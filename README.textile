@@ -8,7 +8,7 @@ h2. Setup
 
 @git clone git://github.com/robbyrussell/oh-my-zsh.git@
 
-2. Symlink the zsh config with: @ln -s ~/oh-my-zsh/zshrc .zshrc@
+2. Symlink the zsh config with: @ln -s ~/oh-my-zsh/zshrc ~/.zshrc@
 
 3. Start / restart zsh (open a new terminal is easy enough..)
 
