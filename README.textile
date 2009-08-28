@@ -12,6 +12,10 @@ h2. Setup
 
 3. Start / restart zsh (open a new terminal is easy enough..)
 
+h3. Problems?
+
+You _might_ need to modify your PATH.. and this needs to be refactored in the near future.
+
 h2. Usage
 
 TODO: Update this..
