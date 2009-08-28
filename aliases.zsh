@@ -22,8 +22,6 @@ alias e='mate'
 
 alias history='fc -l 1'
 
-# Git aliases
-
 alias utb='tar jxvf'
 alias utz='tar zxvf'
 
