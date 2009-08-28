@@ -1,3 +1,7 @@
+A handful of functions, auto-complete helpers, and stuff that makes you shout...
+
+bq. "OH MY ZSHELL!"
+
 h2. Setup
 
 1. Clone the repository
@@ -9,6 +13,12 @@ h2. Setup
 3. Start / restart zsh (open a new terminal is easy enough..)
 
 
+h2. Thanks
 
+* Rick Olsen (technoweenie) might remember some of the configuration, which I took from a pastie a few years ago.
+* Whoever created the rake autocomplete stuff, which was posted all over the internet a few years ago.
 
+h2. Help out!
+
+If you have ideas on how to improve/optimize the configuration, don't hesitate to send pull requests.
 
