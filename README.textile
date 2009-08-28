@@ -12,6 +12,14 @@ h2. Setup
 
 3. Start / restart zsh (open a new terminal is easy enough..)
 
+h2. Usage
+
+TODO: Update this..
+
+* Rake autocomplete: @rake (tab)@. Will generate a cache of all your rake tasks and then let you auto-complete and/or select the task to run.
+* ssh autocomplete: @ssh (tab)@ or @scp (tab)@
+* Git branch, it'll tell you which branch you're in when you're in a git repository directory.
+* much much more..
 
 h2. Thanks
 
