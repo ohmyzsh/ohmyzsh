@@ -1,8 +1,14 @@
 h2. Setup
 
-# Clone the repository to ~/zsh
-# Symlink the zsh config with: @ln -s ~/zsh/zshrc .zshrc@
-# Reload zsh (open a new terminal)
+1. Clone the repository
+
+@git clone git://github.com/robbyrussell/oh-my-zsh.git@
+
+2. Symlink the zsh config with: @ln -s ~/oh-my-zsh/zshrc .zshrc@
+
+3. Start / restart zsh (open a new terminal is easy enough..)
+
+
 
 
 
