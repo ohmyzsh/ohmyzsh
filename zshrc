@@ -1,6 +1,5 @@
-export EDITOR=/opt/local/bin/joe
 export PAGER=less
-export ZSH=$HOME/zsh
+export ZSH=$HOME/oh-my-zsh
 export LC_CTYPE=en_US.UTF-8
 
 # TODO: Refactor this sometimes soon...
