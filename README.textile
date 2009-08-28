@@ -32,5 +32,6 @@ h2. Thanks
 
 h2. Help out!
 
-If you have ideas on how to improve/optimize the configuration, don't hesitate to send pull requests.
+I'm far from being a zsh-expert and suspect there are many ways to improve. If you have ideas on how to make the configuration easier to maintain (and faster), don't hesitate to fork and send pull requests!
+
 
