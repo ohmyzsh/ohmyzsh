@@ -2,19 +2,9 @@ export PAGER=less
 export ZSH=$HOME/oh-my-zsh
 export LC_CTYPE=en_US.UTF-8
 
-# TODO: Refactor this sometimes soon...
-source $ZSH/colors.zsh
-source $ZSH/aliases.zsh
-source $ZSH/completion.zsh
-source $ZSH/rake_completion.zsh
-source $ZSH/functions.zsh
-source $ZSH/git.zsh
-source $ZSH/history.zsh
-source $ZSH/grep.zsh
-source $ZSH/prompt.zsh
-
-# Uncomment if you have a projects.zsh file
-# source $ZSH/projects.zsh
+# Load all of the config files in ~/oh-my-zsh that end in .zsh
+# TIP: Add files you don't want in git to .gitignore
+for i in $ZSH/*zsh; do source $i; done;
 
 # Directory stuff.
 
