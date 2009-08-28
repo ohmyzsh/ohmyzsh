@@ -14,7 +14,7 @@ h2. Setup
 
 h3. Problems?
 
-You _might_ need to modify your PATH.. and this needs to be refactored in the near future.
+You _might_ need to modify your PATH in ~/.zshrc if you're not able to find some commands after switching to oh-my-zsh.
 
 h2. Usage
 
