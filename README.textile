@@ -1,0 +1,8 @@
+h2. Setup
+
+# Clone the repository to ~/zsh
+# Symlink the zsh config with: @ln -s ~/zsh/zshrc .zshrc@
+# Reload zsh (open a new terminal)
+
+
+
