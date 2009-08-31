@@ -38,6 +38,7 @@ TODO: Update this..
 * Rake autocomplete: @rake (tab)@. Will generate a cache of all your rake tasks and then let you auto-complete and/or select the task to run.
 * ssh autocomplete: @ssh (tab)@ or @scp (tab)@
 * Git branch, it'll tell you which branch you're in when you're in a git repository directory.
+* Theme support: Change the @ZSH_THEME@ environment variable in @~/.zshrc@.
 * much much more..
 
 h2. Thanks
@@ -49,4 +50,7 @@ h2. Help out!
 
 I'm far from being a zsh-expert and suspect there are many ways to improve. If you have ideas on how to make the configuration easier to maintain (and faster), don't hesitate to fork and send pull requests!
 
+h3. Send us your theme!
+
+I'm hoping to collect a bunch of themes for our command prompts. You can see existing ones in the @themes/@ directory.
 
