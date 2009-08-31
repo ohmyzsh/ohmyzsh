@@ -32,8 +32,6 @@ alias sgem='sudo gem'
 
 alias rfind='find . -name *.rb | xargs grep -n'
 
-alias xenon='ssh rrussell@xenon.planetargon.com'
-
 alias git-svn-dcommit-push='git svn dcommit && git push github master:svntrunk'
 
 bindkey '\ew' kill-region
