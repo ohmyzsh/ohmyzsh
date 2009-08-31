@@ -8,7 +8,7 @@ else
 fi
 
 echo "Looking for an existing zsh config..."
-if [ -f ~/.zshrc ]
+if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]
 then
   echo "Found ~/.zshrc. Backing up to ~/.zshrc.pre-oh-my-zsh";
   cp ~/.zshrc ~/.zshrc.pre-oh-my-zsh;
@@ -22,3 +22,4 @@ echo "Time to change your default shell to zsh!"
 chsh -s /bin/zsh
 
 echo "Hooray! Oh My Zsh has been installed."
+/bin/zsh
