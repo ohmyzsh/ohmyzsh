@@ -41,6 +41,10 @@ TODO: Update this..
 * Theme support: Change the @ZSH_THEME@ environment variable in @~/.zshrc@.
 * much much more..
 
+h3. Uninstalling
+
+If you want to uninstall it, just run @uninstall_oh_my_zsh@ from the command line and it'll remove itself and revert you to bash (or your previous zsh config).
+
 h2. Thanks
 
 * Rick Olsen (technoweenie) might remember some of the configuration, which I took from a pastie a few years ago.
