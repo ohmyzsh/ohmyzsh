@@ -10,6 +10,6 @@ export ZSH_THEME="robbyrussell"
 for i in $ZSH/*zsh; do source $i; done;
 
 # Customize to your needs...
-export PATH=~/bin:/opt/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/local/sbin:/opt/local/lib/postgresql83/bin
-
+#export PATH=~/bin:/opt/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/local/sbin:/opt/local/lib/postgresql83/bin
+export PATH=$PATH:$HOME/bin
 
