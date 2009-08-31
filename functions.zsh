@@ -31,3 +31,25 @@ function zsh_stats() {
 function uninstall_oh_my_zsh() {
   /bin/sh $ZSH/tools/uninstall.sh
 }
+
+function tab() {
+  osascript 2>/dev/null <<EOF
+    tell application "System Events"
+      tell process "Terminal" to keystroke "t" using command down
+    end
+    tell application "Terminal"
+      activate
+      do script with command "cd $PWD; $*" in window 1
+    end tell
+EOF
+}
+
+function take() {
+  mkdir -p $1
+  cd $1
+}
+
+function tm() {
+  cd $1
+  mate $1
+}
