@@ -1,29 +1,18 @@
-alias c='cd'
 alias pu='pushd'
 alias po='popd'
+
 alias sc='ruby script/console'
 alias ss='ruby script/server'
 
 alias mr='mate CHANGELOG app config db lib public script spec test'
 alias .='pwd'
 alias ...='cd ../..'
-alias ....='cd ../../..'
-alias .....='cd ../../../..'
-alias ......='cd ../../../../..'
-alias .......='cd ../../../../../..'
 
 alias _='sudo'
-alias ss='setsid'
 
 alias g='grep -in'
 
-alias s='svn'
-alias e='mate'
-
 alias history='fc -l 1'
-
-alias utb='tar jxvf'
-alias utz='tar zxvf'
 
 alias ls='ls -GF'
 alias ll='ls -al'
