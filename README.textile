@@ -10,6 +10,8 @@ h2. Setup
 
 2. Symlink the zsh config with:
 
+  *NOTE*: If you already have a ~/.zshrc file, you should back it up. @cp ~/.zshrc ~/.zshrc.orig@ in case you want to go back to your original settings.
+
   @ln -s ~/oh-my-zsh/zshrc ~/.zshrc@
 
 3. Set zsh as your default shell:
