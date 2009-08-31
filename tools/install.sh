@@ -22,4 +22,6 @@ echo "Time to change your default shell to zsh!"
 chsh -s /bin/zsh
 
 echo "Hooray! Oh My Zsh has been installed."
-source ~/.zshrc && /bin/zsh
+/bin/zsh
+source ~/.zshrc
+
