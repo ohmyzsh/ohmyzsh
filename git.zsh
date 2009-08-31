@@ -9,8 +9,6 @@ function git_prompt_info() {
     CURRENT_BRANCH=''
   fi
 
-
-  #echo "%{$fg[red]%}git:(%{$fg[green]$CURRENT_BRANCH%{$fg[red])"
   echo $CURRENT_BRANCH
 }
 

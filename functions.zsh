@@ -20,7 +20,6 @@ function preexec {
   title $cmd[1]:t "$cmd[2,-1]"
 }
 
-
 function remote_console() {
   /usr/bin/env ssh $1 "( cd $2 && ruby script/console production )"
 }
