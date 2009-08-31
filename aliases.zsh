@@ -2,7 +2,8 @@ alias pu='pushd'
 alias po='popd'
 
 alias sc='ruby script/console'
-alias ss='ruby script/server'
+alias sd='ruby script/server --debugger'
+alias ss='thin --stats "/thin/stats" start'
 
 alias mr='mate CHANGELOG app config db lib public script spec test'
 alias .='pwd'
