@@ -11,7 +11,8 @@ alias ...='cd ../..'
 
 alias _='sudo'
 
-alias g='grep -in'
+#alias g='grep -in'
+alias g='git'
 
 alias history='fc -l 1'
 
