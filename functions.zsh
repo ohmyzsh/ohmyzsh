@@ -32,6 +32,10 @@ function uninstall_oh_my_zsh() {
   /bin/sh $ZSH/tools/uninstall.sh
 }
 
+function upgrade_oh_my_zsh() {
+  /bin/sh $ZSH/tools/upgrade.sh
+}
+
 function tab() {
   osascript 2>/dev/null <<EOF
     tell application "System Events"
