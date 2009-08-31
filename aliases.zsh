@@ -16,7 +16,7 @@ alias g='git'
 
 alias history='fc -l 1'
 
-alias ls='ls -GF'
+alias ls='ls -F'
 alias ll='ls -al'
 
 alias sgem='sudo gem'
@@ -34,3 +34,6 @@ alias et='mate . &'
 alias ett='mate app config lib db public spec test Rakefile Capfile Todo &'
 alias etp='mate app config lib db public spec test vendor/plugins vendor/gems Rakefile Capfile Todo &'
 alias etts='mate app config lib db public script spec test vendor/plugins vendor/gems Rakefile Capfile Todo &'
+
+bindkey "^[[A" history-beginning-search-backward
+bindkey "^[[B" history-beginning-search-forward
