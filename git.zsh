@@ -13,5 +13,5 @@ function git_prompt_info() {
 }
 
 parse_git_dirty () {
-  [[ $(git status | tail -n1) != "nothing to commit (working directory clean)" ]] && echo "%{$fg[white] ♻ "
+  [[ $(git status | tail -n1) != "nothing to commit (working directory clean)" ]] && echo "%{$fg[yellow]%}✗%{$reset_color%}"
 }
