@@ -4,7 +4,7 @@ function git_prompt_info() {
   branch=${ref#refs/heads/}
 
   if [[ -d .git ]]; then
-    CURRENT_BRANCH="(%{$fg[red]%}${branch}%{$reset_color%}) $(parse_git_dirty) "
+    CURRENT_BRANCH="(%{$fg[red]%}${branch}%{$reset_color%})$(parse_git_dirty) "
   else
     CURRENT_BRANCH=''
   fi
@@ -13,5 +13,5 @@ function git_prompt_info() {
 }
 
 parse_git_dirty () {
-  [[ $(git status | tail -n1) != "nothing to commit (working directory clean)" ]] && echo "%{$fg[yellow]%}✗%{$reset_color%}"
+  [[ $(git status | tail -n1) != "nothing to commit (working directory clean)" ]] && echo " %{$fg[yellow]%}✗%{$reset_color%}"
 }
