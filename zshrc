@@ -1,5 +1,5 @@
 # Path to your oh-my-zsh configuration.
-export ZSH=$HOME/oh-my-zsh
+export ZSH=$HOME/.oh-my-zsh
 
 # Load all of the config files in ~/oh-my-zsh that end in .zsh
 # TIP: Add files you don't want in git to .gitignore

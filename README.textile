@@ -4,6 +4,13 @@ bq. "OH MY ZSHELL!"
 
 h2. Setup
 
+h3. The automatic installer... (do you trust me?)
+
+@wget http://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh@
+
+h3. The manual way
+
+
 1. Clone the repository
 
   @git clone git://github.com/robbyrussell/oh-my-zsh.git@
