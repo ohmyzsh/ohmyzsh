@@ -4,7 +4,7 @@ function git_prompt_info() {
   branch=${ref#refs/heads/}
 
   if [[ -d .git ]]; then
-    CURRENT_BRANCH="%{$fg[red]%}git:(%{$fg[green]${branch}%{$fg[red])"
+    CURRENT_BRANCH="(${branch})"
   else
     CURRENT_BRANCH=''
   fi
