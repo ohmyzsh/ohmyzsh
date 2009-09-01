@@ -15,8 +15,8 @@ then
   rm ~/.zshrc;
 fi
 
-echo "Symlinking .zshrc to ~/.oh-my-zsh/"
-ln -s ~/.oh-my-zsh/zshrc ~/.zshrc
+echo "Using the Oh My Zsh template file and adding it to ~/.zshrc"
+cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
 
 echo "Time to change your default shell to zsh!"
 chsh -s /bin/zsh
