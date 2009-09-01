@@ -39,6 +39,7 @@ TODO: Update this..
 * ssh autocomplete: @ssh (tab)@ or @scp (tab)@
 * Git branch, it'll tell you which branch you're in when you're in a git repository directory.
 * Theme support: Change the @ZSH_THEME@ environment variable in @~/.zshrc@.
+** Take a look at the "current themes":http://wiki.github.com/robbyrussell/oh-my-zsh/themes that come bundled with Oh My Zsh.
 * much much more..
 
 h3. Uninstalling
