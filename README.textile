@@ -15,11 +15,11 @@ h3. The manual way
 
   @git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh@
 
-2. Symlink the zsh config with:
+2. Create a new zsh config by copying the zsh template we've provided.
 
   *NOTE*: If you already have a ~/.zshrc file, you should back it up. @cp ~/.zshrc ~/.zshrc.orig@ in case you want to go back to your original settings.
 
-  @ln -s ~/.oh-my-zsh/zshrc ~/.zshrc@
+  @cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc@
 
 3. Set zsh as your default shell:
 
