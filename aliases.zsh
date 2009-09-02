@@ -25,15 +25,10 @@ alias rfind='find . -name *.rb | xargs grep -n'
 
 alias git-svn-dcommit-push='git svn dcommit && git push github master:svntrunk'
 
-bindkey '\ew' kill-region
-
-bindkey -s '\el' "ls\n"
-bindkey -s '\e.' "..\n"
-
 alias et='mate . &'
 alias ett='mate app config lib db public spec test Rakefile Capfile Todo &'
 alias etp='mate app config lib db public spec test vendor/plugins vendor/gems Rakefile Capfile Todo &'
 alias etts='mate app config lib db public script spec test vendor/plugins vendor/gems Rakefile Capfile Todo &'
 
-bindkey "^[[A" history-beginning-search-backward
-bindkey "^[[B" history-beginning-search-forward
+
+
