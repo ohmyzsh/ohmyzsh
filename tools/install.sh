@@ -18,6 +18,9 @@ fi
 echo "Using the Oh My Zsh template file and adding it to ~/.zshrc"
 cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
 
+echo "Copying your current PATH and adding it to the end of ~/.zshrc for you."
+echo "export PATH=$PATH" >> ~/.zshrc
+
 echo "Time to change your default shell to zsh!"
 chsh -s /bin/zsh
 
