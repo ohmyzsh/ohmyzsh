@@ -1,16 +1,21 @@
-# Specific to xterms, such as OS X terminal
-
-if [[ "${TERM}" == xterm* ]]; then
-  unset TMOUT
-
-  precmd () {
-    print -Pn  "\033]0;%n@%m %~\007"
-    #print -Pn "\033]0;%n@%m%#  %~ %l  %w :: %T\a" ## or use this
-  }
-
-  preexec () {
-    print -Pn "\033]0;%n@%m <$1> %~\007"
-    #print -Pn "\033]0;%n@%m%#  <$1>  %~ %l  %w :: %T\a" ## or use this
-  }
-
-fi
+case "$TERM" in
+  xterm*|rxvt*)
+    preexec () {
+      print -Pn "\e]0;%n@%m: $1\a"  # xterm
+    }
+    precmd () {
+      print -Pn "\e]0;%n@%m: %~\a"  # xterm
+    }
+    ;;
+  screen*)
+    preexec () {
+      local CMD=${1[(wr)^(*=*|sudo|ssh|-*)]}
+      echo -ne "\ek$CMD\e\\"
+      print -Pn "\e]0;%n@%m: $1\a"  # xterm
+    }
+    precmd () {
+      echo -ne "\ekzsh\e\\"
+      print -Pn "\e]0;%n@%m: %~\a"  # xterm
+    }
+    ;;
+esac

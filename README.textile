@@ -59,3 +59,7 @@ h3. Send us your theme!
 
 I'm hoping to collect a bunch of themes for our command prompts. You can see existing ones in the @themes/@ directory.
 
+h3. Todo from imajes:
+
+* need to make the title bar support git folder
+* 
