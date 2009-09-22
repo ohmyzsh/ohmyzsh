@@ -1,6 +1,8 @@
+## fixme - the load process here seems a bit bizarre
+
 setopt noautomenu
-setopt COMPLETE_IN_WORD
-setopt ALWAYS_TO_END
+setopt complete_in_word
+setopt always_to_end
 
 unsetopt flowcontrol
 
@@ -17,9 +19,10 @@ zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' hosts $( sed 's/[, ].*$//' $HOME/.ssh/known_hosts )
 
-unsetopt MENU_COMPLETE
-setopt AUTO_MENU
+#unsetopt MENU_COMPLETE
+#setopt AUTO_MENU
 
+# should this be in keybindings?
 bindkey -M menuselect '^o' accept-and-infer-next-history
 
 zstyle ':completion:*:*:*:*:*' menu yes select
