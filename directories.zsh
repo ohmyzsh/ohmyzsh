@@ -1,5 +1,5 @@
 # Changing/making/removing directory
-
+setopt auto_name_dirs
 
 alias ..='cd ..'
 alias cd..='cd ..'
