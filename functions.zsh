@@ -1,3 +1,4 @@
+## fixme, i duplicated this in xterms - oops
 function title {
   if [[ $TERM == "screen" ]]; then
     # Use these two for GNU Screen:

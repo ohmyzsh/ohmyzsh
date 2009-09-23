@@ -1,19 +1,12 @@
 export PAGER=less
 export LC_CTYPE=en_US.UTF-8
 
-bindkey -e
+# speed stuff.
 
-# Directory stuff.
-setopt AUTO_NAME_DIRS
-
-# Speed stuff.
-
-#setopt NO_BEEP
-setopt AUTO_CD
-setopt MULTIOS
-setopt CDABLEVARS
-
-bindkey -e
+#setopt no_beep
+setopt auto_cd
+setopt multios
+setopt cdablevarS
 
 if [[ x$WINDOW != x ]]
 then
