@@ -10,6 +10,7 @@ alias .='pwd'
 alias ...='cd ../..'
 
 alias _='sudo'
+alias ss='sudo su -'
 
 #alias g='grep -in'
 
@@ -26,7 +27,10 @@ alias gba='git branch -a'
 alias history='fc -l 1'
 
 alias ls='ls -F'
-alias ll='ls -al'
+alias ll='ls -alr'
+alias l='ls'
+alias ll='ls -l'
+alias sl=ls # often screw this up
 
 alias sgem='sudo gem'
 

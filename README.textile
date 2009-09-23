@@ -42,6 +42,10 @@ TODO: Update this..
 ** Take a look at the "current themes":http://wiki.github.com/robbyrussell/oh-my-zsh/themes that come bundled with Oh My Zsh.
 * much much more..
 
+h2. Useful
+
+the "refcard":http://www.bash2zsh.com/zsh_refcard/refcard.pdf is pretty tasty for tips.
+
 h3. Customization
 
 If you want to override any of the default behavior, just add a new file (ending in @.zsh@) into the @custom/@ directory.
@@ -63,3 +67,7 @@ h3. Send us your theme!
 
 I'm hoping to collect a bunch of themes for our command prompts. You can see existing ones in the @themes/@ directory.
 
+h3. Todo from imajes:
+
+* need to make the title bar support git folder
+* 
