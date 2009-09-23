@@ -42,6 +42,10 @@ TODO: Update this..
 ** Take a look at the "current themes":http://wiki.github.com/robbyrussell/oh-my-zsh/themes that come bundled with Oh My Zsh.
 * much much more..
 
+h3. Customization
+
+If you want to override any of the default behavior, just add a new file (ending in @.zsh@) into the @custom/@ directory.
+
 h3. Uninstalling
 
 If you want to uninstall it, just run @uninstall_oh_my_zsh@ from the command line and it'll remove itself and revert you to bash (or your previous zsh config).
