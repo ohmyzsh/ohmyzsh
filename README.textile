@@ -43,7 +43,12 @@ TODO: Update this..
 * much much more..
 
 h2. Useful
+
 the "refcard":http://www.bash2zsh.com/zsh_refcard/refcard.pdf is pretty tasty for tips.
+
+h3. Customization
+
+If you want to override any of the default behavior, just add a new file (ending in @.zsh@) into the @custom/@ directory.
 
 h3. Uninstalling
 

@@ -17,7 +17,7 @@ _rake () {
   fi
 }
 
-compdef _rake rake
+compctl -K _rake rake
 
 function _cap_does_task_list_need_generating () {
   if [ ! -f .cap_tasks~ ]; then return 0;
@@ -39,4 +39,4 @@ function _cap () {
   fi
 }
 
-compdef _cap cap
+compctl -K _cap cap
