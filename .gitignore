@@ -1,5 +1,5 @@
 log/.zsh_history
 
 custom/*.zsh
-# !custom/example.zsh
+!custom/example.zsh
 
