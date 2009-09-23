@@ -8,8 +8,8 @@ setopt HIST_IGNORE_DUPS
 ## Command history configuration
 #
 HISTFILE=$ZSH/log/.zsh_history
-HISTSIZE=2500
-SAVEHIST=2500
+HISTSIZE=10000
+SAVEHIST=10000
 setopt hist_ignore_dups # ignore duplication command history list
 setopt share_history # share command history data
 
