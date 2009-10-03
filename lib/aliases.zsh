@@ -8,6 +8,7 @@ alias ss='thin --stats "/thin/stats" start'
 alias mr='mate CHANGELOG app config db lib public script spec test'
 alias .='pwd'
 alias ...='cd ../..'
+alias -- -='cd -'
 
 alias _='sudo'
 alias ss='sudo su -'
