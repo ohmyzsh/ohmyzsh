@@ -14,7 +14,7 @@ compinit
 zmodload -i zsh/complist
 
 ## case-insensitive (all),partial-word and then substring completion
-if [ "$CASE_SENSITIVE" ]; then
+if [ "x$CASE_SENSITIVE" = "xtrue" ]; then
   zstyle ':completion:*' matcher-list 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
   unset CASE_SENSITIVE
 else
