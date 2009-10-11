@@ -37,6 +37,7 @@ alias sl=ls # often screw this up
 alias sgem='sudo gem'
 
 alias rfind='find . -name *.rb | xargs grep -n'
+alias afind='ack-grep -il'
 
 alias git-svn-dcommit-push='git svn dcommit && git push github master:svntrunk'
 
