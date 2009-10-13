@@ -3,7 +3,7 @@ alias po='popd'
 
 alias sc='ruby script/console'
 alias sdb='ruby script/dbconsole'
-alias sd='ruby script/server --debugger'
+alias ssd='ruby script/server --debugger'
 alias ss='thin --stats "/thin/stats" start'
 alias sg='ruby script/generate'
 alias sd='ruby script/destroy'
