@@ -39,7 +39,7 @@ alias gcp='git cherry-pick'
 alias history='fc -l 1'
 
 alias ls='ls -F'
-alias lsa='ls -lah'
+alias lsa='ls -lahG'
 alias ll='ls -alr'
 alias l='ls'
 alias ll='ls -l'
