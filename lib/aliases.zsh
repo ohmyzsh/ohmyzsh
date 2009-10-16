@@ -4,12 +4,17 @@
 alias pu='pushd'
 alias po='popd'
 
-# Ruby related
 alias ss='thin --stats "/thin/stats" start'
+alias sg='ruby script/generate'
+alias sd='ruby script/destroy'
+alias sp='ruby script/plugin'
+alias ssp='ruby script/spec'
+alias rdbm='rake db:migrate'
 
 # Basic directory operations
 alias .='pwd'
 alias ...='cd ../..'
+alias -- -='cd -'
 
 # Super user
 alias _='sudo'
@@ -21,12 +26,17 @@ alias ss='sudo su -'
 alias g='git'
 alias gst='git status'
 alias gl='git pull'
+alias gup='git fetch && git rebase'
 alias gp='git push'
 alias gd='git diff | mate'
+alias gdv='git diff -w "$@" | vim -R -'
 alias gc='git commit -v'
 alias gca='git commit -v -a'
 alias gb='git branch'
 alias gba='git branch -a'
+alias gdb='git branch -d'
+alias gcount='git shortlog -sn'
+alias gcp='git cherry-pick'
 
 # Show history
 alias history='fc -l 1'
@@ -41,6 +51,7 @@ alias sgem='sudo gem'
 
 # Find ruby file
 alias rfind='find . -name *.rb | xargs grep -n'
+alias afind='ack-grep -il'
 
 # Git and svn mix
 alias git-svn-dcommit-push='git svn dcommit && git push github master:svntrunk'
@@ -58,6 +69,4 @@ alias sd='ruby script/server --debugger'
 
 # Editor Ruby file in TextMate
 alias mr='mate CHANGELOG app config db lib public script spec test'
-
-
 
