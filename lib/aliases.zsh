@@ -42,7 +42,8 @@ alias gcp='git cherry-pick'
 alias history='fc -l 1'
 
 # List direcory contents
-#alias ls='ls -F' # This messes up colors on my linux system
+alias ls='ls -F'
+alias lsa='ls -lahG'
 alias l='ls -la'
 alias ll='ls -alr'
 alias sl=ls # often screw this up
@@ -61,6 +62,8 @@ alias et='mate . &'
 alias ett='mate app config lib db public spec test Rakefile Capfile Todo &'
 alias etp='mate app config lib db public spec test vendor/plugins vendor/gems Rakefile Capfile Todo &'
 alias etts='mate app config lib db public script spec test vendor/plugins vendor/gems Rakefile Capfile Todo &'
+<<<<<<< HEAD:lib/aliases.zsh
+=======
 
 ## Ruby related
 # Ruby scripts
@@ -70,3 +73,4 @@ alias sd='ruby script/server --debugger'
 # Editor Ruby file in TextMate
 alias mr='mate CHANGELOG app config db lib public script spec test'
 
+>>>>>>> 886d97f41e72b8662232a2c6b196fb60508e4f67:lib/aliases.zsh
