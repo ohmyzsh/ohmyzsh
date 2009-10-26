@@ -10,6 +10,8 @@ alias sd='ruby script/destroy'
 alias sp='ruby script/plugin'
 alias ssp='ruby script/spec'
 alias rdbm='rake db:migrate'
+alias sc='ruby script/console'
+alias sd='ruby script/server --debugger'
 
 # Basic directory operations
 alias .='pwd'
@@ -62,15 +64,6 @@ alias et='mate . &'
 alias ett='mate app config lib db public spec test Rakefile Capfile Todo &'
 alias etp='mate app config lib db public spec test vendor/plugins vendor/gems Rakefile Capfile Todo &'
 alias etts='mate app config lib db public script spec test vendor/plugins vendor/gems Rakefile Capfile Todo &'
-<<<<<<< HEAD:lib/aliases.zsh
-=======
-
-## Ruby related
-# Ruby scripts
-alias sc='ruby script/console'
-alias sd='ruby script/server --debugger'
 
 # Editor Ruby file in TextMate
 alias mr='mate CHANGELOG app config db lib public script spec test'
-
->>>>>>> 886d97f41e72b8662232a2c6b196fb60508e4f67:lib/aliases.zsh
