@@ -37,8 +37,7 @@ zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-
 zstyle ':completion:*:*:*:*:processes' command "ps -u `whoami` -o pid,user,comm -w -w"
 zstyle ':completion:*:*:(ssh|scp):*:*' hosts `sed 's/^\([^ ,]*\).*$/\1/' ~/.ssh/known_hosts`
 
-
-#complete on history
+# Complete on history
 # zstyle ':completion:*:history-words' stop yes
 # zstyle ':completion:*:history-words' remove-all-dups yes
 # zstyle ':completion:*:history-words' list false
