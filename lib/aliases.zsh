@@ -45,8 +45,7 @@ alias gcp='git cherry-pick'
 alias history='fc -l 1'
 
 # List direcory contents
-alias ls='ls -F -G'
-alias lsa='ls -lahG'
+alias lsa='ls -lah'
 alias l='ls -la'
 alias ll='ls -alr'
 alias sl=ls # often screw this up
