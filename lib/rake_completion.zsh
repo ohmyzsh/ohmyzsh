@@ -1,8 +1,8 @@
 _rake_does_task_list_need_generating () {
   if [ ! -f .rake_tasks~ ]; then return 0;
   else
-    accurate=$(stat -c "%n" .rake_tasks~)
-    changed=$(stat -c "%n" Rakefile)
+    accurate=$(stat -f%m .rake_tasks~)
+    changed=$(stat -f%m Rakefile)
     return $(expr $accurate '>=' $changed)
   fi
 }
