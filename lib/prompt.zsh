@@ -22,8 +22,4 @@ setopt prompt_subst
 
 export LSCOLORS="Gxfxcxdxbxegedabagacad"
 
-function oh_my_zsh_theme_precmd() {
-  # Blank function; override this in your themes
-}
-
 source "$ZSH/themes/$ZSH_THEME.zsh-theme"
