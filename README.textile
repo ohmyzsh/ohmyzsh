@@ -56,8 +56,9 @@ If you want to uninstall it, just run @uninstall_oh_my_zsh@ from the command lin
 
 h2. Thanks
 
-* Rick Olsen (technoweenie) might remember some of the configuration, which I took from a pastie a few years ago.
-* Whoever created the rake autocomplete stuff, which was posted all over the internet a few years ago.
+* Rick Olson (technoweenie) might remember some of the configuration, which I took from a pastie a few years ago.
+* Marcel (noradio) provided Rick the original zsh configuration.
+* Nicholas (ulysses) for the "rake autocompletion code":http://weblog.rubyonrails.org/2006/3/9/fast-rake-task-completion-for-zsh.
 
 h2. Help out!
 
@@ -70,4 +71,3 @@ I'm hoping to collect a bunch of themes for our command prompts. You can see exi
 h3. Todo from imajes:
 
 * need to make the title bar support git folder
-* 
