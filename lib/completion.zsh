@@ -43,7 +43,7 @@ if [ -f ~/.ssh/known_hosts ]; then
 fi
 
 # Complete on history
-# zstyle ':completion:*:history-words' stop yes
-# zstyle ':completion:*:history-words' remove-all-dups yes
-# zstyle ':completion:*:history-words' list false
-# zstyle ':completion:*:history-words' menu yes
+#zstyle ':completion:*:history-words' stop yes
+#zstyle ':completion:*:history-words' remove-all-dups yes
+#zstyle ':completion:*:history-words' list false
+#zstyle ':completion:*:history-words' menu yes
