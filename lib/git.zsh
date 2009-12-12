@@ -1,7 +1,7 @@
 # get the name of the branch we are on
 function git_prompt_info() {
-  ref=$(git symbolic-ref HEAD 2> /dev/null) || return
-  echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
+  branch=$(current_branch_for_display) || return
+  echo "$ZSH_THEME_GIT_PROMPT_PREFIX${branch}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
 }
 
 parse_git_dirty () {
@@ -19,4 +19,16 @@ parse_git_dirty () {
 function current_branch() {
   ref=$(git symbolic-ref HEAD 2> /dev/null) || return
   echo ${ref#refs/heads/}
+}
+
+#
+# current branch for display.  Abbreviate master to M.  
+# Other substitutions are possible.
+# TODO: 
+#   * allow to enable/disable translation of master to M.  
+#   * enable argument to git_prompt_info control what is displayed 
+#      (eg: M=535516, ala git-prompt project for bash)
+function current_branch_for_display() {
+  branch=$(current_branch) || return
+  echo ${branch/master/M}    # master abbreviated to M.
 }
