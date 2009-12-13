@@ -15,5 +15,5 @@ if [ "$DISABLE_AUTO_UPDATE" = "true" ]
 then
   return
 else
-  /bin/zsh $ZSH/tools/check_for_upgrade.sh
+  /usr/bin/env zsh $ZSH/tools/check_for_upgrade.sh
 fi
