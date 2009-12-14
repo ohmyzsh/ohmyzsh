@@ -1,7 +1,18 @@
 # get the name of the branch we are on
 function git_prompt_info() {
-  branch=$(current_branch_for_display) || return
-  echo "$ZSH_THEME_GIT_PROMPT_PREFIX${branch}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
+  local type=${1:-$branch} # ; [[ -n "$type" ]] || type='branch'
+
+  branch=$(current_branch) || return
+  d_branch="$branch"
+  case $type in
+    *abbr*)
+	     d_branch=${branch/master/M}
+	     ;;
+  esac
+
+  d_commit='';
+
+  echo "$ZSH_THEME_GIT_PROMPT_PREFIX${d_branch}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
 }
 
 parse_git_dirty () {
