@@ -1,7 +1,4 @@
 # TODO: Explain what some of this does..
-autoload -U compinit
-compinit
-
 bindkey -e
 bindkey '\ew' kill-region
 bindkey -s '\el' "ls\n"

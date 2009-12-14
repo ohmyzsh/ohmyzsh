@@ -9,7 +9,8 @@ unsetopt flowcontrol
 WORDCHARS=''
 
 autoload -U compinit
-compinit
+# -i to avoid 'insecure directories prompt after sudo'
+compinit -i 
 
 zmodload -i zsh/complist
 
