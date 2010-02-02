@@ -3,6 +3,7 @@ autoload -U url-quote-magic
 zle -N self-insert url-quote-magic
 
 ## file rename magick
+autoload -U zmv
 bindkey "^[m" copy-prev-shell-word
 
 ## jobs

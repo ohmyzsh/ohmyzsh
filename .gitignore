@@ -1,5 +1,8 @@
 locals.zsh
 log/.zsh_history
 projects.zsh
+custom
 custom/*.zsh
 !custom/example.zsh
+
+.DS_Store
