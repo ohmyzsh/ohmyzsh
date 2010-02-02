@@ -15,7 +15,7 @@ parse_git_dirty () {
 	echo -n "$ZSH_THEME_GIT_PROMPT_UNTRACKED"
   fi 
 
-  if [[ $(echo ${gitstat} | wc -l | tr -d ' ') == 0 ]]; then
+  if [[ $(echo ${gitstat} | grep -v '^$' | wc -l | tr -d ' ') == 0 ]]; then
 	echo -n "$ZSH_THEME_GIT_PROMPT_CLEAN"
   fi
 }
