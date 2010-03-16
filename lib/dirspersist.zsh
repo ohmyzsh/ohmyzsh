@@ -17,3 +17,6 @@ dirpersistrestore () {
 DIRSTACKSIZE=10
 setopt autopushd pushdminus pushdsilent pushdtohome pushdignoredups
 dirpersistrestore
+
+# Make popd changes permanent without having to wait for logout
+alias popd="popd;dirpersiststore"
