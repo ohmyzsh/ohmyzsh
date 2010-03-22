@@ -1,0 +1,3 @@
+[submodule "vendor/beech"]
+	path = vendor/beech
+	url = git@github.com:pjaspers/beech.git
