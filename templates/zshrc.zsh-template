@@ -17,6 +17,11 @@ export ZSH_THEME="robbyrussell"
 # Uncomment following line if you want to disable colors in ls
 # export DISABLE_LS_COLORS="true"
 
+# If this terminal has strange settings, set this to true
+# the first run will have you set some parameters,
+# and then all will be well.
+#export STRANGE_TERMINAL='true'
+
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
