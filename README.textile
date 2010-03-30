@@ -27,6 +27,7 @@ h3. The manual install
 
 h3. Features different than robbyrussel's version
 
+* Option to configure a terminal with strange settings (labor intensive on the first run, perfectly wonderful after that.)
 * Will automatically rehash the path, so new commands will be found immediately
 * Added realias to quickly make a new shell alias/function (EDITOR env variable required)
 * Removed upgrade checker
