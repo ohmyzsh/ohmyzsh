@@ -33,12 +33,12 @@ h2. Usage
 
 TODO: Update this..
 
-   o auto rehash
-   o Put in Terminal configurator for those strange terminal settings
-   o easier support for more SCM's (now it's mostly Git)
-   o Have different zsh on the same machine share history
-   o Put in some Django shortcuts
-   o More to come
+* auto rehash
+* Put in Terminal configurator for those strange terminal settings
+* easier support for more SCM's (now it's mostly Git)
+* Have different zsh on the same machine share history
+* Put in some Django shortcuts
+* More to come
 
 h2. Useful
 
@@ -62,6 +62,7 @@ h2. Thanks
 h2. Help out!
 
 I just quote robbyrussel:
+
 bq. I'm far from being a zsh-expert and suspect there are many ways to improve. If you have ideas on how to make the configuration easier to maintain (and faster), don't hesitate to fork and send pull requests!
 
 I would love more advance yet nice ZSH stuff\
