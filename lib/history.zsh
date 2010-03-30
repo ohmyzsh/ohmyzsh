@@ -11,5 +11,4 @@ setopt inc_append_history
 setopt extended_history
 setopt hist_expire_dups_first
 
-setopt SHARE_HISTORY
 setopt APPEND_HISTORY
