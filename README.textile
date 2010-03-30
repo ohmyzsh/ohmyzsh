@@ -25,16 +25,23 @@ h3. The manual install
 
 4. Start / restart zsh (open a new terminal is easy enough..)
 
+h3. Features different than robbyrussel's version
+
+* Will automatically rehash the path, so new commands will be found immediately
+* Added realias to quickly make a new shell alias/function (EDITOR env variable required)
+* Removed upgrade checker
+* share history with your zsh's on the same host
+
 h3. Problems?
 
 You _might_ need to modify your PATH in ~/.zshrc if you're not able to find some commands after switching to oh-my-zsh.
+
+
 
 h2. Usage
 
 TODO: Update this..
 
-* auto rehash
-* Put in Terminal configurator for those strange terminal settings
 * easier support for more SCM's (now it's mostly Git)
 * Have different zsh on the same machine share history
 * Put in some Django shortcuts
