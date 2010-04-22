@@ -5,8 +5,7 @@
 # Run dirpersiststore in ~/.zlogout
 
 dirpersiststore () {
-# FIXME: need to escape all shell metacharacters, not just spaces!
-    dirs -p | sed 's/ /\\ /g;s/&/\\&/;s/^/pushd -q /;1!G;h;$!d;' > ~/.zdirstore
+    dirs -p | tail -r | perl -ne 'chomp;s/([& ])/\\$1/g ;print "if [ -d $_ ]; then pushd -q $_; fi\n"' > ~/.zdirstore
 }
 
 dirpersistrestore () {
