@@ -5,7 +5,10 @@ compinit
 bindkey -e
 bindkey '\ew' kill-region
 bindkey -s '\el' "ls\n"
-bindkey -s '\e.' "..\n"
+
+## insert last argument from last command
+bindkey '\e.' insert-last-word 
+
 bindkey '^r' history-incremental-search-backward
 bindkey "^[[5~" up-line-or-history
 bindkey "^[[6~" down-line-or-history
