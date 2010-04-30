@@ -1,7 +1,7 @@
 function wo() {
     [ -f './.venv' ] && workon `cat ./.venv`
 }
-
+alias deact='deactivate'
 alias cdv='cd $WORKON_HOME'
 
 function cdp () {

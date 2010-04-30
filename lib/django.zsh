@@ -1,3 +1,4 @@
+alias pm='python manage.py'
 alias pmr='python manage.py runserver'
 alias pmrp='python manage.py runserver_plus'
 alias pmrpg='pmrp --adminmedia=`pwd`/media/admin'

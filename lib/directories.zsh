@@ -48,4 +48,5 @@ alias d='dirs -v'
 alias lsa='ls -lah'
 alias l='ls -la'
 alias ll='ls -alr'
+alias ls='ls -Goh'
 alias sl=ls
