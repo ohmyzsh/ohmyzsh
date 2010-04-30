@@ -17,3 +17,8 @@ export LC_CTYPE=en_US.UTF-8
 function pman() {
     man $1 -t | open -f -a Preview
 }
+
+## pretty JSON
+function pj() {
+    python -mjson.tool
+}
