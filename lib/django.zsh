@@ -4,3 +4,7 @@ alias pmrpg='pmrp --adminmedia=`pwd`/media/admin'
 alias pmsdb='python manage.py syncdb'
 alias pms='python manage.py shell'
 alias pmlf='python manage.py loaddata fixtures/*'
+
+alias gs='gunicorn_django'
+alias gk='kill `cat .gunicorn.pid`'
+alias gl='tail -f .gunicorn.log'

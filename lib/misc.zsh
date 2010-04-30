@@ -22,3 +22,6 @@ function pman() {
 function pj() {
     python -mjson.tool
 }
+
+## Open current directory
+alias oo='open .'
