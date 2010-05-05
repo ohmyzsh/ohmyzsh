@@ -45,8 +45,13 @@ alias rd=rmdir
 alias d='dirs -v'
 
 # List direcory contents
-alias lsa='ls -lah'
-alias l='ls -la'
-alias ll='ls -alr'
-alias ls='ls -Goh'
-alias sl=ls
+alias l1='tree --dirsfirst -ChFL 1'
+alias l2='tree --dirsfirst -ChFL 2'
+alias l3='tree --dirsfirst -ChFL 3'
+
+alias ll1='tree --dirsfirst -ChFupDaL 1'
+alias ll2='tree --dirsfirst -ChFupDaL 2'
+alias ll3='tree --dirsfirst -ChFupDaL 3'
+
+alias l='l1'
+alias ll='ll1'
