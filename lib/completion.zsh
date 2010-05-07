@@ -9,7 +9,7 @@ setopt always_to_end
 WORDCHARS=''
 
 autoload -U compinit
-compinit
+compinit -i
 
 zmodload -i zsh/complist
 
