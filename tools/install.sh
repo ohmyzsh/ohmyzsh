@@ -24,6 +24,13 @@ echo "export PATH=$PATH" >> ~/.zshrc
 echo "Time to change your default shell to zsh!"
 chsh -s /bin/zsh
 
-echo "Hooray! Oh My Zsh has been installed."
+echo '         __                                     __  '
+echo '  ____  / /_     ____ ___  __  __   ____  _____/ /_ '
+echo ' / __ \/ __ \   / __ `__ \/ / / /  /_  / / ___/ __ \ '
+echo '/ /_/ / / / /  / / / / / / /_/ /    / /_(__  ) / / / '
+echo '\____/_/ /_/  /_/ /_/ /_/\__, /    /___/____/_/ /_/  '
+echo '                        /____/'
+
+echo "\n\n ....is now installed."
 /bin/zsh
 source ~/.zshrc
