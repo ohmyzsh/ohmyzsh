@@ -30,3 +30,7 @@ function _cap () {
 }
 
 compctl -K _cap cap
+
+function remote_console() {
+  /usr/bin/env ssh $1 "( cd $2 && ruby script/console production )"
+}
