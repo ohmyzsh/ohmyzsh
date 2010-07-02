@@ -27,8 +27,6 @@ zstyle ':completion:*' list-colors ''
 bindkey -M menuselect '^o' accept-and-infer-next-history
 
 zstyle ':completion:*:*:*:*:*' menu select
-# zstyle ':completion:*:*:*:*:processes' force-list always
-
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
 zstyle ':completion:*:*:*:*:processes' command "ps -u `whoami` -o pid,user,comm -w -w"
 
@@ -37,9 +35,3 @@ if [ -f ~/.ssh/known_hosts ]; then
   zstyle ':completion:*' hosts $( sed 's/[, ].*$//' $HOME/.ssh/known_hosts )
   zstyle ':completion:*:*:(ssh|scp):*:*' hosts `sed 's/^\([^ ,]*\).*$/\1/' ~/.ssh/known_hosts`
 fi
-
-# Complete on history
-#zstyle ':completion:*:history-words' stop yes
-#zstyle ':completion:*:history-words' remove-all-dups yes
-#zstyle ':completion:*:history-words' list false
-#zstyle ':completion:*:history-words' menu yes
