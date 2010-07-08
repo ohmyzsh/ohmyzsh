@@ -4,6 +4,7 @@ alias pmrp='python manage.py runserver_plus'
 alias pmrpg='pmrp --adminmedia=`pwd`/media/admin'
 alias pmsdb='python manage.py syncdb'
 alias pms='python manage.py shell'
+alias pmsp='python manage.py shell_plus'
 alias pmlf='python manage.py loaddata fixtures/*'
 
 alias gs='gunicorn_django'
