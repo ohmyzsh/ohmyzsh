@@ -4,7 +4,7 @@
 JTZEMP_CURRENT_TIME_="%{$fg[blue]%}[%{$fg[red]%}%T%{$fg[blue]%}]%{$reset_color%}"
 
 # Grab the current version of ruby in use (via RVM): [ruby-1.8.7]
-JTZEMP_CURRENT_RUBY_="%{$fg[white]%}[%{$fg[magenta]%}\$(~/.rvm/bin/rvm-prompt i v)%{$fg[white]%}]%{$reset_color%}"
+JTZEMP_CURRENT_RUBY_="%{$fg[blue]%}[%{$fg[red]%}\$(~/.rvm/bin/rvm-prompt i v)%{$fg[blue]%}]%{$reset_color%}"
 
 # Grab the current machine name: muscato
 JTZEMP_CURRENT_MACH_="%{$fg[green]%}%m%{$fg[white]%}:%{$reset_color%}"
@@ -34,4 +34,4 @@ ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%} ✗✗✗"
 
 
 # Put it all together!
-PROMPT="$JTZEMP_CURRENT_TIME_ $JTZEMP_CURRENT_USER_$JTZEMP_CURRENT_MACH_$JTZEMP_CURRENT_LOCA_ $JTZEMP_PROMPT_CHAR_ "
+PROMPT="$JTZEMP_CURRENT_TIME_$JTZEMP_CURRENT_RUBY_ $JTZEMP_CURRENT_USER_$JTZEMP_CURRENT_MACH_$JTZEMP_CURRENT_LOCA_ $JTZEMP_PROMPT_CHAR_ "
