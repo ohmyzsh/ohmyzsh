@@ -17,3 +17,5 @@ then
 else
   /usr/bin/env zsh $ZSH/tools/check_for_upgrade.sh
 fi
+
+unset config_file

@@ -9,7 +9,6 @@ alias devlog='tail -f log/development.log'
 
 # Super user
 alias _='sudo'
-alias ss='sudo su -'
 
 # Show history
 alias history='fc -l 1'
