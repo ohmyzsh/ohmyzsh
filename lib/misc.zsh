@@ -26,6 +26,9 @@ function pj() {
 ## Open current directory
 alias oo='open .'
 
+## Quick-look a file (^C to close)
+alias ql='qlmanage -p 2>/dev/null'
+
 ## Start a local SMTP server and dump emails sent to it to the console
 alias smtpconsole='python -m smtpd -n -c DebuggingServer localhost:1025'
 
