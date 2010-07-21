@@ -44,13 +44,3 @@ function tab() {
     end tell
 EOF
 }
-
-function take() {
-  mkdir -p $1
-  cd $1
-}
-
-function tm() {
-  cd $1
-  mate $1
-}
