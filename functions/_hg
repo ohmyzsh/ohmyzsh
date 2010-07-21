@@ -1,4 +1,3 @@
-
 #compdef hg
 
 # Zsh completion script for mercurial.  Rename this file to _hg and copy
@@ -359,7 +358,7 @@ _hg_pat_opts=(
 _hg_diff_opts=(
   '(--text -a)'{-a,--text}'[treat all files as text]'
   '(--git -g)'{-g,--git}'[use git extended diff format]'
-  "--nodates[don't include dates in diff headers]")
+  "--nodates[omit dates from diff headers]")
 
 _hg_dryrun_opts=(
   '(--dry-run -n)'{-n,--dry-run}'[do not perform actions, just print output]')
@@ -733,6 +732,11 @@ _hg_cmd_status() {
   '(--print0 -0)'{-0,--print0}'[end filenames with NUL, for use with xargs]' \
   '--rev[show difference from revision]:revision:_hg_tags' \
   '*:files:_files'
+}
+
+_hg_cmd_summary() {
+  _arguments -s -w : $_hg_global_opts \
+  '--remote[check for push and pull]'
 }
 
 _hg_cmd_tag() {
