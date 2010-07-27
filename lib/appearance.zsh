@@ -15,8 +15,11 @@ if [[ "$terminfo[colors]" -ge 8 ]]; then
   fi
 fi
 
-# disable zle inside emacs
-[[ $TERM = 'dumb' && $EMACS = t ]] && unsetopt zle
+# disable zle and prompt_cr inside emacs, confuses tramp
+if [[ $TERM = 'dumb' && $EMACS = t ]]; then
+  unsetopt zle
+  unsetopt prompt_cr
+fi
 
 #setopt no_beep
 setopt auto_cd
