@@ -6,6 +6,7 @@ alias pmsdb='python manage.py syncdb'
 alias pms='python manage.py shell'
 alias pmsp='python manage.py shell_plus'
 alias pmlf='python manage.py loaddata fixtures/*'
+alias pmt='python -W ignore::DeprecationWarning manage.py test'
 
 alias gs='gunicorn_django'
 alias gk='kill `cat .gunicorn.pid`'
