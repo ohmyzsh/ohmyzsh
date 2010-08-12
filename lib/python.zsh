@@ -1,5 +1,7 @@
 function wo() {
-    [ -f './.venv' ] && workon `cat ./.venv`
+    [ "$VEW_SOURCED" ] || source "$VEW_PATH"
+    [ -f './.venv' ] && workon `cat ./.venv` || workon $1
+    export VEW_SOURCED=1
 }
 alias deact='deactivate'
 alias cdv='cd $WORKON_HOME'
