@@ -37,3 +37,11 @@ alias serve_this='python -m SimpleHTTPServer'
 
 ## Highlight-aware less command
 alias hl='less -R'
+
+## Show history
+alias history='fc -l 1'
+
+## Color grep results
+## Examples: http://rubyurl.com/ZXv
+export GREP_OPTIONS='--color=auto'
+export GREP_COLOR='1;32'
