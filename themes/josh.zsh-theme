@@ -5,7 +5,7 @@ ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_DIRTY="%{$grey%}) %{$fg[yellow]%}✗%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$grey%})"
 
-function pat_prompt {
+function josh_prompt {
   (( spare_width = ${COLUMNS} ))
   prompt=" "
 
@@ -14,7 +14,7 @@ function pat_prompt {
   path_size=${#PWD}
   branch_size=${#branch}
   ruby_size=${#ruby_version}
-  machine_size=11
+  user_machine_size=${#${(%):-%n@%m-}}
   
   if [[ ${#branch} -eq 0 ]]
     then (( ruby_size = ruby_size + 1 ))
@@ -25,7 +25,7 @@ function pat_prompt {
     fi
   fi
   
-  (( spare_width = ${spare_width} - (${machine_size} + ${path_size} + ${branch_size} + ${ruby_size}) ))
+  (( spare_width = ${spare_width} - (${user_machine_size} + ${path_size} + ${branch_size} + ${ruby_size}) ))
 
   while [ ${#prompt} -lt $spare_width ]; do
     prompt=" $prompt"
@@ -39,5 +39,5 @@ function pat_prompt {
 setopt prompt_subst
 
 PROMPT='
-%n@%m $(pat_prompt)
+%n@%m $(josh_prompt)
 %(?,%{%F{green}%},%{%F{red}%})⚡%{$reset_color%} '
