@@ -4,5 +4,6 @@ projects.zsh
 custom
 custom/*.zsh
 !custom/example.zsh
+*.un~
 
 .DS_Store
