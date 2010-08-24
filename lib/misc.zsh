@@ -23,6 +23,11 @@ function pj() {
     python -mjson.tool
 }
 
+## curl JSON
+function cj() {
+    curl -sS $@ | pj
+}
+
 ## Open current directory
 alias oo='open .'
 
