@@ -1,0 +1,46 @@
+#compdef pip
+#autoload
+
+# pip zsh completion, based on homebrew completion
+
+_pip_installed() {
+  installed_pkgs=(`pip freeze`)
+}
+
+local -a _1st_arguments
+_1st_arguments=(
+  'bundle:Create pybundles (archives containing multiple packages)'
+  'freeze:Output all currently installed packages (exact versions) to stdout'
+  'help:Show available commands'
+  'install:Install packages'
+  'search:Search PyPI'
+  'uninstall:Uninstall packages'
+  'unzip:Unzip individual packages'
+  'zip:Zip individual packages'
+)
+
+local expl
+local -a pkgs installed_pkgs
+
+_arguments \
+  '(--version)--version[Show version number of program and exit]' \
+  '(-v --verbose)'{-v,--verbose}'[Give more output]' \
+  '(-q --quiet)'{-q,--quiet}'[Give less output]' \
+  '(-h --help)'{-h,--help}'[Show help]' \
+  '*:: :->subcmds' && return 0
+
+if (( CURRENT == 1 )); then
+  _describe -t commands "pip subcommand" _1st_arguments
+  return
+fi
+
+case "$words[1]" in
+  list)
+      if [[ "$state" == forms ]]; then
+        _pip_installed
+        _requested installed_pkgs expl 'installed packages' compadd -a installed_pkgs
+      fi ;;
+  uninstall)
+    _pip_installed
+    _wanted installed_pkgs expl 'installed packages' compadd -a installed_pkgs ;;
+esac
