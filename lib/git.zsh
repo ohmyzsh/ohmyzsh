@@ -5,9 +5,23 @@ function git_prompt_info() {
 }
 
 parse_git_dirty () {
-  if [[ -n $(git status -s 2> /dev/null) ]]; then
-    echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
-  else
-    echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
+  gitstat=$(git status -s 2>/dev/null | grep -v '\(^A|^M|^.M|??\)')
+
+  if [[ $(echo ${gitstat} | grep -v '^$' | wc -l | tr -d ' ') == 0 ]]; then
+	echo -n "$ZSH_THEME_GIT_PROMPT_CLEAN"
+	else
+	echo -n "$ZSH_THEME_GIT_PROMPT_UNCLEAN_SPACER"
+  fi
+
+  if [[ $(echo ${gitstat} | grep -c "^.M") > 0 ]]; then
+	echo -n "$ZSH_THEME_GIT_PROMPT_DIRTY"
+  fi
+
+  if [[ $(echo ${gitstat} | grep -c "^[MA]") > 0 ]]; then
+	echo -n "$ZSH_THEME_GIT_PROMPT_STAGED"
+  fi
+
+  if [[ $(echo ${gitstat} | grep -c '^??') > 0 ]]; then
+	echo -n "$ZSH_THEME_GIT_PROMPT_UNTRACKED"
   fi
 }
