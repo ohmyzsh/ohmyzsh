@@ -4,7 +4,7 @@
 JTZEMP_CURRENT_TIME_="%{$fg[blue]%}[%{$fg[red]%}%T%{$fg[blue]%}]%{$reset_color%}"
 
 # Grab the current version of ruby in use (via RVM): [ruby-1.8.7]
-JTZEMP_CURRENT_RUBY_="%{$fg[blue]%}[%{$fg[red]%}\$(~/.rvm/bin/rvm-prompt i v)%{$fg[blue]%}]%{$reset_color%}"
+JTZEMP_CURRENT_RUBY_="%{$fg[blue]%}[%{$fg[red]%}\$(~/.rvm/bin/rvm-prompt s i v)%{$fg[blue]%}]%{$reset_color%}"
 
 # Grab the current machine name: muscato
 JTZEMP_CURRENT_MACH_="%{$fg[green]%}%m%{$fg[white]%}:%{$reset_color%}"
