@@ -13,11 +13,11 @@ parse_git_dirty () {
 	echo -n "$ZSH_THEME_GIT_PROMPT_UNCLEAN_SPACER"
   fi
 
-  if [[ $(echo ${gitstat} | grep -c "^.M") > 0 ]]; then
+  if [[ $(echo ${gitstat} | grep -c "^.[MD]") > 0 ]]; then
 	echo -n "$ZSH_THEME_GIT_PROMPT_DIRTY"
   fi
 
-  if [[ $(echo ${gitstat} | grep -c "^[MA]") > 0 ]]; then
+  if [[ $(echo ${gitstat} | grep -c "^[MAD]") > 0 ]]; then
 	echo -n "$ZSH_THEME_GIT_PROMPT_STAGED"
   fi
 
