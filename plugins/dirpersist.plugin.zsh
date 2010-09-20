@@ -5,6 +5,9 @@
 # Add dirpersist to $plugins in ~/.zshrc to load
 # 
 
+# $zdirstore is the file used to persist the stack
+zdirstore=~/.zdirstore
+
 dirpersistinstall () {
     if grep -qL 'dirpersiststore' ~/.zlogout; then
     else
@@ -17,12 +20,12 @@ dirpersistinstall () {
 }
 
 dirpersiststore () {
-    dirs -p | tail -r | perl -ne 'chomp;s/([& ])/\\$1/g ;print "if [ -d $_ ]; then pushd -q $_; fi\n"' > ~/.zdirstore
+    dirs -p | tail -r | perl -ne 'chomp;s/([& ])/\\$1/g ;print "if [ -d $_ ]; then pushd -q $_; fi\n"' > $zdirstore
 }
 
 dirpersistrestore () {
-    if [ -f ~/.zdirstore ]; then
-        source ~/.zdirstore
+    if [ -f $zdirstore ]; then
+        source $zdirstore
     fi
 }
 
