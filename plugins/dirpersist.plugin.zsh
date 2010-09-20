@@ -2,7 +2,8 @@
 # 
 # Make the dirstack more persistant
 # 
-# Run dirpersiststore in ~/.zlogout
+# Add dirpersist to $plugins in ~/.zshrc to load
+# 
 
 dirpersistinstall () {
     if grep -qL 'dirpersiststore' ~/.zlogout; then
