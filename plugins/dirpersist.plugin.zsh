@@ -9,7 +9,7 @@
 zdirstore=~/.zdirstore
 
 dirpersistinstall () {
-    if grep -qL 'dirpersiststore' ~/.zlogout; then
+    if grep 'dirpersiststore' ~/.zlogout > /dev/null; then
     else
         if read -q \?"Would you like to set up your .zlogout file for use with dirspersist? (y/n) "; then
             echo "# Store dirs stack\n# See ~/.oh-my-zsh/plugins/dirspersist.plugin.zsh\ndirpersiststore" >> ~/.zlogout
@@ -19,6 +19,7 @@ dirpersistinstall () {
     fi
 }
 
+# FIXME solaris doesn't support tail -r
 dirpersiststore () {
     dirs -p | tail -r | perl -ne 'chomp;s/([& ])/\\$1/g ;print "if [ -d $_ ]; then pushd -q $_; fi\n"' > $zdirstore
 }
