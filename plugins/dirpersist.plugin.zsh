@@ -19,9 +19,8 @@ dirpersistinstall () {
     fi
 }
 
-# FIXME solaris doesn't support tail -r
 dirpersiststore () {
-    dirs -p | tail -r | perl -ne 'chomp;s/([& ])/\\$1/g ;print "if [ -d $_ ]; then pushd -q $_; fi\n"' > $zdirstore
+    dirs -p | perl -e 'foreach (reverse <STDIN>) {chomp;s/([& ])/\\$1/g ;print "if [ -d $_ ]; then pushd -q $_; fi\n"}' > $zdirstore
 }
 
 dirpersistrestore () {
