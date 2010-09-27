@@ -17,7 +17,7 @@ parse_git_dirty () {
 	echo -n "$ZSH_THEME_GIT_PROMPT_DIRTY"
   fi
 
-  if [[ $(echo ${gitstat} | grep -c "^[MAD]") > 0 ]]; then
+  if [[ $(echo ${gitstat} | grep -c "^[MARD]") > 0 ]]; then
 	echo -n "$ZSH_THEME_GIT_PROMPT_STAGED"
   fi
 
