@@ -1,4 +1,5 @@
 # Aliases
+[[ -x $(which hub) ]] && function git(){hub "$@"}
 alias g='git'
 alias gst='git status'
 alias gl='git pull'
@@ -12,7 +13,6 @@ alias gb='git branch'
 alias gba='git branch -a'
 alias gcount='git shortlog -sn'
 alias gcp='git cherry-pick'
-
 
 # Git and svn mix
 alias git-svn-dcommit-push='git svn dcommit && git push github master:svntrunk'
