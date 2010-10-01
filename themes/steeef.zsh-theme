@@ -56,7 +56,7 @@ function steeef_chpwd {
 add-zsh-hook chpwd steeef_chpwd
 
 function steeef_precmd {
-    if [[ -n "$PR_GIT_UPDATE" ]] ; then
+    if [[ -n "$PR_GIT_UPDATE" || -z $(git ls-files --other --exclude-standard 2> /dev/null) ]] ; then
         vcs_info 'prompt'
         PR_GIT_UPDATE=
     fi
