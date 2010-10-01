@@ -31,8 +31,8 @@ zstyle ':vcs_info:*:prompt:*' check-for-changes true
 PR_RST="%{${reset_color}%}"
 FMT_BRANCH="(%{$fg[magenta]%}%b%u%c${PR_RST})"
 FMT_ACTION="(%{$fg[green]%}%a${PR_RST})"
-FMT_UNSTAGED="%{$fg[yellow]%}!"
-FMT_STAGED="%{$fg[yellow]%}?"
+FMT_UNSTAGED="%F{11}●"
+FMT_STAGED="%F{28}●"
 
 zstyle ':vcs_info:*:prompt:*' unstagedstr   "${FMT_UNSTAGED}"
 zstyle ':vcs_info:*:prompt:*' stagedstr     "${FMT_STAGED}"
@@ -56,7 +56,16 @@ function steeef_chpwd {
 add-zsh-hook chpwd steeef_chpwd
 
 function steeef_precmd {
-    if [[ -n "$PR_GIT_UPDATE" || -z $(git ls-files --other --exclude-standard 2> /dev/null) ]] ; then
+    # check for untracked files, since vcs_info doesn't
+    if [[ -n $(git ls-files --other --exclude-standard 2> /dev/null) ]]; then
+        PR_GIT_UPDATE=1
+        FMT_BRANCH="(%{$fg[magenta]%}%b%u%c%{$fg[red]%}●${PR_RST})"
+    else
+        FMT_BRANCH="(%{$fg[magenta]%}%b%u%c${PR_RST})"
+    fi
+    zstyle ':vcs_info:*:prompt:*' formats       "${FMT_BRANCH}"
+
+    if [[ -n "$PR_GIT_UPDATE" ]] ; then
         vcs_info 'prompt'
         PR_GIT_UPDATE=
     fi
