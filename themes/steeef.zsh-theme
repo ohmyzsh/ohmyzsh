@@ -3,6 +3,9 @@
 #
 # vcs_info modifications from Bart Trojanowski's zsh prompt:
 # http://www.jukie.net/bart/blog/pimping-out-zsh-prompt
+#
+# git untracked files modification from Brian Carper:
+# http://briancarper.net/blog/570/git-info-in-your-zsh-prompt
 
 function virtualenv_info {
     [ $VIRTUAL_ENV ] && echo '('`basename $VIRTUAL_ENV`') '
@@ -16,6 +19,9 @@ colors
 autoload -U add-zsh-hook
 autoload -Uz vcs_info
 
+
+# enable VCS systems you use
+zstyle ':vcs_info:*' enable git svn
 
 # check-for-changes can be really slow.
 # you should disable it, if you work with large repositories
@@ -31,8 +37,8 @@ zstyle ':vcs_info:*:prompt:*' check-for-changes true
 PR_RST="%{${reset_color}%}"
 FMT_BRANCH="(%{$fg[magenta]%}%b%u%c${PR_RST})"
 FMT_ACTION="(%{$fg[green]%}%a${PR_RST})"
-FMT_UNSTAGED="%{$fg[yellow]%}!"
-FMT_STAGED="%{$fg[yellow]%}?"
+FMT_UNSTAGED="%{$fg[yellow]%}●"
+FMT_STAGED="%{$fg[green]%}●"
 
 zstyle ':vcs_info:*:prompt:*' unstagedstr   "${FMT_UNSTAGED}"
 zstyle ':vcs_info:*:prompt:*' stagedstr     "${FMT_STAGED}"
@@ -46,6 +52,9 @@ function steeef_preexec {
         *git*)
             PR_GIT_UPDATE=1
             ;;
+        *svn*)
+            PR_GIT_UPDATE=1
+            ;;
     esac
 }
 add-zsh-hook preexec steeef_preexec
@@ -56,6 +65,15 @@ function steeef_chpwd {
 add-zsh-hook chpwd steeef_chpwd
 
 function steeef_precmd {
+    # check for untracked files or updated submodules, since vcs_info doesn't
+    if [[ -n $(git ls-files --other --exclude-standard 2> /dev/null) || -n $(git ls-files -m --exclude-standard 2> /dev/null) ]]; then
+        PR_GIT_UPDATE=1
+        FMT_BRANCH="(%{$fg[magenta]%}%b%u%c%{$fg[red]%}●${PR_RST})"
+    else
+        FMT_BRANCH="(%{$fg[magenta]%}%b%u%c${PR_RST})"
+    fi
+    zstyle ':vcs_info:*:prompt:*' formats       "${FMT_BRANCH}"
+
     if [[ -n "$PR_GIT_UPDATE" ]] ; then
         vcs_info 'prompt'
         PR_GIT_UPDATE=
