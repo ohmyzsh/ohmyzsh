@@ -52,6 +52,9 @@ function steeef_preexec {
         *git*)
             PR_GIT_UPDATE=1
             ;;
+        *svn*)
+            PR_GIT_UPDATE=1
+            ;;
     esac
 }
 add-zsh-hook preexec steeef_preexec
