@@ -1,10 +1,11 @@
 # Aliases
 alias g='git'
-alias gs='git status --ignore-submodules'
+alias ga='git add'
+alias gs='git status'
 alias gl='git pull'
 alias gup='git fetch && git rebase'
 alias gp='git push'
-alias gd='git diff --ignore-submodules | less'
+alias gd='git diff | less'
 alias gdv='git diff -w "$@" | vim -R -'
 alias gc='git commit -v'
 alias gca='git commit -v -a'
