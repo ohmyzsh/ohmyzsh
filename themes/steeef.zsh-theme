@@ -31,8 +31,8 @@ zstyle ':vcs_info:*:prompt:*' check-for-changes true
 PR_RST="%{${reset_color}%}"
 FMT_BRANCH="(%{$fg[magenta]%}%b%u%c${PR_RST})"
 FMT_ACTION="(%{$fg[green]%}%a${PR_RST})"
-FMT_UNSTAGED="%F{11}●"
-FMT_STAGED="%F{28}●"
+FMT_UNSTAGED="%{$fg[yellow]%}●"
+FMT_STAGED="%{$fg[green]%}●"
 
 zstyle ':vcs_info:*:prompt:*' unstagedstr   "${FMT_UNSTAGED}"
 zstyle ':vcs_info:*:prompt:*' stagedstr     "${FMT_STAGED}"
