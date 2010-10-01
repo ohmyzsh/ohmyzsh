@@ -1,4 +1,4 @@
 # add brew completion function to path
-fpath=($ZSH/functions/gem $fpath)
+fpath=($ZSH/plugins/gem $fpath)
 autoload -U compinit
 compinit -i
