@@ -66,7 +66,7 @@ add-zsh-hook chpwd steeef_chpwd
 
 function steeef_precmd {
     # check for untracked files or updated submodules, since vcs_info doesn't
-    if [[ -n $(git ls-files --other --exclude-standard 2> /dev/null) ]]; then
+    if [[ ! -z $(git ls-files --other --exclude-standard 2> /dev/null) ]]; then
         PR_GIT_UPDATE=1
         FMT_BRANCH="(%{$fg[magenta]%}%b%u%c%{$fg[red]%}●${PR_RST})"
     else
