@@ -20,6 +20,7 @@ bindkey "^[[F"  end-of-line
 bindkey "^[[4~" end-of-line
 bindkey ' ' magic-space    # also do history expansion on space
 
+bindkey '^[[Z' reverse-menu-complete
 
 # consider emacs keybindings:
 
