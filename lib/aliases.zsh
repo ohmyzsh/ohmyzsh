@@ -3,7 +3,6 @@ alias pu='pushd'
 alias po='popd'
 
 # Basic directory operations
-alias .='pwd'
 alias ...='cd ../..'
 alias -- -='cd -'
 
