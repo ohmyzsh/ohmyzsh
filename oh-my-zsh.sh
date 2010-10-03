@@ -8,7 +8,9 @@ fpath=($ZSH/functions $fpath)
 for config_file ($ZSH/lib/*.zsh) source $config_file
 
 # Load all of your custom configurations from custom/
-for config_file ($ZSH/custom/*.zsh) source $config_file
+if [ -d "$ZSH/custom" ]; then
+  for config_file ($ZSH/custom/*.zsh) source $config_file
+fi
 
 # Load all of the plugins that were defined in ~/.zshrc
 plugin=${plugin:=()}
