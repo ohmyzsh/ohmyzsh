@@ -1,4 +1,5 @@
 #compdef brew
+#autoload
 
 # imported from the latest homebrew contributions
 
@@ -65,3 +66,4 @@ case "$words[1]" in
     _brew_installed_formulae
     _wanted installed_formulae expl 'installed formulae' compadd -a installed_formulae ;;
 esac
+
