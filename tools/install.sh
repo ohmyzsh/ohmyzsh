@@ -21,6 +21,9 @@ cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
 echo "Copying your current PATH and adding it to the end of ~/.zshrc for you."
 echo "export PATH=$PATH" >> ~/.zshrc
 
+echo "Copying your current MANPATH and adding it to the end of ~/.zshrc for you."
+echo "export MANPATH=$MANPATH" >> ~/.zshrc
+
 echo "Time to change your default shell to zsh!"
 chsh -s "/usr/bin/env zsh"
 
