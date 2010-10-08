@@ -38,3 +38,10 @@ function take() {
   cd $1
 }
 
+function logview() {
+  ccze -A < $1 | less -R
+}
+
+function logtail() {
+  tail -f $1 | ccze
+}
