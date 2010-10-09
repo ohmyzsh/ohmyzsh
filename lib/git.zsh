@@ -38,4 +38,3 @@ git_prompt_status() {
   fi
   echo $STATUS
 }
-
