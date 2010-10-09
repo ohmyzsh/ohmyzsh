@@ -21,8 +21,6 @@ _1st_arguments=(
   'info:Info about this project'
   'issues:Project issues tools'
   'network:Project network tools - sub-commands : web [user], list, fetch, commits'
-  'network --after:Only show commits after a certain date'
-  'network --applies:Filter commits to patches that apply cleanly'
   'open:Open the given user/project in a web browser'
   'pull-request:Generate the text for a pull request'
   'pull:Pull from a remote'
