@@ -1,3 +1,6 @@
+# in order to make this work, you would need to have the github gem installed
+# http://github.com/defunkt/github-gem
+
 #compdef github
 #autoload
 
