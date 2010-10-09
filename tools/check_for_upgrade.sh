@@ -31,4 +31,3 @@ fi
 
 # update the zsh file
 _update_zsh_update
-
