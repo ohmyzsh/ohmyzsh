@@ -5,3 +5,6 @@ alias pfind='find . -name *.pl | xargs grep -n'
 
 #Check syntax perl file 
 alias psc='perl -c'
+
+#French perldoc 
+alias perldoc-fr="perldoc -L FR"
