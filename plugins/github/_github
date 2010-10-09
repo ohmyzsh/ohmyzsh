@@ -1,8 +1,8 @@
-# in order to make this work, you would need to have the github gem installed
-# http://github.com/defunkt/github-gem
-
 #compdef github
 #autoload
+
+# in order to make this work, you will need to have the github gem installed
+# http://github.com/defunkt/github-gem
 
 # github zsh completion, based on homebrew completion
 
