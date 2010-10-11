@@ -18,7 +18,6 @@ alias gsub='git submodule'
 
 =======
 alias glg='git log --stat --max-count=5'
->>>>>>> upstream/master
 
 # Git and svn mix
 alias git-svn-dcommit-push='git svn dcommit && git push github master:svntrunk'
