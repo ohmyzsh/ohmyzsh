@@ -13,7 +13,6 @@ alias gb='git branch'
 alias gba='git branch -a'
 alias gcount='git shortlog -sn'
 alias gcp='git cherry-pick'
-<<<<<<< HEAD
 alias gsub='git submodule'
 
 =======
