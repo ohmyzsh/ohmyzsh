@@ -6,6 +6,7 @@ alias gl='git pull'
 alias gup='git fetch && git rebase'
 alias gp='git push'
 alias gd='git diff | less'
+alias gdt='git difftool'
 alias gdv='git diff -w "$@" | vim -R -'
 alias gc='git commit -v'
 alias gca='git commit -v -a'
@@ -14,8 +15,6 @@ alias gba='git branch -a'
 alias gcount='git shortlog -sn'
 alias gcp='git cherry-pick'
 alias gsub='git submodule'
-
-=======
 alias glg='git log --stat --max-count=5'
 
 # Git and svn mix
