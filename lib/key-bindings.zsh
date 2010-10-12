@@ -22,6 +22,12 @@ bindkey ' ' magic-space    # also do history expansion on space
 
 bindkey '^[[Z' reverse-menu-complete
 
+# Fix Mac OS X's keybinding
+bindkey '^?' backward-delete-char
+bindkey '^[[3~' delete-char
+
+
+
 # consider emacs keybindings:
 
 #bindkey -e  ## emacs key bindings
