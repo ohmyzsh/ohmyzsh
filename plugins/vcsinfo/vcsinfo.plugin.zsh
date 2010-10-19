@@ -6,8 +6,12 @@
 #
 # http://zsh.sourceforge.net/Doc/Release/User-Contributions.html#IDX2133
 #
+
+typeset -ga precmd_functions
 autoload -Uz vcs_info
 
-precmd() {
+zsh_vcsinfo_precmd() {
   vcs_info
 }
+
+precmd_functions+='zsh_vcsinfo_precmd'
