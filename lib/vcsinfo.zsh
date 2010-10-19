@@ -10,8 +10,16 @@
 typeset -ga precmd_functions
 autoload -Uz vcs_info
 
+zstyle ':vcs_info:git:*' check-for-changes true
+zstyle ':vcs_info:git:*' formats "$ZSH_THEME_GIT_PROMPT_PREFIX%b%u%F$ZSH_THEME_GIT_PROMPT_SUFFIX"
+zstyle ':vcs_info:git:*' unstagedstr "$ZSH_THEME_GIT_PROMPT_DIRTY"
+
 zsh_vcsinfo_precmd() {
   vcs_info
+}
+
+vcs_prompt_info() {
+  echo "${vcs_info_msg_0_}"
 }
 
 precmd_functions+='zsh_vcsinfo_precmd'
