@@ -5,7 +5,7 @@ function title {
     print -nR $'\033k'$1$'\033'\\\
 
     print -nR $'\033]0;'$2$'\a'
-  elif [[ $TERM =~ "^xterm" || $TERM == "rxvt" ]]; then
+  elif [[ ($TERM =~ "^xterm") ]] || [[ ($TERM == "rxvt") ]]; then
     # Use this one instead for XTerms:
     print -nR $'\033]0;'$*$'\a'
   fi
@@ -37,4 +37,3 @@ function take() {
   mkdir -p $1
   cd $1
 }
-
