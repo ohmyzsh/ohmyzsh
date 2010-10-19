@@ -38,3 +38,19 @@ function take() {
   cd $1
 }
 
+function logview() {
+    if [ -x $(which ccze) ]; then
+        ccze -A < $1 | less -R
+    else
+        cat $1 | less -R
+    fi
+}
+
+function logtail() {
+    if [ -x $(which ccze) ]; then
+        tail -f $1 | ccze
+    else
+        tail -f $1
+    fi
+}
+
