@@ -20,7 +20,7 @@ autoload -U add-zsh-hook
 autoload -Uz vcs_info
 
 #use extended color pallete if available
-if [ $TERM = "xterm-256color" || $TERM = "linux" || $TERM = "rxvt-256color" || $TERM = "rxvt-unicode-256color" ]; then
+if [ [ $TERM = "xterm-256color" ] || [ $TERM = "linux"] || [ $TERM = "rxvt-256color" ] || [ $TERM = "rxvt-unicode-256color" ] ]; then
     turquoise="%F{81}"
     orange="%F{166}"
     purple="%F{135}"
