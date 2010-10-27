@@ -26,4 +26,5 @@ ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[green]%}!"
 ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[green]%}?"
 ZSH_THEME_GIT_PROMPT_CLEAN=""
 
-. ~/bin/dotfiles/zsh/aliases
+test -r ~/bin/dotfiles/zsh/aliases && . ~/bin/dotfiles/zsh/aliases
+
