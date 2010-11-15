@@ -1,7 +1,35 @@
 #compdef vagrant 
 #autoload
 
-# vagrant zsh completion, based on homebrew completion
+# vagrant zsh completion
+
+local -a _1st_arguments
+_1st_arguments=(
+    'box:Box commands'
+    'destroy:Destroys the vagrant environment'
+    'halt:Halts the currently running vagrant environment'
+    'help:[TASK] Describe available tasks or one specific task'
+    'init:[box_name] [box_url] Initializes current folder for Vagrant usage'
+    'package:Packages a vagrant environment for distribution'
+    'provision:Run the provisioner'
+    'reload:Reload the vagrant environment'
+    'resume:Resumes a suspend vagrant environment'
+    'ssh:SSH into the currently running environment'
+    'ssh_config:outputs .ssh/config valid syntax for connecting to this environment via ssh.'
+    'status:Shows the status of the current Vagrant environment.'
+    'suspend:Suspends the currently running vagrant environment'
+    'up:Creates the vagrant environment'
+    'version:Prints the Vagrant version information'
+)
+
+local -a _box_arguments
+_box_arguments=(
+    'add:NAME URI Add a box to the system'
+    'help:COMMAND Describe subcommands or one specific subcommand'
+    'list:Lists all installed boxes'
+    'remove:NAME Remove a box from the system'
+    'repackage:NAME Repackage an installed box into a `.box` file.'
+)
 
 __task_list ()
 {
@@ -36,43 +64,15 @@ __vagrant-box ()
        (options)
            case $line[1] in
                (repackage|remove)
-                   _arguments \
-                       -F'[Fetch from origin before performing finish]' \
-                       -r'[Rebase instead of merge]'\
-                         ':feature:__box_list' 
+                   _arguments ':feature:__box_list' 
                ;;
            esac
        ;;
     esac
 }
 
-local -a _1st_arguments
-_1st_arguments=(
-    'box:Box commands'
-    'destroy:Destroys the vagrant environment'
-    'halt:Halts the currently running vagrant environment'
-    'help:[TASK] Describe available tasks or one specific task'
-    'init:[box_name] [box_url] Initializes current folder for Vagrant usage'
-    'package:Packages a vagrant environment for distribution'
-    'provision:Run the provisioner'
-    'reload:Reload the vagrant environment'
-    'resume:Resumes a suspend vagrant environment'
-    'ssh:SSH into the currently running environment'
-    'ssh_config:outputs .ssh/config valid syntax for connecting to this environment via ssh.'
-    'status:Shows the status of the current Vagrant environment.'
-    'suspend:Suspends the currently running vagrant environment'
-    'up:Creates the vagrant environment'
-    'version:Prints the Vagrant version information'
-)
 
-local -a _box_arguments
-_box_arguments=(
-    'add:NAME URI Add a box to the system'
-    'help:COMMAND Describe subcommands or one specific subcommand'
-    'list:Lists all installed boxes'
-    'remove:NAME Remove a box from the system'
-    'repackage:NAME Repackage an installed box into a `.box` file.'
-)
+
 
 local expl
 local -a boxes installed_boxes
@@ -84,7 +84,6 @@ _arguments -C \
     ':command:->command' \
     '*::options:->options'
 
-
 case $state in
   (command)
       _describe -t commands "gem subcommand" _1st_arguments
@@ -94,10 +93,7 @@ case $state in
   (options)
     case $line[1] in
       (help)
-         _arguments \
-             -F'[Fetch from origin before performing finish]' \
-             -r'[Rebase instead of merge]'\
-               ':feature:__task_list' 
+         _arguments ':feature:__task_list' 
       ;;
 
       (box)
