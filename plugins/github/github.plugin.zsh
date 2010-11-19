@@ -3,6 +3,7 @@ fpath=($ZSH/plugins/github $fpath)
 autoload -U compinit
 compinit -i
 
+
 # git + hub = github
 # https://github.com/defunkt/hub
 function git()
