@@ -1,6 +1,6 @@
 # Aliases
 alias g='git'
-alias gst='git status'
+alias gst='git status -s'
 alias gl='git pull'
 alias gup='git fetch && git rebase'
 alias gp='git push'
@@ -13,7 +13,7 @@ alias gba='git branch -a'
 alias gcount='git shortlog -sn'
 alias gcp='git cherry-pick'
 alias glg='git log --stat --max-count=5'
-alias glgg='git log --graph --max-count=5'
+alias glgg='git log --graph --decorate --max-count=5'
 
 # Git and svn mix
 alias git-svn-dcommit-push='git svn dcommit && git push github master:svntrunk'
