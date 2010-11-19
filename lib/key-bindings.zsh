@@ -26,8 +26,6 @@ bindkey '^[[Z' reverse-menu-complete
 bindkey '^?' backward-delete-char
 bindkey '^[[3~' delete-char
 
-
-
 # consider emacs keybindings:
 
 #bindkey -e  ## emacs key bindings
