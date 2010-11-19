@@ -7,9 +7,9 @@ compinit -i
 # https://github.com/defunkt/hub
 function git()
 {
-	if [ -x $(which hub) ]; then
-		hub "$@"
-	else
-		git "$@"
-	fi
+  if [ -x $(which hub) ]; then
+    hub "$@"
+  else
+    git "$@"
+  fi
 }
