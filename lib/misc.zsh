@@ -50,3 +50,13 @@ alias history='fc -l 1'
 ## Examples: http://rubyurl.com/ZXv
 export GREP_OPTIONS='--color=auto'
 export GREP_COLOR='1;32'
+
+# What the hell did I do the other day?
+function whatthehelldididoon() {
+    for repo in `find . -name '.hg'`
+    do
+        echo $repo
+        hg .. -R $repo/.. -d "$1" -u 'Steve Losh'
+    done
+}
+
