@@ -7,6 +7,9 @@ fpath=($ZSH/functions $fpath)
 # TIP: Add files you don't want in git to .gitignore
 for config_file ($ZSH/lib/*.zsh) source $config_file
 
+# Load theme
+source "$ZSH/themes/$ZSH_THEME.zsh-theme"
+
 # Load all of your custom configurations from custom/
 for config_file ($ZSH/custom/*.zsh) source $config_file
 
