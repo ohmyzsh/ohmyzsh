@@ -1,4 +1,5 @@
-alias ss='thin --stats "/thin/stats" start'
+# alias ss='thin --stats "/thin/stats" start'
+alias ss='ruby script/server'
 alias sg='ruby script/generate'
 alias sd='ruby script/destroy'
 alias sp='ruby script/plugin'
