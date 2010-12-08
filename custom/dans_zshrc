@@ -1,0 +1,31 @@
+# Path to your oh-my-zsh configuration.
+export ZSH=$HOME/.oh-my-zsh
+
+# Set to the name theme to load.
+# Look in ~/.oh-my-zsh/themes/
+export ZSH_THEME="compact"
+
+# Set to this to use case-sensitive completion
+# export CASE_SENSITIVE="true"
+
+# Comment this out to disable weekly auto-update checks
+# export DISABLE_AUTO_UPDATE="true"
+
+# Uncomment following line if you want to disable colors in ls
+# export DISABLE_LS_COLORS="true"
+
+# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# Example format: plugins=(rails git textmate ruby lighthouse)
+plugins=(git command-not-found)
+
+source $ZSH/oh-my-zsh.sh
+
+# Customize to your needs...
+#
+
+# When an editor is needed, use vim
+export EDITOR=/usr/bin/vim
+
+# Remote connection aliases
+alias perplexity='rdesktop -g 1680x1050 -D -a 24 perplexity.cs.byu.edu -r sound:local'
+alias bleu='rdesktop -g 1024x1280 -D -a 24 bleu.cs.byu.edu -r sound:local'
