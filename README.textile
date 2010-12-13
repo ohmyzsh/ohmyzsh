@@ -4,6 +4,8 @@ bq. "OH MY ZSHELL!"
 
 h2. Setup
 
+@oh-my-zsh@ should work with any recent release of "zsh":http://www.zsh.org/, the minimum recommended version is 4.3.9.
+
 h3. The automatic installer... (do you trust me?)
 
 @wget http://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh@
@@ -25,22 +27,19 @@ h3. The manual way
 
   @chsh -s /bin/zsh@
 
-4. Start / restart zsh (open a new terminal is easy enough..)
+4. Start / restart zsh (open a new terminal is easy enough...)
 
 h3. Problems?
 
-You _might_ need to modify your PATH in ~/.zshrc if you're not able to find some commands after switching to oh-my-zsh.
+You _might_ need to modify your PATH in ~/.zshrc if you're not able to find some commands after switching to _Oh My Zsh_.
 
 h2. Usage
 
-TODO: Update this..
-
-* Rake autocomplete: @rake (tab)@. Will generate a cache of all your rake tasks and then let you auto-complete and/or select the task to run.
-* ssh autocomplete: @ssh (tab)@ or @scp (tab)@
-* Git branch, it'll tell you which branch you're in when you're in a git repository directory.
+* enable the plugins you want in your @~/.zshrc@ (take a look at @plugins/@ to see what's possible)
+** example: @plugins=(git osx ruby)@
 * Theme support: Change the @ZSH_THEME@ environment variable in @~/.zshrc@.
-** Take a look at the "current themes":http://wiki.github.com/robbyrussell/oh-my-zsh/themes that come bundled with Oh My Zsh.
-* much much more..
+** Take a look at the "current themes":http://wiki.github.com/robbyrussell/oh-my-zsh/themes that come bundled with _Oh My Zsh_.
+* much much more...  take a look at @lib/@ what _Oh My Zsh_ offers...
 
 h2. Useful
 
@@ -49,6 +48,7 @@ the "refcard":http://www.bash2zsh.com/zsh_refcard/refcard.pdf is pretty tasty fo
 h3. Customization
 
 If you want to override any of the default behavior, just add a new file (ending in @.zsh@) into the @custom/@ directory.
+If you have many functions which go good together you can put them as a *.plugin.zsh file in the @plugin/@ directory and then enable this plugin.
 
 h3. Uninstalling
 
@@ -67,7 +67,3 @@ I'm far from being a zsh-expert and suspect there are many ways to improve. If y
 h3. Send us your theme!
 
 I'm hoping to collect a bunch of themes for our command prompts. You can see existing ones in the @themes/@ directory.
-
-h3. Todo from imajes:
-
-* need to make the title bar support git folder
