@@ -26,7 +26,7 @@ alias tunnel='ssh -fqND 8888'
 
 # Python stuff
 alias 2to3='2to3 -x buffer'
-alias pydebug='python -m pudb.run'
+alias pydebug='python2 -m pudb.run'
 
 # IPv6 netstat version
 alias netstat6='netstat -A inet6'
