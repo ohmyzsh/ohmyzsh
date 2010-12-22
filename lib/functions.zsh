@@ -37,7 +37,6 @@ function take() {
   mkdir -p $1
   cd $1
 }
-<<<<<<< HEAD
 
 function logview() {
     if [ -x $(which ccze) ]; then
@@ -55,5 +54,3 @@ function logtail() {
     fi
 }
 
-=======
->>>>>>> upstream/master
