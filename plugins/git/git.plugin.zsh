@@ -13,10 +13,7 @@ alias gb='git branch'
 alias gba='git branch -a'
 alias gcount='git shortlog -sn'
 alias gcp='git cherry-pick'
-<<<<<<< HEAD:plugins/git.plugin.zsh
-=======
 alias glg='git log --stat --max-count=5'
->>>>>>> upstream/master:plugins/git/git.plugin.zsh
 
 # Git and svn mix
 alias git-svn-dcommit-push='git svn dcommit && git push github master:svntrunk'
