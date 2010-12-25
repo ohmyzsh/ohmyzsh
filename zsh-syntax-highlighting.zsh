@@ -10,6 +10,7 @@ ZLE_ALIAS_STYLE='fg=magenta,bold'
 ZLE_BUILTIN_STYLE='fg=cyan,bold'
 ZLE_FUNCTION_STYLE='fg=blue,bold'
 ZLE_COMMAND_STYLE='fg=green,bold'
+ZLE_PATH_STYLE='fg=white,underline'
 ZLE_COMMAND_UNKNOWN_TOKEN_STYLE='fg=red,bold'
 
 ZLE_HYPHEN_CLI_OPTION='fg=yellow,bold'
@@ -40,7 +41,10 @@ colorize-zle-buffer() {
         *'shell builtin'*)  style=$ZLE_BUILTIN_STYLE;;
         *'shell function'*) style=$ZLE_FUNCTION_STYLE;;
         *"$cmd is"*)        style=$ZLE_COMMAND_STYLE;;
-        *)                  style=$ZLE_COMMAND_UNKNOWN_TOKEN_STYLE;;
+        *)
+	style=$ZLE_COMMAND_UNKNOWN_TOKEN_STYLE
+	[ -e "$arg" ] && style=$ZLE_PATH_STYLE
+	;;
       esac
     else
 	case $arg in
@@ -50,7 +54,10 @@ colorize-zle-buffer() {
 	    '"'*'"') style=$ZLE_DOUBLE_QUOTED;;
 	    '`'*'`') style=$ZLE_BACK_QUOTED;;
 	    *"*"*) style=$ZLE_GLOBING;;
-	    *) style=$ZLE_DEFAULT;;
+	    *)
+	    style=$ZLE_DEFAULT
+	    [ -e "$arg" ] && style=$ZLE_PATH_STYLE
+	    ;;
 	esac
     fi
     region_highlight+=("$start_pos $end_pos $style")

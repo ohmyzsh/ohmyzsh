@@ -20,3 +20,4 @@ Just source the script from your `~/.zshrc`.
  * [Mounier Florian](http://github.com/paradoxxxzero)
  * [Jonathan Dahan](http://github.com/jedahan)
  * James Ahlborn
+ * [Andreas Jaggi](http://github.com/x-way)
