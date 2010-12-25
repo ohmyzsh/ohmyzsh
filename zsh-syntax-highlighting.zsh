@@ -1,5 +1,6 @@
 #!/usr/bin/env zsh
 # Copyleft 2010 zsh-syntax-highlighting contributors
+# http://github.com/nicoulaj/zsh-syntax-highlighting
 # All wrongs reserved.
 
 # Token types styles.
