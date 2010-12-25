@@ -5,7 +5,18 @@ An attempt at providing [Fish shell](http://www.fishshell.org) like syntax highl
 
 ## Usage
 
-Just source the script from your `~/.zshrc`.
+Download the script or clone this repository:
+
+    git clone git://github.com/nicoulaj/zsh-syntax-highlighting.git
+
+Update your `~/.zshrc` so that the script is sourced:
+
+    source /path/to/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+Re-open your terminal, or just reload it to take changes into account:
+
+    source ~/.zshrc
+
 
 ## References
 
@@ -22,4 +33,3 @@ Just source the script from your `~/.zshrc`.
  * James Ahlborn
  * [Andreas Jaggi](http://github.com/x-way)
  * [Wayne Davison](http://github.com/WayneD)
- 
