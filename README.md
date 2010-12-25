@@ -18,4 +18,5 @@ Just source the script from your `~/.zshrc`.
  * [Julien Nicoulaud](http://github.com/nicoulaj)
  * [Dave Ingram](http://github.com/dingram)
  * [Mounier Florian](http://github.com/paradoxxxzero)
+ * [Jonathan Dahan](http://github.com/jedahan)
  * James Ahlborn
