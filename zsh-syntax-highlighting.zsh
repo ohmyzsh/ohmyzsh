@@ -6,17 +6,17 @@
 # Token types styles.
 # See http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#SEC135
 ZLE_RESERVED_WORD_STYLE='fg=yellow,bold'
-ZLE_ALIAS_STYLE='fg=magenta,bold'
+ZLE_ALIAS_STYLE='fg=green,bold'
 ZLE_BUILTIN_STYLE='fg=cyan,bold'
 ZLE_FUNCTION_STYLE='fg=blue,bold'
 ZLE_COMMAND_STYLE='fg=green,bold'
 ZLE_PATH_STYLE='fg=white,underline'
 ZLE_COMMAND_UNKNOWN_TOKEN_STYLE='fg=red,bold'
 
-ZLE_HYPHEN_CLI_OPTION='fg=yellow,bold'
-ZLE_DOUBLE_HYPHEN_CLI_OPTION='fg=green,bold'
-ZLE_SINGLE_QUOTED='fg=magenta,bold'
-ZLE_DOUBLE_QUOTED='fg=red,bold'
+ZLE_HYPHEN_CLI_OPTION='fg=white'
+ZLE_DOUBLE_HYPHEN_CLI_OPTION='fg=white'
+ZLE_SINGLE_QUOTED='fg=yellow'
+ZLE_DOUBLE_QUOTED='fg=red'
 ZLE_BACK_QUOTED='fg=cyan,bold'
 ZLE_GLOBING='fg=blue,bold'
 
