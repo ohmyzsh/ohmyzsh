@@ -24,6 +24,14 @@ ZLE_DEFAULT='fg=white,bold'
 
 ZLE_TOKENS_FOLLOWED_BY_COMMANDS=('|' '||' ';' '&' '&&' 'sudo' 'start' 'time' 'strace' '§')
 
+_check_path() {
+	[ -z "$arg" ] && return 1
+	[ -e $arg ] && return 0
+	[ ! -e "`dirname $arg`" ] && return 1
+	[ ${#BUFFER} = $end_pos -a -n "`print $arg*`" ] && return 0
+	return 1
+}
+
 # Recolorize the current ZLE buffer.
 colorize-zle-buffer() {
   region_highlight=()
@@ -43,7 +51,7 @@ colorize-zle-buffer() {
         *"$cmd is"*)        style=$ZLE_COMMAND_STYLE;;
         *)
 	style=$ZLE_COMMAND_UNKNOWN_TOKEN_STYLE
-	[ -e "$arg" ] && style=$ZLE_PATH_STYLE
+	_check_path && style=$ZLE_PATH_STYLE
 	;;
       esac
     else
@@ -56,7 +64,7 @@ colorize-zle-buffer() {
 	    *"*"*) style=$ZLE_GLOBING;;
 	    *)
 	    style=$ZLE_DEFAULT
-	    [ -e "$arg" ] && style=$ZLE_PATH_STYLE
+	    _check_path && style=$ZLE_PATH_STYLE
 	    ;;
 	esac
     fi
