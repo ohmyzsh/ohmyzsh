@@ -21,3 +21,5 @@ Just source the script from your `~/.zshrc`.
  * [Jonathan Dahan](http://github.com/jedahan)
  * James Ahlborn
  * [Andreas Jaggi](http://github.com/x-way)
+ * [Wayne Davison](http://github.com/WayneD)
+ 
