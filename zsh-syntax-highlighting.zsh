@@ -61,7 +61,7 @@ colorize-zle-buffer() {
 	esac
     fi
     region_highlight+=("$start_pos $end_pos $style")
-    [[ ${${ZLE_TOKENS_FOLLOWED_BY_COMMANDS[(r)${arg//|/\|}]}:+yes} = 'yes' ]] && colorize=true
+    [[ ${${ZLE_TOKENS_FOLLOWED_BY_COMMANDS[(r)${arg//|/\|}]:-}:+yes} = 'yes' ]] && colorize=true
     start_pos=$end_pos
   done
 }
