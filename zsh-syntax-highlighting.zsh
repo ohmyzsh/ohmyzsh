@@ -25,6 +25,7 @@ ZLE_DEFAULT='fg=white,bold'
 ZLE_TOKENS_FOLLOWED_BY_COMMANDS=('|' '||' ';' '&' '&&' 'sudo' 'start' 'time' 'strace' '§')
 
 _check_path() {
+	setopt localoptions null_glob
 	[ -z "$arg" ] && return 1
 	[ -e $arg ] && return 0
 	[ ! -e "`dirname $arg`" ] && return 1
@@ -48,7 +49,7 @@ colorize-zle-buffer() {
         *'an alias'*)       style=$ZLE_ALIAS_STYLE;;
         *'shell builtin'*)  style=$ZLE_BUILTIN_STYLE;;
         *'shell function'*) style=$ZLE_FUNCTION_STYLE;;
-        *"$cmd is"*)        style=$ZLE_COMMAND_STYLE;;
+        *"${cmd:-no-command-specified} is"*) style=$ZLE_COMMAND_STYLE;;
         *)
 	style=$ZLE_COMMAND_UNKNOWN_TOKEN_STYLE
 	_check_path && style=$ZLE_PATH_STYLE
