@@ -39,7 +39,12 @@ else
     shell_level="%{$fg[cyan]%}(%{$fg[red]%}$[${SHLVL} - 1]%{$fg[cyan]%})%{$reset_color%}"
 fi
 
-PROMPT='%{$fg[cyan]%}[${user_host} %{$fg[yellow]%}%~%{$fg[cyan]%}]$(jobs_prompt_info)${shell_level} ${prompt_char} '
+# setup command result indicator
+CMDRESULT="%(?,,%{$fg[red]%}[%?]%{$reset_color%})"
+
+# Put it all together
+PROMPT='${CMDRESULT}%{$fg[cyan]%}[${user_host} %{$fg[yellow]%}%~%{$fg[cyan]%}]$(jobs_prompt_info)${shell_level}${prompt_char} '
+
 
 # Setup vi mode indicator
 MODE_INDICATOR="%{$fg_bold[yellow]%}<N>%{$reset_color%}"
@@ -50,10 +55,7 @@ ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%} "
 ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%})%{$fg[red]%}⚡%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%})"
 
-# setup command result indicator
-CMDRESULT="%(?, ,%{$fg[red]%}[$?]%{$reset_color%})"
-
 # setup right prompt
-RPROMPT='$(git_prompt_info)${CMDRESULT}$(vi_mode_prompt_info)'
+RPROMPT='$(git_prompt_info)$(vi_mode_prompt_info)'
 
 # vim: set ft=zsh
