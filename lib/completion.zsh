@@ -36,10 +36,12 @@ cdpath=(.)
 
 # use /etc/hosts and known_hosts for hostname completion
 [ -r ~/.ssh/known_hosts ] && _ssh_hosts=(${${${${(f)"$(<$HOME/.ssh/known_hosts)"}:#[\|]*}%%\ *}%%,*}) || _ssh_hosts=()
+[ -r ~/.host-completion ] && : ${(A)_host_completion:=${(s: :)${(ps:\t:)${${(f)~~"$(<~/.host-completion)"}%%\#*}##[:blank:]#[^[:blank:]]#}}} || _host_completion=()
 [ -r /etc/hosts ] && : ${(A)_etc_hosts:=${(s: :)${(ps:\t:)${${(f)~~"$(</etc/hosts)"}%%\#*}##[:blank:]#[^[:blank:]]#}}} || _etc_hosts=()
 hosts=(
   "$_ssh_hosts[@]"
   "$_etc_hosts[@]"
+  "$_host_completion[@]"
   `hostname`
   localhost
 )
