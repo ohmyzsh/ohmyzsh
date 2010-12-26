@@ -22,23 +22,24 @@ ZLE_GLOBING='fg=blue,bold'
 
 ZLE_DEFAULT='fg=white,bold'
 
-ZLE_TOKENS_FOLLOWED_BY_COMMANDS=('|' '||' ';' '&' '&&' 'sudo' 'start' 'time' 'strace' '§')
+ZLE_TOKENS_FOLLOWED_BY_COMMANDS=('|' '||' ';' '&' '&&' 'sudo' 'start' 'time' 'strace')
 
 _check_path() {
-	[ -z "$arg" ] && return 1
-	[ -e $arg ] && return 0
-	[ ! -e "`dirname $arg`" ] && return 1
-	[ ${#BUFFER} = $end_pos -a -n "`print $arg*`" ] && return 0
+	[[ -z $arg ]] && return 1
+	[[ -e $arg ]] && return 0
+	[[ ! -e ${arg:h} ]] && return 1
+	[[ ${#BUFFER} == $end_pos && -n $(print $arg*(N)) ]] && return 0
 	return 1
 }
 
 # Recolorize the current ZLE buffer.
 colorize-zle-buffer() {
+  setopt localoptions extendedglob
   region_highlight=()
   colorize=true
   start_pos=0
   for arg in ${(z)BUFFER}; do
-    ((start_pos+=${#BUFFER[$start_pos+1,-1]}-${#${BUFFER[$start_pos+1,-1]## #}}))
+    ((start_pos+=${#BUFFER[$start_pos+1,-1]}-${#${BUFFER[$start_pos+1,-1]##[[:space:]]#}}))
     ((end_pos=$start_pos+${#arg}))
     if $colorize; then
       colorize=false
@@ -48,7 +49,7 @@ colorize-zle-buffer() {
         *'an alias'*)       style=$ZLE_ALIAS_STYLE;;
         *'shell builtin'*)  style=$ZLE_BUILTIN_STYLE;;
         *'shell function'*) style=$ZLE_FUNCTION_STYLE;;
-        *"$cmd is"*)        style=$ZLE_COMMAND_STYLE;;
+        *"${cmd:-no-command-specified} is"*) style=$ZLE_COMMAND_STYLE;;
         *)
 	style=$ZLE_COMMAND_UNKNOWN_TOKEN_STYLE
 	_check_path && style=$ZLE_PATH_STYLE
