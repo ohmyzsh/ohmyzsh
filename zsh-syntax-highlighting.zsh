@@ -25,21 +25,21 @@ ZLE_DEFAULT='fg=white,bold'
 ZLE_TOKENS_FOLLOWED_BY_COMMANDS=('|' '||' ';' '&' '&&' 'sudo' 'start' 'time' 'strace' '§')
 
 _check_path() {
-	setopt localoptions null_glob
-	[ -z "$arg" ] && return 1
-	[ -e $arg ] && return 0
-	[ ! -e "`dirname $arg`" ] && return 1
-	[ ${#BUFFER} = $end_pos -a -n "`print $arg*`" ] && return 0
+	[[ -z $arg ]] && return 1
+	[[ -e $arg ]] && return 0
+	[[ ! -e ${arg:h} ]] && return 1
+	[[ ${#BUFFER} == $end_pos && -n $(print $arg*(N)) ]] && return 0
 	return 1
 }
 
 # Recolorize the current ZLE buffer.
 colorize-zle-buffer() {
+  setopt localoptions extendedglob
   region_highlight=()
   colorize=true
   start_pos=0
   for arg in ${(z)BUFFER}; do
-    ((start_pos+=${#BUFFER[$start_pos+1,-1]}-${#${BUFFER[$start_pos+1,-1]## #}}))
+    ((start_pos+=${#BUFFER[$start_pos+1,-1]}-${#${BUFFER[$start_pos+1,-1]##[[:space:]]#}}))
     ((end_pos=$start_pos+${#arg}))
     if $colorize; then
       colorize=false
