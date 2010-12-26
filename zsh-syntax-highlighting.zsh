@@ -22,7 +22,7 @@ ZLE_GLOBING='fg=blue,bold'
 
 ZLE_DEFAULT='fg=white,bold'
 
-ZLE_TOKENS_FOLLOWED_BY_COMMANDS=('|' '||' ';' '&' '&&' 'sudo' 'start' 'time' 'strace' '§')
+ZLE_TOKENS_FOLLOWED_BY_COMMANDS=('|' '||' ';' '&' '&&' 'sudo' 'start' 'time' 'strace')
 
 _check_path() {
 	[[ -z $arg ]] && return 1
