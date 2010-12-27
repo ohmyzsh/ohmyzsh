@@ -14,9 +14,9 @@ ZLE_PATH_STYLE='fg=white,underline'
 ZLE_COMMAND_UNKNOWN_TOKEN_STYLE='fg=red,bold'
 
 ZLE_HYPHEN_CLI_OPTION='fg=yellow,bold'
-ZLE_DOUBLE_HYPHEN_CLI_OPTION='fg=green,bold'
+ZLE_DOUBLE_HYPHEN_CLI_OPTION='fg=yellow,bold'
 ZLE_SINGLE_QUOTED='fg=magenta,bold'
-ZLE_DOUBLE_QUOTED='fg=red,bold'
+ZLE_DOUBLE_QUOTED='fg=magenta,bold'
 ZLE_BACK_QUOTED='fg=cyan,bold'
 ZLE_GLOBING='fg=blue,bold'
 
