@@ -43,17 +43,20 @@ colorize-zle-buffer() {
     ((end_pos=$start_pos+${#arg}))
     if $colorize; then
       colorize=false
-      res=$(LC_ALL=C builtin type $arg 2>/dev/null)
+      res=$(LC_ALL=C builtin type -w $arg 2>/dev/null)
       case $res in
-        *'reserved word'*)  style=$ZLE_RESERVED_WORD_STYLE;;
-        *'an alias'*)       style=$ZLE_ALIAS_STYLE;;
-        *'shell builtin'*)  style=$ZLE_BUILTIN_STYLE;;
-        *'shell function'*) style=$ZLE_FUNCTION_STYLE;;
-        *"${cmd:-no-command-specified} is"*) style=$ZLE_COMMAND_STYLE;;
-        *)
-	style=$ZLE_COMMAND_UNKNOWN_TOKEN_STYLE
-	_check_path && style=$ZLE_PATH_STYLE
-	;;
+	*': reserved')  style=$ZLE_RESERVED_WORD_STYLE;;
+	*': alias')     style=$ZLE_ALIAS_STYLE;;
+	*': builtin')   style=$ZLE_BUILTIN_STYLE;;
+	*': function')  style=$ZLE_FUNCTION_STYLE;;
+	*': command')   style=$ZLE_COMMAND_STYLE;;
+	*)
+	  if _check_path; then
+	    style=$ZLE_PATH_STYLE
+	  else
+	    style=$ZLE_COMMAND_UNKNOWN_TOKEN_STYLE
+	  fi
+	  ;;
       esac
     else
 	case $arg in
