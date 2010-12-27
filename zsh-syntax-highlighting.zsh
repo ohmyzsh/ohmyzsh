@@ -16,7 +16,9 @@ ZLE_COMMAND_UNKNOWN_TOKEN_STYLE='fg=red,bold'
 ZLE_HYPHEN_CLI_OPTION='fg=white'
 ZLE_DOUBLE_HYPHEN_CLI_OPTION='fg=white'
 ZLE_SINGLE_QUOTED='fg=yellow'
-ZLE_DOUBLE_QUOTED='fg=red'
+ZLE_DOUBLE_QUOTED='fg=yellow'
+ZLE_DOLLAR_DOUBLE_QUOTED='fg=cyan'
+ZLE_BACK_DOUBLE_QUOTED='fg=magenta'
 ZLE_BACK_QUOTED='fg=cyan,bold'
 ZLE_GLOBING='fg=blue,bold'
 
@@ -32,6 +34,24 @@ _check_path() {
 	return 1
 }
 
+# hightlight special chars inside double-quoted strings
+_hl_string() {
+	local i
+	local j
+	local k
+	local c
+	for (( i = 0 ; i < end_pos - start_pos ; i += 1 )) ; do
+		(( j = i + start_pos - 1 ))
+		(( k = j + 1 ))
+		c="$arg[$i]"
+		[[ "$c" = '$' ]] && region_highlight+=("$j $k $ZLE_DOLLAR_DOUBLE_QUOTED")
+		if [[ "$c" = '\' ]] ; then
+			(( k = k + 1 ))
+			region_highlight+=("$j $k $ZLE_BACK_DOUBLE_QUOTED")
+		fi
+	done
+}
+
 # Recolorize the current ZLE buffer.
 colorize-zle-buffer() {
   setopt localoptions extendedglob
@@ -39,6 +59,7 @@ colorize-zle-buffer() {
   colorize=true
   start_pos=0
   for arg in ${(z)BUFFER}; do
+    local substr_color=0
     ((start_pos+=${#BUFFER[$start_pos+1,-1]}-${#${BUFFER[$start_pos+1,-1]##[[:space:]]#}}))
     ((end_pos=$start_pos+${#arg}))
     if $colorize; then
@@ -60,7 +81,12 @@ colorize-zle-buffer() {
 	    '--'*) style=$ZLE_DOUBLE_HYPHEN_CLI_OPTION;;
 	    '-'*) style=$ZLE_HYPHEN_CLI_OPTION;;
 	    "'"*"'") style=$ZLE_SINGLE_QUOTED;;
-	    '"'*'"') style=$ZLE_DOUBLE_QUOTED;;
+	    '"'*'"')
+	    style=$ZLE_DOUBLE_QUOTED
+            region_highlight+=("$start_pos $end_pos $style")
+	    _hl_string
+	    substr_color=1
+	    ;;
 	    '`'*'`') style=$ZLE_BACK_QUOTED;;
 	    *"*"*) style=$ZLE_GLOBING;;
 	    *)
@@ -69,7 +95,7 @@ colorize-zle-buffer() {
 	    ;;
 	esac
     fi
-    region_highlight+=("$start_pos $end_pos $style")
+    [[ $substr_color = 0 ]] && region_highlight+=("$start_pos $end_pos $style")
     [[ ${${ZLE_TOKENS_FOLLOWED_BY_COMMANDS[(r)${arg//|/\|}]:-}:+yes} = 'yes' ]] && colorize=true
     start_pos=$end_pos
   done
