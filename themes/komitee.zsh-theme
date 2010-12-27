@@ -34,20 +34,20 @@ jobs_prompt_info() {
 }
 
 if [ "$SHLVL" = "0" ] || [ "$SHLVL" = "1" ] || [ "$SHLVL" = "" ]; then
-    shell_level=""
+    local shell_level=""
 else
-    shell_level="%{$fg[cyan]%}(%{$fg[red]%}$[${SHLVL} - 1]%{$fg[cyan]%})%{$reset_color%}"
+    local shell_level="%{$fg[cyan]%}(%{$fg[red]%}$[${SHLVL} - 1]%{$fg[cyan]%})%{$reset_color%}"
 fi
 
 # setup command result indicator
-CMDRESULT="%(?,,%{$fg[red]%}[%?]%{$reset_color%})"
+local exit_code="%(?,,%{$fg[red]%}[%?]%{$reset_color%})"
 
 # Put it all together
-PROMPT='${CMDRESULT}%{$fg[cyan]%}[${user_host} %{$fg[yellow]%}%~%{$fg[cyan]%}]$(jobs_prompt_info)${shell_level}${prompt_char} '
+PROMPT='${exit_code}%{$fg[cyan]%}[${user_host} %{$fg[yellow]%}%~%{$fg[cyan]%}]$(jobs_prompt_info)${shell_level}${prompt_char} '
 
 
 # Setup vi mode indicator
-MODE_INDICATOR="%{$fg_bold[yellow]%}<N>%{$reset_color%}"
+MODE_INDICATOR="%{$fg_bold[yellow]%}<CMD>%{$reset_color%}"
 
 # Setup git prompt info
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[blue]%}("
