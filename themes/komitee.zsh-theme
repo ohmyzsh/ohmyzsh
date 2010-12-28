@@ -1,3 +1,48 @@
+if [ -f ~/.pathrc ]; then
+    path=()
+    typeset -U path
+    for dir in $(<$HOME/.pathrc); do 
+        path+=($dir)
+    done 
+fi 
+
+if [ -f ~/.manpathrc ]; then
+    typeset -U manpath
+    manpath=()
+    for dir in $(<$HOME/.manpathrc); do
+        manpath+=($dir)
+    done 
+fi
+
+function current_dir() {
+    local -a regex
+    local current_dir=$(pwd)
+    local full_dir=${current_dir/${HOME}/\~}
+    if [[ ${#full_dir} > 15 ]]; then
+        if [[ ${full_dir} =~ "^(~/|/)([^/]+)/.+/([^/]+)$" ]]; then
+            local short_dir="$match[1]$match[2]/.../$match[3]"
+            if [[ ${#full_dir} > ${#short_dir} ]]; then
+                echo $short_dir
+            else
+                echo $full_dir
+            fi
+        else
+            echo $full_dir
+        fi
+    else
+        echo $full_dir
+    fi
+}
+
+function svn_repository() {
+    if [ -d .svn ]; then
+        local -a regex
+        svn_info=$(svn info)
+        if [[ ${svn_info} =~ "Repository Root: \S+/(\S+)" ]]; then
+            echo "%{$fg[blue]%}(svn:$match)%{$reset_color%}"
+        fi
+    fi
+}
 
 # setup basic prompt
 local user="$(whoami)"
@@ -43,19 +88,24 @@ fi
 local exit_code="%(?,,%{$fg[red]%}[%?]%{$reset_color%})"
 
 # Put it all together
-PROMPT='${exit_code}%{$fg[cyan]%}[${user_host} %{$fg[yellow]%}%~%{$fg[cyan]%}]$(jobs_prompt_info)${shell_level}${prompt_char} '
+PROMPT='${exit_code}%{$fg[cyan]%}[${user_host} %{$fg[yellow]%}$(current_dir)%{$fg[cyan]%}]$(jobs_prompt_info)${shell_level}${prompt_char} '
 
 
 # Setup vi mode indicator
 MODE_INDICATOR="%{$fg_bold[yellow]%}<CMD>%{$reset_color%}"
 
 # Setup git prompt info
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[blue]%}("
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[blue]%}(git:"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%} "
-ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%})%{$fg[red]%}⚡%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%})%{$fg[red]%}!%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%})"
 
 # setup right prompt
-RPROMPT='$(git_prompt_info)$(vi_mode_prompt_info)'
+RPROMPT='$(svn_repository)$(git_prompt_info)$(vi_mode_prompt_info)'
 
-# vim: set ft=zsh
+if [ "$DISABLE_LS_COLORS" != "true" ]
+then
+  # Find the option for using colors in ls, depending on the version: Linux or BSD
+  ls --color -d . &>/dev/null 2>&1 && alias ls='ls --color=tty -F -h' || alias ls='ls -GFh'
+fi
+# vim: set ft=zsh ts=4 sw=4 et:
