@@ -39,7 +39,7 @@ function svn_repository() {
         local -a regex
         svn_info=$(svn info)
         if [[ ${svn_info} =~ "Repository Root: \S+/(\S+)" ]]; then
-            echo "%{$fg[blue]%}(svn:$match)%{$reset_color%}"
+            echo "%{$fg[yellow]%}(svn:$match)%{$reset_color%}"
         fi
     fi
 }
@@ -95,10 +95,10 @@ PROMPT='${exit_code}%{$fg[cyan]%}[${user_host} %{$fg[yellow]%}$(current_dir)%{$f
 MODE_INDICATOR="%{$fg_bold[yellow]%}<CMD>%{$reset_color%}"
 
 # Setup git prompt info
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[blue]%}(git:"
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[yellow]%}(git:"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%} "
-ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%})%{$fg[red]%}!%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%})"
+ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[yellow]%})%{$fg[red]%}!%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[yellow]%})"
 
 # setup right prompt
 RPROMPT='$(svn_repository)$(git_prompt_info)$(vi_mode_prompt_info)'
