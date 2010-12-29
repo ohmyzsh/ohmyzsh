@@ -31,6 +31,12 @@ ZSH_THEME_GIT_PROMPT_SUFFIX=")"             # At the very end of the prompt
 ZSH_THEME_GIT_PROMPT_DIRTY="*"              # Text to display if the branch is dirty
 ZSH_THEME_GIT_PROMPT_CLEAN=""               # Text to display if the branch is clean
 
+# vcs theming default: Variables for theming the vcs info prompt
+ZSH_THEME_VCS_PROMPT_PREFIX=""
+ZSH_THEME_VCS_PROMPT_SUFFIX=""
+ZSH_THEME_VCS_PROMPT_STAGED="!"
+ZSH_THEME_VCS_PROMPT_UNSTAGED="*"
+
 # Setup the prompt with pretty colors
 setopt prompt_subst
 
