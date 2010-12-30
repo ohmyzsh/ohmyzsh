@@ -27,29 +27,29 @@ ZLE_DEFAULT='fg=white,bold'
 ZLE_TOKENS_FOLLOWED_BY_COMMANDS=('|' '||' ';' '&' '&&' 'sudo' 'start' 'time' 'strace' 'noglob' 'command' 'builtin')
 
 _check_path() {
-	[[ -z $arg ]] && return 1
-	[[ -e $arg ]] && return 0
-	[[ ! -e ${arg:h} ]] && return 1
-	[[ ${#BUFFER} == $end_pos && -n $(print $arg*(N)) ]] && return 0
-	return 1
+  [[ -z $arg ]] && return 1
+  [[ -e $arg ]] && return 0
+  [[ ! -e ${arg:h} ]] && return 1
+  [[ ${#BUFFER} == $end_pos && -n $(print $arg*(N)) ]] && return 0
+  return 1
 }
 
 # hightlight special chars inside double-quoted strings
 _hl_string() {
-	local i
-	local j
-	local k
-	local c
-	for (( i = 0 ; i < end_pos - start_pos ; i += 1 )) ; do
-		(( j = i + start_pos - 1 ))
-		(( k = j + 1 ))
-		c="$arg[$i]"
-		[[ "$c" = '$' ]] && region_highlight+=("$j $k $ZLE_DOLLAR_DOUBLE_QUOTED")
-		if [[ "$c" = '\' ]] ; then
-			(( k = k + 1 ))
-			region_highlight+=("$j $k $ZLE_BACK_DOUBLE_QUOTED")
-		fi
-	done
+  local i
+  local j
+  local k
+  local c
+  for (( i = 0 ; i < end_pos - start_pos ; i += 1 )) ; do
+    (( j = i + start_pos - 1 ))
+    (( k = j + 1 ))
+    c="$arg[$i]"
+    [[ "$c" = '$' ]] && region_highlight+=("$j $k $ZLE_DOLLAR_DOUBLE_QUOTED")
+    if [[ "$c" = "\\" ]] ; then
+      (( k = k + 1 ))
+      region_highlight+=("$j $k $ZLE_BACK_DOUBLE_QUOTED")
+    fi
+  done
 }
 
 # Recolorize the current ZLE buffer.
@@ -66,37 +66,35 @@ colorize-zle-buffer() {
       colorize=false
       res=$(LC_ALL=C builtin type -w $arg 2>/dev/null)
       case $res in
-	*': reserved')  style=$ZLE_RESERVED_WORD_STYLE;;
-	*': alias')     style=$ZLE_ALIAS_STYLE;;
-	*': builtin')   style=$ZLE_BUILTIN_STYLE;;
-	*': function')  style=$ZLE_FUNCTION_STYLE;;
-	*': command')   style=$ZLE_COMMAND_STYLE;;
-	*)
-	  if _check_path; then
-	    style=$ZLE_PATH_STYLE
-	  else
-	    style=$ZLE_COMMAND_UNKNOWN_TOKEN_STYLE
-	  fi
-	  ;;
+        *': reserved')  style=$ZLE_RESERVED_WORD_STYLE;;
+        *': alias')     style=$ZLE_ALIAS_STYLE;;
+        *': builtin')   style=$ZLE_BUILTIN_STYLE;;
+        *': function')  style=$ZLE_FUNCTION_STYLE;;
+        *': command')   style=$ZLE_COMMAND_STYLE;;
+        *)
+          if _check_path; then
+            style=$ZLE_PATH_STYLE
+          else
+            style=$ZLE_COMMAND_UNKNOWN_TOKEN_STYLE
+          fi
+          ;;
       esac
     else
-	case $arg in
-	    '--'*) style=$ZLE_DOUBLE_HYPHEN_CLI_OPTION;;
-	    '-'*) style=$ZLE_HYPHEN_CLI_OPTION;;
-	    "'"*"'") style=$ZLE_SINGLE_QUOTED;;
-	    '"'*'"')
-	    style=$ZLE_DOUBLE_QUOTED
-            region_highlight+=("$start_pos $end_pos $style")
-	    _hl_string
-	    substr_color=1
-	    ;;
-	    '`'*'`') style=$ZLE_BACK_QUOTED;;
-	    *"*"*) style=$ZLE_GLOBING;;
-	    *)
-	    style=$ZLE_DEFAULT
-	    _check_path && style=$ZLE_PATH_STYLE
-	    ;;
-	esac
+      case $arg in
+          '--'*)   style=$ZLE_DOUBLE_HYPHEN_CLI_OPTION;;
+          '-'*)    style=$ZLE_HYPHEN_CLI_OPTION;;
+          "'"*"'") style=$ZLE_SINGLE_QUOTED;;
+          '"'*'"') style=$ZLE_DOUBLE_QUOTED
+                   region_highlight+=("$start_pos $end_pos $style")
+                   _hl_string
+                   substr_color=1
+                   ;;
+          '`'*'`') style=$ZLE_BACK_QUOTED;;
+          *"*"*)   style=$ZLE_GLOBING;;
+          *)       style=$ZLE_DEFAULT
+                   _check_path && style=$ZLE_PATH_STYLE
+                   ;;
+      esac
     fi
     [[ $substr_color = 0 ]] && region_highlight+=("$start_pos $end_pos $style")
     [[ ${${ZLE_TOKENS_FOLLOWED_BY_COMMANDS[(r)${arg//|/\|}]:-}:+yes} = 'yes' ]] && colorize=true
@@ -106,23 +104,23 @@ colorize-zle-buffer() {
 
 # Bind the function to ZLE events.
 ZLE_COLORED_FUNCTIONS=(
-    self-insert
-    magic-space
-    delete-char
-    backward-delete-char
-    kill-word
-    backward-kill-word
-    up-line-or-history
-    down-line-or-history
-    beginning-of-history
-    end-of-history
-    undo
-    redo
-    yank
+  self-insert
+  magic-space
+  delete-char
+  backward-delete-char
+  kill-word
+  backward-kill-word
+  up-line-or-history
+  down-line-or-history
+  beginning-of-history
+  end-of-history
+  undo
+  redo
+  yank
 )
 
 for f in $ZLE_COLORED_FUNCTIONS; do
-    eval "$f() { zle .$f && colorize-zle-buffer } ; zle -N $f"
+  eval "$f() { zle .$f && colorize-zle-buffer } ; zle -N $f"
 done
 
 # Expand or complete hack
