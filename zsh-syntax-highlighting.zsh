@@ -53,9 +53,14 @@ ZSH_HIGHLIGHT_ZLE_UPDATE_EVENTS=(
   down-line-or-history
   beginning-of-history
   end-of-history
+  accept-line
+  accept-line-and-down-history
   undo
   redo
   yank
+  complete-word
+  expand-or-complete
+  expand-or-complete-prefix
 )
 
 # Check if the argument is a path.
@@ -130,16 +135,22 @@ _zsh_highlight-zle-buffer() {
   done
 }
 
+# Special treatment for completion/expansion events:
+# For each *complete* function, we create a widget which mimics the original
+# and use this orig-* version inside the new colorized zle function (the dot
+# idiom used for all others doesn't work right for these functions for some
+# reason).  You can see the default setup using "zle -l -L".
+
 # Bind ZLE events to highlighting function.
 for f in $ZSH_HIGHLIGHT_ZLE_UPDATE_EVENTS; do
-  eval "$f() { zle .$f && _zsh_highlight-zle-buffer } ; zle -N $f"
+  case $f in
+    *complete*)
+      eval "zle -C orig-$f .$f _main_complete ; $f() { builtin zle orig-$f && colorize-zle-buffer } ; zle -N $f"
+      ;;
+    *)
+      eval "$f() { builtin zle .$f && _zsh_highlight-zle-buffer } ; zle -N $f"
+      ;;
+  esac
 done
-
-# Special treatment for completion/expansion events:
-# Create an expansion widget which mimics the original "expand-or-complete" (you can see the default setup using "zle -l -L"),
-# use the orig-expand-or-complete inside the colorize function (for some reason, using the ".expand-or-complete" widget doesn't work the same)
-zle -C orig-expand-or-complete .expand-or-complete _main_complete
-expand-or-complete() { builtin zle orig-expand-or-complete && _zsh_highlight-zle-buffer }
-zle -N expand-or-complete
 
 # vim: sw=2 ts=4 et
