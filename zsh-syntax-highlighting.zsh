@@ -34,7 +34,7 @@ _check_path() {
 
 # Recolorize the current ZLE buffer.
 colorize-zle-buffer() {
-  setopt localoptions extendedglob
+  setopt localoptions extendedglob bareglobqual
   region_highlight=()
   colorize=true
   start_pos=0
