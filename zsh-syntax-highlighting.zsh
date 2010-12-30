@@ -74,19 +74,21 @@ _zsh_check-path() {
 
 # Highlight special chars inside double-quoted strings
 _zsh_highlight-string() {
-  local i
-  local j
-  local k
-  local c
-  for (( i = 0 ; i < end_pos - start_pos ; i += 1 )) ; do
+  setopt localoptions noksharrays
+  local i j k style
+  # Starting quote is at 1, so start parsing at offset 2 in the string.
+  for (( i = 2 ; i < end_pos - start_pos ; i += 1 )) ; do
     (( j = i + start_pos - 1 ))
     (( k = j + 1 ))
-    c="$arg[$i]"
-    [[ "$c" = '$' ]] && region_highlight+=("$j $k $ZSH_SYNTAX_HIGHLIGHTING_STYLES[dollar-double-quoted-argument]")
-    if [[ "$c" = "\\" ]] ; then
-      (( k = k + 1 ))
-      region_highlight+=("$j $k $ZSH_SYNTAX_HIGHLIGHTING_STYLES[back-double-quoted-argument]")
-    fi
+    case "$arg[$i]" in
+      '$')  style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[dollar-double-quoted-argument];;
+      "\\") style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[back-double-quoted-argument]
+            (( k += 1 )) # Color following char too.
+            (( i += 1 )) # Skip parsing the escaped char.
+            ;;
+      *)    continue;;
+    esac
+    region_highlight+=("$j $k $style")
   done
 }
 
