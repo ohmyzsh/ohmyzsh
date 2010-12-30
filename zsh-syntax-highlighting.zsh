@@ -14,7 +14,7 @@ ZSH_SYNTAX_HIGHLIGHTING_STYLES=(
   builtin                       'fg=cyan,bold'
   function                      'fg=blue,bold'
   command                       'fg=green,bold'
-  path                          'fg=white,underline'
+  path                          'underline'
   globbing                      'fg=blue,bold'
   single-hyphen-option          'fg=yellow'
   double-hyphen-option          'fg=yellow'
