@@ -25,9 +25,41 @@ ZSH_SYNTAX_HIGHLIGHTING_STYLES=(
   back-double-quoted-argument   'fg=magenta'
 )
 
-ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS=('|' '||' ';' '&' '&&' 'sudo' 'start' 'time' 'strace' 'noglob' 'command' 'builtin')
+# Tokens that are always followed by a command.
+ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS=(
+  '|'
+  '||'
+  ';'
+  '&'
+  '&&'
+  'sudo'
+  'start'
+  'time'
+  'strace'
+  'noglob'
+  'command'
+  'builtin'
+)
 
-_check_path() {
+# ZLE events that trigger an update of the highlighting.
+ZSH_HIGHLIGHT_ZLE_UPDATE_EVENTS=(
+  self-insert
+  magic-space
+  delete-char
+  backward-delete-char
+  kill-word
+  backward-kill-word
+  up-line-or-history
+  down-line-or-history
+  beginning-of-history
+  end-of-history
+  undo
+  redo
+  yank
+)
+
+# Check if the argument is a path.
+_zsh_check-path() {
   [[ -z $arg ]] && return 1
   [[ -e $arg ]] && return 0
   [[ ! -e ${arg:h} ]] && return 1
@@ -35,8 +67,8 @@ _check_path() {
   return 1
 }
 
-# hightlight special chars inside double-quoted strings
-_hl_string() {
+# Highlight special chars inside double-quoted strings
+_zsh_highlight-string() {
   local i
   local j
   local k
@@ -54,7 +86,7 @@ _hl_string() {
 }
 
 # Recolorize the current ZLE buffer.
-colorize-zle-buffer() {
+_zsh_highlight-zle-buffer() {
   setopt localoptions extendedglob bareglobqual
   region_highlight=()
   colorize=true
@@ -72,13 +104,7 @@ colorize-zle-buffer() {
         *': builtin')   style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[builtin];;
         *': function')  style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[function];;
         *': command')   style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[command];;
-        *)
-          if _check_path; then
-            style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[path]
-          else
-            style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[unknown-token]
-          fi
-          ;;
+        *)              _zsh_check-path && style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[path] || style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[unknown-token];;
       esac
     else
       case $arg in
@@ -87,14 +113,12 @@ colorize-zle-buffer() {
           "'"*"'") style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[single-quoted-argument];;
           '"'*'"') style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[double-quoted-argument]
                    region_highlight+=("$start_pos $end_pos $style")
-                   _hl_string
+                   _zsh_highlight-string
                    substr_color=1
                    ;;
           '`'*'`') style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[back-quoted-argument];;
           *"*"*)   style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[globbing];;
-          *)       style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[default]
-                   _check_path && style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[path]
-                   ;;
+          *)       _zsh_check-path && style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[path] || style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[default];;
       esac
     fi
     [[ $substr_color = 0 ]] && region_highlight+=("$start_pos $end_pos $style")
@@ -103,32 +127,14 @@ colorize-zle-buffer() {
   done
 }
 
-# Bind the function to ZLE events.
-ZSH_HIGHLIGHT_COLORED_FUNCTIONS=(
-  self-insert
-  magic-space
-  delete-char
-  backward-delete-char
-  kill-word
-  backward-kill-word
-  up-line-or-history
-  down-line-or-history
-  beginning-of-history
-  end-of-history
-  undo
-  redo
-  yank
-)
-
-for f in $ZSH_HIGHLIGHT_COLORED_FUNCTIONS; do
-  eval "$f() { zle .$f && colorize-zle-buffer } ; zle -N $f"
+# Bind ZLE events to highlighting function.
+for f in $ZSH_HIGHLIGHT_ZLE_UPDATE_EVENTS; do
+  eval "$f() { zle .$f && _zsh_highlight-zle-buffer } ; zle -N $f"
 done
 
-# Expand or complete hack
-
-# create an expansion widget which mimics the original "expand-or-complete" (you can see the default setup using "zle -l -L")
-zle -C orig-expand-or-complete .expand-or-complete _main_complete
-
+# Special treatment for completion/expansion events:
+# Create an expansion widget which mimics the original "expand-or-complete" (you can see the default setup using "zle -l -L"),
 # use the orig-expand-or-complete inside the colorize function (for some reason, using the ".expand-or-complete" widget doesn't work the same)
-expand-or-complete() { builtin zle orig-expand-or-complete && colorize-zle-buffer }
+zle -C orig-expand-or-complete .expand-or-complete _main_complete
+expand-or-complete() { builtin zle orig-expand-or-complete && _zsh_highlight-zle-buffer }
 zle -N expand-or-complete
