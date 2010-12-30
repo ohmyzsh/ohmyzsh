@@ -93,9 +93,10 @@ _zsh_highlight-string() {
 # Recolorize the current ZLE buffer.
 _zsh_highlight-zle-buffer() {
   setopt localoptions extendedglob bareglobqual
+  local colorize=true
+  local start_pos=0
+  local end_pos arg style
   region_highlight=()
-  colorize=true
-  start_pos=0
   for arg in ${(z)BUFFER}; do
     local substr_color=0
     ((start_pos+=${#BUFFER[$start_pos+1,-1]}-${#${BUFFER[$start_pos+1,-1]##[[:space:]]#}}))
