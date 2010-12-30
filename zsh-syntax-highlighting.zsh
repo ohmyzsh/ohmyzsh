@@ -81,6 +81,7 @@ colorize-zle-buffer() {
 # Bind the function to ZLE events.
 ZLE_COLORED_FUNCTIONS=(
     self-insert
+    magic-space
     delete-char
     backward-delete-char
     kill-word

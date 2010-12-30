@@ -33,3 +33,4 @@ Re-open your terminal, or just reload it to take changes into account:
  * James Ahlborn
  * [Andreas Jaggi](http://github.com/x-way)
  * [Wayne Davison](http://github.com/WayneD)
+ * [Suraj N. Kurapati](http://github.com/sunaku)
