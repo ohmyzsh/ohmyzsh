@@ -111,17 +111,17 @@ _zsh_highlight-zle-buffer() {
       esac
     else
       case $arg in
-          '--'*)   style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[double-hyphen-option];;
-          '-'*)    style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[single-hyphen-option];;
-          "'"*"'") style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[single-quoted-argument];;
-          '"'*'"') style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[double-quoted-argument]
-                   region_highlight+=("$start_pos $end_pos $style")
-                   _zsh_highlight-string
-                   substr_color=1
-                   ;;
-          '`'*'`') style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[back-quoted-argument];;
-          *"*"*)   style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[globbing];;
-          *)       _zsh_check-path && style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[path] || style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[default];;
+        '--'*)   style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[double-hyphen-option];;
+        '-'*)    style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[single-hyphen-option];;
+        "'"*"'") style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[single-quoted-argument];;
+        '"'*'"') style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[double-quoted-argument]
+                 region_highlight+=("$start_pos $end_pos $style")
+                 _zsh_highlight-string
+                 substr_color=1
+                 ;;
+        '`'*'`') style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[back-quoted-argument];;
+        *"*"*)   style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[globbing];;
+        *)       _zsh_check-path && style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[path] || style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[default];;
       esac
     fi
     [[ $substr_color = 0 ]] && region_highlight+=("$start_pos $end_pos $style")
@@ -141,3 +141,5 @@ done
 zle -C orig-expand-or-complete .expand-or-complete _main_complete
 expand-or-complete() { builtin zle orig-expand-or-complete && _zsh_highlight-zle-buffer }
 zle -N expand-or-complete
+
+# vim: sw=2 ts=4 et
