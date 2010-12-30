@@ -46,6 +46,7 @@ ZSH_HIGHLIGHT_ZLE_UPDATE_EVENTS=(
   self-insert
   magic-space
   delete-char
+  delete-char-or-list
   backward-delete-char
   kill-word
   backward-kill-word
