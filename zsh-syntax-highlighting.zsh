@@ -2,6 +2,7 @@
 # Copyleft 2010 zsh-syntax-highlighting contributors
 # http://github.com/nicoulaj/zsh-syntax-highlighting
 # All wrongs reserved.
+# vim: ft=zsh sw=2 ts=2 et
 
 # Token types styles.
 # See http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#SEC135
@@ -156,5 +157,3 @@ for f in $ZSH_HIGHLIGHT_ZLE_UPDATE_EVENTS; do
       ;;
   esac
 done
-
-# vim: sw=2 ts=4 et
