@@ -148,7 +148,7 @@ _zsh_highlight-zle-buffer() {
 for f in $ZSH_HIGHLIGHT_ZLE_UPDATE_EVENTS; do
   case $f in
     *complete*)
-      eval "zle -C orig-$f .$f _main_complete ; $f() { builtin zle orig-$f && colorize-zle-buffer } ; zle -N $f"
+      eval "zle -C orig-$f .$f _main_complete ; $f() { builtin zle orig-$f && _zsh_highlight-zle-buffer } ; zle -N $f"
       ;;
     *)
       eval "$f() { builtin zle .$f && _zsh_highlight-zle-buffer } ; zle -N $f"
