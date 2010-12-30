@@ -5,26 +5,27 @@
 
 # Token types styles.
 # See http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#SEC135
-ZLE_RESERVED_WORD_STYLE='fg=yellow,bold'
-ZLE_ALIAS_STYLE='fg=green,bold'
-ZLE_BUILTIN_STYLE='fg=cyan,bold'
-ZLE_FUNCTION_STYLE='fg=blue,bold'
-ZLE_COMMAND_STYLE='fg=green,bold'
-ZLE_PATH_STYLE='fg=white,underline'
-ZLE_COMMAND_UNKNOWN_TOKEN_STYLE='fg=red,bold'
+typeset -A ZSH_SYNTAX_HIGHLIGHTING_STYLES
+ZSH_SYNTAX_HIGHLIGHTING_STYLES=(
+  default                       'none'
+  unknown-token                 'fg=red,bold'
+  reserved-word                 'fg=yellow,bold'
+  alias                         'fg=green,bold'
+  builtin                       'fg=cyan,bold'
+  function                      'fg=blue,bold'
+  command                       'fg=green,bold'
+  path                          'fg=white,underline'
+  globbing                      'fg=blue,bold'
+  single-hyphen-option          'fg=yellow'
+  double-hyphen-option          'fg=yellow'
+  single-quoted-argument        'fg=yellow'
+  double-quoted-argument        'fg=yellow'
+  dollar-double-quoted-argument 'fg=cyan'
+  back-quoted-argument          'fg=cyan,bold'
+  back-double-quoted-argument   'fg=magenta'
+)
 
-ZLE_HYPHEN_CLI_OPTION='fg=white'
-ZLE_DOUBLE_HYPHEN_CLI_OPTION='fg=white'
-ZLE_SINGLE_QUOTED='fg=yellow'
-ZLE_DOUBLE_QUOTED='fg=yellow'
-ZLE_DOLLAR_DOUBLE_QUOTED='fg=cyan'
-ZLE_BACK_DOUBLE_QUOTED='fg=magenta'
-ZLE_BACK_QUOTED='fg=cyan,bold'
-ZLE_GLOBING='fg=blue,bold'
-
-ZLE_DEFAULT='fg=white,bold'
-
-ZLE_TOKENS_FOLLOWED_BY_COMMANDS=('|' '||' ';' '&' '&&' 'sudo' 'start' 'time' 'strace' 'noglob' 'command' 'builtin')
+ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS=('|' '||' ';' '&' '&&' 'sudo' 'start' 'time' 'strace' 'noglob' 'command' 'builtin')
 
 _check_path() {
   [[ -z $arg ]] && return 1
@@ -44,10 +45,10 @@ _hl_string() {
     (( j = i + start_pos - 1 ))
     (( k = j + 1 ))
     c="$arg[$i]"
-    [[ "$c" = '$' ]] && region_highlight+=("$j $k $ZLE_DOLLAR_DOUBLE_QUOTED")
+    [[ "$c" = '$' ]] && region_highlight+=("$j $k $ZSH_SYNTAX_HIGHLIGHTING_STYLES[dollar-double-quoted-argument]")
     if [[ "$c" = "\\" ]] ; then
       (( k = k + 1 ))
-      region_highlight+=("$j $k $ZLE_BACK_DOUBLE_QUOTED")
+      region_highlight+=("$j $k $ZSH_SYNTAX_HIGHLIGHTING_STYLES[back-double-quoted-argument]")
     fi
   done
 }
@@ -66,44 +67,44 @@ colorize-zle-buffer() {
       colorize=false
       res=$(LC_ALL=C builtin type -w $arg 2>/dev/null)
       case $res in
-        *': reserved')  style=$ZLE_RESERVED_WORD_STYLE;;
-        *': alias')     style=$ZLE_ALIAS_STYLE;;
-        *': builtin')   style=$ZLE_BUILTIN_STYLE;;
-        *': function')  style=$ZLE_FUNCTION_STYLE;;
-        *': command')   style=$ZLE_COMMAND_STYLE;;
+        *': reserved')  style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[reserved-word];;
+        *': alias')     style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[alias];;
+        *': builtin')   style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[builtin];;
+        *': function')  style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[function];;
+        *': command')   style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[command];;
         *)
           if _check_path; then
-            style=$ZLE_PATH_STYLE
+            style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[path]
           else
-            style=$ZLE_COMMAND_UNKNOWN_TOKEN_STYLE
+            style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[unknown-token]
           fi
           ;;
       esac
     else
       case $arg in
-          '--'*)   style=$ZLE_DOUBLE_HYPHEN_CLI_OPTION;;
-          '-'*)    style=$ZLE_HYPHEN_CLI_OPTION;;
-          "'"*"'") style=$ZLE_SINGLE_QUOTED;;
-          '"'*'"') style=$ZLE_DOUBLE_QUOTED
+          '--'*)   style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[double-hyphen-option];;
+          '-'*)    style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[single-hyphen-option];;
+          "'"*"'") style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[single-quoted-argument];;
+          '"'*'"') style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[double-quoted-argument]
                    region_highlight+=("$start_pos $end_pos $style")
                    _hl_string
                    substr_color=1
                    ;;
-          '`'*'`') style=$ZLE_BACK_QUOTED;;
-          *"*"*)   style=$ZLE_GLOBING;;
-          *)       style=$ZLE_DEFAULT
-                   _check_path && style=$ZLE_PATH_STYLE
+          '`'*'`') style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[back-quoted-argument];;
+          *"*"*)   style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[globbing];;
+          *)       style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[default]
+                   _check_path && style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[path]
                    ;;
       esac
     fi
     [[ $substr_color = 0 ]] && region_highlight+=("$start_pos $end_pos $style")
-    [[ ${${ZLE_TOKENS_FOLLOWED_BY_COMMANDS[(r)${arg//|/\|}]:-}:+yes} = 'yes' ]] && colorize=true
+    [[ ${${ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS[(r)${arg//|/\|}]:-}:+yes} = 'yes' ]] && colorize=true
     start_pos=$end_pos
   done
 }
 
 # Bind the function to ZLE events.
-ZLE_COLORED_FUNCTIONS=(
+ZSH_HIGHLIGHT_COLORED_FUNCTIONS=(
   self-insert
   magic-space
   delete-char
@@ -119,7 +120,7 @@ ZLE_COLORED_FUNCTIONS=(
   yank
 )
 
-for f in $ZLE_COLORED_FUNCTIONS; do
+for f in $ZSH_HIGHLIGHT_COLORED_FUNCTIONS; do
   eval "$f() { zle .$f && colorize-zle-buffer } ; zle -N $f"
 done
 
