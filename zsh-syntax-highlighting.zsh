@@ -110,8 +110,8 @@ _zsh_highlight-zle-buffer() {
       case $res in
         *': reserved')  style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[reserved-word];;
         *': alias')     style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[alias]
-						local aliased_command=${$(alias $arg)#*=}
-						[[ ${${ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS[(r)$aliased_command]:-}:+yes} = 'yes' ]] && ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS+=($arg)
+                        local aliased_command=${$(alias $arg)#*=}
+                        [[ ${${ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS[(r)$aliased_command]:-}:+yes} = 'yes' ]] && ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS+=($arg)
                         ;;
         *': builtin')   style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[builtin];;
         *': function')  style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[function];;
