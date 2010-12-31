@@ -57,3 +57,5 @@ Re-open your terminal, or just reload it to take changes into account:
  * [Andreas Jaggi](http://github.com/x-way)
  * [Wayne Davison](http://github.com/WayneD)
  * [Suraj N. Kurapati](http://github.com/sunaku)
+ * [Takeshi Banse](http://github.com/hchbaw)
+
