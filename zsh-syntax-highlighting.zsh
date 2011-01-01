@@ -159,7 +159,9 @@ _zsh_highlight-zle-buffer() {
         *': reserved')  style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[reserved-word];;
         *': alias')     style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[alias]
                         local aliased_command=${"$(alias $arg)"#*=}
-                        [[ ${${ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS[(r)$aliased_command]:-}:+yes} = 'yes' ]] && ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS+=($arg)
+                        if [[ ${${ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS[(r)$aliased_command]:-}:+yes} = 'yes' && ${${ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS[(r)$arg]:-}:+yes} != 'yes' ]]; then
+                          ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS+=($arg)
+                        fi
                         ;;
         *': builtin')   style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[builtin];;
         *': function')  style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[function];;
