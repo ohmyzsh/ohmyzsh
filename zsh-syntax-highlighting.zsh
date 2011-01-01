@@ -143,7 +143,7 @@ _zsh_highlight-zle-buffer() {
   ZSH_PRIOR_HIGHLIGHTED_BUFFER=$BUFFER
 
   setopt localoptions extendedglob bareglobqual
-  local colorize=true
+  local new_expression=true
   local start_pos=0
   local highlight_glob=true
   local end_pos arg style
@@ -153,8 +153,8 @@ _zsh_highlight-zle-buffer() {
     [[ $start_pos -eq 0 && $arg = 'noglob' ]] && highlight_glob=false
     ((start_pos+=${#BUFFER[$start_pos+1,-1]}-${#${BUFFER[$start_pos+1,-1]##[[:space:]]#}}))
     ((end_pos=$start_pos+${#arg}))
-    if $colorize; then
-      colorize=false
+    if $new_expression; then
+      new_expression=false
       res=$(LC_ALL=C builtin type -w $arg 2>/dev/null)
       case $res in
         *': reserved')  style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[reserved-word];;
@@ -197,7 +197,7 @@ _zsh_highlight-zle-buffer() {
       esac
     fi
     [[ $substr_color = 0 ]] && region_highlight+=("$start_pos $end_pos $style")
-    [[ ${${ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS[(r)${arg//|/\|}]:-}:+yes} = 'yes' ]] && colorize=true
+    [[ ${${ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS[(r)${arg//|/\|}]:-}:+yes} = 'yes' ]] && new_expression=true
     start_pos=$end_pos
   done
 }
