@@ -5,7 +5,7 @@
 # vim: ft=zsh sw=2 ts=2 et
 
 # Token types styles.
-typeset -A ZSH_HIGHLIGHT_STYLES
+typeset -gA ZSH_HIGHLIGHT_STYLES
 ZSH_HIGHLIGHT_STYLES=(
   default                       'none'
   isearch                       'fg=magenta,standout'
