@@ -144,10 +144,12 @@ _zsh_highlight-zle-buffer() {
   setopt localoptions extendedglob bareglobqual
   local colorize=true
   local start_pos=0
+  local highlight_glob=true
   local end_pos arg style
   region_highlight=()
   for arg in ${(z)BUFFER}; do
     local substr_color=0
+    [[ $start_pos -eq 0 && $arg = 'noglob' ]] && highlight_glob=false
     ((start_pos+=${#BUFFER[$start_pos+1,-1]}-${#${BUFFER[$start_pos+1,-1]##[[:space:]]#}}))
     ((end_pos=$start_pos+${#arg}))
     if $colorize; then
@@ -175,7 +177,7 @@ _zsh_highlight-zle-buffer() {
                  substr_color=1
                  ;;
         '`'*'`') style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[back-quoted-argument];;
-        *"*"*)   style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[globbing];;
+        *"*"*)   $highlight_glob && style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[globbing] || style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[default];;
         *)       _zsh_check-path && style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[path] || style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[default];;
       esac
     fi
