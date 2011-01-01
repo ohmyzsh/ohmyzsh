@@ -5,9 +5,8 @@
 # vim: ft=zsh sw=2 ts=2 et
 
 # Token types styles.
-# See http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#SEC135
-typeset -A ZSH_SYNTAX_HIGHLIGHTING_STYLES
-ZSH_SYNTAX_HIGHLIGHTING_STYLES=(
+typeset -A ZSH_HIGHLIGHT_STYLES
+ZSH_HIGHLIGHT_STYLES=(
   default                       'none'
   isearch                       'fg=magenta,standout'
   special                       'fg=magenta,standout'
@@ -103,8 +102,8 @@ ZSH_HIGHLIGHT_ZLE_UPDATE_EVENTS=(
 
 # ZLE highlight types.
 zle_highlight=(
-  special:$ZSH_SYNTAX_HIGHLIGHTING_STYLES[special]
-  isearch:$ZSH_SYNTAX_HIGHLIGHTING_STYLES[isearch]
+  special:$ZSH_HIGHLIGHT_STYLES[special]
+  isearch:$ZSH_HIGHLIGHT_STYLES[isearch]
 )
 
 # Check if the argument is a path.
@@ -125,8 +124,8 @@ _zsh_highlight-string() {
     (( j = i + start_pos - 1 ))
     (( k = j + 1 ))
     case "$arg[$i]" in
-      '$')  style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[dollar-double-quoted-argument];;
-      "\\") style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[back-double-quoted-argument]
+      '$')  style=$ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument];;
+      "\\") style=$ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]
             (( k += 1 )) # Color following char too.
             (( i += 1 )) # Skip parsing the escaped char.
             ;;
@@ -157,42 +156,42 @@ _zsh_highlight-zle-buffer() {
       new_expression=false
       res=$(LC_ALL=C builtin type -w $arg 2>/dev/null)
       case $res in
-        *': reserved')  style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[reserved-word];;
-        *': alias')     style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[alias]
+        *': reserved')  style=$ZSH_HIGHLIGHT_STYLES[reserved-word];;
+        *': alias')     style=$ZSH_HIGHLIGHT_STYLES[alias]
                         local aliased_command=${"$(alias $arg)"#*=}
                         if [[ ${${ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS[(r)$aliased_command]:-}:+yes} = 'yes' && ${${ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS[(r)$arg]:-}:+yes} != 'yes' ]]; then
                           ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS+=($arg)
                         fi
                         ;;
-        *': builtin')   style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[builtin];;
-        *': function')  style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[function];;
-        *': command')   style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[command];;
+        *': builtin')   style=$ZSH_HIGHLIGHT_STYLES[builtin];;
+        *': function')  style=$ZSH_HIGHLIGHT_STYLES[function];;
+        *': command')   style=$ZSH_HIGHLIGHT_STYLES[command];;
         *)              if _zsh_check-path; then
-                          style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[path]
+                          style=$ZSH_HIGHLIGHT_STYLES[path]
                         elif [[ ${arg:0:1} = ${histchars:0:1} ]]; then
-                          style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[history-expansion]
+                          style=$ZSH_HIGHLIGHT_STYLES[history-expansion]
                         else
-                          style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[unknown-token]
+                          style=$ZSH_HIGHLIGHT_STYLES[unknown-token]
                         fi;;
       esac
     else
       case $arg in
-        '--'*)   style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[double-hyphen-option];;
-        '-'*)    style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[single-hyphen-option];;
-        "'"*"'") style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[single-quoted-argument];;
-        '"'*'"') style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[double-quoted-argument]
+        '--'*)   style=$ZSH_HIGHLIGHT_STYLES[double-hyphen-option];;
+        '-'*)    style=$ZSH_HIGHLIGHT_STYLES[single-hyphen-option];;
+        "'"*"'") style=$ZSH_HIGHLIGHT_STYLES[single-quoted-argument];;
+        '"'*'"') style=$ZSH_HIGHLIGHT_STYLES[double-quoted-argument]
                  region_highlight+=("$start_pos $end_pos $style")
                  _zsh_highlight-string
                  substr_color=1
                  ;;
-        '`'*'`') style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[back-quoted-argument];;
-        *"*"*)   $highlight_glob && style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[globbing] || style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[default];;
+        '`'*'`') style=$ZSH_HIGHLIGHT_STYLES[back-quoted-argument];;
+        *"*"*)   $highlight_glob && style=$ZSH_HIGHLIGHT_STYLES[globbing] || style=$ZSH_HIGHLIGHT_STYLES[default];;
         *)       if _zsh_check-path; then
-                   style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[path]
+                   style=$ZSH_HIGHLIGHT_STYLES[path]
                  elif [[ ${arg:0:1} = ${histchars:0:1} ]]; then
-                   style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[history-expansion]
+                   style=$ZSH_HIGHLIGHT_STYLES[history-expansion]
                  else
-                   style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[default]
+                   style=$ZSH_HIGHLIGHT_STYLES[default]
                  fi;;
       esac
     fi

@@ -1,61 +1,77 @@
 zsh-syntax-highlighting
 =======================
 
-An attempt at providing [Fish shell](http://www.fishshell.org) like syntax highlighting for [Zsh](http://www.zsh.org).
+[Fish shell](http://www.fishshell.org) like syntax highlighting for [Zsh](http://www.zsh.org).
 
 
-## Usage
+## Try it
+
+Here is a one-liner to try it without installing or modifying anything:
+
+    wget --no-check-certificate --output-document=/tmp/zsh-syntax-highlighting.zsh https://github.com/nicoulaj/zsh-syntax-highlighting/raw/master/zsh-syntax-highlighting.zsh && . /tmp/zsh-syntax-highlighting.zsh
 
 
-### From your ~/.zshrc
-
-Download the script or clone this repository:
-
-    git clone git://github.com/nicoulaj/zsh-syntax-highlighting.git
-
-Update your `~/.zshrc` so that the script is sourced:
-
-    source /path/to/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-Re-open your terminal, or just reload it to take changes into account:
-
-    source ~/.zshrc
+## Install it
 
 
-### With [oh-my-zsh](http://github.com/robbyrussell/oh-my-zsh)
+### In your ~/.zshrc
 
-Download the script or clone this repository as a oh-my-zsh plugin:
+* Download the script or clone this repository:
 
-    cd ~/.oh-my-zsh/plugins/
-    git clone git://github.com/nicoulaj/zsh-syntax-highlighting.git
-    cd zsh-syntax-highlighting
-    ln -s zsh-syntax-highlighting.zsh zsh-syntax-highlighting.plugin.zsh
+        git clone git://github.com/nicoulaj/zsh-syntax-highlighting.git
 
-Update your `~/.zshrc` so that the script is sourced:
+* Source the script at the end of `~/.zshrc`:
 
-    plugins=(zsh-syntax-highlighting)
+        source /path/to/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-Re-open your terminal, or just reload it to take changes into account:
+* Source `~/.zshrc`  to take changes into account:
+
+        source ~/.zshrc
+
+
+### With oh-my-zsh
+
+* Download the script or clone this repository in [oh-my-zsh](http://github.com/robbyrussell/oh-my-zsh) plugins directory:
+
+        cd ~/.oh-my-zsh/plugins/
+        git clone git://github.com/nicoulaj/zsh-syntax-highlighting.git
+        cd zsh-syntax-highlighting
+        ln -s zsh-syntax-highlighting.zsh zsh-syntax-highlighting.plugin.zsh
+
+* Activate the plugin in `~/.zshrc`
+
+        plugins=(zsh-syntax-highlighting)
+
+* Source `~/.zshrc`  to take changes into account:
     
-    source ~/.zshrc
+        source ~/.zshrc
 
 
-## References
+## Tweak it
 
- * [zsh-users mailing list thread](http://www.zsh.org/mla/users/2010/msg00692.html)
- * [Gist 586698](http://gist.github.com/586698) and forks
+Optionally, you can override the default styles used for highlighting. The styles are declared in the [`ZSH_HIGHLIGHT_STYLES` array](https://github.com/nicoulaj/zsh-syntax-highlighting/blob/master/zsh-syntax-highlighting.zsh#L9). You can override styles this way:
+
+    # To differenciate aliases from other command types
+    ZSH_HIGHLIGHT_STYLES[alias]='fg=magenta,bold'
+    
+    # To have paths colored instead of underlined
+    ZSH_HIGHLIGHT_STYLES[path]='fg=cyan'
+    
+    # To disable highlighting of globbing expressions
+    ZSH_HIGHLIGHT_STYLES[globbing]='none'
+
+This must be done **after** the script is sourced, otherwise your styles will be overwritten. The syntax for declaring styles is [documented here](http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#SEC135).
 
 
 ## Authors / Greetings
 
- * [Roy Zuo](http://github.com/roylez)
- * [Julien Nicoulaud](http://github.com/nicoulaj)
- * [Dave Ingram](http://github.com/dingram)
- * [Mounier Florian](http://github.com/paradoxxxzero)
- * [Jonathan Dahan](http://github.com/jedahan)
+ * [Roy Zuo](https://github.com/roylez)
+ * [Julien Nicoulaud](https://github.com/nicoulaj)
+ * [Dave Ingram](https://github.com/dingram)
+ * [Mounier Florian](https://github.com/paradoxxxzero)
+ * [Jonathan Dahan](https://github.com/jedahan)
  * James Ahlborn
- * [Andreas Jaggi](http://github.com/x-way)
- * [Wayne Davison](http://github.com/WayneD)
- * [Suraj N. Kurapati](http://github.com/sunaku)
- * [Takeshi Banse](http://github.com/hchbaw)
-
+ * [Andreas Jaggi](https://github.com/x-way)
+ * [Wayne Davison](https://github.com/WayneD)
+ * [Suraj N. Kurapati](https://github.com/sunaku)
+ * [Takeshi Banse](https://github.com/hchbaw)
