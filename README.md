@@ -18,33 +18,33 @@ Here is a one-liner to try it without installing or modifying anything:
 
 * Download the script or clone this repository:
 
-        git clone git://github.com/nicoulaj/zsh-syntax-highlighting.git
+      git clone git://github.com/nicoulaj/zsh-syntax-highlighting.git
 
 * Source the script at the end of `~/.zshrc`:
 
-        source /path/to/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+      source /path/to/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 * Source `~/.zshrc`  to take changes into account:
 
-        source ~/.zshrc
+      source ~/.zshrc
 
 
 ### With oh-my-zsh
 
 * Download the script or clone this repository in [oh-my-zsh](http://github.com/robbyrussell/oh-my-zsh) plugins directory:
 
-        cd ~/.oh-my-zsh/plugins/
-        git clone git://github.com/nicoulaj/zsh-syntax-highlighting.git
-        cd zsh-syntax-highlighting
-        ln -s zsh-syntax-highlighting.zsh zsh-syntax-highlighting.plugin.zsh
+      cd ~/.oh-my-zsh/plugins/
+      git clone git://github.com/nicoulaj/zsh-syntax-highlighting.git
+      cd zsh-syntax-highlighting
+      ln -s zsh-syntax-highlighting.zsh zsh-syntax-highlighting.plugin.zsh
 
 * Activate the plugin in `~/.zshrc`
 
-        plugins=(zsh-syntax-highlighting)
+      plugins=(zsh-syntax-highlighting)
 
 * Source `~/.zshrc`  to take changes into account:
     
-        source ~/.zshrc
+      source ~/.zshrc
 
 
 ## Tweak it
