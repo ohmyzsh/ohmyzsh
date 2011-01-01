@@ -40,6 +40,7 @@ ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS=(
   'time'
   'strace'
   'noglob'
+  'nocorrect'
   'command'
   'builtin'
 )
