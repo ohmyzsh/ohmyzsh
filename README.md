@@ -38,7 +38,7 @@ Here is a one-liner to try it without installing or modifying anything:
       cd zsh-syntax-highlighting
       ln -s zsh-syntax-highlighting.zsh zsh-syntax-highlighting.plugin.zsh
 
-* Activate the plugin in `~/.zshrc`
+* Activate the plugin in `~/.zshrc`:
 
       plugins=(zsh-syntax-highlighting)
 
@@ -49,9 +49,9 @@ Here is a one-liner to try it without installing or modifying anything:
 
 ## Tweak it
 
-Optionally, you can override the default styles used for highlighting. The styles are declared in the [`ZSH_HIGHLIGHT_STYLES` array](https://github.com/nicoulaj/zsh-syntax-highlighting/blob/master/zsh-syntax-highlighting.zsh#L9). You can override styles this way:
+Optionally, you can override the default styles used for highlighting. The styles are declared in the [`ZSH_HIGHLIGHT_STYLES`](https://github.com/nicoulaj/zsh-syntax-highlighting/blob/master/zsh-syntax-highlighting.zsh#L9) array. You can override styles this way:
 
-    # To differenciate aliases from other command types
+    # To differentiate aliases from other command types
     ZSH_HIGHLIGHT_STYLES[alias]='fg=magenta,bold'
     
     # To have paths colored instead of underlined

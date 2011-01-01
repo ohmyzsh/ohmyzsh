@@ -168,7 +168,7 @@ _zsh_highlight-zle-buffer() {
         *': command')   style=$ZSH_HIGHLIGHT_STYLES[command];;
         *)              if _zsh_check-path; then
                           style=$ZSH_HIGHLIGHT_STYLES[path]
-                        elif [[ ${arg:0:1} = ${histchars:0:1} ]]; then
+                        elif [[ $arg[0,1] = $histchars[0,1] ]]; then
                           style=$ZSH_HIGHLIGHT_STYLES[history-expansion]
                         else
                           style=$ZSH_HIGHLIGHT_STYLES[unknown-token]
@@ -188,7 +188,7 @@ _zsh_highlight-zle-buffer() {
         *"*"*)   $highlight_glob && style=$ZSH_HIGHLIGHT_STYLES[globbing] || style=$ZSH_HIGHLIGHT_STYLES[default];;
         *)       if _zsh_check-path; then
                    style=$ZSH_HIGHLIGHT_STYLES[path]
-                 elif [[ ${arg:0:1} = ${histchars:0:1} ]]; then
+                 elif [[ $arg[0,1] = $histchars[0,1] ]]; then
                    style=$ZSH_HIGHLIGHT_STYLES[history-expansion]
                  else
                    style=$ZSH_HIGHLIGHT_STYLES[default]
