@@ -19,6 +19,7 @@ ZSH_SYNTAX_HIGHLIGHTING_STYLES=(
   command                       'fg=green'
   path                          'underline'
   globbing                      'fg=blue'
+  history-expansion             'fg=blue'
   single-hyphen-option          'none'
   double-hyphen-option          'none'
   back-quoted-argument          'none'
@@ -166,7 +167,13 @@ _zsh_highlight-zle-buffer() {
         *': builtin')   style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[builtin];;
         *': function')  style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[function];;
         *': command')   style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[command];;
-        *)              _zsh_check-path && style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[path] || style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[unknown-token];;
+        *)              if _zsh_check-path; then
+                          style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[path]
+                        elif [[ ${arg:0:1} = ${histchars:0:1} ]]; then
+                          style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[history-expansion]
+                        else
+                          style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[unknown-token]
+                        fi;;
       esac
     else
       case $arg in
@@ -180,7 +187,13 @@ _zsh_highlight-zle-buffer() {
                  ;;
         '`'*'`') style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[back-quoted-argument];;
         *"*"*)   $highlight_glob && style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[globbing] || style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[default];;
-        *)       _zsh_check-path && style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[path] || style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[default];;
+        *)       if _zsh_check-path; then
+                   style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[path]
+                 elif [[ ${arg:0:1} = ${histchars:0:1} ]]; then
+                   style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[history-expansion]
+                 else
+                   style=$ZSH_SYNTAX_HIGHLIGHTING_STYLES[default]
+                 fi;;
       esac
     fi
     [[ $substr_color = 0 ]] && region_highlight+=("$start_pos $end_pos $style")
