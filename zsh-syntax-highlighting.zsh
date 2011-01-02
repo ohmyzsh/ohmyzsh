@@ -43,6 +43,8 @@ ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS=(
   'nocorrect'
   'command'
   'builtin'
+  'whence'
+  'which'
 )
 
 # ZLE events that trigger an update of the highlighting.
