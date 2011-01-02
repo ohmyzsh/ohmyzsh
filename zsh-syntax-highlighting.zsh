@@ -45,6 +45,8 @@ ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS=(
   'builtin'
   'whence'
   'which'
+  'where'
+  'whereis'
 )
 
 # ZLE events that trigger an update of the highlighting.
