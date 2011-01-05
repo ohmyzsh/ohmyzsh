@@ -213,20 +213,22 @@ _zsh_highlight-zle-buffer() {
 # reason).  You can see the default setup using "zle -l -L".
 
 # Bind all ZLE events from zle -la to highlighting function.
+local clean_event_name
 for f in $(zle -la); do
   case $f in
-    .*|_*)
+    _*)
       ;;
     accept-and-menu-complete)
       eval "$f() { builtin zle .$f && _zsh_highlight-zle-buffer } ; zle -N $f"
       ;;
-    *complete*)
+    [^\.]*complete*)
       eval "zle -C orig-$f .$f _main_complete ; $f() { builtin zle orig-$f && _zsh_highlight-zle-buffer } ; zle -N $f"
       ;;
+    .*)
+      local clean_event_name=$f[2,${#f}] # Remove the leading dot in the event name
+      eval "$clean_event_name() { builtin zle $f && _zsh_highlight-zle-buffer } ; zle -N $clean_event_name"
+      ;;
     *)
-      eval "$f() { builtin zle .$f && _zsh_highlight-zle-buffer } ; zle -N $f"
       ;;
   esac
 done
-
-
