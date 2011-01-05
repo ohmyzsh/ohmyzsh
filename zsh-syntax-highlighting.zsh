@@ -101,7 +101,7 @@ _zsh_highlight-string() {
 # Recolorize the current ZLE buffer.
 _zsh_highlight-zle-buffer() {
   # Avoid doing the same work over and over
-  [[ ${ZSH_PRIOR_HIGHLIGHTED_BUFFER:-} == $BUFFER ]] && return
+  [[ ${ZSH_PRIOR_HIGHLIGHTED_BUFFER:-} == $BUFFER ]] && [[ ${#region_highlight} -gt 0 ]] && return
   ZSH_PRIOR_HIGHLIGHTED_BUFFER=$BUFFER
 
   setopt localoptions extendedglob bareglobqual
