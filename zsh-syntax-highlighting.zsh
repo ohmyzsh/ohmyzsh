@@ -340,7 +340,7 @@ _zsh_highlight-zle-buffer() {
       case $res in
         *': reserved')  style=$ZSH_HIGHLIGHT_STYLES[reserved-word];;
         *': alias')     style=$ZSH_HIGHLIGHT_STYLES[alias]
-                        local aliased_command=${"$(alias $arg)"#*=}
+                        local aliased_command="${"$(alias $arg)"#*=}"
                         if [[ ${${ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS[(r)$aliased_command]:-}:+yes} = 'yes' && ${${ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS[(r)$arg]:-}:+yes} != 'yes' ]]; then
                           ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS+=($arg)
                         fi
