@@ -101,8 +101,9 @@ _zsh_highlight-string() {
 # Recolorize the current ZLE buffer.
 _zsh_highlight-zle-buffer() {
   # Avoid doing the same work over and over
-  [[ ${ZSH_PRIOR_HIGHLIGHTED_BUFFER:-} == $BUFFER ]] && [[ ${#region_highlight} -gt 0 ]] && return
+  [[ ${ZSH_PRIOR_HIGHLIGHTED_BUFFER:-} == $BUFFER ]] && [[ ${#region_highlight} -gt 0 ]] && (( ZSH_PRIOR_CURSOR == CURSOR )) && return
   ZSH_PRIOR_HIGHLIGHTED_BUFFER=$BUFFER
+  ZSH_PRIOR_CURSOR=$CURSOR
 
   setopt localoptions extendedglob bareglobqual
   local new_expression=true
@@ -168,23 +169,39 @@ _zsh_highlight-zle-buffer() {
 # Bracket matching
   bracket_color_size=${#ZSH_MATCHING_BRACKETS}
   if ((bracket_color_size > 0)); then
+    typeset -A levelpos
+    typeset -A lastoflevel
+    typeset -A matching
+    typeset -A revmatching
     ((level = 0))
     for pos in {1..${#BUFFER}}; do
       case $BUFFER[pos] in
         "("|"["|"{")
-          ((level++))
-          region_highlight+=("$((pos - 1)) $pos "$ZSH_MATCHING_BRACKETS[(( (level - 1) % bracket_color_size + 1 ))])
+          levelpos[$pos]=$((++level))
+          lastoflevel[$level]=$pos
           ;;
         ")"|"]"|"}")
-          if ((level < 1)); then
-            region_highlight+=("$((pos - 1)) $pos "$ZSH_HIGHLIGHT_STYLES[bracket-error])
-          else
-            region_highlight+=("$((pos - 1)) $pos "$ZSH_MATCHING_BRACKETS[(( (level - 1) % bracket_color_size + 1 ))])
-          fi
-          ((level--))
+          matching[$lastoflevel[$level]]=$pos
+          revmatching[$pos]=$lastoflevel[$level]
+          levelpos[$pos]=$((level--))
           ;;
       esac
     done
+    for pos in ${(k)levelpos}; do
+      level=$levelpos[$pos]
+      if ((level < 1)); then
+        region_highlight+=("$((pos - 1)) $pos "$ZSH_HIGHLIGHT_STYLES[bracket-error])
+      else
+        region_highlight+=("$((pos - 1)) $pos "$ZSH_MATCHING_BRACKETS[(( (level - 1) % bracket_color_size + 1 ))])
+      fi
+    done
+    ((c = CURSOR + 1))
+    if [[ -n $levelpos[$c] ]]; then
+      ((otherpos = -1))
+      [[ -n $matching[$c] ]] && otherpos=$matching[$c]
+      [[ -n $revmatching[$c] ]] && otherpos=$revmatching[$c]
+      region_highlight+=("$((otherpos - 1)) $otherpos standout")
+    fi
   fi
 }
 
