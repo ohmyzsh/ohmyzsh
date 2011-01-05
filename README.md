@@ -22,7 +22,7 @@ Here is a one-liner to try it without installing or modifying anything:
 
       git clone git://github.com/nicoulaj/zsh-syntax-highlighting.git
 
-* Source the script at the end of `~/.zshrc`:
+* Source the script **at the end** of `~/.zshrc`:
 
       source /path/to/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
@@ -38,9 +38,9 @@ Here is a one-liner to try it without installing or modifying anything:
       cd ~/.oh-my-zsh/plugins/
       git clone git://github.com/nicoulaj/zsh-syntax-highlighting.git
 
-* Activate the plugin in `~/.zshrc`:
+* Activate the plugin in `~/.zshrc` (in **last** position):
 
-      plugins=(zsh-syntax-highlighting)
+      plugins=( [plugins...] zsh-syntax-highlighting)
 
 * Source `~/.zshrc`  to take changes into account:
     
