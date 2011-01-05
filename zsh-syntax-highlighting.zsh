@@ -32,6 +32,17 @@ ZSH_HIGHLIGHT_STYLES=(
   bracket-error                 'fg=red,bold'
 )
 
+# Colors for bracket levels.
+# Put as many color as you wish.
+# Leave it as an empty array to disable.
+ZSH_HIGHLIGHT_MATCHING_BRACKETS_STYLES=(
+  'fg=blue,bold'
+  'fg=green,bold'
+  'fg=magenta,bold'
+  'fg=yellow,bold'
+  'fg=cyan,bold'
+)
+
 # Tokens that are always followed by a command.
 ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS=(
   '|'
@@ -51,17 +62,6 @@ ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS=(
   'which'
   'where'
   'whereis'
-)
-
-# Colors for bracket levels
-# Put as many color as you wish
-# Leave it as an empty array to disable
-ZSH_MATCHING_BRACKETS=(
-  'fg=blue,bold'
-  'fg=green,bold'
-  'fg=magenta,bold'
-  'fg=yellow,bold'
-  'fg=cyan,bold'
 )
 
 # ZLE highlight types.
@@ -169,7 +169,7 @@ _zsh_highlight-zle-buffer() {
   done
 
 # Bracket matching
-  bracket_color_size=${#ZSH_MATCHING_BRACKETS}
+  bracket_color_size=${#ZSH_HIGHLIGHT_MATCHING_BRACKETS_STYLES}
   if ((bracket_color_size > 0)); then
     typeset -A levelpos lastoflevel matching revmatching
     ((level = 0))
@@ -191,7 +191,7 @@ _zsh_highlight-zle-buffer() {
       if ((level < 1)); then
         region_highlight+=("$((pos - 1)) $pos "$ZSH_HIGHLIGHT_STYLES[bracket-error])
       else
-        region_highlight+=("$((pos - 1)) $pos "$ZSH_MATCHING_BRACKETS[(( (level - 1) % bracket_color_size + 1 ))])
+        region_highlight+=("$((pos - 1)) $pos "$ZSH_HIGHLIGHT_MATCHING_BRACKETS_STYLES[(( (level - 1) % bracket_color_size + 1 ))])
       fi
     done
     ((c = CURSOR + 1))
