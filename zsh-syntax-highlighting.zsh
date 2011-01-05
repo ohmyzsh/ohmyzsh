@@ -130,6 +130,7 @@ _zsh_highlight-zle-buffer() {
         *': builtin')   style=$ZSH_HIGHLIGHT_STYLES[builtin];;
         *': function')  style=$ZSH_HIGHLIGHT_STYLES[function];;
         *': command')   style=$ZSH_HIGHLIGHT_STYLES[command];;
+        *': hashed')   style=$ZSH_HIGHLIGHT_STYLES[command];;
         *)              if _zsh_check-path; then
                           style=$ZSH_HIGHLIGHT_STYLES[path]
                         elif [[ $arg[0,1] = $histchars[0,1] ]]; then
