@@ -52,225 +52,6 @@ ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS=(
   'whereis'
 )
 
-# ZLE events that trigger an update of the highlighting.
-ZSH_HIGHLIGHT_ZLE_UPDATE_EVENTS=(
-  accept-and-hold
-  accept-and-infer-next-history
-# accept-and-menu-complete
-  accept-line
-  accept-line-and-down-history
-  argument-base
-  auto-suffix-remove
-  auto-suffix-retain
-  backward-char
-  backward-delete-char
-  backward-delete-word
-  backward-kill-line
-  backward-kill-word
-  backward-kill-word-match
-  backward-word
-  backward-word-match
-  beep
-  beginning-of-buffer-or-history
-  beginning-of-history
-  beginning-of-line
-  beginning-of-line-hist
-  capitalize-word
-  capitalize-word-match
-  clear-screen
-  complete-word
-  copy-earlier-word
-  copy-prev-shell-word
-  copy-prev-word
-  copy-region-as-kill
-  cycle-completion-positions
-  delete-char
-  delete-char-or-list
-  delete-to-char
-  delete-whole-word-match
-  delete-word
-  describe-key-briefly
-  digit-argument
-  down-case-word
-  down-case-word-match
-  down-history
-  down-line-or-beginning-search
-  down-line-or-history
-  down-line-or-search
-  edit-command-line
-  emacs-backward-word
-  emacs-forward-word
-  end-of-buffer-or-history
-  end-of-history
-  end-of-line
-  end-of-line-hist
-  end-of-list
-  exchange-point-and-mark
-  execute-last-named-cmd
-  execute-named-cmd
-  expand-cmd-path
-  expand-history
-  expand-or-complete
-  expand-or-complete-prefix
-  expand-word
-  forward-char
-  forward-word
-  forward-word-match
-  get-line
-  gosmacs-transpose-chars
-  history-beginning-search-backward
-  history-beginning-search-backward-end
-  history-beginning-search-forward
-  history-beginning-search-forward-end
-  history-beginning-search-menu
-  history-incremental-pattern-search-backward
-  history-incremental-pattern-search-forward
-  history-incremental-search-backward
-  history-incremental-search-forward
-  history-pattern-search
-  history-pattern-search-backward
-  history-pattern-search-forward
-  history-search-backward
-  history-search-forward
-  incarg
-# incremental-complete-word
-  infer-next-history
-  insert-composed-char
-  insert-files
-  insert-last-word
-  insert-unicode-char
-  kill-buffer
-  kill-line
-  kill-region
-  kill-whole-line
-  kill-word
-  kill-word-match
-  list-choices
-  list-expand
-  magic-space
-  match-word-context
-  match-words-by-style
-  menu-complete
-  menu-expand-or-complete
-  menu-select
-  modify-current-argument
-  narrow-to-region
-  narrow-to-region-invisible
-  neg-argument
-  overwrite-mode
-  pound-insert
-  predict-off
-  predict-on
-  push-input
-  push-line
-  push-line-or-edit
-  quote-line
-  quote-region
-  quoted-insert
-  read-command
-  read-from-minibuffer
-  recursive-edit
-  redisplay
-  redo
-  replace-pattern
-  replace-string
-  replace-string-again
-  reset-prompt
-  reverse-menu-complete
-  run-help
-  select-word-style
-  self-insert
-  self-insert-unmeta
-  send-break
-  set-mark-command
-  smart-insert-last-word
-  spell-word
-  split-shell-arguments
-  transpose-chars
-  transpose-words
-  transpose-words-match
-  undefined-key
-  undo
-  universal-argument
-  up-case-word
-  up-case-word-match
-  up-history
-  up-line-or-beginning-search
-  up-line-or-history
-  up-line-or-search
-  vi-add-eol
-  vi-add-next
-  vi-backward-blank-word
-  vi-backward-char
-  vi-backward-delete-char
-  vi-backward-kill-word
-  vi-backward-word
-  vi-beginning-of-line
-  vi-caps-lock-panic
-  vi-change
-  vi-change-eol
-  vi-change-whole-line
-  vi-cmd-mode
-  vi-delete
-  vi-delete-char
-  vi-digit-or-beginning-of-line
-  vi-down-line-or-history
-  vi-end-of-line
-  vi-fetch-history
-  vi-find-next-char
-  vi-find-next-char-skip
-  vi-find-prev-char
-  vi-find-prev-char-skip
-  vi-first-non-blank
-  vi-forward-blank-word
-  vi-forward-blank-word-end
-  vi-forward-char
-  vi-forward-word
-  vi-forward-word-end
-  vi-goto-column
-  vi-goto-mark
-  vi-goto-mark-line
-  vi-history-search-backward
-  vi-history-search-forward
-  vi-indent
-  vi-insert
-  vi-insert-bol
-  vi-join
-  vi-kill-eol
-  vi-kill-line
-  vi-match-bracket
-  vi-open-line-above
-  vi-open-line-below
-  vi-oper-swap-case
-  vi-pound-insert
-  vi-put-after
-  vi-put-before
-  vi-quoted-insert
-  vi-repeat-change
-  vi-repeat-find
-  vi-repeat-search
-  vi-replace
-  vi-replace-chars
-  vi-rev-repeat-find
-  vi-rev-repeat-search
-  vi-set-buffer
-  vi-set-mark
-  vi-substitute
-  vi-swap-case
-  vi-undo-change
-  vi-unindent
-  vi-up-line-or-history
-  vi-yank
-  vi-yank-eol
-  vi-yank-whole-line
-  what-cursor-position
-  where-is
-  which-command
-  yank
-  yank-pop
-  zap-to-char
-)
-
 # Colors for bracket levels
 # Put as many color as you wish
 # Leave it as an empty array to disable
@@ -408,14 +189,20 @@ _zsh_highlight-zle-buffer() {
 }
 
 # Special treatment for completion/expansion events:
-# For each *complete* function, we create a widget which mimics the original
+# For each *complete* function (except 'accept-and-menu-complete'), 
+# we create a widget which mimics the original
 # and use this orig-* version inside the new colorized zle function (the dot
 # idiom used for all others doesn't work right for these functions for some
 # reason).  You can see the default setup using "zle -l -L".
 
-# Bind ZLE events to highlighting function.
-for f in $ZSH_HIGHLIGHT_ZLE_UPDATE_EVENTS; do
+# Bind all ZLE events from zle -la to highlighting function.
+for f in $(zle -la); do
   case $f in
+    .*|_*)
+      ;;
+    accept-and-menu-complete)
+      eval "$f() { builtin zle .$f && _zsh_highlight-zle-buffer } ; zle -N $f"
+      ;;
     *complete*)
       eval "zle -C orig-$f .$f _main_complete ; $f() { builtin zle orig-$f && _zsh_highlight-zle-buffer } ; zle -N $f"
       ;;
