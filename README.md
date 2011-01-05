@@ -13,6 +13,8 @@ Here is a one-liner to try it without installing or modifying anything:
 
 ## Install it
 
+### Requirements :
+    zsh 4.3.9 or superior
 
 ### In your ~/.zshrc
 
