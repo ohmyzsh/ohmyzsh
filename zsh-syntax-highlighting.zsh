@@ -28,6 +28,7 @@ ZSH_HIGHLIGHT_STYLES=(
   double-quoted-argument        'fg=yellow'
   dollar-double-quoted-argument 'fg=cyan'
   back-double-quoted-argument   'fg=cyan'
+  bracket-error                 'fg=red,bold'
 )
 
 # Tokens that are always followed by a command.
@@ -270,6 +271,17 @@ ZSH_HIGHLIGHT_ZLE_UPDATE_EVENTS=(
   zap-to-char
 )
 
+# Colors for bracket levels
+# Put as many color as you wish
+# Leave it as an empty array to disable
+ZSH_MATCHING_BRACKETS=(
+  'fg=blue,bold'
+  'fg=green,bold'
+  'fg=magenta,bold'
+  'fg=yellow,bold'
+  'fg=cyan,bold'
+)
+
 # ZLE highlight types.
 zle_highlight=(
   special:$ZSH_HIGHLIGHT_STYLES[special]
@@ -371,6 +383,28 @@ _zsh_highlight-zle-buffer() {
     [[ ${${ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS[(r)${arg//|/\|}]:-}:+yes} = 'yes' ]] && new_expression=true
     start_pos=$end_pos
   done
+
+# Bracket matching
+  bracket_color_size=${#ZSH_MATCHING_BRACKETS}
+  if ((bracket_color_size > 0)); then
+    ((level = 0))
+    for pos in {1..${#BUFFER}}; do
+      case $BUFFER[pos] in
+        "("|"["|"{")
+          ((level++))
+          region_highlight+=("$((pos - 1)) $pos "$ZSH_MATCHING_BRACKETS[(( (level - 1) % bracket_color_size + 1 ))])
+          ;;
+        ")"|"]"|"}")
+          if ((level < 1)); then
+            region_highlight+=("$((pos - 1)) $pos "$ZSH_HIGHLIGHT_STYLES[bracket-error])
+          else
+            region_highlight+=("$((pos - 1)) $pos "$ZSH_MATCHING_BRACKETS[(( (level - 1) % bracket_color_size + 1 ))])
+          fi
+          ((level--))
+          ;;
+      esac
+    done
+  fi
 }
 
 # Special treatment for completion/expansion events:
