@@ -18,6 +18,7 @@ ZSH_HIGHLIGHT_STYLES=(
   builtin                       'fg=green'
   function                      'fg=green'
   command                       'fg=green'
+  hashed-command                'fg=green'
   path                          'underline'
   globbing                      'fg=blue'
   history-expansion             'fg=blue'
@@ -130,7 +131,7 @@ _zsh_highlight-zle-buffer() {
         *': builtin')   style=$ZSH_HIGHLIGHT_STYLES[builtin];;
         *': function')  style=$ZSH_HIGHLIGHT_STYLES[function];;
         *': command')   style=$ZSH_HIGHLIGHT_STYLES[command];;
-        *': hashed')   style=$ZSH_HIGHLIGHT_STYLES[command];;
+        *': hashed')    style=$ZSH_HIGHLIGHT_STYLES[hashed-command];;
         *)              if _zsh_check-path; then
                           style=$ZSH_HIGHLIGHT_STYLES[path]
                         elif [[ $arg[0,1] = $histchars[0,1] ]]; then
@@ -170,10 +171,7 @@ _zsh_highlight-zle-buffer() {
 # Bracket matching
   bracket_color_size=${#ZSH_MATCHING_BRACKETS}
   if ((bracket_color_size > 0)); then
-    typeset -A levelpos
-    typeset -A lastoflevel
-    typeset -A matching
-    typeset -A revmatching
+    typeset -A levelpos lastoflevel matching revmatching
     ((level = 0))
     for pos in {1..${#BUFFER}}; do
       case $BUFFER[pos] in
