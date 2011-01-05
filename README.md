@@ -1,7 +1,9 @@
 zsh-syntax-highlighting
 =======================
 
-[Fish shell](http://www.fishshell.org) like syntax highlighting for [Zsh](http://www.zsh.org).
+**[Fish shell](http://www.fishshell.org) like syntax highlighting for [Zsh](http://www.zsh.org).**
+
+*Requirements: zsh 4.3.9 or superior.*
 
 
 ## Try it
@@ -13,8 +15,6 @@ Here is a one-liner to try it without installing or modifying anything:
 
 ## Install it
 
-### Requirements :
-    zsh 4.3.9 or superior
 
 ### In your ~/.zshrc
 
@@ -37,8 +37,6 @@ Here is a one-liner to try it without installing or modifying anything:
 
       cd ~/.oh-my-zsh/plugins/
       git clone git://github.com/nicoulaj/zsh-syntax-highlighting.git
-      cd zsh-syntax-highlighting
-      ln -s zsh-syntax-highlighting.zsh zsh-syntax-highlighting.plugin.zsh
 
 * Activate the plugin in `~/.zshrc`:
 
@@ -51,7 +49,7 @@ Here is a one-liner to try it without installing or modifying anything:
 
 ## Tweak it
 
-Optionally, you can override the default styles used for highlighting. The styles are declared in the [`ZSH_HIGHLIGHT_STYLES`](https://github.com/nicoulaj/zsh-syntax-highlighting/blob/master/zsh-syntax-highlighting.zsh#L9) array. You can override styles this way:
+Optionally, you can override the default styles used for highlighting. The styles are declared in the [`ZSH_HIGHLIGHT_STYLES`](https://github.com/nicoulaj/zsh-syntax-highlighting/blob/master/zsh-syntax-highlighting.zsh#L11) array. You can override styles this way:
 
     # To differentiate aliases from other command types
     ZSH_HIGHLIGHT_STYLES[alias]='fg=magenta,bold'
@@ -61,6 +59,16 @@ Optionally, you can override the default styles used for highlighting. The style
     
     # To disable highlighting of globbing expressions
     ZSH_HIGHLIGHT_STYLES[globbing]='none'
+
+You can tweak the styles used to colorize matching brackets by overriding the [`ZSH_HIGHLIGHT_MATCHING_BRACKETS_STYLES`](https://github.com/nicoulaj/zsh-syntax-highlighting/blob/master/zsh-syntax-highlighting.zsh#L11).
+
+    ZSH_HIGHLIGHT_MATCHING_BRACKETS_STYLES=(
+      'fg=blue,bold'    # Style for first level of imbrication
+      'fg=green,bold'   # Style for second level of imbrication
+      'fg=magenta,bold' # etc... Put as many styles as you wish, or leave
+      'fg=yellow,bold'  # empty to disable brackets matching.
+      'fg=cyan,bold'
+    )
 
 This must be done **after** the script is sourced, otherwise your styles will be overwritten. The syntax for declaring styles is [documented here](http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#SEC135).
 
@@ -77,3 +85,4 @@ This must be done **after** the script is sourced, otherwise your styles will be
  * [Wayne Davison](https://github.com/WayneD)
  * [Suraj N. Kurapati](https://github.com/sunaku)
  * [Takeshi Banse](https://github.com/hchbaw)
+ * [Sorin Ionescu](https://github.com/SpookyET)
