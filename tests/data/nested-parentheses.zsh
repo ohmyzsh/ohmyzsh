@@ -1,0 +1,1 @@
+echo $(echo ${(z)array})
