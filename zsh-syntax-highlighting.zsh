@@ -217,7 +217,7 @@ _zsh_highlight-zle-buffer() {
 local clean_event
 for event in $(zle -la); do
   case $event in
-    _*|orig-*|.which-command)
+    _*|orig-*|.run-help|.which-command)
       ;;
     accept-and-menu-complete)
       eval "$event() { builtin zle .$event && _zsh_highlight-zle-buffer } ; zle -N $event"
