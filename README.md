@@ -86,4 +86,4 @@ This must be done **after** the script is sourced, otherwise your styles will be
  * [Suraj N. Kurapati](https://github.com/sunaku)
  * [Takeshi Banse](https://github.com/hchbaw)
  * [Sorin Ionescu](https://github.com/SpookyET)
- * [Clayton Parker]https://github.com/claytron)
+ * [Clayton Parker](https://github.com/claytron)
