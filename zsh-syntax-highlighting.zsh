@@ -62,6 +62,8 @@ ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS=(
   'which'
   'where'
   'whereis'
+  'xargs'
+  'zargs'
 )
 
 # ZLE highlight types.
@@ -168,7 +170,7 @@ _zsh_highlight-zle-buffer() {
     start_pos=$end_pos
   done
 
-# Bracket matching
+  # Bracket matching
   bracket_color_size=${#ZSH_HIGHLIGHT_MATCHING_BRACKETS_STYLES}
   if ((bracket_color_size > 0)); then
     typeset -A levelpos lastoflevel matching revmatching
