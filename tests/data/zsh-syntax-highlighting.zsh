@@ -1,1 +1,1 @@
-/home/nicoulaj/projects/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+../../zsh-syntax-highlighting.zsh

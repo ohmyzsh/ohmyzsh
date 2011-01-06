@@ -12,5 +12,5 @@ source $(dirname $0)/../zsh-syntax-highlighting.zsh
 TIMEFMT="%*Es"
 for buffer in $(dirname $0)/data/*.zsh; do
   echo -n "${buffer:t:r}: "
-  time (BUFFER="`cat $buffer`" &&_zsh_highlight-zle-buffer)
+  time ( BUFFER="`cat $buffer`" && _zsh_highlight-zle-buffer )
 done
