@@ -215,24 +215,27 @@ _zsh_highlight-zle-buffer() {
 
 # Bind all ZLE events from zle -la to highlighting function.
 _zsh_highlight-install() {
+  zmodload zsh/zleparameter 2>/dev/null || {
+    echo 'zsh-syntax-highlighting:zmoadload error. exiting.' >&2; return -1
+  }
+  local -a events; : ${(A)events::=${@:#(_*|orig-*|.run-help|.which-command)}}
   local clean_event
-  for event in "$@"; do
-    case $event in
-      _*|orig-*|.run-help|.which-command)
-        ;;
-      accept-and-menu-complete)
-        eval "$event() { builtin zle .$event && _zsh_highlight-zle-buffer } ; zle -N $event"
-        ;;
-      [^\.]*complete*)
-        eval "zle -C orig-$event .$event _main_complete ; $event() { builtin zle orig-$event && _zsh_highlight-zle-buffer } ; zle -N $event"
-        ;;
-      .*)
-        clean_event=$event[2,${#event}] # Remove the leading dot in the event name
-        eval "$clean_event() { builtin zle $event && _zsh_highlight-zle-buffer } ; zle -N $clean_event"
-        ;;
-      *)
-        ;;
-    esac
+  for event in $events; do
+    if [[ "$widgets[$event]" == completion:* ]]; then
+      eval "zle -C orig-$event ${${${widgets[$event]}#*:}/:/ } ; $event() { builtin zle orig-$event && _zsh_highlight-zle-buffer } ; zle -N $event"
+    else
+      case $event in
+        accept-and-menu-complete)
+          eval "$event() { builtin zle .$event && _zsh_highlight-zle-buffer } ; zle -N $event"
+          ;;
+        .*)
+          clean_event=$event[2,${#event}] # Remove the leading dot in the event name
+          eval "$clean_event() { builtin zle $event && _zsh_highlight-zle-buffer } ; zle -N $clean_event"
+          ;;
+        *)
+          ;;
+      esac
+    fi
   done
 }
 _zsh_highlight-install "${(@f)"$(zle -la)"}"
