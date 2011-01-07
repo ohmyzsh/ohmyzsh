@@ -214,22 +214,25 @@ _zsh_highlight-zle-buffer() {
 # reason).  You can see the default setup using "zle -l -L".
 
 # Bind all ZLE events from zle -la to highlighting function.
-local clean_event
-for event in $(zle -la); do
-  case $event in
-    _*|orig-*|.run-help|.which-command)
-      ;;
-    accept-and-menu-complete)
-      eval "$event() { builtin zle .$event && _zsh_highlight-zle-buffer } ; zle -N $event"
-      ;;
-    [^\.]*complete*)
-      eval "zle -C orig-$event .$event _main_complete ; $event() { builtin zle orig-$event && _zsh_highlight-zle-buffer } ; zle -N $event"
-      ;;
-    .*)
-      clean_event=$event[2,${#event}] # Remove the leading dot in the event name
-      eval "$clean_event() { builtin zle $event && _zsh_highlight-zle-buffer } ; zle -N $clean_event"
-      ;;
-    *)
-      ;;
-  esac
-done
+_zsh_highlight-install() {
+  local clean_event
+  for event in "$@"; do
+    case $event in
+      _*|orig-*|.run-help|.which-command)
+        ;;
+      accept-and-menu-complete)
+        eval "$event() { builtin zle .$event && _zsh_highlight-zle-buffer } ; zle -N $event"
+        ;;
+      [^\.]*complete*)
+        eval "zle -C orig-$event .$event _main_complete ; $event() { builtin zle orig-$event && _zsh_highlight-zle-buffer } ; zle -N $event"
+        ;;
+      .*)
+        clean_event=$event[2,${#event}] # Remove the leading dot in the event name
+        eval "$clean_event() { builtin zle $event && _zsh_highlight-zle-buffer } ; zle -N $clean_event"
+        ;;
+      *)
+        ;;
+    esac
+  done
+}
+_zsh_highlight-install "${(@f)"$(zle -la)"}"
