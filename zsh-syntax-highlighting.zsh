@@ -230,7 +230,13 @@ _zsh_highlight-install() {
           ;;
         .*)
           clean_event=$event[2,${#event}] # Remove the leading dot in the event name
-          eval "$clean_event() { builtin zle $event && _zsh_highlight-zle-buffer } ; zle -N $clean_event"
+          case ${widgets[$clean_event]-} in
+            (completion|user):*)
+              ;;
+            *)
+              eval "$clean_event() { builtin zle $event && _zsh_highlight-zle-buffer } ; zle -N $clean_event"
+              ;;
+          esac
           ;;
         *)
           ;;
