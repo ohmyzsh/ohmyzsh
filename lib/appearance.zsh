@@ -11,9 +11,9 @@ then
 fi
 
 #setopt no_beep
-setopt auto_cd
+unsetopt auto_cd
 setopt multios
-setopt cdablevarS
+unsetopt cdablevarS
 
 if [[ x$WINDOW != x ]]
 then
