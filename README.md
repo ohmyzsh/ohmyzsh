@@ -87,3 +87,4 @@ This must be done **after** the script is sourced, otherwise your styles will be
  * [Takeshi Banse](https://github.com/hchbaw)
  * [Sorin Ionescu](https://github.com/SpookyET)
  * [Clayton Parker](https://github.com/claytron)
+ * [Arlen Cuss](https://github.com/celtic)
