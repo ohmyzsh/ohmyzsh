@@ -1,5 +1,5 @@
-zsh-syntax-highlighting
-=======================
+zsh-syntax-highlighting ![Project status](http://stillmaintained.com/nicoulaj/zsh-syntax-highlighting.png)
+==========================================================================================================
 
 **[Fish shell](http://www.fishshell.org) like syntax highlighting for [Zsh](http://www.zsh.org).**
 
