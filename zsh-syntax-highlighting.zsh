@@ -43,27 +43,9 @@ ZSH_HIGHLIGHT_MATCHING_BRACKETS_STYLES=(
   'fg=cyan,bold'
 )
 
-# Tokens that are always followed by a command.
+# Tokens that are always immediately followed by a command.
 ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS=(
-  '|'
-  '||'
-  ';'
-  '&'
-  '&&'
-  'sudo'
-  'start'
-  'time'
-  'strace'
-  'noglob'
-  'nocorrect'
-  'command'
-  'builtin'
-  'whence'
-  'which'
-  'where'
-  'whereis'
-  'xargs'
-  'zargs'
+  '|' '||' ';' '&' '&&' 'noglob' 'nocorrect' 'builtin'
 )
 
 # ZLE highlight types.
