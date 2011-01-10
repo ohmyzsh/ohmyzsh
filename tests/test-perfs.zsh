@@ -28,12 +28,27 @@
 # vim: ft=zsh sw=2 ts=2 et
 # -------------------------------------------------------------------------------------------------
 
-BUFFER='ps aux | grep java'
 
-expected_region_highlight=(
-  "1  2  $ZSH_HIGHLIGHT_STYLES[command]" # ps
-  "4  6  $ZSH_HIGHLIGHT_STYLES[default]" # aux
-  "8  8  $ZSH_HIGHLIGHT_STYLES[default]" # |
-  "9  12 $ZSH_HIGHLIGHT_STYLES[command]" # grep
-  "14 17 $ZSH_HIGHLIGHT_STYLES[default]" # java
-)
+# Load the main script.
+. $(dirname $0)/../zsh-syntax-highlighting.zsh
+
+# Process each test data file in data/.
+for data_file in $(dirname $0)/data/*.zsh; do
+
+  # Load the data and prepare checking it.
+  BUFFER=
+  echo -n "* ${data_file:t:r}: "
+  . $data_file
+
+  # Check the data declares $BUFFER.
+  if [[ ${#BUFFER} -eq 0 ]]; then
+    echo "KO\n   - 'BUFFER' is not declared or blank."
+  else
+
+    # Measure the time taken by _zsh_highlight-zle-buffer.
+    TIMEFMT="%*Es"
+    time ( BUFFER="$BUFFER" && _zsh_highlight-zle-buffer)
+
+  fi
+
+done
