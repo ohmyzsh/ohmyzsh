@@ -34,5 +34,22 @@ ZSH_THEME_GIT_PROMPT_CLEAN=""               # Text to display if the branch is c
 # Setup the prompt with pretty colors
 setopt prompt_subst
 
+
+#load scm prompt info
+ZSH_THEME_SCM_DISPLAY_NAME=0
+for scm in $scms; do
+    source $ZSH/scm/$scm.scm.zsh
+done
+
+
+
+function get_scm_prompt () {
+    for scm in $scms; do
+        if [ $("scm_in_"$scm"_repo") ]; then
+            echo `"scm_"$scm"_prompt_info"`
+        fi
+    done
+}
+
 # Load the theme
 source "$ZSH/themes/$ZSH_THEME.zsh-theme"
