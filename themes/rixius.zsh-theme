@@ -1,3 +1,8 @@
+# /|/ Code by Stephen
+# /|/ "Rixius" Middleton
+# 
+# name in folder (github)
+# ± if in github repo, or ≥ if otherwise Time in 24-hour format is on right.
 function collapse_pwd {
     echo $(pwd | sed -e "s,^$HOME,~,")
 }
