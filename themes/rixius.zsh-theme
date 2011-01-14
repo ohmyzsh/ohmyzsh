@@ -6,11 +6,10 @@ function prompt_char {
     echo "%{$fg[red]%}≈%{$reset_color%}"
 }
 
-PROMPT='
-%{$fg[magenta]%}%n%{$reset_color%} in %{$fg_bold[green]%}$(collapse_pwd)%{$reset_color%}$(git_prompt_info)
+PROMPT='%{$fg[magenta]%}%n%{$reset_color%} in %{$fg_bold[green]%}$(collapse_pwd)%{$reset_color%}$(git_prompt_info)
 $(prompt_char) '
 
 ZSH_THEME_GIT_PROMPT_PREFIX=" on %{$fg[magenta]%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[green]%}!"
-ZSH_THEME_GIT_PROMPT_CLEAN=""
+ZSH_THEME_GIT_PROMPT_DIRTY="%{$bg[white]%}%{$fg[red]%}!%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_CLEAN="%{$bg[white]%}%{$fg[red]%}√%{$reset_color%}"
