@@ -39,12 +39,13 @@ function take() {
 }
 
 function extract() {
-    unset REMOVE_ARCHIVE
+  unset REMOVE_ARCHIVE
     
-    if test "$1" = "-r"; then
-        REMOVE=1
-        shift
-    fi
+  if test "$1" = "-r"; then
+    REMOVE_ARCHIVE=1
+    shift
+  fi
+
   if [[ -f $1 ]]; then
     case $1 in
       *.tar.bz2) tar xvjf $1;;
@@ -64,12 +65,11 @@ function extract() {
     esac
 
     if [[ $REMOVE_ARCHIVE -eq 1 ]]; then
-        echo removing "$1";
-        /bin/rm "$1";
+      echo removing "$1";
+      /bin/rm "$1";
     fi
 
   else
     echo "'$1' is not a valid file"
   fi
 }
-
