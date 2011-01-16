@@ -106,8 +106,22 @@ _zsh_highlight-string() {
   done
 }
 
+# Functions to be called in _zsh_highlight-zle-buffer.
+ZSH_HIGHLIGHT_FUNCTIONS=(
+  _zsh_main-highlight
+)
+
 # Recolorize the current ZLE buffer.
 _zsh_highlight-zle-buffer() {
+  local ret=$?
+  {
+    for func in ${ZSH_HIGHLIGHT_FUNCTIONS}; do "$func"; done
+  } always {
+    return $ret
+  }
+}
+
+_zsh_main-highlight() {
   # Avoid doing the same work over and over
   [[ ${ZSH_PRIOR_HIGHLIGHTED_BUFFER:-} == $BUFFER ]] && [[ ${#region_highlight} -gt 0 ]] && (( ZSH_PRIOR_CURSOR == CURSOR )) && return
   ZSH_PRIOR_HIGHLIGHTED_BUFFER=$BUFFER
