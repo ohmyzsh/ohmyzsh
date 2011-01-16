@@ -109,6 +109,7 @@ _zsh_highlight-string() {
 # Functions to be called in _zsh_highlight-zle-buffer.
 ZSH_HIGHLIGHT_FUNCTIONS=(
   _zsh_main-highlight
+  _zsh_highlight-bracket-match
 )
 
 # Recolorize the current ZLE buffer.
@@ -123,9 +124,8 @@ _zsh_highlight-zle-buffer() {
 
 _zsh_main-highlight() {
   # Avoid doing the same work over and over
-  [[ ${ZSH_PRIOR_HIGHLIGHTED_BUFFER:-} == $BUFFER ]] && [[ ${#region_highlight} -gt 0 ]] && (( ZSH_PRIOR_CURSOR == CURSOR )) && return
+  [[ ${ZSH_PRIOR_HIGHLIGHTED_BUFFER:-} == $BUFFER ]] && [[ ${#region_highlight} -gt 0 ]] && return
   ZSH_PRIOR_HIGHLIGHTED_BUFFER=$BUFFER
-  ZSH_PRIOR_CURSOR=$CURSOR
 
   setopt localoptions extendedglob bareglobqual
   local new_expression=true
@@ -189,6 +189,11 @@ _zsh_main-highlight() {
     start_pos=$end_pos
   done
 
+}
+
+_zsh_highlight-bracket-match() {
+  (( ZSH_PRIOR_CURSOR == CURSOR )) && return
+  ZSH_PRIOR_CURSOR=$CURSOR
   # Bracket matching
   bracket_color_size=${#ZSH_HIGHLIGHT_MATCHING_BRACKETS_STYLES}
   if ((bracket_color_size > 0)); then
