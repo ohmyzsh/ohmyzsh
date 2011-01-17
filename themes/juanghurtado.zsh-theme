@@ -11,9 +11,9 @@ function git_prompt_sha() {
 
 # Prompts
 PROMPT='
-%{$fg[green]%}%n@%m%{$fg[white]%}:%{$fg[yellow]%}%~%u$(parse_git_dirty)%{$reset_color%}
+%{$fg_bold[green]%}%n@%m%{$fg[white]%}:%{$fg[yellow]%}%~%u$(parse_git_dirty)%{$reset_color%}
 %{$fg[blue]%}>%{$reset_color%} '
-RPROMPT='%{$fg[green]%}$(current_branch) $(git_prompt_sha) $(git_prompt_status)%{$reset_color%}'
+RPROMPT='%{$fg_bold[green]%}$(current_branch) $(git_prompt_sha) $(git_prompt_status)%{$reset_color%}'
 
 ZSH_THEME_GIT_PROMPT_PREFIX=""
 ZSH_THEME_GIT_PROMPT_SUFFIX=""
