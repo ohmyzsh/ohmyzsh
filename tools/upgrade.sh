@@ -1,6 +1,19 @@
 current_path=`pwd`
 echo "Upgrading Oh My Zsh"
-( cd $ZSH && git pull origin master )
+
+git_branches=`git remote -v`
+default_origin=`echo $git_branches | egrep 'origin\s+https://github.com/robbyrussell/oh-my-zsh\.git'`
+upgrade_cmd="git pull origin master"
+if [ "N$default_origin" = "N" ]; then
+	upstream_branch=`echo $git_branches | egrep 'upstream\s+https://github.com/robbyrussell/oh-my-zsh\.git'`
+	if [ "N$upstream_branch" = "N" ]; then
+		upgrade_cmd="git remote add upstream https://github.com/robbyrussell/oh-my-zsh/; git fetch upstream; git merge upstream/master"
+	else
+		upgrade_cmd="git fetch upstream; git merge upstream/master"
+	fi
+fi
+
+( cd $ZSH && eval "$upgrade_cmd" )
 echo '         __                                     __  '
 echo '  ____  / /_     ____ ___  __  __   ____  _____/ /_ '
 echo ' / __ \/ __ \   / __ `__ \/ / / /  /_  / / ___/ __ \ '
