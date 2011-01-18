@@ -1,13 +1,21 @@
-alias ss='thin --stats "/thin/stats" start'
-alias sg='ruby script/generate'
-alias sd='ruby script/destroy'
-alias sp='ruby script/plugin'
-alias ssp='ruby script/spec'
-alias rdbm='rake db:migrate'
-alias sc='ruby script/console'
-alias sd='ruby script/server --debugger'
-alias devlog='tail -f log/development.log'
-
-function remote_console() {
-  /usr/bin/env ssh $1 "( cd $2 && ruby script/console production )"
+function _rails () {
+  if [ -e script/server ]; then
+    ruby script/$@
+  else
+    ruby script/rails $@
+  fi
 }
+
+function cuke () {
+  cucumber $@ -r features
+}
+
+alias rs='_rails server'
+alias rd='_rails server --debugger'
+alias rg='_rails generate'
+alias rd='_rails destroy'
+alias rp='_rails plugin'
+alias rc='_rails console'
+alias rdb='_rails dbconsole'
+alias rdbm='rake db:migrate db:test:clone'
+alias devlog='tail -f log/development.log'
