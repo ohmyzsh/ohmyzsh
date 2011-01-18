@@ -1,6 +1,7 @@
 # Aliases
 alias g='git'
 alias gst='git status'
+alias gsts='git status --short'
 alias gl='git pull'
 alias gup='git fetch && git rebase'
 alias gp='git push'
@@ -12,6 +13,7 @@ alias gb='git branch'
 alias gba='git branch -a'
 alias gcount='git shortlog -sn'
 alias gcp='git cherry-pick'
+alias gcpe='git cherry-pick --edit '
 
 
 # Git and svn mix
