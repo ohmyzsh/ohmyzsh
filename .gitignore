@@ -6,3 +6,5 @@ custom/*
 
 # editor backup files
 *~
+# cache
+cache/
