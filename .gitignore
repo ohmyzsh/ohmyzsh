@@ -1,3 +1,4 @@
+*.DS_Store
 locals.zsh
 log/.zsh_history
 projects.zsh
