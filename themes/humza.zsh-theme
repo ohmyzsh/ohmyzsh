@@ -1,4 +1,4 @@
-# ZSH THEME
+# ZSH THEME Preview: https://skitch.com/huyy/rk979/humza.zshtheme
 
 let TotalBytes=0
 for Bytes in $(ls -l | grep "^-" | awk '{ print $5 }')
