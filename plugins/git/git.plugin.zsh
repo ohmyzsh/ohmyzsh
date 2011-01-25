@@ -18,6 +18,8 @@ alias gcpe='git cherry-pick --edit '
 
 # Git and svn mix
 alias git-svn-dcommit-push='git svn dcommit && git push github master:svntrunk'
+alias gsup= !DIRTY=$(git status --porcelain -uno) && git stash save svn-up-auto && git svn rebase && test -n \"$DIRTY\" && git stash pop
+alias gsc=!DIRTY=$(git status --porcelain -uno) && git stash save svn-up-auto && git svn dcommit && test -n \"$DIRTY\" && git stash pop
 
 #
 # Will return the current branch name
