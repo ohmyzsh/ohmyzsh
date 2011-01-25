@@ -1,6 +1,6 @@
-*.DS_Store
 locals.zsh
 log/.zsh_history
 projects.zsh
-custom/*.zsh
+custom/*
 !custom/example.zsh
+
