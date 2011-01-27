@@ -10,6 +10,7 @@ alias gdt='git difftool'
 alias gdv='git diff -w "$@" | vim -R -'
 alias gc='git commit -v'
 alias gca='git commit -v -a'
+alias gco='git checkout'
 alias gb='git branch'
 alias gba='git branch -a'
 alias gcount='git shortlog -sn'
@@ -29,7 +30,7 @@ function current_branch() {
   echo ${ref#refs/heads/}
 }
 
-# these aliases take advangate of the previous function
+# these aliases take advantage of the previous function
 alias ggpull='git pull origin $(current_branch)'
 alias ggpush='git push origin $(current_branch)'
 alias ggpnp='git pull origin $(current_branch) && git push origin $(current_branch)'
