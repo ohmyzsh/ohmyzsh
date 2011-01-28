@@ -12,14 +12,18 @@ function title {
 }
 
 function precmd {
-  title zsh "$PWD"
+  if [ "$DISABLE_AUTO_TITLE" != "true" ]; then
+    title zsh "$PWD"
+  fi
 }
 
 function preexec {
   emulate -L zsh
   local -a cmd; cmd=(${(z)1})
-  title $cmd[1]:t "$cmd[2,-1]"
-}
+  if [ "$DISABLE_AUTO_TITLE" != "true" ]; then
+    title $cmd[1]:t "$cmd[2,-1]"
+  fi
+  }
 
 function zsh_stats() {
   history | awk '{print $2}' | sort | uniq -c | sort -rn | head
