@@ -28,13 +28,15 @@ function git_time_since_commit() {
         last_commit=`git log --pretty=format:'%at' -1 2> /dev/null`
         seconds_since_last_commit=$((now-last_commit))
 
-        # Total minutes
+        # Totals
         MINUTES=$((seconds_since_last_commit / 60))
-       
-        # Hours and minutes
         HOURS=$((seconds_since_last_commit/3600))
-        SUB_MINUTES=$((seconds_since_last_commit % 3600 / 60))
-
+       
+        # Sub-hours and sub-minutes
+        DAYS=$((seconds_since_last_commit / 86400))
+        SUB_HOURS=$((HOURS % 24))
+        SUB_MINUTES=$((MINUTES % 60))
+        
         if [[ -n $(git status -s 2> /dev/null) ]]; then
             if [ "$MINUTES" -gt 30 ]; then
                 COLOR="$ZSH_THEME_GIT_TIME_SINCE_COMMIT_LONG"
@@ -47,7 +49,9 @@ function git_time_since_commit() {
             COLOR="$ZSH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL"
         fi
 
-        if [ "$MINUTES" -gt 60 ]; then
+        if [ "$HOURS" -gt 24 ]; then
+            echo "($COLOR${DAYS}d${SUB_HOURS}h${SUB_MINUTES}m%{$reset_color%}|"
+        elif [ "$MINUTES" -gt 60 ]; then
             echo "($COLOR${HOURS}h${SUB_MINUTES}m%{$reset_color%}|"
         else
             echo "($COLOR${MINUTES}m%{$reset_color%}|"
