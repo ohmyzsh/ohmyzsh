@@ -1,7 +1,7 @@
 zsh-syntax-highlighting ![Project status](http://stillmaintained.com/nicoulaj/zsh-syntax-highlighting.png)
 ==========================================================================================================
 
-**[Fish shell](http://www.fishshell.org) like syntax highlighting for [Zsh](http://www.zsh.org).**
+**[Fish shell](http://www.fishshell.com) like syntax highlighting for [Zsh](http://www.zsh.org).**
 
 *Requirements: zsh 4.3.9 or superior.*
 
