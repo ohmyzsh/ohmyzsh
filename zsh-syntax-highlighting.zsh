@@ -221,7 +221,7 @@ _zsh_highlight-zle-buffer() {
 # Bind all ZLE events from zle -la to highlighting function.
 _zsh_highlight-install() {
   zmodload zsh/zleparameter 2>/dev/null || {
-    echo 'zsh-syntax-highlighting:zmoadload error. exiting.' >&2; return -1
+    echo 'zsh-syntax-highlighting:zmodload error. exiting.' >&2; return -1
   }
   local -a events; : ${(A)events::=${@:#(_*|orig-*|.run-help|.which-command)}}
   local clean_event
