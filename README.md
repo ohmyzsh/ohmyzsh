@@ -71,20 +71,3 @@ You can tweak the styles used to colorize matching brackets by overriding the [`
     )
 
 This must be done **after** the script is sourced, otherwise your styles will be overwritten. The syntax for declaring styles is [documented here](http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#SEC135).
-
-
-## Authors / Greetings
-
- * [Roy Zuo](https://github.com/roylez)
- * [Julien Nicoulaud](https://github.com/nicoulaj)
- * [Dave Ingram](https://github.com/dingram)
- * [Mounier Florian](https://github.com/paradoxxxzero)
- * [Jonathan Dahan](https://github.com/jedahan)
- * James Ahlborn
- * [Andreas Jaggi](https://github.com/x-way)
- * [Wayne Davison](https://github.com/WayneD)
- * [Suraj N. Kurapati](https://github.com/sunaku)
- * [Takeshi Banse](https://github.com/hchbaw)
- * [Sorin Ionescu](https://github.com/SpookyET)
- * [Clayton Parker](https://github.com/claytron)
- * [Arlen Cuss](https://github.com/celtic)
