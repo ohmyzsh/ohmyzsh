@@ -46,7 +46,7 @@ done
 function get_scm_prompt () {
     for scm in $scms; do
         if [ $("scm_in_"$scm"_repo") ]; then
-            echo `"scm_"$scm"_prompt_info"`
+            echo  -n `"scm_"$scm"_prompt_info"`
         fi
     done
 }
