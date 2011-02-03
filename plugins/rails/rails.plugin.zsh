@@ -1,3 +1,7 @@
+fpath=($ZSH/plugins/rails $fpath)
+autoload -U compinit
+compinit -i
+
 function _rails () {
   if [ -e script/server ]; then
     ruby script/$@
