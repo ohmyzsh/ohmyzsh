@@ -1,3 +1,7 @@
+fpath=($ZSH/plugins/rails3 $fpath)
+autoload -U compinit
+compinit -i
+
 alias rs='ruby script/rails server'
 alias rg='ruby script/rails generate'
 alias rd='ruby script/rails destroy'
