@@ -7,7 +7,7 @@ function _rails () {
 }
 
 function cuke () {
-  cucumber $@ -r features
+  bundle exec cucumber $@ -r features
 }
 
 alias rs='_rails server'
