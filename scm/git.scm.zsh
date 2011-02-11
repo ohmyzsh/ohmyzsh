@@ -1,5 +1,5 @@
 function scm_in_git_repo () {
-    if [[ -d .git ]]; then
+    if [ "$(git st 2>/dev/null)" ]; then
         echo 1
     fi
 }
