@@ -1,5 +1,4 @@
 alias be='bundle exec'
-alias bspec='bundle exec spec -f specdoc -c'
 alias e='mvim'
 alias fresh_coffee='coffee -wc -o public/javascripts app/coffee'
 alias ll='ls -lFh'
@@ -12,5 +11,3 @@ alias postgres_start='pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgr
 alias postgres_stop='pg_ctl -D /usr/local/var/postgres stop -s -m fast'
 alias rails2_mode='rvm --default ruby-1.8.7-p302@rails2'
 alias rails3_mode='rvm --default ruby-1.9.2-p0@rails3'
-alias rspec='bundle exec rspec --color --format documentation'
-alias spec='spec -f specdoc -c'
