@@ -53,6 +53,7 @@ ZSH_HIGHLIGHT_STYLES=(
   dollar-double-quoted-argument 'fg=cyan'
   back-double-quoted-argument   'fg=cyan'
   bracket-error                 'fg=red,bold'
+  assign                        'none'
 )
 
 # Colors for bracket levels.
@@ -76,6 +77,12 @@ zle_highlight=(
   special:$ZSH_HIGHLIGHT_STYLES[special]
   isearch:$ZSH_HIGHLIGHT_STYLES[isearch]
 )
+
+# Check if the argument is variable assignment
+_zsh_check-assign() {
+    setopt localoptions extended_glob
+    [[ ${(Q)arg} == [[:alpha:]_]([[:alnum:]_])#=* ]]
+}
 
 # Check if the argument is a path.
 _zsh_check-path() {
@@ -139,7 +146,10 @@ _zsh_highlight-zle-buffer() {
         *': function')  style=$ZSH_HIGHLIGHT_STYLES[function];;
         *': command')   style=$ZSH_HIGHLIGHT_STYLES[command];;
         *': hashed')    style=$ZSH_HIGHLIGHT_STYLES[hashed-command];;
-        *)              if _zsh_check-path; then
+        *)              if _zsh_check-assign; then
+                          style=$ZSH_HIGHLIGHT_STYLES[assign]
+                          new_expression=true
+                        elif _zsh_check-path; then
                           style=$ZSH_HIGHLIGHT_STYLES[path]
                         elif [[ $arg[0,1] = $histchars[0,1] ]]; then
                           style=$ZSH_HIGHLIGHT_STYLES[history-expansion]
