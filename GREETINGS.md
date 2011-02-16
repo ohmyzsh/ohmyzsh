@@ -14,3 +14,4 @@ Authors / Greetings
  * [Sorin Ionescu](https://github.com/sorin-ionescu)
  * [Clayton Parker](https://github.com/claytron)
  * [Arlen Cuss](https://github.com/celtic)
+ * [Nakamura Yoshitaka](https://github.com/nakamuray)
