@@ -59,4 +59,4 @@ _zsh_highlight-keyword-loop() {
   fi
 }
 
-_zsh_add-highlighter _zsh_highlight-keyword _zsh_buffer-modified-p
+_zsh_highlight_add-highlighter _zsh_highlight-keyword _zsh_highlight_buffer-modified-p
