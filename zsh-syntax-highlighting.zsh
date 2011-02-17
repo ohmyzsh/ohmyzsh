@@ -33,8 +33,6 @@
 typeset -gA ZSH_HIGHLIGHT_STYLES
 ZSH_HIGHLIGHT_STYLES=(
   default                       'none'
-  isearch                       'fg=magenta,standout'
-  special                       'fg=magenta,standout'
   unknown-token                 'fg=red,bold'
   reserved-word                 'fg=yellow'
   alias                         'fg=green'
@@ -70,12 +68,6 @@ ZSH_HIGHLIGHT_MATCHING_BRACKETS_STYLES=(
 # Tokens that are always immediately followed by a command.
 ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS=(
   '|' '||' ';' '&' '&&' 'noglob' 'nocorrect' 'builtin'
-)
-
-# ZLE highlight types.
-zle_highlight=(
-  special:$ZSH_HIGHLIGHT_STYLES[special]
-  isearch:$ZSH_HIGHLIGHT_STYLES[isearch]
 )
 
 # Check if the argument is variable assignment
