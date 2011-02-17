@@ -51,8 +51,7 @@ _zsh_highlight-keyword() {
 
 _zsh_highlight-keyword-loop() {
   # This does *not* do its job syntactically, sorry.
-  local buf="$1"
-  local pat="$2"
+  local buf="$1" pat="$2"
   local -a match mbegin mend
   if [[ "$buf" == (#b)(*)(${~pat})* ]]; then
     region_highlight+=("$((mbegin[2] - 1)) $mend[2] $ZSH_HIGHLIGHT_KEYWORD_KEYWORDS[$pat]")

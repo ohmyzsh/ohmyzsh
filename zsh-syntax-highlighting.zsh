@@ -157,8 +157,7 @@ _zsh_highlight-zle-buffer() {
 
 # Whether supplied highlight_predicate satisfies or not.
 _zsh_highlight-zle-buffer-p() {
-  local region_highlight_size="$1"
-  local highlight_predicate="$2"
+  local region_highlight_size="$1" highlight_predicate="$2"
   # If any highlightings are not taken into account, asume it is needed.
   # This holds for some up/down-history commands, for example.
   ((region_highlight_size == 0)) || "$highlight_predicate"
@@ -176,9 +175,7 @@ _zsh_cursor-moved-p() {
 
 # Register a highlighting function.
 _zsh_add-highlighter() {
-  local func="$1"
-  local pred="${2-${1}-p}"
-  local cache_place="${3-${1//-/_}}"
+  local func="$1" pred="${2-${1}-p}" cache_place="${3-${1//-/_}}"
   zsh_highlight_functions+=$func
   zsh_highlight_predicates+=$pred
   zsh_highlight_caches+=$cache_place
@@ -191,10 +188,7 @@ _zsh_add-highlighter _zsh_highlight-bracket-match
 # Core syntax highlighting.
 _zsh_main-highlight() {
   setopt localoptions extendedglob bareglobqual
-  local new_expression=true
-  local start_pos=0
-  local highlight_glob=true
-  local end_pos arg style
+  local start_pos=0 end_pos highlight_glob=true new_expression=true arg style
   region_highlight=()
   for arg in ${(z)BUFFER}; do
     local substr_color=0
