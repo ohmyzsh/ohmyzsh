@@ -128,8 +128,7 @@ _zsh_highlight-zle-buffer() {
     local -a funinds
     local -i rh_size=$#region_highlight
     for i in {1..${#zsh_highlight_functions}}; do
-      local pred=${zsh_highlight_predicates[i]}
-      local cache_place=${zsh_highlight_caches[i]}
+      local pred=${zsh_highlight_predicates[i]} cache_place=${zsh_highlight_caches[i]}
       if _zsh_highlight-zle-buffer-p "$rh_size" "$pred"; then
         if ((${#${(P)cache_place}} > 0)); then
           region_highlight=(${region_highlight:#(${(P~j.|.)cache_place})})
@@ -139,8 +138,7 @@ _zsh_highlight-zle-buffer() {
       fi
     done
     for i in $funinds; do
-      local func=${zsh_highlight_functions[i]}
-      local cache_place=${zsh_highlight_caches[i]}
+      local func=${zsh_highlight_functions[i]} cache_place=${zsh_highlight_caches[i]}
       local -a rh; rh=($region_highlight)
       {
         "$func"
@@ -183,7 +181,7 @@ _zsh_highlight_add-highlighter() {
 
 # Register the builtin highlighters.
 _zsh_highlight_add-highlighter _zsh_main-highlight _zsh_highlight_buffer-modified-p
-_zsh_highlight_add-highlighter _zsh_highlight-bracket-match
+_zsh_highlight_add-highlighter _zsh_highlight_bracket-match
 
 # Core syntax highlighting.
 _zsh_main-highlight() {
@@ -256,7 +254,7 @@ _zsh_highlight_bracket-match-p() {
 }
 
 # Bracket match highlighting.
-_zsh_highlight-bracket-match() {
+_zsh_highlight_bracket-match() {
   # Bracket matching
   bracket_color_size=${#ZSH_HIGHLIGHT_MATCHING_BRACKETS_STYLES}
   if ((bracket_color_size > 0)); then
