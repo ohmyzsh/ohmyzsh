@@ -49,7 +49,7 @@ Here is a one-liner to try it without installing or modifying anything:
 
 ## Tweak it
 
-Optionally, you can override the default styles used for highlighting. The styles are declared in the [`ZSH_HIGHLIGHT_STYLES`](https://github.com/nicoulaj/zsh-syntax-highlighting/blob/master/zsh-syntax-highlighting.zsh#L11) array. You can override styles this way:
+Optionally, you can override the default styles used for highlighting. The styles are declared in the `ZSH_HIGHLIGHT_STYLES` array. You can override styles this way:
 
     # To differentiate aliases from other command types
     ZSH_HIGHLIGHT_STYLES[alias]='fg=magenta,bold'
@@ -60,7 +60,7 @@ Optionally, you can override the default styles used for highlighting. The style
     # To disable highlighting of globbing expressions
     ZSH_HIGHLIGHT_STYLES[globbing]='none'
 
-You can tweak the styles used to colorize matching brackets by overriding the [`ZSH_HIGHLIGHT_MATCHING_BRACKETS_STYLES`](https://github.com/nicoulaj/zsh-syntax-highlighting/blob/master/zsh-syntax-highlighting.zsh#L11).
+You can tweak the styles used to colorize matching brackets by overriding the `ZSH_HIGHLIGHT_MATCHING_BRACKETS_STYLES`.
 
     ZSH_HIGHLIGHT_MATCHING_BRACKETS_STYLES=(
       'fg=blue,bold'    # Style for first level of imbrication

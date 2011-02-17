@@ -29,83 +29,12 @@
 # -------------------------------------------------------------------------------------------------
 
 
-# Token types styles.
+# -------------------------------------------------------------------------------------------------
+# Core highligting update system
+# -------------------------------------------------------------------------------------------------
+
+# Array used by highlighters to declare overridable styles.
 typeset -gA ZSH_HIGHLIGHT_STYLES
-ZSH_HIGHLIGHT_STYLES=(
-  default                       'none'
-  unknown-token                 'fg=red,bold'
-  reserved-word                 'fg=yellow'
-  alias                         'fg=green'
-  builtin                       'fg=green'
-  function                      'fg=green'
-  command                       'fg=green'
-  hashed-command                'fg=green'
-  path                          'underline'
-  globbing                      'fg=blue'
-  history-expansion             'fg=blue'
-  single-hyphen-option          'none'
-  double-hyphen-option          'none'
-  back-quoted-argument          'none'
-  single-quoted-argument        'fg=yellow'
-  double-quoted-argument        'fg=yellow'
-  dollar-double-quoted-argument 'fg=cyan'
-  back-double-quoted-argument   'fg=cyan'
-  bracket-error                 'fg=red,bold'
-  assign                        'none'
-)
-
-# Colors for bracket levels.
-# Put as many color as you wish.
-# Leave it as an empty array to disable.
-ZSH_HIGHLIGHT_MATCHING_BRACKETS_STYLES=(
-  'fg=blue,bold'
-  'fg=green,bold'
-  'fg=magenta,bold'
-  'fg=yellow,bold'
-  'fg=cyan,bold'
-)
-
-# Tokens that are always immediately followed by a command.
-ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS=(
-  '|' '||' ';' '&' '&&' 'noglob' 'nocorrect' 'builtin'
-)
-
-# Check if the argument is variable assignment
-_zsh_highlight_check-assign() {
-    setopt localoptions extended_glob
-    [[ ${(Q)arg} == [[:alpha:]_]([[:alnum:]_])#=* ]]
-}
-
-# Check if the argument is a path.
-_zsh_highlight_check-path() {
-  [[ -z ${(Q)arg} ]] && return 1
-  [[ -e ${(Q)arg} ]] && return 0
-  [[ ! -e ${(Q)arg:h} ]] && return 1
-  [[ ${#BUFFER} == $end_pos && -n $(print ${(Q)arg}*(N)) ]] && return 0
-  return 1
-}
-
-# Highlight special chars inside double-quoted strings
-_zsh_highlight_highlight_string() {
-  setopt localoptions noksharrays
-  local i j k style
-  # Starting quote is at 1, so start parsing at offset 2 in the string.
-  for (( i = 2 ; i < end_pos - start_pos ; i += 1 )) ; do
-    (( j = i + start_pos - 1 ))
-    (( k = j + 1 ))
-    case "$arg[$i]" in
-      '$')  style=$ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument];;
-      "\\") style=$ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]
-            (( k += 1 )) # Color following char too.
-            (( i += 1 )) # Skip parsing the escaped char.
-            ;;
-      *)    continue;;
-    esac
-    region_highlight+=("$j $k $style")
-  done
-}
-
-# Recolorize the current ZLE buffer.
 
 # An `object' implemented by below 3 arrays' elements could be called a
 # `highlighter', registered by `_zsh_highlight_add-highlighter`. In other words, these
@@ -171,17 +100,79 @@ _zsh_highlight_cursor-moved-p() {
   ((ZSH_PRIOR_CURSOR != $CURSOR))
 }
 
-# Register a highlighting function.
+# Register an highlighter.
 _zsh_highlight_add-highlighter() {
-  local func="$1" pred="${2-${1}-p}" cache_place="${3-${1//-/_}}"
-  zsh_highlight_functions+=$func
-  zsh_highlight_predicates+=$pred
-  zsh_highlight_caches+=$cache_place
+  zsh_highlight_functions+="$1"
+  zsh_highlight_predicates+="${2-${1}-p}"
+  zsh_highlight_caches+="${3-${1//-/_}}"
 }
 
-# Register the builtin highlighters.
-_zsh_highlight_add-highlighter _zsh_main-highlight _zsh_highlight_buffer-modified-p
-_zsh_highlight_add-highlighter _zsh_highlight_bracket-match
+
+# -------------------------------------------------------------------------------------------------
+# Main highlighter
+# -------------------------------------------------------------------------------------------------
+
+ZSH_HIGHLIGHT_STYLES+=(
+  default                       'none'
+  unknown-token                 'fg=red,bold'
+  reserved-word                 'fg=yellow'
+  alias                         'fg=green'
+  builtin                       'fg=green'
+  function                      'fg=green'
+  command                       'fg=green'
+  hashed-command                'fg=green'
+  path                          'underline'
+  globbing                      'fg=blue'
+  history-expansion             'fg=blue'
+  single-hyphen-option          'none'
+  double-hyphen-option          'none'
+  back-quoted-argument          'none'
+  single-quoted-argument        'fg=yellow'
+  double-quoted-argument        'fg=yellow'
+  dollar-double-quoted-argument 'fg=cyan'
+  back-double-quoted-argument   'fg=cyan'
+  assign                        'none'
+)
+
+# Tokens that are always immediately followed by a command.
+ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS=(
+  '|' '||' ';' '&' '&&' 'noglob' 'nocorrect' 'builtin'
+)
+
+# Check if the argument is variable assignment
+_zsh_highlight_check-assign() {
+    setopt localoptions extended_glob
+    [[ ${(Q)arg} == [[:alpha:]_]([[:alnum:]_])#=* ]]
+}
+
+# Check if the argument is a path.
+_zsh_highlight_check-path() {
+  [[ -z ${(Q)arg} ]] && return 1
+  [[ -e ${(Q)arg} ]] && return 0
+  [[ ! -e ${(Q)arg:h} ]] && return 1
+  [[ ${#BUFFER} == $end_pos && -n $(print ${(Q)arg}*(N)) ]] && return 0
+  return 1
+}
+
+# Highlight special chars inside double-quoted strings
+_zsh_highlight_highlight_string() {
+  setopt localoptions noksharrays
+  local i j k style
+  # Starting quote is at 1, so start parsing at offset 2 in the string.
+  for (( i = 2 ; i < end_pos - start_pos ; i += 1 )) ; do
+    (( j = i + start_pos - 1 ))
+    (( k = j + 1 ))
+    case "$arg[$i]" in
+      '$')  style=$ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument];;
+      "\\") style=$ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]
+            (( k += 1 )) # Color following char too.
+            (( i += 1 )) # Skip parsing the escaped char.
+            ;;
+      *)    continue;;
+    esac
+    region_highlight+=("$j $k $style")
+  done
+}
 
 # Core syntax highlighting.
 _zsh_main-highlight() {
@@ -246,63 +237,22 @@ _zsh_main-highlight() {
   done
 }
 
-# Whether the bracket match highlighting shound be called or not.
-_zsh_highlight_bracket-match-p() {
-  _zsh_highlight_cursor-moved-p || _zsh_highlight_buffer-modified-p
-}
 
-# Bracket match highlighting.
-_zsh_highlight_bracket-match() {
-  # Bracket matching
-  bracket_color_size=${#ZSH_HIGHLIGHT_MATCHING_BRACKETS_STYLES}
-  if ((bracket_color_size > 0)); then
-    typeset -A levelpos lastoflevel matching revmatching
-    ((level = 0))
-    for pos in {1..${#BUFFER}}; do
-      case $BUFFER[pos] in
-        "("|"["|"{")
-          levelpos[$pos]=$((++level))
-          lastoflevel[$level]=$pos
-          ;;
-        ")"|"]"|"}")
-          matching[$lastoflevel[$level]]=$pos
-          revmatching[$pos]=$lastoflevel[$level]
-          levelpos[$pos]=$((level--))
-          ;;
-      esac
-    done
-    for pos in ${(k)levelpos}; do
-      level=$levelpos[$pos]
-      if ((level < 1)); then
-        region_highlight+=("$((pos - 1)) $pos "$ZSH_HIGHLIGHT_STYLES[bracket-error])
-      else
-        region_highlight+=("$((pos - 1)) $pos "$ZSH_HIGHLIGHT_MATCHING_BRACKETS_STYLES[(( (level - 1) % bracket_color_size + 1 ))])
-      fi
-    done
-    ((c = CURSOR + 1))
-    if [[ -n $levelpos[$c] ]]; then
-      ((otherpos = -1))
-      [[ -n $matching[$c] ]] && otherpos=$matching[$c]
-      [[ -n $revmatching[$c] ]] && otherpos=$revmatching[$c]
-      region_highlight+=("$((otherpos - 1)) $otherpos standout")
-    fi
-  fi
-}
+# -------------------------------------------------------------------------------------------------
+# Setup
+# -------------------------------------------------------------------------------------------------
 
-# Special treatment for completion/expansion events:
-# For each *complete* function (except 'accept-and-menu-complete'), 
-# we create a widget which mimics the original
-# and use this orig-* version inside the new colorized zle function (the dot
-# idiom used for all others doesn't work right for these functions for some
-# reason).  You can see the default setup using "zle -l -L".
-
-# Bind all ZLE events from zle -la to highlighting function.
+# Setup highlighting.
 _zsh_highlight_install() {
+
+  # Resolve event names what have to be bound to.
   zmodload zsh/zleparameter 2>/dev/null || {
     echo 'zsh-syntax-highlighting:zmodload error. exiting.' >&2
     return -1
   }
   local -a events; : ${(A)events::=${@:#(_*|orig-*|.run-help|.which-command)}}
+
+  # Bind the events to _zsh_highlight-zle-buffer.
   local clean_event
   for event in $events; do
     if [[ "$widgets[$event]" == completion:* ]]; then
@@ -327,5 +277,15 @@ _zsh_highlight_install() {
       esac
     fi
   done
+
+  # Register the main highlighter.
+  _zsh_highlight_add-highlighter _zsh_main-highlight _zsh_highlight_buffer-modified-p
+
+  # Load additional highlighters if available.
+  local highlighters_dir=${$(command readlink -f ${(%):-%N}):h}/highlighters
+  if [[ -d $highlighters_dir ]]; then
+    for highlighter_def ($highlighters_dir/*.zsh) . $highlighter_def
+  fi
 }
+
 _zsh_highlight_install "${(@f)"$(zle -la)"}"
