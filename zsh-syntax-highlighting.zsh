@@ -114,12 +114,90 @@ _zsh_highlight-string() {
 }
 
 # Recolorize the current ZLE buffer.
-_zsh_highlight-zle-buffer() {
-  # Avoid doing the same work over and over
-  [[ ${ZSH_PRIOR_HIGHLIGHTED_BUFFER:-} == $BUFFER ]] && [[ ${#region_highlight} -gt 0 ]] && (( ZSH_PRIOR_CURSOR == CURSOR )) && return
-  ZSH_PRIOR_HIGHLIGHTED_BUFFER=$BUFFER
-  ZSH_PRIOR_CURSOR=$CURSOR
 
+# An `object' implemented by below 3 arrays' elements could be called a
+# `highlighter', registered by `_zsh_add-highlighter`. In other words, these
+# arrays are indexed and tied by their own functionality. If they have been
+# arranged inconsistently, things goes wrong.
+# Please see `_zsh_highlight-zle-buffer` and `_zsh_add-highlighter`.
+
+# Actual recolorize functions to be called.
+typeset -a zsh_highlight_functions; zsh_highlight_functions=()
+
+# Predicate functions whether its recolorize function should be called or not.
+typeset -a zsh_highlight_predicates; zsh_highlight_predicates=()
+
+# Highlight storages for each recolorize functions.
+typeset -a zsh_highlight_caches; zsh_highlight_caches=()
+
+_zsh_highlight-zle-buffer() {
+  local ret=$?
+  {
+    local -a funinds
+    local -i rh_size=$#region_highlight
+    for i in {1..${#zsh_highlight_functions}}; do
+      local pred=${zsh_highlight_predicates[i]}
+      local cache_place=${zsh_highlight_caches[i]}
+      if _zsh_highlight-zle-buffer-p "$rh_size" "$pred"; then
+        if ((${#${(P)cache_place}} > 0)); then
+          region_highlight=(${region_highlight:#(${(P~j.|.)cache_place})})
+          local -a empty; empty=(); : ${(PA)cache_place::=$empty}
+        fi
+        funinds+=$i
+      fi
+    done
+    for i in $funinds; do
+      local func=${zsh_highlight_functions[i]}
+      local cache_place=${zsh_highlight_caches[i]}
+      local -a rh; rh=($region_highlight)
+      {
+        "$func"
+      } always  {
+        : ${(PA)cache_place::=${region_highlight:#(${(~j.|.)rh})}}
+      }
+    done
+  } always {
+    ZSH_PRIOR_CURSOR=$CURSOR
+    ZSH_PRIOR_HIGHLIGHTED_BUFFER=$BUFFER
+    return $ret
+  }
+}
+
+# Whether supplied highlight_predicate satisfies or not.
+_zsh_highlight-zle-buffer-p() {
+  local region_highlight_size="$1"
+  local highlight_predicate="$2"
+  # If any highlightings are not taken into account, asume it is needed.
+  # This holds for some up/down-history commands, for example.
+  ((region_highlight_size == 0)) || "$highlight_predicate"
+}
+
+# Whether the command line buffer is modified or not.
+_zsh_buffer-modified-p() {
+  [[ ${ZSH_PRIOR_HIGHLIGHTED_BUFFER:-} != $BUFFER ]]
+}
+
+# Whether the cursor is moved or not.
+_zsh_cursor-moved-p() {
+  ((ZSH_PRIOR_CURSOR != $CURSOR))
+}
+
+# Register a highlighting function.
+_zsh_add-highlighter() {
+  local func="$1"
+  local pred="${2-${1}-p}"
+  local cache_place="${3-${1//-/_}}"
+  zsh_highlight_functions+=$func
+  zsh_highlight_predicates+=$pred
+  zsh_highlight_caches+=$cache_place
+}
+
+# Register the builtin highlighters.
+_zsh_add-highlighter _zsh_main-highlight _zsh_buffer-modified-p
+_zsh_add-highlighter _zsh_highlight-bracket-match
+
+# Core syntax highlighting.
+_zsh_main-highlight() {
   setopt localoptions extendedglob bareglobqual
   local new_expression=true
   local start_pos=0
@@ -184,7 +262,15 @@ _zsh_highlight-zle-buffer() {
     [[ ${${ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS[(r)${arg//|/\|}]:-}:+yes} = 'yes' ]] && new_expression=true
     start_pos=$end_pos
   done
+}
 
+# Whether the bracket match highlighting shound be called or not.
+_zsh_highlight-bracket-match-p() {
+  _zsh_cursor-moved-p || _zsh_buffer-modified-p
+}
+
+# Bracket match highlighting.
+_zsh_highlight-bracket-match() {
   # Bracket matching
   bracket_color_size=${#ZSH_HIGHLIGHT_MATCHING_BRACKETS_STYLES}
   if ((bracket_color_size > 0)); then
