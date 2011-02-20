@@ -10,10 +10,6 @@ function _rails () {
   fi
 }
 
-function cuke () {
-  bundle exec cucumber $@ -r features
-}
-
 alias rs='_rails server'
 alias rd='_rails server --debugger'
 alias rg='_rails generate'
@@ -23,3 +19,4 @@ alias rc='_rails console'
 alias rdb='_rails dbconsole'
 alias rdbm='rake db:migrate db:test:clone'
 alias devlog='tail -f log/development.log'
+alias cuke='bundle exec cucumber'
