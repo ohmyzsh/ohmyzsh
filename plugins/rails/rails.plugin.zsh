@@ -3,7 +3,7 @@ autoload -U compinit
 compinit -i
 
 function _bundle_command {
-  if command -v bundle; then
+  if command -v bundle && [ -e "Gemfile" ]; then
     bundle exec $@
   else
     $@
