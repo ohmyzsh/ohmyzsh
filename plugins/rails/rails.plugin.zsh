@@ -28,5 +28,7 @@ alias rdb='_rails_command dbconsole'
 alias rdbm='rake db:migrate db:test:clone'
 alias rdbmr='rake db:migrate && rake db:migrate:redo'
 alias devlog='tail -f log/development.log'
+
+alias rspec='_bundle_command rspec'
 alias cuke='_bundle_command cucumber'
 alias begs='_bundle_command guard start'
