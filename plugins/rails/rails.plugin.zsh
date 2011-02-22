@@ -2,6 +2,14 @@ fpath=($ZSH/plugins/rails $fpath)
 autoload -U compinit
 compinit -i
 
+function _bundle_command {
+  if command -v bundle; then
+    bundle exec $@
+  else
+    $@
+  fi
+}
+
 function _rails_command () {
   if [ -e "script/server" ]; then
     ruby script/$@
@@ -19,4 +27,4 @@ alias rc='_rails_command console'
 alias rdb='_rails_command dbconsole'
 alias rdbm='rake db:migrate db:test:clone'
 alias devlog='tail -f log/development.log'
-alias cuke='bundle exec cucumber'
+alias cuke='_bundle_command cucumber'
