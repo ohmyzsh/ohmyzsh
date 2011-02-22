@@ -8,7 +8,7 @@ h2. Setup
 
 h3. The automatic installer... (do you trust me?)
 
-@wget http://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh@
+@wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh@
 
 h3. The manual way
 
@@ -38,7 +38,7 @@ h2. Usage
 * enable the plugins you want in your @~/.zshrc@ (take a look at @plugins/@ to see what's possible)
 ** example: @plugins=(git osx ruby)@
 * Theme support: Change the @ZSH_THEME@ environment variable in @~/.zshrc@.
-** Take a look at the "current themes":http://wiki.github.com/robbyrussell/oh-my-zsh/themes that come bundled with _Oh My Zsh_.
+** Take a look at the "current themes":https://wiki.github.com/robbyrussell/oh-my-zsh/themes that come bundled with _Oh My Zsh_.
 * much much more...  take a look at @lib/@ what _Oh My Zsh_ offers...
 
 h2. Useful
