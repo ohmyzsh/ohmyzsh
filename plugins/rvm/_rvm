@@ -1,0 +1,147 @@
+#compdef rvm
+
+local curcontext="$curcontext" state line cmds ret=1
+
+_arguments -C \
+	'(- 1 *)'{-v,--version}'[display version information]' \
+	'(-l|--level)'{-l,--level}'+[patch level to use with rvm use / install]:number' \
+	'(--prefix)--prefix[path for all rvm files (~/.rvm/), with trailing slash!]:path:_files' \
+	'(--bin)--bin[path for binaries to be placed (~/.rvm/bin/)]:path:_files' \
+	'(--source)--source[src directory to use (~/.rvm/src/)]:path:_files' \
+	'(--archives)--archives[directory for downladed files (~/.rvm/archives/)]:path:_files' \
+	'-S[Specify a script file to attempt to load and run (rubydo)]:file:_files' \
+	'-e[Execute code from the command line]:code' \
+	'(-G)-G[root gem path to use]:path:_files' \
+	'(--gems)--gems[Used to set the gems_flag, use with remove to remove gems]' \
+	'(--archive)--archive[Used to set the archive_flag, use with remove to remove archive]' \
+	'(--patch)--patch[With MRI Rubies you may specify one or more full paths to patches]' \
+	'(-C|--configure)'{-C,--configure}'=[custom configure options]' \
+	'(--nice)--nice[process niceness (for slow computers, default 0)]:number' \
+	'(--ree)--ree-options[Options passed directly to ree ./installer on the command line]:options' \
+	'(--head)--head[with update, updates rvm to git head version]' \
+	'(--rubygems)--rubygems[with update, updates rubygems for selected ruby]' \
+	'(--default)--default[with ruby select, sets a default ruby for new shells]' \
+	'(--debug)--debug[Toggle debug mode on for very verbose output]' \
+	'(--trace)--trace[Toggle trace mode on to see EVERYTHING rvm is doing]' \
+	'(--force)--force[Force install, removes old install & source before install]' \
+	'(--summary)--summary[Used with rubydo to print out a summary of the commands run]' \
+	'(--latest)--latest[with gemset --dump skips version strings for latest gem]' \
+	'(--gems)--gems[with uninstall/remove removes gems with the interpreter]' \
+	'(--docs)--docs[with install, attempt to generate ri after installation]' \
+	'(--reconfigure)--reconfigure[Force ./configure on install even if Makefile already exists]' \
+	'1: :->cmds' \
+	'*: :->args' && ret=0
+
+case $state in
+	cmds)
+		cmds=( 
+            "version:show the rvm version installed in rvm_path"
+            "use:setup current shell to use a specific ruby version"
+            "reload:reload rvm source itself (useful after changing rvm source)"
+            "implode:(seppuku) removes the rvm installation completely. This means everything in $rvm_path (~/.rvm)."
+            "update:upgrades rvm to the latest version."
+            "reset:remove current and stored default & system settings."
+            "info :show the *current* environment information for current ruby"
+            "current:print the *current* ruby version and the name of any gemset being used."
+            "debug:show info plus additional information for common issues"
+            "install:install one or many ruby versions"
+            "uninstall:uninstall one or many ruby versions, leaves their sources"
+            "remove:uninstall one or many ruby versions and remove their sources"
+            "migrate:Lets you migrate all gemsets from one ruby to another."
+            "upgrade:Lets you upgrade from one version of a ruby to another, including migrating your gemsets semi-automatically."
+            "wrapper:generates a set of wrapper executables for a given ruby with the specified ruby and gemset combination. Used under the hood for passenger support and the like."
+            "cleanup:Lets you remove stale source folders / archives and other miscellaneous data associated with rvm."
+            "repair:Lets you repair parts of your environment e.g. wrappers, env files and and similar files (e.g. general maintenance)."
+            "snapshot:Lets your backup / restore an rvm installation in a lightweight manner."
+            "disk-usage:Tells you how much disk space rvm install is using."
+            "tools:Provides general information about the ruby environment, primarily useful when scripting rvm."
+            "docs:Tools to make installing ri and rdoc documentation easier."
+            "rvmrc:Tools related to managing rvmrc trust and loading."
+            "exec:runs an arbitrary command as a set operation."
+            "ruby:runs a named ruby file against specified and/or all rubies"
+            "gem:runs a gem command using selected ruby's 'gem'"
+            "rake:runs a rake task against specified and/or all rubies"
+            "tests:runs 'rake test' across selected ruby versions"
+            "specs:runs 'rake spec' across selected ruby versions"
+            "monitor:Monitor cwd for testing, run rake {spec,test} on changes."
+            "gemset:gemsets: http://rvm.beginrescueend.com/gemsets/"
+            "rubygems:Switches the installed version of rubygems for the current ruby."
+            "gemdir:display the path to the current gem directory (GEM_HOME)."
+            "srcdir:display the path to rvm source directory (may be yanked)"
+            "fetch:Performs an archive / src fetch only of the selected ruby."
+            "list:show currently installed rubies, interactive output."
+            "package:Install a dependency package {readline,iconv,zlib,openssl}"
+            "notes:Display notes, with operating system specifics."
+            "export:Temporarily set an environment variable in the current shell."
+            "unexport:Undo changes made to the environment by 'rvm export'."
+        )
+		_describe -t commands 'rvm command' cmds && ret=0
+		;;
+	args)
+		case $line[1] in
+			(use|uninstall|remove|list)
+				_values -S , 'rubies' $(rvm list strings | sed -e 's/ruby-\([^) ]*\)-\([^) ]*\)/ruby-\1-\2 \1-\2 \1/g') default system && ret=0
+				;;
+			(install|fetch)
+				_values -S , 'rubies' $(rvm list known_strings) && ret=0
+				;;
+			gemset)
+				if (( CURRENT == 3 )); then
+					_values 'gemset_commands' \
+                        'import' \
+                        'export' \
+                        'create' \
+                        'copy' \
+                        'rename' \
+                        'empty' \
+                        'delete' \
+                        'name' \
+                        'dir' \
+                        'list' \
+                        'list_all' \
+                        'gemdir' \
+                        'install' \
+                        'pristine' \
+                        'clear' \
+                        'use' \
+                        'update' \
+                        'unpack' \
+                        'globalcache'
+				else
+					_values -S , 'gemsets' $(rvm gemset list | grep -v gemset 2>/dev/null)
+				fi
+				ret=0
+				;;
+			package)
+				if (( CURRENT == 3 )); then
+					_values 'package_commands' \
+                        'install' \
+                        'uninstall'  
+				else
+					_values 'packages' \
+                        'readline' \
+                        'iconv' \
+                        'curl' \
+                        'openssl' \
+                        'zlib' \
+                        'autoconf' \
+                        'ncurses' \
+                        'pkgconfig' \
+                        'gettext' \
+                        'glib' \
+                        'mono' \
+                        'llvm' \
+                        'libxml2' \
+                        'libxslt' \
+                        'libyaml'
+				fi
+				ret=0
+				;;
+			*)
+				(( ret )) && _message 'no more arguments'
+				;;
+		esac
+		;;
+esac
+
+return ret
