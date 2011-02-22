@@ -19,7 +19,7 @@ function _rails_command () {
 }
 
 alias rs='_rails_command server'
-alias rd='_rails_command server --debugger'
+alias rsd='_rails_command server --debugger'
 alias rg='_rails_command generate'
 alias rd='_rails_command destroy'
 alias rp='_rails_command plugin'
