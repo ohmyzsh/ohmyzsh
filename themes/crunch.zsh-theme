@@ -6,7 +6,7 @@
 # things that vary in my own workflow are shown:
 #
 # * The time (not the date)
-# * The RVM version (omitting the interpreter name if it's just 'ruby')
+# * The RVM version and gemset (omitting the 'ruby' name if it's MRI)
 # * The current directory
 # * The Git branch and its 'dirty' state
 # 
@@ -29,7 +29,7 @@ ZSH_THEME_GIT_PROMPT_DIRTY=" $CRUNCH_GIT_DIRTY_COLOR✗"
 
 # Our elements:
 CRUNCH_TIME_="$CRUNCH_BRACKET_COLOR{$CRUNCH_TIME_COLOR%T$CRUNCH_BRACKET_COLOR}%{$reset_color%}"
-CRUNCH_RVM_="$CRUNCH_BRACKET_COLOR"["$CRUNCH_RVM_COLOR\$(~/.rvm/bin/rvm-prompt v g)$CRUNCH_BRACKET_COLOR"]"%{$reset_color%}"
+CRUNCH_RVM_="$CRUNCH_BRACKET_COLOR"["$CRUNCH_RVM_COLOR\${\$(~/.rvm/bin/rvm-prompt i v g)#ruby-}$CRUNCH_BRACKET_COLOR"]"%{$reset_color%}"
 CRUNCH_DIR_="$CRUNCH_DIR_COLOR%~\$(git_prompt_info) "
 CRUNCH_PROMPT="$CRUNCH_BRACKET_COLOR➭ "
 
