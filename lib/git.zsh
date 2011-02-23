@@ -32,31 +32,32 @@ function git_prompt_long_sha() {
 
 # Get the status of the working tree
 git_prompt_status() {
-  INDEX=$(git status --porcelain 2> /dev/null)
-  STATUS=""
-  if $(echo "$INDEX" | grep '^?? ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_UNTRACKED$STATUS"
-  fi
-  if $(echo "$INDEX" | grep '^A  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
-  elif $(echo "$INDEX" | grep '^M  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
-  fi
-  if $(echo "$INDEX" | grep '^ M ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
-  elif $(echo "$INDEX" | grep '^AM ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
-  elif $(echo "$INDEX" | grep '^ T ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
-  fi
-  if $(echo "$INDEX" | grep '^R  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_RENAMED$STATUS"
-  fi
-  if $(echo "$INDEX" | grep '^D ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
-  fi
-  if $(echo "$INDEX" | grep '^UU ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_UNMERGED$STATUS"
-  fi
-  echo $STATUS
+  local indicators line untracked added modified renamed deleted
+  while IFS=$'\n' read line; do
+    if [[ "$line" =~ '^\?\? ' ]]; then
+      [[ -n $untracked ]] && continue || untracked='yes'
+      indicators="${ZSH_THEME_GIT_PROMPT_UNTRACKED}${indicators}"
+    fi
+    if [[ "$line" =~ '^(((A|M|D|T) )|(AD|AM|AT|MM)) ' ]]; then
+      [[ -n $added ]] && continue || added='yes'
+      indicators="${ZSH_THEME_GIT_PROMPT_ADDED}${indicators}"
+    fi
+    if [[ "$line" =~ '^(( (M|T))|(AM|AT|MM)) ' ]]; then
+      [[ -n $modified ]] && continue || modified='yes'
+      indicators="${ZSH_THEME_GIT_PROMPT_MODIFIED}${indicators}"
+    fi
+    if [[ "$line" =~ '^R  ' ]]; then
+      [[ -n $renamed ]] && continue || renamed='yes'
+      indicators="${ZSH_THEME_GIT_PROMPT_RENAMED}${indicators}"
+    fi
+    if [[ "$line" =~ '^( D|AD) ' ]]; then
+      [[ -n $deleted ]] && continue || deleted='yes'
+      indicators="${ZSH_THEME_GIT_PROMPT_DELETED}${indicators}"
+    fi
+    if [[ "$line" =~ '^UU ' ]]; then
+      [[ -n $unmerged ]] && continue || unmerged='yes'
+      indicators="${ZSH_THEME_GIT_PROMPT_UNMERGED}${indicators}"
+    fi
+  done < <(git status --porcelain 2> /dev/null)
+  echo $indicators
 }
