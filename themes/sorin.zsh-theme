@@ -2,12 +2,12 @@
 #          FILE:  sorin.zsh-theme
 #   DESCRIPTION:  oh-my-zsh theme file.
 #        AUTHOR:  Sorin Ionescu (sorin.ionescu@gmail.com)
-#       VERSION:  1.0.2
+#       VERSION:  1.0.3
 #    SCREENSHOT:  http://i.imgur.com/aipDQ.png
 # ------------------------------------------------------------------------------
 
 
-if [[ "$TERM" != "dumb" ]] && [[ "$DISABLE_LS_COLORS" != "true" ]]; then
+if [[ "$DISABLE_COLOR" != "true" ]]; then
   MODE_INDICATOR="%{$fg_bold[red]%}❮%{$reset_color%}%{$fg[red]%}❮❮%{$reset_color%}"
   local return_status="%{$fg[red]%}%(?..⏎)%{$reset_color%}"
   
