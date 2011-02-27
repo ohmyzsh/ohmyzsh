@@ -14,7 +14,7 @@ export ZSH_THEME="robbyrussell"
 # export DISABLE_AUTO_UPDATE="true"
 
 # Uncomment following line if you want to disable colors in ls
-# export DISABLE_LS_COLORS="true"
+# export DISABLE_COLOR="true"
 
 # Uncomment following line if you want to disable autosetting terminal title.
 # export DISABLE_AUTO_TITLE="true"

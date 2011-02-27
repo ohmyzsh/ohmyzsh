@@ -6,6 +6,11 @@ fi
 
 # Initializes Oh My Zsh
 
+# Disable colors on dumb terminals
+if [ "$TERM" = "dumb" ]; then
+  DISABLE_COLOR="true"
+fi
+
 # add a function path
 fpath=($ZSH/functions $ZSH/completions $fpath)
 
