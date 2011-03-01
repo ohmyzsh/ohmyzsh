@@ -30,7 +30,7 @@
 
 
 # -------------------------------------------------------------------------------------------------
-# Core highligting update system
+# Core highlighting update system
 # -------------------------------------------------------------------------------------------------
 
 # Array used by highlighters to declare overridable styles.
@@ -239,11 +239,11 @@ _zsh_main-highlight() {
 
 
 # -------------------------------------------------------------------------------------------------
-# Setup
+# Setup functions
 # -------------------------------------------------------------------------------------------------
 
-# Setup highlighting.
-_zsh_highlight_install() {
+# Intercept specified ZLE events to have highlighting triggered.
+_zsh_highlight_bind-events() {
 
   # Resolve event names what have to be bound to.
   zmodload zsh/zleparameter 2>/dev/null || {
@@ -277,15 +277,23 @@ _zsh_highlight_install() {
       esac
     fi
   done
-
-  # Register the main highlighter.
-  _zsh_highlight_add-highlighter _zsh_main-highlight _zsh_highlight_buffer-modified-p
-
-  # Load additional highlighters if available.
-  local highlighters_dir=${$(command readlink -f ${(%):-%N}):h}/highlighters
-  if [[ -d $highlighters_dir ]]; then
-    for highlighter_def ($highlighters_dir/*.zsh) . $highlighter_def
-  fi
 }
 
-_zsh_highlight_install "${(@f)"$(zle -la)"}"
+# Load highlighters from specified directory if it exists.
+_zsh_highlight_load-highlighters() {
+  [[ -d $1 ]] && for highlighter_def ($1/*.zsh) . $highlighter_def
+}
+
+
+# -------------------------------------------------------------------------------------------------
+# Setup
+# -------------------------------------------------------------------------------------------------
+
+# Bind highlighting to all known events.
+_zsh_highlight_bind-events "${(@f)"$(zle -la)"}"
+
+# Register the main highlighter.
+_zsh_highlight_add-highlighter _zsh_main-highlight _zsh_highlight_buffer-modified-p
+
+# Load additional highlighters if available.
+_zsh_highlight_load-highlighters "${${(%):-%N}:h}/highlighters"
