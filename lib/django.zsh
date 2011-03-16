@@ -1,15 +1,10 @@
-<<<<<<< HEAD
-=======
 alias pm='python manage.py'
->>>>>>> upstream/master
 alias pmr='python manage.py runserver'
 alias pmrp='python manage.py runserver_plus'
 alias pmrpg='pmrp --adminmedia=`pwd`/media/admin'
 alias pmsdb='python manage.py syncdb'
 alias pms='python manage.py shell'
-<<<<<<< HEAD
 alias pmlf='python manage.py loaddata fixtures/*'
-=======
 alias pmsp='python manage.py shell_plus'
 alias pmlf='python manage.py loaddata fixtures/*'
 alias pmt='python -W ignore::DeprecationWarning manage.py test'
@@ -34,4 +29,3 @@ function djapp() {
     echo "from django.contrib import admin\nfrom $1.models import *\n\n" > $1/admin.py
     echo "from django.conf.urls.defaults import *\n\n" > $1/urls.py
 }
->>>>>>> upstream/master
