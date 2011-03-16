@@ -1,19 +1,17 @@
-## fixme - the load process here seems a bit bizarre
+# fixme - the load process here seems a bit bizarre
 
-setopt noautomenu
+unsetopt noautomenu
 setopt complete_in_word
-setopt always_to_end
-
-unsetopt flowcontrol
+unsetopt always_to_end
 
 WORDCHARS=''
 
 autoload -U compinit
-compinit
+compinit -i
 
 zmodload -i zsh/complist
 
-## case-insensitive (all),partial-word and then substring completion
+# case-insensitive (all), partial-word and then substring completion
 if [ "x$CASE_SENSITIVE" = "xtrue" ]; then
   zstyle ':completion:*' matcher-list 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
   unset CASE_SENSITIVE
@@ -23,27 +21,42 @@ fi
 
 zstyle ':completion:*' list-colors ''
 
-
-unsetopt MENU_COMPLETE
-#setopt AUTO_MENU
-
 # should this be in keybindings?
 bindkey -M menuselect '^o' accept-and-infer-next-history
 
-zstyle ':completion:*:*:*:*:*' menu yes select
-# zstyle ':completion:*:*:*:*:processes' force-list always
-
+zstyle ':completion:*:*:*:*:*' menu select
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
 zstyle ':completion:*:*:*:*:processes' command "ps -u `whoami` -o pid,user,comm -w -w"
 
-# Load known hosts file for auto-completion with ssh and scp commands
-if [ -f ~/.ssh/known_hosts ]; then
-  zstyle ':completion:*' hosts $( sed 's/[, ].*$//' $HOME/.ssh/known_hosts )
-  zstyle ':completion:*:*:(ssh|scp):*:*' hosts `sed 's/^\([^ ,]*\).*$/\1/' ~/.ssh/known_hosts`
-fi
+# disable named-directories autocompletion
+zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-directories
+cdpath=(.)
 
-# Complete on history
-#zstyle ':completion:*:history-words' stop yes
-#zstyle ':completion:*:history-words' remove-all-dups yes
-#zstyle ':completion:*:history-words' list false
-#zstyle ':completion:*:history-words' menu yes
+# use /etc/hosts and known_hosts for hostname completion
+[ -r ~/.ssh/known_hosts ] && _ssh_hosts=(${${${${(f)"$(<$HOME/.ssh/known_hosts)"}:#[\|]*}%%\ *}%%,*}) || _ssh_hosts=()
+[ -r /etc/hosts ] && : ${(A)_etc_hosts:=${(s: :)${(ps:\t:)${${(f)~~"$(</etc/hosts)"}%%\#*}##[:blank:]#[^[:blank:]]#}}} || _etc_hosts=()
+hosts=(
+  "$_ssh_hosts[@]"
+  "$_etc_hosts[@]"
+  `hostname`
+  localhost
+)
+zstyle ':completion:*:hosts' hosts $hosts
+
+# Use caching so that commands like apt and dpkg complete are useable
+zstyle ':completion::complete:*' use-cache 1
+zstyle ':completion::complete:*' cache-path ~/.oh-my-zsh/cache/
+
+# Don't complete uninteresting users
+zstyle ':completion:*:*:*:users' ignored-patterns \
+        adm amanda apache avahi beaglidx bin cacti canna clamav daemon \
+        dbus distcache dovecot fax ftp games gdm gkrellmd gopher \
+        hacluster haldaemon halt hsqldb ident junkbust ldap lp mail \
+        mailman mailnull mldonkey mysql nagios \
+        named netdump news nfsnobody nobody nscd ntp nut nx openvpn \
+        operator pcap postfix postgres privoxy pulse pvm quagga radvd \
+        rpc rpcuser rpm shutdown squid sshd sync uucp vcsa xfs
+
+# ... unless we really want to.
+zstyle '*' single-ignored show
+

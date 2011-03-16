@@ -10,5 +10,11 @@ setopt hist_verify
 setopt inc_append_history
 setopt extended_history
 setopt hist_expire_dups_first
+<<<<<<< HEAD
 
+=======
+setopt hist_ignore_space
+
+setopt SHARE_HISTORY
+>>>>>>> upstream/master
 setopt APPEND_HISTORY

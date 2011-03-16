@@ -10,3 +10,17 @@ for config_file ($ZSH/lib/*.zsh) source $config_file
 # Load all of your custom configurations from custom/
 for config_file ($ZSH/custom/*.zsh) source $config_file
 
+<<<<<<< HEAD
+=======
+# Load all of the plugins that were defined in ~/.zshrc
+plugin=${plugin:=()}
+for plugin ($plugins) source $ZSH/plugins/$plugin/$plugin.plugin.zsh
+
+# Check for updates on initial load...
+if [ "$DISABLE_AUTO_UPDATE" = "true" ]
+then
+  return
+else
+  /usr/bin/env zsh $ZSH/tools/check_for_upgrade.sh
+fi
+>>>>>>> upstream/master

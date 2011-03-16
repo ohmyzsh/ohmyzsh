@@ -23,7 +23,7 @@ h3. The manual install
 
   @chsh -s /bin/zsh@
 
-4. Start / restart zsh (open a new terminal is easy enough..)
+4. Start / restart zsh (open a new terminal is easy enough...)
 
 h3. Features different than robbyrussel's version
 
@@ -35,7 +35,7 @@ h3. Features different than robbyrussel's version
 
 h3. Problems?
 
-You _might_ need to modify your PATH in ~/.zshrc if you're not able to find some commands after switching to oh-my-zsh.
+You _might_ need to modify your PATH in ~/.zshrc if you're not able to find some commands after switching to _Oh My Zsh_.
 
 
 
@@ -55,6 +55,7 @@ the "refcard":http://www.bash2zsh.com/zsh_refcard/refcard.pdf is pretty tasty fo
 h3. Customization
 
 If you want to override any of the default behavior, just add a new file (ending in @.zsh@) into the @custom/@ directory.
+If you have many functions which go good together you can put them as a *.plugin.zsh file in the @plugin/@ directory and then enable this plugin.
 
 h3. Uninstalling
 
@@ -70,4 +71,4 @@ I just quote robbyrussel:
 
 bq. I'm far from being a zsh-expert and suspect there are many ways to improve. If you have ideas on how to make the configuration easier to maintain (and faster), don't hesitate to fork and send pull requests!
 
-I would love more advance yet nice ZSH stuff\
+I would love more advance yet nice ZSH stuff

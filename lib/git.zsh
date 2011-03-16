@@ -5,10 +5,18 @@ function git_prompt_info() {
 }
 
 parse_git_dirty () {
-  if [[ $((git status 2> /dev/null) | tail -n1) != "nothing to commit (working directory clean)" ]]; then
-    echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
-  else
-    echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
+  gitstat=$(git status 2>/dev/null | grep '\(# Untracked\|# Changes\|# Changed but not updated:\)')
+
+  if [[ $(echo ${gitstat} | grep -c "^# Changes to be committed:$") > 0 ]]; then
+	echo -n "$ZSH_THEME_GIT_PROMPT_DIRTY"
+  fi
+
+  if [[ $(echo ${gitstat} | grep -c "^\(# Untracked files:\|# Changed but not updated:\)$") > 0 ]]; then
+	echo -n "$ZSH_THEME_GIT_PROMPT_UNTRACKED"
+  fi 
+
+  if [[ $(echo ${gitstat} | grep -v '^$' | wc -l | tr -d ' ') == 0 ]]; then
+	echo -n "$ZSH_THEME_GIT_PROMPT_CLEAN"
   fi
 }
 
@@ -21,17 +29,29 @@ function current_branch() {
   echo ${ref#refs/heads/}
 }
 
-# Aliases
-alias g='git'
-alias gst='git status'
-alias gl='git pull'
-alias gup='git fetch && git rebase'
-alias gp='git push'
-alias gd='git diff | mate'
-alias gdv='git diff -w "$@" | vim -R -'
-alias gc='git commit -v'
-alias gca='git commit -v -a'
-alias gb='git branch'
-alias gba='git branch -a'
-alias gcount='git shortlog -sn'
-alias gcp='git cherry-pick'
+# get the status of the working tree
+git_prompt_status() {
+  INDEX=$(git status --porcelain 2> /dev/null)
+  STATUS=""
+  if $(echo "$INDEX" | grep '^?? ' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_UNTRACKED$STATUS"
+  fi
+  if $(echo "$INDEX" | grep '^A  ' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
+  elif $(echo "$INDEX" | grep '^M  ' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
+  fi
+  if $(echo "$INDEX" | grep '^ M ' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
+  fi
+  if $(echo "$INDEX" | grep '^R  ' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_RENAMED$STATUS"
+  fi
+  if $(echo "$INDEX" | grep '^ D ' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
+  fi
+  if $(echo "$INDEX" | grep '^UU ' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_UNMERGED$STATUS"
+  fi
+  echo $STATUS
+}
