@@ -9,7 +9,7 @@ _1st_arguments=(
   'adduser:Add a registry user account'
   'bundle:Bundle package dependencies'
   'bn:Bundle package dependencies'
-  'c:Mange the npm configuration file'
+  'c:Manage the npm configuration file'
   'cache:Work with npm cache'
   'config:Manage the npm configuration file'
   'deactivate:Deactivate the active version of a package'
