@@ -1,0 +1,64 @@
+#compdef npm
+#autoload
+
+# npm zsh completion, based on brew completion plugin
+
+local -a _1st_arguments
+_1st_arguments=(
+  'activate:'
+  'adduser:'
+  'bn:'
+  'bundle:'
+  'c:'
+  'cache:'
+  'config:'
+  'deactivate:'
+  'deprecate:'
+  'docs:'
+  'edit:'
+  'explore:'
+  'faq:'
+  'find:'
+  'get:'
+  'help:'
+  'i:'
+  'info:'
+  'init:'
+  'install:'
+  'link:'
+  'list:'
+  'ln:'
+  'ls:'
+  'outdated:'
+  'owner:'
+  'publish:'
+  'r:'
+  'rb:'
+  'rebuild:'
+  'rm:'
+  'run-script:'
+  'search:'
+  'set:'
+  'start:'
+  'stop:'
+  'tag:'
+  'test:'
+  'un:'
+  'uninstall:'
+  'unpublish:'
+  'up:'
+  'update:'
+  'version:'
+  'view:'
+  'xmas:'
+)
+
+local expl
+
+_arguments \
+  '*:: :->subcmds' && return 0
+
+if (( CURRENT == 1 )); then
+  _describe -t commands "npm subcommand" _1st_arguments
+  return
+fi
