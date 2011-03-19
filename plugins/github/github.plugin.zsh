@@ -1,7 +1,8 @@
 # hub alias from defunkt
 # https://github.com/defunkt/hub
-if which hub > /dev/null; then
-    eval $(hub alias -s zsh)
+if [ "$commands[(I)hub]" ]; then
+    # eval `hub alias -s zsh`
+    function git(){hub "$@"}
 fi
 
 # add github completion function to path
