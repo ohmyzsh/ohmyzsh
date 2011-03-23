@@ -55,7 +55,7 @@ function svnsafeup() {
   local repo_id="$(svn_get_repo_name)@$(svn_get_rev_nr)"
   local diffcmd="svn diff -r $range"
 
-  local diff=$($=diffcmd)
+  local diff="$($=diffcmd)"
   if [[ $diff == '' ]] ; then
     echo "No changes for $repo_id in range $range."
     return
