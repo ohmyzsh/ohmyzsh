@@ -4,7 +4,6 @@ setopt auto_pushd
 setopt pushd_ignore_dups
 
 alias -- -='cd -'
-alias .='pwd'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
