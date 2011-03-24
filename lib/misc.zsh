@@ -17,16 +17,14 @@ export LC_CTYPE=en_US.UTF-8
 function pman() {
     man $1 -t | open -f -a Preview
 }
-
+#
 ## pretty JSON
 function pj() {
     python -mjson.tool
 }
 
-## curl JSON
-function cj() {
-    curl -sS $@ | pj
-}
+
+
 
 ## Open current directory
 alias oo='open .'
@@ -51,12 +49,10 @@ alias history='fc -l 1'
 export GREP_OPTIONS='--color=auto'
 export GREP_COLOR='1;32'
 
-# What the hell did I do the other day?
-function whatthehelldididoon() {
-    for repo in `find . -name '.hg'`
-    do
-        echo $repo
-        hg .. -R $repo/.. -d "$1" -u 'Steve Losh'
-    done
+# Quick and dirty encryption
+function encrypt() {
+    openssl des3 -a -in $1 -out $1.des3
 }
-
+function decrypt() {
+    openssl des3 -d -a -in $1 -out ${1%.des3}
+}
