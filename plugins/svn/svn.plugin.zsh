@@ -51,7 +51,7 @@ function svnsafeup() {
   fi
   local from=${2:-BASE} to=${1:-HEAD}
   local range="$from:$to"
-  local marker_o='{{{' marker_c="}}}\n\n" # fold markers
+  local marker_o='{{{' marker_c="}}}\n" # fold markers
   local repo_id="$(svn_get_repo_name)@$(svn_get_rev_nr)"
   local diffcmd="svn diff -r $range"
 
@@ -65,19 +65,23 @@ function svnsafeup() {
     echo "Diff for: $repo_id, range: $range"
     echo
     if [ $commands[diffstat] ] ; then
-      echo "$diffcmd | diffstat: $marker_o"
-      echo $diff | diffstat
-      echo "$marker_c"
+      diffstat=$(echo $diff | diffstat)
+      echo -n "diffstat: "
+      echo $diffstat | tail -n1
+      echo $marker_o
+      echo $diffstat
+      echo $marker_c
     fi
     echo "svn log -r $range: $marker_o"
     svn log -r $range
     echo "$marker_c"
     echo "$diffcmd: $marker_o"
-    echo $diff
-    echo "$marker_c"
+    echo $diff | sed "s/^Index: .*/\0 ${marker_o}2/"
+    echo "${marker_c}2"
     # add modeline for vim
     echo " vim:fdm=marker:fdl=1:"
   } | view -
-  read "?continue to 'svn up'? (ctrl-c to abort)" || return 1
+  read "answer?continue to 'svn up'? (ctrl-c to abort, y to continue) " || return 1
+  [[ $answer == "y" ]] || return 1
   svn up -r $to
 }
