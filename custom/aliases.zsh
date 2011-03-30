@@ -1,9 +1,10 @@
 alias be='bundle exec'
 alias -g rs='rspec -cf d'
-alias fresh_coffee='coffee -wc -o public/javascripts app/coffee'
-alias thog='thin start -d; tail -f log/development.log'
 alias e='mvim'
 alias g='git'
+alias le='less -r'
+alias gr='grep -C 1 --color=always -rin'
+alias coupa='coffee -wc -o public/javascripts app/coffee'
 
 alias ll='ls -lFh'
 alias lll='ls -laFh'
