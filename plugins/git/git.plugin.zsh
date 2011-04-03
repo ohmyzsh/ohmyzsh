@@ -12,7 +12,7 @@ compdef _git gp=git-push
 alias gd='git diff | mate'
 # WTF is mate??
 compdef _git gd=git-diff
-alias gdv='git diff -w "$@" | vim -R -'
+gdv() { git diff -w "$@" | view - }
 compdef gdv=git
 alias gc='git commit -v'
 compdef gc=git
