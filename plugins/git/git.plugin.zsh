@@ -2,15 +2,16 @@
 alias g='git'
 compdef g=git
 alias gst='git status'
-compdef gst=git
+compdef _git gst=git-status
 alias gl='git pull'
-compdef gl=git
+compdef _git gl=git-pull
 alias gup='git fetch && git rebase'
 compdef gup=git
 alias gp='git push'
-compdef gp=git
+compdef _git gp=git-push
 alias gd='git diff | mate'
-compdef gd=git
+# WTF is mate??
+compdef _git gd=git-diff
 alias gdv='git diff -w "$@" | vim -R -'
 compdef gdv=git
 alias gc='git commit -v'
@@ -18,20 +19,21 @@ compdef gc=git
 alias gca='git commit -v -a'
 compdef gca=git
 alias gco='git checkout'
-compdef gco=git
+compdef _git gco=git-checkout
 alias gb='git branch'
-compdef gb=git
+compdef _git gb=git-branch
 alias gba='git branch -a'
 compdef gba=git
 alias gcount='git shortlog -sn'
 compdef gcount=git
 alias gcp='git cherry-pick'
-compdef gcp=git
+compdef _git gcp=git-cherry-pick
 alias glg='git log --stat --max-count=5'
-compdef glg=git
+compdef _git glg=git-log
 
 # Git and svn mix
 alias git-svn-dcommit-push='git svn dcommit && git push github master:svntrunk'
+compdef git-svn-dcommit-push=git
 
 #
 # Will return the current branch name
