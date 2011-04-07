@@ -24,6 +24,8 @@ function precmd {
 #Appears at the beginning of (and during) of command execution
 function preexec {
   if [ "$DISABLE_AUTO_TITLE" != "true" ]; then
+    emulate -L zsh
+    setopt extended_glob
     local CMD=${1[(wr)^(*=*|sudo|ssh|-*)]} #cmd name only, or if this is sudo or ssh, the next cmd
     title "$CMD" "%100>...>$2%<<"
   fi
