@@ -18,8 +18,8 @@ for plugin ($plugins) source $ZSH/plugins/$plugin/$plugin.plugin.zsh
 source "$ZSH/themes/$ZSH_THEME.zsh-theme"
 
 # Load and run compinit
-autoload -U compinit
-compinit -i
+#autoload -U compinit
+#compinit -i
 
 # Check for updates on initial load...
 if [ "$DISABLE_AUTO_UPDATE" = "true" ]
