@@ -1,14 +1,14 @@
-PROMPT='%{$fg[blue]%}%n%{$reset_color%} on %{$fg[red]%}%M%{$reset_color%} in %{$fg[blue]%}%~%b%{$reset_color%}$(git_time_since_commit)$(git_prompt_info)
+PROMPT='%{$fg[blue]%}%n%{$reset_color%} on %{$fg[red]%}%M%{$reset_color%} in %{$fg[blue]%}%~%b%{$reset_color%}$(git_time_since_commit)$(vcs_prompt_info)
 $ '
 
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[white]%}"
-ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%})"
+ZSH_THEME_VCS_PROMPT_PREFIX="%{$fg[white]%}"
+ZSH_THEME_VCS_PROMPT_SUFFIX="%{$reset_color%})"
 
 # Text to display if the branch is dirty
-ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}*%{$reset_color%}" 
+ZSH_THEME_VCS_PROMPT_DIRTY="%{$fg[red]%}*%{$reset_color%}"
 
 # Text to display if the branch is clean
-ZSH_THEME_GIT_PROMPT_CLEAN="" 
+ZSH_THEME_VCS_PROMPT_CLEAN=""
 
 # Colors vary depending on time lapsed.
 ZSH_THEME_GIT_TIME_SINCE_COMMIT_SHORT="%{$fg[green]%}"

@@ -17,13 +17,13 @@ patches: <patches|join( → )|pre_applied(%{$fg[yellow]%})|post_applied(%{$reset
 }
 
 PROMPT='
-%{$fg[magenta]%}%n%{$reset_color%} at %{$fg[yellow]%}%m%{$reset_color%} in %{$fg_bold[green]%}${PWD/#$HOME/~}%{$reset_color%}$(hg_prompt_info)$(git_prompt_info)
+%{$fg[magenta]%}%n%{$reset_color%} at %{$fg[yellow]%}%m%{$reset_color%} in %{$fg_bold[green]%}${PWD/#$HOME/~}%{$reset_color%}$(hg_prompt_info)$(vcs_prompt_info)
 $(virtualenv_info)$(prompt_char) '
 
-ZSH_THEME_GIT_PROMPT_PREFIX=" on %{$fg[magenta]%}"
-ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[green]%}!"
-ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[green]%}?"
-ZSH_THEME_GIT_PROMPT_CLEAN=""
+ZSH_THEME_VCS_PROMPT_PREFIX=" on %{$fg[magenta]%}"
+ZSH_THEME_VCS_PROMPT_SUFFIX="%{$reset_color%}"
+ZSH_THEME_VCS_PROMPT_DIRTY="%{$fg[green]%}!"
+ZSH_THEME_VCS_PROMPT_UNTRACKED="%{$fg[green]%}?"
+ZSH_THEME_VCS_PROMPT_CLEAN=""
 
 . ~/bin/dotfiles/zsh/aliases
