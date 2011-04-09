@@ -8,10 +8,10 @@ elif [ -e /proc/acpi/battery/BAT1/ ]
         then 
         battpath="/proc/acpi/battery/BAT1" 
 else 
-        echo "No battery found. Make sure that you have acpi support in your kernel" 
-        echo "and that the computer actually is a laptop :)" 
+        echo "--" 
         exit 1 
 fi
+
 batt_prompt_perc(){
 fullcap=`grep "^last full capacity" $battpath/info | awk '{ print $4 }'`
 remcap=`grep "^remaining capacity" $battpath/state | awk '{ print $3 }'`
@@ -24,36 +24,35 @@ if [ "$charge" -gt "99" ]
    		charge=100
 fi
 
-color="red"
+color="$ZSH_THEME_BATPERC_PROMPT_CLRLESS25PRC"
 if [ $charge -gt "80" ]
 	then 
-		color="cyan"
-elif [ $charge -gt 60 ]
+		color="$ZSH_THEME_BATPERC_PROMPT_CLRMORE80PRC"
+elif [ $charge -gt 40 ]
 	then	
-		color="green"
+		color="$ZSH_THEME_BATPERC_PROMPT_CLR40TO80PRC"
 elif [ $charge -gt 25 ]
 	then
-		color="yellow"
+		color="$ZSH_THEME_BATPERC_PROMPT_CLR25TO40PRC"
 fi
 
-echo -e "%F{$color}$charge%f"
+echo -e "$ZSH_THEME_BATPERC_PROMPT_PREFIX%F{$color}$charge%f$ZSH_THEME_BATPERC_PROMPT_SUFFIX"
 }
 
 bat_prompt_acstt(){
 batstate=`grep "^charging state" $battpath/state | awk '{ print $3 }'`
+STUATUS=""
 case "${batstate}" in
    'charged')
-  	 clr="green"
-   	 btst="°"
+	STATUS="$ZSH_THEME_ACBAT_PROMPT_CHARGED"
    ;;
    'charging')
-   	clr="blue"
-   	btst="+"
+	STATUS="$ZSH_THEME_ACBAT_PROMPT_CHARGING"
    ;;
    'discharging')
-   	clr="yellow"
-   	btst="-"
+	STATUS="$ZSH_THEME_ACBAT_PROMPT_DISCHARGING"
    ;;
 esac
-echo -e "%F{$clr}$btst%f"
+
+echo -e "$STATUS"
 }
