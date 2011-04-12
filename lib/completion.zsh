@@ -60,7 +60,3 @@ zstyle ':completion:*:*:*:users' ignored-patterns \
 # ... unless we really want to.
 zstyle '*' single-ignored show
 
-# Load and run compinit
-autoload -U compinit
-compinit -i
-

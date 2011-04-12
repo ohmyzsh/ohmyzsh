@@ -14,6 +14,10 @@ for config_file ($ZSH/custom/*.zsh) source $config_file
 plugin=${plugin:=()}
 for plugin ($plugins) source $ZSH/plugins/$plugin/$plugin.plugin.zsh
 
+# Load and run compinit
+autoload -U compinit
+compinit -i
+
 # Load the theme
 source "$ZSH/themes/$ZSH_THEME.zsh-theme"
 
