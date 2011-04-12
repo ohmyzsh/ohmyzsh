@@ -19,10 +19,8 @@ compinit -i
 for config_file ($ZSH/custom/*.zsh) source $config_file
 
 # Load all of the plugins that were defined in ~/.zshrc
-for plugin ($plugins)
-do
-  if [ -f $ZSH/plugins/$plugin/$plugin.plugin.zsh ]
-  then
+for plugin ($plugins); do
+  if [ -f $ZSH/plugins/$plugin/$plugin.plugin.zsh ]; then
     source $ZSH/plugins/$plugin/$plugin.plugin.zsh
   fi
 done
