@@ -1,10 +1,3 @@
-# get ruby version from either rvm or system ruby.
-if [[ -s ~/.rvm/scripts/rvm ]] ; then
-  RPS1="%{%}%{$reset_color%}%{$fg[red]%}\$(~/.rvm/bin/rvm-prompt i v g)%{$reset_color%}"
-else
-  RPS1="%{$fg[red]%}\$(ruby -e 'print RUBY_VERSION')%{$reset_color%} $EPS1"
-fi
-
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$reset_color%}%{$fg[green]%}["
 ZSH_THEME_GIT_PROMPT_SUFFIX="]"
 
