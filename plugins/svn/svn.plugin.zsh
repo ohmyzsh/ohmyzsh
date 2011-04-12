@@ -42,8 +42,8 @@ function svn_dirty {
 }
 
 # Function to update an SVN repository in a safe manner: first display
-# diffstat (if installed), log and diff, then ask about continuing with
-# `svn up`.
+# diffstat (if installed), log and diff (folded), then ask about continuing
+# with `svn up`.
 # Optional args: $to $from (default: HEAD BASE)
 function svnsafeup() {
   if [[ "$(in_svn)" != "1" ]]; then
@@ -51,7 +51,6 @@ function svnsafeup() {
   fi
   local from=${2:-BASE} to=${1:-HEAD}
   local range="$from:$to"
-  local marker_o='{{{' marker_c="}}}\n" # fold markers
   local repo_id="$(svn_get_repo_name)@$(svn_get_rev_nr)"
   local diffcmd="svn diff -r $range"
 
@@ -68,19 +67,13 @@ function svnsafeup() {
       diffstat=$(echo $diff | diffstat)
       echo -n "diffstat: "
       echo $diffstat | tail -n1
-      echo $marker_o
-      echo $diffstat
-      echo $marker_c
+      echo $diffstat | sed 's/^/  /'
     fi
-    echo "svn log -r $range: $marker_o"
-    svn log -r $range
-    echo "$marker_c"
-    echo "$diffcmd: $marker_o"
-    echo $diff | sed "s/^Index: .*/\0 ${marker_o}2/"
-    echo "${marker_c}2"
-    # add modeline for vim
-    echo " vim:fdm=marker:fdl=1:"
-  } | view -
+    echo "svn log -r $range:"
+    svn log -r $range | sed 's/^/  /'
+    echo "$diffcmd:"
+    echo $diff | sed 's/^/  /' | sed '/^  Index: / !s/^/  /'
+  } | view -c 'set foldnestmax=2 foldlevel=0 shiftwidth=2 foldmethod=indent'  -
   read "answer?continue to 'svn up'? (ctrl-c to abort, y to continue) " || return 1
   [[ $answer == "y" ]] || return 1
   svn up -r $to
