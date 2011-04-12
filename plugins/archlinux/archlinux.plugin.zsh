@@ -1,7 +1,14 @@
 ##some functions
-###############
+## scan function that find out what libs are linking to a specific package (taken from wonder https://github.com/wonder)
+scan () {
+    pacman -Qlq $1 | xargs file | grep ELF | awk -F: '{print $1}' |
+    	while read elfobj;
+        do  readelf -d $elfobj | sed -n 's|.*NEEDED.*\[\(.*\)\].*|'$elfobj' -- \1|p'
+done
+
+}
+
 ##--Daemons--##
-###############
 # starts, stops, restarts and check status of daemons
 
 dstart() {
