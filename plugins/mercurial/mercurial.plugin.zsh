@@ -17,12 +17,41 @@ hg_prompt_info(){
 }
 
 ##	Gets bookmark name
-hg_bookmark_name(){
+hg_bookmark_name() {
 	hg bookmarks 2> /dev/null | awk '{ print $2 }' || return 
 }
-hg_prompt_bookmarks(){
+hg_prompt_bookmarks() {
 	if [[ -d .hg ]]; then
 		echo "$ZSH_THEME_HG_PROMPT_BOOKMARK_PREFIX$(hg_bookmark_name)$ZSH_THEME_HG_BOOKMARK_PROMPT_SUFFIX"	
 	fi	
 }
 
+hg_prompt_status() {  
+  STATUS=""
+
+   if $( hg status -A| grep "^M" > /dev/null); then
+    STATUS="$ZSH_THEME_HG_PROMPT_MODIFIED$STATUS" 
+  fi
+
+  if  $( hg status -A | grep "^A" > /dev/null); then
+    STATUS="$ZSH_THEME_HG_PROMPT_ADDED$STATUS"
+  fi
+
+  if $( hg status -A | grep "^R" > /dev/null); then
+    STATUS="$ZSH_THEME_HG_PROMPT_DELETED$STATUS"
+  fi
+
+  if $( hg status -A | grep "^!" > /dev/null); then
+    STATUS="$ZSH_THEME_HG_PROMPT_MISSING$STATUS"
+  fi
+
+  if $( hg status -A | grep "^?" > /dev/null); then
+    STATUS="$ZSH_THEME_HG_PROMPT_UNTRACKED$STATUS"
+  fi
+
+  if $( hg status -A | grep "^I" > /dev/null); then
+    STATUS="$ZSH_THEME_HG_PROMPT_UNMERGED$STATUS"
+  fi
+
+  echo $STATUS
+}
