@@ -6,7 +6,7 @@ else
 fi
 
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$reset_color%}%{$fg[green]%}["
-ZSH_THEME_GIT_PROMPT_SUFFIX="]%{$fg[white]%}%B$%b "
+ZSH_THEME_GIT_PROMPT_SUFFIX="]"
 
 local host_name='%{$fg[white]%}%m%{$reset_color%}:'
 local current_dir='%{$fg[blue]%}%~%{$reset_color%}'
