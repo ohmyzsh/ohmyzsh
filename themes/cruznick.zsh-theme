@@ -1,11 +1,20 @@
 
 prompt_char() {
-    git branch >/dev/null 2>/dev/null && echo "%F{cyan}±%f" || return
-    hg root >/dev/null 2>/dev/null && echo "%F{cyan}☿%f" || return
+    if [[ -d .git ]]; then
+	echo "%F{cyan}±%f" || return
+    elif [[ -d .hg ]]; then
+	echo "%F{cyan}☿%f" || return
+    elif [[ -d .svn ]]; then
+	"%F{cyan}☿%f"
+    fi
+
 }
 custom_prompt_info() {
-    git branch >/dev/null 2>/dev/null && echo  "$(git_prompt_info)%F{green}<->%f[$(git_prompt_status)]" || return
-    hg root >/dev/null 2>/dev/null && hg prompt "{ on {branch}}{ at {bookmark}}{status}" 2> /dev/null || return
+    if [[ -d .git ]]; then
+	echo  "$(git_prompt_info)%F{green}<->%f[$(git_prompt_status)]" || return
+    elif [[ -d .hg ]]; then
+	echo "$(hg_prompt_info)"
+    fi
    
 }
 command_succes() {
@@ -38,10 +47,13 @@ ZSH_THEME_ACBAT_PROMPT_CHARGED="%F{green}°%"
 ZSH_THEME_ACBAT_PROMPT_CHARGING="%F{cyan}+%"
 ZSH_THEME_ACBAT_PROMPT_DISCHARGING="%F{yellow}-%"
 
-ZSH_THEME_BATPERC_PROMPT_PREFIX="%F{yellow}⚡%f "
-ZSH_THEME_BATPERC_PROMPT_SUFFIX=""
+ZSH_THEME_BATPERC_PROMPT_PREFIX="%F{yellow}⚡% :"
+#ZSH_THEME_BATPERC_PROMPT_SUFFIX=""
 ZSH_THEME_BATPERC_PROMPT_CLRLESS25PRC="red"
 ZSH_THEME_BATPERC_PROMPT_CLRMORE80PRC="cyan"
 ZSH_THEME_BATPERC_PROMPT_CLR40TO80PRC="green"
 ZSH_THEME_BATPERC_PROMPT_CLR25TO40PRC="yellow"
+
+ZSH_THEME_HG_PROMPT_PREFIX="[%F{yellow}"
+ZSH_THEME_HG_PROMPT_SUFFIX="%f]"
 
