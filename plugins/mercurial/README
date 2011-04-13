@@ -1,0 +1,46 @@
+This plugin is for having info from your mercurial (hg) repo in your prompt
+you can enable it by addin "mercurial" (without quotes ) to your plugins in
+your .zshrc :
+
+plugins=( ...mercurial...)
+
+You can also costumize the way it looks.
+
+The custom variables are :
+
+For branch name:
+
+ZSH_THEME_HG_PROMPT_PREFIX      This sets what will be shown before the branch name
+ZSH_THEME_HG_PROMPT_SUFFIX	This sets what will be shown after the branch name
+ZSH_THEME_HG_PROMPT_DIRTY	This sets what will be shown when the repo is dirty 
+ZSH_THEME_HG_PROMPT_CLEAN	This sets what will be shown when the repo is clean
+
+For status of repo:
+
+ZSH_THEME_HG_PROMPT_ADDED	This sets what will be shown when a file is added to the repo
+ZSH_THEME_HG_PROMPT_MODIFIED	This sets what will be shown when a file is modified
+ZSH_THEME_HG_PROMPT_DELETED	This sets what will be shown when a file is deleted  
+ZSH_THEME_HG_PROMPT_MISSING	This sets what will be shown when a file is missing (deleted by non-hg command, but still tracked)
+ZSH_THEME_HG_PROMPT_UNMERGED	This sets what will be shown when a file is not merged
+ZSH_THEME_HG_PROMPT_UNTRACKED	This sets what will be shown when a file is not tracked
+
+For bookmarks:
+
+ZSH_THEME_HG_PROMPT_PREFIX	This sets what will be shown before the bookmark name
+ZSH_THEME_HG_PROMPT_SUFFIX	This sets what will be shown after the bookmark name
+
+To configure add this vars in your theme 
+Example config:
+
+ZSH_THEME_HG_PROMPT_PREFIX="[%F{yellow}"
+ZSH_THEME_HG_PROMPT_SUFFIX="%f]"
+ZSH_THEME_HG_PROMPT_DIRTY=" %F{red}*%f"
+ZSH_THEME_HG_PROMPT_CLEAN=" %F{green}°%f"
+
+ZSH_THEME_HG_PROMPT_ADDED="%F{green}+%f"
+ZSH_THEME_HG_PROMPT_MODIFIED="%F{blue}*%f"
+ZSH_THEME_HG_PROMPT_DELETED="%F{red}x%f"
+ZSH_THEME_HG_PROMPT_MISSING="%F{magenta}!%f"
+ZSH_THEME_HG_PROMPT_UNMERGED="%F{yellow}═%f"
+ZSH_THEME_HG_PROMPT_UNTRACKED="%F{cyan}?%f"
+

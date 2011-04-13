@@ -1,0 +1,45 @@
+Este plugin sirve para tener la información de tu repositorio mercurial (hg) en tu prompt.
+Para usarlo tienes que agregarlo a tu .zshrc 
+
+Ejemplo:
+plugins=( ...mercurial...)
+
+Puedes personalizar la forma en que se ve
+
+Las variables a personalizar son:
+
+Para el nombre de la rama:
+
+ZSH_THEME_HG_PROMPT_PREFIX      Esta muestra lo que se vera antes de la nombre de la rama
+ZSH_THEME_HG_PROMPT_SUFFIX	Esta muestra lo que se vera despues de la rama
+ZSH_THEME_HG_PROMPT_DIRTY	Esta muestra lo que se vera cuando el repositorio este súcio
+ZSH_THEME_HG_PROMPT_CLEAN	Esta muestra lo que se vera cuando el repositorio este limpio
+
+Para el estatus del repositorio:
+
+ZSH_THEME_HG_PROMPT_ADDED	Esta muestra lo que se vera cuando se agregue un archivo
+ZSH_THEME_HG_PROMPT_MODIFIED	Esta muestra lo que se vera cuando se modifique un archivo
+ZSH_THEME_HG_PROMPT_DELETED	Esta muestra lo que se vera cuando se borre un archivo 
+ZSH_THEME_HG_PROMPT_MISSING	Esta muestra lo que se vera cuando se falte un archivo (borrado por un comando externo a hg)
+ZSH_THEME_HG_PROMPT_UNMERGED	Esta muestra lo que se vera cuando se combine un archivo
+ZSH_THEME_HG_PROMPT_UNTRACKED	Esta muestra lo que se vera cuando no sea seguido un archivo
+
+Para los bookmarks:
+
+ZSH_THEME_HG_PROMPT_PREFIX	Esto es lo que se vera antes del nombre del bookmark
+ZSH_THEME_HG_PROMPT_SUFFIX	Esto es lo que se vera despues del nombre del bookmark
+
+Para configurarlas agregalas a tu tema
+Configuración de ejemplo:
+
+ZSH_THEME_HG_PROMPT_PREFIX="[%F{yellow}"
+ZSH_THEME_HG_PROMPT_SUFFIX="%f]"
+ZSH_THEME_HG_PROMPT_DIRTY=" %F{red}*%f"
+ZSH_THEME_HG_PROMPT_CLEAN=" %F{green}°%f"
+
+ZSH_THEME_HG_PROMPT_ADDED="%F{green}+%f"
+ZSH_THEME_HG_PROMPT_MODIFIED="%F{blue}*%f"
+ZSH_THEME_HG_PROMPT_DELETED="%F{red}x%f"
+ZSH_THEME_HG_PROMPT_MISSING="%F{magenta}!%f"
+ZSH_THEME_HG_PROMPT_UNMERGED="%F{yellow}═%f"
+ZSH_THEME_HG_PROMPT_UNTRACKED="%F{cyan}?%f"
