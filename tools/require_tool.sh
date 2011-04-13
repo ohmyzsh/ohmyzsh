@@ -89,7 +89,7 @@ require_tool ()
   envvar_name=$(echo $1 | tr '[:lower:]' '[:upper:]')
   tool=$(printenv $envvar_name || echo $1)
   local version=$($tool --version 2>/dev/null| \
-    sed -n 's/.*[^0-9.]\([0-9][0-9.]*\).*/\1/p;q')
+    sed -n 's/.*[^0-9.]\([0-9]*\.[0-9.]*\).*/\1/p;q')
   if test x"$version" = x ; then
       echo "$tool is required" >/dev/stderr
       return 1
