@@ -1,7 +1,26 @@
 ##some functions
-###############
+##gets tar from aur (depends on curl taken from falconindy https://github.com/falconindy)
+
+aget() {
+  for pkg; do
+    if curl -s --compressed "https://aur.archlinux.org/packages/$pkg/$pkg.tar.gz" | tar xz 2>/dev/null; then
+      echo ":: downloaded $pkg"
+    else
+      echo ":: $pkg not found"
+    fi
+  done
+}
+
+## scan function that find out what libs are linking to a specific package (taken from wonder https://github.com/wonder)
+scan () {
+    pacman -Qlq $1 | xargs file | grep ELF | awk -F: '{print $1}' |
+    	while read elfobj;
+        do  readelf -d $elfobj | sed -n 's|.*NEEDED.*\[\(.*\)\].*|'$elfobj' -- \1|p'
+done
+
+}
+
 ##--Daemons--##
-###############
 # starts, stops, restarts and check status of daemons
 
 dstart() {
