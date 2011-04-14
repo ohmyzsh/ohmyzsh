@@ -1,0 +1,73 @@
+.TH Z "1" "February 2011" "z" "User Commands"
+
+.SH NAME
+z \- jump around
+
+.SH SYNOPSIS
+z [\-h] [\-l] [\-r] [\-t] [regex1 regex2 ... regexn]
+
+.SH AVAILABILITY
+bash, zsh
+
+.SH DESCRIPTION
+Tracks your most used directories, based on 'frecency'.
+.P
+After a short learning phase, \fBz\fR will take you to the most 'frecent'
+directory that matches ALL of the regexes given on the command line.
+
+.SH OPTIONS
+\fB\-h\fR show a brief help message
+.br
+\fB\-l\fR list only
+.br
+\fB\-r\fR match by rank only
+.br
+\fB\-t\fR match by recent access only
+
+.SH EXAMPLES
+\fBz foo\fR     cd to most frecent dir matching foo
+.br
+\fBz foo bar\fR cd to most frecent dir matching foo and bar
+.br
+\fBz -r foo\fR  cd to highest ranked dir matching foo
+.br
+\fBz -t foo\fR  cd to most recently accessed dir matching foo
+.br
+\fBz -l foo\fR  list all dirs matching foo (by frecency)
+
+.SH NOTES
+
+\fBInstallation:\fR
+.P
+put something like this in your $HOME/.bashrc:
+.P
+ . /path/to/z.sh
+.P
+put something like this in your $HOME/.zshrc:
+.P
+ . /path/to/z.sh
+ function precmd () {
+   z --add "$(pwd -P)"
+ }
+.P
+cd around for a while to build up the db.
+.br
+PROFIT!!
+
+\fBFrecency:\fR
+.P
+Frecency is a portmantaeu of 'recent' and 'frequency'. It is a weighted rank
+that depends on 'how often' and 'how recently' something occured. As far as I
+know, Mozilla came up with the term.
+.P
+In \fBz\fR, a directory that has low ranking but has been accessed recently
+will quickly have higher rank than a directory accessed frequently a long time
+ago.
+
+.SH FILES
+data is stored in \fB$HOME/.z\fR
+
+.SH SEE ALSO
+regex(7), cdargs, pushd, popd, autojump, cdargs
+.P
+Please file bugs at https://github.com/rupa/z/
