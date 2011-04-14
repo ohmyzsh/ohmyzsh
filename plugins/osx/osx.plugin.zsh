@@ -1,3 +1,5 @@
+bindkey "^[[3~" delete-char
+
 function savepath() {
   pwd > ~/.current_path~
 }
