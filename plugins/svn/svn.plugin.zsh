@@ -68,13 +68,16 @@ function svnsafeup() {
       echo -n "diffstat: "
       echo $diffstat | tail -n1
       echo $diffstat | sed 's/^/  /'
+      echo
     fi
     echo "svn log -r $range:"
     svn log -r $range | sed 's/^/  /'
+    echo
     echo "$diffcmd:"
     echo $diff | sed 's/^/  /' | sed '/^  Index: / !s/^/  /'
   } | view -c 'set foldnestmax=2 foldlevel=0 shiftwidth=2 foldmethod=indent'  -
   read "answer?continue to 'svn up'? (ctrl-c to abort, y to continue) " || return 1
   [[ $answer == "y" ]] || return 1
+  echo "Updating from $from to $to.."
   svn up -r $to
 }
