@@ -1,6 +1,6 @@
 # Emacs 23 daemon capability is a killing feature.
 # One emacs process handles all your frames whether
-# you use a frame opened in a terminal via a ssh connection or X frames 
+# you use a frame opened in a terminal via a ssh connection or X frames
 # opened on the same host.
 
 # Benefits are multiple
@@ -23,7 +23,23 @@ if "$ZSH/tools/require_tool.sh" emacs 23 2>/dev/null ; then
     # to code all night long
     alias emasc=emacs
     alias emcas=emacs
+
+    # jump to the directory of the current buffer
+    function ecd {
+        local cmd="(let ((buf-name (buffer-file-name (window-buffer))))
+               (if buf-name
+                 (file-name-directory buf-name)))"
+
+        local dir=`$EDITOR --eval "$cmd" | tr -d \"`
+        if [ -n "$dir" ] ;then
+            cd "$dir"
+        else
+            echo "can not deduce current buffer filename." >/dev/stderr
+            return 1
+        fi
+    }
 fi
+
 
 ## Local Variables:
 ## mode: sh
