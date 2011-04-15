@@ -27,8 +27,7 @@ if "$ZSH/tools/require_tool.sh" emacs 23 2>/dev/null ; then
     # jump to the directory of the current buffer
     function ecd {
         local cmd="(let ((buf-name (buffer-file-name (window-buffer))))
-               (if buf-name
-                 (file-name-directory buf-name)))"
+                     (if buf-name (file-name-directory buf-name)))"
 
         local dir=`$EDITOR --eval "$cmd" | tr -d \"`
         if [ -n "$dir" ] ;then
