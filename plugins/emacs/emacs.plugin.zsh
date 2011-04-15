@@ -16,7 +16,7 @@ if "$ZSH/tools/require_tool.sh" emacs 23 2>/dev/null ; then
     alias e=emacs
 
     # same than M-x eval but from outside Emacs.
-    alias eeval="emacs --eval"
+    alias eeval="$EDITOR --eval"
     # create a new X frame
     alias eframe='emacsclient --alternate-editor "" --create-frame'
 
