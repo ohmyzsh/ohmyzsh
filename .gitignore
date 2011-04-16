@@ -1,4 +1,5 @@
 locals.zsh
 log/.zsh_history
 projects.zsh
-custom/personal.zsh
+custom/*
+!custom/example.zsh

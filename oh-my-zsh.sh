@@ -14,8 +14,8 @@ for config_file ($ZSH/custom/*.zsh) source $config_file
 plugin=${plugin:=()}
 for plugin ($plugins) source $ZSH/plugins/$plugin/$plugin.plugin.zsh
 
-# automatically remove duplicates from these arrays
-typeset -U path cdpath fpath manpath
+# Load the theme
+source "$ZSH/themes/$ZSH_THEME.zsh-theme"
 
 # Check for updates on initial load...
 if [ "$DISABLE_AUTO_UPDATE" = "true" ]
