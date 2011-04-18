@@ -1,13 +1,18 @@
 # ------------------------------------------------------------------------------
-#          FILE:  kphoen.zsh-theme
+#          FILE:  jz.zsh-theme
 #   DESCRIPTION:  oh-my-zsh theme file.
-#        AUTHOR:  Kévin Gomez (geek63@gmail.com)
+#        AUTHOR:  Justin Zhu (haoranjzhu@gmail.com)
 #       VERSION:  1.0.0
 #    SCREENSHOT:
 # ------------------------------------------------------------------------------
 
+# Shows background jobs:
+#   #jobs  Display
+#     0    Nothing
+#    1-9   [bg:#jobs] in yellow
+#    > 10  [bg:#jobs] in red
 job_bg() {
-  local JC=$(jobs -r | grep running |  wc -l)
+  local JC=$(jobs -r | grep running | wc -l)
   if [[ JC -gt 10 ]]; then
     echo "%{$fg[red]%}[bg:${JC}]%{$reset_color%}"
   elif [[ JC -gt 0 ]]; then
@@ -15,6 +20,11 @@ job_bg() {
   fi
 }
 
+# Shows suspended jobs:
+#   #jobs  Display
+#     0    Nothing
+#    1-2   [sp:#jobs] in yellow
+#    > 2   [bg:#jobs] in red
 job_sp() {
   local JC=$(jobs -s | grep suspended | wc -l)
   if [[ JC -gt 2 ]]; then
@@ -24,13 +34,9 @@ job_sp() {
   fi
 }
 
-GRAY_COLOR=$FG[242]
-
 if [[ "$TERM" != "dumb" ]] && [[ "$DISABLE_LS_COLORS" != "true" ]]; then
-    PROMPT='%{$fg[blue]%}[%{$fg[red]%}%n%{$GRAY_COLOR%}@%{$fg[magenta]%}%m%{$reset_color%}:%{$fg[blue]%}%~]%{$reset_color%}$(git_prompt_info)$(job_bg)$(job_sp)
-%(!.%{$fg_bold[red]%}#.%{$fg_bold[green]%}❯)%{$reset_color%} '
-
-
+    PROMPT='%{$fg[blue]%}[%{$fg[red]%}%n%{$FG[242]%}@%{$fg[magenta]%}%m%{$reset_color%}:%{$fg[blue]%}%~]%{$reset_color%}$(git_prompt_info)$(job_bg)$(job_sp)
+%(?.%{$fg_bold[green]%}❯.%{$fg_bold[red]%}❯)%{$reset_color%} '
 
     ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[green]%}["
     ZSH_THEME_GIT_PROMPT_SUFFIX="]%{$reset_color%}"
