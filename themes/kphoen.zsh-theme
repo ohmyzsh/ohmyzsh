@@ -6,13 +6,34 @@
 #    SCREENSHOT:
 # ------------------------------------------------------------------------------
 
+job_bg() {
+  local JC=$(jobs -r | grep running |  wc -l)
+  if [[ JC -gt 10 ]]; then
+    echo "%{$fg[red]%}[bg:${JC}]%{$reset_color%}"
+  elif [[ JC -gt 0 ]]; then
+    echo "%{$fg[yellow]%}[bg:${JC}]%{$reset_color%}"
+  fi
+}
+
+job_sp() {
+  local JC=$(jobs -s | grep suspended | wc -l)
+  if [[ JC -gt 2 ]]; then
+    echo "%{$fg[red]%}[sp:${JC}]%{$reset_color%}"
+  elif [[ JC -gt 0 ]]; then
+    echo "%{$fg[yellow]%}[sp:${JC}]%{$reset_color%}"
+  fi
+}
+
+GRAY_COLOR=$FG[242]
 
 if [[ "$TERM" != "dumb" ]] && [[ "$DISABLE_LS_COLORS" != "true" ]]; then
-    PROMPT='[%{$fg[red]%}%n%{$reset_color%}@%{$fg[magenta]%}%m%{$reset_color%}:%{$fg[blue]%}%~%{$reset_color%}$(git_prompt_info)]
-%# '
+    PROMPT='%{$fg[blue]%}[%{$fg[red]%}%n%{$GRAY_COLOR%}@%{$fg[magenta]%}%m%{$reset_color%}:%{$fg[blue]%}%~]%{$reset_color%}$(git_prompt_info)$(job_bg)$(job_sp)
+%(!.%{$fg_bold[red]%}#.%{$fg_bold[green]%}❯)%{$reset_color%} '
 
-    ZSH_THEME_GIT_PROMPT_PREFIX=" on %{$fg[green]%}"
-    ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
+
+
+    ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[green]%}["
+    ZSH_THEME_GIT_PROMPT_SUFFIX="]%{$reset_color%}"
     ZSH_THEME_GIT_PROMPT_DIRTY=""
     ZSH_THEME_GIT_PROMPT_CLEAN=""
 
