@@ -22,6 +22,10 @@ bindkey ' ' magic-space    # also do history expansion on space
 
 bindkey '^[[Z' reverse-menu-complete
 
+# Make the delete key (or Fn + Delete on the Mac) work instead of outputting a ~
+bindkey "^[[3~" delete-char
+bindkey "^[3;5~" delete-char
+
 # consider emacs keybindings:
 
 #bindkey -e  ## emacs key bindings
