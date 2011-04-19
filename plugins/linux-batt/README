@@ -1,0 +1,26 @@
+This plugin is for showing batt info in your prompt the variable to configure are:
+ 
+ZSH_THEME_ACBAT_PROMPT_CHARGED 			Shows if AC adapter is coneccted and batt charged
+ZSH_THEME_ACBAT_PROMPT_CHARGING			Shows if AC adapter is coneccted and batt is charging
+ZSH_THEME_ACBAT_PROMPT_DISCHARGING		Shows if AC adapter is disconeccted and batt discharging
+
+ZSH_THEME_BATPERC_PROMPT_PREFIX			Prefix of batt perc
+ZSH_THEME_BATPERC_PROMPT_SUFFIX			Suffix of batt perc
+ZSH_THEME_BATPERC_PROMPT_CLRLESS25PRC		Color to show batt percent if charge is less than 25%
+ZSH_THEME_BATPERC_PROMPT_CLRMORE80PRC		Color to show batt percent if charge is from 80% to 100%
+ZSH_THEME_BATPERC_PROMPT_CLR40TO80PRC		Color to show batt percent if charge is from 40% to 80%
+ZSH_THEME_BATPERC_PROMPT_CLR25TO40PRC		Color to show batt percent if charge is from 25% to 40%
+
+
+Example config:
+
+ZSH_THEME_ACBAT_PROMPT_CHARGED="%F{green}°%"
+ZSH_THEME_ACBAT_PROMPT_CHARGING="%F{cyan}+%"
+ZSH_THEME_ACBAT_PROMPT_DISCHARGING="%F{yellow}-%"
+
+ZSH_THEME_BATPERC_PROMPT_PREFIX="%F{yellow}⚡% :"
+#ZSH_THEME_BATPERC_PROMPT_SUFFIX=""
+ZSH_THEME_BATPERC_PROMPT_CLRLESS25PRC="red"
+ZSH_THEME_BATPERC_PROMPT_CLRMORE80PRC="cyan"
+ZSH_THEME_BATPERC_PROMPT_CLR40TO80PRC="green"
+ZSH_THEME_BATPERC_PROMPT_CLR25TO40PRC="yellow"
