@@ -9,44 +9,55 @@
 # Shows background jobs:
 #   #jobs  Display
 #     0    Nothing
-#    1-9   [bg:#jobs] in yellow
-#    > 10  [bg:#jobs] in red
-job_bg() {
-  local JC=$(jobs -r | grep running | wc -l)
-  if [[ JC -gt 10 ]]; then
-    echo "%{$fg[red]%}[bg:${JC}]%{$reset_color%}"
-  elif [[ JC -gt 0 ]]; then
-    echo "%{$fg[yellow]%}[bg:${JC}]%{$reset_color%}"
-  fi
-}
-
+#    1-7   [bg:#jobs] in yellow
+#    > 8  [bg:#jobs] in red
+#
 # Shows suspended jobs:
 #   #jobs  Display
 #     0    Nothing
 #    1-2   [sp:#jobs] in yellow
 #    > 2   [bg:#jobs] in red
-job_sp() {
-  local JC=$(jobs -s | grep suspended | wc -l)
-  if [[ JC -gt 2 ]]; then
-    echo "%{$fg[red]%}[sp:${JC}]%{$reset_color%}"
-  elif [[ JC -gt 0 ]]; then
-    echo "%{$fg[yellow]%}[sp:${JC}]%{$reset_color%}"
-  fi
+jobs_precmd_hook() {
+    local count=$#jobstates[(R)running*]
+     if [[ count -gt 8 ]]; then
+       BG_COUNT="%{$fg[red]%}[bg:${count}]%{$reset_color%}"
+     elif [[ count -gt 0 ]]; then
+       BG_COUNT="%{$fg[yellow]%}[bg:${count}]%{$reset_color%}"
+     else
+       BG_COUNT=""
+     fi
+
+     count=$#jobstates[(R)suspended*]
+     if [[ count -gt 2 ]]; then
+       SP_COUNT="%{$fg[red]%}[sp:${count}]%{$reset_color%}"
+     elif [[ count -gt 0 ]]; then
+       SP_COUNT="%{$fg[yellow]%}[sp:${count}]%{$reset_color%}"
+     else
+       SP_COUNT=""
+     fi
+}
+
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd jobs_precmd_hook
+
+git_prompt_info_status() {
+  local git_info=$(git_prompt_info) 
+  [[ -n $git_info ]] && echo "%{$fg[green]%}[${git_info}$(git_prompt_status)%{$fg[green]%}]%{$reset_color%}"
 }
 
 if [[ "$TERM" != "dumb" ]] && [[ "$DISABLE_LS_COLORS" != "true" ]]; then
-    PROMPT='%{$fg[blue]%}[%{$fg[red]%}%n%{$FG[242]%}@%{$fg[magenta]%}%m%{$reset_color%}:%{$fg[blue]%}%~]%{$reset_color%}$(git_prompt_info)$(job_bg)$(job_sp)
+    PROMPT='%{$fg[blue]%}[%{$fg[red]%}%n%{$FG[242]%}@%{$fg[magenta]%}%m%{$reset_color%}:%{$fg[blue]%}%~]%{$reset_color%}$(git_prompt_info_status)$BG_COUNT$SP_COUNT
 %(?.%{$fg_bold[green]%}❯.%{$fg_bold[red]%}❯)%{$reset_color%} '
 
-    ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[green]%}["
-    ZSH_THEME_GIT_PROMPT_SUFFIX="]%{$reset_color%}"
+    ZSH_THEME_GIT_PROMPT_PREFIX=""
+    ZSH_THEME_GIT_PROMPT_SUFFIX=""
     ZSH_THEME_GIT_PROMPT_DIRTY=""
     ZSH_THEME_GIT_PROMPT_CLEAN=""
 
     # display exitcode on the right when >0
     return_code="%(?..%{$fg[red]%}%? ↵%{$reset_color%})"
 
-    RPROMPT='${return_code}$(git_prompt_status)%{$reset_color%}'
+    RPROMPT='${return_code}%{$reset_color%}'
 
     ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[green]%} ✚"
     ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg[blue]%} ✹"
@@ -56,7 +67,7 @@ if [[ "$TERM" != "dumb" ]] && [[ "$DISABLE_LS_COLORS" != "true" ]]; then
     ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[cyan]%} ✭"
 else
     PROMPT='[%n@%m:%~$(git_prompt_info)]
-%# '
+❯ '
 
     ZSH_THEME_GIT_PROMPT_PREFIX=" on"
     ZSH_THEME_GIT_PROMPT_SUFFIX=""
