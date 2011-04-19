@@ -57,8 +57,8 @@ bindkey -M vicmd "gg" beginning-of-history
 bindkey -M vicmd "G" end-of-history
 bindkey -M vicmd "k" history-search-backward
 bindkey -M vicmd "j" history-search-forward
-bindkey -M vicmd "?" history-incremental-search-backward
-bindkey -M vicmd "/" history-incremental-search-forward
+bindkey -M vicmd "/" history-incremental-search-backward
+bindkey -M vicmd "?" history-incremental-search-forward
 
 bindkey -M viins "^L" clear-screen
 bindkey -M viins "^W" backward-kill-word
