@@ -46,7 +46,7 @@ else
         		    activate current session
             		launch session \"Default Session\"
             		tell the current session
-            			write text \"cd \\\"$ThisDirectory\\\"\"
+            			write text \"cd \\\"$PWD\\\"; cd \\\"$ThisDirectory\\\"\"
             		end tell
             	end tell
             end tell
