@@ -1,0 +1,1 @@
+unsetopt auto_pushd
