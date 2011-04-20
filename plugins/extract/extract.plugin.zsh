@@ -2,7 +2,7 @@
 #          FILE:  extract.plugin.zsh
 #   DESCRIPTION:  oh-my-zsh plugin file.
 #        AUTHOR:  Sorin Ionescu (sorin.ionescu@gmail.com)
-#       VERSION:  1.0.1
+#       VERSION:  1.0.2
 # ------------------------------------------------------------------------------
 
 
@@ -77,9 +77,3 @@ function extract() {
 }
 
 alias x=extract
-
-# add extract completion function to path
-fpath=($ZSH/plugins/extract $fpath)
-autoload -U compinit
-compinit -i
-
