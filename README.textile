@@ -54,12 +54,6 @@ h3. Uninstalling
 
 If you want to uninstall it, just run @uninstall_oh_my_zsh@ from the command line and it'll remove itself and revert you to bash (or your previous zsh config).
 
-h2. Thanks
-
-* Rick Olson (technoweenie) might remember some of the configuration, which I took from a pastie a few years ago.
-* Marcel (noradio) provided Rick the original zsh configuration.
-* Nicholas (ulysses) for the "rake autocompletion code":http://weblog.rubyonrails.org/2006/3/9/fast-rake-task-completion-for-zsh.
-
 h2. Help out!
 
 I'm far from being a zsh-expert and suspect there are many ways to improve. If you have ideas on how to make the configuration easier to maintain (and faster), don't hesitate to fork and send pull requests!
@@ -67,3 +61,11 @@ I'm far from being a zsh-expert and suspect there are many ways to improve. If y
 h3. Send us your theme!
 
 I'm hoping to collect a bunch of themes for our command prompts. You can see existing ones in the @themes/@ directory.
+
+h2. Contributors
+
+This project wouldn't exist without all of our awesome users and contributors.
+
+* "View our growing list of contributors":https://github.com/robbyrussell/oh-my-zsh/contributors
+
+Thank you so much!
