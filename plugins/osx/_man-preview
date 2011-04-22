@@ -1,0 +1,4 @@
+#compdef man-preview
+#autoload
+
+_man
