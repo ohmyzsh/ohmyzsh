@@ -9,7 +9,8 @@ setopt always_to_end
 
 WORDCHARS=''
 
-zmodload -i zsh/complist
+# fixme - complist is crashing ZSH on menu completion
+# zmodload -i zsh/complist
 
 ## case-insensitive (all),partial-word and then substring completion
 if [ "x$CASE_SENSITIVE" = "xtrue" ]; then
@@ -22,7 +23,7 @@ fi
 zstyle ':completion:*' list-colors ''
 
 # should this be in keybindings?
-bindkey -M menuselect '^o' accept-and-infer-next-history
+# bindkey -M menuselect '^o' accept-and-infer-next-history
 
 zstyle ':completion:*:*:*:*:*' menu select
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
