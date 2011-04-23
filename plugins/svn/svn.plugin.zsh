@@ -78,6 +78,7 @@ function svnsafeup() {
   } | view -c 'set foldnestmax=2 foldlevel=0 shiftwidth=2 foldmethod=indent'  -
   read "answer?continue to 'svn up'? (ctrl-c to abort, y to continue) " || return 1
   [[ $answer == "y" ]] || return 1
-  echo "Updating from $from to $to.."
+  currev="$(svn info | grep '^Revision:' | cut -f2 -d\ )"
+  echo "Updating from revision $currev to $to.."
   svn up -r $to
 }
