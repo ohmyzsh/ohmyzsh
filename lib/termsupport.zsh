@@ -24,6 +24,6 @@ function precmd {
 function preexec {
   emulate -L zsh
   setopt extended_glob
-  local CMD=${1[(wr)^(*=*|sudo|ssh|-*)]} #cmd name only, or if this is sudo or ssh, the next cmd
+  local CMD=${1[(wr)^(*=*|sudo|ssh|_|-*)]} #cmd name only, or if this is sudo or ssh, the next cmd
   title "$CMD" "%100>...>$2%<<"
 }
