@@ -1,3 +1,6 @@
 [submodule "plugins/syntax-highlighting"]
 	path = plugins/syntax-highlighting
 	url = https://github.com/sorin-ionescu/zsh-syntax-highlighting.git
+[submodule "plugins/history-substring-search"]
+	path = plugins/history-substring-search
+	url = https://github.com/sorin-ionescu/zsh-history-substring-search.git
