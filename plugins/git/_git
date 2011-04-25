@@ -1,4 +1,4 @@
-#compdef git git-cvsserver git-receive-pack git-upload-archive git-upload-pack git-shell
+#compdef git git-cvsserver git-receive-pack git-upload-archive git-upload-pack git-shell gitk tig
 
 # Some parts of this completion's behaviour are configurable:
 #
@@ -4466,8 +4466,7 @@ _git_commands () {
     stash:'stash away changes to dirty working directory'
     status:'show working-tree status'
     submodule:'initialize, update, or inspect submodules'
-    tag:'create, list, delete or verify tag object signed with GPG'
-    gitk:'brows the repository interactively')
+    tag:'create, list, delete or verify tag object signed with GPG')
 
   local -a ancillary_manipulator_commands
   ancillary_manipulator_commands=(
@@ -5960,6 +5959,16 @@ __git_color_attributes () {
   attributes=(bold dim ul blink reverse)
 
   _describe -t attributes attribute attributes $*
+}
+
+(( $+functions[_gitk] )) ||
+_gitk () {
+  _git-log
+}
+
+(( $+functions[_tig] )) ||
+_tig () {
+  _git-log
 }
 
 # Now, for the main driver…
