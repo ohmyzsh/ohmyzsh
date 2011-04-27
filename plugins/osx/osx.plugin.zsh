@@ -38,9 +38,7 @@ if [[  $TERM_PROGRAM != iTerm.app ]]; then
                       end tell"
           return 1
 else     
-    osascript -e "  tell app \"Finder\"
-                        activate
-                        tell application \"iTerm\"
+    osascript -e "  tell application \"iTerm\"
             	        make new terminal
                 	    tell the front terminal 
                 		    activate current session
@@ -50,13 +48,9 @@ else
                     		end tell
                     	end tell
                     end tell
-                tell application \"Finder\"
-                	activate
-                end tell
                 tell application \"iTerm\"
                 	activate
-                end tell
-             end tell"
+                end tell  "
     
 fi
 
