@@ -29,34 +29,34 @@ fi
 
 if [[  $TERM_PROGRAM != iTerm.app ]]; then
    
-  osascript -e "tell application \"System Events\"
-          tell process \"Terminal\" to keystroke \"t\" using command down
-        end
-        tell application \"Terminal\"
-          activate
-          do script with command \"cd \\\"$ThisDirectory\\\"\" in window 1
-        end tell"
+  osascript -e "  tell application \"System Events\"
+                      tell process \"Terminal\" to keystroke \"t\" using command down
+                      end
+                      tell application \"Terminal\"
+                          activate
+                          do script with command \"cd \\\"$ThisDirectory\\\"\" in window 1
+                      end tell"
           return 1
 else     
     osascript -e "  tell app \"Finder\"
-         activate
-            tell application \"iTerm\"
-    	-- make new terminal
-        	    tell the front terminal 
-        		    activate current session
-            		launch session \"Default Session\"
-            		tell the current session
-            			write text \"cd \\\"$PWD\\\"; cd \\\"$ThisDirectory\\\"\"
-            		end tell
-            	end tell
-            end tell
-        tell application \"Finder\"
-        	activate
-        end tell
-        tell application \"iTerm\"
-        	activate
-        end tell
-     end tell"
+                        activate
+                        tell application \"iTerm\"
+            	        make new terminal
+                	    tell the front terminal 
+                		    activate current session
+                    		launch session \"Default Session\"
+                    		tell the current session
+                    			write text \"cd \\\"$PWD\\\"; cd \\\"$ThisDirectory\\\"\"
+                    		end tell
+                    	end tell
+                    end tell
+                tell application \"Finder\"
+                	activate
+                end tell
+                tell application \"iTerm\"
+                	activate
+                end tell
+             end tell"
     
 fi
 
