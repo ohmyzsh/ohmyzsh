@@ -55,3 +55,12 @@ end do_submenu
 do_submenu("iTerm", "Shell", "New Tab")
 EOF
 }
+
+# Send a notification to growl from iTerm or iterm2
+#
+#  usage: growl "Notification Text"
+#
+# You can use \n and \t to add newlines and tabs
+# respectively.  Or add \a to make it beep
+growl() { print -n '\e]9;'${@}'\007' }
+
