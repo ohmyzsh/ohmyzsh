@@ -31,6 +31,7 @@ _1st_arguments=(
   'search:search for a formula (/regex/ or string)'
   'unlink:unlink a formula'
   'update:freshen up links'
+  'upgrade:upgrade outdated formulae'
   'uses:show formulas which depend on a formula'
 )
 
