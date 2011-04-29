@@ -7,12 +7,23 @@ fpath=($ZSH/functions $fpath)
 # TIP: Add files you don't want in git to .gitignore
 for config_file ($ZSH/lib/*.zsh) source $config_file
 
-# Load all of your custom configurations from custom/
-for config_file ($ZSH/custom/*.zsh) source $config_file
+# Add all defined plugins to fpath
+plugin=${plugin:=()}
+for plugin ($plugins) fpath=($ZSH/plugins/$plugin $fpath)
+
+# Load and run compinit
+autoload -U compinit
+compinit -i
 
 # Load all of the plugins that were defined in ~/.zshrc
-plugin=${plugin:=()}
-for plugin ($plugins) source $ZSH/plugins/$plugin/$plugin.plugin.zsh
+for plugin ($plugins); do
+  if [ -f $ZSH/plugins/$plugin/$plugin.plugin.zsh ]; then
+    source $ZSH/plugins/$plugin/$plugin.plugin.zsh
+  fi
+done
+
+# Load all of your custom configurations from custom/
+for config_file ($ZSH/custom/*.zsh) source $config_file
 
 # Load the theme
 source "$ZSH/themes/$ZSH_THEME.zsh-theme"
