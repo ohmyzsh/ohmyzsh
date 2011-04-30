@@ -39,6 +39,10 @@ else
   source "$ZSH/themes/$ZSH_THEME.zsh-theme"
 fi
 
+# Compile zcompdump if necessary
+if [ ~/.zcompdump -nt ~/.zcompdump.zwc ]; then
+  zcompile ~/.zcompdump
+fi
 
 # Check for updates on initial load...
 if [ "$DISABLE_AUTO_UPDATE" = "true" ]
