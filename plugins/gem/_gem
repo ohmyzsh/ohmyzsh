@@ -23,6 +23,7 @@ _1st_arguments=(
   'lock:Generate a lockdown list of gems'
   'mirror:Mirror a gem repository'
   'outdated:Display all gems that need updates'
+  'open:Open gem in $EDITOR'
   'owner:Manage gem owners on RubyGems.org.'
   'pristine:Restores installed gems to pristine condition from files located in the gem cache'
   'push:Push a gem up to RubyGems.org'
@@ -58,7 +59,7 @@ case "$words[1]" in
         _gem_installed
         _requested installed_gems expl 'installed gems' compadd -a installed_gems
       fi ;;
-  uninstall|update)
+  uninstall|update|open)
     _gem_installed
     _wanted installed_gems expl 'installed gems' compadd -a installed_gems ;;
 esac
