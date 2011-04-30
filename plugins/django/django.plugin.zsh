@@ -1,4 +1,5 @@
 alias djstartproject='django-admin.py startproject'
+alias djstartapp='python manager.py startapp'
 alias djsyncdb='python manager.py syndb'
 alias djtest='python manager.py test'
 alias djtestserver='python manager.py testserver'
