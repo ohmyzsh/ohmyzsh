@@ -40,8 +40,8 @@ else
 fi
 
 # Compile zcompdump if necessary
-if [ "~/.zcompdump" -nt "~/.zcompdump.zwc" ]; then
-  zcompile ~/.zcompdump
+if [ "~/.zcompdump -nt ~/.zcompdump.zwc" -o ! -e "~/.zcompdump.zwc" ]; then
+  zcompile "~/.zcompdump"
 fi
 
 # Check for updates on initial load...
