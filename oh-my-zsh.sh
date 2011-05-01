@@ -54,3 +54,7 @@ else
   fi
 fi
 
+# Compile zcompdump, if modified, to increase startup speed.
+if [ "$HOME/.zcompdump" -nt "$HOME/.zcompdump.zwc" -o ! -e "$HOME/.zcompdump.zwc" ]; then
+  zcompile "$HOME/.zcompdump"
+fi
