@@ -40,7 +40,7 @@ else
 fi
 
 # Compile zcompdump if necessary
-if [ "~/.zcompdump -nt ~/.zcompdump.zwc" -o ! -e "~/.zcompdump.zwc" ]; then
+if [ ~/.zcompdump -nt ~/.zcompdump.zwc -o ! -e ~/.zcompdump.zwc ]; then
   zcompile ~/.zcompdump
 fi
 
