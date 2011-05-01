@@ -41,7 +41,7 @@ fi
 
 # Compile zcompdump if necessary
 if [ "~/.zcompdump -nt ~/.zcompdump.zwc" -o ! -e "~/.zcompdump.zwc" ]; then
-  zcompile "~/.zcompdump"
+  zcompile ~/.zcompdump
 fi
 
 # Check for updates on initial load...
