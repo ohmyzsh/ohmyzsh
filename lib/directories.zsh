@@ -31,7 +31,9 @@ alias d='dirs -v'
 # mkdir & cd to it
 function mcd() { 
   mkdir -p "$1" && cd "$1"; 
-}alias d='dirs -v'
+}
+
+alias d='dirs -v'
 
 # List direcory contents
 alias l1='tree --dirsfirst -ChFL 1'
