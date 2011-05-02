@@ -1,30 +1,3 @@
-## fixme, i duplicated this in xterms - oops
-function title {
-  if [[ $TERM == "screen" ]]; then
-    # Use these two for GNU Screen:
-    print -nR $'\033k'$1$'\033'\\\
-
-    print -nR $'\033]0;'$2$'\a'
-  elif [[ $TERM == "xterm" || $TERM == "rxvt" ]]; then
-    # Use this one instead for XTerms:
-    print -nR $'\033]0;'$*$'\a'
-  fi
-}
-
-function precmd {
-  title zsh "$PWD"
-}
-
-function preexec {
-  emulate -L zsh
-  local -a cmd; cmd=(${(z)1})
-  title $cmd[1]:t "$cmd[2,-1]"
-}
-
-function remote_console() {
-  /usr/bin/env ssh $1 "( cd $2 && ruby script/console production )"
-}
-
 function zsh_stats() {
   history | awk '{print $2}' | sort | uniq -c | sort -rn | head
 }
@@ -37,41 +10,43 @@ function upgrade_oh_my_zsh() {
   /bin/sh $ZSH/tools/upgrade.sh
 }
 
-function tab() {
-  osascript 2>/dev/null <<EOF
-    tell application "System Events"
-      tell process "Terminal" to keystroke "t" using command down
-    end
-    tell application "Terminal"
-      activate
-      do script with command "cd \"$PWD\"; $*" in window 1
-    end tell
-EOF
-}
-
 function take() {
   mkdir -p $1
   cd $1
 }
 
-function tm() {
-  cd $1
-  mate $1
-}
+function extract() {
+    unset REMOVE_ARCHIVE
+    
+    if test "$1" = "-r"; then
+        REMOVE=1
+        shift
+    fi
+  if [[ -f $1 ]]; then
+    case $1 in
+      *.tar.bz2) tar xvjf $1;;
+      *.tar.gz) tar xvzf $1;;
+      *.tar.xz) tar xvJf $1;;
+      *.tar.lzma) tar --lzma -xvf $1;;
+      *.bz2) bunzip $1;;
+      *.rar) unrar $1;;
+      *.gz) gunzip $1;;
+      *.tar) tar xvf $1;;
+      *.tbz2) tar xvjf $1;;
+      *.tgz) tar xvzf $1;;
+      *.zip) unzip $1;;
+      *.Z) uncompress $1;;
+      *.7z) 7z x $1;;
+      *) echo "'$1' cannot be extracted via >extract<";;
+    esac
 
-# To use: add a .lighthouse file into your directory with the URL to the
-# individual project. For example:
-# https://rails.lighthouseapp.com/projects/8994
-# Example usage: http://screencast.com/t/ZDgwNDUwNT
-open_lighthouse_ticket () {
-  if [ ! -f .lighthouse-url ]; then
-    echo "There is no .lighthouse file in the current directory..."
-    return 0;
+    if [[ $REMOVE_ARCHIVE -eq 1 ]]; then
+        echo removing "$1";
+        /bin/rm "$1";
+    fi
+
   else
-    lighthouse_url=$(cat .lighthouse-url);
-    echo "Opening ticket #$1";
-    `open $lighthouse_url/tickets/$1`;
+    echo "'$1' is not a valid file"
   fi
 }
 
-alias lho='open_lighthouse_ticket'
