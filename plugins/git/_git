@@ -1509,12 +1509,12 @@ _git-tag () {
       '*:: :__git_ignore_line_inside_arguments __git_tags' \
     - listing \
       '-n+[limit line output of annotation]: :__git_guard_number "limit"' \
-      '-l[list tags matching pattern]:pattern' \
+      '-l[list tags matching pattern]' \
       '--contains=[only list tags which contain the specified commit]: :__git_commits' \
+      '::pattern' \
     - verification \
       '-v[verifies gpg signutare of tags]' \
-      '*:: :__git_ignore_line_inside_arguments __git_tags' \
-      && ret=0
+      '*:: :__git_ignore_line_inside_arguments __git_tags' && ret=0
 }
 
 # Ancillary Commands (Manipulators)
