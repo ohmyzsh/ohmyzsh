@@ -623,7 +623,11 @@ _git-diff () {
       case $CURRENT in
         (1)
           if [[ -n ${opt_args[(I)--]} ]]; then
-            __git_changed-in-working-tree_files && ret=0
+            if [[ -n ${opt_args[(I)--cached|--staged]} ]]; then
+              __git_changed-in-index_files && ret=0
+            else
+              __git_changed-in-working-tree_files && ret=0
+            fi
           else
             local files_alt='files::__git_changed-in-working-tree_files'
 
@@ -5146,45 +5150,32 @@ __git_notes_refs () {
 
 (( $+functions[__git_files_relative] )) ||
 __git_files_relative () {
-  local rawfiles files file f_parts prefix p_parts tmp
+  local files file f_parts prefix p_parts tmp
 
   prefix=$(_call_program gitprefix git rev-parse --show-prefix 2>/dev/null)
   __git_command_successful $pipestatus || return
 
-  # Empty prefix, no modifications
   if (( $#prefix == 0 )); then
     print $1
     return
   fi
 
-  rawfiles=(${(0)1})
   files=()
 
-  # Now we assume that we've given "absolute" paths list with "root"
-  # being repository top directory.  $prefix is also "absolute" path.
-  for file in $rawfiles; do
-    # Collapse "/./" and "//", strip "/." and "/" from tail (I know,
-    # this is a bit paranoid).
-    f_parts=(${(s:/:)"${${${${file//\/\///}//\/.\///}%%/.}%%/}"})
-    p_parts=(${(s:/:)"${${${${prefix//\/\///}//\/.\///}%%/.}%%/}"})
-    tmp=()
-
-    # Strip common path prefix.
-    while (( $#f_parts > 0 )) && (( $#p_parts > 0 )) && [[ $f_parts[1] == $p_parts[1] ]]; do
-      f_parts[1]=()
-      p_parts[1]=()
+  # Collapse "//" and "/./" into "/". Strip any remaining "/." and "/".
+  for file in ${${${${${(0)1}//\/\///}//\/.\///}%/.}%/}; do
+    integer i n
+    (( n = $#file > $#prefix ? $#file : $#prefix ))
+    for (( i = 1; i <= n; i++ )); do
+      if [[ $file[i] != $prefix[i] ]]; then
+        while (( i > 0 )) && [[ $file[i-1] != / ]]; do
+          (( i-- ))
+        done
+        break
+      fi
     done
 
-    # If prefix still not empty, ascend up.
-    while (( $#p_parts > 0 )); do
-      tmp+=..
-      p_parts[1]=()
-    done
-
-    # Add remaining path.
-    tmp+=($f_parts)
-
-    files+=${(j:/:)tmp}
+    files+=${(l@${#prefix[i,-1]//[^\/]}*3@@../@)}${file[i,-1]}
   done
 
   print ${(pj:\0:)files}
@@ -5192,27 +5183,25 @@ __git_files_relative () {
 
 (( $+functions[__git_files] )) ||
 __git_files () {
-  local compadd_opts opts tag description gitdir gitcdup files expl
+  local compadd_opts opts tag description gitcdup gitprefix files expl
 
   zparseopts -D -E -a compadd_opts V: J: 1 2 n f X: M: P: S: r: R: q F:
   zparseopts -D -E -a opts -- -cached -deleted -modified -others -ignored -unmerged -killed x+: --exclude+:
   tag=$1 description=$2; shift 2
 
-  gitdir=$(_call_program gitdir git rev-parse --git-dir 2>/dev/null)
-  __git_command_successful $pipestatus || return
-
   gitcdup=$(_call_program gitcdup git rev-parse --show-cdup 2>/dev/null)
   __git_command_successful $pipestatus || return
 
-  opts+='--exclude-per-directory=.gitignore'
-  [[ -f "$gitdir/info/exclude" ]] && opts+="--exclude-from=$gitdir/info/exclude"
-
-  files=$(_call_program files git ls-files -z --full-name $opts -- $gitcdup 2>/dev/null)
-  __git_command_successful $pipestatus || return
-  files=(${(0)"$(__git_files_relative $files)"})
+  gitprefix=$(_call_program gitprefix git rev-parse --show-prefix 2>/dev/null)
   __git_command_successful $pipestatus || return
 
-  _wanted $tag expl $description _multi_parts $compadd_opts - / files
+  # TODO: --directory should probably be added to $opts when --others is given.
+
+  local pref=$gitcdup$gitprefix$PREFIX
+  files=(${(0)"$(_call_program files git ls-files -z --exclude-standard $opts -- ${pref:+$pref\*} 2>/dev/null)"})
+  __git_command_successful $pipestatus || return
+
+  _wanted $tag expl $description _multi_parts -f $compadd_opts - / files
 }
 
 (( $+functions[__git_cached_files] )) ||
