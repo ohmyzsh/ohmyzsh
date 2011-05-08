@@ -589,7 +589,7 @@ _git-commit () {
 (( $+functions[_git-describe] )) ||
 _git-describe () {
   _arguments -w -S -s \
-    '(*)--dirty=-[describe HEAD, adding mark if dirty]::mark'
+    '(*)--dirty=-[describe HEAD, adding mark if dirty]::mark' \
     '--all[use any ref found in "$GIT_DIR/refs/"]' \
     '--tags[use any ref found in "$GIT_DIR/refs/tags"]' \
     '(--tags)--contains[find the tag after the commit instead of before]' \
