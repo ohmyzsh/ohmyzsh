@@ -98,8 +98,8 @@ plugin_upgrade(){
 }
 
 
-# base_upgrade
+base_upgrade
 overlay_upgrade
-# plugin_upgrade
+plugin_upgrade
 
 cd "$ZSH"
