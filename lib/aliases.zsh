@@ -22,3 +22,10 @@ alias sl=ls # often screw this up
 
 alias afind='ack-grep -il'
 
+alias x=extract
+
+alias reload="source ~/.zshrc"
+
+alias netr='netstat -rn '
+alias nets='netstat -an -f inet '
+alias netl='netstat -an -f inet | grep LISTEN'
