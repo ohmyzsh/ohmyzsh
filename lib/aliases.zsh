@@ -26,4 +26,3 @@ alias x=extract
 
 alias reload="source ~/.zshrc"
 alias galias='alias | grep'
-
