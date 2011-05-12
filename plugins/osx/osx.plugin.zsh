@@ -97,3 +97,6 @@ function trash() {
   IFS=$temp_ifs
 }
 
+function lock() {
+    open -a ScreenSaverEngine
+}
