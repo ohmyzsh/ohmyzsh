@@ -11,14 +11,6 @@ parse_git_dirty() {
   else
     echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
   fi
-
-  if [[ $(echo ${gitstat} | grep -c "^\(# Untracked files:\|# Changed but not updated:\)$") > 0 ]]; then
-	echo -n "$ZSH_THEME_GIT_PROMPT_UNTRACKED"
-  fi 
-
-  if [[ $(echo ${gitstat} | grep -v '^$' | wc -l | tr -d ' ') == 0 ]]; then
-	echo -n "$ZSH_THEME_GIT_PROMPT_CLEAN"
-  fi
 }
 
 # Checks if there are commits ahead from remote
