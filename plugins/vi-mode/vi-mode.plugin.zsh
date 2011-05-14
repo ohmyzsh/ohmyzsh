@@ -95,3 +95,6 @@ bindkey -M viins '^d' delete
 
 bindkey -M vicmd '^?' backward-delete-char
 bindkey -M viins '^?' backward-delete-char
+
+# 'jj' = ESC
+bindkey -M viins 'jj' vi-cmd-mode
