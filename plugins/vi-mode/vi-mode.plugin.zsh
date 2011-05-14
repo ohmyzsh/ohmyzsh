@@ -52,7 +52,7 @@ bindkey -v # Use vi key bindings.
 bindkey -M vicmd "^M" accept_line # Alow RETURN in vi command.
 bindkey -M vicmd v edit-command-line # ESC-v to edit in an external editor.
 
-bindkey ' ' magic-space 
+bindkey ' ' magic-space
 bindkey -M vicmd "gg" beginning-of-history
 bindkey -M vicmd "G" end-of-history
 
@@ -66,11 +66,32 @@ else
   bindkey -M vicmd "j" history-search-forward
 fi
 
-bindkey -M vicmd "?" history-incremental-search-backward
-bindkey -M vicmd "/" history-incremental-search-forward
+bindkey "^P"          up-line-or-search
+bindkey -M vicmd "^k" up-line-or-search
+bindkey -M viins "^k" up-line-or-search
+bindkey "^N"          down-line-or-search
+bindkey -M vicmd "^j" down-line-or-search
+bindkey -M viins "^j" down-line-or-search
 
+bindkey -M viins '^r' history-incremental-search-backward
+bindkey -M vicmd '^r' history-incremental-search-backward
+bindkey -M vicmd "/"  history-incremental-search-backward
+bindkey -M vicmd "?"  history-incremental-search-forward
+
+bindkey -M vicmd "^L" clear-screen
 bindkey -M viins "^L" clear-screen
+
+bindkey -M vicmd "^W" backward-kill-word
 bindkey -M viins "^W" backward-kill-word
+
+bindkey -M vicmd "^A" beginning-of-line
 bindkey -M viins "^A" beginning-of-line
+
+bindkey -M vicmd "^E" end-of-line
 bindkey -M viins "^E" end-of-line
 
+bindkey -M vicmd '^d' delete
+bindkey -M viins '^d' delete
+
+bindkey -M vicmd '^?' backward-delete-char
+bindkey -M viins '^?' backward-delete-char
