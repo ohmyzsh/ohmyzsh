@@ -46,6 +46,13 @@ alias print-libpath='echo -e ${LD_LIBRARY_PATH//:/\\n}'
 alias lsbom='lsbom -f -l -s -pf'
 alias t="$HOME/.local/bin/t --task-dir ~/.tasks --list todo.txt --delete-if-empty"
 
+alias v.='vim .'
+alias v='vim ~/.vimrc'
+alias VS='vim -S Session.vim'
+
+alias zs='source ~/.zshrc; source ~/.zshenv'
+
+
 if [[ -x "${commands[htop]}" ]]; then
   alias top=htop
 else
