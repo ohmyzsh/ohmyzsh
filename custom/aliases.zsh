@@ -37,19 +37,19 @@ alias get='curl -C - -O'
 alias q='exit'
 alias ssh='ssh -X'
 alias h='history'
-alias j='jobs -l'
+#alias j='jobs -l'
 alias f='fg'
 alias gr='grep -r'
 alias type='type -a'
 alias print-path='echo -e ${PATH//:/\\n}'
 alias print-libpath='echo -e ${LD_LIBRARY_PATH//:/\\n}'
 alias lsbom='lsbom -f -l -s -pf'
-alias t="$HOME/.local/bin/t --task-dir ~/.tasks --list todo.txt --delete-if-empty"
+#alias t="$HOME/.local/bin/t --task-dir ~/.tasks --list todo.txt --delete-if-empty"
 
-alias v.='vim .'
-alias v='vim ~/.vimrc'
-alias VS='vim -S Session.vim'
-
+#alias v.='vim .'
+#alias v='vim ~/.vimrc'
+#alias VS='vim -S Session.vim'
+alias top='htop'
 alias zs='source ~/.zshrc; source ~/.zshenv'
 
 
