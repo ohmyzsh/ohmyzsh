@@ -50,3 +50,12 @@ function extract() {
   fi
 }
 
+zsh-theme(){
+  echo $ZSH/themes/$1
+  source $ZSH/themes/$1
+  typeset -ga chpwd_functions
+  typeset -ga precmd_functions
+  precmd_functions=''
+  chpwd_functions=''
+}
+compctl -k "(`\ls $ZSH/themes`)" zsh-theme
