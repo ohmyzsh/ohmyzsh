@@ -29,3 +29,6 @@ alias reload="source ~/.zshrc"
 alias netr='netstat -rn '
 alias nets='netstat -an -f inet '
 alias netl='netstat -an -f inet | grep LISTEN'
+
+alias galias='alias | grep'
+
