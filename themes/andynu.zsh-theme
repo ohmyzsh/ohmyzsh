@@ -59,6 +59,10 @@ screen_window(){
   else echo "" # regular
   fi
 }
+
+PROMPT=""
+RPROMPT=""
+
 _prompt(){
     export PS1="$(err_prompt)$(screen_window)%{$(c 24)%}%n%{$NC%}%{$(c 237)%}@%{$h_color%}%m%{$(c 237)%}:%{$(c 124)%}%~ %{$(c 11)%}$(parse_git_branch)$(parse_svn_branch)%{$(c 233)%}
 %{$LightRed%}%# %{$NC%}"
