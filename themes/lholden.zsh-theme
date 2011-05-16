@@ -15,16 +15,16 @@ function rvm_custom_prompt {
   echo "$ZSH_THEME_RVM_PROMPT_BRANCH_PREFIX${rvmp}$ZSH_THEME_RVM_PROMPT_BRANCH_SUFFIX"
 }
 
-ZSH_THEME_RVM_PROMPT_BRANCH_PREFIX=" $reset_color$fg[magenta]["
+ZSH_THEME_RVM_PROMPT_BRANCH_PREFIX=" %{$reset_color%}%{$fg[magenta]%}["
 ZSH_THEME_RVM_PROMPT_BRANCH_SUFFIX="]"
-ZSH_THEME_GIT_PROMPT_BRANCH_PREFIX=" $reset_color$fg[magenta]["
+ZSH_THEME_GIT_PROMPT_BRANCH_PREFIX=" %{$reset_color%{$fg[magenta]%}["
 ZSH_THEME_GIT_PROMPT_BRANCH_SUFFIX=""
 ZSH_THEME_GIT_PROMPT_SHA_BEFORE="@"
 ZSH_THEME_GIT_PROMPT_SHA_AFTER="]"
-ZSH_THEME_GIT_PROMPT_DIRTY="$reset_color$fg_bold[red]*"
+ZSH_THEME_GIT_PROMPT_DIRTY="%{$reset_color%}%{$fg_bold[red]%}*"
 ZSH_THEME_GIT_PROMPT_CLEAN=""
-ZSH_THEME_GIT_PROMPT_AHEAD="$reset_color$fg_bold[red]!"
+ZSH_THEME_GIT_PROMPT_AHEAD="$reset_color%}%{$fg_bold[red]%}!"
 
 # Prompt format
-PROMPT='( $fg[white]%n@%m$fg[white]:$(parse_git_dirty)$(git_prompt_ahead)$reset_color$fg_bold[blue]%~%u$(git_custom_branch)$(git_prompt_short_sha)$(rvm_custom_prompt)$reset_color )
-$fg_bold[blue]%%$reset_color '
+PROMPT='( %{$fg[white%}]%n@%m%{$fg[white]%}:$(parse_git_dirty)$(git_prompt_ahead)%{$reset_color%}%{$fg_bold[blue]%}%~%u$(git_custom_branch)$(git_prompt_short_sha)$(rvm_custom_prompt)%{$reset_color%} )
+%{$fg_bold[blue]%}%%%{$reset_color%} '
