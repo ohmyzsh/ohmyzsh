@@ -2941,7 +2941,7 @@ _git-rev-parse () {
     else
       # TODO: Parse option specification?
       _arguments -w -S -s \
-        '(- *)'{-h,--help}'[display usage]'
+        '(- *)'{-h,--help}'[display usage]' \
         '--keep-dashdash[do not skip first -- option]' \
         '--stop-at-non-option[stop parsing options at first non-option argument]' \
         '*:option specification' && ret=0
