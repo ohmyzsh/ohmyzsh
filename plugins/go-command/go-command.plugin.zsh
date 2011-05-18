@@ -1,7 +1,12 @@
 go() {
   if [ -f "$1" ]; then
     if [ -n "`file $1 | grep '\(text\|empty\|no magic\)'`" ]; then
-      $EDITOR "$1"
+      if [ -w "$1" ]; then
+        $EDITOR "$1"
+      else
+        sudo $EDITOR "$1"
+        #echo $EDITOR /sudo::"$1" # For emacsclient+tramp
+      fi
     else
       if [ -e "`which xdg-open`" ]; then
         if [ -n "$DISPLAY" ]; then
