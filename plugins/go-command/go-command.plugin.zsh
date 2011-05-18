@@ -9,8 +9,10 @@ go() {
         else
           echo "DISPLAY not set:  xdg-open requires X11"
         fi
+      elif [ -e "`which cygstart`" ]; then
+        cygstart "$1"
       else
-        echo "xdg-open not found:  unable to open '$1'"
+        echo "neither xdg-open nor cygstart found:  unable to open '$1'"
       fi
     fi
   elif [ -d "$1" ]; then
