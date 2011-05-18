@@ -50,7 +50,8 @@ alias v.='vim .'
 alias v='vim ~/.vimrc'
 alias VS='vim -S Session.vim'
 
-alias zs='source ~/.zshrc; source ~/.zshenv'
+alias z='vim -o ~/.zshenv ~/.oh-my-zsh/custom/aliases.zsh ~/.zshrc'
+alias zs='source ~/.zshrc'
 
 
 if [[ -x "${commands[htop]}" ]]; then
