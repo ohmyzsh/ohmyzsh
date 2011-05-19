@@ -67,9 +67,11 @@ else
 fi
 
 bindkey "^P"          up-line-or-search
+bindkey -M vicmd "k" up-line-or-search
 bindkey -M vicmd "^k" up-line-or-search
 bindkey -M viins "^k" up-line-or-search
 bindkey "^N"          down-line-or-search
+bindkey -M vicmd "j" down-line-or-search
 bindkey -M vicmd "^j" down-line-or-search
 bindkey -M viins "^j" down-line-or-search
 
