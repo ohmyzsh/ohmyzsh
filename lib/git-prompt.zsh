@@ -553,13 +553,14 @@ typeset -Uga chpwd_functions
 typeset -Uga periodic_functions
 
 # Append git functions needed for prompt.
-preexec_functions+='preexec_update_git_vars'
-precmd_functions+='precmd_update_git_vars'
-chpwd_functions+="$GIT_PROMPT_INFO_FUNC"
+preexec_functions+='__git_prompt_preexec_update_git_vars'
+precmd_functions+='__git_prompt_precmd_update_git_vars'
+chpwd_functions+="__git_prompt_info"
 PERIOD=15
-periodic_functions+="$GIT_PROMPT_INFO_FUNC"
+periodic_functions+="__git_prompt_info"
 
-precmd_update_git_vars()
+__git_prompt_info () { $GIT_PROMPT_INFO_FUNC }
+__git_prompt_precmd_update_git_vars()
 {
     if [[ $ZSH_VERSION = *\ 4.2* ]]; then
         # some older versions of zsh don't have periodic_functions, so do the
@@ -571,31 +572,14 @@ precmd_update_git_vars()
         unset __EXECUTED_GIT_COMMAND
     fi
 }
-
-preexec_update_git_vars ()
+__git_prompt_preexec_update_git_vars ()
 {
     case "$1" in
-        vim*)
-        __EXECUTED_GIT_COMMAND=1
-        ;;
-        g*)
-        __EXECUTED_GIT_COMMAND=1
-        ;;
-        rm*)
-        __EXECUTED_GIT_COMMAND=1
-        ;;
-        touch*)
-        __EXECUTED_GIT_COMMAND=1
-        ;;
-        mkdir*)
-        __EXECUTED_GIT_COMMAND=1
-        ;;
-#         f)
-#         __EXECUTED_GIT_COMMAND=1
-#         ;;
-#         fg)
-#         __EXECUTED_GIT_COMMAND=1
-#         ;;
+        $EDITOR*)   __EXECUTED_GIT_COMMAND=1 ;;
+        g*)         __EXECUTED_GIT_COMMAND=1 ;;
+        rm*)        __EXECUTED_GIT_COMMAND=1 ;;
+        touch*)     __EXECUTED_GIT_COMMAND=1 ;;
+        mkdir*)     __EXECUTED_GIT_COMMAND=1 ;;
     esac
 }
 
