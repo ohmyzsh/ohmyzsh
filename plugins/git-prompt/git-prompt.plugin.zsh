@@ -498,41 +498,41 @@ _git_prompt__dirty_state ()
     _big_repo='yes'
     local line
     while IFS=$'\n' read line; do
-        if [[ "$line" =~ '^M' ]]; then
+        if [[ "$line" = M* ]]; then
             GIT_PROMPT_DIRTY_STATE_INDEX_MODIFIED='yes'
             GIT_PROMPT_DIRTY_STATE_INDEX_DIRTY='yes'
         fi
-        if [[ "$line" =~ '^A' ]]; then
+        if [[ "$line" = A* ]]; then
             GIT_PROMPT_DIRTY_STATE_INDEX_ADDED='yes'
             GIT_PROMPT_DIRTY_STATE_INDEX_DIRTY='yes'
         fi
-        if [[ "$line" =~ '^R' ]]; then
+        if [[ "$line" = R* ]]; then
             GIT_PROMPT_DIRTY_STATE_INDEX_RENAMED='yes'
             GIT_PROMPT_DIRTY_STATE_INDEX_DIRTY='yes'
         fi
-        if [[ "$line" =~ '^C' ]]; then
+        if [[ "$line" = C* ]]; then
             GIT_PROMPT_DIRTY_STATE_INDEX_COPIED='yes'
             GIT_PROMPT_DIRTY_STATE_INDEX_DIRTY='yes'
         fi
-        if [[ "$line" =~ '^D' ]]; then
+        if [[ "$line" = D* ]]; then
             GIT_PROMPT_DIRTY_STATE_INDEX_DELETED='yes'
             GIT_PROMPT_DIRTY_STATE_INDEX_DIRTY='yes'
         fi
 
-        if [[ "$line" =~ '^\?\? ' ]]; then
+        if [[ "$line" = \?\?* ]]; then
             GIT_PROMPT_DIRTY_STATE_WORKTREE_UNTRACKED='yes'
             GIT_PROMPT_DIRTY_STATE_WORKTREE_DIRTY='yes'
         fi
-        if [[ "$line" =~ '^ M' ]]; then
+        if [[ "$line" = \ M* ]]; then
             GIT_PROMPT_DIRTY_STATE_WORKTREE_MODIFIED='yes'
             GIT_PROMPT_DIRTY_STATE_WORKTREE_DIRTY='yes'
         fi
-        if [[ "$line" =~ '^ D' ]]; then
+        if [[ "$line" = \ D* ]]; then
             GIT_PROMPT_DIRTY_STATE_WORKTREE_DELETED='yes'
             GIT_PROMPT_DIRTY_STATE_WORKTREE_DIRTY='yes'
         fi
 
-        if [[ "$line" =~ '^UU' ]]; then
+        if [[ "$line" = UU* ]]; then
             GIT_PROMPT_DIRTY_STATE_INDEX_UNMERGED='yes'
             GIT_PROMPT_DIRTY_STATE_INDEX_DIRTY='yes'
         fi
