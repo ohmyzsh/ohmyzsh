@@ -3958,7 +3958,7 @@ _git-name-rev () {
     '--refs=[only use refs matching given pattern]: :_guard "?#" "shell pattern"' \
     '(--stdin :)--all[list all commits reachable from all refs]' \
     '(--all :)--stdin[read from stdin and append revision-name]' \
-    '--name-only[display only name of commits]'
+    '--name-only[display only name of commits]' \
     '--no-undefined[die with non-zero return when a reference is undefined]' \
     '--always[show uniquely abbreviated commit object as fallback]' \
     '(--stdin --all)*: :__git_commits' && ret=0
