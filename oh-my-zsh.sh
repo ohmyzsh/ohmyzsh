@@ -23,7 +23,7 @@ for plugin ($plugins); do
 done
 
 # Load all of your custom configurations from custom/
-for config_file ($ZSH/custom/*.zsh) source $config_file
+for config_file ($(find $ZSH/custom -iname \*.zsh)) source $config_file
 
 # Load the theme
 # Check for updates on initial load...
