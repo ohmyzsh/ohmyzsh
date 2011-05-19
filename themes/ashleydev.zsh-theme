@@ -1,3 +1,6 @@
+# NOTE: make sure to add 'git-prompt' to your list of oh-my-zsh plugins (in your
+# ~/.zshrc), otherwise the git prompt info will not be shown.
+#
 #-------------------- PROMPT definition: ----------------------
 # Set the prompt.
 
@@ -25,7 +28,7 @@ MODE_INDICATOR="%{$fg_bold[cyan]%}-- CMD MODE -- $R"
 #-----------------------------------------------------
 # git prompt info:
 
-# $ZSH/lib/git-prompt.zsh will cause $GIT_PROMPT_INFO_FUNC to be called
+# The git-prompt plugin will cause $GIT_PROMPT_INFO_FUNC to be called
 # when the git prompt info needs to be updated.
 GIT_PROMPT_INFO_FUNC="update__GIT_PROMPT_INFO"
 
@@ -48,25 +51,25 @@ local __GIT_PROMPT_INFO=''
 # will set __GIT_PROMPT_INFO
 update__GIT_PROMPT_INFO ()
 {
-    local g="$(__git_dir)"
+    local g="$(_git_promt__git_dir)"
     if [ -z "$g" ]; then
         __GIT_PROMPT_INFO=''
         return
     fi
 
-    __git_stash_state
+    _git_prompt__stash
     local s=$GIT_PROMPT_STASH_STATE_DIRTY
 
-    __git_upstream
+    _git_prompt__upstream
     local p=$GIT_PROMPT_UPSTREAM_STATE
 
-    __git_branch
+    _git_prompt__branch
     local b=$GIT_PROMPT_BRANCH
 
-    __git_rebase_info
+    _git_prompt__rebase_info
     local r=$GIT_PROMPT_REBASE_INFO
 
-    __git_dirty_state
+    _git_prompt__dirty_state
     local w=$GIT_PROMPT_DIRTY_STATE_WORKTREE_DIRTY
     local i=$GIT_PROMPT_DIRTY_STATE_INDEX_DIRTY
     local u=$GIT_PROMPT_DIRTY_STATE_WORKTREE_UNTRACKED

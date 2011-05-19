@@ -3,6 +3,9 @@
 # This example shows some of the things you in this plugin.  This is how the
 # author uses it:
 #
+# NOTE: make sure to add 'git-prompt' to your list of oh-my-zsh plugins (in your
+# .zshrc) otherwise the git prompt info will not show up in your prompt.
+#
 # ---------------------- SAMPLE THEME FILE ------------------------
 #
 #     # this is a simple example PROMPT with only git info in it:
@@ -65,25 +68,25 @@
 #     local __GIT_PROMPT_INFO=''
 #     update__GIT_PROMPT_INFO ()
 #     {
-#         local g="$(__git_dir)"
+#         local g="$(_git_promt__git_dir)"
 #         if [ -z "$g" ]; then
 #             __GIT_PROMPT_INFO=''
 #             return
 #         fi
 #     
-#         __git_stash_state
+#         _git_prompt__stash
 #         local s=$GIT_PROMPT_STASH_STATE_DIRTY
 #     
-#         __git_upstream
+#         _git_prompt__upstream
 #         local p=$GIT_PROMPT_UPSTREAM_STATE
 #     
-#         __git_branch
+#         _git_prompt__branch
 #         local b=$GIT_PROMPT_BRANCH
 #     
-#         __git_rebase_info
+#         _git_prompt__rebase_info
 #         local r=$GIT_PROMPT_REBASE_INFO
 #     
-#         __git_dirty_state
+#         _git_prompt__dirty_state
 #         local w=$GIT_PROMPT_DIRTY_STATE_WORKTREE_DIRTY
 #         local i=$GIT_PROMPT_DIRTY_STATE_INDEX_DIRTY
 #         local u=$GIT_PROMPT_DIRTY_STATE_WORKTREE_UNTRACKED
@@ -146,19 +149,16 @@
 
 
 #------------------ git information utils ------------------
-# To pull information out of git, I borrowed from:
+# For some of the following functions, I borrowed some from:
 #   https://github.com/git/git/blob/master/contrib/completion/git-completion.bash
 #
 
-
-# __git_dir accepts 0 or 1 arguments (i.e., location)
+# _git_promt__git_dir accepts 0 or 1 arguments (i.e., location)
 # echos location of .git repo
-__git_dir ()
+_git_promt__git_dir ()
 {
     if [ -z "${1-}" ]; then
-        if [ -n "${__git_dir-}" ]; then
-            echo "$__git_dir"
-        elif [ -d .git ]; then
+        if [ -d .git ]; then
             echo .git
         else
             git rev-parse --git-dir 2>/dev/null
@@ -186,17 +186,17 @@ __git_dir ()
 #                   versions of git-rev-list
 #     git           always compare HEAD to @{upstream}
 #     svn           always compare HEAD to your SVN upstream
-# By default, __git_upstream will compare HEAD to your SVN upstream
+# By default, _git_prompt__upstream will compare HEAD to your SVN upstream
 # if it can find one, or @{upstream} otherwise.  Once you have
 # set GIT_PROMPT_SHOWUPSTREAM, you can override it on a
 # per-repository basis by setting the prompt.showUpstream config
 # variable (i.e. `git config prompt.showUpstream 'verbose legacy'`).
 #
-# __git_upstream accepts 0 or 1 arguments.  If an argument is given, it must be
-# a string of the form specified above for GIT_PROMPT_SHOWUPSTREAM.  Setting
-# this argument will override any value set for GIT_PROMPT_SHOWUPSTREAM or in
-# the .git/config.
-__git_upstream ()
+# _git_prompt__upstream accepts 0 or 1 arguments.  If an argument is given, it
+# must be a string of the form specified above for GIT_PROMPT_SHOWUPSTREAM.
+# Setting this argument will override any value set for GIT_PROMPT_SHOWUPSTREAM
+# or in the .git/config.
+_git_prompt__upstream ()
 {
     GIT_PROMPT_UPSTREAM_STATE=''
 
@@ -298,7 +298,7 @@ __git_upstream ()
     GIT_PROMPT_UPSTREAM_STATE=$p
 }
 
-__git_rebase_info ()
+_git_prompt__rebase_info ()
 {
     GIT_PROMPT_REBASE_INFO=''
 
@@ -313,7 +313,7 @@ __git_rebase_info ()
     fi
 
     local r=""
-    local g="$(__git_dir)"
+    local g="$(_git_promt__git_dir)"
     if [ -n "$g" ]; then
         if [ -f "$g/rebase-merge/interactive" ]; then
             r="|REBASE-i"
@@ -342,7 +342,7 @@ __git_rebase_info ()
     GIT_PROMPT_REBASE_INFO=$r
 }
 
-__git_branch ()
+_git_prompt__branch ()
 {
     GIT_PROMPT_BRANCH=''
 
@@ -358,7 +358,7 @@ __git_branch ()
     fi
 
     local b=""
-    local g="$(__git_dir)"
+    local g="$(_git_promt__git_dir)"
     if [ -n "$g" ]; then
         if [ -f "$g/rebase-merge/interactive" ]; then
             b="$(cat "$g/rebase-merge/head-name")"
@@ -397,7 +397,7 @@ __git_branch ()
 }
 
 
-__git_stash_state ()
+_git_prompt__stash ()
 {
     GIT_PROMPT_STASH_STATE_DIRTY=''
 
@@ -447,7 +447,7 @@ TRAPINT ()
     return $(( 128 + $1 ))
 }
 
-__git_dirty_state ()
+_git_prompt__dirty_state ()
 {
     GIT_PROMPT_DIRTY_STATE_FRESH_REPO=''
     GIT_PROMPT_DIRTY_STATE_INDEX_ADDED=''
@@ -466,7 +466,7 @@ __git_dirty_state ()
         return
     fi
 
-    local g="$(__git_dir)"
+    local g="$(_git_promt__git_dir)"
     if [ -z "$g" ]; then
         return
     fi
@@ -553,14 +553,14 @@ typeset -Uga chpwd_functions
 typeset -Uga periodic_functions
 
 # Append git functions needed for prompt.
-preexec_functions+='__git_prompt_preexec_update_git_vars'
-precmd_functions+='__git_prompt_precmd_update_git_vars'
-chpwd_functions+="__git_prompt_info"
+preexec_functions+='_git_prompt__preexec_update_git_vars'
+precmd_functions+='_git_prompt__precmd_update_git_vars'
+chpwd_functions+="_git_prompt_info"
 PERIOD=15
-periodic_functions+="__git_prompt_info"
+periodic_functions+="_git_prompt_info"
 
-__git_prompt_info () { $GIT_PROMPT_INFO_FUNC }
-__git_prompt_precmd_update_git_vars()
+_git_prompt_info () { $GIT_PROMPT_INFO_FUNC }
+_git_prompt__precmd_update_git_vars()
 {
     if [[ $ZSH_VERSION = *\ 4.2* ]]; then
         # some older versions of zsh don't have periodic_functions, so do the
@@ -572,7 +572,7 @@ __git_prompt_precmd_update_git_vars()
         unset __EXECUTED_GIT_COMMAND
     fi
 }
-__git_prompt_preexec_update_git_vars ()
+_git_prompt__preexec_update_git_vars ()
 {
     case "$1" in
         $EDITOR*)   __EXECUTED_GIT_COMMAND=1 ;;
