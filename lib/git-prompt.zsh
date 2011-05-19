@@ -27,17 +27,13 @@
 #     
 #     # GIT_PROMPT_INFO_FUNC must be set to the
 #     # function that defines your prompt info
-#     # inorder to turn the git-prompt plugin on.
+#     # in order to turn the git-prompt plugin on.
+#     # $ZSH/lib/git-prompt.zsh will cause
+#     # $GIT_PROMPT_INFO_FUNC to be called when the
+#     # git prompt info needs to be updated.
 #     GIT_PROMPT_INFO_FUNC='update__GIT_PROMPT_INFO'
 #
 #     GIT_PROMPT_SHOWUPSTREAM="verbose"
-#
-#     if [[ -z $__git_prompt_loaded__ &&
-#         -f $ZSH/plugins/git-prompt/git-prompt.plugin.zsh ]];
-#     then
-#         source $ZSH/plugins/git-prompt/git-prompt.plugin.zsh
-#     fi
-#
 #
 #     # Some color settings for the format
 #     # '_C' for color:
@@ -426,7 +422,7 @@ __git_stash_state ()
 
 # This is the short-circuit logic:
 local _big_repo='init'
-TRAPINT()
+__git_prompt_shortcircuit ()
 {
     if [[ "$_big_repo" == 'yes' ]]; then
         _big_repo=''
@@ -444,8 +440,13 @@ TRAPINT()
             $GIT_PROMPT_INFO_FUNC
         fi
     fi
+}
+TRAPINT ()
+{
+    __git_prompt_shortcircuit
     return $(( 128 + $1 ))
 }
+
 __git_dirty_state ()
 {
     GIT_PROMPT_DIRTY_STATE_FRESH_REPO=''
@@ -599,4 +600,3 @@ preexec_update_git_vars ()
 }
 
 #--------------------------------------------------
-__git_prompt_loaded__='yes'

@@ -25,13 +25,12 @@ MODE_INDICATOR="%{$fg_bold[cyan]%}-- CMD MODE -- $R"
 #-----------------------------------------------------
 # git prompt info:
 
+# $ZSH/lib/git-prompt.zsh will cause $GIT_PROMPT_INFO_FUNC to be called
+# when the git prompt info needs to be updated.
+GIT_PROMPT_INFO_FUNC="update__GIT_PROMPT_INFO"
+
 GIT_PROMPT_SHOWUPSTREAM="verbose"
 GIT_PROMPT_SHORTCIRCUIT='on'
-GIT_PROMPT_INFO_FUNC="update__GIT_PROMPT_INFO"
-if [[ -z $__git_prompt_loaded__ &&
-    -f $ZSH/plugins/git-prompt/git-prompt.plugin.zsh ]]; then
-    source $ZSH/plugins/git-prompt/git-prompt.plugin.zsh
-fi
 
 # git_prompt_info colors ('_C' for color):
 local _Cerror_="%{$fg[yellow]%}"            # bad (empty) .git/ directory
