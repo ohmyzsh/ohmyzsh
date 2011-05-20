@@ -26,6 +26,7 @@ plugins=(git git-flow gem brew vi-mode pip osx)
 
 source $ZSH/oh-my-zsh.sh
 # Customize to your needs...
+export PATH=$HOME/.bin:$PATH
+export PATH=$HOME/bin:$PATH
 source ~/.profile
 source /usr/local/Cellar/autojump/15/etc/autojump.zsh
-[[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator
