@@ -49,8 +49,7 @@ alias lsbom='lsbom -f -l -s -pf'
 #alias v.='vim .'
 #alias v='vim ~/.vimrc'
 #alias VS='vim -S Session.vim'
-alias top='htop'
-alias zs='source ~/.zshrc; source ~/.zshenv'
+alias zs='source ~/.zshrc'
 
 
 if [[ -x "${commands[htop]}" ]]; then
@@ -80,4 +79,4 @@ alias S="screen $screenrc -U -S"
 [[ "$TERM" == 'xterm-256color' && -e "$HOME/.tmux256.conf" ]] && tmuxconf="-f '$HOME/.tmux256.conf'"
 alias tmux="tmux $tmuxconf"
 alias tls="tmux list-sessions"
-
+alias ta="tmux attach -t"
