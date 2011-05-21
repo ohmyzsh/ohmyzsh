@@ -2,6 +2,11 @@ function savepath() {
   pwd > ~/.current_path~
 }
 
+# load base PATH
+if [ -x /usr/libexec/path_helper ]; then
+    eval `/usr/libexec/path_helper -s`
+fi
+
 function tab() {
 savepath
 osascript >/dev/null <<EOF
