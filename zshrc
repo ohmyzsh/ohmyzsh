@@ -29,4 +29,8 @@ source $ZSH/oh-my-zsh.sh
 export PATH=$HOME/.bin:$PATH
 export PATH=$HOME/bin:$PATH
 source ~/.profile
-source /usr/local/Cellar/autojump/15/etc/autojump.zsh
+#source /usr/local/Cellar/autojump/15/etc/autojump.zsh
+#if [[ -z "$TMUX" ]]; then
+        #tmux att
+#fi
+
