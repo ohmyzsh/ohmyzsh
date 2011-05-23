@@ -80,3 +80,5 @@ alias S="screen $screenrc -U -S"
 alias tmux="tmux $tmuxconf"
 alias tls="tmux list-sessions"
 alias ta="tmux attach -t"
+
+alias pjson="python -m json.tool"
