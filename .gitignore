@@ -4,3 +4,4 @@ projects.zsh
 custom/*
 !custom/example.zsh
 cache
+*.swp
