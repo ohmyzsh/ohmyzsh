@@ -28,6 +28,7 @@ source $ZSH/oh-my-zsh.sh
 # Customize to your needs...
 export PATH=$HOME/.bin:$PATH
 export PATH=$HOME/bin:$PATH
+export IPYTHONDIR=$HOME/.ipython
 source ~/.profile
 #source /usr/local/Cellar/autojump/15/etc/autojump.zsh
 #if [[ -z "$TMUX" ]]; then
