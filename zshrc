@@ -22,14 +22,14 @@ MODE_INDICATOR="%{$fg_bold[cyan]%}-- CMD MODE -- $R"
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git git-flow gem brew vi-mode pip osx syntax-highlighting extract)
+plugins=(git git-flow gem brew vi-mode pip osx syntax-highlighting extract autojump)
 
 source $ZSH/oh-my-zsh.sh
 # Customize to your needs...
 export PATH=$HOME/.bin:$PATH
 export PATH=$HOME/bin:$PATH
 source ~/.profile
-source /usr/local/Cellar/autojump/15/etc/autojump.zsh
+#source /usr/local/Cellar/autojump/15/etc/autojump.zsh
 #if [[ -z "$TMUX" ]]; then
         #tmux att
 #fi
