@@ -4,7 +4,7 @@
 # Example usage: http://screencast.com/t/ZDgwNDUwNT
 open_lighthouse_ticket () {
   if [ ! -f .lighthouse-url ]; then
-    echo "There is no .lighthouse file in the current directory..."
+    echo "There is no .lighthouse-url file in the current directory..."
     return 0;
   else
     lighthouse_url=$(cat .lighthouse-url);
