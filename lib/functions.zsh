@@ -10,14 +10,16 @@ function upgrade_oh_my_zsh() {
   /bin/sh $ZSH/tools/upgrade.sh
 }
 
-function take() {
-  mkdir -p $1
-  cd $1
+function logview() {
+  ccze -A < $1 | less -R
+}
+
+function logtail() {
+  tail -f $1 | ccze
 }
 
 function extract() {
     unset REMOVE_ARCHIVE
-    
     if test "$1" = "-r"; then
         REMOVE=1
         shift
@@ -49,4 +51,3 @@ function extract() {
     echo "'$1' is not a valid file"
   fi
 }
-
