@@ -1,8 +1,15 @@
+stat -f%m . > /dev/null 2>&1
+if [ "$?" = 0 ]; then
+	stat_cmd=(stat -f%m)
+else
+	stat_cmd=(stat -L --format=%y)
+fi
+
 _ant_does_target_list_need_generating () {
   if [ ! -f .ant_targets ]; then return 0;
   else
-    accurate=$(stat -f%m .ant_targets)
-    changed=$(stat -f%m build.xml)
+    accurate=$($stat_cmd -f%m .ant_targets)
+    changed=$($stat_cmd -f%m build.xml)
     return $(expr $accurate '>=' $changed)
   fi
 }
