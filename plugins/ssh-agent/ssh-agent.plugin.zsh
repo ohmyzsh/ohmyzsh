@@ -10,14 +10,15 @@ function start_agent {
   /usr/bin/ssh-add;
 }
 
-# Source SSH settings, if applicable
+function has_agent {
+  [ -n "${SSH_AUTH_SOCK}" ] && [ -r "${SSH_AUTH_SOCK}" ]
+  return $?
+}
 
-if [ -f "${SSH_ENV}" ]; then
+if ! has_agent && [ -f "${SSH_ENV}" ] ; then
   . ${SSH_ENV} > /dev/null
-  ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
-    start_agent;
-  }
-else
-  start_agent;
 fi
 
+if ! has_agent ; then
+  start_agent
+fi
