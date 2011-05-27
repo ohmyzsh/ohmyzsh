@@ -4,6 +4,7 @@
 local SSH_ENV=$HOME/.ssh/environment-$HOST
 
 function start_agent {
+  mkdir -m 700 -p $HOME/.ssh
   /usr/bin/env ssh-agent | sed 's/^echo/#echo/' > ${SSH_ENV}
   chmod 600 ${SSH_ENV}
   . ${SSH_ENV} > /dev/null
