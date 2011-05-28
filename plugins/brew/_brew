@@ -25,10 +25,12 @@ _1st_arguments=(
   'link:link a formula'
   'list:list files in a formula or not-installed formulae'
   'log:git commit log for a formula'
+  'missing:check all installed formuale for missing dependencies.'
   'outdated:list formulas for which a newer version is available'
   'prune:remove dead links'
   'remove:remove a formula'
   'search:search for a formula (/regex/ or string)'
+  'server:start a local web app that lets you browse formulae (requires Sinatra)'
   'unlink:unlink a formula'
   'update:freshen up links'
   'upgrade:upgrade outdated formulae'
@@ -36,10 +38,14 @@ _1st_arguments=(
 )
 
 local expl
-local -a formula installed_formulae
+local -a formulae installed_formulae
 
 _arguments \
-  '(-v --verbose)'{-v,--verbose}'[verbose]' \
+  '(-v)-v[verbose]' \
+  '(--cellar)--cellar[brew cellar]' \
+  '(--config)--config[brew configuration]' \
+  '(--env)--env[brew environment]' \
+  '(--repository)--repository[brew repository]' \
   '(--version)--version[version information]' \
   '(--prefix)--prefix[where brew lives on this system]' \
   '(--cache)--cache[brew cache]' \
@@ -51,20 +57,24 @@ if (( CURRENT == 1 )); then
 fi
 
 case "$words[1]" in
-  list)
+  search|-S)
+    _arguments \
+      '(--macports)--macports[search the macports repository]' \
+      '(--fink)--fink[search the fink repository]' ;;
+  list|ls)
     _arguments \
       '(--unbrewed)--unbrewed[files in brew --prefix not controlled by brew]' \
+      '(--versions)--versions[list all installed versions of a formula]' \
       '1: :->forms' &&  return 0
 
       if [[ "$state" == forms ]]; then
         _brew_installed_formulae
-        _requested installed_formulae expl 'installed formulae' compadd -a installed_formulae
+        _wanted installed_formulae expl 'installed formulae' compadd -a installed_formulae
       fi ;;
-  install|home|log|info|uses|cat|deps)
+  install|home|homepage|log|info|abv|uses|cat|deps|edit|options)
     _brew_all_formulae
     _wanted formulae expl 'all formulae' compadd -a formulae ;;
-  remove|edit|xo)
+  remove|rm|uninstall|unlink|cleanup|link|ln)
     _brew_installed_formulae
     _wanted installed_formulae expl 'installed formulae' compadd -a installed_formulae ;;
 esac
-
