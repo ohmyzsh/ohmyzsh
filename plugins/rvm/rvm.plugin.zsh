@@ -29,3 +29,12 @@ function rb19 {
 
 _rb19() {compadd `ls -1 $rvm_path/gems | grep "^$ruby19@" | sed -e "s/^$ruby19@//" | awk '{print $1}'`}
 compdef _rb19 rb19
+
+function rvm-update {
+	rvm get head
+	rvm reload # TODO: Reload rvm completion?
+}
+
+function rvm-link-completion {
+	ln -s "$rvm_path/scripts/zsh/Completion/_rvm" "$ZSH/plugins/rvm/_rvm.official"
+}
