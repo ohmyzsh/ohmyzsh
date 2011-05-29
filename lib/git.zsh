@@ -15,13 +15,13 @@ function parse_git_dirty() {
 
 # Checks if there are commits ahead from remote
 function git_prompt_ahead() {
-  if $(echo "$(git log $(git_current_remote)/$(git_current_branch)..HEAD 2> /dev/null)" | grep '^commit' &> /dev/null); then
+  if $(echo "$(git log $(git_current_remote)/$(current_branch)..HEAD 2> /dev/null)" | grep '^commit' &> /dev/null); then
     echo "$ZSH_THEME_GIT_PROMPT_AHEAD"
   fi
 }
 
 function git_prompt_behind() {
-  if $(echo "$(git log HEAD..$(git_current_remote)/$(git_current_branch) 2> /dev/null)" | grep '^commit' &> /dev/null); then
+  if $(echo "$(git log HEAD..$(git_current_remote)/$(current_branch) 2> /dev/null)" | grep '^commit' &> /dev/null); then
     echo "$ZSH_THEME_GIT_PROMPT_BEHIND"
   fi
 }
@@ -67,13 +67,8 @@ function git_prompt_status() {
   echo $STATUS
 }
 
-function git_current_branch() {
-  ref=$(git symbolic-ref HEAD 2> /dev/null) || return
-  echo ${ref#refs/heads/}
-}
-
 function git_current_remote() {
-  remote=$(git config --get "branch.$(git_current_branch).remote")
+  remote=$(git config --get "branch.$(current_branch).remote")
   if [ -z "$remote" ]; then
     echo 'origin'
   else
