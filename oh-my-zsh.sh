@@ -42,7 +42,14 @@ then
   RANDOM_THEME=${themes[$N]}
   source "$RANDOM_THEME"
   echo "[oh-my-zsh] Random theme '$RANDOM_THEME' loaded..."
+  unset themes
+  unset N
+  unset RANDOM_THEME
 else
   source "$ZSH/themes/$ZSH_THEME.zsh-theme"
 fi
+
+# remove locally used variables
+unset config_file
+unset plugin
 
