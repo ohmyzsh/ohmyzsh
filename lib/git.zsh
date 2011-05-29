@@ -5,7 +5,7 @@ function git_prompt_info() {
 }
 
 # Checks if working tree is dirty
-parse_git_dirty() {
+function parse_git_dirty() {
   if [[ -n $(git status -s 2> /dev/null) ]]; then
     echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
   else
@@ -15,8 +15,14 @@ parse_git_dirty() {
 
 # Checks if there are commits ahead from remote
 function git_prompt_ahead() {
-  if $(echo "$(git log origin/$(current_branch)..HEAD 2> /dev/null)" | grep '^commit' &> /dev/null); then
+  if $(echo "$(git log $(git_current_remote)/$(git_current_branch)..HEAD 2> /dev/null)" | grep '^commit' &> /dev/null); then
     echo "$ZSH_THEME_GIT_PROMPT_AHEAD"
+  fi
+}
+
+function git_prompt_behind() {
+  if $(echo "$(git log HEAD..$(git_current_remote)/$(git_current_branch) 2> /dev/null)" | grep '^commit' &> /dev/null); then
+    echo "$ZSH_THEME_GIT_PROMPT_BEHIND"
   fi
 }
 
@@ -31,7 +37,7 @@ function git_prompt_long_sha() {
 }
 
 # Get the status of the working tree
-git_prompt_status() {
+function git_prompt_status() {
   INDEX=$(git status --porcelain 2> /dev/null)
   STATUS=""
   if $(echo "$INDEX" | grep '^?? ' &> /dev/null); then
@@ -59,4 +65,18 @@ git_prompt_status() {
     STATUS="$ZSH_THEME_GIT_PROMPT_UNMERGED$STATUS"
   fi
   echo $STATUS
+}
+
+function git_current_branch() {
+  ref=$(git symbolic-ref HEAD 2> /dev/null) || return
+  echo ${ref#refs/heads/}
+}
+
+function git_current_remote() {
+  remote=$(git config --get "branch.$(git_current_branch).remote")
+  if [ -z "$remote" ]; then
+    echo 'origin'
+  else
+    echo "$remote"
+  fi
 }
