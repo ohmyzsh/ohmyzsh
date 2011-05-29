@@ -131,7 +131,7 @@ _git-archive () {
     '--format=-[format of the resulting archive]:archive format:__git_archive_formats' \
     '(- :)'{-l,--list}'[list available archive formats]' \
     '(-v --verbose)'{-v,--verbose}'[report progress to stderr]' \
-    '--prefix=-[prepend the given path prefix to to each filename]:path prefix:_directories -r ""' \
+    '--prefix=-[prepend the given path prefix to each filename]:path prefix:_directories -r ""' \
     '--output=[write archive to argument instead of stdout]:archive:_files' \
     '--worktree-attributes[look for attributes in .gitattributes in working directory too]' \
     $backend_args \
@@ -258,16 +258,22 @@ _git-branch () {
   d='-d -D'
 
   declare -a dependent_creation_args
-  dependent_creation_args=(
-    "($l $m $d): :__git_branch_names"
-    "::start-point:__git_revisions")
+  if (( words[(I)-r] == 0 )); then
+    dependent_creation_args=(
+      "($l $m $d): :__git_branch_names"
+      "::start-point:__git_revisions")
+  fi
 
   declare -a dependent_deletion_args
   if (( words[(I)-d] || words[(I)-D] )); then
     dependent_creation_args=
     dependent_deletion_args=(
-      '-r[delete remote-tracking branches]'
-      '*: :__git_ignore_line_inside_arguments __git_branch_names')
+      '-r[delete only remote-tracking branches]')
+    if (( words[(I)-r] )); then
+      dependent_deletion_args+='*: :__git_ignore_line_inside_arguments __git_remote_branch_names'
+    else
+      dependent_deletion_args+='*: :__git_ignore_line_inside_arguments __git_branch_names'
+    fi
   fi
 
   declare -a dependent_modification_args
@@ -281,7 +287,7 @@ _git-branch () {
   _arguments -w -S -s \
     "($c $m $d --no-color :)--color=-[turn on branch coloring]:: :__git_color_whens" \
     "($c $m $d : --color)--no-color[turn off branch coloring]" \
-    "($c $m $d : -a)-r[list only the remote-tracking branches]" \
+    "($c $m      -a)-r[list or delete only remote-tracking branches]" \
     "($c $m $d : -r)-a[list both remote-tracking branches and local branches]" \
     "($c $m $d : -v --verbose)"{-v,--verbose}'[show SHA1 and commit subject line for each head]' \
     "($c $m $d :)--abbrev=[set minimum SHA1 display-length]: :__git_guard_number length" \
@@ -4919,7 +4925,7 @@ __git_remote_branch_names () {
   local expl
   declare -a branch_names
 
-  branch_names=(${${(f)"$(_call_program remote-branch-refs git for-each-ref --format='%(refname)' refs/remotes 2>/dev/null)"}#refs/remotes/})
+  branch_names=(${${(f)"$(_call_program remote-branch-refs git for-each-ref --format='"%(refname)"' refs/remotes 2>/dev/null)"}#refs/remotes/})
   __git_command_successful $pipestatus || return
 
   _wanted remote-branch-names expl 'remote branch name' compadd $* - $branch_names
@@ -5162,7 +5168,7 @@ __git_files_relative () {
 
   files=()
 
-  # Collapse "//" and "/./" into "/". Strip any remaining "/." and "/".
+  # Collapse “//” and “/./” into “/”. Strip any remaining “/.” and “/”.
   for file in ${${${${${(0)1}//\/\///}//\/.\///}%/.}%/}; do
     integer i n
     (( n = $#file > $#prefix ? $#file : $#prefix ))
@@ -5413,6 +5419,10 @@ __git_guard_diff-stat-width () {
 
 (( $+functions[__git_guard_number] )) ||
 __git_guard_number () {
+  declare -A opts
+
+  zparseopts -K -D -A opts M: J: V: 1 2 n F: X:
+
   _guard "[[:digit:]]#" ${1:-number}
 }
 
