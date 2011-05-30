@@ -1,1 +1,2 @@
-eval "$(npm completion 2>/dev/null)"
+# TODO: Don't do this in such a weird way.
+export PATH=`echo $PATH | sed -e 's|/usr/bin|/usr/local/share/npm/bin:&|'`
