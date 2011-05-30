@@ -9,7 +9,13 @@ for config_file ($ZSH/lib/*.zsh) source $config_file
 
 # Add all defined plugins to fpath
 plugin=${plugin:=()}
-for plugin ($plugins) fpath=($ZSH/plugins/$plugin $fpath)
+for plugin ($plugins); do
+  if [ -d $ZSH/custom/plugins/$plugin/ ]; then
+    fpath=($ZSH/custom/plugins/$plugin $fpath)
+  elif [ -d $ZSH/plugins/$plugin/ ]; then
+    fpath=($ZSH/plugins/$plugin $fpath)
+  fi
+done
 
 # Load and run compinit
 autoload -U compinit
