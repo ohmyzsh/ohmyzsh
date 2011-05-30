@@ -1,6 +1,3 @@
-# What does this really do?
-# fpath=($ZSH/plugins/rvm $fpath)
-
 alias rubies='rvm list rubies'
 alias gemsets='rvm gemset list'
 
