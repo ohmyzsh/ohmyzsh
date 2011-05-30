@@ -1,31 +1,31 @@
-alias s = "sudo"
+[ $(id -u) -eq 0 ] && return
 
-[ $(id -u) != 0 ] && sudo="sudo" || sudo=""
+alias s="sudo"
 
 function pacman() {
 	case $1 in
-	 -S | -S[^sih]* | -R* | -U*) $sudo pacman $* ;;
+	 -S | -S[^sih]* | -R* | -U*) sudo pacman $* ;;
 		* ) command pacman $* ;;
 	esac
 }
 
 function clyde() {
 	case $1 in
-	 -S | -S[^sih]* | -R* | -U*) $sudo clyde $* ;;
+	 -S | -S[^sih]* | -R* | -U*) sudo clyde $* ;;
 		* ) command clyde $* ;;
 	esac
 }
 
 function pip() {
 	case $1 in 
-		install | uninstall ) $sudo pip $* ;;
+		install | uninstall ) sudo pip $* ;;
 		*)  command pip $* ;;
 	esac
 }
 
 function npm() {
 	case $1 in 
-		install | uninstall ) $sudo npm $* ;;
+		install | uninstall ) sudo npm $* ;;
 		*)  command npm $* ;;
 	esac
 }
@@ -33,17 +33,17 @@ function npm() {
 function mount() {
 	case $i in 
 		"" ) command mount ;;
-	* ) $sudo mount $* ;;
+	* ) sudo mount $* ;;
 	esac
 }
-alias umount="$sudo umount"
+alias umount="sudo umount"
 
-alias dhdpcd="$sudo dhcpcd"
-alias netcfg="$sudo netcfg"
+alias dhdpcd="sudo dhcpcd"
+alias netcfg="sudo netcfg"
 
-alias halt="$sudo halt" 
-alias reboot="$sudo reboot"
+alias halt="sudo halt" 
+alias reboot="sudo reboot"
 
-alias easy_install="$sudo easy_install"
+alias easy_install="sudo easy_install"
 
-alias pppoe-connect="$sudo pppoe-connect"
+alias pppoe-connect="sudo pppoe-connect"
