@@ -4,7 +4,7 @@
   [[ -x "${commands[gdircolors]}" ]] && use_color_gnu='true' || use_color_bsd='true'
 }
 
-[[ "$use_color_gnu" == 'true' ]] && eval $(gdircolors $HOME/.dir_colors)
+[[ "$use_color_gnu" == 'true' && -e "$HOME/.dir_colors" ]] && eval $(gdircolors $HOME/.dir_colors)
 [[ "$use_color_bsd" == 'true' ]] && export CLICOLOR=1
 [[ "$use_color_bsd" == 'true' ]] && export LSCOLORS="exfxcxdxbxegedabagacad"
 
@@ -29,15 +29,17 @@ alias rm='nocorrect rm -i'
 alias cp='nocorrect cp -i'
 alias mv='nocorrect mv -i'
 alias ln='nocorrect ln -i'
+alias mkdir='nocorrect mkdir -p'
 alias du='du -kh'
 alias df='df -kh'
 alias e="$EDITOR"
 alias get='curl -C - -O'
-alias mkdir='nocorrect mkdir -p'
 alias q='exit'
 alias ssh='ssh -X'
 alias h='history'
 alias j='jobs -l'
+alias f='fg'
+alias gr='grep -r'
 alias type='type -a'
 alias print-path='echo -e ${PATH//:/\\n}'
 alias print-libpath='echo -e ${LD_LIBRARY_PATH//:/\\n}'
@@ -58,16 +60,16 @@ fi
 
 # Screen
 # ------------------------------------------------------------------------------
-[[ "$TERM" == 'xterm-color' ]] && screenrc="$HOME/.screenrc"
-[[ "$TERM" == 'xterm-256color' ]] && screenrc="$HOME/.screenrc256"
-alias screen="screen -c '$screenrc'"
-alias sls="screen -c '$screenrc' -list"
-alias surd="screen -c '$screenrc' -aAURD"
-alias sus="screen -c '$screenrc' -US"
+[[ "$TERM" == 'xterm-color'  && -e "$HOME/.screenrc" ]] && screenrc="-c '$HOME/.screenrc'"
+[[ "$TERM" == 'xterm-256color' && -e "$HOME/.screenrc256" ]] && screenrc="-c '$HOME/.screenrc256'"
+alias screen="screen $screenrc"
+alias sl="screen $screenrc -list"
+alias sr="screen $screenrc -a -A -U -D -R"
+alias S="screen $screenrc -U -S"
 
 # TMUX
 # ------------------------------------------------------------------------------
-[[ "$TERM" == 'xterm-color' ]] && tmuxconf="$HOME/.tmux.conf"
-[[ "$TERM" == 'xterm-256color' ]] && tmuxconf="$HOME/.tmux256.conf"
-alias tmux="tmux -f '$tmuxconf'"
+[[ "$TERM" == 'xterm-color' && -e "$HOME/.tmux.conf" ]] && tmuxconf="-f '$HOME/.tmux.conf'"
+[[ "$TERM" == 'xterm-256color' && -e "$HOME/.tmux256.conf" ]] && tmuxconf="-f '$HOME/.tmux256.conf'"
+alias tmux="tmux $tmuxconf"
 alias tls="tmux list-sessions"
