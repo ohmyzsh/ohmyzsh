@@ -4,4 +4,3 @@ if [ "$commands[(I)hub]" ]; then
     # eval `hub alias -s zsh`
     function git(){hub "$@"}
 fi
-
