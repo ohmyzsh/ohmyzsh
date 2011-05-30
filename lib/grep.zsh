@@ -1,4 +1,8 @@
 if [[ "$DISABLE_COLOR" != "true" ]]; then
-    [[ -z "$GREP_OPTIONS" ]] && export GREP_OPTIONS='--color=auto'
-    [[ -z "$GREP_COLOR" ]] && export GREP_COLOR='1;32'
+  export GREP_OPTIONS='--color=auto'
+  export GREP_COLOR='37;45'
+else
+  export GREP_OPTIONS='--color=none'
+  export GREP_COLOR=''
 fi
+
