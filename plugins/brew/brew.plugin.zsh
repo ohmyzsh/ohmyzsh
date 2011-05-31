@@ -2,7 +2,6 @@
 # This will allow us to override system binaries like ruby with our brews
 # TODO: Do this in a more compatible way.
 #       What if someone doesn't have /usr/bin in their path?
-export PATH='/usr/local/share/python':$PATH
 export PATH=`echo $PATH | sed -e 's|/usr/local/bin||' -e 's|::|:|g'` # Remove /usr/local/bin
 export PATH=`echo $PATH | sed -e 's|/usr/bin|/usr/local/bin:&|'`     # Add it in front of /usr/bin
 export PATH=`echo $PATH | sed -e 's|/usr/bin|/usr/local/sbin:&|'`    # Add /usr/local/sbin
