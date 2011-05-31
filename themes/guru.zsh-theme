@@ -64,13 +64,18 @@ custom_git_prompt_status() {
   if $(echo "$INDEX" | grep '^A' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_STAGED_ADDED$STATUS"
   fi
+
+  if $(echo "$STATUS" &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_STATUS_PREFIX$STATUS"
+  fi
+
   echo $STATUS
 }
 
 # get the name of the branch we are on (copied and modified from git.zsh)
 function custom_git_prompt() {
   ref=$(git symbolic-ref HEAD 2> /dev/null) || return
-  echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$(git_prompt_ahead)$(parse_git_dirty)$(custom_git_prompt_status)$ZSH_THEME_GIT_PROMPT_SUFFIX"
+  echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$(parse_git_dirty)$(git_prompt_ahead)$(custom_git_prompt_status)$ZSH_THEME_GIT_PROMPT_SUFFIX"
 }
 
 PROMPT='${PROMPTCOLOR}$PREFIX %2~ $(custom_git_prompt)%{$M%}%B»%b%{$RESET%} '
@@ -79,7 +84,12 @@ RPS1="${return_code}"
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$YB%}‹"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$YB%}›%{$RESET%} "
 
-ZSH_THEME_GIT_PROMPT_AHEAD="%{$BB%}➝"
+ZSH_THEME_GIT_PROMPT_DIRTY="%{$R%}*"
+ZSH_THEME_GIT_PROMPT_CLEAN=""
+
+ZSH_THEME_GIT_PROMPT_AHEAD="%{$BB%}➔"
+
+ZSH_THEME_GIT_STATUS_PREFIX=" "
 
 # Staged
 ZSH_THEME_GIT_PROMPT_STAGED_ADDED="%{$G%}A"
@@ -88,11 +98,7 @@ ZSH_THEME_GIT_PROMPT_STAGED_RENAMED="%{$G%}R"
 ZSH_THEME_GIT_PROMPT_STAGED_DELETED="%{$G%}D"
 
 # Not-staged
-ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$R%}??"
+ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$R%}⁇"
 ZSH_THEME_GIT_PROMPT_MODIFIED="%{$R%}M"
 ZSH_THEME_GIT_PROMPT_DELETED="%{$R%}D"
 ZSH_THEME_GIT_PROMPT_UNMERGED="%{$R%}UU"
-
-ZSH_THEME_GIT_PROMPT_DIRTY="%{$R%}* "
-
-ZSH_THEME_GIT_PROMPT_CLEAN=""
