@@ -8,7 +8,7 @@ h2. Setup
 
 h3. The automatic installer... (do you trust me?)
 
-@wget http://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh@
+@wget --no-check-certificate https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh@
 
 h3. The manual way
 
@@ -38,7 +38,7 @@ h2. Usage
 * enable the plugins you want in your @~/.zshrc@ (take a look at @plugins/@ to see what's possible)
 ** example: @plugins=(git osx ruby)@
 * Theme support: Change the @ZSH_THEME@ environment variable in @~/.zshrc@.
-** Take a look at the "current themes":http://wiki.github.com/robbyrussell/oh-my-zsh/themes that come bundled with _Oh My Zsh_.
+** Take a look at the "current themes":https://wiki.github.com/robbyrussell/oh-my-zsh/themes that come bundled with _Oh My Zsh_.
 * much much more...  take a look at @lib/@ what _Oh My Zsh_ offers...
 
 h2. Useful
@@ -48,17 +48,13 @@ the "refcard":http://www.bash2zsh.com/zsh_refcard/refcard.pdf is pretty tasty fo
 h3. Customization
 
 If you want to override any of the default behavior, just add a new file (ending in @.zsh@) into the @custom/@ directory.
-If you have many functions which go good together you can put them as a *.plugin.zsh file in the @plugin/@ directory and then enable this plugin.
+If you have many functions which go good together you can put them as a *.plugin.zsh file in the @custom/plugins/@ directory and then enable this plugin.
+If you would like to override the functionality of a plugin distributed with oh-my-zsh, create a plugin of the same name in the @custom/plugins/@ directory and it will be loaded instead of the one in @plugins/@.
+
 
 h3. Uninstalling
 
 If you want to uninstall it, just run @uninstall_oh_my_zsh@ from the command line and it'll remove itself and revert you to bash (or your previous zsh config).
-
-h2. Thanks
-
-* Rick Olson (technoweenie) might remember some of the configuration, which I took from a pastie a few years ago.
-* Marcel (noradio) provided Rick the original zsh configuration.
-* Nicholas (ulysses) for the "rake autocompletion code":http://weblog.rubyonrails.org/2006/3/9/fast-rake-task-completion-for-zsh.
 
 h2. Help out!
 
@@ -67,3 +63,11 @@ I'm far from being a zsh-expert and suspect there are many ways to improve. If y
 h3. Send us your theme!
 
 I'm hoping to collect a bunch of themes for our command prompts. You can see existing ones in the @themes/@ directory.
+
+h2. Contributors
+
+This project wouldn't exist without all of our awesome users and contributors.
+
+* "View our growing list of contributors":https://github.com/robbyrussell/oh-my-zsh/contributors
+
+Thank you so much!
