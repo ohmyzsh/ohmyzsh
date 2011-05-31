@@ -16,11 +16,16 @@ function clyde() {
 	esac
 }
 
+# special: virtual_env 
 function pip() {
-	case $1 in 
-		install | uninstall ) sudo pip $* ;;
-		*)  command pip $* ;;
-	esac
+	if [[ -n ${VIRTUAL_ENV+1} && -w $VIRTUAL_ENV ]]  ; then
+		command pip $* 
+	else
+		case $1 in 
+			install | uninstall ) sudo pip $* ;;
+			*)  command pip $* ;;
+		esac
+	fi
 }
 
 function npm() {
