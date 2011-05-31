@@ -31,7 +31,7 @@ export PATH=$HOME/bin:$PATH
 export IPYTHONDIR=$HOME/.ipython
 source ~/.profile
 
-if [[ -z "$TMUX" ]]; then
-    tmux attach
-fi
+#if [[ -z "$TMUX" ]]; then
+    #tmux attach
+#fi
 
