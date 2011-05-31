@@ -2,6 +2,7 @@ locals.zsh
 log/.zsh_history
 projects.zsh
 custom/*
+!custom/brew.plugin.zsh
 !custom/example
 !custom/example.zsh
 cache
