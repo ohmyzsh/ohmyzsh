@@ -1,7 +1,5 @@
 [ $(id -u) -eq 0 ] && return
 
-alias s="sudo"
-
 function pacman() {
 	case $1 in
 	 -S | -S[^sih]* | -R* | -U*) sudo pacman $* ;;
