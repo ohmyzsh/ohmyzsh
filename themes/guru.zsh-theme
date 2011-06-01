@@ -27,9 +27,6 @@ fi
 
 local return_code="%(?..%{$R%}%? ↵%{$RESET%})"
 
-GIT_PREFIX="%{$YB%}‹"
-GIT_SUFFIX="%{$YB%}›"
-
 # Get the status of the working tree (copied and modified from git.zsh)
 custom_git_prompt_status() {
   INDEX=$(git status --porcelain 2> /dev/null)
@@ -65,7 +62,7 @@ custom_git_prompt_status() {
     STATUS="$ZSH_THEME_GIT_PROMPT_STAGED_ADDED$STATUS"
   fi
 
-  if $(echo "$STATUS" &> /dev/null); then
+  if $(echo -n "$STATUS" | grep '.*' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_STATUS_PREFIX$STATUS"
   fi
 
