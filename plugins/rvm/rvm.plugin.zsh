@@ -1,3 +1,11 @@
+# Get the name of the current branch.
+function rvm_prompt_info() {
+  local ruby_version=$(~/.rvm/bin/rvm-prompt 2> /dev/null)
+  if [[ -n "$ruby_version" ]]; then
+	echo "($ruby_version)"
+  fi
+}
+
 alias rubies='rvm list rubies'
 alias gemsets='rvm gemset list'
 
@@ -42,3 +50,4 @@ function gems {
 		-Ee "s/$current_ruby@global/$fg[yellow]&$reset_color/g" \
 		-Ee "s/$current_ruby$current_gemset$/$fg[green]&$reset_color/g"
 }
+
