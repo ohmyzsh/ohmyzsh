@@ -52,7 +52,7 @@ bindkey -v # Use vi key bindings.
 bindkey -M vicmd "^M" accept_line # Alow RETURN in vi command.
 bindkey -M vicmd v edit-command-line # ESC-v to edit in an external editor.
 
-bindkey ' ' magic-space 
+bindkey ' ' magic-space
 bindkey -M vicmd "gg" beginning-of-history
 bindkey -M vicmd "G" end-of-history
 

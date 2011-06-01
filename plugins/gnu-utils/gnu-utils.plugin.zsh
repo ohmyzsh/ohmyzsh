@@ -6,7 +6,7 @@
 # ------------------------------------------------------------------------------
 
 
-if [[ -x "${commands[gwhoami]}" ]]; then 
+if [[ -x "${commands[gwhoami]}" ]]; then
   __gnu_utils() {
     emulate -L zsh
     local gcmds
@@ -14,7 +14,7 @@ if [[ -x "${commands[gwhoami]}" ]]; then
     local cmd
     local prefix
 
-    # coreutils 
+    # coreutils
     gcmds=('g[' 'gbase64' 'gbasename' 'gcat' 'gchcon' 'gchgrp' 'gchmod'
     'gchown' 'gchroot' 'gcksum' 'gcomm' 'gcp' 'gcsplit' 'gcut' 'gdate'
     'gdd' 'gdf' 'gdir' 'gdircolors' 'gdirname' 'gdu' 'gecho' 'genv' 'gexpand'
@@ -35,7 +35,7 @@ if [[ -x "${commands[gwhoami]}" ]]; then
     for gcmd in "${gcmds[@]}"; do
       #
       # This method allows for builtin commands to be primary but it's
-      # lost if hash -r or rehash -f is executed. Thus, those two 
+      # lost if hash -r or rehash -f is executed. Thus, those two
       # functions have to be wrapped.
       #
       (( ${+commands[$gcmd]} )) && hash ${gcmd[2,-1]}=${commands[$gcmd]}

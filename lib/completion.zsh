@@ -1,19 +1,21 @@
-# fixme - the load process here seems a bit bizarre
-[[ "$TERM" == "dumb" ]] && return
+# Dumb terminals lack support.
+if [[ "$TERM" == 'dumb' ]]; then
+  return
+fi
 
-unsetopt menu_complete   # do not autoselect the first completion entry
-unsetopt flowcontrol
-setopt auto_menu         # show completion menu on succesive tab press
-setopt complete_in_word
-setopt always_to_end
+unsetopt menu_complete     # Do not autoselect the first completion entry.
+unsetopt flow_control      # Disable start/stop characters in shell editor.
+setopt auto_menu           # Show completion menu on a succesive tab press.
+setopt complete_in_word    # Complete from both ends of a word.
+setopt always_to_end       # Move cursor to the end of a completed word.
 
 WORDCHARS=''
 
-# fixme - complist is crashing ZSH on menu completion
+# FIXME: complist is crashing ZSH on menu completion.
 # zmodload -i zsh/complist
 
-## case-insensitive (all),partial-word and then substring completion
-if [ "x$CASE_SENSITIVE" = "xtrue" ]; then
+## Case-insensitive (all), partial-word, and then substring completion.
+if [[ "$CASE_SENSITIVE" == "true" ]]; then
   zstyle ':completion:*' matcher-list 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
   unset CASE_SENSITIVE
 else
@@ -22,18 +24,19 @@ fi
 
 zstyle ':completion:*' list-colors ''
 
-# should this be in keybindings?
+# FIXME: It depends on complist which crashes ZSH on menu completion.
+# Should this be in key-bindings.zsh?
 # bindkey -M menuselect '^o' accept-and-infer-next-history
 
 zstyle ':completion:*:*:*:*:*' menu select
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
 zstyle ':completion:*:*:*:*:processes' command "ps -u `whoami` -o pid,user,comm -w -w"
 
-# disable named-directories autocompletion
+# Disable named-directories autocompletion.
 zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-directories
 cdpath=(.)
 
-# use /etc/hosts and known_hosts for hostname completion
+# Use /etc/hosts and known_hosts for hostname completion.
 [ -r ~/.ssh/known_hosts ] && _ssh_hosts=(${${${${(f)"$(<$HOME/.ssh/known_hosts)"}:#[\|]*}%%\ *}%%,*}) || _ssh_hosts=()
 [ -r /etc/hosts ] && : ${(A)_etc_hosts:=${(s: :)${(ps:\t:)${${(f)~~"$(</etc/hosts)"}%%\#*}##[:blank:]#[^[:blank:]]#}}} || _etc_hosts=()
 hosts=(
@@ -44,11 +47,11 @@ hosts=(
 )
 zstyle ':completion:*:hosts' hosts $hosts
 
-# Use caching so that commands like apt and dpkg complete are useable
+# Use caching to make completion for cammands such as dpkg and apt usable.
 zstyle ':completion::complete:*' use-cache 1
 zstyle ':completion::complete:*' cache-path ~/.oh-my-zsh/cache/
 
-# Don't complete uninteresting users
+# Don't complete uninteresting users...
 zstyle ':completion:*:*:*:users' ignored-patterns \
         adm amanda apache avahi beaglidx bin cacti canna clamav daemon \
         dbus distcache dovecot fax ftp games gdm gkrellmd gopher \
