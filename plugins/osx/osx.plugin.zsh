@@ -61,3 +61,7 @@ end do_submenu
 do_submenu("iTerm", "Shell", "New Tab")
 EOF
 }
+
+function lock() {
+    open -a ScreenSaverEngine
+}

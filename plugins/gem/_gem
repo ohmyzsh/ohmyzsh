@@ -7,6 +7,10 @@ _gem_installed() {
   installed_gems=(`gem list --local --no-versions`)
 }
 
+_gem_installed_for_open() {
+  installed_gems=(`ruby -rubygems -e 'puts Dir["{#{Gem::SourceIndex.installed_spec_directories.join(",")}}/*.gemspec"].collect {|s| File.basename(s).gsub(/\.gemspec$/, "")}'`)
+}
+
 local -a _1st_arguments
 _1st_arguments=(
   'cert:Manage RubyGems certificates and signing settings'
@@ -22,6 +26,7 @@ _1st_arguments=(
   'list:Display gems whose name starts with STRING'
   'lock:Generate a lockdown list of gems'
   'mirror:Mirror a gem repository'
+  'open:Open a gem into your favorite editor (install gem-open before: "[sudo] gem install gem-open")'
   'outdated:Display all gems that need updates'
   'owner:Manage gem owners on RubyGems.org.'
   'pristine:Restores installed gems to pristine condition from files located in the gem cache'
@@ -60,5 +65,8 @@ case "$words[1]" in
       fi ;;
   uninstall|update)
     _gem_installed
+    _wanted installed_gems expl 'installed gems' compadd -a installed_gems ;;
+  open)
+    _gem_installed_for_open
     _wanted installed_gems expl 'installed gems' compadd -a installed_gems ;;
 esac
