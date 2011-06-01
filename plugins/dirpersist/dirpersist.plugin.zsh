@@ -1,9 +1,9 @@
 #!/bin/zsh
-# 
+#
 # Make the dirstack more persistant
-# 
+#
 # Add dirpersist to $plugins in ~/.zshrc to load
-# 
+#
 
 # $zdirstore is the file used to persist the stack
 zdirstore=~/.zdirstore

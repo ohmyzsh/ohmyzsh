@@ -1,25 +1,24 @@
-# Path to your oh-my-zsh configuration.
-export ZSH=$HOME/.oh-my-zsh
+# Path to oh-my-zsh.
+export ZSH="$HOME/.oh-my-zsh"
 
-# Set name of the theme to load.
-# Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
+# Set the name of the theme to load (see $ZSH/themes/).
+# Setting it to 'random' loads a random theme.
 export ZSH_THEME="robbyrussell"
 
-# Set to this to use case-sensitive completion
-# export CASE_SENSITIVE="true"
+# Set to 'true' to enable case-sensitivity.
+export CASE_SENSITIVE='false'
 
-# Uncomment following line if you want to disable colors in ls
-# export DISABLE_COLOR="true"
+# Set to 'true' to disable color (auto set on dumb terminals).
+export DISABLE_COLOR='false'
 
-# Uncomment following line if you want to disable autosetting terminal title.
-# export DISABLE_AUTO_TITLE="true"
+# Set to 'true' to disable auto setting the tab and window titles.
+export DISABLE_AUTO_TITLE='false'
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Example format: plugins=(rails git textmate ruby lighthouse)
+# Set the plugins to load (see $ZSH/plugins/).
+# Example: plugins=(rails git textmate ruby lighthouse)
 plugins=(git)
 
-source $ZSH/oh-my-zsh.sh
+source "$ZSH/oh-my-zsh.sh"
 
 # Customize to your needs...
+

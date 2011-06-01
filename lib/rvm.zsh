@@ -1,7 +1,8 @@
-# get the name of the branch we are on
+# Get the name of the current branch.
 function rvm_prompt_info() {
-  ruby_version=$(~/.rvm/bin/rvm-prompt 2> /dev/null) || return
-  echo "($ruby_version)"
+  local ruby_version=$(~/.rvm/bin/rvm-prompt 2> /dev/null)
+  if [[ -n "$ruby_version" ]]; then
+    echo "($ruby_version)"
+  fi
 }
-
 

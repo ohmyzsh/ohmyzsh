@@ -26,10 +26,10 @@ if [[ "$DISABLE_COLOR" != "true" ]]; then
   ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[magenta]%} ➜"
   ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[yellow]%} ═"
   ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[cyan]%} ✭"
-else 
+else
   MODE_INDICATOR="❮❮❮"
   local return_status="%(?::⏎)"
-  
+
   PROMPT='%c$(git_prompt_info) %(!.#.❯) '
 
   ZSH_THEME_GIT_PROMPT_PREFIX=" git:"

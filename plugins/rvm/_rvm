@@ -34,7 +34,7 @@ _arguments -C \
 
 case $state in
 	cmds)
-		cmds=( 
+		cmds=(
             "version:show the rvm version installed in rvm_path"
             "use:setup current shell to use a specific ruby version"
             "reload:reload rvm source itself (useful after changing rvm source)"
@@ -116,7 +116,7 @@ case $state in
 				if (( CURRENT == 3 )); then
 					_values 'package_commands' \
                         'install' \
-                        'uninstall'  
+                        'uninstall'
 				else
 					_values 'packages' \
                         'readline' \

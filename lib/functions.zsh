@@ -1,10 +1,10 @@
-function zsh_stats() {
+function history-stat() {
   history | awk '{print $2}' | sort | uniq -c | sort -rn | head
 }
 
-function take() {
-  mkdir -p $1
-  cd $1
+function mkdcd() {
+  mkdir -p "$1"
+  cd "$1"
 }
 
 function cdll() {
@@ -30,12 +30,16 @@ function popdll() {
   ls -lFhA
 }
 
-function grab() {
-  sudo chown -R ${USER} ${1:-.}
+function gown() {
+  sudo chown -R "${USER}" "${1:-.}"
 }
 
 function reload() {
-  source "$HOME/.zshrc"
+  local zshrc="$HOME/.zshrc"
+  if [[ -n "$1" ]]; then
+    zshrc="$1"
+  fi
+  source "$zshrc"
 }
 
 function calc() {
@@ -43,14 +47,14 @@ function calc() {
 }
 
 function pmine() {
-  ps $@ -u $USER -o pid,%cpu,%mem,command
+  ps "$@" -u "$USER" -o pid,%cpu,%mem,command
 }
 
 function findexec() {
-  find . -type f -iname '*'${1:-}'*' -exec ${2:-file} {} \;
+  find . -type f -iname "*${1:-}*" -exec "${2:-file}" {} \;
 }
 
 function httpserve() {
-  python -m SimpleHTTPServer
+  python -m SimpleHTTPServer "$@"
 }
 
