@@ -111,7 +111,7 @@ update__GIT_PROMPT_INFO ()
 
     local _prompt="$b$r$s$i$p"
     # add ( ) around _prompt:
-    if [ $f = 'yes' ]; then
+    if [ "$f" = 'yes' ]; then
         _prompt="($_prompt)"
     elif [ "$u" = "yes" ]; then
         _prompt="$_Cu_dirty_($_prompt$_Cu_dirty_)"

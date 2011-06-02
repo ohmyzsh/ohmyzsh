@@ -40,7 +40,7 @@ alias ghhhh="git log --graph --stat -p --full-diff $pretty_format_medium"; compd
 
 # Git and svn mix
 alias git-svn-dcommit-push='git svn dcommit && git push github master:svntrunk'
-compdef git-svn-dcommit-push=git
+compdef _git git-svn-dcommit-push=git
 
 #
 # Will return the current branch name
@@ -53,8 +53,8 @@ function current_branch() {
 
 # these aliases take advantage of the previous function
 alias ggpull='git pull origin $(current_branch)'
-compdef ggpull=git
+compdef _git ggpull=git
 alias ggpush='git push origin $(current_branch)'
-compdef ggpush=git
+compdef _git ggpush=git
 alias ggpnp='git pull origin $(current_branch) && git push origin $(current_branch)'
-compdef ggpnp=git
+compdef _git ggpnp=git
