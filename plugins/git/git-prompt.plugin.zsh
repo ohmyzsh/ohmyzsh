@@ -148,9 +148,7 @@
 #     
 #         local _prompt="$b$r$i$s$p"
 #         # add ( ) around _prompt:
-#         if [ $f = 'yes' ]; then
-#             _prompt="($_prompt)"
-#         elif [ "$u" = "yes" ]; then
+#         if [ "$u" = "yes" ]; then
 #             _prompt="$_Cu_dirty_($_prompt$_Cu_dirty_)"
 #         elif [ "$u" = "no" ]; then
 #             _prompt="$_Cu_clean_($_prompt$_Cu_clean_)"
@@ -539,11 +537,11 @@ _git_prompt__dirty_state ()
         if [[ "$line" = \?\?* ]]; then
             GIT_PROMPT_DIRTY_STATE_WORKTREE_UNTRACKED='yes'
         fi
-        if [[ "$line" = \ M* ]]; then
+        if [[ "$line" = ?M* ]]; then
             GIT_PROMPT_DIRTY_STATE_WORKTREE_MODIFIED='yes'
             GIT_PROMPT_DIRTY_STATE_WORKTREE_DIRTY='yes'
         fi
-        if [[ "$line" = \ D* ]]; then
+        if [[ "$line" = ?D* ]]; then
             GIT_PROMPT_DIRTY_STATE_WORKTREE_DELETED='yes'
             GIT_PROMPT_DIRTY_STATE_WORKTREE_DIRTY='yes'
         fi
