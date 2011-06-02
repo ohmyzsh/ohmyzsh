@@ -1,3 +1,12 @@
+# ------------------------------------------------------------------------------
+#          FILE:  ashleydev.theme.zsh
+#   DESCRIPTION:  oh-my-zsh prompt theme, shows vi mode, last shell return code,
+#                 and verbose git info.
+#        AUTHOR:  Ashley Dev (the.ashley.dev+zsh-theme@gmail.com)
+#       VERSION:  2.1
+#    SCREENSHOT:  
+# ------------------------------------------------------------------------------
+
 # NOTE: make sure to add 'git' to your list of oh-my-zsh plugins (in your
 # ~/.zshrc), otherwise the git prompt info will not be shown.
 
