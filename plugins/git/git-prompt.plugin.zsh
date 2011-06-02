@@ -12,152 +12,49 @@
 # Add 'git' to your list of oh-my-zsh plugins (in your .zshrc) otherwise this
 # git prompt info will not show up in your prompt.
 #
-# This example shows some of the things you can do with this plugin.  This is
-# how the author uses it:
+# This simple example shows some of the things you can do with this plugin.
+# (See the ashleydev theme for more complex usage.)
 # ---------------------- SAMPLE THEME FILE ------------------------
 #
 #     # this is a simple example PROMPT with only git
 #     # info from this plugin in it:
 #     PROMPT='$__GIT_PROMPT_INFO# '
 # 
-#     # Set GIT_PROMPT_SHORTCIRCUIT='off' to turn the
-#     # short-circuit logic off.  The short-circuit
-#     # logic will turn off the showing of dirty
-#     # state in your git prompt if ctrl-c is pressed
-#     # while the prompt is updating the dirty state
-#     # info.  Gathering dirty-state info can take a
-#     # long time on large repositories, so if you
-#     # find that your prompt is taking for ever to
-#     # return, and you press ctrl-c, the short-
-#     # circuit logic will turn off the showing of
-#     # dirty state for this repository (locally) and
-#     # let you know, that way you won't be slowed
-#     # down waiting for your prompt in large git
-#     # repositories.
 #     #GIT_PROMPT_SHORTCIRCUIT='off'
 #     
-#     GIT_PROMPT_SHOWUPSTREAM="verbose"
-#     #GIT_PROMPT_SHOWREBASEINFO='off'
-#     #GIT_PROMPT_SHOWBRANCH='off'
-#     #GIT_PROMPT_SHOWSTASHSTATE='off'
-#     #GIT_PROMPT_SHORTCIRCUIT='off'
-#     #GIT_PROMPT_SHOWDIRTYSTATE='off'
-#
-#     # Some color settings for my prompt format
-#     # '_C' for color:
-#     if [[ "$DISABLE_COLOR" != "true" ]]; then
-#         local _Cerror_="%{$fg[yellow]%}"            # bad (empty) .git/ directory
-#         local _Cb_new_repo_="%{$fg_bold[default]%}" # branch color of new repo
-#         local _Cb_clean_="%{$fg_no_bold[green]%}"   # branch color when clean
-#         local _Cb_dirty_="%{$fg_no_bold[red]%}"     # branch color when dirty
-#         local _Cr_="%{$bold_color$fg[yellow]%}"     # rebase info
-#         local _Ci_="%{$bold_color$fg[red]%}"        # index info
-#         local _Cu_clean_=""                         # untracked files state when clean
-#         local _Cu_dirty_="%{$fg_bold[red]%}"        # untracked files state when dirty
-#         local _Cp_="%{${fg[cyan]}%}"                # upstream info
-#         local _Cs_=""                               # stash state
-#         # 'R'eset formating
-#         local R="%{$terminfo[sgr0]%}"
-#     fi
-#
 #     # GIT_PROMPT_INFO_FUNC must be set to the
 #     # function that defines your prompt info
 #     # in order to turn this plugin on.
-#     # $GIT_PROMPT_INFO_FUNC to be called when the
-#     # git prompt info variable needs to be updated.
 #     GIT_PROMPT_INFO_FUNC='update__GIT_PROMPT_INFO'
 #
-#     # update__GIT_PROMPT_INFO creates the format and
-#     # content of the git prompt info and puts the
-#     # result in $__GIT_PROMPT_INFO.  Which you can
-#     # use in your $PROMPT (see above).  This is an
-#     # example of some of the ways you can set up
-#     # your prompt with this plugin.
-#     #
-#     # NOTE: This function must set a global variable
-#     # (with the your git prompt format) that you
-#     # include in your PROMPT string.
-#     # It cannot echo this info as in:
-#     #     PROMPT="$(update__GIT_PROMPT_INFO)"
-#     # or the short-circuit logic will not work.
-#     #
 #     local __GIT_PROMPT_INFO=''
 #     update__GIT_PROMPT_INFO ()
 #     {
-#         local g="$(_git_promt__git_dir)"
-#         # short circuit if we're not in a git repo:
-#         if [ -z "$g" ]; then
-#             __GIT_PROMPT_INFO=''
-#             return
-#         fi
-#     
-#         _git_prompt__stash
-#         local s=$GIT_PROMPT_STASH_STATE_DIRTY
-#     
-#         _git_prompt__upstream
-#         local p=$GIT_PROMPT_UPSTREAM_STATE
-#     
 #         _git_prompt__branch
 #         local b=$GIT_PROMPT_BRANCH
-#     
-#         _git_prompt__rebase_info
-#         local r=$GIT_PROMPT_REBASE_INFO
 #     
 #         _git_prompt__dirty_state
 #         local w=$GIT_PROMPT_DIRTY_STATE_WORKTREE_DIRTY
 #         local i=$GIT_PROMPT_DIRTY_STATE_INDEX_DIRTY
-#         local u=$GIT_PROMPT_DIRTY_STATE_WORKTREE_UNTRACKED
-#         local f=$GIT_PROMPT_DIRTY_STATE_FRESH_REPO
 #     
-#         if [ -z "$b$i$w$u" ]; then
-#             if [ -n "$g" ]; then
-#                 __GIT_PROMPT_INFO="$R$_Cerror_(Error: bad ./$g dir)$R"
-#                 return
-#             fi
-#         fi
-#     
-#         if [ "$s" = 'yes' ]; then
-#             s="$_Cs_\$$R"
-#         else
-#             s=""
-#         fi
-#     
-#         if [ -n "$p" ]; then
-#             p="$_Cp_$p$R"
-#         fi
-#     
+#         # Reset color
+#         local R="%{$terminfo[sgr0]%}"
+#
 #         if [ "$i" = "yes" ]; then
-#             i="$_Ci_+$R"
+#             i="%{$bold_color$fg[red]%}+$R"
 #         else
 #             i=""
 #         fi
 #     
 #         if [ -n "$b" ]; then
-#             if [ "$f" = "yes" ]; then
-#                 # this is a fresh repo, nothing here...
-#                 b="$_Cb_new_repo_$b$R"
-#             elif [ "$w" = 'yes' ]; then
-#                 b="$_Cb_dirty_$b$R"
+#             if [ "$w" = 'yes' ]; then
+#                 b="%{$fg_no_bold[red]%}$b$R"
 #             elif [ "$w" = 'no' ]; then
-#                 b="$_Cb_clean_$b$R"
+#                 b="%{$fg_no_bold[green]%}$b$R"
 #             fi
 #         fi
 #     
-#         if [ -n "$r" ]; then
-#             r="$_Cr_$r$R"
-#         fi
-#     
-#         local _prompt="$b$r$i$s$p"
-#         # add ( ) around _prompt:
-#         if [ "$u" = "yes" ]; then
-#             _prompt="$_Cu_dirty_($_prompt$_Cu_dirty_)"
-#         elif [ "$u" = "no" ]; then
-#             _prompt="$_Cu_clean_($_prompt$_Cu_clean_)"
-#         else
-#             _prompt="($_prompt$)"
-#         fi
-#     
-#         __GIT_PROMPT_INFO="$R$_prompt$R"
+#         __GIT_PROMPT_INFO="$R($b$i)$R"
 #     }
 # -----------------------------------------------------------------
 #
@@ -438,6 +335,40 @@ _git_prompt__stash ()
 
 
 # This is the short-circuit logic:
+#
+# Set GIT_PROMPT_SHORTCIRCUIT='off' to turn the short-circuit logic off.
+#
+# Gathering dirty-state info can take a long time on large repositories.  The
+# short-circuit logic is engaged by pressing ctrl-c while the prompt is trying
+# to gather information about a large repository.  When this happens the
+# short-circuit logic will display a warning and turn off the showing of dirty
+# state in your git prompt (for the local repo only).
+#
+# NOTE: To make the short-circuit logic work, the GIT_PROMPT_INFO_FUNC function
+# must set a global variable (with your git prompt format), rather than echo it.
+#    Correct:
+#
+#       PROMPT='$__GIT_PROMPT_INFO > '
+#
+#       # this function sets $__GIT_PROMPT_INFO
+#       function update_prompt_func ()
+#       {
+#           #...
+#           __GIT_PROMPT_INFO="$info"
+#       }
+#       GIT_PROMPT_INFO_FUNC=update_prompt_func
+#
+#   Incorrect:
+#       
+#       PROMPT='$(update_prompt_func) > '
+#
+#       function update_prompt_func ()
+#       {
+#           #...
+#           echo "$info"
+#       }
+#       GIT_PROMPT_INFO_FUNC=update_prompt_func
+#
 local _big_repo='init'
 __git_prompt_shortcircuit ()
 {
