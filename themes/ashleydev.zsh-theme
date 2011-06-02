@@ -1,51 +1,47 @@
-# NOTE: make sure to add 'git-prompt' to your list of oh-my-zsh plugins (in your
+# NOTE: make sure to add 'git' to your list of oh-my-zsh plugins (in your
 # ~/.zshrc), otherwise the git prompt info will not be shown.
-#
-#-------------------- PROMPT definition: ----------------------
-# Set the prompt.
 
-# Reset formating
-local R="%{$terminfo[sgr0]%}"
+#-------------------- Colors ----------------------
+# Colors ('_C' for color):
+if [[ "$DISABLE_COLOR" != "true" ]]; then
+    # git prompt info colors:
+    local _Cerror_="%{$fg[yellow]%}"            # bad (empty) .git/ directory
+    local _Cb_new_repo_="%{$fg_bold[default]%}" # branch color of new repo
+    local _Cb_clean_="%{$fg_no_bold[green]%}"   # branch color when clean
+    local _Cb_dirty_="%{$fg_no_bold[red]%}"     # branch color when dirty
+    local _Cr_="%{$bold_color$fg[yellow]%}"     # rebase info
+    local _Ci_="%{$bold_color$fg[red]%}"        # index info
+    local _Cu_clean_=""                         # untracked files state when clean
+    local _Cu_dirty_="%{$fg_bold[red]%}"        # untracked files state when dirty
+    local _Cp_="%{${fg[cyan]}%}"                # upstream info
+    local _Cs_=""                               # stash state
 
-# special colors for privileged users (root)
-local user_="%(!.%{$fg_bold[yellow]$bg[red]%}.%{$fg_bold[cyan]%})%n$R"
-local host_="%(!.%{$fg[red]%}.%{$fg_bold[blue]%})%m$R"
-local path_="%(!.%{$fg_bold[white]%}.%{$fg_bold[white]%})%~$R"
-local jobs_="%(1j.%{$fg[blue]%}%j$R.)"
+    # Reset formating:
+    local R="%{$terminfo[sgr0]%}"
 
-PROMPT='$user_$host_$path_ $__GIT_PROMPT_INFO$jobs_# '
+    # PROMPT colors:
+    local _Cuser_root_="%{$fg_bold[yellow]$bg[red]%}"
+    local _Chost_root_="%{$fg[red]%}"
+    local _Cpath_root_="%{$fg_bold[white]%}"
+    local _Cuser_="%{$fg_bold[cyan]%}"
+    local _Chost_="%{$fg_bold[blue]%}"
+    local _Cpath_="%{$fg_bold[white]%}"
+    local _Cjobs_="%{$fg[blue]%}"
 
-local date_format_="%D{%a %b %d}, %*"
-local date_="%{$fg[green]%}[$date_format_]"
-local return_code_="%(?..%{$fg[red]%}%? ↵ )"
+    # RPROMPT colors:
+    local _Cdate_="%{$fg[green]%}"
+    local _Creturn_code_="%{$fg[red]%}"
+    local _Cvi_mode_="%{$fg_bold[cyan]%}"
+fi
 
-RPROMPT='$return_code_$R$date_$R'
-
-# use the vi-mode oh-my-zsh plugin to get this:
-MODE_INDICATOR="%{$fg_bold[cyan]%}-- CMD MODE -- $R"
-
-#
 #-----------------------------------------------------
 # git prompt info:
 
-# The git-prompt plugin will cause $GIT_PROMPT_INFO_FUNC to be called
-# when the git prompt info needs to be updated.
+# The git prompt plugin will cause $GIT_PROMPT_INFO_FUNC to be called
+# when $__GIT_PROMPT_INFO needs to be updated.
 GIT_PROMPT_INFO_FUNC="update__GIT_PROMPT_INFO"
-
 GIT_PROMPT_SHOWUPSTREAM="verbose"
 GIT_PROMPT_SHORTCIRCUIT='on'
-
-# git_prompt_info colors ('_C' for color):
-local _Cerror_="%{$fg[yellow]%}"            # bad (empty) .git/ directory
-local _Cb_new_repo_="%{$fg_bold[default]%}" # branch color of new repo
-local _Cb_clean_="%{$fg_no_bold[green]%}"   # branch color when clean
-local _Cb_dirty_="%{$fg_no_bold[red]%}"     # branch color when dirty
-local _Cr_="%{$bold_color$fg[yellow]%}"     # rebase info
-local _Ci_="%{$bold_color$fg[red]%}"        # index info
-local _Cu_clean_=""                         # untracked files state when clean
-local _Cu_dirty_="%{$fg_bold[red]%}"        # untracked files state when dirty
-local _Cp_="%{${fg[cyan]}%}"                # upstream info
-local _Cs_=""                               # stash state
 
 local __GIT_PROMPT_INFO=''
 # will set __GIT_PROMPT_INFO
@@ -126,3 +122,23 @@ update__GIT_PROMPT_INFO ()
 
     __GIT_PROMPT_INFO="$R$_prompt$R"
 }
+
+
+#-------------------- PROMPT definition: ----------------------
+#
+local user_="%(!.$_Cuser_root_.$_Cuser_)%n$R"
+local host_="%(!.$_Chost_root_.$_Chost_)%m$R"
+local path_="%(!.$_Cpath_root_.$_Cpath_)%~$R"
+local jobs_="%(1j.$_Cjobs_%j$R.)"
+
+PROMPT='$user_$host_$path_ $__GIT_PROMPT_INFO$jobs_# '
+
+local date_format_='%D{%a %b %d}, %*'
+local date_="${_Cdate_}[$date_format_]$R"
+local return_code_="%(?..$_Creturn_code_%? ↵ )$R"
+
+RPROMPT='$return_code_$date_'
+
+# use the vi-mode oh-my-zsh plugin to get this:
+MODE_INDICATOR="${_Cvi_mode_}-- CMD MODE -- $R"
+

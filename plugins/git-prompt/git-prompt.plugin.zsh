@@ -3,14 +3,14 @@
 # This example shows some of the things you in this plugin.  This is how the
 # author uses it:
 #
-# NOTE: make sure to add 'git-prompt' to your list of oh-my-zsh plugins (in your
-# .zshrc) otherwise the git prompt info will not show up in your prompt.
+# NOTE: make sure to add 'git' to your list of oh-my-zsh plugins (in your
+# .zshrc) otherwise this git prompt info will not show up in your prompt.
 #
 # ---------------------- SAMPLE THEME FILE ------------------------
 #
-#     # this is a simple example PROMPT with only git info in it:
+#     # this is a simple example PROMPT with only git
+#     # info from this plugin in it:
 #     PROMPT='$__GIT_PROMPT_INFO# '
-#
 # 
 #     # Set GIT_PROMPT_SHORTCIRCUIT='off' to turn the
 #     # short-circuit logic off.  The short-circuit
@@ -19,9 +19,9 @@
 #     # while the prompt is updating the dirty state
 #     # info.  Gathering dirty-state info can take a
 #     # long time on large repositories, so if you
-#     # find that you're prompt is taking for ever to
-#     # show up, and you press ctrl-c, the short-
-#     # circuit logic will turn of the showing of
+#     # find that your prompt is taking for ever to
+#     # return, and you press ctrl-c, the short-
+#     # circuit logic will turn off the showing of
 #     # dirty state for this repository (locally) and
 #     # let you know, that way you won't be slowed
 #     # down waiting for your prompt in large git
@@ -30,38 +30,41 @@
 #     
 #     # GIT_PROMPT_INFO_FUNC must be set to the
 #     # function that defines your prompt info
-#     # in order to turn the git-prompt plugin on.
-#     # $ZSH/lib/git-prompt.zsh will cause
+#     # in order to turn this plugin on.
 #     # $GIT_PROMPT_INFO_FUNC to be called when the
-#     # git prompt info needs to be updated.
+#     # git prompt info variable needs to be updated.
 #     GIT_PROMPT_INFO_FUNC='update__GIT_PROMPT_INFO'
 #
 #     GIT_PROMPT_SHOWUPSTREAM="verbose"
 #
-#     # Some color settings for the format
+#     # Some color settings for my prompt format
 #     # '_C' for color:
-#     local _Cerror_="%{$fg[yellow]%}"            # bad (empty) .git/ directory
-#     local _Cb_new_repo_="%{$fg_bold[default]%}" # branch color of new repo
-#     local _Cb_clean_="%{$fg_no_bold[green]%}"   # branch color when clean
-#     local _Cb_dirty_="%{$fg_no_bold[red]%}"     # branch color when dirty
-#     local _Cr_="%{$bold_color$fg[yellow]%}"     # rebase info
-#     local _Ci_="%{$bold_color$fg[red]%}"        # index info
-#     local _Cu_clean_=""                         # untracked files state when clean
-#     local _Cu_dirty_="%{$fg_bold[red]%}"        # untracked files state when dirty
-#     local _Cp_="%{${fg[cyan]}%}"                # upstream info
-#     local _Cs_=""                               # stash state
-#     # 'R'eset formating
-#     local R="%{$terminfo[sgr0]%}"
+#     if [[ "$DISABLE_COLOR" != "true" ]]; then
+#         local _Cerror_="%{$fg[yellow]%}"            # bad (empty) .git/ directory
+#         local _Cb_new_repo_="%{$fg_bold[default]%}" # branch color of new repo
+#         local _Cb_clean_="%{$fg_no_bold[green]%}"   # branch color when clean
+#         local _Cb_dirty_="%{$fg_no_bold[red]%}"     # branch color when dirty
+#         local _Cr_="%{$bold_color$fg[yellow]%}"     # rebase info
+#         local _Ci_="%{$bold_color$fg[red]%}"        # index info
+#         local _Cu_clean_=""                         # untracked files state when clean
+#         local _Cu_dirty_="%{$fg_bold[red]%}"        # untracked files state when dirty
+#         local _Cp_="%{${fg[cyan]}%}"                # upstream info
+#         local _Cs_=""                               # stash state
+#         # 'R'eset formating
+#         local R="%{$terminfo[sgr0]%}"
+#     fi
 #
 #     # This function creates the format and content
-#     # of the git prompt info.  It shows some of the
-#     # ways you can set up your prompt with this
-#     # plugin.
+#     # of the git prompt info and puts the result
+#     # in $__GIT_PROMPT_INFO.  Which you can use in
+#     # your $PROMPT (see above).  This is an
+#     # example of some of the ways you can set up
+#     # your prompt with this plugin.
 #     #
-#     # This function must set a global variable (with
-#     # the your git prompt format) that you include in
-#     # your PROMPT string.
-#     # NOTE: it cannot echo this info as in:
+#     # NOTE: This function must set a global variable
+#     # (with the your git prompt format) that you
+#     # include in your PROMPT string.
+#     # It cannot echo this info as in:
 #     #     PROMPT="$(update__GIT_PROMPT_INFO)"
 #     # or the short-circuit logic will not work.
 #     #
@@ -69,6 +72,7 @@
 #     update__GIT_PROMPT_INFO ()
 #     {
 #         local g="$(_git_promt__git_dir)"
+#         # short circuit if we're not in a git repo:
 #         if [ -z "$g" ]; then
 #             __GIT_PROMPT_INFO=''
 #             return
@@ -154,7 +158,8 @@
 #
 
 # _git_promt__git_dir accepts 0 or 1 arguments (i.e., location)
-# echos location of .git repo
+# echos the location of .git repo.
+# Useful for quickly figuring out if cwd is under a git repo.
 _git_promt__git_dir ()
 {
     if [ -z "${1-}" ]; then
