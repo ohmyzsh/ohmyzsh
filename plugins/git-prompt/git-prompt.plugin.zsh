@@ -1,11 +1,18 @@
+# ------------------------------------------------------------------------------
+#          FILE:  git-prompt.plugin.zsh
+#   DESCRIPTION:  oh-my-zsh git information for your PROMPT.
+#        AUTHOR:  Ashley Dev (the.ashley.dev+git-prompt@gmail.com)
+#       VERSION:  2.1
+#    SCREENSHOT:  
+# ------------------------------------------------------------------------------
+
 # USAGE:
 #
-# This example shows some of the things you in this plugin.  This is how the
-# author uses it:
+# Add 'git' to your list of oh-my-zsh plugins (in your .zshrc) otherwise this
+# git prompt info will not show up in your prompt.
 #
-# NOTE: make sure to add 'git' to your list of oh-my-zsh plugins (in your
-# .zshrc) otherwise this git prompt info will not show up in your prompt.
-#
+# This example shows some of the things you can do with this plugin.  This is
+# how the author uses it:
 # ---------------------- SAMPLE THEME FILE ------------------------
 #
 #     # this is a simple example PROMPT with only git
@@ -26,16 +33,14 @@
 #     # let you know, that way you won't be slowed
 #     # down waiting for your prompt in large git
 #     # repositories.
-#     GIT_PROMPT_SHORTCIRCUIT='on'
+#     #GIT_PROMPT_SHORTCIRCUIT='off'
 #     
-#     # GIT_PROMPT_INFO_FUNC must be set to the
-#     # function that defines your prompt info
-#     # in order to turn this plugin on.
-#     # $GIT_PROMPT_INFO_FUNC to be called when the
-#     # git prompt info variable needs to be updated.
-#     GIT_PROMPT_INFO_FUNC='update__GIT_PROMPT_INFO'
-#
 #     GIT_PROMPT_SHOWUPSTREAM="verbose"
+#     #GIT_PROMPT_SHOWREBASEINFO='off'
+#     #GIT_PROMPT_SHOWBRANCH='off'
+#     #GIT_PROMPT_SHOWSTASHSTATE='off'
+#     #GIT_PROMPT_SHORTCIRCUIT='off'
+#     #GIT_PROMPT_SHOWDIRTYSTATE='off'
 #
 #     # Some color settings for my prompt format
 #     # '_C' for color:
@@ -54,10 +59,17 @@
 #         local R="%{$terminfo[sgr0]%}"
 #     fi
 #
-#     # This function creates the format and content
-#     # of the git prompt info and puts the result
-#     # in $__GIT_PROMPT_INFO.  Which you can use in
-#     # your $PROMPT (see above).  This is an
+#     # GIT_PROMPT_INFO_FUNC must be set to the
+#     # function that defines your prompt info
+#     # in order to turn this plugin on.
+#     # $GIT_PROMPT_INFO_FUNC to be called when the
+#     # git prompt info variable needs to be updated.
+#     GIT_PROMPT_INFO_FUNC='update__GIT_PROMPT_INFO'
+#
+#     # update__GIT_PROMPT_INFO creates the format and
+#     # content of the git prompt info and puts the
+#     # result in $__GIT_PROMPT_INFO.  Which you can
+#     # use in your $PROMPT (see above).  This is an
 #     # example of some of the ways you can set up
 #     # your prompt with this plugin.
 #     #
