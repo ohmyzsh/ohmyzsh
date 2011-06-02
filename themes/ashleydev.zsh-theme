@@ -4,7 +4,8 @@
 #                 and verbose git info.
 #        AUTHOR:  Ashley Dev (the.ashley.dev+zsh-theme@gmail.com)
 #       VERSION:  2.1
-#    SCREENSHOT:  
+#    SCREENSHOT:  http://i.imgur.com/Yw1KG.png
+#                 http://i.imgur.com/wx6MU.png
 # ------------------------------------------------------------------------------
 
 # NOTE: make sure to add 'git' to your list of oh-my-zsh plugins (in your

@@ -3,7 +3,8 @@
 #   DESCRIPTION:  oh-my-zsh git information for your PROMPT.
 #        AUTHOR:  Ashley Dev (the.ashley.dev+git-prompt@gmail.com)
 #       VERSION:  2.1
-#    SCREENSHOT:  
+#    SCREENSHOT:  http://i.imgur.com/Yw1KG.png
+#                 http://i.imgur.com/wx6MU.png
 # ------------------------------------------------------------------------------
 
 # USAGE:
