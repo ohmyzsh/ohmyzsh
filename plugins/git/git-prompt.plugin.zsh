@@ -146,7 +146,7 @@
 #             r="$_Cr_$r$R"
 #         fi
 #     
-#         local _prompt="$b$r$s$i$p"
+#         local _prompt="$b$r$i$s$p"
 #         # add ( ) around _prompt:
 #         if [ $f = 'yes' ]; then
 #             _prompt="($_prompt)"
@@ -538,7 +538,6 @@ _git_prompt__dirty_state ()
 
         if [[ "$line" = \?\?* ]]; then
             GIT_PROMPT_DIRTY_STATE_WORKTREE_UNTRACKED='yes'
-            GIT_PROMPT_DIRTY_STATE_WORKTREE_DIRTY='yes'
         fi
         if [[ "$line" = \ M* ]]; then
             GIT_PROMPT_DIRTY_STATE_WORKTREE_MODIFIED='yes'
@@ -577,6 +576,8 @@ PERIOD=15
 periodic_functions+="_git_prompt_info"
 
 _git_prompt_info () { $GIT_PROMPT_INFO_FUNC }
+_git_prompt_info
+
 _git_prompt__precmd_update_git_vars()
 {
     if [[ $ZSH_VERSION = *\ 4.2* ]]; then

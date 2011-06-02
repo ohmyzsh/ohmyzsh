@@ -109,7 +109,7 @@ update__GIT_PROMPT_INFO ()
         r="$_Cr_$r$R"
     fi
 
-    local _prompt="$b$r$s$i$p"
+    local _prompt="$b$r$i$s$p"
     # add ( ) around _prompt:
     if [ "$f" = 'yes' ]; then
         _prompt="($_prompt)"
