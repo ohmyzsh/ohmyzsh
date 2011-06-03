@@ -2,7 +2,7 @@
 #          FILE:  git-prompt.plugin.zsh
 #   DESCRIPTION:  oh-my-zsh git information for your PROMPT.
 #        AUTHOR:  Ashley Dev (the.ashley.dev+git-prompt@gmail.com)
-#       VERSION:  2.1
+#       VERSION:  3.0
 #    SCREENSHOT:  http://i.imgur.com/Yw1KG.png
 #                 http://i.imgur.com/wx6MU.png
 # ------------------------------------------------------------------------------
@@ -18,43 +18,37 @@
 #
 #   # this is a simple example PROMPT with only git
 #   # info from this plugin in it:
-#   PROMPT='$_GIT_PROMPT_INFO# '
+#   PROMPT='$(git_prompt_info2)# '
 # 
-#   #GIT_PROMPT_SHORTCIRCUIT='off'
-#   
-#   # GIT_PROMPT_INFO_FUNC must be set to the
-#   # function that defines your prompt info
-#   # in order to turn this plugin on.
-#   GIT_PROMPT_INFO_FUNC='update__GIT_PROMPT_INFO'
-#
-#   local _GIT_PROMPT_INFO=''
-#   update__GIT_PROMPT_INFO ()
+#   # if you want to override the default format you can define your own
+#   # _git_prompt_info() function that sets $_GIT_PROMPT_INFO with your format
+#   _git_prompt_info ()
 #   {
 #     git_prompt__branch
-#     local b=$GIT_PROMPT_BRANCH
+#     local branch_=$GIT_PROMPT_BRANCH
 #   
 #     git_prompt__dirty_state
-#     local w=$GIT_PROMPT_DIRTY_STATE_WORKTREE_DIRTY
-#     local i=$GIT_PROMPT_DIRTY_STATE_INDEX_DIRTY
+#     local work_=$GIT_PROMPT_DIRTY_STATE_WORKTREE_DIRTY
+#     local index_=$GIT_PROMPT_DIRTY_STATE_INDEX_DIRTY
 #   
 #     # Reset color
 #     local R="%{$terminfo[sgr0]%}"
 #
-#     if [[ "$i" = "yes" ]]; then
-#       i="%{$bold_color$fg[red]%}+$R"
+#     if [[ "$index_" = "yes" ]]; then
+#       index_="%{$bold_color$fg[red]%}+$R"
 #     else
-#       i=""
+#       index_=""
 #     fi
 #   
-#     if [[ -n "$b" ]]; then
-#       if [[ "$w" = 'yes' ]]; then
-#         b="%{$fg_no_bold[red]%}$b$R"
-#       elif [[ "$w" = 'no' ]]; then
-#         b="%{$fg_no_bold[green]%}$b$R"
+#     if [[ -n "$branch_" ]]; then
+#       if [[ "$work_" = 'yes' ]]; then
+#         branch_="%{$fg_no_bold[red]%}$branch_$R"
+#       elif [[ "$work_" = 'no' ]]; then
+#         branch_="%{$fg_no_bold[green]%}$branch_$R"
 #       fi
 #     fi
 #   
-#     __GIT_PROMPT_INFO="$R($b$i)$R"
+#     _GIT_PROMPT_INFO="$R($branch_$index_)$R"
 #   }
 # -----------------------------------------------------------------
 #
@@ -87,15 +81,17 @@ git_prompt__git_dir ()
 # sets GIT_PROMPT_UPSTREAM_STATE
 #
 # output format:
-# A "<" indicates you are behind, ">" indicates you are ahead, "<>"
-# indicates you have diverged, "=" indicates no divergence, and "" indicates
-# there is no upstream or this feature is turned 'off' (see below).
+# A "-1" indicates you are behind by one commit, "+3" indicates you are ahead by
+# 3 commits, "-1+3" indicates you have diverged, "=" indicates no divergence,
+# and "" indicates there is no upstream or this feature is turned 'off' (see
+# below).
 #
 # You can control behaviour by setting GIT_PROMPT_SHOWUPSTREAM to a
 # space-separated list of values:
 #     off           no output
-#     verbose       show number of commits ahead/behind (+/-) upstream instead
-#                   of using "<" and ">".
+#     simple        Instead of '+/-', a "<" indicates you are behind, ">"
+#                   indicates you are ahead, "<>" indicates you have diverged,
+#                   "=" indicates no divergence.
 #     legacy        don't use the '--count' option available in recent
 #                   versions of git-rev-list
 #     git           always compare HEAD to @{upstream}
@@ -104,7 +100,7 @@ git_prompt__git_dir ()
 # if it can find one, or @{upstream} otherwise.  Once you have
 # set GIT_PROMPT_SHOWUPSTREAM, you can override it on a
 # per-repository basis by setting the prompt.showUpstream config
-# variable (i.e. `git config prompt.showUpstream 'verbose legacy'`).
+# variable (i.e. `git config prompt.showUpstream 'simple legacy'`).
 #
 # git_prompt__upstream accepts 0 or 1 arguments.  If an argument is given, it
 # must be a string of the form specified above for GIT_PROMPT_SHOWUPSTREAM.
@@ -120,7 +116,7 @@ git_prompt__upstream ()
 
   local key value
   local svn_remote svn_url_pattern count n
-  local upstream=git legacy="" verbose=""
+  local upstream=git legacy="" simple=""
   local p
 
   # get some config options from git-config
@@ -146,8 +142,8 @@ git_prompt__upstream ()
     case "$option" in
     off) return ;;
     git|svn) upstream="$option" ;;
-    verbose) verbose=1 ;;
-    legacy)  legacy=1  ;;
+    simple) simple=1 ;;
+    legacy) legacy=1 ;;
     esac
   done
 
@@ -181,7 +177,7 @@ git_prompt__upstream ()
   fi
 
   # calculate the result
-  if [[ -z "$verbose" ]]; then
+  if [[ -n "$simple" ]]; then
     case "$count" in
     "") # no upstream
       p="" ;;
@@ -228,34 +224,34 @@ git_prompt__rebase_info ()
     return
   fi
 
-  local r=""
-  local g="$(git_prompt__git_dir)"
-  if [[ -n "$g" ]]; then
-    if [[ -f "$g/rebase-merge/interactive" ]]; then
-      r="|REBASE-i"
-    elif [[ -d "$g/rebase-merge" ]]; then
-      r="|REBASE-m"
+  local rebase_=""
+  local dir_="$(git_prompt__git_dir)"
+  if [[ -n "$dir_" ]]; then
+    if [[ -f "$dir_/rebase-merge/interactive" ]]; then
+      rebase_="|REBASE-i"
+    elif [[ -d "$dir_/rebase-merge" ]]; then
+      rebase_="|REBASE-m"
     else
-      if [[ -d "$g/rebase-apply" ]]; then
-        if [[ -f "$g/rebase-apply/rebasing" ]]; then
-          r="|REBASE"
-        elif [[ -f "$g/rebase-apply/applying" ]]; then
-          r="|AM"
+      if [[ -d "$dir_/rebase-apply" ]]; then
+        if [[ -f "$dir_/rebase-apply/rebasing" ]]; then
+          rebase_="|REBASE"
+        elif [[ -f "$dir_/rebase-apply/applying" ]]; then
+          rebase_="|AM"
         else
-          r="|AM/REBASE"
+          rebase_="|AM/REBASE"
         fi
-      elif [[ -f "$g/MERGE_HEAD" ]]; then
-        r="|MERGING"
-      elif [[ -f "$g/CHERRY_PICK_HEAD" ]]; then
-        r="|CHERRY-PICKING"
-      elif [[ -f "$g/BISECT_LOG" ]]; then
-        r="|BISECTING"
+      elif [[ -f "$dir_/MERGE_HEAD" ]]; then
+        rebase_="|MERGING"
+      elif [[ -f "$dir_/CHERRY_PICK_HEAD" ]]; then
+        rebase_="|CHERRY-PICKING"
+      elif [[ -f "$dir_/BISECT_LOG" ]]; then
+        rebase_="|BISECTING"
       fi
 
     fi
   fi
 
-  GIT_PROMPT_REBASE_INFO=$r
+  GIT_PROMPT_REBASE_INFO=$rebase_
 }
 
 # sets GIT_PROMPT_BRANCH
@@ -275,17 +271,17 @@ git_prompt__branch ()
     return
   fi
 
-  local b=""
-  local g="$(git_prompt__git_dir)"
-  if [[ -n "$g" ]]; then
-    if [[ -f "$g/rebase-merge/interactive" ]]; then
-      b="$(cat "$g/rebase-merge/head-name")"
-    elif [[ -d "$g/rebase-merge" ]]; then
-      b="$(cat "$g/rebase-merge/head-name")"
+  local branch_=""
+  local dir_="$(git_prompt__git_dir)"
+  if [[ -n "$dir_" ]]; then
+    if [[ -f "$dir_/rebase-merge/interactive" ]]; then
+      branch_="$(cat "$dir_/rebase-merge/head-name")"
+    elif [[ -d "$dir_/rebase-merge" ]]; then
+      branch_="$(cat "$dir_/rebase-merge/head-name")"
     else
-      b="$(git symbolic-ref HEAD 2>/dev/null)" || {
+      branch_="$(git symbolic-ref HEAD 2>/dev/null)" || {
 
-      b="$(
+      branch_="$(
       case "${GIT_PROMPT_DESCRIBE_STYLE-}" in
         (contains)
           git describe --contains HEAD ;;
@@ -297,21 +293,21 @@ git_prompt__branch ()
           git describe --tags --exact-match HEAD ;;
       esac 2>/dev/null)" ||
 
-        b="$(cut -c1-7 "$g/HEAD" 2>/dev/null)" ||
-        b="$b"
+        branch_="$(cut -c1-7 "$dir_/HEAD" 2>/dev/null)" ||
+        branch_="$branch_"
       }
     fi
-    b=${b##refs/heads/}
+    branch_=${branch_##refs/heads/}
     if [[ "true" = "$(git rev-parse --is-inside-git-dir 2>/dev/null)" ]]; then
       if [[ "true" = "$(git rev-parse --is-bare-repository 2>/dev/null)" ]]; then
-        b="BARE:$b"
+        branch_="BARE:$branch_"
       else
-        b="GIT_DIR!"
+        branch_="GIT_DIR!"
       fi
     fi
   fi
 
-  GIT_PROMPT_BRANCH=$b
+  GIT_PROMPT_BRANCH=$branch_
 }
 
 
@@ -349,32 +345,6 @@ git_prompt__stash ()
 # to gather information about a large repository.  When this happens the
 # short-circuit logic will display a warning and turn off the showing of dirty
 # state in your git prompt (for the local repo only).
-#
-# NOTE: To make the short-circuit logic work, the GIT_PROMPT_INFO_FUNC function
-# must set a global variable (with your git prompt format), rather than echo it.
-#  Correct:
-#
-#     PROMPT='$__GIT_PROMPT_INFO > '
-#
-#     # this function sets $__GIT_PROMPT_INFO
-#     function update_prompt_func ()
-#     {
-#       #...
-#       __GIT_PROMPT_INFO="$info"
-#     }
-#     GIT_PROMPT_INFO_FUNC=update_prompt_func
-#
-#   Incorrect:
-#     
-#     PROMPT='$(update_prompt_func) > '
-#
-#     function update_prompt_func ()
-#     {
-#       #...
-#       echo "$info"
-#     }
-#     GIT_PROMPT_INFO_FUNC=update_prompt_func
-#
 local _big_repo='init'
 __git_prompt_shortcircuit ()
 {
@@ -391,7 +361,7 @@ __git_prompt_shortcircuit ()
       echo '' > /dev/stderr
 
       git config prompt.showDirtyState 'false'
-      $GIT_PROMPT_INFO_FUNC
+      _git_prompt_info
     fi
   fi
 }
@@ -421,8 +391,8 @@ git_prompt__dirty_state ()
     return
   fi
 
-  local g="$(git_prompt__git_dir)"
-  if [[ -z "$g" ]]; then
+  local dir_="$(git_prompt__git_dir)"
+  if [[ -z "$dir_" ]]; then
     return
   fi
   if [[ "$GIT_PROMPT_SHOWDIRTYSTATE" = 'off' ]]; then
@@ -494,6 +464,108 @@ git_prompt__dirty_state ()
   _big_repo=''
 }
 
+#------------------ Default Prompt Format ------------------
+# You can override this by defining your own _git_prompt_info in your theme that
+# sets $_GIT_PROMPT_INFO.
+
+# You can override these colors if you like too.
+
+# Colors ('_C' for color):
+if [[ "$DISABLE_COLOR" != "true" ]]; then
+  # git prompt info colors:
+  local _Cerror_="%{$fg[yellow]%}"                 # bad (empty) .git/ directory
+  local _Cbranch_new_repo_="%{$fg_bold[default]%}" # branch color of new repo
+  local _Cbranch_clean_="%{$fg_no_bold[green]%}"   # branch color when clean
+  local _Cbranch_dirty_="%{$fg_no_bold[red]%}"     # branch color when dirty
+  local _Crebase_="%{$bold_color$fg[yellow]%}"     # rebase info
+  local _Cindex_="%{$bold_color$fg[red]%}"         # index info
+  local _Cuntracked_clean_=""                      # untracked files state when clean
+  local _Cuntracked_dirty_="%{$fg_bold[red]%}"     # untracked files state when dirty
+  local _Cupstream_="%{${fg[cyan]}%}"              # upstream info
+  local _Cstash_=""                                # stash state
+
+  # Reset formating:
+  local R="%{$terminfo[sgr0]%}"
+fi
+
+# sets _GIT_PROMPT_INFO
+_git_prompt_info ()
+{
+  local dir_="$(git_prompt__git_dir)"
+  if [ -z "$dir_" ]; then
+    _GIT_PROMPT_INFO=''
+    return
+  fi
+
+  git_prompt__stash
+  local stash_=$GIT_PROMPT_STASH_STATE_DIRTY
+
+  git_prompt__upstream
+  local upstream_=$GIT_PROMPT_UPSTREAM_STATE
+
+  git_prompt__branch
+  local branch_=$GIT_PROMPT_BRANCH
+
+  git_prompt__rebase_info
+  local rebase_=$GIT_PROMPT_REBASE_INFO
+
+  git_prompt__dirty_state
+  local work_=$GIT_PROMPT_DIRTY_STATE_WORKTREE_DIRTY
+  local index_=$GIT_PROMPT_DIRTY_STATE_INDEX_DIRTY
+  local untracked_=$GIT_PROMPT_DIRTY_STATE_WORKTREE_UNTRACKED
+  local freshy_=$GIT_PROMPT_DIRTY_STATE_FRESH_REPO
+
+  if [ -z "$branch_$index_$work_$untracked_" ]; then
+    if [ -n "$dir_" ]; then
+      _GIT_PROMPT_INFO="$R$_Cerror_(Error: bad ./$dir_ dir)$R"
+      return
+    fi
+  fi
+
+  if [ "$stash_" = 'yes' ]; then
+    stash_="$_Cstash_\$$R"
+  else
+    stash_=""
+  fi
+
+  if [ -n "$upstream_" ]; then
+    upstream_="$_Cupstream_$upstream_$R"
+  fi
+
+  if [ "$index_" = "yes" ]; then
+    index_="$_Cindex_+$R"
+  else
+    index_=""
+  fi
+
+  if [ -n "$branch_" ]; then
+    if [ "$freshy_" = "yes" ]; then
+      # this is a fresh repo, nothing here...
+      branch_="$_Cbranch_new_repo_$branch_$R"
+    elif [ "$work_" = 'yes' ]; then
+      branch_="$_Cbranch_dirty_$branch_$R"
+    elif [ "$work_" = 'no' ]; then
+      branch_="$_Cbranch_clean_$branch_$R"
+    fi
+  fi
+
+  if [ -n "$rebase_" ]; then
+    rebase_="$_Crebase_$rebase_$R"
+  fi
+
+  local _prompt="$branch_$rebase_$index_$stash_$upstream_"
+  # add ( ) around _prompt:
+  if [ "$untracked_" = "yes" ]; then
+    _prompt="$_Cuntracked_dirty_($_prompt$_Cuntracked_dirty_)"
+  elif [ "$untracked_" = "no" ]; then
+    _prompt="$_Cuntracked_clean_($_prompt$_Cuntracked_clean_)"
+  else
+    _prompt="($_prompt)"
+  fi
+
+  _GIT_PROMPT_INFO="$R$_prompt$R"
+}
+
 #------------------ Fast Prompt ------------------
 # This section sets up some functions that get called infrequently as possible
 # and therefore don't slow your prompt down as you are using zsh.
@@ -512,8 +584,6 @@ precmd_functions+='_git_prompt__precmd_update_git_vars'
 chpwd_functions+="_git_prompt_info"
 PERIOD=15
 periodic_functions+="_git_prompt_info"
-
-_git_prompt_info () { $GIT_PROMPT_INFO_FUNC }
 _git_prompt_info
 
 _git_prompt__precmd_update_git_vars()
@@ -521,10 +591,10 @@ _git_prompt__precmd_update_git_vars()
   if [[ $ZSH_VERSION = *\ 4.2* ]]; then
     # some older versions of zsh don't have periodic_functions, so do the
     # slow path if that's the case:
-    $GIT_PROMPT_INFO_FUNC
+    _git_prompt_info
 
   elif [[ -n "$__EXECUTED_GIT_COMMAND" ]]; then
-    $GIT_PROMPT_INFO_FUNC
+    _git_prompt_info
     unset __EXECUTED_GIT_COMMAND
   fi
 }
@@ -536,7 +606,11 @@ _git_prompt__preexec_update_git_vars ()
     rm*)        __EXECUTED_GIT_COMMAND=1 ;;
     touch*)     __EXECUTED_GIT_COMMAND=1 ;;
     mkdir*)     __EXECUTED_GIT_COMMAND=1 ;;
+    echo*)     __EXECUTED_GIT_COMMAND=1 ;;
   esac
 }
 
 #--------------------------------------------------
+
+git_prompt_info2() { echo $_GIT_PROMPT_INFO }
+
