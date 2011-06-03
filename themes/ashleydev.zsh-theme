@@ -48,34 +48,34 @@ fi
 # git prompt info:
 
 # The git prompt plugin will cause $GIT_PROMPT_INFO_FUNC to be called
-# when $__GIT_PROMPT_INFO needs to be updated.
+# when $_GIT_PROMPT_INFO needs to be updated.
 GIT_PROMPT_INFO_FUNC="update__GIT_PROMPT_INFO"
 GIT_PROMPT_SHOWUPSTREAM="verbose"
 GIT_PROMPT_SHORTCIRCUIT='on'
 
-local __GIT_PROMPT_INFO=''
-# will set __GIT_PROMPT_INFO
+local _GIT_PROMPT_INFO=''
+# will set _GIT_PROMPT_INFO
 update__GIT_PROMPT_INFO ()
 {
-    local g="$(_git_prompt__git_dir)"
+    local g="$(git_prompt__git_dir)"
     if [ -z "$g" ]; then
-        __GIT_PROMPT_INFO=''
+        _GIT_PROMPT_INFO=''
         return
     fi
 
-    _git_prompt__stash
+    git_prompt__stash
     local s=$GIT_PROMPT_STASH_STATE_DIRTY
 
-    _git_prompt__upstream
+    git_prompt__upstream
     local p=$GIT_PROMPT_UPSTREAM_STATE
 
-    _git_prompt__branch
+    git_prompt__branch
     local b=$GIT_PROMPT_BRANCH
 
-    _git_prompt__rebase_info
+    git_prompt__rebase_info
     local r=$GIT_PROMPT_REBASE_INFO
 
-    _git_prompt__dirty_state
+    git_prompt__dirty_state
     local w=$GIT_PROMPT_DIRTY_STATE_WORKTREE_DIRTY
     local i=$GIT_PROMPT_DIRTY_STATE_INDEX_DIRTY
     local u=$GIT_PROMPT_DIRTY_STATE_WORKTREE_UNTRACKED
@@ -83,7 +83,7 @@ update__GIT_PROMPT_INFO ()
 
     if [ -z "$b$i$w$u" ]; then
         if [ -n "$g" ]; then
-            __GIT_PROMPT_INFO="$R$_Cerror_(Error: bad ./$g dir)$R"
+            _GIT_PROMPT_INFO="$R$_Cerror_(Error: bad ./$g dir)$R"
             return
         fi
     fi
@@ -129,7 +129,7 @@ update__GIT_PROMPT_INFO ()
         _prompt="($_prompt$)"
     fi
 
-    __GIT_PROMPT_INFO="$R$_prompt$R"
+    _GIT_PROMPT_INFO="$R$_prompt$R"
 }
 
 
@@ -140,7 +140,7 @@ local host_="%(!.$_Chost_root_.$_Chost_)%m$R"
 local path_="%(!.$_Cpath_root_.$_Cpath_)%~$R"
 local jobs_="%(1j.$_Cjobs_%j$R.)"
 
-PROMPT='$user_$host_$path_ $__GIT_PROMPT_INFO$jobs_# '
+PROMPT='$user_$host_$path_ $_GIT_PROMPT_INFO$jobs_# '
 
 local date_format_='%D{%a %b %d}, %*'
 local date_="${_Cdate_}[$date_format_]$R"
