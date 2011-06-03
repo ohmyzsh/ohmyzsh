@@ -584,6 +584,10 @@ precmd_functions+='_git_prompt__precmd_update_git_vars'
 chpwd_functions+="_git_prompt_info"
 PERIOD=15
 periodic_functions+="_git_prompt_info"
+
+# Prime the pump; this will be executed before PROMPT is defined by the theme, So
+# make sure the first prompt when the shell is opened has the git info set
+# properly.
 _git_prompt_info
 
 _git_prompt__precmd_update_git_vars()
@@ -601,16 +605,23 @@ _git_prompt__precmd_update_git_vars()
 _git_prompt__preexec_update_git_vars ()
 {
   case "$1" in
-    $EDITOR*)   __EXECUTED_GIT_COMMAND=1 ;;
     g*)         __EXECUTED_GIT_COMMAND=1 ;;
     rm*)        __EXECUTED_GIT_COMMAND=1 ;;
     touch*)     __EXECUTED_GIT_COMMAND=1 ;;
     mkdir*)     __EXECUTED_GIT_COMMAND=1 ;;
     echo*)     __EXECUTED_GIT_COMMAND=1 ;;
+    $EDITOR*)
+      if [[ -n "$EDITOR" ]]; then
+        __EXECUTED_GIT_COMMAND=1
+      fi
+      ;;
   esac
 }
 
 #--------------------------------------------------
 
-git_prompt_info2() { echo $_GIT_PROMPT_INFO }
+git_prompt_info2()
+{
+  echo $_GIT_PROMPT_INFO
+}
 
