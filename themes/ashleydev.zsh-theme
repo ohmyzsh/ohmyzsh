@@ -57,7 +57,7 @@ local __GIT_PROMPT_INFO=''
 # will set __GIT_PROMPT_INFO
 update__GIT_PROMPT_INFO ()
 {
-    local g="$(_git_promt__git_dir)"
+    local g="$(_git_prompt__git_dir)"
     if [ -z "$g" ]; then
         __GIT_PROMPT_INFO=''
         return

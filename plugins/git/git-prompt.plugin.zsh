@@ -66,10 +66,10 @@
 #   https://github.com/git/git/blob/master/contrib/completion/git-completion.bash
 #
 
-# _git_promt__git_dir accepts 0 or 1 arguments (i.e., location)
+# _git_prompt__git_dir accepts 0 or 1 arguments (i.e., location)
 # echos the location of .git repo.
 # Useful for quickly figuring out if cwd is under a git repo.
-_git_promt__git_dir ()
+_git_prompt__git_dir ()
 {
     if [ -z "${1-}" ]; then
         if [ -d .git ]; then
@@ -229,7 +229,7 @@ _git_prompt__rebase_info ()
     fi
 
     local r=""
-    local g="$(_git_promt__git_dir)"
+    local g="$(_git_prompt__git_dir)"
     if [ -n "$g" ]; then
         if [ -f "$g/rebase-merge/interactive" ]; then
             r="|REBASE-i"
@@ -276,7 +276,7 @@ _git_prompt__branch ()
     fi
 
     local b=""
-    local g="$(_git_promt__git_dir)"
+    local g="$(_git_prompt__git_dir)"
     if [ -n "$g" ]; then
         if [ -f "$g/rebase-merge/interactive" ]; then
             b="$(cat "$g/rebase-merge/head-name")"
@@ -421,7 +421,7 @@ _git_prompt__dirty_state ()
         return
     fi
 
-    local g="$(_git_promt__git_dir)"
+    local g="$(_git_prompt__git_dir)"
     if [ -z "$g" ]; then
         return
     fi
