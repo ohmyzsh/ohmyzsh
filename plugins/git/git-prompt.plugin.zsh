@@ -212,6 +212,8 @@ _git_prompt__upstream ()
     GIT_PROMPT_UPSTREAM_STATE=$p
 }
 
+# sets GIT_PROMPT_REBASE_INFO
+# with info about a rebase/merge/etc if it's in progress.
 _git_prompt__rebase_info ()
 {
     GIT_PROMPT_REBASE_INFO=''
@@ -256,6 +258,8 @@ _git_prompt__rebase_info ()
     GIT_PROMPT_REBASE_INFO=$r
 }
 
+# sets GIT_PROMPT_BRANCH
+# with the branch name
 _git_prompt__branch ()
 {
     GIT_PROMPT_BRANCH=''
@@ -311,6 +315,8 @@ _git_prompt__branch ()
 }
 
 
+# sets GIT_PROMPT_STASH_STATE_DIRTY
+# if the git stash state is dirty
 _git_prompt__stash ()
 {
     GIT_PROMPT_STASH_STATE_DIRTY=''
@@ -395,6 +401,7 @@ TRAPINT ()
     return $(( 128 + $1 ))
 }
 
+# sets a bunch of variables, see below:
 _git_prompt__dirty_state ()
 {
     GIT_PROMPT_DIRTY_STATE_FRESH_REPO=''
