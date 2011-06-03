@@ -1,7 +1,7 @@
 # Based on code from Joseph M. Reagle
 # http://www.cygwin.com/ml/cygwin/2001-06/msg00537.html
 
-local SSH_ENV=$HOME/.ssh/environment
+local SSH_ENV=$HOME/.ssh/environment-$HOST
 
 function start_agent {
   /usr/bin/env ssh-agent | sed 's/^echo/#echo/' > ${SSH_ENV}

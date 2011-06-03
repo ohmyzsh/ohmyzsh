@@ -30,7 +30,6 @@ cd () {
 
 alias md='mkdir -p'
 alias rd=rmdir
-
 alias d='dirs -v'
 
 # List direcory contents
@@ -44,3 +43,8 @@ alias ll3='tree --dirsfirst -ChFupDaL 3'
 
 alias l='l1'
 alias ll='ll1'
+
+# mkdir & cd to it
+function mcd() { 
+  mkdir -p "$1" && cd "$1"; 
+}

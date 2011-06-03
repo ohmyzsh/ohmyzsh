@@ -22,7 +22,7 @@ echo "Copying your current PATH and adding it to the end of ~/.zshrc for you."
 echo "export PATH=$PATH" >> ~/.zshrc
 
 echo "Time to change your default shell to zsh!"
-chsh -s "/usr/bin/env zsh"
+chsh -s `which zsh`
 
 echo '         __                                     __  '
 echo '  ____  / /_     ____ ___  __  __   ____  _____/ /_ '
