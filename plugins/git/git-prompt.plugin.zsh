@@ -16,13 +16,29 @@
 # (See the ashleydev theme for more complex usage.)
 # ---------------------- SAMPLE THEME FILE ------------------------
 #
-#   # this is a simple example PROMPT with only git
-#   # info from this plugin in it:
-#   PROMPT='$(git_prompt_info2)# '
+#   # GIT_PROMPT_INFO_FUNC has to be set to the function that updates the
+#   # global GIT_PROMPT_INFO variable(s).  The GIT_PROMPT_INFO_FUNC function
+#   # should be run whenever your prompt should be updated, but no more.  This
+#   # means it won't slow down your prompt when you're doing things that won't
+#   # change the git info in your prompt.
+#   #
+#   # So setting GIT_PROMPT_INFO_FUNC both turns on this plugin on and allows
+#   # you to set up your own custom git_prompt_format_* function.
+#   #
+#   GIT_PROMPT_INFO_FUNC=git_prompt_info_default
+#
+#   # git_prompt_info_default() will set $GIT_PROMPT_INFO, use this variable
+#   # in your prompt:
+#   PROMPT='$GIT_PROMPT_INFO# '
 # 
-#   # if you want to override the default format you can define your own
-#   # _git_prompt_info() function that sets $_GIT_PROMPT_INFO with your format
-#   _git_prompt_info ()
+# ---------------------- SAMPLE THEME FILE 2 ----------------------
+#   # If you want to override the default format you can define your own
+#   # format function:
+#   GIT_PROMPT_INFO_FUNC=git_prompt_format_simple
+#
+#   PROMPT='$GIT_PROMPT_INFO# '
+#
+#   git_prompt_format_simple ()
 #   {
 #     git_prompt__branch
 #     local branch_=$GIT_PROMPT_BRANCH
@@ -48,7 +64,7 @@
 #       fi
 #     fi
 #   
-#     _GIT_PROMPT_INFO="$R($branch_$index_)$R"
+#     GIT_PROMPT_INFO="$R($branch_$index_)$R"
 #   }
 # -----------------------------------------------------------------
 #
@@ -465,10 +481,8 @@ git_prompt__dirty_state ()
 }
 
 #------------------ Default Prompt Format ------------------
-# You can override this by defining your own _git_prompt_info in your theme that
-# sets $_GIT_PROMPT_INFO.
 
-# You can override these colors if you like too.
+# You can override these colors if you like.
 
 # Colors ('_C' for color):
 if [[ "$DISABLE_COLOR" != "true" ]]; then
@@ -488,12 +502,12 @@ if [[ "$DISABLE_COLOR" != "true" ]]; then
   local R="%{$terminfo[sgr0]%}"
 fi
 
-# sets _GIT_PROMPT_INFO
-_git_prompt_info ()
+# sets GIT_PROMPT_INFO
+git_prompt_info_default ()
 {
   local dir_="$(git_prompt__git_dir)"
   if [ -z "$dir_" ]; then
-    _GIT_PROMPT_INFO=''
+    GIT_PROMPT_INFO=''
     return
   fi
 
@@ -517,7 +531,7 @@ _git_prompt_info ()
 
   if [ -z "$branch_$index_$work_$untracked_" ]; then
     if [ -n "$dir_" ]; then
-      _GIT_PROMPT_INFO="$R$_Cerror_(Error: bad ./$dir_ dir)$R"
+      GIT_PROMPT_INFO="$R$_Cerror_(Error: bad ./$dir_ dir)$R"
       return
     fi
   fi
@@ -563,7 +577,7 @@ _git_prompt_info ()
     _prompt="($_prompt)"
   fi
 
-  _GIT_PROMPT_INFO="$R$_prompt$R"
+  GIT_PROMPT_INFO="$R$_prompt$R"
 }
 
 #------------------ Fast Prompt ------------------
@@ -585,10 +599,10 @@ chpwd_functions+="_git_prompt_info"
 PERIOD=15
 periodic_functions+="_git_prompt_info"
 
-# Prime the pump; this will be executed before PROMPT is defined by the theme, So
-# make sure the first prompt when the shell is opened has the git info set
-# properly.
-_git_prompt_info
+_git_prompt_info ()
+{
+  $GIT_PROMPT_INFO_FUNC
+}
 
 _git_prompt__precmd_update_git_vars()
 {
@@ -616,12 +630,5 @@ _git_prompt__preexec_update_git_vars ()
       fi
       ;;
   esac
-}
-
-#--------------------------------------------------
-
-git_prompt_info2()
-{
-  echo $_GIT_PROMPT_INFO
 }
 

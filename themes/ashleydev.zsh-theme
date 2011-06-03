@@ -34,12 +34,16 @@ fi
 
 #-------------------- PROMPT definition: ----------------------
 #
+
 local user_="%(!.$_Cuser_root_.$_Cuser_)%n$R"
 local host_="%(!.$_Chost_root_.$_Chost_)%m$R"
 local path_="%(!.$_Cpath_root_.$_Cpath_)%~$R"
 local jobs_="%(1j.$_Cjobs_%j$R.)"
 
-PROMPT='$user_$host_$path_ $(git_prompt_info2)$jobs_# '
+# git_prompt_info_default() will set $GIT_PROMPT_INFO
+GIT_PROMPT_INFO_FUNC=git_prompt_info_default
+
+PROMPT='$user_$host_$path_ $GIT_PROMPT_INFO$jobs_# '
 
 local date_format_='%D{%a %b %d}, %*'
 local date_="${_Cdate_}[$date_format_]$R"
