@@ -13,7 +13,7 @@ function in_svn() {
 }
 
 function svn_get_repo_name {
-    if [ is_svn ]; then
+    if [ in_svn ]; then
         svn info | sed -n 's/Repository\ Root:\ .*\///p' | read SVN_ROOT
     
         svn info | sed -n "s/URL:\ .*$SVN_ROOT\///p" | sed "s/\/.*$//"
@@ -21,13 +21,13 @@ function svn_get_repo_name {
 }
 
 function svn_get_rev_nr {
-    if [ is_svn ]; then
+    if [ in_svn ]; then
         svn info 2> /dev/null | sed -n s/Revision:\ //p
     fi
 }
 
 function svn_dirty_choose {
-    if [ is_svn ]; then
+    if [ in_svn ]; then
         s=$(svn status 2>/dev/null)
         if [ $s ]; then 
             echo $1
