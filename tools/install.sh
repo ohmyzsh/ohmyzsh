@@ -1,36 +1,42 @@
+RESET="\033[0m"
+RED="\033[0;31m"
+BLUE="\033[0;34m"
+GREEN="\033[0;32m"
+YELLOW="\033[0;33m"
+UNDERLN="\033[4m"
 if [ -d ~/.oh-my-zsh ]
 then
-  echo "\033[0;33mYou already have Oh My Zsh installed.\033[0m You'll need to remove ~/.oh-my-zsh if you want to install"
+  echo "${YELLOW}You already have Oh My Zsh installed.${RESET} You'll need to remove ~/.oh-my-zsh if you want to install"
   exit
 fi
 
-echo "\033[0;34mCloning Oh My Zsh...\033[0m"
+echo "${BLUE}Cloning Oh My Zsh...${RESET}"
 /usr/bin/env git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
 
-echo "\033[0;34mLooking for an existing zsh config...\033[0m"
+echo "${BLUE}Looking for an existing zsh config...${RESET}"
 if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]
 then
-  echo "\033[0;33mFound ~/.zshrc.\033[0m \033[0;32]Backing up to ~/.zshrc.pre-oh-my-zsh\033[0m";
+  echo "${YELLOW}Found ~/.zshrc.${RESET} ${GREEN}Backing up to ~/.zshrc.pre-oh-my-zsh${RESET}";
   cp ~/.zshrc ~/.zshrc.pre-oh-my-zsh;
   rm ~/.zshrc;
 fi
 
-echo "\033[0;34mUsing the Oh My Zsh template file and adding it to ~/.zshrc\033[0m"
+echo "${BLUE}Using the Oh My Zsh template file and adding it to ~/.zshrc${RESET}"
 cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
 
-echo "\033[0;34mCopying your current PATH and adding it to the end of ~/.zshrc for you.\033[0m"
+echo "${BLUE}Copying your current PATH and adding it to the end of ~/.zshrc for you.${RESET}"
 echo "export PATH=$PATH" >> ~/.zshrc
 
-echo "\033[0;34mTime to change your default shell to zsh!\033[0m"
+echo "${BLUE}Time to change your default shell to zsh!${RESET}"
 chsh -s `which zsh`
 
-echo "\033[0;32m"'         __                                     __   '"\033[0m"
-echo "\033[0;32m"'  ____  / /_     ____ ___  __  __   ____  _____/ /_  '"\033[0m"
-echo "\033[0;32m"' / __ \/ __ \   / __ `__ \/ / / /  /_  / / ___/ __ \ '"\033[0m"
-echo "\033[0;32m"'/ /_/ / / / /  / / / / / / /_/ /    / /_(__  ) / / / '"\033[0m"
-echo "\033[0;32m"'\____/_/ /_/  /_/ /_/ /_/\__, /    /___/____/_/ /_/  '"\033[0m"
-echo "\033[0;32m"'                        /____/                       '"\033[0m"
+echo "${GREEN}"'         __                                     __   '"${RESET}"
+echo "${GREEN}"'  ____  / /_     ____ ___  __  __   ____  _____/ /_  '"${RESET}"
+echo "${GREEN}"' / __ \/ __ \   / __ `__ \/ / / /  /_  / / ___/ __ \ '"${RESET}"
+echo "${GREEN}"'/ /_/ / / / /  / / / / / / /_/ /    / /_(__  ) / / / '"${RESET}"
+echo "${GREEN}"'\____/_/ /_/  /_/ /_/ /_/\__, /    /___/____/_/ /_/  '"${RESET}"
+echo "${GREEN}"'                        /____/                       '"${RESET}"
 
-echo "\n\n \033[0;32m....is now installed.\033[0m"
+echo "\n\n ${GREEN}....is now installed.${RESET}"
 /usr/bin/env zsh
 source ~/.zshrc
