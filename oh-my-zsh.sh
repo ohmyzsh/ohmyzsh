@@ -42,13 +42,13 @@ export FAVORITE_THEMES_DIR="$ZSH/themes/favorites/"
 # Load the theme
 # Check for updates on initial load...
 if [ "$ZSH_THEME" = "random" ]; then
-  load_random_theme $ZSH/themes/*zsh-theme
+  load_random_theme
 elif [ "$ZSH_THEME" = "favorites" ]; then
   # Only randomize with liked themes if there are any
   if [ `ls $FAVORITE_THEMES_DIR | wc -w` -gt 0 ]; then
     load_random_theme $FAVORITE_THEMES_DIR/*zsh-theme
   else
-    load_random_theme $ZSH/themes/*zsh-theme
+    load_random_theme
   fi
 else
   source "$ZSH/themes/$ZSH_THEME.zsh-theme"

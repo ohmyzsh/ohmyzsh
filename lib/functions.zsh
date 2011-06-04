@@ -86,7 +86,13 @@ function unlike_theme() {
 }
 
 function load_random_theme() {
-    themes=($*)
+    # Default theme selection
+    if [ $# -eq 0 ]; then
+        themes=($ZSH/themes/*zsh-theme)
+    else
+        themes=($*)
+    fi
+
     N=${#themes[@]}
     ((N=(RANDOM%N)+1))
     RANDOM_THEME=${themes[$N]}
