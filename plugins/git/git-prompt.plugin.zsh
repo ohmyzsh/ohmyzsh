@@ -16,29 +16,15 @@
 # (See the ashleydev theme for more complex usage.)
 # ---------------------- SAMPLE THEME FILE ------------------------
 #
-#   # GIT_PROMPT_INFO_FUNC has to be set to the function that updates the
-#   # global GIT_PROMPT_INFO variable(s).  The GIT_PROMPT_INFO_FUNC function
-#   # should be run whenever your prompt should be updated, but no more.  This
-#   # means it won't slow down your prompt when you're doing things that won't
-#   # change the git info in your prompt.
-#   #
-#   # So setting GIT_PROMPT_INFO_FUNC both turns on this plugin on and allows
-#   # you to set up your own custom git_prompt_format_* function.
-#   #
-#   GIT_PROMPT_INFO_FUNC=git_prompt_info_default
-#
-#   # git_prompt_info_default() will set $GIT_PROMPT_INFO, use this variable
-#   # in your prompt:
+#   # this is a simple example PROMPT with only git
+#   # info from this plugin in it:
 #   PROMPT='$GIT_PROMPT_INFO# '
 # 
-# ---------------------- SAMPLE THEME FILE 2 ----------------------
+#   # ...
 #   # If you want to override the default format you can define your own
-#   # format function:
-#   GIT_PROMPT_INFO_FUNC=git_prompt_format_simple
-#
-#   PROMPT='$GIT_PROMPT_INFO# '
-#
-#   git_prompt_format_simple ()
+#   # git_prompt_info() function that sets $GIT_PROMPT_INFO (or other variables)
+#   # with your format:
+#   git_prompt_info ()
 #   {
 #     git_prompt__branch
 #     local branch_=$GIT_PROMPT_BRANCH
@@ -71,10 +57,139 @@
 #
 
 
+#------------------ Default Prompt Format ------------------
+# You can override this by defining your own git_prompt_info in your theme that
+# sets some global variable(s); i.e. $GIT_PROMPT_INFO.
+# (See the ashleydev theme for more complex usage).
+git_prompt_info ()
+{
+  git_prompt__branch
+  local branch=$GIT_PROMPT_BRANCH
+
+  git_prompt__dirty_state
+  local dirty=$GIT_PROMPT_DIRTY_STATE_ANY_DIRTY
+
+  if [[ -n "$branch" ]]; then
+    local prompt=$branch
+
+    if [[ "$dirty" = 'yes' ]]; then
+      prompt="$prompt$ZSH_THEME_GIT_PROMPT_DIRTY"
+    elif [[ "$dirty" = 'no' ]]; then
+      prompt="$prompt$ZSH_THEME_GIT_PROMPT_CLEAN"
+    fi
+
+    GIT_PROMPT_INFO="$ZSH_THEME_GIT_PROMPT_PREFIX$prompt$ZSH_THEME_GIT_PROMPT_SUFFIX"
+  fi
+}
+
 #------------------ git information utils ------------------
 # For some of the following functions, I borrowed some from:
 #   https://github.com/git/git/blob/master/contrib/completion/git-completion.bash
 #
+
+# sets a bunch of variables, see below:
+git_prompt__dirty_state ()
+{
+  GIT_PROMPT_DIRTY_STATE_ANY_DIRTY=''
+  GIT_PROMPT_DIRTY_STATE_FRESH_REPO=''
+  GIT_PROMPT_DIRTY_STATE_INDEX_ADDED=''
+  GIT_PROMPT_DIRTY_STATE_INDEX_COPIED=''
+  GIT_PROMPT_DIRTY_STATE_INDEX_DELETED=''
+  GIT_PROMPT_DIRTY_STATE_INDEX_DIRTY=''
+  GIT_PROMPT_DIRTY_STATE_INDEX_MODIFIED=''
+  GIT_PROMPT_DIRTY_STATE_INDEX_RENAMED=''
+  GIT_PROMPT_DIRTY_STATE_INDEX_UNMERGED=''
+  GIT_PROMPT_DIRTY_STATE_WORKTREE_DELETED=''
+  GIT_PROMPT_DIRTY_STATE_WORKTREE_DIRTY=''
+  GIT_PROMPT_DIRTY_STATE_WORKTREE_MODIFIED=''
+  GIT_PROMPT_DIRTY_STATE_WORKTREE_UNTRACKED=''
+
+  if [[ "true" != "$(git rev-parse --is-inside-work-tree 2>/dev/null)" ]]; then
+    return
+  fi
+
+  local dir_="$(git_prompt__git_dir)"
+  if [[ -z "$dir_" ]]; then
+    return
+  fi
+  if [[ "$GIT_PROMPT_SHOWDIRTYSTATE" = 'off' ]]; then
+    return
+  fi
+  if [[ "$(git config --bool prompt.showDirtyState)" = "false" ]]; then
+    return
+  fi
+
+  GIT_PROMPT_DIRTY_STATE_ANY_DIRTY='no'
+  GIT_PROMPT_DIRTY_STATE_FRESH_REPO='no'
+  GIT_PROMPT_DIRTY_STATE_INDEX_ADDED='no'
+  GIT_PROMPT_DIRTY_STATE_INDEX_COPIED='no'
+  GIT_PROMPT_DIRTY_STATE_INDEX_DELETED='no'
+  GIT_PROMPT_DIRTY_STATE_INDEX_DIRTY='no'
+  GIT_PROMPT_DIRTY_STATE_INDEX_MODIFIED='no'
+  GIT_PROMPT_DIRTY_STATE_INDEX_RENAMED='no'
+  GIT_PROMPT_DIRTY_STATE_INDEX_UNMERGED='no'
+  GIT_PROMPT_DIRTY_STATE_WORKTREE_DELETED='no'
+  GIT_PROMPT_DIRTY_STATE_WORKTREE_DIRTY='no'
+  GIT_PROMPT_DIRTY_STATE_WORKTREE_MODIFIED='no'
+  GIT_PROMPT_DIRTY_STATE_WORKTREE_UNTRACKED='no'
+
+  if git rev-parse --quiet --verify HEAD >/dev/null; then
+  else
+    GIT_PROMPT_DIRTY_STATE_FRESH_REPO='yes'
+  fi
+
+  _big_repo='yes'
+  local line
+  while IFS=$'\n' read line; do
+    if [[ "$line" = M* ]]; then
+      GIT_PROMPT_DIRTY_STATE_INDEX_MODIFIED='yes'
+      GIT_PROMPT_DIRTY_STATE_INDEX_DIRTY='yes'
+      GIT_PROMPT_DIRTY_STATE_ANY_DIRTY='yes'
+    fi
+    if [[ "$line" = A* ]]; then
+      GIT_PROMPT_DIRTY_STATE_INDEX_ADDED='yes'
+      GIT_PROMPT_DIRTY_STATE_INDEX_DIRTY='yes'
+      GIT_PROMPT_DIRTY_STATE_ANY_DIRTY='yes'
+    fi
+    if [[ "$line" = R* ]]; then
+      GIT_PROMPT_DIRTY_STATE_INDEX_RENAMED='yes'
+      GIT_PROMPT_DIRTY_STATE_INDEX_DIRTY='yes'
+      GIT_PROMPT_DIRTY_STATE_ANY_DIRTY='yes'
+    fi
+    if [[ "$line" = C* ]]; then
+      GIT_PROMPT_DIRTY_STATE_INDEX_COPIED='yes'
+      GIT_PROMPT_DIRTY_STATE_INDEX_DIRTY='yes'
+      GIT_PROMPT_DIRTY_STATE_ANY_DIRTY='yes'
+    fi
+    if [[ "$line" = D* ]]; then
+      GIT_PROMPT_DIRTY_STATE_INDEX_DELETED='yes'
+      GIT_PROMPT_DIRTY_STATE_INDEX_DIRTY='yes'
+      GIT_PROMPT_DIRTY_STATE_ANY_DIRTY='yes'
+    fi
+
+    if [[ "$line" = \?\?* ]]; then
+      GIT_PROMPT_DIRTY_STATE_WORKTREE_UNTRACKED='yes'
+      GIT_PROMPT_DIRTY_STATE_ANY_DIRTY='yes'
+    fi
+    if [[ "$line" = ?M* ]]; then
+      GIT_PROMPT_DIRTY_STATE_WORKTREE_MODIFIED='yes'
+      GIT_PROMPT_DIRTY_STATE_WORKTREE_DIRTY='yes'
+      GIT_PROMPT_DIRTY_STATE_ANY_DIRTY='yes'
+    fi
+    if [[ "$line" = ?D* ]]; then
+      GIT_PROMPT_DIRTY_STATE_WORKTREE_DELETED='yes'
+      GIT_PROMPT_DIRTY_STATE_WORKTREE_DIRTY='yes'
+      GIT_PROMPT_DIRTY_STATE_ANY_DIRTY='yes'
+    fi
+
+    if [[ "$line" = UU* ]]; then
+      GIT_PROMPT_DIRTY_STATE_INDEX_UNMERGED='yes'
+      GIT_PROMPT_DIRTY_STATE_INDEX_DIRTY='yes'
+      GIT_PROMPT_DIRTY_STATE_ANY_DIRTY='yes'
+    fi
+  done < <(git status --porcelain 2> /dev/null)
+  _big_repo=''
+}
 
 # git_prompt__git_dir accepts 0 or 1 arguments (i.e., location)
 # echos the location of .git repo.
@@ -351,7 +466,61 @@ git_prompt__stash ()
   fi
 }
 
+#------------------ Fast Prompt ------------------
+# This section sets up some functions that get called infrequently as possible
+# and therefore don't slow your prompt down as you are using zsh.
+#
+# I borrowed from: http://sebastiancelis.com/2009/nov/16/zsh-prompt-git-users/
 
+# Enable auto-execution of functions.
+typeset -Uga preexec_functions
+typeset -Uga precmd_functions
+typeset -Uga chpwd_functions
+typeset -Uga periodic_functions
+
+# Append git functions needed for prompt.
+preexec_functions+='_git_prompt__preexec_update_git_vars'
+precmd_functions+='_git_prompt__precmd_update_git_vars'
+chpwd_functions+="_git_prompt_info"
+PERIOD=15
+periodic_functions+="_git_prompt_info"
+
+_git_prompt_info ()
+{
+  if [[ -z $GIT_PROMPT_INFO_DISABLED ]]; then
+    git_prompt_info
+  fi
+}
+
+_git_prompt__precmd_update_git_vars()
+{
+  if [[ $ZSH_VERSION = *\ 4.2* ]]; then
+    # some older versions of zsh don't have periodic_functions, so do the
+    # slow path if that's the case:
+    _git_prompt_info
+
+  elif [[ -n "$__EXECUTED_GIT_COMMAND" ]]; then
+    _git_prompt_info
+    unset __EXECUTED_GIT_COMMAND
+  fi
+}
+_git_prompt__preexec_update_git_vars ()
+{
+  case "$1" in
+    g*)         __EXECUTED_GIT_COMMAND=1 ;;
+    rm*)        __EXECUTED_GIT_COMMAND=1 ;;
+    touch*)     __EXECUTED_GIT_COMMAND=1 ;;
+    mkdir*)     __EXECUTED_GIT_COMMAND=1 ;;
+    echo*)     __EXECUTED_GIT_COMMAND=1 ;;
+    $EDITOR*)
+      if [[ -n "$EDITOR" ]]; then
+        __EXECUTED_GIT_COMMAND=1
+      fi
+      ;;
+  esac
+}
+
+#------------------ Short Circuit ------------------
 # This is the short-circuit logic:
 #
 # Set GIT_PROMPT_SHORTCIRCUIT='off' to turn the short-circuit logic off.
@@ -386,249 +555,4 @@ TRAPINT ()
   __git_prompt_shortcircuit
   return $(( 128 + $1 ))
 }
-
-# sets a bunch of variables, see below:
-git_prompt__dirty_state ()
-{
-  GIT_PROMPT_DIRTY_STATE_FRESH_REPO=''
-  GIT_PROMPT_DIRTY_STATE_INDEX_ADDED=''
-  GIT_PROMPT_DIRTY_STATE_INDEX_COPIED=''
-  GIT_PROMPT_DIRTY_STATE_INDEX_DELETED=''
-  GIT_PROMPT_DIRTY_STATE_INDEX_DIRTY=''
-  GIT_PROMPT_DIRTY_STATE_INDEX_MODIFIED=''
-  GIT_PROMPT_DIRTY_STATE_INDEX_RENAMED=''
-  GIT_PROMPT_DIRTY_STATE_INDEX_UNMERGED=''
-  GIT_PROMPT_DIRTY_STATE_WORKTREE_DELETED=''
-  GIT_PROMPT_DIRTY_STATE_WORKTREE_DIRTY=''
-  GIT_PROMPT_DIRTY_STATE_WORKTREE_MODIFIED=''
-  GIT_PROMPT_DIRTY_STATE_WORKTREE_UNTRACKED=''
-
-  if [[ "true" != "$(git rev-parse --is-inside-work-tree 2>/dev/null)" ]]; then
-    return
-  fi
-
-  local dir_="$(git_prompt__git_dir)"
-  if [[ -z "$dir_" ]]; then
-    return
-  fi
-  if [[ "$GIT_PROMPT_SHOWDIRTYSTATE" = 'off' ]]; then
-    return
-  fi
-  if [[ "$(git config --bool prompt.showDirtyState)" = "false" ]]; then
-    return
-  fi
-
-  GIT_PROMPT_DIRTY_STATE_FRESH_REPO='no'
-  GIT_PROMPT_DIRTY_STATE_INDEX_ADDED='no'
-  GIT_PROMPT_DIRTY_STATE_INDEX_COPIED='no'
-  GIT_PROMPT_DIRTY_STATE_INDEX_DELETED='no'
-  GIT_PROMPT_DIRTY_STATE_INDEX_DIRTY='no'
-  GIT_PROMPT_DIRTY_STATE_INDEX_MODIFIED='no'
-  GIT_PROMPT_DIRTY_STATE_INDEX_RENAMED='no'
-  GIT_PROMPT_DIRTY_STATE_INDEX_UNMERGED='no'
-  GIT_PROMPT_DIRTY_STATE_WORKTREE_DELETED='no'
-  GIT_PROMPT_DIRTY_STATE_WORKTREE_DIRTY='no'
-  GIT_PROMPT_DIRTY_STATE_WORKTREE_MODIFIED='no'
-  GIT_PROMPT_DIRTY_STATE_WORKTREE_UNTRACKED='no'
-
-  if git rev-parse --quiet --verify HEAD >/dev/null; then
-  else
-    GIT_PROMPT_DIRTY_STATE_FRESH_REPO='yes'
-  fi
-
-  _big_repo='yes'
-  local line
-  while IFS=$'\n' read line; do
-    if [[ "$line" = M* ]]; then
-      GIT_PROMPT_DIRTY_STATE_INDEX_MODIFIED='yes'
-      GIT_PROMPT_DIRTY_STATE_INDEX_DIRTY='yes'
-    fi
-    if [[ "$line" = A* ]]; then
-      GIT_PROMPT_DIRTY_STATE_INDEX_ADDED='yes'
-      GIT_PROMPT_DIRTY_STATE_INDEX_DIRTY='yes'
-    fi
-    if [[ "$line" = R* ]]; then
-      GIT_PROMPT_DIRTY_STATE_INDEX_RENAMED='yes'
-      GIT_PROMPT_DIRTY_STATE_INDEX_DIRTY='yes'
-    fi
-    if [[ "$line" = C* ]]; then
-      GIT_PROMPT_DIRTY_STATE_INDEX_COPIED='yes'
-      GIT_PROMPT_DIRTY_STATE_INDEX_DIRTY='yes'
-    fi
-    if [[ "$line" = D* ]]; then
-      GIT_PROMPT_DIRTY_STATE_INDEX_DELETED='yes'
-      GIT_PROMPT_DIRTY_STATE_INDEX_DIRTY='yes'
-    fi
-
-    if [[ "$line" = \?\?* ]]; then
-      GIT_PROMPT_DIRTY_STATE_WORKTREE_UNTRACKED='yes'
-    fi
-    if [[ "$line" = ?M* ]]; then
-      GIT_PROMPT_DIRTY_STATE_WORKTREE_MODIFIED='yes'
-      GIT_PROMPT_DIRTY_STATE_WORKTREE_DIRTY='yes'
-    fi
-    if [[ "$line" = ?D* ]]; then
-      GIT_PROMPT_DIRTY_STATE_WORKTREE_DELETED='yes'
-      GIT_PROMPT_DIRTY_STATE_WORKTREE_DIRTY='yes'
-    fi
-
-    if [[ "$line" = UU* ]]; then
-      GIT_PROMPT_DIRTY_STATE_INDEX_UNMERGED='yes'
-      GIT_PROMPT_DIRTY_STATE_INDEX_DIRTY='yes'
-    fi
-  done < <(git status --porcelain 2> /dev/null)
-  _big_repo=''
-}
-
-#------------------ Default Prompt Format ------------------
-
-# You can override these colors if you like.
-
-# Colors ('_C' for color):
-if [[ "$DISABLE_COLOR" != "true" ]]; then
-  # git prompt info colors:
-  local _Cerror_="%{$fg[yellow]%}"                 # bad (empty) .git/ directory
-  local _Cbranch_new_repo_="%{$fg_bold[default]%}" # branch color of new repo
-  local _Cbranch_clean_="%{$fg_no_bold[green]%}"   # branch color when clean
-  local _Cbranch_dirty_="%{$fg_no_bold[red]%}"     # branch color when dirty
-  local _Crebase_="%{$bold_color$fg[yellow]%}"     # rebase info
-  local _Cindex_="%{$bold_color$fg[red]%}"         # index info
-  local _Cuntracked_clean_=""                      # untracked files state when clean
-  local _Cuntracked_dirty_="%{$fg_bold[red]%}"     # untracked files state when dirty
-  local _Cupstream_="%{${fg[cyan]}%}"              # upstream info
-  local _Cstash_=""                                # stash state
-
-  # Reset formating:
-  local R="%{$terminfo[sgr0]%}"
-fi
-
-# sets GIT_PROMPT_INFO
-git_prompt_info_default ()
-{
-  local dir_="$(git_prompt__git_dir)"
-  if [ -z "$dir_" ]; then
-    GIT_PROMPT_INFO=''
-    return
-  fi
-
-  git_prompt__stash
-  local stash_=$GIT_PROMPT_STASH_STATE_DIRTY
-
-  git_prompt__upstream
-  local upstream_=$GIT_PROMPT_UPSTREAM_STATE
-
-  git_prompt__branch
-  local branch_=$GIT_PROMPT_BRANCH
-
-  git_prompt__rebase_info
-  local rebase_=$GIT_PROMPT_REBASE_INFO
-
-  git_prompt__dirty_state
-  local work_=$GIT_PROMPT_DIRTY_STATE_WORKTREE_DIRTY
-  local index_=$GIT_PROMPT_DIRTY_STATE_INDEX_DIRTY
-  local untracked_=$GIT_PROMPT_DIRTY_STATE_WORKTREE_UNTRACKED
-  local freshy_=$GIT_PROMPT_DIRTY_STATE_FRESH_REPO
-
-  if [ -z "$branch_$index_$work_$untracked_" ]; then
-    if [ -n "$dir_" ]; then
-      GIT_PROMPT_INFO="$R$_Cerror_(Error: bad ./$dir_ dir)$R"
-      return
-    fi
-  fi
-
-  if [ "$stash_" = 'yes' ]; then
-    stash_="$_Cstash_\$$R"
-  else
-    stash_=""
-  fi
-
-  if [ -n "$upstream_" ]; then
-    upstream_="$_Cupstream_$upstream_$R"
-  fi
-
-  if [ "$index_" = "yes" ]; then
-    index_="$_Cindex_+$R"
-  else
-    index_=""
-  fi
-
-  if [ -n "$branch_" ]; then
-    if [ "$freshy_" = "yes" ]; then
-      # this is a fresh repo, nothing here...
-      branch_="$_Cbranch_new_repo_$branch_$R"
-    elif [ "$work_" = 'yes' ]; then
-      branch_="$_Cbranch_dirty_$branch_$R"
-    elif [ "$work_" = 'no' ]; then
-      branch_="$_Cbranch_clean_$branch_$R"
-    fi
-  fi
-
-  if [ -n "$rebase_" ]; then
-    rebase_="$_Crebase_$rebase_$R"
-  fi
-
-  local _prompt="$branch_$rebase_$index_$stash_$upstream_"
-  # add ( ) around _prompt:
-  if [ "$untracked_" = "yes" ]; then
-    _prompt="$_Cuntracked_dirty_($_prompt$_Cuntracked_dirty_)"
-  elif [ "$untracked_" = "no" ]; then
-    _prompt="$_Cuntracked_clean_($_prompt$_Cuntracked_clean_)"
-  else
-    _prompt="($_prompt)"
-  fi
-
-  GIT_PROMPT_INFO="$R$_prompt$R"
-}
-
-#------------------ Fast Prompt ------------------
-# This section sets up some functions that get called infrequently as possible
-# and therefore don't slow your prompt down as you are using zsh.
-#
-# I borrowed from: http://sebastiancelis.com/2009/nov/16/zsh-prompt-git-users/
-
-# Enable auto-execution of functions.
-typeset -Uga preexec_functions
-typeset -Uga precmd_functions
-typeset -Uga chpwd_functions
-typeset -Uga periodic_functions
-
-# Append git functions needed for prompt.
-preexec_functions+='_git_prompt__preexec_update_git_vars'
-precmd_functions+='_git_prompt__precmd_update_git_vars'
-chpwd_functions+="_git_prompt_info"
-PERIOD=15
-periodic_functions+="_git_prompt_info"
-
-_git_prompt_info ()
-{
-  $GIT_PROMPT_INFO_FUNC
-}
-
-_git_prompt__precmd_update_git_vars()
-{
-  if [[ $ZSH_VERSION = *\ 4.2* ]]; then
-    # some older versions of zsh don't have periodic_functions, so do the
-    # slow path if that's the case:
-    _git_prompt_info
-
-  elif [[ -n "$__EXECUTED_GIT_COMMAND" ]]; then
-    _git_prompt_info
-    unset __EXECUTED_GIT_COMMAND
-  fi
-}
-_git_prompt__preexec_update_git_vars ()
-{
-  case "$1" in
-    g*)         __EXECUTED_GIT_COMMAND=1 ;;
-    rm*)        __EXECUTED_GIT_COMMAND=1 ;;
-    touch*)     __EXECUTED_GIT_COMMAND=1 ;;
-    mkdir*)     __EXECUTED_GIT_COMMAND=1 ;;
-    echo*)     __EXECUTED_GIT_COMMAND=1 ;;
-    $EDITOR*)
-      if [[ -n "$EDITOR" ]]; then
-        __EXECUTED_GIT_COMMAND=1
-      fi
-      ;;
-  esac
-}
-
+#----------------------------------------------------
