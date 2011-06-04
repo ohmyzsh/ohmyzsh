@@ -50,6 +50,12 @@ function extract() {
   fi
 }
 
+function favorite_themes() {
+    for theme in `ls $FAVORITE_THEMES_DIR`; do
+        echo $theme
+    done
+}
+
 function get_current_theme() {
     echo `basename $RANDOM_THEME`
 }
