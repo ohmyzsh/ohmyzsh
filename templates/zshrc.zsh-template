@@ -3,9 +3,18 @@ export ZSH=$HOME/.oh-my-zsh
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
 export ZSH_THEME="robbyrussell"
+
+# Load a new theme by running 'load_theme' or re-sourcing your ~/.zshrc
+
+# Set this to "random" to load a random theme each time oh-my-zsh is loaded.
+
+# Set this to "favorites" to load a random theme only from themes you've
+# marked as a favorite.
+
+# To mark a theme as a favorite, load it and run 'like_theme'
+# To remove a theme as a favorite, load it and run 'unlike_theme'
+# To view all favorites, run 'favorite_themes'
 
 # Set to this to use case-sensitive completion
 # export CASE_SENSITIVE="true"
