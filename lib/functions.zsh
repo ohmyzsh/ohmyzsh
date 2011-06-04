@@ -64,7 +64,7 @@ function like_theme() {
     theme_name=`get_current_theme`
     link_name="$FAVORITE_THEMES_DIR/$theme_name"
 
-    if [[ ! -L $link_name ]]; then
+    if [ ! -L $link_name ]; then
         ln -s $RANDOM_THEME $link_name
         echo "Added $theme_name to favorites"
     else
@@ -76,10 +76,10 @@ function unlike_theme() {
     theme_name=`get_current_theme`
     link_name="$FAVORITE_THEMES_DIR/$theme_name"
 
-    if [[ -L $link_name ]]; then
-        # FIXME: What happens if we remove the last theme we have?
+    if [ -L $link_name ]; then
         rm $link_name
         echo "Removed $theme_name from favorites"
+        load_theme
     else
         echo "$theme_name isn't a favorite"
     fi
@@ -99,4 +99,19 @@ function load_random_theme() {
     source "$RANDOM_THEME"
     echo "[oh-my-zsh] Random theme '$RANDOM_THEME' loaded..."
     export RANDOM_THEME
+}
+
+function load_theme() {
+    if [ "$ZSH_THEME" = "random" ]; then
+        load_random_theme
+    elif [ "$ZSH_THEME" = "favorites" ]; then
+        # Only randomize with liked themes if there are any
+        if [ `ls $FAVORITE_THEMES_DIR | wc -w` -gt 0 ]; then
+            load_random_theme $FAVORITE_THEMES_DIR/*zsh-theme
+        else
+            load_random_theme
+        fi
+    else
+      source "$ZSH/themes/$ZSH_THEME.zsh-theme"
+    fi
 }
