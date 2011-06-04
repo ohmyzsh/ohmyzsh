@@ -34,29 +34,22 @@ done
 for config_file ($ZSH/custom/*.zsh) source $config_file
 
 export FAVORITE_THEMES_DIR="$ZSH/themes/favorites/"
-
-# Load the theme
-# Check for updates on initial load...
-if [ "$ZSH_THEME" = "random" ]
-then
   # Allow users to randomize themes with only their favorites
   if [ ! -d $FAVORITE_THEMES_DIR ]; then
       mkdir $FAVORITE_THEMES_DIR
   fi
 
+# Load the theme
+# Check for updates on initial load...
+if [ "$ZSH_THEME" = "random" ]; then
+  load_random_theme $ZSH/themes/*zsh-theme
+elif [ "$ZSH_THEME" = "favorites" ]; then
   # Only randomize with liked themes if there are any
   if [ `ls $FAVORITE_THEMES_DIR | wc -w` -gt 0 ]; then
-    themes=($FAVORITE_THEMES_DIR/*zsh-theme)
+    load_random_theme $FAVORITE_THEMES_DIR/*zsh-theme
   else
-    themes=($ZSH/themes/*zsh-theme)
+    load_random_theme $ZSH/themes/*zsh-theme
   fi
-
-  N=${#themes[@]}
-  ((N=(RANDOM%N)+1))
-  RANDOM_THEME=${themes[$N]}
-  source "$RANDOM_THEME"
-  echo "[oh-my-zsh] Random theme '$RANDOM_THEME' loaded..."
-  export RANDOM_THEME
 else
   source "$ZSH/themes/$ZSH_THEME.zsh-theme"
 fi
