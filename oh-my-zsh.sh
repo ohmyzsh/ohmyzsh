@@ -1,5 +1,11 @@
 # Initializes Oh My Zsh
 
+# Create another directory under $ZSH called favorite_themes
+# Every time a user 'likes' a theme:
+#   Create symlink to it in favorite_themes (if it doesn't already exist)
+# If user is using 'random' theme AND there are contents in the favorite_themes
+# directory, use that as the 'themes' variable, otherwise use all
+
 # add a function path
 fpath=($ZSH/functions $ZSH/completions $fpath)
 
@@ -27,16 +33,30 @@ done
 # Load all of your custom configurations from custom/
 for config_file ($ZSH/custom/*.zsh) source $config_file
 
+export FAVORITE_THEMES_DIR="$ZSH/themes/favorites/"
+
 # Load the theme
 # Check for updates on initial load...
 if [ "$ZSH_THEME" = "random" ]
 then
-  themes=($ZSH/themes/*zsh-theme)
+  # Allow users to randomize themes with only their favorites
+  if [ ! -d $FAVORITE_THEMES_DIR ]; then
+      mkdir $FAVORITE_THEMES_DIR
+  fi
+
+  # Only randomize with liked themes if there are any
+  if [ `ls $FAVORITE_THEMES_DIR | wc -w` -gt 0 ]; then
+    themes=($FAVORITE_THEMES_DIR/*zsh-theme)
+  else
+    themes=($ZSH/themes/*zsh-theme)
+  fi
+
   N=${#themes[@]}
   ((N=(RANDOM%N)+1))
   RANDOM_THEME=${themes[$N]}
   source "$RANDOM_THEME"
   echo "[oh-my-zsh] Random theme '$RANDOM_THEME' loaded..."
+  export RANDOM_THEME
 else
   source "$ZSH/themes/$ZSH_THEME.zsh-theme"
 fi

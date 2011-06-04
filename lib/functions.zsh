@@ -50,3 +50,31 @@ function extract() {
   fi
 }
 
+function get_current_theme() {
+    echo `basename $RANDOM_THEME`
+}
+
+function like_theme() {
+    theme_name=`get_current_theme`
+    link_name="$FAVORITE_THEMES_DIR/$theme_name"
+
+    if [[ ! -L $link_name ]]; then
+        ln -s $RANDOM_THEME $link_name
+        echo "Added $theme_name to favorites"
+    else
+        echo "$theme_name already a favorite!"
+    fi
+}
+
+function unlike_theme() {
+    theme_name=`get_current_theme`
+    link_name="$FAVORITE_THEMES_DIR/$theme_name"
+
+    if [[ -L $link_name ]]; then
+        # FIXME: What happens if we remove the last theme we have?
+        rm $link_name
+        echo "Removed $theme_name from favorites"
+    else
+        echo "$theme_name isn't a favorite"
+    fi
+}
