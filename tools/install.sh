@@ -16,9 +16,9 @@ echo "${BLUE}Cloning Oh My Zsh...${RESET}"
 echo "${BLUE}Looking for an existing zsh config...${RESET}"
 if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]
 then
-  echo "${YELLOW}Found ~/.zshrc.${RESET} ${GREEN}Backing up to ~/.zshrc.pre-oh-my-zsh${RESET}";
-  cp ~/.zshrc ~/.zshrc.pre-oh-my-zsh;
-  rm ~/.zshrc;
+  echo "${YELLOW}Found ~/.zshrc.${RESET} ${GREEN}Backing up to ~/.zshrc.pre-oh-my-zsh${RESET}"
+  cp ~/.zshrc ~/.zshrc.pre-oh-my-zsh
+  rm ~/.zshrc
 fi
 
 echo "${BLUE}Using the Oh My Zsh template file and adding it to ~/.zshrc${RESET}"

@@ -13,10 +13,10 @@ fi
 echo "${BLUE}Looking for an existing zsh config...${RESET}"
 if [ -f ~/.zshrc.pre-oh-my-zsh ] || [ -h ~/.zshrc.pre-oh-my-zsh ]
 then
-  echo "${YELLOW}Found ~/.zshrc.pre-oh-my-zsh.${RESET} ${GREEN}Restoring to ~/.zshrc${RESET}";
-  rm ~/.zshrc;
-  cp ~/.zshrc.pre-oh-my-zsh ~/.zshrc;
-  source ~/.zshrc;
+  echo "${YELLOW}Found ~/.zshrc.pre-oh-my-zsh.${RESET} ${GREEN}Restoring to ~/.zshrc${RESET}"
+  rm ~/.zshrc
+  cp ~/.zshrc.pre-oh-my-zsh ~/.zshrc
+  source ~/.zshrc
 else
   echo "${BLUE}Switching back to bash${RESET}"
   chsh -s /bin/bash
