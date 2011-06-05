@@ -6,6 +6,11 @@
 #
 #     zstyle :omz:plugins:ssh-agent agent-forwarding on
 #
+#   To load multiple identies use the identities style, For
+#   example:
+#
+#     zstyle :omz:plugins:ssh-agent id_rsa id_rsa2 id_github
+#
 #
 # CREDITS
 #
@@ -21,17 +26,23 @@ local _plugin__forwarding
 
 function _plugin__start_agent()
 {
+  local -a identities
+
+  # start ssh-agent and setup environment
   /usr/bin/env ssh-agent | sed 's/^echo/#echo/' > ${_plugin__ssh_env}
   chmod 600 ${_plugin__ssh_env}
   . ${_plugin__ssh_env} > /dev/null
-  /usr/bin/ssh-add;
+
+  # load identies
+  zstyle -a :omz:plugins:ssh-agent identities identities 
+  echo starting...
+  /usr/bin/ssh-add $HOME/.ssh/${^identities}
 }
 
 # test if agent-forwarding is enabled
 zstyle -b :omz:plugins:ssh-agent agent-forwarding _plugin__forwarding
-if [[ ${_plugin__forwarding} == "yes" && -z $SSH_AGENT_PID && -n "$SSH_AUTH_SOCK" ]]; then
-  # No PID but a AUTH_SOCK means agent forwarding is enabled
-  # Add a nifty symlink for screen/tmux 
+if [[ ${_plugin__forwarding} == "yes" && -n "$SSH_AUTH_SOCK" ]]; then
+  # Add a nifty symlink for screen/tmux if agent forwarding
   [[ -L $SSH_AUTH_SOCK ]] || ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USER-screen
 
 elif [ -f "${_plugin__ssh_env}" ]; then
