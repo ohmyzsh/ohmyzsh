@@ -1,11 +1,21 @@
-# get the name of the branch we are on
+# Renders the name of the current branch.
 function git_prompt_info() {
-  ref=$(git symbolic-ref HEAD 2> /dev/null) || return
-  echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
+  local branch=$(git_current_branch)
+  if [[ -n "$branch" ]]; then
+    echo "${ZSH_THEME_GIT_PROMPT_PREFIX}${branch}$(parse_git_dirty)${ZSH_THEME_GIT_PROMPT_SUFFIX}"
+  fi
 }
 
-# Checks if working tree is dirty
-parse_git_dirty() {
+# Gets the current branch.
+function git_current_branch() {
+  local ref=$(git symbolic-ref HEAD 2> /dev/null)
+  if [[ -n "$ref" ]]; then
+    echo "${ref#refs/heads/}"
+  fi
+}
+
+# Checks if the working tree is dirty.
+function parse_git_dirty() {
   if [[ -n $(git status -s 2> /dev/null) ]]; then
     echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
   else
@@ -13,25 +23,31 @@ parse_git_dirty() {
   fi
 }
 
-# Checks if there are commits ahead from remote
+# Checks if there are commits ahead from remote.
 function git_prompt_ahead() {
-  if $(echo "$(git log origin/$(current_branch)..HEAD 2> /dev/null)" | grep '^commit' &> /dev/null); then
+  if $(echo "$(git log origin/$(git_current_branch)..HEAD 2> /dev/null)" | grep '^commit' &> /dev/null); then
     echo "$ZSH_THEME_GIT_PROMPT_AHEAD"
   fi
 }
 
-# Formats prompt string for current git commit short SHA
+# Formats the prompt string for current git commit short SHA.
 function git_prompt_short_sha() {
-  SHA=$(git rev-parse --short HEAD 2> /dev/null) && echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
+  local sha=$(git rev-parse --short HEAD 2> /dev/null)
+  if [[ -n "$sha" ]]; then
+    echo "${ZSH_THEME_GIT_PROMPT_SHA_BEFORE}${sha}${ZSH_THEME_GIT_PROMPT_SHA_AFTER}"
+  fi
 }
 
-# Formats prompt string for current git commit long SHA
+# Formats the prompt string for current git commit long SHA.
 function git_prompt_long_sha() {
-  SHA=$(git rev-parse HEAD 2> /dev/null) && echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
+  local sha=$(git rev-parse HEAD 2> /dev/null)
+  if [[ -n "$sha" ]]; then
+    echo "${ZSH_THEME_GIT_PROMPT_SHA_BEFORE}${sha}${ZSH_THEME_GIT_PROMPT_SHA_AFTER}"
+  fi
 }
 
-# Get the status of the working tree
-git_prompt_status() {
+# Gets the status of the working tree.
+function git_prompt_status() {
   local indicators line untracked added modified renamed deleted
   while IFS=$'\n' read line; do
     if [[ "$line" =~ '^\?\? ' ]]; then
@@ -61,3 +77,4 @@ git_prompt_status() {
   done < <(git status --porcelain 2> /dev/null)
   echo $indicators
 }
+
