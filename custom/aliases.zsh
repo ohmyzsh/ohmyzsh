@@ -46,17 +46,10 @@ alias print-libpath='echo -e ${LD_LIBRARY_PATH//:/\\n}'
 alias lsbom='lsbom -f -l -s -pf'
 #alias t="$HOME/.local/bin/t --task-dir ~/.tasks --list todo.txt --delete-if-empty"
 
-<<<<<<< HEAD
 #alias v.='vim .'
 #alias v='vim ~/.vimrc'
 #alias VS='vim -S Session.vim'
-=======
-alias v.='vim .'
-alias v='vim ~/.vimrc'
-alias VS='vim -S Session.vim'
 
-alias z='vim -o ~/.zshenv ~/.oh-my-zsh/custom/aliases.zsh ~/.zshrc'
->>>>>>> ashleydev/master
 alias zs='source ~/.zshrc'
 
 
