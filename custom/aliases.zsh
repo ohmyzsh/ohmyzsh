@@ -52,7 +52,6 @@ alias lsbom='lsbom -f -l -s -pf'
 
 alias zs='source ~/.zshrc'
 
-
 if [[ -x "${commands[htop]}" ]]; then
   alias top=htop
 else
