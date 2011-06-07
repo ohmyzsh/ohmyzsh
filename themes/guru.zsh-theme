@@ -6,23 +6,17 @@
 
 # Color shortcuts
 R=$fg[red]
-Y=$fg[yellow]
 G=$fg[green]
 M=$fg[magenta]
-W=$fg[white]
-B=$fg[black]
 RB=$fg_bold[red]
 YB=$fg_bold[yellow]
-GB=$fg_bold[green]
-MB=$fg_bold[magenta]
-WB=$fg_bold[white]
-BB=$fg_bold[black]
+BB=$fg_bold[blue]
 RESET=$reset_color
 
 if [ "$(whoami)" = "root" ]; then
     PROMPTCOLOR="%{$RB%}" PREFIX="-!-";
 else
-    PROMPTCOLOR="%{$BB%}" PREFIX="---";
+    PROMPTCOLOR="" PREFIX="---";
 fi
 
 local return_code="%(?..%{$R%}%? ↵%{$RESET%})"
@@ -75,7 +69,8 @@ function custom_git_prompt() {
   echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$(parse_git_dirty)$(git_prompt_ahead)$(custom_git_prompt_status)$ZSH_THEME_GIT_PROMPT_SUFFIX"
 }
 
-PROMPT='${PROMPTCOLOR}$PREFIX %2~ $(custom_git_prompt)%{$M%}%B»%b%{$RESET%} '
+# %B sets bold text
+PROMPT='%B$PREFIX %2~ $(custom_git_prompt)%{$M%}%B»%b%{$RESET%} '
 RPS1="${return_code}"
 
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$YB%}‹"
