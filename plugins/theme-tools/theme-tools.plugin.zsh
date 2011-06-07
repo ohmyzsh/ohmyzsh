@@ -21,26 +21,30 @@ function usetheme() {
 
 # Change themes through a menu style prompt
 function changetheme() {
-  theme_files=($ZSH_THEMES_PATH/*)
-  theme_names=(${${theme_files[@]##*/}[@]%.zsh-theme})
+  if [ $1 ]; then
+    usetheme "$1"
+  else
+    theme_files=($ZSH_THEMES_PATH/*)
+    theme_names=(${${theme_files[@]##*/}[@]%.zsh-theme})
 
-  PS3="Enter your selection: "
-  SELECTION=""
+    PS3="Enter your selection: "
+    SELECTION=""
 
-  echo "Themes available:"
-  select theme in ${theme_names[@]} Quit
-  do
-    case $theme in
-      Quit)
-        echo "Exiting... "
-        exit;;
-      *)
-        SELECTION=$REPLY
-        break
-        ;;
-    esac
-  done
+    echo "Themes available:"
+    select theme in ${theme_names[@]} Quit
+    do
+      case $theme in
+        Quit)
+          echo "Exiting... "
+          exit;;
+        *)
+          SELECTION=$REPLY
+          break
+          ;;
+      esac
+    done
 
-  theme="${theme_names[$SELECTION]}"
-  usetheme $theme
+    theme="${theme_names[$SELECTION]}"
+    usetheme $theme
+  fi
 }
