@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------
-# Guru theme for oh-my-zsh by Adam Lindberg (eproxus@gmail.com)
+# Sunrise theme for oh-my-zsh by Adam Lindberg (eproxus@gmail.com)
 # Intended to be used with Solarized: http://ethanschoonover.com/solarized
 # (Needs Git plugin for current_branch method)
 #-------------------------------------------------------------------------------
