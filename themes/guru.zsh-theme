@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------
-# Guru theme for oh-my-zsh by Adam Lindberg
+# Guru theme for oh-my-zsh by Adam Lindberg (eproxus@gmail.com)
 # (Needs Git plugin for current_branch method)
 #-------------------------------------------------------------------------------
 
