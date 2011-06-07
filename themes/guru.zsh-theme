@@ -35,7 +35,7 @@ custom_git_prompt_status() {
   if $(echo "$INDEX" | grep '^ D ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
   fi
-  if $(echo "$INDEX" | grep '^ M ' &> /dev/null); then
+  if $(echo "$INDEX" | grep '^.M ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
   elif $(echo "$INDEX" | grep '^AM ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
@@ -46,7 +46,7 @@ custom_git_prompt_status() {
   if $(echo "$INDEX" | grep '^D  ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_STAGED_DELETED$STATUS"
   fi
-  if $(echo "$INDEX" | grep '^R  ' &> /dev/null); then
+  if $(echo "$INDEX" | grep '^R' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_STAGED_RENAMED$STATUS"
   fi
   if $(echo "$INDEX" | grep '^M  ' &> /dev/null); then
