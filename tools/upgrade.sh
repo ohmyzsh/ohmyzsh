@@ -1,12 +1,12 @@
 current_path=`pwd`
-echo "Upgrading Oh My Zsh"
+echo "\033[0;34mUpgrading Oh My Zsh\033[0m"
 ( cd $ZSH && git pull origin master )
-echo '         __                                     __  '
-echo '  ____  / /_     ____ ___  __  __   ____  _____/ /_ '
-echo ' / __ \/ __ \   / __ `__ \/ / / /  /_  / / ___/ __ \ '
-echo '/ /_/ / / / /  / / / / / / /_/ /    / /_(__  ) / / / '
-echo '\____/_/ /_/  /_/ /_/ /_/\__, /    /___/____/_/ /_/  '
-echo '                        /____/'
-echo "Hooray! Oh My Zsh has been updated and/or is at the current version. \nAny new updates will be reflected when you start your next terminal session."
-echo "To keep up on the latest, be sure to follow Oh My Zsh on twitter: http://twitter.com/ohmyzsh"
+echo "\033[0;32m"'         __                                     __   '"\033[0m"
+echo "\033[0;32m"'  ____  / /_     ____ ___  __  __   ____  _____/ /_  '"\033[0m"
+echo "\033[0;32m"' / __ \/ __ \   / __ `__ \/ / / /  /_  / / ___/ __ \ '"\033[0m"
+echo "\033[0;32m"'/ /_/ / / / /  / / / / / / /_/ /    / /_(__  ) / / / '"\033[0m"
+echo "\033[0;32m"'\____/_/ /_/  /_/ /_/ /_/\__, /    /___/____/_/ /_/  '"\033[0m"
+echo "\033[0;32m"'                        /____/                       '"\033[0m"
+echo "\033[0;34mHooray! Oh My Zsh has been updated and/or is at the current version.\033[0m"
+echo "\033[0;34mTo keep up on the latest, be sure to follow Oh My Zsh on twitter: \033[1mhttp://twitter.com/ohmyzsh\033[0m"
 cd $current_path

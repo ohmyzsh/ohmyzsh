@@ -1,10 +1,30 @@
-alias rs='ruby script/rails server'
-alias rg='ruby script/rails generate'
-alias rd='ruby script/rails destroy'
-alias rp='ruby script/rails plugin'
+# Rails 3 aliases, backwards-compatible with Rails 2.
+
+function _bundle_command {
+  if command -v bundle && [ -e "Gemfile" ]; then
+    bundle exec $@
+  else
+    $@
+  fi
+}
+
+function _rails_command () {
+  if [ -e "script/server" ]; then
+    ruby script/$@
+  else
+    ruby script/rails $@
+  fi
+}
+
+alias rc='_rails_command console'
+alias rd='_rails_command destroy'
+alias rdb='_rails_command dbconsole'
 alias rdbm='rake db:migrate db:test:clone'
-alias rdbmr='rake db:migrate && rake db:migrate:redo'
-alias rc='ruby script/rails console'
-alias rd='ruby script/rails server --debugger'
+alias rg='_rails_command generate'
+alias rp='_rails_command plugin'
+alias rs='_rails_command server'
+alias rsd='_rails_command server --debugger'
 alias devlog='tail -f log/development.log'
 
+alias rspec='_bundle_command rspec'
+alias cuke='_bundle_command cucumber'

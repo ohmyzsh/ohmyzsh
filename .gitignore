@@ -2,7 +2,8 @@ locals.zsh
 log/.zsh_history
 projects.zsh
 custom/*
-!custom/example.zsh
+!custom/example
+!custom/example!custom/example.zsh
 
 # editor backup files
 *~
