@@ -1,17 +1,22 @@
-export ZSH_THEMES_PATH=$ZSH/themes
-
 # Directly change a theme
 function usetheme() {
   if [ $1 ] && theme_name=${1%.zsh-theme}; then
-    printf "Changing theme to $1... "
+    if [ $theme_name = $ZSH_THEME ]; then
+      print "Maintaining theme... "
 
-    if [ -f $ZSH_THEMES_PATH/$theme_name.zsh-theme ]; then
-      source $ZSH_THEMES_PATH/$theme_name.zsh-theme
-      export ZSH_THEME=$theme_name
-      echo "$fg_bold[green]Done"
+      # A work-around when used through changetheme
+      source "$ZSH/themes/$theme_name.zsh-theme"
     else
-      printf "$fg_bold[red]Error$reset_color: "
-      echo "Could not find theme: '$theme_name.zsh-theme' in $ZSH_THEMES_PATH"
+      printf "Changing theme to $1... "
+
+      if [ -f "$ZSH/themes/$theme_name.zsh-theme" ]; then
+        source "$ZSH/themes/$theme_name.zsh-theme"
+        export ZSH_THEME=$theme_name
+        echo "$fg_bold[green]Done$reset_color"
+      else
+        printf "$fg_bold[red]Error$reset_color: "
+        echo "Could not find theme: '$theme_name.zsh-theme' in $ZSH_THEMES_PATH"
+      fi
     fi
 
   else
@@ -24,27 +29,45 @@ function changetheme() {
   if [ $1 ]; then
     usetheme "$1"
   else
-    theme_files=($ZSH_THEMES_PATH/*)
+    theme_files=($ZSH/themes/*)
     theme_names=(${${theme_files[@]##*/}[@]%.zsh-theme})
 
     PS3="Enter your selection: "
-    SELECTION=""
-
-    echo "Themes available:"
-    select theme in ${theme_names[@]} Quit
+    print "Themes available:"
+    select theme_name in ${theme_names[@]} Quit
     do
-      case $theme in
+      case $theme_name in
         Quit)
           echo "Exiting... "
           exit;;
         *)
-          SELECTION=$REPLY
-          break
-          ;;
+          theme_selection=$REPLY
+          printf "Would you like to preview this theme before applying? [yn]: "
+          read confirmation
+          case $confirmation in
+            y*)
+              source "${theme_files[$theme_selection]}"
+
+              PS3="$PROMPT"
+              echo "Apply theme? ";
+              select theme_confirmation in yes no
+              do
+                case $theme_confirmation in
+                  yes)
+                    theme="${theme_names[$theme_selection]}"
+                    break;;
+                  no)
+                    theme="$ZSH_THEME.zsh-theme"
+                    break;;
+                esac
+              done;
+              break;;
+            n*) break;;
+          esac
+          break;;
       esac
     done
-
-    theme="${theme_names[$SELECTION]}"
+    unset PS3
     usetheme $theme
   fi
 }
