@@ -55,4 +55,6 @@ function accept-line-and-enable-warning {
 	}
 
 zle -N accept-line-and-enable-warning
-bindkey '^M' accept-line-and-enable-warning
+# The accept-line-and-enable-warning feature breaks
+# when defining functions on the command line.
+# bindkey '^M' accept-line-and-enable-warning
