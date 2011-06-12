@@ -29,35 +29,31 @@
 # -------------------------------------------------------------------------------------------------
 
 
-# A simple keyword highlighting extension for zsh-syntax-highlighting.
-
-# To use this, please do the following steps.
-# 1) Source this file after zsh-syntax-highlighting.zsh
-# % source zsh-syntax-highlighting.zsh
-# % source contrib/keyword.zsh
-# 2) Add keyword and color pairs to `ZSH_HIGHLIGHT_KEYWORD_KEYWORDS`.
-# % ZSH_HIGHLIGHT_KEYWORD_KEYWORDS+=('rm -rf *' 'fg=white,bold,bg=red')
-# 3) Please see the effect.
-# % ;# rm -rf /tmp/doesnotexist
-
 # List of keyword and color pairs.
-typeset -gA ZSH_HIGHLIGHT_KEYWORD_KEYWORDS
+typeset -gA ZSH_HIGHLIGHT_PATTERNS
 
-_zsh_highlight-keyword() {
+# Whether the pattern highlighter should be called or not.
+_zsh_highlight_pattern_highlighter_predicate()
+{
+  _zsh_highlight_buffer_modified
+}
+
+# Pattern syntax highlighting function.
+_zsh_highlight_pattern_highlighter()
+{
   setopt localoptions extendedglob
-  for pattern in ${(k)ZSH_HIGHLIGHT_KEYWORD_KEYWORDS}; do
-    _zsh_highlight-keyword-loop "$BUFFER" "$pattern"
+  for pattern in ${(k)ZSH_HIGHLIGHT_PATTERNS}; do
+    _zsh_highlight_pattern_highlighter_loop "$BUFFER" "$pattern"
   done
 }
 
-_zsh_highlight-keyword-loop() {
+_zsh_highlight_pattern_highlighter_loop()
+{
   # This does *not* do its job syntactically, sorry.
   local buf="$1" pat="$2"
   local -a match mbegin mend
   if [[ "$buf" == (#b)(*)(${~pat})* ]]; then
-    region_highlight+=("$((mbegin[2] - 1)) $mend[2] $ZSH_HIGHLIGHT_KEYWORD_KEYWORDS[$pat]")
+    region_highlight+=("$((mbegin[2] - 1)) $mend[2] $ZSH_HIGHLIGHT_PATTERNS[$pat]")
     "$0" "$match[1]" "$pat"; return $?
   fi
 }
-
-_zsh_highlight_add-highlighter _zsh_highlight-keyword _zsh_highlight_buffer-modified-p

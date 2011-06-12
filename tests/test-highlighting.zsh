@@ -29,14 +29,35 @@
 # -------------------------------------------------------------------------------------------------
 
 
+# Check an highlighter was given as argument.
+[[ -n "$1" ]] || {
+  echo "You must provide the name of a valid highlighter as argument." >&2
+  exit 1
+}
+
+# Check the highlighter is valid.
+[[ -f ${0:h:h}/highlighters/$1/$1-highlighter.zsh ]] || {
+  echo "Could not find highlighter '$1'." >&2
+  exit 1
+}
+
+# Check the highlighter has test data.
+[[ -d ${0:h:h}/highlighters/$1/test-data ]] || {
+  echo "Highlighter '$1' has no test data." >&2
+  exit 1
+}
+
 local -a errors highlight_zone
 local -A observed_result
 
 # Load the main script.
-. $(dirname $0)/../zsh-syntax-highlighting.zsh
+. ${0:h:h}/zsh-syntax-highlighting.zsh
 
-# Process each test data file in data/.
-for data_file in $(dirname $0)/data/*.zsh; do
+# Activate the highlighter.
+ZSH_HIGHLIGHT_HIGHLIGHTERS=($1)
+
+# Process each test data file in test data directory.
+for data_file in ${0:h:h}/highlighters/$1/test-data/*; do
 
   # Load the data and prepare checking it.
   BUFFER= ; expected_region_highlight=(); errors=()
@@ -55,7 +76,7 @@ for data_file in $(dirname $0)/data/*.zsh; do
 
       # Process the data.
       region_highlight=()
-      _zsh_highlight-zle-buffer
+      _zsh_highlight
 
       # Overlapping regions can be declared in region_highlight, so we first build an array of the
       # observed highlighting.

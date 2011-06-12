@@ -29,29 +29,24 @@
 # -------------------------------------------------------------------------------------------------
 
 
-ZSH_HIGHLIGHT_STYLES+=(
-  bracket-error                 'fg=red,bold'
-)
+# Define default styles.
+: ${ZSH_HIGHLIGHT_STYLES[bracket-error]:=fg=red,bold}
+: ${ZSH_HIGHLIGHT_STYLES[bracket-level-1]:=fg=blue,bold}
+: ${ZSH_HIGHLIGHT_STYLES[bracket-level-2]:=fg=green,bold}
+: ${ZSH_HIGHLIGHT_STYLES[bracket-level-3]:=fg=magenta,bold}
+: ${ZSH_HIGHLIGHT_STYLES[bracket-level-4]:=fg=yellow,bold}
+: ${ZSH_HIGHLIGHT_STYLES[bracket-level-5]:=fg=cyan,bold}
 
-# Colors for bracket levels.
-# Put as many color as you wish.
-# Leave it as an empty array to disable.
-ZSH_HIGHLIGHT_MATCHING_BRACKETS_STYLES=(
-  'fg=blue,bold'
-  'fg=green,bold'
-  'fg=magenta,bold'
-  'fg=yellow,bold'
-  'fg=cyan,bold'
-)
-
-# Whether the bracket match highlighting shound be called or not.
-_zsh_highlight_bracket-match-p() {
-  _zsh_highlight_cursor-moved-p || _zsh_highlight_buffer-modified-p
+# Whether the brackets highlighter should be called or not.
+_zsh_highlight_brackets_highlighter_predicate()
+{
+  _zsh_highlight_cursor_moved || _zsh_highlight_buffer_modified
 }
 
-# Bracket match highlighting.
-_zsh_highlight_bracket-match() {
-  bracket_color_size=${#ZSH_HIGHLIGHT_MATCHING_BRACKETS_STYLES}
+# Brackets highlighting function.
+_zsh_highlight_brackets_highlighter()
+{
+  bracket_color_size=${#ZSH_HIGHLIGHT_STYLES[(I)bracket-level-*]}
   if ((bracket_color_size > 0)); then
     typeset -A levelpos lastoflevel matching revmatching
     ((level = 0))
@@ -73,7 +68,7 @@ _zsh_highlight_bracket-match() {
       if ((level < 1)); then
         region_highlight+=("$((pos - 1)) $pos "$ZSH_HIGHLIGHT_STYLES[bracket-error])
       else
-        region_highlight+=("$((pos - 1)) $pos "$ZSH_HIGHLIGHT_MATCHING_BRACKETS_STYLES[(( (level - 1) % bracket_color_size + 1 ))])
+        region_highlight+=("$((pos - 1)) $pos "$ZSH_HIGHLIGHT_STYLES[bracket-level-$(( (level - 1) % bracket_color_size + 1 ))])
       fi
     done
     ((c = CURSOR + 1))
@@ -85,5 +80,3 @@ _zsh_highlight_bracket-match() {
     fi
   fi
 }
-
-_zsh_highlight_add-highlighter _zsh_highlight_bracket-match
