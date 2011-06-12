@@ -5,26 +5,26 @@ bundled_commands=(cucumber heroku rackup rails rake rspec ruby shotgun spec spor
 
 ## Functions
 
-bundler-installed()
+_bundler-installed()
 {
     which bundle > /dev/null 2>&1
 }
 
-within-bundled-project()
+_within-bundled-project()
 {
-    local dir="$(pwd)"
-    while [ "$(dirname $dir)" != "/" ]; do
-        [ -f "$dir/Gemfile" ] && return
-        dir="$(dirname $dir)"
+    local check_dir=$PWD
+    while [ "$(dirname $check_dir)" != "/" ]; do
+        [ -f "$check_dir/Gemfile" ] && return
+        dir="$(dirname $check_dir)"
     done
     false
 }
 
-run-with-bundler()
+_run-with-bundler()
 {
     local command="$1"
     shift
-    if bundler-installed && within-bundled-project; then
+    if _bundler-installed && _within-bundled-project; then
         bundle exec $command "$@"
     else
         $command "$@"
@@ -33,5 +33,5 @@ run-with-bundler()
 
 ## Main program
 for cmd in $bundled_commands; do
-   alias $cmd="run-with-bundler $cmd"
+   alias $cmd="_run-with-bundler $cmd"
 done
