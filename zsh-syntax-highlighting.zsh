@@ -64,6 +64,7 @@ _zsh_highlight()
         # Remove what was stored in its cache from region_highlight.
         cache_place="_zsh_highlight_${highlighter}_highlighter_cache"
         [[ ${#${(P)cache_place}} -gt 0 ]] && region_highlight=(${region_highlight:#(${(P~j.|.)cache_place})})
+
       fi
     done
 
