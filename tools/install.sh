@@ -22,7 +22,15 @@ echo "\033[0;34mCopying your current PATH and adding it to the end of ~/.zshrc f
 echo "export PATH=$PATH" >> ~/.zshrc
 
 echo "\033[0;34mTime to change your default shell to zsh!\033[0m"
-chsh -s `which zsh`
+
+zshpath=$(which zsh)
+if [ $? -eq 1 ]
+then
+    echo "\033[0;33mAre you sure you have installed zsh?\033[0m"
+    exit
+fi
+
+chsh -s $zshpath
 
 echo "\033[0;32m"'         __                                     __   '"\033[0m"
 echo "\033[0;32m"'  ____  / /_     ____ ___  __  __   ____  _____/ /_  '"\033[0m"
@@ -32,5 +40,5 @@ echo "\033[0;32m"'\____/_/ /_/  /_/ /_/ /_/\__, /    /___/____/_/ /_/  '"\033[0m
 echo "\033[0;32m"'                        /____/                       '"\033[0m"
 
 echo "\n\n \033[0;32m....is now installed.\033[0m"
-/usr/bin/env zsh
+/usr/bin/env $zshpath
 source ~/.zshrc
