@@ -15,7 +15,7 @@ _within-bundled-project()
     local check_dir=$PWD
     while [ "$(dirname $check_dir)" != "/" ]; do
         [ -f "$check_dir/Gemfile" ] && return
-        dir="$(dirname $check_dir)"
+        check_dir="$(dirname $check_dir)"
     done
     false
 }
@@ -27,7 +27,7 @@ _run-with-bundler()
     if _bundler-installed && _within-bundled-project; then
         bundle exec $command "$@"
     else
-        $command "$@"
+      $command "$@"
     fi
 }
 
