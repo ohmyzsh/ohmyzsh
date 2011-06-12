@@ -1,7 +1,7 @@
 # This plugin is based on https://github.com/gma/bundler-exec
 # modify the BUNDLED_COMMANDS if needed
 
-BUNDLED_COMMANDS=(cucumber heroku rackup rails rake rspec ruby shotgun spec spork)
+bundled_commands=(cucumber heroku rackup rails rake rspec ruby shotgun spec spork)
 
 ## Functions
 
@@ -32,6 +32,6 @@ run-with-bundler()
 }
 
 ## Main program
-for CMD in $BUNDLED_COMMANDS; do
-   alias $CMD="run-with-bundler $CMD"
+for cmd in $bundled_commands; do
+   alias $cmd="run-with-bundler $cmd"
 done
