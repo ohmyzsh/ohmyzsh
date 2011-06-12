@@ -21,6 +21,7 @@ This highlighter is active by default.
 How to tweak it
 ---------------
 This highlighter defines the following styles:
+
 * `unknown-token` - unknown tokens / errors
 * `reserved-word` - shell reserved words
 * `alias` - aliases

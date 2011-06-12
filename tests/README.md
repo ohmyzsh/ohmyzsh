@@ -8,13 +8,13 @@ The tests expect the highlighter directory to contain a `test-data` directory wi
 
 highlighting test
 -----------------
-[`test-highlighting.zsh`](test-highlighting.zsh) tests the correctness of the highlighting. Usage:
+[`test-highlighting.zsh`](tests/test-highlighting.zsh) tests the correctness of the highlighting. Usage:
 
     zsh test-highlighting.zsh <HIGHLIGHTER NAME>
 
 
 performance test
 ----------------
-[`test-perfs.zsh`](test-highlighting.zsh) measures the time spent doing the highlighting. Usage:
+[`test-perfs.zsh`](tests/test-perfs.zsh) measures the time spent doing the highlighting. Usage:
 
     zsh test-perfs.zsh <HIGHLIGHTER NAME>

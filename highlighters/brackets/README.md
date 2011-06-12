@@ -14,6 +14,7 @@ To activate it, add it to `ZSH_HIGHLIGHT_HIGHLIGHTERS`:
 How to tweak it
 ---------------
 This highlighter defines the following styles:
+
 * `bracket-error` - unmatched brackets
 * `bracket-level-N` - brackets with nest level N
 
