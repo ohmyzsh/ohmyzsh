@@ -85,10 +85,10 @@ _zsh_highlight_main_highlighter()
         *': function')  style=$ZSH_HIGHLIGHT_STYLES[function];;
         *': command')   style=$ZSH_HIGHLIGHT_STYLES[command];;
         *': hashed')    style=$ZSH_HIGHLIGHT_STYLES[hashed-command];;
-        *)              if _zsh_highlight_main_highlighter_check_assign; then
+        *)              if _zsh_highlight_main_highlighter_check_assign "$arg"; then
                           style=$ZSH_HIGHLIGHT_STYLES[assign]
                           new_expression=true
-                        elif _zsh_highlight_main_highlighter_check_path; then
+                        elif _zsh_highlight_main_highlighter_check_path "$arg"; then
                           style=$ZSH_HIGHLIGHT_STYLES[path]
                         elif [[ $arg[0,1] = $histchars[0,1] ]]; then
                           style=$ZSH_HIGHLIGHT_STYLES[history-expansion]
@@ -109,7 +109,7 @@ _zsh_highlight_main_highlighter()
                  ;;
         '`'*'`') style=$ZSH_HIGHLIGHT_STYLES[back-quoted-argument];;
         *"*"*)   $highlight_glob && style=$ZSH_HIGHLIGHT_STYLES[globbing] || style=$ZSH_HIGHLIGHT_STYLES[default];;
-        *)       if _zsh_highlight_main_highlighter_check_path; then
+        *)       if _zsh_highlight_main_highlighter_check_path "$arg"; then
                    style=$ZSH_HIGHLIGHT_STYLES[path]
                  elif [[ $arg[0,1] = $histchars[0,1] ]]; then
                    style=$ZSH_HIGHLIGHT_STYLES[history-expansion]
@@ -128,6 +128,7 @@ _zsh_highlight_main_highlighter()
 # Check if the argument is variable assignment
 _zsh_highlight_main_highlighter_check_assign()
 {
+    local arg="$1"
     setopt localoptions extended_glob
     [[ ${(Q)arg} == [[:alpha:]_]([[:alnum:]_])#=* ]]
 }
@@ -135,6 +136,7 @@ _zsh_highlight_main_highlighter_check_assign()
 # Check if the argument is a path.
 _zsh_highlight_main_highlighter_check_path()
 {
+  local arg="$1"
   [[ -z ${(Q)arg} ]] && return 1
   [[ -e ${(Q)arg} ]] && return 0
   [[ ! -e ${(Q)arg:h} ]] && return 1
