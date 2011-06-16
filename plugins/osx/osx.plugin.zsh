@@ -10,7 +10,7 @@ function savepath() {
 
 function tab() {
 savepath
-osascript >/dev/null <<EOF
+arch -i386 osascript >/dev/null <<EOF
 on do_submenu(app_name, menu_name, menu_item, submenu_item)
     -- bring the target application to the front
     tell application app_name
