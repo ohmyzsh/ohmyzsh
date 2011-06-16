@@ -43,5 +43,5 @@ How to install
 How to tweak
 ------------
 
-Syntax highlighting is done by pluggable highlighter scripts, see the [highlighters directory](highlighters)
+Syntax highlighting is done by pluggable highlighter scripts, see the [highlighters directory](zsh-syntax-highlighting/highlighters)
 for documentation and configuration settings.
