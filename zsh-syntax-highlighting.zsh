@@ -110,7 +110,7 @@ _zsh_highlight_buffer_modified()
 # Returns 0 if the cursor has moved since _zsh_highlight was last called.
 _zsh_highlight_cursor_moved()
 {
-  (($_ZSH_HIGHLIGHT_PRIOR_CURSOR != $CURSOR))
+  [[ -n $CURSOR ]] && [[ -n $_ZSH_HIGHLIGHT_PRIOR_CURSOR ]] && (($_ZSH_HIGHLIGHT_PRIOR_CURSOR != $CURSOR))
 }
 
 
