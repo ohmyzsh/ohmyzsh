@@ -174,13 +174,5 @@ unset highlighter highlighter_dir highlighters_dir
 [[ $#ZSH_HIGHLIGHT_HIGHLIGHTERS -eq 0 ]] && ZSH_HIGHLIGHT_HIGHLIGHTERS=(main)
 
 # workaround to start highlighting immediately after the creation of a new command line.
-if [[ $#functions[zle-line-init] -eq 0 ]]; then
-  _zsh_highlight_old_zle_line_init_definition=$functions[zle-line-init]
-
-  function zle-line-init() {    
-    eval $_zsh_highlight_old_zle_line_init_definition
-    _zsh_highlight
-  }
-fi
-
-zle -N zle-line-init
+_zsh_highlight_old_precmd_definition=$functions[precmd]
+functions[precmd]="$_zsh_highlight_old_precmd_definition"";""_zsh_highlight"
