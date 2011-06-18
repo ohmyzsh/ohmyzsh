@@ -17,3 +17,9 @@ alias rp='_rails_command plugin'
 alias rs='_rails_command server'
 alias rsd='_rails_command server --debugger'
 alias devlog='tail -f log/development.log'
+
+alias rspec='_bundle_command rspec'
+alias cuke='_bundle_command cucumber'
+
+alias routes='rake routes'
+alias groutes='routes | grep'
