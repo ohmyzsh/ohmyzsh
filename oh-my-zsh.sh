@@ -1,3 +1,7 @@
+if [ -f $ZSH/custom/path/path.zsh ]; then
+   source $ZSH/custom/path/path.zsh
+fi
+
 # Check for updates on initial load...
 if [ "$DISABLE_AUTO_UPDATE" != "true" ]
 then
