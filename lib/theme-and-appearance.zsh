@@ -10,6 +10,9 @@ then
   ls --color -d . &>/dev/null 2>&1 && alias ls='ls --color=tty' || alias ls='ls -G'
 fi
 
+# Less colors
+export LESS=R
+
 #setopt no_beep
 setopt auto_cd
 setopt multios
