@@ -11,7 +11,9 @@ then
 fi
 
 # Less colors
-export LESS=R
+if [ "$DISABLE_LESS_COLORS" != "true" ]; then
+	export LESS=R
+fi
 
 #setopt no_beep
 setopt auto_cd
