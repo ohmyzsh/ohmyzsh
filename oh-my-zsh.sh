@@ -43,6 +43,9 @@ then
   source "$RANDOM_THEME"
   echo "[oh-my-zsh] Random theme '$RANDOM_THEME' loaded..."
 else
-  source "$ZSH/themes/$ZSH_THEME.zsh-theme"
+  if [ ! "$ZSH_THEME" = ""  ]
+  then
+    source "$ZSH/themes/$ZSH_THEME.zsh-theme"
+  fi
 fi
 
