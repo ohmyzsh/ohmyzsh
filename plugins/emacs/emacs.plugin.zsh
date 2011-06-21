@@ -11,6 +11,6 @@ alias em="$EDITOR"
 # workaround b/c Emacs can only open already existing files
 function _emacs_touch_and_edit() {
     touch $*
-    $EDITOR $*
+    eval $EDITOR $*
 }
 alias emt=_emacs_touch_and_edit
