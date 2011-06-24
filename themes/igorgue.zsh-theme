@@ -1,4 +1,4 @@
-PROMPT='$(rvm_ruby) %{$fg_bold[green]%}$(current_dir) %{$fg_bold[cyan]%}$(git_time_since_commit)$(git_prompt_info)%{$fg_bold[blue]%}%{$reset_color%}'
+PROMPT='$(python_version)$(rvm_ruby) %{$fg_bold[green]%}$(current_dir) %{$fg_bold[cyan]%}$(git_time_since_commit)$(git_prompt_info)%{$fg_bold[blue]%}%{$reset_color%}'
 
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[green]%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
@@ -15,8 +15,18 @@ function current_dir() {
     echo "%~"
 }
 
+function python_version() {
+    # FIXME python --version # doesn't work since x=`python --version` is not
+    # capturing the thing
+    if [[ -x "`which python`" && "`ls`" == *.py* ]]; then
+        out=`python -c "import sys, itertools; print ''.join([item for item in itertools.takewhile(lambda char: char != ' ', sys.version)])"`
+        echo "%{$fg[red]%}‹python-$out›%{$reset_color%}"
+    fi
+}
+
 function rvm_ruby() {
-    if [ -x "`which rvm-prompt`" ]; then
+    cur_dir_files=`ls`
+    if [[ -x "`which rvm-prompt`" && ( "$cur_dir_files" == *Capfile* || "$cur_dir_files" == *Gemfile* || "$cur_dir_files" == *Rakefile* || "$cur_dir_files" == *.rb* ) ]]; then
         if [ "$(rvm-prompt i v g)" != "" ]; then
             echo "%{$fg[red]%}‹$(rvm-prompt i v g)›%{$reset_color%}"
         else
