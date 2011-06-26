@@ -1,4 +1,4 @@
-PROMPT='$(python_version)$(rvm_ruby) %{$fg_bold[green]%}$(current_dir) %{$fg_bold[cyan]%}$(git_time_since_commit)$(git_prompt_info)%{$fg_bold[blue]%}%{$reset_color%}'
+PROMPT='$(haskell_version)$(python_version)$(rvm_ruby) %{$fg_bold[green]%}$(current_dir) %{$fg_bold[cyan]%}$(git_time_since_commit)$(git_prompt_info)%{$fg_bold[blue]%}%{$reset_color%}'
 
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[green]%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
@@ -13,6 +13,13 @@ ZSH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL="%{$fg[cyan]%}"
 
 function current_dir() {
     echo "%~"
+}
+
+function haskell_version() {
+    if [[ -x "`which ghci`" && ( "`ls`" == *.hs* || "`ls`" == *.cabal* ) ]]; then
+        out="`python -c "import sys; print sys.argv[-1]" \`ghci --version\``"
+        echo "%{$fg[red]%}‹ghci-$out›%{$reset_color%}"
+    fi
 }
 
 function python_version() {
