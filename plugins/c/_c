@@ -1,0 +1,6 @@
+#compdef c
+if [[ "$CODE_HOME" == "" && -d "$HOME/code" ]] ; then
+  _files -W $HOME/code
+elif [ -d "$CODE_HOME" ]; then
+  _files -W "$CODE_HOME"
+fi
