@@ -125,7 +125,7 @@ zmodload zsh/zleparameter 2>/dev/null || {
 }
 
 # Resolve highlighters directory location.
-highlighters_dir="${ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR:-${${(%):-%N}:A:h}/highlighters}"
+highlighters_dir=`dirname $0`/highlighters
 [[ -d $highlighters_dir ]] || {
   echo "zsh-syntax-highlighting: highlighters directory '$highlighters_dir' not found, exiting." >&2
   return -1
