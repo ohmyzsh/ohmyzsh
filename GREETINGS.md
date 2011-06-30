@@ -15,3 +15,4 @@ Authors / Greetings
  * [Clayton Parker](https://github.com/claytron)
  * [Arlen Cuss](https://github.com/celtic)
  * [Nakamura Yoshitaka](https://github.com/nakamuray)
+ * [Ted Naleid](https://github.com/tednaleid)
