@@ -1,61 +1,53 @@
 # ------------------------------------------------------------------------
-# Nils Pascal Illenseer oh-my-zsh theme (based on Juan G. Hurtado)
-# (Needs Git plugin for current_branch method)
+#          FILE: illenseer.zsh-theme
+#   DESCRIPTION: oh-my-zsh theme file, based on themes by Juan G. Hurtado,
+#                Stephen Tudor, Dejan Ranisavljevic, jnrowe
+#        AUTHOR: Nils Pascal Illenseer <ni@np.cx>
+#       VERSION: 1
+#    SCREENSHOT: 
 # ------------------------------------------------------------------------
-
-# Color shortcuts
-RED=$fg[red]
-YELLOW=$fg[yellow]
-GREEN=$fg[green]
-WHITE=$fg[white]
-BLUE=$fg[blue]
-RED_BOLD=$fg_bold[red]
-YELLOW_BOLD=$fg_bold[yellow]
-GREEN_BOLD=$fg_bold[green]
-WHITE_BOLD=$fg_bold[white]
-BLUE_BOLD=$fg_bold[blue]
-RESET_COLOR=$reset_color
 
 # Format for git_prompt_info()
 ZSH_THEME_GIT_PROMPT_PREFIX=""
 ZSH_THEME_GIT_PROMPT_SUFFIX=""
 
 # Format for parse_git_dirty()
-ZSH_THEME_GIT_PROMPT_DIRTY=" %{$RED%}✖"
-ZSH_THEME_GIT_PROMPT_CLEAN=" %{$GREEN%}✔"
+ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[red]%}✘"
+ZSH_THEME_GIT_PROMPT_CLEAN=" %{$fg[green]%}✔"
 
 # Format for git_prompt_status()
-ZSH_THEME_GIT_PROMPT_UNMERGED=" %{$RED%}unmerged"
-ZSH_THEME_GIT_PROMPT_DELETED=" %{$RED%}deleted"
-ZSH_THEME_GIT_PROMPT_RENAMED=" %{$YELLOW%}renamed"
-ZSH_THEME_GIT_PROMPT_MODIFIED=" %{$YELLOW%}modified"
-ZSH_THEME_GIT_PROMPT_ADDED=" %{$GREEN%}added"
-ZSH_THEME_GIT_PROMPT_UNTRACKED=" %{$WHITE%}untracked"
+ZSH_THEME_GIT_PROMPT_UNMERGED=" %{$fg_bold[magenta]%}➜"
+ZSH_THEME_GIT_PROMPT_DELETED=" %{$fg_bold[red]%}✖"
+ZSH_THEME_GIT_PROMPT_RENAMED=" %{$fg_bold[yellow]%}➜"
+ZSH_THEME_GIT_PROMPT_MODIFIED=" %{$fg_bold[yellow]%}✹"
+ZSH_THEME_GIT_PROMPT_ADDED=" %{$fg_bold[green]%}✚"
+ZSH_THEME_GIT_PROMPT_UNTRACKED=" %{$fg_bold[red]%}✚"
 
 # Format for git_prompt_ahead()
-ZSH_THEME_GIT_PROMPT_AHEAD=" %{$RED%}!"
+ZSH_THEME_GIT_PROMPT_AHEAD=" %{$fg_bold[red]%}‼"
 
 # Format for git_prompt_long_sha() and git_prompt_short_sha()
-ZSH_THEME_GIT_PROMPT_SHA_BEFORE=" %{$WHITE%}[%{$YELLOW%}"
-ZSH_THEME_GIT_PROMPT_SHA_AFTER="%{$WHITE%}]"
+ZSH_THEME_GIT_PROMPT_SHA_BEFORE=" %{$fg[white]%}[%{$fg_bold[cyan]%}"
+ZSH_THEME_GIT_PROMPT_SHA_AFTER="%{$fg[white]%}]"
 
-# Checks if working tree is dirty
-git_dirty_bit_info() {
-  ref=$(git symbolic-ref HEAD 2> /dev/null) || return
-  if [[ -n $(git status -s 2> /dev/null) ]]; then
-    echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
-  else
-    echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
-  fi
-}
+# Return code
+local ret_status="%(?:%{$fg_bold[green]%}✔:%{$fg_bold[red]%}✘ %s%?)"
+
+# root (red) vs. normal user (green)
+if [[ `id -u` -eq 0 ]]; then
+    user="%{$fg_bold[red]%}%n"
+else
+    user="%{$fg_bold[green]%}%n"
+fi
+
+# local (green) vs. remote (yellow)
+if [[ -n $SSH_CONNECTION ]]; then
+    loc="%{$fg_bold[yellow]%}%m"
+else
+    loc="%{$fg_bold[green]%}%m"
+fi
 
 # Prompt format
-if [[ `id -u` -eq 0 ]]; then
-PROMPT='%{$RED_BOLD%}%n@%m %{$WHITE_BOLD%}%~%u$(git_dirty_bit_info)$(git_prompt_ahead)%{$RESET_COLOR%}
-%{$WHITE_BOLD%}❯%{$RESET_COLOR%} '
-RPROMPT='%{$GREEN_BOLD%}$(current_branch)$(git_prompt_short_sha)$(git_prompt_status)%{$RESET_COLOR%}'
-else
-PROMPT='%{$GREEN_BOLD%}%n@%m %{$WHITE_BOLD%}%~%u$(git_dirty_bit_info)$(git_prompt_ahead)%{$RESET_COLOR%}
-%{$WHITE_BOLD%}❯%{$RESET_COLOR%} '
-RPROMPT='%{$GREEN_BOLD%}$(current_branch)$(git_prompt_short_sha)$(git_prompt_status)%{$RESET_COLOR%}'
-fi
+PROMPT='${ret_status} ${user}%{$fg_bold[white]%}@${loc} %{$fg_bold[white]%}%~%u
+➜%{$reset_color%} '
+RPROMPT='$(git_prompt_ahead)%{$fg_bold[white]%}$(git_prompt_info)$(git_prompt_short_sha)$(git_prompt_status)%{$reset_color%}'
