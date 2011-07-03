@@ -4,7 +4,7 @@
 #                Stephen Tudor, Dejan Ranisavljevic, jnrowe
 #        AUTHOR: Nils Pascal Illenseer <ni@np.cx>
 #       VERSION: 1
-#    SCREENSHOT: 
+#    SCREENSHOT: http://www.flickr.com/photos/infion/5895644448
 # ------------------------------------------------------------------------
 
 # Format for git_prompt_info()
@@ -24,7 +24,7 @@ ZSH_THEME_GIT_PROMPT_ADDED=" %{$fg_bold[green]%}✚"
 ZSH_THEME_GIT_PROMPT_UNTRACKED=" %{$fg_bold[red]%}✚"
 
 # Format for git_prompt_ahead()
-ZSH_THEME_GIT_PROMPT_AHEAD=" %{$fg_bold[red]%}‼"
+ZSH_THEME_GIT_PROMPT_AHEAD=" %{$fg_bold[red]%}‼ "
 
 # Format for git_prompt_long_sha() and git_prompt_short_sha()
 ZSH_THEME_GIT_PROMPT_SHA_BEFORE=" %{$fg[white]%}[%{$fg_bold[cyan]%}"
