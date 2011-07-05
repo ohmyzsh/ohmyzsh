@@ -27,7 +27,7 @@ alias gcp='git cherry-pick'
 compdef _git gcp=git-cherry-pick
 alias glg='git log --stat --max-count=5'
 compdef _git glg=git-log
-alias glp='git log --pretty=oneline --graph'
+alias glp='git log --pretty=short --graph'
 compdef _git glp=git-log
 
 # Git and svn mix
