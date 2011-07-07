@@ -31,7 +31,7 @@ function josh_prompt {
     prompt=" $prompt"
   done
 
-  prompt="%{%F{green}%}$PWD$prompt%{%F{red}%}$(rvm_prompt_info)%{$reset_color%} $(git_prompt_info)"
+  prompt="%{%F{green}%}$PWD$prompt%{%F{red}%}$(rvm_prompt_info)%{$reset_color%} $GIT_PROMPT_INFO"
 
   echo $prompt
 }

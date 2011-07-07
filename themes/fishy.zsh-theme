@@ -5,16 +5,47 @@ PROMPT='%n@%m %{$fg[$user_color]%}%~%{$reset_color%}%(!.#.>) '
 PROMPT2='%{$fg[red]%}\ %{$reset_color%}'
 
 local return_status="%{$fg_bold[red]%}%(?..%?)%{$reset_color%}"
-RPROMPT='${return_status}$(git_prompt_info)$(git_prompt_status)%{$reset_color%}'
+RPROMPT='${return_status}$GIT_PROMPT_INFO%{$reset_color%}'
 
-ZSH_THEME_GIT_PROMPT_PREFIX=" "
-ZSH_THEME_GIT_PROMPT_SUFFIX=""
-ZSH_THEME_GIT_PROMPT_DIRTY=""
-ZSH_THEME_GIT_PROMPT_CLEAN=""
+git_prompt_info ()
+{
+    if [ -z "$(git_prompt__git_dir)" ]; then
+        GIT_PROMPT_INFO=''
+        return
+    fi
 
-ZSH_THEME_GIT_PROMPT_ADDED="%{$fg_bold[green]%}+"
-ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg_bold[blue]%}!"
-ZSH_THEME_GIT_PROMPT_DELETED="%{$fg_bold[red]%}-"
-ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg_bold[magenta]%}>"
-ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg_bold[yellow]%}#"
-ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg_bold[cyan]%}?"
+    local prompt=''
+
+    git_prompt__branch
+    prompt=" $GIT_PROMPT_BRANCH"
+
+    git_prompt__rebase_info
+    prompt="${prompt}$GIT_PROMPT_REBASE_INFO"
+
+    git_prompt__dirty_state
+    if [[ "$GIT_PROMPT_DIRTY_STATE_INDEX_ADDED" = 'yes' ]]; then
+        prompt="${prompt}%{$fg[green]%} +"
+    fi
+    if [[ "$GIT_PROMPT_DIRTY_STATE_INDEX_MODIFIED" = 'yes' ]]; then
+        prompt="${prompt}%{$fg[blue]%} !"
+    fi
+    if [[ "$GIT_PROMPT_DIRTY_STATE_WORKTREE_MODIFIED" = 'yes' ]]; then
+        prompt="${prompt}%{$fg[blue]%} !"
+    fi
+    if [[ "$GIT_PROMPT_DIRTY_STATE_INDEX_DELETED" = 'yes' ]]; then
+        prompt="${prompt}%{$fg[red]%} -"
+    fi
+    if [[ "$GIT_PROMPT_DIRTY_STATE_WORKTREE_DELETED" = 'yes' ]]; then
+        prompt="${prompt}%{$fg[red]%} -"
+    fi
+    if [[ "$GIT_PROMPT_DIRTY_STATE_INDEX_RENAMED" = 'yes' ]]; then
+        prompt="${prompt}%{$fg[magenta]%} >"
+    fi
+    if [[ "$GIT_PROMPT_DIRTY_STATE_INDEX_UNMERGED" = 'yes' ]]; then
+        prompt="${prompt}%{$fg[yellow]%} #"
+    fi
+    if [[ "$GIT_PROMPT_DIRTY_STATE_WORKTREE_UNTRACKED" = 'yes' ]]; then
+        prompt="${prompt}%{$fg[cyan]%} ?"
+    fi
+    GIT_PROMPT_INFO=$prompt
+}

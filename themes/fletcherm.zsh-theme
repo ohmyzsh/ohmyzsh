@@ -1,5 +1,5 @@
 # Copied from old version of tonotdo's theme. LSCOLORS modified.
-PROMPT='%{$fg_no_bold[cyan]%}%n%{$fg_no_bold[magenta]%}•%{$fg_no_bold[green]%}%3~$(git_prompt_info)%{$reset_color%}» '
+PROMPT='%{$fg_no_bold[cyan]%}%n%{$fg_no_bold[magenta]%}•%{$fg_no_bold[green]%}%3~$GIT_PROMPT_INFO%{$reset_color%}» '
 RPROMPT='[%*]'
 
 # git theming

@@ -14,7 +14,7 @@ function prompt_char {
 RIXIUS_PRE="%{$bg[white]%}%{$fg[red]%}"
 
 PROMPT='
-%{$RIXIUS_PRE%}%n%{$reset_color%} in %{$fg_bold[green]%}$(collapse_pwd)%{$reset_color%}$(git_prompt_info)
+%{$RIXIUS_PRE%}%n%{$reset_color%} in %{$fg_bold[green]%}$(collapse_pwd)%{$reset_color%}$GIT_PROMPT_INFO
 $(prompt_char) '
 RPROMPT='%{$RIXIUS_PRE%}%T%{$reset_color%}'
 

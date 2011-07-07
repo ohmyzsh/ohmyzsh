@@ -1,6 +1,5 @@
 # ------------------------------------------------------------------------
 # Juan G. Hurtado oh-my-zsh theme
-# (Needs Git plugin for current_branch method)
 # ------------------------------------------------------------------------
 
 # Color shortcuts
@@ -16,31 +15,68 @@ WHITE_BOLD=$fg_bold[white]
 BLUE_BOLD=$fg_bold[blue]
 RESET_COLOR=$reset_color
 
-# Format for git_prompt_info()
-ZSH_THEME_GIT_PROMPT_PREFIX=""
-ZSH_THEME_GIT_PROMPT_SUFFIX=""
-
-# Format for parse_git_dirty()
-ZSH_THEME_GIT_PROMPT_DIRTY=" %{$RED%}(*)"
-ZSH_THEME_GIT_PROMPT_CLEAN=""
-
-# Format for git_prompt_status()
-ZSH_THEME_GIT_PROMPT_UNMERGED=" %{$RED%}unmerged"
-ZSH_THEME_GIT_PROMPT_DELETED=" %{$RED%}deleted"
-ZSH_THEME_GIT_PROMPT_RENAMED=" %{$YELLOW%}renamed"
-ZSH_THEME_GIT_PROMPT_MODIFIED=" %{$YELLOW%}modified"
-ZSH_THEME_GIT_PROMPT_ADDED=" %{$GREEN%}added"
-ZSH_THEME_GIT_PROMPT_UNTRACKED=" %{$WHITE%}untracked"
-
-# Format for git_prompt_ahead()
-ZSH_THEME_GIT_PROMPT_AHEAD=" %{$RED%}(!)"
-
-# Format for git_prompt_long_sha() and git_prompt_short_sha()
-ZSH_THEME_GIT_PROMPT_SHA_BEFORE=" %{$WHITE%}[%{$YELLOW%}"
-ZSH_THEME_GIT_PROMPT_SHA_AFTER="%{$WHITE%}]"
 
 # Prompt format
 PROMPT='
-%{$GREEN_BOLD%}%n@%m%{$WHITE%}:%{$YELLOW%}%~%u$(parse_git_dirty)$(git_prompt_ahead)%{$RESET_COLOR%}
+%{$GREEN_BOLD%}%n@%m%{$WHITE%}:%{$YELLOW%}%~%u$GIT_PROMPT_INFO%{$RESET_COLOR%}
 %{$BLUE%}>%{$RESET_COLOR%} '
-RPROMPT='%{$GREEN_BOLD%}$(current_branch)$(git_prompt_short_sha)$(git_prompt_status)%{$RESET_COLOR%}'
+RPROMPT='%{$GREEN_BOLD%}$GIT_RPROMPT_INFO%{$RESET_COLOR%}'
+
+git_prompt_info ()
+{
+    if [ -z "$(git_prompt__git_dir)" ]; then
+        GIT_PROMPT_INFO=''
+        GIT_RPROMPT_INFO=''
+        return
+    fi
+
+    local dirty=''
+    git_prompt__dirty_state
+    if [[ "$GIT_PROMPT_DIRTY_STATE_ANY_DIRTY" = 'yes' ]]; then
+        dirty=" %{$RED%}(*)"
+    fi
+    git_prompt__upstream
+    if [[ "$GIT_PROMPT_UPSTREAM_STATE" != "=" ]]; then
+        local upstream=" %{$RED%}($GIT_PROMPT_UPSTREAM_STATE)"
+    fi
+
+    GIT_PROMPT_INFO="$dirty$upstream"
+
+    git_prompt__branch
+    local current_branch="$GIT_PROMPT_BRANCH"
+
+    git_prompt__rebase_info
+    current_branch="${current_branch}$GIT_PROMPT_REBASE_INFO"
+
+    local sha=$(git rev-parse --short HEAD 2> /dev/null)
+    if [[ -n "$sha" ]]; then
+        sha=" %{$WHITE%}[%{$YELLOW%}$sha%{$WHITE%}]"
+    fi
+
+    local git_status=''
+    if [[ "$GIT_PROMPT_DIRTY_STATE_INDEX_ADDED" = 'yes' ]]; then
+        git_status="%{$GREEN%} added"
+    fi
+    if [[ "$GIT_PROMPT_DIRTY_STATE_INDEX_MODIFIED" = 'yes' ]]; then
+        git_status="${git_status}%{$YELLOW%} modified"
+    fi
+    if [[ "$GIT_PROMPT_DIRTY_STATE_WORKTREE_MODIFIED" = 'yes' ]]; then
+        git_status="${git_status}%{$YELLOW%} modified"
+    fi
+    if [[ "$GIT_PROMPT_DIRTY_STATE_INDEX_DELETED" = 'yes' ]]; then
+        git_status="${git_status}%{$RED%} deleted"
+    fi
+    if [[ "$GIT_PROMPT_DIRTY_STATE_WORKTREE_DELETED" = 'yes' ]]; then
+        git_status="${git_status}%{$RED%} deleted"
+    fi
+    if [[ "$GIT_PROMPT_DIRTY_STATE_INDEX_RENAMED" = 'yes' ]]; then
+        git_status="${git_status}%{$YELLOW%} renamed"
+    fi
+    if [[ "$GIT_PROMPT_DIRTY_STATE_INDEX_UNMERGED" = 'yes' ]]; then
+        git_status="${git_status}%{$RED%} unmerged"
+    fi
+    if [[ "$GIT_PROMPT_DIRTY_STATE_WORKTREE_UNTRACKED" = 'yes' ]]; then
+        git_status="${git_status}%{$WHITE%} untracked"
+    fi
+    GIT_RPROMPT_INFO="$current_branch$sha$git_status"
+}

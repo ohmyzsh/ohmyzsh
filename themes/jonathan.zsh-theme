@@ -32,7 +32,51 @@ preexec () {
 }
 
 
-setprompt () {
+git_prompt_info ()
+{
+    if [ -z "$(git_prompt__git_dir)" ]; then
+        GIT_PROMPT_INFO=''
+        return
+    fi
+
+    local prompt=''
+
+    git_prompt__branch
+    prompt=" on %{$fg[green]%}$GIT_PROMPT_BRANCH"
+
+    git_prompt__rebase_info
+    prompt="${prompt}$GIT_PROMPT_REBASE_INFO%{$terminfo[sgr0]%}"
+
+    git_prompt__dirty_state
+    if [[ "$GIT_PROMPT_DIRTY_STATE_INDEX_ADDED" = 'yes' ]]; then
+        prompt="${prompt}%{$fg[green]%} ✚"
+    fi
+    if [[ "$GIT_PROMPT_DIRTY_STATE_INDEX_MODIFIED" = 'yes' ]]; then
+        prompt="${prompt}%{$fg[blue]%} ✹"
+    fi
+    if [[ "$GIT_PROMPT_DIRTY_STATE_WORKTREE_MODIFIED" = 'yes' ]]; then
+        prompt="${prompt}%{$fg[blue]%} ✹"
+    fi
+    if [[ "$GIT_PROMPT_DIRTY_STATE_INDEX_DELETED" = 'yes' ]]; then
+        prompt="${prompt}%{$fg[red]%} ✖"
+    fi
+    if [[ "$GIT_PROMPT_DIRTY_STATE_WORKTREE_DELETED" = 'yes' ]]; then
+        prompt="${prompt}%{$fg[red]%} ✖"
+    fi
+    if [[ "$GIT_PROMPT_DIRTY_STATE_INDEX_RENAMED" = 'yes' ]]; then
+        prompt="${prompt}%{$fg[magenta]%} ➜"
+    fi
+    if [[ "$GIT_PROMPT_DIRTY_STATE_INDEX_UNMERGED" = 'yes' ]]; then
+        prompt="${prompt}%{$fg[yellow]%} ═"
+    fi
+    if [[ "$GIT_PROMPT_DIRTY_STATE_WORKTREE_UNTRACKED" = 'yes' ]]; then
+        prompt="${prompt}%{$fg[cyan]%} ✭"
+    fi
+    GIT_PROMPT_INFO=$prompt
+}
+
+setprompt ()
+{
     ###
     # Need this so the prompt will work.
 
@@ -52,20 +96,6 @@ setprompt () {
 	(( count = $count + 1 ))
     done
     PR_NO_COLOUR="%{$terminfo[sgr0]%}"
-
-    ###
-    # Modify Git prompt
-    ZSH_THEME_GIT_PROMPT_PREFIX=" on %{$fg[green]%}"
-    ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
-    ZSH_THEME_GIT_PROMPT_DIRTY=""
-    ZSH_THEME_GIT_PROMPT_CLEAN=""
-
-    ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[green]%} ✚"
-    ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg[blue]%} ✹"
-    ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[red]%} ✖"
-    ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[magenta]%} ➜"
-    ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[yellow]%} ═"
-    ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[cyan]%} ✭"
 
     ###
     # See if we can use extended characters to look nicer.
@@ -119,7 +149,7 @@ $PR_GREY)$PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_URCORNER$PR_SHIFT_OUT\
 
 $PR_CYAN$PR_SHIFT_IN$PR_LLCORNER$PR_BLUE$PR_HBAR$PR_SHIFT_OUT(\
 $PR_YELLOW%D{%H:%M:%S}\
-$PR_LIGHT_BLUE%{$reset_color%}`git_prompt_info``git_prompt_status`$PR_BLUE)$PR_CYAN$PR_SHIFT_IN$PR_HBAR\
+$PR_LIGHT_BLUE%{$reset_color%}$GIT_PROMPT_INFO$PR_BLUE)$PR_CYAN$PR_SHIFT_IN$PR_HBAR\
 $PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT\
 >$PR_NO_COLOUR '
 

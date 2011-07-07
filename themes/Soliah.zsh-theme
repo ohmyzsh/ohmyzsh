@@ -1,14 +1,30 @@
-PROMPT='%{$fg[blue]%}%n%{$reset_color%} on %{$fg[red]%}%M%{$reset_color%} in %{$fg[blue]%}%~%b%{$reset_color%}$(git_time_since_commit)$(check_git_prompt_info)
+local R="%{$terminfo[sgr0]%}"
+
+PROMPT='%{$fg[blue]%}%n$R on %{$fg[red]%}%M$R in %{$fg[blue]%}%~%b$R$GIT_PROMPT_INFO
 $ '
 
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[white]%}"
-ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%})"
+git_prompt_info ()
+{
+    if [ -z "$(git_prompt__git_dir)" ]; then
+        GIT_PROMPT_INFO="($(rvm_gemset)$R)"
+        return
+    fi
 
-# Text to display if the branch is dirty
-ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}*%{$reset_color%}"
+    local prompt=''
 
-# Text to display if the branch is clean
-ZSH_THEME_GIT_PROMPT_CLEAN=""
+    git_prompt__branch
+    prompt="%{$fg[white]%}$GIT_PROMPT_BRANCH"
+
+    git_prompt__rebase_info
+    prompt="${prompt}$GIT_PROMPT_REBASE_INFO"
+
+    git_prompt__dirty_state
+    if [[ "$GIT_PROMPT_DIRTY_STATE_ANY_DIRTY" = 'yes' ]]; then
+        prompt="${prompt}%{$fg[red]%}*"
+    fi
+
+    GIT_PROMPT_INFO="($(rvm_gemset)$(git_time_since_commit)$prompt$R)"
+}
 
 # Colors vary depending on time lapsed.
 ZSH_THEME_GIT_TIME_SINCE_COMMIT_SHORT="%{$fg[green]%}"
@@ -17,24 +33,11 @@ ZSH_THEME_GIT_TIME_SINCE_COMMIT_LONG="%{$fg[red]%}"
 ZSH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL="%{$fg[cyan]%}"
 
 
-# Git sometimes goes into a detached head state. git_prompt_info doesn't
-# return anything in this case. So wrap it in another function and check
-# for an empty string.
-function check_git_prompt_info() {
-    if git rev-parse --git-dir > /dev/null 2>&1; then
-        if [[ -z $(git_prompt_info) ]]; then
-            echo "%{$fg[magenta]%}detached-head%{$reset_color%})"
-        else
-            echo "$(git_prompt_info)"
-        fi
-    fi
-}
-
 # Determine if we are using a gemset.
 function rvm_gemset() {
     GEMSET=`rvm gemset list | grep '=>' | cut -b4-`
     if [[ -n $GEMSET ]]; then
-        echo "%{$fg[yellow]%}$GEMSET%{$reset_color%}|"
+        echo "%{$fg[yellow]%}${GEMSET}$R|"
     fi
 
 }
@@ -72,15 +75,15 @@ function git_time_since_commit() {
             fi
 
             if [ "$HOURS" -gt 24 ]; then
-                echo "($(rvm_gemset)$COLOR${DAYS}d${SUB_HOURS}h${SUB_MINUTES}m%{$reset_color%}|"
+                echo "$COLOR${DAYS}d${SUB_HOURS}h${SUB_MINUTES}m$R|"
             elif [ "$MINUTES" -gt 60 ]; then
-                echo "($(rvm_gemset)$COLOR${HOURS}h${SUB_MINUTES}m%{$reset_color%}|"
+                echo "$COLOR${HOURS}h${SUB_MINUTES}m$R|"
             else
-                echo "($(rvm_gemset)$COLOR${MINUTES}m%{$reset_color%}|"
+                echo "$COLOR${MINUTES}m$R|"
             fi
         else
             COLOR="$ZSH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL"
-            echo "($(rvm_gemset)$COLOR~|"
+            echo "$COLOR~|"
         fi
     fi
 }
