@@ -3,7 +3,7 @@ export ZSH="$HOME/.oh-my-zsh"
 
 # Set the name of the theme to load (see $ZSH/themes/).
 # Setting it to 'random' loads a random theme.
-export ZSH_THEME="robbyrussell"
+export ZSH_THEME="ashleydev"
 
 # Set to 'true' to enable case-sensitivity.
 export CASE_SENSITIVE='false'
