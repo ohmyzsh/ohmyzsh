@@ -24,7 +24,7 @@ alias gba='git branch -a'               ; compdef _git gba=git-branch
 alias gcount='git shortlog -sn'         ; compdef gcount=git
 alias gcp='git cherry-pick'             ; compdef _git gcp=git-cherry-pick
 alias gm='git merge'                    ; compdef _git gm=git-merge
-alias glg='git log --stat --max-count=5'; compdef _git glg=git-log
+alias gls='git shortlog'                ; compdef _git gls=shortlog
 
 # Git history (pretty)
 local pretty_format_oneline='--pretty=format:"%C(yellow)%h %C(green)%cd %C(cyan)%an %C(bold cyan)%d%C(reset) %s" --date=short'
