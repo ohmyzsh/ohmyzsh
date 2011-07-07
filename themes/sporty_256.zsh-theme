@@ -3,7 +3,7 @@
 # Preview - http://www.flickr.com/photos/adelcampo/4556482563/sizes/o/
 # based on robbyrussell's shell but louder!
 
-PROMPT='%{$fg_bold[blue]%}$(git_prompt_info) %F{208}%c%f
+PROMPT='%{$fg_bold[blue]%}$GIT_PROMPT_INFO %F{208}%c%f
 %{$fg_bold[white]%}%# %{$reset_color%}'
 RPROMPT='%B%F{208}%n%f%{$fg_bold[white]%}@%F{039}%m%f%{$reset_color%}'
 

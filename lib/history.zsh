@@ -1,13 +1,14 @@
 ## Command history configuration
-HISTFILE=$HOME/.zsh_history
+HISTFILE="$HOME/.zsh_history"
 HISTSIZE=10000
 SAVEHIST=10000
 
-setopt HIST_VERIFY
-setopt HIST_EXPIRE_DUPS_FIRST
-setopt HIST_IGNORE_SPACE
-setopt HIST_IGNORE_DUPS
-setopt SHARE_HISTORY
-setopt APPEND_HISTORY
-setopt EXTENDED_HISTORY
-setopt INC_APPEND_HISTORY
+setopt hist_verify
+setopt hist_expire_dups_first
+setopt hist_ignore_space
+setopt hist_ignore_dups
+setopt share_history
+setopt append_history
+setopt extended_history
+setopt inc_append_history
+

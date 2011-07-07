@@ -10,8 +10,6 @@ PROMPT_BRACKET_END='%{$fg_bold[white]%}]'
 PROMPT_USER='%{$fg_bold[white]%}%n'
 PROMPT_SIGN='%{$reset_color%}%#'
 
-GIT_PROMPT_INFO='$(git_prompt_info)'
-
 # My current prompt looks like:
 # [host:current_dir] (git_prompt_info)
 # [username]%

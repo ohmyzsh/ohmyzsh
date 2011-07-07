@@ -6,30 +6,70 @@
 #    SCREENSHOT: coming soon
 # -----------------------------------------------------------------------------
 
-MODE_INDICATOR="%{$fg_bold[red]%}❮%{$reset_color%}%{$fg[red]%}❮❮%{$reset_color%}"
-local return_status="%{$fg[red]%}%(?..⏎)%{$reset_color%}"
+local R="%{$terminfo[sgr0]%}"
 
-PROMPT='%{$fg[blue]%}%m%{$reset_color%}%{$fg_bold[white]%} ओम् %{$reset_color%}%{$fg[cyan]%}%~:%{$reset_color%}$(git_time_since_commit)$(git_prompt_info)
-%{$fg[red]%}%!%{$reset_color%} $(prompt_char) '
+MODE_INDICATOR="%{$fg_bold[red]%}❮$R%{$fg[red]%}❮❮$R"
+local return_status="%{$fg[red]%}%(?..⏎)$R"
 
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[green]%}git%{$reset_color%}@%{$bg[white]%}%{$fg[black]%}"
-ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%})"
-ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}!%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_CLEAN=""
+PROMPT='%{$fg[blue]%}%m$R%{$fg_bold[white]%} ओम् $R%{$fg[cyan]%}%~:$R$GIT_PROMPT_INFO
+%{$fg[red]%}%!$R $(prompt_char) '
 
-RPROMPT='${return_status}$(git_prompt_status)%{$reset_color%}'
+git_prompt_info ()
+{
+    if [ -z "$(git_prompt__git_dir)" ]; then
+        GIT_PROMPT_INFO=''
+        GIT_RPROMPT_INFO=''
+        return
+    fi
 
-ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[green]%} ✚"
-ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg[blue]%} ✹"
-ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[red]%} ✖"
-ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[magenta]%} ➜"
-ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[yellow]%} ═"
-ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[cyan]%} ✭"
+    local prompt=''
+
+    git_prompt__branch
+    prompt="%{$fg_bold[green]%}git$R@%{$bg[white]%}%{$fg[black]%}$GIT_PROMPT_BRANCH"
+
+    git_prompt__rebase_info
+    prompt="${prompt}$GIT_PROMPT_REBASE_INFO"
+
+    git_prompt__dirty_state
+    if [[ "$GIT_PROMPT_DIRTY_STATE_ANY_DIRTY" = 'yes' ]]; then
+        prompt="${prompt}%{$fg[red]%}!"
+    fi
+    GIT_PROMPT_INFO="($(git_time_since_commit)$prompt$R)"
+
+    local rprompt=''
+    if [[ "$GIT_PROMPT_DIRTY_STATE_INDEX_ADDED" = 'yes' ]]; then
+        rprompt="%{$fg[green]%} ✚"
+    fi
+    if [[ "$GIT_PROMPT_DIRTY_STATE_INDEX_MODIFIED" = 'yes' ]]; then
+        rprompt="${rprompt}%{$fg[blue]%} ✹"
+    fi
+    if [[ "$GIT_PROMPT_DIRTY_STATE_WORKTREE_MODIFIED" = 'yes' ]]; then
+        rprompt="${rprompt}%{$fg[blue]%} ✹"
+    fi
+    if [[ "$GIT_PROMPT_DIRTY_STATE_INDEX_DELETED" = 'yes' ]]; then
+        rprompt="${rprompt}%{$fg[red]%} ✖"
+    fi
+    if [[ "$GIT_PROMPT_DIRTY_STATE_WORKTREE_DELETED" = 'yes' ]]; then
+        rprompt="${rprompt}%{$fg[red]%} ✖"
+    fi
+    if [[ "$GIT_PROMPT_DIRTY_STATE_INDEX_RENAMED" = 'yes' ]]; then
+        rprompt="${rprompt}%{$fg[magenta]%} ➜"
+    fi
+    if [[ "$GIT_PROMPT_DIRTY_STATE_INDEX_UNMERGED" = 'yes' ]]; then
+        rprompt="${rprompt}%{$fg[yellow]%} ═"
+    fi
+    if [[ "$GIT_PROMPT_DIRTY_STATE_WORKTREE_UNTRACKED" = 'yes' ]]; then
+        rprompt="${rprompt}%{$fg[cyan]%} ✭"
+    fi
+    GIT_RPROMPT_INFO=$rprompt
+}
+
+RPROMPT='${return_status}$GIT_RPROMPT_INFO$R'
 
 function prompt_char() {
-  git branch >/dev/null 2>/dev/null && echo "%{$fg[green]%}±%{$reset_color%}" && return
-  hg root >/dev/null 2>/dev/null && echo "%{$fg_bold[red]%}☿%{$reset_color%}" && return
-  echo "%{$fg[cyan]%}◯ %{$reset_color%}"
+  git branch >/dev/null 2>/dev/null && echo "%{$fg[green]%}±$R" && return
+  hg root >/dev/null 2>/dev/null && echo "%{$fg_bold[red]%}☿$R" && return
+  echo "%{$fg[cyan]%}◯ $R"
 }
 
 # Colors vary depending on time lapsed.
@@ -40,7 +80,8 @@ ZSH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL="%{$fg[cyan]%}"
 
 # Determine the time since last commit. If branch is clean,
 # use a neutral color, otherwise colors will vary according to time.
-function git_time_since_commit() {
+git_time_since_commit ()
+{
     if git rev-parse --git-dir > /dev/null 2>&1; then
         # Only proceed if there is actually a commit.
         if [[ $(git log 2>&1 > /dev/null | grep -c "^fatal: bad default revision") == 0 ]]; then
@@ -71,15 +112,15 @@ function git_time_since_commit() {
             fi
 
             if [ "$HOURS" -gt 24 ]; then
-                echo "($COLOR${DAYS}d${SUB_HOURS}h${SUB_MINUTES}m%{$reset_color%}|"
+                echo "$COLOR${DAYS}d${SUB_HOURS}h${SUB_MINUTES}m$R|"
             elif [ "$MINUTES" -gt 60 ]; then
-                echo "($COLOR${HOURS}h${SUB_MINUTES}m%{$reset_color%}|"
+                echo "$COLOR${HOURS}h${SUB_MINUTES}m$R|"
             else
-                echo "($COLOR${MINUTES}m%{$reset_color%}|"
+                echo "$COLOR${MINUTES}m$R|"
             fi
         else
             COLOR="$ZSH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL"
-            echo "($COLOR~|"
+            echo "$COLOR~|"
         fi
     fi
 }

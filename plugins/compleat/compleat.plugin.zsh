@@ -5,10 +5,9 @@
 #       VERSION:  1.0.0
 # ------------------------------------------------------------------------------
 
-
 if (( ${+commands[compleat]} )); then
   local prefix="${commands[compleat]:h:h}"
-  local setup="${prefix}/share/compleat-1.0/compleat_setup" 
+  local setup="${prefix}/share/compleat-1.0/compleat_setup"
 
   if [[ -f "$setup" ]]; then
     if ! bashcompinit >/dev/null 2>&1; then
@@ -16,7 +15,6 @@ if (( ${+commands[compleat]} )); then
       bashcompinit -i
     fi
 
-    source "$setup" 
+    source "$setup"
   fi
 fi
-

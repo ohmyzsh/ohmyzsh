@@ -1,7 +1,9 @@
-# Changing/making/removing directory
-setopt auto_name_dirs
-setopt auto_pushd
-setopt pushd_ignore_dups
+setopt auto_cd              # Auto cd to a directory without typing cd.
+setopt auto_pushd           # Push the old directory onto the stack on cd.
+setopt pushd_ignore_dups    # Don't store duplicates in the stack.
+setopt cdable_vars          # Change directory to a path stored in a variable.
+setopt auto_name_dirs       # Auto add variable-stored paths to ~ list.
+setopt multios              # Write to multiple descriptors.
 
 alias ..='cd ..'
 alias cd..='cd ..'
@@ -9,6 +11,7 @@ alias cd...='cd ../..'
 alias cd....='cd ../../..'
 alias cd.....='cd ../../../..'
 alias cd/='cd /'
+alias -- -='cd -'
 
 alias 1='cd -'
 alias 2='cd +2'
@@ -34,11 +37,3 @@ cd () {
   fi
 }
 
-alias md='mkdir -p'
-alias rd=rmdir
-alias d='dirs -v'
-
-# mkdir & cd to it
-function mcd() { 
-  mkdir -p "$1" && cd "$1"; 
-}
