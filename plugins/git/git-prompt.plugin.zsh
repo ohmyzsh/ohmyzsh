@@ -26,6 +26,11 @@
 #   # with your format:
 #   git_prompt_info ()
 #   {
+#     if [ -z "$(git_prompt__git_dir)" ]; then
+#       GIT_PROMPT_INFO=''
+#       return
+#     fi
+#
 #     git_prompt__branch
 #     local branch_=$GIT_PROMPT_BRANCH
 #   
@@ -63,23 +68,26 @@
 # (See the ashleydev theme for more complex usage).
 git_prompt_info ()
 {
+  if [ -z "$(git_prompt__git_dir)" ]; then
+    GIT_PROMPT_INFO=''
+    return
+  fi
+
   git_prompt__branch
   local branch=$GIT_PROMPT_BRANCH
 
   git_prompt__dirty_state
   local dirty=$GIT_PROMPT_DIRTY_STATE_ANY_DIRTY
 
-  if [[ -n "$branch" ]]; then
-    local prompt=$branch
+  local prompt=$branch
 
-    if [[ "$dirty" = 'yes' ]]; then
-      prompt="$prompt$ZSH_THEME_GIT_PROMPT_DIRTY"
-    elif [[ "$dirty" = 'no' ]]; then
-      prompt="$prompt$ZSH_THEME_GIT_PROMPT_CLEAN"
-    fi
-
-    GIT_PROMPT_INFO="$ZSH_THEME_GIT_PROMPT_PREFIX$prompt$ZSH_THEME_GIT_PROMPT_SUFFIX"
+  if [[ "$dirty" = 'yes' ]]; then
+    prompt="$prompt$ZSH_THEME_GIT_PROMPT_DIRTY"
+  elif [[ "$dirty" = 'no' ]]; then
+    prompt="$prompt$ZSH_THEME_GIT_PROMPT_CLEAN"
   fi
+
+  GIT_PROMPT_INFO="$ZSH_THEME_GIT_PROMPT_PREFIX$prompt$ZSH_THEME_GIT_PROMPT_SUFFIX"
 }
 
 #------------------ git information utils ------------------
