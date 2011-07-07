@@ -44,3 +44,7 @@ function gems {
 		-Ee "s/$current_ruby$current_gemset$/$fg[green]&$reset_color/g"
 }
 
+# After open new tabs / windows and "Reuse Previous Tab's Directory"
+# reload the .rvmrc file on current directory
+# http://beginrescueend.com/integration/zsh/
+[[ -s $HOME/.rvm/scripts/rvm ]] && __rvm_project_rvmrc
