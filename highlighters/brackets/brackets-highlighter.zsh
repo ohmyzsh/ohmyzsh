@@ -46,8 +46,9 @@ _zsh_highlight_brackets_highlighter_predicate()
 # Brackets highlighting function.
 _zsh_highlight_brackets_highlighter()
 {
-  bracket_color_size=${#ZSH_HIGHLIGHT_STYLES[(I)bracket-level-*]}
+  local bracket_color_size=${#ZSH_HIGHLIGHT_STYLES[(I)bracket-level-*]}
   if ((bracket_color_size > 0)); then
+    local c level pos
     typeset -A levelpos lastoflevel matching revmatching
     ((level = 0))
     for pos in {1..${#BUFFER}}; do
@@ -64,15 +65,16 @@ _zsh_highlight_brackets_highlighter()
       esac
     done
     for pos in ${(k)levelpos}; do
-      level=$levelpos[$pos]
-      if ((level < 1)); then
+      if [[ -z $matching[$pos] ]] && [[ -z $revmatching[$pos] ]]; then
         region_highlight+=("$((pos - 1)) $pos "$ZSH_HIGHLIGHT_STYLES[bracket-error])
       else
-        region_highlight+=("$((pos - 1)) $pos "$ZSH_HIGHLIGHT_STYLES[bracket-level-$(( (level - 1) % bracket_color_size + 1 ))])
+        local style=bracket-level-$(( (levelpos[$pos] - 1) % bracket_color_size + 1 ))
+        region_highlight+=("$((pos - 1)) $pos "$ZSH_HIGHLIGHT_STYLES[$style])
       fi
     done
     ((c = CURSOR + 1))
     if [[ -n $levelpos[$c] ]]; then
+      local otherpos
       ((otherpos = -1))
       [[ -n $matching[$c] ]] && otherpos=$matching[$c]
       [[ -n $revmatching[$c] ]] && otherpos=$revmatching[$c]
