@@ -1,6 +1,6 @@
-[submodule "plugins/syntax-highlighting"]
-	path = plugins/syntax-highlighting
+[submodule "plugins/zsh-syntax-highlighting"]
+	path = plugins/zsh-syntax-highlighting
 	url = git://github.com/nicoulaj/zsh-syntax-highlighting.git
-[submodule "plugins/history-substring-search"]
-	path = plugins/history-substring-search
+[submodule "plugins/zsh-history-substring-search"]
+	path = plugins/zsh-history-substring-search
 	url = git://github.com/sunaku/zsh-history-substring-search.git
