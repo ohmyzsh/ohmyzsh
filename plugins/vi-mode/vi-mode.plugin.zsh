@@ -66,11 +66,12 @@ else
   bindkey -M vicmd "j" history-search-forward
 fi
 
-bindkey -M vicmd "?" history-incremental-search-backward
-bindkey -M vicmd "/" history-incremental-search-forward
+bindkey -M vicmd "/" history-incremental-search-backward
+bindkey -M vicmd "?" history-incremental-search-forward
 
 bindkey -M viins "^L" clear-screen
 bindkey -M viins "^W" backward-kill-word
+bindkey -M vicmd "^W" backward-kill-word
 bindkey -M viins "^A" beginning-of-line
 bindkey -M viins "^E" end-of-line
 
