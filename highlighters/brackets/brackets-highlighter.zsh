@@ -49,18 +49,25 @@ _zsh_highlight_brackets_highlighter()
   local level pos
   local -A levelpos lastoflevel matching typepos
   ((level = 0))
-  for pos in {1..${#BUFFER}}; do
+  for ((pos = 1; $pos <= ${#BUFFER}; pos++ )) ; do
     case $BUFFER[pos] in
-      "("|"["|"{")
+      ["([{"])
         levelpos[$pos]=$((++level))
         lastoflevel[$level]=$pos
         typepos[$pos]=$BUFFER[$pos]
         ;;
-      ")"|"]"|"}")
+      [")]}"])
         matching[$lastoflevel[$level]]=$pos
         matching[$pos]=$lastoflevel[$level]
         levelpos[$pos]=$((level--))
         typepos[$pos]=$BUFFER[$pos]
+        ;;
+      ['"'\'])
+        local temp=$BUFFER[$pos]
+        while (( $pos < ${#BUFFER} )) ; do
+          ((++pos))
+          [[ $BUFFER[$pos] == $temp ]] && break
+        done
         ;;
     esac
   done
