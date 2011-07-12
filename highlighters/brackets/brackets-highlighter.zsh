@@ -79,10 +79,8 @@ _zsh_highlight_brackets_highlighter()
     fi
   done
   ((pos = CURSOR + 1))
-  if [[ -n $levelpos[$pos] ]]; then
-    local otherpos
-    ((otherpos = -1))
-    [[ -n $matching[$pos] ]] && otherpos=$matching[$pos]
+  if [[ -n $levelpos[$pos] ]] && [[ -n $matching[$pos] ]]; then
+    local otherpos=$matching[$pos]
     region_highlight+=("$((otherpos - 1)) $otherpos standout")
   fi
 }
