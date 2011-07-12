@@ -46,45 +46,43 @@ _zsh_highlight_brackets_highlighter_predicate()
 # Brackets highlighting function.
 _zsh_highlight_brackets_highlighter()
 {
-  local bracket_color_size=${#ZSH_HIGHLIGHT_STYLES[(I)bracket-level-*]}
-  if ((bracket_color_size > 0)); then
-    local c level pos
-    typeset -A levelpos lastoflevel matching typepos revmatching
-    ((level = 0))
-    for pos in {1..${#BUFFER}}; do
-      case $BUFFER[pos] in
-        "("|"["|"{")
-          levelpos[$pos]=$((++level))
-          lastoflevel[$level]=$pos
-          typepos[$pos]=$BUFFER[$pos]
-          ;;
-        ")"|"]"|"}")
-          matching[$lastoflevel[$level]]=$pos
-          matching[$pos]=$lastoflevel[$level]
-          levelpos[$pos]=$((level--))
-          typepos[$pos]=$BUFFER[$pos]
-          ;;
-      esac
-    done
-    for pos in ${(k)typepos}; do
-          typepos[$pos]=${typepos[${pos}]/["()"]/round}
-          typepos[$pos]=${typepos[${pos}]/["[]"]/square}
-          typepos[$pos]=${typepos[${pos}]/["{}"]/curly}
-    done
-    for pos in ${(k)levelpos}; do
-      if [[ -z $matching[$pos] ]] || [[ $typepos[$pos] != $typepos[$matching[$pos]] ]]; then
-        region_highlight+=("$((pos - 1)) $pos "$ZSH_HIGHLIGHT_STYLES[bracket-error])
-      else
-        local style=bracket-level-$(( (levelpos[$pos] - 1) % bracket_color_size + 1 ))
-        region_highlight+=("$((pos - 1)) $pos "$ZSH_HIGHLIGHT_STYLES[$style])
-      fi
-    done
-    ((c = CURSOR + 1))
-    if [[ -n $levelpos[$c] ]]; then
-      local otherpos
-      ((otherpos = -1))
-      [[ -n $matching[$c] ]] && otherpos=$matching[$c]
-      region_highlight+=("$((otherpos - 1)) $otherpos standout")
+  local level pos
+  local -A levelpos lastoflevel matching typepos
+  ((level = 0))
+  for pos in {1..${#BUFFER}}; do
+    case $BUFFER[pos] in
+      "("|"["|"{")
+        levelpos[$pos]=$((++level))
+        lastoflevel[$level]=$pos
+        typepos[$pos]=$BUFFER[$pos]
+        ;;
+      ")"|"]"|"}")
+        matching[$lastoflevel[$level]]=$pos
+        matching[$pos]=$lastoflevel[$level]
+        levelpos[$pos]=$((level--))
+        typepos[$pos]=$BUFFER[$pos]
+        ;;
+    esac
+  done
+  for pos in ${(k)typepos}; do
+    typepos[$pos]=${typepos[${pos}]/["()"]/round}
+    typepos[$pos]=${typepos[${pos}]/["[]"]/square}
+    typepos[$pos]=${typepos[${pos}]/["{}"]/curly}
+  done
+  for pos in ${(k)levelpos}; do
+    if [[ -z $matching[$pos] ]] || [[ $typepos[$pos] != $typepos[$matching[$pos]] ]]; then
+      region_highlight+=("$((pos - 1)) $pos "$ZSH_HIGHLIGHT_STYLES[bracket-error])
+    else
+      local bracket_color_size=${#ZSH_HIGHLIGHT_STYLES[(I)bracket-level-*]}
+      local style=bracket-level-$(( (levelpos[$pos] - 1) % bracket_color_size + 1 ))
+      region_highlight+=("$((pos - 1)) $pos "$ZSH_HIGHLIGHT_STYLES[$style])
     fi
+  done
+  ((pos = CURSOR + 1))
+  if [[ -n $levelpos[$pos] ]]; then
+    local otherpos
+    ((otherpos = -1))
+    [[ -n $matching[$pos] ]] && otherpos=$matching[$pos]
+    region_highlight+=("$((otherpos - 1)) $otherpos standout")
   fi
 }
