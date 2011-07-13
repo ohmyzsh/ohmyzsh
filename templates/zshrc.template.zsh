@@ -18,7 +18,7 @@ export DISABLE_AUTO_TITLE='false'
 # Example: plugins=(rails git textmate ruby lighthouse)
 plugins=(git)
 
-source "$ZSH/oh-my-zsh.sh"
+source "$ZSH/oh-my-zsh.zsh"
 
 # Customize to your needs...
 
