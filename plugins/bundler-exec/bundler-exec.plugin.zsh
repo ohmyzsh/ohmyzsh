@@ -1,7 +1,7 @@
 # This plugin is based on https://github.com/gma/bundler-exec
 # modify the bundled_commands if needed
 
-bundled_commands=(cucumber heroku rackup rails rake rspec ruby shotgun spec spork)
+bundled_commands=(cap capify cucumber heroku rackup rails rake rspec ruby shotgun spec spork thin unicorn unicorn_rails)
 
 ## Functions
 
