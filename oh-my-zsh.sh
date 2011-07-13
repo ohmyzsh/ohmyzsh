@@ -29,15 +29,14 @@ done
 
 # Load the theme.
 if [[ "$ZSH_THEME" == "random" ]]; then
-  themes=($ZSH/themes/*.zsh-theme)
+  themes=($ZSH/themes/**/*.theme.zsh)
   theme_index=${#themes[@]}
   (( theme_index=((RANDOM % theme_index) + 1) ))
   random_theme="${themes[$theme_index]}"
   source "$random_theme"
 else
-  if [ ! "$ZSH_THEME" = ""  ]
-  then
-    source "$ZSH/themes/$ZSH_THEME.zsh-theme"
+  if [[ -f "$ZSH/themes/$ZSH_THEME/$ZSH_THEME.theme.zsh" ]]; then
+    source "$ZSH/themes/$ZSH_THEME/$ZSH_THEME.theme.zsh"
   fi
 fi
 
