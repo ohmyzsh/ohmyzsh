@@ -54,27 +54,22 @@ _zsh_highlight_brackets_highlighter()
       ["([{"])
         levelpos[$pos]=$((++level))
         lastoflevel[$level]=$pos
-        typepos[$pos]=$BUFFER[$pos]
+        typepos[$pos]=`_zsh_highlight_brackets_highlighter_brackettype $BUFFER[$pos]`
         ;;
       [")]}"])
         matching[$lastoflevel[$level]]=$pos
         matching[$pos]=$lastoflevel[$level]
         levelpos[$pos]=$((level--))
-        typepos[$pos]=$BUFFER[$pos]
+        typepos[$pos]=`_zsh_highlight_brackets_highlighter_brackettype $BUFFER[$pos]`
         ;;
       ['"'\'])
-        local temp=$BUFFER[$pos]
+        local quotetype=$BUFFER[$pos]
         while (( $pos < ${#BUFFER} )) ; do
           ((++pos))
-          [[ $BUFFER[$pos] == $temp ]] && break
+          [[ $BUFFER[$pos] == $quotetype ]] && break
         done
         ;;
     esac
-  done
-  for pos in ${(k)typepos}; do
-    typepos[$pos]=${typepos[${pos}]/["()"]/round}
-    typepos[$pos]=${typepos[${pos}]/["[]"]/square}
-    typepos[$pos]=${typepos[${pos}]/["{}"]/curly}
   done
   for pos in ${(k)levelpos}; do
     if [[ -z $matching[$pos] ]] || [[ $typepos[$pos] != $typepos[$matching[$pos]] ]]; then
@@ -90,4 +85,14 @@ _zsh_highlight_brackets_highlighter()
     local otherpos=$matching[$pos]
     region_highlight+=("$((otherpos - 1)) $otherpos standout")
   fi
+}
+
+_zsh_highlight_brackets_highlighter_brackettype()
+{
+  case $1 in
+    ["()"]) print round;;
+    ["[]"]) print bracket;;
+    ["{}"]) print curly;;
+    *) ;;
+  esac
 }
