@@ -16,3 +16,4 @@ Authors / Greetings
  * [Arlen Cuss](https://github.com/celtic)
  * [Nakamura Yoshitaka](https://github.com/nakamuray)
  * [Ted Naleid](https://github.com/tednaleid)
+ * [garinger](https://github.com/garinger)
