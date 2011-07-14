@@ -6,8 +6,8 @@ if [[ "$TERM" == 'dumb' ]]; then
 fi
 
 # Load all files in $ZSH/oh-my-zsh/lib/ that end in .zsh.
-for config_file in $ZSH/lib/*.zsh; do
-  source "$config_file"
+for function_file in $ZSH/functions/*.zsh; do
+  source "$function_file"
 done
 
 # Add all defined plugins to fpath.
