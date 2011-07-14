@@ -82,18 +82,15 @@ fi
 
 # Terminal Multiplexer
 # ------------------------------------------------------------------------------
-local screenrc tmuxconf
-if [[ "$TERM" == 'xterm-color' ]]; then
-  if [[ -e "$HOME/.screenrc" ]]; then
-    screenrc="-c '$HOME/.screenrc'"
-    tmuxconf="-f '$HOME/.tmux.conf'"
-  fi
-fi
-
-if [[ "$TERM" == 'xterm-256color' ]]; then
+if [[ "$TERM" == *256color* ]]; then
   if [[ -e "$HOME/.screenrc256" ]]; then
     screenrc="-c '$HOME/.screenrc256'"
     tmuxconf="-f '$HOME/.tmux256.conf'"
+  fi
+else
+  if [[ -e "$HOME/.screenrc" ]]; then
+    screenrc="-c '$HOME/.screenrc'"
+    tmuxconf="-f '$HOME/.tmux.conf'"
   fi
 fi
 
@@ -102,6 +99,8 @@ alias sl="screen $screenrc -list"
 alias sr="screen $screenrc -a -A -U -D -R"
 alias S="screen $screenrc -U -S"
 
-alias tmux="tmux $tmuxconf"
-alias tls="tmux list-sessions"
+if (( ${+commands[tmux]} )); then
+  alias tmux="tmux $tmuxconf"
+  alias tls="tmux list-sessions"
+fi
 
