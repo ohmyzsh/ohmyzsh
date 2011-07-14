@@ -1,4 +1,4 @@
-# The 'ls' family
+# The 'ls' Family
 # ------------------------------------------------------------------------------
 if [[ "$DISABLE_COLOR" != 'true' ]]; then
   if (( ${+commands[dircolors]} )); then
@@ -21,7 +21,7 @@ alias ll='ls -lh'            # Show human readable.
 alias la='ls -lhA'           # Show hidden files.
 alias lx='ls -lhXB'          # Sort by extension.
 alias lk='ls -lhSr'          # Sort by size, biggest last.
-alias lc='ls -lhtcr'         # Sort by and show change time, most recent lasa.
+alias lc='ls -lhtcr'         # Sort by and show change time, most recent last.
 alias lu='ls -lhtur'         # Sort by and show access time, most recent last.
 alias lt='ls -lhtr'          # Sort by date, most recent last.
 alias lm='ls -lha | more'    # Pipe through 'more'.
@@ -40,12 +40,17 @@ alias df='df -kh'
 alias pu='pushd'
 alias po='popd'
 alias _='sudo'
+alias o='open'
 alias e="$EDITOR"
+alias v="$PAGER"
+alias b="$BROWSER"
 alias history='fc -l 1'
 alias get='curl -C - -O'
 alias afind='ack -il'
 alias type='type -a'
 alias ssh='ssh -X'
+alias pbc='pbcopy'
+alias pbp='pbpaste'
 alias print-path='echo -e ${PATH//:/\\n}'
 alias t="t --task-dir ~/.tasks --list todo.txt --delete-if-empty"
 
