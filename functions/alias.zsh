@@ -63,11 +63,20 @@ fi
 
 if [[ "$DISABLE_COLOR" != 'true' ]]; then
   if [[ -x "${commands[colordiff]}" ]]; then
-    alias diff='colordiff'
+    alias diff='colordiff -u'
+    compdef colordiff=diff
+  elif [[ -x "${commands[git]}" ]]; then
+    function diff() {
+      git --no-pager diff --color=always --no-ext-diff --no-index "$@";
+    }
+    compdef _git diff=git-diff
+  else
+    alias diff='diff -u'
   fi
 
   if [[ -x "${commands[colormake]}" ]]; then
     alias make='colormake'
+    compdef colormake=make
   fi
 fi
 
