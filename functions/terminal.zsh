@@ -3,6 +3,13 @@ if [[ "$TERM" == 'dumb' ]]; then
   return
 fi
 
+# Set the GNU Screen window number.
+if [[ -n "$WINDOW" ]]; then
+  SCREEN_NO="%B$WINDOW%b "
+else
+  SCREEN_NO=""
+fi
+
 # Fully supports GNU Screen, iTerm, and most modern xterm and rxvt terminals.
 # Partially supports Mac OS X Terminal since it can't set window and tab separately.
 # Usage: title "tab title" "window title"
@@ -37,4 +44,3 @@ function preexec {
   local CMD=${1[(wr)^(*=*|sudo|ssh|-*)]}
   title "$CMD" "%100>...>$2%<<"
 }
-

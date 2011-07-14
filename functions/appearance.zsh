@@ -2,13 +2,6 @@
 autoload -U colors
 colors -i
 
-# Set the GNU Screen window number.
-if [[ -n "$WINDOW" ]]; then
-  SCREEN_NO="%B$WINDOW%b "
-else
-  SCREEN_NO=""
-fi
-
 # Set the default prompt theme.
 PS1="%n@%m:%~%# "
 
