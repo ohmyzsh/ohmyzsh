@@ -1,12 +1,25 @@
-if [[ -n `which dircolors` ]];then
+
+check_for_command(){
+	if [[ -z `which "$1" | grep "^$1 not found$"` ]]; then
+		echo "YES"
+	else
+		echo "NO"
+	fi
+}
+
+if [[ `check_for_command go_to_a_lemonparty_with_tubgirl_and_mr_goatse` == "YES" ]];then # testing stdout suppression
+	echo "I think we have a problem"
+fi
+
+if [[ `check_for_command dircolors` == "YES" ]];then
 	eval `dircolors -b`
 	zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 fi
 
 plugins(){
-	oUT=""
+	OUT=""
 
-	if [ -n "`which git_prompt_info`" ] ; then
+	if [[ "`check_for_command git_prompt_info`" == "YES" ]] ; then
 		OUT=`git_prompt_info`
 	fi
 
@@ -14,8 +27,11 @@ plugins(){
 }
 
 screen_window(){
-	if [ -n "$WINDOW" ]; then
+	if [[ -n "$WINDOW" ]]; then
 		echo "%{$reset_color%}%{$fg_bold[grey]%}/ %{$fg[red]%}$WINDOW%{$reset_color%} "
+	elif [[ -n "$TMUX_PANE" ]]; then
+		PANE=`echo $TMUX_PANE | sed 's/^%//'`
+		echo "%{$reset_color%}%{$fg_bold[grey]%}/ %{$fg[red]%}$PANE%{$reset_color%} "
 	fi
 }
 
