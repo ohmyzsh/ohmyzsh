@@ -5,11 +5,6 @@ if [[ "$TERM" == 'dumb' ]]; then
   DISABLE_COLOR='true'
 fi
 
-# Load all files in $ZSH/oh-my-zsh/lib/ that end in .zsh.
-for function_file in $ZSH/functions/*.zsh; do
-  source "$function_file"
-done
-
 # Add all defined plugins to fpath.
 plugin=${plugin:=()}
 for plugin in $plugins; do
@@ -17,8 +12,12 @@ for plugin in $plugins; do
 done
 
 # Load and run compinit.
-autoload -U compinit
-compinit -i
+autoload -Uz compinit && compinit -i
+
+# Load all files in $ZSH/oh-my-zsh/lib/ that end in .zsh.
+for function_file in $ZSH/functions/*.zsh; do
+  source "$function_file"
+done
 
 # Load all plugins defined in ~/.zshrc.
 for plugin in $plugins; do
