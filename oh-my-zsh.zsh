@@ -8,7 +8,7 @@ fi
 # Add all defined plugins to fpath.
 plugin=${plugin:=()}
 for plugin in $plugins; do
-  fpath=($ZSH/plugins/$plugin $fpath)
+  fpath=("$ZSH/plugins/$plugin" $fpath)
 done
 
 # Load and run compinit.
