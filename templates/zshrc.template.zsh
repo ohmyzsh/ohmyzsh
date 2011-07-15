@@ -1,7 +1,7 @@
 # Path to oh-my-zsh.
-export ZSH="$HOME/.oh-my-zsh"
+export OMZ="$HOME/.oh-my-zsh"
 
-# Set the name of the theme to load (see $ZSH/themes/).
+# Set the name of the theme to load (see $OMZ/themes/).
 # Setting it to 'random' loads a random theme.
 export ZSH_THEME="robbyrussell"
 
@@ -14,11 +14,11 @@ export DISABLE_COLOR='false'
 # Set to 'true' to disable auto setting the tab and window titles.
 export DISABLE_AUTO_TITLE='false'
 
-# Set the plugins to load (see $ZSH/plugins/).
+# Set the plugins to load (see $OMZ/plugins/).
 # Example: plugins=(rails git textmate ruby lighthouse)
 plugins=(git)
 
-source "$ZSH/oh-my-zsh.zsh"
+source "$OMZ/oh-my-zsh.zsh"
 
 # Customize to your needs...
 
