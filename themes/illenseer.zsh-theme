@@ -4,7 +4,7 @@
 #                Stephen Tudor, Dejan Ranisavljevic, jnrowe
 #        AUTHOR: Nils Pascal Illenseer <ni@np.cx>
 #       VERSION: 1
-#    SCREENSHOT: http://www.flickr.com/photos/infion/5895644448
+#    SCREENSHOT: http://www.flickr.com/photos/infion/5902602288/lightbox
 # ------------------------------------------------------------------------
 
 # Format for git_prompt_info()
@@ -40,14 +40,14 @@ else
     user="%{$fg_bold[green]%}%n"
 fi
 
-# local (green) vs. remote (yellow)
+# local (white) vs. remote (yellow)
 if [[ -n $SSH_CONNECTION ]]; then
     loc="%{$fg_bold[yellow]%}%m"
 else
-    loc="%{$fg_bold[green]%}%m"
+    loc="%m"
 fi
 
 # Prompt format
-PROMPT='${ret_status} ${user}%{$fg_bold[white]%}@${loc} %{$fg_bold[white]%}%~%u
-➜%{$reset_color%} '
+PROMPT='${ret_status} ${user}%{$fg_bold[white]%}@${loc} %{$fg_bold[blue]%}%~%u
+%{$fg_bold[white]%}❱%{$reset_color%} '
 RPROMPT='$(git_prompt_ahead)%{$fg_bold[white]%}$(git_prompt_info)$(git_prompt_short_sha)$(git_prompt_status)%{$reset_color%}'
