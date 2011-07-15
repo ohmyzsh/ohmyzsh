@@ -5,3 +5,4 @@ custom/*
 !custom/example
 !custom/example.zsh
 cache
+*.swp
