@@ -5,11 +5,8 @@ if [[ "$TERM" == 'dumb' ]]; then
   DISABLE_COLOR='true'
 fi
 
-# Add all defined plugins to fpath.
-plugin=${plugin:=()}
-for plugin in $plugins; do
-  fpath=("$OMZ/plugins/$plugin" $fpath)
-done
+# Add functions to fpath.
+fpath+=(${OMZ}/plugins/${^plugins} $OMZ/themes/*(/))
 
 # Load and run compinit.
 autoload -Uz compinit && compinit -i
@@ -26,18 +23,8 @@ for plugin in $plugins; do
   fi
 done
 
-# Load the theme.
-if [[ "$ZSH_THEME" == "random" ]]; then
-  themes=($OMZ/themes/**/*.theme.zsh)
-  theme_index=${#themes[@]}
-  (( theme_index=((RANDOM % theme_index) + 1) ))
-  random_theme="${themes[$theme_index]}"
-  source "$random_theme"
-else
-  if [[ -f "$OMZ/themes/$ZSH_THEME/$ZSH_THEME.theme.zsh" ]]; then
-    source "$OMZ/themes/$ZSH_THEME/$ZSH_THEME.theme.zsh"
-  fi
-fi
+# Load and run the prompt theming system.
+autoload -Uz promptinit && promptinit -i
 
 # Compile zcompdump, if modified, to increase startup speed.
 if [[ "$HOME/.zcompdump" -nt "$HOME/.zcompdump.zwc" ]] || [[ ! -e "$HOME/.zcompdump.zwc" ]]; then

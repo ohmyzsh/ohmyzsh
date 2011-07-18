@@ -1,0 +1,35 @@
+function +vi-git-status() {
+  # Untracked files.
+  if [[ -n $(git ls-files --other --exclude-standard 2> /dev/null) ]]; then
+    hook_com[unstaged]='%F{red}●%f'
+  fi
+}
+
+function prompt_minimal_precmd () {
+  setopt noxtrace noksharrays localoptions
+  vcs_info
+}
+
+function prompt_minimal_setup() {
+  setopt noxtrace noksharrays localoptions
+  prompt_opts=(cr subst percent)
+
+  autoload -Uz add-zsh-hook
+  autoload -Uz vcs_info
+
+  add-zsh-hook precmd prompt_minimal_precmd
+
+  zstyle ':vcs_info:*' enable bzr git hg svn
+  zstyle ':vcs_info:*' check-for-changes true
+  zstyle ':vcs_info:*' stagedstr '%F{green}●%f'
+  zstyle ':vcs_info:*' unstagedstr '%F{yellow}●%f'
+  zstyle ':vcs_info:*' formats ' - [%b%c%u]'
+  zstyle ':vcs_info:*' actionformats " - [%b%c%u|%F{cyan}%a%f]"
+  zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b|%F{cyan}%r%f'
+  zstyle ':vcs_info:git*+set-message:*' hooks git-status
+
+  PROMPT='%2~${vcs_info_msg_0_} » '
+}
+
+prompt_minimal_setup "$@"
+

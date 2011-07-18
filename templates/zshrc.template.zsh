@@ -1,24 +1,25 @@
 # Path to oh-my-zsh.
-export OMZ="$HOME/.oh-my-zsh"
-
-# Set the name of the theme to load (see $OMZ/themes/).
-# Setting it to 'random' loads a random theme.
-export ZSH_THEME="robbyrussell"
+OMZ="$HOME/.oh-my-zsh"
 
 # Set to 'true' to enable case-sensitivity.
-export CASE_SENSITIVE='false'
+CASE_SENSITIVE='false'
 
 # Set to 'true' to disable color (auto set on dumb terminals).
-export DISABLE_COLOR='false'
+DISABLE_COLOR='false'
 
 # Set to 'true' to disable auto setting the tab and window titles.
-export DISABLE_AUTO_TITLE='false'
+DISABLE_AUTO_TITLE='false'
 
 # Set the plugins to load (see $OMZ/plugins/).
-# Example: plugins=(rails git textmate ruby lighthouse)
+# Example: plugins=(git lighthouse rails ruby textmate)
 plugins=(git)
 
+# This will make you scream: OH MY ZSH!
 source "$OMZ/oh-my-zsh.zsh"
+
+# Load the prompt theme (type prompt -l to list all themes).
+# Setting it to 'random' loads a random theme.
+[[ "$TERM" != 'dumb' ]] && prompt sorin || prompt off
 
 # Customize to your needs...
 

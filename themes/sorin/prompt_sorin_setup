@@ -1,0 +1,34 @@
+# ------------------------------------------------------------------------------
+#          FILE:  prompt_sorin_setup
+#   DESCRIPTION:  oh-my-zsh theme file.
+#        AUTHOR:  Sorin Ionescu <sorin.ionescu@gmail.com>
+#       VERSION:  1.0.4
+#    SCREENSHOT:  http://i.imgur.com/aipDQ.png
+# ------------------------------------------------------------------------------
+
+
+function prompt_sorin_setup() {
+  setopt localoptions noxtrace noksharrays
+  prompt_opts=(cr subst percent)
+  
+  MODE_INDICATOR="%B%F{red}❮%f%b%F{red}❮❮%f"
+  ZSH_THEME_GIT_PROMPT_SHA_BEFORE=""
+  ZSH_THEME_GIT_PROMPT_SHA_AFTER=""
+  ZSH_THEME_GIT_PROMPT_AHEAD=""
+  ZSH_THEME_GIT_PROMPT_DIRTY=""
+  ZSH_THEME_GIT_PROMPT_CLEAN=""
+  ZSH_THEME_GIT_PROMPT_PREFIX=" %F{blue}git%f:%F{red}"
+  ZSH_THEME_GIT_PROMPT_SUFFIX="%f"
+  ZSH_THEME_GIT_PROMPT_ADDED="%F{green} ✚%f"
+  ZSH_THEME_GIT_PROMPT_MODIFIED="%F{blue} ✹%f"
+  ZSH_THEME_GIT_PROMPT_DELETED="%F{red} ✖%f"
+  ZSH_THEME_GIT_PROMPT_RENAMED="%F{magenta} ➜%f"
+  ZSH_THEME_GIT_PROMPT_UNMERGED="%F{yellow} ═%f"
+  ZSH_THEME_GIT_PROMPT_UNTRACKED="%F{cyan} ✭%f"
+
+  PROMPT='%F{cyan}%~%f$(git-prompt-info) %(!.%B%F{red}#%f%b.%B%F{green}❯%f%b) '
+  RPROMPT='%(?::%F{red}⏎%f)$(git-prompt-status)'
+}
+
+prompt_sorin_setup "$@"
+
