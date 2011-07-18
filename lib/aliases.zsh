@@ -1,25 +1,30 @@
+# Helper function that won't overwrite the alias if defined
+function alias_if_undefined() { 
+    alias $1 &> /dev/null || alias $1=$2
+}
+
 # Push and pop directories on directory stack
-alias pu='pushd'
-alias po='popd'
+alias_if_undefined pu 'pushd'
+alias_if_undefined po 'popd'
 
 # Basic directory operations
-alias ...='cd ../..'
-alias -- -='cd -'
+alias_if_undefined ... 'cd ../..'
+alias_if_undefined -- 'cd -'
 
 # Super user
-alias _='sudo'
+alias_if_undefined _ 'sudo'
 
-#alias g='grep -in'
+#alias_if_undefined g 'grep -in'
 
 # Show history
-alias history='fc -l 1'
+alias_if_undefined history 'fc -l 1'
 
 # List direcory contents
-alias lsa='ls -lah'
-alias l='ls -la'
-alias ll='ls -l'
-alias sl=ls # often screw this up
+alias_if_undefined lsa 'ls -lah'
+alias_if_undefined l 'ls -la'
+alias_if_undefined ll 'ls -l'
+alias_if_undefined sl 'ls' # often screw this up
 
-alias afind='ack-grep -il'
+alias_if_undefined afind 'ack-grep -il'
 
-alias x=extract
+alias_if_undefined x 'extract'
