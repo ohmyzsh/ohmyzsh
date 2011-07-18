@@ -1,9 +1,13 @@
 #compdef play
 #autoload
 
-local -a subcmds
+local curcontext="$curcontext" state line cmds ret=1
 
-subcmds=(
+_arguments \
+    '1: :->cmds' \
+    '*:: :->args' && ret=0
+
+cmds=(
     'antify:Create a build.xml file for this project'
     'auto-test:Automatically run all application tests'
     'build-module:Build and package a module'
@@ -39,10 +43,54 @@ subcmds=(
     'war:Export the application as a standalone WAR archive'
 )
 
-_arguments \
-  '*:: :->subcmds' && return 0
+case $state in
+    cmds)
+        _describe -t commands "play command" cmds && ret=0
+        ;;
 
-if (( CURRENT == 1 )); then
-  _describe -t commands "play subcommand" subcmds
-  return
-fi
+    args)
+        case $line[1] in
+            help)
+                _values 'commands' \
+                    'antify' \
+                    'auto-test' \
+                    'build-module' \
+                    'check' \
+                    'classpath' \
+                    'clean' \
+                    'dependencies' \
+                    'eclipsify' \
+                    'evolutions' \
+                    'evolutions\:apply' \
+                    'evolutions\:mark' \
+                    'evolutions\:resolve' \
+                    'id' \
+                    'idealize' \
+                    'install' \
+                    'javadoc' \
+                    'list-modules' \
+                    'modules' \
+                    'netbeansify' \
+                    'new' \
+                    'new-module' \
+                    'out' \
+                    'pid' \
+                    'precompile' \
+                    'restart' \
+                    'run' \
+                    'secret' \
+                    'start' \
+                    'status' \
+                    'stop' \
+                    'test' \
+                    'war' \
+                    && ret=0
+                ;;
+            *)
+                (( ret )) && _message 'no more arguments'
+                ;;
+        esac
+        ;;
+esac
+
+return ret
