@@ -1,0 +1,48 @@
+#compdef play
+#autoload
+
+local -a subcmds
+
+subcmds=(
+    'antify:Create a build.xml file for this project'
+    'auto-test:Automatically run all application tests'
+    'build-module:Build and package a module'
+    'check:Check for a release newer than the current one'
+    'classpath:Display the computed classpath'
+    'clean:Delete temporary files (including the bytecode cache)'
+    'dependencies:Resolve and retrieve project dependencies'
+    'eclipsify:Create all Eclipse configuration files'
+    'evolutions:Run the evolution check'
+    'evolutions\:apply:Automatically apply pending evolutions'
+    'evolutions\:mark:AppliedMark pending evolutions as manually applied'
+    'evolutions\:resolve:Resolve partially applied evolution'
+    'help:Display help on a specific command'
+    'id:Define the framework ID'
+    'idealize:Create all IntelliJ Idea configuration files'
+    'install:Install a module'
+    'javadoc:Generate your application Javadoc'
+    'list-modules:List modules available from the central modules repository'
+    'modules:Display the computed modules list'
+    'netbeansify:Create all NetBeans configuration files'
+    'new:Create a new application'
+    'new-module:Create a module'
+    'out:Follow logs/system.out file'
+    'pid:Show the PID of the running application'
+    'precompile:Precompile all Java sources and templates to speed up application start-up'
+    'restart:Restart the running application'
+    'run:Run the application in the current shell'
+    'secret:Generate a new secret key'
+    'start:Start the application in the background'
+    'status:Display the running application status'
+    'stop:Stop the running application'
+    'test:Run the application in test mode in the current shell'
+    'war:Export the application as a standalone WAR archive'
+)
+
+_arguments \
+  '*:: :->subcmds' && return 0
+
+if (( CURRENT == 1 )); then
+  _describe -t commands "play subcommand" subcmds
+  return
+fi
