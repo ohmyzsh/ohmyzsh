@@ -1,13 +1,13 @@
 # ------------------------------------------------------------------------------
 #          FILE:  gnu-utils.plugin.zsh
 #   DESCRIPTION:  oh-my-zsh plugin file.
-#        AUTHOR:  Sorin Ionescu (sorin.ionescu@gmail.com)
-#       VERSION:  1.0.0
+#        AUTHOR:  Sorin Ionescu <sorin.ionescu@gmail.com>
+#       VERSION:  1.0.1
 # ------------------------------------------------------------------------------
 
 
-if [[ -x "${commands[gwhoami]}" ]]; then
-  __gnu_utils() {
+if (( ${+commands[gwhoami]} )); then
+  function __gnu_utils() {
     emulate -L zsh
     local gcmds
     local gcmd
@@ -38,21 +38,10 @@ if [[ -x "${commands[gwhoami]}" ]]; then
       # lost if hash -r or rehash -f is executed. Thus, those two
       # functions have to be wrapped.
       #
-      (( ${+commands[$gcmd]} )) && hash ${gcmd[2,-1]}=${commands[$gcmd]}
-
-      #
-      # This method generates wrapper functions.
-      # It will override shell builtins.
-      #
-      # (( ${+commands[$gcmd]} )) && \
-      # eval "function $gcmd[2,-1]() { \"${prefix}/${gcmd//"["/"\\["}\" \"\$@\"; }"
-
-      #
-      # This method is inflexible since the aliases are at risk of being
-      # overriden resulting in the BSD coreutils being called.
-      #
-      # (( ${+commands[$gcmd]} )) && \
-      # alias "$gcmd[2,-1]"="${prefix}/${gcmd//"["/"\\["}"
+      if (( ${+commands[$gcmd]} )); then
+        hash "${gcmd[2,-1]}"="${commands[$gcmd]}"
+        unhash "$gcmd"
+      fi
     done
 
     return 0
@@ -69,11 +58,7 @@ if [[ -x "${commands[gwhoami]}" ]]; then
   }
 
   function rehash() {
-    if [[ "$*" =~ "-f" ]]; then
-      builtin rehash "$@"
-      __gnu_utils
-    else
-      builtin rehash "$@"
-    fi
+    hash -r "$@"
   }
 fi
+
