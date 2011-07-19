@@ -1,7 +1,7 @@
 #compdef play
 #autoload
 
-local curcontext="$curcontext" state line cmds ret=1
+local curcontext="$curcontext" state line cmds links ret=1
 
 _arguments \
     '1: :->cmds' \
@@ -43,9 +43,64 @@ cmds=(
     'war:Export the application as a standalone WAR archive'
 )
 
+__desc_commands() {
+    _describe -t commands "play command" cmds
+}
+
+links=(
+    'cp:An alias for classpath'
+    'deps:An alias for dependencies'
+    'ec:An alias for eclipsify'
+    'idea:An alias for idealize'
+    'jd:An alias for javadoc'
+    'lm:An alias for list-modules'
+    'nb:An alias for netbeansify'
+    'nm:An alias for new-module'
+    'st:An alias for status'
+)
+
+__desc_aliases() {
+    _describe -t alias "play alias" links
+}
+
+# Build the arguments using the given keys
+_build_arguments() {
+    local args
+    local chosen
+
+    declare -A args
+    args=(
+        'debug' '(debug)--debug[Debug mode (even more informations logged than in verbose mode)]'
+        'deps' '(deps)--deps[Resolve and install dependencies before running the command.]'
+        'exclude' '(exclude)--exclude[Excludes a list of directories (separator is ':').]'
+        'f' '(f)-f[Disable the JPDA port checking and force the jpda.port value.]'
+        'fwk_id' '(fwk_id)--%fwk_id[Use this ID to run the application (override the default framework ID)]'
+        'jpda' '(jpda)--jpda[Listen for JPDA connection. The process will  suspended until a client is plugged to the JPDA port.]'
+        'output' '(output)--output[The path where the WAR directory will be created. The contents of this directory will first be deleted.]'
+        'secret' '(secret)--secret[The script uses the secret key to generate an authorization token.]'
+        'sync' '(sync)--sync[Keep lib/ and modules/ directory synced. Delete unknow dependencies.]'
+        'url' '(url=)--url=[If you want to monitor an application running on a remote server, specify the application URL using this option]'
+        'verbose' '(--verbose)--verbose[Verbose Mode]'
+        # TODO: add module_list
+        'with' '(with)--with[Automatically enable this set of module for the newly created application.]'
+        'zip' '(zip)--zip[By default, the script creates an exploded WAR. If you want a zipped archive, specify the --zip option.]'
+    )
+
+    chosen=()
+    for param in "$@"; do
+        chosen+=($args[$param])
+    done
+
+    _arguments -s  $chosen
+}
+
+
+
 case $state in
     cmds)
-        _describe -t commands "play command" cmds && ret=0
+        _alternative \
+            'aliases::__desc_aliases' \
+            'commands::__desc_commands' && ret=0
         ;;
 
     args)
@@ -86,6 +141,44 @@ case $state in
                     'war' \
                     && ret=0
                 ;;
+
+            auto-test)
+                _build_arguments 'deps'
+                ;;
+
+            dependencies)
+                _build_arguments 'verbose' 'debug' 'jpda' 'sync' 'fwk_id'
+                ;;
+
+            classpath|eclipsify|idealize|modules|netbeansify|precompile)
+                _build_arguments 'deps' 'fwk_id'
+                ;;
+
+            new)
+                _build_arguments 'with'
+                ;;
+
+            # TODO: --java_options
+            restart|start)
+                _build_arguments 'deps' 'fwk_id'
+                ;;
+
+            run)
+                _build_arguments 'f' 'deps' 'fwk_id'
+                ;;
+
+            status)
+                _build_arguments 'url' 'secret'
+                ;;
+
+            test)
+                _build_arguments 'f' 'deps'
+                ;;
+
+            war)
+                _build_arguments 'output' 'zip' 'fwk_id' 'deps' 'exclude'
+                ;;
+
             *)
                 (( ret )) && _message 'no more arguments'
                 ;;
