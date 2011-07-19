@@ -8,10 +8,10 @@
 # http://sam.zoy.org/wtfpl/COPYING for more details.
 
 THEMES_DIR="$ZSH/themes"
-FAVLIST="~/.zsh_favlist"
+FAVLIST="${HOME}/.zsh_favlist"
 
 function noyes() {
-    read -p "$1 [y/N]" a
+    read -p "$1 [y/N] " a
     if [[ $a == "N" || $a == "n" || $a = "" ]]; then
         return 0
     fi
@@ -30,7 +30,7 @@ EOF
     rm -rf "$ZDOTDIR"
 
     echo
-    noyes "Do you want to add it to your favourite list?" && \
+    noyes "Do you want to add it to your favourite list ($FAVLIST)?" || \
           echo $THEME >> $FAVLIST
     echo
 }
