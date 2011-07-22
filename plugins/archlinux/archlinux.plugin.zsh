@@ -46,7 +46,8 @@ alias pacmir='sudo pacman -Syy'                # Force refresh of all package li
 paclist() {
   sudo pacman -Qei $(pacman -Qu|cut -d" " -f 1)|awk ' BEGIN {FS=":"}/^Name/{printf("\033[1;36m%s\033[1;37m", $2)}/^Description/{print $2}'
 }
-alias paclsorhpans='sudo pacman -Qdt'
+
+alias paclsorphans='sudo pacman -Qdt'
 alias pacrmorphans='sudo pacman -Rs $(pacman -Qtdq)'
 
 pacdisowned() {
