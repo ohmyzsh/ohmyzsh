@@ -1,3 +1,18 @@
+alias scpan='sudo cpan'
+
+# Find perl file
+alias pfind='find . -name *.pl | xargs grep -n'
+
+#Check syntax perl file 
+alias psc='perl -c'
+
+#French perldoc 
+alias perldoc-fr="perldoc -L FR"
+
+#Trace query SQL
+export DBIC_TRACE=1
+export DBI_TRACE=1
+
 # https://github.com/dbbolton
 #
 # Below are some useful Perl-related aliases/functions that I use with zsh.
@@ -29,22 +44,22 @@ alias latest-perl='curl -s http://www.perl.org/get.html | perl -wlne '\''if (/pe
 
 # newpl - creates a basic Perl script file and opens it with $EDITOR 
 newpl () {
-	# set $EDITOR to 'vim' if it is undefined
-	[[ -z $EDITOR ]] && EDITOR=vim
+    # set $EDITOR to 'vim' if it is undefined
+    [[ -z $EDITOR ]] && EDITOR=vim
 
-	# if the file exists, just open it
-	[[ -e $1 ]] && print "$1 exists; not modifying.\n" && $EDITOR $1
+    # if the file exists, just open it
+    [[ -e $1 ]] && print "$1 exists; not modifying.\n" && $EDITOR $1
 
-	# if it doesn't, make it, and open it
-	[[ ! -e $1 ]] && print '#!/usr/bin/perl'"\n"'use strict;'"\n"'use warnings;'\
-		"\n\n" > $1 && $EDITOR $1
+    # if it doesn't, make it, and open it
+    [[ ! -e $1 ]] && print '#!/usr/bin/perl'"\n"'use strict;'"\n"'use warnings;'\
+        "\n\n" > $1 && $EDITOR $1
 }
 
 
 # pgs - Perl Global Substitution
-# find pattern		= 1st arg
-# replace pattern	= 2nd arg
-# filename			= 3rd arg
+# find pattern        = 1st arg
+# replace pattern    = 2nd arg
+# filename            = 3rd arg
 pgs() { # [find] [replace] [filename]
     perl -i.orig -pe 's/'"$1"'/'"$2"'/g' "$3"
 }
@@ -59,4 +74,3 @@ prep() { # [pattern] [filename unless STDOUT]
 say() {
     print "$1\n"
 }
-
