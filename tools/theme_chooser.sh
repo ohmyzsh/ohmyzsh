@@ -20,18 +20,19 @@ function noyes() {
 
 function theme_preview() {
     THEME=$1
+    THEME_NAME=`echo $THEME | sed s/\.zsh-theme//`
     export ZDOTDIR="$(mktemp -d tmp.zshXXXX)"
 
 cat <<-EOF >"$ZDOTDIR/.zshrc"
-    source ~/.zshrc
-    source "$THEMES_DIR/$THEME"
+    ZSH_THEME="$THEME_NAME"
+    source $ZSH/oh-my-zsh.sh
 EOF
     zsh
     rm -rf "$ZDOTDIR"
 
     echo
     noyes "Do you want to add it to your favourite list ($FAVLIST)?" || \
-          echo $THEME >> $FAVLIST
+          echo $THEME_NAME >> $FAVLIST
     echo
 }
 
