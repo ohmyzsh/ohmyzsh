@@ -28,7 +28,7 @@ function svn_get_rev_nr {
 
 function svn_dirty_choose {
     if [ in_svn ]; then
-        s=$(svn status 2>/dev/null)
+        s=$(svn status|grep -E '^\s*[ACDIM!?L]' 2>/dev/null)
         if [ $s ]; then 
             echo $1
         else 
