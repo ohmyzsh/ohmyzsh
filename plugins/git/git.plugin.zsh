@@ -9,6 +9,8 @@ alias gup='git fetch && git rebase'
 compdef _git gup=git-fetch
 alias gp='git push'
 compdef _git gp=git-push
+gd() { git diff "$@" }
+compdef _git gd=git-diff
 gdv() { git diff -w "$@" | view - }
 compdef _git gdv=git-diff
 alias gc='git commit -v'
@@ -29,6 +31,8 @@ alias glg='git log --stat --max-count=5'
 compdef _git glg=git-log
 alias glgg='git log --graph --max-count=5'
 compdef _git glgg=git-log
+alias gg='git grep'
+compdef _git gg=git-grep
 
 # Git and svn mix
 alias git-svn-dcommit-push='git svn dcommit && git push github master:svntrunk'
