@@ -20,7 +20,7 @@ function noyes() {
 
 function theme_preview() {
     THEME=$1
-    export ZDOTDIR="$(mktemp -d)"
+    export ZDOTDIR="$(mktemp -d tmp.zshXXXX)"
 
 cat <<-EOF >"$ZDOTDIR/.zshrc"
     source ~/.zshrc
