@@ -47,6 +47,10 @@ _zsh_highlight()
   # Store the previous command return code to restore it whatever happens.
   local ret=$?
 
+  # Do not highlight if there are more than 300 chars in the buffer. It's most
+  # likely a pasted command or a huge list of files in that case..
+  [[ -n $ZSH_HIGHLIGHT_MAXLENGTH ]] && [[ $#BUFFER -gt $ZSH_HIGHLIGHT_MAXLENGTH ]] && return $ret
+
   # Do not highlight if there are pending inputs (copy/paste).
   [[ $PENDING -gt 0 ]] && return $ret
 
