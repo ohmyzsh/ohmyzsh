@@ -145,7 +145,7 @@ for event in ${${(f)"$(zle -la)"}:#(_*|orig-*|.run-help|.which-command|.beep)}; 
         eval "$event() { builtin zle .$event && _zsh_highlight } ; zle -N $event"
         ;;
       .*)
-        clean_event=$event[2,${#event}] # Remove the leading dot in the event name
+        clean_event=${event#\.}
         case ${widgets[$clean_event]-} in
           (completion|user):*)
             ;;
