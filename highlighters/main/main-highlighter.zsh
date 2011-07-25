@@ -52,7 +52,7 @@
 
 # Tokens that are always immediately followed by a command.
 ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS=(
-  '|' '||' ';' '&' '&&' 'noglob' 'nocorrect' 'builtin'
+  '|' '||' ';' '&' '&&' 'noglob' 'nocorrect' 'builtin' 'exec'
 )
 
 # Whether the highlighter should be called or not.
