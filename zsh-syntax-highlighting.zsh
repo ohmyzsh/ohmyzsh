@@ -144,17 +144,17 @@ for cur_widget in ${${(f)"$(builtin zle -la)"}:#(.*|orig-*|run-help|which-comman
 
     # User defined widget: override and rebind old one with prefix "orig-".
     user:*) eval "zle -N orig-$cur_widget ${widgets[$cur_widget]#*:}; \
-                  $cur_widget() { builtin zle orig-$cur_widget && _zsh_highlight }; \
-                  zle -N $cur_widget";;
+                  _zsh_highlight_widget_$cur_widget() { builtin zle orig-$cur_widget && _zsh_highlight }; \
+                  zle -N $cur_widget _zsh_highlight_widget_$cur_widget";;
 
     # Completion widget: override and rebind old one with prefix "orig-".
     completion:*) eval "zle -C orig-$cur_widget ${${widgets[$cur_widget]#*:}/:/ }; \
-                        $cur_widget() { builtin zle orig-$cur_widget && _zsh_highlight }; \
-                        zle -N $cur_widget";;
+                        _zsh_highlight_widget_$cur_widget() { builtin zle orig-$cur_widget && _zsh_highlight }; \
+                        zle -N $cur_widget _zsh_highlight_widget_$cur_widget";;
 
     # Builtin widget: override and make it call the builtin ".widget".
-    builtin) eval "$cur_widget() { builtin zle .$cur_widget && _zsh_highlight }; \
-                   zle -N $cur_widget";;
+    builtin) eval "_zsh_highlight_widget_$cur_widget() { builtin zle .$cur_widget && _zsh_highlight }; \
+                   zle -N $cur_widget _zsh_highlight_widget_$cur_widget";;
 
     # Default: unhandled case.
     *) echo "zsh-syntax-highlighting: unhandled ZLE widget '$cur_widget'" >&2 ;;
