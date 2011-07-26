@@ -136,30 +136,31 @@ highlighters_dir="${ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR:-${0:h}/highlighters}"
 }
 
 # Override ZLE widgets to make them invoke _zsh_highlight.
-for event in ${${(f)"$(zle -la)"}:#(_*|orig-*|.run-help|.which-command|.beep)}; do
-  if [[ "$widgets[$event]" == completion:* ]]; then
-    eval "zle -C orig-$event ${${${widgets[$event]}#*:}/:/ } ; $event() { builtin zle orig-$event && _zsh_highlight } ; zle -N $event"
-  else
-    case $event in
-      accept-and-menu-complete)
-        eval "$event() { builtin zle .$event && _zsh_highlight } ; zle -N $event"
-        ;;
-      .*)
-        clean_event=${event#\.}
-        case ${widgets[$clean_event]-} in
-          (completion|user):*)
-            ;;
-          *)
-            eval "$clean_event() { builtin zle $event && _zsh_highlight } ; zle -N $clean_event"
-            ;;
-        esac
-        ;;
-      *)
-        ;;
-    esac
-  fi
+for cur_widget in ${${(f)"$(builtin zle -la)"}:#(.*|orig-*|run-help|which-command|beep)}; do
+  case $widgets[$cur_widget] in
+
+    # Already rebound event: do nothing.
+    user:$cur_widget);;
+
+    # User defined widget: override and rebind old one with prefix "orig-".
+    user:*) eval "zle -N orig-$cur_widget ${widgets[$cur_widget]#*:}; \
+                  $cur_widget() { builtin zle orig-$cur_widget && _zsh_highlight }; \
+                  zle -N $cur_widget";;
+
+    # Completion widget: override and rebind old one with prefix "orig-".
+    completion:*) eval "zle -C orig-$cur_widget ${${widgets[$cur_widget]#*:}/:/ }; \
+                        $cur_widget() { builtin zle orig-$cur_widget && _zsh_highlight }; \
+                        zle -N $cur_widget";;
+
+    # Builtin widget: override and make it call the builtin ".widget".
+    builtin) eval "$cur_widget() { builtin zle .$cur_widget && _zsh_highlight }; \
+                   zle -N $cur_widget";;
+
+    # Default: unhandled case.
+    *) echo "zsh-syntax-highlighting: unhandled ZLE widget '$cur_widget'" >&2 ;;
+  esac
 done
-unset event clean_event
+unset cur_widget
 
 # Start highlighting immediately after the creation of a new command line.
 autoload add-zsh-hook && add-zsh-hook precmd _zsh_highlight
