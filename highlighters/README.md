@@ -7,6 +7,7 @@ Syntax highlighting is done by pluggable highlighters:
 * [***brackets***](highlighters/brackets) - matches brackets and parenthesis.
 * [***pattern***](highlighters/pattern) - matches user-defined patterns.
 * [***cursor***](highlighters/cursor) - matches the cursor position.
+* [***root***](highlighters/root) - triggered if the current user is root.
 
 
 How to activate highlighters
