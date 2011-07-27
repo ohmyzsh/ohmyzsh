@@ -4,11 +4,16 @@
 #Limited support for Apple Terminal (Terminal can't set window or tab separately)
 function title {
   [ "$DISABLE_AUTO_TITLE" != "true" ] || return
+  local e1="$1" e2="$2"
+  if [[ "$NOESCAPE" != 1 ]]; then
+	  e1="$1:q"
+	  e2="$1:q"
+  fi
   if [[ "$TERM" == screen* ]]; then 
-    print -Pn "\ek$1:q\e\\" #set screen hardstatus, usually truncated at 20 chars
+    print -Pn "\ek$e1\e\\" #set screen hardstatus, usually truncated at 20 chars
   elif [[ "$TERM" == xterm* ]] || [[ $TERM == rxvt* ]] || [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
-    print -Pn "\e]2;$2:q\a" #set window name
-    print -Pn "\e]1;$1:q\a" #set icon (=tab) name (will override window name on broken terminal)
+    print -Pn "\e]2;$e2\a" #set window name
+    print -Pn "\e]1;$e1\a" #set icon (=tab) name (will override window name on broken terminal)
   fi
 }
 
@@ -28,5 +33,5 @@ function preexec {
   local psvar
   psvar[1]="$CMD"
   psvar[2]="$2"
-  title "%1v" "%100>...>%2v%<<"
+  NOESCAPE=1 title "%1v" "%100>...>%2v%<<"
 }
