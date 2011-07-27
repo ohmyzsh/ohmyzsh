@@ -18,7 +18,8 @@ function git_ahead {
     AHEAD=$(echo "$GITSTATUS" | grep '^# Your branch is ahead of' 2> /dev/null)
     if [[ -n $AHEAD ]]; then
         AHEAD=${AHEAD##\# Your branch is ahead of * by }
-	AHEAD=${AHEAD%% commit.}
+	AHEAD=${AHEAD%% commits.}
+    AHEAD=${AHEAD%% commit.}
         echo "^%{$fg[magenta]%}"$AHEAD"%{$reset_color%}"
     fi
 	
