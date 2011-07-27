@@ -25,5 +25,8 @@ function preexec {
   emulate -L zsh
   setopt extended_glob
   local CMD=${1[(wr)^(*=*|sudo|ssh|-*)]} #cmd name only, or if this is sudo or ssh, the next cmd
-  title "$CMD" "%100>...>$2%<<"
+  local psvar
+  psvar[1]="$CMD"
+  psvar[2]="$2"
+  title "%1v" "%100>...>%2v%<<"
 }
