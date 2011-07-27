@@ -5,7 +5,7 @@
 function title {
   [ "$DISABLE_AUTO_TITLE" != "true" ] || return
   local e1="$1" e2="$2"
-  if [[ "$NOESCAPE" != 1 ]]; then
+  if [[ "$TITLE_NO_ESCAPE" != 1 ]]; then
 	  e1="$1:q"
 	  e2="$1:q"
   fi
@@ -33,5 +33,5 @@ function preexec {
   local psvar
   psvar[1]="$CMD"
   psvar[2]="$2"
-  NOESCAPE=1 title "%1v" "%100>...>%2v%<<"
+  TITLE_NO_ESCAPE=1 title "%1v" "%100>...>%2v%<<"
 }
