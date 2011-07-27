@@ -11,7 +11,7 @@ parse_git_dirty () {
 	echo -n "$ZSH_THEME_GIT_PROMPT_DIRTY"
   fi
 
-  if [[ $(echo ${gitstat} | grep -c "^\(# Untracked files:\|# Changed but not updated:\)$") > 0 ]]; then
+  if [[ $(echo ${gitstat} | grep -c "^\(# Untracked files:\|# Changed but not updated:\|# Changes not staged for commit:\)$") > 0 ]]; then
 	echo -n "$ZSH_THEME_GIT_PROMPT_UNTRACKED"
   fi 
 
