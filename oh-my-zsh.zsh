@@ -11,10 +11,8 @@ fpath=($OMZ/themes/*(/) $OMZ/plugins/${^plugins} $OMZ/functions $fpath)
 # Load and initialize the completion system.
 autoload -Uz compinit && compinit -i
 
-# Load all files in $OMZ/oh-my-zsh/lib/ that end in .zsh.
-for function_file in $OMZ/functions/*.zsh; do
-  source "$function_file"
-done
+# Source function files.
+source "$OMZ/functions/init.zsh"
 
 # Load all plugins defined in ~/.zshrc.
 for plugin in $plugins; do
