@@ -6,9 +6,9 @@ if [[ "$TERM" == 'dumb' ]]; then
 fi
 
 # Add functions to fpath.
-fpath+=(${OMZ}/plugins/${^plugins} $OMZ/themes/*(/))
+fpath=($OMZ/themes/*(/) $OMZ/plugins/${^plugins} $OMZ/functions $fpath)
 
-# Load and run compinit.
+# Load and initialize the completion system.
 autoload -Uz compinit && compinit -i
 
 # Load all files in $OMZ/oh-my-zsh/lib/ that end in .zsh.
