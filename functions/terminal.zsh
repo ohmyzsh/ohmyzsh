@@ -14,7 +14,7 @@ fi
 # Partially supports Mac OS X Terminal since it can't set window and tab separately.
 # Usage: title "tab title" "window title"
 function terminal-title {
-  if [[ "$DISABLE_AUTO_TITLE" != 'true' ]]; then
+  if ! check-bool "$DISABLE_AUTO_TITLE"; then
     if [[ "$TERM" == screen* ]]; then
       # Set GNU Screen's hardstatus (usually truncated at 20 characters).
       printf "\ek%s\e\\" ${(V)1}

@@ -85,27 +85,27 @@ function git-prompt-status() {
   fi
 
   while IFS=$'\n' read line; do
-    if [[ "$line" == \?\?\ * ]] && [[ untracked != 'yes' ]]; then
+    if [[ "$line" == \?\?\ * ]] && ! check-bool "$untracked"; then
       untracked='yes'
       indicators="${ZSH_THEME_GIT_PROMPT_UNTRACKED}${indicators}"
     fi
-    if [[ "$line" == (((A|M|D|T) )|(AD|AM|AT|MM))\ * ]] && [[ added != 'yes' ]]; then
+    if [[ "$line" == (((A|M|D|T) )|(AD|AM|AT|MM))\ * ]] && ! check-bool "$added"; then
       added='yes'
       indicators="${ZSH_THEME_GIT_PROMPT_ADDED}${indicators}"
     fi
-    if [[ "$line" == (( (M|T))|(AM|AT|MM))\ * ]] && [[ modified != 'yes' ]]; then
+    if [[ "$line" == (( (M|T))|(AM|AT|MM))\ * ]] && ! check-bool "$modified"; then
       modified='yes'
       indicators="${ZSH_THEME_GIT_PROMPT_MODIFIED}${indicators}"
     fi
-    if [[ "$line" == R\ \ * ]] && [[ renamed != 'yes' ]]; then
+    if [[ "$line" == R\ \ * ]] && ! check-bool "$renamed"; then
       renamed='yes'
       indicators="${ZSH_THEME_GIT_PROMPT_RENAMED}${indicators}"
     fi
-    if [[ "$line" == ( D|AD)\ * ]] && [[ deleted != 'yes' ]]; then
+    if [[ "$line" == ( D|AD)\ * ]] && ! check-bool "$deleted"; then
       deleted='yes'
       indicators="${ZSH_THEME_GIT_PROMPT_DELETED}${indicators}"
     fi
-    if [[ "$line" == UU\ * ]] && [[ unmerged != 'yes' ]]; then
+    if [[ "$line" == UU\ * ]] && ! check-bool "$unmerged"; then
       unmerged='yes'
       indicators="${ZSH_THEME_GIT_PROMPT_UNMERGED}${indicators}"
     fi

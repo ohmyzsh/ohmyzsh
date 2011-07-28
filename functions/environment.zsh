@@ -64,7 +64,7 @@ export VISUAL="vim"
 export PAGER='less'
 
 # Grep
-if [[ "$DISABLE_COLOR" != 'true' ]]; then
+if ! check-bool "$DISABLE_COLOR"; then
   export GREP_COLOR='37;45'
   export GREP_OPTIONS='--color=auto'
 fi
@@ -89,7 +89,7 @@ if (( $+commands[lesspipe.sh] )); then
 fi
 
 # Termcap
-if [[ "$DISABLE_COLOR" != 'true' ]]; then
+if ! check-bool "$DISABLE_COLOR"; then
   export LESS_TERMCAP_mb=$'\E[01;31m'      # begin blinking
   export LESS_TERMCAP_md=$'\E[01;31m'      # begin bold
   export LESS_TERMCAP_me=$'\E[0m'          # end mode
