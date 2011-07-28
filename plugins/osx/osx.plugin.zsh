@@ -1,8 +1,8 @@
 # ------------------------------------------------------------------------------
 #          FILE:  osx.plugin.zsh
 #   DESCRIPTION:  oh-my-zsh plugin file.
-#        AUTHOR:  Sorin Ionescu (sorin.ionescu@gmail.com)
-#       VERSION:  1.0.1
+#        AUTHOR:  Sorin Ionescu <sorin.ionescu@gmail.com>
+#       VERSION:  1.0.2
 # ------------------------------------------------------------------------------
 
 
@@ -96,3 +96,8 @@ function trash() {
   done
   IFS=$temp_ifs
 }
+
+function rm-osx-cruft() {
+  find ${@:-$PWD} \( -type f -name ".DS_Store" \) -o \( -type d -name '__MACOSX' \) -delete
+}
+
