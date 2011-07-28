@@ -6,7 +6,7 @@
 # ------------------------------------------------------------------------------
 
 
-if (( ${+commands[gwhoami]} )); then
+if (( $+commands[gwhoami] )); then
   function __gnu_utils() {
     emulate -L zsh
     local gcmds
@@ -30,17 +30,16 @@ if (( ${+commands[gwhoami]} )); then
     'gwhoami' 'gyes')
 
     # Not part of coreutils, installed separately.
-    gcmds+=('gsed' 'gtar' 'gtime')
+    gcmds+=('ggrep' 'gsed' 'gtar' 'gtime')
 
-    for gcmd in "${gcmds[@]}"; do
+    for gcmd in "$gcmds[@]"; do
       #
       # This method allows for builtin commands to be primary but it's
       # lost if hash -r or rehash -f is executed. Thus, those two
       # functions have to be wrapped.
       #
-      if (( ${+commands[$gcmd]} )); then
-        hash "${gcmd[2,-1]}"="${commands[$gcmd]}"
-        unhash "$gcmd"
+      if (( $+commands[$gcmd] )); then
+        hash "$gcmd[2,-1]"="$commands[$gcmd]"
       fi
     done
 
@@ -49,7 +48,7 @@ if (( ${+commands[gwhoami]} )); then
   __gnu_utils;
 
   function hash() {
-    if [[ "$*" =~ "-(r|f)" ]]; then
+    if (( $+argv[(er)-r] )) || (( $+argv[(er)-f] )); then
       builtin hash "$@"
       __gnu_utils
     else
