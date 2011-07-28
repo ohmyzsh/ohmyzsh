@@ -27,7 +27,8 @@ minimum recommended version is 4.3.9.
 ### Problems?
 
 If you are not able to find certain commands after switching to *Oh My ZSH*, you need
-to modify `PATH` in `~/.zshrc`.
+to modify `PATH` in `~/.zshrc`, or better yet, in `~/functions/environment.zsh` (may
+be subject to merge conflicts).
 
 ## Usage
 
