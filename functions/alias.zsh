@@ -1,3 +1,6 @@
+setopt correct        # Correct commands.
+setopt correct_all    # Correct all arguments.
+
 # The 'ls' Family
 # ------------------------------------------------------------------------------
 if [[ "$DISABLE_COLOR" != 'true' ]]; then
@@ -30,11 +33,16 @@ alias sl='ls'                # I often screw this up.
 
 # General
 # ------------------------------------------------------------------------------
-alias rm='nocorrect rm -i'
+alias cd='nocorrect cd'
 alias cp='nocorrect cp -i'
-alias mv='nocorrect mv -i'
+alias find='noglob find'
+alias gcc='nocorrect gcc'
 alias ln='nocorrect ln -i'
+alias man='nocorrect man'
 alias mkdir='nocorrect mkdir -p'
+alias mv='nocorrect mv -i'
+alias rm='nocorrect rm -i'
+alias scp='nocorrect scp'
 alias du='du -kh'
 alias df='df -kh'
 alias pu='pushd'
@@ -53,6 +61,12 @@ alias pbc='pbcopy'
 alias pbp='pbpaste'
 alias print-path='echo -e ${PATH//:/\\n}'
 alias t="t --task-dir ~/.tasks --list todo.txt --delete-if-empty"
+
+(( $+commands[ebuild] )) && alias ebuild='nocorrect ebuild'
+(( $+commands[gist] )) && alias gist='nocorrect gist'
+(( $+commands[heroku] )) && alias heroku='nocorrect heroku'
+(( $+commands[hpodder] )) && alias hpodder='nocorrect hpodder'
+(( $+commands[mysql] )) && alias mysql='nocorrect mysql'
 
 if [[ -x "${commands[htop]}" ]]; then
   alias top=htop
