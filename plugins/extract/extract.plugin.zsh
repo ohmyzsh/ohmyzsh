@@ -1,8 +1,8 @@
 # ------------------------------------------------------------------------------
 #          FILE:  extract.plugin.zsh
 #   DESCRIPTION:  oh-my-zsh plugin file.
-#        AUTHOR:  Sorin Ionescu (sorin.ionescu@gmail.com)
-#       VERSION:  1.0.1
+#        AUTHOR:  Sorin Ionescu <sorin.ionescu@gmail.com>
+#       VERSION:  1.0.2
 # ------------------------------------------------------------------------------
 
 
@@ -15,7 +15,7 @@ function extract() {
   if (( $# == 0 )); then
     echo "Usage: extract [-option] [file ...]"
     echo
-    echo Options:
+    echo "Options:"
     echo "    -r, --remove    Remove archive."
     echo
     echo "Report bugs to <sorin.ionescu@gmail.com>."
@@ -76,5 +76,50 @@ function extract() {
   done
 }
 
-alias x=extract
+function ls-archive() {
+  local verbose
+
+  if (( $# == 0 )); then
+    echo "Usage: extract [-option] [file ...]"
+    echo
+    echo "Options:"
+    echo "    -v, --verbose    Verbose archive listing."
+    echo
+    echo "Report bugs to <sorin.ionescu@gmail.com>."
+  fi
+
+  if [[ "$1" == "-v" ]] || [[ "$1" == "--verbose" ]]; then
+    verbose=0
+    shift
+  fi
+
+  while (( $# > 0 )); do
+    if [[ ! -f "$1" ]]; then
+      echo "extract: '$1' is not a valid file" 1>&2
+      shift
+      continue
+    fi
+
+    case "$1" in
+      (*.tar.gz|*.tgz) tar t${verbose:+v}vzf "$1" ;;
+      (*.tar.bz2|*.tbz|*.tbz2) tar t${verbose:+v}jf "$1" ;;
+      (*.tar.xz|*.txz) tar --xz --help &> /dev/null \
+        && tar --xz -t${verbose:+v}f "$1" \
+        || xzcat "$1" | tar t${verbose:+v}f - ;;
+      (*.tar.zma|*.tlz) tar --lzma --help &> /dev/null \
+        && tar --lzma -t${verbose:+v}f "$1" \
+        || lzcat "$1" | tar x${verbose:+v}f - ;;
+      (*.tar) tar t${verbose:+v}f "$1" ;;
+      (*.zip) unzip -l${verbose:+v} "$1" ;;
+      (*.rar) unrar ${${verbose:+v}:-l} "$1" ;;
+      (*.7z) 7za l "$1" ;;
+      (*)
+        echo "ls-archive: '$1' cannot be listed" 1>&2
+        success=1
+      ;;
+    esac
+
+    shift
+  done
+}
 
