@@ -95,26 +95,8 @@ if [[ "$DISABLE_COLOR" != 'true' ]]; then
 fi
 
 # Terminal Multiplexer
-# ------------------------------------------------------------------------------
-if [[ "$TERM" == *256color* ]]; then
-  if [[ -e "$HOME/.screenrc256" ]]; then
-    screenrc="-c '$HOME/.screenrc256'"
-    tmuxconf="-f '$HOME/.tmux256.conf'"
-  fi
-else
-  if [[ -e "$HOME/.screenrc" ]]; then
-    screenrc="-c '$HOME/.screenrc'"
-    tmuxconf="-f '$HOME/.tmux.conf'"
-  fi
-fi
-
-alias screen="screen $screenrc"
-alias sl="screen $screenrc -list"
-alias sr="screen $screenrc -a -A -U -D -R"
-alias S="screen $screenrc -U -S"
-
-if (( ${+commands[tmux]} )); then
-  alias tmux="tmux $tmuxconf"
-  alias tls="tmux list-sessions"
-fi
+alias sl="screen -list"
+alias sr="screen -a -A -U -D -R"
+alias sn="screen -U -S"
+alias tl="tmux list-sessions"
 
