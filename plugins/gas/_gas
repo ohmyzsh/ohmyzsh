@@ -25,7 +25,7 @@ case $state in
 	args)
 		case $line[1] in
 			(use|delete)
-				_values -S , 'rubies' $(cat ~/.gas | sed -n -e 's/^\[\(.*\)\]/\1/p') && ret=0
+				_values -S , 'authors' $(cat ~/.gas | sed -n -e 's/^\[\(.*\)\]/\1/p') && ret=0
 				;;
 		esac
 		;;
