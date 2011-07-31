@@ -162,9 +162,6 @@ for cur_widget in ${${(f)"$(builtin zle -la)"}:#(.*|orig-*|run-help|which-comman
 done
 unset cur_widget
 
-# Start highlighting immediately after the creation of a new command line.
-autoload add-zsh-hook && add-zsh-hook precmd _zsh_highlight
-
 # Load highlighters from highlighters directory and check they define required functions.
 for highlighter_dir ($highlighters_dir/*/); do
   highlighter="${highlighter_dir:t}"
