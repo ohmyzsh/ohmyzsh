@@ -119,61 +119,88 @@ _zsh_highlight_cursor_moved()
 
 
 # -------------------------------------------------------------------------------------------------
+# Setup functions
+# -------------------------------------------------------------------------------------------------
+
+# Rebind all ZLE widgets to make them invoke _zsh_highlights.
+_zsh_highlight_bind_widgets()
+{
+  # Load ZSH module zsh/zleparameter, needed to override user defined widgets.
+  zmodload zsh/zleparameter 2>/dev/null || {
+    echo 'zsh-syntax-highlighting: failed loading zsh/zleparameter.' >&2
+    return 1
+  }
+
+  # Override ZLE widgets to make them invoke _zsh_highlight.
+  local cur_widget
+  for cur_widget in ${${(f)"$(builtin zle -la)"}:#(.*|orig-*|run-help|which-command|beep)}; do
+    case $widgets[$cur_widget] in
+
+      # Already rebound event: do nothing.
+      user:$cur_widget);;
+
+      # User defined widget: override and rebind old one with prefix "orig-".
+      user:*) eval "zle -N orig-$cur_widget ${widgets[$cur_widget]#*:}; \
+                    _zsh_highlight_widget_$cur_widget() { builtin zle orig-$cur_widget && _zsh_highlight }; \
+                    zle -N $cur_widget _zsh_highlight_widget_$cur_widget";;
+
+      # Completion widget: override and rebind old one with prefix "orig-".
+      completion:*) eval "zle -C orig-$cur_widget ${${widgets[$cur_widget]#*:}/:/ }; \
+                          _zsh_highlight_widget_$cur_widget() { builtin zle orig-$cur_widget && _zsh_highlight }; \
+                          zle -N $cur_widget _zsh_highlight_widget_$cur_widget";;
+
+      # Builtin widget: override and make it call the builtin ".widget".
+      builtin) eval "_zsh_highlight_widget_$cur_widget() { builtin zle .$cur_widget && _zsh_highlight }; \
+                     zle -N $cur_widget _zsh_highlight_widget_$cur_widget";;
+
+      # Default: unhandled case.
+      *) echo "zsh-syntax-highlighting: unhandled ZLE widget '$cur_widget'" >&2 ;;
+    esac
+  done
+}
+
+# Load highlighters from directory.
+#
+# Arguments:
+#   1) Path to the highlighters directory.
+_zsh_highlight_load_highlighters()
+{
+  # Check the directory exists.
+  [[ -d "$1" ]] || {
+    echo "zsh-syntax-highlighting: highlighters directory '$1' not found." >&2
+    return 1
+  }
+
+  # Load highlighters from highlighters directory and check they define required functions.
+  local highlighter highlighter_dir
+  for highlighter_dir ($1/*/); do
+    highlighter="${highlighter_dir:t}"
+    [[ -f "$highlighter_dir/${highlighter}-highlighter.zsh" ]] && {
+      . "$highlighter_dir/${highlighter}-highlighter.zsh"
+      type "_zsh_highlight_${highlighter}_highlighter" &> /dev/null &&
+      type "_zsh_highlight_${highlighter}_highlighter_predicate" &> /dev/null || {
+        echo "zsh-syntax-highlighting: '${highlighter}' highlighter should define both required functions '_zsh_highlight_${highlighter}_highlighter' and '_zsh_highlight_${highlighter}_highlighter_predicate' in '${highlighter_dir}/${highlighter}-highlighter.zsh'." >&2
+      }
+    }
+  done
+}
+
+
+# -------------------------------------------------------------------------------------------------
 # Setup
 # -------------------------------------------------------------------------------------------------
 
-# Load ZSH module zsh/zleparameter, needed to override user defined widgets.
-zmodload zsh/zleparameter 2>/dev/null || {
-  echo 'zsh-syntax-highlighting: failed loading zsh/zleparameter, exiting.' >&2
-  return -1
+# Try binding widgets.
+_zsh_highlight_bind_widgets || {
+  echo 'zsh-syntax-highlighting: failed binding ZLE widgets, exiting.' >&2
+  return 1
 }
 
 # Resolve highlighters directory location.
-highlighters_dir="${ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR:-${0:h}/highlighters}"
-[[ -d $highlighters_dir ]] || {
-  echo "zsh-syntax-highlighting: highlighters directory '$highlighters_dir' not found, exiting." >&2
-  return -1
+_zsh_highlight_load_highlighters "${ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR:-${0:h}/highlighters}" || {
+  echo 'zsh-syntax-highlighting: failed loading highlighters, exiting.' >&2
+  return 1
 }
-
-# Override ZLE widgets to make them invoke _zsh_highlight.
-for cur_widget in ${${(f)"$(builtin zle -la)"}:#(.*|orig-*|run-help|which-command|beep)}; do
-  case $widgets[$cur_widget] in
-
-    # Already rebound event: do nothing.
-    user:$cur_widget);;
-
-    # User defined widget: override and rebind old one with prefix "orig-".
-    user:*) eval "zle -N orig-$cur_widget ${widgets[$cur_widget]#*:}; \
-                  _zsh_highlight_widget_$cur_widget() { builtin zle orig-$cur_widget && _zsh_highlight }; \
-                  zle -N $cur_widget _zsh_highlight_widget_$cur_widget";;
-
-    # Completion widget: override and rebind old one with prefix "orig-".
-    completion:*) eval "zle -C orig-$cur_widget ${${widgets[$cur_widget]#*:}/:/ }; \
-                        _zsh_highlight_widget_$cur_widget() { builtin zle orig-$cur_widget && _zsh_highlight }; \
-                        zle -N $cur_widget _zsh_highlight_widget_$cur_widget";;
-
-    # Builtin widget: override and make it call the builtin ".widget".
-    builtin) eval "_zsh_highlight_widget_$cur_widget() { builtin zle .$cur_widget && _zsh_highlight }; \
-                   zle -N $cur_widget _zsh_highlight_widget_$cur_widget";;
-
-    # Default: unhandled case.
-    *) echo "zsh-syntax-highlighting: unhandled ZLE widget '$cur_widget'" >&2 ;;
-  esac
-done
-unset cur_widget
-
-# Load highlighters from highlighters directory and check they define required functions.
-for highlighter_dir ($highlighters_dir/*/); do
-  highlighter="${highlighter_dir:t}"
-  [[ -f "$highlighter_dir/${highlighter}-highlighter.zsh" ]] && {
-    . "$highlighter_dir/${highlighter}-highlighter.zsh"
-    type "_zsh_highlight_${highlighter}_highlighter" &> /dev/null &&
-    type "_zsh_highlight_${highlighter}_highlighter_predicate" &> /dev/null || {
-      echo "zsh-syntax-highlighting: '${highlighter}' highlighter should define both required functions '_zsh_highlight_${highlighter}_highlighter' and '_zsh_highlight_${highlighter}_highlighter_predicate' in '${highlighter_dir}/${highlighter}-highlighter.zsh'." >&2
-    }
-  }
-done
-unset highlighter highlighter_dir highlighters_dir
 
 # Initialize the array of active highlighters if needed.
 [[ $#ZSH_HIGHLIGHT_HIGHLIGHTERS -eq 0 ]] && ZSH_HIGHLIGHT_HIGHLIGHTERS=(main)
