@@ -5,51 +5,85 @@ fi
 
 # Set the GNU Screen window number.
 if [[ -n "$WINDOW" ]]; then
-  SCREEN_NO="%B$WINDOW%b "
+  export SCREEN_NO="%B${WINDOW}%b "
 else
-  SCREEN_NO=""
+  export SCREEN_NO=""
 fi
 
-# Fully supports GNU Screen, iTerm, and most modern xterm and rxvt terminals.
-# Partially supports Mac OS X Terminal since it can't set window and tab separately.
-# Usage: title "tab title" "window title"
-function terminal-title {
-  if ! check-bool "$DISABLE_AUTO_TITLE"; then
-    if [[ "$TERM" == screen* ]]; then
-      # Set GNU Screen's hardstatus (usually truncated at 20 characters).
-      printf "\ek%s\e\\" ${(V)1}
-    elif [[ "$TERM" == xterm* ]] || [[ "$TERM" == rxvt* ]]; then
-      # Set the window title.
-      printf "\e]2;%s\a" ${(V)2}
-      # Set the tab title (will override window title on a broken terminal).
-      printf "\e]1;%s\a" ${(V)1}
-    fi
+# Sets the GNU Screen title.
+function set-screen-title() {
+  if [[ "$TERM" == screen* ]]; then
+    printf "\ek%s\e\\" ${(V)argv}
   fi
 }
 
-# Don't override precmd/preexec, append to hook array.
+# Sets the terminal window title.
+function set-window-title() {
+  if [[ "$TERM" == ((x|a|ml|dt|E)term*|(u|)rxvt*) ]]; then
+    printf "\e]2;%s\a" ${(V)argv}
+  fi
+}
+
+# Sets the terminal tab title.
+function set-tab-title() {
+  if [[ "$TERM" == ((x|a|ml|dt|E)term*|(u|)rxvt*) ]]; then
+    printf "\e]1;%s\a" ${(V)argv}
+  fi
+}
+
+function set-title-by-command() {
+  emulate -L zsh
+  setopt localoptions extended_glob
+
+  # Get the command name that is under job control.
+  if [[ "${1[(w)1]}" == (fg|%*)(\;|) ]]; then
+    # Get the job name, and, if missing, set it to the default %+.
+    local job_name="${${1[(wr)%*(\;|)]}:-%+}"
+
+    # Make a local copy for use in the subshell.
+    local -A jobtexts_from_parent_shell
+    jobtexts_from_parent_shell=(${(kv)jobtexts})
+
+    jobs $job_name 2>/dev/null > >(
+      read index discarded
+      # The index is already surrounded by brackets: [1].
+      set-title-by-command "${(e):-\$jobtexts_from_parent_shell$index}"
+    )
+  else
+    # Set the command name, or in the case of sudo or ssh, the next command.
+    local cmd=${1[(wr)^(*=*|sudo|ssh|-*)]}
+
+    # Right-truncate the command name to 15 characters.
+    if (( $#cmd > 15 )); then
+      cmd="${cmd[1,15]}..."
+    fi
+
+    for kind in window tab screen; do
+      set-${kind}-title "$cmd"
+    done
+  fi
+}
+
+# Don't override precmd/preexec; append to hook array.
 autoload -Uz add-zsh-hook
 
-# Set the tab and window titles before the prompt is displayed.
-function terminal-title-precmd {
-  # 15 character, left-truncated current working directory.
-  local terminal_tab_title="${(%):-%15<...<%~%<<}"
-  local terminal_window_title="${(%):-%n@%m: %~}"
-  terminal-title "$terminal_tab_title" "$terminal_window_title"
-}
-add-zsh-hook precmd terminal-title-precmd
-
-# Set the tab and window titles before command execution.
-function terminal-title-preexec {
-  emulate -L zsh
-  setopt extended_glob
-  # Command name only, or if this is sudo or ssh, the next command.
-  local CMD=${1[(wr)^(*=*|sudo|ssh|-*)]}
-  local trimmed="${2[1,100]}"
-  if [[ "$2" != "$trimmed" ]]; then
-    trimmed="${trimmed}..."
+# Sets the tab and window titles before the prompt is displayed.
+function set-title-precmd {
+  if ! check-bool "$DISABLE_AUTO_TITLE"; then
+    set-window-title "${(%):-%~}"
+    for kind in tab screen; do
+      # Left-truncate the current working directory to 15 characters.
+      set-${kind}-title "${(%):-%15<...<%~%<<}"
+    done
   fi
-  terminal-title "$CMD" "$trimmed"
 }
-add-zsh-hook preexec terminal-title-preexec
+add-zsh-hook precmd set-title-precmd
+
+# Sets the tab and window titles before command execution.
+function set-title-preexec {
+  if ! check-bool "$DISABLE_AUTO_TITLE"; then
+    set-title-by-command "$2"
+  fi
+}
+add-zsh-hook preexec set-title-preexec
 
