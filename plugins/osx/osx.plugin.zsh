@@ -1,8 +1,12 @@
 # ------------------------------------------------------------------------------
 #          FILE:  osx.plugin.zsh
 #   DESCRIPTION:  oh-my-zsh plugin file.
-#        AUTHOR:  Sorin Ionescu (sorin.ionescu@gmail.com)
-#       VERSION:  1.0.1
+#       AUTHORS:  sorin-ionescu
+#                 benlangfeld
+#                 robbyrussell
+#                 betawaffle
+#                 rgm
+#       VERSION:  1.0.2
 # ------------------------------------------------------------------------------
 
 
@@ -97,3 +101,17 @@ function trash() {
   IFS=$temp_ifs
 }
 
+if [[ $TERM_PROGRAM == "Apple Terminal" ]] && [[ -z "$INSIDE_EMACS" ]] {
+  autoload -U add-zsh-hook
+
+  function lion_resume_chpwd {
+    # add support for OS X Lion window resume on Terminal.app relaunch
+    # straight port from /etc/bashrc on Lion
+    local SEARCH=' '
+    local REPLACE='%20'
+    local PWD_URL="file://$HOSTNAME${PWD//$SEARCH/$REPLACE}"
+    printf '\e]7;%s\a' "$PWD_URL"
+  }
+
+   add-zsh-hook chpwd lion_resume_chpwd
+}
