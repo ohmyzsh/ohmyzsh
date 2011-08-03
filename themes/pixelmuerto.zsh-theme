@@ -12,12 +12,12 @@ zstyle ':vcs_info:*' check-for-changes true
 zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{11}%r'
 zstyle ':vcs_info:*' enable git svn
 
-# check remote branch
+# check new commits in remote branchs
 function git_remotes() {
+  git_dir=$(git rev-parse --git-dir 2> /dev/null ) || return 
   remotes=""
-  if [[ -d .git ]]; then
+  if [[ -n $git_dir ]]; then
 	  if [[ $(git branch | awk '{ print $2}') == "master" ]]; then
-  			git_dir=$(git rev-parse --git-dir)
 	        fetchUpdate=3600 
 	        remotes=()
 	        for remote in $(git remote)
@@ -47,7 +47,7 @@ function git_remotes() {
   fi
   echo $remotes
 }
-local remotes='%B%F{blue}$(git_remotes)%{$reset_color%}'
+local remotes='%B%F{green}$(git_remotes)%{$reset_color%}'
 
 precmd () {
     if [[ -z $(git ls-files --other --exclude-standard 2> /dev/null) ]] {
