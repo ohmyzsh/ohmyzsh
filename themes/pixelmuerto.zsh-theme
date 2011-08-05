@@ -48,6 +48,7 @@ function git_remotes() {
   echo $remotes
 }
 # TODO if commits to push show this number
+# TODO show arrow when push is necessary 
 local remotes='%B%F{green}$(git_remotes)%{$reset_color%}'
 
 precmd () {
