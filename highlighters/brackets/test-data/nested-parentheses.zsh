@@ -28,8 +28,13 @@
 # vim: ft=zsh sw=2 ts=2 et
 # -------------------------------------------------------------------------------------------------
 
-BUFFER='echo $(echo ${(z)array})'
+BUFFER='echo $(echo x{(z)array})'
 
 expected_region_highlight=(
-  # TODO
+  "6  6  $ZSH_HIGHLIGHT_STYLES[bracket-level-1]" # (
+  "13 13 $ZSH_HIGHLIGHT_STYLES[bracket-level-2]" # {
+  "14 14 $ZSH_HIGHLIGHT_STYLES[bracket-level-3]" # (
+  "16 16 $ZSH_HIGHLIGHT_STYLES[bracket-level-3]" # )
+  "22 22 $ZSH_HIGHLIGHT_STYLES[bracket-level-2]" # }
+  "23 23 $ZSH_HIGHLIGHT_STYLES[bracket-level-1]" # )
 )
