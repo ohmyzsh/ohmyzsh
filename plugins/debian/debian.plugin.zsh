@@ -15,9 +15,9 @@ alias apsrc='apt-get source'
 alias apv='apt-cache policy'
 
 # aliases that use su -c ##############
-alias apdg='su -c "aptitude update && aptitude safe-upgrade"'
-alias apud='su -c "aptitude update"'
-alias apug='su -c "aptitude safe-upgrade"'
+alias apdg='su -lc "aptitude update && aptitude safe-upgrade" root'
+alias apud='su -lc "aptitude update" root'
+alias apug='su -lc "aptitude safe-upgrade" root'
 # end aliases that use su -c ##########
 
 # aliases that use sudo ###############
@@ -36,13 +36,13 @@ alias allpkgs='aptitude search -F "%p" --disable-columns ~i'
 # Install all .deb files in the current directory.
 # Warning: you will need to put the glob in single quotes if you use:
 # glob_subst
-alias di='su -c "dpkg -i ./*.deb"'
+alias di='su -lc "dpkg -i ./*.deb" root'
 
 # Create a basic .deb package
 alias mydeb='time dpkg-buildpackage -rfakeroot -us -uc'
 
 # Remove ALL kernel images and headers EXCEPT the one in use
-alias kclean='su -c '\''aptitude remove -P ?and(~i~nlinux-(ima|hea) ?not(~n`uname -r`))'\'' root'
+alias kclean='su -lc '\''aptitude remove -P ?and(~i~nlinux-(ima|hea) ?not(~n`uname -r`))'\'' root'
 
 
 
@@ -80,5 +80,4 @@ kerndeb () {
     time fakeroot make-kpkg --append-to-version "$appendage" --revision \
         "$revision" kernel_image kernel_headers
 }
-
 
