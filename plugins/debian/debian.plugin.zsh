@@ -1,48 +1,76 @@
-# https://github.com/dbb/
+# Authors:
+# https://github.com/AlexBio
+# https://github.com/dbb
 #
 # Debian-related zsh aliases and functions for zsh
 
+# Set to 'apt-get' or 'aptitude'
+apt_pref='aptitude'
+
+# Use sudo by default if it's installed
+if [[ -e $( which sudo ) ]]; then
+    use_sudo=1
+fi
 
 # Aliases ###################################################################
 
 # Some self-explanatory aliases
 alias acs="apt-cache search"
-alias afs='apt-file search --regexp'
 alias aps='aptitude search'
 alias as="aptitude -F \"* %p -> %d \n(%v/%V)\" \
 		--no-gui --disable-columns search"	# search package
-alias apsrc='apt-get source'
-alias apv='apt-cache policy'
 
-# aliases that use su -c ##############
-alias apdg='su -lc "aptitude update && aptitude safe-upgrade" root'
-alias apud='su -lc "aptitude update" root'
-alias apug='su -lc "aptitude safe-upgrade" root'
-# end aliases that use su -c ##########
+# apt-file
+alias afs='apt-file search --regexp'
 
-# aliases that use sudo ###############
-alias ad="sudo apt-get update"				# update packages lists
-alias au="sudo apt-get update && \
-		sudo apt-get dselect-upgrade"		# upgrade packages
-alias ai="sudo apt-get install"				# install package
-alias ar="sudo apt-get remove --purge && \
-		sudo apt-get autoremove --purge"	# remove package
-alias ac="sudo apt-get clean && sudo apt-get autoclean" # clean apt cache
-# end aliases that use sudo ###########
+
+# These are apt-get only
+alias asrc='apt-get source'
+alias ap='apt-cache policy'
+
+# superuser operations ################
+if [[ $use_sudo -eq 1 ]]; then
+    alias ai="sudo $apt_pref install"
+    alias ad="sudo $apt_pref update"
+    alias afu='sudo apt-file update'
+    alias ag="sudo $apt_pref upgrade"
+    alias adg="sudo $apt_pref update && sudo $apt_pref upgrade"
+    alias ap="sudo $apt_pref purge"
+    alias ar="sudo $apt_pref remove"
+
+    if [[ $apt_pref -eq 'apt-get' ]]; then
+        alias ads="sudo $apt_pref dselect-upgrade"
+    fi
+    
+    # Install all .deb files in the current directory.
+    # Warning: you will need to put the glob in single quotes if you use:
+    # glob_subst
+    alias di='sudo dpkg -i ./*.deb'
+
+    # Remove ALL kernel images and headers EXCEPT the one in use
+    alias kclean='sudo aptitude remove -P ?and(~i~nlinux-(ima|hea) ?not(~n`uname -r`))'
+else
+    alias ai='apin' 
+    alias ad='su -lc "'"$apt_pref"' update" root'
+    alias afu='su -lc "apt-file update"'
+    alias ag='su -lc "'"$apt_pref"' safe-upgrade" root'
+    alias adg='su -lc "'"$apt_pref"' update && aptitude safe-upgrade" root'
+    alias di='su -lc "dpkg -i ./*.deb" root'
+    # Remove ALL kernel images and headers EXCEPT the one in use
+    alias kclean='su -lc '\''aptitude remove -P ?and(~i~nlinux-(ima|hea) ?not(~n`uname -r`))'\'' root'
+fi
+# end superuser operations ##########
+
 
 # print all installed packages
 alias allpkgs='aptitude search -F "%p" --disable-columns ~i'
 
-# Install all .deb files in the current directory.
-# Warning: you will need to put the glob in single quotes if you use:
-# glob_subst
-alias di='su -lc "dpkg -i ./*.deb" root'
+
 
 # Create a basic .deb package
 alias mydeb='time dpkg-buildpackage -rfakeroot -us -uc'
 
-# Remove ALL kernel images and headers EXCEPT the one in use
-alias kclean='su -lc '\''aptitude remove -P ?and(~i~nlinux-(ima|hea) ?not(~n`uname -r`))'\'' root'
+
 
 
 
