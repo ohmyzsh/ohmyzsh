@@ -35,5 +35,3 @@ if (( CURRENT == 1 )); then
 	_describe -t commands "adb subcommand" _1st_arguments
 	return
 fi
-
-_files
