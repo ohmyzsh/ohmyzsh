@@ -1,4 +1,5 @@
-# inspirated in { kolo alanpeabody microtech }.zsh-theme
+# inspirated in { kolo alanpeabody nanotech }.zsh-theme
+# inspirated in https://github.com/lvv/git-prompt 
 autoload -U colors && colors
 
 autoload -Uz vcs_info
@@ -43,12 +44,12 @@ function git_remotes() {
 	                        (git fetch $remote >& /dev/null &)
 	                fi
 	        done
+			pushed=$(git log --oneline origin/master..HEAD | wc -l )
+			[ "$pushed" -gt "0" ] && remotes+="↑:"$pushed
 	  fi
   fi
   echo $remotes
 }
-# TODO if commits to push show this number
-# TODO show arrow when push is necessary 
 local remotes='%B%F{green}$(git_remotes)%{$reset_color%}'
 
 precmd () {
