@@ -87,7 +87,7 @@ _zsh_highlight_brackets_highlighter()
   done
 
   # If cursor is on a bracket, then highlight corresponding bracket, if any
-  pos=CURSOR
+  pos=$CURSOR
   if [[ -n $levelpos[$pos] ]] && [[ -n $matching[$pos] ]]; then
     local otherpos=$matching[$pos]
     region_highlight+=("$otherpos $((otherpos + 1)) standout")
