@@ -38,23 +38,24 @@ function extract() {
     file_name="$( basename "$1" )"
     extract_dir="$( echo "$file_name" | sed "s/\.${1##*.}//g" )"
     case "$1" in
-      (*.tar.gz|*.tgz) tar xvzf "$1" ;;
-      (*.tar.bz2|*.tbz|*.tbz2) tar xvjf "$1" ;;
-      (*.tar.xz|*.txz) tar --xz --help &> /dev/null \
+      (*.tar.gz|*.tgz)         tar xvzf    "$1" ;;
+      (*.tar.bz2|*.tbz|*.tbz2) tar xvjf    "$1" ;;
+      (*.tar.xz|*.txz)         tar --xz --help &> /dev/null \
         && tar --xz -xvf "$1" \
         || xzcat "$1" | tar xvf - ;;
-      (*.tar.zma|*.tlz) tar --lzma --help &> /dev/null \
+      (*.tar.zma|*.tlz)        tar --lzma --help &> /dev/null \
         && tar --lzma -xvf "$1" \
         || lzcat "$1" | tar xvf - ;;
-      (*.tar) tar xvf "$1" ;;
-      (*.gz) gunzip "$1" ;;
-      (*.bz2) bunzip2 "$1" ;;
-      (*.xz) unxz "$1" ;;
-      (*.lzma) unlzma "$1" ;;
-      (*.Z) uncompress "$1" ;;
-      (*.zip) unzip "$1" -d $extract_dir ;;
-      (*.rar) unrar e -ad "$1" ;;
-      (*.7z) 7za x "$1" ;;
+      (*.tar)                  tar xvf     "$1" ;;
+      (*.gz)                   gunzip      "$1" ;;
+      (*.bz2)                  bunzip2     "$1" ;;
+      (*.xz)                   unxz        "$1" ;;
+      (*.lzma)                 unlzma      "$1" ;;
+      (*.Z)                    uncompress  "$1" ;;
+      (*.zip)                  unzip       "$1" -d $extract_dir ;;
+      (*.rar)                  unrar e -ad "$1" ;;
+      (*.7z)                   7za x       "$1" ;;
+      (*.gpg)                  gpg -d "$1" | tar -xvzf - ;;
       (*.deb)
         mkdir -p "$extract_dir/control"
         mkdir -p "$extract_dir/data"
@@ -76,7 +77,7 @@ function extract() {
   done
 }
 
-alias x=extract
+#alias x=extract                # please do not write an alias here !
 
 # add extract completion function to path
 fpath=($ZSH/plugins/extract $fpath)
