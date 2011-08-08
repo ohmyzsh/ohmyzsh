@@ -17,6 +17,7 @@ This highlighter defines the following styles:
 
 * `bracket-error` - unmatched brackets
 * `bracket-level-N` - brackets with nest level N
+* `cursor-matchingbracket` - the matching bracket, if cursor is on a bracket
 
 To override one of those styles, change its entry in `ZSH_HIGHLIGHT_STYLES`, for example in `~/.zshrc`:
 
