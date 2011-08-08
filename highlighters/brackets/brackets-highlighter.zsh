@@ -57,13 +57,13 @@ _zsh_highlight_brackets_highlighter()
       ["([{"])
         levelpos[$pos]=$((++level))
         lastoflevel[$level]=$pos
-        typepos[$pos]=`_zsh_highlight_brackets_highlighter_brackettype $char`
+        _zsh_highlight_brackets_highlighter_brackettype $char
         ;;
       [")]}"])
         matching[$lastoflevel[$level]]=$pos
         matching[$pos]=$lastoflevel[$level]
         levelpos[$pos]=$((level--))
-        typepos[$pos]=`_zsh_highlight_brackets_highlighter_brackettype $char`
+        _zsh_highlight_brackets_highlighter_brackettype $char
         ;;
       ['"'\'])
         # Skip everything inside quotes
@@ -78,13 +78,13 @@ _zsh_highlight_brackets_highlighter()
 
   # Now highlight all found brackets
   for pos in ${(k)levelpos}; do
-    if [[ -z $matching[$pos] ]] || [[ $typepos[$pos] != $typepos[$matching[$pos]] ]]; then
-      local style=$ZSH_HIGHLIGHT_STYLES[bracket-error]
-      region_highlight+=("$pos $((pos + 1)) $style")
-    else
+    if [[ -n $matching[$pos] ]] && [[ $typepos[$pos] == $typepos[$matching[$pos]] ]]; then
       local bracket_color_size=${#ZSH_HIGHLIGHT_STYLES[(I)bracket-level-*]}
       local bracket_color_level=bracket-level-$(( (levelpos[$pos] - 1) % bracket_color_size + 1 ))
       local style=$ZSH_HIGHLIGHT_STYLES[$bracket_color_level]
+      region_highlight+=("$pos $((pos + 1)) $style")
+    else
+      local style=$ZSH_HIGHLIGHT_STYLES[bracket-error]
       region_highlight+=("$pos $((pos + 1)) $style")
     fi
   done
@@ -102,9 +102,9 @@ _zsh_highlight_brackets_highlighter()
 _zsh_highlight_brackets_highlighter_brackettype()
 {
   case $1 in
-    ["()"]) print round;;
-    ["[]"]) print bracket;;
-    ["{}"]) print curly;;
+    ["()"]) typepos[$pos]=round;;
+    ["[]"]) typepos[$pos]=bracket;;
+    ["{}"]) typepos[$pos]=curly;;
     *) ;;
   esac
 }
