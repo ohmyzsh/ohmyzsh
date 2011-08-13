@@ -121,7 +121,7 @@ alias mydeb='time dpkg-buildpackage -rfakeroot -us -uc'
 apt-copy() {
     print '#!/bin/sh'"\n" > apt-copy.sh
 
-    cmd="$apt_pref install -s "
+    cmd="$apt_pref install "
 
     for p in ${(f)"$(aptitude search -F "%p" --disable-columns \~i)"}; {
         cmd="${cmd} ${p}"
