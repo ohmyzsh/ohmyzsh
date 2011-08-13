@@ -1,4 +1,4 @@
-# ZSH Theme - Preview: http://dl.dropbox.com/u/4109351/pics/gnzh-zsh-theme.png
+# ZSH Theme - Preview: http://gyazo.com/8becc8a7ed5ab54a0262a470555c3eed.png
 # Based on bira theme
 
 # load some modules
@@ -35,9 +35,17 @@ local return_code="%(?..%{$PR_RED%}%? ↵%{$PR_NO_COLOR%})"
 
 local user_host='${PR_USER}${PR_CYAN}@${PR_HOST}'
 local current_dir='%{$PR_BOLD$PR_BLUE%}%~%{$PR_NO_COLOR%}'
-local rvm_ruby='%{$PR_RED%}‹$(rvm-prompt i v g s)›%{$PR_NO_COLOR%}'
+local rvm_ruby=''
+if which rvm-prompt &> /dev/null; then
+  rvm_ruby='%{$PR_RED%}‹$(rvm-prompt i v g s)›%{$PR_NO_COLOR%}'
+else
+  if which rbenv &> /dev/null; then
+    rvm_ruby='%{$PR_RED%}‹$(rbenv version | sed -e "s/ (set.*$//")›%{$PR_NO_COLOR%}'
+  fi
+fi
 local git_branch='$(git_prompt_info)%{$PR_NO_COLOR%}'
 
+#PROMPT="${user_host} ${current_dir} ${rvm_ruby} ${git_branch}$PR_PROMPT "
 PROMPT="╭─${user_host} ${current_dir} ${rvm_ruby} ${git_branch}
 ╰─$PR_PROMPT "
 RPS1="${return_code}"
