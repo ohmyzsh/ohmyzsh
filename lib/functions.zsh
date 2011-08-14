@@ -15,3 +15,11 @@ function take() {
   cd $1
 }
 
+function show_processes() {
+    if (($# == 0)); then
+        ps -ef
+    else
+        echo "  UID   PID  PPID   C     STIME TTY           TIME CMD"
+        ps -ef | grep $*
+    fi
+}

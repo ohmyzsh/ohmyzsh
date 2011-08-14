@@ -23,6 +23,11 @@ alias sl=ls # often screw this up
 alias afind='ack-grep -il'
 
 alias x=extract
-
 alias reload="source ~/.zshrc"
 alias galias='alias | grep'
+
+# Request confirmation before attempting to remove each file, regardless of the file's permissions, or
+# whether or not the standard input device is a terminal.  The -i option overrides any previous -f options.
+alias rm="rm -i"
+
+alias psg='show_processes'
