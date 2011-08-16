@@ -10,9 +10,9 @@ ZSH_THEME_GIT_TIME_SINCE_COMMIT_MEDIUM="%{$fg[yellow]%}"
 ZSH_THEME_GIT_TIME_SINCE_COMMIT_SHORT="%{$fg[green]%}"
 
 function git_prompt() {
-  time="$(git_time_since_commit)"
   info="$(git_prompt_info)"
   if [ -n "$info" ]; then
+    time="$(git_time_since_commit)"
     echo "%{$reset_color%}($time$info%{$reset_color%})"
   fi
 }
