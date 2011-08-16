@@ -1,5 +1,3 @@
-# by tinogomes
-
 #compdef hg
 #autoload
 
@@ -104,6 +102,7 @@ _global_options=(
 	'(--profile)'--profile'[print command execution profile]'
 	'(--version)'--version'[output version information and exit]'
 	'(-h --help)'{-h,--help}'[display help and exit]'
+	"*::archieve file:_files -g '(#i)*.*'"
 )
 
 local -a _command_options
@@ -587,9 +586,9 @@ case "$words[1]" in
 			'(-r --rev REV)'{-r,--rev}'[revision]'
 		)
 		;;
+	*)
 esac
 
 _arguments \
 	$_global_options \
-	$_command_options \
-	"*::archieve file:_files -g '(#i)*.*'" && return 0
+	$_command_options
