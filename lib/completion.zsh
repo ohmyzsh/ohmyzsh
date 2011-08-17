@@ -8,9 +8,6 @@ setopt always_to_end
 
 WORDCHARS=''
 
-autoload -U compinit
-compinit -i
-
 zmodload -i zsh/complist
 
 ## case-insensitive (all),partial-word and then substring completion
