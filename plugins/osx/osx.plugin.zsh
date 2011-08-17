@@ -34,7 +34,7 @@ if [[  $TERM_PROGRAM != iTerm.app ]]; then
                       end
                       tell application \"Terminal\"
                           activate
-                          do script with command \"cd \\\"$ThisDirectory\\\"\" in window 1
+                          do script with command \"cd \\\"$PWD\\\";cd \\\"$ThisDirectory\\\"\" in window 1
                       end tell"
           return 1
 else     
