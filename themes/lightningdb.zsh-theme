@@ -3,6 +3,9 @@ PROMPT='%{$fg[magenta]%}%c$(git_prompt) %{$reset_color%}$ '
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[blue]%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[white]%}!%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[white]%}?%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[white]%}*%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[white]%}+%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%}"
 
 ZSH_THEME_GIT_TIME_SINCE_COMMIT_LONG="%{$fg[red]%}"
