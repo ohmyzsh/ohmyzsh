@@ -22,7 +22,7 @@ ZSH_THEME_GIT_PROMPT_ADDED=" %{$fg_bold[green]%}added"
 ZSH_THEME_GIT_PROMPT_UNTRACKED=" %{$fg_bold[red]%}untracked"
 
 # Format for git_prompt_ahead()
-ZSH_THEME_GIT_PROMPT_AHEAD="%{$fg_bold[red]%}‼ "
+ZSH_THEME_GIT_PROMPT_AHEAD=" %{$fg_bold[red]%}‼"
 
 # Format for git_prompt_long_sha() and git_prompt_short_sha()
 ZSH_THEME_GIT_PROMPT_SHA_BEFORE=" %{$reset_color%}- commit %{$fg_bold[white]%}[%{$fg_bold[green]%}"
@@ -57,7 +57,7 @@ function prompt_char {
 
 # Prompt format
 if [[ "$TERM" != "dumb" ]] && [[ "$DISABLE_LS_COLORS" != "true" ]]; then
-    PROMPT='${user} at ${loc} in %{$fg_bold[blue]%}$(collapse_pwd)%{$reset_color%}$(git_prompt_ahead)$(git_prompt_info)$(git_prompt_status)$(git_prompt_short_sha)%{$reset_color%}
+    PROMPT='${user} at ${loc} in %{$fg_bold[blue]%}$(collapse_pwd)%{$reset_color%}$(git_prompt_info)$(git_prompt_status)$(git_prompt_short_sha)%{$reset_color%}$(git_prompt_ahead)
 %{$fg_bold[white]%}$(prompt_char)%{$reset_color%} '
     RPROMPT='${ret_status}'
 else
