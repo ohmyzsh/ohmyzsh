@@ -57,7 +57,8 @@ function prompt_char {
 
 # Prompt format
 if [[ "$TERM" != "dumb" ]] && [[ "$DISABLE_LS_COLORS" != "true" ]]; then
-    PROMPT='${user} at ${loc} in %{$fg_bold[blue]%}$(collapse_pwd)%{$reset_color%}$(git_prompt_info)$(git_prompt_status)$(git_prompt_short_sha)%{$reset_color%}$(git_prompt_ahead)
+    PROMPT='
+${user} at ${loc} in %{$fg_bold[blue]%}$(collapse_pwd)%{$reset_color%}$(git_prompt_info)$(git_prompt_status)$(git_prompt_short_sha)%{$reset_color%}$(git_prompt_ahead)
 %{$fg_bold[white]%}$(prompt_char)%{$reset_color%} '
     RPROMPT='${ret_status}'
 else
