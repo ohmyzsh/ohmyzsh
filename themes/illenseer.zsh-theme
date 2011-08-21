@@ -3,7 +3,7 @@
 #   DESCRIPTION: oh-my-zsh theme file, based on themes by Juan G. Hurtado,
 #                Stephen Tudor, Dejan Ranisavljevic, jnrowe
 #        AUTHOR: Nils Pascal Illenseer <ni@np.cx>
-#       VERSION: 1
+#       VERSION: 2
 #    SCREENSHOT: http://www.flickr.com/photos/infion/5902602288/lightbox
 # ------------------------------------------------------------------------
 
@@ -36,8 +36,10 @@ local ret_status="%(?:%{$fg_bold[green]%}✔:%{$fg_bold[red]%}✘ %s%?)"
 # root (red) vs. normal user (green)
 if [[ `id -u` -eq 0 ]]; then
     user="%{$fg_bold[red]%}%n"
+    end="#"
 else
     user="%{$fg_bold[green]%}%n"
+    end="$"
 fi
 
 # local (white) vs. remote (yellow)
@@ -48,6 +50,10 @@ else
 fi
 
 # Prompt format
+if [[ "$TERM" != "dumb" ]] && [[ "$DISABLE_LS_COLORS" != "true" ]]; then
 PROMPT='${ret_status} ${user}%{$fg_bold[white]%}@${loc} %{$fg_bold[blue]%}%~%u
 %{$fg_bold[white]%}❱%{$reset_color%} '
 RPROMPT='$(git_prompt_ahead)%{$fg_bold[white]%}$(git_prompt_info)$(git_prompt_short_sha)$(git_prompt_status)%{$reset_color%}'
+else
+PROMPT='%n@%m: %~%u ${end} '
+fi
