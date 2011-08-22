@@ -173,7 +173,7 @@ task_freqs=(
 # attributes
 local -a task_attributes
 _regex_words -t ':' default 'task attributes' \
-	'pro*ject:Project name:$task_projects' \
+	'pro*j*ect:Project name:$task_projects' \
 	'du*e:Due date:$task_dates' \
 	'wa*it:Date until task becomes pending:$task_dates' \
 	're*cur:Recurrence frequency:$task_freqs' \
