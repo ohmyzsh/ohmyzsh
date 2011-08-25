@@ -1,5 +1,6 @@
 
 
+
 function tab() {
 osascript >/dev/null <<EOF
     tell application "System Events"
@@ -11,7 +12,7 @@ osascript >/dev/null <<EOF
     end tell
 
 EOF
-}
+  }
 
 
 
