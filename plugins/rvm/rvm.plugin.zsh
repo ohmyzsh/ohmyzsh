@@ -1,8 +1,10 @@
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+
 alias rubies='rvm list rubies'
 alias gemsets='rvm gemset list'
 
-local ruby18='ruby-1.8.7-p334'
-local ruby19='ruby-1.9.2-p180'
+local ruby18='ruby-1.8.7'
+local ruby19='ruby-1.9.2'
 
 function rb18 {
 	if [ -z "$1" ]; then
