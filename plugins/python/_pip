@@ -1,9 +1,9 @@
 #compdef pip
 #autoload
 
-# pip zsh completion, based on homebrew completion
+# This completion is based on the Homebrew completion.
 
-_pip_installed() {
+function _pip-installed() {
   installed_pkgs=(`pip freeze`)
 }
 
@@ -37,10 +37,11 @@ fi
 case "$words[1]" in
   list)
       if [[ "$state" == forms ]]; then
-        _pip_installed
+        _pip-installed
         _requested installed_pkgs expl 'installed packages' compadd -a installed_pkgs
       fi ;;
   uninstall)
-    _pip_installed
+    _pip-installed
     _wanted installed_pkgs expl 'installed packages' compadd -a installed_pkgs ;;
 esac
+
