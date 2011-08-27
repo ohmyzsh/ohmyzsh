@@ -1,9 +1,9 @@
 #compdef gem
 #autoload
 
-# gem zsh completion, based on homebrew completion
+# This completion is based on the Homebrew completion.
 
-_gem_installed() {
+function _gem-installed() {
   installed_gems=(`gem list --local --no-versions`)
 }
 
@@ -55,10 +55,11 @@ fi
 case "$words[1]" in
   list)
       if [[ "$state" == forms ]]; then
-        _gem_installed
+        _gem-installed
         _requested installed_gems expl 'installed gems' compadd -a installed_gems
       fi ;;
   uninstall|update)
-    _gem_installed
+    _gem-installed
     _wanted installed_gems expl 'installed gems' compadd -a installed_gems ;;
 esac
+
