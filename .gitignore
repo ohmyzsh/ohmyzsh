@@ -1,2 +1,3 @@
 *.zwc
 *.zwc.old
+plugins/*/cache.zsh
