@@ -1,6 +1,16 @@
-# TODO: Make this compatible with rvm.
-#       Run sudo gem on the system ruby, not the active ruby.
-alias sgem='sudo gem'
+# Install local gems according to Mac OS X conventions.
+if [[ "$OSTYPE" == darwin* ]]; then
+  export GEM_HOME=$HOME/Library/Ruby/Gems/1.8
+  export PATH=$GEM_HOME/bin:$PATH
 
-# Find ruby file
-alias rfind='find . -name *.rb | xargs grep -n'
+  # gem is slow; cache its output.
+  cache_file="${0:h}/cache.zsh"
+  if [[ ! -f "$cache_file" ]]; then
+    echo export GEM_PATH=$GEM_HOME:$(gem env gempath) >! "$cache_file"
+    source "$cache_file"
+  else
+    source "$cache_file"
+  fi
+  unset cache_file
+fi
+
