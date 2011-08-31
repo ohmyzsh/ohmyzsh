@@ -1,95 +1,4 @@
 #!/usr/bin/env zsh
-#
-# This is a clean-room implementation of the Fish[1] shell's history search
-# feature, where you can type in any part of any previously entered command
-# and press the UP and DOWN arrow keys to cycle through the matching commands.
-#
-#-----------------------------------------------------------------------------
-# Usage
-#-----------------------------------------------------------------------------
-#
-# 1. Load this script into your interactive ZSH session:
-#
-#       % source history-substring-search.zsh
-#
-#    If you want to use the zsh-syntax-highlighting[6] script along with this
-#    script, then make sure that you load it *before* you load this script:
-#
-#       % source zsh-syntax-highlighting.zsh
-#       % source history-substring-search.zsh
-#
-# 2. Type any part of any previous command and then:
-#
-#     * Press the UP arrow key to select the nearest command that (1) contains
-#       your query and (2) is older than the current command in the command
-#       history.
-#
-#     * Press the DOWN arrow key to select the nearest command that (1)
-#       contains your query and (2) is newer than the current command in the
-#       command history.
-#
-#     * Press ^U (the Control and U keys simultaneously) to abort the search.
-#
-# 3. If a matching command spans more than one line of text, press the LEFT
-#    arrow key to move the cursor away from the end of the command, and then:
-#
-#     * Press the UP arrow key to move the cursor to the line above.  When the
-#       cursor reaches the first line of the command, pressing the UP arrow
-#       key again will cause this script to perform another search.
-#
-#     * Press the DOWN arrow key to move the cursor to the line below.  When
-#       the cursor reaches the last line of the command, pressing the DOWN
-#       arrow key again will cause this script to perform another search.
-#
-#-----------------------------------------------------------------------------
-# Configuration
-#-----------------------------------------------------------------------------
-#
-# This script defines the following global variables. You may override their
-# default values only after having loaded this script into your ZSH session.
-#
-# * HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND is a global variable that defines
-#   how the query should be highlighted inside a matching command. Its default
-#   value causes this script to highlight using bold, white text on a magenta
-#   background. See the "Character Highlighting" section in the zshzle(1) man
-#   page to learn about the kinds of values you may assign to this variable.
-#
-# * HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND is a global variable that
-#   defines how the query should be highlighted when no commands in the
-#   history match it. Its default value causes this script to highlight using
-#   bold, white text on a red background. See the "Character Highlighting"
-#   section in the zshzle(1) man page to learn about the kinds of values you
-#   may assign to this variable.
-#
-# * HISTORY_SUBSTRING_SEARCH_GLOBBING_FLAGS is a global variable that defines
-#   how the command history will be searched for your query. Its default value
-#   causes this script to perform a case-insensitive search. See the "Globbing
-#   Flags" section in the zshexpn(1) man page to learn about the kinds of
-#   values you may assign to this variable.
-#
-#-----------------------------------------------------------------------------
-# History
-#-----------------------------------------------------------------------------
-#
-# This script was originally written by Peter Stephenson[2], who published it
-# to the ZSH users mailing list (thereby making it public domain) in September
-# 2009. It was later revised by Guido van Steen and released under the BSD
-# license (see below) as part of the fizsh[3] project in January 2011.
-#
-# It was later extracted from fizsh[3] release 1.0.1, refactored heavily, and
-# repackaged as both an oh-my-zsh plugin[4] and as an independently loadable
-# ZSH script[5] by Suraj N. Kurapati in 2011.
-#
-# It was further developed[4] by Guido van Steen, Suraj N. Kurapati, Sorin
-# Ionescu, and Vincent Guerci in 2011.
-#
-# [1]: http://fishshell.com
-# [2]: http://www.zsh.org/mla/users/2009/msg00818.html
-# [3]: http://sourceforge.net/projects/fizsh/
-# [4]: https://github.com/robbyrussell/oh-my-zsh/pull/215
-# [5]: https://github.com/sunaku/zsh-history-substring-search
-# [6]: https://github.com/nicoulaj/zsh-syntax-highlighting
-#
 ##############################################################################
 #
 # Copyright (c) 2009 Peter Stephenson
@@ -170,7 +79,6 @@ bindkey '\e[B' history-substring-search-down
 # implementation details
 #-----------------------------------------------------------------------------
 
-setopt extendedglob
 zmodload -F zsh/parameter
 
 #
@@ -201,12 +109,9 @@ if [[ $+functions[_zsh_highlight] -eq 0 ]]; then
   zle -N self-insert ordinary-key-press
 
   #
-  # Override ZLE widgets to invoke _zsh_highlight()
+  # The following snippet was taken from the zsh-syntax-highlighting project:
   #
-  # https://github.com/nicoulaj/zsh-syntax-highlighting/blob/
-  # bb7fcb79fad797a40077bebaf6f4e4a93c9d8163/zsh-syntax-highlighting.zsh#L121
-  #
-  #--------------8<-------------------8<-------------------8<-----------------
+  # https://github.com/zsh-users/zsh-syntax-highlighting/blob/56b134f5d62ae3d4e66c7f52bd0cc2595f9b305b/zsh-syntax-highlighting.zsh#L126-161
   #
   # Copyright (c) 2010-2011 zsh-syntax-highlighting contributors
   # All rights reserved.
@@ -237,48 +142,52 @@ if [[ $+functions[_zsh_highlight] -eq 0 ]]; then
   # LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
   # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
   # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  #
+  #--------------8<-------------------8<-------------------8<-----------------
+  # Rebind all ZLE widgets to make them invoke _zsh_highlights.
+  _zsh_highlight_bind_widgets()
+  {
+    # Load ZSH module zsh/zleparameter, needed to override user defined widgets.
+    zmodload zsh/zleparameter 2>/dev/null || {
+      echo 'zsh-syntax-highlighting: failed loading zsh/zleparameter.' >&2
+      return 1
+    }
 
-  # Load ZSH module zsh/zleparameter, needed to override user defined widgets.
-  zmodload zsh/zleparameter 2>/dev/null || {
-    echo 'zsh-syntax-highlighting: failed loading zsh/zleparameter, exiting.' >&2
-    return -1
-  }
+    # Override ZLE widgets to make them invoke _zsh_highlight.
+    local cur_widget
+    for cur_widget in ${${(f)"$(builtin zle -la)"}:#(.*|_*|orig-*|run-help|which-command|beep)}; do
+      case $widgets[$cur_widget] in
 
-  # Override ZLE widgets to make them invoke _zsh_highlight.
-  for event in ${${(f)"$(zle -la)"}:#(_*|orig-*|.run-help|.which-command)}; do
-    if [[ "$widgets[$event]" == completion:* ]]; then
-      eval "zle -C orig-$event ${${${widgets[$event]}#*:}/:/ } ; $event() { builtin zle orig-$event && _zsh_highlight } ; zle -N $event"
-    else
-      case $event in
-        accept-and-menu-complete)
-          eval "$event() { builtin zle .$event && _zsh_highlight } ; zle -N $event"
-          ;;
+        # Already rebound event: do nothing.
+        user:$cur_widget|user:_zsh_highlight_widget_*);;
 
-        # The following widgets should NOT remove any previously
-        # applied highlighting. Therefore we do not remap them.
-        .forward-char|.backward-char|.up-line-or-history|.down-line-or-history)
-          ;;
+        # User defined widget: override and rebind old one with prefix "orig-".
+        user:*) eval "zle -N orig-$cur_widget ${widgets[$cur_widget]#*:}; \
+                      _zsh_highlight_widget_$cur_widget() { builtin zle orig-$cur_widget -- \"\$@\" && _zsh_highlight }; \
+                      zle -N $cur_widget _zsh_highlight_widget_$cur_widget";;
 
-        .*)
-          clean_event=$event[2,${#event}] # Remove the leading dot in the event name
-          case ${widgets[$clean_event]-} in
-            (completion|user):*)
-              ;;
-            *)
-              eval "$clean_event() { builtin zle $event && _zsh_highlight } ; zle -N $clean_event"
-              ;;
-          esac
-          ;;
-        *)
-          ;;
+        # Completion widget: override and rebind old one with prefix "orig-".
+        completion:*) eval "zle -C orig-$cur_widget ${${widgets[$cur_widget]#*:}/:/ }; \
+                            _zsh_highlight_widget_$cur_widget() { builtin zle orig-$cur_widget -- \"\$@\" && _zsh_highlight }; \
+                            zle -N $cur_widget _zsh_highlight_widget_$cur_widget";;
+
+        # Builtin widget: override and make it call the builtin ".widget".
+        builtin) eval "_zsh_highlight_widget_$cur_widget() { builtin zle .$cur_widget -- \"\$@\" && _zsh_highlight }; \
+                       zle -N $cur_widget _zsh_highlight_widget_$cur_widget";;
+
+        # Default: unhandled case.
+        *) echo "zsh-syntax-highlighting: unhandled ZLE widget '$cur_widget'" >&2 ;;
       esac
-    fi
-  done
-  unset event clean_event
+    done
+  }
   #-------------->8------------------->8------------------->8-----------------
+
+  _zsh_highlight_bind_widgets
 fi
 
 function _history-substring-search-begin() {
+  setopt localoptions extendedglob
+
   _history_substring_search_move_cursor_eol=false
   _history_substring_search_query_highlight=
 
@@ -345,6 +254,8 @@ function _history-substring-search-begin() {
 }
 
 function _history-substring-search-end() {
+  setopt localoptions extendedglob
+
   _history_substring_search_result=$BUFFER
 
   # move the cursor to the end of the command line
@@ -447,7 +358,7 @@ function _history-substring-search-up-history() {
 
     # going up from somewhere below the top of history
     else
-      zle up-history
+      zle up-line-or-history
     fi
 
     return true
@@ -470,7 +381,7 @@ function _history-substring-search-down-history() {
 
     # going down from somewhere above the bottom of history
     else
-      zle down-history
+      zle down-line-or-history
     fi
 
     return true

@@ -2,3 +2,4 @@
 #autoload
 
 compadd `thor list | grep thor | cut -d " " -f 2`
+

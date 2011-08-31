@@ -53,13 +53,15 @@ if (( CURRENT == 1 )); then
 fi
 
 case "$words[1]" in
-  list)
-      if [[ "$state" == forms ]]; then
-        _gem-installed
-        _requested installed_gems expl 'installed gems' compadd -a installed_gems
-      fi ;;
-  uninstall|update)
+  (list)
+    if [[ "$state" == 'forms' ]]; then
+      _gem-installed
+      _requested installed_gems expl 'installed gems' compadd -a installed_gems
+    fi
+  ;;
+  (uninstall|update)
     _gem-installed
-    _wanted installed_gems expl 'installed gems' compadd -a installed_gems ;;
+    _wanted installed_gems expl 'installed gems' compadd -a installed_gems
+  ;;
 esac
 

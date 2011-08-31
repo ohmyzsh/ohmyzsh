@@ -1,12 +1,12 @@
 #
 # INSTRUCTIONS
 #
-#   To enabled agent forwarding support add the following to
+#   To enabled agent forwarding support, add the following to
 #   your .zshrc file:
 #
 #     zstyle :omz:plugins:ssh-agent agent-forwarding on
 #
-#   To load multiple identies use the identities style, For
+#   To load multiple identies, use the identities style, For
 #   example:
 #
 #     zstyle :omz:plugins:ssh-agent id_rsa id_rsa2 id_github
@@ -21,42 +21,40 @@
 #   Florent Thoumie and Jonas Pfenniger
 #
 
-local _plugin__ssh_env=$HOME/.ssh/environment-$HOST
-local _plugin__forwarding
+_ssh_agent_env="$HOME/.ssh/environment-$HOST"
+_ssh_agent_forwarding=
 
-function _plugin__start_agent()
-{
+function _ssh-agent-start() {
   local -a identities
 
-  # start ssh-agent and setup environment
-  /usr/bin/env ssh-agent | sed 's/^echo/#echo/' > ${_plugin__ssh_env}
-  chmod 600 ${_plugin__ssh_env}
-  . ${_plugin__ssh_env} > /dev/null
+  # Start ssh-agent and setup environment.
+  /usr/bin/env ssh-agent | sed 's/^echo/#echo/' > "${_ssh_agent_env}"
+  chmod 600 "${_ssh_agent_env}"
+  source "${_ssh_agent_env}" > /dev/null
 
-  # load identies
-  zstyle -a :omz:plugins:ssh-agent identities identities 
+  # Load identies.
+  zstyle -a :omz:plugins:ssh-agent identities identities
   echo starting...
-  /usr/bin/ssh-add $HOME/.ssh/${^identities}
+  /usr/bin/ssh-add "$HOME/.ssh/${^identities}"
 }
 
-# test if agent-forwarding is enabled
-zstyle -b :omz:plugins:ssh-agent agent-forwarding _plugin__forwarding
-if [[ ${_plugin__forwarding} == "yes" && -n "$SSH_AUTH_SOCK" ]]; then
-  # Add a nifty symlink for screen/tmux if agent forwarding
-  [[ -L $SSH_AUTH_SOCK ]] || ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USER-screen
-
-elif [ -f "${_plugin__ssh_env}" ]; then
-  # Source SSH settings, if applicable
-  . ${_plugin__ssh_env} > /dev/null
-  ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
-    _plugin__start_agent;
+# Test if agent-forwarding is enabled.
+zstyle -b :omz:plugins:ssh-agent agent-forwarding _ssh_agent_forwarding
+if [[ "${_ssh_agent_forwarding}" == "yes" && -n "$SSH_AUTH_SOCK" ]]; then
+  # Add a nifty symlink for screen/tmux if agent forwarding.
+  [[ -L "$SSH_AUTH_SOCK" ]] || ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USER-screen
+elif [ -f "${_ssh_agent_env}" ]; then
+  # Source SSH settings, if applicable.
+  source "${_ssh_agent_env}" > /dev/null
+  ps -ef | grep "${SSH_AGENT_PID}" | grep ssh-agent$ > /dev/null || {
+    _ssh-agent-start;
   }
 else
-  _plugin__start_agent;
+  _ssh-agent-start;
 fi
 
-# tidy up after ourselves
-unfunction _plugin__start_agent
-unset _plugin__forwarding
-unset _plugin__ssh_env
+# Tidy up after ourselves.
+unfunction _ssh-agent-start
+unset _ssh_agent_forwarding
+unset _ssh_agent_env
 

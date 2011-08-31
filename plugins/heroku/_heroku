@@ -1,4 +1,5 @@
 #compdef heroku
+#autoload
 
 # Heroku Autocomplete plugin for Oh-My-Zsh
 # Requires: The Heroku client gem (https://github.com/heroku/heroku)
