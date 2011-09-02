@@ -45,7 +45,10 @@ function git_remotes() {
 	                fi
 	        done
 			pushed=$(git log --oneline origin/master..HEAD | wc -l )
-			[ "$pushed" -gt "0" ] && remotes+="↑:"$pushed
+			[ "$pushed" -gt "0" ] && remotes+=" ↑:"$pushed
+			# submodules commints
+			submod=$(git status | grep "new commits" | wc -l)
+			[ "$submod" -gt "0" ] && remotes+=" _:"$submod
 	  fi
   fi
   echo $remotes
