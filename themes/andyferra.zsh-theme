@@ -3,9 +3,9 @@ function git_branch() {
 
 	if [ "$branch" != "" ]; then
 		if [ "$branch" = "master" ]; then
-			echo "%{${FG[154]}%}[$branch]%{${reset_color}%}"
+			echo "%{${FG[154]}%}($branch)%{${reset_color}%}"
 		else
-			echo "%{${FG[161]}%}[$branch]%{${reset_color}%}"
+			echo "%{${FG[161]}%}($branch)%{${reset_color}%}"
 		fi
 	else
 		echo ""
@@ -14,4 +14,4 @@ function git_branch() {
 
 PROMPT='
 %c $(git_branch)
-%{${FG[237]}%}↳%{${reset_color}%}  '
+%{${FG[237]}%}↪%{${reset_color}%}  '
