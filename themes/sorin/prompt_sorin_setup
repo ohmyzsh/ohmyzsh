@@ -2,32 +2,43 @@
 #          FILE:  prompt_sorin_setup
 #   DESCRIPTION:  oh-my-zsh theme file.
 #        AUTHOR:  Sorin Ionescu <sorin.ionescu@gmail.com>
-#       VERSION:  1.0.4
+#       VERSION:  1.0.5
 #    SCREENSHOT:  http://i.imgur.com/aipDQ.png
 # ------------------------------------------------------------------------------
+function prompt_sorin_precmd () {
+  setopt noxtrace noksharrays localoptions
 
+  if (( $+functions[git-info] )); then
+    git-info
+  fi
+}
 
 function prompt_sorin_setup() {
   setopt localoptions noxtrace noksharrays
   prompt_opts=(cr subst percent)
-  
-  MODE_INDICATOR="%B%F{red}❮%f%b%F{red}❮❮%f"
-  ZSH_THEME_GIT_PROMPT_SHA_BEFORE=""
-  ZSH_THEME_GIT_PROMPT_SHA_AFTER=""
-  ZSH_THEME_GIT_PROMPT_AHEAD=""
-  ZSH_THEME_GIT_PROMPT_DIRTY=""
-  ZSH_THEME_GIT_PROMPT_CLEAN=""
-  ZSH_THEME_GIT_PROMPT_PREFIX=" %F{blue}git%f:%F{red}"
-  ZSH_THEME_GIT_PROMPT_SUFFIX="%f"
-  ZSH_THEME_GIT_PROMPT_ADDED="%F{green} ✚%f"
-  ZSH_THEME_GIT_PROMPT_MODIFIED="%F{blue} ✹%f"
-  ZSH_THEME_GIT_PROMPT_DELETED="%F{red} ✖%f"
-  ZSH_THEME_GIT_PROMPT_RENAMED="%F{magenta} ➜%f"
-  ZSH_THEME_GIT_PROMPT_UNMERGED="%F{yellow} ═%f"
-  ZSH_THEME_GIT_PROMPT_UNTRACKED="%F{cyan} ✭%f"
 
-  PROMPT='%F{cyan}%~%f$(git-prompt-info) %(!.%B%F{red}#%f%b.%B%F{green}❯%f%b) '
-  RPROMPT='%(?::%F{red}⏎%f)$(git-prompt-status)'
+  autoload -Uz add-zsh-hook
+  add-zsh-hook precmd prompt_sorin_precmd
+
+  MODE_INDICATOR="%B%F{red}❮%f%b%F{red}❮❮%f"
+  zstyle ':git-info:' action ':%%B%F{yellow}%s%f%%b'
+  zstyle ':git-info:' added ' %%B%F{green}✚%f%%b'
+  zstyle ':git-info:' ahead ' %%B%F{yellow}⬆%f%%b'
+  zstyle ':git-info:' behind ' %%B%F{yellow}⬇%f%%b'
+  zstyle ':git-info:' branch ':%F{red}%b%f'
+  zstyle ':git-info:' deleted ' %%B%F{red}✖%f%%b'
+  zstyle ':git-info:' modified ' %%B%F{blue}✹%f%%b'
+  zstyle ':git-info:' renamed ' %%B%F{magenta}➜%f%%b'
+  zstyle ':git-info:' commit '%c'
+  zstyle ':git-info:' stashed ' %%B%F{white}✭%f%%b'
+  zstyle ':git-info:' unmerged ' %%B%F{yellow}═%f%%b'
+  zstyle ':git-info:' untracked ' %%B%F{cyan}•%f%%b'
+  zstyle ':git-info:' prompt ' %F{blue}git%f%b%s'
+  zstyle ':git-info:' rprompt '%A%B%S%a%d%m%r%U%u'
+
+  PROMPT='%F{cyan}%1~%f${git_prompt_info} %(!.%B%F{red}#%f%b.%B%F{green}❯%f%b) '
+  RPROMPT='%(?::%F{red}⏎%f)${git_rprompt_info}'
+  SPROMPT='zsh: correct %F{red}%R%f to %F{green}%r%f [nyae]? '
 }
 
 prompt_sorin_setup "$@"
