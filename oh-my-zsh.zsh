@@ -24,26 +24,8 @@ done
 # Load and run the prompt theming system.
 autoload -Uz promptinit && promptinit -i
 
-# Load the automatic recompiler.
-autoload -Uz zrecompile
-
-# Compile files.
-for zsh_file in $HOME/.z{login,logout,profile,shenv,shrc,compdump}(N) $OMZ/*.zsh(N); do
-  zrecompile -q -p -U -z "$zsh_file"
-done
-
-# Compile function directories.
-for (( i=1; i <= $#fpath; i++ )); do
-  function_dir="$fpath[i]"
-  [[ "$function_dir" == (.|..) ]] \
-    || [[ "$function_dir" == (.|..)/* ]] \
-    || [[ ! -w "$function_dir:h" ]] && continue
-  function_files=($function_dir/^*(\.(rej|orig)|~|\#)(N-.))
-  [[ -n "$function_files" ]] \
-    && function_files=(${${(M)function_files%/*/*}#/}) \
-    && ( cd "$function_dir:h" && zrecompile -q -p -U -z "${function_dir:t}.zwc" "$function_files[@]" ) \
-    && fpath[i]="$fpath[i].zwc"
-done
-unset function_dir
-unset function_files
+# Compile zcompdump, if modified, to increase startup speed.
+if [[ "$HOME/.zcompdump" -nt "$HOME/.zcompdump.zwc" ]] || [[ ! -f "$HOME/.zcompdump.zwc" ]]; then
+  zcompile "$HOME/.zcompdump"
+fi
 
