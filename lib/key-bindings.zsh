@@ -19,6 +19,8 @@ bindkey "^[[4~" end-of-line
 bindkey ' ' magic-space    # also do history expansion on space
 
 bindkey '^[[Z' reverse-menu-complete
+bindkey '^[[U' backward-kill-line
+
 
 # Make the delete key (or Fn + Delete on the Mac) work instead of outputting a ~
 bindkey '^?' backward-delete-char
@@ -30,17 +32,17 @@ bindkey "\e[3~" delete-char
 
 #bindkey -e  ## emacs key bindings
 #
-#bindkey '^[[A' up-line-or-search
-#bindkey '^[[B' down-line-or-search
-#bindkey '^[^[[C' emacs-forward-word
-#bindkey '^[^[[D' emacs-backward-word
+bindkey '^[[A' up-line-or-search
+bindkey '^[[B' down-line-or-search
+bindkey '^[^[[C' emacs-forward-word
+bindkey '^[^[[D' emacs-backward-word
 #
-#bindkey -s '^X^Z' '%-^M'
-#bindkey '^[e' expand-cmd-path
-#bindkey '^[^I' reverse-menu-complete
-#bindkey '^X^N' accept-and-infer-next-history
-#bindkey '^W' kill-region
-#bindkey '^I' complete-word
-## Fix weird sequence that rxvt produces
-#bindkey -s '^[[Z' '\t'
+bindkey -s '^X^Z' '%-^M'
+bindkey '^[e' expand-cmd-path
+bindkey '^[^I' reverse-menu-complete
+bindkey '^X^N' accept-and-infer-next-history
+bindkey '^W' kill-region
+bindkey '^I' complete-word
+# Fix weird sequence that rxvt produces
+bindkey -s '^[[Z' '\t'
 #
