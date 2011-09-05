@@ -69,7 +69,7 @@ autoload -Uz add-zsh-hook
 
 # Sets the tab and window titles before the prompt is displayed.
 function set-title-precmd {
-  if ! check-bool "$DISABLE_AUTO_TITLE"; then
+  if check-bool "$AUTO_TITLE"; then
     set-window-title "${(%):-%~}"
     for kind in tab screen; do
       # Left-truncate the current working directory to 15 characters.
@@ -81,7 +81,7 @@ add-zsh-hook precmd set-title-precmd
 
 # Sets the tab and window titles before command execution.
 function set-title-preexec {
-  if ! check-bool "$DISABLE_AUTO_TITLE"; then
+  if check-bool "$AUTO_TITLE"; then
     set-title-by-command "$2"
   fi
 }

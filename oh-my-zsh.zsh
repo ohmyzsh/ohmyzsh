@@ -2,7 +2,7 @@
 
 # Disable color in dumb terminals.
 if [[ "$TERM" == 'dumb' ]]; then
-  DISABLE_COLOR='true'
+  COLOR='false'
 fi
 
 # Add functions to fpath.

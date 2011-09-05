@@ -67,7 +67,7 @@ if [[ "$KEYMAP" == (emacs|) ]]; then
   bindkey "${keys[Control]}x${keys[Control]}e" edit-command-line
 
   # Expand .... to ../..
-  if ! check-bool "$DISABLE_DOT_EXPANSION"; then
+  if check-bool "$DOT_EXPANSION"; then
     bindkey "." expand-dot-to-parent-directory-path
   fi
 
@@ -132,7 +132,7 @@ elif [[ "$KEYMAP" == 'vi' ]]; then
   bindkey -M vicmd "${keys[Control]}r" redo
 
   # Expand .... to ../..
-  if ! check-bool "$DISABLE_DOT_EXPANSION"; then
+  if check-bool "$DOT_EXPANSION"; then
     bindkey -M viins "." expand-dot-to-parent-directory-path
   fi
 
@@ -233,7 +233,7 @@ bindkey '^[[Z' reverse-menu-complete
 bindkey "${keys[Control]}i" expand-or-complete-prefix
 
 # Convert .... to ../.. automatically.
-if ! check-bool "$DISABLE_DOT_EXPANSION"; then
+if check-bool "$DOT_EXPANSION"; then
   function expand-dot-to-parent-directory-path() {
     if [[ $LBUFFER = *.. ]]; then
       LBUFFER+=/..
@@ -247,7 +247,7 @@ if ! check-bool "$DISABLE_DOT_EXPANSION"; then
 fi
 
 # Display an indicator when completing.
-if ! check-bool "$DISABLE_COMPLETION_INDICATOR"; then
+if check-bool "$COMPLETION_INDICATOR"; then
   function expand-or-complete-prefix-with-indicator() {
     echo -n "\e[31m...\e[0m"
     zle expand-or-complete-prefix

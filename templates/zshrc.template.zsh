@@ -4,20 +4,20 @@ OMZ="$HOME/.oh-my-zsh"
 # Set the key mapping style to 'emacs' or 'vi'.
 KEYMAP='emacs'
 
-# Set to 'true' to enable case-sensitivity.
+# Set case-sensitivity for completion, history lookup, etc.
 CASE_SENSITIVE='false'
 
-# Set to 'true' to disable color (auto set on dumb terminals).
-DISABLE_COLOR='false'
+# Color output (auto set to 'false' on dumb terminals).
+COLOR='true'
 
-# Set to 'true' to disable auto setting the tab and window titles.
-DISABLE_AUTO_TITLE='false'
+# Auto set the tab and window titles.
+AUTO_TITLE='true'
 
-# Set to 'false' to enable converting .... to ../.. automatically.
-DISABLE_DOT_EXPANSION='true'
+# Auto convert .... to ../..
+DOT_EXPANSION='false'
 
-# Set to 'false' to enable the completion indicator.
-DISABLE_COMPLETION_INDICATOR='true'
+# Indicate that completions are being generated.
+COMPLETION_INDICATOR='false'
 
 # Set the plugins to load (see $OMZ/plugins/).
 # Example: plugins=(git lighthouse rails ruby textmate)

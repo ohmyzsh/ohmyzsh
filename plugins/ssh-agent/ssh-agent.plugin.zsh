@@ -40,7 +40,7 @@ function _ssh-agent-start() {
 
 # Test if agent-forwarding is enabled.
 zstyle -b :omz:plugins:ssh-agent agent-forwarding _ssh_agent_forwarding
-if [[ "${_ssh_agent_forwarding}" == "yes" && -n "$SSH_AUTH_SOCK" ]]; then
+if check-bool "${_ssh_agent_forwarding}" && [[ -n "$SSH_AUTH_SOCK" ]]; then
   # Add a nifty symlink for screen/tmux if agent forwarding.
   [[ -L "$SSH_AUTH_SOCK" ]] || ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USER-screen
 elif [ -f "${_ssh_agent_env}" ]; then

@@ -2,7 +2,7 @@ setopt correct        # Correct commands.
 setopt correct_all    # Correct all arguments.
 
 # The 'ls' Family
-if ! check-bool "$DISABLE_COLOR"; then
+if check-bool "$COLOR"; then
   if [[ -f "$HOME/.dir_colors" ]] && ( (( $+commands[dircolors] )) || ( (( $+plugins[(er)gnu-utils] )) && (( $+commands[gdircolors] )) ) ); then
     eval $("${commands[dircolors]:-$commands[gdircolors]}" "$HOME/.dir_colors")
     alias ls='ls -hF --group-directories-first --color=auto'
@@ -80,7 +80,7 @@ else
 fi
 
 # Diff/Make
-if ! check-bool "$DISABLE_COLOR"; then
+if check-bool "$COLOR"; then
   if (( $+commands[colordiff] )); then
     alias diff='colordiff -u'
     compdef colordiff=diff
