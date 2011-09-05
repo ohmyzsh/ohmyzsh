@@ -21,6 +21,11 @@ for plugin in $plugins; do
   fi
 done
 
+# Set PATH for Mac OS X GUI applications (requires re-login).
+if [[ "$OSTYPE" == darwin* ]]; then
+  launchctl setenv PATH "$PATH" &!
+fi
+
 # Load and run the prompt theming system.
 autoload -Uz promptinit && promptinit -i
 
