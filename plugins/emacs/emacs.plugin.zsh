@@ -24,21 +24,28 @@ if "$ZSH/tools/require_tool.sh" emacs 23 2>/dev/null ; then
     alias emasc=emacs
     alias emcas=emacs
 
-    # jump to the directory of the current buffer
+    # Write to standard output the path to the file
+    # opened in the current buffer.
+    function efile {
+        local cmd="(buffer-file-name (window-buffer))"
+        $EDITOR --eval "$cmd" | tr -d \"
+    }
+
+    # display the directory of the file
+    # opened in the the current buffer
     function ecd {
         local cmd="(let ((buf-name (buffer-file-name (window-buffer))))
                      (if buf-name (file-name-directory buf-name)))"
 
         local dir=`$EDITOR --eval "$cmd" | tr -d \"`
         if [ -n "$dir" ] ;then
-            cd "$dir"
+            echo "$dir"
         else
             echo "can not deduce current buffer filename." >/dev/stderr
             return 1
         fi
     }
 fi
-
 
 ## Local Variables:
 ## mode: sh
