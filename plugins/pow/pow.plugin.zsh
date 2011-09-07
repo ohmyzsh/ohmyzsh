@@ -1,9 +1,6 @@
 # Thanks to Christopher Sexton
 # https://gist.github.com/1019777
 
-# Restart a rack app running under pow
-# http://pow.cx/
-#
 # Adds a kapow command that will restart an app
 #
 #   $ kapow myapp
@@ -35,11 +32,12 @@ rack_root_detect(){
 
   builtin cd $orgdir 2>/dev/null
   [[ ${basedir} == "/" ]] && return 1
-  echo `basename $basedir | sed -E "s/.(com|net|org)//"`
+	echo $basedir
 }
+
 kapow(){
   local vhost=$1
-  [ ! -n "$vhost" ] && vhost=$(rack_root_detect)
+  [ ! -n "$vhost" ] && vhost=$(basename `rack_root_detect` | sed -E "s/.(com|net|org)//")
   if [ ! -h ~/.pow/$vhost ]
   then
     echo "pow: This domain isn’t set up yet. Symlink your application to ${vhost} first."
@@ -49,6 +47,33 @@ kapow(){
   [ ! -d "~/.pow/${vhost}/tmp" ] &&  mkdir -p "~/.pow/$vhost/tmp"
   touch ~/.pow/$vhost/tmp/restart.txt;
   [ $? -eq 0 ] &&  echo "pow: restarting $vhost.dev"
+}
+
+# The powinit command symlinks a dir to ~/.pow
+#
+#   $ powinit /path/to/myapp
+#
+# powinit alone uses the working dir:
+#
+#   $ powinit
+
+powinit(){
+  local full_path=$1
+  [ -n "$full_path" ] && full_path=$(echo $full_path(:A))
+  [ ! -n "$full_path" ] && full_path=$(rack_root_detect)
+  if [ ! -n "$full_path" ]
+  then
+    echo "pow: Not a rack app"
+    return 1
+  fi
+  local vhost=$(basename $full_path | sed -E "s/.(com|net|org)//")
+  if [ -h ~/.pow/$vhost ]
+  then
+    echo "pow: This domain is already set up. Remove the symlink in ~/.pow to reconfigure."
+    return 1
+  fi
+	ln -s $full_path ~/.pow/$vhost
+	echo "pow: Application set up on http://$vhost.dev"
 }
 compctl -W ~/.pow -/ kapow
 
