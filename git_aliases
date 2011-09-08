@@ -1,0 +1,54 @@
+export git_concise_log_format='--pretty=format:%Cblue%h%d%Creset %ar %Cgreen%an%Creset %s'
+
+git_current_branch() {
+  git symbolic-ref HEAD 2> /dev/null | sed -e 's/refs\/heads\///'
+}
+
+alias ga='git add'
+alias gap='ga -p'
+alias gau='git add -u'
+alias gbr='git branch -v'
+gc() {
+  git diff --cached | grep '\btap[ph]\b' >/dev/null &&
+    echo "\e[0;31;29mOops, there's a #tapp or similar in that diff.\e[0m" ||
+    git commit -v "$@"
+}
+alias gc!='git commit -v'
+alias gca='git commit -v -a'
+alias gcam='gca --amend'
+alias gch='git cherry-pick'
+alias gcm='git commit -v --amend'
+alias gco='git checkout'
+alias gcop='gco -p'
+alias gd='git diff -M'
+alias gd.='git diff -M --color-words="."'
+alias gdc='git diff --cached -M'
+alias gdc.='git diff --cached -M --color-words="."'
+alias gf='git fetch'
+alias glog='git log $git_concise_log_format'
+alias gl='glog --graph'
+alias gla='gl --all'
+alias gl_absolute='git log --pretty=format:"%Cblue%h%d%Creset %ad %Cgreen%an%Creset %s"'
+gls() {
+  query="$1"
+  shift
+  glog --pickaxe-regex "-S$query" "$@"
+}
+alias gm='git merge --no-ff'
+alias gmf='git merge --ff-only'
+alias gp='git push'
+alias gpt='gp --tags'
+alias gr='git reset'
+alias grb='git rebase -p'
+alias grbc='git rebase --continue'
+alias grbi='git rebase -i'
+alias grh='git reset --hard'
+alias grp='gr --patch'
+alias grsh='git reset --soft HEAD~'
+alias grv='git remote -v'
+alias gs='git show'
+alias gs.='git show --color-words="."'
+alias gst='git stash'
+alias gstp='git stash pop'
+alias gup='git smart-pull'
+alias graf='git remote add $argv[1] $argv[2] && gf $argv[1]'
