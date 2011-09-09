@@ -138,7 +138,7 @@ _zsh_highlight_main_highlighter_check_path()
   [[ -z ${(Q)~arg} ]] && return 1
   [[ -e ${(Q)~arg} ]] && return 0
   [[ ! -e ${(Q)~arg:h} ]] && return 1
-  [[ ${BUFFER[1]} != "-" && ${#BUFFER} == $end_pos && -n $(print ${(Q)~arg}*(N)) ]] && return 0
+  [[ ${BUFFER[1]} != "-" && ${#BUFFER} == $end_pos && -n $(print "${(Q)~arg}"*(N)) ]] && return 0
   return 1
 }
 
