@@ -68,3 +68,21 @@ if [ "x$COMPLETION_WAITING_DOTS" = "xtrue" ]; then
   zle -N expand-or-complete-with-dots
   bindkey "^I" expand-or-complete-with-dots
 fi
+
+
+# Completion messages
+# originally due to Adam Spiers <adam@spiers.net>
+
+# Separate matches into groups
+zstyle ':completion:*:matches' group 'yes'
+
+# Describe each match group.
+zstyle ':completion:*:descriptions' format "%B---- %d%b"
+
+# Messages/warnings format
+zstyle ':completion:*:messages' format '%B%U---- %d%u%b'
+zstyle ':completion:*:warnings' format '%B%U---- no match for: %d%u%b'
+
+# Describe options in full
+zstyle ':completion:*:options' description 'yes'
+zstyle ':completion:*:options' auto-description '%d'
