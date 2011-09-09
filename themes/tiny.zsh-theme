@@ -10,7 +10,7 @@ function collapse_pwd {
 function prompt_character {
   # if you're in a git branch, the prompt character is '±'
   # (this is handled by git_colors)
-  git branch >> /dev/null 2>> /dev/null && echo "%{$fg[`git_colors`]%}±%{$reset_color%}" && return
+  git branch >> /dev/null 2>> /dev/null && echo "%{$fg[`git_colors`]%} ±%{$reset_color%}" && return
 }
 
 function git_colors {
@@ -34,4 +34,4 @@ function git_branch {
   fi
 }
 
-PROMPT='$(collapse_pwd) %{$fg[cyan]%}$(git_branch)%{$reset_color%}$(prompt_character) » '
+PROMPT='%{$fg[cyan]%}$(collapse_pwd)$(git_branch)%{$reset_color%}$(prompt_character) » '
