@@ -11,8 +11,6 @@ function prompt_character {
   # if you're in a git branch, the prompt character is '±'
   # (this is handled by git_colors)
   git branch >> /dev/null 2>> /dev/null && echo "%{$fg[`git_colors`]%}±%{$reset_color%}" && return
-  # else, it's a blank space
-  echo " "
 }
 
 function git_colors {
