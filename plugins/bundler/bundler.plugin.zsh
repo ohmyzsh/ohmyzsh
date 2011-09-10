@@ -33,5 +33,10 @@ _run-with-bundler() {
 
 ## Main program
 for cmd in $bundled_commands; do
-  alias $cmd="_run-with-bundler $cmd"
+  eval "function bundled_$cmd () { _run-with-bundler $cmd \$@}"
+  alias $cmd=bundled_$cmd
+
+  if which _$cmd > /dev/null 2>&1; then
+        compdef _$cmd bundled_$cmd
+  fi
 done
