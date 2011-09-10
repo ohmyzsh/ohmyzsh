@@ -1,10 +1,3 @@
-
-if [[ ! -d $GRAILS_HOME/scripts ]];
-then
-    echo "$0:"
-    echo "Please set \$GRAILS_HOME to use the 'grails' plugin, and ensure that \$GRAILS_HOME/scripts exists"
-fi
-
 _enumerateGrailsScripts() {
     # Default directoryies
     directories=($GRAILS_HOME/scripts ~/.grails/scripts ./scripts)
