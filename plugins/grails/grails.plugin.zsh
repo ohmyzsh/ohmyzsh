@@ -21,7 +21,7 @@ _enumerateGrailsScripts() {
     do
         if [ -d $dir ]
         then
-            files+=($dir/*.groovy)
+            files+=($dir/[^_]*.groovy)
         fi
     done
     
@@ -37,7 +37,6 @@ _enumerateGrailsScripts() {
     # - PackagePlugin         -> Package-Plugin
     # - Package-Plugin        -> package-plugin
     basename $files                             \
-        | grep -vE -e '^_'                      \
         | sed -E  -e 's/^_?([^_]+)_?.groovy/\1/'\
                   -e 's/([a-z])([A-Z])/\1-\2/g' \
         | tr "[:upper:]" "[:lower:]"            \
