@@ -1,8 +1,7 @@
-function zle-line-init zle-keymap-select {
+function zle-keymap-select {
   zle reset-prompt
 }
 
-zle -N zle-line-init
 zle -N zle-keymap-select
 
 bindkey -v
