@@ -14,10 +14,10 @@ autoload -Uz compinit && compinit -i
 # Source function files.
 source "$OMZ/functions/init.zsh"
 
-# Load all plugins defined in ~/.zshrc.
+# Source plugins defined in ~/.zshrc.
 for plugin in $plugins; do
-  if [[ -f "$OMZ/plugins/$plugin/$plugin.plugin.zsh" ]]; then
-    source "$OMZ/plugins/$plugin/$plugin.plugin.zsh"
+  if [[ -f "$OMZ/plugins/$plugin/init.zsh" ]]; then
+    source "$OMZ/plugins/$plugin/init.zsh"
   fi
 done
 

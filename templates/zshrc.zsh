@@ -24,7 +24,7 @@ COMPLETION_INDICATOR='false'
 plugins=(git)
 
 # This will make you scream: OH MY ZSH!
-source "$OMZ/oh-my-zsh.zsh"
+source "$OMZ/init.zsh"
 
 # Load the prompt theme (type prompt -l to list all themes).
 # Setting it to 'random' loads a random theme.
