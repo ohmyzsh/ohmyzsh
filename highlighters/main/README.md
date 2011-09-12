@@ -28,6 +28,8 @@ This highlighter defines the following styles:
 * `builtin` - shell builtin commands
 * `function` - functions
 * `command` - commands
+* `precommand` - precommands (i.e. exec, builtin, ...)
+* `commandseparator` - command separation tokens
 * `hashed-command` - hashed commands
 * `path` - paths
 * `globbing` - globbing expressions

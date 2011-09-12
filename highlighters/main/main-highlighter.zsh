@@ -37,6 +37,8 @@
 : ${ZSH_HIGHLIGHT_STYLES[builtin]:=fg=green}
 : ${ZSH_HIGHLIGHT_STYLES[function]:=fg=green}
 : ${ZSH_HIGHLIGHT_STYLES[command]:=fg=green}
+: ${ZSH_HIGHLIGHT_STYLES[precommand]:=fg=green,underline}
+: ${ZSH_HIGHLIGHT_STYLES[commandseparator]:=fg=green,bold}
 : ${ZSH_HIGHLIGHT_STYLES[hashed-command]:=fg=green}
 : ${ZSH_HIGHLIGHT_STYLES[path]:=underline}
 : ${ZSH_HIGHLIGHT_STYLES[globbing]:=fg=blue}
@@ -50,11 +52,6 @@
 : ${ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]:=fg=cyan}
 : ${ZSH_HIGHLIGHT_STYLES[assign]:=none}
 
-# Tokens that are always immediately followed by a command.
-ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS=(
-  '|' '||' ';' '&' '&&' 'noglob' 'nocorrect' 'builtin' 'exec'
-)
-
 # Whether the highlighter should be called or not.
 _zsh_highlight_main_highlighter_predicate()
 {
@@ -66,7 +63,22 @@ _zsh_highlight_main_highlighter()
 {
   setopt localoptions extendedglob bareglobqual
   local start_pos=0 end_pos highlight_glob=true new_expression=true arg style
+  typeset -a ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR
+  typeset -a ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS
+  typeset -a ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS
   region_highlight=()
+
+  ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR=(
+    '|' '||' ';' '&' '&&'
+  )
+  ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS=(
+    'builtin' 'command' 'exec' 'nocorrect' 'noglob'
+  )
+  # Tokens that are always immediately followed by a command.
+  ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS=(
+    $ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR $ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS
+  )
+
   for arg in ${(z)BUFFER}; do
     local substr_color=0
     [[ $start_pos -eq 0 && $arg = 'noglob' ]] && highlight_glob=false
@@ -74,6 +86,9 @@ _zsh_highlight_main_highlighter()
     ((end_pos=$start_pos+${#arg}))
     if $new_expression; then
       new_expression=false
+     if [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS:#"$arg"} ]]; then
+      style=$ZSH_HIGHLIGHT_STYLES[precommand]
+     else
       res=$(LC_ALL=C builtin type -w $arg 2>/dev/null)
       case $res in
         *': reserved')  style=$ZSH_HIGHLIGHT_STYLES[reserved-word];;
@@ -97,6 +112,7 @@ _zsh_highlight_main_highlighter()
                         fi
                         ;;
       esac
+     fi
     else
       case $arg in
         '--'*)   style=$ZSH_HIGHLIGHT_STYLES[double-hyphen-option];;
@@ -113,6 +129,8 @@ _zsh_highlight_main_highlighter()
                    style=$ZSH_HIGHLIGHT_STYLES[path]
                  elif [[ $arg[0,1] = $histchars[0,1] ]]; then
                    style=$ZSH_HIGHLIGHT_STYLES[history-expansion]
+                 elif [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR:#"$arg"} ]]; then
+                   style=$ZSH_HIGHLIGHT_STYLES[commandseparator]
                  else
                    style=$ZSH_HIGHLIGHT_STYLES[default]
                  fi
