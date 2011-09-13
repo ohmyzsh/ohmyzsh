@@ -42,4 +42,6 @@ RWZSH=$HOME/.zsh
 . $ZSH/completion.zsh
 
 # use .localrc for settings specific to one system
-[[ -f ~/.localrc ]] && . ~/.localrc
+if [[ -f ~/.localrc ]]; then
+	. ~/.localrc
+fi
