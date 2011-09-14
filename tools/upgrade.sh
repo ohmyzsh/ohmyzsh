@@ -1,6 +1,6 @@
 current_path=`pwd`
 echo -e "\033[0;34mUpgrading Oh My Zsh\033[0m"
-( cd $ZSH && git pull origin master )
+cd "${ZSH:-$HOME/.oh-my-zsh}" && git pull origin master || (echo "Cannot upgrade ZSH!"; exit 1)
 echo -e "\033[0;32m"'         __                                     __   '"\033[0m"
 echo -e "\033[0;32m"'  ____  / /_     ____ ___  __  __   ____  _____/ /_  '"\033[0m"
 echo -e "\033[0;32m"' / __ \/ __ \   / __ `__ \/ / / /  /_  / / ___/ __ \ '"\033[0m"

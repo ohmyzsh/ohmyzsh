@@ -1,20 +1,22 @@
-echo "Removing ~/.oh-my-zsh"
-if [[ -d ~/.oh-my-zsh ]]
-then
-  rm -rf ~/.oh-my-zsh
+if [[ -d ~/.oh-my-zsh ]]; then
+  echo "Removing '~/.oh-my-zsh'";
+  rm -rf ~/.oh-my-zsh;
+else
+  echo "Cannot find '~/.oh-my-zsh'";
+  exit 1
 fi
 
-echo "Looking for an existing zsh config..."
 if [ -f ~/.zshrc.pre-oh-my-zsh ] || [ -h ~/.zshrc.pre-oh-my-zsh ]
 then
-  echo "Found ~/.zshrc. Backing up to ~/.zshrc.pre-oh-my-zsh";
-  rm ~/.zshrc;
-  cp ~/.zshrc.pre-oh-my-zsh ~/.zshrc;
+  echo "Found '~/.zshrc.pre-oh-my-zsh', Restoring to ~/.zshrc";
+  mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc \
+   || ( echo "cannot restore '~/.zshrc'!"; exit 2)
   source ~/.zshrc;
 else
-  echo "Switching back to bash"
-  chsh -s /bin/bash
-  source /etc/profile
+  echo "You might want to switch back to bash:";
+  echo "chsh -s /bin/bash";
+  echo "source /etc/profile";
 fi
 
-echo "Thanks for trying out Oh My Zsh. It's been uninstalled."
+echo "Thanks for trying out 'Oh My Zsh', It is no longer installed.";
+
