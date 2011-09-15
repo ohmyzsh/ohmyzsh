@@ -1,0 +1,280 @@
+#compdef task
+#
+# zsh completion for taskwarrior
+#
+# Copyright 2010 - 2011 Johannes Schlatow
+# Copyright 2009 P.C. Shyamshankar
+# All rights reserved.
+#
+# This script is part of the taskwarrior project.
+#
+# This program is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program; if not, write to the
+#
+#     Free Software Foundation, Inc.,
+#     51 Franklin Street, Fifth Floor,
+#     Boston, MA
+#     02110-1301
+#     USA
+#
+typeset -g _task_cmds _task_projects _task_tags _task_config _task_modifiers
+_task_projects=($(task _projects))
+_task_tags=($(task _tags))
+_task_ids=($(task _ids))
+_task_config=($(task _config))
+_task_modifiers=(
+	'before' \
+	'after' \
+	'none' \
+	'any' \
+	'is' \
+	'isnt' \
+	'has' \
+	'hasnt' \
+	'startswith' \
+	'endswith' \
+	'word' \
+	'noword'
+)
+_task_cmds=($(task _commands))
+_task_zshcmds=( ${(f)"$(task _zshcommands)"} )
+
+
+_task_idCmds=(
+	'append' \
+	'prepend' \
+	'annotate' \
+	'denotate' \
+	'edit' \
+	'duplicate' \
+	'info' \
+	'start' \
+	'stop' \
+	'done'
+)
+
+_task_idCmdsDesc=(
+	'append:Appends more description to an existing task.' \
+	'prepend:Prepends more description to an existing task.' \
+	'annotate:Adds an annotation to an existing task.' \
+	'denotate:Deletes an annotation of an existing task.' \
+	'edit:Launches an editor to let you modify a task directly.' \
+	'duplicate:Duplicates the specified task, and allows modifications.' \
+	'info:Shows all data, metadata for specified task.' \
+	'start:Marks specified task as started.' \
+	'stop:Removes the start time from a task.' \
+	'done:Marks the specified task as completed.'
+)
+
+_task() {
+    _arguments -s -S \
+        "*::task command:_task_commands"
+    return 0
+}
+
+local -a reply args word
+word=$'[^\0]#\0'
+
+# priorities
+local -a task_priorities
+_regex_words values 'task priorities' \
+	'H:High' \
+	'M:Middle' \
+	'L:Low'
+task_priorities=("$reply[@]")
+
+# projects
+local -a task_projects
+task_projects=(
+	/"$word"/
+	":values:task projects:compadd -a _task_projects"
+)
+
+local -a _task_dates
+_regex_words values 'task dates' \
+	'tod*ay:Today' \
+	'yes*terday:Yesterday' \
+	'tom*orrow:Tomorrow' \
+	'sow:Start of week' \
+	'soww:Start of work week' \
+	'socw:Start of calendar week' \
+	'som:Start of month' \
+	'soy:Start of year' \
+	'eow:End of week' \
+	'eoww:End of work week' \
+	'eocw:End of calendar week' \
+	'eom:End of month' \
+	'eoy:End of year' \
+	'mon:Monday' \
+	'tue:Tuesday'\
+	'wed:Wednesday' \
+	'thu:Thursday' \
+	'fri:Friday' \
+	'sat:Saturday' \
+	'sun:Sunday'
+_task_dates=("$reply[@]")
+
+local -a _task_reldates
+_regex_words values 'task reldates' \
+	'hrs:n hours' \
+	'day:n days' \
+	'1st:first' \
+	'2nd:second' \
+	'3rd:third' \
+	'th:4th, 5th, etc.' \
+	'wks:weeks'
+_task_reldates=("$reply[@]")
+
+task_dates=(
+	\( "$_task_dates[@]" \|
+    \( /$'[0-9][0-9]#'/- \( "$_task_reldates[@]" \) \)
+	\)
+)
+
+_regex_words values 'task frequencies' \
+	'daily:Every day' \
+	'day:Every day' \
+	'weekdays:Every day skipping weekend days' \
+	'weekly:Every week' \
+	'biweekly:Every two weeks' \
+	'fortnight:Every two weeks' \
+	'quarterly:Every three months' \
+	'semiannual:Every six months' \
+	'annual:Every year' \
+	'yearly:Every year' \
+	'biannual:Every two years' \
+	'biyearly:Every two years'
+_task_freqs=("$reply[@]")
+
+local -a _task_frequencies
+_regex_words values 'task frequencies' \
+	'd:days' \
+	'w:weeks' \
+	'q:quarters' \
+	'y:years'
+_task_frequencies=("$reply[@]")
+
+task_freqs=(
+	\( "$_task_freqs[@]" \|
+     \( /$'[0-9][0-9]#'/- \( "$_task_frequencies[@]" \) \)
+	\)
+)
+
+# attributes
+local -a task_attributes
+_regex_words -t ':' default 'task attributes' \
+	'pro*ject:Project name:$task_projects' \
+	'du*e:Due date:$task_dates' \
+	'wa*it:Date until task becomes pending:$task_dates' \
+	're*cur:Recurrence frequency:$task_freqs' \
+	'pri*ority:priority:$task_priorities' \
+	'un*til:Recurrence end date:$task_dates' \
+	'fg:Foreground color' \
+	'bg:Background color' \
+	'li*mit:Desired number of rows in report'
+task_attributes=("$reply[@]")
+
+args=(
+	\( "$task_attributes[@]" \|
+	\( /'(project|due|wait|recur|priority|until|fg|bg|limit).'/- \( /$'[^:]#:'/ ":default:modifiers:compadd -S ':' -a _task_modifiers" \) \) \|
+	\( /'(rc).'/- \( /$'[^:]#:'/ ":arguments:config:compadd -S ':' -a _task_config" \) \) \|
+	\( /'(+|-)'/- \( /"$word"/ ":values:remove tag:compadd -a _task_tags" \) \) \|
+	\( /"$word"/ \)
+	\) \#
+)
+_regex_arguments _task_attributes "${args[@]}"
+
+## task commands
+
+# default completion
+(( $+functions[_task_default] )) ||
+_task_default() {
+	_task_attributes "$@"
+}
+
+# commands expecting an ID
+(( $+functions[_task_id] )) ||
+_task_id() {
+	if (( CURRENT < 3 )); then
+		# update IDs
+		_task_zshids=( ${(f)"$(task _zshids)"} )
+		_describe -t values 'task IDs' _task_zshids
+	else
+		_task_attributes "$@"
+	fi
+}
+
+# merge completion
+(( $+functions[_task_merge] )) ||
+_task_merge() {
+	# TODO match URIs in .taskrc
+	_files
+}
+
+# push completion
+(( $+functions[_task_push] )) ||
+_task_push() {
+	# TODO match URIs in .taskrc
+	_files
+}
+
+# pull completion
+(( $+functions[_task_pull] )) ||
+_task_pull() {
+	# TODO match URIs in .taskrc
+	_files
+}
+
+
+# modify (task [0-9]* ...) completion
+(( $+functions[_task_modify] )) ||
+_task_modify() {
+	_describe -t commands 'task command' _task_idCmdsDesc
+	_task_attributes "$@"
+}
+
+## first level completion => task sub-command completion
+(( $+functions[_task_commands] )) ||
+_task_commands() {
+    local cmd ret=1
+	if (( CURRENT == 1 )); then
+		# update IDs
+		_task_zshids=( ${(f)"$(task _zshids)"} )
+
+		_describe -t commands 'task command' _task_zshcmds
+		_describe -t values 'task IDs' _task_zshids
+		# TODO match more than one ID
+	elif [[ $words[1] =~ ^[0-9]*$ ]] then
+		 _call_function ret _task_modify
+		 return ret
+	else
+#        local curcontext="${curcontext}"
+#        cmd="${_task_cmds[(r)$words[1]:*]%%:*}"
+		  cmd="${_task_cmds[(r)$words[1]]}"
+		  idCmd="${(M)_task_idCmds[@]:#$words[1]}"
+        if (( $#cmd )); then
+#            curcontext="${curcontext%:*:*}:task-${cmd}"
+
+				if (( $#idCmd )); then
+					_call_function ret _task_id
+				else
+					_call_function ret _task_${cmd} ||
+						_call_function ret _task_default ||
+							_message "No command remaining."
+				fi
+        else
+            _message "Unknown subcommand ${cmd}"
+        fi
+        return ret
+    fi
+}
