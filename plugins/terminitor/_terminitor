@@ -32,7 +32,7 @@ if (( CURRENT == 1 )); then
 fi
 
 case "$words[1]" in
-  start)
+  start|edit|delete|setup)
     _terminitor_available_scripts
     _wanted scripts expl 'installed scripts' compadd -a scripts ;;
 esac
