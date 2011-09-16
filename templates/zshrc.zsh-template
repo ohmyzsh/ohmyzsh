@@ -15,7 +15,7 @@ export DISABLE_COLOR='false'
 export DISABLE_AUTO_TITLE='false'
 
 # Set the plugins to load (see $ZSH/plugins/).
-# Example: plugins=(rails git textmate ruby lighthouse)
+# Example: plugins=(vi-mode git git-prompt extract history-substring-search compleat)
 plugins=(git)
 
 source "$ZSH/oh-my-zsh.sh"
