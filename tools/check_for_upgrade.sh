@@ -1,5 +1,7 @@
 #!/bin/sh
 
+source ./common
+
 function _current_epoch() {
   echo $(($(date +%s) / 60 / 60 / 24))
 }
@@ -19,15 +21,17 @@ then
   epoch_diff=$(($(_current_epoch) - $LAST_EPOCH))
   if [ $epoch_diff -gt 6 ]
   then
-    echo "[Oh My Zsh] Would you like to check for updates?"
-    echo "Type Y to update oh-my-zsh: \c"
+    note '[Oh My Zsh] Would you like to check for updates?'
+    query 'Type Y to update oh-my-zsh:'
     read line
     if [ "$line" = Y ] || [ "$line" = y ]
     then
-      /bin/sh $ZSH/tools/upgrade.sh
+      ./upgrade.sh
       # update the zsh file
       _update_zsh_update
     fi
+  else
+    proclaim 'Updated recently.'
   fi
 else
   # create the zsh file
