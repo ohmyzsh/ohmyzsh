@@ -34,7 +34,7 @@ alias lr='ls -lhR'           # Recursive ls.
 
 # General
 # ------------------------------------------------------------------------------
-alias rm='nocorrect rm -i'
+alias rm='nocorrect rm'
 alias cp='nocorrect cp -i'
 alias mv='nocorrect mv -i'
 alias ln='nocorrect ln -i'
