@@ -10,7 +10,7 @@ function wake() {
     return 1
   fi
 
-  wakeonlan -f $config_file
+  wakeonlan -f "$config_file"
 }
 
 if (( $+functions[compdef] )); then
