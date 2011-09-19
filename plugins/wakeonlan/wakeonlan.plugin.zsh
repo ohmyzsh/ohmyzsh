@@ -12,7 +12,3 @@ function wake() {
 
   wakeonlan -f "$config_file"
 }
-
-if (( $+functions[compdef] )); then
-  compdef "_arguments '1:device to wake:_files -W '\''$HOME/.wakeonlan'\'''" wake
-fi
