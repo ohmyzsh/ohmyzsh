@@ -1,4 +1,17 @@
-# zsh mouse (and X clipboard) support v1.5
+###########################################################################
+# zsh mouse (and X clipboard) support v1.6
+###########################################################################
+#
+# Copyright 2004-2011 Stephane Chazelas <stephane_chazelas@yahoo.fr>
+#
+# Permission to use, copy, modify, distribute, and sell this software and
+# its documentation for any purpose is hereby granted without fee, provided
+# that the above copyright notice appear in all copies and that both that
+# copyright notice and this permission notice appear in supporting
+# documentation.  No representations are made about the suitability of this
+# software for any purpose.  It is provided "as is" without express or
+# implied warranty.
+###########################################################################
 #
 # QUICKSTART: jump to "how to use" below.
 #
@@ -7,7 +20,7 @@
 #  - GPM on Linux little-endian systems such as i386 (at least)
 #  - X clipboard handling if xsel(1) or xclip(1) is available (see
 #    note below).
-#
+# 
 # addionnaly, if you are using xterm and don't want to use the mouse
 # tracking system, you can map some button click events so that they
 # send \E[M<bt>^X[<y><x> where <bt> is the character 0x20 + (0, 1, 2)
@@ -112,7 +125,7 @@
 # to the context menu. Use Ctrl-Insert to put the selection on the
 # clipboard.
 # dtterm: no mouse support but the selection works OK.
-#
+# 
 # bugs:
 #   - the GPM support was not much tested (was tested with gpm 1.19.6 on
 #     a linux 2.6.9, AMD Athlon)
@@ -127,6 +140,7 @@
 #   Stephane Chazelas <Stephane_Chazelas@yahoo.fr>
 #
 # Changes:
+#  v1.6 2011-09-15: added Copyright and License notice, no code change
 #  v1.5 2005-03-12: bug fixes (GPM now works again), xclip prefered over
 #       xsel as xsel is bogus.
 #  v1.4 2005-03-01: <Ctrl-W><Ctrl-W> puts both words on the cut buffer
@@ -167,7 +181,7 @@ else
   x_clipboard_tool=
   x_selection_tool=
 fi
-if [[ -n $x_clipboard_tool ]]; then
+if [[ -n $x_clipboard_tool && $ZSH_X_COPY_PASTING -gt 0 ]]; then
   eval '
     get-x-clipboard() {
       (( $+DISPLAY )) || return 1
@@ -244,7 +258,7 @@ if [[ -n $x_clipboard_tool ]]; then
       }
       zle -N '${w#.}
   done
-
+  
   zle -N push-x-selection
   zle -N push-x-cut_buffer0
 
@@ -278,7 +292,12 @@ if [[ -n $x_clipboard_tool ]]; then
   bindkey -M viins '\e[2;5~' push-x-selection
   bindkey -M vicmd '\e[2;5~' push-x-selection
 
-  # for terminal without an insert key:
+  # same for rxvt:
+  bindkey -M emacs '\e[2^' push-x-selection
+  bindkey -M viins '\e[2^' push-x-selection
+  bindkey -M vicmd '\e[2^' push-x-selection
+
+  # for terminals without an insert key:
   bindkey -M vicmd X push-x-selection
   bindkey -M emacs '^XX' push-x-selection
 
@@ -400,7 +419,7 @@ if [[ $TERM = *[xeEk]term* ||
     # store the characters i for which x(i) <= mx < x(i+1) for every
     # value of y in the pos array. We also get the Y(CURSOR), so that at
     # the end, we're able to say which pos element is the right one
-
+    
     local -a pos # array holding the possible positions of
 		 # the mouse pointer
     local -i n x=0 y=1 cursor=$((${#cur_prompt}+$CURSOR+1))
@@ -466,15 +485,15 @@ if [[ $TERM = *[xeEk]term* ||
       ;;
     esac
   }
-
+  
   zle -N handle-mouse-event
 
   handle-xterm-mouse-event() {
     local last_status=$?
     emulate -L zsh
     local bt mx my
-
-    # either xterm mouse tracking or binded xterm event
+    
+    # either xterm mouse tracking or bound xterm event
     # read the event from the terminal
     read -k bt # mouse button, x, y reported after \e[M
     bt=$((#bt & 0x47))
@@ -573,7 +592,7 @@ if [[ $TERM = *[xeEk]term* ||
 	  zle-update-mouse-driver
 	fi
       }
-    fi
+    fi 
   else
     # xterm-like mouse support
     zmodload -i zsh/parameter # needed for $functions
@@ -641,5 +660,3 @@ zle-toggle-mouse() {
   zle-update-mouse-driver
 }
 zle -N zle-toggle-mouse
-
-zle-toggle-mouse
