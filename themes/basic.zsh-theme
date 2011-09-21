@@ -1,7 +1,8 @@
 if [ "$(whoami)" = "root" ]; then NCOLOR="red"; else NCOLOR="white"; fi
 
 PROMPT='%{$fg[white]%}%B%c%b%{$reset_color%}$(git_prompt_info) %(!.#.$) '
-RPROMPT='%{$fg[$NCOLOR]%}%n %{$fg_bold[white]%}@ %{$fg_bold[yellow]%}%*%{$reset_color%}'
+RPROMPT='%{$fg[$NCOLOR]%}%n%{$fg_bold[white]%}@%{$fg_bold[yellow]%}%m %{$fg_bold[white]%}%*%{$reset_color%}'
+
 
 # git theming
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[blue]%}::%{$fg_no_bold[white]%}%B"
