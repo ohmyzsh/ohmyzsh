@@ -1,6 +1,9 @@
 if [ "$(whoami)" = "root" ]; then NCOLOR="red"; else NCOLOR="white"; fi
 
-PROMPT='%{$fg[white]%}%B%c%b%{$reset_color%}$(git_prompt_info) %(!.#.$) '
+if [[ -z $BASIC_COLOR ]]; then SHELL_COLOR="white"; else SHELL_COLOR=$BASIC_COLOR ; fi
+
+
+PROMPT='%{$fg[white]%}%B%c%b%{$reset_color%}$(git_prompt_info)%{$fg_bold[$SHELL_COLOR]%} %(!.#.$) '
 RPROMPT='%{$fg_bold[$NCOLOR]%}%n%{$fg_bold[blue]%}@%{$fg_bold[white]%}%m %{$fg_bold[white]%}%*%{$reset_color%}'
 
 
