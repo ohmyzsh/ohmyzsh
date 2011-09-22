@@ -1,7 +1,7 @@
 if [ "$(whoami)" = "root" ]; then NCOLOR="red"; else NCOLOR="white"; fi
 
 PROMPT='%{$fg[white]%}%B%c%b%{$reset_color%}$(git_prompt_info) %(!.#.$) '
-RPROMPT='%{$fg[$NCOLOR]%}%n%{$fg_bold[white]%}@%{$fg_bold[yellow]%}%m %{$fg_bold[white]%}%*%{$reset_color%}'
+RPROMPT='%{$fg_bold[$NCOLOR]%}%n%{$fg_bold[blue]%}@%{$fg_bold[white]%}%m %{$fg_bold[white]%}%*%{$reset_color%}'
 
 
 # git theming
