@@ -153,7 +153,7 @@ _zsh_highlight_main_highlighter_check_assign()
 # Check if the argument is a path.
 _zsh_highlight_main_highlighter_check_path()
 {
-  setopt nonomatch
+  setopt localoptions nonomatch
   local expanded_path; : ${expanded_path:=${(Q)~arg}}
   [[ -z $expanded_path ]] && return 1
   [[ -e $expanded_path ]] && return 0
