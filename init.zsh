@@ -10,6 +10,7 @@ fpath=(
   $OMZ/themes/*(/N)
   ${plugins:+$OMZ/plugins/${^plugins}}
   $OMZ/functions
+  $OMZ/completions
   $fpath
 )
 
