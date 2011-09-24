@@ -6,13 +6,27 @@ if [[ "$TERM" == 'dumb' ]]; then
 fi
 
 # Add functions to fpath.
-fpath=($OMZ/themes/*(/) $OMZ/plugins/${^plugins} $OMZ/functions $fpath)
+fpath=(
+  $OMZ/themes/*(/N)
+  ${plugins:+$OMZ/plugins/${^plugins}}
+  $OMZ/functions
+  $fpath
+)
 
-# Load and initialize the completion system.
+# Load and initialize the completion system ignoring insecure directories.
 autoload -Uz compinit && compinit -i
 
-# Source function files.
-source "$OMZ/functions/init.zsh"
+# Source files (the order matters).
+source "$OMZ/helper.zsh"
+source "$OMZ/environment.zsh"
+source "$OMZ/terminal.zsh"
+source "$OMZ/keyboard.zsh"
+source "$OMZ/completion.zsh"
+source "$OMZ/history.zsh"
+source "$OMZ/directory.zsh"
+source "$OMZ/alias.zsh"
+source "$OMZ/spectrum.zsh"
+source "$OMZ/utility.zsh"
 
 # Source plugins defined in ~/.zshrc.
 for plugin in $plugins; do
@@ -20,14 +34,16 @@ for plugin in $plugins; do
     source "$OMZ/plugins/$plugin/init.zsh"
   fi
 done
+unset plugin
+unset plugins
 
-# Set PATH for Mac OS X GUI applications (requires re-login).
+# Set environment variables for launchd processes.
 if [[ "$OSTYPE" == darwin* ]]; then
   launchctl setenv PATH "$PATH" &!
 fi
 
 # Load and run the prompt theming system.
-autoload -Uz promptinit && promptinit -i
+autoload -Uz promptinit && promptinit
 
 # Compile zcompdump, if modified, to increase startup speed.
 if [[ "$HOME/.zcompdump" -nt "$HOME/.zcompdump.zwc" ]] || [[ ! -f "$HOME/.zcompdump.zwc" ]]; then
