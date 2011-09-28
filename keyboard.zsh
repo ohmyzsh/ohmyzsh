@@ -14,8 +14,8 @@ zle -N edit-command-line
 
 # Use human-friendly identifiers.
 zmodload zsh/terminfo
-typeset -g -A keys
-keys=(
+typeset -g -A keyinfo
+keyinfo=(
   'Control'   '\C-'
   'Escape'    '\e'
   'Meta'      '\M-'
@@ -49,27 +49,27 @@ if [[ "$KEYMAP" == (emacs|) ]]; then
   # Use Emacs key bindings.
   bindkey -e
 
-  bindkey "${keys[Escape]}b" emacs-backward-word
-  bindkey "${keys[Escape]}f" emacs-forward-word
-  bindkey "${keys[Escape]}${keys[Left]}" emacs-backward-word
-  bindkey "${keys[Escape]}${keys[Right]}" emacs-forward-word
+  bindkey "${keyinfo[Escape]}b" emacs-backward-word
+  bindkey "${keyinfo[Escape]}f" emacs-forward-word
+  bindkey "${keyinfo[Escape]}${keyinfo[Left]}" emacs-backward-word
+  bindkey "${keyinfo[Escape]}${keyinfo[Right]}" emacs-forward-word
 
   # Kill to the beginning of the line.
-  bindkey "${keys[Control]}u" backward-kill-line
+  bindkey "${keyinfo[Control]}u" backward-kill-line
 
   # Kill to the beginning of the word.
-  bindkey "${keys[Control]}w" backward-kill-word
+  bindkey "${keyinfo[Control]}w" backward-kill-word
 
   # Undo/Redo
-  bindkey "${keys[Control]}_" undo
-  bindkey "${keys[Escape]}_" redo
+  bindkey "${keyinfo[Control]}_" undo
+  bindkey "${keyinfo[Escape]}_" redo
 
   # Search character.
-  bindkey "${keys[Control]}]" vi-find-next-char
-  bindkey "${keys[Escape]}${keys[Control]}]" vi-find-prev-char
+  bindkey "${keyinfo[Control]}]" vi-find-next-char
+  bindkey "${keyinfo[Escape]}${keyinfo[Control]}]" vi-find-prev-char
 
   # Edit command in an external editor.
-  bindkey "${keys[Control]}x${keys[Control]}e" edit-command-line
+  bindkey "${keyinfo[Control]}x${keyinfo[Control]}e" edit-command-line
 
   # Expand .... to ../..
   if check-bool "$DOT_EXPANSION"; then
@@ -79,11 +79,11 @@ if [[ "$KEYMAP" == (emacs|) ]]; then
   # Bind to history substring search plugin if enabled;
   # otherwise, bind to built-in ZSH history search.
   if (( ${+widgets[history-incremental-pattern-search-backward]} )); then
-    bindkey "${keys[Control]}r" history-incremental-pattern-search-backward
-    bindkey "${keys[Control]}s" history-incremental-pattern-search-forward
+    bindkey "${keyinfo[Control]}r" history-incremental-pattern-search-backward
+    bindkey "${keyinfo[Control]}s" history-incremental-pattern-search-forward
   else
-    bindkey "${keys[Control]}r" history-incremental-search-backward
-    bindkey "${keys[Control]}s" history-incremental-search-forward
+    bindkey "${keyinfo[Control]}r" history-incremental-search-backward
+    bindkey "${keyinfo[Control]}s" history-incremental-search-forward
   fi
 elif [[ "$KEYMAP" == 'vi' ]]; then
   # Use vi key bindings.
@@ -131,7 +131,7 @@ elif [[ "$KEYMAP" == 'vi' ]]; then
 
   # Undo/Redo
   bindkey -M vicmd "u" undo
-  bindkey -M vicmd "${keys[Control]}r" redo
+  bindkey -M vicmd "${keyinfo[Control]}r" redo
 
   # Expand .... to ../..
   if check-bool "$DOT_EXPANSION"; then
@@ -143,21 +143,21 @@ elif [[ "$KEYMAP" == 'vi' ]]; then
   bindkey -M viins "kj" vi-cmd-mode
 
   # Emacs key bindings in insert mode.
-  bindkey -M viins "${keys[Control]}a" beginning-of-line
-  bindkey -M viins "${keys[Control]}b" backward-char
-  bindkey -M viins "${keys[Escape]}b" emacs-backward-word
-  bindkey -M viins "${keys[Control]}d" delete-char-or-list
-  bindkey -M viins "${keys[Escape]}d" kill-word
-  bindkey -M viins "${keys[Control]}e" end-of-line
-  bindkey -M viins "${keys[Control]}f" forward-char
-  bindkey -M viins "${keys[Escape]}f" emacs-forward-word
-  bindkey -M viins "${keys[Control]}k" kill-line
-  bindkey -M viins "${keys[Control]}u" backward-kill-line
-  bindkey -M viins "${keys[Control]}w" backward-kill-word
-  bindkey -M viins "${keys[Escape]}w" copy-region-as-kill
-  bindkey -M viins "${keys[Escape]}h" run-help
-  bindkey -M viins "${keys[Escape]}${keys[Left]}" emacs-backward-word
-  bindkey -M viins "${keys[Escape]}${keys[Right]}" emacs-forward-word
+  bindkey -M viins "${keyinfo[Control]}a" beginning-of-line
+  bindkey -M viins "${keyinfo[Control]}b" backward-char
+  bindkey -M viins "${keyinfo[Escape]}b" emacs-backward-word
+  bindkey -M viins "${keyinfo[Control]}d" delete-char-or-list
+  bindkey -M viins "${keyinfo[Escape]}d" kill-word
+  bindkey -M viins "${keyinfo[Control]}e" end-of-line
+  bindkey -M viins "${keyinfo[Control]}f" forward-char
+  bindkey -M viins "${keyinfo[Escape]}f" emacs-forward-word
+  bindkey -M viins "${keyinfo[Control]}k" kill-line
+  bindkey -M viins "${keyinfo[Control]}u" backward-kill-line
+  bindkey -M viins "${keyinfo[Control]}w" backward-kill-word
+  bindkey -M viins "${keyinfo[Escape]}w" copy-region-as-kill
+  bindkey -M viins "${keyinfo[Escape]}h" run-help
+  bindkey -M viins "${keyinfo[Escape]}${keyinfo[Left]}" emacs-backward-word
+  bindkey -M viins "${keyinfo[Escape]}${keyinfo[Right]}" emacs-forward-word
 
   # History
   bindkey -M vicmd "gg" beginning-of-history
@@ -178,15 +178,15 @@ elif [[ "$KEYMAP" == 'vi' ]]; then
     bindkey -M vicmd "/" history-incremental-pattern-search-forward
 
     # Emacs key bindings in insert mode.
-    bindkey -M viins "${keys[Control]}r" history-incremental-pattern-search-backward
-    bindkey -M viins "${keys[Control]}s" history-incremental-pattern-search-forward
+    bindkey -M viins "${keyinfo[Control]}r" history-incremental-pattern-search-backward
+    bindkey -M viins "${keyinfo[Control]}s" history-incremental-pattern-search-forward
   else
     bindkey -M vicmd "?" history-incremental-search-backward
     bindkey -M vicmd "/" history-incremental-search-forward
 
     # Emacs key bindings in insert mode.
-    bindkey -M viins "${keys[Control]}r" history-incremental-search-backward
-    bindkey -M viins "${keys[Control]}s" history-incremental-search-forward
+    bindkey -M viins "${keyinfo[Control]}r" history-incremental-search-backward
+    bindkey -M viins "${keyinfo[Control]}s" history-incremental-search-forward
   fi
 else
   echo "oh-my-zsh: KEYMAP must be set 'emacs' or 'vi' but is set to '$KEYMAP'" >&2
@@ -194,45 +194,45 @@ else
 fi
 
 # The next key bindings are for both Emacs and Vi.
-bindkey "${keys[Home]}" beginning-of-line
-bindkey "${keys[End]}" end-of-line
+bindkey "${keyinfo[Home]}" beginning-of-line
+bindkey "${keyinfo[End]}" end-of-line
 
-bindkey "${keys[Insert]}" overwrite-mode
-bindkey "${keys[Delete]}" delete-char
-bindkey "${keys[Backspace]}" backward-delete-char
+bindkey "${keyinfo[Insert]}" overwrite-mode
+bindkey "${keyinfo[Delete]}" delete-char
+bindkey "${keyinfo[Backspace]}" backward-delete-char
 
-bindkey "${keys[Left]}" backward-char
-bindkey "${keys[Right]}" forward-char
+bindkey "${keyinfo[Left]}" backward-char
+bindkey "${keyinfo[Right]}" forward-char
 
 # Expand history on space.
 bindkey ' ' magic-space
 
 if (( $+plugins[(er)history-substring-search] )); then
-  bindkey "${keys[Up]}" history-substring-search-up
-  bindkey "${keys[Down]}" history-substring-search-down
-  bindkey "${keys[Control]}p" history-substring-search-up
-  bindkey "${keys[Control]}n" history-substring-search-down
+  bindkey "${keyinfo[Up]}" history-substring-search-up
+  bindkey "${keyinfo[Down]}" history-substring-search-down
+  bindkey "${keyinfo[Control]}p" history-substring-search-up
+  bindkey "${keyinfo[Control]}n" history-substring-search-down
 else
-  bindkey "${keys[Up]}" up-line-or-history
-  bindkey "${keys[Down]}" down-line-or-history
-  bindkey "${keys[Control]}p" up-line-or-history
-  bindkey "${keys[Control]}n" down-line-or-history
+  bindkey "${keyinfo[Up]}" up-line-or-history
+  bindkey "${keyinfo[Down]}" down-line-or-history
+  bindkey "${keyinfo[Control]}p" up-line-or-history
+  bindkey "${keyinfo[Control]}n" down-line-or-history
 fi
 
 # Clear screen.
-bindkey "${keys[Control]}l" clear-screen
+bindkey "${keyinfo[Control]}l" clear-screen
 
 # Expand command name to full path.
-bindkey "${keys[Escape]}e" expand-cmd-path
+bindkey "${keyinfo[Escape]}e" expand-cmd-path
 
 # Duplicate the previous word.
-bindkey "${keys[Escape]}m" copy-prev-shell-word
+bindkey "${keyinfo[Escape]}m" copy-prev-shell-word
 
 # Bind Shift + Tab to go to the previous menu item.
-bindkey "${keys[BackTab]}" reverse-menu-complete
+bindkey "${keyinfo[BackTab]}" reverse-menu-complete
 
 # Complete in the middle of word.
-bindkey "${keys[Control]}i" expand-or-complete-prefix
+bindkey "${keyinfo[Control]}i" expand-or-complete-prefix
 
 # Convert .... to ../.. automatically.
 if check-bool "$DOT_EXPANSION"; then
@@ -258,6 +258,6 @@ if check-bool "$COMPLETION_INDICATOR"; then
     zle redisplay
   }
   zle -N expand-or-complete-prefix-with-indicator
-  bindkey "${keys[Control]}i" expand-or-complete-prefix-with-indicator
+  bindkey "${keyinfo[Control]}i" expand-or-complete-prefix-with-indicator
 fi
 
