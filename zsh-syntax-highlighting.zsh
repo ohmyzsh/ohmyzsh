@@ -203,5 +203,16 @@ _zsh_highlight_load_highlighters "${ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR:-${0:h}/highl
   return 1
 }
 
+# Reset scratch variables when commandline is done.
+_zsh_highlight_preexec_hook()
+{
+  _ZSH_HIGHLIGHT_PRIOR_BUFFER=
+  _ZSH_HIGHLIGHT_PRIOR_CURSOR=
+}
+autoload -U add-zsh-hook
+add-zsh-hook preexec _zsh_highlight_preexec_hook 2>/dev/null || {
+    echo 'zsh-syntax-highlighting: failed loading add-zsh-hook.' >&2
+  }
+
 # Initialize the array of active highlighters if needed.
 [[ $#ZSH_HIGHLIGHT_HIGHLIGHTERS -eq 0 ]] && ZSH_HIGHLIGHT_HIGHLIGHTERS=(main) || true
