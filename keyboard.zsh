@@ -1,3 +1,7 @@
+# The default styles.
+zstyle ':prompt:' vicmd '<<<'         # Indicator to notify of vi command mode.
+zstyle ':prompt:' completion "..."    # Indicator to notify of generating completion.
+
 # Beep on error in line editor.
 setopt beep
 
@@ -84,9 +88,6 @@ elif [[ "$KEYMAP" == 'vi' ]]; then
   # Use vi key bindings.
   bindkey -v
 
-  # The default mode indicator.
-  MODE_INDICATOR="%B%F{red}❮%f%b%F{red}❮❮%f"
-
   # Restores RPROMPT when exiting vicmd.
   function vi-restore-rprompt() {
     if (( $+RPROMPT_CACHED )); then
@@ -103,7 +104,7 @@ elif [[ "$KEYMAP" == 'vi' ]]; then
   function zle-keymap-select() {
     if ! vi-restore-rprompt && [[ "$KEYMAP" == 'vicmd' ]]; then
       RPROMPT_CACHED="$RPROMPT"
-      RPROMPT="$MODE_INDICATOR"
+      zstyle -s ':prompt:' vicmd RPROMPT
       zle reset-prompt
     fi
   }
@@ -249,7 +250,9 @@ fi
 # Display an indicator when completing.
 if check-bool "$COMPLETION_INDICATOR"; then
   function expand-or-complete-prefix-with-indicator() {
-    echo -n "\e[31m...\e[0m"
+    zstyle -s ':prompt:' completion indicator
+    print -Pn "$indicator"
+    unset indicator
     zle expand-or-complete-prefix
     zle redisplay
   }

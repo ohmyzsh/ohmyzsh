@@ -2,7 +2,7 @@
 #          FILE:  prompt_sorin_setup
 #   DESCRIPTION:  oh-my-zsh theme file.
 #        AUTHOR:  Sorin Ionescu <sorin.ionescu@gmail.com>
-#       VERSION:  1.0.5
+#       VERSION:  1.0.6
 #    SCREENSHOT:  http://i.imgur.com/aipDQ.png
 # ------------------------------------------------------------------------------
 function prompt_sorin_precmd () {
@@ -20,19 +20,20 @@ function prompt_sorin_setup() {
   autoload -Uz add-zsh-hook
   add-zsh-hook precmd prompt_sorin_precmd
 
-  MODE_INDICATOR="%B%F{red}❮%f%b%F{red}❮❮%f"
+  zstyle ':prompt:' vicmd '%F{yellow}❮%f%B%F{red}❮%f%b%F{red}❮%f'
+  zstyle ':prompt:' completion '%B%F{red}...%f%b'
   zstyle ':git-info:' action ':%%B%F{yellow}%s%f%%b'
   zstyle ':git-info:' added ' %%B%F{green}✚%f%%b'
   zstyle ':git-info:' ahead ' %%B%F{yellow}⬆%f%%b'
   zstyle ':git-info:' behind ' %%B%F{yellow}⬇%f%%b'
   zstyle ':git-info:' branch ':%F{red}%b%f'
   zstyle ':git-info:' deleted ' %%B%F{red}✖%f%%b'
-  zstyle ':git-info:' modified ' %%B%F{blue}✹%f%%b'
+  zstyle ':git-info:' modified ' %%B%F{blue}✱%f%%b'
   zstyle ':git-info:' renamed ' %%B%F{magenta}➜%f%%b'
   zstyle ':git-info:' commit '%c'
-  zstyle ':git-info:' stashed ' %%B%F{white}✭%f%%b'
+  zstyle ':git-info:' stashed ' %%B%F{cyan}✭%f%%b'
   zstyle ':git-info:' unmerged ' %%B%F{yellow}═%f%%b'
-  zstyle ':git-info:' untracked ' %%B%F{cyan}•%f%%b'
+  zstyle ':git-info:' untracked ' %%B%F{white}◼%f%%b'
   zstyle ':git-info:' prompt ' %F{blue}git%f%b%s'
   zstyle ':git-info:' rprompt '%A%B%S%a%d%m%r%U%u'
 
