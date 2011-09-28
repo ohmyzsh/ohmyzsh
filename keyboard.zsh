@@ -13,35 +13,36 @@ autoload -Uz edit-command-line
 zle -N edit-command-line
 
 # Use human-friendly identifiers.
+zmodload zsh/terminfo
 typeset -g -A keys
 keys=(
   'Control'   '\C-'
   'Escape'    '\e'
   'Meta'      '\M-'
-  'F1'        '^[OP'
-  'F2'        '^[OQ'
-  'F3'        '^[OR'
-  'F4'        '^[OS'
-  'F5'        '^[[15~'
-  'F6'        '^[[17~'
-  'F7'        '^[[18~'
-  'F8'        '^[[19~'
-  'F9'        '^[[20~'
-  'F10'       '^[[21~'
-  'F11'       '^[[23~'
-  'F12'       '^[[24~'
-  'Backspace' '^?'
-  'Insert'    '^[[2~'
-  'Home'      '^[[H'
-  'PageUp'    '^[[5~'
-  'Delete'    '^[[3~'
-  'End'       '^[[F'
-  'PageDown'  '^[[6~'
-  'Up'        '^[[A'
-  'Left'      '^[[D'
-  'Down'      '^[[B'
-  'Right'     '^[[C'
-  'Menu'      '^[[29~'
+  'F1'        "${terminfo[kf1]}"
+  'F2'        "${terminfo[kf2]}"
+  'F3'        "${terminfo[kf3]}"
+  'F4'        "${terminfo[kf4]}"
+  'F5'        "${terminfo[kf5]}"
+  'F6'        "${terminfo[kf6]}"
+  'F7'        "${terminfo[kf7]}"
+  'F8'        "${terminfo[kf8]}"
+  'F9'        "${terminfo[kf9]}"
+  'F10'       "${terminfo[kf10]}"
+  'F11'       "${terminfo[kf11]}"
+  'F12'       "${terminfo[kf12]}"
+  'Backspace' "${terminfo[kbs]}"
+  'Insert'    "${terminfo[kich1]}"
+  'Home'      "${terminfo[khome]}"
+  'PageUp'    "${terminfo[kpp]}"
+  'Delete'    "${terminfo[kdch1]}"
+  'End'       "${terminfo[kend]}"
+  'PageDown'  "${terminfo[knp]}"
+  'Up'        "${terminfo[kcuu1]}"
+  'Left'      "${terminfo[kcub1]}"
+  'Down'      "${terminfo[kcud1]}"
+  'Right'     "${terminfo[kcuf1]}"
+  'BackTab'   "${terminfo[kcbt]}"
 )
 
 if [[ "$KEYMAP" == (emacs|) ]]; then
@@ -228,7 +229,7 @@ bindkey "${keys[Escape]}e" expand-cmd-path
 bindkey "${keys[Escape]}m" copy-prev-shell-word
 
 # Bind Shift + Tab to go to the previous menu item.
-bindkey '^[[Z' reverse-menu-complete
+bindkey "${keys[BackTab]}" reverse-menu-complete
 
 # Complete in the middle of word.
 bindkey "${keys[Control]}i" expand-or-complete-prefix
