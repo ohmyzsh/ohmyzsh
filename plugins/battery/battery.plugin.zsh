@@ -6,4 +6,5 @@ else
   error_msg='no battery'
   function battery_pct_remaining() { echo $error_msg }
   function battery_time_remaining() { echo $error_msg }
+  function battery_pct_prompt() { echo '' }
 fi
