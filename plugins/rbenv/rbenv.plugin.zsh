@@ -6,8 +6,13 @@ if [ -d $rbenvdir ] ; then
   alias rubies="rbenv versions"
   alias gemsets="rbenv gemset list"
 
-  current_ruby=$(rbenv version | cut -f1 -d ' ')
-  current_gemset=$($benv gemset active 2&>/dev/null | grep -v 'no active gemsets')
+  function current_ruby() {
+    echo "$(rbenv version | cut -f1 -d ' ')"
+  }
+
+  function current_gemset() {
+    echo "$(rbenv gemset active 2&>/dev/null | grep -v 'no active gemsets')"
+  }
 
   function gems {
     local rbenv_path=$(rbenv prefix)
@@ -19,10 +24,10 @@ if [ -d $rbenvdir ] ; then
   }
 
   function rbenv_prompt_info() {
-    if [[ -n $current_gemset ]] ; then
-      echo "${current_ruby}@${current_gemset}"
+    if [[ -n $(current_gemset) ]] ; then
+      echo "$(current_ruby)@$(current_gemset)"
     else
-      echo "${current_ruby}"
+      echo "$(current_ruby)"
     fi
   }
 else
