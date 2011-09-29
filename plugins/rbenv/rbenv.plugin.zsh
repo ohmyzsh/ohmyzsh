@@ -1,9 +1,13 @@
-if [ -x rbenv ] ; then
-  alias rubies='rbenv versions'
-  alias gemsets='rbenv gemset list'
+rbenvdir=$HOME/.rbenv/bin
+if [ -d $rbenvdir ] ; then
+  export PATH=$rbenvdir:$PATH
+  eval "$(rbenv init -)"
 
-  current_ruby=$(rbenv active | cut -f1 -d ' ')
-  current_gemset=$(rbenv gemset active 2&>/dev/null | grep -v 'no active gemsets')
+  alias rubies="rbenv versions"
+  alias gemsets="rbenv gemset list"
+
+  current_ruby=$(rbenv version | cut -f1 -d ' ')
+  current_gemset=$($benv gemset active 2&>/dev/null | grep -v 'no active gemsets')
 
   function gems {
     local rbenv_path=$(rbenv prefix)
@@ -15,14 +19,14 @@ if [ -x rbenv ] ; then
   }
 
   function rbenv_prompt_info() {
-    if [[ -n $gemset ]] ; then
-      echo "${ruby_version}@${gemset}"
+    if [[ -n $current_gemset ]] ; then
+      echo "${current_ruby}@${current_gemset}"
     else
-      echo "${ruby_version}"
+      echo "${current_ruby}"
     fi
   }
 else
   alias rubies='ruby -v'
   function gemsets() { echo 'not supported' }
-  function rbenv_prompt_info() { echo '' }
+  function rbenv_prompt_info() { echo "system: $(ruby -v | cut -f-2 -d ' ')" }
 fi
