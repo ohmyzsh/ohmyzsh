@@ -4,10 +4,10 @@
 # 	export PS1='%3~$(git_info_for_prompt)%# '
 # fi
 
-if (( ${+commands[mvim]} ));then
-	export EDITOR='mvim'
-elif (( ${+commands[mate]} ));then
-	export EDITOR="mate"
+if (( ${+commands[mate]} ));then
+	export EDITOR='mate'
+elif (( ${+commands[mvim]} ));then
+	export EDITOR="mvim"
 else
 	export EDITOR='vim'
 fi
@@ -26,6 +26,7 @@ if [[ -e /usr/libexec/java_home ]]; then
   export JAVA_HOME="`/usr/libexec/java_home`"
 fi
 
+export IDEA_JDK="$JAVA_HOME"
 fpath=(~/.zsh/functions $fpath)
 
 autoload -U ~/.zsh/functions/*(:t)

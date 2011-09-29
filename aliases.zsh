@@ -23,10 +23,12 @@ alias git-authors='git shortlog -s -n'
 
 # rails
 alias r="rails"
-alias a='autotest -rails'
 alias tlog='tail -f log/development.log'
 alias rst='touch tmp/restart.txt'
-alias bist="bundle install"
+alias bi="bundle install"
+alias bu="bundle update"
+alias rake_db_migrate_both="rake db:migrate && rake db:migrate RAILS_ENV=test"
+
 
 # commands starting with % for pasting from web
 alias %=' '
