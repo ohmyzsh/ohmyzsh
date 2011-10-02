@@ -26,6 +26,14 @@ then
     then
       /bin/sh $ZSH/tools/upgrade.sh
       # update the zsh file
+
+      # Run software update if we're on a mac
+      # reccomended setting - run: softwareupdate schedule off
+      if [ uname -a | cut -d " " -f 1= "Darwin" ];
+      then
+        sudo softwareupdate -l --verbose
+      fi
+
       _update_zsh_update
     fi
   fi
