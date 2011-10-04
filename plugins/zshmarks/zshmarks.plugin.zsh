@@ -1,15 +1,15 @@
 # ------------------------------------------------------------------------------
-#          FILE:  go.plugin.zsh
+#          FILE:  zshmarks.plugin.zsh
 #   DESCRIPTION:  oh-my-zsh plugin file.
 #        AUTHOR:  Jocelyn Mallon (jocelyn.e.mallon@gmail.com)
 #       VERSION:  1.0
 # ------------------------------------------------------------------------------
 
-bookmarks_file="$HOME/.zshbookmarks"
+bookmarks_file="$HOME/.bookmarks"
 
 # Create bookmarks_file it if it doesn't exist
 if [[ ! -f $bookmarks_file ]]; then
-  touch $bookmarks_file
+	touch $bookmarks_file
 fi
 
 function bookmark() {
@@ -29,22 +29,27 @@ function bookmark() {
 }
 
 function go() {
-  bookmark_name=$1
-  bookmark="$(grep "|$bookmark_name$" "$bookmarks_file")"
-  if [[ -z $bookmark ]]; then
-    echo "Invalid name, please provide a valid bookmark name. For example:"
-    echo "  go foo"
-    echo
-    echo "To bookmark a folder, go to the folder then do this (naming the bookmark 'foo'):"
-    echo "  bookmark foo"
-  else
-    dir="${bookmark%%|*}"
-    cd "${dir}"
-	dir=""
-  fi
+	bookmark_name=$1
+	bookmark="$(grep "|$bookmark_name$" "$bookmarks_file")"
+	if [[ -z $bookmark ]]; then
+		echo "Invalid name, please provide a valid bookmark name. For example:"
+		echo "  go foo"
+		echo
+		echo "To bookmark a folder, go to the folder then do this (naming the bookmark 'foo'):"
+		echo "  bookmark foo"
+	else
+		dir="${bookmark%%|*}"
+		cd "${dir}"
+		dir=""
+	fi
 }
 
 # Show a list of the bookmarks
-function bookmarksshow(){
-  cat ~/.bookmarks | awk '{ printf "%-40s%-40s%s\n",$1,$2,$3}' FS=\|
+function showmarks() {
+	cat ~/.bookmarks | awk '{ printf "%-40s%-40s%s\n",$1,$2,$3}' FS=\|
+}
+
+# manually edit bookmarks
+function editmarks() {
+	$EDITOR $bookmarks_file
 }

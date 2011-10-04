@@ -1,0 +1,4 @@
+#compdef go
+#autoload
+
+_arguments "1: :(`grep "|" $HOME/.bookmarks | cut -d\| -f2`)"
