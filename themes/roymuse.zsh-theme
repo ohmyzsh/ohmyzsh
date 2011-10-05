@@ -13,8 +13,8 @@ GIT_DIRTY_COLOR=$FG[133]
 GIT_CLEAN_COLOR=$FG[118]
 GIT_PROMPT_INFO=$FG[012]
 
-PROMPT='%{$PROMPT_SUCCESS_COLOR%}%~%{$reset_color%} %{$GIT_PROMPT_INFO%}$(git_prompt_info)%{$GIT_DIRTY_COLOR%}$(git_prompt_status) %{$reset_color%}%{$PROMPT_PROMPT%}ᐅ%{$reset_color%} '
-RPROMPT='$(git_time_since_commit)'
+PROMPT='╭─%{$PROMPT_SUCCESS_COLOR%}%~%{$reset_color%} %{$GIT_PROMPT_INFO%}$(git_time_since_commit)$(git_prompt_info)%{$GIT_DIRTY_COLOR%}$(git_prompt_status) %{$reset_color%}%{$PROMPT_PROMPT%}
+╰─ᐅ%{$reset_color%} '
 
 #RPS1="${return_code}"
 
@@ -44,6 +44,14 @@ function rvm_gemset() {
 
 }
 
+
+function minutes_since_last_commit {
+    now=`date +%s`
+    last_commit=`git log --pretty=format:'%at' -1`
+    seconds_since_last_commit=$((now-last_commit))
+    minutes_since_last_commit=$((seconds_since_last_commit/60))
+    echo $minutes_since_last_commit
+}
 # Determine the time since last commit. If branch is clean,
 # use a neutral color, otherwise colors will vary according to time.
 function git_time_since_commit() {
@@ -77,15 +85,12 @@ function git_time_since_commit() {
             fi
 
             if [ "$HOURS" -gt 24 ]; then
-                echo "|$(rvm_gemset)$COLOR${DAYS}d${SUB_HOURS}h${SUB_MINUTES}m%{$reset_color%}|"
+                echo "|$COLOR${DAYS}d${SUB_HOURS}h${SUB_MINUTES}m%{$reset_color%}|"
             elif [ "$MINUTES" -gt 60 ]; then
-                echo "|$(rvm_gemset)$COLOR${HOURS}h${SUB_MINUTES}m%{$reset_color%}|"
+                echo "|$COLOR${HOURS}h${SUB_MINUTES}m%{$reset_color%}|"
             else
-                echo "|$(rvm_gemset)$COLOR${MINUTES}m%{$reset_color%}|"
+                echo "|$COLOR${MINUTES}m%{$reset_color%}|"
             fi
-        else
-            COLOR="$ZSH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL"
-            echo "|$(rvm_gemset)$COLOR~|"
         fi
     fi
 }
