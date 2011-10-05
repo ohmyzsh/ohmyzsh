@@ -44,12 +44,12 @@ setprompt () {
 	ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%})"
 	ZSH_THEME_GIT_PROMPT_DIRTY=""
 	ZSH_THEME_GIT_PROMPT_CLEAN=""
-	ZSH_THEME_GIT_PROMPT_ADDED="(%{$fg[green]%}✚%{$reset_color%})"
-	ZSH_THEME_GIT_PROMPT_MODIFIED="(%{$fg[blue]%}✹%{$reset_color%})"
-	ZSH_THEME_GIT_PROMPT_DELETED="(%{$fg[red]%}✖%{$reset_color%})"
-	ZSH_THEME_GIT_PROMPT_RENAMED="(%{$fg[magenta]%}➜%{$reset_color%})"
-	ZSH_THEME_GIT_PROMPT_UNMERGED="(%{$fg[yellow]%}═%{$reset_color%})"
-	ZSH_THEME_GIT_PROMPT_UNTRACKED="(%{$fg[cyan]%}✭%{$reset_color%})"
+	ZSH_THEME_GIT_PROMPT_ADDED="(%{$fg_bold[green]%}✚%{$reset_color%})"
+	ZSH_THEME_GIT_PROMPT_MODIFIED="(%{$fg_bold[blue]%}✹%{$reset_color%})"
+	ZSH_THEME_GIT_PROMPT_DELETED="(%{$fg_bold[red]%}✖%{$reset_color%})"
+	ZSH_THEME_GIT_PROMPT_RENAMED="(%{$fg_bold[magenta]%}➜%{$reset_color%})"
+	ZSH_THEME_GIT_PROMPT_UNMERGED="(%{$fg_bold[yellow]%}═%{$reset_color%})"
+	ZSH_THEME_GIT_PROMPT_UNTRACKED="(%{$fg_bold[cyan]%}✭%{$reset_color%})"
 	
 # See if we can use extended characters to look nicer.
 	typeset -A altchar
