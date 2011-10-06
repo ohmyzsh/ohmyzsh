@@ -40,16 +40,11 @@ function go() {
 	else
 		dir="${bookmark%%|*}"
 		cd "${dir}"
-		dir=""
+		unset dir
 	fi
 }
 
 # Show a list of the bookmarks
 function showmarks() {
 	cat ~/.bookmarks | awk '{ printf "%-40s%-40s%s\n",$1,$2,$3}' FS=\|
-}
-
-# manually edit bookmarks
-function editmarks() {
-	$EDITOR $bookmarks_file
 }
