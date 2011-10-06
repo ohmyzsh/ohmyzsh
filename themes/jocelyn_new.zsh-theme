@@ -21,6 +21,7 @@ preexec () {
 		local CMD=${1[(wr)^(*=*|sudo|-*)]}
 		echo -n "\ek$CMD\e\\"
 	fi
+	echo -en $reset_color
 }
 
 setprompt () {
@@ -40,16 +41,16 @@ setprompt () {
 	PR_NO_COLOUR="%{$terminfo[sgr0]%}"
 
 # Modify Git prompt
-	ZSH_THEME_GIT_PROMPT_PREFIX="(%{$fg_bold[blue]%}git:%{$reset_color%}%{$fg_bold[yellow]%}"
-	ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%})"
+	ZSH_THEME_GIT_PROMPT_PREFIX="$PR_MAGENTA($PR_BLUE% git:$PR_YELLOW"
+	ZSH_THEME_GIT_PROMPT_SUFFIX="$PR_MAGENTA)"
 	ZSH_THEME_GIT_PROMPT_DIRTY=""
 	ZSH_THEME_GIT_PROMPT_CLEAN=""
-	ZSH_THEME_GIT_PROMPT_ADDED="(%{$fg_bold[green]%}✚%{$reset_color%})"
-	ZSH_THEME_GIT_PROMPT_MODIFIED="(%{$fg_bold[blue]%}✹%{$reset_color%})"
-	ZSH_THEME_GIT_PROMPT_DELETED="(%{$fg_bold[red]%}✖%{$reset_color%})"
-	ZSH_THEME_GIT_PROMPT_RENAMED="(%{$fg_bold[magenta]%}➜%{$reset_color%})"
-	ZSH_THEME_GIT_PROMPT_UNMERGED="(%{$fg_bold[yellow]%}═%{$reset_color%})"
-	ZSH_THEME_GIT_PROMPT_UNTRACKED="(%{$fg_bold[cyan]%}✭%{$reset_color%})"
+	ZSH_THEME_GIT_PROMPT_ADDED="($PR_GREEN✚$PR_MAGENTA)"
+	ZSH_THEME_GIT_PROMPT_MODIFIED="($PR_BLUE✹$PR_MAGENTA)"
+	ZSH_THEME_GIT_PROMPT_DELETED="($PR_RED✖$PR_MAGENTA)"
+	ZSH_THEME_GIT_PROMPT_RENAMED="($PR_MAGENTA➜$PR_MAGENTA)"
+	ZSH_THEME_GIT_PROMPT_UNMERGED="($PR_YELLOW═$PR_MAGENTA)"
+	ZSH_THEME_GIT_PROMPT_UNTRACKED="($PR_CYAN✭$PR_MAGENTA)"
 	
 # See if we can use extended characters to look nicer.
 	typeset -A altchar
@@ -83,26 +84,24 @@ setprompt () {
 		PR_STITLE=''
 	fi
 
+return_code="%(?..$PR_MAGENTA($PR_RED%? ↵ $PR_MAGENTA%))"
+
 PROMPT='$PR_SET_CHARSET\
-$PR_SHIFT_IN$PR_ULCORNER$PR_HBAR$PR_SHIFT_OUT$PR_NO_COLOUR(\
-$PR_MAGENTA%n$PR_NO_COLOUR@$PR_BLUE%m$PR_NO_COLOUR)\
-$PR_SHIFT_IN$PR_HBAR$PR_HBAR${(e)PR_FILLBAR}$PR_HBAR\
-$PR_HBAR$PR_HBAR$PR_HBAR$PR_HBAR$PR_HBAR$PR_SHIFT_OUT\
-$PR_NO_COLOUR($PR_BLUE%$PR_PWDLEN<...<%~%<<\
-$PR_NO_COLOUR)\
-$PR_SHIFT_IN$PR_HBAR$PR_URCORNER$PR_SHIFT_OUT\
+$PR_MAGENTA$PR_SHIFT_IN$PR_ULCORNER$PR_HBAR$PR_SHIFT_OUT(\
+$PR_BLUE%n$PR_MAGENTA@$PR_GREEN%m$PR_MAGENTA)\
+$PR_SHIFT_IN${(e)PR_FILLBAR}$PR_SHIFT_OUT\
+($PR_BLUE%$PR_PWDLEN<...<%~%<<\
+$PR_MAGENTA)$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT\
+($PR_GREEN%D{%H:%M:%S}$PR_MAGENTA)\
 
 $PR_SHIFT_IN$PR_LLCORNER$PR_HBAR$PR_SHIFT_OUT$PR_NO_COLOUR\
+$return_code\
 `git_prompt_info`\
 `git_prompt_status`\
-$PR_SHIFT_IN$PR_HBAR\
-$PR_GREEN❯$PR_NO_COLOUR '
+$PR_MAGENTA$PR_SHIFT_IN$PR_HBAR\
+$PR_GREEN❯$PR_SHIFT_OUT '
 
-# display exitcode on the right when >0
-return_code="%(?..%{$fg[red]%}%? ↵ %{$reset_color%})"
-RPROMPT='$return_code($PR_GREEN%D{%H:%M:%S}$PR_NO_COLOUR)$PR_SHIFT_IN$PR_HBAR$PR_LRCORNER$PR_SHIFT_OUT$PR_NO_COLOUR'
-
-PS2='$PR_SHIFT_IN$PR_LLCORNER$PR_HBAR$PR_SHIFT_OUT$PR_NO_COLOUR\'
+PS2='$PR_MAGENTA$PR_SHIFT_IN$PR_LLCORNER$PR_HBAR$PR_HBAR$PR_SHIFT_OUT$PR_GREEN\ '
 }
 
 setprompt
