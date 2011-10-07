@@ -29,7 +29,7 @@ then
 
       # Run software update if we're on a mac
       # reccomended setting - run: softwareupdate schedule off
-      if [ uname -a | cut -d " " -f 1= "Darwin" ];
+      if [ `uname -a | cut -d " " -f 1`= "Darwin" ];
       then
         sudo softwareupdate -l --verbose
       fi
