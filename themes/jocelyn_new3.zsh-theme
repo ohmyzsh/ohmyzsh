@@ -1,7 +1,19 @@
+function title {
+  [ "$DISABLE_AUTO_TITLE" != "true" ] || return
+  if [[ "$TERM" == screen* ]]; then 
+    print -Pn "\ek$1:q\e\\"
+  elif [[ "$TERM" == xterm* ]] || [[ $TERM == rxvt* ]] || [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
+    print -Pn "\e]2;$2:q\a"
+    print -Pn "\e]1;$1:q\a"
+  fi
+}
+
+ZSH_THEME_TERM_TAB_TITLE_IDLE="%15<..<%~%<<"
+ZSH_THEME_TERM_TITLE_IDLE="%n@%m: %~"
+
 function precmd {
 	local TERMWIDTH
 	(( TERMWIDTH = ${COLUMNS} - 1 ))
-# Truncate the path if it's too long.    
 	PR_FILLBAR=""
 	PR_PWDLEN=""
 	local promptsize=${#${(%):--(%n@%m)-()-(%D{%H:%M:%})-}}
@@ -13,6 +25,7 @@ function precmd {
 	else
 		PR_FILLBAR="\${(l.(($TERMWIDTH - ($promptsize + $rubypromptsize + $pwdsize)))..${PR_HBAR}.)}"
 	fi
+	title $ZSH_THEME_TERM_TAB_TITLE_IDLE $ZSH_THEME_TERM_TITLE_IDLE
 }
 
 setopt extended_glob
@@ -21,14 +34,14 @@ preexec () {
 		local CMD=${1[(wr)^(*=*|sudo|-*)]}
 		echo -n "\ek$CMD\e\\"
 	fi
+	local CMD=${1[(wr)^(*=*|sudo|ssh|-*)]}
+	title "$CMD" "%100>...>$2%<<"
 	echo -en $reset_color
 }
 
 setprompt () {
 # Need this so the prompt will work.
 	setopt prompt_subst
-
-# See if we can use colors.
 	autoload colors zsh/terminfo
 	if [[ "$terminfo[colors]" -ge 8 ]]; then
 		colors
@@ -41,7 +54,7 @@ setprompt () {
 	PR_NO_COLOUR="%{$terminfo[sgr0]%}"
 
 # Modify Git prompt
-	ZSH_THEME_GIT_PROMPT_PREFIX="$PR_BLUE($PR_MAGENTA% git$PR_WHITE:$PR_YELLOW"
+	ZSH_THEME_GIT_PROMPT_PREFIX="$PR_BLUE($PR_MAGENTA% git:$PR_YELLOW"
 	ZSH_THEME_GIT_PROMPT_SUFFIX="$PR_BLUE)"
 	ZSH_THEME_GIT_PROMPT_DIRTY=""
 	ZSH_THEME_GIT_PROMPT_CLEAN=""
@@ -64,27 +77,8 @@ setprompt () {
 	PR_LRCORNER=${altchar[j]:--}
 	PR_URCORNER=${altchar[k]:--}
 
-# Decide if we need to set titlebar text.
-	case $TERM in
-	xterm*)
-		PR_TITLEBAR=$'%{\e]0;%(!.-=*[ROOT]*=- | .)%n@%m:%~ | ${COLUMNS}x${LINES} | %y\a%}'
-		;;
-	screen)
-		PR_TITLEBAR=$'%{\e_screen \005 (\005t) | %(!.-=[ROOT]=- | .)%n@%m:%~ | ${COLUMNS}x${LINES} | %y\e\\%}'
-		;;
-	*)
-		PR_TITLEBAR=''
-		;;
-	esac
-	
-# Decide whether to set a screen title
-	if [[ "$TERM" == "screen" ]]; then
-		PR_STITLE=$'%{\ekzsh\e\\%}'
-	else
-		PR_STITLE=''
-	fi
-
-return_code="%(?..$PR_BLUE($PR_RED%? ↵ $PR_BLUE%))"
+# set return code to display if greater than zero
+	return_code="%(?..$PR_BLUE($PR_RED%? ↵ $PR_BLUE%))"
 
 PROMPT='$PR_SET_CHARSET\
 $PR_BLUE$PR_SHIFT_IN$PR_ULCORNER$PR_HBAR$PR_SHIFT_OUT(\
