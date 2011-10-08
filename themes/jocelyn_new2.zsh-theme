@@ -39,6 +39,11 @@ preexec () {
 	echo -en $reset_color
 }
 
+function battery_charge {
+	$ZSH/lib/battcharge.py
+	echo `$BAT_CHARGE` 2>/dev/null
+}
+
 setprompt () {
 # Need this so the prompt will work.
 	setopt prompt_subst
@@ -78,7 +83,7 @@ setprompt () {
 	PR_URCORNER=${altchar[k]:--}
 
 # set return code to display if greater than zero
-	return_code="%(?..$PR_WHITE($PR_RED%? ↵ $PR_WHITE%))"
+	return_code="%(?..$PR_WHITE($PR_RED%?↩ $PR_WHITE%))"
 
 PROMPT='$PR_SET_CHARSET\
 $PR_WHITE$PR_SHIFT_IN$PR_ULCORNER$PR_HBAR$PR_SHIFT_OUT(\
@@ -94,6 +99,8 @@ $return_code\
 `git_prompt_status`\
 $PR_WHITE$PR_SHIFT_IN$PR_HBAR\
 $PR_GREEN❯$PR_SHIFT_OUT '
+
+RPROMPT='$(battery_charge)$PR_GREEN'
 
 PS2='$PR_MAGENTA$PR_SHIFT_IN$PR_LLCORNER$PR_HBAR$PR_HBAR$PR_SHIFT_OUT$PR_GREEN\ '
 }

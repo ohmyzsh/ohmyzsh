@@ -13,19 +13,21 @@ if [[ ! -f $bookmarks_file ]]; then
 fi
 
 function bookmark() {
-  bookmark_name=$1
-  if [[ -z $bookmark_name ]]; then
-    echo 'Invalid name, please provide a name for your bookmark. For example:'
-    echo '  bookmark foo'
-  else
-    bookmark="$(pwd)|$bookmark_name" # Store the bookmark as folder|name
-    if [[ -z $(grep "$bookmark" $bookmarks_file) ]]; then
-      echo $bookmark >> $bookmarks_file
-      echo "Bookmark '$bookmark_name' saved"
-    else
-      echo "Bookmark already existed"
-    fi
-  fi
+	bookmark_name=$1
+	if [[ -z $bookmark_name ]]; then
+		echo 'Invalid name, please provide a name for your bookmark. For example:'
+		echo '  bookmark foo'
+		return 1
+	else
+		bookmark="$(pwd)|$bookmark_name" # Store the bookmark as folder|name
+		if [[ -z $(grep "$bookmark" $bookmarks_file) ]]; then
+			echo $bookmark >> $bookmarks_file
+			echo "Bookmark '$bookmark_name' saved"
+		else
+			echo "Bookmark already existed"
+			return 1
+		fi
+	fi
 }
 
 function go() {
@@ -37,6 +39,7 @@ function go() {
 		echo
 		echo "To bookmark a folder, go to the folder then do this (naming the bookmark 'foo'):"
 		echo "  bookmark foo"
+		return 1
 	else
 		dir="${bookmark%%|*}"
 		cd "${dir}"
