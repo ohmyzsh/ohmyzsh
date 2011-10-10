@@ -5,12 +5,12 @@ compinit -i
 alias be="bundle exec"
 alias bi="bundle install"
 alias bl="bundle list"
-alias bu="bundle update"
 alias bp="bundle package"
+alias bu="bundle update"
 
 # The following is based on https://github.com/gma/bundler-exec
 
-bundled_commands=(cap capify cucumber guard heroku rackup rails rake rspec ruby shotgun spec spork thin unicorn unicorn_rails)
+bundled_commands=(cap capify cucumber foreman guard heroku nanoc rackup rails rainbows rake rspec ruby shotgun spec spork thin unicorn unicorn_rails)
 
 ## Functions
 
