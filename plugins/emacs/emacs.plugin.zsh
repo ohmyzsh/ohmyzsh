@@ -31,13 +31,13 @@ if "$ZSH/tools/require_tool.sh" emacs 23 2>/dev/null ; then
         $EDITOR --eval "$cmd" | tr -d \"
     }
 
-    # display the directory of the file
+    # Write to standard output the directory of the file
     # opened in the the current buffer
     function ecd {
         local cmd="(let ((buf-name (buffer-file-name (window-buffer))))
                      (if buf-name (file-name-directory buf-name)))"
 
-        local dir=`$EDITOR --eval "$cmd" | tr -d \"`
+        local dir="$($EDITOR --eval $cmd | tr -d \")"
         if [ -n "$dir" ] ;then
             echo "$dir"
         else
