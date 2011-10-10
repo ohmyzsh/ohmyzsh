@@ -12,8 +12,10 @@ FAVLIST="${HOME}/.zsh_favlist"
 source $ZSH/oh-my-zsh.sh
 
 function noyes() {
-    read "a?$1 [y/N] "
-    if [[ $a == "N" || $a == "n" || $a = "" ]]; then
+    read "a?$1 [y/N/q] "
+    if [[ $a == "q" || $a == "quit" ]] then
+        exit 0
+    elif [[ $a == "N" || $a == "n" || $a = "" ]]; then
         return 0
     fi
     return 1
