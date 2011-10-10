@@ -11,12 +11,16 @@
 
 
 if "$ZSH/tools/require_tool.sh" emacs 23 2>/dev/null ; then
-    export EDITOR="$ZSH/plugins/emacs/emacsclient.sh"
-    alias emacs="$EDITOR --no-wait"
+    export EMACS_PLUGIN_LAUNCHER="$ZSH/plugins/emacs/emacsclient.sh"
+
+    # set EDITOR if not already defined.
+    export EDITOR="${EDITOR:-${EMACS_PLUGIN_LAUNCHER}}"
+
+    alias emacs="$EMACS_PLUGIN_LAUNCHER --no-wait"
     alias e=emacs
 
     # same than M-x eval but from outside Emacs.
-    alias eeval="$EDITOR --eval"
+    alias eeval="$EMACS_PLUGIN_LAUNCHER --eval"
     # create a new X frame
     alias eframe='emacsclient --alternate-editor "" --create-frame'
 
@@ -28,7 +32,7 @@ if "$ZSH/tools/require_tool.sh" emacs 23 2>/dev/null ; then
     # opened in the current buffer.
     function efile {
         local cmd="(buffer-file-name (window-buffer))"
-        $EDITOR --eval "$cmd" | tr -d \"
+        "$EMACS_PLUGIN_LAUNCHER" --eval "$cmd" | tr -d \"
     }
 
     # Write to standard output the directory of the file
@@ -37,7 +41,7 @@ if "$ZSH/tools/require_tool.sh" emacs 23 2>/dev/null ; then
         local cmd="(let ((buf-name (buffer-file-name (window-buffer))))
                      (if buf-name (file-name-directory buf-name)))"
 
-        local dir="$($EDITOR --eval $cmd | tr -d \")"
+        local dir="$($EMACS_PLUGIN_LAUNCHER --eval $cmd | tr -d \")"
         if [ -n "$dir" ] ;then
             echo "$dir"
         else
