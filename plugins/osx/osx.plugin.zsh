@@ -97,3 +97,5 @@ function trash() {
   IFS=$temp_ifs
 }
 
+ 
+alias updatedb=/usr/libexec/locate.updated
