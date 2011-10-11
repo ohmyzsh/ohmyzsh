@@ -45,8 +45,9 @@ function prompt_steeef_chpwd() {
 }
 
 function prompt_steeef_setup() {
-  setopt NO_XTRACE NO_KSHARRAYS LOCAL_OPTIONS
-  prompt_opts=(cr subst percent)
+  setopt LOCAL_OPTIONS
+  unsetopt XTRACE KSH_ARRAYS
+  prompt_opts=(cr percent subst)
 
   autoload -Uz add-zsh-hook
   autoload -Uz vcs_info

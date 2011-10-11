@@ -6,7 +6,8 @@
 #    SCREENSHOT:  http://i.imgur.com/aipDQ.png
 # ------------------------------------------------------------------------------
 function prompt_sorin_precmd () {
-  setopt NO_XTRACE NO_KSHARRAYS LOCAL_OPTIONS
+  setopt LOCAL_OPTIONS
+  unsetopt XTRACE KSH_ARRAYS
 
   if (( $+functions[git-info] )); then
     git-info
@@ -14,8 +15,9 @@ function prompt_sorin_precmd () {
 }
 
 function prompt_sorin_setup() {
-  setopt NO_XTRACE NO_KSHARRAYS LOCAL_OPTIONS
-  prompt_opts=(cr subst percent)
+  setopt LOCAL_OPTIONS
+  unsetopt XTRACE KSH_ARRAYS
+  prompt_opts=(cr percent subst)
 
   autoload -Uz add-zsh-hook
   add-zsh-hook precmd prompt_sorin_precmd

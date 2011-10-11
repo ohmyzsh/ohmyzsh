@@ -11,8 +11,9 @@
 # ------------------------------------------------------------------------------
 
 function prompt_nicoulaj_setup() {
-  setopt NO_XTRACE NO_KSHARRAYS LOCAL_OPTIONS
-  prompt_opts=(cr subst percent)
+  setopt LOCAL_OPTIONS
+  unsetopt XTRACE KSH_ARRAYS
+  prompt_opts=(cr percent subst)
 
   # Load required modules.
   autoload -Uz add-zsh-hook

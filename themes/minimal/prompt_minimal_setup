@@ -6,13 +6,13 @@ function +vi-git-status() {
 }
 
 function prompt_minimal_precmd () {
-  setopt NO_XTRACE NO_KSHARRAYS LOCAL_OPTIONS
   vcs_info
 }
 
 function prompt_minimal_setup() {
-  setopt NO_XTRACE NO_KSHARRAYS LOCAL_OPTIONS
-  prompt_opts=(cr subst percent)
+  setopt LOCAL_OPTIONS
+  unsetopt XTRACE KSH_ARRAYS
+  prompt_opts=(cr percent subst)
 
   autoload -Uz add-zsh-hook
   autoload -Uz vcs_info
