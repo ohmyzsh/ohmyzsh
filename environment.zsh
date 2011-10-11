@@ -3,16 +3,16 @@ autoload -Uz url-quote-magic
 zle -N self-insert url-quote-magic
 
 # General
-setopt rc_quotes          # Allow 'Henry''s Garage' instead of 'Henry'\''s Garage'.
-unsetopt mail_warning     # Don't print a warning message if a mail file has been accessed
+setopt RC_QUOTES          # Allow 'Henry''s Garage' instead of 'Henry'\''s Garage'.
+unsetopt MAIL_WARNING     # Don't print a warning message if a mail file has been accessed
 
 # Jobs
-setopt long_list_jobs     # List jobs in the long format by default.
-setopt auto_resume        # Attempt to resume existing job before creating a new process.
-setopt notify             # Report status of background jobs immediately.
-unsetopt bg_nice          # Don't run all background jobs at a lower priority.
-unsetopt hup              # Don't kill jobs on shell exit.
-unsetopt check_jobs       # Don't report on jobs when shell exit.
+setopt LONG_LIST_JOBS     # List jobs in the long format by default.
+setopt AUTO_RESUME        # Attempt to resume existing job before creating a new process.
+setopt NOTIFY             # Report status of background jobs immediately.
+unsetopt BG_NICE          # Don't run all background jobs at a lower priority.
+unsetopt HUP              # Don't kill jobs on shell exit.
+unsetopt CHECK_JOBS       # Don't report on jobs when shell exit.
 
 # PATH
 typeset -U path manpath cdpath fpath

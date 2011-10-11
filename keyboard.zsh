@@ -8,7 +8,7 @@ zstyle ':prompt:' vicmd '<<<'         # Indicator to notify of vi command mode.
 zstyle ':prompt:' completion "..."    # Indicator to notify of generating completion.
 
 # Beep on error in line editor.
-setopt beep
+setopt BEEP
 
 # Reset to default key bindings.
 bindkey -d

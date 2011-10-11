@@ -1,5 +1,5 @@
-setopt correct        # Correct commands.
-setopt correct_all    # Correct all arguments.
+setopt CORRECT        # Correct commands.
+setopt CORRECT_ALL    # Correct all arguments.
 
 # The 'ls' Family
 if check-bool "$COLOR"; then

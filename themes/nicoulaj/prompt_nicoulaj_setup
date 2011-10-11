@@ -11,7 +11,7 @@
 # ------------------------------------------------------------------------------
 
 function prompt_nicoulaj_setup() {
-  setopt noxtrace noksharrays localoptions
+  setopt NO_XTRACE NO_KSHARRAYS LOCAL_OPTIONS
   prompt_opts=(cr subst percent)
 
   # Load required modules.

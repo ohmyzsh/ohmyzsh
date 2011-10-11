@@ -105,8 +105,8 @@ add-zsh-trap INT _git-info-abort
 # Gets the Git status information.
 function git-info() {
   # Extended globbing is needed to parse repository status.
-  setopt local_options
-  setopt extended_glob
+  setopt LOCAL_OPTIONS
+  setopt EXTENDED_GLOB
 
   local action
   local action_format

@@ -34,7 +34,7 @@ function set-tab-title() {
 # Sets the tab and window titles with the command name.
 function set-title-by-command() {
   emulate -L zsh
-  setopt localoptions extended_glob
+  setopt LOCAL_OPTIONS EXTENDED_GLOB
 
   # Get the command name that is under job control.
   if [[ "${1[(w)1]}" == (fg|%*)(\;|) ]]; then

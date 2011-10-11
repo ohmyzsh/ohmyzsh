@@ -6,12 +6,12 @@ function +vi-git-status() {
 }
 
 function prompt_minimal_precmd () {
-  setopt noxtrace noksharrays localoptions
+  setopt NO_XTRACE NO_KSHARRAYS LOCAL_OPTIONS
   vcs_info
 }
 
 function prompt_minimal_setup() {
-  setopt noxtrace noksharrays localoptions
+  setopt NO_XTRACE NO_KSHARRAYS LOCAL_OPTIONS
   prompt_opts=(cr subst percent)
 
   autoload -Uz add-zsh-hook

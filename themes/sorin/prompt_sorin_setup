@@ -6,7 +6,7 @@
 #    SCREENSHOT:  http://i.imgur.com/aipDQ.png
 # ------------------------------------------------------------------------------
 function prompt_sorin_precmd () {
-  setopt noxtrace noksharrays localoptions
+  setopt NO_XTRACE NO_KSHARRAYS LOCAL_OPTIONS
 
   if (( $+functions[git-info] )); then
     git-info
@@ -14,7 +14,7 @@ function prompt_sorin_precmd () {
 }
 
 function prompt_sorin_setup() {
-  setopt localoptions noxtrace noksharrays
+  setopt NO_XTRACE NO_KSHARRAYS LOCAL_OPTIONS
   prompt_opts=(cr subst percent)
 
   autoload -Uz add-zsh-hook

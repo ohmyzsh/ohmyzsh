@@ -17,7 +17,7 @@ fi
 # Loads RVM into the shell session.
 if [[ -s "$HOME/.rvm/scripts/rvm" ]]; then
   # Auto adding variable-stored paths to ~ list conflicts with RVM.
-  unsetopt auto_name_dirs
+  unsetopt AUTO_NAME_DIRS
 
   # Source RVM.
   source "$HOME/.rvm/scripts/rvm"

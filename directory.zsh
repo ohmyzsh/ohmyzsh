@@ -1,14 +1,14 @@
-setopt auto_cd              # Auto cd to a directory without typing cd.
-setopt auto_pushd           # Push the old directory onto the stack on cd.
-setopt pushd_ignore_dups    # Don't store duplicates in the stack.
-setopt pushd_silent         # Do not print the directory stack after pushd or popd.
-setopt pushd_to_home        # Push to home directory when no argument is given.
-setopt pushd_minus          # Use +/-n to specify a directory in the stack.
-setopt cdable_vars          # Change directory to a path stored in a variable.
-setopt auto_name_dirs       # Auto add variable-stored paths to ~ list.
-setopt multios              # Write to multiple descriptors.
-setopt extended_glob        # Use extended globbing syntax.
-unsetopt clobber            # Don't overwrite existing files with > and >>.
+setopt AUTO_CD              # Auto cd to a directory without typing cd.
+setopt AUTO_PUSHD           # Push the old directory onto the stack on cd.
+setopt PUSHD_IGNORE_DUPS    # Don't store duplicates in the stack.
+setopt PUSHD_SILENT         # Do not print the directory stack after pushd or popd.
+setopt PUSHD_TO_HOME        # Push to home directory when no argument is given.
+setopt PUSHD_MINUS          # Use +/-n to specify a directory in the stack.
+setopt CDABLE_VARS          # Change directory to a path stored in a variable.
+setopt AUTO_NAME_DIRS       # Auto add variable-stored paths to ~ list.
+setopt MULTIOS              # Write to multiple descriptors.
+setopt EXTENDED_GLOB        # Use extended globbing syntax.
+unsetopt CLOBBER            # Don't overwrite existing files with > and >>.
                             # Use >! and >>! to bypass.
 
 alias 1='cd -'

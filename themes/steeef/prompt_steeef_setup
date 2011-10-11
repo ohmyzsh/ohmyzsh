@@ -45,7 +45,7 @@ function prompt_steeef_chpwd() {
 }
 
 function prompt_steeef_setup() {
-  setopt localoptions noxtrace noksharrays
+  setopt NO_XTRACE NO_KSHARRAYS LOCAL_OPTIONS
   prompt_opts=(cr subst percent)
 
   autoload -Uz add-zsh-hook

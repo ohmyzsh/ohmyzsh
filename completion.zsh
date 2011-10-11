@@ -3,14 +3,14 @@ if [[ "$TERM" == 'dumb' ]]; then
   return
 fi
 
-setopt complete_in_word    # Complete from both ends of a word.
-setopt always_to_end       # Move cursor to the end of a completed word.
-setopt path_dirs           # Perform path search even on command names with slashes.
-setopt auto_menu           # Show completion menu on a succesive tab press.
-setopt auto_list           # Automatically list choices on ambiguous completion.
-setopt auto_param_slash    # If completed parameter is a directory, add a trailing slash.
-unsetopt menu_complete     # Do not autoselect the first completion entry.
-unsetopt flow_control      # Disable start/stop characters in shell editor.
+setopt COMPLETE_IN_WORD    # Complete from both ends of a word.
+setopt ALWAYS_TO_END       # Move cursor to the end of a completed word.
+setopt PATH_DIRS           # Perform path search even on command names with slashes.
+setopt AUTO_MENU           # Show completion menu on a succesive tab press.
+setopt AUTO_LIST           # Automatically list choices on ambiguous completion.
+setopt AUTO_PARAM_SLASH    # If completed parameter is a directory, add a trailing slash.
+unsetopt MENU_COMPLETE     # Do not autoselect the first completion entry.
+unsetopt FLOW_CONTROL      # Disable start/stop characters in shell editor.
 
 # Treat these characters as part of a word.
 WORDCHARS='*?_-.[]~&;!#$%^(){}<>'
@@ -22,10 +22,10 @@ zstyle ':completion::complete:*' cache-path "$HOME/.zcache"
 # Case-insensitive (all), partial-word, and then substring completion.
 if check-bool "$CASE_SENSITIVE"; then
   zstyle ':completion:*' matcher-list 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
-  setopt case_glob
+  setopt CASE_GLOB
 else
   zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
-  unsetopt case_glob
+  unsetopt CASE_GLOB
 fi
 
 # Group matches and describe.

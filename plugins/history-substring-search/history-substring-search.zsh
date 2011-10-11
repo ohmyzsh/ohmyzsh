@@ -186,7 +186,7 @@ if [[ $+functions[_zsh_highlight] -eq 0 ]]; then
 fi
 
 function _history-substring-search-begin() {
-  setopt localoptions extendedglob
+  setopt LOCAL_OPTIONS EXTENDED_GLOB
 
   _history_substring_search_move_cursor_eol=false
   _history_substring_search_query_highlight=
@@ -254,7 +254,7 @@ function _history-substring-search-begin() {
 }
 
 function _history-substring-search-end() {
-  setopt localoptions extendedglob
+  setopt LOCAL_OPTIONS EXTENDED_GLOB
 
   _history_substring_search_result=$BUFFER
 
