@@ -7,10 +7,10 @@ fi
 
 # Add functions to fpath.
 fpath=(
-  $OMZ/themes/*(/N)
-  ${plugins:+$OMZ/plugins/${^plugins}}
-  $OMZ/functions
-  $OMZ/completions
+  ${0:h}/themes/*(/N)
+  ${plugins:+${0:h}/plugins/${^plugins}}
+  ${0:h}/functions
+  ${0:h}/completions
   $fpath
 )
 
@@ -18,21 +18,21 @@ fpath=(
 autoload -Uz compinit && compinit -i
 
 # Source files (the order matters).
-source "$OMZ/helper.zsh"
-source "$OMZ/environment.zsh"
-source "$OMZ/terminal.zsh"
-source "$OMZ/keyboard.zsh"
-source "$OMZ/completion.zsh"
-source "$OMZ/history.zsh"
-source "$OMZ/directory.zsh"
-source "$OMZ/alias.zsh"
-source "$OMZ/spectrum.zsh"
-source "$OMZ/utility.zsh"
+source "${0:h}/helper.zsh"
+source "${0:h}/environment.zsh"
+source "${0:h}/terminal.zsh"
+source "${0:h}/keyboard.zsh"
+source "${0:h}/completion.zsh"
+source "${0:h}/history.zsh"
+source "${0:h}/directory.zsh"
+source "${0:h}/alias.zsh"
+source "${0:h}/spectrum.zsh"
+source "${0:h}/utility.zsh"
 
 # Source plugins defined in ~/.zshrc.
 for plugin in $plugins; do
-  if [[ -f "$OMZ/plugins/$plugin/init.zsh" ]]; then
-    source "$OMZ/plugins/$plugin/init.zsh"
+  if [[ -f "${0:h}/plugins/$plugin/init.zsh" ]]; then
+    source "${0:h}/plugins/$plugin/init.zsh"
   fi
 done
 unset plugin
