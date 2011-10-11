@@ -33,6 +33,8 @@ alias gss='git status -s'
 compdef _git gss=git-status
 alias ga='git add'
 compdef _git ga=git-add
+alias gm='git merge'
+compdef _git gm=git-merge
 
 # Git and svn mix
 alias git-svn-dcommit-push='git svn dcommit && git push github master:svntrunk'
