@@ -1,3 +1,8 @@
+# Dumb terminals lack support.
+if [[ "$TERM" == 'dumb' ]]; then
+  return
+fi
+
 # The default styles.
 zstyle ':prompt:' vicmd '<<<'         # Indicator to notify of vi command mode.
 zstyle ':prompt:' completion "..."    # Indicator to notify of generating completion.
