@@ -45,16 +45,28 @@ end
 if ARGV[0].nil?
    puts "You need to specify a file to upload."
    exit!(1)
+elsif ARGV[0] == '-'
+  if ARGV[1].nil?
+    puts "You need to specify a filename for the input stream."
+    puts "Example usage: echo \"Hello\" | cloudapp - hello.txt"
+    exit!(1)
+  end
+  file = "/tmp/#{ARGV[1]}"
+  f = open(file, File::CREAT | File::WRONLY | File::BINARY)
+  f.write STDIN.read
+  f.close
+else
+  file = ARGV[0]
 end
 
 CloudApp.authenticate(email,password)
-url = CloudApp::Item.create(:upload, {:file => ARGV[0]}).url
+url = CloudApp::Item.create(:upload, {:file => file}).url
 
 # Say it for good measure.
 puts "Uploaded to #{url}."
 
 # Get the embed link.
-url = "#{url}/#{ARGV[0].split('/').last}"
+url = "#{url}/#{file.split('/').last}"
 
 # Copy it to your (Mac's) clipboard.
 `echo '#{url}' | tr -d "\n" | pbcopy`
