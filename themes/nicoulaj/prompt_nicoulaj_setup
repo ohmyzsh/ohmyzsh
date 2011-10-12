@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# Prompt for ZSH:
+# Prompt for Zsh:
 #   * One line.
 #   * VCS info on the right prompt.
 #   * Only shows the path on the left prompt by default.

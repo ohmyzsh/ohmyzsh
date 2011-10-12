@@ -6,5 +6,5 @@ alias bl='b list'
 alias bo='b open'
 alias bp='b package'
 alias bu='b update'
-alias binit="bi && b package && echo '\nvendor/ruby' >>! .gitignore"
+alias binit="bi && b package && print '\nvendor/ruby' >>! .gitignore"
 

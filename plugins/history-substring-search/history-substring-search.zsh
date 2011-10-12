@@ -147,9 +147,9 @@ if [[ $+functions[_zsh_highlight] -eq 0 ]]; then
   # Rebind all ZLE widgets to make them invoke _zsh_highlights.
   _zsh_highlight_bind_widgets()
   {
-    # Load ZSH module zsh/zleparameter, needed to override user defined widgets.
+    # Load Zsh module zsh/zleparameter, needed to override user defined widgets.
     zmodload zsh/zleparameter 2>/dev/null || {
-      echo 'zsh-syntax-highlighting: failed loading zsh/zleparameter.' >&2
+      print 'zsh-syntax-highlighting: failed loading zsh/zleparameter.' >&2
       return 1
     }
 
@@ -176,7 +176,7 @@ if [[ $+functions[_zsh_highlight] -eq 0 ]]; then
                        zle -N $cur_widget _zsh_highlight_widget_$cur_widget";;
 
         # Default: unhandled case.
-        *) echo "zsh-syntax-highlighting: unhandled ZLE widget '$cur_widget'" >&2 ;;
+        *) print "zsh-syntax-highlighting: unhandled ZLE widget '$cur_widget'" >&2 ;;
       esac
     done
   }
@@ -347,7 +347,7 @@ function _history-substring-search-down-buffer() {
 
 function _history-substring-search-up-history() {
   #
-  # Behave like up in ZSH, except clear the $BUFFER
+  # Behave like up in Zsh, except clear the $BUFFER
   # when beginning of history is reached like in Fish.
   #
   if [[ -z $_history_substring_search_query ]]; then
@@ -369,7 +369,7 @@ function _history-substring-search-up-history() {
 
 function _history-substring-search-down-history() {
   #
-  # Behave like down-history in ZSH, except clear the
+  # Behave like down-history in Zsh, except clear the
   # $BUFFER when end of history is reached like in Fish.
   #
   if [[ -z $_history_substring_search_query ]]; then

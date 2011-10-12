@@ -1,4 +1,11 @@
-# Initializes OH MY ZSH.
+# Initializes Oh My Zsh.
+
+# Check for the minimum supported version.
+min_zsh_version=4.3.9
+if ! autoload -Uz is-at-least || ! is-at-least "$min_zsh_version"; then
+  print "oh-my-zsh: The minimum supported Zsh version is $min_zsh_version."
+fi
+unset min_zsh_version
 
 # Disable color in dumb terminals.
 if [[ "$TERM" == 'dumb' ]]; then
@@ -7,10 +14,9 @@ fi
 
 # Add functions to fpath.
 fpath=(
-  ${0:h}/themes/*(/N)
-  ${plugins:+${0:h}/plugins/${^plugins}}
-  ${0:h}/functions
-  ${0:h}/completions
+  ${0:h}/themes/*(/FN)
+  ${plugins:+${0:h}/plugins/${^plugins}/{functions,completions}(/FN)}
+  ${0:h}/{functions,completions}(/FN)
   $fpath
 )
 
@@ -29,14 +35,28 @@ source "${0:h}/alias.zsh"
 source "${0:h}/spectrum.zsh"
 source "${0:h}/utility.zsh"
 
+# Autoload Zsh function builtins.
+autoload -Uz age
+autoload -Uz zargs
+autoload -Uz zcalc
+autoload -Uz zmv
+
 # Source plugins defined in ~/.zshrc.
-for plugin in $plugins; do
+for plugin in "$plugins[@]"; do
   if [[ -f "${0:h}/plugins/$plugin/init.zsh" ]]; then
     source "${0:h}/plugins/$plugin/init.zsh"
   fi
 done
-unset plugin
-unset plugins
+unset plugin plugins
+
+# Autoload Oh My Zsh functions.
+for fdir in "$fpath[@]"; do
+  if [[ "$fdir" == ${0:h}/(|*/)functions ]]; then
+    for afunction in $fdir/[^_.]*(N.:t); do
+      autoload -Uz $afunction
+    done
+  fi
+done
 
 # Set environment variables for launchd processes.
 if [[ "$OSTYPE" == darwin* ]]; then

@@ -1,0 +1,12 @@
+# Perl Global Substitution
+if (( $# < 2 )); then
+  print "Usage: $0 find replace [file ...]" >&2
+  return 1
+fi
+
+local find="$1"
+local replace="$2"
+repeat 2 shift
+
+perl -i.orig -pe 's/'"$find"'/'"$replace"'/g' "$@"
+

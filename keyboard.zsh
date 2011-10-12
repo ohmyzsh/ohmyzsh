@@ -82,7 +82,7 @@ if [[ "$KEYMAP" == (emacs|) ]]; then
   fi
 
   # Bind to history substring search plugin if enabled;
-  # otherwise, bind to built-in ZSH history search.
+  # otherwise, bind to built-in Zsh history search.
   if (( $+widgets[history-incremental-pattern-search-backward] )); then
     bindkey "$keyinfo[Control]r" history-incremental-pattern-search-backward
     bindkey "$keyinfo[Control]s" history-incremental-pattern-search-forward
@@ -169,7 +169,7 @@ elif [[ "$KEYMAP" == 'vi' ]]; then
   bindkey -M vicmd "G" end-of-history
 
   # Bind to history substring search plugin if enabled;
-  # otherwise, bind to built-in ZSH history search.
+  # otherwise, bind to built-in Zsh history search.
   if (( $+plugins[(er)history-substring-search] )); then
     bindkey -M vicmd "k" history-substring-search-up
     bindkey -M vicmd "j" history-substring-search-down
@@ -194,7 +194,7 @@ elif [[ "$KEYMAP" == 'vi' ]]; then
     bindkey -M viins "$keyinfo[Control]s" history-incremental-search-forward
   fi
 else
-  echo "oh-my-zsh: KEYMAP must be set 'emacs' or 'vi' but is set to '$KEYMAP'" >&2
+  print "oh-my-zsh: KEYMAP must be set 'emacs' or 'vi' but is set to '$KEYMAP'" >&2
   return 1
 fi
 

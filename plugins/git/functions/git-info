@@ -1,22 +1,3 @@
-# The default styles.
-zstyle ':git-info:' action    'action:%s'       #  %s - Special action name (am, merge, rebase).
-zstyle ':git-info:' added     'added:%a'        #  %a - Indicator to notify of added files.
-zstyle ':git-info:' ahead     'ahead:%A'        #  %A - Indicator to notify of ahead branch.
-zstyle ':git-info:' behind    'behind:%B'       #  %B - Indicator to notify of behind branch.
-zstyle ':git-info:' branch    '%b'              #  %b - Branch name.
-zstyle ':git-info:' clean     'clean'           #  %C - Indicator to notify of clean branch.
-zstyle ':git-info:' commit    'commit:%c'       #  %c - SHA-1 hash.
-zstyle ':git-info:' deleted   'deleted:%d'      #  %d - Indicator to notify of deleted files.
-zstyle ':git-info:' dirty     'dirty'           #  %D - Indicator to notify of dirty branch.
-zstyle ':git-info:' modified  'modified:%m'     #  %m - Indicator to notify of modified files.
-zstyle ':git-info:' remote    '%R'              #  %R - Remote name.
-zstyle ':git-info:' renamed   'renamed:%r'      #  %r - Indicator to notify of renamed files.
-zstyle ':git-info:' stashed   'stashed:%S'      #  %S - Indicator to notify of stashed files.
-zstyle ':git-info:' unmerged  'unmerged:%U'     #  %U - Indicator to notify of unmerged files.
-zstyle ':git-info:' untracked 'untracked:%u'    #  %u - Indicator to notify of untracked files.
-zstyle ':git-info:' prompt    ' git:(%b %D%C)'  #  Left prompt.
-zstyle ':git-info:' rprompt   ''                #  Right prompt.
-
 # Gets the Git special action (am, merge, rebase, etc.).
 # Borrowed from vcs_info and edited.
 function _git-action() {
@@ -36,7 +17,7 @@ function _git-action() {
       else
         action='am/rebase'
       fi
-      echo "$action"
+      print "$action"
       return 0
     fi
   done
@@ -45,7 +26,7 @@ function _git-action() {
     "${git_dir}/rebase-merge/interactive" \
     "${git_dir}/.dotest-merge/interactive"; do
     if [[ -f "$action_dir" ]]; then
-      echo 'rebase-i'
+      print 'rebase-i'
       return 0
     fi
   done
@@ -54,23 +35,23 @@ function _git-action() {
     "${git_dir}/rebase-merge" \
     "${git_dir}/.dotest-merge"; do
     if [[ -d "$action_dir" ]]; then
-      echo 'rebase-m'
+      print 'rebase-m'
       return 0
     fi
   done
 
   if [[ -f "${git_dir}/MERGE_HEAD" ]]; then
-    echo 'merge'
+    print 'merge'
     return 0
   fi
 
   if [[ -f "${git_dir}/CHERRY_PICK_HEAD" ]]; then
-    echo 'cherry-pick'
+    print 'cherry-pick'
     return 0
   fi
 
   if [[ -f "${git_dir}/BISECT_LOG" ]]; then
-    echo 'bisect'
+    print 'bisect'
     return 0
   fi
 
@@ -175,7 +156,7 @@ function git-info() {
     elif [[ "$1" == [Oo][Ff][Ff] ]]; then
       git config --bool prompt.showinfo false
     else
-      echo "Usage: $0 [ on | off ]"
+      print "Usage: $0 [ on | off ]"
     fi
     return 0
   fi
@@ -354,4 +335,6 @@ function git-info() {
   unset _git_info_executing
   return 0
 }
+
+git-info "$@"
 

@@ -1,0 +1,10 @@
+# Kernel-package building shortcut.
+MAKEFLAGS=''                  # Temporarily unset MAKEFLAGS ( '-j3' will fail ).
+appendage='-custom'           # This shows up in $ (uname -r ).
+revision=$(date +"%Y%m%d")    # This shows up in the .deb file name.
+
+make-kpkg clean
+
+time fakeroot make-kpkg --append-to-version "$appendage" --revision \
+  "$revision" kernel_image kernel_headers
+

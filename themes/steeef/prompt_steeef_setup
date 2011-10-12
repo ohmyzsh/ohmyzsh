@@ -1,7 +1,7 @@
 # Prompt style and colors based on Steve Losh's Prose theme:
 # http://github.com/sjl/oh-my-zsh/blob/master/themes/prose.zsh-theme
 #
-# vcs_info modifications from Bart Trojanowski's zsh prompt:
+# vcs_info modifications from Bart Trojanowski's Zsh prompt:
 # http://www.jukie.net/bart/blog/pimping-out-zsh-prompt
 #
 # Git untracked files modification from Brian Carper:
@@ -9,7 +9,7 @@
 
 function virtualenv_info() {
   if [[ -n "$VIRTUAL_ENV" ]]; then
-    echo '('`basename $VIRTUAL_ENV`') '
+    print "(${VIRTUAL_ENV:t}) "
   fi
 }
 

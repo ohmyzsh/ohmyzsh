@@ -1,4 +1,4 @@
-# Uses the command-not-found package ZSH support as seen in
+# Uses the command-not-found package Zsh support as seen in
 # http://www.porcheron.info/command-not-found-for-zsh/ and
 # installed in Ubuntu.
 

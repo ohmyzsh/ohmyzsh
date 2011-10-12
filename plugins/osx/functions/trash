@@ -1,0 +1,13 @@
+local trash_dir="${HOME}/.Trash"
+local trash_item
+local item
+for item in "${@}"; do
+  if [[ -e "${item}" ]] || [[ -L "${item}" ]]; then
+    trash_item="${trash_dir}/${item:t}"
+    if [[ -e "${trash_item}" ]] || [[ -L "${trash_item}" ]]; then
+      trash_item="${trash_item} $(date "+%H-%M-%S")"
+    fi
+    mv -f "${item}" "${trash_item}"
+  fi
+done
+

@@ -1,4 +1,4 @@
-To activate this script, load it into an interactive ZSH session:
+To activate this script, load it into an interactive Zsh session:
 
   % source history-substring-search.zsh
 

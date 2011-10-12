@@ -1,0 +1,11 @@
+# Perl grep since 'grep -P' is terrible.
+if (( $# < 1 )) ; then
+  print "Usage: $0 pattern [file ...]" >&2
+  return 1
+fi
+
+local pattern="$1"
+shift
+
+perl -nle 'print if /'"$pattern"'/;' "$@"
+

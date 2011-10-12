@@ -4,29 +4,29 @@ A handful of functions, auto-complete helpers, and stuff that makes you shout...
 
 ## Setup
 
-`oh-my-zsh` should work with any recent release of [ZSH](http://www.zsh.org), but the
+`oh-my-zsh` should work with any recent release of [Zsh](http://www.zsh.org), but the
 minimum recommended version is 4.3.9.
 
 1. Clone the repository.
 
     `git clone git://github.com/sorin-ionescu/oh-my-zsh.git ~/.oh-my-zsh`
 
-2. Create a new ZSH configuration by copying the ZSH template provided.
+2. Create a new Zsh configuration by copying the Zsh template provided.
 
 **NOTE**: If you already have a `~/.zshrc` file, you should back it up with `cp
 ~/.zshrc{,.orig}` in case you want to go back to your original settings.
 
     cp ~/.oh-my-zsh/templates/zshrc.template.zsh ~/.zshrc
 
-3. Set ZSH as your default shell:
+3. Set Zsh as your default shell:
 
     `chsh -s /bin/zsh`
 
-4. Start / restart ZSH by opening a new terminal window or tab.
+4. Start / restart Zsh by opening a new terminal window or tab.
 
 ### Problems?
 
-If you are not able to find certain commands after switching to *Oh My ZSH*, you need
+If you are not able to find certain commands after switching to *Oh My Zsh*, you need
 to modify `PATH` in `~/.zshrc`, or better yet, in `~/functions/02.environment.zsh`
 (may be subject to merge conflicts).
 
@@ -42,7 +42,7 @@ to modify `PATH` in `~/.zshrc`, or better yet, in `~/functions/02.environment.zs
 
 ## Useful
 
-The [ZSH Reference Card](http://www.bash2zsh.com/zsh_refcard/refcard.pdf) is tasty.
+The [Zsh Reference Card](http://www.bash2zsh.com/zsh_refcard/refcard.pdf) is tasty.
 
 ### Customization
 
@@ -51,7 +51,7 @@ If you have many related functions, you can organise them in a file in the
 
 ## Help out!
 
-I am not a ZSH expert and suspect that there are improvements to be made. If you have
+I am not a Zsh expert and suspect that there are improvements to be made. If you have
 ideas on how to make the configuration easier to maintain or improve the performance,
 do not hesitate to fork and send pull requests!
 

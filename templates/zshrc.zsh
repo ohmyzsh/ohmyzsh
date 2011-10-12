@@ -1,4 +1,4 @@
-# Path to oh-my-zsh.
+# Set the path to Oh My Zsh.
 OMZ="$HOME/.oh-my-zsh"
 
 # Set the key mapping style to 'emacs' or 'vi'.
@@ -23,7 +23,7 @@ COMPLETION_INDICATOR='false'
 # Example: plugins=(git lighthouse rails ruby textmate)
 plugins=(git)
 
-# This will make you scream: OH MY ZSH!
+# This will make you shout: OH MY ZSHELL!
 source "$OMZ/init.zsh"
 
 # Load the prompt theme (type prompt -l to list all themes).

@@ -6,7 +6,7 @@ if [[ "$OSTYPE" == darwin* ]]; then
   # gem is slow; cache its output.
   cache_file="${0:h}/cache.zsh"
   if [[ ! -f "$cache_file" ]]; then
-    echo export GEM_PATH=$GEM_HOME:$(gem env gempath) >! "$cache_file"
+    print export GEM_PATH=$GEM_HOME:$(gem env gempath) >! "$cache_file"
     source "$cache_file"
   else
     source "$cache_file"

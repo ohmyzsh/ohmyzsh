@@ -1,0 +1,45 @@
+local verbose
+
+if (( $# == 0 )); then
+  print "Usage: extract [-option] [file ...]"
+  print
+  print "Options:"
+  print "    -v, --verbose    Verbose archive listing."
+  print
+  print "Report bugs to <sorin.ionescu@gmail.com>."
+fi
+
+if [[ "$1" == "-v" ]] || [[ "$1" == "--verbose" ]]; then
+  verbose=0
+  shift
+fi
+
+while (( $# > 0 )); do
+  if [[ ! -f "$1" ]]; then
+    print "extract: '$1' is not a valid file" 1>&2
+    shift
+    continue
+  fi
+
+  case "$1" in
+    (*.tar.gz|*.tgz) tar t${verbose:+v}vzf "$1" ;;
+    (*.tar.bz2|*.tbz|*.tbz2) tar t${verbose:+v}jf "$1" ;;
+    (*.tar.xz|*.txz) tar --xz --help &> /dev/null \
+      && tar --xz -t${verbose:+v}f "$1" \
+      || xzcat "$1" | tar t${verbose:+v}f - ;;
+    (*.tar.zma|*.tlz) tar --lzma --help &> /dev/null \
+      && tar --lzma -t${verbose:+v}f "$1" \
+      || lzcat "$1" | tar x${verbose:+v}f - ;;
+    (*.tar) tar t${verbose:+v}f "$1" ;;
+    (*.zip) unzip -l${verbose:+v} "$1" ;;
+    (*.rar) unrar ${${verbose:+v}:-l} "$1" ;;
+    (*.7z) 7za l "$1" ;;
+    (*)
+      print "ls-archive: '$1' cannot be listed" 1>&2
+      success=1
+    ;;
+  esac
+
+  shift
+done
+

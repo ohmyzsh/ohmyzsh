@@ -28,13 +28,13 @@ function _ssh-agent-start() {
   local -a identities
 
   # Start ssh-agent and setup environment.
-  /usr/bin/env ssh-agent | sed 's/^echo/#echo/' > "${_ssh_agent_env}"
+  /usr/bin/env ssh-agent | sed 's/^print/#print/' > "${_ssh_agent_env}"
   chmod 600 "${_ssh_agent_env}"
   source "${_ssh_agent_env}" > /dev/null
 
   # Load identies.
   zstyle -a :omz:plugins:ssh-agent identities identities
-  echo starting...
+  print starting...
   /usr/bin/ssh-add "$HOME/.ssh/${^identities}"
 }
 

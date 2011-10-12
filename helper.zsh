@@ -9,7 +9,7 @@ function check-bool {
 }
 
 # Trap signals were generated with 'kill -l'.
-# DEBUG, EXIT, and ZERR are ZSH signals.
+# DEBUG, EXIT, and ZERR are Zsh signals.
 TRAP_SIGNALS=(
   ABRT ALRM BUS CHLD CONT EMT FPE HUP ILL INFO INT IO KILL PIPE PROF QUIT
   SEGV STOP SYS TERM TRAP TSTP TTIN TTOU URG USR1 USR2 VTALRM WINCH XCPU XFSZ
@@ -19,12 +19,12 @@ TRAP_SIGNALS=(
 # Adds a function to a list to be called when a trap is triggered.
 function add-zsh-trap {
   if (( $# < 2 )); then
-    echo "Usage: $0 type function"
+    print "Usage: $0 type function"
     return 1
   fi
 
   if [[ -z "$TRAP_SIGNALS[(r)$1]" ]]; then
-    echo "$0: unknown signal: $1"
+    print "$0: unknown signal: $1"
     return 1
   fi
 

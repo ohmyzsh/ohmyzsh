@@ -1,0 +1,22 @@
+# Open the GitHub repository in the browser.
+local url=$(
+  git config -l \
+    | grep "remote.origin.url" \
+    | sed -En "s/remote.origin.url=(git|https?)(@|:\/\/)github.com(:|\/)(.+)\/(.+).git/https:\/\/github.com\/\4\/\5/p"
+)
+
+if [[ -n "$url" ]]; then
+  url="${url}/tree/${$(git-branch):-master}"
+
+  if (( $+commands[$BROWSER] )); then
+    "$BROWSER" "$url"
+    return 0
+  else
+    print "fatal: Browser not set or set to a non-existent browser." >&2
+    return 1
+  fi
+else
+  print "fatal: Not a Git repository or origin remote not set." >&2
+  return 1
+fi
+
