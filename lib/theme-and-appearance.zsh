@@ -30,6 +30,8 @@ ZSH_THEME_GIT_PROMPT_PREFIX="git:("         # Prefix at the very beginning of th
 ZSH_THEME_GIT_PROMPT_SUFFIX=")"             # At the very end of the prompt
 ZSH_THEME_GIT_PROMPT_DIRTY="*"              # Text to display if the branch is dirty
 ZSH_THEME_GIT_PROMPT_CLEAN=""               # Text to display if the branch is clean
+ZSH_THEME_GIT_PROMPT_STASH="#"              # Text to display if stash exists
+ZSH_THEME_GIT_PROMPT_NOSTASH=""             # Text to display if no stash exists
 
 # Setup the prompt with pretty colors
 setopt prompt_subst
