@@ -1,4 +1,4 @@
-# These three lines of simple code originally by ilikenwf/Matt Parnell
+# This line of simple code originally by ilikenwf/Matt Parnell
 # simply import the ~/.aliases file if it exists when the plugin is
 # enabled.
 
@@ -14,6 +14,4 @@
 # alias tunnel="ssh -D 3290  user@host.com"
 # alias vnc="vncviewer -compresslevel 0 -q 0 localhost:2985"
 
-if [ -f ~/.aliases ] ; then
-	source ~/.aliases
-fi
+[[ -f ~/.aliases ]] && . ~/.aliases
