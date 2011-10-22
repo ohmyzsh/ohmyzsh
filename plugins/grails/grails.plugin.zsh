@@ -29,12 +29,15 @@ _enumerateGrailsScripts() {
     # - PackagePlugin_.groovy -> PackagePlugin
     # - PackagePlugin         -> Package-Plugin
     # - Package-Plugin        -> package-plugin
-    basename $files                             \
-        | sed -E  -e 's/^_?([^_]+)_?.groovy/\1/'\
-                  -e 's/([a-z])([A-Z])/\1-\2/g' \
-        | tr "[:upper:]" "[:lower:]"            \
-        | sort                                  \
-        | uniq
+    for i in $files;
+    do
+        echo `basename $i`                          \
+            | sed -E  -e 's/^_?([^_]+)_?.groovy/\1/'\
+                      -e 's/([a-z])([A-Z])/\1-\2/g' \
+            | tr "[:upper:]" "[:lower:]"            \
+            | sort                                  \
+            | uniq
+    done
 }
  
 _grails() {
