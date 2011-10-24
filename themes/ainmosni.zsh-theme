@@ -8,6 +8,7 @@
 #   PRODUCTION_RE='^prod-'
 # And for yellow:
 #   STAGING_RE='^staging-'
+# The contents are regular expression against which the host is matched,
 
 # Default user colour
 us_col=$fg[green]
@@ -16,18 +17,17 @@ if [[ `whoami` == 'root' ]]; then
     us_col=$fg[red]
 fi
 
-
-
-
+# Default host colour.
 host_col=$fg[green]
 local hostname=`hostname`
+
+# Set the host colour red if it matches the production regex.
 if [[ "$PRODUCTION_RE" != "" && "$hostname" =~ "$PRODUCTION_RE" ]]; then
     host_col=$fg[red]
+# And yellow if it matches the staging regex.
 elif [[ "$STAGING_RE" != "" && $hostname =~ $STAGING_RE ]]; then
     host_col=$fg[yellow]
 fi
-
-
 
 local start_angular="%{$fg_bold[white]%}[%{$reset_color%}"
 local user_at_host="%{$us_col%}%n%{$reset_color%}%{$fg_bold[yellow]%}@%{$reset_color%}%{$host_col%}%m%{$reset_color%}"
