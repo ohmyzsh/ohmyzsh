@@ -1,9 +1,10 @@
 # Theme with colour changing user and hostname.
+#   by Daniël Franke <daniel [at] ams-sec [dot] org>
 #
 # Handy if you work on different servers all the time and want a different
 # colourscheme when you're root and when you're on certain hosts.
 #
-# You can put this in your .zshrc to set yourhostname red:
+# You can put this in your .zshrc to set your hostname red:
 #   PRODUCTION_RE='^prod-'
 # And for yellow:
 #   STAGING_RE='^staging-'
