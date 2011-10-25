@@ -10,8 +10,10 @@ svn_prompt_status() {
 }
 
 rvm_prompt_status() {
-	if [ "" -ne "$(rvm-prompt i v g)" ]; then
-		 echo "<"$(rvm-prompt i v g)">"
+	if [ -f "$(which rvm-prompt)"]; then
+		if [ "" -ne "$(rvm-prompt i v g)" ]; then
+			 echo "<"$(rvm-prompt i v g)">"
+		fi
 	fi
 }
 
