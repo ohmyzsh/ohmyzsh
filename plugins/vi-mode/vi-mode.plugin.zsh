@@ -43,7 +43,7 @@ zle -N accept_line
 zle -N edit-command-line
 
 # Avoid binding ^J, ^M,  ^C, ^?, ^S, ^Q, etc.
-bindkey -d # Reset to default.
+# bindkey -d # Reset to default. Breaks tab completion. Start tab completing and press tab to move across options and it will kill your terminal.
 bindkey -v # Use vi key bindings.
 bindkey -M vicmd "^M" accept_line # Alow RETURN in vi command.
 bindkey -M vicmd v edit-command-line # ESC-v to edit in an external editor.
