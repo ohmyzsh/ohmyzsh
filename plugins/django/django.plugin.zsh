@@ -81,7 +81,7 @@ _managepy-reset(){
 
 _managepy-runfcgi(){
   local state
-  
+
   local fcgi_opts
   fcgi_opts=(
     'protocol[fcgi, scgi, ajp, ... (default fcgi)]:protocol:(fcgi scgi ajp)'
@@ -99,7 +99,7 @@ _managepy-runfcgi(){
     'outlog[write stdout to this file.]:file:_files'
     'errlog[write stderr to this file.]:file:_files'
   )
-  
+
   _arguments -s : \
     $nul_args \
     '*: :_values "FCGI Setting" $fcgi_opts' && ret=0
@@ -159,7 +159,7 @@ _managepy-validate() {
 
 _managepy-commands() {
   local -a commands
-  
+
   commands=(
     'adminindex:prints the admin-index template snippet for the given app name(s).'
     'createcachetable:creates the table needed to use the SQL cache backend.'
@@ -189,7 +189,7 @@ _managepy-commands() {
     'testserver:Runs a development server with data from the given fixture(s).'
     'validate:Validates all installed models.'
   )
-  
+
   _describe -t commands 'manage.py command' commands && ret=0
 }
 
@@ -207,7 +207,7 @@ _applist() {
 
 _managepy() {
   local curcontext=$curcontext ret=1
-  
+
   if ((CURRENT == 2)); then
     _managepy-commands
   else

@@ -34,7 +34,7 @@ function _plugin__start_agent()
   . ${_plugin__ssh_env} > /dev/null
 
   # load identies
-  zstyle -a :omz:plugins:ssh-agent identities identities 
+  zstyle -a :omz:plugins:ssh-agent identities identities
   echo starting...
   /usr/bin/ssh-add $HOME/.ssh/${^identities}
 }
