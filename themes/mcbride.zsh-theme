@@ -25,12 +25,12 @@ local user_color='blue'
 local back="${BG[237]}"
 test $UID -eq 0 && user_color='red'
 
-PROMPT='$(dirStack $back)
-$back%B%!%b$back %{$fg_bold[$user_color]%}%~%{$reset_color%}'\
-'$back $(git_prompt_status)%{$reset_color%}'\
-'$back%{$fg_bold[magenta]%}$(git_prompt_info)%{$reset_color%}'\
-'$back$(git_prompt_ahead)$reset_color'\
-'$back%(!.#.>)$reset_color '
+PROMPT='$(dirStack %{$back%})
+%{$back%}%B%!%b%{$back%} %{$fg_bold[$user_color]%}%~%{$reset_color%}'\
+'%{$back%} $(git_prompt_status)%{$reset_color%}'\
+'%{$back%}%{$fg_bold[magenta]%}$(git_prompt_info)%{$reset_color%}'\
+'%{$back%}$(git_prompt_ahead)%{$reset_color%}'\
+'%{$back%}%(!.#.>)%{$reset_color%} '
 
 PROMPT2='%{$fg[red]%}%_ %{$reset_color%}'
 PROMPT3='%{$fg[red]%}... %{$reset_color%}'
