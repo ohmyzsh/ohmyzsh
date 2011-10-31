@@ -1,6 +1,6 @@
 PROMPT='%n@%m %~$(check_git_prompt_info)$ %{$reset_color%}'
 
-local return_code="%(?..%{$fg[magenta]%}%? ↵%{$reset_color%})"
+local return_code="%(?..%{$fg[cyan]%}%? ↵%{$reset_color%})"
 RPROMPT="${return_code}"
 
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[cyan]%}("
