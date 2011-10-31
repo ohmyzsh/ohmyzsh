@@ -5,7 +5,7 @@ RPROMPT="${return_code}"
 
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[cyan]%}("
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}*%{$reset_color%}%{$fg[cyan]%})%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}*%{$fg[cyan]%})%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[cyan]%})%{$fg[blue]%}"
 
 
