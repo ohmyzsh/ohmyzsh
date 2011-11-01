@@ -4,12 +4,12 @@
 function collapse_pwd {
     local pwd_truncation_length=20
     local dir=$(pwd)
-    
+
     if $(echo $dir | grep "^$HOME" >>/dev/null)
     then
         dir="~$(echo $dir | awk -F$HOME '{print $2}')"
     fi
-        
+
     if [ $(echo -n $dir | wc -c | tr -d " ") -gt $pwd_truncation_length ]
     then
         dir="…${dir[-$pwd_truncation_length,-1]}"
@@ -29,7 +29,7 @@ function git_remote_information {
             local n_commits="$(egrep -o "by [0-9]+ commit" <<< $git_status | awk '{ print $2 }')"
             remote_information=" ahead($n_commits)"
         fi
-        
+
         if grep -q "have diverged" <<< $git_status ; then
             local n_commits="$(egrep -o "have [0-9]+ and [0-9]+ different commit" <<< $git_status | awk '{ print $2,$4 }')"
             remote_information=" diverged($n_commits)"
@@ -62,4 +62,3 @@ ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[cyan]%} ✭"
 
 PROMPT="${pwd} ➤ "
 RPROMPT="${return_code} ${git_information}"
-
