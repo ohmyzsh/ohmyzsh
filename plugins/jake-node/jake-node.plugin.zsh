@@ -1,7 +1,7 @@
-##-----Autocomplete for Jake tool----
+#---oh-my-zsh plugin : take Autocomplete for Jake tool---
 # Jake : https://github.com/mde/jake
-# Warning : Jakefile should have the right cas : Jakefile
-# Add a .jake_tasks file to your working directory
+# Warning : Jakefile should have the right case : Jakefile
+# Warnign : Add a .jake_tasks file to your working directory
 # Author : Alexandre Lacheze (@al3xstrat)
 # Inspiration : http://weblog.rubyonrails.org/2006/3/9/fast-rake-task-completion-for-zsh 
 
