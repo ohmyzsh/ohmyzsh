@@ -14,3 +14,6 @@ ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg_bold[yellow]%}⚡%{$reset_color%}"
 # Format for git_prompt_long_sha() and git_prompt_short_sha()
 ZSH_THEME_GIT_PROMPT_SHA_BEFORE="%{$fg[grey]%}"
 ZSH_THEME_GIT_PROMPT_SHA_AFTER="|%{$reset_color%}"
+
+# Right column
+# RPROMPT='%{$fg[grey]%}$USER@$HOST%{$reset_color%}'
