@@ -8,7 +8,9 @@ h2. Setup
 
 h3. The automatic installer... (do you trust me?)
 
-@wget --no-check-certificate https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh@
+@wget --no-check-certificate https://github.com/avit/oh-my-zsh/raw/master/tools/install.sh -O - | ZSH=~/.oh-my-zsh sh@
+
+You can adjust the install destination by changing the ZSH variable. The default location is `~/.oh-my-zsh` (but I like to keep these things together under my .dotfiles, for example.)
 
 h3. The manual way
 
