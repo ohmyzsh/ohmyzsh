@@ -5,14 +5,11 @@ then
   ZSH=~/.oh-my-zsh
 fi
 
-if [ -d $ZSH ]
+if [ ! -d $ZSH ]
 then
-  echo "\033[0;33mYou already have Oh My Zsh installed.\033[0m You'll need to remove $ZSH if you want to install"
-  exit
+  echo "\033[0;34mCloning Oh My Zsh...\033[0m"
+  /usr/bin/env git clone https://github.com/avit/oh-my-zsh.git $ZSH
 fi
-
-echo "\033[0;34mCloning Oh My Zsh...\033[0m"
-/usr/bin/env git clone https://github.com/avit/oh-my-zsh.git $ZSH
 
 echo "\033[0;34mLooking for an existing zsh config...\033[0m"
 if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]
