@@ -13,9 +13,16 @@ fpath=($ZSH/functions $ZSH/completions $fpath)
 # TIP: Add files you don't want in git to .gitignore
 for config_file ($ZSH/lib/*.zsh) source $config_file
 
-# Add all defined plugins to fpath
+# Add all defined plugins to fpath. This must be done
+# before running compinit.
 plugin=${plugin:=()}
-for plugin ($plugins) fpath=($ZSH/plugins/$plugin $fpath)
+for plugin ($plugins); do
+  if [ -f $ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh ]; then
+    fpath=($ZSH_CUSTOM/plugins/$plugin $fpath)
+  elif [ -f $ZSH/plugins/$plugin/$plugin.plugin.zsh ]; then
+    fpath=($ZSH/plugins/$plugin $fpath)
+  fi
+done
 
 # Load and run compinit
 autoload -U compinit
