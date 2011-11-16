@@ -11,14 +11,16 @@ function my_git_prompt_info() {
 	echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$GIT_STATUS$ZSH_THEME_GIT_PROMPT_SUFFIX"
 }
 
-LOGIN_COLOR=green
-test -n "$SSH_CONNECTION" && LOGIN_COLOR=red
-test $UID -eq 0 && LOGIN_COLOR=pink
-
-PROMPT='%{$fg[$LOGIN_COLOR]%}%B%n@%M:%{$fg[yellow]%}%B%~%{$reset_color%}%b $(my_git_prompt_info)%(!.#.$) '
+# Colored prompt
+ZSH_THEME_COLOR_USER="green" 
+ZSH_THEME_COLOR_HOST="green" 
+ZSH_THEME_COLOR_PWD="yellow" 
+test -n "$SSH_CONNECTION" && ZSH_THEME_COLOR_USER="red" && ZSH_THEME_COLOR_HOST="red"
+test `id -u` = 0 && ZSH_THEME_COLOR_USER="magenta" && ZSH_THEME_COLOR_HOST="magenta"
+PROMPT='%{$fg_bold[$ZSH_THEME_COLOR_USER]%}%n@%{$fg_bold[$ZSH_THEME_COLOR_HOST]%}%M%{$reset_color%}:%{$fg_bold[$ZSH_THEME_COLOR_PWD]%}%~%{$reset_color%} $(my_git_prompt_info)%(!.#.$) '
 RPS1="${return_code}"
 
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[yellow]%}("
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[cyan]%}("
 ZSH_THEME_GIT_PROMPT_SUFFIX=") %{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_UNTRACKED="%%"
 ZSH_THEME_GIT_PROMPT_ADDED="+"
