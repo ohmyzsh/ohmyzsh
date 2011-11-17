@@ -30,13 +30,22 @@ if [[ "$DISABLE_COLOR" != "true" ]]; then
     local _Cstash_=""                                # stash state
 
     # PROMPT colors:
-    local _Cuser_root_="%{$fg_bold[yellow]$bg[red]%}"
-    local _Chost_root_="%{$fg[red]%}"
-    local _Cpath_root_="%{$fg_bold[white]%}"
     local _Cuser_="%{$fg_bold[cyan]%}"
     local _Chost_="%{$fg_bold[blue]%}"
     local _Cpath_="%{$fg_bold[white]%}"
     local _Cjobs_="%{$fg[blue]%}"
+
+    if [[ "`uname -a`" = *CYGWIN* ]]; then
+        local _Cuser_="%{$fg[green]%}"
+        local _Chost_="%{$fg_bold[yellow]%}"
+        local _Cpath_=" %{$fg[yellow]%}"
+    fi
+
+    if [[ "`whoami`" = root ]]; then
+        local _Cuser_="%{$fg_bold[yellow]$bg[red]%}"
+        local _Chost_="%{$fg[red]%}"
+        local _Cpath_="%{$fg_bold[white]%}"
+    fi
 
     # RPROMPT colors:
     local _Cdate_="%{$fg[green]%}"
@@ -47,9 +56,9 @@ fi
 #-------------------- PROMPT definition: ----------------------
 #
 
-local user_="%(!.$_Cuser_root_.$_Cuser_)%n$R"
-local host_="%(!.$_Chost_root_.$_Chost_)%m$R"
-local path_="%(!.$_Cpath_root_.$_Cpath_)%~$R"
+local user_="$_Cuser_%n$R"
+local host_="$_Chost_%m$R"
+local path_="$_Cpath_%~$R"
 local jobs_="%(1j.$_Cjobs_%j$R.)"
 
 PROMPT='$user_$host_$path_ $GIT_PROMPT_INFO$jobs_# '
