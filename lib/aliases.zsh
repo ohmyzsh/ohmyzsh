@@ -13,7 +13,7 @@ if [[ "$DISABLE_COLOR" != 'true' ]]; then
   else
     export CLICOLOR=1
     export LSCOLORS="exfxcxdxbxegedabagacad"
-    if [[ "`uname`" = Linux ]]; then
+    if [[ "`uname`" = Linux ]] || [[ "`uname`" = *CYGWIN* ]]; then
         alias ls='ls -G -F --color=auto'
     else
         alias ls='ls -G -F'
