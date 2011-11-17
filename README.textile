@@ -16,6 +16,9 @@ h3. The automatic installer... (do you trust me?)
 Includes "SpotSpecific.theme":https://github.com/SpotSpecific/oh-my-zsh/raw/master/SpotSpecific_theme.png
 @wget --no-check-certificate https://github.com/SpotSpecific/oh-my-zsh/raw/master/tools/install.sh -O - | sh@
 
+Or, on macos
+@curl https://raw.github.com/SpotSpecific/oh-my-zsh/master/tools/install.sh| sh -@
+
 h3. The manual way
 
 
