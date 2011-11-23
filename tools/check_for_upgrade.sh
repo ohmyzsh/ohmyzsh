@@ -27,6 +27,7 @@ then
       /usr/bin/env ZSH=$ZSH /bin/sh $ZSH/tools/upgrade.sh
       # update the zsh file
       _update_zsh_update
+      cat ~/.zshrc > $ZSH/templates/zshrc-backup
     fi
   fi
 else
