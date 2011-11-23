@@ -10,8 +10,8 @@ function _update_zsh_update() {
 
 if [ -f ~/.zsh-update ]
 then
-  . ~/.zsh-update
-
+  . ~/.zsh-update  
+  
   if [[ -z "$LAST_EPOCH" ]]; then
     _update_zsh_update && return 0;
   fi
@@ -27,7 +27,6 @@ then
       /usr/bin/env ZSH=$ZSH /bin/sh $ZSH/tools/upgrade.sh
       # update the zsh file
       _update_zsh_update
-      cat ~/.zshrc > $ZSH/templates/zshrc-backup
     fi
   fi
 else
