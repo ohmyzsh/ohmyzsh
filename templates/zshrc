@@ -81,11 +81,11 @@ bindkey '^i' expand-or-complete-prefix
 
 # Set up auto
 alias -s html=$BROWSER
-alias -s zip='tar -xzvf'
-alias -s tar='tar -xzvf'
-alias -s tgz='tar -xzvf'
-alias -s gz='tar -xzvf'
-alias -s xz='tar -xzvf'
+alias -s zip='tar -xf'
+alias -s tar='tar -xf'
+alias -s tgz='tar -xf'
+alias -s gz='tar -xf'
+alias -s xz='tar -xf'
 alias -s txt=$EDITOR
 alias -s PKGBUILD=$EDITOR
 
@@ -104,10 +104,10 @@ alias pkg-list="pacman -Qei \$(pacman -Qq)|awk 'BEGIN {FS=\":\"}/^Name/{printf(\
 alias -g DN='&> /dev/null &'
 
 pacman() {
+ pacman_bin=${commands[pacman-color]:-/usr/bin/pacman}
+ sudo_bin==sudo
  case $1 in
-  -S | -S[^sih]* | -R* | -U*) /usr/bin/su -c"/usr/bin/pacman-color \"$@\"" || /usr/bin/su -c"/usr/bin/pacman \"$@\"" ;;
-  *) /usr/bin/pacman-color "$@" || /usr/bin/pacman "$@" ;;
+  -S | -S[^sih]* | -R* | -U*) $sudo_bin /bin/su -c"$pacman_bin \"$@\"" ;;
+  *) $pacman_bin "$@" ;;
  esac
 }
-
-/usr/local/share/oh-my-zsh.sh
