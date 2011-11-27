@@ -47,31 +47,29 @@ HERE
   exit
 }
 
-sprunge() {
-  if [ -t 0 ]; then
-    if [ "$*" ]; then
-      if [ -f "$*" ]; then
-        # Use python to attempt to detect the syntax
-        syntax=$(echo "try:
-          from pygments.lexers import get_lexer_for_filename
-          print(get_lexer_for_filename('$*').aliases[0])
-        except:
-          print('text')" | python)
-        url=$(cat "$*" | curl -F 'sprunge=<-' http://sprunge.us)
-      fi
-    else
-      usage
+if [ -t 0 ]; then
+  if [ "$*" ]; then
+    if [ -f "$*" ]; then
+      # Use python to attempt to detect the syntax
+      syntax=$(echo "try:
+        from pygments.lexers import get_lexer_for_filename
+        print(get_lexer_for_filename('$*').aliases[0])
+      except:
+        print('text')" | python)
+      url=$(cat "$*" | curl -F 'sprunge=<-' http://sprunge.us)
     fi
   else
-    syntax="text" # We're dumb in this mode. So, dumb syntax highlighting!
-    url=$(while read -r line ; do
-      echo $line
-    done | curl -F 'sprunge=<-' http://sprunge.us)
+    usage
   fi
+else
+  syntax="text" # We're dumb in this mode. So, dumb syntax highlighting!
+  url=$(while read -r line ; do
+    echo $line
+  done | curl -F 'sprunge=<-' http://sprunge.us)
+fi
 
-  if [ "$syntax" != "text" ]; then
-    echo "$url?$syntax"
-  else
-    echo $url
-  fi
-}
+if [ "$syntax" != "text" ]; then
+  echo "$url?$syntax"
+else
+  echo $url
+fi
