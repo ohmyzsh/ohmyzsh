@@ -68,7 +68,7 @@ sprunge() {
     done | curl -F 'sprunge=<-' http://sprunge.us)
   fi
 
-  if [ "$syntax" -ne "text" ]; then
+  if [ "$syntax" != "text" ]; then
     echo "$url?$syntax"
   else
     echo $url
