@@ -1,14 +1,25 @@
 # Contributed and SLIGHTLY modded by Matt Parnell/ilikenwf <parwok -at- gmail>
 # Created by the blogger at the URL below...I don't know where to find his/her name
 # Original found at http://www.shellperson.net/sprunge-pastebin-script/
+#
+# Modified by Evaryont to:
+#  - Detect syntax via pygments
+#  - Behave nicely as a plugin
 
-usage() {
-  description | fmt -s >&2
-}
-
-description() {
-  cat << HERE
-
+sprunge() {
+  if [ -t 0 ]; then
+    if [ "$*" ]; then
+      if [ -f "$*" ]; then
+        # Use python to attempt to detect the syntax
+        syntax=$(echo "try:
+          from pygments.lexers import get_lexer_for_filename
+          print(get_lexer_for_filename('$*').aliases[0])
+        except:
+          print('text')" | python)
+        url=$(cat "$*" | curl -F 'sprunge=<-' http://sprunge.us)
+      fi
+    else
+      cat << HERE
 DESCRIPTION
   Upload data and fetch URL from the pastebin http://sprunge.us
 
@@ -34,25 +45,8 @@ In this example, the contents of file_as_stdin_redirection.txt would be uploaded
 If a filename is misspelled or doesn't have the necessary path description, it will NOT generate an error, but will instead treat it as a text string and upload it.
 --------------------------------------------------------------------------
 
-HERE
-  exit
-}
-
-sprunge() {
-  if [ -t 0 ]; then
-    if [ "$*" ]; then
-      if [ -f "$*" ]; then
-        # Use python to attempt to detect the syntax
-        syntax=$(echo "
-        try:
-          from pygments.lexers import get_lexer_for_filename
-          print(get_lexer_for_filename('$*').aliases[0])
-        except:
-          print('text')" | python)
-        url=$(cat "$*" | curl -F 'sprunge=<-' http://sprunge.us)
-      fi
-    else
-      usage
+HERE | fmt -s >&2
+      return 0
     fi
   else
     syntax="text" # We're dumb in this mode. So, dumb syntax highlighting!
