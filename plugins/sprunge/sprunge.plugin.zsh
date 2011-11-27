@@ -49,14 +49,21 @@ sprunge() {
           print(get_lexer_for_filename('$*').aliases[0])
         except:
           print('text')" | python)
-        cat "$*" | curl -F 'sprunge=<-' http://sprunge.us
+        url=$(cat "$*" | curl -F 'sprunge=<-' http://sprunge.us)
       fi
     else
       usage
     fi
   else
-    while read -r line ; do
+    syntax="text" # We're dumb in this mode. So, dumb syntax highlighting!
+    url=$(while read -r line ; do
       echo $line
-    done | curl -F 'sprunge=<-' http://sprunge.us
+    done | curl -F 'sprunge=<-' http://sprunge.us)
+  fi
+
+  if [ "$syntax" -ne "text" ]; then
+    echo "$url?$syntax"
+  else
+    echo $url
   fi
 }
