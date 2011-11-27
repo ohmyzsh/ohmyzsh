@@ -24,11 +24,7 @@ h3. The manual way. ( unrecommended, as it isn't complete )
 
   @cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc@
 
-3. Set zsh as your default shell:
-
-  @chsh -s /bin/zsh@
-
-4. Start / restart zsh (open a new terminal is easy enough...)
+3. Start / restart zsh (open a new terminal is easy enough...)
 
 h3. Problems?
 
