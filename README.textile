@@ -1,3 +1,5 @@
+@NOTE: This fork is specifically for Archlinux.@
+
 A handful of functions, auto-complete helpers, and stuff that makes you shout...
 
 bq. "OH MY ZSHELL!"
@@ -6,12 +8,11 @@ h2. Setup
 
 @oh-my-zsh@ should work with any recent release of "zsh":http://www.zsh.org/, the minimum recommended version is 4.3.9.
 
-h3. The automatic installer... (do you trust me?)
+h4. Installing using cower
 
-@wget --no-check-certificate https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh@
+@cower -dd oh-my-zsh-git@
 
-h3. The manual way
-
+h3. The manual way. ( unrecommended, as it isn't complete )
 
 1. Clone the repository
 
