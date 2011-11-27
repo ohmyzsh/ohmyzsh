@@ -48,9 +48,8 @@ pacdisowned() {
 
 pacman() {
  pacman_bin=${commands[pacman-color]:-/usr/bin/pacman}
- sudo_bin==sudo
  case $1 in
-  -S | -S[^sih]* | -R* | -U*) $sudo_bin /bin/su -c"$pacman_bin \"$@\"" ;;
+  -S | -S[^sih]* | -R* | -U*) =sudo /bin/su -c"$pacman_bin $@" ;;
   *) $pacman_bin "$@" ;;
  esac
 }
