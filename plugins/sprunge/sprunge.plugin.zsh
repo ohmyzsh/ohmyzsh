@@ -3,11 +3,11 @@
 # Original found at http://www.shellperson.net/sprunge-pastebin-script/
 
 usage() {
-description | fmt -s >&2
+  description | fmt -s >&2
 }
 
 description() {
-cat << HERE
+  cat << HERE
 
 DESCRIPTION
   Upload data and fetch URL from the pastebin http://sprunge.us
@@ -35,27 +35,28 @@ If a filename is misspelled or doesn't have the necessary path description, it w
 --------------------------------------------------------------------------
 
 HERE
-exit
+  exit
 }
 
 sprunge() {
-	if [ -t 0 ]; then
-	  if [ "$*" ]; then
-		if [ -f "$*" ]; then
-		  # Use python to attempt to detect the syntax
-                  syntax=$(echo "try:
-                    from pygments.lexers import get_lexer_for_filename
-                    print(get_lexer_for_filename('$*').aliases[0])
-                  except:
-                    print('text')" | python)
-		  cat "$*" | curl -F 'sprunge=<-' http://sprunge.us
-		fi
-	  else
-		usage
-	  fi
-	else
-	  while read -r line ; do
-		echo $line
-	  done | curl -F 'sprunge=<-' http://sprunge.us
-	fi
+  if [ -t 0 ]; then
+    if [ "$*" ]; then
+      if [ -f "$*" ]; then
+        # Use python to attempt to detect the syntax
+        syntax=$(echo "
+        try:
+          from pygments.lexers import get_lexer_for_filename
+          print(get_lexer_for_filename('$*').aliases[0])
+        except:
+          print('text')" | python)
+        cat "$*" | curl -F 'sprunge=<-' http://sprunge.us
+      fi
+    else
+      usage
+    fi
+  else
+    while read -r line ; do
+      echo $line
+    done | curl -F 'sprunge=<-' http://sprunge.us
+  fi
 }
