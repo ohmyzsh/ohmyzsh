@@ -32,7 +32,7 @@ Otherwise, the alias defined by the script can only be called the following way:
 
     piped_data | sprunge
 
-# Copyright, license, etc.
+# Copyright & License
 
 This plugin is released under the MIT license. The script is presumed to be
 released into the public domain, as the original announcement had no explicit
