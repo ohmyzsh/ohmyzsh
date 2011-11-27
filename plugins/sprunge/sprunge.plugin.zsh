@@ -42,8 +42,7 @@ description, it will NOT generate an error, but will instead treat it as
 a text string and upload it.
 
 HERE
-  #exit
-  return 0
+  exit
 }
 
 sprunge() {
@@ -59,6 +58,7 @@ sprunge() {
         url=$(cat "$*" | curl -F 'sprunge=<-' http://sprunge.us)
       fi
     else
+      syntax="text"
       usage
     fi
   else
