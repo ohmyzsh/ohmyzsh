@@ -8,7 +8,7 @@ h2. Setup
 
 @oh-my-zsh@ should work with any recent release of "zsh":http://www.zsh.org/, the minimum recommended version is 4.3.9.
 
-h4. Installing using cower
+h3. Installing using cower
 
 @cower -dd oh-my-zsh-git@
 
