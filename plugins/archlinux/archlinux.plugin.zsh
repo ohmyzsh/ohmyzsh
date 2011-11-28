@@ -1,3 +1,7 @@
+# This isn't finished, but shows how the aur-helpers will/can be managed
+# zstyle :omz:plugins:aur-helper aur_helper {cower,meat}
+#zstyle -b :omz:plugins:aur-helper aur_helper _plugin__aur_helper
+
 # Archlinux zsh aliases and functions
 # Usage is also described at https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins
 
