@@ -1,5 +1,5 @@
 set_theme() {
-  source "$ZSH/themes/$ZSH_THEME.zsh-theme"
+  source "$ZSH/themes/$1.zsh-theme"
 }
 
 random_theme() {
