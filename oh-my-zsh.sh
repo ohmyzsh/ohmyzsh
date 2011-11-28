@@ -40,19 +40,12 @@ done
 # Load all of your custom configurations from custom/
 for config_file ($ZSH_CUSTOM/*.zsh) source $config_file
 
-# Load the theme
-if [ "$ZSH_THEME" = "random" ]
-then
-  themes=($ZSH/themes/*zsh-theme)
-  N=${#themes[@]}
-  ((N=(RANDOM%N)+1))
-  RANDOM_THEME=${themes[$N]}
-  source "$RANDOM_THEME"
-  echo "[oh-my-zsh] Random theme '$RANDOM_THEME' loaded..."
-else
-  if [ ! "$ZSH_THEME" = ""  ]
-  then
-    source "$ZSH/themes/$ZSH_THEME.zsh-theme"
-  fi
-fi
+set_theme() {
+  source "$ZSH/themes/$ZSH_THEME.zsh-theme"
+}
 
+random_theme() {
+  local themes
+  themes=($ZSH/themes/*zsh-theme)
+  source "$themes[$RANDOM%$#themes+1]"
+}
