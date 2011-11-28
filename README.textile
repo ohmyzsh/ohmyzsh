@@ -24,9 +24,6 @@ If the above command doesn't run please try..
 @cat /usr/share/oh-my-zsh/templates/user.zsh-template>>$HOME/.zshrc@
 If that doesn't work and you don't have anything in your .zshrc file. simply copy the file accross.
 
-The .zshrc file must be executable!
-@chmod +x .zshrc@
-
 h3. Problems?
 
 You _might_ need to modify your PATH in ~/.zshrc if you're not able to find some commands after switching to _Oh My Zsh_.
