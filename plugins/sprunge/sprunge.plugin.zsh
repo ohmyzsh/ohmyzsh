@@ -11,7 +11,7 @@
 # if [[ ${_plugin__path} == "on" ]]; then
   # Plugin setting: Add this plugin directory to the path
   # export PATH=$PATH:$ZSH/plugins/sprunge
-# elif [ -z "${commands[sprunge]}" ]; then
+# elif [[ -z "${commands[sprunge]}" ]]; then
   # Nope. No `sprunge` command, period. So, dumb/simple alias, here we go!
   # alias sprunge="curl -F 'sprunge=<-' http://sprunge.us/"
 # fi
@@ -21,9 +21,9 @@
 # Original found at http://www.shellperson.net/sprunge-pastebin-script/
 
 sprunge () {
-  if [ -t 0 ]; then
-    if [ "$*" ]; then
-      if [ -f "$*" ]; then
+  if [[ -t 0 ]]; then
+    if [[ "$*" ]]; then
+      if [[ -f "$*" ]]; then
         # Use python to attempt to detect the syntax
         syntax=$(echo "try:
 	from pygments.lexers import get_lexer_for_filename
@@ -81,7 +81,7 @@ HERE
     done | curl -F 'sprunge=<-' http://sprunge.us)
   fi
 
-  if [ "$syntax" != "text" ]; then
+  if [[ "$syntax" != "text" ]]; then
     echo "$url?$syntax"
   else
     echo $url
