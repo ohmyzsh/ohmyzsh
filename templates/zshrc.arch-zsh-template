@@ -1,11 +1,9 @@
 # Path to your oh-my-zsh configuration.
 ZSH=/usr/share/oh-my-zsh/
 
-# Set name of the theme to load.
-# Look in /usr/local/share/oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
-ZSH_THEME="arch-blue"
+load_oh_my_zshell(){
+  source $ZSH/oh-my-zsh.sh
+}
 
 # Set to this to use case-sensitive completion
 # CASE_SENSITIVE="true"
@@ -24,10 +22,13 @@ DISABLE_AUTO_UPDATE="true"
 
 # Which plugins would you like to load? (plugins can be found in /usr/local/share/oh-my-zsh/plugins/*)
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git)
+plugins=(archlinux sprung git)
 
-load_oh_my_zshell(){
-  source $ZSH/oh-my-zsh.sh
-}
+load_oh_my_zshell
+
+# Load a theme
+# Look in /usr/local/share/oh-my-zsh/themes/
+set_theme "arch-blue"
+# random_theme
 
 # Customize to your needs...
