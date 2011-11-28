@@ -27,7 +27,7 @@ DISABLE_AUTO_UPDATE="true"
 plugins=(git)
 
 load_oh_my_zshell(){
-  source $ZSH/oh-my-zsh.sh
+  source $ZSH/oh-my-zsh.zsh
 }
 
 # Customize to your needs...
