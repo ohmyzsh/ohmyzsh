@@ -1,4 +1,5 @@
-@NOTE: This fork is specifically for Archlinux.@
+**NOTE: This fork is specifically for Archlinux and has been patched for a system-wide install; Don't attempt to install to ~/.oh-my-zsh!! There will be a user specifc wrapper later on, but for now. system wide or use robby's official master ( not optimized for arch nor as patched; He is too lazy to merge some pull requests. )**
+**This documentation/wiki isn't finished nor official!**
 
 A handful of functions, auto-complete helpers, and stuff that makes you shout...
 
@@ -12,19 +13,19 @@ h3. Installing using cower
 
 @cower -dd oh-my-zsh-git@
 
-h3. The manual way. ( unrecommended, as it isn't complete )
+h4. Enableing for a user.
 
-1. Clone the repository
+The user must first have zsh set as their shell.
+@[[ $SHELL == '/bin/zsh' ]] && su -c'chsh -s $(which zsh) <USERNAME>'@
 
-  @git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh@
+For each user who wishes to use oh-my-zsh they must append/copy the user.zsh-template to their .zshrc.
+@</usr/share/oh-my-zsh/templates/user.zsh-template>>$HOME/.zshrc@
+If the above command doesn't run please try..
+@cat /usr/share/oh-my-zsh/templates/user.zsh-template>>$HOME/.zshrc@
+If that doesn't work and you don't have anything in your .zshrc file. simply copy the file accross.
 
-2. Create a new zsh config by copying the zsh template we've provided.
-
-  *NOTE*: If you already have a ~/.zshrc file, you should back it up. @cp ~/.zshrc ~/.zshrc.orig@ in case you want to go back to your original settings.
-
-  @cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc@
-
-3. Start / restart zsh (open a new terminal is easy enough...)
+The .zshrc file must be executable!
+@chmod +x .zshrc@
 
 h3. Problems?
 
