@@ -29,6 +29,5 @@ load_oh_my_zshell
 # Load a theme
 # Look in /usr/local/share/oh-my-zsh/themes/
 set_theme "arch-blue"
-# random_theme
 
 # Customize to your needs...

@@ -7,3 +7,5 @@ random_theme() {
   themes=($ZSH/themes/*zsh-theme)
   source "$themes[$RANDOM%$#themes+1]"
 }
+
+compdef "_files -g '*.zsh'" set_theme
