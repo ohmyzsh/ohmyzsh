@@ -72,7 +72,7 @@ description, it will NOT generate an error, but will instead treat it as
 a text string and upload it.
 
 HERE
-      exit
+      return 1
     fi
   else
     syntax="text" # We're dumb in this mode. So, dumb syntax highlighting!
