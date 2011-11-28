@@ -1,0 +1,5 @@
+# Check /etc/zsh/zshrc for system defaults. Eg. plugins=(git)
+
+plugins+=(archlinux sprunge github)
+
+load_oh_my_zshell
