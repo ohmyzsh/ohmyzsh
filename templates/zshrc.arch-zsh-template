@@ -2,7 +2,7 @@
 ZSH=/usr/share/oh-my-zsh/
 
 load_oh_my_zshell(){
-  source $ZSH/oh-my-zsh.sh
+  source $ZSH/oh-my-zsh.zsh
 }
 
 # Set to this to use case-sensitive completion

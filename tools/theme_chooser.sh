@@ -9,7 +9,7 @@
 
 THEMES_DIR="$ZSH/themes"
 FAVLIST="${HOME}/.zsh_favlist"
-source $ZSH/oh-my-zsh.sh
+source $ZSH/oh-my-zsh.zsh
 
 function noyes() {
     read "a?$1 [y/N] "

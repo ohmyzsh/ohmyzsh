@@ -20,7 +20,7 @@ ZSH=$HOME/.oh-my-zsh
 # Example format: plugins=(rails git textmate ruby lighthouse)
 plugins=(git)
 
-source $ZSH/oh-my-zsh.sh
+source $ZSH/oh-my-zsh.zsh
 
 # Load a theme
 # Look in $ZSH/themes/
