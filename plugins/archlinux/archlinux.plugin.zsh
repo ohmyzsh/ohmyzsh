@@ -51,7 +51,7 @@ pacdisowned() {
 }
 
 asroot() {
-  whence sudo && sudo $@ || su -c "$@"
+  whence sudo &>/dev/null && sudo $@ || su -c "$@"
 }
 
 pacman() {
