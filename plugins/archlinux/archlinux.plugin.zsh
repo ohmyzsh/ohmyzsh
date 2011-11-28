@@ -46,11 +46,14 @@ pacdisowned() {
   comm -23 "$fs" "$db"
 }
 
+asroot() {
+  whence sudo && sudo $@ || su -c "$@"
+}
+
 pacman() {
  pacman_bin=${commands[pacman-color]:-/usr/bin/pacman}
  case $1 in
-# The following line is a pure bug, Please fix! 
-  -S | -S[^sih]* | -R* | -U*) =sudo /bin/su -c "$pacman_bin $@" ;;
+  -S | -S[^sih]* | -R* | -U*) asroot $pacman_bin $@ ;;
   *) $pacman_bin "$@" ;;
  esac
 }
