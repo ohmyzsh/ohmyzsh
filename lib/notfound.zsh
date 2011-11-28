@@ -11,10 +11,13 @@ if [[ -x /usr/bin/pkgfile ]]; then
     read pid cmd state ppid pgrp session tty_nr tpgid rest < /proc/self/stat
     [[ $$ -eq $tpgid ]] && return 127
 
-    pkg=$(pkgfile -b -v -- $1)
+    saveIFS=$IFS; IFS=$'\n';
+    pkg=($(pkgfile -b -v -- $1))
+    IFS=$saveIFS
+
     if [[ -z $pkg ]] && return 127
 
     echo "The command \"$1\" can be found in the following packages:"
-    for p in $pkg; echo "  $p"
+    for p in $pkg; echo "    $p"
   }
 fi
