@@ -48,45 +48,55 @@ FILENAMES
 HERE
 }
 
+sprunge_syntax() {
+  echo "try:
+	from pygments.lexers import get_lexer_for_filename
+	print(get_lexer_for_filename('$1').aliases[0])
+except:
+	print('text')" | python
+}
+
 sprunge () {
-  local url syntax
+  local urls url file syntax
+
+  urls=()
 
   if [[ ! -t 0 ]]; then
-    # We're dumb in this mode. So, dumb syntax highlighting!
-    syntax="text"
     url=$(curl -s -F 'sprunge=<-' http://sprunge.us <& 0)
+    urls=(${url//[[:space:]]})
   elif [[ $#argv -eq 0 ]]; then
     sprunge_usage
     return 1
-  elif [[ -f $1 ]]; then
-    # Use python to attempt to detect the syntax
-    syntax=$(echo "try:
-	from pygments.lexers import get_lexer_for_filename
-	print(get_lexer_for_filename('$*').aliases[0])
-except:
-	print('text')" | python)
-    url=$(curl -s -F 'sprunge=<-' http://sprunge.us < $1)
   else
-    echo "$1 isn't a file"
-    return 1
+    # Use python to attempt to detect the syntax
+    for file in $@; do
+      if [[ ! -f $file ]]; then
+        echo "$file isn't a file"
+        continue
+      fi
+
+      syntax=$(sprunge_syntax $file)
+      url=$(curl -s -F 'sprunge=<-' http://sprunge.us < $file)
+      url=${url//[[:space:]]}
+      [[ $syntax != text ]] && url=${url}?${syntax}
+
+      urls+=(${url})
+    done
   fi
 
-  # trim whitespaces and add syntax info
-  url=${url//[[:space:]]}
-  [[ $syntax != text ]] && url=${url}?${syntax}
-
   # output
-  echo $url
+  for url in $urls
+    echo $url
 
   # don't copy to clipboad if piped
   [[ ! -t 1 ]] && return 0
 
   #copy url to primary and clipboard (middle-mouse & shift+ins/Ctrl+v)
   if (( $+commands[xclip] )); then
-    echo -n $url | xclip -sel primary
-    echo -n $url | xclip -sel clipboard
+    echo -n $urls | xclip -sel primary
+    echo -n $urls | xclip -sel clipboard
   elif (( $+commands[xsel] )); then
-    echo -n $url | xsel -ip # primary
-    echo -n $url | xsel -ib # clipboard
+    echo -n $urls | xsel -ip # primary
+    echo -n $urls | xsel -ib # clipboard
   fi
 }
