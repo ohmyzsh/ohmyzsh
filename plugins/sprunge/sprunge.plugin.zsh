@@ -6,19 +6,12 @@
 
 sprunge_usage() {
   cat << HERE
-
-DESCRIPTION
-  Upload data and fetch URL from the pastebin http://sprunge.us
-
-  In addition to printing the returned URL, if the xset or xsel
-  programs are available, the URL will also be copied to the
-  PRIMARY selection and the CLIPBOARD selection.
-
-USAGE
+Usage:
   sprunge [files]
   sprunge < file
   piped_data | sprunge
 
+Upload data and fetch URL from the pastebin http://sprunge.us.
 HERE
 }
 
@@ -39,12 +32,12 @@ sprunge() {
 
   urls=()
 
-  if [[ ! -t 0 ]]; then
+  if [[ ! -t 0 || $#argv -eq 0 ]]; then
     url=$(curl -s -F 'sprunge=<-' http://sprunge.us <& 0)
     urls=(${url//[[:space:]]})
-  elif [[ $#argv -eq 0 ]]; then
+  elif [[ $1 == '-h' || $1 == '--help' ]]; then
     sprunge_usage
-    return 1
+    return 0
   else
     # Use python to attempt to detect the syntax
     for file in $@; do
