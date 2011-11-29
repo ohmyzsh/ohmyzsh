@@ -3,6 +3,10 @@ ZSH=${ZSH:-/usr/share/oh-my-zsh/}
 
 local config_file plugin
 
+# Load and run compinit
+autoload -U compinit
+compinit -i
+
 # add a function path
 fpath=($ZSH/functions $ZSH/completions $fpath)
 for config_file ($ZSH/lib/*.zsh) source $config_file
@@ -21,10 +25,6 @@ if [[ -d ~/.omz ]]; then
     for plugin ($plugins) fpath=(~/.omz/plugins/$plugin $fpath)
   fi
 fi
-
-# Load and run compinit
-autoload -U compinit
-compinit -i
 
 # Load the theme
 if [ "$ZSH_THEME" = "random" ]
