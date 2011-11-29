@@ -11,39 +11,13 @@ DESCRIPTION
   Upload data and fetch URL from the pastebin http://sprunge.us
 
   In addition to printing the returned URL, if the xset or xsel
-  programs are available (on $PATH), the URL will also be copied to the
-  PRIMARY selection and the CLIPBOARD selection (allowing to quickly
-  paste the url into IRC client for example).
+  programs are available, the URL will also be copied to the
+  PRIMARY selection and the CLIPBOARD selection.
 
 USAGE
-  $0 filename.txt
-  $0 < filename.txt
-  piped_data | $0
-
-INPUT METHODS
-  $0 can accept piped data, STDIN redirection [<filename.txt], text strings
-  following the command as arguments, or filenames as arguments.  Only one
-  of these methods can be used at a time, so please see the note on
-  precedence.  Also, note that using a pipe or STDIN redirection will treat
-  tabs as spaces, or disregard them entirely (if they appear at the
-  beginning of a line).  So I suggest using a filename as an argument if
-  tabs are important either to the function or readability of the code.
-
-PRECEDENCE
-  STDIN redirection has precedence, then piped input, then a filename as an
-  argument. Example:
-
-      echo piped | "$0" arguments.txt < stdin_redirection.txt
-
-  In this example, the contents of file_as_stdin_redirection.txt would be
-  uploaded. Both the piped_text and the file_as_argument.txt are ignored. If
-  there is piped input and arguments, the arguments will be ignored, and the
-  piped input uploaded.
-
-FILENAMES
-  If a filename is misspelled or doesn't have the necessary path
-  description, it will NOT generate an error, but will instead treat it as
-  a text string and upload it.
+  sprunge [files]
+  sprunge < file
+  piped_data | sprunge
 
 HERE
 }
@@ -95,7 +69,7 @@ sprunge() {
   # don't copy to clipboad if piped
   [[ ! -t 1 ]] && return 0
 
-  #copy url to primary and clipboard (middle-mouse & shift+ins/Ctrl+v)
+  # copy urls to primary and clipboard (middle-mouse & shift+ins/Ctrl+v)
   if (( $+commands[xclip] )); then
     echo -n $urls | xclip -sel primary
     echo -n $urls | xclip -sel clipboard

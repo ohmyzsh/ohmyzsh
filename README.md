@@ -22,10 +22,6 @@ install it:
 $ cower -dd oh-my-zsh-git
 ```
 
-  [zsh]: http://www.zsh.org/
-  [oh-my-zsh-git]: https://aur.archlinux.org/packages.php?ID=54375
-  [cower]: https://github.com/falconindy/cower
-
 The user must have zsh set as their shell.
 
 ```
@@ -65,4 +61,7 @@ Resources
 
 The [refcard][] is pretty tasty for tips.
 
+  [zsh]: http://www.zsh.org/
+  [oh-my-zsh-git]: https://aur.archlinux.org/packages.php?ID=54375
+  [cower]: https://github.com/falconindy/cower
   [refcard]: http://www.bash2zsh.com/zsh_refcard/refcard.pdf
