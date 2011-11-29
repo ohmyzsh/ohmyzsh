@@ -1,5 +1,7 @@
 # Check /etc/zsh/zshrc for system defaults. Eg. plugins=(git)
 
+# Enable for awesome sprunge!
+zstyle :omz:plugins:sprunge add-path on
 plugins+=(archlinux sprunge github)
 
 load_oh_my_zshell
