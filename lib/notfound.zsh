@@ -1,4 +1,4 @@
-if [[ -x /usr/bin/pkgfile ]]; then
+if (( $+commands[pkgfile] )); then
   command_not_found_handler() {
     local pkg p
     local pid ppid pgrp session tty_nr tpgid
