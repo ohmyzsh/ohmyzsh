@@ -32,13 +32,18 @@ sprunge () {
 	print(get_lexer_for_filename('$*').aliases[0])
 except:
 	print('text')" | python)
-        url=$(curl -F 'sprunge=<-' http://sprunge.us < "$*")
+        url=$(curl -s -F 'sprunge=<-' http://sprunge.us < "$*")
       fi
     else
       cat << HERE
 
 DESCRIPTION
   Upload data and fetch URL from the pastebin http://sprunge.us
+
+  In addition to printing the returned URL, if the xset or xsel
+  programs are available (on $PATH), the URL will also be copied to the 
+  PRIMARY selection and the CLIPBOARD selection (allowing to quickly
+  paste the url into IRC client for example). 
 
 USAGE
   $0 filename.txt
@@ -80,12 +85,25 @@ HERE
     syntax="text" # We're dumb in this mode. So, dumb syntax highlighting!
     url=$(while read -r line ; do
       echo $line
-    done | curl -F 'sprunge=<-' http://sprunge.us)
+    done | curl -s -F 'sprunge=<-' http://sprunge.us)
   fi
 
   if [[ "$syntax" != "text" ]]; then
-    echo "$url?$syntax"
+    # if stdout is not a tty, suppress trailing newline
+    if [[ ! -t 1 ]] ; then local flags='-n' ; fi
+    echo $flags "$url?$syntax"
   else
-    echo $url
+    # if stdout is not a tty, suppress trailing newline
+    if [[ ! -t 1 ]] ; then local flags='-n' ; fi
+    echo $flags $url
+  fi
+
+  #copy url to primary and clipboard (middle-mouse & shift+ins/Ctrl+v)
+  if (( $+commands[xclip] )); then
+    echo -n "$url?$syntax" | xclip -sel primary
+    echo -n "$url?$syntax" | xclip -sel clipboard
+  elif (( $+commands[xsel] )); then
+    echo -n "$url?$syntax" | xsel -ip #primary
+    echo -n "$url?$syntax" | xsel -ib #clipboard
   fi
 }
