@@ -1,7 +1,3 @@
-# This isn't finished, but shows how the aur-helpers will/can be managed
-# zstyle :omz:plugins:aur-helper aur_helper {cower,meat}
-#zstyle -b :omz:plugins:aur-helper aur_helper _plugin__aur_helper
-
 # Archlinux zsh aliases and functions
 # Usage is also described at https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins
 
@@ -27,9 +23,8 @@ alias pacmir='sudo pacman -Syy'                # Force refresh of all package li
 # https://bbs.archlinux.org/viewtopic.php?id=93683
 paclist() {
   [[ -x $(which expac) ]] && expac "${fg[cyan]}%n${fg[green]}: ${reset_color}%d" || (
-    read -p "You don't have 'expac' installed, install? [y,N]" install_expac
-    # fixme!
-    echo "Sorry, this isn't yet implemented, please run 'pacman -S expac' manually! (fixme!)"
+    pacman -Qqei|awk 'BEGIN {FS=": "}/^Name/{printf("\033[36m%s\033[32m:\033[37m ", $2)}/^Description/{print $2}' && \
+    echo "Please install expac! Awk used with pacman -Qqei; expac is faster!" >&2
   )
 }
 
