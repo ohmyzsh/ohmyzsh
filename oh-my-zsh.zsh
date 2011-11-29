@@ -22,6 +22,15 @@ if [[ -d ~/.omz ]]; then
   fi
 fi
 
+# load plugins
+for plugin ($plugins); do
+  if [[ -f ~/.omz/plugins/$plugin/$plugin.plugin.zsh ]]; then
+    source ~/.omz/plugins/$plugin/$plugin.plugin.zsh
+  elif [[ -f $ZSH/plugins/$plugin/$plugin.plugin.zsh ]]; then
+    source $ZSH/plugins/$plugin/$plugin.plugin.zsh
+  fi
+done
+
 # Load and run compinit
 autoload -U compinit
 compinit -i
