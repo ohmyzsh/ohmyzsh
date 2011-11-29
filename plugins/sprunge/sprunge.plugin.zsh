@@ -24,7 +24,7 @@ sprunge () {
   local url syntax
 
   if [[ -t 0 ]]; then
-    if [[ "$*" ]]; then
+    if [[ -n "$*" ]]; then
       if [[ -f "$*" ]]; then
         # Use python to attempt to detect the syntax
         syntax=$(echo "try:
@@ -32,7 +32,7 @@ sprunge () {
 	print(get_lexer_for_filename('$*').aliases[0])
 except:
 	print('text')" | python)
-        url=$(cat "$*" | curl -F 'sprunge=<-' http://sprunge.us)
+        url=$(curl -F 'sprunge=<-' http://sprunge.us < "$*")
       fi
     else
       cat << HERE
