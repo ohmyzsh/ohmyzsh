@@ -48,15 +48,19 @@ FILENAMES
 HERE
 }
 
-sprunge_syntax() {
-  echo "try:
+if (( $+commands[python] )); then
+  sprunge_syntax() {
+    echo "try:
 	from pygments.lexers import get_lexer_for_filename
 	print(get_lexer_for_filename('$1').aliases[0])
 except:
 	print('text')" | python
-}
+  }
+else
+  sprunge_syntax() { echo 'text' }
+fi
 
-sprunge () {
+sprunge() {
   local urls url file syntax
 
   urls=()
