@@ -16,7 +16,7 @@ h3. Installing using cower
 h4. Enableing for a user.
 
 The user must first have zsh set as their shell.
-@[[ $SHELL == '/bin/zsh' ]] && su -c'chsh -s $(which zsh) <USERNAME>'@
+@[[ $SHELL != '/bin/zsh' ]] && su -c'chsh -s $(which zsh) <USERNAME>'@
 
 For each user who wishes to use oh-my-zsh they must append/copy the user.zsh-template to their .zshrc.
 @</usr/share/oh-my-zsh/templates/user.zsh-template>>$HOME/.zshrc@
