@@ -14,13 +14,12 @@ Setup
 -----
 
 `oh-my-zsh` should work with any recent release of [zsh][], the
-minimum recommended version is 4.3.9.
-
-A package can be found in Archlinux's [AUR][oh-my-zsh-git]. We
-recommend using [cower] to install it:
+minimum recommended version is 4.3.9. A package can be found in
+Archlinux's [AUR][oh-my-zsh-git]. We recommend using [cower] to
+install it:
 
 ```
-cower -dd oh-my-zsh-git
+$ cower -dd oh-my-zsh-git
 ```
 
   [zsh]: http://www.zsh.org/
@@ -36,11 +35,9 @@ The user must have zsh set as their shell.
 The following needs to be added to the start of the user's `~/.zshrc`
 file to activate oh-my-zshell goodness.
 
-```
-ZSH_THEME="arch-blue"
-plugins=(archlinux sprunge git)
-load_oh_my_zshell
-```
+	ZSH_THEME="arch-blue"
+	plugins=(archlinux sprunge git)
+	load_oh_my_zshell
 
 A skeleton template can be found in
 `/usr/share/oh-my-zsh/templates/user.zsh-template`
