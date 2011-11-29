@@ -3,28 +3,41 @@ ZSH=${ZSH:-/usr/share/oh-my-zsh/}
 
 local config_file plugin
 
-# Load and run compinit
-autoload -U compinit
-compinit -i
-
 # add a function path
 fpath=($ZSH/functions $ZSH/completions $fpath)
-for config_file ($ZSH/lib/*.zsh) source $config_file
-plugin=${plugin:=()}
-for plugin ($plugins) fpath=($ZSH/plugins/$plugin $fpath)
 
 if [[ -d ~/.omz ]]; then
   [[ -d ~/.omz/functions ]] && fpath=(~/.omz/functions $fpath)
   [[ -d ~/.omz/completion ]] && fpath=(~/.omz/completions $fpath)
+fi
 
+for config_file ($ZSH/lib/*.zsh) source $config_file
+if [[ -d ~/.omz ]]; then
   if [[ -d ~/.omz/lib ]]; then
     for config_file (~/.omz/lib/*.zsh) source $config_file
   fi
+fi
 
+plugin=${plugin:=()}
+for plugin ($plugins) fpath=($ZSH/plugins/$plugin $fpath)
+if [[ -d ~/.omz ]]; then
   if [[ -d ~/.omz/plugins ]]; then
     for plugin ($plugins) fpath=(~/.omz/plugins/$plugin $fpath)
   fi
 fi
+
+# Load and run compinit
+autoload -U compinit
+compinit -i
+
+# load plugins
+for plugin ($plugins); do
+  if [[ -f ~/.omz/plugins/$plugin/$plugin.plugin.zsh ]]; then
+    source ~/.omz/plugins/$plugin/$plugin.plugin.zsh
+  elif [[ -f $ZSH/plugins/$plugin/$plugin.plugin.zsh ]]; then
+    source $ZSH/plugins/$plugin/$plugin.plugin.zsh
+  fi
+done
 
 # Load the theme
 if [ "$ZSH_THEME" = "random" ]
