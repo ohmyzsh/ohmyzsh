@@ -41,9 +41,9 @@ DESCRIPTION
   Upload data and fetch URL from the pastebin http://sprunge.us
 
   In addition to printing the returned URL, if the xset or xsel
-  programs are available (on $PATH), the URL will also be copied to the 
+  programs are available (on $PATH), the URL will also be copied to the
   PRIMARY selection and the CLIPBOARD selection (allowing to quickly
-  paste the url into IRC client for example). 
+  paste the url into IRC client for example).
 
 USAGE
   $0 filename.txt
@@ -88,22 +88,28 @@ HERE
     done | curl -s -F 'sprunge=<-' http://sprunge.us)
   fi
 
-  if [[ "$syntax" != "text" ]]; then
-    # if stdout is not a tty, suppress trailing newline
-    if [[ ! -t 1 ]] ; then local flags='-n' ; fi
-    echo $flags "$url?$syntax"
-  else
-    # if stdout is not a tty, suppress trailing newline
-    if [[ ! -t 1 ]] ; then local flags='-n' ; fi
-    echo $flags $url
-  fi
+  local flags
+
+  # trim whitespaces and add syntax info
+  url=${url//[[:space:]]}
+  [[ $syntax != text ]] && url=${url}?${syntax}
+
+  # if stdout is not a tty, suppress trailing newline
+  # XXX: i don't think this is the right thing to do
+  # [[ ! -t 1 ]] && flags='-n'
+
+  # output
+  echo $flags $url
+
+  # don't copy to clipboad if piped
+  [[ ! -t 1 ]] && return 0
 
   #copy url to primary and clipboard (middle-mouse & shift+ins/Ctrl+v)
   if (( $+commands[xclip] )); then
-    echo -n "$url?$syntax" | xclip -sel primary
-    echo -n "$url?$syntax" | xclip -sel clipboard
+    echo -n $url | xclip -sel primary
+    echo -n $url | xclip -sel clipboard
   elif (( $+commands[xsel] )); then
-    echo -n "$url?$syntax" | xsel -ip #primary
-    echo -n "$url?$syntax" | xsel -ib #clipboard
+    echo -n $url | xsel -ip #primary
+    echo -n $url | xsel -ib #clipboard
   fi
 }
