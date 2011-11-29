@@ -1,5 +1,5 @@
 # Path to your oh-my-zsh configuration.
-ZSH=/usr/share/oh-my-zsh/
+ZSH=/usr/share/oh-my-zsh
 
 # Set name of the theme to load.
 # Look in /usr/local/share/oh-my-zsh/themes/
