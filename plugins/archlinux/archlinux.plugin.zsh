@@ -59,3 +59,4 @@ asroot() {
 
 # TODO There needs to be a better way to support this
 [[ -x /usr/bin/cower ]] && source $ZSH/plugins/archlinux/aur-helpers/aur-helper-cower.zsh
+[[ -x /usr/bin/meat  ]] && source $ZSH/plugins/archlinux/aur-helpers/aur-helper-meat.zsh
