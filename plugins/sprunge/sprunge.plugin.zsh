@@ -16,6 +16,7 @@ HERE
 }
 
 if (( $+commands[python] )); then
+  # use python to attempt to detect the syntax
   sprunge_syntax() {
     echo "try:
 	from pygments.lexers import get_lexer_for_filename
@@ -24,6 +25,7 @@ except:
 	print('text')" | python
   }
 else
+  # if we happen to lack python, just report everything as text
   sprunge_syntax() { echo 'text' }
 fi
 
@@ -32,14 +34,16 @@ sprunge() {
 
   urls=()
 
-  if [[ ! -t 0 || $#argv -eq 0 ]]; then
-    url=$(curl -s -F 'sprunge=<-' http://sprunge.us <& 0)
-    urls=(${url//[[:space:]]})
-  elif [[ $1 == '-h' || $1 == '--help' ]]; then
+  if [[ $1 == '-h' || $1 == '--help' ]]; then
+    # print usage information
     sprunge_usage
     return 0
+  elif [[ ! -t 0 || $#argv -eq 0 ]]; then
+    # read from stdin
+    url=$(curl -s -F 'sprunge=<-' http://sprunge.us <& 0)
+    urls=(${url//[[:space:]]})
   else
-    # Use python to attempt to detect the syntax
+    # treat arguments as a list of files to upload
     for file in $@; do
       if [[ ! -f $file ]]; then
         echo "$file isn't a file" >&2
@@ -55,14 +59,14 @@ sprunge() {
     done
   fi
 
-  # output
+  # output each url on its own line
   for url in $urls
     echo $url
 
   # don't copy to clipboad if piped
   [[ ! -t 1 ]] && return 0
 
-  # copy urls to primary and clipboard (middle-mouse & shift+ins/Ctrl+v)
+  # copy urls to primary and secondary clipboards
   if (( $+commands[xclip] )); then
     echo -n $urls | xclip -sel primary
     echo -n $urls | xclip -sel clipboard
