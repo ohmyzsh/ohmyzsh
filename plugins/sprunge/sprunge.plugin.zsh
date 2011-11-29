@@ -21,6 +21,8 @@
 # Original found at http://www.shellperson.net/sprunge-pastebin-script/
 
 sprunge () {
+  local url syntax
+
   if [[ -t 0 ]]; then
     if [[ "$*" ]]; then
       if [[ -f "$*" ]]; then
