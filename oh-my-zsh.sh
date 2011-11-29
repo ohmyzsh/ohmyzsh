@@ -1,7 +1,7 @@
 # Check for updates on initial load...
 if [ "$DISABLE_AUTO_UPDATE" != "true" ]
 then
-  /usr/bin/env zsh $ZSH/tools/check_for_upgrade.sh
+  /usr/bin/env ZSH=$ZSH zsh $ZSH/tools/check_for_upgrade.sh
 fi
 
 # Initializes Oh My Zsh
@@ -21,17 +21,24 @@ for plugin ($plugins) fpath=($ZSH/plugins/$plugin $fpath)
 autoload -U compinit
 compinit -i
 
+# Set ZSH_CUSTOM to the path where your custom config files
+# and plugins exists, or else we will use the default custom/
+if [ "$ZSH_CUSTOM" = ""  ]
+then
+    ZSH_CUSTOM="$ZSH/custom"
+fi
+
 # Load all of the plugins that were defined in ~/.zshrc
 for plugin ($plugins); do
-  if [ -f $ZSH/custom/plugins/$plugin/$plugin.plugin.zsh ]; then
-    source $ZSH/custom/plugins/$plugin/$plugin.plugin.zsh
+  if [ -f $ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh ]; then
+    source $ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh
   elif [ -f $ZSH/plugins/$plugin/$plugin.plugin.zsh ]; then
     source $ZSH/plugins/$plugin/$plugin.plugin.zsh
   fi
 done
 
 # Load all of your custom configurations from custom/
-for config_file ($ZSH/custom/*.zsh) source $config_file
+for config_file ($ZSH_CUSTOM/*.zsh) source $config_file
 
 # Load the theme
 if [ "$ZSH_THEME" = "random" ]
