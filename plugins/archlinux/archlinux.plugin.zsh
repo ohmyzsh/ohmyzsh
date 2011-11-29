@@ -52,7 +52,7 @@ asroot() {
 pacman() {
  pacman_bin=${commands[pacman-color]:-/usr/bin/pacman}
  case $1 in
-  -S | -S[^sih]* | -R* | -U*) asroot $pacman_bin $@ ;;
+  -S | -S[^sihgl]* | -R* | -U*) asroot $pacman_bin $@ ;;
   *) $pacman_bin "$@" ;;
  esac
 }
