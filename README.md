@@ -43,7 +43,7 @@ Customization
 
 - To enable more the plugins, customize the plugins array in your
   `~/.zshrc`
-- To change themes, change the @ZSH_THEME@ environment variable in
+- To change themes, change the `ZSH_THEME` environment variable in
   `~/.zshrc`.
 
 If you want to override any of the default behaviour, just add a new
