@@ -1,42 +1,30 @@
 # Initializes Oh My Zsh
 ZSH=${ZSH:-/usr/share/oh-my-zsh/}
 
+local config_file plugin
+
 # add a function path
 fpath=($ZSH/functions $ZSH/completions $fpath)
-fpath=(~/.oh-my-zsh/functions ~/.oh-my-zsh/completions $fpath)
-
-# Load all of the config files in ~/oh-my-zsh that end in .zsh
-# TIP: Add files you don't want in git to .gitignore
 for config_file ($ZSH/lib/*.zsh) source $config_file
-for config_file (~/.oh-my-zsh/lib/*.zsh) source $config_file
-
-# Add all defined plugins to fpath
 plugin=${plugin:=()}
 for plugin ($plugins) fpath=($ZSH/plugins/$plugin $fpath)
-for plugin ($plugins) fpath=(~/.oh-my-zsh/plugins/$plugin $fpath)
+
+if [[ -d ~/.omz ]]; then
+  [[ -d ~/.omz/functions ]] && fpath=(~/.omz/functions $fpath)
+  [[ -d ~/.omz/completion ]] && fpath=(~/.omz/completions $fpath)
+
+  if [[ -d ~/.omz/lib ]]; then
+    for config_file (~/.omz/lib/*.zsh) source $config_file
+  fi
+
+  if [[ -d ~/.omz/plugins ]]; then
+    for plugin ($plugins) fpath=(~/.omz/plugins/$plugin $fpath)
+  fi
+fi
 
 # Load and run compinit
 autoload -U compinit
 compinit -i
-
-# Set ZSH_CUSTOM to the path where your custom config files
-# and plugins exists, or else we will use the default custom/
-# if [ "$ZSH_CUSTOM" = ""  ]
-# then
-#     ZSH_CUSTOM="$ZSH/custom"
-# fi
-
-# Load all of the plugins that were defined in ~/.zshrc
-# for plugin ($plugins); do
-#   if [ -f $ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh ]; then
-#     source $ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh
-#   elif [ -f $ZSH/plugins/$plugin/$plugin.plugin.zsh ]; then
-#     source $ZSH/plugins/$plugin/$plugin.plugin.zsh
-#   fi
-# done
-
-# Load all of your custom configurations from custom/
-# for config_file ($ZSH_CUSTOM/*.zsh) source $config_file
 
 # Load the theme
 if [ "$ZSH_THEME" = "random" ]
