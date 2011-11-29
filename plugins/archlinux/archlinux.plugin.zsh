@@ -49,13 +49,13 @@ asroot() {
   whence sudo &>/dev/null && sudo $@ || su -c "$@"
 }
 
-pacman() {
- pacman_bin=${commands[pacman-color]:-/usr/bin/pacman}
- case $1 in
-  -S | -S[^sihgl]* | -R* | -U*) asroot $pacman_bin $@ ;;
-  *) $pacman_bin "$@" ;;
- esac
-}
+# pacman() {
+#  pacman_bin=${commands[pacman-color]:-/usr/bin/pacman}
+#  case $1 in
+#   -S | -S[^sihgl]* | -R* | -U*) asroot $pacman_bin $@ ;;
+#   *) $pacman_bin "$@" ;;
+#  esac
+# }
 
 # TODO There needs to be a better way to support this
 [[ -x /usr/bin/cower ]] && source $ZSH/plugins/archlinux/aur-helpers/aur-helper-cower.zsh
