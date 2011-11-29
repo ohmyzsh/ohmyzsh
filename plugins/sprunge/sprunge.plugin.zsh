@@ -42,7 +42,7 @@ sprunge() {
     # Use python to attempt to detect the syntax
     for file in $@; do
       if [[ ! -f $file ]]; then
-        echo "$file isn't a file"
+        echo "$file isn't a file" >&2
         continue
       fi
 
