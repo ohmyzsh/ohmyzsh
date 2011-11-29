@@ -2,6 +2,7 @@
 ZSH=${ZSH:-/usr/share/oh-my-zsh/}
 
 local config_file plugin
+plugin=${plugin:=()}
 
 # add a function path
 fpath=($ZSH/functions $ZSH/completions $fpath)
@@ -11,18 +12,21 @@ if [[ -d ~/.omz ]]; then
   [[ -d ~/.omz/completion ]] && fpath=(~/.omz/completions $fpath)
 fi
 
-for config_file ($ZSH/lib/*.zsh) source $config_file
+for config_file ($ZSH/lib/*.zsh(N))
+  source $config_file
+
 if [[ -d ~/.omz ]]; then
-  if [[ -d ~/.omz/lib ]]; then
-    for config_file (~/.omz/lib/*.zsh) source $config_file
-  fi
+  for config_file (~/.omz/*.zsh(N))
+    source $config_file
 fi
 
-plugin=${plugin:=()}
-for plugin ($plugins) fpath=($ZSH/plugins/$plugin $fpath)
+for plugin ($plugins)
+  fpath=($ZSH/plugins/$plugin $fpath)
+
 if [[ -d ~/.omz ]]; then
   if [[ -d ~/.omz/plugins ]]; then
-    for plugin ($plugins) fpath=(~/.omz/plugins/$plugin $fpath)
+    for plugin ($plugins)
+      fpath=(~/.omz/plugins/$plugin $fpath)
   fi
 fi
 
