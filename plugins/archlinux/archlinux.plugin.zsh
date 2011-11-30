@@ -50,7 +50,7 @@ asroot() {
 }
 
 # pacman() {
-#  pacman_bin=${commands[pacman-color]:-/usr/bin/pacman}
+  pacman_bin=${commands[pacman-color]:-/usr/bin/pacman}
 #  case $1 in
 #   -S | -S[^sihgl]* | -R* | -U*) asroot $pacman_bin $@ ;;
 #   *) $pacman_bin "$@" ;;
