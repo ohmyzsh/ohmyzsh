@@ -1,5 +1,6 @@
 # Initializes Oh My Zsh
-ZSH=${ZSH:-/usr/share/oh-my-zsh/}
+ZSH=${ZSH:-/usr/share/oh-my-zsh}
+ZSH2=$HOME/.zsh
 
 local config_file plugin
 plugin=${plugin:=()}
@@ -7,16 +8,16 @@ plugin=${plugin:=()}
 # add a function path
 fpath=($ZSH/functions $ZSH/completions $fpath)
 
-if [[ -d ~/.omz ]]; then
-  [[ -d ~/.omz/functions ]] && fpath=(~/.omz/functions $fpath)
-  [[ -d ~/.omz/completion ]] && fpath=(~/.omz/completions $fpath)
+if [[ -d $OMZ2 ]]; then
+  [[ -d $OMZ2/functions ]] && fpath=($OMZ2/functions $fpath)
+  [[ -d $OMZ2/completion ]] && fpath=($OMZ2/completions $fpath)
 fi
 
 for config_file ($ZSH/lib/*.zsh(N))
   source $config_file
 
 if [[ -d ~/.omz ]]; then
-  for config_file (~/.omz/*.zsh(N))
+  for config_file ($OMG2/*.zsh(N))
     source $config_file
 fi
 
@@ -24,9 +25,9 @@ for plugin ($plugins)
   fpath=($ZSH/plugins/$plugin $fpath)
 
 if [[ -d ~/.omz ]]; then
-  if [[ -d ~/.omz/plugins ]]; then
+  if [[ -d $OMZ2/plugins ]]; then
     for plugin ($plugins)
-      fpath=(~/.omz/plugins/$plugin $fpath)
+      fpath=($OMZ2/plugins/$plugin $fpath)
   fi
 fi
 
@@ -36,8 +37,8 @@ compinit -i
 
 # load plugins
 for plugin ($plugins); do
-  if [[ -f ~/.omz/plugins/$plugin/$plugin.plugin.zsh ]]; then
-    source ~/.omz/plugins/$plugin/$plugin.plugin.zsh
+  if [[ -f $OMZ2/plugins/$plugin/$plugin.plugin.zsh ]]; then
+    source $OMZ2/plugins/$plugin/$plugin.plugin.zsh
   elif [[ -f $ZSH/plugins/$plugin/$plugin.plugin.zsh ]]; then
     source $ZSH/plugins/$plugin/$plugin.plugin.zsh
   fi
