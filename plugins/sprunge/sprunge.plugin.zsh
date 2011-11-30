@@ -67,11 +67,5 @@ sprunge() {
   [[ ! -t 1 ]] && return 0
 
   # copy urls to primary and secondary clipboards
-  if (( $+commands[xclip] )); then
-    echo -n $urls | xclip -sel primary
-    echo -n $urls | xclip -sel clipboard
-  elif (( $+commands[xsel] )); then
-    echo -n $urls | xsel -ip # primary
-    echo -n $urls | xsel -ib # clipboard
-  fi
+  sendtoclip $urls
 }
