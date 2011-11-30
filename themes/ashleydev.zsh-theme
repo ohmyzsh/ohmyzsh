@@ -21,6 +21,7 @@ if [[ "$DISABLE_COLOR" != "true" ]]; then
     local _Cerror_="%{$fg[yellow]%}"                 # bad (empty) .git/ directory
     local _Cbranch_new_repo_="%{$fg_bold[default]%}" # branch color of new repo
     local _Cbranch_clean_="%{$fg_no_bold[green]%}"   # branch color when clean
+    local _Cbranch_unmerged_="%{$fg_bold[yellow]%}"  # branch color when clean
     local _Cbranch_dirty_="%{$fg_no_bold[red]%}"     # branch color when dirty
     local _Crebase_="%{$bold_color$fg[yellow]%}"     # rebase info
     local _Cindex_="%{$bold_color$fg[red]%}"         # index info
@@ -99,6 +100,7 @@ git_prompt_info ()
   local index_=$GIT_PROMPT_DIRTY_STATE_INDEX_DIRTY
   local untracked_=$GIT_PROMPT_DIRTY_STATE_WORKTREE_UNTRACKED
   local freshy_=$GIT_PROMPT_DIRTY_STATE_FRESH_REPO
+  local unmerged_=$GIT_PROMPT_DIRTY_STATE_INDEX_UNMERGED
 
   if [ -z "$branch_$index_$work_$untracked_" ]; then
     if [ -n "$dir_" ]; then
@@ -127,6 +129,8 @@ git_prompt_info ()
     if [ "$freshy_" = "yes" ]; then
       # this is a fresh repo, nothing here...
       branch_="$_Cbranch_new_repo_$branch_$R"
+    elif [ "$unmerged_" = 'yes' ]; then
+      branch_="$_Cbranch_unmerged_$branch_$R"
     elif [ "$work_" = 'yes' ]; then
       branch_="$_Cbranch_dirty_$branch_$R"
     elif [ "$work_" = 'no' ]; then

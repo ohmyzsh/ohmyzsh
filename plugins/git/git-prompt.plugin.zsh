@@ -192,7 +192,6 @@ git_prompt__dirty_state ()
 
     if [[ "$line" = UU* ]]; then
       GIT_PROMPT_DIRTY_STATE_INDEX_UNMERGED='yes'
-      GIT_PROMPT_DIRTY_STATE_INDEX_DIRTY='yes'
       GIT_PROMPT_DIRTY_STATE_ANY_DIRTY='yes'
     fi
   done < <(git status --porcelain 2> /dev/null)
