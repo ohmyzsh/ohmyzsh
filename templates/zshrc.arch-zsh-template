@@ -1,3 +1,5 @@
+ZSH=/usr/share/oh-my-zsh
+
 ZSH_THEME="arch-blue"
 
 load_oh_my_zshell(){
