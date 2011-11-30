@@ -17,7 +17,7 @@ for config_file ($ZSH/lib/*.zsh(N))
   source $config_file
 
 if [[ -d $OMZ ]]; then
-  for config_file ($OMG/*.zsh(N))
+  for config_file ($OMZ/*.zsh(N))
     source $config_file
 fi
 
