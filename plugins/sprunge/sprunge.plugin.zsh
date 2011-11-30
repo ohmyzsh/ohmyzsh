@@ -64,8 +64,5 @@ sprunge() {
     echo $url
 
   # don't copy to clipboad if piped
-  [[ ! -t 1 ]] && return 0
-
-  # copy urls to primary and secondary clipboards
-  sendtoclip $urls
+  [[ -t 1 ]] && sendtoclip $urls
 }
