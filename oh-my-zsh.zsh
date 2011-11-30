@@ -1,6 +1,6 @@
 # Initializes Oh My Zsh
 ZSH=${ZSH:-/usr/share/oh-my-zsh}
-OMZ=$HOME/.zsh
+OMZ=${OMZ:-$HOME/.omz}
 
 local config_file plugin
 plugin=${plugin:=()}
@@ -16,7 +16,7 @@ fi
 for config_file ($ZSH/lib/*.zsh(N))
   source $config_file
 
-if [[ -d ~/.omz ]]; then
+if [[ -d $OMZ ]]; then
   for config_file ($OMG/*.zsh(N))
     source $config_file
 fi
@@ -24,7 +24,7 @@ fi
 for plugin ($plugins)
   fpath=($ZSH/plugins/$plugin $fpath)
 
-if [[ -d ~/.omz ]]; then
+if [[ -d $OMZ ]]; then
   if [[ -d $OMZ/plugins ]]; then
     for plugin ($plugins)
       fpath=($OMZ/plugins/$plugin $fpath)
