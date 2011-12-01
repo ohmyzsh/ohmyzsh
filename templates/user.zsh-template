@@ -1,7 +1,7 @@
 # Check /etc/zsh/zshrc for system defaults.
 
-ZSH_THEME="arch-blue"
+zstyle :omz:style theme "arch-blue"
 
 plugins=(archlinux sprunge git github)
 
-load_oh_my_zshell
+omz_init

@@ -1,6 +1,4 @@
-local ssh_env=$HOME/.ssh/environment-$HOST
-
-function start_agent()
+function keychain_start_agent()
 {
   local -a identities
 
@@ -15,23 +13,23 @@ function start_agent()
 }
 
 function keychain() {
+  local ssh_env=$HOME/.ssh/environment-$HOST
+
   case $1 in
-    "start") ;;
+    "start")
+      if [[ -f $ssh_env ]]; then
+        source $ssh_env >/dev/null
+        ps -p $SSH_AGENT_PID >/dev/null || keychain_start_agent
+      else
+        keychain_start_agent;
+      fi
+      ;;
     "kill")
-      ssh-agent -k
+      echo "Stopping agent"
+      ssh-agent -k >/dev/null && [[ -f $ssh_env ]] && rm $ssh_env
       ;;
   esac
 }
 
 zstyle -a :omz:plugins:keychain autostart state
-if [[ $state == "on" ]]; then
-  if [[ -f $ssh_env ]]; then
-    source $ssh_env >/dev/null
-    ps -p $SSH_AGENT_PID >/dev/null || start_agent
-  else
-    start_agent;
-  fi
-fi
-
-unfunction start_agent
-unset ssh_env
+[[ $state == "on" ]] && keychain start

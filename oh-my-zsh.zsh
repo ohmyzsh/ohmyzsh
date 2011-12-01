@@ -45,7 +45,7 @@ for plugin ($plugins); do
 done
 
 local ZSH_THEME
-zstyle -a :omz theme ZSH_THEME
+zstyle -a :omz:style theme ZSH_THEME
 
 # Load the theme
 if [ "$ZSH_THEME" = "random" ]
