@@ -26,7 +26,7 @@ function keychain() {
       ;;
     "kill")
       echo "Stopping agent"
-      ssh-agent -k >/dev/null
+      ssh-agent -k >/dev/null && [[ -f $ssh_env ]] && rm $ssh_env
       ;;
   esac
 }
