@@ -28,6 +28,9 @@ function keychain() {
       echo "Stopping agent"
       ssh-agent -k >/dev/null && [[ -f $ssh_env ]] && rm $ssh_env
       ;;
+    *)
+      echo "$0: invalid command $1" 2>&1
+      ;;
   esac
 }
 
