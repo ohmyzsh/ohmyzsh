@@ -27,6 +27,7 @@ function _plugin__start_agent()
 
   # start ssh-agent and setup environment
   /usr/bin/env ssh-agent | sed 's/^echo/#echo/' > ${_plugin__ssh_env}
+  [[ ! -f ${_plugin__ssh_env} ]] && return 1
   chmod 600 ${_plugin__ssh_env} . ${_plugin__ssh_env} > /dev/null
 
   # load identies
@@ -55,4 +56,3 @@ fi
 unfunction _plugin__start_agent
 unset _plugin__forwarding
 unset _plugin__ssh_env
-
