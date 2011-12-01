@@ -6,8 +6,8 @@
 if (( $+commands[tmux] )); then
   local state
 
-  zstyle -a :omz:plugins:autostart state
-  [[ state == "on" && -z $TMUX ]] && exec tmux
+  zstyle -a :omz:plugins:tmux autostart state
+  [[ $state == "on" && -z $TMUX ]] && exec tmux
 
   # start an irc client in a tmux session
   if [[ -n $IRC ]]; then
