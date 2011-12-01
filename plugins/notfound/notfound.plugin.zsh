@@ -20,4 +20,6 @@ if (( $+commands[pkgfile] )); then
     echo "The command \"$1\" can be found in the following packages:"
     for p in $pkg; echo "    $p"
   }
+else
+  omz_log_msg "notfound: plugin requires pkgtools"
 fi

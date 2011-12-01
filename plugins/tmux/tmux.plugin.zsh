@@ -14,4 +14,6 @@ if (( $+commands[tmux] )); then
       fi
     }
   fi
+else
+  omz_log_mgs "notfound: plugin requires tmux"
 fi

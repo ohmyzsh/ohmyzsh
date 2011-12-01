@@ -26,6 +26,7 @@ except:
   }
 else
   # if we happen to lack python, just report everything as text
+  omz_log_msg "sprunge: syntax highlighting disabled since python isn't available"
   sprunge_syntax() { echo 'text' }
 fi
 
