@@ -1,6 +1,6 @@
 ZSH=/usr/share/oh-my-zsh
 
-ZSH_THEME="arch-blue"
+zstyle -a :omz theme "arch-blue"
 plugins=(archlinux sprunge)
 
 omz_init(){
