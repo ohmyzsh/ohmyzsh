@@ -1,37 +1,32 @@
 # Enable autostarting of tmux with:
-#
 #   zstyle :omz:plugins:tmux autostart on
+#
+# Configure t command to autostart a command like
+# this (example for "t irc"):
+#   zstyle :omz:plugins:cmd irc weechat-curses
 #
 
 if (( $+commands[tmux] )); then
   local state
 
+  # autoload tmux on start
   zstyle -a :omz:plugins:tmux autostart state
   [[ $state == "on" && -z $TMUX ]] && exec tmux
 
-  # start an irc client in a tmux session
-  if [[ -n $IRC ]]; then
-    irc() {
-      if tmux has -t irc >/dev/null; then
-        [[ -n $TMUX ]] && tmux switch -t irc || tmux attach -t irc
-      else
-        TMUX="" tmux new -ds irc $IRC[1]
-        [[ -n $TMUX ]] && tmux switch -t irc || tmux attach -t irc
-      fi
-    }
-  fi
+  t() {
+    #load the command from config
+    zstyle -a :omz:plugins:tmux:cmd $1 cmd
+    (( $+commands[$cmd] )) || return 127
 
-  # start rtorrent in a tmux session
-  if [[ -n $RTORRENT ]]; then
-    torrents() {
-      if tmux has -t torrents >/dev/null; then
-        [[ -n $TMUX ]] && tmux switch -t torrents || tmux attach -t torrents
-      else
-        TMUX="" tmux new -ds torrents $RTORRENT[1]
-        [[ -n $TMUX ]] && tmux switch -t torrents || tmux attach -t torrents
-      fi
-    }
-  fi
+    # start the command
+    if ! tmux has -t $1 2>/dev/null; then
+      TMUX= tmux new -ds $1 ${cmd-$2}
+    fi
+
+    # switch or attach depending on if we're inside tmux
+    [[ -n $TMUX ]] && tmux switch -t $1 \
+                   || tmux attach -t $1
+  }
 else
-  omz_log_mgs "notfound: plugin requires tmux"
+  omz_log_mgs "tmux: plugin requires tmux"
 fi
