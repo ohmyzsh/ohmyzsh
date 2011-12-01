@@ -1,8 +1,13 @@
-# TODO: move elsewhere
-IRC=($commands[weechat-curses] $commands[irssi])
+# Enable autostarting of tmux with:
+#
+#   zstyle :omz:plugins:tmux autostart on
+#
 
 if (( $+commands[tmux] )); then
-  [[ -z $TMUX ]] && exec tmux
+  local state
+
+  zstyle -a :omz:plugins:autostart state
+  [[ state == "on" && -z $TMUX ]] && exec tmux
 
   if [[ -n $IRC ]]; then
     irc() {
