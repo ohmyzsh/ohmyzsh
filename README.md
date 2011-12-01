@@ -22,20 +22,20 @@ install it:
 $ cower -dd oh-my-zsh-git
 ```
 
-The user must have zsh set as their shell.
+First set zsh as your shell.
 
 ```
-# chsh -s /bin/zsh <USERNAME>
+$ chsh -s /bin/zsh
 ```
 
-The following needs to be added to the start of the user's `~/.zshrc`
-file to activate oh-my-zshell goodness.
+Then the following needs to be added to  `~/.zshrc` file to activate
+oh-my-zshell goodness.
 
-	ZSH_THEME="arch-blue"
+	zstyle :omz:style theme arch-blue
 	plugins=(archlinux sprunge git)
-	load_oh_my_zshell
+	omz_init
 
-A skeleton template can be found in
+A skeleton template can be found at
 `/usr/share/oh-my-zsh/templates/user.zsh-template`
 
 Customization
@@ -43,8 +43,7 @@ Customization
 
 - To enable more the plugins, customize the plugins array in your
   `~/.zshrc`
-- To change themes, change the `ZSH_THEME` environment variable in
-  `~/.zshrc`.
+- To change themes, change the `:omg:style` zstyle `~/.zshrc`.
 
 If you want to override any of the default behaviour, just add a new
 file (ending in `.zsh`) into the `~/.omz/` directory. If you have many
