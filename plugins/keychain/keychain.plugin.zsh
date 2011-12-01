@@ -5,7 +5,7 @@ function start_agent()
   local -a identities
 
   # start ssh-agent and setup environment
-  ssh-agent | sed 's/^echo/#echo/' >${ssh_env}
+  ssh-agent >${ssh_env}
   chmod 600 $ssh_env
   source $ssh_env >/dev/null
 
