@@ -1,10 +1,13 @@
 set_theme() {
-  source "$ZSH/themes/$1.zsh-theme"
+  local theme
+
+  theme=({$OMZ,$ZSH}/themes/$1-theme(N))
+  source $theme[1]
 }
 
 random_theme() {
   local themes
-  themes=($ZSH/themes/*zsh-theme)
+  themes=($ZSH/themes/*zsh-theme(N))
   source "$themes[$RANDOM%$#themes+1]"
 }
 
