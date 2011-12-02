@@ -1,5 +1,4 @@
-function keychain_start_agent()
-{
+function keychain_start_agent() {
   local -a identities
 
   # start ssh-agent and setup environment
@@ -24,9 +23,13 @@ function keychain() {
         keychain_start_agent;
       fi
       ;;
-    "kill")
+    "stop")
       echo "Stopping agent"
       ssh-agent -k >/dev/null && [[ -f $ssh_env ]] && rm $ssh_env
+      ;;
+    "status")
+      [[ -f "$ssh_env" ]] && echo "$0: status is running" \
+        || echo "$0: status is stopped"
       ;;
     *)
       echo "$0: invalid command $1" 2>&1
