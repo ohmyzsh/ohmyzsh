@@ -23,7 +23,7 @@ function keychain() {
         keychain_start_agent;
       fi
       ;;
-    "kill")
+    "stop")
       echo "Stopping agent"
       ssh-agent -k >/dev/null && [[ -f $ssh_env ]] && rm $ssh_env
       ;;
