@@ -31,9 +31,10 @@ $ chsh -s /bin/zsh
 Then the following needs to be added to  `~/.zshrc` file to activate
 oh-my-zshell goodness.
 
+	autoload omz
 	zstyle :omz:style theme arch-blue
 	plugins=(archlinux sprunge git)
-	omz_init
+	omz init
 
 A skeleton template can be found at
 `/usr/share/oh-my-zsh/templates/user.zsh-template`
