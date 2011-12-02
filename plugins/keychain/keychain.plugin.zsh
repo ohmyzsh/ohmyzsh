@@ -7,7 +7,7 @@ function keychain_start_agent() {
   source $ssh_env >/dev/null
 
   # load identies
-  zstyle -a :omz:plugins:ssh-agent identities identities
+  zstyle -a :omz:plugins:keychain identities identities
   ssh-add $HOME/.ssh/${^identities}
 }
 
