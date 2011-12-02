@@ -46,4 +46,4 @@ done
 
 local theme
 zstyle -a :omz:style theme theme
-set_theme theme
+set_theme $theme
