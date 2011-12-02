@@ -44,21 +44,6 @@ for plugin ($plugins); do
   fi
 done
 
-local ZSH_THEME
-zstyle -a :omz:style theme ZSH_THEME
-
-# Load the theme
-if [ "$ZSH_THEME" = "random" ]
-then
-  themes=($ZSH/themes/*zsh-theme)
-  N=${#themes[@]}
-  ((N=(RANDOM%N)+1))
-  RANDOM_THEME=${themes[$N]}
-  source "$RANDOM_THEME"
-  echo "[oh-my-zsh] Random theme '$RANDOM_THEME' loaded..."
-else
-  if [ ! "$ZSH_THEME" = ""  ]
-  then
-    source "$ZSH/themes/$ZSH_THEME.zsh-theme"
-  fi
-fi
+local theme
+zstyle -a :omz:style theme theme
+set_theme theme

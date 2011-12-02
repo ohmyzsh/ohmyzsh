@@ -6,7 +6,7 @@ fi
 
 # Functions #################################################################
 
-# https://github.com/dbb 
+# https://github.com/dbb
 
 
 # empty_gh [NAME_OF_REPO]
