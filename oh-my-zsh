@@ -1,4 +1,5 @@
 # Initializes Oh My Zsh
+oh-my-zsh() {
 ZSH=${ZSH:-/usr/share/oh-my-zsh}
 OMZ=${OMZ:-$HOME/.omz}
 
@@ -47,3 +48,4 @@ done
 local theme
 zstyle -a :omz:style theme theme
 set_theme $theme
+}
