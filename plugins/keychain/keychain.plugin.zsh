@@ -1,5 +1,4 @@
-function keychain_start_agent()
-{
+function keychain_start_agent() {
   local -a identities
 
   # start ssh-agent and setup environment
