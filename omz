@@ -5,7 +5,7 @@ omz() {
   OMZ=${OMZ:-$HOME/.omz}
 
   case "$1" in
-    "start")
+    "init")
       local config_file plugin
       plugin=${plugin:=()}
 
