@@ -35,7 +35,8 @@ if (( $+commands[tmux] )); then
     (( $+commands[$cmd] )) || return 127
 
     # start the command
-    if ! tmux has -t $1 2>/dev/null; then
+    # if ! tmux has -t $1 2>/dev/null; then
+    if ! tmux has -t $1; then
       TMUX= tmux new -ds $1 ${cmd-$2}
     fi
 
