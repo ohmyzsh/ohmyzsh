@@ -9,6 +9,11 @@ zsh-syntax-highlighting
 How to install
 --------------
 
+### Using packages
+
+* Arch Linux: [AUR/zsh-syntax-highlighting](https://aur.archlinux.org/packages.php?ID=54171) / [AUR/zsh-syntax-highlighting-git](https://aur.archlinux.org/packages.php?ID=50867)
+* Gentoo: [mv overlay](http://gpo.zugaina.org/app-shells/zsh-syntax-highlighting)
+
 ### In your ~/.zshrc
 
 * Download the script or clone this repository:
