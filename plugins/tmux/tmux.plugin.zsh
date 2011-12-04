@@ -21,6 +21,9 @@
 # this (example for "t irc"):
 #   zstyle :omz:plugins:tmux:cmd irc weechat-curses
 #
+# Another example would be to start a new session in a directory. (example for "t git")
+#   zstyle :omz:plugins:tmux:dir git $HOME/github
+#
 
 if (( $+commands[tmux] )); then
   local state
@@ -30,14 +33,17 @@ if (( $+commands[tmux] )); then
   [[ $state == "on" && -z $TMUX ]] && exec tmux
 
   t() {
-    #load the command from config
+    # Load the command or directory-path from config.
     zstyle -a :omz:plugins:tmux:cmd $1 cmd
-    (( $+commands[$cmd] )) || return 127
+    zstyle -a :omz:plugins:tmux:dir $1 dir
+    (( $+commands[$cmd] )) || [[ -d $dir ]] || return 127
 
     # start the command
     # if ! tmux has -t $1 2>/dev/null; then
     if ! tmux has -t $1; then
-      TMUX= tmux new -ds $1 ${cmd-$2}
+      # It would be nice to hide the message about set changing the default-path.
+      [[ -d $dir ]] && (cd $dir && tmux new -s $1 \; set default-path ${dir})
+      (( $+commands[$cmd] )) && TMUX= tmux new -ds $1 ${cmd-$2}
     fi
 
     # switch or attach depending on if we're inside tmux
