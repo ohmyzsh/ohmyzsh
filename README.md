@@ -39,6 +39,10 @@ oh-my-zshell goodness.
 A skeleton template can be found at
 `/usr/share/oh-my-zsh/templates/user.zsh-template`
 
+Here's some example configs:
+
+- James' example: [example.zshrc][]
+
 Customization
 =============
 
@@ -66,4 +70,4 @@ The [refcard][] is pretty tasty for tips.
   [oh-my-zsh-git]: https://aur.archlinux.org/packages.php?ID=54375
   [cower]: https://github.com/falconindy/cower
   [refcard]: http://www.bash2zsh.com/zsh_refcard/refcard.pdf
-  [example.zshrc] http://sprunge.us/AgXc -- James' .zshrc
+  [example.zshrc]: http://sprunge.us/AgXc
