@@ -45,6 +45,7 @@ Customization
 - To enable more the plugins, customize the plugins array in your
   `~/.zshrc`
 - To change themes, change the `:omz:style` zstyle in `~/.zshrc`.
+- To use sub-plugins simply add plugin/sub-plugin; example, archlinux/cower
 
 If you want to override any of the default behaviour, just add a new
 file (ending in `.zsh`) into the `~/.omz/` directory. If you have many
