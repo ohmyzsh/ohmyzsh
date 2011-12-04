@@ -41,10 +41,11 @@ omz() {
 
         # load plugins
       for plugin ($plugins); do
-        if [[ -f $OMZ/plugins/$plugin/$plugin.plugin.zsh ]]; then
-        source $OMZ/plugins/$plugin/$plugin.plugin.zsh
-        elif [[ -f $ZSH/plugins/$plugin/$plugin.plugin.zsh ]]; then
-        source $ZSH/plugins/$plugin/$plugin.plugin.zsh
+        plugin_sub=$(echo $plugin|cut -d'/' -f2)
+        if [[ -f $OMZ/plugins/$plugin/$plugin_sub.plugin.zsh ]]; then
+        source $OMZ/plugins/$plugin/$plugin_sub.plugin.zsh
+        elif [[ -f $ZSH/plugins/$plugin/$plugin_sub.plugin.zsh ]]; then
+        source $ZSH/plugins/$plugin/$plugin_sub.plugin.zsh
         fi
       done
 
