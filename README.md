@@ -66,3 +66,4 @@ The [refcard][] is pretty tasty for tips.
   [oh-my-zsh-git]: https://aur.archlinux.org/packages.php?ID=54375
   [cower]: https://github.com/falconindy/cower
   [refcard]: http://www.bash2zsh.com/zsh_refcard/refcard.pdf
+  [example.zshrc] http://sprunge.us/AgXc -- James' .zshrc
