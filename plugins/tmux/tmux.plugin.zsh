@@ -34,16 +34,17 @@ if (( $+commands[tmux] )); then
 
   t() {
     # Load the command or directory-path from config.
-    zstyle -a :omz:plugins:tmux:cmd $1 cmd
+    zstyle -a :omz:plugins:tmux:cmd $1 cmd; cmd=${cmd:-$2}
     zstyle -a :omz:plugins:tmux:dir $1 dir
-    (( $+commands[$cmd] )) || [[ -d $dir ]] || return 127
+    [[ -n $cmd ]] && (( ! $+commands[$cmd] )) && return 127
 
     # start the command
     # if ! tmux has -t $1 2>/dev/null; then
     if ! tmux has -t $1; then
-      # It would be nice to hide the message about set changing the default-path.
-      [[ -d $dir ]] && (cd $dir && tmux new -s $1 \; set default-path ${dir})
-      (( $+commands[$cmd] )) && TMUX= tmux new -ds $1 ${cmd-$2}
+      (
+        [[ -d $dir ]] && cd $dir
+        TMUX= tmux new -ds $1 ${cmd:-$SHELL}
+      )
     fi
 
     # switch or attach depending on if we're inside tmux
