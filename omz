@@ -25,21 +25,25 @@ omz() {
         source $config_file
       fi
 
+    #  for plugin ($plugins)
+    #    fpath=($ZSH/plugins/$plugin $fpath)
+
+    #  if [[ -d $OMZ ]]; then
+    #    if [[ -d $OMZ/plugins ]]; then
+    #    for plugin ($plugins)
+    #      fpath=($OMZ/plugins/$plugin $fpath)
+    #    fi
+    #  fi
+
       for plugin ($plugins)
-        fpath=($ZSH/plugins/$plugin $fpath)
+        [[ -d $OMZ/plugins/$plugin ]] && fpath=($OMZ/plugins/$plugin $fpath) && continue || \
+        [[ -d $ZSH/plugins/$plugin ]] && fpath=($ZSH/plugins/$plugin $fpath) || omz_log_msg "$plugin not found."
 
-      if [[ -d $OMZ ]]; then
-        if [[ -d $OMZ/plugins ]]; then
-        for plugin ($plugins)
-          fpath=($OMZ/plugins/$plugin $fpath)
-        fi
-      fi
-
-        # Load and run compinit
+      # Load and run compinit
       autoload -U compinit
       compinit -i
 
-        # load plugins
+      # load plugins (TODO: Make this slimmer and better)
       for plugin ($plugins); do
         plugin_sub=$(echo $plugin|cut -d'/' -f2)
         if [[ -f $OMZ/plugins/$plugin/$plugin_sub.plugin.zsh ]]; then
