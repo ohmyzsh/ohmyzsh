@@ -9,50 +9,25 @@ omz() {
       local config_file plugin
       plugin=${plugin:=()}
 
-        # add a function path
-      fpath=($ZSH/functions $ZSH/completions $fpath)
+      # add a function path
+      fpath=({$ZSH,$OMZ}/functions(N) {$ZSH,$OMZ}/completions(N) $fpath)
 
-      if [[ -d $OMZ ]]; then
-        [[ -d $OMZ/functions ]] && fpath=($OMZ/functions $fpath)
-        [[ -d $OMZ/completion ]] && fpath=($OMZ/completions $fpath)
-      fi
-
-      for config_file ($ZSH/lib/*.zsh(N))
-        source $config_file
-
-      if [[ -d $OMZ ]]; then
-        for config_file ($OMZ/*.zsh(N))
-        source $config_file
-      fi
-
-    #  for plugin ($plugins)
-    #    fpath=($ZSH/plugins/$plugin $fpath)
-
-    #  if [[ -d $OMZ ]]; then
-    #    if [[ -d $OMZ/plugins ]]; then
-    #    for plugin ($plugins)
-    #      fpath=($OMZ/plugins/$plugin $fpath)
-    #    fi
-    #  fi
-
-      for plugin ($plugins); do
-        files=({$OMZ,$ZSH}/plugins/$plugin(N))
-        [[ -n $files[1] ]] && fpath=($files[1] $fpath) || omz_log_msg "$plugin not found."
-      done
+      # add plugins to fpath
+      for plugin ($plugins)
+        fpath=({$OMZ,$ZSH}/plugins/$plugin.plugin.zsh(N))
 
       # Load and run compinit
       autoload -U compinit
       compinit -i
 
-      # load plugins (TODO: Make this slimmer and better)
-    #  for plugin ($fpath/*.plugin.zsh(N)) source $plugin
+      # load lib
+      for config_file ({$ZSH/lib,$OMZ}/*.zsh(N))
+        source $config_file
+
+      # load plugins
       for plugin ($plugins); do
-        plugin_sub=$(basename $plugin)
-        if [[ -f $OMZ/plugins/$plugin/$plugin_sub.plugin.zsh ]]; then
-          source $OMZ/plugins/$plugin/$plugin_sub.plugin.zsh
-        elif [[ -f $ZSH/plugins/$plugin/$plugin_sub.plugin.zsh ]]; then
-          source $ZSH/plugins/$plugin/$plugin_sub.plugin.zsh
-        fi
+        files=({$OMZ,$ZSH}/plugins/$plugin.plugin.zsh(N))
+        source $files[1] || omz_log_msg "$plugin not found."
       done
 
       local theme
