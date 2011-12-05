@@ -36,8 +36,8 @@ omz() {
     #  fi
 
       for plugin ($plugins); do
-        [[ -d $OMZ/plugins/$plugin ]] && fpath=($OMZ/plugins/$plugin $fpath) && continue || \
-        [[ -d $ZSH/plugins/$plugin ]] && fpath=($ZSH/plugins/$plugin $fpath) || omz_log_msg "$plugin not found."
+        files=({$OMZ,$ZSH}/plugins/$plugin(N))
+        [[ -n $files[1] ]] && fpath=($files[1] $fpath) || omz_log_msg "$plugin not found."
       done
 
       # Load and run compinit
