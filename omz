@@ -48,8 +48,8 @@ omz() {
     #  for plugin ($fpath/*.plugin.zsh(N)) source $plugin
       for plugin ($plugins); do
         plugin_sub=$(basename $plugin)
-          if [[ -f $OMZ/plugins/$plugin/$plugin_sub.plugin.zsh ]]; then
-        source $OMZ/plugins/$plugin/$plugin_sub.plugin.zsh
+        if [[ -f $OMZ/plugins/$plugin/$plugin_sub.plugin.zsh ]]; then
+          source $OMZ/plugins/$plugin/$plugin_sub.plugin.zsh
         elif [[ -f $ZSH/plugins/$plugin/$plugin_sub.plugin.zsh ]]; then
           source $ZSH/plugins/$plugin/$plugin_sub.plugin.zsh
         fi
