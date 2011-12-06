@@ -15,7 +15,7 @@ omz() {
       # add plugins to fpath
       for plugin ($plugins); do
         files=({$OMZ,$ZSH}/plugins/$plugin)
-	fpath=($files[1] $fpath)
+        fpath=($files[1] $fpath)
       done
 
       # Load and run compinit
@@ -46,4 +46,4 @@ omz() {
   esac
 }
 
-# vi: ft=zsh
+# vi: ft=zsh sw=2 tb=2 et
