@@ -13,8 +13,10 @@ omz() {
       fpath=({$ZSH,$OMZ}/functions(N) {$ZSH,$OMZ}/completions(N) $fpath)
 
       # add plugins to fpath
-      for plugin ($plugins)
-        fpath=({$OMZ,$ZSH}/plugins/$plugin.plugin.zsh(N))
+      for plugin ($plugins); do
+        files=({$OMZ,$ZSH}/plugins/$plugin)
+        fpath+=$files[1]
+      done
 
       # Load and run compinit
       autoload -U compinit
@@ -26,7 +28,7 @@ omz() {
 
       # load plugins
       for plugin ($plugins); do
-        files=({$OMZ,$ZSH}/plugins/$plugin.plugin.zsh(N))
+        files=({$OMZ,$ZSH}/plugins/$plugin/$(basename $plugin).plugin.zsh(N))
         source $files[1] || omz_log_msg "$plugin not found."
       done
 
