@@ -1,7 +1,10 @@
 set_theme() {
   local themes
   themes=({$OMZ,$ZSH}/themes/$1.zsh-theme(N))
-  source $themes[1] || omz_log_msg "theme: $1 was not found. falling back to default." && source $ZSH/themes/default.zsh-theme
+  if ! source $themes[1]; then
+    omz_log_msg "theme: $1 was not found. falling back to default."
+    source $ZSH/themes/default.zsh-theme
+  fi
 }
 
 random_theme() {
