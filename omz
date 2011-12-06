@@ -38,8 +38,7 @@ omz() {
     "theme")
       local theme
       zstyle -a :omz:style theme theme
-      [[ -f {$OMZ,$ZSH}/themes/$2.zsh-theme(N) ]] && theme=$2 || omz_log_msg "Theme: $2 not found."
-      set_theme $theme
+      set_theme ${2:-$theme}
       ;;
     *)
       echo "$0: invalid command $1" 2>&1
