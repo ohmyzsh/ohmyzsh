@@ -4,7 +4,10 @@
 # pip zsh completion, based on homebrew completion
 
 _pip_all() {
-  all_pkgs=(`pip search * | cut -d ' ' -f 1 | tr '[A-Z]' '[a-z]'`)
+  # we cache the list of packages (originally from the macports plugin)
+  if (( ! $+piplist )); then
+	piplist=($(pip search * | cut -d ' ' -f 1 | tr '[A-Z]' '[a-z]'))
+  fi
 }
 
 _pip_installed() {
@@ -62,7 +65,7 @@ case "$words[1]" in
      
       if [[ "$state" == packages ]]; then
         _pip_all
-        _wanted all_pkgs expl 'packages' compadd -a all_pkgs
+        _wanted piplist expl 'packages' compadd -a piplist
       fi ;;
   uninstall)
     _pip_installed
