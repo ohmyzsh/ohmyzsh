@@ -6,6 +6,7 @@
 _pip_all() {
   # we cache the list of packages (originally from the macports plugin)
   if (( ! $+piplist )); then
+    echo -n " (caching package index...)"
 	piplist=($(pip search * | cut -d ' ' -f 1 | tr '[A-Z]' '[a-z]'))
   fi
 }
