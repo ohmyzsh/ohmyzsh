@@ -43,6 +43,7 @@ sprunge() {
     # read from stdin
     url=$(curl -s -F 'sprunge=<-' http://sprunge.us <& 0)
     urls=(${url//[[:space:]]})
+    echo "stdin: $url"
   else
     # treat arguments as a list of files to upload
     for file in $@; do
@@ -56,14 +57,14 @@ sprunge() {
       url=${url//[[:space:]]}
       [[ $syntax != text ]] && url=${url}?${syntax}
 
+      echo "$file: $url" >> $OMZ/sprunge.log
       urls+=(${url})
     done
   fi
 
   # output each url on its own line
   for url in $urls
-    echo $url && echo $url >> "$OMZ/sprunge.log"
-
+    echo $url
 
   # don't copy to clipboad if piped
   [[ -t 1 ]] && sendtoclip $urls
