@@ -47,4 +47,4 @@ omz() {
   esac
 }
 
-# vi: ft=zsh sw=2 et
+# vi: ft=zsh sw=2 ts=2 et
