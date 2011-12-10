@@ -62,7 +62,8 @@ sprunge() {
 
   # output each url on its own line
   for url in $urls
-    echo $url
+    echo $url && echo $url >> "$OMZ/sprunge.log"
+
 
   # don't copy to clipboad if piped
   [[ -t 1 ]] && sendtoclip $urls
