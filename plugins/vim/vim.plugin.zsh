@@ -1,3 +1,5 @@
-# Aliases to commands one may use with vim.
+# Vim helper plugin.
 # Colorize the source of a file and create a html file.
-alias code2html="vim omz -f +'syn on' +'set background=dark' +'colorscheme pablo' +'TOhtml' +'w' +'qa' &>/dev/null"
+code2html() {
+  vim $@ +'syn on' +'set background=dark' +'colorscheme pablo' +'TOhtml' +'w' +'qa' &>/dev/null
+}
