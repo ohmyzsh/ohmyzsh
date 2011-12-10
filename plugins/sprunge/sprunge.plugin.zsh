@@ -43,7 +43,7 @@ sprunge() {
     # read from stdin
     url=$(curl -s -F 'sprunge=<-' http://sprunge.us <& 0)
     urls=(${url//[[:space:]]})
-    echo "stdin: $url"
+    echo "stdin: $url" >> $OMZ/sprunge.log
   else
     # treat arguments as a list of files to upload
     for file in $@; do
