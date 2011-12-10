@@ -25,6 +25,7 @@ omz() {
       # load lib
       for config_file ({$ZSH/lib,$OMZ}/*.zsh(N))
         source $config_file
+
       omz plugin
       omz theme
       ;;
@@ -46,4 +47,4 @@ omz() {
   esac
 }
 
-# vi: ft=zsh sw=2 tb=2 et
+# vi: ft=zsh sw=2 et
