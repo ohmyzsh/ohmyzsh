@@ -45,7 +45,7 @@ zstyle ':completion:*:hosts' hosts $hosts
 
 # Use caching so that commands like apt and dpkg complete are useable
 zstyle ':completion::complete:*' use-cache on
-zstyle ':completion::complete:*' cache-path ~/.omz/cache/
+zstyle ':completion::complete:*' cache-path $OMZ/cache/
 
 # Fuzzy matching of completions for when you mistype them
 zstyle ':completion:*' completer _complete _match _approximate
