@@ -1,0 +1,50 @@
+# omz control center
+
+omz() {
+  ZSH=${ZSH:-/usr/share/oh-my-zsh}
+  OMZ=${OMZ:-$HOME/.omz}
+
+  case "$1" in
+    "init")
+      local config_file plugin
+      plugin=${plugin:=()}
+
+      # add a function path
+      fpath=({$ZSH,$OMZ}/functions(N) {$ZSH,$OMZ}/completions(N) $fpath)
+
+      # add plugins to fpath
+      for plugin ($plugins); do
+        files=({$OMZ,$ZSH}/plugins/$plugin)
+        fpath=($files[1] $fpath)
+      done
+
+      # Load and run compinit
+      autoload -U compinit
+      compinit -i
+
+      # load lib
+      for config_file ({$ZSH/lib,$OMZ}/*.zsh(N))
+        source $config_file
+
+      omz plugin
+      omz theme
+      ;;
+    "plugin")
+      # load plugins
+      for plugin ($plugins); do
+        files=({$OMZ,$ZSH}/plugins/$plugin/$(basename $plugin).plugin.zsh(N))
+        source $files[1] || omz_log_msg "$plugin not found."
+      done
+      ;;
+    "theme")
+      local theme
+      zstyle -a :omz:style theme theme
+      set_theme ${2:-$theme}
+      ;;
+    *)
+      echo "$0: invalid command $1" 2>&1
+      ;;
+  esac
+}
+
+# vi: ft=zsh sw=2 ts=2 et
