@@ -16,8 +16,8 @@ function _upgrade_zsh() {
 
 if [ -f ~/.zsh-update ]
 then
-  . ~/.zsh-update
-
+  . ~/.zsh-update  
+  
   if [[ -z "$LAST_EPOCH" ]]; then
     _update_zsh_update && return 0;
   fi
