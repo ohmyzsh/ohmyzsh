@@ -30,6 +30,13 @@ function git_prompt_long_sha() {
   SHA=$(git rev-parse HEAD 2> /dev/null) && echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
 }
 
+# Checks if there are stashed changes
+function git_prompt_stash() {
+  if [[ -n $(git stash list 2> /dev/null) ]]; then 
+    echo "$ZSH_THEME_GIT_PROMPT_STASH"
+  fi
+}
+
 # Get the status of the working tree
 git_prompt_status() {
   INDEX=$(git status --porcelain 2> /dev/null)
