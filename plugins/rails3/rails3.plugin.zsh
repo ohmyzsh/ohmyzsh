@@ -17,3 +17,8 @@ alias rp='_rails_command plugin'
 alias rs='_rails_command server'
 alias rsd='_rails_command server --debugger'
 alias devlog='tail -f log/development.log'
+
+# set environment aliases
+alias -g RT=' RAILS_ENV=test '
+alias -g RP=' RAILS_ENV=production '
+alias -g RS=' RAILS_ENV=staging '

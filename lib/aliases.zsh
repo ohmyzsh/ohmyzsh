@@ -22,3 +22,8 @@ alias sl=ls # often screw this up
 
 alias afind='ack-grep -il'
 
+# global aliases
+alias -g G=' | grep '
+alias -g L=' | less '
+
+
