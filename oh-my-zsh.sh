@@ -59,7 +59,11 @@ then
 else
   if [ ! "$ZSH_THEME" = ""  ]
   then
-    source "$ZSH/themes/$ZSH_THEME.zsh-theme"
+    if [ -f "$ZSH_CUSTOM/themes/$ZSH_THEME.zsh-theme" ]; then
+      source "$ZSH_CUSTOM/themes/$ZSH_THEME.zsh-theme"
+    else
+      source "$ZSH/themes/$ZSH_THEME.zsh-theme"
+    fi
   fi
 fi
 
