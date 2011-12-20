@@ -1,3 +1,3 @@
 # See https://github.com/clvv/f for more info
 
-source ./f.sh
+source $ZSH_HOME/plugins/f/f.sh
