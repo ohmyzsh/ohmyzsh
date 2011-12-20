@@ -229,6 +229,7 @@ alias ${_F_CMD_F:=f}='_f -f'
 [ -z "$_F_SINK" ] && _F_SINK=/dev/null
 [ -z "$_F_TRACK_PWD" ] && _F_TRACK_PWD=1
 [ -z "$_F_MAX" ] && _F_MAX=2000
+[ -z "$_F_QUERY_SEPARATOR" ] && _F_QUERY_SEPARATOR=,
 
 if [ -z "$_F_AWK" ]; then
   # awk preferences
@@ -271,18 +272,38 @@ else # fall back on emulated readlink
 fi
 
 if compctl >> "$_F_SINK" 2>&1; then # zsh
-  _f_zsh_tab_completion() {
+  _f_zsh_cmd_complete() {
     local compl
     read -c compl
+    compstate[insert]=menu # no expand
     reply=(${(f)"$(_f --complete "$compl")"})
   }
-  compctl -U -K _f_zsh_tab_completion -x 'C[-1,-*e],s[-]n[1,e]' -c -- _f
+  compctl -U -K _f_zsh_cmd_complete -x 'C[-1,-*e],s[-]n[1,e]' -c -- _f
+  _f_zsh_word_complete() {
+    local fnd="$(echo "${words[CURRENT]}" | sed 's/'"$_F_QUERY_SEPARATOR"'/ /g')"
+    local typ=${1:-e}
+    _f --query 2>> "$_F_SINK" | sed 's/^[0-9.]*[ ]*//' | while read line; do
+      compadd -U "$line"
+    done
+    compstate[insert]=menu # no expand
+  }
+  _f_zsh_word_complete_trigger() {
+    [[ ${words[CURRENT]} == "$_F_QUERY_SEPARATOR"* ]] && _f_zsh_word_complete
+  }
+  _f_zsh_word_complete_f() { _f_zsh_word_complete f ; }
+  _f_zsh_word_complete_d() { _f_zsh_word_complete d ; }
+  { zstyle ':completion:*' completer _complete _ignored \
+    _f_zsh_word_complete_trigger
+    zle -C f-complete menu-select _f_zsh_word_complete
+    zle -C f-complete-f menu-select _f_zsh_word_complete_f
+    zle -C f-complete-d menu-select _f_zsh_word_complete_d
+  } >> "$_F_SINK" 2>&1
   # add zsh hook
   autoload -U add-zsh-hook
   function _f_preexec () { eval "_f --add $3" >> "$_F_SINK" 2>&1; }
   add-zsh-hook preexec _f_preexec
 elif complete >> "$_F_SINK" 2>&1; then # bash
-  _f_bash_completion() {
+  _f_bash_cmd_complete() {
     # complete command after "-e"
     local cur=${COMP_WORDS[COMP_CWORD]}
     [[ ${COMP_WORDS[COMP_CWORD-1]} == -*e ]] && \
@@ -293,12 +314,39 @@ elif complete >> "$_F_SINK" 2>&1; then # bash
     local IFS=$'\n'
     COMPREPLY=( $RESULT )
   }
-  _f_bash_hook_completion() {
+  _f_bash_hook_cmd_complete() {
     for cmd in $*; do
-      complete -F _f_bash_completion $cmd
+      complete -F _f_bash_cmd_complete $cmd
     done
   }
-  _f_bash_hook_completion $_F_CMD_A $_F_CMD_S $_F_CMD_D $_F_CMD_F
+  _f_bash_hook_cmd_complete $_F_CMD_A $_F_CMD_S $_F_CMD_D $_F_CMD_F
+  _f_bash_word_complete() {
+    local cur=${COMP_WORDS[COMP_CWORD]}
+    if [[ $cur == "$_F_QUERY_SEPARATOR"* ]]; then
+      local fnd="$(echo "$cur" | sed 's/'"$_F_QUERY_SEPARATOR"'/ /g')"
+      local typ=e
+      local RESULT=$(_f --query 2>> "$_F_SINK" | sed 's/^[0-9.]*[ ]*//')
+      local IFS=$'\n'
+      COMPREPLY=( $RESULT )
+    fi
+  }
+  _f_bash_word_complete_wrap() {
+    _f_bash_word_complete
+    # try original comp func
+    [ "$COMPREPLY" ] || eval "$( echo "$_F_BASH_COMPLETE_P" | \
+      grep -e "${COMP_WORDS[0]}$" | sed -n 's/.*-F \(.*\) .*/\1/p' )"
+    # fall back on original complete options
+    [ "$COMPREPLY" ] || COMPREPLY=( $(eval "$(echo "$_F_BASH_COMPLETE_P" | \
+      grep -e "${COMP_WORDS[0]}$" | sed 's/complete/compgen/') \
+      ${COMP_WORDS[COMP_CWORD]}" 2>> "$_F_SINK") )
+  }
+  _f_bash_hook_word_complete_wrap_all() {
+    export _F_BASH_COMPLETE_P="$(complete -p)"
+    for cmd in $(complete -p | awk '{print $NF}' | tr '\n' ' '); do
+      complete -F _f_bash_word_complete_wrap $cmd
+    done
+  }
+  complete -D -F _f_bash_word_complete >> "$_F_SINK" 2>&1
   # add bash hook
   echo $PROMPT_COMMAND | grep -v -q "_f --add" && \
     PROMPT_COMMAND='eval "_f --add $(history 1 | \
