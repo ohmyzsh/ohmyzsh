@@ -160,21 +160,22 @@ _f() {
     while [ "$1" ]; do case "$1" in
       --complete) [ "$2" = "--" ] && shift; set -- $(echo $2); local list=1;;
       --) while [ "$2" ]; do shift; fnd+="$1 "; last="$1"; done;;
-      -*) local opt=${1:1}; while [ "$opt" ]; do case ${opt:0:1} in
-          s) local show=1;;
-          l) local list=1;;
-          r) local mode=rank;;
-          t) local mode=recent;;
-          e) if [ "${opt:1}" ]; then # there are characters after "-e"
-               local exec=${opt:1} # anything after "-e"
-             else # use the next argument
-               local exec=${2:?"Argument needed after -e"}
-               shift
-             fi; break;;
-          a) local typ=e;;
-          d) local typ=d;;
-          f) local typ=f;;
-          h) echo "_f [options] [query ...]
+      -*) [ "$ZSH_VERSION" ] && local x='o=${o[2,#o]}' || local x='o=${o:1}'
+        local o=${1#-}; while [ "$o" ]; do case $o in
+          s*) local show=1;;
+          l*) local list=1;;
+          r*) local mode=rank;;
+          t*) local mode=recent;;
+          e*) eval $x; if [ "$o" ]; then # there are characters after "-e"
+                local exec=$o # anything after "-e"
+              else # use the next argument
+                local exec=${2:?"Argument needed after -e"}
+                shift
+              fi; break;;
+          a*) local typ=e;;
+          d*) local typ=d;;
+          f*) local typ=f;;
+          h*) echo "_f [options] [query ...]
   options:
     -s        show list of files with their ranks
     -l        list paths only
@@ -185,7 +186,7 @@ _f() {
     -r        match by rank only
     -h        show a brief help message" >&2; return;;
           #*) fnd+="$1 "; last="$1"; break;; # unknown option detected
-        esac; opt="${opt:1}"; done;;
+        esac; eval $x; done;;
       *) fnd+="$1 "; last="$1";;
     esac; shift; done
 
