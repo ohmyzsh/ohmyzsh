@@ -100,7 +100,7 @@ _f() {
   elif [ "$1" = "--query" ]; then
     # query the database, this need some local variables to be set
     while read line; do
-      [ -${typ} "${line%%|*}" ] && echo "$line"
+      [ -${typ:-e} "${line%%|*}" ] && echo "$line"
     done < "$_F_DATA" | \
     $_F_AWK -v t="$(date +%s)" -v mode="$mode" -v q="$fnd" -F"|" '
       function frecent(rank, time) {
@@ -158,7 +158,7 @@ _f() {
     [ -f "$_F_DATA" ] || return # no db yet
     local fnd last
     while [ "$1" ]; do case "$1" in
-      --complete) [ "$2" = "--" ] && shift; set -- $(echo $2); local list=1;;
+      --complete) [ "$2" = "--" ] && shift; set -- $(echo $2); local list=1 r=r;;
       --) while [ "$2" ]; do shift; fnd+="$1 "; last="$1"; done;;
       -*) [ "$ZSH_VERSION" ] && local x='o=${o[2,#o]}' || local x='o=${o:1}'
         local o=${1#-}; while [ "$o" ]; do case $o in
@@ -190,12 +190,10 @@ _f() {
       *) fnd+="$1 "; last="$1";;
     esac; shift; done
 
-    [ "$typ" ] || local typ=e # default to match file and directory
-
     # if we hit enter on a completion just execute
     case "$last" in
      # completions will always start with /
-     /*) [ -z "$show$list" -a -${typ} "$last" -a "$exec" ] \
+     /*) [ -z "$show$list" -a -${typ:-e} "$last" -a "$exec" ] \
        && $exec "$last" && return;;
     esac
 
@@ -203,15 +201,15 @@ _f() {
     result="$(_f --query 2>> "$_F_SINK")" # query the database
     [ $? -gt 0 ] && return
     if [ "$list" ]; then
-      echo "$result" | sort -n | sed 's/^[0-9.]*[ ]*//'
+      echo "$result" | sort -n${r} | sed 's/^[0-9.]*[ ]*//'
     elif [ "$show" ]; then
-      echo "$result" | sort -n
+      echo "$result" | sort -n${r}
     elif [ "$fnd" -a "$exec" ]; then # exec
-      $exec "$(echo "$result" | sort -n | sed 's/^[0-9.]*[ ]*//' | tail -n1)"
+      $exec "$(echo "$result" | sort -n | sed -n '$s/^[0-9.]*[ ]*//p')"
     elif [ "$fnd" ] && [ "$ZSH_SUBSHELL$BASH_SUBSHELL" != "0" ]; then # echo
-      echo "$(echo "$result" | sort -n | sed 's/^[0-9.]*[ ]*//' | tail -n1)"
+      echo "$(echo "$result" | sort -n | sed -n '$s/^[0-9.]*[ ]*//p')"
     else # no args, show
-      echo "$result" | sort -n
+      echo "$result" | sort -n${r}
     fi
 
   fi
@@ -279,12 +277,12 @@ if compctl >> "$_F_SINK" 2>&1; then # zsh
     compstate[insert]=menu # no expand
     reply=(${(f)"$(_f --complete "$compl")"})
   }
-  compctl -U -K _f_zsh_cmd_complete -x 'C[-1,-*e],s[-]n[1,e]' -c -- _f
+  compctl -U -K _f_zsh_cmd_complete -V f -x 'C[-1,-*e],s[-]n[1,e]' -c -- _f
   _f_zsh_word_complete() {
     local fnd="$(echo "${words[CURRENT]}" | sed 's/'"$_F_QUERY_SEPARATOR"'/ /g')"
     local typ=${1:-e}
-    _f --query 2>> "$_F_SINK" | sed 's/^[0-9.]*[ ]*//' | while read line; do
-      compadd -U "$line"
+    _f --query 2>> "$_F_SINK" | sort -nr | sed 's/^[0-9.]*[ ]*//' | while read line; do
+      compadd -U -V f "$line"
     done
     compstate[insert]=menu # no expand
   }
