@@ -1,8 +1,7 @@
-
+# I hate ZSH's correction feature.
 setopt nocorrect
 
-# Found on the ZshWiki
-#  http://zshwiki.org/home/config/prompt
+# Found on the ZshWiki: http://zshwiki.org/home/config/prompt
 function prompt_char {
   git branch >/dev/null 2>/dev/null && echo "%{$fg[blue]%}λ" && return
   # These are slow and have therefore been killed:
@@ -24,10 +23,5 @@ function git_current_branch() {
   echo "$ZSH_THEME_GIT_PROMPT_PREFIX%{$fg[blue]%}${ref#refs/heads/}$ZSH_THEME_GIT_PROMPT_SUFFIX"
 }
 
-# PROMPT='[%{$fg[magenta]%}%n%{$reset_color%}@%{$fg[yellow]%}%m%{$reset_color%}:%{$fg_bold[green]%}$(collapse_pwd)%{$reset_color%}$(git_prompt_info)]
-# $(prompt_char) '
-# PROMPT='[%{$fg[magenta]%}%n%{$reset_color%}@%{$fg[yellow]%}%m%{$reset_color%}:%{$fg_bold[green]%}$(collapse_pwd)%{$reset_color%}$(git_prompt_info)]
-# λ '
-# PROMPT='[%{$fg[magenta]%}%n%{$reset_color%}@%{$fg[yellow]%}%m%{$reset_color%}:%{$fg_bold[green]%}%~%{$reset_color%}]
-# λ '
-PROMPT='[%{$fg[magenta]%}%n%{$reset_color%}@%{$fg[yellow]%}%m%{$reset_color%}:%{$fg_bold[green]%}%~%{$reset_color%}$(git_current_branch)] $(prompt_char)%{$reset_color%} '
+PROMPT='[%{$fg[magenta]%}%n%{$reset_color%}@%{$fg[yellow]%}%m%{$reset_color%}:%{$fg_bold[green]%}%~%{$reset_color%}$(git_prompt_info)]
+$(prompt_char)%{$reset_color%} '
