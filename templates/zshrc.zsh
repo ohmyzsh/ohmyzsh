@@ -13,9 +13,6 @@ zstyle ':omz:*:*' color 'yes'
 # Auto set the tab and window titles.
 zstyle ':omz:terminal' auto-title 'yes'
 
-# Indicate that completions are being generated.
-zstyle ':omz:completion:indicator' enable 'no'
-
 # Set the plugins to load (see $OMZ/plugins/).
 zstyle ':omz:load' plugin 'archive' 'git'
 

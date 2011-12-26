@@ -22,7 +22,7 @@ function prompt_sorin_setup() {
   autoload -Uz add-zsh-hook
   add-zsh-hook precmd prompt_sorin_precmd
 
-  zstyle ':omz:completion:indicator' format '%B%F{red}...%f%b'
+  zstyle ':omz:completion' indicator '%B%F{red}...%f%b'
   zstyle ':omz:prompt' vicmd '%F{yellow}❮%f%B%F{red}❮%f%b%F{red}❮%f'
   zstyle ':omz:plugin:git:prompt' action ':%%B%F{yellow}%s%f%%b'
   zstyle ':omz:plugin:git:prompt' added ' %%B%F{green}✚%f%%b'

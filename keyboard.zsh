@@ -9,7 +9,7 @@ fi
 zstyle ':omz:prompt' vicmd '<<<'
 
 # Indicator to notify of generating completion.
-zstyle ':omz:completion:indicator' format "..."
+zstyle ':omz:completion' indicator '...'
 
 # Beep on error in line editor.
 setopt BEEP
@@ -258,15 +258,13 @@ if zstyle -t ':omz:editor' dot-expansion; then
 fi
 
 # Display an indicator when completing.
-if zstyle -t ':omz:completion:indicator' enable; then
-  function expand-or-complete-prefix-with-indicator() {
-    zstyle -s ':omz:completion:indicator' format indicator
-    print -Pn "$indicator"
-    unset indicator
-    zle expand-or-complete-prefix
-    zle redisplay
-  }
-  zle -N expand-or-complete-prefix-with-indicator
-  bindkey "$keyinfo[Control]i" expand-or-complete-prefix-with-indicator
-fi
+function expand-or-complete-prefix-with-indicator() {
+  local indicator
+  zstyle -s ':omz:completion' indicator 'indicator'
+  print -Pn "$indicator"
+  zle expand-or-complete-prefix
+  zle redisplay
+}
+zle -N expand-or-complete-prefix-with-indicator
+bindkey "$keyinfo[Control]i" expand-or-complete-prefix-with-indicator
 
