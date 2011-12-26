@@ -20,7 +20,7 @@ zstyle ':completion::complete:*' use-cache on
 zstyle ':completion::complete:*' cache-path "$HOME/.zcache"
 
 # Case-insensitive (all), partial-word, and then substring completion.
-if check-bool "$CASE_SENSITIVE"; then
+if zstyle -t ':omz:completion:*' case-sensitive; then
   zstyle ':completion:*' matcher-list 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
   setopt CASE_GLOB
 else

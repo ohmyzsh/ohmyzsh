@@ -1,34 +1,30 @@
-# Set the path to Oh My Zsh.
-OMZ="$HOME/.oh-my-zsh"
-
 # Set the key mapping style to 'emacs' or 'vi'.
-KEYMAP='emacs'
-
-# Set case-sensitivity for completion, history lookup, etc.
-CASE_SENSITIVE='false'
-
-# Color output (auto set to 'false' on dumb terminals).
-COLOR='true'
-
-# Auto set the tab and window titles.
-AUTO_TITLE='true'
+zstyle ':omz:editor' keymap 'emacs'
 
 # Auto convert .... to ../..
-DOT_EXPANSION='false'
+zstyle ':omz:editor' dot-expansion 'no'
+
+# Set case-sensitivity for completion, history lookup, etc.
+zstyle ':omz:*:*' case-sensitive 'no'
+
+# Color output (auto set to 'no' on dumb terminals).
+zstyle ':omz:*:*' color 'yes'
+
+# Auto set the tab and window titles.
+zstyle ':omz:terminal' auto-title 'yes'
 
 # Indicate that completions are being generated.
-COMPLETION_INDICATOR='false'
+zstyle ':omz:completion:indicator' enable 'no'
 
 # Set the plugins to load (see $OMZ/plugins/).
-# Example: plugins=(git lighthouse rails ruby textmate)
-plugins=(git)
+zstyle ':omz:load' plugin 'archive' 'git'
+
+# Setting it to 'random' loads a random theme.
+# Auto set to 'off' on dumb terminals.
+zstyle ':omz:prompt' theme 'sorin'
 
 # This will make you shout: OH MY ZSHELL!
-source "$OMZ/init.zsh"
-
-# Load the prompt theme (type prompt -l to list all themes).
-# Setting it to 'random' loads a random theme.
-[[ "$TERM" != 'dumb' ]] && prompt sorin || prompt off
+source "$HOME/.oh-my-zsh/init.zsh"
 
 # Customize to your needs...
 

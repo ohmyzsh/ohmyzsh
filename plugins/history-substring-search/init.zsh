@@ -2,11 +2,11 @@
 
 source "${0:h}/history-substring-search.zsh"
 
-if check-bool "$CASE_SENSITIVE"; then
+if zstyle -t ':omz:plugin:history-substring-search' case-sensitive; then
   unset HISTORY_SUBSTRING_SEARCH_GLOBBING_FLAGS
 fi
 
-if ! check-bool "$COLOR"; then
+if ! zstyle -t ':omz:plugin:history-substring-search' color; then
   unset HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND
   unset HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND
 fi

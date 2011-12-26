@@ -2,9 +2,9 @@ setopt CORRECT        # Correct commands.
 setopt CORRECT_ALL    # Correct all arguments.
 
 # The 'ls' Family
-if check-bool "$COLOR"; then
-  if [[ -f "$HOME/.dir_colors" ]] && ( (( $+commands[dircolors] )) || ( (( $+plugins[(er)gnu-utils] )) && (( $+commands[gdircolors] )) ) ); then
-    eval $("${commands[dircolors]:-$commands[gdircolors]}" "$HOME/.dir_colors")
+if zstyle -t ':omz:alias:ls' color; then
+  if [[ -f "$HOME/.dir_colors" ]] && (( $+commands[dircolors] )); then
+    eval $(dircolors "$HOME/.dir_colors")
     alias ls='ls -hF --group-directories-first --color=auto'
   else
     export CLICOLOR=1
@@ -80,7 +80,7 @@ else
 fi
 
 # Diff/Make
-if check-bool "$COLOR"; then
+if zstyle -t ':omz:alias:diff' color; then
   if (( $+commands[colordiff] )); then
     alias diff='colordiff -u'
     compdef colordiff=diff

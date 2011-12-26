@@ -4,12 +4,12 @@
 #   To enabled agent forwarding support, add the following to
 #   your .zshrc file:
 #
-#     zstyle :omz:plugins:ssh-agent agent-forwarding on
+#     zstyle ':omz:plugin:ssh-agent' forwarding 'on'
 #
 #   To load multiple identies, use the identities style, For
 #   example:
 #
-#     zstyle :omz:plugins:ssh-agent id_rsa id_rsa2 id_github
+#     zstyle ':omz:plugin:ssh-agent' identities 'id_rsa' 'id_rsa2' 'id_github'
 #
 #
 # CREDITS
@@ -33,13 +33,13 @@ function _ssh-agent-start() {
   source "${_ssh_agent_env}" > /dev/null
 
   # Load identies.
-  zstyle -a :omz:plugins:ssh-agent identities identities
+  zstyle -a ':omz:plugin:ssh-agent' identities 'identities'
   print starting...
   /usr/bin/ssh-add "$HOME/.ssh/${^identities}"
 }
 
 # Test if agent-forwarding is enabled.
-zstyle -b :omz:plugins:ssh-agent agent-forwarding _ssh_agent_forwarding
+zstyle -b ':omz:plugin:ssh-agent' forwarding '_ssh_agent_forwarding'
 if check-bool "${_ssh_agent_forwarding}" && [[ -n "$SSH_AUTH_SOCK" ]]; then
   # Add a nifty symlink for screen/tmux if agent forwarding.
   [[ -L "$SSH_AUTH_SOCK" ]] || ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USER-screen

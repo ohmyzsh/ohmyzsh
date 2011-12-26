@@ -3,14 +3,18 @@
 # Check for the minimum supported version.
 min_zsh_version=4.3.9
 if ! autoload -Uz is-at-least || ! is-at-least "$min_zsh_version"; then
-  print "oh-my-zsh: The minimum supported Zsh version is $min_zsh_version."
+  print "omz: The minimum supported Zsh version is $min_zsh_version."
 fi
 unset min_zsh_version
 
-# Disable color in dumb terminals.
+# Disable color and theme in dumb terminals.
 if [[ "$TERM" == 'dumb' ]]; then
-  COLOR='false'
+  zstyle ':omz:*:*' color 'no'
+  zstyle ':omz:prompt' theme 'off'
 fi
+
+# Get enabled plugins.
+zstyle -a ':omz:load' plugin 'plugins'
 
 # Add functions to fpath.
 fpath=(
@@ -43,6 +47,7 @@ autoload -Uz zmv
 
 # Source plugins defined in ~/.zshrc.
 for plugin in "$plugins[@]"; do
+  zstyle ":omz:plugin:$plugin" enable 'yes'
   if [[ -f "${0:h}/plugins/$plugin/init.zsh" ]]; then
     source "${0:h}/plugins/$plugin/init.zsh"
   fi
@@ -65,6 +70,11 @@ fi
 
 # Load and run the prompt theming system.
 autoload -Uz promptinit && promptinit
+
+# Load the prompt theme.
+zstyle -a ':omz:prompt' theme 'prompt_argv'
+prompt "$prompt_argv[@]"
+unset prompt_argv
 
 # Compile zcompdump, if modified, to increase startup speed.
 if [[ "$HOME/.zcompdump" -nt "$HOME/.zcompdump.zwc" ]] || [[ ! -f "$HOME/.zcompdump.zwc" ]]; then

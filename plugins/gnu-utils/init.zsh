@@ -2,11 +2,11 @@
 #          FILE:  gnu-utils.plugin.zsh
 #   DESCRIPTION:  oh-my-zsh plugin file.
 #        AUTHOR:  Sorin Ionescu <sorin.ionescu@gmail.com>
-#       VERSION:  1.0.1
+#       VERSION:  1.0.2
 # ------------------------------------------------------------------------------
 
 
-if (( $+commands[gwhoami] )); then
+if (( $+commands[gdircolors] )); then
   function __gnu_utils() {
     emulate -L zsh
     local gcmds
@@ -59,5 +59,13 @@ if (( $+commands[gwhoami] )); then
   function rehash() {
     hash -r "$@"
   }
+
+  # A sensible default for ls.
+  if zstyle -t ':omz:alias:ls' color && [[ -f "$HOME/.dir_colors" ]]; then
+    eval $(gdircolors "$HOME/.dir_colors")
+    alias ls='ls -hF --group-directories-first --color=auto'
+  else
+    alias ls='ls -hF --group-directories-first'
+  fi
 fi
 

@@ -4,8 +4,12 @@ if [[ "$TERM" == 'dumb' ]]; then
 fi
 
 # The default styles.
-zstyle ':prompt:' vicmd '<<<'         # Indicator to notify of vi command mode.
-zstyle ':prompt:' completion "..."    # Indicator to notify of generating completion.
+
+# Indicator to notify of vi command mode.
+zstyle ':omz:prompt' vicmd '<<<'
+
+# Indicator to notify of generating completion.
+zstyle ':omz:completion:indicator' format "..."
 
 # Beep on error in line editor.
 setopt BEEP
@@ -50,7 +54,7 @@ keyinfo=(
   'BackTab'   "$terminfo[kcbt]"
 )
 
-if [[ "$KEYMAP" == (emacs|) ]]; then
+if zstyle -m ':omz:editor' keymap 'emacs'; then
   # Use Emacs key bindings.
   bindkey -e
 
@@ -77,7 +81,7 @@ if [[ "$KEYMAP" == (emacs|) ]]; then
   bindkey "$keyinfo[Control]x$keyinfo[Control]e" edit-command-line
 
   # Expand .... to ../..
-  if check-bool "$DOT_EXPANSION"; then
+  if zstyle -t ':omz:editor' dot-expansion; then
     bindkey "." expand-dot-to-parent-directory-path
   fi
 
@@ -90,7 +94,7 @@ if [[ "$KEYMAP" == (emacs|) ]]; then
     bindkey "$keyinfo[Control]r" history-incremental-search-backward
     bindkey "$keyinfo[Control]s" history-incremental-search-forward
   fi
-elif [[ "$KEYMAP" == 'vi' ]]; then
+elif zstyle -m ':omz:editor' keymap 'vi'; then
   # Use vi key bindings.
   bindkey -v
 
@@ -110,7 +114,7 @@ elif [[ "$KEYMAP" == 'vi' ]]; then
   function zle-keymap-select() {
     if ! vi-restore-rprompt && [[ "$KEYMAP" == 'vicmd' ]]; then
       RPROMPT_CACHED="$RPROMPT"
-      zstyle -s ':prompt:' vicmd RPROMPT
+      zstyle -s ':omz:prompt' vicmd RPROMPT
       zle reset-prompt
     fi
   }
@@ -139,7 +143,7 @@ elif [[ "$KEYMAP" == 'vi' ]]; then
   bindkey -M vicmd "$keyinfo[Control]r" redo
 
   # Expand .... to ../..
-  if check-bool "$DOT_EXPANSION"; then
+  if zstyle -t ':omz:editor' dot-expansion; then
     bindkey -M viins "." expand-dot-to-parent-directory-path
   fi
 
@@ -194,7 +198,7 @@ elif [[ "$KEYMAP" == 'vi' ]]; then
     bindkey -M viins "$keyinfo[Control]s" history-incremental-search-forward
   fi
 else
-  print "oh-my-zsh: KEYMAP must be set 'emacs' or 'vi' but is set to '$KEYMAP'" >&2
+  print "omz: \`zstyle ':omz:editor' keymap\` must be set to 'emacs' or 'vi'" >&2
   return 1
 fi
 
@@ -240,7 +244,7 @@ bindkey "$keyinfo[BackTab]" reverse-menu-complete
 bindkey "$keyinfo[Control]i" expand-or-complete-prefix
 
 # Convert .... to ../.. automatically.
-if check-bool "$DOT_EXPANSION"; then
+if zstyle -t ':omz:editor' dot-expansion; then
   function expand-dot-to-parent-directory-path() {
     if [[ $LBUFFER = *.. ]]; then
       LBUFFER+=/..
@@ -254,9 +258,9 @@ if check-bool "$DOT_EXPANSION"; then
 fi
 
 # Display an indicator when completing.
-if check-bool "$COMPLETION_INDICATOR"; then
+if zstyle -t ':omz:completion:indicator' enable; then
   function expand-or-complete-prefix-with-indicator() {
-    zstyle -s ':prompt:' completion indicator
+    zstyle -s ':omz:completion:indicator' format indicator
     print -Pn "$indicator"
     unset indicator
     zle expand-or-complete-prefix
