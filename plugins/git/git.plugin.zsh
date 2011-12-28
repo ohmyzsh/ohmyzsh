@@ -52,6 +52,11 @@ function current_branch() {
   echo ${ref#refs/heads/}
 }
 
+function git_current_upstream(){
+  local upstream=$(git config --get branch."$(current_branch)".remote) || return
+  echo $upstream
+}
+
 # these aliases take advantage of the previous function
 alias ggpull='git pull origin $(current_branch)'
 compdef ggpull=git
