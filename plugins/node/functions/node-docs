@@ -1,4 +1,4 @@
 # Open the node api for your current version to the optional section.
 # TODO: Make the sections easier to use.
-open "http://nodejs.org/docs/$(node --version)/api/all.html#${1}"
+open "http://nodejs.org/docs/$(node --version | sed 's/-.*//')/api/all.html#${1}"
 
