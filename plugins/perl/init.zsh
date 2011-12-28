@@ -13,7 +13,7 @@ if [[ "$OSTYPE" == darwin* ]]; then
   cache_file="${0:h}/cache.zsh"
   perl_path="$HOME/Library/Perl/5.12"
   if [[ -f "$perl_path/lib/perl5/local/lib.pm" ]]; then
-    export MANPATH="$perl_path/man:$MANPATH"
+    manpath=("$perl_path/man" $manpath)
     if [[ ! -f "$cache_file" ]]; then
       perl -I$perl_path/lib/perl5 -Mlocal::lib=$perl_path >! "$cache_file"
       source "$cache_file"
@@ -23,10 +23,8 @@ if [[ "$OSTYPE" == darwin* ]]; then
   fi
   unset perl_path
   unset cache_file
-fi
 
-# Set environment variables for launchd processes.
-if [[ "$OSTYPE" == darwin* ]]; then
+  # Set environment variables for launchd processes.
   for env_var in PERL_LOCAL_LIB_ROOT PERL_MB_OPT PERL_MM_OPT PERL5LIB; do
     launchctl setenv "$env_var" "${(P)env_var}" &!
   done
