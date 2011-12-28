@@ -1,5 +1,4 @@
-setopt CORRECT        # Correct commands.
-setopt CORRECT_ALL    # Correct all arguments.
+setopt CORRECT               # Correct commands.
 
 # The 'ls' Family
 if zstyle -t ':omz:alias:ls' color; then
