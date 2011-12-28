@@ -9,6 +9,10 @@ alias mr='mate CHANGELOG app config db lib public script spec test'
 
 # Functions
 function tm() {
-  cd "$1" && mate .
+  if [[ -z "$1" ]]; then
+    mate .
+  else
+    ( [[ -d "$1" ]] && cd "$1" && mate . )
+  fi
 }
 
