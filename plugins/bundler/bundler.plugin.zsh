@@ -41,6 +41,6 @@ for cmd in $bundled_commands; do
   alias $cmd=bundled_$cmd
 
   if which _$cmd > /dev/null 2>&1; then
-        compdef _$cmd bundled_$cmd
+        compdef _$cmd bundled_$cmd=$cmd
   fi
 done
