@@ -118,6 +118,5 @@ fi
 (( $+commands[ebuild] )) && alias ebuild='nocorrect ebuild'
 (( $+commands[gist] )) && alias gist='nocorrect gist'
 (( $+commands[heroku] )) && alias heroku='nocorrect heroku'
-(( $+commands[hpodder] )) && alias hpodder='nocorrect hpodder'
 (( $+commands[mysql] )) && alias mysql='nocorrect mysql'
 
