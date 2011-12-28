@@ -80,17 +80,27 @@ fi
 
 # Diff/Make
 if zstyle -t ':omz:alias:diff' color; then
-  if (( $+commands[colordiff] )); then
-    alias diff='colordiff -u'
-    compdef colordiff=diff
-  elif (( $+commands[git] )); then
-    function diff() {
-      git --no-pager diff --color=always --no-ext-diff --no-index "$@";
-    }
-    compdef _git diff=git-diff
-  else
-    alias diff='diff -u'
-  fi
+  function diff() {
+    if (( $+commands[colordiff] )); then
+      "$commands[diff]" --unified "$@" | colordiff --difftype diffu
+    elif (( $+commands[git] )); then
+      git --no-pager diff --color=auto --no-ext-diff --no-index "$@"
+    else
+      "$commands[diff]" --unified "$@"
+    fi
+  }
+
+  function wdiff() {
+    if (( $+commands[wdiff] )) && (( $+commands[colordiff] )); then
+      "$commands[diff]" --unified "$@" | "$commands[wdiff]" --diff-input --avoid-wraps | colordiff --difftype wdiff
+    elif (( $+commands[git] )); then
+      git --no-pager diff --color=auto --no-ext-diff --no-index --word-diff "$@"
+    elif (( $+commands[wdiff] )); then
+      "$commands[diff]" --unified "$@" | "$commands[wdiff]" --diff-input --avoid-wraps
+    else
+      print "zsh: command not found: $0" >&2
+    fi
+  }
 
   if (( $+commands[colormake] )); then
     alias make='colormake'
