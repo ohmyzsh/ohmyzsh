@@ -35,7 +35,6 @@ alias du='du -kh'
 alias e="$EDITOR"
 alias find='noglob find'
 alias gcc='nocorrect gcc'
-alias history='fc -l 1'
 alias ln='nocorrect ln -i'
 alias locate='noglob locate'
 alias man='nocorrect man'
