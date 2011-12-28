@@ -91,12 +91,17 @@ if zstyle -t ':omz:alias:diff' color; then
   }
 
   function wdiff() {
-    if (( $+commands[wdiff] )) && (( $+commands[colordiff] )); then
-      "$commands[diff]" --unified "$@" | "$commands[wdiff]" --diff-input --avoid-wraps | colordiff --difftype wdiff
+    if (( $+commands[wdiff] )); then
+      "$commands[wdiff]" \
+        --avoid-wraps \
+        --start-delete="$(print -n $FG[red])" \
+        --end-delete="$(print -n $FG[none])" \
+        --start-insert="$(print -n $FG[green])" \
+        --end-insert="$(print -n $FG[none])" \
+        "$@" \
+      | sed 's/^\(@@\( [+-][[:digit:]]*,[[:digit:]]*\)\{2\} @@\)$/;5;6m\10m/g'
     elif (( $+commands[git] )); then
-      git --no-pager diff --color=auto --no-ext-diff --no-index --word-diff "$@"
-    elif (( $+commands[wdiff] )); then
-      "$commands[diff]" --unified "$@" | "$commands[wdiff]" --diff-input --avoid-wraps
+      git --no-pager diff --color=auto --no-ext-diff --no-index --color-words "$@"
     else
       print "zsh: command not found: $0" >&2
     fi
