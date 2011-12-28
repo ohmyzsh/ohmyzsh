@@ -4,7 +4,7 @@ function autoloadable() {
 }
 
 # Checks boolean variable for "true" (case insensitive "1", "y", "yes", "t", "true", "o", and "on").
-function check-bool {
+function check-bool() {
   [[ -n "$1" && "$1" == (1|[Yy]([Ee][Ss]|)|[Tt]([Rr][Uu][Ee]|)|[Oo]([Nn]|)) ]]
 }
 
@@ -17,7 +17,7 @@ TRAP_SIGNALS=(
 )
 
 # Adds a function to a list to be called when a trap is triggered.
-function add-zsh-trap {
+function add-zsh-trap() {
   if (( $# < 2 )); then
     print "Usage: $0 type function"
     return 1
