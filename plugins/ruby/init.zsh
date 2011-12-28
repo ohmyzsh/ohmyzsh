@@ -3,21 +3,8 @@ if [[ "$OSTYPE" == darwin* ]]; then
   export GEM_HOME=$HOME/Library/Ruby/Gems/1.8
   path=("$GEM_HOME/bin" $path)
 
-  # gem is slow; cache its output.
-  cache_file="${0:h}/cache.zsh"
-  if [[ ! -f "$cache_file" ]]; then
-    print export GEM_PATH=$GEM_HOME:$(gem env gempath) >! "$cache_file"
-    source "$cache_file"
-  else
-    source "$cache_file"
-  fi
-  unset cache_file
-
   # Set environment variables for launchd processes.
-  for env_var in GEM_PATH GEM_HOME; do
-    launchctl setenv "$env_var" "${(P)env_var}" &!
-  done
-  unset env_var
+  launchctl setenv GEM_HOME "$GEM_HOME" &!
 fi
 
 # Loads RVM into the shell session.
