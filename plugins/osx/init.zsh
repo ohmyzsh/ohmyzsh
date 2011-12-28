@@ -11,13 +11,8 @@ function ql() {
   (( $# > 0 )) && qlmanage -p "$@" &> /dev/null
 }
 
-# Open man pages in Preview.
-function manp() {
-  (( $# > 0 )) && man -t "$@" | open -f -a Preview
-}
-compdef _man manp
-
 # Delete .DS_Store and __MACOSX directories.
 function rm-osx-cruft() {
   find "${@:-$PWD}" \( -type f -name '.DS_Store' \) -o \( -type d -name '__MACOSX' \) -print0 | xargs rm -rf
 }
+
