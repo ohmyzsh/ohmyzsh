@@ -1,7 +1,7 @@
 # Install local gems according to Mac OS X conventions.
 if [[ "$OSTYPE" == darwin* ]]; then
   export GEM_HOME=$HOME/Library/Ruby/Gems/1.8
-  export PATH=$GEM_HOME/bin:$PATH
+  path=("$GEM_HOME/bin" $path)
 
   # gem is slow; cache its output.
   cache_file="${0:h}/cache.zsh"
@@ -12,6 +12,12 @@ if [[ "$OSTYPE" == darwin* ]]; then
     source "$cache_file"
   fi
   unset cache_file
+
+  # Set environment variables for launchd processes.
+  for env_var in GEM_PATH GEM_HOME; do
+    launchctl setenv "$env_var" "${(P)env_var}" &!
+  done
+  unset env_var
 fi
 
 # Loads RVM into the shell session.
@@ -27,13 +33,5 @@ fi
 if [[ -s "$HOME/.rbenv/bin/rbenv" ]]; then
   path=("$HOME/.rbenv/bin" $path)
   eval "$(rbenv init -)"
-fi
-
-# Set environment variables for launchd processes.
-if [[ "$OSTYPE" == darwin* ]]; then
-  for env_var in GEM_PATH GEM_HOME; do
-    launchctl setenv "$env_var" "${(P)env_var}" &!
-  done
-  unset env_var
 fi
 
