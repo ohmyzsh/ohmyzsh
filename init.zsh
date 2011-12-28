@@ -65,7 +65,9 @@ done
 
 # Set environment variables for launchd processes.
 if [[ "$OSTYPE" == darwin* ]]; then
-  launchctl setenv PATH "$PATH" &!
+  for env_var in PATH MANPATH; do
+    launchctl setenv "$env_var" "${(P)env_var}" &!
+  done
 fi
 
 # Load and run the prompt theming system.
