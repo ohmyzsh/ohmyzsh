@@ -6,7 +6,7 @@ function git_prompt_info() {
 
 # Checks if working tree is dirty
 parse_git_dirty() {
-  if [[ -n $(git status -s 2> /dev/null) ]]; then
+  if [[ -n $(git status -s --ignore-submodules=dirty 2> /dev/null) ]]; then
     echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
   else
     echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
@@ -52,7 +52,9 @@ git_prompt_status() {
   if $(echo "$INDEX" | grep '^R  ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_RENAMED$STATUS"
   fi
-  if $(echo "$INDEX" | grep '^D ' &> /dev/null); then
+  if $(echo "$INDEX" | grep '^ D ' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
+  elif $(echo "$INDEX" | grep '^AD ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
   fi
   if $(echo "$INDEX" | grep '^UU ' &> /dev/null); then
