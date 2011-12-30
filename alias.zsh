@@ -39,13 +39,13 @@ alias locate='noglob locate'
 alias man='nocorrect man'
 alias mkdir='nocorrect mkdir -p'
 alias mv='nocorrect mv -i'
+alias p="$PAGER"
 alias po='popd'
 alias pu='pushd'
 alias rake='noglob rake'
 alias rm='nocorrect rm -i'
 alias scp='nocorrect scp'
 alias type='type -a'
-alias v="$PAGER"
 
 # Mac OS X
 if [[ "$OSTYPE" != darwin* ]]; then
