@@ -74,7 +74,3 @@ unsetopt EXTENDED_HISTORY # add timestamps to history
 
 # ctrl-< and crtrl-> still works
 export DISABLE_AUTO_UPDATE=true
-
-# rvm, should be at the end of this config file
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"  # This loads RVM into a shell session.
-

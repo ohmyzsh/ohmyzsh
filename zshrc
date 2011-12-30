@@ -1,6 +1,7 @@
 # source global profile if exists. This is important, since in /etc/profile the /etc/profile.d/* files are sourced.
 # These usually contain additional path variables and other global settings
-[[ -f /etc/profile ]] && . /etc/profile
+# on the other hand, when I source this the path i set in zshenv seems to be overriden
+# [[ -f /etc/profile ]] && . /etc/profile
 
 # Path to your oh-my-zsh configuration.
 ZSH=$HOME/.zsh
