@@ -54,6 +54,17 @@ keyinfo=(
   'BackTab'   "$terminfo[kcbt]"
 )
 
+# Use Emacs bindings by default.
+if ! zstyle -m ':omz:editor' keymap ' *'; then
+  zstyle ':omz:editor' keymap 'emacs'
+fi
+
+# Stop binding on an invalid keymap.
+if ! zstyle -m ':omz:editor' keymap 'emacs|vi'; then
+  print "omz: \`zstyle ':omz:editor' keymap\` must be set to 'emacs' or 'vi'" >&2
+  return 1
+fi
+
 if zstyle -m ':omz:editor' keymap 'emacs'; then
   # Use Emacs key bindings.
   bindkey -e
@@ -109,7 +120,9 @@ if zstyle -m ':omz:editor' keymap 'emacs'; then
     [[ -n "$keyinfo[Control]" ]] && \
       bindkey "$keyinfo[Control]s" history-incremental-search-forward
   fi
-elif zstyle -m ':omz:editor' keymap 'vi'; then
+fi
+
+if zstyle -m ':omz:editor' keymap 'vi'; then
   # Use vi key bindings.
   bindkey -v
 
@@ -232,9 +245,6 @@ elif zstyle -m ':omz:editor' keymap 'vi'; then
     [[ -n "$keyinfo[Control]" ]] && \
       bindkey -M viins "$keyinfo[Control]s" history-incremental-search-forward
   fi
-else
-  print "omz: \`zstyle ':omz:editor' keymap\` must be set to 'emacs' or 'vi'" >&2
-  return 1
 fi
 
 # The next key bindings are for both Emacs and Vi.
