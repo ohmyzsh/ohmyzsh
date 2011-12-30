@@ -48,6 +48,11 @@ autoload -Uz zmv
 # Source plugins defined in ~/.zshrc.
 for plugin in "$plugins[@]"; do
   zstyle ":omz:plugin:$plugin" enable 'yes'
+
+  if [[ ! -d "${0:h}/plugins/$plugin" ]]; then
+    print "omz: no such plugin: $plugin" >&2
+  fi
+
   if [[ -f "${0:h}/plugins/$plugin/init.zsh" ]]; then
     source "${0:h}/plugins/$plugin/init.zsh"
   fi
