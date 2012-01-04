@@ -17,6 +17,7 @@ alias gca='git commit -v -a'
 compdef _git gca=git-commit
 alias gco='git checkout'
 compdef _git gco=git-checkout
+alias gcm='git checkout master'
 alias gb='git branch'
 compdef _git gb=git-branch
 alias gba='git branch -a'
