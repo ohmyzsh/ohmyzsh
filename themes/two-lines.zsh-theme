@@ -14,8 +14,8 @@ function _show_rvm_prompt() {
 
 local return_code="%(?..%{$red%}%? ↵%{$reset_color%})"
 
-PROMPT='
-%{$magenta%}%n@%m%{$reset_color%}: %{$blue%}%~ $(git_prompt_info)%{$reset_color%}
+
+PROMPT='%{$magenta%}%n@%m%{$reset_color%}: %{$blue%}%~ $(git_prompt_info)%{$reset_color%}
 $(_show_rvm_prompt)> '
 
 RPS1="${return_code}"
