@@ -144,7 +144,7 @@ p_choose_prompt () {
   local p_line_1a_width=${#${(S%%)p_line_1a//(\%([KF1]|)\{*\}|\%[Bbkf])}}
   local p_line_1b_width=${#${(S%%)p_line_1b//(\%([KF1]|)\{*\}|\%[Bbkf])}}
 
-  local p_padding_size=$(( COLUMNS - p_line_1a_width + 2 - p_line_1b_width))
+  local p_padding_size=$(( COLUMNS - p_line_1a_width - p_line_1b_width))
 
   # Try to fit in long path and user@host.
   if (( p_padding_size > 0 )); then
