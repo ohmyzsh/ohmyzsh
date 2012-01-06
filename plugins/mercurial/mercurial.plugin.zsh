@@ -26,17 +26,17 @@ function prompt_hg_info(){
         s+="$__CURRENT_HG_BRANCH"
         case "$__CURRENT_HG_BRANCH_STATUS" in
             ahead)
-            s+="↑"
+            s+=" ↑"
             ;;
             diverged)
-            s+="↕"
+            s+=" ↕"
             ;;
             behind)
-            s+="↓"
+            s+=" ↓"
             ;;
         esac
         if [ -n "$__CURRENT_HG_BRANCH_IS_DIRTY" ]; then
-            s+="⚡"
+            s+=" ⚡"
         fi
         s+="] "
 
