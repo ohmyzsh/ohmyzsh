@@ -63,6 +63,10 @@ function update_current_hg_vars(){
     fi
 }
 
+typeset -ga preexec_functions
+typeset -ga precmd_functions
+typeset -ga chpwd_functions
+
 preexec_functions+='preexec_update_hg_vars'
 precmd_functions+='precmd_update_hg_vars'
 chpwd_functions+='chpwd_update_hg_vars'
