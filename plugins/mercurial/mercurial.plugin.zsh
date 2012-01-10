@@ -1,46 +1,30 @@
 ## Source : https://bitbucket.org/Josh/mercurial-for-zsh
 
-function chpwd_update_hg_vars() {
-    update_current_hg_vars
-}
-
-function precmd_update_hg_vars(){
-    if [ -n "$__EXECUTED_HG_COMMAND" ]; then
-        update_current_hg_vars
-        unset __EXECUTED_HG_COMMAND
-    fi
-}
-
-
-function preexec_update_hg_vars(){
-    case "$1" in
-        hg*)
-            export __EXECUTED_HG_COMMAND=1
-            ;;
-    esac
-}
-
 function prompt_hg_info(){
+    __CURRENT_DIR_IS_REPO=$(hg summary 2> /dev/null) || return
+
+    if [ -n "$__CURRENT_DIR_IS_REPO" ]; then
+        update_current_hg_vars
+    fi
+
     if [ -n "$__CURRENT_HG_BRANCH" ]; then
-        local s="["
-        s+="$__CURRENT_HG_BRANCH"
+        local s="$__CURRENT_HG_BRANCH"
         case "$__CURRENT_HG_BRANCH_STATUS" in
             ahead)
-            s+=" ↑"
+            d="↑"
             ;;
             diverged)
-            s+=" ↕"
+            d="↕"
             ;;
             behind)
-            s+=" ↓"
+            d="↓"
             ;;
         esac
         if [ -n "$__CURRENT_HG_BRANCH_IS_DIRTY" ]; then
-            s+=" ⚡"
+            d="⚡"
         fi
-        s+="] "
 
-        printf " %s%s" "%{${fg[yellow]}%}" $s
+        printf "%s[%s %s%s%s] " "%{${fg[yellow]}%}" $s "%{${fg[red]}%}" $d "%{${fg[yellow]}%}"
     fi
 }
 
@@ -62,17 +46,6 @@ function update_current_hg_vars(){
         fi
     fi
 }
-
-typeset -ga preexec_functions
-typeset -ga precmd_functions
-typeset -ga chpwd_functions
-
-preexec_functions+='preexec_update_hg_vars'
-precmd_functions+='precmd_update_hg_vars'
-chpwd_functions+='chpwd_update_hg_vars'
-
-# Set the prompt.
-# PROMPT=$'%{${fg[cyan]}%}%B%~%b$(prompt_hg_info)%{${fg[default]}%} '
 
 # Mercurial
 alias hgc='hg commit -v'
