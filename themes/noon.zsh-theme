@@ -1,4 +1,6 @@
-# "noon" by Noon Silk.
+# "noon" by Noon Silk - http://github.com/silky
+#
+# Screenshot: http://i.imgur.com/EoYZz.png
 #
 # This theme is essentially "dieter", with a bit of stuff removed (git related
 # prompt stuff). I also added the time into the prompt, and the date on the 
