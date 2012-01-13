@@ -17,7 +17,7 @@
 # (i.e. they will be reset, even if you hit enter a few times on empty command prompts)
 
 # local time, color coded by last return code
-time_enabled="%(?.%{$fg[magenta]%}.%{$fg[red]%})%D{%I:%M %p}%{$reset_color%}"
+time_enabled="%(?.%{$fg[magenta]%}.%{$fg[red]%}⚡ )%D{%I:%M %p}%{$reset_color%}"
 time_disabled="%{$fg[magenta]%}%D{%I:%M %p}%{$reset_color%}"
 time=$time_enabled
 
