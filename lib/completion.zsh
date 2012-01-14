@@ -1,14 +1,16 @@
 # fixme - the load process here seems a bit bizarre
 
-unsetopt noautomenu
+unsetopt menu_complete   # do not autoselect the first completion entry
+unsetopt flowcontrol
+setopt auto_menu         # show completion menu on succesive tab press
 setopt complete_in_word
-unsetopt always_to_end
+setopt always_to_end
 
 WORDCHARS=''
 
 zmodload -i zsh/complist
 
-# case-insensitive (all), partial-word and then substring completion
+## case-insensitive (all),partial-word and then substring completion
 if [ "x$CASE_SENSITIVE" = "xtrue" ]; then
   zstyle ':completion:*' matcher-list 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
   unset CASE_SENSITIVE
