@@ -34,7 +34,7 @@ return_code_enabled="%(?..%{$fg[red]%}%? ↵%{$reset_color%})"
 return_code_disabled="%{$fg[magenta]%}%D{%a %b %d}%{$reset_color%}"
 return_code=$return_code_disabled
 
-RPROMPT='${return_code} $(battery_charge)'
+RPROMPT='${return_code}$(battery_charge)'
 
 function accept-line-or-clear-warning () {
 	if [[ -z $BUFFER ]]; then
