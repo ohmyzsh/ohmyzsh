@@ -29,6 +29,7 @@ _within-bundled-project() {
 
 _run-with-bundler() {
   if _bundler-installed && _within-bundled-project; then
+    echo "Running command with 'bundle exec'"
     bundle exec $@
   else
     $@
