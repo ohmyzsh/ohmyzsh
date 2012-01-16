@@ -5,16 +5,15 @@
 #-------------------------------------------------------------------------------
 
 # Color shortcuts
-R=$fg[red]
-G=$fg[green]
-M=$fg[magenta]
-RB=$fg_bold[red]
-YB=$fg_bold[yellow]
-BB=$fg_bold[blue]
+R=$fg_no_bold[red]
+G=$fg_no_bold[green]
+M=$fg_no_bold[magenta]
+Y=$fg_no_bold[yellow]
+B=$fg_no_bold[blue]
 RESET=$reset_color
 
 if [ "$(whoami)" = "root" ]; then
-    PROMPTCOLOR="%{$RB%}" PREFIX="-!-";
+    PROMPTCOLOR="%{$R%}" PREFIX="-!-";
 else
     PROMPTCOLOR="" PREFIX="---";
 fi
@@ -73,13 +72,14 @@ function custom_git_prompt() {
 PROMPT='%B$PREFIX %2~ $(custom_git_prompt)%{$M%}%B»%b%{$RESET%} '
 RPS1="${return_code}"
 
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$YB%}‹"
-ZSH_THEME_GIT_PROMPT_SUFFIX="%{$YB%}›%{$RESET%} "
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$Y%}‹"
+ZSH_THEME_GIT_PROMPT_SUFFIX="%{$Y%}›%{$RESET%} "
 
 ZSH_THEME_GIT_PROMPT_DIRTY="%{$R%}*"
 ZSH_THEME_GIT_PROMPT_CLEAN=""
 
-ZSH_THEME_GIT_PROMPT_AHEAD="%{$BB%}➔"
+ZSH_THEME_GIT_PROMPT_AHEAD="%{$B%}➔"
+
 
 ZSH_THEME_GIT_STATUS_PREFIX=" "
 
@@ -90,7 +90,7 @@ ZSH_THEME_GIT_PROMPT_STAGED_RENAMED="%{$G%}R"
 ZSH_THEME_GIT_PROMPT_STAGED_DELETED="%{$G%}D"
 
 # Not-staged
-ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$R%}⁇"
+ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$R%}?"
 ZSH_THEME_GIT_PROMPT_MODIFIED="%{$R%}M"
 ZSH_THEME_GIT_PROMPT_DELETED="%{$R%}D"
 ZSH_THEME_GIT_PROMPT_UNMERGED="%{$R%}UU"
