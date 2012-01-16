@@ -57,8 +57,6 @@ sprunge() {
 	  fi
 	else
 	  echo Using input from a pipe or STDIN redirection... >&2
-	  while IFS= read -r line ; do
-		echo $line
-	  done | curl -F 'sprunge=<-' http://sprunge.us
+	  curl -F 'sprunge=<-' http://sprunge.us
 	fi
 }
