@@ -1,5 +1,3 @@
-fpath=($ZSH/plugins/bundler $fpath)
-
 alias be="bundle exec"
 alias bi="bundle install"
 alias bl="bundle list"
