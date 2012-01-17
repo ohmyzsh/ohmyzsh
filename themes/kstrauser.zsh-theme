@@ -1,4 +1,12 @@
-# Define common and useful things to put in a prompt
+# kstrauser's theme for oh-my-zsh by Kirk Strauser <kirk@strauser.com>
+
+# Git prompt coloring was heavily influenced by the "muse" theme, but muse
+# doesn't offer green smileys to indicate that the last command exited
+# successfully or red frowneys to indicate failure. :)
+
+# Define common and useful things to put in a prompt. By building a little
+# library of these components, the actual PROMPT=... definition can be short,
+# readable, and editable.
 typeset -A prc
 prc[abbrevpath]='%{${fg[red]}%}%B%45<...<%~%<<%b%{$reset_color%}'
 prc[gitprompt]='%{$fg[cyan]%}$(git_prompt_info)$(git_prompt_status)%{$reset_color%}'
