@@ -1,7 +1,7 @@
 # Define common and useful things to put in a prompt
 typeset -A prc
 prc[abbrevpath]='%{${fg[red]}%}%B%45<...<%~%<<%b%{$reset_color%}'
-prc[gitprompt]='%{$fg[cyan]%}$(git_prompt_info)$(git_prompt_status) %{$reset_color%}'
+prc[gitprompt]='%{$fg[cyan]%}$(git_prompt_info)$(git_prompt_status)%{$reset_color%}'
 prc[newline]=$'\n'
 prc[promptchar]='%(!.#.$)'
 prc[smiley]='%(?.%{${fg[green]}%}:).%{${fg[red]}%}:()%{$reset_color%}'
