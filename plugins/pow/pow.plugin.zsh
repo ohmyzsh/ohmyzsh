@@ -48,3 +48,6 @@ kapow(){
   [ $? -eq 0 ] &&  echo "pow: restarting $vhost.dev"
 }
 compctl -W ~/.pow -/ kapow
+
+# View the standard out (puts) from any pow app
+alias kaput="tail -f ~/Library/Logs/Pow/apps/*"
