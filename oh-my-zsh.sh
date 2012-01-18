@@ -69,6 +69,8 @@ for config_file ($ZSH_LOCAL/*.zsh) source $config_file
 if [ "$ZSH_THEME" = "random" ]
 then
   themes=($ZSH/themes/*zsh-theme)
+  themes+=($ZSH_CUSTOM/*zsh-theme)
+  themes+=($ZSH_LOCAL/*zsh-theme)
   N=${#themes[@]}
   ((N=(RANDOM%N)+1))
   RANDOM_THEME=${themes[$N]}
