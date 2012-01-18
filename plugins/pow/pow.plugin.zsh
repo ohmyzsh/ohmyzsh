@@ -34,6 +34,7 @@ rack_root_detect(){
   [[ ${basedir} == "/" ]] && return 1
   echo `basename $basedir | sed -E "s/.(com|net|org)//"`
 }
+
 kapow(){
   local vhost=$1
   [ ! -n "$vhost" ] && vhost=$(rack_root_detect)
@@ -43,11 +44,23 @@ kapow(){
     return 1
   fi
 
-  # [ ! -d "~/.pow/${vhost}/tmp" ] &&  mkdir -p "~/.pow/$vhost/tmp"
+  [ ! -d ~/.pow/${vhost}/tmp ] && mkdir -p ~/.pow/$vhost/tmp
   touch ~/.pow/$vhost/tmp/restart.txt;
   [ $? -eq 0 ] &&  echo "pow: restarting $vhost.dev"
 }
 compctl -W ~/.pow -/ kapow
+
+powit(){
+	local basedir=$(pwd)
+  local vhost=$1
+  [ ! -n "$vhost" ] && vhost=$(rack_root_detect)
+  if [ ! -h ~/.pow/$vhost ]
+	then
+		echo "pow: Symlinking your app with pow. ${vhost}"
+	  [ ! -d ~/.pow/${vhost} ] && ln -s $basedir ~/.pow/$vhost
+    return 1
+  fi
+}
 
 # View the standard out (puts) from any pow app
 alias kaput="tail -f ~/Library/Logs/Pow/apps/*"
