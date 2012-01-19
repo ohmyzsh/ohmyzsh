@@ -234,11 +234,13 @@ alias glo='git log --topo-order ${git_log_format_oneline}'
 compdef _git glo=git-log
 alias glO='git log --topo-order --date=short ${git_log_format_oneline_more}'
 compdef _git glO=git-log
-alias glg='git log --graph --topo-order ${git_log_format_medium}'
+alias glg='git log --topo-order --all --graph ${git_log_format_oneline}'
 compdef _git glg=git-log
-alias gls='git log --graph --topo-order --stat ${git_log_format_medium}'
+alias glG='git log --topo-order --all --graph --date=short ${git_log_format_oneline_more}'
+compdef _git glG=git-log
+alias gls='git log --topo-order --stat ${git_log_format_medium}'
 compdef _git gls=git-log
-alias gld='git log --graph --topo-order --stat --patch --full-diff ${git_log_format_medium}'
+alias gld='git log --topo-order --stat --patch --full-diff ${git_log_format_medium}'
 compdef _git gld=git-log
 alias glc='git shortlog --summary --numbered'
 compdef _git glc=git-shortlog
