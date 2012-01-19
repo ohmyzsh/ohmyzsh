@@ -19,7 +19,7 @@ TRAP_SIGNALS=(
 # Adds a function to a list to be called when a trap is triggered.
 function add-zsh-trap() {
   if (( $# < 2 )); then
-    print "Usage: $0 type function"
+    print "usage: $0 type function"
     return 1
   fi
 

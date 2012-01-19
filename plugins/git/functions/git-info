@@ -64,7 +64,7 @@ function _git-info-abort() {
     return 1
   fi
 
-  cat > /dev/stderr <<END
+  cat >&2 <<EOF
 
 
 Gathering status for certain repositories is time intensive.
@@ -74,7 +74,7 @@ for this repository.
 To revert, execute:
   git-info on
 
-END
+EOF
 
   unset _git_info_executing
   git config --bool prompt.showinfo false
@@ -156,7 +156,7 @@ function git-info() {
     elif [[ "$1" == [Oo][Ff][Ff] ]]; then
       git config --bool prompt.showinfo false
     else
-      print "Usage: $0 [ on | off ]"
+      print "usage: $0 [ on | off ]" >&2
     fi
     return 0
   fi

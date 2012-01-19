@@ -1,11 +1,11 @@
 local config_file="$HOME/.wakeonlan/$1"
 if [[ ! -f "$config_file" ]]; then
-  print "$0: $1: There is no such device file." >&2
+  print "$0: no such device file: $1" >&2
   return 1
 fi
 
 if (( ! $+commands[wakeonlan] )); then
-  print "$0: Can't find wakeonlan. Is it installed?" >&2
+  print "$0: command not found: wakeonlan" >&2
   return 1
 fi
 

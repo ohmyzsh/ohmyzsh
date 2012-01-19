@@ -149,7 +149,7 @@ if [[ $+functions[_zsh_highlight] -eq 0 ]]; then
   {
     # Load Zsh module zsh/zleparameter, needed to override user defined widgets.
     zmodload zsh/zleparameter 2>/dev/null || {
-      print 'zsh-syntax-highlighting: failed loading zsh/zleparameter.' >&2
+      print 'history-substring-search: failed loading: zsh/zleparameter' >&2
       return 1
     }
 
@@ -176,7 +176,7 @@ if [[ $+functions[_zsh_highlight] -eq 0 ]]; then
                        zle -N $cur_widget _zsh_highlight_widget_$cur_widget";;
 
         # Default: unhandled case.
-        *) print "zsh-syntax-highlighting: unhandled ZLE widget '$cur_widget'" >&2 ;;
+        *) print "history-substring-search: unhandled ZLE widget: $cur_widget" >&2 ;;
       esac
     done
   }

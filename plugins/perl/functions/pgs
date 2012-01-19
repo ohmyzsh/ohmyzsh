@@ -1,6 +1,6 @@
 # Perl Global Substitution
 if (( $# < 2 )); then
-  print "Usage: $0 find replace [file ...]" >&2
+  print "usage: $0 find replace [file ...]" >&2
   return 1
 fi
 

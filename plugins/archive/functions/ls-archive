@@ -1,12 +1,14 @@
 local verbose
 
 if (( $# == 0 )); then
-  print "Usage: extract [-option] [file ...]"
-  print
-  print "Options:"
-  print "    -v, --verbose    Verbose archive listing."
-  print
-  print "Report bugs to <sorin.ionescu@gmail.com>."
+  cat >&2 <<EOF
+usage: $0 [-option] [file ...]
+
+options:
+    -v, --verbose    verbose archive listing
+
+Report bugs to <sorin.ionescu@gmail.com>.
+EOF
 fi
 
 if [[ "$1" == "-v" ]] || [[ "$1" == "--verbose" ]]; then
@@ -16,7 +18,7 @@ fi
 
 while (( $# > 0 )); do
   if [[ ! -f "$1" ]]; then
-    print "extract: '$1' is not a valid file" 1>&2
+    print "$0: file not valid: $1" >&2
     shift
     continue
   fi
@@ -35,7 +37,7 @@ while (( $# > 0 )); do
     (*.rar) unrar ${${verbose:+v}:-l} "$1" ;;
     (*.7z) 7za l "$1" ;;
     (*)
-      print "ls-archive: '$1' cannot be listed" 1>&2
+			print "$0: cannot list: $1" >&2
       success=1
     ;;
   esac

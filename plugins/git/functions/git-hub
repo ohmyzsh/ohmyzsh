@@ -30,11 +30,11 @@ if [[ -n "$url" ]]; then
     "$BROWSER" "$url"
     return 0
   else
-    print "fatal: Browser not set or set to a non-existent browser." >&2
+    print "$0: browser not set or set to a non-existent browser" >&2
     return 1
   fi
 else
-  print "fatal: Not a Git repository or origin remote not set." >&2
+  print "$0: not a Git repository or remote origin not set" >&2
   return 1
 fi
 

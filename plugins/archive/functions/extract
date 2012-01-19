@@ -4,12 +4,14 @@ local file_name
 local extract_dir
 
 if (( $# == 0 )); then
-  print "Usage: extract [-option] [file ...]"
-  print
-  print "Options:"
-  print "    -r, --remove    Remove archive."
-  print
-  print "Report bugs to <sorin.ionescu@gmail.com>."
+  cat >&2 <<EOF
+usage: $0 [-option] [file ...]
+
+options:
+    -r, --remove    remove archive
+
+Report bugs to <sorin.ionescu@gmail.com>.
+EOF
 fi
 
 remove_archive=1
@@ -20,7 +22,7 @@ fi
 
 while (( $# > 0 )); do
   if [[ ! -f "$1" ]]; then
-    print "extract: '$1' is not a valid file" 1>&2
+    print "$0: file not valid: $1" >&2
     shift
     continue
   fi
@@ -56,7 +58,7 @@ while (( $# > 0 )); do
       cd ..
     ;;
     (*)
-      print "extract: '$1' cannot be extracted" 1>&2
+      print "$0: cannot extract: $1" >&2
       success=1
     ;;
   esac
