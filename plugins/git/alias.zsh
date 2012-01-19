@@ -182,6 +182,8 @@ alias ghc='git remote prune'
 compdef _git ghc=git-remote
 alias ghs='git remote show'
 compdef _git ghs=git-remote
+alias ghb='git-hub'
+compdef _git-hub ghb=git-hub
 
 # Stash (t)
 alias gta='git stash apply'

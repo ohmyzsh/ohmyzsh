@@ -1,12 +1,30 @@
 # Open the GitHub repository in the browser.
-local url=$(
+local remote branches branch current_branch url
+
+remote="${1:-origin}"
+url=$(
   git config -l \
-    | grep "remote.origin.url" \
-    | sed -En "s/remote.origin.url=(git|https?)(@|:\/\/)github.com(:|\/)(.+)\/(.+).git/https:\/\/github.com\/\4\/\5/p"
+    | grep "remote.${remote}.url" \
+    | sed -En "s/remote.${remote}.url=(git|https?)(@|:\/\/)github.com(:|\/)(.+)\/(.+).git/https:\/\/github.com\/\4\/\5/p"
 )
+branches=($(
+  git branch -a \
+    | grep "remotes/${remote}" \
+    | sed -e 's/[ \*]*//g' -e "s:remotes/${remote}/::g"
+))
+current_branch="$(git-branch)"
+branch="${2:-master}"
+
+if [[ -z "$2" ]]; then
+  if (( $branches[(I)$current_branch] != 0 )); then
+    branch="$current_branch"
+  else
+    branch='master'
+  fi
+fi
 
 if [[ -n "$url" ]]; then
-  url="${url}/tree/${$(git-branch):-master}"
+  url="${url}/tree/${branch}"
 
   if (( $+commands[$BROWSER] )); then
     "$BROWSER" "$url"

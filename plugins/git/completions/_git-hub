@@ -1,0 +1,29 @@
+#compdef git-hub
+#autoload
+
+local state remotes remote branches ret=1
+
+_arguments -C -s -S \
+  '1::args:->remote' \
+  '2::args:->branch' && ret=0
+
+case "$state" in
+  (remote)
+    remotes=($(
+      git config -l \
+        | grep 'remote\.[^.]*\.url' \
+        | cut -d'.' -f2))
+    _describe -t branch 'remotes' remotes && ret=0
+  ;;
+  (branch)
+    remote="$words[(($CURRENT - 1))]"
+    branches=($(
+      git branch -a \
+        | grep "remotes/${remote}" \
+        | sed -e 's/[ \*]*//g' -e "s:remotes/${remote}/::g"
+    ))
+    _describe -t branch 'branches' branches && ret=0
+  ;;
+esac
+
+return $ret
