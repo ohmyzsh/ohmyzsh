@@ -6,7 +6,7 @@
 #
 # Right prompt when in a Git repository:
 #      ±‹branch_name clean_or_dirty› status(ahead) [short_sha]
-#
+# 
 # author: Eric Bouchut
 
 ZSH_THEME_GIT_PROMPT_PREFIX="±‹%{$fg_bold[yellow]%}"
@@ -34,9 +34,14 @@ ZSH_THEME_GIT_PROMPT_SHA_AFTER="%{$reset_color%}]"
 local username="%{$fg_bold[green]%}%n%{$reset_color%}"
 local hostname="%{$fg_bold[magenta]%}%m%{$reset_color%}"
 local current_dir="%{$fg_bold[blue]%}%~%{$reset_color%}"
+local cmd_status="%(?,%{$fg[green]%}☺%{$reset_color%},%{$fg[red]%}☹%{$reset_color%})"
+local rvm_config=$(~/.rvm/bin/rvm-prompt)
 
-# Left prompt: username@hostname:current_directory%  
-PROMPT='$username@$hostname:$current_dir%# '
+# Left prompt: username@hostname:current_directory
+PROMPT='
+$username@$hostname:$current_dir 
+${cmd_status} '
 
-# Right prompt when in a git repo:  ±‹branch_name clean_or_dirty› status(ahead) [short_sha]
-RPROMPT='$(git_prompt_info)$(git_prompt_status)$(git_prompt_ahead)$(git_prompt_short_sha)'
+
+# Right prompt when in a git repo:  rvm_config ±‹branch_name clean_or_dirty› status(ahead) [short_sha]
+RPROMPT='${rvm_config} $(git_prompt_info)$(git_prompt_status)$(git_prompt_ahead)$(git_prompt_short_sha)'
