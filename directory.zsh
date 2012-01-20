@@ -3,7 +3,7 @@ setopt AUTO_PUSHD           # Push the old directory onto the stack on cd.
 setopt PUSHD_IGNORE_DUPS    # Don't store duplicates in the stack.
 setopt PUSHD_SILENT         # Do not print the directory stack after pushd or popd.
 setopt PUSHD_TO_HOME        # Push to home directory when no argument is given.
-setopt PUSHD_MINUS          # Use +/-n to specify a directory in the stack.
+setopt PUSHD_MINUS          # Swap the meaning of + and - when specifing a stack directory.
 setopt CDABLE_VARS          # Change directory to a path stored in a variable.
 setopt AUTO_NAME_DIRS       # Auto add variable-stored paths to ~ list.
 setopt MULTIOS              # Write to multiple descriptors.
