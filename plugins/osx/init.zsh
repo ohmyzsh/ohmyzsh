@@ -13,6 +13,9 @@ function ql() {
 
 # Delete .DS_Store and __MACOSX directories.
 function rm-osx-cruft() {
-  find "${@:-$PWD}" \( -type f -name '.DS_Store' \) -o \( -type d -name '__MACOSX' \) -print0 | xargs rm -rf
+  find "${@:-$PWD}" \( \
+    -type f -name '.DS_Store' -o \
+    -type d -name '__MACOSX' \
+  \) -print0 | xargs -0 rm -rf
 }
 
