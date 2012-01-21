@@ -10,7 +10,7 @@ alias ta="tmux attach-session"
 alias tl="tmux list-sessions"
 
 # Auto
-if (( $SHLVL == 1 )) && check-bool "$AUTO_TMUX"; then
+if (( $SHLVL == 1 )) && is-true "$AUTO_TMUX"; then
   (( SHLVL += 1 )) && export SHLVL
   session="$(tmux list-sessions 2> /dev/null | cut -d':' -f1 | head -1)"
   if [[ -n "$session" ]]; then

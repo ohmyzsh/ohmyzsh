@@ -60,7 +60,7 @@ function _git-action() {
 
 # Turns off git-info for the current repository.
 function _git-info-abort() {
-  if ! check-bool "$_git_info_executing"; then
+  if ! is-true "$_git_info_executing"; then
     return 1
   fi
 
@@ -146,7 +146,7 @@ function git-info() {
   unset git_rprompt_info
 
   # Return if not inside a Git repository work tree.
-  if ! check-bool "$(git rev-parse --is-inside-work-tree 2> /dev/null)"; then
+  if ! is-true "$(git rev-parse --is-inside-work-tree 2> /dev/null)"; then
     return 1
   fi
 
@@ -162,7 +162,7 @@ function git-info() {
   fi
 
   # Return if git-info is disabled.
-  if ! check-bool "${$(git config --bool prompt.showinfo):-true}"; then
+  if ! is-true "${$(git config --bool prompt.showinfo):-true}"; then
     return 1
   fi
 

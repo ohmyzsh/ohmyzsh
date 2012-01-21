@@ -4,7 +4,7 @@ function autoloadable() {
 }
 
 # Checks boolean variable for "true" (case insensitive "1", "y", "yes", "t", "true", "o", and "on").
-function check-bool() {
+function is-true() {
   [[ -n "$1" && "$1" == (1|[Yy]([Ee][Ss]|)|[Tt]([Rr][Uu][Ee]|)|[Oo]([Nn]|)) ]]
 }
 
