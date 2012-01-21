@@ -8,3 +8,4 @@ Provides the following commands.
 - `ql` quick look at files.
 - `manp` Open MAN pages in _Preview.app_.
 - `trash` Move files and folders to _Trash_.
+
