@@ -24,14 +24,17 @@ function _scm_get_scm_type {
   return 1
 } 
 
+function _scm_reset {
+  unset SCM_ROOT
+  unset SCM_TYPE
+}
+
 # Recursive lookup for possible SCM root
 function scm_detect_root {
   _DETECT_WD=${1:-$PWD}
 
   [ $SCM_ROOT ] && [[ $_DETECT_WD == $SCM_ROOT* ]] && return
-
-  unset SCM_ROOT
-  unset SCM_TYPE
+  _scm_reset
 
   until [ "$_DETECT_WD" = "" ]; do
     _scm_get_scm_type "$_DETECT_WD" && return
