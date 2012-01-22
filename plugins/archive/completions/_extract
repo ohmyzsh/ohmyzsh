@@ -2,6 +2,6 @@
 #autoload
 
 _arguments \
-  '(-r --remove)'{-r,--remove}'[Remove archive.]' \
+  '(-r --remove)'{-r,--remove}'[remove archive]' \
   "*::archive file:_files -g '(#i)*.(tar|tgz|tbz|tbz2|txz|tlz|gz|bz2|xz|lzma|Z|zip|rar|7z|deb)(-.)'" && return 0
 
