@@ -49,3 +49,16 @@ function scm_prompt_char() {
   echo $_SCM_PROMPT_CHARS[$SCM_TYPE]
 }
 
+
+function scm_prompt_info_for_git() {
+  git_prompt_info
+}
+
+function scm_prompt_info_for_hg() {}
+function scm_prompt_info_for_svn() {}
+
+function scm_prompt_info() {
+  [ ! $SCM_TYPE ] && return
+
+  scm_prompt_info_for_$SCM_TYPE # calls scm type specific prompt generator
+}
