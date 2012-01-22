@@ -1,0 +1,1 @@
+pathmunge "/Developer/usr/bin"
