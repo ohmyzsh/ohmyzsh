@@ -1,5 +1,11 @@
 SCM_DEBUG=yes # comment line to disable debugging
+
+declare -A _scm_prompt_chars
+
 _scm_types=(git hg svn) && export _scm_types
+_scm_prompt_chars[git]=± 
+_scm_prompt_chars[hg]=ʜɢ 
+_scm_prompt_chars[svn]=svn 
 
 function _scm_debug { [ $SCM_DEBUG ] && echo $* >&2 }
 
