@@ -1,11 +1,11 @@
 SCM_DEBUG=yes # comment line to disable debugging
 
-declare -A _scm_prompt_chars
+declare -A _SCM_PROMPT_CHARS
 
-_scm_types=(git hg svn) && export _scm_types
-_scm_prompt_chars[git]=± 
-_scm_prompt_chars[hg]=ʜɢ 
-_scm_prompt_chars[svn]=svn 
+_SCM_TYPES=(git hg svn) && export _SCM_TYPES
+_SCM_PROMPT_CHARS[git]=± 
+_SCM_PROMPT_CHARS[hg]=ʜɢ 
+_SCM_PROMPT_CHARS[svn]=svn 
 
 function _scm_debug { [ $SCM_DEBUG ] && echo $* >&2 }
 
@@ -13,7 +13,7 @@ function _scm_debug { [ $SCM_DEBUG ] && echo $* >&2 }
 function _scm_get_scm_type {
   [[ "$1" = "/" ]] && return 1
 
-  for type ($_scm_types) {
+  for type ($_SCM_TYPES) {
     [ ! -d "$1/.$type" ] && continue
 
     export SCM_ROOT="$1"
@@ -46,5 +46,6 @@ function scm_detect_root {
 function scm_prompt_char() {
   [ ! $SCM_TYPE ] && return
 
-  echo $_scm_prompt_chars[$SCM_TYPE]
+  echo $_SCM_PROMPT_CHARS[$SCM_TYPE]
 }
+
