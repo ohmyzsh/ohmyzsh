@@ -11,15 +11,16 @@ function _scm_debug { [ $SCM_DEBUG ] && echo $* >&2 }
 
 # Checks given 1st path argument if it's root of .git|.hg|.svn 
 function _scm_get_scm_type {
+  [[ "$1" = "/" ]] && return 1
+
   for type ($_scm_types) {
     [ ! -d "$1/.$type" ] && continue
 
     export SCM_ROOT="$1"
     export SCM_TYPE=$type
-    
     return 0
   }
-  
+
   return 1
 } 
 
