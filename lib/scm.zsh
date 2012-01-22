@@ -14,22 +14,33 @@ function _scm_get_scm_type {
   for type ($_scm_types) {
     [ ! -d "$1/.$type" ] && continue
 
-    _scm_debug "   -> Is a $type repository"
-    export SCM_ROOT=$1
+    export SCM_ROOT="$1"
     export SCM_TYPE=$type
+    
     return 0
   }
   
   return 1
 } 
 
-# Recursive lookup for possible SCM root from current dir => /
+# Recursive lookup for possible SCM root
 function scm_detect_root {
-  [[ $# -eq 1 && "$1" = "" ]] && return # touched the root (/)
   _DETECT_WD=${1:-$PWD}
-  
-  _scm_debug -ne "."
 
-  _scm_get_scm_type "$_DETECT_WD" && return
-  scm_detect_root "${_DETECT_WD%/*}"
-} 
+  [ $SCM_ROOT ] && [[ $_DETECT_WD == $SCM_ROOT* ]] && return
+
+  unset SCM_ROOT
+  unset SCM_TYPE
+
+  until [ "$_DETECT_WD" = "" ]; do
+    _scm_get_scm_type "$_DETECT_WD" && return
+    
+    _DETECT_WD=${_DETECT_WD%/*}
+  done
+}
+
+function scm_prompt_char() {
+  [ ! $SCM_TYPE ] && return
+
+  echo $_scm_prompt_chars[$SCM_TYPE]
+}
