@@ -5,15 +5,19 @@ function prompt_char {
 }
 
 function virtualenv_info {
-    [ $VIRTUAL_ENV ] && echo '('`basename $VIRTUAL_ENV`') '
+    [ $VIRTUAL_ENV ] && echo `dirname $VIRTUAL_ENV | xargs basename`'#'`basename $VIRTUAL_ENV`
+}
+
+function virtualenv_info_prefix {
+    [ $VIRTUAL_ENV ] && echo and
 }
 
 function collapse_pwd {
     echo $(pwd | sed -e "s,^$HOME,~,")
 }
 
-PROMPT='%{$fg[magenta]%}%n%{$reset_color%} at %{$fg[yellow]%}%m%{$reset_color%} in %{$fg_bold[green]%}${PWD/#$HOME/~}%{$reset_color%}$(git_prompt_info) using %{$reset_color%}%{$fg[red]%}$(~/.rvm/bin/rvm-prompt)%{$reset_color%} 
-$(virtualenv_info)$(prompt_char) '
+PROMPT='%{$fg[magenta]%}%n%{$reset_color%} at %{$fg[yellow]%}%m%{$reset_color%} in %{$fg_bold[green]%}${PWD/#$HOME/~}%{$reset_color%}$(git_prompt_info) using %{$reset_color%}%{$fg[red]%}$(~/.rvm/bin/rvm-prompt)%{$reset_color%} $(virtualenv_info_prefix) %{$reset_color%}%{$fg[red]%}$(virtualenv_info)%{$reset_color%}
+$(prompt_char) '
 
 
 ZSH_THEME_GIT_PROMPT_PREFIX=" on %{$fg[magenta]%}"
