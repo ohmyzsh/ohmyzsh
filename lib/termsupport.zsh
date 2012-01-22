@@ -28,6 +28,12 @@ function omz_termsupport_preexec {
   title "$CMD" "%100>...>$2%<<"
 }
 
+# Prints given 2nd argument with xterm color code of 1st argument
+# see http://www.calmar.ws/vim/256-xterm-24bit-rgb-color-chart.html for color codes
+function xterm_color() {
+  echo -e "\033[38;5;$1m$2\033[0m"
+}
+
 autoload -U add-zsh-hook
 add-zsh-hook precmd  omz_termsupport_precmd
 add-zsh-hook preexec omz_termsupport_preexec
