@@ -8,9 +8,7 @@ url=$(
     | sed -En "s/remote.${remote}.url=(git|https?)(@|:\/\/)github.com(:|\/)(.+)\/(.+).git/https:\/\/github.com\/\4\/\5/p"
 )
 branches=($(
-  git branch -a \
-    | grep "remotes/${remote}" \
-    | sed -e 's/[ \*]*//g' -e "s:remotes/${remote}/::g"
+  git branch -r | sed -e "/${remote}\/HEAD -> ${remote}/d" -e "s/^[[:space:]]*${remote}\///g"
 ))
 current_branch="$(git-branch)"
 branch="${2:-master}"
