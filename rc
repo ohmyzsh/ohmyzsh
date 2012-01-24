@@ -1,0 +1,138 @@
+# The following lines were added by compinstall
+# zstyle ':completion:*' completer _expand _complete _ignored _correct _approximate
+zstyle ':completion:*' completer _expand _complete _ignored _correct _approximate
+zstyle ':completion:*' matcher-list '' 'r:|[._-]=** r:|=**' 'l:|=* r:|=*'
+zstyle :compinstall filename '/home/nate/.zshrc'
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall
+
+
+# Lines configured by zsh-newuser-install
+HISTFILE=~/.histfile
+HISTSIZE=1000
+SAVEHIST=1000
+setopt autocd beep extendedglob nomatch
+bindkey -v
+# End of lines configured by zsh-newuser-install
+
+
+# These guys know what they are doing.
+export ZSH=$HOME/.oh-my-zsh
+export ZSH_THEME="light"
+source $ZSH/oh-my-zsh.sh
+
+
+# Fuck flow control. Right off the bat.
+stty -ixon
+# LOL HAI
+setopt DVORAK
+setopt interactivecomments
+unsetopt correct_all
+
+
+# Important variables.
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/nate/.exe:/home/nate/.cabal/bin:/home/nate/.node_modules/.bin
+
+
+# Plugins time! TODO: add more plugins
+# TODO: make sure git autocomplete is happy times
+plugins=(git)
+
+
+# My aliases.
+alias ls="ls --color=auto --hide='*.pyc'"
+alias tmux "TERM=xterm-256color tmux"
+alias mkdir='mkdir -p'
+alias bbuild="bookbuilder -a \"Nate Soares\""
+alias pacman="pacman-color"
+alias aurify="makepkg -s && sudo pacman -U *.pkg.*"
+alias pirate="aria2c"
+alias view="feh -F"
+alias pdf="apvlv"
+alias pdf2="evince"
+alias ebook="calibre"
+alias get="sudo pacman-color -S"
+alias unget="sudo pacman-color -R"
+alias canget="pacman-color -Ss"
+alias music="ncmpc"
+alias song="cvlc"
+alias dvi="evince"
+alias so="source"
+
+
+# This is sort of like an alias.
+qfind() { find . -iname "*$1*" }
+
+
+# Ls on printing
+preexec() { ODIR="$(pwd)" }
+precmd() { [[ "$(pwd)" != $ODIR ]] && ls --color=auto --hide='*.pyc' }
+
+
+# Extract all the archives!
+extract() {
+	if [ -f $1 ] ; then
+		case $1 in
+			*.tar.bz2)	tar xvjf $1		;;
+			*.tar.gz)	tar xvzf $1		;;
+			*.bz2)		bunzip2 $1		;;
+			*.rar)		unrar x $1		;;
+			*.gz)		gunzip $1		;;
+			*.tar)		tar xvf $1		;;
+			*.tbz2)		tar xvjf $1		;;
+			*.tgz)		tar xvzf $1		;;
+			*.zip)		unzip $1		;;
+			*.Z)		uncompress $1	;;
+			*.7z)		7z x $1			;;
+			*)			echo "'$1' cannot be extracted via >extract<" ;;
+		esac
+	else
+		echo "'$1' is not a valid file"
+	fi
+}
+
+
+# TODO: Remove when you are sure you like the new way better.
+# No correcting
+# unsetopt correct_all
+# Complete from both ends
+# setopt completeinword
+# Insensitive complete
+# zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+# Better killall
+# zstyle ':completion:*:killall:*' command 'ps -u $USER -o cmd'
+# Better 'word' usage (^W)
+# autoload select-word-style
+# select-word-style shell
+# Superior globbing
+# setopt extendedglob
+# unsetopt caseglob
+
+
+# TODO: Get some more virtualenvs back
+# export WORKON_HOME=$HOME/.virtualenvs
+# export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
+# source /usr/local/bin/virtualenvwrapper.sh
+
+
+# Git
+export GIT_EDITOR=vim
+
+
+# TODO: Make the transition between term and X nicer
+if [ $TERM = "screen-256color" ]; then
+	PS1="%{$fg[green]%}"'$(tmux display-message -p "#W")'"%{$fg[white]%}:"$PS1
+	PS1="%{$fg[blue]%}"'$(tmux display-message -p "#I")'"%{$fg[white]%}."$PS1
+elif [ $TERM = "xterm" ]; then
+	if [ !`tmux attach` ]; then
+		TERM=xterm-256color tmux
+	fi
+fi
+
+
+# Muzak
+if [ ! "`pgrep mpd`" ]; then
+	echo "Starting music player daemon..."
+	mpd
+fi
