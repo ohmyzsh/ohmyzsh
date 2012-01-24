@@ -34,8 +34,8 @@ ZSH_THEME_GIT_PROMPT_SHA_AFTER="%{$reset_color%}]"
 local username="%{$fg_bold[green]%}%n%{$reset_color%}"
 local hostname="%{$fg_bold[magenta]%}%m%{$reset_color%}"
 local current_dir="%{$fg_bold[blue]%}%~%{$reset_color%}"
-local cmd_status="%(?,%{$fg[green]%}☺%{$reset_color%},%{$fg[red]%}☹%{$reset_color%})"
-local rvm_config=$(~/.rvm/bin/rvm-prompt)
+local cmd_status="%(?,%{$fg_bold[green]%}☺%{$reset_color%},%{$fg_bold[red]%}☹%{$reset_color%})"
+
 
 # Left prompt: username@hostname:current_directory
 PROMPT='
@@ -44,4 +44,4 @@ ${cmd_status} '
 
 
 # Right prompt when in a git repo:  rvm_config ±‹branch_name clean_or_dirty› status(ahead) [short_sha]
-RPROMPT='${rvm_config} $(git_prompt_info)$(git_prompt_status)$(git_prompt_ahead)$(git_prompt_short_sha)'
+RPROMPT='$(~/.rvm/bin/rvm-prompt) $(git_prompt_info)$(git_prompt_status)$(git_prompt_ahead)$(git_prompt_short_sha)'
