@@ -70,55 +70,55 @@ if zstyle -m ':omz:editor' keymap 'emacs'; then
   bindkey -e
 
   [[ -n "$keyinfo[Escape]" ]] && \
-    bindkey "$keyinfo[Escape]b" emacs-backward-word
+    bindkey -M emacs "$keyinfo[Escape]b" emacs-backward-word
   [[ -n "$keyinfo[Escape]" ]] && \
-    bindkey "$keyinfo[Escape]f" emacs-forward-word
+    bindkey -M emacs "$keyinfo[Escape]f" emacs-forward-word
   [[ -n "$keyinfo[Escape]" ]] && [[ -n "$keyinfo[Left]" ]] && \
-    bindkey "$keyinfo[Escape]$keyinfo[Left]" emacs-backward-word
+    bindkey -M emacs "$keyinfo[Escape]$keyinfo[Left]" emacs-backward-word
   [[ -n "$keyinfo[Escape]" ]] && [[ -n "$keyinfo[Right]" ]] && \
-    bindkey "$keyinfo[Escape]$keyinfo[Right]" emacs-forward-word
+    bindkey -M emacs "$keyinfo[Escape]$keyinfo[Right]" emacs-forward-word
 
   # Kill to the beginning of the line.
   [[ -n "$keyinfo[Control]" ]] && \
-    bindkey "$keyinfo[Control]u" backward-kill-line
+    bindkey -M emacs "$keyinfo[Control]u" backward-kill-line
 
   # Kill to the beginning of the word.
   [[ -n "$keyinfo[Control]" ]] && \
-    bindkey "$keyinfo[Control]w" backward-kill-word
+    bindkey -M emacs "$keyinfo[Control]w" backward-kill-word
 
   # Undo/Redo
   [[ -n "$keyinfo[Control]" ]] && \
-    bindkey "$keyinfo[Control]_" undo
+    bindkey -M emacs "$keyinfo[Control]_" undo
   [[ -n "$keyinfo[Escape]" ]] && \
-    bindkey "$keyinfo[Escape]_" redo
+    bindkey -M emacs "$keyinfo[Escape]_" redo
 
   # Search character.
   [[ -n "$keyinfo[Control]" ]] && \
-    bindkey "$keyinfo[Control]]" vi-find-next-char
+    bindkey -M emacs "$keyinfo[Control]]" vi-find-next-char
   [[ -n "$keyinfo[Escape]" ]] && [[ -n "$keyinfo[Control]" ]] && \
-    bindkey "$keyinfo[Escape]$keyinfo[Control]]" vi-find-prev-char
+    bindkey -M emacs "$keyinfo[Escape]$keyinfo[Control]]" vi-find-prev-char
 
   # Edit command in an external editor.
   [[ -n "$keyinfo[Control]" ]] && \
-    bindkey "$keyinfo[Control]x$keyinfo[Control]e" edit-command-line
+    bindkey -M emacs "$keyinfo[Control]x$keyinfo[Control]e" edit-command-line
 
   # Expand .... to ../..
   if zstyle -t ':omz:editor' dot-expansion; then
-    bindkey "." expand-dot-to-parent-directory-path
+    bindkey -M emacs "." expand-dot-to-parent-directory-path
   fi
 
   # Bind to history substring search plugin if enabled;
   # otherwise, bind to built-in Zsh history search.
   if (( $+widgets[history-incremental-pattern-search-backward] )); then
     [[ -n "$keyinfo[Control]" ]] && \
-      bindkey "$keyinfo[Control]r" history-incremental-pattern-search-backward
+      bindkey -M emacs "$keyinfo[Control]r" history-incremental-pattern-search-backward
     [[ -n "$keyinfo[Control]" ]] && \
-      bindkey "$keyinfo[Control]s" history-incremental-pattern-search-forward
+      bindkey -M emacs "$keyinfo[Control]s" history-incremental-pattern-search-forward
   else
     [[ -n "$keyinfo[Control]" ]] && \
-      bindkey "$keyinfo[Control]r" history-incremental-search-backward
+      bindkey -M emacs "$keyinfo[Control]r" history-incremental-search-backward
     [[ -n "$keyinfo[Control]" ]] && \
-      bindkey "$keyinfo[Control]s" history-incremental-search-forward
+      bindkey -M emacs "$keyinfo[Control]s" history-incremental-search-forward
   fi
 fi
 
