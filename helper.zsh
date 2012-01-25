@@ -19,12 +19,12 @@ TRAP_SIGNALS=(
 # Adds a function to a list to be called when a trap is triggered.
 function add-zsh-trap() {
   if (( $# < 2 )); then
-    print "usage: $0 type function"
+    print "usage: $0 type function" >&2
     return 1
   fi
 
   if [[ -z "$TRAP_SIGNALS[(r)$1]" ]]; then
-    print "$0: unknown signal: $1"
+    print "$0: unknown signal: $1" >&2
     return 1
   fi
 
