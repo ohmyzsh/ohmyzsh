@@ -6,8 +6,6 @@ function git_prompt_info() {
 
 # Checks if working tree is dirty
 parse_git_dirty() {
-#do stuff here
-    ver=$(git --version | cut -d " " -f 3)
     if $(is_legacy_git); then
         echo $(parse_legacy_git_dirty)
     else
@@ -45,8 +43,6 @@ parse_recent_git_dirty() {
     echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
   fi
 }
-
-
 
 # Checks if there are commits ahead from remote
 function git_prompt_ahead() {
