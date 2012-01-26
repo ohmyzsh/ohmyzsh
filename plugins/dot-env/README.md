@@ -64,6 +64,8 @@ There are some helpful functions to maintain things:
 
     config_omzs_for_host      # stubs out a hierarchy for a specified remote hostname
 
+    add_ssh_key_to_host       # copy your .ssh/id_rsa.pub or id_dsa.pub key to a remote host
+
     propagate_omzs_to_host    # copies your ~/.oh-my-zsh directory to a remote host
 
     load_omzs_on_alias        # run this on a remote host to setup an alias 'omzs' to load oh-my-zsh
@@ -73,6 +75,8 @@ There are some helpful functions to maintain things:
 * `config_omzs_for_this_host` - no arguments, just creates a directory structure for your local machine and stubs out a few .sh files
 
 * `config_omzs_for_host` - "Usage: config_omzs_for_host HOSTNAME" - creates a directory structure for your remote machine and stubs out a few .sh files
+
+* `add_ssh_key_to_host` - "Usage: add_ssh_key_to_host [user@]HOSTNAME" - Add your public SSH key to a remote host. You may have to enter your password up to 3 times.  After that it will be passwordless if the remote sshd server is setup to allow it
 
 * The `load_omzs_on_alias` function is nice if others also use that account and you don't want to force them to use your oh-my-zsh settings.
 

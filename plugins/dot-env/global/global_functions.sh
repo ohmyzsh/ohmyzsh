@@ -24,6 +24,36 @@ function load_omzs_on_alias {
   return 0
 }
 
+# Add your public SSH key to a remote host
+# You may have to enter your password up to 3 times.
+# After that it will be passwordless if the remote sshd server is setup to allow it
+function add_ssh_key_to_host {
+  if [[ $# -lt 1 ]]; then
+    echo "Usage: add_ssh_key_to_host [user@]HOSTNAME"
+    return
+  fi
+
+  # First check that the account has an authorized_keys file
+  ssh_dir='~/.ssh'
+  authorized_keys_file='authorized_keys'
+  output=`ssh $1 "ls -1 $ssh_dir" stderr 2> /dev/null`
+  if [[ "$output" =~ "authorized_keys" ]]; then
+    echo "- appending [$1]: $ssh_dir/$authorized_keys_file"
+  else
+    echo "- creating [$1]: $ssh_dir/$authorized_keys_file"
+    output=`ssh $1 "mkdir -p $ssh_dir && touch $ssh_dir/$authorized_keys_file && chmod 700 $ssh_dir && chmod 600 $ssh_dir/$authorized_keys_file"`
+  fi
+
+  # Use DSA key by default, fallback to RSA key
+  if [[ -r ~/.ssh/id_dsa.pub ]]; then
+    echo "- using your DSA key"
+    cat ~/.ssh/id_dsa.pub | ssh $1 "cat >> $ssh_dir/$authorized_keys_file"
+  elif [[ -r ~/.ssh/id_rsa.pub ]]; then
+    echo "- using your RSA key"
+    cat ~/.ssh/id_rsa.pub | ssh $1 "cat >> $ssh_dir/$authorized_keys_file"
+  fi
+  echo "- ssh logins should now be passwordless on [$1]"
+}
 
 # Propagate your environment system to a remote host
 function propagate_omzs_to_host {
