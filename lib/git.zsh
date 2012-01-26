@@ -17,7 +17,11 @@ parse_git_dirty() {
 # echos false otherwise 
 is_legacy_git() {
     checkit() {
-        if [ $1 -gt 1 -o $2 -gt 7 -o $3 -ge 2 ]; then
+        if [ $1 -gt 1 ]; then
+            echo false
+        elif [ $1 -eq 1 -a $2 -gt 7 ]; then
+            echo false
+        elif [ $1 -eq 1 -a $2 -eq 7 -a $3 -ge 2 ]; then
             echo false
         else
             echo true 
