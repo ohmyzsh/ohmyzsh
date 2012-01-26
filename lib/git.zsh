@@ -6,12 +6,47 @@ function git_prompt_info() {
 
 # Checks if working tree is dirty
 parse_git_dirty() {
+#do stuff here
+    ver=$(git --version | cut -d " " -f 3)
+    if $(is_legacy_git); then
+        echo $(parse_legacy_git_dirty)
+    else
+        echo $(parse_recent_git_dirty)
+    fi
+}
+
+# echos the string 'true' if this git is old enough not to have --ignore-submodules
+# echos false otherwise 
+is_legacy_git() {
+    checkit() {
+        if [ $1 -gt 1 -o $2 -gt 7 -o $3 -ge 2 ]; then
+            echo false
+        else
+            echo true 
+        fi
+    }
+    echo $(checkit $(git --version | cut -d " " -f 3 | tr '.' ' '))
+}
+
+# Checks if working tree is dirty when --ignore-submodules is not present
+parse_legacy_git_dirty() {
+  if [[ -n $(git status --porcelain 2> /dev/null) ]]; then
+    echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
+  else
+    echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
+  fi
+}
+
+# Checks if working tree is dirty when git is recent
+parse_recent_git_dirty() {
   if [[ -n $(git status -s --ignore-submodules=dirty 2> /dev/null) ]]; then
     echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
   else
     echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
   fi
 }
+
+
 
 # Checks if there are commits ahead from remote
 function git_prompt_ahead() {
