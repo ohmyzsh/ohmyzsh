@@ -37,10 +37,11 @@ for i in $OS_DIR/*.sh ; do
 done
 
 # Source Host specifics if there are any for the current host
-if [[ ! -z "$HOST" ]]; then
+HOSTNAME=`hostname`
+if [[ ! -z "$HOSTNAME" ]]; then
 	HOST_DIR=$DOT_ENV_PATH/host/`hostname`
 	if [[ "$SHLVL" == "1" ]]; then
-		echo "Sourcing '$HOST' Environment"
+		echo "Sourcing '$HOSTNAME' Environment"
 	fi
 	for i in $HOST_DIR/*.sh ; do
 	  if [ -r "$i" ]; then

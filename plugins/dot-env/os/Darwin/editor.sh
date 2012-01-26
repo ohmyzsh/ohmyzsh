@@ -5,14 +5,14 @@
 # export EDITOR="$HOME/bin/mate2"
 
 # Sublime Text 2 Editor
-export EDITOR="$HOME/bin/subl"
+export EDITOR="$HOME/bin/subl -n"
 
 alias e="$EDITOR ."
 alias ea="$EDITOR $DOT_ENV_PATH/host/$HOSTNAME/alias.sh"
 alias eas=". $DOT_ENV_PATH/host/$HOSTNAME/alias.sh"
 alias eb="$EDITOR $HOME/bin"
-alias ee="$EDITOR $DOT_ENV_PATH $HOME/.bashrc"
-alias ees=". $DOT_ENV_PATH/source.sh"
+alias ee="$EDITOR $DOT_ENV_PATH $HOME/.zshrc"
+alias ees=". $DOT_ENV_PATH/dot-env.plugin.zsh"
 alias ef="$EDITOR $DOT_ENV_PATH/host/$HOSTNAME/functions.sh"
 alias efs=". $DOT_ENV_PATH/host/$HOSTNAME/functions.sh"
 alias eh="$EDITOR $HOME/.ssh"
