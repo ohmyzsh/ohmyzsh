@@ -16,6 +16,7 @@ zstyle ':omz:terminal' auto-title 'yes'
 # Set the plugins to load (see $OMZ/plugins/).
 zstyle ':omz:load' plugin 'archive' 'git'
 
+# Set the prompt theme to load.
 # Setting it to 'random' loads a random theme.
 # Auto set to 'off' on dumb terminals.
 zstyle ':omz:prompt' theme 'sorin'
