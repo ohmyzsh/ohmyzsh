@@ -36,7 +36,7 @@ manpath=(
   /usr/share/man
 )
 
-for path_file in /etc/manpaths.d/*; do
+for path_file in /etc/manpaths.d/*(.N); do
   manpath+=($(<$path_file))
 done
 
@@ -51,7 +51,7 @@ path=(
   /sbin
 )
 
-for path_file in /etc/paths.d/*; do
+for path_file in /etc/paths.d/*(.N); do
   path+=($(<$path_file))
 done
 
