@@ -63,9 +63,9 @@ if [[ "$keymap" == (emacs|) ]]; then
     bindkey -M emacs "$keyinfo[Escape]b" emacs-backward-word
   [[ -n "$keyinfo[Escape]" ]] && \
     bindkey -M emacs "$keyinfo[Escape]f" emacs-forward-word
-  [[ -n "$keyinfo[Escape]" ]] && [[ -n "$keyinfo[Left]" ]] && \
+  [[ -n "$keyinfo[Escape]" && -n "$keyinfo[Left]" ]] && \
     bindkey -M emacs "$keyinfo[Escape]$keyinfo[Left]" emacs-backward-word
-  [[ -n "$keyinfo[Escape]" ]] && [[ -n "$keyinfo[Right]" ]] && \
+  [[ -n "$keyinfo[Escape]" && -n "$keyinfo[Right]" ]] && \
     bindkey -M emacs "$keyinfo[Escape]$keyinfo[Right]" emacs-forward-word
 
   # Kill to the beginning of the line.
@@ -85,7 +85,7 @@ if [[ "$keymap" == (emacs|) ]]; then
   # Search character.
   [[ -n "$keyinfo[Control]" ]] && \
     bindkey -M emacs "$keyinfo[Control]]" vi-find-next-char
-  [[ -n "$keyinfo[Escape]" ]] && [[ -n "$keyinfo[Control]" ]] && \
+  [[ -n "$keyinfo[Escape]" && -n "$keyinfo[Control]" ]] && \
     bindkey -M emacs "$keyinfo[Escape]$keyinfo[Control]]" vi-find-prev-char
 
   # Edit command in an external editor.
@@ -195,9 +195,9 @@ elif [[ "$keymap" == vi ]]; then
     bindkey -M viins "$keyinfo[Escape]w" copy-region-as-kill
   [[ -n "$keyinfo[Escape]" ]] && \
     bindkey -M viins "$keyinfo[Escape]h" run-help
-  [[ -n "$keyinfo[Escape]" ]] && [[ -n "$keyinfo[Left]" ]] && \
+  [[ -n "$keyinfo[Escape]" && -n "$keyinfo[Left]" ]] && \
     bindkey -M viins "$keyinfo[Escape]$keyinfo[Left]" emacs-backward-word
-  [[ -n "$keyinfo[Escape]" ]] && [[ -n "$keyinfo[Right]" ]] && \
+  [[ -n "$keyinfo[Escape]" && -n "$keyinfo[Right]" ]] && \
     bindkey -M viins "$keyinfo[Escape]$keyinfo[Right]" emacs-forward-word
 
   # History

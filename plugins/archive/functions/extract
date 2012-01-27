@@ -15,7 +15,7 @@ EOF
 fi
 
 remove_archive=1
-if [[ "$1" == "-r" ]] || [[ "$1" == "--remove" ]]; then
+if [[ "$1" == "-r" || "$1" == "--remove" ]]; then
   remove_archive=0
   shift
 fi

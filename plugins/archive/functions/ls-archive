@@ -11,7 +11,7 @@ Report bugs to <sorin.ionescu@gmail.com>.
 EOF
 fi
 
-if [[ "$1" == "-v" ]] || [[ "$1" == "--verbose" ]]; then
+if [[ "$1" == "-v" || "$1" == "--verbose" ]]; then
   verbose=0
   shift
 fi
