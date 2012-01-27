@@ -3,7 +3,7 @@
 # Check for the minimum supported version.
 min_zsh_version='4.3.10'
 if ! autoload -Uz is-at-least || ! is-at-least "$min_zsh_version"; then
-  print "omz: old shell version detected, minimum required: $min_zsh_version" >&2
+  print "omz: old shell detected, minimum required: $min_zsh_version" >&2
 fi
 unset min_zsh_version
 
@@ -39,7 +39,7 @@ source "${0:h}/alias.zsh"
 source "${0:h}/spectrum.zsh"
 source "${0:h}/utility.zsh"
 
-# Autoload Zsh function builtins.
+# Autoload Zsh functions.
 autoload -Uz age
 autoload -Uz zargs
 autoload -Uz zcalc
@@ -62,17 +62,19 @@ unset plugin plugins
 # Autoload Oh My Zsh functions.
 for fdir in "$fpath[@]"; do
   if [[ "$fdir" == ${0:h}/(|*/)functions ]]; then
-    for afunction in $fdir/[^_.]*(N.:t); do
-      autoload -Uz $afunction
+    for func in $fdir/[^_.]*(N.:t); do
+      autoload -Uz $func
     done
   fi
 done
+unset fdir func
 
 # Set environment variables for launchd processes.
 if [[ "$OSTYPE" == darwin* ]]; then
   for env_var in PATH MANPATH; do
     launchctl setenv "$env_var" "${(P)env_var}" &!
   done
+  unset env_var
 fi
 
 # Load and run the prompt theming system.
@@ -83,8 +85,10 @@ zstyle -a ':omz:prompt' theme 'prompt_argv'
 prompt "$prompt_argv[@]"
 unset prompt_argv
 
-# Compile zcompdump, if modified, to increase startup speed.
-if [[ "$HOME/.zcompdump" -nt "$HOME/.zcompdump.zwc" ]] || [[ ! -f "$HOME/.zcompdump.zwc" ]]; then
-  zcompile "$HOME/.zcompdump"
+# Compile the completion dump, to increase startup speed.
+dump_file="$HOME/.zcompdump"
+if [[ "$dump_file" -nt "${dump_file}.zwc" || ! -f "${dump_file}.zwc" ]]; then
+  zcompile "$dump_file"
 fi
+unset dump_file
 
