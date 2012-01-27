@@ -6,7 +6,7 @@ function git_prompt_info() {
 
 # Checks if working tree is dirty
 parse_git_dirty() {
-    if $(is_legacy_git); then
+    if [ "true" = "$IS_LEGACY_GIT" ]; then
         echo $(parse_legacy_git_dirty)
     else
         echo $(parse_recent_git_dirty)
@@ -15,20 +15,26 @@ parse_git_dirty() {
 
 # echos the string 'true' if this git is old enough not to have --ignore-submodules
 # echos false otherwise 
-is_legacy_git() {
+get_is_legacy_git() {
     checkit() {
         if [ $1 -gt 1 ]; then
-            echo false
+            echo "false"
         elif [ $1 -eq 1 -a $2 -gt 7 ]; then
-            echo false
+            echo "false"
         elif [ $1 -eq 1 -a $2 -eq 7 -a $3 -ge 2 ]; then
-            echo false
+            echo "false"
         else
-            echo true 
+            echo "true" 
         fi
     }
     echo $(checkit $(git --version | cut -d " " -f 3 | tr '.' ' '))
 }
+
+#this is unlikely to change so make it all statically assigned
+IS_LEGACY_GIT=$(get_is_legacy_git)
+
+#clean up the namespace slightly by removing the checker function
+unset -f get_is_legacy_git
 
 # Checks if working tree is dirty when --ignore-submodules is not present
 parse_legacy_git_dirty() {
