@@ -20,7 +20,7 @@ add-zsh-hook precmd  ohmyzsh_ion_precmd
 
 local color_error="$fg_bold[red]"
 local color_info="$fg_bold[black]"
-local color_user="$fg_bold[cyan]"
+local color_user="$fg_bold[blue]"
 local color_root="$fg_bold[red]"
 
 local newline=$'\n'
