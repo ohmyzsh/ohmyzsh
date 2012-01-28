@@ -1,12 +1,13 @@
-# Perl grep since 'grep -P' is terrible.
+# Perl Substitution
 
-local usage pattern modifiers
+local usage pattern replacement modifiers
 
 usage="$(
 cat <<EOF
-usage: $0 [-option ...] [--] pattern [file ...]
+usage: $0 [-option ...] [--] pattern replacement [file ...]
 
 options:
+  -g    match globally
   -i    ignore case
   -m    ^ and $ match the start and the end of a line
   -s    . matches newline
@@ -17,6 +18,7 @@ EOF
 while getopts ':igmxe::' opt; do
   case "$opt" in
     (i) modifiers="${modifiers}i" ;;
+    (g) modifiers="${modifiers}g" ;;
     (m) modifiers="${modifiers}m" ;;
     (x) modifiers="${modifiers}x" ;;
     (e) modifiers="${modifiers}e" ;;
@@ -34,13 +36,13 @@ while getopts ':igmxe::' opt; do
 done
 shift $(( $OPTIND - 1 ))
 
-if (( $# < 1 )); then
+if (( $# < 2 )); then
   print "$usage" >&2
   return 1
 fi
 
 pattern="$1"
-shift
+replacement="$2"
+repeat 2 shift
 
-perl -n -l -e "print if m/${pattern//\//\\/}/${modifiers}" "$@"
-
+perl -i'.orig' -n -l -e "s/${pattern//\//\\/}/${replacement//\//\\/}/${modifiers}; print" "$@"
