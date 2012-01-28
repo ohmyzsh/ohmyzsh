@@ -157,3 +157,7 @@ function trash() {
 function vncviewer() {
   open vnc://$@
 }
+
+function lock() {
+    open -a ScreenSaverEngine
+}
