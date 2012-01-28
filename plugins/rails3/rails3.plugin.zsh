@@ -24,3 +24,9 @@ alias rdr='rake db:rollback'
 alias -g RET='RAILS_ENV=test'
 alias -g REP='RAILS_ENV=production'
 alias -g RED='RAILS_ENV=development'
+
+alias rspec='_run-with-bundler rspec'
+alias cuke='_run-with-bundler cucumber'
+
+alias routes='_run-with-bundler rake routes'
+alias groutes='routes | grep'
