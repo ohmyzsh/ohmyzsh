@@ -19,5 +19,11 @@ alias ru='_rails_command runner'
 alias rs='_rails_command server'
 alias rsd='_rails_command server --debugger'
 alias devlog='tail -f log/development.log'
-alias rdm='rake db:migrate'
-alias rdr='rake db:rollback'
+alias rdm='_run-with-bundler rake db:migrate'
+alias rdr='_run-with-bundlerrake db:rollback'
+
+alias rspec='_run-with-bundler rspec'
+alias cuke='_run-with-bundler cucumber'
+
+alias routes='_run-with-bundler rake routes'
+alias groutes='routes | grep'
