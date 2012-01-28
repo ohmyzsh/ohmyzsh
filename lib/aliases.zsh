@@ -32,3 +32,10 @@ alias galias='alias | grep'
 #alias rm="rm -i"
 
 alias psg='show_processes'
+
+# If you are using oh-my-zsh and you see something like this error:
+# pwd:4: too many arguments
+# This is caused by an alias and due to the sh style sourcing of a
+# script using the '.' operator instead of 'source'.
+# So, uncomment below line.
+# alias .='pwd'
