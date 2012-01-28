@@ -157,3 +157,6 @@ function trash() {
 function lock() {
     open -a ScreenSaverEngine
 }
+
+# Listen the faggy song
+alias faggy='say -v Good\ News faggy faggy faggy faggy faggy faggy faggy faggy'
