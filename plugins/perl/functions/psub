@@ -15,13 +15,13 @@ options:
 EOF
 )"
 
-while getopts ':igmxe::' opt; do
+while getopts ':gimsx' opt; do
   case "$opt" in
-    (i) modifiers="${modifiers}i" ;;
     (g) modifiers="${modifiers}g" ;;
+    (i) modifiers="${modifiers}i" ;;
     (m) modifiers="${modifiers}m" ;;
+    (s) modifiers="${sodifiers}s" ;;
     (x) modifiers="${modifiers}x" ;;
-    (e) modifiers="${modifiers}e" ;;
     (:)
       print "$0: option requires an argument: $OPTARG" >&2
       print "$usage" >&2
@@ -46,3 +46,4 @@ replacement="$2"
 repeat 2 shift
 
 perl -i'.orig' -n -l -e "s/${pattern//\//\\/}/${replacement//\//\\/}/${modifiers}; print" "$@"
+

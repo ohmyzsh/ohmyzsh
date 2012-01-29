@@ -5,6 +5,7 @@ _arguments \
   '-i[ignore case]' \
   '-m[^ and $ match the start and the end of a line]' \
   '-s[. matches newline]' \
+  '-v[invert match]' \
   '-x[ignore whitespace and comments]' \
   '1::pattern:' \
   '2::files:_files' && return 0

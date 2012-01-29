@@ -1,6 +1,6 @@
-# Perl grep since 'grep -P' is terrible.
+# Perl Grep
 
-local usage pattern modifiers
+local usage pattern modifiers invert
 
 usage="$(
 cat <<EOF
@@ -10,16 +10,18 @@ options:
   -i    ignore case
   -m    ^ and $ match the start and the end of a line
   -s    . matches newline
+  -v    invert match
   -x    ignore whitespace and comments
 EOF
 )"
 
-while getopts ':igmxe::' opt; do
+while getopts ':imsxv' opt; do
   case "$opt" in
     (i) modifiers="${modifiers}i" ;;
     (m) modifiers="${modifiers}m" ;;
+    (s) modifiers="${modifiers}s" ;;
     (x) modifiers="${modifiers}x" ;;
-    (e) modifiers="${modifiers}e" ;;
+    (v) invert="yes" ;;
     (:)
       print "$0: option requires an argument: $OPTARG" >&2
       print "$usage" >&2
@@ -42,5 +44,5 @@ fi
 pattern="$1"
 shift
 
-perl -n -l -e "print if m/${pattern//\//\\/}/${modifiers}" "$@"
+perl -n -l -e "print if ${invert:+not} m/${pattern//\//\\/}/${modifiers}" "$@"
 
