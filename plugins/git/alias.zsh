@@ -116,7 +116,7 @@ git_log_format_oneline='--pretty=format:%C(green)%h%C(reset) %s%C(red)%d%C(reset
 git_log_format_oneline_more='--pretty=format:%C(green)%h%C(reset) %C(blue)%ad%C(reset) %s%C(red)%d%C(reset) [%C(magenta)%an%C(reset)]'
 git_log_format_medium='--pretty=format:%C(green)Commit: %H%C(red)%d%C(reset)%n%C(magenta)Author: %an <%ae>%C(reset)%n%C(blue)Date:   %cd%C(reset)%n%+s%n%+b'
 
-alias gl='git log'
+alias gl='git log --topo-order ${git_log_format_medium}'
 compdef _git gl=git-log
 alias glo='git log --topo-order ${git_log_format_oneline}'
 compdef _git glo=git-log
