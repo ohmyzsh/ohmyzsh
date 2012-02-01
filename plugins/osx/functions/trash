@@ -1,3 +1,10 @@
+#
+# Moves directories and files to Trash.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 print -N "${@:a}" | xargs -0 osascript -e '
   on run theFilePaths
     tell application "Finder"

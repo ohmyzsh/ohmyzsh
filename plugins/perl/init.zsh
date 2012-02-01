@@ -1,3 +1,10 @@
+#
+# Enables local Perl module installation on Mac OS X and defines aliases.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 # For Perl older than 5.10.14, install local::lib.
 #   curl -L -C - -O http://search.cpan.org/CPAN/authors/id/A/AP/APEIRON/local-lib-1.008004.tar.gz
 #   tar xvf local-lib-1.008004.tar.gz

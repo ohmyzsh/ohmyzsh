@@ -1,4 +1,10 @@
-# Complete npm.
+#
+# Completes npm.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 cache_file="${0:h}/cache.zsh"
 if [[ ! -f "$cache_file" ]] && (( $+commands[npm] )); then
   # npm is slow; cache its output.

@@ -1,3 +1,10 @@
+#
+# Defines rsync aliases.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 # Aliases
 rsync_cmd='rsync --verbose --progress --human-readable --compress --archive --hard-links --one-file-system'
 

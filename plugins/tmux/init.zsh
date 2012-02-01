@@ -1,9 +1,9 @@
-# ------------------------------------------------------------------------------
-#          FILE:  tmux.plugin.zsh
-#   DESCRIPTION:  oh-my-zsh plugin file.
-#        AUTHOR:  Sorin Ionescu <sorin.ionescu@gmail.com>
-#       VERSION:  1.0.0
-# ------------------------------------------------------------------------------
+#
+# Defines tmux aliases and provides for auto launching it at startup.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
 
 # Aliases
 alias ta="tmux attach-session"

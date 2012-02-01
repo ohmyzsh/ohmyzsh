@@ -1,4 +1,9 @@
-# The default styles.
+#
+# Defines Git information display styles.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
 
 # %s - Special action name (am, merge, rebase).
 zstyle ':omz:plugin:git:prompt' action 'action:%s'

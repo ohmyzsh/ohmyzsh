@@ -1,3 +1,11 @@
+#
+# Sets completion options.
+#
+# Authors:
+#   Robby Russell <robby@planetargon.com>
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 # Dumb terminals lack support.
 if [[ "$TERM" == 'dumb' ]]; then
   return

@@ -1,4 +1,10 @@
+#
 # Initializes Oh My Zsh.
+#
+# Authors:
+#   Robby Russell <robby@planetargon.com>
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
 
 # Check for the minimum supported version.
 min_zsh_version='4.3.10'

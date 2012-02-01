@@ -1,3 +1,10 @@
+#
+# Displays Git repository information.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 # Gets the Git special action (am, merge, rebase, etc.).
 # Borrowed from vcs_info and edited.
 function _git-action() {

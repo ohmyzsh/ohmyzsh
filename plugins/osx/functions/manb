@@ -1,4 +1,10 @@
-# Open man pages in Bwana.
+#
+# Opens man pages in Bwana.app.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 function manb() {
   local page
   if (( $# > 0 )); then

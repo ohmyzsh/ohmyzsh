@@ -1,4 +1,10 @@
-# Gets the current branch.
+#
+# Displays the current Git branch.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 local ref="$(git symbolic-ref HEAD 2> /dev/null)"
 if [[ -n "$ref" ]]; then
   print "${ref#refs/heads/}"

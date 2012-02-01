@@ -1,11 +1,13 @@
-# Prompt style and colors based on Steve Losh's Prose theme:
-# http://github.com/sjl/oh-my-zsh/blob/master/themes/prose.zsh-theme
 #
-# vcs_info modifications from Bart Trojanowski's Zsh prompt:
-# http://www.jukie.net/bart/blog/pimping-out-zsh-prompt
+# A theme based on Steve Losh's prompt with VCS_INFO integration.
 #
-# Git untracked files modification from Brian Carper:
-# http://briancarper.net/blog/570/git-info-in-your-zsh-prompt
+# Authors:
+#   Steve Losh <steve@stevelosh.com>
+#   Bart Trojanowski <bart@jukie.net>
+#   Brian Carper <brian@carper.ca>
+#   steeef <steeef@gmail.com>
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
 
 function virtualenv_info() {
   if [[ -n "$VIRTUAL_ENV" ]]; then

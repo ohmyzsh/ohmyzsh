@@ -1,3 +1,10 @@
+#
+# Configures Ruby gem installation and loads rvm/rbenv.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 # Install local gems according to Mac OS X conventions.
 if [[ "$OSTYPE" == darwin* ]]; then
   export GEM_HOME="$HOME/Library/Ruby/Gems/${$(ruby --version)[6,8]}"

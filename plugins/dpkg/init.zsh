@@ -1,3 +1,12 @@
+#
+# Defines dpkg aliases.
+#
+# Authors:
+#   Daniel Bolton <dbb@9y.com>
+#   Benjamin Boudreau <boudreau.benjamin@gmail.com>
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 # Aliases
 alias as="aptitude -F \"* %p -> %d \n(%v/%V)\" --no-gui --disable-columns search" # Search package.
 alias ad="sudo apt-get update"                                                    # Update packages lists.

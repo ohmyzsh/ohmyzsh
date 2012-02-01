@@ -1,13 +1,9 @@
-# ------------------------------------------------------------------------------
-#          FILE:  z.plugin.zsh
-#   DESCRIPTION:  oh-my-zsh plugin file.
-#        AUTHOR:  Sorin Ionescu <sorin.ionescu@gmail.com>
-#       VERSION:  1.0.0
-# ------------------------------------------------------------------------------
-
-
-# z is the new j.
-# https://github.com/rupa/z
+#
+# Maintains a frequently used directory list for fast directory changes.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
 
 if [[ -f /etc/profile.d/z.zsh ]]; then
   source /etc/profile.d/z.zsh

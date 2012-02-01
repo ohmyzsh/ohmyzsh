@@ -1,4 +1,9 @@
-# Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+# Defines Mac OS X aliases and functions.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
 
 # Change directory to the current Finder directory.
 alias cdf='cd "$(pfd)"'

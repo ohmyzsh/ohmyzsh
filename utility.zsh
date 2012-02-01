@@ -1,3 +1,12 @@
+#
+# Defines utility functions.
+#
+# Authors:
+#   Robby Russell <robby@planetargon.com>
+#   Suraj N. Kurapati <sunaku@gmail.com>
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 # Lists the ten most used commands.
 alias history-stat="history | awk '{print \$2}' | sort | uniq -c | sort -n -r | head"
 

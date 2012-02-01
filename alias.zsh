@@ -1,3 +1,10 @@
+#
+# Defines general aliases.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 setopt CORRECT               # Correct commands.
 
 # The 'ls' Family

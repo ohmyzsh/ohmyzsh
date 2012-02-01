@@ -1,3 +1,11 @@
+#
+# Defines yum aliases.
+#
+# Authors:
+#   Simon <contact@saimon.org>
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 # Aliases
 alias ys="yum search"                          # Search package.
 alias yp="yum info"                            # Show package info.

@@ -1,3 +1,10 @@
+#
+# Reloads the Zsh configuration.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 # Reloads ~/.zshrc.
 local zshrc="$HOME/.zshrc"
 if [[ -n "$1" ]]; then

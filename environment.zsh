@@ -1,3 +1,10 @@
+#
+# Sets general shell options and defines environment variables.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 # Smart URLs
 autoload -Uz url-quote-magic
 zle -N self-insert url-quote-magic

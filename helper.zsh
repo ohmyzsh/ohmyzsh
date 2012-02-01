@@ -1,3 +1,10 @@
+#
+# Defines helper functions.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 # Checks if a file can be autoloaded by trying to load it in a subshell.
 function autoloadable() {
   ( unfunction $1 ; autoload -U +X $1 ) &> /dev/null

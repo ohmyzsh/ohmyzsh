@@ -1,3 +1,11 @@
+#
+# A monochrome theme that displays basic information.
+#
+# Authors:
+#   Brian Tse <briankftse@gmail.com>
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 function +vi-git-status() {
   # Untracked files.
   if [[ -n $(git ls-files --other --exclude-standard 2> /dev/null) ]]; then

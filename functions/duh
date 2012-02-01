@@ -1,4 +1,11 @@
-# Displays human readable disk usage statistics.
+#
+# Displays human readable disk usage.
+#
+# Authors:
+#   Suraj N. Kurapati <sunaku@gmail.com>
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 function duh() {
   (( $# == 0 )) && set -- *
   if [[ "$OSTYPE" == linux* ]]; then

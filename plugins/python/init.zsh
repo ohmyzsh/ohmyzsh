@@ -1,3 +1,10 @@
+#
+# Enables local Python package installation.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 # Prepend PEP 370 per user site packages directory, which defaults to
 # ~/Library/Python on Mac OS X and ~/.local elsewhere, to PATH/MANPATH.
 if [[ "$OSTYPE" == darwin* ]]; then

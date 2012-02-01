@@ -1,3 +1,10 @@
+#
+# Defines Git aliases.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 # Git
 alias g='git'
 compdef g=git

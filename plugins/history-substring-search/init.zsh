@@ -1,4 +1,10 @@
-# This file integrates the history-substring-search script into oh-my-zsh.
+#
+# Integrates history-substring-search into Oh My Zsh.
+#
+# Authors:
+#   Suraj N. Kurapati <sunaku@gmail.com>
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
 
 source "${0:h}/history-substring-search.zsh"
 

@@ -1,10 +1,9 @@
-# ------------------------------------------------------------------------------
-#          FILE:  gnu-utils.plugin.zsh
-#   DESCRIPTION:  oh-my-zsh plugin file.
-#        AUTHOR:  Sorin Ionescu <sorin.ionescu@gmail.com>
-#       VERSION:  1.0.2
-# ------------------------------------------------------------------------------
-
+#
+# Provides for the interactive usage of GNU Coreutils on BSD systems.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
 
 if (( $+commands[gdircolors] )); then
   function __gnu_utils() {

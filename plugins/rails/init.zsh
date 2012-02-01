@@ -1,3 +1,12 @@
+#
+# Defines Ruby on Rails aliases.
+#
+# Authors:
+#   Robby Russell <robby@planetargon.com>
+#   Jake Bell <jake.b.bell@gmail.com>
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 # Aliases (compatible with Rails 2)
 alias rc='_rails-command console'
 alias rd='_rails-command destroy'

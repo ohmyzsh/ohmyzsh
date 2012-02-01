@@ -1,4 +1,10 @@
-# Based on ssh-agent code.
+#
+# Provides for an easier use of gpg-agent.
+#
+# Authors:
+#   Florian Walch <florian.walch@gmx.at>
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
 
 local GPG_ENV="$HOME/.gnupg/gpg-agent.env"
 

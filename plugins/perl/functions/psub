@@ -1,4 +1,9 @@
-# Perl Substitution
+#
+# Provides a sed-like pattern substitution.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
 
 local usage pattern replacement modifiers
 

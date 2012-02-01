@@ -1,7 +1,13 @@
-# Arch Linux Zsh Aliases and Functions
 #
-# Pacman Tips:
+# Defines pacman aliases.
+#
+# Authors:
+#   Benjamin Boudreau <dreurmail@gmail.com>
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+# Tips:
 #   https://wiki.archlinux.org/index.php/Pacman_Tips
+#
 
 # Yaourt Aliases
 if (( $+commands[yaourt] )); then

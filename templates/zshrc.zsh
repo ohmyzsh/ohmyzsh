@@ -1,3 +1,10 @@
+#
+# Sets Oh My Zsh options.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 # Set the key mapping style to 'emacs' or 'vi'.
 zstyle ':omz:editor' keymap 'emacs'
 

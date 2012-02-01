@@ -1,4 +1,11 @@
-# List disowned files.
+#
+# Lists pacman disowned files.
+#
+# Authors:
+#   Benjamin Boudreau <dreurmail@gmail.com>
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 tmp="${TMPDIR-/tmp}/pacman-disowned-$UID-$$"
 db="$tmp/db"
 fs="$tmp/fs"

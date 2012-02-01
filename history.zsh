@@ -1,3 +1,11 @@
+#
+# Sets history options.
+#
+# Authors:
+#   Robby Russell <robby@planetargon.com>
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 HISTFILE="$HOME/.zhistory"
 HISTSIZE=10000
 SAVEHIST=10000

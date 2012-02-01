@@ -1,3 +1,11 @@
+#
+# Sets terminal window and tab titles.
+#
+# Authors:
+#   James Cox <james@imaj.es>
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 # Dumb terminals lack support.
 if [[ "$TERM" == 'dumb' ]]; then
   return

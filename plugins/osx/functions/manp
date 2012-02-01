@@ -1,4 +1,10 @@
-# Open man pages in Preview.
+#
+# Opens man pages in Preview.app.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 function manp() {
   local page
   if (( $# > 0 )); then

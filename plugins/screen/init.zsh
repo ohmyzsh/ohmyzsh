@@ -1,9 +1,9 @@
-# ------------------------------------------------------------------------------
-#          FILE:  screen.plugin.zsh
-#   DESCRIPTION:  oh-my-zsh plugin file.
-#        AUTHOR:  Sorin Ionescu <sorin.ionescu@gmail.com>
-#       VERSION:  1.0.0
-# ------------------------------------------------------------------------------
+#
+# Defines GNU Screen aliases and provides for auto launching it at startup.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
 
 # Aliases
 alias sl="screen -list"

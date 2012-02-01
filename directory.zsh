@@ -1,3 +1,11 @@
+#
+# Sets directory options and defines directory aliases.
+#
+# Authors:
+#   James Cox <james@imaj.es>
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 setopt AUTO_CD              # Auto cd to a directory without typing cd.
 setopt AUTO_PUSHD           # Push the old directory onto the stack on cd.
 setopt PUSHD_IGNORE_DUPS    # Don't store duplicates in the stack.

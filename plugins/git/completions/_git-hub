@@ -1,6 +1,13 @@
 #compdef git-hub
 #autoload
 
+#
+# Completes git-hub.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 local state remotes remote branches ret=1
 
 _arguments -C -s -S \

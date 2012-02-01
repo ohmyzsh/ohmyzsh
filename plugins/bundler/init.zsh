@@ -1,3 +1,11 @@
+#
+# Defines bundler aliases.
+#
+# Authors:
+#   Myron Marston <myron.marston@gmail.com>
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 # Aliases
 alias b='bundle'
 alias be='b exec'

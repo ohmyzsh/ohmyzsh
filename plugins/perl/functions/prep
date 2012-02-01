@@ -1,4 +1,9 @@
-# Perl Grep
+#
+# Provides a grep-like pattern search.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
 
 local usage pattern modifiers invert
 

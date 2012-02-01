@@ -1,4 +1,10 @@
-# Get the latest Git completion.
+#
+# Gets the latest Git completion.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 completion_file="${0:h}/completions/_git"
 completion_file_url='http://zsh.git.sourceforge.net/git/gitweb.cgi?p=zsh/zsh;a=blob_plain;f=Completion/Unix/Command/_git;hb=HEAD'
 if [[ ! -e "$completion_file" ]] && (( $+commands[git] )); then

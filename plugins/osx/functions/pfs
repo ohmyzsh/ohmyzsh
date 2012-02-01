@@ -1,3 +1,10 @@
+#
+# Displays the current Finder.app selection.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 osascript 2>/dev/null <<EOF
   set output to ""
   tell application "Finder" to set the_selection to selection

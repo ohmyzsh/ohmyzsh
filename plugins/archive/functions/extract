@@ -1,3 +1,10 @@
+#
+# Extracts the contents of popular archive formats.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 local remove_archive
 local success
 local file_name

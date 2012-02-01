@@ -1,6 +1,10 @@
-# A script to make using 256 colors in Zsh less painful.
-# P.C. Shyamshankar <sykora@lucentbeing.com>
-# Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+# Provides for easier formatting and use of 256 colors.
+#
+# Authors:
+#   P.C. Shyamshankar <sykora@lucentbeing.com>
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
 
 typeset -Ag FX FG BG
 

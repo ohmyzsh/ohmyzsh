@@ -1,9 +1,9 @@
-# ------------------------------------------------------------------------------
-#          FILE:  git.plugin.zsh
-#   DESCRIPTION:  oh-my-zsh plugin file.
-#        AUTHOR:  Sorin Ionescu <sorin.ionescu@gmail.com>
-#       VERSION:  1.0.0
-# ------------------------------------------------------------------------------
+#
+# Provides Git aliases and functions.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
 
 # Source plugin files.
 source "${0:h}/alias.zsh"

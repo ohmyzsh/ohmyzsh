@@ -1,6 +1,13 @@
 #compdef prep
 #autoload
 
+#
+# Completes prep.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 _arguments \
   '-i[ignore case]' \
   '-m[^ and $ match the start and the end of a line]' \

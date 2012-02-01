@@ -1,3 +1,10 @@
+#
+# Lists the contents of popular archive formats.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 local verbose
 
 if (( $# == 0 )); then

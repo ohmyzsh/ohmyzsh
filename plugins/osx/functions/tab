@@ -1,3 +1,10 @@
+#
+# Opens a new Terminal.app/iTerm.app tab in the current directory.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 local command="cd \\\"$PWD\\\""
 (( $# > 0 )) && command="${command}; $*"
 

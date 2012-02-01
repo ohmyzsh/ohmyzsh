@@ -1,3 +1,10 @@
+#
+# Sets keyboard bindings.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 # Dumb terminals lack support.
 if [[ "$TERM" == 'dumb' ]]; then
   return

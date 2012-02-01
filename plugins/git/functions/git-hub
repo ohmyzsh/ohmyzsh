@@ -1,4 +1,10 @@
-# Open the GitHub repository in the browser.
+#
+# Opens a GitHub repository in the default browser.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
 local remote branches branch current_branch url
 
 remote="${1:-origin}"

@@ -1,24 +1,23 @@
 #
-# INSTRUCTIONS
+# Provides for an easier use of ssh-agent.
 #
-#   To enabled agent forwarding support, add the following to
-#   your .zshrc file:
+# Authors:
+#   Robby Russell <robby@planetargon.com>
+#   Theodore Robert Campbell Jr <trcjr@stupidfoot.com>
+#   Joseph M. Reagle Jr. <reagle@mit.edu>
+#   Florent Thoumie <flz@xbsd.org>
+#   Jonas Pfenniger <jonas@pfenniger.name>
+#   gwjo <gowen72@gmail.com>
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
 #
-#     zstyle ':omz:plugin:ssh-agent' forwarding 'on'
+# Usage:
+#   To enable agent forwarding, add the following to your .zshrc:
 #
-#   To load multiple identies, use the identities style, For
-#   example:
+#     zstyle ':omz:plugin:ssh-agent' forwarding 'yes'
+#
+#   To load multiple identies, add the following to your .zshrc:
 #
 #     zstyle ':omz:plugin:ssh-agent' identities 'id_rsa' 'id_rsa2' 'id_github'
-#
-#
-# CREDITS
-#
-#   Based on code from Joseph M. Reagle
-#   http://www.cygwin.com/ml/cygwin/2001-06/msg00537.html
-#
-#   Agent forwarding support based on ideas from
-#   Florent Thoumie and Jonas Pfenniger
 #
 
 _ssh_agent_env="$HOME/.ssh/environment-$HOST"
