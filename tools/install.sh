@@ -10,7 +10,7 @@ echo "\033[0;34mCloning Oh My Zsh...\033[0m"
 echo "\033[0;34mLooking for an existing zsh config...\033[0m"
 if [ -f $HOME/.zshrc ] || [ -h $HOME/.zshrc ]
 then
-  echo "\033[0;33mFound $HOME/.zshrc.\033[0m \033[0;32]Backing up to $HOME/.zshrc.pre-oh-my-zsh\033[0m";
+  echo "\033[0;33mFound $HOME/.zshrc.\033[0m \033[0;32mBacking up to $HOME/.zshrc.pre-oh-my-zsh\033[0m";
   cp $HOME/.zshrc $HOME/.zshrc.pre-oh-my-zsh;
   rm $HOME/.zshrc;
 fi
