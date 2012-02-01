@@ -26,7 +26,7 @@ _ssh_agent_forwarding=
 function _ssh-agent-start() {
   local -a identities
 
-  # Start ssh-agent and setup environment.
+  # Start ssh-agent and setup the environment.
   /usr/bin/env ssh-agent | sed 's/^print/#print/' > "${_ssh_agent_env}"
   chmod 600 "${_ssh_agent_env}"
   source "${_ssh_agent_env}" > /dev/null
