@@ -6,9 +6,9 @@
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
 #
 
-MAKEFLAGS=''                  # Temporarily unset MAKEFLAGS ( '-j3' will fail ).
-appendage='-custom'           # This shows up in $ (uname -r ).
-revision=$(date +"%Y%m%d")    # This shows up in the .deb file name.
+MAKEFLAGS=''                  # Temporarily unset MAKEFLAGS ('-j3' will fail).
+appendage='-custom'           # Displayed in $(uname -r).
+revision=$(date +"%Y%m%d")    # Displayed in the dpkg package file name.
 
 make-kpkg clean
 
