@@ -6,12 +6,17 @@ function git_prompt_info() {
 
 # Checks if working tree is dirty
 parse_git_dirty() {
-  if [[ -n $(git status -s --ignore-submodules=dirty 2> /dev/null) ]]; then
+  local SUBMODULE_SYNTAX=''
+  if [[ $(git_compare_version "1.7.2") -gt 0 ]]; then
+        SUBMODULE_SYNTAX="--ignore-submodules=dirty"
+  fi
+  if [[ -n $(git status -s ${SUBMODULE_SYNTAX}  2> /dev/null) ]]; then
     echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
   else
     echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
   fi
 }
+
 
 # Checks if there are commits ahead from remote
 function git_prompt_ahead() {
@@ -62,3 +67,24 @@ git_prompt_status() {
   fi
   echo $STATUS
 }
+
+
+#compare the provided version of git to the version installed and on path
+#prints 1 if input version <= installed version
+#prints -1 otherwise 
+function git_compare_version() {
+  local INPUT_GIT_VERSION=$1;
+  local INSTALLED_GIT_VERSION
+  INPUT_GIT_VERSION=(${(s/./)INPUT_GIT_VERSION});
+  INSTALLED_GIT_VERSION=($(git --version));
+  INSTALLED_GIT_VERSION=(${(s/./)INSTALLED_GIT_VERSION[3]});
+
+  for i in {1..3}; do
+    if [[ $INSTALLED_GIT_VERSION[$i] -lt $INPUT_GIT_VERSION[$i] ]]; then
+      echo -1
+      return 0
+    fi
+  done
+  echo 1
+}
+
