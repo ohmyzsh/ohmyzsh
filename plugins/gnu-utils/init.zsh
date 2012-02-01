@@ -13,7 +13,7 @@ if (( $+commands[gdircolors] )); then
     local cmd
     local prefix
 
-    # coreutils
+    # GNU Coreutils.
     gcmds=('g[' 'gbase64' 'gbasename' 'gcat' 'gchcon' 'gchgrp' 'gchmod'
     'gchown' 'gchroot' 'gcksum' 'gcomm' 'gcp' 'gcsplit' 'gcut' 'gdate'
     'gdd' 'gdf' 'gdir' 'gdircolors' 'gdirname' 'gdu' 'gecho' 'genv' 'gexpand'
