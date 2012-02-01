@@ -1,18 +1,6 @@
 
 
-ZSH_THEME_HG_PROMPT_PREFIX=$ZSH_THEME_GIT_PROMPT_PREFIX
-ZSH_THEME_HG_PROMPT_SUFFIX=$ZSH_THEME_GIT_PROMPT_SUFFIX
-ZSH_THEME_HG_PROMPT_SHA_BEFORE=$ZSH_THEME_GIT_PROMPT_SHA_BEFORE
-ZSH_THEME_HG_PROMPT_SHA_AFTER=$ZSH_THEME_GIT_PROMPT_SHA_AFTER
-ZSH_THEME_HG_PROMPT_UNTRACKED=$ZSH_THEME_GIT_PROMPT_UNTRACKED
-ZSH_THEME_HG_PROMPT_ADDED=$ZSH_THEME_GIT_PROMPT_ADDED
-ZSH_THEME_HG_PROMPT_MODIFIED=$ZSH_THEME_GIT_PROMPT_MODIFIED
-ZSH_THEME_HG_PROMPT_RENAMED=$ZSH_THEME_GIT_PROMPT_RENAMED
-ZSH_THEME_HG_PROMPT_DELETED=$ZSH_THEME_GIT_PROMPT_DELETED
-ZSH_THEME_HG_PROMPT_UNMERGED=$ZSH_THEME_GIT_PROMPT_UNMERGED
-
-
-# get the name of the branch we are on
+#give branch & tag:
 function hg_prompt_info() {
   ref=$(hg branch 2> /dev/null) || return
   tag=$(hg parent | grep tag | cut -f 2 -d ":" | tr -d ' ')
@@ -21,9 +9,9 @@ function hg_prompt_info() {
 
 
 
-# Formats prompt string for current git commit short SHA
+#
 function hg_prompt_name() {
-  SHA=$(hg id 2> /dev/null) && echo "$ZSH_THEME_HG_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_HG_PROMPT_SHA_AFTER"
+  ID=$(hg id 2> /dev/null) && echo "$ZSH_THEME_HG_PROMPT_SHA_BEFORE$ID$ZSH_THEME_HG_PROMPT_SHA_AFTER"
 }
 
 
@@ -46,12 +34,9 @@ hg_prompt_status() {
   elif $(echo "$INDEX" | grep '^ T ' &> /dev/null); then
     STATUS="$ZSH_THEME_HG_PROMPT_MODIFIED$STATUS"
   fi
-  if $(echo "$INDEX" | grep '^R  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_HG_PROMPT_RENAMED$STATUS"
-  fi
-  if $(echo "$INDEX" | grep '^ D ' &> /dev/null); then
+  if $(echo "$INDEX" | grep '^ R ' &> /dev/null); then
     STATUS="$ZSH_THEME_HG_PROMPT_DELETED$STATUS"
-  elif $(echo "$INDEX" | grep '^AD ' &> /dev/null); then
+  elif $(echo "$INDEX" | grep '^R ' &> /dev/null); then
     STATUS="$ZSH_THEME_HG_PROMPT_DELETED$STATUS"
   fi
   if $(echo "$INDEX" | grep '^UU ' &> /dev/null); then
