@@ -1,37 +1,37 @@
 #compdef task
-#
 # zsh completion for taskwarrior
+#
+# taskwarrior - a command line task list manager.
 #
 # Copyright 2010 - 2011 Johannes Schlatow
 # Copyright 2009 P.C. Shyamshankar
-# All rights reserved.
 #
-# This script is part of the taskwarrior project.
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
 #
-# This program is free software; you can redistribute it and/or modify it under
-# the terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
-# version.
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
 #
-# This program is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
-# details.
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+# OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
 #
-# You should have received a copy of the GNU General Public License along with
-# this program; if not, write to the
-#
-#     Free Software Foundation, Inc.,
-#     51 Franklin Street, Fifth Floor,
-#     Boston, MA
-#     02110-1301
-#     USA
+# http://www.opensource.org/licenses/mit-license.php
 #
 typeset -g _task_cmds _task_projects _task_tags _task_config _task_modifiers
 _task_projects=($(task _projects))
 _task_tags=($(task _tags))
 _task_ids=($(task _ids))
 _task_config=($(task _config))
+_task_columns=($(task _columns))
 _task_modifiers=(
 	'before' \
 	'after' \
@@ -46,39 +46,19 @@ _task_modifiers=(
 	'word' \
 	'noword'
 )
+_task_conjunctions=(
+   'and' \
+   'or' \
+	'xor' \
+	'\)'
+	'\('
+)
 _task_cmds=($(task _commands))
 _task_zshcmds=( ${(f)"$(task _zshcommands)"} )
 
-
-_task_idCmds=(
-	'append' \
-	'prepend' \
-	'annotate' \
-	'denotate' \
-	'edit' \
-	'duplicate' \
-	'info' \
-	'start' \
-	'stop' \
-	'done'
-)
-
-_task_idCmdsDesc=(
-	'append:Appends more description to an existing task.' \
-	'prepend:Prepends more description to an existing task.' \
-	'annotate:Adds an annotation to an existing task.' \
-	'denotate:Deletes an annotation of an existing task.' \
-	'edit:Launches an editor to let you modify a task directly.' \
-	'duplicate:Duplicates the specified task, and allows modifications.' \
-	'info:Shows all data, metadata for specified task.' \
-	'start:Marks specified task as started.' \
-	'stop:Removes the start time from a task.' \
-	'done:Marks the specified task as completed.'
-)
-
 _task() {
     _arguments -s -S \
-        "*::task command:_task_commands"
+        "*::task default:_task_default"
     return 0
 }
 
@@ -148,6 +128,7 @@ _regex_words values 'task frequencies' \
 	'weekly:Every week' \
 	'biweekly:Every two weeks' \
 	'fortnight:Every two weeks' \
++ 'monthly:Every month' \
 	'quarterly:Every three months' \
 	'semiannual:Every six months' \
 	'annual:Every year' \
@@ -196,22 +177,13 @@ _regex_arguments _task_attributes "${args[@]}"
 
 ## task commands
 
-# default completion
-(( $+functions[_task_default] )) ||
-_task_default() {
+# filter completion
+(( $+functions[_task_filter] )) ||
+_task_filter() {
 	_task_attributes "$@"
-}
 
-# commands expecting an ID
-(( $+functions[_task_id] )) ||
-_task_id() {
-	if (( CURRENT < 3 )); then
-		# update IDs
-		_task_zshids=( ${(f)"$(task _zshids)"} )
-		_describe -t values 'task IDs' _task_zshids
-	else
-		_task_attributes "$@"
-	fi
+	# TODO complete conjunctions only if the previous word is a filter expression, i.e. attribute, ID, any non-command
+	_describe -t default 'task conjunctions' _task_conjunctions
 }
 
 # merge completion
@@ -235,46 +207,42 @@ _task_pull() {
 	_files
 }
 
+# execute completion
+(( $+functions[_task_execute] )) ||
+_task_execute() {
+	_files
+}
 
-# modify (task [0-9]* ...) completion
-(( $+functions[_task_modify] )) ||
-_task_modify() {
-	_describe -t commands 'task command' _task_idCmdsDesc
-	_task_attributes "$@"
+# id-only completion
+(( $+functions[_task_id] )) ||
+_task_id() {
+	_describe -t values 'task IDs' _task_zshids
 }
 
 ## first level completion => task sub-command completion
-(( $+functions[_task_commands] )) ||
-_task_commands() {
+(( $+functions[_task_default] )) ||
+_task_default() {
     local cmd ret=1
-	if (( CURRENT == 1 )); then
-		# update IDs
-		_task_zshids=( ${(f)"$(task _zshids)"} )
 
-		_describe -t commands 'task command' _task_zshcmds
-		_describe -t values 'task IDs' _task_zshids
-		# TODO match more than one ID
-	elif [[ $words[1] =~ ^[0-9]*$ ]] then
-		 _call_function ret _task_modify
-		 return ret
-	else
-#        local curcontext="${curcontext}"
-#        cmd="${_task_cmds[(r)$words[1]:*]%%:*}"
-		  cmd="${_task_cmds[(r)$words[1]]}"
-		  idCmd="${(M)_task_idCmds[@]:#$words[1]}"
-        if (( $#cmd )); then
-#            curcontext="${curcontext%:*:*}:task-${cmd}"
+	integer i=1
+	while (( i < $#words ))
+	do
+		cmd="${_task_cmds[(r)$words[$i]]}"
+		if (( $#cmd )); then
+			_call_function ret _task_${cmd} ||
+				_call_function ret _task_filter ||
+					_message "No command remaining."
+			return ret
+		fi
+		(( i++ ))
+	done
 
-				if (( $#idCmd )); then
-					_call_function ret _task_id
-				else
-					_call_function ret _task_${cmd} ||
-						_call_function ret _task_default ||
-							_message "No command remaining."
-				fi
-        else
-            _message "Unknown subcommand ${cmd}"
-        fi
-        return ret
-    fi
+	# update IDs
+	_task_zshids=( ${(f)"$(task _zshids)"} )
+
+	_describe -t commands 'task command' _task_zshcmds
+	_describe -t values 'task IDs' _task_zshids
+	_call_function ret _task_filter
+
+	return ret
 }
