@@ -26,6 +26,7 @@ case "$state" in
     remote="$words[(($CURRENT - 1))]"
     branches=($(
       git branch -r \
+        | grep "${remote}/" \
         | sed \
           -e "/${remote}\/HEAD -> ${remote}/d" \
           -e "s/^[[:space:]]*${remote}\///g"
