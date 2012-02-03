@@ -26,6 +26,6 @@ fi
 # Loads rbenv into the shell session.
 if [[ -s "$HOME/.rbenv/bin/rbenv" ]]; then
   path=("$HOME/.rbenv/bin" $path)
-  eval "$(rbenv init -)"
+  eval "$(rbenv init - zsh)"
 fi
 
