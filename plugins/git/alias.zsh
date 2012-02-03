@@ -112,24 +112,22 @@ compdef _git gkt=git-checkout
 alias gkT='gkt $(gkl)'
 
 # Log (l)
-git_log_format_oneline='--pretty=format:%C(green)%h%C(reset) %s%C(red)%d%C(reset)'
-git_log_format_oneline_more='--pretty=format:%C(green)%h%C(reset) %C(blue)%ad%C(reset) %s%C(red)%d%C(reset) [%C(magenta)%an%C(reset)]'
-git_log_format_medium='--pretty=format:%C(green)Commit: %H%C(red)%d%C(reset)%n%C(magenta)Author: %an <%ae>%C(reset)%n%C(blue)Date:   %cd%C(reset)%n%+s%n%+b'
+git_log_format_medium='--pretty=format:%C(bold)Commit:%C(reset) %C(green)%H%C(red)%d%n%C(bold)Author:%C(reset) %C(cyan)%an <%ae>%n%C(bold)Date:%C(reset)   %C(blue)%ai (%ar)%C(reset)%n%+B'
+git_log_format_oneline='--pretty=format:%C(green)%h%C(reset) %s%n'
+git_log_format_brief='--pretty=format:%C(green)%h%C(reset) %s%n%C(blue)(%ar by %an)%C(red)%d%C(reset)%n'
 
 alias gl='git log --topo-order ${git_log_format_medium}'
 compdef _git gl=git-log
-alias glo='git log --topo-order ${git_log_format_oneline}'
-compdef _git glo=git-log
-alias glO='git log --topo-order --date=short ${git_log_format_oneline_more}'
-compdef _git glO=git-log
-alias glg='git log --topo-order --all --graph ${git_log_format_oneline}'
-compdef _git glg=git-log
-alias glG='git log --topo-order --all --graph --date=short ${git_log_format_oneline_more}'
-compdef _git glG=git-log
 alias gls='git log --topo-order --stat ${git_log_format_medium}'
 compdef _git gls=git-log
 alias gld='git log --topo-order --stat --patch --full-diff ${git_log_format_medium}'
 compdef _git gld=git-log
+alias glo='git log --topo-order ${git_log_format_oneline}'
+compdef _git glo=git-log
+alias glg='git log --topo-order --all --graph ${git_log_format_oneline}'
+compdef _git glg=git-log
+alias glb='git log --topo-order ${git_log_format_brief}'
+compdef _git glb=git-log
 alias glc='git shortlog --summary --numbered'
 compdef _git glc=git-shortlog
 
