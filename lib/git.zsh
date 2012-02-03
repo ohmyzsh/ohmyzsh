@@ -34,30 +34,30 @@ function git_prompt_long_sha() {
 git_prompt_status() {
   INDEX=$(git status --porcelain 2> /dev/null)
   STATUS=""
-  if $(echo "$INDEX" | grep '^?? ' &> /dev/null); then
+  if [ "${INDEX#?? }" != "$INDEX" ]; then
     STATUS="$ZSH_THEME_GIT_PROMPT_UNTRACKED$STATUS"
   fi
-  if $(echo "$INDEX" | grep '^A  ' &> /dev/null); then
+  if [ "${INDEX#A  }" != "$INDEX" ]; then
     STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
-  elif $(echo "$INDEX" | grep '^M  ' &> /dev/null); then
+  elif [ "${INDEX#M  }" != "$INDEX" ]; then
     STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
   fi
-  if $(echo "$INDEX" | grep '^ M ' &> /dev/null); then
+  if [ "${INDEX# M }" != "$INDEX" ]; then
     STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
-  elif $(echo "$INDEX" | grep '^AM ' &> /dev/null); then
+  elif [ "${INDEX#AM }" != "$INDEX" ]; then
     STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
-  elif $(echo "$INDEX" | grep '^ T ' &> /dev/null); then
+  elif [ "${INDEX# T }" != "$INDEX" ]; then
     STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
   fi
-  if $(echo "$INDEX" | grep '^R  ' &> /dev/null); then
+  if [ "${INDEX#R  }" != "$INDEX" ]; then
     STATUS="$ZSH_THEME_GIT_PROMPT_RENAMED$STATUS"
   fi
-  if $(echo "$INDEX" | grep '^ D ' &> /dev/null); then
+  if [ "${INDEX# D }" != "$INDEX" ]; then
     STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
-  elif $(echo "$INDEX" | grep '^AD ' &> /dev/null); then
+  elif [ "${INDEX#AD }" != "$INDEX" ]; then
     STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
   fi
-  if $(echo "$INDEX" | grep '^UU ' &> /dev/null); then
+  if [ "${INDEX#UU }" != "$INDEX" ]; then
     STATUS="$ZSH_THEME_GIT_PROMPT_UNMERGED$STATUS"
   fi
   echo $STATUS
