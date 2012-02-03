@@ -19,3 +19,5 @@ function tm() {
 		fi
 	fi
 }
+
+alias reload_bundles="osascript -e 'tell app \"TextMate\" to reload bundles'"
