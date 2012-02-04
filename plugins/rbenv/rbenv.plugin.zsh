@@ -8,9 +8,15 @@ for rbenvdir in "$HOME/.rbenv" "/usr/local/rbenv" "/opt/rbenv" ; do
 done
 unset rbenvdir
 
-# Check for homebrew rbenv (installed directly in /usr/local/bin)
-if [ -f /usr/local/bin/rbenv -a $FOUND_RBENV -eq 0 ] ; then
-  FOUND_RBENV=1
+# If not found above, check the rest of $PATH for an rbenv executable (usually installed
+# in /usr/local/bin, but may be installed elsewhere)
+if [ $FOUND_RBENV -eq 0 ] ; then
+  for rbbindir in ${path} ; do
+    if [ -x $rbbindir/rbenv ] ; then
+      FOUND_RBENV=1
+      break
+    fi
+  done
 fi
 
 if [ $FOUND_RBENV -eq 1 ] ; then
