@@ -7,7 +7,7 @@
 
 # Install local gems according to Mac OS X conventions.
 if [[ "$OSTYPE" == darwin* ]]; then
-  export GEM_HOME="$HOME/Library/Ruby/Gems/${$(ruby --version)[6,8]}"
+  export GEM_HOME=$HOME/Library/Ruby/Gems/1.8
   path=("$GEM_HOME/bin" $path)
 
   # Set environment variables for launchd processes.
