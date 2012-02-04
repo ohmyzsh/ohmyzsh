@@ -56,3 +56,9 @@ zstyle ':omz:plugin:git:prompt' prompt ' git:(%b %D%C)'
 # Right prompt.
 zstyle ':omz:plugin:git:prompt' rprompt ''
 
+# Ignore submodule.
+zstyle ':omz:plugin:git:prompt:ignore' submodule 'no'
+
+# Ignore submodule when it is 'dirty', 'untracked', 'all', or 'none'.
+zstyle ':omz:plugin:git:prompt:ignore:submodule' when 'all'
+

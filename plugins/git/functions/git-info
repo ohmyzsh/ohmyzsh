@@ -147,6 +147,9 @@ function git-info() {
   local rprompt
   local git_info_var
   local -A git_info_vars
+  local status_cmd
+  local ignore_submodule
+  local ignore_submodule_when
 
   # Clean up previous Git info.
   unset git_prompt_info
@@ -175,6 +178,16 @@ function git-info() {
 
   # Used to abort and turn git-info off on SIGINT.
   _git_info_executing=true
+
+  # Use short status for easy parsing.
+  status_cmd='git status --short --branch'
+
+  # Ignore submodule status.
+  zstyle -b ':omz:plugin:git:prompt:ignore' submodule ignore_submodule
+  zstyle -s ':omz:plugin:git:prompt:ignore:submodule' when ignore_submodule_when
+  if is-true "$ignore_submodule"; then
+    status_cmd+=" --ignore-submodules=${ignore_submodule_when:-all}"
+  fi
 
   # Get commit.
   commit="$(git rev-parse HEAD 2> /dev/null)"
@@ -248,7 +261,7 @@ function git-info() {
       [[ "$line" == UU\ * ]] && (( unmerged++ ))
       [[ "$line" == \?\?\ * ]] && (( untracked++ ))
     fi
-  done < <(git status --short --branch 2> /dev/null)
+  done < <("${(z)status_cmd}" 2> /dev/null)
 
   # Format branch.
   zstyle -s ':omz:plugin:git:prompt' branch branch_format
