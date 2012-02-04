@@ -11,8 +11,8 @@ unset rbenvdir
 # If not found above, check the rest of $PATH for an rbenv executable (usually installed
 # in /usr/local/bin, but may be installed elsewhere)
 if [ $FOUND_RBENV -eq 0 ] ; then
-  for rbbindir in ${path} ; do
-    if [ -x $rbbindir/rbenv ] ; then
+  for dir in ${path} ; do
+    if [ -x $dir/rbenv ] ; then
       FOUND_RBENV=1
       break
     fi
