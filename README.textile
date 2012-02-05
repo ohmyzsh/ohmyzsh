@@ -8,6 +8,14 @@ h2. Setup
 
 h3. The automatic installer... (do you trust me?)
 
+You can install this via the command line with either `curl` or `wget`.
+
+h4. via `curl`
+
+@curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh | sh@
+
+h4. via `wget`
+
 @wget --no-check-certificate https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh@
 
 h3. The manual way
@@ -48,7 +56,7 @@ the "refcard":http://www.bash2zsh.com/zsh_refcard/refcard.pdf is pretty tasty fo
 h3. Customization
 
 If you want to override any of the default behavior, just add a new file (ending in @.zsh@) into the @custom/@ directory.
-If you have many functions which go good together you can put them as a *.plugin.zsh file in the @custom/plugins/@ directory and then enable this plugin.
+If you have many functions which go well together you can put them as a *.plugin.zsh file in the @custom/plugins/@ directory and then enable this plugin.
 If you would like to override the functionality of a plugin distributed with oh-my-zsh, create a plugin of the same name in the @custom/plugins/@ directory and it will be loaded instead of the one in @plugins/@.
 
 
