@@ -5,7 +5,7 @@ function _current_epoch() {
 }
 
 function _update_zsh_update() {
-  echo "LAST_EPOCH=$(_current_epoch)" > ~/.zsh-update
+  echo "LAST_EPOCH=$(_current_epoch)" >! ~/.zsh-update
 }
 
 function _upgrade_zsh() {
