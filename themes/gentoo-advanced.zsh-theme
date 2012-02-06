@@ -2,7 +2,7 @@
 #          FILE:  gentoo-advanced.zsh-theme
 #   DESCRIPTION:  Gentoo's bashrc clone theme for oh-my-zsh.
 #        AUTHOR:  Sergio Conde Gómez (skgsergio@gmail.com)
-#       VERSION:  1.0.0
+#       VERSION:  1.1
 # ------------------------------------------------------------------------------
 
 # Return Code
@@ -32,5 +32,9 @@ ZSH_THEME_GIT_PROMPT_SHA_BEFORE=" %{$fg[white]%}[%{$fg[yellow]%}"
 ZSH_THEME_GIT_PROMPT_SHA_AFTER="%{$fg[white]%}]"
 
 # Prompt format
-PROMPT='%{$fg_bold[green]%}%n@%m%{$fg[white]%} %{$fg_bold[blue]%}%~%u%{$reset_color%} %{$fg_bold[blue]%}$%{$reset_color%} '
+if [[ $UID -eq 0 ]]; then
+    PROMPT='%{$fg_bold[red]%}%m%{$fg[white]%} %{$fg_bold[blue]%}%~%u%{$reset_color%} %{$fg_bold[blue]%}#%{$reset_color%} '
+else
+    PROMPT='%{$fg_bold[green]%}%n@%m%{$fg[white]%} %{$fg_bold[blue]%}%~%u%{$reset_color%} %{$fg_bold[blue]%}$%{$reset_color%} '
+fi
 RPROMPT='${return_code}%{$fg_bold[green]%}$(current_branch)$(parse_git_dirty)$(git_prompt_ahead)$(git_prompt_short_sha)$(git_prompt_status)%{$reset_color%}'
