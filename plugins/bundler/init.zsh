@@ -9,7 +9,7 @@
 # Aliases
 alias b='bundle'
 alias be='b exec'
-alias bi='b install --path vendor'
+alias bi='b install --path vendor/bundle'
 alias bl='b list'
 alias bo='b open'
 alias bp='b package'
