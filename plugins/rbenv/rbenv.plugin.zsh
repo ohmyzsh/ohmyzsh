@@ -8,15 +8,12 @@ for rbenvdir in "$HOME/.rbenv" "/usr/local/rbenv" "/opt/rbenv" ; do
 done
 unset rbenvdir
 
-# If not found above, check the rest of $PATH for an rbenv executable (usually installed
-# in /usr/local/bin, but may be installed elsewhere)
+# If not found above, check for the existence of the rbenv executable anyway.
 if [ $FOUND_RBENV -eq 0 ] ; then
-  for dir in ${path} ; do
-    if [ -x $dir/rbenv ] ; then
-      FOUND_RBENV=1
-      break
-    fi
-  done
+  if ( which rbenv > /dev/null 2>&1 ) ; then
+    FOUND_RBENV=1
+    export RBENV_ROOT=$(rbenv root)
+  fi
 fi
 
 if [ $FOUND_RBENV -eq 1 ] ; then
