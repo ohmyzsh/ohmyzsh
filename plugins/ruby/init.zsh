@@ -16,6 +16,9 @@ fi
 
 # Loads RVM into the shell session.
 if [[ -s "$HOME/.rvm/scripts/rvm" ]]; then
+  # Let RVM manage the GEM_HOME.
+  unset GEM_HOME
+
   # Auto adding variable-stored paths to ~ list conflicts with RVM.
   unsetopt AUTO_NAME_DIRS
 
@@ -25,6 +28,9 @@ fi
 
 # Loads rbenv into the shell session.
 if [[ -s "$HOME/.rbenv/bin/rbenv" ]]; then
+  # Let rbenv manage the GEM_HOME.
+  unset GEM_HOME
+
   path=("$HOME/.rbenv/bin" $path)
   eval "$(rbenv init - zsh)"
 fi
