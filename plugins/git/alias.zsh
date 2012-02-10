@@ -205,10 +205,8 @@ alias gsL='git stash show --patch --stat'
 compdef _git gsL=git-stash
 alias gsp='git stash pop'
 compdef _git gsp=git-stash
-alias gss='git stash save'
+alias gss='git stash save --include-untracked'
 compdef _git gss=git-stash
-alias gsS='git stash save --include-untracked'
-compdef _git gsS=git-stash
 alias gsS='git stash save --patch --no-keep-index'
 compdef _git gsS=git-stash
 
