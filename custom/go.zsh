@@ -24,7 +24,7 @@ alias p="project"
 alias m="project open"
 
 function _project () {
-    compadd `/bin/ls -l $PROJECT_PATHS 2>/dev/null | awk '{ print $8 }'`
+    compadd `/bin/ls -l $PROJECT_PATHS 2>/dev/null | awk '{ print $9 }'`
 }
 
 compdef _project project
