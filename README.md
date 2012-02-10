@@ -70,4 +70,4 @@ The [refcard][] is pretty tasty for tips.
   [oh-my-zsh-git]: https://aur.archlinux.org/packages.php?ID=54375
   [cower]: https://github.com/falconindy/cower
   [refcard]: http://www.bash2zsh.com/zsh_refcard/refcard.pdf
-  [example.zshrc]: https://github.com/jamesm-sitegen/dotfiles-arch-desktop/blob/master/.zshrc
+  [example.zshrc]: https://github.com/archeydevil/dotfiles/blob/master/zshrc
