@@ -1,3 +1,3 @@
 # Default applications
 
-IRC=($commands[weechat-curses] $commands[irssi])
+IRC=($commands[irssi] $commands[weechat-curses])
