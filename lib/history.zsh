@@ -1,5 +1,5 @@
 ## Command history configuration
-HISTFILE=$HOME/.zsh_history
+HISTFILE=$OMZ/zsh-history.log
 HISTSIZE=10000
 SAVEHIST=10000
 
