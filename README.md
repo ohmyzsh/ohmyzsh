@@ -61,6 +61,13 @@ distributed with oh-my-zsh, create a plugin of the same name in the
 `~/.omz/plugins/` directory and it will be loaded instead of the one
 provided one.
 
+Themes
+======
+
+To use your custom theme, cp/mv the theme to `~/.omz/themes/mytheme.zsh-theme`
+then update your .zshrc file so it knows to use the theme with
+`zstyle :omz:style theme mytheme`
+
 Resources
 ---------
 
