@@ -49,7 +49,7 @@ git_prompt_status() {
   elif $(echo "$INDEX" | grep '^ T ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
   fi
-  if $(echo "$INDEX" | grep '^R  ' &> /dev/null); then
+  if $(echo "$INDEX" | grep '^RM ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_RENAMED$STATUS"
   fi
   if $(echo "$INDEX" | grep '^ D ' &> /dev/null); then
