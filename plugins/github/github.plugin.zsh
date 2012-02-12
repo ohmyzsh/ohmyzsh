@@ -1,7 +1,17 @@
 # Setup hub function for git, if it is available; http://github.com/defunkt/hub
 if [ "$commands[(I)hub]" ] && [ "$commands[(I)ruby]" ]; then
     # eval `hub alias -s zsh`
-    function git(){hub "$@"}
+    function git(){
+        if ! (( $+_has_working_hub  )); then
+            hub --version &> /dev/null
+            _has_working_hub=$(($? == 0))
+        fi
+        if (( $_has_working_hub )) ; then
+            hub "$@"
+        else
+            command git "$@"
+        fi
+    }
 fi
 
 # Functions #################################################################
