@@ -1,6 +1,6 @@
 omz_log_msg() {
   [[ ! -d $OMZ ]] && mkdir $OMZ
-  echo $@ >> $OMZ/omz.log
+  echo "$@" >> $OMZ/omz.log
 }
 
 omzlog() {
