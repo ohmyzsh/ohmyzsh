@@ -1,0 +1,37 @@
+#compdef consular
+#autoload
+
+# consular zsh completion
+
+_consular_available_scripts() {
+  scripts=(`for SCRIPT in ~/.config/consular/*.term ; do basename $SCRIPT .term ; done`)
+}
+
+local -a _1st_arguments
+_1st_arguments=(
+    'create:create a Termfile in directory'
+    'delete:delete consular script'
+    'edit:open termitor script'
+    'fetch:clone the designated repo and run setup'
+    'help:Describe available tasks or one specific task'
+    'init:create initial root consular folder'
+    'list:lists all consular scripts'
+    'setup:execute setup in the consular script'
+    'start:runs the consular script'
+)
+
+local expl
+
+_arguments \
+  '*:: :->subcmds' && return 0
+
+if (( CURRENT == 1 )); then
+  _describe -t commands "consular task" _1st_arguments
+  return
+fi
+
+case "$words[1]" in
+  start|edit|delete|setup)
+    _consular_available_scripts
+    _wanted scripts expl 'installed scripts' compadd -a scripts ;;
+esac
