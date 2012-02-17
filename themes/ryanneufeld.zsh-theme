@@ -1,6 +1,6 @@
 local user='%{$fg[magenta]%}%n@%{$fg[magenta]%}%m%{$reset_color%}'
 local pwd='%{$fg[blue]%}%~%{$reset_color%}'
-local svn='%{$fg[green]%}$(svn_prompt_info)%{$reset_color%}'
+local svn='%{$fg[green]%}$(svn_prompt_info):$(svn_get_rev_nr)%{$reset_color%}'
 local return_code='%(?..%{$fg[red]%}%? ↵%{$reset_color%})'
 local git_branch='$(git_prompt_status)%{$reset_color%}$(git_prompt_info)%{$reset_color%}'
 
