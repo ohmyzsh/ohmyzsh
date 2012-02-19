@@ -48,14 +48,11 @@ for path_file in /etc/manpaths.d/*(.N); do
 done
 
 path=(
-  $HOME/.tilde/bin
-  $HOME/.tilde/opt/bin
-  /usr/local/bin
-  /usr/local/sbin
-  /usr/bin
-  /bin
-  /usr/sbin
-  /sbin
+  $HOME/.tilde/{bin,sbin}
+  $HOME/.tilde/opt/{bin,sbin}
+  /usr/local/{bin,sbin}
+  /usr/{bin,sbin}
+  /{bin,sbin}
 )
 
 for path_file in /etc/paths.d/*(.N); do
