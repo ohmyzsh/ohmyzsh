@@ -60,14 +60,9 @@ for path_file in /etc/paths.d/*(.N); do
 done
 
 # Language
-export LANG="en_AU.UTF-8"
-export LC_ALL="$LANG"
-export LC_COLLATE="$LANG"
-export LC_CTYPE="$LANG"
-export LC_MESSAGES="$LANG"
-export LC_MONETARY="$LANG"
-export LC_NUMERIC="$LANG"
-export LC_TIME="$LANG"
+if [[ -z "$LANG" ]]; then
+  eval "$(locale)"
+fi
 
 # Editors
 export EDITOR="vim"
