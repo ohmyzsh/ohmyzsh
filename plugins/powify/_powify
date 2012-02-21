@@ -1,0 +1,4 @@
+#compdef powify
+#autoload
+
+compadd `powify | grep powify | cut -d " " -f 6`
