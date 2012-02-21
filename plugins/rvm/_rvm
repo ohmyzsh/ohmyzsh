@@ -41,7 +41,7 @@ case $state in
             "implode:(seppuku) removes the rvm installation completely. This means everything in $rvm_path (~/.rvm)."
             "update:upgrades rvm to the latest version."
             "reset:remove current and stored default & system settings."
-            "info :show the *current* environment information for current ruby"
+            "info:show the *current* environment information for current ruby"
             "current:print the *current* ruby version and the name of any gemset being used."
             "debug:show info plus additional information for common issues"
             "install:install one or many ruby versions"
