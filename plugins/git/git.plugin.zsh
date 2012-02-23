@@ -91,3 +91,6 @@ alias ggpush='git push origin $(current_branch)'
 compdef ggpush=git
 alias ggpnp='git pull origin $(current_branch) && git push origin $(current_branch)'
 compdef ggpnp=git
+
+# Remove from repo all files deleted
+alias gitstrm="git st | egrep 'deleted' | sed -e 's/#//' -e 's/deleted:/git rm/' | sh"
