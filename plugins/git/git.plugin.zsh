@@ -39,12 +39,6 @@ compdef _git gm=git-merge
 alias grh='git reset HEAD'
 alias grhh='git reset HEAD --hard'
 
-# Git and svn mix
-alias git-svn-dcommit-push='git svn dcommit && git push github master:svntrunk'
-compdef git-svn-dcommit-push=git
-
-alias gsr='git svn rebase'
-alias gsd='git svn dcommit'
 #
 # Will return the current branch name
 # Usage example: git pull origin $(current_branch)
