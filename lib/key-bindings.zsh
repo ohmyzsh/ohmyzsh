@@ -12,6 +12,10 @@ bindkey "^[[6~" down-line-or-history
 bindkey '^[[A' up-line-or-search
 bindkey '^[[B' down-line-or-search
 
+# left/right arrow keys to move cursor backward/forward
+bindkey '^[[C' forward-char
+bindkey '^[[D' backward-char
+
 bindkey "^[[H" beginning-of-line
 bindkey "^[[1~" beginning-of-line
 bindkey "^[OH" beginning-of-line
