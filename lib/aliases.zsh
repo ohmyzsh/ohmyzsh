@@ -39,3 +39,5 @@ alias psg='show_processes'
 # script using the '.' operator instead of 'source'.
 # So, uncomment below line.
 # alias .='pwd'
+
+alias ssh-list='cat ~/.ssh/config'
