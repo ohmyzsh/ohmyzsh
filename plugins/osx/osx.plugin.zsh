@@ -6,6 +6,11 @@
 # ------------------------------------------------------------------------------
 
 
+# load base PATH
+if [ -x /usr/libexec/path_helper ]; then
+    eval `/usr/libexec/path_helper -s`
+fi
+
 function tab() {
   local command="cd \\\"$PWD\\\""
   (( $# > 0 )) && command="${command}; $*"
