@@ -22,8 +22,16 @@ parse_git_dirty() {
 
 # Checks if there are commits ahead from remote
 function git_prompt_ahead() {
-  if $(echo "$(git log origin/$(current_branch)..HEAD 2> /dev/null)" | grep '^commit' &> /dev/null); then
-    echo "$ZSH_THEME_GIT_PROMPT_AHEAD"
+  ahead=$(git rev-list origin/$(current_branch)..HEAD -- 2> /dev/null)
+  behind=$(git rev-list HEAD..origin/$(current_branch) -- 2> /dev/null)
+  if [[ -n $ahead && -n $behind ]]; then
+      echo "$ZSH_THEME_GIT_PROMPT_DIVERGED"
+  elif [[ -n $ahead ]]; then
+      echo "$ZSH_THEME_GIT_PROMPT_AHEAD"
+  elif [[ -n $behind ]]; then
+      echo "$ZSH_THEME_GIT_PROMPT_BEHIND"
+  else
+      echo "$ZSH_THEME_GIT_PROMPT_UPTODATE"
   fi
 }
 
