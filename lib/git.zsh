@@ -19,11 +19,10 @@ parse_git_dirty() {
 }
 
 
-# Checks if there are commits ahead from remote
+# Checks if there are commits ahead the upstream (the tracked remote branch)
 function git_prompt_ahead() {
-  if $(echo "$(git log origin/$(current_branch)..HEAD 2> /dev/null)" | grep '^commit' &> /dev/null); then
-    echo "$ZSH_THEME_GIT_PROMPT_AHEAD"
-  fi
+  local cherries=$(git cherry @{upstream}) 2> /dev/null
+  [ $cherries ] && echo "$ZSH_THEME_GIT_PROMPT_AHEAD"
 }
 
 # Formats prompt string for current git commit short SHA
