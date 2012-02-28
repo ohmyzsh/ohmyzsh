@@ -69,7 +69,7 @@ else
     then
       source "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme"
     else
-      source "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme"
+      source "$ZSH/themes/$ZSH_THEME.zsh-theme"
     fi
   fi
 fi
