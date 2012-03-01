@@ -1,5 +1,5 @@
 FOUND_RBENV=0
-for rbenvdir in "$HOME/.rbenv" "/usr/local/rbenv" "/opt/rbenv" ; do
+for rbenvdir in "$HOME/.rbenv" "/usr/local/rbenv" "/usr/local/bin/rbenv" "/opt/rbenv" ; do
   if [ -d $rbenvdir/bin -a $FOUND_RBENV -eq 0 ] ; then
     FOUND_RBENV=1
     export RBENV_ROOT=$rbenvdir
