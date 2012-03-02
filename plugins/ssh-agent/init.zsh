@@ -27,14 +27,21 @@ function _ssh-agent-start() {
   local -a identities
 
   # Start ssh-agent and setup the environment.
-  /usr/bin/env ssh-agent | sed 's/^print/#print/' > "${_ssh_agent_env}"
+  rm -f "${_ssh_agent_env}"
+  ssh-agent > "${_ssh_agent_env}"
   chmod 600 "${_ssh_agent_env}"
   source "${_ssh_agent_env}" > /dev/null
 
   # Load identies.
   zstyle -a ':omz:plugin:ssh-agent' identities 'identities'
-  print starting...
-  /usr/bin/ssh-add "$HOME/.ssh/${^identities}"
+
+  print starting ssh-agent...
+
+  if [[ ! -n "${identities}" ]]; then
+    ssh-add
+  else
+    ssh-add "$HOME/.ssh/${^identities}"
+  fi
 }
 
 # Test if agent-forwarding is enabled.
