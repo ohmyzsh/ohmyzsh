@@ -78,8 +78,3 @@ function extract() {
 
 alias x=extract
 
-# add extract completion function to path
-fpath=($ZSH/plugins/extract $fpath)
-autoload -U compinit
-compinit -i
-
