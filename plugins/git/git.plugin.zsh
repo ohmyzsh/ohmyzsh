@@ -54,6 +54,16 @@ function current_branch() {
   echo ${ref#refs/heads/}
 }
 
+#
+# Will return the local branches order by date
+#
+function gbabydate() {
+    for b in `git branch --no-color 2> /dev/null | sed -e 's/*//'`;
+    do
+        echo -e `git log -1 --format=%Cgreen%ci%Creset "$b" --`\\t"$b";
+    done | sort
+}
+
 # these aliases take advantage of the previous function
 alias ggpull='git pull origin $(current_branch)'
 compdef ggpull=git
