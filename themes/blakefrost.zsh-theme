@@ -8,6 +8,6 @@ ZSH_THEME_GIT_PROMPT_CLEAN=""
 PROMPT='%~%{$reset_color%}$(git_prompt_info) ★ %{$reset_color%}'
 
 if which rbenv &> /dev/null; then
-  local ruby="%{$fg[blue]%}$(rbenv version | cut -d " " -f 1 | sed "s/-/ /g")%{$reset_color%}"
+  local ruby='%{$fg[blue]%}$(rbenv version | cut -d " " -f 1 | sed "s/-/ /g")%{$reset_color%}'
 fi
-RPROMPT='%(?..%{$fg[white]%}%?%{$fg[red]%}⚡)%{$reset_color%} $ruby'
+RPROMPT="%(?..%{$fg[white]%}%?%{$fg[red]%}⚡)%{$reset_color%} ${ruby}"
