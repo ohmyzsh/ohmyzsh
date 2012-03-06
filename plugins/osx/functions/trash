@@ -1,0 +1,27 @@
+#
+# Moves directories and files to Trash.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
+print -N "${@:a}" | xargs -0 osascript -e '
+  on run theFilePaths
+    tell application "Finder"
+      set thePOSIXFiles to {}
+      repeat with aFilePath in theFilePaths
+        set aPOSIXFile to aFilePath as POSIX file
+        if exists aPOSIXFile
+          set end of thePOSIXFiles to aPOSIXFile
+        end if
+      end repeat
+      move every item of thePOSIXFiles to trash
+    end tell
+  end run
+' &>/dev/null
+
+if (( $? != 0)); then
+  print "$0: failed to move one or more items" >&2
+  return 1
+fi
+

@@ -1,0 +1,37 @@
+#
+# Displays dpkg history.
+#
+# Authors:
+#   Peter Leung <commandolinux@gmail.com>
+#   Benjamin Boudreau <boudreau.benjamin@gmail.com>
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
+case "$1" in
+  (install)
+    zgrep --no-filename 'install ' $(ls -rt /var/log/dpkg*)
+  ;;
+  (upgrade|remove)
+    zgrep --no-filename $1 $(ls -rt /var/log/dpkg*)
+  ;;
+  (rollback)
+    zgrep --no-filename upgrade $(ls -rt /var/log/dpkg*) | \
+      grep "$2" -A10000000 | \
+      grep "$3" -B10000000 | \
+      awk '{print $4"="$5}'
+  ;;
+  (list)
+    zcat $(ls -rt /var/log/dpkg*)
+  ;;
+  (*)
+    cat >&2 <<EOF
+Commands:
+    install - List installed packages
+    upgrade - List upgraded packages
+    remove - List removed packages
+    rollback - List rollback information
+    list - Display contents of dpkg logs
+EOF
+  ;;
+esac
+

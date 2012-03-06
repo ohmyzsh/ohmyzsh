@@ -1,0 +1,17 @@
+#
+# Makes a dpkg Linux kernel package.
+#
+# Authors:
+#   Daniel Bolton <dbb@9y.com>
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
+MAKEFLAGS=''                  # Temporarily unset MAKEFLAGS ('-j3' will fail).
+appendage='-custom'           # Displayed in $(uname -r).
+revision=$(date +"%Y%m%d")    # Displayed in the dpkg package file name.
+
+make-kpkg clean
+
+time fakeroot make-kpkg --append-to-version "$appendage" --revision \
+  "$revision" kernel_image kernel_headers
+

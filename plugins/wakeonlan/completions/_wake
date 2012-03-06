@@ -1,0 +1,13 @@
+#compdef wake
+#autoload
+
+#
+# Completes wake.
+#
+# Authors:
+#   Paul Gideon Dann <pdgiddie@gmail.com>
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
+_arguments "1:device to wake:_files -W '$HOME/.wakeonlan'" && return 0
+

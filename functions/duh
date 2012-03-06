@@ -1,0 +1,20 @@
+#
+# Displays human readable disk usage.
+#
+# Authors:
+#   Suraj N. Kurapati <sunaku@gmail.com>
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
+function duh() {
+  (( $# == 0 )) && set -- *
+  if [[ "$OSTYPE" == linux* ]]; then
+    du -khsc "$@" | sort -h -r
+  else
+    du -kcs "$@" | awk '{ printf "%9.1fM    %s\n", $1 / 1024, $2 } ' | sort -n -r
+  fi
+}
+compdef _du duh
+
+duh "$@"
+

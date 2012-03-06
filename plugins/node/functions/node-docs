@@ -1,0 +1,10 @@
+#
+# Opens the Node.js online API documentation in the default browser.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
+# TODO: Make the sections easier to use.
+open "http://nodejs.org/docs/$(node --version | sed 's/-.*//')/api/all.html#${1}"
+

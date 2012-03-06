@@ -1,0 +1,54 @@
+#
+# Provides a sed-like pattern substitution.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
+local usage pattern replacement modifiers
+
+usage="$(
+cat <<EOF
+usage: $0 [-option ...] [--] pattern replacement [file ...]
+
+options:
+  -g    match globally
+  -i    ignore case
+  -m    ^ and $ match the start and the end of a line
+  -s    . matches newline
+  -x    ignore whitespace and comments
+EOF
+)"
+
+while getopts ':gimsx' opt; do
+  case "$opt" in
+    (g) modifiers="${modifiers}g" ;;
+    (i) modifiers="${modifiers}i" ;;
+    (m) modifiers="${modifiers}m" ;;
+    (s) modifiers="${sodifiers}s" ;;
+    (x) modifiers="${modifiers}x" ;;
+    (:)
+      print "$0: option requires an argument: $OPTARG" >&2
+      print "$usage" >&2
+      return 1
+    ;;
+    ([?])
+      print "$0: unknown option: $OPTARG" >&2
+      print "$usage" >&2
+      return 1
+    ;;
+  esac
+done
+shift $(( $OPTIND - 1 ))
+
+if (( $# < 2 )); then
+  print "$usage" >&2
+  return 1
+fi
+
+pattern="$1"
+replacement="$2"
+repeat 2 shift
+
+perl -i'.orig' -n -l -e "s/${pattern//\//\\/}/${replacement//\//\\/}/${modifiers}; print" "$@"
+

@@ -1,0 +1,53 @@
+#
+# Provides a grep-like pattern search.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
+local usage pattern modifiers invert
+
+usage="$(
+cat <<EOF
+usage: $0 [-option ...] [--] pattern [file ...]
+
+options:
+  -i    ignore case
+  -m    ^ and $ match the start and the end of a line
+  -s    . matches newline
+  -v    invert match
+  -x    ignore whitespace and comments
+EOF
+)"
+
+while getopts ':imsxv' opt; do
+  case "$opt" in
+    (i) modifiers="${modifiers}i" ;;
+    (m) modifiers="${modifiers}m" ;;
+    (s) modifiers="${modifiers}s" ;;
+    (x) modifiers="${modifiers}x" ;;
+    (v) invert="yes" ;;
+    (:)
+      print "$0: option requires an argument: $OPTARG" >&2
+      print "$usage" >&2
+      return 1
+    ;;
+    ([?])
+      print "$0: unknown option: $OPTARG" >&2
+      print "$usage" >&2
+      return 1
+    ;;
+  esac
+done
+shift $(( $OPTIND - 1 ))
+
+if (( $# < 1 )); then
+  print "$usage" >&2
+  return 1
+fi
+
+pattern="$1"
+shift
+
+perl -n -l -e "print if ${invert:+not} m/${pattern//\//\\/}/${modifiers}" "$@"
+

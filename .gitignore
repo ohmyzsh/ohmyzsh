@@ -1,4 +1,3 @@
-locals.zsh
-log/.zsh_history
-projects.zsh
-cache
+*.zwc
+*.zwc.old
+plugins/*/cache.zsh

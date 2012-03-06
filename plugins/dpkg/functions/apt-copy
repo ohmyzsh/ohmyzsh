@@ -1,0 +1,16 @@
+#
+# Generates a script that can be used to duplicate a dpkg-based system.
+#
+# Authors:
+#   Daniel Bolton <danielbarrettbolton@gmail.com>
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
+print '#!/bin/sh'"\n" > apt-copy.sh
+
+list=$(perl -m'AptPkg::Cache' -e '$c=AptPkg::Cache->new; for (keys %$c){ push @a, $_ if $c->{$_}->{'CurrentState'} eq 'Installed';} print "$_ " for sort @a;')
+
+print 'aptitude install '"$list\n" >> apt-copy.sh
+
+chmod +x apt-copy.sh
+

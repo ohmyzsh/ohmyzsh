@@ -1,0 +1,20 @@
+#
+# Opens man pages in Preview.app.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
+function manp() {
+  local page
+  if (( $# > 0 )); then
+    for page in "$@"; do
+      man -t "$page" | open -f -a Preview
+    done
+  else
+    print 'What manual page do you want?' >&2
+  fi
+}
+compdef _man manp
+manp "$@"
+

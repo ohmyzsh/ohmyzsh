@@ -1,0 +1,44 @@
+#compdef git-hub
+#autoload
+
+#
+# Completes git-hub.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
+local state remotes remote branches files ret=1
+
+_arguments -C -s -S \
+  '1::args:->remote' \
+  '2::args:->branch' \
+  '3::args:->file' && ret=0
+
+case "$state" in
+  (remote)
+    remotes=($(
+      git config -l \
+        | grep 'remote\.[^.]*\.url' \
+        | cut -d'.' -f2))
+    _describe -t branch 'remotes' remotes && ret=0
+  ;;
+  (branch)
+    remote="$words[(($CURRENT - 1))]"
+    branches=($(
+      git branch -r \
+        | grep "${remote}/" \
+        | sed \
+          -e "/${remote}\/HEAD -> ${remote}/d" \
+          -e "s/^[[:space:]]*${remote}\///g"
+    ))
+    _describe -t branch 'branches' branches && ret=0
+  ;;
+  (file)
+    files=(${(0)"$(_call_program files git ls-files -z --exclude-standard 2>/dev/null)"})
+    _wanted file expl 'file' _multi_parts - / files && ret=0
+  ;;
+esac
+
+return $ret
+

@@ -1,0 +1,45 @@
+#
+# Opens a GitHub repository in the default browser.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
+local remote branches branch current_branch file url
+
+remote="${1:-origin}"
+url=$(
+  git config -l \
+    | grep "remote.${remote}.url" \
+    | sed -En "s/remote.${remote}.url=(git|https?)(@|:\/\/)github.com(:|\/)(.+)\/(.+).git/https:\/\/github.com\/\4\/\5/p"
+)
+branches=($(
+  git branch -r | sed -e "/${remote}\/HEAD -> ${remote}/d" -e "s/^[[:space:]]*${remote}\///g"
+))
+current_branch="$(git-branch)"
+branch="${2:-master}"
+file="$3"
+
+if [[ -z "$2" ]]; then
+  if (( $branches[(I)$current_branch] != 0 )); then
+    branch="$current_branch"
+  else
+    branch='master'
+  fi
+fi
+
+if [[ -n "$url" ]]; then
+  url="${url}/tree/${branch}/${file}"
+
+  if (( $+commands[$BROWSER] )); then
+    "$BROWSER" "$url"
+    return 0
+  else
+    print "$0: browser not set or set to a non-existent browser" >&2
+    return 1
+  fi
+else
+  print "$0: not a Git repository or remote origin not set" >&2
+  return 1
+fi
+

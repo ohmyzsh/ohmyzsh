@@ -1,0 +1,15 @@
+#
+# Displays the Git repository root.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
+local root="$(git rev-parse --show-toplevel 2> /dev/null)"
+if [[ -n "$root" ]]; then
+  print "$root"
+  return 0
+else
+  return 1
+fi
+

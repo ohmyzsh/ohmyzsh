@@ -1,0 +1,24 @@
+#
+# Opens man pages in Bwana.app.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
+function manb() {
+  local page
+  if (( $# > 0 )); then
+    for page in "$@"; do
+      open "man:$page" 2>/dev/null
+      if (( $? != 0 )); then
+        print "$0: Bwana is not installed" >&2
+        break
+      fi
+    done
+  else
+    print 'What manual page do you want?' >&2
+  fi
+}
+compdef _man manb
+manb "$@"
+

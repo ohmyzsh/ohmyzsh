@@ -1,0 +1,21 @@
+#
+# Wakes devices via wakeonlan.
+#
+# Authors:
+#   Paul Gideon Dann <pdgiddie@gmail.com>
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
+local config_file="$HOME/.wakeonlan/$1"
+if [[ ! -f "$config_file" ]]; then
+  print "$0: no such device file: $1" >&2
+  return 1
+fi
+
+if (( ! $+commands[wakeonlan] )); then
+  print "$0: command not found: wakeonlan" >&2
+  return 1
+fi
+
+wakeonlan -f "$config_file"
+

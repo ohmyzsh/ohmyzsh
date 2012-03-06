@@ -1,0 +1,15 @@
+#compdef git-info
+#autoload
+
+#
+# Completes git-info.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
+_arguments "1:toggle:((
+  on\:'enable in-prompt information for the current repository'
+  off\:'disable in-prompt information for the current repository'
+))" && return 0
+

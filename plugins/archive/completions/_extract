@@ -1,0 +1,14 @@
+#compdef extract
+#autoload
+
+#
+# Completes extract.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
+_arguments \
+  '(-r --remove)'{-r,--remove}'[remove archive]' \
+  "*::archive file:_files -g '(#i)*.(tar|tgz|tbz|tbz2|txz|tlz|gz|bz2|xz|lzma|Z|zip|rar|7z|deb)(-.)'" && return 0
+
