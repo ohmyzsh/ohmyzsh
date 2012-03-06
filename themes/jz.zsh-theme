@@ -41,8 +41,10 @@ autoload -Uz add-zsh-hook
 add-zsh-hook precmd jobs_precmd_hook
 
 git_prompt_info_status() {
-  local git_info=$(git_prompt_info) 
+ local git_info=$(git_prompt_info) 
+ # git_prompt_status commented out cuz its fucking slow
   [[ -n $git_info ]] && echo "%{$fg[green]%}[${git_info}$(git_prompt_status)%{$fg[green]%}]%{$reset_color%}"
+#[[ -n $git_info ]] && echo "%{$fg[green]%}[${git_info}%{$fg[green]%}]%{$reset_color%}"
 }
 
 if [[ "$TERM" != "dumb" ]] && [[ "$DISABLE_LS_COLORS" != "true" ]]; then
@@ -77,7 +79,7 @@ else
     # display exitcode on the right when >0
     return_code="%(?..%? ↵)"
 
-    RPROMPT='${return_code}$(git_prompt_status)'
+    RPROMPT='${return_code}'
 
     ZSH_THEME_GIT_PROMPT_ADDED=" ✚"
     ZSH_THEME_GIT_PROMPT_MODIFIED=" ✹"

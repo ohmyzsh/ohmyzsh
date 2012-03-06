@@ -2,7 +2,8 @@
 function git_prompt_info() {
   local branch=$(git_current_branch)
   if [[ -n "$branch" ]]; then
-    echo "${ZSH_THEME_GIT_PROMPT_PREFIX}${branch}$(parse_git_dirty)${ZSH_THEME_GIT_PROMPT_SUFFIX}"
+    #echo "${ZSH_THEME_GIT_PROMPT_PREFIX}${branch}$(parse_git_dirty)${ZSH_THEME_GIT_PROMPT_SUFFIX}"
+    echo "${ZSH_THEME_GIT_PROMPT_PREFIX}${branch}${ZSH_THEME_GIT_PROMPT_SUFFIX}"
   fi
 }
 
