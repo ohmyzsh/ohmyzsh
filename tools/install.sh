@@ -1,3 +1,15 @@
+if ! git --version >/dev/null 2>&1
+then
+  echo "\033[0;33mCan't find git.\033[0m You need to install \033[1;31mgit\033[0m if you want to install oh-my-zsh"
+  exit
+fi
+
+if ! zsh --version >/dev/null 2>&1
+then
+  echo "\033[0;33mCan't find zsh.\033[0m You need to install \033[1;31mzsh\033[0m if you want to install oh-my-zsh"
+  exit
+fi
+
 if [ -d ~/.oh-my-zsh ]
 then
   echo "\033[0;33mYou already have Oh My Zsh installed.\033[0m You'll need to remove ~/.oh-my-zsh if you want to install"
