@@ -20,7 +20,7 @@
 #     zstyle ':omz:plugin:ssh-agent' identities 'id_rsa' 'id_rsa2' 'id_github'
 #
 
-_ssh_agent_env="$HOME/.ssh/environment-$HOST"
+_ssh_agent_env="${HOME}/.ssh/environment-${HOST}"
 _ssh_agent_forwarding=
 
 function _ssh-agent-start() {
@@ -30,7 +30,7 @@ function _ssh-agent-start() {
   rm -f "${_ssh_agent_env}"
   ssh-agent > "${_ssh_agent_env}"
   chmod 600 "${_ssh_agent_env}"
-  source "${_ssh_agent_env}" > /dev/null
+  source "${_ssh_agent_env}"
 
   # Load identies.
   zstyle -a ':omz:plugin:ssh-agent' identities 'identities'
@@ -40,7 +40,7 @@ function _ssh-agent-start() {
   if [[ ! -n "${identities}" ]]; then
     ssh-add
   else
-    ssh-add "$HOME/.ssh/${^identities}"
+    ssh-add "${HOME}/.ssh/${^identities}"
   fi
 }
 
@@ -51,8 +51,8 @@ if is-true "${_ssh_agent_forwarding}" && [[ -n "$SSH_AUTH_SOCK" ]]; then
   [[ -L "$SSH_AUTH_SOCK" ]] || ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USER-screen
 elif [ -f "${_ssh_agent_env}" ]; then
   # Source SSH settings, if applicable.
-  source "${_ssh_agent_env}" > /dev/null
-  ps -ef | grep "${SSH_AGENT_PID}" | grep ssh-agent$ > /dev/null || {
+  source "${_ssh_agent_env}"
+  ps -ef | grep "${SSH_AGENT_PID}" | grep -q 'ssh-agent$' || {
     _ssh-agent-start;
   }
 else
