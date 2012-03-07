@@ -13,14 +13,14 @@ if (( ! $+commands[gpg-agent] )); then
 fi
 
 function _gpg-agent-start() {
-  gpg-agent --daemon --enable-ssh-support --write-env-file "${_gpg_env}"
+  gpg-agent --daemon --enable-ssh-support --write-env-file "${_gpg_env}" > /dev/null
   chmod 600 "${_gpg_env}"
-  source "${_gpg_env}"
+  source "${_gpg_env}" > /dev/null
 }
 
 # Source GPG agent settings, if applicable.
 if [[ -f "${_gpg_env}" ]]; then
-  source "${_gpg_env}"
+  source "${_gpg_env}" > /dev/null
   ps -ef | grep "${SSH_AGENT_PID}" | grep -q 'gpg-agent' || {
     _gpg-agent-start
   }

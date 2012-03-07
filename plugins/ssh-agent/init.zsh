@@ -30,12 +30,10 @@ function _ssh-agent-start() {
   rm -f "${_ssh_agent_env}"
   ssh-agent > "${_ssh_agent_env}"
   chmod 600 "${_ssh_agent_env}"
-  source "${_ssh_agent_env}"
+  source "${_ssh_agent_env}" > /dev/null
 
   # Load identies.
   zstyle -a ':omz:plugin:ssh-agent' identities 'identities'
-
-  print starting ssh-agent...
 
   if [[ ! -n "${identities}" ]]; then
     ssh-add
@@ -51,7 +49,7 @@ if is-true "${_ssh_agent_forwarding}" && [[ -n "$SSH_AUTH_SOCK" ]]; then
   [[ -L "$SSH_AUTH_SOCK" ]] || ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USER-screen
 elif [ -f "${_ssh_agent_env}" ]; then
   # Source SSH settings, if applicable.
-  source "${_ssh_agent_env}"
+  source "${_ssh_agent_env}" > /dev/null
   ps -ef | grep "${SSH_AGENT_PID}" | grep -q 'ssh-agent$' || {
     _ssh-agent-start;
   }
