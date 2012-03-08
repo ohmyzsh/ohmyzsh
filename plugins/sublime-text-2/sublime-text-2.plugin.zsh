@@ -6,12 +6,12 @@
 #
 SUBL=`which subl`
 if [[ $SUBL == 'subl not found' ]] ; then
-	if [[ `uname` == 'Darwin' ]] ; then
+ 	if [[ `uname` == 'Darwin' ]] ; then
 		if [ -d /Applications/Sublime\ Text\ 2.app/Contents/SharedSupport/bin ] ; then
 			export PATH=/Applications/Sublime\ Text\ 2.app/Contents/SharedSupport/bin:${PATH}
 		fi
 		if [ -d ~/Applications/Sublime\ Text\ 2.app/Contents/SharedSupport/bin ] ; then
-			export PATH=~/Applications/Sublime\ Text\ 2.app/Contents/SharedSupport/bin;${PATH}
+			export PATH=~/Applications/Sublime\ Text\ 2.app/Contents/SharedSupport/bin:${PATH}
 		fi
 	fi
 fi
