@@ -6,11 +6,11 @@
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
 #
 
-_gpg_env="$HOME/.gnupg/gpg-agent.env"
-
 if (( ! $+commands[gpg-agent] )); then
   return
 fi
+
+_gpg_env="$HOME/.gnupg/gpg-agent.env"
 
 function _gpg-agent-start() {
   gpg-agent --daemon --enable-ssh-support --write-env-file "${_gpg_env}" > /dev/null
