@@ -35,10 +35,10 @@ function _ssh-agent-start() {
   # Load identities.
   zstyle -a ':omz:plugin:ssh-agent' identities 'identities'
 
-  if [[ ! -n "${identities}" ]]; then
-    ssh-add
+  if (( ${#identities} > 0 )); then
+    ssh-add "${HOME}/.ssh/${^identities[@]}"
   else
-    ssh-add "${HOME}/.ssh/${^identities}"
+    ssh-add
   fi
 }
 
