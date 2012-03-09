@@ -20,6 +20,10 @@
 #     zstyle ':omz:plugin:ssh-agent' identities 'id_rsa' 'id_rsa2' 'id_github'
 #
 
+if (( ! $+commands[ssh-agent] )); then
+  return
+fi
+
 _ssh_agent_env="${HOME}/.ssh/environment-${HOST}"
 _ssh_agent_forwarding=
 
