@@ -72,14 +72,5 @@ powed(){
   find ~/.pow/ -type l -lname "*$basedir*" -exec basename {}'.dev' \;
 }
 
-# Restart pow process
-# taken from http://www.matthewratzloff.com/blog/2011/12/23/restarting-pow-when-dns-stops-responding
-repow(){
-  lsof | grep 20560 | awk '{print $2}' | xargs kill -9
-  launchctl unload ~/Library/LaunchAgents/cx.pow.powd.plist
-  launchctl load ~/Library/LaunchAgents/cx.pow.powd.plist
-  echo "restarted pow"
-}
-
 # View the standard out (puts) from any pow app
 alias kaput="tail -f ~/Library/Logs/Pow/apps/*"
