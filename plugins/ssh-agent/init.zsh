@@ -15,7 +15,7 @@
 #
 #     zstyle ':omz:plugin:ssh-agent' forwarding 'yes'
 #
-#   To load multiple identies, add the following to your .zshrc:
+#   To load multiple identities, add the following to your .zshrc:
 #
 #     zstyle ':omz:plugin:ssh-agent' identities 'id_rsa' 'id_rsa2' 'id_github'
 #
@@ -32,7 +32,7 @@ function _ssh-agent-start() {
   chmod 600 "${_ssh_agent_env}"
   source "${_ssh_agent_env}" > /dev/null
 
-  # Load identies.
+  # Load identities.
   zstyle -a ':omz:plugin:ssh-agent' identities 'identities'
 
   if [[ ! -n "${identities}" ]]; then
