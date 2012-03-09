@@ -16,7 +16,7 @@ h4. via `curl`
 
 h4. via `wget`
 
-@wget --no-check-certificate https://github.com/zyce/oh-my-zsh/raw/master/tools/install.sh -O - | sh@
+@wget --no-check-certificate https://github.com/bobbyrussel/oh-my-zsh/raw/master/tools/install.sh -O - | sh@
 
 h3. The manual way
 
