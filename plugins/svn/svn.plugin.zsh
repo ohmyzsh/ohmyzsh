@@ -13,19 +13,10 @@ function in_svn() {
     fi
 }
 
-function svn_get_repo_name {
-    if [ $(in_svn) ]; then
-        svn info | sed -n 's/Repository\ Root:\ .*\///p' | read SVN_ROOT
-    
-        svn info | sed -n "s/URL:\ .*$SVN_ROOT\///p" | sed "s/\/.*$//"
-    fi
-}
-
 function svn_get_branch_name {
     if [ $(in_svn) ]; then
-        svn info | sed -n 's/URL:\ .*\///p' | read SVN_URL
-    
-        basename $SVN_URL
+      svn info | grep '^URL:' | egrep -o '(tags|branches)/[^/]+|trunk' | egrep -o '[^/]+$' | read SVN_URL
+      echo $SVN_URL
     fi
 }
 
