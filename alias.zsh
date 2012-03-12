@@ -57,8 +57,11 @@ alias scp='nocorrect scp'
 alias type='type -a'
 
 # Mac OS X
-if [[ "$OSTYPE" != darwin* ]]; then
-  alias open='xdg-open'
+if [[ "$OSTYPE" == darwin* ]]; then
+  alias o='open'
+  alias get='curl --continue-at - --location --progress-bar --remote-name'
+else
+  alias o='xdg-open'
   alias get='wget --continue --progress=bar'
 
   if (( $+commands[xclip] )); then
@@ -70,11 +73,8 @@ if [[ "$OSTYPE" != darwin* ]]; then
     alias pbcopy='xsel --clipboard --input'
     alias pbpaste='xsel --clipboard --output'
   fi
-else
-  alias get='curl --continue-at - --location --progress-bar --remote-name'
 fi
 
-alias o='open'
 alias pbc='pbcopy'
 alias pbp='pbpaste'
 

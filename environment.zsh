@@ -76,12 +76,12 @@ if zstyle -t ':omz:environment:grep' color; then
 fi
 
 # Browser (Default)
-if (( $+commands[xdg-open] )); then
-  export BROWSER='xdg-open'
-fi
-
-if (( $+commands[open] )); then
+if [[ "$OSTYPE" == darwin* ]]; then
   export BROWSER='open'
+else
+  if (( $+commands[xdg-open] )); then
+    export BROWSER='xdg-open'
+  fi
 fi
 
 # Less
