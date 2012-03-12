@@ -97,18 +97,6 @@ if [[ $+functions[_zsh_highlight] -eq 0 ]]; then
   }
 
   #
-  # Remove existing highlights when the user
-  # inserts printable characters into $BUFFER
-  #
-  function ordinary-key-press() {
-    if [[ $KEYS == [[:print:]] ]]; then
-      region_highlight=()
-    fi
-    zle .self-insert
-  }
-  zle -N self-insert ordinary-key-press
-
-  #
   # The following snippet was taken from the zsh-syntax-highlighting project:
   #
   # https://github.com/zsh-users/zsh-syntax-highlighting/blob/56b134f5d62ae3d4e66c7f52bd0cc2595f9b305b/zsh-syntax-highlighting.zsh#L126-161
