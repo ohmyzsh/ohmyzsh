@@ -30,17 +30,17 @@ else
   fi
 fi
 
-alias l='ls -1A'             # Show files in one column.
-alias ll='ls -lh'            # Show human readable.
-alias la='ls -lhA'           # Show hidden files.
-alias lx='ls -lhXB'          # Sort by extension.
-alias lk='ls -lhSr'          # Sort by size, biggest last.
-alias lc='ls -lhtcr'         # Sort by and show change time, most recent last.
-alias lu='ls -lhtur'         # Sort by and show access time, most recent last.
-alias lt='ls -lhtr'          # Sort by date, most recent last.
-alias lm='ls -lha | more'    # Pipe through 'more'.
-alias lr='ls -lhR'           # Recursive ls.
-alias sl='ls'                # I often screw this up.
+alias l='ls -1A'         # List in one column.
+alias ll='ls -lh'        # List human readable sizes.
+alias lr='ll -R'         # List recursively.
+alias la='ll -A'         # List hidden files.
+alias lp='la | "$PAGER"' # List through pager.
+alias lx='ll -XB'        # List sorted by extension.
+alias lk='ll -Sr'        # List sorted by size, largest last.
+alias lt='ll -tr'        # List sorted by date, most recent last.
+alias lc='lt -c'         # List sorted by date, most recent last, show change time.
+alias lu='lt -u'         # List sorted by date, most recent last, show access time.
+alias sl='ls'            # I often screw this up.
 
 # General
 alias _='sudo'
