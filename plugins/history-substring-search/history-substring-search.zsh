@@ -89,11 +89,14 @@ zmodload -F zsh/parameter
 #
 if [[ $+functions[_zsh_highlight] -eq 0 ]]; then
   #
-  # Dummy implementation of _zsh_highlight()
-  # that simply removes existing highlights
+  # Dummy implementation of _zsh_highlight() that
+  # simply removes any existing highlights when the
+  # user inserts printable characters into $BUFFER.
   #
   function _zsh_highlight() {
-    region_highlight=()
+    if [[ $KEYS == [[:print:]] ]]; then
+      region_highlight=()
+    fi
   }
 
   #
