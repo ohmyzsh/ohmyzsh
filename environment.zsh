@@ -22,7 +22,8 @@ unsetopt HUP              # Don't kill jobs on shell exit.
 unsetopt CHECK_JOBS       # Don't report on jobs when shell exit.
 
 # PATH
-typeset -U cdpath fpath infopath manpath path
+typeset -U cdpath fpath mailpath manpath path
+typeset -UT INFOPATH infopath
 
 cdpath=(
   $HOME
