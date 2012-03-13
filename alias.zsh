@@ -5,7 +5,7 @@
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
 #
 
-setopt CORRECT               # Correct commands.
+setopt CORRECT # Correct commands.
 
 # The 'ls' Family
 if (( $+commands[dircolors] )); then
