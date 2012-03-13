@@ -60,11 +60,15 @@ if (( $+commands[gdircolors] )); then
   }
 
   # A sensible default for ls.
-  if zstyle -t ':omz:alias:ls' color && [[ -f "$HOME/.dir_colors" ]]; then
-    eval $(gdircolors "$HOME/.dir_colors")
-    alias ls='ls -hF --group-directories-first --color=auto'
+  alias ls='ls --group-directories-first'
+
+  if zstyle -t ':omz:alias:ls' color; then
+    if [[ -f "$HOME/.dir_colors" ]]; then
+      eval $(gdircolors "$HOME/.dir_colors")
+    fi
+    alias ls="$aliases[ls] --color=auto"
   else
-    alias ls='ls -hF --group-directories-first'
+    alias ls="$aliases[ls] -F"
   fi
 fi
 
