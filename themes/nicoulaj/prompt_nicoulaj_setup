@@ -16,6 +16,10 @@
 #   - Shows if logged in as root or not.
 #
 
+function prompt_nicoulaj_precmd() {
+  vcs_info
+}
+
 function prompt_nicoulaj_setup() {
   setopt LOCAL_OPTIONS
   unsetopt XTRACE KSH_ARRAYS
@@ -26,7 +30,7 @@ function prompt_nicoulaj_setup() {
   autoload -Uz vcs_info
 
   # Add hook for calling vcs_info before each command.
-  add-zsh-hook precmd vcs_info
+  add-zsh-hook precmd prompt_nicoulaj_precmd
 
   # Customizable parameters.
   local max_path_chars=30
