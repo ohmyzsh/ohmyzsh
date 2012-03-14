@@ -9,5 +9,4 @@
 source "${0:h}/alias.zsh"
 source "${0:h}/hub.zsh"
 source "${0:h}/style.zsh"
-source "${0:h}/completion.zsh"
 
