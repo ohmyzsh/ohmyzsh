@@ -127,6 +127,8 @@ function git-info {
   local added_format
   local added_formatted
   local ahead
+  local ahead_and_behind
+  local ahead_and_behind_cmd
   local ahead_format
   local ahead_formatted
   local ahead_or_behind
@@ -134,53 +136,54 @@ function git-info {
   local behind_format
   local behind_formatted
   local branch
-  local branch_info
   local branch_format
   local branch_formatted
+  local branch_info
   local clean
   local clean_formatted
   local commit
   local commit_format
+  local commit_formatted
   local deleted=0
   local deleted_format
   local deleted_formatted
   local dirty=0
   local dirty_format
   local dirty_formatted
+  local ignore_submodule
+  local ignore_submodule_when
   local line_number=0
   local modified=0
   local modified_format
   local modified_formatted
+  local prompt_format
   local remote
+  local remote_cmd
   local remote_format
   local remote_formatted
   local renamed=0
   local renamed_format
   local renamed_formatted
-  local commit_formatted
+  local rprompt_format
   local stashed=0
   local stashed_format
   local stashed_formatted
+  local status_cmd
   local unmerged=0
   local unmerged_format
   local unmerged_formatted
   local untracked=0
   local untracked_format
   local untracked_formatted
-  local prompt
-  local rprompt
-  local git_info_var
   local -A git_info_vars
-  local status_cmd
-  local ignore_submodule
-  local ignore_submodule_when
+  local git_info_var
 
-  # Clean up previous Git info.
+  # Clean up previous git-info.
   unset git_prompt_info
   unset git_rprompt_info
 
   # Return if not inside a Git repository work tree.
-  if ! is-true "$(git rev-parse --is-inside-work-tree 2>/dev/null)"; then
+  if ! is-true "$(git rev-parse --is-inside-work-tree 2> /dev/null)"; then
     return 1
   fi
 
@@ -203,8 +206,14 @@ function git-info {
   # Used to abort and turn git-info off on SIGINT.
   _git_info_executing=true
 
-  # Use short status for easy parsing.
-  status_cmd='git status --short --branch'
+  # Use porcelain status for easy parsing.
+  status_cmd='git status --porcelain'
+
+  # Gets the remote name.
+  remote_cmd='git rev-parse --symbolic-full-name --verify HEAD@{upstream}'
+
+  # Gets the commit difference counts between local and remote.
+  ahead_and_behind_cmd='git rev-list --count --left-right HEAD...@{upstream}'
 
   # Ignore submodule status.
   zstyle -b \
@@ -215,104 +224,70 @@ function git-info {
     status_cmd+=" --ignore-submodules=${ignore_submodule_when:-all}"
   fi
 
-  # Get commit.
-  commit="$(git rev-parse HEAD 2>/dev/null)"
-
   # Format commit.
+  commit="$(git rev-parse HEAD 2> /dev/null)"
   if [[ -n "$commit" ]]; then
     zstyle -s ':omz:plugin:git:prompt' commit 'commit_format'
     zformat -f commit_formatted "$commit_format" "c:$commit"
   fi
 
-  # Stashed
+  # Format stashed.
   if [[ -f "$(_git-dir)/refs/stash" ]]; then
-    stashed="$(git stash list 2>/dev/null | wc -l)"
+    stashed="$(git stash list 2> /dev/null | wc -l)"
     zstyle -s ':omz:plugin:git:prompt' stashed 'stashed_format'
     zformat -f stashed_formatted "$stashed_format" "S:$stashed"
   fi
 
+  # Format action.
+  action="$(_git-action)"
+  if [[ -n "$action" ]]; then
+    zstyle -s ':omz:plugin:git:prompt' action 'action_format'
+    zformat -f action_formatted "$action_format" "s:$action"
+  fi
+
+  # Get current status.
   while IFS=$'\n' read line; do
-    (( line_number++ ))
-
-    if (( line_number == 1 )) && [[ "$line" == *'(no branch)'* ]]; then
-      # Get action.
-      action="$(_git-action)"
-
-      # Format action.
-      if [[ -n "$action" ]]; then
-        zstyle -s ':omz:plugin:git:prompt' action 'action_format'
-        zformat -f action_formatted "$action_format" "s:$action"
-      fi
-    elif (( line_number == 1 )) \
-      && [[ "$line" == (#b)'## Initial commit on '(?##) ]];
-    then
-      branch="$match[1]"
-    elif (( line_number == 1 )); then
-      # Split the line into an array for parsing.
-      branch_info=(${(s: :)line})
-
-      # Match: master...origin/master
-      if [[ "$branch_info[2]" == (#b)(?##)...(?##/?##) ]]; then
-        branch="$match[1]"
-        remote="$match[2]"
-
-        # Match: [ahead or [behind
-        if [[ "$branch_info[3]" == (#b)\[(ahead|behind) ]]; then
-          ahead_or_behind="$match[1]"
-          if [[ "$ahead_or_behind" == 'behind' ]]; then
-            # Extract digits: 10]
-            behind="${branch_info[4]%\]}"
-          else
-            # Extract digits: 10] or 10,
-            ahead="${branch_info[4]%[,\]]}"
-            # Extract digits: 10]
-            behind="${branch_info[6]%\]}"
-          fi
-        fi
-      # Match: master
-      elif [[ "$branch_info[2]" == (#b)(?##) ]]; then
-        branch="$match[1]"
-      fi
-    else
-      # Count added, deleted, modified, renamed, unmerged, untracked, dirty.
-      # T (type change) is undocumented, see http://git.io/FnpMGw.
-      # For a table of scenarii, see http://i.imgur.com/2YLu1.png.
-      [[ "$line" == ([ACDMT][\ MT]|[ACMT]D)\ * ]] && (( added++ ))
-      [[ "$line" == [\ ACMRT]D\ * ]] && (( deleted++ ))
-      [[ "$line" == ?[MT]\ * ]] && (( modified++ ))
-      [[ "$line" == R?\ * ]] && (( renamed++ ))
-      [[ "$line" == (AA|DD|U?|?U)\ * ]] && (( unmerged++ ))
-      [[ "$line" == \?\?\ * ]] && (( untracked++ ))
-      (( dirty++ ))
-    fi
-  done < <("${(z)status_cmd}" 2>/dev/null)
+    # Count added, deleted, modified, renamed, unmerged, untracked, dirty.
+    # T (type change) is undocumented, see http://git.io/FnpMGw.
+    # For a table of scenarii, see http://i.imgur.com/2YLu1.png.
+    [[ "$line" == ([ACDMT][\ MT]|[ACMT]D)\ * ]] && (( added++ ))
+    [[ "$line" == [\ ACMRT]D\ * ]] && (( deleted++ ))
+    [[ "$line" == ?[MT]\ * ]] && (( modified++ ))
+    [[ "$line" == R?\ * ]] && (( renamed++ ))
+    [[ "$line" == (AA|DD|U?|?U)\ * ]] && (( unmerged++ ))
+    [[ "$line" == \?\?\ * ]] && (( untracked++ ))
+    (( dirty++ ))
+  done < <(${(z)status_cmd} 2> /dev/null)
 
   # Format branch.
+  branch="${$(git symbolic-ref -q HEAD)##refs/heads/}"
   if [[ -n "$branch" ]]; then
     zstyle -s ':omz:plugin:git:prompt' branch 'branch_format'
     zformat -f branch_formatted "$branch_format" "b:$branch"
 
     # Format remote.
-    if [[ -z "$remote" ]]; then
-      remote="${$( \
-        git rev-parse \
-          --verify ${branch}@{upstream} \
-          --symbolic-full-name 2>/dev/null)#refs/remotes/}"
+    remote="${$(${(z)remote_cmd} 2> /dev/null)##refs/remotes/}"
+    if [[ -n "$remote" ]]; then
+      zstyle -s ':omz:plugin:git:prompt' remote 'remote_format'
+      zformat -f remote_formatted "$remote_format" "R:$remote"
+
+      # Get ahead and behind counts.
+      ahead_and_behind="$(${(z)ahead_and_behind_cmd} 2> /dev/null)"
+
+      # Format ahead.
+      ahead="$ahead_and_behind[(w)1]"
+      if (( $ahead > 0 )); then
+        zstyle -s ':omz:plugin:git:prompt' ahead 'ahead_format'
+        zformat -f ahead_formatted "$ahead_format" "A:$ahead"
+      fi
+
+      # Format behind.
+      behind="$ahead_and_behind[(w)2]"
+      if (( $behind > 0 )); then
+        zstyle -s ':omz:plugin:git:prompt' behind 'behind_format'
+        zformat -f behind_formatted "$behind_format" "B:$behind"
+      fi
     fi
-    zstyle -s ':omz:plugin:git:prompt' remote 'remote_format'
-    zformat -f remote_formatted "$remote_format" "R:$remote"
-  fi
-
-  # Format ahead.
-  if [[ -n "$ahead" ]]; then
-    zstyle -s ':omz:plugin:git:prompt' ahead 'ahead_format'
-    zformat -f ahead_formatted "$ahead_format" "A:$ahead"
-  fi
-
-  # Format behind.
-  if [[ -n "$behind" ]]; then
-    zstyle -s ':omz:plugin:git:prompt' behind 'behind_format'
-    zformat -f behind_formatted "$behind_format" "B:$behind"
   fi
 
   # Format added.
