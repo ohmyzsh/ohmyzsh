@@ -145,7 +145,8 @@ function git-info() {
   local deleted=0
   local deleted_format
   local deleted_formatted
-  local dirty
+  local dirty=0
+  local dirty_format
   local dirty_formatted
   local line_number=0
   local modified=0
@@ -277,21 +278,14 @@ function git-info() {
         branch="$match[1]"
       fi
     else
-      # Format dirty.
-      if [[ -z "$dirty" ]]; then
-        zstyle -s ':omz:plugin:git:prompt' dirty 'dirty_formatted'
-        if [[ -z "$dirty_formatted" ]]; then
-          unset clean_formatted
-        fi
-      fi
-
-      # Count: added/deleted/modified/renamed/unmerged/untracked
+      # Count added, deleted, modified, renamed, unmerged, untracked, dirty.
       [[ "$line" == (((A|M|D|T) )|(AD|AM|AT|MM))\ * ]] && (( added++ ))
       [[ "$line" == ( D|AD)\ * ]] && (( deleted++ ))
       [[ "$line" == (( (M|T))|(AM|AT|MM))\ * ]] && (( modified++ ))
       [[ "$line" == R\ \ * ]] && (( renamed++ ))
       [[ "$line" == UU\ * ]] && (( unmerged++ ))
       [[ "$line" == \?\?\ * ]] && (( untracked++ ))
+      (( dirty++ ))
     fi
   done < <("${(z)status_cmd}" 2>/dev/null)
 
@@ -357,6 +351,13 @@ function git-info() {
   if (( $untracked > 0 )); then
     zstyle -s ':omz:plugin:git:prompt' untracked 'untracked_format'
     zformat -f untracked_formatted "$untracked_format" "u:$untracked"
+  fi
+
+  # Format dirty.
+  if (( $dirty > 0 )); then
+    zstyle -s ':omz:plugin:git:prompt' dirty 'dirty_format'
+    zformat -f dirty_formatted "$dirty_format" "D:$dirty"
+    unset clean_formatted
   fi
 
   # Format prompts.

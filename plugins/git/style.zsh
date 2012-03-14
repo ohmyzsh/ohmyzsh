@@ -29,8 +29,8 @@ zstyle ':omz:plugin:git:prompt' commit 'commit:%c'
 # %d - Indicator to notify of deleted files.
 zstyle ':omz:plugin:git:prompt' deleted 'deleted:%d'
 
-# %D - Indicator to notify of dirty branch.
-zstyle ':omz:plugin:git:prompt' dirty 'dirty'
+# %D - Indicator to notify of dirty files.
+zstyle ':omz:plugin:git:prompt' dirty 'dirty:%D'
 
 # %m - Indicator to notify of modified files.
 zstyle ':omz:plugin:git:prompt' modified 'modified:%m'
