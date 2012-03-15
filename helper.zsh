@@ -15,6 +15,15 @@ function is-true() {
   [[ -n "$1" && "$1" == (1|[Yy]([Ee][Ss]|)|[Tt]([Rr][Uu][Ee]|)|[Oo]([Nn]|)) ]]
 }
 
+# Prints the first non-empty string in the arguments array.
+function coalesce() {
+  for arg in "$argv[@]"; do
+    print "$arg"
+    return 0
+  done
+  return 1
+}
+
 # Trap signals were generated with 'kill -l'.
 # DEBUG, EXIT, and ZERR are Zsh signals.
 TRAP_SIGNALS=(

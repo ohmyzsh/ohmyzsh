@@ -140,7 +140,6 @@ function git-info() {
   local clean
   local clean_formatted
   local commit
-  local commit_short
   local commit_format
   local deleted=0
   local deleted_format
@@ -220,9 +219,8 @@ function git-info() {
   commit="$(git rev-parse HEAD 2>/dev/null)"
 
   # Format commit (short).
-  commit_short="$commit[1,7]"
   zstyle -s ':omz:plugin:git:prompt' commit 'commit_format'
-  zformat -f commit_formatted "$commit_format" "c:$commit_short"
+  zformat -f commit_formatted "$commit_format" "c:$commit"
 
   # Stashed
   if [[ -f "$(_git-dir)/refs/stash" ]]; then
@@ -238,9 +236,6 @@ function git-info() {
     (( line_number++ ))
 
     if (( line_number == 1 )) && [[ "$line" == *'(no branch)'* ]]; then
-      # Set branch to commit (short) when the branch is not found.
-      branch="$commit_short"
-
       # Get action.
       action="$(_git-action)"
       if [[ -n "$action" ]]; then
