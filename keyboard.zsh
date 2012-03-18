@@ -115,6 +115,15 @@ function expand-or-complete-prefix-with-indicator() {
 }
 zle -N expand-or-complete-prefix-with-indicator
 
+# Inserts 'sudo ' at the beginning of the line.
+function prepend-sudo() {
+  if [[ "$BUFFER" != su(do|)\ * ]]; then
+    BUFFER="sudo $BUFFER"
+    (( CURSOR += 5 ))
+  fi
+}
+zle -N prepend-sudo
+
 zstyle -s ':omz:editor' keymap 'keymap'
 if [[ "$keymap" == (emacs|) ]]; then
   # Use Emacs key bindings.
@@ -304,6 +313,10 @@ fi
 [[ -n "$keyinfo[Control]" && -n "$keyinfo[Escape]" ]] && \
   for key in "$keyinfo[Control]Q" "$keyinfo[Escape]"{q,Q}; \
     bindkey "$key" push-line-or-edit
+
+# Insert 'sudo ' at the beginning of the line.
+[[ -n "$keyinfo[Control]" ]] && \
+  bindkey "$keyinfo[Control]X$keyinfo[Control]S" prepend-sudo
 
 unset key
 
