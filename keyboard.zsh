@@ -300,5 +300,10 @@ fi
 [[ -n "$keyinfo[Control]" ]] && \
   bindkey "$keyinfo[Control]I" expand-or-complete-prefix-with-indicator
 
+# Use a more flexible push-line.
+[[ -n "$keyinfo[Control]" && -n "$keyinfo[Escape]" ]] && \
+  for key in "$keyinfo[Control]Q" "$keyinfo[Escape]"{q,Q}; \
+    bindkey "$key" push-line-or-edit
+
 unset key
 
