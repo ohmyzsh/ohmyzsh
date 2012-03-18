@@ -217,7 +217,8 @@ unset keymap
 [[ -n "$keyinfo[Delete]" ]] && \
   bindkey "$keyinfo[Delete]" delete-char
 [[ -n "$keyinfo[Backspace]" ]] && \
-  bindkey "$keyinfo[Backspace]" backward-delete-char
+  bindkey "$keyinfo[Backspace]" backward-delete-char && \
+  stty erase "$keyinfo[Backspace]"
 
 [[ -n "$keyinfo[Left]" ]] && \
   bindkey "$keyinfo[Left]" backward-char
