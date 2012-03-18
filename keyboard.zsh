@@ -255,12 +255,12 @@ fi
 # Expand command name to full path.
 [[ -n "$keyinfo[Escape]" ]] && \
   for key in "$keyinfo[Escape]"{E,e}; \
-    bindkey -M viins "$key" expand-cmd-path
+    bindkey "$key" expand-cmd-path
 
 # Duplicate the previous word.
 [[ -n "$keyinfo[Escape]" ]] && \
   for key in "$keyinfo[Escape]"{M,m}; \
-    bindkey -M viins "$key" copy-prev-shell-word
+    bindkey "$key" copy-prev-shell-word
 
 # Bind Shift + Tab to go to the previous menu item.
 [[ -n "$keyinfo[BackTab]" ]] && \
