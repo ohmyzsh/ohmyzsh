@@ -81,13 +81,7 @@ if [[ "$keymap" == (emacs|) ]]; then
   [[ -n "$keyinfo[Control]" ]] && \
     bindkey -M emacs "$keyinfo[Control]U" backward-kill-line
 
-  # Kill to the beginning of the word.
-  [[ -n "$keyinfo[Control]" ]] && \
-    bindkey -M emacs "$keyinfo[Control]W" backward-kill-word
-
-  # Undo/Redo
-  [[ -n "$keyinfo[Control]" ]] && \
-    bindkey -M emacs "$keyinfo[Control]_" undo
+  # Redo
   [[ -n "$keyinfo[Escape]" ]] && \
     bindkey -M emacs "$keyinfo[Escape]_" redo
 
