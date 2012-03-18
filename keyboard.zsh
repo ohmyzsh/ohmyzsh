@@ -177,43 +177,6 @@ elif [[ "$keymap" == vi ]]; then
   bindkey -M viins "jk" vi-cmd-mode
   bindkey -M viins "kj" vi-cmd-mode
 
-  # Emacs key bindings in insert mode.
-  [[ -n "$keyinfo[Control]" ]] && \
-    bindkey -M viins "$keyinfo[Control]A" beginning-of-line
-  [[ -n "$keyinfo[Control]" ]] && \
-    bindkey -M viins "$keyinfo[Control]B" backward-char
-  [[ -n "$keyinfo[Escape]" ]] && \
-    for key in "$keyinfo[Escape]"{B,b}; \
-      bindkey -M viins "$key" emacs-backward-word
-  [[ -n "$keyinfo[Control]" ]] && \
-    bindkey -M viins "$keyinfo[Control]D" delete-char-or-list
-  [[ -n "$keyinfo[Escape]" ]] && \
-    for key in "$keyinfo[Escape]"{D,d}; \
-      bindkey -M viins "$key" kill-word
-  [[ -n "$keyinfo[Control]" ]] && \
-    bindkey -M viins "$keyinfo[Control]E" end-of-line
-  [[ -n "$keyinfo[Control]" ]] && \
-    bindkey -M viins "$keyinfo[Control]F" forward-char
-  [[ -n "$keyinfo[Escape]" ]] && \
-    for key in "$keyinfo[Escape]"{F,f}; \
-      bindkey -M viins "$key" emacs-forward-word
-  [[ -n "$keyinfo[Control]" ]] && \
-    bindkey -M viins "$keyinfo[Control]K" kill-line
-  [[ -n "$keyinfo[Control]" ]] && \
-    bindkey -M viins "$keyinfo[Control]U" backward-kill-line
-  [[ -n "$keyinfo[Control]" ]] && \
-    bindkey -M viins "$keyinfo[Control]W" backward-kill-word
-  [[ -n "$keyinfo[Escape]" ]] && \
-    for key in "$keyinfo[Escape]"{W,w}; \
-      bindkey -M viins "$key" copy-region-as-kill
-  [[ -n "$keyinfo[Escape]" ]] && \
-    for key in "$keyinfo[Escape]"{H,h}; \
-      bindkey -M viins "$key" run-help
-  [[ -n "$keyinfo[Escape]" && -n "$keyinfo[Left]" ]] && \
-    bindkey -M viins "$keyinfo[Escape]$keyinfo[Left]" emacs-backward-word
-  [[ -n "$keyinfo[Escape]" && -n "$keyinfo[Right]" ]] && \
-    bindkey -M viins "$keyinfo[Escape]$keyinfo[Right]" emacs-forward-word
-
   # History
   bindkey -M vicmd "gg" beginning-of-history
   bindkey -M vicmd "G" end-of-history
@@ -231,21 +194,9 @@ elif [[ "$keymap" == vi ]]; then
   if (( $+widgets[history-incremental-pattern-search-backward] )); then
     bindkey -M vicmd "?" history-incremental-pattern-search-backward
     bindkey -M vicmd "/" history-incremental-pattern-search-forward
-
-    # Emacs key bindings in insert mode.
-    [[ -n "$keyinfo[Control]" ]] && \
-      bindkey -M viins "$keyinfo[Control]R" history-incremental-pattern-search-backward
-    [[ -n "$keyinfo[Control]" ]] && \
-      bindkey -M viins "$keyinfo[Control]S" history-incremental-pattern-search-forward
   else
     bindkey -M vicmd "?" history-incremental-search-backward
     bindkey -M vicmd "/" history-incremental-search-forward
-
-    # Emacs key bindings in insert mode.
-    [[ -n "$keyinfo[Control]" ]] && \
-      bindkey -M viins "$keyinfo[Control]R" history-incremental-search-backward
-    [[ -n "$keyinfo[Control]" ]] && \
-      bindkey -M viins "$keyinfo[Control]S" history-incremental-search-forward
   fi
 else
   print "omz: invalid keymap: $keymap" >&2
