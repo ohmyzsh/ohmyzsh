@@ -95,6 +95,26 @@ function zle-line-finish() {
 }
 zle -N zle-line-finish
 
+# Converts .... to ../...
+function expand-dot-to-parent-directory-path() {
+  if [[ $LBUFFER = *.. ]]; then
+    LBUFFER+='/..'
+  else
+    LBUFFER+='.'
+  fi
+}
+zle -N expand-dot-to-parent-directory-path
+
+# Displays an indicator when completing.
+function expand-or-complete-prefix-with-indicator() {
+  local indicator
+  zstyle -s ':omz:completion' indicator 'indicator'
+  print -Pn "$indicator"
+  zle expand-or-complete-prefix
+  zle redisplay
+}
+zle -N expand-or-complete-prefix-with-indicator
+
 zstyle -s ':omz:editor' keymap 'keymap'
 if [[ "$keymap" == (emacs|) ]]; then
   # Use Emacs key bindings.
@@ -272,27 +292,11 @@ fi
 
 # Convert .... to ../.. automatically.
 if zstyle -t ':omz:editor' dot-expansion; then
-  function expand-dot-to-parent-directory-path() {
-    if [[ $LBUFFER = *.. ]]; then
-      LBUFFER+=/..
-    else
-      LBUFFER+=.
-    fi
-  }
-  zle -N expand-dot-to-parent-directory-path
-  # Do not expand .... to ../..  during incremental search.
+  # Do not expand during incremental search.
   bindkey -M isearch . self-insert 2>/dev/null
 fi
 
 # Display an indicator when completing.
-function expand-or-complete-prefix-with-indicator() {
-  local indicator
-  zstyle -s ':omz:completion' indicator 'indicator'
-  print -Pn "$indicator"
-  zle expand-or-complete-prefix
-  zle redisplay
-}
-zle -N expand-or-complete-prefix-with-indicator
 [[ -n "$keyinfo[Control]" ]] && \
   bindkey "$keyinfo[Control]I" expand-or-complete-prefix-with-indicator
 
