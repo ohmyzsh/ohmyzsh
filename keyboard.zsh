@@ -86,11 +86,13 @@ if [[ "$keymap" == (emacs|) ]]; then
   [[ -n "$keyinfo[Escape]" ]] && \
     bindkey -M emacs "$keyinfo[Escape]_" redo
 
-  # Search character.
+  # Search previous character.
   [[ -n "$keyinfo[Control]" ]] && \
-    bindkey -M emacs "$keyinfo[Control]]" vi-find-next-char
-  [[ -n "$keyinfo[Escape]" && -n "$keyinfo[Control]" ]] && \
-    bindkey -M emacs "$keyinfo[Escape]$keyinfo[Control]]" vi-find-prev-char
+    bindkey -M emacs "$keyinfo[Control]X$keyinfo[Control]B" vi-find-prev-char
+
+  # Match bracket.
+  [[ -n "$keyinfo[Control]" ]] && \
+    bindkey -M emacs "$keyinfo[Control]X$keyinfo[Control]]" vi-match-bracket
 
   # Edit command in an external editor.
   [[ -n "$keyinfo[Control]" ]] && \
