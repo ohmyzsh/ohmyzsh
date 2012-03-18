@@ -82,7 +82,7 @@ if [[ "$keymap" == (emacs|) ]]; then
     for key in "$keyinfo[Escape]"{K,k}; \
       bindkey -M emacs "$key" backward-kill-line
 
-  # Redo
+  # Redo.
   [[ -n "$keyinfo[Escape]" ]] && \
     bindkey -M emacs "$keyinfo[Escape]_" redo
 
@@ -107,14 +107,18 @@ if [[ "$keymap" == (emacs|) ]]; then
   # otherwise, bind to built-in Zsh history search.
   if (( $+widgets[history-incremental-pattern-search-backward] )); then
     [[ -n "$keyinfo[Control]" ]] && \
-      bindkey -M emacs "$keyinfo[Control]R" history-incremental-pattern-search-backward
+      bindkey -M emacs "$keyinfo[Control]R" \
+        history-incremental-pattern-search-backward
     [[ -n "$keyinfo[Control]" ]] && \
-      bindkey -M emacs "$keyinfo[Control]S" history-incremental-pattern-search-forward
+      bindkey -M emacs "$keyinfo[Control]S" \
+        history-incremental-pattern-search-forward
   else
     [[ -n "$keyinfo[Control]" ]] && \
-      bindkey -M emacs "$keyinfo[Control]R" history-incremental-search-backward
+      bindkey -M emacs "$keyinfo[Control]R" \
+        history-incremental-search-backward
     [[ -n "$keyinfo[Control]" ]] && \
-      bindkey -M emacs "$keyinfo[Control]S" history-incremental-search-forward
+      bindkey -M emacs "$keyinfo[Control]S" \
+        history-incremental-search-forward
   fi
 elif [[ "$keymap" == vi ]]; then
   # Use vi key bindings.
