@@ -67,9 +67,11 @@ if [[ "$keymap" == (emacs|) ]]; then
   bindkey -e
 
   [[ -n "$keyinfo[Escape]" ]] && \
-    bindkey -M emacs "$keyinfo[Escape]B" emacs-backward-word
+    for key in "$keyinfo[Escape]"{B,b}; \
+      bindkey -M emacs "$key" emacs-backward-word
   [[ -n "$keyinfo[Escape]" ]] && \
-    bindkey -M emacs "$keyinfo[Escape]F" emacs-forward-word
+    for key in "$keyinfo[Escape]"{F,f}; \
+      bindkey -M emacs "$key" emacs-forward-word
   [[ -n "$keyinfo[Escape]" && -n "$keyinfo[Left]" ]] && \
     bindkey -M emacs "$keyinfo[Escape]$keyinfo[Left]" emacs-backward-word
   [[ -n "$keyinfo[Escape]" && -n "$keyinfo[Right]" ]] && \
@@ -181,17 +183,20 @@ elif [[ "$keymap" == vi ]]; then
   [[ -n "$keyinfo[Control]" ]] && \
     bindkey -M viins "$keyinfo[Control]B" backward-char
   [[ -n "$keyinfo[Escape]" ]] && \
-    bindkey -M viins "$keyinfo[Escape]B" emacs-backward-word
+    for key in "$keyinfo[Escape]"{B,b}; \
+      bindkey -M viins "$key" emacs-backward-word
   [[ -n "$keyinfo[Control]" ]] && \
     bindkey -M viins "$keyinfo[Control]D" delete-char-or-list
   [[ -n "$keyinfo[Escape]" ]] && \
-    bindkey -M viins "$keyinfo[Escape]D" kill-word
+    for key in "$keyinfo[Escape]"{D,d}; \
+      bindkey -M viins "$key" kill-word
   [[ -n "$keyinfo[Control]" ]] && \
     bindkey -M viins "$keyinfo[Control]E" end-of-line
   [[ -n "$keyinfo[Control]" ]] && \
     bindkey -M viins "$keyinfo[Control]F" forward-char
   [[ -n "$keyinfo[Escape]" ]] && \
-    bindkey -M viins "$keyinfo[Escape]F" emacs-forward-word
+    for key in "$keyinfo[Escape]"{F,f}; \
+      bindkey -M viins "$key" emacs-forward-word
   [[ -n "$keyinfo[Control]" ]] && \
     bindkey -M viins "$keyinfo[Control]K" kill-line
   [[ -n "$keyinfo[Control]" ]] && \
@@ -199,9 +204,11 @@ elif [[ "$keymap" == vi ]]; then
   [[ -n "$keyinfo[Control]" ]] && \
     bindkey -M viins "$keyinfo[Control]W" backward-kill-word
   [[ -n "$keyinfo[Escape]" ]] && \
-    bindkey -M viins "$keyinfo[Escape]W" copy-region-as-kill
+    for key in "$keyinfo[Escape]"{W,w}; \
+      bindkey -M viins "$key" copy-region-as-kill
   [[ -n "$keyinfo[Escape]" ]] && \
-    bindkey -M viins "$keyinfo[Escape]H" run-help
+    for key in "$keyinfo[Escape]"{H,h}; \
+      bindkey -M viins "$key" run-help
   [[ -n "$keyinfo[Escape]" && -n "$keyinfo[Left]" ]] && \
     bindkey -M viins "$keyinfo[Escape]$keyinfo[Left]" emacs-backward-word
   [[ -n "$keyinfo[Escape]" && -n "$keyinfo[Right]" ]] && \
@@ -294,11 +301,13 @@ fi
 
 # Expand command name to full path.
 [[ -n "$keyinfo[Escape]" ]] && \
-  bindkey "$keyinfo[Escape]E" expand-cmd-path
+  for key in "$keyinfo[Escape]"{E,e}; \
+    bindkey -M viins "$key" expand-cmd-path
 
 # Duplicate the previous word.
 [[ -n "$keyinfo[Escape]" ]] && \
-  bindkey "$keyinfo[Escape]M" copy-prev-shell-word
+  for key in "$keyinfo[Escape]"{M,m}; \
+    bindkey -M viins "$key" copy-prev-shell-word
 
 # Bind Shift + Tab to go to the previous menu item.
 [[ -n "$keyinfo[BackTab]" ]] && \
@@ -333,4 +342,6 @@ function expand-or-complete-prefix-with-indicator() {
 zle -N expand-or-complete-prefix-with-indicator
 [[ -n "$keyinfo[Control]" ]] && \
   bindkey "$keyinfo[Control]I" expand-or-complete-prefix-with-indicator
+
+unset key
 
