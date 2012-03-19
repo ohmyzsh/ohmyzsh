@@ -95,7 +95,7 @@ function zle-line-finish() {
 }
 zle -N zle-line-finish
 
-# Converts .... to ../...
+# Expands .... to ../..
 function expand-dot-to-parent-directory-path() {
   if [[ $LBUFFER = *.. ]]; then
     LBUFFER+='/..'
@@ -157,11 +157,6 @@ zle -N prepend-sudo
 [[ -n "$keyinfo[Control]" ]] && \
   bindkey -M emacs "$keyinfo[Control]X$keyinfo[Control]E" edit-command-line
 
-# Expand .... to ../..
-if zstyle -t ':omz:editor' dot-expansion; then
-  bindkey -M emacs "." expand-dot-to-parent-directory-path
-fi
-
 # Bind to history substring search plugin if enabled;
 # otherwise, bind to built-in Zsh history search.
 if (( $+widgets[history-incremental-pattern-search-backward] )); then
@@ -192,11 +187,6 @@ bindkey -M vicmd "ga" what-cursor-position
 bindkey -M vicmd "u" undo
 [[ -n "$keyinfo[Control]" ]] && \
   bindkey -M vicmd "$keyinfo[Control]R" redo
-
-# Expand .... to ../..
-if zstyle -t ':omz:editor' dot-expansion; then
-  bindkey -M viins "." expand-dot-to-parent-directory-path
-fi
 
 # Switch to command mode.
 bindkey -M viins "jk" vi-cmd-mode
@@ -294,10 +284,9 @@ for keymap in 'emacs' 'viins'; do
   [[ -n "$keyinfo[Control]" ]] && \
     bindkey -M "$keymap" "$keyinfo[Control]I" expand-or-complete-prefix
 
-  # Convert .... to ../.. automatically.
+  # Expand .... to ../..
   if zstyle -t ':omz:editor' dot-expansion; then
-    # Do not expand during incremental search.
-    bindkey -M "$keymap" -M isearch . self-insert 2>/dev/null
+    bindkey -M "$keymap" "." expand-dot-to-parent-directory-path
   fi
 
   # Display an indicator when completing.
@@ -309,6 +298,11 @@ for keymap in 'emacs' 'viins'; do
   [[ -n "$keyinfo[Control]" ]] && \
     bindkey -M "$keymap" "$keyinfo[Control]X$keyinfo[Control]S" prepend-sudo
 done
+
+# Do not expand .... to ../.. during incremental search.
+if zstyle -t ':omz:editor' dot-expansion; then
+  bindkey -M isearch . self-insert 2> /dev/null
+fi
 
 # Set the key layout.
 zstyle -s ':omz:editor' keymap 'keymap'
