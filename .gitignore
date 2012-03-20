@@ -3,9 +3,8 @@ log/.zsh_history
 projects.zsh
 custom/*
 !custom/example
-!custom/example!custom/example.zsh
-
-# editor backup files
+!custom/example.zsh
+cache
+*.swp
 *~
-# cache
-cache/
+
