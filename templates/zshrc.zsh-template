@@ -28,5 +28,6 @@ plugins=(git rails textmate ruby gem github osx)
 
 source $ZSH/oh-my-zsh.sh
 source ~/.profile
+unsetopt correct_all
 
 # Customize to your needs...
