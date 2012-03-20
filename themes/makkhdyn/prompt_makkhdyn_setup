@@ -1,0 +1,48 @@
+#
+# A theme heavily using git_prompt_info.
+#
+# Authors:
+#   Colin Hebert <hebert.colin@gmail.com>
+
+function prompt_makkhdyn_precmd () {
+  setopt LOCAL_OPTIONS
+  unsetopt XTRACE KSH_ARRAYS
+
+  if (( $+functions[git-info] )); then
+    git-info
+  fi
+}
+
+function prompt_makkhdyn_setup() {
+  setopt LOCAL_OPTIONS
+  unsetopt XTRACE KSH_ARRAYS
+  prompt_opts=(cr percent subst)
+
+  autoload -Uz add-zsh-hook
+  add-zsh-hook precmd prompt_makkhdyn_precmd
+
+  zstyle ':omz:prompt:vi' insert ''
+  zstyle ':omz:prompt:vi' command '%F{yellow}❮%f%B%F{red}❮%f%b%F{red}❮%f'
+  zstyle ':omz:completion' indicator '%B%F{red}...%f%b'
+  zstyle ':omz:plugin:git:prompt' action '|%s'
+  zstyle ':omz:plugin:git:prompt' added '+'
+  zstyle ':omz:plugin:git:prompt' ahead '>'
+  zstyle ':omz:plugin:git:prompt' behind '<'
+  zstyle ':omz:plugin:git:prompt' branch '%b'
+  zstyle ':omz:plugin:git:prompt' deleted '-'
+  zstyle ':omz:plugin:git:prompt' modified '*'
+  zstyle ':omz:plugin:git:prompt' renamed '➜'
+  zstyle ':omz:plugin:git:prompt' commit '(%.7c...)'
+  zstyle ':omz:plugin:git:prompt' stashed '\$'
+  zstyle ':omz:plugin:git:prompt' unmerged '!'
+  zstyle ':omz:plugin:git:prompt' untracked '%%%'
+  zstyle ':omz:plugin:git:prompt' prompt '%F{blue}($(coalesce "%b" "%c")%m%a%d%r%S%u%U$([[ -n "%R" ]] && coalesce "%B%A" "=")%s)%f'
+  zstyle ':omz:plugin:git:prompt' rprompt ''
+
+  PROMPT='%F{green}%~${(e)git_prompt_info} %B%F{red}%(!.#.$)%b%f '
+  RPROMPT='${vi_prompt_info}%(?::%F{red}⏎%f)'
+  SPROMPT='zsh: correct %F{red}%R%f to %F{green}%r%f [nyae]? '
+}
+
+prompt_makkhdyn_setup "$@"
+
