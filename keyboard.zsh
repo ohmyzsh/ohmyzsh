@@ -106,14 +106,14 @@ function expand-dot-to-parent-directory-path() {
 zle -N expand-dot-to-parent-directory-path
 
 # Displays an indicator when completing.
-function expand-or-complete-prefix-with-indicator() {
+function expand-or-complete-with-indicator() {
   local indicator
   zstyle -s ':omz:completion' indicator 'indicator'
   print -Pn "$indicator"
   zle expand-or-complete-prefix
   zle redisplay
 }
-zle -N expand-or-complete-prefix-with-indicator
+zle -N expand-or-complete-with-indicator
 
 # Inserts 'sudo ' at the beginning of the line.
 function prepend-sudo() {
@@ -296,7 +296,7 @@ for keymap in 'emacs' 'viins'; do
   # Display an indicator when completing.
   [[ -n "$keyinfo[Control]" ]] && \
     bindkey -M "$keymap" "$keyinfo[Control]I" \
-      expand-or-complete-prefix-with-indicator
+      expand-or-complete-with-indicator
 
   # Insert 'sudo ' at the beginning of the line.
   [[ -n "$keyinfo[Control]" ]] && \
