@@ -157,8 +157,20 @@ zle -N prepend-sudo
 [[ -n "$keyinfo[Control]" ]] && \
   bindkey -M emacs "$keyinfo[Control]X$keyinfo[Control]E" edit-command-line
 
-# Bind to history substring search plugin if enabled;
+# Bind to the history substring search plugin if enabled;
 # otherwise, bind to built-in Zsh history search.
+if (( $+plugins[(er)history-substring-search] )); then
+  [[ -n "$keyinfo[Control]" ]] && \
+    bindkey -M emacs "$keyinfo[Control]P" history-substring-search-up
+  [[ -n "$keyinfo[Control]" ]] && \
+    bindkey -M emacs "$keyinfo[Control]N" history-substring-search-down
+else
+  [[ -n "$keyinfo[Control]" ]] && \
+    bindkey -M emacs "$keyinfo[Control]P" up-line-or-history
+  [[ -n "$keyinfo[Control]" ]] && \
+    bindkey -M emacs "$keyinfo[Control]N" down-line-or-history
+fi
+
 if (( $+widgets[history-incremental-pattern-search-backward] )); then
   [[ -n "$keyinfo[Control]" ]] && \
     bindkey -M emacs "$keyinfo[Control]R" \
@@ -196,7 +208,7 @@ bindkey -M viins "kj" vi-cmd-mode
 bindkey -M vicmd "gg" beginning-of-history
 bindkey -M vicmd "G" end-of-history
 
-# Bind to history substring search plugin if enabled;
+# Bind to the history substring search plugin if enabled;
 # otherwise, bind to built-in Zsh history search.
 if (( $+plugins[(er)history-substring-search] )); then
   bindkey -M vicmd "k" history-substring-search-up
@@ -242,19 +254,11 @@ for keymap in 'emacs' 'viins'; do
       bindkey -M "$keymap" "$keyinfo[Up]" history-substring-search-up
     [[ -n "$keyinfo[Down]" ]] && \
       bindkey -M "$keymap" "$keyinfo[Down]" history-substring-search-down
-    [[ -n "$keyinfo[Control]" ]] && \
-      bindkey -M "$keymap" "$keyinfo[Control]P" history-substring-search-up
-    [[ -n "$keyinfo[Control]" ]] && \
-      bindkey -M "$keymap" "$keyinfo[Control]N" history-substring-search-down
   else
     [[ -n "$keyinfo[Up]" ]] && \
       bindkey -M "$keymap" "$keyinfo[Up]" up-line-or-history
     [[ -n "$keyinfo[Down]" ]] && \
       bindkey -M "$keymap" "$keyinfo[Down]" down-line-or-history
-    [[ -n "$keyinfo[Control]" ]] && \
-      bindkey -M "$keymap" "$keyinfo[Control]P" up-line-or-history
-    [[ -n "$keyinfo[Control]" ]] && \
-      bindkey -M "$keymap" "$keyinfo[Control]N" down-line-or-history
   fi
 
   # Clear screen.
