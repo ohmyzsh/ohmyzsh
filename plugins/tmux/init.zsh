@@ -17,8 +17,6 @@ alias tl="tmux list-sessions"
 
 # Auto Start
 if (( $SHLVL == 1 )) && zstyle -t ':omz:plugin:tmux:auto' start; then
-  (( SHLVL += 1 )) && export SHLVL
-
   session="$(
     tmux list-sessions 2> /dev/null \
       | cut -d':' -f1 \
