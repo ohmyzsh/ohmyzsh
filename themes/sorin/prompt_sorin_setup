@@ -26,7 +26,8 @@ function prompt_sorin_setup() {
   add-zsh-hook precmd prompt_sorin_precmd
 
   zstyle ':omz:completion' indicator '%B%F{red}...%f%b'
-  zstyle ':omz:prompt' vicmd '%F{yellow}❮%f%B%F{red}❮%f%b%F{red}❮%f'
+  zstyle ':omz:prompt:vi' insert ''
+  zstyle ':omz:prompt:vi' command ' %F{yellow}❮%f%B%F{red}❮%f%b%F{red}❮%f'
   zstyle ':omz:plugin:git:prompt' action ':%%B%F{yellow}%s%f%%b'
   zstyle ':omz:plugin:git:prompt' added ' %%B%F{green}✚%f%%b'
   zstyle ':omz:plugin:git:prompt' ahead ' %%B%F{yellow}⬆%f%%b'
@@ -43,7 +44,7 @@ function prompt_sorin_setup() {
   zstyle ':omz:plugin:git:prompt' rprompt '%A%B%S%a%d%m%r%U%u'
 
   PROMPT='%F{cyan}%1~%f${(e)git_prompt_info} %(!.%B%F{red}#%f%b.%B%F{green}❯%f%b) '
-  RPROMPT='%(?::%F{red}⏎%f)${VIM:+" %B%F{green}V%f%b"}${git_rprompt_info}'
+  RPROMPT='${vi_prompt_info}%(?:: %F{red}⏎%f)${VIM:+" %B%F{green}V%f%b"}${git_rprompt_info}'
   SPROMPT='zsh: correct %F{red}%R%f to %F{green}%r%f [nyae]? '
 }
 
