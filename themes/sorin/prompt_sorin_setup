@@ -40,7 +40,7 @@ function prompt_sorin_setup() {
   zstyle ':omz:plugin:git:prompt' unmerged ' %%B%F{yellow}═%f%%b'
   zstyle ':omz:plugin:git:prompt' untracked ' %%B%F{white}◼%f%%b'
   zstyle ':omz:plugin:git:prompt' rprompt '%A%B%S%a%d%m%r%U%u'
-  zstyle -e ':omz:plugin:git:prompt' prompt 'reply=("%F{blue}git%f$(coalesce "%b" "%c")%s")'
+  zstyle -e ':omz:plugin:git:prompt' prompt 'reply=(" %F{blue}git%f$(coalesce "%b" "%c")%s")'
 
   PROMPT='%F{cyan}%1~%f${git_prompt_info} %(!.%B%F{red}#%f%b.%B%F{green}❯%f%b) '
   RPROMPT='%(?::%F{red}⏎%f)${VIM:+" %B%F{green}V%f%b"}${git_rprompt_info}'
