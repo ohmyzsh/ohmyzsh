@@ -231,9 +231,6 @@ function git-info() {
     zformat -f stashed_formatted "$stashed_format" "S:$stashed"
   fi
 
-  # Assume that the working copy is clean.
-  zstyle -s ':omz:plugin:git:prompt' clean 'clean_formatted'
-
   while IFS=$'\n' read line; do
     (( line_number++ ))
 
@@ -358,7 +355,8 @@ function git-info() {
   if (( $dirty > 0 )); then
     zstyle -s ':omz:plugin:git:prompt' dirty 'dirty_format'
     zformat -f dirty_formatted "$dirty_format" "D:$dirty"
-    unset clean_formatted
+  else
+    zstyle -s ':omz:plugin:git:prompt' clean 'clean_formatted'
   fi
 
   # Format prompts.
