@@ -38,6 +38,8 @@ keyinfo=(
   'Control'   '\C-'
   'Escape'    '\e'
   'Meta'      '\M-'
+  'Backspace' "^?"
+  'Delete'    "^[[3~"
   'F1'        "$terminfo[kf1]"
   'F2'        "$terminfo[kf2]"
   'F3'        "$terminfo[kf3]"
@@ -50,11 +52,9 @@ keyinfo=(
   'F10'       "$terminfo[kf10]"
   'F11'       "$terminfo[kf11]"
   'F12'       "$terminfo[kf12]"
-  'Backspace' "$terminfo[kbs]"
   'Insert'    "$terminfo[kich1]"
   'Home'      "$terminfo[khome]"
   'PageUp'    "$terminfo[kpp]"
-  'Delete'    "$terminfo[kdch1]"
   'End'       "$terminfo[kend]"
   'PageDown'  "$terminfo[knp]"
   'Up'        "$terminfo[kcuu1]"
@@ -221,8 +221,7 @@ for keymap in 'emacs' 'viins'; do
   [[ -n "$keyinfo[Delete]" ]] && \
     bindkey -M "$keymap" "$keyinfo[Delete]" delete-char
   [[ -n "$keyinfo[Backspace]" ]] && \
-    bindkey -M "$keymap" "$keyinfo[Backspace]" backward-delete-char && \
-    stty erase "$keyinfo[Backspace]"
+    bindkey -M "$keymap" "$keyinfo[Backspace]" backward-delete-char
 
   [[ -n "$keyinfo[Left]" ]] && \
     bindkey -M "$keymap" "$keyinfo[Left]" backward-char
