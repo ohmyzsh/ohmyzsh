@@ -12,7 +12,7 @@ fi
 
 _gpg_env="$HOME/.gnupg/gpg-agent.env"
 
-function _gpg-agent-start() {
+function _gpg-agent-start {
   gpg-agent --daemon --enable-ssh-support --write-env-file "${_gpg_env}" > /dev/null
   chmod 600 "${_gpg_env}"
   source "${_gpg_env}" > /dev/null

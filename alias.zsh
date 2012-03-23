@@ -99,7 +99,7 @@ fi
 
 # Diff/Make
 if zstyle -t ':omz:alias:diff' color; then
-  function diff() {
+  function diff {
     if (( $+commands[colordiff] )); then
       "$commands[diff]" --unified "$@" | colordiff --difftype diffu
     elif (( $+commands[git] )); then
@@ -109,7 +109,7 @@ if zstyle -t ':omz:alias:diff' color; then
     fi
   }
 
-  function wdiff() {
+  function wdiff {
     if (( $+commands[wdiff] )); then
       "$commands[wdiff]" \
         --avoid-wraps \

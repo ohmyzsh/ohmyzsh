@@ -6,7 +6,7 @@
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
 #
 
-function duh() {
+function duh {
   (( $# == 0 )) && set -- *
   if [[ "$OSTYPE" == linux* ]]; then
     du -khsc "$@" | sort -h -r

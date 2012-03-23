@@ -19,28 +19,28 @@ else
 fi
 
 # Sets the GNU Screen title.
-function set-screen-title() {
+function set-screen-title {
   if [[ "$TERM" == screen* ]]; then
     printf "\ek%s\e\\" ${(V)argv}
   fi
 }
 
 # Sets the terminal window title.
-function set-window-title() {
+function set-window-title {
   if [[ "$TERM" == ((x|a|ml|dt|E)term*|(u|)rxvt*) ]]; then
     printf "\e]2;%s\a" ${(V)argv}
   fi
 }
 
 # Sets the terminal tab title.
-function set-tab-title() {
+function set-tab-title {
   if [[ "$TERM" == ((x|a|ml|dt|E)term*|(u|)rxvt*) ]]; then
     printf "\e]1;%s\a" ${(V)argv}
   fi
 }
 
 # Sets the tab and window titles with the command name.
-function set-title-by-command() {
+function set-title-by-command {
   emulate -L zsh
   setopt LOCAL_OPTIONS EXTENDED_GLOB
 
@@ -77,7 +77,7 @@ function set-title-by-command() {
 autoload -Uz add-zsh-hook
 
 # Sets the tab and window titles before the prompt is displayed.
-function set-title-precmd() {
+function set-title-precmd {
   if [[ "$TERM_PROGRAM" != "Apple_Terminal" ]] && zstyle -t ':omz:terminal' auto-title; then
     set-window-title "${(%):-%~}"
     for kind in tab screen; do
@@ -92,7 +92,7 @@ function set-title-precmd() {
 add-zsh-hook precmd set-title-precmd
 
 # Sets the tab and window titles before command execution.
-function set-title-preexec() {
+function set-title-preexec {
   if zstyle -t ':omz:terminal' auto-title; then
     set-title-by-command "$2"
   fi

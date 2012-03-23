@@ -6,17 +6,17 @@
 #
 
 # Checks if a file can be autoloaded by trying to load it in a subshell.
-function autoloadable() {
+function autoloadable {
   ( unfunction $1 ; autoload -U +X $1 ) &> /dev/null
 }
 
 # Checks boolean variable for "true" (case insensitive "1", "y", "yes", "t", "true", "o", and "on").
-function is-true() {
+function is-true {
   [[ -n "$1" && "$1" == (1|[Yy]([Ee][Ss]|)|[Tt]([Rr][Uu][Ee]|)|[Oo]([Nn]|)) ]]
 }
 
 # Prints the first non-empty string in the arguments array.
-function coalesce() {
+function coalesce {
   for arg in $argv; do
     print "$arg"
     return 0
@@ -33,7 +33,7 @@ TRAP_SIGNALS=(
 )
 
 # Adds a function to a list to be called when a trap is triggered.
-function add-zsh-trap() {
+function add-zsh-trap {
   if (( $# < 2 )); then
     print "usage: $0 type function" >&2
     return 1
@@ -52,7 +52,7 @@ function add-zsh-trap() {
 
   if (( ! $+functions[TRAP${1}] )); then
     eval "
-     function TRAP${1}() {
+     function TRAP${1} {
         for trap_function in \"\$TRAP${1}_FUNCTIONS[@]\"; do
           if (( \$+functions[\$trap_function] )); then
             \"\$trap_function\" \"\$1\"

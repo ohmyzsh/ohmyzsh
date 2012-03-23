@@ -20,7 +20,7 @@ alias rsd='_rails-command server --debugger'
 alias devlog='tail -f log/development.log'
 
 # Functions
-function _rails-command() {
+function _rails-command {
   if [[ -e "script/server" ]]; then
     ruby script/"$@"
   else

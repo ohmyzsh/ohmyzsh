@@ -49,7 +49,7 @@ HISTORY_SUBSTRING_SEARCH_GLOBBING_FLAGS='i'
 # the main ZLE widgets
 #-----------------------------------------------------------------------------
 
-function history-substring-search-up() {
+function history-substring-search-up {
   _history-substring-search-begin
 
   _history-substring-search-up-history ||
@@ -59,7 +59,7 @@ function history-substring-search-up() {
   _history-substring-search-end
 }
 
-function history-substring-search-down() {
+function history-substring-search-down {
   _history-substring-search-begin
 
   _history-substring-search-down-history ||
@@ -93,7 +93,7 @@ if [[ $+functions[_zsh_highlight] -eq 0 ]]; then
   # simply removes any existing highlights when the
   # user inserts printable characters into $BUFFER.
   #
-  function _zsh_highlight() {
+  function _zsh_highlight {
     if [[ $KEYS == [[:print:]] ]]; then
       region_highlight=()
     fi
@@ -136,8 +136,7 @@ if [[ $+functions[_zsh_highlight] -eq 0 ]]; then
   #
   #--------------8<-------------------8<-------------------8<-----------------
   # Rebind all ZLE widgets to make them invoke _zsh_highlights.
-  _zsh_highlight_bind_widgets()
-  {
+  function _zsh_highlight_bind_widgets {
     # Load Zsh module zsh/zleparameter, needed to override user defined widgets.
     zmodload zsh/zleparameter 2>/dev/null || {
       print 'history-substring-search: failed loading: zsh/zleparameter' >&2
@@ -163,7 +162,7 @@ if [[ $+functions[_zsh_highlight] -eq 0 ]]; then
                             zle -N $cur_widget _zsh_highlight_widget_$cur_widget";;
 
         # Builtin widget: override and make it call the builtin ".widget".
-        builtin) eval "_zsh_highlight_widget_$cur_widget() { builtin zle .$cur_widget -- \"\$@\" && _zsh_highlight }; \
+        builtin) eval "function _zsh_highlight_widget_$cur_widget { builtin zle .$cur_widget -- \"\$@\" && _zsh_highlight }; \
                        zle -N $cur_widget _zsh_highlight_widget_$cur_widget";;
 
         # Default: unhandled case.
@@ -176,7 +175,7 @@ if [[ $+functions[_zsh_highlight] -eq 0 ]]; then
   _zsh_highlight_bind_widgets
 fi
 
-function _history-substring-search-begin() {
+function _history-substring-search-begin {
   setopt LOCAL_OPTIONS EXTENDED_GLOB
 
   _history_substring_search_move_cursor_eol=false
@@ -244,7 +243,7 @@ function _history-substring-search-begin() {
   fi
 }
 
-function _history-substring-search-end() {
+function _history-substring-search-end {
   setopt LOCAL_OPTIONS EXTENDED_GLOB
 
   _history_substring_search_result=$BUFFER
@@ -278,7 +277,7 @@ function _history-substring-search-end() {
   true
 }
 
-function _history-substring-search-up-buffer() {
+function _history-substring-search-up-buffer {
   #
   # Check if the UP arrow was pressed to move the cursor within a multi-line
   # buffer. This amounts to three tests:
@@ -307,7 +306,7 @@ function _history-substring-search-up-buffer() {
   false
 }
 
-function _history-substring-search-down-buffer() {
+function _history-substring-search-down-buffer {
   #
   # Check if the DOWN arrow was pressed to move the cursor within a multi-line
   # buffer. This amounts to three tests:
@@ -336,7 +335,7 @@ function _history-substring-search-down-buffer() {
   false
 }
 
-function _history-substring-search-up-history() {
+function _history-substring-search-up-history {
   #
   # Behave like up in Zsh, except clear the $BUFFER
   # when beginning of history is reached like in Fish.
@@ -358,7 +357,7 @@ function _history-substring-search-up-history() {
   false
 }
 
-function _history-substring-search-down-history() {
+function _history-substring-search-down-history {
   #
   # Behave like down-history in Zsh, except clear the
   # $BUFFER when end of history is reached like in Fish.
@@ -381,7 +380,7 @@ function _history-substring-search-down-history() {
   false
 }
 
-function _history-substring-search-up-search() {
+function _history-substring-search-up-search {
   _history_substring_search_move_cursor_eol=true
 
   #
@@ -460,7 +459,7 @@ function _history-substring-search-up-search() {
   fi
 }
 
-function _history-substring-search-down-search() {
+function _history-substring-search-down-search {
   _history_substring_search_move_cursor_eol=true
 
   #

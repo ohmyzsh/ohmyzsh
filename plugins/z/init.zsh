@@ -16,7 +16,7 @@ fi
 if (( $+functions[_z] )); then
   alias z='nocorrect _z 2>&1'
   alias j='z'
-  function z-precmd () {
+  function z-precmd {
     z --add "$(pwd -P)"
   }
   autoload -Uz add-zsh-hook

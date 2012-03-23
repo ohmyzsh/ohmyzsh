@@ -79,7 +79,7 @@ zle -N zle-line-finish
 zle -N zle-keymap-select
 
 # Expands .... to ../..
-function expand-dot-to-parent-directory-path() {
+function expand-dot-to-parent-directory-path {
   if [[ $LBUFFER = *.. ]]; then
     LBUFFER+='/..'
   else
@@ -89,7 +89,7 @@ function expand-dot-to-parent-directory-path() {
 zle -N expand-dot-to-parent-directory-path
 
 # Displays an indicator when completing.
-function expand-or-complete-with-indicator() {
+function expand-or-complete-with-indicator {
   local indicator
   zstyle -s ':omz:completion' indicator 'indicator'
   print -Pn "$indicator"
@@ -99,7 +99,7 @@ function expand-or-complete-with-indicator() {
 zle -N expand-or-complete-with-indicator
 
 # Inserts 'sudo ' at the beginning of the line.
-function prepend-sudo() {
+function prepend-sudo {
   if [[ "$BUFFER" != su(do|)\ * ]]; then
     BUFFER="sudo $BUFFER"
     (( CURSOR += 5 ))

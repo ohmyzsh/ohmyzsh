@@ -8,7 +8,7 @@
 #   http://i.imgur.com/aipDQ.png
 #
 
-function prompt_sorin_precmd () {
+function prompt_sorin_precmd {
   setopt LOCAL_OPTIONS
   unsetopt XTRACE KSH_ARRAYS
 
@@ -17,7 +17,7 @@ function prompt_sorin_precmd () {
   fi
 }
 
-function prompt_sorin_setup() {
+function prompt_sorin_setup {
   setopt LOCAL_OPTIONS
   unsetopt XTRACE KSH_ARRAYS
   prompt_opts=(cr percent subst)

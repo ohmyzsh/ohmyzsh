@@ -9,13 +9,13 @@
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
 #
 
-function virtualenv_info() {
+function virtualenv_info {
   if [[ -n "$VIRTUAL_ENV" ]]; then
     print "(${VIRTUAL_ENV:t}) "
   fi
 }
 
-function prompt_steeef_precmd() {
+function prompt_steeef_precmd {
   if [[ -n "$__PROMPT_STEEEF_VCS_UPDATE" ]] ; then
     # Check for untracked files or updated submodules since vcs_info doesn't.
     if [[ ! -z $(git ls-files --other --exclude-standard 2> /dev/null) ]]; then
@@ -31,7 +31,7 @@ function prompt_steeef_precmd() {
   fi
 }
 
-function prompt_steeef_preexec() {
+function prompt_steeef_preexec {
   case "$(history $HISTCMD)" in
     (*git*)
       __PROMPT_STEEEF_VCS_UPDATE=1
@@ -42,11 +42,11 @@ function prompt_steeef_preexec() {
   esac
 }
 
-function prompt_steeef_chpwd() {
+function prompt_steeef_chpwd {
   __PROMPT_STEEEF_VCS_UPDATE=1
 }
 
-function prompt_steeef_setup() {
+function prompt_steeef_setup {
   setopt LOCAL_OPTIONS
   unsetopt XTRACE KSH_ARRAYS
   prompt_opts=(cr percent subst)

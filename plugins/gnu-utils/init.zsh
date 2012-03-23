@@ -6,7 +6,7 @@
 #
 
 if (( $+commands[gdircolors] )); then
-  function __gnu_utils() {
+  function __gnu_utils {
     emulate -L zsh
     local gcmds
     local gcmd
@@ -46,7 +46,7 @@ if (( $+commands[gdircolors] )); then
   }
   __gnu_utils;
 
-  function hash() {
+  function hash {
     if (( $+argv[(er)-r] )) || (( $+argv[(er)-f] )); then
       builtin hash "$@"
       __gnu_utils
@@ -55,7 +55,7 @@ if (( $+commands[gdircolors] )); then
     fi
   }
 
-  function rehash() {
+  function rehash {
     hash -r "$@"
   }
 

@@ -13,11 +13,11 @@ function +vi-git-status() {
   fi
 }
 
-function prompt_minimal_precmd () {
+function prompt_minimal_precmd {
   vcs_info
 }
 
-function prompt_minimal_setup() {
+function prompt_minimal_setup {
   setopt LOCAL_OPTIONS
   unsetopt XTRACE KSH_ARRAYS
   prompt_opts=(cr percent subst)

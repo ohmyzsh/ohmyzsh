@@ -7,7 +7,7 @@
 #
 
 if (( $+commands[hub] )); then
-  function git() {
+  function git {
     hub "$@"
   }
 fi

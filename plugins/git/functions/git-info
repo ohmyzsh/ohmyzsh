@@ -6,7 +6,7 @@
 #
 
 # Gets the path to the Git directory.
-function _git-dir() {
+function _git-dir {
   local git_root="$(git-root)"
   local git_dir_or_file="${git_root}/.git"
   local git_dir
@@ -31,7 +31,7 @@ function _git-dir() {
 
 # Gets the Git special action (am, merge, rebase, etc.).
 # Borrowed from vcs_info and edited.
-function _git-action() {
+function _git-action {
   local action=''
   local action_dir
   local git_dir="$(_git-dir)"
@@ -90,7 +90,7 @@ function _git-action() {
 }
 
 # Turns off git-info for the current repository.
-function _git-info-abort() {
+function _git-info-abort {
   if ! is-true "$_git_info_executing"; then
     return 1
   fi
@@ -115,7 +115,7 @@ EOF
 add-zsh-trap INT _git-info-abort
 
 # Gets the Git status information.
-function git-info() {
+function git-info {
   # Extended globbing is needed to parse repository status.
   setopt LOCAL_OPTIONS
   setopt EXTENDED_GLOB

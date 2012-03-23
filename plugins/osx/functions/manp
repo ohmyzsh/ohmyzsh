@@ -5,7 +5,7 @@
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
 #
 
-function manp() {
+function manp {
   local page
   if (( $# > 0 )); then
     for page in "$@"; do

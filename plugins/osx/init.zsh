@@ -12,12 +12,12 @@ alias cdf='cd "$(pfd)"'
 alias pushdf='pushd "$(pfd)"'
 
 # Open files in Quick Look.
-function ql() {
+function ql {
   (( $# > 0 )) && qlmanage -p "$@" &> /dev/null
 }
 
 # Delete .DS_Store and __MACOSX directories.
-function rm-osx-cruft() {
+function rm-osx-cruft {
   find "${@:-$PWD}" \( \
     -type f -name '.DS_Store' -o \
     -type d -name '__MACOSX' \

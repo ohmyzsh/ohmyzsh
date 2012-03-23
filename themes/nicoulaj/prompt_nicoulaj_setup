@@ -16,11 +16,11 @@
 #   - Shows if logged in as root or not.
 #
 
-function prompt_nicoulaj_precmd() {
+function prompt_nicoulaj_precmd {
   vcs_info
 }
 
-function prompt_nicoulaj_setup() {
+function prompt_nicoulaj_setup {
   setopt LOCAL_OPTIONS
   unsetopt XTRACE KSH_ARRAYS
   prompt_opts=(cr percent subst)
