@@ -218,9 +218,11 @@ function git-info() {
   # Get commit.
   commit="$(git rev-parse HEAD 2>/dev/null)"
 
-  # Format commit (short).
-  zstyle -s ':omz:plugin:git:prompt' commit 'commit_format'
-  zformat -f commit_formatted "$commit_format" "c:$commit"
+  # Format commit.
+  if [[ -n "$commit" ]]; then
+    zstyle -s ':omz:plugin:git:prompt' commit 'commit_format'
+    zformat -f commit_formatted "$commit_format" "c:$commit"
+  fi
 
   # Stashed
   if [[ -f "$(_git-dir)/refs/stash" ]]; then
@@ -238,6 +240,8 @@ function git-info() {
     if (( line_number == 1 )) && [[ "$line" == *'(no branch)'* ]]; then
       # Get action.
       action="$(_git-action)"
+
+      # Format action.
       if [[ -n "$action" ]]; then
         zstyle -s ':omz:plugin:git:prompt' action 'action_format'
         zformat -f action_formatted "$action_format" "s:$action"
@@ -287,11 +291,11 @@ function git-info() {
   done < <("${(z)status_cmd}" 2>/dev/null)
 
   # Format branch.
-  zstyle -s ':omz:plugin:git:prompt' branch 'branch_format'
-  zformat -f branch_formatted "$branch_format" "b:$branch"
+  if [[ -n "$branch" ]]; then
+    zstyle -s ':omz:plugin:git:prompt' branch 'branch_format'
+    zformat -f branch_formatted "$branch_format" "b:$branch"
 
-  # Format remote.
-  if [[ "$branch" != "$commit" ]]; then
+    # Format remote.
     if [[ -z "$remote" ]]; then
       remote="${$( \
         git rev-parse \
