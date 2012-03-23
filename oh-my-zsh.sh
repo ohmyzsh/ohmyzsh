@@ -74,3 +74,5 @@ else
   fi
 fi
 
+# Add omz command line tool
+export PATH="$ZSH/bin:$PATH"

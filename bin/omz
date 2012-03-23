@@ -1,0 +1,40 @@
+#!/bin/zsh
+
+STATUS=0
+
+function omz_usage() {
+    echo "OH MY ZSH! command line tool"
+    echo "  theme         choose your theme"
+    echo "  upgrade       upgrade OH MY ZSH"
+    echo "  uninstall     remove OH MY ZSH :("
+    echo "  help          show this help"
+}
+
+
+case $1 in
+
+    theme )
+        zsh $ZSH/tools/theme_chooser.sh
+        ;;
+
+    upgrade )
+        zsh $ZSH/tools/upgrade.sh
+        ;;
+
+    uninstall )
+        echo "Are you sure?"
+        zsh $ZSH/tools/uninstall.sh
+        ;;
+
+    help )
+        omz_usage
+        ;;
+
+    * )
+        omz_usage
+        STATUS=1
+        ;;
+
+esac
+
+exit $STATUS
