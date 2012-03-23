@@ -35,7 +35,7 @@ function prompt_sorin_setup() {
   zstyle ':omz:plugin:git:prompt' deleted ' %%B%F{red}✖%f%%b'
   zstyle ':omz:plugin:git:prompt' modified ' %%B%F{blue}✱%f%%b'
   zstyle ':omz:plugin:git:prompt' renamed ' %%B%F{magenta}➜%f%%b'
-  zstyle ':omz:plugin:git:prompt' commit ':%F{red}%.7c%f'
+  zstyle ':omz:plugin:git:prompt' commit ':%F{green}%.7c%f'
   zstyle ':omz:plugin:git:prompt' stashed ' %%B%F{cyan}✭%f%%b'
   zstyle ':omz:plugin:git:prompt' unmerged ' %%B%F{yellow}═%f%%b'
   zstyle ':omz:plugin:git:prompt' untracked ' %%B%F{white}◼%f%%b'
