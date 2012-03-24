@@ -1,3 +1,12 @@
+#!/bin/zsh
+
+### Better prompt the user!
+echo -n "Are you sure to completely remove OH MY ZSH?"
+read "a? [type 'yes' to continue] "
+if [[ $a != "yes" ]]; then
+    return 0
+fi
+
 echo "Removing ~/.oh-my-zsh"
 if [[ -d ~/.oh-my-zsh ]]
 then
