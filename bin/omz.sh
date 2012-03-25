@@ -1,11 +1,11 @@
 #!/bin/zsh
 
 function omz_usage() {
-    echo "OH MY ZSH! command line tool. Available commands:"
+    echo "Oh My Zsh command line tool. Available commands:"
     echo "   plugin NAME  Enable plugin specified by NAME"
     echo "   theme        Choose theme"
-    echo "   upgrade      Upgrade OH MY ZSH!"
-    echo "   uninstall    Remove OH MY ZSH! :("
+    echo "   upgrade      Upgrade Oh My Zsh"
+    echo "   uninstall    Remove Oh My Zsh :("
     echo "   help         Show this help"
 }
 

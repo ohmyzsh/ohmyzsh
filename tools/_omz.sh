@@ -9,8 +9,8 @@ local -a _1st_arguments
 _1st_arguments=(
     'plugin:Enable plugin'
     'theme:Choose theme'
-    'upgrade:Upgrade OH MY ZSH!'
-    'uninstall:Remove OH MY ZSH! :('
+    'upgrade:Upgrade Oh My Zsh'
+    'uninstall:Remove Oh My Zsh :('
 )
 
 local expl
