@@ -2,40 +2,33 @@
 
 function omz_usage() {
     echo "Oh My Zsh command line tool. Available commands:"
-    echo "   plugin NAME  Enable plugin specified by NAME"
-    echo "   theme        Choose theme"
-    echo "   upgrade      Upgrade Oh My Zsh"
-    echo "   uninstall    Remove Oh My Zsh :("
-    echo "   help         Show this help"
+    echo "  plugin         Manage plugins"
+    echo "  theme_chooser  Preview themes"
+    echo "  upgrade        Upgrade Oh My Zsh"
+    echo "  uninstall      Remove Oh My Zsh :("
+    echo "  help           Show this help"
 }
 
 COMMAND=$1
 
 case $COMMAND in
 
-    plugin )
+    plugin )  # we need source to enable autocompletion
         shift 1
-        source $ZSH/tools/omz-plugin.sh $@
-        ;;
-
-    theme )
-        zsh $ZSH/tools/theme_chooser.sh
-        ;;
-
-    upgrade )
-        zsh $ZSH/tools/upgrade.sh
-        ;;
-
-    uninstall )
-        zsh $ZSH/tools/uninstall.sh
-        ;;
-
-    help )
-        omz_usage
+        source $ZSH/tools/$COMMAND.sh $@
         ;;
 
     * )
-        omz_usage
+        shift 1
+
+        if [ -x $ZSH/tools/$COMMAND.sh ]; then
+            zsh $ZSH/tools/$COMMAND.sh $@
+        else
+            omz_usage
+        fi
         ;;
+
+    '' | help )
+        omz_usage ;;
 
 esac

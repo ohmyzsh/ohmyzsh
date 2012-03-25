@@ -7,8 +7,8 @@ _omz_all_plugins() {
 
 local -a _1st_arguments
 _1st_arguments=(
-    'plugin:Enable plugin'
-    'theme:Choose theme'
+    'plugin:Manage plugins'
+    'theme_chooser:Preview themes'
     'upgrade:Upgrade Oh My Zsh'
     'uninstall:Remove Oh My Zsh :('
 )
