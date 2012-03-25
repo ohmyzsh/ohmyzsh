@@ -1,0 +1,89 @@
+#compdef legit
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for legit (https://github.com/kennethreitz/legit).
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Ryan James (https://github.com/autoplectic)
+#
+# ------------------------------------------------------------------------------
+# -*- mode: zsh; -*-
+# ------------------------------------------------------------------------------
+
+
+_legit ()
+{
+        local curcontext="$curcontext" state line
+        typeset -A opt_args
+
+        _arguments -C \
+                '1:command:->command' \
+                '*::options:->options'
+
+        case $state in
+                (command)
+
+                        local -a subcommands
+                        subcommands=(
+                                'settings: Display and edit the current Legit settings.'
+                                'branches: Get a nice pretty list of available branches.'
+                                'sync: Synchronizes the given branch. Defaults to current branch. Stash, Fetch, Auto-Merge/Rebase, Push, and Unstash. You can only sync published branches.'
+                                'switch: Switches to specified branch. Defaults to current branch. Automatically stashes and unstashes any changes.'
+                                'sprout: Creates a new branch off of the specified branch. Switches to it immediately.'
+                                'graft: Merges specified branch into the second branch, and removes it. You can only graft unpublished branches.'
+                                'publish: Publishes specified branch to the remote.'
+                                'unpublish: Removes specified branch from the remote.'
+                                'harvest: Syncs a branch with a given branch. Defaults to current.'
+                        )
+                        _describe -t commands 'legit' subcommands
+                ;;
+
+                (options)
+                        case $line[1] in
+                                (settings|branches)
+                                ;;
+                                (sync|switch|publish|unpublish)
+                                        _arguments \
+                                                ':branch:__git_branch_names'
+                                ;;
+                                (sprout)
+                                        _arguments \
+                                                '1:branch:__git_branch_names' \
+                                                '2:new-branch'
+                                ;;
+                                (graft)
+                                        _arguments \
+                                                '1:branch:__git_branch_names' \
+                                                '2:into-branch:__git_branch_names'
+                                ;;
+                                (harvest)
+                                        _arguments \
+                                                '1:from-branch:__git_branch_names' \
+                                                '2:to-branch:__get_branch_names'
+                                ;;
+                        esac
+        esac
+}
+
+__git_branch_names () {
+        local expl
+        declare -a branch_names
+
+        branch_names=(${${(f)"$(_call_program branchrefs git for-each-ref --format='"%(refname)"' refs/heads 2>/dev/null)"}#refs/heads/})
+        __git_command_successful || return
+
+        _wanted branch-names expl branch-name compadd $* - $branch_names
+}
+
+__git_command_successful () {
+        if (( ${#pipestatus:#0} > 0 )); then
+                _message 'not a git repository'
+                return 1
+        fi
+        return 0
+}
