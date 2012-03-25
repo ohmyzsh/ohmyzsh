@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 ### Better prompt the user!
-echo -n "Are you sure to completely remove Oh My Zsh?"
+echo -n "\033[0;33mAre you sure to completely remove Oh My Zsh?\033[0m"
 read "a? [type 'yes' to continue] "
 if [[ $a != "yes" ]]; then
     return 0
