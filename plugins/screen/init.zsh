@@ -17,9 +17,7 @@ alias sn="screen -U -S"
 alias sr="screen -a -A -U -D -R"
 
 # Auto Start
-if (( $SHLVL == 1 )) && zstyle -t ':omz:plugin:screen:auto' start; then
-  (( SHLVL += 1 )) && export SHLVL
-
+if [[ -z "$STY" ]] && zstyle -t ':omz:plugin:screen:auto' start; then
   session="$(
     screen -list 2> /dev/null \
       | sed '1d;$d' \
