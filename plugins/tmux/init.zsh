@@ -3,6 +3,7 @@
 #
 # Authors:
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
+#   Colin Hebert <hebert.colin@gmail.com>
 #
 # Usage:
 #   To auto start it, add the following to zshrc:
