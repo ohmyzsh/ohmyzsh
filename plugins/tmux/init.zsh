@@ -10,6 +10,10 @@
 #     # Auto launch tmux at start-up.
 #     zstyle -t ':omz:plugin:tmux:auto' start 'yes'
 #
+# Warning:
+#   Tmux is known to cause kernel panics on Mac OS X.
+#   For more information, see http://git.io/jkPqHg.
+#
 
 # Aliases
 alias ta="tmux attach-session"
