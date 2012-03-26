@@ -9,26 +9,29 @@ function omz_usage() {
     echo "  help           Show this help"
 }
 
-COMMAND=$1
 
-case $COMMAND in
+OMZ_COMMAND=$1
+case $OMZ_COMMAND in
 
-    plugin )  # we need source to enable autocompletion
+    '' | help )
+        omz_usage
+        ;;
+
+    plugin )
         shift 1
-        source $ZSH/tools/$COMMAND.sh $@
+        source $ZSH/tools/$OMZ_COMMAND.sh $@
         ;;
 
     * )
         shift 1
-
-        if [ -x $ZSH/tools/$COMMAND.sh ]; then
-            zsh $ZSH/tools/$COMMAND.sh $@
+        if [ -x $ZSH/tools/$OMZ_COMMAND.sh ]; then
+            zsh $ZSH/tools/$OMZ_COMMAND.sh $@
         else
             omz_usage
         fi
         ;;
-
-    '' | help )
-        omz_usage ;;
-
 esac
+
+# Clean global vars
+unfunction omz_usage
+unset OMZ_COMMAND

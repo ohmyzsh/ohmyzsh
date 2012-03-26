@@ -1,4 +1,4 @@
-#!/bin/zsh -x
+#!/bin/zsh
 
 function omz_plugin_usage() {
     echo "Usage: omz plugin [options] [plugin]"
@@ -9,35 +9,48 @@ function omz_plugin_usage() {
     echo "  -h   Show this help message"
 }
 
+function omz_plugin_exit_clean() {
+    unset OMZ_OPTION
+    unset OMZ_PLUGIN
+    unfunction omz_plugin_usage
+    unfunction omz_plugin_exit_clean
+    return
+}
 
-while getopts ":lh" Option
+
+OPTIND=0
+while getopts "lh" OMZ_OPTION
 do
-    case $Option in
-        l )
-            ls $ZSH/plugins
+    case $OMZ_OPTION in
+        l ) ls $ZSH/plugins
+            omz_plugin_exit_clean
             return ;;
 
         * ) omz_plugin_usage
-            return 1 ;;
+            omz_plugin_exit_clean
+            return ;;
+
     esac
 done
 
-
 if [ -n "$1" ]; then
-    PLUGIN="$ZSH/plugins/$1"
+    OMZ_PLUGIN="$ZSH/plugins/$1"
 
-    if [ -d $PLUGIN ]; then
-        fpath=($PLUGIN $fpath)
-        source $PLUGIN/*.plugin.zsh
+    if [ -d $OMZ_PLUGIN ]; then
+        fpath=($OMZ_PLUGIN $fpath)
         autoload -U compinit
         compinit -i
+        if [ -e $OMZ_PLUGIN/$1.plugin.zsh ]; then
+            source $OMZ_PLUGIN/$1.plugin.zsh
+        fi
         echo "\033[0;32mPlugin $1 enabled"
-        return
     else
         echo "\033[1;31mPlugin $1 not found"
-        return 1
     fi
 else
-    omz_plugin_usage;
-    return 1
+    omz_plugin_usage
 fi
+
+# Clean global vars
+omz_plugin_exit_clean
+return
