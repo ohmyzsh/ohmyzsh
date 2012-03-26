@@ -139,8 +139,6 @@ function git-info {
   local branch_format
   local branch_formatted
   local branch_info
-  local clean
-  local clean_formatted
   local commit
   local commit_format
   local commit_formatted
@@ -330,8 +328,6 @@ function git-info {
   if (( $dirty > 0 )); then
     zstyle -s ':omz:plugin:git:prompt' dirty 'dirty_format'
     zformat -f dirty_formatted "$dirty_format" "D:$dirty"
-  else
-    zstyle -s ':omz:plugin:git:prompt' clean 'clean_formatted'
   fi
 
   # Format prompts.
@@ -350,7 +346,6 @@ function git-info {
       "A:$ahead_formatted" \
       "B:$behind_formatted" \
       "b:$branch_formatted" \
-      "C:$clean_formatted" \
       "c:$commit_formatted" \
       "d:$deleted_formatted" \
       "D:$dirty_formatted" \

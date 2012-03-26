@@ -20,9 +20,6 @@ zstyle ':omz:plugin:git:prompt' behind 'behind:%B'
 # %b - Branch name.
 zstyle ':omz:plugin:git:prompt' branch '%b'
 
-# %C - Indicator to notify of clean branch.
-zstyle ':omz:plugin:git:prompt' clean 'clean'
-
 # %c - SHA-1 hash.
 zstyle ':omz:plugin:git:prompt' commit 'commit:%c'
 
