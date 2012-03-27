@@ -24,9 +24,6 @@ zstyle ':omz:completion' indicator '...'
 # Beep on error in line editor.
 setopt BEEP
 
-# Reset to default key bindings.
-bindkey -d
-
 # Allow command line editing in an external editor.
 autoload -Uz edit-command-line
 zle -N edit-command-line
@@ -114,6 +111,9 @@ function prepend-sudo {
   fi
 }
 zle -N prepend-sudo
+
+# Reset to default key bindings.
+bindkey -d
 
 # Emacs key bindings.
 for key in "$keyinfo[Escape]"{B,b}; \
