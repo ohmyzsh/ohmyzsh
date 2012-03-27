@@ -23,7 +23,7 @@ function omz_termsupport_precmd {
 #Appears at the beginning of (and during) of command execution
 function omz_termsupport_preexec {
   emulate -L zsh
-  setopt extended_glob
+  setopt extendedglob
   local CMD=${1[(wr)^(*=*|sudo|ssh|-*)]} #cmd name only, or if this is sudo or ssh, the next cmd
   title "$CMD" "%100>...>$2%<<"
 }

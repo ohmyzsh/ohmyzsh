@@ -77,7 +77,7 @@ function quick-look() {
 }
 
 function man-preview() {
-  man -t "$@" | open -f -a Preview
+  man -t dvi "$@" | open -f -a Preview
 }
 
 function trash() {
