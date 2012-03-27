@@ -7,21 +7,10 @@
 
 # Gets the path to the Git directory.
 function _git-dir {
-  local git_root="$(git-root)"
-  local git_dir_or_file="${git_root}/.git"
   local git_dir
+  git_dir=("$(git rev-parse --git-dir)"(:A))
 
-  if [[ ! -d "$git_root" ]]; then
-    return 1
-  fi
-
-  if [[ -f "$git_dir_or_file" ]]; then
-    git_dir="${${${$(<"$git_dir_or_file")}[(fr)gitdir:*]}#gitdir: }"
-  else
-    git_dir="$git_dir_or_file"
-  fi
-
-  if [[ -d "$git_dir" ]]; then
+  if [[ -n "$git_dir" ]]; then
     print "$git_dir"
     return 0
   fi
