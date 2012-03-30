@@ -58,6 +58,9 @@ EOH
   fi
   cmd="$before$files$after"
   gvim --remote-send "$cmd"
+  if typeset -f postCallVim > /dev/null; then
+    postCallVim
+  fi
 }
 
 alias v=callvim
