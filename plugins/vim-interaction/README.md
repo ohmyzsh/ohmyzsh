@@ -25,6 +25,19 @@ There are a few aliases presented as well:
 * `vvsp` Edits the passed in file but first makes a vertical split
 * `vhsp` Edits the passed in file but first makes a horizontal split
 
+## Post Callout ##
+
+At the end of the `callvim` function we invoke the `postCallVim` function if it
+exists.  If you're using MacVim, for example, you could define a function that
+brings window focus to it after the file is loaded:
+
+    function postCallVim
+    {
+      osascript -e 'tell application "MacVim" to activate'
+    }
+
+This'll be different depending on your OS / Window Manager.
+
 ## Examples ##
 
 This will load `/tmp/myfile.scala` into the running GVim session:
