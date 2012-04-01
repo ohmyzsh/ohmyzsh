@@ -30,7 +30,7 @@ EOH
   fi
 
   local cmd=""
-  local before=""
+  local before="<esc>"
   local after=""
   while getopts ":b:a:" option
   do
