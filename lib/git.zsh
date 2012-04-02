@@ -8,6 +8,11 @@ function git_prompt_info() {
 
 # Checks if working tree is dirty
 parse_git_dirty() {
+  if [[ -z "$ZSH_THEME_GIT_PROMPT_DIRTY" &&
+        -z "$ZSH_THEME_GIT_PROMPT_CLEAN" ]]; then
+    return
+  fi
+
   local SUBMODULE_SYNTAX=''
   local GIT_STATUS=''
   local CLEAN_MESSAGE='nothing to commit (working directory clean)'
