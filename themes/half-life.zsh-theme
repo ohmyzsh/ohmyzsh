@@ -49,8 +49,8 @@ zstyle ':vcs_info:*:prompt:*' check-for-changes true
 # %R - repository path
 # %S - path in the repository
 PR_RST="%{${reset_color}%}"
-FMT_BRANCH="(%{$turquoise%}%b%u%c${PR_RST})"
-FMT_ACTION="(%{$limegreen%}%a${PR_RST})"
+FMT_BRANCH=" on %{$turquoise%}%b%u%c${PR_RST}"
+FMT_ACTION=" performing a %{$limegreen%}%a${PR_RST}"
 FMT_UNSTAGED="%{$orange%}●"
 FMT_STAGED="%{$limegreen%}●"
 
