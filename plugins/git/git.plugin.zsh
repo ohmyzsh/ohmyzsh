@@ -30,6 +30,8 @@ alias glg='git log --stat --max-count=5'
 compdef _git glg=git-log
 alias glgg='git log --graph --max-count=5'
 compdef _git glgg=git-log
+alias glo='git log --oneline'
+compdef _git glo=git-log
 alias gss='git status -s'
 compdef _git gss=git-status
 alias ga='git add'
@@ -59,3 +61,12 @@ alias ggpush='git push origin $(current_branch)'
 compdef ggpush=git
 alias ggpnp='git pull origin $(current_branch) && git push origin $(current_branch)'
 compdef ggpnp=git
+
+# Pretty log messages
+function _git_log_prettily(){
+  if ! [ -z $1 ]; then
+    git log --pretty=$1
+  fi
+}
+alias glp="_git_log_prettily"
+compdef _git glp=git-log
