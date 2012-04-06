@@ -1,4 +1,4 @@
-SCM_DEBUG=yes # comment line to disable debugging
+# SCM_DEBUG=yes # comment line to disable debugging
 
 declare -A _SCM_PROMPT_CHARS
 
@@ -25,6 +25,7 @@ function _scm_get_scm_type {
 } 
 
 function _scm_reset {
+  _scm_debug 'scm reset'
   unset SCM_ROOT
   unset SCM_TYPE
   unset SCM_PROMPT_INFO
