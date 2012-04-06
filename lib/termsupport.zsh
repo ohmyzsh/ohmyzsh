@@ -34,6 +34,14 @@ function xterm_color() {
   echo -e "\033[38;5;$1m$2\033[0m"
 }
 
+function xterm_color_open() {
+  echo -e "\033[38;5;$1m"
+}
+
+function xterm_color_reset() {
+  echo -e "\033[0m"
+}
+
 autoload -U add-zsh-hook
 add-zsh-hook precmd  omz_termsupport_precmd
 add-zsh-hook preexec omz_termsupport_preexec
