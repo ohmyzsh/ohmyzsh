@@ -33,7 +33,8 @@ omz() {
       # load plugins
       for plugin ($plugins); do
         files=({$OMZ,$ZSH}/plugins/$plugin/$(basename $plugin).plugin.zsh(N))
-        source $files[1] || omz_log_msg "$plugin not found."
+        [[ ${#files} -eq 0 ]] && continue
+        source $files[1] || omz_log_msg "$plugin: Error, can't source plugin file."
       done
       ;;
     "theme")
