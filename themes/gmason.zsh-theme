@@ -2,9 +2,9 @@ local return_code="%(?..%{$fg[red]%}%? ↵%{$reset_color%})"
 
 local userhostcolor='green'
 
-local time='%{$fg_bold[cyan]%}%T%{$reset_color%}'
-local user_host='%{$terminfo[bold]$fg[$userhostcolor]%}%n%{$fg[magenta]%}@$reset_color$fg[$userhostcolor]%}%m%'
-local current_dir='%{$terminfo[bold]$fg[blue]%} %~%{$reset_color%}'
+local time='%{$fg[cyan]%}%T%{$reset_color%}'
+local user_host='%{$fg_bold[$userhostcolor]%}%n%{$fg[magenta]%}@%{$reset_color$fg_bold[$userhostcolor]%}%m%'
+local current_dir='%{$fg_bold[blue]%} %~%{$reset_color%}'
 local git_branch='$(git_prompt_info)%{$reset_color%}'
 
 PROMPT="${time} ${user_host} ${current_dir} ${git_branch}
