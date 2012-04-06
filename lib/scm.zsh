@@ -52,7 +52,7 @@ function scm_prompt_char() {
 }
 
 
-function scm_prompt_info_for_git() { git_prompt_info }
+function scm_prompt_info_for_git() { echo "$(git_prompt_info)$(git_prompt_status)" }
 function scm_prompt_info_for_hg() {}
 function scm_prompt_info_for_svn() {}
 
