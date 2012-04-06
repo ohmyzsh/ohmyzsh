@@ -33,6 +33,7 @@ function _scm_reset {
 function scm_detect_root {
   _DETECT_WD=${1:-$PWD}
 
+  # skip detection if SCM root already detected and current folder is sub folder of SCM
   [ $SCM_ROOT ] && [[ $_DETECT_WD == $SCM_ROOT* ]] && return
   _scm_reset
 
@@ -50,15 +51,31 @@ function scm_prompt_char() {
 }
 
 
-function scm_prompt_info_for_git() {
-  git_prompt_info
-}
-
+function scm_prompt_info_for_git() { git_prompt_info }
 function scm_prompt_info_for_hg() {}
 function scm_prompt_info_for_svn() {}
 
 function scm_prompt_info() {
   [ ! $SCM_TYPE ] && return
 
-  scm_prompt_info_for_$SCM_TYPE # calls scm type specific prompt generator
+  SCM_DATA_DIR=$SCM_ROOT/.$SCM_TYPE
+  SCM_PROMPT_CACHE_FILE=$SCM_DATA_DIR/prompt_cache
+
+  if [ ! -e "$SCM_PROMPT_CACHE_FILE" ]; then
+    _scm_debug "Creating $SCM_PROMPT_CACHE_FILE"
+    touch "$SCM_PROMPT_CACHE_FILE"
+    SCM_PROMPT_INFO=$(scm_prompt_info_for_$SCM_TYPE) # calls scm type specific prompt generator
+  else 
+    LAST_UPDATE_TIME=`stat -c %Y $SCM_PROMPT_CACHE_FILE`
+    DIRSTATE_TIME=`stat -c %Y $SCM_DATA_DIR`
+      
+    if [[ $DIRSTATE_TIME -gt $LAST_UPDATE_TIME || "$1" == "force" ]]; then
+      _scm_debug "Updating $SCM_PROMPT_CACHE_FILE"
+      touch "$SCM_PROMPT_CACHE_FILE"
+      SCM_PROMPT_INFO=$(scm_prompt_info_for_$SCM_TYPE) # calls scm type specific prompt generator
+    fi
+  fi
+
+  SCM_PROMPT_INFO=${SCM_PROMPT_INFO:-$(scm_prompt_info_for_$SCM_TYPE)}
+  export SCM_PROMPT_INFO
 }
