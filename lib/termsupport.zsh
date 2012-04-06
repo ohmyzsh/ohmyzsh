@@ -31,15 +31,15 @@ function omz_termsupport_preexec {
 # Prints given 2nd argument with xterm color code of 1st argument
 # see http://www.calmar.ws/vim/256-xterm-24bit-rgb-color-chart.html for color codes
 function xterm_color() {
-  echo -e "\033[38;5;$1m$2\033[0m"
+  echo -e "%{\033[38;5;$1m%}$2%{\033[0m%}"
 }
 
 function xterm_color_open() {
-  echo -e "\033[38;5;$1m"
+  echo -e "%{\033[38;5;$1m%}"
 }
 
 function xterm_color_reset() {
-  echo -e "\033[0m"
+  echo -e "%{\033[0m%}"
 }
 
 autoload -U add-zsh-hook
