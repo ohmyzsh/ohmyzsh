@@ -27,6 +27,7 @@ function _scm_get_scm_type {
 function _scm_reset {
   unset SCM_ROOT
   unset SCM_TYPE
+  unset SCM_PROMPT_INFO
 }
 
 # Recursive lookup for possible SCM root
