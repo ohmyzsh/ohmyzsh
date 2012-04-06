@@ -2,7 +2,7 @@
 PROMPT_PREFIX="$(xterm_color 243 '%n')$(xterm_color 240 '@')$(xterm_color 238 '%m')"
 
 PROMPT='$PROMPT_PREFIX $(xterm_color 76 "${PWD/#$HOME/~}") $SCM_PROMPT_INFO 
-$(scm_prompt_char)> '
+$(xterm_color 33 $(scm_prompt_char))> '
 
 RPROMPT='$RPROMPT_SUFFIX'
 
