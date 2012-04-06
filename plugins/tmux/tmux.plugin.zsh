@@ -36,5 +36,5 @@ if (( $+commands[tmux] )); then
                    || tmux attach -t $1
   }
 else
-  omz_log_mgs "tmux: plugin requires tmux"
+  omz_log_msg "tmux: plugin requires tmux"
 fi
