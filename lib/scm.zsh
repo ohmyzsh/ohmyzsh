@@ -55,7 +55,7 @@ function scm_prompt_info_for_git() { git_prompt_info }
 function scm_prompt_info_for_hg() {}
 function scm_prompt_info_for_svn() {}
 
-function scm_prompt_info() {
+function scm_build_prompt_info() {
   [ ! $SCM_TYPE ] && return
 
   SCM_DATA_DIR=$SCM_ROOT/.$SCM_TYPE
@@ -68,11 +68,11 @@ function scm_prompt_info() {
   else 
     LAST_UPDATE_TIME=`stat -c %Y $SCM_PROMPT_CACHE_FILE`
     DIRSTATE_TIME=`stat -c %Y $SCM_DATA_DIR`
-      
+
     if [[ $DIRSTATE_TIME -gt $LAST_UPDATE_TIME || "$1" == "force" ]]; then
       _scm_debug "Updating $SCM_PROMPT_CACHE_FILE"
-      touch "$SCM_PROMPT_CACHE_FILE"
       SCM_PROMPT_INFO=$(scm_prompt_info_for_$SCM_TYPE) # calls scm type specific prompt generator
+      touch "$SCM_PROMPT_CACHE_FILE"
     fi
   fi
 
