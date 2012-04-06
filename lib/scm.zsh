@@ -7,7 +7,7 @@ _SCM_PROMPT_CHARS[git]=±
 _SCM_PROMPT_CHARS[hg]=ʜɢ 
 _SCM_PROMPT_CHARS[svn]=svn 
 
-function _scm_debug { [ $SCM_DEBUG ] && echo $* >&2 }
+function _scm_debug { [ $SCM_DEBUG ] && echo $(xterm_color 237 "$*") >&2 }
 
 # Checks given 1st path argument if it's root of .git|.hg|.svn 
 function _scm_get_scm_type {
