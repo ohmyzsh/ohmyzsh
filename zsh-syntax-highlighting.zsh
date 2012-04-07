@@ -107,7 +107,7 @@ typeset -gA ZSH_HIGHLIGHT_STYLES
 # Returns 0 if the buffer has changed since _zsh_highlight was last called.
 _zsh_highlight_buffer_modified()
 {
-  [[ ${_ZSH_HIGHLIGHT_PRIOR_BUFFER:-} != $BUFFER ]]
+  [[ "${_ZSH_HIGHLIGHT_PRIOR_BUFFER:-}" != "$BUFFER" ]]
 }
 
 # Whether the cursor has moved or not.
