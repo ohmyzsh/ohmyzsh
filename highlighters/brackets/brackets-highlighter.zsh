@@ -52,18 +52,18 @@ _zsh_highlight_brackets_highlighter()
 
   # Find all brackets and remember which one is matching
   for (( pos = 0; $pos < ${#BUFFER}; pos++ )) ; do
-    local char=$BUFFER[pos+1]
+    local char="$BUFFER[pos+1]"
     case $char in
       ["([{"])
         levelpos[$pos]=$((++level))
         lastoflevel[$level]=$pos
-        _zsh_highlight_brackets_highlighter_brackettype $char
+        _zsh_highlight_brackets_highlighter_brackettype "$char"
         ;;
       [")]}"])
         matching[$lastoflevel[$level]]=$pos
         matching[$pos]=$lastoflevel[$level]
         levelpos[$pos]=$((level--))
-        _zsh_highlight_brackets_highlighter_brackettype $char
+        _zsh_highlight_brackets_highlighter_brackettype "$char"
         ;;
       ['"'\'])
         # Skip everything inside quotes
