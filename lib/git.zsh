@@ -57,7 +57,7 @@ git_remote_status() {
 
 # Checks if there are commits ahead from remote
 function git_prompt_ahead() {
-  if [[ -n $(git rev-list -1 origin/$(current_branch)..HEAD 2>/dev/null) ]]; then
+  if [[ -n $(git rev-list -1 --first-parent @{upstream}..HEAD 2>/dev/null) ]]; then
     echo "$ZSH_THEME_GIT_PROMPT_AHEAD"
   fi
 }
