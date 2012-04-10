@@ -24,7 +24,7 @@ if (( $+commands[python] )); then
 #except:
 #	print('text')" | python
 	  echo ${1##*.}
-	}
+  }
 else
   # if we happen to lack python, just report everything as text
   omz_log_msg "sprunge: syntax highlighting disabled since python isn't available"
