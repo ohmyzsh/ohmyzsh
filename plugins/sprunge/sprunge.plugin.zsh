@@ -18,11 +18,12 @@ HERE
 if (( $+commands[python] )); then
   # use python to attempt to detect the syntax
   sprunge_syntax() {
-    echo "try:
-	from pygments.lexers import get_lexer_for_filename
-	print(get_lexer_for_filename('$1').aliases[0])
-except:
-	print('text')" | python
+#    echo "try:
+#	from pygments.lexers import get_lexer_for_filename
+#	print(get_lexer_for_filename('$1').aliases[0])
+#except:
+#	print('text')" | python
+	echo ${1##*.};
   }
 else
   # if we happen to lack python, just report everything as text
