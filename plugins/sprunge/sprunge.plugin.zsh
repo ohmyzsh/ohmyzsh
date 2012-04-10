@@ -23,8 +23,8 @@ if (( $+commands[python] )); then
 #	print(get_lexer_for_filename('$1').aliases[0])
 #except:
 #	print('text')" | python
-	echo ${1##*.};
-  }
+	  echo ${1##*.}
+	}
 else
   # if we happen to lack python, just report everything as text
   omz_log_msg "sprunge: syntax highlighting disabled since python isn't available"
