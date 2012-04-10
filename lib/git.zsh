@@ -3,7 +3,7 @@ function git_prompt_info() {
   ref=$(git symbolic-ref HEAD 2> /dev/null)
   if [ -z $ref ]; then
     # check if in detached HEAD mode
-    branch_name=$(git status -sb $(git_submodule_syntax) 2> /dev/null)
+    branch_name=$(git status -sb $(git_submodule_syntax) 2> /dev/null | head -n 1)
     if [ "$branch_name" = "## HEAD (no branch)" ]; then
       # set tag name if found
       tag_name=$(git name-rev --name-only $(git --no-pager show --stat 2> /dev/null | head -n 1 | awk '{ print $2 }') 2> /dev/null)
