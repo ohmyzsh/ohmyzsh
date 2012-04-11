@@ -25,7 +25,7 @@ function android_package_name() {
 }
 
 function android_prompt_info() {
-    if (android_sdk_version > 0) {
+    if (android_sdk_version) {
     echo "${ZSH_THEME_ANDROID_PROMPT_PREFIX}$(android_package_name) $(android_sdk_version)${ZSH_THEME_ANDROID_PROMPT_SUFFIX}"
     }
 }
