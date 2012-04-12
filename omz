@@ -1,19 +1,15 @@
 # omz control center
 
-omz() {
+omz () {
   ZSH=${ZSH:-/usr/share/oh-my-zsh}
   OMZ=${OMZ:-$HOME/.omz}
-
   case "$1" in
-    "init")
-      local config_file plugin
-      plugin=${plugin:=()}
+    ("init") local config_file plugin
+      plugin=${plugin:=()} # Create plugins array if not already set.
 
-      # add a function path
+      # Add plugins to fpath
       fpath=({$ZSH,$OMZ}/functions(N) {$ZSH,$OMZ}/completions(N) $fpath)
-
-      # add plugins to fpath
-      for plugin ($plugins); do
+      for plugin in $plugins; do
         files=({$OMZ,$ZSH}/plugins/$plugin)
         fpath=($files[1] $fpath)
       done
@@ -22,29 +18,25 @@ omz() {
       autoload -U compinit
       compinit -i
 
-      # load lib
+      # Load libraries
       for config_file ({$ZSH/lib,$OMZ}/*.zsh(N))
         source $config_file
 
+      # !next
       omz plugin
-      omz theme
-      ;;
-    "plugin")
-      # load plugins
-      for plugin ($plugins); do
+      omz theme ;;
+    # Load plugins, can be used to load a plugin during runtime.
+    ("plugin") shift; local plugin files
+      for plugin in $plugins $@; do
         files=({$OMZ,$ZSH}/plugins/$plugin/$(basename $plugin).plugin.zsh(N))
-        [[ ${#files} -eq 0 ]] && continue
+        [[ ${#files} -eq 0 ]] && omz_log_msg "$plugin: Plugin not found." && continue
         source $files[1] || omz_log_msg "$plugin: Error, can't source plugin file."
-      done
-      ;;
-    "theme")
-      local theme
+      done ;;
+    ("theme") local theme
       zstyle -a :omz:style theme theme
-      set_theme ${2:-$theme}
-      ;;
-    *)
-      echo "$0: invalid command $1" 2>&1
-      ;;
+      set_theme ${2:-$theme} ;;
+    ("log") omzlog ;;
+    (*) echo "$0: invalid command $1" 2>&1 ;;
   esac
 }
 
