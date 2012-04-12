@@ -12,7 +12,7 @@ ZSH_THEME_GIT_PROMPT_DIRTY=" $(xterm_color 196 '(!)')"
 ZSH_THEME_GIT_PROMPT_UNTRACKED=" $(xterm_color 33 '(+)')"
 ZSH_THEME_GIT_PROMPT_CLEAN=""
 
-# Map the default colors to more pasteleqsue colors
+# Map the default colors to more pastelesque colors
 # see https://code.google.com/p/mintty/wiki/Tips#Changing_colours
 # see http://stackoverflow.com/questions/1057564/pretty-git-branch-graphs#comment12477465_9074343
 echo -ne '\e]4;0;#202020\a'   # black
