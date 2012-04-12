@@ -22,15 +22,14 @@ omz () {
       for config_file ({$ZSH/lib,$OMZ}/*.zsh(N))
         source $config_file
 
-      # !next
-      omz plugin
+      omz plugin $plugins
       omz theme ;;
     # Load plugins, can be used to load a plugin during runtime.
     ("plugin") shift; local plugin files
-      for plugin in $plugins $@; do
-        files=({$OMZ,$ZSH}/plugins/$plugin/$(basename $plugin).plugin.zsh(N))
+      for plugin in $@; do
+        files=({$OMZ,$ZSH}/plugins/$plugin/*.zsh(N))
         [[ ${#files} -eq 0 ]] && omz_log_msg "$plugin: Plugin not found." && continue
-        source $files[1] || omz_log_msg "$plugin: Error, can't source plugin file."
+        source $files[1]      || omz_log_msg "$plugin: Error, can't source plugin file."
       done ;;
     ("theme") local theme
       zstyle -a :omz:style theme theme
