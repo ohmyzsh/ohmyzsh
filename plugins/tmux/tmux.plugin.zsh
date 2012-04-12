@@ -1,3 +1,4 @@
+#!/bin/zsh
 # tmux plugin
 # Copyright (C) 2011 Simon Gomizelj
 #
@@ -35,6 +36,11 @@ if (( $+commands[tmux] )); then
     [[ -n $TMUX ]] && tmux switch -t $1 \
                    || tmux attach -t $1
   }
+
+  # For those who would like to run this script from outside of zsh.
+	# ( ie, key bindings to load a prompt )
+  [[ $- != *i* ]] && source ~/.zshrc && t $1
+	return 0
 else
-  omz_log_msg "tmux: plugin requires tmux"
+  omz_log_mgs "tmux: plugin requires tmux"
 fi
