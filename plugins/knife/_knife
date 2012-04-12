@@ -26,7 +26,7 @@ _knife() {
   
   case $state in
   knifecmd)
-    compadd -Q "$@" bootstrap client configure cookbook "cookbook site" "data bag" exec index node recipe role search ssh status windows $cloudproviders
+    compadd -Q "$@" bootstrap client configure cookbook "cookbook site" "data bag" exec environment index node recipe role search ssh status windows $cloudproviders
   ;;
   knifesubcmd)
     case $words[2] in
@@ -42,6 +42,9 @@ _knife() {
     cookbook)
       compadd -Q "$@" test list create download delete "metadata from" show "bulk delete" metadata upload
     ;;
+  environment)
+      compadd -Q "$@" list create delete edit show "from file"
+      ;;
     node)
      compadd -Q "$@" "from file" create show edit delete list run_list "bulk delete"
     ;;
@@ -138,27 +141,31 @@ _knife_options3() {
 
 # The chef_x_remote functions use knife to get a list of objects of type x on the server
 _chef_roles_remote() {
- (knife role list | grep \" | awk '{print $1}' | awk -F"," '{print $1}' | awk -F"\"" '{print $2}')
+ (knife role list --format json | grep \" | awk '{print $1}' | awk -F"," '{print $1}' | awk -F"\"" '{print $2}')
 }
 
 _chef_clients_remote() {
- (knife client list | grep \" | awk '{print $1}' | awk -F"," '{print $1}' | awk -F"\"" '{print $2}')
+ (knife client list --format json | grep \" | awk '{print $1}' | awk -F"," '{print $1}' | awk -F"\"" '{print $2}')
 }
 
 _chef_nodes_remote() {
- (knife node list | grep \" | awk '{print $1}' | awk -F"," '{print $1}' | awk -F"\"" '{print $2}')
+ (knife node list --format json | grep \" | awk '{print $1}' | awk -F"," '{print $1}' | awk -F"\"" '{print $2}')
 }
 
 _chef_cookbooks_remote() {
- (knife cookbook list | grep \" | awk '{print $1}' | awk -F"," '{print $1}' | awk -F"\"" '{print $2}')
+ (knife cookbook list --format json | grep \" | awk '{print $1}' | awk -F"," '{print $1}' | awk -F"\"" '{print $2}')
 }
 
 _chef_sitecookbooks_remote() {
- (knife cookbook site list | grep \" | awk '{print $1}' | awk -F"," '{print $1}' | awk -F"\"" '{print $2}')
+ (knife cookbook site list --format json | grep \" | awk '{print $1}' | awk -F"," '{print $1}' | awk -F"\"" '{print $2}')
 }
 
 _chef_data_bags_remote() {
- (knife data bag list | grep \" | awk '{print $1}' | awk -F"," '{print $1}' | awk -F"\"" '{print $2}')
+ (knife data bag list --format json | grep \" | awk '{print $1}' | awk -F"," '{print $1}' | awk -F"\"" '{print $2}')
+}
+
+_chef_environments_remote() {
+  (knife environment list | awk '{print $1}')
 }
 
 # The chef_x_local functions use the knife config to find the paths of relevant objects x to be uploaded to the server
