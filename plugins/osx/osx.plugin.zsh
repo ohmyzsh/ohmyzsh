@@ -164,3 +164,5 @@ function lock() {
 
 # Listen the faggy song
 alias faggy='say -v Good\ News faggy faggy faggy faggy faggy faggy faggy faggy'
+
+alias ssh-key-copy="cat ~/.ssh/id_rsa.pub | pbcopy"
