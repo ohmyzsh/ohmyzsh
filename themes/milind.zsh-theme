@@ -1,4 +1,3 @@
-#Added some cool stuff to pygmalion theme
 # Yay! High voltage and arrows!
 
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$reset_color%}%{$fg[green]%}"
@@ -6,6 +5,8 @@ ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%} "
 ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[yellow]%} ⚡%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_CLEAN=""
 
+#ZSH_THEME_SVN_PROMPT_PREFIX="svn:("
+#ZSH_THEME_SVN_PROMPT_SUFFIX=")"
 ZSH_THEME_SVN_PROMPT_PREFIX="%{$reset_color%}%{$fg[green]%}"
 ZSH_THEME_SVN_PROMPT_SUFFIX="%{$reset_color%} "
 
@@ -22,7 +23,7 @@ if which acpi &> /dev/null; then
             PR_BATTERY="${fg[red]} batt:${BATTPRCNT}%%"
         elif [[ "${BATTPRCNT}" -lt 60 ]]; then
             PR_BATTERY="${fg[yellow]} batt:${BATTPRCNT}%%"
-        elif [[ "${BATTPRCNT}" -lt 96 ]]; then
+        elif [[ "${BATTPRCNT}" -lt 100 ]]; then
             PR_BATTERY="${fg[green]} batt:${BATTPRCNT}%%"
         else
             PR_BATTERY=""
