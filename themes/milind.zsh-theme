@@ -5,8 +5,6 @@ ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%} "
 ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[yellow]%} ⚡%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_CLEAN=""
 
-#ZSH_THEME_SVN_PROMPT_PREFIX="svn:("
-#ZSH_THEME_SVN_PROMPT_SUFFIX=")"
 ZSH_THEME_SVN_PROMPT_PREFIX="%{$reset_color%}%{$fg[green]%}"
 ZSH_THEME_SVN_PROMPT_SUFFIX="%{$reset_color%} "
 
