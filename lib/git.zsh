@@ -139,3 +139,4 @@ POST_1_7_2_GIT=$(git_compare_version "1.7.2")
 unset -f git_compare_version
 
 
+alias gitgcprune="git remote prune origin ; git gc --prune --aggressive"
