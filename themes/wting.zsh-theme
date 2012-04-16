@@ -38,7 +38,11 @@ local time='${PR_GREEN}%D{%T %Z} ${PR_NO_COLOR}'
 local user_host='${PR_USER}${PR_CYAN}@${PR_HOST}'
 local current_dir='%{$PR_BOLD$PR_BLUE%}%~%{$PR_NO_COLOR%}'
 
-# Retrieve Ruby environment info, load RVM if found
+# Retrieve Python environment info
+PYTHON_VER=`python -c 'import sys; print(sys.version[:5])'`
+python_env='%{$PR_RED%}‹python-${PYTHON_VER}›%{$PR_NO_COLOR%}'
+
+# Retrieve Ruby environment info
 local ruby_env=''
 if ${HOME}/.rvm/bin/rvm-prompt &> /dev/null; then # detect local rvm installation
 	ruby_env='%{$PR_RED%}‹$(${HOME}/.rvm/bin/rvm-prompt i v g s)›%{$PR_NO_COLOR%}'
@@ -51,7 +55,7 @@ fi
 # Retrieve git info
 local git_branch='$(git_prompt_info)%{$PR_NO_COLOR%}'
 
-PROMPT="╭─${user_host} ${current_dir} ${ruby_env} ${git_branch}
+PROMPT="╭─${user_host} ${current_dir} ${python_env} ${ruby_env} ${git_branch}
 ╰─$PR_PROMPT "
 RPROMPT="${date}${time}"
 
