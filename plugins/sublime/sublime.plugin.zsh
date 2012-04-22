@@ -1,3 +1,3 @@
 # Sublime Text 2 Aliases
-alias st='open -a "/Applications/Sublime Text 2.app"'
+alias st='/Applications/Sublime\ Text\ 2.app/Contents/SharedSupport/bin/subl'
 alias stt='st .'
