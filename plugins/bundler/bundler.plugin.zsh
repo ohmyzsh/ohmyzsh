@@ -6,7 +6,13 @@ alias bu="bundle update"
 
 # The following is based on https://github.com/gma/bundler-exec
 
-bundled_commands=(annotate cap capify cucumber ey foreman guard heroku middleman nanoc rackup rainbows rails rake rspec ruby shotgun spec spork thin thor unicorn unicorn_rails)
+if [ -f $ZSH_CUSTOM/bundle-commands.zsh ]; then
+  source $ZSH_CUSTOM/bundle-exec.zsh
+fi
+
+if [[ -z "${bundled_commands}" ]]; then
+  bundled_commands=(annotate cap capify cucumber ey foreman guard heroku middleman nanoc rackup rainbows rails rake rspec ruby shotgun spec spork thin thor unicorn unicorn_rails)
+fi
 
 ## Functions
 
