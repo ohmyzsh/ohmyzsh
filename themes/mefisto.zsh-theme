@@ -1,12 +1,17 @@
 # diff color for root shell
 if [ $UID -eq 0 ]; then 
-        NCOLOR="red"; else NCOLOR="green"; fi
+        NCOLOR="red"
+        PCOLOR="red" 
+else 
+        NCOLOR="green" 
+        PCOLOR="green"
+fi
 
 # diff color for host if on SSH session
 if [[ -n "${SSH_CLIENT}"  ||  -n "${SSH2_CLIENT}" ]]; then 
         HCOLOR="yellow"; else HCOLOR="green"; fi
 
-PROMPT='%{$fg[cyan]%}[%{$reset_color%}%{$fg[$NCOLOR]%}%n%{$reset_color%}%{$fg[cyan]%}@%{$reset_color%}%{$fg[$HCOLOR]%}%m%{$reset_color%}%{$fg[cyan]%}]%{$reset_color%}%{$fg[cyan]%}[%{$reset_color%}%{$fg[blue]%}%B%c/%b%{$reset_color%}%{$fg[cyan]%}]%{$reset_color%}%{$fg[green]%}%#%{$reset_color%} '
+PROMPT='%{$fg[cyan]%}[%{$reset_color%}%{$fg[$NCOLOR]%}%n%{$reset_color%}%{$fg[cyan]%}@%{$reset_color%}%{$fg[$HCOLOR]%}%m%{$reset_color%}%{$fg[cyan]%}]%{$reset_color%}%{$fg[cyan]%}[%{$reset_color%}%{$fg[blue]%}%B%c/%b%{$reset_color%}%{$fg[cyan]%}]%{$reset_color%}%{$fg[$PCOLOR]%}%#%{$reset_color%} '
 
 RPROMPT='$(git_prompt_info)'
 
