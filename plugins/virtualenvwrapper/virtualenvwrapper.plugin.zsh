@@ -1,2 +1,6 @@
-export WORKON_HOME="/Volumes/Workspace/Envs"
-source /usr/local/share/python/virtualenvwrapper.sh
+
+VW_SCRIPT=`which virtualenvwrapper.sh`
+if [ -f $VW_SCRIPT ]; then
+    export WORKON_HOME="~/virtualenvs"
+    source $VW_SCRIPT
+fi
