@@ -2,7 +2,7 @@
 local user='%{$fg[magenta]%}%n@%{$fg[magenta]%}%m%{$reset_color%}'
 local pwd='%{$fg[blue]%}%~%{$reset_color%}'
 local rvm=''
-if which rvm-prompt &> /dev/null; then
+if [ -e ~/.rvm/bin/rvm-prompt ]; then
   rvm='%{$fg[green]%}‹$(rvm-prompt i v g)›%{$reset_color%}'
 else
   if which rbenv &> /dev/null; then

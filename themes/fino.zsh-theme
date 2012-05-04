@@ -26,7 +26,7 @@ function box_name {
 
 
 local rvm_ruby=''
-if which rvm-prompt &> /dev/null; then
+if [ -e ~/.rvm/bin/rvm-prompt ]; then
   rvm_ruby='‹$(rvm-prompt i v g)›%{$reset_color%}'
 else
   if which rbenv &> /dev/null; then
