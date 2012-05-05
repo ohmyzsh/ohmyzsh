@@ -59,6 +59,19 @@ alias xu='xargs "$CURL"'
 
 alias s='"$ROOT"'
 
+alias sy='"$ROOT" "$GREP" -i'
+alias sn='"$ROOT" "$GREP" -iv'
+
+alias sc='"$ROOT" cat'
+alias sw='"$ROOT" cat >'
+alias sa='"$ROOT" cat >>'
+
+alias sp='"$ROOT" "$PAGER"'
+
+alias sd='"$ROOT" "$WGET"'
+
+# SUDO-XARGS
+
 alias sx='"$ROOT" xargs'
 
 alias sxy='"$ROOT" xargs "$GREP" -i'
