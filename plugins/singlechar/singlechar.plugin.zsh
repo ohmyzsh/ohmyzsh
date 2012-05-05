@@ -20,7 +20,7 @@ default ROOT sudo
 default WGET wget
 default CURL curl
 
-env_defaul PAGER less
+env_default PAGER less
 
 ###########################
 # Alias
