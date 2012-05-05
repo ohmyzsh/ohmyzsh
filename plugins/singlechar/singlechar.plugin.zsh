@@ -20,6 +20,8 @@ default ROOT sudo
 default WGET wget
 default CURL curl
 
+env_defaul PAGER less
+
 ###########################
 # Alias
 
@@ -31,6 +33,8 @@ alias n='"$GREP" -vi'
 alias c='cat'
 alias w='cat >'
 alias a='cat >>'
+
+alias p='"$PAGER"'
 
 alias d='"$WGET"'
 alias u='"$CURL"'
@@ -45,6 +49,8 @@ alias xn='xargs "$GREP" -iv'
 alias xc='xargs cat'
 alias xw='xargs cat >'
 alias xa='xargs cat >>'
+
+alias xp='xargs "$PAGER"'
 
 alias xd='xargs "$WGET"'
 alias xu='xargs "$CURL"'
@@ -61,6 +67,8 @@ alias sxn='"$ROOT" xargs "$GREP" -iv'
 alias sxc='"$ROOT" xargs cat'
 alias sxw='"$ROOT" xargs cat >'
 alias sxa='"$ROOT" xargs cat >>'
+
+alias sxp='"$ROOT" xargs "$PAGER"'
 
 alias sxd='"$ROOT" xargs "$WGET"'
 alias sxu='"$ROOT" xargs "$CURL"'
