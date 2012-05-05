@@ -30,14 +30,19 @@ env_default PAGER less
 alias y='"$GREP" -i'
 alias n='"$GREP" -vi'
 
-alias c='cat'
-alias w='cat >'
-alias a='cat >>'
+alias w='echo >'
+alias a='echo >>'
 
+alias c='cat'
 alias p='"$PAGER"'
 
 alias d='"$WGET"'
 alias u='"$CURL"'
+
+# enhanced writeing
+
+alias w:='cat >'
+alias a:='cat >>'
 
 # XARGS
 
@@ -46,14 +51,17 @@ alias x='xargs'
 alias xy='xargs "$GREP" -i'
 alias xn='xargs "$GREP" -iv'
 
-alias xc='xargs cat'
-alias xw='xargs cat >'
-alias xa='xargs cat >>'
+alias xw='xargs echo >'
+alias xa='xargs echo >>'
 
+alias xc='xargs cat'
 alias xp='xargs "$PAGER"'
 
 alias xd='xargs "$WGET"'
 alias xu='xargs "$CURL"'
+
+alias xw:='xargs cat >'
+alias xa:='xargs >>'
 
 # SUDO
 
@@ -62,13 +70,16 @@ alias s='"$ROOT"'
 alias sy='"$ROOT" "$GREP" -i'
 alias sn='"$ROOT" "$GREP" -iv'
 
-alias sc='"$ROOT" cat'
-alias sw='"$ROOT" cat >'
-alias sa='"$ROOT" cat >>'
+alias sw='"$ROOT" echo >'
+alias sa='"$ROOT" echo >>'
 
+alias sc='"$ROOT" cat'
 alias sp='"$ROOT" "$PAGER"'
 
 alias sd='"$ROOT" "$WGET"'
+
+alias sw:='"$ROOT" cat >'
+alias sa:='"$ROOT" cat >>'
 
 # SUDO-XARGS
 
@@ -77,11 +88,14 @@ alias sx='"$ROOT" xargs'
 alias sxy='"$ROOT" xargs "$GREP" -i'
 alias sxn='"$ROOT" xargs "$GREP" -iv'
 
-alias sxc='"$ROOT" xargs cat'
-alias sxw='"$ROOT" xargs cat >'
-alias sxa='"$ROOT" xargs cat >>'
+alias sxw='"$ROOT" xargs echo >'
+alias sxa='"$ROOT" xargs echo >>'
 
+alias sxc='"$ROOT" xargs cat'
 alias sxp='"$ROOT" xargs "$PAGER"'
 
 alias sxd='"$ROOT" xargs "$WGET"'
 alias sxu='"$ROOT" xargs "$CURL"'
+
+alias sxw:='"$ROOT" xargs cat >'
+alias sxa:='"$ROOT" xargs cat >>'
