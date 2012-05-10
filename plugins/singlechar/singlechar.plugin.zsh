@@ -30,6 +30,12 @@ env_default PAGER less
 alias y='"$GREP" -i'
 alias n='"$GREP" -vi'
 
+alias f.='find .'
+alias f:='find'
+
+alias f='"$GREP" -li'
+alias fn='"$GREP" -lvi'
+
 alias w='echo >'
 alias a='echo >>'
 
@@ -39,7 +45,7 @@ alias p='"$PAGER"'
 alias d='"$WGET"'
 alias u='"$CURL"'
 
-# enhanced writeing
+# enhanced writing
 
 alias w:='cat >'
 alias a:='cat >>'
@@ -50,6 +56,12 @@ alias x='xargs'
 
 alias xy='xargs "$GREP" -i'
 alias xn='xargs "$GREP" -iv'
+
+alias xf.='xargs find .'
+alias xf:='xargs find'
+
+alias xf='xargs "$GREP" -li'
+alias xfn='xargs "$GREP" -lvi'
 
 alias xw='xargs echo >'
 alias xa='xargs echo >>'
@@ -70,6 +82,12 @@ alias s='"$ROOT"'
 alias sy='"$ROOT" "$GREP" -i'
 alias sn='"$ROOT" "$GREP" -iv'
 
+alias xf.='"$ROOT" find .'
+alias xf:='"$ROOT" find'
+
+alias xf='"$ROOT" "$GREP" -li'
+alias xfn='"$ROOT" "$GREP" -lvi'
+
 alias sw='"$ROOT" echo >'
 alias sa='"$ROOT" echo >>'
 
@@ -87,6 +105,12 @@ alias sx='"$ROOT" xargs'
 
 alias sxy='"$ROOT" xargs "$GREP" -i'
 alias sxn='"$ROOT" xargs "$GREP" -iv'
+
+alias sxf.='"$ROOT" xargs find .'
+alias sxf:='"$ROOT" xargs find'
+
+alias sxf='"$ROOT" xargs "$GREP" -li'
+alias sxfn='"$ROOT" xargs "$GREP" -lvi'
 
 alias sxw='"$ROOT" xargs echo >'
 alias sxa='"$ROOT" xargs echo >>'
