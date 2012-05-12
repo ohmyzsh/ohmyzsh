@@ -31,6 +31,7 @@ _1st_arguments=(
   'remove:remove a formula'
   'search:search for a formula (/regex/ or string)'
   'server:start a local web app that lets you browse formulae (requires Sinatra)'
+  'tap:tap a new source of formulae on Github'
   'unlink:unlink a formula'
   'update:freshen up links'
   'upgrade:upgrade outdated formulae'
