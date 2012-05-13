@@ -59,7 +59,7 @@ alias x='xargs'
 alias xy='xargs "$GREP" -Ri'
 alias xn='xargs "$GREP" -Riv'
 
-alias xf.='xargs find . | "$GREP"'
+alias xf.='xargs find | "$GREP"'
 alias xf:='xargs find'
 
 alias xf='xargs "$GREP" -Rli'
@@ -112,7 +112,7 @@ alias sx='"$ROOT" xargs'
 alias sxy='"$ROOT" xargs "$GREP" -Ri'
 alias sxn='"$ROOT" xargs "$GREP" -Riv'
 
-alias sxf.='"$ROOT" xargs find . | "$GREP"'
+alias sxf.='"$ROOT" xargs find | "$GREP"'
 alias sxf:='"$ROOT" xargs find'
 
 alias sxf='"$ROOT" xargs "$GREP" -li'
