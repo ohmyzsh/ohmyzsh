@@ -27,14 +27,14 @@ env_default PAGER less
 
 # CAT, GREP, CURL, WGET
 
-alias y='"$GREP" -i'
-alias n='"$GREP" -vi'
+alias y='"$GREP" -Ri'
+alias n='"$GREP" -Rvi'
 
 alias f.='find . | "$GREP"'
 alias f:='find'
 
-alias f='"$GREP" -li'
-alias fn='"$GREP" -lvi'
+alias f='"$GREP" -Rli'
+alias fn='"$GREP" -Rlvi'
 
 alias w='echo >'
 alias a='echo >>'
@@ -56,14 +56,14 @@ alias a:='cat >>'
 
 alias x='xargs'
 
-alias xy='xargs "$GREP" -i'
-alias xn='xargs "$GREP" -iv'
+alias xy='xargs "$GREP" -Ri'
+alias xn='xargs "$GREP" -Riv'
 
 alias xf.='xargs find . | "$GREP"'
 alias xf:='xargs find'
 
-alias xf='xargs "$GREP" -li'
-alias xfn='xargs "$GREP" -lvi'
+alias xf='xargs "$GREP" -Rli'
+alias xfn='xargs "$GREP" -Rlvi'
 
 alias xw='xargs echo >'
 alias xa='xargs echo >>'
@@ -83,14 +83,14 @@ alias xa:='xargs >>'
 
 alias s='"$ROOT"'
 
-alias sy='"$ROOT" "$GREP" -i'
-alias sn='"$ROOT" "$GREP" -iv'
+alias sy='"$ROOT" "$GREP" -Ri'
+alias sn='"$ROOT" "$GREP" -Riv'
 
 alias sf.='"$ROOT" find . | "$GREP"'
 alias sf:='"$ROOT" find'
 
-alias sf='"$ROOT" "$GREP" -li'
-alias sfn='"$ROOT" "$GREP" -lvi'
+alias sf='"$ROOT" "$GREP" -Rli'
+alias sfn='"$ROOT" "$GREP" -Rlvi'
 
 alias sw='"$ROOT" echo >'
 alias sa='"$ROOT" echo >>'
@@ -109,8 +109,8 @@ alias sa:='"$ROOT" cat >>'
 
 alias sx='"$ROOT" xargs'
 
-alias sxy='"$ROOT" xargs "$GREP" -i'
-alias sxn='"$ROOT" xargs "$GREP" -iv'
+alias sxy='"$ROOT" xargs "$GREP" -Ri'
+alias sxn='"$ROOT" xargs "$GREP" -Riv'
 
 alias sxf.='"$ROOT" xargs find . | "$GREP"'
 alias sxf:='"$ROOT" xargs find'
