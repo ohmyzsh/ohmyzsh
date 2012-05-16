@@ -108,3 +108,9 @@ function _git_log_prettily(){
 }
 alias glp="_git_log_prettily"
 compdef _git glp=git-log
+alias gf='git fetch'
+compdef _git gf=git-fetch
+alias gsi='git submodule init'
+compdef gsi=git-submodule
+alias gsu='git submodule update'
+compdef gsu=git-submodule
