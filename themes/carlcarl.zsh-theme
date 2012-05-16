@@ -5,17 +5,17 @@ setopt promptsubst
 
 autoload -U add-zsh-hook
 
-HOST_PROMPT_="%{$fg_bold[magenta]%}@$HOST "
+HOST_PROMPT_="%B%{$FG[197]%}@$HOST %b"
 
 PROMPT_SUCCESS_COLOR=$FG[077]
 PROMPT_FAILURE_COLOR=$FG[124]
 PROMPT_VCS_INFO_COLOR=$FG[242]
 PROMPT_PROMPT=$FG[077]
-GIT_DIRTY_COLOR=$fg_bold[magenta]
+GIT_DIRTY_COLOR=$FG[197]
 GIT_CLEAN_COLOR=$FG[118]
-GIT_PROMPT_INFO=$fg_bold[magenta]
+GIT_PROMPT_INFO=$FG[197]
 
-PROMPT='$HOST_PROMPT_%{$PROMPT_SUCCESS_COLOR%}%~%{$reset_color%} %{$GIT_PROMPT_INFO%}$(git_prompt_info)%{$GIT_DIRTY_COLOR%}$(git_prompt_status) %{$reset_color%}%{$PROMPT_PROMPT%}➭%{$reset_color%} '
+PROMPT='$HOST_PROMPT_%{$PROMPT_SUCCESS_COLOR%}%~%{$reset_color%} %B%{$GIT_PROMPT_INFO%}$(git_prompt_info)%{$GIT_DIRTY_COLOR%}$(git_prompt_status)%b %{$reset_color%}%{$PROMPT_PROMPT%}➭%{$reset_color%} '
 
 RPROMPT='[%*]'
 #RPS1="${return_code}"
