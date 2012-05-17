@@ -1,22 +1,4 @@
-FOUND_RBENV=0
-for rbenvdir in "$HOME/.rbenv" "/usr/local/rbenv" "/opt/rbenv" ; do
-  if [ -d $rbenvdir/bin -a $FOUND_RBENV -eq 0 ] ; then
-    FOUND_RBENV=1
-    export RBENV_ROOT=$rbenvdir
-    export PATH=${rbenvdir}/bin:$PATH
-  fi
-done
-unset rbenvdir
-
-# If not found above, check for the existence of the rbenv executable anyway.
-if [ $FOUND_RBENV -eq 0 ] ; then
-  if ( which rbenv > /dev/null 2>&1 ) ; then
-    FOUND_RBENV=1
-    export RBENV_ROOT=$(rbenv root)
-  fi
-fi
-
-if [ $FOUND_RBENV -eq 1 ] ; then
+if [[ $+commands[rbenv] -eq 1 ]] ; then
 
   eval "$(rbenv init -)"
 
