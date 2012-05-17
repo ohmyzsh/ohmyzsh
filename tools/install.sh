@@ -14,6 +14,10 @@ hash git >/dev/null 2>&1 && env git clone --depth=1 https://github.com/ahirreddy
   echo "git not installed"
   exit
 }
+cd .oh-my-zsh
+git submodule init
+git submodule update
+cd ..
 
 echo "\033[0;34mLooking for an existing zsh config...\033[0m"
 if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]; then
