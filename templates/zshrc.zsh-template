@@ -34,5 +34,7 @@ plugins=(git osx python virtualenvwrapper vim-override)
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
+if [ -z "$LC_ALL" ]; then export LC_ALL=en_US.UTF-8; fi
+if [ -z "$LANG" ]; then export LANG=en_US.UTF-8; fi
 
 # Themes override ls alias from aliases.zsh
