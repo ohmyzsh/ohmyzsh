@@ -5,7 +5,11 @@ then
 fi
 
 echo "\033[0;34mCloning Oh My Zsh...\033[0m"
-/usr/bin/env git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
+/usr/bin/env wget --no-check-certificate -O oh-my-zsh.tar.gz https://github.com/robbyrussell/oh-my-zsh/tarball/master
+mkdir ~/.oh-my-zsh
+tar -xzf oh-my-zsh.tar.gz -C ~/.oh-my-zsh --strip-path=1
+rm oh-my-zsh.tar.gz
+
 
 echo "\033[0;34mLooking for an existing zsh config...\033[0m"
 if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]
