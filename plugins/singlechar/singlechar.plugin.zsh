@@ -30,7 +30,7 @@ env_default PAGER less
 alias y='"$GREP" -i'
 alias n='"$GREP" -vi'
 
-alias f.='find .'
+alias f.='find . | "$GREP"'
 alias f:='find'
 
 alias f='"$GREP" -li'
@@ -59,7 +59,7 @@ alias x='xargs'
 alias xy='xargs "$GREP" -i'
 alias xn='xargs "$GREP" -iv'
 
-alias xf.='xargs find .'
+alias xf.='xargs find . | "$GREP"'
 alias xf:='xargs find'
 
 alias xf='xargs "$GREP" -li'
@@ -86,7 +86,7 @@ alias s='"$ROOT"'
 alias sy='"$ROOT" "$GREP" -i'
 alias sn='"$ROOT" "$GREP" -iv'
 
-alias sf.='"$ROOT" find .'
+alias sf.='"$ROOT" find . | "$GREP"'
 alias sf:='"$ROOT" find'
 
 alias sf='"$ROOT" "$GREP" -li'
@@ -112,7 +112,7 @@ alias sx='"$ROOT" xargs'
 alias sxy='"$ROOT" xargs "$GREP" -i'
 alias sxn='"$ROOT" xargs "$GREP" -iv'
 
-alias sxf.='"$ROOT" xargs find .'
+alias sxf.='"$ROOT" xargs find . | "$GREP"'
 alias sxf:='"$ROOT" xargs find'
 
 alias sxf='"$ROOT" xargs "$GREP" -li'
