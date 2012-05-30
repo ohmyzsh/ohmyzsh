@@ -40,6 +40,8 @@ done
 autoload -U compinit
 compinit -i
 
+# Load all of your custom configurations from custom/
+for config_file ($ZSH_CUSTOM/*.zsh(.N)) source $config_file
 
 # Load all of the plugins that were defined in ~/.zshrc
 for plugin ($plugins); do
@@ -49,9 +51,6 @@ for plugin ($plugins); do
     source $ZSH/plugins/$plugin/$plugin.plugin.zsh
   fi
 done
-
-# Load all of your custom configurations from custom/
-for config_file ($ZSH_CUSTOM/*.zsh(.N)) source $config_file
 
 # Load the theme
 if [ "$ZSH_THEME" = "random" ]
