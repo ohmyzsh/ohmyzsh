@@ -54,6 +54,9 @@ function current_branch() {
   echo ${ref#refs/heads/}
 }
 
+alias incoming='git log ..origin/$(current_branch)'
+alias outgoing='git log origin/$(current_branch)..'
+
 # these aliases take advantage of the previous function
 alias ggpull='git pull origin $(current_branch)'
 compdef ggpull=git
