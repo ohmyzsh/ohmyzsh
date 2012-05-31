@@ -1,18 +1,20 @@
 # get the name of the branch we are on
 function git_prompt_info() {
-  ref=$(git symbolic-ref HEAD 2> /dev/null) || return
+  git rev-parse 2> /dev/null || return
+  ref=$(git symbolic-ref HEAD 2> /dev/null || print '(no branch)')
   echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
 }
 
 
 # Checks if working tree is dirty
 parse_git_dirty() {
-  local SUBMODULE_SYNTAX=''
-  if [[ $POST_1_7_2_GIT -gt 0 ]]; then
-        SUBMODULE_SYNTAX="--ignore-submodules=dirty"
-  fi
-  if [[ -n $(git status -s ${SUBMODULE_SYNTAX}  2> /dev/null) ]]; then
-    echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
+  gitstatus=$(git status --porcelain ${SUBMODULE_SYNTAX} 2> /dev/null)
+  if [[ -n "$gitstatus" ]]; then
+    if [[ "$gitstatus" =~ '^[MADRCU].*$' ]] && (($+ZSH_THEME_GIT_PROMPT_STAGED)); then
+      echo "$ZSH_THEME_GIT_PROMPT_STAGED"
+    else
+      echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
+    fi
   else
     echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
   fi
@@ -21,8 +23,16 @@ parse_git_dirty() {
 
 # Checks if there are commits ahead from remote
 function git_prompt_ahead() {
-  if $(echo "$(git log origin/$(current_branch)..HEAD 2> /dev/null)" | grep '^commit' &> /dev/null); then
-    echo "$ZSH_THEME_GIT_PROMPT_AHEAD"
+  ahead=$(git rev-list origin/$(current_branch)..HEAD -- 2> /dev/null)
+  behind=$(git rev-list HEAD..origin/$(current_branch) -- 2> /dev/null)
+  if [[ -n $ahead && -n $behind ]]; then
+      echo "$ZSH_THEME_GIT_PROMPT_DIVERGED"
+  elif [[ -n $ahead ]]; then
+      echo "$ZSH_THEME_GIT_PROMPT_AHEAD"
+  elif [[ -n $behind ]]; then
+      echo "$ZSH_THEME_GIT_PROMPT_BEHIND"
+  else
+      echo "$ZSH_THEME_GIT_PROMPT_UPTODATE"
   fi
 }
 
