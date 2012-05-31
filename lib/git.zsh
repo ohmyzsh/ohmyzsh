@@ -38,7 +38,7 @@ function git_prompt_long_sha() {
 
 # Get the status of the working tree
 git_prompt_status() {
-  INDEX=$(git status --porcelain 2> /dev/null)
+  INDEX=$(git status --porcelain 2> /dev/null) || return
   STATUS=""
   if $(echo "$INDEX" | grep '^?? ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_UNTRACKED$STATUS"
@@ -66,7 +66,9 @@ git_prompt_status() {
   if $(echo "$INDEX" | grep '^UU ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_UNMERGED$STATUS"
   fi
-  echo $STATUS
+  if [[ "$STATUS" != "" ]]; then
+    echo "$ZSH_THEME_GIT_STATUS_BEFORE$STATUS$ZSH_THEME_GIT_STATUS_AFTER"
+  fi
 }
 
 #compare the provided version of git to the version installed and on path
