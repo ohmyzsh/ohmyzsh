@@ -1,0 +1,8 @@
+alias padpg='padrino g admin_page'
+alias par='padrino rake ar:migrate'
+alias pcon='padrino console'
+alias pdaem='padrino start -d'
+alias pg='padrino gen'
+alias pprod='padrino stop; padrino start -de production'
+alias pstart='padrino start'
+alias pstop='padrino stop'
