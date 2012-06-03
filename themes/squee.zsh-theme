@@ -1,4 +1,8 @@
-LHOST=$(scutil --get LocalHostName)
+# Squee a pleasant little zsh-theme
+
+# LHOST=$(scutil --get LocalHostName)
+# ^ uncomment and v comment - for better os x hostname support
+LHOST=$HOST
 PROMPT='$fg_bold[magenta][$fg[white]%t$fg_bold[magenta]]$fg_bold[magenta] [$fg[white]%n@$LHOST$fg_bold[magenta]]
 [$fg[white]%~$(git_prompt_info)$fg[white]$(rvm_prompt_info)$fg_bold[magenta]]$reset_color
 $ '
