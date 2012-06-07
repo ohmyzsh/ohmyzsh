@@ -46,7 +46,7 @@ function git_remote_information {
 local pwd='%{$fg[white]%}$(collapse_pwd)%{$reset_color%}'
 
 local return_code='%(?..%{$fg[red]%}%? ↵%{$reset_color%})'
-local git_information='$(git_prompt_status)%{$reset_color%}$(git_prompt_info)%{$reset_color%}%{$fg[cyan]%}$(git_remote_information)%{$reset_color%}'
+local git_information='$(git_prompt_status) %{$reset_color%}$(git_prompt_info)%{$reset_color%}%{$fg[cyan]%}$(git_remote_information)%{$reset_color%}'
 
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[green]%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
