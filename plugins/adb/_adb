@@ -1,0 +1,39 @@
+#compdef adb
+#autoload
+
+# in order to make this work, you will need to have the android adb tools
+
+# adb zsh completion, based on homebrew completion
+
+local -a _1st_arguments
+_1st_arguments=(
+'bugreport:return all information from the device that should be included in a bug report.'
+'connect:connect to a device via TCP/IP Port 5555 is default.'
+'devices:list all connected devices'
+'disconnect:disconnect from a TCP/IP device. Port 5555 is default.'
+'emu:run emulator console command'
+'forward:forward socket connections'
+'help:show the help message'
+'install:push this package file to the device and install it'
+'jdwp:list PIDs of processes hosting a JDWP transport'
+'logcat:View device log'
+'pull:copy file/dir from device'
+'push:copy file/dir to device'
+'shell:run remote shell interactively'
+'sync:copy host->device only if changed (-l means list but dont copy)'
+'uninstall:remove this app package from the device'
+'version:show version num'
+)
+
+local expl
+local -a pkgs installed_pkgs
+
+_arguments \
+	'*:: :->subcmds' && return 0
+
+if (( CURRENT == 1 )); then
+	_describe -t commands "adb subcommand" _1st_arguments
+	return
+fi
+
+_files
