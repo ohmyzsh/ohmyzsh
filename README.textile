@@ -34,7 +34,7 @@ h3. The manual way
 
 3. Set zsh as your default shell:
 
-  @chsh -s /bin/zsh@
+  @chsh -s $(which zsh)@
 
 4. Start / restart zsh (open a new terminal is easy enough...)
 
