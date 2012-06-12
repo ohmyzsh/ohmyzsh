@@ -12,7 +12,7 @@ dirpersistinstall () {
     if grep 'dirpersiststore' ~/.zlogout > /dev/null; then
     else
         if read -q \?"Would you like to set up your .zlogout file for use with dirspersist? (y/n) "; then
-            echo "# Store dirs stack\n# See ~/.oh-my-zsh/plugins/dirspersist.plugin.zsh\ndirpersiststore" >> ~/.zlogout
+            echo "# Store dirs stack\n# See $ZSH/plugins/dirspersist.plugin.zsh\ndirpersiststore" >> ~/.zlogout
         else
             echo "If you don't want this message to appear, remove dirspersist from \$plugins"
         fi
