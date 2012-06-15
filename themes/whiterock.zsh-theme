@@ -6,7 +6,7 @@
 rp_mode='git-dir' 
 
 # color definition
-# first one is for normal user, while the oter is for root user
+# first one is for normal user, while the other is for root user
 if [ `id -u` -ne 0 ]; then
    lp_color1='yellow'
    lp_color2='blue'
