@@ -1,5 +1,18 @@
+function is_homebrew_installed() {
+  type brew &> /dev/null
+}
+
+function is_rbenv_installed() {
+  brew --prefix rbenv &> /dev/null
+}
+
 FOUND_RBENV=0
-for rbenvdir in "$HOME/.rbenv" "/usr/local/rbenv" "/opt/rbenv" ; do
+rbenvdirs=("$HOME/.rbenv" "/usr/local/rbenv" "/opt/rbenv")
+if is_homebrew_installed && is_rbenv_installed ; then
+    rbenvdirs=($(brew --prefix rbenv) "${rbenvdirs[@]}")
+fi
+
+for rbenvdir in "${rbenvdirs[@]}" ; do
   if [ -d $rbenvdir/bin -a $FOUND_RBENV -eq 0 ] ; then
     FOUND_RBENV=1
     export RBENV_ROOT=$rbenvdir
