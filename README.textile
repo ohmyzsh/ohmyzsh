@@ -1,5 +1,6 @@
 A handful of functions, auto-complete helpers, and stuff that makes you shout...
 
+
 bq. "OH MY ZSHELL!"
 
 h2. Setup
@@ -68,9 +69,13 @@ h2. Help out!
 
 I'm far from being a zsh-expert and suspect there are many ways to improve. If you have ideas on how to make the configuration easier to maintain (and faster), don't hesitate to fork and send pull requests!
 
-h3. Send us your theme!
+h3. (Don't) Send us your theme! (for now)
 
-I'm hoping to collect a bunch of themes for our command prompts. You can see existing ones in the @themes/@ directory.
+-I'm hoping to collect a bunch of themes for our command prompts. You can see existing ones in the @themes/@ directory.-
+
+We have enough themes for the time being. Please fork the project and add on in there, you can let people know how to grab it from there. 
+
+
 
 h2. Contributors
 
