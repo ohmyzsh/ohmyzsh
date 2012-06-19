@@ -1,3 +1,4 @@
+# Coffeescript Theme by Dylan Hudson (@dyln_hdsn on twitter)
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$reset_color%} ("
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%})%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[yellow]%}*%{$reset_color%}"
