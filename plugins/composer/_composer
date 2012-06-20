@@ -1,0 +1,21 @@
+#simple composer subcommand completion
+#compdef composer.phar
+#autoload
+
+local -a _1st_arguments
+
+if [ -f composer.phar ]; then
+	_1st_arguments=(`./composer.phar --no-ansi | sed "1,/Available commands/d" | awk '{ printf $1":"; for (i = 2; i <= NF; i++) printf "%s\xc2\xa0",$i; printf "\n" }'`)
+    else
+	if which composer.phar &> /dev/null; then
+		_1st_arguments=(`composer.phar --no-ansi | sed "1,/Available commands/d" | awk '{ printf $1":"; for (i = 2; i <= NF; i++) printf "%s\xc2\xa0",$i; printf "\n" }'`)
+	fi
+fi
+
+_arguments \
+ '*:: :->subcmds' && return 0
+
+if (( CURRENT == 1 )); then
+  _describe -t commands "composer.phar subcommand" _1st_arguments
+  return
+fi
