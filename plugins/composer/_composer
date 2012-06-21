@@ -1,18 +1,18 @@
-#simple composer subcommand completion
 #compdef composer.phar
 #autoload
 
 local -a _1st_arguments
 
-if [ -f composer.phar ]; then
-	_1st_arguments=(`./composer.phar --no-ansi | sed "1,/Available commands/d" | awk '{ printf $1":"; for (i = 2; i <= NF; i++) printf "%s\xc2\xa0",$i; printf "\n" }'`)
-    else
-	if which composer.phar &> /dev/null; then
-		_1st_arguments=(`composer.phar --no-ansi | sed "1,/Available commands/d" | awk '{ printf $1":"; for (i = 2; i <= NF; i++) printf "%s\xc2\xa0",$i; printf "\n" }'`)
-	fi
-fi
+_1st_arguments=(`composer.phar --no-ansi | sed "1,/Available commands/d" | awk '{ printf $1":"; for (i = 2; i <= NF; i++) printf "%s\xc2\xa0",$i; printf "\n" }'`)
 
 _arguments \
+ '(--help)--help[Display help message.]' \
+ '(--quiet)--quiet[Do not output any message.]' \
+ '(--verbose)--verbose[Increase verbosity of messages.]' \
+ '(--version)--version[Display this application version.]' \
+ '(--ansi)--ansi[Force ANSI output.]' \
+ '(--no-ansi)--no-ansi[Disable ANSI output.]' \
+ '(--no-interaction)--no-interaction[Do not ask any interactive question.]' \
  '*:: :->subcmds' && return 0
 
 if (( CURRENT == 1 )); then
