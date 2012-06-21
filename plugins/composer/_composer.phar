@@ -1,9 +1,9 @@
-#compdef composer
+#compdef composer.phar
 #autoload
 
 local -a _1st_arguments
 
-_1st_arguments=(`composer --no-ansi | sed "1,/Available commands/d" | awk '{ printf $1":"; for (i = 2; i <= NF; i++) printf "%s\xc2\xa0",$i; printf "\n" }'`)
+_1st_arguments=(`composer.phar --no-ansi | sed "1,/Available commands/d" | awk '{ printf $1":"; for (i = 2; i <= NF; i++) printf "%s\xc2\xa0",$i; printf "\n" }'`)
 
 _arguments \
  '(--help)--help[Display help message.]' \
@@ -16,6 +16,6 @@ _arguments \
  '*:: :->subcmds' && return 0
 
 if (( CURRENT == 1 )); then
-  _describe -t commands "composer subcommand" _1st_arguments
+  _describe -t commands "composer.phar subcommand" _1st_arguments
   return
 fi
