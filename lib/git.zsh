@@ -1,5 +1,6 @@
 # get the name of the branch we are on
 function git_prompt_info() {
+  [ -n "`git config zsh.ignore`" ] && return
   ref=$(git symbolic-ref HEAD 2> /dev/null) || \
   ref=$(git rev-parse --short HEAD 2> /dev/null) || return
   echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
@@ -8,6 +9,7 @@ function git_prompt_info() {
 
 # Checks if working tree is dirty
 parse_git_dirty() {
+  [ -n "`git config zsh.ignore`" ] && return
   local SUBMODULE_SYNTAX=''
   if [[ "$(git config --get oh-my-zsh.hide-status)" != "1" ]]; then
     if [[ $POST_1_7_2_GIT -gt 0 ]]; then
@@ -43,6 +45,7 @@ git_remote_status() {
 
 # Checks if there are commits ahead from remote
 function git_prompt_ahead() {
+  [ -n "`git config zsh.ignore`" ] && return
   if $(echo "$(git log origin/$(current_branch)..HEAD 2> /dev/null)" | grep '^commit' &> /dev/null); then
     echo "$ZSH_THEME_GIT_PROMPT_AHEAD"
   fi
@@ -50,16 +53,19 @@ function git_prompt_ahead() {
 
 # Formats prompt string for current git commit short SHA
 function git_prompt_short_sha() {
+  [ -n "`git config zsh.ignore`" ] && return
   SHA=$(git rev-parse --short HEAD 2> /dev/null) && echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
 }
 
 # Formats prompt string for current git commit long SHA
 function git_prompt_long_sha() {
+  [ -n "`git config zsh.ignore`" ] && return
   SHA=$(git rev-parse HEAD 2> /dev/null) && echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
 }
 
 # Get the status of the working tree
 git_prompt_status() {
+  [ -n "`git config zsh.ignore`" ] && return
   INDEX=$(git status --porcelain -b 2> /dev/null)
   STATUS=""
   if $(echo "$INDEX" | grep '^?? ' &> /dev/null); then
