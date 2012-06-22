@@ -19,7 +19,7 @@ THUMBS_UP=$(echo -e "\xF0\x9F\x91\x8D")
 PROMPT='
 
 %{$USER_COLOR%}%n@%m %{$DIR_COLOR%}[%~] %{$GIT_INFO_COLOR%}$(git_prompt_info) $(git_prompt_status) %{$RESET_COLOR%}
-% %{$RESET_COLOR%}'
+> %{$RESET_COLOR%}'
 
 RPROMPT='%{$DATE_AND_COLOR%}%w,%t%{$RESET_COLOR%}'
 
