@@ -4,6 +4,10 @@ function git_prompt_info() {
   echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
 }
 
+# returns root of current repo
+function git_get_root() {
+  echo "$(git rev-parse --show-toplevel 2> /dev/null)"
+}
 
 # Checks if working tree is dirty
 parse_git_dirty() {
@@ -71,7 +75,7 @@ git_prompt_status() {
 
 #compare the provided version of git to the version installed and on path
 #prints 1 if input version <= installed version
-#prints -1 otherwise 
+#prints -1 otherwise
 function git_compare_version() {
   local INPUT_GIT_VERSION=$1;
   local INSTALLED_GIT_VERSION
