@@ -5,19 +5,30 @@ function _lein_commands() {
     case $state in
       subcommand)
         subcommands=(
-          "clean:remove compiled files and dependencies from project"
-          "compile:ahead-of-time compile the project"
-          "deps:download and install all dependencies"
-          "help:display a list of tasks or help for a given task"
-          "install:install the project and its dependencies in your local repository"
-          "jar:create a jar file containing the compiled .class files"
-          "new:create a new project skeleton"
-          "pom:write a pom.xml file to disk for maven interop"
-          "test:run the project's tests"
-          "uberjar:Create a jar including the contents of each of deps"
-          "upgrade:upgrade leiningen to the latest stable release"
-          "version:print leiningen's version"
-        )
+            "classpath:Print the classpath of the current project"
+            "clean:Remove compiled class files and jars from project"
+            "compile:Compile Clojure source into .class files"
+            "deploy:Build jar and deploy to remote repository"
+            "deps:Download :dependencies and put them in :library-path"
+            "help:Display a list of tasks or help for a given task"
+            "install:Install current project or download specified project"
+            "interactive:Enter an interactive task shell. Aliased to 'int'"
+            "jar:Package up all the project's files into a jar file"
+            "javac:Compile Java source files"
+            "new:Create a new project skeleton"
+            "plugin:Manage user-level plugins"
+            "pom:Write a pom.xml file to disk for Maven interop"
+            "repl:Start a repl session either with the current project or standalone"
+            "retest:Run only the test namespaces which failed last time around"
+            "run:Run the project's -main function"
+            "search:Search remote maven repositories for matching jars"
+            "test:Run the project's tests"
+            "test!:Run a project's tests after cleaning and fetching dependencies"
+            "trampoline:Run a task without nesting the project's JVM inside Leiningen's"
+            "uberjar:Package up the project files and all dependencies into a jar file"
+            "upgrade:Upgrade"
+            "version:Print version for Leiningen and the current JVM"
+         )
         _describe -t subcommands 'leiningen subcommands' subcommands && ret=0
     esac
 
