@@ -51,7 +51,7 @@ for plugin ($plugins); do
 done
 
 # Load all of your custom configurations from custom/
-for config_file ($ZSH_CUSTOM/*.zsh(.N)) source $config_file
+for config_file ($ZSH_CUSTOM/*.zsh(N)) source $config_file
 
 # Load the theme
 if [ "$ZSH_THEME" = "random" ]
