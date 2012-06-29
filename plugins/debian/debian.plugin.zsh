@@ -107,6 +107,20 @@ else
         ?not(~n`uname -r`))'\'' root'
 fi
 
+# Completion ################################################################
+
+# TODO: These definitions won't change between apt-get and uptitude automaticaly
+compdef _apt aac="$apt_pref autoclean"
+compdef _apt abd="$apt_pref build-dep"
+compdef _apt ac="$apt_pref clean"
+compdef _apt ad="$apt_pref update"
+compdef _apt afu="$apt_pref update"
+compdef _apt ag="$apt_pref upgrade"
+compdef _apt ai="$apt_pref install"
+compdef _apt ail="$apt_pref install"
+compdef _apt ap="$apt_pref purge"
+compdef _apt ar="$apt_pref remove"
+compdef _apt ads="apt-get dselect-upgrade"
 
 # Misc. #####################################################################
 # print all installed packages
