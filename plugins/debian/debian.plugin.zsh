@@ -56,7 +56,7 @@ if [[ $use_sudo -eq 1 ]]; then
     alias ar='sudo $apt_pref remove'
 
     # apt-get only
-    alias ads='sudo $apt_pref dselect-upgrade'
+    alias ads='sudo apt-get dselect-upgrade'
 
     # Install all .deb files in the current directory.
     # Warning: you will need to put the glob in single quotes if you use:
