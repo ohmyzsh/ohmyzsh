@@ -110,18 +110,39 @@ fi
 
 # Completion ################################################################
 
-# TODO: These definitions won't change between apt-get and uptitude automaticaly
-compdef _apt aac="$apt_pref autoclean"
-compdef _apt abd="$apt_pref build-dep"
-compdef _apt ac="$apt_pref clean"
-compdef _apt ad="$apt_pref update"
-compdef _apt afu="$apt_pref update"
-compdef _apt ag="$apt_pref upgrade"
-compdef _apt ai="$apt_pref install"
-compdef _apt ail="$apt_pref install"
-compdef _apt ap="$apt_pref purge"
-compdef _apt ar="$apt_pref remove"
-compdef _apt ads="apt-get dselect-upgrade"
+#
+# Registers a compdef for $1 that calls $apt_pref with the commands $2
+# To do that it creates a new completion function called _apt_pref_$2
+#
+apt_pref_compdef() {
+    local f fb
+    f="_apt_pref_${2}"
+
+    fb="function ${f}() {
+        shift words; 
+	service=\"\$apt_pref\"; 
+	words=(\"\$apt_pref\" '$2' \$words); 
+	((CURRENT++))
+	test \"\${apt_pref}\" = 'aptitude' && _aptitude || _apt
+    }"
+    
+    eval "$fb"
+    echo "$fb"
+
+    compdef "$f" "$1"
+}
+
+apt_pref_compdef aac "autoclean"
+apt_pref_compdef abd "build-dep"
+apt_pref_compdef ac  "clean"
+apt_pref_compdef ad  "update"
+apt_pref_compdef afu "update"
+apt_pref_compdef ag  "upgrade"
+apt_pref_compdef ai  "install"
+apt_pref_compdef ail "install"
+apt_pref_compdef ap  "purge"
+apt_pref_compdef ar  "remove"
+apt_pref_compdef ads "dselect-upgrade"
 
 # Misc. #####################################################################
 # print all installed packages
