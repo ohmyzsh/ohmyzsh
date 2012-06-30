@@ -118,16 +118,13 @@ apt_pref_compdef() {
     local f fb
     f="_apt_pref_${2}"
 
-    fb="function ${f}() {
+    eval "function ${f}() {
         shift words; 
 	service=\"\$apt_pref\"; 
 	words=(\"\$apt_pref\" '$2' \$words); 
 	((CURRENT++))
 	test \"\${apt_pref}\" = 'aptitude' && _aptitude || _apt
     }"
-    
-    eval "$fb"
-    echo "$fb"
 
     compdef "$f" "$1"
 }
