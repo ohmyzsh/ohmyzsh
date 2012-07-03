@@ -17,6 +17,7 @@ ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%}) "
 if which rbenv &> /dev/null; then
   RPROMPT='%{$fg[red]%}$(rbenv version | sed -e "s/ (set.*$//")%{$reset_color%}'
 else
-if which rvm-prompt &> /dev/null; then
-  RPROMPT='%{$fg[red]%}$(rvm-prompt)%{$reset_color%}'
+  if which rvm-prompt &> /dev/null; then
+    RPROMPT='%{$fg[red]%}$(rvm-prompt)%{$reset_color%}'
+  fi
 fi
