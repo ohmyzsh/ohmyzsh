@@ -53,6 +53,8 @@ if (( CURRENT == 1 )); then
 fi
 
 case "$words[1]" in
+  install)
+    _files ;;
   list)
       if [[ "$state" == forms ]]; then
         _gem_installed
