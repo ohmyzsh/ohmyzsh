@@ -278,66 +278,630 @@ fi
 
 local -a _command_args
 case "$words[1]" in
-    apps:info)
-        _command_args=(
-            '(-r|--raw)'{-r,--raw}'[output info as raw key/value pairs]' \
-                )
-        ;;
-    apps:create)
-        _command_args=(
-            '(-a|--addons)'{-a,--addons}'[a list of addons to install]' \
-                '(-r|--remote)'{-r,--remote}'[the git remote to create, default "heroku"]' \
-                '(-s|--stack)'{-s,--stack}'[the stack on which to create the app]' \
-                )
-        ;;
-    config)
-        _command_args=(
-            '(-s|--shell)'{-s,--shell}'[output config vars in shell format]' \
-                )
-        ;;
-    db:push)
-        _command_args=(
-            '(-c|--chunksize)'{-c,--chunksize}'[specify the number of rows to send in each batch]' \
-                '(-d|--debug)'{-d,--debug}'[enable debugging output]' \
-                '(-e|--exclude)'{-e,--exclude}'[exclude the specified tables from the push]' \
-                '(-f|--filter)'{-f,--filter}'[only push certain tables]' \
-                '(-r|--resume)'{-r,--resume}'[resume transfer described by a .dat file]' \
-                '(-t|--tables)'{-t,--tables}'[only push the specified tables]' \
-                )
-        ;;
-    db:pull)
-        _command_args=(
-            '(-c|--chunksize)'{-c,--chunksize}'[specify the number of rows to send in each batch]' \
-                '(-d|--debug)'{-d,--debug}'[enable debugging output]' \
-                '(-e|--exclude)'{-e,--exclude}'[exclude the specified tables from the pull]' \
-                '(-f|--filter)'{-f,--filter}'[only pull certain tables]' \
-                '(-r|--resume)'{-r,--resume}'[resume transfer described by a .dat file]' \
-                '(-t|--tables)'{-t,--tables}'[only pull the specified tables]' \
-                )
-        ;;
-    keys)
-        _command_args=(
-            '(-l|--long)'{-l,--long}'[display extended information for each key]' \
-                )
-        ;;
-    logs)
-        _command_args=(
-            '(-n|--num)'{-n,--num}'[the number of lines to display]' \
-                '(-p|--ps)'{-p,--ps}'[only display logs from the given process]' \
-                '(-s|--source)'{-s,--source}'[only display logs from the given source]' \
-                '(-t|--tail)'{-t,--tail}'[continually stream logs]' \
-                )
-        ;;
-    pgbackups:capture)
-        _command_args=(
-            '(-e|--expire)'{-e,--expire}'[if no slots are available to capture, delete the oldest backup to make room]' \
-                )
-        ;;
-    stack)
-        _command_args=(
-            '(-a|--all)'{-a,--all}'[include deprecated stacks]' \
-                )
-        ;;
+	add-library)
+		_command_args=('--type')
+	;;
+	add-resources)
+		_command_args=('--target')
+	;;
+	apply-http-lb-changes)
+		_command_args=('--ping')
+	;;
+	backup-domain)
+		_command_args=('--backupconfig' '--backupdir' '--description' '--domaindir' '--long')
+	;;
+	change-admin-password)
+		_command_args=('--domain_name' '--domaindir')
+	;;
+	change-master-password)
+		_command_args=('--domaindir' '--nodedir' '--savemasterpassword')
+	;;
+	collect-log-files)
+		_command_args=('--retrieve' '--target')
+	;;
+	configure-jms-cluster)
+		_command_args=('--clustertype' '--configstoretype' '--dburl' '--dbuser' '--dbvendor' '--jmsdbpassword' '--messagestoretype' '--property')
+	;;
+	configure-lb-weight)
+		_command_args=('--cluster')
+	;;
+	configure-ldap-for-admin)
+		_command_args=('--basedn' '--ldap-group' '--target' '--url')
+	;;
+	copy-config)
+		_command_args=('--systemproperties')
+	;;
+	create-admin-object)
+		_command_args=('--classname' '--description' '--enabled' '--property' '--raname' '--restype' '--target')
+	;;
+	create-application-ref)
+		_command_args=('--enabled' '--lbenabled' '--target' '--virtualservers')
+	;;
+	create-audit-module)
+		_command_args=('--classname' '--property' '--target')
+	;;
+	create-auth-realm)
+		_command_args=('--classname' '--property' '--target')
+	;;
+	create-connector-connection-pool)
+		_command_args=('--associatewiththread' '--connectiondefinition' '--creationretryattempts' '--creationretryinterval' '--description' '--failconnection' '--idletimeout' '--isconnectvalidatereq' '--lazyconnectionassociation' '--lazyconnectionenlistment' '--leakreclaim' '--leaktimeout' '--matchconnections' '--maxconnectionusagecount' '--maxpoolsize' '--maxwait' '--ping' '--pooling' '--poolresize' '--property' '--raname' '--steadypoolsize' '--target' '--transactionsupport' '--validateatmostonceperiod')
+	;;
+	create-connector-resource)
+		_command_args=('--description' '--enabled' '--objecttype' '--poolname' '--property' '--target')
+	;;
+	create-connector-security-map)
+		_command_args=('--mappedpassword' '--mappedusername' '--poolname' '--principals' '--target' '--usergroups')
+	;;
+	create-connector-work-security-map)
+		_command_args=('--description' '--groupsmap' '--principalsmap' '--raname')
+	;;
+	create-custom-resource)
+		_command_args=('--description' '--enabled' '--factoryclass' '--property' '--restype' '--target')
+	;;
+	create-domain)
+		_command_args=('--adminport' '--checkports' '--domaindir' '--domainproperties' '--instanceport' '--keytooloptions' '--nopassword' '--portbase' '--profile' '--savelogin' '--savemasterpassword' '--template' '--usemasterpassword')
+	;;
+	create-file-user)
+		_command_args=('--authrealmname' '--groups' '--target' '--userpassword')
+	;;
+	create-http)
+		_command_args=('--default-virtual-server' '--dns-lookup-enabled' '--max-connection' '--request-timeout-seconds' '--servername' '--target' '--timeout-seconds' '--xpowered')
+	;;
+	create-http-health-checker)
+		_command_args=('--config' '--interval' '--timeout' '--url')
+	;;
+	create-http-lb)
+		_command_args=('--autoapplyenabled' '--devicehost' '--deviceport' '--healthcheckerinterval' '--healthcheckertimeout' '--healthcheckerurl' '--httpsrouting' '--lbenableallapplications' '--lbenableallinstances' '--lbpolicy' '--lbpolicymodule' '--lbweight' '--monitor' '--property' '--reloadinterval' '--responsetimeout' '--routecookie' '--sslproxyhost' '--sslproxyport' '--target')
+	;;
+	create-http-lb-ref)
+		_command_args=('--config' '--healthcheckerinterval' '--healthcheckertimeout' '--healthcheckerurl' '--lbenableallapplications' '--lbenableallinstances' '--lbname' '--lbpolicy' '--lbpolicymodule' '--lbweight')
+	;;
+	create-http-listener)
+		_command_args=('--acceptorthreads' '--default-virtual-server' '--defaultvs' '--enabled' '--listeneraddress' '--listenerport' '--redirectport' '--secure' '--securityenabled' '--servername' '--target' '--xpowered')
+	;;
+	create-http-redirect)
+		_command_args=('--redirect-port' '--secure-redirect' '--target')
+	;;
+	create-iiop-listener)
+		_command_args=('--enabled' '--iiopport' '--listeneraddress' '--property' '--securityenabled' '--target')
+	;;
+	create-instance)
+		_command_args=('--checkports' '--cluster' '--config' '--lbenabled' '--node' '--portbase' '--systemproperties' '--terse')
+	;;
+	create-jacc-provider)
+		_command_args=('--policyconfigfactoryclass' '--policyproviderclass' '--property' '--target')
+	;;
+	create-javamail-resource)
+		_command_args=('--debug' '--description' '--enabled' '--fromaddress' '--mailhost' '--mailuser' '--property' '--storeprotocol' '--storeprotocolclass' '--target' '--transprotocol' '--transprotocolclass')
+	;;
+	create-jdbc-connection-pool)
+		_command_args=('--allownoncomponentcallers' '--associatewiththread' '--creationretryattempts' '--creationretryinterval' '--datasourceclassname' '--description' '--driverclassname' '--failconnection' '--idletimeout' '--initsql' '--isconnectvalidatereq' '--isisolationguaranteed' '--isolationlevel' '--lazyconnectionassociation' '--lazyconnectionenlistment' '--leakreclaim' '--leaktimeout' '--matchconnections' '--maxconnectionusagecount' '--maxpoolsize' '--maxwait' '--nontransactionalconnections' '--ping' '--pooling' '--poolresize' '--property' '--restype' '--sqltracelisteners' '--statementcachesize' '--statementleakreclaim' '--statementleaktimeout' '--statementtimeout' '--steadypoolsize' '--target' '--validateatmostonceperiod' '--validationclassname' '--validationmethod' '--validationtable' '--wrapjdbcobjects')
+	;;
+	create-jdbc-resource)
+		_command_args=('--connectionpoolid' '--description' '--enabled' '--property' '--target')
+	;;
+	create-jms-host)
+		_command_args=('--mqhost' '--mqpassword' '--mqport' '--mquser' '--property' '--target')
+	;;
+	create-jms-resource)
+		_command_args=('--description' '--enabled' '--property' '--restype' '--target')
+	;;
+	create-jmsdest)
+		_command_args=('--desttype' '--property' '--target')
+	;;
+	create-jndi-resource)
+		_command_args=('--description' '--enabled' '--factoryclass' '--jndilookupname' '--property' '--restype' '--target')
+	;;
+	create-jvm-options)
+		_command_args=('--profiler' '--target')
+	;;
+	create-lifecycle-module)
+		_command_args=('--classname' '--classpath' '--description' '--enabled' '--failurefatal' '--loadorder' '--property' '--target')
+	;;
+	create-local-instance)
+		_command_args=('--checkports' '--cluster' '--config' '--lbenabled' '--node' '--nodedir' '--portbase' '--savemasterpassword' '--systemproperties' '--usemasterpassword')
+	;;
+	create-message-security-provider)
+		_command_args=('--classname' '--isdefaultprovider' '--layer' '--property' '--providertype' '--requestauthrecipient' '--requestauthsource' '--responseauthrecipient' '--responseauthsource' '--target')
+	;;
+	create-network-listener)
+		_command_args=('--address' '--enabled' '--jkenabled' '--listenerport' '--protocol' '--target' '--threadpool' '--transport')
+	;;
+	create-node-config)
+		_command_args=('--installdir' '--nodedir' '--nodehost')
+	;;
+	create-node-dcom)
+		_command_args=('--archive' '--force' '--install' '--installdir' '--nodedir' '--nodehost' '--windowsdomain' '--windowspassword' '--windowsuser')
+	;;
+	create-node-ssh)
+		_command_args=('--archive' '--force' '--install' '--installdir' '--nodedir' '--nodehost' '--sshkeyfile' '--sshkeypassphrase' '--sshpassword' '--sshport' '--sshuser')
+	;;
+	create-password-alias)
+		_command_args=('--aliaspassword')
+	;;
+	create-profiler)
+		_command_args=('--classpath' '--enabled' '--nativelibrarypath' '--property' '--target')
+	;;
+	create-protocol)
+		_command_args=('--securityenabled' '--target')
+	;;
+	create-protocol-filter)
+		_command_args=('--classname' '--protocol' '--target')
+	;;
+	create-protocol-finder)
+		_command_args=('--classname' '--protocol' '--target' '--targetprotocol')
+	;;
+	create-resource-adapter-config)
+		_command_args=('--objecttype' '--property' '--target' '--threadpoolid')
+	;;
+	create-resource-ref)
+		_command_args=('--enabled' '--target')
+	;;
+	create-service)
+		_command_args=('--domaindir' '--dry-run' '--force' '--name' '--node' '--nodedir' '--serviceproperties' '--serviceuser')
+	;;
+	create-ssl)
+		_command_args=('--certname' '--clientauthenabled' '--ssl2ciphers' '--ssl2enabled' '--ssl3enabled' '--ssl3tlsciphers' '--target' '--tlsenabled' '--tlsrollbackenabled' '--type')
+	;;
+	create-system-properties)
+		_command_args=('--target')
+	;;
+	create-threadpool)
+		_command_args=('--idletimeout' '--maxqueuesize' '--maxthreadpoolsize' '--minthreadpoolsize' '--target' '--workqueues')
+	;;
+	create-transport)
+		_command_args=('--acceptorthreads' '--buffersizebytes' '--bytebuffertype' '--classname' '--displayconfiguration' '--enablesnoop' '--idlekeytimeoutseconds' '--maxconnectionscount' '--readtimeoutmillis' '--selectionkeyhandler' '--selectorpolltimeoutmillis' '--target' '--tcpnodelay' '--writetimeoutmillis')
+	;;
+	create-virtual-server)
+		_command_args=('--defaultwebmodule' '--hosts' '--httplisteners' '--logfile' '--networklisteners' '--property' '--state' '--target')
+	;;
+	delete-admin-object)
+		_command_args=('--target')
+	;;
+	delete-application-ref)
+		_command_args=('--cascade' '--target')
+	;;
+	delete-audit-module)
+		_command_args=('--target')
+	;;
+	delete-auth-realm)
+		_command_args=('--target')
+	;;
+	delete-connector-connection-pool)
+		_command_args=('--cascade' '--target')
+	;;
+	delete-connector-resource)
+		_command_args=('--target')
+	;;
+	delete-connector-security-map)
+		_command_args=('--poolname' '--target')
+	;;
+	delete-connector-work-security-map)
+		_command_args=('--raname')
+	;;
+	delete-custom-resource)
+		_command_args=('--target')
+	;;
+	delete-domain)
+		_command_args=('--domaindir')
+	;;
+	delete-file-user)
+		_command_args=('--authrealmname' '--target')
+	;;
+	delete-http)
+		_command_args=('--target')
+	;;
+	delete-http-health-checker)
+		_command_args=('--config')
+	;;
+	delete-http-lb-ref)
+		_command_args=('--config' '--force' '--lbname')
+	;;
+	delete-http-listener)
+		_command_args=('--secure' '--target')
+	;;
+	delete-http-redirect)
+		_command_args=('--target')
+	;;
+	delete-iiop-listener)
+		_command_args=('--target')
+	;;
+	delete-instance)
+		_command_args=('--terse')
+	;;
+	delete-jacc-provider)
+		_command_args=('--target')
+	;;
+	delete-javamail-resource)
+		_command_args=('--target')
+	;;
+	delete-jdbc-connection-pool)
+		_command_args=('--cascade' '--target')
+	;;
+	delete-jdbc-resource)
+		_command_args=('--target')
+	;;
+	delete-jms-host)
+		_command_args=('--target')
+	;;
+	delete-jms-resource)
+		_command_args=('--target')
+	;;
+	delete-jmsdest)
+		_command_args=('--desttype' '--target')
+	;;
+	delete-jndi-resource)
+		_command_args=('--target')
+	;;
+	delete-jvm-options)
+		_command_args=('--profiler' '--target')
+	;;
+	delete-lifecycle-module)
+		_command_args=('--target')
+	;;
+	delete-local-instance)
+		_command_args=('--node' '--nodedir')
+	;;
+	delete-log-levels)
+		_command_args=('--target')
+	;;
+	delete-message-security-provider)
+		_command_args=('--layer' '--target')
+	;;
+	delete-network-listener)
+		_command_args=('--target')
+	;;
+	delete-profiler)
+		_command_args=('--target')
+	;;
+	delete-protocol)
+		_command_args=('--target')
+	;;
+	delete-protocol-filter)
+		_command_args=('--protocol' '--target')
+	;;
+	delete-protocol-finder)
+		_command_args=('--protocol' '--target')
+	;;
+	delete-resource-adapter-config)
+		_command_args=('--target')
+	;;
+	delete-resource-ref)
+		_command_args=('--target')
+	;;
+	delete-ssl)
+		_command_args=('--target' '--type')
+	;;
+	delete-system-property)
+		_command_args=('--target')
+	;;
+	delete-threadpool)
+		_command_args=('--target')
+	;;
+	delete-transport)
+		_command_args=('--target')
+	;;
+	delete-virtual-server)
+		_command_args=('--target')
+	;;
+	deploy)
+		_command_args=('--asyncreplication' '--availabilityenabled' '--contextroot' '--createtables' '--dbvendorname' '--deploymentplan' '--description' '--dropandcreatetables' '--enabled' '--force' '--generatermistubs' '--isredeploy' '--keepfailedstubs' '--keepreposdir' '--keepstate' '--lbenabled' '--libraries' '--logreportederrors' '--name' '--precompilejsp' '--properties' '--property' '--retrieve' '--target' '--type' '--uniquetablenames' '--verify' '--virtualservers')
+	;;
+	deploydir)
+		_command_args=('--asyncreplication' '--availabilityenabled' '--contextroot' '--createtables' '--dbvendorname' '--deploymentplan' '--description' '--dropandcreatetables' '--enabled' '--force' '--generatermistubs' '--isredeploy' '--keepfailedstubs' '--keepreposdir' '--keepstate' '--lbenabled' '--libraries' '--logreportederrors' '--name' '--precompilejsp' '--properties' '--property' '--retrieve' '--target' '--type' '--uniquetablenames' '--verify' '--virtualservers')
+	;;
+	disable)
+		_command_args=('--cascade' '--droptables' '--isredeploy' '--isundeploy' '--keepreposdir' '--keepstate' '--properties' '--target')
+	;;
+	disable-http-lb-application)
+		_command_args=('--name' '--timeout')
+	;;
+	disable-http-lb-server)
+		_command_args=('--timeout')
+	;;
+	disable-monitoring)
+		_command_args=('--modules' '--target')
+	;;
+	enable)
+		_command_args=('--target')
+	;;
+	enable-http-lb-application)
+		_command_args=('--name')
+	;;
+	enable-monitoring)
+		_command_args=('--dtrace' '--mbean' '--modules' '--options' '--pid' '--target')
+	;;
+	enable-secure-admin)
+		_command_args=('--adminalias' '--instancealias')
+	;;
+	export-http-lb-config)
+		_command_args=('--config' '--lbname' '--lbtargets' '--property' '--retrievefile')
+	;;
+	export-sync-bundle)
+		_command_args=('--retrieve' '--target')
+	;;
+	flush-connection-pool)
+		_command_args=('--appname' '--modulename')
+	;;
+	flush-jmsdest)
+		_command_args=('--desttype' '--target')
+	;;
+	freeze-transaction-service)
+		_command_args=('--target')
+	;;
+	generate-domain-schema)
+		_command_args=('--format' '--showdeprecated' '--showsubclasses')
+	;;
+	generate-jvm-report)
+		_command_args=('--target' '--type')
+	;;
+	get)
+		_command_args=('--monitor')
+	;;
+	get-client-stubs)
+		_command_args=('--appname')
+	;;
+	import-sync-bundle)
+		_command_args=('--instance' '--node' '--nodedir')
+	;;
+	install-node-dcom)
+		_command_args=('--archive' '--create' '--force' '--installdir' '--save' '--windowsdomain' '--windowsuser')
+	;;
+	install-node-ssh)
+		_command_args=('--archive' '--create' '--force' '--installdir' '--save' '--sshkeyfile' '--sshport' '--sshuser')
+	;;
+	jms-ping)
+		_command_args=('--target')
+	;;
+	list)
+		_command_args=('--monitor')
+	;;
+	list-application-refs)
+		_command_args=('--long' '--terse')
+	;;
+	list-backups)
+		_command_args=('--backupconfig' '--backupdir' '--domaindir' '--long')
+	;;
+	list-commands)
+		_command_args=('--localonly' '--remoteonly')
+	;;
+	list-components)
+		_command_args=('--long' '--resources' '--subcomponents' '--terse' '--type')
+	;;
+	list-connector-security-maps)
+		_command_args=('--long' '--securitymap' '--target')
+	;;
+	list-connector-work-security-maps)
+		_command_args=('--securitymap')
+	;;
+	list-custom-resources)
+		_command_args=('--target')
+	;;
+	list-domains)
+		_command_args=('--domaindir')
+	;;
+	list-file-groups)
+		_command_args=('--authrealmname' '--name')
+	;;
+	list-file-users)
+		_command_args=('--authrealmname')
+	;;
+	list-http-listeners)
+		_command_args=('--long')
+	;;
+	list-instances)
+		_command_args=('--long' '--nostatus' '--standaloneonly' '--timeoutmsec')
+	;;
+	list-javamail-resources)
+		_command_args=('--target')
+	;;
+	list-jms-hosts)
+		_command_args=('--target')
+	;;
+	list-jms-resources)
+		_command_args=('--restype')
+	;;
+	list-jmsdest)
+		_command_args=('--desttype' '--property')
+	;;
+	list-jndi-entries)
+		_command_args=('--context')
+	;;
+	list-jndi-resources)
+		_command_args=('--target')
+	;;
+	list-jvm-options)
+		_command_args=('--profiler' '--target')
+	;;
+	list-libraries)
+		_command_args=('--type')
+	;;
+	list-lifecycle-modules)
+		_command_args=('--terse')
+	;;
+	list-message-security-providers)
+		_command_args=('--layer')
+	;;
+	list-nodes)
+		_command_args=('--long' '--terse')
+	;;
+	list-nodes-config)
+		_command_args=('--long' '--terse')
+	;;
+	list-nodes-dcom)
+		_command_args=('--long' '--terse')
+	;;
+	list-nodes-ssh)
+		_command_args=('--long' '--terse')
+	;;
+	list-persistence-types)
+		_command_args=('--type')
+	;;
+	list-protocol-filters)
+		_command_args=('--target')
+	;;
+	list-protocol-finders)
+		_command_args=('--target')
+	;;
+	list-resource-adapter-configs)
+		_command_args=('--long' '--raname')
+	;;
+	list-sub-components)
+		_command_args=('--appname' '--resources' '--terse' '--type')
+	;;
+	list-virtual-servers)
+		_command_args=('--target')
+	;;
+	list-web-context-param)
+		_command_args=('--name')
+	;;
+	list-web-env-entry)
+		_command_args=('--name')
+	;;
+	login)
+		_command_args=('--target')
+	;;
+	migrate-timers)
+		_command_args=('--target')
+	;;
+	monitor)
+		_command_args=('--filename' '--filter' '--interval' '--type')
+	;;
+	multimode)
+		_command_args=('--encoding' '--file' '--printprompt')
+	;;
+	ping-connection-pool)
+		_command_args=('--appname' '--modulename' '--target')
+	;;
+	recover-transactions)
+		_command_args=('--target' '--transactionlogdir')
+	;;
+	redeploy)
+		_command_args=('--asyncreplication' '--availabilityenabled' '--contextroot' '--createtables' '--dbvendorname' '--deploymentplan' '--description' '--dropandcreatetables' '--enabled' '--force' '--generatermistubs' '--isredeploy' '--keepfailedstubs' '--keepreposdir' '--keepstate' '--lbenabled' '--libraries' '--logreportederrors' '--name' '--precompilejsp' '--properties' '--property' '--retrieve' '--target' '--type' '--uniquetablenames' '--verify' '--virtualservers')
+	;;
+	remove-library)
+		_command_args=('--type')
+	;;
+	restart-domain)
+		_command_args=('--debug' '--domaindir' '--force' '--kill')
+	;;
+	restart-instance)
+		_command_args=('--debug')
+	;;
+	restart-local-instance)
+		_command_args=('--debug' '--force' '--kill' '--node' '--nodedir')
+	;;
+	restore-domain)
+		_command_args=('--backupconfig' '--backupdir' '--description' '--domaindir' '--filename' '--force' '--long')
+	;;
+	rollback-transaction)
+		_command_args=('--target' '--transaction_id')
+	;;
+	rotate-log)
+		_command_args=('--target')
+	;;
+	set-log-attributes)
+		_command_args=('--target')
+	;;
+	set-log-levels)
+		_command_args=('--target')
+	;;
+	set-web-context-param)
+		_command_args=('--description' '--ignoredescriptoritem' '--name' '--value')
+	;;
+	set-web-env-entry)
+		_command_args=('--description' '--ignoredescriptoritem' '--name' '--type' '--value')
+	;;
+	setup-ssh)
+		_command_args=('--generatekey' '--sshkeyfile' '--sshport' '--sshpublickeyfile' '--sshuser')
+	;;
+	show-component-status)
+		_command_args=('--target')
+	;;
+	start-cluster)
+		_command_args=('--autohadboverride' '--verbose')
+	;;
+	start-database)
+		_command_args=('--dbhome' '--dbhost' '--dbport' '--jvmoptions')
+	;;
+	start-domain)
+		_command_args=('--debug' '--domaindir' '--upgrade' '--verbose')
+	;;
+	start-instance)
+		_command_args=('--debug' '--setenv' '--sync' '--terse')
+	;;
+	start-local-instance)
+		_command_args=('--debug' '--node' '--nodedir' '--sync' '--verbose')
+	;;
+	stop-cluster)
+		_command_args=('--autohadboverride' '--kill' '--verbose')
+	;;
+	stop-database)
+		_command_args=('--dbhost' '--dbport' '--dbuser')
+	;;
+	stop-domain)
+		_command_args=('--domaindir' '--force' '--kill')
+	;;
+	stop-instance)
+		_command_args=('--force' '--kill')
+	;;
+	stop-local-instance)
+		_command_args=('--force' '--kill' '--node' '--nodedir')
+	;;
+	undeploy)
+		_command_args=('--cascade' '--droptables' '--isredeploy' '--keepreposdir' '--keepstate' '--properties' '--target')
+	;;
+	unfreeze-transaction-service)
+		_command_args=('--target')
+	;;
+	uninstall-node-dcom)
+		_command_args=('--force' '--installdir' '--windowsdomain' '--windowsuser')
+	;;
+	uninstall-node-ssh)
+		_command_args=('--force' '--installdir' '--sshkeyfile' '--sshport' '--sshuser')
+	;;
+	unset-web-context-param)
+		_command_args=('--name')
+	;;
+	unset-web-env-entry)
+		_command_args=('--name')
+	;;
+	update-connector-security-map)
+		_command_args=('--addprincipals' '--addusergroups' '--mappedpassword' '--mappedusername' '--poolname' '--removeprincipals' '--removeusergroups' '--target')
+	;;
+	update-connector-work-security-map)
+		_command_args=('--addgroups' '--addprincipals' '--raname' '--removegroups' '--removeprincipals')
+	;;
+	update-file-user)
+		_command_args=('--authrealmname' '--groups' '--target' '--userpassword')
+	;;
+	update-node-config)
+		_command_args=('--installdir' '--nodedir' '--nodehost')
+	;;
+	update-node-dcom)
+		_command_args=('--force' '--installdir' '--nodedir' '--nodehost' '--windowsdomain' '--windowspassword' '--windowsuser')
+	;;
+	update-node-ssh)
+		_command_args=('--force' '--installdir' '--nodedir' '--nodehost' '--sshkeyfile' '--sshkeypassphrase' '--sshpassword' '--sshport' '--sshuser')
+	;;
+	update-password-alias)
+		_command_args=('--aliaspassword')
+	;;
+	uptime)
+		_command_args=('--milliseconds')
+	;;
+	validate-dcom)
+		_command_args=('--remotetestdir' '--verbose' '--windowsdomain' '--windowspassword' '--windowsuser')
+	;;
+	validate-multicast)
+		_command_args=('--bindaddress' '--multicastaddress' '--multicastport' '--sendperiod' '--timeout' '--timetolive' '--verbose')
+	;;
+	verify-domain-xml)
+		_command_args=('--domaindir')
+	;;
+	version)
+		_command_args=('--local' '--terse' '--verbose')
+	;;
 esac
 
 _arguments \
