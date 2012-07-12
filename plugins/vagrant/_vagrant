@@ -15,7 +15,7 @@ _1st_arguments=(
     'reload:Reload the vagrant environment'
     'resume:Resumes a suspend vagrant environment'
     'ssh:SSH into the currently running environment'
-    'ssh_config:outputs .ssh/config valid syntax for connecting to this environment via ssh.'
+    'ssh-config:outputs .ssh/config valid syntax for connecting to this environment via ssh.'
     'status:Shows the status of the current Vagrant environment.'
     'suspend:Suspends the currently running vagrant environment'
     'up:Creates the vagrant environment'
