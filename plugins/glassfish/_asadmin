@@ -272,635 +272,635 @@ _1st_arguments=(
 _arguments '*:: :->command'
 
 if (( CURRENT == 1 )); then
-    _describe -t commands "glassfish command" _1st_arguments
+    _describe -t commands "asadmin command" _1st_arguments
     return
 fi
 
 local -a _command_args
 case "$words[1]" in
 	add-library)
-		_command_args=('--type')
+		_command_args=('--type+:type:(common ext app)')
 	;;
 	add-resources)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	apply-http-lb-changes)
-		_command_args=('--ping')
+		_command_args=('--ping+:')
 	;;
 	backup-domain)
-		_command_args=('--backupconfig' '--backupdir' '--description' '--domaindir' '--long')
+		_command_args=('--backupconfig+:' '--backupdir+:' '--description+:' '--domaindir+:' '--long+:long:(true false)')
 	;;
 	change-admin-password)
-		_command_args=('--domain_name' '--domaindir')
+		_command_args=('--domain_name+:' '--domaindir+:')
 	;;
 	change-master-password)
-		_command_args=('--domaindir' '--nodedir' '--savemasterpassword')
+		_command_args=('--domaindir+:' '--nodedir+:' '--savemasterpassword+:savemasterpassword:(true false)')
 	;;
 	collect-log-files)
-		_command_args=('--retrieve' '--target')
+		_command_args=('--retrieve+:retrieve:(true false)' '--target+:')
 	;;
 	configure-jms-cluster)
-		_command_args=('--clustertype' '--configstoretype' '--dburl' '--dbuser' '--dbvendor' '--jmsdbpassword' '--messagestoretype' '--property')
+		_command_args=('--clustertype+:' '--configstoretype+:' '--dburl+:' '--dbuser+:' '--dbvendor+:' '--jmsdbpassword+:' '--messagestoretype+:' '--property+:')
 	;;
 	configure-lb-weight)
-		_command_args=('--cluster')
+		_command_args=('--cluster+:')
 	;;
 	configure-ldap-for-admin)
-		_command_args=('--basedn' '--ldap-group' '--target' '--url')
+		_command_args=('--basedn+:' '--ldap-group+:' '--target+:' '--url+:')
 	;;
 	copy-config)
-		_command_args=('--systemproperties')
+		_command_args=('--systemproperties+:')
 	;;
 	create-admin-object)
-		_command_args=('--classname' '--description' '--enabled' '--property' '--raname' '--restype' '--target')
+		_command_args=('--classname+:' '--description+:' '--enabled+:enabled:(true false)' '--property+:' '--raname+:' '--restype+:' '--target+:')
 	;;
 	create-application-ref)
-		_command_args=('--enabled' '--lbenabled' '--target' '--virtualservers')
+		_command_args=('--enabled+:enabled:(true false)' '--lbenabled+:lbenabled:(true false)' '--target+:' '--virtualservers+:')
 	;;
 	create-audit-module)
-		_command_args=('--classname' '--property' '--target')
+		_command_args=('--classname+:' '--property+:' '--target+:')
 	;;
 	create-auth-realm)
-		_command_args=('--classname' '--property' '--target')
+		_command_args=('--classname+:' '--property+:' '--target+:')
 	;;
 	create-connector-connection-pool)
-		_command_args=('--associatewiththread' '--connectiondefinition' '--creationretryattempts' '--creationretryinterval' '--description' '--failconnection' '--idletimeout' '--isconnectvalidatereq' '--lazyconnectionassociation' '--lazyconnectionenlistment' '--leakreclaim' '--leaktimeout' '--matchconnections' '--maxconnectionusagecount' '--maxpoolsize' '--maxwait' '--ping' '--pooling' '--poolresize' '--property' '--raname' '--steadypoolsize' '--target' '--transactionsupport' '--validateatmostonceperiod')
+		_command_args=('--associatewiththread+:associatewiththread:(true false)' '--connectiondefinition+:' '--creationretryattempts+:' '--creationretryinterval+:' '--description+:' '--failconnection+:failconnection:(true false)' '--idletimeout+:' '--isconnectvalidatereq+:isconnectvalidatereq:(true false)' '--lazyconnectionassociation+:lazyconnectionassociation:(true false)' '--lazyconnectionenlistment+:lazyconnectionenlistment:(true false)' '--leakreclaim+:leakreclaim:(true false)' '--leaktimeout+:' '--matchconnections+:matchconnections:(true false)' '--maxconnectionusagecount+:' '--maxpoolsize+:' '--maxwait+:' '--ping+:ping:(true false)' '--pooling+:pooling:(true false)' '--poolresize+:' '--property+:' '--raname+:' '--steadypoolsize+:' '--target+:' '--transactionsupport+:transactionsupport:(XATransaction LocalTransaction NoTransaction)' '--validateatmostonceperiod+:')
 	;;
 	create-connector-resource)
-		_command_args=('--description' '--enabled' '--objecttype' '--poolname' '--property' '--target')
+		_command_args=('--description+:' '--enabled+:enabled:(true false)' '--objecttype+:' '--poolname+:' '--property+:' '--target+:')
 	;;
 	create-connector-security-map)
-		_command_args=('--mappedpassword' '--mappedusername' '--poolname' '--principals' '--target' '--usergroups')
+		_command_args=('--mappedpassword+:' '--mappedusername+:' '--poolname+:' '--principals+:' '--target+:' '--usergroups+:')
 	;;
 	create-connector-work-security-map)
-		_command_args=('--description' '--groupsmap' '--principalsmap' '--raname')
+		_command_args=('--description+:' '--groupsmap+:' '--principalsmap+:' '--raname+:')
 	;;
 	create-custom-resource)
-		_command_args=('--description' '--enabled' '--factoryclass' '--property' '--restype' '--target')
+		_command_args=('--description+:' '--enabled+:enabled:(true false)' '--factoryclass+:' '--property+:' '--restype+:' '--target+:')
 	;;
 	create-domain)
-		_command_args=('--adminport' '--checkports' '--domaindir' '--domainproperties' '--instanceport' '--keytooloptions' '--nopassword' '--portbase' '--profile' '--savelogin' '--savemasterpassword' '--template' '--usemasterpassword')
+		_command_args=('--adminport+:' '--checkports+:checkports:(true false)' '--domaindir+:' '--domainproperties+:' '--instanceport+:' '--keytooloptions+:' '--nopassword+:nopassword:(true false)' '--portbase+:' '--profile+:' '--savelogin+:savelogin:(true false)' '--savemasterpassword+:savemasterpassword:(true false)' '--template+:' '--usemasterpassword+:usemasterpassword:(true false)')
 	;;
 	create-file-user)
-		_command_args=('--authrealmname' '--groups' '--target' '--userpassword')
+		_command_args=('--authrealmname+:' '--groups+:' '--target+:' '--userpassword+:')
 	;;
 	create-http)
-		_command_args=('--default-virtual-server' '--dns-lookup-enabled' '--max-connection' '--request-timeout-seconds' '--servername' '--target' '--timeout-seconds' '--xpowered')
+		_command_args=('--default-virtual-server+:' '--dns-lookup-enabled+:dns-lookup-enabled:(true false)' '--max-connection+:' '--request-timeout-seconds+:' '--servername+:' '--target+:' '--timeout-seconds+:' '--xpowered+:xpowered:(true false)')
 	;;
 	create-http-health-checker)
-		_command_args=('--config' '--interval' '--timeout' '--url')
+		_command_args=('--config+:' '--interval+:' '--timeout+:' '--url+:')
 	;;
 	create-http-lb)
-		_command_args=('--autoapplyenabled' '--devicehost' '--deviceport' '--healthcheckerinterval' '--healthcheckertimeout' '--healthcheckerurl' '--httpsrouting' '--lbenableallapplications' '--lbenableallinstances' '--lbpolicy' '--lbpolicymodule' '--lbweight' '--monitor' '--property' '--reloadinterval' '--responsetimeout' '--routecookie' '--sslproxyhost' '--sslproxyport' '--target')
+		_command_args=('--autoapplyenabled+:autoapplyenabled:(true false)' '--devicehost+:' '--deviceport+:' '--healthcheckerinterval+:' '--healthcheckertimeout+:' '--healthcheckerurl+:' '--httpsrouting+:httpsrouting:(true false)' '--lbenableallapplications+:' '--lbenableallinstances+:' '--lbpolicy+:' '--lbpolicymodule+:' '--lbweight+:' '--monitor+:monitor:(true false)' '--property+:' '--reloadinterval+:' '--responsetimeout+:' '--routecookie+:routecookie:(true false)' '--sslproxyhost+:' '--sslproxyport+:' '--target+:')
 	;;
 	create-http-lb-ref)
-		_command_args=('--config' '--healthcheckerinterval' '--healthcheckertimeout' '--healthcheckerurl' '--lbenableallapplications' '--lbenableallinstances' '--lbname' '--lbpolicy' '--lbpolicymodule' '--lbweight')
+		_command_args=('--config+:' '--healthcheckerinterval+:' '--healthcheckertimeout+:' '--healthcheckerurl+:' '--lbenableallapplications+:' '--lbenableallinstances+:' '--lbname+:' '--lbpolicy+:' '--lbpolicymodule+:' '--lbweight+:')
 	;;
 	create-http-listener)
-		_command_args=('--acceptorthreads' '--default-virtual-server' '--defaultvs' '--enabled' '--listeneraddress' '--listenerport' '--redirectport' '--secure' '--securityenabled' '--servername' '--target' '--xpowered')
+		_command_args=('--acceptorthreads+:' '--default-virtual-server+:' '--defaultvs+:' '--enabled+:enabled:(true false)' '--listeneraddress+:' '--listenerport+:' '--redirectport+:' '--secure+:secure:(true false)' '--securityenabled+:securityenabled:(true false)' '--servername+:' '--target+:' '--xpowered+:xpowered:(true false)')
 	;;
 	create-http-redirect)
-		_command_args=('--redirect-port' '--secure-redirect' '--target')
+		_command_args=('--redirect-port+:' '--secure-redirect+:' '--target+:')
 	;;
 	create-iiop-listener)
-		_command_args=('--enabled' '--iiopport' '--listeneraddress' '--property' '--securityenabled' '--target')
+		_command_args=('--enabled+:enabled:(true false)' '--iiopport+:' '--listeneraddress+:' '--property+:' '--securityenabled+:securityenabled:(true false)' '--target+:')
 	;;
 	create-instance)
-		_command_args=('--checkports' '--cluster' '--config' '--lbenabled' '--node' '--portbase' '--systemproperties' '--terse')
+		_command_args=('--checkports+:checkports:(true false)' '--cluster+:' '--config+:' '--lbenabled+:lbenabled:(true false)' '--node+:' '--portbase+:' '--systemproperties+:' '--terse+:terse:(true false)')
 	;;
 	create-jacc-provider)
-		_command_args=('--policyconfigfactoryclass' '--policyproviderclass' '--property' '--target')
+		_command_args=('--policyconfigfactoryclass+:' '--policyproviderclass+:' '--property+:' '--target+:')
 	;;
 	create-javamail-resource)
-		_command_args=('--debug' '--description' '--enabled' '--fromaddress' '--mailhost' '--mailuser' '--property' '--storeprotocol' '--storeprotocolclass' '--target' '--transprotocol' '--transprotocolclass')
+		_command_args=('--debug+:debug:(true false)' '--description+:' '--enabled+:enabled:(true false)' '--fromaddress+:' '--mailhost+:' '--mailuser+:' '--property+:' '--storeprotocol+:' '--storeprotocolclass+:' '--target+:' '--transprotocol+:' '--transprotocolclass+:')
 	;;
 	create-jdbc-connection-pool)
-		_command_args=('--allownoncomponentcallers' '--associatewiththread' '--creationretryattempts' '--creationretryinterval' '--datasourceclassname' '--description' '--driverclassname' '--failconnection' '--idletimeout' '--initsql' '--isconnectvalidatereq' '--isisolationguaranteed' '--isolationlevel' '--lazyconnectionassociation' '--lazyconnectionenlistment' '--leakreclaim' '--leaktimeout' '--matchconnections' '--maxconnectionusagecount' '--maxpoolsize' '--maxwait' '--nontransactionalconnections' '--ping' '--pooling' '--poolresize' '--property' '--restype' '--sqltracelisteners' '--statementcachesize' '--statementleakreclaim' '--statementleaktimeout' '--statementtimeout' '--steadypoolsize' '--target' '--validateatmostonceperiod' '--validationclassname' '--validationmethod' '--validationtable' '--wrapjdbcobjects')
+		_command_args=('--allownoncomponentcallers+:allownoncomponentcallers:(true false)' '--associatewiththread+:associatewiththread:(true false)' '--creationretryattempts+:' '--creationretryinterval+:' '--datasourceclassname+:' '--description+:' '--driverclassname+:' '--failconnection+:failconnection:(true false)' '--idletimeout+:' '--initsql+:' '--isconnectvalidatereq+:isconnectvalidatereq:(true false)' '--isisolationguaranteed+:isisolationguaranteed:(true false)' '--isolationlevel+:' '--lazyconnectionassociation+:lazyconnectionassociation:(true false)' '--lazyconnectionenlistment+:lazyconnectionenlistment:(true false)' '--leakreclaim+:leakreclaim:(true false)' '--leaktimeout+:' '--matchconnections+:matchconnections:(true false)' '--maxconnectionusagecount+:' '--maxpoolsize+:' '--maxwait+:' '--nontransactionalconnections+:nontransactionalconnections:(true false)' '--ping+:ping:(true false)' '--pooling+:pooling:(true false)' '--poolresize+:' '--property+:' '--restype+:restype:(javax.sql.DataSource javax.sql.XADataSource javax.sql.ConnectionPoolDataSource java.sql.Driver)' '--sqltracelisteners+:' '--statementcachesize+:' '--statementleakreclaim+:statementleakreclaim:(true false)' '--statementleaktimeout+:' '--statementtimeout+:' '--steadypoolsize+:' '--target+:' '--validateatmostonceperiod+:' '--validationclassname+:' '--validationmethod+:validationmethod:(auto-commit meta-data table custom-validation)' '--validationtable+:' '--wrapjdbcobjects+:wrapjdbcobjects:(true false)')
 	;;
 	create-jdbc-resource)
-		_command_args=('--connectionpoolid' '--description' '--enabled' '--property' '--target')
+		_command_args=('--connectionpoolid+:' '--description+:' '--enabled+:enabled:(true false)' '--property+:' '--target+:')
 	;;
 	create-jms-host)
-		_command_args=('--mqhost' '--mqpassword' '--mqport' '--mquser' '--property' '--target')
+		_command_args=('--mqhost+:' '--mqpassword+:' '--mqport+:' '--mquser+:' '--property+:' '--target+:')
 	;;
 	create-jms-resource)
-		_command_args=('--description' '--enabled' '--property' '--restype' '--target')
+		_command_args=('--description+:' '--enabled+:enabled:(true false)' '--property+:' '--restype+:' '--target+:')
 	;;
 	create-jmsdest)
-		_command_args=('--desttype' '--property' '--target')
+		_command_args=('--desttype+:' '--property+:' '--target+:')
 	;;
 	create-jndi-resource)
-		_command_args=('--description' '--enabled' '--factoryclass' '--jndilookupname' '--property' '--restype' '--target')
+		_command_args=('--description+:' '--enabled+:enabled:(true false)' '--factoryclass+:' '--jndilookupname+:' '--property+:' '--restype+:' '--target+:')
 	;;
 	create-jvm-options)
-		_command_args=('--profiler' '--target')
+		_command_args=('--profiler+:profiler:(true false)' '--target+:')
 	;;
 	create-lifecycle-module)
-		_command_args=('--classname' '--classpath' '--description' '--enabled' '--failurefatal' '--loadorder' '--property' '--target')
+		_command_args=('--classname+:' '--classpath+:' '--description+:' '--enabled+:enabled:(true false)' '--failurefatal+:failurefatal:(true false)' '--loadorder+:' '--property+:' '--target+:')
 	;;
 	create-local-instance)
-		_command_args=('--checkports' '--cluster' '--config' '--lbenabled' '--node' '--nodedir' '--portbase' '--savemasterpassword' '--systemproperties' '--usemasterpassword')
+		_command_args=('--checkports+:checkports:(true false)' '--cluster+:' '--config+:' '--lbenabled+:lbenabled:(true false)' '--node+:' '--nodedir+:' '--portbase+:' '--savemasterpassword+:savemasterpassword:(true false)' '--systemproperties+:' '--usemasterpassword+:usemasterpassword:(true false)')
 	;;
 	create-message-security-provider)
-		_command_args=('--classname' '--isdefaultprovider' '--layer' '--property' '--providertype' '--requestauthrecipient' '--requestauthsource' '--responseauthrecipient' '--responseauthsource' '--target')
+		_command_args=('--classname+:' '--isdefaultprovider+:isdefaultprovider:(true false)' '--layer+:layer:(SOAP HttpServlet)' '--property+:' '--providertype+:providertype:(client server client-server)' '--requestauthrecipient+:' '--requestauthsource+:' '--responseauthrecipient+:' '--responseauthsource+:' '--target+:')
 	;;
 	create-network-listener)
-		_command_args=('--address' '--enabled' '--jkenabled' '--listenerport' '--protocol' '--target' '--threadpool' '--transport')
+		_command_args=('--address+:' '--enabled+:enabled:(true false)' '--jkenabled+:jkenabled:(true false)' '--listenerport+:' '--protocol+:' '--target+:' '--threadpool+:' '--transport+:')
 	;;
 	create-node-config)
-		_command_args=('--installdir' '--nodedir' '--nodehost')
+		_command_args=('--installdir+:' '--nodedir+:' '--nodehost+:')
 	;;
 	create-node-dcom)
-		_command_args=('--archive' '--force' '--install' '--installdir' '--nodedir' '--nodehost' '--windowsdomain' '--windowspassword' '--windowsuser')
+		_command_args=('--archive+:' '--force+:force:(true false)' '--install+:install:(true false)' '--installdir+:' '--nodedir+:' '--nodehost+:' '--windowsdomain+:' '--windowspassword+:' '--windowsuser+:')
 	;;
 	create-node-ssh)
-		_command_args=('--archive' '--force' '--install' '--installdir' '--nodedir' '--nodehost' '--sshkeyfile' '--sshkeypassphrase' '--sshpassword' '--sshport' '--sshuser')
+		_command_args=('--archive+:' '--force+:force:(true false)' '--install+:install:(true false)' '--installdir+:' '--nodedir+:' '--nodehost+:' '--sshkeyfile+:' '--sshkeypassphrase+:' '--sshpassword+:' '--sshport+:' '--sshuser+:')
 	;;
 	create-password-alias)
-		_command_args=('--aliaspassword')
+		_command_args=('--aliaspassword+:')
 	;;
 	create-profiler)
-		_command_args=('--classpath' '--enabled' '--nativelibrarypath' '--property' '--target')
+		_command_args=('--classpath+:' '--enabled+:enabled:(true false)' '--nativelibrarypath+:' '--property+:' '--target+:')
 	;;
 	create-protocol)
-		_command_args=('--securityenabled' '--target')
+		_command_args=('--securityenabled+:securityenabled:(true false)' '--target+:')
 	;;
 	create-protocol-filter)
-		_command_args=('--classname' '--protocol' '--target')
+		_command_args=('--classname+:' '--protocol+:' '--target+:')
 	;;
 	create-protocol-finder)
-		_command_args=('--classname' '--protocol' '--target' '--targetprotocol')
+		_command_args=('--classname+:' '--protocol+:' '--target+:' '--targetprotocol+:')
 	;;
 	create-resource-adapter-config)
-		_command_args=('--objecttype' '--property' '--target' '--threadpoolid')
+		_command_args=('--objecttype+:' '--property+:' '--target+:' '--threadpoolid+:')
 	;;
 	create-resource-ref)
-		_command_args=('--enabled' '--target')
+		_command_args=('--enabled+:enabled:(true false)' '--target+:')
 	;;
 	create-service)
-		_command_args=('--domaindir' '--dry-run' '--force' '--name' '--node' '--nodedir' '--serviceproperties' '--serviceuser')
+		_command_args=('--domaindir+:' '--dry-run+:dry-run:(true false)' '--force+:force:(true false)' '--name+:' '--node+:' '--nodedir+:' '--serviceproperties+:' '--serviceuser+:')
 	;;
 	create-ssl)
-		_command_args=('--certname' '--clientauthenabled' '--ssl2ciphers' '--ssl2enabled' '--ssl3enabled' '--ssl3tlsciphers' '--target' '--tlsenabled' '--tlsrollbackenabled' '--type')
+		_command_args=('--certname+:' '--clientauthenabled+:clientauthenabled:(true false)' '--ssl2ciphers+:' '--ssl2enabled+:ssl2enabled:(true false)' '--ssl3enabled+:ssl3enabled:(true false)' '--ssl3tlsciphers+:' '--target+:' '--tlsenabled+:tlsenabled:(true false)' '--tlsrollbackenabled+:tlsrollbackenabled:(true false)' '--type+:type:(network-listener http-listener iiop-listener iiop-service jmx-connector)')
 	;;
 	create-system-properties)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	create-threadpool)
-		_command_args=('--idletimeout' '--maxqueuesize' '--maxthreadpoolsize' '--minthreadpoolsize' '--target' '--workqueues')
+		_command_args=('--idletimeout+:' '--maxqueuesize+:' '--maxthreadpoolsize+:' '--minthreadpoolsize+:' '--target+:' '--workqueues+:')
 	;;
 	create-transport)
-		_command_args=('--acceptorthreads' '--buffersizebytes' '--bytebuffertype' '--classname' '--displayconfiguration' '--enablesnoop' '--idlekeytimeoutseconds' '--maxconnectionscount' '--readtimeoutmillis' '--selectionkeyhandler' '--selectorpolltimeoutmillis' '--target' '--tcpnodelay' '--writetimeoutmillis')
+		_command_args=('--acceptorthreads+:' '--buffersizebytes+:' '--bytebuffertype+:' '--classname+:' '--displayconfiguration+:displayconfiguration:(true false)' '--enablesnoop+:enablesnoop:(true false)' '--idlekeytimeoutseconds+:' '--maxconnectionscount+:' '--readtimeoutmillis+:' '--selectionkeyhandler+:' '--selectorpolltimeoutmillis+:' '--target+:' '--tcpnodelay+:tcpnodelay:(true false)' '--writetimeoutmillis+:')
 	;;
 	create-virtual-server)
-		_command_args=('--defaultwebmodule' '--hosts' '--httplisteners' '--logfile' '--networklisteners' '--property' '--state' '--target')
+		_command_args=('--defaultwebmodule+:' '--hosts+:' '--httplisteners+:' '--logfile+:' '--networklisteners+:' '--property+:' '--state+:state:(on off disabled)' '--target+:')
 	;;
 	delete-admin-object)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	delete-application-ref)
-		_command_args=('--cascade' '--target')
+		_command_args=('--cascade+:cascade:(true false)' '--target+:')
 	;;
 	delete-audit-module)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	delete-auth-realm)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	delete-connector-connection-pool)
-		_command_args=('--cascade' '--target')
+		_command_args=('--cascade+:cascade:(true false)' '--target+:')
 	;;
 	delete-connector-resource)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	delete-connector-security-map)
-		_command_args=('--poolname' '--target')
+		_command_args=('--poolname+:' '--target+:')
 	;;
 	delete-connector-work-security-map)
-		_command_args=('--raname')
+		_command_args=('--raname+:')
 	;;
 	delete-custom-resource)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	delete-domain)
-		_command_args=('--domaindir')
+		_command_args=('--domaindir+:')
 	;;
 	delete-file-user)
-		_command_args=('--authrealmname' '--target')
+		_command_args=('--authrealmname+:' '--target+:')
 	;;
 	delete-http)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	delete-http-health-checker)
-		_command_args=('--config')
+		_command_args=('--config+:')
 	;;
 	delete-http-lb-ref)
-		_command_args=('--config' '--force' '--lbname')
+		_command_args=('--config+:' '--force+:' '--lbname+:')
 	;;
 	delete-http-listener)
-		_command_args=('--secure' '--target')
+		_command_args=('--secure+:' '--target+:')
 	;;
 	delete-http-redirect)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	delete-iiop-listener)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	delete-instance)
-		_command_args=('--terse')
+		_command_args=('--terse+:terse:(true false)')
 	;;
 	delete-jacc-provider)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	delete-javamail-resource)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	delete-jdbc-connection-pool)
-		_command_args=('--cascade' '--target')
+		_command_args=('--cascade+:cascade:(true false)' '--target+:')
 	;;
 	delete-jdbc-resource)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	delete-jms-host)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	delete-jms-resource)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	delete-jmsdest)
-		_command_args=('--desttype' '--target')
+		_command_args=('--desttype+:' '--target+:')
 	;;
 	delete-jndi-resource)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	delete-jvm-options)
-		_command_args=('--profiler' '--target')
+		_command_args=('--profiler+:profiler:(true false)' '--target+:')
 	;;
 	delete-lifecycle-module)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	delete-local-instance)
-		_command_args=('--node' '--nodedir')
+		_command_args=('--node+:' '--nodedir+:')
 	;;
 	delete-log-levels)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	delete-message-security-provider)
-		_command_args=('--layer' '--target')
+		_command_args=('--layer+:' '--target+:')
 	;;
 	delete-network-listener)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	delete-profiler)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	delete-protocol)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	delete-protocol-filter)
-		_command_args=('--protocol' '--target')
+		_command_args=('--protocol+:' '--target+:')
 	;;
 	delete-protocol-finder)
-		_command_args=('--protocol' '--target')
+		_command_args=('--protocol+:' '--target+:')
 	;;
 	delete-resource-adapter-config)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	delete-resource-ref)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	delete-ssl)
-		_command_args=('--target' '--type')
+		_command_args=('--target+:' '--type+:type:(network-listener http-listener iiop-listener iiop-service jmx-connector)')
 	;;
 	delete-system-property)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	delete-threadpool)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	delete-transport)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	delete-virtual-server)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	deploy)
-		_command_args=('--asyncreplication' '--availabilityenabled' '--contextroot' '--createtables' '--dbvendorname' '--deploymentplan' '--description' '--dropandcreatetables' '--enabled' '--force' '--generatermistubs' '--isredeploy' '--keepfailedstubs' '--keepreposdir' '--keepstate' '--lbenabled' '--libraries' '--logreportederrors' '--name' '--precompilejsp' '--properties' '--property' '--retrieve' '--target' '--type' '--uniquetablenames' '--verify' '--virtualservers')
+		_command_args=('--asyncreplication+:asyncreplication:(true false)' '--availabilityenabled+:availabilityenabled:(true false)' '--contextroot+:' '--createtables+:createtables:(true false)' '--dbvendorname+:' '--deploymentplan+:' '--description+:' '--dropandcreatetables+:dropandcreatetables:(true false)' '--enabled+:enabled:(true false)' '--force+:force:(true false)' '--generatermistubs+:generatermistubs:(true false)' '--isredeploy+:isredeploy:(true false)' '--keepfailedstubs+:keepfailedstubs:(true false)' '--keepreposdir+:keepreposdir:(true false)' '--keepstate+:keepstate:(true false)' '--lbenabled+:lbenabled:(true false)' '--libraries+:' '--logreportederrors+:logreportederrors:(true false)' '--name+:' '--precompilejsp+:precompilejsp:(true false)' '--properties+:' '--property+:' '--retrieve+:' '--target+:' '--type+:' '--uniquetablenames+:uniquetablenames:(true false)' '--verify+:verify:(true false)' '--virtualservers+:')
 	;;
 	deploydir)
-		_command_args=('--asyncreplication' '--availabilityenabled' '--contextroot' '--createtables' '--dbvendorname' '--deploymentplan' '--description' '--dropandcreatetables' '--enabled' '--force' '--generatermistubs' '--isredeploy' '--keepfailedstubs' '--keepreposdir' '--keepstate' '--lbenabled' '--libraries' '--logreportederrors' '--name' '--precompilejsp' '--properties' '--property' '--retrieve' '--target' '--type' '--uniquetablenames' '--verify' '--virtualservers')
+		_command_args=('--asyncreplication+:asyncreplication:(true false)' '--availabilityenabled+:availabilityenabled:(true false)' '--contextroot+:' '--createtables+:createtables:(true false)' '--dbvendorname+:' '--deploymentplan+:' '--description+:' '--dropandcreatetables+:dropandcreatetables:(true false)' '--enabled+:enabled:(true false)' '--force+:force:(true false)' '--generatermistubs+:generatermistubs:(true false)' '--isredeploy+:isredeploy:(true false)' '--keepfailedstubs+:keepfailedstubs:(true false)' '--keepreposdir+:keepreposdir:(true false)' '--keepstate+:keepstate:(true false)' '--lbenabled+:lbenabled:(true false)' '--libraries+:' '--logreportederrors+:logreportederrors:(true false)' '--name+:' '--precompilejsp+:precompilejsp:(true false)' '--properties+:' '--property+:' '--retrieve+:' '--target+:' '--type+:' '--uniquetablenames+:uniquetablenames:(true false)' '--verify+:verify:(true false)' '--virtualservers+:')
 	;;
 	disable)
-		_command_args=('--cascade' '--droptables' '--isredeploy' '--isundeploy' '--keepreposdir' '--keepstate' '--properties' '--target')
+		_command_args=('--cascade+:cascade:(true false)' '--droptables+:droptables:(true false)' '--isredeploy+:isredeploy:(true false)' '--isundeploy+:isundeploy:(true false)' '--keepreposdir+:keepreposdir:(true false)' '--keepstate+:keepstate:(true false)' '--properties+:' '--target+:')
 	;;
 	disable-http-lb-application)
-		_command_args=('--name' '--timeout')
+		_command_args=('--name+:' '--timeout+:')
 	;;
 	disable-http-lb-server)
-		_command_args=('--timeout')
+		_command_args=('--timeout+:')
 	;;
 	disable-monitoring)
-		_command_args=('--modules' '--target')
+		_command_args=('--modules+:' '--target+:')
 	;;
 	enable)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	enable-http-lb-application)
-		_command_args=('--name')
+		_command_args=('--name+:')
 	;;
 	enable-monitoring)
-		_command_args=('--dtrace' '--mbean' '--modules' '--options' '--pid' '--target')
+		_command_args=('--dtrace+:dtrace:(true false)' '--mbean+:mbean:(true false)' '--modules+:' '--options+:' '--pid+:' '--target+:')
 	;;
 	enable-secure-admin)
-		_command_args=('--adminalias' '--instancealias')
+		_command_args=('--adminalias+:' '--instancealias+:')
 	;;
 	export-http-lb-config)
-		_command_args=('--config' '--lbname' '--lbtargets' '--property' '--retrievefile')
+		_command_args=('--config+:' '--lbname+:' '--lbtargets+:' '--property+:' '--retrievefile+:retrievefile:(true false)')
 	;;
 	export-sync-bundle)
-		_command_args=('--retrieve' '--target')
+		_command_args=('--retrieve+:retrieve:(true false)' '--target+:')
 	;;
 	flush-connection-pool)
-		_command_args=('--appname' '--modulename')
+		_command_args=('--appname+:' '--modulename+:')
 	;;
 	flush-jmsdest)
-		_command_args=('--desttype' '--target')
+		_command_args=('--desttype+:' '--target+:')
 	;;
 	freeze-transaction-service)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	generate-domain-schema)
-		_command_args=('--format' '--showdeprecated' '--showsubclasses')
+		_command_args=('--format+:' '--showdeprecated+:showdeprecated:(true false)' '--showsubclasses+:showsubclasses:(true false)')
 	;;
 	generate-jvm-report)
-		_command_args=('--target' '--type')
+		_command_args=('--target+:' '--type+:type:(summary thread class memory log)')
 	;;
 	get)
-		_command_args=('--monitor')
+		_command_args=('--monitor+:monitor:(true false)')
 	;;
 	get-client-stubs)
-		_command_args=('--appname')
+		_command_args=('--appname+:')
 	;;
 	import-sync-bundle)
-		_command_args=('--instance' '--node' '--nodedir')
+		_command_args=('--instance+:' '--node+:' '--nodedir+:')
 	;;
 	install-node-dcom)
-		_command_args=('--archive' '--create' '--force' '--installdir' '--save' '--windowsdomain' '--windowsuser')
+		_command_args=('--archive+:' '--create+:create:(true false)' '--force+:force:(true false)' '--installdir+:' '--save+:save:(true false)' '--windowsdomain+:' '--windowsuser+:')
 	;;
 	install-node-ssh)
-		_command_args=('--archive' '--create' '--force' '--installdir' '--save' '--sshkeyfile' '--sshport' '--sshuser')
+		_command_args=('--archive+:' '--create+:create:(true false)' '--force+:force:(true false)' '--installdir+:' '--save+:save:(true false)' '--sshkeyfile+:' '--sshport+:' '--sshuser+:')
 	;;
 	jms-ping)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	list)
-		_command_args=('--monitor')
+		_command_args=('--monitor+:monitor:(true false)')
 	;;
 	list-application-refs)
-		_command_args=('--long' '--terse')
+		_command_args=('--long+:long:(true false)' '--terse+:terse:(true false)')
 	;;
 	list-backups)
-		_command_args=('--backupconfig' '--backupdir' '--domaindir' '--long')
+		_command_args=('--backupconfig+:' '--backupdir+:' '--domaindir+:' '--long+:long:(true false)')
 	;;
 	list-commands)
-		_command_args=('--localonly' '--remoteonly')
+		_command_args=('--localonly+:localonly:(true false)' '--remoteonly+:remoteonly:(true false)')
 	;;
 	list-components)
-		_command_args=('--long' '--resources' '--subcomponents' '--terse' '--type')
+		_command_args=('--long+:long:(true false)' '--resources+:resources:(true false)' '--subcomponents+:subcomponents:(true false)' '--terse+:terse:(true false)' '--type+:')
 	;;
 	list-connector-security-maps)
-		_command_args=('--long' '--securitymap' '--target')
+		_command_args=('--long+:long:(true false)' '--securitymap+:' '--target+:')
 	;;
 	list-connector-work-security-maps)
-		_command_args=('--securitymap')
+		_command_args=('--securitymap+:')
 	;;
 	list-custom-resources)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	list-domains)
-		_command_args=('--domaindir')
+		_command_args=('--domaindir+:')
 	;;
 	list-file-groups)
-		_command_args=('--authrealmname' '--name')
+		_command_args=('--authrealmname+:' '--name+:')
 	;;
 	list-file-users)
-		_command_args=('--authrealmname')
+		_command_args=('--authrealmname+:')
 	;;
 	list-http-listeners)
-		_command_args=('--long')
+		_command_args=('--long+:long:(true false)')
 	;;
 	list-instances)
-		_command_args=('--long' '--nostatus' '--standaloneonly' '--timeoutmsec')
+		_command_args=('--long+:long:(true false)' '--nostatus+:nostatus:(true false)' '--standaloneonly+:standaloneonly:(true false)' '--timeoutmsec+:')
 	;;
 	list-javamail-resources)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	list-jms-hosts)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	list-jms-resources)
-		_command_args=('--restype')
+		_command_args=('--restype+:')
 	;;
 	list-jmsdest)
-		_command_args=('--desttype' '--property')
+		_command_args=('--desttype+:' '--property+:')
 	;;
 	list-jndi-entries)
-		_command_args=('--context')
+		_command_args=('--context+:')
 	;;
 	list-jndi-resources)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	list-jvm-options)
-		_command_args=('--profiler' '--target')
+		_command_args=('--profiler+:profiler:(true false)' '--target+:')
 	;;
 	list-libraries)
-		_command_args=('--type')
+		_command_args=('--type+:type:(common ext app)')
 	;;
 	list-lifecycle-modules)
-		_command_args=('--terse')
+		_command_args=('--terse+:terse:(true false)')
 	;;
 	list-message-security-providers)
-		_command_args=('--layer')
+		_command_args=('--layer+:layer:(SOAP HttpServlet)')
 	;;
 	list-nodes)
-		_command_args=('--long' '--terse')
+		_command_args=('--long+:long:(true false)' '--terse+:terse:(true false)')
 	;;
 	list-nodes-config)
-		_command_args=('--long' '--terse')
+		_command_args=('--long+:long:(true false)' '--terse+:terse:(true false)')
 	;;
 	list-nodes-dcom)
-		_command_args=('--long' '--terse')
+		_command_args=('--long+:long:(true false)' '--terse+:terse:(true false)')
 	;;
 	list-nodes-ssh)
-		_command_args=('--long' '--terse')
+		_command_args=('--long+:long:(true false)' '--terse+:terse:(true false)')
 	;;
 	list-persistence-types)
-		_command_args=('--type')
+		_command_args=('--type+:')
 	;;
 	list-protocol-filters)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	list-protocol-finders)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	list-resource-adapter-configs)
-		_command_args=('--long' '--raname')
+		_command_args=('--long+:long:(true false)' '--raname+:')
 	;;
 	list-sub-components)
-		_command_args=('--appname' '--resources' '--terse' '--type')
+		_command_args=('--appname+:' '--resources+:resources:(true false)' '--terse+:terse:(true false)' '--type+:')
 	;;
 	list-virtual-servers)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	list-web-context-param)
-		_command_args=('--name')
+		_command_args=('--name+:')
 	;;
 	list-web-env-entry)
-		_command_args=('--name')
+		_command_args=('--name+:')
 	;;
 	login)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	migrate-timers)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	monitor)
-		_command_args=('--filename' '--filter' '--interval' '--type')
+		_command_args=('--filename+:' '--filter+:' '--interval+:' '--type+:')
 	;;
 	multimode)
-		_command_args=('--encoding' '--file' '--printprompt')
+		_command_args=('--encoding+:' '--file+:' '--printprompt+:printprompt:(true false)')
 	;;
 	ping-connection-pool)
-		_command_args=('--appname' '--modulename' '--target')
+		_command_args=('--appname+:' '--modulename+:' '--target+:')
 	;;
 	recover-transactions)
-		_command_args=('--target' '--transactionlogdir')
+		_command_args=('--target+:' '--transactionlogdir+:')
 	;;
 	redeploy)
-		_command_args=('--asyncreplication' '--availabilityenabled' '--contextroot' '--createtables' '--dbvendorname' '--deploymentplan' '--description' '--dropandcreatetables' '--enabled' '--force' '--generatermistubs' '--isredeploy' '--keepfailedstubs' '--keepreposdir' '--keepstate' '--lbenabled' '--libraries' '--logreportederrors' '--name' '--precompilejsp' '--properties' '--property' '--retrieve' '--target' '--type' '--uniquetablenames' '--verify' '--virtualservers')
+		_command_args=('--asyncreplication+:asyncreplication:(true false)' '--availabilityenabled+:availabilityenabled:(true false)' '--contextroot+:' '--createtables+:createtables:(true false)' '--dbvendorname+:' '--deploymentplan+:' '--description+:' '--dropandcreatetables+:dropandcreatetables:(true false)' '--enabled+:enabled:(true false)' '--force+:force:(true false)' '--generatermistubs+:generatermistubs:(true false)' '--isredeploy+:isredeploy:(true false)' '--keepfailedstubs+:keepfailedstubs:(true false)' '--keepreposdir+:keepreposdir:(true false)' '--keepstate+:keepstate:(true false)' '--lbenabled+:lbenabled:(true false)' '--libraries+:' '--logreportederrors+:logreportederrors:(true false)' '--name+:' '--precompilejsp+:precompilejsp:(true false)' '--properties+:' '--property+:' '--retrieve+:' '--target+:' '--type+:' '--uniquetablenames+:uniquetablenames:(true false)' '--verify+:verify:(true false)' '--virtualservers+:')
 	;;
 	remove-library)
-		_command_args=('--type')
+		_command_args=('--type+:type:(common ext app)')
 	;;
 	restart-domain)
-		_command_args=('--debug' '--domaindir' '--force' '--kill')
+		_command_args=('--debug+:debug:(true false)' '--domaindir+:' '--force+:force:(true false)' '--kill+:kill:(true false)')
 	;;
 	restart-instance)
-		_command_args=('--debug')
+		_command_args=('--debug+:')
 	;;
 	restart-local-instance)
-		_command_args=('--debug' '--force' '--kill' '--node' '--nodedir')
+		_command_args=('--debug+:debug:(true false)' '--force+:force:(true false)' '--kill+:kill:(true false)' '--node+:' '--nodedir+:')
 	;;
 	restore-domain)
-		_command_args=('--backupconfig' '--backupdir' '--description' '--domaindir' '--filename' '--force' '--long')
+		_command_args=('--backupconfig+:' '--backupdir+:' '--description+:' '--domaindir+:' '--filename+:' '--force+:force:(true false)' '--long+:long:(true false)')
 	;;
 	rollback-transaction)
-		_command_args=('--target' '--transaction_id')
+		_command_args=('--target+:' '--transaction_id+:')
 	;;
 	rotate-log)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	set-log-attributes)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	set-log-levels)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	set-web-context-param)
-		_command_args=('--description' '--ignoredescriptoritem' '--name' '--value')
+		_command_args=('--description+:' '--ignoredescriptoritem+:ignoredescriptoritem:(true false)' '--name+:' '--value+:')
 	;;
 	set-web-env-entry)
-		_command_args=('--description' '--ignoredescriptoritem' '--name' '--type' '--value')
+		_command_args=('--description+:' '--ignoredescriptoritem+:ignoredescriptoritem:(true false)' '--name+:' '--type+:' '--value+:')
 	;;
 	setup-ssh)
-		_command_args=('--generatekey' '--sshkeyfile' '--sshport' '--sshpublickeyfile' '--sshuser')
+		_command_args=('--generatekey+:generatekey:(true false)' '--sshkeyfile+:' '--sshport+:' '--sshpublickeyfile+:' '--sshuser+:')
 	;;
 	show-component-status)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	start-cluster)
-		_command_args=('--autohadboverride' '--verbose')
+		_command_args=('--autohadboverride+:autohadboverride:(true false)' '--verbose+:verbose:(true false)')
 	;;
 	start-database)
-		_command_args=('--dbhome' '--dbhost' '--dbport' '--jvmoptions')
+		_command_args=('--dbhome+:' '--dbhost+:' '--dbport+:' '--jvmoptions+:')
 	;;
 	start-domain)
-		_command_args=('--debug' '--domaindir' '--upgrade' '--verbose')
+		_command_args=('--debug+:debug:(true false)' '--domaindir+:' '--upgrade+:upgrade:(true false)' '--verbose+:verbose:(true false)')
 	;;
 	start-instance)
-		_command_args=('--debug' '--setenv' '--sync' '--terse')
+		_command_args=('--debug+:debug:(true false)' '--setenv+:' '--sync+:sync:(none normal full)' '--terse+:terse:(true false)')
 	;;
 	start-local-instance)
-		_command_args=('--debug' '--node' '--nodedir' '--sync' '--verbose')
+		_command_args=('--debug+:debug:(true false)' '--node+:' '--nodedir+:' '--sync+:sync:(none normal full)' '--verbose+:verbose:(true false)')
 	;;
 	stop-cluster)
-		_command_args=('--autohadboverride' '--kill' '--verbose')
+		_command_args=('--autohadboverride+:autohadboverride:(true false)' '--kill+:kill:(true false)' '--verbose+:verbose:(true false)')
 	;;
 	stop-database)
-		_command_args=('--dbhost' '--dbport' '--dbuser')
+		_command_args=('--dbhost+:' '--dbport+:' '--dbuser+:')
 	;;
 	stop-domain)
-		_command_args=('--domaindir' '--force' '--kill')
+		_command_args=('--domaindir+:' '--force+:force:(true false)' '--kill+:kill:(true false)')
 	;;
 	stop-instance)
-		_command_args=('--force' '--kill')
+		_command_args=('--force+:force:(true false)' '--kill+:kill:(true false)')
 	;;
 	stop-local-instance)
-		_command_args=('--force' '--kill' '--node' '--nodedir')
+		_command_args=('--force+:force:(true false)' '--kill+:kill:(true false)' '--node+:' '--nodedir+:')
 	;;
 	undeploy)
-		_command_args=('--cascade' '--droptables' '--isredeploy' '--keepreposdir' '--keepstate' '--properties' '--target')
+		_command_args=('--cascade+:cascade:(true false)' '--droptables+:droptables:(true false)' '--isredeploy+:isredeploy:(true false)' '--keepreposdir+:keepreposdir:(true false)' '--keepstate+:keepstate:(true false)' '--properties+:' '--target+:')
 	;;
 	unfreeze-transaction-service)
-		_command_args=('--target')
+		_command_args=('--target+:')
 	;;
 	uninstall-node-dcom)
-		_command_args=('--force' '--installdir' '--windowsdomain' '--windowsuser')
+		_command_args=('--force+:force:(true false)' '--installdir+:' '--windowsdomain+:' '--windowsuser+:')
 	;;
 	uninstall-node-ssh)
-		_command_args=('--force' '--installdir' '--sshkeyfile' '--sshport' '--sshuser')
+		_command_args=('--force+:force:(true false)' '--installdir+:' '--sshkeyfile+:' '--sshport+:' '--sshuser+:')
 	;;
 	unset-web-context-param)
-		_command_args=('--name')
+		_command_args=('--name+:')
 	;;
 	unset-web-env-entry)
-		_command_args=('--name')
+		_command_args=('--name+:')
 	;;
 	update-connector-security-map)
-		_command_args=('--addprincipals' '--addusergroups' '--mappedpassword' '--mappedusername' '--poolname' '--removeprincipals' '--removeusergroups' '--target')
+		_command_args=('--addprincipals+:' '--addusergroups+:' '--mappedpassword+:' '--mappedusername+:' '--poolname+:' '--removeprincipals+:' '--removeusergroups+:' '--target+:')
 	;;
 	update-connector-work-security-map)
-		_command_args=('--addgroups' '--addprincipals' '--raname' '--removegroups' '--removeprincipals')
+		_command_args=('--addgroups+:' '--addprincipals+:' '--raname+:' '--removegroups+:' '--removeprincipals+:')
 	;;
 	update-file-user)
-		_command_args=('--authrealmname' '--groups' '--target' '--userpassword')
+		_command_args=('--authrealmname+:' '--groups+:' '--target+:' '--userpassword+:')
 	;;
 	update-node-config)
-		_command_args=('--installdir' '--nodedir' '--nodehost')
+		_command_args=('--installdir+:' '--nodedir+:' '--nodehost+:')
 	;;
 	update-node-dcom)
-		_command_args=('--force' '--installdir' '--nodedir' '--nodehost' '--windowsdomain' '--windowspassword' '--windowsuser')
+		_command_args=('--force+:force:(true false)' '--installdir+:' '--nodedir+:' '--nodehost+:' '--windowsdomain+:' '--windowspassword+:' '--windowsuser+:')
 	;;
 	update-node-ssh)
-		_command_args=('--force' '--installdir' '--nodedir' '--nodehost' '--sshkeyfile' '--sshkeypassphrase' '--sshpassword' '--sshport' '--sshuser')
+		_command_args=('--force+:force:(true false)' '--installdir+:' '--nodedir+:' '--nodehost+:' '--sshkeyfile+:' '--sshkeypassphrase+:' '--sshpassword+:' '--sshport+:' '--sshuser+:')
 	;;
 	update-password-alias)
-		_command_args=('--aliaspassword')
+		_command_args=('--aliaspassword+:')
 	;;
 	uptime)
-		_command_args=('--milliseconds')
+		_command_args=('--milliseconds+:milliseconds:(true false)')
 	;;
 	validate-dcom)
-		_command_args=('--remotetestdir' '--verbose' '--windowsdomain' '--windowspassword' '--windowsuser')
+		_command_args=('--remotetestdir+:' '--verbose+:verbose:(true false)' '--windowsdomain+:' '--windowspassword+:' '--windowsuser+:')
 	;;
 	validate-multicast)
-		_command_args=('--bindaddress' '--multicastaddress' '--multicastport' '--sendperiod' '--timeout' '--timetolive' '--verbose')
+		_command_args=('--bindaddress+:' '--multicastaddress+:' '--multicastport+:' '--sendperiod+:' '--timeout+:' '--timetolive+:' '--verbose+:verbose:(true false)')
 	;;
 	verify-domain-xml)
-		_command_args=('--domaindir')
+		_command_args=('--domaindir+:')
 	;;
 	version)
-		_command_args=('--local' '--terse' '--verbose')
+		_command_args=('--local+:local:(true false)' '--terse+:terse:(true false)' '--verbose+:verbose:(true false)')
 	;;
 esac
 
