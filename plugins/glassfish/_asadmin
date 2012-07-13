@@ -279,10 +279,10 @@ fi
 local -a _command_args
 case "$words[1]" in
 	add-library)
-		_command_args=('--type+:type:(common ext app)')
+		_command_args=('*:directory:_files' '--type+:type:(common ext app)')
 	;;
 	add-resources)
-		_command_args=('--target+:')
+		_command_args=('*:directory:_files' '--target+:')
 	;;
 	apply-http-lb-changes)
 		_command_args=('--ping+:')
@@ -438,7 +438,7 @@ case "$words[1]" in
 		_command_args=('--enabled+:enabled:(true false)' '--target+:')
 	;;
 	create-service)
-		_command_args=('--domaindir+:' '--dry-run+:dry-run:(true false)' '--force+:force:(true false)' '--name+:' '--node+:' '--nodedir+:' '--serviceproperties+:' '--serviceuser+:')
+		_command_args=('--domaindir+:domaindir:directory:_files' '--dry-run+:dry-run:(true false)' '--force+:force:(true false)' '--name+:' '--node+:' '--nodedir+:' '--serviceproperties+:' '--serviceuser+:')
 	;;
 	create-ssl)
 		_command_args=('--certname+:' '--clientauthenabled+:clientauthenabled:(true false)' '--ssl2ciphers+:' '--ssl2enabled+:ssl2enabled:(true false)' '--ssl3enabled+:ssl3enabled:(true false)' '--ssl3tlsciphers+:' '--target+:' '--tlsenabled+:tlsenabled:(true false)' '--tlsrollbackenabled+:tlsrollbackenabled:(true false)' '--type+:type:(network-listener http-listener iiop-listener iiop-service jmx-connector)')
@@ -585,10 +585,10 @@ case "$words[1]" in
 		_command_args=('--target+:')
 	;;
 	deploy)
-		_command_args=('--asyncreplication+:asyncreplication:(true false)' '--availabilityenabled+:availabilityenabled:(true false)' '--contextroot+:' '--createtables+:createtables:(true false)' '--dbvendorname+:' '--deploymentplan+:' '--description+:' '--dropandcreatetables+:dropandcreatetables:(true false)' '--enabled+:enabled:(true false)' '--force+:force:(true false)' '--generatermistubs+:generatermistubs:(true false)' '--isredeploy+:isredeploy:(true false)' '--keepfailedstubs+:keepfailedstubs:(true false)' '--keepreposdir+:keepreposdir:(true false)' '--keepstate+:keepstate:(true false)' '--lbenabled+:lbenabled:(true false)' '--libraries+:' '--logreportederrors+:logreportederrors:(true false)' '--name+:' '--precompilejsp+:precompilejsp:(true false)' '--properties+:' '--property+:' '--retrieve+:' '--target+:' '--type+:' '--uniquetablenames+:uniquetablenames:(true false)' '--verify+:verify:(true false)' '--virtualservers+:')
+		_command_args=('*:directory:_files' '--asyncreplication+:asyncreplication:(true false)' '--availabilityenabled+:availabilityenabled:(true false)' '--contextroot+:' '--createtables+:createtables:(true false)' '--dbvendorname+:' '--deploymentplan+:deploymentplan:directory:_files' '--description+:' '--dropandcreatetables+:dropandcreatetables:(true false)' '--enabled+:enabled:(true false)' '--force+:force:(true false)' '--generatermistubs+:generatermistubs:(true false)' '--isredeploy+:isredeploy:(true false)' '--keepfailedstubs+:keepfailedstubs:(true false)' '--keepreposdir+:keepreposdir:(true false)' '--keepstate+:keepstate:(true false)' '--lbenabled+:lbenabled:(true false)' '--libraries+:' '--logreportederrors+:logreportederrors:(true false)' '--name+:' '--precompilejsp+:precompilejsp:(true false)' '--properties+:' '--property+:' '--retrieve+:' '--target+:' '--type+:' '--uniquetablenames+:uniquetablenames:(true false)' '--verify+:verify:(true false)' '--virtualservers+:')
 	;;
 	deploydir)
-		_command_args=('--asyncreplication+:asyncreplication:(true false)' '--availabilityenabled+:availabilityenabled:(true false)' '--contextroot+:' '--createtables+:createtables:(true false)' '--dbvendorname+:' '--deploymentplan+:' '--description+:' '--dropandcreatetables+:dropandcreatetables:(true false)' '--enabled+:enabled:(true false)' '--force+:force:(true false)' '--generatermistubs+:generatermistubs:(true false)' '--isredeploy+:isredeploy:(true false)' '--keepfailedstubs+:keepfailedstubs:(true false)' '--keepreposdir+:keepreposdir:(true false)' '--keepstate+:keepstate:(true false)' '--lbenabled+:lbenabled:(true false)' '--libraries+:' '--logreportederrors+:logreportederrors:(true false)' '--name+:' '--precompilejsp+:precompilejsp:(true false)' '--properties+:' '--property+:' '--retrieve+:' '--target+:' '--type+:' '--uniquetablenames+:uniquetablenames:(true false)' '--verify+:verify:(true false)' '--virtualservers+:')
+		_command_args=('*:directory:_files' '--asyncreplication+:asyncreplication:(true false)' '--availabilityenabled+:availabilityenabled:(true false)' '--contextroot+:' '--createtables+:createtables:(true false)' '--dbvendorname+:' '--deploymentplan+:deploymentplan:directory:_files' '--description+:' '--dropandcreatetables+:dropandcreatetables:(true false)' '--enabled+:enabled:(true false)' '--force+:force:(true false)' '--generatermistubs+:generatermistubs:(true false)' '--isredeploy+:isredeploy:(true false)' '--keepfailedstubs+:keepfailedstubs:(true false)' '--keepreposdir+:keepreposdir:(true false)' '--keepstate+:keepstate:(true false)' '--lbenabled+:lbenabled:(true false)' '--libraries+:' '--logreportederrors+:logreportederrors:(true false)' '--name+:' '--precompilejsp+:precompilejsp:(true false)' '--properties+:' '--property+:' '--retrieve+:' '--target+:' '--type+:' '--uniquetablenames+:uniquetablenames:(true false)' '--verify+:verify:(true false)' '--virtualservers+:')
 	;;
 	disable)
 		_command_args=('--cascade+:cascade:(true false)' '--droptables+:droptables:(true false)' '--isredeploy+:isredeploy:(true false)' '--isundeploy+:isundeploy:(true false)' '--keepreposdir+:keepreposdir:(true false)' '--keepstate+:keepstate:(true false)' '--properties+:' '--target+:')
@@ -765,10 +765,10 @@ case "$words[1]" in
 		_command_args=('--target+:')
 	;;
 	monitor)
-		_command_args=('--filename+:' '--filter+:' '--interval+:' '--type+:')
+		_command_args=('--filename+:filename:directory:_files' '--filter+:' '--interval+:' '--type+:')
 	;;
 	multimode)
-		_command_args=('--encoding+:' '--file+:' '--printprompt+:printprompt:(true false)')
+		_command_args=('--encoding+:' '--file+:file:directory:_files' '--printprompt+:printprompt:(true false)')
 	;;
 	ping-connection-pool)
 		_command_args=('--appname+:' '--modulename+:' '--target+:')
@@ -777,7 +777,7 @@ case "$words[1]" in
 		_command_args=('--target+:' '--transactionlogdir+:')
 	;;
 	redeploy)
-		_command_args=('--asyncreplication+:asyncreplication:(true false)' '--availabilityenabled+:availabilityenabled:(true false)' '--contextroot+:' '--createtables+:createtables:(true false)' '--dbvendorname+:' '--deploymentplan+:' '--description+:' '--dropandcreatetables+:dropandcreatetables:(true false)' '--enabled+:enabled:(true false)' '--force+:force:(true false)' '--generatermistubs+:generatermistubs:(true false)' '--isredeploy+:isredeploy:(true false)' '--keepfailedstubs+:keepfailedstubs:(true false)' '--keepreposdir+:keepreposdir:(true false)' '--keepstate+:keepstate:(true false)' '--lbenabled+:lbenabled:(true false)' '--libraries+:' '--logreportederrors+:logreportederrors:(true false)' '--name+:' '--precompilejsp+:precompilejsp:(true false)' '--properties+:' '--property+:' '--retrieve+:' '--target+:' '--type+:' '--uniquetablenames+:uniquetablenames:(true false)' '--verify+:verify:(true false)' '--virtualservers+:')
+		_command_args=('*:directory:_files' '--asyncreplication+:asyncreplication:(true false)' '--availabilityenabled+:availabilityenabled:(true false)' '--contextroot+:' '--createtables+:createtables:(true false)' '--dbvendorname+:' '--deploymentplan+:deploymentplan:directory:_files' '--description+:' '--dropandcreatetables+:dropandcreatetables:(true false)' '--enabled+:enabled:(true false)' '--force+:force:(true false)' '--generatermistubs+:generatermistubs:(true false)' '--isredeploy+:isredeploy:(true false)' '--keepfailedstubs+:keepfailedstubs:(true false)' '--keepreposdir+:keepreposdir:(true false)' '--keepstate+:keepstate:(true false)' '--lbenabled+:lbenabled:(true false)' '--libraries+:' '--logreportederrors+:logreportederrors:(true false)' '--name+:' '--precompilejsp+:precompilejsp:(true false)' '--properties+:' '--property+:' '--retrieve+:' '--target+:' '--type+:' '--uniquetablenames+:uniquetablenames:(true false)' '--verify+:verify:(true false)' '--virtualservers+:')
 	;;
 	remove-library)
 		_command_args=('--type+:type:(common ext app)')
