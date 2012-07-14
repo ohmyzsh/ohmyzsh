@@ -92,5 +92,6 @@ alias whats-my-ip="curl -s checkip.dyndns.org | grep -Eo '[0-9\.]+'"
 # Annoyances
 alias heroku='nocorrect heroku'
 alias jitsu='nocorrect jitsu'
+alias guard='bundle exec guard'
 
 
