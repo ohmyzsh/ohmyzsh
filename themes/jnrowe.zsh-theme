@@ -1,3 +1,4 @@
+autoload -U colors && colors
 autoload -U add-zsh-hook
 autoload -Uz vcs_info
 
@@ -8,9 +9,10 @@ zstyle ':vcs_info:*' formats \
 zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
 zstyle ':vcs_info:*' enable git
 
-add-zsh-hook precmd prompt_jnrowe_precmd
+add-zsh-hook precmd prompt_vcs
+add-zsh-hook precmd prompt_host
 
-prompt_jnrowe_precmd () {
+prompt_vcs () {
     vcs_info
 
     if [ "${vcs_info_msg_0_}" = "" ]; then
@@ -24,8 +26,17 @@ prompt_jnrowe_precmd () {
     fi
 }
 
+prompt_host () {
+    if [[ -n "$SSH_CLIENT" ]]; then
+        host=" ($HOST)"
+    else
+        host=''
+    fi
+}
+
+
 local ret_status="%(?:%{$fg_bold[green]%}Ξ:%{$fg_bold[red]%}%S↑%s%?)"
 
-PROMPT='${ret_status}%{$fg_bold[green]%}%p %{$fg_bold[yellow]%}%2~ ${vcs_info_msg_0_}${dir_status}%{$reset_color%} '
+PROMPT='${ret_status}%{$fg[blue]%}${host}%{$fg_bold[green]%}%p %{$fg_bold[yellow]%}%2~ ${vcs_info_msg_0_}${dir_status}%{$reset_color%} '
 
 #  vim: set ft=zsh ts=4 sw=4 et:
