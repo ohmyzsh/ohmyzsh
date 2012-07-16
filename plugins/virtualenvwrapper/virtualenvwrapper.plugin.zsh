@@ -1,5 +1,5 @@
 WRAPPER_FOUND=0
-for wrapsource in "/usr/local/bin/virtualenvwrapper.sh" "/etc/bash_completion.d/virtualenvwrapper" ; do
+for wrapsource in "/usr/bin/virtualenvwrapper.sh" "/usr/local/bin/virtualenvwrapper.sh" "/etc/bash_completion.d/virtualenvwrapper" ; do
   if [[ -e $wrapsource ]] ; then
     WRAPPER_FOUND=1
     source $wrapsource
