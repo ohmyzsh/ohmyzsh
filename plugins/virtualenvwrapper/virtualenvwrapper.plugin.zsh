@@ -1,5 +1,5 @@
 WRAPPER_FOUND=0
-for wrapsource in "/usr/local/bin/virtualenvwrapper.sh" "/etc/bash_completion.d/virtualenvwrapper" ; do
+for wrapsource in "/usr/bin/virtualenvwrapper.sh" "/usr/local/bin/virtualenvwrapper.sh" "/etc/bash_completion.d/virtualenvwrapper" ; do
   if [[ -e $wrapsource ]] ; then
     WRAPPER_FOUND=1
     source $wrapsource
@@ -10,11 +10,9 @@ for wrapsource in "/usr/local/bin/virtualenvwrapper.sh" "/etc/bash_completion.d/
       # by placing a .venv file in the project root with a virtualenv name in it
       function workon_cwd {
           # Check that this is a Git repo
-          GIT_DIR=`git rev-parse --git-dir 2> /dev/null`
+          PROJECT_ROOT=`git rev-parse --show-toplevel 2> /dev/null`
           if (( $? == 0 )); then
-              # Find the repo root and check for virtualenv name override
-              GIT_DIR=`readlink -f $GIT_DIR`
-              PROJECT_ROOT=`dirname "$GIT_DIR"`
+              # Check for virtualenv name override
               ENV_NAME=`basename "$PROJECT_ROOT"`
               if [[ -f "$PROJECT_ROOT/.venv" ]]; then
                   ENV_NAME=`cat "$PROJECT_ROOT/.venv"`
@@ -30,6 +28,7 @@ for wrapsource in "/usr/local/bin/virtualenvwrapper.sh" "/etc/bash_completion.d/
               # Note: this only happens if the virtualenv was activated automatically
               deactivate && unset CD_VIRTUAL_ENV
           fi
+          unset PROJECT_ROOT
       }
 
       # New cd function that does the virtualenv magic
