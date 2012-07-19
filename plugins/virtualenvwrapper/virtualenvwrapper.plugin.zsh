@@ -37,10 +37,8 @@ for wrapsource in "/usr/bin/virtualenvwrapper.sh" "/usr/local/bin/virtualenvwrap
         fi
       }
 
-      # New cd function that does the virtualenv magic
-      function cd {
-        builtin cd "$@" && _workon_cwd
-      }
+      # Add hook to chpwd function
+      add-zsh-hook chpwd _workon_cwd
     fi
 
     break
