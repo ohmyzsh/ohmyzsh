@@ -1,3 +1,7 @@
+# dhodgkin theme
+# copyright (C) 2011 Damien Hodgkin.
+# ----------------------------------
+
 local user='%{$fg[magenta]%}%n@%{$fg[magenta]%}%m%{$reset_color%}'
 local pwd='%{$fg[blue]%}%c%{$reset_color%}'
 local rvm='%{$fg[green]%}‹$(rvm-prompt i v g)›%{$reset_color%}'
