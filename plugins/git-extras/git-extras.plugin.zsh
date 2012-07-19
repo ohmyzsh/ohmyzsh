@@ -1,4 +1,24 @@
 #compdef git
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for git-extras (http://github.com/visionmedia/git-extras).
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Alexis GRIMALDI (https://github.com/agrimaldi)
+#
+# ------------------------------------------------------------------------------
+# Inspirations
+# -----------
+#
+#  * git-extras (http://github.com/visionmedia/git-extras)
+#  * git-flow-completion (http://github.com/bobthecow/git-flow-completion)
+#
+# ------------------------------------------------------------------------------
 
 
 __git_command_successful () {
