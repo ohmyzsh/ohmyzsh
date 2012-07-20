@@ -95,7 +95,7 @@ __git_author_names() {
 
 _git-changelog() {
     _arguments \
-        '(-l --list)'{-l, --list}'[list commits]' \
+        '(-l --list)'{-l,--list}'[list commits]' \
 }
 
 
