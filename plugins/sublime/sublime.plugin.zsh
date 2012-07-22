@@ -2,8 +2,10 @@
 #unamestr = 'uname'
 
 if [[ $('uname') == 'Linux' ]]; then
-	alias st='/usr/bin/sublime_text&'
+        runst() { nohup /usr/bin/sublime-text $@ > /dev/null & }
+        alias st=runst
 elif  [[ $('uname') == 'Darwin' ]]; then
-	alias st='/Applications/Sublime\ Text\ 2.app/Contents/SharedSupport/bin/subl'
+        alias st='open -a /Applications/Sublime\ Text\ 2.app'
 fi
 alias stt='st .'
+
