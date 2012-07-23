@@ -25,7 +25,14 @@ function box_name {
 }
 
 
-local rvm_ruby='‹$(rvm-prompt i v g)›%{$reset_color%}'
+local rvm_ruby=''
+if which rvm-prompt &> /dev/null; then
+  rvm_ruby='‹$(rvm-prompt i v g)›%{$reset_color%}'
+else
+  if which rbenv &> /dev/null; then
+    rvm_ruby='‹$(rbenv version | sed -e "s/ (set.*$//")›%{$reset_color%}'
+  fi
+fi
 local current_dir='${PWD/#$HOME/~}'
 local git_info='$(git_prompt_info)'
 
