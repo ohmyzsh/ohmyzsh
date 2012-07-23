@@ -37,70 +37,6 @@ function prompt_char {
     echo "${fg[blue]}○${reset_color}"
 }
 
-function battery_charge {
-    [[ ! ($1 == "arrows" || $1 == "steps") ]] && print "usage $0 arrows|steps [opt: CurrentCapacity]" && exit
-    [[ -e /usr/bin/pmset ]] || return
-
-    s=`pmset -g ps`
-    # "Currently drawing from 'AC Power'"
-    # "-InternalBattery-0   54%; charging; 0:51 remaining"
-
-    [[ -z $s ]] && return
-    [[ -z $1 && -z $2 ]] && return
-    [[ $1 == 'arrows' ]] && base=10
-    [[ $1 == 'steps' ]] && base=8
-
-    [[ ! -z $2 ]] && cur=$2
-
-    percent=`pmset -g batt | awk '/-InternalBattery-0/ {print $2}'`
-    percent=${percent%%%*}
-
-    fuel=$(( $percent / $base ))
-    # fuel=`echo "scale=1; $percent/$base" | bc -q`
-
-    # color=""
-    # if [[ $fuel -ge 9 ]]; then
-    # 	#full
-    # 	color="$terminfo[bold]$fg[green]"
-    # elif [[ $fuel -ge 8 ]]; then
-    # 	#good
-    # 	color="$fg[green]"
-    # elif [[ $fuel -ge 5 ]]; then
-    # 	#ok
-    # 	color="$fg[orange]"
-    # elif [[ $fuel -ge 3 ]]; then
-    # 	#low
-    # 	color="$terminfo[bold]$fg[yellow]"
-    # elif [[ $fuel -ge 1 ]]; then
-    # 	#bad
-    # 	color="$fg[red]"
-    # fi
-
-    if [[ $1 == arrows ]]; then
-    	full='▶'
-    	part='▷'
-    	display=""
-    	for (( i = 1; i <= $fuel; i++ )); do
-    		display=$display$full
-    	done
-    	for (( i = $fuel; i < 10; i++ )); do
-    		display=$display$part
-    	done
-    fi
-
-    if [[ $1 == steps ]]; then
-    	level="▁▂▃▄▅▆▇▉"
-    	for (( i = 1; i <= $fuel; i++ )); do
-    		display=$display$level[$i]
-    	done
-    	for (( i = $fuel; i < 8; i++ )); do
-    		display=" "$display
-    	done
-    fi
-
-    print "${display}"
-}
-
 function virtualenv_info {
     [ $VIRTUAL_ENV ] && echo "${blue_op}$fg[magenta]"`basename $VIRTUAL_ENV`"$fg[reset]${blue_cp}─"
 }
@@ -119,26 +55,12 @@ function hg_prompt_info() {
 patches: <patches|join( → )|pre_applied(%{$fg[yellow]%})|post_applied(%{$reset_color%})|pre_unapplied(%{$fg_bold[black]%})|post_unapplied(%{$reset_color%})>>" 2>/dev/null
 }
 
-
-function parse_git_dirty2() {
-  gitstat=$(git status -u 2>/dev/null | grep '\(# Untracked\|# Changes\|# Changed but not updated:\)'&)
-  if [[ $(echo ${gitstat} | grep -c "^# Changes to be committed:$") > 0 ]]; then
-    echo -n "$ZSH_THEME_GIT_PROMPT_DIRTY"
-      fi
-  if [[ $(echo ${gitstat} | grep -c "^\(# Untracked files:\|# Changed but not updated:\)$") > 0 ]]; then
-    echo -n "$ZSH_THEME_GIT_PROMPT_UNTRACKED"
-  fi
-  if [[ $(echo ${gitstat} | grep -v '^$' | wc -l | tr -d ' ') == 0 ]]; then
-    echo -n "$ZSH_THEME_GIT_PROMPT_CLEAN"
-  fi
-}
-
 # get the name of the branch we are on
 function git_prompt_info2() {
   ref=$(git symbolic-ref HEAD 2> /dev/null) || return
   branch=${ref#refs/heads/}
   sha=$(git rev-parse --short ${branch})
-  echo "$ZSH_THEME_GIT_PROMPT_PREFIX${branch}%{$fg[green]%}@%{$fg[magenta]%}${sha}$ZSH_THEME_GIT_PROMPT_SUFFIX$(parse_git_dirty2)"
+  echo "$ZSH_THEME_GIT_PROMPT_PREFIX${branch}%{$fg[green]%}@%{$fg[magenta]%}${sha}$ZSH_THEME_GIT_PROMPT_SUFFIX$(parse_git_dirty)"
 }
 
 PROMPT='╭─$(virtualenv_info)$(prompt_char)$(git_prompt_info2)─${user_host}─${path_p}─${panic}-${ret_status}─${hist_no}
@@ -146,6 +68,5 @@ PROMPT='╭─$(virtualenv_info)$(prompt_char)$(git_prompt_info2)─${user_host}
 PROMPT2='${blue_ob}$_${blue_cb}> '
 
 # righthand side
-
-RPROMPT='$(battery_charge arrows)'
+RPROMPT='$(battery_pct_prompt)'
 
