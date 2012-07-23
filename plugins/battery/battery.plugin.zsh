@@ -12,6 +12,21 @@ if [[ $(acpi 2&>/dev/null | grep -c '^Battery.*Discharging') -gt 0 ]] ; then
     fi
     echo "%{$fg[$color]%}[$(battery_pct_remaining)%%]%{$reset_color%}"
   }
+elif [[ -e /usr/bin/pmset ]] ; then
+  function battery_pct_remaining() { echo "$(pmset -g ps | tr -cd '[:digit:][:blank:]:' | awk '{print $2}')"}
+  function battery_time_remaining() { echo "$(pmset -g ps | tr -cd '[:digit:][:blank:]:' | awk '{print $3}')"}
+  function battery_pct_prompt() {
+    b=$(battery_pct_remaining)
+    display=""
+    if [[ $1 == steps ]] ; then
+      fuel=$(( $b / 12.5 ))
+      echo ${(r:$fuel::▁▂▃▄▅▆▇█:)}
+    else ;
+      fuel=$(( $b / 10 ))
+      remainder=$(( 10 - $fuel ))
+      echo ${(r:$fuel::▶:)}${(l:$remainder::▷:)}
+    fi
+  }
 else
   error_msg='no battery'
   function battery_pct_remaining() { echo $error_msg }
