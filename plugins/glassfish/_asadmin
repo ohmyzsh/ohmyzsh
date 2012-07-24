@@ -559,13 +559,13 @@ case "$words[1]" in
         _command_args=('--host+:' '--port+:' '--target+:')
         ;;
     delete-node-config)
-        _command_args=('--host+:' '--port+:')
+        _command_args=('*:nodes:_asadmin_nodes_config' '--host+:' '--port+:')
         ;;
     delete-node-dcom)
-        _command_args=('--force+:force:(true false)' '--host+:' '--port+:' '--uninstall+:uninstall:(true false)')
+        _command_args=('*:nodes:_asadmin_nodes_dcom' '--force+:force:(true false)' '--host+:' '--port+:' '--uninstall+:uninstall:(true false)')
         ;;
     delete-node-ssh)
-        _command_args=('--force+:force:(true false)' '--host+:' '--port+:' '--uninstall+:uninstall:(true false)')
+        _command_args=('*:nodes:_asadmin_nodes_ssh' '--force+:force:(true false)' '--host+:' '--port+:' '--uninstall+:uninstall:(true false)')
         ;;
     delete-password-alias)
         _command_args=('--host+:' '--port+:')
@@ -889,10 +889,10 @@ case "$words[1]" in
         _command_args=('--appname+:' '--host+:' '--modulename+:' '--port+:' '--target+:')
         ;;
     ping-node-dcom)
-        _command_args=('--host+:' '--port+:' '--validate+:validate:(true false)')
+        _command_args=('*:nodes:_asadmin_nodes_dcom' '--host+:' '--port+:' '--validate+:validate:(true false)')
         ;;
     ping-node-ssh)
-        _command_args=('--host+:' '--port+:' '--validate+:validate:(true false)')
+        _command_args=('*:nodes:_asadmin_nodes_ssh' '--host+:' '--port+:' '--validate+:validate:(true false)')
         ;;
     recover-transactions)
         _command_args=('--host+:' '--port+:' '--target+:' '--transactionlogdir+:')
@@ -1006,13 +1006,13 @@ case "$words[1]" in
         _command_args=('--authrealmname+:' '--groups+:' '--host+:' '--port+:' '--target+:' '--userpassword+:')
         ;;
     update-node-config)
-        _command_args=('--host+:' '--installdir+:' '--nodedir+:' '--nodehost+:' '--port+:')
+        _command_args=('*:nodes:_asadmin_nodes_config' '--host+:' '--installdir+:' '--nodedir+:' '--nodehost+:' '--port+:')
         ;;
     update-node-dcom)
-        _command_args=('--force+:force:(true false)' '--host+:' '--installdir+:' '--nodedir+:' '--nodehost+:' '--port+:' '--windowsdomain+:' '--windowspassword+:' '--windowsuser+:')
+        _command_args=('*:nodes:_asadmin_nodes_dcom' '--force+:force:(true false)' '--host+:' '--installdir+:' '--nodedir+:' '--nodehost+:' '--port+:' '--windowsdomain+:' '--windowspassword+:' '--windowsuser+:')
         ;;
     update-node-ssh)
-        _command_args=('--force+:force:(true false)' '--host+:' '--installdir+:' '--nodedir+:' '--nodehost+:' '--port+:' '--sshkeyfile+:' '--sshkeypassphrase+:' '--sshpassword+:' '--sshport+:' '--sshuser+:')
+        _command_args=('*:nodes:_asadmin_nodes_ssh' '--force+:force:(true false)' '--host+:' '--installdir+:' '--nodedir+:' '--nodehost+:' '--port+:' '--sshkeyfile+:' '--sshkeypassphrase+:' '--sshpassword+:' '--sshport+:' '--sshuser+:')
         ;;
     update-password-alias)
         _command_args=('--aliaspassword+:' '--host+:' '--port+:')
@@ -1045,6 +1045,18 @@ _asadmin_libraries() {
 
 _asadmin_nodes() {
     compadd $(command asadmin list-nodes --terse)
+}
+
+_asadmin_nodes_config() {
+    compadd $(command asadmin list-nodes-config --terse)
+}
+
+_asadmin_nodes_dcom() {
+    compadd $(command asadmin list-nodes-dcom --terse)
+}
+
+_asadmin_nodes_ssh() {
+    compadd $(command asadmin list-nodes-ssh --terse)
 }
 
 compadd '--help'
