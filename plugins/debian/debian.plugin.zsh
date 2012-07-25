@@ -21,7 +21,7 @@ fi
 # These are for more obscure uses of apt-get and aptitude that aren't covered
 # below.
 alias ag='apt-get'
-alias at='aptitude'
+alias ap='aptitude'
 
 # Some self-explanatory aliases
 alias acs="apt-cache search"
@@ -35,7 +35,7 @@ alias afs='apt-file search --regexp'
 
 # These are apt-get only
 alias asrc='apt-get source'
-alias ap='apt-cache policy'
+alias app='apt-cache policy'
 
 # superuser operations ######################################################
 if [[ $use_sudo -eq 1 ]]; then
