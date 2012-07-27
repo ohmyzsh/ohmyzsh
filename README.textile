@@ -26,17 +26,19 @@ h3. The manual way
 
   @git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh@
 
-2. Create a new zsh config by copying the zsh template we've provided.
+2. *(Optional)* Backup ~/.zshrc file, if you already have one. (In case you want to go back to your original settings.)
 
-  *NOTE*: If you already have a ~/.zshrc file, you should back it up. @cp ~/.zshrc ~/.zshrc.orig@ in case you want to go back to your original settings.
+  @cp ~/.zshrc ~/.zshrc.orig@
 
-  @cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc@
+3. Create a new zsh config by copying the zsh template we've provided.
 
-3. Set zsh as your default shell:
+  @cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc@ 
+
+4. Set zsh as your default shell:
 
   @chsh -s /bin/zsh@
 
-4. Start / restart zsh (open a new terminal is easy enough...)
+5. Start / restart zsh (open a new terminal is easy enough...)
 
 h3. Problems?
 
