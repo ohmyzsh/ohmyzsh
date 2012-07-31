@@ -283,7 +283,7 @@ case "$words[1]" in
         _command_args=('*:directory:_files' '--host+:' '--port+:' '--type+:type:(common ext app)')
         ;;
     add-resources)
-        _command_args=('*:directory:_files' '--host+:' '--port+:' '--target+:')
+        _command_args=('*:directory:_files' '--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_das_domain_standalone_instance')
         ;;
     apply-http-lb-changes)
         _command_args=('--host+:' '--ping+:' '--port+:')
@@ -310,28 +310,28 @@ case "$words[1]" in
         _command_args=('--cluster+:cluster:_asadmin_clusters' '--host+:' '--port+:')
         ;;
     configure-ldap-for-admin)
-        _command_args=('--basedn+:' '--host+:' '--ldap-group+:' '--port+:' '--target+:' '--url+:')
+        _command_args=('--basedn+:' '--host+:' '--ldap-group+:' '--port+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance' '--url+:')
         ;;
     copy-config)
         _command_args=('--host+:' '--port+:' '--systemproperties+:')
         ;;
     create-admin-object)
-        _command_args=('--classname+:' '--description+:' '--enabled+:enabled:(true false)' '--host+:' '--port+:' '--property+:' '--raname+:' '--restype+:' '--target+:')
+        _command_args=('--classname+:' '--description+:' '--enabled+:enabled:(true false)' '--host+:' '--port+:' '--property+:' '--raname+:' '--restype+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     create-application-ref)
-        _command_args=('--enabled+:enabled:(true false)' '--host+:' '--lbenabled+:lbenabled:(true false)' '--port+:' '--target+:' '--virtualservers+:')
+        _command_args=('--enabled+:enabled:(true false)' '--host+:' '--lbenabled+:lbenabled:(true false)' '--port+:' '--target+:target:_asadmin_targets_cluster_das_standalone_instance' '--virtualservers+:')
         ;;
     create-audit-module)
-        _command_args=('--classname+:' '--host+:' '--port+:' '--property+:' '--target+:')
+        _command_args=('--classname+:' '--host+:' '--port+:' '--property+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     create-auth-realm)
-        _command_args=('--classname+:' '--host+:' '--port+:' '--property+:' '--target+:')
+        _command_args=('--classname+:' '--host+:' '--port+:' '--property+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     create-connector-connection-pool)
         _command_args=('--associatewiththread+:associatewiththread:(true false)' '--connectiondefinition+:' '--creationretryattempts+:' '--creationretryinterval+:' '--description+:' '--failconnection+:failconnection:(true false)' '--host+:' '--idletimeout+:' '--isconnectvalidatereq+:isconnectvalidatereq:(true false)' '--lazyconnectionassociation+:lazyconnectionassociation:(true false)' '--lazyconnectionenlistment+:lazyconnectionenlistment:(true false)' '--leakreclaim+:leakreclaim:(true false)' '--leaktimeout+:' '--matchconnections+:matchconnections:(true false)' '--maxconnectionusagecount+:' '--maxpoolsize+:' '--maxwait+:' '--ping+:ping:(true false)' '--pooling+:pooling:(true false)' '--poolresize+:' '--port+:' '--property+:' '--raname+:' '--steadypoolsize+:' '--target+:' '--transactionsupport+:transactionsupport:(XATransaction LocalTransaction NoTransaction)' '--validateatmostonceperiod+:')
         ;;
     create-connector-resource)
-        _command_args=('--description+:' '--enabled+:enabled:(true false)' '--host+:' '--objecttype+:' '--poolname+:' '--port+:' '--property+:' '--target+:')
+        _command_args=('--description+:' '--enabled+:enabled:(true false)' '--host+:' '--objecttype+:' '--poolname+:' '--port+:' '--property+:' '--target+:target:_asadmin_targets_cluster_das_domain_standalone_instance')
         ;;
     create-connector-security-map)
         _command_args=('--host+:' '--mappedpassword+:' '--mappedusername+:' '--poolname+:' '--port+:' '--principals+:' '--target+:' '--usergroups+:')
@@ -340,76 +340,76 @@ case "$words[1]" in
         _command_args=('--description+:' '--groupsmap+:' '--host+:' '--port+:' '--principalsmap+:' '--raname+:')
         ;;
     create-custom-resource)
-        _command_args=('--description+:' '--enabled+:enabled:(true false)' '--factoryclass+:' '--host+:' '--port+:' '--property+:' '--restype+:' '--target+:')
+        _command_args=('--description+:' '--enabled+:enabled:(true false)' '--factoryclass+:' '--host+:' '--port+:' '--property+:' '--restype+:' '--target+:target:_asadmin_targets_cluster_das_domain_standalone_instance')
         ;;
     create-domain)
         _command_args=('--adminport+:' '--checkports+:checkports:(true false)' '--domaindir+:' '--domainproperties+:' '--instanceport+:' '--keytooloptions+:' '--nopassword+:nopassword:(true false)' '--portbase+:' '--profile+:' '--savelogin+:savelogin:(true false)' '--savemasterpassword+:savemasterpassword:(true false)' '--template+:' '--usemasterpassword+:usemasterpassword:(true false)')
         ;;
     create-file-user)
-        _command_args=('--authrealmname+:' '--groups+:' '--host+:' '--port+:' '--target+:' '--userpassword+:')
+        _command_args=('--authrealmname+:' '--groups+:' '--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance' '--userpassword+:')
         ;;
     create-http)
-        _command_args=('--default-virtual-server+:' '--dns-lookup-enabled+:dns-lookup-enabled:(true false)' '--host+:' '--max-connection+:' '--port+:' '--request-timeout-seconds+:' '--servername+:' '--target+:' '--timeout-seconds+:' '--xpowered+:xpowered:(true false)')
+        _command_args=('--default-virtual-server+:' '--dns-lookup-enabled+:dns-lookup-enabled:(true false)' '--host+:' '--max-connection+:' '--port+:' '--request-timeout-seconds+:' '--servername+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance' '--timeout-seconds+:' '--xpowered+:xpowered:(true false)')
         ;;
     create-http-health-checker)
         _command_args=('--config+:' '--host+:' '--interval+:' '--port+:' '--timeout+:' '--url+:')
         ;;
     create-http-lb)
-        _command_args=('--autoapplyenabled+:autoapplyenabled:(true false)' '--devicehost+:' '--deviceport+:' '--healthcheckerinterval+:' '--healthcheckertimeout+:' '--healthcheckerurl+:' '--host+:' '--httpsrouting+:httpsrouting:(true false)' '--lbenableallapplications+:' '--lbenableallinstances+:' '--lbpolicy+:' '--lbpolicymodule+:' '--lbweight+:' '--monitor+:monitor:(true false)' '--port+:' '--property+:' '--reloadinterval+:' '--responsetimeout+:' '--routecookie+:routecookie:(true false)' '--sslproxyhost+:' '--sslproxyport+:' '--target+:')
+        _command_args=('--autoapplyenabled+:autoapplyenabled:(true false)' '--devicehost+:' '--deviceport+:' '--healthcheckerinterval+:' '--healthcheckertimeout+:' '--healthcheckerurl+:' '--host+:' '--httpsrouting+:httpsrouting:(true false)' '--lbenableallapplications+:' '--lbenableallinstances+:' '--lbpolicy+:' '--lbpolicymodule+:' '--lbweight+:' '--monitor+:monitor:(true false)' '--port+:' '--property+:' '--reloadinterval+:' '--responsetimeout+:' '--routecookie+:routecookie:(true false)' '--sslproxyhost+:' '--sslproxyport+:' '--target+:target:_asadmin_targets_cluster_standalone_instance')
         ;;
     create-http-lb-ref)
         _command_args=('--config+:' '--healthcheckerinterval+:' '--healthcheckertimeout+:' '--healthcheckerurl+:' '--host+:' '--lbenableallapplications+:' '--lbenableallinstances+:' '--lbname+:' '--lbpolicy+:' '--lbpolicymodule+:' '--lbweight+:' '--port+:')
         ;;
     create-http-listener)
-        _command_args=('--acceptorthreads+:' '--default-virtual-server+:' '--defaultvs+:' '--enabled+:enabled:(true false)' '--host+:' '--listeneraddress+:' '--listenerport+:' '--port+:' '--redirectport+:' '--secure+:secure:(true false)' '--securityenabled+:securityenabled:(true false)' '--servername+:' '--target+:' '--xpowered+:xpowered:(true false)')
+        _command_args=('--acceptorthreads+:' '--default-virtual-server+:' '--defaultvs+:' '--enabled+:enabled:(true false)' '--host+:' '--listeneraddress+:' '--listenerport+:' '--port+:' '--redirectport+:' '--secure+:secure:(true false)' '--securityenabled+:securityenabled:(true false)' '--servername+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance' '--xpowered+:xpowered:(true false)')
         ;;
     create-http-redirect)
-        _command_args=('--host+:' '--port+:' '--redirect-port+:' '--secure-redirect+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--redirect-port+:' '--secure-redirect+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     create-iiop-listener)
-        _command_args=('--enabled+:enabled:(true false)' '--host+:' '--iiopport+:' '--listeneraddress+:' '--port+:' '--property+:' '--securityenabled+:securityenabled:(true false)' '--target+:')
+        _command_args=('--enabled+:enabled:(true false)' '--host+:' '--iiopport+:' '--listeneraddress+:' '--port+:' '--property+:' '--securityenabled+:securityenabled:(true false)' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     create-instance)
         _command_args=('--checkports+:checkports:(true false)' '--cluster+:cluster:_asadmin_clusters' '--config+:' '--host+:' '--lbenabled+:lbenabled:(true false)' '--node+:node:_asadmin_nodes' '--port+:' '--portbase+:' '--systemproperties+:' '--terse+:terse:(true false)')
         ;;
     create-jacc-provider)
-        _command_args=('--host+:' '--policyconfigfactoryclass+:' '--policyproviderclass+:' '--port+:' '--property+:' '--target+:')
+        _command_args=('--host+:' '--policyconfigfactoryclass+:' '--policyproviderclass+:' '--port+:' '--property+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     create-javamail-resource)
-        _command_args=('--debug+:debug:(true false)' '--description+:' '--enabled+:enabled:(true false)' '--fromaddress+:' '--host+:' '--mailhost+:' '--mailuser+:' '--port+:' '--property+:' '--storeprotocol+:' '--storeprotocolclass+:' '--target+:' '--transprotocol+:' '--transprotocolclass+:')
+        _command_args=('--debug+:debug:(true false)' '--description+:' '--enabled+:enabled:(true false)' '--fromaddress+:' '--host+:' '--mailhost+:' '--mailuser+:' '--port+:' '--property+:' '--storeprotocol+:' '--storeprotocolclass+:' '--target+:target:_asadmin_targets_cluster_das_domain_standalone_instance' '--transprotocol+:' '--transprotocolclass+:')
         ;;
     create-jdbc-connection-pool)
         _command_args=('--allownoncomponentcallers+:allownoncomponentcallers:(true false)' '--associatewiththread+:associatewiththread:(true false)' '--creationretryattempts+:' '--creationretryinterval+:' '--datasourceclassname+:' '--description+:' '--driverclassname+:' '--failconnection+:failconnection:(true false)' '--host+:' '--idletimeout+:' '--initsql+:' '--isconnectvalidatereq+:isconnectvalidatereq:(true false)' '--isisolationguaranteed+:isisolationguaranteed:(true false)' '--isolationlevel+:' '--lazyconnectionassociation+:lazyconnectionassociation:(true false)' '--lazyconnectionenlistment+:lazyconnectionenlistment:(true false)' '--leakreclaim+:leakreclaim:(true false)' '--leaktimeout+:' '--matchconnections+:matchconnections:(true false)' '--maxconnectionusagecount+:' '--maxpoolsize+:' '--maxwait+:' '--nontransactionalconnections+:nontransactionalconnections:(true false)' '--ping+:ping:(true false)' '--pooling+:pooling:(true false)' '--poolresize+:' '--port+:' '--property+:' '--restype+:restype:(javax.sql.DataSource javax.sql.XADataSource javax.sql.ConnectionPoolDataSource java.sql.Driver)' '--sqltracelisteners+:' '--statementcachesize+:' '--statementleakreclaim+:statementleakreclaim:(true false)' '--statementleaktimeout+:' '--statementtimeout+:' '--steadypoolsize+:' '--target+:' '--validateatmostonceperiod+:' '--validationclassname+:' '--validationmethod+:validationmethod:(auto-commit meta-data table custom-validation)' '--validationtable+:' '--wrapjdbcobjects+:wrapjdbcobjects:(true false)')
         ;;
     create-jdbc-resource)
-        _command_args=('--connectionpoolid+:' '--description+:' '--enabled+:enabled:(true false)' '--host+:' '--port+:' '--property+:' '--target+:')
+        _command_args=('--connectionpoolid+:' '--description+:' '--enabled+:enabled:(true false)' '--host+:' '--port+:' '--property+:' '--target+:target:_asadmin_targets_cluster_das_domain_standalone_instance')
         ;;
     create-jms-host)
-        _command_args=('--host+:' '--mqhost+:' '--mqpassword+:' '--mqport+:' '--mquser+:' '--port+:' '--property+:' '--target+:')
+        _command_args=('--host+:' '--mqhost+:' '--mqpassword+:' '--mqport+:' '--mquser+:' '--port+:' '--property+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     create-jms-resource)
-        _command_args=('--description+:' '--enabled+:enabled:(true false)' '--host+:' '--port+:' '--property+:' '--restype+:' '--target+:')
+        _command_args=('--description+:' '--enabled+:enabled:(true false)' '--host+:' '--port+:' '--property+:' '--restype+:' '--target+:target:_asadmin_targets_cluster_das_domain_standalone_instance')
         ;;
     create-jmsdest)
-        _command_args=('--desttype+:' '--host+:' '--port+:' '--property+:' '--target+:')
+        _command_args=('--desttype+:' '--host+:' '--port+:' '--property+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     create-jndi-resource)
-        _command_args=('--description+:' '--enabled+:enabled:(true false)' '--factoryclass+:' '--host+:' '--jndilookupname+:' '--port+:' '--property+:' '--restype+:' '--target+:')
+        _command_args=('--description+:' '--enabled+:enabled:(true false)' '--factoryclass+:' '--host+:' '--jndilookupname+:' '--port+:' '--property+:' '--restype+:' '--target+:target:_asadmin_targets_cluster_das_domain_standalone_instance')
         ;;
     create-jvm-options)
-        _command_args=('--host+:' '--port+:' '--profiler+:profiler:(true false)' '--target+:')
+        _command_args=('--host+:' '--port+:' '--profiler+:profiler:(true false)' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     create-lifecycle-module)
-        _command_args=('--classname+:' '--classpath+:' '--description+:' '--enabled+:enabled:(true false)' '--failurefatal+:failurefatal:(true false)' '--host+:' '--loadorder+:' '--port+:' '--property+:' '--target+:')
+        _command_args=('--classname+:' '--classpath+:' '--description+:' '--enabled+:enabled:(true false)' '--failurefatal+:failurefatal:(true false)' '--host+:' '--loadorder+:' '--port+:' '--property+:' '--target+:target:_asadmin_targets_cluster_das_domain_standalone_instance')
         ;;
     create-local-instance)
         _command_args=('--checkports+:checkports:(true false)' '--cluster+:cluster:_asadmin_clusters' '--config+:' '--lbenabled+:lbenabled:(true false)' '--node+:node:_asadmin_nodes' '--nodedir+:' '--portbase+:' '--savemasterpassword+:savemasterpassword:(true false)' '--systemproperties+:' '--usemasterpassword+:usemasterpassword:(true false)')
         ;;
     create-message-security-provider)
-        _command_args=('--classname+:' '--host+:' '--isdefaultprovider+:isdefaultprovider:(true false)' '--layer+:layer:(SOAP HttpServlet)' '--port+:' '--property+:' '--providertype+:providertype:(client server client-server)' '--requestauthrecipient+:' '--requestauthsource+:' '--responseauthrecipient+:' '--responseauthsource+:' '--target+:')
+        _command_args=('--classname+:' '--host+:' '--isdefaultprovider+:isdefaultprovider:(true false)' '--layer+:layer:(SOAP HttpServlet)' '--port+:' '--property+:' '--providertype+:providertype:(client server client-server)' '--requestauthrecipient+:' '--requestauthsource+:' '--responseauthrecipient+:' '--responseauthsource+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     create-network-listener)
-        _command_args=('--address+:' '--enabled+:enabled:(true false)' '--host+:' '--jkenabled+:jkenabled:(true false)' '--listenerport+:' '--port+:' '--protocol+:' '--target+:' '--threadpool+:' '--transport+:')
+        _command_args=('--address+:' '--enabled+:enabled:(true false)' '--host+:' '--jkenabled+:jkenabled:(true false)' '--listenerport+:' '--port+:' '--protocol+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance' '--threadpool+:' '--transport+:')
         ;;
     create-node-config)
         _command_args=('--host+:' '--installdir+:' '--nodedir+:' '--nodehost+:' '--port+:')
@@ -424,52 +424,52 @@ case "$words[1]" in
         _command_args=('--aliaspassword+:' '--host+:' '--port+:')
         ;;
     create-profiler)
-        _command_args=('--classpath+:' '--enabled+:enabled:(true false)' '--host+:' '--nativelibrarypath+:' '--port+:' '--property+:' '--target+:')
+        _command_args=('--classpath+:' '--enabled+:enabled:(true false)' '--host+:' '--nativelibrarypath+:' '--port+:' '--property+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     create-protocol)
-        _command_args=('--host+:' '--port+:' '--securityenabled+:securityenabled:(true false)' '--target+:')
+        _command_args=('--host+:' '--port+:' '--securityenabled+:securityenabled:(true false)' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     create-protocol-filter)
-        _command_args=('--classname+:' '--host+:' '--port+:' '--protocol+:' '--target+:')
+        _command_args=('--classname+:' '--host+:' '--port+:' '--protocol+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     create-protocol-finder)
-        _command_args=('--classname+:' '--host+:' '--port+:' '--protocol+:' '--target+:' '--targetprotocol+:')
+        _command_args=('--classname+:' '--host+:' '--port+:' '--protocol+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance' '--targetprotocol+:')
         ;;
     create-resource-adapter-config)
         _command_args=('--host+:' '--objecttype+:' '--port+:' '--property+:' '--target+:' '--threadpoolid+:')
         ;;
     create-resource-ref)
-        _command_args=('--enabled+:enabled:(true false)' '--host+:' '--port+:' '--target+:')
+        _command_args=('--enabled+:enabled:(true false)' '--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_das_standalone_instance')
         ;;
     create-service)
         _command_args=('*:instances:_asadmin_instances' '--domaindir+:domaindir:directory:_files' '--dry-run+:dry-run:(true false)' '--force+:force:(true false)' '--name+:' '--node+:node:_asadmin_nodes' '--nodedir+:' '--serviceproperties+:' '--serviceuser+:')
         ;;
     create-ssl)
-        _command_args=('--certname+:' '--clientauthenabled+:clientauthenabled:(true false)' '--host+:' '--port+:' '--ssl2ciphers+:' '--ssl2enabled+:ssl2enabled:(true false)' '--ssl3enabled+:ssl3enabled:(true false)' '--ssl3tlsciphers+:' '--target+:' '--tlsenabled+:tlsenabled:(true false)' '--tlsrollbackenabled+:tlsrollbackenabled:(true false)' '--type+:type:(network-listener http-listener iiop-listener iiop-service jmx-connector)')
+        _command_args=('--certname+:' '--clientauthenabled+:clientauthenabled:(true false)' '--host+:' '--port+:' '--ssl2ciphers+:' '--ssl2enabled+:ssl2enabled:(true false)' '--ssl3enabled+:ssl3enabled:(true false)' '--ssl3tlsciphers+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance' '--tlsenabled+:tlsenabled:(true false)' '--tlsrollbackenabled+:tlsrollbackenabled:(true false)' '--type+:type:(network-listener http-listener iiop-listener iiop-service jmx-connector)')
         ;;
     create-system-properties)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_clustered_instance_config_das_domain_standalone_instance')
         ;;
     create-threadpool)
-        _command_args=('--host+:' '--idletimeout+:' '--maxqueuesize+:' '--maxthreadpoolsize+:' '--minthreadpoolsize+:' '--port+:' '--target+:' '--workqueues+:')
+        _command_args=('--host+:' '--idletimeout+:' '--maxqueuesize+:' '--maxthreadpoolsize+:' '--minthreadpoolsize+:' '--port+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance' '--workqueues+:')
         ;;
     create-transport)
-        _command_args=('--acceptorthreads+:' '--buffersizebytes+:' '--bytebuffertype+:' '--classname+:' '--displayconfiguration+:displayconfiguration:(true false)' '--enablesnoop+:enablesnoop:(true false)' '--host+:' '--idlekeytimeoutseconds+:' '--maxconnectionscount+:' '--port+:' '--readtimeoutmillis+:' '--selectionkeyhandler+:' '--selectorpolltimeoutmillis+:' '--target+:' '--tcpnodelay+:tcpnodelay:(true false)' '--writetimeoutmillis+:')
+        _command_args=('--acceptorthreads+:' '--buffersizebytes+:' '--bytebuffertype+:' '--classname+:' '--displayconfiguration+:displayconfiguration:(true false)' '--enablesnoop+:enablesnoop:(true false)' '--host+:' '--idlekeytimeoutseconds+:' '--maxconnectionscount+:' '--port+:' '--readtimeoutmillis+:' '--selectionkeyhandler+:' '--selectorpolltimeoutmillis+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance' '--tcpnodelay+:tcpnodelay:(true false)' '--writetimeoutmillis+:')
         ;;
     create-virtual-server)
-        _command_args=('--defaultwebmodule+:' '--host+:' '--hosts+:' '--httplisteners+:' '--logfile+:' '--networklisteners+:' '--port+:' '--property+:' '--state+:state:(on off disabled)' '--target+:')
+        _command_args=('--defaultwebmodule+:' '--host+:' '--hosts+:' '--httplisteners+:' '--logfile+:' '--networklisteners+:' '--port+:' '--property+:' '--state+:state:(on off disabled)' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     delete-admin-object)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     delete-application-ref)
-        _command_args=('--cascade+:cascade:(true false)' '--host+:' '--port+:' '--target+:')
+        _command_args=('--cascade+:cascade:(true false)' '--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_das_standalone_instance')
         ;;
     delete-audit-module)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     delete-auth-realm)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     delete-config)
         _command_args=('--host+:' '--port+:')
@@ -478,7 +478,7 @@ case "$words[1]" in
         _command_args=('--cascade+:cascade:(true false)' '--host+:' '--port+:' '--target+:')
         ;;
     delete-connector-resource)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_das_domain_standalone_instance')
         ;;
     delete-connector-security-map)
         _command_args=('--host+:' '--poolname+:' '--port+:' '--target+:')
@@ -487,16 +487,16 @@ case "$words[1]" in
         _command_args=('--host+:' '--port+:' '--raname+:')
         ;;
     delete-custom-resource)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_das_domain_standalone_instance')
         ;;
     delete-domain)
         _command_args=('--domaindir+:')
         ;;
     delete-file-user)
-        _command_args=('--authrealmname+:' '--host+:' '--port+:' '--target+:')
+        _command_args=('--authrealmname+:' '--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     delete-http)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     delete-http-health-checker)
         _command_args=('--config+:' '--host+:' '--port+:')
@@ -505,58 +505,58 @@ case "$words[1]" in
         _command_args=('--config+:' '--force+:' '--host+:' '--lbname+:' '--port+:')
         ;;
     delete-http-listener)
-        _command_args=('--host+:' '--port+:' '--secure+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--secure+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     delete-http-redirect)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     delete-iiop-listener)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     delete-instance)
         _command_args=('*:instances:_asadmin_instances' '--host+:' '--port+:' '--terse+:terse:(true false)')
         ;;
     delete-jacc-provider)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     delete-javamail-resource)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_das_domain_standalone_instance')
         ;;
     delete-jdbc-connection-pool)
         _command_args=('--cascade+:cascade:(true false)' '--host+:' '--port+:' '--target+:')
         ;;
     delete-jdbc-resource)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_das_domain_standalone_instance')
         ;;
     delete-jms-host)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     delete-jms-resource)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_das_domain_standalone_instance')
         ;;
     delete-jmsdest)
-        _command_args=('--desttype+:' '--host+:' '--port+:' '--target+:')
+        _command_args=('--desttype+:' '--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     delete-jndi-resource)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_das_domain_standalone_instance')
         ;;
     delete-jvm-options)
-        _command_args=('--host+:' '--port+:' '--profiler+:profiler:(true false)' '--target+:')
+        _command_args=('--host+:' '--port+:' '--profiler+:profiler:(true false)' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     delete-lifecycle-module)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_das_domain_standalone_instance')
         ;;
     delete-local-instance)
         _command_args=('*:instances:_asadmin_instances' '--node+:node:_asadmin_nodes' '--nodedir+:')
         ;;
     delete-log-levels)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     delete-message-security-provider)
-        _command_args=('--host+:' '--layer+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--layer+:' '--port+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     delete-network-listener)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     delete-node-config)
         _command_args=('*:nodes:_asadmin_nodes_config' '--host+:' '--port+:')
@@ -571,46 +571,46 @@ case "$words[1]" in
         _command_args=('--host+:' '--port+:')
         ;;
     delete-profiler)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     delete-protocol)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     delete-protocol-filter)
-        _command_args=('--host+:' '--port+:' '--protocol+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--protocol+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     delete-protocol-finder)
-        _command_args=('--host+:' '--port+:' '--protocol+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--protocol+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     delete-resource-adapter-config)
         _command_args=('--host+:' '--port+:' '--target+:')
         ;;
     delete-resource-ref)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_das_standalone_instance')
         ;;
     delete-ssl)
-        _command_args=('--host+:' '--port+:' '--target+:' '--type+:type:(network-listener http-listener iiop-listener iiop-service jmx-connector)')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance' '--type+:type:(network-listener http-listener iiop-listener iiop-service jmx-connector)')
         ;;
     delete-system-property)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_clustered_instance_config_das_domain_standalone_instance')
         ;;
     delete-threadpool)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     delete-transport)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     delete-virtual-server)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     deploy)
-        _command_args=('*:directory:_files' '--asyncreplication+:asyncreplication:(true false)' '--availabilityenabled+:availabilityenabled:(true false)' '--contextroot+:' '--createtables+:createtables:(true false)' '--dbvendorname+:' '--deploymentplan+:deploymentplan:directory:_files' '--description+:' '--dropandcreatetables+:dropandcreatetables:(true false)' '--enabled+:enabled:(true false)' '--force+:force:(true false)' '--generatermistubs+:generatermistubs:(true false)' '--host+:' '--isredeploy+:isredeploy:(true false)' '--keepfailedstubs+:keepfailedstubs:(true false)' '--keepreposdir+:keepreposdir:(true false)' '--keepstate+:keepstate:(true false)' '--lbenabled+:lbenabled:(true false)' '--libraries+:' '--logreportederrors+:logreportederrors:(true false)' '--name+:' '--port+:' '--precompilejsp+:precompilejsp:(true false)' '--properties+:' '--property+:' '--retrieve+:' '--target+:' '--type+:' '--uniquetablenames+:uniquetablenames:(true false)' '--verify+:verify:(true false)' '--virtualservers+:')
+        _command_args=('*:directory:_files' '--asyncreplication+:asyncreplication:(true false)' '--availabilityenabled+:availabilityenabled:(true false)' '--contextroot+:' '--createtables+:createtables:(true false)' '--dbvendorname+:' '--deploymentplan+:deploymentplan:directory:_files' '--description+:' '--dropandcreatetables+:dropandcreatetables:(true false)' '--enabled+:enabled:(true false)' '--force+:force:(true false)' '--generatermistubs+:generatermistubs:(true false)' '--host+:' '--isredeploy+:isredeploy:(true false)' '--keepfailedstubs+:keepfailedstubs:(true false)' '--keepreposdir+:keepreposdir:(true false)' '--keepstate+:keepstate:(true false)' '--lbenabled+:lbenabled:(true false)' '--libraries+:' '--logreportederrors+:logreportederrors:(true false)' '--name+:' '--port+:' '--precompilejsp+:precompilejsp:(true false)' '--properties+:' '--property+:' '--retrieve+:' '--target+:target:_asadmin_targets_cluster_das_domain_standalone_instance' '--type+:' '--uniquetablenames+:uniquetablenames:(true false)' '--verify+:verify:(true false)' '--virtualservers+:')
         ;;
     deploydir)
-        _command_args=('*:directory:_files' '--asyncreplication+:asyncreplication:(true false)' '--availabilityenabled+:availabilityenabled:(true false)' '--contextroot+:' '--createtables+:createtables:(true false)' '--dbvendorname+:' '--deploymentplan+:deploymentplan:directory:_files' '--description+:' '--dropandcreatetables+:dropandcreatetables:(true false)' '--enabled+:enabled:(true false)' '--force+:force:(true false)' '--generatermistubs+:generatermistubs:(true false)' '--host+:' '--isredeploy+:isredeploy:(true false)' '--keepfailedstubs+:keepfailedstubs:(true false)' '--keepreposdir+:keepreposdir:(true false)' '--keepstate+:keepstate:(true false)' '--lbenabled+:lbenabled:(true false)' '--libraries+:' '--logreportederrors+:logreportederrors:(true false)' '--name+:' '--port+:' '--precompilejsp+:precompilejsp:(true false)' '--properties+:' '--property+:' '--retrieve+:' '--target+:' '--type+:' '--uniquetablenames+:uniquetablenames:(true false)' '--verify+:verify:(true false)' '--virtualservers+:')
+        _command_args=('*:directory:_files' '--asyncreplication+:asyncreplication:(true false)' '--availabilityenabled+:availabilityenabled:(true false)' '--contextroot+:' '--createtables+:createtables:(true false)' '--dbvendorname+:' '--deploymentplan+:deploymentplan:directory:_files' '--description+:' '--dropandcreatetables+:dropandcreatetables:(true false)' '--enabled+:enabled:(true false)' '--force+:force:(true false)' '--generatermistubs+:generatermistubs:(true false)' '--host+:' '--isredeploy+:isredeploy:(true false)' '--keepfailedstubs+:keepfailedstubs:(true false)' '--keepreposdir+:keepreposdir:(true false)' '--keepstate+:keepstate:(true false)' '--lbenabled+:lbenabled:(true false)' '--libraries+:' '--logreportederrors+:logreportederrors:(true false)' '--name+:' '--port+:' '--precompilejsp+:precompilejsp:(true false)' '--properties+:' '--property+:' '--retrieve+:' '--target+:target:_asadmin_targets_cluster_das_domain_standalone_instance' '--type+:' '--uniquetablenames+:uniquetablenames:(true false)' '--verify+:verify:(true false)' '--virtualservers+:')
         ;;
     disable)
-        _command_args=('--cascade+:cascade:(true false)' '--droptables+:droptables:(true false)' '--host+:' '--isredeploy+:isredeploy:(true false)' '--isundeploy+:isundeploy:(true false)' '--keepreposdir+:keepreposdir:(true false)' '--keepstate+:keepstate:(true false)' '--port+:' '--properties+:' '--target+:')
+        _command_args=('--cascade+:cascade:(true false)' '--droptables+:droptables:(true false)' '--host+:' '--isredeploy+:isredeploy:(true false)' '--isundeploy+:isundeploy:(true false)' '--keepreposdir+:keepreposdir:(true false)' '--keepstate+:keepstate:(true false)' '--port+:' '--properties+:' '--target+:target:_asadmin_targets_cluster_clustered_instance_das_domain_standalone_instance')
         ;;
     disable-http-lb-application)
         _command_args=('--host+:' '--name+:' '--port+:' '--timeout+:')
@@ -619,13 +619,13 @@ case "$words[1]" in
         _command_args=('--host+:' '--port+:' '--timeout+:')
         ;;
     disable-monitoring)
-        _command_args=('--host+:' '--modules+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--modules+:' '--port+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     disable-secure-admin)
         _command_args=('--host+:' '--port+:')
         ;;
     enable)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_clustered_instance_das_domain_standalone_instance')
         ;;
     enable-http-lb-application)
         _command_args=('--host+:' '--name+:' '--port+:')
@@ -634,7 +634,7 @@ case "$words[1]" in
         _command_args=('--host+:' '--port+:')
         ;;
     enable-monitoring)
-        _command_args=('--dtrace+:dtrace:(true false)' '--host+:' '--mbean+:mbean:(true false)' '--modules+:' '--options+:' '--pid+:' '--port+:' '--target+:')
+        _command_args=('--dtrace+:dtrace:(true false)' '--host+:' '--mbean+:mbean:(true false)' '--modules+:' '--options+:' '--pid+:' '--port+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     enable-secure-admin)
         _command_args=('--adminalias+:' '--host+:' '--instancealias+:' '--port+:')
@@ -649,16 +649,16 @@ case "$words[1]" in
         _command_args=('--appname+:' '--host+:' '--modulename+:' '--port+:')
         ;;
     flush-jmsdest)
-        _command_args=('--desttype+:' '--host+:' '--port+:' '--target+:')
+        _command_args=('--desttype+:' '--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     freeze-transaction-service)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_clustered_instance_config_das_standalone_instance')
         ;;
     generate-domain-schema)
         _command_args=('--format+:' '--host+:' '--port+:' '--showdeprecated+:showdeprecated:(true false)' '--showsubclasses+:showsubclasses:(true false)')
         ;;
     generate-jvm-report)
-        _command_args=('--host+:' '--port+:' '--target+:' '--type+:type:(summary thread class memory log)')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_clustered_instance_das_standalone_instance' '--type+:type:(summary thread class memory log)')
         ;;
     get)
         _command_args=('--host+:' '--monitor+:monitor:(true false)' '--port+:')
@@ -685,25 +685,25 @@ case "$words[1]" in
         _command_args=('--archive+:' '--create+:create:(true false)' '--force+:force:(true false)' '--installdir+:' '--save+:save:(true false)' '--sshkeyfile+:' '--sshport+:' '--sshuser+:')
         ;;
     jms-ping)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_clustered_instance_config_das_standalone_instance')
         ;;
     list)
         _command_args=('--host+:' '--monitor+:monitor:(true false)' '--port+:')
         ;;
     list-admin-objects)
-        _command_args=('--host+:' '--port+:')
+        _command_args=('*:targets:_asadmin_targets_cluster_clustered_instance_config_das_standalone_instance' '--host+:' '--port+:')
         ;;
     list-application-refs)
-        _command_args=('--host+:' '--long+:long:(true false)' '--port+:' '--terse+:terse:(true false)')
+        _command_args=('*:targets:_asadmin_targets_cluster_das_standalone_instance' '--host+:' '--long+:long:(true false)' '--port+:' '--terse+:terse:(true false)')
         ;;
     list-applications)
-        _command_args=('--host+:' '--long+:long:(true false)' '--port+:' '--resources+:resources:(true false)' '--subcomponents+:subcomponents:(true false)' '--terse+:terse:(true false)' '--type+:')
+        _command_args=('*:targets:_asadmin_targets_cluster_das_domain_standalone_instance' '--host+:' '--long+:long:(true false)' '--port+:' '--resources+:resources:(true false)' '--subcomponents+:subcomponents:(true false)' '--terse+:terse:(true false)' '--type+:')
         ;;
     list-audit-modules)
-        _command_args=('--host+:' '--port+:')
+        _command_args=('*:targets:_asadmin_targets_cluster_clustered_instance_config_das_standalone_instance' '--host+:' '--port+:')
         ;;
     list-auth-realms)
-        _command_args=('--host+:' '--port+:')
+        _command_args=('*:targets:_asadmin_targets_cluster_clustered_instance_config_das_standalone_instance' '--host+:' '--port+:')
         ;;
     list-backups)
         _command_args=('--backupconfig+:' '--backupdir+:' '--domaindir+:' '--long+:long:(true false)')
@@ -715,19 +715,19 @@ case "$words[1]" in
         _command_args=('--localonly+:localonly:(true false)' '--remoteonly+:remoteonly:(true false)')
         ;;
     list-components)
-        _command_args=('--host+:' '--long+:long:(true false)' '--port+:' '--resources+:resources:(true false)' '--subcomponents+:subcomponents:(true false)' '--terse+:terse:(true false)' '--type+:')
+        _command_args=('*:targets:_asadmin_targets_cluster_das_domain_standalone_instance' '--host+:' '--long+:long:(true false)' '--port+:' '--resources+:resources:(true false)' '--subcomponents+:subcomponents:(true false)' '--terse+:terse:(true false)' '--type+:')
         ;;
     list-configs)
-        _command_args=('--host+:' '--port+:')
+        _command_args=('*:targets:_asadmin_targets_cluster_clustered_instance_config_das_domain_standalone_instance' '--host+:' '--port+:')
         ;;
     list-connector-connection-pools)
         _command_args=('--host+:' '--port+:')
         ;;
     list-connector-resources)
-        _command_args=('--host+:' '--port+:')
+        _command_args=('*:targets:_asadmin_targets_cluster_clustered_instance_das_domain_standalone_instance' '--host+:' '--port+:')
         ;;
     list-connector-security-maps)
-        _command_args=('--host+:' '--long+:long:(true false)' '--port+:' '--securitymap+:' '--target+:')
+        _command_args=('--host+:' '--long+:long:(true false)' '--port+:' '--securitymap+:' '--target+:target:_asadmin_targets_cluster_clustered_instance_das_domain_standalone_instance')
         ;;
     list-connector-work-security-maps)
         _command_args=('--host+:' '--port+:' '--securitymap+:')
@@ -736,7 +736,7 @@ case "$words[1]" in
         _command_args=('--host+:' '--port+:')
         ;;
     list-custom-resources)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('*:targets:_asadmin_targets_cluster_clustered_instance_das_domain_standalone_instance' '--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_clustered_instance_das_domain_standalone_instance')
         ;;
     list-descriptors)
         _command_args=('--host+:' '--port+:')
@@ -748,25 +748,25 @@ case "$words[1]" in
         _command_args=('--authrealmname+:' '--host+:' '--name+:' '--port+:')
         ;;
     list-file-users)
-        _command_args=('--authrealmname+:' '--host+:' '--port+:')
+        _command_args=('*:targets:_asadmin_targets_cluster_clustered_instance_config_das_standalone_instance' '--authrealmname+:' '--host+:' '--port+:')
         ;;
     list-http-lb-configs)
         _command_args=('--host+:' '--port+:')
         ;;
     list-http-listeners)
-        _command_args=('--host+:' '--long+:long:(true false)' '--port+:')
+        _command_args=('*:targets:_asadmin_targets_cluster_config_das_standalone_instance' '--host+:' '--long+:long:(true false)' '--port+:')
         ;;
     list-iiop-listeners)
-        _command_args=('--host+:' '--port+:')
+        _command_args=('*:targets:_asadmin_targets_cluster_clustered_instance_config_das_domain_standalone_instance' '--host+:' '--port+:')
         ;;
     list-instances)
         _command_args=('--host+:' '--long+:long:(true false)' '--nostatus+:nostatus:(true false)' '--port+:' '--standaloneonly+:standaloneonly:(true false)' '--timeoutmsec+:')
         ;;
     list-jacc-providers)
-        _command_args=('--host+:' '--port+:')
+        _command_args=('*:targets:_asadmin_targets_cluster_clustered_instance_config_das_standalone_instance' '--host+:' '--port+:')
         ;;
     list-javamail-resources)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('*:targets:_asadmin_targets_cluster_clustered_instance_das_domain_standalone_instance' '--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_clustered_instance_das_domain_standalone_instance')
         ;;
     list-jdbc-connection-pools)
         _command_args=('--host+:' '--port+:')
@@ -775,43 +775,43 @@ case "$words[1]" in
         _command_args=('--host+:' '--port+:')
         ;;
     list-jms-hosts)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     list-jms-resources)
-        _command_args=('--host+:' '--port+:' '--restype+:')
+        _command_args=('*:targets:_asadmin_targets_cluster_das_domain_standalone_instance' '--host+:' '--port+:' '--restype+:')
         ;;
     list-jmsdest)
-        _command_args=('--desttype+:' '--host+:' '--port+:' '--property+:')
+        _command_args=('*:targets:_asadmin_targets_cluster_config_das_standalone_instance' '--desttype+:' '--host+:' '--port+:' '--property+:')
         ;;
     list-jndi-entries)
-        _command_args=('--context+:' '--host+:' '--port+:')
+        _command_args=('*:targets:_asadmin_targets_cluster_clustered_instance_das_domain_standalone_instance' '--context+:' '--host+:' '--port+:')
         ;;
     list-jndi-resources)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('*:targets:_asadmin_targets_cluster_clustered_instance_das_domain_standalone_instance' '--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_clustered_instance_das_domain_standalone_instance')
         ;;
     list-jvm-options)
-        _command_args=('--host+:' '--port+:' '--profiler+:profiler:(true false)' '--target+:')
+        _command_args=('--host+:' '--port+:' '--profiler+:profiler:(true false)' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     list-libraries)
         _command_args=('--host+:' '--port+:' '--type+:type:(common ext app)')
         ;;
     list-lifecycle-modules)
-        _command_args=('--host+:' '--port+:' '--terse+:terse:(true false)')
+        _command_args=('*:targets:_asadmin_targets_cluster_das_domain_standalone_instance' '--host+:' '--port+:' '--terse+:terse:(true false)')
         ;;
     list-log-attributes)
-        _command_args=('--host+:' '--port+:')
+        _command_args=('*:targets:_asadmin_targets_cluster_clustered_instance_config_das_standalone_instance' '--host+:' '--port+:')
         ;;
     list-log-levels)
         _command_args=('--host+:' '--port+:')
         ;;
     list-message-security-providers)
-        _command_args=('--host+:' '--layer+:layer:(SOAP HttpServlet)' '--port+:')
+        _command_args=('*:targets:_asadmin_targets_cluster_clustered_instance_config_das_standalone_instance' '--host+:' '--layer+:layer:(SOAP HttpServlet)' '--port+:')
         ;;
     list-modules)
         _command_args=('--host+:' '--port+:')
         ;;
     list-network-listeners)
-        _command_args=('--host+:' '--port+:')
+        _command_args=('*:targets:_asadmin_targets_cluster_config_das_standalone_instance' '--host+:' '--port+:')
         ;;
     list-nodes)
         _command_args=('--host+:' '--long+:long:(true false)' '--port+:' '--terse+:terse:(true false)')
@@ -832,19 +832,19 @@ case "$words[1]" in
         _command_args=('--host+:' '--port+:' '--type+:')
         ;;
     list-protocol-filters)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     list-protocol-finders)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     list-protocols)
-        _command_args=('--host+:' '--port+:')
+        _command_args=('*:targets:_asadmin_targets_cluster_config_das_standalone_instance' '--host+:' '--port+:')
         ;;
     list-resource-adapter-configs)
         _command_args=('--host+:' '--long+:long:(true false)' '--port+:' '--raname+:')
         ;;
     list-resource-refs)
-        _command_args=('--host+:' '--port+:')
+        _command_args=('*:targets:_asadmin_targets_cluster_clustered_instance_das_standalone_instance' '--host+:' '--port+:')
         ;;
     list-sub-components)
         _command_args=('--appname+:' '--host+:' '--port+:' '--resources+:resources:(true false)' '--terse+:terse:(true false)' '--type+:')
@@ -853,19 +853,19 @@ case "$words[1]" in
         _command_args=('--host+:' '--port+:')
         ;;
     list-system-properties)
-        _command_args=('--host+:' '--port+:')
+        _command_args=('*:targets:_asadmin_targets_cluster_clustered_instance_config_das_domain_standalone_instance' '--host+:' '--port+:')
         ;;
     list-threadpools)
         _command_args=('--host+:' '--port+:')
         ;;
     list-timers)
-        _command_args=('--host+:' '--port+:')
+        _command_args=('*:targets:_asadmin_targets_cluster_das_standalone_instance' '--host+:' '--port+:')
         ;;
     list-transports)
-        _command_args=('--host+:' '--port+:')
+        _command_args=('*:targets:_asadmin_targets_cluster_config_das_standalone_instance' '--host+:' '--port+:')
         ;;
     list-virtual-servers)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('*:targets:_asadmin_targets_cluster_config_das_standalone_instance' '--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     list-web-context-param)
         _command_args=('--host+:' '--name+:' '--port+:')
@@ -874,10 +874,10 @@ case "$words[1]" in
         _command_args=('--host+:' '--name+:' '--port+:')
         ;;
     login)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_das_standalone_instance')
         ;;
     migrate-timers)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_clustered_instance_das')
         ;;
     monitor)
         _command_args=('--filename+:filename:directory:_files' '--filter+:' '--interval+:' '--type+:')
@@ -895,10 +895,10 @@ case "$words[1]" in
         _command_args=('*:nodes:_asadmin_nodes_ssh' '--host+:' '--port+:' '--validate+:validate:(true false)')
         ;;
     recover-transactions)
-        _command_args=('--host+:' '--port+:' '--target+:' '--transactionlogdir+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_clustered_instance_das_standalone_instance' '--transactionlogdir+:')
         ;;
     redeploy)
-        _command_args=('*:directory:_files' '--asyncreplication+:asyncreplication:(true false)' '--availabilityenabled+:availabilityenabled:(true false)' '--contextroot+:' '--createtables+:createtables:(true false)' '--dbvendorname+:' '--deploymentplan+:deploymentplan:directory:_files' '--description+:' '--dropandcreatetables+:dropandcreatetables:(true false)' '--enabled+:enabled:(true false)' '--force+:force:(true false)' '--generatermistubs+:generatermistubs:(true false)' '--host+:' '--isredeploy+:isredeploy:(true false)' '--keepfailedstubs+:keepfailedstubs:(true false)' '--keepreposdir+:keepreposdir:(true false)' '--keepstate+:keepstate:(true false)' '--lbenabled+:lbenabled:(true false)' '--libraries+:' '--logreportederrors+:logreportederrors:(true false)' '--name+:' '--port+:' '--precompilejsp+:precompilejsp:(true false)' '--properties+:' '--property+:' '--retrieve+:' '--target+:' '--type+:' '--uniquetablenames+:uniquetablenames:(true false)' '--verify+:verify:(true false)' '--virtualservers+:')
+        _command_args=('*:directory:_files' '--asyncreplication+:asyncreplication:(true false)' '--availabilityenabled+:availabilityenabled:(true false)' '--contextroot+:' '--createtables+:createtables:(true false)' '--dbvendorname+:' '--deploymentplan+:deploymentplan:directory:_files' '--description+:' '--dropandcreatetables+:dropandcreatetables:(true false)' '--enabled+:enabled:(true false)' '--force+:force:(true false)' '--generatermistubs+:generatermistubs:(true false)' '--host+:' '--isredeploy+:isredeploy:(true false)' '--keepfailedstubs+:keepfailedstubs:(true false)' '--keepreposdir+:keepreposdir:(true false)' '--keepstate+:keepstate:(true false)' '--lbenabled+:lbenabled:(true false)' '--libraries+:' '--logreportederrors+:logreportederrors:(true false)' '--name+:' '--port+:' '--precompilejsp+:precompilejsp:(true false)' '--properties+:' '--property+:' '--retrieve+:' '--target+:target:_asadmin_targets_cluster_das_domain_standalone_instance' '--type+:' '--uniquetablenames+:uniquetablenames:(true false)' '--verify+:verify:(true false)' '--virtualservers+:')
         ;;
     remove-library)
         _command_args=('--host+:' '--port+:' '--type+:type:(common ext app)')
@@ -916,19 +916,19 @@ case "$words[1]" in
         _command_args=('--backupconfig+:' '--backupdir+:' '--description+:' '--domaindir+:' '--filename+:' '--force+:force:(true false)' '--long+:long:(true false)')
         ;;
     rollback-transaction)
-        _command_args=('--host+:' '--port+:' '--target+:' '--transaction_id+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_clustered_instance_das_standalone_instance' '--transaction_id+:')
         ;;
     rotate-log)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_clustered_instance_das_standalone_instance')
         ;;
     set)
         _command_args=('--host+:' '--port+:')
         ;;
     set-log-attributes)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     set-log-levels)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance')
         ;;
     set-web-context-param)
         _command_args=('--description+:' '--host+:' '--ignoredescriptoritem+:ignoredescriptoritem:(true false)' '--name+:' '--port+:' '--value+:')
@@ -940,7 +940,7 @@ case "$words[1]" in
         _command_args=('--generatekey+:generatekey:(true false)' '--sshkeyfile+:' '--sshport+:' '--sshpublickeyfile+:' '--sshuser+:')
         ;;
     show-component-status)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_clustered_instance_das_domain_standalone_instance')
         ;;
     start-cluster)
         _command_args=('*:clusters:_asadmin_clusters' '--autohadboverride+:autohadboverride:(true false)' '--host+:' '--port+:' '--verbose+:verbose:(true false)')
@@ -976,10 +976,10 @@ case "$words[1]" in
         _command_args=('--host+:' '--port+:')
         ;;
     undeploy)
-        _command_args=('--cascade+:cascade:(true false)' '--droptables+:droptables:(true false)' '--host+:' '--isredeploy+:isredeploy:(true false)' '--keepreposdir+:keepreposdir:(true false)' '--keepstate+:keepstate:(true false)' '--port+:' '--properties+:' '--target+:')
+        _command_args=('--cascade+:cascade:(true false)' '--droptables+:droptables:(true false)' '--host+:' '--isredeploy+:isredeploy:(true false)' '--keepreposdir+:keepreposdir:(true false)' '--keepstate+:keepstate:(true false)' '--port+:' '--properties+:' '--target+:target:_asadmin_targets_cluster_das_domain_standalone_instance')
         ;;
     unfreeze-transaction-service)
-        _command_args=('--host+:' '--port+:' '--target+:')
+        _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_clustered_instance_config_das_standalone_instance')
         ;;
     uninstall-node)
         _command_args=('--force+:force:(true false)' '--installdir+:' '--sshkeyfile+:' '--sshport+:' '--sshuser+:')
@@ -1003,7 +1003,7 @@ case "$words[1]" in
         _command_args=('--addgroups+:' '--addprincipals+:' '--host+:' '--port+:' '--raname+:' '--removegroups+:' '--removeprincipals+:')
         ;;
     update-file-user)
-        _command_args=('--authrealmname+:' '--groups+:' '--host+:' '--port+:' '--target+:' '--userpassword+:')
+        _command_args=('--authrealmname+:' '--groups+:' '--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_config_das_standalone_instance' '--userpassword+:')
         ;;
     update-node-config)
         _command_args=('*:nodes:_asadmin_nodes_config' '--host+:' '--installdir+:' '--nodedir+:' '--nodehost+:' '--port+:')
@@ -1039,8 +1039,16 @@ _asadmin_clusters() {
     compadd $(command asadmin list-clusters --terse | sed 's/ .*//')
 }
 
+_asadmin_configs() {
+    compadd $(command asadmin list-configs --terse)
+}
+
 _asadmin_instances() {
     compadd $(command asadmin list-instances --terse --nostatus domain)
+}
+
+_asadmin_instances_standalone() {
+    compadd $(command asadmin list-instances --terse --standaloneonly --nostatus domain)
 }
 
 _asadmin_libraries() {
@@ -1062,6 +1070,75 @@ _asadmin_nodes_dcom() {
 _asadmin_nodes_ssh() {
     compadd $(command asadmin list-nodes-ssh --terse)
 }
+
+_asadmin_targets() {
+    _asadmin_instances
+    _asadmin_clusters
+    _asadmin_configs
+    compadd domain server
+}
+
+_asadmin_targets_cluster_clustered_instance_config_das_domain_standalone_instance() {
+    _asadmin_instances
+    _asadmin_clusters
+    _asadmin_configs
+    compadd domain server
+}
+
+_asadmin_targets_cluster_clustered_instance_config_das_standalone_instance() {
+    _asadmin_instances
+    _asadmin_clusters
+    _asadmin_configs
+    compadd server
+}
+
+_asadmin_targets_cluster_clustered_instance_das_domain_standalone_instance() {
+    _asadmin_instances
+    _asadmin_clusters
+    compadd domain server
+}
+
+_asadmin_targets_cluster_clustered_instance_das_standalone_instance() {
+    _asadmin_instances
+    _asadmin_clusters
+    _asadmin_configs
+    compadd server
+}
+
+_asadmin_targets_cluster_config_das_standalone_instance() {
+    _asadmin_instances_standalone
+    _asadmin_clusters
+    _asadmin_configs
+    compadd server
+}
+
+_asadmin_targets_cluster_das_domain_standalone_instance() {
+    _asadmin_instances_standalone
+    _asadmin_clusters
+    compadd domain server
+}
+
+_asadmin_targets_cluster_das_standalone_instance() {
+    _asadmin_instances_standalone
+    _asadmin_clusters
+    compadd server
+}
+
+_asadmin_targets_clustered_instance_das() {
+    _asadmin_instances
+    compadd server
+}
+
+_asadmin_targets_clustered_instance_das_standalone_instance() {
+    _asadmin_instances
+    compadd server
+}
+
+_asadmin_targets_cluster_standalone_instance() {
+    _asadmin_clusters
+    _asadmin_instances_standalone
+}
+
 
 compadd '--help'
 _arguments \
