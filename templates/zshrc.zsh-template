@@ -27,7 +27,7 @@ plugins=(git svn textmate osx) #::_SS_PLUGINS::
 #::_SS_PLACEHOLDER::
 
 
-source .oh-my-zsh/oh-my-zsh.sh
+source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
 export PATH=~/bin:/usr/local/bin:/usr/bin:/bin:/usr/X11/bin:/opt/local/bin:/usr/local/git/bin:/Developer/android-sdk-mac/tools:/usr/local/narwhal/bin:/usr/local/node/bin:/usr/local/sbin:/usr/sbin:/sbin
