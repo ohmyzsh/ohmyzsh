@@ -307,7 +307,7 @@ case "$words[1]" in
         _command_args=('--clustertype+:' '--configstoretype+:' '--dburl+:' '--dbuser+:' '--dbvendor+:' '--host+:' '--jmsdbpassword+:' '--messagestoretype+:' '--port+:' '--property+:')
         ;;
     configure-lb-weight)
-        _command_args=('--cluster+:' '--host+:' '--port+:')
+        _command_args=('--cluster+:cluster:_asadmin_clusters' '--host+:' '--port+:')
         ;;
     configure-ldap-for-admin)
         _command_args=('--basedn+:' '--host+:' '--ldap-group+:' '--port+:' '--target+:' '--url+:')
@@ -370,7 +370,7 @@ case "$words[1]" in
         _command_args=('--enabled+:enabled:(true false)' '--host+:' '--iiopport+:' '--listeneraddress+:' '--port+:' '--property+:' '--securityenabled+:securityenabled:(true false)' '--target+:')
         ;;
     create-instance)
-        _command_args=('--checkports+:checkports:(true false)' '--cluster+:' '--config+:' '--host+:' '--lbenabled+:lbenabled:(true false)' '--node+:node:_asadmin_nodes' '--port+:' '--portbase+:' '--systemproperties+:' '--terse+:terse:(true false)')
+        _command_args=('--checkports+:checkports:(true false)' '--cluster+:cluster:_asadmin_clusters' '--config+:' '--host+:' '--lbenabled+:lbenabled:(true false)' '--node+:node:_asadmin_nodes' '--port+:' '--portbase+:' '--systemproperties+:' '--terse+:terse:(true false)')
         ;;
     create-jacc-provider)
         _command_args=('--host+:' '--policyconfigfactoryclass+:' '--policyproviderclass+:' '--port+:' '--property+:' '--target+:')
@@ -403,7 +403,7 @@ case "$words[1]" in
         _command_args=('--classname+:' '--classpath+:' '--description+:' '--enabled+:enabled:(true false)' '--failurefatal+:failurefatal:(true false)' '--host+:' '--loadorder+:' '--port+:' '--property+:' '--target+:')
         ;;
     create-local-instance)
-        _command_args=('--checkports+:checkports:(true false)' '--cluster+:' '--config+:' '--lbenabled+:lbenabled:(true false)' '--node+:node:_asadmin_nodes' '--nodedir+:' '--portbase+:' '--savemasterpassword+:savemasterpassword:(true false)' '--systemproperties+:' '--usemasterpassword+:usemasterpassword:(true false)')
+        _command_args=('--checkports+:checkports:(true false)' '--cluster+:cluster:_asadmin_clusters' '--config+:' '--lbenabled+:lbenabled:(true false)' '--node+:node:_asadmin_nodes' '--nodedir+:' '--portbase+:' '--savemasterpassword+:savemasterpassword:(true false)' '--systemproperties+:' '--usemasterpassword+:usemasterpassword:(true false)')
         ;;
     create-message-security-provider)
         _command_args=('--classname+:' '--host+:' '--isdefaultprovider+:isdefaultprovider:(true false)' '--layer+:layer:(SOAP HttpServlet)' '--port+:' '--property+:' '--providertype+:providertype:(client server client-server)' '--requestauthrecipient+:' '--requestauthsource+:' '--responseauthrecipient+:' '--responseauthsource+:' '--target+:')
@@ -442,7 +442,7 @@ case "$words[1]" in
         _command_args=('--enabled+:enabled:(true false)' '--host+:' '--port+:' '--target+:')
         ;;
     create-service)
-        _command_args=('--domaindir+:domaindir:directory:_files' '--dry-run+:dry-run:(true false)' '--force+:force:(true false)' '--name+:' '--node+:node:_asadmin_nodes' '--nodedir+:' '--serviceproperties+:' '--serviceuser+:')
+        _command_args=('*:instances:_asadmin_instances' '--domaindir+:domaindir:directory:_files' '--dry-run+:dry-run:(true false)' '--force+:force:(true false)' '--name+:' '--node+:node:_asadmin_nodes' '--nodedir+:' '--serviceproperties+:' '--serviceuser+:')
         ;;
     create-ssl)
         _command_args=('--certname+:' '--clientauthenabled+:clientauthenabled:(true false)' '--host+:' '--port+:' '--ssl2ciphers+:' '--ssl2enabled+:ssl2enabled:(true false)' '--ssl3enabled+:ssl3enabled:(true false)' '--ssl3tlsciphers+:' '--target+:' '--tlsenabled+:tlsenabled:(true false)' '--tlsrollbackenabled+:tlsrollbackenabled:(true false)' '--type+:type:(network-listener http-listener iiop-listener iiop-service jmx-connector)')
@@ -514,7 +514,7 @@ case "$words[1]" in
         _command_args=('--host+:' '--port+:' '--target+:')
         ;;
     delete-instance)
-        _command_args=('--host+:' '--port+:' '--terse+:terse:(true false)')
+        _command_args=('*:instances:_asadmin_instances' '--host+:' '--port+:' '--terse+:terse:(true false)')
         ;;
     delete-jacc-provider)
         _command_args=('--host+:' '--port+:' '--target+:')
@@ -547,7 +547,7 @@ case "$words[1]" in
         _command_args=('--host+:' '--port+:' '--target+:')
         ;;
     delete-local-instance)
-        _command_args=('--node+:node:_asadmin_nodes' '--nodedir+:')
+        _command_args=('*:instances:_asadmin_instances' '--node+:node:_asadmin_nodes' '--nodedir+:')
         ;;
     delete-log-levels)
         _command_args=('--host+:' '--port+:' '--target+:')
@@ -907,10 +907,10 @@ case "$words[1]" in
         _command_args=('--debug+:debug:(true false)' '--domaindir+:' '--force+:force:(true false)' '--kill+:kill:(true false)')
         ;;
     restart-instance)
-        _command_args=('--debug+:' '--host+:' '--port+:')
+        _command_args=('*:instances:_asadmin_instances' '--debug+:' '--host+:' '--port+:')
         ;;
     restart-local-instance)
-        _command_args=('--debug+:debug:(true false)' '--force+:force:(true false)' '--kill+:kill:(true false)' '--node+:node:_asadmin_nodes' '--nodedir+:')
+        _command_args=('*:instances:_asadmin_instances' '--debug+:debug:(true false)' '--force+:force:(true false)' '--kill+:kill:(true false)' '--node+:node:_asadmin_nodes' '--nodedir+:')
         ;;
     restore-domain)
         _command_args=('--backupconfig+:' '--backupdir+:' '--description+:' '--domaindir+:' '--filename+:' '--force+:force:(true false)' '--long+:long:(true false)')
@@ -943,7 +943,7 @@ case "$words[1]" in
         _command_args=('--host+:' '--port+:' '--target+:')
         ;;
     start-cluster)
-        _command_args=('--autohadboverride+:autohadboverride:(true false)' '--host+:' '--port+:' '--verbose+:verbose:(true false)')
+        _command_args=('*:clusters:_asadmin_clusters' '--autohadboverride+:autohadboverride:(true false)' '--host+:' '--port+:' '--verbose+:verbose:(true false)')
         ;;
     start-database)
         _command_args=('--dbhome+:' '--dbhost+:' '--dbport+:' '--jvmoptions+:')
@@ -952,13 +952,13 @@ case "$words[1]" in
         _command_args=('--debug+:debug:(true false)' '--domaindir+:' '--upgrade+:upgrade:(true false)' '--verbose+:verbose:(true false)')
         ;;
     start-instance)
-        _command_args=('--debug+:debug:(true false)' '--host+:' '--port+:' '--setenv+:' '--sync+:sync:(none normal full)' '--terse+:terse:(true false)')
+        _command_args=('*:instances:_asadmin_instances' '--debug+:debug:(true false)' '--host+:' '--port+:' '--setenv+:' '--sync+:sync:(none normal full)' '--terse+:terse:(true false)')
         ;;
     start-local-instance)
-        _command_args=('--debug+:debug:(true false)' '--node+:node:_asadmin_nodes' '--nodedir+:' '--sync+:sync:(none normal full)' '--verbose+:verbose:(true false)')
+        _command_args=('*:instances:_asadmin_instances' '--debug+:debug:(true false)' '--node+:node:_asadmin_nodes' '--nodedir+:' '--sync+:sync:(none normal full)' '--verbose+:verbose:(true false)')
         ;;
     stop-cluster)
-        _command_args=('--autohadboverride+:autohadboverride:(true false)' '--host+:' '--kill+:kill:(true false)' '--port+:' '--verbose+:verbose:(true false)')
+        _command_args=('*:clusters:_asadmin_clusters' '--autohadboverride+:autohadboverride:(true false)' '--host+:' '--kill+:kill:(true false)' '--port+:' '--verbose+:verbose:(true false)')
         ;;
     stop-database)
         _command_args=('--dbhost+:' '--dbport+:' '--dbuser+:')
@@ -967,10 +967,10 @@ case "$words[1]" in
         _command_args=('--domaindir+:' '--force+:force:(true false)' '--kill+:kill:(true false)')
         ;;
     stop-instance)
-        _command_args=('--force+:force:(true false)' '--host+:' '--kill+:kill:(true false)' '--port+:')
+        _command_args=('*:instances:_asadmin_instances' '--force+:force:(true false)' '--host+:' '--kill+:kill:(true false)' '--port+:')
         ;;
     stop-local-instance)
-        _command_args=('--force+:force:(true false)' '--kill+:kill:(true false)' '--node+:node:_asadmin_nodes' '--nodedir+:')
+        _command_args=('*:instances:_asadmin_instances' '--force+:force:(true false)' '--kill+:kill:(true false)' '--node+:node:_asadmin_nodes' '--nodedir+:')
         ;;
     test-upgrade)
         _command_args=('--host+:' '--port+:')
@@ -1034,6 +1034,10 @@ case "$words[1]" in
         ;;
 esac
 
+
+_asadmin_clusters() {
+    compadd $(command asadmin list-clusters --terse | sed 's/ .*//')
+}
 
 _asadmin_instances() {
     compadd $(command asadmin list-instances --terse --nostatus domain)
