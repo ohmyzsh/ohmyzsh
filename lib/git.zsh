@@ -1,13 +1,18 @@
 # get the name of the branch we are on
-function git_prompt_info() {
+function git_current_branch() {
   ref=$(git symbolic-ref HEAD 2> /dev/null) || \
   ref=$(git rev-parse --short HEAD 2> /dev/null) || return
-  echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
+  echo ${ref#refs/heads/}
 }
 
+# Branch and dirty flag
+function git_prompt_info() {
+  ref=$(git symbolic-ref HEAD 2> /dev/null) || return
+  echo "$ZSH_THEME_GIT_PROMPT_PREFIX$(git_current_branch)$(git_parse_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
+}
 
 # Checks if working tree is dirty
-parse_git_dirty() {
+function git_parse_dirty() {
   local SUBMODULE_SYNTAX=''
   if [[ $POST_1_7_2_GIT -gt 0 ]]; then
         SUBMODULE_SYNTAX="--ignore-submodules=dirty"
@@ -18,11 +23,12 @@ parse_git_dirty() {
     echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
   fi
 }
-
+# For backwards compatibility
+function parse_git_dirty() { git_parse_dirty }
 
 # Checks if there are commits ahead from remote
 function git_prompt_ahead() {
-  if $(echo "$(git log origin/$(current_branch)..HEAD 2> /dev/null)" | grep '^commit' &> /dev/null); then
+  if $(echo "$(git log origin/$(git_current_branch)..HEAD 2> /dev/null)" | grep '^commit' &> /dev/null); then
     echo "$ZSH_THEME_GIT_PROMPT_AHEAD"
   fi
 }
@@ -38,7 +44,7 @@ function git_prompt_long_sha() {
 }
 
 # Get the status of the working tree
-git_prompt_status() {
+function git_prompt_status() {
   INDEX=$(git status --porcelain 2> /dev/null)
   STATUS=""
   if $(echo "$INDEX" | grep '^?? ' &> /dev/null); then
