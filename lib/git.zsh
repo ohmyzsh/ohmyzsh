@@ -28,10 +28,18 @@ function parse_git_dirty() { git_parse_dirty }
 
 # Checks if there are commits ahead from remote
 function git_prompt_ahead() {
-  if $(echo "$(git log origin/$(git_current_branch)..HEAD 2> /dev/null)" | grep '^commit' &> /dev/null); then
+  if $(git status --porcelain --branch 2> /dev/null | grep '^## .*ahead' &> /dev/null); then
     echo "$ZSH_THEME_GIT_PROMPT_AHEAD"
   fi
 }
+
+# Checks if there are commits behind from remote
+function git_prompt_behind() {
+  if $(git status --porcelain --branch 2> /dev/null | grep '^## .*behind' &> /dev/null); then
+    echo $ZSH_THEME_GIT_PROMPT_BEHIND
+  fi
+}
+
 
 # Formats prompt string for current git commit short SHA
 function git_prompt_short_sha() {
