@@ -3,7 +3,9 @@
 #Fully support screen, iterm, and probably most modern xterm and rxvt
 #Limited support for Apple Terminal (Terminal can't set window or tab separately)
 function title {
-  [ "$DISABLE_AUTO_TITLE" != "true" ] || return
+  if [[ "$DISABLE_AUTO_TITLE" == "true" ]] || [[ "$EMACS" == *term* ]]; then
+    return
+  fi
   if [[ "$TERM" == screen* ]]; then
     print -Pn "\ek$1:q\e\\" #set screen hardstatus, usually truncated at 20 chars
   elif [[ "$TERM" == xterm* ]] || [[ $TERM == rxvt* ]] || [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then

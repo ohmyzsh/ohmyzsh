@@ -36,7 +36,7 @@ cd () {
 
 alias md='mkdir -p'
 alias rd=rmdir
-alias d='dirs -v'
+alias d='dirs -v | head -10'
 
 # mkdir & cd to it
 function mcd() { 
