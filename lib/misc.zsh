@@ -9,5 +9,5 @@ bindkey "^[m" copy-prev-shell-word
 setopt long_list_jobs
 
 ## pager
-export PAGER="less -R"
+export PAGER=less
 export LC_CTYPE=$LANG

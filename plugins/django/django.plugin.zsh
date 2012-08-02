@@ -220,4 +220,3 @@ _managepy() {
 
 compdef _managepy manage.py
 compdef _managepy django
-compdef _managepy django-manage
