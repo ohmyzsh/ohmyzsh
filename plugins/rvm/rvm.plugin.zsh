@@ -1,8 +1,8 @@
 alias rubies='rvm list rubies'
 alias gemsets='rvm gemset list'
 
-local ruby18='ruby-1.8.7-p334'
-local ruby19='ruby-1.9.2-p180'
+local ruby18='ruby-1.8.7-p370'
+local ruby19='ruby-1.9.3-p194'
 
 function rb18 {
 	if [ -z "$1" ]; then
@@ -27,8 +27,7 @@ _rb19() {compadd `ls -1 $rvm_path/gems | grep "^$ruby19@" | sed -e "s/^$ruby19@/
 compdef _rb19 rb19
 
 function rvm-update {
-	rvm get head
-	rvm reload # TODO: Reload rvm completion?
+	rvm get stable # TODO: Reload rvm completion?
 }
 
 # TODO: Make this usable w/o rvm.
