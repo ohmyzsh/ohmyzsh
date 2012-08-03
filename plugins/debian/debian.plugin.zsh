@@ -21,7 +21,7 @@ fi
 # These are for more obscure uses of apt-get and aptitude that aren't covered
 # below.
 alias ag='apt-get'
-alias at='aptitude'
+alias att='aptitude'
 
 # Some self-explanatory aliases
 alias acs="apt-cache search"
