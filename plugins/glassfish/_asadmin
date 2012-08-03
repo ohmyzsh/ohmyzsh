@@ -901,7 +901,7 @@ case "$words[1]" in
         _command_args=('*:directory:_files' '--asyncreplication+:asyncreplication:(true false)' '--availabilityenabled+:availabilityenabled:(true false)' '--contextroot+:' '--createtables+:createtables:(true false)' '--dbvendorname+:' '--deploymentplan+:deploymentplan:directory:_files' '--description+:' '--dropandcreatetables+:dropandcreatetables:(true false)' '--enabled+:enabled:(true false)' '--force+:force:(true false)' '--generatermistubs+:generatermistubs:(true false)' '--host+:' '--isredeploy+:isredeploy:(true false)' '--keepfailedstubs+:keepfailedstubs:(true false)' '--keepreposdir+:keepreposdir:(true false)' '--keepstate+:keepstate:(true false)' '--lbenabled+:lbenabled:(true false)' '--libraries+:' '--logreportederrors+:logreportederrors:(true false)' '--name+:' '--port+:' '--precompilejsp+:precompilejsp:(true false)' '--properties+:' '--property+:' '--retrieve+:' '--target+:target:_asadmin_targets_cluster_das_domain_standalone_instance' '--type+:' '--uniquetablenames+:uniquetablenames:(true false)' '--verify+:verify:(true false)' '--virtualservers+:')
         ;;
     remove-library)
-        _command_args=('--host+:' '--port+:' '--type+:type:(common ext app)')
+        _command_args=('*:libraries:_asadmin_libraries' '--host+:' '--port+:' '--type+:type:(common ext app)')
         ;;
     restart-domain)
         _command_args=('--debug+:debug:(true false)' '--domaindir+:' '--force+:force:(true false)' '--kill+:kill:(true false)')
