@@ -976,7 +976,7 @@ case "$words[1]" in
         _command_args=('--host+:' '--port+:')
         ;;
     undeploy)
-        _command_args=('--cascade+:cascade:(true false)' '--droptables+:droptables:(true false)' '--host+:' '--isredeploy+:isredeploy:(true false)' '--keepreposdir+:keepreposdir:(true false)' '--keepstate+:keepstate:(true false)' '--port+:' '--properties+:' '--target+:target:_asadmin_targets_cluster_das_domain_standalone_instance')
+        _command_args=('*:applications:_asadmin_applications' '--cascade+:cascade:(true false)' '--droptables+:droptables:(true false)' '--host+:' '--isredeploy+:isredeploy:(true false)' '--keepreposdir+:keepreposdir:(true false)' '--keepstate+:keepstate:(true false)' '--port+:' '--properties+:' '--target+:target:_asadmin_targets_cluster_das_domain_standalone_instance')
         ;;
     unfreeze-transaction-service)
         _command_args=('--host+:' '--port+:' '--target+:target:_asadmin_targets_cluster_clustered_instance_config_das_standalone_instance')
@@ -1035,8 +1035,12 @@ case "$words[1]" in
 esac
 
 
+_asadmin_applications() {
+    compadd $(command asadmin list-applications --terse | sed 's/\s.*//')
+}
+
 _asadmin_clusters() {
-    compadd $(command asadmin list-clusters --terse | sed 's/ .*//')
+    compadd $(command asadmin list-clusters --terse | sed 's/\s.*//')
 }
 
 _asadmin_configs() {
