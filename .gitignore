@@ -4,5 +4,6 @@ projects.zsh
 custom/*
 !custom/example
 !custom/example.zsh
-cache
 *.swp
+!custom/example.zshcache
+cache/

@@ -16,7 +16,7 @@ function svn_get_repo_name {
     if [ $(in_svn) ]; then
         svn info | sed -n 's/Repository\ Root:\ .*\///p' | read SVN_ROOT
     
-        svn info | sed -n "s/URL:\ .*$SVN_ROOT\///p" | sed "s/\/.*$//"
+        svn info | sed -n "s/URL:\ .*$SVN_ROOT\///p"
     fi
 }
 
