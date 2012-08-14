@@ -38,6 +38,8 @@ alias gm='git merge'
 compdef _git gm=git-merge
 alias grh='git reset HEAD'
 alias grhh='git reset HEAD --hard'
+alias gt="git tag"
+compdef _git gt=git-tag
 
 # Git and svn mix
 alias git-svn-dcommit-push='git svn dcommit && git push github master:svntrunk'
