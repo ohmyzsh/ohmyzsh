@@ -21,3 +21,8 @@ function vundle-update () {
   vundle-init
   vim -c "execute \"BundleInstall!\" | q | q"
 }
+
+function vundle-clean () {
+  vundle-init
+  vim -c "execute \"BundleClean\" | q | q"
+}
