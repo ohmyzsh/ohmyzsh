@@ -1,4 +1,11 @@
-PROMPT='%{$FG[238]%}%3~ \
+function ssh_connection() {
+  if [[ -n $SSH_CONNECTION ]]; then
+    echo "%{$fg_bold[red]%}(ssh %n@%m) "
+  fi
+}
+
+PROMPT='$(ssh_connection)\
+%{$FG[238]%}%3~ \
 $(git_prompt_info)\
 %{$fg[green]%}%(!.#.❯)\
 %{$reset_color%} '
