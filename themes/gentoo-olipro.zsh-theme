@@ -23,11 +23,6 @@ theme_precmd () {
 
 setopt prompt_subst
 #PROMPT='%B%F{magenta}%c%B%F{green}${vcs_info_msg_0_}%B%F{magenta} %{$reset_color%}%% '
-if [[ -z ${vcs_info_msg_0} ]] {
-	PROMPT='%(!.%{$fg_bold[red]%}.%{$fg_bold[green]%}%n@)%m %{$fg_bold[blue]%}%(!.%1~.%~) %#%{$reset_color%} '
-} else {
 	PROMPT='%(!.%{$fg_bold[red]%}.%{$fg_bold[green]%}%n@)%m %{$fg_bold[blue]%}%(!.%1~.%~)${vcs_info_msg_0_}%#%{$reset_color%} '
-}
-
 autoload -U add-zsh-hook
 add-zsh-hook precmd  theme_precmd
