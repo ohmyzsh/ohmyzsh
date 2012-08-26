@@ -73,7 +73,7 @@ _zsh_highlight_main_highlighter()
     '|' '||' ';' '&' '&&'
   )
   ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS=(
-    'builtin' 'command' 'exec' 'nocorrect' 'noglob'
+    'builtin' 'command' 'exec' 'nocorrect' 'noglob' 'sudo'
   )
   # Tokens that are always immediately followed by a command.
   ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS=(
