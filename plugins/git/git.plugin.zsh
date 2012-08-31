@@ -93,4 +93,9 @@ alias ggpnp='git pull origin $(current_branch) && git push origin $(current_bran
 compdef ggpnp=git
 
 # Remove from repo all files deleted
-alias gitstrm="git st | egrep 'deleted' | sed -e 's/#//' -e 's/deleted:/git rm/' | sh"
+alias gitstrm='git st | egrep "deleted" | sed -e "s/#//" -e "s/deleted:/git rm/" | sh'
+
+alias gpush='git push'
+compdef gpush=git
+alias gpull='git pull'
+compdef gpull=git
