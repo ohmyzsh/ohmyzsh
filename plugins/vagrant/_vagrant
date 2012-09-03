@@ -44,7 +44,7 @@ __task_list ()
 
 __box_list ()
 {
-    _wanted application expl 'command' compadd $(command ls -1 $HOME/.vagrant/boxes 2>/dev/null| sed -e 's/ /\\ /g')
+    _wanted application expl 'command' compadd $(command vagrant box list | sed -e 's/ /\\ /g')
 }
 
 __vm_list ()
