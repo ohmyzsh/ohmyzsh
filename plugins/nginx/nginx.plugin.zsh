@@ -81,45 +81,36 @@ _nginx_vhost () {
 
 # Parsing arguments
 vhost () {
-    user=$USER;
-    template=$NGINX_VHOST_TEMPLATE
-    tpl="non_existing_template"
-    enable=1
-    write_hosts=0
-    args=""
+    local user=$USER;
+    local template=$NGINX_VHOST_TEMPLATE
+    local tpl="non_existing_template"
+    local enable=1
+    local write_hosts=0
 
     while getopts ":lu:t:nwh" option
     do
       case $option in
         l ) ls $NGINX_DIR/sites-enabled; return ;;
-        u ) user=$OPTARG; args="$args -u $OPTARG" ;;
-        t ) tpl=$OPTARG; args="$args -t $OPTARG" ;;
-        n ) enable=0; args="$args -n" ;;
-        w ) write_hosts=1; args="$args -w" ;;
+        u ) user=$OPTARG ;;
+        t ) tpl=$OPTARG ;;
+        n ) enable=0 ;;
+        w ) write_hosts=1 ;;
         h ) _vhost_usage; return ;;
       esac
     done
     
-    vhost=${@: -1}
-    vhostNotGiven=0
-    
-    if [ ! $vhost ]; then
-        vhostNotGiven=1
-    else
-        if [ $(echo $args | grep -o $vhost) ]; then
-            vhostNotGiven=1
-        fi
-    fi
-    
-    if [ $vhostNotGiven -eq 1 ]; then
+    shift $[ $OPTIND - 1 ]
+    local vhost=$1
+  
+    if [ -z "$vhost" ]; then
         echo "\033[337;41m\nThe name of the vhost is required!\n\033[0m"
         return
     fi
     
     if [ -e $ZSH/plugins/nginx/templates/$tpl ]; then
-        template=$ZSH/plugins/nginx/templates/$tpl
+        local template=$ZSH/plugins/nginx/templates/$tpl
     elif [ -e $tpl ]; then
-        template=$tpl
+        local template=$tpl
     fi
         
     _vhost_generate $vhost $user
@@ -149,7 +140,7 @@ _vhost_usage () {
 
 # Generate config file
 _vhost_generate () {
-    user=$(cat /etc/passwd | grep $2 | awk -F : '{print $1 }')
+    local user=$(cat /etc/passwd | grep $2 | awk -F : '{print $1 }')
     
     if [ ! $user ]; then
       echo "User \033[31m$2\033[0m doesn't have an account on \033[33m$HOST\033[0m"
@@ -158,10 +149,10 @@ _vhost_generate () {
 
     echo "Generating \033[32m$1\033[0m vhost for \033[33m$user\033[0m user"
         
-    user_id=$(cat /etc/passwd | grep $2 | awk -F : '{print $3 }')
-    pool_port=1$user_id
+    local user_id=$(cat /etc/passwd | grep $2 | awk -F : '{print $3 }')
+    local pool_port=1$user_id
     
-    conf=$(sed -e 's/{vhost}/'$1'/g' -e 's/{user}/'$user'/g' -e 's/{pool_port}/'$pool_port'/g' $template )
+    local conf=$(sed -e 's/{vhost}/'$1'/g' -e 's/{user}/'$user'/g' -e 's/{pool_port}/'$pool_port'/g' $template )
     
     echo $conf > $1.tmp
     $sudo mv $1.tmp $NGINX_DIR/sites-available/$1
@@ -188,7 +179,7 @@ _write_hosts () {
 	
 	$sudo mv $temp /etc/hosts;
 	
-	"\033[32m$1\033[0m vhost has been successfully written in /etc/hosts"
+	echo "\033[32m$1\033[0m vhost has been successfully written in /etc/hosts"
 }
 
 alias ngt="$sudo nginx -t"

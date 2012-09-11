@@ -9,7 +9,7 @@ server {
 	access_log /var/log/nginx/{vhost}.access.log;
     
     location / {
-        try_files $uri $uri/ /app_dev.php;
+        try_files $uri $uri/ /app_dev.php$uri /app_dev.php$is_args$args;
     }
 
     # pass the PHP scripts to FastCGI server listening on 127.0.0.1:{pool_port}
