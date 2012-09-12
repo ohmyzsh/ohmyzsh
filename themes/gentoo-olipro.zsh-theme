@@ -19,7 +19,7 @@ theme_precmd () {
                 }
         }
     } else {
-        zstyle ':vcs_info:*' formats ' (%b) %c%u%B%F{red}[34m~W~O%F{blue}'
+        zstyle ':vcs_info:*' formats ' (%b) %c%u%B%F{red}●%F{blue}'
     }
 
     vcs_info
