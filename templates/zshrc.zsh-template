@@ -34,3 +34,4 @@ plugins=(git svn history-substring-search)
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
+setopt interactivecomments
