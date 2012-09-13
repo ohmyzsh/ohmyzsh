@@ -12,7 +12,7 @@ _cap_show_undescribed_tasks=0
 _cap_task_cache_file='.cap_task_cache'
 
 _cap_get_task_list () {
-  if [ ${_cap_show_undescribed_tasks} -eq 0 ]
+  if [ ${_cap_show_undescribed_tasks} -eq 0 ]; then
     cap -T | grep '^cap' | cut -d " " -f 2
   else
     cap -vT | grep '^cap' | cut -d " " -f 2
