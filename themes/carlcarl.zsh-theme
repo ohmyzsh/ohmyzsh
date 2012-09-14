@@ -17,7 +17,7 @@ GIT_PROMPT_INFO=$FG[161]
 
 PROMPT='$HOST_PROMPT_%B%{$PROMPT_SUCCESS_COLOR%}%~%{$reset_color%} %B%{$GIT_PROMPT_INFO%}$(git_prompt_info)%{$GIT_DIRTY_COLOR%}$(git_prompt_status)%b %{$reset_color%}%{$PROMPT_PROMPT%}➭%{$reset_color%} '
 
-RPROMPT='[%*]'
+RPROMPT='[%*][%D{%Y-%m-%d}]'
 #RPS1="${return_code}"
 
 ZSH_THEME_GIT_PROMPT_PREFIX="("
