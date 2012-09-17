@@ -89,8 +89,8 @@ pull_request() {
     issue=""
   fi
 
-  echo "hub pull-request $issue -b $organization:master -h $organization:$(current_branch)"
-	hub pull-request $issue -b $organization:master -h $organization:$(current_branch)
+  echo "hub pull-request $(echo $issue) -b $organization:master -h $organization:$(current_branch)"
+	hub pull-request $(echo $issue) -b $organization:master -h $organization:$(current_branch)
 }
 
 # End Functions #############################################################
