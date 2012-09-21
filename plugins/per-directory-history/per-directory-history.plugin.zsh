@@ -81,7 +81,6 @@ bindkey '^G' per-directory-history-toggle-history
 # implementation details
 #-------------------------------------------------------------------------------
 
-_per_directory_history_global=$HISTFILE
 _per_directory_history_directory="$HISTORY_BASE${PWD:A}/history"
 
 function _per-directory-history-change-directory() {
@@ -89,7 +88,7 @@ function _per-directory-history-change-directory() {
   mkdir -p ${_per_directory_history_directory:h}
   if [[ $_per_directory_history_is_global == false ]]; then
     #save to the global history
-    fc -AI $_per_directory_history_global
+    fc -AI $HISTFILE
     #save history to previous file
     local prev="$HISTORY_BASE${OLDPWD:A}/history"
     mkdir -p ${prev:h}
@@ -115,7 +114,7 @@ function _per-directory-history-addhistory() {
 
 function _per-directory-history-set-directory-history() {
   if [[ $_per_directory_history_is_global == true ]]; then
-    fc -AI $_per_directory_history_global
+    fc -AI $HISTFILE
     local original_histsize=$HISTSIZE
     HISTSIZE=0
     HISTSIZE=$original_histsize
@@ -131,8 +130,8 @@ function _per-directory-history-set-global-history() {
     local original_histsize=$HISTSIZE
     HISTSIZE=0
     HISTSIZE=$original_histsize
-    if [[ -e "$_per_directory_history_global" ]]; then
-      fc -R "$_per_directory_history_global"
+    if [[ -e "$HISTFILE" ]]; then
+      fc -R "$HISTFILE"
     fi
   fi
   _per_directory_history_is_global=true
