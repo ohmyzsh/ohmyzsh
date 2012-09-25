@@ -35,6 +35,7 @@ DISABLE_AUTO_UPDATE="true"
 plugins=(git python vim-override)
 
 source $ZSH/oh-my-zsh.sh
+source `which virtualenvwrapper.sh`
 
 # Customize to your needs...
 if [ -z "$LC_ALL" ]; then export LC_ALL=en_US.UTF-8; fi
