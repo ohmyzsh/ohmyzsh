@@ -5,7 +5,7 @@
 #        jira ABC-123   # Opens an existing issue
 open_jira_issue () {
   if [ ! -f .jira-url ]; then
-    echo "There is no .jira-url file in the current directory or your home folder..."
+    echo "There is no .jira-url file in the current directory..."
     return 0;
   else
     jira_url=$(cat .jira-url);
