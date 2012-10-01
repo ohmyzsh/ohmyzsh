@@ -1,6 +1,6 @@
 # To use: add a .jira-url file in the base of your project
 # Setup: cd to/my/project
-         echo "https://name.jira.com" >> .jira-url
+#        echo "https://name.jira.com" >> .jira-url
 # Usage: jira           # opens a new issue
 #        jira ABC-123   # Opens an existing issue
 open_jira_issue () {
