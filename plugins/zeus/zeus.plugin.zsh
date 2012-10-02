@@ -44,11 +44,11 @@ alias zucumber='zeus cucumber'
 alias zt='zeus test'
 alias zest='zeus test'
 
-alias zu='zeus test/unit/*'
-alias zunits='zeus test/unit/*'
+alias zu='zeus test test/unit/*'
+alias zunits='zeus test test/unit/*'
 
-alias zf='zeus test/functional/*'
-alias zunctional='zeus test/functional/*'
+alias zf='zeus test test/functional/*'
+alias zunctional='zeus test test/functional/*'
 
 alias za='zeus test test/unit/*; zeus test test/functional/; zeus cucumber'
 alias zall='zeus test test/unit/*; zeus test test/functional/; zeus cucumber'
