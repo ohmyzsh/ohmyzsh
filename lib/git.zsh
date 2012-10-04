@@ -66,7 +66,9 @@ git_prompt_status() {
   if echo "$INDEX" | grep '^UU ' &> /dev/null; then
     STATUS="$ZSH_THEME_GIT_PROMPT_UNMERGED$STATUS"
   fi
-  echo $STATUS
+  if [ "$STATUS" != "" ];then
+	  echo $STATUS
+  fi
 }
 
 #compare the provided version of git to the version installed and on path
