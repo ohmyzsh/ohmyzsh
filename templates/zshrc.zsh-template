@@ -41,4 +41,7 @@ source `which virtualenvwrapper.sh`
 if [ -z "$LC_ALL" ]; then export LC_ALL=en_US.UTF-8; fi
 if [ -z "$LANG" ]; then export LANG=en_US.UTF-8; fi
 
+if [ -e $HOME/bin ]; then export PATH="$HOME/bin:$PATH"; fi
+unsetopt correctall
+
 # Themes override ls alias from aliases.zsh
