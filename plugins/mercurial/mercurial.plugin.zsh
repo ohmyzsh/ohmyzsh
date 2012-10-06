@@ -19,12 +19,11 @@ function hg_current_branch() {
   fi
 }
 
-parse_hg_dirty() {
-  hg status 2> /dev/null \
-    | awk '$1 == "?" { unknown = 1 } 
-           $1 != "?" { changed = 1 }
-           END {
-             if (changed) printf "$ZSH_THEME_GIT_PROMPT_DIRTY"
-             else if (unknown) printf "$ZSH_THEME_GIT_PROMPT_CLEAN" 
-           }'
+function parse_hg_dirty() {
+  local num_status=$(hg status | wc -l)
+  if [ $num_status -eq 0 ]; then
+  	echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
+  else
+  	echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
+  fi
 }
