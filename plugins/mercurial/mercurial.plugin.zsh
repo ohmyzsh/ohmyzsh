@@ -15,6 +15,6 @@ alias hgca='hg qimport -r tip ; hg qrefresh -e ; hg qfinish tip'
 
 function hg_current_branch() {
   if [ -d .hg ]; then
-    echo hg:$(hg branch)
+    echo $(hg branch)
   fi
 }
