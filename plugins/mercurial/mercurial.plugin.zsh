@@ -18,3 +18,13 @@ function hg_current_branch() {
     echo $(hg branch)
   fi
 }
+
+parse_hg_dirty() {
+  hg status 2> /dev/null \
+    | awk '$1 == "?" { unknown = 1 } 
+           $1 != "?" { changed = 1 }
+           END {
+             if (changed) printf "$ZSH_THEME_GIT_PROMPT_DIRTY"
+             else if (unknown) printf "$ZSH_THEME_GIT_PROMPT_CLEAN" 
+           }'
+}
