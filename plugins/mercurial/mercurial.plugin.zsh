@@ -14,9 +14,8 @@ alias hgs='hg status'
 alias hgca='hg qimport -r tip ; hg qrefresh -e ; hg qfinish tip'
 
 function hg_current_branch() {
-  if [ -d .hg ]; then
-    echo $(hg branch)
-  fi
+  local ref=$(hg branch 2>/dev/null) || return
+  echo $ref
 }
 
 function parse_hg_dirty() {
