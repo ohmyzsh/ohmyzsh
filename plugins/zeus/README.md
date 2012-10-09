@@ -28,14 +28,14 @@
 * `zt` aliases `zeus test`
 * `zest` aliases `zeus test`
 
-* `zu` aliases `zeus test/units/*`
-* `zunits` aliases `zeus test/units/*`
+* `zu` aliases `zeus test test/unit/*`
+* `zunits` aliases `zeus test test/unit/*`
 
-* `zf` aliases `zeus test/functional/*`
-* `zunctional` aliases `zeus test/functional/*`
+* `zf` aliases `zeus test test/functional/*`
+* `zunctional` aliases `zeus test test/functional/*`
 
-* `za` aliases `zeus test test/units/*; zeus test test/functional/; zeus cucumber`
-* `zall` aliases `zeus test test/units/*; zeus test test/functional/; zeus cucumber`
+* `za` aliases `zeus test test/unit/*; zeus test test/functional/; zeus cucumber`
+* `zall` aliases `zeus test test/unit/*; zeus test test/functional/; zeus cucumber`
 
 * `zsw` aliases `rm .zeus.sock`
 * `zweep` aliases `rm .zeus.sock`
