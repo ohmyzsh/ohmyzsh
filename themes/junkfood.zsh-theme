@@ -5,7 +5,7 @@
 # ------------------------------------------------------------------------
 
 # Grab the current date (%W) and time (%t):
-JUNKFOOD_TIME_="%{$fg_bold[red]%}#%{$fg_bold[white]%}( %t on %{$fg_bold[yellow]%}%W%{$fg_bold[white]%} )( %{$reset_color%}"
+JUNKFOOD_TIME_="%{$fg_bold[red]%}#%{$fg_bold[white]%}( %{$fg_bold[yellow]%}%W%{$reset_color%}@%{$fg_bold[white]%}%t )( %{$reset_color%}"
 
 # Grab the current machine name 
 JUNKFOOD_MACHINE_="%{$fg_bold[blue]%}%m%{$fg[white]%} ):%{$reset_color%}"
@@ -31,4 +31,4 @@ ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg_bold[red]%}✗✗✗"
 
 # Put it all together!
 PROMPT="$JUNKFOOD_TIME_$JUNKFOOD_CURRENT_USER_@$JUNKFOOD_MACHINE_$JUNKFOOD_LOCA_
-    "
+   "
