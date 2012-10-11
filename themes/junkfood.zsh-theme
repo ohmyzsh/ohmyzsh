@@ -5,10 +5,10 @@
 # ------------------------------------------------------------------------
 
 # Grab the current date (%W) and time (%t):
-JUNKFOOD_TIME_="%{$fg_bold[red]%}#(%{$fg_bold[white]%}%t on %{$fg_bold[yellow]%}%W%{$fg_bold[white]%})%{$reset_color%}"
+JUNKFOOD_TIME_="%{$fg_bold[red]%}#%{$fg_bold[white]%}( %t on %{$fg_bold[yellow]%}%W%{$fg_bold[white]%} )( %{$reset_color%}"
 
 # Grab the current machine name 
-JUNKFOOD_MACHINE_="%{$fg_bold[blue]%}%m%{$fg[white]%}):%{$reset_color%}"
+JUNKFOOD_MACHINE_="%{$fg_bold[blue]%}%m%{$fg[white]%} ):%{$reset_color%}"
 
 # Grab the current username 
 JUNKFOOD_CURRENT_USER_="%{$fg_bold[green]%}%n%{$reset_color%}"
