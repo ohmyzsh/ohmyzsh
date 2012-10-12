@@ -60,6 +60,11 @@ function current_repository() {
   echo $(git remote -v | cut -d':' -f 2)
 }
 
+# change workdir to repo's root (or do `cd` with no arguments if not in a repo)
+function toroot() {
+  builtin cd "`git_get_root`"
+}
+
 # these aliases take advantage of the previous function
 alias ggpull='git pull origin $(current_branch)'
 compdef ggpull=git
