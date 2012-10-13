@@ -38,6 +38,9 @@ function git_prompt_long_sha() {
 
 # Get the status of the working tree
 git_prompt_status() {
+  if ! git status &> /dev/null; then
+    return
+  fi
   INDEX=$(git status --porcelain 2> /dev/null)
   STATUS=""
   if $(echo "$INDEX" | grep '^?? ' &> /dev/null); then
@@ -66,6 +69,8 @@ git_prompt_status() {
   if $(echo "$INDEX" | grep '^UU ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_UNMERGED$STATUS"
   fi
+  STATUS="$ZSH_THEME_GIT_PROMPT_STATUS_PREFIX$STATUS"
+  STATUS+="$ZSH_THEME_GIT_PROMPT_STATUS_SUFFIX"
   echo $STATUS
 }
 
