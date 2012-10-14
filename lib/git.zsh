@@ -1,7 +1,10 @@
 # get the name of the branch we are on
 function git_prompt_info() {
-  ref=$(git symbolic-ref HEAD 2> /dev/null) || return
-  echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
+  if ! git status &> /dev/null; then
+    return
+  fi
+  branch=$(git branch | grep ^\* | cut -d" " -f2-)
+  echo "$ZSH_THEME_GIT_PROMPT_PREFIX${branch}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
 }
 
 
@@ -38,6 +41,9 @@ function git_prompt_long_sha() {
 
 # Get the status of the working tree
 git_prompt_status() {
+  if ! git status &> /dev/null; then
+    return
+  fi
   INDEX=$(git status --porcelain 2> /dev/null)
   STATUS=""
   if $(echo "$INDEX" | grep '^?? ' &> /dev/null); then
@@ -66,6 +72,8 @@ git_prompt_status() {
   if $(echo "$INDEX" | grep '^UU ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_UNMERGED$STATUS"
   fi
+  STATUS="$ZSH_THEME_GIT_PROMPT_STATUS_PREFIX$STATUS"
+  STATUS+="$ZSH_THEME_GIT_PROMPT_STATUS_SUFFIX"
   echo $STATUS
 }
 
