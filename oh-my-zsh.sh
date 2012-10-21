@@ -9,16 +9,6 @@ fi
 # add a function path
 fpath=($ZSH/functions $ZSH/completions $fpath)
 
-# Load all library config files in the lib/ folder. If a config file with the
-# same name exists under custom/ load that instead. This allows you to override
-# default behaviors
-for library ($ZSH/lib/*.zsh); do
-  if [ -f $ZSH/custom/$library:t ]; then
-    source $ZSH/custom/$library:t
-  elif [ -f $library ]; then
-    source $library
-  fi
-done
 
 # Set ZSH_CUSTOM to the path where your custom config files
 # and plugins exists, or else we will use the default custom/
@@ -26,6 +16,17 @@ if [[ -z "$ZSH_CUSTOM" ]]; then
     ZSH_CUSTOM="$ZSH/custom"
 fi
 
+# Load all library config files in the lib/ folder. If a config file with the
+# same name exists under custom/ don't load the one in lib/. This allows you to
+# override default behaviors
+for library ($ZSH/lib/*.zsh); do
+  if [ ! -f $ZSH_CUSTOM/$library:t ]; then
+    source $library
+  fi
+done
+
+# Load all of your custom configurations from custom/
+for config_file ($ZSH_CUSTOM/*.zsh(N)) source $config_file
 
 is_plugin() {
   local base_dir=$1
