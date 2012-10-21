@@ -1,0 +1,32 @@
+#compdef supervisord
+
+typeset -A opt_args
+local context state line
+
+_arguments \
+    {--configuration,-c}"[configuration file]:FILENAME:_files" \
+    {--nodaemon,-n}"[run in the foreground (same as 'nodaemon true' in config file)]" \
+    {--help,-h}"[print this usage message and exit]:" \
+    {--user,-u}"[run supervisord as this user]:USER:_users" \
+    {--umask,-m}"[use this umask for daemon subprocess (default is 022)]" \
+    {--directory,-d}"[directory to chdir to when daemonized]" \
+    {--logfile,-l}"[use FILENAME as logfile path]:FILENAME:_files" \
+    {--logfile_maxbytes,-y}"[use BYTES to limit the max size of logfile]" \
+    {--logfile_backups,-z}"[number of backups to keep when max bytes reached]" \
+    {--loglevel,-e}"[use LEVEL as log level (debug,info,warn,error,critical)]:level:->levels" \
+    {--pidfile,-j}"[write a pid file for the daemon process to FILENAME]:FILENAME:_files" \
+    {--identifier,-i}"[identifier used for this instance of supervisord]" \
+    {--childlogdir,-q}"[the log directory for child process logs]:child log directory:_files -/" \
+    {--nocleanup,-k}"[prevent the process from performing cleanup (removal of old automatic child log files) at startup.]" \
+    {--minfds,-a}"[the minimum number of file descriptors for start success]" \
+    {--strip_ansi,-t}"[strip ansi escape codes from process output]" \
+    "--minprocs[the minimum number of processes available for start success]" \
+    "--profile_options[run supervisord under profiler and output results based on OPTIONS, which is a comma-sep'd list of 'cumulative', 'calls', and/or 'callers', e.g. 'cumulative,callers')]" \
+    "*::args:_gnu_generic"
+
+case $state in
+levels)
+    levels=("debug" "info" "warn" "error" "critical")
+    _describe -t levels 'supervisord levels' levels && return 0
+    ;;
+esac
