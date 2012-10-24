@@ -42,3 +42,4 @@ if [ -e $HOME/bin ]; then export PATH="$HOME/bin:$PATH"; fi
 unsetopt correctall
 
 # Themes override ls alias from aliases.zsh
+alias tmux='tmux -u2'
