@@ -24,15 +24,18 @@ DISABLE_AUTO_UPDATE="true"
 # DISABLE_AUTO_TITLE="true"
 
 # Uncomment following line if you want red dots to be displayed while waiting for completion
-# COMPLETION_WAITING_DOTS="true"
+COMPLETION_WAITING_DOTS="true"
+
+# Virtualenvwrapper plugin - Disable directory name discovery
+DISABLE_VENV_CD="true"
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git python pythonbrew vim-override)
+plugins=(git ssh-agent python pythonbrew vim-override virtualenvwrapper)
 
 source $ZSH/oh-my-zsh.sh
-source `which virtualenvwrapper.sh`
+# source `which virtualenvwrapper.sh`
 
 # Customize to your needs...
 if [ -z "$LC_ALL" ]; then export LC_ALL=en_US.UTF-8; fi
@@ -40,5 +43,3 @@ if [ -z "$LANG" ]; then export LANG=en_US.UTF-8; fi
 
 if [ -e $HOME/bin ]; then export PATH="$HOME/bin:$PATH"; fi
 unsetopt correctall
-
-# Themes override ls alias from aliases.zsh
