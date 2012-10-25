@@ -1,0 +1,27 @@
+server {
+    root /home/{user}/www/{vhost};
+    index index.php;
+
+    server_name {vhost};
+
+    error_log /var/log/nginx/{vhost}.error.log;
+    access_log /var/log/nginx/{vhost}.access.log;
+
+    location / {
+        try_files $uri $uri/ $uri/index.php;
+    }
+
+    location ~ \.php$ {
+        include fastcgi_params;
+        fastcgi_index index.php;
+        fastcgi_pass   127.0.0.1:{pool_port};
+        fastcgi_split_path_info ^(.+\.php)(/.*)$;
+
+        fastcgi_param  SCRIPT_FILENAME    $document_root$fastcgi_script_name;
+        fastcgi_param  HTTPS              off;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}
