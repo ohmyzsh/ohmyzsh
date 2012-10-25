@@ -1,6 +1,7 @@
 WRAPPER_FOUND=0
-for wrapsource in "/usr/bin/virtualenvwrapper.sh" "/usr/local/bin/virtualenvwrapper.sh" "/etc/bash_completion.d/virtualenvwrapper" ; do
-  if [[ -e $wrapsource ]] ; then
+for wrapsource in "virtualenvwrapper.sh" "virtualenvwrapper"; do
+  wrap_path=`command -v $wrapsource`
+  if [[ -e $wrap_path ]] ; then
     WRAPPER_FOUND=1
     source $wrapsource
 
