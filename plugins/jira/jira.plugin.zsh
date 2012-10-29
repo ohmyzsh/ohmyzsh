@@ -14,7 +14,7 @@ open_jira_issue () {
       `open $jira_url/secure/CreateIssue!default.jspa`;
     else
       echo "Opening issue #$1";
-      `open $jira_url/issues/$1`;
+      `open $jira_url/browse/$1`;
     fi
   fi
 }
