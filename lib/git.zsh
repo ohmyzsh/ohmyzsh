@@ -26,6 +26,14 @@ function git_prompt_ahead() {
   fi
 }
 
+# Checks if there are commits behind from remote
+function git_prompt_behind() {
+  local cb=$(current_branch)
+  if $(echo "$(git log $cb..origin/$cb 2> /dev/null)" | grep '^commit' &> /dev/null); then
+    echo "$ZSH_THEME_GIT_PROMPT_BEHIND"
+  fi
+}
+
 # Formats prompt string for current git commit short SHA
 function git_prompt_short_sha() {
   SHA=$(git rev-parse --short HEAD 2> /dev/null) && echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
