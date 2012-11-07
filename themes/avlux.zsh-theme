@@ -1,4 +1,6 @@
-# based on gnzh, which is "based on bira", add svn support, show git status, color tweaks
+# AVLUX theme, by Andrew vonderLuft, Nov. 2012
+# based on gnzh, which is "based on bira", add svn support, show git status, color tweaks, 
+# remove most special characters for broader terminal compatibility
 
 # load some modules
 autoload -U colors zsh/terminfo # Used in the colour alias below
@@ -51,8 +53,8 @@ RPS1="${return_code}"
 
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[blue]%}git:"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}✗%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[green]%}✓%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_DIRTY="%{$reset_color%}-%{$fg[red]%}x%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_CLEAN="%{$reset_color%}-%{$fg[green]%}o%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[green]%}+%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg[magenta]%}Δ%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[red]%}!%{$reset_color%}"
@@ -62,6 +64,6 @@ ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[yellow]%}?%{$reset_color%}"
 
 ZSH_THEME_SVN_PROMPT_PREFIX="%{$fg[yellow]%}svn:"
 ZSH_THEME_SVN_PROMPT_SUFFIX="%{$reset_color%}"
-ZSH_THEME_SVN_PROMPT_DIRTY="%{$fg[red]%}✗%{$reset_color%}"
-ZSH_THEME_SVN_PROMPT_CLEAN="%{$fg[green]%}✓%{$reset_color%}"
+ZSH_THEME_SVN_PROMPT_DIRTY="-%{$fg[red]%}x%{$reset_color%}"
+ZSH_THEME_SVN_PROMPT_CLEAN="-%{$fg[green]%}o%{$reset_color%}"
 
