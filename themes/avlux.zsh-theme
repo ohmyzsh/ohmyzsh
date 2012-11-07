@@ -15,10 +15,10 @@ eval PR_USER='${PR_CYAN}%n${PR_NO_COLOR}'
 
 # Check the UID
 if [[ $UID -ge 10 ]]; then # normal user
-  eval PR_USER_OP='${PR_GREEN}%#${PR_NO_COLOR}'
+  # eval PR_USER_OP='${PR_GREEN}%#${PR_NO_COLOR}'
   local PR_PROMPT='$PR_NO_COLOR%%$PR_NO_COLOR'
 elif [[ $UID -eq 0 ]]; then # root
-  eval PR_USER_OP='${PR_RED}%#${PR_NO_COLOR}'
+  # eval PR_USER_OP='${PR_RED}%#${PR_NO_COLOR}'
   local PR_PROMPT='$PR_RED#$PR_NO_COLOR'
 fi
 
