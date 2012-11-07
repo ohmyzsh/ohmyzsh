@@ -11,7 +11,7 @@ setopt prompt_subst
 for color in RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
   eval PR_$color='%{$fg[${(L)color}]%}'
 done
-eval PR_NO_COLOR="%{$terminfo[sgr0]%}"
+# eval PR_NO_COLOR="%{$terminfo[sgr0]%}"
 eval PR_BOLD="%{$terminfo[bold]%}"
 eval PR_USER='${PR_CYAN}%n${PR_NO_COLOR}'
 
@@ -31,20 +31,20 @@ else
   eval PR_HOST='${PR_GREEN}%M${PR_NO_COLOR}' # no SSH
 fi
 
-local return_code="%(?..%{$PR_RED%}%? ↵%{$PR_NO_COLOR%})"
+local return_code="%(?..%{$PR_RED%}%? ↵%{$reset_color%})"
 local user_host='${PR_USER}${PR_CYAN}@${PR_HOST}'
-local current_dir='%{$PR_BOLD$PR_GREEN%}%~%{$PR_NO_COLOR%}'
+local current_dir='%{$PR_BOLD$PR_GREEN%}%~%{$reset_color%}'
 local rvm_ruby=''
 if which rvm-prompt &> /dev/null; then
-  rvm_ruby='%{$PR_RED%}<$(rvm-prompt i v g s)>%{$PR_NO_COLOR%}'
+  rvm_ruby='%{$PR_RED%}<$(rvm-prompt i v g s)>%{$reset_color%}'
 else
   if which rbenv &> /dev/null; then
-    rvm_ruby='%{$PR_RED%}<$(rbenv version | sed -e "s/ (set.*$//")>%{$PR_NO_COLOR%}'
+    rvm_ruby='%{$PR_RED%}<$(rbenv version | sed -e "s/ (set.*$//")>%{$reset_color%}'
   fi
 fi
-local svn_info='$(svn_prompt_info)%{$PR_NO_COLOR%}'
-local git_branch='$(git_prompt_info)%{$PR_NO_COLOR%}'
-local git_status='$(git_prompt_status)%{$PR_NO_COLOR%}'
+local svn_info='$(svn_prompt_info)%{$reset_color%}'
+local git_branch='$(git_prompt_info)%{$reset_color%}'
+local git_status='$(git_prompt_status)%{$reset_color%}'
 
 #PROMPT="${user_host} ${current_dir} ${rvm_ruby} ${git_branch}$PR_PROMPT "
 PROMPT="╭─${user_host} ${current_dir} ${rvm_ruby} ${svn_info}${git_branch}${git_status}
