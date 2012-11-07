@@ -1,4 +1,4 @@
-if [ "$(whoami)" = "root" ]; then NCOLOR="red"; else NCOLOR="green"; fi
+if [ $UID -eq 0 ]; then NCOLOR="red"; else NCOLOR="green"; fi
 
 PROMPT='
 %{$fg[$NCOLOR]%}%B%n@%m%b%{$reset_color%} %{$fg[white]%}%B${PWD/#$HOME/~}%b%{$reset_color%}
