@@ -1,12 +1,12 @@
-# Path to oh-my-zsh.
-export ZSH="$HOME/.oh-my-zsh"
+# Path to your oh-my-zsh configuration.
+export ZSH=$HOME/.oh-my-zsh
 
 # Set the name of the theme to load (see $ZSH/themes/).
 # Setting it to 'random' loads a random theme.
 export ZSH_THEME="ashleydev"
 
 # Set to 'true' to enable case-sensitivity.
-export CASE_SENSITIVE='false'
+export CASE_SENSITIVE='true'
 
 # Set to 'true' to disable color (auto set on dumb terminals).
 export DISABLE_COLOR='false'
@@ -16,9 +16,12 @@ export DISABLE_AUTO_TITLE='false'
 
 # Set the plugins to load (see $ZSH/plugins/).
 # Example: plugins=(vi-mode git git-prompt extract history-substring-search compleat)
-plugins=(git)
+plugins=(vi-mode git git-prompt extract history-substring-search compleat)
 
-source "$ZSH/oh-my-zsh.sh"
+source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
+#
+export EDITOR='vim'
+export PAGER='less'
 
