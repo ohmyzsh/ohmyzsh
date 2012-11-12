@@ -106,11 +106,21 @@ if [[ "$TERM" == 'xterm-256color' ]]; then
   fi
 fi
 
+if [[ "$TMUX" != "" ]]; then
+    # For some reason tmux does a `cd -P $PWD` for it's default-path.
+    # my homedir is /u/$USER, but /u is a symlink to /usr/home/nfs, but I want
+    # my PROMPT to show '~' instead of '/usr/home/nfs'.  This accomplishes that.
+    if [[ "${PWD#*$USER}" != "" ]] && [[ "${PWD#*$USER}" != "${PWD}" ]]; then
+        cd ~/${PWD#*$USER/}
+    fi
+fi
+
+
 alias screen="screen $screenrc"
 alias sl="screen $screenrc -list"
 alias sr="screen $screenrc -a -A -U -D -R"
 alias S="screen $screenrc -U -S"
 
 alias tmux="tmux $tmuxconf"
-alias tls="tmux list-sessions"
+alias tl="tmux list-sessions"
 
