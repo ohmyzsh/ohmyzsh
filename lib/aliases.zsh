@@ -37,3 +37,5 @@ alias psg='show_processes'
 # alias .='pwd'
 
 alias ssh-list='cat ~/.ssh/config'
+alias lhosts='cat /etc/hosts'
+alias ghosts='cat /etc/hosts | grep'
