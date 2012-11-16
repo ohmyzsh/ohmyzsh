@@ -42,9 +42,9 @@ else
     rvm_ruby='%{$PR_RED%}<$(rbenv version | sed -e "s/ (set.*$//")>%{$reset_color%}'
   fi
 fi
-local svn_info='$(svn_prompt_info)%{$reset_color%}'
 local git_branch='$(git_prompt_info)%{$reset_color%}'
 local git_status='$(git_prompt_status)%{$reset_color%}'
+local svn_info='$(svn_prompt_info)%{$reset_color%}'
 
 #PROMPT="${user_host} ${current_dir} ${rvm_ruby} ${git_branch}$PR_PROMPT "
 PROMPT="╭─${user_host} ${current_dir} ${rvm_ruby} ${svn_info}${git_branch}${git_status}
