@@ -18,8 +18,8 @@ alias ecmb=ecmbuild
 alias ecmc=ecmclean
 alias ecms=ecmstart
 alias ecmo=ecmstop
-alias ecm=goecm
-
+alias ecmi=ecminstall
+alias ecm=ecmfull
 
 # update ecm
 ecmup() {
@@ -30,19 +30,31 @@ ecmup() {
 
 # build it!
 ecmbuild() {
-	vared -p 'build? no problem sir, do you want a installer? (y/N) ' INSTALLER
+	echo "build? no problem sir..."
+	
+	case $@ in
+	-*i*)
+		INSTALLER=y
+		;;
+	esac	
+
 	cd $VOLDEMORT && mvncie
 	cd $VOLDEMORT/social-ecm
 	cd $VOLDEMORT/wcm && mvncie
 	cd $ECM/ecm/wecmpackage && mvncie
 	cd $VOLDEMORT/ecm && mvncie
-	if [[ $INSTALLER -eq 'y' ]]; then
-		cd $VOLDEMORT/ecm/installer
-		mvnci -am -Drun=installer -DLinux64=true -DappServer=jboss
-	else
-		cd $VOLDEMORT/ecm/build && mvnci
-		cd $VOLDEMORT/social-ecm/build && mvnci
-	fi
+	ecminstall
+}
+
+# gen installer or cp wars...
+ecminstall() {
+        if [[ "$INSTALLER" == "y" ]]; then
+                cd $VOLDEMORT/ecm/installer
+                mvnci -am -Drun=installer -DLinux64=true -DappServer=jboss
+        else
+                cd $VOLDEMORT/ecm/build && mvnci
+                cd $VOLDEMORT/social-ecm/build && mvnci
+        fi
 }
 
 # clean jboss trash folders
@@ -53,8 +65,11 @@ ecmclean() {
 
 # start jboss server
 ecmstart() {
-	echo "starting jboss"
-	JAVA_OPTS="-Xmx2048m -XX:MaxPermSize=512m -DzkRun -Dbootstrap_conf=true" $ECM_JBOSS/bin/standalone.sh
+	# why shall I start server if i just gen a installer?
+	if [[ "$INSTALLER" == "y" ]]; then
+		echo "starting jboss"
+		JAVA_OPTS="-Xmx2048m -XX:MaxPermSize=512m -DzkRun -Dbootstrap_conf=true" $ECM_JBOSS/bin/standalone.sh
+	fi
 }
 
 # stop jboss (usually on 8080)
@@ -64,7 +79,7 @@ ecmstop() {
 }
 
 # do all the things
-goecm() {
+ecmfull() {
 	echo "serious business here. let's have a coffee.."
 	ecmstop
 	ecmclean
