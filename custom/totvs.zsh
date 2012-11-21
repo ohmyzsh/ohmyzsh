@@ -49,10 +49,13 @@ ecmbuild() {
 # gen installer or cp wars...
 ecminstall() {
         if [[ "$INSTALLER" == "y" ]]; then
-                cd $VOLDEMORT/ecm/installer
+        	echo "generating installer..."
+	        cd $VOLDEMORT/ecm/installer
                 mvnci -am -Drun=installer -DLinux64=true -DappServer=jboss
         else
+		echo "cpying wars..."
                 cd $VOLDEMORT/ecm/build && mvnci
+		cd $VOLDEMORT/wcm/build && mvnci
                 cd $VOLDEMORT/social-ecm/build && mvnci
         fi
 }
