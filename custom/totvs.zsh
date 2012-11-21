@@ -69,9 +69,10 @@ ecmclean() {
 # start jboss server
 ecmstart() {
 	# why shall I start server if i just gen a installer?
-	if [[ "$INSTALLER" == "y" ]]; then
+	if [[ "$INSTALLER" == "n" ]]; then
 		echo "starting jboss"
-		JAVA_OPTS="-Xmx2048m -XX:MaxPermSize=512m -DzkRun -Dbootstrap_conf=true" $ECM_JBOSS/bin/standalone.sh
+		cd $ECM_JBOSS/bin
+		JAVA_OPTS="-Xmx2048m -XX:MaxPermSize=512m -DzkRun -Dbootstrap_conf=true" ./standalone.sh
 	fi
 }
 
