@@ -36,7 +36,7 @@ ecmbuild() {
 	cd $VOLDEMORT/wcm && mvncie
 	cd $ECM/ecm/wecmpackage && mvncie
 	cd $VOLDEMORT/ecm && mvncie
-	if [[ $INSTALLER -eq 'n' ]]; then
+	if [[ $INSTALLER -eq 'y' ]]; then
 		cd $VOLDEMORT/ecm/installer
 		mvnci -am -Drun=installer -DLinux64=true -DappServer=jboss
 	else
@@ -68,7 +68,8 @@ goecm() {
 	echo "serious business here. let's have a coffee.."
 	ecmstop
 	ecmclean
-	ecmbuild && ecmup && ecmstart
+	ecmup
+	ecmbuild && ecmstart
 }
 
 
