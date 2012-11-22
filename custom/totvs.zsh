@@ -22,6 +22,8 @@ alias ecmo=ecmstop
 alias ecmi=ecminstall
 alias ecmri=ecmruninstall
 alias ecm=ecmfull
+alias e='MAVEN_OPTS="-Xmx2048m -XX:MaxPermSize=512m -DskipTests=true" ecm'  
+
 
 # update ecm
 ecmup() {
