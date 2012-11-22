@@ -38,11 +38,11 @@ ecmbuild() {
 		;;
 	esac	
 
-	cd $VOLDEMORT && mvncie
-	cd $VOLDEMORT/social-ecm
-	cd $VOLDEMORT/wcm && mvncie
-	cd $ECM/ecm/wecmpackage && mvncie
-	cd $VOLDEMORT/ecm && mvncie
+	cd $VOLDEMORT && mvncie && \
+	cd $VOLDEMORT/social-ecm && \
+	cd $VOLDEMORT/wcm && mvncie && \
+	cd $ECM/wecmpackage && mvncie && \
+	cd $VOLDEMORT/ecm && mvncie && \
 	ecminstall
 }
 
@@ -54,8 +54,8 @@ ecminstall() {
                 mvnci -am -Drun=installer -DLinux64=true -DappServer=jboss
         else
 		echo "cpying wars..."
-                cd $VOLDEMORT/ecm/build && mvnci
-		cd $VOLDEMORT/wcm/build && mvnci
+                cd $VOLDEMORT/ecm/build && mvnci && \
+		cd $VOLDEMORT/wcm/build && mvnci && \
                 cd $VOLDEMORT/social-ecm/build && mvnci
         fi
 }
