@@ -106,7 +106,7 @@ prompt_status() {
 build_prompt() {
   RETVAL=$?
   prompt_status
-  prompt_contextx
+  prompt_context
   prompt_dir
   prompt_git
   prompt_end
