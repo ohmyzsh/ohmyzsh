@@ -15,7 +15,7 @@ function in_svn() {
 function svn_get_repo_name {
     if [ $(in_svn) ]; then
         svn info | sed -n 's/Repository\ Root:\ .*\///p' | read SVN_ROOT
-    
+
         svn info | sed -n "s/URL:\ .*$SVN_ROOT\///p"
     fi
 }
@@ -31,7 +31,7 @@ function svn_dirty_choose {
         svn status 2> /dev/null | grep -Eq '^\s*[ACDIM!?L]'
         if [ $pipestatus[-1] -ne 0 ]; then
             echo $1
-        else 
+        else
             echo $2
         fi
     fi
