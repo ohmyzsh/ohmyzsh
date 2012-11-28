@@ -5,7 +5,7 @@ if [ $commands[autojump] ]; then # check if autojump is installed
     . /etc/profile.d/autojump.zsh
   elif [ -f /opt/local/etc/profile.d/autojump.zsh ]; then # mac os x with ports
     . /opt/local/etc/profile.d/autojump.zsh
-  elif [ $commands[brew] -a -f `brew --prefix`/etc/autojump ]; then # mac os x with brew
-    . `brew --prefix`/etc/autojump
+  elif [ $commands[brew] -a -f `brew --prefix`/etc/autojump.zsh ]; then # mac os x with brew
+    . `brew --prefix`/etc/autojump.zsh
   fi
 fi
