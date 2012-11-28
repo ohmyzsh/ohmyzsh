@@ -61,7 +61,8 @@ if [[ $use_sudo -eq 1 ]]; then
     # Install all .deb files in the current directory.
     # Warning: you will need to put the glob in single quotes if you use:
     # glob_subst
-    alias di='sudo dpkg -i ./*.deb'
+    alias dia='sudo dpkg -i ./*.deb'
+    alias di='sudo dpkg -i'
 
     # Remove ALL kernel images and headers EXCEPT the one in use
     alias kclean='sudo aptitude remove -P ?and(~i~nlinux-(ima|hea) \
@@ -100,7 +101,8 @@ else
 
     # Install all .deb files in the current directory
     # Assumes glob_subst is off
-    alias di='su -lc "dpkg -i ./*.deb" root'
+    alias dia='su -lc "dpkg -i ./*.deb" root'
+    alias di='su -lc "dpkg -i" root'
 
     # Remove ALL kernel images and headers EXCEPT the one in use
     alias kclean='su -lc '\''aptitude remove -P ?and(~i~nlinux-(ima|hea) \
