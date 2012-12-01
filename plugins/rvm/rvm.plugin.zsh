@@ -1,3 +1,5 @@
+fpath=($rvm_path/scripts/zsh/Completion $fpath)
+
 alias rubies='rvm list rubies'
 alias gemsets='rvm gemset list'
 
