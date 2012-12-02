@@ -28,9 +28,9 @@ h3. The manual way
 
 2. Create a new zsh config by copying the zsh template we've provided.
 
-  *NOTE*: If you already have a ~/.zshrc file, you should back it up. @cp ~/.zshrc ~/.zshrc.orig@ in case you want to go back to your original settings.
-
   @cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc@
+
+  *NOTE*: If you already have a ~/.zshrc file, you should back it up. @cp ~/.zshrc ~/.zshrc.orig@ in case you want to go back to your original settings.
 
 3. Set zsh as your default shell:
 
