@@ -95,7 +95,6 @@ setprompt () {
     # Modify RVM prompt
     ZSH_THEME_RVM_PROMPT_PREFIX=" ["
     ZSH_THEME_RVM_PROMPT_SUFFIX="]"
-    ZSH_THEME_RVM_PROMPT_OPTIONS=(v i)
 
 
 ###
