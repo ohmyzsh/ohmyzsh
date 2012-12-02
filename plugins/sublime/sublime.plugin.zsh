@@ -3,10 +3,11 @@
 
 if [[ $('uname') == 'Linux' ]]; then
 	if [ -f '/usr/bin/sublime_text' ]; then
-		alias st='/usr/bin/sublime_text&'
+		st_run() { nohup /usr/bin/sublime_text $@ > /dev/null & }
 	else
-		alias st='/usr/bin/sublime-text&'
+		st_run() { nohup /usr/bin/sublime-text $@ > /dev/null & }
 	fi
+alias st=st_run
 elif  [[ $('uname') == 'Darwin' ]]; then
 	alias st='/Applications/Sublime\ Text\ 2.app/Contents/SharedSupport/bin/subl'
 fi
