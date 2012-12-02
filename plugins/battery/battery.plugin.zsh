@@ -8,7 +8,7 @@
 # Modified to add support for Apple Mac   #
 ###########################################
 
-if [[ $(uname) -eq "Darwin" ]] ; then
+if [[ $(uname) == "Darwin" ]] ; then
 
   function battery_pct_remaining() {
     if [[ $(ioreg -rc AppleSmartBattery | grep -c '^.*"ExternalConnected"\ =\ No') -eq 1 ]] ; then
@@ -46,7 +46,7 @@ if [[ $(uname) -eq "Darwin" ]] ; then
     fi
   }
 
-elif [[ $(uname) -eq "Linux"  ]] ; then
+elif [[ $(uname) == "Linux"  ]] ; then
 
   if [[ $(acpi 2&>/dev/null | grep -c '^Battery.*Discharging') -gt 0 ]] ; then
     function battery_pct_remaining() { echo "$(acpi | cut -f2 -d ',' | tr -cd '[:digit:]')" }
