@@ -5,7 +5,7 @@ alias gst='git status'
 compdef _git gst=git-status
 alias gl='git pull'
 compdef _git gl=git-pull
-alias gup='git fetch && git rebase'
+alias gup='git pull --rebase'
 compdef _git gup=git-fetch
 alias gp='git push'
 compdef _git gp=git-push
@@ -38,6 +38,7 @@ alias gm='git merge'
 compdef _git gm=git-merge
 alias grh='git reset HEAD'
 alias grhh='git reset HEAD --hard'
+alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
 
 # Will cd into the top of the current repository
 # or submodule.

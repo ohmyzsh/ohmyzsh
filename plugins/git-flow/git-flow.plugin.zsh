@@ -195,7 +195,7 @@ __git-flow-feature ()
 				'start:Start a new feature branch.'
 				'finish:Finish a feature branch.'
 				'list:List all your feature branches. (Alias to `git flow feature`)'
-				'publish: public'
+				'publish: publish'
 				'track: track'
 				'diff: diff'
 				'rebase: rebase'
