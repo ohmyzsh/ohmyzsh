@@ -63,7 +63,7 @@ elif [[ $(uname) == "Linux"  ]] ; then
       echo "%{$fg[$color]%}[$(battery_pct_remaining)%%]%{$reset_color%}"
     }
   else
-    error_msg='no battery'
+    error_msg="∞"
     function battery_pct_remaining() { echo $error_msg }
     function battery_time_remaining() { echo $error_msg }
     function battery_pct_prompt() { echo '' }
