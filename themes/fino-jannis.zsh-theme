@@ -30,7 +30,7 @@ local current_dir='${PWD/#$HOME/~}'
 local git_info='$(git_prompt_info)'
 
 
-PROMPT="╭─ {$reset_color%} %{$FG[033]%}$(box_name)%{$reset_color%} %{$FG[239]%}in%{$reset_color%} %{$terminfo[bold]$FG[226]%}${current_dir}%{$reset_color%}${git_info} %{$FG[239]%}using%{$FG[243]%} ${rvm_ruby} %{$FG[239]%}with %{$reset_color%}$(battery_time_remaining) %{$FG[239]%}left %{$reset_color%}
+PROMPT="╭─ $reset_color%}%{$FG[033]%}$(box_name)%{$reset_color%} %{$FG[239]%}in%{$reset_color%} %{$terminfo[bold]$FG[226]%}${current_dir}%{$reset_color%}${git_info} %{$FG[239]%}using%{$FG[243]%} ${rvm_ruby} %{$FG[239]%}with %{$reset_color%}$(battery_time_remaining) %{$FG[239]%}left %{$reset_color%}
 ╰─$(virtualenv_info)$(prompt_char) "
 
 ZSH_THEME_GIT_PROMPT_PREFIX=" %{$FG[239]%}on%{$reset_color%} %{$fg[255]%}"
