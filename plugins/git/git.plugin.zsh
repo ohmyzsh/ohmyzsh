@@ -9,6 +9,7 @@ alias gup='git pull --rebase'
 compdef _git gup=git-fetch
 alias gp='git push'
 compdef _git gp=git-push
+alias gd='git diff'
 gdv() { git diff -w "$@" | view - }
 compdef _git gdv=git-diff
 alias gc='git commit -v'
@@ -24,12 +25,15 @@ alias gba='git branch -a'
 compdef _git gba=git-branch
 alias gcount='git shortlog -sn'
 compdef gcount=git
+alias gcl='git config --list'
 alias gcp='git cherry-pick'
 compdef _git gcp=git-cherry-pick
 alias glg='git log --stat --max-count=5'
 compdef _git glg=git-log
 alias glgg='git log --graph --max-count=5'
 compdef _git glgg=git-log
+alias glgga='git log --graph --decorate --all'
+compdef _git glgga=git-log
 alias gss='git status -s'
 compdef _git gss=git-status
 alias ga='git add'
@@ -39,6 +43,8 @@ compdef _git gm=git-merge
 alias grh='git reset HEAD'
 alias grhh='git reset HEAD --hard'
 alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
+alias gf='git ls-files | grep'
+alias gpoat='git push origin --all && git push origin --tags'
 
 # Will cd into the top of the current repository
 # or submodule.
@@ -55,13 +61,14 @@ alias gsd='git svn dcommit'
 # Usage example: git pull origin $(current_branch)
 #
 function current_branch() {
-  ref=$(git symbolic-ref HEAD 2> /dev/null) || return
+  ref=$(git symbolic-ref HEAD 2> /dev/null) || \
+  ref=$(git rev-parse --short HEAD 2> /dev/null) || return
   echo ${ref#refs/heads/}
 }
 
 function current_repository() {
-
-  ref=$(git symbolic-ref HEAD 2> /dev/null) || return
+  ref=$(git symbolic-ref HEAD 2> /dev/null) || \
+  ref=$(git rev-parse --short HEAD 2> /dev/null) || return
   echo $(git remote -v | cut -d':' -f 2)
 }
 

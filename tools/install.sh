@@ -14,8 +14,7 @@ echo "\033[0;34mLooking for an existing zsh config...\033[0m"
 if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]
 then
   echo "\033[0;33mFound ~/.zshrc.\033[0m \033[0;32mBacking up to ~/.zshrc.pre-oh-my-zsh\033[0m";
-  cp ~/.zshrc ~/.zshrc.pre-oh-my-zsh;
-  rm ~/.zshrc;
+  mv ~/.zshrc ~/.zshrc.pre-oh-my-zsh;
 fi
 
 echo "\033[0;34mUsing the Oh My Zsh template file and adding it to ~/.zshrc\033[0m"
