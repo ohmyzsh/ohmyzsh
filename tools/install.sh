@@ -35,6 +35,5 @@ echo "\033[0;32m"'\____/_/ /_/  /_/ /_/ /_/\__, /    /___/____/_/ /_/  '"\033[0m
 echo "\033[0;32m"'                        /____/                       '"\033[0m"
 
 echo "\n\n \033[0;32m....is now installed.\033[0m"
-#!`which zsh`
-exec source .zshrc
+echo "source .zshrc" | zsh
 /usr/bin/env zsh
