@@ -5,12 +5,12 @@ function git_prompt_custom() {
  echo "$ZSH_THEME_GIT_PROMPT_PREFIX$GIT_STATUS$ZSH_THEME_GIT_PROMPT_SUFFIX"
 }
 
-PROMPT='%n%{$reset_color%}%{$fg[red]%}@%m%{$reset_color%}:[%{$fg[green]%}%~%{$reset_color%}]%u$(git_prompt_custom)%{$fg[red]%} ?^?^?  %{$reset_color%}'
+PROMPT='%n%{$reset_color%}%{$fg[red]%}@%m%{$reset_color%}:[%{$fg[green]%}%~%{$reset_color%}]%u$(git_prompt_custom)%{$fg[red]%} ➜  %{$reset_color%}'
 RPROMPT='[%{$fg[red]%}%W %t%{$reset_color%}]'
 
 ZSH_THEME_GIT_PROMPT_PREFIX=""
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_DIRTY=": %{$fg[red]%}?^?^?%{$fg[red]%} "
+ZSH_THEME_GIT_PROMPT_DIRTY=": %{$fg[red]%}✗%{$fg[red]%} "
 ZSH_THEME_GIT_PROMPT_CLEAN=": %{$fg[red]%}"
 
 ZSH_THEME_GIT_PROMPT_UNMERGED=" %{$RED%}unmerged"
