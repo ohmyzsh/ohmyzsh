@@ -1,6 +1,6 @@
 function git_prompt_custom() {
  ref=$(git symbolic-ref HEAD 2> /dev/null) || return
- GIT_STATUS="%{$fg[red]%}<%{$reset_color%}$(git_prompt_info)%{$reset_color%}[%{$fg[green]%}$(git_prompt_short_sha)%{$reset_color%}]$(git_prompt_status)%{$fg[red]%}>"
+ GIT_STATUS="%{$fg[red]%}<%{$bg[green]%} $(git_prompt_info)%{$bg[green]%}%{$fg[black]%}[%{$fg[red]%}$(git_prompt_short_sha)%{$fg[black]%}]$(git_prompt_status) %{$reset_color%}%{$fg[red]%}>"
  [[ -n $GIT_STATUS ]] && GIT_STATUS=" $GIT_STATUS"
  echo "$ZSH_THEME_GIT_PROMPT_PREFIX$GIT_STATUS$ZSH_THEME_GIT_PROMPT_SUFFIX"
 }
@@ -10,7 +10,7 @@ RPROMPT='[%{$fg[red]%}%W %t%{$reset_color%}]'
 
 ZSH_THEME_GIT_PROMPT_PREFIX=""
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_DIRTY=": %{$fg[red]%}✗%{$fg[red]%} "
+ZSH_THEME_GIT_PROMPT_DIRTY=": %{$fg[red]%}✗%{$reset_color%}%{$bg[green]%} "
 ZSH_THEME_GIT_PROMPT_CLEAN=": %{$fg[red]%}"
 
 ZSH_THEME_GIT_PROMPT_UNMERGED=" %{$RED%}unmerged"
