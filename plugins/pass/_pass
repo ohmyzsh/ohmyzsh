@@ -4,10 +4,13 @@
 # Copyright (C) 2012:
 #    Johan Venant <jvenant@invicem.pro>
 #    Brian Mattern <rephorm@rephorm.com>
-#    Jason A. Donenfeld <Jason@zx2c4.com>.
-#    Santiago Borrazás <sanbor@gmail.com>
+#    Jason A. Donenfeld <Jason@zx2c4.com>
 # All Rights Reserved.
-# This file is licensed under the GPLv2+. Please see COPYING for more information.
+#
+# This file is licensed under the GPLv2+.
+# Please visit http://git.zx2c4.com/password-store/tree/COPYING for more information.
+#
+# Oh my zsh plugin maintainer: Santiago Borrazás <sanbor@gmail.com>
 
 
 _pass () {
