@@ -1,5 +1,6 @@
 A handful of functions, auto-complete helpers, and stuff that makes you shout...
 
+
 bq. "OH MY ZSHELL!"
 
 h2. Setup
@@ -25,17 +26,20 @@ h3. The manual way
 
   @git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh@
 
-2. Create a new zsh config by copying the zsh template we've provided.
+2. *OPTIONAL* Backup your existing ~/.zshrc file
 
-  *NOTE*: If you already have a ~/.zshrc file, you should back it up. @cp ~/.zshrc ~/.zshrc.orig@ in case you want to go back to your original settings.
+  @cp ~/.zshrc ~/.zshrc.orig@
+
+3. Create a new zsh config by copying the zsh template we've provided.
 
   @cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc@
 
-3. Set zsh as your default shell:
+
+4. Set zsh as your default shell:
 
   @chsh -s /bin/zsh@
 
-4. Start / restart zsh (open a new terminal is easy enough...)
+5. Start / restart zsh (open a new terminal is easy enough...)
 
 h3. Problems?
 
@@ -68,9 +72,13 @@ h2. Help out!
 
 I'm far from being a zsh-expert and suspect there are many ways to improve. If you have ideas on how to make the configuration easier to maintain (and faster), don't hesitate to fork and send pull requests!
 
-h3. Send us your theme!
+h3. (Don't) Send us your theme! (for now)
 
-I'm hoping to collect a bunch of themes for our command prompts. You can see existing ones in the @themes/@ directory.
+-I'm hoping to collect a bunch of themes for our command prompts. You can see existing ones in the @themes/@ directory.-
+
+We have enough themes for the time being. Please fork the project and add on in there, you can let people know how to grab it from there. 
+
+
 
 h2. Contributors
 

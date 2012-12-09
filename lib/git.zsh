@@ -1,18 +1,16 @@
 # get the name of the branch we are on
 function git_prompt_info() {
-  local type=${1:-$branch} # ; [[ -n "$type" ]] || type='branch'
+  ref=$(git symbolic-ref HEAD 2> /dev/null) || \
+  ref=$(git rev-parse --short HEAD 2> /dev/null) || return
 
-  branch=$(current_branch) || return
-  d_branch="$branch"
+  local type=${1:-$branch} # ; [[ -n "$type" ]] || type='branch'
   case $type in
     *abbr*)
-	     d_branch=${branch/master/M}
+	     ref=${ref/master/M}
 	     ;;
   esac
 
-  d_commit='';
-
-  echo "$ZSH_THEME_GIT_PROMPT_PREFIX${d_branch}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
+  echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
 }
 
 
@@ -29,25 +27,24 @@ parse_git_dirty() {
   fi
 }
 
-#
-# Will return the current branch name
-# Usage example: git pull origin $(current_branch)
-#
-function current_branch() {
-  ref=$(git symbolic-ref HEAD 2> /dev/null) || return
-  echo ${ref#refs/heads/}
-}
+# get the difference between the local and remote branches
+git_remote_status() {
+    remote=${$(git rev-parse --verify ${hook_com[branch]}@{upstream} --symbolic-full-name 2>/dev/null)/refs\/remotes\/}
+    if [[ -n ${remote} ]] ; then
+        ahead=$(git rev-list ${hook_com[branch]}@{upstream}..HEAD 2>/dev/null | wc -l)
+        behind=$(git rev-list HEAD..${hook_com[branch]}@{upstream} 2>/dev/null | wc -l)
 
-#
-# current branch for display.  Abbreviate master to M.  
-# Other substitutions are possible.
-# TODO: 
-#   * allow to enable/disable translation of master to M.  
-#   * enable argument to git_prompt_info control what is displayed 
-#      (eg: M=535516, ala git-prompt project for bash)
-function current_branch_for_display() {
-  branch=$(current_branch) || return
-  echo ${branch/master/M}    # master abbreviated to M.
+        if [ $ahead -eq 0 ] && [ $behind -gt 0 ]
+        then
+            echo "$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE"
+        elif [ $ahead -gt 0 ] && [ $behind -eq 0 ]
+        then
+            echo "$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE"
+        elif [ $ahead -gt 0 ] && [ $behind -gt 0 ]
+        then
+            echo "$ZSH_THEME_GIT_PROMPT_DIVERGED_REMOTE"
+        fi
+    fi
 }
 
 # Checks if there are commits ahead from remote
@@ -69,7 +66,7 @@ function git_prompt_long_sha() {
 
 # Get the status of the working tree
 git_prompt_status() {
-  INDEX=$(git status --porcelain 2> /dev/null)
+  INDEX=$(git status --porcelain -b 2> /dev/null)
   STATUS=""
   if $(echo "$INDEX" | grep '^?? ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_UNTRACKED$STATUS"
@@ -91,11 +88,22 @@ git_prompt_status() {
   fi
   if $(echo "$INDEX" | grep '^ D ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
+  elif $(echo "$INDEX" | grep '^D  ' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
   elif $(echo "$INDEX" | grep '^AD ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
   fi
   if $(echo "$INDEX" | grep '^UU ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_UNMERGED$STATUS"
+  fi
+  if $(echo "$INDEX" | grep '^## .*ahead' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_AHEAD$STATUS"
+  fi
+  if $(echo "$INDEX" | grep '^## .*behind' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_BEHIND$STATUS"
+  fi
+  if $(echo "$INDEX" | grep '^## .*diverged' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_DIVERGED$STATUS"
   fi
   echo $STATUS
 }

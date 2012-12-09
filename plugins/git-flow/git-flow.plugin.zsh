@@ -110,6 +110,8 @@ __git-flow-release ()
 						-u'[Use the given GPG-key for the digital signature (implies -s)]'\
 						-m'[Use the given tag message]'\
 						-p'[Push to $ORIGIN after performing finish]'\
+						-k'[Keep branch after performing finish]'\
+						-n"[Don't tag this release]"\
 						':version:__git_flow_version_list'
 				;;
 
@@ -162,6 +164,8 @@ __git-flow-hotfix ()
 						-u'[Use the given GPG-key for the digital signature (implies -s)]'\
 						-m'[Use the given tag message]'\
 						-p'[Push to $ORIGIN after performing finish]'\
+						-k'[Keep branch after performing finish]'\
+						-n"[Don't tag this release]"\
 						':hotfix:__git_flow_hotfix_list'
 				;;
 
@@ -191,7 +195,7 @@ __git-flow-feature ()
 				'start:Start a new feature branch.'
 				'finish:Finish a feature branch.'
 				'list:List all your feature branches. (Alias to `git flow feature`)'
-				'publish: public'
+				'publish: publish'
 				'track: track'
 				'diff: diff'
 				'rebase: rebase'
@@ -217,6 +221,7 @@ __git-flow-feature ()
 					_arguments \
 						-F'[Fetch from origin before performing finish]' \
 						-r'[Rebase instead of merge]'\
+						-k'[Keep branch after performing finish]'\
 						':feature:__git_flow_feature_list'
 				;;
 
