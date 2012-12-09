@@ -42,6 +42,7 @@ _zsh_highlight_pattern_highlighter_predicate()
 _zsh_highlight_pattern_highlighter()
 {
   setopt localoptions extendedglob
+  local pattern
   for pattern in ${(k)ZSH_HIGHLIGHT_PATTERNS}; do
     _zsh_highlight_pattern_highlighter_loop "$BUFFER" "$pattern"
   done
