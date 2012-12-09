@@ -12,7 +12,12 @@ ZSH_THEME_GIT_PROMPT_SUFFIX="›%{$reset_color%}"
 local prompt_char="%B%(!,#,$user_prompt_char)%b"
 local who_where="%(!,%{$fg[magenta]%}%n@%m,%{$fg[blue]%}%m)%{$reset_color%}"
 
-PROMPT='$(git_prompt_info abbr)%1(l, ,)$who_where %{$fg[cyan]%}%2~ %{$reset_color%}$prompt_char '
+function git_prompt_info_abbr() {
+  ref=$(git_prompt_info)
+  echo ${ref/master/M}
+}
+
+PROMPT='$(git_prompt_info_abbr)%1(l, ,)$who_where %{$fg[cyan]%}%2~ %{$reset_color%}$prompt_char '
 RPS1="${return_code}"
 
 # on dumb terminals, switch to simpler prompt char
