@@ -24,7 +24,8 @@ if [[ $(uname) == "Darwin" ]] ; then
   function battery_time_remaining() {
     if [[ $(ioreg -rc AppleSmartBattery | grep -c '^.*"ExternalConnected"\ =\ No') -eq 1 ]] ; then
       timeremaining=$(ioreg -rc "AppleSmartBattery"| grep '^.*"AvgTimeToEmpty"\ =\ ' | sed -e 's/^.*"AvgTimeToEmpty"\ =\ //')
-      echo "~$((timeremaining / 60)):$((timeremaining % 60))"
+      minutes="$((timeremaining % 60))"
+      echo "~$((timeremaining / 60)):${(l:2::0:)minutes}"
     else
       echo "∞"
     fi
