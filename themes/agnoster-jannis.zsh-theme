@@ -3,6 +3,9 @@ function bat {
   echo "%{$FG[243]%}`battery_time_remaining`%{$reset_color%}"
   # echo `date`
 }
+function rvm_ruby {
+  echo "%{$FG[243]%}‹$(rvm-prompt i v g)›%{$reset_color%} "
+}
 function virtualenv_info {
     [ $VIRTUAL_ENV ] && echo '('`basename $VIRTUAL_ENV`') '
 }
@@ -65,7 +68,7 @@ prompt_end() {
     echo -n "%{%k%}"
   fi
   echo -n "%{%f%}"
-  echo -n "\n╰─$(virtualenv_info)${$(prompt_char)} "
+  # echo -n "\n╰─$(virtualenv_info)${$(prompt_char)} "
   CURRENT_BG=''
 }
 
@@ -85,7 +88,7 @@ prompt_context() {
 prompt_git() {
   local ref dirty
   if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
-    ZSH_THEME_GIT_PROMPT_DIRTY='±'
+    ZSH_THEME_GIT_PROMPT_DIRTY=" %{$FG[202]%}✘"
     dirty=$(parse_git_dirty)
     ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="➦ $(git show-ref --head -s --abbrev |head -n1 2> /dev/null)"
     if [[ -n $dirty ]]; then
@@ -99,7 +102,8 @@ prompt_git() {
 
 # Dir: current working directory
 prompt_dir() {
-  prompt_segment blue black '%~'
+  # prompt_segment blue black '%~'
+  prompt_segment blue black '%1~'
 }
 
 # Status:
@@ -119,7 +123,7 @@ prompt_status() {
 ## Main prompt
 build_prompt() {
   RETVAL=$?
-  echo -n '╭─ '        # Jannis'
+  # echo -n '╭─ '        # Jannis'
   prompt_status
   # prompt_context     # Jannis'
   prompt_dir
@@ -127,5 +131,5 @@ build_prompt() {
   prompt_end
 }
 
-PROMPT='%{%f%b%k%}$(build_prompt)'
-RPROMPT='$(bat)'
+PROMPT='%{%f%b%k%}$(build_prompt) '
+RPROMPT='$(rvm_ruby)$(bat)'
