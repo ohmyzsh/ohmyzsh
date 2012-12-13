@@ -20,4 +20,7 @@ function tm() {
 	fi
 }
 
-alias reload_bundles="osascript -e 'tell app \"TextMate\" to reload bundles'"
+alias reload-bundles="osascript -e 'tell app \"TextMate\" to reload bundles'"
+
+# Go to TextMate bundles directory
+alias bundles='cd ~/Library/Application\ Support/TextMate/Bundles'
