@@ -39,3 +39,6 @@ alias psg='show_processes'
 alias cat-ssh-config='[ -e ~/.ssh/config ] && cat ~/.ssh/config'
 alias cat-hosts='cat /etc/hosts'
 alias grep-hosts='cat /etc/hosts | grep'
+
+# open your DEFAULT editor
+alias ed=$EDITOR
