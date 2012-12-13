@@ -2,12 +2,23 @@
 #http://www.faqs.org/docs/Linux-mini/Xterm-Title.html#ss3.1
 #Fully support screen, iterm, and probably most modern xterm and rxvt
 #Limited support for Apple Terminal (Terminal can't set window or tab separately)
+
+ZSH_SCREEN_PLUGIN_ACTIVE=false
+for i in $plugins; do
+  if [[ "$i" == "screen" ]]; then
+    ZSH_SCREEN_PLUGIN_ACTIVE=true
+  fi
+done
+
 function title {
   if [[ "$DISABLE_AUTO_TITLE" == "true" ]] || [[ "$EMACS" == *term* ]]; then
     return
   fi
   if [[ "$TERM" == screen* ]]; then
-    print -Pn "\ek$1:q\e\\" #set screen hardstatus, usually truncated at 20 chars
+    # do not set the screen hardstatus, if screen plugin is active
+    if [[ "$ZSH_SCREEN_PLUGIN_ACTIVE" != "true" ]]; then
+      print -Pn "\ek$1:q\e\\" #set screen hardstatus, usually truncated at 20 chars
+    fi
   elif [[ "$TERM_PROGRAM" == "Apple_Terminal" ]]; then
     print -Pn "\e]1;$1:q\a" #set icon (=tab) name (will override window name on broken terminal)
   elif [[ "$TERM" == xterm* ]] || [[ $TERM == rxvt* ]] || [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
