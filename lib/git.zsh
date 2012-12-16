@@ -1,18 +1,31 @@
 # get the name of the branch we are on
 function git_prompt_info() {
-  ref=$(git symbolic-ref HEAD 2> /dev/null) || \
-  ref=$(git rev-parse --short HEAD 2> /dev/null) || return
+  ref=$(git symbolic-ref HEAD 2> /dev/null)
+
+  if [ -z $ref ]; then
+    # check if in detached HEAD mode
+    branch_name=$(git status -sb $(git_submodule_syntax) 2> /dev/null | head -n 1)
+    if [ "$branch_name" = "## HEAD (no branch)" ]; then
+      tag_name=$(git name-rev --name-only $(git --no-pager show --stat 2> /dev/null | head -n 1 | awk '{ print $2 }') 2> /dev/null)
+
+      # set ref to tag name if found, else set to short sha
+      if [ -n $tag_name ]; then
+      	ref=$tag_name
+      else
+		ref=$(git rev-parse --short HEAD 2> /dev/null)
+      fi
+    else
+      return
+    fi
+  fi
+
   echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
 }
 
 
 # Checks if working tree is dirty
 parse_git_dirty() {
-  local SUBMODULE_SYNTAX=''
-  if [[ $POST_1_7_2_GIT -gt 0 ]]; then
-        SUBMODULE_SYNTAX="--ignore-submodules=dirty"
-  fi
-  if [[ -n $(git status -s ${SUBMODULE_SYNTAX}  2> /dev/null) ]]; then
+  if [[ -n $(git status -s $(git_submodule_syntax) 2> /dev/null) ]]; then
     echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
   else
     echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
@@ -37,6 +50,14 @@ git_remote_status() {
             echo "$ZSH_THEME_GIT_PROMPT_DIVERGED_REMOTE"
         fi
     fi
+}
+
+git_submodule_syntax() {
+  if [[ $POST_1_7_2_GIT -gt 0 ]]; then
+    echo "--ignore-submodules=dirty"
+  else
+    echo ""
+  fi
 }
 
 # Checks if there are commits ahead from remote
