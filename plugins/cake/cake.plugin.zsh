@@ -1,3 +1,9 @@
+stat -f%m . > /dev/null 2>&1
+if [ "$?" = 0 ]; then
+    stat_cmd=(stat -f%m)
+else
+	stat_cmd=(stat -L --format=%y)
+fi
 # Set this to 1 if you want to cache the tasks
 _cake_cache_task_list=1
 
@@ -16,8 +22,8 @@ _cake_does_target_list_need_generating () {
 
 	if [ ! -f ${_cake_task_cache_file} ]; then return 0;
 	else
-		accurate=$(stat -f%m $_cake_task_cache_file)
-		changed=$(stat -f%m Cakefile)
+		accurate=$($stat_cmd $_cake_task_cache_file)
+		changed=$($stat_cmd Cakefile)
 		return $(expr $accurate '>=' $changed)
 	fi
 }
