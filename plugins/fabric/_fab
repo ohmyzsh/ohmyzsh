@@ -1,0 +1,27 @@
+#compdef fab
+#autoload
+
+# I tried doing bash tricks to get the target list parsed, and gave up.
+
+_fabric_targets() {
+    local line
+    fabric_targets=()
+    fab --list 2>/dev/null | python -c "
+import re, sys
+fab_target_matcher = re.compile(r'^    (?P<target>[a-z_]+)\s+(?P<description>.*)$')
+for line in sys.stdin:
+ matcher = fab_target_matcher.match(line)
+ if matcher is not None:
+  target = matcher.group('target')
+  description = matcher.group('description').strip()
+  if len(description) == 0:
+   description = target
+  print \"%s:%s\" % (target, description)
+" \
+    | while read line; do fabric_targets+=($line); done  
+}
+
+local -a fabric_targets
+
+_fabric_targets
+_describe -t commands "fab target" fabric_targets
