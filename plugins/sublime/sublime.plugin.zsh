@@ -1,4 +1,5 @@
 # Sublime Text 2 Aliases
+alias st='/usr/bin/subl'
 #unamestr = 'uname'
 
 local _sublime_darwin_subl=/Applications/Sublime\ Text\ 2.app/Contents/SharedSupport/bin/subl
@@ -18,4 +19,5 @@ elif  [[ $('uname') == 'Darwin' ]]; then
 		alias st='${_sublime_darwin_subl}'
 	fi
 fi
+
 alias stt='st .'
