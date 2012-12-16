@@ -1,0 +1,42 @@
+#compdef gvm
+#autoload
+
+# gvm zsh completion, based on homebrew completion
+
+local -a _1st_arguments
+_1st_arguments=(
+  'install:install a candidate version'
+  'uninstall:uninstall a candidate version'
+  'list:list available candidate versions'
+  'use:use a candidate version in current shell'
+  'current:dispaly current candidate version'
+  'version:display the current version of gvm'
+  'default:set the default candidate version for every shell'
+  'selfupdate:update the gvm'
+  'broadcast:display the last broadcast message'
+  'help:show the gvm help message'
+)
+
+local -a _2nd_arguments
+_2nd_arguments=(
+  'groovy:dynamic jvm programming language'
+  'grails:full-stack web framework'
+  'griffon:framework for building desktop application'
+  'gradle:build tool using groovy dsl'
+  'vert.x:event driven application framework'
+)
+
+local expl
+
+_arguments \
+  '*:: :->subcmds' && return 0
+
+if (( CURRENT == 1 )); then
+  _describe -t commands "gvm subcommand" _1st_arguments
+  return
+fi
+
+case "$words[1]" in
+  install|uninstall|list|use|current|default)
+    _describe -t commands "gvm subcommand" _2nd_arguments ;;
+esac
