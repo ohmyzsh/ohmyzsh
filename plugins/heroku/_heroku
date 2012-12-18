@@ -154,5 +154,6 @@ case "$words[1]" in
 _arguments \
   $_command_args \
   '(--app)--app[the app name]' \
+  '(--remote)--remote[the remote name]' \
   &&  return 0
 
