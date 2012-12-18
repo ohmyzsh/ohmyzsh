@@ -36,3 +36,12 @@ alias nomnom='killall'
 alias byes='exit'
 alias cya='reboot'
 alias kthxbai='halt'
+
+alias pwned='ssh'
+
+alias hackzor='git init'
+alias rulz='git push'
+alias bringz='git pull'
+alias moarhack='git checkout'
+alias chicken='git add'
+
