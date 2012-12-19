@@ -52,3 +52,4 @@ _grails() {
 }
  
 compdef _grails grails
+compdef _grails grailsw
