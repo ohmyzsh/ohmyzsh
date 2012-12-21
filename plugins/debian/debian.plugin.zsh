@@ -1,12 +1,15 @@
 # Authors:
 # https://github.com/AlexBio
 # https://github.com/dbb
+# https://github.com/jcassee
 #
 # Debian-related zsh aliases and functions for zsh
 
 # Use aptitude if installed, or apt-get if not.
-# You can just set apt_pref='apt-get' to override it.
-if [[ -e $( which aptitude 2>&1 ) ]]; then
+# You can just set apt_pref='apt-get' before loading oh-my-zsh to override it.
+if [[ -n $apt_pref ]]; then
+    # Use existing value
+elif [[ -e $( which aptitude 2>&1 ) ]]; then
     apt_pref='aptitude'
 else
     apt_pref='apt-get'
@@ -40,23 +43,23 @@ alias app='apt-cache policy'
 # superuser operations ######################################################
 if [[ $use_sudo -eq 1 ]]; then
 # commands using sudo #######
-    alias aac='sudo $apt_pref autoclean'
-    alias abd='sudo $apt_pref build-dep'
-    alias ac='sudo $apt_pref clean'
-    alias ad='sudo $apt_pref update'
-    alias adg='sudo $apt_pref update && sudo $apt_pref upgrade'
-    alias adu='sudo $apt_pref update && sudo $apt_pref dist-upgrade'
-    alias afu='sudo apt-file update'
-    alias ag='sudo $apt_pref upgrade'
-    alias ai='sudo $apt_pref install'
+    alias aac="sudo $apt_pref autoclean"
+    alias abd="sudo $apt_pref build-dep"
+    alias ac="sudo $apt_pref clean"
+    alias ad="sudo $apt_pref update"
+    alias adg="sudo $apt_pref update && sudo $apt_pref upgrade"
+    alias adu="sudo $apt_pref update && sudo $apt_pref dist-upgrade"
+    alias afu="sudo apt-file update"
+    alias ag="sudo $apt_pref upgrade"
+    alias ai="sudo $apt_pref install"
     # Install all packages given on the command line while using only the first word of each line:
     # acs ... | ail
-    alias ail="sed -e 's/  */ /g' -e 's/ *//' | cut -s -d ' ' -f 1 | "' xargs sudo $apt_pref install'
-    alias ap='sudo $apt_pref purge'
-    alias ar='sudo $apt_pref remove'
+    alias ail="sed -e 's/  */ /g' -e 's/ *//' | cut -s -d ' ' -f 1 | xargs sudo $apt_pref install"
+    alias ap="sudo $apt_pref purge"
+    alias ar="sudo $apt_pref remove"
 
     # apt-get only
-    alias ads='sudo $apt_pref dselect-upgrade'
+    alias ads="sudo $apt_pref dselect-upgrade"
 
     # Install all .deb files in the current directory.
     # Warning: you will need to put the glob in single quotes if you use:
@@ -71,18 +74,18 @@ if [[ $use_sudo -eq 1 ]]; then
 
 # commands using su #########
 else
-    alias aac='su -ls \'$apt_pref autoclean\' root'
+    alias aac="su -ls '$apt_pref autoclean' root"
     abd() {
         cmd="su -lc '$apt_pref build-dep $@' root"
         print "$cmd"
         eval "$cmd"
     }
-    alias ac='su -ls \'$apt_pref clean\' root'
-    alias ad='su -lc \'$apt_pref update\' root'
-    alias adg='su -lc \'$apt_pref update && aptitude safe-upgrade\' root'
-    alias adu='su -lc \'$apt_pref update && aptitude dist-upgrade\' root'
-    alias afu='su -lc "apt-file update"'
-    alias ag='su -lc \'$apt_pref safe-upgrade\' root'
+    alias ac="su -ls '$apt_pref clean' root"
+    alias ad="su -lc '$apt_pref update' root"
+    alias adg="su -lc '$apt_pref update && aptitude safe-upgrade' root"
+    alias adu="su -lc '$apt_pref update && aptitude dist-upgrade' root"
+    alias afu="su -lc 'apt-file update'"
+    alias ag="su -lc '$apt_pref safe-upgrade' root"
     ai() {
         cmd="su -lc 'aptitude -P install $@' root"
         print "$cmd"
@@ -123,7 +126,7 @@ alias mydeb='time dpkg-buildpackage -rfakeroot -us -uc'
 apt-copy() {
     print '#!/bin/sh'"\n" > apt-copy.sh
 
-    cmd='$apt_pref install'
+    cmd="$apt_pref install"
 
     for p in ${(f)"$(aptitude search -F "%p" --disable-columns \~i)"}; {
         cmd="${cmd} ${p}"
