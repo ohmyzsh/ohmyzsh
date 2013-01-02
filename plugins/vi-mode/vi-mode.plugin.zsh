@@ -7,11 +7,11 @@ function zle-keymap-select zle-line-init zle-line-finish {
     case "$0" in
       (zle-line-init)
         # Enable terminal application mode.
-        echoti smkx
+        printf '%s' ${terminfo[smkx]}
       ;;
       (zle-line-finish)
         # Disable terminal application mode.
-        echoti rmkx
+        printf '%s' ${terminfo[rmkx]}
       ;;
     esac
   fi
