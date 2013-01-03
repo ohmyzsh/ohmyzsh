@@ -1,0 +1,11 @@
+[{user}]
+user = {user}
+group = {group}
+
+listen = /var/run/php-fpm/{user}.socket
+
+pm = dynamic
+pm.max_children = 10
+pm.min_spare_servers = 1
+pm.max_spare_servers = 3
+pm.max_requests = 100
