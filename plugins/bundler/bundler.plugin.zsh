@@ -33,6 +33,7 @@ _run-with-bundler() {
 
 ## Main program
 for cmd in $bundled_commands; do
+  eval "function unbundled_$cmd () { $cmd \$@ }"
   eval "function bundled_$cmd () { _run-with-bundler $cmd \$@}"
   alias $cmd=bundled_$cmd
 
