@@ -13,31 +13,30 @@ You can install this via the command line with either `curl` or `wget`.
 
 h4. via `curl`
 
-@curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh | sh@
+bc. curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh | sh
 
 h4. via `wget`
 
-@wget --no-check-certificate https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh@
+bc. wget --no-check-certificate https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh
 
 h3. The manual way
 
 
 1. Clone the repository
 
-  @git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh@
+bc. git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
 
 2. *OPTIONAL* Backup your existing ~/.zshrc file
 
-  @cp ~/.zshrc ~/.zshrc.orig@
+bc. cp ~/.zshrc ~/.zshrc.orig
 
 3. Create a new zsh config by copying the zsh template we've provided.
 
-  @cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc@
-
+bc. cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
 
 4. Set zsh as your default shell:
 
-  @chsh -s /bin/zsh@
+bc. chsh -s /bin/zsh
 
 5. Start / restart zsh (open a new terminal is easy enough...)
 
