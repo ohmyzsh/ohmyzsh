@@ -12,3 +12,9 @@ alias hgp='hg push'
 alias hgs='hg status'
 # this is the 'git commit --amend' equivalent
 alias hgca='hg qimport -r tip ; hg qrefresh -e ; hg qfinish tip'
+
+function hg_current_branch() {
+  if [ -d .hg ]; then
+    echo hg:$(hg branch)
+  fi
+}

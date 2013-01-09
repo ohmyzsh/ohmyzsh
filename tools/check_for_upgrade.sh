@@ -14,6 +14,12 @@ function _upgrade_zsh() {
   _update_zsh_update
 }
 
+epoch_target=$UPDATE_ZSH_DAYS
+if [[ -z "$epoch_target" ]]; then
+  # Default to old behavior
+  epoch_target=13
+fi
+
 if [ -f ~/.zsh-update ]
 then
   . ~/.zsh-update
@@ -23,7 +29,7 @@ then
   fi
 
   epoch_diff=$(($(_current_epoch) - $LAST_EPOCH))
-  if [ $epoch_diff -gt 13 ]
+  if [ $epoch_diff -gt $epoch_target ]
   then
     if [ "$DISABLE_UPDATE_PROMPT" = "true" ]
     then
@@ -32,9 +38,10 @@ then
       echo "[Oh My Zsh] Would you like to check for updates?"
       echo "Type Y to update oh-my-zsh: \c"
       read line
-      if [ "$line" = Y ] || [ "$line" = y ]
-      then
+      if [ "$line" = Y ] || [ "$line" = y ]; then
         _upgrade_zsh
+      else
+        _update_zsh_update
       fi
     fi
   fi
