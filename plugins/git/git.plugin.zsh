@@ -1,4 +1,7 @@
 # Aliases
+# custom alias
+alias gsu='git submodule update --init --recursive'
+
 alias g='git'
 compdef g=git
 alias gst='git status'
