@@ -41,24 +41,24 @@ exit
 
 sprunge() {
 	if [ -t 0 ]; then
-	  echo Running interactively, checking for arguments... >&2
+	  print Running interactively, checking for arguments... >&2
 	  if [ "$*" ]; then
-		echo Arguments present... >&2
+		print Arguments present... >&2
 		if [ -f "$*" ]; then
-		  echo Uploading the contents of "$*"... >&2
+		  print Uploading the contents of "$*"... >&2
 		  cat "$*"
 		else
-		  echo Uploading the text: \""$*"\"... >&2
-		  echo "$*"
+		  print Uploading the text: \""$*"\"... >&2
+		  print -- "$*"
 		fi | curl -F 'sprunge=<-' http://sprunge.us
 	  else
-		echo No arguments found, printing USAGE and exiting. >&2
+		print No arguments found, printing USAGE and exiting. >&2
 		usage
 	  fi
 	else
-	  echo Using input from a pipe or STDIN redirection... >&2
+	  print Using input from a pipe or STDIN redirection... >&2
 	  while read -r line ; do
-		echo $line
+		print -- "$line"
 	  done | curl -F 'sprunge=<-' http://sprunge.us
 	fi
 }
