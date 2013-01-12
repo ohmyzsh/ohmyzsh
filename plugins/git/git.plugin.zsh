@@ -10,6 +10,7 @@ compdef _git gup=git-fetch
 alias gp='git push'
 compdef _git gp=git-push
 alias gd='git diff'
+compdef _git gd=git-diff
 gdv() { git diff -w "$@" | view - }
 compdef _git gdv=git-diff
 alias gc='git commit -v'
@@ -19,6 +20,7 @@ compdef _git gca=git-commit
 alias gco='git checkout'
 compdef _git gco=git-checkout
 alias gcm='git checkout master'
+compdef _git gcm=git-checkout
 alias gr='git remote'
 compdef _git gr=git-remote
 alias grv='git remote -v'
@@ -30,7 +32,7 @@ compdef _git grrm=git-remote
 alias grset='git remote set-url'
 compdef _git grset=git-remote
 alias grup='git remote update'
-compdef _git grset=git-remote
+compdef _git grup=git-remote
 alias gb='git branch'
 compdef _git gb=git-branch
 alias gba='git branch -a'
@@ -38,6 +40,7 @@ compdef _git gba=git-branch
 alias gcount='git shortlog -sn'
 compdef gcount=git
 alias gcl='git config --list'
+compdef _git gcl=git-config
 alias gcp='git cherry-pick'
 compdef _git gcp=git-cherry-pick
 alias glg='git log --stat --max-count=5'
@@ -53,10 +56,15 @@ compdef _git ga=git-add
 alias gm='git merge'
 compdef _git gm=git-merge
 alias grh='git reset HEAD'
+compdef _git grh=git-reset
 alias grhh='git reset HEAD --hard'
+compdef _git grhh=git-reset
 alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
+compdef _git gwc=git-whatchanged
 alias gf='git ls-files | grep'
+compdef _git gf=git-ls-files
 alias gpoat='git push origin --all && git push origin --tags'
+compdef _git gpoat=git-push
 
 # Will cd into the top of the current repository
 # or submodule.
