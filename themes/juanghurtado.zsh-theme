@@ -21,7 +21,7 @@ ZSH_THEME_GIT_PROMPT_PREFIX=""
 ZSH_THEME_GIT_PROMPT_SUFFIX=""
 
 # Format for parse_git_dirty()
-ZSH_THEME_GIT_PROMPT_DIRTY=" %{$RED%}(*)"
+ZSH_THEME_GIT_PROMPT_DIRTY=" %{$RED%}(⚡)"
 ZSH_THEME_GIT_PROMPT_CLEAN=""
 
 # Format for git_prompt_status()
@@ -35,12 +35,21 @@ ZSH_THEME_GIT_PROMPT_UNTRACKED=" %{$WHITE%}untracked"
 # Format for git_prompt_ahead()
 ZSH_THEME_GIT_PROMPT_AHEAD=" %{$RED%}(!)"
 
-# Format for git_prompt_long_sha() and git_prompt_short_sha()
-ZSH_THEME_GIT_PROMPT_SHA_BEFORE=" %{$WHITE%}[%{$YELLOW%}"
-ZSH_THEME_GIT_PROMPT_SHA_AFTER="%{$WHITE%}]"
-
 # Prompt format
+# PROMPT='
+# %{$RED_BOLD%}%n@%m%{$WHITE%}:%~%u$(parse_git_dirty)$(git_prompt_ahead)%{$RESET_COLOR%}
+# %{$BLUE%}>%{$RESET_COLOR%} '
 PROMPT='
-%{$GREEN_BOLD%}%n@%m%{$WHITE%}:%{$YELLOW%}%~%u$(parse_git_dirty)$(git_prompt_ahead)%{$RESET_COLOR%}
-%{$BLUE%}>%{$RESET_COLOR%} '
-RPROMPT='%{$GREEN_BOLD%}$(current_branch)$(git_prompt_short_sha)$(git_prompt_status)%{$RESET_COLOR%}'
+%{$RED_BOLD%}[%{$WHITE%}\
+%n\
+%{$RED_BOLD%}@%{$WHITE%}\
+%m:%~%{$RED_BOLD%}]\
+%u$(parse_git_dirty)$(git_prompt_ahead)%{$RESET_COLOR%}
+%{$RED%}>%{$RESET_COLOR%} '
+
+PROMPT='
+%{$WHITE%}%n\
+%{$RED_BOLD%}@%{$WHITE%}\
+%m:%~\
+%u$(parse_git_dirty)$(git_prompt_ahead)%{$RESET_COLOR%}
+%{$RED%}>%{$RESET_COLOR%} '
