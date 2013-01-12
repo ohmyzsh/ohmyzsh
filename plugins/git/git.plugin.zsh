@@ -28,6 +28,7 @@ compdef _git gcmsg=git-commit
 alias gco='git checkout'
 compdef _git gco=git-checkout
 alias gcm='git checkout master'
+compdef _git gcm=git-checkout
 alias gr='git remote'
 compdef _git gr=git-remote
 alias grv='git remote -v'
@@ -57,6 +58,7 @@ compdef _git gba=git-branch
 alias gcount='git shortlog -sn'
 compdef gcount=git
 alias gcl='git config --list'
+compdef _git gcl=git-config
 alias gcp='git cherry-pick'
 compdef _git gcp=git-cherry-pick
 alias glg='git log --stat --color'
@@ -78,14 +80,14 @@ compdef _git ga=git-add
 alias gm='git merge'
 compdef _git gm=git-merge
 alias grh='git reset HEAD'
+compdef _git grh=git-reset
 alias grhh='git reset HEAD --hard'
+compdef _git grhh=git-reset
 alias gclean='git reset --hard && git clean -dfx'
 alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
-
-#remove the gf alias
-#alias gf='git ls-files | grep'
-
+compdef _git gwc=git-whatchanged
 alias gpoat='git push origin --all && git push origin --tags'
+compdef _git gpoat=git-push
 alias gmt='git mergetool --no-prompt'
 compdef _git gm=git-mergetool
 
