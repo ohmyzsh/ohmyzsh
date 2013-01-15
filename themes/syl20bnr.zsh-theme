@@ -45,14 +45,12 @@ ZSH_THEME_GIT_PROMPT_SHA_AFTER="%{$WHITE%}]"
 # Format for VI mode
 INSERT_MODE="%{$GREEN%}-- INSERT --"
 NORMAL_MODE="%{$RED%}-- NORMAL --"
-VI_PROMPT="$INSERT_MODE"
-function zle-keymap-select {
-	VI_PROMPT="${${KEYMAP/vicmd/$NORMAL_MODE}/(main|viins)/$INSERT_MODE}"
-    zle reset-prompt
+function vi_mode_prompt_info() {
+	echo "${${KEYMAP/vicmd/$NORMAL_MODE}/(main|viins)/$INSERT_MODE}"
 }
 
 # Prompt format
 PROMPT='
 %{$BLUE_BOLD%}%n@%m%{$WHITE%}:%{$YELLOW%}%~%u$(parse_git_dirty)$(git_prompt_ahead)%{$RESET_COLOR%}
-${VI_PROMPT} ➤%{$RESET_COLOR%} '
+$(vi_mode_prompt_info) ➤%{$RESET_COLOR%} '
 RPROMPT='%{$GREEN_BOLD%}$(current_branch)$(git_prompt_short_sha)$(git_prompt_status)%{$RESET_COLOR%}'
