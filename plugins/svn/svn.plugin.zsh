@@ -46,7 +46,7 @@ function svn_get_rev_nr {
 
 function svn_dirty_choose {
     if [ $(in_svn) ]; then
-        if [ $ZSH_THEME_SVN_NUVC_IN_DIRTY -eq 0 ]; then
+        if [ "x$ZSH_THEME_SVN_NUVC_IN_DIRTY" = "x0" ]; then
             svn status 2> /dev/null | grep -Eq '^\s*[ACDIM!L]'
         else
             svn status 2> /dev/null | grep -Eq '^\s*[ACDIM!?L]'
