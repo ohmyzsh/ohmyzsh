@@ -1,4 +1,4 @@
-
+SVN_DIRTY_COUNT="svn_dirty_count_string_wait_for_replacement"
 function svn_prompt_info {
     if [ $(in_svn) ]; then
         if [ "x$SVN_SHOW_BRANCH" = "xtrue" ]; then
@@ -47,13 +47,14 @@ function svn_get_rev_nr {
 function svn_dirty_choose {
     if [ $(in_svn) ]; then
         if [ "x$ZSH_THEME_SVN_NUVC_IN_DIRTY" = "x0" ]; then
-            svn status 2> /dev/null | grep -Eq '^\s*[ACDIM!L]'
+            svn status 2> /dev/null | grep -Ec '^\s*[ACDIM!L]' | read DIRTY_COUNT
         else
-            svn status 2> /dev/null | grep -Eq '^\s*[ACDIM!?L]'
+            svn status 2> /dev/null | grep -Ec '^\s*[ACDIM!?L]' | read DIRTY_COUNT
         fi
-        if [ $pipestatus[-1] -eq 0 ]; then
+        if [ "x$DIRTY_COUNT" != "x0" ]; then
             # Grep exits with 0 when "One or more lines were selected", return "dirty".
-            echo $1
+            echo -e $1 | sed -e "s/${SVN_DIRTY_COUNT}/${DIRTY_COUNT}/g" | read output
+            echo $output
         else
             # Otherwise, no lines were found, or an error occurred. Return clean.
             echo $2
