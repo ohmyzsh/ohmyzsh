@@ -24,7 +24,7 @@ function svn_get_repo_name {
     if [ $(in_svn) ]; then
         svn info | sed -n 's/Repository\ Root:\ .*\///p' | read SVN_ROOT
 
-        svn info | sed -n "s/URL:\ .*$SVN_ROOT\///p"
+        svn info | sed -n "s/URL:\ .*$SVN_ROOT\///p" | read TMPP
     fi
 }
 
@@ -46,7 +46,11 @@ function svn_get_rev_nr {
 
 function svn_dirty_choose {
     if [ $(in_svn) ]; then
-        svn status 2> /dev/null | grep -Eq '^\s*[ACDIM!?L]'
+        if [ $ZSH_THEME_SVN_NUVC_IN_DIRTY -eq 0 ]; then
+            svn status 2> /dev/null | grep -Eq '^\s*[ACDIM!L]'
+        else
+            svn status 2> /dev/null | grep -Eq '^\s*[ACDIM!?L]'
+        fi
         if [ $pipestatus[-1] -eq 0 ]; then
             # Grep exits with 0 when "One or more lines were selected", return "dirty".
             echo $1
