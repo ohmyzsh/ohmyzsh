@@ -13,9 +13,10 @@ $ZSH_THEME_REPO_NAME_COLOR$_DISPLAY$ZSH_PROMPT_BASE_COLOR$ZSH_THEME_SVN_PROMPT_S
     fi
 }
 
-
 function in_svn() {
-    if [[ -d .svn ]]; then
+    is_svn=0
+    svn status 2>&1 1>/dev/null | grep -c '.*' | read is_svn
+    if [ "x$is_svn" = "x0" ]; then
         echo 1
     fi
 }
