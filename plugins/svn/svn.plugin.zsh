@@ -1,15 +1,19 @@
 SVN_DIRTY_COUNT="svn_dirty_count_string_wait_for_replacement"
 function svn_prompt_info {
     if [ $(in_svn) ]; then
-        if [ "x$SVN_SHOW_BRANCH" = "xtrue" ]; then
-            unset SVN_SHOW_BRANCH
-            _DISPLAY=$(svn_get_branch_name)
-        else
-            _DISPLAY=$(svn_get_repo_name)
-        fi
-        echo "$ZSH_PROMPT_BASE_COLOR$ZSH_THEME_SVN_PROMPT_PREFIX\
+        if [ "x$SVN_SHOW_NONE" != "x1" ]; then
+            if [ "x$SVN_SHOW_BRANCH" = "xtrue" ]; then
+                unset SVN_SHOW_BRANCH
+                _DISPLAY=$(svn_get_branch_name)
+            else
+                _DISPLAY=$(svn_get_repo_name)
+            fi
+            echo "$ZSH_PROMPT_BASE_COLOR$ZSH_THEME_SVN_PROMPT_PREFIX\
 $ZSH_THEME_REPO_NAME_COLOR$_DISPLAY$ZSH_PROMPT_BASE_COLOR$ZSH_THEME_SVN_PROMPT_SUFFIX$ZSH_PROMPT_BASE_COLOR$(svn_dirty)$ZSH_PROMPT_BASE_COLOR"
-        unset _DISPLAY
+            unset _DISPLAY
+        else
+            echo "$ZSH_PROMPT_BASE_COLOR$(svn_dirty)$ZSH_PROMPT_BASE_COLOR"
+        fi
     fi
 }
 
