@@ -9,7 +9,7 @@
 #   To load multiple identies use the identities style, For
 #   example:
 #
-#     zstyle :omz:plugins:ssh-agent id_rsa id_rsa2 id_github
+#     zstyle :omz:plugins:ssh-agent identities id_rsa id_github
 #
 #
 # CREDITS
@@ -34,7 +34,7 @@ function _plugin__start_agent()
   . ${_plugin__ssh_env} > /dev/null
 
   # load identies
-  zstyle -a :omz:plugins:ssh-agent identities identities 
+  zstyle -a :omz:plugins:ssh-agent identities identities
   echo starting...
   /usr/bin/ssh-add $HOME/.ssh/${^identities}
 }
