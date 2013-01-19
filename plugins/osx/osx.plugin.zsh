@@ -154,3 +154,12 @@ function trash() {
   IFS=$temp_ifs
 }
 
+function viewDownloadsList() {
+  sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV*\
+    'select LSQuarantineDataURLString from LSQuarantineEvent'
+}
+
+function removeDownloadList() {
+  sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV*\
+    'delete from LSQuarantineEvent'
+}
