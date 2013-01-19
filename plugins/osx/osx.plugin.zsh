@@ -154,7 +154,7 @@ function trash() {
   IFS=$temp_ifs
 }
 
-function listDownloads() {
+function viewDownloadsList() {
   sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV*\
     'select LSQuarantineDataURLString from LSQuarantineEvent'
 }
