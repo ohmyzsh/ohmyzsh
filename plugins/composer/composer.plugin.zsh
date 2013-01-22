@@ -2,7 +2,7 @@
 #          FILE:  composer.plugin.zsh
 #   DESCRIPTION:  oh-my-zsh composer plugin file.
 #        AUTHOR:  Daniel Gomes (me@danielcsgomes.com)
-#       VERSION:  1.0.0
+#       VERSION:  1.0.1
 # ------------------------------------------------------------------------------
 
 # Composer basic command completion
@@ -11,9 +11,7 @@ _composer_get_command_list () {
 }
 
 _composer () {
-  if [ -f composer.json ]; then
-    compadd `_composer_get_command_list`
-  fi
+  compadd `_composer_get_command_list`
 }
 
 compdef _composer composer
