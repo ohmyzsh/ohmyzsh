@@ -11,12 +11,20 @@ parse_git_dirty() {
   local SUBMODULE_SYNTAX=''
   if [[ "$(git config --get oh-my-zsh.hide-status)" != "1" ]]; then
     if [[ $POST_1_7_2_GIT -gt 0 ]]; then
-          SUBMODULE_SYNTAX="--ignore-submodules=dirty"
+        SUBMODULE_SYNTAX="--ignore-submodules=dirty"
     fi
-    if [[ -n $(git status -s ${SUBMODULE_SYNTAX}  2> /dev/null) ]]; then
-      echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
+    local GIT_DIRTY=0
+    # see https://github.com/robbyrussell/oh-my-zsh/commit/3c87d483628267e48fc0f462f46488dcd4f87810
+    # and https://github.com/robbyrussell/oh-my-zsh/issues/40
+    if [[ $POST_1_6_4_GIT -gt 0 ]]; then
+        [[ -n $(git status -s ${SUBMODULE_SYNTAX}  2> /dev/null) ]] && GIT_DIRTY=1
     else
-      echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
+        [[ $((git status 2> /dev/null) | tail -n1) != "nothing to commit (working directory clean)" ]] && GIT_DIRTY=1
+    fi
+    if (( GIT_DIRTY )); then
+        echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
+    else
+        echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
     fi
   fi
 }
@@ -126,6 +134,7 @@ function git_compare_version() {
 
 #this is unlikely to change so make it all statically assigned
 POST_1_7_2_GIT=$(git_compare_version "1.7.2")
+POST_1_6_4_GIT=$(git_compare_version "1.6.4")
 #clean up the namespace slightly by removing the checker function
 unset -f git_compare_version
 
