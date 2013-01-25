@@ -1,5 +1,8 @@
-# get the name of the branch we are on
+# get the name of the ruby version
 function rvm_prompt_info() {
-  ruby_version=$(~/.rvm/bin/rvm-prompt 2> /dev/null) || return
-  [[ ! -z $ruby_version ]] && echo "($ruby_version)"
+  [ -f $HOME/.rvm/bin/rvm-prompt ] || return
+  local rvm_prompt
+  rvm_prompt=$($HOME/.rvm/bin/rvm-prompt ${ZSH_THEME_RVM_PROMPT_OPTIONS} 2>/dev/null)
+  [[ "${rvm_prompt}x" == "x" ]] && return
+  echo "${ZSH_THEME_RVM_PROMPT_PREFIX:=(}${rvm_prompt}${ZSH_THEME_RVM_PROMPT_SUFFIX:=)}"
 }
