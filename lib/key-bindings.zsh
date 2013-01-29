@@ -1,6 +1,8 @@
 # TODO: Explain what some of this does..
+# For more information on keybindings, see http://zshwiki.org/home/zle/bindkeys
 
-bindkey -e
+#bindkey -e
+bindkey -v # vi keybindings
 bindkey '\ew' kill-region
 bindkey -s '\el' "ls\n"
 bindkey '^r' history-incremental-search-backward
@@ -25,10 +27,11 @@ bindkey "^[[1;5D" backward-word
 bindkey '^[[Z' reverse-menu-complete
 
 # Make the delete key (or Fn + Delete on the Mac) work instead of outputting a ~
+# default keybinding is normal US Keyboard (non-mac)
 bindkey '^?' backward-delete-char
 bindkey "^[[3~" delete-char
-bindkey "^[3;5~" delete-char
-bindkey "\e[3~" delete-char
+#bindkey "^[3;5~" delete-char
+#bindkey "\e[3~" delete-char
 
 # consider emacs keybindings:
 
