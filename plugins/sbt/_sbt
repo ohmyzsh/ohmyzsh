@@ -1,0 +1,57 @@
+#compdef sbt
+#autoload
+
+local -a _1st_arguments
+_1st_arguments=(
+  'clean:delete files produced by the build'
+  'compile:compile sources'
+  'console:start the Scala REPL with project classes on the classpath'
+  'console-quick:start the Scala REPL with project deps on the classpath'
+  'console-project:start the Scala REPL w/sbt+build-def on the classpath'
+  'dist:generate distribution artifacts'
+  'dist\:clean:clean distribution artifacts'
+  'doc:generate API documentation'
+  'gen-idea:generate Intellij Idea project files'
+  'package:produce the main artifact, such as a binary jar'
+  'package-doc:produce a doc artifact, such as a jar containing API docs'
+  'package-src:produce a source artifact, such as a jar containing sources'
+  'publish:publish artifacts to a repository'
+  'publish-local:publish artifacts to the local repository'
+  'run:run a main class'
+  'run-main:run the main class selected by the first argument'
+  'test:execute all tests'
+  'test-only:execute the tests provided as arguments'
+  'test-quick:execute previously failed tests'
+  'update:resolve and optionally retrieve dependencies'
+)
+
+local expl
+
+_arguments \
+  '(-h)-h[prints an help message]' \
+  '(-help)-help[prints an help message]' \
+  '(-v)-v[this runner is chattier]' \
+  '(-verbose)-verbose[this runner is chattier]' \
+  '(-d)-d[set sbt log level to debug]' \
+  '(-debug)-debug[set sbt log level to debug]' \
+  '(-no-colors)-no-colors[disable ANSI color codes]' \
+  '(-sbt-create)-sbt-create[start even if current dir contains no sbt project]' \
+  '(-sbt-dir)-sbt-dir[path to global settings/plugins dir (default: ~/.sbt)]' \
+  '(-sbt-boot)-sbt-boot[path to shared boot dir (default: ~/.sbt/boot)]' \
+  '(-ivy)-ivy[path to local Ivy repository (default: ~/.ivy2)]' \
+  '(-mem)-mem[set memory options]' \
+  '(-no-share)-no-share[use all local caches; no sharing]' \
+  '(-no-global)-no-global[use global caches, but do not use global ~/.sbt dir]' \
+  '(-jvm-debug)-jvm-debug[turn on JVM debugging, open at the given port]' \
+  '(-batch)-batch[disable interactive mode]' \
+  '(-sbt-version)-sbt-version[use the specified version of sbt]' \
+  '(-sbt-jar)-sbt-jar[use the specified jar as the sbt launcher]' \
+  '(-sbt-rc)-sbt-rc[use an RC version of sbt]' \
+  '(-sbt-snapshot)-sbt-snapshot[use a snapshot version of sbt]' \
+  '(-java-home)-java-home[alternate JAVA_HOME]' \
+  '*:: :->subcmds' && return 0
+
+if (( CURRENT == 1 )); then
+  _describe -t commands "sbt subcommand" _1st_arguments
+  return
+fi
