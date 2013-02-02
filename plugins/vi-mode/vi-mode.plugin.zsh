@@ -3,18 +3,13 @@
 function zle-keymap-select zle-line-init zle-line-finish {
   # The terminal must be in application mode when ZLE is active for $terminfo
   # values to be valid.
-  if (( $+terminfo[smkx] && $+terminfo[rmkx] )); then
-    case "$0" in
-      (zle-line-init)
-        # Enable terminal application mode.
-        echoti smkx
-      ;;
-      (zle-line-finish)
-        # Disable terminal application mode.
-        echoti rmkx
-      ;;
-    esac
+  if (( ${+terminfo[smkx]} )); then
+    printf '%s' ${terminfo[smkx]}
   fi
+  if (( ${+terminfo[rmkx]} )); then
+    printf '%s' ${terminfo[rmkx]}
+  fi
+
   zle reset-prompt
   zle -R
 }
