@@ -1,0 +1,10 @@
+# simpler.zsh-theme
+#
+# Customization of the simple theme
+
+PROMPT='%{$fg_bold[blue]%}%.%{$fg[red]%}$(git_prompt_info)%{$reset_color%} '
+
+ZSH_THEME_GIT_PROMPT_PREFIX=" "
+ZSH_THEME_GIT_PROMPT_SUFFIX=""
+ZSH_THEME_GIT_PROMPT_DIRTY="(✗)"
+ZSH_THEME_GIT_PROMPT_CLEAN="(✔)"
