@@ -48,7 +48,7 @@ if [[ $(uname) == "Darwin" ]] ; then
 
 elif [[ $(uname) == "Linux"  ]] ; then
 
-  if [[ $(acpi 2&>/dev/null | grep -c '^Battery.*Discharging') -gt 0 ]] ; then
+  if [[ $(acpi 2&>/dev/null | egrep -c '^Battery.*(Discharging|Charging|Full)') -gt 0 ]] ; then
     function battery_pct_remaining() { echo "$(acpi | cut -f2 -d ',' | tr -cd '[:digit:]')" }
     function battery_time_remaining() { echo $(acpi | cut -f3 -d ',') }
     function battery_pct_prompt() {
