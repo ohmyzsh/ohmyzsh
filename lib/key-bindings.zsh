@@ -1,9 +1,28 @@
 # TODO: Explain what some of this does..
 
+# To reset bindings: 
+#   bindkey -d
+#
+# To show value for a key combination
+#   Ctrl+V => <Press the combination>
+#
+
 bindkey -e
+
+# Verified keybindings
+
+bindkey "^[[3~" delete-char             # Delete
+bindkey '^[[3;5~' kill-word             # Ctrl+Delete
+bindkey '^_' backward-delete-word       # Ctrl+Backspace
+bindkey '^[[2~' insert-last-word        # Insert
+
+# I actually don't know what those do
+
 bindkey '\ew' kill-region
 bindkey -s '\el' "ls\n"
 bindkey -s '\e.' "..\n"
+
+
 bindkey '^r' history-incremental-search-backward
 bindkey "^[[5~" up-line-or-history
 bindkey "^[[6~" down-line-or-history
@@ -25,11 +44,7 @@ bindkey "^[[1;5D" backward-word
 
 bindkey '^[[Z' reverse-menu-complete
 
-# Make the delete key (or Fn + Delete on the Mac) work instead of outputting a ~
 bindkey '^?' backward-delete-char
-bindkey "^[[3~" delete-char
-bindkey "^[3;5~" delete-char
-bindkey "\e[3~" delete-char
 
 # consider emacs keybindings:
 
