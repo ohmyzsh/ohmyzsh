@@ -21,13 +21,24 @@ fi
 for config_file ($ZSH/lib/*.zsh); do
   filename=$(basename "$config_file")
   if [ -f $ZSH_CUSTOM/$filename ]; then
-    #echo "source $ZSH_CUSTOM/$filename"
+    # echo "source $ZSH_CUSTOM/$filename"
     source $ZSH_CUSTOM/$filename
   elif [ -f $config_file ]; then
-    #echo "source $config_file"
+    # echo "source $config_file"
     source $config_file
   fi
 done
+unset config_file
+
+# Now source all remaining .zsh scripts in ZSH_CUSTOM
+for config_file ($ZSH_CUSTOM/*.zsh); do
+  filename=$(basename "$config_file")
+  if [ ! -f $ZSH/lib/$filename ]; then
+    # echo "source $config_file"
+    source $config_file
+  fi
+done
+unset config_file
 
 is_plugin() {
   local base_dir=$1
@@ -49,7 +60,6 @@ done
 autoload -U compinit
 compinit -i
 
-
 # Load all of the plugins that were defined in ~/.zshrc
 for plugin ($plugins); do
   if [ -f $ZSH_CUSTOM/$plugin/$plugin.plugin.zsh ]; then
@@ -58,9 +68,6 @@ for plugin ($plugins); do
     source $ZSH/plugins/$plugin/$plugin.plugin.zsh
   fi
 done
-
-# Unser variables
-unset config_file
 unset plugin
 
 # Load the theme
