@@ -1,0 +1,146 @@
+#compdef repo
+
+_repo()
+{
+  typeset -A opt_args
+  local context state line curcontext="$curcontext"
+
+  local ret=1
+
+  _arguments -C \
+    '(- 1 *)--help[show usage]'\
+    '1:command:->command'\
+    '*::args:->args' && ret=0
+
+  case $state in
+    (command)
+      repo status 2> /dev/null > /dev/null
+      if [[ $? == 0 ]]; then
+        local commands;
+        commands=(
+          'abandon:Permanently abandon a development branch'
+          'branch:View current topic branches'
+          'branches:View current topic branches'
+          'checkout:Checkout a branch for development'
+          'checkout-manifest:for every project in a manifest tag file check out the sha1 listed in the file'
+          'cherry-pick:Cherry-pick a change.'
+          'diff:Show changes between commit and working tree'
+          'download:Download and checkout a change'
+          'format-patch:build patch sets for each project common to a manifest baseline'
+          'grep:Print lines matching a pattern'
+          'help:Display detailed help on a command'
+          'init:Initialize repo in the current directory'
+          'list:List projects and their associated directories'
+          'overview:Display overview of unmerged project branches'
+          'prune:Prune (delete) already merged topics'
+          'push:Push the local branch rebase:Rebase local branches on upstream branch'
+          'smartsync:Update working tree to the latest known good revision'
+          'stage:Stage file(s) for commit start:Start a new branch for development'
+          'status:Show the working tree status sync:Update working tree to the latest revision'
+          'sync:Update working tree to the latest revision'
+          'tag-manifest:for every project in a manifest tag use the sha1 listed in the file set the tagname to it'
+          'upload:Upload changes for code review'
+        )
+        _describe -t commands 'command' commands && ret=0
+      else
+        local commands;
+        commands=(
+          'init:Install repo in the current working directory'
+          'help:Display detailed help on a command'
+        )
+        _describe -t commands 'command' commands && ret=0
+      fi
+      ;;
+    (args)
+      
+      case $words[1] in
+        (branch | branches )
+          # TODO : list available projects and add them in list to feed compadd with
+          _arguments :::_branches_projects
+        ;;
+        (init)
+          _arguments \
+                     "(-h --help)"{-h,--help}"[Show help]" \
+                     "(-q --quiet)"{-q,--quiet}"[be quiet]" \
+                     "(-u --manifest-url)"{-u,--manifest-url=}"[manifest repository location]":url:_url \
+                     "(-b --manifest-branch)"{-b,--manifest-branch=}"[manifest branch or revision]":branch:_branch\
+                     "(-m --manifest-name)"{-m,--manifest-name=}"[initial manifest file]":manifest_name:_manifest_name\
+                     "(--mirror)--mirror[mirror the forrest]"\
+                     "(--reference)--reference=[location of mirror directory]":dir:_dirs\
+                     "(--depth)--depth=[create a shallow clone with given depth; see git clone]":depth:_depth\
+                     "(-g --group=)"{-g,--group=}"[restrict manifest projects to ones with a specified group]":group:_group\
+                     "(-p --platform=)"{-p,--platform=}"[restrict manifest projects to ones with a specified platform group(auto|all|none|linux|darwin|...)]":platform:_platform\
+                     "(--repo-url)--repo-url=[repo repository location]":url:_url\
+                     "(--repo-branch)--repo-branch[repo branch or revision]":branch_or_rev:_branch_or_rev\
+                     "(--no-repo-verify)--no-repo-verify[do not verify repo source code]"\
+                     "(--config-name)--config-name[Always prompt for name/e-mail]"\
+          && ret=0
+        ;;
+        *)
+          ret=0
+      esac
+      ;;
+  esac
+
+  return $ret
+}
+
+_url()
+{
+  _message -e url 'url'
+}
+
+_platform()
+{
+  _message -e platform 'platform group(auto|all|none|linux|darwin|...)'
+}
+
+_manifest_name()
+{
+  _message -e manifest_name 'manifest name'
+}
+
+_group()
+{
+  _message -e group 'group'
+}
+
+_branch()
+{
+  _message -e branch 'branch'
+}
+
+_branch_or_rev()
+{
+  _message -e branch_or_rev 'repo branch or revision'
+}
+
+_depth()
+{
+  _message -e depth 'depth'
+}
+
+_branches_projects()
+{
+  _message -e depth '<projects>...'
+}
+
+_repo "$@"
+return $?
+
+
+#typeset -A opt_args
+
+local context state line
+local fontdir
+
+_arguments \
+    "(-l -c -r)init[Install repo in the current working directory]" \
+    "(-l -c -r)help[Display detailed help on a command]" \
+    && return 0
+
+
+return 1
+
+
+

@@ -1,0 +1,5 @@
+#compdef blop
+
+
+_arguments "1: :(World)"
+

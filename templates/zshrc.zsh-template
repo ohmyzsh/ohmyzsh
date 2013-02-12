@@ -36,4 +36,6 @@ plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 
+zstyle ':completion:*:descriptions' format '%B%d%b'
+
 # Customize to your needs...
