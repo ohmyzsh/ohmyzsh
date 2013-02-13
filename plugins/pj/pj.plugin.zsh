@@ -43,7 +43,7 @@ function _pj () {
     typeset -a projects
     foreach i ($PROJECT_PATHS/*)
     do
-        projects+=`basename $i`
+        projects+=(${i##*/})
     done
 
     _arguments '*:file:($projects)'
