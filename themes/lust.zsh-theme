@@ -82,18 +82,23 @@ if [[ "$TERM" != "dumb" ]] && [[ "$DISABLE_LS_COLORS" != "true" ]]; then
             fi
         fi
     }
-    function my_git_prompt_status() {
+    function my_git_prompt_status_and_time() {
         #wrap git prompt status with stuff 
         NOW_GIT_PROMPT_STATUS="$(git_prompt_status)"
+        NOW_GIT_TIME_SINCE="$(git_time_since_commit)"
         if [[ -n $NOW_GIT_PROMPT_STATUS ]]; then 
-            echo "%{$fg[grey]%}[$NOW_GIT_PROMPT_STATUS%{$fg[grey]%}]%{$reset_color%}"
+            echo "%{$fg[grey]%}[$NOW_GIT_PROMPT_STATUS%{$fg[grey]%}]$NOW_GIT_TIME_SINCE%{$reset_color%}"
+        else
+            if [[ -n $NOW_GIT_TIME_SINCE ]]; then
+                echo "%{$fg[grey]%}‖$NOW_GIT_TIME_SINCE%{$reset_color%}"
+            fi
         fi
     }
 
     # display exitcode on the right when >0
     return_code="%(?..%{$fg[magenta]%}%? ↲ %{$reset_color%}) "
  
-    RPROMPT='${return_code}$(git_prompt_info)$(git_prompt_short_sha)$(my_git_prompt_status)$(git_time_since_commit)%{$reset_color%}'
+    RPROMPT='${return_code}$(git_prompt_info)$(git_prompt_short_sha)$(my_git_prompt_status_and_time)'
 
 else
     PROMPT='[%n@%m:%~$(git_prompt_info)]
