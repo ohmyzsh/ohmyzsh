@@ -7,7 +7,7 @@ _buildbot()
 
   local ret=1
 
-  _arguments -C \
+  _arguments -C : \
     '(- 1 *)--help[show usage]'\
     '(- 1 *)--version[display version]'\
     '(- 1 *)--verbose[verbose output]'\
