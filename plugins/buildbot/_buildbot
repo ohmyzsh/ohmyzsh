@@ -1,0 +1,51 @@
+#compdef buildbot
+
+_buildbot()
+{
+  typeset -A opt_args
+  local context state line curcontext="$curcontext"
+
+  local ret=1
+
+  _arguments -C : \
+    '(- 1 *)--help[show usage]'\
+    '(- 1 *)--version[display version]'\
+    '(- 1 *)--verbose[verbose output]'\
+    '1:command:->command'\
+    '*::args:->args' && ret=0
+
+  case $state in
+    (command)
+        local commands;
+        commands=(
+          'create-master:Create and populate a directory for a new buildmaster'
+          'upgrade-master:Upgrade an existing buildmaster directory for the current version'
+          'start:Start a buildmaster'
+          'stop:Stop a buildmaster'
+          'restart:Restart a buildmaster'
+          'reconfig:SIGHUP a buildmaster to make it re-read the config file'
+          'sighup:SIGHUP a buildmaster to make it re-read the config file'
+          'sendchange:Send a change to the buildmaster'
+          'debugclient:Launch a small debug panel GUI'
+          'statuslog:Emit current builder status to stdout'
+          'statusgui:Display a small window showing current builder status'
+          'try:Run a build with your local changes'
+          'tryserver:buildmaster-side "try" support function, not for users'
+          'checkconfig:test the validity of a master.cfg config file'
+          'user:Manage users in buildbot''s database'
+        )
+        _describe -t commands 'command' commands && ret=0
+      ;;
+    (args)
+      ret=0
+      ;;
+  esac
+
+  return $ret
+}
+
+_buildbot "$@"
+return $?
+
+
+
