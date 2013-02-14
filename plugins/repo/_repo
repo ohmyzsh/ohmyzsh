@@ -2,11 +2,11 @@
 
 _repo()
 {
+  local context state state_descr line curcontext="$curcontext"
   typeset -A opt_args
-  local context state line curcontext="$curcontext"
 
   local ret=1
-
+  
   _arguments -C \
     '(- 1 *)--help[show usage]'\
     '1:command:->command'\
@@ -36,6 +36,7 @@ _repo()
           'push:Push the local branch rebase:Rebase local branches on upstream branch'
           'smartsync:Update working tree to the latest known good revision'
           'stage:Stage file(s) for commit start:Start a new branch for development'
+          'start:Start a new branch for development'
           'status:Show the working tree status sync:Update working tree to the latest revision'
           'sync:Update working tree to the latest revision'
           'tag-manifest:for every project in a manifest tag use the sha1 listed in the file set the tagname to it'
@@ -54,28 +55,89 @@ _repo()
     (args)
       
       case $words[1] in
-        (branch | branches )
+        (branch | branches)
           # TODO : list available projects and add them in list to feed compadd with
-          _arguments :::_branches_projects
+          _arguments  : \
+                      '::__repo_projects'
+          ret=0
         ;;
         (init)
-          _arguments \
+          _arguments : 
                      "(-h --help)"{-h,--help}"[Show help]" \
                      "(-q --quiet)"{-q,--quiet}"[be quiet]" \
-                     "(-u --manifest-url)"{-u,--manifest-url=}"[manifest repository location]":url:_url \
-                     "(-b --manifest-branch)"{-b,--manifest-branch=}"[manifest branch or revision]":branch:_branch\
-                     "(-m --manifest-name)"{-m,--manifest-name=}"[initial manifest file]":manifest_name:_manifest_name\
+                     "(-u --manifest-url)"{-u,--manifest-url=}"[manifest repository location]":url:__repo_url_prompt \
+                     "(-b --manifest-branch)"{-b,--manifest-branch=}"[manifest branch or revision]":branch:__repo_branch\
+                     "(-m --manifest-name)"{-m,--manifest-name=}"[initial manifest file]":manifest_name:__repo_manifest_name\
                      "(--mirror)--mirror[mirror the forrest]"\
                      "(--reference)--reference=[location of mirror directory]":dir:_dirs\
-                     "(--depth)--depth=[create a shallow clone with given depth; see git clone]":depth:_depth\
+                     "(--depth)--depth=[create a shallow clone with given depth; see git clone]":depth:__repo_depth_prompt\
                      "(-g --group=)"{-g,--group=}"[restrict manifest projects to ones with a specified group]":group:_group\
-                     "(-p --platform=)"{-p,--platform=}"[restrict manifest projects to ones with a specified platform group(auto|all|none|linux|darwin|...)]":platform:_platform\
-                     "(--repo-url)--repo-url=[repo repository location]":url:_url\
-                     "(--repo-branch)--repo-branch[repo branch or revision]":branch_or_rev:_branch_or_rev\
+                     "(-p --platform=)"{-p,--platform=}"[restrict manifest projects to ones with a specified platform group(auto|all|none|linux|darwin|...)]":platform:(auto all none linux darwin)\
+                     "(--repo-url)--repo-url=[repo repository location]":url:__repo_url_prompt\
+                     "(--repo-branch)--repo-branch[repo branch or revision]":branch_or_rev:__repo__repo_branch_or_rev\
                      "(--no-repo-verify)--no-repo-verify[do not verify repo source code]"\
                      "(--config-name)--config-name[Always prompt for name/e-mail]"\
           && ret=0
         ;;
+        (start)
+          _arguments : \
+                     "(-h --help)"{-h,--help}"[Show help]" \
+                     "(--all)--all=[begin branch in all projects]"\
+                    ':branch name:__repo_new__repo_branch_name' \
+                    ':projects:__repo_projects_or_all' \
+                    && ret=0
+          ;;
+        (checkout)
+          _arguments : \
+                     "(-h --help)"{-h,--help}"[Show help]" \
+                    ':branch name:__git_branch_names' \
+                    ':projects:__repo_projects' \
+                    && ret=0
+        ;;
+        (list)
+          _arguments : \
+                     "(-h --help)"{-h,--help}"[Show help]" \
+                    && ret=0
+          ;;
+        (status)
+          _arguments : \
+                     "(-h --help)"{-h,--help}"[Show help]" \
+                     "(-j --jobs)"{-j,--jobs}"[number of projects to check simultaneously]" \
+                    ':projects:__repo_projects' \
+                    && ret=0
+        ;;
+        (sync)
+          _arguments : \
+                     "(-h --help)"{-h,--help}"[Show help]" \
+                     "(--no-force-broken)--no-force-broken[stop sync if a project fails to sync (probably because of permissions)]" \
+                     "(-l --local-only)"{-l,--local-only}"[only update working tree, don't fetch]" \
+                     "(-n --network-only)"{-n,--network-branch}"[fetch only, don't update working tree]" \
+                     "(-d --detach)"{-d,--detach}"[detach projects back to manifest revision]" \
+                     "(-c --current-branch)"{-c,--current-branch}"[fetch only current branch from server]" \
+                     "(-q --quiet)"{-q,--quiet}"[be more quiet]" \
+                     "(-j --jobs=)"{-j,--jobs=}"[projects to fetch simultaneously (default 1) (limited to 5)]:projects to fetch simultaneously (default 1) (limited to 5)" \
+                     "(--i-know-i-may-hurt-the-team=)--i-know-i-may-hurt-the-team=[raise the maximum number of jobs]:raise the maximum number of jobs" \
+                     "(-m --manifest-name=)"{-m,--manifest-name=}"[temporary manifest to use for this sync]:manifest xml file:_files -g *.xml" \
+                     "(--no-clone-bundle)--no-clone-bundle[disable use of /clone.bundle on HTTP/HTTPS]" \
+                     "(-s --smart-sync)"{-s,--smart-sync=}"[smart sync using manifest from a known tag]:tag:" \
+                     '(--no-repo-verify)--no-repo-verify[do not verify repo source code]' \
+                     ': :__repo_projects' \
+                    && ret=0                    
+          ;;
+        (upload)
+          _arguments : \
+                     "(-h --help)"{-h,--help}"[Show help]" \
+                     "(-t)-t[Send local branch name to Gerrit Code Review]" \
+                     "(--re= --reviewers=)"{--re=,--reviewers=}"[Request reviews from these people]:Request reviews from these people:" \
+                     "(--cc=)--cc=[Also send email to these email addresses.]:email addresses:_email_addresses" \
+                     "(--br=)--br=[Branch to upload.]:branch:__repo_branch" \
+                     "(--cbr --current-branch)"{--cbr,--current-branch}"[Upload current git branch]" \
+                     "(-d --draft)"{-d,--draft}"[If specified, upload as a draft.]" \
+                     "(--verify --no-verify)--no-verify[Do not run the upload hook.]" \
+                     '(--verify --no-verify)--verify[Run the upload hook without prompting]' \
+                     ': :__repo_projects' \
+                    && ret=0
+          ;;
         *)
           ret=0
       esac
@@ -85,17 +147,22 @@ _repo()
   return $ret
 }
 
-_url()
+__repo_reviewers()
+{
+ # _message -e url 'reviewers'
+}
+
+__repo_url_prompt()
 {
   _message -e url 'url'
 }
 
-_platform()
+__repo_platform()
 {
   _message -e platform 'platform group(auto|all|none|linux|darwin|...)'
 }
 
-_manifest_name()
+__repo_manifest_name()
 {
   _message -e manifest_name 'manifest name'
 }
@@ -105,24 +172,36 @@ _group()
   _message -e group 'group'
 }
 
-_branch()
+__repo_branch()
 {
-  _message -e branch 'branch'
+  _message -e branch 'Repo branch'
 }
 
-_branch_or_rev()
+__repo__repo_branch_or_rev()
 {
   _message -e branch_or_rev 'repo branch or revision'
 }
 
-_depth()
+__repo_depth_prompt()
 {
   _message -e depth 'depth'
 }
 
-_branches_projects()
+__repo_projects()
 {
-  _message -e depth '<projects>...'
+  #_message -e depth 'Optional option : <projects>...'
+  projects=($(repo list | cut -d' ' -f1))
+  _describe -t projects 'Select projects (keep empty for selecting all projects)' projects
+}
+
+__repo_new__repo_branch_name()
+{
+  _message -e depth '<new branch name>'
+}
+
+__repo_projects_or_all()
+{
+  _message -e depth '[--all | <project>...]'
 }
 
 _repo "$@"
