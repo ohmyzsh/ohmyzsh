@@ -58,7 +58,24 @@ _repo()
         (branch | branches)
           # TODO : list available projects and add them in list to feed compadd with
           _arguments  : \
-                      '::__repo_projects'
+                     "(-h --help)"{-h,--help}"[Show help]" \
+                      ': :__repo_projects'
+          ret=0
+        ;;
+        (abandon)
+          # TODO : list available projects and add them in list to feed compadd with
+          _arguments  : \
+                     "(-h --help)"{-h,--help}"[Show help]" \
+                    ':branch name:__repo_branch' \
+                      ': :__repo_projects'
+          ret=0
+        ;;
+        (checkout)
+          # TODO : list available projects and add them in list to feed compadd with
+          _arguments  : \
+                     "(-h --help)"{-h,--help}"[Show help]" \
+                    ':branch name:__repo_branch' \
+                      ': :__repo_projects'
           ret=0
         ;;
         (init)
@@ -174,7 +191,9 @@ _group()
 
 __repo_branch()
 {
-  _message -e branch 'Repo branch'
+  #_message -e branch 'Repo branch'
+  branches=($(repo branches| cut -c4- | grep '|' | cut -d' ' -f1))
+  _describe -t branches 'Select repo branch' branches
 }
 
 __repo__repo_branch_or_rev()
@@ -189,19 +208,25 @@ __repo_depth_prompt()
 
 __repo_projects()
 {
-  #_message -e depth 'Optional option : <projects>...'
-  projects=($(repo list | cut -d' ' -f1))
+  _message -e depth 'Optional option : <projects>...'
+  projects=("" $(repo list | cut -d' ' -f1))
   _describe -t projects 'Select projects (keep empty for selecting all projects)' projects
 }
 
 __repo_new__repo_branch_name()
 {
-  _message -e depth '<new branch name>'
+  branches=($(repo branches| cut -c4- | grep '|' | cut -d' ' -f1))
+  _describe "" branches
+  _message -e "branch name" 'Enter new branch name or select an existing repo branch'
 }
 
 __repo_projects_or_all()
 {
-  _message -e depth '[--all | <project>...]'
+  #_message -e depth '[--all | <project>...]'
+  
+  projects=(--all $(repo list | cut -d' ' -f1))
+  _describe -t projects 'Select projects or --all' projects
+  _describe -t --all 'All projects'
 }
 
 _repo "$@"
