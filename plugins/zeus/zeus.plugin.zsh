@@ -4,7 +4,7 @@
 
 # Always use bundler.
 # Rails depends on bundler, so we can be pretty sure, that there are no
-# problems with this command. For all the other aliases I provided an 
+# problems with this command. For all the other aliases I provided an
 # alternative, in case people have conflicts with other plugins (e.g. suse).
 alias zeus='bundle exec zeus'
 
@@ -39,6 +39,9 @@ alias zunner='zeus runner'
 # Cucumber
 alias zcu='zeus cucumber'
 alias zucumber='zeus cucumber'
+
+# Rspec
+alias zspec='zeus rspec'
 
 # Test
 alias zt='zeus test'

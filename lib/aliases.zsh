@@ -3,10 +3,18 @@ alias pu='pushd'
 alias po='popd'
 
 # Basic directory operations
+alias ..='cd ..'
 alias ...='cd ../..'
+alias ....='cd ../../..'
 alias -- -='cd -'
 
+alias cd..='cd ..'
+alias cd...='cd ../..'
+alias cd....='cd ../../..'
+alias cd.....='cd ../../../..'
+
 # Super user
+alias sudo='sudo ' # This allow 'sudo ll'. See http://www.shellperson.net/using-sudo-with-an-alias/
 alias _='sudo'
 alias please='sudo'
 
