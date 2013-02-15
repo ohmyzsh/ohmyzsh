@@ -27,6 +27,7 @@ _repo()
           'diff:Show changes between commit and working tree'
           'download:Download and checkout a change'
           'format-patch:build patch sets for each project common to a manifest baseline'
+          'forall:execute command on several project'
           'grep:Print lines matching a pattern'
           'help:Display detailed help on a command'
           'init:Initialize repo in the current directory'
@@ -155,6 +156,15 @@ _repo()
                      ': :__repo_projects' \
                     && ret=0
           ;;
+        (forall)
+          _arguments : \
+                     "(-h --help)"{-h,--help}"[Show help]" \
+                     "(-v --verbose)"{-v,--verbose}"[Show command error messages]" \
+                     '(-p)-p[Show project headers before output]' \
+                     ': :__repo_projects_mandatory' \
+                     "(-c --command -h --help -v --verbose -p)"{-c,--command}"[Command (and arguments) to execute]" \
+                    && ret=0
+          ;;
         *)
           ret=0
       esac
@@ -209,8 +219,15 @@ __repo_depth_prompt()
 __repo_projects()
 {
   _message -e depth 'Optional option : <projects>...'
-  projects=("" $(repo list | cut -d' ' -f1))
+  projects=($(repo list | cut -d' ' -f1))
   _describe -t projects 'Select projects (keep empty for selecting all projects)' projects
+}
+
+__repo_projects_mandatory()
+{
+  projects=($(repo list | cut -d' ' -f1))
+  #_describe -t projects 'Select projects to apply commands' projects
+  _values -s ' ' "Select projects to apply commands" $projects
 }
 
 __repo_new__repo_branch_name()
