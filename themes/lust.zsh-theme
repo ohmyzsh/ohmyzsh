@@ -2,13 +2,19 @@
 #          FILE:  lust.zsh-theme
 #   DESCRIPTION:  oh-my-zsh theme file.
 #        AUTHOR:  Steven Lu, based on kphoen.zsh-theme by Kévin Gomez (geek63@gmail.com)
-#       VERSION:  0.1
+#       VERSION:  0.2
 # ------------------------------------------------------------------------------
  
+function myjobs() {
+    JOBS=`jobs -l`
+    if [[ -n $JOBS ]]; then 
+        print "$JOBS%{\n%}"
+    fi
+}
  
 if [[ "$TERM" != "dumb" ]] && [[ "$DISABLE_LS_COLORS" != "true" ]]; then
     PROMPT='%{$fg[red]%}%n%{$reset_color%}@%{$fg[green]%}%m%{$reset_color%}:%{$fg[blue]%}%~%{$reset_color%} %{$fg[yellow]%}%*%{$reset_color%}
-%(!.%{$fg[red]%}#.%{$fg[cyan]%}❯)%{$reset_color%} '
+$(myjobs)%(!.%{$fg[red]%}#.%{$fg[cyan]%}❯)%{$reset_color%} '
  
     ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[green]%}"
     ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
@@ -19,9 +25,9 @@ if [[ "$TERM" != "dumb" ]] && [[ "$DISABLE_LS_COLORS" != "true" ]]; then
     ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[grey]%}[%{$fg[yellow]%}⚡%{$fg[grey]%}]%{$reset_color%}"
     ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[grey]%}[%{$fg[green]%}✓%{$fg[grey]%}]%{$reset_color%}"
  
-    ZSH_THEME_GIT_PROMPT_AHEAD="%{$fg[red]%}↑%{$reset_color%}"
+    ZSH_THEME_GIT_PROMPT_AHEAD="%{$fg[cyan]%}↑%{$reset_color%}"
     ZSH_THEME_GIT_PROMPT_BEHIND="%{$fg[red]%}↓%{$reset_color%}"
-    ZSH_THEME_GIT_PROMPT_DIVERGED="%{$fg[red]%}↕%{$reset_color%}"
+    ZSH_THEME_GIT_PROMPT_DIVERGED="%{$fg[magenta]%}↕%{$reset_color%}"
  
     ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[green]%}✚"
     ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg[yellow]%}✎"
@@ -35,7 +41,7 @@ if [[ "$TERM" != "dumb" ]] && [[ "$DISABLE_LS_COLORS" != "true" ]]; then
     ZSH_THEME_GIT_TIME_SINCE_COMMIT_SHORT="%{$fg[green]%}"
     ZSH_THEME_GIT_TIME_SHORT_COMMIT_MEDIUM="%{$fg[yellow]%}"
     ZSH_THEME_GIT_TIME_SINCE_COMMIT_LONG="%{$fg[red]%}"
-    ZSH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL="%{$fg[cyan]%}"
+    ZSH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL="%{$reset_color%}"
 
     # Determine the time since last commit. If branch is clean,
     # use a neutral color, otherwise colors will vary according to time.
