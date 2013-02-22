@@ -1,7 +1,7 @@
 # Symfony2 basic command completion
 
 _symfony2_get_command_list () {
-	app/console --no-ansi | sed "1,/Available commands/d" | awk '/^  [a-z]+/ { print $1 }'
+	php app/console --no-ansi | sed "1,/Available commands/d" | awk '/^  [a-z]+/ { print $1 }'
 }
 
 _symfony2 () {
