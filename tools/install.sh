@@ -1,3 +1,11 @@
+which zsh>/dev/null
+RES=$?
+if [ $RES -ne 0 ]
+then
+  echo "\033[0;33mYou do not have zsh installed.\033[0m You'll need to install zsh first if you want to install oh-my-zsh"
+  exit
+fi
+
 if [ -d ~/.oh-my-zsh ]
 then
   echo "\033[0;33mYou already have Oh My Zsh installed.\033[0m You'll need to remove ~/.oh-my-zsh if you want to install"
@@ -5,7 +13,7 @@ then
 fi
 
 echo "\033[0;34mCloning Oh My Zsh...\033[0m"
-hash git >/dev/null && /usr/bin/env git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh || {
+hash git >/dev/null && /usr/bin/env git clone https://github.com/NeuralSandwichl/oh-my-zsh.git ~/.oh-my-zsh || {
   echo "git not installed"
   exit
 }
@@ -34,5 +42,5 @@ echo "\033[0;32m"'\____/_/ /_/  /_/ /_/ /_/\__, /    /___/____/_/ /_/  '"\033[0m
 echo "\033[0;32m"'                        /____/                       '"\033[0m"
 
 echo "\n\n \033[0;32m....is now installed.\033[0m"
+echo "source .zshrc" | zsh
 /usr/bin/env zsh
-source ~/.zshrc
