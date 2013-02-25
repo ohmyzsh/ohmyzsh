@@ -65,7 +65,7 @@ alias gf='git ls-files | grep'
 alias gpoat='git push origin --all && git push origin --tags'
 
 alias gg='git gui'
-alias gk='gitk'
+alias gk='gitk --all --branches'
 
 # Will cd into the top of the current repository
 # or submodule.
