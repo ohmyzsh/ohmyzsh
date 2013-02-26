@@ -11,6 +11,14 @@
 # Get the absolute path to the current directory
 local zsh_tmux_plugin_path="$(cd "$(dirname "$0")" && pwd)"
 
+# Determine if the terminal supports 256 colors
+if [[ `tput colors` == "256" ]]
+then
+	export $ZSH_TMUX_TERM="screen-256"
+else
+	export $ZSH_TMUX_TERM="screen"
+fi
+
 # Local variable to store the local config file to use, if any.
 local fixed_config=""
 
