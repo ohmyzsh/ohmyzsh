@@ -36,7 +36,12 @@ fi
 # Override tmux with our function
 function zsh_tmux_plugin_start()
 {
-	if [[ "$ZSH_TMUX_AUTOCONNECT" == "true" ]]
+	# We have other arguments, just run them
+	if [[ ! -n "$@" ]]
+	then
+		\tmux $@
+	# Try to connect to an existing session.
+	elif [[ "$ZSH_TMUX_AUTOCONNECT" == "true" ]]
 	then
 		\tmux attach || tmux -f $fixed_config new-session
 		[[ "$ZSH_TMUX_AUTOQUIT" == "true" ]] && exit
