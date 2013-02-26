@@ -27,8 +27,10 @@ if [[ "$ZSH_TMUX_FIXTERM" == "true" ]]
 then
 	if [[ -f $HOME/.tmux.conf || -h $HOME/.tmux.conf ]]
 	then
+		#use this when they have a ~/.tmux.conf
 		fixed_config=$zsh_tmux_plugin_path/tmux.extra.conf
 	else
+		#use this when they don't have a ~/.tmux.conf
 		fixed_config=$zsh_tmux_plugin_path/tmux.only.conf
 	fi
 fi
@@ -45,6 +47,7 @@ function zsh_tmux_plugin_start()
 	then
 		\tmux attach || tmux -f $fixed_config new-session
 		[[ "$ZSH_TMUX_AUTOQUIT" == "true" ]] && exit
+	# Just try to fix the TERM variable.
 	else
 		\tmux -f $fixed_config
 		[[ "$ZSH_TMUX_AUTOQUIT" == "true" ]] && exit
