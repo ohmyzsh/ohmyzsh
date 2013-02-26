@@ -55,3 +55,8 @@ function zsh_tmux_plugin_start()
 }
 
 alias tmux=zsh_tmux_plugin_start
+
+if [[ "$ZSH_TMUX_AUTOSTART" == "true" ]]
+then
+	zsh_tmux_plugin_start
+fi
