@@ -54,7 +54,7 @@ function zsh_tmux_plugin_run()
 # Alias tmux to our wrapper function.
 alias tmux=zsh_tmux_plugin_start
 
-if [[ "$ZSH_TMUX_AUTOSTART" == "true" ]]
+if [[ ! -n "$TMUX" && "$ZSH_TMUX_AUTOSTART" == "true" ]]
 then
 	zsh_tmux_plugin_run
 fi
