@@ -56,6 +56,9 @@ function zsh_tmux_plugin_run()
 	fi
 }
 
+# Use the completions for tmux for our function
+compdef _tmux zsh_tmux_plugin_run
+
 # Alias tmux to our wrapper function.
 alias tmux=zsh_tmux_plugin_run
 
