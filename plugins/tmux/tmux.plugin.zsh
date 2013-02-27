@@ -1,82 +1,88 @@
-# Configuration variables
-#
-# Automatically start tmux
-[[ -n "$ZSH_TMUX_AUTOSTART" ]] || ZSH_TMUX_AUTOSTART=false
-# Only autostart once. If set to false, tmux will attempt to
-# autostart every time your zsh configs are reloaded.
-[[ -n "$ZSH_TMUX_AUTOSTART_ONCE" ]] || ZSH_TMUX_AUTOSTART_ONCE=true
-# Automatically connect to a previous session if it exists
-[[ -n "$ZSH_TMUX_AUTOCONNECT" ]] || ZSH_TMUX_AUTOCONNECT=true
-# Automatically close the terminal when tmux exits
-[[ -n "$ZSH_TMUX_AUTOQUIT" ]] || ZSH_TMUX_AUTOQUIT=$ZSH_TMUX_AUTOSTART
-# Set term to screen or screen-256color based on current terminal support
-[[ -n "$ZSH_TMUX_FIXTERM" ]] || ZSH_TMUX_FIXTERM=true
-# The TERM to use for non-256 color terminals.
-# Tmux states this should be screen, but you may need to change it on
-# systems without the proper terminfo
-[[ -n "$ZSH_TMUX_FIXTERM_WITHOUT_256COLOR" ]] || ZSH_TMUX_FIXTERM_WITHOUT_256COLOR="screen"
-# The TERM to use for 256 color terminals.
-# Tmux states this should be screen-256color, but you may need to change it on
-# systems without the proper terminfo
-[[ -n "$ZSH_TMUX_FIXTERM_WITH_256COLOR" ]] || ZSH_TMUX_FIXTERM_WITH_256COLOR="screen-256color"
-
-
-# Get the absolute path to the current directory
-local zsh_tmux_plugin_path="$(cd "$(dirname "$0")" && pwd)"
-
-# Determine if the terminal supports 256 colors
-if [[ `tput colors` == "256" ]]
-then
-	export ZSH_TMUX_TERM=$ZSH_TMUX_FIXTERM_WITH_256COLOR
-else
-	export ZSH_TMUX_TERM=$ZSH_TMUX_FIXTERM_WITHOUT_256COLOR
-fi
-
-# Local variable to store the local config file to use, if any.
-local fixed_config=""
-
-# Set the correct local config file to use.
-if [[ -f $HOME/.tmux.conf || -h $HOME/.tmux.conf ]]
-then
-	#use this when they have a ~/.tmux.conf
-	fixed_config="$zsh_tmux_plugin_path/tmux.extra.conf"
-else
-	#use this when they don't have a ~/.tmux.conf
-	fixed_config="$zsh_tmux_plugin_path/tmux.only.conf"
-fi
-
-# Wrapper function for tmux.
-function zsh_tmux_plugin_run()
-{
-	# We have other arguments, just run them
-	if [[ -n "$@" ]]
+# Only run if tmux is actually installed
+if which tmux &> /dev/null
 	then
-		\tmux $@
-	# Try to connect to an existing session.
-	elif [[ "$ZSH_TMUX_AUTOCONNECT" == "true" ]]
+	# Configuration variables
+	#
+	# Automatically start tmux
+	[[ -n "$ZSH_TMUX_AUTOSTART" ]] || ZSH_TMUX_AUTOSTART=false
+	# Only autostart once. If set to false, tmux will attempt to
+	# autostart every time your zsh configs are reloaded.
+	[[ -n "$ZSH_TMUX_AUTOSTART_ONCE" ]] || ZSH_TMUX_AUTOSTART_ONCE=true
+	# Automatically connect to a previous session if it exists
+	[[ -n "$ZSH_TMUX_AUTOCONNECT" ]] || ZSH_TMUX_AUTOCONNECT=true
+	# Automatically close the terminal when tmux exits
+	[[ -n "$ZSH_TMUX_AUTOQUIT" ]] || ZSH_TMUX_AUTOQUIT=$ZSH_TMUX_AUTOSTART
+	# Set term to screen or screen-256color based on current terminal support
+	[[ -n "$ZSH_TMUX_FIXTERM" ]] || ZSH_TMUX_FIXTERM=true
+	# The TERM to use for non-256 color terminals.
+	# Tmux states this should be screen, but you may need to change it on
+	# systems without the proper terminfo
+	[[ -n "$ZSH_TMUX_FIXTERM_WITHOUT_256COLOR" ]] || ZSH_TMUX_FIXTERM_WITHOUT_256COLOR="screen"
+	# The TERM to use for 256 color terminals.
+	# Tmux states this should be screen-256color, but you may need to change it on
+	# systems without the proper terminfo
+	[[ -n "$ZSH_TMUX_FIXTERM_WITH_256COLOR" ]] || ZSH_TMUX_FIXTERM_WITH_256COLOR="screen-256color"
+
+
+	# Get the absolute path to the current directory
+	local zsh_tmux_plugin_path="$(cd "$(dirname "$0")" && pwd)"
+
+	# Determine if the terminal supports 256 colors
+	if [[ `tput colors` == "256" ]]
 	then
-		\tmux attach || \tmux `[[ "$ZSH_TMUX_FIXTERM" == "true" ]] && echo '-f '$fixed_config`  new-session
-		[[ "$ZSH_TMUX_AUTOQUIT" == "true" ]] && exit
-	# Just run tmux, fixing the TERM variable if requested.
+		export ZSH_TMUX_TERM=$ZSH_TMUX_FIXTERM_WITH_256COLOR
 	else
-		\tmux `[[ "$ZSH_TMUX_FIXTERM" == "true" ]] && echo '-f '$fixed_config`
-		[[ "$ZSH_TMUX_AUTOQUIT" == "true" ]] && exit
+		export ZSH_TMUX_TERM=$ZSH_TMUX_FIXTERM_WITHOUT_256COLOR
 	fi
-}
 
-# Use the completions for tmux for our function
-compdef _tmux zsh_tmux_plugin_run
+	# Local variable to store the local config file to use, if any.
+	local fixed_config=""
 
-# Alias tmux to our wrapper function.
-alias tmux=zsh_tmux_plugin_run
-
-# Autostart if not already in tmux and enabled.
-if [[ ! -n "$TMUX" && "$ZSH_TMUX_AUTOSTART" == "true" ]]
-then
-	# Actually don't autostart if we already did and multiple autostarts are disabled.
-	if [[ "$ZSH_TMUX_AUTOSTART_ONCE" == "false" || "$ZSH_TMUX_AUTOSTARTED" != "true" ]]
+	# Set the correct local config file to use.
+	if [[ -f $HOME/.tmux.conf || -h $HOME/.tmux.conf ]]
 	then
-		export ZSH_TMUX_AUTOSTARTED=true
-		zsh_tmux_plugin_run
+		#use this when they have a ~/.tmux.conf
+		fixed_config="$zsh_tmux_plugin_path/tmux.extra.conf"
+	else
+		#use this when they don't have a ~/.tmux.conf
+		fixed_config="$zsh_tmux_plugin_path/tmux.only.conf"
 	fi
+
+	# Wrapper function for tmux.
+	function zsh_tmux_plugin_run()
+	{
+		# We have other arguments, just run them
+		if [[ -n "$@" ]]
+		then
+			\tmux $@
+		# Try to connect to an existing session.
+		elif [[ "$ZSH_TMUX_AUTOCONNECT" == "true" ]]
+		then
+			\tmux attach || \tmux `[[ "$ZSH_TMUX_FIXTERM" == "true" ]] && echo '-f '$fixed_config`  new-session
+			[[ "$ZSH_TMUX_AUTOQUIT" == "true" ]] && exit
+		# Just run tmux, fixing the TERM variable if requested.
+		else
+			\tmux `[[ "$ZSH_TMUX_FIXTERM" == "true" ]] && echo '-f '$fixed_config`
+			[[ "$ZSH_TMUX_AUTOQUIT" == "true" ]] && exit
+		fi
+	}
+
+	# Use the completions for tmux for our function
+	compdef _tmux zsh_tmux_plugin_run
+
+	# Alias tmux to our wrapper function.
+	alias tmux=zsh_tmux_plugin_run
+
+	# Autostart if not already in tmux and enabled.
+	if [[ ! -n "$TMUX" && "$ZSH_TMUX_AUTOSTART" == "true" ]]
+	then
+		# Actually don't autostart if we already did and multiple autostarts are disabled.
+		if [[ "$ZSH_TMUX_AUTOSTART_ONCE" == "false" || "$ZSH_TMUX_AUTOSTARTED" != "true" ]]
+		then
+			export ZSH_TMUX_AUTOSTARTED=true
+			zsh_tmux_plugin_run
+		fi
+	fi
+else
+	print "zsh tmux plugin: tmux not found. Please install tmux before using this plugin."
 fi
