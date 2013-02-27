@@ -23,16 +23,13 @@ fi
 local fixed_config=""
 
 # Set the correct local config file to use.
-if [[ "$ZSH_TMUX_FIXTERM" == "true" ]]
+if [[ -f $HOME/.tmux.conf || -h $HOME/.tmux.conf ]]
 then
-	if [[ -f $HOME/.tmux.conf || -h $HOME/.tmux.conf ]]
-	then
-		#use this when they have a ~/.tmux.conf
-		fixed_config="$zsh_tmux_plugin_path/tmux.extra.conf"
-	else
-		#use this when they don't have a ~/.tmux.conf
-		fixed_config="$zsh_tmux_plugin_path/tmux.only.conf"
-	fi
+	#use this when they have a ~/.tmux.conf
+	fixed_config="$zsh_tmux_plugin_path/tmux.extra.conf"
+else
+	#use this when they don't have a ~/.tmux.conf
+	fixed_config="$zsh_tmux_plugin_path/tmux.only.conf"
 fi
 
 # Wrapper function for tmux.
@@ -45,11 +42,11 @@ function zsh_tmux_plugin_run()
 	# Try to connect to an existing session.
 	elif [[ "$ZSH_TMUX_AUTOCONNECT" == "true" ]]
 	then
-		\tmux attach || \tmux `[[ -n "$fixed_config" ]] && echo '-f ' $fixed_config`  new-session
+		\tmux attach || \tmux `[[ "$ZSH_TMUX_FIXTERM" == "true" ]] && echo '-f '$fixed_config`  new-session
 		[[ "$ZSH_TMUX_AUTOQUIT" == "true" ]] && exit
 	# Just run tmux, fixing the TERM variable if requested.
 	else
-		\tmux `[[ -n "$fixed_config" ]] && echo '-f ' $fixed_config`
+		\tmux `[[ "$ZSH_TMUX_FIXTERM" == "true" ]] && echo '-f '$fixed_config`
 		[[ "$ZSH_TMUX_AUTOQUIT" == "true" ]] && exit
 	fi
 }
