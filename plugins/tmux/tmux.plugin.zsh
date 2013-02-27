@@ -11,6 +11,14 @@
 [[ -n "$ZSH_TMUX_AUTOQUIT" ]] || ZSH_TMUX_AUTOQUIT=$ZSH_TMUX_AUTOSTART
 # Set term to screen or screen-256color based on current terminal support
 [[ -n "$ZSH_TMUX_FIXTERM" ]] || ZSH_TMUX_FIXTERM=true
+# The TERM to use for non-256 color terminals.
+# Tmux states this should be screen, but you may need to change it on
+# systems without the proper terminfo
+[[ -n "$ZSH_TMUX_FIXTERM_WITHOUT_256COLOR" ]] || ZSH_TMUX_FIXTERM_WITHOUT_256COLOR="screen"
+# The TERM to use for 256 color terminals.
+# Tmux states this should be screen-256color, but you may need to change it on
+# systems without the proper terminfo
+[[ -n "$ZSH_TMUX_FIXTERM_WITH_256COLOR" ]] || ZSH_TMUX_FIXTERM_WITH_256COLOR="screen-256color"
 
 
 # Get the absolute path to the current directory
@@ -19,9 +27,9 @@ local zsh_tmux_plugin_path="$(cd "$(dirname "$0")" && pwd)"
 # Determine if the terminal supports 256 colors
 if [[ `tput colors` == "256" ]]
 then
-	export ZSH_TMUX_TERM="screen-256color"
+	export ZSH_TMUX_TERM=$ZSH_TMUX_FIXTERM_WITH_256COLOR
 else
-	export ZSH_TMUX_TERM="screen"
+	export ZSH_TMUX_TERM=$ZSH_TMUX_FIXTERM_WITHOUT_256COLOR
 fi
 
 # Local variable to store the local config file to use, if any.
