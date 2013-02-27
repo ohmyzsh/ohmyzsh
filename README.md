@@ -41,12 +41,12 @@ How to install
         plugins=( [plugins...] zsh-syntax-highlighting)
 
 * Source `~/.zshrc`  to take changes into account:
-    
+
         source ~/.zshrc
 
 
 How to tweak
 ------------
 
-Syntax highlighting is done by pluggable highlighter scripts, see the [highlighters directory](zsh-syntax-highlighting/tree/master/highlighters)
+Syntax highlighting is done by pluggable highlighter scripts, see the [highlighters directory](highlighters)
 for documentation and configuration settings.
