@@ -15,3 +15,10 @@ function take() {
   cd $1
 }
 
+# Functions for gcc and g++
+function my_c++ () { g++ -Wall -Wextra -pedantic $1 -o $2 }
+
+function my_c () { gcc -Wall -Wextra -pedantic $1 -o $2 }
+
+# Userful stuff I come across
+function find_my_word () { grep -R $1 * }

@@ -24,3 +24,13 @@ alias sl=ls # often screw this up
 
 alias afind='ack-grep -il'
 
+# Rails Pry
+alias rpry="rails-console-pry -r pry-doc -r awesome_print"
+
+# Go to specific folders that I need to go to
+alias code="cd ~/Code/"
+alias rkoans="cd /Users/tarebyte/Code/Languages/Ruby/ruby_koans/"
+alias ckoans="cd /Users/tarebyte/Code/Languages/Clojure/clojure-koans"
+
+# I'm pretty lazy
+alias pingG="ping -c 4 8.8.8.8"
