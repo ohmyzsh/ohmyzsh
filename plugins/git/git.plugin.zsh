@@ -64,7 +64,8 @@ alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
 alias gf='git ls-files | grep'
 alias gpoat='git push origin --all && git push origin --tags'
 
-alias gg='git gui'
+alias gg='git gui citool'
+alias gga='git gui citool --amend'
 alias gk='gitk --all --branches'
 
 # Will cd into the top of the current repository
