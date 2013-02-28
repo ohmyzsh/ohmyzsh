@@ -1,5 +1,21 @@
 #compdef repo
 
+
+__git_apply_whitespace_strategies ()
+{
+  declare -a strategies
+
+  strategies=(
+    'nowarn:turn off the trailing-whitespace warning'
+    'warn:output trailing-whitespace warning, but apply patch'
+    'fix:output trailing-whitespace warning and strip trailing whitespace'
+    'error:output trailing-whitespace warning and refuse to apply patch'
+    'error-all:same as "error", but output warnings for all files')
+
+  _describe -t strategies 'trailing-whitespace resolution strategy' strategies $*
+}
+
+
 _repo()
 {
   local context state state_descr line curcontext="$curcontext"
@@ -34,11 +50,12 @@ _repo()
           'list:List projects and their associated directories'
           'overview:Display overview of unmerged project branches'
           'prune:Prune (delete) already merged topics'
-          'push:Push the local branch rebase:Rebase local branches on upstream branch'
+          'push:Push the local branch'
+          'rebase:Rebase local branches on upstream branch'
           'smartsync:Update working tree to the latest known good revision'
-          'stage:Stage file(s) for commit start:Start a new branch for development'
+          'stage:Stage file(s) for commit'
           'start:Start a new branch for development'
-          'status:Show the working tree status sync:Update working tree to the latest revision'
+          'status:Show the working tree status'
           'sync:Update working tree to the latest revision'
           'tag-manifest:for every project in a manifest tag use the sha1 listed in the file set the tagname to it'
           'upload:Upload changes for code review'
@@ -103,6 +120,18 @@ _repo()
                      "(--all)--all=[begin branch in all projects]"\
                     ':branch name:__repo_new__repo_branch_name' \
                     ':projects:__repo_projects_or_all' \
+                    && ret=0
+          ;;
+        (rebase)
+          _arguments : \
+                     "(-h --help)"{-h,--help}"[Show help]" \
+                     "(-i --interactive)"{-i,--interactive}"[interactive rebase (single project only)]: :__repo_projects" \
+                     "(-f --force-rebase)"{-f,--force-rebase}"[Pass --force-rebase to git rebase]" \
+                     "(--no-ff)--no-ff=[Pass --no-ff to git rebase]"\
+                     "(-q --quiet)"{-q,--quiet}"[Pass --quiet to git rebase]" \
+                     "(--autosquash)--no-ff[Pass --autosquash to git rebase]"\
+                     "(--whitespace=)--whitespace=[Pass --whitespace to git rebase]: :__git_apply_whitespace_strategies"\
+                     "(--auto-stash)--auto-stash[Stash local modifications before starting]"\
                     && ret=0
           ;;
         (checkout)

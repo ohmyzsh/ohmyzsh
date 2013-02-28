@@ -1,2 +1,2 @@
 # Aliases
-#alias r='repo'
+alias r='repo'
