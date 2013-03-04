@@ -5,7 +5,7 @@ then
 fi
 
 echo "\033[0;34mCloning Oh My Zsh...\033[0m"
-hash git >/dev/null && /usr/bin/env git clone https://github.com/cadusk/oh-my-zsh.git ~/.oh-my-zsh || {
+hash git >/dev/null && /usr/bin/env git clone https://github.com/stibbons/oh-my-zsh.git ~/.oh-my-zsh || {
   echo "git not installed"
   exit
 }
@@ -32,6 +32,7 @@ echo "\033[0;32m"' / __ \/ __ \   / __ `__ \/ / / /  /_  / / ___/ __ \ '"\033[0m
 echo "\033[0;32m"'/ /_/ / / / /  / / / / / / /_/ /    / /_(__  ) / / / '"\033[0m"
 echo "\033[0;32m"'\____/_/ /_/  /_/ /_/ /_/\__, /    /___/____/_/ /_/  '"\033[0m"
 echo "\033[0;32m"'                        /____/                       '"\033[0m"
+echo "\033[0;32m"'                                 (Stibbons version)  '"\033[0m"
 
 echo "\n\n \033[0;32m....is now installed.\033[0m"
 /usr/bin/env zsh
