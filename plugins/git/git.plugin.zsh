@@ -12,6 +12,8 @@ compdef _git gp=git-push
 alias gd='git diff'
 gdv() { git diff -w "$@" | view - }
 compdef _git gdv=git-diff
+alias gd='git diff'
+compdef _git gd=git-diff
 alias gc='git commit -v'
 compdef _git gc=git-commit
 alias gca='git commit -v -a'
@@ -54,6 +56,8 @@ alias gm='git merge'
 compdef _git gm=git-merge
 alias grh='git reset HEAD'
 alias grhh='git reset HEAD --hard'
+alias ggr='git grep'
+compdef _git ggr='git grep'
 alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
 alias gf='git ls-files | grep'
 alias gpoat='git push origin --all && git push origin --tags'
