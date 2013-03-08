@@ -31,5 +31,5 @@ if [[ -s ~/.rvm/scripts/rvm ]] ; then
 fi
 
 PROMPT='
-%{$fg[yellow]%}%n%{$reset_color%}@%{$fg[cyan]%}%m%{$reset_color%}:%{$fg_bold[blue]%}%~%{$reset_color%} '$RVM_PROMPT'$(git_prompt_info)$(prompt_hg_info)
-%_$(prompt_char) '
+# %{$fg[yellow]%}%n%{$reset_color%}@%{$fg[cyan]%}%m%{$reset_color%}:%{$fg_bold[blue]%}%~%{$reset_color%} '$RVM_PROMPT'$(git_prompt_info)$(prompt_hg_info)
+# %_$(prompt_char) '
