@@ -9,16 +9,19 @@ function git_prompt_info() {
 # Checks if working tree is dirty
 parse_git_dirty() {
   local SUBMODULE_SYNTAX=''
+  local GIT_STATUS=''
+  local CLEAN_MESSAGE='nothing to commit (working directory clean)'
   if [[ "$(git config --get oh-my-zsh.hide-status)" != "1" ]]; then
     if [[ $POST_1_7_2_GIT -gt 0 ]]; then
           SUBMODULE_SYNTAX="--ignore-submodules=dirty"
-    fi
-    if [[ -n $(git status -s ${SUBMODULE_SYNTAX}  2> /dev/null) ]]; then
+    fi  
+    GIT_STATUS=$(git status -s ${SUBMODULE_SYNTAX} 2> /dev/null | tail -n1)
+    if [[ -n $GIT_STATUS && "$GIT_STATUS" != "$CLEAN_MESSAGE" ]]; then
       echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
     else
       echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
-    fi
-  fi
+    fi  
+  fi  
 }
 
 # get the difference between the local and remote branches
