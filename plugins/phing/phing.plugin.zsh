@@ -1,10 +1,7 @@
 _phing_does_target_list_need_generating () {
-  if [ ! -f .phing_targets ]; then return 0;
-  else
-    accurate=$(stat -f%m .phing_targets)
-    changed=$(stat -f%m build.xml)
-    return $(expr $accurate '>=' $changed)
-  fi
+  [ ! -f .phing_targets ] && return 0;
+  [ .phing_targets -nt build.xml ] && return 0;
+  return 1;
 }
 
 _phing () {
