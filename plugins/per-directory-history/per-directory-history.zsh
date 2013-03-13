@@ -1,27 +1,27 @@
 #!/usr/bin/env zsh
 #
-# This is a implementation of per directory history for zsh, some 
-# implementations of which exist in bash[1,2].  It also implements 
-# a per-directory-history-toggle-history function to change from using the 
-# directory history to using the global history.  In both cases the history is 
-# always saved to both the global history and the directory history, so the 
-# toggle state will not effect the saved histories.  Being able to switch 
-# between global and directory histories on the fly is a novel feature as far 
+# This is a implementation of per directory history for zsh, some
+# implementations of which exist in bash[1,2].  It also implements
+# a per-directory-history-toggle-history function to change from using the
+# directory history to using the global history.  In both cases the history is
+# always saved to both the global history and the directory history, so the
+# toggle state will not effect the saved histories.  Being able to switch
+# between global and directory histories on the fly is a novel feature as far
 # as I am aware.
 #
 #-------------------------------------------------------------------------------
 # Configuration
 #-------------------------------------------------------------------------------
 #
-# HISTORY_BASE a global variable that defines the base directory in which the 
+# HISTORY_BASE a global variable that defines the base directory in which the
 # directory histories are stored
 #
 #-------------------------------------------------------------------------------
 # History
 #-------------------------------------------------------------------------------
 #
-# The idea/inspiration for a per directory history is from Stewart MacArthur[1] 
-# and Dieter[2], the implementation idea is from Bart Schaefer on the the zsh 
+# The idea/inspiration for a per directory history is from Stewart MacArthur[1]
+# and Dieter[2], the implementation idea is from Bart Schaefer on the the zsh
 # mailing list[3].  The implementation is by Jim Hester in September 2012.
 #
 # [1]: http://www.compbiome.com/2010/07/bash-per-directory-bash-history.html
@@ -32,20 +32,20 @@
 #
 # Copyright (c) 2012 Jim Hester
 #
-# This software is provided 'as-is', without any express or implied warranty.  
-# In no event will the authors be held liable for any damages arising from the 
+# This software is provided 'as-is', without any express or implied warranty. 
+# In no event will the authors be held liable for any damages arising from the
 # use of this software.
 #
-# Permission is granted to anyone to use this software for any purpose, 
-# including commercial applications, and to alter it and redistribute it 
+# Permission is granted to anyone to use this software for any purpose,
+# including commercial applications, and to alter it and redistribute it
 # freely, subject to the following restrictions:
 #
-# 1. The origin of this software must not be misrepresented; you must not claim 
-# that you wrote the original software. If you use this software in a product, 
-# an acknowledgment in the product documentation would be appreciated but is 
+# 1. The origin of this software must not be misrepresented; you must not claim
+# that you wrote the original software. If you use this software in a product,
+# an acknowledgment in the product documentation would be appreciated but is
 # not required.
 #
-# 2. Altered source versions must be plainly marked as such, and must not be 
+# 2. Altered source versions must be plainly marked as such, and must not be
 # misrepresented as being the original software.
 #
 # 3. This notice may not be removed or altered from any source distribution..
@@ -99,7 +99,7 @@ function _per-directory-history-change-directory() {
     local original_histsize=$HISTSIZE
     HISTSIZE=0
     HISTSIZE=$original_histsize
-    
+
     #read history in new file
     if [[ -e $_per_directory_history_directory ]]; then
       fc -R $_per_directory_history_directory
@@ -108,8 +108,8 @@ function _per-directory-history-change-directory() {
 }
 
 function _per-directory-history-addhistory() {
-  print -sr -- ${1%%$'\n'}
-  fc -a -p $_per_directory_history_directory
+  print -Sr -- ${1%%$'\n'}
+  fc -p $_per_directory_history_directory
 }
 
 
