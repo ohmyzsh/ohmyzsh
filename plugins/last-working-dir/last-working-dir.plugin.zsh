@@ -9,7 +9,7 @@ local cache_file="$ZSH/cache/last-working-dir"
 
 # Updates the last directory once directory is changed.
 function chpwd() {
-        # Use >! in case noclobber is set to avoid "file exists" error
+  # Use >! in case noclobber is set to avoid "file exists" error
 	echo "$PWD" >! "$cache_file"
 }
 
