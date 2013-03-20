@@ -1,0 +1,86 @@
+#compdef ralio
+#autoload
+
+local -a _1st_arguments
+
+_1st_arguments=(
+	"backlog:Show the product backlog"
+	"sprint:Show the current team iteration"
+	"show:Show related information for an individual story, defect or task"
+	"open:Open a story, defect or task in a web browser"
+	"start:Set a task, defect or story state to in-progress and assign it to you"
+	"finish:Set a task, defect or story state to completed and assign it to you"
+	"abandon:Set a task, defect or story state to defined and clear the owner"
+	"block:Set a task, defect or story state to blocked"
+	"unblock:Set a task, defect or story state to unblocked"
+	"current:Show your current tasks and stories"
+	"point:Set the points for a story or defect"
+	"task:Allow you to create and delete story tasks"
+	"configure:Set your Rally configurations"
+)
+
+local expl
+
+_arguments \
+	"(-h --help)"{-h,--help}"[show help]" \
+	"*:: :->subcmds" && return 0
+
+if (( CURRENT == 1 )); then
+	_describe -t commands "ralio subcommand" _1st_arguments
+	return
+fi
+
+local -a _global_options
+
+_global_options=(
+	"(-h --help)"{-h,--help}"[display help and exit]"
+)
+
+local -a _command_options
+
+case "$words[1]" in
+	backlog)
+		_command_options=(
+			"(-a --all)"{-a,-all}"[Show all stories (instead of just the top 20)]"
+			"(-t --tag)"{-t,--tag}"[Show stories with tag]"
+			"(-p --project)"{-p,--project}"[Show backlog stories for project]"
+		)
+		;;
+
+	finish)
+		_command_options=(
+			"(-c --rootcause)"{-c,--rootcause}"[Set defect's root cause]"
+			"(-r --resolution)"{-r,--resolution}"[Set defect's resolution]"
+			"(-p --pair)"{-p,--pair}"[How's pair programming with you - require pair custom field]"
+		)
+		;;
+
+	sprint)
+		_command_options=(
+			"(-t --tasks)"{-t,--tasks}"[Show story tasks]"
+			"(-f --find)"{-f,--find}"[Find stories that matches with the term]"
+			"(-a --accepted)"{-a,--accepted}"[Show accepted stories]"
+			"(-p --project)"{-p,--project}"[Show sprint stories for project]"
+		)
+		;;
+
+	start)
+		_command_options=(
+			"(-p --pair)"{-p,--pair}"[How's pair programming with you - require pair custom field]"
+		)
+		;;
+
+	task)
+		_command_options=(
+			"(-n --name)"{-n,--name}"[Task's name]"
+			"(-t --tags)"{-t,--tags}"[List tasks with tags (separated by comma)]"
+			"(-p --project)"{-p,--project}"[Create/delete a task from a specific project]"
+		)
+		;;
+
+	*)
+esac
+
+_arguments \
+	$_global_options \
+	$_command_options
