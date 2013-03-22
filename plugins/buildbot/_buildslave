@@ -1,0 +1,41 @@
+#compdef buildslave
+
+_buildslave()
+{
+  typeset -A opt_args
+  local context state line curcontext="$curcontext"
+
+  local ret=1
+
+  _arguments -C : \
+    '(- 1 *)--help[show usage]'\
+    '(- 1 *)--version[display version]'\
+    '(- 1 *)--verbose[verbose output]'\
+    '1:command:->command'\
+    '*::args:->args' && ret=0
+
+  case $state in
+    (command)
+        local commands;
+        commands=(
+          'create-slave:Create and populate a directory for a new buildslave'
+          'upgrade-slave:Upgrade an existing buildslave directory for the current version'
+          'start:Start a buildslave'
+          'stop:Stop a buildslave'
+          'restart:Restart a buildslave'
+        )
+        _describe -t commands 'command' commands && ret=0
+      ;;
+    (args)
+      ret=0
+      ;;
+  esac
+
+  return $ret
+}
+
+_buildslave "$@"
+return $?
+
+
+

@@ -32,7 +32,7 @@ DISABLE_AUTO_UPDATE="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git python vim-override)
+plugins=(git python pythonbrew repo cp buildbot rsync git-remote-branch command-not-found debian dircycle encode64 lol extract launch_trial common-aliases vim-scp)
 
 source $ZSH/oh-my-zsh.sh
 source `which virtualenvwrapper.sh`

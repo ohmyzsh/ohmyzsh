@@ -1,0 +1,101 @@
+#compdef vim exim gvim gex gview rvim rview rgvim rgview evim eview vimdiff gvimdiff
+
+(( $+functions[_vim_files] )) ||
+_vim_files () {
+  case $PREFIX in
+    (+*) _files -P './' $* && return 0 ;;
+    (scp|http(|s)|(|s)ftp):*) _urls ;;
+    (*) _files $* ;;
+  esac
+  case $PREFIX in
+    (+) _message -e 'start at a given line (default: end of file)' ;;
+    (+<1->) _message -e 'line number' ;;
+  esac
+}
+
+local curcontext="$curcontext" state line expl
+typeset -A opt_args
+
+local arguments
+
+arguments=(
+  '(   -e -E -s -d -y)-v[vi mode]'
+  '(-v    -E    -d -y)-e[ex mode]'
+  '(-v -e       -d -y)-E[improved ex mode]'
+  '(-v -e -E -s    -y)-d[diff mode]'
+  '(-v -e -E -s -d   )-y[easy mode]'
+  '-R[readonly mode]'
+  '-Z[restricted mode]'
+  '-m[modifications (writing files) not allowed]'
+  '-M[modifications in text not allowed]'
+  '-b[binary mode]'
+  '-g[start with GUI]'
+  '-l[lisp mode]'
+  '-C[start in compatible mode]'
+  '-N[start in incompatible mode]'
+  '(--nofork -f)'{--nofork,-f}'[do not detach the GUI version from the shell]'
+  '-V-[verbosity level]::verbosity:((0\:"do not display any messages"
+                                     1\:"display when viminfo file is read or written"
+                                     2\:"display sourced files"
+                                     5\:"display every searched tag-file"
+                                     8\:"display files that trigger autocommands"
+                                     9\:"display every triggered autocommand (default)"
+                                    12\:"display every executed function"
+                                    13\:"report every thrown, caught, finished, or discarded exception"
+                                    14\:"display anything pending in a \:finally clause"
+                                    15\:"display every executed ex-command"))'
+  '-D[debugging mode]'
+  '-n[no swap file (memory only)]'
+  '-nb[start as NetBean server]'
+  {-r,-L}'[list swap files and exit or recover from a swap file]::swap file:_vim_files -g "*.sw?(-.)"'
+  '(   -H -F)-A[start in Arabic mode]'
+  '(-A    -F)-H[start in Hebrew mode]'
+  '(-A -H   )-F[start in Farsi mode]'
+  '-T[set terminal type]:::_terminals'
+  '-u[use given vimrc file instead of default .vimrc]::rc file:_files'
+  '-U[use given gvimrc file instead of default .gvimrc]::rc file:_files'
+  '--noplugin[do not load plugin scripts]'
+  '-o-[number of windows to open (default: one for each file)]::window count: '
+  '-O-[number of windows to vertically split open (default is one for each file)]::window count: '
+  '-p-[number of tabs to open (default: one for each file)]::tab count: '
+  '(* -t)-q-[quickfix file]:*:file:_vim_files'
+  '*--cmd[execute given command before loading any RC files]:command: '
+  '-c[execute given command after loading the first file]:command: '
+  '-S[source a session file after loading the first file]:session file:_files'
+  '-s[read normal-mode commands from script file]:script file:_files'
+  '-w[append all typed commands to given file]:output file:_files'
+  '-W[write all typed commands to given file, overwriting existing file]:output file:_files'
+  '-x[edit encrypted files]'
+  '-X[do not connect to X server]'
+  '--remote[edit given files in a vim server if possible]:*:file:_vim_files'
+  '--remote-silent[as --remote but without complaining if not possible]:*:file:_vim_files'
+  '--remote-wait[as --remote but wait for files to have been edited]:*:file:_vim_files'
+  '--remote-wait-silent[as --remote-wait but without complaining if not possible]:*:file:_vim_files'
+  '--remote-send[send given keys to vim server if possible]:keys: '
+  '--remote-tab[as --remote but open tab page for each file]:*:file:_vim_files'
+  '--remote-tab-silent[as --remote-silent but open tab page for each file]:*:file:_vim_files'
+  '--remote-tab-wait[as --remote-wait but open tab page for each file]:*:file:_vim_files'
+  '--remote-tab-wait-silent[as --remote-wait-silent but open tab page for each file]:*:file:_vim_files'
+  '--remote-expr[evaluate given expression in a vim server and print result]:expression: '
+  '--echo-wid[echo window ID on STDOUT, GUI version only]'
+  '--literal[do not expand wildcards in arguments (this is useless with ZSH)]'
+  '(- *)--serverlist[list available vim servers and exit]'
+  '--servername[name of vim server to send to or name of server to become]:server name:->server'
+  '--startuptime[write startup timing messages to given file]:log file:_files'
+  '--socketid[run GVIM in another window]'
+  '-i[use given viminfo file instead of default .viminfo]:viminfo file:_files'
+  '(- *)'{-h,--help}'[print help and exit]'
+  '(- *)--version[print version information and exit]'
+  '(* -q)-t[edit file where tag is defined]:tag:_complete_tag'
+  '(-t -q)*:file:_vim_files'
+)
+
+_arguments -C -S $arguments && return
+
+if [[ "$state" = server ]]; then
+  local -a servers
+  servers=( ${(f)"$(_call_program servers $words[1] --serverlist 2>/dev/null)"} )
+  _wanted servers expl server compadd -M 'm:{a-z}={A-Z}' -a servers && return
+fi
+
+return 1
