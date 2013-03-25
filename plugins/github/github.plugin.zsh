@@ -67,5 +67,33 @@ exist_gh() { # [DIRECTORY]
     git push -u origin master
 }
 
+# If your branch named like [issue_number]_some_description
+gh_issue() {
+  local ghissue
+  ghissue=`echo $(current_branch) | sed  -e 's/\([0-9]*\).*/\1/'`
+  if [ $ghissue ]; then
+    echo "$ghissue"
+  fi
+}
+
+pull_request() {
+	local organization
+	if [ $1 ]; then
+		organization=$1
+	else
+		organization=$( git config --get remote.origin.url | sed "s/^[^:]*:\([^\/]*\)\/.*/\1/" )
+	fi
+
+  if [ $(gh_issue) ]; then
+    issue="-i $(gh_issue)"
+  else
+    issue=""
+  fi
+
+  echo "hub pull-request $(echo $issue) -b $organization:master -h $organization:$(current_branch)"
+	hub pull-request $(echo $issue) -b $organization:master -h $organization:$(current_branch)
+}
+
 # End Functions #############################################################
 
+alias gpr="pull_request"
