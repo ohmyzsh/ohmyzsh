@@ -6,14 +6,14 @@
 
 # Use aptitude if installed, or apt-get if not.
 # You can just set apt_pref='apt-get' to override it.
-if [[ -e $( which aptitude ) ]]; then
+if [[ -e $( which aptitude 2>&1 ) ]]; then
     apt_pref='aptitude'
 else
     apt_pref='apt-get'
 fi
 
 # Use sudo by default if it's installed
-if [[ -e $( which sudo ) ]]; then
+if [[ -e $( which sudo 2>&1 ) ]]; then
     use_sudo=1
 fi
 
@@ -21,7 +21,7 @@ fi
 # These are for more obscure uses of apt-get and aptitude that aren't covered
 # below.
 alias ag='apt-get'
-alias at='aptitude'
+alias ap='aptitude'
 
 # Some self-explanatory aliases
 alias acs="apt-cache search"
@@ -35,7 +35,7 @@ alias afs='apt-file search --regexp'
 
 # These are apt-get only
 alias asrc='apt-get source'
-alias ap='apt-cache policy'
+alias app='apt-cache policy'
 
 # superuser operations ######################################################
 if [[ $use_sudo -eq 1 ]]; then
