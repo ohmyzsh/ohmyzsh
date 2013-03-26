@@ -49,7 +49,7 @@ if which tmux &> /dev/null
 	fi
 
 	# Wrapper function for tmux.
-	function zsh_tmux_plugin_run()
+	function _zsh_tmux_plugin_run()
 	{
 		# We have other arguments, just run them
 		if [[ -n "$@" ]]
@@ -68,10 +68,10 @@ if which tmux &> /dev/null
 	}
 
 	# Use the completions for tmux for our function
-	compdef _tmux zsh_tmux_plugin_run
+	compdef _tmux _zsh_tmux_plugin_run
 
 	# Alias tmux to our wrapper function.
-	alias tmux=zsh_tmux_plugin_run
+	alias tmux=_zsh_tmux_plugin_run
 
 	# Autostart if not already in tmux and enabled.
 	if [[ ! -n "$TMUX" && "$ZSH_TMUX_AUTOSTART" == "true" ]]
@@ -80,7 +80,7 @@ if which tmux &> /dev/null
 		if [[ "$ZSH_TMUX_AUTOSTART_ONCE" == "false" || "$ZSH_TMUX_AUTOSTARTED" != "true" ]]
 		then
 			export ZSH_TMUX_AUTOSTARTED=true
-			zsh_tmux_plugin_run
+			_zsh_tmux_plugin_run
 		fi
 	fi
 else
