@@ -87,12 +87,11 @@ prompt_hg() {
 	local rev status
 	if $(hg id >/dev/null 2>&1); then
 		if $(hg prompt >/dev/null 2>&1); then
-			st=$(hg prompt {status})
-			if [[ $st = "?" ]]; then
+			if [[ $(hg prompt "{status|unknown}") = "?" ]]; then
 				# if files are not added
 				prompt_segment red white
 				st='±'
-			elif [[ -n $st ]]; then
+			elif [[ -n $(hg prompt "{status|modified}") ]]; then
 				# if any modification
 				prompt_segment yellow black
 				st='±'
