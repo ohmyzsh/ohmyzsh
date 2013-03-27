@@ -5,7 +5,7 @@ ZSH=$HOME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="gsemet"
+ZSH_THEME="stibbons"
 
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
@@ -36,6 +36,8 @@ plugins=(git python pythonbrew repo cp buildbot rsync git-remote-branch command-
 
 source $ZSH/oh-my-zsh.sh
 source `which virtualenvwrapper.sh`
+
+zstyle ':completion:*:descriptions' format '%B%d%b'
 
 # Customize to your needs...
 if [ -z "$LC_ALL" ]; then export LC_ALL=en_US.UTF-8; fi

@@ -5,7 +5,7 @@ ZSH=$HOME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="mh"
+ZSH_THEME="stibbons"
 
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
@@ -15,7 +15,7 @@ ZSH_THEME="mh"
 # CASE_SENSITIVE="true"
 
 # Comment this out to disable weekly auto-update checks
-DISABLE_AUTO_UPDATE="true"
+DISABLE_AUTO_UPDATE="false"
 
 # Uncomment following line if you want to disable colors in ls
 # DISABLE_LS_COLORS="true"
@@ -32,7 +32,7 @@ DISABLE_VENV_CD="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git python pythonbrew repo cp buildbot rsync git-remote-branch command-not-found debian dircycle encode64 lol extract launch_trial common-aliases vim-scp)
+plugins=(git python pythonbrew repo cp buildbot rsync git-remote-branch command-not-found debian dircycle encode64 lol extract launch_trial common-aliases)
 
 source $ZSH/oh-my-zsh.sh
 # source `which virtualenvwrapper.sh`
