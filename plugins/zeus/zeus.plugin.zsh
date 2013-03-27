@@ -2,12 +2,6 @@
 # Zeus preloads your Rails environment and forks that process whenever
 # needed. This effectively speeds up Rails' boot process to under 1 sec.
 
-# Always use bundler.
-# Rails depends on bundler, so we can be pretty sure, that there are no
-# problems with this command. For all the other aliases I provided an
-# alternative, in case people have conflicts with other plugins (e.g. suse).
-alias zeus='bundle exec zeus'
-
 # Init
 alias zi='zeus init'
 alias zinit='zeus init'
