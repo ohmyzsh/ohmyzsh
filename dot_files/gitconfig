@@ -1,0 +1,20 @@
+# Please copy this part to your ~/.gitconfig
+# or include it if git > 0.7.10
+
+[alias]
+   commit = commit -s
+   st = status
+   ci = commit
+   br = branch
+   co = checkout
+   df = diff
+   lg = log -p
+   loo = log --pretty=oneline --abbrev-commit
+   lol = log --graph --decorate --pretty=oneline --abbrev-commit
+   lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+   rewrite-history = rebase -i HEAD~~
+   rewrite-history1 = rebase -i HEAD~
+   rewrite-history2 = rebase -i HEAD~~
+   rewrite-history3 = rebase -i HEAD~~~
+   rewrite-history4 = rebase -i HEAD~~~~
+   rewrite-history5 = rebase -i HEAD~~~~~
