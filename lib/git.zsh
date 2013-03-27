@@ -112,7 +112,7 @@ function git_compare_version() {
   local INPUT_GIT_VERSION=$1;
   local INSTALLED_GIT_VERSION
   INPUT_GIT_VERSION=(${(s/./)INPUT_GIT_VERSION});
-  INSTALLED_GIT_VERSION=($(git --version));
+  INSTALLED_GIT_VERSION=($(git --version 2>/dev/null));
   INSTALLED_GIT_VERSION=(${(s/./)INSTALLED_GIT_VERSION[3]});
 
   for i in {1..3}; do
