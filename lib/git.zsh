@@ -62,7 +62,7 @@ function git_prompt_long_sha() {
 git_prompt_status() {
   INDEX=$(git status --porcelain -b 2> /dev/null)
   STATUS=""
-  if $(echo "$INDEX" | grep '^?? ' &> /dev/null); then
+  if $(echo "$INDEX" | grep '^\?\? ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_UNTRACKED$STATUS"
   fi
   if $(echo "$INDEX" | grep '^A  ' &> /dev/null); then
