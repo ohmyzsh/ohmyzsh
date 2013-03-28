@@ -41,3 +41,4 @@ source $ZSH/oh-my-zsh.sh
 
 if [ -e $HOME/bin ]; then export PATH="$HOME/bin:$PATH"; fi
 unsetopt correctall
+[ "$TERM" = "xterm" ] && TERM="xterm-256color"
