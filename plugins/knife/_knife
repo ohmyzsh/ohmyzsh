@@ -170,11 +170,13 @@ _chef_environments_remote() {
 
 # The chef_x_local functions use the knife config to find the paths of relevant objects x to be uploaded to the server
 _chef_cookbooks_local() {
- local knife_rb="$HOME/.chef/knife.rb"
- if [ -f ./.chef/knife.rb ]; then
-  knife_rb="./.chef/knife.rb"
- fi
- (for i in $( grep cookbook_path $knife_rb | awk 'BEGIN {FS = "[" }; {print $2}' | sed 's/\,//g' | sed "s/'//g" | sed 's/\(.*\)]/\1/' ); do ls $i; done)
+  
+  local knife_rb=${KNIFE_CONF_PATH:-${HOME}/.chef/knife.rb}
+  if [ -f ./.chef/knife.rb ]; then
+    knife_rb="./.chef/knife.rb"
+  fi
+  local cookbook_path=${KNIFE_COOKBOOK_PATH:-$(grep cookbook_path $knife_rb | awk 'BEGIN {FS = "[" }; {print $2}' | sed 's/\,//g' | sed "s/'//g" | sed 's/\(.*\)]/\1/' )}
+  (for i in $cookbook_path; do ls $i; done)
 }
 
 # This function extracts the available cookbook versions on the chef server
