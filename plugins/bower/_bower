@@ -1,13 +1,13 @@
 
 
-# Credits to npm's. Awesome completion utility.
+# Credits to npm's awesome completion utility.
 #
 # Bower completion script, based on npm completion script.
 
 ###-begin-bower-completion-###
 #
 # Installation: bower completion >> ~/.bashrc  (or ~/.zshrc)
-# Or, maybe: bower completion > /usr/local/etc/bash_completion.d/npm
+# Or, maybe: bower completion > /usr/local/etc/bash_completion.d/bower
 #
 
 COMP_WORDBREAKS=${COMP_WORDBREAKS/=/}
