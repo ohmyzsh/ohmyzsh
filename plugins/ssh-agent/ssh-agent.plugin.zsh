@@ -6,11 +6,17 @@
 #
 #     zstyle :omz:plugins:ssh-agent agent-forwarding on
 #
-#   To load multiple identies use the identities style, For
+#   To load multiple identities use the identities style, For
 #   example:
 #
 #     zstyle :omz:plugins:ssh-agent id_rsa id_rsa2 id_github
 #
+#   To set the maximum lifetime of the identities, use the
+#   lifetime style. The lifetime may be specified in seconds
+#   or as described in sshd_config(5) (see TIME FORMATS)
+#   If left unspecified, the default lifetime is forever.
+#
+#     zstyle :omz:plugins:ssh-agent lifetime 4h
 #
 # CREDITS
 #
@@ -27,15 +33,18 @@ local _plugin__forwarding
 function _plugin__start_agent()
 {
   local -a identities
+  local lifetime
+  zstyle -s :omz:plugins:ssh-agent lifetime lifetime
 
   # start ssh-agent and setup environment
-  /usr/bin/env ssh-agent | sed 's/^echo/#echo/' > ${_plugin__ssh_env}
+  /usr/bin/env ssh-agent ${lifetime:+-t} ${lifetime} | sed 's/^echo/#echo/' > ${_plugin__ssh_env}
   chmod 600 ${_plugin__ssh_env}
   . ${_plugin__ssh_env} > /dev/null
 
   # load identies
   zstyle -a :omz:plugins:ssh-agent identities identities 
-  echo starting...
+  echo starting ssh-agent...
+
   /usr/bin/ssh-add $HOME/.ssh/${^identities}
 }
 

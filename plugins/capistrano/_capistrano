@@ -1,7 +1,7 @@
 #compdef cap
 #autoload
 
-if [ -f config/deploy.rb ]; then
+if [[ -f config/deploy.rb || -f Capfile ]]; then
   if [[ ! -f .cap_tasks~ || config/deploy.rb -nt .cap_tasks~ ]]; then
     echo "\nGenerating .cap_tasks~..." > /dev/stderr
     cap --tasks | grep '#' | cut -d " " -f 2 > .cap_tasks~
