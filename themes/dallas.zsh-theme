@@ -14,7 +14,7 @@ fi
 DALLAS_CURRENT_MACH_="%{$fg[green]%}%m%{$fg[white]%}:%{$reset_color%}"
 # Grab the current filepath, use shortcuts: ~/Desktop
 # Append the current git branch, if in a git repository: ~aw@master
-DALLAS_CURRENT_LOCA_="%{$fg[cyan]%}%~\$(git_prompt_info)%{$reset_color%}"
+DALLAS_CURRENT_LOCA_="%{$fg[cyan]%}%~\$(git_prompt_info)%{$reset_color%}\$(parse_git_dirty)"
 # Grab the current username: dallas
 DALLAS_CURRENT_USER_="%{$fg[red]%}%n%{$reset_color%}"
 # Use a % for normal users and a # for privelaged (root) users.
