@@ -1,3 +1,5 @@
+#!/bin/sh
+
 if [ -d ~/.oh-my-zsh ]
 then
   echo "\033[0;33mYou already have Oh My Zsh installed.\033[0m You'll need to remove ~/.oh-my-zsh if you want to install"
@@ -24,7 +26,10 @@ echo "\033[0;34mCopying your current PATH and adding it to the end of ~/.zshrc f
 echo "export PATH=$PATH" >> ~/.zshrc
 
 echo "\033[0;34mTime to change your default shell to zsh!\033[0m"
-chsh -s `which zsh`
+
+if [ "$SHELL" != "/bin/zsh" ]; then
+   chsh -s `which zsh`;
+else
 
 echo "\033[0;32m"'         __                                     __   '"\033[0m"
 echo "\033[0;32m"'  ____  / /_     ____ ___  __  __   ____  _____/ /_  '"\033[0m"
