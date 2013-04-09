@@ -21,6 +21,7 @@ elif  [[ $('uname') == 'Darwin' ]]; then
 	for _sublime_path in $_sublime_darwin_paths; do
 		if [[ -a $_sublime_path ]]; then
 			alias st="'$_sublime_path'"
+			break
 		fi
 	done
 fi
