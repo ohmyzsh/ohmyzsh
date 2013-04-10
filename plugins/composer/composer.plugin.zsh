@@ -13,6 +13,8 @@ _composer_get_command_list () {
 _composer () {
   if [ -f composer.json ]; then
     compadd `_composer_get_command_list`
+  else
+    compadd create-project init search selfupdate show
   fi
 }
 
