@@ -10,6 +10,14 @@ function upgrade_oh_my_zsh() {
   /usr/bin/env ZSH=$ZSH /bin/sh $ZSH/tools/upgrade.sh
 }
 
+function upgrade_forked_oh_my_zsh() {
+	cd $ZSH
+	git remote add robbyrussell https://github.com/robbyrussell/oh-my-zsh.git
+	git fetch robbyrussell
+	git merge robbyrussell/master
+	git push origin master
+}
+
 function take() {
   mkdir -p $1
   cd $1
