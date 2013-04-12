@@ -11,3 +11,11 @@ _symfony2 () {
 }
 
 compdef _symfony2 app/console
+compdef _symfony2 sf
+
+#Alias
+alias sf='php app/console'
+alias sfcl='php app/console cache:clear'
+alias sfroute='php app/console router:debug'
+alias sfgb='php app/console generate:bundle'
+

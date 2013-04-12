@@ -1,8 +1,11 @@
+fpath=($rvm_path/scripts/zsh/Completion $fpath)
+
 alias rubies='rvm list rubies'
 alias gemsets='rvm gemset list'
 
 local ruby18='ruby-1.8.7-p334'
-local ruby19='ruby-1.9.2-p180'
+local ruby19='ruby-1.9.3-p385'
+local ruby20='ruby-2.0.0-rc2'
 
 function rb18 {
 	if [ -z "$1" ]; then
@@ -26,6 +29,17 @@ function rb19 {
 _rb19() {compadd `ls -1 $rvm_path/gems | grep "^$ruby19@" | sed -e "s/^$ruby19@//" | awk '{print $1}'`}
 compdef _rb19 rb19
 
+function rb20 {
+	if [ -z "$1" ]; then
+		rvm use "$ruby"
+	else
+		rvm use "$ruby20@$1"
+	fi
+}
+
+_rb20() {compadd `ls -1 $rvm_path/gems | grep "^$ruby20@" | sed -e "s/^$ruby20@//" | awk '{print $1}'`}
+compdef _rb20 rb20
+
 function rvm-update {
 	rvm get head
 	rvm reload # TODO: Reload rvm completion?
@@ -42,3 +56,8 @@ function gems {
 		-Ee "s/$current_ruby@global/$fg[yellow]&$reset_color/g" \
 		-Ee "s/$current_ruby$current_gemset$/$fg[green]&$reset_color/g"
 }
+
+function _rvm_completion {
+  source $rvm_path"/scripts/zsh/Completion/_rvm"
+}
+compdef _rvm_completion rvm
