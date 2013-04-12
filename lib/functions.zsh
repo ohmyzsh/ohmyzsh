@@ -16,6 +16,7 @@ function upgrade_forked_oh_my_zsh() {
 	git fetch robbyrussell
 	git merge robbyrussell/master
 	git push origin master
+	cd -
 }
 
 function take() {
