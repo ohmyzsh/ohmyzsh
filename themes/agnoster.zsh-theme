@@ -118,6 +118,19 @@ prompt_hg() {
 	fi
 }
 
+prompt_maildir() {
+  # Avoid zsh complaining for ** not matching anything.
+  unsetopt nomatch 2>/dev/null
+  # Only enable this segment if the $MAILDIR variable is set.
+  if [[ -n "$MAILDIR" ]] then
+    ls $MAILDIR/**/new/* >/dev/null 2>&1
+    # ls succeeds if there is at least one file matching the pattern.
+    if [[ $? -eq 0 ]] then
+      prompt_segment black red "M"
+    fi
+  fi
+}
+
 # Dir: current working directory
 prompt_dir() {
   prompt_segment blue black '%~'
@@ -145,6 +158,7 @@ build_prompt() {
   prompt_dir
   prompt_git
   prompt_hg
+  prompt_maildir
   prompt_end
 }
 
