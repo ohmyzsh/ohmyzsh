@@ -40,13 +40,13 @@ function ssh() {
 	fi
 	
 	local param=$1
-	shift
 	local host=$ssh_hosts[$param]
 
 	if [ -z "$host" ]; then
-		echo INVALID HOST
-		return 1
+		$actual_ssh $*
 	fi	
+
+	shift
 
 	$actual_ssh $(echo $ssh_hosts[$param]) $* # $() to circumvent ssh from b0rking if options are present in map
 }
