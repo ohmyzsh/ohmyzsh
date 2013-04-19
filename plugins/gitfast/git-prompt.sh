@@ -275,7 +275,7 @@ __git_ps1 ()
 
 			if [ -n "${GIT_PS1_SHOWUNTRACKEDFILES-}" ]; then
 				if [ -n "$(git ls-files --others --exclude-standard)" ]; then
-					u="%"
+					u="%%"
 				fi
 			fi
 
