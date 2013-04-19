@@ -3,13 +3,19 @@
 #
 # How to use this plugin
 #
-# Add in your zshrc before sourcing oh-my-zsh.zsh
+# plugins=(... ssh ...)
+# 
+################# Plugin configuration #################
+#
+# Add in your zshrc before sourcing oh-my-zsh.zsh --
 #
 # typeset -A ssh_hosts
 # ssh_hosts=('nickname' 'user@host1' \
 #            'nickname1' 'host2' \
 #            'nickname3' 'user2@host1' \
 #           )
+#
+################## End configuration ###################
 #
 # Once you've done that, reload your zshrc and try
 # ssh <TAB>
