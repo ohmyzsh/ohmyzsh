@@ -9,7 +9,7 @@ function _update_zsh_update() {
 }
 
 function _upgrade_zsh() {
-  /usr/bin/env ZSH=$ZSH /bin/sh $ZSH/tools/upgrade.sh
+  /usr/bin/env ZSH=$ZSH /bin/bash $ZSH/tools/upgrade.sh
   # update the zsh file
   _update_zsh_update
 }
