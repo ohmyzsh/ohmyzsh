@@ -44,8 +44,9 @@ function ssh() {
 
 	if [ -z "$host" ]; then
 		$actual_ssh $*
-	fi	
-
+		return
+	fi
+	
 	shift
 
 	$actual_ssh $(echo $ssh_hosts[$param]) $* # $() to circumvent ssh from b0rking if options are present in map
