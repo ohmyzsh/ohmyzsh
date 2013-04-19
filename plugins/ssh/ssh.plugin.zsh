@@ -26,7 +26,7 @@
 # or call the function as
 # ssh nickname <option>
 
-if [ -z $ssh_hosts ]; then
+if [ -z "$ssh_hosts" ]; then
 	echo "ssh_hosts map not set"
 	return
 fi
