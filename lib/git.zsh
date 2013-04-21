@@ -21,6 +21,8 @@ parse_git_dirty() {
     else
       echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
     fi  
+  else
+    echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
   fi  
 }
 
