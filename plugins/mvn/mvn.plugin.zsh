@@ -114,7 +114,7 @@ function listMavenCompletions {
         # jboss
         jboss:start jboss:stop jboss:deploy jboss:undeploy jboss:redeploy
         # tomcat
-        tomcat:start tomcat:stop tomcat:deploy tomcat:undeploy tomcat:undeploy
+        tomcat:start tomcat:stop tomcat:deploy tomcat:undeploy tomcat:redeploy
         # tomcat6
         tomcat6:run tomcat6:run-war tomcat6:run-war-only tomcat6:stop tomcat6:deploy tomcat6:undeploy
         # tomcat7
@@ -163,7 +163,7 @@ function listMavenCompletions {
         cli:execute cli:execute-phase 
         archetype:generate generate-sources 
         cobertura:cobertura
-        -Dtest= `if [ -d ./src ] ; then find ./src/test/java -type f -name '*.java' | grep -v svn | sed 's?.*/\([^/]*\)\..*?-Dtest=\1?' ; fi`
+        -Dtest= `if [ -d ./src/test/java ] ; then find ./src/test/java -type f -name '*.java' | grep -v svn | sed 's?.*/\([^/]*\)\..*?-Dtest=\1?' ; fi`
     ); 
 }
 
