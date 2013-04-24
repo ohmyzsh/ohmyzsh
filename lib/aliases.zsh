@@ -7,6 +7,7 @@ alias ...='cd ../..'
 alias -- -='cd -'
 
 # Super user
+alias sudo='sudo ' # http://www.shellperson.net/using-sudo-with-an-alias/
 alias _='sudo'
 alias please='sudo'
 
