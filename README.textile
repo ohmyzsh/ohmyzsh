@@ -1,5 +1,4 @@
-A handful of functions, auto-complete helpers, and stuff that makes you shout...
-
+oh-my-zsh is an open source, community-driven framework for managing your ZSH configuration. It comes bundled with a ton of helpful functions, helpers, plugins, themes, and few things that make you shout...
 
 bq. "OH MY ZSHELL!"
 
@@ -76,9 +75,7 @@ h3. (Don't) Send us your theme! (for now)
 
 -I'm hoping to collect a bunch of themes for our command prompts. You can see existing ones in the @themes/@ directory.-
 
-We have enough themes for the time being. Please fork the project and add on in there, you can let people know how to grab it from there. 
-
-
+We have enough themes for the time being. Please fork the project and add on in there, you can let people know how to grab it from there.
 
 h2. Contributors
 
