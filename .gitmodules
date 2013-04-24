@@ -1,3 +1,0 @@
-[submodule "plugins/zsh-syntax-highlighting"]
-path = plugins/zsh-syntax-highlighting
-url = git://github.com/zsh-users/zsh-syntax-highlighting.git

@@ -22,9 +22,9 @@ h4. via `wget`
 h3. The manual way
 
 
-1. Clone the repository and all submodules.
+1. Clone the repository
 
-  @git clone --recursive git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh@
+  @git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh@
 
 2. *OPTIONAL* Backup your existing ~/.zshrc file
 
