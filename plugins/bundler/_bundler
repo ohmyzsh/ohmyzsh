@@ -23,6 +23,7 @@ case $state in
 			"viz[Generate a visual representation of your dependencies]" \
 			"init[Generate a simple Gemfile, placed in the current directory]" \
 			"gem[Create a simple gem, suitable for development with bundler]" \
+			"clean[Cleans up unused gems in your bundler directory]" \
 			"help[Describe available tasks or one specific task]"
 		ret=0
 		;;
@@ -61,6 +62,14 @@ case $state in
 				;;
 			exec)
 				_normal && ret=0
+				;;
+			clean)
+				_arguments \
+					'(--force)--force[forces clean even if --path is not set]' \
+					'(--dry-run)--dry-run[only print out changes, do not actually clean gems]' \
+					'(--no-color)--no-color[Disable colorization in output]' \
+					'(--verbose)--verbose[Enable verbose output mode]'
+				ret=0
 				;;
 			(open|show)
 				_gems=( $(bundle show 2> /dev/null | sed -e '/^  \*/!d; s/^  \* \([^ ]*\) .*/\1/') )
