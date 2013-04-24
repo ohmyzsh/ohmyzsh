@@ -10,6 +10,12 @@ hash git >/dev/null && /usr/bin/env git clone https://github.com/robbyrussell/oh
   exit
 }
 
+echo "\033[0;34mCloining submodule...\033[0m"
+current_path=`pwd`
+cd ~/.oh-my-zsh
+/usr/bin/env git submodule update --init
+cd "$current_path"
+
 echo "\033[0;34mLooking for an existing zsh config...\033[0m"
 if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]
 then
