@@ -1,4 +1,4 @@
-# https://gneatgeek.github.io
+# http://gneatgeek.github.io
 #
 # Some useful commands for setting permissions. I find this most handy for website files.
 
