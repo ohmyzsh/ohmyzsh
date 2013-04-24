@@ -7,7 +7,7 @@ function uninstall_oh_my_zsh() {
 }
 
 function upgrade_oh_my_zsh() {
-  /usr/bin/env ZSH=$ZSH /bin/sh $ZSH/tools/upgrade.sh
+  /usr/bin/env ZSH=$ZSH /bin/bash $ZSH/tools/upgrade.sh
 }
 
 function take() {
