@@ -1,4 +1,4 @@
-wrapsource=`which virtualenvwrapper_lazy.sh`
+wrapsource=`which virtualenvwrapper.sh`
 
 if [[ -f "$wrapsource" ]]; then
   source $wrapsource
