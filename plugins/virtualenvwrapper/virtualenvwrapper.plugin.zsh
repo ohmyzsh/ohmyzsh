@@ -20,15 +20,23 @@ if [[ -f "$wrapsource" ]]; then
             if [[ "$VIRTUAL_ENV" != "$WORKON_HOME/$ENV_NAME" ]]; then
                 if [[ -e "$WORKON_HOME/$ENV_NAME/bin/activate" ]]; then
                     workon "$ENV_NAME" && export CD_VIRTUAL_ENV="$ENV_NAME"
+                else
+                  _deactivate
                 fi
             fi
-        elif [ $CD_VIRTUAL_ENV ]; then
+          else
             # We've just left the repo, deactivate the environment
             # Note: this only happens if the virtualenv was activated automatically
-            deactivate && unset CD_VIRTUAL_ENV
+            _deactivate
         fi
         unset PROJECT_ROOT
         unset ENV_NAME
+    }
+
+    function _deactivate() {
+      if [[ -n $CD_VIRTUAL_ENV ]]; then
+        deactivate && unset CD_VIRTUAL_ENV
+      fi
     }
 
     # New cd function that does the virtualenv magic
