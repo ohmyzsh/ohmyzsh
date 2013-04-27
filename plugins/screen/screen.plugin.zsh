@@ -19,7 +19,7 @@ if [[ "$TERM" == screen* ]]; then
 
   # use the current path (with standard ~ replacement) in square brackets as the
   # prefix of the tab window hardstatus.
-  TAB_HARDSTATUS_PREFIX='"[`'$_GET_PATH'`] "'
+  TAB_HARDSTATUS_PREFIX=$STY'"[`'$_GET_PATH'`] "'
   # when at the shell prompt, use the shell name (truncated to remove the path to
   # the shell) as the rest of the title
   TAB_HARDSTATUS_PROMPT='$SHELL:t'
