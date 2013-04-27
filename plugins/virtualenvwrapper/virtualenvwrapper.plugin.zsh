@@ -7,10 +7,10 @@ if [[ -f "$wrapsource" ]]; then
     # Automatically activate Git projects' virtual environments based on the
     # directory name of the project. Virtual environment name can be overridden
     # by placing a .venv file in the project root with a virtualenv name in it
-    function workon_cwd {
+    function _workon_cwd {
         # Check that this is a Git repo
-        PROJECT_ROOT=`git rev-parse --show-toplevel 2> /dev/null`
-        if (( $? == 0 )); then
+        PROJECT_ROOT=`git_get_root`
+        if [[ -n "$PROJECT_ROOT" ]]; then
             # Check for virtualenv name override
             ENV_NAME=`basename "$PROJECT_ROOT"`
             if [[ -f "$PROJECT_ROOT/.venv" ]]; then
@@ -28,11 +28,12 @@ if [[ -f "$wrapsource" ]]; then
             deactivate && unset CD_VIRTUAL_ENV
         fi
         unset PROJECT_ROOT
+        unset ENV_NAME
     }
 
     # New cd function that does the virtualenv magic
     function cd {
-        builtin cd "$@" && workon_cwd
+        builtin cd "$@" && _workon_cwd
     }
   fi
 else
