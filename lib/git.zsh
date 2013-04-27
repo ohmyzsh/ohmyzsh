@@ -8,9 +8,14 @@ function git_prompt_info() {
 
 # Checks if working tree is dirty
 parse_git_dirty() {
+  if [[ -z "$ZSH_THEME_GIT_PROMPT_DIRTY" &&
+        -z "$ZSH_THEME_GIT_PROMPT_CLEAN" ]]; then
+    return
+  fi
+
   local SUBMODULE_SYNTAX=''
   local GIT_STATUS=''
-  local CLEAN_MESSAGE='nothing to commit (working directory clean)'
+
   if [[ "$(git config --get oh-my-zsh.hide-status)" != "1" ]]; then
     if [[ $POST_1_7_2_GIT -gt 0 ]]; then
           SUBMODULE_SYNTAX="--ignore-submodules=dirty"
@@ -52,7 +57,7 @@ git_remote_status() {
 
 # Checks if there are commits ahead from remote
 function git_prompt_ahead() {
-  if $(echo "$(git log origin/$(current_branch)..HEAD 2> /dev/null)" | grep '^commit' &> /dev/null); then
+  if [[ -n $(git rev-list -1 --first-parent @{upstream}..HEAD 2>/dev/null) ]]; then
     echo "$ZSH_THEME_GIT_PROMPT_AHEAD"
   fi
 }
@@ -69,48 +74,92 @@ function git_prompt_long_sha() {
 
 # Get the status of the working tree
 git_prompt_status() {
-  INDEX=$(git status --porcelain -b 2> /dev/null)
+  local NO_DIRTY_SUBMODULES=''
+  local NO_UNTRACKED=''
+
+  if [[ $POST_1_7_2_GIT -gt 0 ]]; then
+    NO_DIRTY_SUBMODULES="--ignore-submodules=dirty"
+  fi
+
+  if [[ -z "$ZSH_THEME_GIT_PROMPT_UNTRACKED" ]]; then
+    NO_UNTRACKED="--untracked-files=no"
+  fi
+
+  # This could use --porcelain but git does not print
+  # the branch ahead/behind information when --porcelain is used.
+  INDEX=$(git status -s -b ${NO_DIRTY_SUBMODULES} ${NO_UNTRACKED} 2>/dev/null)
   STATUS=""
-  if $(echo "$INDEX" | grep -E '^\?\? ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_UNTRACKED$STATUS"
+
+  if [[ -n "$ZSH_THEME_GIT_PROMPT_UNTRACKED" ]]; then
+    if echo "$INDEX" | grep -E '^\?\? ' &> /dev/null; then
+      STATUS="$ZSH_THEME_GIT_PROMPT_UNTRACKED$STATUS"
+    fi
   fi
-  if $(echo "$INDEX" | grep '^A  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
-  elif $(echo "$INDEX" | grep '^M  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
+
+  if [[ -n "$ZSH_THEME_GIT_PROMPT_ADDED" ]]; then
+    if echo "$INDEX" | grep '^A  ' &> /dev/null; then
+      STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
+    elif echo "$INDEX" | grep '^M  ' &> /dev/null; then
+      STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
+    fi
   fi
-  if $(echo "$INDEX" | grep '^ M ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
-  elif $(echo "$INDEX" | grep '^AM ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
-  elif $(echo "$INDEX" | grep '^ T ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
+
+  if [[ -n "$ZSH_THEME_GIT_PROMPT_MODIFIED" ]]; then
+    if echo "$INDEX" | grep '^ M ' &> /dev/null; then
+      STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
+    elif echo "$INDEX" | grep '^AM ' &> /dev/null; then
+      STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
+    elif echo "$INDEX" | grep '^ T ' &> /dev/null; then
+      STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
+    fi
   fi
-  if $(echo "$INDEX" | grep '^R  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_RENAMED$STATUS"
+
+  if [[ -n "$ZSH_THEME_GIT_PROMPT_RENAMED" ]]; then
+    if echo "$INDEX" | grep '^R  ' &> /dev/null; then
+      STATUS="$ZSH_THEME_GIT_PROMPT_RENAMED$STATUS"
+    fi
   fi
-  if $(echo "$INDEX" | grep '^ D ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
-  elif $(echo "$INDEX" | grep '^D  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
-  elif $(echo "$INDEX" | grep '^AD ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
+
+  if [[ -n "$ZSH_THEME_GIT_PROMPT_DELETED" ]]; then
+    if echo "$INDEX" | grep '^ D ' &> /dev/null; then
+      STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
+    elif echo "$INDEX" | grep '^D  ' &> /dev/null; then
+      STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
+    elif echo "$INDEX" | grep '^AD ' &> /dev/null; then
+      STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
+    fi
   fi
-  if $(git rev-parse --verify refs/stash >/dev/null 2>&1); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_STASHED$STATUS"
+
+  if [[ -n "$ZSH_THEME_GIT_PROMPT_STASHED" ]]; then
+    if git rev-parse --verify refs/stash &> /dev/null; then
+      STATUS="$ZSH_THEME_GIT_PROMPT_STASHED$STATUS"
+    fi
   fi
-  if $(echo "$INDEX" | grep '^UU ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_UNMERGED$STATUS"
+
+  if [[ -n "$ZSH_THEME_GIT_PROMPT_UNMERGED" ]]; then
+    if echo "$INDEX" | grep '^UU ' &> /dev/null; then
+      STATUS="$ZSH_THEME_GIT_PROMPT_UNMERGED$STATUS"
+    fi
   fi
-  if $(echo "$INDEX" | grep '^## .*ahead' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_AHEAD$STATUS"
+
+  if [[ -n "$ZSH_THEME_GIT_PROMPT_AHEAD" ]]; then
+    if echo "$INDEX" | grep '^## .*ahead' &> /dev/null; then
+      STATUS="$ZSH_THEME_GIT_PROMPT_AHEAD$STATUS"
+    fi
   fi
-  if $(echo "$INDEX" | grep '^## .*behind' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_BEHIND$STATUS"
+
+  if [[ -n "$ZSH_THEME_GIT_PROMPT_BEHIND" ]]; then
+    if echo "$INDEX" | grep '^## .*behind' &> /dev/null; then
+      STATUS="$ZSH_THEME_GIT_PROMPT_BEHIND$STATUS"
+    fi
   fi
-  if $(echo "$INDEX" | grep '^## .*diverged' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_DIVERGED$STATUS"
+
+  if [[ -n "$ZSH_THEME_GIT_PROMPT_DIVERGED" ]]; then
+    if echo "$INDEX" | grep '^## .*diverged' &> /dev/null; then
+      STATUS="$ZSH_THEME_GIT_PROMPT_DIVERGED$STATUS"
+    fi
   fi
+
   echo $STATUS
 }
 
@@ -134,8 +183,8 @@ function git_compare_version() {
 }
 
 #this is unlikely to change so make it all statically assigned
-POST_1_7_2_GIT=$(git_compare_version "1.7.2")
+if [[ -z "$POST_1_7_2_GIT" ]]; then
+  POST_1_7_2_GIT=$(git_compare_version "1.7.2")
+fi
 #clean up the namespace slightly by removing the checker function
 unset -f git_compare_version
-
-
