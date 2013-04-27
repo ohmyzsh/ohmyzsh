@@ -5,6 +5,10 @@ function git_prompt_info() {
   echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
 }
 
+# returns root of current repo
+function git_get_root() {
+  echo "$(git rev-parse --show-toplevel 2> /dev/null)"
+}
 
 # Checks if working tree is dirty
 parse_git_dirty() {
