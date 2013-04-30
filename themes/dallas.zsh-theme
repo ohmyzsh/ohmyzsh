@@ -3,7 +3,7 @@
 # Grab the current date (%D) and time (%T) wrapped in {}: {%D %T}
 DALLAS_CURRENT_TIME_="%{$fg[white]%}{%{$fg[yellow]%}%D %T%{$fg[white]%}}%{$reset_color%}"
 # Grab the current version of ruby in use (via RVM): [ruby-1.8.7]
-if which rvm-prompt &> /dev/null; then
+if [ -e ~/.rvm/bin/rvm-prompt ]; then
   DALLAS_CURRENT_RUBY_="%{$fg[white]%}[%{$fg[magenta]%}\$(~/.rvm/bin/rvm-prompt i v)%{$fg[white]%}]%{$reset_color%}"
 else
   if which rbenv &> /dev/null; then
