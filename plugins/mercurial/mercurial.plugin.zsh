@@ -3,6 +3,7 @@
 alias hgc='hg commit'
 alias hgb='hg branch'
 alias hgba='hg branches'
+alias hgbk='hg bookmarks'
 alias hgco='hg checkout'
 alias hgd='hg diff'
 alias hged='hg diffmerge'
