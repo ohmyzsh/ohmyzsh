@@ -119,6 +119,34 @@ function listMavenCompletions {
         tomcat6:run tomcat6:run-war tomcat6:run-war-only tomcat6:stop tomcat6:deploy tomcat6:undeploy
         # tomcat7
         tomcat7:run tomcat7:run-war tomcat7:run-war-only tomcat7:deploy
+
+        # tycho
+        org.eclipse.tycho:tycho-compiler-plugin:compile
+        org.eclipse.tycho:tycho-p2-director-plugin:archive-products
+        org.eclipse.tycho:tycho-p2-director-plugin:materialize-products
+        org.eclipse.tycho:tycho-p2-publisher-plugin:attach-artifacts
+        org.eclipse.tycho:tycho-p2-publisher-plugin:publish-categories
+        org.eclipse.tycho:tycho-p2-publisher-plugin:publish-ee-profile
+        org.eclipse.tycho:tycho-p2-publisher-plugin:publish-products
+        org.eclipse.tycho:tycho-p2-repository-plugin:archive-repository
+        org.eclipse.tycho:tycho-p2-repository-plugin:assemble-repository
+        org.eclipse.tycho:tycho-p2-repository-plugin:verify-repository
+        org.eclipse.tycho:tycho-packaging-plugin:build-qualifier
+        org.eclipse.tycho:tycho-packaging-plugin:build-qualifier-aggregator
+        org.eclipse.tycho:tycho-packaging-plugin:package-feature
+        org.eclipse.tycho:tycho-packaging-plugin:package-plugin
+        org.eclipse.tycho:tycho-packaging-plugin:package-target-definition
+        org.eclipse.tycho:tycho-packaging-plugin:product-export
+        org.eclipse.tycho:tycho-packaging-plugin:update-site
+        org.eclipse.tycho:tycho-packaging-plugin:update-site-packaging
+        org.eclipse.tycho:tycho-packaging-plugin:validate-id
+        org.eclipse.tycho:tycho-packaging-plugin:validate-version
+        org.eclipse.tycho:tycho-pomgenerator-plugin:generate-poms
+        org.eclipse.tycho:tycho-source-plugin:plugin-source
+        org.eclipse.tycho:tycho-surefire-plugin:test
+        org.eclipse.tycho:tycho-versions-plugin:set-version
+        org.eclipse.tycho:tycho-versions-plugin:update-pom
+
         # exec
         exec:exec exec:java
         # versions
