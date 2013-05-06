@@ -146,6 +146,14 @@ function listMavenCompletions {
         org.eclipse.tycho:tycho-surefire-plugin:test
         org.eclipse.tycho:tycho-versions-plugin:set-version
         org.eclipse.tycho:tycho-versions-plugin:update-pom
+        # tycho-extras
+        org.eclipse.tycho.extras:tycho-p2-extras-plugin:mirror
+        org.eclipse.tycho.extras:tycho-p2-extras-plugin:publish-features-and-bundles
+        org.eclipse.tycho.extras:target-platform-validation-plugin:validate-target-platform
+        org.eclipse.tycho.extras:tycho-eclipserun-plugin:eclipse-run
+        org.eclipse.tycho.extras:tycho-source-feature-plugin:source-feature
+        org.eclipse.tycho.extras:tycho-pack200a-plugin:normalize
+        org.eclipse.tycho.extras:tycho-pack200b-plugin:normalize
 
         # exec
         exec:exec exec:java
