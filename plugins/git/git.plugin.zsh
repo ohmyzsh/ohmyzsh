@@ -37,9 +37,9 @@ alias grset='git remote set-url'
 compdef _git grset=git-remote
 alias grup='git remote update'
 compdef _git grset=git-remote
-alias gb='git branch'
+alias gb='git branch -v'
 compdef _git gb=git-branch
-alias gba='git branch -a'
+alias gba='git branch -av'
 compdef _git gba=git-branch
 alias gcount='git shortlog -sn'
 compdef gcount=git
@@ -54,7 +54,7 @@ alias glgga='git log --graph --decorate --all'
 compdef _git glgga=git-log
 alias glo='git log --oneline'
 compdef _git glo=git-log
-alias gss='git status -s'
+alias gss='git status -sb'
 compdef _git gss=git-status
 alias ga='git add'
 compdef _git ga=git-add
@@ -65,6 +65,7 @@ alias grhh='git reset HEAD --hard'
 alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
 alias gf='git ls-files | grep'
 alias gpoat='git push origin --all && git push origin --tags'
+alias grepo='echo "Repository: $(git config remote.origin.url)"'
 
 # Will cd into the top of the current repository
 # or submodule.
