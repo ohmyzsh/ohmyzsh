@@ -5,36 +5,71 @@
 #
 # This plugin does the following:
 #  - Adds aliases and autocompletion for artisan
-#  - Adds aliases and autocompletion for bob
-
-local curcontext="$curcontext" state line _opts _bundles ret=1
+# - Adds aliases and autocompletion for bob
+# _opts _bundles
+ 
+local curcontext="$curcontext" state line ret=1
 _arguments -C \
     '1: :->cmds' \
-    '*:: :->args' && ret=0
+    '2:: :->args' && ret=0
 
 case $state in
     cmds)
 
     _values "Artisan command" \
-        'session\:install[Create a session table]' \
-        'migrate[Manage Migrations]' \
-        'test[Run a test]' \
-        'route\:\:call[Call a route in the CLI]' \
-        'key\:\:generate[Generate a key]'
+        'clear-compiled[Remove the compiled class file]' \
+        'down[Put the application into maintenance mode]' \
+        'dump-autoload[Regenerate framework autoload files]' \
+        'help[Displays help for a command]' \
+        'list[Lists commands]' \
+        'migrate[Run the database migrations]' \
+        'optimize[Optimize the framework for better performance]' \
+        'routes[List all registered routes]' \
+        'serve[Serve the application on the PHP development server]' \
+        'tinker[Interact with your application]' \
+        'up[Bring the application out of maintenace mode]' \
+        'workbench[Create a new package workbench]' \
+        'asset\:publish[Publish assets of a package to the public directory]' \
+        'auth\:reminders[Create a migration for the password reminders table]' \
+        'cache\:clear[Flush the application cache]' \
+        'command\:make[Create a new Artisan command]' \
+        'config\:publish[Publish configuration of a package to the application]' \
+        'controller\:make[Create a new resourceful controller]' \
+        'db\:seed[Seed the database with records]' \
+        'key\:generate[Set the application key]' \
+        'migrate\:install[Create the migration repository]' \
+        'migrate\:make[Create a new migration file]' \
+        'migrate\:refresh[Reset and re-run all migrations]' \
+        'migrate\:reset[Rollback all database migrations]' \
+        'migrate\:rollback[Rollback the last database migration]' \
+        'queue\:listen[Listen to a given queue]' \
+        'queue\:subscribe[Subscribe a URL to an Iron.io push queue]' \
+        'queue\:work[Process the next job on a queue]' \
+        'session\:table[Create a migration for the session database table]'
         ret=0
         ;;
+
     args)
         case $line[1] in
             migrate)
                 _values \
-                    'install[Create the Laravel migration table' \
-                    'make[Create a migration]' \
-                    'rollback[Roll back to the last migration operation]' \
-                    'reset[Roll back all migrations that have ever run]'
+                    'install    [Create the Laravel migration table' \
+                    'make       [Create a migration]' \
+                    'rollback   [Roll back to the last migration operation]' \
+                    'reset      [Roll back all migrations that have ever run]' \
+                    'refresh    [Reset and re-run all migrations]'
+                ret=0
+                ;;
+
+            queue)
+                _values \
+                    'listen     [Listen to a given queue]' \
+                    'subscribe  [Subscribe a URL to an Iron.io push queue]' \
+                    'work       [Process the next job on the queue]'
                 ret=0
                 ;;
         esac
         ;;
 esac
-
+;;
 return ret
