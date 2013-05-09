@@ -3,6 +3,8 @@ alias g='git'
 compdef g=git
 alias gst='git status'
 compdef _git gst=git-status
+alias gd='git diff'
+compdef _git gd=git-diff
 alias gl='git pull'
 compdef _git gl=git-pull
 alias gch='git fetch'
@@ -55,6 +57,8 @@ alias glgg='git log --graph --color'
 compdef _git glgg=git-log
 alias glgga='git log --graph --decorate --all'
 compdef _git glgga=git-log
+alias glo='git log --oneline'
+compdef _git glo=git-log
 alias gss='git status -s'
 compdef _git gss=git-status
 alias ga='git add'
@@ -100,3 +104,12 @@ alias ggpush='git push origin $(current_branch)'
 compdef ggpush=git
 alias ggpnp='git pull origin $(current_branch) && git push origin $(current_branch)'
 compdef ggpnp=git
+
+# Pretty log messages
+function _git_log_prettily(){
+  if ! [ -z $1 ]; then
+    git log --pretty=$1
+  fi
+}
+alias glp="_git_log_prettily"
+compdef _git glp=git-log
