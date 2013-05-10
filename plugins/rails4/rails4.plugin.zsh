@@ -1,10 +1,12 @@
-# Rails 3 aliases, backwards-compatible with Rails 2.
+# Rails 4 aliases
 
 function _rails_command () {
   if [ -e "script/server" ]; then
     ruby script/$@
-  else
+  elif [ -e "script/rails" ]; then
     ruby script/rails $@
+  else
+    ruby bin/rails $@  
   fi
 }
 
@@ -20,7 +22,9 @@ alias rs='_rails_command server'
 alias rsd='_rails_command server --debugger'
 alias devlog='tail -f log/development.log'
 alias rdm='rake db:migrate'
+alias rdc='rake db:create'
 alias rdr='rake db:rollback'
-alias -g RET='RAILS_ENV=test'
-alias -g REP='RAILS_ENV=production'
-alias -g RED='RAILS_ENV=development'
+alias rds='rake db:seed'
+alias rlc='rake log:clear'
+alias rn='rake notes'
+alias rr='rake routes'
