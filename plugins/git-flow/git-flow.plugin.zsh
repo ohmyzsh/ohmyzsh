@@ -88,6 +88,8 @@ __git-flow-release ()
 				'start:Start a new release branch.'
 				'finish:Finish a release branch.'
 				'list:List all your release branches. (Alias to `git flow release`)'
+				'publish: public'
+				'track: track'
 			)
 			_describe -t commands 'git flow release' subcommands
 			_arguments \
@@ -113,6 +115,16 @@ __git-flow-release ()
 						-k'[Keep branch after performing finish]'\
 						-n"[Don't tag this release]"\
 						':version:__git_flow_version_list'
+				;;
+
+				(publish)
+					_arguments \
+						':version:__git_flow_version_list'\
+				;;
+
+				(track)
+					_arguments \
+						':version:__git_flow_version_list'\
 				;;
 
 				*)
