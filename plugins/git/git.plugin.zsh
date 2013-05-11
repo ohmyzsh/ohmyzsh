@@ -4,6 +4,7 @@ compdef g=git
 alias gst='git status'
 compdef _git gst=git-status
 alias gd='git diff --color'
+alias gdcac='git diff --cached'
 compdef _git gd=git-diff
 alias gl='git pull'
 compdef _git gl=git-pull
