@@ -22,3 +22,17 @@ function hg_current_branch() {
     echo hg:$(hg branch)
   fi
 }
+
+function parse_hg_dirty() {
+  if [[ -n $(hg status -mard . 2> /dev/null) ]]; then
+    echo "$ZSH_THEME_HG_PROMPT_DIRTY"
+  else
+    echo "$ZSH_THEME_HG_PROMPT_CLEAN"
+  fi
+}
+
+function hg_prompt_info() {
+  if [ -d .hg ]; then
+  	echo "$ZSH_THEME_HG_PROMPT_PREFIX$(hg branch)$(parse_hg_dirty)$ZSH_THEME_HG_PROMPT_SUFFIX"
+  fi
+}
