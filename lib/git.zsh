@@ -128,6 +128,9 @@ function git_compare_version() {
     if [[ $INSTALLED_GIT_VERSION[$i] -lt $INPUT_GIT_VERSION[$i] ]]; then
       echo -1
       return 0
+    else
+      echo 1
+      return 0
     fi
   done
   echo 1
