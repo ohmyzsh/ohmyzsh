@@ -54,27 +54,14 @@ function in_gradle() {
     fi
 }
 
-############################################################################
-# Define the stat_cmd command based on platform behavior
-##########################################################################
-stat -f%m . > /dev/null 2>&1
-if [ "$?" = 0 ]; then
-	stat_cmd=(stat -f%m)
-else
-	stat_cmd=(stat -L --format=%Y)
-fi
-
 ############################################################################## Examine the build.gradle file to see if its
 # timestamp has changed, and if so, regen
 # the .gradle_tasks cache file
 ############################################################################
 _gradle_does_task_list_need_generating () {
-  if [ ! -f .gradletasknamecache ]; then return 0;
-  else
-    accurate=$($stat_cmd .gradletasknamecache)
-    changed=$($stat_cmd build.gradle)
-    return $(expr $accurate '>=' $changed)
-  fi
+  [ ! -f .gradletasknamecache ] && return 0;
+  [ .gradletasknamecache -nt build.gradle ] && return 0;
+  return 1;
 }
 
 

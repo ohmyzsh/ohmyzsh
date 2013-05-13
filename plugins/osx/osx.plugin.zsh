@@ -154,3 +154,6 @@ function trash() {
   IFS=$temp_ifs
 }
 
+function vncviewer() {
+  open vnc://$@
+}

@@ -20,6 +20,19 @@ _managepy-createcachetable(){
     $nul_args && ret=0
 }
 
+_managepy-collectstatic(){
+  _arguments -s : \
+    '--link=-[Create a symbolic link to each file instead of copying.]:' \
+    '--noinput=-[Do NOT prompt the user for input of any kind.]:' \
+    '--no-post-process=-[Do NOT post process collected files.]:' \
+    '--ignore=-[Ignore files or directories matching this glob-style pattern. Use multiple times to ignore more.]:' \
+    '--dry-run=-[Do everything except modify the filesystem.]:' \
+    '--clear=-[Clear the existing files using the storage before trying to copy or link the original file.]:' \
+    '--link=-[Create a symbolic link to each file instead of copying.]:' \
+    '--no-default-ignore=-[Do not ignore the common private glob-style patterns "CVS", ".*" and "*~".]:' \
+    $nul_args && ret=0
+}
+
 _managepy-dbshell(){
   _arguments -s : \
     $nul_args && ret=0
@@ -163,6 +176,7 @@ _managepy-commands() {
   commands=(
     'adminindex:prints the admin-index template snippet for the given app name(s).'
     'createcachetable:creates the table needed to use the SQL cache backend.'
+    'collectstatic:Collect static files in a single location.'
     'dbshell:runs the command-line client for the current DATABASE_ENGINE.'
     "diffsettings:displays differences between the current settings.py and Django's default settings."
     'dumpdata:Output the contents of the database as a fixture of the given format.'
@@ -220,4 +234,5 @@ _managepy() {
 
 compdef _managepy manage.py
 compdef _managepy django
+compdef _managepy django-admin.py
 compdef _managepy django-manage
