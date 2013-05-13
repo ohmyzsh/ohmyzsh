@@ -15,18 +15,14 @@ _bower ()
 
 	case $state in
 		(command)
-
-			local -a subcommands
-			subcommands=(${=$(bower help | grep help | sed -e 's/,//g')})
-			_describe -t commands 'bower' subcommands
+            compadd "$@" $(bower help --no-color | egrep '^\s+[a-z\-]+(, [a-z\-]+|)\s{2,}' | sed -e 's/^\s*//' -e 's/,//' | cut -d ' ' -f 1) 
 		;;
 
 		(options)
 			case $line[1] in
-
 				(install)
 				    if [ -z "$bower_package_list" ];then
-                    bower_package_list=$(bower search | awk 'NR > 2' | cut -d '-' -f 2 | cut -d ' ' -f 2 | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g")
+                    bower_package_list=$(bower search --no-color | sed -e 's/^\s*//' | cut -d ' ' -f 1)
                 fi
 				    compadd "$@" $(echo $bower_package_list)
                 ;;
