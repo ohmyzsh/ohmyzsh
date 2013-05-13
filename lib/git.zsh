@@ -20,7 +20,7 @@ parse_git_dirty() {
     else
         GIT_STATUS=$(git status -s ${SUBMODULE_SYNTAX} -uno 2> /dev/null | tail -n1)
     fi
-    if [[ -n $(git status -s ${SUBMODULE_SYNTAX} -uno  2> /dev/null) ]]; then
+    if [[ -n $GIT_STATUS ]]; then
       echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
     else
       echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
@@ -127,6 +127,9 @@ function git_compare_version() {
   for i in {1..3}; do
     if [[ $INSTALLED_GIT_VERSION[$i] -lt $INPUT_GIT_VERSION[$i] ]]; then
       echo -1
+      return 0
+    else
+      echo 1
       return 0
     fi
   done
