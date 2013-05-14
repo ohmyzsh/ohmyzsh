@@ -9,7 +9,7 @@ _1st_arguments=(
   'uninstall:uninstall a candidate version'
   'list:list available candidate versions'
   'use:use a candidate version in current shell'
-  'current:dispaly current candidate version'
+  'current:display current candidate version'
   'version:display the current version of gvm'
   'default:set the default candidate version for every shell'
   'selfupdate:update the gvm'
@@ -23,7 +23,7 @@ _2nd_arguments=(
   'grails:full-stack web framework'
   'griffon:framework for building desktop application'
   'gradle:build tool using groovy dsl'
-  'vert.x:event driven application framework'
+  'vertx:event driven application framework'
 )
 
 local expl
