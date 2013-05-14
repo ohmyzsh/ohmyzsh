@@ -1,5 +1,5 @@
 # Grab the current version of ruby in use (via RVM): [ruby-1.8.7]
-if which rvm-prompt &> /dev/null; then
+if [ -e ~/.rvm/bin/rvm-prompt ]; then
   JARIN_CURRENT_RUBY_="%{$fg[white]%}[%{$fg[red]%}\$(~/.rvm/bin/rvm-prompt i v)%{$fg[white]%}]%{$reset_color%}"
 else
   if which rbenv &> /dev/null; then
