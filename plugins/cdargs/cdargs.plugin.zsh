@@ -98,7 +98,7 @@ function _cdargs_exec ()
         i=1;
         for arg; do
             if [ $i -lt $# ]; then
-                $command "$arg" "$dir";
+                eval $command "$arg" "$dir";
             fi
             let i=$i+1;
         done
