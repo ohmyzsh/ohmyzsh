@@ -23,6 +23,7 @@ _2nd_arguments=(
   'grails:full-stack web framework'
   'griffon:framework for building desktop application'
   'gradle:build tool using groovy dsl'
+  'lazybones:project creation tool that uses packaged project templates'
   'vertx:event driven application framework'
 )
 
