@@ -16,7 +16,7 @@ else
 fi
 
 # Use sudo by default if it's installed
-if [[ -e $( which sudo 2>&1 ) ]]; then
+if [[ -e $( command which sudo 2>&1 ) ]]; then
     use_sudo=1
 fi
 
