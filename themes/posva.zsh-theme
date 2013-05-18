@@ -1,3 +1,8 @@
+# Theme by Eduardo San Martin Morote aka Posva
+# www.killdaducks.com
+# Use as you wish but don't remove this notice
+# Sat May 18 16:30:33 CEST 2013 
+
 PROMPT='%{$FG[239]%}┌[%{$FG[040]%}%n%{$reset_color%}%{$FG[196]%}@%{$FG[208]%}%M%{$reset_color%}%{$FG[239]%}]%{$fg[white]%}-%{$FG[220]%}(%{$fg_bold[white]%}%~%{$reset_color%}%{$FG[220]%})%{$fg[white]%}-$(git_prompt_info)%{$FG[239]%}[%{$FG[033]%}%D{%H:%M:%S}%{$FG[239]%}] %(?..%{$FG[196]%}✘(%?%)%{$reset_color%})
 %{$FG[239]%}└>%{$reset_color%}'
 
