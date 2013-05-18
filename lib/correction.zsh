@@ -11,4 +11,6 @@ else
   alias ebuild='nocorrect ebuild'
   alias hpodder='nocorrect hpodder'
   alias sudo='nocorrect sudo'
+  alias git status='nocorrect git status'
+  alias git config='nocorrect git config'
 fi
