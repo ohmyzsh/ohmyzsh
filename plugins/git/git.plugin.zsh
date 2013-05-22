@@ -72,7 +72,10 @@ alias grh='git reset HEAD'
 alias grhh='git reset HEAD --hard'
 alias gclean='git reset --hard && git clean -dfx'
 alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
-alias gf='git ls-files | grep'
+
+#remove the gf alias
+#alias gf='git ls-files | grep'
+
 alias gpoat='git push origin --all && git push origin --tags'
 alias gmt='git mergetool --no-prompt'
 compdef _git gm=git-mergetool
