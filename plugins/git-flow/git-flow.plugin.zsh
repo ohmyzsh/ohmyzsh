@@ -20,6 +20,9 @@
 #     c. Or, use this file as a oh-my-zsh plugin.
 #
 
+#Alias
+alias gf='git flow'
+
 _git-flow ()
 {
 	local curcontext="$curcontext" state line
