@@ -5,16 +5,18 @@ if [[ $('uname') == 'Linux' ]]; then
     _sublime_linux_paths=(
         "$HOME/bin/sublime_text"
         "/opt/sublime_text/sublime_text"
-        "/usr/bin/sublime_text"
         "/usr/local/bin/sublime_text"
+        "/usr/local/bin/sublime-text"
+        "/usr/bin/sublime_text"
+        "/usr/bin/sublime-text"
     )
-    for _sublime_path in $_sublime_linux_paths; do
-        if [[ -a $_sublime_path ]]; then
-            st_run() { $_sublime_path $@ >/dev/null 2>&1 &| }
-            alias st=st_run
-            break
-        fi
-    done
+	for _sublime_path in $_sublime_linux_paths; do
+		if [[ -a $_sublime_path ]]; then
+			st_run() { nohup $_sublime_path $@ > /dev/null 2>&1 &| }
+	        alias st=st_run
+			break
+		fi
+	done
 
 elif  [[ $('uname') == 'Darwin' ]]; then
     local _sublime_darwin_paths > /dev/null 2>&1
