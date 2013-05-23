@@ -40,10 +40,8 @@ if [[ -f "$wrapsource" ]]; then
         fi
     }
 
-    # New cd function that does the virtualenv magic
-    function cd {
-        builtin cd "$@" && workon_cwd
-    }
+    # Add zsh hook for virtualenv magic
+    add-zsh-hook chpwd workon_cwd
   fi
 else
   print "zsh virtualenvwrapper plugin: Cannot find virtualenvwrapper_lazy.sh. Please install with \`pip install virtualenvwrapper\`."
