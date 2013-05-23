@@ -11,13 +11,19 @@ function web_search() {
   fi
 
   # check whether the search engine is supported
-  if [[ ! $1 =~ '(google|bing|yahoo)' ]];
+  if [[ ! $1 =~ '(google|bing|yahoo|yandex)' ]];
   then
     echo "Search engine $1 not supported."
     return 1
   fi
 
-  local url="http://www.$1.com"
+  if [[ $1 =~ '(google|bing|yahoo)' ]];
+  then
+    local url="http://www.$1.com"
+  elif [[ $1 == 'yandex' ]];
+  then
+      local url="http://$1.ru"
+  fi
 
   # no keyword provided, simply open the search engine homepage
   if [[ $# -le 1 ]]; then
@@ -25,7 +31,14 @@ function web_search() {
     return
   fi
 
-  url="${url}/search?q="
+  if [[ $1 =~ '(google|bing|yahoo)' ]];
+  then
+    url="${url}/search?q="
+  elif [[ $1 == 'yandex' ]];
+  then
+    url="${url}/yandsearch?text="
+  fi
+
   shift   # shift out $1
 
   while [[ $# -gt 0 ]]; do
@@ -41,3 +54,6 @@ function web_search() {
 alias bing='web_search bing'
 alias google='web_search google'
 alias yahoo='web_search yahoo'
+alias yandex='web_search yandex'
+alias ya='web_search yandex'
+
