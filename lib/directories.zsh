@@ -30,9 +30,6 @@ cd () {
     cd ../../../..
   elif [[ "x$*" == "x......" ]]; then
     cd ../../../../..
-  elif [ -d ~/.autoenv ]; then
-    source ~/.autoenv/activate.sh
-    autoenv_cd "$@"
   else
     builtin cd "$@"
   fi
