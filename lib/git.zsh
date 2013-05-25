@@ -133,6 +133,22 @@ function git_compare_version() {
   echo 1
 }
 
+function git_prompt_no_changed_files {
+
+  if [ ! -d .git ]; then
+    return
+  fi
+
+  local NO_OF_CHANGED_FILES
+
+  NO_OF_CHANGED_FILES=$(git status -s 2> /dev/null | wc -l | sed 's/ *//g')
+  if [ $NO_OF_CHANGED_FILES != 0 ]; then
+    echo " $NO_OF_CHANGED_FILES"
+  else 
+    return
+  fi
+}
+
 #this is unlikely to change so make it all statically assigned
 POST_1_7_2_GIT=$(git_compare_version "1.7.2")
 #clean up the namespace slightly by removing the checker function
