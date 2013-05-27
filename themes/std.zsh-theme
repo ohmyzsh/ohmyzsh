@@ -6,8 +6,8 @@
 #    SCREENSHOT: http://s23.postimg.org/dlcljx5kb/std.png
 # -----------------------------------------------------------------------------
 
-NOT_OK="%{$fg[red]%} ☻ %{$reset_color%}"
-OK="%{$fg[green]%} ☻ %{$reset_color%}"
+NOT_OK="%{$fg[red]%} ✸ %{$reset_color%}"
+OK="%{$fg[green]%} ✸ %{$reset_color%}"
 
 ZSH_THEME_GIT_PROMPT_PREFIX=""
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%} "
