@@ -1,8 +1,19 @@
-function prompt_char {
-	if [ $UID -eq 0 ]; then echo "#"; else echo $; fi
+autoload -Uz colors && colors
+
+autoload -Uz vcs_info
+zstyle ':vcs_info:*' check-for-changes true
+zstyle ':vcs_info:*' unstagedstr '%F{red}*'   # display this when there are unstaged changes
+zstyle ':vcs_info:*' stagedstr '%F{yellow}+'  # display this when there are staged changes
+zstyle ':vcs_info:*' actionformats '%F{5}(%F{2}%b%F{3}|%F{1}%a%c%u%F{5})%f '
+zstyle ':vcs_info:*' formats '%F{5}(%F{2}%b%c%u%F{5})%f '
+zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
+zstyle ':vcs_info:*' enable git cvs svn
+
+gentoo_precmd() {
+  vcs_info
 }
 
-PROMPT='%(!.%{$fg_bold[red]%}.%{$fg_bold[green]%}%n@)%m %{$fg_bold[blue]%}%(!.%1~.%~) $(git_prompt_info)$(prompt_char)%{$reset_color%} '
+autoload -U add-zsh-hook
+add-zsh-hook precmd gentoo_precmd
 
-ZSH_THEME_GIT_PROMPT_PREFIX="("
-ZSH_THEME_GIT_PROMPT_SUFFIX=") "
+PROMPT='%(!.%B%F{red}.%B%F{green}%n@)%m %F{blue}%(!.%1~.%~) ${vcs_info_msg_0_}%(!.#.$)%{$reset_color%} '
