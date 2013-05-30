@@ -46,6 +46,9 @@ alias rake='bundle exec rake'
 #alias remigrate="rake db:migrate && rake db:migrate:redo && rake db:schema:dump db:test:prepare"
 #alias remongrate="rake mongoid:migrate && rake mongoid:migrate:redo"
 
+# POW aliases
+alias p='powder'
+
 # Git aliases
 alias g="git"
 alias glog='git log --color'
