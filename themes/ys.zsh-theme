@@ -8,7 +8,11 @@
 
 # Machine name.
 function box_name {
-    [ -f ~/.box-name ] && cat ~/.box-name || hostname -s
+    if [[ `uname -o` == "Cygwin" ]]; then
+        [ -f ~/.box-name ] && cat ~/.box-name || hostname
+    else
+        [ -f ~/.box-name ] && cat ~/.box-name || hostname -s
+    fi
 }
 
 # Directory info.
