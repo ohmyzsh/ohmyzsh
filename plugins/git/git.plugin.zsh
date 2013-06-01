@@ -17,6 +17,8 @@ alias gds='git diff --staged'
 compdef _git gds=git-diff
 gdv() { git diff -w "$@" | view - }
 compdef _git gdv=git-diff
+alias gds='git diff --staged'
+compdef _git gds=git-diff
 alias gc='git commit -v'
 compdef _git gc=git-commit
 alias gc!='git commit -v --amend'
