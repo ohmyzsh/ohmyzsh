@@ -1,7 +1,7 @@
 if [[ "$DISABLE_CORRECTION" == "true" ]]; then
   return
 else
-  setopt correct
+  setopt correct_all
   alias man='nocorrect man'
   alias mv='nocorrect mv'
   alias mysql='nocorrect mysql'
@@ -11,4 +11,5 @@ else
   alias ebuild='nocorrect ebuild'
   alias hpodder='nocorrect hpodder'
   alias sudo='nocorrect sudo'
+  alias aptitude='nocorrect aptitude'
 fi
