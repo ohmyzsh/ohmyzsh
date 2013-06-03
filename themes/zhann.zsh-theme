@@ -23,10 +23,5 @@ PROMPT='%B%F{blue}%c%B%F{green}${vcs_info_msg_0_}%B%F{magenta} %{$reset_color%}%
 autoload -U add-zsh-hook
 add-zsh-hook precmd  theme_precmd
 
-if [ -e ~/.rvm/bin/rvm-prompt ]; then
-  RPROMPT='%{$reset_color%} %{$fg[red]%}$(~/.rvm/bin/rvm-prompt i v g) %{$reset_color%}'
-else
-  if which rbenv &> /dev/null; then
-    RPROMPT='%{$reset_color%} %{$fg[red]%}$(rbenv version | sed -e "s/ (set.*$//") %{$reset_color%}'
-  fi
-fi
+RPROMPT='%{$reset_color%} %{$fg[red]%}$(ruby -e "puts \"#{RUBY_VERSION}p#{RUBY_PATCHLEVEL}\"") %{$reset_color%}'
+
