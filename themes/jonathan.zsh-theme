@@ -1,3 +1,5 @@
+functions rbenv_prompt_info >& /dev/null || rbenv_prompt_info(){}
+
 function theme_precmd {
     local TERMWIDTH
     (( TERMWIDTH = ${COLUMNS} - 1 ))

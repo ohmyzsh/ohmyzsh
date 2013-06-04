@@ -8,7 +8,7 @@ function title {
   fi
   if [[ "$TERM" == screen* ]]; then
     print -Pn "\ek$1:q\e\\" #set screen hardstatus, usually truncated at 20 chars
-  elif [[ "$TERM" == xterm* ]] || [[ $TERM == rxvt* ]] || [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
+  elif [[ "$TERM" == xterm* ]] || [[ $TERM == rxvt* ]] || [[ $TERM == ansi ]] || [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
     print -Pn "\e]2;$2:q\a" #set window name
     print -Pn "\e]1;$1:q\a" #set icon (=tab) name (will override window name on broken terminal)
   fi
@@ -26,8 +26,8 @@ function omz_termsupport_precmd {
 function omz_termsupport_preexec {
   emulate -L zsh
   setopt extended_glob
-  local CMD=${1[(wr)^(*=*|sudo|ssh|-*)]} #cmd name only, or if this is sudo or ssh, the next cmd
-  title "$CMD" "%100>...>$2%<<"
+  local CMD=${1[(wr)^(*=*|sudo|ssh|rake|-*)]} #cmd name only, or if this is sudo or ssh, the next cmd
+  title "$CMD" "%100>...>${2:gs/%/%%}%<<"
 }
 
 autoload -U add-zsh-hook

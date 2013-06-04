@@ -35,10 +35,12 @@ DISABLE_VENV_CD="1"
 plugins=(git tmux debian python pythonbrew vim-override virtualenvwrapper)
 
 source $ZSH/oh-my-zsh.sh
-# source `which virtualenvwrapper.sh`
 
 # Customize to your needs...
+if [ -z "$LC_ALL" ]; then export LC_ALL=en_US.UTF-8; fi
+if [ -z "$LANG" ]; then export LANG=en_US.UTF-8; fi
 
 if [ -e $HOME/bin ]; then export PATH="$HOME/bin:$PATH"; fi
 unsetopt correctall
+
 [ "$TERM" = "xterm" ] && TERM="xterm-256color"

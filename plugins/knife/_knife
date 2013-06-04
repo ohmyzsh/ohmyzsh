@@ -1,5 +1,10 @@
 #compdef knife
 
+# You can override the path to knife.rb and your cookbooks by setting
+# KNIFE_CONF_PATH=/path/to/my/.chef/knife.rb
+# KNIFE_COOKBOOK_PATH=/path/to/my/chef/cookbooks
+# Read around where these are used for more detail.
+
 # These flags should be available everywhere according to man knife
 knife_general_flags=( --help --server-url --key --config --editor --format --log_level --logfile --no-editor --user --print-after --version --yes )
 
@@ -26,7 +31,7 @@ _knife() {
   
   case $state in
   knifecmd)
-    compadd -Q "$@" bootstrap client configure cookbook "cookbook site" "data bag" exec environment index node recipe role search ssh status windows $cloudproviders
+    compadd -Q "$@" bootstrap client configure cookbook "cookbook site" "data bag" diff exec environment index node recipe role search ssh status upload windows $cloudproviders
   ;;
   knifesubcmd)
     case $words[2] in
@@ -42,9 +47,12 @@ _knife() {
     cookbook)
       compadd -Q "$@" test list create download delete "metadata from" show "bulk delete" metadata upload
     ;;
-  environment)
+    diff)
+      _arguments '*:file or directory:_files -g "*"'
+    ;;
+    environment)
       compadd -Q "$@" list create delete edit show "from file"
-      ;;
+    ;;
     node)
      compadd -Q "$@" "from file" create show edit delete list run_list "bulk delete"
     ;;
@@ -54,6 +62,9 @@ _knife() {
     role)
       compadd -Q "$@" "bulk delete" create delete edit "from file" list show
     ;; 
+    upload)
+     _arguments '*:file or directory:_files -g "*"'
+    ;;
     windows)
       compadd "$@" bootstrap
     ;;
@@ -170,7 +181,13 @@ _chef_environments_remote() {
 
 # The chef_x_local functions use the knife config to find the paths of relevant objects x to be uploaded to the server
 _chef_cookbooks_local() {
- (for i in $( grep cookbook_path $HOME/.chef/knife.rb | awk 'BEGIN {FS = "[" }; {print $2}' | sed 's/\,//g' | sed "s/'//g" | sed 's/\(.*\)]/\1/' ); do ls $i; done)
+  
+  local knife_rb=${KNIFE_CONF_PATH:-${HOME}/.chef/knife.rb}
+  if [ -f ./.chef/knife.rb ]; then
+    knife_rb="./.chef/knife.rb"
+  fi
+  local cookbook_path=${KNIFE_COOKBOOK_PATH:-$(grep cookbook_path $knife_rb | awk 'BEGIN {FS = "[" }; {print $2}' | sed 's/\,//g' | sed "s/'//g" | sed 's/\(.*\)]/\1/' )}
+  (for i in $cookbook_path; do ls $i; done)
 }
 
 # This function extracts the available cookbook versions on the chef server
