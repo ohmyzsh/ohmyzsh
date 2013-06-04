@@ -1,7 +1,7 @@
 # try to replace OSX's default vim by MacVim's version
-RECENTVIM=`test -e /usr/local/Cellar/macvim && find /usr/local/Cellar/macvim -name Vim`
+MACVIM="/usr/local/bin/mvim"
 
 # if mode indicator wasn't setup by theme, define default
-if [[ "$OSTYPE" == darwin* && -e $RECENTVIM ]]; then
-  alias vim="$RECENTVIM"
+if [[ "$OSTYPE" == darwin* && -e $MACVIM ]]; then
+  alias vim="$MACVIM -v"
 fi
