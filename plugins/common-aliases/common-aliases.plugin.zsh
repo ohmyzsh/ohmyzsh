@@ -16,8 +16,6 @@ alias zshrc='vim ~/.zshrc'
 alias grep='grep --color'
 alias sgrep='grep -R -n -H -C 5'
 
-alias cdb='cd ~/projects/buildbot/'
-
 alias t='tail -f'
 
 # cd, because typing the backslash is A LOT of work!!
