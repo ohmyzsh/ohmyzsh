@@ -105,6 +105,25 @@ git_prompt_status() {
   echo $STATUS
 }
 
+# Checks if there is a bisect, merge or rebase currently going on
+git_prompt_rebase_state() {
+  STATUS=""
+
+  if [ -f ".git/BISECT_LOG" ] ; then
+    STATUS="$ZSH_THEME_GIT_PROMPT_STATE_BEFORE$ZSH_THEME_GIT_PROMPT_STATE_BISECT"
+  elif [ -f ".git/MERGE_HEAD" ] ; then
+    STATUS="$ZSH_THEME_GIT_PROMPT_STATE_BEFORE$ZSH_THEME_GIT_PROMPT_STATE_MERGE"
+  else
+    for dir in rebase rebase-apply rebase-merge ; do
+      if [ -d ".git/$dir" ] ; then
+        STATUS="$ZSH_THEME_GIT_PROMPT_STATE_BEFORE$ZSH_THEME_GIT_PROMPT_STATE_REBASE"
+        break
+      fi
+    done
+  fi
+  echo $STATUS
+}
+
 #compare the provided version of git to the version installed and on path
 #prints 1 if input version <= installed version
 #prints -1 otherwise
