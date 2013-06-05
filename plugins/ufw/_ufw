@@ -1,0 +1,51 @@
+#compdef ufw
+
+
+_ufw()
+{
+  local context state state_descr line curcontext="$curcontext"
+  typeset -A opt_args
+
+  local ret=1
+  
+  _arguments -C \
+    '(- 1 *)--help[show usage]'\
+    '1:command:->command'\
+    '*::args:->args' && ret=0
+
+  case $state in
+    (command)
+        commands=(
+          'enable:enables the firewall'
+          'disable:disables the firewall'
+          'default:set default policy'
+          'logging:set logging to LEVEL'
+          'allow:add allow rule'
+          'deny:add deny rule'
+          'reject:add reject rule'
+          'limit:add limit rule'
+          'delete:delete RULE'
+          'insert:insert RULE at NUM'
+          'reset:reset firewall'
+          'status :show firewall status'
+          'status:show firewall status as numbered list of RULES'
+          'status:show verbose firewall status'
+          'show:show firewall report'
+          'version:display version information'
+        )
+        _describe -t commands 'command' commands && ret=0
+      ;;
+    (args)      
+      case $words[1] in
+        (allow:)
+          _message -e port 'port'
+          ret=0
+        ;;
+        *)
+          ret=0
+      esac
+      ;;
+  esac
+
+  return $ret
+}
