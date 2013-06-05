@@ -32,7 +32,7 @@ DISABLE_VENV_CD="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git tmux python pythonbrew vim-override virtualenvwrapper)
+plugins=(git python vim-override)
 
 source $ZSH/oh-my-zsh.sh
 # source `which virtualenvwrapper.sh`
@@ -43,3 +43,5 @@ if [ -z "$LANG" ]; then export LANG=en_US.UTF-8; fi
 
 if [ -e $HOME/bin ]; then export PATH="$HOME/bin:$PATH"; fi
 unsetopt correctall
+
+if [ -e ~/.profile ]; then source ~/.profile; fi
