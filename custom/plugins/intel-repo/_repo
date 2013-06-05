@@ -38,24 +38,29 @@ _repo()
           'branch:View current topic branches'
           'branches:View current topic branches'
           'checkout:Checkout a branch for development'
+          'checkout-manifest:for every project in a manifest tag file check out the sha1 listed in the file' 
           'cherry-pick:Cherry-pick a change.'
           'diff:Show changes between commit and working tree'
           'download:Download and checkout a change'
           'forall:execute command on several project'
+          'format-patch:build patch sets for each project common to a manifest baseline'    
           'grep:Print lines matching a pattern'
           'help:Display detailed help on a command'
           'init:Initialize repo in the current directory'
+          # 'info:Get info on the manifest branch, current branch or unmerged branches' 
           'list:List projects and their associated directories'
           'manifest:Manifest inspection utility'
           'overview:Display overview of unmerged project branches'
           'prune:Prune (delete) already merged topics'
+          'push:Push the local branch'
           'rebase:Rebase local branches on upstream branch'
-          'selfupdate:Update repo to the latest version'
+          #- 'selfupdate:Update repo to the latest version'
           'smartsync:Update working tree to the latest known good revision'
           'stage:Stage file(s) for commit'
           'start:Start a new branch for development'
           'status:Show the working tree status'
           'sync:Update working tree to the latest revision'
+          'tag-manifest:for every project in a manifest tag use the sha1 listed in the file set the tagname to it'
           'upload:Upload changes for code review'
           'version:Display the version of repo'
         )
@@ -159,6 +164,7 @@ _repo()
                      "(-n --network-only)"{-n,--network-branch}"[fetch only, don't update working tree]" \
                      "(-d --detach)"{-d,--detach}"[detach projects back to manifest revision]" \
                      "(-c --current-branch)"{-c,--current-branch}"[fetch only current branch from server]" \
+                     "(--i-know-i-may-hurt-the-team=)--i-know-i-may-hurt-the-team=[raise the maximum number of jobs]:raise the maximum number of jobs" \
                      "(-q --quiet)"{-q,--quiet}"[be more quiet]" \
                      "(-j --jobs=)"{-j,--jobs=}"[projects to fetch simultaneously (default 1) (limited to 5)]:projects to fetch simultaneously (default 1) (limited to 5)" \
                      "(-m --manifest-name=)"{-m,--manifest-name=}"[temporary manifest to use for this sync]:manifest xml file:_files -g *.xml" \
