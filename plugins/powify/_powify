@@ -1,0 +1,55 @@
+#compdef powify
+
+_powify_all_servers() {
+  all_servers=(`ls $HOME/.pow/`)
+}
+
+local -a all_servers
+
+local -a _1st_arguments
+_1st_arguments=(
+  'server:server specific commands'
+  'utils:manage powify'
+  'create:creates a pow app from the current directory (to change the name append name as an argument)'
+  'destroy:destroys the pow app linked to the current directory'
+  'restart:restarts the pow app linked to the current directory'
+  'always_restart:reload the pow app after each request'
+  'always_restart_off:do not reload the pow app after each request'
+  'rename:rename the current pow app to [NAME] or renmae [OLD] to [NEW]'
+  'environment:run the this pow app in a different environment (aliased `env`)'
+  'browse:opens and navigates the default browser to this app'
+  'logs:tail the application logs'
+)
+
+_arguments '*:: :->command'
+
+if (( CURRENT == 1 )); then
+  _describe -t commands "powify command" _1st_arguments
+  return
+fi
+
+case "$words[1]" in
+  server)
+    _values \
+      'install[install pow server]' \
+      'reinstall[reinstall pow server]' \
+      'update[update pow server]' \
+      'uninstall[uninstall pow server]' \
+      'list[list all pow apps]' \
+      'start[start the pow server]' \
+      'stop[stop the pow server]' \
+      'restart[restart the pow server]' \
+      'host[adds all pow apps to /etc/hosts file]' \
+      'unhost[removes all pow apps from /etc/hosts file]' \
+      'status[print the current server status]' \
+      'config[print the current server configuration]' \
+      'logs[tails the pow server logs]' ;;
+  utils)
+    _values \
+      'install[install powify.dev server management tool]' \
+      'reinstall[reinstall powify.dev server management tool]' \
+      'uninstall[uninstall powify.dev server management tool]' ;;
+  destroy|restart|always_restart|always_restart_off|rename|browse|logs)
+    _powify_all_servers
+    _wanted all_servers expl 'all pow servers' compadd -a all_servers ;;
+esac

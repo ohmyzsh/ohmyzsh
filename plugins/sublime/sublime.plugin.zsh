@@ -1,11 +1,12 @@
 # Sublime Text 2 Aliases
 
-local _sublime_darwin_paths
+local _sublime_darwin_paths > /dev/null 2>&1
 _sublime_darwin_paths=(
-	"$HOME/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"
+	"/usr/local/bin/subl"
 	"$HOME/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl"
-	"/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"
+	"$HOME/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"
 	"/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl"
+	"/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"
 )
 
 if [[ $('uname') == 'Linux' ]]; then
@@ -21,6 +22,7 @@ elif  [[ $('uname') == 'Darwin' ]]; then
 	for _sublime_path in $_sublime_darwin_paths; do
 		if [[ -a $_sublime_path ]]; then
 			alias st="'$_sublime_path'"
+			break
 		fi
 	done
 fi
