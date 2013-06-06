@@ -8,22 +8,25 @@ function _rails_command () {
   fi
 }
 
+alias -g RED='RAILS_ENV=development'
+alias -g REP='RAILS_ENV=production'
+alias -g RET='RAILS_ENV=test'
+
+alias devlog='tail -f log/development.log'
 alias rc='_rails_command console'
 alias rd='_rails_command destroy'
 alias rdb='_rails_command dbconsole'
 alias rdbm='rake db:migrate db:test:clone'
+alias rdm='rake db:migrate'
+alias rdm='_run-with-bundler rake db:migrate'
+alias rdr='rake db:rollback'
+alias rdr='_run-with-bundlerrake db:rollback'
 alias rg='_rails_command generate'
 alias rgm='_rails_command generate migration'
 alias rp='_rails_command plugin'
-alias ru='_rails_command runner'
 alias rs='_rails_command server'
 alias rsd='_rails_command server --debugger'
-alias devlog='tail -f log/development.log'
-alias rdm='rake db:migrate'
-alias rdr='rake db:rollback'
-alias -g RET='RAILS_ENV=test'
-alias -g REP='RAILS_ENV=production'
-alias -g RED='RAILS_ENV=development'
+alias ru='_rails_command runner'
 
 alias rspec='_run-with-bundler rspec'
 alias cuke='_run-with-bundler cucumber'
