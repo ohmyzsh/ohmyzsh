@@ -1,4 +1,3 @@
-
 # Mercurial
 alias hgc='hg commit'
 alias hgb='hg branch'
@@ -9,9 +8,11 @@ alias hgd='hg diff'
 alias hged='hg diffmerge'
 # pull and update
 alias hgi='hg incoming'
+alias hgic='hg incoming | grep "changeset" | wc -l'
 alias hgl='hg pull -u'
 alias hglr='hg pull --rebase'
 alias hgo='hg outgoing'
+alias hgoc='hg outgoing | grep 'changeset' | wc -l'
 alias hgp='hg push'
 alias hgs='hg status'
 # this is the 'git commit --amend' equivalent
