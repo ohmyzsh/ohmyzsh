@@ -1,0 +1,60 @@
+#compdef fab
+#autoload
+
+local curcontext=$curcontext state line
+declare -A opt_args
+
+declare target_list
+target_list=(`fab --shortlist 2>/dev/null`)
+
+_targets() {
+    _describe -t commands "fabric targets" target_list
+}
+
+output_levels=(
+    'status: Status messages, i.e. noting when Fabric is done running, if the user used a keyboard interrupt, or when servers are disconnected from. These messages are almost always relevant and rarely verbose.'
+    'aborts: Abort messages. Like status messages, these should really only be turned off when using Fabric as a library, and possibly not even then. Note that even if this output group is turned off, aborts will still occur – there just won’t be any output about why Fabric aborted!'
+    'warnings: Warning messages. These are often turned off when one expects a given operation to fail, such as when using grep to test existence of text in a file. If paired with setting env.warn_only to True, this can result in fully silent warnings when remote programs fail. As with aborts, this setting does not control actual warning behavior, only whether warning messages are printed or hidden.'
+    'running: Printouts of commands being executed or files transferred, e.g. [myserver] run: ls /var/www. Also controls printing of tasks being run, e.g. [myserver] Executing task ''foo''.'
+    'stdout: Local, or remote, stdout, i.e. non-error output from commands.'
+    'stderr: Local, or remote, stderr, i.e. error-related output from commands.'
+    'user: User-generated output, i.e. local output printed by fabfile code via use of the fastprint or puts functions.'
+)
+
+_arguments -w -S -C \
+  '(-)'{-h,--help}'[show this help message and exit]: :->noargs' \
+  '(-)'{-V,--version}'[show program''s version number and exit]: :->noargs' \
+  '(-)--list[print list of possible commands and exit]: :->noargs' \
+  '(-)--shortlist[print non-verbose list of possible commands and exit]: :->noargs' \
+  '(--reject-unknown-hosts)--reject-unknown-hosts[reject unknown hosts]' \
+  '(--no-pty)--no-pty[do not use pseudo-terminal in run/sudo]' \
+  "(-d+ --display=-)"{-d+,--display=-}"[print detailed info about a given command]: :_targets" \
+  '(-D --disable-known-hosts)'{-D,--disable-known-hosts}'[do not load user known_hosts file]' \
+  '(-r --reject-unknown-hosts)'{-r,--reject-unknown-hosts}'[reject unknown hosts]' \
+  '(-u+ --user=-)'{-u+,--user=-}'[username to use when connecting to remote hosts]: :' \
+  '(-p+ --password=-)'{-p+,--password=-}'[password for use with authentication and/or sudo]: :' \
+  '(-H+ --hosts=-)'{-H+,--hosts=-}'[comma separated list of hosts to operate on]: :' \
+  '(-R+ --roles=-)'{-R+,--roles=-}'[comma separated list of roles to operate on]: :' \
+  '(-a --no-agent)'{-a,--no-agent}'[don''t use the running SSH agent]' \
+  '(-k --no-keys)'{-k,--no-keys}'[don''t load private key files from ~/.ssh/]' \
+  '(-w --warn-only)'{-w,--warn-only}'[warn instead of abort, when commands fail]' \
+  '-i+[path to SSH private key file. May be repeated]: :_files' \
+  "(-f+ --fabfile=)"{-f+,--fabfile=}"[Python module file to import]: :_files -g *.py" \
+  '(-c+ --config=-)'{-c+,--config=-}'[specify location of config file to use]: :_files' \
+  '(-s+ --shell=-)'{-s+,--shell=-}'[specify a new shell, defaults to ''/bin/bash -l -c'']: :' \
+  '(--hide=-)--hide=-[comma-separated list of output levels to hide]: :->levels' \
+  '(--show=-)--show=-[comma-separated list of output levels to show]: :->levels' \
+  '*::: :->subcmds' && return 0
+
+if [[ CURRENT -ge 1 ]]; then
+    case $state in
+        noargs)
+             _message "nothing to complete";;
+        levels)
+            _describe -t commands "output levels" output_levels;;
+        *)
+            _targets;;
+    esac
+
+    return
+fi
