@@ -1,4 +1,4 @@
-Get a random quote fron the sitehttp://www.quotationspage.com/random.php3
+# Get a random quote fron the site http://www.quotationspage.com/random.php3
 # Created by Eduardo San Martin Morote aka Posva
 # http://posva.github.io
 # Sun Jun 09 10:59:36 CEST 2013 
