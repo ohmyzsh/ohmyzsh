@@ -78,6 +78,9 @@ alias gg='git gui citool'
 alias gga='git gui citool --amend'
 alias gk='gitk --all --branches'
 alias gss='git stash show --text'
+alias gitk-entier-history='gitk --all $(git log -g --pretty=format:%h)' # show complete history, with dangling commits
+# Note: if the commit has been cleaned my 'git gc', the dangling commits older than 2 weeks may already been completely deleted
+#
 
 # Will cd into the top of the current repository
 # or submodule.
@@ -121,3 +124,4 @@ function _git_log_prettily(){
 }
 alias glp="_git_log_prettily"
 compdef _git glp=git-log
+
