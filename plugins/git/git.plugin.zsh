@@ -11,6 +11,8 @@ alias gup='git pull --rebase'
 compdef _git gup=git-fetch
 alias gp='git push'
 compdef _git gp=git-push
+alias gfa='git fetch --all'
+compdef _git gfa='git fetch --all'
 alias gd='git diff'
 gdv() { git diff -w "$@" | view - }
 compdef _git gdv=git-diff
@@ -79,7 +81,7 @@ alias gga='git gui citool --amend'
 alias gk='gitk --all --branches'
 alias gss='git stash show --text'
 alias gitk-entier-history='gitk --all $(git log -g --pretty=format:%h)' # show complete history, with dangling commits
-# Note: if the commit has been cleaned my 'git gc', the dangling commits older than 2 weeks may already been completely deleted
+# Note: if the commit has been cleaned my 'git gc', the dangling commits older than 2 weeks may have been deleted
 #
 
 # Will cd into the top of the current repository
