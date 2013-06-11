@@ -57,6 +57,7 @@ __box_list ()
 __vm_list ()
 {
     _wanted application expl 'command' compadd $(command grep Vagrantfile -oe '^[^#]*\.vm\.define *[:"]\([a-zA-Z0-9_-]\+\)' 2>/dev/null | awk '{print substr($2, 2)}')
+    _wanted application expl 'command' compadd $(command ls .vagrant/machines/ 2>/dev/null)
 }
 
 __vagrant-box ()
