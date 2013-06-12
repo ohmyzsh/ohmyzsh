@@ -24,6 +24,9 @@
    rewrite-history8  = rebase -i HEAD~8
    rewrite-history9  = rebase -i HEAD~9
    rewrite-history10 = rebase -i HEAD~10
+   tags = tag -l
+   branches = branch -a
+   remotes = remote -v
 
 # This only works if git > 0.7.10
 # # [include]

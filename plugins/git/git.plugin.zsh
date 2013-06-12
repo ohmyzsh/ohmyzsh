@@ -9,6 +9,8 @@ alias gl='git pull'
 compdef _git gl=git-pull
 alias gup='git pull --rebase'
 compdef _git gup=git-fetch
+alias gpr='git pull --rebase'
+compdef _git gpr=git-fetch
 alias gp='git push'
 compdef _git gp=git-push
 alias gfa='git fetch --all'
@@ -83,6 +85,8 @@ alias gss='git stash show --text'
 alias gitk-entier-history='gitk --all $(git log -g --pretty=format:%h)' # show complete history, with dangling commits
 # Note: if the commit has been cleaned my 'git gc', the dangling commits older than 2 weeks may have been deleted
 #
+alias gitconfig="vim ~/.gitconfig"
+alias gitmessage="vim ~/.gitmessage"
 
 # Will cd into the top of the current repository
 # or submodule.
