@@ -1,5 +1,6 @@
 
 alias cdb='cd ~/projects/buildbot/'
+alias cdp='cd ~/projects/'
 
 function bb_env()
 {
