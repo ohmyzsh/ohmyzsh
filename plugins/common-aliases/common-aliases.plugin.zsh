@@ -54,9 +54,20 @@ alias unexport='unset'
 
 alias whereami=display_info
 
+alias week='date +%V'
+alias hexdump='hexdump -C'
+
 alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
+
+# Use Git’s colored diff when available
+hash git &>/dev/null
+if [ $? -eq 0 ]; then
+    function diff() {
+        git diff --no-index --color-words "$@"
+    }
+fi
 
 # zsh is able to auto-do some kungfoo
 # depends on the SUFFIX :)
