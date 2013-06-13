@@ -27,7 +27,7 @@ DISABLE_AUTO_UPDATE="true"
 # DISABLE_AUTO_TITLE="true"
 
 # Uncomment following line if you want to disable command autocorrection
-# DISABLE_CORRECTION="true"
+DISABLE_CORRECTION="true"
 
 # Uncomment following line if you want red dots to be displayed while waiting for completion
 # COMPLETION_WAITING_DOTS="true"
@@ -40,10 +40,9 @@ DISABLE_AUTO_UPDATE="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git python pythonbrew repo cp buildbot rsync git-remote-branch command-not-found debian dircycle encode64 lol extract launch_trial common-aliases vim-scp)
+plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
-source `which virtualenvwrapper.sh`
 
 zstyle ':completion:*:descriptions' format '%B%d%b'
 
@@ -53,6 +52,3 @@ if [ -z "$LANG" ]; then export LANG=en_US.UTF-8; fi
 
 if [ -e $HOME/bin ]; then export PATH="$HOME/bin:$PATH"; fi
 unsetopt correctall
-
-# Themes override ls alias from aliases.zsh
-alias tmux='tmux -u2'
