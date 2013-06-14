@@ -4,16 +4,26 @@
 #
 # Debian-related zsh aliases and functions for zsh
 
+# Function to check if a command exists
+exists() {
+    if command -v $1 >/dev/null 2>&1 
+    then
+        return 0
+    else
+        return 1
+    fi
+}
+
 # Use aptitude if installed, or apt-get if not.
 # You can just set apt_pref='apt-get' to override it.
-if [[ -e $( which aptitude 2>&1 ) ]]; then
+if exists aptitude; then
     apt_pref='aptitude'
 else
     apt_pref='apt-get'
 fi
 
 # Use sudo by default if it's installed
-if [[ -e $( which sudo 2>&1 ) ]]; then
+if exists sudo; then
     use_sudo=1
 fi
 
