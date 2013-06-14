@@ -1,10 +1,9 @@
-wrapsource=`which virtualenvwrapper_lazy.sh`
-
-if [[ -f "$wrapsource" ]]; then
-  source $wrapsource
+virtualenvwrapper='virtualenvwrapper_lazy.sh'
+if (( $+commands[$virtualenvwrapper] )); then
+  source ${${virtualenvwrapper}:c}
 
   if [[ ! $DISABLE_VENV_CD -eq 1 ]]; then
-    # Automatically activate Git projects' virtual environments based on the
+    # Automatically activate Git projects's virtual environments based on the
     # directory name of the project. Virtual environment name can be overridden
     # by placing a .venv file in the project root with a virtualenv name in it
     function workon_cwd {
@@ -40,11 +39,17 @@ if [[ -f "$wrapsource" ]]; then
         fi
     }
 
-    # New cd function that does the virtualenv magic
-    function cd {
-        builtin cd "$@" && workon_cwd
-    }
+    # Append workon_cwd to the chpwd_functions array, so it will be called on cd
+    # http://zsh.sourceforge.net/Doc/Release/Functions.html
+    # TODO: replace with 'add-zsh-hook chpwd workon_cwd' when oh-my-zsh min version is raised above 4.3.4
+    if (( ${+chpwd_functions} )); then
+        if (( $chpwd_functions[(I)workon_cwd] == 0 )); then
+            set -A chpwd_functions $chpwd_functions workon_cwd
+        fi
+    else
+        set -A chpwd_functions workon_cwd
+    fi
   fi
 else
-  print "zsh virtualenvwrapper plugin: Cannot find virtualenvwrapper_lazy.sh. Please install with \`pip install virtualenvwrapper\`."
+  print "zsh virtualenvwrapper plugin: Cannot find ${virtualenvwrapper}. Please install with \`pip install virtualenvwrapper\`."
 fi
