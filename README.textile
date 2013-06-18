@@ -1,3 +1,64 @@
+This is a Forked version of Oh-my-zsh. I maintain this fork against the following repos:
+
+bors-ltd  https://github.com/bors-ltd/oh-my-zsh.git (fetch)
+bors-ltd  https://github.com/bors-ltd/oh-my-zsh.git (push)
+cadusk  https://github.com/cadusk/oh-my-zsh.git (fetch)
+cadusk  https://github.com/cadusk/oh-my-zsh.git (push)
+kipanshi  https://github.com/kipanshi/oh-my-zsh.git (fetch)
+kipanshi  https://github.com/kipanshi/oh-my-zsh.git (push)
+origin  https://Stibbons@github.com/Stibbons/oh-my-zsh.git (fetch)
+origin  https://Stibbons@github.com/Stibbons/oh-my-zsh.git (push)
+upstream  https://github.com/robbyrussell/oh-my-zsh.git (fetch)
+upstream  https://github.com/robbyrussell/oh-my-zsh.git (push)
+ysmood  https://github.com/ysmood/oh-my-zsh.git (fetch)
+ysmood  https://github.com/ysmood/oh-my-zsh.git (push)
+
+Why do I do that? I want the cuting edge zsh for my git workflow, so I select the best from every available repository (thanks github!) and I merge it with my own salt.
+
+I also have a bunch of aliases and plugins for my own workflow : repo, pylint, python, git,...
+
+So I can have a workflow like the following ones:
+
+h2. Classic Git Project
+# cdp
+# cd myproject
+# gfa
+(hack hack hack)
+# gg
+(rehack)
+# gga
+(new hack)
+# gg
+# gp
+
+=> that is, cd in my project, git fetch all, hack, git gui, git gui amend, rehack, git gui (new commit), and then git push
+
+h2. Git-Repo Project
+
+# rsrra
+(hack)
+# gg
+# ru
+
+=> this is, repo sync and rebase, git gui new commit, repo upload
+
+h2 Merging
+# git merge <tab><tab><tab>
+(conflict araises)
+# gmt
+(kdiff3 show me what's wrong, Ctrl+2/Ctrl+3 to choose the solution, modify the code, Ctrl+Up/Down to jump to next conflict, and then save)
+# gg
+(edit the commit message)
+# gp
+
+h2 Daily development
+
+h3. Text search
+# sgrep "substring" .
+
+
+h1. README
+
 oh-my-zsh is an open source, community-driven framework for managing your ZSH configuration. It comes bundled with a ton of helpful functions, helpers, plugins, themes, and few things that make you shout...
 
 bq. "OH MY ZSHELL!"
