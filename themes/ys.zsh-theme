@@ -3,7 +3,7 @@
 # It is recommended to use with a dark background and the font Inconsolata.
 # Colors: black, red, green, yellow, *blue, magenta, cyan, and white.
 # 
-# http://ysmood.org/wp/2013/03/my-ys-terminal-theme/
+# http://blog.ysmood.org/2013/03/my-ys-terminal-theme/
 # Mar 2013 ys
 
 # Machine name.
