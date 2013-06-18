@@ -83,8 +83,8 @@ alias grhh='git reset HEAD --hard'
 compdef _git grhh=git-reset
 alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
 compdef _git gwc=git-whatchanged
-alias gf='git ls-files | grep'
-compdef _git gf=git-ls-files
+alias gls='git ls-files | grep'
+compdef _git gls=git-ls-files
 alias gpoat='git push origin --all && git push origin --tags'
 compdef _git gpoat=git-push
 alias gmt='git mergetool --no-prompt'
