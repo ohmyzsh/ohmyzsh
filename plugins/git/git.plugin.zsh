@@ -7,6 +7,8 @@ alias gd='git diff'
 compdef _git gd=git-diff
 alias gl='git pull'
 compdef _git gl=git-pull
+alias gch='git fetch'
+compdef _git gch=git-fetch
 alias gup='git pull --rebase'
 compdef _git gup=git-fetch
 alias gpr='git pull --rebase'
@@ -15,7 +17,7 @@ alias gp='git push'
 compdef _git gp=git-push
 alias gfa='git fetch --all'
 compdef _git gfa='git fetch --all'
-alias gd='git diff'
+alias gd='git diff --color'
 compdef _git gd=git-diff
 gdv() { git diff -w "$@" | view - }
 compdef _git gdv=git-diff
@@ -63,9 +65,11 @@ alias gcl='git config --list'
 compdef _git gcl=git-config
 alias gcp='git cherry-pick'
 compdef _git gcp=git-cherry-pick
-alias glg='git log --stat --max-count=5'
+alias glg='git log --stat --color'
 compdef _git glg=git-log
-alias glgg='git log --graph --max-count=5'
+alias glgp='git log --stat --color -p'
+compdef _git glgp=git-log
+alias glgg='git log --graph --color'
 compdef _git glgg=git-log
 alias glgga='git log --graph --decorate --all'
 compdef _git glgga=git-log
