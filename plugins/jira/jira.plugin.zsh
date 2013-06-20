@@ -11,6 +11,13 @@
 # Usage: jira           # opens a new issue
 #        jira ABC-123   # Opens an existing issue
 open_jira_issue () {
+  local open_cmd
+  if [[ $(uname -s) == 'Darwin' ]]; then
+    open_cmd='open'
+  else
+    open_cmd='xdg-open'
+  fi
+
   if [ -f .jira-url ]; then
     jira_url=$(cat .jira-url)
   elif [ -f ~/.jira-url ]; then
@@ -28,9 +35,9 @@ open_jira_issue () {
   else
     echo "Opening issue #$1"
     if [[ "x$JIRA_RAPID_BOARD" = "yes" ]]; then
-      `open $jira_url/issues/$1`
+      $open_cmd  "$jira_url/issues/$1"
     else
-      `open $jira_url/browse/$1`
+      $open_cmd  "$jira_url/browse/$1"
     fi
   fi
 }
