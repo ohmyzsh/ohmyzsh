@@ -34,12 +34,6 @@ _composer () {
   fi
 }
 
-_composer_required () {
-  if [ -f composer.json ]; then
-    compadd `_composer_get_required_list`
-  fi
-}
-
 compdef _composer composer
 
 # Aliases
