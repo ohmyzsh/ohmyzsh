@@ -38,7 +38,7 @@ if which tmux &> /dev/null
 	fi
 
 	# Set the correct local config file to use.
-	if [[ -f $HOME/.tmux.conf || -h $HOME/.tmux.conf ]]
+    if [[ "$ZSH_TMUX_ITERM2" == "false" ]] && (( [[ -f $HOME/.tmux.conf ]] || -h $HOME/.tmux.conf ]] ))
 	then
 		#use this when they have a ~/.tmux.conf
 		export _ZSH_TMUX_FIXED_CONFIG="$zsh_tmux_plugin_path/tmux.extra.conf"
