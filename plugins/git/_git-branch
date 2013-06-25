@@ -1,0 +1,62 @@
+#compdef git-branch
+
+_git-branch () 
+{
+  declare l c m d
+
+  l='--color --no-color -r -a --all -v --verbose --abbrev --no-abbrev'
+  c='-l -f --force -t --track --no-track --set-upstream --contains --merged --no-merged'
+  m='-m -M'
+  d='-d -D'
+
+  declare -a dependent_creation_args
+  if (( words[(I)-r] == 0 )); then
+    dependent_creation_args=(
+      "($l $m $d): :__git_branch_names"
+      "::start-point:__git_revisions")
+  fi
+
+  declare -a dependent_deletion_args
+  if (( words[(I)-d] || words[(I)-D] )); then
+    dependent_creation_args=
+    dependent_deletion_args=(
+      '-r[delete only remote-tracking branches]')
+    if (( words[(I)-r] )); then
+      dependent_deletion_args+='*: :__git_ignore_line_inside_arguments __git_remote_branch_names'
+    else
+      dependent_deletion_args+='*: :__git_ignore_line_inside_arguments __git_branch_names'
+    fi
+  fi
+
+  declare -a dependent_modification_args
+  if (( words[(I)-m] || words[(I)-M] )); then
+    dependent_creation_args=
+    dependent_modification_args=(
+      ':old or new branch name:__git_branch_names'
+      '::new branch name:__git_branch_names')
+  fi
+
+  _arguments -w -S -s \
+    "($c $m $d --no-color :)--color=-[turn on branch coloring]:: :__git_color_whens" \
+    "($c $m $d : --color)--no-color[turn off branch coloring]" \
+    "($c $m      -a --all)-r[list or delete only remote-tracking branches]" \
+    "($c $m $d : -r)"{-a,--all}"[list both remote-tracking branches and local branches]" \
+    "($c $m $d : -v --verbose)"{-v,--verbose}'[show SHA1 and commit subject line for each head]' \
+    "($c $m $d :)--abbrev=[set minimum SHA1 display-length]: :__git_guard_number length" \
+    "($c $m $d :)--no-abbrev[do not abbreviate sha1s]" \
+    "($l $m $d)-l[create the branch's reflog]" \
+    "($l $m $d -f --force)"{-f,--force}"[force the creation of a new branch]" \
+    "($l $m $d -t --track)"{-t,--track}"[set up configuration so that pull merges from the start point]" \
+    "($l $m $d)--no-track[override the branch.autosetupmerge configuration variable]" \
+    "($l $m $d)--set-upstream[set up configuration so that pull merges]" \
+    "($l $m $d)--contains=[only list branches which contain the specified commit]: :__git_committishs" \
+    "($l $m $d)--merged=[only list branches which are fully contained by HEAD]: :__git_committishs" \
+    "($l $m $d)--no-merged=[do not list branches which are fully contained by HEAD]: :__git_committishs" \
+    $dependent_creation_args \
+    "($l $c $d -M)-m[rename a branch and the corresponding reflog]" \
+    "($l $c $d -m)-M[rename a branch even if the new branch-name already exists]" \
+    $dependent_modification_args \
+    "($l $c $m -D)-d[delete a fully merged branch]" \
+    "($l $c $m -d)-D[delete a branch]" \
+    $dependent_deletion_args
+}
