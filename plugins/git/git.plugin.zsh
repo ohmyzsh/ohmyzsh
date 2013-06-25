@@ -95,6 +95,8 @@ function current_repository() {
 # these aliases take advantage of the previous function
 alias ggpull='git pull origin $(current_branch)'
 compdef ggpull=git
+alias ggpur='git pull --rebase origin $(current_branch)'
+compdef ggpur=git
 alias ggpush='git push origin $(current_branch)'
 compdef ggpush=git
 alias ggpnp='git pull origin $(current_branch) && git push origin $(current_branch)'
