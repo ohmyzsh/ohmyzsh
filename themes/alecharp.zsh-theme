@@ -1,21 +1,24 @@
+# author: Adrien Lecharpentier
+# release date: 2013-06-25
+
 function prompt_char {
-	if [[ $? -ne 0 ]]; then
-		echo "%{$fg_bold[red]%}»%{$reset_color%}"
-	else
-		echo "%{$fg_bold[green]%}»%{$reset_color%}"
-	fi
+    if [[ $? -ne 0 ]]; then
+        echo "%{$fg_bold[red]%}»%{$reset_color%}"
+    else
+        echo "%{$fg_bold[green]%}»%{$reset_color%}"
+    fi
 }
 
 function git_show_branch {
-	ref=$(command git symbolic-ref HEAD 2> /dev/null) || \
-	ref=$(command git rev-parse --short HEAD 2> /dev/null) || return
+    ref=$(command git symbolic-ref HEAD 2> /dev/null) || \
+    ref=$(command git rev-parse --short HEAD 2> /dev/null) || return
 
-	STATUS=${ZSH_THEME_GIT_PROMPT_PREFIX}
-	STATUS=$STATUS${ZSH_THEME_GIT_PROMPT_BRANCH_PREFIX}${ref#refs/heads/}${ZSH_THEME_GIT_PROMPT_BRANCH_SUFFIX}
-	remote=${$(command git rev-parse --verify ${hook_com[branch]}@{upstream} --symbolic-full-name 2>/dev/null)/refs\/remotes\/}
+    STATUS=${ZSH_THEME_GIT_PROMPT_PREFIX}
+    STATUS=$STATUS${ZSH_THEME_GIT_PROMPT_BRANCH_PREFIX}${ref#refs/heads/}${ZSH_THEME_GIT_PROMPT_BRANCH_SUFFIX}
+    remote=${$(command git rev-parse --verify ${hook_com[branch]}@{upstream} --symbolic-full-name 2>/dev/null)/refs\/remotes\/}
     if [[ -n ${remote} ]] ; then
 
-    	STATUS="$STATUS ${remote#/refs/remote}"
+        STATUS="$STATUS ${remote#/refs/remote}"
 
         ahead=$(command git rev-list ${hook_com[branch]}@{upstream}..HEAD 2>/dev/null | wc -l | tr -d ' ')
         behind=$(command git rev-list HEAD..${hook_com[branch]}@{upstream} 2>/dev/null | wc -l | tr -d ' ')
@@ -27,12 +30,16 @@ function git_show_branch {
             STATUS="$STATUS $ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE_PREFIX$behind$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE_SUFFIX"
         fi
         if [ $ahead -eq 0 ] && [ $behind -eq 0 ]; then
-        	STATUS="$STATUS ="
+            STATUS="$STATUS ="
         fi
     fi
 
-	STATUS=$STATUS${ZSH_THEME_GIT_PROMPT_SUFFIX}
-	echo $STATUS
+    if $(command git rev-parse --verify refs/stash >/dev/null 2>&1); then
+        STATUS="$STATUS $ZSH_THEME_GIT_PROMPT_STASH"
+    fi
+
+    STATUS=$STATUS${ZSH_THEME_GIT_PROMPT_SUFFIX}
+    echo $STATUS
 }
 
 PROMPT='%{$fg_bold[cyan]%}%n: %{$fg[yellow]%}%04~%{$reset_color%}
@@ -53,8 +60,9 @@ ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE="↓"
 ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE="↑"
 ZSH_THEME_GIT_PROMPT_DIVERGED_REMOTE="<>"
 
+ZSH_THEME_GIT_PROMPT_STASH="%{$fg[cyan]%}$"
+
 ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[green]%}+"
 ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg[yellow]%}*"
 ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[red]%}-"
 ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[cyan]%}?"
-
