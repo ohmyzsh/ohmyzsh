@@ -37,6 +37,12 @@ alias grset='git remote set-url'
 compdef _git grset=git-remote
 alias grup='git remote update'
 compdef _git grset=git-remote
+alias grbi='git rebase -i'
+compdef _git grbi=git-rebase
+alias grbc='git rebase --continue'
+compdef _git grbc=git-rebase
+alias grba='git rebase --abort'
+compdef _git grba=git-rebase
 alias gb='git branch'
 compdef _git gb=git-branch
 alias gba='git branch -a'
@@ -65,6 +71,13 @@ alias grhh='git reset HEAD --hard'
 alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
 alias gf='git ls-files | grep'
 alias gpoat='git push origin --all && git push origin --tags'
+alias gmt='git mergetool --no-prompt'
+compdef _git gm=git-mergetool
+
+alias gg='git gui citool'
+alias gga='git gui citool --amend'
+alias gk='gitk --all --branches'
+alias gss='git stash show --text'
 
 # Will cd into the top of the current repository
 # or submodule.
