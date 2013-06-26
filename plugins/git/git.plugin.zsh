@@ -49,12 +49,12 @@ alias grset='git remote set-url'
 compdef _git grset=git-remote
 alias grup='git remote update'
 compdef _git grset=git-remote
-alias gri='git rebase -i'
-compdef _git grbi=git-rebase
+alias gr='git rebase -i'
+compdef _git gr=git-rebase
 alias grc='git rebase --continue'
-compdef _git grbc=git-rebase
+compdef _git grc=git-rebase
 alias gra='git rebase --abort'
-compdef _git grba=git-rebase
+compdef _git gra=git-rebase
 alias gb='git branch'
 compdef _git gb=git-branch
 alias gba='git branch -a'
@@ -85,6 +85,8 @@ alias grh='git reset HEAD'
 compdef _git grh=git-reset
 alias grhh='git reset HEAD --hard'
 compdef _git grhh=git-reset
+alias gclean='git reset --hard && git clean -dfx'
+compdef _git gclean=git-reset
 alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
 compdef _git gwc=git-whatchanged
 alias gls='git ls-files | grep'
@@ -138,6 +140,8 @@ function current_repository() {
 # these aliases take advantage of the previous function
 alias ggpull='git pull origin $(current_branch)'
 compdef ggpull=git
+alias ggpur='git pull --rebase origin $(current_branch)'
+compdef ggpur=git
 alias ggpush='git push origin $(current_branch)'
 compdef ggpush=git
 alias ggpnp='git pull origin $(current_branch) && git push origin $(current_branch)'
