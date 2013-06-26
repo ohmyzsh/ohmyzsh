@@ -24,7 +24,7 @@ function git_show_branch {
         behind=$(command git rev-list HEAD..${hook_com[branch]}@{upstream} 2>/dev/null | wc -l | tr -d ' ')
 
         if [ $ahead -gt 0 ]; then
-            STATUS="$STATUS $ahead$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE"
+            STATUS="$STATUS $ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE_PREFIX$ahead$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE_SUFFIX"
         fi
         if [ $behind -gt 0 ]; then
             STATUS="$STATUS $ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE_PREFIX$behind$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE_SUFFIX"
@@ -55,6 +55,8 @@ ZSH_THEME_GIT_PROMPT_BRANCH_PREFIX="%{$fg[magenta]%}"
 ZSH_THEME_GIT_PROMPT_BRANCH_SUFFIX="%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE_PREFIX="%{$fg[red]%}"
 ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE_SUFFIX="%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE_PREFIX="%{$fg[green]%}"
+ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE_SUFFIX="%{$reset_color%}"
 
 ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE="↓"
 ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE="↑"
