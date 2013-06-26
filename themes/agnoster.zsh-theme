@@ -134,6 +134,14 @@ prompt_dir() {
   prompt_segment blue black '%~'
 }
 
+# Virtualenv: current working virtualenv
+prompt_virtualenv() {
+  local virtualenv_path="$VIRTUAL_ENV"
+  if [[ -n $virtualenv_path ]]; then
+    prompt_segment blue black "(`basename $virtualenv_path`)"
+  fi
+}
+
 # Status:
 # - was there an error
 # - am I root
@@ -152,6 +160,7 @@ prompt_status() {
 build_prompt() {
   RETVAL=$?
   prompt_status
+  prompt_virtualenv
   prompt_context
   prompt_dir
   prompt_git
