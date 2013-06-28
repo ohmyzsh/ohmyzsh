@@ -28,10 +28,10 @@ _knife() {
     '4: :->knifesubcmd3' \
     '5: :->knifesubcmd4' \
     '6: :->knifesubcmd5'
-  
+
   case $state in
   knifecmd)
-    compadd -Q "$@" bootstrap client configure cookbook "cookbook site" "data bag" diff exec environment index node recipe role search ssh status upload windows $cloudproviders
+    compadd -Q "$@" bootstrap client configure cookbook "cookbook site" "data bag" diff exec environment index node recipe role search solo ssh status windows $cloudproviders
   ;;
   knifesubcmd)
     case $words[2] in
@@ -56,12 +56,15 @@ _knife() {
     node)
      compadd -Q "$@" "from file" create show edit delete list run_list "bulk delete"
     ;;
+    solo)
+     compadd -Q "$@" init prepare cook bootstrap clean
+    ;;
     recipe)
      compadd "$@" list
     ;;
     role)
       compadd -Q "$@" "bulk delete" create delete edit "from file" list show
-    ;; 
+    ;;
     upload)
      _arguments '*:file or directory:_files -g "*"'
     ;;
@@ -131,8 +134,8 @@ _knife() {
       else
        _arguments '*:Subsubcommands:($(_knife_options2))'
       fi
-    ;; 
-    knifesubcmd5) 
+    ;;
+    knifesubcmd5)
       _arguments '*:Subsubcommands:($(_knife_options3))'
    esac
 }
@@ -181,7 +184,7 @@ _chef_environments_remote() {
 
 # The chef_x_local functions use the knife config to find the paths of relevant objects x to be uploaded to the server
 _chef_cookbooks_local() {
-  
+
   local knife_rb=${KNIFE_CONF_PATH:-${HOME}/.chef/knife.rb}
   if [ -f ./.chef/knife.rb ]; then
     knife_rb="./.chef/knife.rb"
