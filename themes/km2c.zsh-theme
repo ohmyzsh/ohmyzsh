@@ -20,7 +20,7 @@ DIR_PROMPT_="%{$FG[002]%} %1~ % "
 GIT_PROMPT="%{$FG[117]%}\$(git_prompt_info)%{$reset_color%}\$(git_prompt_status)%{$reset_color%}%{$FG[117]%}%{$FG[208]%}» %{$reset_color%}"
 
 PROMPT="$SMILEY_$DIR_PROMPT_$GIT_PROMPT"
-RPROMPT="$RUBY_PROMPT_"
+RPROMPT="$RUBY_PROMPT"
 
 #Git prompt info
 ZSH_THEME_GIT_PROMPT_PREFIX="%B%F{208}| %{$reset_color%}%{$FG[117]%}git:(%{$FG[118]%}"
