@@ -35,27 +35,37 @@
 # -------
 #
 #  * Mario Fernandez (https://github.com/sirech)
+#  * Dong Weiming (https://github.com/dongweiming)
 #
 # ------------------------------------------------------------------------------
 
-local curcontext="$curcontext" state line ret=1
+local curcontext="$curcontext" state line ret=1 version opts first second third
 typeset -A opt_args
+version=(${(f)"$(_call_program version $words[1] --version)"})
+version=${${(z)${version[1]}}[3]}
+first=$(echo $version|cut -d '.' -f 1)
+second=$(echo $version|cut -d '.' -f 2)
+third=$(echo $version|cut -d '.' -f 3)
+if (( $first < 2 )) &&  (( $second < 7 )) && (( $third < 3 ));then
+  opts+=('(-l --lint)'{-l,--lint}'[pipe the compiled JavaScript through JavaScript Lint]'
+         '(-r --require)'{-r,--require}'[require a library before executing your script]:library')
+fi
+
 
 _arguments -C \
   '(- *)'{-h,--help}'[display this help message]' \
   '(- *)'{-v,--version}'[display the version number]' \
+  $opts \
   '(-b --bare)'{-b,--bare}'[compile without a top-level function wrapper]' \
   '(-e --eval)'{-e,--eval}'[pass a string from the command line as input]:Inline Script' \
   '(-i --interactive)'{-i,--interactive}'[run an interactive CoffeeScript REPL]' \
   '(-j --join)'{-j,--join}'[concatenate the source CoffeeScript before compiling]:Destination JS file:_files -g "*.js"' \
-  '(-l --lint)'{-l,--lint}'[pipe the compiled JavaScript through JavaScript Lint]' \
   '(--nodejs)--nodejs[pass options directly to the "node" binary]' \
   '(-c --compile)'{-c,--compile}'[compile to JavaScript and save as .js files]' \
   '(-o --output)'{-o,--output}'[set the output directory for compiled JavaScript]:Output Directory:_files -/' \
   '(-n -t -p)'{-n,--nodes}'[print out the parse tree that the parser produces]' \
   '(-n -t -p)'{-p,--print}'[print out the compiled JavaScript]' \
   '(-n -t -p)'{-t,--tokens}'[print out the tokens that the lexer/rewriter produce]' \
-  '(-r --require)'{-r,--require}'[require a library before executing your script]:library' \
   '(-s --stdio)'{-s,--stdio}'[listen for and compile scripts over stdio]' \
   '(-w --watch)'{-w,--watch}'[watch scripts for changes and rerun commands]' \
   '*:script or directory:_files' && ret=0
