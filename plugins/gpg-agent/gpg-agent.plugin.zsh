@@ -14,16 +14,24 @@ function start_agent_withssh {
     export SSH_AGENT_PID
 }
 
-# source settings of old agent, if applicable
-if [ -f "${GPG_ENV}" ]; then
-  . ${GPG_ENV} > /dev/null
-fi
+# check if another agent is running
+if ! gpg-connect-agent --quiet /bye > /dev/null 2> /dev/null; then
+    # source settings of old agent, if applicable
+    if [ -f "${GPG_ENV}" ]; then
+        . ${GPG_ENV} > /dev/null
+    fi
 
-# check for existing ssh-agent
-if ssh-add -l > /dev/null 2> /dev/null; then
-    start_agent_nossh;
-else
-    start_agent_withssh;
+    # check again if another agent is running using the newly sourced settings
+    if ! gpg-connect-agent --quiet /bye > /dev/null 2> /dev/null; then
+        # check for existing ssh-agent
+        if ssh-add -l > /dev/null 2> /dev/null; then
+            # ssh-agent running, start gpg-agent without ssh support
+            start_agent_nossh;
+        else
+            # otherwise start gpg-agent with ssh support
+            start_agent_withssh;
+        fi
+    fi
 fi
 
 GPG_TTY=$(tty)
