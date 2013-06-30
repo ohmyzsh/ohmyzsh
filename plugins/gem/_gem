@@ -4,11 +4,13 @@
 # gem zsh completion, based on homebrew completion
 
 _gem_installed() {
-  installed_gems=(`gem list --local --no-versions`)
+  installed_gems=(${(f)"$(gem list --local --no-versions)"})
 }
 
 local -a _1st_arguments
+
 _1st_arguments=(
+  'build:Build a gem from a gemspec'
   'cert:Manage RubyGems certificates and signing settings'
   'check:Check installed gems'
   'cleanup:Clean up old versions of installed gems in the local repository'
@@ -37,6 +39,7 @@ _1st_arguments=(
   'unpack:Unpack an installed gem to the current directory'
   'update:Update the named gems (or all installed gems) in the local repository'
   'which:Find the location of a library file you can require'
+  'yank:Remove a specific gem version release from RubyGems.org'
 )
 
 local expl
