@@ -1,6 +1,11 @@
-if [ -d ~/.oh-my-zsh ]
+ZSH=`/usr/bin/env|grep 'ZSH='|cut -d '=' -f 2`
+if [ -d "$ZSH" ]
 then
-  echo "\033[0;33mYou already have Oh My Zsh installed.\033[0m You'll need to remove ~/.oh-my-zsh if you want to install"
+  echo "\033[0;33mYou already have Oh My Zsh installed.\033[0m You'll need to remove $ZSH if you want to install"
+  exit
+elif [ -d ~/.oh-my-zsh ]
+then
+  echo "\033[0;33mYou already have One Oh My Zsh Directory.\033[0m You'll need to remove  ~/.oh-my-zsh if you want to clone"
   exit
 fi
 
