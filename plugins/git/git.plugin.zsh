@@ -102,8 +102,8 @@ alias gga='git gui citool --amend'
 compdef _git gga='git gui citool --amend'
 alias gk='gitk --all --branches'
 compdef _git gk='gitk'
-alias gss='git stash show --text'
-compdef _git gss='git stash show'
+alias gsts='git stash show --text'
+compdef _git gsts='git-stash'
 alias gitk-entier-history='gitk --all $(git log -g --pretty=format:%h)' # show complete history, with dangling commits
 compdef _git gitk='gitk'
 # Note: if the commit has been cleaned my 'git gc', the dangling commits older than 2 weeks may have been deleted

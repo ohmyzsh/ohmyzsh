@@ -1,0 +1,56 @@
+#compdef rails
+#autoload
+
+# rails 3 zsh completion, based on homebrew completion
+# Extracted from https://github.com/robbyrussell/oh-my-zsh/blob/30620d463850c17f86e7a56fbf6a8b5e793a4e07/plugins/rails3/_rails3
+# Published by Christopher Chow
+
+local -a _1st_arguments
+_1st_arguments=(
+    'generate:Generate new code (short-cut alias: "g")'
+    'console:Start the Rails console (short-cut alias: "c")'
+    'server:Start the Rails server (short-cut alias: "s")'
+    'dbconsole:Start a console for the database specified in config/database.yml (short-cut alias: "db")'
+    'new:Create a new Rails application. "rails new my_app" creates a new application called MyApp in "./my_app"'
+    'application:Generate the Rails application code'
+    'destroy:Undo code generated with "generate"'
+    'benchmarker:See how fast a piece of code runs'
+    'profiler:Get profile information from a piece of code'
+    'plugin:Install a plugin'
+)
+
+_rails_generate_arguments() {
+    generate_arguments=(
+        controller
+        generator
+        helper
+        integration_test
+        mailer
+        migration
+        model
+        observer
+        performance_test
+        plugin
+        resource
+        scaffold
+        scaffold_controller
+        session_migration
+        stylesheets
+    )
+}
+
+_arguments \
+    '(--version)--version[show version]' \
+    '(--help)--help[show help]' \
+    '*:: :->subcmds' && return 0
+
+if (( CURRENT == 1 )); then
+  _describe -t commands "rails subcommand" _1st_arguments
+  return
+fi
+
+case "$words[1]" in
+  generate)
+    _rails_generate_arguments
+    _wanted generate_arguments expl 'all generate' compadd -a generate_arguments ;;
+esac
