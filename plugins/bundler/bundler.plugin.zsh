@@ -34,11 +34,13 @@ _run-with-bundler() {
 
 ## Main program
 for cmd in $bundled_commands; do
-  eval "function unbundled_$cmd () { $cmd \$@ }"
-  eval "function bundled_$cmd () { _run-with-bundler $cmd \$@}"
-  alias $cmd=bundled_$cmd
+  if [[ ${REMOVE_BUNDLED_COMMANDS[(r)$cmd]} != $cmd ]]; then
+    eval "function unbundled_$cmd () { $cmd \$@ }"
+    eval "function bundled_$cmd () { _run-with-bundler $cmd \$@}"
+    alias $cmd=bundled_$cmd
 
-  if which _$cmd > /dev/null 2>&1; then
-        compdef _$cmd bundled_$cmd=$cmd
+    if which _$cmd > /dev/null 2>&1; then
+          compdef _$cmd bundled_$cmd=$cmd
+    fi
   fi
 done
