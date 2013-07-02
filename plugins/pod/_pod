@@ -1,0 +1,112 @@
+#compdef pod
+_pod()
+{
+  if (( CURRENT > 2 )); then
+    _process_subcommand
+  else
+    _pod_cmds
+  fi
+  
+}
+
+_pod_cmd_install()
+{
+  _arguments \
+    "--no-clean[Leave SCM dirs like \'.git\' and \'.svn\' in tact after downloading]" \
+    "--no-update[Skip running \'pod repo update\' before install]" \
+    '*::xcode project file:_files -/ -g "*.xcodeproj"'
+}
+
+_pod_cmd_list()
+{
+}
+
+_pod_cmd_repo()
+{
+  if ((CURRENT == 2)); then
+    repo_cmds=(
+      "add:pod repo add NAME URL. Clones \`URL\' in the local spec-repos directory at \`~/.cocoapods\'."
+      "update:pod repo update NAME. Updates the local clone of the spec-repo \`NAME\'."
+      "set-url:pod repo set-url NAME URL. Updates the remote \`URL\' of the spec-repo \`NAME\'."
+    )
+    _describe 'pod repo commands' repo_cmds
+  fi
+}
+
+_pod_cmd_search()
+{
+  _arguments \
+    "--full[Search by name, summary, and description]" \
+    '1: :->specs'
+  case $state in
+    specs)
+      spec_list_cmd='pod list | awk "/==>/ {print \$2}"'
+      installed_specs=(`eval ${spec_list_cmd}`)
+      compadd -a installed_specs
+    ;;
+  esac
+}
+
+_pod_cmd_spec()
+{
+  if ((CURRENT == 2)); then
+    spec_cmds=(
+      "create:pod spec create NAME. Creates a PodSpec, in the current working dir, called \`NAME.podspec\'."
+      "lint:pod spec lint NAME.podspec. Validates \`NAME.podspec\'."
+    )
+    _describe 'pod spec commands' spec_cmds
+  elif ((CURRENT == 3)); then
+    local cmd=${words[2]}
+    if [[ $cmd == "lint" ]]; then
+      _files -g "*.podspec"
+    fi
+  fi
+}
+
+_pod_cmd_setup()
+{
+}
+
+_pod_cmds()
+{
+  local -a cmdlist
+  #cmdlist=(`pod --help | awk '/\*/ {print \$4}'`) 
+  cmdlist=(
+    "setup:Creates a directory at \`~/.cocoapods\' which will hold your spec-repos."
+    "search:pod search [QUERY]. Searches for pods, ignoring case, whose name matches \`QUERY\'."
+    "list:Lists all available pods."
+    "install:pod install [PROJECT]. Downloads all dependencies defined in \`Podfile\' and creates an Xcode Pods library project in \`./Pods\'."
+    "repo:Managing spec-repos"
+    "spec:Managing PodSpec files"
+  )
+  _pod_base_options
+  _describe 'Pod commands' cmdlist
+}
+
+_process_subcommand()
+{
+    local cmd=${words[2]}
+    (( CURRENT-- ))
+    shift words
+    _pod_cmd_$cmd
+}
+
+_pod_base_options()
+{
+  _arguments \
+    "--help[Show help information]" \
+    "--silent[Print nothing]" \
+    "--verbose[Print more information while working]" \
+    "--version[Prints the version of CocoaPods]"
+}
+
+_installed_podspecs() {
+  local -a installed_specs
+  spec_list_cmd='pod list | awk "/==>/ {print \$2}"'
+  installed_specs=(`eval ${spec_list_cmd}`)
+  return installed_specs
+
+}
+
+_pod "$@"
+
