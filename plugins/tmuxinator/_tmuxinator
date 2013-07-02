@@ -25,8 +25,9 @@ case $state in
   args)
     case $line[1] in
       start|open|copy|delete)
-        _configs=(`tmuxinator list | sed -n 's/^[ \t]\+//p'`)
-        _values 'configs' $_configs
+        _configs=$(tmuxinator list | sed -n 's/^[ \t]\+//p')
+
+        test "x$_configs" != "x" && compadd $_configs
         ret=0
         ;;
     esac
