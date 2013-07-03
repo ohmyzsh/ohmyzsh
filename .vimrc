@@ -4,6 +4,7 @@ let mapleader = ','
 
 set hlsearch
 set incsearch
+set cursorline
 
 set nocompatible
 filetype off
