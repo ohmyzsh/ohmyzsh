@@ -1,3 +1,5 @@
+" https://github.com/vim-scripts/searchfold.vim
+
 let mapleader = ','
 
 set hlsearch
