@@ -1,3 +1,5 @@
+let mapleader = ','
+
 set nocompatible
 filetype off
 
@@ -95,6 +97,4 @@ set expandtab
 if has ('gui_running')
     highlight Pmenu guibg=#cccccc gui=bold
 endif
-
-let mapleader = ','
 
