@@ -1,5 +1,8 @@
 let mapleader = ','
 
+set hlsearch
+set incsearch
+
 set nocompatible
 filetype off
 
