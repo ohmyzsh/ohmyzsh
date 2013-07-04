@@ -25,6 +25,7 @@ Bundle 'scrooloose/nerdtree'
 Bundle 'klen/python-mode'
 Bundle 'davidhalter/jedi-vim'
 Bundle 'tpope/vim-fugitive'
+Bundle 'altercation/vim-colors-solarized'
 
 " The rest of your config follows here
 
@@ -68,7 +69,7 @@ let g:pymode_doc_key = 'K'
 let g:pymode_lint = 1
 let g:pymode_lint_checker = "pyflakes,pep8"
 " Auto check on save
-let g:pymode_lint_write = 1
+let g:pymode_lint_write = 0
 
 " Support virtualenv
 let g:pymode_virtualenv = 1
@@ -106,3 +107,7 @@ if has ('gui_running')
     highlight Pmenu guibg=#cccccc gui=bold
 endif
 
+" solarized theme
+syntax enable
+set background=dark
+colorscheme solarized
