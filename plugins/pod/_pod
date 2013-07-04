@@ -1,0 +1,82 @@
+#compdef pod
+
+# -----------------------------------------------------------------------------
+#          FILE:  pod.plugin.zsh
+#   DESCRIPTION:  Cocoapods autocomplete plugin for Oh-My-Zsh
+#        AUTHOR:  Alexandre Joly (alexandre.joly@mekanics.ch)
+#        GITHUB:  https://github.com/mekanics
+#       VERSION:  0.0.1
+# -----------------------------------------------------------------------------
+
+_pod_all_repos() {
+    repos=(`ls ~/.cocoapods`)
+}
+
+local -a _1st_arguments
+_1st_arguments=(
+    'help:Show help for the given command.'
+    'install:Install project dependencies'
+    'ipc:Inter-process communication'
+    'lib:Develop pods'
+    'list:List pods'
+    'outdated:Show outdated project dependencies'
+    'podfile-info:Shows information on installed Pods'
+    'push:Push new specifications to a spec-repo'
+    'repo:Manage spec-repositories'
+    'search:Searches for pods'
+    'setup:Setup the CocoaPods environment'
+    'spec:Manage pod specs'
+    'update:Update outdated project dependencies'
+)
+
+_arguments '*:: :->command'
+
+if (( CURRENT == 1 )); then
+  _describe -t commands "pod command" _1st_arguments
+  return
+fi
+
+local -a _command_args
+case "$words[1]" in
+    install)
+    _command_args=(
+        '(--no-clean)--no-clean[Leave SCM dirs like `.git` and `.svn` intact after downloading]' \
+        '(--no-integrate)--no-integrate[Skip integration of the Pods libraries in the Xcode project(s)]' \
+        '(--no-repo-update)--no-repo-update[Skip running `pod repo update before install]'
+    )
+    ;;
+    update)
+    _command_args=(
+        '(--no-clean)--no-clean[Leave SCM dirs like `.git` and `.svn intact after downloading]' \
+        '(--no-integrate)--no-integrate[Skip integration of the Pods libraries in the Xcode project(s)]' \
+        '(--no-repo-update)--no-repo-update[Skip running `pod repo update before install]'
+    )
+    ;;
+    outdated)
+    _command_args=(
+        '(--no-repo-update)--no-repo-update[Skip running `pod repo update before install]'
+    )
+    ;;
+    search)
+    _command_args=(
+        '(--full)--full[Search by name, summary, and description]' \
+        '(--stats)--stats[Show additional stats (like GitHub watchers and forks)]' \
+        '(--ios)--ios[Restricts the search to Pods supported on iOS]' \
+        '(--osx)--osx[Restricts the search to Pods supported on OS X]'
+    )
+    ;;
+    update)
+    _command_args=(
+        '(--update)--update[Run `pod repo update before listing]'
+    )
+    ;;
+esac
+
+_arguments \
+    $_command_args \
+    '(--silent)--silent[Show nothing]' \
+    '(--version)--version[Show the version of CocoaPods]' \
+    '(--no-color)--no-color[Show output without color]' \
+    '(--verbose)--verbose[Show more debugging information]' \
+    '(--help)--help[Show help banner of specified command]' \
+    &&  return 0
