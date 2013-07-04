@@ -26,6 +26,7 @@ Bundle 'klen/python-mode'
 Bundle 'davidhalter/jedi-vim'
 Bundle 'tpope/vim-fugitive'
 Bundle 'altercation/vim-colors-solarized'
+Bundle 'ervandew/supertab'
 
 " The rest of your config follows here
 
