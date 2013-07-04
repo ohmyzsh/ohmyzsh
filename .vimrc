@@ -112,3 +112,6 @@ endif
 syntax enable
 set background=dark
 colorscheme solarized
+
+" Cursor Wrapping
+set whichwrap+=<,>,h,l,[,]
