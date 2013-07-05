@@ -196,6 +196,10 @@ case $state in
             _arguments ':feature:__first_command_list'
         ;;
 
+        (push)
+            _arguments ':feature:__repo_list'
+        ;;
+
         (repo)
             __pod-repo
         ;;
@@ -212,7 +216,7 @@ case $state in
             __pod-list
         ;;
 
-        (install|outdated|podfile-info|push|search|setup|update)
+        (install|outdated|podfile-info|search|setup|update)
             #_arguments ':feature:__repo_list'
     esac
   ;;
