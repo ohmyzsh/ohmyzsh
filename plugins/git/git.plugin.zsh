@@ -85,7 +85,6 @@ alias grh='git reset HEAD'
 compdef _git grh=git-reset
 alias grhh='git reset HEAD --hard'
 compdef _git grhh=git-reset
-alias gclean='git reset --hard && git clean -dfx'
 compdef _git gclean=git-reset
 alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
 compdef _git gwc=git-whatchanged
