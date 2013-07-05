@@ -1,16 +1,29 @@
 #compdef pod
+#autoload
 
 # -----------------------------------------------------------------------------
 #          FILE:  pod.plugin.zsh
 #   DESCRIPTION:  Cocoapods autocomplete plugin for Oh-My-Zsh
+#                 http://cocoapods.org
 #        AUTHOR:  Alexandre Joly (alexandre.joly@mekanics.ch)
 #        GITHUB:  https://github.com/mekanics
+#       TWITTER:  @jolyAlexandre
 #       VERSION:  0.0.1
+#       LICENSE:  MIT
 # -----------------------------------------------------------------------------
 
-_pod_all_repos() {
-    repos=(`ls ~/.cocoapods`)
-}
+#------------------
+# TODO:
+#   - Parameters for
+#       - install
+#       - update
+#       - outdated
+#       - search
+#       - list
+#       - push
+#       - podfile-info
+#       - setup
+#------------------
 
 local -a _1st_arguments
 _1st_arguments=(
@@ -29,54 +42,158 @@ _1st_arguments=(
     'update:Update outdated project dependencies'
 )
 
-_arguments '*:: :->command'
+local -a _repo_arguments
+_repo_arguments=(
+    'add:Add a spec repo'
+    'lint:Validates all specs in a repo'
+    'update:Update a spec repo'
+)
 
-if (( CURRENT == 1 )); then
-  _describe -t commands "pod command" _1st_arguments
-  return
-fi
+local -a _spec_arguments
+_spec_arguments=(
+    'cat:Prints a spec file'
+    'create:Create spec file stub'
+    'edit:Edit a spec file'
+    'lint:Validates a spec file'
+    'which:Prints the path of the given spec'
+)
 
-local -a _command_args
-case "$words[1]" in
-    install)
-    _command_args=(
-        '(--no-clean)--no-clean[Leave SCM dirs like `.git` and `.svn` intact after downloading]' \
-        '(--no-integrate)--no-integrate[Skip integration of the Pods libraries in the Xcode project(s)]' \
-        '(--no-repo-update)--no-repo-update[Skip running `pod repo update before install]'
-    )
-    ;;
-    update)
-    _command_args=(
-        '(--no-clean)--no-clean[Leave SCM dirs like `.git` and `.svn intact after downloading]' \
-        '(--no-integrate)--no-integrate[Skip integration of the Pods libraries in the Xcode project(s)]' \
-        '(--no-repo-update)--no-repo-update[Skip running `pod repo update before install]'
-    )
-    ;;
-    outdated)
-    _command_args=(
-        '(--no-repo-update)--no-repo-update[Skip running `pod repo update before install]'
-    )
-    ;;
-    search)
-    _command_args=(
-        '(--full)--full[Search by name, summary, and description]' \
-        '(--stats)--stats[Show additional stats (like GitHub watchers and forks)]' \
-        '(--ios)--ios[Restricts the search to Pods supported on iOS]' \
-        '(--osx)--osx[Restricts the search to Pods supported on OS X]'
-    )
-    ;;
-    update)
-    _command_args=(
-        '(--update)--update[Run `pod repo update before listing]'
-    )
-    ;;
+local -a _ipc_arguments
+_ipc_arguments=(
+    'list:Lists the specifications know to CocoaPods'
+    'podfile:Converts a Podfile to YAML'
+    'repl:The repl listens to commands on standard input'
+    'spec:Converts a podspec to YAML'
+    'update-search-index:Updates the search index'
+)
+
+local -a _list_arguments
+_list_arguments=(
+    'new:Lists pods introduced in the master spec-repo since the last check'
+)
+
+__first_command_list ()
+{
+    local expl
+    declare -a tasks
+
+    tasks=(install ipc lib list outdated podfile-info push repo search setup spec update)
+
+    _wanted tasks expl 'help' compadd $tasks
+}
+
+__repo_list() {
+    _wanted application expl 'command' compadd $(command ls -1 ~/.cocoapods 2>/dev/null | sed -e 's/ /\\ /g')
+}
+
+__pod-repo() {
+    local curcontext="$curcontext" state line
+    typeset -A opt_args
+
+    _arguments -C \
+        ':command:->command' \
+        '*::options:->options'
+
+   case $state in
+       (command)
+           _describe -t commands "gem subcommand" _repo_arguments
+           return
+       ;;
+
+       (options)
+           case $line[1] in
+               (update|lint)
+                   _arguments ':feature:__repo_list'
+               ;;
+           esac
+       ;;
+    esac
+}
+
+__pod-spec() {
+    local curcontext="$curcontext" state line
+    typeset -A opt_args
+
+    _arguments -C \
+        ':command:->command' \
+        '*::options:->options'
+
+   case $state in
+        (command)
+            _describe -t commands "gem subcommand" _spec_arguments
+            return
+        ;;
+
+        (options)
+            #todo
+            return
+        ;;
+    esac
+}
+
+__pod-ipc() {
+    local curcontext="$curcontext" state line
+    typeset -A opt_args
+
+    _arguments -C \
+        ':command:->command' \
+        '*::options:->options'
+
+   case $state in
+        (command)
+            _describe -t commands "gem subcommand" _ipc_arguments
+            return
+        ;;
+
+        (options)
+            #todo
+            return
+        ;;
+    esac
+}
+
+
+
+local expl
+#local -a boxes installed_boxes
+
+local curcontext="$curcontext" state line
+typeset -A opt_args
+
+_arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+case $state in
+  (command)
+      _describe -t commands "gem subcommand" _1st_arguments
+      return
+  ;;
+
+  (options)
+    case $line[1] in
+        (help)
+            _arguments ':feature:__first_command_list'
+        ;;
+
+        (repo)
+            __pod-repo
+        ;;
+
+        (spec)
+            __pod-spec
+        ;;
+
+        (ipc)
+            __pod-ipc
+        ;;
+
+        (list)
+            __pod-list
+        ;;
+
+        (install|lib|outdated|podfile-info|push|search|setup|update)
+            #_arguments ':feature:__repo_list'
+    esac
+  ;;
 esac
-
-_arguments \
-    $_command_args \
-    '(--silent)--silent[Show nothing]' \
-    '(--version)--version[Show the version of CocoaPods]' \
-    '(--no-color)--no-color[Show output without color]' \
-    '(--verbose)--verbose[Show more debugging information]' \
-    '(--help)--help[Show help banner of specified command]' \
-    &&  return 0
