@@ -30,7 +30,6 @@ _1st_arguments=(
     'help:Show help for the given command.'
     'install:Install project dependencies'
     'ipc:Inter-process communication'
-    'lib:Develop pods'
     'list:List pods'
     'outdated:Show outdated project dependencies'
     'podfile-info:Shows information on installed Pods'
@@ -77,7 +76,7 @@ __first_command_list ()
     local expl
     declare -a tasks
 
-    tasks=(install ipc lib list outdated podfile-info push repo search setup spec update)
+    tasks=(install ipc list outdated podfile-info push repo search setup spec update)
 
     _wanted tasks expl 'help' compadd $tasks
 }
@@ -152,6 +151,27 @@ __pod-ipc() {
     esac
 }
 
+__pod-list() {
+    local curcontext="$curcontext" state line
+    typeset -A opt_args
+
+    _arguments -C \
+        ':command:->command' \
+        '*::options:->options'
+
+   case $state in
+        (command)
+            _describe -t commands "gem subcommand" _list_arguments
+            return
+        ;;
+
+        (options)
+            #todo
+            return
+        ;;
+    esac
+}
+
 
 
 local expl
@@ -192,7 +212,7 @@ case $state in
             __pod-list
         ;;
 
-        (install|lib|outdated|podfile-info|push|search|setup|update)
+        (install|outdated|podfile-info|push|search|setup|update)
             #_arguments ':feature:__repo_list'
     esac
   ;;
