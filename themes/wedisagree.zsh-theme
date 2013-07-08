@@ -5,9 +5,9 @@
 # - Place that bundle in ~/Library/Application\ Support/SIMBL/Plugins (create that folder if it doesn't exist)
 # - Open Terminal preferences. Go to Settings -> Text -> More
 # - Change default colours to your liking.
-# 
+#
 # Here are the colours from Textmate's Monokai theme:
-# 
+#
 # Black: 0, 0, 0
 # Red: 229, 34, 34
 # Green: 166, 227, 45
@@ -25,7 +25,7 @@ PROMPT='%{$fg[magenta]%}[%c] %{$reset_color%}'
 
 # The right-hand prompt
 
-RPROMPT='${time} %{$fg[magenta]%}$(git_prompt_info)%{$reset_color%}$(git_prompt_status)%{$reset_color%}'
+RPROMPT='${time} %{$fg[magenta]%}$(git_prompt_info)%{$reset_color%}$(git_prompt_status)%{$reset_color%}$(git_remote_status)%{$reset_color%}'
 
 # Add this at the start of RPROMPT to include rvm info showing ruby-version@gemset-name
 # %{$fg[yellow]%}$(~/.rvm/bin/rvm-prompt)%{$reset_color%}
@@ -47,8 +47,8 @@ ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[red]%} ✖" # ⓧ ⑂
 ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[blue]%} ➜" # ⓡ ⑄
 ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[magenta]%} ♒" # ⓤ ⑊
 
-ZSH_THEME_GIT_PROMPT_AHEAD="%{$fg[red]%} +${ahead// /}%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_BEHIND="%{$fg[cyan]%} -${behind// /}%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE="%{$fg[red]%} +${ahead// /}%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE="%{$fg[cyan]%} -${behind// /}%{$reset_color%}"
 
 # More symbols to choose from:
 # ☀ ✹ ☄ ♆ ♀ ♁ ♐ ♇ ♈ ♉ ♚ ♛ ♜ ♝ ♞ ♟ ♠ ♣ ⚢ ⚲ ⚳ ⚴ ⚥ ⚤ ⚦ ⚒ ⚑ ⚐ ♺ ♻ ♼ ☰ ☱ ☲ ☳ ☴ ☵ ☶ ☷
