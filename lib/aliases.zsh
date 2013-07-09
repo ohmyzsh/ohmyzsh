@@ -13,7 +13,7 @@ alias please='sudo'
 #alias g='grep -in'
 
 # Show history
-alias history='fc -l 1'
+# alias history='fc -l 1'
 
 # List direcory contents
 alias lsa='ls -lah'
