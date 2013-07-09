@@ -132,8 +132,8 @@
 # configuration variables
 #-----------------------------------------------------------------------------
 
-HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='bg=magenta,fg=white,bold'
-HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND='bg=red,fg=white,bold'
+HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='bg=cyan,fg=black'
+HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND='bg=magenta,fg=black'
 HISTORY_SUBSTRING_SEARCH_GLOBBING_FLAGS='i'
 
 #-----------------------------------------------------------------------------
@@ -434,6 +434,8 @@ function _history-substring-search-down-buffer() {
   false
 }
 
+HISTORY_PATH_SEPARATOR="///; "
+
 function _history-substring-search-up-history() {
   #
   # Behave like up in ZSH, except clear the $BUFFER
@@ -447,7 +449,8 @@ function _history-substring-search-up-history() {
 
     # going up from somewhere below the top of history
     else
-      zle up-history
+      ((HISTNO--))
+      BUFFER=${history[$HISTNO]#*$HISTORY_PATH_SEPARATOR}
     fi
 
     return true
@@ -470,7 +473,8 @@ function _history-substring-search-down-history() {
 
     # going down from somewhere above the bottom of history
     else
-      zle down-history
+      ((HISTNO++))
+      BUFFER=${history[$HISTNO]#*$HISTORY_PATH_SEPARATOR}
     fi
 
     return true
@@ -517,7 +521,7 @@ function _history-substring-search-up-search() {
     #    to highlight the current buffer.
     #
     (( _history_substring_search_match_index-- ))
-    BUFFER=$history[$_history_substring_search_matches[$_history_substring_search_match_index]]
+    BUFFER=${history[$_history_substring_search_matches[$_history_substring_search_match_index]]#*$HISTORY_PATH_SEPARATOR}
     _history_substring_search_query_highlight=$HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND
 
   elif [[ $_history_substring_search_match_index -eq 1 ]]; then
