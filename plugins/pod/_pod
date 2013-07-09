@@ -2,7 +2,7 @@
 #autoload
 
 # -----------------------------------------------------------------------------
-#          FILE:  pod.plugin.zsh
+#          FILE:  _pod
 #   DESCRIPTION:  Cocoapods autocomplete plugin for Oh-My-Zsh
 #                 http://cocoapods.org
 #        AUTHOR:  Alexandre Joly (alexandre.joly@mekanics.ch)
