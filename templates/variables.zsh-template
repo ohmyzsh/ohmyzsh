@@ -1,0 +1,6 @@
+# Put variables here
+export RBENV_ROOT=/usr/local/var/rbenv
+export PATH=/usr/local/share/npm/bin:/usr/local/bin:/usr/local/sbin:$PATH
+export JAVA_HOME=`/usr/libexec/java_home`
+export ANDROID_HOME=/usr/local/opt/android-sdk
+

@@ -1,0 +1,6 @@
+unalias run-help
+autoload run-help
+export HELPDIR=/usr/local/share/zsh/helpfiles
+
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+
