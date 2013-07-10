@@ -14,7 +14,7 @@ alias please='sudo'
 
 # Show history
 # alias history='fc -l 1'
-alias his = 'fc -l 1'
+alias his='fc -l 1'
 
 # List direcory contents
 alias lsa='ls -lah'
