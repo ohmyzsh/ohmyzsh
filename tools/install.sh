@@ -34,6 +34,7 @@ ln -s "$HOME/.oh-my-zsh/zshrc" ~/.zshrc
 # echo "export PATH=\$PATH:$PATH" >> ~/.zshrc
 
 echo "\033[0;34mChanging default shell to zsh\033[0m"
+sudo echo `which zsh` >> /etc/shells
 chsh -s `which zsh`
 
 echo "\033[0;32m""         __    slu's fork                       __   ""\033[0m"
