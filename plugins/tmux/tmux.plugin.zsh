@@ -15,7 +15,7 @@ if which tmux &> /dev/null
 	# Set term to screen or screen-256color based on current terminal support
 	[[ -n "$ZSH_TMUX_FIXTERM" ]] || ZSH_TMUX_FIXTERM=true
 	# Set '-CC' option for iTerm2 tmux integration
-	[[ -n "$$ZSH_TMUX_ITERM2" ]] || ZSH_TMUX_ITERM2=false
+	[[ -n "$ZSH_TMUX_ITERM2" ]] || ZSH_TMUX_ITERM2=false
 	# The TERM to use for non-256 color terminals.
 	# Tmux states this should be screen, but you may need to change it on
 	# systems without the proper terminfo

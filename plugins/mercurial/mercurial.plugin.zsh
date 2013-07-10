@@ -8,11 +8,9 @@ alias hgd='hg diff'
 alias hged='hg diffmerge'
 # pull and update
 alias hgi='hg incoming'
-alias hgic='hg incoming | grep "changeset" | wc -l'
 alias hgl='hg pull -u'
 alias hglr='hg pull --rebase'
 alias hgo='hg outgoing'
-alias hgoc='hg outgoing | grep 'changeset' | wc -l'
 alias hgp='hg push'
 alias hgs='hg status'
 # this is the 'git commit --amend' equivalent
@@ -54,4 +52,12 @@ function hg_dirty_choose {
 
 function hg_dirty {
   hg_dirty_choose $ZSH_THEME_HG_PROMPT_DIRTY $ZSH_THEME_HG_PROMPT_CLEAN
+}
+
+function hgic() {
+    hg incoming "$@" | grep "changeset" | wc -l
+}
+
+function hgoc() {
+    hg outgoing "$@" | grep "changeset" | wc -l
 }
