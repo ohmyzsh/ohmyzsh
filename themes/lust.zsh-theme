@@ -102,7 +102,7 @@ $(myjobs)%(!.%{$fg[red]%}#.%{$fg[cyan]%}❯)%{$reset_color%} '
     }
 
     # display exitcode on the right when >0
-    return_code="%(?..%{$fg[magenta]%}%? ↲ %{$reset_color%}) "
+    return_code="%(?..%F{magenta}%? ↲ %f) "
  
     RPROMPT='${return_code}$(git_prompt_info)$(git_prompt_short_sha)$(my_git_prompt_status_and_time)'
 
