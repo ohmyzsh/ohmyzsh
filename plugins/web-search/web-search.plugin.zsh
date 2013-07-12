@@ -21,7 +21,7 @@ function web_search() {
 
   # no keyword provided, simply open the search engine homepage
   if [[ $# -le 1 ]]; then
-    $open_cmd "$url"
+    $open_cmd "$url" &> /dev/null
     return
   fi
 
@@ -35,7 +35,7 @@ function web_search() {
 
   url="${url%?}" # remove the last '+'
 
-  $open_cmd "$url"
+  $open_cmd "$url" &> /dev/null
 }
 
 alias bing='web_search bing'
