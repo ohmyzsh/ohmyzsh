@@ -13,21 +13,18 @@ function web_search() {
   local url="http://$1"
 
   # no keyword provided, simply open the search engine homepage
-  if [[ $# -le 2 ]]; then
-    $open_cmd "$url" &> /dev/null
-    return
+  if [[ ! $# -le 2 ]]; then
+    url="${url}/$2"
+
+    shift 2  # shift out $1 and $2
+
+    while [[ $# -gt 0 ]]; do
+      url="${url}$1+"
+      shift
+    done
+
+    url="${url%?}" # remove the last '+'
   fi
-
-  url="${url}/$2"
-
-  shift 2  # shift out $1 and $2
-
-  while [[ $# -gt 0 ]]; do
-    url="${url}$1+"
-    shift
-  done
-
-  url="${url%?}" # remove the last '+'
 
   $open_cmd "$url" &> /dev/null
 }
