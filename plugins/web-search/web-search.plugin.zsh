@@ -10,34 +10,27 @@ function web_search() {
     open_cmd='xdg-open'
   fi
 
-  # check whether the search engine is supported
-  if [[ ! $1 =~ '(google|bing|yahoo)' ]];
-  then
-    echo "Search engine $1 not supported."
-    return 1
-  fi
-
-  local url="http://www.$1.com"
+  local url="http://$1"
 
   # no keyword provided, simply open the search engine homepage
-  if [[ $# -le 1 ]]; then
-    $open_cmd "$url"
-    return
+  if [[ ! $# -le 2 ]]; then
+    url="${url}/$2"
+
+    shift 2  # shift out $1 and $2
+
+    while [[ $# -gt 0 ]]; do
+      url="${url}$1+"
+      shift
+    done
+
+    url="${url%?}" # remove the last '+'
   fi
 
-  url="${url}/search?q="
-  shift   # shift out $1
-
-  while [[ $# -gt 0 ]]; do
-    url="${url}$1+"
-    shift
-  done
-
-  url="${url%?}" # remove the last '+'
-
-  $open_cmd "$url"
+  $open_cmd "$url" &> /dev/null
 }
 
-alias bing='web_search bing'
-alias google='web_search google'
-alias yahoo='web_search yahoo'
+alias bing='web_search www.bing.com search\?q='
+alias google='web_search www.google.com search\?q='
+alias yahoo='web_search www.yahoo.com search\?q='
+alias ddg="web_search www.duckduckgo.com \?q="
+alias wp="web_search www.wikipedia.org wiki/"
