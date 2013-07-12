@@ -36,3 +36,4 @@ alias bing='web_search www.bing.com search\?q='
 alias google='web_search www.google.com search\?q='
 alias yahoo='web_search www.yahoo.com search\?q='
 alias ddg="web_search www.duckduckgo.com \?q="
+alias wp="web_search www.wikipedia.org wiki/"
