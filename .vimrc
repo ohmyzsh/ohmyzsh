@@ -27,6 +27,7 @@ Bundle 'davidhalter/jedi-vim'
 Bundle 'tpope/vim-fugitive'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'ervandew/supertab'
+Bundle 'Raimondi/delimitMate'
 
 " The rest of your config follows here
 
@@ -88,12 +89,10 @@ let g:pymode_syntax_space_errors = g:pymode_syntax_all
 " Don't autofold code
 let g:pymode_folding = 0
 
-
-" Other settings
-" Use <leader>l to toggle display of whitespace
-nmap <leader>l :set list!<CR>
-" And set some nice chars to do it with
-set listchars=tab:»\ ,eol:¬
+" Highlight trailing white space and delete on save
+autocmd InsertLeave *.py match ErrorMsg '\s\+$'
+autocmd InsertEnter *.py call clearmatches()
+autocmd BufWritePre *.py :%s/\s\+$//e
 
 " automatically change window's cwd to file's dir
 set autochdir
