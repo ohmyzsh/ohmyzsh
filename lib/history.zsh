@@ -4,6 +4,8 @@ if [ -z $HISTFILE ]; then
 fi
 HISTSIZE=200000
 SAVEHIST=2000000
+INC_APPEND_HISTORY=1
+HIST_IGNORE_DUPS=1
 
 setopt append_history
 setopt extended_history
