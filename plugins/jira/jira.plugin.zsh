@@ -3,7 +3,7 @@
 #         .jira-url in the current directory takes precedence
 #
 # If you use Rapid Board, set:
-#JIRA_RAPID_BOARD="yes"
+#JIRA_RAPID_BOARD="true"
 # in you .zshrc
 #
 # Setup: cd to/my/project
@@ -34,7 +34,7 @@ open_jira_issue () {
     `open $jira_url/secure/CreateIssue!default.jspa`
   else
     echo "Opening issue #$1"
-    if [[ "x$JIRA_RAPID_BOARD" = "yes" ]]; then
+    if [[ "x$JIRA_RAPID_BOARD" = "xtrue" ]]; then
       $open_cmd  "$jira_url/issues/$1"
     else
       $open_cmd  "$jira_url/browse/$1"
