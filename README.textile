@@ -38,7 +38,7 @@ h2. Git-Repo Project (Android)
 # gg # dear git, commit my change
 # ru # dear repo, please upload everything change to the remote
 
-h2 Merging
+h2. Merging
 
 # git merge <tab><tab><tab> # dear git, please merge this branch to mine
 (conflict araises)
@@ -48,7 +48,7 @@ h2 Merging
 (edit the commit message)
 # gp # dear git, push that to my remote
 
-h2 Rebase / fixup / squash / reorder / split commit history
+h2. Rebase / fixup / squash / reorder / split commit history
 
 # git rewrite-history # dear git, let me edit you history up to 2 commits behind (git rebase -i HEAD~2)
 # git rewrite-history4 # dear git, let me edit you history up to 4 commits behind (git rebase -i HEAD~4)
