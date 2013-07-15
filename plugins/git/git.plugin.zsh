@@ -15,6 +15,7 @@ alias gpr='git pull --rebase'
 compdef _git gpr=git-pull
 alias gp='git push'
 compdef _git gp=git-push
+compdef _git gd=git-diff
 alias gf='git fetch --all'
 compdef _git gf='git-fetch'
 alias gfa='git fetch --all'
@@ -67,7 +68,7 @@ alias gcl='git config --list'
 compdef _git gcl=git-config
 alias gcp='git cherry-pick'
 compdef _git gcp=git-cherry-pick
-alias glg='git log --stat --color'
+alias glg='git log --stat --max-count=5 --color'
 compdef _git glg=git-log
 alias glgp='git log --stat --color -p'
 compdef _git glgp=git-log
@@ -87,8 +88,9 @@ alias grh='git reset HEAD'
 compdef _git grh=git-reset
 alias grhh='git reset HEAD --hard'
 compdef _git grhh=git-reset
-compdef _git gclean=git-reset
 alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
+compdef _git gwc=git-whatchanged
+alias gf='git ls-files | grep'
 compdef _git gwc=git-whatchanged
 alias gls='git ls-files | grep'
 compdef _git gls=git-ls-files
@@ -121,7 +123,10 @@ alias git-svn-dcommit-push='git svn dcommit && git push github master:svntrunk'
 compdef git-svn-dcommit-push=git
 
 alias gsr='git svn rebase'
+compdef _git gsr='git-svn'
 alias gsd='git svn dcommit'
+compdef _git gsd='git-svn'
+
 #
 # Will return the current branch name
 # Usage example: git pull origin $(current_branch)
