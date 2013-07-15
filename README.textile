@@ -22,36 +22,35 @@ So I can have a workflow like the following ones:
 h2. Classic Git Project
 # cdp
 # cd myproject
-# gfa
-(hack hack hack)
+# gfa # dear git, fetch me all remotes
+# # hack hack hack
+# gg # dear git, please show me a nice gui so I can select the lines I want to commit and enter the commit message
+# # rehack
+# gga # dear git, I changed my ming, let met amend my last commit
+# # new hack
 # gg
-(rehack)
-# gga
-(new hack)
-# gg
-# gp
+# gp # dear git, push these changes to my remote
 
-=> that is, cd in my project, git fetch all, hack, git gui, git gui amend, rehack, git gui (new commit), and then git push
+h2. Git-Repo Project (Android)
 
-h2. Git-Repo Project
-
-# rsrra
-(hack)
-# gg
-# ru
-
-=> this is, repo sync and rebase, git gui new commit, repo upload
+# rsrra # dear repo, repo sync all project and rebase everything with auto stash.
+# (hack)
+# gg # dear git, commit my change
+# ru # dear repo, please upload everything change to the remote
 
 h2 Merging
-# git merge <tab><tab><tab>
+# git merge <tab><tab><tab> # dear git, please merge this branch to mine
 (conflict araises)
-# gmt
-(kdiff3 show me what's wrong, Ctrl+2/Ctrl+3 to choose the solution, modify the code, Ctrl+Up/Down to jump to next conflict, and then save)
-# gg
+# gmt # dear git, show me what's wrong!
+# # kdiff3 show me what's wrong, Ctrl+2/Ctrl+3 to choose the solution, modify the code, Ctrl+Up/Down to jump to next conflict, and then save
+# gg # dear git, commit my changes
 (edit the commit message)
-# gp
+# gp # dear git, push that to my remote
 
-h2 Daily development
+h2 Rebase / fixup / squash / reorder / split commit history
+# git rewrite-history # dear git, let me edit you history up to 2 commits behind (git rebase -i HEAD~2)
+# git rewrite-history4 # dear git, let me edit you history up to 4 commits behind (git rebase -i HEAD~4)
+# git rewrite-history10 # dear git, let me edit you history up to 10 commits behind (git rebase -i HEAD~10)
 
 h3. Text search
 # sgrep "substring" .
