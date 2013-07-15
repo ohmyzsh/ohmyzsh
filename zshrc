@@ -41,8 +41,6 @@ source $ZSH/oh-my-zsh.sh
 # Thankfully the path that is already present is the one that the system has set according to
 # normal practices. This inserts a few more things that I use from the shell.
 export PATH=~/bin:~/util:$PATH:/usr/local/share/npm/bin
-
-[[ $(id -u) == 0 ]] && export PATH=/usr/local/bin:$PATH
 # export PAGER=vimpager
 
 # zmodload zsh/complist
