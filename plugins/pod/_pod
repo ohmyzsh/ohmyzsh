@@ -102,13 +102,15 @@ _list_options=(
 local -a _podfile_info_options
 _podfile_info_options=(
     '(--all)--all[Show information about all Pods with dependencies that are used in a project]' \
-    '(--md)--md[Output information in Markdown format]'
+    '(--md)--md[Output information in Markdown format]' \
+    '*:script or directory:_files'
 )
 
 local -a _push_options
 _push_options=(
     '(--allow-warnings)--allow-warnings[Allows pushing even if there are warnings]' \
-    '(--local-only)--local-only[Does not perform the step of pushing REPO to its remote]'
+    '(--local-only)--local-only[Does not perform the step of pushing REPO to its remote]' \
+    '*:script or directory:_files'
 )
 
 local -a _repo_lint_options
@@ -125,7 +127,8 @@ local -a _spec_lint_options
 _spec_lint_options=(
     '(--quick)--quick[Lint skips checks that would require to download and build the spec]' \
     '(--only-errors)--only-errors[Lint validates even if warnings are present]' \
-    '(--no-clean)--no-clean[Lint leaves the build directory intact for inspection]'
+    '(--no-clean)--no-clean[Lint leaves the build directory intact for inspection]' \
+    '*:script or directory:_files'
 )
 
 local -a _spec_cat_options
