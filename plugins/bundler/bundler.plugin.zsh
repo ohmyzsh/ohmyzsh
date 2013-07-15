@@ -7,7 +7,7 @@ alias bu="bundle update"
 
 # The following is based on https://github.com/gma/bundler-exec
 
-bundled_commands=(annotate cap capify cucumber foreman guard jekyll middleman nanoc rackup rainbows rake rspec ruby shotgun spec spin spork thin thor unicorn unicorn_rails puma)
+bundled_commands=(annotate berks cap capify cucumber foodcritic foreman guard jekyll kitchen knife middleman nanoc rackup rainbows rake rspec ruby shotgun spec spin spork strainer tailor thin thor unicorn unicorn_rails puma)
 
 ## Functions
 
