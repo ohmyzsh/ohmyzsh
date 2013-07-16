@@ -1,17 +1,11 @@
 This is a Forked version of Oh-my-zsh. I maintain this fork against the following repos:
 
-bors-ltd  https://github.com/bors-ltd/oh-my-zsh.git (fetch)
-bors-ltd  https://github.com/bors-ltd/oh-my-zsh.git (push)
-cadusk  https://github.com/cadusk/oh-my-zsh.git (fetch)
-cadusk  https://github.com/cadusk/oh-my-zsh.git (push)
-kipanshi  https://github.com/kipanshi/oh-my-zsh.git (fetch)
-kipanshi  https://github.com/kipanshi/oh-my-zsh.git (push)
-origin  https://Stibbons@github.com/Stibbons/oh-my-zsh.git (fetch)
-origin  https://Stibbons@github.com/Stibbons/oh-my-zsh.git (push)
-upstream  https://github.com/robbyrussell/oh-my-zsh.git (fetch)
-upstream  https://github.com/robbyrussell/oh-my-zsh.git (push)
-ysmood  https://github.com/ysmood/oh-my-zsh.git (fetch)
-ysmood  https://github.com/ysmood/oh-my-zsh.git (push)
+bors-ltd  https://github.com/bors-ltd/oh-my-zsh.git
+cadusk  https://github.com/cadusk/oh-my-zsh.git
+kipanshi  https://github.com/kipanshi/oh-my-zsh.git
+upstream  https://github.com/robbyrussell/oh-my-zsh.git
+ysmood  https://github.com/ysmood/oh-my-zsh.git
+bchretien https://github.com/bchretien/oh-my-zsh.git
 
 Why do I do that? I want the cuting edge zsh for my git workflow, so I select the best from every available repository (thanks github!) and I merge it with my own salt.
 
