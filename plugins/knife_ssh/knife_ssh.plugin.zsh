@@ -1,5 +1,5 @@
 function knife_ssh() {
-  grep -q $1 ~/.knife_comp~ || rm -f ~/.knife_comp~;
+  grep -q $1 ~/.knife_comp~ 2> /dev/null || rm -f ~/.knife_comp~;
   ssh $(knife node show $1 | awk '/IP:/{print $2}')
 }
 
@@ -9,7 +9,7 @@ _knife_ssh() {
       echo "\nGenerating ~/.knife_comp~..." >/dev/stderr
       knife node list > ~/.knife_comp~
     fi
-    compadd `cat ~/.knife_comp~`
+    compadd $(<~/.knife_comp~)
   else
     echo "Could not find knife" > /dev/stderr;
   fi
