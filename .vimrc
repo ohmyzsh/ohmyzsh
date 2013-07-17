@@ -28,6 +28,7 @@ Bundle 'tpope/vim-fugitive'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'ervandew/supertab'
 Bundle 'Raimondi/delimitMate'
+Bundle 'nathanaelkane/vim-indent-guides'
 
 " The rest of your config follows here
 
@@ -90,9 +91,9 @@ let g:pymode_syntax_space_errors = g:pymode_syntax_all
 let g:pymode_folding = 0
 
 " Highlight trailing white space and delete on save
-autocmd InsertLeave *.py match ErrorMsg '\s\+$'
-autocmd InsertEnter *.py call clearmatches()
-autocmd BufWritePre *.py :%s/\s\+$//e
+autocmd InsertLeave *.py, *.js, *.c, *.h match ErrorMsg '\s\+$'
+autocmd InsertEnter *.py, *.js, *.c, *.h call clearmatches()
+autocmd BufWritePre *.py, *.js, *.c, *.h :%s/\s\+$//e
 
 " automatically change window's cwd to file's dir
 set autochdir
