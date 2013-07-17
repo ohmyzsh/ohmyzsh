@@ -46,6 +46,7 @@ compdef _git grba=git-rebase
 alias gb='git branch'
 compdef _git gb=git-branch
 alias gba='git branch -a'
+alias gbnm='git branch --no-merged'
 compdef _git gba=git-branch
 alias gcount='git shortlog -sn'
 compdef gcount=git
