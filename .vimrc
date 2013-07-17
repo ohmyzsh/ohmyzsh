@@ -29,6 +29,7 @@ Bundle 'altercation/vim-colors-solarized'
 Bundle 'ervandew/supertab'
 Bundle 'Raimondi/delimitMate'
 Bundle 'nathanaelkane/vim-indent-guides'
+Bundle 'majutsushi/tagbar'
 
 " The rest of your config follows here
 
@@ -115,3 +116,6 @@ colorscheme solarized
 
 " Cursor Wrapping
 set whichwrap+=<,>,h,l,[,]
+
+" Ctags
+let g:tagbar_ctags_bin="/opt/local/bin/ctags"
