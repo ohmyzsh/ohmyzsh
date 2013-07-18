@@ -30,6 +30,7 @@ Bundle 'ervandew/supertab'
 Bundle 'Raimondi/delimitMate'
 Bundle 'nathanaelkane/vim-indent-guides'
 Bundle 'majutsushi/tagbar'
+Bundle 'Lokaltog/vim-easymotion'
 
 " The rest of your config follows here
 
