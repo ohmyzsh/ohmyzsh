@@ -42,7 +42,7 @@ source $ZSH/oh-my-zsh.sh
 # normal practices. This inserts a few more things that I use from the shell.
 export PATH=~/bin:~/util:$PATH:/usr/local/share/npm/bin
 
-[[ $(id -u) == 0 ]] && export PATH=/usr/local/bin:$PATH
+# [[ $(id -u) == 0 ]] && export PATH=/usr/local/bin:$PATH
 # export PAGER=vimpager
 
 # zmodload zsh/complist
@@ -77,13 +77,21 @@ source $ZSH/plugins/history-substring-search/history-substring-search.plugin.zsh
 export HISTSIZE=20000
 export SAVEHIST=200000
 
+# This is an independent save of the history and terminal's cwd.
+# This avoids problems that crop up when I try to squish the cwd into the history entry.
 function zshaddhistory() {
     COMMAND_STR=${1%%$'\n'}
     [[ ( -z $COMMAND_STR ) || ( $COMMAND_STR == history ) || \
         ( $COMMAND_STR =~ ^l(s\|l\|a)?$ ) || \
         ( $COMMAND_STR =~ ^(d\|gd\|git\ diff\|glp\|gg)$ ) \
     ]] && return 1
-    print -sr "${PWD}///; ${COMMAND_STR}"
+    # do not do anything on common commands
+
+    # do the needful
+    echo "$PWD; $COMMAND_STR; $TTY@$(date +%s.%N)" >> ~/.zsh_enhanced_history
+
+    # rest is "default" zshaddhistory()
+    print -sr "${COMMAND_STR}"
     fc -p
 }
 
