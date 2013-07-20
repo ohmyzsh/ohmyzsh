@@ -28,6 +28,7 @@ _1st_arguments=(
   'missing:check all installed formuale for missing dependencies.'
   'outdated:list formulas for which a newer version is available'
   'prune:remove dead links'
+  'reinstall:reinstall a formula'
   'remove:remove a formula'
   'search:search for a formula (/regex/ or string)'
   'server:start a local web app that lets you browse formulae (requires Sinatra)'
