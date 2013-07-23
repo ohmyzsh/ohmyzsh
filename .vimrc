@@ -93,9 +93,9 @@ let g:pymode_syntax_space_errors = g:pymode_syntax_all
 let g:pymode_folding = 0
 
 " Highlight trailing white space and delete on save
-autocmd InsertLeave *.py, *.js, *.c, *.h match ErrorMsg '\s\+$'
-autocmd InsertEnter *.py, *.js, *.c, *.h call clearmatches()
-autocmd BufWritePre *.py, *.js, *.c, *.h :%s/\s\+$//e
+autocmd InsertLeave * match ErrorMsg '\s\+$'
+autocmd InsertEnter * call clearmatches()
+autocmd BufWritePre * :%s/\s\+$//e
 
 " automatically change window's cwd to file's dir
 set autochdir
