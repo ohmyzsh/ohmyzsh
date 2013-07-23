@@ -434,8 +434,6 @@ function _history-substring-search-down-buffer() {
   false
 }
 
-HISTORY_PATH_SEPARATOR="///; "
-
 function _history-substring-search-up-history() {
   #
   # Behave like up in ZSH, except clear the $BUFFER
@@ -449,8 +447,7 @@ function _history-substring-search-up-history() {
 
     # going up from somewhere below the top of history
     else
-      ((HISTNO--))
-      BUFFER=${history[$HISTNO]#*$HISTORY_PATH_SEPARATOR}
+      zle up-history
     fi
 
     return true
@@ -473,8 +470,7 @@ function _history-substring-search-down-history() {
 
     # going down from somewhere above the bottom of history
     else
-      ((HISTNO++))
-      BUFFER=${history[$HISTNO]#*$HISTORY_PATH_SEPARATOR}
+      zle down-history
     fi
 
     return true
@@ -521,7 +517,7 @@ function _history-substring-search-up-search() {
     #    to highlight the current buffer.
     #
     (( _history_substring_search_match_index-- ))
-    BUFFER=${history[$_history_substring_search_matches[$_history_substring_search_match_index]]#*$HISTORY_PATH_SEPARATOR}
+    BUFFER=$history[$_history_substring_search_matches[$_history_substring_search_match_index]]
     _history_substring_search_query_highlight=$HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND
 
   elif [[ $_history_substring_search_match_index -eq 1 ]]; then
