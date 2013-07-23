@@ -4,7 +4,7 @@
 if [[ -f config/deploy.rb || -f Capfile ]]; then
   if [[ ! -f .cap_tasks~ || config/deploy.rb -nt .cap_tasks~ ]]; then
     echo "\nGenerating .cap_tasks~..." > /dev/stderr
-    cap --tasks | grep '#' | cut -d " " -f 2 > .cap_tasks~
+    cap -v --tasks | grep '#' | cut -d " " -f 2 > .cap_tasks~
   fi
   compadd `cat .cap_tasks~`
 fi
