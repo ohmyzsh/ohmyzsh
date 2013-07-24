@@ -26,7 +26,7 @@
 # A few utility functions to make it easy and re-usable to draw segmented prompts
 
 CURRENT_BG='NONE'
-SEGMENT_SEPARATOR=''
+SEGMENT_SEPARATOR='⮀'
 
 # Begin a segment
 # Takes two arguments, background and foreground. Both can be omitted,
@@ -90,7 +90,7 @@ prompt_git() {
     zstyle ':vcs_info:*' formats ' %u%c'
     zstyle ':vcs_info:*' actionformats '%u%c'
     vcs_info
-    echo -n "${ref/refs\/heads\// }${vcs_info_msg_0_}"
+    echo -n "${ref/refs\/heads\//⭠ }${vcs_info_msg_0_}"
   fi
 }
 
