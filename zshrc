@@ -89,6 +89,6 @@ alias ds="dirs -v | head -10"
 alias d="gd"
 
 # maintain this manually per-system
-source ~/.oh-my-zsh/keychain-setup.sh
+source ~/.keychain-setup.sh
 
 echo "Finished loading my .zshrc"
