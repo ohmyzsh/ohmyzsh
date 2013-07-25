@@ -7,11 +7,11 @@
 
 # Composer basic command completion
 _composer_get_command_list () {
-	composer --no-ansi | sed "1,/Available commands/d" | awk '/^\s*[a-z]+/ { print $1 }'
+    $_comp_command1 --no-ansi | sed "1,/Available commands/d" | awk '/^\s*[a-z]+/ { print $1 }'
 }
 
 _composer_get_required_list () {
-    composer show -s --no-ansi | sed '1,/requires/d' | awk 'NF > 0 && !/^requires \(dev\)/{ print $1 }'
+    $_comp_command1 show -s --no-ansi | sed '1,/requires/d' | awk 'NF > 0 && !/^requires \(dev\)/{ print $1 }'
 }
 
 _composer () {
@@ -35,6 +35,7 @@ _composer () {
 }
 
 compdef _composer composer
+compdef _composer composer.phar
 
 # Aliases
 alias c='composer'
