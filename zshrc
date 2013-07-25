@@ -88,4 +88,6 @@ alias mk="make"
 alias ds="dirs -v | head -10"
 alias d="gd"
 
+source ~/.oh-my-zsh/keychain-setup.sh
+
 echo "Finished loading my .zshrc"
