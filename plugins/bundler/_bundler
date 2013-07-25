@@ -18,6 +18,7 @@ case $state in
 			"check[Determine whether the requirements for your application are installed]" \
 			"list[Show all of the gems in the current bundle]" \
 			"show[Show the source location of a particular gem in the bundle]" \
+			"outdated[Show all of the outdated gems in the current bundle]" \
 			"console[Start an IRB session in the context of the current bundle]" \
 			"open[Open an installed gem in the editor]" \
 			"viz[Generate a visual representation of your dependencies]" \
@@ -39,6 +40,7 @@ case $state in
                     'check' \
                     'list' \
                     'show' \
+                    'outdated' \
                     'console' \
                     'open' \
                     'viz' \
@@ -76,6 +78,15 @@ case $state in
 				if [[ $_gems != "" ]]; then
 					_values 'gems' $_gems && ret=0
 				fi
+				;;
+			outdated)
+				_arguments \
+		      '(--pre)--pre[Check for newer pre-release gems]' \
+    	  	'(--source)--source[Check against a specific source]' \
+      		'(--local)--local[Do not attempt to fetch gems remotely and use the gem cache instead]' \
+      		'(--no-color)--no-color[Disable colorization in output]' \
+					'(--verbose)--verbose[Enable verbose output mode]'
+				ret=0
 				;;
 			*)
 				_opts=(  $(bundle help $line[1] | sed -e '/^  \[-/!d; s/^  \[\(-[^=]*\)=.*/\1/') )
