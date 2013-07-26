@@ -71,7 +71,7 @@ function zshaddhistory() {
     echo "$PWD; $COMMAND_STR; $TTY@$(date +%s.%N)" >> ~/.zsh_enhanced_history
 
     # rest is "default" zshaddhistory()
-    print -sr "${COMMAND_STR}"
+    print -Sr ${COMMAND_STR}
     fc -p
 }
 
