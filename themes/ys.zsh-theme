@@ -17,12 +17,12 @@ ZSH_THEME_GIT_PROMPT_CLEAN=" %{$fg[green]%}o"
 : <<'FORMAT'
 Prompt format:
 
-PRIVILEGES USER@MACHINE in DIRECTORY on git:BRANCH STATE [TIME] L:SHELL_LEVEL N:LINE_NUM
-$ 
+PRIVILEGES USER @ MACHINE in DIRECTORY on git:BRANCH STATE [TIME] L:SHELL_LEVEL N:LINE_NUM
+$ COMMAND
 
 For example:
 
-% ys@ys-mbp in ~/.oh-my-zsh on git:master x [21:47:42] - 12
+% ys@ys-mbp in ~/.oh-my-zsh on git:master x [21:47:42] L:1 N:6
 $ 
 
 FORMAT
