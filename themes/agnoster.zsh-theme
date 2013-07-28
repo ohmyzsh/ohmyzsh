@@ -26,7 +26,7 @@
 # A few utility functions to make it easy and re-usable to draw segmented prompts
 
 CURRENT_BG='NONE'
-SEGMENT_SEPARATOR='⮀'
+SEGMENT_SEPARATOR=''
 
 # Begin a segment
 # Takes two arguments, background and foreground. Both can be omitted,
@@ -71,7 +71,6 @@ prompt_context() {
 prompt_git() {
   local ref dirty
   if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
-    ZSH_THEME_GIT_PROMPT_DIRTY='±'
     dirty=$(parse_git_dirty)
     ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="➦ $(git show-ref --head -s --abbrev |head -n1 2> /dev/null)"
     if [[ -n $dirty ]]; then
@@ -79,7 +78,19 @@ prompt_git() {
     else
       prompt_segment green black
     fi
-    echo -n "${ref/refs\/heads\//⭠ }$dirty"
+
+    setopt promptsubst
+    autoload -Uz vcs_info
+
+    zstyle ':vcs_info:*' enable git
+    zstyle ':vcs_info:*' get-revision true
+    zstyle ':vcs_info:*' check-for-changes true
+    zstyle ':vcs_info:*' stagedstr '✚'
+    zstyle ':vcs_info:git:*' unstagedstr '●'
+    zstyle ':vcs_info:*' formats ' %u%c'
+    zstyle ':vcs_info:*' actionformats '%u%c'
+    vcs_info
+    echo -n "${ref/refs\/heads\// }${vcs_info_msg_0_}"
   fi
 }
 
@@ -99,7 +110,7 @@ prompt_hg() {
 				# if working copy is clean
 				prompt_segment green black
 			fi
-			echo -n $(hg prompt "⭠ {rev}@{branch}") $st
+			echo -n $(hg prompt " {rev}@{branch}") $st
 		else
 			st=""
 			rev=$(hg id -n 2>/dev/null | sed 's/[^-0-9]//g')
@@ -113,7 +124,7 @@ prompt_hg() {
 			else
 				prompt_segment green black
 			fi
-			echo -n "⭠ $rev@$branch" $st
+			echo -n " $rev@$branch" $st
 		fi
 	fi
 }
@@ -121,6 +132,14 @@ prompt_hg() {
 # Dir: current working directory
 prompt_dir() {
   prompt_segment blue black '%~'
+}
+
+# Virtualenv: current working virtualenv
+prompt_virtualenv() {
+  local virtualenv_path="$VIRTUAL_ENV"
+  if [[ -n $virtualenv_path ]]; then
+    prompt_segment blue black "(`basename $virtualenv_path`)"
+  fi
 }
 
 # Status:
@@ -141,6 +160,7 @@ prompt_status() {
 build_prompt() {
   RETVAL=$?
   prompt_status
+  prompt_virtualenv
   prompt_context
   prompt_dir
   prompt_git
