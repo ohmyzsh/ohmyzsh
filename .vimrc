@@ -99,6 +99,12 @@ autocmd InsertLeave * match ErrorMsg '\s\+$'
 autocmd InsertEnter * call clearmatches()
 autocmd BufWritePre * :%s/\s\+$//e
 
+autocmd FileType tex set spell
+autocmd FileType tex set tw=80
+autocmd FileType tex set nowrap
+autocmd InsertLeave *.tex highlight OverLength ctermbg=darkred ctermfg=white guibg=#FFD9D9
+autocmd InsertLeave *.tex match OverLength /\%82v.*/
+
 " automatically change window's cwd to file's dir
 set autochdir
 
