@@ -32,6 +32,7 @@ Bundle 'nathanaelkane/vim-indent-guides'
 Bundle 'majutsushi/tagbar'
 Bundle 'Lokaltog/vim-easymotion'
 Bundle 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX'
+Bundle 'tpope/vim-surround'
 
 " The rest of your config follows here
 
