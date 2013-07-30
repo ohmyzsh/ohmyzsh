@@ -5,9 +5,9 @@ alias cdp='cd ~/projects/'
 function bb_env()
 {
   BASE=$HOME/projects/buildbot/
-  #export __PATHBKP=$PATH
-  #export PYTHONPATH=$BASE/buildbot/master:$BASE/txwebservices/install:$BASE/cactus/install:$BASE/config/tools
-  #export PATH=$HOME/bin:$BASE/buildbot/master/bin:$BASE/txwebservices/install:$PATH
+  export __PATHBKP=$PATH
+  export PYTHONPATH=$BASE/buildbot/master:$BASE/txwebservices/install:$BASE/cactus/install:$BASE/config/tools
+  export PATH=$HOME/bin:$BASE/buildbot/master/bin:$BASE/txwebservices/install:$PATH
   #export format_warnings_path=$BASE/config
   #export warning_path=$BASE/config/latests_warnings
   #export __PS1BKP=$PS1
