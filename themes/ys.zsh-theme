@@ -6,29 +6,34 @@
 # http://blog.ysmood.org/2013/03/my-ys-terminal-theme/
 # Mar 2013 ys
 
-# Machine name.
-function box_name {
-    [ -f ~/.box-name ] && cat ~/.box-name || hostname -s
-}
-
-# Directory info.
-local current_dir='${PWD/#$HOME/~}'
-
-# Git info.
+# Git Info
 local git_info='$(git_prompt_info)'
 ZSH_THEME_GIT_PROMPT_PREFIX=" %{$fg[white]%}on%{$reset_color%} git:%{$fg[cyan]%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[red]%}x"
 ZSH_THEME_GIT_PROMPT_CLEAN=" %{$fg[green]%}o"
 
-# Prompt format: \n # USER at MACHINE in DIRECTORY on git:BRANCH STATE [TIME] \n $ 
+
+: <<'FORMAT'
+Prompt format:
+
+PRIVILEGES USER @ MACHINE in DIRECTORY on git:BRANCH STATE [TIME] L:SHELL_LEVEL N:LINE_NUM
+$ COMMAND
+
+For example:
+
+% ys@ys-mbp in ~/.oh-my-zsh on git:master x [21:47:42] L:1 N:6
+$ 
+
+FORMAT
+
 PROMPT="
-%{$terminfo[bold]$fg[blue]%}#%{$reset_color%} \
+%{$terminfo[bold]$fg[blue]%}%#%{$reset_color%} \
 %{$fg[cyan]%}%n \
-%{$fg[white]%}at \
-%{$fg[green]%}$(box_name) \
+%{$fg[white]%}@ \
+%{$fg[green]%}%m \
 %{$fg[white]%}in \
-%{$terminfo[bold]$fg[yellow]%}${current_dir}%{$reset_color%}\
+%{$terminfo[bold]$fg[yellow]%}%~%{$reset_color%}\
 ${git_info} \
-%{$fg[white]%}[%*]
+%{$fg[white]%}[%*] L:%L N:%i
 %{$terminfo[bold]$fg[red]%}$ %{$reset_color%}"
