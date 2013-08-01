@@ -9,8 +9,9 @@ git_custom_status() {
   local cb=$(current_branch)
   if [ -n "$cb" ]; then
     R="$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_PREFIX$(current_branch)$ZSH_THEME_GIT_PROMPT_SUFFIX$(git_prompt_rebase_state)"
-    if [ ! -z $(git_changes_info) ]; then
-      R="$R $(git_changes_info)"
+    CI=$(git_changes_info)
+    if [ ! -z $CI ]; then
+      R="$CI $R"
     fi
     echo $R
   fi
