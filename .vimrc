@@ -129,3 +129,7 @@ set whichwrap+=<,>,h,l,[,]
 
 " Ctags
 let g:tagbar_ctags_bin="/opt/local/bin/ctags"
+
+if has("autocmd")
+  au  BufNewFile,BufRead *.bro set filetype=bro
+endif
