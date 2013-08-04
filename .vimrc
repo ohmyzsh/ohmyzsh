@@ -33,6 +33,7 @@ Bundle 'majutsushi/tagbar'
 Bundle 'Lokaltog/vim-easymotion'
 Bundle 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX'
 Bundle 'tpope/vim-surround'
+Bundle 'mephux/bro.vim'
 
 " The rest of your config follows here
 
