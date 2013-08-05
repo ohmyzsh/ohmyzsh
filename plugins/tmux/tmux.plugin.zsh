@@ -24,7 +24,9 @@ if which tmux &> /dev/null
 	# Tmux states this should be screen-256color, but you may need to change it on
 	# systems without the proper terminfo
 	[[ -n "$ZSH_TMUX_FIXTERM_WITH_256COLOR" ]] || ZSH_TMUX_FIXTERM_WITH_256COLOR="screen-256color"
-
+    	# Run tmux with `[[ "$ZSH_TMUX_FORCEUTF8" == "true" ]] parameter, which makes tmux to fully enable UTF-8 support 
+    	# without trying to guess if the current terminal supports it.
+    	[[ -n "$ZSH_TMUX_FORCEUTF8" ]] || ZSH_TMUX_FORCEUTF8="false" 
 
 	# Get the absolute path to the current directory
 	local zsh_tmux_plugin_path="$(cd "$(dirname "$0")" && pwd)"
@@ -57,11 +59,11 @@ if which tmux &> /dev/null
 		# Try to connect to an existing session.
 		elif [[ "$ZSH_TMUX_AUTOCONNECT" == "true" ]]
 		then
-			\tmux `[[ "$ZSH_TMUX_ITERM2" == "true" ]] && echo '-CC '` attach || \tmux `[[ "$ZSH_TMUX_ITERM2" == "true" ]] && echo '-CC '` `[[ "$ZSH_TMUX_FIXTERM" == "true" ]] && echo '-f '$_ZSH_TMUX_FIXED_CONFIG` new-session
+			\tmux `[[ "$ZSH_TMUX_FORCEUTF8" == "true" ]] && echo '-u'` `[[ "$ZSH_TMUX_ITERM2" == "true" ]] && echo '-CC '` attach || \tmux `[[ "$ZSH_TMUX_FORCEUTF8" == "true" ]] && echo '-u'` `[[ "$ZSH_TMUX_ITERM2" == "true" ]] && echo '-CC '` `[[ "$ZSH_TMUX_FIXTERM" == "true" ]] && echo '-f '$_ZSH_TMUX_FIXED_CONFIG` new-session
 			[[ "$ZSH_TMUX_AUTOQUIT" == "true" ]] && exit
 		# Just run tmux, fixing the TERM variable if requested.
 		else
-			\tmux `[[ "$ZSH_TMUX_ITERM2" == "true" ]] && echo '-CC '` `[[ "$ZSH_TMUX_FIXTERM" == "true" ]] && echo '-f '$_ZSH_TMUX_FIXED_CONFIG`
+			\tmux `[[ "$ZSH_TMUX_FORCEUTF8" == "true" ]] && echo '-u'` `[[ "$ZSH_TMUX_ITERM2" == "true" ]] && echo '-CC '` `[[ "$ZSH_TMUX_FIXTERM" == "true" ]] && echo '-f '$_ZSH_TMUX_FIXED_CONFIG`
 			[[ "$ZSH_TMUX_AUTOQUIT" == "true" ]] && exit
 		fi
 	}
