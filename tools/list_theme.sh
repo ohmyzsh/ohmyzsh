@@ -26,6 +26,7 @@ for f in $THEMES_DIR/*.zsh-theme ; do
   grep -q '%M'  $f && echo -n "machine "
   grep -q '%~'  $f && echo -n "path "
   grep -q '%2~'  $f && echo -n "path2 "
+  grep -q '%3~'  $f && echo -n "path3 "
   grep -q 'precmd' $f && echo -n "precmd "
   grep -q 'RPROMPT' $f && echo -n "rprompt "
   grep -q '%S'  $f && echo -n "sec "
