@@ -19,5 +19,5 @@ zstyle ':vcs_info:*' unstagedstr "%{$fg_no_bold[red]%}"
 zstyle ':vcs_info:*' stagedstr "%{$fg_no_bold[yellow]%}"
 zstyle ':vcs_info:*' enable fossil hg svn git cvs # p4 off, but must be last.
 
-RPROMPT='%F{green}%n@%m %F{magenta}%3~${vcs_info_msg_0_}%{$reset_color%}'
+RPROMPT='%F{green}%n@%m %F{magenta}%3~$%{$reset_color%}${vcs_info_msg_0_}%{$reset_color%}'
 setopt PROMPT_SUBST
