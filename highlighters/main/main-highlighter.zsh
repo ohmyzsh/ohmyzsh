@@ -158,6 +158,10 @@ _zsh_highlight_main_highlighter_check_path()
   local expanded_path; : ${expanded_path:=${(Q)~arg}}
   [[ -z $expanded_path ]] && return 1
   [[ -e $expanded_path ]] && return 0
+  # Search the path in CDPATH
+  for cdpath_dir in $cdpath ; do
+    [[ -e "$cdpath_dir/$expanded_path" ]] && return 0
+  done
   [[ ! -e ${expanded_path:h} ]] && return 1
   [[ ${BUFFER[1]} != "-" && ${#BUFFER} == $end_pos && -n $(print ${expanded_path}*(N)) ]] && return 0
   return 1
