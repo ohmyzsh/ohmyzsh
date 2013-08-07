@@ -31,7 +31,7 @@ __build() {
     _arguments \
         '-q=false[Suppress verbose build output]' \
         '-t="[fuck to be applied to the resulting image in case of success]' \
-        ' *:files:_files'
+        '*:files:_files'
 }
 
 __commit() {
@@ -60,7 +60,7 @@ __images() {
         '-a[show all images]' \
         '-notrunc[dont truncate output]' \
         '-q[only show numeric IDs]' \
-        '-viz[output graph in graphviz format'
+        '-viz[output graph in graphviz format]'
     __docker_images
 }
 
@@ -159,20 +159,20 @@ __run() {
 }
 
 __search() {
-    arguments '-notrunc[Dont truncate output]'
+    _arguments '-notrunc[Dont truncate output]'
 }
 
 __start() {
-    __docker_container
+    __docker_containers
 }
 
 __stop() {
-    __arguments '-t=[number of seconds to try to stop before killing]'
+    _arguments '-t=[number of seconds to try to stop before killing]'
     __docker_containers
 }
 
 __tag() {
-    __arguments '-f[Force]'
+    _arguments '-f[Force]'
     __docker_images
 }
 
@@ -181,7 +181,7 @@ __version() {
 }
 
 __wait() {
-    __docker_container
+    __docker_containers
 }
 
 # end commands ---------
