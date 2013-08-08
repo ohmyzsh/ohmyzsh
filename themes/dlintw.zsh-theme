@@ -2,10 +2,17 @@
 # @author Daniel YC Lin <dlin.tw at gmail>
 # Shows the exit status of the last command if non-zero
 # Uses "#" instead of "$" when running as root
+
+# set variable debian_chroot if running in a chroot with /etc/debian_chroot
+if [[ -z "$debian_chroot" ]] && [[ -r /etc/debian_chroot ]]; then
+    debian_chroot=$(cat /etc/debian_chroot)
+fi
+
+p_chroot="${debian_chroot:+[$debian_chroot]}"
 p_time="%K{black}%B%F{yellow}%D{%H:%M:%S}%k"
 p_ret="%(0?.. %F{red}%? )"
 p_ps="%B%F{blue}%(#.#.$)%b "
-PROMPT="$p_time$ret$p_ps%{$reset_color%}"
+PROMPT="$p_chroot$p_time$ret$p_ps%{$reset_color%}"
 
 autoload -Uz vcs_info
 precmd () { vcs_info }
