@@ -1,0 +1,164 @@
+#compdef veewee 
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+# Completion script for veewee 0.3.7 (https://github.com/jedi4ever/veewee)
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+# * Marius Bergmann (https://github.com/mbrgm)
+#
+# ------------------------------------------------------------------------------
+
+typeset curcontext state line cmds ret
+
+curcontext="$curcontext"
+ret=1
+
+_arguments -C \
+  '--debug' \
+  '--workdir=[Change the working directory (the folder containing the definitions folder).]:directory:_files -/' \
+  '1: :->cmds' \
+  '2: :->providers' \
+  '*: :->args' && ret=0
+
+
+local -a provider_cmds; provider_cmds=(
+    'build:Build box'
+    'copy:Copy a file to the VM'
+    'define:Define a new basebox starting from a template'
+    'destroy:Destroys the virtualmachine that was built'
+    'halt:Activates a shutdown the virtualmachine'
+    'help:Describe subcommands or one specific subcommand'
+    'list:Lists all defined boxes'
+    'ostypes:List the available Operating System types'
+    'sendkeys:Sends the key sequence (comma separated) to the box. E.g for testing the :boot_cmd_sequence'
+    'ssh:SSH to box'
+    'templates:List the currently available templates'
+    'undefine:Removes the definition of a basebox'
+    'up:Starts a Box'
+    'validate:Validates a box against vmfusion compliancy rules'
+    'winrm:Execute command via winrm'
+)
+
+case $state in
+    cmds)
+        local -a cmds; cmds=(
+            'fusion:Subcommand for Vmware fusion'
+            'help:Describe available commands or one specific command'
+            'kvm:Subcommand for KVM'
+            'parallels:Subcommand for Parallels'
+            'vbox:Subcommand for VirtualBox'
+            'version:Prints the Veewee version information'
+        )
+
+        _describe -t commands 'veewee command' cmds && ret=0
+    ;;
+
+    providers)
+        case $line[1] in
+            (help)
+                local -a cmds; cmds=(
+                    'fusion'
+                    'help'
+                    'kvm'
+                    'parallels'
+                    'vbox'
+                    'version'
+                )
+
+                _values -S , 'commands' $cmds && ret=0
+            ;;
+
+            (fusion)
+                provider_cmds+='add_share:Adds a share to the guest'
+                provider_cmds+='export:Exports the basebox to the vagrant format'
+
+                _describe -t commands 'veewee fusion command' provider_cmds && ret=0
+            ;;
+
+            (kvm)
+                provider_cmds+='export:Exports the basebox to the vagrant format'
+
+                _describe -t commands 'veewee kvm command' provider_cmds && ret=0
+            ;;
+
+            (parallels)
+                _describe -t commands 'veewee parallels command' provider_cmds && ret=0
+            ;;
+
+            (vbox)
+
+                provider_cmds+='export:Exports the basebox to the vagrant format'
+                provider_cmds+='screenshot:Takes a screenshot of the box'
+
+                _describe -t commands 'veewee vbox command' provider_cmds && ret=0
+            ;;
+        esac;
+    ;;
+    args)
+        case $line[2] in
+            (add_share|build|copy|destroy|export|halt|screenshot|sendkeys|ssh|undefine|up|validate|winrm)
+                if [ ${#line[@]} -eq 3 ]; then
+                    boxes=( ${(f)"$(ls -1 ./definitions)"} )
+                    _values -S , 'boxes' $boxes && ret=0
+                fi
+            ;;
+            (define)
+                if [ ${#line[@]} -eq 4 ]; then
+                    templates=( ${(f)"$(_call_program templates veewee $line[1] templates | awk '/^veewee.+define/{sub(/^.+>[:\47] [:\47]/, "");sub(/[:\47].+$/, "");print}')"} )
+                    _values -S , 'templates' $templates && ret=0
+                fi
+            ;;
+            (help)
+                local -a cmds; cmds=(
+                    'build'
+                    'copy'
+                    'define'
+                    'destroy'
+                    'halt'
+                    'help'
+                    'list'
+                    'ostypes'
+                    'sendkeys'
+                    'ssh'
+                    'templates'
+                    'undefine'
+                    'up'
+                    'validate'
+                    'winrm'
+                )
+                if [ $line[1] = "fusion" ]; then
+                    cmds+='add_share'
+                    cmds+='export'
+                elif [ $line[1] = "kvm" ]; then
+                    cmds+='export'
+                elif [ $line[1] = "vbox" ]; then
+                    cmds+='export'
+                    cmds+='screenshot'
+                fi
+                _values -S , 'commands' $cmds && ret=0
+            ;;
+        esac;
+        case $line[2] in
+            (add_share)
+                if [ ${#line[@]} -eq 5 ]; then
+                    _arguments "*::filename:_files"
+                fi
+            ;;
+            (copy)
+                if [ ${#line[@]} -eq 4 ]; then
+                    _arguments "*::filename:_files"
+                fi
+            ;;
+            (screenshot)
+                if [ ${#line[@]} -eq 4 ]; then
+                    _arguments "*::filename:_files"
+                fi
+            ;;
+        esac;
+    ;;
+esac;
