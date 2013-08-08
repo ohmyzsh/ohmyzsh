@@ -41,6 +41,8 @@
 : ${ZSH_HIGHLIGHT_STYLES[commandseparator]:=none}
 : ${ZSH_HIGHLIGHT_STYLES[hashed-command]:=fg=green}
 : ${ZSH_HIGHLIGHT_STYLES[path]:=underline}
+: ${ZSH_HIGHLIGHT_STYLES[path_prefix]:=underline}
+: ${ZSH_HIGHLIGHT_STYLES[path_approx]:=fg=yellow,underline}
 : ${ZSH_HIGHLIGHT_STYLES[globbing]:=fg=blue}
 : ${ZSH_HIGHLIGHT_STYLES[history-expansion]:=fg=blue}
 : ${ZSH_HIGHLIGHT_STYLES[single-hyphen-option]:=none}
@@ -82,6 +84,7 @@ _zsh_highlight_main_highlighter()
 
   for arg in ${(z)BUFFER}; do
     local substr_color=0
+    local style_override=""
     [[ $start_pos -eq 0 && $arg = 'noglob' ]] && highlight_glob=false
     ((start_pos+=${#BUFFER[$start_pos+1,-1]}-${#${BUFFER[$start_pos+1,-1]##[[:space:]]#}}))
     ((end_pos=$start_pos+${#arg}))
@@ -138,6 +141,8 @@ _zsh_highlight_main_highlighter()
                  ;;
       esac
     fi
+    # if a style_override was set (eg in _zsh_highlight_main_highlighter_check_path), use it
+    [[ -n $style_override ]] && style=$ZSH_HIGHLIGHT_STYLES[$style_override]
     [[ $substr_color = 0 ]] && region_highlight+=("$start_pos $end_pos $style")
     [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS:#"$arg"} ]] && new_expression=true
     start_pos=$end_pos
@@ -163,7 +168,15 @@ _zsh_highlight_main_highlighter_check_path()
     [[ -e "$cdpath_dir/$expanded_path" ]] && return 0
   done
   [[ ! -e ${expanded_path:h} ]] && return 1
-  [[ ${BUFFER[1]} != "-" && ${#BUFFER} == $end_pos && -n $(print ${expanded_path}*(N)) ]] && return 0
+  if [[ ${BUFFER[1]} != "-" && ${#BUFFER} == $end_pos ]]; then
+    local -a tmp
+    # got a path prefix?
+    tmp=( ${expanded_path}*(N) )
+    (( $#tmp > 0 )) && style_override=path_prefix && return 0
+    # or maybe an approximate path?
+    tmp=( (#a1)${expanded_path}*(N) )
+    (( $#tmp > 0 )) && style_override=path_approx && return 0
+  fi
   return 1
 }
 
