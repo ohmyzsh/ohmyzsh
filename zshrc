@@ -68,7 +68,7 @@ function zshaddhistory() {
     # do not do anything on common commands
 
     # do the needful
-    echo "$PWD; $COMMAND_STR; $TTY@$HOST@$(date +%s.%N)" >> ~/.zsh_enhanced_history
+    print -r "$PWD; $COMMAND_STR; $TTY@$HOST@$(date +%s.%N)" >> ~/.zsh_enhanced_history
 
     # rest is "default" zshaddhistory()
     print -Sr ${COMMAND_STR}
