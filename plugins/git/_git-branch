@@ -60,3 +60,24 @@ _git-branch ()
     "($l $c $m -d)-D[delete a branch]" \
     $dependent_deletion_args
 }
+
+(( $+functions[__git_ignore_line] )) ||
+__git_ignore_line () {
+  declare -a ignored
+  ignored=()
+  ((CURRENT > 1)) &&
+    ignored+=(${line[1,CURRENT-1]//(#m)[\[\]()\\*?#<>~\^]/\\$MATCH})
+  ((CURRENT < $#line)) &&
+    ignored+=(${line[CURRENT+1,-1]//(#m)[\[\]()\\*?#<>~\^]/\\$MATCH})
+  $* -F ignored
+}
+
+(( $+functions[__git_ignore_line_inside_arguments] )) ||
+__git_ignore_line_inside_arguments () {
+  declare -a compadd_opts
+
+  zparseopts -D -E -a compadd_opts V: J: 1 2 n f X: M: P: S: r: R: q F:
+
+  __git_ignore_line $* $compadd_opts
+}
+
