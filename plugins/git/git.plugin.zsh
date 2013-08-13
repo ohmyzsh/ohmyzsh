@@ -15,7 +15,6 @@ alias gpr='git pull --rebase'
 compdef _git gpr=git-pull
 alias gp='git push'
 compdef _git gp=git-push
-compdef _git gd=git-diff
 alias gf='git fetch --all'
 compdef _git gf='git-fetch'
 alias gfa='git fetch --all'
