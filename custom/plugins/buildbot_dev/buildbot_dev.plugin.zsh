@@ -4,7 +4,13 @@ alias cdp='cd ~/projects/'
 
 function bb_env()
 {
-  BASE=$HOME/projects/buildbot/
+  BBDIR=$1
+  shift
+  if [[ -z $BBDIR ]]; then
+    BASE=$HOME/projects/buildbot/
+  else
+    BASE=$BBDIR
+  fi
   export __PATHBKP=$PATH
   export PYTHONPATH=$BASE/buildbot/master:$BASE/txwebservices/install:$BASE/cactus/install:$BASE/config/tools
   export PATH=$HOME/bin:$BASE/buildbot/master/bin:$BASE/txwebservices/install:$PATH
