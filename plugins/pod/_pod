@@ -1,0 +1,381 @@
+#compdef pod
+#autoload
+
+# -----------------------------------------------------------------------------
+#          FILE:  _pod
+#   DESCRIPTION:  Cocoapods autocomplete plugin for Oh-My-Zsh
+#                 http://cocoapods.org
+#        AUTHOR:  Alexandre Joly (alexandre.joly@mekanics.ch)
+#        GITHUB:  https://github.com/mekanics
+#       TWITTER:  @jolyAlexandre
+#       VERSION:  0.0.1
+#       LICENSE:  MIT
+# -----------------------------------------------------------------------------
+
+local -a _1st_arguments
+_1st_arguments=(
+    'help:Show help for the given command.'
+    'install:Install project dependencies'
+    'ipc:Inter-process communication'
+    'list:List pods'
+    'outdated:Show outdated project dependencies'
+    'podfile-info:Shows information on installed Pods'
+    'push:Push new specifications to a spec-repo'
+    'repo:Manage spec-repositories'
+    'search:Searches for pods'
+    'setup:Setup the CocoaPods environment'
+    'spec:Manage pod specs'
+    'update:Update outdated project dependencies'
+)
+
+local -a _repo_arguments
+_repo_arguments=(
+    'add:Add a spec repo'
+    'lint:Validates all specs in a repo'
+    'update:Update a spec repo'
+)
+
+local -a _spec_arguments
+_spec_arguments=(
+    'cat:Prints a spec file'
+    'create:Create spec file stub'
+    'edit:Edit a spec file'
+    'lint:Validates a spec file'
+    'which:Prints the path of the given spec'
+)
+
+local -a _ipc_arguments
+_ipc_arguments=(
+    'list:Lists the specifications know to CocoaPods'
+    'podfile:Converts a Podfile to YAML'
+    'repl:The repl listens to commands on standard input'
+    'spec:Converts a podspec to YAML'
+    'update-search-index:Updates the search index'
+)
+
+local -a _list_arguments
+_list_arguments=(
+    'new:Lists pods introduced in the master spec-repo since the last check'
+)
+
+local -a _inherited_options
+_inherited_options=(
+    '(--silent)--silent[Show nothing]' \
+    '(--version)--version[Show the version of CocoaPods]' \
+    '(--no-color)--no-color[Show output without color]' \
+    '(--verbose)--verbose[Show more debugging information]' \
+    '(--help)--help[Show help banner of specified command]'
+)
+
+local -a _install_options
+_install_options=(
+    '(--no-clean)--no-clean[Leave SCM dirs like `.git` and `.svn` intact after downloading]' \
+    '(--no-integrate)--no-integrate[Skip integration of the Pods libraries in the Xcode project(s)]' \
+    '(--no-repo-update)--no-repo-update[Skip running `pod repo update` before install]'
+)
+
+local -a _update_options
+_update_options=(
+    '(--no-clean)--no-clean[Leave SCM dirs like `.git` and `.svn intact after downloading]' \
+    '(--no-integrate)--no-integrate[Skip integration of the Pods libraries in the Xcode project(s)]' \
+    '(--no-repo-update)--no-repo-update[Skip running `pod repo update before install]'
+)
+
+local -a _outdated_options
+_outdated_options=(
+    '(--no-repo-update)--no-repo-update[Skip running `pod repo update` before install]'
+)
+
+local -a _search_options
+_search_options=(
+    '(--full)--full[Search by name, summary, and description]' \
+    '(--stats)--stats[Show additional stats (like GitHub watchers and forks)]' \
+    '(--ios)--ios[Restricts the search to Pods supported on iOS]' \
+    '(--osx)--osx[Restricts the search to Pods supported on OS X]'
+)
+
+local -a _list_options
+_list_options=(
+    '(--update)--update[Run `pod repo update` before listing]'
+)
+
+local -a _podfile_info_options
+_podfile_info_options=(
+    '(--all)--all[Show information about all Pods with dependencies that are used in a project]' \
+    '(--md)--md[Output information in Markdown format]' \
+    '*:script or directory:_files'
+)
+
+local -a _push_options
+_push_options=(
+    '(--allow-warnings)--allow-warnings[Allows pushing even if there are warnings]' \
+    '(--local-only)--local-only[Does not perform the step of pushing REPO to its remote]' \
+    '*:script or directory:_files'
+)
+
+local -a _repo_lint_options
+_repo_lint_options=(
+    '(--only-errors)--only-errors[Lint presents only the errors]'
+)
+
+local -a _setup_options
+_setup_options=(
+    '(--push)--push[Use this option to enable push access once granted]'
+)
+
+local -a _spec_lint_options
+_spec_lint_options=(
+    '(--quick)--quick[Lint skips checks that would require to download and build the spec]' \
+    '(--only-errors)--only-errors[Lint validates even if warnings are present]' \
+    '(--no-clean)--no-clean[Lint leaves the build directory intact for inspection]' \
+    '*:script or directory:_files'
+)
+
+local -a _spec_cat_options
+_spec_cat_options=(
+    '(--show-all)--show-all[Pick from all versions of the given podspec]'
+)
+
+local -a _spec_which_options
+_spec_which_options=(
+    '(--show-all)--show-all[Print all versions of the given podspec]'
+)
+
+local -a _spec_edit_options
+_spec_edit_options=(
+    '(--show-all)--show-all[Pick which spec to edit from all available versions of the given podspec]'
+)
+
+
+__first_command_list ()
+{
+    local expl
+    declare -a tasks
+
+    tasks=(install ipc list outdated podfile-info push repo search setup spec update)
+
+    _wanted tasks expl 'help' compadd $tasks
+}
+
+__repo_list() {
+    _wanted application expl 'repo' compadd $(command ls -1 ~/.cocoapods 2>/dev/null | sed -e 's/ /\\ /g')
+}
+
+__pod-repo() {
+    local curcontext="$curcontext" state line
+    typeset -A opt_args
+
+    _arguments -C \
+        ':command:->command' \
+        '*::options:->options'
+
+    case $state in
+        (command)
+            _describe -t commands "pod repo" _repo_arguments
+            return
+        ;;
+
+        (options)
+            case $line[1] in
+                (lint)
+                    _arguments \
+                        $_inherited_options \
+                        $_repo_lint_options \
+                        ':feature:__repo_list'
+                ;;
+
+                (update)
+                    _arguments \
+                        $_inherited_options \
+                        ':feature:__repo_list'
+                ;;
+
+                (add)
+                    _arguments \
+                        $_inherited_options
+            esac
+        ;;
+    esac
+}
+
+__pod-spec() {
+    local curcontext="$curcontext" state line
+    typeset -A opt_args
+
+    _arguments -C \
+        ':command:->command' \
+        '*::options:->options'
+
+   case $state in
+        (command)
+            _describe -t commands "pod spec" _spec_arguments
+            return
+        ;;
+
+        (options)
+            case $line[1] in
+                (create)
+                    _arguments \
+                        $_inherited_options
+                ;;
+
+                (lint)
+                    _arguments \
+                        $_inherited_options \
+                        $_spec_lint_options
+                ;;
+
+                (cat)
+                    _arguments \
+                        $_inherited_options \
+                        $_spec_cat_options
+                ;;
+
+                (which)
+                    _arguments \
+                        $_inherited_options \
+                        $_spec_which_options
+                ;;
+
+                (edit)
+                    _arguments \
+                        $_inherited_options \
+                        $_spec_edit_options
+                ;;
+            esac
+            return
+        ;;
+    esac
+}
+
+__pod-ipc() {
+    local curcontext="$curcontext" state line
+    typeset -A opt_args
+
+    _arguments -C \
+        ':command:->command' \
+        '*::options:->options'
+
+   case $state in
+        (command)
+            _describe -t commands "pod ipc" _ipc_arguments
+            return
+        ;;
+
+        (options)
+            _arguments -C \
+                $_inherited_options
+            return
+        ;;
+    esac
+}
+
+__pod-list() {
+    local curcontext="$curcontext" state line
+    typeset -A opt_args
+
+    _arguments -C \
+        $_inherited_options \
+        $_list_options \
+        ':command:->command' \
+        '*::options:->options'
+
+   case $state in
+        (command)
+            _describe -t commands "pod list" _list_arguments
+            return
+        ;;
+
+        (options)
+            _arguments -C \
+                $_inherited_options \
+                $_list_options
+            return
+        ;;
+    esac
+}
+
+local curcontext="$curcontext" state line
+typeset -A opt_args
+
+_arguments -C \
+    $_inherited_options \
+    ':command:->command' \
+    '*::options:->options'
+
+case $state in
+  (command)
+      _describe -t commands "pod" _1st_arguments
+      return
+  ;;
+
+  (options)
+    case $line[1] in
+        (help)
+            _arguments \
+                $_inherited_options \
+                ':help:__first_command_list'
+        ;;
+
+        (push)
+            _arguments \
+                $_inherited_options \
+                $_push_options \
+                ':repo:__repo_list'
+        ;;
+
+        (repo)
+            __pod-repo
+        ;;
+
+        (spec)
+            __pod-spec
+        ;;
+
+        (ipc)
+            __pod-ipc
+        ;;
+
+        (list)
+            __pod-list
+        ;;
+
+        (install)
+            _arguments \
+                $_inherited_options \
+                $_install_options
+        ;;
+
+        (update)
+            _arguments \
+                $_inherited_options \
+                $_update_options
+        ;;
+
+        (outdated)
+            _arguments \
+                $_inherited_options \
+                $_outdated_options
+        ;;
+
+        (search)
+            _arguments \
+                $_inherited_options \
+                $_search_options
+        ;;
+
+        (podfile-info)
+            _arguments \
+                $_inherited_options \
+                $_podfile_info_options
+        ;;
+
+        (setup)
+            _arguments \
+                $_inherited_options \
+                $_setup_options
+        ;;
+
+    esac
+  ;;
+esac
