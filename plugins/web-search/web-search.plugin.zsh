@@ -46,7 +46,7 @@ function web_search() {
 alias bing='web_search bing'
 alias google='web_search google'
 alias yahoo='web_search yahoo'
-alias duck='web_search duckduckgo'
+alias ddg='web_search duckduckgo'
 #add your own !bang searches here
 alias wiki='web_search duckduckgo \!w'
 alias news='web_search duckduckgo \!n'
