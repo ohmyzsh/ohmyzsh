@@ -61,7 +61,7 @@ export SAVEHIST=200000
 # This avoids problems that crop up when I try to squish the cwd into the history entry.
 function zshaddhistory() {
     COMMAND_STR=${1%%$'\n'}
-    [[ ( -z $COMMAND_STR ) || ( $COMMAND_STR =~ hist(ory)? ) || \
+    [[ ( -z $COMMAND_STR ) || ( $COMMAND_STR =~ $hist(ory)?$ ) || \
         ( $COMMAND_STR =~ ^l(s\|l\|a)?$ ) || \
         ( $COMMAND_STR =~ ^(d\|gd\|git\ diff\|glp\|gg)$ ) \
     ]] && return 1
