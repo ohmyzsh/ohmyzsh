@@ -22,6 +22,8 @@ alias gca='git commit -v -a'
 compdef _git gc=git-commit
 alias gca!='git commit -v -a --amend'
 compdef _git gca!=git-commit
+alias gcmsg='git commit -m'
+compdef _git gcmsg=git-commit
 alias gco='git checkout'
 compdef _git gco=git-checkout
 alias gcm='git checkout master'
@@ -37,6 +39,12 @@ alias grset='git remote set-url'
 compdef _git grset=git-remote
 alias grup='git remote update'
 compdef _git grset=git-remote
+alias grbi='git rebase -i'
+compdef _git grbi=git-rebase
+alias grbc='git rebase --continue'
+compdef _git grbc=git-rebase
+alias grba='git rebase --abort'
+compdef _git grba=git-rebase
 alias gb='git branch'
 compdef _git gb=git-branch
 alias gba='git branch -a'
@@ -62,9 +70,17 @@ alias gm='git merge'
 compdef _git gm=git-merge
 alias grh='git reset HEAD'
 alias grhh='git reset HEAD --hard'
+alias gclean='git reset --hard && git clean -dfx'
 alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
 alias gf='git ls-files | grep'
 alias gpoat='git push origin --all && git push origin --tags'
+alias gmt='git mergetool --no-prompt'
+compdef _git gm=git-mergetool
+
+alias gg='git gui citool'
+alias gga='git gui citool --amend'
+alias gk='gitk --all --branches'
+alias gsts='git stash show --text'
 
 # Will cd into the top of the current repository
 # or submodule.
@@ -95,6 +111,8 @@ function current_repository() {
 # these aliases take advantage of the previous function
 alias ggpull='git pull origin $(current_branch)'
 compdef ggpull=git
+alias ggpur='git pull --rebase origin $(current_branch)'
+compdef ggpur=git
 alias ggpush='git push origin $(current_branch)'
 compdef ggpush=git
 alias ggpnp='git pull origin $(current_branch) && git push origin $(current_branch)'
