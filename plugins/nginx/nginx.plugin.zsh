@@ -1,7 +1,7 @@
 : ${NGINX_DIR:=/etc/nginx}
 : ${NGINX_VHOST_TEMPLATE:=$ZSH/plugins/nginx/templates/symfony2}
 
-if [ $use_sudo -eq 1 ]; then
+if [[ -e $( which -p sudo 2>&1 ) ]]; then
     sudo="sudo"
 else
     sudo=""
