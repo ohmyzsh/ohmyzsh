@@ -16,7 +16,7 @@ p_chroot="${debian_chroot:+[$debian_chroot]}"
 p_time="%K{black}%B%F{yellow}%D{%H:%M:%S}%k"
 p_ret="%(0?.. %F{red}%? )"
 p_ps="%B%F{blue}%(#.#.$)%b "
-PROMPT="$p_chroot$p_time$ret$p_ps%{$reset_color%}"
+PROMPT="$p_chroot$p_time$p_ret$p_ps%{$reset_color%}"
 
 autoload -Uz vcs_info
 zstyle ':vcs_info:*' enable fossil hg svn git cvs # p4 off, but must be last.
