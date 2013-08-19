@@ -50,5 +50,10 @@ PROMPT="╭─${user_host} ${current_dir} ${rvm_ruby} ${git_branch}
 ╰─$PR_PROMPT "
 RPS1="${return_code}"
 
+# GIT section
+GIT_CLEAN_COLOR="%{$fg[green]%}"
+GIT_DIRTY_COLOR="%{$fg[red]%}"
+ZSH_THEME_GIT_PROMPT_CLEAN=" $GIT_CLEAN_COLOR✓"
+ZSH_THEME_GIT_PROMPT_DIRTY=" $GIT_DIRTY_COLOR✗"
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$PR_YELLOW%}‹"
 ZSH_THEME_GIT_PROMPT_SUFFIX="› %{$PR_NO_COLOR%}"
