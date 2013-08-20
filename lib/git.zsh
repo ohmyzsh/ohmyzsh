@@ -74,32 +74,39 @@ git_prompt_status() {
   if $(echo "$INDEX" | grep -E '^\?\? ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_UNTRACKED$STATUS"
   fi
-  if $(echo "$INDEX" | grep '^A  ' &> /dev/null); then
+  if $(echo "$INDEX" | grep '^A[ MDAU] ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
-  elif $(echo "$INDEX" | grep '^M  ' &> /dev/null); then
+  elif $(echo "$INDEX" | grep '^UA  ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
   fi
-  if $(echo "$INDEX" | grep '^ M ' &> /dev/null); then
+  if $(echo "$INDEX" | grep '^C[ MD]  ' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_COPIED$STATUS"
+  fi
+  if $(echo "$INDEX" | grep '^M[ MD] ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
-  elif $(echo "$INDEX" | grep '^AM ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
-  elif $(echo "$INDEX" | grep '^ T ' &> /dev/null); then
+  elif $(echo "$INDEX" | grep '^[ MARC]M ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
   fi
-  if $(echo "$INDEX" | grep '^R  ' &> /dev/null); then
+  if $(echo "$INDEX" | grep '^R[ MD]  ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_RENAMED$STATUS"
   fi
-  if $(echo "$INDEX" | grep '^ D ' &> /dev/null); then
+  if $(echo "$INDEX" | grep '^[MARCDU ]D ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
-  elif $(echo "$INDEX" | grep '^D  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
-  elif $(echo "$INDEX" | grep '^AD ' &> /dev/null); then
+  elif $(echo "$INDEX" | grep '^D[ UM] ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
   fi
   if $(command git rev-parse --verify refs/stash >/dev/null 2>&1); then
     STATUS="$ZSH_THEME_GIT_PROMPT_STASHED$STATUS"
   fi
   if $(echo "$INDEX" | grep '^UU ' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_UNMERGED$STATUS"
+  elif $(echo "$INDEX" | grep '^AA ' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_UNMERGED$STATUS"
+  elif $(echo "$INDEX" | grep '^DD ' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_UNMERGED$STATUS"
+  elif $(echo "$INDEX" | grep '^U[DA] ' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_UNMERGED$STATUS"
+  elif $(echo "$INDEX" | grep '^[DA]U ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_UNMERGED$STATUS"
   fi
   if $(echo "$INDEX" | grep '^## .*ahead' &> /dev/null); then
