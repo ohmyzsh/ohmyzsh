@@ -8,8 +8,12 @@ __git_branch_names() {
 }
 
 _git-note() {
-    _arguments '-b :branch-name:__git_branch_names [branch to attach note to]' \
+    _arguments \
+      - set1 \
+      '-b[branch to attach note to]:branch-name:__git_branch_names ' \
+      - set2 \
       '-l[list all branches with notes]' \
+      - set3 \
       '-v[also show branches without notes]'
 }
 
