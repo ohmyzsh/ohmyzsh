@@ -77,7 +77,7 @@ function zshaddhistory() {
     fc -p
 }
 
-. ~/aliases.sh
+. ~/.aliases.sh
 
 # maintain this manually per-system
 source ~/.keychain-setup.sh
