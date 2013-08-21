@@ -6,7 +6,7 @@
 # ------------------------------------------------------------------------------
 
 function tab() {
-  local command="cd \\\"$PWD\\\""
+  local command="cd \\\"$PWD\\\"; clear; "
   (( $# > 0 )) && command="${command}; $*"
 
   the_app=$(
@@ -34,7 +34,7 @@ EOF
           launch session "Default Session"
           set current_session to current session
           tell current_session
-            write text "${command}; clear;"
+            write text "${command}"
           end tell
         end tell
       end tell
