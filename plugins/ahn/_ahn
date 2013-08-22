@@ -1,0 +1,112 @@
+#compdef ahn
+#autoload
+
+# zsh ahn completion
+
+local -a _1st_arguments
+_1st_arguments=(
+    '-:Using the current dir, start the Adhearsion server in the foreground'
+    'generate:generators'
+    'create:create a new Adhearsion application under the given path'
+    'daemon:start the Adhearsion server in the background'
+    'help:Describe available commands or one specific command'
+    'plugin:Plugin commands'
+    'restart:restart the Adhearsion server'
+    'start:Start the Adhearsion server in the foreground with a console'
+    'stop:Stop a running Adhearsion server'
+    'version:shows Adhearsion version'
+)
+
+local -a _generate_arguments
+_generate_arguments=(
+    'plugin: Generate a plugin'
+    'controller: Generate a controller'
+)
+
+local -a _plugin_arguments
+_plugin_arguments=(
+    'create_ahnhub_hooks: Creates ahnhub hooks for both a rubygem and github repo'
+    'create_github_hook: Creates ahnhub hook to track rubygem updates'
+    'create_rubygem_hook: Creates ahnhub hook to track github commits'
+)
+
+__task_list ()
+{
+    local expl
+    declare -a tasks
+
+    tasks=(generate create daemon help plugin restart start stop version)
+
+    _wanted tasks expl 'help' compadd $tasks
+}
+
+__generate ()
+{
+    local curcontext="$curcontext" state line
+    typeset -A opt_args
+
+    _arguments -C \
+        ':command:->command' \
+        '*::options:->options'
+
+   case $state in
+       (command)
+           _describe -t commands "ahn subcommand" _generate_arguments
+           return
+       ;;
+
+       (options)
+       ;;
+    esac
+}
+
+__plugin ()
+{
+    local curcontext="$curcontext" state line
+    typeset -A opt_args
+
+    _arguments -C \
+        ':command:->command' \
+        '*::options:->options'
+
+   case $state in
+       (command)
+           _describe -t commands "ahn subcommand" _plugin_arguments
+           return
+       ;;
+
+       (options)
+       ;;
+    esac
+}
+
+local expl
+
+local curcontext="$curcontext" state line
+typeset -A opt_args
+
+_arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+case $state in
+  (command)
+      _describe -t commands "ahn subcommand" _1st_arguments
+      return
+  ;;
+
+  (options)
+    case $line[1] in
+      (help)
+         _arguments ':feature:__task_list'
+      ;;
+
+      (generate)
+          __generate
+      ;;
+      (plugin)
+          __plugin
+      ;;
+    esac
+  ;;
+esac
