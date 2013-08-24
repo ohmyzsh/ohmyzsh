@@ -1,5 +1,7 @@
 # ls colors
-autoload colors zsh/terminfo
+autoload colors; colors;
+export LSCOLORS="Gxfxcxdxbxegedabagacad"
+#export LS_COLORS
 
 # Enable ls colors
 if [ "$DISABLE_LS_COLORS" != "true" ]
