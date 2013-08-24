@@ -42,7 +42,9 @@ source $ZSH/oh-my-zsh.sh
 # normal practices. This inserts a few more things that I use from the shell.
 export PATH=~/bin:~/util:$PATH:/usr/local/share/npm/bin:~/.apportable/SDK/bin
 
-# [[ $(id -u) == 0 ]] && export PATH=/usr/local/bin:$PATH
+# this should be allowed I think. But the system should really be configured to
+# give that path to root user.
+[[ $(id -u) == 0 ]] && export PATH=/usr/local/bin:$PATH
 # export PAGER=vimpager
 
 # zmodload zsh/complist
@@ -75,18 +77,7 @@ function zshaddhistory() {
     fc -p
 }
 
-alias l="ls"
-alias gs="git s" # short status 
-alias glp="git log -p --no-ext-diff"
-alias gdt="git difftool"
-alias gd="git diff --no-ext-diff"
-alias gdc="gd --cached"
-alias gg="git lg"
-alias gcm="git commit -am"
-alias mk="make"
-
-alias ds="dirs -v | head -10"
-alias d="gd"
+. ~/.aliases.sh
 
 # maintain this manually per-system
 source ~/.keychain-setup.sh
