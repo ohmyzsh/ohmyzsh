@@ -99,6 +99,8 @@ alias gpoat='git push origin --all && git push origin --tags'
 compdef _git gpoat=git-push
 alias gmt='git mergetool --no-prompt'
 compdef _git gmt=git-mergetool
+alias gmtvim='git mergetool --no-prompt --tool=vimdiff'
+compdef _git gmtvim=git-mergetool
 
 alias gg='git gui citool'
 compdef _git gg='git gui'
