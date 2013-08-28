@@ -129,6 +129,17 @@ prompt_hg() {
 	fi
 }
 
+prompt_svn() {
+  if in_svn; then
+    if (svn status | grep -Eq '^\s*[ACDIM!?L]'); then
+      prompt_segment yellow black
+    else
+      prompt_segment green black
+    fi
+    echo -n " $(svn_get_rev_nr)"
+  fi
+}
+
 # Dir: current working directory
 prompt_dir() {
   prompt_segment blue black '%~'
@@ -164,6 +175,7 @@ build_prompt() {
   prompt_context
   prompt_dir
   prompt_git
+	prompt_svn
   prompt_hg
   prompt_end
 }
