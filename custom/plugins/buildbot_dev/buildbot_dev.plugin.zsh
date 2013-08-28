@@ -91,3 +91,25 @@ function bb_push_with_care()
   echo "Display merged:"
   git log --pretty=oneline --graph -3 | cat 
 }
+
+function bb_start_slaves()
+{
+  DIR=$(basename $PWD)
+  if [[ $DIR == "config" ]]; then
+    ~/bin/buildslave start ~/data/buildbot-developer
+    ~/bin/buildslave start ~/data/buildbot-developer2
+  else
+    ~/bin/buildslave start ~/data/buildbot/
+  fi
+}
+
+function bb_stop_slaves()
+{
+  DIR=$(basename $PWD)
+  if [[ $DIR == "config" ]]; then
+    ~/bin/buildslave stop ~/data/buildbot-developer
+    ~/bin/buildslave stop ~/data/buildbot-developer2
+  else
+    ~/bin/buildslave stop ~/data/buildbot/
+  fi
+}
