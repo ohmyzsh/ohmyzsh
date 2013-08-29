@@ -22,6 +22,8 @@ alias gca='git commit -v -a'
 compdef _git gc=git-commit
 alias gca!='git commit -v -a --amend'
 compdef _git gca!=git-commit
+alias gcmsg='git commit -m'
+compdef _git gcmsg=git-commit
 alias gco='git checkout'
 compdef _git gco=git-checkout
 alias gcm='git checkout master'
@@ -78,7 +80,7 @@ compdef _git gm=git-mergetool
 alias gg='git gui citool'
 alias gga='git gui citool --amend'
 alias gk='gitk --all --branches'
-alias gss='git stash show --text'
+alias gsts='git stash show --text'
 
 # Will cd into the top of the current repository
 # or submodule.
