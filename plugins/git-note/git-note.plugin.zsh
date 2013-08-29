@@ -1,4 +1,6 @@
 #compdef git
+# Completion for git-note sciprt:
+# https://bitbucket.org/rkj/dotfiles/src/88f2d39f09ae40622c9561c366cd97d3363fe57c/bin/git-note?at=default
 __git_branch_names() {
     local expl
     declare -a branch_names
