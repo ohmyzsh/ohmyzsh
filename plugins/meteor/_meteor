@@ -4,6 +4,13 @@
 # Meteor Autocomplete plugin for Oh-My-Zsh, based on homebrew completion
 # Original author: Dimitri JORGE (https://github.com/jorge-d)
 
+_meteor_all_packages() {
+  packages=(`meteor list | cut -d" " -f1`)
+}
+_meteor_installed_packages() {
+  installed_packages=(`meteor list --using`)
+}
+
 local -a _1st_arguments
 _1st_arguments=(
   'run:[Default] Run this project in local development mode'
@@ -21,6 +28,9 @@ _1st_arguments=(
   'test-packages:Test one or more packages'
 )
 
+local expl
+local -a packages installed_packages
+
 if (( CURRENT == 2 )); then
   _describe -t commands "meteor subcommand" _1st_arguments
   return
@@ -28,5 +38,11 @@ fi
 
 case "$words[2]" in
     help)
-      _describe -t commands "brew subcommand" _1st_arguments
+      _describe -t commands "meteor subcommand" _1st_arguments ;;
+    remove)
+      _meteor_installed_packages
+      _wanted installed_packages expl 'installed packages' compadd -a installed_packages ;;
+    add)
+      _meteor_all_packages
+      _wanted packages expl 'all packages' compadd -a packages ;;
 esac
