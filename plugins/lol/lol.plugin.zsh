@@ -5,6 +5,7 @@ alias wtf='dmesg'
 alias onoz='cat /var/log/errors.log'
 alias rtfm='man'
 
+alias :3='echo'
 alias visible='echo'
 alias invisible='cat'
 alias moar='more'
@@ -29,7 +30,7 @@ alias iminurbase='finger'
 alias btw='nice'
 alias obtw='nohup'
 
-alias nomz='ps -aux'
+alias nomz='ps aux'
 alias nomnom='killall'
 
 alias byes='exit'
