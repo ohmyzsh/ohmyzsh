@@ -37,11 +37,12 @@ local current_dir='%{$PR_BOLD$PR_GREEN%}%~%{$reset_color%}'
 local rvm_ruby=''
 if which rvm-prompt &> /dev/null; then
   rvm_ruby='%{$PR_RED%}<$(rvm-prompt i v g s)>%{$reset_color%}'
+elif which rbenv &> /dev/null; then
+  rvm_ruby='%{$PR_RED%}<$(rbenv version | sed -e "s/ (set.*$//")>%{$reset_color%}'
 else
-  if which rbenv &> /dev/null; then
-    rvm_ruby='%{$PR_RED%}<$(rbenv version | sed -e "s/ (set.*$//")>%{$reset_color%}'
-  fi
+  rvm_ruby='%{$PR_RED%}<$(ruby -v | sed -e "s/ (.*$//")>%{$reset_color%}'
 fi
+  
 local git_branch='$(git_prompt_info)%{$reset_color%}'
 local git_status='$(git_prompt_status)%{$reset_color%}'
 local svn_info='$(svn_prompt_info)%{$reset_color%}'
