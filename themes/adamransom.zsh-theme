@@ -5,7 +5,7 @@ function _prompt_char() {
 }
 
 function _ssh_prompt() {
-  [[ -n "${SSH_CONNECTION}" ]] && "%{$fg_bold[green]%}%n%{$fg_bold[blue]%}@%{$fg_bold[cyan]%}%m%{$fg_bold[green]%}"
+  [[ -n "${SSH_CONNECTION}" ]] && echo "%{$fg_bold[green]%}%n@%m%{$reset_color%} "
 }
 
 function _collapse_pwd {
