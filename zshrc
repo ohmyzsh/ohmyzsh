@@ -54,6 +54,8 @@ export PATH=~/bin:~/util:$PATH:/usr/local/share/npm/bin
 
 stty -ixon
 stty -ixoff
+bindkey "^[[1;3C" forward-word
+bindkey "^[[1;3D" backward-word
 source $ZSH/plugins/history-substring-search/history-substring-search.plugin.zsh
 
 export HISTSIZE=20000
