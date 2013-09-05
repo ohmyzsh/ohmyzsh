@@ -85,7 +85,11 @@ compdef _git gm=git-mergetool
 alias gg='git gui citool'
 alias gga='git gui citool --amend'
 alias gk='gitk --all --branches'
+
 alias gsts='git stash show --text'
+alias gsta='git stash'
+alias gstp='git stash pop'
+alias gstd='git stash drop'
 
 # Will cd into the top of the current repository
 # or submodule.
