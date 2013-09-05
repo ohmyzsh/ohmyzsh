@@ -51,7 +51,7 @@ _1st_arguments=(
   'keys:find all keys matching the given pattern'
   'lastsave:get the UNIX timestamp of the last successful save to disk'
   'lindex:get an element from a list by its index'
-  'linset:insert an element before or after another element in a list'
+  'linsert:insert an element before or after another element in a list'
   'llen:get the length of a list'
   'lpop:remove and get the first element in a list'
   'lpush:prepend a value to a list'

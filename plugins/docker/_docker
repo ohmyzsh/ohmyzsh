@@ -1,0 +1,290 @@
+#compdef docker
+
+# Docker autocompletion for oh-my-zsh
+# Requires: Docker installed
+# Author : Azaan (@aeonazaan)
+
+
+# ----- Helper functions
+# Output a selectable list of all running docker containers
+__docker_containers() {
+    declare -a cont_cmd
+    cont_cmd=($(docker ps | awk 'NR>1{print $1":[CON("$1")"$2"("$3")]"}'))
+    _describe 'containers' cont_cmd
+}
+
+# output a selectable list of all docker images
+__docker_images() {
+    declare -a img_cmd
+    img_cmd=($(docker images | awk 'NR>1{print $1}'))
+    _describe 'images' img_cmd
+}
+
+# ----- Commands
+# Seperate function for each command, makes extension easier later
+# ---------------------------
+__attach() {
+    __docker_containers
+}
+
+__build() {
+    _arguments \
+        '-q=false[Suppress verbose build output]' \
+        '-t="[fuck to be applied to the resulting image in case of success]' \
+        '*:files:_files'
+}
+
+__commit() {
+    _arguments \
+        '-author="[Author]' \
+        '-m="[Commit message]' \
+        '-run="[Config automatically applied when the image is run.\n]'
+    __docker_containers
+}
+
+__diff() {
+    __docker_containers
+}
+
+__export() {
+   __docker_containers
+}
+
+
+__history() {
+    __docker_images
+}
+
+__images() {
+    _arguments \
+        '-a[show all images]' \
+        '-notrunc[dont truncate output]' \
+        '-q[only show numeric IDs]' \
+        '-viz[output graph in graphviz format]'
+    __docker_images
+}
+
+__import() {
+    _arguments '*:files:_files'
+}
+
+__info() {
+    # no arguments
+}
+
+__insert() {
+    __docker_images
+    _arguments '*:files:_files'
+}
+
+__inspect() {
+    __docker_images
+    __docker_containers
+}
+
+__kill() {
+    __docker_containers
+}
+
+__login() {
+    _arguments \
+        '-e="[email]' \
+        '-p="[password]' \
+        '-u="[username]' \
+}
+
+__logs() {
+    __docker_containers
+}
+
+__port() {
+    __docker_containers
+}
+
+__top() {
+    __docker_containers
+}
+
+__ps() {
+    _arguments \
+        '-a[Show all containers. Only running containers are shown by default.]' \
+        '-beforeId="[Show only container created before Id, include non-running ones.]' \
+        '-l[Show only the latest created container, include non-running ones.]' \
+        '-n=[Show n last created containers, include non-running ones.]' \
+        '-notrurrrrnc[Dont truncate output]' \
+        '-q[Only display numeric IDs]' \
+        '-s[Display sizes]' \
+        '-sinceId="[Show only containers created since Id, include non-running ones.]'
+}
+
+__pull() {
+    _arguments '-t="[Download tagged image in repository]'
+}
+
+__push() {
+
+}
+
+__restart() {
+    _arguments '-t=[number of seconds to try to stop before killing]'
+    __docker_containers
+}
+
+__rm() {
+    _arguments '-v[Remove the volumes associated to the container]'
+    __docker_containers
+}
+
+__rmi() {
+    __docker_images
+}
+
+__run() {
+    _arguments \
+        '-a=[Attach to stdin, stdout or stderr.]' \
+        '-c=[CPU shares (relative weight)]' \
+        '-d[Detached mode: leave the container running in the background]' \
+        '-dns=[Set custom dns servers]' \
+        '-e=[Set environment variables]' \
+        '-entrypoint="[Overwrite the default entrypoint of the image]' \
+        '-h="[Container host name]' \
+        '-i[Keep stdin open even if not attached]' \
+        '-m=[Memory limit (in bytes)]' \
+        '-p=[Expose a containers port to the host (use docker port to see the actual mapping)]' \
+        '-t[Allocate a pseudo-tty]' \
+        '-u="[Username or UID]' \
+        '-v=[Bind mount a volume (e.g. from the host: -v /host:/container, from docker: -v /container)]' \
+        '-volumes-from="[Mount volumes from the specified container]'
+    __docker_images
+}
+
+__search() {
+    _arguments '-notrunc[Dont truncate output]'
+}
+
+__start() {
+    __docker_containers
+}
+
+__stop() {
+    _arguments '-t=[number of seconds to try to stop before killing]'
+    __docker_containers
+}
+
+__tag() {
+    _arguments '-f[Force]'
+    __docker_images
+}
+
+__version() {
+
+}
+
+__wait() {
+    __docker_containers
+}
+
+# end commands ---------
+# ----------------------
+
+local -a _1st_arguments
+_1st_arguments=(
+    "attach":"Attach to a running container"
+    "build":"Build a container from a Dockerfile"
+    "commit":"Create a new image from a container's changes"
+    "diff":"Inspect changes on a container's filesystem"
+    "export":"Stream the contents of a container as a tar archive"
+    "history":"Show the history of an image"
+    "images":"List images"
+    "import":"Create a new filesystem image from the contents of a tarball"
+    "info":"Display system-wide information"
+    "insert":"Insert a file in an image"
+    "inspect":"Return low-level information on a container"
+    "kill":"Kill a running container"
+    "login":"Register or Login to the docker registry server"
+    "logs":"Fetch the logs of a container"
+    "port":"Lookup the public-facing port which is NAT-ed to PRIVATE_PORT"
+    "top":"Lookup the running processes of a container"
+    "ps":"List containers"
+    "pull":"Pull an image or a repository from the docker registry server"
+    "push":"Push an image or a repository to the docker registry server"
+    "restart":"Restart a running container"
+    "rm":"Remove one or more containers"
+    "rmi":"Remove one or more images"
+    "run":"Run a command in a new container"
+    "search":"Search for an image in the docker index"
+    "start":"Start a stopped container"
+    "stop":"Stop a running container"
+    "tag":"Tag an image into a repository"
+    "version":"Show the docker version information"
+    "wait":"Block until a container stops, then print its exit code"
+)
+
+_arguments '*:: :->command'
+
+if (( CURRENT == 1 )); then
+    _describe -t commands "docker command" _1st_arguments
+    return
+fi
+
+local -a _command_args
+case "$words[1]" in
+    attach)
+       __docker_containers ;;
+    build)
+        __build ;;
+    commit)
+        __commit ;;
+    diff)
+        __diff ;;
+    export)
+        __export ;;
+    history)
+        __history ;;
+    images)
+        __images ;;
+    import)
+        __import ;;
+    info)
+        __info ;;
+    insert)
+        __insert ;;
+    inspect)
+        __inspect ;;
+    kill)
+        __kill ;;
+    login)
+        __login ;;
+    logs)
+        __logs ;;
+    port)
+        __port ;;
+    top)
+        __top ;;
+    ps)
+        __ps ;;
+    pull)
+        __pull ;;
+    push)
+        __push ;;
+    restart)
+        __restart ;;
+    rm)
+        __rm ;;
+    rmi)
+        __rmi ;;
+    run)
+        __run ;;
+    search)
+        __search ;;
+    start)
+        __start ;;
+    stop)
+        __stop ;;
+    tag)
+        __tag ;;
+    version)
+        __version ;;
+    wait)
+        __wait ;;
+esac

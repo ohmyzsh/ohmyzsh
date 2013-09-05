@@ -88,6 +88,8 @@ __git-flow-release ()
 				'start:Start a new release branch.'
 				'finish:Finish a release branch.'
 				'list:List all your release branches. (Alias to `git flow release`)'
+				'publish: public'
+				'track: track'
 			)
 			_describe -t commands 'git flow release' subcommands
 			_arguments \
@@ -110,7 +112,19 @@ __git-flow-release ()
 						-u'[Use the given GPG-key for the digital signature (implies -s)]'\
 						-m'[Use the given tag message]'\
 						-p'[Push to $ORIGIN after performing finish]'\
+						-k'[Keep branch after performing finish]'\
+						-n"[Don't tag this release]"\
 						':version:__git_flow_version_list'
+				;;
+
+				(publish)
+					_arguments \
+						':version:__git_flow_version_list'\
+				;;
+
+				(track)
+					_arguments \
+						':version:__git_flow_version_list'\
 				;;
 
 				*)
@@ -162,6 +176,8 @@ __git-flow-hotfix ()
 						-u'[Use the given GPG-key for the digital signature (implies -s)]'\
 						-m'[Use the given tag message]'\
 						-p'[Push to $ORIGIN after performing finish]'\
+						-k'[Keep branch after performing finish]'\
+						-n"[Don't tag this release]"\
 						':hotfix:__git_flow_hotfix_list'
 				;;
 
@@ -191,7 +207,7 @@ __git-flow-feature ()
 				'start:Start a new feature branch.'
 				'finish:Finish a feature branch.'
 				'list:List all your feature branches. (Alias to `git flow feature`)'
-				'publish: public'
+				'publish: publish'
 				'track: track'
 				'diff: diff'
 				'rebase: rebase'
@@ -217,6 +233,7 @@ __git-flow-feature ()
 					_arguments \
 						-F'[Fetch from origin before performing finish]' \
 						-r'[Rebase instead of merge]'\
+						-k'[Keep branch after performing finish]'\
 						':feature:__git_flow_feature_list'
 				;;
 
@@ -232,13 +249,13 @@ __git-flow-feature ()
 
 				(diff)
 					_arguments \
-						':branch:__git_branch_names'\
+						':branch:__git_flow_feature_list'\
 				;;
 
 				(rebase)
 					_arguments \
 						-i'[Do an interactive rebase]' \
-						':branch:__git_branch_names'
+						':branch:__git_flow_feature_list'
 				;;
 
 				(checkout)
@@ -249,7 +266,7 @@ __git-flow-feature ()
 				(pull)
 					_arguments \
 						':remote:__git_remotes'\
-						':branch:__git_branch_names'
+						':branch:__git_flow_feature_list'
 				;;
 
 				*)

@@ -8,18 +8,19 @@ _1st_arguments=(
     'box:Box commands'
     'destroy:Destroys the vagrant environment'
     'halt:Halts the currently running vagrant environment'
-    'help:[TASK] Describe available tasks or one specific task'
     'init:[box_name] [box_url] Initializes current folder for Vagrant usage'
     'package:Packages a vagrant environment for distribution'
+    'plugin:Plugin commands'
     'provision:Run the provisioner'
     'reload:Reload the vagrant environment'
     'resume:Resumes a suspend vagrant environment'
     'ssh:SSH into the currently running environment'
-    'ssh_config:outputs .ssh/config valid syntax for connecting to this environment via ssh.'
+    'ssh-config:outputs .ssh/config valid syntax for connecting to this environment via ssh.'
     'status:Shows the status of the current Vagrant environment.'
     'suspend:Suspends the currently running vagrant environment'
     'up:Creates the vagrant environment'
-    'version:Prints the Vagrant version information'
+    '--help:[TASK] Describe available tasks or one specific task'
+    '--version:Prints the Vagrant version information'
 )
 
 local -a _box_arguments
@@ -44,6 +45,11 @@ __task_list ()
 __box_list ()
 {
     _wanted application expl 'command' compadd $(command ls -1 $HOME/.vagrant/boxes 2>/dev/null| sed -e 's/ /\\ /g')
+}
+
+__vm_list ()
+{
+    _wanted application expl 'command' compadd $(command grep Vagrantfile -oe '^[^#]*\.vm\.define *:\([a-zA-Z0-9]\+\)' 2>/dev/null | cut -d: -f2)
 }
 
 __vagrant-box ()
@@ -99,6 +105,8 @@ case $state in
       (box)
           __vagrant-box
       ;;
+      (up|provision|package|destroy|reload|ssh|halt|resume|status)
+	_arguments ':feature:__vm_list'
     esac
   ;;
 esac
