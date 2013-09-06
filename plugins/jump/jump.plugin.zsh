@@ -7,15 +7,19 @@
 # marks: lists all marks
 #
 export MARKPATH=$HOME/.marks
+
 function jump {
 	cd -P "$MARKPATH/$1" 2>/dev/null || echo "No such mark: $1"
 }
+
 function mark {
 	mkdir -p "$MARKPATH"; ln -s "$(pwd)" $MARKPATH/$1
 }
+
 function unmark {
 	rm -i "$MARKPATH/$1"
 }
+
 function marks {
 	ls -l "$MARKPATH" | sed 's/  / /g' | cut -d' ' -f9- | sed 's/ -/\t-/g' && echo
 }
@@ -23,6 +27,13 @@ function marks {
 function _completemarks {
   reply=($(ls $MARKPATH/**/*(-) | grep : | sed -E 's/(.*)\/([_\da-zA-Z\-]*):$/\2/g'))
 }
-
 compctl -K _completemarks jump
 compctl -K _completemarks unmark
+
+_mark_expansion() {
+	setopt extendedglob
+	autoload -U modify-current-argument
+	modify-current-argument '$(readlink "$MARKPATH/$ARG")'
+}
+zle -N _mark_expansion
+bindkey "^g" _mark_expansion
