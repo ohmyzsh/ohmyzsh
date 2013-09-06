@@ -13,7 +13,15 @@ jump() {
 }
 
 mark() {
-	mkdir -p "$MARKPATH"; ln -s "$(pwd)" $MARKPATH/$1
+	DIR="$(pwd)"
+	if (( $# == 0 )); then
+		MARK=$(basename $DIR)
+	else
+		MARK=$1
+	fi
+	if read -q \?"Mark ${DIR} as ${MARK}? (y/n) "; then
+		mkdir -p "$MARKPATH"; ln -s "${DIR}" "$MARKPATH/$MARK"
+	fi
 }
 
 unmark() {
