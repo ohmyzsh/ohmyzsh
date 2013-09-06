@@ -8,24 +8,30 @@
 #
 export MARKPATH=$HOME/.marks
 
-function jump {
+jump() {
 	cd -P "$MARKPATH/$1" 2>/dev/null || echo "No such mark: $1"
 }
 
-function mark {
+mark() {
 	mkdir -p "$MARKPATH"; ln -s "$(pwd)" $MARKPATH/$1
 }
 
-function unmark {
+unmark() {
 	rm -i "$MARKPATH/$1"
 }
 
-function marks {
-	ls -l "$MARKPATH" | sed 's/  / /g' | cut -d' ' -f9- | sed 's/ -/\t-/g' && echo
+autoload colors
+marks() {
+	for link in $MARKPATH/*(@); do
+		local markname="$fg[cyan]${link:t}$reset_color"
+		local markpath="$fg[blue]$(readlink $link)$reset_color"
+		printf "%s\t" $markname
+		printf "-> %s \t\n" $markpath
+	done
 }
 
-function _completemarks {
-  reply=($(ls $MARKPATH/**/*(-) | grep : | sed -E 's/(.*)\/([_\da-zA-Z\-]*):$/\2/g'))
+_completemarks() {
+	reply=($(ls $MARKPATH/**/*(-) | grep : | sed -E 's/(.*)\/([_\da-zA-Z\-]*):$/\2/g'))
 }
 compctl -K _completemarks jump
 compctl -K _completemarks unmark
