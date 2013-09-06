@@ -13,14 +13,13 @@ jump() {
 }
 
 mark() {
-	DIR="$(pwd)"
 	if (( $# == 0 )); then
-		MARK=$(basename $DIR)
+		MARK=$(basename "$(pwd)")
 	else
-		MARK=$1
+		MARK="$1"
 	fi
-	if read -q \?"Mark ${DIR} as ${MARK}? (y/n) "; then
-		mkdir -p "$MARKPATH"; ln -s "${DIR}" "$MARKPATH/$MARK"
+	if read -q \?"Mark $(pwd) as ${MARK}? (y/n) "; then
+		mkdir -p "$MARKPATH"; ln -s "$(pwd)" "$MARKPATH/$MARK"
 	fi
 }
 
