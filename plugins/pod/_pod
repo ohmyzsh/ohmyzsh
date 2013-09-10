@@ -3,18 +3,19 @@
 
 # -----------------------------------------------------------------------------
 #          FILE:  _pod
-#   DESCRIPTION:  Cocoapods autocomplete plugin for Oh-My-Zsh
+#   DESCRIPTION:  Cocoapods (0.24.0) autocomplete plugin for Oh-My-Zsh
 #                 http://cocoapods.org
 #        AUTHOR:  Alexandre Joly (alexandre.joly@mekanics.ch)
 #        GITHUB:  https://github.com/mekanics
 #       TWITTER:  @jolyAlexandre
-#       VERSION:  0.0.1
+#       VERSION:  0.0.2
 #       LICENSE:  MIT
 # -----------------------------------------------------------------------------
 
 local -a _1st_arguments
 _1st_arguments=(
     'help:Show help for the given command.'
+    'init:Generate a Podfile for the current directory.'
     'install:Install project dependencies'
     'ipc:Inter-process communication'
     'list:List pods'
