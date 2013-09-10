@@ -114,6 +114,14 @@ alias gitk-entier-history='gitk --all $(git log -g --pretty=format:%h)' # show c
 compdef _git gitk='gitk'
 # Note: if the commit has been cleaned my 'git gc', the dangling commits older than 2 weeks may have been deleted
 #
+alias gstst='git stash show --text'
+alias gsts='git stash'
+alias gstsp='git stash pop'
+alias gstsd='git stash drop'
+alias gstsa='git stash apply'
+alias gstsl='git stash list'
+
+
 alias gitconfig="vim ~/.gitconfig"
 alias gitmessage="vim ~/.gitmessage"
 
