@@ -159,7 +159,7 @@ __first_command_list ()
 }
 
 __repo_list() {
-    _wanted application expl 'repo' compadd $(command ls -1 ~/.cocoapods 2>/dev/null | sed -e 's/ /\\ /g')
+    _wanted application expl 'repo' compadd $(command ls -1 ~/.cocoapods/repos 2>/dev/null | sed -e 's/ /\\ /g')
 }
 
 __pod-repo() {
