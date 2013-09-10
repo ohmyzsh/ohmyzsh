@@ -6,10 +6,15 @@
 # unmark FOO: delete a mark
 # marks: lists all marks
 #
+
 export MARKPATH=$HOME/.marks
-function jump {
+
+function jump()
+{
   if [[ -z $1 ]]; then
-    echo "Error: no mark required"
+    echo "Error: no mark name given"
+    echo "available marks:"
+    marks
     return
   fi
   if [[ $1 == "--help" ]]; then
@@ -20,29 +25,59 @@ function jump {
     echo "  'marks': lists all marks"
     return
   fi
-	cd -P "$MARKPATH/$1" 2>/dev/null || echo "No such mark: $1"
+
+  cd -P "$MARKPATH/$1" 2>/dev/null || echo "No such mark: $1"
 }
-function mark { 
-	mkdir -p "$MARKPATH"; ln -s "$(pwd)" $MARKPATH/$1
-}
-function unmark { 
-	rm -i "$MARKPATH/$1"
-}
-function marks {
-	if [[ -d $MARKPATH ]]; then
-    ls -l "$MARKPATH" | sed 's/  / /g' | cut -d' ' -f9- | sed 's/ -/\t-/g' && echo
+
+function mark()
+{
+  if (( $# == 0 )); then
+    MARK=$(basename "$(pwd)")
   else
-    echo "No mark directory"
+    MARK="$1"
+  fi
+  if read -q \?"Mark $(pwd) as ${MARK}? (y/n) "; then
+    mkdir -p "$MARKPATH"; ln -s "$(pwd)" "$MARKPATH/$MARK"
   fi
 }
 
-function _completemarks {
-  reply=($(ls $MARKPATH))
+function unmark()
+{
+  rm -i "$MARKPATH/$1"
+}
+
+autoload colors
+function marks()
+{
+  if [[ -d $MARKPATH ]]; then
+	for link in $MARKPATH/*(@); do
+		local markname="$fg[cyan]${link:t}$reset_color"
+		local markpath="$fg[blue]$(readlink $link)$reset_color"
+		printf "%s\t" $markname
+		printf "-> %s \t\n" $markpath
+	done
+  else
+    echo "No mark found."
+  fi
+}
+
+function _completemarks()
+{
+	reply=($(ls $MARKPATH/**/*(-) | grep : | sed -E 's/(.*)\/([_\da-zA-Z\-]*):$/\2/g'))
 }
 
 compctl -K _completemarks jump
 compctl -K _completemarks unmark
 
+function _mark_expansion()
+{
+	setopt extendedglob
+	autoload -U modify-current-argument
+	modify-current-argument '$(readlink "$MARKPATH/$ARG")'
+}
+
+zle -N _mark_expansion
+bindkey "^g" _mark_expansion
+
 alias j='jump'
 compdef _jump j=jump
-
