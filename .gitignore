@@ -4,3 +4,4 @@ projects.zsh
 *.swp
 *.un~
 cache/
+.metadata/
