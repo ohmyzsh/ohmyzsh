@@ -27,7 +27,7 @@ eval my_gray='$FG[237]'
 eval my_orange='$FG[214]'
 
 # right prompt
-RPROMPT='$my_gray%n@%m%{$reset_color%}%'
+PROMPT='$(virtualenv_prompt_info)$my_gray%n@%m%{$reset_color%}%'
 
 # git settings
 ZSH_THEME_GIT_PROMPT_PREFIX="$FG[075](branch:"
