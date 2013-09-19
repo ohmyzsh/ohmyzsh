@@ -6,3 +6,4 @@ custom/example.zsh
 *.swp
 !custom/example.zshcache
 cache/
+plugins/zsh-syntax-highlighting/
