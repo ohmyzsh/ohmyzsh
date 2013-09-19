@@ -35,6 +35,18 @@ Bundle 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX'
 Bundle 'tpope/vim-surround'
 Bundle 'mephux/bro.vim'
 
+" Scala Bundles
+" You need to check out appropriate ensime branch by hand by running ie.
+" > git checkout scala-2.10
+" in ensime plugin directory managed by vundle (probably ~/.vim/bundle/ensime). Also you'll need to run make in vimproc directory.
+Bundle "megaannum/self"
+Bundle "megaannum/forms"
+Bundle "Shougo/vimproc"
+Bundle "Shougo/vimshell"
+Bundle "aemoncannon/ensime"
+Bundle "megaannum/vimside"
+
+
 " The rest of your config follows here
 
 " Excess Line Length
