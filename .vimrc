@@ -40,12 +40,12 @@ Bundle 'derekwyatt/vim-scala'
 " You need to check out appropriate ensime branch by hand by running ie.
 " > git checkout scala-2.10
 " in ensime plugin directory managed by vundle (probably ~/.vim/bundle/ensime). Also you'll need to run make in vimproc directory.
-Bundle "megaannum/self"
-Bundle "megaannum/forms"
-Bundle "Shougo/vimproc"
-Bundle "Shougo/vimshell"
-Bundle "aemoncannon/ensime"
-Bundle "megaannum/vimside"
+"Bundle "megaannum/self"
+"Bundle "megaannum/forms"
+"Bundle "Shougo/vimproc"
+"Bundle "Shougo/vimshell"
+"Bundle "aemoncannon/ensime"
+"Bundle "megaannum/vimside"
 
 
 " The rest of your config follows here
@@ -145,4 +145,5 @@ let g:tagbar_ctags_bin="/opt/local/bin/ctags"
 
 if has("autocmd")
   au  BufNewFile,BufRead *.bro set filetype=bro
+  au BufRead,BufNewFile *.scala set filetype=scala
 endif
