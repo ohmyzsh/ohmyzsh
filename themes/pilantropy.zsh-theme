@@ -49,7 +49,7 @@ function ssh_connection() {
 
 psep="%{$reset_color%}$fg_bold[white]:%{$reset_color%}"
 
-PROMPT=$'$(ssh_connection)%{$fg_bold[green]%}%n@%m %{$psep%} $fg_bold[cyan]%*%{$reset_color%} %{$psep%}$(my_git_prompt) %~\n%(?//%{$fg_bold[red]%}%? )%#%{$reset_color%} '
+PROMPT=$'%(?//%{$fg_bold[red]%}= %?\n)$(ssh_connection)%{$fg_bold[green]%}%n@%m %{$psep%} $fg_bold[cyan]%*%{$reset_color%} %{$psep%}$(my_git_prompt) %~\n%#%{$reset_color%} '
 
 ZSH_THEME_PROMPT_RETURNCODE_PREFIX="%{$fg_bold[red]%}"
 ZSH_THEME_GIT_PROMPT_PREFIX=" $fg_bold[white]‹ %{$fg_bold[yellow]%}"
