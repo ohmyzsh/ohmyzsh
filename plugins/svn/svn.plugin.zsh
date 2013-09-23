@@ -24,8 +24,9 @@ function in_svn() {
 
 function svn_get_repo_name() {
   if in_svn; then
-    svn info | sed -n 's/Repository\ Root:\ .*\///p' | read SVN_ROOT
-    svn info | sed -n "s/URL:\ .*$SVN_ROOT\///p"
+    SVN_INFO=$(svn info)
+    echo $SVN_INFO | sed -n 's/Repository\ Root:\ .*\///p' | read SVN_ROOT
+    echo $SVN_INFO | sed -n "s/^URL:\ .*$SVN_ROOT\///p"
   fi
 }
 
@@ -43,7 +44,7 @@ function svn_get_branch_name() {
         } \
       }'
   )
-  
+
   if [ "x$_DISPLAY" = "x" ]; then
     svn_get_repo_name
   else
