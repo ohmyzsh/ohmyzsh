@@ -35,6 +35,6 @@ plugins=(git)
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
-export PATH=/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/home/harry/bin:/home/harry/HarrysFile/Develop/jdk1.7.0_06/bin:/home/harry/bin:/home/harry/HarrysFile/Develop/jre1.7.0_05/bin
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/home/harry/bin:/home/harry/Project/android-sdk-linux/platform-tools:/home/harry/Project/android-sdk-linux/tools
 
 #export HTTP_PROXY=http://192.168.2.22:8087
