@@ -13,7 +13,6 @@ alias gup='git pull --rebase'
 compdef _git gup=git-fetch
 alias gp='git push'
 compdef _git gp=git-push
-alias gd='git diff'
 gdv() { git diff -w "$@" | view - }
 compdef _git gdv=git-diff
 alias gc='git commit -v'
@@ -51,6 +50,8 @@ alias gb='git branch'
 compdef _git gb=git-branch
 alias gba='git branch -a'
 compdef _git gba=git-branch
+alias gbv='git branch -av'
+compdef _git gbv=git-branch
 alias gcount='git shortlog -sn'
 compdef gcount=git
 alias gcl='git config --list'
@@ -68,6 +69,8 @@ alias gss='git status -s'
 compdef _git gss=git-status
 alias ga='git add'
 compdef _git ga=git-add
+alias gai='git add -p'
+compdef _git gai=git-add
 alias gm='git merge'
 compdef _git gm=git-merge
 alias grh='git reset HEAD'
@@ -85,6 +88,7 @@ compdef _git gm=git-mergetool
 alias gg='git gui citool'
 alias gga='git gui citool --amend'
 alias gk='gitk --all --branches'
+alias gq='qgit --all'
 alias gsts='git stash show --text'
 
 # Will cd into the top of the current repository
