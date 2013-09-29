@@ -3,6 +3,10 @@ alias g='git'
 compdef g=git
 alias gst='git status'
 compdef _git gst=git-status
+alias gd='git diff'
+compdef _git gd=git-diff
+alias gdc='git diff --cached'
+compdef _git gdc=git-diff
 alias gl='git pull'
 compdef _git gl=git-pull
 alias gup='git pull --rebase'
@@ -14,8 +18,14 @@ gdv() { git diff -w "$@" | view - }
 compdef _git gdv=git-diff
 alias gc='git commit -v'
 compdef _git gc=git-commit
+alias gc!='git commit -v --amend'
+compdef _git gc!=git-commit
 alias gca='git commit -v -a'
-compdef _git gca=git-commit
+compdef _git gc=git-commit
+alias gca!='git commit -v -a --amend'
+compdef _git gca!=git-commit
+alias gcmsg='git commit -m'
+compdef _git gcmsg=git-commit
 alias gco='git checkout'
 compdef _git gco=git-checkout
 alias gcm='git checkout master'
@@ -31,6 +41,12 @@ alias grset='git remote set-url'
 compdef _git grset=git-remote
 alias grup='git remote update'
 compdef _git grset=git-remote
+alias grbi='git rebase -i'
+compdef _git grbi=git-rebase
+alias grbc='git rebase --continue'
+compdef _git grbc=git-rebase
+alias grba='git rebase --abort'
+compdef _git grba=git-rebase
 alias gb='git branch'
 compdef _git gb=git-branch
 alias gba='git branch -a'
@@ -40,12 +56,14 @@ compdef gcount=git
 alias gcl='git config --list'
 alias gcp='git cherry-pick'
 compdef _git gcp=git-cherry-pick
-alias glg='git log --stat --max-count=5'
+alias glg='git log --stat --max-count=10'
 compdef _git glg=git-log
-alias glgg='git log --graph --max-count=5'
+alias glgg='git log --graph --max-count=10'
 compdef _git glgg=git-log
 alias glgga='git log --graph --decorate --all'
 compdef _git glgga=git-log
+alias glo='git log --oneline'
+compdef _git glo=git-log
 alias gss='git status -s'
 compdef _git gss=git-status
 alias ga='git add'
@@ -54,9 +72,20 @@ alias gm='git merge'
 compdef _git gm=git-merge
 alias grh='git reset HEAD'
 alias grhh='git reset HEAD --hard'
+alias gclean='git reset --hard && git clean -dfx'
 alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
-alias gf='git ls-files | grep'
+
+#remove the gf alias
+#alias gf='git ls-files | grep'
+
 alias gpoat='git push origin --all && git push origin --tags'
+alias gmt='git mergetool --no-prompt'
+compdef _git gm=git-mergetool
+
+alias gg='git gui citool'
+alias gga='git gui citool --amend'
+alias gk='gitk --all --branches'
+alias gsts='git stash show --text'
 
 # Will cd into the top of the current repository
 # or submodule.
@@ -87,7 +116,32 @@ function current_repository() {
 # these aliases take advantage of the previous function
 alias ggpull='git pull origin $(current_branch)'
 compdef ggpull=git
+alias ggpur='git pull --rebase origin $(current_branch)'
+compdef ggpur=git
 alias ggpush='git push origin $(current_branch)'
 compdef ggpush=git
 alias ggpnp='git pull origin $(current_branch) && git push origin $(current_branch)'
 compdef ggpnp=git
+
+# Pretty log messages
+function _git_log_prettily(){
+  if ! [ -z $1 ]; then
+    git log --pretty=$1
+  fi
+}
+alias glp="_git_log_prettily"
+compdef _git glp=git-log
+
+# Work In Progress (wip)
+# These features allow to pause a branch development and switch to another one (wip)
+# When you want to go back to work, just unwip it
+#
+# This function return a warning if the current branch is a wip
+function work_in_progress() {
+  if $(git log -n 1 | grep -q -c wip); then
+    echo "WIP!!"
+  fi
+}
+# these alias commit and uncomit wip branches
+alias gwip='git add -A; git ls-files --deleted -z | xargs -0 git rm; git commit -m "wip"'
+alias gunwip='git log -n 1 | grep -q -c wip && git reset HEAD~1'

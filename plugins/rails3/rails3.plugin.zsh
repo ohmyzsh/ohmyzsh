@@ -4,7 +4,11 @@ function _rails_command () {
   if [ -e "script/server" ]; then
     ruby script/$@
   else
-    ruby script/rails $@
+    if [ -e "bin/rails" ]; then
+      bin/rails $@
+    else
+      rails $@
+    fi
   fi
 }
 
@@ -19,5 +23,10 @@ alias ru='_rails_command runner'
 alias rs='_rails_command server'
 alias rsd='_rails_command server --debugger'
 alias devlog='tail -f log/development.log'
+alias testlog='tail -f log/test.log'
+alias prodlog='tail -f log/production.log'
 alias rdm='rake db:migrate'
 alias rdr='rake db:rollback'
+alias -g RET='RAILS_ENV=test'
+alias -g REP='RAILS_ENV=production'
+alias -g RED='RAILS_ENV=development'

@@ -1,12 +1,20 @@
 alias be="bundle exec"
-alias bi="bundle install"
 alias bl="bundle list"
 alias bp="bundle package"
+alias bo="bundle open"
 alias bu="bundle update"
+
+if [[ "$(uname)" == 'Darwin' ]]
+then
+  local cores_num="$(sysctl hw.ncpu | awk '{print $2}')"
+else
+  local cores_num="$(nproc)"
+fi
+eval "alias bi='bundle install --jobs=$cores_num'"
 
 # The following is based on https://github.com/gma/bundler-exec
 
-bundled_commands=(annotate cap capify cucumber foreman guard middleman nanoc rackup rainbows rake rspec ruby shotgun spec spork thin thor unicorn unicorn_rails puma zeus)
+bundled_commands=(annotate berks cap capify cucumber foodcritic foreman guard jekyll kitchen knife middleman nanoc rackup rainbows rake rspec ruby shotgun spec spin spork strainer tailor taps thin thor unicorn unicorn_rails puma)
 
 ## Functions
 
@@ -41,3 +49,4 @@ for cmd in $bundled_commands; do
         compdef _$cmd bundled_$cmd=$cmd
   fi
 done
+
