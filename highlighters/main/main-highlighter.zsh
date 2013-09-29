@@ -65,7 +65,7 @@ _zsh_highlight_main_highlighter()
 {
   emulate -L zsh 
   setopt localoptions extendedglob bareglobqual
-  local start_pos=0 end_pos highlight_glob=true new_expression=true arg style
+  local start_pos=0 end_pos highlight_glob=true new_expression=true arg style sudo=false sudo_arg=false
   typeset -a ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR
   typeset -a ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS
   typeset -a ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS
@@ -75,7 +75,7 @@ _zsh_highlight_main_highlighter()
     '|' '||' ';' '&' '&&'
   )
   ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS=(
-    'builtin' 'command' 'exec' 'nocorrect' 'noglob' 'sudo'
+    'builtin' 'command' 'exec' 'nocorrect' 'noglob'
   )
   # Tokens that are always immediately followed by a command.
   ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS=(
@@ -88,10 +88,29 @@ _zsh_highlight_main_highlighter()
     [[ $start_pos -eq 0 && $arg = 'noglob' ]] && highlight_glob=false
     ((start_pos+=${#BUFFER[$start_pos+1,-1]}-${#${BUFFER[$start_pos+1,-1]##[[:space:]]#}}))
     ((end_pos=$start_pos+${#arg}))
+    # Parse the sudo command line
+    if $sudo; then
+      case "$arg" in
+        # Flag that requires an argument
+        '-'[Cgprtu]) sudo_arg=true;;
+        # This prevents misbehavior with sudo -u -otherargument
+        '-'*)        sudo_arg=false;;
+        *)           if $sudo_arg; then
+                       sudo_arg=false
+                     else
+                       sudo=false
+                       new_expression=true
+                     fi
+                     ;;
+      esac
+    fi
     if $new_expression; then
       new_expression=false
      if [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS:#"$arg"} ]]; then
       style=$ZSH_HIGHLIGHT_STYLES[precommand]
+     elif [[ "$arg" = "sudo" ]]; then
+      style=$ZSH_HIGHLIGHT_STYLES[precommand]
+      sudo=true
      else
       res=$(LC_ALL=C builtin type -w $arg 2>/dev/null)
       case $res in
