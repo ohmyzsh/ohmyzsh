@@ -29,7 +29,7 @@ function battery_charge {
 
 function hg_prompt_info {
   if [ $(in_hg) ]; then
-    hg prompt "{rev}:{node|short} on {root|basename}/{branch} {task} {status} {update} {patch|count|unapplied} {incoming changes{incoming}} " 2>/dev/null
+    hg prompt "{rev}:{node|short} on {root|basename}/{branch} {task} {status} {update} {patch|count|unapplied} {incoming changes{incoming|count}} " 2>/dev/null
   fi
 }
 if which rvm-prompt &> /dev/null; then
