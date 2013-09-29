@@ -29,14 +29,17 @@ function battery_charge {
 
 function hg_prompt_info {
   if [ $(in_hg) ]; then
-    hg prompt "{rev}:{node|short} on {root|basename}:{branch} {task} {status|modified} {patch|count|unapplied} {incoming changes{incoming|count}} {update}" 2>/dev/null
+    hg prompt "{rev}:{node|short} on {root|basename}/{branch} {task} {status} {update} {patch|count|unapplied} {incoming changes{incoming}} " 2>/dev/null
   fi
 }
-
-if which rbenv &> /dev/null; then
+if which rvm-prompt &> /dev/null; then
   PROMPT='%{$fg[magenta]%}%n%{$reset_color%} at %{$fg[yellow]%}%m%{$reset_color%} in %{$fg_bold[green]%} %~ %{$reset_color%}$(hg_prompt_info)$(git_prompt_info)%{$reset_color%}
    $(prompt_char)  '
-  RPROMPT='using %{$fg[red]%}$(rbenv version | sed -e "s/ (set.*$//")%{$reset_color%} %{$fg[magenta]%}$(date "+%Y-%m-%d")%{$reset_color%} BAT: $(battery_charge)'
+  RPROMPT='%{$fg[red]%}RB $(~/.rvm/bin/rvm-prompt)%{$reset_color%}  %{$fg[magenta]%}$(date "+%Y-%m-%d")%{$reset_color%} %{$fg[green]%} BAT: %{$reset_color%} $(battery_charge)'
+elif which rbenv &> /dev/null; then
+  PROMPT='%{$fg[magenta]%}%n%{$reset_color%} at %{$fg[yellow]%}%m%{$reset_color%} in %{$fg_bold[green]%} %~ %{$reset_color%}$(hg_prompt_info)$(git_prompt_info)%{$reset_color%}
+   $(prompt_char)  '
+  RPROMPT='%{$fg[red]%}RB $(rbenv version | sed -e "s/ (set.*$//")%{$reset_color%} %{$fg[magenta]%}$(date "+%Y-%m-%d")%{$reset_color%} %{$fg[green]%} BAT: %{$reset_color%} $(battery_charge)'
 
 fi
 
