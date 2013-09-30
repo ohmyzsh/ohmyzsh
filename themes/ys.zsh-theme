@@ -35,5 +35,5 @@ PROMPT="
 %{$fg[white]%}in \
 %{$terminfo[bold]$fg[yellow]%}%~%{$reset_color%}\
 ${git_info} \
-%{$fg[white]%}[%*] L:%L N:%i
+%{$fg[white]%}[%*] tty:%l L:%L N:%i
 %{$terminfo[bold]$fg[red]%}$ %{$reset_color%}"
