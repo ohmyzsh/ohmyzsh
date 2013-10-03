@@ -52,7 +52,7 @@ function extract() {
       (*.xz) unxz "$1" ;;
       (*.lzma) unlzma "$1" ;;
       (*.Z) uncompress "$1" ;;
-      (*.zip|*.war) unzip "$1" -d $extract_dir ;;
+      (*.zip|*.war|*.jar) unzip "$1" -d $extract_dir ;;
       (*.rar) unrar x -ad "$1" ;;
       (*.7z) 7za x "$1" ;;
       (*.deb)
