@@ -30,7 +30,7 @@ _composer () {
         ;;
     esac
   else
-    compadd create-project init search selfupdate show
+    about compadd create-project help init search selfupdate show
   fi
 }
 
