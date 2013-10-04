@@ -5,7 +5,8 @@ _gitignireio_get_command_list() {
 }
 
 _gitignireio () {
-  compadd `_gitignireio_get_command_list`
+  compset -P '*,'
+  compadd -S '' `_gitignireio_get_command_list`
 }
 
 compdef _gitignireio gi
