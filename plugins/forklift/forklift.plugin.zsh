@@ -1,5 +1,6 @@
-# Open folder in ForkLift.app from console
+# Open folder in ForkLift.app of ForkLift2.app from console
 # Author: Adam Strzelecki nanoant.com, modified by Bodo Tasche bitboxer.de
+#         Updated to support ForkLift2 by Johan Kaving
 #
 # Usage:
 #   fl [<folder>]
@@ -22,9 +23,33 @@ function fl {
     fi
   fi
   osascript 2>&1 1>/dev/null <<END
-    tell application "ForkLift"
-      activate
-    end tell
+
+    try
+      tell application "Finder"
+        set appName to name of application file id "com.binarynights.ForkLift2"
+      end tell
+    on error err_msg number err_num
+      tell application "Finder"
+        set appName to name of application file id "com.binarynights.ForkLift"
+      end tell
+    end try
+
+    if application appName is running
+      tell application appName
+        activate
+      end tell
+    else
+      tell application appName
+        activate
+      end tell
+      repeat until application appName is running
+        delay 1
+      end repeat
+      tell application appName
+        activate
+      end tell
+    end if
+
     tell application "System Events"
       tell application process "ForkLift"
         try
@@ -36,7 +61,7 @@ function fl {
         keystroke "g" using {command down, shift down}
         tell sheet 1 of topWindow
           set value of text field 1 to "$PWD"
-        	keystroke return
+          keystroke return
         end tell
       end tell
     end tell
