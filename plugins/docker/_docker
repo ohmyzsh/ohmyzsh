@@ -30,7 +30,7 @@ __attach() {
 __build() {
     _arguments \
         '-q=false[Suppress verbose build output]' \
-        '-t="[fuck to be applied to the resulting image in case of success]' \
+        '-t="[Repository name (and optionally a tag) to be applied to the resulting image in case of success]' \
         '*:files:_files'
 }
 
