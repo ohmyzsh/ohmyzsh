@@ -54,13 +54,14 @@ function in_gradle() {
     fi
 }
 
-############################################################################## Examine the build.gradle file to see if its
+##############################################################################
+# Examine the build.gradle file to see if its
 # timestamp has changed, and if so, regen
 # the .gradle_tasks cache file
 ############################################################################
 _gradle_does_task_list_need_generating () {
   [ ! -f .gradletasknamecache ] && return 0;
-  [ .gradletasknamecache -nt build.gradle ] && return 0;
+  [ build.gradle -nt .gradletasknamecache ] && return 0;
   return 1;
 }
 
