@@ -6,8 +6,8 @@
 _pip_all() {
   # we cache the list of packages (originally from the macports plugin)
   if (( ! $+piplist )); then
-    echo -n " (caching package index...)"
-	piplist=($(pip search * | cut -d ' ' -f 1 | tr '[A-Z]' '[a-z]'))
+      echo -n " (caching package index...)"
+      piplist=($(pip search * | cut -d ' ' -f 1 | tr '[A-Z]' '[a-z]'))
   fi
 }
 
@@ -62,8 +62,13 @@ case "$words[1]" in
       '(--no-install)--no-install[only download packages]' \
       '(--no-download)--no-download[only install downloaded packages]' \
       '(--install-option)--install-option[extra arguments to be supplied to the setup.py]' \
+      '(--single-version-externally-managed)--single-version-externally-managed[do not download/install dependencies. requires --record or --root]'\
+      '(--root)--root[treat this path as a fake chroot, installing into it. implies --single-version-externally-managed]'\
+      '(--record)--record[file to record all installed files to.]'\
+      '(-r --requirement)'{-r,--requirement}'[requirements file]: :_files'\
+      '(-e --editable)'{-e,--editable}'[path of or url to source to link to instead of installing.]: :_files -/'\
       '1: :->packages' &&  return 0
-     
+
       if [[ "$state" == packages ]]; then
         _pip_all
         _wanted piplist expl 'packages' compadd -a piplist
