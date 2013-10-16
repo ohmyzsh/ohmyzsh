@@ -7,7 +7,7 @@
 #
 # If you do not wish to have vcs info redefine function rkj_vcs_info to be empty.
 
-function rkj_hg_prompt_info {
+rkj_hg_prompt_info() {
     hg prompt --angle-brackets "\
 <hg:%{$fg[magenta]%}<branch>%{$reset_color%}>\
 </%{$fg[yellow]%}<tags|%{$reset_color%}, %{$fg[yellow]%}>%{$reset_color%}>\
@@ -22,25 +22,27 @@ ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[blue]%}➦"
 ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[magenta]%}✂"
 ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[grey]%}✈"
 
-function rkj_git_prompt_info() {
+rkj_git_prompt_info() {
   ref=$(git symbolic-ref HEAD 2> /dev/null) || return
   echo -n "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$( git_prompt_status )%{$reset_color%}$ZSH_THEME_GIT_PROMPT_SUFFIX"
 }
 
-function rkj_vcs_info() {
+rkj_vcs_info() {
   rkj_git_prompt_info
   rkj_hg_prompt_info
 }
 
 # random prompt sign
 signs=(@ ☢ ☸ ☹ ☺ ☻ ☼ ☀ ☄ ☠ ☣ ☯ ♈ ♻ ♼ ♽ ⚙)
-PROMPT_SIGN=$signs[$[${RANDOM} % ${#signs}]]
+rkj_prompt() {
+  echo $signs[$[${RANDOM} % ${#signs}]]
+}
 
-function retcode() {
+rkj_retcode() {
   return $?
 }
 
 PROMPT=$'%{\e[0;34m%}%B┌─[%b%{\e[0m%}%{\e[1;32m%}%n%{\e[1;30m%}@%{\e[0m%}%{\e[0;36m%}%m%{\e[0;34m%}%B]%b%{\e[0m%} - %b%{\e[0;34m%}%B[%b%{\e[1;37m%}%~%{\e[0;34m%}%B]%b%{\e[0m%} - %{\e[0;34m%}%B[%b%{\e[0;33m%}'%D{"%Y-%m-%d %I:%M:%S"}%b$'%{\e[0;34m%}%B]%b%{\e[0m%}
-%{\e[0;34m%}%B└─%B[%{\e[1;35m%}%?$(retcode)%{\e[0;34m%}%B] $(rkj_vcs_info)$PROMPT_SIGN%{\e[0m%}%b '
+%{\e[0;34m%}%B└─%B[%{\e[1;35m%}%?$(rkj_retcode)%{\e[0;34m%}%B] $(rkj_vcs_info)$(rkj_prompt)%{\e[0m%}%b '
 PS2=$' \e[0;34m%}%B>%{\e[0m%}%b '
 
