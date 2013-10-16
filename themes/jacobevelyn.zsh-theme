@@ -1,5 +1,5 @@
 function parent_project() {
-  [[ $PWD =~ ([a-z]+)/vendor ]] && echo " $match[1] "
+  [[ $PWD =~ ([a-z]+)/vendor ]] && echo "$match[1] "
 }
 
 function get_color() {
