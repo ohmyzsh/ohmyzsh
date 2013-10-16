@@ -26,3 +26,10 @@ function spectrum_ls() {
   done
 }
 
+# Show all 256 colors where the background is set to specific color
+function spectrum_bls() {
+  for code in {000..255}; do
+    ((cc = code + 1))
+    print -P -- "$BG[$code]$code: Test %{$reset_color%}"
+  done
+}
