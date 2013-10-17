@@ -91,13 +91,25 @@ function hg_prompt_info {
 }
 
 function hg_dirty {
-  local hg_status
-  if ! hg_status="$(hg status -mar 2>/dev/null)"; then
+  # Do nothing if clean / dirty settings aren't defined
+  if [[ -z "$ZSH_THEME_HG_PROMPT_DIRTY" && -z "$ZSH_THEME_HG_PROMPT_CLEAN" ]]; then
     return
   fi
 
+  # Check if there are modifications
+  local hg_status
+  if [[ "$DISABLE_UNTRACKED_FILES_DIRTY" = true ]]; then
+    if ! hg_status="$(hg status -q 2>/dev/null)"; then
+      return
+    fi
+  else
+    if ! hg_status="$(hg status 2>/dev/null)"; then
+      return
+    fi
+  fi
+
   # grep exits with 0 when dirty
-  if command grep -Eq '^\s*[ACDIM!?L]' <<< "$hg_status"; then
+  if command grep -Eq '^\s*[ACDIMR!?L].*$' <<< "$hg_status"; then
     echo $ZSH_THEME_HG_PROMPT_DIRTY
     return
   fi
