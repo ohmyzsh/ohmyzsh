@@ -105,13 +105,15 @@ let g:pymode_syntax_all = 1
 let g:pymode_syntax_indent_errors = g:pymode_syntax_all
 let g:pymode_syntax_space_errors = g:pymode_syntax_all
 
+let g:pymode_utils_whitespaces = 0
+
 " Don't autofold code
 let g:pymode_folding = 0
 
 " Highlight trailing white space and delete on save
 autocmd InsertLeave * match ErrorMsg '\s\+$'
 autocmd InsertEnter * call clearmatches()
-autocmd BufWritePre * :%s/\s\+$//e
+" autocmd BufWritePre * :%s/\s\+$//e
 
 autocmd FileType tex set spell
 autocmd FileType tex set tw=80
