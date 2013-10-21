@@ -164,6 +164,7 @@ _zsh_highlight_main_highlighter_check_path()
   [[ -z $expanded_path ]] && return 1
   [[ -e $expanded_path ]] && return 0
   # Search the path in CDPATH
+  local cdpath_dir
   for cdpath_dir in $cdpath ; do
     [[ -e "$cdpath_dir/$expanded_path" ]] && return 0
   done
