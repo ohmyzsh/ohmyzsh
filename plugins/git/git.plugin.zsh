@@ -97,6 +97,13 @@ compdef git-svn-dcommit-push=git
 
 alias gsr='git svn rebase'
 alias gsd='git svn dcommit'
+
+function in_git {
+  if $(git status > /dev/null 2>&1); then
+    echo 1
+  fi
+}
+
 #
 # Will return the current branch name
 # Usage example: git pull origin $(current_branch)
