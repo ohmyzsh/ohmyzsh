@@ -2,11 +2,8 @@
 # Developed by NETPUNK#, software services
 # http://www.netpunk.net (not up ATM)
 #
-<<<<<<< HEAD
 # Depends on rbenv/rvm, git, mercurial and battery plugins
 #
-=======
->>>>>>> 473dc4eeb017f7ce6c7057da588bf39337beb4be
 # License: MIT
 #
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
@@ -18,33 +15,13 @@
 # THE SOFTWARE.
 ##
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 473dc4eeb017f7ce6c7057da588bf39337beb4be
 function prompt_char {
     git branch >/dev/null 2>/dev/null && echo 'GIT ☢ ↪' && return
     hg root >/dev/null 2>/dev/null && echo 'HG ☢ ↪' && return
     echo ' ☢ ↪'
 }
-<<<<<<< HEAD
 
-=======
-function battery_charge {
-    if [ -e /usr/local/bin/batcharge.py ]
-    then
-        echo `python /usr/local/bin/batcharge.py`
-    else
-        echo '';
-    fi
-}
-
-function hg_prompt_info {
-  if [ $(in_hg) ]; then
-    hg prompt "{rev}:{node|short} on {root|basename}/{branch} {task} {status} {update} {patch|count|unapplied} {incoming changes{incoming|count}} " 2>/dev/null
-  fi
-}
->>>>>>> 473dc4eeb017f7ce6c7057da588bf39337beb4be
 if which rvm-prompt &> /dev/null; then
   PROMPT='%{$fg[magenta]%}%n%{$reset_color%} at %{$fg[yellow]%}%m%{$reset_color%} in %{$fg_bold[green]%} %~ %{$reset_color%}$(hg_prompt_info)$(git_prompt_info)%{$reset_color%}
    $(prompt_char)  '
@@ -52,11 +29,7 @@ if which rvm-prompt &> /dev/null; then
 elif which rbenv &> /dev/null; then
   PROMPT='%{$fg[magenta]%}%n%{$reset_color%} at %{$fg[yellow]%}%m%{$reset_color%} in %{$fg_bold[green]%} %~ %{$reset_color%}$(hg_prompt_info)$(git_prompt_info)%{$reset_color%}
    $(prompt_char)  '
-<<<<<<< HEAD
   RPROMPT='%{$fg[red]%}RB $(rbenv version | sed -e "s/ (set.*$//")%{$reset_color%} %{$fg[magenta]%}$(date "+%Y-%m-%d")%{$reset_color%} $(battery_pct_prompt)'
-=======
-  RPROMPT='%{$fg[red]%}RB $(rbenv version | sed -e "s/ (set.*$//")%{$reset_color%} %{$fg[magenta]%}$(date "+%Y-%m-%d")%{$reset_color%} %{$fg[green]%} BAT: %{$reset_color%} $(battery_charge)'
->>>>>>> 473dc4eeb017f7ce6c7057da588bf39337beb4be
 
 fi
 
