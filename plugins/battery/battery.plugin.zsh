@@ -46,7 +46,7 @@ if [[ $(uname) == "Darwin" ]] ; then
       fi
       echo "%{$fg[$color]%}[$(battery_pct_remaining)%%]%{$reset_color%}"
     else
-      echo "∞"
+      echo "⚡"
     fi
   }
 
