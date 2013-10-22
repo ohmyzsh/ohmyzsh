@@ -22,6 +22,8 @@ if which tmux &> /dev/null
 	[[ -n "$ZSH_TMUX_AUTOQUIT" ]] || ZSH_TMUX_AUTOQUIT=$ZSH_TMUX_AUTOSTART
 	# Set term to screen or screen-256color based on current terminal support
 	[[ -n "$ZSH_TMUX_FIXTERM" ]] || ZSH_TMUX_FIXTERM=true
+	# Group with the previous session instead of attaching to it
+	[[ -n "$ZSH_TMUX_GROUP" ]] || ZSH_TMUX_GROUP=false
 	# Set '-CC' option for iTerm2 tmux integration
 	[[ -n "$ZSH_TMUX_ITERM2" ]] || ZSH_TMUX_ITERM2=false
 	# The TERM to use for non-256 color terminals.
@@ -69,7 +71,37 @@ if which tmux &> /dev/null
 		# Try to connect to an existing session.
 		elif [[ "$ZSH_TMUX_AUTOCONNECT" == "true" ]]
 		then
-			\tmux $tmux_options attach || \tmux $tmux_options new-session
+			# Group with an existing session or create a new one.
+			if [[ "$ZSH_TMUX_GROUP" == "true" ]]; then
+				sessions="$(tmux list-sessions -F '#{session_grouped} #{session_attached} #{session_name}')"
+				grouped_sessions="$(echo "$sessions" | grep '^1')"
+
+				# Join an existing group.
+				if [[ -n "$grouped_sessions" ]]; then
+					unattached_session="$(echo "$grouped_sessions" | awk '$2 == 0 {print $3; exit}')"
+
+					# Reuse an unattached, grouped session or create a new one.
+					if [[ -n "$unattached_session" ]]; then
+						\tmux $tmux_options attach-session -t "$unattached_session"
+					else
+						\tmux $tmux_options new-session -t "$unattached_session"
+					fi
+				# There are no existing groups.
+				else
+					first_session="$(echo "$sessions" | awk '{print $3; exit}')"
+
+					# Create a new session, grouped if there is anything to group with.
+					if [[ -n "$first_session" ]]; then
+						\tmux $tmux_options new-session -t "$first_session"
+					else
+						\tmux $tmux_options new-session
+					fi
+				fi
+			# Attach to an existing session or create a new one.
+			else
+				\tmux $tmux_options attach || \tmux $tmux_options new-session
+			fi
+
 			[[ "$ZSH_TMUX_AUTOQUIT" == "true" ]] && exit
 		# Just run tmux, fixing the TERM variable if requested.
 		else
