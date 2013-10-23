@@ -1,4 +1,5 @@
 alias be="bundle exec"
+alias bi="bundle install"
 alias bl="bundle list"
 alias bp="bundle package"
 alias bo="bundle open"
@@ -10,7 +11,7 @@ then
 else
   local cores_num="$(nproc)"
 fi
-eval "alias bi='bundle install --jobs=$cores_num'"
+export BUNDLE_JOBS=$cores_num
 
 # The following is based on https://github.com/gma/bundler-exec
 
