@@ -1,13 +1,14 @@
+BUILDBOT_PROJECT_PATH="~/projects/buildbot/"
 
-alias cdb='cd ~/projects/buildbot/'
-alias cdp='cd ~/projects/'
+alias cdb='cd $BUILDBOT_PROJECT_PATH/main'
+alias cdp='cd $BUILDBOT_PROJECT_PATH'
 
 function bb_env()
 {
   BBDIR=$1
   shift
   if [[ -z $BBDIR ]]; then
-    BASE=$HOME/projects/buildbot/
+    BASE=$BUILDBOT_PROJECT_PATH/main
   else
     BASE=$BBDIR
   fi
