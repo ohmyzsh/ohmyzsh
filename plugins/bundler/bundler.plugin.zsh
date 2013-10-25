@@ -13,6 +13,7 @@ fi
 eval "alias bi='bundle install --jobs=$cores_num'"
 
 # The following is based on https://github.com/gma/bundler-exec
+
 bundled_commands=(annotate berks cap capify cucumber foodcritic foreman guard jekyll kitchen knife middleman nanoc rackup rainbows rake rspec ruby shotgun spec spin spork strainer tailor taps thin thor unicorn unicorn_rails puma)
 
 # Remove $UNBUNDLED_COMMANDS from the bundled_commands list
