@@ -4,7 +4,7 @@
 alias g='git'
 compdef g=git
 
-# Git Status (gst)
+# Git status (gst)
 alias gst='git status'
 compdef _git gst=git-status
 
@@ -134,16 +134,16 @@ compdef _git gmt=git-mergetool
 alias gmtvim='git mergetool --no-prompt --tool=vimdiff'
 compdef _git gmtvim=git-mergetool
 
-# Git stash (gst)
-alias gsts='git stash show --text'
+# Git stash (gsta)
+alias gstas='git stash show --text'
 compdef _git gsts='git-stash'
-alias gstp='git stash pop'
+alias gstap='git stash pop'
 compdef _git gstp='git-stash'
-alias gsta='git stash apply'
+alias gstaa='git stash apply'
 compdef _git gstz='git-stash'
-alias gst='git stash'
+alias gsta='git stash'
 compdef _git gst='git-stash'
-alias gstd='git stash drop'
+alias gstad='git stash drop'
 compdef _git gstd='git-stash'
 
 # Git Gui (gg)
@@ -158,7 +158,7 @@ compdef _git gk='gitk'
 alias gitk-entier-history='gitk --all $(git log -g --pretty=format:%h)' # show complete history, with dangling commits
 compdef _git gitk='gitk'
 # Note: if the commit has been cleaned my 'git gc', the dangling commits older than 2 weeks may have been deleted
-#lias gstsd='git stash drop'
+
 
 # Edit global Git configuration files
 alias gitconfig="vim ~/.gitconfig"
