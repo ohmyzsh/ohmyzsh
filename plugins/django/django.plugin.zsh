@@ -141,6 +141,7 @@ _managepy-sqlinitialdata(){}
 _managepy-sqlreset(){}
 _managepy-sqlsequencereset(){}
 _managepy-startapp(){}
+_managepy-startproject(){}
 
 _managepy-syncdb() {
   _arguments -s : \
@@ -198,6 +199,7 @@ _managepy-commands() {
     'sqlreset:Prints the DROP TABLE SQL, then the CREATE TABLE SQL, for the given app name(s).'
     'sqlsequencereset:Prints the SQL statements for resetting sequences for the given app name(s).'
     "startapp:Creates a Django app directory structure for the given app name in this project's directory."
+    "startproject:Creates a Django project directory structure for the given project name in this current directory."
     "syncdb:Create the database tables for all apps in INSTALLED_APPS whose tables haven't already been created."
     'test:Runs the test suite for the specified applications, or the entire site if no apps are specified.'
     'testserver:Runs a development server with data from the given fixture(s).'
