@@ -26,6 +26,7 @@ _1st_arguments=(
   'list:list files in a formula or not-installed formulae'
   'log:git commit log for a formula'
   'missing:check all installed formuale for missing dependencies.'
+  'options:display install options specific to formula.'
   'outdated:list formulas for which a newer version is available'
   'prune:remove dead links'
   'reinstall:reinstall a formula'
