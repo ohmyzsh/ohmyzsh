@@ -4,7 +4,7 @@ local USER_HOST='%{$fg[magenta]%}%n%{$reset_color%} at %{$fg[yellow]%}%m%{$reset
 REMOTE_CONN=''
 
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
-    REMOTE_CONN='%{$fg[magenta]%}✭%{$reset_color%} '
+    REMOTE_CONN="%{$fg[magenta]%}✭%{$reset_color%} "
 fi
 
 PROMPT='[${REMOTE_CONN}%{$fg_bold[yellow]%}%n@%m%{$reset_color%}%{$fg_bold[green]%} ${PWD/#$HOME/~}%{$reset_color%}$(git_prompt_info)%{$reset_color%}]%{$fg_bold[green]%}
