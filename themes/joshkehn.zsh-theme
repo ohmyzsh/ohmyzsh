@@ -1,8 +1,13 @@
 local USER_HOST='%{$fg_bold[yellow]%}%n@%m%{$reset_color%}'
 local CURRENT_DIR=''
 local USER_HOST='%{$fg[magenta]%}%n%{$reset_color%} at %{$fg[yellow]%}%m%{$reset_color%}'
+REMOTE_CONN=''
 
-PROMPT='[%{$fg_bold[yellow]%}%n@%m%{$reset_color%}%{$fg_bold[green]%} ${PWD/#$HOME/~}%{$reset_color%}$(git_prompt_info)%{$reset_color%}]%{$fg_bold[green]%}
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+    REMOTE_CONN='%{$fg[magenta]%}✭%{$reset_color%} '
+fi
+
+PROMPT='[${REMOTE_CONN}%{$fg_bold[yellow]%}%n@%m%{$reset_color%}%{$fg_bold[green]%} ${PWD/#$HOME/~}%{$reset_color%}$(git_prompt_info)%{$reset_color%}]%{$fg_bold[green]%}
 : %{$reset_color%}'
 
 ZSH_THEME_GIT_PROMPT_PREFIX=" git(%{$fg[red]%}"
