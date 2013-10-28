@@ -1,11 +1,14 @@
 # Authors:
 # https://github.com/AlexBio
 # https://github.com/dbb
+# https://github.com/asm0dey
 #
 # Debian-related zsh aliases and functions for zsh
 
-# Use aptitude if installed, or apt-get if not.
+# Use apt-fast if installed, if not - aptitude, if not too - apt-get.
 # You can just set apt_pref='apt-get' to override it.
+if [[ -e $( which -p apt-fast 2>&1 ) ]]; then
+    apt_pref='apt-fast'
 if [[ -e $( which -p aptitude 2>&1 ) ]]; then
     apt_pref='aptitude'
 else
@@ -67,7 +70,7 @@ if [[ $use_sudo -eq 1 ]]; then
     # Remove ALL kernel images and headers EXCEPT the one in use
     alias kclean='sudo aptitude remove -P ?and(~i~nlinux-(ima|hea) \
         ?not(~n`uname -r`))'
-
+    alias aar='sudo add-apt-repository -y'
 
 # commands using su #########
 else
@@ -83,6 +86,11 @@ else
     alias adu='su -lc \'$apt_pref update && aptitude dist-upgrade\' root'
     alias afu='su -lc "apt-file update"'
     alias ag='su -lc \'$apt_pref safe-upgrade\' root'
+    alias aar(){
+        cmd="su -lc 'add-apt-repository -y $@' root"
+        print "$cmd"
+        eval "$cmd"
+    }
     ai() {
         cmd="su -lc 'aptitude -P install $@' root"
         print "$cmd"
