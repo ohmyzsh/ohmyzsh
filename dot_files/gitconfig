@@ -10,9 +10,11 @@
    co = checkout
    df = diff
    lg = log -p
+   lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
    loo = log --pretty=oneline --abbrev-commit
-   lol = log --graph --decorate --pretty=oneline --abbrev-commit
-   lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+   lol = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+   lola = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all
+
    rewrite-history   = rebase -i HEAD~2
    rewrite-history1  = rebase -i HEAD~
    rewrite-history2  = rebase -i HEAD~2
@@ -39,6 +41,10 @@ ui = auto
 [core]
 editor = vim
 
+[cola]
+   fontdiff = Courier 10 Pitch,9,-1,5,50,0,0,0,0,0
+   tabwidth = 4
+
 [commit]
 template = /home/username/.gitmessage
 
@@ -48,8 +54,11 @@ tool = kdiff3
 [guitool "mergetool"]
 cmd = git mergetool --no-prompt
 
-[mergetool "kdiff3"]
-cmd = kdiff3
-args = --L1 base --L2 mine --L3 theirs $base $local $other -o $output
-keepBackup = false
+# [mergetool "kdiff3"]
+# cmd = kdiff3
+# args = --L1 base --L2 mine --L3 theirs $base $local $other -o $output
+# keepBackup = false
+
+[push]
+  default = current
 
