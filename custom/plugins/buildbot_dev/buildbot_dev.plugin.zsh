@@ -1,4 +1,4 @@
-BUILDBOT_PROJECT_PATH="~/projects/buildbot/"
+BUILDBOT_PROJECT_PATH="$HOME/projects/buildbot/"
 
 alias cdb='cd $BUILDBOT_PROJECT_PATH/main'
 alias cdp='cd $BUILDBOT_PROJECT_PATH'
@@ -83,6 +83,11 @@ function bb_push_with_care()
   echo "Press Enter to continue"
   read
   git push ssh://android.intel.com/a/buildbot/$project HEAD:platform/buildbot/$branch
+  #   git push umg HEAD:platform/buildbot/$branch
+  # This requires to have the following configuration in git remote (ex for 'config' project):
+  # umg     ssh://gerrit-glb.tl.intel.com/a/buildbot/config (fetch)
+  # umg     ssh://gerrit-glb.tl.intel.com/a/buildbot/config (push)
+  #
 
   echo "Refreshing repo"
   echo "Waitin 30s..."
@@ -90,7 +95,7 @@ function bb_push_with_care()
   repo sync .
 
   echo "Display merged:"
-  git log --pretty=oneline --graph -3 | cat 
+  git log --pretty=oneline --graph -3 | cat
 }
 
 function bb_start_slaves()
