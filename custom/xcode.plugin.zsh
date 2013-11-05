@@ -10,4 +10,4 @@ function xc {
 }
 
 alias xcb='xcodebuild'
-alias xcs='xcode-select -p'
+alias xcs='xcode-select --print-path'
