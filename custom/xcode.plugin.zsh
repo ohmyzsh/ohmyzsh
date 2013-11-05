@@ -9,5 +9,9 @@ function xc {
   fi
 }
 
+function xcsel {
+  sudo xcode-select --switch "$*"
+}
+
 alias xcb='xcodebuild'
-alias xcs='xcode-select --print-path'
+alias xcp='xcode-select --print-path'
