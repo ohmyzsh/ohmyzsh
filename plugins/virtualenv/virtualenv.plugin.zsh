@@ -6,3 +6,4 @@ function virtualenv_prompt_info(){
 
 # disables prompt mangling in virtual_env/bin/activate
 export VIRTUAL_ENV_DISABLE_PROMPT=1
+export VIRTUAL_ENV_DISABLE_PROMPT_BY_PLUGIN=1
