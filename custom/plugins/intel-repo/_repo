@@ -38,23 +38,23 @@ _repo()
           'branch:View current topic branches'
           'branches:View current topic branches'
           'checkout:Checkout a branch for development'
-          'checkout-manifest:for every project in a manifest tag file check out the sha1 listed in the file' 
+          'checkout-manifest:for every project in a manifest tag file check out the sha1 listed in the file'
           'cherry-pick:Cherry-pick a change.'
           'diff:Show changes between commit and working tree'
           'download:Download and checkout a change'
           'forall:execute command on several project'
-          'format-patch:build patch sets for each project common to a manifest baseline'    
+          'format-patch:build patch sets for each project common to a manifest baseline'
           'grep:Print lines matching a pattern'
           'help:Display detailed help on a command'
           'init:Initialize repo in the current directory'
-          # 'info:Get info on the manifest branch, current branch or unmerged branches' 
+          # 'info:Get info on the manifest branch, current branch or unmerged branches'
           'list:List projects and their associated directories'
           'manifest:Manifest inspection utility'
           'overview:Display overview of unmerged project branches'
           'prune:Prune (delete) already merged topics'
           'push:Push the local branch'
           'rebase:Rebase local branches on upstream branch'
-          #- 'selfupdate:Update repo to the latest version'
+          'selfupdate:Update repo to the latest version'
           'smartsync:Update working tree to the latest known good revision'
           'stage:Stage file(s) for commit'
           'start:Start a new branch for development'
@@ -195,6 +195,12 @@ _repo()
                      '(-p)-p[Show project headers before output]' \
                      ': :__repo_projects_mandatory' \
                      "(-c --command -h --help -v --verbose -p)"{-c,--command}"[Command (and arguments) to execute]" \
+                     && ret=0
+          ;;
+        (selfupdate)
+          _arguments : \
+                     "(-h --help)"{-h,--help}"[Show help]" \
+                     "(--no-repo-verif)--no-repo-verif[do not verify repo source code]" \
                      && ret=0
           ;;
         *)
