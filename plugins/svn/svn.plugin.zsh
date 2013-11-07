@@ -16,16 +16,17 @@ $ZSH_THEME_REPO_NAME_COLOR$_DISPLAY$ZSH_PROMPT_BASE_COLOR$ZSH_THEME_SVN_PROMPT_S
 
 
 function in_svn() {
-  if $(svn info >/dev/null 2>&1); then
-    return 0
-  fi
-  return 1
+  # Subversion doesn't return any exit status for the 'info' command, hence this hack.
+  # grep will return 0 if 'One or more lines were selected', and Bash treats 0 as true!
+  svn info 2>&1 | grep -q 'Path:'
+  return $?
 }
 
 function svn_get_repo_name() {
   if in_svn; then
-    svn info | sed -n 's/Repository\ Root:\ .*\///p' | read SVN_ROOT
-    svn info | sed -n "s/URL:\ .*$SVN_ROOT\///p"
+    SVN_INFO=$(svn info)
+    echo $SVN_INFO | sed -n 's/Repository\ Root:\ .*\///p' | read SVN_ROOT
+    echo $SVN_INFO | sed -n "s/^URL:\ .*$SVN_ROOT\///p"
   fi
 }
 
@@ -43,7 +44,7 @@ function svn_get_branch_name() {
         } \
       }'
   )
-  
+
   if [ "x$_DISPLAY" = "x" ]; then
     svn_get_repo_name
   else
