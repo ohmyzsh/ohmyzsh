@@ -13,3 +13,6 @@ compdef _repo rsrra='repo sync ; repo rebase --auto-stash'
 
 alias ru='repo upload'
 compdef _repo ru='repo upload'
+
+alias rst='repo status'
+compdef _repo rst='repo status'
