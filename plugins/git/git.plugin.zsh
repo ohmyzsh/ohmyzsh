@@ -153,3 +153,16 @@ function work_in_progress() {
 # these alias commit and uncomit wip branches
 alias gwip='git add -A; git ls-files --deleted -z | xargs -0 git rm; git commit -m "wip"'
 alias gunwip='git log -n 1 | grep -q -c wip && git reset HEAD~1'
+
+function git_restore_file() {
+  if [ -z $1 ]; then
+    echo 'filename required'
+    return 1
+  fi
+
+  local file=$1; shift
+  
+  git checkout $(git rev-list -n 1 HEAD -- "$file")~1 -- "$file"
+
+  echo $file
+}
