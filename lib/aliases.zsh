@@ -32,3 +32,7 @@ alias l=la
 alias sl=ls # often screw this up
 
 alias afind='ack-grep -il'
+
+# Git aliases
+alias gits='git st'
+alias gitk='gitk --all &'
