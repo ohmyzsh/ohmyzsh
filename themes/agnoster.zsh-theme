@@ -124,7 +124,7 @@ prompt_hg() {
 			else
 				prompt_segment green black
 			fi
-			echo -n " $rev@$branch" $st
+			echo -n "☿ $rev@$branch" $st
 		fi
 	fi
 }
