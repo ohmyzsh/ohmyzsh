@@ -19,6 +19,9 @@ if ! gpg-connect-agent --quiet /bye > /dev/null 2> /dev/null; then
     # source settings of old agent, if applicable
     if [ -f "${GPG_ENV}" ]; then
         . ${GPG_ENV} > /dev/null
+        export GPG_AGENT_INFO
+        export SSH_AUTH_SOCK
+        export SSH_AGENT_PID
     fi
 
     # check again if another agent is running using the newly sourced settings
