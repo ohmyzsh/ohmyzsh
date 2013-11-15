@@ -10,4 +10,3 @@ function package_version() {
     echo "@"$(grep '"version"' ./package.json | head -n 1 | awk -F'"' '{print $4}')
   fi
 }
-master〕❲master❳
