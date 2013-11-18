@@ -5,6 +5,12 @@ alias cdp='cd $BUILDBOT_PROJECT_PATH'
 
 alias c='cactus'
 alias cj='cactus jump'
+alias cjh='cactus jump home'
+alias cjw='cactus jump workdir'
+alias cjc='cactus jump cactus'
+alias cjt='cactus jump txwebservices'
+alias cja='cactus jump android'
+alias cjm='cactus jump metacactus'
 
 function bb_env()
 {
@@ -56,6 +62,7 @@ function bb_repo_upload()
   A=$(printf -- '%s,' ${REVIEWERS[@]})
   A=${A%,}
   echo "Reviewers: $A"
+  echo "Cmd: repo upload --cbr --re=$A ."
   yes | repo upload --cbr --re=$A .
 }
 
