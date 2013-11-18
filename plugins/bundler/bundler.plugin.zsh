@@ -4,18 +4,6 @@ alias bp="bundle package"
 alias bo="bundle open"
 alias bu="bundle update"
 
-bundler_version=`bundle version | cut -d' ' -f3`
-if [[ $bundler_version > '1.4.0' || $bundler_version = '1.4.0' ]]; then
-  if [[ "$(uname)" == 'Darwin' ]]
-  then
-    local cores_num="$(sysctl hw.ncpu | awk '{print $2}')"
-  else
-    local cores_num="$(nproc)"
-  fi
-  eval "alias bi='bundle install --jobs=$cores_num'"
-else
-  alias bi='bundle install' 
-fi
 
 # The following is based on https://github.com/gma/bundler-exec
 
@@ -44,14 +32,28 @@ _run-with-bundler() {
   fi
 }
 
-## Main program
-for cmd in $bundled_commands; do
-  eval "function unbundled_$cmd () { $cmd \$@ }"
-  eval "function bundled_$cmd () { _run-with-bundler $cmd \$@}"
-  alias $cmd=bundled_$cmd
+if _bundler-installed; then
+	bundler_version=`bundle version | cut -d' ' -f3`
+	if [[ $bundler_version > '1.4.0' || $bundler_version = '1.4.0' ]]; then
+		if [[ "$(uname)" == 'Darwin' ]]
+		then
+			local cores_num="$(sysctl hw.ncpu | awk '{print $2}')"
+		else
+			local cores_num="$(nproc)"
+		fi
+		eval "alias bi='bundle install --jobs=$cores_num'"
+	else
+		alias bi='bundle install' 
+	fi
 
-  if which _$cmd > /dev/null 2>&1; then
-        compdef _$cmd bundled_$cmd=$cmd
-  fi
-done
+	## Main program
+	for cmd in $bundled_commands; do
+		eval "function unbundled_$cmd () { $cmd \$@ }"
+		eval "function bundled_$cmd () { _run-with-bundler $cmd \$@}"
+		alias $cmd=bundled_$cmd
 
+		if which _$cmd > /dev/null 2>&1; then
+			compdef _$cmd bundled_$cmd=$cmd
+		fi
+	done
+fi
