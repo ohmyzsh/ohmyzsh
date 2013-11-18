@@ -56,7 +56,7 @@ function bb_repo_upload()
   A=$(printf -- '%s,' ${REVIEWERS[@]})
   A=${A%,}
   echo "Reviewers: $A"
-  repo upload --cbr --re=$A .
+  yes | repo upload --cbr --re=$A .
 }
 
 function bb_merge_staging_main()
