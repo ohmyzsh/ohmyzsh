@@ -73,16 +73,14 @@ function bb_merge_prod_staging()
 
 function bb_push_with_care()
 {
-  project=$1
-  shift
-  branch=$1
-  shift
+  branch=$(git branches | grep "remotes/m/" | cut -d'/' -f5 | cut -d' ' -f1)
+  project=$(git remote -v | grep umg | tail -n 1 | cut -d'/' -f6 | cut -d' ' -f1)
 
   if [[ -z $project || -z $branch ]]; then
-    echo "Missing arg : <project> <branch>"
+    echo "Unable to findout branches or project name :("
     return
   fi
-  echo "Pushing branch $branch on project $project"
+  echo "Pushing branch '$branch' on project '$project'"
   echo "Press Enter to continue"
   read
   git push ssh://android.intel.com/a/buildbot/$project HEAD:platform/buildbot/$branch
