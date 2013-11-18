@@ -32,14 +32,16 @@ DISABLE_VENV_CD="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git python vim-override common-aliases zsh-syntax-highlighting jump coffee cp 
+plugins=(git python vim-override common-aliases zsh-syntax-highlighting jump coffee cp
          rsync git-remote-branch command-not-found debian dircycle encode64 lol extract common-aliases
          pip brew sublime grin)
 
 source $ZSH/oh-my-zsh.sh
-# source `which virtualenvwrapper.sh`
+
+zstyle ':completion:*:descriptions' format '%B%d%b'
 
 # Customize to your needs...
+
 if [ -z "$LC_ALL" ]; then export LC_ALL=en_US.UTF-8; fi
 if [ -z "$LANG" ]; then export LANG=en_US.UTF-8; fi
 

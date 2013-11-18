@@ -17,6 +17,9 @@ ZSH_THEME="stibbons"
 # Comment this out to disable weekly auto-update checks
 DISABLE_AUTO_UPDATE="false"
 
+# Uncomment to change how many often would you like to wait before auto-updates occur? (in days)
+# export UPDATE_ZSH_DAYS=13
+
 # Uncomment following line if you want to disable colors in ls
 # DISABLE_LS_COLORS="true"
 
@@ -32,18 +35,34 @@ DISABLE_VENV_CD="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git python cp rsync git-remote-branch command-not-found debian dircycle encode64 lol extract common-aliases)
+plugins=(git python repo cp buildbot rsync git-extras git-remote-branch\
+         command-not-found debian dircycle encode64 lol extract launch_trial \
+         vim-scp ufw sublime pylint pep8 autopep8 \
+         common-aliases buildbot_dev zsh-syntax-highlighting \
+         txw jump grin)
 
 source $ZSH/oh-my-zsh.sh
 
-# Customize to your needs...
+# To differentiate aliases from other command types
+ZSH_HIGHLIGHT_STYLES[alias]='fg=magenta,bold'
+
+# To have paths colored instead of underline
+ZSH_HIGHLIGHT_STYLES[path]='fg=cyan'
+
+# To disable highlighting of globbing expressions
+ZSH_HIGHLIGHT_STYLES[globbing]='none'
+
 zstyle ':completion:*:descriptions' format '%B%d%b'
 
+# Customize to your needs...
 if [ -z "$LC_ALL" ]; then export LC_ALL=en_US.UTF-8; fi
 if [ -z "$LANG" ]; then export LANG=en_US.UTF-8; fi
 
 if [ -e $HOME/bin ]; then export PATH="$HOME/bin:$PATH"; fi
 if [ -e $HOME/.cabal/bin ]; then export PATH="$HOME/.cabal/bin:$PATH"; fi
 unsetopt correctall
+
+# source .profile is any (proxy settings,...)
+[ -f $HOME/.profile ] && source $HOME/.profile
 
 [ "$TERM" = "xterm" ] && TERM="xterm-256color"
