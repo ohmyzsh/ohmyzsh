@@ -63,7 +63,7 @@ _zsh_highlight_main_highlighter_predicate()
 # Main syntax highlighting function.
 _zsh_highlight_main_highlighter()
 {
-  emulate -L zsh 
+  emulate -L zsh
   setopt localoptions extendedglob bareglobqual
   local start_pos=0 end_pos highlight_glob=true new_expression=true arg style
   typeset -a ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR
@@ -97,7 +97,7 @@ _zsh_highlight_main_highlighter()
       case $res in
         *': reserved')  style=$ZSH_HIGHLIGHT_STYLES[reserved-word];;
         *': alias')     style=$ZSH_HIGHLIGHT_STYLES[alias]
-                        local aliased_command="${"$(alias $arg)"#*=}"
+                        local aliased_command="${"$(alias -- $arg)"#*=}"
                         [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS:#"$aliased_command"} && -z ${(M)ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS:#"$arg"} ]] && ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS+=($arg)
                         ;;
         *': builtin')   style=$ZSH_HIGHLIGHT_STYLES[builtin];;
