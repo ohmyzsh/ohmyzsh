@@ -18,12 +18,12 @@ zsh-pip-clear-cache() {
 }
 
 zsh-pip-clean-packages() {
-    sed -nr '/<a href/ s/.*>([^<]+).*/\1/p'
+    sed -n '/<a href/ s/.*>\([^<]\{1,\}\).*/\1/p'
 }
 
 zsh-pip-cache-packages() {
-  if [[ ! -d ${PIP_CACHE_FILE:h} ]]; then
-      mkdir -p ${PIP_CACHE_FILE:h}
+  if [[ ! -d ${ZSH_PIP_CACHE_FILE:h} ]]; then
+      mkdir -p ${ZSH_PIP_CACHE_FILE:h}
   fi
 
   if [[ ! -f $ZSH_PIP_CACHE_FILE ]]; then
