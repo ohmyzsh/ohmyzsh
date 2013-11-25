@@ -7,6 +7,7 @@
 # To Public License, Version 2, as published by Sam Hocevar. See
 # http://sam.zoy.org/wtfpl/COPYING for more details.
 
+ZSH=$(cd $(dirname $0) && cd .. && pwd)
 THEMES_DIR="$ZSH/themes"
 FAVLIST="${HOME}/.zsh_favlist"
 source $ZSH/oh-my-zsh.sh
