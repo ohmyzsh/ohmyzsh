@@ -5,6 +5,7 @@ alias cdp='cd $BUILDBOT_PROJECT_PATH'
 
 alias c='cactus'
 alias cj='cactus jump'
+alias ct='cactus trial'
 alias cjh='cactus jump home'
 alias cjw='cactus jump workdir'
 alias cjc='cactus jump cactus'
