@@ -43,6 +43,9 @@ plugins=(git python repo cp buildbot rsync git-extras git-remote-branch\
 
 source $ZSH/oh-my-zsh.sh
 
+
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
+
 # To differentiate aliases from other command types
 ZSH_HIGHLIGHT_STYLES[alias]='fg=magenta,bold'
 
