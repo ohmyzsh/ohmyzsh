@@ -19,6 +19,13 @@ RED="\033[91m"
 NOC="\033[m"
 
 
+# check if config file exists
+if [[ ! -a $CONFIG ]]
+then
+  # if not: create config file
+  touch $CONFIG
+fi
+
 ## load warp points
 typeset -A points
 while read line
@@ -120,11 +127,12 @@ wd_print_msg()
 
 wd_print_usage()
 {
-		print "Usage: wd [add|-a|--add] [rm|-r|--remove] [ls|-l|--list] <point>"
+    print "Usage: wd [add|-a|--add] [rm|-r|--remove] [ls|-l|--list] <point>"
     print "\nCommands:"
     print "\t add \t Adds the current working directory to your warp points"
     print "\t add! \t Overwrites existing warp point"
     print "\t remove  Removes the given warp point"
+    print "\t show \t Outputs warp points to current directory"
     print "\t list \t Outputs all stored warp points"
     print "\t help \t Show this extremely helpful text"
 }
@@ -135,13 +143,20 @@ wd_print_usage()
 # get opts
 args=`getopt -o a:r:lhs -l add:,remove:,list,help,show -- $*`
 
+# check if no arguments were given
 if [[ $? -ne 0 || $#* -eq 0 ]]
 then
     wd_print_usage
-else
-    # can't exit, as this would exit the excecuting shell
-    # e.i. your terminal
 
+# check if config file is writeable
+elif [[ ! -w $CONFIG ]]
+then
+    wd_print_msg $RED "\'$CONFIG\' is not writeable."
+    # do nothing => exit
+    # can't run `exit`, as this would exit the executing shell
+    # i.e. your terminal
+
+else
     #set -- $args # WTF
 
     for i
