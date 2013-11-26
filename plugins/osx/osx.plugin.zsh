@@ -158,6 +158,12 @@ function vncviewer() {
   open vnc://$@
 }
 
+function lock() {
+    open -a ScreenSaverEngine
+}
+
+alias ssh-key-copy="cat ~/.ssh/id_rsa.pub | pbcopy"
+
 # iTunes control function
 function itunes() {
 	local opt=$1
@@ -190,4 +196,3 @@ function itunes() {
 	esac
 	osascript -e "tell application \"iTunes\" to $opt"
 }
-

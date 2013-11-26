@@ -36,3 +36,6 @@ alias nomnom='killall'
 alias byes='exit'
 alias cya='reboot'
 alias kthxbai='halt'
+
+# Flip a coin function. http://twitter.com/#!/climagic/status/195158151534882817
+flipcoin() { [[ $(( $RANDOM % 2 )) == 0 ]] && echo heads || echo tails; }

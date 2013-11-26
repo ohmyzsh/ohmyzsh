@@ -136,6 +136,14 @@ function _git_log_prettily(){
 alias glp="_git_log_prettily"
 compdef _git glp=git-log
 
+# Remove from repo all files deleted
+alias gitstrm='git st | egrep "deleted" | sed -e "s/#//" -e "s/deleted:/git rm/" | sh'
+
+alias gpush='git push'
+compdef gpush=git
+alias gpull='git pull'
+compdef gpull=git
+
 # Work In Progress (wip)
 # These features allow to pause a branch development and switch to another one (wip)
 # When you want to go back to work, just unwip it
@@ -149,3 +157,16 @@ function work_in_progress() {
 # these alias commit and uncomit wip branches
 alias gwip='git add -A; git ls-files --deleted -z | xargs -0 git rm; git commit -m "wip"'
 alias gunwip='git log -n 1 | grep -q -c wip && git reset HEAD~1'
+
+function git_restore_file() {
+  if [ -z $1 ]; then
+    echo 'filename required'
+    return 1
+  fi
+
+  local file=$1; shift
+  
+  git checkout $(git rev-list -n 1 HEAD -- "$file")~1 -- "$file"
+
+  echo $file
+}

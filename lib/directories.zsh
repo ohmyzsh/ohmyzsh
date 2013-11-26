@@ -4,11 +4,15 @@ setopt auto_pushd
 setopt pushd_ignore_dups
 setopt pushdminus
 
-alias ..='cd ..'
-alias cd..='cd ..'
-alias cd...='cd ../..'
-alias cd....='cd ../../..'
-alias cd.....='cd ../../../..'
+# Basic directory operations
+alias ..='cd ..; ls'
+alias ...='cd ../..; ls'
+alias -- -='cd -'
+
+alias cd..='cd ..; ls'
+alias cd...='cd ../..; ls'
+alias cd....='cd ../../..; ls'
+alias cd.....='cd ../../../..; ls'
 alias cd/='cd /'
 
 alias 1='cd -'

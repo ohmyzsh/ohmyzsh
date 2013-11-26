@@ -2,10 +2,6 @@
 alias pu='pushd'
 alias po='popd'
 
-# Basic directory operations
-alias ...='cd ../..'
-alias -- -='cd -'
-
 # Super user
 alias _='sudo'
 alias please='sudo'
@@ -17,10 +13,32 @@ alias history='fc -l 1'
 
 # List direcory contents
 alias lsa='ls -lah'
-alias l='ls -la'
-alias ll='ls -l'
-alias la='ls -lA'
+alias l='ls -lAh1'
+alias ll='ls -lh'
+alias la='ls -lAh'
 alias sl=ls # often screw this up
 
 alias afind='ack-grep -il'
 
+alias reload="source ~/.zshrc"
+alias galias='alias | grep'
+
+# Request confirmation before attempting to remove each file, regardless of the file's permissions, or
+# whether or not the standard input device is a terminal.  The -i option overrides any previous -f options.
+#alias rm="rm -i"
+
+alias psg='show_processes'
+
+# If you are using oh-my-zsh and you see something like this error:
+# pwd:4: too many arguments
+# This is caused by an alias and due to the sh style sourcing of a
+# script using the '.' operator instead of 'source'.
+# So, uncomment below line.
+# alias .='pwd'
+
+alias cat-ssh-config='[ -e ~/.ssh/config ] && cat ~/.ssh/config'
+alias cat-hosts='cat /etc/hosts'
+alias grep-hosts='cat /etc/hosts | grep'
+
+# open your DEFAULT editor
+alias ed=$EDITOR
