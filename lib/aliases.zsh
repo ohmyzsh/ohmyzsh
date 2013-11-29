@@ -6,6 +6,11 @@ alias po='popd'
 alias ...='cd ../..'
 alias -- -='cd -'
 
+# Prevent headaches
+alias cp='cp -v'
+alias rm='rm -v'
+alias mv='mv -v'
+
 # Super user
 alias _='sudo'
 alias please='sudo'
@@ -27,9 +32,9 @@ else
 fi
 # List direcory contents
 alias lsa='ls -lah'
-alias l='ls -la'
-alias ll='ls -l'
-alias la='ls -lA'
+alias l='ls -lah'
+alias ll='ls -lh'
+alias la='ls -lAh'
 alias sl=ls # often screw this up
 
 alias afind='ack-grep -il'
