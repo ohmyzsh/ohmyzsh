@@ -16,15 +16,15 @@
 # $FG[125] - strawberry
 # $FG[145] - white
 
-PROMPT='%{$fg[green]%}$(collapse_pwd)%{$fg[white]%} $(git_prompt_info)%{$reset_color%} ≫ '
+PROMPT='%{$fg[green]%}[$(collapse_pwd)]
+%{$fg[yellow]%}$(git_prompt_short_sha)%{$reset_color%}$(git_prompt_info)%{$reset_color%} '
 
-ZSH_THEME_GIT_PROMPT_PREFIX="// %{$fg[red]%}"
-#ZSH_THEME_GIT_PROMPT_SUFFIX="%{$fg[white]%} // %{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_PREFIX=" %{$fg[red]%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX=""
 ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[yellow]%} ✼%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%} ⌘"
 
-# RPROMPT='${return_status}$(git_prompt_status)%{$reset_color%}'
+RPROMPT='${return_status}$(git_prompt_status) %{$reset_color%}'
 
 ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[green]%} +++"
 ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg[blue]%} ***"
