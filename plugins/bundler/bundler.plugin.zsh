@@ -32,7 +32,7 @@ _run-with-bundler() {
   fi
 }
 
-if _bundler-installed; then
+if [ _bundler-installed ]; then
 	bundler_version=`bundle version | cut -d' ' -f3`
 	if [[ $bundler_version > '1.4.0' || $bundler_version = '1.4.0' ]]; then
 		if [[ "$(uname)" == 'Darwin' ]]
@@ -52,7 +52,7 @@ if _bundler-installed; then
 		eval "function bundled_$cmd () { _run-with-bundler $cmd \$@}"
 		alias $cmd=bundled_$cmd
 
-		if which _$cmd > /dev/null 2>&1; then
+		if [ which _$cmd > /dev/null 2>&1 ]; then
 			compdef _$cmd bundled_$cmd=$cmd
 		fi
 	done
