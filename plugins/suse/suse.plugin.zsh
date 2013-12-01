@@ -29,9 +29,9 @@ alias zpatch='sudo zypper patch' #install patches
 #Request commands
 alias zif='sudo zypper if' #display info about packages
 alias zpa='sudo zypper pa' #list packages
-alias zpatch-info='sudo zyper patch-info' #display info about patches
-alias zpattern-info='sudo zyper patch-info' #display info about patterns
-alias zproduct-info='sudo zyper patch-info' #display info about products
+alias zpatch-info='sudo zypper patch-info' #display info about patches
+alias zpattern-info='sudo zypper patch-info' #display info about patterns
+alias zproduct-info='sudo zypper patch-info' #display info about products
 alias zpch='sudo zypper pch' #list all patches
 alias zpd='sudo zypper pd' #list products
 alias zpt='sudo zypper pt' #list patterns
