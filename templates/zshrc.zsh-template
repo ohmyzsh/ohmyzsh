@@ -45,3 +45,10 @@ plugins=(git)
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
+if [ -f ~/.aliases ] ; then
+  source ~/.aliases 
+fi
+
+if [ -f ~/.functions ] ; then
+  source ~/.functions
+fi
