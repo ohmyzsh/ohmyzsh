@@ -5,7 +5,7 @@ ZSH=$HOME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="robbyrussell"
+ZSH_THEME="gnzh"
 
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
@@ -18,7 +18,7 @@ ZSH_THEME="robbyrussell"
 # DISABLE_AUTO_UPDATE="true"
 
 # Uncomment to change how often before auto-updates occur? (in days)
-# export UPDATE_ZSH_DAYS=13
+export UPDATE_ZSH_DAYS=15
 
 # Uncomment following line if you want to disable colors in ls
 # DISABLE_LS_COLORS="true"
@@ -45,10 +45,11 @@ plugins=(git)
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
-if [ -f ~/.aliases ] ; then
-  source ~/.aliases 
-fi
+for file in ~/.{path,exports,aliases,functions,extra}; do
+  [ -r "$file" ] && [ -f "$file" ] && source "$file"
+done
+unset file
 
-if [ -f ~/.functions ] ; then
-  source ~/.functions
-fi
+#export PATH=$PATH:/opt/local/bin:/opt/local/sbin:/opt/local/libexec/gnubin:/opt/local/bin:/opt/local/sbin:/usr/local/mysql/bin:/Users/cng/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin:/usr/local/MacGPG2/bin:/Users/cng/.ec2/bin:/Users/cng/.rvm/bin:/usr/local/sbin
+#[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"  # This loads RVM into a shell session.
+#PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
