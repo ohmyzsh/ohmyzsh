@@ -6,6 +6,7 @@ function gerrit_usage {
   echo  "   push             Push changes without going through a review. ";
   echo  "   pull             Pull latest changes and rebase ... or something. ";
   echo  "   review           Push changes and submit changes for review";
+  echo  "   patchset         Work with a checked out patch set";
   echo  "   setup-reviewers  Set current repo to automatically have reviewers from your team";
   echo  "   add-reviewer     Add a reviewer to the repo";
   echo  "   clone            Clone a repo from gerrit, requires repo name";
@@ -18,7 +19,11 @@ function gerrit_push () {
 }
 
 function gerrit_review () {
-  git push origin HEAD:refs/for/$1;
+  if [ -z $1 ]; then
+    git push origin HEAD:refs/for/master;
+  else
+    git push origin HEAD:refs/for/$1;
+  fi
 }
 
 function gerrit_pull () {
@@ -27,12 +32,31 @@ function gerrit_pull () {
   git rebase origin/$1
 }
 
+function gerrit_patchset_usage () {
+  echo
+  echo " usage: gerrit patchset <commnad>";
+  echo
+  echo "commands : ";
+  echo "  commit                Amend commit to add a patchset";
+  echo "  review                Push changes back to commit as patchset";
+  echo
+}
+
+function gerrit_patchset () {
+  if [ -z $1 ]; then
+    gerrit_patchset_usage;
+  else
+    [ $1 = "commit" ] && git commit --amend;
+    [ $1 = "review" ] && git push origin HEAD:refs/for/${2:-master};
+  fi
+}
+
 function gerrit_clone () {
   if [ -z $1 ]; then
     echo "$yellow Please supply the name of a repo to clone. $stop"
   else
-    git clone --recursive ssh://gerrit_host/$1 $2
-    #echo "git clone ssh://gerrit_host/$1"
+    #git clone --recursive ssh://gerrit_host/$1 $2
+    gg-gerrit-clone $1 $2
   fi
 }
 
@@ -77,9 +101,10 @@ function gerrit () {
     [ $1 = "push" ] && gerrit_push $branch;
     [ $1 = "review" ] && gerrit_review $branch;
     [ $1 = "pull" ] && gerrit_pull $branch;
+    [ $1 = "patchset" ] && gerrit_patchset $2 $3;
     [ $1 = "setup-reviewers" ] && gerrit_set_team_reviewers;
     [ $1 = "add-reviewer" ] && gerrit_add_reviewer $2;
-    [ $1 = "clone" ] && gerrit_clone $2;
+    [ $1 = "clone" ] && gerrit_clone $2 $3;
     [ $1 = "setup" ] && gerrit_setup;
   fi
 
