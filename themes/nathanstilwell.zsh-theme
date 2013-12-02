@@ -17,7 +17,7 @@
 # $FG[145] - white
 
 PROMPT='%{$fg[green]%}[$(collapse_pwd)]
-%{$fg[yellow]%}$(git_prompt_short_sha)%{$reset_color%}$(git_prompt_info)%{$reset_color%} '
+%{$fg[cyan]%}$(git_prompt_short_sha)%{$reset_color%}$(git_prompt_info)%{$reset_color%} > '
 
 ZSH_THEME_GIT_PROMPT_PREFIX=" %{$fg[red]%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX=""
