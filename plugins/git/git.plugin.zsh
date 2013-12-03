@@ -149,3 +149,12 @@ function work_in_progress() {
 # these alias commit and uncomit wip branches
 alias gwip='git add -A; git ls-files --deleted -z | xargs -0 git rm; git commit -m "wip"'
 alias gunwip='git log -n 1 | grep -q -c wip && git reset HEAD~1'
+
+# these alias ignore changes to file
+alias gignore='git update-index --assume-unchanged'
+alias gunignore='git update-index --no-assume-unchanged'
+# list temporarily ignored files
+alias gignored='git ls-files -v | grep "^[[:lower:]]"'
+
+
+
