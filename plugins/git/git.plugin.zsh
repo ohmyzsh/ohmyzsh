@@ -142,7 +142,7 @@ compdef _git glp=git-log
 #
 # This function return a warning if the current branch is a wip
 function work_in_progress() {
-  if $(git log -n 1 | grep -q -c wip); then
+  if $(git log -n 1 2>/dev/null | grep -q -c wip); then
     echo "WIP!!"
   fi
 }
