@@ -60,7 +60,7 @@ compdef _git gcmsg=git-commit
 alias gco='git checkout'
 compdef _git gco=git-checkout
 alias gcom='git checkout master'
-compdef _git gcm=git-checkout
+compdef _git gcom=git-checkout
 
 
 # Git Remote (gre)
