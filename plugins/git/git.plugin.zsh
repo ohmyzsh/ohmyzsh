@@ -170,6 +170,9 @@ alias gitk-entier-history='gitk --all $(git log -g --pretty=format:%h)'
 compdef _git gitk='gitk'
 # Note: if the commit has been cleaned my 'git gc', the dangling commits older than 2 weeks may have been deleted
 
+# Clean
+# Remove all .orig, .BASE.*, .REMOTE.*, .LOCAL.* files
+alias gclean='find . -name "*.orig" -or -name "*.REMOTE.*" -or -name "*.LOCAL.*" -or -name "*.BASE.*" -delete'
 
 # Edit global Git configuration files
 alias gitconfig="vim ~/.gitconfig"
