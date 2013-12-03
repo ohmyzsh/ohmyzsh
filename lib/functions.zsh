@@ -15,3 +15,17 @@ function take() {
   cd $1
 }
 
+function string_hash() {
+	HASHSTR=$1
+	HASHSIZE=$2
+
+	HASHVAL=0
+	for i in {1..${#HASHSTR}}; do;
+		THISCHAR=$HASHSTR[$i]
+		HASHVAL=$(( $HASHVAL + $((#THISCHAR)) ))
+	done
+	HASHSIZE=$(( $HASHSIZE - 1 ))
+	HASHVAL=$(( $HASHVAL % $HASHSIZE ))
+	HASHVAL=$(( $HASHVAL + 1 ))
+	echo $HASHVAL
+}
