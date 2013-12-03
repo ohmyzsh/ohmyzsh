@@ -65,8 +65,10 @@ zstyle ':completion:*:*:*:users' ignored-patterns \
 zstyle '*' single-ignored show
 
 if [ "x$COMPLETION_WAITING_DOTS" = "xtrue" ]; then
+  ZSH_THEME_COMPLETION_WAITING_DOTS="\e[31m......\e[0m"
+
   expand-or-complete-with-dots() {
-    echo -n "\e[31m......\e[0m"
+    echo -n "$ZSH_THEME_COMPLETION_WAITING_DOTS"
     zle expand-or-complete
     zle redisplay
   }
