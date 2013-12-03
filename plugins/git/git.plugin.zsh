@@ -1,6 +1,6 @@
-# Aliases
+# Aliases for Git tool.
 
-# Common
+# Common (g)
 alias g='git'
 compdef g=git
 
@@ -20,8 +20,8 @@ compdef _git gdv=git-diff
 alias gdc='git diff --cached'
 compdef _git gdc=git-diff
 
-# Git Pull (gl)
-alias gl='git pull'
+# Git Pull (gp)
+alias gp='git pull'
 compdef _git gl=git-pull
 alias gch='git fetch'
 compdef _git gch=git-fetch
@@ -29,8 +29,14 @@ alias gup='git pull --rebase'
 compdef _git gup=git-pull
 alias gpr='git pull --rebase'
 compdef _git gpr=git-pull
-alias gp='git push'
-compdef _git gp=git-push
+
+# git push (gP), since pushing has much impact than pulling (gp), it use a capital case
+alias gP='git push'
+compdef _git gP=git-push
+alias gPd='git push --dry-run'
+compdef _git gPd=git-push
+alias gPf='git push --force'
+compdef _git gPf=git-push
 
 # Git Fetch (gf)
 alias gf='git fetch'
@@ -50,13 +56,12 @@ compdef _git gca!=git-commit
 alias gcmsg='git commit -m'
 compdef _git gcmsg=git-commit
 
-# Git Checkout
+# Git Checkout (gco)
 alias gco='git checkout'
 compdef _git gco=git-checkout
-alias gcm='git checkout master'
+alias gcom='git checkout master'
 compdef _git gcm=git-checkout
-alias grm='git rebase master'
-compdef _git grm=git-rebase
+
 
 # Git Remote (gre)
 alias gre='git remote'
@@ -81,6 +86,8 @@ alias gra='git rebase --abort'
 compdef _git gra=git-rebase
 alias grs='git rebase --skip'
 compdef _git grs=git-rebase
+alias grm='git rebase master'
+compdef _git grm=git-rebase
 
 # Git Branch (bb)
 alias gb='git branch'
@@ -122,8 +129,11 @@ compdef _git ga=git-add
 alias gm='git merge'
 compdef _git gm=git-merge
 
+# See what changed in the current commit
 alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
 compdef _git gwc=git-whatchanged
+
+# Search for a changed file
 alias gls='git ls-files | grep'
 compdef _git gls=git-ls-files
 
@@ -155,7 +165,8 @@ compdef _git gga='git gui citool --amend'
 # Gitk
 alias gk='gitk --all --branches'
 compdef _git gk='gitk'
-alias gitk-entier-history='gitk --all $(git log -g --pretty=format:%h)' # show complete history, with dangling commits
+# show complete history, with dangling commits
+alias gitk-entier-history='gitk --all $(git log -g --pretty=format:%h)'
 compdef _git gitk='gitk'
 # Note: if the commit has been cleaned my 'git gc', the dangling commits older than 2 weeks may have been deleted
 
@@ -229,7 +240,9 @@ alias gunwip='git log -n 1 | grep -q -c wip && git reset HEAD~1'
 
 # these alias ignore changes to file
 alias gignore='git update-index --assume-unchanged'
+compdef _git gignore='git update-index'
 alias gunignore='git update-index --no-assume-unchanged'
+compdef _git gunignore='git update-index'
 # list temporarily ignored files
 alias gignored='git ls-files -v | grep "^[[:lower:]]"'
 
