@@ -60,6 +60,8 @@ alias glg='git log --stat --max-count=10'
 compdef _git glg=git-log
 alias glgg='git log --graph --max-count=10'
 compdef _git glgg=git-log
+alias gplg="git log --no-merges --graph --pretty=format:'%C()%h%Creset - %C(green)%aN%Creset -%C(blue)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"
+compdef _git gplg=git-log
 alias glgga='git log --graph --decorate --all'
 compdef _git glgga=git-log
 alias glo='git log --oneline'
