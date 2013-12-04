@@ -1,6 +1,7 @@
 # Authors:
 # https://github.com/AlexBio
 # https://github.com/dbb
+# https://github.com/Mappleconfusers
 #
 # Debian-related zsh aliases and functions for zsh
 
@@ -56,7 +57,7 @@ if [[ $use_sudo -eq 1 ]]; then
     alias ar='sudo $apt_pref remove'
 
     # apt-get only
-    alias ads='sudo $apt_pref dselect-upgrade'
+    alias ads='sudo apt-get dselect-upgrade'
 
     # Install all .deb files in the current directory.
     # Warning: you will need to put the glob in single quotes if you use:
@@ -109,6 +110,38 @@ else
         ?not(~n`uname -r`))'\'' root'
 fi
 
+# Completion ################################################################
+
+#
+# Registers a compdef for $1 that calls $apt_pref with the commands $2
+# To do that it creates a new completion function called _apt_pref_$2
+#
+apt_pref_compdef() {
+    local f fb
+    f="_apt_pref_${2}"
+
+    eval "function ${f}() {
+        shift words; 
+	service=\"\$apt_pref\"; 
+	words=(\"\$apt_pref\" '$2' \$words); 
+	((CURRENT++))
+	test \"\${apt_pref}\" = 'aptitude' && _aptitude || _apt
+    }"
+
+    compdef "$f" "$1"
+}
+
+apt_pref_compdef aac "autoclean"
+apt_pref_compdef abd "build-dep"
+apt_pref_compdef ac  "clean"
+apt_pref_compdef ad  "update"
+apt_pref_compdef afu "update"
+apt_pref_compdef ag  "upgrade"
+apt_pref_compdef ai  "install"
+apt_pref_compdef ail "install"
+apt_pref_compdef ap  "purge"
+apt_pref_compdef ar  "remove"
+apt_pref_compdef ads "dselect-upgrade"
 
 # Misc. #####################################################################
 # print all installed packages
