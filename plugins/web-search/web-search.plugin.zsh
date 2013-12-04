@@ -1,13 +1,31 @@
 # web_search from terminal
+# You can use the default browser to open the search, you can also choose to open
+# the search browser, if you add in the parameter '-f' or '--firefox' will use firefox;
+# Add the '-c' or '- chrome' will use of google-chrome
 
 function web_search() {
 
   # get the open command
-  local open_cmd
+  local open_cmd firefox chrome
+
+  for i in "$@"
+    do
+        if [[ $i =~ '(-f|--firefox)' ]];
+        then
+            firefox='true'
+        elif [[ $i =~ '(-c|--chrome)' ]];
+        then
+            chrome='true'
+        fi
+    done
   if [[ $(uname -s) == 'Darwin' ]]; then
     open_cmd='open'
+    [[ -n $firefox ]] && open_cmd='open  -a "/Applications/Firefox.app"'
+    [[ -n $chrome ]] && open_cmd='open -a "/Applications/Google Chrome.app"'
   else
     open_cmd='xdg-open'
+    [[ -n $firefox ]] && open_cmd='firefox'
+    [[ -n $chrome ]] && open_cmd='google-chrome'
   fi
 
   # check whether the search engine is supported
@@ -21,7 +39,7 @@ function web_search() {
 
   # no keyword provided, simply open the search engine homepage
   if [[ $# -le 1 ]]; then
-    $open_cmd "$url"
+    eval $open_cmd "'$url'"
     return
   fi
   if [[ $1 == 'duckduckgo' ]]; then
@@ -33,13 +51,16 @@ function web_search() {
   shift   # shift out $1
 
   while [[ $# -gt 0 ]]; do
-    url="${url}$1+"
+    if [[ ! $1 =~ '(-f|-c|--chrome|--firefox)' ]];
+    then
+        url="${url}$1+"
+    fi
     shift
   done
 
   url="${url%?}" # remove the last '+'
-  
-  $open_cmd "$url"
+
+  eval "$open_cmd" "'$url'"
 }
 
 
