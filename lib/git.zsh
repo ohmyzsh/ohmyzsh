@@ -13,7 +13,7 @@ parse_git_dirty() {
   local SUBMODULE_SYNTAX=''
   local GIT_STATUS=''
   local CLEAN_MESSAGE='nothing to commit (working directory clean)'
-  if [[ "$(command git config --get oh-my-zsh.hide-status)" != "1" ]]; then
+  if [[ "$(command git config --get oh-my-zsh.hide-dirty)" != "1" ]]; then
     if [[ $POST_1_7_2_GIT -gt 0 ]]; then
           SUBMODULE_SYNTAX="--ignore-submodules=dirty"
     fi
