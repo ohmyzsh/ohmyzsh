@@ -17,16 +17,10 @@ alias gd='git diff --color'
 compdef _git gd=git-diff
 gdv() { git diff -w "$@" | view - }
 compdef _git gdv=git-diff
-alias gdc='git diff --cached'
-compdef _git gdc=git-diff
 
 # Git Pull (gp)
 alias gp='git pull'
 compdef _git gl=git-pull
-alias gch='git fetch'
-compdef _git gch=git-fetch
-alias gup='git pull --rebase'
-compdef _git gup=git-pull
 alias gpr='git pull --rebase'
 compdef _git gpr=git-pull
 
@@ -62,7 +56,6 @@ compdef _git gco=git-checkout
 alias gcom='git checkout master'
 compdef _git gcom=git-checkout
 
-
 # Git Remote (gre)
 alias gre='git remote'
 compdef _git gre=git-remote
@@ -89,7 +82,7 @@ compdef _git grs=git-rebase
 alias grm='git rebase master'
 compdef _git grm=git-rebase
 
-# Git Branch (bb)
+# Git Branch (gb)
 alias gb='git branch'
 compdef _git gb=git-branch
 alias gba='git branch -a'
@@ -109,11 +102,17 @@ compdef _git glgga=git-log
 alias glo='git log --oneline'
 compdef _git glo=git-log
 
-# Git Reset (grh)
+# Git Reset Head (grh)
 alias grh='git reset HEAD'
 compdef _git grh=git-reset
 alias grhh='git reset HEAD --hard'
 compdef _git grhh=git-reset
+
+# Git merge (gm)
+alias gm='git merge'
+compdef _git gm=git-merge
+alias gmum='git merge upstream/master'
+compdef _git gmum=git-merge
 
 # Other
 alias gcount='git shortlog -sn'
@@ -126,8 +125,6 @@ alias gss='git status -s'
 compdef _git gss=git-status
 alias ga='git add'
 compdef _git ga=git-add
-alias gm='git merge'
-compdef _git gm=git-merge
 
 # See what changed in the current commit
 alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
@@ -145,16 +142,16 @@ alias gmtvim='git mergetool --no-prompt --tool=vimdiff'
 compdef _git gmtvim=git-mergetool
 
 # Git stash (gsta)
-alias gstas='git stash show --text'
-compdef _git gsts='git-stash'
-alias gstap='git stash pop'
-compdef _git gstp='git-stash'
-alias gstaa='git stash apply'
-compdef _git gstz='git-stash'
 alias gsta='git stash'
-compdef _git gst='git-stash'
+compdef _git gsta='git-stash'
+alias gstas='git stash show --text'
+compdef _git gstas='git-stash'
+alias gstap='git stash pop'
+compdef _git gstap='git-stash'
+alias gstaa='git stash apply'
+compdef _git gstaa='git-stash'
 alias gstad='git stash drop'
-compdef _git gstd='git-stash'
+compdef _git gstad='git-stash'
 
 # Git Gui (gg)
 alias gg='git gui citool'
@@ -172,7 +169,7 @@ compdef _git gitk='gitk'
 
 # Clean
 # Remove all .orig, .BASE.*, .REMOTE.*, .LOCAL.* files
-alias gclean='find . -name "*.orig" -or -name "*.REMOTE.*" -or -name "*.LOCAL.*" -or -name "*.BASE.*" -delete'
+alias gclean="find . -name '*.orig' -or -name '*.REMOTE.*' -or -name '*.LOCAL.*' -or -name '*.BASE.*' -delete"
 
 # Edit global Git configuration files
 alias gitconfig="vim ~/.gitconfig"
