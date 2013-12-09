@@ -59,7 +59,7 @@ fi
 
 # Display the image
 I=0
-convert "$IMG" -resize $COLS\> +dither `echo $REMAP` txt:- |
+convert "$IMG" -resize $COLS\> +dither `echo $REMAP` txt:- 2>/dev/null |
 sed -e 's/.*none.*/NO NO NO/g' -e '1d;s/^.*(\(.*\)[,)].*$/\1/g;y/,/ /' |
 while read R G B f; do
   if [ ! "$R" = "NO" ]; then
