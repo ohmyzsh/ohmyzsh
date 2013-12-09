@@ -43,7 +43,7 @@ if [ ! "$WIDTH" ]; then
 else
   COLS=$(expr $WIDTH "/" $(echo -n "$CHAR" | wc -c))
 fi
-WIDTH=$(convert ${IMG} -print "%w\n" /dev/null)
+WIDTH=$(convert "$IMG" -print "%w\n" /dev/null)
 if [ "$WIDTH" -gt "$COLS" ]; then
   WIDTH=$COLS
 fi
@@ -58,6 +58,7 @@ else
 fi
 
 # Display the image
+I=0
 convert "$IMG" -resize $COLS\> +dither `echo $REMAP` txt:- |
 sed -e 's/.*none.*/NO NO NO/g' -e '1d;s/^.*(\(.*\)[,)].*$/\1/g;y/,/ /' |
 while read R G B f; do

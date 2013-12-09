@@ -9,7 +9,7 @@
 
 if [[ -x  `which convert` ]]; then
   function catimg() {
-    source $(dirname $0)/catimg.sh $@
+    source $ZSH/plugins/catimg/catimg.sh $@
   }
 else
   echo "catimg need convert (ImageMagick) to work)"
