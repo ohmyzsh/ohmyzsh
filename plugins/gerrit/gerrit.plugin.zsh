@@ -31,8 +31,11 @@ function gerrit_clone () {
   if [ -z $1 ]; then
     echo "$yellow Please supply the name of a repo to clone. $stop"
   else
-    git clone --recursive ssh://gerrit_host/$1 $2
-    #echo "git clone ssh://gerrit_host/$1"
+    if [[ -n $(which gg-gerrit-clone) ]]; then
+      gg-gerrit-clone $1
+    else
+      git clone --recursive ssh://gerrit_host/$1
+    fi
   fi
 }
 
