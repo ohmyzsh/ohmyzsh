@@ -241,7 +241,7 @@ compdef _git ggpnp=git-checkout
 # Work In Progress (wip)
 # These features allow to pause a branch development and switch to another one
 # When you want to go back to work, just unwip it
-alias gwip="git add -A; git ls-files --deleted -z | xargs ${XARGS_OPTS} -0 git rm; git commit -m \"--wip--\""
+alias gwip="git add -A; git ls-files --deleted -z | xargs ${XARGS_OPTS} -0 git rm 2>/dev/null; git commit -m \"--wip--\""
 alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
 # Ignore changes to file
 alias gignore='git update-index --assume-unchanged'
