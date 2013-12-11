@@ -82,6 +82,26 @@ compdef _git grs=git-rebase
 alias grm='git rebase master'
 compdef _git grm=git-rebase
 
+# Git rebase Interactively N commit (rewrite history)
+alias gr2='git rebase -i HEAD~2'
+compdef _git gr2=git-rebase
+alias gr3='git rebase -i HEAD~3'
+compdef _git gr3=git-rebase
+alias gr4='git rebase -i HEAD~4'
+compdef _git gr4=git-rebase
+alias gr5='git rebase -i HEAD~5'
+compdef _git gr5=git-rebase
+alias gr6='git rebase -i HEAD~6'
+compdef _git gr6=git-rebase
+alias gr7='git rebase -i HEAD~7'
+compdef _git gr7=git-rebase
+alias gr8='git rebase -i HEAD~8'
+compdef _git gr8=git-rebase
+alias gr9='git rebase -i HEAD~9'
+compdef _git gr9=git-rebase
+alias gr10='git rebase -i HEAD~10'
+compdef _git gr10=git-rebase
+
 # Git Branch (gb)
 alias gb='git branch'
 compdef _git gb=git-branch
@@ -165,11 +185,13 @@ compdef _git gk='gitk'
 # show complete history, with dangling commits
 alias gitk-entier-history='gitk --all $(git log -g --pretty=format:%h)'
 compdef _git gitk='gitk'
+alias gke='gitk-entier-history'
+compdef _git gke='gitk'
 # Note: if the commit has been cleaned my 'git gc', the dangling commits older than 2 weeks may have been deleted
 
 # Clean
-# Remove all .orig, .BASE.*, .REMOTE.*, .LOCAL.* files
-alias gclean="find . -name '*.orig' -or -name '*.REMOTE.*' -or -name '*.LOCAL.*' -or -name '*.BASE.*' -delete"
+# Remove all .orig, .BASE.*, .REMOTE.*, .LOCAL.*, *.BACKUP files
+alias gclean=" find . -name '*.orig' -or -name '*.REMOTE.*' -or -name '*.LOCAL.*' -or -name '*.BACKUP.*' | xargs -r rm -v"
 
 # Edit global Git configuration files
 alias gitconfig="vim ~/.gitconfig"
