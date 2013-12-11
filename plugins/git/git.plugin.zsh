@@ -37,6 +37,8 @@ alias gf='git fetch'
 compdef _git gf='git-fetch'
 alias gfa='git fetch --all'
 compdef _git gfa='git-fetch'
+alias gfagpr='git fetch --all && git pull --rebase'
+compdef _git gfagpr='git-pull'
 
 # Git Commit (gc)
 alias gc='git commit -v'
