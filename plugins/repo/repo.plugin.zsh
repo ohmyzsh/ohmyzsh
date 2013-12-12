@@ -8,6 +8,12 @@ compdef _repo rra='repo rebase --auto-stash'
 alias rs='repo sync'
 compdef _repo rs='repo sync'
 
+alias rs.='repo sync .'
+compdef _repo rs='repo sync'
+
+alias rra.='repo rebase --auto-stash .'
+compdef _repo rra='repo rebase --auto-stash'
+
 alias rsrra='repo sync ; repo rebase --auto-stash'
 compdef _repo rsrra='repo sync ; repo rebase --auto-stash'
 
