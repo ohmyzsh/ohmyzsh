@@ -1,60 +1,98 @@
 # Aliases for Git tool.
 
+############
 # Common (g)
+############
 alias g='git'
 compdef g=git
 
+##################
 # Git status (gst)
+##################
+# Git status
 alias gst='git status'
 compdef _git gst=git-status
+# shortened git status
+alias gsts='git status -s'
+compdef _git gsts=git-status
 
+###############
 # Git Diff (gd)
-alias gd='git diff'
-compdef _git gd=git-diff
-alias gdc='git diff --cached'
-compdef _git gdc=git-diff
+###############
+# Git diff (colorful)
 alias gd='git diff --color'
 compdef _git gd=git-diff
+# Git diff staged changes
+alias gdc='git diff --cached'
+compdef _git gdc=git-diff
+# Git diff in a vim editor
 gdv() { git diff -w "$@" | view - }
 compdef _git gdv=git-diff
 
+###############
 # Git Pull (gp)
+###############
+# Git pull
 alias gp='git pull'
 compdef _git gl=git-pull
+# Git pull and rebase
 alias gpr='git pull --rebase'
 compdef _git gpr=git-pull
 
-# git push (gP), since pushing has much impact than pulling (gp), it use a capital case
+###############
+# git push (gP)
+###############
+# since pushing has much impact than pulling (gp), it use a capital case
+# git push
 alias gP='git push'
 compdef _git gP=git-push
+# git push dry run
 alias gPd='git push --dry-run'
 compdef _git gPd=git-push
+# git push force
 alias gPf='git push --force'
 compdef _git gPf=git-push
 
+################
 # Git Fetch (gf)
+################
+# Git fetch current branch
 alias gf='git fetch'
 compdef _git gf='git-fetch'
+# Git fetch all branches
 alias gfa='git fetch --all'
 compdef _git gfa='git-fetch'
+# reset your work to the latest status of the code base (and fetch all other branches).
+# (git fetch all branch and rebase)
 alias gfagpr='git fetch --all && git pull --rebase'
 compdef _git gfagpr='git-pull'
 
+#################
 # Git Commit (gc)
+#################
+# Git commit
 alias gc='git commit -v'
 compdef _git gc=git-commit
+# Git commit amend
 alias gc!='git commit -v --amend'
 compdef _git gc!=git-commit
+# Git commit all tracked files
 alias gca='git commit -v -a'
 compdef _git gca=git-commit
+# Git commit amend all tracked files
 alias gca!='git commit -v -a --amend'
 compdef _git gca!=git-commit
+# Git commit with message
 alias gcmsg='git commit -m'
 compdef _git gcmsg=git-commit
 
+####################
 # Git Checkout (gco)
+####################
+# git checkout
 alias gco='git checkout'
 compdef _git gco=git-checkout
+# Git checkout master
 alias gcom='git checkout master'
 compdef _git gcom=git-checkout
 
@@ -84,7 +122,9 @@ compdef _git grs=git-rebase
 alias grm='git rebase master'
 compdef _git grm=git-rebase
 
+#####################################################
 # Git rebase Interactively N commit (rewrite history)
+#####################################################
 alias gr2='git rebase -i HEAD~2'
 compdef _git gr2=git-rebase
 alias gr3='git rebase -i HEAD~3'
@@ -110,41 +150,59 @@ compdef _git gb=git-branch
 alias gba='git branch -a'
 compdef _git gba=git-branch
 
+##############
 # Git Log (gl)
+##############
+alias gl='git log'
+compdef _git gl=git-log
+# Git log graph
 alias glg='git log --stat --max-count=10'
 compdef _git glg=git-log
-alias glgg='git log --graph --max-count=10'
-compdef _git glgg=git-log
-alias glgg='git log --graph --max-count=10 -p'
+# Git log graph with patch content
+alias glgp='git log --graph --max-count=10 -p'
 compdef _git glgp=git-log
+## Git log graph limited to 10
+alias glgm='git log --graph --max-count=10'
+compdef _git glgm=git-log
+# Git log graph colorful
 alias glgg='git log --graph --color'
 compdef _git glgg=git-log
+# Git log graph with all branches
 alias glgga='git log --graph --decorate --all'
 compdef _git glgga=git-log
+# one line git log
 alias glo='git log --oneline'
 compdef _git glo=git-log
 
+######################
 # Git Reset Head (grh)
+######################
+# Soft Reset to HEAD
 alias grh='git reset HEAD'
 compdef _git grh=git-reset
+# Hard reset to HEAD
 alias grhh='git reset HEAD --hard'
 compdef _git grhh=git-reset
 
+################
 # Git merge (gm)
+################
+# Git merge
 alias gm='git merge'
 compdef _git gm=git-merge
+# git merge changes from the master branch on the upstream remote
 alias gmum='git merge upstream/master'
 compdef _git gmum=git-merge
 
 # Other
+# Show contribution scorecard
 alias gcount='git shortlog -sn'
 compdef gcount=git
+# Show current configuration
 alias gcl='git config --list'
 compdef _git gcl=git-config
 alias gcp='git cherry-pick'
 compdef _git gcp=git-cherry-pick
-alias gss='git status -s'
-compdef _git gss=git-status
 alias ga='git add'
 compdef _git ga=git-add
 
