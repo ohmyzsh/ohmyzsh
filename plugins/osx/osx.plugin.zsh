@@ -191,3 +191,29 @@ function itunes() {
 	osascript -e "tell application \"iTunes\" to $opt"
 }
 
+# Spotify control function
+function spotify() {
+    local opt=$1
+    shift
+    case "$opt" in
+        launch|play|pause|quit)
+            ;;
+        next|previous)
+            opt="$opt track"
+            ;;
+        ""|-h|--help)
+            echo "Usage: spotify <option>"
+            echo "option:"
+            echo "\tlaunch|play|pause|quit"
+            echo "\tnext|previous\tplay next or previous track"
+            echo "\thelp\tshow this message and exit"
+            return 0
+            ;;
+        *)
+            print "Unknown option: $opt"
+            return 1
+            ;;
+    esac
+    osascript -e "tell application \"Spotify\" to $opt"
+}
+
