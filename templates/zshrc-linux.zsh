@@ -33,15 +33,21 @@ DISABLE_VENV_CD="1"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git tmux debian python pythonbrew vim-override virtualenvwrapper)
-
-source $ZSH/oh-my-zsh.sh
+plugins=(git tmux debian python virtualenvwrapper)
 
 # Customize to your needs...
 if [ -z "$LC_ALL" ]; then export LC_ALL=en_US.UTF-8; fi
 if [ -z "$LANG" ]; then export LANG=en_US.UTF-8; fi
 
 if [ -e $HOME/bin ]; then export PATH="$HOME/bin:$PATH"; fi
-unsetopt correctall
+if [ -e $HOME/.cabal/bin ]; then export PATH="$HOME/.cabal/bin:$PATH"; fi
 
 [ "$TERM" = "xterm" ] && TERM="xterm-256color"
+
+# Aliases
+alias ta='tmux attach -t'
+alias tl='tmux list-session'
+alias ts='tmux new-session'
+
+source $ZSH/oh-my-zsh.sh
+unsetopt correctall

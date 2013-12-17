@@ -33,15 +33,13 @@ DISABLE_VENV_CD="1"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git postgres python pythonbrew vim-override virtualenvwrapper)
+plugins=(git postgres tmux python vim-override virtualenvwrapper)
 
 # User configuration
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 export EDITOR='vim'
 
-# tmux configuration
-export ZSH_TMUX_AUTOCONNECT=false
-export ZSH_TMUX_ITERM2=true
+# Aliases
 alias ta='tmux attach -t'
 alias tl='tmux list-session'
 alias ts='tmux new-session'
