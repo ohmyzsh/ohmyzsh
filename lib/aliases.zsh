@@ -13,14 +13,17 @@ alias please='sudo'
 #alias g='grep -in'
 
 # Show history
-alias history='fc -l 1'
-
-# Enable ls colors
-LS_OPTIONS='-hF'
-if [ "$DISABLE_LS_COLORS" != "true" ]
+if [ "$HIST_STAMPS" = "mm/dd/yyyy" ]
 then
-  # Find the option for using colors in ls, depending on the version: Linux or BSD
-  ls --color -d . &>/dev/null 2>&1 && alias ls="ls --color=tty $LS_OPTIONS" || alias ls="ls -G $LS_OPTIONS"
+    alias history='fc -fl 1'
+elif [ "$HIST_STAMPS" = "dd.mm.yyyy" ]
+then
+    alias history='fc -El 1'
+elif [ "$HIST_STAMPS" = "yyyy-mm-dd" ]
+then
+    alias history='fc -il 1'
+else
+    alias history='fc -l 1'
 fi
 
 # List direcory contents
