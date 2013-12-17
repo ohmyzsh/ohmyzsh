@@ -32,7 +32,7 @@ if [[ "$TERM_PROGRAM" == "Apple_Terminal" ]] && [[ -z "$INSIDE_EMACS" ]]; then
     # Register the function so it is called whenever the working
     # directory changes.
     autoload add-zsh-hook
-    add-zsh-hook chpwd update_terminal_cwd
+    add-zsh-hook precmd update_terminal_cwd
 
     # Tell the terminal about the initial directory.
     update_terminal_cwd
