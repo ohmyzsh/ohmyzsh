@@ -5,11 +5,23 @@ function gerrit_usage {
   echo  " try these :";
   echo  "   push             Push changes without going through a review. ";
   echo  "   pull             Pull latest changes and rebase ... or something. ";
+  echo  "   patch            Work with gerrit patchset";
   echo  "   review           Push changes and submit changes for review";
   echo  "   setup-reviewers  Set current repo to automatically have reviewers from your team";
   echo  "   add-reviewer     Add a reviewer to the repo";
   echo  "   clone            Clone a repo from gerrit, requires repo name";
   echo  "   setup            Add gerrit commit hook to a repo";
+  echo
+}
+
+function gerrit_patch_usage () {
+  echo
+  echo  " usage: gerrit patch <command>";
+  echo
+  echo  " try these :";
+  echo
+  echo  "   commit          amend the patchset commit";
+  echo  "   review          push the patchset back to the gerrit review";
   echo
 }
 
@@ -25,6 +37,15 @@ function gerrit_pull () {
   #git pull --rebase origin $1;
   git fetch;
   git rebase origin/$1
+}
+
+function gerrit_patch () {
+  if [ -z $1 ]; then
+    gerrit_patch_usage;
+  else
+    [ $1 = "commit" ] && git commit --amend;
+    [ $1 = "review" ] && gerrit_review "master";
+  fi
 }
 
 function gerrit_clone () {
@@ -77,6 +98,7 @@ function gerrit () {
   if [ -z $1 ]; then
     gerrit_usage;
   else
+    [ $1 = "patch" ] && gerrit_patch $2
     [ $1 = "push" ] && gerrit_push $branch;
     [ $1 = "review" ] && gerrit_review $branch;
     [ $1 = "pull" ] && gerrit_pull $branch;
