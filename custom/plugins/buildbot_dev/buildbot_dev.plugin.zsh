@@ -15,25 +15,26 @@ alias cjm='cactus jump metacactus'
 
 function bb_env()
 {
+    local BASE
+
     BBDIR=$1
     shift
-    local BASE
 
     if [[ -z $BBDIR ]]; then
       BASE=$BUILDBOT_PROJECT_PATH/main-new/
     else
       BASE=$BBDIR
     fi
-    #export __PATHBKP=$PATH
-    #export PYTHONPATH=$BASE/buildbot/master:$BASE/txwebservices/install:$BASE/cactus/install:$BASE/config/tools
-    #export PATH=$HOME/bin:$BASE/buildbot/master/bin:$BASE/txwebservices/install:$PATH
-    #export format_warnings_path=$BASE/config
-    #export warning_path=$BASE/config/latests_warnings
-    #export __PS1BKP=$PS1
+    # export __PATHBKP=$PATH
+    # export PYTHONPATH=$BASE/buildbot/master:$BASE/txwebservices/install:$BASE/cactus/install:$BASE/config/tools
+    # export PATH=$HOME/bin:$BASE/buildbot/master/bin:$BASE/txwebservices/install:$PATH
+    # export format_warnings_path=$BASE/config
+    # export warning_path=$BASE/config/latests_warnings
+    # export __PS1BKP=$PS1
 
-    fg_blue=%{$'\e[0;34m'%}
-    fg_cyan=%{$'\e[0;36m'%}
-    fg_lgreen=%{$'\e[1;32m'%}
+    # fg_blue=%{$'\e[0;34m'%}
+    # fg_cyan=%{$'\e[0;36m'%}
+    # fg_lgreen=%{$'\e[1;32m'%}
     # export PS1=${fg_lgreen}BBENV${fg_cyan}:$PS1
 
     cd $BASE/config
@@ -46,8 +47,9 @@ function bb_envrestore()
     unset PYTHONPATH
     unset warning_path
     unset format_warnings_path
-    export PATH=$__PATHBKP
-    export PS1=$__PS1BKP
+
+    # export PATH=$__PATHBKP
+    # export PS1=$__PS1BKP
 }
 
 alias autopep8_cur_directory='autopep8 --ignore=E501 -i **/*.py'
@@ -67,16 +69,17 @@ function bb_repo_upload()
                remy.protat@intel.com\
                gaetan.semet@intel.com\
                pierre.tardy@intel.com)
-    A=$(printf -- '%s,' ${REVIEWERS[@]})
-    A=${A%,}
-    echo "Reviewers: $A"
-    echo "Cmd: repo upload --cbr --re=$A ."
-    yes | repo upload --cbr --re=$A .
+    RE_LIST=$(printf -- '%s,' ${REVIEWERS[@]})
+    RE_LIST=${RE_LIST%,}
+    echo "Reviewers: $RE_LIST"
+    echo "Cmd: repo upload --cbr --re=$RE_LIST ."
+    yes | repo upload --cbr --re=$RE_LIST .
 }
 
 function bb_merge_bottom_branch_to_here()
 {
     local branch
+    local bottom_branch
 
     branch=$(git branches | grep "remotes/m/" | cut -d'/' -f5 | cut -d' ' -f1)
     case $branch in
@@ -92,7 +95,7 @@ function bb_merge_bottom_branch_to_here()
     esac
     echo "Merging branch $bottom_branch to $branch..."
     git merge umg/platform/buildbot/$bottom_branch --m "Manual merge of branch 'platform/buildbot/$bottom_branch' into 'platform/buildbot/$branch'"
-    git mergetool --no-prompt --tool=kdiff3
+    git mergetool --no-prompt
 }
 
 
