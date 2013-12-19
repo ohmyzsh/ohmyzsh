@@ -1,7 +1,7 @@
 #compdef powify
 
 _powify_all_servers() {
-  all_servers=(`ls $HOME/.pow/`)
+  all_servers=(`ls $HOME/.pow/ 2>/dev/null`)
 }
 
 local -a all_servers
@@ -30,7 +30,7 @@ fi
 
 case "$words[1]" in
   server)
-    _values \
+    _values , \
       'install[install pow server]' \
       'reinstall[reinstall pow server]' \
       'update[update pow server]' \
@@ -45,7 +45,7 @@ case "$words[1]" in
       'config[print the current server configuration]' \
       'logs[tails the pow server logs]' ;;
   utils)
-    _values \
+    _values , \
       'install[install powify.dev server management tool]' \
       'reinstall[reinstall powify.dev server management tool]' \
       'uninstall[uninstall powify.dev server management tool]' ;;
