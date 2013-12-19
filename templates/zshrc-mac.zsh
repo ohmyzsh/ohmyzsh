@@ -40,12 +40,15 @@ source $ZSH/oh-my-zsh.sh
 
 zstyle ':completion:*:descriptions' format '%B%d%b'
 
-# Customize to your needs...
+# Aliases
+alias ta='tmux attach -t'
+alias tl='tmux list-session'
+alias ts='tmux new-session'
 
-if [ -z "$LC_ALL" ]; then export LC_ALL=en_US.UTF-8; fi
-if [ -z "$LANG" ]; then export LANG=en_US.UTF-8; fi
+# Compilation flags
+# export ARCHFLAGS="-arch x86_64"
 
-if [ -e $HOME/bin ]; then export PATH="$HOME/bin:$PATH"; fi
+source $ZSH/oh-my-zsh.sh
 unsetopt correctall
 
 if [ -e ~/.profile ]; then source ~/.profile; fi

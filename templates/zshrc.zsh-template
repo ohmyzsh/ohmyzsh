@@ -50,7 +50,6 @@ plugins=(git)
 source $ZSH/oh-my-zsh.sh
 
 zstyle ':completion:*:descriptions' format '%B%d%b'
-
 # User configuration
 
 export PATH=$HOME/bin:/usr/local/bin:$PATH
