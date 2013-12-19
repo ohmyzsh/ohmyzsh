@@ -26,13 +26,6 @@ if [ -f ~/.zsh-update ]
 then
   . ~/.zsh-update
 
-  # cancel update if the current user doesn't have write permissions for the
-  # oh-my-zsh directory
-  if [ -n $(find -not -writable "$ZSH") ]
-  then
-    return 0;
-  fi
-
   if [[ -z "$LAST_EPOCH" ]]; then
     _update_zsh_update && return 0;
   fi
