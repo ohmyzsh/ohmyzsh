@@ -27,7 +27,8 @@
 
 CURRENT_BG='NONE'
 SEGMENT_SEPARATOR=''
-
+SEG_2=''
+ip=`curl -s icanhazip.com`
 # Begin a segment
 # Takes two arguments, background and foreground. Both can be omitted,
 # rendering default background/foreground.
@@ -36,7 +37,7 @@ prompt_segment() {
   [[ -n $1 ]] && bg="%K{$1}" || bg="%k"
   [[ -n $2 ]] && fg="%F{$2}" || fg="%f"
   if [[ $CURRENT_BG != 'NONE' && $1 != $CURRENT_BG ]]; then
-    echo -n " %{$bg%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR%{$fg%} "
+    echo -n " %{$reset_color%}%{$fg[black]%}%{$bg`echo '\033[104;32m'`%}$SEGMENT_SEPARATOR%{$bg%F{$CURRENT_BG}%}%{$fg%} "
   else
     echo -n "%{$bg%}%{$fg%} "
   fi
@@ -63,9 +64,10 @@ prompt_context() {
   local user=`whoami`
 
   if [[ "$user" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-    prompt_segment black default "%(!.%{%F{yellow}%}.)$user@%m"
+	prompt_segment black default "%{$fg[red]%}%(!.%{%F{yellow}%}.)%n%{$fg[white]%}@%{$fg[blue]%}`scutil --get ComputerName`%{$reset_color%}%{$fg[black]%}%{`echo '\033[42m'`%}$SEGMENT_SEPARATOR$ip"
   fi
 }
+#   prompt_segment black default "%{$fg[red]%}%(!.%{%F{yellow}%}.)%n%{$reset_color%}@%{$fg[blue]%}%m%{$reset_color%}%{$fg[black]%}`echo '\033[106m'`$SEGMENT_SEPARATOR$ip%{$reset_color%}%"
 
 # Git: branch/detached head, dirty status
 prompt_git() {
@@ -131,7 +133,7 @@ prompt_hg() {
 
 # Dir: current working directory
 prompt_dir() {
-  prompt_segment blue black '%~'
+  prompt_segment blue white "%{`echo '\033[44;32m'`%} %~ "
 }
 
 # Virtualenv: current working virtualenv
@@ -168,4 +170,71 @@ build_prompt() {
   prompt_end
 }
 
-PROMPT='%{%f%b%k%}$(build_prompt) '
+
+typeset -Ag FX FG BG
+
+FX=(
+    reset     "%{[00m%}"
+    bold      "%{[01m%}" no-bold      "%{[22m%}"
+    italic    "%{[03m%}" no-italic    "%{[23m%}"
+    underline "%{[04m%}" no-underline "%{[24m%}"
+    blink     "%{[05m%}" no-blink     "%{[25m%}"
+    reverse   "%{[07m%}" no-reverse   "%{[27m%}"
+)
+
+for color in {000..255}; do
+    FG[$color]="%{[38;5;${color}m%}"
+    BG[$color]="%{[48;5;${color}m%}"
+done
+
+# Show all 256 colors with color number
+function spectrum_ls() {
+  for code in {000..255}; do
+    print -P -- "zz $code: %F{$code}zzz"
+  done
+}
+
+
+function prompt_char {
+    git branch >/dev/null 2>/dev/null && echo '±' && return
+    hg root >/dev/null 2>/dev/null && echo '☿' && return
+    echo '%(!.!.➜)'
+}
+ 
+ 
+function parse_hg_dirty {
+  if [[ -n $(hg status -mard . 2> /dev/null) ]]; then
+    echo "$ZSH_THEME_HG_PROMPT_DIRTY"
+  fi
+}
+ 
+function get_RAM {
+  top -l1 | grep "PhysMem"| awk '{print (int($6)/1024)}'
+}
+ 
+ 
+function get_load() {
+  uptime | awk '{print $11}' | tr ',' ' '
+}
+ 
+function battery_charge {
+    echo `~/.oh-my-zsh/custom/battery.py` 2>/dev/null
+}
+
+#case '~/*' in '~/' ) echo "yes";;
+#  * ) echo "no";;
+#esac
+
+function user_folder_check {
+string='/Users/rever';
+path=`pwd`;
+if [[ $path == *$string* ]]
+then
+  echo "Local";
+else
+  echo "External";
+fi
+}
+RPROMPT='%{$fg_bold[white]%}$(user_folder_check) %{$fg_bold[green]%}%t%{$reset_color%} $(battery_charge)'
+
+PROMPT='%{%f%b%k%}$(build_prompt)  '
