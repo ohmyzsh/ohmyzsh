@@ -36,8 +36,13 @@ DISABLE_VENV_CD="1"
 plugins=(git postgres tmux python vim-override virtualenvwrapper)
 
 # User configuration
-export PATH=$HOME/bin:/usr/local/bin:$PATH
+if [ -e $HOME/bin ]; then export PATH="$HOME/bin:$PATH"; fi
+if [ -e /usr/local/bin ]; then export PATH="/usr/local/bin:$PATH"; fi
 export EDITOR='vim'
+
+# Language configuration
+if [ -z "$LC_ALL" ]; then export LC_ALL=en_US.UTF-8; fi
+if [ -z "$LANG" ]; then export LANG=en_US.UTF-8; fi
 
 # Aliases
 alias ta='tmux attach -t'
