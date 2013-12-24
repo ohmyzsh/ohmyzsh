@@ -198,7 +198,7 @@ _zsh_highlight_bind_widgets || {
 }
 
 # Resolve highlighters directory location.
-_zsh_highlight_load_highlighters "${ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR:-${0:h}/highlighters}" || {
+_zsh_highlight_load_highlighters "${ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR:-${${0:A}:h}/highlighters}" || {
   echo 'zsh-syntax-highlighting: failed loading highlighters, exiting.' >&2
   return 1
 }
