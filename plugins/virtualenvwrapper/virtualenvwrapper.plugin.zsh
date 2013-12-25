@@ -15,9 +15,11 @@ if (( $+commands[$virtualenvwrapper] )); then
                 PROJECT_ROOT="."
             fi
             # Check for virtualenv name override
-            if [[ -f "$PROJECT_ROOT/.venv" ]]; then
+            if [[ -f "$PWD/.venv" && $PWD = $PROJECT_ROOT/* ]]; then
+                ENV_NAME=`cat "$PWD/.venv"`
+            elif [[ -f "$PROJECT_ROOT/.venv" ]]; then
                 ENV_NAME=`cat "$PROJECT_ROOT/.venv"`
-            elif [[ -f "$PROJECT_ROOT/.venv/bin/activate" ]];then 
+            elif [[ -f "$PROJECT_ROOT/.venv/bin/activate" ]]; then
                 ENV_NAME="$PROJECT_ROOT/.venv"
             elif [[ "$PROJECT_ROOT" != "." ]]; then
                 ENV_NAME=`basename "$PROJECT_ROOT"`
