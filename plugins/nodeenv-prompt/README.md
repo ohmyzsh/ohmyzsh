@@ -7,17 +7,6 @@ It support to customize the
 [nodeenv](https://github.com/ekalinin/nodeenv)
 prompt in oh-my-zsh themes.
 
-Installation
-------------
-
-You can install this plugin from shell:
-
-    repo="git://github.com/chenhouwu/oh-my-zsh-nodeenv-prompt.git"
-    target="$HOME/.oh-my-zsh/custom/plugins/nodeenv-prompt"
-
-    git clone $repo $target
-
-
 Customize Theme
 ---------------
 
