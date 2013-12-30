@@ -10,7 +10,7 @@ local pwd="%{$fg[yellow]%}%~%{$reset_color%}"
 PROMPT='${user}${host} ${pwd}
 ${smiley}  '
 
-RPROMPT='$(rvm-prompt || rbenv version) %{$fg[white]%}$(git_prompt_info)%{$reset_color%}'
+RPROMPT='$(rvm-prompt 2>/dev/null || rbenv version 2>/dev/null) %{$fg[white]%}$(git_prompt_info)%{$reset_color%}'
 
 ZSH_THEME_GIT_PROMPT_PREFIX=""
 ZSH_THEME_GIT_PROMPT_SUFFIX=""
