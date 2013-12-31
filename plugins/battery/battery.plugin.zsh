@@ -17,25 +17,45 @@ if [[ $(uname) == "Darwin" ]] ; then
     echo $i
   }
   
-  function battery_pct_remaining() {
+  function charger_connected() {
     if [[ $(ioreg -rc AppleSmartBattery | grep -c '^.*"ExternalConnected"\ =\ No') -eq 1 ]] ; then
-      battery_pct
+      echo "NO"
     else
-      echo "External Power"
+      echo "YES"
+    fi 
+  }
+  
+  function charging_state() {
+    if [[ $(charger_connected) == "YES" ]] ; then
+      echo "C"
+    else
+      echo "D"
     fi
   }
-
+  
+  function battery_pct_remaining() {
+      echo "$(battery_pct)"
+    }
+    
+  function time_to_full {
+    echo $(ioreg -rc "AppleSmartBattery"| grep '^.*"AvgTimeToFull"\ =\ ' | sed -e 's/^.*"AvgTimeToFull"\ =\ //')
+  }
+  function time_to_empty {
+    echo $(ioreg -rc "AppleSmartBattery"| grep '^.*"TimeRemaining"\ =\ ' | sed -e 's/^.*"TimeRemaining"\ =\ //')
+  }
+  
   function battery_time_remaining() {
-    if [[ $(ioreg -rc AppleSmartBattery | grep -c '^.*"ExternalConnected"\ =\ No') -eq 1 ]] ; then
-      timeremaining=$(ioreg -rc "AppleSmartBattery"| grep '^.*"AvgTimeToEmpty"\ =\ ' | sed -e 's/^.*"AvgTimeToEmpty"\ =\ //')
+    timeremaining=$(time_to_empty)
+    timetofull=$(time_to_full)
+    if [[ $(charger_connected) == "NO" ]] ; then
       echo "~$((timeremaining / 60)):$((timeremaining % 60))"
     else
-      echo "∞"
+      echo "~$((timetofull / 60)):$((timetofull % 60))"
     fi
   }
 
   function battery_pct_prompt () {
-    if [[ $(ioreg -rc AppleSmartBattery | grep -c '^.*"ExternalConnected"\ =\ No') -eq 1 ]] ; then
+    if [[ $(charger_connected) == "NO" ]] ; then
       b=$(battery_pct_remaining)
       if [ $b -gt 50 ] ; then
         color='green'
@@ -49,6 +69,7 @@ if [[ $(uname) == "Darwin" ]] ; then
       echo "∞"
     fi
   }
+
 
 elif [[ $(uname) == "Linux"  ]] ; then
 
@@ -89,4 +110,9 @@ else
 
 	function battery_pct_prompt() {
 	}
+  function charger_connected() {
+  }
+  function charging_state() {
+  }
+  
 fi
