@@ -7,13 +7,9 @@ function rvm_prompt_info() {
   echo "${ZSH_THEME_RVM_PROMPT_PREFIX:=(}${rvm_prompt}${ZSH_THEME_RVM_PROMPT_SUFFIX:=)}"
 }
 
-# using the rbenv plugin will override this with a real implementation
-function rbenv_prompt_info() {
-  return 1
-}
-
-# using the chruby plugin will override this with a real implementation
-function chruby_prompt_info() {
+# using the chruby and/or rbenv plugins will override
+# these with real implementations
+function chruby_prompt_info rbenv_prompt_info {
   return 1
 }
 
