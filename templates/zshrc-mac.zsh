@@ -37,8 +37,14 @@ plugins=(git python vim-override common-aliases zsh-syntax-highlighting jump cof
          pip brew sublime grin)
 
 source $ZSH/oh-my-zsh.sh
+# User configuration
+if [ -e $HOME/bin ]; then export PATH="$HOME/bin:$PATH"; fi
+if [ -e /usr/local/bin ]; then export PATH="/usr/local/bin:$PATH"; fi
 
 zstyle ':completion:*:descriptions' format '%B%d%b'
+# Language configuration
+if [ -z "$LC_ALL" ]; then export LC_ALL=en_US.UTF-8; fi
+if [ -z "$LANG" ]; then export LANG=en_US.UTF-8; fi
 
 # Aliases
 alias ta='tmux attach -t'
