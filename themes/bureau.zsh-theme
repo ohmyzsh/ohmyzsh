@@ -70,7 +70,7 @@ bureau_git_prompt () {
 
 _PATH="%{$fg_bold[white]%}%~%{$reset_color%}"
 
-if [[ "%#" == "#" ]]; then
+if [[ $EUID -eq 0 ]]; then
   _USERNAME="%{$fg_bold[red]%}%n"
   _LIBERTY="%{$fg[red]%}#"
 else
