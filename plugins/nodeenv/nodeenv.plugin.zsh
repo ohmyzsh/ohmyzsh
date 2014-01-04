@@ -22,10 +22,7 @@ if [[ ! $DISABLE_NODEENV_CD -eq 1 ]]; then
             fi
             source $NODEENV_NAME/bin/activate && export CD_NODEENV="$NODEENV_NAME"
             if [[ "$NODEENV_NAME" != "" ]]; then
-                # Activate the environment only if it is not already active
-                if [[ "$NODE_VIRTUAL_ENV" != "$WORKON_HOME/$NODEENV_NAME" ]]; then
-                    source $NODEENV_NAME/bin/activate && export CD_NODEENV="$NODEENV_NAME"
-                fi
+                source $NODEENV_NAME/bin/activate && export CD_NODEENV="$NODEENV_NAME"
             elif [ $CD_NODEENV ]; then
                 # We've just left the repo, deactivate the environment
                 # Note: this only happens if the virtualenv was activated automatically
