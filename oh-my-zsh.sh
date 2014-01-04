@@ -64,12 +64,13 @@ load_customizations() { source_files $ZSH_CUSTOM/*.zsh }
 # Does nothing if ZSH_THEME is an empty string or unset
 _source_zsh_theme() {
   if [ "$ZSH_THEME" = "random" ]; then
+    local themes
+    local theme_name
     themes=($ZSH/themes/*zsh-theme)
-    N=${#themes[@]}
-    ((N=(RANDOM%N)+1))
-    RANDOM_THEME=${themes[$N]}
-    source "$RANDOM_THEME"
+    RANDOM_THEME=${themes[$RANDOM % ${#themes[@]}]}
     theme_name=$(basename $RANDOM_THEME .zsh-theme)
+
+    source "$RANDOM_THEME"
     echo "[oh-my-zsh] Random theme '$theme_name' loaded..."
   elif [ ! "$ZSH_THEME" = ""  ]; then
     # custom themes take precedence over built-in themes!
