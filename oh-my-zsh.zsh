@@ -4,7 +4,7 @@
 # its awesomeness at a single glance.
 
 check_for_updates() {
-  if [ "$DISABLE_AUTO_UPDATE" != "true" ]; then
+  if [[ $DISABLE_AUTO_UPDATE != "true" ]]; then
     /usr/bin/env ZSH=$ZSH DISABLE_UPDATE_PROMPT=$DISABLE_UPDATE_PROMPT \
       zsh -f $ZSH/tools/check_for_upgrade.sh
   fi
@@ -20,11 +20,11 @@ find_plugin_paths() {
   local plugin_path
   local zsh_path
 
-  for plugin ($plugins); do
+  for plugin in $plugins; do
     plugin_path="plugins/$plugin/$plugin.plugin.zsh"
     for zsh_path in $ZSH_CUSTOM $ZSH; do
-      if [ -f "$zsh_path/$plugin_path" ]; then
-        ZSH_PLUGIN_PATHS+="$zsh_path/$plugin_path"
+      if [[ -f $zsh_path/$plugin_path ]]; then
+        ZSH_PLUGIN_PATHS+=$zsh_path/$plugin_path
         break
       fi
     done
@@ -37,20 +37,18 @@ initialize_completions() {
   short_host=$($(scutil --get ComputerName 2>/dev/null) || echo ${HOST/.*/})
 
   # Save the location of the current completion dump file.
-  ZSH_COMPDUMP="${ZDOTDIR:-${HOME}}/.zcompdump-${short_host}-${ZSH_VERSION}"
+  ZSH_COMPDUMP="${ZDOTDIR:-${HOME}}/.zcompdump-$short_host-$ZSH_VERSION"
 
   # plugins need to be added to the functions path before compinit
   fpath=($ZSH_PLUGIN_PATHS $fpath)
 
   autoload -U compinit
-  compinit -i -d "${ZSH_COMPDUMP}"
+  compinit -i -d $ZSH_COMPDUMP
 }
 
 source_files() {
   local file
-  for file in $@; do
-    source $file
-  done
+  for file in $@; { source $file }
 }
 
 load_lib_files() { source_files $ZSH/lib/*.zsh }
@@ -60,7 +58,7 @@ load_customizations() { source_files $ZSH_CUSTOM/*.zsh }
 # Sources ZSH_THEME
 # Does nothing if ZSH_THEME is an empty string or unset
 _source_zsh_theme() {
-  if [ "$ZSH_THEME" = "random" ]; then
+  if [[ $ZSH_THEME = "random" ]]; then
     local themes
     local theme_name
     themes=($ZSH/themes/*zsh-theme)
@@ -69,16 +67,15 @@ _source_zsh_theme() {
 
     source "$RANDOM_THEME"
     echo "[oh-my-zsh] Random theme '$theme_name' loaded..."
-  elif [ "$ZSH_THEME" != "" ]; then
-    echo ho
+  elif [[ $ZSH_THEME != '' ]]; then
     local theme_path
     local zsh_path
 
     # custom themes take precedence over built-in themes!
     theme_path="themes/$ZSH_THEME.zsh-theme"
     for zsh_path in $ZSH_CUSTOM $ZSH; do
-      if [ -f "$zsh_path/$theme_path" ]; then
-        source "$zsh_path/$theme_path"
+      if [[ -f $zsh_path/$theme_path ]]; then
+        source $zsh_path/$theme_path
         break
       fi
     done
@@ -112,10 +109,11 @@ _default_theming() {
 # are pygmalion or pure) you will see remnants of their prompts if you load
 # another theme on the fly. Just open a new shell and you're good again.
 load_zsh_theme() {
-  if [ ! "$1" = '' ]; then; ZSH_THEME="$1"; fi
+  [[ $1 != '' ]] && ZSH_THEME=$1
   _source_zsh_theme || _default_theming
 }
 
+# This is where the magic happens
 check_for_updates
 find_plugin_paths
 initialize_completions
