@@ -1,3 +1,4 @@
+#------activate/deactivate automatically--------------
 if [[ ! $DISABLE_NODEENV_CD -eq 1 ]]; then
     # Automatically activate Git projects's virtual environments based on the
     # directory name of the project. Virtual environment name can be overridden
@@ -11,16 +12,12 @@ if [[ ! $DISABLE_NODEENV_CD -eq 1 ]]; then
                 NODEENV_PROJECT_ROOT="."
             fi
             # Check for virtualenv name override
-            if [[ -f "$NODEENV_PROJECT_ROOT/.nodeenv" ]]; then
-                NODEENV_NAME=`cat "$NODEENV_PROJECT_ROOT/.nodeenv"`
-            elif [[ -f "$NODEENV_PROJECT_ROOT/.nodeenv/bin/activate" ]];then
+            if [[ -f "$NODEENV_PROJECT_ROOT/.nodeenv/bin/activate" ]];then
                 NODEENV_NAME="$NODEENV_PROJECT_ROOT/.nodeenv"
-            elif [[ "$NODEENV_PROJECT_ROOT" != "." ]]; then
-                NODEENV_NAME=`basename "$NODEENV_PROJECT_ROOT"`
             else
                 NODEENV_NAME=""
             fi
-            if [[ "$NODEENV_NAME" != "" ]]; then
+            if [[ $NODEENV_NAME != "" ]]; then
                 source $NODEENV_NAME/bin/activate && export CD_NODEENV="$NODEENV_NAME"
             elif [ $CD_NODEENV ]; then
                 # We've just left the repo, deactivate the environment
@@ -44,6 +41,7 @@ if [[ ! $DISABLE_NODEENV_CD -eq 1 ]]; then
     fi
 fi
 
+#---------prompt-------------------
 export NODE_VIRTUAL_ENV_DISABLE_PROMPT=1
 
 ZSH_THEME_NODEENV_PROMPT_PREFIX="("
