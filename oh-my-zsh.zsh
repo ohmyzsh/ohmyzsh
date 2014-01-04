@@ -17,14 +17,16 @@ check_for_updates() {
 find_plugin_paths() {
   ZSH_PLUGIN_PATHS=()
   local plugin
+  local plugin_file
   local plugin_path
   local zsh_path
 
   for plugin in $plugins; do
     plugin_path="plugins/$plugin/$plugin.plugin.zsh"
     for zsh_path in $ZSH_CUSTOM $ZSH; do
-      if [[ -f $zsh_path/$plugin_path ]]; then
-        ZSH_PLUGIN_PATHS+=$zsh_path/$plugin_path
+      plugin_file=$zsh_path/$plugin_path
+      if [[ -f $plugin_file ]]; then
+        ZSH_PLUGIN_PATHS+=$plugin_file
         break
       fi
     done
@@ -68,14 +70,16 @@ _source_zsh_theme() {
     source "$RANDOM_THEME"
     echo "[oh-my-zsh] Random theme '$theme_name' loaded..."
   elif [[ $ZSH_THEME != '' ]]; then
+    local theme_file
     local theme_path
     local zsh_path
 
     # custom themes take precedence over built-in themes!
     theme_path="themes/$ZSH_THEME.zsh-theme"
     for zsh_path in $ZSH_CUSTOM $ZSH; do
-      if [[ -f $zsh_path/$theme_path ]]; then
-        source $zsh_path/$theme_path
+      theme_file=$zsh_path/$theme_path
+      if [[ -f $theme_file ]]; then
+        source $theme_file
         break
       fi
     done
