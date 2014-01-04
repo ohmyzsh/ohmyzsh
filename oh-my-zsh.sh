@@ -1,71 +1,59 @@
-# Check for updates on initial load...
-if [ "$DISABLE_AUTO_UPDATE" != "true" ]; then
-  /usr/bin/env ZSH=$ZSH DISABLE_UPDATE_PROMPT=$DISABLE_UPDATE_PROMPT zsh $ZSH/tools/check_for_upgrade.sh
-fi
+# Initialization script of oh-my-zsh
+#
+# Skip to the bottom of the file to see how oh-my-zsh loads
+# its awesomeness at a single glance.
 
-# Initializes Oh My Zsh
-
-# add a function path
-fpath=($ZSH/functions $ZSH/completions $fpath)
-
-# Load all of the config files in ~/oh-my-zsh that end in .zsh
-# TIP: Add files you don't want in git to .gitignore
-for config_file ($ZSH/lib/*.zsh); do
-  source $config_file
-done
-
-# Set ZSH_CUSTOM to the path where your custom config files
-# and plugins exists, or else we will use the default custom/
-if [[ -z "$ZSH_CUSTOM" ]]; then
-    ZSH_CUSTOM="$ZSH/custom"
-fi
-
-
-is_plugin() {
-  local base_dir=$1
-  local name=$2
-  test -f $base_dir/plugins/$name/$name.plugin.zsh \
-    || test -f $base_dir/plugins/$name/_$name
+check_for_updates() {
+  if [ "$DISABLE_AUTO_UPDATE" != "true" ]; then
+    /usr/bin/env ZSH=$ZSH DISABLE_UPDATE_PROMPT=$DISABLE_UPDATE_PROMPT \
+      zsh -f $ZSH/tools/check_for_upgrade.sh
+  fi
 }
-# Add all defined plugins to fpath. This must be done
-# before running compinit.
-for plugin ($plugins); do
-  if is_plugin $ZSH_CUSTOM $plugin; then
-    fpath=($ZSH_CUSTOM/plugins/$plugin $fpath)
-  elif is_plugin $ZSH $plugin; then
-    fpath=($ZSH/plugins/$plugin $fpath)
+
+# Resolves plugin names to their respective paths.
+# If a custom plugin is defined, the default plugin
+# won't be added to the plugin_paths.
+find_plugin_paths() {
+  ZSH_PLUGIN_PATHS=()
+  for plugin ($plugins); do
+    plugin_path="plugins/$plugin/$plugin.plugin.zsh"
+    for zsh_path in $ZSH_CUSTOM $ZSH; do
+      if [ -f "$zsh_path/$plugin_path" ]; then
+        ZSH_PLUGIN_PATHS+="$zsh_path/$plugin_path"
+        break
+      fi
+    done
+  done
+}
+
+initialize_completions() {
+  # Figure out the SHORT hostname
+  if [ -n "$commands[scutil]" ]; then
+    # OS X
+    SHORT_HOST=$(scutil --get ComputerName)
+  else
+    SHORT_HOST=${HOST/.*/}
   fi
-done
 
-# Figure out the SHORT hostname
-if [ -n "$commands[scutil]" ]; then
-  # OS X
-  SHORT_HOST=$(scutil --get ComputerName)
-else
-  SHORT_HOST=${HOST/.*/}
-fi
+  # Save the location of the current completion dump file.
+  ZSH_COMPDUMP="${ZDOTDIR:-${HOME}}/.zcompdump-${SHORT_HOST}-${ZSH_VERSION}"
 
-# Save the location of the current completion dump file.
-ZSH_COMPDUMP="${ZDOTDIR:-${HOME}}/.zcompdump-${SHORT_HOST}-${ZSH_VERSION}"
+  # plugins need to be added to the functions path before compinit
+  fpath=($ZSH_PLUGIN_PATHS $fpath)
 
-# Load and run compinit
-autoload -U compinit
-compinit -i -d "${ZSH_COMPDUMP}"
+  autoload -U compinit
+  compinit -i -d "${ZSH_COMPDUMP}"
+}
 
-# Load all of the plugins that were defined in ~/.zshrc
-for plugin ($plugins); do
-  if [ -f $ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh ]; then
-    source $ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh
-  elif [ -f $ZSH/plugins/$plugin/$plugin.plugin.zsh ]; then
-    source $ZSH/plugins/$plugin/$plugin.plugin.zsh
-  fi
-done
+source_files() {
+  for file in $@; do
+    source $file
+  done
+}
 
-# Load all of your custom configurations from custom/
-for config_file ($ZSH_CUSTOM/*.zsh(N)); do
-  source $config_file
-done
-unset config_file
+load_lib_files() { source_files $ZSH/lib/*.zsh }
+load_plugins() { source_files $ZSH_PLUGIN_PATHS }
+load_customizations() { source_files $ZSH_CUSTOM/*.zsh }
 
 # Sources ZSH_THEME
 # Does nothing if ZSH_THEME is an empty string or unset
@@ -78,16 +66,15 @@ _source_zsh_theme() {
     source "$RANDOM_THEME"
     theme_name=$(basename $RANDOM_THEME .zsh-theme)
     echo "[oh-my-zsh] Random theme '$theme_name' loaded..."
-  elif; then
-    if [ ! "$ZSH_THEME" = ""  ]; then
-      if [ -f "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme" ]; then
-        source "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme"
-      elif [ -f "$ZSH_CUSTOM/themes/$ZSH_THEME.zsh-theme" ]; then
-        source "$ZSH_CUSTOM/themes/$ZSH_THEME.zsh-theme"
-      else
-        source "$ZSH/themes/$ZSH_THEME.zsh-theme"
+  elif [ ! "$ZSH_THEME" = ""  ]; then
+    # custom themes take precedence over built-in themes!
+    for zsh_path in $ZSH_CUSTOM $ZSH; do
+      theme_path="themes/$ZSH_THEME.zsh-theme"
+      if [ -f "$zsh_path/$theme_path" ]; then
+        source "$zsh_path/$theme_path"
+        break
       fi
-    fi
+    done
   fi
 }
 
@@ -122,4 +109,10 @@ load_zsh_theme() {
   _source_zsh_theme || _default_theming
 }
 
+check_for_updates
+find_plugin_paths
+initialize_completions
+load_lib_files
+load_plugins
+load_customizations
 load_zsh_theme
