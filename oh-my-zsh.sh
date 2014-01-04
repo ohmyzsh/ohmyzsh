@@ -10,9 +10,10 @@ check_for_updates() {
   fi
 }
 
-# Resolves the names insode of the plugins array to their respective paths.
+# Resolves the names inside of the plugins array to their respective paths.
 # Custom plugins take precedence, if one is found, the default plugin won't
 # be added to ZSH_PLUGIN_PATHS.
+# This variable is used to initialize zsh completions and load the plugins.
 find_plugin_paths() {
   ZSH_PLUGIN_PATHS=()
   local plugin
