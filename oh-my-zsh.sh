@@ -15,6 +15,10 @@ check_for_updates() {
 # won't be added to the plugin_paths.
 find_plugin_paths() {
   ZSH_PLUGIN_PATHS=()
+  local plugin
+  local plugin_path
+  local zsh_path
+
   for plugin ($plugins); do
     plugin_path="plugins/$plugin/$plugin.plugin.zsh"
     for zsh_path in $ZSH_CUSTOM $ZSH; do
@@ -46,6 +50,7 @@ initialize_completions() {
 }
 
 source_files() {
+  local file
   for file in $@; do
     source $file
   done
@@ -69,7 +74,7 @@ _source_zsh_theme() {
   elif [ ! "$ZSH_THEME" = ""  ]; then
     # custom themes take precedence over built-in themes!
     for zsh_path in $ZSH_CUSTOM $ZSH; do
-      theme_path="themes/$ZSH_THEME.zsh-theme"
+      local theme_path="themes/$ZSH_THEME.zsh-theme"
       if [ -f "$zsh_path/$theme_path" ]; then
         source "$zsh_path/$theme_path"
         break
