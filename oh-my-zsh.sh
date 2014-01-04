@@ -69,13 +69,14 @@ _source_zsh_theme() {
 
     source "$RANDOM_THEME"
     echo "[oh-my-zsh] Random theme '$theme_name' loaded..."
-  elif [ ! "$ZSH_THEME" = ""  ]; then
+  elif [ "$ZSH_THEME" != "" ]; then
+    echo ho
     local theme_path
     local zsh_path
 
     # custom themes take precedence over built-in themes!
+    theme_path="themes/$ZSH_THEME.zsh-theme"
     for zsh_path in $ZSH_CUSTOM $ZSH; do
-      theme_path="themes/$ZSH_THEME.zsh-theme"
       if [ -f "$zsh_path/$theme_path" ]; then
         source "$zsh_path/$theme_path"
         break
