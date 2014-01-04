@@ -103,17 +103,19 @@ _default_theming() {
 }
 
 # Tries to source a theme given as ZSH_THEME.
-# If ZSH_THEME is not set, nothing is done at all. This is
-# to enable users do circumvent the theming of oh-my-zsh
-# on purpose.
-# If ZSH_THEME contains an invalid theme string, a fallback
-# is provided.
-# Takes an argument to provide a new value fo ZSH_THEME
-# before loading it.
-# Example to load a random theme::
+# If ZSH_THEME is not set, nothing  is done at all. This is to enable
+# users do circumvent the theming of oh-my-zsh on purpose.
+# If ZSH_THEME contains an invalid theme string, a fallback is provided.
+# Takes an argument to provide a new value fo ZSH_THEME before loading it.
+# Example to load a random theme:
 #   load_zsh_theme random
 # Example to load whatever ZSH_THEME currently is:
 #   load_zsh_theme
+#
+# A word of warning: The function doesn't clean up after itself - that means
+# that if you load a theme that define a precmd and or zsh hooks (examples
+# are pygmalion or pure) you will see remnants of their prompts if you load
+# another theme on the fly. Just open a new shell and you're good again.
 load_zsh_theme() {
   if [ ! "$1" = '' ]; then; ZSH_THEME="$1"; fi
   _source_zsh_theme || _default_theming
