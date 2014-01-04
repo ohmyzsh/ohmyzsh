@@ -67,22 +67,56 @@ for config_file ($ZSH_CUSTOM/*.zsh(N)); do
 done
 unset config_file
 
-# Load the theme
-if [ "$ZSH_THEME" = "random" ]; then
-  themes=($ZSH/themes/*zsh-theme)
-  N=${#themes[@]}
-  ((N=(RANDOM%N)+1))
-  RANDOM_THEME=${themes[$N]}
-  source "$RANDOM_THEME"
-  echo "[oh-my-zsh] Random theme '$RANDOM_THEME' loaded..."
-else
-  if [ ! "$ZSH_THEME" = ""  ]; then
-    if [ -f "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme" ]; then
-      source "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme"
-    elif [ -f "$ZSH_CUSTOM/themes/$ZSH_THEME.zsh-theme" ]; then
-      source "$ZSH_CUSTOM/themes/$ZSH_THEME.zsh-theme"
-    else
-      source "$ZSH/themes/$ZSH_THEME.zsh-theme"
+# Sources ZSH_THEME
+# Does nothing if ZSH_THEME is an empty string or unset
+_source_zsh_theme() {
+  if [ "$ZSH_THEME" = "random" ]; then
+    themes=($ZSH/themes/*zsh-theme)
+    N=${#themes[@]}
+    ((N=(RANDOM%N)+1))
+    RANDOM_THEME=${themes[$N]}
+    source "$RANDOM_THEME"
+    echo "[oh-my-zsh] Random theme '$RANDOM_THEME' loaded..."
+  elif; then
+    if [ ! "$ZSH_THEME" = ""  ]; then
+      if [ -f "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme" ]; then
+        source "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme"
+      elif [ -f "$ZSH_CUSTOM/themes/$ZSH_THEME.zsh-theme" ]; then
+        source "$ZSH_CUSTOM/themes/$ZSH_THEME.zsh-theme"
+      else
+        source "$ZSH/themes/$ZSH_THEME.zsh-theme"
+      fi
     fi
   fi
-fi
+}
+
+_default_theming() {
+  echo "Falling back to default theming"
+  # default prompt
+  PS1="%n@%m:%~%# "
+
+  # default variables for theming the git info prompt
+  ZSH_THEME_GIT_PROMPT_PREFIX="git:("         # Prefix at the very beginning of the prompt, before the branch name
+  ZSH_THEME_GIT_PROMPT_SUFFIX=")"             # At the very end of the prompt
+  ZSH_THEME_GIT_PROMPT_DIRTY="*"              # Text to display if the branch is dirty
+  ZSH_THEME_GIT_PROMPT_CLEAN=""               # Text to display if the branch is clean
+}
+
+# Tries to source a theme given as ZSH_THEME.
+# If ZSH_THEME is not set, nothing is done at all. This is
+# to enable users do circumvent the theming of oh-my-zsh
+# on purpose.
+# If ZSH_THEME contains an invalid theme string, a fallback
+# is provided.
+# Takes an argument to provide a new value fo ZSH_THEME
+# before loading it.
+# Example to load a random theme::
+#   load_zsh_theme random
+# Example to load whatever ZSH_THEME currently is:
+#   load_zsh_theme
+load_zsh_theme() {
+  if [ ! "$1" = '' ]; then; ZSH_THEME="$1"; fi
+  _source_zsh_theme || _default_theming
+}
+
+load_zsh_theme
