@@ -19,10 +19,13 @@
 #   To ignore untracked files making your branch dirty, set
 #   DISABLE_UNTRACKED_FILES_DIRTY to 'true'
 #
-# git_prompt_short_sha and git_prompt_long_sha
+# git_prompt_sha
 #   Delimited by
 #     ZSH_THEME_GIT_PROMPT_SHA_BEFORE
 #     ZSH_THEME_GIT_PROMPT_SHA_AFTER
+#   By default displays the long sha key, call git_prompt_sha --short
+#   to have it shortened. The former functions git_prompt_long_sha and
+#   git_prompt_short_sha are kept for backward compatibility.
 #
 # git_remote_status
 #   Shows the difference between your local and its remote branch. Checks
@@ -68,17 +71,15 @@ git_is_clean() {
   [[ $(command git status -s $GIT_STATUS_OPTIONS 2> /dev/null) == '' ]]
 }
 
-# Formats prompt string for current git commit short SHA
-git_prompt_short_sha() {
-  SHA=$(command git rev-parse --short HEAD 2> /dev/null) && \
+# Shows the long git sha, pass in --short to get it shortened
+git_prompt_sha() {
+  SHA=$(command git rev-parse $1 HEAD 2> /dev/null) && \
     echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
 }
 
-# Formats prompt string for current git commit long SHA
-git_prompt_long_sha() {
-  SHA=$(command git rev-parse HEAD 2> /dev/null) && \
-    echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
-}
+# The following are kept for backwards compatibility
+git_prompt_short_sha() { git_prompt_sha --short }
+git_prompt_long_sha() { git_prompt_sha }
 
 # get the difference between the local and remote branches
 git_remote_status() {
