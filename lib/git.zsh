@@ -51,59 +51,60 @@ function git_prompt_ahead() {
 
 # Formats prompt string for current git commit short SHA
 function git_prompt_short_sha() {
-  SHA=$(command git rev-parse --short HEAD 2> /dev/null) && echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
+  SHA=$(command git rev-parse --short HEAD 2> /dev/null) && \
+    echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
 }
 
 # Formats prompt string for current git commit long SHA
 function git_prompt_long_sha() {
-  SHA=$(command git rev-parse HEAD 2> /dev/null) && echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
+  SHA=$(command git rev-parse HEAD 2> /dev/null) && \
+    echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
+}
+
+# provides an associative array with instructions
+# used by grep in git_prompt_status
+git_remote_status_setup() {
+  declare -Ag ZSH_THEME_GIT_PROMPT_MOD_MAP
+  # need to shield the vars with quotes, because they might
+  # be empty strings!
+  ZSH_THEME_GIT_PROMPT_MOD_MAP=(
+    "\?\?" "$ZSH_THEME_GIT_PROMPT_UNTRACKED"
+    "A" "$ZSH_THEME_GIT_PROMPT_ADDED"
+    "[MT]" "$ZSH_THEME_GIT_PROMPT_MODIFIED"
+    "D" "$ZSH_THEME_GIT_PROMPT_DELETED"
+    "UU" "$ZSH_THEME_GIT_PROMPT_UNMERGED"
+  )
+}
+
+has_stashed_commits() {
+  command git rev-parse --verify refs/stash &>/dev/null
 }
 
 # Get the status of the working tree
 git_prompt_status() {
-  INDEX=$(command git status --porcelain -b 2> /dev/null)
-  STATUS=""
-  if $(echo "$INDEX" | grep -E '^\?\? ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_UNTRACKED$STATUS"
+  local index
+  local remote_line
+  local status_syms
+  local return_str=''
+  index=$(command git status --porcelain -b 2> /dev/null)
+  remote_line=$(echo $index | head -1)
+  status_syms=$(echo $index | awk '{ print $1 }')
+
+  for key in ${(k)ZSH_THEME_GIT_PROMPT_MOD_MAP}; do
+    echo $status_syms | grep -E "$key" &>/dev/null && \
+      return_str+=$ZSH_THEME_GIT_PROMPT_MOD_MAP[$key]
+  done
+
+  for val in ahead behind diverged; do
+    echo $remote_line | grep "##.*$val" &>/dev/null && \
+      return_str+=$(eval echo \$ZSH_THEME_GIT_PROMPT_$val:u)
+  done
+
+  if has_stashed_commits; then
+    return_str+=$ZSH_THEME_GIT_PROMPT_STASHED
   fi
-  if $(echo "$INDEX" | grep '^A  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
-  elif $(echo "$INDEX" | grep '^M  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
-  fi
-  if $(echo "$INDEX" | grep '^ M ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
-  elif $(echo "$INDEX" | grep '^AM ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
-  elif $(echo "$INDEX" | grep '^ T ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
-  fi
-  if $(echo "$INDEX" | grep '^R  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_RENAMED$STATUS"
-  fi
-  if $(echo "$INDEX" | grep '^ D ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
-  elif $(echo "$INDEX" | grep '^D  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
-  elif $(echo "$INDEX" | grep '^AD ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
-  fi
-  if $(command git rev-parse --verify refs/stash >/dev/null 2>&1); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_STASHED$STATUS"
-  fi
-  if $(echo "$INDEX" | grep '^UU ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_UNMERGED$STATUS"
-  fi
-  if $(echo "$INDEX" | grep '^## .*ahead' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_AHEAD$STATUS"
-  fi
-  if $(echo "$INDEX" | grep '^## .*behind' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_BEHIND$STATUS"
-  fi
-  if $(echo "$INDEX" | grep '^## .*diverged' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_DIVERGED$STATUS"
-  fi
-  echo $STATUS
+
+  echo $return_str
 }
 
 #compare the provided version of git to the version installed and on path
@@ -144,4 +145,5 @@ function check_git_show_status() {
 }
 #this is unlikely to change so make it all statically assigned
 check_git_show_status
+git_remote_status_setup
 
