@@ -73,8 +73,9 @@ git_is_clean() {
 
 # Shows the long git sha, pass in --short to get it shortened
 git_prompt_sha() {
-  SHA=$(command git rev-parse $1 HEAD 2> /dev/null) && \
-    echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
+  local sha
+  sha=$(command git rev-parse $1 HEAD 2> /dev/null) && \
+    echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$sha$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
 }
 
 # The following are kept for backwards compatibility
