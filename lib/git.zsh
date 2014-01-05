@@ -22,33 +22,6 @@ git_is_clean() {
   [[ $(command git status -s $GIT_STATUS_OPTIONS 2> /dev/null) == '' ]]
 }
 
-# get the difference between the local and remote branches
-git_remote_status() {
-    remote=${$(command git rev-parse --verify ${hook_com[branch]}@{upstream} --symbolic-full-name 2>/dev/null)/refs\/remotes\/}
-    if [[ -n ${remote} ]] ; then
-        ahead=$(command git rev-list ${hook_com[branch]}@{upstream}..HEAD 2>/dev/null | wc -l)
-        behind=$(command git rev-list HEAD..${hook_com[branch]}@{upstream} 2>/dev/null | wc -l)
-
-        if [ $ahead -eq 0 ] && [ $behind -gt 0 ]
-        then
-            echo "$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE"
-        elif [ $ahead -gt 0 ] && [ $behind -eq 0 ]
-        then
-            echo "$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE"
-        elif [ $ahead -gt 0 ] && [ $behind -gt 0 ]
-        then
-            echo "$ZSH_THEME_GIT_PROMPT_DIVERGED_REMOTE"
-        fi
-    fi
-}
-
-# Checks if there are commits ahead from remote
-function git_prompt_ahead() {
-  if $(echo "$(command git log origin/$(current_branch)..HEAD 2> /dev/null)" | grep '^commit' &> /dev/null); then
-    echo "$ZSH_THEME_GIT_PROMPT_AHEAD"
-  fi
-}
-
 # Formats prompt string for current git commit short SHA
 function git_prompt_short_sha() {
   SHA=$(command git rev-parse --short HEAD 2> /dev/null) && \
@@ -61,9 +34,23 @@ function git_prompt_long_sha() {
     echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
 }
 
+# get the difference between the local and remote branches
+git_remote_status() {
+  local val
+  local remote
+  local return_str
+  remote=${1:=$(command git status --porcelain -b 2> /dev/null | head -1)}
+
+  for val in ahead behind diverged; do
+    echo $remote | grep "##.*$val" &>/dev/null && \
+      return_str+=$(eval echo \$ZSH_THEME_GIT_PROMPT_$val:u)
+  done
+  echo $return_str
+}
+
 # provides an associative array with instructions
 # used by grep in git_prompt_status
-git_remote_status_setup() {
+git_prompt_status_setup() {
   declare -Ag ZSH_THEME_GIT_PROMPT_MOD_MAP
   # need to shield the vars with quotes, because they might
   # be empty strings!
@@ -82,6 +69,7 @@ has_stashed_commits() {
 
 # Get the status of the working tree
 git_prompt_status() {
+  local key
   local index
   local remote_line
   local status_syms
@@ -95,14 +83,8 @@ git_prompt_status() {
       return_str+=$ZSH_THEME_GIT_PROMPT_MOD_MAP[$key]
   done
 
-  for val in ahead behind diverged; do
-    echo $remote_line | grep "##.*$val" &>/dev/null && \
-      return_str+=$(eval echo \$ZSH_THEME_GIT_PROMPT_$val:u)
-  done
-
-  if has_stashed_commits; then
-    return_str+=$ZSH_THEME_GIT_PROMPT_STASHED
-  fi
+  return_str+=$(git_remote_status $remote_line)
+  has_stashed_commits && return_str+=$ZSH_THEME_GIT_PROMPT_STASHED
 
   echo $return_str
 }
@@ -145,5 +127,5 @@ function check_git_show_status() {
 }
 #this is unlikely to change so make it all statically assigned
 check_git_show_status
-git_remote_status_setup
+git_prompt_status_setup
 
