@@ -22,13 +22,13 @@ git_is_clean() {
 }
 
 # Formats prompt string for current git commit short SHA
-function git_prompt_short_sha() {
+git_prompt_short_sha() {
   SHA=$(command git rev-parse --short HEAD 2> /dev/null) && \
     echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
 }
 
 # Formats prompt string for current git commit long SHA
-function git_prompt_long_sha() {
+git_prompt_long_sha() {
   SHA=$(command git rev-parse HEAD 2> /dev/null) && \
     echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
 }
@@ -91,7 +91,7 @@ git_prompt_status() {
 #compare the provided version of git to the version installed and on path
 #prints 1 if installed version > input version
 #prints -1 otherwise
-function is_recent_git_version() {
+is_recent_git_version() {
   local not_recent_git
   local installed_git
   not_recent_git=(1 7 2);
@@ -106,7 +106,7 @@ function is_recent_git_version() {
   return 1
 }
 
-function set_git_status_options() {
+set_git_status_options() {
   GIT_STATUS_OPTIONS=''
   if is_recent_git_version; then
     GIT_STATUS_OPTIONS+='--ignore-submodules=dirty'
@@ -116,7 +116,7 @@ function set_git_status_options() {
   fi
 }
 
-function check_git_show_status() {
+check_git_show_status() {
   if [[ $(command git config --get oh-my-zsh.hide-status) != "1" ]]; then
     # no need to set options if status is hidden anyway
     set_git_status_options
