@@ -22,7 +22,7 @@ find_plugin_paths() {
   local zsh_path
 
   for plugin in $plugins; do
-    plugin_path="plugins/$plugin/$plugin.plugin.zsh"
+    plugin_path=plugins/$plugin/$plugin.plugin.zsh
     for zsh_path in $ZSH_CUSTOM $ZSH; do
       plugin_file=$zsh_path/$plugin_path
       if [[ -f $plugin_file ]]; then
@@ -41,7 +41,7 @@ initialize_completions() {
   short_host=$($(scutil --get ComputerName 2>/dev/null) || echo ${HOST/.*/})
 
   # Save the location of the current completion dump file.
-  ZSH_COMPDUMP="${ZDOTDIR:-${HOME}}/.zcompdump-$short_host-$ZSH_VERSION"
+  ZSH_COMPDUMP=${ZDOTDIR:-${HOME}}/.zcompdump-$short_host-$ZSH_VERSION
 
   # plugins need to be added to the functions path before compinit
   for plugin in $ZSH_PLUGIN_PATHS; { fpath=($(dirname $plugin) $fpath) }
