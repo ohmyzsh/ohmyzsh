@@ -34,15 +34,17 @@ find_plugin_paths() {
 }
 
 initialize_completions() {
-  # Figure out the SHORT hostname, scutil is for OS X users
   local short_host
+  local plugin
+
+  # Figure out the SHORT hostname, scutil is for OS X users
   short_host=$($(scutil --get ComputerName 2>/dev/null) || echo ${HOST/.*/})
 
   # Save the location of the current completion dump file.
   ZSH_COMPDUMP="${ZDOTDIR:-${HOME}}/.zcompdump-$short_host-$ZSH_VERSION"
 
   # plugins need to be added to the functions path before compinit
-  fpath=($ZSH_PLUGIN_PATHS $fpath)
+  for plugin in $ZSH_PLUGIN_PATHS; { fpath=($(dirname $plugin) $fpath) }
 
   autoload -U compinit
   compinit -i -d $ZSH_COMPDUMP
