@@ -1,3 +1,49 @@
+# Basic git handling - if you need more, check the plugin
+#
+# This file provides several methods to inform your prompt about your
+# git status. All symbols and delimiters used can be customized.
+#
+# The variables and methods at a glance:
+#
+# git_prompt_info
+#   Shows your branch and whether your working tree is dirty or not.
+#   The string is delimited by
+#     ZSH_THEME_GIT_PROMPT_PREFIX
+#     ZSH_THEME_GIT_PROMPT_SUFFIX
+#   The symbols used to show dirtyness (evaluated in parse_git_dirty) are
+#     ZSH_THEME_GIT_PROMPT_DIRTY
+#     ZSH_THEME_GIT_PROMPT_CLEAN
+#   Can be disabled if GIT_HIDE == 'true' or through your git config (see
+#   check_git_show_status below)
+#   Dirty submodules are not tracked by this function if your git version
+#   if post 1.7.2
+#
+# git_prompt_short_sha and git_prompt_long_sha
+#   Delimited by
+#     ZSH_THEME_GIT_PROMPT_SHA_BEFORE
+#     ZSH_THEME_GIT_PROMPT_SHA_AFTER
+#
+# git_remote_status
+#   Shows the difference between your local and its remote branch. Checks
+#   for ahead, behind or diverged status and is shown with the help of
+#     ZSH_THEME_GIT_PROMPT_AHEAD
+#     ZSH_THEME_GIT_PROMPT_BEHIND
+#     ZSH_THEME_GIT_PROMPT_DIVERGED
+#
+# git_stash_status
+#   Shows whether you have stashed commits or not
+#     ZSH_THEME_GIT_PROMPT_STASHED
+#
+# git_prompt_status
+#   More detailed information about the status of your working tree. Shows
+#   what exactly makes it dirty and as a superset includes the information
+#   of git_remote_status and git_stash_status
+#     ZSH_THEME_GIT_PROMPT_ADDED
+#     ZSH_THEME_GIT_PROMPT_DELETED
+#     ZSH_THEME_GIT_PROMPT_MODIFIED
+#     ZSH_THEME_GIT_PROMPT_UNMERGED
+#     ZSH_THEME_GIT_PROMPT_UNTRACKED
+
 # get the name of the branch we are on
 function git_prompt_info() {
   [[ GIT_HIDE == 'true' ]] && return
@@ -66,6 +112,11 @@ has_stashed_commits() {
   command git rev-parse --verify refs/stash &>/dev/null
 }
 
+git_stash_status() {
+  has_stashed_commits && echo $ZSH_THEME_GIT_PROMPT_STASHED
+}
+
+
 # Get the status of the working tree
 git_prompt_status() {
   local key
@@ -83,8 +134,7 @@ git_prompt_status() {
   done
 
   return_str+=$(git_remote_status $remote_line)
-  has_stashed_commits && return_str+=$ZSH_THEME_GIT_PROMPT_STASHED
-
+  return_str+=$(git_stash_status)
   echo $return_str
 }
 
@@ -127,4 +177,3 @@ check_git_show_status() {
 #this is unlikely to change so make it all statically assigned
 check_git_show_status
 git_prompt_status_setup
-
