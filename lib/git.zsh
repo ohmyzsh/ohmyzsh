@@ -52,7 +52,7 @@
 function git_prompt_info() {
   [[ GIT_HIDE == 'true' ]] && return
   ref=$(command git symbolic-ref HEAD 2> /dev/null) || \
-  ref=$(command git rev-parse --short HEAD 2> /dev/null) || return
+    ref=$(command git rev-parse --short HEAD 2> /dev/null) || return
   echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
 }
 
@@ -118,7 +118,6 @@ git_stash_status() {
   has_stashed_commits && echo $ZSH_THEME_GIT_PROMPT_STASHED
 }
 
-
 # Get the status of the working tree
 git_prompt_status() {
   local key
@@ -176,6 +175,7 @@ check_git_show_status() {
     GIT_HIDE='true'
   fi
 }
+
 #this is unlikely to change so make it all statically assigned
 check_git_show_status
 git_prompt_status_setup
