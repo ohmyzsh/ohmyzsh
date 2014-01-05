@@ -15,8 +15,9 @@
 #     ZSH_THEME_GIT_PROMPT_CLEAN
 #   Can be disabled if GIT_HIDE == 'true' or through your git config (see
 #   check_git_show_status below)
-#   Dirty submodules are not tracked by this function if your git version
-#   if post 1.7.2
+#   Dirty submodules are not tracked f your git version is post 1.7.2.
+#   To ignore untracked files making your branch dirty, set
+#   DISABLE_UNTRACKED_FILES_DIRTY to 'true
 #
 # git_prompt_short_sha and git_prompt_long_sha
 #   Delimited by
