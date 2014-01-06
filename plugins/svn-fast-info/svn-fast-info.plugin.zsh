@@ -10,7 +10,7 @@
 # *** IMPORTANT *** DO NO USE with the simple svn plugin, this plugin acts as a replacement of it.
 
 function parse_svn() {
-    info=$(svn info 2> /dev/null) || return
+	info=$(svn info 2>&1) || return; # capture stdout and stdout
     in_svn=true
 	repo_need_upgrade="$(svn_repo_need_upgrade $info)"
     svn_branch_name="$(svn_get_branch_name $info)"
@@ -22,7 +22,13 @@ function parse_svn() {
 function svn_prompt_info() {
     eval parse_svn
 
-    if [ ${in_svn} ]; then
+	if [ ! -z $repo_need_upgrade ]; then
+		echo $ZSH_PROMPT_BASE_COLOR$ZSH_THEME_SVN_PROMPT_PREFIX$ZSH_PROMPT_BASE_COLOR\
+$repo_need_upgrade\
+$ZSH_PROMPT_BASE_COLOR$ZSH_THEME_SVN_PROMPT_SUFFIX$ZSH_PROMPT_BASE_COLOR
+	fi
+
+    if [[ ${in_svn} == true && -z $repo_need_upgrade ]]; then
         echo "$ZSH_PROMPT_BASE_COLOR$ZSH_THEME_SVN_PROMPT_PREFIX\
 $ZSH_THEME_REPO_NAME_COLOR${svn_branch_name}\
 $ZSH_PROMPT_BASE_COLOR${svn_dirty}\
@@ -34,8 +40,8 @@ $ZSH_PROMPT_BASE_COLOR"
 
 function svn_repo_need_upgrade() {
 	info=$1
-	[ -z "${info}" ] && info=$(svn info 2> /dev/null)
-	[ "${info}" = "E155036" ] && echo "upgrade repo with svn upgrade"
+	[ -z "${info}" ] && info=$(svn info 2>&1)
+	if grep -q "E155036" <<< $info; then echo "E155036: upgrade repo with svn upgrade"; fi
 }
 
 function svn_get_branch_name() {
