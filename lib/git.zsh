@@ -38,15 +38,18 @@
 #   Shows whether you have stashed commits or not
 #     ZSH_THEME_GIT_PROMPT_STASHED
 #
-# git_prompt_status
+# git_change_status
 #   More detailed information about the status of your working tree. Shows
-#   what exactly makes it dirty and as a superset includes the information
-#   of git_remote_status and git_stash_status
+#   what exactly makes it dirty
 #     ZSH_THEME_GIT_PROMPT_ADDED
 #     ZSH_THEME_GIT_PROMPT_DELETED
 #     ZSH_THEME_GIT_PROMPT_MODIFIED
 #     ZSH_THEME_GIT_PROMPT_UNMERGED
 #     ZSH_THEME_GIT_PROMPT_UNTRACKED
+#
+# git_prompt_status
+#   Acts as a superset and combines the information of git_change_status,
+#   git_remote_status and git_stash_status
 
 # get the name of the branch we are on
 function git_prompt_info() {
@@ -87,7 +90,8 @@ git_remote_status() {
   local val
   local remote
   local return_str
-  remote=${1:=$(command git status --porcelain -b 2> /dev/null | head -1)}
+  remote=${1:=$(command git status --porcelain -b 2> /dev/null)}
+  remote=$(echo $remote | head -1)
 
   for val in ahead behind diverged; do
     echo $remote | grep "##.*$val" &>/dev/null && \
@@ -96,13 +100,37 @@ git_remote_status() {
   echo $return_str
 }
 
+# shows if you have stashed commits
+git_stash_status() {
+  has_stashed_commits && echo $ZSH_THEME_GIT_PROMPT_STASHED
+}
+
+has_stashed_commits() {
+  command git rev-parse --verify refs/stash &>/dev/null
+}
+
+# reveals the nature of your changes in git
+git_change_status() {
+  local change_stats
+  local key
+  local return_str
+  change_stats=${1:=$(command git status --porcelain -b 2> /dev/null)}
+  change_stats=$(echo $change_stats | awk '{ print $1 }')
+
+  for key in ${(k)ZSH_THEME_GIT_CHANGE_MAP}; do
+    echo $change_stats | grep -E "$key" &>/dev/null && \
+      return_str+=$ZSH_THEME_GIT_CHANGE_MAP[$key]
+  done
+  echo $return_str
+}
+
 # provides an associative array with instructions
-# used by grep in git_prompt_status
-git_prompt_status_setup() {
-  declare -Ag ZSH_THEME_GIT_PROMPT_MOD_MAP
+# used by grep in git_change_status
+setup_git_change_status() {
+  declare -Ag ZSH_THEME_GIT_CHANGE_MAP
   # need to shield the vars with quotes, because they might
   # be empty strings!
-  ZSH_THEME_GIT_PROMPT_MOD_MAP=(
+  ZSH_THEME_GIT_CHANGE_MAP=(
     "\?\?" "$ZSH_THEME_GIT_PROMPT_UNTRACKED"
     "A" "$ZSH_THEME_GIT_PROMPT_ADDED"
     "[MT]" "$ZSH_THEME_GIT_PROMPT_MODIFIED"
@@ -111,33 +139,12 @@ git_prompt_status_setup() {
   )
 }
 
-has_stashed_commits() {
-  command git rev-parse --verify refs/stash &>/dev/null
-}
-
-git_stash_status() {
-  has_stashed_commits && echo $ZSH_THEME_GIT_PROMPT_STASHED
-}
-
-# Get the status of the working tree
+# Combines the output of git_change_status, git_remote_status and
+# git_stash_status
 git_prompt_status() {
-  local key
-  local index
-  local remote_line
-  local status_syms
-  local return_str=''
-  index=$(command git status --porcelain -b 2> /dev/null)
-  remote_line=$(echo $index | head -1)
-  status_syms=$(echo $index | awk '{ print $1 }')
-
-  for key in ${(k)ZSH_THEME_GIT_PROMPT_MOD_MAP}; do
-    echo $status_syms | grep -E "$key" &>/dev/null && \
-      return_str+=$ZSH_THEME_GIT_PROMPT_MOD_MAP[$key]
-  done
-
-  return_str+=$(git_remote_status $remote_line)
-  return_str+=$(git_stash_status)
-  echo $return_str
+  local git_index
+  git_index=$(command git status --porcelain -b 2> /dev/null)
+  echo $(git_change_status $git_index)$(git_remote_status $git_index)$(git_stash_status)
 }
 
 #compare the provided version of git to the version installed and on path
@@ -179,4 +186,4 @@ check_git_show_status() {
 
 #this is unlikely to change so make it all statically assigned
 check_git_show_status
-git_prompt_status_setup
+setup_git_change_status
