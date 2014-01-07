@@ -89,7 +89,7 @@ compdef _git gwc=git-whatchanged
 alias gpoat='git push origin --all && git push origin --tags'
 compdef _git gpoat=git-push
 alias gmt='git mergetool --no-prompt'
-compdef _git gm=git-mergetool
+compdef _git gmt=git-mergetool
 
 alias gg='git gui citool'
 alias gga='git gui citool --amend'
