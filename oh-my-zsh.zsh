@@ -43,8 +43,8 @@ initialize_completions() {
   # Save the location of the current completion dump file.
   ZSH_COMPDUMP=${ZDOTDIR:-${HOME}}/.zcompdump-$short_host-$ZSH_VERSION
 
-  # plugins need to be added to the functions path before compinit
-  for plugin in $ZSH_PLUGIN_PATHS; { fpath=($(dirname $plugin) $fpath) }
+  # the plugin directories need to be added to the functions path before compinit
+  for plugin in $ZSH_PLUGIN_PATHS; { fpath=(${plugin:h} $fpath) }
 
   autoload -U compinit
   compinit -i -d $ZSH_COMPDUMP
