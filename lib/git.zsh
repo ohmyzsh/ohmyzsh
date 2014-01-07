@@ -13,9 +13,7 @@
 #   The symbols used to show dirtyness (evaluated in parse_git_dirty) are
 #     ZSH_THEME_GIT_PROMPT_DIRTY
 #     ZSH_THEME_GIT_PROMPT_CLEAN
-#   Can be disabled if ZSH_THEME_GIT_PROMPT_HIDE == 'true'
-#   or through your git config (see check_git_show_status below)
-#   Dirty submodules are not tracked f your git version is post 1.7.2.
+#   Dirty submodules are not tracked if your git version is post 1.7.2.
 #   To ignore untracked files making your branch dirty, set
 #   DISABLE_UNTRACKED_FILES_DIRTY to 'true'
 #
@@ -50,11 +48,18 @@
 # git_prompt_status
 #   Acts as a superset and combines the information of git_change_status,
 #   git_remote_status and git_stash_status
+#
+# git_prompt_info, git_prompt_status and parse_git_dirty can be disabled:
+#   * globally through setting ZSH_THEME_GIT_PROMPT_HIDE to 'true'
+#   * locally through adding a key to your repositories config file
+#     This needs not to be done manually, just call the function
+#     toggle_git_prompt_visibility to hide a specific repository.
+#
 
 # get the name of the branch we are on
 function git_prompt_info() {
   local branch
-  [[ ZSH_THEME_GIT_PROMPT_HIDE == 'true' ]] && return
+  git_prompt_is_active || return
   branch=$(current_branch) || return 1
   printf '%s%s%s%s\n' \
     $ZSH_THEME_GIT_PROMPT_PREFIX \
@@ -75,7 +80,7 @@ git_current_branch() {
 
 # Checks if working tree is dirty
 parse_git_dirty() {
-  [[ ZSH_THEME_GIT_PROMPT_HIDE == 'true' ]] && return
+  git_prompt_is_active || return
   if git_is_clean; then
     echo $ZSH_THEME_GIT_PROMPT_CLEAN
   else
@@ -158,6 +163,7 @@ setup_git_change_status() {
 # Combines the output of git_change_status, git_remote_status and
 # git_stash_status
 git_prompt_status() {
+  git_prompt_is_active || return
   local git_index
   git_index=$(command git status --porcelain -b 2> /dev/null)
   printf '%s%s%s\n' \
@@ -166,9 +172,9 @@ git_prompt_status() {
     $(git_stash_status)
 }
 
-#compare the provided version of git to the version installed and on path
-#prints 1 if installed version > input version
-#prints -1 otherwise
+# compare the provided version of git to the version installed and on path
+# prints 1 if installed version > input version
+# prints -1 otherwise
 is_recent_git_version() {
   local not_recent_git
   local installed_git
@@ -184,7 +190,25 @@ is_recent_git_version() {
   return 1
 }
 
-set_git_status_options() {
+git_prompt_is_active() {
+  [[ $ZSH_THEME_GIT_PROMPT_HIDE != 'true' && \
+    $(command git config --get oh-my-zsh.hide-status 2>/dev/null) != "1" ]]
+}
+
+# Used to deactive git prompt updates for a single repository.
+# Some users need this when they enter huge git repositories, which
+# might unacceptibly slow down your prompt
+toggle_git_prompt_visibility() {
+  local cmd='command git config --local'
+  local key='oh-my-zsh.hide-status'
+  if eval $cmd --get $key >/dev/null; then
+    eval $cmd --unset $key
+  else
+    eval $cmd --add $key 1
+  fi
+}
+
+setup_git_status_options() {
   GIT_STATUS_OPTIONS=''
   if is_recent_git_version; then
     GIT_STATUS_OPTIONS+='--ignore-submodules=dirty'
@@ -194,15 +218,6 @@ set_git_status_options() {
   fi
 }
 
-check_git_show_status() {
-  if [[ $(command git config --get oh-my-zsh.hide-status) != "1" ]]; then
-    # no need to set options if status is hidden anyway
-    set_git_status_options
-  else
-    ZSH_THEME_GIT_PROMPT_HIDE='true'
-  fi
-}
-
-#this is unlikely to change so make it all statically assigned
-check_git_show_status
+# this is unlikely to change so make it all statically assigned
+setup_git_status_options
 setup_git_change_status
