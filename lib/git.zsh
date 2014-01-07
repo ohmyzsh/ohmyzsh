@@ -13,8 +13,8 @@
 #   The symbols used to show dirtyness (evaluated in parse_git_dirty) are
 #     ZSH_THEME_GIT_PROMPT_DIRTY
 #     ZSH_THEME_GIT_PROMPT_CLEAN
-#   Can be disabled if GIT_HIDE == 'true' or through your git config (see
-#   check_git_show_status below)
+#   Can be disabled if ZSH_THEME_GIT_PROMPT_HIDE == 'true'
+#   or through your git config (see check_git_show_status below)
 #   Dirty submodules are not tracked f your git version is post 1.7.2.
 #   To ignore untracked files making your branch dirty, set
 #   DISABLE_UNTRACKED_FILES_DIRTY to 'true'
@@ -54,7 +54,7 @@
 # get the name of the branch we are on
 function git_prompt_info() {
   local branch
-  [[ GIT_HIDE == 'true' ]] && return
+  [[ ZSH_THEME_GIT_PROMPT_HIDE == 'true' ]] && return
   branch=$(current_branch) || return 1
   printf '%s%s%s%s\n' \
     $ZSH_THEME_GIT_PROMPT_PREFIX \
@@ -75,7 +75,7 @@ git_current_branch() {
 
 # Checks if working tree is dirty
 parse_git_dirty() {
-  [[ GIT_HIDE == 'true' ]] && return
+  [[ ZSH_THEME_GIT_PROMPT_HIDE == 'true' ]] && return
   if git_is_clean; then
     echo $ZSH_THEME_GIT_PROMPT_CLEAN
   else
@@ -199,7 +199,7 @@ check_git_show_status() {
     # no need to set options if status is hidden anyway
     set_git_status_options
   else
-    GIT_HIDE='true'
+    ZSH_THEME_GIT_PROMPT_HIDE='true'
   fi
 }
 
