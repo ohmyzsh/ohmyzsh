@@ -68,8 +68,6 @@ alias gss='git status -s'
 compdef _git gss=git-status
 alias ga='git add'
 compdef _git ga=git-add
-alias gm='git merge'
-compdef _git gm=git-merge
 alias grh='git reset HEAD'
 alias grhh='git reset HEAD --hard'
 alias gclean='git reset --hard && git clean -dfx'
@@ -80,7 +78,7 @@ alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
 
 alias gpoat='git push origin --all && git push origin --tags'
 alias gmt='git mergetool --no-prompt'
-compdef _git gm=git-mergetool
+compdef _git gmt=git-mergetool
 
 alias gg='git gui citool'
 alias gga='git gui citool --amend'
