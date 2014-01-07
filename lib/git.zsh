@@ -53,16 +53,25 @@
 
 # get the name of the branch we are on
 function git_prompt_info() {
+  local branch
   [[ GIT_HIDE == 'true' ]] && return
-  ref=$(command git symbolic-ref HEAD 2> /dev/null) || \
-    ref=$(command git rev-parse --short HEAD 2> /dev/null) || return
+  branch=$(current_branch) || return 1
   printf '%s%s%s%s\n' \
     $ZSH_THEME_GIT_PROMPT_PREFIX \
-    ${ref#refs/heads/} \
+    $branch \
     $(parse_git_dirty) \
     $ZSH_THEME_GIT_PROMPT_SUFFIX
 }
 
+
+# Shows the current git branch.
+# Exits with 1 when git is not available
+git_current_branch() {
+  local ref
+  ref=$(command git symbolic-ref HEAD 2>/dev/null) || \
+    ref=$(command git rev-parse --short HEAD 2>/dev/null) || return 1
+  echo ${ref#refs/heads/}
+}
 
 # Checks if working tree is dirty
 parse_git_dirty() {
