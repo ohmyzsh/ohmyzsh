@@ -1,6 +1,6 @@
 # get the name of the branch we are on
 function git_prompt_info() {
-  if [[ "$(git config --get oh-my-zsh.hide-status)" != "1" ]]; then
+  if [[ "$(git config --get oh-my-zsh.hide-status 2> /dev/null)" != "1" ]]; then
     ref=$(command git symbolic-ref HEAD 2> /dev/null) || \
     ref=$(command git rev-parse --short HEAD 2> /dev/null) || return
     echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
@@ -13,7 +13,7 @@ parse_git_dirty() {
   local SUBMODULE_SYNTAX=''
   local GIT_STATUS=''
   local CLEAN_MESSAGE='nothing to commit (working directory clean)'
-  if [[ "$(command git config --get oh-my-zsh.hide-status)" != "1" ]]; then
+  if [[ "$(command git config --get oh-my-zsh.hide-status 2> /dev/null)" != "1" ]]; then
     if [[ $POST_1_7_2_GIT -gt 0 ]]; then
           SUBMODULE_SYNTAX="--ignore-submodules=dirty"
     fi
