@@ -56,7 +56,11 @@ function git_prompt_info() {
   [[ GIT_HIDE == 'true' ]] && return
   ref=$(command git symbolic-ref HEAD 2> /dev/null) || \
     ref=$(command git rev-parse --short HEAD 2> /dev/null) || return
-  echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
+  printf '%s%s%s%s\n' \
+    $ZSH_THEME_GIT_PROMPT_PREFIX \
+    ${ref#refs/heads/} \
+    $(parse_git_dirty) \
+    $ZSH_THEME_GIT_PROMPT_SUFFIX
 }
 
 
@@ -78,7 +82,10 @@ git_is_clean() {
 git_prompt_sha() {
   local sha
   sha=$(command git rev-parse $1 HEAD 2> /dev/null) && \
-    echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$sha$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
+    printf '%s%s%s\n' \
+      $ZSH_THEME_GIT_PROMPT_SHA_BEFORE \
+      $sha \
+      $ZSH_THEME_GIT_PROMPT_SHA_AFTER
 }
 
 # The following are kept for backwards compatibility
@@ -144,7 +151,10 @@ setup_git_change_status() {
 git_prompt_status() {
   local git_index
   git_index=$(command git status --porcelain -b 2> /dev/null)
-  echo $(git_change_status $git_index)$(git_remote_status $git_index)$(git_stash_status)
+  printf '%s%s%s\n' \
+    $(git_change_status $git_index)\
+    $(git_remote_status $git_index)\
+    $(git_stash_status)
 }
 
 #compare the provided version of git to the version installed and on path
