@@ -4,12 +4,10 @@
 #
 # Works with svn 1.6, 1.7, 1.8.
 # Use `svn_prompt_info` method to enquire the svn data.
-# It's faster because his efficient use of svn (single svn call) done in the `parse_svn` function
-# Also changed prompt suffix *after* the svn dirty marker
-#
-# *** IMPORTANT *** DO NO USE with the simple svn plugin, this plugin acts as a replacement of it.
+# It's faster because his efficient use of svn (single svn call) which saves a lot on a huge codebase
+# It displays the current status of the local files (added, deleted, modified, replaced, or else...)
 
-function svn_prompt_info() {
+function svn_fast_info() {
   local info
   info=$(svn info 2>&1) || return 1; # capture stdout and stderr
   local repo_need_upgrade=$(svn_repo_need_upgrade $info)
@@ -32,10 +30,10 @@ function svn_prompt_info() {
       $ZSH_PROMPT_BASE_COLOR \
       \
       $ZSH_THEME_BRANCH_NAME_COLOR \
-      $(svn_get_branch_name $info) \
+      $(svn_current_branch_name $info) \
       $ZSH_PROMPT_BASE_COLOR \
       \
-      $(svn_get_revision $info) \
+      $(svn_current_revision $info) \
       $ZSH_PROMPT_BASE_COLOR \
       \
       $ZSH_THEME_SVN_PROMPT_SUFFIX \
@@ -43,21 +41,20 @@ function svn_prompt_info() {
   fi
 }
 
-
 function svn_repo_need_upgrade() {
   grep -q "E155036" <<< ${1:-$(svn info 2> /dev/null)} && \
     echo "E155036: upgrade repo with svn upgrade"
 }
 
-function svn_get_branch_name() {
+function svn_current_branch_name() {
   grep '^URL:' <<< "${1:-$(svn info 2> /dev/null)}" | egrep -o '(tags|branches)/[^/]+|trunk'	
 }
 
-function svn_get_repo_root_name() {
+function svn_repo_root_name() {
   grep '^Repository\ Root:' <<< "${1:-$(svn info 2> /dev/null)}" | sed 's#.*/##'
 }
 
-function svn_get_revision() {
+function svn_current_revision() {
   echo "${1:-$(svn info 2> /dev/null)}" | sed -n 's/Revision: //p'
 }
 
