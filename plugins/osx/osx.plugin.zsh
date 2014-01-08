@@ -191,3 +191,22 @@ function itunes() {
 	osascript -e "tell application \"iTunes\" to $opt"
 }
 
+# enable google search from terminal
+function google() {
+	local url="https://www.google.com/search?hl=en#newwindow=1&q="
+	case "$1" in
+		"" | -h | --help)
+			cat << EOH
+google:
+	google "keyword" to search
+EOH
+			exit 0
+			;;
+		*)
+			while [ $# -ge 1 ]; do
+				open "$url"$(echo ${1// /+} | xxd -plain | sed 's/\(..\)/%\1/g')
+				shift
+			done
+			;;
+	esac
+}
