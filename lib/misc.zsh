@@ -8,7 +8,7 @@ bindkey "^[m" copy-prev-shell-word
 ## jobs
 setopt long_list_jobs
 
-## pager. Interfers with Capistrano display.
+## pager. Interferes with Capistrano display.
 # export PAGER="less"
 # export LESS="-R"
 
