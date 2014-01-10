@@ -13,3 +13,10 @@ export PAGER="less"
 export LESS="-R"
 
 export LC_CTYPE=$LANG
+
+## super user alias
+alias _='sudo'
+alias please='sudo'
+
+## more intelligent acking for ubuntu users
+alias afind='ack-grep -il'
