@@ -11,15 +11,18 @@ git_custom_status() {
   fi
 }
 
-#RVM and git settings
-if [[ -s ~/.rvm/scripts/rvm ]] ; then
-  RPS1='$(git_custom_status)%{$fg[red]%}[`~/.rvm/bin/rvm-prompt`]%{$reset_color%} $EPS1'
-else
-  if which rbenv &> /dev/null; then
-    RPS1='$(git_custom_status)%{$fg[red]%}[`rbenv version | sed -e "s/ (set.*$//"`]%{$reset_color%} $EPS1'
-  else
-    RPS1='$(git_custom_status) $EPS1'
+function gallois_virtualenv_info {
+  [ $VIRTUAL_ENV ] && echo "[`basename $VIRTUAL_ENV`]"
+}
+
+function gallois_ruby_info {
+  if [[ -s ~/.rvm/scripts/rvm ]] ; then
+    echo "[`~/.rvm/bin/rvm-prompt`]"
+  elif which rbenv &> /dev/null; then 
+    echo "[`rbenv version | sed -e "s/ (set.*$//"`]"
   fi
-fi
+}
+
+RPS1='$(git_custom_status)%{$fg[red]%}`gallois_ruby_info`%{$fg[yellow]%}`gallois_virtualenv_info`%{$reset_color%} $EPS1'
 
 PROMPT='%{$fg[cyan]%}[%~% ]%(?.%{$fg[green]%}.%{$fg[red]%})%B$%b '
