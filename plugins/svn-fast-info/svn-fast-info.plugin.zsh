@@ -6,8 +6,10 @@
 # Use `svn_prompt_info` method to enquire the svn data.
 # It's faster because his efficient use of svn (single svn call) which saves a lot on a huge codebase
 # It displays the current status of the local files (added, deleted, modified, replaced, or else...)
+#
+# Use as a drop-in replacement of the svn plugin not as complementary plugin
 
-function svn_fast_info() {
+function svn_prompt_info() {
   local info
   info=$(svn info 2>&1) || return 1; # capture stdout and stderr
   local repo_need_upgrade=$(svn_repo_need_upgrade $info)
