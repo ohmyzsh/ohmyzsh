@@ -52,7 +52,7 @@ function omz_termsupport_preexec {
 		CMD=${CMD:gs/%/%%}
 		LINE=${LINE:gs/%/%%}
 	fi
-	title "${CMD}" "%100>...>${LINE}%<<"
+	title "$CMD" "%100>...>$LINE%<<"
 }
 
 autoload -U add-zsh-hook
