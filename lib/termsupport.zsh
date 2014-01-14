@@ -9,8 +9,6 @@ function title {
 	if [[ "$TERM" == screen* ]]; then
 		print -Pn "\ek$1:q\e\\" #set screen hardstatus, usually truncated at 20 chars
 	elif [[ "$TERM" == xterm* ]] || [[ $TERM == rxvt* ]] || [[ $TERM == ansi ]] || [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
-		#		print -r "$2:q" 1>&2
-		#		print -r "$1:q" 1>&2
 		print -Pn "\e]2;$2:q\a" #set window name
 		print -Pn "\e]1;$1:q\a" #set icon (=tab) name (will override window name on broken terminal)
 	fi
@@ -39,20 +37,20 @@ function omz_termsupport_preexec {
 	fi
 
 	if [[ -o PROMPT_SUBST ]]; then
-		# We must escape $ and `, as both initiate command substitution and
-		# the former also initiates arithmetic and parameter expansion
-		CMD=${CMD:gs/$/\\$}
-		CMD=${CMD:gs/\`/\\\`}
-		LINE=${LINE:gs/$/\\$}
-		LINE=${LINE:gs/\`/\\\`}
-	fi
+        # We must escape $ and `, as both initiate command substitution and
+        # the former also initiates arithmetic and parameter expansion
+        CMD=${CMD:gs/$/\\$}
+        CMD=${CMD:gs/\`/\\\`}
+        LINE=${LINE:gs/$/\\$}
+        LINE=${LINE:gs/\`/\\\`}
+    fi
 
-	if [[ -o PROMPT_PERCENT ]]; then
-		# We must escape % so that it is not interpreted as starting an escape sequence
-		CMD=${CMD:gs/%/%%}
-		LINE=${LINE:gs/%/%%}
-	fi
-	title "$CMD" "%100>...>$LINE%<<"
+    if [[ -o PROMPT_PERCENT ]]; then
+        # We must escape % so that it is not interpreted as starting an escape sequence
+        CMD=${CMD:gs/%/%%}
+        LINE=${LINE:gs/%/%%}
+    fi
+    title "$CMD" "%100>...>$LINE%<<"
 }
 
 autoload -U add-zsh-hook
