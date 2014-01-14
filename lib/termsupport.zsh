@@ -27,8 +27,7 @@ function omz_termsupport_preexec {
 	emulate -L zsh
 	setopt extended_glob
 	local CMD=${1[(wr)^(*=*|sudo|ssh|rake|-*)]} #cmd name only, or if this is sudo or ssh, the next cmd
-	CMD=${CMD:gs/\\/\\\\} # escapses \ -- must be first
-	local LINE=${2:gs/\\/\\\\} # escapes \ -- must be first
+	local LINE=${2}
 
 	if [[ -o PROMPT_BANG ]]; then
 		# We must escape ! so that it is not interpreted as a history event number
@@ -37,10 +36,14 @@ function omz_termsupport_preexec {
 	fi
 
 	if [[ -o PROMPT_SUBST ]]; then
-		# We must escape $ and `, as both initiate command substitution and
-		# the former also initiates arithmetic and parameter expansion
+		# We must escape '\', '$', and '`'
+		# The backslash is the escape character, and so must be escaped first.
+		# Both '$' and '`' initiate command substitution, and
+		# the former initiates arithmetic and parameter expansion
+		CMD=${CMD:gs/\\/\\\\} # escapses \ -- must be first
 		CMD=${CMD:gs/$/\\$}
 		CMD=${CMD:gs/\`/\\\`}
+		local LINE=${LINE:gs/\\/\\\\} # escapes \ -- must be first
 		LINE=${LINE:gs/$/\\$}
 		LINE=${LINE:gs/\`/\\\`}
 	fi
@@ -54,5 +57,5 @@ function omz_termsupport_preexec {
 }
 
 autoload -U add-zsh-hook
-add-zsh-hook precmd	 omz_termsupport_precmd
+add-zsh-hook precmd omz_termsupport_precmd
 add-zsh-hook preexec omz_termsupport_preexec
