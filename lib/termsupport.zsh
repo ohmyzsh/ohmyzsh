@@ -37,22 +37,22 @@ function omz_termsupport_preexec {
 	fi
 
 	if [[ -o PROMPT_SUBST ]]; then
-        # We must escape $ and `, as both initiate command substitution and
-        # the former also initiates arithmetic and parameter expansion
-        CMD=${CMD:gs/$/\\$}
-        CMD=${CMD:gs/\`/\\\`}
-        LINE=${LINE:gs/$/\\$}
-        LINE=${LINE:gs/\`/\\\`}
-    fi
+		# We must escape $ and `, as both initiate command substitution and
+		# the former also initiates arithmetic and parameter expansion
+		CMD=${CMD:gs/$/\\$}
+		CMD=${CMD:gs/\`/\\\`}
+		LINE=${LINE:gs/$/\\$}
+		LINE=${LINE:gs/\`/\\\`}
+	fi
 
-    if [[ -o PROMPT_PERCENT ]]; then
-        # We must escape % so that it is not interpreted as starting an escape sequence
-        CMD=${CMD:gs/%/%%}
-        LINE=${LINE:gs/%/%%}
-    fi
-    title "$CMD" "%100>...>$LINE%<<"
+	if [[ -o PROMPT_PERCENT ]]; then
+		# We must escape % so that it is not interpreted as starting an escape sequence
+		CMD=${CMD:gs/%/%%}
+		LINE=${LINE:gs/%/%%}
+	fi
+	title "$CMD" "%100>...>$LINE%<<"
 }
 
 autoload -U add-zsh-hook
-add-zsh-hook precmd  omz_termsupport_precmd
+add-zsh-hook precmd	 omz_termsupport_precmd
 add-zsh-hook preexec omz_termsupport_preexec
