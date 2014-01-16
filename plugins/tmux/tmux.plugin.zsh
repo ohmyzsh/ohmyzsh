@@ -90,6 +90,17 @@ if which tmux &> /dev/null
 			_zsh_tmux_plugin_run
 		fi
 	fi
+
+	# Add window name support
+	function omz_tmux_windowname_precmd {
+		# ZSH_THEME_TERM_TAB_TITLE_IDLE is from lib/termsupport.zsh
+		if [[ "$DISABLE_AUTO_TITLE" == "true" ]] || [[ "$EMACS" == *term* ]]; then
+			return
+		fi
+ 		print -Pn "\033k$ZSH_THEME_TERM_TAB_TITLE_IDLE\033"
+	}
+	autoload -U add-zsh-hook
+	add-zsh-hook precmd omz_tmux_windowname_precmd
 else
 	print "zsh tmux plugin: tmux not found. Please install tmux before using this plugin."
 fi
