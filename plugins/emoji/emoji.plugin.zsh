@@ -1,0 +1,1097 @@
+# Make emoji available within the ZSH terminal
+#
+# To output a specific emoji, use:
+#    $> echo $emoji[<name>]
+#    ex: $> echo $emoji[mouse_face]
+#
+# To output a random emoji, use:
+#    $> random_emoji
+#    $> random_emoji_fruit
+#    $> random_emoji_animal
+#    $> random_emoji_vehicle
+#    $> random_emoji_face
+#
+# To list all available emoji with names, use:
+#    $> display_all_emoji
+#    $> display_emoji_fruits
+#    $> display_emoji_animals
+#    $> display_emoji_vehicles
+#    $> display_emoji_faces
+#
+# To use an emoji in a prompt:
+#    PROMPT='$(echo $emoji[penguin])  > '
+#    PROMPT='$(random_emoji_fruit)  > '
+#    eval surfer=$(echo $emoji[surfer])
+#    PROMPT='$surfer  > '
+#
+# emoji codes sourced from http://apps.timwhitlock.info/emoji/tables/unicode
+
+typeset -A emoji
+emoji[grinning_face_with_smiling_eyes]='\xF0\x9F\x98\x81'
+emoji[face_with_tears_of_joy]='\xF0\x9F\x98\x82'
+emoji[smiling_face_with_open_mouth]='\xF0\x9F\x98\x83'
+emoji[smiling_face_with_open_mouth_and_smiling_eyes]='\xF0\x9F\x98\x84'
+emoji[smiling_face_with_open_mouth_and_cold_sweat]='\xF0\x9F\x98\x85'
+emoji[smiling_face_with_open_mouth_and_tightly_closed_eyes]='\xF0\x9F\x98\x86'
+emoji[winking_face]='\xF0\x9F\x98\x89'
+emoji[smiling_face_with_smiling_eyes]='\xF0\x9F\x98\x8A'
+emoji[face_savouring_delicious_food]='\xF0\x9F\x98\x8B'
+emoji[relieved_face]='\xF0\x9F\x98\x8C'
+emoji[smiling_face_with_heart_shaped_eyes]='\xF0\x9F\x98\x8D'
+emoji[smirking_face]='\xF0\x9F\x98\x8F'
+emoji[unamused_face]='\xF0\x9F\x98\x92'
+emoji[face_with_cold_sweat]='\xF0\x9F\x98\x93'
+emoji[pensive_face]='\xF0\x9F\x98\x94'
+emoji[confounded_face]='\xF0\x9F\x98\x96'
+emoji[face_throwing_a_kiss]='\xF0\x9F\x98\x98'
+emoji[kissing_face_with_closed_eyes]='\xF0\x9F\x98\x9A'
+emoji[face_with_stuck_out_tongue_and_winking_eye]='\xF0\x9F\x98\x9C'
+emoji[face_with_stuck_out_tongue_and_tightly_closed_eyes]='\xF0\x9F\x98\x9D'
+emoji[disappointed_face]='\xF0\x9F\x98\x9E'
+emoji[angry_face]='\xF0\x9F\x98\xA0'
+emoji[pouting_face]='\xF0\x9F\x98\xA1'
+emoji[crying_face]='\xF0\x9F\x98\xA2'
+emoji[persevering_face]='\xF0\x9F\x98\xA3'
+emoji[face_with_look_of_triumph]='\xF0\x9F\x98\xA4'
+emoji[disappointed_but_relieved_face]='\xF0\x9F\x98\xA5'
+emoji[fearful_face]='\xF0\x9F\x98\xA8'
+emoji[weary_face]='\xF0\x9F\x98\xA9'
+emoji[sleepy_face]='\xF0\x9F\x98\xAA'
+emoji[tired_face]='\xF0\x9F\x98\xAB'
+emoji[loudly_crying_face]='\xF0\x9F\x98\xAD'
+emoji[face_with_open_mouth_and_cold_sweat]='\xF0\x9F\x98\xB0'
+emoji[face_screaming_in_fear]='\xF0\x9F\x98\xB1'
+emoji[astonished_face]='\xF0\x9F\x98\xB2'
+emoji[flushed_face]='\xF0\x9F\x98\xB3'
+emoji[dizzy_face]='\xF0\x9F\x98\xB5'
+emoji[face_with_medical_mask]='\xF0\x9F\x98\xB7'
+emoji[grinning_cat_face_with_smiling_eyes]='\xF0\x9F\x98\xB8'
+emoji[cat_face_with_tears_of_joy]='\xF0\x9F\x98\xB9'
+emoji[smiling_cat_face_with_open_mouth]='\xF0\x9F\x98\xBA'
+emoji[smiling_cat_face_with_heart_shaped_eyes]='\xF0\x9F\x98\xBB'
+emoji[cat_face_with_wry_smile]='\xF0\x9F\x98\xBC'
+emoji[kissing_cat_face_with_closed_eyes]='\xF0\x9F\x98\xBD'
+emoji[pouting_cat_face]='\xF0\x9F\x98\xBE'
+emoji[crying_cat_face]='\xF0\x9F\x98\xBF'
+emoji[weary_cat_face]='\xF0\x9F\x99\x80'
+emoji[face_with_no_good_gesture]='\xF0\x9F\x99\x85'
+emoji[face_with_ok_gesture]='\xF0\x9F\x99\x86'
+emoji[person_bowing_deeply]='\xF0\x9F\x99\x87'
+emoji[see_no_evil_monkey]='\xF0\x9F\x99\x88'
+emoji[hear_no_evil_monkey]='\xF0\x9F\x99\x89'
+emoji[speak_no_evil_monkey]='\xF0\x9F\x99\x8A'
+emoji[happy_person_raising_one_hand]='\xF0\x9F\x99\x8B'
+emoji[person_raising_both_hands_in_celebration]='\xF0\x9F\x99\x8C'
+emoji[person_frowning]='\xF0\x9F\x99\x8D'
+emoji[person_with_pouting_face]='\xF0\x9F\x99\x8E'
+emoji[person_with_folded_hands]='\xF0\x9F\x99\x8F'
+emoji[black_scissors]='\xE2\x9C\x82'
+emoji[white_heavy_check_mark]='\xE2\x9C\x85'
+emoji[airplane]='\xE2\x9C\x88'
+emoji[envelope]='\xE2\x9C\x89'
+emoji[raised_fist]='\xE2\x9C\x8A'
+emoji[raised_hand]='\xE2\x9C\x8B'
+emoji[victory_hand]='\xE2\x9C\x8C'
+emoji[pencil]='\xE2\x9C\x8F'
+emoji[black_nib]='\xE2\x9C\x92'
+emoji[heavy_check_mark]='\xE2\x9C\x94'
+emoji[heavy_multiplication_x]='\xE2\x9C\x96'
+emoji[sparkles]='\xE2\x9C\xA8'
+emoji[eight_spoked_asterisk]='\xE2\x9C\xB3'
+emoji[eight_pointed_black_star]='\xE2\x9C\xB4'
+emoji[snowflake]='\xE2\x9D\x84'
+emoji[sparkle]='\xE2\x9D\x87'
+emoji[cross_mark]='\xE2\x9D\x8C'
+emoji[negative_squared_cross_mark]='\xE2\x9D\x8E'
+emoji[black_question_mark_ornament]='\xE2\x9D\x93'
+emoji[white_question_mark_ornament]='\xE2\x9D\x94'
+emoji[white_exclamation_mark_ornament]='\xE2\x9D\x95'
+emoji[heavy_exclamation_mark_symbol]='\xE2\x9D\x97'
+emoji[heavy_black_heart]='\xE2\x9D\xA4'
+emoji[heavy_plus_sign]='\xE2\x9E\x95'
+emoji[heavy_minus_sign]='\xE2\x9E\x96'
+emoji[heavy_division_sign]='\xE2\x9E\x97'
+emoji[black_rightwards_arrow]='\xE2\x9E\xA1'
+emoji[curly_loop]='\xE2\x9E\xB0'
+emoji[rocket]='\xF0\x9F\x9A\x80'
+emoji[railway_car]='\xF0\x9F\x9A\x83'
+emoji[high_speed_train]='\xF0\x9F\x9A\x84'
+emoji[high_speed_train_with_bullet_nose]='\xF0\x9F\x9A\x85'
+emoji[metro]='\xF0\x9F\x9A\x87'
+emoji[station]='\xF0\x9F\x9A\x89'
+emoji[bus]='\xF0\x9F\x9A\x8C'
+emoji[bus_stop]='\xF0\x9F\x9A\x8F'
+emoji[ambulance]='\xF0\x9F\x9A\x91'
+emoji[fire_engine]='\xF0\x9F\x9A\x92'
+emoji[police_car]='\xF0\x9F\x9A\x93'
+emoji[taxi]='\xF0\x9F\x9A\x95'
+emoji[automobile]='\xF0\x9F\x9A\x97'
+emoji[recreational_vehicle]='\xF0\x9F\x9A\x99'
+emoji[delivery_truck]='\xF0\x9F\x9A\x9A'
+emoji[ship]='\xF0\x9F\x9A\xA2'
+emoji[speedboat]='\xF0\x9F\x9A\xA4'
+emoji[horizontal_traffic_light]='\xF0\x9F\x9A\xA5'
+emoji[construction_sign]='\xF0\x9F\x9A\xA7'
+emoji[police_cars_revolving_light]='\xF0\x9F\x9A\xA8'
+emoji[triangular_flag_on_post]='\xF0\x9F\x9A\xA9'
+emoji[door]='\xF0\x9F\x9A\xAA'
+emoji[no_entry_sign]='\xF0\x9F\x9A\xAB'
+emoji[smoking_symbol]='\xF0\x9F\x9A\xAC'
+emoji[no_smoking_symbol]='\xF0\x9F\x9A\xAD'
+emoji[bicycle]='\xF0\x9F\x9A\xB2'
+emoji[pedestrian]='\xF0\x9F\x9A\xB6'
+emoji[mens_symbol]='\xF0\x9F\x9A\xB9'
+emoji[womens_symbol]='\xF0\x9F\x9A\xBA'
+emoji[restroom]='\xF0\x9F\x9A\xBB'
+emoji[baby_symbol]='\xF0\x9F\x9A\xBC'
+emoji[toilet]='\xF0\x9F\x9A\xBD'
+emoji[water_closet]='\xF0\x9F\x9A\xBE'
+emoji[bath]='\xF0\x9F\x9B\x80'
+emoji[circled_latin_capital_letter_m]='\xE2\x93\x82'
+emoji[negative_squared_latin_capital_letter_a]='\xF0\x9F\x85\xB0'
+emoji[negative_squared_latin_capital_letter_b]='\xF0\x9F\x85\xB1'
+emoji[negative_squared_latin_capital_letter_o]='\xF0\x9F\x85\xBE'
+emoji[negative_squared_latin_capital_letter_p]='\xF0\x9F\x85\xBF'
+emoji[negative_squared_ab]='\xF0\x9F\x86\x8E'
+emoji[squared_cl]='\xF0\x9F\x86\x91'
+emoji[squared_cool]='\xF0\x9F\x86\x92'
+emoji[squared_free]='\xF0\x9F\x86\x93'
+emoji[squared_id]='\xF0\x9F\x86\x94'
+emoji[squared_new]='\xF0\x9F\x86\x95'
+emoji[squared_ng]='\xF0\x9F\x86\x96'
+emoji[squared_ok]='\xF0\x9F\x86\x97'
+emoji[squared_sos]='\xF0\x9F\x86\x98'
+emoji[squared_up_with_exclamation_mark]='\xF0\x9F\x86\x99'
+emoji[squared_vs]='\xF0\x9F\x86\x9A'
+emoji[regional_indicator_symbol_letter_d_regional_indicator_symbol_letter_e]='\xF0\x9F\x87\xA9\xF0\x9F\x87\xAA'
+emoji[regional_indicator_symbol_letter_g_regional_indicator_symbol_letter_b]='\xF0\x9F\x87\xAC\xF0\x9F\x87\xA7'
+emoji[regional_indicator_symbol_letter_c_regional_indicator_symbol_letter_n]='\xF0\x9F\x87\xA8\xF0\x9F\x87\xB3'
+emoji[regional_indicator_symbol_letter_j_regional_indicator_symbol_letter_p]='\xF0\x9F\x87\xAF\xF0\x9F\x87\xB5'
+emoji[regional_indicator_symbol_letter_k_regional_indicator_symbol_letter_r]='\xF0\x9F\x87\xB0\xF0\x9F\x87\xB7'
+emoji[regional_indicator_symbol_letter_f_regional_indicator_symbol_letter_r]='\xF0\x9F\x87\xAB\xF0\x9F\x87\xB7'
+emoji[regional_indicator_symbol_letter_e_regional_indicator_symbol_letter_s]='\xF0\x9F\x87\xAA\xF0\x9F\x87\xB8'
+emoji[regional_indicator_symbol_letter_i_regional_indicator_symbol_letter_t]='\xF0\x9F\x87\xAE\xF0\x9F\x87\xB9'
+emoji[regional_indicator_symbol_letter_u_regional_indicator_symbol_letter_s]='\xF0\x9F\x87\xBA\xF0\x9F\x87\xB8'
+emoji[regional_indicator_symbol_letter_r_regional_indicator_symbol_letter_u]='\xF0\x9F\x87\xB7\xF0\x9F\x87\xBA'
+emoji[squared_katakana_koko]='\xF0\x9F\x88\x81'
+emoji[squared_katakana_sa]='\xF0\x9F\x88\x82'
+emoji[squared_cjk_unified_ideograph_7121]='\xF0\x9F\x88\x9A'
+emoji[squared_cjk_unified_ideograph_6307]='\xF0\x9F\x88\xAF'
+emoji[squared_cjk_unified_ideograph_7981]='\xF0\x9F\x88\xB2'
+emoji[squared_cjk_unified_ideograph_7a7a]='\xF0\x9F\x88\xB3'
+emoji[squared_cjk_unified_ideograph_5408]='\xF0\x9F\x88\xB4'
+emoji[squared_cjk_unified_ideograph_6e80]='\xF0\x9F\x88\xB5'
+emoji[squared_cjk_unified_ideograph_6709]='\xF0\x9F\x88\xB6'
+emoji[squared_cjk_unified_ideograph_6708]='\xF0\x9F\x88\xB7'
+emoji[squared_cjk_unified_ideograph_7533]='\xF0\x9F\x88\xB8'
+emoji[squared_cjk_unified_ideograph_5272]='\xF0\x9F\x88\xB9'
+emoji[squared_cjk_unified_ideograph_55b6]='\xF0\x9F\x88\xBA'
+emoji[circled_ideograph_advantage]='\xF0\x9F\x89\x90'
+emoji[circled_ideograph_accept]='\xF0\x9F\x89\x91'
+emoji[copyright_sign]='\xC2\xA9'
+emoji[registered_sign]='\xC2\xAE'
+emoji[double_exclamation_mark]='\xE2\x80\xBC'
+emoji[exclamation_question_mark]='\xE2\x81\x89'
+emoji[digit_eight_combining_enclosing_keycap]='\x38\xE2\x83\xA3'
+emoji[digit_nine_combining_enclosing_keycap]='\x39\xE2\x83\xA3'
+emoji[digit_seven_combining_enclosing_keycap]='\x37\xE2\x83\xA3'
+emoji[digit_six_combining_enclosing_keycap]='\x36\xE2\x83\xA3'
+emoji[digit_one_combining_enclosing_keycap]='\x31\xE2\x83\xA3'
+emoji[digit_zero_combining_enclosing_keycap]='\x30\xE2\x83\xA3'
+emoji[digit_two_combining_enclosing_keycap]='\x32\xE2\x83\xA3'
+emoji[digit_three_combining_enclosing_keycap]='\x33\xE2\x83\xA3'
+emoji[digit_five_combining_enclosing_keycap]='\x35\xE2\x83\xA3'
+emoji[digit_four_combining_enclosing_keycap]='\x34\xE2\x83\xA3'
+emoji[number_sign_combining_enclosing_keycap]='\x23\xE2\x83\xA3'
+emoji[trade_mark_sign]='\xE2\x84\xA2'
+emoji[information_source]='\xE2\x84\xB9'
+emoji[left_right_arrow]='\xE2\x86\x94'
+emoji[up_down_arrow]='\xE2\x86\x95'
+emoji[north_west_arrow]='\xE2\x86\x96'
+emoji[north_east_arrow]='\xE2\x86\x97'
+emoji[south_east_arrow]='\xE2\x86\x98'
+emoji[south_west_arrow]='\xE2\x86\x99'
+emoji[leftwards_arrow_with_hook]='\xE2\x86\xA9'
+emoji[rightwards_arrow_with_hook]='\xE2\x86\xAA'
+emoji[watch]='\xE2\x8C\x9A'
+emoji[hourglass]='\xE2\x8C\x9B'
+emoji[black_right_pointing_double_triangle]='\xE2\x8F\xA9'
+emoji[black_left_pointing_double_triangle]='\xE2\x8F\xAA'
+emoji[black_up_pointing_double_triangle]='\xE2\x8F\xAB'
+emoji[black_down_pointing_double_triangle]='\xE2\x8F\xAC'
+emoji[alarm_clock]='\xE2\x8F\xB0'
+emoji[hourglass_with_flowing_sand]='\xE2\x8F\xB3'
+emoji[black_small_square]='\xE2\x96\xAA'
+emoji[white_small_square]='\xE2\x96\xAB'
+emoji[black_right_pointing_triangle]='\xE2\x96\xB6'
+emoji[black_left_pointing_triangle]='\xE2\x97\x80'
+emoji[white_medium_square]='\xE2\x97\xBB'
+emoji[black_medium_square]='\xE2\x97\xBC'
+emoji[white_medium_small_square]='\xE2\x97\xBD'
+emoji[black_medium_small_square]='\xE2\x97\xBE'
+emoji[black_sun_with_rays]='\xE2\x98\x80'
+emoji[cloud]='\xE2\x98\x81'
+emoji[black_telephone]='\xE2\x98\x8E'
+emoji[ballot_box_with_check]='\xE2\x98\x91'
+emoji[umbrella_with_rain_drops]='\xE2\x98\x94'
+emoji[hot_beverage]='\xE2\x98\x95'
+emoji[white_up_pointing_index]='\xE2\x98\x9D'
+emoji[white_smiling_face]='\xE2\x98\xBA'
+emoji[aries]='\xE2\x99\x88'
+emoji[taurus]='\xE2\x99\x89'
+emoji[gemini]='\xE2\x99\x8A'
+emoji[cancer]='\xE2\x99\x8B'
+emoji[leo]='\xE2\x99\x8C'
+emoji[virgo]='\xE2\x99\x8D'
+emoji[libra]='\xE2\x99\x8E'
+emoji[scorpius]='\xE2\x99\x8F'
+emoji[sagittarius]='\xE2\x99\x90'
+emoji[capricorn]='\xE2\x99\x91'
+emoji[aquarius]='\xE2\x99\x92'
+emoji[pisces]='\xE2\x99\x93'
+emoji[black_spade_suit]='\xE2\x99\xA0'
+emoji[black_club_suit]='\xE2\x99\xA3'
+emoji[black_heart_suit]='\xE2\x99\xA5'
+emoji[black_diamond_suit]='\xE2\x99\xA6'
+emoji[hot_springs]='\xE2\x99\xA8'
+emoji[black_universal_recycling_symbol]='\xE2\x99\xBB'
+emoji[wheelchair_symbol]='\xE2\x99\xBF'
+emoji[anchor]='\xE2\x9A\x93'
+emoji[warning_sign]='\xE2\x9A\xA0'
+emoji[high_voltage_sign]='\xE2\x9A\xA1'
+emoji[medium_white_circle]='\xE2\x9A\xAA'
+emoji[medium_black_circle]='\xE2\x9A\xAB'
+emoji[soccer_ball]='\xE2\x9A\xBD'
+emoji[baseball]='\xE2\x9A\xBE'
+emoji[snowman_without_snow]='\xE2\x9B\x84'
+emoji[sun_behind_cloud]='\xE2\x9B\x85'
+emoji[ophiuchus]='\xE2\x9B\x8E'
+emoji[no_entry]='\xE2\x9B\x94'
+emoji[church]='\xE2\x9B\xAA'
+emoji[fountain]='\xE2\x9B\xB2'
+emoji[flag_in_hole]='\xE2\x9B\xB3'
+emoji[sailboat]='\xE2\x9B\xB5'
+emoji[tent]='\xE2\x9B\xBA'
+emoji[fuel_pump]='\xE2\x9B\xBD'
+emoji[arrow_pointing_rightwards_then_curving_upwards]='\xE2\xA4\xB4'
+emoji[arrow_pointing_rightwards_then_curving_downwards]='\xE2\xA4\xB5'
+emoji[leftwards_black_arrow]='\xE2\xAC\x85'
+emoji[upwards_black_arrow]='\xE2\xAC\x86'
+emoji[downwards_black_arrow]='\xE2\xAC\x87'
+emoji[black_large_square]='\xE2\xAC\x9B'
+emoji[white_large_square]='\xE2\xAC\x9C'
+emoji[white_medium_star]='\xE2\xAD\x90'
+emoji[heavy_large_circle]='\xE2\xAD\x95'
+emoji[wavy_dash]='\xE3\x80\xB0'
+emoji[part_alternation_mark]='\xE3\x80\xBD'
+emoji[circled_ideograph_congratulation]='\xE3\x8A\x97'
+emoji[circled_ideograph_secret]='\xE3\x8A\x99'
+emoji[mahjong_tile_red_dragon]='\xF0\x9F\x80\x84'
+emoji[playing_card_black_joker]='\xF0\x9F\x83\x8F'
+emoji[cyclone]='\xF0\x9F\x8C\x80'
+emoji[foggy]='\xF0\x9F\x8C\x81'
+emoji[closed_umbrella]='\xF0\x9F\x8C\x82'
+emoji[night_with_stars]='\xF0\x9F\x8C\x83'
+emoji[sunrise_over_mountains]='\xF0\x9F\x8C\x84'
+emoji[sunrise]='\xF0\x9F\x8C\x85'
+emoji[cityscape_at_dusk]='\xF0\x9F\x8C\x86'
+emoji[sunset_over_buildings]='\xF0\x9F\x8C\x87'
+emoji[rainbow]='\xF0\x9F\x8C\x88'
+emoji[bridge_at_night]='\xF0\x9F\x8C\x89'
+emoji[water_wave]='\xF0\x9F\x8C\x8A'
+emoji[volcano]='\xF0\x9F\x8C\x8B'
+emoji[milky_way]='\xF0\x9F\x8C\x8C'
+emoji[earth_globe_asia_australia]='\xF0\x9F\x8C\x8F'
+emoji[new_moon_symbol]='\xF0\x9F\x8C\x91'
+emoji[first_quarter_moon_symbol]='\xF0\x9F\x8C\x93'
+emoji[waxing_gibbous_moon_symbol]='\xF0\x9F\x8C\x94'
+emoji[full_moon_symbol]='\xF0\x9F\x8C\x95'
+emoji[crescent_moon]='\xF0\x9F\x8C\x99'
+emoji[first_quarter_moon_with_face]='\xF0\x9F\x8C\x9B'
+emoji[glowing_star]='\xF0\x9F\x8C\x9F'
+emoji[shooting_star]='\xF0\x9F\x8C\xA0'
+emoji[chestnut]='\xF0\x9F\x8C\xB0'
+emoji[seedling]='\xF0\x9F\x8C\xB1'
+emoji[palm_tree]='\xF0\x9F\x8C\xB4'
+emoji[cactus]='\xF0\x9F\x8C\xB5'
+emoji[tulip]='\xF0\x9F\x8C\xB7'
+emoji[cherry_blossom]='\xF0\x9F\x8C\xB8'
+emoji[rose]='\xF0\x9F\x8C\xB9'
+emoji[hibiscus]='\xF0\x9F\x8C\xBA'
+emoji[sunflower]='\xF0\x9F\x8C\xBB'
+emoji[blossom]='\xF0\x9F\x8C\xBC'
+emoji[ear_of_maize]='\xF0\x9F\x8C\xBD'
+emoji[ear_of_rice]='\xF0\x9F\x8C\xBE'
+emoji[herb]='\xF0\x9F\x8C\xBF'
+emoji[four_leaf_clover]='\xF0\x9F\x8D\x80'
+emoji[maple_leaf]='\xF0\x9F\x8D\x81'
+emoji[fallen_leaf]='\xF0\x9F\x8D\x82'
+emoji[leaf_fluttering_in_wind]='\xF0\x9F\x8D\x83'
+emoji[mushroom]='\xF0\x9F\x8D\x84'
+emoji[tomato]='\xF0\x9F\x8D\x85'
+emoji[aubergine]='\xF0\x9F\x8D\x86'
+emoji[grapes]='\xF0\x9F\x8D\x87'
+emoji[melon]='\xF0\x9F\x8D\x88'
+emoji[watermelon]='\xF0\x9F\x8D\x89'
+emoji[tangerine]='\xF0\x9F\x8D\x8A'
+emoji[banana]='\xF0\x9F\x8D\x8C'
+emoji[pineapple]='\xF0\x9F\x8D\x8D'
+emoji[red_apple]='\xF0\x9F\x8D\x8E'
+emoji[green_apple]='\xF0\x9F\x8D\x8F'
+emoji[peach]='\xF0\x9F\x8D\x91'
+emoji[cherries]='\xF0\x9F\x8D\x92'
+emoji[strawberry]='\xF0\x9F\x8D\x93'
+emoji[hamburger]='\xF0\x9F\x8D\x94'
+emoji[slice_of_pizza]='\xF0\x9F\x8D\x95'
+emoji[meat_on_bone]='\xF0\x9F\x8D\x96'
+emoji[poultry_leg]='\xF0\x9F\x8D\x97'
+emoji[rice_cracker]='\xF0\x9F\x8D\x98'
+emoji[rice_ball]='\xF0\x9F\x8D\x99'
+emoji[cooked_rice]='\xF0\x9F\x8D\x9A'
+emoji[curry_and_rice]='\xF0\x9F\x8D\x9B'
+emoji[steaming_bowl]='\xF0\x9F\x8D\x9C'
+emoji[spaghetti]='\xF0\x9F\x8D\x9D'
+emoji[bread]='\xF0\x9F\x8D\x9E'
+emoji[french_fries]='\xF0\x9F\x8D\x9F'
+emoji[roasted_sweet_potato]='\xF0\x9F\x8D\xA0'
+emoji[dango]='\xF0\x9F\x8D\xA1'
+emoji[oden]='\xF0\x9F\x8D\xA2'
+emoji[sushi]='\xF0\x9F\x8D\xA3'
+emoji[fried_shrimp]='\xF0\x9F\x8D\xA4'
+emoji[fish_cake_with_swirl_design]='\xF0\x9F\x8D\xA5'
+emoji[soft_ice_cream]='\xF0\x9F\x8D\xA6'
+emoji[shaved_ice]='\xF0\x9F\x8D\xA7'
+emoji[ice_cream]='\xF0\x9F\x8D\xA8'
+emoji[doughnut]='\xF0\x9F\x8D\xA9'
+emoji[cookie]='\xF0\x9F\x8D\xAA'
+emoji[chocolate_bar]='\xF0\x9F\x8D\xAB'
+emoji[candy]='\xF0\x9F\x8D\xAC'
+emoji[lollipop]='\xF0\x9F\x8D\xAD'
+emoji[custard]='\xF0\x9F\x8D\xAE'
+emoji[honey_pot]='\xF0\x9F\x8D\xAF'
+emoji[shortcake]='\xF0\x9F\x8D\xB0'
+emoji[bento_box]='\xF0\x9F\x8D\xB1'
+emoji[pot_of_food]='\xF0\x9F\x8D\xB2'
+emoji[cooking]='\xF0\x9F\x8D\xB3'
+emoji[fork_and_knife]='\xF0\x9F\x8D\xB4'
+emoji[teacup_without_handle]='\xF0\x9F\x8D\xB5'
+emoji[sake_bottle_and_cup]='\xF0\x9F\x8D\xB6'
+emoji[wine_glass]='\xF0\x9F\x8D\xB7'
+emoji[cocktail_glass]='\xF0\x9F\x8D\xB8'
+emoji[tropical_drink]='\xF0\x9F\x8D\xB9'
+emoji[beer_mug]='\xF0\x9F\x8D\xBA'
+emoji[clinking_beer_mugs]='\xF0\x9F\x8D\xBB'
+emoji[ribbon]='\xF0\x9F\x8E\x80'
+emoji[wrapped_present]='\xF0\x9F\x8E\x81'
+emoji[birthday_cake]='\xF0\x9F\x8E\x82'
+emoji[jack_o_lantern]='\xF0\x9F\x8E\x83'
+emoji[christmas_tree]='\xF0\x9F\x8E\x84'
+emoji[father_christmas]='\xF0\x9F\x8E\x85'
+emoji[fireworks]='\xF0\x9F\x8E\x86'
+emoji[firework_sparkler]='\xF0\x9F\x8E\x87'
+emoji[balloon]='\xF0\x9F\x8E\x88'
+emoji[party_popper]='\xF0\x9F\x8E\x89'
+emoji[confetti_ball]='\xF0\x9F\x8E\x8A'
+emoji[tanabata_tree]='\xF0\x9F\x8E\x8B'
+emoji[crossed_flags]='\xF0\x9F\x8E\x8C'
+emoji[pine_decoration]='\xF0\x9F\x8E\x8D'
+emoji[japanese_dolls]='\xF0\x9F\x8E\x8E'
+emoji[carp_streamer]='\xF0\x9F\x8E\x8F'
+emoji[wind_chime]='\xF0\x9F\x8E\x90'
+emoji[moon_viewing_ceremony]='\xF0\x9F\x8E\x91'
+emoji[school_satchel]='\xF0\x9F\x8E\x92'
+emoji[graduation_cap]='\xF0\x9F\x8E\x93'
+emoji[carousel_horse]='\xF0\x9F\x8E\xA0'
+emoji[ferris_wheel]='\xF0\x9F\x8E\xA1'
+emoji[roller_coaster]='\xF0\x9F\x8E\xA2'
+emoji[fishing_pole_and_fish]='\xF0\x9F\x8E\xA3'
+emoji[microphone]='\xF0\x9F\x8E\xA4'
+emoji[movie_camera]='\xF0\x9F\x8E\xA5'
+emoji[cinema]='\xF0\x9F\x8E\xA6'
+emoji[headphone]='\xF0\x9F\x8E\xA7'
+emoji[artist_palette]='\xF0\x9F\x8E\xA8'
+emoji[top_hat]='\xF0\x9F\x8E\xA9'
+emoji[circus_tent]='\xF0\x9F\x8E\xAA'
+emoji[ticket]='\xF0\x9F\x8E\xAB'
+emoji[clapper_board]='\xF0\x9F\x8E\xAC'
+emoji[performing_arts]='\xF0\x9F\x8E\xAD'
+emoji[video_game]='\xF0\x9F\x8E\xAE'
+emoji[direct_hit]='\xF0\x9F\x8E\xAF'
+emoji[slot_machine]='\xF0\x9F\x8E\xB0'
+emoji[billiards]='\xF0\x9F\x8E\xB1'
+emoji[game_die]='\xF0\x9F\x8E\xB2'
+emoji[bowling]='\xF0\x9F\x8E\xB3'
+emoji[flower_playing_cards]='\xF0\x9F\x8E\xB4'
+emoji[musical_note]='\xF0\x9F\x8E\xB5'
+emoji[multiple_musical_notes]='\xF0\x9F\x8E\xB6'
+emoji[saxophone]='\xF0\x9F\x8E\xB7'
+emoji[guitar]='\xF0\x9F\x8E\xB8'
+emoji[musical_keyboard]='\xF0\x9F\x8E\xB9'
+emoji[trumpet]='\xF0\x9F\x8E\xBA'
+emoji[violin]='\xF0\x9F\x8E\xBB'
+emoji[musical_score]='\xF0\x9F\x8E\xBC'
+emoji[running_shirt_with_sash]='\xF0\x9F\x8E\xBD'
+emoji[tennis_racquet_and_ball]='\xF0\x9F\x8E\xBE'
+emoji[ski_and_ski_boot]='\xF0\x9F\x8E\xBF'
+emoji[basketball_and_hoop]='\xF0\x9F\x8F\x80'
+emoji[chequered_flag]='\xF0\x9F\x8F\x81'
+emoji[snowboarder]='\xF0\x9F\x8F\x82'
+emoji[runner]='\xF0\x9F\x8F\x83'
+emoji[surfer]='\xF0\x9F\x8F\x84'
+emoji[trophy]='\xF0\x9F\x8F\x86'
+emoji[american_football]='\xF0\x9F\x8F\x88'
+emoji[swimmer]='\xF0\x9F\x8F\x8A'
+emoji[house_building]='\xF0\x9F\x8F\xA0'
+emoji[house_with_garden]='\xF0\x9F\x8F\xA1'
+emoji[office_building]='\xF0\x9F\x8F\xA2'
+emoji[japanese_post_office]='\xF0\x9F\x8F\xA3'
+emoji[hospital]='\xF0\x9F\x8F\xA5'
+emoji[bank]='\xF0\x9F\x8F\xA6'
+emoji[automated_teller_machine]='\xF0\x9F\x8F\xA7'
+emoji[hotel]='\xF0\x9F\x8F\xA8'
+emoji[love_hotel]='\xF0\x9F\x8F\xA9'
+emoji[convenience_store]='\xF0\x9F\x8F\xAA'
+emoji[school]='\xF0\x9F\x8F\xAB'
+emoji[department_store]='\xF0\x9F\x8F\xAC'
+emoji[factory]='\xF0\x9F\x8F\xAD'
+emoji[izakaya_lantern]='\xF0\x9F\x8F\xAE'
+emoji[japanese_castle]='\xF0\x9F\x8F\xAF'
+emoji[european_castle]='\xF0\x9F\x8F\xB0'
+emoji[snail]='\xF0\x9F\x90\x8C'
+emoji[snake]='\xF0\x9F\x90\x8D'
+emoji[horse]='\xF0\x9F\x90\x8E'
+emoji[sheep]='\xF0\x9F\x90\x91'
+emoji[monkey]='\xF0\x9F\x90\x92'
+emoji[chicken]='\xF0\x9F\x90\x94'
+emoji[boar]='\xF0\x9F\x90\x97'
+emoji[elephant]='\xF0\x9F\x90\x98'
+emoji[octopus]='\xF0\x9F\x90\x99'
+emoji[spiral_shell]='\xF0\x9F\x90\x9A'
+emoji[bug]='\xF0\x9F\x90\x9B'
+emoji[ant]='\xF0\x9F\x90\x9C'
+emoji[honeybee]='\xF0\x9F\x90\x9D'
+emoji[lady_beetle]='\xF0\x9F\x90\x9E'
+emoji[fish]='\xF0\x9F\x90\x9F'
+emoji[tropical_fish]='\xF0\x9F\x90\xA0'
+emoji[blowfish]='\xF0\x9F\x90\xA1'
+emoji[turtle]='\xF0\x9F\x90\xA2'
+emoji[hatching_chick]='\xF0\x9F\x90\xA3'
+emoji[baby_chick]='\xF0\x9F\x90\xA4'
+emoji[front_facing_baby_chick]='\xF0\x9F\x90\xA5'
+emoji[bird]='\xF0\x9F\x90\xA6'
+emoji[penguin]='\xF0\x9F\x90\xA7'
+emoji[koala]='\xF0\x9F\x90\xA8'
+emoji[poodle]='\xF0\x9F\x90\xA9'
+emoji[bactrian_camel]='\xF0\x9F\x90\xAB'
+emoji[dolphin]='\xF0\x9F\x90\xAC'
+emoji[mouse_face]='\xF0\x9F\x90\xAD'
+emoji[cow_face]='\xF0\x9F\x90\xAE'
+emoji[tiger_face]='\xF0\x9F\x90\xAF'
+emoji[rabbit_face]='\xF0\x9F\x90\xB0'
+emoji[cat_face]='\xF0\x9F\x90\xB1'
+emoji[dragon_face]='\xF0\x9F\x90\xB2'
+emoji[spouting_whale]='\xF0\x9F\x90\xB3'
+emoji[horse_face]='\xF0\x9F\x90\xB4'
+emoji[monkey_face]='\xF0\x9F\x90\xB5'
+emoji[dog_face]='\xF0\x9F\x90\xB6'
+emoji[pig_face]='\xF0\x9F\x90\xB7'
+emoji[frog_face]='\xF0\x9F\x90\xB8'
+emoji[hamster_face]='\xF0\x9F\x90\xB9'
+emoji[wolf_face]='\xF0\x9F\x90\xBA'
+emoji[bear_face]='\xF0\x9F\x90\xBB'
+emoji[panda_face]='\xF0\x9F\x90\xBC'
+emoji[pig_nose]='\xF0\x9F\x90\xBD'
+emoji[paw_prints]='\xF0\x9F\x90\xBE'
+emoji[eyes]='\xF0\x9F\x91\x80'
+emoji[ear]='\xF0\x9F\x91\x82'
+emoji[nose]='\xF0\x9F\x91\x83'
+emoji[mouth]='\xF0\x9F\x91\x84'
+emoji[tongue]='\xF0\x9F\x91\x85'
+emoji[white_up_pointing_backhand_index]='\xF0\x9F\x91\x86'
+emoji[white_down_pointing_backhand_index]='\xF0\x9F\x91\x87'
+emoji[white_left_pointing_backhand_index]='\xF0\x9F\x91\x88'
+emoji[white_right_pointing_backhand_index]='\xF0\x9F\x91\x89'
+emoji[fisted_hand_sign]='\xF0\x9F\x91\x8A'
+emoji[waving_hand_sign]='\xF0\x9F\x91\x8B'
+emoji[ok_hand_sign]='\xF0\x9F\x91\x8C'
+emoji[thumbs_up_sign]='\xF0\x9F\x91\x8D'
+emoji[thumbs_down_sign]='\xF0\x9F\x91\x8E'
+emoji[clapping_hands_sign]='\xF0\x9F\x91\x8F'
+emoji[open_hands_sign]='\xF0\x9F\x91\x90'
+emoji[crown]='\xF0\x9F\x91\x91'
+emoji[womans_hat]='\xF0\x9F\x91\x92'
+emoji[eyeglasses]='\xF0\x9F\x91\x93'
+emoji[necktie]='\xF0\x9F\x91\x94'
+emoji[t_shirt]='\xF0\x9F\x91\x95'
+emoji[jeans]='\xF0\x9F\x91\x96'
+emoji[dress]='\xF0\x9F\x91\x97'
+emoji[kimono]='\xF0\x9F\x91\x98'
+emoji[bikini]='\xF0\x9F\x91\x99'
+emoji[womans_clothes]='\xF0\x9F\x91\x9A'
+emoji[purse]='\xF0\x9F\x91\x9B'
+emoji[handbag]='\xF0\x9F\x91\x9C'
+emoji[pouch]='\xF0\x9F\x91\x9D'
+emoji[mans_shoe]='\xF0\x9F\x91\x9E'
+emoji[athletic_shoe]='\xF0\x9F\x91\x9F'
+emoji[high_heeled_shoe]='\xF0\x9F\x91\xA0'
+emoji[womans_sandal]='\xF0\x9F\x91\xA1'
+emoji[womans_boots]='\xF0\x9F\x91\xA2'
+emoji[footprints]='\xF0\x9F\x91\xA3'
+emoji[bust_in_silhouette]='\xF0\x9F\x91\xA4'
+emoji[boy]='\xF0\x9F\x91\xA6'
+emoji[girl]='\xF0\x9F\x91\xA7'
+emoji[man]='\xF0\x9F\x91\xA8'
+emoji[woman]='\xF0\x9F\x91\xA9'
+emoji[family]='\xF0\x9F\x91\xAA'
+emoji[man_and_woman_holding_hands]='\xF0\x9F\x91\xAB'
+emoji[police_officer]='\xF0\x9F\x91\xAE'
+emoji[woman_with_bunny_ears]='\xF0\x9F\x91\xAF'
+emoji[bride_with_veil]='\xF0\x9F\x91\xB0'
+emoji[person_with_blond_hair]='\xF0\x9F\x91\xB1'
+emoji[man_with_gua_pi_mao]='\xF0\x9F\x91\xB2'
+emoji[man_with_turban]='\xF0\x9F\x91\xB3'
+emoji[older_man]='\xF0\x9F\x91\xB4'
+emoji[older_woman]='\xF0\x9F\x91\xB5'
+emoji[baby]='\xF0\x9F\x91\xB6'
+emoji[construction_worker]='\xF0\x9F\x91\xB7'
+emoji[princess]='\xF0\x9F\x91\xB8'
+emoji[japanese_ogre]='\xF0\x9F\x91\xB9'
+emoji[japanese_goblin]='\xF0\x9F\x91\xBA'
+emoji[ghost]='\xF0\x9F\x91\xBB'
+emoji[baby_angel]='\xF0\x9F\x91\xBC'
+emoji[extraterrestrial_alien]='\xF0\x9F\x91\xBD'
+emoji[alien_monster]='\xF0\x9F\x91\xBE'
+emoji[imp]='\xF0\x9F\x91\xBF'
+emoji[skull]='\xF0\x9F\x92\x80'
+emoji[information_desk_person]='\xF0\x9F\x92\x81'
+emoji[guardsman]='\xF0\x9F\x92\x82'
+emoji[dancer]='\xF0\x9F\x92\x83'
+emoji[lipstick]='\xF0\x9F\x92\x84'
+emoji[nail_polish]='\xF0\x9F\x92\x85'
+emoji[face_massage]='\xF0\x9F\x92\x86'
+emoji[haircut]='\xF0\x9F\x92\x87'
+emoji[barber_pole]='\xF0\x9F\x92\x88'
+emoji[syringe]='\xF0\x9F\x92\x89'
+emoji[pill]='\xF0\x9F\x92\x8A'
+emoji[kiss_mark]='\xF0\x9F\x92\x8B'
+emoji[love_letter]='\xF0\x9F\x92\x8C'
+emoji[ring]='\xF0\x9F\x92\x8D'
+emoji[gem_stone]='\xF0\x9F\x92\x8E'
+emoji[kiss]='\xF0\x9F\x92\x8F'
+emoji[bouquet]='\xF0\x9F\x92\x90'
+emoji[couple_with_heart]='\xF0\x9F\x92\x91'
+emoji[wedding]='\xF0\x9F\x92\x92'
+emoji[beating_heart]='\xF0\x9F\x92\x93'
+emoji[broken_heart]='\xF0\x9F\x92\x94'
+emoji[two_hearts]='\xF0\x9F\x92\x95'
+emoji[sparkling_heart]='\xF0\x9F\x92\x96'
+emoji[growing_heart]='\xF0\x9F\x92\x97'
+emoji[heart_with_arrow]='\xF0\x9F\x92\x98'
+emoji[blue_heart]='\xF0\x9F\x92\x99'
+emoji[green_heart]='\xF0\x9F\x92\x9A'
+emoji[yellow_heart]='\xF0\x9F\x92\x9B'
+emoji[purple_heart]='\xF0\x9F\x92\x9C'
+emoji[heart_with_ribbon]='\xF0\x9F\x92\x9D'
+emoji[revolving_hearts]='\xF0\x9F\x92\x9E'
+emoji[heart_decoration]='\xF0\x9F\x92\x9F'
+emoji[diamond_shape_with_a_dot_inside]='\xF0\x9F\x92\xA0'
+emoji[electric_light_bulb]='\xF0\x9F\x92\xA1'
+emoji[anger_symbol]='\xF0\x9F\x92\xA2'
+emoji[bomb]='\xF0\x9F\x92\xA3'
+emoji[sleeping_symbol]='\xF0\x9F\x92\xA4'
+emoji[collision_symbol]='\xF0\x9F\x92\xA5'
+emoji[splashing_sweat_symbol]='\xF0\x9F\x92\xA6'
+emoji[droplet]='\xF0\x9F\x92\xA7'
+emoji[dash_symbol]='\xF0\x9F\x92\xA8'
+emoji[pile_of_poo]='\xF0\x9F\x92\xA9'
+emoji[flexed_biceps]='\xF0\x9F\x92\xAA'
+emoji[dizzy_symbol]='\xF0\x9F\x92\xAB'
+emoji[speech_balloon]='\xF0\x9F\x92\xAC'
+emoji[white_flower]='\xF0\x9F\x92\xAE'
+emoji[hundred_points_symbol]='\xF0\x9F\x92\xAF'
+emoji[money_bag]='\xF0\x9F\x92\xB0'
+emoji[currency_exchange]='\xF0\x9F\x92\xB1'
+emoji[heavy_dollar_sign]='\xF0\x9F\x92\xB2'
+emoji[credit_card]='\xF0\x9F\x92\xB3'
+emoji[banknote_with_yen_sign]='\xF0\x9F\x92\xB4'
+emoji[banknote_with_dollar_sign]='\xF0\x9F\x92\xB5'
+emoji[money_with_wings]='\xF0\x9F\x92\xB8'
+emoji[chart_with_upwards_trend_and_yen_sign]='\xF0\x9F\x92\xB9'
+emoji[seat]='\xF0\x9F\x92\xBA'
+emoji[personal_computer]='\xF0\x9F\x92\xBB'
+emoji[briefcase]='\xF0\x9F\x92\xBC'
+emoji[minidisc]='\xF0\x9F\x92\xBD'
+emoji[floppy_disk]='\xF0\x9F\x92\xBE'
+emoji[optical_disc]='\xF0\x9F\x92\xBF'
+emoji[dvd]='\xF0\x9F\x93\x80'
+emoji[file_folder]='\xF0\x9F\x93\x81'
+emoji[open_file_folder]='\xF0\x9F\x93\x82'
+emoji[page_with_curl]='\xF0\x9F\x93\x83'
+emoji[page_facing_up]='\xF0\x9F\x93\x84'
+emoji[calendar]='\xF0\x9F\x93\x85'
+emoji[tear_off_calendar]='\xF0\x9F\x93\x86'
+emoji[card_index]='\xF0\x9F\x93\x87'
+emoji[chart_with_upwards_trend]='\xF0\x9F\x93\x88'
+emoji[chart_with_downwards_trend]='\xF0\x9F\x93\x89'
+emoji[bar_chart]='\xF0\x9F\x93\x8A'
+emoji[clipboard]='\xF0\x9F\x93\x8B'
+emoji[pushpin]='\xF0\x9F\x93\x8C'
+emoji[round_pushpin]='\xF0\x9F\x93\x8D'
+emoji[paperclip]='\xF0\x9F\x93\x8E'
+emoji[straight_ruler]='\xF0\x9F\x93\x8F'
+emoji[triangular_ruler]='\xF0\x9F\x93\x90'
+emoji[bookmark_tabs]='\xF0\x9F\x93\x91'
+emoji[ledger]='\xF0\x9F\x93\x92'
+emoji[notebook]='\xF0\x9F\x93\x93'
+emoji[notebook_with_decorative_cover]='\xF0\x9F\x93\x94'
+emoji[closed_book]='\xF0\x9F\x93\x95'
+emoji[open_book]='\xF0\x9F\x93\x96'
+emoji[green_book]='\xF0\x9F\x93\x97'
+emoji[blue_book]='\xF0\x9F\x93\x98'
+emoji[orange_book]='\xF0\x9F\x93\x99'
+emoji[books]='\xF0\x9F\x93\x9A'
+emoji[name_badge]='\xF0\x9F\x93\x9B'
+emoji[scroll]='\xF0\x9F\x93\x9C'
+emoji[memo]='\xF0\x9F\x93\x9D'
+emoji[telephone_receiver]='\xF0\x9F\x93\x9E'
+emoji[pager]='\xF0\x9F\x93\x9F'
+emoji[fax_machine]='\xF0\x9F\x93\xA0'
+emoji[satellite_antenna]='\xF0\x9F\x93\xA1'
+emoji[public_address_loudspeaker]='\xF0\x9F\x93\xA2'
+emoji[cheering_megaphone]='\xF0\x9F\x93\xA3'
+emoji[outbox_tray]='\xF0\x9F\x93\xA4'
+emoji[inbox_tray]='\xF0\x9F\x93\xA5'
+emoji[package]='\xF0\x9F\x93\xA6'
+emoji[e_mail_symbol]='\xF0\x9F\x93\xA7'
+emoji[incoming_envelope]='\xF0\x9F\x93\xA8'
+emoji[envelope_with_downwards_arrow_above]='\xF0\x9F\x93\xA9'
+emoji[closed_mailbox_with_lowered_flag]='\xF0\x9F\x93\xAA'
+emoji[closed_mailbox_with_raised_flag]='\xF0\x9F\x93\xAB'
+emoji[postbox]='\xF0\x9F\x93\xAE'
+emoji[newspaper]='\xF0\x9F\x93\xB0'
+emoji[mobile_phone]='\xF0\x9F\x93\xB1'
+emoji[mobile_phone_with_rightwards_arrow_at_left]='\xF0\x9F\x93\xB2'
+emoji[vibration_mode]='\xF0\x9F\x93\xB3'
+emoji[mobile_phone_off]='\xF0\x9F\x93\xB4'
+emoji[antenna_with_bars]='\xF0\x9F\x93\xB6'
+emoji[camera]='\xF0\x9F\x93\xB7'
+emoji[video_camera]='\xF0\x9F\x93\xB9'
+emoji[television]='\xF0\x9F\x93\xBA'
+emoji[radio]='\xF0\x9F\x93\xBB'
+emoji[videocassette]='\xF0\x9F\x93\xBC'
+emoji[clockwise_downwards_and_upwards_open_circle_arrows]='\xF0\x9F\x94\x83'
+emoji[speaker_with_three_sound_waves]='\xF0\x9F\x94\x8A'
+emoji[battery]='\xF0\x9F\x94\x8B'
+emoji[electric_plug]='\xF0\x9F\x94\x8C'
+emoji[left_pointing_magnifying_glass]='\xF0\x9F\x94\x8D'
+emoji[right_pointing_magnifying_glass]='\xF0\x9F\x94\x8E'
+emoji[lock_with_ink_pen]='\xF0\x9F\x94\x8F'
+emoji[closed_lock_with_key]='\xF0\x9F\x94\x90'
+emoji[key]='\xF0\x9F\x94\x91'
+emoji[lock]='\xF0\x9F\x94\x92'
+emoji[open_lock]='\xF0\x9F\x94\x93'
+emoji[bell]='\xF0\x9F\x94\x94'
+emoji[bookmark]='\xF0\x9F\x94\x96'
+emoji[link_symbol]='\xF0\x9F\x94\x97'
+emoji[radio_button]='\xF0\x9F\x94\x98'
+emoji[back_with_leftwards_arrow_above]='\xF0\x9F\x94\x99'
+emoji[end_with_leftwards_arrow_above]='\xF0\x9F\x94\x9A'
+emoji[on_with_exclamation_mark_with_left_right_arrow_above]='\xF0\x9F\x94\x9B'
+emoji[soon_with_rightwards_arrow_above]='\xF0\x9F\x94\x9C'
+emoji[top_with_upwards_arrow_above]='\xF0\x9F\x94\x9D'
+emoji[no_one_under_eighteen_symbol]='\xF0\x9F\x94\x9E'
+emoji[keycap_ten]='\xF0\x9F\x94\x9F'
+emoji[input_symbol_for_latin_capital_letters]='\xF0\x9F\x94\xA0'
+emoji[input_symbol_for_latin_small_letters]='\xF0\x9F\x94\xA1'
+emoji[input_symbol_for_numbers]='\xF0\x9F\x94\xA2'
+emoji[input_symbol_for_symbols]='\xF0\x9F\x94\xA3'
+emoji[input_symbol_for_latin_letters]='\xF0\x9F\x94\xA4'
+emoji[fire]='\xF0\x9F\x94\xA5'
+emoji[electric_torch]='\xF0\x9F\x94\xA6'
+emoji[wrench]='\xF0\x9F\x94\xA7'
+emoji[hammer]='\xF0\x9F\x94\xA8'
+emoji[nut_and_bolt]='\xF0\x9F\x94\xA9'
+emoji[hocho]='\xF0\x9F\x94\xAA'
+emoji[pistol]='\xF0\x9F\x94\xAB'
+emoji[crystal_ball]='\xF0\x9F\x94\xAE'
+emoji[six_pointed_star_with_middle_dot]='\xF0\x9F\x94\xAF'
+emoji[japanese_symbol_for_beginner]='\xF0\x9F\x94\xB0'
+emoji[trident_emblem]='\xF0\x9F\x94\xB1'
+emoji[black_square_button]='\xF0\x9F\x94\xB2'
+emoji[white_square_button]='\xF0\x9F\x94\xB3'
+emoji[large_red_circle]='\xF0\x9F\x94\xB4'
+emoji[large_blue_circle]='\xF0\x9F\x94\xB5'
+emoji[large_orange_diamond]='\xF0\x9F\x94\xB6'
+emoji[large_blue_diamond]='\xF0\x9F\x94\xB7'
+emoji[small_orange_diamond]='\xF0\x9F\x94\xB8'
+emoji[small_blue_diamond]='\xF0\x9F\x94\xB9'
+emoji[up_pointing_red_triangle]='\xF0\x9F\x94\xBA'
+emoji[down_pointing_red_triangle]='\xF0\x9F\x94\xBB'
+emoji[up_pointing_small_red_triangle]='\xF0\x9F\x94\xBC'
+emoji[down_pointing_small_red_triangle]='\xF0\x9F\x94\xBD'
+emoji[clock_face_one_oclock]='\xF0\x9F\x95\x90'
+emoji[clock_face_two_oclock]='\xF0\x9F\x95\x91'
+emoji[clock_face_three_oclock]='\xF0\x9F\x95\x92'
+emoji[clock_face_four_oclock]='\xF0\x9F\x95\x93'
+emoji[clock_face_five_oclock]='\xF0\x9F\x95\x94'
+emoji[clock_face_six_oclock]='\xF0\x9F\x95\x95'
+emoji[clock_face_seven_oclock]='\xF0\x9F\x95\x96'
+emoji[clock_face_eight_oclock]='\xF0\x9F\x95\x97'
+emoji[clock_face_nine_oclock]='\xF0\x9F\x95\x98'
+emoji[clock_face_ten_oclock]='\xF0\x9F\x95\x99'
+emoji[clock_face_eleven_oclock]='\xF0\x9F\x95\x9A'
+emoji[clock_face_twelve_oclock]='\xF0\x9F\x95\x9B'
+emoji[mount_fuji]='\xF0\x9F\x97\xBB'
+emoji[tokyo_tower]='\xF0\x9F\x97\xBC'
+emoji[statue_of_liberty]='\xF0\x9F\x97\xBD'
+emoji[silhouette_of_japan]='\xF0\x9F\x97\xBE'
+emoji[moyai]='\xF0\x9F\x97\xBF'
+emoji[grinning_face]='\xF0\x9F\x98\x80'
+emoji[smiling_face_with_halo]='\xF0\x9F\x98\x87'
+emoji[smiling_face_with_horns]='\xF0\x9F\x98\x88'
+emoji[smiling_face_with_sunglasses]='\xF0\x9F\x98\x8E'
+emoji[neutral_face]='\xF0\x9F\x98\x90'
+emoji[expressionless_face]='\xF0\x9F\x98\x91'
+emoji[confused_face]='\xF0\x9F\x98\x95'
+emoji[kissing_face]='\xF0\x9F\x98\x97'
+emoji[kissing_face_with_smiling_eyes]='\xF0\x9F\x98\x99'
+emoji[face_with_stuck_out_tongue]='\xF0\x9F\x98\x9B'
+emoji[worried_face]='\xF0\x9F\x98\x9F'
+emoji[frowning_face_with_open_mouth]='\xF0\x9F\x98\xA6'
+emoji[anguished_face]='\xF0\x9F\x98\xA7'
+emoji[grimacing_face]='\xF0\x9F\x98\xAC'
+emoji[face_with_open_mouth]='\xF0\x9F\x98\xAE'
+emoji[hushed_face]='\xF0\x9F\x98\xAF'
+emoji[sleeping_face]='\xF0\x9F\x98\xB4'
+emoji[face_without_mouth]='\xF0\x9F\x98\xB6'
+emoji[helicopter]='\xF0\x9F\x9A\x81'
+emoji[steam_locomotive]='\xF0\x9F\x9A\x82'
+emoji[train]='\xF0\x9F\x9A\x86'
+emoji[light_rail]='\xF0\x9F\x9A\x88'
+emoji[tram]='\xF0\x9F\x9A\x8A'
+emoji[oncoming_bus]='\xF0\x9F\x9A\x8D'
+emoji[trolleybus]='\xF0\x9F\x9A\x8E'
+emoji[minibus]='\xF0\x9F\x9A\x90'
+emoji[oncoming_police_car]='\xF0\x9F\x9A\x94'
+emoji[oncoming_taxi]='\xF0\x9F\x9A\x96'
+emoji[oncoming_automobile]='\xF0\x9F\x9A\x98'
+emoji[articulated_lorry]='\xF0\x9F\x9A\x9B'
+emoji[tractor]='\xF0\x9F\x9A\x9C'
+emoji[monorail]='\xF0\x9F\x9A\x9D'
+emoji[mountain_railway]='\xF0\x9F\x9A\x9E'
+emoji[suspension_railway]='\xF0\x9F\x9A\x9F'
+emoji[mountain_cableway]='\xF0\x9F\x9A\xA0'
+emoji[aerial_tramway]='\xF0\x9F\x9A\xA1'
+emoji[rowboat]='\xF0\x9F\x9A\xA3'
+emoji[vertical_traffic_light]='\xF0\x9F\x9A\xA6'
+emoji[put_litter_in_its_place_symbol]='\xF0\x9F\x9A\xAE'
+emoji[do_not_litter_symbol]='\xF0\x9F\x9A\xAF'
+emoji[potable_water_symbol]='\xF0\x9F\x9A\xB0'
+emoji[non_potable_water_symbol]='\xF0\x9F\x9A\xB1'
+emoji[no_bicycles]='\xF0\x9F\x9A\xB3'
+emoji[bicyclist]='\xF0\x9F\x9A\xB4'
+emoji[mountain_bicyclist]='\xF0\x9F\x9A\xB5'
+emoji[no_pedestrians]='\xF0\x9F\x9A\xB7'
+emoji[children_crossing]='\xF0\x9F\x9A\xB8'
+emoji[shower]='\xF0\x9F\x9A\xBF'
+emoji[bathtub]='\xF0\x9F\x9B\x81'
+emoji[passport_control]='\xF0\x9F\x9B\x82'
+emoji[customs]='\xF0\x9F\x9B\x83'
+emoji[baggage_claim]='\xF0\x9F\x9B\x84'
+emoji[left_luggage]='\xF0\x9F\x9B\x85'
+emoji[earth_globe_europe_africa]='\xF0\x9F\x8C\x8D'
+emoji[earth_globe_americas]='\xF0\x9F\x8C\x8E'
+emoji[globe_with_meridians]='\xF0\x9F\x8C\x90'
+emoji[waxing_crescent_moon_symbol]='\xF0\x9F\x8C\x92'
+emoji[waning_gibbous_moon_symbol]='\xF0\x9F\x8C\x96'
+emoji[last_quarter_moon_symbol]='\xF0\x9F\x8C\x97'
+emoji[waning_crescent_moon_symbol]='\xF0\x9F\x8C\x98'
+emoji[new_moon_with_face]='\xF0\x9F\x8C\x9A'
+emoji[last_quarter_moon_with_face]='\xF0\x9F\x8C\x9C'
+emoji[full_moon_with_face]='\xF0\x9F\x8C\x9D'
+emoji[sun_with_face]='\xF0\x9F\x8C\x9E'
+emoji[evergreen_tree]='\xF0\x9F\x8C\xB2'
+emoji[deciduous_tree]='\xF0\x9F\x8C\xB3'
+emoji[lemon]='\xF0\x9F\x8D\x8B'
+emoji[pear]='\xF0\x9F\x8D\x90'
+emoji[baby_bottle]='\xF0\x9F\x8D\xBC'
+emoji[horse_racing]='\xF0\x9F\x8F\x87'
+emoji[rugby_football]='\xF0\x9F\x8F\x89'
+emoji[european_post_office]='\xF0\x9F\x8F\xA4'
+emoji[rat]='\xF0\x9F\x90\x80'
+emoji[mouse]='\xF0\x9F\x90\x81'
+emoji[ox]='\xF0\x9F\x90\x82'
+emoji[water_buffalo]='\xF0\x9F\x90\x83'
+emoji[cow]='\xF0\x9F\x90\x84'
+emoji[tiger]='\xF0\x9F\x90\x85'
+emoji[leopard]='\xF0\x9F\x90\x86'
+emoji[rabbit]='\xF0\x9F\x90\x87'
+emoji[cat]='\xF0\x9F\x90\x88'
+emoji[dragon]='\xF0\x9F\x90\x89'
+emoji[crocodile]='\xF0\x9F\x90\x8A'
+emoji[whale]='\xF0\x9F\x90\x8B'
+emoji[ram]='\xF0\x9F\x90\x8F'
+emoji[goat]='\xF0\x9F\x90\x90'
+emoji[rooster]='\xF0\x9F\x90\x93'
+emoji[dog]='\xF0\x9F\x90\x95'
+emoji[pig]='\xF0\x9F\x90\x96'
+emoji[dromedary_camel]='\xF0\x9F\x90\xAA'
+emoji[busts_in_silhouette]='\xF0\x9F\x91\xA5'
+emoji[two_men_holding_hands]='\xF0\x9F\x91\xAC'
+emoji[two_women_holding_hands]='\xF0\x9F\x91\xAD'
+emoji[thought_balloon]='\xF0\x9F\x92\xAD'
+emoji[banknote_with_euro_sign]='\xF0\x9F\x92\xB6'
+emoji[banknote_with_pound_sign]='\xF0\x9F\x92\xB7'
+emoji[open_mailbox_with_raised_flag]='\xF0\x9F\x93\xAC'
+emoji[open_mailbox_with_lowered_flag]='\xF0\x9F\x93\xAD'
+emoji[postal_horn]='\xF0\x9F\x93\xAF'
+emoji[no_mobile_phones]='\xF0\x9F\x93\xB5'
+emoji[twisted_rightwards_arrows]='\xF0\x9F\x94\x80'
+emoji[clockwise_rightwards_and_leftwards_open_circle_arrows]='\xF0\x9F\x94\x81'
+emoji[clockwise_rightwards_and_leftwards_open_circle_arrows_with_circled_one_overlay]='\xF0\x9F\x94\x82'
+emoji[anticlockwise_downwards_and_upwards_open_circle_arrows]='\xF0\x9F\x94\x84'
+emoji[low_brightness_symbol]='\xF0\x9F\x94\x85'
+emoji[high_brightness_symbol]='\xF0\x9F\x94\x86'
+emoji[speaker_with_cancellation_stroke]='\xF0\x9F\x94\x87'
+emoji[speaker_with_one_sound_wave]='\xF0\x9F\x94\x89'
+emoji[bell_with_cancellation_stroke]='\xF0\x9F\x94\x95'
+emoji[microscope]='\xF0\x9F\x94\xAC'
+emoji[telescope]='\xF0\x9F\x94\xAD'
+emoji[clock_face_one_thirty]='\xF0\x9F\x95\x9C'
+emoji[clock_face_two_thirty]='\xF0\x9F\x95\x9D'
+emoji[clock_face_three_thirty]='\xF0\x9F\x95\x9E'
+emoji[clock_face_four_thirty]='\xF0\x9F\x95\x9F'
+emoji[clock_face_five_thirty]='\xF0\x9F\x95\xA0'
+emoji[clock_face_six_thirty]='\xF0\x9F\x95\xA1'
+emoji[clock_face_seven_thirty]='\xF0\x9F\x95\xA2'
+emoji[clock_face_eight_thirty]='\xF0\x9F\x95\xA3'
+emoji[clock_face_nine_thirty]='\xF0\x9F\x95\xA4'
+emoji[clock_face_ten_thirty]='\xF0\x9F\x95\xA5'
+emoji[clock_face_eleven_thirty]='\xF0\x9F\x95\xA6'
+emoji[clock_face_twelve_thirty]='\xF0\x9F\x95\xA7'
+
+emoji_fruits=(
+  tomato
+  aubergine
+  grapes
+  melon
+  watermelon
+  tangerine
+  banana
+  pineapple
+  red_apple
+  green_apple
+  peach
+  cherries
+  strawberry
+  lemon
+  pear
+)
+
+emoji_vehicles=(
+  airplane
+  rocket
+  railway_car
+  high_speed_train
+  high_speed_train_with_bullet_nose
+  bus
+  ambulance
+  fire_engine
+  police_car
+  taxi
+  automobile
+  recreational_vehicle
+  delivery_truck
+  ship
+  speedboat
+  bicycle
+  helicopter
+  steam_locomotive
+  train
+  light_rail
+  tram
+  oncoming_bus
+  trolleybus
+  minibus
+  oncoming_police_car
+  oncoming_taxi
+  oncoming_automobile
+  articulated_lorry
+  tractor
+  monorail
+  mountain_railway
+  suspension_railway
+  mountain_cableway
+  aerial_tramway
+  rowboat
+  bicyclist
+  mountain_bicyclist
+  sailboat
+)
+
+emoji_animals=(
+  snail
+  snake
+  horse
+  sheep
+  monkey
+  chicken
+  boar
+  elephant
+  octopus
+  spiral_shell
+  bug
+  ant
+  honeybee
+  lady_beetle
+  fish
+  tropical_fish
+  blowfish
+  turtle
+  hatching_chick
+  baby_chick
+  front_facing_baby_chick
+  bird
+  penguin
+  koala
+  poodle
+  bactrian_camel
+  dolphin
+  mouse_face
+  cow_face
+  tiger_face
+  rabbit_face
+  cat_face
+  dragon_face
+  spouting_whale
+  horse_face
+  monkey_face
+  dog_face
+  pig_face
+  frog_face
+  hamster_face
+  wolf_face
+  bear_face
+  panda_face
+  rat
+  mouse
+  ox
+  water_buffalo
+  cow
+  tiger
+  leopard
+  rabbit
+  cat
+  dragon
+  crocodile
+  whale
+  ram
+  goat
+  rooster
+  dog
+  pig
+  dromedary_camel
+)
+
+emoji_faces=(
+  grinning_face_with_smiling_eyes
+  face_with_tears_of_joy
+  smiling_face_with_open_mouth
+  smiling_face_with_open_mouth_and_smiling_eyes
+  smiling_face_with_open_mouth_and_cold_sweat
+  smiling_face_with_open_mouth_and_tightly_closed_eyes
+  winking_face
+  smiling_face_with_smiling_eyes
+  face_savouring_delicious_food
+  relieved_face
+  smiling_face_with_heart_shaped_eyes
+  smirking_face
+  unamused_face
+  face_with_cold_sweat
+  pensive_face
+  confounded_face
+  face_throwing_a_kiss
+  kissing_face_with_closed_eyes
+  face_with_stuck_out_tongue_and_winking_eye
+  face_with_stuck_out_tongue_and_tightly_closed_eyes
+  disappointed_face
+  angry_face
+  pouting_face
+  crying_face
+  persevering_face
+  face_with_look_of_triumph
+  disappointed_but_relieved_face
+  fearful_face
+  weary_face
+  sleepy_face
+  tired_face
+  loudly_crying_face
+  face_with_open_mouth_and_cold_sweat
+  face_screaming_in_fear
+  astonished_face
+  flushed_face
+  dizzy_face
+  face_with_medical_mask
+)
+
+function random_emoji(){
+  local emoji_array_size=${#emoji[@]}
+  local random_element_index=$(( ( RANDOM % $emoji_array_size ) + 1 ))
+  echo ${emoji[@][$random_element_index]}
+}
+
+function random_emoji_from_list(){
+  local array_name=$1
+  local list_size=${#${(P)array_name}[@]}
+  local random_index=$(( ( RANDOM % $list_size ) + 1 ))
+  local key=${${(P)array_name}[@][$random_index]}
+  echo ${emoji[$key]}
+}
+
+function display_emoji_list(){
+  local array_name=$1
+  for i in ${${(P)array_name}[@]}; do
+    echo "${emoji[$i]}  = $i"
+  done
+}
+
+function random_emoji_fruit(){
+  random_emoji_from_list 'emoji_fruits'
+}
+
+function random_emoji_vehicle(){
+  random_emoji_from_list 'emoji_vehicles'
+}
+
+function random_emoji_animal(){
+  random_emoji_from_list 'emoji_animals'
+}
+
+function random_emoji_face(){
+  random_emoji_from_list 'emoji_faces'
+}
+
+function display_emoji_fruits(){
+  display_emoji_list 'emoji_fruits'
+}
+
+function display_emoji_vehicles(){
+  display_emoji_list 'emoji_vehicles'
+}
+
+function display_emoji_animals(){
+  display_emoji_list 'emoji_animals'
+}
+
+function display_emoji_faces(){
+  display_emoji_list 'emoji_faces'
+}
+
+function display_all_emoji(){
+  echo $emoji[@]
+  echo
+  for k in ${(k)emoji}; do
+    echo "${emoji[$k]}  = $k"
+  done
+}
+
