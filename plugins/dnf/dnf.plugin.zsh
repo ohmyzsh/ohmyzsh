@@ -10,6 +10,6 @@ alias dnfmc="dnf makecache"                   # Generate metadata cache
 alias dnfu="sudo dnf update"                  # upgrate packages
 alias dnfi="sudo dnf install"                 # install package
 alias dnfgi="sudo dnf groupinstall"           # install package group
-alias dnfr="sudo dnf erase"                  # remove package
+alias dnfr="sudo dnf erase"                   # remove package
 alias dnfgr="sudo dnf groupremove"            # remove pagage group
 alias dnfc="sudo dnf clean all"               # clean cache
