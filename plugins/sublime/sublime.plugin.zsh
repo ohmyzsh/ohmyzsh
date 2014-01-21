@@ -14,6 +14,8 @@ _sublime_darwin_paths=(
 if [[ $('uname') == 'Linux' ]]; then
     if [ -f '/usr/bin/sublime_text' ]; then
         st_run() { nohup /usr/bin/sublime_text $@ > /dev/null & }
+    elif [ -f '/opt/sublime_text/sublime_text' ]; then
+        st_run() { nohup /opt/sublime_text/sublime_text $@ > /dev/null & }
     else
         st_run() { nohup /usr/bin/sublime-text $@ > /dev/null & }
     fi
