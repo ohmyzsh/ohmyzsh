@@ -1,7 +1,10 @@
 #compdef brew
-#autoload
 
-# imported from the latest homebrew contributions
+# Brew ZSH completion function
+# Drop this somewhere in your $fpath (like /usr/share/zsh/site-functions)
+# and rename it _brew
+#
+# altered from _fink
 
 _brew_all_formulae() {
   formulae=(`brew search`)
