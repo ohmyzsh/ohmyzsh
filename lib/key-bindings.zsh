@@ -30,6 +30,7 @@ bindkey "^[[3~" delete-char
 bindkey "^[3;5~" delete-char
 bindkey "\e[3~" delete-char
 
+bindkey '<ctrl><j>' backward-kill-line
 # consider emacs keybindings:
 
 #bindkey -e  ## emacs key bindings
