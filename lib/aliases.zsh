@@ -38,6 +38,7 @@ alias rm='/opt/local/bin/MacRm'
 alias rrm='/bin/rm'
 alias bp='bpython-2.7'
 
+alias dnstest='open /Applications/namebench.app'
 
 alias ipx="curl -s checkip.dyndns.org|sed -e 's/.*Current IP Address: //' -e 's/<.*$//'"
 alias mnode="sshfs root@andrewfree.com:/ /Users/rever/nodessh/"
