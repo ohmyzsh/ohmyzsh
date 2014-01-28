@@ -45,7 +45,14 @@ ZSH_THEME="my-robbyrussell"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git git-extras go redis-cli xcode autojump osx brew custom-aliases encode64 gem mercurial sublime web-search taskwarrior zsh-syntax-highlighting)
+case `uname` in
+    Darwin)
+    plugins=(brew autojump osx xcode sublime git git-extras go redis-cli custom-aliases encode64 gem mercurial web-search zsh-syntax-highlighting);;
+    Linux)
+    plugins=(command-not-found archlinux git git-extras go redis-cli custom-aliases encode64 gem mercurial web-search zsh-syntax-highlighting);;
+    *)
+    plugins=(git git-extras go redis-cli custom-aliases encode64 gem mercurial web-search zsh-syntax-highlighting)
+esac
 
 source $ZSH/oh-my-zsh.sh
 
@@ -82,8 +89,6 @@ if [[ -s ~/.zsh-autosuggestions/autosuggestions.zsh ]]; then
     }
 
     zle -N zle-line-init
-
-    bindkey '^T' autosuggest-toggle
 fi
 
 [[ -s ~/.zsh-history-substring-search/zsh-history-substring-search.zsh ]] && source ~/.zsh-history-substring-search/zsh-history-substring-search.zsh 
