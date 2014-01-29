@@ -6,7 +6,7 @@
 # # README
 #
 # In order for this theme to render correctly, you will need a
-# [Powerline-patched font](https://gist.github.com/1595572).
+# [Powerline-patched font](https://github.com/Lokaltog/powerline-fonts).
 #
 # In addition, I recommend the
 # [Solarized theme](https://github.com/altercation/solarized/) and, if you're
