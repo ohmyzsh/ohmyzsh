@@ -251,7 +251,7 @@ compdef _git gke='gitk'
 
 # Clean
 # Remove all .orig, .BASE.*, .REMOTE.*, .LOCAL.*, *.BACKUP files
-alias gclean=" find . -name '*.orig' -or -name '*.REMOTE.*' -or -name '*.LOCAL.*' -or -name '*.BACKUP.*' | xargs -r rm -v"
+alias gclean=" find . -name '*.orig' -or -name '*.REMOTE.*' -or -name '*.LOCAL.*' -or -name '*.BACKUP.*' -or -name '*.BASE.*' | xargs -r rm -v"
 
 # Edit global Git configuration files
 alias gitconfig="vim ~/.gitconfig"
