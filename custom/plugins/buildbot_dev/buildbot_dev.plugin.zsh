@@ -12,6 +12,8 @@ alias cjc='cactus jump cactus'
 alias cjt='cactus jump txwebservices'
 alias cja='cactus jump android'
 alias cjm='cactus jump metacactus'
+alias cjs='cactus jump src'
+alias cjy='cactus jump yamls'
 
 function bb_env()
 {
