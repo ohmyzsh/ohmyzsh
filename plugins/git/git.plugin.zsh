@@ -1,261 +1,95 @@
-# Aliases for Git tool.
-
-############
-# Common (g)
-############
+# Aliases
 alias g='git'
 compdef g=git
-
-##################
-# Git status (gst)
-##################
-# Git status
 alias gst='git status'
 compdef _git gst=git-status
-# shortened git status
-alias gsts='git status -s'
-compdef _git gsts=git-status
-
-###############
-# Git Diff (gd)
-###############
-# Git diff (colorful)
-alias gd='git diff --color'
+alias gd='git diff'
 compdef _git gd=git-diff
-# Git diff staged changes
 alias gdc='git diff --cached'
 compdef _git gdc=git-diff
-# Git diff in a vim editor
+alias gl='git pull'
+compdef _git gl=git-pull
+alias gup='git pull --rebase'
+compdef _git gup=git-fetch
+alias gp='git push'
+compdef _git gp=git-push
+alias gd='git diff'
 gdv() { git diff -w "$@" | view - }
 compdef _git gdv=git-diff
-
-###############
-# Git Pull (gp)
-###############
-# Git pull
-alias gp='git pull'
-compdef _git gl=git-pull
-# Git pull and rebase
-alias gpr='git pull --rebase'
-compdef _git gpr=git-pull
-
-###############
-# git push (gP)
-###############
-# since pushing has much impact than pulling (gp), it use a capital case
-# git push
-alias gP='git push'
-compdef _git gP=git-push
-# git push dry run
-alias gPd='git push --dry-run'
-compdef _git gPd=git-push
-# git push force
-alias gPf='git push --force'
-compdef _git gPf=git-push
-
-################
-# Git Fetch (gf)
-################
-# Git fetch current branch
-alias gf='git fetch'
-compdef _git gf='git-fetch'
-# Git fetch all branches
-alias gfa='git fetch --all'
-compdef _git gfa='git-fetch'
-# reset your work to the latest status of the code base (and fetch all other branches).
-# (git fetch all branch and rebase)
-alias gfagpr='git fetch --all && git pull --rebase'
-compdef _git gfagpr='git-pull'
-
-#################
-# Git Commit (gc)
-#################
-# Git commit
 alias gc='git commit -v'
 compdef _git gc=git-commit
-# Git commit amend
 alias gc!='git commit -v --amend'
 compdef _git gc!=git-commit
-# Git commit all tracked files
 alias gca='git commit -v -a'
-compdef _git gca=git-commit
-# Git commit amend all tracked files
+compdef _git gc=git-commit
 alias gca!='git commit -v -a --amend'
 compdef _git gca!=git-commit
-# Git commit with message
 alias gcmsg='git commit -m'
 compdef _git gcmsg=git-commit
-
-####################
-# Git Checkout (gco)
-####################
-# git checkout
 alias gco='git checkout'
 compdef _git gco=git-checkout
-# Git checkout master
-alias gcom='git checkout master'
-compdef _git gcom=git-checkout
-
-# Git Remote (gre)
-alias gre='git remote'
-compdef _git gre=git-remote
-alias grev='git remote -v'
+alias gcm='git checkout master'
+alias gr='git remote'
+compdef _git gr=git-remote
+alias grv='git remote -v'
 compdef _git grv=git-remote
-alias gremv='git remote rename'
-compdef _git gremv=git-remote
-alias grerm='git remote remove'
+alias grmv='git remote rename'
+compdef _git grmv=git-remote
+alias grrm='git remote remove'
 compdef _git grrm=git-remote
-alias greset='git remote set-url'
-compdef _git greset=git-remote
-alias greup='git remote update'
-compdef _git greset=git-remote
-
-# Git Rebase (gr)
-alias gr='git rebase -i'
-compdef _git gr=git-rebase
-alias grc='git rebase --continue'
-compdef _git grc=git-rebase
-alias gra='git rebase --abort'
-compdef _git gra=git-rebase
-alias grs='git rebase --skip'
-compdef _git grs=git-rebase
-alias grm='git rebase master'
-compdef _git grm=git-rebase
-
-#####################################################
-# Git rebase Interactively N commit (rewrite history)
-#####################################################
-alias gr2='git rebase -i HEAD~2'
-compdef _git gr2=git-rebase
-alias gr3='git rebase -i HEAD~3'
-compdef _git gr3=git-rebase
-alias gr4='git rebase -i HEAD~4'
-compdef _git gr4=git-rebase
-alias gr5='git rebase -i HEAD~5'
-compdef _git gr5=git-rebase
-alias gr6='git rebase -i HEAD~6'
-compdef _git gr6=git-rebase
-alias gr7='git rebase -i HEAD~7'
-compdef _git gr7=git-rebase
-alias gr8='git rebase -i HEAD~8'
-compdef _git gr8=git-rebase
-alias gr9='git rebase -i HEAD~9'
-compdef _git gr9=git-rebase
-alias gr10='git rebase -i HEAD~10'
-compdef _git gr10=git-rebase
-
-# Git Branch (gb)
+alias grset='git remote set-url'
+compdef _git grset=git-remote
+alias grup='git remote update'
+compdef _git grset=git-remote
+alias grbi='git rebase -i'
+compdef _git grbi=git-rebase
+alias grbc='git rebase --continue'
+compdef _git grbc=git-rebase
+alias grba='git rebase --abort'
+compdef _git grba=git-rebase
 alias gb='git branch'
 compdef _git gb=git-branch
 alias gba='git branch -a'
 compdef _git gba=git-branch
-
-##############
-# Git Log (gl)
-##############
-alias gl='git log'
-compdef _git gl=git-log
-# Git log graph
-alias glg='git log --stat --max-count=10'
-compdef _git glg=git-log
-# Git log graph with patch content
-alias glgp='git log --graph --max-count=10 -p'
-compdef _git glgp=git-log
-## Git log graph limited to 10
-alias glgm='git log --graph --max-count=10'
-compdef _git glgm=git-log
-# Git log graph colorful
-alias glgg='git log --graph --color'
-compdef _git glgg=git-log
-# Git log graph with all branches
-alias glgga='git log --graph --decorate --all'
-compdef _git glgga=git-log
-# one line git log
-alias glo='git log --oneline'
-compdef _git glo=git-log
-
-######################
-# Git Reset Head (grh)
-######################
-# Soft Reset to HEAD
-alias grh='git reset HEAD'
-compdef _git grh=git-reset
-# Hard reset to HEAD
-alias grhh='git reset HEAD --hard'
-compdef _git grhh=git-reset
-
-################
-# Git merge (gm)
-################
-# Git merge
-alias gm='git merge'
-compdef _git gm=git-merge
-# git merge changes from the master branch on the upstream remote
-alias gmum='git merge upstream/master'
-compdef _git gmum=git-merge
-
-# Other
-# Show contribution scorecard
 alias gcount='git shortlog -sn'
 compdef gcount=git
-# Show current configuration
 alias gcl='git config --list'
-compdef _git gcl=git-config
 alias gcp='git cherry-pick'
 compdef _git gcp=git-cherry-pick
+alias glg='git log --stat --max-count=10'
+compdef _git glg=git-log
+alias glgg='git log --graph --max-count=10'
+compdef _git glgg=git-log
+alias glgga='git log --graph --decorate --all'
+compdef _git glgga=git-log
+alias glo='git log --oneline'
+compdef _git glo=git-log
+alias gss='git status -s'
+compdef _git gss=git-status
 alias ga='git add'
 compdef _git ga=git-add
-
-# See what changed in the current commit
+alias gm='git merge'
+compdef _git gm=git-merge
+alias grh='git reset HEAD'
+alias grhh='git reset HEAD --hard'
+alias gclean='git reset --hard && git clean -dfx'
 alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
-compdef _git gwc=git-whatchanged
 
-# Search for a changed file
-alias gls='git ls-files | grep'
-compdef _git gls=git-ls-files
+#remove the gf alias
+#alias gf='git ls-files | grep'
 
 alias gpoat='git push origin --all && git push origin --tags'
-compdef _git gpoat=git-push
 alias gmt='git mergetool --no-prompt'
-compdef _git gmt=git-mergetool
-alias gmtvim='git mergetool --no-prompt --tool=vimdiff'
-compdef _git gmtvim=git-mergetool
+compdef _git gm=git-mergetool
 
-# Git stash (gsta)
-alias gsta='git stash'
-compdef _git gsta='git-stash'
-alias gstas='git stash show --text'
-compdef _git gstas='git-stash'
-alias gstap='git stash pop'
-compdef _git gstap='git-stash'
-alias gstaa='git stash apply'
-compdef _git gstaa='git-stash'
-alias gstad='git stash drop'
-compdef _git gstad='git-stash'
-
-# Git Gui (gg)
 alias gg='git gui citool'
-compdef _git gg='git gui'
 alias gga='git gui citool --amend'
-compdef _git gga='git gui citool --amend'
+alias gk='gitk --all --branches'
 
-# Gitk
-alias gk='\gitk --all --branches'
-compdef _git gk='gitk'
-# show complete history, with dangling commits
-alias gitk-entier-history='\gitk --all $(git log -g --pretty=format:%h)'
-compdef _git gitk='gitk'
-alias gke='gitk-entier-history'
-compdef _git gke='gitk'
-# Note: if the commit has been cleaned my 'git gc', the dangling commits older than 2 weeks may have been deleted
-
-# Clean
-# Remove all .orig, .BASE.*, .REMOTE.*, .LOCAL.*, *.BACKUP files
-alias gclean=" find . -name '*.orig' -or -name '*.REMOTE.*' -or -name '*.LOCAL.*' -or -name '*.BACKUP.*' -or -name '*.BASE.*' | xargs -r rm -v"
-
-# Edit global Git configuration files
-alias gitconfig="vim ~/.gitconfig"
-alias gitmessage="vim ~/.gitmessage"
+alias gsts='git stash show --text'
+alias gsta='git stash'
+alias gstp='git stash pop'
+alias gstd='git stash drop'
 
 # Will cd into the top of the current repository
 # or submodule.
@@ -265,12 +99,8 @@ alias grt='cd $(git rev-parse --show-toplevel || echo ".")'
 alias git-svn-dcommit-push='git svn dcommit && git push github master:svntrunk'
 compdef git-svn-dcommit-push=git
 
-# Git SVN
 alias gsr='git svn rebase'
-compdef _git gsr='git-svn'
 alias gsd='git svn dcommit'
-compdef _git gsd='git-svn'
-
 #
 # Will return the current branch name
 # Usage example: git pull origin $(current_branch)
@@ -322,9 +152,7 @@ alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
 
 # these alias ignore changes to file
 alias gignore='git update-index --assume-unchanged'
-compdef _git gignore='git update-index'
 alias gunignore='git update-index --no-assume-unchanged'
-compdef _git gunignore='git update-index'
 # list temporarily ignored files
 alias gignored='git ls-files -v | grep "^[[:lower:]]"'
 
