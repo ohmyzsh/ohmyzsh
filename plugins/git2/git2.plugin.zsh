@@ -1,4 +1,4 @@
-# Aliases for Git tool.
+# Aliases for Git tool (rework).
 
 ############
 # Common (g)
