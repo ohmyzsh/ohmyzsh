@@ -3,6 +3,7 @@ alias bl="bundle list"
 alias bp="bundle package"
 alias bo="bundle open"
 alias bu="bundle update"
+alias bi="bundle_install"
 
 # The following is based on https://github.com/gma/bundler-exec
 
@@ -15,7 +16,7 @@ done
 
 ## Functions
 
-bi() {
+bundle_install() {
   if _bundler-installed && _within-bundled-project; then
     local bundler_version=`bundle version | cut -d' ' -f3`
     if [[ $bundler_version > '1.4.0' || $bundler_version = '1.4.0' ]]; then
