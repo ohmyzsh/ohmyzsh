@@ -1,26 +1,32 @@
 # vim:ft=zsh ts=2 sw=2 sts=2
 #
-# agnoster's Theme - https://gist.github.com/3712874
-# A Powerline-inspired theme for ZSH
+# Adapted from agnoster's theme (a great work)
+#   agnoster's Theme - https://gist.github.com/3712874
+#   Powerline-inspired theme for ZSH
 #
-# # README
-#
-# In order for this theme to render correctly, you will need a
-# [Powerline-patched font](https://gist.github.com/1595572).
-#
-# In addition, I recommend the
-# [Solarized theme](https://github.com/altercation/solarized/) and, if you're
-# using it on Mac OS X, [iTerm 2](http://www.iterm2.com/) over Terminal.app -
-# it has significantly better color fidelity.
-#
-# # Goals
-#
-# The aim of this theme is to only show you *relevant* information. Like most
-# prompts, it will only show git information when in a git working directory.
-# However, it goes a step further: everything from the current user and
-# hostname to whether the last call exited with an error to whether background
-# jobs are running in this shell will all be displayed automatically when
-# appropriate.
+# Requirements
+#   A powerline patched font 
+#   Solarized colors look best as in agnosters original theme 
+#   Oh My ZSH Plugins Used by me:
+#     git
+#     gem
+#     urltools
+#     sublime
+#     ssh-agent
+#     screen
+#     ruby
+#     python
+#     osx
+#     nyan
+#     brew
+#     knife
+#     gnu-utils
+#     github
+#     git-flow
+#     virtualenv
+#     git-remote-branch
+#     battery
+# 
 
 ### Segment drawing
 # A few utility functions to make it easy and re-usable to draw segmented prompts
