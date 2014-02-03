@@ -240,10 +240,10 @@ alias gga='git gui citool --amend'
 compdef _git gga='git gui citool --amend'
 
 # Gitk
-alias gk='gitk --all --branches'
+alias gk='\gitk --all --branches'
 compdef _git gk='gitk'
 # show complete history, with dangling commits
-alias gitk-entier-history='gitk --all $(git log -g --pretty=format:%h)'
+alias gitk-entier-history='\gitk --all $(git log -g --pretty=format:%h)'
 compdef _git gitk='gitk'
 alias gke='gitk-entier-history'
 compdef _git gke='gitk'
