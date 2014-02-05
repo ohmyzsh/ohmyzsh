@@ -150,3 +150,7 @@ if has("autocmd")
   au  BufNewFile,BufRead *.bro set filetype=bro
   au BufRead,BufNewFile *.scala set filetype=scala
 endif
+
+" Eclim Settings
+let g:EclimScalaSearchSingleResult = 'tabnew'
+map <C-Space> :ScalaSearch<CR>
