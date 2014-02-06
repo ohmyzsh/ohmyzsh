@@ -153,4 +153,6 @@ endif
 
 " Eclim Settings
 let g:EclimScalaSearchSingleResult = 'tabnew'
+let g:EclimCompletionMethod = 'omnifunc'
+let g:SuperTabDefaultCompletionType = 'context'
 map <C-Space> :ScalaSearch<CR>
