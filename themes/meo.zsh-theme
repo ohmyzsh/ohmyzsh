@@ -1,0 +1,2 @@
+PROMPT="%{${fg_bold[white]}%}[%F{167}%2C%{${fg_bold[white]}%}] %(0?.%{${fg[blue]}%}.%{${fg[red]}%})$%{${reset_color}%} "
+RPROMPT='%F{167} $(git_prompt_info_quick) %{${fg_bold[white]}%}%T%{${reset_color}%}'
