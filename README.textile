@@ -1,4 +1,4 @@
-This is a Forked version of Oh-my-zsh. I maintain this fork against the following repos:
+This is a Forked version of Oh-my-zsh. I (Stibbons) maintain this fork against the following repos:
 
 bors-ltd  https://github.com/bors-ltd/oh-my-zsh.git
 cadusk  https://github.com/cadusk/oh-my-zsh.git
@@ -7,14 +7,18 @@ upstream  https://github.com/robbyrussell/oh-my-zsh.git
 ysmood  https://github.com/ysmood/oh-my-zsh.git
 bchretien https://github.com/bchretien/oh-my-zsh.git
 
-Why do I do that? I want the cuting edge zsh for my git workflow, so I select the best from every available repository (thanks github!) and I merge it with my own salt.
+Why do I do that? I want the cuting edge zsh for my git workflow, so I select the best from every available repository
+(thanks github!) and I merge it with my own salt.
 
 I also have a bunch of aliases and plugins for my own workflow : repo, pylint, python, git,...
 
-So I can have a workflow like the following ones:
+I'm very satisfied with the command workfow this fork provide. Also, the access of the git command is pretty easy since
+they are basically just sortened version of the complete command. So when you have to work on a computer that does not
+have these aliases, you can still work (but decrease your productivity, but that's why we use aliases!)
+
+Here are some samples:
 
 h2. Classic Git Project
-# cdp
 # cd myproject
 # gfa # dear git, fetch me all remotes
 # # hack hack hack
@@ -23,7 +27,7 @@ h2. Classic Git Project
 # gga # dear git, I changed my ming, let met amend my last commit
 # # new hack
 # gg
-# gp # dear git, push these changes to my remote
+# gP # dear git, push these changes to my remote (gp is reserved for git pull)
 
 h2. Git-Repo Project (Android)
 
@@ -42,18 +46,25 @@ h2. Merging
 (edit the commit message)
 # gp # dear git, push that to my remote
 
+h2. Upstream merging
+
+# gmum # git merge upstream master
+# gmt
+# gg
+# gP
+
 h2. Rebase / fixup / squash / reorder / split commit history
 
-# git rewrite-history # dear git, let me edit you history up to 2 commits behind (git rebase -i HEAD~2)
-# git rewrite-history4 # dear git, let me edit you history up to 4 commits behind (git rebase -i HEAD~4)
-# git rewrite-history10 # dear git, let me edit you history up to 10 commits behind (git rebase -i HEAD~10)
+# gr2 # dear git, let me edit you history up to 2 commits behind (git rebase -i HEAD~2)
+# gr4 # dear git, let me edit you history up to 4 commits behind (git rebase -i HEAD~4)
+# gr10 # dear git, let me edit you history up to 10 commits behind (git rebase -i HEAD~10)
 
 h3. Text search
 
 # sgrep "substring" .
 
 
-h1. README
+h1. Official Oh My Zsh README
 
 oh-my-zsh is an open source, community-driven framework for managing your ZSH configuration. It comes bundled with a ton of helpful functions, helpers, plugins, themes, and few things that make you shout...
 
