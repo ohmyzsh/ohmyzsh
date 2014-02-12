@@ -11,10 +11,25 @@ _brew_installed_formulae() {
   installed_formulae=(`brew list`)
 }
 
+_brew_installed_taps() {
+  installed_taps=(`brew tap`)
+}
+
+_brew_outdated_formulae() {
+  outdated_formulae=(`brew outdated`)
+}
+
+_brew_running_services() {
+  running_services=(`brew services list | awk '{print $1}'`)
+}
+
 local -a _1st_arguments
 _1st_arguments=(
+  'audit:check formulae for Homebrew coding style'
+  'bundle:look for a Brewfile and run each line as a brew command'
   'cat:display formula file for a formula'
   'cleanup:uninstall unused and old versions of packages'
+  'commands:show a list of commands'
   'create:create a new formula'
   'deps:list dependencies and dependants of a formula'
   'doctor:audits your installation for common issues'
@@ -22,27 +37,38 @@ _1st_arguments=(
   'home:visit the homepage of a formula or the brew project'
   'info:information about a formula'
   'install:install a formula'
+  'reinstall:install a formula anew; re-using its current options'
   'link:link a formula'
   'list:list files in a formula or not-installed formulae'
   'log:git commit log for a formula'
   'missing:check all installed formuale for missing dependencies.'
-  'options:display install options specific to formula.'
-  'outdated:list formulas for which a newer version is available'
+  'outdated:list formulae for which a newer version is available'
+  'pin:pin specified formulae'
   'prune:remove dead links'
-  'reinstall:reinstall a formula'
   'remove:remove a formula'
   'search:search for a formula (/regex/ or string)'
   'server:start a local web app that lets you browse formulae (requires Sinatra)'
-  'services:manage background services via launchctl'
+  'services:small wrapper around `launchctl` for supported formulae'
+  'tap:tap a new formula repository from GitHub, or list existing taps'
   'unlink:unlink a formula'
+  'unpin:unpin specified formulae'
+  'untap:remove a tapped repository'
   'update:freshen up links'
   'upgrade:upgrade outdated formulae'
-  'uses:show formulas which depend on a formula'
-  'versions:show all available formula versions'
+  'uses:show formulae which depend on a formula'
+)
+
+local -a _service_arguments
+_service_arguments=(
+  'cleanup:get rid of stale services and unused plists'
+  'list:list all services managed by `brew services`'
+  'restart:gracefully restart selected service'
+  'start:start selected service'
+  'stop:stop selected service'
 )
 
 local expl
-local -a formulae installed_formulae
+local -a formulae installed_formulae installed_taps outdated_formulae running_services
 
 _arguments \
   '(-v)-v[verbose]' \
@@ -61,24 +87,41 @@ if (( CURRENT == 1 )); then
 fi
 
 case "$words[1]" in
-  search|-S)
-    _arguments \
-      '(--macports)--macports[search the macports repository]' \
-      '(--fink)--fink[search the fink repository]' ;;
+  install|reinstall|audit|home|homepage|log|info|abv|uses|cat|deps|edit|options)
+    _brew_all_formulae
+    _wanted formulae expl 'all formulae' compadd -a formulae ;;
   list|ls)
     _arguments \
       '(--unbrewed)--unbrewed[files in brew --prefix not controlled by brew]' \
+      '(--pinned)--pinned[list all versions of pinned formulae]' \
       '(--versions)--versions[list all installed versions of a formula]' \
-      '1: :->forms' &&  return 0
+      '1: :->forms' && return 0
 
       if [[ "$state" == forms ]]; then
         _brew_installed_formulae
         _wanted installed_formulae expl 'installed formulae' compadd -a installed_formulae
       fi ;;
-  install|home|homepage|log|info|abv|uses|cat|deps|edit|options|versions)
-    _brew_all_formulae
-    _wanted formulae expl 'all formulae' compadd -a formulae ;;
-  reinstall|remove|rm|uninstall|unlink|cleanup|link|ln)
+  remove|rm|uninstall|unlink|cleanup|link|ln|pin|unpin)
     _brew_installed_formulae
     _wanted installed_formulae expl 'installed formulae' compadd -a installed_formulae ;;
+  search|-S)
+    _arguments \
+      '(--macports)--macports[search the macports repository]' \
+      '(--fink)--fink[search the fink repository]' ;;
+  services)
+    if [[ -n "$words[2]" ]]; then
+      case "$words[2]" in
+        restart|start|stop)
+          _brew_running_services
+          _wanted running_services expl 'running services' compadd -a running_services ;;
+      esac
+    else
+      _describe -t commands "brew services subcommand" _service_arguments
+    fi ;;
+  untap)
+    _brew_installed_taps
+    _wanted installed_taps expl 'installed taps' compadd -a installed_taps ;;
+  upgrade)
+    _brew_outdated_formulae
+    _wanted outdated_formulae expl 'outdated formulae' compadd -a outdated_formulae ;;
 esac
