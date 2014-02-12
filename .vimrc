@@ -35,6 +35,8 @@ Bundle 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX'
 Bundle 'tpope/vim-surround'
 Bundle 'mephux/bro.vim'
 Bundle 'derekwyatt/vim-scala'
+Bundle 'wincent/Command-T'
+Bundle 'fholgado/minibufexpl.vim'
 
 " Scala Bundles
 " You need to check out appropriate ensime branch by hand by running ie.
