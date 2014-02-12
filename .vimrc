@@ -125,7 +125,7 @@ autocmd InsertLeave *.tex highlight OverLength ctermbg=darkred ctermfg=white gui
 autocmd InsertLeave *.tex match OverLength /\%82v.*/
 
 " automatically change window's cwd to file's dir
-set autochdir
+set noautochdir
 
 " I'm prefer spaces to tabs
 set tabstop=4
