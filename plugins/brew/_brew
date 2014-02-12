@@ -13,6 +13,7 @@ _brew_installed_formulae() {
 
 local -a _1st_arguments
 _1st_arguments=(
+  'bundle:run all commands from the Brewfile'
   'cat:display formula file for a formula'
   'cleanup:uninstall unused and old versions of packages'
   'create:create a new formula'
