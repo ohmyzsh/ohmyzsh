@@ -46,6 +46,8 @@ compdef _git gpr=git-pull
 # git push
 alias gP='git push'
 compdef _git gP=git-push
+alias gPum='git push upstream master'
+compdef _git gP=git-push
 # git push dry run
 alias gPd='git push --dry-run'
 compdef _git gPd=git-push
