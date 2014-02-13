@@ -154,7 +154,7 @@ if has("autocmd")
 endif
 
 " Eclim Settings
-let g:EclimScalaSearchSingleResult = 'tabnew'
+let g:EclimScalaSearchSingleResult = 'edit'
 let g:EclimCompletionMethod = 'omnifunc'
 let g:SuperTabDefaultCompletionType = 'context'
 map <C-Space> :ScalaSearch<CR>
