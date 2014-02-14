@@ -2,6 +2,7 @@ BUILDBOT_PROJECT_PATH="$HOME/projects/buildbot/"
 
 alias cdb='cd $BUILDBOT_PROJECT_PATH/main'
 alias cdp='cd $BUILDBOT_PROJECT_PATH'
+alias cdd='cd $HOME/projects/dev-tools'
 
 alias c='cactus'
 alias cj='cactus jump'
