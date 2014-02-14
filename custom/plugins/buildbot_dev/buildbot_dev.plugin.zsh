@@ -84,7 +84,7 @@ function bb_merge_bottom_branch_to_here()
     local branch
     local bottom_branch
 
-    branch=$(git branches | grep "remotes/m/" | cut -d'/' -f5 | cut -d' ' -f1)
+    branch=$(git branch -a| grep "remotes/m/" | cut -d'/' -f5 | cut -d' ' -f1)
     case $branch in
         main)
             bottom_branch="staging"
@@ -107,7 +107,7 @@ function bb_push_with_care()
     local branch
     local project
 
-    branch=$(git branches | grep "remotes/m/" | cut -d'/' -f5 | cut -d' ' -f1)
+    branch=$(git branch -a | grep "remotes/m/" | cut -d'/' -f5 | cut -d' ' -f1)
     project=$(git remote -v | grep umg | tail -n 1 | cut -d'/' -f6 | cut -d' ' -f1)
 
     if [[ -z $project || -z $branch ]]; then
