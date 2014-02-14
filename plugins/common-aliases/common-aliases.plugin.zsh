@@ -3,7 +3,6 @@
 #
 
 # ls, the common ones I use a lot shortened for rapid fire usage
-alias ls='ls --color' #I like color
 alias l='ls -lFh'     #size,show type,human readable
 alias la='ls -lAFh'   #long list,show almost all,show type,human readable
 alias lr='ls -tRFh'   #sorted by date,recursive,show type,human readable
