@@ -1,7 +1,7 @@
 # ------------------------------------------------------------------------------
-#          FILE:  kphoen.zsh-theme
+#          FILE:  dstkph.zsh-theme
 #   DESCRIPTION:  oh-my-zsh theme file.
-#        AUTHOR:  Kévin Gomez (geek63@gmail.com)
+#        AUTHOR:  Ale Sandro (git@alexrah.otherinbox.com)
 #       VERSION:  1.0.0
 #    SCREENSHOT:
 # ------------------------------------------------------------------------------
