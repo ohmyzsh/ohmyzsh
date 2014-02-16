@@ -1,3 +1,5 @@
+#!/bin/sh
+
 __require_tool_version_compare ()
 {
   (

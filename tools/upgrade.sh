@@ -1,3 +1,5 @@
+#!/bin/sh
+
 printf '\033[0;34m%s\033[0m\n' "Upgrading Oh My Zsh"
 cd "$ZSH"
 if git pull --rebase --stat origin master
