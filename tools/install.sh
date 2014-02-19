@@ -1,3 +1,5 @@
+#!/bin/sh
+
 ZSH=`/usr/bin/env|grep 'ZSH='|cut -d '=' -f 2`
 if [ -d "$ZSH" ]
 then

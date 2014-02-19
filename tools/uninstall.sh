@@ -1,3 +1,5 @@
+#!/bin/sh
+
 echo "Removing ~/.oh-my-zsh"
 if [[ -d ~/.oh-my-zsh ]]
 then
