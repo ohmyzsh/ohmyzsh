@@ -40,10 +40,14 @@ alias grset='git remote set-url'
 compdef _git grset=git-remote
 alias grup='git remote update'
 compdef _git grset=git-remote
+alias grb='git rebase'
+compdef _git grb=git-rebase
 alias grbi='git rebase -i'
 compdef _git grbi=git-rebase
 alias grbc='git rebase --continue'
 compdef _git grbc=git-rebase
+alias grbs='git rebase --skip'
+compdef _git grbs=git-rebase
 alias grba='git rebase --abort'
 compdef _git grba=git-rebase
 alias gb='git branch'
@@ -160,7 +164,6 @@ alias gignore='git update-index --assume-unchanged'
 alias gunignore='git update-index --no-assume-unchanged'
 # list temporarily ignored files
 alias gignored='git ls-files -v | grep "^[[:lower:]]"'
-
 
 # Submodules
 alias gf='git fetch'
