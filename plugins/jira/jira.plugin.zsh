@@ -31,7 +31,7 @@ open_jira_issue () {
 
   if [ -z "$1" ]; then
     echo "Opening new issue"
-    `open $jira_url/secure/CreateIssue!default.jspa`
+    $open_cmd "$jira_url/secure/CreateIssue!default.jspa"
   else
     echo "Opening issue #$1"
     if [[ "x$JIRA_RAPID_BOARD" = "xtrue" ]]; then

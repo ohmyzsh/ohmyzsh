@@ -1,3 +1,14 @@
+function cabal_sandbox_info() {
+    cabal_files=(*.cabal(N))
+    if [ $#cabal_files -gt 0 ]; then
+        if [ -f cabal.sandbox.config ]; then
+            echo "%{$fg[green]%}sandboxed%{$reset_color%}"
+        else
+            echo "%{$fg[red]%}not sandboxed%{$reset_color%}"
+        fi
+    fi
+}
+
 function _cabal_commands() {
     local ret=1 state
     _arguments ':subcommand:->subcommand' && ret=0

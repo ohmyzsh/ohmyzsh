@@ -17,6 +17,8 @@ if (( $+commands[$virtualenvwrapper] )); then
             # Check for virtualenv name override
             if [[ -f "$PROJECT_ROOT/.venv" ]]; then
                 ENV_NAME=`cat "$PROJECT_ROOT/.venv"`
+            elif [[ -f "$PROJECT_ROOT/.venv/bin/activate" ]];then 
+                ENV_NAME="$PROJECT_ROOT/.venv"
             elif [[ "$PROJECT_ROOT" != "." ]]; then
                 ENV_NAME=`basename "$PROJECT_ROOT"`
             else
@@ -27,6 +29,8 @@ if (( $+commands[$virtualenvwrapper] )); then
                 if [[ "$VIRTUAL_ENV" != "$WORKON_HOME/$ENV_NAME" ]]; then
                     if [[ -e "$WORKON_HOME/$ENV_NAME/bin/activate" ]]; then
                         workon "$ENV_NAME" && export CD_VIRTUAL_ENV="$ENV_NAME"
+                    elif [[ -e "$ENV_NAME/bin/activate" ]]; then
+                        source $ENV_NAME/bin/activate && export CD_VIRTUAL_ENV="$ENV_NAME"
                     fi
                 fi
             elif [ $CD_VIRTUAL_ENV ]; then

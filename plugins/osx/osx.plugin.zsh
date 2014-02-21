@@ -157,3 +157,37 @@ function trash() {
 function vncviewer() {
   open vnc://$@
 }
+
+# iTunes control function
+function itunes() {
+	local opt=$1
+	shift
+	case "$opt" in
+		launch|play|pause|stop|rewind|resume|quit)
+			;;
+		mute)
+			opt="set mute to true"
+			;;
+		unmute)
+			opt="set mute to false"
+			;;
+		next|previous)
+			opt="$opt track"
+			;;
+		""|-h|--help)
+			echo "Usage: itunes <option>"
+			echo "option:"
+			echo "\tlaunch|play|pause|stop|rewind|resume|quit"
+			echo "\tmute|unmute\tcontrol volume set"
+			echo "\tnext|previous\tplay next or previous track"
+			echo "\thelp\tshow this message and exit"
+			return 0
+			;;
+		*)
+			print "Unkonwn option: $opt"
+			return 1
+			;;
+	esac
+	osascript -e "tell application \"iTunes\" to $opt"
+}
+
