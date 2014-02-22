@@ -67,7 +67,7 @@ if bline.find('Not currently on any branch') != -1:
         '--short',
         'HEAD'], stdout=PIPE).communicate()[0][:-1]
 else:
-    branch = bline.split(' ')[3]
+    branch = bline.split(' ')[-1]
     bstatusline = lines[1]
     match = behead_re.match(bstatusline)
     if match:
