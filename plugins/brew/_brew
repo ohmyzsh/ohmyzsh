@@ -33,6 +33,7 @@ _1st_arguments=(
   'remove:remove a formula'
   'search:search for a formula (/regex/ or string)'
   'server:start a local web app that lets you browse formulae (requires Sinatra)'
+  'services:manage background services via launchctl'
   'unlink:unlink a formula'
   'update:freshen up links'
   'upgrade:upgrade outdated formulae'
