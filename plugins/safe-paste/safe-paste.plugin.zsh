@@ -43,12 +43,12 @@ function _paste_insert() {
 
 function _zle_line_init() {
   # Tell terminal to send escape codes around pastes.
-  [[ $TERM == rxvt-unicode || $TERM == xterm || $TERM = xterm-256color ]] && printf '\e[?2004h'
+  [[ $TERM == rxvt-unicode || $TERM == xterm || $TERM = xterm-256color || $TERM = screen || $TERM = screen-256color ]] && printf '\e[?2004h'
 }
 
 function _zle_line_finish() {
   # Tell it to stop when we leave zle, so pasting in other programs
   # doesn't get the ^[[200~ codes around the pasted text.
-  [[ $TERM == rxvt-unicode || $TERM == xterm || $TERM = xterm-256color ]] && printf '\e[?2004l'
+  [[ $TERM == rxvt-unicode || $TERM == xterm || $TERM = xterm-256color || $TERM = screen || $TERM = screen-256color ]] && printf '\e[?2004l'
 }
 

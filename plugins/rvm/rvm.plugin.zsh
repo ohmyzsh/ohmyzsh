@@ -3,9 +3,9 @@ fpath=($rvm_path/scripts/zsh/Completion $fpath)
 alias rubies='rvm list rubies'
 alias gemsets='rvm gemset list'
 
-local ruby18='ruby-1.8.7-p334'
-local ruby19='ruby-1.9.3-p385'
-local ruby20='ruby-2.0.0-rc2'
+local ruby18='ruby-1.8.7'
+local ruby19='ruby-1.9.3'
+local ruby20='ruby-2.0.0'
 
 function rb18 {
 	if [ -z "$1" ]; then
@@ -31,7 +31,7 @@ compdef _rb19 rb19
 
 function rb20 {
 	if [ -z "$1" ]; then
-		rvm use "$ruby"
+		rvm use "$ruby20"
 	else
 		rvm use "$ruby20@$1"
 	fi
@@ -42,7 +42,6 @@ compdef _rb20 rb20
 
 function rvm-update {
 	rvm get head
-	rvm reload # TODO: Reload rvm completion?
 }
 
 # TODO: Make this usable w/o rvm.

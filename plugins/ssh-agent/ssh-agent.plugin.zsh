@@ -9,7 +9,7 @@
 #   To load multiple identities use the identities style, For
 #   example:
 #
-#     zstyle :omz:plugins:ssh-agent id_rsa id_rsa2 id_github
+#     zstyle :omz:plugins:ssh-agent identities id_rsa id_rsa2 id_github
 #
 #   To set the maximum lifetime of the identities, use the
 #   lifetime style. The lifetime may be specified in seconds
@@ -57,7 +57,7 @@ if [[ ${_plugin__forwarding} == "yes" && -n "$SSH_AUTH_SOCK" ]]; then
 elif [ -f "${_plugin__ssh_env}" ]; then
   # Source SSH settings, if applicable
   . ${_plugin__ssh_env} > /dev/null
-  ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
+  ps x | grep ${SSH_AGENT_PID} | grep ssh-agent > /dev/null || {
     _plugin__start_agent;
   }
 else

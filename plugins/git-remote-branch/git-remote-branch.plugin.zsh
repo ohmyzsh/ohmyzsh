@@ -6,7 +6,8 @@ _git_remote_branch() {
       compadd create publish rename delete track
     elif (( CURRENT == 3 )); then
       # second arg: remote branch name
-      compadd `git branch -r | grep -v HEAD | sed "s/.*\///" | sed "s/ //g"`
+      remotes=`git remote | tr '\n' '|' | sed "s/\|$//g"`
+      compadd `git branch -r | grep -v HEAD | sed "s/$remotes\///" | sed "s/ //g"`
     elif (( CURRENT == 4 )); then
       # third arg: remote name
       compadd `git remote`

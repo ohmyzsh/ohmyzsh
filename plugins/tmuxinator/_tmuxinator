@@ -1,4 +1,4 @@
-#compdef tmuxinator
+#compdef tmuxinator mux
 #autoload
 
 local curcontext="$curcontext" state line ret=1
@@ -25,7 +25,7 @@ case $state in
   args)
     case $line[1] in
       start|open|copy|delete)
-        _configs=(`tmuxinator list | sed -n 's/^[ \t]\+//p'`)
+        _configs=(`find ~/.tmuxinator -name \*.yml | cut -d/ -f5 | sed s:.yml::g`)
         _values 'configs' $_configs
         ret=0
         ;;
