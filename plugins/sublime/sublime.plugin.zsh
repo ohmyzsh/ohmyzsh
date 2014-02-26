@@ -14,10 +14,13 @@ _sublime_darwin_paths=(
 if [[ $('uname') == 'Linux' ]]; then
     if [ -f '/usr/bin/sublime_text' ]; then
         st_run() { nohup /usr/bin/sublime_text $@ > /dev/null & }
-    else
+        alias st=st_run
+    elif [ -f '/usr/bin/sublime-text' ]; then
         st_run() { nohup /usr/bin/sublime-text $@ > /dev/null & }
+        alias st=st_run
+    else
+        alias st="/usr/bin/subl3"
     fi
-    alias st=st_run
 
 elif  [[ $('uname') == 'Darwin' ]]; then
 
