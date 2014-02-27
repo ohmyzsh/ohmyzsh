@@ -1,1 +1,2 @@
-alias gb="gem build *.gemspec"
+alias gemb="gem build *.gemspec"
+alias gemp="gem push *.gem"
