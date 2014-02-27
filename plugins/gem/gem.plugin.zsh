@@ -1,0 +1,1 @@
+alias gb="gem build *.gemspec"
