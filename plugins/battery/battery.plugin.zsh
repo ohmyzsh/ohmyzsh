@@ -66,9 +66,19 @@ if [[ $(uname) == "Darwin" ]] ; then
 
 elif [[ $(uname) == "Linux"  ]] ; then
 
+  function battery_is_charging() {
+    ! [[ $(acpi 2&>/dev/null | grep -c '^Battery.*Discharging') -gt 0 ]]
+  }
+
+  function battery_pct() {
+    echo "$(acpi | cut -f2 -d ',' | tr -cd '[:digit:]')" 
+  }
+
   function battery_pct_remaining() {
-    if [[ $(acpi 2&>/dev/null | grep -c '^Battery.*Discharging') -gt 0 ]] ; then
-      echo "$(acpi | cut -f2 -d ',' | tr -cd '[:digit:]')" 
+    if [ ! $(battery_is_charging) ] ; then
+      battery_pct
+    else
+      echo "External Power"
     fi
   }
 
@@ -94,15 +104,6 @@ elif [[ $(uname) == "Linux"  ]] ; then
     fi
   }
   
-  function battery_pct() {
-    # todo for on linux
-  }
-  
-  function battery_is_charging() {
-    # todo on linux
-	false
-  }
-
 else
   # Empty functions so we don't cause errors in prompts
   function battery_pct_remaining() {
