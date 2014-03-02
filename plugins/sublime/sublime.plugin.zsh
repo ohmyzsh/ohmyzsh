@@ -3,19 +3,19 @@
 local _sublime_darwin_paths > /dev/null 2>&1
 _sublime_darwin_paths=(
     "/usr/local/bin/subl"
-    "$HOME/Applications/Sublime Text 3.app/Contents/SharedSupport/bin/subl"
-    "$HOME/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl"
-    "$HOME/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"
+    "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"
     "/Applications/Sublime Text 3.app/Contents/SharedSupport/bin/subl"
     "/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl"
-    "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"
+    "$HOME/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"
+    "$HOME/Applications/Sublime Text 3.app/Contents/SharedSupport/bin/subl"
+    "$HOME/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl"
 )
 
 if [[ $('uname') == 'Linux' ]]; then
-    if [ -f '/usr/bin/sublime_text' ]; then
-        st_run() { nohup /usr/bin/sublime_text $@ > /dev/null & }
+    if [ -f '/opt/sublime_text/sublime_text' ]; then
+        st_run() { /opt/sublime_text/sublime_text $@ &| }
     else
-        st_run() { nohup /usr/bin/sublime-text $@ > /dev/null & }
+        st_run() { /usr/bin/sublime-text $@ &| }
     fi
     alias st=st_run
 
