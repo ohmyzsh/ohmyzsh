@@ -22,6 +22,9 @@
 # jobs are running in this shell will all be displayed automatically when
 # appropriate.
 
+# Comment this to disable right side features like "$pipestatus return codes"
+ENABLE_RPROMPT=y
+
 ### Segment drawing
 # A few utility functions to make it easy and re-usable to draw segmented prompts
 
@@ -142,6 +145,22 @@ prompt_virtualenv() {
   fi
 }
 
+prompt_code_returns() {
+  local show_returns=''
+  for n in $pipestat ; do
+    [[ "0" != "$n" ]] && show_returns=y
+  done
+  if [ "$show_returns" ] ; then
+    for n in $pipestat ; do
+      if [[ "0" != "$n" ]] ; then
+        prompt_segment red white $n
+      else
+        prompt_segment black blue $n
+      fi
+    done
+  fi
+}
+
 # Status:
 # - was there an error
 # - am I root
@@ -168,4 +187,11 @@ build_prompt() {
   prompt_end
 }
 
+## Right side prompt
+build_rprompt() {
+  pipestat=($pipestatus)
+  prompt_code_returns
+}
+
+[[ "$ENABLE_RPROMPT" == "y" ]] && RPROMPT='%{%f%b%k%}$(build_rprompt) '
 PROMPT='%{%f%b%k%}$(build_prompt) '
