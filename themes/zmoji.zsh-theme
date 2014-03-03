@@ -1,7 +1,7 @@
 ##############################################################################
 # zmoji: A fun oh_my_zsh theme with an OSX emoji character in your prompt
 # 
-# Uses the moonphase and emoji-clock plugins to provide moon phase and time
+# Requires the zmoji, moonphase, and emoji-clock plugins
 #
 # Open this link in Safari to see a master list:
 # http://www.grumdrig.com/emoji-list/
@@ -25,7 +25,7 @@ ICONLIST=(
   PERSONAL_COMPUTER             # 9 am
   FLOPPY_DISK                  # 10 am
   SEE-NO-EVIL_MONKEY           # 11 am
-  HEAR-NO-EVIL_MONKEY          # 12 am
+  HEAR-NO-EVIL_MONKEY          # 12 pm
   SPEAK-NO_EVIL_MONKEY         #  1 pm
   DIZZY_SYMBOL                 #  2 pm
   SAILBOAT                     #  3 pm
