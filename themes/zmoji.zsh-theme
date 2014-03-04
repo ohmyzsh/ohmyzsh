@@ -26,7 +26,7 @@ ICONLIST=(
   FLOPPY_DISK                  # 10 am
   SEE-NO-EVIL_MONKEY           # 11 am
   HEAR-NO-EVIL_MONKEY          # 12 pm
-  SPEAK-NO_EVIL_MONKEY         #  1 pm
+  SPEAK-NO-EVIL_MONKEY         #  1 pm
   DIZZY_SYMBOL                 #  2 pm
   SAILBOAT                     #  3 pm
   SURFER                       #  4 pm
