@@ -50,12 +50,12 @@ wd_warp()
             wd_print_msg $YELLOW "Warping to current directory?"
         else
             (( n = $#1 - 1 ))
-            wd_print_msg $BLUE "Warping..."
+            #wd_print_msg $BLUE "Warping..."
             cd -$n > /dev/null
         fi
     elif [[ ${points[$1]} != "" ]]
     then
-        wd_print_msg $BLUE "Warping..."
+        #wd_print_msg $BLUE "Warping..."
         cd ${points[$1]}
     else
         wd_print_msg $RED "Unkown warp point '$1'"
@@ -64,16 +64,16 @@ wd_warp()
 
 wd_add()
 {
-    if [[ $1 =~ "^\.+$" ]]
+    if [[ $2 =~ "^\.+$" || $2 =~ "^\s*$" ]]
     then
-        wd_print_msg $RED "Illeagal warp point (see README)."
-    elif [[ ${points[$1]} == "" ]] || $2
+        wd_print_msg $RED "Illegal warp point (see README)."
+    elif [[ ${points[$2]} == "" ]] || $1
     then
-        wd_remove $1 > /dev/null
-        print "$1:$PWD" >> $CONFIG
+        wd_remove $2 > /dev/null
+        print "$2:$PWD" >> $CONFIG
         wd_print_msg $GREEN "Warp point added"
     else
-        wd_print_msg $YELLOW "Warp point '$1' alredy exists. Use 'add!' to overwrite."
+        wd_print_msg $YELLOW "Warp point '$2' already exists. Use 'add!' to overwrite."
     fi
 }
 
@@ -83,7 +83,9 @@ wd_remove()
     then
         if wd_tmp=`sed "/^$1:/d" $CONFIG`
         then
-            echo $wd_tmp > $CONFIG
+            # `>!` forces overwrite
+            # we need this if people use `setopt NO_CLOBBER`
+            echo $wd_tmp >! $CONFIG
             wd_print_msg $GREEN "Warp point removed"
         else
             wd_print_msg $RED "Warp point unsuccessfully removed. Sorry!"
@@ -131,9 +133,9 @@ wd_print_usage()
     print "\nCommands:"
     print "\t add \t Adds the current working directory to your warp points"
     print "\t add! \t Overwrites existing warp point"
-    print "\t remove  Removes the given warp point"
+    print "\t rm \t  Removes the given warp point"
     print "\t show \t Outputs warp points to current directory"
-    print "\t list \t Outputs all stored warp points"
+    print "\t ls \t Outputs all stored warp points"
     print "\t help \t Show this extremely helpful text"
 }
 
@@ -141,7 +143,7 @@ wd_print_usage()
 ## run
 
 # get opts
-args=`getopt -o a:r:lhs -l add:,remove:,list,help,show -- $*`
+args=`getopt -o a:r:lhs -l add:,rm:,ls,help,show -- $*`
 
 # check if no arguments were given
 if [[ $? -ne 0 || $#* -eq 0 ]]
@@ -161,49 +163,40 @@ else
 
     for i
     do
-		    case "$i"
-		        in
-			      -a|--add|add)
-                wd_add $2 false
-				        shift
-                shift
+        case "$i"
+            in
+            -a|--add|add)
+                wd_add false $2
                 break
                 ;;
             -a!|--add!|add!)
-                wd_add $2 true
-				        shift
-                shift
+                wd_add true $2
                 break
                 ;;
-			      -r|--remove|rm)
-				        wd_remove $2
-                shift
-				        shift
+            -r|--remove|rm)
+                wd_remove $2
                 break
                 ;;
-			      -l|--list|ls)
-				        wd_list_all
-				        shift
+            -l|--list|ls)
+                wd_list_all
                 break
                 ;;
-			      -h|--help|help)
-				        wd_print_usage
-				        shift
+            -h|--help|help)
+                wd_print_usage
                 break
                 ;;
-			      -s|--show|show)
-				        wd_show
-				        shift
+            -s|--show|show)
+                wd_show
                 break
                 ;;
             *)
                 wd_warp $i
-                shift
                 break
                 ;;
-			      --)
-				        shift; break;;
-		    esac
+            --)
+                break
+                ;;
+        esac
     done
 fi
 
@@ -211,6 +204,6 @@ fi
 ## garbage collection
 # if not, next time warp will pick up variables from this run
 # remember, there's no sub shell
-points=""
-args=""
-unhash -d val &> /dev/null # fixes issue #1
+unset points
+unset args
+unset val &> /dev/null # fixes issue #1
