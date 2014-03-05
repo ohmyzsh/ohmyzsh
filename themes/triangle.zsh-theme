@@ -12,8 +12,6 @@ local git_status='$(parse_git_dirty)$(git_prompt_info)%{$reset_color%} $(git_rem
 
 RPROMPT="${git_status}"
 
-DISABLE_UNTRACKED_FILES_DIRTY=true
-
 ZSH_THEME_GIT_PROMPT_PREFIX=""
 ZSH_THEME_GIT_PROMPT_SUFFIX=""
 ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg_bold[yellow]%}"
