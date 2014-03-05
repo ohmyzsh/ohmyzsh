@@ -22,7 +22,7 @@ bindkey -v
 
 # if mode indicator wasn't setup by theme, define default
 if [[ "$MODE_INDICATOR" == "" ]]; then
-  MODE_INDICATOR="%{$fg_bold[red]%}<%{$fg[red]%}<<%{$reset_color%}"
+  MODE_INDICATOR="%{$fg[red]%}[CMD]%{$reset_color%}"
 fi
 
 function vi_mode_prompt_info() {
