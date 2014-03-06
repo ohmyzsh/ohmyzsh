@@ -53,6 +53,10 @@ alias mvncom='mvn compile'
 alias mvnt='mvn test'
 alias mvnag='mvn archetype:generate'
 alias mvn-updates='mvn versions:display-dependency-updates'
+alias mvntc7='mvn tomcat7:run' 
+alias mvntc='mvn tomcat:run'
+
+
 function listMavenCompletions { 
      reply=(
         # common lifecycle
