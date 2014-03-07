@@ -1,7 +1,6 @@
 # Check for updates on initial load...
-if [ "$DISABLE_AUTO_UPDATE" != "true" ]
-then
-  /usr/bin/env ZSH=$ZSH zsh $ZSH/tools/check_for_upgrade.sh
+if [ "$DISABLE_AUTO_UPDATE" != "true" ]; then
+  /usr/bin/env ZSH=$ZSH DISABLE_UPDATE_PROMPT=$DISABLE_UPDATE_PROMPT zsh -f $ZSH/tools/check_for_upgrade.sh
 fi
 
 # Initializes Oh My Zsh
@@ -11,7 +10,9 @@ fpath=($ZSH/functions $ZSH/completions $fpath)
 
 # Load all of the config files in ~/oh-my-zsh that end in .zsh
 # TIP: Add files you don't want in git to .gitignore
-for config_file ($ZSH/lib/*.zsh) source $config_file
+for config_file ($ZSH/lib/*.zsh); do
+  source $config_file
+done
 
 # Set ZSH_CUSTOM to the path where your custom config files
 # and plugins exists, or else we will use the default custom/
@@ -36,10 +37,20 @@ for plugin ($plugins); do
   fi
 done
 
+# Figure out the SHORT hostname
+if [ -n "$commands[scutil]" ]; then
+  # OS X
+  SHORT_HOST=$(scutil --get ComputerName)
+else
+  SHORT_HOST=${HOST/.*/}
+fi
+
+# Save the location of the current completion dump file.
+ZSH_COMPDUMP="${ZDOTDIR:-${HOME}}/.zcompdump-${SHORT_HOST}-${ZSH_VERSION}"
+
 # Load and run compinit
 autoload -U compinit
-compinit -i
-
+compinit -i -d "${ZSH_COMPDUMP}"
 
 # Load all of the plugins that were defined in ~/.zshrc
 for plugin ($plugins); do
@@ -51,11 +62,13 @@ for plugin ($plugins); do
 done
 
 # Load all of your custom configurations from custom/
-for config_file ($ZSH_CUSTOM/*.zsh(N)) source $config_file
+for config_file ($ZSH_CUSTOM/*.zsh(N)); do
+  source $config_file
+done
+unset config_file
 
 # Load the theme
-if [ "$ZSH_THEME" = "random" ]
-then
+if [ "$ZSH_THEME" = "random" ]; then
   themes=($ZSH/themes/*zsh-theme)
   N=${#themes[@]}
   ((N=(RANDOM%N)+1))
@@ -63,11 +76,11 @@ then
   source "$RANDOM_THEME"
   echo "[oh-my-zsh] Random theme '$RANDOM_THEME' loaded..."
 else
-  if [ ! "$ZSH_THEME" = ""  ]
-  then
-    if [ -f "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme" ]
-    then
+  if [ ! "$ZSH_THEME" = ""  ]; then
+    if [ -f "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme" ]; then
       source "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme"
+    elif [ -f "$ZSH_CUSTOM/themes/$ZSH_THEME.zsh-theme" ]; then
+      source "$ZSH_CUSTOM/themes/$ZSH_THEME.zsh-theme"
     else
       source "$ZSH/themes/$ZSH_THEME.zsh-theme"
     fi

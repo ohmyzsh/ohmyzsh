@@ -17,7 +17,7 @@ for rbenvdir in "${rbenvdirs[@]}" ; do
     FOUND_RBENV=1
     export RBENV_ROOT=$rbenvdir
     export PATH=${rbenvdir}/bin:$PATH
-    eval "$(rbenv init - zsh)"
+    eval "$(rbenv init --no-rehash - zsh)"
 
     alias rubies="rbenv versions"
     alias gemsets="rbenv gemset list"
@@ -32,11 +32,11 @@ for rbenvdir in "${rbenvdirs[@]}" ; do
 
     function gems {
       local rbenv_path=$(rbenv prefix)
-      gem list $@ | sed \
-        -Ee "s/\([0-9\.]+( .+)?\)/$fg[blue]&$reset_color/g" \
-        -Ee "s|$(echo $rbenv_path)|$fg[magenta]\$rbenv_path$reset_color|g" \
-        -Ee "s/$current_ruby@global/$fg[yellow]&$reset_color/g" \
-        -Ee "s/$current_ruby$current_gemset$/$fg[green]&$reset_color/g"
+      gem list $@ | sed -E \
+        -e "s/\([0-9a-z, \.]+( .+)?\)/$fg[blue]&$reset_color/g" \
+        -e "s|$(echo $rbenv_path)|$fg[magenta]\$rbenv_path$reset_color|g" \
+        -e "s/$current_ruby@global/$fg[yellow]&$reset_color/g" \
+        -e "s/$current_ruby$current_gemset$/$fg[green]&$reset_color/g"
     }
 
     function rbenv_prompt_info() {
