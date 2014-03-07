@@ -36,11 +36,11 @@ local user_host='${PR_USER}${PR_CYAN}@${PR_HOST}'
 local current_dir='%{$PR_BOLD$PR_GREEN%}%~%{$reset_color%}'
 local rvm_ruby=''
 if which rvm-prompt &> /dev/null; then
-  rvm_ruby='%{$PR_RED%}<$(rvm-prompt i v g s)>%{$reset_color%}'
+  rvm_ruby='%{$fg[red]%}<$(rvm-prompt i v g s)>%{$reset_color%}'
 elif which rbenv &> /dev/null; then
-  rvm_ruby='%{$PR_RED%}<$(rbenv version | sed -e "s/ (set.*$//")>%{$reset_color%}'
+  rvm_ruby='%{$fg[red]%}<$(rbenv version | sed -e "s/ (set.*$//")>%{$reset_color%}'
 else
-  rvm_ruby='%{$PR_RED%}<$(ruby -v | sed -e "s/ (.*$//")>%{$reset_color%}'
+  rvm_ruby='%{$fg[red]%}<$(ruby -v | sed -e "s/ (.*$//")>%{$reset_color%}'
 fi
   
 local git_branch='$(git_prompt_info)%{$reset_color%}'
@@ -67,4 +67,6 @@ ZSH_THEME_SVN_PROMPT_PREFIX="%{$fg[yellow]%}svn:"
 ZSH_THEME_SVN_PROMPT_SUFFIX="%{$reset_color%}"
 ZSH_THEME_SVN_PROMPT_DIRTY="-%{$fg[red]%}x%{$reset_color%}"
 ZSH_THEME_SVN_PROMPT_CLEAN="-%{$fg[green]%}o%{$reset_color%}"
+ZSH_THEME_SVN_PROMPT_DIRTY_PWD="%{$fg[red]%}x%{$reset_color%}"
+ZSH_THEME_SVN_PROMPT_CLEAN_PWD="%{$fg[green]%}o%{$reset_color%}"
 
