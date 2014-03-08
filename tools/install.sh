@@ -1,16 +1,16 @@
-ZSH=`/usr/bin/env|grep 'ZSH='|cut -d '=' -f 2`
-if [ -d "$ZSH" ]
+if [ ! -n $ZSH ]
+then
+  ZSH=~/.oh-my-zsh
+fi
+
+if [ -d $ZSH ]
 then
   echo "\033[0;33mYou already have Oh My Zsh installed.\033[0m You'll need to remove $ZSH if you want to install"
-  exit
-elif [ -d ~/.oh-my-zsh ]
-then
-  echo "\033[0;33mYou already have One Oh My Zsh Directory.\033[0m You'll need to remove  ~/.oh-my-zsh if you want to clone"
   exit
 fi
 
 echo "\033[0;34mCloning Oh My Zsh...\033[0m"
-hash git >/dev/null && /usr/bin/env git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh || {
+hash git >/dev/null && /usr/bin/env git clone https://github.com/robbyrussell/oh-my-zsh.git $ZSH || {
   echo "git not installed"
   exit
 }
@@ -23,7 +23,7 @@ then
 fi
 
 echo "\033[0;34mUsing the Oh My Zsh template file and adding it to ~/.zshrc\033[0m"
-cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
+cp $ZSH/templates/zshrc.zsh-template ~/.zshrc
 
 echo "\033[0;34mCopying your current PATH and adding it to the end of ~/.zshrc for you.\033[0m"
 sed -i -e "/export PATH=/ c\\
