@@ -1,3 +1,5 @@
+set -e
+
 if [ ! -n $ZSH ]
 then
   ZSH=~/.oh-my-zsh
