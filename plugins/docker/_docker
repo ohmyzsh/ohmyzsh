@@ -111,7 +111,7 @@ __ps() {
         '-beforeId="[Show only container created before Id, include non-running ones.]' \
         '-l[Show only the latest created container, include non-running ones.]' \
         '-n=[Show n last created containers, include non-running ones.]' \
-        '-notrurrrrnc[Dont truncate output]' \
+        '-notrunc[Dont truncate output]' \
         '-q[Only display numeric IDs]' \
         '-s[Display sizes]' \
         '-sinceId="[Show only containers created since Id, include non-running ones.]'
