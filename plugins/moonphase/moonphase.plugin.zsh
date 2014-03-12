@@ -18,23 +18,25 @@ function printmoon() {
     phase=$(calcphase $(date +%s))
   fi
 
-  if [[ $phase > 0 ]] && [[ $phase < 1 ]]; then
+  #echo "Phase is $phase"
+
+  if [[ $phase -gt 0 ]] && [[ $phase -lt 1 ]]; then
     moon="🌑 "
-  elif [[ $phase > 1 ]] && [[ $phase < 7.38 ]]; then
+  elif [[ $phase -gt 1 ]] && [[ $phase -lt 7.38 ]]; then
     moon="🌒 "
-  elif [[ $phase > 7.38 ]] && [[ $phase < 8.38 ]]; then
+  elif [[ $phase -gt 7.38 ]] && [[ $phase -lt 8.38 ]]; then
     moon="🌓 " 
-  elif [[ $phase > 8.38 ]] && [[ $phase < 14.77 ]]; then
+  elif [[ $phase -gt 8.38 ]] && [[ $phase -lt 14.77 ]]; then
     moon="🌔 " 
-  elif [[ $phase > 14.77 ]] && [[ $phase < 15.77 ]]; then
+  elif [[ $phase -gt 14.77 ]] && [[ $phase -lt 15.77 ]]; then
     moon="🌕 "
-  elif [[ $phase > 15.77 ]] && [[ $phase < 22.15 ]]; then
+  elif [[ $phase -gt 15.77 ]] && [[ $phase -lt 22.15 ]]; then
     moon="🌖 "
-  elif [[ $phase > 22.15 ]] && [[ $phase < 23.15 ]]; then
+  elif [[ $phase -gt 22.15 ]] && [[ $phase -lt 23.15 ]]; then
     moon="🌗 " 
-  elif [[ $phase > 23.15 ]] && [[ $phase < 24.15 ]]; then
+  elif [[ $phase -gt 23.15 ]] && [[ $phase -lt 24.15 ]]; then
     moon="🌗 "
-  elif [[ $phase > 24.15 ]] && [[ $phase < 29.53 ]]; then
+  elif [[ $phase -gt 24.15 ]] && [[ $phase -lt 29.53 ]]; then
     moon="🌘 "
   fi
   echo $moon
