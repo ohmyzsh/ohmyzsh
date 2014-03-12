@@ -72,7 +72,7 @@ alias gm='git merge'
 compdef _git gm=git-merge
 alias grh='git reset HEAD'
 alias grhh='git reset HEAD --hard'
-alias gclean='git reset --hard && git clean -dfx'
+alias gclean='(cd $(git rev-parse --show-toplevel) && git reset --hard && git clean -dfx)'
 alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
 
 #remove the gf alias
@@ -156,5 +156,5 @@ alias gunignore='git update-index --no-assume-unchanged'
 # list temporarily ignored files
 alias gignored='git ls-files -v | grep "^[[:lower:]]"'
 
-
+alias tiga='tig --all'
 

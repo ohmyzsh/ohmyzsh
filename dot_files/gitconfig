@@ -9,27 +9,27 @@
    br = branch
    co = checkout
    df = diff
-   lg = log -p
    lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
    loo = log --pretty=oneline --abbrev-commit
    lol = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
    lola = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all
 
-   rewrite-history   = rebase -i HEAD~2
-   rewrite-history1  = rebase -i HEAD~
-   rewrite-history2  = rebase -i HEAD~2
-   rewrite-history3  = rebase -i HEAD~3
-   rewrite-history4  = rebase -i HEAD~4
-   rewrite-history5  = rebase -i HEAD~5
-   rewrite-history6  = rebase -i HEAD~6
-   rewrite-history7  = rebase -i HEAD~7
-   rewrite-history8  = rebase -i HEAD~8
-   rewrite-history9  = rebase -i HEAD~9
+   rewrite-history = rebase -i HEAD~2
+   rewrite-history1 = rebase -i HEAD~
+   rewrite-history2 = rebase -i HEAD~2
+   rewrite-history3 = rebase -i HEAD~3
+   rewrite-history4 = rebase -i HEAD~4
+   rewrite-history5 = rebase -i HEAD~5
+   rewrite-history6 = rebase -i HEAD~6
+   rewrite-history7 = rebase -i HEAD~7
+   rewrite-history8 = rebase -i HEAD~8
+   rewrite-history9 = rebase -i HEAD~9
    rewrite-history10 = rebase -i HEAD~10
    tags = tag -l
    branches = branch -a
    remotes = remote -v
    sync = fetch --all
+   root = rev-parse --show-toplevel
 
 # This only works if git > 0.7.10
 # # [include]
