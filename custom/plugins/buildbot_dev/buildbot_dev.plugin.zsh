@@ -16,6 +16,9 @@ alias cjm='cactus jump metacactus'
 alias cjs='cactus jump src'
 alias cjy='cactus jump yamls'
 
+alias m='make'
+alias s='subl'
+
 function bb_env()
 {
     local BASE
