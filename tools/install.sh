@@ -43,4 +43,4 @@ echo "\033[0;32m"'                        /____/                       '"\033[0m
 echo "\n\n \033[0;32m....is now installed.\033[0m"
 echo "\n\n \033[0;32mPlease look over the ~/.zshrc file to select plugins, themes, and options.\033[0m"
 /usr/bin/env zsh
-source ~/.zshrc
+. ~/.zshrc
