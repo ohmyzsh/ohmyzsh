@@ -8,7 +8,7 @@
 # http://briancarper.net/blog/570/git-info-in-your-zsh-prompt
 
 function virtualenv_info {
-    [ $VIRTUAL_ENV ] && echo '('`basename $VIRTUAL_ENV`') '
+    [ $VIRTUAL_ENV ] && echo '('$fg[blue]`basename $VIRTUAL_ENV`%{$reset_color%}') '
 }
 PR_GIT_UPDATE=1
 
@@ -87,7 +87,7 @@ function steeef_precmd {
         else
             FMT_BRANCH="(%{$turquoise%}%b%u%c${PR_RST})"
         fi
-        zstyle ':vcs_info:*:prompt:*' formats       "${FMT_BRANCH}"
+        zstyle ':vcs_info:*:prompt:*' formats "${FMT_BRANCH} "
 
         vcs_info 'prompt'
         PR_GIT_UPDATE=
@@ -96,5 +96,5 @@ function steeef_precmd {
 add-zsh-hook precmd steeef_precmd
 
 PROMPT=$'
-%{$purple%}%n%{$reset_color%} at %{$orange%}%m%{$reset_color%} in %{$limegreen%}%~%{$reset_color%} $vcs_info_msg_0_
-$(virtualenv_info)$ '
+%{$purple%}%n%{$reset_color%} at %{$orange%}%m%{$reset_color%} in %{$limegreen%}%~%{$reset_color%} $vcs_info_msg_0_$(virtualenv_info)%{$reset_color%}
+$ '
