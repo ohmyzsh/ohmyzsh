@@ -17,12 +17,16 @@ if [[ $(uname) == "Darwin" ]] ; then
     integer i=$(((currentcapacity/maxcapacity) * 100))
     echo $i
   }
+
+  function plugged_in() {
+    [ $(ioreg -rc AppleSmartBattery | grep -c '^.*"ExternalConnected"\ =\ Yes') -eq 1 ]
+  }
   
   function battery_pct_remaining() {
-    if [[ $(ioreg -rc AppleSmartBattery | grep -c '^.*"ExternalConnected"\ =\ No') -eq 1 ]] ; then
-      battery_pct
-    else
+    if plugged_in ; then
       echo "External Power"
+    else
+      battery_pct
     fi
   }
 
