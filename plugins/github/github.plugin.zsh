@@ -84,5 +84,37 @@ exist_gh() { # [DIRECTORY]
     git push -u origin master
 }
 
+#
+# Provides a review workflow for pull requests. Best used with `prmerge` when ready to merge.
+#
+# Example - checks out the Pull Request 1 and rebases branch against master:
+#     `prfetch master 1`
+#     ... Check it out, test, etc.
+#     `prmerge master 1`
+#     Merges the Pull request, creates a reference to it, then pushes to the remote.
+#
+# @link http://derickrethans.nl/managing-prs-for-php-mongo.html
+#
+function prfetch()
+{
+    git checkout $1
+    git fetch origin pull/$2/head:pr/$2
+    git checkout pr/$2
+    git rebase $1
+}
+
+#
+# Merge a Pull Request that has been reviewed using `prfetch` and push.
+# Example - Merge PR #1 into master and reference the PR in the merge:
+#     `prmerge master 1`
+#
+function prmerge()
+{
+    git checkout $1
+    git merge --no-ff -m "Merged pull request #$2" pr/$2
+    git branch -D pr/$2
+    git push
+}
+
 # End Functions #############################################################
 
