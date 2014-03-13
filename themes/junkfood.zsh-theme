@@ -1,8 +1,4 @@
-# ------------------------------------------------------------------------
-# Tyler Cipriani 
-# oh-my-zsh theme
 # Totally ripped off Dallas theme
-# ------------------------------------------------------------------------
 
 # Grab the current date (%W) and time (%t):
 JUNKFOOD_TIME_="%{$fg_bold[red]%}#%{$fg_bold[white]%}( %{$fg_bold[yellow]%}%W%{$reset_color%}@%{$fg_bold[white]%}%t )( %{$reset_color%}"
