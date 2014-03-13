@@ -1,12 +1,10 @@
 set -e
 
-if [ ! -n $ZSH ]
-then
+if [ ! -n "$ZSH" ]; then
   ZSH=~/.oh-my-zsh
 fi
 
-if [ -d $ZSH ]
-then
+if [ -d "$ZSH" ]; then
   echo "\033[0;33mYou already have Oh My Zsh installed.\033[0m You'll need to remove $ZSH if you want to install"
   exit
 fi
@@ -18,8 +16,7 @@ hash git >/dev/null && /usr/bin/env git clone https://github.com/robbyrussell/oh
 }
 
 echo "\033[0;34mLooking for an existing zsh config...\033[0m"
-if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]
-then
+if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]; then
   echo "\033[0;33mFound ~/.zshrc.\033[0m \033[0;32mBacking up to ~/.zshrc.pre-oh-my-zsh\033[0m";
   mv ~/.zshrc ~/.zshrc.pre-oh-my-zsh;
 fi
@@ -43,9 +40,8 @@ echo "\033[0;32m"'  ____  / /_     ____ ___  __  __   ____  _____/ /_  '"\033[0m
 echo "\033[0;32m"' / __ \/ __ \   / __ `__ \/ / / /  /_  / / ___/ __ \ '"\033[0m"
 echo "\033[0;32m"'/ /_/ / / / /  / / / / / / /_/ /    / /_(__  ) / / / '"\033[0m"
 echo "\033[0;32m"'\____/_/ /_/  /_/ /_/ /_/\__, /    /___/____/_/ /_/  '"\033[0m"
-echo "\033[0;32m"'                        /____/                       '"\033[0m"
-
-echo "\n\n \033[0;32m....is now installed.\033[0m"
+echo "\033[0;32m"'                        /____/                       ....is now installed!'"\033[0m"
 echo "\n\n \033[0;32mPlease look over the ~/.zshrc file to select plugins, themes, and options.\033[0m"
+echo "\n\n \033[0;32mp.s. Follow us at http://twitter.com/ohmyzsh.\033[0m"
 /usr/bin/env zsh
 . ~/.zshrc
