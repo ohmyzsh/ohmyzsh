@@ -4,7 +4,13 @@ setopt auto_pushd
 setopt pushd_ignore_dups
 setopt pushdminus
 
+# Push and pop directories on directory stack
+alias pu='pushd'
+alias po='popd'
+
+# Basic directory operations
 alias ..='cd ..'
+alias ...='cd ../..'
 alias cd..='cd ..'
 alias cd...='cd ../..'
 alias cd....='cd ../../..'
@@ -20,6 +26,11 @@ alias 6='cd -6'
 alias 7='cd -7'
 alias 8='cd -8'
 alias 9='cd -9'
+alias -- -='cd -'
+
+alias md='mkdir -p'
+alias rd=rmdir
+alias d='dirs -v | head -10'
 
 cd () {
   if   [[ "x$*" == "x..." ]]; then
@@ -37,7 +48,3 @@ cd () {
     builtin cd "$@"
   fi
 }
-
-alias md='mkdir -p'
-alias rd=rmdir
-alias d='dirs -v | head -10'

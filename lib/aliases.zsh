@@ -1,11 +1,3 @@
-# Push and pop directories on directory stack
-alias pu='pushd'
-alias po='popd'
-
-# Basic directory operations
-alias ...='cd ../..'
-alias -- -='cd -'
-
 # Prevent headaches
 alias cp='cp -v'
 alias rm='rm -v'
