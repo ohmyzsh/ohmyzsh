@@ -7,8 +7,6 @@ alias mv='mv -v'
 alias _='sudo'
 alias please='sudo'
 
-#alias g='grep -in'
-
 # Show history
 if [ "$HIST_STAMPS" = "mm/dd/yyyy" ]
 then
@@ -30,4 +28,3 @@ alias la='ls -lAh'
 alias sl=ls # often screw this up
 
 alias afind='ack-grep -il'
-
