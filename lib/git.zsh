@@ -48,6 +48,8 @@ git_remote_status() {
         elif [ $ahead -gt 0 ] && [ $behind -gt 0 ]
         then
             echo "$ZSH_THEME_GIT_PROMPT_DIVERGED_REMOTE"
+        else
+            echo "$ZSH_THEME_GIT_PROMPT_NO_DIFFERENCE_REMOTE"
         fi
     fi
 }
