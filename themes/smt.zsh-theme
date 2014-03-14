@@ -1,10 +1,4 @@
-# -----------------------------------------------------------------------------
-#          FILE: smt.zsh-theme
-#   DESCRIPTION: oh-my-zsh theme file, based on dogenpunk by Matthew Nelson.
-#        AUTHOR: Stephen Tudor (stephen@tudorstudio.com
-#       VERSION: 0.1
-#    SCREENSHOT: coming soon
-# -----------------------------------------------------------------------------
+# smt.zsh-theme, based on dogenpunk by Matthew Nelson.
 
 MODE_INDICATOR="%{$fg_bold[red]%}❮%{$reset_color%}%{$fg[red]%}❮❮%{$reset_color%}"
 local return_status="%{$fg[red]%}%(?..⏎)%{$reset_color%} "

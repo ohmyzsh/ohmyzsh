@@ -2,12 +2,12 @@
 # #
 # # #README
 # #
-# # This theme provides two customizable header functionalities : 
+# # This theme provides two customizable header functionalities:
 # # a) displaying a pseudo-random message from a database of quotations
 # # (https://en.wikipedia.org/wiki/Fortune_%28Unix%29)
-# # b) displaying randomly command line tips from The command line fu 
+# # b) displaying randomly command line tips from The command line fu
 # # (http://www.commandlinefu.com) community: in order to make use of this functionality
-# # you will need Internet connection. 
+# # you will need Internet connection.
 # # This theme provides as well information for the current user's context, like;
 # # branch and status for the current version control system (git and svn currently
 # # supported) and time, presented to the user in a non invasive volatile way.
@@ -25,11 +25,8 @@
 # # -Solarized theme (https://github.com/altercation/solarized/)
 # # -OS X: iTerm 2 (http://www.iterm2.com/)
 # # -font Source code pro (https://github.com/adobe/source-code-pro)
-# # 
-# # Author: Adolfo Benedetti
-# # email: adolfo.benedetti@gmail.com
-# # License: Public Domain
-# # This theme's look and feel is based on the Aaron Toponce's zsh theme , more info: 
+# #
+# # This theme's look and feel is based on the Aaron Toponce's zsh theme, more info:
 # # http://pthree.org/2008/11/23/727/
 # # enjoy!
 ########## COLOR ###########

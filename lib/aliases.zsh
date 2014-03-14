@@ -44,9 +44,9 @@ fi
 
 # List direcory contents
 alias lsa='ls -lah'
-alias l='ls -la'
-alias ll='ls -l'
-alias la='ls -lA'
+alias l='ls -lah'
+alias ll='ls -lh'
+alias la='ls -lAh'
 alias l=la
 alias sl=ls # often screw this up
 
