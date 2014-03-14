@@ -19,7 +19,8 @@ ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[grey]%}✈"
 
 function mygit() {
   ref1=$(git symbolic-ref HEAD 2> /dev/null) || return
-  ref2=$(git rev-parse HEAD | head -c 6) || return
+  gitdir=$(git rev-parse --git-dir 2> /dev/null) || return
+  heads=($gitdir/refs/heads/*(N)) ; [[ -z $heads ]] && ref2="" || ref2=$(git rev-parse HEAD | head -c 6)
   ref="$ref1 %{$fg[grey]%}$ref2"
   #ref=$(git symbolic-ref HEAD 2> /dev/null) $(git rev-parse HEAD | head -c 6) || return
   echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$( git_prompt_status )%{$reset_color%}$ZSH_THEME_GIT_PROMPT_SUFFIX "
