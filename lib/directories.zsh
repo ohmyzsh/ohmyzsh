@@ -22,7 +22,7 @@ alias md='mkdir -p'
 alias rd=rmdir
 alias d='dirs -v | head -10'
 
-# List direcory contents
+# List directory contents
 alias lsa='ls -lah'
 alias l='ls -la'
 alias ll='ls -l'
