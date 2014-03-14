@@ -1,10 +1,10 @@
 function _rails_command () {
-  if [ -e "script/server" ]; then
-    ruby script/$@
+  if [ -e "bin/rails" ]; then
+    bin/rails $@
   elif [ -e "script/rails" ]; then
     ruby script/rails $@
-  elif [ -e "bin/rails" ]; then
-    bin/rails $@
+  elif [ -e "script/server" ]; then
+    ruby script/$@
   else
     rails $@
   fi
@@ -51,6 +51,7 @@ alias rds='rake db:seed'
 alias rdd='rake db:drop'
 alias rdtc='rake db:test:clone'
 alias rdtp='rake db:test:prepare'
+alias rdmtc='rake db:migrate db:test:clone'
 
 alias rlc='rake log:clear'
 alias rn='rake notes'
