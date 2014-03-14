@@ -1,28 +1,21 @@
-# af-magic-light.zsh-theme
-#
-# Author: Andreas Pohle (thanks to Andy Fleming http://andyfleming.com/)
-# URL: http://apoh.de/
-# Repo: https://github.com/apoh/oh-my-zsh
-#
-# This is a light version of Andy Flemings af-magic theme
-# 
-# Created on:		March 14, 2014
-# Last modified on:	March 14, 2014
+# af-magic.zsh-theme
+# Repo: https://github.com/andyfleming/oh-my-zsh
+# Direct Link: https://github.com/andyfleming/oh-my-zsh/blob/master/themes/af-magic.zsh-theme
 
 if [ $UID -eq 0 ]; then NCOLOR="red"; else NCOLOR="green"; fi
 local return_code="%(?..%{$fg[red]%}%? %{$reset_color%})"
 
+# color vars
+eval my_gray='$FG[237]'
+eval my_orange='$FG[214]'
+
 # primary prompt
-PROMPT='$FG[032]%~\
+PROMPT='$my_orange%(1j.%jz .)${reset_color}$FG[032]%~\
 $(git_prompt_info) \
 $FG[105]%(!.#.${return_code}»)%{$reset_color%} '
 PROMPT2='%{$fg[red]%}\ %{$reset_color%}'
 RPS1='${return_code}'
 
-
-# color vars
-eval my_gray='$FG[237]'
-eval my_orange='$FG[214]'
 
 # right prompt
 if type "virtualenv_prompt_info" > /dev/null
