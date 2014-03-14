@@ -10,7 +10,7 @@ eval my_gray='$FG[237]'
 eval my_orange='$FG[214]'
 
 # primary prompt
-PROMPT='$my_orange%(1j.%jz .)${reset_color}$FG[032]%~\
+PROMPT='$my_orange%(1j.%jz .)$FG[032]%~\
 $(git_prompt_info) \
 $FG[105]%(!.#.${return_code}»)%{$reset_color%} '
 PROMPT2='%{$fg[red]%}\ %{$reset_color%}'
