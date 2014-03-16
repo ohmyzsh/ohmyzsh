@@ -15,11 +15,6 @@
 # which is inspired by this Ruby on Rails trick from 2006:
 # http://weblog.rubyonrails.org/2006/3/9/fast-rake-task-completion-for-zsh/
 
-# Author: Kevin Bongart
-# contact@kevinbongart.net
-# http://kevinbongart.net
-# https://github.com/KevinBongart
-
 _rake_refresh () {
   if [ -f .rake_tasks ]; then
     rm .rake_tasks
