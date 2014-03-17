@@ -111,8 +111,7 @@ SCD_MEANLIFE</dt><dd>
 
 SCD_THRESHOLD</dt><dd>
     threshold for cumulative directory likelihood.  Directories with
-    lower likelihood are excluded unless they are the only match to
-    scd patterns.
+    a lower likelihood compared to the best match are excluded (0.005).
     </dd><dt>
 
 SCD_SCRIPT</dt><dd>
