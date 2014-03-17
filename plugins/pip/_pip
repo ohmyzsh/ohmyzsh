@@ -20,6 +20,7 @@ _1st_arguments=(
   'bundle:create pybundles (archives containing multiple packages)'
   'freeze:output all currently installed packages (exact versions) to stdout'
   'help:show available commands'
+  'show:show information about installed packages'
   'install:install packages'
   'search:search PyPI'
   'uninstall:uninstall packages'
@@ -74,6 +75,9 @@ case "$words[1]" in
         _wanted piplist expl 'packages' compadd -a piplist
       fi ;;
   uninstall)
+    _pip_installed
+    _wanted installed_pkgs expl 'installed packages' compadd -a installed_pkgs ;;
+  show)
     _pip_installed
     _wanted installed_pkgs expl 'installed packages' compadd -a installed_pkgs ;;
 esac
