@@ -1,5 +1,5 @@
 virtualenvwrapper='virtualenvwrapper_lazy.sh'
-if (( $+commands[$virtualenvwrapper] )); then
+if [[ -f `which $virtualenvwrapper` ]]; then
   source ${${virtualenvwrapper}:c}
 
   if [[ ! $DISABLE_VENV_CD -eq 1 ]]; then
