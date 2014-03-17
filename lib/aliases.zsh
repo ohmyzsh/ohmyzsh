@@ -6,11 +6,6 @@ alias po='popd'
 alias ...='cd ../..'
 alias -- -='cd -'
 
-# Prevent headaches
-alias cp='cp -v'
-alias rm='rm -v'
-alias mv='mv -v'
-
 # Super user
 alias _='sudo'
 alias please='sudo'
