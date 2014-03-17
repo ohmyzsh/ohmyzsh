@@ -1,4 +1,3 @@
-# ZSH theme by James Smith (http://loopj.com)
 # A multiline prompt with username, hostname, full path, return status, git branch, git dirty status, git remote status
 
 local return_status="%{$fg[red]%}%(?..⏎)%{$reset_color%}"

@@ -13,7 +13,7 @@ alias hglr='hg pull --rebase'
 alias hgo='hg outgoing'
 alias hgp='hg push'
 alias hgs='hg status'
-alias hgsl='log --limit 20 --template "{node|short} | {date|isodatesec} | {author|user}: {desc|strip|firstline}\n" '
+alias hgsl='hg log --limit 20 --template "{node|short} | {date|isodatesec} | {author|user}: {desc|strip|firstline}\n" '
 # this is the 'git commit --amend' equivalent
 alias hgca='hg qimport -r tip ; hg qrefresh -e ; hg qfinish tip'
 
