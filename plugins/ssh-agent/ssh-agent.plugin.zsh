@@ -27,7 +27,7 @@
 #   Florent Thoumie and Jonas Pfenniger
 #
 
-local _plugin__ssh_env=$HOME/.ssh/environment-$HOST
+local _plugin__ssh_env
 local _plugin__forwarding
 
 function _plugin__start_agent()
@@ -42,11 +42,19 @@ function _plugin__start_agent()
   . ${_plugin__ssh_env} > /dev/null
 
   # load identies
-  zstyle -a :omz:plugins:ssh-agent identities identities 
+  zstyle -a :omz:plugins:ssh-agent identities identities
   echo starting ssh-agent...
 
   /usr/bin/ssh-add $HOME/.ssh/${^identities}
 }
+
+# Get the filename to store/lookup the environment from
+if (( $+commands[scutil] )); then
+  # It's OS X!
+  _plugin__ssh_env="$HOME/.ssh/environment-$(scutil --get ComputerName)"
+else
+  _plugin__ssh_env="$HOME/.ssh/environment-$HOST"
+fi
 
 # test if agent-forwarding is enabled
 zstyle -b :omz:plugins:ssh-agent agent-forwarding _plugin__forwarding
