@@ -34,7 +34,11 @@ if [[ $(uname) == "Darwin" ]] ; then
   	local smart_battery_status="$(ioreg -rc "AppleSmartBattery")"
     if [[ $(echo $smart_battery_status | grep -c '^.*"ExternalConnected"\ =\ No') -eq 1 ]] ; then
       timeremaining=$(echo $smart_battery_status | grep '^.*"AvgTimeToEmpty"\ =\ ' | sed -e 's/^.*"AvgTimeToEmpty"\ =\ //')
-      echo "~$((timeremaining / 60)):$((timeremaining % 60))"
+      if [ $timeremaining -gt 720 ] ; then
+        echo "::"
+      else
+        echo "~$((timeremaining / 60)):$((timeremaining % 60))"
+      fi
     else
       echo "∞"
     fi
