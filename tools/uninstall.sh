@@ -1,5 +1,5 @@
 echo "Removing ~/.oh-my-zsh"
-if [[ -d ~/.oh-my-zsh ]]
+if [ -d ~/.oh-my-zsh ]
 then
   rm -rf ~/.oh-my-zsh
 fi
@@ -17,12 +17,17 @@ then
   fi
 
   mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc;
+fi
 
-  source ~/.zshrc;
-else
-  echo "Switching back to bash"
-  chsh -s /bin/bash
-  source /etc/profile
+echo "Looking for previous default shell..."
+if [ -f ~/.pre-oh-my-zsh-shell ] || [ -h ~/.pre-oh-my-zsh-shell ]
+then
+  PREVSHELL=$(cat ~/.pre-oh-my-zsh-shell)
+  if [ -x "$PREVSHELL" ]
+  then
+    echo "Switching back to $PREVSHELL"
+    chsh -s $PREVSHELL
+  fi
 fi
 
 echo "Thanks for trying out Oh My Zsh. It's been uninstalled."
