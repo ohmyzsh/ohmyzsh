@@ -34,14 +34,18 @@ _brew-cask()
 							"alfred:used to modify Alfred's scope to include the Caskroom"
 							'audit:verifies installability of casks'
 							'checklinks:checks for bad cask links'
+							'cleanup:cleans up cached downloads'
 							'create:creates a cask of the given name and opens it in an editor'
+							'doctor:checks for configuration issues'
 							'edit:edits the cask of the given name'
+							'fetch:downloads Cask resources to local cache'
 							'home:opens the homepage of the cask of the given name'
 							'info:displays information about the cask of the given name'
 							'install:installs the cask of the given name'
 							'list:with no args, lists installed casks; given installed casks, lists installed files'
 							'search:searches all known casks'
 							'uninstall:uninstalls the cask of the given name'
+							"update:a synonym for 'brew update'"
 						)
 						_describe -t commands "brew cask subcommand" subcommands
 					fi ;;
