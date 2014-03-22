@@ -5,6 +5,14 @@ fi
 HISTSIZE=10000
 SAVEHIST=10000
 
+# Show history
+case $HIST_STAMPS in
+  "mm/dd/yyyy") alias history='fc -fl 1' ;;
+  "dd.mm.yyyy") alias history='fc -El 1' ;;
+  "yyyy-mm-dd") alias history='fc -il 1' ;;
+  *) alias history='fc -l 1' ;;
+esac
+
 setopt append_history
 setopt extended_history
 setopt hist_expire_dups_first
