@@ -71,7 +71,7 @@ if [ ${ZSH_VERSION//\./} -ge 420 ]; then
   _image_fts=(jpg jpeg png gif mng tiff tif xpm)
   for ft in $_image_fts ; do alias -s $ft=$XIVIEWER; done
 
-  _media_fts=(avi mpg mpeg ogm mp3 wav ogg ape rm mov mkv)
+  _media_fts=(ape avi flv mkv mov mp3 mpeg mpg ogg ogm rm wav webm)
   for ft in $_media_fts ; do alias -s $ft=mplayer ; done
 
   #read documents
