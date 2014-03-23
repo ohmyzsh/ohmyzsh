@@ -29,11 +29,11 @@ fi
 alias afind='ack-grep -il'
 # List direcory contents
 alias lsa='ls -lah'
-alias l='ls -la'
-alias ll='ls -l'
-alias la='ls -lA'
-alias l=la
+alias l='ls -lah'
+alias ll='ls -lh'
+alias la='ls -lAh'
 alias sl=ls # often screw this up
+
 # Git aliases
 alias gita='git add -A'
 alias gits='git st'

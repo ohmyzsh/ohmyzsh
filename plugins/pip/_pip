@@ -20,6 +20,7 @@ _1st_arguments=(
   'bundle:create pybundles (archives containing multiple packages)'
   'freeze:output all currently installed packages (exact versions) to stdout'
   'help:show available commands'
+  'show:show information about installed packages'
   'install:install packages'
   'search:search PyPI'
   'uninstall:uninstall packages'
@@ -58,6 +59,7 @@ case "$words[1]" in
   	_arguments \
       '(-U --upgrade)'{-U,--upgrade}'[upgrade all packages to the newest available version]' \
       '(-f --find-links)'{-f,--find-links}'[URL for finding packages]' \
+      '(-r --requirement)'{-r,--requirement}'[Requirements file for packages to install]:File:_files' \
       '(--no-deps --no-dependencies)'{--no-deps,--no-dependencies}'[iIgnore package dependencies]' \
       '(--no-install)--no-install[only download packages]' \
       '(--no-download)--no-download[only install downloaded packages]' \
@@ -74,6 +76,9 @@ case "$words[1]" in
         _wanted piplist expl 'packages' compadd -a piplist
       fi ;;
   uninstall)
+    _pip_installed
+    _wanted installed_pkgs expl 'installed packages' compadd -a installed_pkgs ;;
+  show)
     _pip_installed
     _wanted installed_pkgs expl 'installed packages' compadd -a installed_pkgs ;;
 esac
