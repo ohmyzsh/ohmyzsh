@@ -1,7 +1,5 @@
 # jsontools
 
-# Plugin name
-
 A handy command line tool for dealing with json data.
 
 ## Usage
