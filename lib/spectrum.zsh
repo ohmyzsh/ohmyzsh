@@ -19,17 +19,19 @@ for color in {000..255}; do
     BG[$color]="%{[48;5;${color}m%}"
 done
 
+
+ZSH_SPECTRUM_TEXT=${ZSH_SPECTRUM_TEXT:-Arma virumque cano Troiae qui primus ab oris}
+
 # Show all 256 colors with color number
 function spectrum_ls() {
   for code in {000..255}; do
-    print -P -- "$code: %F{$code}Test%f"
+    print -P -- "$code: %F{$code}$ZSH_SPECTRUM_TEXT%f"
   done
 }
 
 # Show all 256 colors where the background is set to specific color
 function spectrum_bls() {
   for code in {000..255}; do
-    ((cc = code + 1))
-    print -P -- "$BG[$code]$code: Test %{$reset_color%}"
+    print -P -- "$BG[$code]$code: $ZSH_SPECTRUM_TEXT %{$reset_color%}"
   done
 }
