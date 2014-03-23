@@ -49,6 +49,12 @@ if [ -e $HOME/.cabal/bin ]; then export PATH="$HOME/.cabal/bin:$PATH"; fi
 alias ta='tmux attach -t'
 alias tl='tmux list-session'
 alias ts='tmux new-session'
+# Git aliases
+alias gita='git add -A'
+alias gits='git status'
+alias gitl='git l'
+alias gitw='git who'
+alias gitt='git tags'
 
 source $ZSH/oh-my-zsh.sh
 unsetopt correctall
