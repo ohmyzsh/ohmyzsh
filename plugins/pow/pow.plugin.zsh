@@ -8,18 +8,18 @@
 # Supports command completion.
 #
 # If you are not already using completion you might need to enable it with
-# 
+#
 #    autoload -U compinit compinit
 #
 # Changes:
 #
-# Defaults to the current application, and will walk up the tree to find 
+# Defaults to the current application, and will walk up the tree to find
 # a config.ru file and restart the corresponding app
 #
-# Will Detect if a app does not exist in pow and print a (slightly) helpful 
+# Will Detect if a app does not exist in pow and print a (slightly) helpful
 # error message
 
-rack_root_detect(){
+rack_root(){
   setopt chaselinks
   local orgdir=$(pwd)
   local basedir=$(pwd)
@@ -32,6 +32,11 @@ rack_root_detect(){
 
   builtin cd $orgdir 2>/dev/null
   [[ ${basedir} == "/" ]] && return 1
+  echo $basedir
+}
+
+rack_root_detect(){
+  basedir=$(rack_root)
   echo `basename $basedir | sed -E "s/.(com|net|org)//"`
 }
 
@@ -51,15 +56,29 @@ kapow(){
 compctl -W ~/.pow -/ kapow
 
 powit(){
-	local basedir=$(pwd)
+  local basedir=$(pwd)
   local vhost=$1
   [ ! -n "$vhost" ] && vhost=$(rack_root_detect)
   if [ ! -h ~/.pow/$vhost ]
-	then
-		echo "pow: Symlinking your app with pow. ${vhost}"
-	  [ ! -d ~/.pow/${vhost} ] && ln -s $basedir ~/.pow/$vhost
+  then
+    echo "pow: Symlinking your app with pow. ${vhost}"
+    [ ! -d ~/.pow/${vhost} ] && ln -s $basedir ~/.pow/$vhost
     return 1
   fi
+}
+
+powed(){
+  local basedir=$(rack_root)
+  find ~/.pow/ -type l -lname "*$basedir*" -exec basename {}'.dev' \;
+}
+
+# Restart pow process
+# taken from http://www.matthewratzloff.com/blog/2011/12/23/restarting-pow-when-dns-stops-responding
+repow(){
+  lsof | grep 20560 | awk '{print $2}' | xargs kill -9
+  launchctl unload ~/Library/LaunchAgents/cx.pow.powd.plist
+  launchctl load ~/Library/LaunchAgents/cx.pow.powd.plist
+  echo "restarted pow"
 }
 
 # View the standard out (puts) from any pow app
