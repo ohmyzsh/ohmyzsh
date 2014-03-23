@@ -26,6 +26,7 @@ else
     alias history='fc -l 1'
 fi
 
+alias afind='ack-grep -il'
 # List direcory contents
 alias lsa='ls -lah'
 alias l='ls -la'
@@ -33,9 +34,13 @@ alias ll='ls -l'
 alias la='ls -lA'
 alias l=la
 alias sl=ls # often screw this up
-
-alias afind='ack-grep -il'
-
 # Git aliases
+alias gita='git add -A'
 alias gits='git st'
-alias gitk='gitk --all &'
+alias gitl='git l'
+alias gitw='git who'
+alias gitt='git tags'
+# Aliases
+alias ta='tmux attach -t'
+alias tl='tmux list-session'
+alias ts='tmux new-session'
