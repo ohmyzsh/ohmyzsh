@@ -58,8 +58,8 @@ zstyle ':completion:*:descriptions' format '%B%d%b'
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 # export MANPATH="/usr/local/man:$MANPATH"
 
-if [ -z "$LC_ALL" ]; then export LC_ALL=en_US.UTF-8; fi
-if [ -z "$LANG" ]; then export LANG=en_US.UTF-8; fi
+# You may need to manually set your language environment
+# export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
