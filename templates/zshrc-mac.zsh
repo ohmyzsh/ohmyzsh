@@ -46,13 +46,11 @@ zstyle ':completion:*:descriptions' format '%B%d%b'
 if [ -z "$LC_ALL" ]; then export LC_ALL=en_US.UTF-8; fi
 if [ -z "$LANG" ]; then export LANG=en_US.UTF-8; fi
 
-# Aliases
-alias ta='tmux attach -t'
-alias tl='tmux list-session'
-alias ts='tmux new-session'
-
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
+
+# MacOSX specific aliases
+alias bu='brew update && brew upgrade'
 
 source $ZSH/oh-my-zsh.sh
 unsetopt correctall

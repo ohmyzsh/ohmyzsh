@@ -70,10 +70,5 @@ if [ -e $HOME/.cabal/bin ]; then export PATH="$HOME/.cabal/bin:$PATH"; fi
 
 [ "$TERM" = "xterm" ] && TERM="xterm-256color"
 
-# Aliases
-alias ta='tmux attach -t'
-alias tl='tmux list-session'
-alias ts='tmux new-session'
-
 source $ZSH/oh-my-zsh.sh
 unsetopt correctall
