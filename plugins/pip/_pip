@@ -59,6 +59,7 @@ case "$words[1]" in
   	_arguments \
       '(-U --upgrade)'{-U,--upgrade}'[upgrade all packages to the newest available version]' \
       '(-f --find-links)'{-f,--find-links}'[URL for finding packages]' \
+      '(-r --requirement)'{-r,--requirement}'[Requirements file for packages to install]:File:_files' \
       '(--no-deps --no-dependencies)'{--no-deps,--no-dependencies}'[iIgnore package dependencies]' \
       '(--no-install)--no-install[only download packages]' \
       '(--no-download)--no-download[only install downloaded packages]' \
