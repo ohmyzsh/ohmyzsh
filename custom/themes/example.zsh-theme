@@ -2,3 +2,5 @@
 #
 # Place your themes in this folder and enable theme
 # by setting ZSH_THEME in your .zshrc file.
+#
+# ZSH_THEME='example'
