@@ -3,6 +3,10 @@
 # Skip to the bottom of the file to see how oh-my-zsh loads
 # its awesomeness at a single glance.
 
+# For backward compatibility we need to set ZSH_CUSTOM, otherwise
+# we break the script.
+ZSH_CUSTOM=${ZSH_CUSTOM:=$ZSH/custom}
+
 check_for_updates() {
   if [[ $DISABLE_AUTO_UPDATE != "true" ]]; then
     /usr/bin/env ZSH=$ZSH DISABLE_UPDATE_PROMPT=$DISABLE_UPDATE_PROMPT \
@@ -57,6 +61,7 @@ source_files() {
 
 load_lib_files() { source_files $ZSH/lib/*.zsh }
 load_plugins() { source_files $ZSH_PLUGIN_PATHS }
+
 load_customizations() { source_files $ZSH_CUSTOM/*.zsh }
 
 # Sources ZSH_THEME
