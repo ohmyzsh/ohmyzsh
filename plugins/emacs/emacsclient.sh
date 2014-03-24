@@ -3,7 +3,7 @@
 # get list of available X windows.
 x=`emacsclient --alternate-editor '' --eval '(x-display-list)' 2>/dev/null`
 
-if [ -z "$x" ] ;then
+if [ -z "$x" ] || [ "$x" = "nil" ] ;then
     # Create one if there is no X window yet.
     emacsclient --alternate-editor "" --create-frame "$@"
 else
