@@ -33,7 +33,7 @@ DISABLE_VENV_CD="1"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git postgres tmux python vim-override virtualenvwrapper)
+plugins=(git gitfast postgres tmux python vim-override virtualenvwrapper)
 
 # User configuration
 if [ -e $HOME/bin ]; then export PATH="$HOME/bin:$PATH"; fi
@@ -46,6 +46,9 @@ if [ -z "$LANG" ]; then export LANG=en_US.UTF-8; fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
+
+# MacOSX specific aliases
+alias bu='brew update && brew upgrade'
 
 source $ZSH/oh-my-zsh.sh
 unsetopt correctall
