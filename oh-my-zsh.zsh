@@ -42,7 +42,7 @@ initialize_completions() {
   local plugin
 
   # Figure out the SHORT hostname, scutil is for OS X users
-  short_host=$($(scutil --get ComputerName 2>/dev/null) || echo ${HOST/.*/})
+  short_host=$(scutil --get ComputerName 2>/dev/null) || short_host=${HOST/.*/}
 
   # Save the location of the current completion dump file.
   ZSH_COMPDUMP=${ZDOTDIR:-${HOME}}/.zcompdump-$short_host-$ZSH_VERSION
