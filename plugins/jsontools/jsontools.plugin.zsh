@@ -6,7 +6,7 @@ if [[ $(whence $JSONTOOLS_METHOD) = "" ]]; then
 fi
 
 if [[ $(whence node) != "" && ( "x$JSONTOOLS_METHOD" = "x"  || "x$JSONTOOLS_METHOD" = "xnode" ) ]]; then
-    alias pp_json='node -e "console.log(JSON.stringify(process.argv[1]), null, 4)"'
+    alias pp_json='node -e "console.log(JSON.stringify(JSON.parse(process.argv[1]), null, 4));"'
 elif [[ $(whence python) != "" && ( "x$JSONTOOLS_METHOD" = "x" || "x$JSONTOOLS_METHOD" = "xpython" ) ]]; then
 	alias pp_json='python -mjson.tool'
 elif [[ $(whence ruby) != "" && ( "x$JSONTOOLS_METHOD" = "x" || "x$JSONTOOLS_METHOD" = "xruby" ) ]]; then
