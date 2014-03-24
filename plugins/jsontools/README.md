@@ -1,8 +1,14 @@
 # jsontools
 
-A handy command line tool for dealing with json data.
+Handy command line tools for dealing with json data.
+
+## Tools
+
+- **pp_json** - pretty prints json
 
 ## Usage
+
+##### pp_json - examples
 
 ```sh
 # curl json data and pretty print the results
@@ -13,3 +19,4 @@ less data.json | pp_json
 
 # json data directly from the command line
 echo '{"b":2, "a":1}' | pp_json
+```
