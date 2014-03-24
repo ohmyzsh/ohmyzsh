@@ -331,5 +331,8 @@ compdef _git gunignore='git update-index'
 # list temporarily ignored files
 alias gignored='git ls-files -v | grep "^[[:lower:]]"'
 
+# Tig aliases
+alias tg='tig --all'
+alias tiga='tig --all'
 
 
