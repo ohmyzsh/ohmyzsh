@@ -49,6 +49,7 @@ _zsh_highlight_brackets_highlighter()
 {
   local level=0 pos
   local -A levelpos lastoflevel matching typepos
+  region_highlight=()
 
   # Find all brackets and remember which one is matching
   for (( pos = 0; $pos < ${#BUFFER}; pos++ )) ; do
