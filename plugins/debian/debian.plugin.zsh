@@ -21,8 +21,8 @@ fi
 # Aliases ###################################################################
 # These are for more obscure uses of apt-get and aptitude that aren't covered
 # below.
-alias ag='apt-get'
-alias ap='aptitude'
+alias age='apt-get'
+alias api='aptitude'
 
 # Some self-explanatory aliases
 alias acs="apt-cache search"
