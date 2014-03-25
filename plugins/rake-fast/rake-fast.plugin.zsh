@@ -1,20 +1,3 @@
-# rake-fast
-# Fast rake autocompletion plugin for oh-my-zsh
-
-# This script caches the output for later usage and significantly speeds it up.
-# It generates a .rake_tasks file in parallel to the Rakefile.
-
-# You'll want to add `.rake_tasks` to your global .git_ignore file:
-# https://help.github.com/articles/ignoring-files#global-gitignore
-
-# You can force .rake_tasks to refresh with:
-# $ rake_refresh
-
-# This is entirely based on Ullrich Schäfer's work
-# (https://github.com/robb/.dotfiles/pull/10/),
-# which is inspired by this Ruby on Rails trick from 2006:
-# http://weblog.rubyonrails.org/2006/3/9/fast-rake-task-completion-for-zsh/
-
 _rake_refresh () {
   if [ -f .rake_tasks ]; then
     rm .rake_tasks
