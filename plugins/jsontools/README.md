@@ -6,7 +6,13 @@ Handy command line tools for dealing with json data.
 
 - **pp_json** - pretty prints json
 - **is_json** - returns true if valid json; false otherwise
+- **urlencode_json** - returns a url encoded string for the given json 
 
+## Usage
+Usage is simple...just take your json data and pipe it into the appropriate jsontool.
+```sh
+<json data> | <jsontools tool>
+```
 ## Examples
 
 ##### pp_json
@@ -14,22 +20,16 @@ Handy command line tools for dealing with json data.
 ```sh
 # curl json data and pretty print the results
 curl https://coderwall.com/bobwilliams.json | pp_json
-
-# pretty print the contents of an existing json file
-less data.json | pp_json
-
-# json data directly from the command line
-echo '{"b":2, "a":1}' | pp_json
 ```
 
 ##### is_json
 ```sh
-# curl json data and pretty print the results
-curl https://coderwall.com/bobwilliams.json | is_json
-
 # pretty print the contents of an existing json file
 less data.json | is_json
+```
 
+##### urlencode_json
+```sh
 # json data directly from the command line
-echo '{"b":2, "a":1}' | is_json
+echo '{"b":2, "a":1}' | urlencode_json
 ```
