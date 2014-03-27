@@ -85,14 +85,15 @@ function gerrit_add_reviewer {
 }
 
 function gerrit_setup () {
-  cd .git/hooks;
-  scp gerrit_host:hooks/commit-msg . > /dev/null;
-  cd - > /dev/null;
+  if [ -d /web/tools/bin/install-hooks ]; then
+    # install hooks
+    /web/tools/bin/install-hooks;
 
-  if [[ $? -eq 0 ]]; then
-    echo "$green Gerrit hook installed. $stop";
-  else
-    echo "$red Couldn't install Gerrit hook. $stop";
+    if [[ $? -eq 0 ]]; then
+      echo "$green Gerrit hook installed. $stop";
+    else
+      echo "$red Couldn't install Gerrit hook. $stop";
+    fi
   fi
 }
 
