@@ -33,7 +33,7 @@ export PATH=\"$PATH\"
 " ~/.zshrc
 
 echo "\033[0;34mTime to change your default shell to zsh!\033[0m"
-sudo echo "auth       sufficient   pam_wheel.so trust group=wheel" >> /etc/pam.d/chsh #allows users in group "wheel" to chsh without password
+sudo bash -c "echo "auth       sufficient   pam_wheel.so trust group=wheel" >> /etc/pam.d/chsh" #allows users in group "wheel" to chsh without password
 chsh -s `which zsh`
 
 echo "\033[0;32m"'         __                                     __   '"\033[0m"
