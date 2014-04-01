@@ -3,11 +3,13 @@
 # Examples: http://rubyurl.com/ZXv
 #
 
-# avoid VCS folders
+# avoid VCS folders if grep supports it
 GREP_OPTIONS=
-for PATTERN in .cvs .git .hg .svn; do
-    GREP_OPTIONS+="--exclude-dir=$PATTERN "
-done
+if [[ "$(man grep | grep -q exclude-dir)" != "1" ]]; then
+    for PATTERN in .cvs .git .hg .svn; do
+        GREP_OPTIONS+="--exclude-dir=$PATTERN "
+    done
+fi
 GREP_OPTIONS+="--color=auto"
 export GREP_OPTIONS="$GREP_OPTIONS"
 export GREP_COLOR='1;32'
