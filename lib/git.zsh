@@ -23,7 +23,16 @@ parse_git_dirty() {
         GIT_STATUS=$(command git status -s ${SUBMODULE_SYNTAX} 2> /dev/null | tail -n1)
     fi
     if [[ -n $GIT_STATUS ]]; then
-      echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
+      # display dirty unmerged status
+      if [[ ! -z "$ZSH_THEME_GIT_PROMPT_DIRTY_UNMERGED" ]]; then
+        if $(echo "$(command git status --porcelain -b 2> /dev/null)" | grep -E '^(AA|UU) ' &> /dev/null); then
+          echo "$ZSH_THEME_GIT_PROMPT_DIRTY_UNMERGED"
+        else
+          echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
+        fi
+      else
+        echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
+      fi
     else
       echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
     fi
