@@ -52,3 +52,20 @@ if [[ "$TERM" == screen* ]]; then
     screen_set $tab_title $tab_hardstatus
   }
 fi
+
+function screen_prompt_info() {
+  r=""
+  # I'm not thrilled about this method of testing
+  if [ x"$TERM" = x"screen" ] ;then
+    if [ x"$STY" != x"" ] ; then
+      r="$STY"
+    fi
+  fi
+  if [ x"$r" = x"" ] ; then
+    echo ""
+  else
+    pre=$1
+    post=$2
+    echo "$pre$r$post"
+  fi
+}
