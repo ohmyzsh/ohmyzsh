@@ -1,7 +1,7 @@
-#compdef xcap cap
+#compdef shipit
 #autoload
 
-# Added `xcap` because `cap` is a reserved word. `cap` completion doesn't work.
+# Added `shipit` because `cap` is a reserved word. `cap` completion doesn't work.
 # http://zsh.sourceforge.net/Doc/Release/Zsh-Modules.html#The-zsh_002fcap-Module
 
 local curcontext="$curcontext" state line ret=1
@@ -14,7 +14,7 @@ _arguments -C \
 _cap_tasks() {
   if [[ -f config/deploy.rb || -f Capfile ]]; then
     if [[ ! -f .cap_tasks~ ]]; then
-      xcap -v --tasks | awk '{command=$2; $1=$2=$3=""; gsub(/^[ \t\r\n]+/, "", $0); gsub(":", "\\:", command); print command"["$0"]"}' > .cap_tasks~
+      shipit -v --tasks | awk '{command=$2; $1=$2=$3=""; gsub(/^[ \t\r\n]+/, "", $0); gsub(":", "\\:", command); print command"["$0"]"}' > .cap_tasks~
     fi
 
     OLD_IFS=$IFS

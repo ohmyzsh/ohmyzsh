@@ -1,7 +1,7 @@
-# Added `xcap` because `cap` is a reserved word. `cap` completion doesn't work.
+# Added `shipit` because `cap` is a reserved word. `cap` completion doesn't work.
 # http://zsh.sourceforge.net/Doc/Release/Zsh-Modules.html#The-zsh_002fcap-Module
 
-func xcap() {
+func shipit() {
   if [ -f Gemfile ]
   then
     bundle exec cap $*
