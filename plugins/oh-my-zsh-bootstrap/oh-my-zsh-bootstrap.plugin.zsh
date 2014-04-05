@@ -31,7 +31,7 @@ omz () {
           _list_plugins|less
         ;;
         (on)
-          _enable_plugin "$3"
+          _enable_plugin "$3"&&_populate_enabled_plugins "$3"
         ;;
         (off)
           _disable_plugin "$3"
@@ -40,7 +40,7 @@ omz () {
           _update_plugin "$3"
         ;;
         (get)
-          _download_plugin "$3" "$4"
+          _download_plugin "$3" "$4"&&_populate_enabled_plugins "$4"
         ;;
         (-h|--help|help)
           echo $usage_p
@@ -57,13 +57,13 @@ omz () {
           _list_themes|less
         ;;
         (set)
-          _enable_theme "$3"
+          _enable_theme "$3"&&_populate_enabled_theme
         ;;
         (up)
           _update_theme "$3"
         ;;
         (get)
-          _download_theme "$3" "$4"
+          _download_theme "$3" "$4"&&_populate_enabled_theme
         ;;
         (-h|--help|help)
           echo $usage_t

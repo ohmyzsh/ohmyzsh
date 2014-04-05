@@ -78,7 +78,7 @@ _disable_plugin() {
 }
 
 _populate_enabled_plugins() {
-  for plugin ($(_list_pre_enabled_enabled_plugins)); do
+  for plugin ($@); do
     if [[ -f $ZSH/plugins/$plugin/$plugin.plugin.zsh ]]; then
       fpath=($ZSH/plugins/$plugin $fpath)
       source $ZSH/plugins/$plugin/$plugin.plugin.zsh
@@ -95,6 +95,14 @@ _populate_enabled_plugins() {
 
 _populate_enabled_theme() {
   ZSH_THEME=$(_map_get themes theme)
+  # Reload theme (copied from oh-my-zsh.sh)
+  if [ -f "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme" ]; then
+    source "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme"
+  elif [ -f "$ZSH_CUSTOM/themes/$ZSH_THEME.zsh-theme" ]; then
+    source "$ZSH_CUSTOM/themes/$ZSH_THEME.zsh-theme"
+  else
+    source "$ZSH/themes/$ZSH_THEME.zsh-theme"
+  fi
 }
 
 _update_plugin() {
@@ -122,4 +130,4 @@ _update_theme() {
 _pre_enable_plugins
 _populate_enabled_plugins
 _init_theme
-_populate_enabled_theme
+_populate_enabled_theme $(_list_pre_enabled_enabled_plugins)
