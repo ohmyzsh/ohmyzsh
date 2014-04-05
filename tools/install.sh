@@ -35,7 +35,6 @@ export PATH=\"$PATH\"
 echo "\033[0;34mTime to change your default shell to zsh!\033[0m"
 sudo chsh -s `which zsh` $USER
 
-
 echo "\033[0;32m"'         __                                     __   '"\033[0m"
 echo "\033[0;32m"'  ____  / /_     ____ ___  __  __   ____  _____/ /_  '"\033[0m"
 echo "\033[0;32m"' / __ \/ __ \   / __ `__ \/ / / /  /_  / / ___/ __ \ '"\033[0m"
