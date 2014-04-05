@@ -84,3 +84,4 @@ omz () {
   esac
 }
 
+compdef _omz omz
