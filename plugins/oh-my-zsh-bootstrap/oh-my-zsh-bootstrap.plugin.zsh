@@ -8,14 +8,79 @@ _load_bootstrap() {
 [[ -f $ZSH_CUSTOM/plugins/oh-my-zsh-bootstrap/oh-my-zsh-bootstrap.plugin.zsh ]] && _load_bootstrap $ZSH_CUSTOM/plugins/oh-my-zsh-bootstrap
 [[ -f $ZSH/plugins/oh-my-zsh-bootstrap/oh-my-zsh-bootstrap.plugin.zsh ]] && _load_bootstrap $ZSH/plugins/oh-my-zsh-bootstrap
 
+usage='Usage: omz { plugin | theme } <cmd> [<options>]'
+usage_p='Usage: omz plugin <cmd> [<options>]
+Commands:
+  ls\tlist available plugins
+  on <name>\tenable a plugin
+  off <name>\tdisable a plugin
+  up <name>\tupdate a plugin
+  get <git-url> <name>\tdownload and enable a plugin'
+usage_t='Usage: omz theme <cmd> [<options>]
+Commands:
+  ls\tlist available themes
+  set <name>\tset a theme
+  up <name>\tupdate a theme
+  get <git-url> <name>\tdownload and enable a theme'
 
-alias list_plugins="_list_plugins|less"
-alias list_themes="_list_themes|less"
-alias download_and_enable_plugin="_download_plugin"
-alias download_and_enable_theme="_download_theme"
-alias list_enabled_plugins="_list_enabled_plugins"
-alias enable_plugin="_enable_plugin"
-alias enable_theme="_enable_theme"
-alias disable_plugin="_disable_plugin"
-alias update_plugin="_udpate_plugin"
-alias update_theme="_update_theme"
+omz () {
+  case "$1" in
+    (plugin)
+      case "$2" in
+        (ls)
+          _list_plugins|less
+        ;;
+        (on)
+          _enable_plugin "$3"
+        ;;
+        (off)
+          _disable_plugin "$3"
+        ;;
+        (up)
+          _update_plugin "$3"
+        ;;
+        (get)
+          _download_plugin "$3" "$4"
+        ;;
+        (-h|--help|help)
+          echo $usage_p
+        ;;
+        (*)
+          echo $usage_p
+          return 10
+        ;;
+      esac
+    ;;
+    (theme)
+      case "$2" in
+        (ls)
+          _list_themes|less
+        ;;
+        (set)
+          _enable_theme "$3"
+        ;;
+        (up)
+          _update_theme "$3"
+        ;;
+        (get)
+          _download_theme "$3" "$4"
+        ;;
+        (-h|--help|help)
+          echo $usage_t
+        ;;
+        (*)
+          echo $usage_t
+          return 20
+        ;;
+      esac 
+    ;;
+    (-h|--help|help)
+      echo $usage
+    ;;
+    (*)
+      echo $usage
+      return 1
+    ;;
+  esac
+}
+
