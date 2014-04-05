@@ -5,8 +5,8 @@ _load_bootstrap() {
   source $ZSH_BOOTSTRAP/lib/download.zsh
 }
 
-[[ -f $ZSH_CUSTOM/plugins/oh-my-zsh-bootstrap/oh-my-zsh-bootstrap.plugin.zsh ]] && _load_bootstrap $ZSH_CUSTOM/plugins/oh-my-zsh-bootstrap
-[[ -f $ZSH/plugins/oh-my-zsh-bootstrap/oh-my-zsh-bootstrap.plugin.zsh ]] && _load_bootstrap $ZSH/plugins/oh-my-zsh-bootstrap
+[[ -f $ZSH_CUSTOM/plugins/omz-bootstrap/omz-bootstrap.plugin.zsh ]] && _load_bootstrap $ZSH_CUSTOM/plugins/omz-bootstrap
+[[ -f $ZSH/plugins/omz-bootstrap/omz-bootstrap.plugin.zsh ]] && _load_bootstrap $ZSH/plugins/omz-bootstrap
 
 usage='Usage: omz { plugin | theme } <cmd> [<options>]'
 usage_p='Usage: omz plugin <cmd> [<options>]
