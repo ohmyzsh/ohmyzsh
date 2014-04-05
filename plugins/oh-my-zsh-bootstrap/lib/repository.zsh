@@ -1,6 +1,6 @@
 _init_theme() {
   _map_exists themes theme
-  [[ $? -ne 0 ]] && _map_put themes theme robbyrussell
+  [[ $? -ne 0 ]] && _map_put themes theme $ZSH_THEME
 }
 
 _pre_enable_plugins() {
