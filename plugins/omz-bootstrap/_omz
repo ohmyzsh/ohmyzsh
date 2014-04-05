@@ -45,8 +45,8 @@ _omz-plugin () {
         'ls:list available plugins'
         'on:enable a plugin'
         'off:disable a plugin'
-	'up:update a plugin'
-	'get:download and enable a plugin'
+        'up:update a plugin'
+        'get:download and enable a plugin'
         )
       _describe -t commands 'sub-command' commands && ret=0
       ;;
@@ -114,8 +114,8 @@ _omz-theme () {
       commands=(
         'ls:list available themes'
         'set:set a theme'
-	'up:update a theme'
-	'get:download and enable a theme'
+        'up:update a theme'
+        'get:download and enable a theme'
         )
       _describe -t commands 'sub-command' commands && ret=0
       ;;
