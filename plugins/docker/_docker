@@ -166,7 +166,7 @@ __rm() {
 
 __rmi() {
     _arguments \
-        '(-f,--force=)'{-f,--force=}'[Force]' \
+        '(-f,--force=)'{-f,--force=}'[Force]'
     __docker_images
 }
 
