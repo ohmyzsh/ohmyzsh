@@ -37,6 +37,9 @@ Bundle 'mephux/bro.vim'
 Bundle 'derekwyatt/vim-scala'
 Bundle 'wincent/Command-T'
 Bundle 'fholgado/minibufexpl.vim'
+Bundle 'vim-scripts/EasyGrep'
+Bundle 'vim-scripts/LustyExplorer'
+Bundle 'vim-scripts/yavdb'
 
 " Scala Bundles
 " You need to check out appropriate ensime branch by hand by running ie.
@@ -92,7 +95,7 @@ let g:pymode_doc_key = 'K'
 let g:pymode_lint = 1
 let g:pymode_lint_checker = "pyflakes,pep8,pylint,mccabe"
 " Auto check on save
-let g:pymode_lint_write = 0
+let g:pymode_lint_on_write = 0
 
 " Support virtualenv
 let g:pymode_virtualenv = 1
@@ -160,3 +163,6 @@ let g:SuperTabDefaultCompletionType = 'context'
 map <C-Space> :ScalaSearch<CR>
 
 set wildignore=*.o,*~,*.pyc,*.class,\$global
+" au FileType java :so /Users/ahirreddy/.vim/bundle/JavaKit/vim/JavaKit.vim"
+
+:set hidden
