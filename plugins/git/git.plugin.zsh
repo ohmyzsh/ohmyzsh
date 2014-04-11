@@ -149,7 +149,10 @@ function work_in_progress() {
   fi
 }
 # these alias commit and uncomit wip branches
-alias gwip='git add -A; git ls-files --deleted -z | xargs -r0 git rm; git commit -m "--wip--"'
+# first though, check xargs flavor for -r flag
+echo | xargs -r &>/dev/null && XARGS_OPTS="-r"
+alias gwip="git add -A; git ls-files --deleted -z | xargs ${XARGS_OPTS} -0 git rm; git commit -m \"--wip--\""
+unset XARGS_OPTS
 alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
 
 # these alias ignore changes to file
