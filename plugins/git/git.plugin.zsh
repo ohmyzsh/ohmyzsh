@@ -148,7 +148,8 @@ function work_in_progress() {
     echo "WIP!!"
   fi
 }
-# these alias commit and uncomit wip branches
+
+# these aliases commit and uncommit wip branches
 # first though, check xargs flavor for -r flag
 echo | xargs -r &>/dev/null && XARGS_OPTS="-r"
 alias gwip="git add -A; git ls-files --deleted -z | xargs ${XARGS_OPTS} -0 git rm; git commit -m \"--wip--\""
