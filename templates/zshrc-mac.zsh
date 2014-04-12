@@ -38,6 +38,8 @@ plugins=(git gitfast postgres tmux python vim-override virtualenvwrapper)
 # User configuration
 if [ -e $HOME/bin ]; then export PATH="$HOME/bin:$PATH"; fi
 if [ -e /usr/local/bin ]; then export PATH="/usr/local/bin:$PATH"; fi
+if [ -e /usr/local/share/python ]; then export PATH="/usr/local/share/python:$PATH"; fi
+if [ -e /usr/local/share/python3 ]; then export PATH="/usr/local/share/python3:$PATH"; fi
 export EDITOR='vim'
 
 # Language configuration
