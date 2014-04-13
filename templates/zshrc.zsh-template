@@ -47,6 +47,8 @@ ZSH_THEME="agnoster"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 plugins=(battery capistrano common-aliases git github rbenv sublime systemadmin)
 
+source $ZSH/oh-my-zsh.sh
+
 # User configuration
 
 export PATH=:/usr/local/bin:$HOME/bin:$PATH
@@ -64,5 +66,3 @@ export PATH=:/usr/local/bin:$HOME/bin:$PATH
 
 # ssh
 # export SSH_KEY_PATH="~/.ssh/dsa_id"
-
-source $ZSH/oh-my-zsh.sh
