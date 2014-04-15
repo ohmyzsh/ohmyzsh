@@ -5,7 +5,7 @@
 
 # avoid VCS folders if grep supports it
 GREP_OPTIONS=
-if [[ "$(man grep | grep -q exclude-dir)" != "1" ]]; then
+if [[ "$(grep --help | grep -q exclude-dir)" != "1" ]]; then
     for PATTERN in .cvs .git .hg .svn; do
         GREP_OPTIONS+="--exclude-dir=$PATTERN "
     done
