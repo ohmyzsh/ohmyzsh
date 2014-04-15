@@ -6,7 +6,7 @@
 # # README
 #
 # In order for this theme to render correctly, you will need a
-# [Powerline-patched font](https://gist.github.com/1595572).
+# [Powerline-patched font](https://github.com/Lokaltog/powerline-fonts).
 #
 # In addition, I recommend the
 # [Solarized theme](https://github.com/altercation/solarized/) and, if you're
@@ -88,9 +88,9 @@ prompt_git() {
     zstyle ':vcs_info:*' stagedstr '✚'
     zstyle ':vcs_info:git:*' unstagedstr '●'
     zstyle ':vcs_info:*' formats ' %u%c'
-    zstyle ':vcs_info:*' actionformats '%u%c'
+    zstyle ':vcs_info:*' actionformats ' %u%c'
     vcs_info
-    echo -n "${ref/refs\/heads\//± }${vcs_info_msg_0_}"
+    echo -n "${ref/refs\/heads\// }${vcs_info_msg_0_%% }"
   fi
 }
 
