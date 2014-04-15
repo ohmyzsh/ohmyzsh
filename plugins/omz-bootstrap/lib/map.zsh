@@ -1,4 +1,4 @@
-mapdir=$ZSH_BOOTSTRAP/data
+mapdir=$ZSH/cache/omz-bootstrap
 
 _map_init() {
   mkdir -p $mapdir
