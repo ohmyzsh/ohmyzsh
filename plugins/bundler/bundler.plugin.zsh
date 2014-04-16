@@ -40,8 +40,8 @@ _bundler-installed() {
 }
 
 _within-bundled-project() {
-  local check_dir=$PWD
-  while [ $check_dir != "/" ]; do
+  local check_dir="$PWD"
+  while [ "$check_dir" != "/" ]; do
     [ -f "$check_dir/Gemfile" ] && return
     check_dir="$(dirname $check_dir)"
   done
