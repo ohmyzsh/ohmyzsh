@@ -33,3 +33,30 @@ compdef _repo rscb='repo start'
 # Repo start and rebase current branch on all projects
 alias rscbrra='echo "Starting & Rebasing branch $(git branch | sed -n "/\* /s///p") on all projects" && rscb && echo "Rebasing..." && rra'
 compdef _repo rscbrra='repo rebase'
+
+# Repo start and rebase current branch on all projects
+alias rscbrsrra='echo "Starting & Rebasing branch $(git branch | sed -n "/\* /s///p") on all projects" && rscb && echo "Sync & Rebasing..." && rsrra'
+compdef _repo rscbrsrra='repo rebase'
+
+function rsbrra()
+{
+    if [[ -z $1 ]]; then
+        echo "usage: rsbrra <branch name>"
+        exit 1
+    fi
+    echo "Starting branch $1 and syncing up all project (repo rebase)"
+    repo start $1 --all
+    repo rebase --auto-stash
+}
+
+function rsbrsrra()
+{
+    if [[ -z $1 ]]; then
+        echo "usage: rsbrsrra <branch name>"
+        exit 1
+    fi
+    echo "Starting branch $1 and syncing up all project (repo rebase)"
+    repo start $1 --all || return 1
+    repo sync || return 1
+    repo rebase --auto-stash || return 1
+}
