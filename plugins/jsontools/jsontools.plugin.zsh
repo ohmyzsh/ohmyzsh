@@ -6,7 +6,7 @@ if [[ $(whence $JSONTOOLS_METHOD) = "" ]]; then
 fi
 
 if [[ $(whence node) != "" && ( "x$JSONTOOLS_METHOD" = "x"  || "x$JSONTOOLS_METHOD" = "xnode" ) ]]; then
-    alias pp_json='node -e "console.log(JSON.stringify(process.argv[1]), null, 4)"'
+	alias pp_json='xargs -0 node -e "console.log(JSON.stringify(JSON.parse(process.argv[1]), null, 4));"'
 	alias is_json='xargs -0 node -e "try {json = JSON.parse(process.argv[1]);} catch (e) { console.log(false); json = null; } if(json) { console.log(true); }"'
 	alias urlencode_json='xargs -0 node -e "console.log(encodeURIComponent(process.argv[1]))"'
 	alias urldecode_json='xargs -0 node -e "console.log(decodeURIComponent(process.argv[1]))"'
