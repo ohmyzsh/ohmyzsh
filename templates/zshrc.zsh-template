@@ -51,6 +51,10 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
+alias ll='ls -alh'
+alias l='ll'
+alias la='ls -Alh'
+
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 # export MANPATH="/usr/local/man:$MANPATH"
 
