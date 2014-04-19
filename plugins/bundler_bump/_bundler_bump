@@ -1,0 +1,26 @@
+#compdef bump
+#autoload
+
+local curcontext="$curcontext" state line ret=1
+local -a _configs
+
+_arguments -C \
+  '1: :->cmds'
+
+_bundle_gems() {
+  if [ -f Gemfile ]; then
+    OLD_IFS=$IFS
+    IFS=$'\n'
+    _values 'available gems' $(awk '/gem / {print $2}' Gemfile | sed 's/[^a-zA-Z0-9_-]//g')
+    IFS=$OLD_IFS
+  fi
+}
+
+case $state in
+  cmds)
+    _bundle_gems
+    ret=0
+    ;;
+esac
+
+return ret
