@@ -37,17 +37,11 @@ plugins=(git gitfast postgres tmux python vim-override virtualenvwrapper)
 
 # User configuration
 if [ -e $HOME/bin ]; then export PATH="$HOME/bin:$PATH"; fi
-if [ -e /usr/local/bin ]; then export PATH="/usr/local/bin:$PATH"; fi
-if [ -e /usr/local/share/python ]; then export PATH="/usr/local/share/python:$PATH"; fi
-if [ -e /usr/local/share/python3 ]; then export PATH="/usr/local/share/python3:$PATH"; fi
 export EDITOR='vim'
 
 # Language configuration
 if [ -z "$LC_ALL" ]; then export LC_ALL=en_US.UTF-8; fi
 if [ -z "$LANG" ]; then export LANG=en_US.UTF-8; fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
 
 # MacOSX specific aliases
 alias bu='brew update && brew upgrade'
