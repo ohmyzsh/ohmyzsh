@@ -16,7 +16,7 @@ symbols = {
 }
 
 output, error = Popen(
-    ['git', 'status'], stdout=PIPE, stderr=PIPE).communicate()
+    ['git', 'status'], stdout=PIPE, stderr=PIPE, universal_newlines=True).communicate()
 
 if error:
     import sys
