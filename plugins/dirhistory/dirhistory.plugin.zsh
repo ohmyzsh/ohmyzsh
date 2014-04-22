@@ -50,7 +50,7 @@ function push_future() {
 
 # Called by zsh when directory changes
 function chpwd() {
-  push_past `pwd`
+  push_past "`pwd`"
   # If DIRHISTORY_CD is not set...
   if [[ -z "${DIRHISTORY_CD+x}" ]]; then
     # ... clear future.
