@@ -60,6 +60,7 @@
 # of values:
 #
 #     verbose       show number of commits ahead/behind (+/-) upstream
+#     name          if verbose, then also show the upstream abbrev name
 #     legacy        don't use the '--count' option available in recent
 #                   versions of git-rev-list
 #     git           always compare HEAD to @{upstream}
@@ -84,13 +85,17 @@
 # the colored output of "git status -sb" and are available only when
 # using __git_ps1 for PROMPT_COMMAND or precmd.
 
+# check whether printf supports -v
+__git_printf_supports_v=
+printf -v __git_printf_supports_v -- '%s' yes >/dev/null 2>&1
+
 # stores the divergence from upstream in $p
 # used by GIT_PS1_SHOWUPSTREAM
 __git_ps1_show_upstream ()
 {
 	local key value
 	local svn_remote svn_url_pattern count n
-	local upstream=git legacy="" verbose=""
+	local upstream=git legacy="" verbose="" name=""
 
 	svn_remote=()
 	# get some config options from git-config
@@ -106,7 +111,7 @@ __git_ps1_show_upstream ()
 			;;
 		svn-remote.*.url)
 			svn_remote[$((${#svn_remote[@]} + 1))]="$value"
-			svn_url_pattern+="\\|$value"
+			svn_url_pattern="$svn_url_pattern\\|$value"
 			upstream=svn+git # default upstream is SVN if available, else git
 			;;
 		esac
@@ -118,6 +123,7 @@ __git_ps1_show_upstream ()
 		git|svn) upstream="$option" ;;
 		verbose) verbose=1 ;;
 		legacy)  legacy=1  ;;
+		name)    name=1 ;;
 		esac
 	done
 
@@ -200,6 +206,9 @@ __git_ps1_show_upstream ()
 		*)	    # diverged from upstream
 			p=" u+${count#*	}-${count%	*}" ;;
 		esac
+		if [[ -n "$count" && -n "$name" ]]; then
+			p="$p $(git rev-parse --abbrev-ref "$upstream" 2>/dev/null)"
+		fi
 	fi
 
 }
@@ -433,7 +442,7 @@ __git_ps1 ()
 	local gitstring="$c${b##refs/heads/}${f:+$z$f}$r$p"
 
 	if [ $pcmode = yes ]; then
-		if [[ -n ${ZSH_VERSION-} ]]; then
+		if [ "${__git_printf_supports_v-}" != yes ]; then
 			gitstring=$(printf -- "$printf_format" "$gitstring")
 		else
 			printf -v gitstring -- "$printf_format" "$gitstring"
