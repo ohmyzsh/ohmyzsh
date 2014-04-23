@@ -12,7 +12,7 @@
 #        jira ABC-123   # Opens an existing issue
 open_jira_issue () {
   local open_cmd
-  if [[ $(uname -s) == 'Darwin' ]]; then
+  if [[ "$OSTYPE" = darwin* ]]; then
     open_cmd='open'
   else
     open_cmd='xdg-open'
