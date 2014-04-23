@@ -38,9 +38,9 @@ for plugin ($plugins); do
 done
 
 # Figure out the SHORT hostname
-if [ -n "$commands[scutil]" ]; then
-  # OS X
-  SHORT_HOST=$(scutil --get ComputerName)
+if [[ "$OSTYPE" = darwin* ]]; then
+  # OS X's $HOST changes with dhcp, etc. Use ComputerName if possible.
+  SHORT_HOST=$(scutil --get ComputerName 2>/dev/null) || SHORT_HOST=${HOST/.*/}
 else
   SHORT_HOST=${HOST/.*/}
 fi
