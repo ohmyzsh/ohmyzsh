@@ -54,7 +54,7 @@ bundle_install() {
   if _bundler-installed && _within-bundled-project; then
     local bundler_version=`bundle version | cut -d' ' -f3`
     if [[ $bundler_version > '1.4.0' || $bundler_version = '1.4.0' ]]; then
-      if [[ "$(uname)" == 'Darwin' ]]
+      if [[ "$OSTYPE" = darwin* ]]
       then
         local cores_num="$(sysctl hw.ncpu | awk '{print $2}')"
       else
