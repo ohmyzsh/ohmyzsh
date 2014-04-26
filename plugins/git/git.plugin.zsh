@@ -119,6 +119,44 @@ function current_repository() {
   echo $(git remote -v | cut -d':' -f 2)
 }
 
+#
+# Massive listing of all the git repositories.
+# You should run that from your coding repo, such as ~/code.
+#
+
+gpull()
+{
+    find -type d -name ".git" > ~/repos.list
+    cd ~/
+    for f in  $( < repos.list); 
+    do  
+        cd $(dirname ${f})
+        echo "[+] $(pwd) [+]"
+        git pull
+        cd ~/
+    done
+
+}
+
+#
+# This function takes the input from a file
+# created by a command like $(find -type d -name ".git" > ~/myrepos)
+#
+
+gpush()
+{
+    cd ~/
+    [[ -f myrepos ]] || echo -e "warning, you seem to have forgotten to create your list.\n Please run (find -type d -name ".git" > ~/myrepos) and edit your file by hand to select your repos."
+    for f in $( < myrepos);
+    do  
+        cd $(dirname ${f})
+        echo "[+] $(pwd) [+]"
+        git push
+        cd ~/code/
+    done
+}
+
+
 # these aliases take advantage of the previous function
 alias ggpull='git pull origin $(current_branch)'
 compdef ggpull=git
