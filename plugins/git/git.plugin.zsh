@@ -146,7 +146,7 @@ gpull()
 gpush()
 {
     cd ~/
-    [[ -f myrepos ]] || echo -e "warning, you seem to have forgotten to create your list.\n Please run (find -type d -name ".git" > ~/myrepos) and edit your file by hand to select your repos."
+    [[ -f myrepos ]] || echo -e "warning, you seem to have forgotten to create your list.\n Please run $(find -type d -name ".git" > ~/myrepos) and edit your file by hand to select your repos."
     for f in $( < myrepos);
     do  
         cd $(dirname ${f})
