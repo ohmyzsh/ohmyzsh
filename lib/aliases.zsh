@@ -33,10 +33,3 @@ alias l='ls -lah'
 alias ll='ls -lh'
 alias la='ls -lAh'
 alias sl=ls # often screw this up
-
-# Git aliases
-alias gita='git add -A'
-alias gits='git st'
-alias gitl='git l'
-alias gitw='git who'
-alias gitt='git tags'

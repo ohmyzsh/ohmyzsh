@@ -6,7 +6,7 @@ ZSH=$HOME/.oh-my-zsh
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
 # ZSH_THEME="afowler"
-ZSH_THEME="mh"
+ZSH_THEME="cadusk"
 
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
@@ -40,6 +40,7 @@ if [ -z "$LC_ALL" ]; then export LC_ALL=en_US.UTF-8; fi
 if [ -z "$LANG" ]; then export LANG=en_US.UTF-8; fi
 
 if [ -e $HOME/bin ]; then export PATH="$HOME/bin:$PATH"; fi
+if [ -e $HOME/.local/bin ]; then export PATH="$HOME/.local/bin:$PATH"; fi
 if [ -e $HOME/appengine ]; then export PATH="$HOME/appengine:$PATH"; fi
 if [ -e $HOME/.cabal/bin ]; then export PATH="$HOME/.cabal/bin:$PATH"; fi
 
