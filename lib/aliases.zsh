@@ -34,3 +34,4 @@ alias sl=ls # often screw this up
 
 alias afind='ack-grep -il'
 
+alias ios='open /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
