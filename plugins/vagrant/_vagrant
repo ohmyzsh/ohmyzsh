@@ -14,6 +14,8 @@ _1st_arguments=(
     'provision:Run the provisioner'
     'reload:Reload the vagrant environment'
     'resume:Resumes a suspend vagrant environment'
+    'rsync:Watches all local directories of any rsync synced folders'
+    'rsync-auto:Initiates an rsync transfer'
     'ssh:SSH into the currently running environment'
     'ssh-config:outputs .ssh/config valid syntax for connecting to this environment via ssh.'
     'status:Shows the status of the current Vagrant environment.'
