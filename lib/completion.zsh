@@ -44,7 +44,11 @@ zstyle ':completion:*:*:*:users' ignored-patterns \
         named netdump news nfsnobody nobody nscd ntp nut nx obsrun openvpn \
         operator pcap polkitd postfix postgres privoxy pulse pvm quagga radvd \
         rpc rpcuser rpm rtkit scard shutdown squid sshd statd svn sync tftp \
-        usbmux uucp vcsa wwwrun xfs
+        usbmux uucp vcsa wwwrun xfs '_*'
+
+# Do not complete things beginning with _
+zstyle ':completion:*:functions' ignored-patterns '_*'
+zstyle ':completion:*:parameters' ignored-patterns '_*'
 
 # ... unless we really want to.
 zstyle '*' single-ignored show
