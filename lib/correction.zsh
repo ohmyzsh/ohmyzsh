@@ -1,5 +1,7 @@
 alias man='nocorrect man'
 alias mv='nocorrect mv'
+alias ln='nocorrect ln'
+alias cp='nocorrect cp'
 alias mysql='nocorrect mysql'
 alias mkdir='nocorrect mkdir'
 alias gist='nocorrect gist'
