@@ -1,7 +1,6 @@
 # cadusk ZSH Theme - customized on top of avit theme
 
-PROMPT='
-$(_user_host) ${_current_dir} $(git_prompt_info)
+PROMPT='[$(_user_host) ${_current_dir}] $(git_prompt_info)
 $ '
 PROMPT2='%{$fg[white]%}$%{$reset_color%} '
 
