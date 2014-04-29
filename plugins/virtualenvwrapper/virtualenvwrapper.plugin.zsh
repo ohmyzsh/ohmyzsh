@@ -1,4 +1,6 @@
-virtualenvwrapper='virtualenvwrapper.sh'
+virtualenvwrapper='virtualenvwrapper_lazy.sh'
+[[ $+commands[$virtualenvwrapper] -eq 1 ]] || virtualenvwrapper='virtualenvwrapper.sh'
+
 if (( $+commands[$virtualenvwrapper] )); then
   source ${${virtualenvwrapper}:c}
 
