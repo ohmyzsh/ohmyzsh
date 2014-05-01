@@ -73,7 +73,7 @@ local -a formulae installed_formulae installed_taps outdated_formulae running_se
 _arguments \
   '(-v)-v[verbose]' \
   '(--cellar)--cellar[brew cellar]' \
-  '(--config)--config[brew configuration]' \
+  '(config)--config[brew configuration]' \
   '(--env)--env[brew environment]' \
   '(--repository)--repository[brew repository]' \
   '(--version)--version[version information]' \
