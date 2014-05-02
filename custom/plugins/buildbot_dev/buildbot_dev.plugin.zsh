@@ -75,7 +75,8 @@ function bb_repo_upload()
                olivier.monnier@intel.com\
                remy.protat@intel.com\
                gaetan.semet@intel.com\
-               pierre.tardy@intel.com)
+               pierre.tardy@intel.com\
+               john.l.villalovos@intel.com)
     RE_LIST=$(printf -- '%s,' ${REVIEWERS[@]})
     RE_LIST=${RE_LIST%,}
     echo "Reviewers: $RE_LIST"
