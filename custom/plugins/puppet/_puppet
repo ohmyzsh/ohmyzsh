@@ -93,6 +93,18 @@ _apply_arguments=(
   '--write-catalog-summary:<file> After compiling the catalog saves the resource list and classes list'
 )
 
+local -a _ca_arguments
+_ca_arguments=(
+  'destroy:undocumented action'
+  'fingerprint:undocumented action'
+  'generate:undocumented action'
+  'list:List certificates and/or certificate requests'
+  'print:undocumented action'
+  'revoke:undocumented action'
+  'sign:undocumented action'
+  'verify:undocumented action'
+)
+
 __task_list ()
 {
     local expl
@@ -137,6 +149,23 @@ __puppet-apply ()
   esac
 }
 
+__puppet-ca ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _ca_arguments
+      return
+    ;;
+  esac
+}
+
 
 
 local expl
@@ -170,6 +199,11 @@ case $state in
       # Display sub-commands for puppet apply.
       (apply)
           __puppet-apply
+      ;;
+
+      # Display sub-commands for puppet ca.
+      (ca)
+          __puppet-ca
       ;;
     esac
   ;;
