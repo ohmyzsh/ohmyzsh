@@ -1,0 +1,136 @@
+#compdef puppet 
+#autoload
+
+#set -x
+
+# puppet zsh completion
+
+local -a _1st_arguments
+_1st_arguments=(
+  'agent:The puppet agent daemon'
+  'apply:Apply Puppet manifests locally'
+  'ca:Local Puppet Certificate Authority management.'
+  'catalog:Compile, save, view, and convert catalogs'
+  'cert:Manage certificates and requests'
+  'certificate:Provide access to the CA for certificate management'
+  'certificate_request:Manage certificate requests'
+  'certificate_revocation_list:Manage the list of revoked certificates'
+  'config:Interact with Puppet settings'
+  'describe:Display help about resource types'
+  'device:Manage remote network devices'
+  'doc:Generate Puppet documentation and references'
+  'facts:Retrieve and store facts'
+  'file:Retrieve and store files in a filebucket'
+  'filebucket:Store and retrieve files in a filebucket'
+  'help:Display Puppet help'
+  'inspect:Send an inspection report'
+  'instrumentation_data:Manage instrumentation listener accumulated data'
+  'instrumentation_listener:Manage instrumentation listeners'
+  'instrumentation_probe:Manage instrumentation probes'
+  'key:Create, save, and remove certificate keys'
+  'kick:Remotely control puppet agent'
+  'man:Display Puppet manual pages'
+  'master:The puppet master daemon'
+  'module:Creates, installs and searches for modules on the Puppet Forge'
+  'node:View and manage node definitions'
+  'parser:Interact directly with the parser'
+  'plugin:Interact with the Puppet plugin system'
+  'queue:Deprecated queuing daemon for asynchronous storeconfigs'
+  'report:Create, display, and submit reports'
+  'resource:The resource abstraction layer shell'
+  'resource_type:View classes, defined resource types, and nodes from all manifests'
+  'secret_agent:Mimics puppet agent'
+  'status:View puppet server status'
+)
+
+local -a _agent_arguments
+_agent_arguments=(
+  '--certname:<name> Set the certname of the client'
+  '-D:Send process to background (daemonize)'
+  '--daemonize:Send process to background (daemonize)'
+  '--no-daemonize:Do not send process to background'
+  '-d:Enable full debugging'
+  '--debug:Enable full debugging'
+  '--detailed-exitcodes:Provide transaction information via exit codes'
+  '--digest:<digest> Change the certificate fingerprinting digest algorithm'
+  '--disable:<message> Disable working on the local system'
+  '--enable:Enable working on the local system'
+  '--fingerprint:Display the current certificate or certificate signing request fingerprint and then exit'
+  '-h:Print this help message'
+  '--help:Print this help message'
+  '-l:syslog|<file>|console Where to send messages'
+  '--logdest:syslog|<file>|console Where to send messages'
+  '--no-client:Do not create a config client'
+  '--masterport:The port on which to contact the puppet master'
+  '--noop:Use "noop" mode where the daemon runs in a no-op or dry-run mode'
+  '-o:Run the configuration once'
+  '--onetime:Run the configuration once'
+  '-t:Enable the most common options used for testing'
+  '--test:Enable the most common options used for testing'
+  '-v:Turn on verbose reporting'
+  '--verbose:Turn on verbose reporting'
+  '-V:Print the puppet version number and exit'
+  '--version:Print the puppet version number and exit'
+  '-w:This option only matters for daemons that do not yet have certificates'
+  '--waitforcert:<seconds> This option only matters for daemons that do not yet have certificates'
+)
+
+__task_list ()
+{
+    local expl
+    declare -a tasks
+
+    tasks=(agent apply ca catalog cert certificate certificate_revocation_list config describe device doc facts file filebucket help inspect instrumentation_data instrumentation_listener instrumentation_probe key kick man master module node parser plugin queue report resource resource_type secret_agent status)
+
+    _wanted tasks expl 'help' compadd $tasks
+}
+
+__puppet-agent ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _agent_arguments
+      return
+    ;;
+    esac
+}
+
+
+
+local expl
+#local -a boxes installed_boxes
+
+local curcontext="$curcontext" state line
+typeset -A opt_args
+
+_arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+case $state in
+  (command)
+      _describe -t commands "gem subcommand" _1st_arguments
+      return
+  ;;
+
+  (options)
+    case $line[1] in
+      # Auto-complete help for top-level command sub-commands e.g. puppet help agent, puppet help apply.
+      (help)
+         _arguments ':feature:__task_list' 
+      ;;
+
+      # Display sub-commands for puppet agent.
+      (agent)
+          __puppet-agent
+      ;;
+    esac
+  ;;
+esac
