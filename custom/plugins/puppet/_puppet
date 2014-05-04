@@ -75,6 +75,24 @@ _agent_arguments=(
   '--waitforcert:<seconds> This option only matters for daemons that do not yet have certificates'
 )
 
+local -a _apply_arguments
+_apply_arguments=(
+  '-h:Print this help message'
+  '--help:Print this help message'
+  '-d:Enable full debugging'
+  '--debug:Enable full debugging'
+  '-v:Print extra information'
+  '--verbose:Print extra information'
+  '-e:Execute a specific piece of Puppet code'
+  '--execute:Execute a specific piece of Puppet code'
+  '--detailed-exitcodes:'
+  '-l:Where to send messages'
+  '--logdest:<file> Where to send messages'
+  '--noop:Use "noop" mode where Puppet runs in a no-op or dry-run mode'
+  '--catalog:<catalog>: Apply a JSON catalog (such as one generated with "puppet master --compile)"'
+  '--write-catalog-summary:<file> After compiling the catalog saves the resource list and classes list'
+)
+
 __task_list ()
 {
     local expl
@@ -100,6 +118,23 @@ __puppet-agent ()
       return
     ;;
     esac
+}
+
+__puppet-apply ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _apply_arguments
+      return
+    ;;
+  esac
 }
 
 
@@ -130,6 +165,11 @@ case $state in
       # Display sub-commands for puppet agent.
       (agent)
           __puppet-agent
+      ;;
+
+      # Display sub-commands for puppet apply.
+      (apply)
+          __puppet-apply
       ;;
     esac
   ;;
