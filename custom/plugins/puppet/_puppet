@@ -118,6 +118,19 @@ _catalog_arguments=(
   '--debug:Whether to log debug information'
 )
 
+local -a _cert_arguments
+_cert_arguments=(
+  "clean:'Revoke a host's certificate (if applicable) and remove all files related to that host from puppet cert's storage"
+  'fingerprint:Print the DIGEST (defaults to the signing algorithm) fingerprint of a host's certificate'
+  'generate:Generate a certificate for a named client'
+  'list:List outstanding certificate requests'
+  "print:Print the full-text version of a host's certificate."
+  'revoke:Revoke the certificate of a client'
+  'sign:Sign an outstanding certificate request'
+  'verify:Verify the named certificate against the local CA certificate'
+  'reinventory:Build an inventory of the issued certificates'
+)
+
 __task_list ()
 {
     local expl
@@ -196,6 +209,23 @@ __puppet-catalog ()
   esac
 }
 
+__puppet-cert ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _cert_arguments
+      return
+    ;;
+  esac
+}
+
 
 
 local expl
@@ -239,6 +269,11 @@ case $state in
       # Display sub-commands for puppet catalog.
       (catalog)
           __puppet-catalog
+      ;;
+
+      # Display sub-commands for puppet cert.
+      (cert)
+          __puppet-cert
       ;;
     esac
   ;;
