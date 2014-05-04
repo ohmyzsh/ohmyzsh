@@ -7,7 +7,13 @@ ZSH_THEME_GIT_PROMPT_CLEAN=""
 git_custom_status() {
   local cb=$(current_branch)
   if [ -n "$cb" ]; then
-    echo "$(parse_git_dirty)%{$fg_bold[yellow]%}$(work_in_progress)%{$reset_color%}$ZSH_THEME_GIT_PROMPT_PREFIX$(current_branch)$ZSH_THEME_GIT_PROMPT_SUFFIX"
+    if type "virtualenv_prompt_info" > /dev/null
+    then
+      #RPS1='$(virtualenv_prompt_info) $(git_custom_status) $EPS1'
+	  echo "$(virtualenv_prompt_info)$(parse_git_dirty)%{$fg_bold[yellow]%}$(work_in_progress)%{$reset_color%}$ZSH_THEME_GIT_PROMPT_PREFIX$(current_branch)$ZSH_THEME_GIT_PROMPT_SUFFIX"
+    else
+      echo "$(parse_git_dirty)%{$fg_bold[yellow]%}$(work_in_progress)%{$reset_color%}$ZSH_THEME_GIT_PROMPT_PREFIX$(current_branch)$ZSH_THEME_GIT_PROMPT_SUFFIX"
+    fi
   fi
 }
 
