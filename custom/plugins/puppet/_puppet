@@ -120,8 +120,8 @@ _catalog_arguments=(
 
 local -a _cert_arguments
 _cert_arguments=(
-  "clean:'Revoke a host's certificate (if applicable) and remove all files related to that host from puppet cert's storage"
-  'fingerprint:Print the DIGEST (defaults to the signing algorithm) fingerprint of a host's certificate'
+  "clean:Revoke a host's certificate (if applicable) and remove all files related to that host from puppet cert's storage"
+  "fingerprint:Print the DIGEST (defaults to the signing algorithm) fingerprint of a host's certificate"
   'generate:Generate a certificate for a named client'
   'list:List outstanding certificate requests'
   "print:Print the full-text version of a host's certificate."
