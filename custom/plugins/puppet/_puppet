@@ -221,6 +221,18 @@ _doc_arguments=(
   "--charset: <charset> Used only in 'rdoc' mode"
 )
 
+local -a _facts_arguments
+_facts_arguments=(
+  "find:Retrieve a node's facts"
+  'info:Print the default terminus class for this face'
+  'save:API only: create or overwrite an object'
+  '--render-as:FORMAT The rendering format to use'
+  '--verbose:Whether to log verbosely'
+  '--debug:Whether to log debug information'
+  '--extra:HASH Extra arguments to pass to the indirection request'
+  '--terminus: TERMINUS The indirector terminus to use'
+)
+
 __task_list ()
 {
     local expl
@@ -418,6 +430,23 @@ __puppet-doc ()
   esac
 }
 
+__puppet-facts ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _facts_arguments
+      return
+    ;;
+  esac
+}
+
 
 
 local expl
@@ -496,6 +525,11 @@ case $state in
       # Display sub-commands for puppet doc.
       (doc)
           __puppet-doc
+      ;;
+
+      # Display sub-commands for puppet facts.
+      (facts)
+          __puppet-facts
       ;;
     esac
   ;;
