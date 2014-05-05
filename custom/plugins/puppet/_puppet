@@ -299,6 +299,21 @@ _instrumentation_listener_arguments=(
   '--terminus: TERMINUS The indirector terminus to use'
 )
 
+local -a _instrumentation_probe_arguments
+_instrumentation_probe_arguments=(
+  'destroy:API only: disable all instrumentation probes'
+  'disable:Disable all instrumentation probes'
+  'enable:Enable all instrumentation probes'
+  'info:Print the default terminus class for this face'
+  'save:API only: enable all instrumentation probes'
+  'search:Retrieve all probe statuses'
+  '--render-as:FORMAT The rendering format to use'
+  '--verbose:Whether to log verbosely'
+  '--debug:Whether to log debug information'
+  '--extra:HASH Extra arguments to pass to the indirection request'
+  '--terminus: TERMINUS The indirector terminus to use'
+)
+
 
 __task_list ()
 {
@@ -599,6 +614,23 @@ __puppet-instrumentation_listener ()
   esac
 }
 
+__puppet-instrumentation_probe ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _instrumentation_probe_arguments
+      return
+    ;;
+  esac
+}
+
 
 
 local expl
@@ -707,6 +739,11 @@ case $state in
       # Display sub-commands for puppet instrumentation_listener.
       (instrumentation_listener)
           __puppet-instrumentation_listener
+      ;;
+
+      # Display sub-commands for puppet instrumentation_probe.
+      (instrumentation_probe)
+          __puppet-instrumentation_probe
       ;;
     esac
   ;;
