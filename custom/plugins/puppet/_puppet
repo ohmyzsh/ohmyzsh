@@ -392,6 +392,18 @@ _module_arguments=(
   '--modulepath:$basemodulepath The search path for modules'
 )
 
+local -a _node_arguments
+_node_arguments=(
+  'clean:Clean up everything a puppetmaster knows about a node'
+  'find:Retrieve a node object'
+  'info:Print the default terminus class for this face'
+  '--render-as:FORMAT The rendering format to use'
+  '--verbose:Whether to log verbosely'
+  '--debug:Whether to log debug information'
+  '--extra:HASH Extra arguments to pass to the indirection request'
+  '--terminus: TERMINUS The indirector terminus to use'
+)
+
 
 
 __task_list ()
@@ -795,6 +807,23 @@ __puppet-module ()
   esac
 }
 
+__puppet-node ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _node_arguments
+      return
+    ;;
+  esac
+}
+
 
 
 local expl
@@ -933,6 +962,11 @@ case $state in
       # Display sub-commands for puppet module.
       (module)
           __puppet-module
+      ;;
+
+      # Display sub-commands for puppet node.
+      (node)
+          __puppet-node
       ;;
     esac
   ;;
