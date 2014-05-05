@@ -131,6 +131,16 @@ _cert_arguments=(
   'reinventory:Build an inventory of the issued certificates'
 )
 
+local -a _certificate_arguments
+_certificate_arguments=(
+  'destroy:Delete a certificate'
+  'find:Retrieve a certificate'
+  'generate:Generate a new certificate signing request'
+  'info:Print the default terminus class for this face'
+  'list:List all certificate signing requests'
+  'sign:Sign a certificate signing request for HOST'
+)
+
 __task_list ()
 {
     local expl
@@ -226,6 +236,23 @@ __puppet-cert ()
   esac
 }
 
+__puppet-certificate ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _certificate_arguments
+      return
+    ;;
+  esac
+}
+
 
 
 local expl
@@ -274,6 +301,11 @@ case $state in
       # Display sub-commands for puppet cert.
       (cert)
           __puppet-cert
+      ;;
+
+      # Display sub-commands for puppet certificate.
+      (certificate)
+          __puppet-certificate
       ;;
     esac
   ;;
