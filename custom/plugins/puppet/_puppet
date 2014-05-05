@@ -189,6 +189,23 @@ _describe_arguments=(
   '--short:List only parameters without detail'
 )
 
+local -a _device_arguments
+_device_arguments=(
+  '-d:Enable full debugging'
+  '--debug:Enable full debugging'
+  '--detailed-exitcodes:Provide transaction information via exit codes'
+  '-V:Print the puppet version number and exit'
+  '--version:Print the puppet version number and exit'
+  '-h:Print this help message'
+  '--help:Print this help message'
+  '-l:Where to send messages'
+  '--logdest: syslog|<file>|console Where to send messages'
+  '-v:Turn on verbose reporting'
+  '--verbose:Turn on verbose reporting'
+  '-w:<seconds> This option only matters for daemons that do not yet have certificates'
+  '--waitforcert:<seconds> This option only matters for daemons that do not yet have certificates'
+)
+
 __task_list ()
 {
     local expl
@@ -352,6 +369,23 @@ __puppet-describe ()
   esac
 }
 
+__puppet-device ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _device_arguments
+      return
+    ;;
+  esac
+}
+
 
 
 local expl
@@ -420,6 +454,11 @@ case $state in
       # Display sub-commands for puppet describe.
       (describe)
           __puppet-describe
+      ;;
+
+      # Display sub-commands for puppet device.
+      (device)
+          __puppet-device
       ;;
     esac
   ;;
