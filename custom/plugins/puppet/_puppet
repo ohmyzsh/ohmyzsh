@@ -152,7 +152,7 @@ _certificate_arguments=(
   '--verbose:Whether to log verbosely'
   '--debug:Whether to log debug information'
   '--ca-location: LOCATION Which certificate authority to use (local or remote)'
-  '--extra HASH:Extra arguments to pass to the indirection request'
+  '--extra:HASH Extra arguments to pass to the indirection request'
   '--terminus: TERMINUS The indirector terminus to use'
 )
 
