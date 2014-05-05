@@ -267,6 +267,12 @@ _filebucket_arguments=(
   '--bucket:<directory> undocumented action'
 )
 
+local -a _inspect_arguments
+_inspect_arguments=(
+  '--archive_files:During an inspect run, whether to archive files whose contents are audited to a file bucket'
+  '--archive_file_server:During an inspect run, the file bucket server to archive files to if archive_files is set'
+)
+
 
 __task_list ()
 {
@@ -516,6 +522,23 @@ __puppet-filebucket ()
   esac
 }
 
+__puppet-inspect ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _inspect_arguments
+      return
+    ;;
+  esac
+}
+
 
 
 local expl
@@ -606,9 +629,14 @@ case $state in
           __puppet-file
       ;;
 
-      # Display sub-commands for puppet file.
+      # Display sub-commands for puppet filebucket.
       (filebucket)
           __puppet-filebucket
+      ;;
+
+      # Display sub-commands for puppet inspect.
+      (inspect)
+          __puppet-inspect
       ;;
     esac
   ;;
