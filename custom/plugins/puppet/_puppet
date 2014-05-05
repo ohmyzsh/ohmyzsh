@@ -158,15 +158,15 @@ _certificate_arguments=(
 
 local -a _certificate_revocation_list_arguments
 _certificate_revocation_list_arguments=(
-  destroy    Delete the certificate revocation list.
-  find       Retrieve the certificate revocation list.
-  info       Print the default terminus class for this face.
-  save       Invalid for this subcommand.
-  search     Invalid for this subcommand.
+  'destroy:Delete the certificate revocation list'
+  'find:Retrieve the certificate revocation list'
+  'info:Print the default terminus class for this face'
+  'save:Invalid for this subcommand'
+  'search:Invalid for this subcommand'
   '--render-as:FORMAT The rendering format to use'
   '--verbose:Whether to log verbosely'
   '--debug:Whether to log debug information'
-  '--extra HASH:Extra arguments to pass to the indirection request'
+  '--extra:HASH Extra arguments to pass to the indirection request'
   '--terminus: TERMINUS The indirector terminus to use'
 )
 
@@ -355,7 +355,7 @@ case $state in
       ;;
 
       # Display sub-commands for puppet certificate_revocation_list.
-      (certificate)
+      (certificate_revocation_list)
           __puppet-certificate_revocation_list
       ;;
     esac
