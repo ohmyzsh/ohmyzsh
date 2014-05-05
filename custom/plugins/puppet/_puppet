@@ -273,6 +273,17 @@ _inspect_arguments=(
   '--archive_file_server:During an inspect run, the file bucket server to archive files to if archive_files is set'
 )
 
+local -a _instrumentation_data_arguments
+_instrumentation_data_arguments=(
+  'find:Retrieve listener data'
+  'info:Print the default terminus class for this face'
+  '--render-as:FORMAT The rendering format to use'
+  '--verbose:Whether to log verbosely'
+  '--debug:Whether to log debug information'
+  '--extra:HASH Extra arguments to pass to the indirection request'
+  '--terminus: TERMINUS The indirector terminus to use'
+)
+
 
 __task_list ()
 {
@@ -539,6 +550,23 @@ __puppet-inspect ()
   esac
 }
 
+__puppet-instrumentation_data ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _instrumentation_data_arguments
+      return
+    ;;
+  esac
+}
+
 
 
 local expl
@@ -637,6 +665,11 @@ case $state in
       # Display sub-commands for puppet inspect.
       (inspect)
           __puppet-inspect
+      ;;
+
+      # Display sub-commands for puppet instrumentation_data.
+      (instrumentation_data)
+          __puppet-instrumentation_data
       ;;
     esac
   ;;
