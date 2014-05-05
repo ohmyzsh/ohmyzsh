@@ -247,6 +247,26 @@ _file_arguments=(
   '--terminus: TERMINUS The indirector terminus to use'
 )
 
+local -a _filebucket_arguments
+_filebucket_arguments=(
+  '-h:Print this help message'
+  '--help:Print this help message'
+  '-V:Print version information'
+  '--version:Print version information'
+  '-d:Enable full debugging'
+  '--debug:Enable full debugging'
+  '-v:Print extra information'
+  '--verbose:Print extra information'
+  '-l:Use the local filebucket'
+  '--local:Use the local filebucket'
+  '-r:Use a remote filebucket'
+  '--remote:Use a remote filebucket'
+  '-s:<server> The server to send the file to, instead of locally'
+  '-server:<server> The server to send the file to, instead of locally'
+  '-b:<directory> undocumented action'
+  '--bucket:<directory> undocumented action'
+)
+
 
 __task_list ()
 {
@@ -479,6 +499,23 @@ __puppet-file ()
   esac
 }
 
+__puppet-filebucket ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _filebucket_arguments
+      return
+    ;;
+  esac
+}
+
 
 
 local expl
@@ -567,6 +604,11 @@ case $state in
       # Display sub-commands for puppet file.
       (file)
           __puppet-file
+      ;;
+
+      # Display sub-commands for puppet file.
+      (filebucket)
+          __puppet-filebucket
       ;;
     esac
   ;;
