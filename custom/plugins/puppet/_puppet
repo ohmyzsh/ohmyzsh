@@ -131,6 +131,13 @@ _cert_arguments=(
   'sign:Sign an outstanding certificate request'
   'verify:Verify the named certificate against the local CA certificate'
   'reinventory:Build an inventory of the issued certificates'
+  '-h:Print this help message'
+  '--help:Print this help message'
+  '-V:Print the puppet version number and exit'
+  '--version:Print the puppet version number and exit'
+  '--verbose:Whether to log verbosely'
+  '--debug:Whether to log debug information'
+  '--digest:Set the digest for fingerprinting'
 )
 
 local -a _certificate_arguments
