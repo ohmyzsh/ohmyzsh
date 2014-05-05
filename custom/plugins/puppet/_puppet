@@ -148,6 +148,21 @@ _certificate_arguments=(
   'info:Print the default terminus class for this face'
   'list:List all certificate signing requests'
   'sign:Sign a certificate signing request for HOST'
+  '--render-as:FORMAT The rendering format to use'
+  '--verbose:Whether to log verbosely'
+  '--debug:Whether to log debug information'
+  '--ca-location: LOCATION Which certificate authority to use (local or remote)'
+  '--extra HASH:Extra arguments to pass to the indirection request'
+  '--terminus: TERMINUS The indirector terminus to use'
+)
+
+local -a _certificate_revocation_list_arguments
+_certificate_revocation_list_arguments=(
+  destroy    Delete the certificate revocation list.
+  find       Retrieve the certificate revocation list.
+  info       Print the default terminus class for this face.
+  save       Invalid for this subcommand.
+  search     Invalid for this subcommand.
 )
 
 __task_list ()
