@@ -233,6 +233,21 @@ _facts_arguments=(
   '--terminus: TERMINUS The indirector terminus to use'
 )
 
+local -a _file_arguments
+_file_arguments=(
+  'download:Download a file into the local filebucket'
+  'find:Retrieve a file from the filebucket'
+  'info:Print the default terminus class for this face'
+  'save:API only: create or overwrite an object'
+  'store:Store a file in the local filebucket'
+  '--render-as:FORMAT The rendering format to use'
+  '--verbose:Whether to log verbosely'
+  '--debug:Whether to log debug information'
+  '--extra:HASH Extra arguments to pass to the indirection request'
+  '--terminus: TERMINUS The indirector terminus to use'
+)
+
+
 __task_list ()
 {
     local expl
@@ -447,6 +462,23 @@ __puppet-facts ()
   esac
 }
 
+__puppet-file ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _file_arguments
+      return
+    ;;
+  esac
+}
+
 
 
 local expl
@@ -530,6 +562,11 @@ case $state in
       # Display sub-commands for puppet facts.
       (facts)
           __puppet-facts
+      ;;
+
+      # Display sub-commands for puppet file.
+      (file)
+          __puppet-file
       ;;
     esac
   ;;
