@@ -328,6 +328,28 @@ _key_arguments=(
   '--terminus: TERMINUS The indirector terminus to use'
 )
 
+local -a _kick_arguments
+_kick_arguments=(
+  '-a:Connect to all available hosts. Requires LDAP support at this point'
+  '--all:Connect to all available hosts. Requires LDAP support at this point'
+  '-c:<class> Specify a class of machines to which to connect. This only works if you have LDAP configured, at the moment'
+  '--class:<class> Specify a class of machines to which to connect. This only works if you have LDAP configured, at the moment'
+  '-d:Enable full debugging'
+  '--debug:Enable full debugging'
+  '-f:Run each configuration in the foreground'
+  '--foreground:Run each configuration in the foreground'
+  '-h:Print this help message'
+  '--help:Print this help message'
+  '--host:<host> A specific host to which to connect'
+  '--no-fqdn:undocumented action'
+  '--ignoreschedules:Whether the client should ignore schedules when running its configuration'
+  '-t:<tag> Specify a tag for selecting the objects to apply'
+  '--tag:<tag> Specify a tag for selecting the objects to apply'
+  '--test:Print the hosts you would connect to but do not actually connect'
+  '-p:Do an ICMP echo against the target host'
+  '--ping:Do an ICMP echo against the target host'
+)
+
 
 __task_list ()
 {
@@ -662,6 +684,23 @@ __puppet-key ()
   esac
 }
 
+__puppet-kick ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _kick_arguments
+      return
+    ;;
+  esac
+}
+
 
 
 local expl
@@ -780,6 +819,11 @@ case $state in
       # Display sub-commands for puppet key.
       (key)
           __puppet-key
+      ;;
+
+      # Display sub-commands for puppet kick.
+      (kick)
+          __puppet-kick
       ;;
     esac
   ;;
