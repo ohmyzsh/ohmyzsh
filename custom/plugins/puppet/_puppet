@@ -470,6 +470,17 @@ _secret_agent_arguments=(
   '--debug:Whether to log debug information'
 )
 
+local -a _status_arguments
+_status_arguments=(
+  'find:Check status of puppet master server'
+  'info:Print the default terminus class for this face'
+  '--render-as:FORMAT The rendering format to use'
+  '--verbose:Whether to log verbosely'
+  '--debug:Whether to log debug information'
+  '--extra:HASH Extra arguments to pass to the indirection request'
+  '--terminus: TERMINUS The indirector terminus to use'
+)
+
 
 
 __task_list ()
@@ -992,6 +1003,23 @@ __puppet-secret_agent ()
   esac
 }
 
+__puppet-status ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _status_arguments
+      return
+    ;;
+  esac
+}
+
 
 
 local expl
@@ -1165,6 +1193,11 @@ case $state in
       # Display sub-commands for puppet secret_agent.
       (secret_agent)
           __puppet-secret_agent
+      ;;
+
+      # Display sub-commands for puppet status.
+      (status)
+          __puppet-status
       ;;
     esac
   ;;
