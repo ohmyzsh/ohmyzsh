@@ -432,6 +432,24 @@ _report_arguments=(
   '--terminus: TERMINUS The indirector terminus to use'
 )
 
+local -a _resource_arguments
+_resource_arguments=(
+  '-h:Print this help message'
+  '--help:Print this help message'
+  '-d:Enable full debugging'
+  '--debug:Enable full debugging'
+  '-v:Print extra information'
+  '--verbose:Print extra information'
+  '-e:Write the results of the query to a file'
+  '--edit:Write the results of the query to a file'
+  '-H:<host> When specified, connect to the resource server on the named host and retrieve the list of resouces of the type specified'
+  '--host:<host> When specified, connect to the resource server on the named host and retrieve the list of resouces of the type specified'
+  '-p:<parameter> Add more parameters to be outputted from queries'
+  '--param:<parameter> Add more parameters to be outputted from queries'
+  '-t:<type>List all available types'
+  '--types:<type>List all available types'
+)
+
 
 
 __task_list ()
@@ -903,6 +921,23 @@ __puppet-report ()
   esac
 }
 
+__puppet-resource ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _resource_arguments
+      return
+    ;;
+  esac
+}
+
 
 
 local expl
@@ -1061,6 +1096,11 @@ case $state in
       # Display sub-commands for puppet report.
       (report)
           __puppet-report
+      ;;
+
+      # Display sub-commands for puppet resource.
+      (resource)
+          __puppet-resource
       ;;
     esac
   ;;
