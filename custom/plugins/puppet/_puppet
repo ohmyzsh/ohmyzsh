@@ -180,6 +180,15 @@ _config_arguments=(
   '--section:SECTION_NAME The section of the configuration file to interact with'
 )
 
+local -a _describe_arguments
+_describe_arguments=(
+  '--help:Print this help text'
+  '--providers:Describe providers in detail for each type'
+  '--list:List all types'
+  '--meta:List all metaparameters'
+  '--short:List only parameters without detail'
+)
+
 __task_list ()
 {
     local expl
@@ -326,6 +335,23 @@ __puppet-config ()
   esac
 }
 
+__puppet-describe ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _describe_arguments
+      return
+    ;;
+  esac
+}
+
 
 
 local expl
@@ -389,6 +415,11 @@ case $state in
       # Display sub-commands for puppet config.
       (config)
           __puppet-config
+      ;;
+
+      # Display sub-commands for puppet describe.
+      (describe)
+          __puppet-describe
       ;;
     esac
   ;;
