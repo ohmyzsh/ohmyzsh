@@ -358,6 +358,25 @@ _man_arguments=(
   '--debug:Whether to log debug information'
 )
 
+local -a _master_arguments
+_master_arguments=(
+  '-D:Send the process into the background'
+  '--daemonize:Send the process into the background'
+  '--no-daemonize:Do not send the process into the background'
+  '-d:Enable full debugging'
+  '--debug:Enable full debugging'
+  '-h:Print this help message'
+  '--help:Print this help message'
+  '-l:<file>|console|syslog Where to send messages'
+  '--logdest:<file>|console|syslog Where to send messages'
+  '-v:Enable verbosity'
+  '--verbose:Enable verbosity'
+  '-V:Print the puppet version number and exit'
+  '--version:Print the puppet version number and exit'
+  '--compile:<node-name> Compile a catalogue and output it in JSON from the puppet master'
+)
+
+
 
 __task_list ()
 {
@@ -726,6 +745,23 @@ __puppet-man ()
   esac
 }
 
+__puppet-master ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _master_arguments
+      return
+    ;;
+  esac
+}
+
 
 
 local expl
@@ -854,6 +890,11 @@ case $state in
       # Display sub-commands for puppet man.
       (man)
           __puppet-man
+      ;;
+
+      # Display sub-commands for puppet master.
+      (master)
+          __puppet-master
       ;;
     esac
   ;;
