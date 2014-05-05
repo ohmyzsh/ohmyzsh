@@ -206,6 +206,21 @@ _device_arguments=(
   '--waitforcert:<seconds> This option only matters for daemons that do not yet have certificates'
 )
 
+local -a _doc_arguments
+_doc_arguments=(
+  '-a:Output the docs for all of the reference types'
+  '--all:Output the docs for all of the reference types'
+  '-h:Print this help message'
+  '--help:Print this help message'
+  "-o: <rdoc-outputdir> Used only in 'rdoc' mode"
+  "--outputdir: <rdoc-outputdir> Used only in 'rdoc' mode"
+  '-m:text|pdf|rdoc Determine the output mode'
+  '--mode:text|pdf|rdoc Determine the output mode'
+  '-r: <reference-name> Build a particular reference'
+  '--reference: <reference-name> Build a particular reference'
+  "--charset: <charset> Used only in 'rdoc' mode"
+)
+
 __task_list ()
 {
     local expl
@@ -386,6 +401,23 @@ __puppet-device ()
   esac
 }
 
+__puppet-doc ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _doc_arguments
+      return
+    ;;
+  esac
+}
+
 
 
 local expl
@@ -459,6 +491,11 @@ case $state in
       # Display sub-commands for puppet device.
       (device)
           __puppet-device
+      ;;
+
+      # Display sub-commands for puppet doc.
+      (doc)
+          __puppet-doc
       ;;
     esac
   ;;
