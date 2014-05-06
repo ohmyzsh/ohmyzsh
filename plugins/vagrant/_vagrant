@@ -19,6 +19,7 @@ _1st_arguments=(
     'status:Shows the status of the current Vagrant environment.'
     'suspend:Suspends the currently running vagrant environment'
     'up:Creates the vagrant environment'
+    'version:Prints the currently installed Vagrant version and checks for new updates'
     '--help:[TASK] Describe available tasks or one specific task'
     '--version:Prints the Vagrant version information'
 )
