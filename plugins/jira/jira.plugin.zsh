@@ -14,6 +14,8 @@ open_jira_issue () {
   local open_cmd
   if [[ $(uname -s) == 'Darwin' ]]; then
     open_cmd='open'
+  elif [[ $(uname -o) == 'Cygwin' ]]; then
+    open_cmd='cygstart -o'
   else
     open_cmd='xdg-open'
   fi
