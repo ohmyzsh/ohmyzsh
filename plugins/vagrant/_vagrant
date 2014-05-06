@@ -10,6 +10,7 @@ _1st_arguments=(
     'destroy:Destroys the vagrant environment'
     'halt:Halts the currently running vagrant environment'
     'init:[box_name] [box_url] Initializes current folder for Vagrant usage'
+    'login:Authenticates against a Vagrant Cloud server to access protected boxes'
     'package:Packages a vagrant environment for distribution'
     'plugin:Plugin commands'
     'provision:Run the provisioner'
