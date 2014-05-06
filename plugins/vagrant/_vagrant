@@ -6,6 +6,7 @@
 local -a _1st_arguments
 _1st_arguments=(
     'box:Box commands'
+    'connect:Connects to a shared, remote Vagrant environment'
     'destroy:Destroys the vagrant environment'
     'halt:Halts the currently running vagrant environment'
     'init:[box_name] [box_url] Initializes current folder for Vagrant usage'
@@ -14,6 +15,7 @@ _1st_arguments=(
     'provision:Run the provisioner'
     'reload:Reload the vagrant environment'
     'resume:Resumes a suspend vagrant environment'
+    'share:Shares the Vagrant environment and allows remote access'
     'ssh:SSH into the currently running environment'
     'ssh-config:outputs .ssh/config valid syntax for connecting to this environment via ssh.'
     'status:Shows the status of the current Vagrant environment.'
