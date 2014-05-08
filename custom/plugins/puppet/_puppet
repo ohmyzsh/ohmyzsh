@@ -1033,7 +1033,7 @@ _arguments -C \
 
 case $state in
   (command)
-      _describe -t commands "gem subcommand" _1st_arguments
+      _describe -t commands "sub-commands" _1st_arguments
       return
   ;;
 
