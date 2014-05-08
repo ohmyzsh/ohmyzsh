@@ -1023,7 +1023,6 @@ __puppet-status ()
 
 
 local expl
-#local -a boxes installed_boxes
 
 local curcontext="$curcontext" state line
 typeset -A opt_args
