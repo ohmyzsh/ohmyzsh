@@ -1,0 +1,141 @@
+#compdef kerl
+
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for kerl (http://github.com/spawngrid/kerl
+#
+#  Source: https://github.com/sanmiguel/zsh-completions
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Michael Coles (https://github.com/sanmiguel)
+#
+# ------------------------------------------------------------------------------
+
+# TODO: These are naive and stupid
+_kerl_available_releases() {
+  # we use the file directly as `kerl list releases` dumps extraneous data to stdout
+  releases=(${(f)"$(_call_program releases cat ~/.kerl/otp_releases)"})
+}
+
+_kerl_builds() {
+  builds=(${(f)"$(_call_program builds kerl list builds 2>/dev/null | cut -f 2 -d ",")"})
+}
+
+_kerl_installations() {
+  installations=(${(f)"$(_call_program installations kerl list installations 2>/dev/null | cut -f 2 -d " ")"})
+}
+
+local -a _1st_arguments
+_1st_arguments=(
+  'build:Build specified release or git repository'
+  'install:Install the specified release at the given location'
+  'deploy:Deploy the specified installation to the given host and location'
+  'update:Update the list of available releases from erlang.org'
+  'list:List releases, builds and installations'
+  'delete:Delete builds and installations'
+  'active:Print the path of the active installation'
+  'status:Print available builds and installations'
+  'prompt:Print a string suitable for insertion in prompt'
+  'cleanup:Remove compilation artifacts (use after installation)'
+)
+
+local -a _list_options
+_list_options=(
+    'releases:All available OTP releases'
+    'builds:All locally built OTP releases'
+    'installations:All locally installed OTP builds'
+)
+local -a _update_options
+_update_options=(
+    'releases:All available OTP releases'
+)
+
+local expl
+local -a releases builds installations
+
+_arguments \
+  '*:: :->subcmds' && return 0
+
+if (( CURRENT == 1 )); then
+  _describe -t commands "kerl subcommand" _1st_arguments
+  return
+fi
+
+case "$words[1]" in
+  active) ;;
+  status) ;;
+  prompt) ;;
+  build)
+    _arguments \
+        '1: :->rels' \
+        '2: :->buildnames' && return 0
+
+        if [[ "$state" == rels ]]; then
+            _kerl_available_releases
+            _wanted releases expl 'all releases' compadd -a releases
+        elif [[ "$state" == buildnames ]]; then
+            
+        fi;;
+        # TODO: suggest build name as $(lowercase $release)
+  install)
+      _arguments \
+        '1: :->blds' \
+        '2::location:_path_files -W "(~/kerl)"' && return 0
+        ## TODO: This path should not be hard-coded!
+        
+      if [[ "$state" == blds ]]; then
+        _kerl_builds
+        _wanted builds expl 'all builds' compadd -a builds
+        return
+      fi
+      # TODO: suggest starting location of "$KERLDIR/$(lowercase $build)"
+      _directories
+      ;;
+  deploy) 
+      _arguments \
+          '1: :->hosts' \
+          '2: :->installs' && return 0
+      
+      if [[ "$state" == hosts ]]; then
+          _hosts
+          return
+      elif [[ "$state" == installs ]]; then
+          _kerl_installations
+          _wanted installations expl 'all installations' compadd -a installations
+          return
+      fi
+      ;; # TODO: [remote directory] (or at least prompt)
+  update) 
+      _arguments '1: :->updopts' && return 0
+      if [[ "$state" == updopts ]]; then _describe "kerl update options" _update_options; fi
+      ;;
+  list)
+      _arguments '1: :->listopts' && return 0
+      if [[ "$state" == listopts ]]; then _describe "kerl list options" _list_options; fi
+      ;;
+  delete) 
+      _arguments \
+          '1:<build|installation>:(build installation)'  && return 0
+
+      case "$words[2]" in
+          build)
+              _kerl_builds
+              _wanted builds expl 'all builds' compadd -a builds
+              return
+              ;;
+          installation)
+              _kerl_installations
+              _wanted installations expl 'all installations' compadd -a installations
+              return
+      esac
+      ;;
+  cleanup) 
+      _kerl_builds
+      builds=('all' $builds)
+      _wanted builds expl 'all builds' compadd -a builds;;
+esac
