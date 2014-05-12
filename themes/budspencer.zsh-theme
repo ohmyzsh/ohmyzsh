@@ -78,7 +78,7 @@ prompt_git() {
     if [[ -n $dirty ]]; then
       prompt_segment 160 0
     else
-      prompt_segment 64 254
+      prompt_segment 64 0
     fi
 
     if [[ -e "${repo_path}/BISECT_LOG" ]]; then
@@ -110,7 +110,7 @@ prompt_hg() {
     if $(hg prompt >/dev/null 2>&1); then
       if [[ $(hg prompt "{status|unknown}") = "?" ]]; then
         # if files are not added
-        prompt_segment 160 230
+        prompt_segment 160 0
         st='±'
       elif [[ -n $(hg prompt "{status|modified}") ]]; then
         # if any modification
