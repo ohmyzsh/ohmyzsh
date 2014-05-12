@@ -38,7 +38,7 @@ if which tmux &> /dev/null
 	local zsh_tmux_plugin_path="$(cd "$(dirname "$0")" && pwd)"
 
 	# Determine if the terminal supports 256 colors
-	if [[ `tput colors` == "256" ]]
+	if [[ `tty -s && tput colors` == "256" ]]
 	then
 		export ZSH_TMUX_TERM=$ZSH_TMUX_FIXTERM_WITH_256COLOR
 	else
