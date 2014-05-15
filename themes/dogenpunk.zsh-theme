@@ -1,10 +1,4 @@
-# -----------------------------------------------------------------------------
-#          FILE: dogenpunk.zsh-theme
-#   DESCRIPTION: oh-my-zsh theme file.
-#        AUTHOR: Matthew Nelson (dogenpunk@gmail.com)
-#       VERSION: 0.1
-#    SCREENSHOT: coming soon
-# -----------------------------------------------------------------------------
+# dogenpunk.zsh-theme
 
 MODE_INDICATOR="%{$fg_bold[red]%}❮%{$reset_color%}%{$fg[red]%}❮❮%{$reset_color%}"
 local return_status="%{$fg[red]%}%(?..⏎)%{$reset_color%}"
