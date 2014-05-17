@@ -92,6 +92,7 @@ alias gsts='git stash show --text'
 alias gsta='git stash'
 alias gstp='git stash pop'
 alias gstd='git stash drop'
+alias gstl='git stash list'
 
 # Will cd into the top of the current repository
 # or submodule.
@@ -157,6 +158,3 @@ alias gignore='git update-index --assume-unchanged'
 alias gunignore='git update-index --no-assume-unchanged'
 # list temporarily ignored files
 alias gignored='git ls-files -v | grep "^[[:lower:]]"'
-
-
-
