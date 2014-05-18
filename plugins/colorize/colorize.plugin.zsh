@@ -6,9 +6,9 @@
 alias colorize='colorize_via_pygmentize'
 
 colorize_via_pygmentize() {
-    if [ ! -x $(which pygmentize) ]; then
+    if [ ! -x $(which pygmentize | awk ' { print $(NF) } ') ]; then
         echo package \'pygmentize\' is not installed!
-        exit -1
+        return -1
     fi
 
     if [ $# -eq 0 ]; then
