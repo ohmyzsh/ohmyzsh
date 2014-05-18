@@ -34,3 +34,9 @@ alias sl=ls # often screw this up
 
 alias afind='ack-grep -il'
 
+# Output aliases
+alias -g M='|more'
+alias -g L='|less'
+alias -g H='|head'
+alias -g T='|tail'
+alias -g N='2>/dev/null'
