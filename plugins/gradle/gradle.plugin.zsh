@@ -60,8 +60,8 @@ function in_gradle() {
 ############################################################################
 _gradle_does_task_list_need_generating () {
   [ ! -f .gradletasknamecache ] && return 0;
-  [ .gradletasknamecache -nt build.gradle ] && return 0;
-  return 1;
+  [ .gradletasknamecache -nt build.gradle ] && return 1;
+  return 0;
 }
 
 
