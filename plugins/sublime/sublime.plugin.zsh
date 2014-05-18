@@ -38,3 +38,12 @@ elif  [[ $('uname') == 'Darwin' ]]; then
 fi
 
 alias stt='st .'
+alias sth='st -h'
+
+alias sta='st -a'
+alias stat='st -a .'
+
+alias stn='st -n'
+alias stnt='st -n .'
+
+alias stb='st -b'
