@@ -155,6 +155,7 @@ task_freqs=(
 local -a task_attributes
 _regex_words -t ':' default 'task attributes' \
 	'pro*ject:Project name:$task_projects' \
+	'dep*ends:Dependency' \
 	'du*e:Due date:$task_dates' \
 	'wa*it:Date until task becomes pending:$task_dates' \
 	're*cur:Recurrence frequency:$task_freqs' \
@@ -167,7 +168,7 @@ task_attributes=("$reply[@]")
 
 args=(
 	\( "$task_attributes[@]" \|
-	\( /'(project|due|wait|recur|priority|until|fg|bg|limit).'/- \( /$'[^:]#:'/ ":default:modifiers:compadd -S ':' -a _task_modifiers" \) \) \|
+	\( /'(project|depends|due|wait|recur|priority|until|fg|bg|limit).'/- \( /$'[^:]#:'/ ":default:modifiers:compadd -S ':' -a _task_modifiers" \) \) \|
 	\( /'(rc).'/- \( /$'[^:]#:'/ ":arguments:config:compadd -S ':' -a _task_config" \) \) \|
 	\( /'(+|-)'/- \( /"$word"/ ":values:remove tag:compadd -a _task_tags" \) \) \|
 	\( /"$word"/ \)
@@ -222,7 +223,7 @@ _task_id() {
 ## first level completion => task sub-command completion
 (( $+functions[_task_default] )) ||
 _task_default() {
-    local cmd ret=1
+	local cmd ret=1
 
 	integer i=1
 	while (( i < $#words ))
