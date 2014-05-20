@@ -1,12 +1,19 @@
 virtualenvwrapper='virtualenvwrapper.sh'
+
 if (( $+commands[$virtualenvwrapper] )); then
-
   source ${${virtualenvwrapper}:c}
+elif [[ -f "/etc/bash_completion.d/virtualenvwrapper" ]]; then
+  virtualenvwrapper="/etc/bash_completion.d/virtualenvwrapper"
+  source "/etc/bash_completion.d/virtualenvwrapper"
+else
+  print "zsh virtualenvwrapper plugin: Cannot find ${virtualenvwrapper}. Please install with \`pip install virtualenvwrapper\`."
+  return
+fi
 
+if type workon 2>&1 >/dev/null; then
   if [[ "$WORKON_HOME" == "" ]]; then
     echo "\$WORKON_HOME is not defined so ZSH plugin virtualenvwrapper will not work"
   else
-
     if [[ ! $DISABLE_VENV_CD -eq 1 ]]; then
       # Automatically activate Git projects's virtual environments based on the
       # directory name of the project. Virtual environment name can be overridden
@@ -61,5 +68,5 @@ if (( $+commands[$virtualenvwrapper] )); then
     fi
   fi
 else
-  print "zsh virtualenvwrapper plugin: Cannot find ${virtualenvwrapper}. Please install with \`pip install virtualenvwrapper\`."
+  print "zsh virtualenvwrapper plugin: shell function 'workon' not defined. Please check ${virtualenvwrapper}." >&2
 fi
