@@ -24,6 +24,7 @@ function gerrit_patch_usage () {
   echo  "   commit          Amend the patchset commit";
   echo  "   review          Submit patchset back to the gerrit for review";
   echo  "   draft           Submit patchset back to the gerrit for review as draft";
+  echo  "   rebase          Rebase onto master into patchset";
   echo
 }
 
@@ -52,6 +53,7 @@ function gerrit_patch () {
     [ $1 = "commit" ] && git commit --amend;
     [ $1 = "review" ] && gerrit_review "master";
     [ $1 = "draft" ] && gerrit_draft "master";
+    [ $1 = "rebase" ] && gerrit_pull "master";
   fi
 }
 
