@@ -144,8 +144,8 @@ alias glo='git log --oneline --decorate --color'
 compdef _git glo=git-log
 alias glog='git log --oneline --decorate --color --graph'
 compdef _git glog=git-log
-alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
-compdef _git gwc=git-whatchanged
+alias gwch='git whatchanged -p --abbrev-commit --pretty=medium'
+compdef _git gwch=git-whatchanged
 alias glp="_git_log_prettily"
 compdef _git glp=git-log
 # GUI
