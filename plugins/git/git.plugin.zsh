@@ -166,14 +166,25 @@ compdef git-svn-dcommit-push=git
 alias gsr='git svn rebase'
 alias gsd='git svn dcommit'
 # Current branch
-alias ggpull='git pull origin $(current_branch)'
-compdef ggpull=git
-alias ggpur='git pull --rebase origin $(current_branch)'
-compdef ggpur=git
-alias ggpush='git push origin $(current_branch)'
-compdef ggpush=git
-alias ggpnp='git pull origin $(current_branch) &&git push origin $(current_branch)'
-compdef ggpnp=git
+ggl() {
+  [[ "$#" != 1 ]] && b="$(current_branch)"
+  git pull origin "${b:=$1}"
+}
+compdef _git ggl=git-checkout
+ggu() {
+  [[ "$#" != 1 ]] && b="$(current_branch)"
+  git pull --rebase origin "${b:=$1}"
+}
+compdef _git ggu=git-checkout
+ggp() {
+  [[ "$#" != 1 ]] && b="$(current_branch)"
+  git push origin "${b:=$1}"
+}
+compdef _git ggp=git-checkout
+ggpnp() {
+  ggl "$1" && ggp "$1"
+}
+compdef _git ggpnp=git-checkout
 # Work In Progress (wip)
 # These features allow to pause a branch development and switch to another one
 # When you want to go back to work, just unwip it
