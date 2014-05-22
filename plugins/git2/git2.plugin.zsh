@@ -84,6 +84,9 @@ compdef _git gca=git-commit
 # Git commit amend all tracked files
 alias gca!='git commit -v -a --amend'
 compdef _git gca!=git-commit
+# Git commit amend all tracked files
+alias gcan!='git commit -v -a -s --no-edit --amend'
+compdef _git gcan!=git-commit
 # Git commit with message
 alias gcmsg='git commit -m'
 compdef _git gcmsg=git-commit
