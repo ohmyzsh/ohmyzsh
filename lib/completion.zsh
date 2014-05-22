@@ -46,10 +46,6 @@ zstyle ':completion:*:*:*:users' ignored-patterns \
         rpc rpcuser rpm rtkit scard shutdown squid sshd statd svn sync tftp \
         usbmux uucp vcsa wwwrun xfs '_*'
 
-# Do not complete things beginning with _
-zstyle ':completion:*:functions' ignored-patterns '_*'
-zstyle ':completion:*:parameters' ignored-patterns '_*'
-
 # ... unless we really want to.
 zstyle '*' single-ignored show
 
