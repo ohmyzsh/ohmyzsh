@@ -20,6 +20,8 @@ alias cjb='cactus jump buildbot'
 alias m='make'
 alias s='subl'
 
+alias saguysaguy='sudo apt-get update -y && sudo apt-get upgrade -y'
+
 function bb_env()
 {
     local BASE
