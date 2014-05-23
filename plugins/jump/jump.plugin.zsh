@@ -39,7 +39,7 @@ marks() {
 
 _completemarks() {
 	if [[ $(ls "${MARKPATH}" | wc -l) -gt 1 ]]; then
-		reply=($(ls $MARKPATH/**/*(-) | grep : | sed -E 's/(.*)\/([_\da-zA-Z\-]*):$/\2/g'))
+		reply=($(ls $MARKPATH/**/*(-) | grep : | sed -E 's/(.*)\/([_a-zA-Z0-9\.\-]*):$/\2/g'))
 	else
 		if readlink -e "${MARKPATH}"/* &>/dev/null; then
 			reply=($(ls "${MARKPATH}"))
