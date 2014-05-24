@@ -1,7 +1,7 @@
 #
 # INSTRUCTIONS
 #
-#   To enabled agent forwarding support add the following to
+#   To enable agent forwarding support add the following to
 #   your .zshrc file:
 #
 #     zstyle :omz:plugins:ssh-agent agent-forwarding on
