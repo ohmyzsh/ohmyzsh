@@ -10,22 +10,22 @@ h2. Setup
 
 h3. The automatic installer... (do you trust me?)
 
-You can install this via the command line with either `curl` or `wget`.
+You can install this via the command line with either @curl@ or @wget@.
 
-h4. via `curl`
+h4. via @curl@
 
 @curl -L http://install.ohmyz.sh | sh@
 
-h4. via `wget`
+h4. via @wget@
 
 @wget --no-check-certificate http://install.ohmyz.sh -O - | sh@
 
 h4. Optional: change the install directory
 
-The default location is `~/.oh-my-zsh` (hidden in your home directory).
+The default location is @~/.oh-my-zsh@ (hidden in your home directory).
 
 You can change the install directory with the ZSH environment variable, either
-by running `export ZSH=/your/path` before installing, or setting it before the
+by running @export ZSH=/your/path@ before installing, or setting it before the
 end of the install pipeline like this:
 
 @curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | ZSH=~/.dotfiles/zsh sh@
@@ -37,7 +37,7 @@ h3. The manual way
 
   @git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh@
 
-2. *OPTIONAL* Backup your existing ~/.zshrc file
+2. *OPTIONAL* Backup your existing @~/.zshrc@ file
 
   @cp ~/.zshrc ~/.zshrc.orig@
 
@@ -53,9 +53,9 @@ h3. The manual way
 
 h3. Problems?
 
-You _might_ need to modify your PATH in ~/.zshrc if you're not able to find some commands after switching to _Oh My Zsh_.
+You _might_ need to modify your @PATH@ in @~/.zshrc@ if you're not able to find some commands after switching to _Oh My Zsh_.
 
-If you installed manually or changed the install location, check ZSH in ~/.zshrc
+If you installed manually or changed the install location, check ZSH in @~/.zshrc@
 
 h2. Usage
 
@@ -72,16 +72,16 @@ the "refcard":http://www.bash2zsh.com/zsh_refcard/refcard.pdf is pretty tasty fo
 h3. Customization
 
 If you want to override any of the default behavior, just add a new file (ending in @.zsh@) into the @custom/@ directory.
-If you have many functions which go well together you can put them as a *.plugin.zsh file in the @custom/plugins/@ directory and then enable this plugin.
+If you have many functions which go well together you can put them as a @*.plugin.zsh@ file in the @custom/plugins/@ directory and then enable this plugin.
 If you would like to override the functionality of a plugin distributed with oh-my-zsh, create a plugin of the same name in the @custom/plugins/@ directory and it will be loaded instead of the one in @plugins/@.
 
 h3. Updates
 
-By default you will be prompted to check for updates. If you would like oh-my-zsh to automatically update itself without prompting you, set the following in your ~/.zshrc
+By default you will be prompted to check for updates. If you would like oh-my-zsh to automatically update itself without prompting you, set the following in your @~/.zshrc@
 
 @DISABLE_UPDATE_PROMPT=true@
 
-To disable updates entirely, put this in your ~/.zshrc
+To disable updates entirely, put this in your @~/.zshrc@
 
 @DISABLE_AUTO_UPDATE=true@
 
