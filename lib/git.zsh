@@ -59,6 +59,13 @@ function git_prompt_ahead() {
   fi
 }
 
+# Gets the number of commits ahead from remote
+function git_commits_ahead() {
+  if $(echo "$(command git log @{upstream}..HEAD 2> /dev/null)" | grep '^commit' &> /dev/null); then
+    echo "$(command git log @{upstream}..HEAD | grep '^commit' | wc -l | tr -d ' ')"
+  fi
+}
+
 # Formats prompt string for current git commit short SHA
 function git_prompt_short_sha() {
   SHA=$(command git rev-parse --short HEAD 2> /dev/null) && echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
