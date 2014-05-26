@@ -23,7 +23,6 @@ filetype plugin indent on
 Bundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 Bundle 'scrooloose/nerdtree'
 Bundle 'klen/python-mode'
-Bundle 'davidhalter/jedi-vim'
 Bundle 'tpope/vim-fugitive'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'ervandew/supertab'
@@ -85,7 +84,7 @@ map <F2> :NERDTreeToggle<CR>
 " ]]            Jump on next class or function (normal, visual, operator modes)
 " [M            Jump on previous class or method (normal, visual, operator modes)
 " ]M            Jump on next class or method (normal, visual, operator modes)
-let g:pymode_rope = 1
+let g:pymode_rope = 0
 
 " Documentation
 let g:pymode_doc = 1
