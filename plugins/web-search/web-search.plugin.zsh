@@ -6,6 +6,8 @@ function web_search() {
   local open_cmd
   if [[ $(uname -s) == 'Darwin' ]]; then
     open_cmd='open'
+  elif [[ $(uname -s) == CYGWIN* ]]; then
+    open_cmd='cygstart'
   else
     open_cmd='xdg-open'
   fi
