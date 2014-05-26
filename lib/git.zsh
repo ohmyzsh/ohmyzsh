@@ -62,7 +62,8 @@ function git_prompt_ahead() {
 # Gets the number of commits ahead from remote
 function git_commits_ahead() {
   if $(echo "$(command git log @{upstream}..HEAD 2> /dev/null)" | grep '^commit' &> /dev/null); then
-    echo "$(command git log @{upstream}..HEAD | grep '^commit' | wc -l | tr -d ' ')"
+    COMMITS=$(command git log @{upstream}..HEAD | grep '^commit' | wc -l | tr -d ' ')
+    echo "$ZSH_THEME_GIT_COMMITS_AHEAD_PREFIX$COMMITS$ZSH_THEME_GIT_COMMITS_AHEAD_SUFFIX"
   fi
 }
 
