@@ -19,10 +19,10 @@ if [[ -f "$wrapsource" ]]; then
             # Activate the environment only if it is not already active
             if [[ "$VIRTUAL_ENV" != "$WORKON_HOME/$ENV_NAME" ]]; then
                 if [[ -e "$WORKON_HOME/$ENV_NAME/bin/activate" ]]; then
-                        if [[ -z ${CD_VIRTUAL_ENV} ]]; then
-                                export CD_VIRTUAL_ENV="$ENV_NAME"
-                                workon "$ENV_NAME" || unset CD_VIRTUAL_ENV
-                        fi
+                    if [[ -z ${CD_VIRTUAL_ENV} ]]; then
+                        export CD_VIRTUAL_ENV="$ENV_NAME"
+                        workon "$ENV_NAME" || unset CD_VIRTUAL_ENV
+                    fi
                 fi
             fi
         elif [ $CD_VIRTUAL_ENV ]; then
