@@ -41,11 +41,8 @@ alias pjo="pj open"
 function _pj () {
     # might be possible to improve this using glob, without the basename trick
     typeset -a projects
-    foreach i ($PROJECT_PATHS/*)
-    do
-        projects+=(${i##*/})
-    done
-
+    projects=($PROJECT_PATHS/*)
+    projects=$projects:t 
     _arguments '*:file:($projects)'
 }
 
