@@ -138,6 +138,8 @@ alias gb='git branch'
 compdef _git gb=git-branch
 alias gba='git branch -a'
 compdef _git gba=git-branch
+alias gbnm='git branch --no-merged'
+compdef _git gbnm=git-branch
 # Config
 alias gcl='git config --list'
 compdef _git gcl=git-config
