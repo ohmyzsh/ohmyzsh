@@ -168,12 +168,15 @@ function listMavenCompletions {
         -Dmaven.test.skip=true -DskipTests -Dmaven.surefire.debug -DenableCiProfile -Dpmd.skip=true -Dcheckstyle.skip=true -Dtycho.mode=maven
 
         # arguments
-        -am -amd -B -C -c -cpu -D -e -emp -ep -f -fae -ff -fn -gs -h -l -N -npr -npu -nsu -o -P -pl -q -rf -s -T -t -U -up -V -v -X
+        -am -amd -B -C -c -cpu -D -e -emp -ep -f -fae -ff -fn -gs -h -l -N -npr -npu -nsu -o -pl -q -rf -s -T -t -U -up -V -v -X
 
         cli:execute cli:execute-phase 
         archetype:generate generate-sources 
         cobertura:cobertura
         -Dtest= `if [ -d ./src/test/java ] ; then find ./src/test/java -type f -name '*.java' | grep -v svn | sed 's?.*/\([^/]*\)\..*?-Dtest=\1?' ; fi`
+        -P `[ -e "pom.xml" ] && grep -e "<profile>" -A 1 "pom.xml" | grep -e "<id>.*</id>" | sed 's?.*<id>\(.*\)<\/id>.*?-P\1?'` 
+
+ 
     ); 
 }
 
