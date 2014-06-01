@@ -264,7 +264,7 @@ alias top10='print -l  ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
 #hash -d H="/media/data/backup/ayu"
 #hash -d E="/etc/"
 #hash -d D="/home/ayumi/Documents"
-hash -d weigo="/home/users/shiludeng/data/dev/weigo"
+hash -d weigou="/home/users/shiludeng/data/dev/app/ecom/weigou"
 hash -d ub="/home/users/shiludeng/data/dev/public/ub"
 hash -d example="/home/users/shiludeng/data/dev/com/tools/ubgen"
 #}}} 
