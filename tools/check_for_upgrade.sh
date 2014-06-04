@@ -22,6 +22,10 @@ fi
 
 [ -f ~/.profile ] && source ~/.profile
 
+# Cancel upgrade if the current user doesn't have write permissions for the
+# oh-my-zsh directory.
+[[ -w "$ZSH" ]] || return 0
+
 if [ -f ~/.zsh-update ]
 then
   . ~/.zsh-update
