@@ -8,6 +8,7 @@ Syntax highlighting is done by pluggable highlighters:
 * [***pattern***](pattern) - matches user-defined patterns.
 * [***cursor***](cursor) - matches the cursor position.
 * [***root***](root) - triggered if the current user is root.
+* [***line***](line) - applied to the whole command line
 
 
 How to activate highlighters
