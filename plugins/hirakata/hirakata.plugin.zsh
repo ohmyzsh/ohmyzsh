@@ -1,5 +1,6 @@
-p="$ZSH_CUSTOM/plugins/hirakata/"
-f=$(cat $p"files/hk_symbols.txt")
+p="$ZSH/plugins/hirakata/"
+fh=$(cat $p"files/hira.txt")
+fk=$(cat $p"files/kata.txt")
 
 function hirakata() {
     random_symbol=$(echo "$fh\n$fk" | shuf -n1)
@@ -22,7 +23,7 @@ function hirakata() {
 
     symbol=$(echo $random_symbol | cut -d ' ' -f1)
     sound=$(echo $random_symbol | cut -d ' ' -f2)
-    (mpg321 -q $HK/sounds/$sound & ) > /dev/null 2>&1
+    (mpg321 -q $p/sounds/$sound & ) > /dev/null 2>&1
     echo -n $symbol
 
     if [ $romaji -eq 1 ]; then
