@@ -20,7 +20,7 @@ function _cabal_commands() {
           "build:Make this package ready for installation"
           "check:Check the package for common mistakes"
           "clean:Clean up after a build"
-          "copy:Copy teh files into the install locations"
+          "copy:Copy the files into the install locations"
           "configure:Prepare to build the package"
           "fetch:Downloads packages for later installation"
           "get:Gets a package's source code"
