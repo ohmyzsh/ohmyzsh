@@ -17,14 +17,15 @@ function _cabal_commands() {
       subcommand)
         subcommands=(
           "bench:Run the benchmark, if any (configure with UserHooks)"
-          "build:Make this package ready for installation"
+          "build:Compile all targets or specific target."
           "check:Check the package for common mistakes"
           "clean:Clean up after a build"
           "copy:Copy the files into the install locations"
           "configure:Prepare to build the package"
+          "exec:Run a command with the cabal environment"
           "fetch:Downloads packages for later installation"
           "get:Gets a package's source code"
-          "haddock:Generate HAddock HTML documentation"
+          "haddock:Generate Haddock HTML documentation"
           "help:Help about commands"
           "hscolour:Generate HsColour colourised code, in HTML format"
           "info:Display detailed information about a particular package"
