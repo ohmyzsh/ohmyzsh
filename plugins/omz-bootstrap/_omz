@@ -144,3 +144,4 @@ _themes () {
   _describe -t themes 'theme' themes && return 0
 }
 
+_omz

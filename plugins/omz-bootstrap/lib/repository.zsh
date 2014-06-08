@@ -21,7 +21,7 @@ _list_plugins() {
       printf "%-30s \033[0;32m%-10s\033[0m\n" $plugin_name $enabled
     else
       printf "%-30s \033[0;30m%-10s\033[0m\n" $plugin_name $enabled
-    fi 
+    fi
   done
 }
 
@@ -56,7 +56,7 @@ _list_enabled_plugins() {
 }
 
 _enable_plugin() {
-  [[ "$#" != 1 ]] && return 1
+  [[ -z "$1" ]] && return 1
   local plugin=$1
   _map_exists plugins $plugin
   if [[ $? -ne 0 ]]; then
@@ -65,13 +65,13 @@ _enable_plugin() {
 }
 
 _enable_theme() {
-  [[ "$#" != 1 ]] && return 1
+  [[ -z "$1" ]] && return 1
   local theme=$1
   _map_put themes theme $theme
 }
 
 _disable_plugin() {
-  [[ "$#" != 1 ]] && return 1
+  [[ -z "$1" ]] && return 1
   local plugin=$1
   local enabled=$(_map_get plugins $plugin)
   [[ $enabled = "enabled" ]] && _map_remove plugins $plugin
@@ -106,27 +106,26 @@ _populate_enabled_theme() {
 }
 
 _update_plugin() {
-  [[ "$#" != 1 ]] && return 1
+  [[ -z "$1" ]] && return 1
   local plugin=$1
   if [[ -d $ZSH_CUSTOM/plugins/$plugin ]]; then
-    pushd $ZSH_CUSTOM/plugins/$plugin > /dev/null
-    git pull
-    popd > /dev/null
+    command pushd $ZSH_CUSTOM/plugins/$plugin > /dev/null
+    command git pull
+    command popd > /dev/null
   fi
 }
 
 _update_theme() {
-  [[ "$#" != 1 ]] && return 1
+  [[ -z "$1" ]] && return 1
   local theme=$1
   if [[ -d $ZSH_CUSTOM/themes/$theme ]]; then
-    pushd $ZSH_CUSTOM/themes/$theme > /dev/null
-    git pull
-    popd > /dev/null
+    command pushd $ZSH_CUSTOM/themes/$theme > /dev/null
+    command git pull
+    command popd > /dev/null
   fi
 }
 
-
-
+# initialize repository
 _pre_enable_plugins
 _populate_enabled_plugins
 _init_theme
