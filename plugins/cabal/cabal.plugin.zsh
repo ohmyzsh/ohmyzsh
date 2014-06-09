@@ -24,6 +24,7 @@ function _cabal_commands() {
           "configure:Prepare to build the package"
           "exec:Run a command with the cabal environment"
           "fetch:Downloads packages for later installation"
+          "freeze:Freeze dependencies."
           "get:Gets a package's source code"
           "haddock:Generate Haddock HTML documentation"
           "help:Help about commands"
