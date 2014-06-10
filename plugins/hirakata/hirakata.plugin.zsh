@@ -5,6 +5,7 @@ fk=$(cat $p"files/kata.txt")
 function hirakata() {
     random_symbol=$(echo "$fh\n$fk" | shuf -n1)
     romaji=0
+    mute=0
 
     for arg in "$@"
     do
@@ -18,16 +19,23 @@ function hirakata() {
             "katakana")
                 random_symbol=$(echo "$fk" | shuf -n1)
                 ;;
+            "mute")
+                mute=1
+                ;;
         esac
     done
 
     symbol=$(echo $random_symbol | cut -d ' ' -f1)
     sound=$(echo $random_symbol | cut -d ' ' -f2)
-    (mpg321 -q $p/sounds/$sound & ) > /dev/null 2>&1
+
     echo -n $symbol
 
     if [ $romaji -eq 1 ]; then
         romaji=$(echo $sound | cut -d '.' -f1)
         echo -n " ($romaji)"
+    fi
+
+    if [ $mute -eq 0 ]; then
+        (mpg321 -q $HK/sounds/$sound & ) > /dev/null 2>&1
     fi
 }
