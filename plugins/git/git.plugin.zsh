@@ -54,6 +54,8 @@ alias gdc='git diff --cached'
 compdef _git gdc=git-diff
 gdv() { git diff -w "$@" | view - }
 compdef _git gdv=git-diff
+alias gbl='git blame -b -w'
+compdef _git gbl=git-blame
 # Pull
 alias gl='git pull'
 compdef _git gl=git-pull
@@ -160,6 +162,8 @@ alias grh='git reset HEAD'
 compdef _git grh=git-reset
 alias grhh='git reset HEAD --hard'
 compdef _git grhh=git-reset
+alias gru='git reset --'
+compdef _git gru=git-reset
 alias gclean='git reset --hard && git clean -dfx'
 # Log
 alias gcount='git shortlog -sn'
