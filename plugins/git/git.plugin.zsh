@@ -47,6 +47,8 @@ alias gst='git status'
 compdef _git gst=git-status
 alias gss='git status -s'
 compdef _git gss=git-status
+alias gsb='git status -sb'
+compdef _git gsb=git-status
 # Diff
 alias gd='git diff'
 compdef _git gd=git-diff
@@ -54,6 +56,8 @@ alias gdc='git diff --cached'
 compdef _git gdc=git-diff
 gdv() { git diff -w "$@" | view - }
 compdef _git gdv=git-diff
+alias gdw='git diff --word-diff'
+compdef _git gdw=git-diff
 alias gbl='git blame -b -w'
 compdef _git gbl=git-blame
 # Pull
