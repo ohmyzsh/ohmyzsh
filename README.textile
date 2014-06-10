@@ -22,7 +22,7 @@ The "@upstream-test@ branch":https://github.com/ncanceill/oh-my-zsh/tree/upstrea
 
 h3. Updating
 
-These branches are used to aggregate Pull Requests into categories. Please submit them to these branches, if applicable, instead of sending them directly upstream. This allows to keep the original repository clean.
+These branches are used to aggregate Pull Requests into categories. Please submit your PRs to these branches, if applicable, instead of sending them directly upstream. This allows to keep the original repository clean.
 
 h4. Plugins
 
