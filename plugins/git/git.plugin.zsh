@@ -242,6 +242,11 @@ ggp() {
   git push origin "${b:=$1}"
 }
 compdef _git ggp=git-checkout
+ggf() {
+  [[ "$#" != 1 ]] && b="$(current_branch)"
+  git push --force origin "${b:=$1}"
+}
+compdef _git ggf=git-checkout
 ggpnp() {
   ggl "$1" && ggp "$1"
 }
