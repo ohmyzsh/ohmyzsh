@@ -21,8 +21,8 @@ fi
 # Aliases ###################################################################
 # These are for more obscure uses of apt-get and aptitude that aren't covered
 # below.
-alias ag='apt-get'
-alias ap='aptitude'
+alias age='apt-get'
+alias api='aptitude'
 
 # Some self-explanatory aliases
 alias acs="apt-cache search"
@@ -215,5 +215,13 @@ kerndeb () {
 
     time fakeroot make-kpkg --append-to-version "$appendage" --revision \
         "$revision" kernel_image kernel_headers
+}
+
+# List packages by size
+function apt-list-packages {
+    dpkg-query -W --showformat='${Installed-Size} ${Package} ${Status}\n' | \
+    grep -v deinstall | \
+    sort -n | \
+    awk '{print $1" "$2}'
 }
 
