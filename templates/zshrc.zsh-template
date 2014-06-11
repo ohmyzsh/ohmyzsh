@@ -67,10 +67,14 @@ ZSH_THEME="robbyrussell"
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
+<<<<<<< HEAD
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
+=======
+plugins=(battery capistrano common-aliases git github laravel4 rbenv sublime systemadmin)
+>>>>>>> Added Laravel4 plug-in for autocomplete
 
 source $ZSH/oh-my-zsh.sh
 
