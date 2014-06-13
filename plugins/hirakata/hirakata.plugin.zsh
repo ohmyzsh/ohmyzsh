@@ -36,6 +36,6 @@ function hirakata() {
     fi
 
     if [ $mute -eq 0 ]; then
-        (mpg321 -q $HK/sounds/$sound & ) > /dev/null 2>&1
+        (mpg321 -q $p/sounds/$sound & ) > /dev/null 2>&1
     fi
 }
