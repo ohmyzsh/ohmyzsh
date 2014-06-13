@@ -1,6 +1,6 @@
 _phing_does_target_list_need_generating () {
   [ ! -f .phing_targets ] && return 0;
-  [ .phing_targets -nt build.xml ] && return 0;
+  [ build.xml -nt .phing_targets ] && return 0;
   return 1;
 }
 
