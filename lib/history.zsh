@@ -6,12 +6,24 @@ fi
 HISTSIZE=10000
 SAVEHIST=10000
 
-# Show history
+## History wrapper
+function omz_history {
+  # Delete the history file if `-c' argument provided.
+  # This won't affect the `history' command output until the next login.
+  if [[ "${@[(i)-c]}" -le $# ]]; then
+    echo -n >| "$HISTFILE"
+    echo >&2 History file deleted. Reload the session to see its effects.
+  else
+    fc $@ -l 1
+  fi
+}
+
+# Timestamp format
 case $HIST_STAMPS in
-  "mm/dd/yyyy") alias history='fc -fl 1' ;;
-  "dd.mm.yyyy") alias history='fc -El 1' ;;
-  "yyyy-mm-dd") alias history='fc -il 1' ;;
-  *) alias history='fc -l 1' ;;
+  "mm/dd/yyyy") alias history='omz_history -f' ;;
+  "dd.mm.yyyy") alias history='omz_history -E' ;;
+  "yyyy-mm-dd") alias history='omz_history -i' ;;
+  *) alias history='omz_history' ;;
 esac
 
 setopt append_history
