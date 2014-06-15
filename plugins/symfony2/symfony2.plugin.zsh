@@ -1,21 +1,26 @@
-# Symfony2 basic command completion
+# Symfony2/3 basic command completion
+
+_symfony_console () {
+    if [ -f bin/console ]; then
+        echo "php bin/console"
+    elif [ -f app/console ]; then
+        echo "php app/console"
+    fi
+}
 
 _symfony2_get_command_list () {
-	php app/console --no-ansi | sed "1,/Available commands/d" | awk '/^  [a-z]+/ { print $1 }'
+    `_symfony_console` --no-ansi | sed "1,/Available commands/d" | awk '/^  [a-z]+/ { print $1 }'
 }
 
 _symfony2 () {
-  if [ -f app/console ]; then
     compadd `_symfony2_get_command_list`
-  fi
 }
 
-compdef _symfony2 app/console
+compdef _symfony2 '`_symfony_console`'
 compdef _symfony2 sf
 
 #Alias
-alias sf='php app/console'
-alias sfcl='php app/console cache:clear'
-alias sfroute='php app/console router:debug'
-alias sfgb='php app/console generate:bundle'
-
+alias sf='`_symfony_console`'
+alias sfcl='sf cache:clear'
+alias sfroute='sf router:debug'
+alias sfgb='sf generate:bundle'
