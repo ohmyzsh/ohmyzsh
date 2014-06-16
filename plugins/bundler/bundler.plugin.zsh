@@ -48,9 +48,17 @@ _within-bundled-project() {
   false
 }
 
+_binstubbed() {
+  [ -f "./bin/${1}" ]
+}
+
 _run-with-bundler() {
   if _bundler-installed && _within-bundled-project; then
-    bundle exec $@
+    if _binstubbed $1; then
+      bundle exec "./bin/$@"
+    else
+      bundle exec $@
+    fi
   else
     $@
   fi
