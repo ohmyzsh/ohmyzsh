@@ -20,6 +20,12 @@
 #     c. Or, use this file as a oh-my-zsh plugin.
 #
 
+#Alias
+alias gf='git flow'
+alias gcd='git checkout develop'
+alias gch='git checkout hotfix'
+alias gcr='git checkout release'
+
 _git-flow ()
 {
 	local curcontext="$curcontext" state line
