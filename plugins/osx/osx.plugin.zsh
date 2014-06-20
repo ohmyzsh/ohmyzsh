@@ -12,7 +12,7 @@ EOF
   echo "$the_app"
 }
 
-function tab() {
+function _tab() {
   # Must not have trailing semicolon, for iTerm compatibility
   local command="cd \\\"$PWD\\\"; clear"
   (( $# > 0 )) && command="${command}; $*"
@@ -521,6 +521,20 @@ function spotify() {
         showHelp;
         break ;;
     esac
+  done
+}
+
+function tab() {
+  _tab "$PWD/${1-}"
+}
+
+function mtab() {
+  counter=0
+  limit=$1
+  while [ "$counter" -lt "$limit" ]
+  do
+    _tab "$PWD/${2-}"
+    counter=$(($counter+1))
   done
 }
 
