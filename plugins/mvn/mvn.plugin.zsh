@@ -61,7 +61,65 @@ alias mvnjetty='mvn jetty:run'
 alias mvndt='mvn dependency:tree'
 alias mvns='mvn site'
 
-function listMavenCompletions { 
+#realpath replacement for iOS - not always present
+function _realpath {
+    if [[ -f "$1" ]]
+    then
+        # file *must* exist
+        if cd "$(echo "${1%/*}")" &>/dev/null
+        then
+	    # file *may* not be local
+	    # exception is ./file.ext
+	    # try 'cd .; cd -;' *works!*
+ 	    local tmppwd="$PWD"
+	    cd - &>/dev/null
+        else
+	    # file *must* be local
+	    local tmppwd="$PWD"
+        fi
+    else
+        # file *cannot* exist
+        return 1 # failure    
+    fi
+
+    # reassemble realpath
+    echo "$tmppwd"/"${1##*/}"
+    return 1 #success
+}
+
+function __pom_hierarchy {
+    local file=`_realpath "pom.xml"`
+    POM_HIERARCHY+=("~/.m2/settings.xml")
+    POM_HIERARCHY+=("$file")
+    while [ -n "$file" ] && grep -q "<parent>" $file; do
+	##look for a new relativePath for parent pom.xml
+        local new_file=`grep -e "<relativePath>.*</relativePath>" $file | sed 's/.*<relativePath>//' | sed 's/<\/relativePath>.*//g'`
+
+	## <parent> is present but not defined. Asume ../pom.xml
+	if [ -z "$new_file" ]; then
+	    new_file="../pom.xml"
+	fi 
+
+	## if file exists continue else break
+	new_pom=`_realpath "${file%/*}/$new_file"`
+        if [ -n "$new_pom" ]; then 
+            file=$new_pom
+	else 
+	    break
+        fi
+	POM_HIERARCHY+=("$file")
+    done
+}
+
+function listMavenCompletions {
+     POM_HIERARCHY=()
+     __pom_hierarchy
+     local profiles=()
+     #current pom profiles
+     for item in ${POM_HIERARCHY[*]}; do
+         profiles=($profiles `[ -e $item ] && grep -e "<profile>" -A 1 $item | grep -e "<id>.*</id>" | sed 's?.*<id>\(.*\)<\/id>.*?-P\1?'`)
+     done
+
      reply=(
         # common lifecycle
         clean process-resources compile process-test-resources test-compile test package verify install deploy site
@@ -174,10 +232,9 @@ function listMavenCompletions {
         archetype:generate generate-sources 
         cobertura:cobertura
         -Dtest= `if [ -d ./src/test/java ] ; then find ./src/test/java -type f -name '*.java' | grep -v svn | sed 's?.*/\([^/]*\)\..*?-Dtest=\1?' ; fi`
-        -P `[ -e "pom.xml" ] && grep -e "<profile>" -A 1 "pom.xml" | grep -e "<id>.*</id>" | sed 's?.*<id>\(.*\)<\/id>.*?-P\1?'` 
+        $profiles
+    )
 
- 
-    ); 
 }
 
 compctl -K listMavenCompletions mvn
