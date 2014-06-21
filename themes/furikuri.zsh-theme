@@ -4,7 +4,7 @@ function collapse_pwd {
 
 RPROMPT='%(?.%{$fg[green]%}✔ .%{$fg[red]%}✖ )% %{$reset_color%}'
 
-PROMPT='%{$fg[yellow]%}λ %m %{$fg[green]%}$(collapse_pwd) $(git_prompt_info)%{$reset_color%}
+PROMPT='%{$fg[yellow]%}λ %m %{$fg[green]%}$(collapse_pwd) $(git_prompt_info)%{$reset_color%}$(git_prompt_status)%{$reset_color%}
 $fg[yellow]%}→%{$reset_color%} '
 
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[yellow]%}→ λ %{$fg[blue]%}git %{$fg[cyan]%}⭠ "
