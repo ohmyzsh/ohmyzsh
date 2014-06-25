@@ -6,7 +6,7 @@ NAME
        z - jump around
 
 SYNOPSIS
-       z [-chlrt] [regex1 regex2 ... regexn]
+       z [-chlrtx] [regex1 regex2 ... regexn]
 
 AVAILABILITY
        bash, zsh
@@ -18,7 +18,7 @@ DESCRIPTION
        directory that matches ALL of the regexes given on the command line.
 
 OPTIONS
-       -c     restrict matches to subdirectories of the current directory.
+       -c     restrict matches to subdirectories of the current directory
 
        -h     show a brief help message
 
@@ -27,6 +27,8 @@ OPTIONS
        -r     match by rank only
 
        -t     match by recent access only
+
+       -x     remove the current directory from the datafile
 
 EXAMPLES
        z foo         cd to most frecent dir matching foo
@@ -56,7 +58,7 @@ NOTES
               Set $_Z_NO_PROMPT_COMMAND to handle PROMPT_COMMAND/precmd  your-
               self.
               Set $_Z_EXCLUDE_DIRS to an array of directories to exclude.
-              (These  settings  should  go  in .bashrc/.zshrc before the lines
+              (These  settings  should  go  in  .bashrc/.zshrc before the line
               added above.)
               Install   the   provided   man   page   z.1    somewhere    like
               /usr/local/man/man1.
@@ -68,8 +70,8 @@ NOTES
        multiplied by 0.99. Entries with a rank lower than 1 are forgotten.
 
    Frecency:
-       Frecency is a portmantaeu of 'recent' and 'frequency'. It is a weighted
-       rank  that  depends on how often and how recently something occured. As
+       Frecency is a portmanteau of 'recent' and 'frequency'. It is a weighted
+       rank  that depends on how often and how recently something occurred. As
        far as I know, Mozilla came up with the term.
 
        To z, a directory that has low ranking but has been  accessed  recently
@@ -107,9 +109,9 @@ ENVIRONMENT
        resolving  of  symlinks.  If  it  is  not  set,  symbolic links will be
        resolved when added to the datafile.
 
-       In bash, z prepends a command to the PROMPT_COMMAND  environment  vari-
-       able  to  maintain its database. In zsh, z appends a function _z_precmd
-       to the precmd_functions array.
+       In bash, z appends a command to the PROMPT_COMMAND environment variable
+       to maintain its database. In zsh, z appends a function _z_precmd to the
+       precmd_functions array.
 
        The environment variable $_Z_NO_PROMPT_COMMAND can be set if  you  want
        to handle PROMPT_COMMAND or precmd yourself.
