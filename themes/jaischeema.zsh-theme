@@ -1,11 +1,4 @@
-# ------------------------------------------------------------------------------
-#          FILE:  jaischeema.zsh-theme
-#   DESCRIPTION:  oh-my-zsh theme file.
-#        AUTHOR:  Jais Cheema
-#       VERSION:  0.0.1
-# ------------------------------------------------------------------------------
-
-
+# jaischeema.zsh-theme
 
 PROMPT='%{$fg_bold[magenta]%}%m%{$reset_color%} at %{$fg_bold[green]%}%~%{$reset_color%} %{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%}% %{$reset_color%}%{$fg[red]%}❯%{$reset_color%} '
 

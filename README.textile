@@ -14,14 +14,24 @@ You can install this via the command line with either `curl` or `wget`.
 
 h4. via `curl`
 
-@curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh@
+@curl -L http://install.ohmyz.sh | sh@
 
 h4. via `wget`
 
-@wget --no-check-certificate https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O - | sh@
+@wget --no-check-certificate http://install.ohmyz.sh -O - | sh@
+
+h4. Optional: change the install directory
+
+The default location is `~/.oh-my-zsh` (hidden in your home directory).
+
+You can change the install directory with the ZSH environment variable, either
+by running `export ZSH=/your/path` before installing, or setting it before the
+end of the install pipeline like this:
+
+@curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | ZSH=~/.dotfiles/zsh sh@
+
 
 h3. The manual way
-
 
 1. Clone the repository
 
@@ -35,7 +45,6 @@ h3. The manual way
 
   @cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc@
 
-
 4. Set zsh as your default shell:
 
   @chsh -s /bin/zsh@
@@ -46,9 +55,11 @@ h3. Problems?
 
 You _might_ need to modify your PATH in ~/.zshrc if you're not able to find some commands after switching to _Oh My Zsh_.
 
+If you installed manually or changed the install location, check ZSH in ~/.zshrc
+
 h2. Usage
 
-* enable the plugins you want in your @~/.zshrc@ (take a look at @plugins/@ to see what's possible)
+* enable the plugins you want in your @~/.zshrc@ (take a look at the @plugins/@ directory and the "wiki":https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins to see what's possible)
 ** example: @plugins=(git osx ruby)@
 * Theme support: Change the @ZSH_THEME@ environment variable in @~/.zshrc@.
 ** Take a look at the "current themes":https://wiki.github.com/robbyrussell/oh-my-zsh/themes that come bundled with _Oh My Zsh_.

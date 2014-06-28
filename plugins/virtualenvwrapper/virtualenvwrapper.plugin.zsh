@@ -1,4 +1,4 @@
-virtualenvwrapper='virtualenvwrapper_lazy.sh'
+virtualenvwrapper='virtualenvwrapper.sh'
 if (( $+commands[$virtualenvwrapper] )); then
   source ${${virtualenvwrapper}:c}
 
@@ -17,7 +17,7 @@ if (( $+commands[$virtualenvwrapper] )); then
             # Check for virtualenv name override
             if [[ -f "$PROJECT_ROOT/.venv" ]]; then
                 ENV_NAME=`cat "$PROJECT_ROOT/.venv"`
-            elif [[ -f "$PROJECT_ROOT/.venv/bin/activate" ]];then 
+            elif [[ -f "$PROJECT_ROOT/.venv/bin/activate" ]];then
                 ENV_NAME="$PROJECT_ROOT/.venv"
             elif [[ "$PROJECT_ROOT" != "." ]]; then
                 ENV_NAME=`basename "$PROJECT_ROOT"`
