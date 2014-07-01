@@ -8,10 +8,23 @@ fi
 # add a function path
 fpath=($ZSH/functions $ZSH/completions $fpath)
 
-# Load all of the config files in ~/oh-my-zsh that end in .zsh
+# grab libignores per user's libignore file
+libignores=()
+if [ -f $ZSH/custom/libignore ]
+then
+  for line in `cat $ZSH/custom/libignore`	
+  do
+    libignores+=($ZSH/lib/$line)
+  done
+fi
+
+# Load all of the config files in ~/oh-my-zsh that end in .zsh which are not flagged to be ignored
 # TIP: Add files you don't want in git to .gitignore
 for config_file ($ZSH/lib/*.zsh); do
+if [[ ! -n ${libignores[(r)$config_file]} ]]
+then
   source $config_file
+fi
 done
 
 # Set ZSH_CUSTOM to the path where your custom config files
