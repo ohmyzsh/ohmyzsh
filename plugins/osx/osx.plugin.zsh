@@ -177,10 +177,10 @@ function itunes() {
 		""|-h|--help)
 			echo "Usage: itunes <option>"
 			echo "option:"
-			echo "\tlaunch|play|pause|stop|rewind|resume|quit"
-			echo "\tmute|unmute\tcontrol volume set"
-			echo "\tnext|previous\tplay next or previous track"
-			echo "\thelp\tshow this message and exit"
+			echo -e "\tlaunch|play|pause|stop|rewind|resume|quit"
+			echo -e "\tmute|unmute\tcontrol volume set"
+			echo -e "\tnext|previous\tplay next or previous track"
+			echo -e "\thelp\tshow this message and exit"
 			return 0
 			;;
 		*)
