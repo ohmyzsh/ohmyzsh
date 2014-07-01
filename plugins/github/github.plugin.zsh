@@ -40,7 +40,7 @@ fi
 #
 # Use this when creating a new repo from scratch.
 empty_gh() { # [NAME_OF_REPO]
-    repo = $1
+    repo=$1
     ghuser=$(  git config github.user )
 
     mkdir "$repo"
