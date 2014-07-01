@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 function _current_epoch() {
   echo $(($(date +%s) / 60 / 60 / 24))
@@ -9,7 +9,7 @@ function _update_zsh_update() {
 }
 
 function _upgrade_zsh() {
-  /usr/bin/env ZSH=$ZSH /bin/sh $ZSH/tools/upgrade.sh
+  /usr/bin/env ZSH=$ZSH /bin/bash $ZSH/tools/upgrade.sh
   # update the zsh file
   _update_zsh_update
 }
