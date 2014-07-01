@@ -118,9 +118,12 @@ ENVIRONMENT
        directories to exclude from tracking. $HOME is always excluded.  Direc-
        tories must be full paths without trailing slashes.
 
+       The  environment  variable  $_Z_OWNER  can  be set if you want to use z
+       while `sudo -s' and $HOME variable was kept.
+
 FILES
-       Data  is  stored  in  $HOME/.z.  This  can be overridden by setting the
-       $_Z_DATA environment variable. When initialized, z will raise an  error
+       Data is stored in $HOME/.z. This  can  be  overridden  by  setting  the
+       $_Z_DATA  environment variable. When initialized, z will raise an error
        if this path is a directory, and not function correctly.
 
        A man page (z.1) is provided.
