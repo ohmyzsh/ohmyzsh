@@ -89,6 +89,7 @@ alias gga='git gui citool --amend'
 alias gk='gitk --all --branches'
 
 alias gsts='git stash show --text'
+alias gstl='git stash list'
 alias gsta='git stash'
 alias gstp='git stash pop'
 alias gstd='git stash drop'
