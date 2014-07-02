@@ -232,7 +232,7 @@ function listMavenCompletions {
         archetype:generate generate-sources
         cobertura:cobertura
         -Dtest= `if [ -d ./src/test/java ] ; then find ./src/test/java -type f -name '*.java' | grep -v svn | sed 's?.*/\([^/]*\)\..*?-Dtest=\1?' ; fi`
-        $profiles
+        -P $profiles
     )
 
 }
