@@ -5,9 +5,39 @@ alias bo="bundle open"
 alias bu="bundle update"
 alias bi="bundle_install"
 
-# The following is based on https://github.com/gma/bundler-exec
-
-bundled_commands=(annotate berks cap capify cucumber foodcritic foreman guard irb jekyll kitchen knife middleman nanoc puma rackup rainbows rake rspec ruby shotgun spec spin spork spring strainer tailor taps thin thor unicorn unicorn_rails)
+bundled_commands=(
+  annotate
+  berks
+  cap
+  capify
+  cucumber
+  foodcritic
+  foreman
+  guard
+  irb
+  jekyll
+  kitchen
+  knife
+  middleman
+  nanoc
+  puma
+  rackup
+  rainbows
+  rake
+  rspec
+  ruby
+  shotgun
+  spec
+  spin
+  spork
+  strainer
+  tailor
+  taps
+  thin
+  thor
+  unicorn
+  unicorn_rails
+)
 
 # Remove $UNBUNDLED_COMMANDS from the bundled_commands list
 for cmd in $UNBUNDLED_COMMANDS; do
@@ -74,4 +104,3 @@ for cmd in $bundled_commands; do
         compdef _$cmd bundled_$cmd=$cmd
   fi
 done
-
