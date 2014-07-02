@@ -27,6 +27,7 @@ bundled_commands=(
   rspec
   ruby
   shotgun
+  sidekiq
   spec
   spin
   spork
