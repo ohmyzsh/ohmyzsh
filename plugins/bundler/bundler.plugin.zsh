@@ -28,7 +28,6 @@ bundled_commands=(
   shotgun
   sidekiq
   spec
-  spin
   spork
   strainer
   tailor
