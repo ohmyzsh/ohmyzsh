@@ -114,7 +114,8 @@ function __pom_hierarchy {
 function listMavenCompletions {
      POM_HIERARCHY=()
      __pom_hierarchy
-     local profiles=()
+
+     profiles=()
      #current pom profiles
      for item in ${POM_HIERARCHY[*]}; do
          profiles=($profiles `[ -e $item ] && cat $item | sed 's/<!--.*-->//' | sed '/<!--/,/-->/d' | grep -e "<profile>" -A 1 | grep -e "<id>.*</id>" | sed 's?.*<id>\(.*\)<\/id>.*?-P\1?'`)
