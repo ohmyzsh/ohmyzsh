@@ -12,7 +12,6 @@ bundled_commands=(
   capify
   cucumber
   foodcritic
-  foreman
   guard
   irb
   jekyll
