@@ -3,18 +3,19 @@
 
 # -----------------------------------------------------------------------------
 #          FILE:  _pod
-#   DESCRIPTION:  Cocoapods autocomplete plugin for Oh-My-Zsh
+#   DESCRIPTION:  Cocoapods (0.27.1) autocomplete plugin for Oh-My-Zsh
 #                 http://cocoapods.org
 #        AUTHOR:  Alexandre Joly (alexandre.joly@mekanics.ch)
 #        GITHUB:  https://github.com/mekanics
 #       TWITTER:  @jolyAlexandre
-#       VERSION:  0.0.1
+#       VERSION:  0.0.3
 #       LICENSE:  MIT
 # -----------------------------------------------------------------------------
 
 local -a _1st_arguments
 _1st_arguments=(
-    'help:Show help for the given command.'
+    'help:Show help for the given command'
+    'init:Generate a Podfile for the current directory'
     'install:Install project dependencies'
     'ipc:Inter-process communication'
     'list:List pods'
@@ -32,6 +33,7 @@ local -a _repo_arguments
 _repo_arguments=(
     'add:Add a spec repo'
     'lint:Validates all specs in a repo'
+    'remove:Remove a spec repo.'
     'update:Update a spec repo'
 )
 
@@ -158,7 +160,7 @@ __first_command_list ()
 }
 
 __repo_list() {
-    _wanted application expl 'repo' compadd $(command ls -1 ~/.cocoapods 2>/dev/null | sed -e 's/ /\\ /g')
+    _wanted application expl 'repo' compadd $(command ls -1 ~/.cocoapods/repos 2>/dev/null | sed -e 's/ /\\ /g')
 }
 
 __pod-repo() {
@@ -193,6 +195,12 @@ __pod-repo() {
                 (add)
                     _arguments \
                         $_inherited_options
+
+                (remove)
+                    _arguments \
+                        $_inherited_options \
+                        ':feature:__repo_list'
+                ;;
             esac
         ;;
     esac
