@@ -1,0 +1,1 @@
+../golang/golang.plugin.zsh

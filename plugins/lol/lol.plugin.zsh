@@ -5,6 +5,7 @@ alias wtf='dmesg'
 alias onoz='cat /var/log/errors.log'
 alias rtfm='man'
 
+alias :3='echo'
 alias visible='echo'
 alias invisible='cat'
 alias moar='more'
@@ -35,3 +36,15 @@ alias nomnom='killall'
 alias byes='exit'
 alias cya='reboot'
 alias kthxbai='halt'
+
+alias pwned='ssh'
+
+alias hackzor='git init'
+alias rulz='git push'
+alias bringz='git pull'
+alias chicken='git add'
+alias oanward='git commit -m'
+alias ooanward='git commit -am'
+alias letcat='git checkout'
+alias violenz='git rebase'
+

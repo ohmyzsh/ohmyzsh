@@ -1,0 +1,63 @@
+#compdef rails
+#autoload
+
+local -a _1st_arguments
+_1st_arguments=(
+    'generate:Generate new code (short-cut alias: "g")'
+    'console:Start the Rails console (short-cut alias: "c")'
+    'server:Start the Rails server (short-cut alias: "s")'
+    'dbconsole:Start a console for the database specified in config/database.yml (short-cut alias: "db")'
+    'new:Create a new Rails application. "rails new my_app" creates a new application called MyApp in "./my_app"'
+    'application:Generate the Rails application code'
+    'destroy:Undo code generated with "generate"'
+
+    'benchmarker:See how fast a piece of code runs'
+    'profiler:Get profile information from a piece of code'
+    'plugin:Install a plugin'
+
+    'plugin new:Generates skeleton for developing a Rails plugin'
+    'runner:Run a piece of code in the application environment (short-cut alias: "r")'
+)
+
+_rails_generate_arguments() {
+    generate_arguments=(
+        assets
+        controller
+        decorator
+        generator
+        helper
+        integration_test
+        mailer
+        migration
+        model
+        observer
+        performance_test
+        plugin
+        resource
+        scaffold
+        scaffold_controller
+        session_migration
+        stylesheets
+        task
+    )
+}
+
+
+_arguments \
+    '(--version)--version[show version]' \
+    '(--help)--help[show help]' \
+    '*:: :->subcmds' && return 0
+
+if (( CURRENT == 1 )); then
+  _describe -t commands "rails subcommand" _1st_arguments
+  return
+fi
+
+case "$words[1]" in
+  g|generate)
+    _rails_generate_arguments
+    _wanted generate_arguments expl 'all generate' compadd -a generate_arguments ;;
+  d|destroy)
+    _rails_generate_arguments
+    _wanted generate_arguments expl 'all generate' compadd -a generate_arguments ;;
+esac
