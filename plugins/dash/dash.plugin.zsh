@@ -1,2 +1,2 @@
 # Usage: dash [keyword:]query
-dash(){open dash://"$1"}
+dash() { open dash://"$*" }
