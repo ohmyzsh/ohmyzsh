@@ -132,12 +132,16 @@ function git_compare_version() {
   INSTALLED_GIT_VERSION=(${(s/./)INSTALLED_GIT_VERSION[3]});
 
   for i in {1..3}; do
+    if [[ $INSTALLED_GIT_VERSION[$i] -gt $INPUT_GIT_VERSION[$i] ]]; then
+      echo 1
+      return 0
+    fi
     if [[ $INSTALLED_GIT_VERSION[$i] -lt $INPUT_GIT_VERSION[$i] ]]; then
       echo -1
       return 0
     fi
   done
-  echo 1
+  echo 0
 }
 
 #this is unlikely to change so make it all statically assigned
