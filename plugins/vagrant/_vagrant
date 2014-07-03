@@ -8,6 +8,8 @@ _1st_arguments=(
     'box:Box commands'
     'connect:Connects to a shared, remote Vagrant environment'
     'destroy:Destroys the vagrant environment'
+    'docker-logs:Shows Docker logs'
+    'docker-run:Run one-off commands against a Docker container'
     'global-status:Reports the status of all active Vagrant environments on the system'
     'halt:Halts the currently running vagrant environment'
     'init:[box_name] [box_url] Initializes current folder for Vagrant usage'
