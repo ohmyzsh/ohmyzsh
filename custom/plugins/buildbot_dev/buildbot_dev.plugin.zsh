@@ -104,7 +104,8 @@ function bb_merge_bottom_branch_to_here()
             return 1
     esac
     echo "Merging branch $bottom_branch to $branch..."
-    git merge umg/platform/buildbot/$bottom_branch --m "Manual merge of branch 'platform/buildbot/$bottom_branch' into 'platform/buildbot/$branch'"
+    cmd="git merge umg/platform/buildbot/$bottom_branch --m \"Manual merge of branch 'platform/buildbot/$bottom_branch' into 'platform/buildbot/$branch'\""
+    eval $cmd
     git mergetool --no-prompt
 }
 
