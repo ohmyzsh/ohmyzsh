@@ -27,6 +27,7 @@ bundled_commands=(
   sidekiq
   spec
   spork
+  spring
   strainer
   tailor
   taps
