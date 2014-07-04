@@ -24,7 +24,6 @@ bundled_commands=(
   rainbows
   rake
   rspec
-  ruby
   shotgun
   sidekiq
   spec
