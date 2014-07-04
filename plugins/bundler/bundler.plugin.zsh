@@ -18,6 +18,7 @@ bundled_commands=(
   knife
   middleman
   nanoc
+  pry
   puma
   rackup
   rainbows
