@@ -7,7 +7,7 @@ _rbenv-from-homebrew-installed() {
 }
 
 FOUND_RBENV=0
-rbenvdirs=("$HOME/.rbenv" "/usr/local/rbenv" "/opt/rbenv")
+rbenvdirs=("$HOME/.rbenv" "/usr/local/rbenv" "/opt/rbenv" "/usr/local/opt/rbenv")
 if _homebrew-installed && _rbenv-from-homebrew-installed ; then
     rbenvdirs=($(brew --prefix rbenv) "${rbenvdirs[@]}")
 fi
