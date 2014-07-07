@@ -236,6 +236,9 @@ function listMavenCompletions {
         -P $profiles
     )
 
+    unset POM_HIERARCHY
+    unset profiles
+
 }
 
 compctl -K listMavenCompletions mvn
