@@ -15,7 +15,17 @@ if [ "x$CASE_SENSITIVE" = "xtrue" ]; then
   zstyle ':completion:*' matcher-list 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
   unset CASE_SENSITIVE
 else
-  zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+  # in order try:
+  #   simple tab completion
+  #   case insensitive completion
+  #   simple substring completion
+  #   case insensitive substring completion
+  #   by defining multiple patterns, completion performance remains fast
+  #     while still affording tons of flexibility
+  zstyle ':completion:*' matcher-list '' 'm:{A-ZÄÖÜa-zäöü}={a-zäöüA-ZÄÖÜ}'                  \
+                                         'r:|[._-]=* r:|=*' 'l:|=* r:|=*'                   \
+                                         'm:{A-ZÄÖÜa-zäöü}={a-zäöüA-ZÄÖÜ} r:|[._-]=* r:|=*' \
+                                         'm:{A-ZÄÖÜa-zäöü}={a-zäöüA-ZÄÖÜ} l:|=* r:|=*'
 fi
 
 zstyle ':completion:*' list-colors ''
