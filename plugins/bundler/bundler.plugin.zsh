@@ -43,6 +43,11 @@ for cmd in $UNBUNDLED_COMMANDS; do
   bundled_commands=(${bundled_commands#$cmd});
 done
 
+# Add $BUNDLED_COMMANDS to the bundled_commands list
+for cmd in $BUNDLED_COMMANDS; do
+  bundled_commands+=($cmd);
+done
+
 ## Functions
 
 bundle_install() {
