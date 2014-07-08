@@ -6,4 +6,6 @@
 #
 # @github.com/mfaerevaag/wd
 
-alias wd='. ~/.oh-my-zsh/plugins/wd/wd.sh'
+wd() {
+    . $ZSH/plugins/wd/wd.sh
+}

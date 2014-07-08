@@ -5,7 +5,7 @@ function _current_epoch() {
 }
 
 function _update_zsh_update() {
-  echo "LAST_EPOCH=$(_current_epoch)" > ~/.zsh-update
+  echo "LAST_EPOCH=$(_current_epoch)" >! ~/.zsh-update
 }
 
 function _upgrade_zsh() {
@@ -19,6 +19,12 @@ if [[ -z "$epoch_target" ]]; then
   # Default to old behavior
   epoch_target=13
 fi
+
+[ -f ~/.profile ] && source ~/.profile
+
+# Cancel upgrade if the current user doesn't have write permissions for the
+# oh-my-zsh directory.
+[[ -w "$ZSH" ]] || return 0
 
 if [ -f ~/.zsh-update ]
 then
