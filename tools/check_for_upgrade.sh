@@ -1,7 +1,13 @@
 #!/bin/sh
 
+PLAT=`uname -s`
 function _current_epoch() {
-  echo $(($(date +%s) / 60 / 60 / 24))
+  if [ "$PLAT" = "SunOS" ]
+  then
+    echo $(($(perl -e 'print time') / 60 / 60 / 24))
+  else
+    echo $(($(date +%s) / 60 / 60 / 24))
+  fi
 }
 
 function _update_zsh_update() {
