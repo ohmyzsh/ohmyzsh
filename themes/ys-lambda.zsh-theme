@@ -8,7 +8,7 @@
 
 # Machine name.
 function box_name {
-    [ -f ~/.box-name ] && cat ~/.box-name || hostname
+    [ -f ~/.box-name ] && cat ~/.box-name || hostname -s
 }
 
 # Directory info.
@@ -21,27 +21,14 @@ ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[red]%}x"
 ZSH_THEME_GIT_PROMPT_CLEAN=" %{$fg[green]%}o"
 
-# Prompt format: \n # USER at MACHINE in DIRECTORY on git:BRANCH STATE [TIME] \n $ 
+# Prompt format: \n # USER@MACHINE in DIRECTORY on git:BRANCH STATE [TIME] \n $ 
 PROMPT="
-%{$terminfo[bold]$fg[blue]%}#%{$reset_color%} \
-%{$fg[cyan]%}%n \
-%{$fg[white]%}at \
-%{$fg[green]%}$(box_name) \
-%{$fg[white]%}in \
+%{$terminfo[bold]$fg[blue]%}Λ%{$reset_color%} \
+%{$fg[cyan]%}%n\
+%{$fg[white]%}@\
+%{$fg[green]%}$(box_name)\
+%{$fg[white]%}:\
 %{$terminfo[bold]$fg[yellow]%}${current_dir}%{$reset_color%}\
 ${git_info} \
 %{$fg[white]%}[%*]
-%{$terminfo[bold]$fg[red]%}$ %{$reset_color%}"
-
-if [[ "$(whoami)" == "root" ]]; then
-PROMPT="
-%{$terminfo[bold]$fg[blue]%}#%{$reset_color%} \
-%{$bg[yellow]%}%{$fg[cyan]%}%n%{$reset_color%} \
-%{$fg[white]%}at \
-%{$fg[green]%}$(box_name) \
-%{$fg[white]%}in \
-%{$terminfo[bold]$fg[yellow]%}${current_dir}%{$reset_color%}\
-${git_info} \
-%{$fg[white]%}[%*]
-%{$terminfo[bold]$fg[red]%}$ %{$reset_color%}"
-fi
+%{$terminfo[bold]$fg[red]%}λ %{$reset_color%}"
