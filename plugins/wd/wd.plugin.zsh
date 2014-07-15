@@ -1,7 +1,7 @@
 #!/bin/zsh
 
-# WARP
-# ====
+# WARP DIRECTORY
+# ==============
 # oh-my-zsh plugin
 #
 # @github.com/mfaerevaag/wd
