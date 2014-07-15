@@ -16,6 +16,7 @@ compdef _symfony2 sf
 #Alias
 alias sf='php $(find . -maxdepth 2 -mindepth 1 -name 'console') '
 alias sfcl='php $(find . -maxdepth 2 -mindepth 1 -name 'console')  cache:clear'
+alias sfcw='php $(find . -maxdepth 2 -mindepth 1 -name 'console')  cache:warmup'
 alias sfroute='php $(find . -maxdepth 2 -mindepth 1 -name 'console')  router:debug'
 alias sfcontainer='php $(find . -maxdepth 2 -mindepth 1 -name 'console') container:debug'
 alias sfgb='php $(find . -maxdepth 2 -mindepth 1 -name 'console')  generate:bundle'
