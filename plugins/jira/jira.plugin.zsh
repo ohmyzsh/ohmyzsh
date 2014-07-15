@@ -29,15 +29,23 @@ open_jira_issue () {
     return 0
   fi
 
+  if [ -f .jira-prefix ]; then
+    jira_prefix=$(cat .jira-prefix)
+  elif [ -f ~/.jira-prefix ]; then
+    jira_prefix=$(cat ~/.jira-prefix)
+  else
+    jira_prefix=""
+  fi
+
   if [ -z "$1" ]; then
     echo "Opening new issue"
     $open_cmd "$jira_url/secure/CreateIssue!default.jspa"
   else
     echo "Opening issue #$1"
     if [[ "x$JIRA_RAPID_BOARD" = "xtrue" ]]; then
-      $open_cmd  "$jira_url/issues/$1"
+      $open_cmd  "$jira_url/issues/$jira_prefix$1"
     else
-      $open_cmd  "$jira_url/browse/$1"
+      $open_cmd  "$jira_url/browse/$jira_prefix$1"
     fi
   fi
 }
