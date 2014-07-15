@@ -58,7 +58,7 @@ wd_warp()
         #wd_print_msg $BLUE "Warping..."
         cd ${points[$1]}
     else
-        wd_print_msg $RED "Unkown warp point '$1'"
+        wd_print_msg $RED "Unknown warp point '$1'"
     fi
 }
 
