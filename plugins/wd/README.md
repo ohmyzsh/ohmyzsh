@@ -2,37 +2,39 @@
 
 **Maintainer:** [mfaerevaag](https://github.com/mfaerevaag)
 
-`wd` (warp directory) lets you jump to custom directories in zsh, without using cd. Why? Because cd seems ineffecient when the folder is frequently visited or has a long path. [Source](https://github.com/mfaerevaag/wd)
+`wd` (*warp directory*) lets you jump to custom directories in zsh, without using `cd`. Why? Because `cd` seems ineffecient when the folder is frequently visited or has a long path. [Source](https://github.com/mfaerevaag/wd)
 
 ### Usage
 
  * Add warp point to current working directory:
 
-        wd add test
+        $ wd add foo
 
     If a warp point with the same name exists, use `add!` to overwrite it.
 
- * From an other directory, warp to test with:
+    Note, a warp point cannot contain colons, or only consist of only spaces and dots. The first will conflict in how `wd` stores the warp points, and the second will conflict other features, as below.
 
-        wd test
+ * From an other directory (not necessarily), warp to `foo` with:
 
- * You can warp back to previous directory, and so on, with the puncticulation syntax:
+        $ wd foo
 
-        wd ..
-        wd ...
+ * You can warp back to previous directory, and so on, with this dot syntax:
+
+        $ wd ..
+        $ wd ...
 
     This is a wrapper for the zsh `dirs` function.
 
  * Remove warp point test point:
 
-        wd rm test
-
- * List warp points to current directory (stored in `~/.warprc`):
-
-        wd show
+        $ wd rm foo
 
  * List all warp points (stored in `~/.warprc`):
 
-        wd ls
+        $ wd ls
+
+ * List warp points to current directory
+
+        $ wd show
 
  * Print usage with no opts or the `help` argument.
