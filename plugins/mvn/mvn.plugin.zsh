@@ -129,6 +129,8 @@ function listMavenCompletions {
         tomcat6:run tomcat6:run-war tomcat6:run-war-only tomcat6:stop tomcat6:deploy tomcat6:undeploy
         # tomcat7
         tomcat7:run tomcat7:run-war tomcat7:run-war-only tomcat7:deploy
+        # spring-boot
+        spring-boot:run spring-boot:repackage
         # exec
         exec:exec exec:java
         # versions
