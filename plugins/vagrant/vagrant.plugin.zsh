@@ -1,0 +1,6 @@
+alias vu="vagrant up"
+alias vd="vagrant destroy -f"
+alias vs="vagrant ssh"
+alias vsc="vagrant ssh -c"
+alias vss="vagrant ssh-config"
+alias vgs="vagrant global-status"
