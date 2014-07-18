@@ -256,7 +256,7 @@ compdef _git gke='gitk'
 
 # Clean
 # Remove all .orig, .BASE.*, .REMOTE.*, .LOCAL.*, *.BACKUP files
-alias gclean="find $(git rev-parse --show-toplevel) -name '*.orig' -or -name '*.REMOTE.*' -or -name '*.LOCAL.*' -or -name '*.BACKUP.*' -or -name '*.BASE.*' | xargs -r rm -v"
+alias gclean='find $(git rev-parse --show-toplevel) -name "*.orig" -or -name "*.REMOTE.*" -or -name "*.LOCAL.*" -or -name "*.BACKUP.*" -or -name "*.BASE.*" | xargs -r rm -v'
 alias gcleanreset='(cd $(git rev-parse --show-toplevel) && git reset --hard && git clean -dfx)'
 
 # Edit global Git configuration files
