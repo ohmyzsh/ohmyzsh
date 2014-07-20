@@ -37,6 +37,9 @@ add_plugin_fpath() {
     fi
 }
 
+sourced_plugins={}
+typeset -A sourced_plugins
+
 source_plugin_zsh() {
     local plugin=$1
     if [ -f $ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh ]; then
@@ -44,6 +47,7 @@ source_plugin_zsh() {
     elif [ -f $ZSH/plugins/$plugin/$plugin.plugin.zsh ]; then
         source $ZSH/plugins/$plugin/$plugin.plugin.zsh
     fi
+    sourced_plugins[$1]=$1
 }
 
 # Add all defined plugins to fpath. This must be done
@@ -73,10 +77,13 @@ for plugin ($plugins); do
 done
 
 load_plugin() {
-    fpath=($ZSH/functions $ZSH/completions $fpath)
-    add_plugin_fpath $1
-    compinit -i
-    source_plugin_zsh $1
+    if [ -z ${sourced_plugins[$1]} ]; then
+        add_plugin_fpath $1
+        compinit -i
+        source_plugin_zsh $1
+    else
+        echo "[oh-my-zsh] '$1' already loaded."
+    fi
 }
 
 # Load all of your custom configurations from custom/
