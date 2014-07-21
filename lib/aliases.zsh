@@ -36,3 +36,5 @@ alias sl=ls # often screw this up
 
 alias afind='ack-grep -il'
 
+# brew aliases for Mac
+alias rebrew='brew update; brew doctor'
