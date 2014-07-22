@@ -1,4 +1,4 @@
-# Open folder in ForkLift.app of ForkLift2.app from console
+# Open folder in ForkLift.app or ForkLift2.app from console
 # Author: Adam Strzelecki nanoant.com, modified by Bodo Tasche bitboxer.de
 #         Updated to support ForkLift2 by Johan Kaving
 #
