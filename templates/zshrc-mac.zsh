@@ -34,7 +34,7 @@ DISABLE_VENV_CD="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 plugins=(git2 python vim-override common-aliases zsh-syntax-highlighting jump coffee cp
          rsync git-remote-branch command-not-found debian dircycle encode64 lol extract common-aliases
-         pip brew sublime grin)
+         pip brew sublime grin pip)
 
 source $ZSH/oh-my-zsh.sh
 # User configuration
