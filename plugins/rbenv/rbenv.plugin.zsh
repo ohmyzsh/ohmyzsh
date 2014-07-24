@@ -19,7 +19,7 @@ for rbenvdir in "${rbenvdirs[@]}" ; do
       RBENV_ROOT=$rbenvdir
     fi
     export RBENV_ROOT
-    export PATH=${rbenvdir}/bin:$PATH
+    path=(${rbenvdir}/bin $path)
     eval "$(rbenv init --no-rehash - zsh)"
 
     alias rubies="rbenv versions"
