@@ -16,7 +16,7 @@ for pyenvdir in "${pyenvdirs[@]}" ; do
     if [ -d $pyenvdir/bin -a $FOUND_PYENV -eq 0 ] ; then
         FOUND_PYENV=1
         export PYENV_ROOT=$pyenvdir
-        export PATH=${pyenvdir}/bin:$PATH
+        path=(${pyenvdir}/bin $path)
         eval "$(pyenv init --no-rehash - zsh)"
 
         function pyenv_prompt_info() {
