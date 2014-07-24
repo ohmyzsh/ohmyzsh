@@ -5,19 +5,22 @@ function _storm_commands() {
     case $state in
       subcommand)
         subcommands=(
+          "activate:Activates the specified topology’s spouts."
+          "classpath:Prints the classpath used by the storm client when running commands."
+          "deactivate:Deactivates the specified topology’s spouts."
+          "dev-zookeeper:Launches a fresh Zookeeper server for development/testing."
+          "drpc:Launches a DRPC daemon."
+          "help:Print usage."
           "jar:Runs the main method of class with the specified arguments."
           "kill:Kills the topology with the name topology-name."
-          "activate:Activates the specified topology’s spouts."
-          "deactivate:Deactivates the specified topology’s spouts."
+          "localconfvalue:Prints out the value for conf-name in the local Storm configs."
+          "logviewer:Launches the log viewer daemon."
           "rebalance:Spread out where the workers for a topology are running."
           "repl:Opens up a Clojure REPL with the storm jars and configuration on the classpath."
-          "classpath:Prints the classpath used by the storm client when running commands."
-          "localconfvalue:Prints out the value for conf-name in the local Storm configs."
           "remoteconfvalue:Prints out the value for conf-name in the cluster’s Storm configs."
-          "nimbus:Launches the nimbus daemon."
           "supervisor:Launches the supervisor daemon."
           "ui:Launches the UI daemon."
-          "drpc:Launches a DRPC daemon. "
+          "version:Print version."
         )
         _describe -t subcommands 'storm subcommands' subcommands && ret=0
     esac
