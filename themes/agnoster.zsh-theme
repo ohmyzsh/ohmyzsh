@@ -166,6 +166,12 @@ prompt_status() {
   [[ -n "$symbols" ]] && prompt_segment black default "$symbols"
 }
 
+# Add a newline to the prompt for convenience
+prompt_newline() {
+ 
+  echo "\n→"
+}
+
 ## Main prompt
 build_prompt() {
   RETVAL=$?
@@ -176,6 +182,7 @@ build_prompt() {
   prompt_git
   prompt_hg
   prompt_end
+  prompt_newline
 }
 
 PROMPT='%{%f%b%k%}$(build_prompt) '
