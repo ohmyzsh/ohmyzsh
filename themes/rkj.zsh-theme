@@ -42,7 +42,19 @@ rkj_retcode() {
   return $?
 }
 
-PROMPT=$'%{\e[0;34m%}%B┌─[%b%{\e[0m%}%{\e[1;32m%}%n%{\e[1;30m%}@%{\e[0m%}%{\e[0;36m%}%m%{\e[0;34m%}%B]%b%{\e[0m%} - %b%{\e[0;34m%}%B[%b%{\e[1;37m%}%~%{\e[0;34m%}%B]%b%{\e[0m%} - %{\e[0;34m%}%B[%b%{\e[0;33m%}'%D{"%Y-%m-%d %I:%M:%S"}%b$'%{\e[0;34m%}%B]%b%{\e[0m%}
+short_fortune() {
+  local prompt_variable_part=$'%n%m%~%D{"$PROMPT_DATE_FORMAT"}'
+  if hash fortune 2>/dev/null; then
+    local left=$(( $COLUMNS - ${#${(%)prompt_variable_part}} - 15))
+    echo -ne $left
+    fortune -s -n $left | tr -s "\n\t " "   "
+  else
+    echo "no fortunes for you"
+  fi
+}
+PROMPT_DATE_FORMAT=$'%Y-%m-%d %I:%M:%S'
+LINE1=$'%{\e[0;34m%}%B┌─[%b%{\e[0m%}%{\e[1;32m%}%n%{\e[1;30m%}@%{\e[0m%}%{\e[0;36m%}%m%{\e[0;34m%}%B]%b%{\e[0m%} - %b%{\e[0;34m%}%B[%b%{\e[1;37m%}%~%{\e[0;34m%}%B]%b%{\e[0m%} - %{\e[0;34m%}%B[%b%{\e[0;33m%}'%D{"${PROMPT_DATE_FORMAT}"}%b$'%{\e[0;34m%}%B]%b%{\e[0m%}'
+PROMPT=$'$LINE1 $(short_fortune)
 %{\e[0;34m%}%B└─%B[%{\e[1;35m%}%?$(rkj_retcode)%{\e[0;34m%}%B] $(rkj_vcs_info)$(rkj_prompt)%{\e[0m%}%b '
 PS2=$' \e[0;34m%}%B>%{\e[0m%}%b '
 
