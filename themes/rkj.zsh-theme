@@ -46,7 +46,7 @@ short_fortune() {
   local prompt_variable_part=$'%n%m%~%D{"$PROMPT_DATE_FORMAT"}'
   if hash fortune 2>/dev/null; then
     local left=$(( $COLUMNS - ${#${(%)prompt_variable_part}} - 15))
-    echo -ne $left
+    #echo -ne $left
     fortune -s -n $left | tr -s "\n\t " "   "
   else
     echo "no fortunes for you"
