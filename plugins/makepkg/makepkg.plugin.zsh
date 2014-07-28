@@ -8,6 +8,7 @@ if [[ -x `which makepkg` ]]; then
   alias mpkge='makepkg -e' # Use exist sources in ./src
   alias mpkgre='makepkg -R' # Only repack(use exist files in ./pkg) package
   alias mpkgf='makepkg -f' # Force rebuild package
+  alias mpkgi='makepkg -i' # Install build package
 else
   # Notification if makepkg not availble
   echo "Did you enable makepkg plugin, but makepkg doesn't exist in your system(or in $PATH)."
