@@ -73,7 +73,6 @@ prompt_git() {
   local ref dirty mode repo_path
   repo_path=$(git rev-parse --git-dir 2>/dev/null)
 
-  source ~/gitbranch.sh
   gitbranch;	
 
   if [[ "$GITBRANCH" != "" ]]; then
@@ -87,6 +86,53 @@ prompt_dir() {
   prompt_segment blue black '%~'
 }
 
+# Fast method to get the current branch in git from https://gist.github.com/wolever/6525437
+gitbranch() {
+	export GITBRANCH=""
+
+	local repo="${_GITBRANCH_LAST_REPO-}"
+	local gitdir=""
+	[[ ! -z "$repo" ]] && gitdir="$repo/.git"
+
+	# If we don't have a last seen git repo, or we are in a different directory
+	if [[ -z "$repo" || "$PWD" != "$repo"* || ! -e "$gitdir" ]]; then
+		local cur="$PWD"
+		while [[ ! -z "$cur" ]]; do
+			if [[ -e "$cur/.git" ]]; then
+				repo="$cur"
+				gitdir="$cur/.git"
+				break
+			fi
+			cur="${cur%/*}"
+		done
+	fi
+	
+	if [[ -z "$gitdir" ]]; then
+		unset _GITBRANCH_LAST_REPO
+		return 0
+	fi
+
+	export _GITBRANCH_LAST_REPO="${repo}"
+	local head=""
+	local branch=""
+	read head < "$gitdir/HEAD"
+	case "$head" in
+		ref:*)
+			branch="${head##*/}"
+			;;
+		"")
+			branch=""
+			;;
+		*)
+			branch="d:${head:0:7}"
+			;;
+	esac
+	if [[ -z "$branch" ]]; then
+		return 0
+	fi
+	export GITBRANCH="$branch"
+}
+	
 # Status:
 # - was there an error
 # - am I root
