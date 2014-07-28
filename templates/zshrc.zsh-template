@@ -5,7 +5,7 @@ export ZSH=$HOME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="robbyrussell"
+ZSH_THEME="blecher.at-agnoster"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -78,3 +78,13 @@ export PATH=$HOME/bin:/usr/local/bin:$PATH
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# Do a history search by PGUP and PGDOWN like in the good old suse linux days
+bindkey "^[[5~" history-beginning-search-backward
+bindkey "^[[6~" history-beginning-search-forward
+
+# VIM needs this to use colors
+export TERM='xterm-256color'
+
+# I don't like git using less as default pager, so I override it here
+export GIT_PAGER='cat'
