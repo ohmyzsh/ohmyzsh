@@ -14,10 +14,25 @@ function asp {
   fi
 }
 
+function aws_change_access_key {
+  if [[ "x$1" == "x" ]] then
+    echo "usage: $0 <profile.name>"
+    return 1
+  else
+    echo "Insert the credentials when asked."
+    asp $1
+    aws iam create-access-key
+    aws configure --profile $1
+    echo "You can now safely delete the old access key running 'aws iam delete-access-key --access-key-id ID'"
+    echo "Your current keys are:"
+    aws iam list-access-keys
+  fi
+}
+
 function aws_profiles {
   reply=($(grep '\[profile' "${AWS_CONFIG_FILE:-$HOME/.aws/config}"|sed -e 's/.*profile \([a-zA-Z0-9_\.-]*\).*/\1/'))
 }
-compctl -K aws_profiles asp
+compctl -K aws_profiles asp aws_change_access_key
 
 
 # AWS prompt
