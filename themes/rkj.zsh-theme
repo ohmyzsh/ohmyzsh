@@ -42,15 +42,19 @@ rkj_retcode() {
   return $?
 }
 
+type rkj_debug >/dev/null || rkj_debug() { }
+
 short_fortune() {
+  rkj_debug fortune start
   local prompt_variable_part=$'%n%m%~%D{"$PROMPT_DATE_FORMAT"}'
   if hash fortune 2>/dev/null; then
     local left=$(( $COLUMNS - ${#${(%)prompt_variable_part}} - 15))
-    #echo -ne $left
-    fortune -s -n $left | tr -s "\n\t " "   "
+    rkj_debug Left $left, $COLUMNS available
+    [[ $left -gt 30 ]] && fortune -s -n $left | tr -s "\n\t " "   "
   else
     echo "no fortunes for you"
   fi
+  rkj_debug fortune finished
 }
 PROMPT_DATE_FORMAT=$'%Y-%m-%d %I:%M:%S'
 LINE1=$'%{\e[0;34m%}%B┌─[%b%{\e[0m%}%{\e[1;32m%}%n%{\e[1;30m%}@%{\e[0m%}%{\e[0;36m%}%m%{\e[0;34m%}%B]%b%{\e[0m%} - %b%{\e[0;34m%}%B[%b%{\e[1;37m%}%~%{\e[0;34m%}%B]%b%{\e[0m%} - %{\e[0;34m%}%B[%b%{\e[0;33m%}'%D{"${PROMPT_DATE_FORMAT}"}%b$'%{\e[0;34m%}%B]%b%{\e[0m%}'
