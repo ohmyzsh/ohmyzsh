@@ -7,6 +7,7 @@ bq. "OH MY ZSHELL!"
 h2. Setup
 
 @oh-my-zsh@ should work with any recent release of "zsh":http://www.zsh.org/, the minimum recommended version is 4.3.9.
+If not already, install zsh using the command line first.
 
 h3. The automatic installer... (do you trust me?)
 
