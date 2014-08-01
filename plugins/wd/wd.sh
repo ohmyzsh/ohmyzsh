@@ -64,9 +64,9 @@ wd_warp()
 
 wd_add()
 {
-    if [[ $2 =~ "^\.+$" || $2 =~ "^\s*$" ]]
+    if [[ $2 -regex-match "^\.+$" || $2 -regex-match "^\s*$" ]]
     then
-        wd_print_msg $RED "Illegal warp point (see README)."
+	wd_print_msg $RED "Warp point name cannot be just dots or spaces"
     elif [[ ${points[$2]} == "" ]] || $1
     then
         wd_remove $2 > /dev/null
