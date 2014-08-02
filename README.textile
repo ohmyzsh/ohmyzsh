@@ -83,6 +83,8 @@ h3. Text search
 
 h1. Official Oh My Zsh README
 
+!https://s3.amazonaws.com/ohmyzsh/oh-my-zsh-logo.png!
+
 @oh-my-zsh@ is an open source, community-driven framework for managing your "Zsh":http://www.zsh.org/ configuration.
 
 It comes bundled with a ton of helpful functions, helpers, plugins, themes, and a few things that make you shout…
