@@ -8,6 +8,7 @@ set cursorline
 set smartindent
 
 set nocompatible
+set tw=100
 filetype off
 
 set rtp+=~/.vim/bundle/vundle/
