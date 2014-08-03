@@ -1,7 +1,7 @@
 ; list the packages you want
 (setq package-list '(auctex expand-region gist magit magithub markdown-mode paredit projectile
                             python sass-mode rainbow-mode scss-mode solarized-theme
-                            volatile-highlights evil scala-mode2 sbt-mode))
+                            volatile-highlights evil evil-leader scala-mode2 sbt-mode))
 
 ; list the repositories containing them
 (setq package-archives '(("elpa" . "http://tromey.com/elpa/")
@@ -24,7 +24,12 @@
 (load-theme 'solarized-dark)
 
 ; Enable VIM Mode
+(global-evil-leader-mode)
 (evil-mode 1)
+
+(evil-leader/set-leader ",")
+; Use evil-leader in magit and gnus mode
+(setq evil-leader/no-prefix-mode-rx '("magit-.*-mode" "gnus-.*-mode"))
 
 ; Map escape to exit all modes
 (define-key evil-normal-state-map [escape] 'keyboard-quit)
@@ -56,7 +61,7 @@
 (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
 
 ; Debug
-(setq debug-on-error t)
+;(setq debug-on-error t)
 
 ;Custom
 
