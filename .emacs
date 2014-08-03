@@ -1,12 +1,13 @@
 ; list the packages you want
 (setq package-list '(auctex expand-region gist magit magithub markdown-mode paredit projectile
                             python sass-mode rainbow-mode scss-mode solarized-theme
-                            volatile-highlights evil))
+                            volatile-highlights evil scala-mode2 sbt-mode ensime))
 
 ; list the repositories containing them
 (setq package-archives '(("elpa" . "http://tromey.com/elpa/")
                          ("gnu" . "http://elpa.gnu.org/packages/")
-                         ("marmalade" . "http://marmalade-repo.org/packages/")))
+                         ("marmalade" . "http://marmalade-repo.org/packages/")
+                         ("melpa" . "http://melpa.milkbox.net/packages/")))
 
 ; activate all the packages (in particular autoloads)
 (package-initialize)
@@ -19,7 +20,32 @@
   (unless (package-installed-p package)
     (package-install package)))
 
+; Solarized Theme
 (load-theme 'solarized-dark)
+
+; Enable VIM Mode
+(evil-mode 1)
+
+; Map escape to exit all modes
+(define-key evil-normal-state-map [escape] 'keyboard-quit)
+(define-key evil-visual-state-map [escape] 'keyboard-quit)
+(define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
+
+; Ido
+(ido-mode 1)
+
+; Scala
+(add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
+
+; Debug
+(setq debug-on-error t)
+
+;Custom
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
