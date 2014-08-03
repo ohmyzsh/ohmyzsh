@@ -1,7 +1,7 @@
 ; list the packages you want
 (setq package-list '(auctex expand-region gist magit magithub markdown-mode paredit projectile
                             python sass-mode rainbow-mode scss-mode solarized-theme
-                            volatile-highlights evil scala-mode2 sbt-mode ensime))
+                            volatile-highlights evil scala-mode2 sbt-mode))
 
 ; list the repositories containing them
 (setq package-archives '(("elpa" . "http://tromey.com/elpa/")
@@ -40,7 +40,7 @@
 
 ; Scala
 ;; Load the ensime lisp code...
-(add-to-list 'load-path "ensime/elisp/")
+(add-to-list 'load-path "/Users/ahirreddy/.emacs.d/ensime/elisp")
 (require 'ensime)
 
 ;; This step causes the ensime-mode to be started whenever
