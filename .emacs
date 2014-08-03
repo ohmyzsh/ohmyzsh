@@ -35,6 +35,13 @@
 (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
 (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
 
+; Disable line wrapping
+(setq-default truncate-lines t)
+
+; UI Tweaks
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+
 ; Ido
 (ido-mode 1)
 
