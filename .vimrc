@@ -157,9 +157,9 @@ if has("autocmd")
 endif
 
 " Eclim Settings
-let g:EclimScalaSearchSingleResult = 'edit'
-let g:EclimCompletionMethod = 'omnifunc'
-let g:SuperTabDefaultCompletionType = 'context'
+" let g:EclimScalaSearchSingleResult = 'edit'
+" let g:EclimCompletionMethod = 'omnifunc'
+" let g:SuperTabDefaultCompletionType = 'context'
 map <C-Space> :ScalaSearch<CR>
 
 set wildignore=*.o,*~,*.pyc,*.class,\$global
