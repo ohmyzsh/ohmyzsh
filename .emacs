@@ -1,7 +1,7 @@
 ; list the packages you want
 (setq package-list '(auctex expand-region gist magit magithub markdown-mode paredit projectile
                             python sass-mode rainbow-mode scss-mode solarized-theme anything
-                            volatile-highlights evil evil-leader scala-mode2 sbt-mode))
+                            volatile-highlights evil evil-leader scala-mode2 sbt-mode flx-ido))
 
 ; list the repositories containing them
 (setq package-archives '(("elpa" . "http://tromey.com/elpa/")
@@ -48,7 +48,13 @@
 (scroll-bar-mode -1)
 
 ; Ido
+(require 'flx-ido)
 (ido-mode 1)
+(ido-everywhere 1)
+(flx-ido-mode 1)
+;; disable ido faces to see flx highlights.
+(setq ido-enable-flex-matching t)
+(setq ido-use-faces nil)
 
 ; Scala
 ; Load the ensime lisp code...
