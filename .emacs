@@ -2,7 +2,7 @@
 (setq package-list '(auctex expand-region gist magit magithub markdown-mode paredit projectile
                             python sass-mode rainbow-mode scss-mode solarized-theme anything
                             volatile-highlights evil evil-leader scala-mode2 sbt-mode flx-ido
-                            js2-mode js2-refactor tern tern-auto-complete yasnippet auto-complete))
+                            js2-mode js2-refactor tern tern-auto-complete yasnippet auto-complete helm helm-ls-git))
 
 ; list the repositories containing them
 (setq package-archives '(("elpa" . "http://tromey.com/elpa/")
@@ -31,7 +31,7 @@
 (evil-leader/set-leader ",")
 ; Use evil-leader in magit and gnus mode
 (setq evil-leader/no-prefix-mode-rx '("magit-.*-mode" "gnus-.*-mode"))
-(evil-leader/set-key "t" 'projectile-find-file)
+(evil-leader/set-key "t" 'helm-browse-project)
 
 ; Map escape to exit all modes
 (define-key evil-normal-state-map [escape] 'keyboard-quit)
@@ -49,17 +49,22 @@
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 
-; Ido
-(require 'flx-ido)
-(ido-mode 1)
-(ido-everywhere 1)
-(flx-ido-mode 1)
-;; disable ido faces to see flx highlights.
-(setq ido-enable-flex-matching t)
-(setq ido-use-faces nil)
-(setq projectile-enable-caching t)
-; Special GC Setting
-(setq gc-cons-threshold 20000000)
+; Helm
+(helm-mode 1)
+(require 'helm-ls-git)
+
+
+;; Ido
+;(require 'flx-ido)
+;(ido-mode 1)
+;(ido-everywhere 1)
+;(flx-ido-mode 1)
+;;; disable ido faces to see flx highlights.
+;(setq ido-enable-flex-matching t)
+;(setq ido-use-faces nil)
+;(setq projectile-enable-caching t)
+;; Special GC Setting
+;(setq gc-cons-threshold 20000000)
 
 ; Scala
 ; Load the ensime lisp code...
@@ -115,7 +120,7 @@
 (powerline-center-evil-theme)
 
 ; Projectile Project Management
-(projectile-global-mode)
+;(projectile-global-mode)
 
 ; Debug
 ;(setq debug-on-error t)
