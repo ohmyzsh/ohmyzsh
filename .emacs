@@ -2,7 +2,8 @@
 (setq package-list '(auctex expand-region gist magit magithub markdown-mode paredit projectile
                             python sass-mode rainbow-mode scss-mode solarized-theme anything
                             volatile-highlights evil evil-leader scala-mode2 sbt-mode flx-ido
-                            js2-mode js2-refactor tern tern-auto-complete yasnippet auto-complete helm helm-ls-git))
+                            js2-refactor tern tern-auto-complete yasnippet auto-complete
+                            helm helm-ls-git dtrt-indent highlight-chars))
 
 ; list the repositories containing them
 (setq package-archives '(("elpa" . "http://tromey.com/elpa/")
@@ -23,6 +24,22 @@
 
 ; Solarized Theme
 (load-theme 'solarized-dark)
+
+; Detect Indentation
+(require 'dtrt-indent)
+(dtrt-indent-mode t)
+
+;; Use spaces instead of tabs
+ (setq-default indent-tabs-mode nil)
+;; ;; Set tab to display as 4 spaces
+ (setq-default tab-width 4)
+;; ;; Set stop-tabs to be 4 written as spaces
+ (setq-default tab-stop-list (number-sequence 4 120 4))
+
+;; highlight tabs and trailing whitespace
+(require 'highlight-chars)
+(add-hook 'font-lock-mode-hook 'hc-highlight-tabs)
+;(add-hook 'font-lock-mode-hook 'hc-highlight-trailing-whitespace)
 
 ; Enable VIM Mode
 (global-evil-leader-mode)
@@ -78,10 +95,37 @@
 (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
 
 ; Javascript
+; https://github.com/mooz/js2-mode.git
+(add-to-list 'load-path "~/.emacs.d/js2-mode")
+(require 'js2-mode)
 (add-hook 'js-mode-hook 'js2-minor-mode)
 (add-hook 'js2-mode-hook 'ac-js2-mode)
 (setq js2-highlight-level 3)
 (add-to-list 'auto-mode-alist '("\\.json$" . js-mode))
+
+(setq js2-missing-semi-one-line-override t)
+(setq js2-basic-offset 2) ; 2 spaces for indentation (if you prefer 2 spaces instead of default 4 spaces for tab)
+(setq c-default-style "linux"
+        c-basic-offset 2)
+
+;; add from jslint global variable declarations to js2-mode globals list
+;; modified from one in http://www.emacswiki.org/emacs/Js2Mode
+(defun my-add-jslint-declarations ()
+ (when (> (buffer-size) 0)
+   (let ((btext (replace-regexp-in-string
+                 (rx ":" (* " ") "true") " "
+                 (replace-regexp-in-string
+                  (rx (+ (char "\n\t\r "))) " "
+                  ;; only scans first 1000 characters
+                  (save-restriction (widen) (buffer-substring-no-properties (point-min) (min (1+ 1000) (point-max)))) t t))))
+     (mapc (apply-partially 'add-to-list 'js2-additional-externs)
+           (split-string
+            (if (string-match (rx "/*" (* " ") "global" (* " ") (group (*? nonl)) (* " ") "*/") btext)
+                (match-string-no-properties 1 btext) "")
+            (rx (* " ") "," (* " ")) t))
+     )))
+(add-hook 'js2-post-parse-callbacks 'my-add-jslint-declarations)
+
 
 ;;; yasnippet
 ;;; should be loaded before auto complete so that they can work together
