@@ -153,9 +153,9 @@
 
 ; Gpicker
 ; git clone https://github.com/emacsmirror/gpicker.git                                         1 ↵ ✭
-(add-to-list 'load-path "~/.emacs.d/gpicker")
-(require 'gpicker)
-(setq exec-path (append exec-path '("~/.emacs.d/gpicker")))
+;(add-to-list 'load-path "~/.emacs.d/gpicker")
+;(require 'gpicker)
+;(setq exec-path (append exec-path '("~/.emacs.d/gpicker")))
 
 ; Powerline
 ; https://github.com/Dewdrops/powerline.git
