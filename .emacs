@@ -1,7 +1,8 @@
 ; list the packages you want
 (setq package-list '(auctex expand-region gist magit magithub markdown-mode paredit projectile
                             python sass-mode rainbow-mode scss-mode solarized-theme anything
-                            volatile-highlights evil evil-leader scala-mode2 sbt-mode flx-ido))
+                            volatile-highlights evil evil-leader scala-mode2 sbt-mode flx-ido
+                            js2-mode js2-refactor tern tern-auto-complete))
 
 ; list the repositories containing them
 (setq package-archives '(("elpa" . "http://tromey.com/elpa/")
@@ -64,11 +65,27 @@
 ; Load the ensime lisp code...
 (add-to-list 'load-path "~/.emacs.d/ensime/elisp")
 (require 'ensime)
+(setq exec-path (append exec-path '("~/Work/universe/sbt")))
 
 ;; This step causes the ensime-mode to be started whenever
 ;; scala-mode is started for a buffer. You may have to customize this step
 ;; if you're not using the standard scala mode.
 (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
+
+; Javascript
+(add-hook 'js-mode-hook 'js2-minor-mode)
+(add-hook 'js2-mode-hook 'ac-js2-mode)
+(setq js2-highlight-level 3)
+(add-to-list 'auto-mode-alist '("\\.json$" . js-mode))
+
+; Tern auto completion, install tern
+; sudo npm install -g tern
+(add-hook 'js-mode-hook (lambda () (tern-mode t)))
+(eval-after-load 'tern
+   '(progn
+      (require 'tern-auto-complete)
+      (tern-ac-setup)))
+
 
 ; Powerline
 ; https://github.com/Dewdrops/powerline.git
