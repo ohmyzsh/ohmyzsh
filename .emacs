@@ -104,9 +104,9 @@
 (add-to-list 'auto-mode-alist '("\\.json$" . js-mode))
 
 (setq js2-missing-semi-one-line-override t)
-(setq js2-basic-offset 2) ; 2 spaces for indentation (if you prefer 2 spaces instead of default 4 spaces for tab)
-(setq c-default-style "linux"
-        c-basic-offset 2)
+(setq js-indent-level 2)
+(setq js2-basic-offset 1) ; 2 spaces for indentation (if you prefer 2 spaces instead of default 4 spaces for tab)
+(setq c-basic-offset 2)
 
 ;; add from jslint global variable declarations to js2-mode globals list
 ;; modified from one in http://www.emacswiki.org/emacs/Js2Mode
