@@ -1,6 +1,6 @@
 ; list the packages you want
 (setq package-list '(auctex expand-region gist magit magithub markdown-mode paredit projectile
-                            python sass-mode rainbow-mode scss-mode solarized-theme
+                            python sass-mode rainbow-mode scss-mode solarized-theme anything
                             volatile-highlights evil evil-leader scala-mode2 sbt-mode))
 
 ; list the repositories containing them
@@ -51,9 +51,16 @@
 (ido-mode 1)
 
 ; Scala
-;; Load the ensime lisp code...
-(add-to-list 'load-path "/Users/ahirreddy/.emacs.d/ensime/elisp")
+; Load the ensime lisp code...
+(add-to-list 'load-path "~/.emacs.d/ensime/elisp")
 (require 'ensime)
+
+; Powerline
+; https://github.com/Dewdrops/powerline.git
+(add-to-list 'load-path "~/.emacs.d/powerline")
+(require 'powerline)
+(powerline-center-evil-theme)
+
 
 ;; This step causes the ensime-mode to be started whenever
 ;; scala-mode is started for a buffer. You may have to customize this step
@@ -62,6 +69,9 @@
 
 ; Debug
 ;(setq debug-on-error t)
+
+; Disable Stupid Bell
+(setq bell-volume 0)
 
 ;Custom
 
