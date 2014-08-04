@@ -47,42 +47,25 @@ function gerrit_pull () {
 }
 
 function gerrit_patch () {
-  if [ -z $1 ]; then
+  if [ -z "$1" ]; then
     gerrit_patch_usage;
   else
-    [ $1 = "commit" ] && git commit --amend;
-    [ $1 = "review" ] && gerrit_review "master";
-    [ $1 = "draft" ] && gerrit_draft "master";
-    [ $1 = "rebase" ] && gerrit_pull "master";
+    [ "$1" = "commit" ] && git commit --amend;
+    [ "$1" = "review" ] && gerrit_review "master";
+    [ "$1" = "draft" ] && gerrit_draft "master";
+    [ "$1" = "rebase" ] && gerrit_pull "master";
   fi
 }
 
 function gerrit_clone () {
-  if [ -z $1 ]; then
+  if [ -z "$1" ]; then
     echo "$yellow Please supply the name of a repo to clone. $stop"
   else
     if [[ -n $(which gg-gerrit-clone) ]]; then
-      gg-gerrit-clone $1
+      gg-gerrit-clone "$1"
     else
       git clone --recursive ssh://gerrit_host/$1
     fi
-  fi
-}
-
-function gerrit_set_team_reviewers () {
-  git config remote.origin.receivepack 'git receive-pack --reviewer kmcgregor@giltcity.com --reviewer nyusaf@gilt.com';
-  if [[ $? -eq 0 ]]; then
-    echo "$green Reviewers Added. $stop";
-  else
-    echo "$red That failed for some reason. I'm not sure what to do now. $stop";
-  fi
-}
-
-function gerrit_add_reviewer {
-  if [ -z $1 ]; then
-    echo "$yellow Please specify reviewer. $stop";
-  else
-    echo "$red Please finish me. $stop";
   fi
 }
 
@@ -102,21 +85,18 @@ function gerrit_setup () {
 function gerrit () {
 
   ref=$(git symbolic-ref HEAD 2> /dev/null);
-  isGitRepo=$?
   branch=${ref#refs/heads/};
 
-  if [ -z $1 ]; then
+  if [ -z "$1" ]; then
     gerrit_usage;
   else
-    [ $1 = "patch" ] && gerrit_patch $2
-    [ $1 = "push" ] && gerrit_push $branch;
-    [ $1 = "review" ] && gerrit_review $branch;
-    [ $1 = "draft" ] && gerrit_draft $branch;
-    [ $1 = "pull" ] && gerrit_pull $branch;
-    [ $1 = "setup-reviewers" ] && gerrit_set_team_reviewers;
-    [ $1 = "add-reviewer" ] && gerrit_add_reviewer $2;
-    [ $1 = "clone" ] && gerrit_clone $2;
-    [ $1 = "setup" ] && gerrit_setup;
+    [ "$1" = "patch" ] && gerrit_patch "$2"
+    [ "$1" = "push" ] && gerrit_push "$branch";
+    [ "$1" = "review" ] && gerrit_review "$branch";
+    [ "$1" = "draft" ] && gerrit_draft "$branch";
+    [ "$1" = "pull" ] && gerrit_pull "$branch";
+    [ "$1" = "clone" ] && gerrit_clone "$2";
+    [ "$1" = "setup" ] && gerrit_setup;
   fi
 
 }
