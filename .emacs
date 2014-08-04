@@ -30,6 +30,7 @@
 (evil-leader/set-leader ",")
 ; Use evil-leader in magit and gnus mode
 (setq evil-leader/no-prefix-mode-rx '("magit-.*-mode" "gnus-.*-mode"))
+(evil-leader/set-key "t" 'projectile-find-file)
 
 ; Map escape to exit all modes
 (define-key evil-normal-state-map [escape] 'keyboard-quit)
@@ -55,6 +56,9 @@
 ;; disable ido faces to see flx highlights.
 (setq ido-enable-flex-matching t)
 (setq ido-use-faces nil)
+(setq projectile-enable-caching t)
+; Special GC Setting
+(setq gc-cons-threshold 20000000)
 
 ; Scala
 ; Load the ensime lisp code...
