@@ -1,0 +1,1 @@
+在home目录建立.zshrc和.oh-my-zsh的软链接
