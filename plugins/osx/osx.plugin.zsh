@@ -174,20 +174,23 @@ function itunes() {
 		next|previous)
 			opt="$opt track"
 			;;
+		vol)
+			opt="set sound volume to $1" #$1 Due to the shift
+			;;
 		""|-h|--help)
 			echo "Usage: itunes <option>"
 			echo "option:"
 			echo "\tlaunch|play|pause|stop|rewind|resume|quit"
 			echo "\tmute|unmute\tcontrol volume set"
 			echo "\tnext|previous\tplay next or previous track"
+			echo "\tvol\tSet the volume, takes an argument from 0 to 100"
 			echo "\thelp\tshow this message and exit"
 			return 0
 			;;
 		*)
-			print "Unkonwn option: $opt"
+			print "Unknown option: $opt"
 			return 1
 			;;
 	esac
 	osascript -e "tell application \"iTunes\" to $opt"
 }
-

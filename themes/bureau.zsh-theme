@@ -70,7 +70,7 @@ bureau_git_prompt () {
 
 _PATH="%{$fg_bold[white]%}%~%{$reset_color%}"
 
-if [[ "%#" == "#" ]]; then
+if [[ $EUID -eq 0 ]]; then
   _USERNAME="%{$fg_bold[red]%}%n"
   _LIBERTY="%{$fg[red]%}#"
 else
@@ -101,12 +101,12 @@ _1RIGHT="[%*] "
 
 bureau_precmd () {
   _1SPACES=`get_space $_1LEFT $_1RIGHT`
-  echo
+  print 
+  print -rP "$_1LEFT$_1SPACES$_1RIGHT"
 }
 
 setopt prompt_subst
-PROMPT='$_1LEFT$_1SPACES$_1RIGHT
-> $_LIBERTY '
+PROMPT='> $_LIBERTY '
 RPROMPT='$(nvm_prompt_info) $(bureau_git_prompt)'
 
 autoload -U add-zsh-hook

@@ -62,8 +62,10 @@ alias glgg='git log --graph --max-count=10'
 compdef _git glgg=git-log
 alias glgga='git log --graph --decorate --all'
 compdef _git glgga=git-log
-alias glo='git log --oneline'
+alias glo='git log --oneline --decorate --color'
 compdef _git glo=git-log
+alias glog='git log --oneline --decorate --color --graph'
+compdef _git glog=git-log
 alias gss='git status -s'
 compdef _git gss=git-status
 alias ga='git add'
@@ -147,7 +149,7 @@ function work_in_progress() {
   fi
 }
 # these alias commit and uncomit wip branches
-alias gwip='git add -A; git ls-files --deleted -z | xargs -0 git rm; git commit -m "--wip--"'
+alias gwip='git add -A; git ls-files --deleted -z | xargs -r0 git rm; git commit -m "--wip--"'
 alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
 
 # these alias ignore changes to file

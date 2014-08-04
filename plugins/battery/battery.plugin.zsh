@@ -17,20 +17,28 @@ if [[ $(uname) == "Darwin" ]] ; then
     integer i=$(((currentcapacity/maxcapacity) * 100))
     echo $i
   }
-  
+
+  function plugged_in() {
+    [ $(ioreg -rc AppleSmartBattery | grep -c '^.*"ExternalConnected"\ =\ Yes') -eq 1 ]
+  }
+
   function battery_pct_remaining() {
-    if [[ $(ioreg -rc AppleSmartBattery | grep -c '^.*"ExternalConnected"\ =\ No') -eq 1 ]] ; then
-      battery_pct
-    else
+    if plugged_in ; then
       echo "External Power"
+    else
+      battery_pct
     fi
   }
 
   function battery_time_remaining() {
-  	local smart_battery_status="$(ioreg -rc "AppleSmartBattery")"
+    local smart_battery_status="$(ioreg -rc "AppleSmartBattery")"
     if [[ $(echo $smart_battery_status | grep -c '^.*"ExternalConnected"\ =\ No') -eq 1 ]] ; then
       timeremaining=$(echo $smart_battery_status | grep '^.*"AvgTimeToEmpty"\ =\ ' | sed -e 's/^.*"AvgTimeToEmpty"\ =\ //')
-      echo "~$((timeremaining / 60)):$((timeremaining % 60))"
+      if [ $timeremaining -gt 720 ] ; then
+        echo "::"
+      else
+        echo "~$((timeremaining / 60)):$((timeremaining % 60))"
+      fi
     else
       echo "∞"
     fi
@@ -51,16 +59,28 @@ if [[ $(uname) == "Darwin" ]] ; then
       echo "∞"
     fi
   }
-  
+
   function battery_is_charging() {
-	  [[ $(ioreg -rc "AppleSmartBattery"| grep '^.*"IsCharging"\ =\ ' | sed -e 's/^.*"IsCharging"\ =\ //') == "Yes" ]]
+    [[ $(ioreg -rc "AppleSmartBattery"| grep '^.*"IsCharging"\ =\ ' | sed -e 's/^.*"IsCharging"\ =\ //') == "Yes" ]]
   }
 
 elif [[ $(uname) == "Linux"  ]] ; then
 
+  function battery_is_charging() {
+    ! [[ $(acpi 2&>/dev/null | grep -c '^Battery.*Discharging') -gt 0 ]]
+  }
+
+  function battery_pct() {
+    if (( $+commands[acpi] )) ; then
+      echo "$(acpi | cut -f2 -d ',' | tr -cd '[:digit:]')"
+    fi
+  }
+
   function battery_pct_remaining() {
-    if [[ $(acpi 2&>/dev/null | grep -c '^Battery.*Discharging') -gt 0 ]] ; then
-      echo "$(acpi | cut -f2 -d ',' | tr -cd '[:digit:]')" 
+    if [ ! $(battery_is_charging) ] ; then
+      battery_pct
+    else
+      echo "External Power"
     fi
   }
 
@@ -84,15 +104,6 @@ elif [[ $(uname) == "Linux"  ]] ; then
     else
       echo "∞"
     fi
-  }
-  
-  function battery_pct() {
-    # todo for on linux
-  }
-  
-  function battery_is_charging() {
-    # todo on linux
-	false
   }
 
 else
@@ -127,7 +138,7 @@ function battery_level_gauge() {
   if [[ $battery_remaining_percentage =~ [0-9]+ ]]; then
     local filled=$(((( $battery_remaining_percentage + $gauge_slots - 1) / $gauge_slots)));
     local empty=$(($gauge_slots - $filled));
-	
+
     if [[ $filled -gt $green_threshold ]]; then local gauge_color=$color_green;
     elif [[ $filled -gt $yellow_threshold ]]; then local gauge_color=$color_yellow;
     else local gauge_color=$color_red;
@@ -135,10 +146,9 @@ function battery_level_gauge() {
   else
     local filled=$gauge_slots;
     local empty=0;
-  	filled_symbol=${BATTERY_UNKNOWN_SYMBOL:-'.'};
+    filled_symbol=${BATTERY_UNKNOWN_SYMBOL:-'.'};
   fi
 
-  
   local charging=' ' && battery_is_charging && charging=$charging_symbol;
 
   printf ${charging_color//\%/\%\%}$charging${color_reset//\%/\%\%}${battery_prefix//\%/\%\%}${gauge_color//\%/\%\%}
