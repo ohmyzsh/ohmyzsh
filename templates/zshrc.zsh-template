@@ -47,7 +47,7 @@ COMPLETION_WAITING_DOTS="true"
 # plugins=(git bundler gem web-search rails ruby sprunge pip lol git-flow history-substring-search urltools themes copyfile copydir colored-man autoenv)
 
 # Plugins if is OSX
-plugins=(git gem web-search rails ruby sprunge pip lol git-flow history-substring-search urltools themes copyfile copydir colored-man autoenv brew osx terminalapp cloudapp compleat git-extras jsontools node nom sudo web-search wd)
+plugins=(git gem web-search rails ruby sprunge pip lol git-flow history-substring-search urltools themes copyfile copydir colored-man autoenv brew osx terminalapp cloudapp compleat git-extras jsontools node npm sudo web-search wd)
 
 source $ZSH/oh-my-zsh.sh
 
