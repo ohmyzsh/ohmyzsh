@@ -6,6 +6,7 @@ alias gemsets='rvm gemset list'
 local ruby18='ruby-1.8.7'
 local ruby19='ruby-1.9.3'
 local ruby20='ruby-2.0.0'
+local ruby21='ruby-2.1.2'
 
 function rb18 {
 	if [ -z "$1" ]; then
@@ -39,6 +40,17 @@ function rb20 {
 
 _rb20() {compadd `ls -1 $rvm_path/gems | grep "^$ruby20@" | sed -e "s/^$ruby20@//" | awk '{print $1}'`}
 compdef _rb20 rb20
+
+function rb21 {
+	if [ -z "$1" ]; then
+		rvm use "$ruby21"
+	else
+		rvm use "$ruby21@$1"
+	fi
+}
+
+_rb21() {compadd `ls -1 $rvm_path/gems | grep "^$ruby21@" | sed -e "s/^$ruby21@//" | awk '{print $1}'`}
+compdef _rb21 rb21
 
 function rvm-update {
 	rvm get head
