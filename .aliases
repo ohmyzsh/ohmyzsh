@@ -1,0 +1,3 @@
+#!/bin/sh
+alias duh='du -h --max-depth=1 | sort -h'
+alias curlP='cat ~/.oh-my-zsh/profiles/curl_profile.conf | curl -w @-'

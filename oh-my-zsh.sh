@@ -91,3 +91,5 @@ else
     fi
   fi
 fi
+
+source "$ZSH/.aliases"
