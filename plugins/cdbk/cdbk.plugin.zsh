@@ -7,7 +7,7 @@
 #  Requirements: Needs to be sourced from a zsh startup file, or use oh-my-zsh
 # 
 #    Revision #: 1.0
-# Last modified: 2014-08-08 13:23
+# Last modified: 2014-08-08 13:26
 #
 #    Decription: cdbk() is a simple zsh function to make management of zsh
 #                named directories easier.  It keeps all named directories in a
@@ -25,7 +25,7 @@
 #                This file also provides the function folder_name(), which returns
 #                a formatted list of the names of the current folder for use in 
 #                a prompt. To include the folder name in your prompt use e.g.:
-#                export PROMPT=$PROMPT $(folder_name)
+#                export RPROMPT=$(folder_name) $RPROMPT
 #
 #          Bugs: None that I know of
 #
