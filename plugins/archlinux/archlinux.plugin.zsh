@@ -21,7 +21,7 @@ if [[ -x `which yaourt` ]]; then
   alias yalst='yaourt -Qe'         # List installed packages, even those installed from AUR (they're tagged as "local")
   alias yaorph='yaourt -Qtd'       # Remove orphans using yaourt
   # Additional yaourt alias examples
-  if [[ -x `which abs` && -x `which aur` '']]; then
+  if [[ -x `which abs` && -x `which aur` ]]; then
     alias yaupd='yaourt -Sy && sudo abs && sudo aur'  # Update and refresh the local package, ABS and AUR databases against repositories
   elif [[ -x `which abs` ]]; then
     alias yaupd='yaourt -Sy && sudo abs'   # Update and refresh the local package and ABS databases against repositories
