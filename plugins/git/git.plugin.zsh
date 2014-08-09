@@ -78,6 +78,18 @@ alias grhh='git reset HEAD --hard'
 alias gclean='git reset --hard && git clean -dfx'
 alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
 
+# Sign and verify commits with GPG
+alias gcs='git commit -S'
+compdef _git gcs=git-commit
+alias gsps='git show --pretty=short --show-signature'
+compdef _git gsps=git-show
+
+# Sign and verify tags with GPG
+alias gts='git tag -s'
+compdef _git gts=git-tag
+alias gvt='git verify-tag'
+compdef _git gvt=git verify-tag
+
 #remove the gf alias
 #alias gf='git ls-files | grep'
 
