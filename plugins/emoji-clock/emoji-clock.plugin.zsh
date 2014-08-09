@@ -8,8 +8,8 @@
 # -----------------------------------------------------------------------------
 
 function emoji-clock() {
-  hour=$(date '+%I')
-  minutes=$(date '+%M')
+  hour=$(date -v '+15M' '+%I')
+  minutes=$(date -v '+15M' '+%M')
   case $hour in
     01) clock="🕐"; [ $minutes -ge 30 ] && clock="🕜";;
     02) clock="🕑"; [ $minutes -ge 30 ] && clock="🕝";;
