@@ -21,6 +21,8 @@ alias m='make'
 alias s='subl'
 
 alias saguysaguy='sudo apt-get update -y && sudo apt-get upgrade -y'
+alias saguysaguysagay='sudo apt-get update -y && sudo apt-get upgrade -y && sudo apt-get autoremove -y'
+alias update-my-ubuntu='saguysaguysagay'
 
 function bb_env()
 {
