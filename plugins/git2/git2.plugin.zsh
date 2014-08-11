@@ -198,6 +198,9 @@ compdef _git gm=git-merge
 # git merge changes from the master branch on the upstream remote
 alias gmum='git merge upstream/master'
 compdef _git gmum=git-merge
+# git merge changes from the master branch on the origin remote
+alias gmom='git merge origin/master'
+compdef _git gmom=git-merge
 
 # Other
 # Show contribution scorecard
