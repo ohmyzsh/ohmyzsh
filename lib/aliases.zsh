@@ -34,4 +34,8 @@ alias sl=ls # often screw this up
 
 alias afind='ack-grep -il'
 
+# iOS Simulator
 alias ios='open /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
+
+# Code Directory
+alas code='~/Dropbox/Code'
