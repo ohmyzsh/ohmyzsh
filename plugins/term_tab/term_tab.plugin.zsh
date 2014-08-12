@@ -17,11 +17,8 @@
 function _term_list(){
   local -a w
 
-  for SESSION in $(ps -eo pid,fname | grep zsh | awk '{print $1}'); do
-    SPATH="$(readlink -n /proc/${SESSION}/cwd)"
-    if [ x != x${SPATH} ]; then
-      w+=${SPATH}
-    fi
+  for SESSION in $(pidof  zsh); do
+    w+=$(readlink -n /proc/${SESSION}/cwd)
   done
 
   compadd -a w
