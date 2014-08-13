@@ -2,6 +2,8 @@
 
 let mapleader = ','
 
+let &colorcolumn=join(range(101,999),",")
+
 set hlsearch
 set incsearch
 set cursorline
