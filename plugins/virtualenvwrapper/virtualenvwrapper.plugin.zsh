@@ -41,7 +41,11 @@ if (( $+commands[$virtualenvwrapper] )); then
             unset PROJECT_ROOT
             unset WORKON_CWD
         fi
+        # In case we are using the last-working-dir plugin (virtualenv mucks this up).
+        command -v chpwd > /dev/null 2>&1 && chpwd || true
     }
+    # Go ahead and check to see if the current directory is a virtualenv.
+    workon_cwd
 
     # Append workon_cwd to the chpwd_functions array, so it will be called on cd
     # http://zsh.sourceforge.net/Doc/Release/Functions.html
