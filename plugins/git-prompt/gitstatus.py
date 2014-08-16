@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 # -*- coding: UTF-8 -*-
 from subprocess import Popen, PIPE
 import re
@@ -16,7 +16,7 @@ symbols = {
 }
 
 output, error = Popen(
-    ['git', 'status'], stdout=PIPE, stderr=PIPE).communicate()
+    ['git', 'status'], stdout=PIPE, stderr=PIPE, universal_newlines=True).communicate()
 
 if error:
     import sys

@@ -166,7 +166,7 @@ __rm() {
 
 __rmi() {
     _arguments \
-        '(-f,--force=)'{-f,--force=}'[Force]' \
+        '(-f,--force=)'{-f,--force=}'[Force]'
     __docker_images
 }
 
@@ -214,7 +214,7 @@ __save() {
 __start() {
     _arguments \
         '(-a,--attach=)'{-a,--attach=}'[Attach container''s stdout/stderr and forward all signals to the process]' \
-        '(-i,--interactive=)'{-i, --interactive=}'[Attach container''s stdin]'
+        '(-i,--interactive=)'{-i,--interactive=}'[Attach container''s stdin]'
     __docker_containers
 }
 
