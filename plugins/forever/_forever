@@ -14,7 +14,7 @@ _forever() {
         'restartall:Restart all the running forever scripts'
         'list:List all running forever scripts'
         'logs:Lists log files for all forever processes'
-        'logs <script|index>:Tails the logs for specified script'
+        'logs:<script|index> Tails the logs for specified script'
         'config:Lists all forever user configuration'
         'cleanlogs:[CAREFUL] Deletes all historical forever log files'
     )
