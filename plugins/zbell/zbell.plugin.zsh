@@ -35,6 +35,15 @@ autoload -Uz regexp-replace || return
 # empty string just results in an empty array.
 zbell_timestamp=$EPOCHSECONDS
 
+# default notification function
+# $1: command
+# $2: duration in seconds
+zbell_notify() {
+	type notify-send > /dev/null && \
+		notify-send -i terminal "Command completed in ${2}s:" $1
+	print -n "\a"
+}
+
 # right before we begin to execute something, store the time it started at
 zbell_begin() {
 	zbell_timestamp=$EPOCHSECONDS
@@ -44,10 +53,10 @@ zbell_begin() {
 # when it finishes, if it's been running longer than $zbell_duration,
 # and we dont have an ignored command in the line, then print a bell.
 zbell_end() {
-	ran_long=$(( $EPOCHSECONDS - $zbell_timestamp >= $zbell_duration ))
+	local cmd_duration=$(( $EPOCHSECONDS - $zbell_timestamp ))
+	local ran_long=$(( $cmd_duration >= $zbell_duration ))
 
-	local zbell_lastcmd_tmp
-	zbell_lastcmd_tmp="$zbell_lastcmd"
+	local zbell_lastcmd_tmp="$zbell_lastcmd"
 	regexp-replace zbell_lastcmd_tmp '^sudo ' ''
 
 	[[ $zbell_last_timestamp == $zbell_timestamp ]] && return
@@ -66,10 +75,7 @@ zbell_end() {
 		fi
 	done
 
-	if (( ! $has_ignored_cmd )) && (( ran_long )); then
-		notify-send -i terminal "Command completed:" $zbell_lastcmd
-		print -n "\a"
-	fi
+	(( ! $has_ignored_cmd && ran_long )) && zbell_notify $zbell_lastcmd $cmd_duration
 }
 
 # register the functions as hooks
