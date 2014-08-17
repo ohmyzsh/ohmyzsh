@@ -21,7 +21,7 @@ zmodload zsh/datetime || return
 autoload -Uz add-zsh-hook || return
 
 # make sure we can do regexp replace
-autoload -U regexp-replace
+autoload -Uz regexp-replace || return
 
 # initialize zbell_duration if not set
 (( ${+zbell_duration} )) || zbell_duration=15
