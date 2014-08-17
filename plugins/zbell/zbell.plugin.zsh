@@ -50,13 +50,9 @@ zbell_end() {
 	zbell_lastcmd_tmp="$zbell_lastcmd"
 	regexp-replace zbell_lastcmd_tmp '^sudo ' ''
 
-	if [[ $zbell_last_timestamp == $zbell_timestamp ]]; then
-		return
-	fi
+	[[ $zbell_last_timestamp == $zbell_timestamp ]] && return
 
-	if [[ $zbell_lastcmd_tmp == "" ]]; then
-		return;
-	fi
+	[[ $zbell_lastcmd_tmp == "" ]] && return
 
 	zbell_last_timestamp=$zbell_timestamp
 
