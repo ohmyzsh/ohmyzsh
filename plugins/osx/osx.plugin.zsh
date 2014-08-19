@@ -138,20 +138,19 @@ function man-preview() {
 }
 
 function trash() {
-  local trash_dir="${HOME}/.Trash"
-  local temp_ifs=$IFS
-  IFS=$'\n'
+  local files
+  files=()
   for item in "$@"; do
-    if [[ -e "$item" ]]; then
-      item_name="$(basename $item)"
-      if [[ -e "${trash_dir}/${item_name}" ]]; then
-        mv -f "$item" "${trash_dir}/${item_name} $(date "+%H-%M-%S")"
-      else
-        mv -f "$item" "${trash_dir}/"
-      fi
-    fi
+    files=($files "POSIX file \"$(cd "$(dirname "$item")"; pwd)/$(basename "$item")\"")
   done
-  IFS=$temp_ifs
+  osascript &> /dev/null <<EOF
+    tell application "Finder" to delete {${(j:, :)files}}
+EOF
+  local code=$?
+  if [[ $code -eq 1 ]]; then
+    echo "Item doesn't exist (${(j:, :)files})"
+    return $code
+  fi
 }
 
 function vncviewer() {
