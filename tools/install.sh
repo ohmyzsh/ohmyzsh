@@ -10,7 +10,7 @@ if [ -d "$ZSH" ]; then
 fi
 
 echo "\033[0;34mCloning Oh My Zsh...\033[0m"
-hash git >/dev/null 2>&1 && /usr/bin/env git clone https://github.com/robbyrussell/oh-my-zsh.git $ZSH || {
+hash git >/dev/null 2>&1 && env git clone https://github.com/robbyrussell/oh-my-zsh.git $ZSH || {
   echo "git not installed"
   exit
 }
@@ -44,5 +44,5 @@ echo "\033[0;32m"'                        /____/                       ....is no
 echo "\033[0;32m"'                                 (Stibbons version)  '"\033[0m"
 echo "\n\n \033[0;32mPlease look over the ~/.zshrc file to select plugins, themes, and options.\033[0m"
 echo "\n\n \033[0;32mp.s. Follow us at http://twitter.com/ohmyzsh.\033[0m"
-/usr/bin/env zsh
+env zsh
 . ~/.zshrc
