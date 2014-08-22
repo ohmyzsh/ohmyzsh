@@ -26,6 +26,7 @@ _1st_arguments=(
   'tag-list'
   'tag-create'
   'tag-edit'
+  'tag-remove'
   'gnsync'
   'user'
 )
@@ -116,7 +117,7 @@ case "$words[1]" in
       '(-t|--title)'{-t,--title}'[title of tag]' \
     )
     ;;
-  tag-create)
+  tag-edit)
     _command_args=(
       '(-tgn|--tagname)'{-tgn,--tagname}'[tag to edit]' \
       '(-t|--title)'{-t,--title}'[new tag name]' \
