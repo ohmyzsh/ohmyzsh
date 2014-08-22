@@ -34,6 +34,5 @@ function omz_termsupport_preexec {
   title '$CMD' '%100>...>$LINE%<<'
 }
 
-autoload -U add-zsh-hook
-add-zsh-hook precmd  omz_termsupport_precmd
-add-zsh-hook preexec omz_termsupport_preexec
+precmd_functions+=(omz_termsupport_precmd)
+preexec_functions+=(omz_termsupport_preexec)
