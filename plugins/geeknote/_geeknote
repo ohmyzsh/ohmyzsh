@@ -90,7 +90,7 @@ case "$words[1]" in
       '(-nb|--notebook)'{-nb,--notebook}'[in which notebook search the note]' \
       '(-d|--date)'{-d,--date}'[date in format dd.mm.yyyy or date range dd.mm.yyyy-dd.mm.yyyy]' \
       '(-cn|--count)'{-cn,--count}'[how many notes show in the result list]' \
-      '(-wu|--with-url)'{-wu,--with-url}'[add direct url of each note in results to Evernote web-version]' \
+      '(-uo|--url-only)'{-uo,--url-only}'[add direct url of each note in results to Evernote web-version]' \
       '(-ee|--exact-entry)'{-ee,--exact-entry}'[search for exact entry of the request]' \
       '(-cs|--content-search)'{-cs,--content-search}'[search by content, not by title]' \
     )
