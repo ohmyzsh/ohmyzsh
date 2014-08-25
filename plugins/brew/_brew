@@ -50,6 +50,7 @@ _1st_arguments=(
   'server:start a local web app that lets you browse formulae (requires Sinatra)'
   'services:small wrapper around `launchctl` for supported formulae'
   'tap:tap a new formula repository from GitHub, or list existing taps'
+  'uninstall:uninstall a formula'
   'unlink:unlink a formula'
   'unpin:unpin specified formulae'
   'untap:remove a tapped repository'
