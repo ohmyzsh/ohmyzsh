@@ -4,14 +4,14 @@
 # If tt is passed a file, open it in Textastic
 #
 function tt() {
-    if [[ -z $1 ]]
+    if [[ -z "$1" ]]
     then
         open -a "textastic.app"
     else
-        open -a "textastic.app" $1
-        if [[ -d $1 ]]
+        open -a "textastic.app" "$1"
+        if [[ -d "$1" ]]
         then
-            cd $1
+            cd "$1"
         fi
     fi
 }
