@@ -44,19 +44,22 @@ mvn-color()
 # aliases
 alias mvncie='mvn clean install eclipse:eclipse'
 alias mvnci='mvn clean install'
+alias mvncist='mvn clean install -DskipTests'
 alias mvne='mvn eclipse:eclipse'
 alias mvnce='mvn clean eclipse:clean eclipse:eclipse'
 alias mvnd='mvn deploy'
 alias mvnp='mvn package'
 alias mvnc='mvn clean'
 alias mvncom='mvn compile'
+alias mvnct='mvn clean test'
 alias mvnt='mvn test'
 alias mvnag='mvn archetype:generate'
 alias mvn-updates='mvn versions:display-dependency-updates'
 alias mvntc7='mvn tomcat7:run' 
 alias mvntc='mvn tomcat:run'
 alias mvnjetty='mvn jetty:run'
-
+alias mvndt='mvn dependency:tree'
+alias mvns='mvn site'
 
 function listMavenCompletions { 
      reply=(
@@ -126,6 +129,8 @@ function listMavenCompletions {
         tomcat6:run tomcat6:run-war tomcat6:run-war-only tomcat6:stop tomcat6:deploy tomcat6:undeploy
         # tomcat7
         tomcat7:run tomcat7:run-war tomcat7:run-war-only tomcat7:deploy
+        # spring-boot
+        spring-boot:run spring-boot:repackage
         # exec
         exec:exec exec:java
         # versions
