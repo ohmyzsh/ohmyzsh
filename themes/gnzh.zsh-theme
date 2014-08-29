@@ -31,7 +31,34 @@ else
   eval PR_HOST='${PR_GREEN}%M${PR_NO_COLOR}' # no SSH
 fi
 
-local return_code="%(?..%{$PR_RED%}%? ↵%{$PR_NO_COLOR%})"
+set-return-code() {
+  typeset -g return_code=""
+  if [[ $__prompt_status != 0 ]]; then
+    return_code="%{$PR_RED%}$__prompt_status ↵%{$PR_NO_COLOR%}"
+  fi
+}
+
+set-rps1() {
+  local mode=''
+  if [[ $KEYMAP = vicmd ]]; then
+    mode='%{$PR_RED%}[CMD]%{$PR_NO_COLOR%}'
+  fi
+  RPS1="${return_code} ${mode}"
+  zle reset-prompt
+}
+
+zle-line-init() {
+  typeset -g __prompt_status="$?"
+  set-return-code
+  set-rps1
+}
+
+zle-keymap-select() {
+  set-rps1
+}
+
+zle -N zle-keymap-select
+zle -N zle-line-init
 
 local user_host='${PR_USER}${PR_CYAN}@${PR_HOST}'
 local current_dir='%{$PR_BOLD$PR_BLUE%}%~%{$PR_NO_COLOR%}'
@@ -40,8 +67,10 @@ if ${HOME}/.rvm/bin/rvm-prompt &> /dev/null; then # detect local user rvm instal
   rvm_ruby='%{$PR_RED%}‹$(${HOME}/.rvm/bin/rvm-prompt i v g s)›%{$PR_NO_COLOR%}'
 elif which rvm-prompt &> /dev/null; then # detect sysem-wide rvm installation
   rvm_ruby='%{$PR_RED%}‹$(rvm-prompt i v g s)›%{$PR_NO_COLOR%}'
-elif which rbenv &> /dev/null; then # detect Simple Ruby Version management
+elif which rbenv &> /dev/null; then
   rvm_ruby='%{$PR_RED%}‹$(rbenv version | sed -e "s/ (set.*$//")›%{$PR_NO_COLOR%}'
+elif which chruby &> /dev/null; then
+  rvm_ruby='%{$PR_RED%}‹$(chruby | (grep "*" || echo system) | sed "s/ \* //")›%{$PR_NO_COLOR%}'
 fi
 local git_branch='$(git_prompt_info)%{$PR_NO_COLOR%}'
 
