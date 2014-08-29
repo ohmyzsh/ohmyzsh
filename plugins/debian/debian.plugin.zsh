@@ -66,9 +66,9 @@ if [[ $use_sudo -eq 1 ]]; then
     alias di='sudo dpkg -i'
 
     # Remove ALL kernel images and headers EXCEPT the one in use
-    alias kclean='sudo aptitude remove -P ?and(~i~nlinux-(ima|hea) \
-        ?not(~n`uname -r`))'
-
+    alias kclean='sudo aptitude remove -P "?and(~i~nlinux-(ima|hea),\
+        ?not(?or(~n`uname -r | cut -d'\''-'\'' -f-2`,\
+        ~n(linux-(virtual|headers-virtual|headers-generic|image-virtual|image-generic)))))"'
 
 # commands using su #########
 else
@@ -106,8 +106,9 @@ else
     alias di='su -lc "dpkg -i" root'
 
     # Remove ALL kernel images and headers EXCEPT the one in use
-    alias kclean='su -lc '\''aptitude remove -P ?and(~i~nlinux-(ima|hea) \
-        ?not(~n`uname -r`))'\'' root'
+    alias kclean='su -lc '\''aptitude remove -P "?and(~i~nlinux-(ima|hea),\
+        ?not(?or(~n`uname -r | cut -d'\''-'\'' -f-2`,\
+        ~n(linux-(virtual|headers-virtual|headers-generic|image-virtual|image-generic)))))"'\'' root'
 fi
 
 # Completion ################################################################
