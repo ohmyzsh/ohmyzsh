@@ -46,5 +46,6 @@ echo "\033[0;32m"'                        /____/                       ....is no
 echo "\033[0;32m"'                                 (Stibbons version)  '"\033[0m"
 echo "\n\n \033[0;32mPlease look over the ~/.zshrc file to select plugins, themes, and options.\033[0m"
 echo "\n\n \033[0;32mp.s. Follow us at http://twitter.com/ohmyzsh.\033[0m"
+echo "\n\n \033[0;32mp.p.s. Get stickers and t-shirts at http://shop.planetargon.com.\033[0m"
 env zsh
 . ~/.zshrc
