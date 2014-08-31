@@ -53,6 +53,8 @@ alias gb='git branch'
 compdef _git gb=git-branch
 alias gba='git branch -a'
 compdef _git gba=git-branch
+alias gbl='git blame -b -w'
+compdef _git gbl=git-blame
 alias gcount='git shortlog -sn'
 compdef gcount=git
 alias gcl='git config --list'
@@ -75,8 +77,10 @@ compdef _git ga=git-add
 alias gm='git merge'
 compdef _git gm=git-merge
 alias grh='git reset HEAD'
+alias gru='git reset --'
 alias grhh='git reset HEAD --hard'
 alias gclean='git reset --hard && git clean -dfx'
+compdef _git gm=git-reset
 alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
 
 #remove the gf alias
