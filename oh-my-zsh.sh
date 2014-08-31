@@ -37,13 +37,7 @@ for plugin ($plugins); do
   fi
 done
 
-# Figure out the SHORT hostname
-if [ -n "$commands[scutil]" ]; then
-  # OS X
-  SHORT_HOST=$(scutil --get ComputerName)
-else
-  SHORT_HOST=${HOST/.*/}
-fi
+SHORT_HOST=$(hostname -s)
 
 # Save the location of the current completion dump file.
 if [ -z "$ZSH_COMPDUMP" ]; then
