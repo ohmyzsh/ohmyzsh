@@ -95,5 +95,9 @@ function steeef_precmd {
 }
 add-zsh-hook precmd steeef_precmd
 
+if [ command -v rvm-prompt >/dev/null 2>&1 ]; then
+  RVM=$(rvm-prompt " with%{$fg[red]%} " v g "%{$reset_color%}")
+fi
+
 PROMPT=$'
-%{$purple%}%n%{$reset_color%} in %{$limegreen%}%~%{$reset_color%}$(rvm-prompt " with%{$fg[red]%} " v g "%{$reset_color%}")$vcs_info_msg_0_%{$orange%} λ%{$reset_color%} '
+%{$purple%}%n%{$reset_color%} in %{$limegreen%}%~%{$reset_color%}$RVM$vcs_info_msg_0_%{$orange%} λ%{$reset_color%} '
