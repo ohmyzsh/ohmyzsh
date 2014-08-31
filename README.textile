@@ -15,7 +15,7 @@ You can install this via the command line with either @curl@ or @wget@.
 
 h4. via @curl@
 
-@curl -L http://install.ohmyz.sh | sh@
+@curl -L https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh@
 
 h4. via @wget@
 
