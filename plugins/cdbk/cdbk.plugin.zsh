@@ -1,40 +1,5 @@
-# -----------------------------------------------------------------------------
-#
-#       Program: cdbk.zsh (cd bookmarking for zsh)
-#
-#         Usage: cdbk {-a,-r,-d} <name> [path] (run with no paramaters for info)
-#
-#  Requirements: Needs to be sourced from a zsh startup file, or use oh-my-zsh
-# 
-#    Revision #: 1.0
-# Last modified: 2014-08-08 13:26
-#
-#    Decription: cdbk() is a simple zsh function to make management of zsh
-#                named directories easier.  It keeps all named directories in a
-#                file and uses grep, sed, echo, and perl to parse and modify 
-#                this file in order to add, change or remove bookmarks.
-#        
-#                Because it uses the zsh named directory function, full zsh path
-#                completion is possible.  Further, very simple cdbk completion is
-#                included to make replacing and deleting bookmarks easier.
-#
-#                This program was heavily inspired by Stan Angeloff's function 
-#                of the same name found here:
-#                http://blog.angeloff.name/post/1027007406/cd-with-bookmarks-and-auto-completion-for-zsh
-#
-#                This file also provides the function folder_name(), which returns
-#                a formatted list of the names of the current folder for use in 
-#                a prompt. To include the folder name in your prompt use e.g.:
-#                export RPROMPT=$(folder_name) $RPROMPT
-#
-#          Bugs: None that I know of
-#
-#    Created by: Mike Dacre 
-#    Created on: 19-11-11
-#
-#       License: MIT License - Open Source. Use as you wish
-#    
-# -----------------------------------------------------------------------------
+# cdbk.plugin.zsh (cd bookmarking for zsh)
+# Last modified: 2014-08-31 21:25
 
 # Define location of bookmark file and source it every time this file is sourced
 ZSH_BOOKMARKS="$HOME/.zshbookmarks";
@@ -48,18 +13,15 @@ fi
 # ----------------------
 # Main Function
 # ----------------------
-function cdbk () {
+function cdbk1 () {
   source $ZSH_BOOKMARKS;
 
   # Create local variables for function and global bkmk functions
   local BKMKNAME;
   local BKMKPATH;
   local MYPATH;
-  CURBKMKS=(`grep -e "^hash -d" $ZSH_BOOKMARKS | sed 's#hash -d ##' | sed 's#=\(.*\)# \1#' `)
-  GLBLBKMKS=(`grep -e "^ *hash -d" $HOME/.zshrc | sed 's#hash -d ##' | sed 's#=\(.*\)# \1#' `)
-
-  local GLBLTEST=GLBLBKMKS;
-  local HOSTTEST=HOSTBKMKS;
+  CURBKMKS=(`grep -e "^hash -d" $ZSH_BOOKMARKS | sed 's#hash -d ##' | sed 's#=\(.*\)# \1#'`)
+  GLBLBKMKS=(`grep -e "^ *hash -d" $HOME/.zshrc1 | sed 's#hash -d ##' | sed 's#=\(.*\)# \1#'`)
 
   # Define usage
   local USAGE="-------------------------------------------------------------------------------
@@ -67,7 +29,8 @@ function cdbk () {
 
    cdbk -a <name> [<path>] : Create bookmark (uses current dir if no path)
    cdbk -r <name> [<path>] : Replace bookmark (uses current dir if no path)
-   cdbk -d <name>          : Delete bookmark\n\n";
+   cdbk -d <name>          : Delete bookmark
+   cdbk -l                 : List currently enabled bookmarks\n\n";
 
   # Check first if bookmark file exists
   if [[ ! -e $ZSH_BOOKMARKS ]]; then
@@ -75,24 +38,28 @@ function cdbk () {
     printf "Bookmark file %s created\n" $ZSH_BOOKMARKS;
   fi
 
-  # Check if there are enough arguments
-  if [[ $# -lt 2 ]]; then
-    
-    # If no arguments, display all bookmarks and brief help
+  if [[ $1 == "-l" ]]; then
+    # Display all currently enabled bookmarks
     printf "$USAGE   Current bookmarks:\n";
     print -aC 2 ${(kv)CURBKMKS} | sed 's/^/     /' | sort;
-    if [ $GLBLTEST ]; then
-      printf "\n   Global Bookmarks:\n";
+    if [[ -n ${GLBLBKMKS} ]]; then
+      printf "\n   Global Bookmarks: (from ~/.zshrc)\n";
       print -aC 2 ${(kv)GLBLBKMKS} | sed 's/^/     /' | sort;
-    fi
-    if [ $HOSTTEST ]; then
-      printf "\n   Host Specific Global Bookmarks:\n";
-      print -aC 2 ${(kv)HOSTBKMKS} | sed 's/^/     /' | sort;
     fi
     printf "\n--------------------------------------------------------------------------------\n";
 
-  else
+  # Check if there are enough arguments
+  elif [[ $# -lt 2 ]] || [[ $1 == "-h" ]]; then
+    printf "$USAGE"
+    printf "--------------------------------------------------------------------------------\n";
+    
+  elif [[ $# -gt 3 ]]; then
+    printf "Too many arguments\n\n"
+    printf "Usage:\n\n"
+    printf "$USAGE"
+    printf "--------------------------------------------------------------------------------\n";
 
+  else
     # Look for existing version of query
     BKMKNAME=$(grep "hash -d $2=" "$ZSH_BOOKMARKS" | sed 's#^hash -d ##' | sed 's#=.*$##');
     BKMKPATH=$(grep "hash -d $2=" "$ZSH_BOOKMARKS" | sed 's#^hash -d [^=]*=##');
@@ -200,7 +167,7 @@ function cdbk () {
 
     # If first argument isn't -a or -d then print help
     else
-      printf "First argument must be either -a or -r or -d\n";
+      printf "First argument must be either -a or -r or -d or -l\n";
       printf "To add a bookmark use cdbk -a <name> <path>\n";
       printf "To replace a bookmark use cdbk -r <name> <path>\n";
       printf "To delete a bookmark, use cdbk -d <name>\n";
