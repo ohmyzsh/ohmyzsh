@@ -1,5 +1,5 @@
 # cdbk.plugin.zsh (cd bookmarking for zsh)
-# Last modified: 2014-08-31 21:25
+# Last modified: 2014-08-31 21:51
 
 # Define location of bookmark file and source it every time this file is sourced
 ZSH_BOOKMARKS="$HOME/.zshbookmarks";
@@ -13,7 +13,7 @@ fi
 # ----------------------
 # Main Function
 # ----------------------
-function cdbk1 () {
+function cdbk () {
   source $ZSH_BOOKMARKS;
 
   # Create local variables for function and global bkmk functions
@@ -21,7 +21,7 @@ function cdbk1 () {
   local BKMKPATH;
   local MYPATH;
   CURBKMKS=(`grep -e "^hash -d" $ZSH_BOOKMARKS | sed 's#hash -d ##' | sed 's#=\(.*\)# \1#'`)
-  GLBLBKMKS=(`grep -e "^ *hash -d" $HOME/.zshrc1 | sed 's#hash -d ##' | sed 's#=\(.*\)# \1#'`)
+  GLBLBKMKS=(`grep -e "^ *hash -d" $HOME/.zshrc | sed 's#hash -d ##' | sed 's#=\(.*\)# \1#'`)
 
   # Define usage
   local USAGE="-------------------------------------------------------------------------------
