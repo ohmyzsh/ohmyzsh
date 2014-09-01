@@ -47,5 +47,5 @@ alias cdu='composer dump-autoload'
 # install composer in the current directory
 alias cget='curl -s https://getcomposer.org/installer | php'
 
-# Add Composer's global & local binaries to PATH
-export PATH=$PATH:~/.composer/vendor/bin:./bin
+# Add Composer's global binaries to PATH
+export PATH=$PATH:~/.composer/vendor/bin
