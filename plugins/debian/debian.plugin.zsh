@@ -68,7 +68,7 @@ if [[ $use_sudo -eq 1 ]]; then
     # Remove ALL kernel images and headers EXCEPT the one in use
     alias kclean='sudo aptitude remove -P "?and(~i~nlinux-(ima|hea),\
         ?not(?or(~n`uname -r | cut -d'\''-'\'' -f-2`,\
-        ~n(linux-(virtual|headers-virtual|headers-generic|image-virtual|image-generic)))))"'
+        ~n(linux-(virtual|headers-virtual|headers-generic|image-virtual|image-generic|image-`dpkg --print-architecture`)))))"'
 
 # commands using su #########
 else
@@ -108,7 +108,7 @@ else
     # Remove ALL kernel images and headers EXCEPT the one in use
     alias kclean='su -lc '\''aptitude remove -P "?and(~i~nlinux-(ima|hea),\
         ?not(?or(~n`uname -r | cut -d'\''-'\'' -f-2`,\
-        ~n(linux-(virtual|headers-virtual|headers-generic|image-virtual|image-generic)))))"'\'' root'
+        ~n(linux-(virtual|headers-virtual|headers-generic|image-virtual|image-generic|image-`dpkg --print-architecture`)))))"'\'' root'
 fi
 
 # Completion ################################################################
