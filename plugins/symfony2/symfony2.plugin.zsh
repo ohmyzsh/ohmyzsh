@@ -1,7 +1,7 @@
 # Symfony2 basic command completion
 
 _symfony_console () {
-  echo "php $(find . -maxdepth 2 -mindepth 1 -name 'console')"
+  echo "php $(find . -maxdepth 2 -mindepth 1 -name 'console' | head -n 1)"
 }
 
 _symfony2_get_command_list () {
