@@ -1,10 +1,78 @@
-# get the name of the branch we are on
+autoload -U add-zsh-hook
+add-zsh-hook chpwd update_git_vars
+add-zsh-hook preexec schedule_update_git_vars_if_git_cmd
+add-zsh-hook precmd update_git_vars_if_scheduled
+
+function schedule_update_git_vars_if_git_cmd() {
+	case "$2" in
+		git*)
+			__UPDATE_GIT_VARS_NEEDED="true"
+			;;
+	esac
+}
+
+function update_git_vars_if_scheduled() {
+	if [ "$__UPDATE_GIT_VARS_NEEDED" == "true" ]
+	then
+		update_git_vars
+		unset __UPDATE_GIT_VARS_NEEDED
+	fi
+}
+
+function update_git_vars() {
+	local output merge_ref remote_ref remote
+	local _branch _ahead _behind _staged _conflict _changed _untracked
+	local  branch  ahead  behind  staged  conflict  changed  untracked
+	unset GIT_STATUS
+	output="`git symbolic-ref HEAD 2>/dev/null`" || \
+		output="`git rev-parse --short HEAD 2>/dev/null`" || return 0
+	_branch="${output#refs/heads/}"
+
+	output="`git config branch.$_branch.remote 2>/dev/null`"
+	if [ -n "$output" ]
+	then
+		remote="$output"
+		merge_ref="`git config branch.$_branch.merge`"
+		if [ "$remote" == "." ]
+		then
+			remote_ref="$merge_ref"
+		else
+			remote_ref="refs/remotes/$remote/${merge_ref#refs/heads/}"
+		fi
+		output="`git rev-list --left-right $remote_ref..HEAD`" || \
+			output="`git rev-list --left-right $merge_ref..HEAD`"
+		_ahead="`echo -n $output |grep -c '^>'`"
+		output="`echo -n ${output} |grep -c '.*'`"
+		_behind="`expr $output - $_ahead`"
+	fi
+	output="`git diff --name-status --staged`"
+	_staged="`echo -n $output |grep -c -v -e '^U\>'`"
+	_conflict="`echo -n $output |grep -c -e '^U\>'`"
+	_changed="`git diff --name-status |grep -c -v -e '^U\>'`"
+	_untracked="`git status --porcelain |grep -c -e '^??'`"
+
+	clean="${ZSH_THEME_GIT_PROMPT_CLEAN_PREFIX}c${ZSH_THEME_GIT_PROMPT_CLEAN_SUFFIX}"
+	test -n "${_branch}"                              && branch="${ZSH_THEME_GIT_PROMPT_BRANCH_PREFIX}${_branch}${ZSH_THEME_GIT_PROMPT_BRANCH_SUFFIX}"
+	test -n "${_behind}"    -a "${_behind}"    != "0" && behind="${ZSH_THEME_GIT_PROMPT_BEHIND_PREFIX}${_behind}${ZSH_THEME_GIT_PROMPT_BEHIND_SUFFIX}"
+	test -n "${_ahead}"     -a "${_ahead}"     != "0" && ahead="${ZSH_THEME_GIT_PROMPT_AHEAD_PREFIX}${_ahead}${ZSH_THEME_GIT_PROMPT_AHEAD_SUFFIX}"
+	test -n "${_staged}"    -a "${_staged}"    != "0" && { clean=""; staged="${ZSH_THEME_GIT_PROMPT_STAGED_PREFIX}${_staged}${ZSH_THEME_GIT_PROMPT_STAGED_SUFFIX}"; }
+	test -n "${_conflict}"  -a "${_conflict}"  != "0" && { clean=""; conflict="${ZSH_THEME_GIT_PROMPT_CONFLICT_PREFIX}${_conflict}${ZSH_THEME_GIT_PROMPT_CONFLICT_SUFFIX}"; }
+	test -n "${_changed}"   -a "${_changed}"   != "0" && { clean=""; changed="${ZSH_THEME_GIT_PROMPT_CHANGED_PREFIX}${_changed}${ZSH_THEME_GIT_PROMPT_CHANGED_SUFFIX}"; }
+	test -n "${_untracked}" -a "${_untracked}" != "0" && { clean=""; untracked="${ZSH_THEME_GIT_PROMPT_UNTRACKED_PREFIX}${_untracked}${ZSH_THEME_GIT_PROMPT_UNTRACKED_SUFFIX}"; }
+
+	git_status
+	GIT_STATUS="${ZSH_THEME_GIT_PROMPT_PREFIX}${GIT_STATUS}${ZSH_THEME_GIT_PROMPT_SUFFIX}"
+}
+
 function git_prompt_info() {
-  if [[ "$(command git config --get oh-my-zsh.hide-status 2>/dev/null)" != "1" ]]; then
-    ref=$(command git symbolic-ref HEAD 2> /dev/null) || \
-    ref=$(command git rev-parse --short HEAD 2> /dev/null) || return 0
-    echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
-  fi
+	if [ "$(command git config --get oh-my-zsh.hide-status 2>/dev/null)" != "1" ]
+	then
+		if [ -n "${__UPDATE_GIT_VARS_NEEDED}" ]
+		then
+			update_git_vars
+		fi
+		echo -n "${GIT_STATUS}"
+	fi
 }
 
 
