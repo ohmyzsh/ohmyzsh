@@ -12,7 +12,7 @@ prompt_setup_pygmalion(){
   base_prompt_nocolor=$(echo "$base_prompt" | perl -pe "s/%\{[^}]+\}//g")
   post_prompt_nocolor=$(echo "$post_prompt" | perl -pe "s/%\{[^}]+\}//g")
 
-  add-zsh-hook precmd prompt_pygmalion_precmd
+  precmd_functions+=(prompt_pygmalion_precmd)
 }
 
 prompt_pygmalion_precmd(){
