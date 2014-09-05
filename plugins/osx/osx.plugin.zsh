@@ -6,7 +6,7 @@
 # ------------------------------------------------------------------------------
 
 function tab() {
-  local command="cd \\\"$PWD\\\"; clear; "
+  local command="cd \\\"$PWD\\\"; clear"
   (( $# > 0 )) && command="${command}; $*"
 
   the_app=$(
