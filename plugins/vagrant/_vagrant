@@ -1,5 +1,21 @@
-#compdef vagrant 
+#compdef vagrant
 #autoload
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for Vagrant (http://vagrantup.com).
+#
+#  Source: https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/vagrant
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Nikita Fedyashev (https://github.com/nfedyashev)
+#  * Mark Cornick (https://github.com/markcornick)
+#
+# ------------------------------------------------------------------------------
 
 # vagrant zsh completion
 
@@ -12,10 +28,11 @@ _1st_arguments=(
     'docker-run:Run one-off commands against a Docker container'
     'global-status:Reports the status of all active Vagrant environments on the system'
     'halt:Halts the currently running vagrant environment'
+    'help:[TASK] Describe available tasks or one specific task'
     'init:[box_name] [box_url] Initializes current folder for Vagrant usage'
     'login:Authenticates against a Vagrant Cloud server to access protected boxes'
     'package:Packages a vagrant environment for distribution'
-    'plugin:Plugin commands'
+    'plugin:Manage plugins'
     'provision:Run the provisioner'
     'reload:Reload the vagrant environment'
     'resume:Resumes a suspend vagrant environment'
@@ -26,7 +43,6 @@ _1st_arguments=(
     'suspend:Suspends the currently running vagrant environment'
     'up:Creates the vagrant environment'
     'version:Prints the currently installed Vagrant version and checks for new updates'
-    '--help:[TASK] Describe available tasks or one specific task'
     '--version:Prints the Vagrant version information'
 )
 
@@ -39,13 +55,22 @@ _box_arguments=(
     'repackage:NAME Repackage an installed box into a `.box` file.'
 )
 
+local -a _plugin_arguments
+_plugin_arguments=(
+    'install:NAME Install a plugin to the system'
+    'license:NAME LICENSE_FILE Add a license for an installed plugin'
+    'list:Lists all installed plugins'
+    'uninstall:NAME Uninstall a plugin from the system'
+    'update:[NAMES...] Update all or specified plugins'
+)
+
 __task_list ()
 {
     local expl
     declare -a tasks
 
-    tasks=(box destroy halt init package provision reload resume ssh \
-           ssh_config status suspend up version)
+    tasks=(box destroy global-status halt init package plugin provision \
+           reload resume ssh ssh_config status suspend up version)
 
     _wanted tasks expl 'help' compadd $tasks
 }
@@ -55,6 +80,12 @@ __box_list ()
     _wanted application expl 'command' compadd $(command vagrant box list | \
                                                  awk '{print $1}' | \
                                                  sed -e 's/ /\\ /g')
+}
+
+__plugin_list ()
+{
+    _wanted application expl 'command' compadd $(command vagrant plugin list \
+                                                 2>/dev/null| cut -d' ' -f1)
 }
 
 _vagrant_caching_policy()
@@ -83,7 +114,7 @@ _vagrant_caching_policy()
     comp_time=${$(${(z)STATCMD} $1):Q}
 
     return $(( reg_time < comp_time ))
- }
+}
 
 __vm_list ()
 {
@@ -123,21 +154,46 @@ __vagrant-box ()
        (options)
            case $line[1] in
                (repackage|remove)
-                   _arguments ':feature:__box_list' 
+                   _arguments ':feature:__box_list'
                ;;
            esac
        ;;
     esac
 }
 
+__vagrant-plugin ()
+{
+    local curcontext="$curcontext" state line
+    local -A opt_args
 
+    _arguments -C \
+        ':command:->command' \
+        '*::options:->options'
 
+   case $state in
+       (command)
+           _describe -t commands "gem subcommand" _plugin_arguments
+           return
+       ;;
+
+       (options)
+           case $line[1] in
+               (license)
+                   _arguments ':feature:__plugin_list' '*:file:_files'
+               ;;
+               (uninstall)
+                   _arguments ':feature:__plugin_list'
+               ;;
+           esac
+       ;;
+    esac
+}
 
 local expl
 local -a boxes installed_boxes
 
 local curcontext="$curcontext" state line
-typeset -A opt_args
+local -A opt_args
 
 _arguments -C \
     ':command:->command' \
@@ -152,14 +208,26 @@ case $state in
   (options)
     case $line[1] in
       (help)
-         _arguments ':feature:__task_list' 
+         _arguments ':feature:__task_list'
       ;;
 
       (box)
           __vagrant-box
+      ;;
+
+      (plugin)
+          __vagrant-plugin
       ;;
       (up|provision|package|destroy|reload|ssh|halt|resume|status|suspend)
           _arguments ':feature:__vm_list'
     esac
   ;;
 esac
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et
