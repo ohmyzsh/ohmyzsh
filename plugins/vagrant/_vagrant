@@ -44,20 +44,65 @@ __task_list ()
     local expl
     declare -a tasks
 
-    tasks=(box destroy halt init package provision reload resume ssh ssh_config status suspend up version)
+    tasks=(box destroy halt init package provision reload resume ssh \
+           ssh_config status suspend up version)
 
     _wanted tasks expl 'help' compadd $tasks
 }
 
 __box_list ()
 {
-    _wanted application expl 'command' compadd $(command vagrant box list | sed -e 's/ /\\ /g')
+    _wanted application expl 'command' compadd $(command vagrant box list | \
+                                                 awk '{print $1}' | \
+                                                 sed -e 's/ /\\ /g')
 }
+
+_vagrant_caching_policy()
+{
+    local reg_time comp_time check_file
+
+    case "${1##*/}" in
+        VAGRANT_VMS)
+            if [[ -z $VAGRANT_CWD ]]; then
+                check_file=./Vagrantfile
+            else
+                check_file=$VAGRANT_CWD/Vagrantfile
+            fi
+            ;;
+        *)
+            echo "unknown type: $1"
+            return -1
+            ;;
+    esac
+
+    case $(uname -s) in
+        Darwin) STATCMD="stat -f '%c'" ;;
+        *)      STATCMD="stat -c '%Z'" ;;
+    esac
+    reg_time=${$(${(z)STATCMD} $check_file):Q}
+    comp_time=${$(${(z)STATCMD} $1):Q}
+
+    return $(( reg_time < comp_time ))
+ }
 
 __vm_list ()
 {
-    _wanted application expl 'command' compadd $(command grep Vagrantfile -oe '^[^#]*\.vm\.define *[:"]\([a-zA-Z0-9_-]\+\)' 2>/dev/null | awk '{print substr($2, 2)}')
-    _wanted application expl 'command' compadd $(command ls .vagrant/machines/ 2>/dev/null)
+    local cache_policy
+    zstyle -s ":completion:${curcontext}:" cache-policy cache_policy
+    zstyle ":completion:${curcontext}:" cache-policy \
+        ${cache_policy:-_vagrant_caching_policy}
+
+    # Cache the list of VMs available
+    if ( [[ ${+_vagrant_vms} -eq 0 ]] || _cache_invalid VAGRANT_VMS ) &&
+        ! _retrieve_cache VAGRANT_VMS;
+    then
+      _vagrant_vms=( $(_call_program path-all "vagrant status | \
+                       awk '{print \$1}' | \
+                       egrep -v '^$|^(Current|This|above|VM,)$'" ) )
+      _store_cache VAGRANT_VMS _vagrant_vms
+    fi
+
+    _wanted application expl 'command' compadd $_vagrant_vms
 }
 
 __vagrant-box ()
@@ -113,8 +158,8 @@ case $state in
       (box)
           __vagrant-box
       ;;
-      (up|provision|package|destroy|reload|ssh|halt|resume|status)
-	_arguments ':feature:__vm_list'
+      (up|provision|package|destroy|reload|ssh|halt|resume|status|suspend)
+          _arguments ':feature:__vm_list'
     esac
   ;;
 esac
