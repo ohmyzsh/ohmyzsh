@@ -5,6 +5,8 @@ function web_search() {
   local open_cmd
   if [[ "$OSTYPE" = darwin* ]]; then
     open_cmd='open'
+  elif [[ "$OSTYPE" = cygwin ]]; then
+    open_cmd='cygstart'
   else
     open_cmd='xdg-open'
   fi
