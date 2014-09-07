@@ -21,7 +21,8 @@ function _wd() {
     'add!:Overwrites existing warp point'
     'rm:Removes the given warp point'
     'ls:Outputs all stored warp points'
-    'show:Outputs all warp points that point to the current directory'
+    'show:Outputs all warp points that point to the current directory or shows a specific target directory for a point'
+    'show:Outputs all warp points that point to the current directory or shows a specific target directory for a point'
     'help:Show this extremely helpful text'
     '..:Go back to last directory'
   )
@@ -42,6 +43,9 @@ function _wd() {
           ;;
         add)
           _message 'Write the name of your warp point' && ret=0
+          ;;
+        show)
+          _describe -t points "Warp points" warp_points && ret=0
           ;;
       esac
       ;;
