@@ -24,6 +24,8 @@ if which tmux &> /dev/null
 	[[ -n "$ZSH_TMUX_FIXTERM" ]] || ZSH_TMUX_FIXTERM=true
 	# Set '-CC' option for iTerm2 tmux integration
 	[[ -n "$ZSH_TMUX_ITERM2" ]] || ZSH_TMUX_ITERM2=false
+	# Extra options to pass through to tmux
+	[[ -n "$ZSH_TMUX_OPTIONS" ]] || ZSH_TMUX_OPTIONS=""
 	# The TERM to use for non-256 color terminals.
 	# Tmux states this should be screen, but you may need to change it on
 	# systems without the proper terminfo
@@ -59,6 +61,7 @@ if which tmux &> /dev/null
 	function _zsh_tmux_plugin_run()
 	{
 		# Construct options.
+		tmux_options=($ZSH_TMUX_OPTIONS)
 		[[ "$ZSH_TMUX_ITERM2"  == "true" ]] && tmux_options+=("-CC")
 		[[ "$ZSH_TMUX_FIXTERM" == "true" ]] && tmux_options+=("-f" "$_ZSH_TMUX_FIXED_CONFIG")
 
