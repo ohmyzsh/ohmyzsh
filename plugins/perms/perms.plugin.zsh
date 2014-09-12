@@ -1,6 +1,6 @@
 # http://gneatgeek.github.io
-#
-# Some useful commands for setting permissions. I find this most handy for website files.
+# Rory Hardy [GneatGeek]
+# Some useful commands for setting permissions.
 
 ### Aliases
 
