@@ -46,7 +46,6 @@ alias ff='find . -type f -name'
 alias h='history'
 alias hgrep="fc -El 0 | grep"
 alias help='man'
-alias j='jobs'
 alias p='ps -f'
 alias sortnr='sort -n -r'
 alias unexport='unset'
