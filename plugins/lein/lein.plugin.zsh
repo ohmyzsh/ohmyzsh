@@ -8,6 +8,7 @@ function _lein_commands() {
           "classpath:print the classpath of the current project"
           "clean:remove compiled files and dependencies from project"
           "compile:ahead-of-time compile the project"
+          "cljsbuild:compile clojure script sources"
           "deploy:build jar and deploy to remote repository"
           "deps:download and install all dependencies"
           "help:display a list of tasks or help for a given task"
