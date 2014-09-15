@@ -13,7 +13,6 @@ local c7=$(printf "\033[38;5;149m")
 local c8=$(printf "\033[38;5;126m")
 local c9=$(printf "\033[38;5;162m")
 
-local foopath=$(perl /home/scp1/bin/foopath)
 
 if [ "$TERM" = "linux" ]; then
     c1=$(printf "\033[34;1m")
