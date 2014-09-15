@@ -43,5 +43,5 @@ mcd () {
 }
 
 alias md='mkdir -p'
-# alias rd=rmdir
+alias rd=rmdir
 alias d='dirs -v | head -10'
