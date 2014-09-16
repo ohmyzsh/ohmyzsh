@@ -1,13 +1,9 @@
-#!/bin/sh
+#!/usr/bin/env zsh
 
-PLAT=`uname -s`
+zmodload zsh/datetime
+
 function _current_epoch() {
-  if [ "$PLAT" = "SunOS" ]
-  then
-    echo $(($(perl -e 'print time') / 60 / 60 / 24))
-  else
-    echo $(($(date +%s) / 60 / 60 / 24))
-  fi
+  echo $EPOCHSECONDS
 }
 
 function _update_zsh_update() {
