@@ -22,6 +22,8 @@ if [[ -z "$epoch_target" ]]; then
   epoch_target=13
 fi
 
+epoch_target_seconds=$((epoch_target * 86400))
+
 [ -f ~/.profile ] && source ~/.profile
 
 # Cancel upgrade if the current user doesn't have write permissions for the
@@ -37,7 +39,7 @@ then
   fi
 
   epoch_diff=$(($(_current_epoch) - $LAST_EPOCH))
-  if [ $epoch_diff -gt $epoch_target ]
+  if [ $epoch_diff -gt $epoch_target_seconds ]
   then
     if [ "$DISABLE_UPDATE_PROMPT" = "true" ]
     then
