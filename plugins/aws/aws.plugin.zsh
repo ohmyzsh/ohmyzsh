@@ -14,9 +14,16 @@ function agp {
 }
 function asp {
   export AWS_DEFAULT_PROFILE=$1
-    export RPROMPT="<aws:$AWS_DEFAULT_PROFILE>"
-    
 }
+
+# Makes AWS profile info available to shell prompt. Inspired by git_prompt_info()
+function aws_prompt_info {
+	if [[ -n $(echo $AWS_DEFAULT_PROFILE) ]]; 
+	then
+		echo "$ZSH_THEME_AWS_PROFILE_PREFIX$AWS_DEFAULT_PROFILE$ZSH_THEME_AWS_PROFILE_SUFFIX"
+	fi
+}
+
 function aws_profiles {
   reply=($(grep profile $AWS_HOME/config|sed -e 's/.*profile \([a-zA-Z0-9_-]*\).*/\1/'))
 }
