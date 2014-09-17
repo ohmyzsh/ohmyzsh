@@ -1,44 +1,47 @@
+# Michele Bologna theme
+# mbologna on GitHub
+#
 # reference colors
-GREEN="%{$fg_bold[green]%}"
-RED="%{$fg_bold[red]%}"
-CYAN="%{$fg_bold[cyan]%}"
-YELLOW="%{$fg_bold[yellow]%}"
-BLUE="%{$fg_bold[blue]%}"
-MAGENTA="%{$fg_bold[magenta]%}"
-WHITE="%{$fg_bold[white]%}"
+local GREEN="%{$fg_bold[green]%}"
+local RED="%{$fg_bold[red]%}"
+local CYAN="%{$fg_bold[cyan]%}"
+local YELLOW="%{$fg_bold[yellow]%}"
+local BLUE="%{$fg_bold[blue]%}"
+local MAGENTA="%{$fg_bold[magenta]%}"
+local WHITE="%{$fg_bold[white]%}"
 
+local COLOR_ARRAY
 COLOR_ARRAY=($GREEN $RED $CYAN $YELLOW $BLUE $MAGENTA $WHITE)
 
 # color reset
-RESET_COLOR="%{$reset_color%}"
+local RESET_COLOR="%{$reset_color%}"
 
 # which color should be applied?
-USERNAME_NORMAL_COLOR=$WHITE
-USERNAME_ROOT_COLOR=$RED
-HOSTNAME_NORMAL_COLOR=$BLUE
-# uncomment next line if you want auto-generated hostname color
-#for i in `hostname`; HOSTNAME_NORMAL_COLOR=$COLOR_ARRAY[$[((#i))%7+1]]
-HOSTNAME_ROOT_COLOR=$RED
+local USERNAME_NORMAL_COLOR=$WHITE
+local USERNAME_ROOT_COLOR=$RED
+for i in `hostname`; local HOSTNAME_NORMAL_COLOR=$COLOR_ARRAY[$[((#i))%7+1]]
+local HOSTNAME_ROOT_COLOR=$RED
+local HOSTNAME_COLOR
 HOSTNAME_COLOR=%(!.$HOSTNAME_ROOT_COLOR.$HOSTNAME_NORMAL_COLOR)
-CURRENT_DIR_COLOR=$CYAN
+local CURRENT_DIR_COLOR=$CYAN
 
 # zsh commands
-USERNAME_COMMAND="%n"
-HOSTNAME_COMMAND="%m"
-CURRENT_DIR="%~"
+local USERNAME_COMMAND="%n"
+local HOSTNAME_COMMAND="%m"
+local CURRENT_DIR="%~"
 
 # output: colors + commands
-USERNAME_OUTPUT="%(!..$USERNAME_NORMAL_COLOR$USERNAME_COMMAND$RESET_COLOR@)"
-HOSTNAME_OUTPUT="$HOSTNAME_COLOR$HOSTNAME_COMMAND$RESET_COLOR"
-CURRENT_DIR_OUTPUT="$CURRENT_DIR_COLOR$CURRENT_DIR"
-LAST_COMMAND_OUTPUT="%(?.%(!.$RED.$GREEN).$YELLOW)"
+local USERNAME_OUTPUT="%(!..$USERNAME_NORMAL_COLOR$USERNAME_COMMAND$RESET_COLOR@)"
+local HOSTNAME_OUTPUT="$HOSTNAME_COLOR$HOSTNAME_COMMAND$RESET_COLOR"
+local CURRENT_DIR_OUTPUT="$CURRENT_DIR_COLOR$CURRENT_DIR"
+local LAST_COMMAND_OUTPUT="%(?.%(!.$RED.$GREEN).$YELLOW)"
 
 # git theming
-ZSH_THEME_GIT_PROMPT_PREFIX="("
-ZSH_THEME_GIT_PROMPT_SUFFIX=""
-ZSH_THEME_GIT_PROMPT_DIRTY=")$RED*"
-ZSH_THEME_GIT_PROMPT_CLEAN=")"
+local ZSH_THEME_GIT_PROMPT_PREFIX="("
+local ZSH_THEME_GIT_PROMPT_SUFFIX=""
+local ZSH_THEME_GIT_PROMPT_DIRTY=")$RED*"
+local ZSH_THEME_GIT_PROMPT_CLEAN=")"
 
 # wrap all together
-PROMPT='$USERNAME_OUTPUT$HOSTNAME_OUTPUT:$CURRENT_DIR_OUTPUT $LAST_COMMAND_OUTPUT%#$RESET_COLOR '
-RPROMPT='%1(j.fg: [%j].) $GREEN$(git_prompt_info)$RESET_COLOR [%@]'
+export PROMPT='$USERNAME_OUTPUT$HOSTNAME_OUTPUT:$CURRENT_DIR_OUTPUT $LAST_COMMAND_OUTPUT%#$RESET_COLOR '
+export RPROMPT='%1(j.fg: [%j].) $GREEN$(git_prompt_info)$RESET_COLOR [%@]'
