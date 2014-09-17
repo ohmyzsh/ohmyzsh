@@ -1,44 +1,49 @@
-# reference colors
-GREEN="%{$fg_bold[green]%}"
-RED="%{$fg_bold[red]%}"
-CYAN="%{$fg_bold[cyan]%}"
-YELLOW="%{$fg_bold[yellow]%}"
-BLUE="%{$fg_bold[blue]%}"
-MAGENTA="%{$fg_bold[magenta]%}"
-WHITE="%{$fg_bold[white]%}"
+# Michele Bologna's theme
+# http://michelebologna.net
+#
+# This a theme for oh-my-zsh. Features a colored prompt with a right prompt 
+# containing the git status (if applicable).
+# The '%' prompt will be green if last command return value is 0, yellow otherwise.
+# The hostname color is based on hostname characters (see below).
+# When using as root, the left prompt shows only the hostname in red color.
+#
 
-COLOR_ARRAY=($GREEN $RED $CYAN $YELLOW $BLUE $MAGENTA $WHITE)
+local green="%{$fg_bold[green]%}"
+local red="%{$fg_bold[red]%}"
+local cyan="%{$fg_bold[cyan]%}"
+local yellow="%{$fg_bold[yellow]%}"
+local blue="%{$fg_bold[blue]%}"
+local magenta="%{$fg_bold[magenta]%}"
+local white="%{$fg_bold[white]%}"
+local reset="%{$reset_color%}"
 
-# color reset
-RESET_COLOR="%{$reset_color%}"
+local color_array
+color_array=($green $red $cyan $yellow $blue $magenta $white)
 
-# which color should be applied?
-USERNAME_NORMAL_COLOR=$WHITE
-USERNAME_ROOT_COLOR=$RED
-HOSTNAME_NORMAL_COLOR=$BLUE
-# uncomment next line if you want auto-generated hostname color
-#for i in `hostname`; HOSTNAME_NORMAL_COLOR=$COLOR_ARRAY[$[((#i))%7+1]]
-HOSTNAME_ROOT_COLOR=$RED
-HOSTNAME_COLOR=%(!.$HOSTNAME_ROOT_COLOR.$HOSTNAME_NORMAL_COLOR)
-CURRENT_DIR_COLOR=$CYAN
+local username_normal_color=$white
+local username_root_color=$red
+local hostname_root_color=$red
 
-# zsh commands
-USERNAME_COMMAND="%n"
-HOSTNAME_COMMAND="%m"
-CURRENT_DIR="%~"
+# calculating the hostname color with hostname characters
+for i in `hostname`; local hostname_normal_color=$color_array[$[((#i))%7+1]]
 
-# output: colors + commands
-USERNAME_OUTPUT="%(!..$USERNAME_NORMAL_COLOR$USERNAME_COMMAND$RESET_COLOR@)"
-HOSTNAME_OUTPUT="$HOSTNAME_COLOR$HOSTNAME_COMMAND$RESET_COLOR"
-CURRENT_DIR_OUTPUT="$CURRENT_DIR_COLOR$CURRENT_DIR"
-LAST_COMMAND_OUTPUT="%(?.%(!.$RED.$GREEN).$YELLOW)"
+local hostname_color
+hostname_color=%(!.$hostname_root_color.$hostname_normal_color)
+local current_dir_color=$cyan
 
-# git theming
-ZSH_THEME_GIT_PROMPT_PREFIX="("
-ZSH_THEME_GIT_PROMPT_SUFFIX=""
-ZSH_THEME_GIT_PROMPT_DIRTY=")$RED*"
-ZSH_THEME_GIT_PROMPT_CLEAN=")"
+local username_command="%n"
+local hostname_command="%m"
+local current_dir="%~"
 
-# wrap all together
-PROMPT='$USERNAME_OUTPUT$HOSTNAME_OUTPUT:$CURRENT_DIR_OUTPUT $LAST_COMMAND_OUTPUT%#$RESET_COLOR '
-RPROMPT='%1(j.fg: [%j].) $GREEN$(git_prompt_info)$RESET_COLOR [%@]'
+local username_output="%(!..$username_normal_color$username_command$reset@)"
+local hostname_output="$hostname_color$hostname_command$reset"
+local current_dir_output="$current_dir_color$current_dir"
+local last_command_output="%(?.%(!.$red.$green).$yellow)"
+
+export ZSH_THEME_GIT_PROMPT_PREFIX="("
+export ZSH_THEME_GIT_PROMPT_SUFFIX=""
+export ZSH_THEME_GIT_PROMPT_DIRTY=")$red*"
+export ZSH_THEME_GIT_PROMPT_CLEAN=")"
+
+export PROMPT='$username_output$hostname_output:$current_dir_output $last_command_output%#$reset '
+export RPROMPT='%1(j.fg: [%j].) $green$(git_prompt_info)$reset [%@]'
