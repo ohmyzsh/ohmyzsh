@@ -58,7 +58,7 @@ alias rn='rake notes'
 alias rr='rake routes'
 
 # legacy stuff
-alias ss='thin --stats "/thin/stats" start'
+alias sstats='thin --stats "/thin/stats" start'
 alias sg='ruby script/generate'
 alias sd='ruby script/destroy'
 alias sp='ruby script/plugin'
