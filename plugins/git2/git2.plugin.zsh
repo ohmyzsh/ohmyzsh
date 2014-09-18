@@ -178,6 +178,10 @@ compdef _git glgga=git-log
 # one line git log
 alias glo='git log --oneline'
 compdef _git glo=git-log
+alias glol="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+compdef _git glol=git-log
+alias glola="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all"
+compdef _git glola=git-log
 
 ######################
 # Git Reset Head (grh)
