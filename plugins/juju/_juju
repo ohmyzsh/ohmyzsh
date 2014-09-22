@@ -1,0 +1,106 @@
+#compdef juju
+
+_main() {
+    local curcontext="$curcontext" state line
+    typeset -A opt_args
+
+    _arguments \
+        '1: :->command'\
+        '*: :->options'
+
+    case $state in
+    command)
+        _arguments "1:command:(add-relation add-unit bootstrap get set debug-log debug-hooks deploy destroy-environment destroy-service expose open-tunnel remove-relation remove-unit resolved scp status ssh terminate-machine unexpose upgrade-charm)"
+    ;;
+    *)
+        case $words[2] in
+
+            add-relation)
+                compadd "$@" - -h --help --environment -e --verbose
+            ;;
+
+            add-unit)
+                compadd "$@" - -h --help --environment -e --num-units -n
+            ;;
+
+            bootstrap)
+                compadd "$@" - -h --help --environment -e
+            ;;
+
+            get)
+                compadd "$@" - -h --help --environment -e --schema -s
+            ;;
+
+            set)
+                compadd "$@" - -h --help --environment -e --config
+            ;;
+
+            debug-log)
+                compadd "$@" - -h --help -e --environment -r --replay -i --include -x --exclude -l --level -n --limit -o --output
+            ;;
+
+            debug-hooks)
+                compadd "$@" - -h --help -e --environment
+            ;;
+
+            deploy)
+                compadd "$@" - -h --help --environment -e --num-units -n --repository --config
+            ;;
+
+            destroy-environment)
+                compadd "$@" - -h --help --environment -e
+            ;;
+
+            destroy-service)
+                compadd "$@" - -h --help --environment -e
+            ;;
+
+            expose)
+                compadd "$@" - -h --help --environment -e
+            ;;
+
+            open-tunnel)
+                compadd "$@" - -h --help --environment -e
+            ;;
+
+            remove-relation)
+                compadd "$@" - -h --help --environment -e --verbose
+            ;;
+
+            remove-unit)
+                compadd "$@" - -h --help --environment -e
+            ;;
+
+            resolved)
+                compadd "$@" - -h --help --retry -r --environment -e
+            ;;
+
+            scp)
+                compadd "$@" - -h --help --environment -e
+            ;;
+
+            status)
+                compadd "$@" - -h --help --environment -e --output --format
+            ;;
+
+            ssh)
+                compadd "$@" - -h --help --environment -e
+            ;;
+
+            terminate-machine)
+                compadd "$@" - -h --help --environment -e
+            ;;
+
+            unexpose)
+                compadd "$@" - -h --help --environment -e
+            ;;
+
+            upgrade-charm)
+                compadd "$@" - -h --help --dry-run -n --environment -e --repository
+            ;;
+
+        esac
+    esac
+}
+
+_main "$@"
