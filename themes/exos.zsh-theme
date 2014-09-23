@@ -31,7 +31,7 @@ else
 fi
 }
 
-local ret_status="%(?:%{$fg_bold[green]%}⌨ :%{$fg_bold[red]%}%S↑%s%?)"
+local ret_status="%(?:%{$fg_bold[green]%}☯:%{$fg_bold[red]%}%S↑%s%?)"
 PROMPT='${ret_status}%{$fg[blue]%}${PROMPT_HOST}%{$fg_bold[green]%}%p %{$fg_bold[yellow]%}%2~ ${vcs_info_msg_0_}${dir_status}%{$reset_color%} '
 RPROMPT='%F{blue}$(pwd) %F{yellow}[%*]%f'
 
