@@ -16,16 +16,19 @@ function web_search() {
     return 1
   fi
 
-  local url="${WEB_SEARCH_PROTOCOL:-https}://www.$1.com"
+  local url="${WEB_SEARCH_PROTOCOL:-https}://www.$1.${WEB_SEARCH_TLD:-com}"
 
   # no keyword provided, simply open the search engine homepage
   if [[ $# -le 1 ]]; then
     $open_cmd "$url"
     return
   fi
+  #
+  # slightly different search syntax for duckduckgo and yahoo
   if [[ $1 == 'duckduckgo' ]]; then
-  #slightly different search syntax for DDG
     url="${url}/?q="
+  elif [[ $1 == 'yahoo' ]]; then
+    url="${WEB_SEARCH_PROTOCOL:-https}://search.$1.com/search?p="
   else
     url="${url}/search?q="
   fi
@@ -37,8 +40,14 @@ function web_search() {
   done
 
   url="${url%?}" # remove the last '+'
-  nohup $open_cmd "$url" 
- 	rm nohup.out	
+  local error_file="$(mktemp -t websearchXXXX)"
+  $open_cmd "$url" 2> ${error_file}
+  echo $url
+  local exit_code=$?
+  if [[ ${exit_code} != 0 ]]; then
+      cat $error_file 2>&1
+  fi
+  return ${exit_code}
 }
 
 
