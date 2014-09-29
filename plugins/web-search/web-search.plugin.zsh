@@ -16,7 +16,7 @@ function web_search() {
     return 1
   fi
 
-  local url="http://www.$1.com"
+  local url="${WEB_SEARCH_PROTOCOL:-https}://www.$1.com"
 
   # no keyword provided, simply open the search engine homepage
   if [[ $# -le 1 ]]; then
