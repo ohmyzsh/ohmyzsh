@@ -31,6 +31,7 @@ function _cabal_commands() {
           "install:Installs a list of packages"
           "list:List packages matching a search string"
           "register:Register this package with the compiler"
+          "repl:Open an interpreter session for the given target"
           "report:Upload build reports to a remote server"
           "sdist:Generate a source distribution file (.tar.gz)"
           "test:Run the test suite, if any (configure with UserHooks)"
