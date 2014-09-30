@@ -3,7 +3,7 @@ _homebrew-installed() {
 }
 
 _awscli-homebrew-installed() {
-  test -d brew --prefix awscli &> /dev/null
+  test -d "$( brew --prefix awscli )"
 }
 
 export AWS_HOME=~/.aws
