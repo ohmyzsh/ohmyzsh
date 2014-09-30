@@ -1,11 +1,3 @@
-_homebrew-installed() {
-  type brew &> /dev/null
-}
-
-_awscli-homebrew-installed() {
-  test -d "$( brew --prefix awscli )"
-}
-
 export AWS_HOME=~/.aws
 
 function agp {
