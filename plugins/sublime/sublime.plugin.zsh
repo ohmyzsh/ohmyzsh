@@ -17,7 +17,7 @@ if [[ $('uname') == 'Linux' ]]; then
         fi
     done
 
-elif  [[ $('uname') == 'Darwin' ]]; then
+elif  [[ "$OSTYPE" = darwin* ]]; then
     local _sublime_darwin_paths > /dev/null 2>&1
     _sublime_darwin_paths=(
         "/usr/local/bin/subl"
