@@ -1,0 +1,129 @@
+#compdef haxelib
+#autoload
+
+zmodload zsh/regex
+
+_haxelib() {
+  if (( CURRENT > 2 )); then
+    # Remember the subcommand name
+    local cmd=${words[2]}
+    # Set the context for the subcommand.
+    curcontext="${curcontext%:*:*}:haxelib-$cmd"
+    # Narrow the range of words we are looking at to exclude `haxelib´
+    (( CURRENT-- ))
+    shift words
+    case "$cmd" in
+      upgrade|selfupdate|register)
+        return 1;;
+    esac
+    # Run the completion for the subcommand
+    _haxelib_cmd_$cmd
+  else
+    local hline
+    local -a cmdlist
+    _call_program help-commands haxelib | while read -A hline; do
+      (( ${#hline} < 4 )) && continue
+      [[ $hline[1] = (#i)Haxe ]] && continue
+      [[ $hline[1] = (#i)Usage ]] && continue
+      [[ $hline[1] = (#i)commands ]] && continue
+      cmdlist=($cmdlist "${hline[1]}:${hline[3,-1]}")
+    done
+    _describe -t haxelib-commands "Haxelib command" cmdlist
+  fi
+}
+
+_haxelib_local_libs() {
+  eval $'installed_libs=( ${(s.\n.)"$(haxelib list | cut -d ":" -f 1)"} )'
+}
+
+_haxelib_remote_libs() {
+  eval $'remote_libs=( ${(s.\n.)"%(zshcomplete remote)"} )'
+}
+
+local -a installed_libs
+local -a remote_libs
+
+_haxelib_cmd_install() {
+  _haxelib_remote_libs
+  _path_files -/ -g "*.hxml"
+  _wanted remote-libs expl '' compadd -x "Insufficient completion for haxelib-install, only hxml so far!" -a remote_libs
+}
+
+_haxelib_cmd_list() {
+  compadd -x "No completion so far for haxelib list"
+}
+
+_haxelib_cmd_update() {
+  _haxelib_local_libs
+  _wanted installed-libs expl '' compadd -x "Matching haxe libraries" -a installed_libs
+}
+
+_haxelib_cmd_remove() {
+  _haxelib_local_libs
+  _wanted installed_libs expl '' compadd -x "Matching haxe libraries" -a installed_libs
+}
+
+_haxelib_cmd_set() {
+  compadd -x "$cmd-completion not implemented!"
+}
+
+_haxelib_cmd_search() {
+  compadd -x "$cmd-completion not implemented!"
+}
+_haxelib_cmd_info() {
+  compadd -x "$cmd-completion not implemented!"
+}
+
+_haxelib_cmd_user() {
+  compadd -x "$cmd-completion not implemented!"
+}
+
+_haxelib_cmd_submit() {
+  compadd -x "$cmd-completion not implemented!"
+}
+
+_haxelib_cmd_setup() {
+  compadd -x "$cmd-completion not implemented!"
+}
+
+_haxelib_cmd_convertxml() {
+  compadd -x "$cmd-completion not implemented!"
+}
+
+_haxelib_cmd_config() {
+  compadd -x "$cmd-completion not implemented!"
+}
+
+_haxelib_cmd_path() {
+  compadd -x "$cmd-completion not implemented!"
+}
+
+_haxelib_cmd_run() {
+  compadd -x "$cmd-completion not implemented!"
+}
+
+_haxelib_cmd_local() {
+  compadd -x "$cmd-completion not implemented!"
+}
+
+_haxelib_cmd_dev() {
+  compadd -x "$cmd-completion not implemented!"
+}
+
+_haxelib_cmd_git() {
+  compadd -x "$cmd-completion not implemented!"
+}
+
+_haxelib_cmd_proxy() {
+  compadd -x "$cmd-completion not implemented!"
+}
+
+_haxelib "$@"
+
+# _lib_remote() {
+#   local cache_file=/tmp/haxelib_remote~
+#   if [[ ! -f $cache_file(mh-1) ]]; then
+#     zshcomplete remote > "$cache_file"
+#   fi
+#   eval $'remote_libs=( ${(s.\n.)"$(cat $cache_file)"} )'
+# }

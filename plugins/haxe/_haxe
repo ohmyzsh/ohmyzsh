@@ -1,0 +1,23 @@
+#compdef haxe
+#autoload
+
+_arguments -C \
+  '1::Haxe ML buildfile:_path_files -/ -g "*.hxml"' \
+  '(-cp)-cp[add a classpath]:enter the classpath:_path_files -/' \
+  '(-swf -js -neko -php -cpp -as3 -cs -java)-js[compile to javascript]:enter the destination file:_path_files -/ -g "*.js"' \
+  '(-swf -js -neko -php -cpp -as3 -cs -java)-swf[compile to a swf]:enter the destination file:_path_files -/ -g "*.swf"' \
+  '(-swf -js -neko -php -cpp -as3 -cs -java)-as3[compile to actionscript]:enter the destination directory:_path_files -/' \
+  '(-swf -js -neko -php -cpp -as3 -cs -java)-neko[compile to neko binary]:enter the destination file:_path_files -/ -g "*.n"' \
+  '(-swf -js -neko -php -cpp -as3 -cs -java)-php[compile to php]:enter the destination directory:_path_files -/' \
+  '(-swf -js -neko -php -cpp -as3 -cs -java)-cpp[compile to C++]:enter the destination directory:_path_files -/' \
+  '(-swf -js -neko -php -cpp -as3 -cs -java)-cs[compile to C#]:enter the destination directory:_path_files -/' \
+  '(-swf -js -neko -php -cpp -as3 -cs -java)-java[compile to Java]:enter the destination directory:_path_files -/' \
+  '(-xml)-xml[generate xml types description]:output file:_path_files -/ -g "*.xml"' \
+  '(-main)-main[startup class]' \
+  '-lib[additional libraries]' \
+  '-D[compilation flag]' \
+  '(-v)-v[verbose mode]' \
+  '(-debug)-debug[compile with debugging symbols]' \
+  '(-help --help)'{-help,--help}'[shows list of available commands]'
+
+return 0
