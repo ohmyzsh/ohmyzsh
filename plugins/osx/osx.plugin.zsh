@@ -145,7 +145,7 @@ function trash() {
     if [[ -e "$item" ]]; then
       item_name="$(basename $item)"
       if [[ -e "${trash_dir}/${item_name}" ]]; then
-        mv -f "$item" "${trash_dir}/${item_name} $(date "+%H-%M-%S")"
+        mv -f "$item" "${trash_dir}/${item_name:r} $(date "+%l.%M.%S %p" | sed 's/^ *//')${item_name#${item_name:r}}"
       else
         mv -f "$item" "${trash_dir}/"
       fi
