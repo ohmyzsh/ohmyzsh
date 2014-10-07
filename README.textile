@@ -191,6 +191,6 @@ We have enough themes for the time being. Please fork the project and add on in 
 
 h2. Contributors
 
-This project wouldn't exist without all of our awesome users and contributors: "view our growing list of contributors":https://github.com/robbyrussell/oh-my-zsh/contributors
+This project wouldn't exist without all of our awesome users and contributors: "view our growing list of contributors":https://github.com/stibbons/oh-my-zsh/contributors
 
 Thank you so much!

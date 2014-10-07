@@ -46,13 +46,15 @@ zstyle ':completion:*:descriptions' format '%B%d%b'
 if [ -z "$LC_ALL" ]; then export LC_ALL=en_US.UTF-8; fi
 if [ -z "$LANG" ]; then export LANG=en_US.UTF-8; fi
 
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
 # MacOSX specific aliases
 alias bu='brew update && brew upgrade'
 
 source $ZSH/oh-my-zsh.sh
+
+# Enviroment variables overwrite
+export EDITOR='vim'
+export LESS='-RX'
+
 unsetopt correctall
 
 if [ -e ~/.profile ]; then source ~/.profile; fi
