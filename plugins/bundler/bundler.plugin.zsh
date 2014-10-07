@@ -7,6 +7,7 @@ alias bi="bundle_install"
 
 bundled_commands=(
   annotate
+  berks
   cap
   capify
   cucumber
