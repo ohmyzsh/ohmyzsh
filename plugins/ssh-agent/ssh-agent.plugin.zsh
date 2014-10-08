@@ -45,7 +45,13 @@ function _plugin__start_agent()
   zstyle -a :omz:plugins:ssh-agent identities identities
   echo starting ssh-agent...
 
-  /usr/bin/ssh-add $HOME/.ssh/${^identities}
+  if [ $(command -v ssh-add 2>/dev/null) ]; then
+    SSH_ADD=ssh-add
+  else
+    SSH_ADD=/usr/bin/ssh-add
+  fi
+
+  $SSH_ADD $HOME/.ssh/${^identities}
 }
 
 # Get the filename to store/lookup the environment from
