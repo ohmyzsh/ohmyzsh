@@ -2,7 +2,7 @@
 
 # This will look for a custom profile for the local machine and each domain or
 # subdomain it belongs to. (e.g. com, example.com and foo.example.com)
-parts=(${(s:.:)$(hostname)})
+parts=(${(s:.:)$HOST})
 for i in {${#parts}..1}; do
   profile=${(j:.:)${parts[$i,${#parts}]}}
   file=$ZSH_CUSTOM/profiles/$profile
