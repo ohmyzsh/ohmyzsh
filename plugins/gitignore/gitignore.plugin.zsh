@@ -1,4 +1,4 @@
-function gi() { curl https://www.gitignore.io/api/$@ ;}
+function gi() { curl -L https://www.gitignore.io/api/$@ ;}
 
 _gitignoreio_get_command_list() {
   curl -s https://www.gitignore.io/api/list | tr "," "\n"
