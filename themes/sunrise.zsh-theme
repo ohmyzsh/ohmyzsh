@@ -10,7 +10,7 @@ Y=$fg_no_bold[yellow]
 B=$fg_no_bold[blue]
 RESET=$reset_color
 
-if [ "$(whoami)" = "root" ]; then
+if [ "$USER" = "root" ]; then
     PROMPTCOLOR="%{$R%}" PREFIX="-!-";
 else
     PROMPTCOLOR="" PREFIX="---";
