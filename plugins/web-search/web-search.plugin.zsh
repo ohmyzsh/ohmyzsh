@@ -1,10 +1,9 @@
 # web_search from terminal
 
 function web_search() {
-
   # get the open command
   local open_cmd
-  if [[ $(uname -s) == 'Darwin' ]]; then
+  if [[ "$OSTYPE" = darwin* ]]; then
     open_cmd='open'
   else
     open_cmd='xdg-open'
@@ -38,8 +37,8 @@ function web_search() {
   done
 
   url="${url%?}" # remove the last '+'
-  
-  $open_cmd "$url"
+  nohup $open_cmd "$url" 
+ 	rm nohup.out	
 }
 
 

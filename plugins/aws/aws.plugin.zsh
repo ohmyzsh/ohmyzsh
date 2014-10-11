@@ -1,3 +1,11 @@
+_homebrew-installed() {
+  type brew &> /dev/null
+}
+
+_awscli-homebrew-installed() {
+  brew --prefix awscli &> /dev/null
+}
+
 export AWS_HOME=~/.aws
 
 function agp {
@@ -14,4 +22,9 @@ function aws_profiles {
 }
 
 compctl -K aws_profiles asp
-source `which aws_zsh_completer.sh`
+
+if _homebrew-installed && _awscli-homebrew-installed ; then
+  source $(brew --prefix)/opt/awscli/libexec/bin/aws_zsh_completer.sh
+else
+  source `which aws_zsh_completer.sh`
+fi
