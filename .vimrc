@@ -44,8 +44,6 @@ Bundle 'vim-scripts/LustyExplorer'
 Bundle 'vim-scripts/yavdb'
 Bundle 'junkblocker/patchreview-vim'
 Bundle 'codegram/vim-codereview'
-Bundle 'pangloss/vim-javascript'
-Bundle 'mxw/vim-jsx'
 
 " Scala Bundles
 " You need to check out appropriate ensime branch by hand by running ie.
@@ -168,7 +166,11 @@ endif
 " let g:SuperTabDefaultCompletionType = 'context'
 map <C-Space> :ScalaSearch<CR>
 
-set wildignore=*.o,*~,*.pyc,*.class,\$global
+set wildignore=*.o,*.obj,*.bak,*.swp,*.class,*.pyc,*.java,*.md,*.min,*.txt,*.xml,*.log,*resources/golden*,*.properties,*.sql,*.q,*/node_modules/*,*/target/*
 " au FileType java :so /Users/ahirreddy/.vim/bundle/JavaKit/vim/JavaKit.vim"
+
+" CommandT Options
+let g:CommandTMaxFiles=10000000
+let g:CommandTFileScanner="git"
 
 :set hidden
