@@ -2,7 +2,7 @@
 
 let mapleader = ','
 
-let &colorcolumn=join(range(101,999),",")
+" let &colorcolumn=join(range(101,999),",")
 
 set hlsearch
 set incsearch
@@ -42,6 +42,10 @@ Bundle 'fholgado/minibufexpl.vim'
 Bundle 'vim-scripts/EasyGrep'
 Bundle 'vim-scripts/LustyExplorer'
 Bundle 'vim-scripts/yavdb'
+Bundle 'junkblocker/patchreview-vim'
+Bundle 'codegram/vim-codereview'
+Bundle 'pangloss/vim-javascript'
+Bundle 'mxw/vim-jsx'
 
 " Scala Bundles
 " You need to check out appropriate ensime branch by hand by running ie.
