@@ -1,5 +1,7 @@
 # Please copy this part to your ~/.gitconfig
 # or include it if git > 0.7.10
+# [include]
+#    path = /home/gsemet/.oh-my-zsh/dot_files/gitconfig
 
 [alias]
    commit = commit -s # Always sign commit
@@ -31,10 +33,6 @@
    sync = fetch --all
    root = rev-parse --show-toplevel
 
-# This only works if git > 0.7.10
-# # [include]
-# #    path = /home/username/.oh-my-zsh/dot_files/gitconfig
-
 [color]
 ui = auto
 
@@ -54,11 +52,41 @@ tool = kdiff3
 [guitool "mergetool"]
 cmd = git mergetool --no-prompt
 
-# [mergetool "kdiff3"]
-# cmd = kdiff3
-# args = --L1 base --L2 mine --L3 theirs $base $local $other -o $output
-# keepBackup = false
+[push]
+  default = current
+
+
+[color]
+    ui = auto
+
+[core]
+  editor = vim
+#  abbrev = 12
+
+[commit]
+    template = /home/gsemet/.gitmessage
+
+[user]
+    email = gaetan@xeberon.net
+    name = Gaetan Semet
+
+[cola]
+    fontdiff = Courier 10 Pitch,9,-1,5,50,0,0,0,0,0
+    tabwidth = 4
+
+[guitool "mergetool"]
+  cmd = git mergetool --no-prompt
+
+[merge]
+    tool = kdiff3
+
+[mergetool "kdiff3"]
+  cmd = kdiff3
+  args = --L1 base --L2 mine --L3 theirs $base $local $other -o $output
+  keepBackup = false
 
 [push]
   default = current
 
+[gui]
+  newbranchtemplate = gsemet_
