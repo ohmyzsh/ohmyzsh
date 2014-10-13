@@ -181,7 +181,10 @@ import sys;import os;import logging;
 logging.disable(logging.INFO)
 from django.conf import settings
 import django
-django.setup()
+django_version = django.get_version()
+if float('.'.join(django_version.split('.', 2)[:2])) >= 1.7:
+    django.setup()
+
 from django.core.management import get_commands, load_command_class;
 rs = ''
 for command, app in sorted(get_commands().items(), key=lambda e: (e[1], e[0])):
