@@ -189,6 +189,9 @@ compdef _git glola=git-log
 # Soft Reset to HEAD
 alias grh='git reset HEAD'
 compdef _git grh=git-reset
+# Hard Reset
+alias grH='git reset --hard'
+compdef _git grH=git-reset
 # Hard reset to HEAD
 alias grhh='git reset HEAD --hard'
 compdef _git grhh=git-reset
