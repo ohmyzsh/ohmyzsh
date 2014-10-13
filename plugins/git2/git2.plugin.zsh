@@ -193,8 +193,8 @@ compdef _git grh=git-reset
 alias grH='git reset --hard'
 compdef _git grH=git-reset
 # Hard reset to HEAD
-alias grhh='git reset HEAD --hard'
-compdef _git grhh=git-reset
+alias grhH='git reset HEAD --hard'
+compdef _git grhH=git-reset
 
 ################
 # Git merge (gm)
