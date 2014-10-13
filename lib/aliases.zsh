@@ -2,6 +2,9 @@
 alias pu='pushd'
 alias po='popd'
 
+# Open oh-my-zsh config
+alias zshrc="open ~/.zshrc"
+
 # Basic directory operations
 alias ...='cd ../..'
 alias -- -='cd -'
