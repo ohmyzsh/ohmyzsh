@@ -3,7 +3,7 @@
 zmodload zsh/datetime
 
 function _current_epoch() {
-  echo $EPOCHSECONDS
+  echo $(( $EPOCHSECONDS / 60 / 60 / 24 ))
 }
 
 function _update_zsh_update() {
@@ -22,8 +22,6 @@ if [[ -z "$epoch_target" ]]; then
   epoch_target=13
 fi
 
-epoch_target_seconds=$((epoch_target * 86400))
-
 [ -f ~/.profile ] && source ~/.profile
 
 # Cancel upgrade if the current user doesn't have write permissions for the
@@ -39,7 +37,7 @@ then
   fi
 
   epoch_diff=$(($(_current_epoch) - $LAST_EPOCH))
-  if [ $epoch_diff -gt $epoch_target_seconds ]
+  if [ $epoch_diff -gt $epoch_target ]
   then
     if [ "$DISABLE_UPDATE_PROMPT" = "true" ]
     then
