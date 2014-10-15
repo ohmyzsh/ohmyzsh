@@ -166,6 +166,15 @@ prompt_status() {
   [[ -n "$symbols" ]] && prompt_segment black default "$symbols"
 }
 
+#AWS Profile
+prompt_aws() {
+  local aws_profile=$AWS_DEFAULT_PROFILE
+  if [[ -n $aws_profile ]]; 
+  then
+    prompt_segment red white "AWS: $aws_profile"
+  fi
+}
+
 ## Main prompt
 build_prompt() {
   RETVAL=$?
@@ -175,6 +184,7 @@ build_prompt() {
   prompt_dir
   prompt_git
   prompt_hg
+  prompt_aws
   prompt_end
 }
 
