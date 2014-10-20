@@ -4,7 +4,7 @@ local smiley="%(?,%{$fg[green]%}☺%{$reset_color%},%{$fg[red]%}☹%{$reset_colo
 
 local user="%{$fg[cyan]%}%n%{$reset_color%}"
 local host="%{$fg[cyan]%}@%m%{$reset_color%}"
-local pwd="%{$fg[yellow]%}%~%{$reset_color%}"
+local pwd="%{$fg[yellow]%}%1/%{$reset_color%}"
 
 PROMPT='${user}${host} ${pwd}
 ${smiley}  '
