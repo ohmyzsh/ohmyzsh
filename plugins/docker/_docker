@@ -14,6 +14,13 @@ __docker_containers() {
     _describe 'containers' cont_cmd
 }
 
+# Output a list of all containers (both running and stopped)
+__docker_containers_all() {
+    declare -a cont_cmd
+    cont_cmd=($(docker ps -a | awk 'NR>1{print $1":[CON("$1")"$2"("$3")]"}'))
+    _describe 'containers' cont_cmd
+}
+
 # output a selectable list of all docker images
 __docker_images() {
     declare -a img_cmd
@@ -169,7 +176,7 @@ __rm() {
         '(-f,--force=)'{-f,--force=}'[Force removal of running container]' \
         '(-l,--link=)'{-l,--link=}'[Remove the specified link and not the underlying container]' \
         '(-v,--volumes=)'{-v,--volumes=}'[Remove the volumes associated to the container]'
-    __docker_containers
+    __docker_containers_all
 }
 
 __rmi() {
