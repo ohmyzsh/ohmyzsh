@@ -1,0 +1,5 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =3
+let g:netrw_dirhist_1='/Users/ri_eiyoku/Documents'
+let g:netrw_dirhist_2='/Users/ri_eiyoku/Documents/yy1441yy_backup'
+let g:netrw_dirhist_3='/Users/ri_eiyoku/Documents/yy1441yy_backup/server-configure'
