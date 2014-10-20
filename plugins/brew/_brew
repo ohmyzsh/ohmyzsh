@@ -35,6 +35,7 @@ _1st_arguments=(
   'info:information about a formula'
   'install:install a formula'
   'reinstall:install a formula anew; re-using its current options'
+  'leaves:show installed formulae that are not dependencies of another installed formula'
   'link:link a formula'
   'list:list files in a formula or not-installed formulae'
   'log:git commit log for a formula'
