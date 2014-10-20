@@ -1,4 +1,4 @@
-PROMPT='%{$fg[blue]%}%n%{$reset_color%} on %{$fg[red]%}%M%{$reset_color%} in %{$fg[blue]%}%~%b%{$reset_color%}$(git_time_since_commit)$(check_git_prompt_info)
+PROMPT='%{$fg[blue]%}%n%{$reset_color%} on %{$fg[red]%}%M%{$reset_color%} in %{$fg[blue]%}%1/%{$reset_color%}$(git_time_since_commit)$(check_git_prompt_info)
 $ '
 
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[white]%}"
