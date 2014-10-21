@@ -71,7 +71,7 @@ wd_add()
     if [[ $point =~ "^[\.]+$" ]]
     then
         wd_print_msg $RED "Warp point cannot be just dots"
-    elif [[ $point =~ "(\s|\ )+" ]]
+    elif [[ $point =~ [[:space:]]+ ]]
     then
         wd_print_msg $RED "Warp point should not contain whitespace"
     elif [[ $point == *:* ]]
