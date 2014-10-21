@@ -139,7 +139,7 @@ wd_add()
     if [[ $point =~ "^[\.]+$" ]]
     then
         wd_exit_fail "Warp point cannot be just dots"
-    elif [[ $point =~ "(\s|\ )+" ]]
+    elif [[ $point =~ "[[:space:]]+" ]]
     then
         wd_exit_fail "Warp point should not contain whitespace"
     elif [[ $point == *:* ]]
@@ -151,7 +151,7 @@ wd_add()
     elif [[ ${points[$2]} == "" ]] || $force
     then
         wd_remove $point > /dev/null
-        printf "%q:%q\n" "${point}" "${PWD}" >> $WD_CONFIG
+        printf "%q:%s\n" "${point}" "${PWD}" >> $WD_CONFIG
 
         wd_print_msg $WD_GREEN "Warp point added"
 
