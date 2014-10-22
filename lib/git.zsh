@@ -18,9 +18,9 @@ parse_git_dirty() {
           SUBMODULE_SYNTAX="--ignore-submodules=dirty"
     fi
     if [[ "$DISABLE_UNTRACKED_FILES_DIRTY" == "true" ]]; then
-        GIT_STATUS=$(command git status -s ${SUBMODULE_SYNTAX} -uno 2> /dev/null | tail -n1)
+        GIT_STATUS=$(command git status --porcelain ${SUBMODULE_SYNTAX} -uno 2> /dev/null | tail -n1)
     else
-        GIT_STATUS=$(command git status -s ${SUBMODULE_SYNTAX} 2> /dev/null | tail -n1)
+        GIT_STATUS=$(command git status --porcelain ${SUBMODULE_SYNTAX} 2> /dev/null | tail -n1)
     fi
     if [[ -n $GIT_STATUS ]]; then
       echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
