@@ -49,5 +49,6 @@ alias lsa='ls -lah'
 alias l='ls -lah'
 alias ll='ls -lh'
 alias la='ls -lAh'
+alias llR='ls -lhR'
 
 alias afind='ack-grep -il'
