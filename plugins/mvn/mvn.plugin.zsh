@@ -54,6 +54,9 @@ mvn-color() {
 # either use orignal mvn oder the mvn wrapper
 alias mvn="mvn-or-mvnw"
 
+# Run mvn against the pom found in a project's root directory (assumes a git repo)
+alias 'mvn!'='mvn -f $(git rev-parse --show-toplevel 2>/dev/null || echo ".")/pom.xml'
+
 # aliases
 alias mvncini='mvn clean initialize'
 alias mvncie='mvn clean install eclipse:eclipse'
