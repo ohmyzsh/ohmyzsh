@@ -35,7 +35,9 @@ mvn-color() {
   (
   # Filter mvn output using sed. Before filtering set the locale to C, so invalid characters won't break some sed implementations
   unset LANG
-  LC_CTYPE=C mvn "$@" | sed -e "s/\(\[INFO\]\)\(.*\)/${TEXT_BLUE}${BOLD}\1${RESET_FORMATTING}\2/g" \
+  LC_CTYPE=C mvn "$@" | sed \
+               -e "s/\(\[INFO\]\)\(.*\)/${TEXT_BLUE}${BOLD}\1${RESET_FORMATTING}\2/g" \
+               -e "s/\(\[DEBUG\]\)\(.*\)/${TEXT_RED}${BOLD}\1${RESET_FORMATTING}\2/g" \
                -e "s/\(\[INFO\]\ BUILD SUCCESSFUL\)/${BOLD}${TEXT_GREEN}\1${RESET_FORMATTING}/g" \
                -e "s/\(\[WARNING\]\)\(.*\)/${BOLD}${TEXT_YELLOW}\1${RESET_FORMATTING}\2/g" \
                -e "s/\(\[ERROR\]\)\(.*\)/${BOLD}${TEXT_RED}\1${RESET_FORMATTING}\2/g" \
