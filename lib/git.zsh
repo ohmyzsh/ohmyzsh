@@ -3,7 +3,7 @@ function git_prompt_info() {
   if [[ "$(command git config --get oh-my-zsh.hide-status 2>/dev/null)" != "1" ]]; then
     ref=$(command git symbolic-ref HEAD 2> /dev/null) || \
     ref=$(command git rev-parse --short HEAD 2> /dev/null) || return 0
-    echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
+    echo "$ZSH_THEME_GIT_PROMPT_PREFIX$(git_at_tag)${ref#refs/heads/}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
   fi
 }
 
@@ -50,6 +50,18 @@ git_remote_status() {
             echo "$ZSH_THEME_GIT_PROMPT_DIVERGED_REMOTE"
         fi
     fi
+}
+
+# Get up to ten tags for HEAD
+git_at_tag() {
+  if [[ $POST_1_7_10_GIT -gt 0 ]]; then
+    tag=$(command git tag --points-at HEAD 2> /dev/null | head | paste -s -d ' ' -)
+  else
+    tag=$(command git describe --tags --exact-match HEAD 2> /dev/null)
+  fi
+  if [[ -n $tag ]]; then
+    echo "$tag @ "
+  fi
 }
 
 # Checks if there are commits ahead from remote
@@ -130,21 +142,47 @@ git_prompt_status() {
 function git_compare_version() {
   local INPUT_GIT_VERSION=$1;
   local INSTALLED_GIT_VERSION
+  local MAX_VERSION_PLACE
   INPUT_GIT_VERSION=(${(s/./)INPUT_GIT_VERSION});
   INSTALLED_GIT_VERSION=($(command git --version 2>/dev/null));
   INSTALLED_GIT_VERSION=(${(s/./)INSTALLED_GIT_VERSION[3]});
 
-  for i in {1..3}; do
-    if [[ $INSTALLED_GIT_VERSION[$i] -lt $INPUT_GIT_VERSION[$i] ]]; then
+  # Check for exact similarity
+  if [[ ${(j//)INSTALLED_GIT_VERSION} == ${(j//)INPUT_GIT_VERSION} ]]; then
+    echo 1
+    return 0
+  fi
+
+  # Find largest version number place out of two objects we are working with
+  if [[ ${#INSTALLED_GIT_VERSION[@]} -gt ${#INPUT_GIT_VERSION} ]]; then
+    MAX_VERSION_PLACE=${#INSTALLED_GIT_VERSION[@]}
+  else
+    MAX_VERSION_PLACE=${#INPUT_GIT_VERSION[@]}
+  fi
+
+  # Iteratively compare versions
+  for ((i=1; i <= MAX_VERSION_PLACE; i++)); do
+    if [[ $INSTALLED_GIT_VERSION[$i] -eq $INPUT_GIT_VERSION[$i] ]]; then
+      continue
+    elif [[ $INSTALLED_GIT_VERSION[$i] -lt $INPUT_GIT_VERSION[$i] ]]; then
       echo -1
-      return 0
+    else
+      echo 1
     fi
+
+    return 0
   done
+
+  # Might end up here when local version contains SHA revision (when git was built
+  # directly from source) or some other textual information - "beta", "pre", "rc".
+  # For example, comparing "1.7.0.4" with its source built sibling "1.7.0.4.2be10bb"
+  # would result in "1", as would "1.9.0" check against "1.9.0-rc3"
   echo 1
 }
 
 #this is unlikely to change so make it all statically assigned
 POST_1_7_2_GIT=$(git_compare_version "1.7.2")
+POST_1_7_10_GIT=$(git_compare_version "1.7.10")
 #clean up the namespace slightly by removing the checker function
 unset -f git_compare_version
 
