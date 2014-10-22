@@ -77,13 +77,8 @@ cmd = git mergetool --no-prompt
 [guitool "mergetool"]
   cmd = git mergetool --no-prompt
 
-[merge]
-    tool = kdiff3
-
-[mergetool "kdiff3"]
-  cmd = kdiff3
-  args = --L1 base --L2 mine --L3 theirs $base $local $other -o $output
-  keepBackup = false
+# [merge]
+#     tool = kdiff3
 
 [push]
   default = current
