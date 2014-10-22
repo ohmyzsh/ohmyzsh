@@ -71,21 +71,10 @@ function bb_repo_upload()
     local A
 
     declare -a REVIEWERS
-
-    REVIEWERS=(ion.alberdi@intel.com\
-               vincentx.besanceney@intel.com\
-               vincentx.dardel@intel.com\
-               christophex.letessier@intel.com\
-               olivier.monnier@intel.com\
-               remy.protat@intel.com\
-               gaetan.semet@intel.com\
-               pierre.tardy@intel.com\
-               john.l.villalovos@intel.com)
-    RE_LIST=$(printf -- '%s,' ${REVIEWERS[@]})
-    RE_LIST=${RE_LIST%,}
-    echo "Reviewers: $RE_LIST"
-    echo "Cmd: repo upload --cbr --re=$RE_LIST ."
-    yes | repo upload --cbr --re=$RE_LIST .
+    REVIEWERS=$(txw gerrit-getGroupMembers reviewers-buildbot 2> /dev/null | tr " " ",")
+    echo "Reviewers: $REVIEWERS"
+    echo "Cmd: repo upload --cbr --re=$REVIEWERS ."
+    yes | repo upload --cbr --re=$REVIEWERS .
 }
 
 function bb_merge_bottom_branch_to_here()
@@ -126,6 +115,7 @@ function bb_push_with_care()
     fi
     echo "Pushing branch '$branch' on project '$project'"
     echo "Press Enter to continue"
+    echo "Command: git push ssh://android.intel.com/a/buildbot/$project HEAD:refs/heads/platform/buildbot/$branch"
     read
     git push ssh://android.intel.com/a/buildbot/$project HEAD:refs/heads/platform/buildbot/$branch
 
@@ -134,7 +124,7 @@ function bb_push_with_care()
     sleep "30"
     repo sync .
 
-    echo "Display merged:"
+    echo "Display merged tree:"
     git log --pretty=oneline --graph -3 | cat
 }
 
