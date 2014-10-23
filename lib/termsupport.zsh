@@ -24,6 +24,9 @@ function omz_termsupport_precmd {
 
 #Appears at the beginning of (and during) of command execution
 function omz_termsupport_preexec {
+  if [[ "$DISABLE_CMD_AUTO_TITLE" == "true" ]]; then
+    return
+  fi
   emulate -L zsh
   setopt extended_glob
 
