@@ -13,8 +13,9 @@ function agp {
   
 }
 function asp {
+  export AWS_PROFILE=$1
   export AWS_DEFAULT_PROFILE=$1
-    export RPROMPT="<aws:$AWS_DEFAULT_PROFILE>"
+  export RPROMPT="<aws:$AWS_DEFAULT_PROFILE>"
     
 }
 function aws_profiles {
