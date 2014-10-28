@@ -61,6 +61,14 @@ __events() {
         '--since=[Show previously created events and then stream.]'
 }
 
+__exec() {
+    _arguments \
+        '(-d,--detach)'{-d,--detach}'[Detached mode: run command in the background]' \
+        '(-i,--interactive)'{-i,--interactive}'[Keep STDIN open even if not attached]' \
+        '(-t,--tty)'{-t,--tty}'[Allocate a pseudo-TTY]'
+    __docker_containers
+}
+
 __export() {
    __docker_containers
 }
@@ -126,6 +134,10 @@ __port() {
 }
 
 __top() {
+    __docker_containers
+}
+
+__pause() {
     __docker_containers
 }
 
@@ -230,6 +242,10 @@ __tag() {
     __docker_images
 }
 
+__unpause() {
+    __docker_containers
+}
+
 __version() {
     # no arguments
 }
@@ -249,6 +265,7 @@ _1st_arguments=(
     "cp":"Copy files/folders from the containers filesystem to the host path"
     "diff":"Inspect changes on a container's filesystem"
     "events":"Get real time events from the server"
+    "exec":"Run a command in an existing container"
     "export":"Stream the contents of a container as a tar archive"
     "history":"Show the history of an image"
     "images":"List images"
@@ -259,8 +276,10 @@ _1st_arguments=(
     "kill":"Kill a running container"
     "load":"Load an image from a tar archive"
     "login":"Register or Login to the docker registry server"
+    "logout":"Log out from a Docker registry server"
     "logs":"Fetch the logs of a container"
     "port":"Lookup the public-facing port which is NAT-ed to PRIVATE_PORT"
+    "pause":"Pause all processes within a container"
     "ps":"List containers"
     "pull":"Pull an image or a repository from the docker registry server"
     "push":"Push an image or a repository to the docker registry server"
@@ -274,6 +293,7 @@ _1st_arguments=(
     "stop":"Stop a running container"
     "tag":"Tag an image into a repository"
     "top":"Lookup the running processes of a container"
+    "unpause":"Unpause a paused container"
     "version":"Show the docker version information"
     "wait":"Block until a container stops, then print its exit code"
 )
@@ -299,6 +319,8 @@ case "$words[1]" in
         __diff ;;
     events)
         __events ;;
+    exec)
+        __exec ;;
     export)
         __export ;;
     history)
@@ -323,6 +345,8 @@ case "$words[1]" in
         __logs ;;
     port)
         __port ;;
+    pause)
+        __pause ;;
     ps)
         __ps ;;
     pull)
@@ -349,6 +373,8 @@ case "$words[1]" in
         __tag ;;
     top)
         __top ;;
+    unpause)
+        __unpause ;;
     version)
         __version ;;
     wait)
