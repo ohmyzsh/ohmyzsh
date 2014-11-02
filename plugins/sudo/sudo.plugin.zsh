@@ -17,5 +17,5 @@ sudo-command-line() {
     [[ $BUFFER != sudo\ * ]] && LBUFFER="sudo $LBUFFER"
 }
 zle -N sudo-command-line
-# Defined shortcut keys: [Esc] [Esc]
-bindkey "\e\e" sudo-command-line
+# Defined shortcut keys: Ctrl+_
+bindkey "^_" sudo-command-line
