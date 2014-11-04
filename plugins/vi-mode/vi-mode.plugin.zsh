@@ -28,11 +28,28 @@ bindkey -M vicmd 'v' edit-command-line
 
 # if mode indicator wasn't setup by theme, define default
 if [[ "$MODE_INDICATOR" == "" ]]; then
-  MODE_INDICATOR="%{$fg_bold[red]%}<%{$fg[red]%}<<%{$reset_color%}"
+  MODE_INDICATOR="%{$fg_bold[red]%}<<<%{$reset_color%}"
 fi
 
 function vi_mode_prompt_info() {
   echo "${${KEYMAP/vicmd/$MODE_INDICATOR}/(main|viins)/}"
+}
+
+# if mode prompt wasn't setup by theme, define default
+if [[ "$VIMODE_PROMPT_CMD" == "" ]]; then
+  VIMODE_PROMPT_CMD="%{$fg_bold[red]%}>%{$reset_color%}"
+fi
+
+if [[ "$VIMODE_PROMPT_INS" == "" ]]; then
+  VIMODE_PROMPT_INS="%{$fg[green]%}>%{$reset_color%}"
+fi
+
+# this function can be used to change the command prompt 
+# to red in command mode, and green in insert mode.
+# to use it, set your PROMPT to:
+# PROMPT='$(vi_mode_command_prompt)'
+function vi_mode_command_prompt() {
+  echo "${${KEYMAP/vicmd/$VIMODE_PROMPT_CMD}/(main|viins)/$VIMODE_PROMPT_INS}"
 }
 
 # define right prompt, if it wasn't defined by a theme
