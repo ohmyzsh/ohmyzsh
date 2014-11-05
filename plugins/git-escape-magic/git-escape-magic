@@ -2,7 +2,7 @@
 #
 # git-escape-magic - zle tweak for git command line arguments
 #
-# Copyright (c) 2011, 2012 Akinori MUSHA
+# Copyright (c) 2011, 2012, 2014 Akinori MUSHA
 # Licensed under the 2-clause BSD license.
 #
 # This tweak eliminates the need for manually escaping shell
@@ -81,9 +81,7 @@ git-escape-magic.self-insert() {
                 [[ $words[(i)--] -gt $#words ]] ;;
         esac &&
         case "${words[-1]%%"$KEYS"}" in
-            (*@)
-                [[ "$KEYS" == \{* ]] ;;
-            (*\^)
+            (*[@^])
                 [[ "$KEYS" == [{~^]* ]] ;;
             (*[@^]\{[^}]##)
                 [[ "$KEYS" == \}* ]] ;;
@@ -134,3 +132,4 @@ git-escape-magic() {
 }
 
 [[ -o kshautoload ]] || git-escape-magic "$@"
+
