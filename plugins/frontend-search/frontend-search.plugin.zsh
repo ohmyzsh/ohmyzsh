@@ -118,7 +118,7 @@ alias jquery='frontend jquery'
 alias mdn='frontend mdn'
 
 # pre processors frameworks
-alias compass='frontend compass'
+alias compassdoc='frontend compass'
 
 # important links
 alias html5please='frontend html5please'
