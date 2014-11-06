@@ -35,6 +35,8 @@ bgnotify () {
     terminal-notifier -message $2 -title $1
   elif hash growlnotify 2>/dev/null; then #osx growl
     growlnotify -m $1 $2
+  elif hash notifu 2>/dev/null; then #cygwyn support!
+    notifu /m "$2" /p "$1"
   fi
 }
 
