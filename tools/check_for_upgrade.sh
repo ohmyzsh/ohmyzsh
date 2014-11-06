@@ -1,7 +1,9 @@
-#!/bin/sh
+#!/usr/bin/env zsh
+
+zmodload zsh/datetime
 
 function _current_epoch() {
-  echo $(($(date +%s) / 60 / 60 / 24))
+  echo $(( $EPOCHSECONDS / 60 / 60 / 24 ))
 }
 
 function _update_zsh_update() {
