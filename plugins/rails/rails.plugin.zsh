@@ -52,6 +52,7 @@ alias rdd='rake db:drop'
 alias rdtc='rake db:test:clone'
 alias rdtp='rake db:test:prepare'
 alias rdmtc='rake db:migrate db:test:clone'
+alias rdmrm='rake db:migrate db:rollback && rake db:migrate'
 
 alias rlc='rake log:clear'
 alias rn='rake notes'
