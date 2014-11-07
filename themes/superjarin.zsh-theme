@@ -1,9 +1,29 @@
-# Grab the current version of ruby in use (via RVM): [ruby-1.8.7]
-if [ -e ~/.rvm/bin/rvm-prompt ]; then
+# Grab the current version of ruby in use: [ruby-1.8.7]
+if [ -s ~/.rvm/scripts/rvm ]; then
   JARIN_CURRENT_RUBY_="%{$fg[white]%}[%{$fg[red]%}\$(~/.rvm/bin/rvm-prompt i v)%{$fg[white]%}]%{$reset_color%}"
 else
   if which rbenv &> /dev/null; then
     JARIN_CURRENT_RUBY_="%{$fg[white]%}[%{$fg[red]%}\$(rbenv version | sed -e 's/ (set.*$//')%{$fg[white]%}]%{$reset_color%}"
+  else
+    # Loosely adapted from the oh-my-zsh chruby plugin
+    #
+    # NOTE: If you're using chruby auto-switching, your .zshrc needs to have this:
+    #
+    #   source /usr/local/opt/chruby/share/chruby/chruby.sh
+    #   source /usr/local/opt/chruby/share/chruby/auto.sh
+    #   precmd_functions+=("chruby_auto")
+    #
+    # It's because the auto thingy is evaluated after the prompt thingy.
+
+    if which chruby &> /dev/null; then
+      if [[ $(chruby |grep -c \*) -eq 1 ]]; then
+        _ruby="$(chruby |grep \* |tr -d '* ')"
+      else
+        _ruby="system"
+      fi
+
+      JARIN_CURRENT_RUBY_="%{$fg[white]%}[%{$fg[red]%}$_ruby%{$fg[white]%}]%{$reset_color%}"
+    fi
   fi
 fi
 
