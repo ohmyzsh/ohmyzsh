@@ -12,7 +12,7 @@ autoload -Uz add-zsh-hook || { print "can't add zsh hook!"; return }
 
 ## definitions ##
 
-if ! (type notify_formatted | grep -q 'function'); then
+if ! (type bgnotify_formatted | grep -q 'function'); then
   function bgnotify_formatted {
     ## exit_status, command, elapsed_time
     [ $1 -eq 0 ] && title="#win (took $3 s)" || title="#fail (took $3 s)"
