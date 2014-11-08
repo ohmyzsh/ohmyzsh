@@ -24,7 +24,7 @@ currentWindowId () {
   if hash notify-send 2>/dev/null; then #ubuntu!
     xprop -root | awk '/NET_ACTIVE_WINDOW/ { print $5; exit }'
   elif hash osascript 2>/dev/null; then #osx
-    osascript -e 'tell application (path to frontmost application as text) to id of front window' 2&> /dev/null
+    osascript -e 'tell application (path to frontmost application as text) to id of front window' 2&> /dev/null || echo "0"
   else
     echo $EPOCHSECONDS #fallback for windows
   fi
