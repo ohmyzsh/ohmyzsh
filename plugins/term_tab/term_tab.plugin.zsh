@@ -18,13 +18,12 @@ function _term_list(){
   local -a w
 
   for SESSION in $(pidof  zsh); do
-    PA=$(readlink -n /proc/${SESSION}/cwd)
-    w+=(${(D)PA})
+    w+=${(D)$(readlink -n /proc/${SESSION}/cwd)}
   done
 
   compadd -aQ w
 }
 
-zle -C term_list complete-word _generic
+zle -C term_list menu-complete _generic
 bindkey "^v" term_list
 zstyle ':completion:term_list:*' completer _term_list
