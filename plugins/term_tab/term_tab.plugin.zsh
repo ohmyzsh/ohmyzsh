@@ -21,7 +21,7 @@ function _term_list(){
     w+=${(D)$(readlink -n /proc/${SESSION}/cwd)}
   done
 
-  compadd -aQ w
+  compadd -aQS '' w
 }
 
 zle -C term_list menu-complete _generic
