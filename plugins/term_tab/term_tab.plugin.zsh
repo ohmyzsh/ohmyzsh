@@ -18,10 +18,11 @@ function _term_list(){
   local -a w
 
   for SESSION in $(pidof  zsh); do
-    w+=$(readlink -n /proc/${SESSION}/cwd)
+    PA=$(readlink -n /proc/${SESSION}/cwd)
+    w+=(${(D)PA})
   done
 
-  compadd -a w
+  compadd -aQ w
 }
 
 zle -C term_list complete-word _generic
