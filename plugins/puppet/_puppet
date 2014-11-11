@@ -1,0 +1,1203 @@
+#compdef puppet 
+#autoload
+
+#set -x
+
+# puppet zsh completion
+
+local -a _1st_arguments
+_1st_arguments=(
+  'agent:The puppet agent daemon'
+  'apply:Apply Puppet manifests locally'
+  'ca:Local Puppet Certificate Authority management.'
+  'catalog:Compile, save, view, and convert catalogs'
+  'cert:Manage certificates and requests'
+  'certificate:Provide access to the CA for certificate management'
+  'certificate_request:Manage certificate requests'
+  'certificate_revocation_list:Manage the list of revoked certificates'
+  'config:Interact with Puppet settings'
+  'describe:Display help about resource types'
+  'device:Manage remote network devices'
+  'doc:Generate Puppet documentation and references'
+  'facts:Retrieve and store facts'
+  'file:Retrieve and store files in a filebucket'
+  'filebucket:Store and retrieve files in a filebucket'
+  'help:Display Puppet help'
+  'inspect:Send an inspection report'
+  'instrumentation_data:Manage instrumentation listener accumulated data'
+  'instrumentation_listener:Manage instrumentation listeners'
+  'instrumentation_probe:Manage instrumentation probes'
+  'key:Create, save, and remove certificate keys'
+  'kick:Remotely control puppet agent'
+  'man:Display Puppet manual pages'
+  'master:The puppet master daemon'
+  'module:Creates, installs and searches for modules on the Puppet Forge'
+  'node:View and manage node definitions'
+  'parser:Interact directly with the parser'
+  'plugin:Interact with the Puppet plugin system'
+  'queue:Deprecated queuing daemon for asynchronous storeconfigs'
+  'report:Create, display, and submit reports'
+  'resource:The resource abstraction layer shell'
+  'resource_type:View classes, defined resource types, and nodes from all manifests'
+  'secret_agent:Mimics puppet agent'
+  'status:View puppet server status'
+)
+
+local -a _agent_arguments
+_agent_arguments=(
+  '--certname:<name> Set the certname of the client'
+  '-D:Send process to background (daemonize)'
+  '--daemonize:Send process to background (daemonize)'
+  '--no-daemonize:Do not send process to background'
+  '-d:Enable full debugging'
+  '--debug:Enable full debugging'
+  '--detailed-exitcodes:Provide transaction information via exit codes'
+  '--digest:<digest> Change the certificate fingerprinting digest algorithm'
+  '--disable:<message> Disable working on the local system'
+  '--enable:Enable working on the local system'
+  '--fingerprint:Display the current certificate or certificate signing request fingerprint and then exit'
+  '-h:Print this help message'
+  '--help:Print this help message'
+  '-l:syslog|<file>|console Where to send messages'
+  '--logdest:syslog|<file>|console Where to send messages'
+  '--no-client:Do not create a config client'
+  '--masterport:The port on which to contact the puppet master'
+  '--noop:Use "noop" mode where the daemon runs in a no-op or dry-run mode'
+  '-o:Run the configuration once'
+  '--onetime:Run the configuration once'
+  '-t:Enable the most common options used for testing'
+  '--test:Enable the most common options used for testing'
+  '-v:Turn on verbose reporting'
+  '--verbose:Turn on verbose reporting'
+  '-V:Print the puppet version number and exit'
+  '--version:Print the puppet version number and exit'
+  '-w:This option only matters for daemons that do not yet have certificates'
+  '--waitforcert:<seconds> This option only matters for daemons that do not yet have certificates'
+)
+
+local -a _apply_arguments
+_apply_arguments=(
+  '-h:Print this help message'
+  '--help:Print this help message'
+  '-d:Enable full debugging'
+  '--debug:Enable full debugging'
+  '-v:Print extra information'
+  '--verbose:Print extra information'
+  '-e:Execute a specific piece of Puppet code'
+  '--execute:Execute a specific piece of Puppet code'
+  '--detailed-exitcodes:'
+  '-l:Where to send messages'
+  '--logdest:<file> Where to send messages'
+  '--noop:Use "noop" mode where Puppet runs in a no-op or dry-run mode'
+  '--catalog:<catalog>: Apply a JSON catalog (such as one generated with "puppet master --compile)"'
+  '--write-catalog-summary:<file> After compiling the catalog saves the resource list and classes list'
+)
+
+local -a _ca_arguments
+_ca_arguments=(
+  'destroy:undocumented action'
+  'fingerprint:undocumented action'
+  'generate:undocumented action'
+  'list:List certificates and/or certificate requests'
+  'print:undocumented action'
+  'revoke:undocumented action'
+  'sign:undocumented action'
+  'verify:undocumented action'
+)
+
+local -a _catalog_arguments
+_catalog_arguments=(
+  'apply:Find and apply a catalog'
+  "download:Download this node's catalog from the puppet master server"
+  'find:Retrieve the catalog for a node'
+  'info:Print the default terminus class for this face'
+  'save:API only: create or overwrite an object'
+  'select:Retrieve a catalog and filter it for resources of a given type'
+  '--render-as:FORMAT The rendering format to use'
+  '--verbose:Whether to log verbosely'
+  '--debug:Whether to log debug information'
+  '--extra HASH:Extra arguments to pass to the indirection request'
+  '--terminus: TERMINUS The indirector terminus to use'
+)
+
+local -a _cert_arguments
+_cert_arguments=(
+  "clean:Revoke a host's certificate (if applicable) and remove all files related to that host from puppet cert's storage"
+  "fingerprint:Print the DIGEST (defaults to the signing algorithm) fingerprint of a host's certificate"
+  'generate:Generate a certificate for a named client'
+  'list:List outstanding certificate requests'
+  "print:Print the full-text version of a host's certificate."
+  'revoke:Revoke the certificate of a client'
+  'sign:Sign an outstanding certificate request'
+  'verify:Verify the named certificate against the local CA certificate'
+  'reinventory:Build an inventory of the issued certificates'
+  '-h:Print this help message'
+  '--help:Print this help message'
+  '-V:Print the puppet version number and exit'
+  '--version:Print the puppet version number and exit'
+  '--verbose:Whether to log verbosely'
+  '--debug:Whether to log debug information'
+  '--digest:Set the digest for fingerprinting'
+)
+
+local -a _certificate_arguments
+_certificate_arguments=(
+  'destroy:Delete a certificate'
+  'find:Retrieve a certificate'
+  'generate:Generate a new certificate signing request'
+  'info:Print the default terminus class for this face'
+  'list:List all certificate signing requests'
+  'sign:Sign a certificate signing request for HOST'
+  '--render-as:FORMAT The rendering format to use'
+  '--verbose:Whether to log verbosely'
+  '--debug:Whether to log debug information'
+  '--ca-location: LOCATION Which certificate authority to use (local or remote)'
+  '--extra:HASH Extra arguments to pass to the indirection request'
+  '--terminus: TERMINUS The indirector terminus to use'
+)
+
+local -a _certificate_revocation_list_arguments
+_certificate_revocation_list_arguments=(
+  'destroy:Delete the certificate revocation list'
+  'find:Retrieve the certificate revocation list'
+  'info:Print the default terminus class for this face'
+  'save:Invalid for this subcommand'
+  'search:Invalid for this subcommand'
+  '--render-as:FORMAT The rendering format to use'
+  '--verbose:Whether to log verbosely'
+  '--debug:Whether to log debug information'
+  '--extra:HASH Extra arguments to pass to the indirection request'
+  '--terminus: TERMINUS The indirector terminus to use'
+)
+
+local -a _config_arguments
+_config_arguments=(
+  "print:Examine Puppet's current settings"
+  "set:Set Puppet's settings"
+  '--render-as:FORMAT The rendering format to use'
+  '--verbose:Whether to log verbosely'
+  '--debug:Whether to log debug information'
+  '--section:SECTION_NAME The section of the configuration file to interact with'
+)
+
+local -a _describe_arguments
+_describe_arguments=(
+  '--help:Print this help text'
+  '--providers:Describe providers in detail for each type'
+  '--list:List all types'
+  '--meta:List all metaparameters'
+  '--short:List only parameters without detail'
+)
+
+local -a _device_arguments
+_device_arguments=(
+  '-d:Enable full debugging'
+  '--debug:Enable full debugging'
+  '--detailed-exitcodes:Provide transaction information via exit codes'
+  '-V:Print the puppet version number and exit'
+  '--version:Print the puppet version number and exit'
+  '-h:Print this help message'
+  '--help:Print this help message'
+  '-l:Where to send messages'
+  '--logdest: syslog|<file>|console Where to send messages'
+  '-v:Turn on verbose reporting'
+  '--verbose:Turn on verbose reporting'
+  '-w:<seconds> This option only matters for daemons that do not yet have certificates'
+  '--waitforcert:<seconds> This option only matters for daemons that do not yet have certificates'
+)
+
+local -a _doc_arguments
+_doc_arguments=(
+  '-a:Output the docs for all of the reference types'
+  '--all:Output the docs for all of the reference types'
+  '-h:Print this help message'
+  '--help:Print this help message'
+  "-o: <rdoc-outputdir> Used only in 'rdoc' mode"
+  "--outputdir: <rdoc-outputdir> Used only in 'rdoc' mode"
+  '-m:text|pdf|rdoc Determine the output mode'
+  '--mode:text|pdf|rdoc Determine the output mode'
+  '-r: <reference-name> Build a particular reference'
+  '--reference: <reference-name> Build a particular reference'
+  "--charset: <charset> Used only in 'rdoc' mode"
+)
+
+local -a _facts_arguments
+_facts_arguments=(
+  "find:Retrieve a node's facts"
+  'info:Print the default terminus class for this face'
+  'save:API only: create or overwrite an object'
+  '--render-as:FORMAT The rendering format to use'
+  '--verbose:Whether to log verbosely'
+  '--debug:Whether to log debug information'
+  '--extra:HASH Extra arguments to pass to the indirection request'
+  '--terminus: TERMINUS The indirector terminus to use'
+)
+
+local -a _file_arguments
+_file_arguments=(
+  'download:Download a file into the local filebucket'
+  'find:Retrieve a file from the filebucket'
+  'info:Print the default terminus class for this face'
+  'save:API only: create or overwrite an object'
+  'store:Store a file in the local filebucket'
+  '--render-as:FORMAT The rendering format to use'
+  '--verbose:Whether to log verbosely'
+  '--debug:Whether to log debug information'
+  '--extra:HASH Extra arguments to pass to the indirection request'
+  '--terminus: TERMINUS The indirector terminus to use'
+)
+
+local -a _filebucket_arguments
+_filebucket_arguments=(
+  '-h:Print this help message'
+  '--help:Print this help message'
+  '-V:Print version information'
+  '--version:Print version information'
+  '-d:Enable full debugging'
+  '--debug:Enable full debugging'
+  '-v:Print extra information'
+  '--verbose:Print extra information'
+  '-l:Use the local filebucket'
+  '--local:Use the local filebucket'
+  '-r:Use a remote filebucket'
+  '--remote:Use a remote filebucket'
+  '-s:<server> The server to send the file to, instead of locally'
+  '-server:<server> The server to send the file to, instead of locally'
+  '-b:<directory> undocumented action'
+  '--bucket:<directory> undocumented action'
+)
+
+local -a _inspect_arguments
+_inspect_arguments=(
+  '--archive_files:During an inspect run, whether to archive files whose contents are audited to a file bucket'
+  '--archive_file_server:During an inspect run, the file bucket server to archive files to if archive_files is set'
+)
+
+local -a _instrumentation_data_arguments
+_instrumentation_data_arguments=(
+  'find:Retrieve listener data'
+  'info:Print the default terminus class for this face'
+  '--render-as:FORMAT The rendering format to use'
+  '--verbose:Whether to log verbosely'
+  '--debug:Whether to log debug information'
+  '--extra:HASH Extra arguments to pass to the indirection request'
+  '--terminus: TERMINUS The indirector terminus to use'
+)
+
+local -a _instrumentation_listener_arguments
+_instrumentation_listener_arguments=(
+  'disable:Disable a given instrumentation listener'
+  'enable:Enable a given instrumentation listener'
+  'find:Retrieve a single listener'
+  'info:Print the default terminus class for this face'
+  'save:API only: modify an instrumentation listener status'
+  'search:Retrieve all instrumentation listeners statuses'
+  '--render-as:FORMAT The rendering format to use'
+  '--verbose:Whether to log verbosely'
+  '--debug:Whether to log debug information'
+  '--extra:HASH Extra arguments to pass to the indirection request'
+  '--terminus: TERMINUS The indirector terminus to use'
+)
+
+local -a _instrumentation_probe_arguments
+_instrumentation_probe_arguments=(
+  'destroy:API only: disable all instrumentation probes'
+  'disable:Disable all instrumentation probes'
+  'enable:Enable all instrumentation probes'
+  'info:Print the default terminus class for this face'
+  'save:API only: enable all instrumentation probes'
+  'search:Retrieve all probe statuses'
+  '--render-as:FORMAT The rendering format to use'
+  '--verbose:Whether to log verbosely'
+  '--debug:Whether to log debug information'
+  '--extra:HASH Extra arguments to pass to the indirection request'
+  '--terminus: TERMINUS The indirector terminus to use'
+)
+
+local -a _key_arguments
+_key_arguments=(
+  'destroy:Delete an object'
+  'find:Retrieve an object by name'
+  'info:Print the default terminus class for this face'
+  'save:API only: create or overwrite an object'
+  'search:Search for an object or retrieve multiple objects'
+  '--render-as:FORMAT The rendering format to use'
+  '--verbose:Whether to log verbosely'
+  '--debug:Whether to log debug information'
+  '--extra:HASH Extra arguments to pass to the indirection request'
+  '--terminus: TERMINUS The indirector terminus to use'
+)
+
+local -a _kick_arguments
+_kick_arguments=(
+  '-a:Connect to all available hosts. Requires LDAP support at this point'
+  '--all:Connect to all available hosts. Requires LDAP support at this point'
+  '-c:<class> Specify a class of machines to which to connect. This only works if you have LDAP configured, at the moment'
+  '--class:<class> Specify a class of machines to which to connect. This only works if you have LDAP configured, at the moment'
+  '-d:Enable full debugging'
+  '--debug:Enable full debugging'
+  '-f:Run each configuration in the foreground'
+  '--foreground:Run each configuration in the foreground'
+  '-h:Print this help message'
+  '--help:Print this help message'
+  '--host:<host> A specific host to which to connect'
+  '--no-fqdn:undocumented action'
+  '--ignoreschedules:Whether the client should ignore schedules when running its configuration'
+  '-t:<tag> Specify a tag for selecting the objects to apply'
+  '--tag:<tag> Specify a tag for selecting the objects to apply'
+  '--test:Print the hosts you would connect to but do not actually connect'
+  '-p:Do an ICMP echo against the target host'
+  '--ping:Do an ICMP echo against the target host'
+)
+
+local -a _man_arguments
+_man_arguments=(
+  'man:Display the manual page for a Puppet subcommand'
+  '--render-as:FORMAT The rendering format to use'
+  '--verbose:Whether to log verbosely'
+  '--debug:Whether to log debug information'
+)
+
+local -a _master_arguments
+_master_arguments=(
+  '-D:Send the process into the background'
+  '--daemonize:Send the process into the background'
+  '--no-daemonize:Do not send the process into the background'
+  '-d:Enable full debugging'
+  '--debug:Enable full debugging'
+  '-h:Print this help message'
+  '--help:Print this help message'
+  '-l:<file>|console|syslog Where to send messages'
+  '--logdest:<file>|console|syslog Where to send messages'
+  '-v:Enable verbosity'
+  '--verbose:Enable verbosity'
+  '-V:Print the puppet version number and exit'
+  '--version:Print the puppet version number and exit'
+  '--compile:<node-name> Compile a catalogue and output it in JSON from the puppet master'
+)
+
+local -a _module_arguments
+_module_arguments=(
+  'build:Build a module release package'
+  'changes:Show modified files of an installed module'
+  'generate:Generate boilerplate for a new module'
+  'install:Install a module from the Puppet Forge or a release archive'
+  'list:List installed modules'
+  'search:Search the Puppet Forge for a module'
+  'uninstall:Uninstall a puppet module'
+  'upgrade:Upgrade a puppet module'
+  '-verbose:Whether to log verbosely'
+  '--debug:Whether to log debug information'
+  '--environment: production The environment Puppet is running in'
+  '--modulepath:$basemodulepath The search path for modules'
+)
+
+local -a _node_arguments
+_node_arguments=(
+  'clean:Clean up everything a puppetmaster knows about a node'
+  'find:Retrieve a node object'
+  'info:Print the default terminus class for this face'
+  '--render-as:FORMAT The rendering format to use'
+  '--verbose:Whether to log verbosely'
+  '--debug:Whether to log debug information'
+  '--extra:HASH Extra arguments to pass to the indirection request'
+  '--terminus: TERMINUS The indirector terminus to use'
+)
+
+local -a _parser_arguments
+_parser_arguments=(
+  'validate:Validate the syntax of one or more Puppet manifests'
+  '--render-as:FORMAT The rendering format to use'
+  '--verbose:Whether to log verbosely'
+  '--debug:Whether to log debug information'
+)
+
+local -a _plugin_arguments
+_plugin_arguments=(
+  'download:Download plugins from the puppet master'
+  '--render-as:FORMAT The rendering format to use'
+  '--verbose:Whether to log verbosely'
+  '--debug:Whether to log debug information'
+)
+
+local -a _report_arguments
+_report_arguments=(
+  'info:Print the default terminus class for this face'
+  'save:API only: submit a report'
+  'submit:API only: submit a report with error handling'
+  '--render-as:FORMAT The rendering format to use'
+  '--verbose:Whether to log verbosely'
+  '--debug:Whether to log debug information'
+  '--extra:HASH Extra arguments to pass to the indirection request'
+  '--terminus: TERMINUS The indirector terminus to use'
+)
+
+local -a _resource_arguments
+_resource_arguments=(
+  '-h:Print this help message'
+  '--help:Print this help message'
+  '-d:Enable full debugging'
+  '--debug:Enable full debugging'
+  '-v:Print extra information'
+  '--verbose:Print extra information'
+  '-e:Write the results of the query to a file'
+  '--edit:Write the results of the query to a file'
+  '-H:<host> When specified, connect to the resource server on the named host and retrieve the list of resouces of the type specified'
+  '--host:<host> When specified, connect to the resource server on the named host and retrieve the list of resouces of the type specified'
+  '-p:<parameter> Add more parameters to be outputted from queries'
+  '--param:<parameter> Add more parameters to be outputted from queries'
+  '-t:<type>List all available types'
+  '--types:<type>List all available types'
+)
+
+local -a _resource_type_arguments
+_resource_type_arguments=(
+  'find:Retrieve info about a resource collection'
+  'info:Print the default terminus class for this face'
+  'search:Search for collections matching a regular expression'
+  '--render-as:FORMAT The rendering format to use'
+  '--verbose:Whether to log verbosely'
+  '--debug:Whether to log debug information'
+  '--extra:HASH Extra arguments to pass to the indirection request'
+  '--terminus: TERMINUS The indirector terminus to use'
+)
+
+local -a _secret_agent_arguments
+_secret_agent_arguments=(
+  'synchronize:Run secret_agent once'
+  '--render-as:FORMAT The rendering format to use'
+  '--verbose:Whether to log verbosely'
+  '--debug:Whether to log debug information'
+)
+
+local -a _status_arguments
+_status_arguments=(
+  'find:Check status of puppet master server'
+  'info:Print the default terminus class for this face'
+  '--render-as:FORMAT The rendering format to use'
+  '--verbose:Whether to log verbosely'
+  '--debug:Whether to log debug information'
+  '--extra:HASH Extra arguments to pass to the indirection request'
+  '--terminus: TERMINUS The indirector terminus to use'
+)
+
+
+
+__task_list ()
+{
+    local expl
+    declare -a tasks
+
+    tasks=(agent apply ca catalog cert certificate certificate_revocation_list config describe device doc facts file filebucket help inspect instrumentation_data instrumentation_listener instrumentation_probe key kick man master module node parser plugin queue report resource resource_type secret_agent status)
+
+    _wanted tasks expl 'help' compadd $tasks
+}
+
+__puppet-agent ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _agent_arguments
+      return
+    ;;
+    esac
+}
+
+__puppet-apply ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _apply_arguments
+      return
+    ;;
+  esac
+}
+
+__puppet-ca ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _ca_arguments
+      return
+    ;;
+  esac
+}
+
+__puppet-catalog ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _catalog_arguments
+      return
+    ;;
+  esac
+}
+
+__puppet-cert ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _cert_arguments
+      return
+    ;;
+  esac
+}
+
+__puppet-certificate ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _certificate_arguments
+      return
+    ;;
+  esac
+}
+
+__puppet-certificate_revocation_list ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _certificate_revocation_list_arguments
+      return
+    ;;
+  esac
+}
+
+__puppet-config ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _config_arguments
+      return
+    ;;
+  esac
+}
+
+__puppet-describe ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _describe_arguments
+      return
+    ;;
+  esac
+}
+
+__puppet-device ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _device_arguments
+      return
+    ;;
+  esac
+}
+
+__puppet-doc ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _doc_arguments
+      return
+    ;;
+  esac
+}
+
+__puppet-facts ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _facts_arguments
+      return
+    ;;
+  esac
+}
+
+__puppet-file ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _file_arguments
+      return
+    ;;
+  esac
+}
+
+__puppet-filebucket ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _filebucket_arguments
+      return
+    ;;
+  esac
+}
+
+__puppet-inspect ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _inspect_arguments
+      return
+    ;;
+  esac
+}
+
+__puppet-instrumentation_data ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _instrumentation_data_arguments
+      return
+    ;;
+  esac
+}
+
+__puppet-instrumentation_listener ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _instrumentation_listener_arguments
+      return
+    ;;
+  esac
+}
+
+__puppet-instrumentation_probe ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _instrumentation_probe_arguments
+      return
+    ;;
+  esac
+}
+
+__puppet-key ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _key_arguments
+      return
+    ;;
+  esac
+}
+
+__puppet-kick ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _kick_arguments
+      return
+    ;;
+  esac
+}
+
+__puppet-man ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _man_arguments
+      return
+    ;;
+  esac
+}
+
+__puppet-master ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _master_arguments
+      return
+    ;;
+  esac
+}
+
+__puppet-module ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _module_arguments
+      return
+    ;;
+  esac
+}
+
+__puppet-node ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _node_arguments
+      return
+    ;;
+  esac
+}
+
+__puppet-parser ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _parser_arguments
+      return
+    ;;
+  esac
+}
+
+__puppet-plugin ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _plugin_arguments
+      return
+    ;;
+  esac
+}
+
+__puppet-report ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _report_arguments
+      return
+    ;;
+  esac
+}
+
+__puppet-resource ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _resource_arguments
+      return
+    ;;
+  esac
+}
+
+__puppet-resource_type ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _resource_type_arguments
+      return
+    ;;
+  esac
+}
+
+__puppet-secret_agent ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _secret_agent_arguments
+      return
+    ;;
+  esac
+}
+
+__puppet-status ()
+{
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gem subcommand" _status_arguments
+      return
+    ;;
+  esac
+}
+
+
+
+local expl
+
+local curcontext="$curcontext" state line
+typeset -A opt_args
+
+_arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+case $state in
+  (command)
+      _describe -t commands "sub-commands" _1st_arguments
+      return
+  ;;
+
+  (options)
+    case $line[1] in
+      # Auto-complete help for top-level command sub-commands e.g. puppet help agent, puppet help apply.
+      (help)
+         _arguments ':feature:__task_list' 
+      ;;
+
+      # Display sub-commands for puppet agent.
+      (agent)
+          __puppet-agent
+      ;;
+
+      # Display sub-commands for puppet apply.
+      (apply)
+          __puppet-apply
+      ;;
+
+      # Display sub-commands for puppet ca.
+      (ca)
+          __puppet-ca
+      ;;
+
+      # Display sub-commands for puppet catalog.
+      (catalog)
+          __puppet-catalog
+      ;;
+
+      # Display sub-commands for puppet cert.
+      (cert)
+          __puppet-cert
+      ;;
+
+      # Display sub-commands for puppet certificate.
+      (certificate)
+          __puppet-certificate
+      ;;
+
+      # Display sub-commands for puppet certificate_revocation_list.
+      (certificate_revocation_list)
+          __puppet-certificate_revocation_list
+      ;;
+
+      # Display sub-commands for puppet config.
+      (config)
+          __puppet-config
+      ;;
+
+      # Display sub-commands for puppet describe.
+      (describe)
+          __puppet-describe
+      ;;
+
+      # Display sub-commands for puppet device.
+      (device)
+          __puppet-device
+      ;;
+
+      # Display sub-commands for puppet doc.
+      (doc)
+          __puppet-doc
+      ;;
+
+      # Display sub-commands for puppet facts.
+      (facts)
+          __puppet-facts
+      ;;
+
+      # Display sub-commands for puppet file.
+      (file)
+          __puppet-file
+      ;;
+
+      # Display sub-commands for puppet filebucket.
+      (filebucket)
+          __puppet-filebucket
+      ;;
+
+      # Display sub-commands for puppet inspect.
+      (inspect)
+          __puppet-inspect
+      ;;
+
+      # Display sub-commands for puppet instrumentation_data.
+      (instrumentation_data)
+          __puppet-instrumentation_data
+      ;;
+
+      # Display sub-commands for puppet instrumentation_listener.
+      (instrumentation_listener)
+          __puppet-instrumentation_listener
+      ;;
+
+      # Display sub-commands for puppet instrumentation_probe.
+      (instrumentation_probe)
+          __puppet-instrumentation_probe
+      ;;
+
+      # Display sub-commands for puppet key.
+      (key)
+          __puppet-key
+      ;;
+
+      # Display sub-commands for puppet kick.
+      (kick)
+          __puppet-kick
+      ;;
+
+      # Display sub-commands for puppet man.
+      (man)
+          __puppet-man
+      ;;
+
+      # Display sub-commands for puppet master.
+      (master)
+          __puppet-master
+      ;;
+
+      # Display sub-commands for puppet module.
+      (module)
+          __puppet-module
+      ;;
+
+      # Display sub-commands for puppet node.
+      (node)
+          __puppet-node
+      ;;
+
+      # Display sub-commands for puppet parser.
+      (parser)
+          __puppet-parser
+      ;;
+
+      # Display sub-commands for puppet plugin.
+      (plugin)
+          __puppet-plugin
+      ;;
+
+      # Display sub-commands for puppet report.
+      (report)
+          __puppet-report
+      ;;
+
+      # Display sub-commands for puppet resource.
+      (resource)
+          __puppet-resource
+      ;;
+
+      # Display sub-commands for puppet resource_type.
+      (resource_type)
+          __puppet-resource_type
+      ;;
+
+      # Display sub-commands for puppet secret_agent.
+      (secret_agent)
+          __puppet-secret_agent
+      ;;
+
+      # Display sub-commands for puppet status.
+      (status)
+          __puppet-status
+      ;;
+    esac
+  ;;
+esac
