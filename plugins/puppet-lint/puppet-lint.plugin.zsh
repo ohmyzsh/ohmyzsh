@@ -1,0 +1,1 @@
+alias pl='puppet-lint'
