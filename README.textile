@@ -30,7 +30,7 @@ The default location is @~/.oh-my-zsh@ (hidden in your home directory).
 
 You can change the install directory with the @ZSH@ environment variable, either by running @export ZSH=/your/path@ before installing, or by setting it before the end of the install pipeline like this:
 
-@curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | ZSH=~/.dotfiles/zsh sh@
+@curl -L http://install.ohmyz.sh | ZSH=~/.dotfiles/zsh sh@
 
 h3. The manual way
 
