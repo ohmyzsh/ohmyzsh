@@ -38,5 +38,8 @@ cd () {
 }
 
 alias md='mkdir -p'
+mc(){
+    mkdir -p $1 && cd $_;
+}
 alias rd=rmdir
 alias d='dirs -v | head -10'
