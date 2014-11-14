@@ -42,8 +42,8 @@ function _pj () {
     # might be possible to improve this using glob, without the basename trick
     typeset -a projects
     projects=($PROJECT_PATHS/*)
-    projects=$projects:t 
-    _arguments '*:file:($projects)'
+    projects=$projects:t
+    _arguments "*:file:($projects)"
 }
 
 compdef _pj pj
