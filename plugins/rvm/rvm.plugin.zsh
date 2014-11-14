@@ -72,3 +72,10 @@ function _rvm_completion {
   source $rvm_path"/scripts/zsh/Completion/_rvm"
 }
 compdef _rvm_completion rvm
+
+# Register the rvm sources.
+if [ -f ~/.rvm/scripts/rvm ]; then
+   source ~/.rvm/scripts/rvm
+elif [ -f /usr/local/rvm/scripts/rvm ]; then
+   source /usr/local/rvm/scripts/rvm
+fi
