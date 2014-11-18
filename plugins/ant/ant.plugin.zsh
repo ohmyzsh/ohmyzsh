@@ -1,6 +1,6 @@
 _ant_does_target_list_need_generating () {
   [ ! -f .ant_targets ] && return 0;
-  [ .ant_targets -nt build.xml ] && return 0;
+  [ build.xml -nt .ant_targets ] && return 0;
   return 1;
 }
 
