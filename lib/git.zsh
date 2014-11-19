@@ -13,7 +13,7 @@ parse_git_dirty() {
   local STATUS=''
   local FLAGS
   FLAGS=('--porcelain')
-  if [[ "$(command git config --get oh-my-zsh.hide-status)" != "1" ]]; then
+  if [[ "$(command git config --get oh-my-zsh.hide-dirty)" != "1" ]]; then
     if [[ $POST_1_7_2_GIT -gt 0 ]]; then
       FLAGS+='--ignore-submodules=dirty'
     fi
