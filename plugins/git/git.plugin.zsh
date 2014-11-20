@@ -13,6 +13,7 @@ alias gl='git pull'
 compdef _git gl=git-pull
 alias gup='git pull --rebase'
 compdef _git gup=git-fetch
+alias gfp='git fetch --prune'
 alias gp='git push'
 compdef _git gp=git-push
 alias gd='git diff'
