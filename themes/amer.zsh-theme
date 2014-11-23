@@ -117,7 +117,7 @@ function fish_like_pwd() {
       until [[ (( ${#expn} == 1 )) || $dir = $expn || $i -gt 99 ]]  do
         (( i++ ))
         part+=$dir[$i]
-        expn=($(echo ${part}*(/)))
+        expn=($(echo ${part}*(-/)))
         (( short )) && break
       done
       result+="/$part"
