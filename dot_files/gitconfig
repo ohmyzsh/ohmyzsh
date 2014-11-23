@@ -85,3 +85,6 @@ cmd = git mergetool --no-prompt
 
 [gui]
   newbranchtemplate = gsemet_
+
+[credential]
+	helper = cache --timeout=6000
