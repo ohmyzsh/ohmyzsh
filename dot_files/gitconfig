@@ -63,9 +63,6 @@ cmd = git mergetool --no-prompt
   editor = vim
 #  abbrev = 12
 
-[commit]
-    template = /home/gsemet/.gitmessage
-
 [user]
     email = gaetan@xeberon.net
     name = Gaetan Semet
