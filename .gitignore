@@ -8,3 +8,4 @@ projects.zsh
 *.un~
 cache/
 .metadata/
+*~
