@@ -17,6 +17,7 @@ alias cjs='cactus jump src'
 alias cjy='cactus jump yamls'
 alias cjb='cactus jump buildbot'
 alias cjx='cactus jump xutils'
+alias crcsr='cactus restart && cactus slaves restart'
 
 alias m='make'
 alias s='subl'
