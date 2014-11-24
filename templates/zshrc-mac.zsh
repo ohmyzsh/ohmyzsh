@@ -32,9 +32,11 @@ DISABLE_VENV_CD="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git2 python vim-override common-aliases zsh-syntax-highlighting jump coffee cp
-         rsync git-remote-branch command-not-found debian dircycle encode64 lol extract common-aliases
-         pip brew sublime grin pip)
+plugins=(git2 python repo intel-repo cp buildbot rsync git-extras git-remote-branch\
+         command-not-found debian dircycle encode64 lol extract launch_trial \
+         vim-scp ufw sublime pylint pep8 autopep8 \
+         common-aliases buildbot_dev zsh-syntax-highlighting \
+         txw jump grin pip colored-man)
 
 source $ZSH/oh-my-zsh.sh
 # User configuration
