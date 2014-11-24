@@ -16,9 +16,9 @@ elif grep-flag-available --exclude=.cvs; then
 fi
 
 # export grep settings
-export GREP_OPTIONS="$GREP_OPTIONS"
-export GREP_COLOR='1;32'
+alias grep="grep $GREP_OPTIONS"
 
 # clean up
+unset GREP_OPTIONS
 unset VCS_FOLDERS
 unfunction grep-flag-available
