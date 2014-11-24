@@ -39,7 +39,7 @@ plugins=(git2 python repo intel-repo cp buildbot rsync git-extras git-remote-bra
          command-not-found debian dircycle encode64 lol extract launch_trial \
          vim-scp ufw sublime pylint pep8 autopep8 \
          common-aliases buildbot_dev zsh-syntax-highlighting \
-         txw jump grin pip)
+         txw jump grin pip colored-man)
 
 source $ZSH/oh-my-zsh.sh
 
