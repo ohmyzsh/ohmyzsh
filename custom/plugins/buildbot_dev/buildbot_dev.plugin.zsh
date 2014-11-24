@@ -16,6 +16,7 @@ alias cjm='cactus jump metacactus'
 alias cjs='cactus jump src'
 alias cjy='cactus jump yamls'
 alias cjb='cactus jump buildbot'
+alias cjx='cactus jump xutils'
 
 alias m='make'
 alias s='subl'
