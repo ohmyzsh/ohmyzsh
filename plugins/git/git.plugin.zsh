@@ -70,6 +70,8 @@ alias glo='git log --oneline --decorate --color'
 compdef _git glo=git-log
 alias glog='git log --oneline --decorate --color --graph'
 compdef _git glog=git-log
+alias glvp='git log --pretty="%Cred%h%Creset [%Cgreen%an %Creset %C(cyan)%ar%Creset]: %Cred%d%Creset %C(yellow)%s%Creset" --graph'
+compdef _git glvp=git-log
 alias gss='git status -s'
 compdef _git gss=git-status
 alias ga='git add'
