@@ -1,6 +1,6 @@
 # Check for updates on initial load...
 if [ "$DISABLE_AUTO_UPDATE" != "true" ]; then
-  /usr/bin/env ZSH=$ZSH DISABLE_UPDATE_PROMPT=$DISABLE_UPDATE_PROMPT zsh -f $ZSH/tools/check_for_upgrade.sh
+  env ZSH=$ZSH DISABLE_UPDATE_PROMPT=$DISABLE_UPDATE_PROMPT zsh -f $ZSH/tools/check_for_upgrade.sh
 fi
 
 # Initializes Oh My Zsh
@@ -38,9 +38,9 @@ for plugin ($plugins); do
 done
 
 # Figure out the SHORT hostname
-if [ -n "$commands[scutil]" ]; then
-  # OS X
-  SHORT_HOST=$(scutil --get ComputerName)
+if [[ "$OSTYPE" = darwin* ]]; then
+  # OS X's $HOST changes with dhcp, etc. Use ComputerName if possible.
+  SHORT_HOST=$(scutil --get ComputerName 2>/dev/null) || SHORT_HOST=${HOST/.*/}
 else
   SHORT_HOST=${HOST/.*/}
 fi
