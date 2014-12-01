@@ -3,10 +3,10 @@ if [ -z "$HISTFILE" ]; then
     HISTFILE=$HOME/.zsh_history
 fi
 if [ -z "$HISTSIZE" ]; then
-	HISTSIZE=10000
+    HISTSIZE=10000
 fi
 if [ -z "$SAVEHIST" ]; then
-	SAVEHIST=10000
+    SAVEHIST=10000
 fi
 
 setopt extended_history
