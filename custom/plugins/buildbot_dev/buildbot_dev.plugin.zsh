@@ -74,7 +74,7 @@ function bb_repo_upload()
     local A
 
     declare -a REVIEWERS
-    REVIEWERS=$(txw gerrit-getGroupMembers reviewers-buildbot 2> /dev/null | tr " " ",")
+    REVIEWERS=$(txw --quiet gerrit-getGroupMembers reviewers-buildbot 2> /dev/null | tr " " ",")
     echo "Reviewers: $REVIEWERS"
     echo "Cmd: repo upload --cbr --re=$REVIEWERS ."
     yes | repo upload --cbr --re=$REVIEWERS .
