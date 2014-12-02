@@ -6,7 +6,16 @@ alias etts='mate app config lib db public script spec test vendor/plugins vendor
 # Edit Ruby app in TextMate
 alias mr='mate CHANGELOG app config db lib public script spec test'
 
+# If the tm command is called without an argument, open TextMate in the current directory
+# If tm is passed a directory, cd to it and open it in TextMate
+# If tm is passed a file, open it in TextMate
 function tm() {
-  cd $1
-  mate $1
+	if [[ -z $1 ]]; then
+		mate .
+	else
+		mate $1
+		if [[ -d $1 ]]; then
+			cd $1
+		fi
+	fi
 }

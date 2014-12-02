@@ -1,6 +1,6 @@
 The MIT License
 
-Copyright (c) 2009-2013 Robby Russell and contributors (see https://github.com/robbyrussell/oh-my-zsh/contributors)
+Copyright (c) 2009-2014 Robby Russell and contributors (see https://github.com/robbyrussell/oh-my-zsh/contributors)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

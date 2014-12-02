@@ -14,12 +14,9 @@ _cake_does_target_list_need_generating () {
 		return 1;
 	fi
 
-	if [ ! -f ${_cake_task_cache_file} ]; then return 0;
-	else
-		accurate=$(stat -f%m $_cake_task_cache_file)
-		changed=$(stat -f%m Cakefile)
-		return $(expr $accurate '>=' $changed)
-	fi
+	[ ! -f ${_cake_task_cache_file} ] && return 0;
+	[ ${_cake_task_cache_file} -nt Cakefile ] && return 0;
+	return 1;
 }
 
 _cake () {

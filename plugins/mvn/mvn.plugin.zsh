@@ -24,16 +24,18 @@ export RESET_FORMATTING=`tput sgr0`
 # Wrapper function for Maven's mvn command.
 mvn-color()
 {
-  # Filter mvn output using sed
-  mvn $@ | sed -e "s/\(\[INFO\]\ \-.*\)/${TEXT_BLUE}${BOLD}\1/g" \
-               -e "s/\(\[INFO\]\ \[.*\)/${RESET_FORMATTING}${BOLD}\1${RESET_FORMATTING}/g" \
+  (
+  # Filter mvn output using sed. Before filtering set the locale to C, so invalid characters won't break some sed implementations
+  unset LANG
+  LC_CTYPE=C mvn $@ | sed -e "s/\(\[INFO\]\)\(.*\)/${TEXT_BLUE}${BOLD}\1${RESET_FORMATTING}\2/g" \
                -e "s/\(\[INFO\]\ BUILD SUCCESSFUL\)/${BOLD}${TEXT_GREEN}\1${RESET_FORMATTING}/g" \
-               -e "s/\(\[WARNING\].*\)/${BOLD}${TEXT_YELLOW}\1${RESET_FORMATTING}/g" \
-               -e "s/\(\[ERROR\].*\)/${BOLD}${TEXT_RED}\1${RESET_FORMATTING}/g" \
+               -e "s/\(\[WARNING\]\)\(.*\)/${BOLD}${TEXT_YELLOW}\1${RESET_FORMATTING}\2/g" \
+               -e "s/\(\[ERROR\]\)\(.*\)/${BOLD}${TEXT_RED}\1${RESET_FORMATTING}\2/g" \
                -e "s/Tests run: \([^,]*\), Failures: \([^,]*\), Errors: \([^,]*\), Skipped: \([^,]*\)/${BOLD}${TEXT_GREEN}Tests run: \1${RESET_FORMATTING}, Failures: ${BOLD}${TEXT_RED}\2${RESET_FORMATTING}, Errors: ${BOLD}${TEXT_RED}\3${RESET_FORMATTING}, Skipped: ${BOLD}${TEXT_YELLOW}\4${RESET_FORMATTING}/g"
  
   # Make sure formatting is reset
   echo -ne ${RESET_FORMATTING}
+  )
 }
  
 # Override the mvn command with the colorized one.
@@ -42,19 +44,27 @@ mvn-color()
 # aliases
 alias mvncie='mvn clean install eclipse:eclipse'
 alias mvnci='mvn clean install'
+alias mvncist='mvn clean install -DskipTests'
 alias mvne='mvn eclipse:eclipse'
 alias mvnce='mvn clean eclipse:clean eclipse:eclipse'
 alias mvnd='mvn deploy'
 alias mvnp='mvn package'
 alias mvnc='mvn clean'
 alias mvncom='mvn compile'
+alias mvnct='mvn clean test'
 alias mvnt='mvn test'
 alias mvnag='mvn archetype:generate'
+alias mvn-updates='mvn versions:display-dependency-updates'
+alias mvntc7='mvn tomcat7:run' 
+alias mvntc='mvn tomcat:run'
+alias mvnjetty='mvn jetty:run'
+alias mvndt='mvn dependency:tree'
+alias mvns='mvn site'
 
 function listMavenCompletions { 
      reply=(
         # common lifecycle
-        clean process-resources compile process-test-resources test-compile test package verify install deploy site
+        clean process-resources compile process-test-resources test-compile test integration-test package verify install deploy site
         
         # common plugins
         deploy failsafe install site surefire checkstyle javadoc jxr pmd ant antrun archetype assembly dependency enforcer gpg help release repository source eclipse idea jetty cargo jboss tomcat tomcat6 tomcat7 exec versions war ear ejb android scm buildnumber nexus repository sonar license hibernate3 liquibase flyway gwt
@@ -114,11 +124,15 @@ function listMavenCompletions {
         # jboss
         jboss:start jboss:stop jboss:deploy jboss:undeploy jboss:redeploy
         # tomcat
-        tomcat:start tomcat:stop tomcat:deploy tomcat:undeploy tomcat:undeploy
+        tomcat:start tomcat:stop tomcat:deploy tomcat:undeploy tomcat:redeploy
         # tomcat6
         tomcat6:run tomcat6:run-war tomcat6:run-war-only tomcat6:stop tomcat6:deploy tomcat6:undeploy
         # tomcat7
         tomcat7:run tomcat7:run-war tomcat7:run-war-only tomcat7:deploy
+	# tomee
+        tomee:run tomee:run-war tomee:run-war-only tomee:stop tomee:deploy tomee:undeploy	
+        # spring-boot
+        spring-boot:run spring-boot:repackage
         # exec
         exec:exec exec:java
         # versions
@@ -163,7 +177,7 @@ function listMavenCompletions {
         cli:execute cli:execute-phase 
         archetype:generate generate-sources 
         cobertura:cobertura
-        -Dtest= `if [ -d ./src ] ; then find ./src/test/java -type f -name '*.java' | grep -v svn | sed 's?.*/\([^/]*\)\..*?-Dtest=\1?' ; fi`
+        -Dtest= `if [ -d ./src/test/java ] ; then find ./src/test/java -type f -name '*.java' | grep -v svn | sed 's?.*/\([^/]*\)\..*?-Dtest=\1?' ; fi`
     ); 
 }
 
