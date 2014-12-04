@@ -44,10 +44,17 @@ _arguments -C -s -S "$args[@]" \
 
 if [[ "$state" = modules ]]; then
   local -a modules
-  modules=(
-    ${${=${(f)"$(_call_program modules $words[1] -c \
-      'from\ pydoc\ import\ help\;\ help\(\"modules\"\)')"}[2,-3]}:#\(package\)}
-  )
+  if ( [[ ${+python_modules} -eq 0 ]] || _cache_invalid python_modules ) \
+     && ! _retrieve_cache python_modules; then
+
+    modules=(
+      ${${=${(f)"$(_call_program modules $words[1] -c \
+        'from\ pydoc\ import\ help\;\ help\(\"modules\"\)')"}[2,-3]}:#\(package\)}
+    )
+
+    _store_cache python_modules modules
+ fi
+
   _wanted modules expl module compadd -a modules && return
 fi
 
