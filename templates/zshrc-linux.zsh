@@ -33,7 +33,7 @@ DISABLE_VENV_CD="1"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git gitfast tmux debian python virtualenvwrapper)
+plugins=(git gitfast tmux debian virtualenvwrapper)
 
 if [ -e $HOME/bin ]; then export PATH="$HOME/bin:$PATH"; fi
 if [ -e $HOME/.local/bin ]; then export PATH="$HOME/.local/bin:$PATH"; fi
