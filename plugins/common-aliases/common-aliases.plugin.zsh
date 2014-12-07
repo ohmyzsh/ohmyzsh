@@ -26,6 +26,11 @@ alias ...='cd ../../'
 alias ....='cd ../../../'
 alias .....='cd ../../../../'
 
+# Switch the directory with the vim key-binding
+alias k='cd ../'
+alias 2k='cd ../../'
+alias 3k='cd ../../../'
+
 # Command line head / tail shortcuts
 alias -g H='| head'
 alias -g T='| tail'
@@ -89,4 +94,3 @@ fi
 
 # Make zsh know about hosts already accessed by SSH
 zstyle -e ':completion:*:(ssh|scp|sftp|rsh|rsync):hosts' hosts 'reply=(${=${${(f)"$(cat {/etc/ssh_,~/.ssh/known_}hosts(|2)(N) /dev/null)"}%%[# ]*}//,/ })'
-
