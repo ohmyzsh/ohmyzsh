@@ -6,7 +6,7 @@
 GREP_OPTIONS="--color=auto"
 
 # avoid VCS folders (if the necessary grep flags are available)
-VCS_FOLDERS="{.cvs,.git,.hg,.svn}"
+VCS_FOLDERS="{.bzr,.cvs,.git,.hg,.svn}"
 
 grep-flag-available() {
     echo | grep $1 "" >/dev/null 2>&1
