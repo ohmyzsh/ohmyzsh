@@ -6,17 +6,15 @@
 GREP_OPTIONS="--color=auto"
 
 # avoid VCS folders (if the necessary grep flags are available)
+local VCS_folders="{.cvs,.git,.hg,.svn}"
+
 grep-flag-available() {
     echo | grep $1 "" >/dev/null 2>&1
 }
 if grep-flag-available --exclude-dir=.cvs; then
-    for PATTERN in .cvs .git .hg .svn; do
-        GREP_OPTIONS+=" --exclude-dir=$PATTERN"
-    done
+    GREP_OPTIONS+=" --exclude-dir=$VCS_folders"
 elif grep-flag-available --exclude=.cvs; then
-    for PATTERN in .cvs .git .hg .svn; do
-        GREP_OPTIONS+=" --exclude=$PATTERN"
-    done
+    GREP_OPTIONS+=" --exclude=$VCS_folders"
 fi
 unfunction grep-flag-available
 
