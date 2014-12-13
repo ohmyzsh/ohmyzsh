@@ -5,30 +5,24 @@ zstyle ':completion::complete:wd:*:commands' group-name commands
 zstyle ':completion::complete:wd:*:warp_points' group-name warp_points
 zstyle ':completion::complete:wd::' list-grouped
 
-# Call `_wd()` when when trying to complete the command `wd`
-
 zmodload zsh/mapfile
+
 function _wd() {
-  local ret=1
   local CONFIG=$HOME/.warprc
-
-  # Stolen from
-  # http://stackoverflow.com/questions/9000698/completion-when-program-has-sub-commands
-
-  # local curcontext="$curcontext" state line
-  # typeset -A opt_args
+  local ret=1
 
   local -a commands
   local -a warp_points
-  warp_points=( "${(f)mapfile[$CONFIG]}" )
-  # LIST="${mapfile[$FNAME]}" # Not required unless stuff uses it
+
+  warp_points=( "${(f)mapfile[$CONFIG]//$HOME/~}" )
 
   commands=(
     'add:Adds the current working directory to your warp points'
     'add!:Overwrites existing warp point'
     'rm:Removes the given warp point'
     'ls:Outputs all stored warp points'
-    'show:Outputs all warp points that point to the current directory'
+    'show:Outputs all warp points that point to the current directory or shows a specific target directory for a point'
+    'show:Outputs all warp points that point to the current directory or shows a specific target directory for a point'
     'help:Show this extremely helpful text'
     '..:Go back to last directory'
   )
@@ -49,6 +43,9 @@ function _wd() {
           ;;
         add)
           _message 'Write the name of your warp point' && ret=0
+          ;;
+        show)
+          _describe -t points "Warp points" warp_points && ret=0
           ;;
       esac
       ;;

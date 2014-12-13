@@ -7,6 +7,8 @@ alias gd='git diff'
 compdef _git gd=git-diff
 alias gdc='git diff --cached'
 compdef _git gdc=git-diff
+alias gdt='git diff-tree --no-commit-id --name-only -r'
+compdef _git gdc=git diff-tree --no-commit-id --name-only -r
 alias gl='git pull'
 compdef _git gl=git-pull
 alias gup='git pull --rebase'
@@ -16,6 +18,7 @@ compdef _git gp=git-push
 alias gd='git diff'
 gdv() { git diff -w "$@" | view - }
 compdef _git gdv=git-diff
+alias gdt='git difftool'
 alias gc='git commit -v'
 compdef _git gc=git-commit
 alias gc!='git commit -v --amend'
@@ -51,6 +54,7 @@ alias gb='git branch'
 compdef _git gb=git-branch
 alias gba='git branch -a'
 compdef _git gba=git-branch
+alias gbr='git branch --remote'
 alias gcount='git shortlog -sn'
 compdef gcount=git
 alias gcl='git config --list'
@@ -70,12 +74,25 @@ alias gss='git status -s'
 compdef _git gss=git-status
 alias ga='git add'
 compdef _git ga=git-add
+alias gap='git add --patch'
 alias gm='git merge'
 compdef _git gm=git-merge
 alias grh='git reset HEAD'
 alias grhh='git reset HEAD --hard'
 alias gclean='git reset --hard && git clean -dfx'
 alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
+
+# Sign and verify commits with GPG
+alias gcs='git commit -S'
+compdef _git gcs=git-commit
+alias gsps='git show --pretty=short --show-signature'
+compdef _git gsps=git-show
+
+# Sign and verify tags with GPG
+alias gts='git tag -s'
+compdef _git gts=git-tag
+alias gvt='git verify-tag'
+compdef _git gvt=git verify-tag
 
 #remove the gf alias
 #alias gf='git ls-files | grep'
