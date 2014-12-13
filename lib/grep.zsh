@@ -3,6 +3,7 @@
 # Examples: http://rubyurl.com/ZXv
 #
 
+# color grep output
 GREP_OPTIONS="--color=auto"
 
 # avoid VCS folders (if the necessary grep flags are available)
@@ -20,5 +21,8 @@ elif grep-flag-available --exclude=.cvs; then
 fi
 unfunction grep-flag-available
 
-export GREP_OPTIONS="$GREP_OPTIONS"
-export GREP_COLOR='1;32'
+# define grep wrapper (GREP_OPTIONS env var is deprecated)
+eval "function grep {
+    command grep $GREP_OPTIONS \"\$@\"
+}"
+unset GREP_OPTIONS
