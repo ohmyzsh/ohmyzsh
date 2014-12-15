@@ -2,8 +2,12 @@
 
 ### Initialization
 last_command=$? # Must come first!
-NORMAL_SYMBOL="%{$bg[red]%}%{$fg_bold[white]%}@%{$reset_color%}"
+NORMAL_SYMBOL='@'
 INSERT_SYMBOL='#'
+NORMAL_SYMBOL_PREFIX="%{$bg[red]%}%{$fg_bold[white]%}"
+NORMAL_SYMBOL_SUFFIX="%{$reset_color%}"
+INSERT_SYMBOL_PREFIX=""
+INSERT_SYMBOL_SUFFIX="%{$reset_color%}"
 ### NVM
 
 ZSH_THEME_NVM_PROMPT_PREFIX="%B⬡%b "
@@ -109,7 +113,7 @@ bureau_precmd () {
 }
 
 function zle-line-init zle-keymap-select {
-    _MODE_SYMBOL="${${KEYMAP/vicmd/$NORMAL_SYMBOL}/(main|viins)/$INSERT_SYMBOL}"
+    _MODE_SYMBOL="${${KEYMAP/vicmd/$NORMAL_SYMBOL_PREFIX$NORMAL_SYMBOL$NORMAL_SYMBOL_SUFFIX}/(main|viins)/$INSERT_SYMBOL_PREFIX$INSERT_SYMBOL$INSERT_SYMBOL_SUFFIX}"
     zle reset-prompt
 }
 
