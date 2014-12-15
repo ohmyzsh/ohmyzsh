@@ -7,10 +7,6 @@
 # Email: neuralsandwich@gmail.com         #
 # Modified to add support for Apple Mac   #
 ###########################################
-# Author: Jack Spirou (JackSpirou)        #
-# Email: jack.spirou@me.com               #
-# Modified battery gauge for custom chars #
-###########################################
 
 if [[ "$OSTYPE" = darwin* ]] ; then
 
@@ -158,7 +154,7 @@ function battery_level_gauge() {
     filled_symbol=${BATTERY_UNKNOWN_SYMBOL:-'.'};
   fi
 
-  local charging=' ' && battery_is_charging && charging=$charging_symbol;
+  local charging=' ' && battery_is_charging && charging=$charging_symbol' ';
 
   printf ${charging_color//\%/\%\%}$charging${color_reset//\%/\%\%}${battery_prefix//\%/\%\%}${gauge_color//\%/\%\%}
   printf ${filled_symbol//\%/\%\%}'%.0s' {1..$filled}
