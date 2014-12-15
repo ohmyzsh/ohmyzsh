@@ -2,6 +2,8 @@
 
 ### Initialization
 last_command=$? # Must come first!
+NORMAL_SYMBOL='@'
+INSERT_SYMBOL='%%'
 
 ### NVM
 
@@ -78,10 +80,9 @@ if [[ $EUID -eq 0 ]]; then
 else
   _USERNAME="%{$fg_bold[white]%}%n"
 fi
-_LIBERTY="%(?:%{$reset_color%}> %{$fg_bold[green]%}$:%? %{$fg_bold[red]%}$)"
 
+_LIBERTY="%(?:%{$reset_color%}> %{$fg_bold[green]%}:%? %{$fg_bold[red]%})"
 _USERNAME="$_USERNAME%{$reset_color%}@%m"
-_LIBERTY="$_LIBERTY%{$reset_color%}"
 
 
 get_space () {
@@ -108,9 +109,17 @@ bureau_precmd () {
   print -rP "$_1LEFT$_1SPACES$_1RIGHT"
 }
 
+function zle-line-init zle-keymap-select {
+    _VI_MODE="${${KEYMAP/vicmd/$NORMAL_SYMBOL}/(main|viins)/$INSERT_SYMBOL}"
+    zle reset-prompt
+}
+
+zle -N zle-line-init
+zle -N zle-keymap-select
+
 setopt prompt_subst
-PROMPT='$_LIBERTY '
-RPROMPT='$(nvm_prompt_info) $(bureau_git_prompt)'
+PROMPT='$_LIBERTY$_VI_MODE%{$reset_color%}'
+RPROMPT='$(nvm_prompt_info) %{$reset_color%}$(bureau_git_prompt)'
 
 autoload -U add-zsh-hook
 add-zsh-hook precmd bureau_precmd
