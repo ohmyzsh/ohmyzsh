@@ -20,5 +20,4 @@ elif grep-flag-available --exclude=.cvs; then
 fi
 unfunction grep-flag-available
 
-export GREP_OPTIONS="$GREP_OPTIONS"
-export GREP_COLOR='1;32'
+alias grep="grep $GREP_OPTIONS"
