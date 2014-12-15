@@ -14,7 +14,7 @@ else
 fi
 
 local nvm_node=''
-nvm_node='%{$fg[green]%}‹$(nvm_prompt_info)›%{$reset_color%}'
+nvm_node='%{$fg[green]%}‹node-$(nvm_prompt_info)›%{$reset_color%}'
 
 local jenv_java=''
 jenv_java='%{$fg[blue]%}‹$(jenv_prompt_info)›%{$reset_color%}'
