@@ -20,7 +20,7 @@ _yii2 () {
         name=$words[2]
       fi
 
-      commands=(${(f)"$(./yii help $name | _yii2_format_command)"})
+      commands=(${(f)"$(./yii help $name --color=0 | _yii2_format_command)"})
       compadd -Q -S '' -a -- commands
     esac
   fi
