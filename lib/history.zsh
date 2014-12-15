@@ -1,9 +1,13 @@
 ## Command history configuration
-if [ -z $HISTFILE ]; then
+if [ -z "$HISTFILE" ]; then
     HISTFILE=$HOME/.zsh_history
 fi
-HISTSIZE=10000
-SAVEHIST=10000
+if [ -z "$HISTSIZE" ]; then
+    HISTSIZE=10000
+fi
+if [ -z "$SAVEHIST" ]; then
+    SAVEHIST=10000
+fi
 
 setopt extended_history
 setopt hist_expire_dups_first
