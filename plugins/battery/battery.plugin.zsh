@@ -7,6 +7,10 @@
 # Email: neuralsandwich@gmail.com         #
 # Modified to add support for Apple Mac   #
 ###########################################
+# Author: Jack Spirou (JackSpirou)        #
+# Email: jack.spirou@me.com               #
+# Modified battery gauge for custom chars #
+###########################################
 
 if [[ "$OSTYPE" = darwin* ]] ; then
 
@@ -91,7 +95,7 @@ elif [[ $(uname) == "Linux"  ]] ; then
   }
 
   function battery_pct_prompt() {
-    b=$(battery_pct_remaining) 
+    b=$(battery_pct_remaining)
     if [[ $(acpi 2&>/dev/null | grep -c '^Battery.*Discharging') -gt 0 ]] ; then
       if [ $b -gt 50 ] ; then
         color='green'
@@ -135,6 +139,11 @@ function battery_level_gauge() {
 
   local battery_remaining_percentage=$(battery_pct);
 
+  if [[ $1 ]] && [[ $2 ]]; then
+    filled_symbol=${BATTERY_GAUGE_FILLED_SYMBOL:-$1};
+    empty_symbol=${BATTERY_GAUGE_EMPTY_SYMBOL:-$2};
+  fi
+
   if [[ $battery_remaining_percentage =~ [0-9]+ ]]; then
     local filled=$(((( $battery_remaining_percentage + $gauge_slots - 1) / $gauge_slots)));
     local empty=$(($gauge_slots - $filled));
@@ -156,5 +165,3 @@ function battery_level_gauge() {
   [[ $filled -lt $gauge_slots ]] && printf ${empty_symbol//\%/\%\%}'%.0s' {1..$empty}
   printf ${color_reset//\%/\%\%}${battery_suffix//\%/\%\%}${color_reset//\%/\%\%}
 }
-
-
