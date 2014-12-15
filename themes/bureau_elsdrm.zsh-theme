@@ -2,9 +2,8 @@
 
 ### Initialization
 last_command=$? # Must come first!
-NORMAL_SYMBOL='@'
-INSERT_SYMBOL='%%'
-
+NORMAL_SYMBOL="%{$bg[red]%}%{$fg_bold[white]%}@%{$reset_color%}"
+INSERT_SYMBOL='#'
 ### NVM
 
 ZSH_THEME_NVM_PROMPT_PREFIX="%B⬡%b "
@@ -110,7 +109,7 @@ bureau_precmd () {
 }
 
 function zle-line-init zle-keymap-select {
-    _VI_MODE="${${KEYMAP/vicmd/$NORMAL_SYMBOL}/(main|viins)/$INSERT_SYMBOL}"
+    _MODE_SYMBOL="${${KEYMAP/vicmd/$NORMAL_SYMBOL}/(main|viins)/$INSERT_SYMBOL}"
     zle reset-prompt
 }
 
@@ -118,7 +117,7 @@ zle -N zle-line-init
 zle -N zle-keymap-select
 
 setopt prompt_subst
-PROMPT='$_LIBERTY$_VI_MODE%{$reset_color%}'
+PROMPT='$_LIBERTY$_MODE_SYMBOL%{$reset_color%} '
 RPROMPT='$(nvm_prompt_info) %{$reset_color%}$(bureau_git_prompt)'
 
 autoload -U add-zsh-hook
