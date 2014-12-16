@@ -10,16 +10,14 @@
 setopt nopushdminus
 
 insert-cycledleft () {
-	zle push-line
-	LBUFFER='pushd -q +1'
-	zle accept-line
+	builtin pushd -q +1 &>/dev/null || true
+	zle reset-prompt
 }
 zle -N insert-cycledleft
 
 insert-cycledright () {
-	zle push-line
-	LBUFFER='pushd -q -0'
-	zle accept-line
+	builtin pushd -q -0 &>/dev/null || true
+	zle reset-prompt
 }
 zle -N insert-cycledright
 
