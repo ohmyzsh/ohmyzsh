@@ -135,7 +135,7 @@ function battery_level_gauge() {
 
   local battery_remaining_percentage=$(battery_pct);
 
-  if [[ $1 ]] && [[ $2 ]]; then
+  if [ "$1" ] && [ "$2" ]; then
     filled_symbol=${BATTERY_GAUGE_FILLED_SYMBOL:-$1};
     empty_symbol=${BATTERY_GAUGE_EMPTY_SYMBOL:-$2};
   fi
