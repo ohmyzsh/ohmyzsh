@@ -2,12 +2,18 @@
 function omz_history {
   # Delete the history file if `-c' argument provided.
   # This won't affect the `history' command output until the next login.
-  if [[ "${@[(i)-c]}" -le $# ]]; then
+  zparseopts -E c=clear l=list
+
+  if [[ -n "$clear" ]]; then
+    # if -c provided, clobber the history file
     echo -n >| "$HISTFILE"
     echo >&2 History file deleted. Reload the session to see its effects.
-  elif [[ "${@[(i)-l]}" -le $# ]]; then
+  elif [[ -n "$list" ]]; then
+    # if -l provided, run as if calling `fc' directly
     builtin fc "$@"
   else
+    # otherwise, call `fc -l 1` to show all available
+    # history (and pass additional parameters)
     builtin fc "$@" -l 1
   fi
 }
