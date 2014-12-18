@@ -238,6 +238,14 @@ __wait() {
     __docker_containers
 }
 
+__exec() {
+    _arguments \
+      '(-d,--detach=)'{-d,--detach=}'[Detached mode: run command in the background]' \
+      '(-i,--interactive=)'{-i,--interactive=}'[Keep STDIN open even if not attached]' \
+      '(-t,--tty=)'{-t,--tty=}'[Allocate a pseudo-TTY]'
+    __docker_containers
+}
+
 # end commands ---------
 # ----------------------
 
@@ -276,6 +284,7 @@ _1st_arguments=(
     "top":"Lookup the running processes of a container"
     "version":"Show the docker version information"
     "wait":"Block until a container stops, then print its exit code"
+    "exec":"Run a task inside a running container"
 )
 
 _arguments '*:: :->command'
@@ -353,4 +362,6 @@ case "$words[1]" in
         __version ;;
     wait)
         __wait ;;
+    exec)
+        __exec ;;
 esac
