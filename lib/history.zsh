@@ -6,7 +6,7 @@ function omz_history {
     echo -n >| "$HISTFILE"
     echo >&2 History file deleted. Reload the session to see its effects.
   else
-    fc $@ -l 1
+    builtin fc "$@" -l 1
   fi
 }
 
