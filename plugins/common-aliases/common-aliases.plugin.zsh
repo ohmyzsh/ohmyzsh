@@ -32,13 +32,18 @@ alias 2k='cd ../../'
 alias 3k='cd ../../../'
 # My aliases
 alias jget='sudo apt-get install';
+alias jup='sudo apt-get update'
+alias jug='sudo apt-get upgrate'
 alias s='sudo';
+alias t='cd'
+alias p='echo'
+alias zshrc='vim ~/.zshrc'
 
 alias jic='sudo pppoeconf';
 alias jc='sudo pon dsl-provider';
 alias jdc='sudo poff -a';
 alias jtc='ping -c 5 baidu.com';
-
+alias jsz='source ~/.zshrc'
 alias jas='vim ~/.bash_aliases';
 alias jbc='vim ~/.bashrc';
 alias js='source';
