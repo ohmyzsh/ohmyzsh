@@ -1,9 +1,16 @@
-#usage: title short_tab_title looooooooooooooooooooooggggggg_windows_title
-#http://www.faqs.org/docs/Linux-mini/Xterm-Title.html#ss3.1
-#Fully support screen, iterm, and probably most modern xterm and rxvt
-#Limited support for Apple Terminal (Terminal can't set window or tab separately)
+# Set terminal window and tab/icon title
+#
+# usage: title short_tab_title [long_window_title]
+#
+# See: http://www.faqs.org/docs/Linux-mini/Xterm-Title.html#ss3.1
+# Fully supports screen, iterm, and probably most modern xterm and rxvt
+# (In screen, only short_tab_title is used)
+# Limited support for Apple Terminal (Terminal can't set window and tab separately)
 function title {
-  if [[ "$DISABLE_AUTO_TITLE" == "true" ]] || [[ "$EMACS" == *term* ]]; then
+  if [[ $2 == "" ]]; then
+    2="$1"
+  fi
+  if [[ "$EMACS" == *term* ]]; then
     return
   fi
   if [[ "$TERM" == screen* ]]; then
@@ -17,13 +24,21 @@ function title {
 ZSH_THEME_TERM_TAB_TITLE_IDLE="%15<..<%~%<<" #15 char left truncated PWD
 ZSH_THEME_TERM_TITLE_IDLE="%n@%m: %~"
 
-#Appears when you have the prompt
+# Called when you have a prompt
 function omz_termsupport_precmd {
+  if [[ $DISABLE_AUTO_TITLE == true ]]; then
+    return
+  fi
+
   title $ZSH_THEME_TERM_TAB_TITLE_IDLE $ZSH_THEME_TERM_TITLE_IDLE
 }
 
-#Appears at the beginning of (and during) of command execution
+# Called at the beginning of command execution
 function omz_termsupport_preexec {
+  if [[ $DISABLE_AUTO_TITLE == true ]]; then
+    return
+  fi
+
   emulate -L zsh
   setopt extended_glob
 
