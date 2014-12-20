@@ -7,15 +7,20 @@
 # NO_PUSHD_MINUS syntax:
 #  pushd +N: start counting from left of `dirs' output
 #  pushd -N: start counting from right of `dirs' output
-setopt nopushdminus
 
 insert-cycledleft () {
+	emulate -L zsh
+	setopt nopushdminus
+
 	builtin pushd -q +1 &>/dev/null || true
 	zle reset-prompt
 }
 zle -N insert-cycledleft
 
 insert-cycledright () {
+	emulate -L zsh
+	setopt nopushdminus
+
 	builtin pushd -q -0 &>/dev/null || true
 	zle reset-prompt
 }
