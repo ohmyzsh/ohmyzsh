@@ -24,6 +24,8 @@ function lstheme
 {
     cd $ZSH/themes
     ls *zsh-theme | sed 's,\.zsh-theme$,,'
+    cd $ZSH_CUSTOM/
+    ls *zsh-theme | sed 's,\.zsh-theme$,,'
     cd $ZSH_CUSTOM/themes
     ls *zsh-theme | sed 's,\.zsh-theme$,,'
 }
