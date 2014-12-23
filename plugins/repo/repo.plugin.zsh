@@ -26,6 +26,12 @@ compdef _repo ru='repo upload'
 alias rst='repo status'
 compdef _repo rst='repo status'
 
+alias ruc='repo upload --cbr .'
+compdef _repo ruc='repo upload'
+
+alias yruc='yes | repo upload --cbr .'
+compdef _repo ruc='repo upload'
+
 # Repo start current branch on all projects
 alias rscb='echo "Starting branch $(git branch | sed -n "/\* /s///p") on all projects" && repo start $(git branch | sed -n "/\* /s///p") --all'
 compdef _repo rscb='repo start'
