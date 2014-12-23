@@ -45,13 +45,13 @@
 : ${AGNOSTER_HG_NEWFILE_FG:=white}
 : ${AGNOSTER_HG_NEWFILE_BG:=red}
 : ${AGNOSTER_HG_CHANGED_FG:=black}
-: ${AGNOSTER_HG_CHANGED_BG:=red}
+: ${AGNOSTER_HG_CHANGED_BG:=yellow}
 : ${AGNOSTER_HG_CLEAN_FG:=black}
 : ${AGNOSTER_HG_CLEAN_BG:=green}
 
 # VirtualEnv colors
-: ${AGNOSTER_VENV_FG:=blue}
-: ${AGNOSTER_VENV_BG:=black}
+: ${AGNOSTER_VENV_FG:=black}
+: ${AGNOSTER_VENV_BG:=blue}
 
 # Status symbols
 : ${AGNOSTER_STATUS_RETVAL_FG:=red}
