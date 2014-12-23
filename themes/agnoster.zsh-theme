@@ -46,7 +46,7 @@
 : ${AGNOSTER_GIT_CLEAN_FG:=black}
 : ${AGNOSTER_GIT_CLEAN_BG:=green}
 : ${AGNOSTER_GIT_DIRTY_FG:=black}
-: ${AGNOSTER_GIT_DIRTY_BG:=orange}
+: ${AGNOSTER_GIT_DIRTY_BG:=yellow}
 
 # Mercurial related
 : ${AGNOSTER_HG_NEWFILE_FG:=white}
