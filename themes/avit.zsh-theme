@@ -89,10 +89,6 @@ ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[blue]%}▴ "
 ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[cyan]%}§ "
 ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[grey]%}◒ "
 
-# Colors vary depending on time lapsed.
-ZSH_THEME_GIT_TIME_SINCE_COMMIT_SHORT="%{$fg[green]%}"
-ZSH_THEME_GIT_TIME_SINCE_COMMIT_MEDIUM="%{$fg[yellow]%}"
-ZSH_THEME_GIT_TIME_SINCE_COMMIT_LONG="%{$fg[red]%}"
 ZSH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL="%{$fg[grey]%}"
 
 # LS colors, made with http://geoff.greer.fm/lscolors/

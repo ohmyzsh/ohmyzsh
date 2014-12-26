@@ -85,7 +85,7 @@ function git_time_since_commit() {
                 if [ "$MINUTES" -gt 30 ]; then
                     COLOR="$ZSH_THEME_GIT_TIME_SINCE_COMMIT_LONG"
                 elif [ "$MINUTES" -gt 10 ]; then
-                    COLOR="$ZSH_THEME_GIT_TIME_SHORT_COMMIT_MEDIUM"
+                    COLOR="$ZSH_THEME_GIT_TIME_SINCE_COMMIT_MEDIUM"
                 else
                     COLOR="$ZSH_THEME_GIT_TIME_SINCE_COMMIT_SHORT"
                 fi
