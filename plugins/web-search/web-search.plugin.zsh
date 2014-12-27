@@ -16,6 +16,7 @@ function web_search() {
   # define the open command
   case "$OSTYPE" in
     darwin*)  open_cmd="open" ;;
+    cygwin*)  open_cmd="cygstart" ;;
     linux*)   open_cmd="xdg-open" ;;
     *)        echo "Platform $OSTYPE not supported"
               return 1
