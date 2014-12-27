@@ -10,6 +10,7 @@ function web_search() {
     bing        "https://www.bing.com/search?q="
     yahoo       "https://www.yahoo.com/search?q="
     duckduckgo  "https://www.duckduckgo.com/?q="
+    yandex      "http://yandex.ru/yandsearch?text="
   )
 
   # define the open command
@@ -46,6 +47,8 @@ alias bing='web_search bing'
 alias google='web_search google'
 alias yahoo='web_search yahoo'
 alias ddg='web_search duckduckgo'
+alias yandex='web_search yandex'
+
 #add your own !bang searches here
 alias wiki='web_search duckduckgo \!w'
 alias news='web_search duckduckgo \!n'
