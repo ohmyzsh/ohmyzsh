@@ -39,7 +39,7 @@ function web_search() {
     url="${(j://:)${(s:/:)urls[$1]}[1,2]}"
   fi
 
-  nohup $open_cmd "$url" >/dev/null 2&>1
+  nohup $open_cmd "$url" &>/dev/null
 }
 
 
