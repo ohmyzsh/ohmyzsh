@@ -8,7 +8,7 @@ function web_search() {
   urls=(
     google      "https://www.google.com/search?q="
     bing        "https://www.bing.com/search?q="
-    yahoo       "https://www.yahoo.com/search?q="
+    yahoo       "https://search.yahoo.com/search?p="
     duckduckgo  "https://www.duckduckgo.com/?q="
     yandex      "http://yandex.ru/yandsearch?text="
   )
