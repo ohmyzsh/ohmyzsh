@@ -91,7 +91,7 @@ elif [[ $(uname) == "Linux"  ]] ; then
   }
 
   function battery_pct_prompt() {
-    b=$(battery_pct_remaining) 
+    b=$(battery_pct_remaining)
     if [[ $(acpi 2&>/dev/null | grep -c '^Battery.*Discharging') -gt 0 ]] ; then
       if [ $b -gt 50 ] ; then
         color='green'
@@ -135,6 +135,11 @@ function battery_level_gauge() {
 
   local battery_remaining_percentage=$(battery_pct);
 
+  if [ "$1" ] && [ "$2" ]; then
+    filled_symbol=${BATTERY_GAUGE_FILLED_SYMBOL:-$1};
+    empty_symbol=${BATTERY_GAUGE_EMPTY_SYMBOL:-$2};
+  fi
+
   if [[ $battery_remaining_percentage =~ [0-9]+ ]]; then
     local filled=$(((( $battery_remaining_percentage + $gauge_slots - 1) / $gauge_slots)));
     local empty=$(($gauge_slots - $filled));
@@ -149,12 +154,10 @@ function battery_level_gauge() {
     filled_symbol=${BATTERY_UNKNOWN_SYMBOL:-'.'};
   fi
 
-  local charging=' ' && battery_is_charging && charging=$charging_symbol;
+  local charging=' ' && battery_is_charging && charging=$charging_symbol' ';
 
   printf ${charging_color//\%/\%\%}$charging${color_reset//\%/\%\%}${battery_prefix//\%/\%\%}${gauge_color//\%/\%\%}
   printf ${filled_symbol//\%/\%\%}'%.0s' {1..$filled}
   [[ $filled -lt $gauge_slots ]] && printf ${empty_symbol//\%/\%\%}'%.0s' {1..$empty}
   printf ${color_reset//\%/\%\%}${battery_suffix//\%/\%\%}${color_reset//\%/\%\%}
 }
-
-
