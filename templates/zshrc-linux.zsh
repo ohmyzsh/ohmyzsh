@@ -5,8 +5,8 @@ ZSH=$HOME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-# ZSH_THEME="afowler"
-ZSH_THEME="cadusk"
+ZSH_THEME="afowler"
+# ZSH_THEME="cadusk"
 
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
@@ -33,15 +33,15 @@ DISABLE_VENV_CD="1"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git gitfast tmux debian virtualenvwrapper)
+plugins=(git gitfast tmux)
 
 if [ -e $HOME/bin ]; then export PATH="$HOME/bin:$PATH"; fi
-if [ -e $HOME/.local/bin ]; then export PATH="$HOME/.local/bin:$PATH"; fi
-if [ -e $HOME/appengine ]; then export PATH="$HOME/appengine:$PATH"; fi
-if [ -e $HOME/.cabal/bin ]; then export PATH="$HOME/.cabal/bin:$PATH"; fi
+# if [ -e $HOME/.local/bin ]; then export PATH="$HOME/.local/bin:$PATH"; fi
+# if [ -e $HOME/appengine ]; then export PATH="$HOME/appengine:$PATH"; fi
+# if [ -e $HOME/.cabal/bin ]; then export PATH="$HOME/.cabal/bin:$PATH"; fi
 #
-if [ -z "$LC_ALL" ]; then export LC_ALL=en_US.UTF-8; fi
-if [ -z "$LANG" ]; then export LANG=en_US.UTF-8; fi
+if [ -z "$LC_ALL" ]; then export LC_ALL=en_US.utf8; fi
+if [ -z "$LANG" ]; then export LANG=en_US.utf8; fi
 
 [ "$TERM" = "xterm" ] && TERM="xterm-256color"
 
