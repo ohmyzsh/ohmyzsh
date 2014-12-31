@@ -88,3 +88,6 @@ else
     fi
   fi
 fi
+
+source ~/.bash_profile
+source ~/.bash_rc
