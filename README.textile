@@ -18,11 +18,25 @@ You can install this via the command-line with either @curl@ or @wget@.
 
 h4. via @curl@:
 
-@curl -L http://install.ohmyz.sh | sh@
+@curl -L http://install.ohmyz.sh > ohmyz.sh@
+@openssl sha256 ohmyz.sh@
+
+Verify that the checksum is correct:
+@SHA256(ohmyz.sh)= ad4290f1234ced4f9f344868422e194764d076255df806d90a6bb5bc96c77fb9@
+
+Then run:
+@sh ohmyz.sh@
 
 h4. via @wget@:
 
-@wget --no-check-certificate http://install.ohmyz.sh -O - | sh@
+@wget --no-check-certificate http://install.ohmyz.sh -O ohmyz.sh@
+@openssl sha256 ohmyz.sh@
+
+Verify that the checksum is correct:
+@SHA256(ohmyz.sh)= ad4290f1234ced4f9f344868422e194764d076255df806d90a6bb5bc96c77fb9@
+
+Then run:
+@sh ohmyz.sh@
 
 h4. *Optionally*, change the install directory:
 
