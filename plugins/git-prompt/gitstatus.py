@@ -31,7 +31,7 @@ lines = output.splitlines()
 
 behead_re = re.compile(
     r"^Your branch is (ahead of|behind) '(.*)' by (\d+) commit")
-diverge_re = re.compile(r"^ and have (\d+) and (\d+) different")
+diverge_re = re.compile(r"^and have (\d+) and (\d+) different")
 
 status = ''
 staged = re.compile(r'^# Changes to be committed:$', re.MULTILINE)
