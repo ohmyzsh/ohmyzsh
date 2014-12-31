@@ -2,6 +2,7 @@
 # -*- coding: UTF-8 -*-
 from subprocess import Popen, PIPE
 import re
+import os
 
 # change those symbols to whatever you prefer
 symbols = {
@@ -15,8 +16,13 @@ symbols = {
     'sha1': ':'
 }
 
+def get_env_en():
+    new_env = dict(os.environ)
+    new_env['LANG'] = 'en_US.UTF-8'
+    return new_env
+
 output, error = Popen(
-    ['git', 'status'], stdout=PIPE, stderr=PIPE, universal_newlines=True).communicate()
+    ['git', 'status'], stdout=PIPE, stderr=PIPE, universal_newlines=True, env=get_env_en()).communicate()
 
 if error:
     import sys
@@ -24,8 +30,8 @@ if error:
 lines = output.splitlines()
 
 behead_re = re.compile(
-    r"^# Your branch is (ahead of|behind) '(.*)' by (\d+) commit")
-diverge_re = re.compile(r"^# and have (\d+) and (\d+) different")
+    r"^Your branch is (ahead of|behind) '(.*)' by (\d+) commit")
+diverge_re = re.compile(r"^ and have (\d+) and (\d+) different")
 
 status = ''
 staged = re.compile(r'^# Changes to be committed:$', re.MULTILINE)
@@ -33,9 +39,8 @@ changed = re.compile(r'^# Changed but not updated:$', re.MULTILINE)
 untracked = re.compile(r'^# Untracked files:$', re.MULTILINE)
 unmerged = re.compile(r'^# Unmerged paths:$', re.MULTILINE)
 
-
 def execute(*command):
-    out, err = Popen(stdout=PIPE, stderr=PIPE, *command).communicate()
+    out, err = Popen(stdout=PIPE,env=get_env_en(), stderr=PIPE, *command).communicate()
     if not err:
         nb = len(out.splitlines())
     else:
@@ -65,7 +70,7 @@ if bline.find('Not currently on any branch') != -1:
         'git',
         'rev-parse',
         '--short',
-        'HEAD'], stdout=PIPE).communicate()[0][:-1]
+        'HEAD'], stdout=PIPE, env=get_env_en()).communicate()[0][:-1]
 else:
     branch = bline.split(' ')[-1]
     bstatusline = lines[1]
