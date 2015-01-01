@@ -256,30 +256,46 @@ _git-bug() {
 
 
 zstyle ':completion:*:*:git:*' user-commands \
+    alias:'define, search and show aliases' \
+    archive-file:'creates an zip archive of the current git repository' \
+    back:'remove the latest commit (soft)' \
+    bug:'create a bug branch' \
     changelog:'populate changelog file with commits since the previous tag' \
+    commits-since:'list commits since a given date' \
     contrib:'display author contributions' \
     count:'count commits' \
+    create-branch:'create local and remote branch' \
     delete-branch:'delete local and remote branch' \
+    delete-merged-branches:'Deletes branches that are listed in "git branch --merged"' \
     delete-submodule:'delete submodule' \
     delete-tag:'delete local and remote tag' \
-    extras:'git-extras' \
-    graft:'merge commits from source branch to destination branch' \
-    squash:'merge commits from source branch into the current one as a single commit' \
-    feature:'create a feature branch' \
-    refactor:'create a refactor branch' \
-    bug:'create a bug branch' \
-    summary:'repository summary' \
     effort:'display effort statistics' \
-    repl:'read-eval-print-loop' \
-    commits-since:'list commits since a given date' \
-    release:'release commit with the given tag' \
-    alias:'define, search and show aliases' \
+    extras:'git-extras' \
+    feature:'create a feature branch' \
+    fork:'fork the given github <repo>' \
+    fresh-branch:'create empty local branch' \
+    gh-pages:'sets up the gh-pages branch' \
+    graft:'merge commits from source branch to destination branch' \
     ignore:'add patterns to .gitignore' \
     info:'show info about the repository' \
-    create-branch:'create local and remote branch' \
-    fresh-branch:'create empty local branch' \
-    undo:'remove the latest commit' \
-    setup:'setup a git repository' \
-    touch:'one step creation of new files' \
-    obliterate:'Completely remove a file from the repository, including past commits and tags' \
     local-commits:'list unpushed commits on the local branch' \
+    lock:'lock a local file filename' \
+    locked:'list local locked files' \
+    missing:'print out which commits are on one branch or the other but not both' \
+    obliterate:'Completely remove a file from the repository, including past commits and tags' \
+    pr:'checks out a pull request from GitHub' \
+    pull-request:'publish a pull request' \
+    rebase-patch:'given a patch that does not apply to the current HEAD, find the latest commit it applies to and do a rebase' \
+    refactor:'create a refactor branch' \
+    release:'release commit with the given tag' \
+    rename-tag:'rename a tag' \
+    repl:'read-eval-print-loop' \
+    reset-file:'reset one file to HEAD or certain commit' \
+    root:'show the path to root directory of git repo' \
+    setup:'setup a git repository' \
+    show-tree:'show git logs on tree format' \
+    squash:'merge commits from source branch into the current one as a single commit' \
+    summary:'repository summary' \
+    touch:'one step creation of new files' \
+    undo:'remove the latest commit' \
+    unlock:'unlock a local file filename' \
