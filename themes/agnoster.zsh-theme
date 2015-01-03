@@ -123,10 +123,10 @@ prompt_hg() {
       st=""
       rev=$(hg id -n 2>/dev/null | sed 's/[^-0-9]//g')
       branch=$(hg id -b 2>/dev/null)
-      if `hg st | grep -Eq "^\?"`; then
+      if `hg st | grep -q "^\?"`; then
         prompt_segment red black
         st='±'
-      elif `hg st | grep -Eq "^(M|A)"`; then
+      elif `hg st | grep -q "^(M|A)"`; then
         prompt_segment yellow black
         st='±'
       else
