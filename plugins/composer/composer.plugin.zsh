@@ -20,18 +20,15 @@ _composer () {
   _arguments \
     '1: :->command'\
     '*: :->args'
-  if [ -f composer.json ]; then
-    case $state in
-      command)
-        compadd `_composer_get_command_list`
-        ;;
-      *)
-        compadd `_composer_get_required_list`
-        ;;
-    esac
-  else
-    compadd create-project init search selfupdate show
-  fi
+
+  case $state in
+    command)
+      compadd $(_composer_get_command_list)
+      ;;
+    *)
+      compadd $(_composer_get_required_list)
+      ;;
+  esac
 }
 
 compdef _composer composer
