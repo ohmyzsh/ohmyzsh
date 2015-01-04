@@ -10,7 +10,7 @@ function web_search() {
     bing        "https://www.bing.com/search?q="
     yahoo       "https://search.yahoo.com/search?p="
     duckduckgo  "https://www.duckduckgo.com/?q="
-    yandex      "http://yandex.ru/yandsearch?text="
+    yandex      "https://yandex.ru/yandsearch?text="
   )
 
   # define the open command
