@@ -1,0 +1,68 @@
+#compdef inv invoke
+
+typeset -A opt_args
+local context state line
+
+function _invoke_subcommands {
+    LISTINGS=( $(invoke -l | tail -n+2 | sed 's/^ *//g' | while read line ; do _remove_docstrings "$line"; done;) )
+    for subcommand_listing in $LISTINGS
+    do
+	local comma_separated="$(echo $subcommand_listing | tr -d ')\n' | tr '(' ',')"
+	local names="$(_echo_split $comma_separated ',')"
+	echo $names | tr '\n' ' '
+    done
+}
+
+function _remove_docstrings {
+    local delimiter_character=' '
+    if echo $1 | grep ')' > /dev/null
+    then
+	delimiter_character=')'
+    fi
+    echo $1 | cut -d "$delimiter_character" -f 1
+}
+
+function _echo_split {
+   local IFS    
+    IFS="$2" read -rA -- arr <<EOF
+$1
+EOF
+    echo "${arr[@]}"
+}
+
+function _complete_invoke_subcommand {
+    local cache_policy cache_name _invoke_subcommands
+    cache_name=invoke/subcommands"$(pwd)"
+    zstyle -s ":completion:${curcontext}:" cache-policy cache_policy
+
+    if [[ -z "$cache_policy" ]]; then
+        zstyle ":completion:${curcontext}:" cache-policy _invoke_subcommands_caching_policy
+    fi
+
+    if _cache_invalid "$cache_name" || ! _retrieve_cache "$cache_name"; then
+        _invoke_subcommands=( $(_invoke_subcommands) )
+        _store_cache "$cache_name" _invoke_subcommands
+    fi
+
+    local expl
+    _wanted invoke_subcommands expl 'invoke subcommands' compadd -a _invoke_subcommands
+}
+
+function _invoke_subcommands_caching_policy {
+    local -a oldp
+    oldp=( "$1"(Nmm+1) ) # 1 minute
+    (( $#oldp ))
+}
+
+_arguments -s -S \
+  "--no-dedupe[Disable task deduplication.]" \
+  "(-c --collection)"{-c,--collection}"[Specify collection name to load. May be given >1 time.]" \
+  "(-e --echo)"{-e,--echo}"[Echo executed commands before running.]" \
+  "(-h --help)"{-h,--help}"[Show core or per-task help and exit.]:command:_invoke_subcommand" \
+  "(-H --hide)"{-H,--hide}"[Set default value of run()'s 'hide' kwarg.]:command:_invoke_subcommand" \
+  "(-l --list)"{-l,--list}"[List available tasks.]" \
+  "(-p --pty)"{-p,--pty}"[Use a pty when executing shell commands.]" \
+  "(-r --root)"{-r,--root}"[Change root directory used for finding task modules.]:directory:_directories" \
+  "(-V --version)"{-V,--version}"[Show version and exit.]:" \
+  "(-w --warn-only)"{-w,--warn-only}"[Warn, instead of failing, when shell commands fail.]" \
+  "*:invoke command:_complete_invoke_subcommand"
