@@ -13,6 +13,14 @@ add-zsh-hook precmd prompt_vcs
 add-zsh-hook precmd prompt_virtualenv
 add-zsh-hook precmd prompt_projectname 
 
+presentation () {
+    toilet -f future -F metal "$HOST $(date +%H:%m:%S)" 2> /dev/null && {
+        w 
+    } || {
+        echo "This theme requires toilet command, please install" 
+    }
+}
+
 detect_pdir () {
     pdir=$(git rev-parse --show-toplevel 2> /dev/null )
 }
@@ -83,5 +91,7 @@ local ret_status="%(?:%{$fg_bold[green]%}⏺:%{$fg_bold[red]%}⏺)"
 
 PROMPT='${ret_status}%{$fg[blue]%}${PROMPT_HOST}${pname}%{$fg_bold[green]%}%p %{$fg_bold[yellow]%}%2~ ▶%{$reset_color%} '
 RPROMPT='%F{blue}$(pwd)%(?: :%{$fg_bold[red]%} %? )%F{yellow}[%*]%f'
+
+presentation
 
 #  vim: set ft=zsh ts=4 sw=4 et:
