@@ -22,5 +22,8 @@ _setup_grep_alias() {
 
     # Clean up.
     unfunction grep-flag-available
+
+    # Run it on first invocation.
+    command grep $GREP_OPTIONS "$@"
 }
 alias grep=_setup_grep_alias
