@@ -15,14 +15,23 @@ _setup_grep_alias() {
     elif grep-flag-available --exclude=.cvs; then
         GREP_OPTIONS+=(--exclude=$VCS_FOLDERS)
     fi
-
-    # Re-define alias.
-    alias grep="grep $GREP_OPTIONS"
-
     # Clean up.
     unfunction grep-flag-available
 
+    # Remove alias and setup function.
+    unalias grep
+    setopt localoptions norcexpandparam
+    eval "grep() {
+        local options
+        options=(${(@)GREP_OPTIONS})
+        # Add '-r' if grepping a dir.
+        if [[ -d \$@[\$#] ]]; then
+            options+=(-r)
+        fi
+        command grep \$options \"\$@\"
+    }"
+
     # Run it on first invocation.
-    command grep $GREP_OPTIONS "$@"
+    grep $GREP_OPTIONS "$@"
 }
 alias grep=_setup_grep_alias
