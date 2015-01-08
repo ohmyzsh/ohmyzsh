@@ -5,7 +5,7 @@
 # Flag indicating if we've previously jumped to last directory.
 typeset -g ZSH_LAST_WORKING_DIRECTORY
 mkdir -p $ZSH_CACHE_DIR
-local cache_file="$ZSH_CACHE_DIR/last-working-dir"
+cache_file="$ZSH_CACHE_DIR/last-working-dir"
 
 # Updates the last directory once directory is changed.
 function chpwd() {
