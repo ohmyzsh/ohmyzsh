@@ -5,20 +5,20 @@ compdef _repo r=repo
 alias rra='repo rebase --auto-stash'
 compdef _repo rra='repo rebase --auto-stash'
 
-alias rs='repo sync'
+alias rs='repo sync -j5'
 compdef _repo rs='repo sync'
 
 alias rs.='repo sync .'
 compdef _repo rs.='repo sync'
 
 alias rra.='repo rebase --auto-stash .'
-compdef _repo rra.='repo rebase --auto-stash'
+compdef _repo rra.='repo rebase'
 
-alias rsrra='repo sync ; repo rebase --auto-stash'
-compdef _repo rsrra='repo sync ; repo rebase --auto-stash'
+alias rsrra='repo sync -j5 ; repo rebase --auto-stash'
+compdef _repo rsrra='repo rebase'
 
-alias rsrra.='repo sync .; repo rebase --auto-stash .'
-compdef _repo rsrra.='repo sync .; repo rebase --auto-stash .'
+alias rsrra.='repo sync . ; repo rebase --auto-stash .'
+compdef _repo rsrra.='repo rebase'
 
 alias ru='repo upload'
 compdef _repo ru='repo upload'
@@ -63,6 +63,6 @@ function rsbrsrra()
     fi
     echo "Starting branch $1 and syncing up all project (repo rebase)"
     repo start $1 --all || return 1
-    repo sync || return 1
+    repo sync -j5 || return 1
     repo rebase --auto-stash || return 1
 }
