@@ -74,11 +74,22 @@ function bb_repo_upload()
     local REVIEWERS
     local A
 
+    GROUP_NAME="reviewers-buildbot"
+
     declare -a REVIEWERS
-    REVIEWERS=$(txw --quiet gerrit-getGroupMembers reviewers-buildbot 2> /dev/null | tr " " ",")
-    echo "Reviewers: $REVIEWERS"
-    echo "Cmd: repo upload --cbr --re=$REVIEWERS ."
-    yes | repo upload --cbr --re=$REVIEWERS .
+    REVIEWERS=$(txw --quiet gerrit-getGroupMembers $GROUP_NAME 2> /dev/null | tr " " ",")
+    if [[ -z $REVIEWERS ]]; then
+        echo "Error when executing 'txw gerrit-getGroupMembers $GROUP_NAME'."
+        echo "Uploading without setting reviewers !"
+        yes | repo upload --cbr .
+    else
+        echo "Uploading with the following reviewers: $REVIEWERS"
+        # echo "Cmd: repo upload --cbr --re=$REVIEWERS ."
+        yes | repo upload --cbr --re=$REVIEWERS .
+        if [[ $? == 2 ]]; then
+            echo "Repo upload failed. Nothing to upload?"
+        fi
+    fi
 }
 
 function bb_merge_bottom_branch_to_here()
@@ -109,6 +120,7 @@ function bb_push_with_care()
 {
     local branch
     local project
+    local cmd
 
     branch=$(git branch -a | grep "remotes/m/" | cut -d'/' -f5 | cut -d' ' -f1)
     project=$(git remote -v | grep umg | tail -n 1 | cut -d'/' -f6 | cut -d' ' -f1)
@@ -119,14 +131,15 @@ function bb_push_with_care()
     fi
     echo "Pushing branch '$branch' on project '$project'"
     echo "Press Enter to continue"
-    echo "Command: git push ssh://android.intel.com/a/buildbot/$project HEAD:refs/heads/platform/buildbot/$branch"
+    cmd='git push ssh://android.intel.com/a/buildbot/$project HEAD:refs/heads/platform/buildbot/$branch'
+    echo "Command: $cmd"
     read
-    git push ssh://android.intel.com/a/buildbot/$project HEAD:refs/heads/platform/buildbot/$branch
+    eval $cmd
 
     echo "Refreshing repo"
     echo "Waitin 30s..."
     sleep "30"
-    repo sync .
+    repo sync -j5 .
 
     echo "Display merged tree:"
     git log --pretty=oneline --graph -3 | cat
