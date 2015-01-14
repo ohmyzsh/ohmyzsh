@@ -3,6 +3,7 @@ source ~/.bash_profile
 export ZSH=$HOME/.oh-my-zsh
 
 # show sys. info
+# brew install archey
 archey -c
 
 # Set name of the theme to load.
