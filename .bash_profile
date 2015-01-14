@@ -24,7 +24,7 @@ export LESSCHARSET=utf-8
 alias vim="/Applications/MacVim.app/Contents/MacOS/vim"
 alias l="ls -l"
 alias ll="ls -al"
-alias ls="ls -l"
+alias ls="ls -lart"
 alias c="clear"
 alias cl="clear"
 
