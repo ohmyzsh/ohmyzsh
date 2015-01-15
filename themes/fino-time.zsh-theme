@@ -21,7 +21,7 @@ function prompt_char {
 }
 
 function box_name {
-    [ -f ~/.box-name ] && cat ~/.box-name || echo $SHORT_HOST || echo $HOST
+    [ -f ~/.box-name ] && cat ~/.box-name || echo ${SHORT_HOST:-HOST}
 }
 
 
