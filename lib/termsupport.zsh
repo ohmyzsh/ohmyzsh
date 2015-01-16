@@ -1,7 +1,6 @@
 #usage: title short_tab_title looooooooooooooooooooooggggggg_windows_title
 #http://www.faqs.org/docs/Linux-mini/Xterm-Title.html#ss3.1
 #Fully support screen, iterm, and probably most modern xterm and rxvt
-#Limited support for Apple Terminal (Terminal can't set window or tab separately)
 function title {
   if [[ "$DISABLE_AUTO_TITLE" == "true" ]] || [[ "$EMACS" == *term* ]]; then
     return
