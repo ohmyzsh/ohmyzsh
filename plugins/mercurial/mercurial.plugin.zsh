@@ -10,7 +10,7 @@ alias hgd='hg diff'
 alias hged='hg diffmerge'
 alias hgp='hg push'
 alias hgs='hg status'
-alias hgsl='hg log --limit 20 --template "{node|short} | {date|isodatesec} | {author|user}: {desc|strip|firstline}\n"'
+alias hgsl='hg log --limit 20 --template "{node|short} | {date|isodatesec} | {author|person}: {desc|strip|firstline}\n" '
 alias hgun='hg resolve --list'
 # pull and update
 alias hgi='hg incoming'
