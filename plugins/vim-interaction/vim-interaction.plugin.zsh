@@ -9,7 +9,7 @@ function resolveFile
   if [ -f "$1" ]; then
     echo $(readlink -f "$1")
   elif [[ "${1#/}" == "$1" ]]; then
-    echo "$(pwd)/$1"
+    echo "$PWD/$1"
   else
     echo $1
   fi

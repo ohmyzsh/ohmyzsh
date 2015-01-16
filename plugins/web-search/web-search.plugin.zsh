@@ -3,7 +3,7 @@
 function web_search() {
   # get the open command
   local open_cmd
-  if [[ $(uname -s) == 'Darwin' ]]; then
+  if [[ "$OSTYPE" = darwin* ]]; then
     open_cmd='open'
   else
     open_cmd='xdg-open'
@@ -37,8 +37,7 @@ function web_search() {
   done
 
   url="${url%?}" # remove the last '+'
-  nohup $open_cmd "$url" 
- 	rm nohup.out	
+  nohup $open_cmd "$url" >/dev/null 2&>1
 }
 
 
