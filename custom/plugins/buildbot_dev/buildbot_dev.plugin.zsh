@@ -40,18 +40,6 @@ function bb_env()
     else
       BASE=$BBDIR
     fi
-    # export __PATHBKP=$PATH
-    # export PYTHONPATH=$BASE/buildbot/master:$BASE/txwebservices/install:$BASE/cactus/install:$BASE/config/tools
-    # export PATH=$HOME/bin:$BASE/buildbot/master/bin:$BASE/txwebservices/install:$PATH
-    # export format_warnings_path=$BASE/config
-    # export warning_path=$BASE/config/latests_warnings
-    # export __PS1BKP=$PS1
-
-    # fg_blue=%{$'\e[0;34m'%}
-    # fg_cyan=%{$'\e[0;36m'%}
-    # fg_lgreen=%{$'\e[1;32m'%}
-    # export PS1=${fg_lgreen}BBENV${fg_cyan}:$PS1
-
     cd $BASE/config
     . ../tosource
 }
@@ -113,6 +101,9 @@ function bb_merge_bottom_branch_to_here()
     cmd="git merge umg/platform/buildbot/$bottom_branch --m \"Manual merge of branch 'platform/buildbot/$bottom_branch' into 'platform/buildbot/$branch'\""
     eval $cmd
     git mergetool --no-prompt
+    if [[ $? == 0 ]]; then
+        git gui
+    fi
 }
 
 
@@ -142,29 +133,5 @@ function bb_push_with_care()
     repo sync -j5 .
 
     echo "Display merged tree:"
-    git log --pretty=oneline --graph -3 | cat
-}
-
-function bb_start_slaves()
-{
-    local DIR
-    DIR=$(basename $PWD)
-    if [[ $DIR == "config" ]]; then
-      ~/bin/buildslave start ~/data/buildbot-developer
-      ~/bin/buildslave start ~/data/buildbot-developer2
-    else
-      ~/bin/buildslave start ~/data/buildbot/
-    fi
-}
-
-function bb_stop_slaves()
-{
-    local DIR
-    DIR=$(basename $PWD)
-    if [[ $DIR == "config" ]]; then
-        ~/bin/buildslave stop ~/data/buildbot-developer
-        ~/bin/buildslave stop ~/data/buildbot-developer2
-    else
-        ~/bin/buildslave stop ~/data/buildbot/
-    fi
+    git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all -3 | cat
 }
