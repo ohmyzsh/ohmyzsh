@@ -10,6 +10,7 @@ _wd() {
         s|/home/developer/repos/bitbucket.org|__BITBUCKET|g; \
         s|/media/ahmed/OS|__WINDOZ|g;\
         s|^$HOME/Dropbox|__DROPBOX|g;\
+        s|/var/www|__WWW|g;\
         s|^$HOME|__HOME|g;\
         s|/([^/])[^/]*(?=/)|/\$1|g") | \
     sed \
@@ -17,6 +18,7 @@ _wd() {
         -e "s/__BITBUCKET/ /g" \
         -e "s/__WINDOZ/ /g" \
         -e "s/__DROPBOX/ /g" \
+        -e "s/__WWW/ /g" \
         -e "s/__HOME/ /g" \
         -e "0,/^\//s// \//g" \
         -e "s/\///g"
