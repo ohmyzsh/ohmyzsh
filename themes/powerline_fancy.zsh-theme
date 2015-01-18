@@ -5,8 +5,21 @@ _wd() {
    BEGIN {
       binmode STDIN,  ':encoding(UTF-8)';
       binmode STDOUT, ':encoding(UTF-8)';
-   }; s|^$HOME|~|g; s|/([^/])[^/]*(?=/)|/\$1|g") | \
-    sed -e "0,/^\//s// \//g" -e "s/\///g"
+   }; \
+        s|/home/developer/repos/github.com|__GITHUB|g; \
+        s|/home/developer/repos/bitbucket.org|__BITBUCKET|g; \
+        s|/media/ahmed/OS|__WINDOZ|g;\
+        s|^$HOME/Dropbox|__DROPBOX|g;\
+        s|^$HOME|__HOME|g;\
+        s|/([^/])[^/]*(?=/)|/\$1|g") | \
+    sed \
+        -e "s/__GITHUB/ /g" \
+        -e "s/__BITBUCKET/ /g" \
+        -e "s/__WINDOZ/ /g" \
+        -e "s/__DROPBOX/ /g" \
+        -e "s/__HOME/ /g" \
+        -e "0,/^\//s// \//g" \
+        -e "s/\///g"
 }
 
 if [ "$POWERLINE_DATE_FORMAT" = "" ]; then
