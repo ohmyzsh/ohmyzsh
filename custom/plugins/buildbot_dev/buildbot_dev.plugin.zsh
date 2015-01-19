@@ -17,8 +17,17 @@ alias cjs='cactus jump slavescripts'
 alias cjy='cactus jump yamls'
 alias cjb='cactus jump buildbot'
 alias cjx='cactus jump xutils'
-alias crcsr='cactus restart && cactus slaves restart'
-alias crcsrci='cactus restart && cactus slaves restart && cactus info'
+alias css='cactus slaves stop'
+alias csr='cactus slaves restart'
+alias cs='cactus stop'
+alias cr='cactus restart'
+alias ck='cactus kill'
+alias crcsr='cactus restart; cactus slaves restart'
+alias crcsrci='cactus restart; cactus slaves restart; cactus info'
+alias cscss='cactus stop; cactus slaves stop'
+alias cscssci='cactus stop; cactus slaves stop; cactus info'
+alias ckcss='cactus kill; cactus slaves restart'
+alias ckcssci='cactus kill; cactus slaves restart; cactus info'
 
 alias m='make'
 alias s='subl'
@@ -97,8 +106,9 @@ function bb_merge_bottom_branch_to_here()
             echo "Error: unable to findout current branch!"
             return 1
     esac
-    echo "Merging branch $bottom_branch to $branch..."
     cmd="git merge umg/platform/buildbot/$bottom_branch --m \"Manual merge of branch 'platform/buildbot/$bottom_branch' into 'platform/buildbot/$branch'\""
+    echo "Merging branch $bottom_branch to $branch..."
+    echo "Command: $cmd"
     eval $cmd
     git mergetool --no-prompt
     if [[ $? == 0 ]]; then
@@ -120,18 +130,18 @@ function bb_push_with_care()
       echo "Unable to findout branches or project name :("
       return
     fi
-    echo "Pushing branch '$branch' on project '$project'"
-    echo "Press Enter to continue"
     cmd='git push ssh://android.intel.com/a/buildbot/$project HEAD:refs/heads/platform/buildbot/$branch'
+    echo "Pushing branch '$branch' on project '$project'"
     echo "Command: $cmd"
+    echo "Press Enter to continue"
     read
     eval $cmd
 
-    echo "Refreshing repo"
-    echo "Waitin 30s..."
+    echo "Refreshing repo (repo sync)"
+    echo "Waiting 30s..."
     sleep "30"
     repo sync -j5 .
 
     echo "Display merged tree:"
-    git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all -3 | cat
+    git log --color=always --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all -5 | cat
 }
