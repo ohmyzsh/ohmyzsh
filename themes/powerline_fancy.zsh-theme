@@ -156,3 +156,5 @@ if [ "$POWERLINE_DISABLE_RPROMPT" = "" ]; then
         RPROMPT="$POWERLINE_GIT_INFO_RIGHT%F{white}"$''"%k%F%K $POWERLINE_RIGHT_B %f%F{red}"$''"%f%k%K%F $POWERLINE_RIGHT_A %f%k"
     fi
 fi
+
+RPROMPT=""
