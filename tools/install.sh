@@ -10,7 +10,7 @@ if [ -d "$ZSH" ]; then
 fi
 
 echo "\033[0;34mCloning Oh My Zsh...\033[0m"
-hash git >/dev/null 2>&1 && env git clone https://github.com/robbyrussell/oh-my-zsh.git $ZSH || {
+hash git >/dev/null 2>&1 && env git clone https://github.com/robbyrussell/oh-my-zsh.git "$ZSH" || {
   echo "git not installed"
   exit
 }
@@ -34,7 +34,7 @@ export PATH=\"$PATH\"
 
 if [ "$SHELL" != "$(which zsh)" ]; then
     echo "\033[0;34mTime to change your default shell to zsh!\033[0m"
-    chsh -s `which zsh`
+    chsh -s "$(which zsh)"
 fi
 
 echo "\033[0;32m"'         __                                     __   '"\033[0m"
