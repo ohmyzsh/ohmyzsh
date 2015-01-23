@@ -157,4 +157,5 @@ if [ "$POWERLINE_DISABLE_RPROMPT" = "" ]; then
     fi
 fi
 
-RPROMPT="(%F{green}$(git_prompt_short_sha)%f)"
+POWERLINE_GIT_INFO_RIGHT='$(git_prompt_short_sha)'
+RPROMPT="%F{green}$POWERLINE_GIT_INFO_RIGHT"
