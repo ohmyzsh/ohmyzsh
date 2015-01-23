@@ -41,8 +41,8 @@ elif [ "$POWERLINE_RIGHT_A" = "exit-status" ]; then
 elif [ "$POWERLINE_RIGHT_A" = "date" ]; then
   POWERLINE_RIGHT_A="$POWERLINE_DATE_FORMAT"
 fi
-POWERLINE_RIGHT_A=""
-POWERLINE_RIGHT_B=""
+POWERLINE_RIGHT_A="A"
+POWERLINE_RIGHT_B="B"
 
 if [ "$POWERLINE_HIDE_USER_NAME" = "" ] && [ "$POWERLINE_HIDE_HOST_NAME" = "" ]; then
     POWERLINE_USER_NAME=""
@@ -121,7 +121,7 @@ ZSH_THEME_GIT_PROMPT_DIVERGED=" ⬍"
         POWERLINE_GIT_INFO_RIGHT=""
     else
         POWERLINE_GIT_INFO_LEFT=""
-        POWERLINE_GIT_INFO_RIGHT="" #"%F{white}"$'\ue0b2'"%F{black}%K{white}"$'$(git_prompt_info)'" %K{white}"
+        POWERLINE_GIT_INFO_RIGHT="%F{white}"$'\ue0b2'"%F{black}%K{white}"$'$(git_prompt_info)'" %K{white}"
     fi
 # fi
 
@@ -140,7 +140,7 @@ if [ "$POWERLINE_DETECT_SSH" != "" ]; then
     POWERLINE_SEC1_TXT=%F{white}
   fi
 fi
-PROMPT="$POWERLINE_SEC1_BG$POWERLINE_SEC1_TXT $POWERLINE_USER_NAME %k%f$POWERLINE_SEC1_FG%K{blue}"$''"%k%f%F{white}%K{blue} "$POWERLINE_CURRENT_PATH"%F{blue}"$POWERLINE_GIT_INFO_LEFT" %k"$''"%f "
+PROMPT="$POWERLINE_SEC1_BG$POWERLINE_SEC1_TXT$POWERLINE_USER_NAME %k%f$POWERLINE_SEC1_FG%K{blue}"$''"%k%f%F{white}%K{blue} "$POWERLINE_CURRENT_PATH"%F{blue}"$POWERLINE_GIT_INFO_LEFT" %k"$''"%f "
 
 if [ "$POWERLINE_NO_BLANK_LINE" = "" ]; then
     PROMPT="
@@ -153,8 +153,8 @@ if [ "$POWERLINE_DISABLE_RPROMPT" = "" ]; then
     elif [ "$POWERLINE_RIGHT_B" = "" ]; then
         RPROMPT="$POWERLINE_GIT_INFO_RIGHT%F{yellow}"$''"%k%F%K $POWERLINE_RIGHT_A %f%k"
     else
-        RPROMPT="$POWERLINE_GIT_INFO_RIGHT%F{white}"$''"%k%F%K $POWERLINE_RIGHT_B %f%F{red}"$''"%f%k%K%F $POWERLINE_RIGHT_A %f%k"
+        RPROMPT="$POWERLINE_GIT_INFO_RIGHT%F{red}"$''"%k%F%K $POWERLINE_RIGHT_B %f%F{red}"$''"%f%k%K%F $POWERLINE_RIGHT_A %f%k"
     fi
 fi
 
-RPROMPT=""
+RPROMPT="(%F{green}$(git_prompt_short_sha)%f)"
