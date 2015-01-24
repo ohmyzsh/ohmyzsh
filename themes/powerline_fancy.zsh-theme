@@ -159,3 +159,27 @@ fi
 
 POWERLINE_GIT_INFO_RIGHT='$(git_prompt_short_sha)'
 RPROMPT="%F{green}$POWERLINE_GIT_INFO_RIGHT"
+
+update_prompt(){
+    PROMPT="$POWERLINE_SEC1_BG$POWERLINE_SEC1_TXT$POWERLINE_USER_NAME %k%f$POWERLINE_SEC1_FG%K{blue}"$''"%k%f%F{white}%K{blue} "$POWERLINE_CURRENT_PATH"%F{blue}"$POWERLINE_GIT_INFO_LEFT" %k"$''"%f "
+
+}
+collapse_git () {
+	POWERLINE_GIT_INFO_LEFT=" %F{blue}%K{white}"$''"%F{white}%F{black}%K{white}"$'%F{white}'
+    update_prompt
+}
+
+collapse_wd () {
+	POWERLINE_CURRENT_PATH='%1d'
+    update_prompt
+}
+
+uncollapse_git () {
+	POWERLINE_GIT_INFO_LEFT=" %F{blue}%K{white}"$''"%F{white}%F{black}%K{white}"$'$(git_prompt_info)$(git_prompt_status)%F{white}'
+    update_prompt
+}
+
+uncollapse_wd () {
+	POWERLINE_CURRENT_PATH='$(_wd)'
+    update_prompt
+}
