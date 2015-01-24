@@ -183,3 +183,14 @@ uncollapse_wd () {
 	POWERLINE_CURRENT_PATH='$(_wd)'
     update_prompt
 }
+uncollapse_all(){
+    uncollapse_git
+    uncollapse_wd
+    update_prompt
+}
+
+collapse_all(){
+    collapse_git
+    collapse_wd
+    update_prompt
+}
