@@ -23,39 +23,39 @@ if [[ -e $( which -p sudo 2>&1 ) ]]; then
 fi
 
 # Some self-explanatory aliases
-alias apt-search="apt-cache search"
+alias aptsearch="apt-cache search"
 alias aps='aptitude search'
 alias as="aptitude -F \"* %p -> %d \n(%v/%V)\" \
 		--no-gui --disable-columns search"	# search package
 
 # apt-file
-alias apt-file-search='apt-file search --regexp'
+alias aptfile-search='apt-file search --regexp'
 
 
 # These are apt-get only
-alias apt-source='apt-get source'
-alias apt-cache-policy='apt-cache policy'
+alias aptsource='apt-get source'
+alias aptcache-policy='apt-cache policy'
 
 # superuser operations ######################################################
 if [[ $use_sudo -eq 1 ]]; then
 # commands using sudo #######
-    alias apt-autoclean='sudo $apt_pref autoclean'
-    alias apt-build-dep='sudo $apt_pref build-dep'
-    alias apt-clean='sudo $apt_pref clean'
-    alias apt-update='sudo $apt_pref update'
-    alias apt-upgrade='sudo $apt_pref update && sudo $apt_pref upgrade'
-    alias apt-dist-upgrade='sudo $apt_pref update && sudo $apt_pref dist-upgrade'
-    alias apt-file-upgrade='sudo apt-file update'
-    alias apt-upgrade-only='sudo $apt_pref upgrade'
-    alias apt-install='sudo $apt_pref install'
+    alias aptautoclean='sudo $apt_pref autoclean'
+    alias aptbuild-dep='sudo $apt_pref build-dep'
+    alias aptclean='sudo $apt_pref clean'
+    alias aptupdate='sudo $apt_pref update'
+    alias aptupgrade='sudo $apt_pref update && sudo $apt_pref upgrade'
+    alias aptdist-upgrade='sudo $apt_pref update && sudo $apt_pref dist-upgrade'
+    alias aptfile-upgrade='sudo apt-file update'
+    alias aptupgrade-only='sudo $apt_pref upgrade'
+    alias aptinstall='sudo $apt_pref install'
     # Install all packages given on the command line while using only the first word of each line:
     # apt-search ... | ail
-    alias apt-install-list="sed -e 's/  */ /g' -e 's/ *//' | cut -s -d ' ' -f 1 | "' xargs sudo $apt_pref install'
-    alias apt-purge='sudo $apt_pref purge'
-    alias apt-remove='sudo $apt_pref remove'
+    alias aptinstall-list="sed -e 's/  */ /g' -e 's/ *//' | cut -s -d ' ' -f 1 | "' xargs sudo $apt_pref install'
+    alias aptpurge='sudo $apt_pref purge'
+    alias aptremove='sudo $apt_pref remove'
 
     # apt-get only
-    alias apt-deselect-upgrade='sudo apt-get dselect-upgrade'
+    alias aptdeselect-upgrade='sudo apt-get dselect-upgrade'
 
     # Install all .deb files in the current directory.
     # Warning: you will need to put the glob in single quotes if you use:
@@ -70,29 +70,29 @@ if [[ $use_sudo -eq 1 ]]; then
 
 # commands using su #########
 else
-    alias apt-autoclean='su -ls \'$apt_pref autoclean\' root'
-    apt-build-dep() {
+    alias aptautoclean='su -ls \'$apt_pref autoclean\' root'
+    aptbuild-dep() {
         cmd="su -lc '$apt_pref build-dep $@' root"
         print "$cmd"
         eval "$cmd"
     }
-    alias apt-clean='su -ls \'$apt_pref clean\' root'
-    alias apt-update='su -lc \'$apt_pref update\' root'
-    alias apt-upgrade='su -lc \'$apt_pref update && aptitude safe-upgrade\' root'
-    alias apt-dist-upgrade='su -lc \'$apt_pref update && aptitude dist-upgrade\' root'
-    alias apt-file-upgrade='su -lc "apt-file update"'
-    alias apt-upgrade-only='su -lc \'$apt_pref safe-upgrade\' root'
-    apt-install() {
+    alias aptclean='su -ls \'$apt_pref clean\' root'
+    alias aptupdate='su -lc \'$apt_pref update\' root'
+    alias aptupgrade='su -lc \'$apt_pref update && aptitude safe-upgrade\' root'
+    alias aptdist-upgrade='su -lc \'$apt_pref update && aptitude dist-upgrade\' root'
+    alias aptfile-upgrade='su -lc "apt-file update"'
+    alias aptupgrade-only='su -lc \'$apt_pref safe-upgrade\' root'
+    aptinstall() {
         cmd="su -lc 'aptitude -P install $@' root"
         print "$cmd"
         eval "$cmd"
     }
-    apt-purge() {
+    aptpurge() {
         cmd="su -lc '$apt_pref -P purge $@' root"
         print "$cmd"
         eval "$cmd"
     }
-    apt-remove() {
+    aptremove() {
         cmd="su -lc '$apt_pref -P remove $@' root"
         print "$cmd"
         eval "$cmd"
@@ -129,17 +129,17 @@ apt_pref_compdef() {
     compdef "$f" "$1"
 }
 
-apt_pref_compdef apt-autoclean "autoclean"
-apt_pref_compdef apt-build-dep "build-dep"
-apt_pref_compdef apt-clean  "clean"
-apt_pref_compdef apt-update  "update"
-apt_pref_compdef apt-file-upgrade "update"
-apt_pref_compdef apt-upgrade-only  "upgrade"
-apt_pref_compdef apt-install  "install"
-apt_pref_compdef apt-install-list "install"
-apt_pref_compdef apt-purge  "purge"
-apt_pref_compdef apt-remove  "remove"
-apt_pref_compdef apt-deselect-upgrade "dselect-upgrade"
+apt_pref_compdef aptautoclean "autoclean"
+apt_pref_compdef aptbuild-dep "build-dep"
+apt_pref_compdef aptclean  "clean"
+apt_pref_compdef aptupdate  "update"
+apt_pref_compdef aptfile-upgrade "update"
+apt_pref_compdef aptupgrade-only  "upgrade"
+apt_pref_compdef aptinstall  "install"
+apt_pref_compdef aptinstall-list "install"
+apt_pref_compdef aptpurge  "purge"
+apt_pref_compdef aptremove  "remove"
+apt_pref_compdef aptdeselect-upgrade "dselect-upgrade"
 
 
 # Prints apt history
@@ -180,7 +180,7 @@ apt-history () {
 
 
 # List packages by size
-function apt-list-packages-by-size {
+function aptlist-packages-by-size {
     dpkg-query -W --showformat='${Installed-Size} ${Package} ${Status}\n' | \
     grep -v deinstall | \
     sort -n | \
