@@ -104,6 +104,27 @@ _zsh_highlight_main_highlighter()
     [[ $start_pos -eq 0 && $arg = 'noglob' ]] && highlight_glob=false
     ((start_pos+=${#buf[$start_pos+1,-1]}-${#${buf[$start_pos+1,-1]##([[:space:]]|\\[[:space:]])#}}))
     ((end_pos=$start_pos+${#arg}))
+
+    # Deal with faked colons.
+    #
+    # We can't use the (Z+n+) flag because that elides the end-of-command
+    # token altogether, so 'echo foo\necho bar' (two commands) becomes
+    # indistinguishable from 'echo foo echo bar' (one command with three
+    # words for arguments).
+    if [[ $arg == ';' ]] ; then
+      if [[ $buf[start_pos+1] == ';' ]] ; then
+        # Literally-input colon. That's the normal case.
+      elif [[ $buf[start_pos] == $'\n' ]] ; then
+        # Newline token rendered as a colon.  Empirically we're off-by-one.
+        (( start_pos -= 1 ))
+        (( end_pos -= 1 ))
+      else
+        # Currently, there aren't any other sources of ";" (SEPER) tokens
+        # besides literally-input semicolons and (Z+n+)-converted newlines,
+        # If that ever changes, handle them here.
+      fi
+    fi
+
     # Parse the sudo command line
     if $sudo; then
       case "$arg" in
