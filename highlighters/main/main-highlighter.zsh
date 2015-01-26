@@ -102,7 +102,7 @@ _zsh_highlight_main_highlighter()
     local substr_color=0
     local style_override=""
     [[ $start_pos -eq 0 && $arg = 'noglob' ]] && highlight_glob=false
-    ((start_pos+=${#buf[$start_pos+1,-1]}-${#${buf[$start_pos+1,-1]##[[:space:]]#}}))
+    ((start_pos+=${#buf[$start_pos+1,-1]}-${#${buf[$start_pos+1,-1]##([[:space:]]|\\[[:space:]])#}}))
     ((end_pos=$start_pos+${#arg}))
     # Parse the sudo command line
     if $sudo; then
