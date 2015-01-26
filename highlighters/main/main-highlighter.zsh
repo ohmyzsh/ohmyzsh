@@ -64,6 +64,14 @@ _zsh_highlight_main_highlighter_predicate()
 _zsh_highlight_main_add_region_highlight() {
   integer start=$1 end=$2
   local style=$3
+
+  # The calculation was relative to $PREBUFFER$BUFFER, but region_highlight is
+  # relative to $BUFFER.
+  (( start -= $#PREBUFFER ))
+  (( end -= $#PREBUFFER ))
+
+  (( end < 0 )) && return # bug
+  (( start < 0 )) && start=0 # normal with e.g. multiline strings
   region_highlight+=("$start $end $style")
 }
 
@@ -76,6 +84,7 @@ _zsh_highlight_main_highlighter()
   typeset -a ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR
   typeset -a ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS
   typeset -a ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS
+  local buf="$PREBUFFER$BUFFER"
   region_highlight=()
 
   ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR=(
@@ -89,11 +98,11 @@ _zsh_highlight_main_highlighter()
     $ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR $ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS
   )
 
-  for arg in ${(z)BUFFER}; do
+  for arg in ${(z)buf}; do
     local substr_color=0
     local style_override=""
     [[ $start_pos -eq 0 && $arg = 'noglob' ]] && highlight_glob=false
-    ((start_pos+=${#BUFFER[$start_pos+1,-1]}-${#${BUFFER[$start_pos+1,-1]##[[:space:]]#}}))
+    ((start_pos+=${#buf[$start_pos+1,-1]}-${#${buf[$start_pos+1,-1]##[[:space:]]#}}))
     ((end_pos=$start_pos+${#arg}))
     # Parse the sudo command line
     if $sudo; then
