@@ -60,6 +60,13 @@ _zsh_highlight_main_highlighter_predicate()
   _zsh_highlight_buffer_modified
 }
 
+# Helper to deal with tokens crossing line boundaries.
+_zsh_highlight_main_add_region_highlight() {
+  integer start=$1 end=$2
+  local style=$3
+  region_highlight+=("$start $end $style")
+}
+
 # Main syntax highlighting function.
 _zsh_highlight_main_highlighter()
 {
@@ -142,7 +149,7 @@ _zsh_highlight_main_highlighter()
         '-'*)    style=$ZSH_HIGHLIGHT_STYLES[single-hyphen-option];;
         "'"*"'") style=$ZSH_HIGHLIGHT_STYLES[single-quoted-argument];;
         '"'*'"') style=$ZSH_HIGHLIGHT_STYLES[double-quoted-argument]
-                 region_highlight+=("$start_pos $end_pos $style")
+                 _zsh_highlight_main_add_region_highlight $start_pos $end_pos $style
                  _zsh_highlight_main_highlighter_highlight_string
                  substr_color=1
                  ;;
@@ -162,7 +169,7 @@ _zsh_highlight_main_highlighter()
     fi
     # if a style_override was set (eg in _zsh_highlight_main_highlighter_check_path), use it
     [[ -n $style_override ]] && style=$ZSH_HIGHLIGHT_STYLES[$style_override]
-    [[ $substr_color = 0 ]] && region_highlight+=("$start_pos $end_pos $style")
+    [[ $substr_color = 0 ]] && _zsh_highlight_main_add_region_highlight $start_pos $end_pos $style
     [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS:#"$arg"} ]] && new_expression=true
     start_pos=$end_pos
   done
@@ -235,6 +242,6 @@ _zsh_highlight_main_highlighter_highlight_string()
       *) [[ $varflag -eq 0 ]] && continue ;;
 
     esac
-    region_highlight+=("$j $k $style")
+    _zsh_highlight_main_add_region_highlight $j $k $style
   done
 }
