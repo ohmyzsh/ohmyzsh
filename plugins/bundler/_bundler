@@ -18,11 +18,14 @@ case $state in
 			"check[Determine whether the requirements for your application are installed]" \
 			"list[Show all of the gems in the current bundle]" \
 			"show[Show the source location of a particular gem in the bundle]" \
+			"outdated[Show all of the outdated gems in the current bundle]" \
 			"console[Start an IRB session in the context of the current bundle]" \
 			"open[Open an installed gem in the editor]" \
 			"viz[Generate a visual representation of your dependencies]" \
 			"init[Generate a simple Gemfile, placed in the current directory]" \
 			"gem[Create a simple gem, suitable for development with bundler]" \
+			"platform[Displays platform compatibility information]" \
+			"clean[Cleans up unused gems in your bundler directory]" \
 			"help[Describe available tasks or one specific task]"
 		ret=0
 		;;
@@ -38,11 +41,13 @@ case $state in
                     'check' \
                     'list' \
                     'show' \
+                    'outdated' \
                     'console' \
                     'open' \
                     'viz' \
                     'init' \
                     'gem' \
+                    'platform' \
                     'help' && ret=0
 				;;
 			install)
@@ -61,6 +66,23 @@ case $state in
 				;;
 			exec)
 				_normal && ret=0
+				;;
+			clean)
+				_arguments \
+					'(--force)--force[forces clean even if --path is not set]' \
+					'(--dry-run)--dry-run[only print out changes, do not actually clean gems]' \
+					'(--no-color)--no-color[Disable colorization in output]' \
+					'(--verbose)--verbose[Enable verbose output mode]'
+				ret=0
+				;;
+			outdated)
+				_arguments \
+					'(--pre)--pre[Check for newer pre-release gems]' \
+					'(--source)--source[Check against a specific source]' \
+					'(--local)--local[Do not attempt to fetch gems remotely and use the gem cache instead]' \
+					'(--no-color)--no-color[Disable colorization in output]' \
+					'(--verbose)--verbose[Enable verbose output mode]'
+				ret=0
 				;;
 			(open|show)
 				_gems=( $(bundle show 2> /dev/null | sed -e '/^  \*/!d; s/^  \* \([^ ]*\) .*/\1/') )

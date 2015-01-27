@@ -1,0 +1,6 @@
+n    forw-line
+e    back-line
+k    repeat-search
+\ek  repeat-search-all
+K    reverse-search
+\eK  reverse-search-all
