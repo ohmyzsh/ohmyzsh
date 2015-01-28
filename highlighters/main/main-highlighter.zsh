@@ -177,13 +177,13 @@ _zsh_highlight_main_highlighter()
       case $arg in
         '--'*)   style=$ZSH_HIGHLIGHT_STYLES[double-hyphen-option];;
         '-'*)    style=$ZSH_HIGHLIGHT_STYLES[single-hyphen-option];;
-        "'"*"'") style=$ZSH_HIGHLIGHT_STYLES[single-quoted-argument];;
-        '"'*'"') style=$ZSH_HIGHLIGHT_STYLES[double-quoted-argument]
+        "'"*)    style=$ZSH_HIGHLIGHT_STYLES[single-quoted-argument];;
+        '"'*)    style=$ZSH_HIGHLIGHT_STYLES[double-quoted-argument]
                  _zsh_highlight_main_add_region_highlight $start_pos $end_pos $style
                  _zsh_highlight_main_highlighter_highlight_string
                  substr_color=1
                  ;;
-        '`'*'`') style=$ZSH_HIGHLIGHT_STYLES[back-quoted-argument];;
+        '`'*)    style=$ZSH_HIGHLIGHT_STYLES[back-quoted-argument];;
         *"*"*)   $highlight_glob && style=$ZSH_HIGHLIGHT_STYLES[globbing] || style=$ZSH_HIGHLIGHT_STYLES[default];;
         *)       if _zsh_highlight_main_highlighter_check_path; then
                    style=$ZSH_HIGHLIGHT_STYLES[path]
