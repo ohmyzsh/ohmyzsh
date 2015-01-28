@@ -16,12 +16,19 @@ function title {
 ZSH_THEME_TERM_TAB_TITLE_IDLE="%15<..<%~%<<" #15 char left truncated PWD
 ZSH_THEME_TERM_TITLE_IDLE="%n@%m: %~"
 
-#Appears when you have the prompt
+# Runs when you have the prompt
 function omz_termsupport_precmd {
   title $ZSH_THEME_TERM_TAB_TITLE_IDLE $ZSH_THEME_TERM_TITLE_IDLE
+
+  # Notify Terminal.app of current directory using undocumented OSC sequence
+  # found in OS X 10.9 and 10.10's /etc/bashrc
+  if [[ $TERM_PROGRAM == Apple_Terminal ]] && [[ -z $INSIDE_EMACS ]]; then
+    local PWD_URL="file://$HOSTNAME${PWD// /%20}"
+    printf '\e]7;%s\a' "$PWD_URL"
+  fi
 }
 
-#Appears at the beginning of (and during) of command execution
+# Runs at the beginning of (and during) of command execution
 function omz_termsupport_preexec {
   emulate -L zsh
   setopt extended_glob
@@ -33,18 +40,5 @@ function omz_termsupport_preexec {
   title '$CMD' '%100>...>$LINE%<<'
 }
 
-#Appears each time pwd is changed
-function omz_termsupport_chpwd {
-  #Notify Terminal.app of current directory using undocumented OSC sequence
-  #found in OS X 10.10's /etc/bashrc
-  if [[ $TERM_PROGRAM == Apple_Terminal ]] && [[ -z $INSIDE_EMACS ]]; then
-    local PWD_URL="file://$HOSTNAME${PWD// /%20}"
-    printf '\e]7;%s\a' "$PWD_URL"
-  fi
-}
-#Fire it once so the pwd is set properly upon shell startup
-omz_termsupport_chpwd
-
 precmd_functions+=(omz_termsupport_precmd)
 preexec_functions+=(omz_termsupport_preexec)
-chpwd_functions+=(omz_termsupport_chpwd)
