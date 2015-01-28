@@ -112,8 +112,9 @@ function bb_merge_bottom_branch_to_here()
     eval $cmd
     git mergetool --no-prompt
     if [[ $? == 0 ]]; then
-        git gui
+        git gui citool
     fi
+    echo "Use 'bb_push_with_care' to push your merge to Gerrit"
 }
 
 
