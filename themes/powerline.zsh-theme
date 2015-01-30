@@ -204,7 +204,3 @@ PROMPT='%{%f%b%k%}$(build_prompt) '
 RPROMPT='%{%f%r%k%}$(build_rprompt) '
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 0166395a0ca78d2d253a3f38272d6542bdf2efda
