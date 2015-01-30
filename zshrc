@@ -30,7 +30,6 @@ plugins=(git)
 # Customize to your needs...
 source $ZSH/zsh
 
-
 # workaround for broken xfce4 terminal to force $TERM:
 if [[ "$COLORTERM" == "xfce4-terminal" ]]; then
     export TERM="xterm-256color"
@@ -51,7 +50,7 @@ fi
 # $ZSH - Path to your zsh installation.
 export ZSH=$HOME/.zsh/
 
-export PATH=$HOME/bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/sbin$PATH
+export PATH=$HOME/bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH
 
 # set $EDITOR
 export EDITOR='vim'
@@ -106,7 +105,6 @@ export LC_ALL="en_US.UTF-8"
 # set ls options
 LS_OPTIONS="--color=auto --group-directories-first -F"
 alias ls="ls $LS_OPTIONS"
-alias l="ls $LS_OPTIONS -al"
 
 # Mac OS X specific stuff:
 if [[ "$OS_TYPE" == "osx" ]]; then
@@ -172,11 +170,10 @@ if [ "$TERM" != "dumb" ]; then
 fi
 
 # do not autocorrect sudo commands (fixes "zsh: correct 'vim' to '.vim' [nyae]?")
-# alias sudo='nocorrect sudo'
+alias sudo='nocorrect sudo'
 
-# or, the more brutal attempt:
+# the more brutal attempt:
 unsetopt correct{,all} 
-
 
 alias sd='ssh deep'
 

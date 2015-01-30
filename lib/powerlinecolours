@@ -35,7 +35,7 @@ colours=(254 24 208 236)
 ;;
 
 c7d8a6d722a1ec9a16fae165177c418d4fd63175)
-colours=(254 52 196 32)
+colours=(253 68 196 32)
 #         \  \   \  \________________> prompt background colour for root
 #          \  \   \__________________> prompt foreground colour for root
 #           \  \_____________________> prompt background colour for user
