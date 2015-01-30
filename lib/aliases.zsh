@@ -46,6 +46,11 @@ alias tunnel='sshuttle -D --pidfile=/tmp/sshuttle.pid -r abiggs@10.26.0.80 10.26
 alias stoptunnel='[[ -f /tmp/sshuttle.pid ]] && kill `cat /tmp/sshuttle.pid`'
 =======
 alias code='~/Dropbox\ \(Univ.\ of\ Oklahoma\)/Code'
+<<<<<<< HEAD
 alias wdrop='~/Dropbox\ \(Univ.\ of\ Oklahoma\)'
 alias pdrop='~/Dropbox\ \(Personal\)'
 >>>>>>> Add Dropbox aliases
+=======
+alias dw='~/Dropbox\ \(Univ.\ of\ Oklahoma\)'
+alias dp='~/Dropbox\ \(Personal\)'
+>>>>>>> Changed Dropbox aliases
