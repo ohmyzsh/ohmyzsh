@@ -39,5 +39,5 @@ alias ios='open /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimul
 
 # Code Directory
 alias code='~/Dropbox\ \(Univ.\ of\ Oklahoma\)/Code'
-alias wdrop='~/Dropbox\ \(Univ.\ of\ Oklahoma\)'
-alias pdrop='~/Dropbox\ \(Personal\)'
+alias dw='~/Dropbox\ \(Univ.\ of\ Oklahoma\)'
+alias dp='~/Dropbox\ \(Personal\)'
