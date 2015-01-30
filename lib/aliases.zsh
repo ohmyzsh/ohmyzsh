@@ -38,8 +38,14 @@ alias afind='ack-grep -il'
 alias ios='open /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
 
 # Code Directory
+<<<<<<< HEAD
 alias code='~/Dropbox/Code'
 
 # SSHuttle
 alias tunnel='sshuttle -D --pidfile=/tmp/sshuttle.pid -r abiggs@10.26.0.80 10.26.196.0/24'
 alias stoptunnel='[[ -f /tmp/sshuttle.pid ]] && kill `cat /tmp/sshuttle.pid`'
+=======
+alias code='~/Dropbox\ \(Univ.\ of\ Oklahoma\)/Code'
+alias wdrop='~/Dropbox\ \(Univ.\ of\ Oklahoma\)'
+alias pdrop='~/Dropbox\ \(Personal\)'
+>>>>>>> Add Dropbox aliases
