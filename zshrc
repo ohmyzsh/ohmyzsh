@@ -4,7 +4,8 @@
 ZSH=.zsh
 
 # export ZSH_THEME="random"
-export ZSH_THEME="ezzsh" # name of zsh theme
+# export ZSH_THEME="ezzsh" # name of zsh theme
+export ZSH_THEME="powerline" # name of zsh theme
 
 # Set this to true to use case-sensitive completion
 CASE_SENSITIVE="false" # bool
@@ -19,7 +20,7 @@ DISABLE_LS_COLORS="false" # bool
 DISABLE_AUTO_TITLE="false" # bool
 
 # Uncomment following line if you want disable red dots displayed while waiting for completion
-DISABLE_COMPLETION_WAITING_DOTS="false" # bool
+DISABLE_COMPLETION_WAITING_DOTS="true" # bool
 
 # plugins to load (array)
 # Example format: plugins=(rails git textmate ruby lighthouse)
