@@ -39,6 +39,7 @@ alias ios='open /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimul
 
 # Code Directory
 <<<<<<< HEAD
+<<<<<<< HEAD
 alias code='~/Dropbox/Code'
 
 # SSHuttle
@@ -52,5 +53,9 @@ alias pdrop='~/Dropbox\ \(Personal\)'
 >>>>>>> Add Dropbox aliases
 =======
 alias dw='~/Dropbox\ \(Univ.\ of\ Oklahoma\)'
+=======
+alias code='~/Dropbox/Code'
+alias dw='~/Dropbox'
+>>>>>>> Updated Dropbox aliases with new softlinks
 alias dp='~/Dropbox\ \(Personal\)'
 >>>>>>> Changed Dropbox aliases
