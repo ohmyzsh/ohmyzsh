@@ -38,6 +38,6 @@ alias afind='ack-grep -il'
 alias ios='open /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
 
 # Code Directory
-alias code='~/Dropbox\ \(Univ.\ of\ Oklahoma\)/Code'
-alias dw='~/Dropbox\ \(Univ.\ of\ Oklahoma\)'
+alias code='~/Dropbox/Code'
+alias dw='~/Dropbox'
 alias dp='~/Dropbox\ \(Personal\)'
