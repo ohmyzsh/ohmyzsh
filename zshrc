@@ -40,12 +40,8 @@ if [[ "$COLORTERM" == "rxvt-xpm" ]]; then
     export TERM="rxvt-unicode-256color"
 fi
 
-# set $OS_TYPE to "osx" / "linux":
-if [[ "$(uname)" == "Darwin" ]]; then
-  export OS_TYPE="osx"
-else
-  export OS_TYPE="linux"
-fi
+# set $OS_TYPE
+export OS_TYPE="$(uname)"
 
 # $ZSH - Path to your zsh installation.
 export ZSH=$HOME/.zsh/
@@ -104,10 +100,9 @@ export LC_ALL="en_US.UTF-8"
 
 # set ls options
 LS_OPTIONS="--color=auto --group-directories-first -F"
-alias ls="ls $LS_OPTIONS"
 
 # Mac OS X specific stuff:
-if [[ "$OS_TYPE" == "osx" ]]; then
+if [[ "$OS_TYPE" == "Darwin" ]]; then
   # preceed path with homebrew stuff:
   export PATH="/usr/local/sbin:/usr/local/bin:$PATH"
   # ipython on mac:
@@ -133,6 +128,21 @@ else
   LS_COMMAND="ls"
 fi
 
+if [[ "$OS_TYPE" == "FreeBSD" ]]; then 
+  CLICOLOR=1; export CLICOLOR
+  alias installport="sudo make config-recursive install clean clean-depends"
+  if [[ ! -e /usr/local/bin/gls ]]; then
+    echo "You should install the \"coreutils\" FreeBSD port."
+  else
+    alias ls='gls $LS_OPTIONS'
+  fi
+  if [[ ! -e /usr/local/bin/gdircolors ]]; then
+    echo "You should install the \"coreutils\" FreeBSD port."
+  else
+    alias dircolors='/usr/local/bin/gdircolors'
+  fi
+fi
+
 # enable ls colorization: 
 if [ "$TERM" != "dumb" ]; then
   eval "$(dircolors "$ZSH"/dircolors)"
@@ -143,7 +153,7 @@ fi
 export SHELL="$(which zsh)"
 
 # keychain stuff
-if [[ "$OS_TYPE" == "linux" ]]; then
+if [[ "$OS_TYPE" == "Linux" ]]; then
   ssh_cmd="$(which ssh)"
   function ssh () {
     echo "$@" >> $HOME/.keychain-args
@@ -175,5 +185,4 @@ alias sudo='nocorrect sudo'
 # the more brutal attempt:
 unsetopt correct{,all} 
 
-alias sd='ssh deep'
 
