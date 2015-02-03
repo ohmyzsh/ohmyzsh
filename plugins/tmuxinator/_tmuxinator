@@ -8,6 +8,8 @@ _arguments -C \
   '1: :->cmds' \
   '2:: :->args' && ret=0
 
+_configs=(${$(echo ~/.tmuxinator/*.yml):r:t})
+
 case $state in
   cmds)
     _values "tmuxinator command" \
@@ -21,13 +23,13 @@ case $state in
         "list[list all existing projects]" \
         "doctor[look for problems in your configuration]" \
         "help[shows this help document]" \
-        "version[shows tmuxinator version number]"
+        "version[shows tmuxinator version number]" \
+        $_configs
     ret=0
     ;;
   args)
     case $line[1] in
       start|open|copy|delete|debug)
-        _configs=(`find ~/.tmuxinator -name \*.yml | cut -d/ -f5 | sed s:.yml::g`)
         [[ -n "$_configs" ]] && _values 'configs' $_configs
         ret=0
         ;;
