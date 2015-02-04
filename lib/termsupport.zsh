@@ -24,7 +24,7 @@ function title {
 ZSH_THEME_TERM_TAB_TITLE_IDLE="%15<..<%~%<<" #15 char left truncated PWD
 ZSH_THEME_TERM_TITLE_IDLE="%n@%m: %~"
 
-# Called when you have a prompt
+# Runs before showing the prompt
 function omz_termsupport_precmd {
   # Notify Terminal.app of current directory using undocumented OSC sequence
   # found in OS X 10.9 and 10.10's /etc/bashrc
@@ -41,7 +41,7 @@ function omz_termsupport_precmd {
 
 }
 
-# Called at the beginning of command execution
+# Runs before executing the command
 function omz_termsupport_preexec {
   if [[ $DISABLE_AUTO_TITLE == true ]]; then
     return
