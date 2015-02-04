@@ -6,6 +6,12 @@ _idea_paths=(
     "/Applications/IntelliJ IDEA 13.app"
     "$HOME/Applications/IntelliJ IDEA 12.app"
     "/Applications/IntelliJ IDEA 12.app"
+    "$HOME/Applications/IntelliJ IDEA 14 CE.app"
+    "/Applications/IntelliJ IDEA 14 CE.app"
+    "$HOME/Applications/IntelliJ IDEA 13 CE.app"
+    "/Applications/IntelliJ IDEA 13 CE.app"
+    "$HOME/Applications/IntelliJ IDEA 12 CE.app"
+    "/Applications/IntelliJ IDEA 12 CE.app"
 )
 
 for _idea_path in $_idea_paths; do
