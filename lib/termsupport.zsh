@@ -16,7 +16,7 @@ function title {
 ZSH_THEME_TERM_TAB_TITLE_IDLE="%15<..<%~%<<" #15 char left truncated PWD
 ZSH_THEME_TERM_TITLE_IDLE="%n@%m: %~"
 
-# Runs when you have the prompt
+# Runs before showing the prompt
 function omz_termsupport_precmd {
   title $ZSH_THEME_TERM_TAB_TITLE_IDLE $ZSH_THEME_TERM_TITLE_IDLE
 
@@ -28,7 +28,7 @@ function omz_termsupport_precmd {
   fi
 }
 
-# Runs at the beginning of (and during) of command execution
+# Runs before executing the command
 function omz_termsupport_preexec {
   emulate -L zsh
   setopt extended_glob
