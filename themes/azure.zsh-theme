@@ -270,16 +270,6 @@ hash -d ub="/home/users/shiludeng/data/dev/public/ub"
 hash -d example="/home/users/shiludeng/data/dev/com/tools/ubgen"
 #}}} 
   
-##for Emacs {{{ 
-#在 Emacs终端 中使用 Zsh 的一些设置 不推荐在 Emacs 中使用它 
-#if [[ "$TERM" == "dumb" ]]; then 
-#setopt No_zle 
-#PROMPT='%n@%M %/ 
-#>>' 
-#alias ls='ls -F' 
-#fi 
-#}}} 
-  
 #{{{自定义补全 
 #补全 ping 
 zstyle ':completion:*:ping:*' hosts 192.168.1.{1,50,51,100,101} www.google.com 
@@ -357,26 +347,25 @@ setopt PROMPT_SUBST
 # Autoload zsh functions.
 fpath=(~/.zsh/functions $fpath)
 autoload -U ~/.zsh/functions/*(:t)
-    
-## Enable auto-execution of functions.
-#typeset -ga preexec_functions
-#typeset -ga precmd_functions
-#typeset -ga chpwd_functions
-	 
-## Append git functions needed for prompt.
-#preexec_functions+='preexec_update_git_vars'
-#precmd_functions+='precmd_update_git_vars'
-#chpwd_functions+='chpwd_update_git_vars'
-	  
+
 # Set the prompt.
-#PROMPT=$'%{${fg[cyan]}%}%B%~%b$(prompt_git_info)%{${fg[default]}%} '
-
 local ret_status="%(?:%{$fg_bold[green]%}➜ :%{$fg_bold[red]%}➜ %s)"
-PROMPT='%{${fg[cyan]}%}%n@%{${fg[yellow]}%}%m:%{${fg[cyan]}%}%B%~%{$fg_bold[blue]%}$(git_prompt_info)%{${fg[default]}%}%{${fg[yellow]}%}> '
-#PROMPT='${ret_status}%{$fg_bold[green]%}%p %{$fg[cyan]%}%c %{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}'
+PROMPT='%{${fg[cyan]}%}┌%n@%{${fg[yellow]}%}%m:%{${fg[cyan]}%}%B%~%{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%}$(svn_prompt_info)%{${fg[default]}%}%{$fg[cyan]%}
+└> %'
 
-ZSH_THEME_GIT_PROMPT_PREFIX=" git:(%{$fg[red]%}"
+ZSH_PROMPT_BASE_COLOR="%{$fg_bold[blue]%}"
+ZSH_THEME_REPO_NAME_COLOR="%{$fg_bold[yello]%}"
+ZSH_THEME_REPO_NAME_COLOR="%{$fg_bold[yello]%}"
+SVN_SHOW_BRANCH="true"
+
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[magenta]%} -git- %{$reset_color%}%{$fg_bold[yellow]%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
-#ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%}) %{$fg[yellow]%}✗%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%}) %{$fg[yellow]%}x%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%})"
+ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[cyan]%} ?"
+ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg_bold[red]%} ±"
+ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg_bold[red]%} ♥"
+
+ZSH_THEME_SVN_PROMPT_PREFIX="%{$fg_bold[magenta]%} -svn- %{$reset_color%}%{$fg_bold[yellow]%}"
+ZSH_THEME_SVN_PROMPT_SUFFIX="%{$reset_color%}"
+ZSH_THEME_SVN_PROMPT_UNTRACKED="%{$fg[cyan]%} ?"
+ZSH_THEME_SVN_PROMPT_DIRTY="%{$fg_bold[red]%} ±"
+ZSH_THEME_SVN_PROMPT_CLEAN="%{$fg_bold[red]%} ♥"
