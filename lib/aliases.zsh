@@ -33,3 +33,5 @@ alias la='ls -lAh'
 
 alias afind='ack-grep -il'
 
+# Git Aliases
+alias gaa='git add --all'
