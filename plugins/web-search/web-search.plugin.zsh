@@ -37,8 +37,7 @@ function web_search() {
   done
 
   url="${url%?}" # remove the last '+'
-  nohup $open_cmd "$url" 
- 	rm nohup.out	
+  nohup $open_cmd "$url" >/dev/null 2&>1
 }
 
 
