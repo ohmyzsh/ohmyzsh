@@ -63,10 +63,7 @@ setprompt () {
 ###
 # See if we can use colors.
 
-    autoload colors zsh/terminfo
-    if [[ "$terminfo[colors]" -ge 8 ]]; then
-    colors
-    fi
+    autoload zsh/terminfo
     for color in RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
     eval PR_$color='%{$terminfo[bold]$fg[${(L)color}]%}'
     eval PR_LIGHT_$color='%{$fg[${(L)color}]%}'
