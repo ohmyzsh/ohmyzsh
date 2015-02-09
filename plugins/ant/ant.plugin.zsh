@@ -9,7 +9,7 @@ _ant () {
     if _ant_does_target_list_need_generating; then
     	ant -p | awk -F " " 'NR > 5 { print lastTarget }{lastTarget = $1}' > .ant_targets
     fi
-    compadd `cat .ant_targets`
+    compadd -- `cat .ant_targets`
   fi
 }
 
