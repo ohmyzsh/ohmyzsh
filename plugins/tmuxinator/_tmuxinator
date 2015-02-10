@@ -27,7 +27,7 @@ case $state in
   args)
     case $line[1] in
       start|open|copy|delete|debug)
-        _configs=(`find ~/.tmuxinator -name \*.yml | cut -d/ -f5 | sed s:.yml::g`)
+        _configs=(`find -L ~/.tmuxinator -name \*.yml | cut -d/ -f5 | sed s:.yml::g`)
         [[ -n "$_configs" ]] && _values 'configs' $_configs
         ret=0
         ;;
