@@ -19,8 +19,11 @@ ZSH_THEME="robbyrussell"
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
 
-# Uncomment the following line to disable auto-setting terminal title.
+# Uncomment the following line to disable auto-setting terminal title in any way.
 # DISABLE_AUTO_TITLE="true"
+
+# Uncomment the following line to disable auto-setting running commands in the terminal title.
+# DISABLE_CMD_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
 # ENABLE_CORRECTION="true"
