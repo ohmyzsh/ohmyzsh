@@ -23,14 +23,23 @@ fi
 
 echo "\033[0;34mUsing the Oh My Zsh template file and adding it to ~/.zshrc\033[0m"
 cp $ZSH/templates/zshrc.zsh-template ~/.zshrc
-sed -i -e "/^ZSH=/ c\\
+sed -e "/^ZSH=/ c\\
 ZSH=$ZSH
-" ~/.zshrc
+" ~/.zshrc | tee ~/.zshrc
 
-echo "\033[0;34mCopying your current PATH and adding it to the end of ~/.zshrc for you.\033[0m"
-sed -i -e "/export PATH=/ c\\
-export PATH=\"$PATH\"
-" ~/.zshrc
+ORIG_RC_FILES=`ls ~/.bashrc ~/.zshrc.pre-oh-my-zsh 2>/dev/null` || :
+if [ "$ORIG_RC_FILES" ]
+then
+  ORIG_PATHS=`grep -sh '^export PATH=' $ORIG_RC_FILES` || :
+fi
+
+if [ "$ORIG_PATHS" ]
+then
+  echo "\033[0;34mCopying your current PATH and adding it to the end of ~/.zshrc for you.\033[0m"
+  nl=$'\n'
+  sed -e '/^export PATH=/ c\
+'"${ORIG_PATHS//$nl/\\$nl}" ~/.zshrc | tee ~/.zshrc
+fi
 
 if [ "$SHELL" != "$(which zsh)" ]; then
     echo "\033[0;34mTime to change your default shell to zsh!\033[0m"
