@@ -23,14 +23,16 @@ fi
 
 echo "\033[0;34mUsing the Oh My Zsh template file and adding it to ~/.zshrc\033[0m"
 cp $ZSH/templates/zshrc.zsh-template ~/.zshrc
-sed -i -e "/^ZSH=/ c\\
+sed -e "/^ZSH=/ c\\
 ZSH=$ZSH
-" ~/.zshrc
+" ~/.zshrc > ~/.zshrc.omztemplate
+mv -f ~/.zshrc.omztemplate ~/.zshrc
 
 echo "\033[0;34mCopying your current PATH and adding it to the end of ~/.zshrc for you.\033[0m"
-sed -i -e "/export PATH=/ c\\
+sed -e "/export PATH=/ c\\
 export PATH=\"$PATH\"
-" ~/.zshrc
+" ~/.zshrc > ~/.zshrc.newpath
+mv -f ~/.zshrc.newpath ~/.zshrc
 
 if [ "$SHELL" != "$(which zsh)" ]; then
     echo "\033[0;34mTime to change your default shell to zsh!\033[0m"
