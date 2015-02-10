@@ -10,7 +10,7 @@ function web_search() {
   fi
 
   # check whether the search engine is supported
-  if [[ ! $1 =~ '(google|bing|yahoo|duckduckgo)' ]];
+  if [[ ! $1 =~ '(google|bing|yahoo|duckduckgo|yandex)' ]];
   then
     echo "Search engine $1 not supported."
     return 1
@@ -26,6 +26,8 @@ function web_search() {
   if [[ $1 == 'duckduckgo' ]]; then
   #slightly different search syntax for DDG
     url="${url}/?q="
+  elif [[ $1 == 'yandex' ]]; then
+    url="http://yandex.ru/yandsearch?text="
   else
     url="${url}/search?q="
   fi
@@ -43,6 +45,8 @@ function web_search() {
 
 alias bing='web_search bing'
 alias google='web_search google'
+alias yandex='web_search yandex'
+alias ya='web_search yandex'
 alias yahoo='web_search yahoo'
 alias ddg='web_search duckduckgo'
 #add your own !bang searches here
