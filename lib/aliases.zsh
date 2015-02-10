@@ -30,6 +30,7 @@ alias lsa='ls -lah'
 alias l='ls -lah'
 alias ll='ls -lh'
 alias la='ls -lAh'
+alias lrt='ls -lrth'
 
 alias afind='ack-grep -il'
 
