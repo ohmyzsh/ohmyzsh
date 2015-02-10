@@ -26,6 +26,31 @@ alias ...='cd ../../'
 alias ....='cd ../../../'
 alias .....='cd ../../../../'
 
+# Switch the directory with the vim key-binding
+alias k='cd ../'
+alias 2k='cd ../../'
+alias 3k='cd ../../../'
+# My aliases
+alias jget='sudo apt-get install';
+alias jup='sudo apt-get update'
+alias jug='sudo apt-get upgrate'
+alias s='sudo';
+alias t='cd'
+alias p='echo'
+alias zshrc='vim ~/.zshrc'
+
+alias jic='sudo pppoeconf';
+alias jc='sudo pon dsl-provider';
+alias jdc='sudo poff -a';
+alias jtc='ping -c 5 baidu.com';
+alias jsz='source ~/.zshrc'
+alias jas='vim ~/.bash_aliases';
+alias jbc='vim ~/.bashrc';
+alias js='source';
+alias jsb='source ~/.bashrc';
+alias fq='cd /home/msrty/Downloads/smartladder-master/goagent+/ && python proxy.py';
+
+alias jt='cd $HOME/tmp';
 # Command line head / tail shortcuts
 alias -g H='| head'
 alias -g T='| tail'
@@ -89,4 +114,3 @@ fi
 
 # Make zsh know about hosts already accessed by SSH
 zstyle -e ':completion:*:(ssh|scp|sftp|rsh|rsync):hosts' hosts 'reply=(${=${${(f)"$(cat {/etc/ssh_,~/.ssh/known_}hosts(|2)(N) /dev/null)"}%%[# ]*}//,/ })'
-
