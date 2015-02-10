@@ -25,7 +25,7 @@ then
 else
     alias history='fc -l 1'
 fi
-# List direcory contents
+# List directory contents
 alias lsa='ls -lah'
 alias l='ls -lah'
 alias ll='ls -lh'
