@@ -7,12 +7,12 @@
 # (In screen, only short_tab_title is used)
 # Limited support for Apple Terminal (Terminal can't set window and tab separately)
 function title {
-  if [[ $2 == "" ]]; then
-    2="$1"
-  fi
-  if [[ "$EMACS" == *term* ]]; then
-    return
-  fi
+  [[ "$EMACS" == *term* ]] && return
+
+  # if $2 is unset use $1 as default
+  # if it is set and empty, leave it as is
+  : ${2=$1}
+
   if [[ "$TERM" == screen* ]]; then
     print -Pn "\ek$1:q\e\\" #set screen hardstatus, usually truncated at 20 chars
   elif [[ "$TERM" == xterm* ]] || [[ $TERM == rxvt* ]] || [[ $TERM == ansi ]] || [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
