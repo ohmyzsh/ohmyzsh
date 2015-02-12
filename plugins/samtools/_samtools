@@ -32,14 +32,8 @@ case $state in
         "bamshuf[shuffle and group alignments by name]"
     ret=0
     ;;
-  args)
-    case $line[1] in
-      view|tview)
-        _files=(`find . -name \*.sam -o -name \*.bam | grep '\./[^/]*am' | sed 's/\.\///'`)
-        [[ -n "$_files" ]] && _values 'configs' $_files
-        ret=0
-        ;;
-    esac
+  *)
+    _files
     ;;
 esac
 
