@@ -9,10 +9,19 @@
 
 # ----- Helper functions
 # Output a selectable list of all running docker containers
+__docker_containers_running() {
+    declare -a cont_r_cmd
+    cont_r_cmd=($(docker inspect -f='{{.Id | printf "%12s"}} {{.Name}} {{.Config.Image}} {{.Path}}' $(docker ps -q) |awk '{ printf "%s:[%s(%s)%s]\n", substr($2, 2), substr($1,1,12), $3, $4}'))
+    cont_r_cmd+=($(docker inspect -f='{{.Id | printf "%12s"}} {{.Name}} {{.Config.Image}} {{.Path}}' $(docker ps -q) |awk '{ printf "%s:[%s(%s)%s]\n", substr($1,1,12), substr($2, 2), $3, $4}'))
+    _describe 'containers' cont_r_cmd
+}
+
+# Output a selectable list of all docker containers
 __docker_containers() {
     declare -a cont_cmd
-    cont_cmd=($(docker ps | awk 'NR>1{print $1":[CON("$1")"$2"("$3")]"}'))
-    _describe 'containers' cont_cmd
+    cont_r_cmd=($(docker inspect -f='{{.Id | printf "%12s"}} {{.Name}} {{.Config.Image}} {{.Path}}' $(docker ps -q -a) |awk '{ printf "%s:[%s(%s)%s]\n", substr($2, 2), substr($1,1,12), $3, $4}'))
+    cont_r_cmd+=($(docker inspect -f='{{.Id | printf "%12s"}} {{.Name}} {{.Config.Image}} {{.Path}}' $(docker ps -q -a) |awk '{ printf "%s:[%s(%s)%s]\n", substr($1,1,12), substr($2, 2), $3, $4}'))
+    _describe 'containers' cont_r_cmd
 }
 
 # output a selectable list of all docker images
@@ -29,7 +38,7 @@ __attach() {
     _arguments \
         '--no-stdin[Do not attach stdin]' \
         '--sig-proxy[Proxify all received signal to the process (even in non-tty mode)]'
-    __docker_containers
+    __docker_containers_running
 }
 
 __build() {
@@ -102,7 +111,7 @@ __inspect() {
 }
 
 __kill() {
-    __docker_containers
+    __docker_containers_running
 }
 
 __load() {
@@ -123,11 +132,11 @@ __logs() {
 }
 
 __port() {
-    __docker_containers
+    __docker_containers_running
 }
 
 __top() {
-    __docker_containers
+    __docker_containers_running
 }
 
 __ps() {
@@ -154,7 +163,7 @@ __push() {
 __restart() {
     _arguments \
         '(-t,--time=)'{-t,--time=}'[Number of seconds to try to stop for before killing the container. Once killed it will then be restarted. Default=10]'
-    __docker_containers
+    __docker_containers_running
 }
 
 __rm() {
@@ -222,7 +231,7 @@ __start() {
 __stop() {
     _arguments \
         '(-t,--time=)'{-t,--time=}'[Number of seconds to wait for the container to stop before killing it.]'
-    __docker_containers
+    __docker_containers_running
 }
 
 __tag() {
@@ -236,7 +245,7 @@ __version() {
 }
 
 __wait() {
-    __docker_containers
+    __docker_containers_running
 }
 
 __exec() {
