@@ -1,17 +1,27 @@
 #!/bin/zsh
 
 # Zsh Theme Chooser by fox (fox91 at anche dot no)
+#
 # This program is free software. It comes without any warranty, to
 # the extent permitted by applicable law. You can redistribute it
 # and/or modify it under the terms of the Do What The Fuck You Want
 # To Public License, Version 2, as published by Sam Hocevar. See
 # http://sam.zoy.org/wtfpl/COPYING for more details.
 
-THEMES_DIR="$ZSH/themes"
+# This is intended to be run in its own shell process, as a command
+# To get it to work properly, you should set ZSH and ZSH_CUSTOM in its
+# environment before running.
+#
+# Note that themes with both multi-line prompts and RPROMPTs may not display
+# properly.
+
+ZSH=${ZSH:-$HOME/.oh-my-zsh}
 FAVLIST="${HOME}/.zsh_favlist"
 source $ZSH/oh-my-zsh.sh
 
+
 function noyes() {
+    local a
     read "a?$1 [y/N] "
     if [[ $a == "N" || $a == "n" || $a = "" ]]; then
         return 0
@@ -20,11 +30,11 @@ function noyes() {
 }
 
 function theme_preview() {
-    THEME=$1
-    THEME_NAME=`echo $THEME | sed s/\.zsh-theme$//`
-    print "$fg[blue]${(l.((${COLUMNS}-${#THEME_NAME}-5))..─.)}$reset_color $THEME_NAME $fg[blue]───$reset_color"
-    source "$THEMES_DIR/$THEME"
+    local THEME=$1
+    print "$fg[blue]${(l.((${COLUMNS}-${#THEME}-5))..─.)}$reset_color $THEME $fg[blue]───$reset_color"
+    theme $THEME
     cols=$(tput cols)
+    #TODO: Figure out how to display RPROMPT correctly
     print -P "$PROMPT                                                                                      $RPROMPT"
 }
 
@@ -37,61 +47,81 @@ function banner() {
 }
 
 function usage() {
-    echo "Usage: $0 [options] [theme]"
-    echo
-    echo "Options"
-    echo "  -l   List available themes"
-    echo "  -s   Show all themes"
-    echo "  -h   Get this help message"
-    exit 1
+    local EXIT_STATUS=$1
+    echo \
+"Usage: $TOOL_NAME [options] [theme]
+Options:
+  -s   Show (preview) all themes
+  -l   List available themes
+  -a   List current favourite list contents
+  -h   Display this help message
+
+If [theme] is supplied, previews that single theme.
+If no option and no argument is given, previews all themes in turn, giving user
+the option to add each to their favourites list.
+If you have a custom ZSH or ZSH_CUSTOM directory defined, you should pass that in
+via environment variables. For example: 
+   ZSH=\$ZSH ZSH_CUSTOM=\$ZSH_CUSTOM $TOOL_NAME"
+
+    exit $EXIT_STATUS
 }
 
 function list_themes() {
-    for THEME in $(ls $THEMES_DIR); do
-        THEME_NAME=`echo $THEME | sed s/\.zsh-theme$//`
-        echo $THEME_NAME
-    done
+    lstheme
 }
 
 function insert_favlist() {
-    if grep -q "$THEME_NAME" $FAVLIST 2> /dev/null ; then
-        echo "Already in favlist"
+    local THEME=$1
+    #TODO: This simple grep will match substrings of theme names, not just full names
+    if grep -q $THEME $FAVLIST 2> /dev/null ; then
+        echo "Already in favlist: $THEME"
     else
-        echo $THEME_NAME >> $FAVLIST
-        echo "Saved to favlist"
+        echo $THEME >> $FAVLIST
+        echo "Added to favlist: $THEME"
     fi
-
 }
 
 function theme_chooser() {
-    for THEME in $(ls $THEMES_DIR); do
+    local THEME
+    if [[ -z $1 ]]; then
+        echo "Updating favourite list at $FAVLIST"
+    fi
+    for THEME in $(lstheme); do
         echo
         theme_preview $THEME
         echo
         if [[ -z $1 ]]; then
-            noyes "Do you want to add it to your favourite list ($FAVLIST)?" || \
-                  insert_favlist $THEME_NAME
+            noyes "Do you want to add it to your favourite list" || \
+                  insert_favlist $THEME
             echo
         fi
     done
 }
 
-while getopts ":lhs" Option
-do
-  case $Option in
+function list_favlist() {
+    if [[ -f $FAVLIST ]]; then
+        cat $FAVLIST
+    fi
+    return 0;
+}
+
+TOOL_NAME=${0##*/}
+while getopts ":lhas" OPTION; do
+  case $OPTION in
     l ) list_themes ;;
     s ) theme_chooser 0 ;;
-    h ) usage ;;
-    * ) usage ;; # Default.
+    a ) list_favlist ;;
+    h ) usage 0 ;;
+    * ) echo "Unrecognized option" >&2; usage 1 ;;
   esac
 done
 
-if [[ -z $Option ]]; then
+if [[ -z $OPTION ]]; then
     if [[ -z $1 ]]; then
         banner
         echo
         theme_chooser
     else
-        theme_preview $1".zsh-theme"
+        theme_preview $1
     fi
 fi

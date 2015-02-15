@@ -1,3 +1,0 @@
-#compdef theme
-
-_arguments "1: :($(lstheme | tr "\n" " "))"

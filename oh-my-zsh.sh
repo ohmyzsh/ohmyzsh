@@ -1,5 +1,5 @@
 # Check for updates on initial load...
-if [ "$DISABLE_AUTO_UPDATE" != "true" ]; then
+if [[ "$DISABLE_AUTO_UPDATE" != "true" ]]; then
   env ZSH=$ZSH DISABLE_UPDATE_PROMPT=$DISABLE_UPDATE_PROMPT zsh -f $ZSH/tools/check_for_upgrade.sh
 fi
 
@@ -30,7 +30,7 @@ fi
 # TIP: Add files you don't want in git to .gitignore
 for config_file ($ZSH/lib/*.zsh); do
   custom_config_file="${ZSH_CUSTOM}/lib/${config_file:t}"
-  [ -f "${custom_config_file}" ] && config_file=${custom_config_file}
+  [[ -f "${custom_config_file}" ]] && config_file=${custom_config_file}
   source $config_file
 done
 
@@ -60,7 +60,7 @@ else
 fi
 
 # Save the location of the current completion dump file.
-if [ -z "$ZSH_COMPDUMP" ]; then
+if [[ -z "$ZSH_COMPDUMP" ]]; then
   ZSH_COMPDUMP="${ZDOTDIR:-${HOME}}/.zcompdump-${SHORT_HOST}-${ZSH_VERSION}"
 fi
 
@@ -79,9 +79,9 @@ fi
 
 # Load all of the plugins that were defined in ~/.zshrc
 for plugin ($plugins); do
-  if [ -f $ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh ]; then
+  if [[ -f $ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh ]]; then
     source $ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh
-  elif [ -f $ZSH/plugins/$plugin/$plugin.plugin.zsh ]; then
+  elif [[ -f $ZSH/plugins/$plugin/$plugin.plugin.zsh ]]; then
     source $ZSH/plugins/$plugin/$plugin.plugin.zsh
   fi
 done
@@ -93,21 +93,6 @@ done
 unset config_file
 
 # Load the theme
-if [ "$ZSH_THEME" = "random" ]; then
-  themes=($ZSH/themes/*zsh-theme)
-  N=${#themes[@]}
-  ((N=(RANDOM%N)+1))
-  RANDOM_THEME=${themes[$N]}
-  source "$RANDOM_THEME"
-  echo "[oh-my-zsh] Random theme '$RANDOM_THEME' loaded..."
-else
-  if [ ! "$ZSH_THEME" = ""  ]; then
-    if [ -f "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme" ]; then
-      source "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme"
-    elif [ -f "$ZSH_CUSTOM/themes/$ZSH_THEME.zsh-theme" ]; then
-      source "$ZSH_CUSTOM/themes/$ZSH_THEME.zsh-theme"
-    else
-      source "$ZSH/themes/$ZSH_THEME.zsh-theme"
-    fi
-  fi
+if [[ $ZSH_THEME != "" ]]; then
+  theme $ZSH_THEME
 fi
