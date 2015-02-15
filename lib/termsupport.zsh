@@ -53,14 +53,37 @@ precmd_functions+=(omz_termsupport_precmd)
 preexec_functions+=(omz_termsupport_preexec)
 
 
-# Runs before showing the prompt, to update the current directory in Terminal.app
-function omz_termsupport_cwd {
-  # Notify Terminal.app of current directory using undocumented OSC sequence
-  # found in OS X 10.9 and 10.10's /etc/bashrc
-  if [[ $TERM_PROGRAM == Apple_Terminal ]] && [[ -z $INSIDE_EMACS ]]; then
-    local PWD_URL="file://$HOSTNAME${PWD// /%20}"
-    printf '\e]7;%s\a' "$PWD_URL"
-  fi
-}
+# Keep Apple Terminal.app's current working directory updated
+# Based on this answer: http://superuser.com/a/315029
 
-precmd_functions+=(omz_termsupport_cwd)
+if [[ "$TERM_PROGRAM" == "Apple_Terminal" ]] && [[ -z "$INSIDE_EMACS" ]]; then
+  # Emits the control sequence to notify Terminal.app of the cwd
+  function update_terminalapp_cwd() {
+        # Identify the directory using a "file:" scheme URL, including
+        # the host name to disambiguate local vs. remote paths.
+
+        # Percent-encode the pathname.
+        local URL_PATH=''
+        {
+            # Use LANG=C to process text byte-by-byte.
+            local i ch hexch LANG=C
+            for ((i = 1; i <= ${#PWD}; ++i)); do
+                ch="$PWD[i]"
+                if [[ "$ch" =~ [/._~A-Za-z0-9-] ]]; then
+                    URL_PATH+="$ch"
+                else
+                    hexch=$(printf "%02X" "'$ch")
+                    URL_PATH+="%$hexch"
+                fi
+            done
+        }
+
+        local PWD_URL="file://$HOST$URL_PATH"
+        printf '\e]7;%s\a' "$PWD_URL"
+    }
+
+    # Use a precmd hook instead of a chpwd hook to avoid contaminating output
+    precmd_functions+=(update_terminalapp_cwd)
+    # Run once to get initial cwd set
+    update_terminalapp_cwd
+fi
