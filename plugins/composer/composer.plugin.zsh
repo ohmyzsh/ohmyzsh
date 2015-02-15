@@ -7,7 +7,7 @@
 
 # Composer basic command completion
 _composer_get_command_list () {
-    $_comp_command1 --no-ansi | sed "1,/Available commands/d" | awk '/^\s*[a-z]+/ { print $1 }'
+    $_comp_command1 --no-ansi | sed "1,/Available commands/d" | awk '/^[ \t]*[a-z]+/ { print $1 }'
 }
 
 _composer_get_required_list () {
