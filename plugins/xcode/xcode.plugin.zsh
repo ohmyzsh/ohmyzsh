@@ -16,4 +16,10 @@ function xcsel {
 
 alias xcb='xcodebuild'
 alias xcp='xcode-select --print-path'
-alias simulator='open $(xcode-select  -p)/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
+alias xcdd='rm -rf ~/Library/Developer/Xcode/DerivedData/*'
+
+if [[ -d $(xcode-select -p)/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app ]]; then
+  alias simulator='open $(xcode-select -p)/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
+else
+  alias simulator='open $(xcode-select -p)/Applications/iOS\ Simulator.app'
+fi

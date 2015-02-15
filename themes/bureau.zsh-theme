@@ -31,7 +31,7 @@ bureau_git_status () {
   if $(echo "$_INDEX" | grep '^.[MTD] ' &> /dev/null); then
     _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_UNSTAGED"
   fi
-  if $(echo "$_INDEX" | grep -E '^\?\? ' &> /dev/null); then
+  if $(echo "$_INDEX" | command grep -E '^\?\? ' &> /dev/null); then
     _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_UNTRACKED"
   fi
   if $(echo "$_INDEX" | grep '^UU ' &> /dev/null); then

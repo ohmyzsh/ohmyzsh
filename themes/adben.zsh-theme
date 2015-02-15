@@ -69,17 +69,17 @@ function precmd {
         #Choose from all databases, regardless of whether they are considered "offensive"
         fortune -a
     }
-    #obtains the tip 
+    #obtains the tip
     ps1_command_tip () {
         wget -qO - http://www.commandlinefu.com/commands/random/plaintext | sed 1d | sed '/^$/d'
-    }  
+    }
     prompt_header () {
         if [[ "true" == "$ENABLE_COMMAND_TIP" ]]; then
             ps1_command_tip
         else
             ps1_fortune
-        fi 
-    }   
+        fi
+    }
     PROMPT_HEAD="${RED_START}${PR_YELLOW}$(prompt_header)${PR_RESET}"
     # set a simple variable to show when in screen
     if [[ -n "${WINDOW}" ]]; then
@@ -89,9 +89,8 @@ function precmd {
 
 # Context: user@directory or just directory
 prompt_context () {
-    local user=`whoami`
-    if [[ "$user" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-        echo -n "${PR_RESET}${PR_RED}$user@%m${PR_RESET}${PR_BRIGHT_YELLOW}%~%<<${PR_RESET}"
+    if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
+        echo -n "${PR_RESET}${PR_RED}$USER@%m${PR_RESET}${PR_BRIGHT_YELLOW}%~%<<${PR_RESET}"
     else
         echo -n "${PR_RESET}${PR_BRIGHT_YELLOW}%~%<<${PR_RESET}"
     fi
@@ -100,11 +99,8 @@ prompt_context () {
 set_prompt () {
     # required for the prompt
     setopt prompt_subst
-    autoload colors zsh/terminfo
-    if [[ "$terminfo[colors]" -gt 8 ]]; then
-        colors
-    fi 
-    
+    autoload zsh/terminfo
+
     # ######### PROMPT #########
     PROMPT='${PROMPT_HEAD}
 ${RED_START}$(prompt_context)
