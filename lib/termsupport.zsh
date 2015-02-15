@@ -65,8 +65,8 @@ if [[ "$TERM_PROGRAM" == "Apple_Terminal" ]] && [[ -z "$INSIDE_EMACS" ]]; then
         # Percent-encode the pathname.
         local URL_PATH=''
         {
-            # Use LANG=C to process text byte-by-byte.
-            local i ch hexch LANG=C
+            # Use LC_CTYPE=C to process text byte-by-byte.
+            local i ch hexch LC_CTYPE=C
             for ((i = 1; i <= ${#PWD}; ++i)); do
                 ch="$PWD[i]"
                 if [[ "$ch" =~ [/._~A-Za-z0-9-] ]]; then
