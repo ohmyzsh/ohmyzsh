@@ -50,6 +50,12 @@ alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
 
+# clear screen
+alias c='clear'
+
+# make a directory and cd into it
+function mkcd() { mkdir "$*"; cd "$*" }
+
 # zsh is able to auto-do some kungfoo
 # depends on the SUFFIX :)
 if [ ${ZSH_VERSION//\./} -ge 420 ]; then
