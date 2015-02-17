@@ -1,6 +1,4 @@
-This plugin was created because the aliases in the debian plugin are inconsistent and hard to remember. Also this apt-priority detaction that switched between apt-get and aptitude was dropped to keep it simpler. This plugin uses apt-get for everything but a few things that are only possible with aptitude I guess. Ubuntu does not have aptitude installed by default.
-
-The aliases for this plugin are easy to remember because they are consistent (the debian plugin is not). 
+This plugin was created because the aliases in the debian plugin are inconsistent and hard to remember. Also this apt-priority detection that switched between apt-get and aptitude was dropped to keep it simpler. This plugin uses apt-get for everything but a few things that are only possible with aptitude I guess. Ubuntu does not have aptitude installed by default.
 
 acs = **a**pt-**c**ache **s**earch  
 acp = **a**pt-**c**ache **p**olicy
