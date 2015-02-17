@@ -10,7 +10,7 @@ By now you already can guess almost all aliases
 
 There are two exeptions since ...  
 agu  = sudo **a**pt-**g**et **u**pdate  - we have ...  
-agug = sudo **a**pt-**g**et **u**pgrade - as the exeptional 4 letter alias for a single command.
+agug = sudo **a**pt-**g**et **u**p**g**rade - as the exeptional 4 letter alias for a single command.
 
 afs = **a**pt-**f**ile **s**earch --regexp - this has the regexp switch on without being represented in the alias, I guess this makes sense since the debian plugin has it, I never used that command.
 
