@@ -18,4 +18,4 @@ Then there are the 2 other 4 letter aliases for combined commands, that are stra
 aguu = sudo **a**pt-**g**et **u**pdate && sudo apt-get **u**pgrade      - better then adg or not?  
 agud = sudo **a**pt-**g**et **u**pdate && sudo apt-get **d**ist-upgrade
 
-For a full list aliases and the functions just watch the plugins code https://github.com/robbyrussell/oh-my-zsh/blob/master/plugins/debian/debian.plugin.zsh, look at the comments if you want to switch from the debian plugin. Ubuntu, Mint and & co users will like the new aar function to install packages from ppas with a single command.
+For a full list aliases and the functions just watch the plugins code https://github.com/robbyrussell/oh-my-zsh/blob/master/plugins/ubuntu/ubuntu.plugin.zsh, look at the comments if you want to switch from the debian plugin. Ubuntu, Mint and & co users will like the new aar function to install packages from ppas with a single command.
