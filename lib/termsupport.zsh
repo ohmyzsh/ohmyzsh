@@ -69,7 +69,7 @@ if [[ "$TERM_PROGRAM" == "Apple_Terminal" ]] && [[ -z "$INSIDE_EMACS" ]]; then
 
       # URLs must use UTF-8 encoding; convert if required
       local encoding=${LC_CTYPE/*./}
-      if [[ $encoding != UTF-8 ]]; then
+      if [[ -n $encoding && $encoding != UTF-8 ]]; then
         str=$(iconv -f $encoding -t UTF-8)
         if [[ $? != 0 ]]; then
           echo "Error converting string from $encoding to UTF-8" >&2
