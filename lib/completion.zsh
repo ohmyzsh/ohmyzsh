@@ -42,7 +42,7 @@ zstyle ':completion:*:hosts' hosts $hosts
 
 # Use caching so that commands like apt and dpkg complete are useable
 zstyle ':completion::complete:*' use-cache 1
-zstyle ':completion::complete:*' cache-path ~/.oh-my-zsh/cache/
+zstyle ':completion::complete:*' cache-path ~/.zsh/cache/
 
 # Don't complete uninteresting users
 zstyle ':completion:*:*:*:users' ignored-patterns \
@@ -66,3 +66,5 @@ if [ "$DISABLE_COMPLETION_WAITING_DOTS" != "true" ]; then
   zle -N expand-or-complete-with-dots
   bindkey "^I" expand-or-complete-with-dots
 fi
+
+
