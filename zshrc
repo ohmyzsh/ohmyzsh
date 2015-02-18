@@ -185,4 +185,10 @@ alias sudo='nocorrect sudo'
 # the more brutal attempt:
 unsetopt correct{,all} 
 
+# colored grep / less
+alias grep="grep --color='always'"
+alias less='less -R'
+alias diff='colordiff'
+
+
 
