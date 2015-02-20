@@ -53,14 +53,60 @@ precmd_functions+=(omz_termsupport_precmd)
 preexec_functions+=(omz_termsupport_preexec)
 
 
-# Runs before showing the prompt, to update the current directory in Terminal.app
-function omz_termsupport_cwd {
-  # Notify Terminal.app of current directory using undocumented OSC sequence
-  # found in OS X 10.9 and 10.10's /etc/bashrc
-  if [[ $TERM_PROGRAM == Apple_Terminal ]] && [[ -z $INSIDE_EMACS ]]; then
-    local PWD_URL="file://$HOSTNAME${PWD// /%20}"
-    printf '\e]7;%s\a' "$PWD_URL"
-  fi
-}
+# Keep Apple Terminal.app's current working directory updated
+# Based on this answer: http://superuser.com/a/315029
+# With extra fixes to handle multibyte chars and non-UTF-8 locales
 
-precmd_functions+=(omz_termsupport_cwd)
+if [[ "$TERM_PROGRAM" == "Apple_Terminal" ]] && [[ -z "$INSIDE_EMACS" ]]; then
+
+  # URL-encodes a string
+  # Outputs the encoded string on stdout
+  # Returns nonzero if encoding failed
+  function _omz_urlencode() {
+    local url_str=''
+    {
+      local str=$1
+
+      # URLs must use UTF-8 encoding; convert if required
+      local encoding=${LC_CTYPE/*./}
+      if [[ -n $encoding && $encoding != UTF-8 ]]; then
+        str=$(iconv -f $encoding -t UTF-8)
+        if [[ $? != 0 ]]; then
+          echo "Error converting string from $encoding to UTF-8" >&2
+          return 1
+        fi
+      fi
+
+      # Use LC_CTYPE=C to process text byte-by-byte
+      local i ch hexch LC_CTYPE=C
+      for ((i = 1; i <= ${#str}; ++i)); do
+        ch="$str[i]"
+        if [[ "$ch" =~ [/._~A-Za-z0-9-] ]]; then
+          url_str+="$ch"
+        else
+          hexch=$(printf "%02X" "'$ch")
+          url_str+="%$hexch"
+        fi
+      done
+      echo $url_str
+    }
+  }
+
+  # Emits the control sequence to notify Terminal.app of the cwd
+  function update_terminalapp_cwd() {
+    # Identify the directory using a "file:" scheme URL, including
+    # the host name to disambiguate local vs. remote paths.
+
+    # Percent-encode the pathname.
+    local URL_PATH=$(_omz_urlencode $PWD)
+    [[ $? != 0 ]] && return 1
+    local PWD_URL="file://$HOST$URL_PATH"
+    # Undocumented Terminal.app-specific control sequence
+    printf '\e]7;%s\a' $PWD_URL
+  }
+
+  # Use a precmd hook instead of a chpwd hook to avoid contaminating output
+  precmd_functions+=(update_terminalapp_cwd)
+  # Run once to get initial cwd set
+  update_terminalapp_cwd
+fi
