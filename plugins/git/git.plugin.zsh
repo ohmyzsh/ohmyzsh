@@ -176,4 +176,10 @@ alias gunignore='git update-index --no-assume-unchanged'
 alias gignored='git ls-files -v | grep "^[[:lower:]]"'
 
 
-
+# Submodules
+alias gf='git fetch'
+compdef _git gf=git-fetch
+alias gsi='git submodule init'
+compdef gsi=git-submodule
+alias gsu='git submodule update'
+compdef gsu=git-submodule
