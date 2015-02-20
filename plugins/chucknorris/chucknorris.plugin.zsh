@@ -1,6 +1,12 @@
-if [ ! -f $ZSH/plugins/chucknorris/fortunes/chucknorris.dat ]; then
-    strfile $ZSH/plugins/chucknorris/fortunes/chucknorris $ZSH/plugins/chucknorris/fortunes/chucknorris.dat
-fi
+() {
+  # Automatically generate or update Chuck's compiled fortune data file
+  local fdir=$ZSH/plugins/chucknorris/fortunes
+  if [[ ! -f $fdir/chucknorris.dat ]] || [[ $fdir/chucknorris.dat -ot $fdir/chucknorris ]]; then
+    strfile $fdir/chucknorris $fdir/chucknorris.dat
+  fi
 
-alias chuck="fortune -a $ZSH/plugins/chucknorris/fortunes"
-alias chuck_cow="chuck | cowthink"
+  # Aliases
+  alias chuck="fortune -a $fdir"
+  alias chuck_cow="chuck | cowthink"
+}
+
