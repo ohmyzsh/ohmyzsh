@@ -64,12 +64,12 @@ if [[ "$TERM_PROGRAM" == "Apple_Terminal" ]] && [[ -z "$INSIDE_EMACS" ]]; then
   # Returns nonzero if encoding failed
   function _omz_urlencode() {
     local str=$1
-    local url_str=''
+    local url_str=""
 
     # URLs must use UTF-8 encoding; convert if required
     local encoding=${LC_CTYPE/*./}
-    if [[ -n $encoding && $encoding != UTF-8 ]]; then
-      str=$(iconv -f $encoding -t UTF-8)
+    if [[ -n $encoding && $encoding != UTF-8 && $encoding != utf8 ]]; then
+      str=$(echo $str | iconv -f $encoding -t UTF-8)
       if [[ $? != 0 ]]; then
         echo "Error converting string from $encoding to UTF-8" >&2
         return 1
