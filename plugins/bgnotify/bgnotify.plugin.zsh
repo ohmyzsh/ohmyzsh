@@ -1,6 +1,5 @@
 #!/usr/bin/env zsh
 
-
 ## setup ##
 
 [[ -o interactive ]] || return #interactive only!
@@ -21,22 +20,22 @@ if ! (type bgnotify_formatted | grep -q 'function'); then
 fi
 
 currentWindowId () {
-  if hash notify-send 2>/dev/null; then #ubuntu!
-    xprop -root | awk '/NET_ACTIVE_WINDOW/ { print $5; exit }'
-  elif hash osascript 2>/dev/null; then #osx
+  if hash osascript 2>/dev/null; then #osx
     osascript -e 'tell application (path to frontmost application as text) to id of front window' 2&> /dev/null || echo "0"
+  elif hash notify-send 2>/dev/null; then #ubuntu!
+    xprop -root | awk '/NET_ACTIVE_WINDOW/ { print $5; exit }'
   else
     echo $EPOCHSECONDS #fallback for windows
   fi
 }
 
 bgnotify () {
-  if hash notify-send 2>/dev/null; then #ubuntu!
-    notify-send $1 $2
-  elif hash terminal-notifier 2>/dev/null; then #osx
+  if hash terminal-notifier 2>/dev/null; then #osx
     terminal-notifier -message "$2" -title "$1"
   elif hash growlnotify 2>/dev/null; then #osx growl
     growlnotify -m $1 $2
+  elif hash notify-send 2>/dev/null; then #ubuntu!
+    notify-send $1 $2
   elif hash notifu 2>/dev/null; then #cygwyn support!
     notifu /m "$2" /p "$1"
   fi
