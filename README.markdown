@@ -29,7 +29,7 @@ Oh My Zsh is installed by running one of the following commands in your terminal
 
 #### via wget
 
-`wget --no-check-certificate https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O - | sh`
+`wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O - | sh`
 
 ## Using Oh My Zsh
 
