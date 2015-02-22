@@ -175,5 +175,7 @@ alias gunignore='git update-index --no-assume-unchanged'
 # list temporarily ignored files
 alias gignored='git ls-files -v | grep "^[[:lower:]]"'
 
+# Snapshot  current workspace for backup purposes
+alias gsnapshot='git stash save "snapshot: $(date)" && git stash apply "stash@{0}"'
 
 
