@@ -86,7 +86,7 @@ prompt_jnrowe_precmd () {
   else
     dir_status="%{$c1%}%n%{$c4%}@%{$c2%}%m%{$c0%}:%{$c3%}%l%{$c6%}->%{$(zsh_path)%} %{$c0%}(%{$c5%}%?%{$c0%})"
     PROMPT='${vcs_info_msg_0_}
-%{$fg_bold[green]%}%p%{$reset_color%}${dir_status} ${vcs_info_msg_0_}%{$reset_color%}
+%{$fg_bold[green]%}%p%{$reset_color%}${dir_status}%{$reset_color%}
 > '
 fi
 }
