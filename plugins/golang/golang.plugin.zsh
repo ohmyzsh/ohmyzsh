@@ -23,6 +23,7 @@ __go_tool_complete() {
     'env[print Go environment information]'
     'fix[run go tool fix on packages]'
     'fmt[run gofmt on package sources]'
+    'generate[generate Go files by processing source]'
     'get[download and install packages and dependencies]'
     'help[display help]'
     'install[compile and install packages and dependencies]'
