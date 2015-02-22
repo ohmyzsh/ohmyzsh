@@ -5,7 +5,8 @@ ZSH="$HOME/.zsh"
 
 # export ZSH_THEME="random"
 # export ZSH_THEME="ezzsh" # name of zsh theme
-export ZSH_THEME="powerline" # name of zsh theme
+# export ZSH_THEME="powerline" # name of zsh theme
+export ZSH_THEME="powerline-with-hostname" # name of zsh theme
 
 # Set this to true to use case-sensitive completion
 CASE_SENSITIVE="false" # bool

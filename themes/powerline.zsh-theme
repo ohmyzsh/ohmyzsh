@@ -18,7 +18,7 @@ SEGMENT_SEPARATOR=''
 RSEGMENT_SEPARATOR=''
 
 # use custom colours:
-source "$ZSH"/lib/powerlinecolours
+source "$ZSH"/lib/powerline/colors.zsh
 
 # Begin left side segment
 # Takes two arguments, background and foreground. Both can be omitted,
