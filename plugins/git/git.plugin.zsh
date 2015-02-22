@@ -75,6 +75,7 @@ compdef _git gss=git-status
 alias ga='git add'
 compdef _git ga=git-add
 alias gap='git add --patch'
+alias gaa='git add --all'
 alias gm='git merge'
 compdef _git gm=git-merge
 alias grh='git reset HEAD'
@@ -174,6 +175,3 @@ alias gignore='git update-index --assume-unchanged'
 alias gunignore='git update-index --no-assume-unchanged'
 # list temporarily ignored files
 alias gignored='git ls-files -v | grep "^[[:lower:]]"'
-
-
-
