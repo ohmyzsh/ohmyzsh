@@ -1,4 +1,5 @@
 #compdef grunt
+#autoload
 # -----------------------------------------------------------------------------
 #  _grunt
 #
@@ -8,11 +9,11 @@
 #
 # -----------------------------------------------------------------------------
 #
-#  Version     : 0.1.0
+#  Version     : 0.1.2
 #  Author      : Yonchu <yuyuchu3333@gmail.com>
 #  License     : MIT License
 #  Repository  : https://github.com/yonchu/grunt-zsh-completion
-#  Last Change : 22 Jul 2013.
+#  Last Change : 20 Aug 2014.
 #
 #  Copyright (c) 2013 Yonchu.
 #
@@ -46,7 +47,7 @@
 #
 # -----------------------------------------------------------------------------
 
-function _grunt() {
+function __grunt() {
     local curcontext="$curcontext" update_policy state
     local show_grunt_path update_msg gruntfile opts tasks
 
@@ -113,7 +114,7 @@ function _grunt() {
 #   The cache variable name: __grunt_version __grunt_gruntfile __grunt_opts __grunt_tasks
 function __grunt_update_cache() {
     # TODO
-    local version='0.1.0'
+    local version='0.1.2'
     local is_updating=0
     local gruntfile="$1"
     local grunt_info no_update_options cache_path
@@ -177,6 +178,7 @@ function __grunt_get_tasks() {
         | grep 'Available tasks' -A 100 \
         | grep '^ ' \
         | sed -e 's/^[[:blank:]]*//' -e 's/[[:blank:]]*$//' \
+        | sed -e 's/:/\\:/g' \
         | sed -e 's/  /:/'
 }
 
@@ -250,4 +252,4 @@ function __grunt_caching_policy() {
     (( $#oldp ))
 }
 
-compdef _grunt grunt
+compdef __grunt grunt
