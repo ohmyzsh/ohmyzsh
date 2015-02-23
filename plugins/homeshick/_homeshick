@@ -1,5 +1,10 @@
 #compdef homeshick
 #autoload
+# ------------------------------------------------------------------------------
+#
+# Completion script for homeshick (https://github.com/andsens/homeshick)
+#
+# ------------------------------------------------------------------------------
 
 _homeshick () {
 	local context state line curcontext="$curcontext" ret=1
