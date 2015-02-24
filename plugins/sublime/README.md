@@ -13,3 +13,5 @@ Plugin for Sublime Text, a cross platform text and code editor, available for Li
  * If `st` is passed a directory, `cd` to it and open it in Sublime Text
 
  * If `st` is passed a file, open it in Sublime Text
+
+ * if `stt` command is called, it is equivalent to `st .`, opening the current folder in Sublime Text
