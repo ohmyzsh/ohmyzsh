@@ -171,9 +171,31 @@ _managepy-validate() {
     $nul_args && ret=0
 }
 
-_managepy-commands() {
+_managepy-commands(){
   local -a commands
-  
+
+  if [[ "$DJANGO_PLUGIN" = "extend" ]]; then
+    local line
+  _call_program help-command "python -c \"
+import sys;import os;import logging;
+logging.disable(logging.INFO)
+from django.conf import settings
+import django
+django_version = django.get_version()
+if float('.'.join(django_version.split('.', 2)[:2])) >= 1.7:
+    django.setup()
+
+from django.core.management import get_commands, load_command_class;
+rs = ''
+for command, app in sorted(get_commands().items(), key=lambda e: (e[1], e[0])):
+    try:
+        rs += ':'.join((command, ' '.join(load_command_class(app, command).help.strip().splitlines())[:100]))
+        rs += os.linesep
+    except Exception:
+        pass
+sys.stdout.write(rs)\"" \
+                             | while read -A line; do commands=("$line" $commands) done
+else
   commands=(
     'adminindex:prints the admin-index template snippet for the given app name(s).'
     'createcachetable:creates the table needed to use the SQL cache backend.'
@@ -205,23 +227,30 @@ _managepy-commands() {
     'testserver:Runs a development server with data from the given fixture(s).'
     'validate:Validates all installed models.'
   )
-  
-  _describe -t commands 'manage.py command' commands && ret=0
+fi 
+_describe -t commands 'manage.py command' commands && ret=0
 }
 
 _applist() {
   local line
   local -a apps
-  _call_program help-command "python -c \"import os.path as op, re, django.conf, sys;\\
-                                          bn=op.basename(op.abspath(op.curdir));[sys\\
-                                          .stdout.write(str(re.sub(r'^%s\.(.*?)$' %
-                                          bn, r'\1', i)) + '\n') for i in django.conf.settings.\\
-                                          INSTALLED_APPS if re.match(r'^%s' % bn, i)]\"" \
+  _call_program help-command "python -c \"
+import os, re, django.conf, sys, logging;
+logging.disable(logging.INFO)
+sys.stdout.write(os.linesep.join([i for i in django.conf.settings.INSTALLED_APPS]) + os.linesep)\"" \
                              | while read -A line; do apps=($line $apps) done
   _values 'Application' $apps && ret=0
 }
 
+activate_django_settings() {
+  if [[ -a "settings" ]]; then
+    export DJANGO_SETTINGS_MODULE="settings"
+  fi
+}
+
 _managepy() {
+  autoload activate_django_settings
+  activate_django_settings
   local curcontext=$curcontext ret=1
   
   if ((CURRENT == 2)); then
