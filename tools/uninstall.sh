@@ -20,9 +20,24 @@ then
 
   source ~/.zshrc;
 else
-  echo "Switching back to bash"
+  echo "Changing default login shell from zsh back to bash ... login required."
   chsh -s /bin/bash
-  source /etc/profile
+  if [ "$?" = "0" ]; then
+    echo "Done.  All new shell windows will be bash!"
+    printf "Replace this zsh window with a bash window right now? (yes/no): "
+    read CHOICE
+    if [ "$CHOICE" = "yes" ]; then
+      echo "OK, please login again below ... if something goes wrong you can \
+always close this window and start a new bash window."
+      exec su - $USER
+    else
+      break
+    fi
+  else
+    echo "Oops, something went wrong with the change to bash ... \
+you can execute chsh -s /bin/bash manually and start a new window"
+    break
+  fi
 fi
 
-echo "Thanks for trying out Oh My Zsh. It's been uninstalled."
+echo -e "\nThanks for trying out Oh My Zsh. It's been uninstalled."
