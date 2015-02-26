@@ -87,13 +87,13 @@ function prepend_path() {
 }
 
 #
-# Prepends the PATH variable with the input path
+# Append the PATH variable with the input path
 #
 # Arguments:
-#    1. path - The path that will be prepened
+#    1. path - The path that will be append
 # Return value:
 #    0 if PATH is exported to ENV
 #
-function postpend_path() {
+function append_path() {
     [[ -d "$1" ]] && export PATH=$PATH:"$1" && return 0
 }
