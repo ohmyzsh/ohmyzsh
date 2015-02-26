@@ -75,7 +75,7 @@ function env_default() {
 }
 
 #
-# Prepends the PATH varible with the input path
+# Prepends the PATH variable with the input path
 #
 # Arguments:
 #    1. path - The path that will be prepened
@@ -87,7 +87,7 @@ function prepend_path() {
 }
 
 #
-# Prepends the PATH varible with the input path
+# Prepends the PATH variable with the input path
 #
 # Arguments:
 #    1. path - The path that will be prepened
