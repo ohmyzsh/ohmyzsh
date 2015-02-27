@@ -27,6 +27,8 @@
 #
 # This script is intended to be executable and run in its own shell. It assumes it's
 # independent, and leaks variables whenever it wants.
+#
+# Dependencies: perl, fortune
 
 if [[ -n $1 ]]; then
 	npages=$1
@@ -37,7 +39,8 @@ outfile="fortunes/chucknorris"
 # Page that presents
 chuckpage='http://www.chucknorrisfacts.com/all-chuck-norris-facts'
 rm $outfile
-echo Fetching $npages pages worth of fortunes from $chuckpage
+echo Fetching from Chuck repository: $chuckpage
+echo Fetching $npages pages worth of fortunes
 for (( i = 1; i <= $npages; i++ )) do
 	curl -s $chuckpage\?page\=$i | perl -MHTML::Entities -ne \
 		'/<span class="field-content"><a href.*?>(.*?)</m && print decode_entities("$1\n%\n")' \
@@ -45,7 +48,18 @@ for (( i = 1; i <= $npages; i++ )) do
 done
 nlines=$(wc -l $outfile | perl -ne '/(\d+)/ && print "$1"')
 (( nfacts = nlines / 2 ))
+echo Fetched $nfacts Chuck Norris facts
 
-echo "New fortune source file built at $outfile with $nfacts Chuck Norris facts"
+echo New fortune source file built at $outfile with $nfacts Chuck Norris facts
 
+# Validate outfile format using fortune
+dummyfile=$(mktemp -t chucknorris-scrape)
+nparsedlines=$(strfile $outfile $dummyfile | perl -ne '/There were (\d+) strings/m && print $1')
+if [[ $nparsedlines -ne $nfacts ]]; then
+	echo "WARNING: DATA INTEGRITY CHECK FAILURE"
+	echo "WARNING: Got $nfacts sayings but fortune saw $nparsedlines lines."
+	echo "WARNING: This probably means I had a parsing error and the new file is bad."
+	echo "WARNING: Do not commit these changes without manual review and verification."
+	echo "WARNING: Failure to review properly may endanger correctness of the Norris database!"
+fi
 
