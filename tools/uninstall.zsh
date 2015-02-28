@@ -10,7 +10,7 @@ if [[ -z $SHORT_HOST ]]; then
   SHORT_HOST=${HOST/.*/}
 fi
 setopt null_glob
-rm -fv ~/.zsh-update ${ZDOTDIR:-${HOME}}/.zcompdump-${SHORT_HOST}-*
+rm -fv ~/.zsh-update ~/.zshrc-e ${ZDOTDIR:-${HOME}}/.zcompdump-${SHORT_HOST}-*
 
 
 echo "Looking for original zsh config..."
