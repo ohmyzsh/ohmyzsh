@@ -10,9 +10,21 @@ if [ -d "$ZSH" ]; then
 fi
 
 echo "\033[0;34mCloning Oh My Zsh...\033[0m"
-hash git >/dev/null 2>&1 && env git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git $ZSH || {
-  echo "git not installed"
-  exit
+hash git >/dev/null 2>&1 || {
+  echo "Error: git is not installed"
+  exit 1
+}
+# The Windows (MSYS) Git is not compatible with normal use on cygwin
+if [ "$OSTYPE" = cygwin ]; then
+  if git --version | grep msysgit > /dev/null; then
+    echo "Error: Windows/MSYS Git is not supported on Cygwin"
+    echo "Error: Make sure the Cygwin git package is installed and is first on the path"
+    exit 1
+  fi
+fi
+env git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git $ZSH || {
+  echo "Error: git clone of oh-my-zsh repo failed"
+  exit 1
 }
 
 echo "\033[0;34mLooking for an existing zsh config...\033[0m"
@@ -34,8 +46,13 @@ export PATH=\"$PATH\"
 
 TEST_CURRENT_SHELL=$(expr "$SHELL" : '.*/\(.*\)')
 if [ "$TEST_CURRENT_SHELL" != "zsh" ]; then
+  if hash chsh >/dev/null 2>&1; then
     echo "\033[0;34mTime to change your default shell to zsh!\033[0m"
     chsh -s $(grep /zsh$ /etc/shells | tail -1)
+  else
+    echo "I can't change your shell automatically because this system does not have chsh."
+    echo "Please edit /etc/passwd to set your default shell to zsh."
+  fi
 fi
 unset TEST_CURRENT_SHELL
 
