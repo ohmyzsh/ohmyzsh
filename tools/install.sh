@@ -5,13 +5,21 @@
 # or wget:
 #   sh -c "$(wget -qO- https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 #
-# As an alternative, you can download the install script separately and
-# run it afterwards with `sh install.sh'
+# As an alternative, you can first download the install script and run it afterwards:
+#   wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh
+#   sh install.sh
+#
+# Respects these environment variables for tweaking the installation process:
+#   REPO    - name of the GitHub repo to install from (default: robbyrussell/oh-my-zsh)
+#   BRANCH  - branch to check out immediately after install
 #
 set -e
 
-# Default location
+# Default settings
 ZSH=${ZSH:-~/.oh-my-zsh}
+REPO=${REPO:-robbyrussell/oh-my-zsh}
+BRANCH=${BRANCH:-master}
+
 
 command_exists() {
 	command -v "$@" >/dev/null 2>&1
@@ -68,7 +76,7 @@ setup_ohmyzsh() {
 		exit 1
 	fi
 
-	git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git "$ZSH" || {
+	git clone --depth=1 --branch "$BRANCH" "https://github.com/$REPO.git" "$ZSH" || {
 		error "git clone of oh-my-zsh repo failed"
 		exit 1
 	}
