@@ -112,42 +112,41 @@ if [[ "$OS_TYPE" == "Darwin" ]]; then
   export HOMEBREW_VERBOSE=1
   export HOMEBREW_CURL_VERBOSE=1
   export HOMEBREW_NO_EMOJI=1
-  # let's use ls from gnu utils because the bsd ls doesn't know long options:
-  if hash gls; then
+  if hash gls >/dev/null 2>&1; then
     LS_COMMAND="gls"
   else
     LS_COMMAND="ls"
   fi
-  # homebrew verbose and without annoying emoji icon:
   export HOMEBREW_VERBOSE=1
   export HOMEBREW_CURL_VERBOSE=1
   export HOMEBREW_NO_EMOJI=1
-  # let's use dircolors from gnu utils because the osx version is buggy:
-  alias dircolors="gdircolors"
-# Linux specific stuff
+  if hash gdircolors >/dev/null 2>&1; then
+    alias dircolors="gdircolors"
+    dircolors_enable=1
+  fi
+  if hash gls >/dev/null 2>&1; then
+    alias ls='gls $LS_OPTIONS'
+  fi
 else
   LS_COMMAND="ls"
 fi
 
 if [[ "$OS_TYPE" == "FreeBSD" ]]; then 
+  alias ls='ls -al -F'
   CLICOLOR=1; export CLICOLOR
-  alias installport="sudo make config-recursive install clean clean-depends"
-  if [[ ! -e /usr/local/bin/gls ]]; then
-    echo "You should install the \"coreutils\" FreeBSD port."
-  else
-    alias ls='gls $LS_OPTIONS'
-  fi
-  if [[ ! -e /usr/local/bin/gdircolors ]]; then
-    echo "You should install the \"coreutils\" FreeBSD port."
-  else
-    alias dircolors='/usr/local/bin/gdircolors'
+  alias portinstall="sudo make config-recursive install clean clean-depends"
+  if hash gdircolors >/dev/null 2>&1; then
+    alias dircolors="$(which gdircolors)"
+    dircolors_enable=1
   fi
 fi
 
 # enable ls colorization: 
 if [ "$TERM" != "dumb" ]; then
-  eval "$(dircolors "$ZSH"/dircolors)"
-  alias ls="$LS_COMMAND $LS_OPTIONS"
+  if [[ "$dircolors_enable" == 1 ]]; then
+    eval "$(dircolors "$ZSH"/dircolors)"
+    alias ls="$LS_COMMAND $LS_OPTIONS"
+  fi
 fi
 
 # set $SHELL:
@@ -176,8 +175,10 @@ alias grep='grep --color=auto'
 
 # enable ls colorization: 
 if [ "$TERM" != "dumb" ]; then
-  eval "$(dircolors "$ZSH"/dircolors)"
-  alias ls="$LS_COMMAND $LS_OPTIONS"
+  if [[ "$dircolors_enable" == 1 ]]; then
+    eval "$(dircolors "$ZSH"/dircolors)"
+    alias ls="$LS_COMMAND $LS_OPTIONS"
+  fi
 fi
 
 # do not autocorrect sudo commands (fixes "zsh: correct 'vim' to '.vim' [nyae]?")
