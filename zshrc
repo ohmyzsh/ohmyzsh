@@ -132,7 +132,10 @@ else
 fi
 
 if [[ "$OS_TYPE" == "FreeBSD" ]]; then 
-  alias ls='ls -al -F'
+  if hash gls >/dev/null 2>&1; then
+  alias ls='gls -al -F'
+  LS_COMMAND=gls
+  fi
   CLICOLOR=1; export CLICOLOR
   alias portinstall="sudo make config-recursive install clean clean-depends"
   if hash gdircolors >/dev/null 2>&1; then
