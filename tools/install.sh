@@ -1,7 +1,18 @@
+# install.sh - oh-my-zsh installation script
+#
+# Respects these environment variables for tweaking the installation process:
+#   REPO    - name of the GitHub repo to install from (default: robbyrussel/oh-my-zsh)
+#   BRANCH  - branch to check out immediately after install
+# These options are for use by oh-my-zsh developers, to facilitate testing of
+# changes to the core oh-my-zsh installation code. Normal users should not set them.
+
 set -e
 
 if [ ! -n "$ZSH" ]; then
   ZSH=~/.oh-my-zsh
+fi
+if [ ! -n "$REPO" ]; then
+  REPO=robbyrussell/oh-my-zsh
 fi
 
 if [ -d "$ZSH" ]; then
@@ -10,7 +21,10 @@ if [ -d "$ZSH" ]; then
 fi
 
 echo "\033[0;34mCloning Oh My Zsh...\033[0m"
-hash git >/dev/null 2>&1 && env git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git $ZSH || {
+if [ -n "$BRANCH" ]; then
+  BR_OPT="--branch $BRANCH"
+fi
+hash git >/dev/null 2>&1 && env git clone --depth=1 $BR_OPT https://github.com/$REPO.git $ZSH || {
   echo "git not installed"
   exit
 }
