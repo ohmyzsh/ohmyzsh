@@ -1,5 +1,8 @@
-# Load RVM into a shell session *as a function*
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+# Load rvm if it's not sourced yet.
+[[ -z "$rvm_path"]] && [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+
+# Add the rvm binaries to PATH.
+export PATH="$PATH:$HOME/.rvm/bin"
 
 fpath=($rvm_path/scripts/zsh/Completion $fpath)
 
