@@ -52,19 +52,19 @@ alias wpmlo='wp menu location'
 # Option
 
 # Plugin
-alias wppa='activate'
-alias wppda='deactivate'
-alias wppd='delete'
-alias wppg='get'
-alias wppi='install'
-alias wppis='is-installed'
-alias wppl='list'
-alias wppp='path'
-alias wpps='search'
-alias wppst='status'
-alias wppt='toggle'
-alias wppu='uninstall'
-alias wppu='update'
+alias wppa='wp plugin activate'
+alias wppda='wp plugin deactivate'
+alias wppd='wp plugin delete'
+alias wppg='wp plugin get'
+alias wppi='wp plugin install'
+alias wppis='wp plugin is-installed'
+alias wppl='wp plugin list'
+alias wppp='wp plugin path'
+alias wpps='wp plugin search'
+alias wppst='wp plugin status'
+alias wppt='wp plugin toggle'
+alias wppu='wp plugin uninstall'
+alias wppu='wp plugin update'
 
 # Post
 alias wppoc='wp post create'
@@ -136,3 +136,25 @@ alias wpwd='wp widget delete'
 alias wpwl='wp widget list'
 alias wpwm='wp widget move'
 alias wpwu='wp widget update'
+
+
+autoload -U +X bashcompinit && bashcompinit
+# bash completion for the `wp` command
+
+_wp_complete() {
+	local cur=${COMP_WORDS[COMP_CWORD]}
+
+	IFS=$'\n';  # want to preserve spaces at the end
+	local opts="$(wp cli completions --line="$COMP_LINE" --point="$COMP_POINT")"
+
+	if [[ "$opts" =~ \<file\>\s* ]]
+	then
+		COMPREPLY=( $(compgen -f -- $cur) )
+	elif [[ $opts = "" ]]
+	then
+		COMPREPLY=( $(compgen -f -- $cur) )
+	else
+		COMPREPLY=( ${opts[*]} )
+	fi
+}
+complete -o nospace -F _wp_complete wp
