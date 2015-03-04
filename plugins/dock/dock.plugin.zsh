@@ -2,20 +2,31 @@ function dock_usage () {
   echo
   echo  " usage: dock <command>"
   echo
-  echo "JUST A TEST, THERE ARE NO COMMANDS"
+  echo  "   clean             Remove all containers";
+  echo  "   help              show Docker cheat sheet";
+}
+
+function dock_clean {
+  docker rm $(docker ps -a -q);
+}
+
+function dock_help {
+  echo
+  echo "  # build a tagged docker docker image";
+  echo "  docker build -t <tag name> <folder>";
+  echo
+  echo "  # run a docker image as a daemon on a port";
+  echo "  docker run -d --name <give it a name> -p <inside port : outside port> <tag>";
+  echo
+  echo "  # tunnel to boot2docker";
+  echo "  boot2docker ssh -L 5000:localhost:5000";
 }
 
 function dock () {
   if [ -z "$1" ]; then
     dock_usage;
-  # else
-  #   [ "$1" = "patch" ] && gerrit_patch "$2"
-  #   [ "$1" = "push" ] && gerrit_push "$branch";
-  #   [ "$1" = "review" ] && gerrit_review "$branch";
-  #   [ "$1" = "reset" ] && gerrit_reset;
-  #   [ "$1" = "draft" ] && gerrit_draft "$branch";
-  #   [ "$1" = "pull" ] && gerrit_pull "$branch";
-  #   [ "$1" = "clone" ] && gerrit_clone "$2";
-  #   [ "$1" = "setup" ] && gerrit_setup;
-  fi
+  else
+    [ "$1" = "clean" ] && dock_clean "$2"
+    [ "$1" = "help" ] && dock_help
+ fi
 }
