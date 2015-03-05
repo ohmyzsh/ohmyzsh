@@ -4,7 +4,7 @@
 # Look for yaourt, and add some useful functions if we have it.
 if [[ -x `which yaourt` ]]; then
   upgrade () {
-    yaourt -Syu
+    yaourt -Syua
   }
   alias yaconf='yaourt -C'        # Fix all configuration files with vimdiff
   # Pacman - https://wiki.archlinux.org/index.php/Pacman_Tips
