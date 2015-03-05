@@ -18,6 +18,9 @@ function dock_help {
   echo "  # run a docker image as a daemon on a port";
   echo "  docker run -d --name <give it a name> -p <inside port : outside port> <tag>";
   echo
+  echo "  # run bash in a container";
+  echo "  docker exec -ti <name, tag, or id> bash";
+  echo
   echo "  # tunnel to boot2docker";
   echo "  boot2docker ssh -L 5000:localhost:5000";
 }
