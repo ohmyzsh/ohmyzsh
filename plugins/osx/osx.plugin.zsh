@@ -35,6 +35,7 @@ EOF
           set current_session to current session
           tell current_session
             write text "${command}"
+            keystroke return
           end tell
         end tell
       end tell
