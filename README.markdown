@@ -25,7 +25,7 @@ Oh My Zsh is installed by running one of the following commands in your terminal
 
 #### via curl
 
-`curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh`
+`curl -L https://raw.github.com/yinhou/oh-my-zsh/master/tools/install.sh | sh`
 
 #### via wget
 
