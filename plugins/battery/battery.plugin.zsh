@@ -8,7 +8,7 @@
 # Modified to add support for Apple Mac   #
 ###########################################
 
-if [[ $(uname) == "Darwin" ]] ; then
+if [[ "$OSTYPE" = darwin* ]] ; then
 
   function battery_pct() {
     local smart_battery_status="$(ioreg -rc "AppleSmartBattery")"

@@ -27,8 +27,6 @@ _1st_arguments=(
   "config\:push":"push local config vars to heroku"
   "config\:set":"set one or more config vars"
   "config\:unset":"unset one or more config vars"
-  "db\:push":"push local data up to your app"
-  "db\:pull":"pull heroku data down into your local database"
   "domains":"list custom domains for an app"
   "domains\:add":"add a custom domain to an app"
   "domains\:remove":"remove a custom domain from an app"
@@ -43,12 +41,20 @@ _1st_arguments=(
   "logs\:drains":"manage syslog drains"
   "maintenance\:on":"put the app into maintenance mode"
   "maintenance\:off":"take the app out of maintenance mode"
+  "pg\:credentials":"display the DATABASE credentials"
+  "pg\:diagnose":"run diagnostics report on DATABASE"
   "pg\:info":"display database information"
-  "pg\:ingress":"allow direct connections to the database from this IP for one minute"
+  "pg\:kill":"kill a query"
+  "pg\:killall":"terminates ALL connections"
+  "pg\:maintenance":"manage maintenance for DATABASE"
   "pg\:promote":"sets DATABASE as your DATABASE_URL"
+  "pg\:ps":"view active queries with execution time"
   "pg\:psql":"open a psql shell to the database"
+  "pg\:pull":"pull from REMOTE_SOURCE_DATABASE to LOCAL_TARGET_DATABASE"
+  "pg\:push":"push from LOCAL_SOURCE_DATABASE to REMOTE_TARGET_DATABASE"
   "pg\:reset":"delete all data in DATABASE"
   "pg\:unfollow":"stop a replica from following and make it a read/write database"
+  "pg\:upgrade":"unfollow a database and upgrade it to the latest PostgreSQL version"
   "pg\:wait":"monitor database creation, exit when complete"
   "pgbackups":"list captured backups"
   "pgbackups\:url":"get a temporary URL for a backup"
@@ -106,26 +112,6 @@ case "$words[1]" in
   config)
     _command_args=(
       '(-s|--shell)'{-s,--shell}'[output config vars in shell format]' \
-    )
-    ;;
-  db:push)
-    _command_args=(
-      '(-c|--chunksize)'{-c,--chunksize}'[specify the number of rows to send in each batch]' \
-      '(-d|--debug)'{-d,--debug}'[enable debugging output]' \
-      '(-e|--exclude)'{-e,--exclude}'[exclude the specified tables from the push]' \
-      '(-f|--filter)'{-f,--filter}'[only push certain tables]' \
-      '(-r|--resume)'{-r,--resume}'[resume transfer described by a .dat file]' \
-      '(-t|--tables)'{-t,--tables}'[only push the specified tables]' \
-    )
-    ;;
-  db:pull)
-    _command_args=(
-      '(-c|--chunksize)'{-c,--chunksize}'[specify the number of rows to send in each batch]' \
-      '(-d|--debug)'{-d,--debug}'[enable debugging output]' \
-      '(-e|--exclude)'{-e,--exclude}'[exclude the specified tables from the pull]' \
-      '(-f|--filter)'{-f,--filter}'[only pull certain tables]' \
-      '(-r|--resume)'{-r,--resume}'[resume transfer described by a .dat file]' \
-      '(-t|--tables)'{-t,--tables}'[only pull the specified tables]' \
     )
     ;;
   keys)

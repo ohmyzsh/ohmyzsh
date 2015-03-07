@@ -12,12 +12,14 @@ if [[ $('uname') == 'Linux' ]]; then
     for _sublime_path in $_sublime_linux_paths; do
         if [[ -a $_sublime_path ]]; then
             st_run() { $_sublime_path $@ >/dev/null 2>&1 &| }
+            st_run_sudo() {sudo $_sublime_path $@ >/dev/null 2>&1}
+            alias sst=st_run_sudo
             alias st=st_run
             break
         fi
     done
 
-elif  [[ $('uname') == 'Darwin' ]]; then
+elif  [[ "$OSTYPE" = darwin* ]]; then
     local _sublime_darwin_paths > /dev/null 2>&1
     _sublime_darwin_paths=(
         "/usr/local/bin/subl"

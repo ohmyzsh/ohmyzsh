@@ -7,14 +7,14 @@
 # git untracked files modification from Brian Carper:
 # http://briancarper.net/blog/570/git-info-in-your-zsh-prompt
 
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+
 function virtualenv_info {
     [ $VIRTUAL_ENV ] && echo '('$fg[blue]`basename $VIRTUAL_ENV`%{$reset_color%}') '
 }
 PR_GIT_UPDATE=1
 
 setopt prompt_subst
-autoload colors
-colors
 
 autoload -U add-zsh-hook
 autoload -Uz vcs_info
