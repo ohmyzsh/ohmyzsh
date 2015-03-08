@@ -13,6 +13,16 @@ if which tmux &> /dev/null
 	then
 	# Configuration variables
 	#
+	# Check if OSX
+	if [[ "$(uname)" == "Darwin" ]]
+	then
+		# Check if terminal app is iTerm2
+		if [[ "$TERM_PROGRAM" == "iTerm.app" ]]
+	    	then
+	        	# Set '-CC' option for iTerm2 tmux integration
+	        	[[ -n "$ZSH_TMUX_ITERM2" ]] || ZSH_TMUX_ITERM2=true
+		fi
+	fi
 	# Automatically start tmux
 	[[ -n "$ZSH_TMUX_AUTOSTART" ]] || ZSH_TMUX_AUTOSTART=false
 	# Only autostart once. If set to false, tmux will attempt to
@@ -63,7 +73,7 @@ if which tmux &> /dev/null
 		# We have other arguments, just run them
 		if [[ -n "$@" ]]
 		then
-			\tmux $@
+			\tmux `[[ "$ZSH_TMUX_ITERM2" == "true" ]] && echo '-CC '` $@ || $@
 		# Try to connect to an existing session.
 		elif [[ "$ZSH_TMUX_AUTOCONNECT" == "true" ]]
 		then
