@@ -6,11 +6,11 @@ alias bu="bundle update"
 alias bi="bundle_install"
 
 bundled_commands=(
-  fontello
   annotate
   cap
   capify
   cucumber
+  fontello
   foodcritic
   guard
   irb
