@@ -21,7 +21,7 @@ DISABLE_LS_COLORS="false" # bool
 DISABLE_AUTO_TITLE="false" # bool
 
 # Uncomment following line if you want disable red dots displayed while waiting for completion
-DISABLE_COMPLETION_WAITING_DOTS="true" # bool
+DISABLE_COMPLETION_WAITING_DOTS="false" # bool
 
 # plugins to load (array)
 # Example format: plugins=(rails git textmate ruby lighthouse)
@@ -191,5 +191,7 @@ alias grep="grep --color='always'"
 alias less='less -R'
 alias diff='colordiff'
 
+
+set modeline
 
 
