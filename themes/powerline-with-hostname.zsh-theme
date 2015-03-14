@@ -1,5 +1,4 @@
-# zshrc
-# vim: ts=2 sw=2 sts=2 et
+# vim:ft=zsh ts=2 sw=2 sts=2
 #
 # powerline theme - based on agnoster's theme - https://gist.github.com/3712874
 #
@@ -187,30 +186,15 @@ build_prompt() {
   prompt_end
 }
 
-## right prompt
+## right prompt (fixed)
 build_rprompt() {
   RETVAL=$?
-  FOO="$!"
   local symbols
   symbols=()
   drawrightprompt=0
   [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}⚙" && drawrightprompt=1
   [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}⚡" && drawrightprompt=1
-  if [[ $ZLE_LINE_ABORTED ]]; then
-  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%} ✘ " && drawrightprompt=1
-  else
-    lastchars=8
-    last="$(fc -nl -1 | cut -b -${lastchars})..."
-  
-    if [[ "${#last}" -gt "$lastchars" ]]; then
-      last="$(fc -nl -1 | cut -b -${lastchars})..."
-    else
-      last="$(fc -nl -1 | cut -b -${lastchars})"
-    fi
-
-#   [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%} ✘ $RETVAL $(fc -nl -1 | cut -b -8)..." && drawrightprompt=1
-  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%} ✘" && drawrightprompt=1
-  fi
+  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}✘ $RETVAL" && drawrightprompt=1
   if [[ "$drawrightprompt" -eq 1 ]]; then
 		prompt_rseperator %k 238
   fi
