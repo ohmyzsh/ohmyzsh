@@ -52,14 +52,21 @@ export PATH=$HOME/bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH
 # set $EDITOR
 export EDITOR='vim'
 
-# man pages: color
-export LESS_TERMCAP_mb=$'\E[01;31m'
-export LESS_TERMCAP_md=$'\E[01;33m'
+### colors in man pages :)
+### ::: man pages: basic coloring :::
+# export LESS_TERMCAP_mb=$'\E[01;31m'
+# export LESS_TERMCAP_md=$'\E[01;33m'
 export LESS_TERMCAP_me=$'\E[0m'
 export LESS_TERMCAP_se=$'\E[0m'
-export LESS_TERMCAP_so=$'\E[01;44;33m'
+# export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
-export LESS_TERMCAP_us=$'\E[01;32m'
+# export LESS_TERMCAP_us=$'\E[01;32m'
+### ::: man pages (more beautiful 256 coloring) :::
+export LESS_TERMCAP_mb=$'[38;5;171;01m'
+export LESS_TERMCAP_md=$'[38;5;221;01m'
+export LESS_TERMCAP_so=$'[38;5;80;01m'
+export LESS_TERMCAP_us=$'[38;5;37;01m'
+
 
 # zsh fix for ssh host completion from ~/.ssh/config
 [ -f ~/.ssh/config ] && : ${(A)ssh_config_hosts:=${${${${(@M)${(f)"$(<~/.ssh/config)"}:#Host *}#Host }:#*\**}:#*\?*}}
