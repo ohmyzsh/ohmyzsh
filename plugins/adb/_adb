@@ -21,6 +21,7 @@ _1st_arguments=(
 'push:copy file/dir to device'
 'shell:run remote shell interactively'
 'sync:copy host->device only if changed (-l means list but dont copy)'
+‘tcpip:restart host adb in tcpip mode’
 'uninstall:remove this app package from the device'
 'version:show version num'
 )
