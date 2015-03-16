@@ -350,7 +350,7 @@ autoload -U ~/.zsh/functions/*(:t)
 
 # Set the prompt.
 local ret_status="%(?:%{$fg_bold[green]%}➜ :%{$fg_bold[red]%}➜ %s)"
-PROMPT='%{${fg[cyan]}%}┌%n@%{${fg[yellow]}%}%m:%{${fg[cyan]}%}%B%~%{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%}$(svn_prompt_info)%{${fg[default]}%}%{$fg[cyan]%}
+PROMPT='%{${fg[cyan]}%}┌%n@%{${fg[yellow]}%}%M:%{${fg[cyan]}%}%B%~%{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%}$(svn_prompt_info)%{${fg[default]}%}%{$fg[cyan]%}
 └> %'
 
 ZSH_PROMPT_BASE_COLOR="%{$fg_bold[blue]%}"
