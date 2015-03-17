@@ -7,7 +7,6 @@ get_git_dirty() {
 }
 
 autoload -Uz vcs_info
-autoload -U colors && colors
 zstyle ':vcs_info:*' check-for-changes true
 zstyle ':vcs_info:*' unstagedstr '%F{red}*'   # display this when there are unstaged changes
 zstyle ':vcs_info:*' stagedstr '%F{yellow}+'  # display this when there are staged changes

@@ -2,9 +2,6 @@
 # http://github.com/olivierverdier/zsh-git-prompt
 #
 export __GIT_PROMPT_DIR=$ZSH/plugins/git-prompt
-# Initialize colors.
-autoload -U colors
-colors
 
 # Allow for functions in the prompt.
 setopt PROMPT_SUBST
