@@ -83,10 +83,10 @@ prompt_context() {
   local machine="$(hostname -s)"
   if [[ "$user" == "root" ]]; then
     # prompt for root
-	  prompt_segment "$prompt_context_root_bg" "$prompt_context_root_fg" "%(!.%{%F{red}%}.)$user@$machine"
+	  prompt_segment "$prompt_context_root_bg" "$prompt_context_root_fg" "%(!.%{%F{${prompt_context_root_fg}}%}.)$user@$machine"
   else
     # prompt for normal user
-	  prompt_segment "$prompt_context_user_bg" "$prompt_context_user_fg" "%(!.%{%F{yellow}%}.)$user@$machine"
+	  prompt_segment "$prompt_context_user_bg" "$prompt_context_user_fg" "%(!.%{%F{${prompt_context_user_fg}}%}.)$user@$machine"
   fi
 }
 
