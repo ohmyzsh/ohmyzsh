@@ -1,7 +1,5 @@
 # use $HOME/.zsh/256-color-test.py to test colors.
 
-echo true
-
 # user colors
 prompt_context_user_fg="252"
 prompt_context_user_bg="240"
