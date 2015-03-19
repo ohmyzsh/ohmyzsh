@@ -2,8 +2,7 @@
 # Based on bira theme
 
 # load some modules
-autoload -U colors zsh/terminfo # Used in the colour alias below
-colors
+autoload -U zsh/terminfo # Used in the colour alias below
 setopt prompt_subst
 
 # make some aliases for the colours: (could use normal escape sequences too)

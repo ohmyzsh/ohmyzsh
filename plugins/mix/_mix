@@ -21,6 +21,7 @@ _1st_arguments=(
     'local.install:Install a task or an archive locally'
     'local.rebar:Install rebar locally'
     'local.uninstall:Uninstall local tasks or archives'
+    'local.hex:Install Hex locally'
     'new:Creates a new Elixir project'
     'run:Run the given file or expression'
     "test:Run a project's tests"
