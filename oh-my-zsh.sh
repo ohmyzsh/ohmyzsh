@@ -81,6 +81,10 @@ unset config_file
 # Load the theme
 if [ "$ZSH_THEME" = "random" ]; then
   themes=($ZSH/themes/*zsh-theme)
+  for theme ($ZSH_BLACKLISTED_THEMES) do
+    themes=(${themes:#$ZSH/themes/${theme}.zsh-theme})
+  done
+
   N=${#themes[@]}
   ((N=(RANDOM%N)+1))
   RANDOM_THEME=${themes[$N]}
