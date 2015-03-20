@@ -18,8 +18,8 @@ function _rake_command () {
   fi
 }
 
-alias rails='_rails_command'
-compdef _rails_command=rails
+#alias rails='_rails_command'
+#compdef _rails_command=rails
 
 alias rake='_rake_command'
 compdef _rake_command=rake
