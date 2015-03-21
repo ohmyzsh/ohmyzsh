@@ -4,9 +4,9 @@
 ZSH="$HOME/.zsh"
 
 # export ZSH_THEME="random"
-# export ZSH_THEME="ezzsh" # name of zsh theme
+export ZSH_THEME="ezzsh" # name of zsh theme
 # export ZSH_THEME="powerline" # name of zsh theme
-export ZSH_THEME="powerline-with-hostname" # name of zsh theme
+# export ZSH_THEME="powerline-with-hostname" # name of zsh theme
 
 # Set this to true to use case-sensitive completion
 CASE_SENSITIVE="false" # bool
@@ -151,6 +151,11 @@ if [[ "$OS_TYPE" == "FreeBSD" ]]; then
   fi
 fi
 
+if [[ "$OS_TYPE" == "Linux" ]]; then
+  alias ls='ls --group-directories-first -F --color=auto'
+fi
+
+
 # enable ls colorization: 
 if [ "$TERM" != "dumb" ]; then
   if [[ "$dircolors_enable" == 1 ]]; then
@@ -197,12 +202,7 @@ alias sudo='nocorrect sudo'
 # the more brutal attempt:
 unsetopt correct{,all} 
 
-# colored grep / less
-alias grep="grep --color='always'"
 alias less='less -R'
 alias diff='colordiff'
-
-
-set modeline
 
 
