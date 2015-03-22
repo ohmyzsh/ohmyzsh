@@ -4,9 +4,9 @@
 ZSH="$HOME/.zsh"
 
 # export ZSH_THEME="random"
-export ZSH_THEME="ezzsh" # name of zsh theme
+# export ZSH_THEME="ezzsh" # name of zsh theme
 # export ZSH_THEME="powerline" # name of zsh theme
-# export ZSH_THEME="powerline-with-hostname" # name of zsh theme
+export ZSH_THEME="powerline-with-hostname" # name of zsh theme
 
 # Set this to true to use case-sensitive completion
 CASE_SENSITIVE="false" # bool
@@ -197,7 +197,7 @@ if [ "$TERM" != "dumb" ]; then
 fi
 
 # do not autocorrect sudo commands (fixes "zsh: correct 'vim' to '.vim' [nyae]?")
-alias sudo='nocorrect sudo'
+alias sudo='nocorrect sudo -E'
 
 # the more brutal attempt:
 unsetopt correct{,all} 
