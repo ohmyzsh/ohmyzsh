@@ -15,7 +15,7 @@ _cake_does_target_list_need_generating () {
 	fi
 
 	[ ! -f ${_cake_task_cache_file} ] && return 0;
-	[ ${_cake_task_cache_file} -nt Cakefile ] && return 0;
+	[ Cakefile -nt ${_cake_task_cache_file} ] && return 0;
 	return 1;
 }
 

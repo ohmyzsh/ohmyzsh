@@ -11,7 +11,7 @@
 # Output a selectable list of all running docker containers
 __docker_containers() {
     declare -a cont_cmd
-    cont_cmd=($(docker ps | awk 'NR>1{print $1":[CON("$1")"$2"("$3")]"}'))
+    cont_cmd=($(docker ps | awk 'NR>1{print $NF":[CON("$1")"$2"("$3")]"}'))
     _describe 'containers' cont_cmd
 }
 
@@ -219,6 +219,10 @@ __start() {
     __docker_containers
 }
 
+__stats() {
+    __docker_containers
+}
+
 __stop() {
     _arguments \
         '(-t,--time=)'{-t,--time=}'[Number of seconds to wait for the container to stop before killing it.]'
@@ -280,6 +284,7 @@ _1st_arguments=(
     "save":"Save an image to a tar archive"
     "search":"Search for an image in the docker index"
     "start":"Start a stopped container"
+    "stats":"Display a live stream of one or more containers' resource usage statistics"
     "stop":"Stop a running container"
     "tag":"Tag an image into a repository"
     "top":"Lookup the running processes of a container"
@@ -351,6 +356,8 @@ case "$words[1]" in
         __save ;;
     search)
         __search ;;
+    stats)
+        __stats ;;
     start)
         __start ;;
     stop)
