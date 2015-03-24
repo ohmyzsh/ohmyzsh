@@ -29,9 +29,20 @@ currentWindowId () {
   fi
 }
 
+terminalBundleID () {
+  if [[ $TERM_PROGRAM == iTerm.app ]]; then
+    terminal_id=$(osascript -e 'id of app "iTerm.app"')
+  elif [[ $TERM_PROGRAM == Apple_Terminal ]]; then
+    terminal_id=$(osascript -e 'id of app "Terminal.app"')
+  fi
+  if [ ! -z $terminal_id ]; then
+    echo $terminal_id
+  fi
+}
+
 bgnotify () {
   if hash terminal-notifier 2>/dev/null; then #osx
-    terminal-notifier -message "$2" -title "$1"
+    terminal-notifier -message "$2" -title "$1" -activate "$(terminalBundleID)"
   elif hash growlnotify 2>/dev/null; then #osx growl
     growlnotify -m $1 $2
   elif hash notify-send 2>/dev/null; then #ubuntu!
