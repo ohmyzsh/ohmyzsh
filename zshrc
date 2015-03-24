@@ -151,11 +151,6 @@ if [[ "$OS_TYPE" == "FreeBSD" ]]; then
   fi
 fi
 
-if [[ "$OS_TYPE" == "Linux" ]]; then
-  alias ls='ls --group-directories-first -F --color=auto'
-fi
-
-
 # enable ls colorization: 
 if [ "$TERM" != "dumb" ]; then
   if [[ "$dircolors_enable" == 1 ]]; then
@@ -197,12 +192,17 @@ if [ "$TERM" != "dumb" ]; then
 fi
 
 # do not autocorrect sudo commands (fixes "zsh: correct 'vim' to '.vim' [nyae]?")
-alias sudo='nocorrect sudo -E'
+alias sudo='nocorrect sudo'
 
 # the more brutal attempt:
 unsetopt correct{,all} 
 
+# colored grep / less
+alias grep="grep --color='always'"
 alias less='less -R'
 alias diff='colordiff'
+
+
+set modeline
 
 
