@@ -26,7 +26,8 @@
 # A few utility functions to make it easy and re-usable to draw segmented prompts
 
 CURRENT_BG='NONE'
-SEGMENT_SEPARATOR=''
+SEGMENT_SEPARATOR='\ue0b0'
+
 
 # Begin a segment
 # Takes two arguments, background and foreground. Both can be omitted,
@@ -74,9 +75,10 @@ prompt_git() {
     dirty=$(parse_git_dirty)
     ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="➦ $(git show-ref --head -s --abbrev |head -n1 2> /dev/null)"
     if [[ -n $dirty ]]; then
-      prompt_segment yellow black
+      prompt_segment red black 
     else
       prompt_segment green black
+
     fi
 
     if [[ -e "${repo_path}/BISECT_LOG" ]]; then
@@ -86,7 +88,6 @@ prompt_git() {
     elif [[ -e "${repo_path}/rebase" || -e "${repo_path}/rebase-apply" || -e "${repo_path}/rebase-merge" || -e "${repo_path}/../.dotest" ]]; then
       mode=" >R>"
     fi
-
     setopt promptsubst
     autoload -Uz vcs_info
 
@@ -98,7 +99,7 @@ prompt_git() {
     zstyle ':vcs_info:*' formats ' %u%c'
     zstyle ':vcs_info:*' actionformats ' %u%c'
     vcs_info
-    echo -n "${ref/refs\/heads\// }${vcs_info_msg_0_%% }${mode}"
+    echo -n "${ref/refs\/heads\//\ue0a0 }${vcs_info_msg_0_%% }${mode}"
   fi
 }
 
