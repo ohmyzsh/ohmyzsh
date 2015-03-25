@@ -76,7 +76,6 @@ prompt_git() {
     ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="➦ $(git show-ref --head -s --abbrev |head -n1 2> /dev/null)"
     if [[ -n $dirty ]]; then
       prompt_segment red black 
-      st=' \u00b1'
     else
       prompt_segment green black
 
@@ -89,7 +88,6 @@ prompt_git() {
     elif [[ -e "${repo_path}/rebase" || -e "${repo_path}/rebase-apply" || -e "${repo_path}/rebase-merge" || -e "${repo_path}/../.dotest" ]]; then
       mode=" >R>"
     fi
-    mode=$st;
     setopt promptsubst
     autoload -Uz vcs_info
 
