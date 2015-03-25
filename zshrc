@@ -202,7 +202,7 @@ alias grep="grep --color='always'"
 alias less='less -R'
 alias diff='colordiff'
 
+alias s='sudo -s -E'
 
-set modeline
 
 
