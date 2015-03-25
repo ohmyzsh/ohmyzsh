@@ -92,7 +92,7 @@ fi
   done
 
   function putbuffer() {
-    zle copy-region-as-kill "$(xclip -o)"
+    zle copy-region-as-kill "$(xclip -selection clipboard -o)"
     zle .$WIDGET
   }
 
