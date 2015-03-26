@@ -75,10 +75,9 @@ prompt_git() {
     dirty=$(parse_git_dirty)
     ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="➦ $(git show-ref --head -s --abbrev |head -n1 2> /dev/null)"
     if [[ -n $dirty ]]; then
-      prompt_segment yellow black 
+      prompt_segment yellow black
     else
       prompt_segment green black
-
     fi
 
     if [[ -e "${repo_path}/BISECT_LOG" ]]; then
@@ -88,6 +87,7 @@ prompt_git() {
     elif [[ -e "${repo_path}/rebase" || -e "${repo_path}/rebase-apply" || -e "${repo_path}/rebase-merge" || -e "${repo_path}/../.dotest" ]]; then
       mode=" >R>"
     fi
+
     setopt promptsubst
     autoload -Uz vcs_info
 
