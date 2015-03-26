@@ -28,7 +28,6 @@
 CURRENT_BG='NONE'
 SEGMENT_SEPARATOR='\ue0b0'
 
-
 # Begin a segment
 # Takes two arguments, background and foreground. Both can be omitted,
 # rendering default background/foreground.
