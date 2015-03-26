@@ -12,6 +12,7 @@ function git_prompt_info() {
 parse_git_dirty() {
   local STATUS=''
   local FLAGS
+  local COPID=''
   FLAGS=('--porcelain')
   if [[ "$(command git config --get oh-my-zsh.hide-dirty)" != "1" ]]; then
     if [[ $POST_1_7_2_GIT -gt 0 ]]; then
@@ -20,12 +21,21 @@ parse_git_dirty() {
     if [[ "$DISABLE_UNTRACKED_FILES_DIRTY" == "true" ]]; then
       FLAGS+='--untracked-files=no'
     fi
-    STATUS=$(command git status ${FLAGS} 2> /dev/null | tail -n1)
-  fi
-  if [[ -n $STATUS ]]; then
-    echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
-  else
-    echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
+    # Use coproc to timebox `git status` so slow repo access doesn't hang the prompt
+    # Use dummy "xxx" to distinguish timeouts from empty output
+    local END_OUTPUT="_end_of_status_"
+    coproc (command git status ${FLAGS} 2> /dev/null; echo $END_OUTPUT)
+    COPID=$!
+    read -p -t $ZSH_THEME_SCM_CHECK_TIMEOUT STATUS
+    if [[ -z $STATUS ]]; then
+      echo "$ZSH_THEME_GIT_PROMPT_TIMEDOUT"
+      # Get rid of that git run
+      kill -s KILL $COPID &>/dev/null
+    elif [[ $STATUS = $END_OUTPUT ]]; then
+      echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
+    else
+      echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
+    fi
   fi
 }
 
