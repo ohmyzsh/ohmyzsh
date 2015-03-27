@@ -13,13 +13,37 @@ function title {
   # if it is set and empty, leave it as is
   : ${2=$1}
 
-  if [[ "$TERM" == screen* ]]; then
-    print -Pn "\ek$1:q\e\\" #set screen hardstatus, usually truncated at 20 chars
-  elif [[ "$TERM" == xterm* ]] || [[ "$TERM" == rxvt* ]] || [[ "$TERM" == ansi ]] || [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
-    print -Pn "\e]2;$2:q\a" #set window name
-    print -Pn "\e]1;$1:q\a" #set icon (=tab) name
-  fi
+  case $ZSH_THEME_TERM_TITLE_TYPE in
+    screen)
+      print -Pn "\ek$1:q\e\\" #set screen title string, usually truncated at 20 chars
+      ;;
+    screenlong)
+      print -Pn "\ek$2:q\e\\"
+      ;;
+    xterm)
+      print -Pn "\e]2;$2:q\a" #set window name
+      print -Pn "\e]1;$1:q\a" #set icon (=tab) name
+      ;;
+    both)
+      print -Pn "\ek$1:q\e\\"
+      print -Pn "\e]2;$2:q\a"
+      print -Pn "\e]1;$1:q\a"
+      ;;
+    bothlong)
+      print -Pn "\ek$2:q\e\\"
+      print -Pn "\e]2;$2:q\a"
+      print -Pn "\e]1;$1:q\a"
+      ;;
+  esac
 }
+
+if [[ -z $ZSH_THEME_TERM_TITLE_TYPE ]] then;
+  if [[ "$TERM" == screen* ]]; then
+    ZSH_THEME_TERM_TITLE_TYPE=screen
+  elif [[ "$TERM" == xterm* ]] || [[ "$TERM" == rxvt* ]] || [[ "$TERM" == ansi ]] || [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
+    ZSH_THEME_TERM_TITLE_TYPE=xterm
+  fi
+fi
 
 ZSH_THEME_TERM_TAB_TITLE_IDLE="%15<..<%~%<<" #15 char left truncated PWD
 ZSH_THEME_TERM_TITLE_IDLE="%n@%m: %~"

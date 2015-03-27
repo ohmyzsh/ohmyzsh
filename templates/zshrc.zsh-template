@@ -41,6 +41,14 @@ ZSH_THEME="robbyrussell"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
+# Change the default terminal title setting behavior
+# xterm: Default for most cases, uses \e]1 and \e]2.
+# screen: Default for screen and tmux. Uses \ek with a truncated string.
+# screenlong: A non-truncated version of the screen option.
+# both: Combines the xterm and screen options.
+# bothlong: As both, but do not truncate the string passed to \ek.
+# ZSH_THEME_TERM_TITLE_TYPE = xterm
+
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
