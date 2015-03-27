@@ -42,7 +42,7 @@ terminalBundleID () {
 
 bgnotify () {
   if hash terminal-notifier 2>/dev/null; then #osx
-    terminal-notifier -message "$2" -title "$1" -activate "$(terminalBundleID)"
+    terminal-notifier -message "$2" -title "$1" -activate "$(terminalBundleID)" -sender "$(terminalBundleID)"
   elif hash growlnotify 2>/dev/null; then #osx growl
     growlnotify -m $1 $2
   elif hash notify-send 2>/dev/null; then #ubuntu!
