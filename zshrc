@@ -155,6 +155,11 @@ if [[ "$OS_TYPE" == "FreeBSD" ]]; then
   fi
 fi
 
+if [[ "$OS_TYPE" == "Linux" ]]; then
+  LS_COMMAND=ls
+  dircolors_enable=1
+fi
+
 # enable ls colorization: 
 if [ "$TERM" != "dumb" ]; then
   if [[ "$dircolors_enable" == 1 ]]; then
@@ -212,8 +217,9 @@ alias grep="grep --color='always'"
 alias less='less -R'
 alias diff='colordiff'
 
-
+# sudo shell with "s"
 alias s="sudo -s -E"
 
-
+# don't require "rehash" after installing a package
+setopt nohashdirs
 
