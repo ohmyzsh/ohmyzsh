@@ -1,0 +1,3 @@
+[submodule "themes/powerlevel9k"]
+	path = themes/powerlevel9k
+	url = git@github.com:bhilburn/powerlevel9k.git
