@@ -8,6 +8,10 @@ ZSH="$HOME/.zsh"
 # export ZSH_THEME="powerline" # name of zsh theme
 export ZSH_THEME="powerline-with-hostname" # name of zsh theme
 
+if [[ "$TERM" == "linux" ]]; then
+  export ZSH_THEME=ezzsh
+fi
+
 # Set this to true to use case-sensitive completion
 CASE_SENSITIVE="false" # bool
 
@@ -185,10 +189,16 @@ alias grep='grep --color=auto'
 
 # enable ls colorization: 
 if [ "$TERM" != "dumb" ]; then
-  if [[ "$dircolors_enable" == 1 ]]; then
-    eval "$(dircolors "$ZSH"/dircolors)"
-    alias ls="$LS_COMMAND $LS_OPTIONS"
-  fi
+  #if [[ "$dircolors_enable" == 1 ]]; then
+  #  eval "$(dircolors "$ZSH"/dircolors)"
+  #  alias ls="$LS_COMMAND $LS_OPTIONS"
+  #fi
+  alias ls="$LS_COMMAND $LS_OPTIONS"
+fi
+
+# Fix for KDEs stupid Konsole program
+if [[ $KONSOLE_PROFILE_NAME ]]; then
+  export TERM=xterm-256color
 fi
 
 # do not autocorrect sudo commands (fixes "zsh: correct 'vim' to '.vim' [nyae]?")
@@ -203,6 +213,7 @@ alias less='less -R'
 alias diff='colordiff'
 
 
-set modeline
+alias s="sudo -s -E"
+
 
 
