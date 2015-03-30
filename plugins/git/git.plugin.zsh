@@ -110,6 +110,8 @@ alias gsts='git stash show --text'
 alias gsta='git stash'
 alias gstp='git stash pop'
 alias gstd='git stash drop'
+alias gstl='git stash list'
+alias gstc='git stash clear'
 
 # Will cd into the top of the current repository
 # or submodule.
