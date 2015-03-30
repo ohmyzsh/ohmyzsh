@@ -1,0 +1,12 @@
+# use $HOME/.zsh/256-color-test.py to test colors.
+
+# user colors
+prompt_context_user_fg="252"
+prompt_context_user_bg="240"
+
+# root colors
+prompt_context_root_fg="172"
+prompt_context_root_bg="52"
+
+
+

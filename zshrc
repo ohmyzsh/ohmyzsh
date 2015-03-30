@@ -8,6 +8,10 @@ ZSH="$HOME/.zsh"
 # export ZSH_THEME="powerline" # name of zsh theme
 export ZSH_THEME="powerline-with-hostname" # name of zsh theme
 
+if [[ "$TERM" == "linux" ]]; then
+  export ZSH_THEME=ezzsh
+fi
+
 # Set this to true to use case-sensitive completion
 CASE_SENSITIVE="false" # bool
 
@@ -21,7 +25,7 @@ DISABLE_LS_COLORS="false" # bool
 DISABLE_AUTO_TITLE="false" # bool
 
 # Uncomment following line if you want disable red dots displayed while waiting for completion
-DISABLE_COMPLETION_WAITING_DOTS="true" # bool
+DISABLE_COMPLETION_WAITING_DOTS="false" # bool
 
 # plugins to load (array)
 # Example format: plugins=(rails git textmate ruby lighthouse)
@@ -52,14 +56,21 @@ export PATH=$HOME/bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH
 # set $EDITOR
 export EDITOR='vim'
 
-# man pages: color
-export LESS_TERMCAP_mb=$'\E[01;31m'
-export LESS_TERMCAP_md=$'\E[01;33m'
+### colors in man pages :)
+### ::: man pages: basic coloring :::
+# export LESS_TERMCAP_mb=$'\E[01;31m'
+# export LESS_TERMCAP_md=$'\E[01;33m'
 export LESS_TERMCAP_me=$'\E[0m'
 export LESS_TERMCAP_se=$'\E[0m'
-export LESS_TERMCAP_so=$'\E[01;44;33m'
+# export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
-export LESS_TERMCAP_us=$'\E[01;32m'
+# export LESS_TERMCAP_us=$'\E[01;32m'
+### ::: man pages (more beautiful 256 coloring) :::
+export LESS_TERMCAP_mb=$'[38;5;171;01m'
+export LESS_TERMCAP_md=$'[38;5;81;01m'
+export LESS_TERMCAP_so=$'[38;5;80;01m'
+export LESS_TERMCAP_us=$'[38;5;214;01m'
+
 
 # zsh fix for ssh host completion from ~/.ssh/config
 [ -f ~/.ssh/config ] && : ${(A)ssh_config_hosts:=${${${${(@M)${(f)"$(<~/.ssh/config)"}:#Host *}#Host }:#*\**}:#*\?*}}
@@ -144,6 +155,11 @@ if [[ "$OS_TYPE" == "FreeBSD" ]]; then
   fi
 fi
 
+if [[ "$OS_TYPE" == "Linux" ]]; then
+  LS_COMMAND=ls
+  dircolors_enable=1
+fi
+
 # enable ls colorization: 
 if [ "$TERM" != "dumb" ]; then
   if [[ "$dircolors_enable" == 1 ]]; then
@@ -178,10 +194,16 @@ alias grep='grep --color=auto'
 
 # enable ls colorization: 
 if [ "$TERM" != "dumb" ]; then
-  if [[ "$dircolors_enable" == 1 ]]; then
-    eval "$(dircolors "$ZSH"/dircolors)"
-    alias ls="$LS_COMMAND $LS_OPTIONS"
-  fi
+  #if [[ "$dircolors_enable" == 1 ]]; then
+  #  eval "$(dircolors "$ZSH"/dircolors)"
+  #  alias ls="$LS_COMMAND $LS_OPTIONS"
+  #fi
+  alias ls="$LS_COMMAND $LS_OPTIONS"
+fi
+
+# Fix for KDEs stupid Konsole program
+if [[ $KONSOLE_PROFILE_NAME ]]; then
+  export TERM=xterm-256color
 fi
 
 # do not autocorrect sudo commands (fixes "zsh: correct 'vim' to '.vim' [nyae]?")
@@ -195,5 +217,9 @@ alias grep="grep --color='always'"
 alias less='less -R'
 alias diff='colordiff'
 
+# sudo shell with "s"
+alias s="sudo -s -E"
 
+# don't require "rehash" after installing a package
+setopt nohashdirs
 
