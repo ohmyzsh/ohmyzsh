@@ -25,7 +25,7 @@ DISABLE_COMPLETION_WAITING_DOTS="true" # bool
 
 # plugins to load (array)
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git)
+plugins=(git command-not-found)
 
 
 # Customize to your needs...
