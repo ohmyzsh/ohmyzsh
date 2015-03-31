@@ -79,7 +79,7 @@ function _omz_load_theme_from_file() {
     params_added=(${params_after:|params_before})
     ignore_params=(LINENO RANDOM _ parameters prompt values_before modules \
       params_added ignore_params params_before params_after params_changed \
-      SECONDS TTYIDLE)
+      SECONDS TTYIDLE PS1 PS2 PS3 PS4 RPS1 RPS2)
     params_before=(${params_before:|ignore_params})
     local params_changed
     params_changed=()
@@ -104,7 +104,7 @@ function _omz_load_theme_from_file() {
     if [[ -n $params_changed ]]; then
       printf '=== %s ===\n%s\n' "Theme changed parameters:" ${(F)params_changed}
     fi
-    if [[ -n "$_OMZ_THEME_CHPWD_FUNCTIONS$_OMZ_THEME_PRECMD_FUNCTIONS$_OMZ_THEME_PREEXEC_FUNCTIONS" ]]; then
+    if [[ -n "${_OMZ_THEME_CHPWD_FUNCTIONS}${_OMZ_THEME_PRECMD_FUNCTIONS}${_OMZ_THEME_PREEXEC_FUNCTIONS}" ]]; then
       printf '=== %s ===\n' "Theme added hooks:"
       if [[ -n $_OMZ_THEME_CHPWD_FUNCTIONS ]]; then
         echo "Theme added chpwd hooks: $_OMZ_THEME_CHPWD_FUNCTIONS"
@@ -142,7 +142,12 @@ function _omz_source_theme_file() {
 # It will also remove any hook functions installed by the current theme, if it
 # was loaded by the theme() function
 function _omz_reset_theme() {
+  # Prompts
   PROMPT="%n@%m:%~%# "
+  PROMPT2='%_> '
+  PROMPT3='?# '
+  PROMPT4='+%N:%i> '
+  unset RPROMPT RPROMPT2
 
   # This assumes that all ZSH_THEME_<aspect>_* variables are owned by
   # OMZ theming, and can be reset en masse
