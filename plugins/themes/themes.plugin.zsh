@@ -70,8 +70,8 @@ function _omz_load_theme_from_file() {
     values_before[$param]=${(P)param}
   done
 
-  # Actually load the theme
-  source $file
+  # Actually load the theme, using an indirection function
+  _omz_source_theme_file $file
 
   # Debugging stuff
   if [[ $ZSH_THEME_DEBUG == true ]]; then
@@ -126,6 +126,14 @@ function _omz_load_theme_from_file() {
       echo "WARNING: Theme changed precmd()"
     fi
   fi
+}
+
+# Sources the given file
+# The only reason this function exists is to provide a layer of
+# indirection so that the theme file runs in its own function call stack frame
+# and "local" statements in the theme definitions work as intended.
+function _omz_source_theme_file() {
+  source $1
 }
 
 # Resets all theme settings to their default state
