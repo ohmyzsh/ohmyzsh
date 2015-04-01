@@ -336,8 +336,6 @@ function _omz_reset_theme() {
   unset -m 'ZSH_THEME_GIT_PROMPT_*'
   ZSH_THEME_GIT_PROMPT_PREFIX="git:("   # Prefix at the very beginning of the prompt, before the branch name
   ZSH_THEME_GIT_PROMPT_SUFFIX=")"       # At the very end of the prompt
-  #ZSH_THEME_GIT_PROMPT_PREFIX=
-  #ZSH_THEME_GIT_PROMPT_SUFFIX=
   #ZSH_THEME_GIT_COMMITS_AHEAD_PREFIX=
   #ZSH_THEME_GIT_COMMITS_AHEAD_SUFFIX=
   ZSH_THEME_GIT_PROMPT_DIRTY="*"              # Text to display if the branch is dirty
@@ -414,5 +412,51 @@ function lstheme() {
 # List themes defined in a given dir
 function _omz_lstheme_dir() {
   ls $1 | grep '.zsh-theme$' | sed 's,\.zsh-theme$,,'
+}
+
+# Display a key to the current prompt's symbols
+# Still experimental and for debugging use, so it has a "_" prefix, and its
+# API may change at any time.
+function _omz_theme_show_prompt_key {
+  # Hardcode the variable definitions so ones that are not set are still
+  # included in the key
+  local var vars
+  vars=(
+    ZSH_THEME_GIT_PROMPT_PREFIX
+    ZSH_THEME_GIT_PROMPT_SUFFIX
+    ZSH_THEME_GIT_PROMPT_CLEAN
+    ZSH_THEME_GIT_PROMPT_DIRTY
+    ZSH_THEME_GIT_PROMPT_ADDED
+    ZSH_THEME_GIT_PROMPT_MODIFIED
+    ZSH_THEME_GIT_PROMPT_RENAMED
+    ZSH_THEME_GIT_PROMPT_DELETED
+    ZSH_THEME_GIT_PROMPT_STASHED
+    ZSH_THEME_GIT_PROMPT_UNMERGED
+    ZSH_THEME_GIT_PROMPT_DIVERGED
+    ZSH_THEME_GIT_PROMPT_UNTRACKED
+    ZSH_THEME_GIT_COMMITS_AHEAD_PREFIX
+    ZSH_THEME_GIT_COMMITS_AHEAD_SUFFIX
+    ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE
+    ZSH_THEME_GIT_PROMPT_AHEAD
+    ZSH_THEME_GIT_PROMPT_BEHIND
+    ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE
+    ZSH_THEME_GIT_PROMPT_DIVERGED_REMOTE
+    ZSH_THEME_GIT_PROMPT_SHA_BEFORE
+    ZSH_THEME_GIT_PROMPT_SHA_AFTER
+    ZSH_THEME_NVM_PROMPT_PREFIX
+    ZSH_THEME_NVM_PROMPT_SUFFIX
+    ZSH_THEME_RVM_PROMPT_PREFIX
+    ZSH_THEME_RVM_PROMPT_SUFFIX
+    ZSH_THEME_RVM_PROMPT_OPTIONS
+    ZSH_THEME_SVN_PROMPT_CLEAN
+    ZSH_THEME_SVN_PROMPT_DIRTY
+    ZSH_THEME_SVN_PROMPT_PREFIX
+    ZSH_THEME_SVN_PROMPT_SUFFIX
+  )
+  for var ($vars); do
+    printf '%s=' $var
+    print -P -n ${(P)var}
+    printf '%s\n' $reset_color
+  done
 }
 
