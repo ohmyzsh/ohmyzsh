@@ -202,7 +202,7 @@ if [ "$TERM" != "dumb" ]; then
 fi
 
 # Fix for KDEs stupid Konsole program
-if [[ $KONSOLE_PROFILE_NAME ]]; then
+if [[ ! "$KONSOLE_PROFILE_NAME" == "" ]]; then
   export TERM=xterm-256color
 fi
 
