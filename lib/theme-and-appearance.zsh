@@ -89,9 +89,8 @@ function theme() {
   local themes n_themes random_theme blacklist
   if [[ -z $1 || $1 == "random" ]]; then
     # Special case: random theme
-    blacklist=($(_omz_theme_blacklist))
+    blacklist=($ZSH_BLACKLISTED_THEMES)
     themes=($(lstheme))
-    #themes=(${themes:|blacklist})
     _omz_array_setdiff themes themes blacklist
     n_themes=${#themes[@]}
     ((n=(RANDOM%n_themes)+1))
@@ -175,7 +174,7 @@ function _omz_theme_n() {
     (( n = (last_n % n_themes) + 1 ))
     # Advance past blacklisted themes. Do it this way instead of removing blacklist
     # from themes list to keep indexes stable
-    blacklist=($(_omz_theme_blacklist))
+    blacklist=($ZSH_BLACKLISTED_THEMES)
     while [[ ${blacklist[(i)${themes[n]}]} -le ${#blacklist} ]]; do
       if [[ $ZSH_THEME_DEBUG == 'true' ]]; then
         echo "[oh-my-zsh]: Skipping blacklisted theme ${themes[n]}"
@@ -238,15 +237,6 @@ _OMZ_THEME_CHPWD_FUNCTIONS=()
 _OMZ_THEME_PRECMD_FUNCTIONS=()
 _OMZ_THEME_PREEXEC_FUNCTIONS=()
 
-# Outputs the effective theme blacklist
-function _omz_theme_blacklist() {
-  local blacklist=$ZSH_BLACKLISTED_THEMES
-  if [[ $ZSH_THEME_DEBUG == true ]]; then
-    blacklist+=($_OMZ_DEBUG_BLACKLISTED_THEMES)
-  fi
-  echo ${(F)blacklist}
-}
-
 # Implementation of loading a theme
 # Most of the code in here is for tracking hooks and debugging support
 function _omz_load_theme_from_file() {
@@ -269,7 +259,7 @@ function _omz_load_theme_from_file() {
     params_before=($(set +))
   fi
   for param ($params_before); do
-    values_before[$param]=${(P)param}
+    values_before[$param]="${(P)param}"
   done
 
   # Actually load the theme, using an indirection function
@@ -278,12 +268,11 @@ function _omz_load_theme_from_file() {
   # Debugging stuff
   if [[ $ZSH_THEME_DEBUG == true ]]; then
     params_after=($(set +))
-    #params_added=(${params_after:|params_before})
     _omz_array_setdiff params_added params_after params_before
     ignore_params=(LINENO RANDOM _ parameters prompt values_before modules \
       params_added ignore_params params_before params_after params_changed \
-      SECONDS TTYIDLE PS1 PS2 PS3 PS4 RPS1 RPS2)
-    #params_before=(${params_before:|ignore_params})
+      SECONDS TTYIDLE PS1 PS2 PS3 PS4 RPS1 RPS2 '#')
+    _omz_array_setdiff params_added params_added ignore_params
     _omz_array_setdiff params_before params_before ignore_params
     local params_changed
     params_changed=()
@@ -298,11 +287,8 @@ function _omz_load_theme_from_file() {
   ZSH_THEME=$name
 
   # Track changes to hooks
-  #_OMZ_THEME_CHPWD_FUNCTIONS=(${chpwd_functions:|chpwd_fcns_0})
   _omz_array_setdiff _OMZ_THEME_CHPWD_FUNCTIONS chpwd_functions chpwd_fcns_0
-  #_OMZ_THEME_PRECMD_FUNCTIONS=(${precmd_functions:|precmd_fcns_0})
   _omz_array_setdiff _OMZ_THEME_PRECMD_FUNCTIONS precmd_functions precmd_fcns_0
-  #_OMZ_THEME_PREEXEC_FUNCTIONS=(${preexec_functions:|preexec_fcns_0})
   _omz_array_setdiff _OMZ_THEME_PREEXEC_FUNCTIONS preexec_functions preexec_fcns_0
 
   # Post-loading debugging
@@ -492,9 +478,6 @@ function _omz_theme_show_prompt_key {
 # Note that this can cause unstable behavior, especially with these themes:
 # agnoster dstufft
 ZSH_THEME_DEBUG=${ZSH_THEME_DEBUG:-false}
-# These themes are known to interact badly with our debugging support
-_OMZ_DEBUG_BLACKLISTED_THEMES=(agnoster dstufft dogenpunk fino fino-time half-life \
-  kolo peepcode smt steeef suvash zhann)
 
 # Configure and enable ls colors
 autoload -U colors && colors

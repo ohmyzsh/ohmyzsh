@@ -12,7 +12,7 @@ add-zsh-hook precmd prompt_vcs
 prompt_vcs () {
     vcs_info
 
-    if [ "${vcs_info_msg_0_}" = "" ]; then
+    if [[ "${vcs_info_msg_0_}" == "" ]]; then
         dir_status="%F{2}→%f"
     elif [[ $(git diff --cached --name-status 2>/dev/null ) != "" ]]; then
         dir_status="%F{1}▶%f"
@@ -33,6 +33,6 @@ function {
 
 local ret_status="%(?:%{$fg_bold[green]%}Ξ:%{$fg_bold[red]%}%S↑%s%?)"
 
-PROMPT='${ret_status}%{$fg[blue]%}${PROMPT_HOST}%{$fg_bold[green]%}%p %{$fg_bold[yellow]%}%2~ ${vcs_info_msg_0_}${dir_status}%{$reset_color%} '
+PROMPT=${ret_status}'%{$fg[blue]%}${PROMPT_HOST}%{$fg_bold[green]%}%p %{$fg_bold[yellow]%}%2~ ${vcs_info_msg_0_}${dir_status}%{$reset_color%} '
 
 #  vim: set ft=zsh ts=4 sw=4 et:

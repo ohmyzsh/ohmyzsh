@@ -27,4 +27,4 @@ ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[orange]%}!"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%})"
 
 local return_status="%{$fg[red]%}%(?..✘)%{$reset_color%}"
-RPROMPT='${return_status}$(battery_time_remaining) $(battery_pct_prompt)%{$reset_color%}'
+RPROMPT=${return_status}'$(battery_time_remaining) $(battery_pct_prompt)%{$reset_color%}'

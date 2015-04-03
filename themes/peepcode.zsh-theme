@@ -37,8 +37,8 @@ git_prompt() {
 
 local smiley="%(?,%{$fg[green]%}☺%{$reset_color%},%{$fg[red]%}☹%{$reset_color%})"
 
-PROMPT='
+PROMPT="
 %~
-${smiley}  %{$reset_color%}'
+${smiley}  "'%{$reset_color%}'
 
 RPROMPT='%{$fg[white]%} $(ruby_prompt_info)$(git_prompt)%{$reset_color%}'

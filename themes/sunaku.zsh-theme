@@ -13,7 +13,7 @@ ZSH_THEME_GIT_PROMPT_SUFFIX=" "
 ZSH_THEME_GIT_PROMPT_DIRTY=""
 ZSH_THEME_GIT_PROMPT_CLEAN=""
 
-local user_color='green'
+user_color='green'
 test $UID -eq 0 && user_color='red'
 
 PROMPT='%(?..%{$fg_bold[red]%}exit %?
