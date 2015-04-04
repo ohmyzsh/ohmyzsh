@@ -31,13 +31,6 @@ function omz_termsupport_precmd {
   fi
 
   title $ZSH_THEME_TERM_TAB_TITLE_IDLE $ZSH_THEME_TERM_TITLE_IDLE
-
-  # Notify Terminal.app of current directory using undocumented OSC sequence
-  # found in OS X 10.9 and 10.10's /etc/bashrc
-  if [[ $TERM_PROGRAM == Apple_Terminal ]] && [[ -z $INSIDE_EMACS ]]; then
-    local PWD_URL="file://$HOSTNAME${PWD// /%20}"
-    printf '\e]7;%s\a' "$PWD_URL"
-  fi
 }
 
 # Runs before executing the command
@@ -58,3 +51,16 @@ function omz_termsupport_preexec {
 
 precmd_functions+=(omz_termsupport_precmd)
 preexec_functions+=(omz_termsupport_preexec)
+
+
+# Runs before showing the prompt, to update the current directory in Terminal.app
+function omz_termsupport_cwd {
+  # Notify Terminal.app of current directory using undocumented OSC sequence
+  # found in OS X 10.9 and 10.10's /etc/bashrc
+  if [[ $TERM_PROGRAM == Apple_Terminal ]] && [[ -z $INSIDE_EMACS ]]; then
+    local PWD_URL="file://$HOSTNAME${PWD// /%20}"
+    printf '\e]7;%s\a' "$PWD_URL"
+  fi
+}
+
+precmd_functions+=(omz_termsupport_cwd)

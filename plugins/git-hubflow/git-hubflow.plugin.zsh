@@ -5,7 +5,7 @@
 #
 # To achieve git-hubflow completion nirvana:
 #
-#  0. Update your zsh's git-completion module to the newest verion.
+#  0. Update your zsh's git-completion module to the newest version.
 #     From here. http://zsh.git.sourceforge.net/git/gitweb.cgi?p=zsh/zsh;a=blob_plain;f=Completion/Unix/Command/_git;hb=HEAD
 #
 #  1. Install this file. Either:
@@ -17,7 +17,7 @@
 #
 #            source ~/.git-hubflow-completion.zsh
 #
-#     c. Or, use this file as a oh-my-zsh plugin.
+#     c. Or, use this file as an oh-my-zsh plugin.
 #
 
 _git-hf ()
