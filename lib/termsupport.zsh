@@ -33,7 +33,9 @@ function omz_termsupport_precmd {
   title $ZSH_THEME_TERM_TAB_TITLE_IDLE $ZSH_THEME_TERM_TITLE_IDLE
 }
 
-# Runs before executing the command
+# Runs before executing the command; @CMD@ is the command run; @LINE@ is the rest of the line
+ZSH_THEME_TERM_TAB_TITLE_EXEC='@CMD@'
+ZSH_THEME_TERM_TITLE_EXEC='%100>...>@LINE@%<<'
 function omz_termsupport_preexec {
   if [[ $DISABLE_AUTO_TITLE == true ]]; then
     return
@@ -46,7 +48,12 @@ function omz_termsupport_preexec {
   local CMD=${1[(wr)^(*=*|sudo|ssh|rake|-*)]:gs/%/%%}
   local LINE="${2:gs/%/%%}"
 
-  title '$CMD' '%100>...>$LINE%<<'
+  local tab_title=${ZSH_THEME_TERM_TAB_TITLE_EXEC//@CMD@/$CMD}
+  tab_title=${tab_title//@LINE@/$LINE}
+  local title=${ZSH_THEME_TERM_TITLE_EXEC//@CMD@/$CMD}
+  title=${title//@LINE@/$LINE}
+
+  title "$tab_title" "$title"
 }
 
 precmd_functions+=(omz_termsupport_precmd)
