@@ -5,7 +5,7 @@ Auto completion for scrapy command-line tool
 #### commands
 
 ``` 
-scrapy [tab]
+$ scrapy [tab]
 
 scrapy commands
 check         -- Check spider contracts,
@@ -23,11 +23,11 @@ version       -- Print Scrapy version,
 view          -- Open URL in browser, as seen by Scrapy
 ```
 
-if check/crawl/edit is chosen 
+if check/crawl/edit commands are chosen,
 
 ```
-scrapy check [tab]
+$ scrapy check [tab]
 dmoz
 ```
 
-spiders are listed.
+spiders are listed, if you are in a scrapy project directory.
