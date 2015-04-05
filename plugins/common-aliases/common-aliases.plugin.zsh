@@ -20,12 +20,6 @@ alias sgrep='grep -R -n -H -C 5 --exclude-dir={.git,.svn,CVS} '
 
 alias t='tail -f'
 
-# because typing 'cd' is A LOT of work!!
-alias ..='cd ../'
-alias ...='cd ../../'
-alias ....='cd ../../../'
-alias .....='cd ../../../../'
-
 # Command line head / tail shortcuts
 alias -g H='| head'
 alias -g T='| tail'
@@ -46,7 +40,6 @@ alias ff='find . -type f -name'
 alias h='history'
 alias hgrep="fc -El 0 | grep"
 alias help='man'
-alias j='jobs'
 alias p='ps -f'
 alias sortnr='sort -n -r'
 alias unexport='unset'

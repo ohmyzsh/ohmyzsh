@@ -14,12 +14,12 @@ jump() {
 
 mark() {
 	if (( $# == 0 )); then
-		MARK=$(basename "$(pwd)")
+		MARK=$(basename "$PWD")
 	else
 		MARK="$1"
 	fi
-	if read -q \?"Mark $(pwd) as ${MARK}? (y/n) "; then
-		mkdir -p "$MARKPATH"; ln -s "$(pwd)" "$MARKPATH/$MARK"
+	if read -q \?"Mark $PWD as ${MARK}? (y/n) "; then
+		mkdir -p "$MARKPATH"; ln -s "$PWD" "$MARKPATH/$MARK"
 	fi
 }
 
@@ -27,7 +27,6 @@ unmark() {
 	rm -i "$MARKPATH/$1"
 }
 
-autoload colors
 marks() {
 	for link in $MARKPATH/*(@); do
 		local markname="$fg[cyan]${link:t}$reset_color"

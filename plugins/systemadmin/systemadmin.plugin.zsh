@@ -30,7 +30,7 @@ function retlog() {
 }
 
 alias ping='ping -c 5'
-alias clr='clear;echo "Currently logged in on $(tty), as $(whoami) in directory $(pwd)."'
+alias clr='clear;echo "Currently logged in on $(tty), as $USER in directory $PWD."'
 alias path='echo -e ${PATH//:/\\n}'
 alias mkdir='mkdir -pv'
 # get top process eating memory

@@ -4,13 +4,14 @@
 # Requires: Docker installed
 # Author: Azaan (@aeonazaan)
 # Updates: Bob Maerten (@bobmaerten) for Docker v0.9+
+#          Paul van den Berg (@bergvandenp) for Docker v1.3+ 
 
 
 # ----- Helper functions
 # Output a selectable list of all running docker containers
 __docker_containers() {
     declare -a cont_cmd
-    cont_cmd=($(docker ps | awk 'NR>1{print $1":[CON("$1")"$2"("$3")]"}'))
+    cont_cmd=($(docker ps | awk 'NR>1{print $NF":[CON("$1")"$2"("$3")]"}'))
     _describe 'containers' cont_cmd
 }
 
@@ -218,6 +219,10 @@ __start() {
     __docker_containers
 }
 
+__stats() {
+    __docker_containers
+}
+
 __stop() {
     _arguments \
         '(-t,--time=)'{-t,--time=}'[Number of seconds to wait for the container to stop before killing it.]'
@@ -235,6 +240,14 @@ __version() {
 }
 
 __wait() {
+    __docker_containers
+}
+
+__exec() {
+    _arguments \
+      '(-d,--detach=)'{-d,--detach=}'[Detached mode: run command in the background]' \
+      '(-i,--interactive=)'{-i,--interactive=}'[Keep STDIN open even if not attached]' \
+      '(-t,--tty=)'{-t,--tty=}'[Allocate a pseudo-TTY]'
     __docker_containers
 }
 
@@ -271,11 +284,13 @@ _1st_arguments=(
     "save":"Save an image to a tar archive"
     "search":"Search for an image in the docker index"
     "start":"Start a stopped container"
+    "stats":"Display a live stream of one or more containers' resource usage statistics"
     "stop":"Stop a running container"
     "tag":"Tag an image into a repository"
     "top":"Lookup the running processes of a container"
     "version":"Show the docker version information"
     "wait":"Block until a container stops, then print its exit code"
+    "exec":"Run a task inside a running container"
 )
 
 _arguments '*:: :->command'
@@ -341,6 +356,8 @@ case "$words[1]" in
         __save ;;
     search)
         __search ;;
+    stats)
+        __stats ;;
     start)
         __start ;;
     stop)
@@ -353,4 +370,6 @@ case "$words[1]" in
         __version ;;
     wait)
         __wait ;;
+    exec)
+        __exec ;;
 esac
