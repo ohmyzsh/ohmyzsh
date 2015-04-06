@@ -78,7 +78,7 @@ if (( CURRENT == 1 )); then
 fi
 
 case "$words[1]" in
-  install|reinstall|audit|home|homepage|log|info|abv|uses|cat|deps|edit|options)
+  install|reinstall|fetch|audit|home|homepage|log|info|abv|uses|cat|deps|edit|options)
     _brew_all_formulae
     _wanted formulae expl 'all formulae' compadd -a formulae ;;
   list|ls)
