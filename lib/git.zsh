@@ -7,6 +7,13 @@ function git_prompt_info() {
   fi
 }
 
+function git_cygwin_prompt_info_quick() {
+  ref=$(git symbolic-ref HEAD 2> /dev/null)
+  if [[ "${ref}" != "" ]]; then
+    echo "git:${ref#refs/heads/}"
+  fi
+}
+
 
 # Checks if working tree is dirty
 parse_git_dirty() {
