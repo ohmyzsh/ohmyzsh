@@ -9,6 +9,13 @@ function zle-keymap-select zle-line-init zle-line-finish {
   if (( ${+terminfo[rmkx]} )); then
     printf '%s' ${terminfo[rmkx]}
   fi
+  if [ "$TERM" = "xterm-256color" ]; then
+    if [ $KEYMAP = vicmd ]; then
+      echo -ne "\e[2 q"
+    else
+      echo -ne "\e[5 q"
+    fi
+  fi
 
   zle reset-prompt
   zle -R
