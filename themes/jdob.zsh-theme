@@ -26,6 +26,9 @@ fi
 if [ -z "$COLOR_GIT" ]; then
   COLOR_GIT=%{$PR_YELLOW%}
 fi
+if [ -z "$COLOR_VENV" ]; then
+  COLOR_VENV=%{$PR_YELLOW%}
+fi
 if [ -z "$COLOR_RETURN" ]; then
   COLOR_RETURN=%{$PR_LIGHT_RED%}
 fi
@@ -37,6 +40,11 @@ ZSH_THEME_GIT_PROMPT_CLEAN=" %{$PR_LIGHT_GREEN%}✔%{$COLOR_GIT%}"
 ZSH_THEME_GIT_PROMPT_ADDED=" %{$PR_LIGHT_ORANGE%}✜%{$COLOR_GIT%}"
 ZSH_THEME_GIT_PROMPT_DIRTY=" %{$PR_LIGHT_RED%}✘%{$COLOR_GIT%}"
 
+# Virtual Environments
+function virtualenv_info {
+  [ $VIRTUAL_ENV ] && echo `basename $VIRTUAL_ENV`
+}
+
 # Pieces to be used in the prompts
 local return_code="%(?..%{$COLOR_RETURN%}%? ↵%{$PR_NO_COLOR%})"
 local prompt='%{$COLOR_BORDER%}➤ %{$PR_NO_COLOR%}'
@@ -44,12 +52,14 @@ local user='%{$PR_NO_COLOR%}%{$COLOR_USER%}%n%{$PR_NO_COLOR%}%{$COLOR_BORDER%}'
 local host='%{$PR_NO_COLOR%}%{$COLOR_HOST%}%M%{$PR_NO_COLOR%}%{$COLOR_BORDER%}'
 local current_dir='%{$PR_NO_COLOR%}%{$COLOR_CWD%}%~%{$PR_NO_COLOR%}%{$COLOR_BORDER%}'
 local git_branch='%{$PR_NO_COLOR%}%{$COLOR_GIT%}$(git_prompt_info)%{$PR_NO_COLOR%}%{$COLOR_BORDER%}'
+local venv='%{$PR_NO_COLOR%}%{$COLOR_VENV%}$(virtualenv_info)%{$PR_NO_COLOR%}%{$COLOR_BORDER%}'
 
 local top_leader='%{$COLOR_BORDER%}╭─'
 local bottom_leader='╰─%{$PR_NO_COLOR%}'
 
 # Assemble the prompts
-PROMPT="${top_leader}[${user}]─[${host}]─[${current_dir}]─[${git_branch}]─●
+# PROMPT="${top_leader}[${user}]─[${host}]─[${current_dir}]─[${git_branch}]─●
+PROMPT="${top_leader}[${host}]─[${current_dir}]─[${git_branch}]─[${venv}]-●
 ${bottom_leader}${prompt}%{$PR_NO_COLOR%}"
 RPS1="${return_code}"
 
