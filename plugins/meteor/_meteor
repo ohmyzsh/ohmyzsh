@@ -43,6 +43,8 @@ _1st_arguments=(
   "publish-for-arch: Builds an already-published package for a new platform."
   "search: Search through the package server database."
   "show: Show detailed information about a release or package."
+  "install-sdk:Installs SDKs for a platform."
+  "configure-android:Run the Android configuration tool from Meteor’s ADK environment."
 )
 
 local expl
