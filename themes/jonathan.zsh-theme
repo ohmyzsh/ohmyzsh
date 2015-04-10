@@ -12,7 +12,7 @@ function theme_precmd {
     PR_PWDLEN=""
 
     local promptsize=${#${(%):---(%n@%m:%l)---()--}}
-    local rubyprompt=`rvm_prompt_info || rbenv_prompt_info`
+    local rubyprompt="`rvm_prompt_info || rbenv_prompt_info`"
     local rubypromptsize=${#${rubyprompt}}
     local pwdsize=${#${(%):-%~}}
 
