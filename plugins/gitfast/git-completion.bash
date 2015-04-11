@@ -394,6 +394,13 @@ __git_refs_remotes ()
 	done
 }
 
+# return only local branches
+__git_refs_local ()
+{
+	git for-each-ref --format='%(refname:short)' refs/heads/
+	return
+}
+
 __git_remotes ()
 {
 	local i IFS=$'\n' d="$(__gitdir)"
@@ -1026,7 +1033,7 @@ _git_checkout ()
 		if [ -n "$(__git_find_on_cmdline "$flags")" ]; then
 			track=''
 		fi
-		__gitcomp_nl "$(__git_refs '' $track)"
+		__gitcomp_nl "$(__git_refs_local '' $track)"
 		;;
 	esac
 }
