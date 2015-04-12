@@ -1033,7 +1033,11 @@ _git_checkout ()
 		if [ -n "$(__git_find_on_cmdline "$flags")" ]; then
 			track=''
 		fi
-		__gitcomp_nl "$(__git_refs_local '' $track)"
+		if [ -z ${GITFAST_CHECKOUT_LOCAL_ONLY+x} ]; then
+			__gitcomp_nl "$(__git_refs '' $track)"
+		else
+			__gitcomp_nl "$(__git_refs_local)"
+		fi
 		;;
 	esac
 }
