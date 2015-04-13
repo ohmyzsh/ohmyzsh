@@ -46,8 +46,10 @@ function svn_get_branch_name() {
   
   if [ "x$_DISPLAY" = "x" ]; then
     svn_get_repo_name
+  elif [ "x$_DISPLAY" = "xtrunk" ]; then
+    echo "trunk"
   else
-    echo $_DISPLAY
+    echo "NOT trunk"
   fi
   unset _DISPLAY
 }
