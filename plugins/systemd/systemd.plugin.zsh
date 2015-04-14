@@ -8,8 +8,11 @@ sudo_commands=(
   link load cancel set-environment unset-environment
   edit)
 
+all_commands=($user_commands $sudo_commands)
+
 for c in $user_commands; do; alias sc-$c="systemctl $c"; done
 for c in $sudo_commands; do; alias sc-$c="sudo systemctl $c"; done
+for c in $all_commands; do; alias scu-$c="systemctl --user $c"; done
 
 alias sc-enable-now="sc-enable --now"
 alias sc-disable-now="sc-disable --now"
