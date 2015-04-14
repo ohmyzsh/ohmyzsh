@@ -5,8 +5,13 @@ alias gst='git status'
 compdef _git gst=git-status
 alias gd='git diff'
 compdef _git gd=git-diff
+
+#Dont add alias if gdc (GCC D Compiler) is present
+command -v gdc >/dev/null 2>&1 || {
 alias gdc='git diff --cached'
 compdef _git gdc=git-diff
+}
+
 alias gdt='git diff-tree --no-commit-id --name-only -r'
 compdef _git gdt=git diff-tree --no-commit-id --name-only -r
 alias gl='git pull'
