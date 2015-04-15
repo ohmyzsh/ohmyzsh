@@ -26,3 +26,6 @@ alias grep="grep $GREP_OPTIONS"
 unset GREP_OPTIONS
 unset VCS_FOLDERS
 unfunction grep-flag-available
+
+alias grep="/usr/bin/grep $GREP_OPTIONS"
+unset GREP_OPTIONS
