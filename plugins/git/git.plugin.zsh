@@ -55,6 +55,7 @@ compdef _git gb=git-branch
 alias gba='git branch -a'
 compdef _git gba=git-branch
 alias gbr='git branch --remote'
+alias gbda='git branch --merged | grep -v "\*" | xargs -n 1 git branch -d'
 alias gcount='git shortlog -sn'
 compdef gcount=git
 alias gcl='git config --list'
