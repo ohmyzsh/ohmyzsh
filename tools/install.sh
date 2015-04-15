@@ -34,7 +34,7 @@ export PATH=\"$PATH\"
 
 if [ "$SHELL" != "$(which zsh)" ]; then
     echo "\033[0;34mTime to change your default shell to zsh!\033[0m"
-    chsh -s `which zsh`
+    chsh -s  $(chsh -l | grep "zsh" -m 1)
 fi
 
 echo "\033[0;32m"'         __                                     __   '"\033[0m"
