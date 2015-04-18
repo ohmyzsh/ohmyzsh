@@ -47,6 +47,7 @@ The search content are
 * `angularjs <google.com/search?as_q=<search-term>&as_sitesearch=angularjs.org>`
 * `reactjs <google.com/search?as_q=<search-term>&as_sitesearch=facebook.github.io/react>`
 * `emberjs <emberjs.com>`
+* `stackoverflow <stackoverflow.com>`
 
 
 ## Aliases ##
@@ -72,6 +73,7 @@ There are a few aliases presented as well:
 * `angularjs` A shorthand for `frontend angularjs`
 * `reactjs` A shorthand for `frontend reactjs`
 * `emberjs` A shorthand for `frontend emberjs`
+* `stackoverflow` A shorthand for `frontend stackoverflow`
 
 ## Author
 
