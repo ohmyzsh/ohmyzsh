@@ -18,6 +18,7 @@ __Disclaimer:__ _Oh My Zsh works best on Mac OS X and Linux._
 * [Zsh](http://www.zsh.org) should be installed (v4.3.9 or more recent)
   * This is commonly pre-installed. (`zsh --version` to confirm)
 * `curl` or `wget` should be installed
+* `git` should be installed
 
 ### Basic Installation
 
