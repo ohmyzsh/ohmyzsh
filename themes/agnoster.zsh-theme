@@ -126,7 +126,7 @@ prompt_hg() {
       if `hg st | grep -q "^\?"`; then
         prompt_segment red black
         st='±'
-      elif `hg st | grep -q "^(M|A)"`; then
+      elif `hg st | grep -q "^[MA]"`; then
         prompt_segment yellow black
         st='±'
       else
