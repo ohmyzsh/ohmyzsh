@@ -37,6 +37,8 @@ alias saguysaguy='sudo apt-get update -y && sudo apt-get upgrade -y'
 alias saguysaguysagay='sudo apt-get update -y && sudo apt-get upgrade -y && sudo apt-get autoremove -y'
 alias update-my-ubuntu='saguysaguysagay'
 
+alias bing='notify-send "Stacked work finished" "Work being done in your favorite terminal is now finished. You can come back" -i /usr/share/pixmaps/apple-red.png -t 6000'
+
 function bb_env()
 {
     local BASE
@@ -75,8 +77,9 @@ function bb_repo_upload()
 
     declare -a REVIEWERS
     REVIEWERS=$(txw --quiet gerrit-getGroupMembers $GROUP_NAME 2> /dev/null | tr " " ",")
+    echo "Executing 'txw gerrit-getGroupMembers $GROUP_NAME'."
     if [[ -z $REVIEWERS ]]; then
-        echo "Error when executing 'txw gerrit-getGroupMembers $GROUP_NAME'."
+        echo "Error occured!"
         echo "Uploading without setting reviewers !"
         yes | repo upload --cbr .
     else
@@ -131,7 +134,7 @@ function bb_push_with_care()
       echo "Unable to findout branches or project name :("
       return
     fi
-    cmd='git push ssh://android.intel.com/a/buildbot/$project HEAD:refs/heads/platform/buildbot/$branch'
+    cmd="git push ssh://android.intel.com/a/buildbot/$project HEAD:refs/heads/platform/buildbot/$branch"
     echo "Pushing branch '$branch' on project '$project'"
     echo "Command: $cmd"
     echo "Press Enter to continue"
