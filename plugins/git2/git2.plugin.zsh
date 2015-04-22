@@ -60,6 +60,7 @@ compdef _git gPd=git-push
 # git push force
 alias gPf='git push --force'
 compdef _git gPf=git-push
+alias gPhm='git push heroku master'
 
 ################
 # Git Fetch (gf)
@@ -74,6 +75,8 @@ compdef _git gfa='git-fetch'
 # (git fetch all branch and rebase)
 alias gfagpr='git fetch --all && git pull --rebase'
 compdef _git gfagpr='git-pull'
+alias gfgpr='git fetch && git pull --rebase'
+compdef _git gfgpr='git-pull'
 
 #################
 # Git Commit (gc)
