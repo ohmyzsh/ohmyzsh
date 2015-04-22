@@ -1,6 +1,19 @@
 # Advanced Aliases.
 # Use with caution
-#
+
+
+# Basic directory operations
+#alias ..='cd ..'
+#alias ...='cd ../..'
+#alias ....='cd ../../..'
+#alias .....='cd ../../../..'
+alias -- -='cd -'
+alias cd/='cd /'
+
+alias cd..='cd ..'
+alias cd...='cd ../..'
+alias cd....='cd ../../..'
+alias cd.....='cd ../../../..'
 
 # ls, the common ones I use a lot shortened for rapid fire usage
 # alias ls='ls --color'      # I like color
@@ -10,11 +23,12 @@ alias lr='ls -tRFh'   # sorted by date,recursive,show type,human readable
 alias lt='ls -ltFh'   # long list,sorted by date,show type,human readable
 alias ll='ls -l'      # long list
 alias lla='la'      # long list
+alias llR='ls -lhR'
 alias l='la'      # long list
 alias lsa='ls -lah'
 alias sl=ls # often screw this up
 
-
+alias sudo='sudo ' # This allow 'sudo ll'. See http://www.shellperson.net/using-sudo-with-an-alias/
 
 alias ldot='ls -ld .*'
 alias lS='ls -1FSsh'
