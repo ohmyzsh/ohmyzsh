@@ -33,8 +33,16 @@ export PATH=\"$PATH\"
 " ~/.zshrc
 
 if [ "$SHELL" != "$(which zsh)" ]; then
+  zsh --version > /dev/null 2>&1
+  if [ $? -eq 0 ]; then
     echo "\033[0;34mTime to change your default shell to zsh!\033[0m"
+    echo "\033[0;34mRunning:\033[0;1m chsh -s `which zsh`\033[0m"
     chsh -s `which zsh`
+  else
+    echo "\033[0;33mzsh does not appear to be installed.\033[0m"
+    echo "\033[0;33mPlease install \033[0;1mzsh\033[0;33m and then run:\033[0;1m chsh -s \`which zsh\`\033[0m"
+    exit
+  fi
 fi
 
 echo "\033[0;32m"'         __                                     __   '"\033[0m"
