@@ -72,7 +72,7 @@ alias saguagu="sudo apt-get update && sudo apt-get upgrade"
 # Use Git’s colored diff when available
 hash git &>/dev/null
 if [ $? -eq 0 ]; then
-    function diff() {
+    function sdiff() {
         git diff --no-index --color-words "$@"
     }
 fi
