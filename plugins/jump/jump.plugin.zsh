@@ -46,7 +46,6 @@ function unmark()
   rm -i "$MARKPATH/$1"
 }
 
-autoload colors
 function marks()
 {
   if [[ -d $MARKPATH ]]; then

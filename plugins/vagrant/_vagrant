@@ -113,7 +113,7 @@ case $state in
       (box)
           __vagrant-box
       ;;
-      (up|provision|package|destroy|reload|ssh|halt|resume|status)
+      (up|provision|package|destroy|reload|ssh|ssh-config|halt|resume|status)
 	_arguments ':feature:__vm_list'
     esac
   ;;
