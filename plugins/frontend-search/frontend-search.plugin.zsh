@@ -105,7 +105,7 @@ function frontend() {
       url="${url}emberjs.com"
       url="${url}/api/#stq=$2&stp=1" ;;
     "stackoverflow")
-      url="${url}https://stackoverflow.com"
+      url="${url}stackoverflow.com"
       url="${url}/search?q=$2" ;;
     *) echo "INVALID PARAM!"
        return ;;
