@@ -200,6 +200,7 @@ _adb_device_cmds() {
     'push:copy file/dir to device'
     'pull:copy file/dir from device'
     'sync:copy host->device only if changed'
+    'sideload:flash a package with sideload'
     'shell:run remote shell interactively or command'
     'emu:run emulator console command'
     'logcat:view device log'
