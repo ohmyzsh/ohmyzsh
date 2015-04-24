@@ -13,13 +13,12 @@ if _homebrew-installed && _rbenv-from-homebrew-installed ; then
 fi
 
 for rbenvdir in "${rbenvdirs[@]}" ; do
-  if [ -d $rbenvdir/bin -a $FOUND_RBENV -eq 0 ] ; then
+  if [ -d $rbenvdir -a $FOUND_RBENV -eq 0 ] ; then
     FOUND_RBENV=1
     if [[ $RBENV_ROOT = '' ]]; then
       RBENV_ROOT=$rbenvdir
     fi
     export RBENV_ROOT
-    export PATH=${rbenvdir}/bin:$PATH
     eval "$(rbenv init --no-rehash - zsh)"
 
     alias rubies="rbenv versions"
