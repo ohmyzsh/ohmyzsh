@@ -2,24 +2,6 @@
 
 The idea for this script is to help searches in important doc contents from frontend.
 
-## Instalation ##
-
-I will send a Pull Request with this plugin for .oh-my-zsh official repository. If accept them, it's only add in plugins list that exists in ```.zshrc``` file.
-
-For now, you can clone this repository and add in ```custom/plugins``` folder
-
-```bash
-$ git clone git://github.com/willmendesneto/frontend-search.git ~/.oh-my-zsh/custom/plugins/frontend-search
-```
-
-After this, restart your terminal and frontend-search plugin is configurated in you CLI.
-
-```bash
-...
-plugins=( <your-plugins-list>... frontend-search)
-...
-```
-
 ## Commands ##
 
 All command searches are accept only in format
