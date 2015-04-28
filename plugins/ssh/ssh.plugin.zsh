@@ -4,7 +4,7 @@
 # Filter out wildcard host sections.
 local hosts
 if [[ -f $HOME/.ssh/config ]]; then
-  hosts=($(cat $HOME/.ssh/config | egrep '^Host.*' | awk '{print $2}' | grep -v '^*' | sed -e 's/\.*\*$//' | grep '\.'))
+  hosts=($(egrep '^Host.*' $HOME/.ssh/config | awk '{print $2}' | grep -v '^*' | sed -e 's/\.*\*$//'))
   zstyle ':completion:*:hosts' hosts $hosts
 fi
 
