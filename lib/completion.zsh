@@ -32,8 +32,11 @@ else
   zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm -w -w"
 fi
 
-# auto-complete external commands
-zstyle ':completion:*' rehash true
+# rehash on every external command completion request
+if [ "x$REHASH_COMPLETION" = "xtrue" ]; then
+  zstyle ':completion:*' rehash true
+  unset REHASH_COMPLETION
+fi
 
 # disable named-directories autocompletion
 zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-directories

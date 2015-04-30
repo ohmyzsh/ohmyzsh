@@ -28,6 +28,11 @@ ZSH_THEME="robbyrussell"
 # Uncomment the following line to display red dots whilst waiting for completion.
 # COMPLETION_WAITING_DOTS="true"
 
+# Uncomment the following line to force a rehash on every external completion
+# request, so newly installed commands are automatically completed without
+# reloading the shell. Be aware that this may impact completion performance.
+# REHASH_COMPLETION="true"
+
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
 # much, much faster.
