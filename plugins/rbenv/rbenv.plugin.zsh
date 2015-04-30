@@ -7,7 +7,7 @@ _rbenv-from-homebrew-installed() {
 }
 
 FOUND_RBENV=0
-rbenvdirs=("$HOME/.rbenv" "/usr/local/rbenv" "/opt/rbenv")
+rbenvdirs=("$HOME/.rbenv" "/usr/local/rbenv" "/opt/rbenv" "/usr/local/opt/rbenv")
 if _homebrew-installed && _rbenv-from-homebrew-installed ; then
     rbenvdirs=($(brew --prefix rbenv) "${rbenvdirs[@]}")
 fi
@@ -15,7 +15,10 @@ fi
 for rbenvdir in "${rbenvdirs[@]}" ; do
   if [ -d $rbenvdir/bin -a $FOUND_RBENV -eq 0 ] ; then
     FOUND_RBENV=1
-    export RBENV_ROOT=$rbenvdir
+    if [[ $RBENV_ROOT = '' ]]; then
+      RBENV_ROOT=$rbenvdir
+    fi
+    export RBENV_ROOT
     export PATH=${rbenvdir}/bin:$PATH
     eval "$(rbenv init --no-rehash - zsh)"
 

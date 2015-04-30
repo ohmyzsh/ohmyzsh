@@ -163,8 +163,13 @@ function history-substring-search-down() {
 zle -N history-substring-search-up
 zle -N history-substring-search-down
 
-bindkey '\e[A' history-substring-search-up
-bindkey '\e[B' history-substring-search-down
+zmodload zsh/terminfo
+if [[ -n "$terminfo[kcuu1]" ]]; then
+  bindkey "$terminfo[kcuu1]" history-substring-search-up
+fi
+if [[ -n "$terminfo[kcud1]" ]]; then
+  bindkey "$terminfo[kcud1]" history-substring-search-down
+fi
 
 #-----------------------------------------------------------------------------
 # implementation details

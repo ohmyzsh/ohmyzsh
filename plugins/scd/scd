@@ -1,0 +1,390 @@
+#!/bin/zsh -f
+
+emulate -L zsh
+local EXIT=return
+if [[ $(whence -w $0) == *:' 'command ]]; then
+    emulate -R zsh
+    local RUNNING_AS_COMMAND=1
+    EXIT=exit
+fi
+
+local DOC='scd -- smart change to a recently used directory
+usage: scd [options] [pattern1 pattern2 ...]
+Go to a directory path that contains all fixed string patterns.  Prefer
+recent or frequently visited directories as found in the directory index.
+Display a selection menu in case of multiple matches.
+
+Options:
+  -a, --add         add specified directories to the directory index.
+  --unindex         remove current or specified directories from the index.
+  -r, --recursive   apply options --add or --unindex recursively.
+  --alias=ALIAS     create alias for the current or specified directory and
+                    store it in ~/.scdalias.zsh.
+  --unalias         remove ALIAS definition for the current or specified
+                    directory from ~/.scdalias.zsh.
+  -A, --all         include all matching directories.  Disregard matching by
+                    directory alias and filtering of less likely paths.
+  --list            show matching directories and exit.
+  -v, --verbose     display directory rank in the selection menu.
+  -h, --help        display this message and exit.
+'
+
+local SCD_HISTFILE=${SCD_HISTFILE:-${HOME}/.scdhistory}
+local SCD_HISTSIZE=${SCD_HISTSIZE:-5000}
+local SCD_MENUSIZE=${SCD_MENUSIZE:-20}
+local SCD_MEANLIFE=${SCD_MEANLIFE:-86400}
+local SCD_THRESHOLD=${SCD_THRESHOLD:-0.005}
+local SCD_SCRIPT=${RUNNING_AS_COMMAND:+$SCD_SCRIPT}
+local SCD_ALIAS=~/.scdalias.zsh
+
+local ICASE a d m p i maxrank threshold
+local opt_help opt_add opt_unindex opt_recursive opt_verbose
+local opt_alias opt_unalias opt_all opt_list
+local -A drank dalias
+local dmatching
+local last_directory
+
+setopt extendedhistory extendedglob noautonamedirs brace_ccl
+
+# If SCD_SCRIPT is defined make sure the file exists and is empty.
+# This removes any previous old commands.
+[[ -n "$SCD_SCRIPT" ]] && [[ -s $SCD_SCRIPT || ! -f $SCD_SCRIPT ]] && (
+    umask 077
+    : >| $SCD_SCRIPT
+)
+
+# process command line options
+zmodload -i zsh/zutil
+zmodload -i zsh/datetime
+zparseopts -D -- a=opt_add -add=opt_add -unindex=opt_unindex \
+    r=opt_recursive -recursive=opt_recursive \
+    -alias:=opt_alias -unalias=opt_unalias \
+    A=opt_all -all=opt_all -list=opt_list \
+    v=opt_verbose -verbose=opt_verbose h=opt_help -help=opt_help \
+    || $EXIT $?
+
+if [[ -n $opt_help ]]; then
+    print $DOC
+    $EXIT
+fi
+
+# load directory aliases if they exist
+[[ -r $SCD_ALIAS ]] && source $SCD_ALIAS
+
+# Private internal functions are prefixed with _scd_Y19oug_.
+# Clean them up when the scd function returns.
+setopt localtraps
+trap 'unfunction -m "_scd_Y19oug_*"' EXIT
+
+# works faster than the (:a) modifier and is compatible with zsh 4.2.6
+_scd_Y19oug_abspath() {
+    set -A $1 ${(ps:\0:)"$(
+        unfunction -m "*"; shift
+        for d; do
+            cd $d && print -Nr -- $PWD && cd $OLDPWD
+        done
+        )"}
+}
+
+# define directory alias
+if [[ -n $opt_alias ]]; then
+    if [[ -n $1 && ! -d $1 ]]; then
+        print -u2 "'$1' is not a directory."
+        $EXIT 1
+    fi
+    a=${opt_alias[-1]#=}
+    _scd_Y19oug_abspath d ${1:-$PWD}
+    # alias in the current shell, update alias file if successful
+    hash -d -- $a=$d &&
+    (
+        umask 077
+        hash -dr
+        [[ -r $SCD_ALIAS ]] && source $SCD_ALIAS
+        hash -d -- $a=$d
+        hash -dL >| $SCD_ALIAS
+    )
+    $EXIT $?
+fi
+
+# undefine directory alias
+if [[ -n $opt_unalias ]]; then
+    if [[ -n $1 && ! -d $1 ]]; then
+        print -u2 "'$1' is not a directory."
+        $EXIT 1
+    fi
+    _scd_Y19oug_abspath a ${1:-$PWD}
+    a=$(print -rD ${a})
+    if [[ $a != [~][^/]## ]]; then
+        $EXIT
+    fi
+    a=${a#[~]}
+    # unalias in the current shell, update alias file if successful
+    if unhash -d -- $a 2>/dev/null && [[ -r $SCD_ALIAS ]]; then
+        (
+            umask 077
+            hash -dr
+            source $SCD_ALIAS
+            unhash -d -- $a 2>/dev/null &&
+            hash -dL >| $SCD_ALIAS
+        )
+    fi
+    $EXIT $?
+fi
+
+# The "compress" function collapses repeated directories to
+# one entry with a time stamp that gives equivalent-probability.
+_scd_Y19oug_compress() {
+    awk -v epochseconds=$EPOCHSECONDS -v meanlife=$SCD_MEANLIFE '
+        BEGIN { FS = "[:;]"; }
+        length($0) < 4096 && $2 > 0 {
+            tau = 1.0 * ($2 - epochseconds) / meanlife;
+            if (tau < -6.9078)  tau = -6.9078;
+            prob = exp(tau);
+            sub(/^[^;]*;/, "");
+            if (NF)  {
+                dlist[last[$0]] = "";
+                dlist[NR] = $0;
+                last[$0] = NR;
+                ptot[$0] += prob;
+            }
+        }
+        END {
+            for (i = 1; i <= NR; ++i) {
+                d = dlist[i];
+                if (d) {
+                    ts = log(ptot[d]) * meanlife + epochseconds;
+                    printf(": %.0f:0;%s\n", ts, d);
+                }
+            }
+        }
+    ' $*
+}
+
+# Rewrite directory index if it is at least 20% oversized
+if [[ -s $SCD_HISTFILE ]] && \
+(( $(wc -l <$SCD_HISTFILE) > 1.2 * $SCD_HISTSIZE )); then
+    # compress repeated entries
+    m=( ${(f)"$(_scd_Y19oug_compress $SCD_HISTFILE)"} )
+    # purge non-existent directories
+    m=( ${(f)"$(
+        for a in $m; do
+            if [[ -d ${a#*;} ]]; then print -r -- $a; fi
+        done
+        )"}
+    )
+    # cut old entries if still oversized
+    if [[ $#m -gt $SCD_HISTSIZE ]]; then
+        m=( ${m[-$SCD_HISTSIZE,-1]} )
+    fi
+    print -lr -- $m >| ${SCD_HISTFILE}
+fi
+
+# Determine the last recorded directory
+if [[ -s ${SCD_HISTFILE} ]]; then
+    last_directory=${"$(tail -1 ${SCD_HISTFILE})"#*;}
+fi
+
+# The "record" function adds its arguments to the directory index.
+_scd_Y19oug_record() {
+    while [[ -n $last_directory && $1 == $last_directory ]]; do
+        shift
+    done
+    if [[ $# -gt 0 ]]; then
+        ( umask 077
+          p=": ${EPOCHSECONDS}:0;"
+          print -lr -- ${p}${^*} >>| $SCD_HISTFILE )
+    fi
+}
+
+if [[ -n $opt_add ]]; then
+    for d; do
+        if [[ ! -d $d ]]; then
+            print -u2 "Directory '$d' does not exist."
+            $EXIT 2
+        fi
+    done
+    _scd_Y19oug_abspath m ${*:-$PWD}
+    _scd_Y19oug_record $m
+    if [[ -n $opt_recursive ]]; then
+        for d in $m; do
+            print -n "scanning ${d} ... "
+            _scd_Y19oug_record ${d}/**/*(-/N)
+            print "[done]"
+        done
+    fi
+    $EXIT
+fi
+
+# take care of removing entries from the directory index
+if [[ -n $opt_unindex ]]; then
+    if [[ ! -s $SCD_HISTFILE ]]; then
+        $EXIT
+    fi
+    # expand existing directories in the argument list
+    for i in {1..$#}; do
+        if [[ -d ${argv[i]} ]]; then
+            _scd_Y19oug_abspath d ${argv[i]}
+            argv[i]=${d}
+        fi
+    done
+    m="$(awk -v recursive=${opt_recursive} '
+        BEGIN {
+            for (i = 2; i < ARGC; ++i) {
+                argset[ARGV[i]] = 1;
+                delete ARGV[i];
+            }
+        }
+        1 {
+            d = $0;  sub(/^[^;]*;/, "", d);
+            if (d in argset)  next;
+        }
+        recursive {
+            for (a in argset) {
+                if (substr(d, 1, length(a) + 1) == a"/")  next;
+            }
+        }
+        { print $0 }
+        ' $SCD_HISTFILE ${*:-$PWD} )" || $EXIT $?
+    : >| ${SCD_HISTFILE}
+    [[ ${#m} == 0 ]] || print -r -- $m >> ${SCD_HISTFILE}
+    $EXIT
+fi
+
+# The "action" function is called when there is just one target directory.
+_scd_Y19oug_action() {
+    cd $1 || return $?
+    if [[ -z $SCD_SCRIPT && -n $RUNNING_AS_COMMAND ]]; then
+        print -u2 "Warning: running as command with SCD_SCRIPT undefined."
+    fi
+    if [[ -n $SCD_SCRIPT ]]; then
+        print -r "cd ${(q)1}" >| $SCD_SCRIPT
+    fi
+}
+
+# Match and rank patterns to the index file
+# set global arrays dmatching and drank
+_scd_Y19oug_match() {
+    ## single argument that is an existing directory or directory alias
+    if [[ -z $opt_all && $# == 1 ]] && \
+        [[ -d ${d::=$1} || -d ${d::=${nameddirs[$1]}} ]] && [[ -x $d ]];
+    then
+        _scd_Y19oug_abspath dmatching $d
+        drank[${dmatching[1]}]=1
+        return
+    fi
+
+    # ignore case unless there is an argument with an uppercase letter
+    [[ "$*" == *[[:upper:]]* ]] || ICASE='(#i)'
+    # support "$" as an anchor for the directory name ending
+    argv=( ${argv/(#m)?[$](#e)/${MATCH[1]}(#e)} )
+
+    # calculate rank of all directories in the SCD_HISTFILE and keep it as drank
+    # include a dummy entry for splitting of an empty string is buggy
+    [[ -s $SCD_HISTFILE ]] && drank=( ${(f)"$(
+        print -l /dev/null -10
+        <$SCD_HISTFILE \
+        awk -v epochseconds=$EPOCHSECONDS -v meanlife=$SCD_MEANLIFE '
+            BEGIN { FS = "[:;]"; }
+            length($0) < 4096 && $2 > 0 {
+                tau = 1.0 * ($2 - epochseconds) / meanlife;
+                if (tau < -6.9078)  tau = -6.9078;
+                prob = exp(tau);
+                sub(/^[^;]*;/, "");
+                if (NF)  ptot[$0] += prob;
+            }
+            END { for (di in ptot)  { print di; print ptot[di]; } }'
+        )"}
+    )
+    unset "drank[/dev/null]"
+
+    # filter drank to the entries that match all arguments
+    for a; do
+        p=${ICASE}"*(${a})*"
+        drank=( ${(kv)drank[(I)${~p}]} )
+    done
+    # require at least one argument matches the directory name
+    p=${ICASE}"*(${(j:|:)argv})[^/]#"
+    drank=( ${(kv)drank[(I)${~p}]} )
+
+    # build a list of matching directories reverse-sorted by their probabilities
+    dmatching=( ${(f)"$(
+        for d p in ${(kv)drank}; do
+            print -r -- "$p $d";
+        done | sort -grk1 | cut -d ' ' -f 2-
+        )"}
+    )
+
+    # do not match $HOME or $PWD when run without arguments
+    if [[ $# == 0 ]]; then
+        dmatching=( ${dmatching:#(${HOME}|${PWD})} )
+    fi
+
+    # keep at most SCD_MENUSIZE of matching and valid directories
+    m=( )
+    for d in $dmatching; do
+        [[ ${#m} == $SCD_MENUSIZE ]] && break
+        [[ -d $d && -x $d ]] && m+=$d
+    done
+    dmatching=( $m )
+
+    # find the maximum rank
+    maxrank=0.0
+    for d in $dmatching; do
+        [[ ${drank[$d]} -lt maxrank ]] || maxrank=${drank[$d]}
+    done
+
+    # discard all directories below the rank threshold
+    threshold=$(( maxrank * SCD_THRESHOLD ))
+    if [[ -n ${opt_all} ]]; then
+        threshold=0
+    fi
+    dmatching=( ${^dmatching}(Ne:'(( ${drank[$REPLY]} >= threshold ))':) )
+}
+
+_scd_Y19oug_match $*
+
+## process whatever directories that remained
+if [[ ${#dmatching} == 0 ]]; then
+    print -u2 "No matching directory."
+    $EXIT 1
+fi
+
+## build formatted directory aliases for selection menu or list display
+for d in $dmatching; do
+    if [[ -n ${opt_verbose} ]]; then
+        dalias[$d]=$(printf "%.3g %s" ${drank[$d]} $d)
+    else
+        dalias[$d]=$(print -Dr -- $d)
+    fi
+done
+
+## process the --list option
+if [[ -n $opt_list ]]; then
+    for d in $dmatching; do
+        print -r -- "# ${dalias[$d]}"
+        print -r -- $d
+    done
+    $EXIT
+fi
+
+## process single directory match
+if [[ ${#dmatching} == 1 ]]; then
+    _scd_Y19oug_action $dmatching
+    $EXIT $?
+fi
+
+## here we have multiple matches - display selection menu
+a=( {a-z} {A-Z} )
+a=( ${a[1,${#dmatching}]} )
+p=( )
+for i in {1..${#dmatching}}; do
+    [[ -n ${a[i]} ]] || break
+    p+="${a[i]}) ${dalias[${dmatching[i]}]}"
+done
+
+print -c -r -- $p
+
+if read -s -k 1 d && [[ ${i::=${a[(I)$d]}} -gt 0 ]]; then
+    _scd_Y19oug_action ${dmatching[i]}
+    $EXIT $?
+fi

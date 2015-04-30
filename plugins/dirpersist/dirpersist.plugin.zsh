@@ -1,39 +1,19 @@
-#!/bin/zsh
-# 
-# Make the dirstack more persistant
-# 
-# Add dirpersist to $plugins in ~/.zshrc to load
-# 
+# Save dirstack history to .zdirs
+# adapted from:
+# github.com/grml/grml-etc-core/blob/master/etc/zsh/zshrc#L1547
 
-# $zdirstore is the file used to persist the stack
-zdirstore=~/.zdirstore
+DIRSTACKSIZE=${DIRSTACKSIZE:-20}
+dirstack_file=${dirstack_file:-${HOME}/.zdirs}
 
-dirpersistinstall () {
-    if grep 'dirpersiststore' ~/.zlogout > /dev/null; then
-    else
-        if read -q \?"Would you like to set up your .zlogout file for use with dirspersist? (y/n) "; then
-            echo "# Store dirs stack\n# See $ZSH/plugins/dirspersist.plugin.zsh\ndirpersiststore" >> ~/.zlogout
-        else
-            echo "If you don't want this message to appear, remove dirspersist from \$plugins"
-        fi
-    fi
+if [[ -f ${dirstack_file} ]] && [[ ${#dirstack[*]} -eq 0 ]] ; then
+  dirstack=( ${(f)"$(< $dirstack_file)"} )
+  # "cd -" won't work after login by just setting $OLDPWD, so
+  [[ -d $dirstack[1] ]] && cd $dirstack[1] && cd $OLDPWD
+fi
+
+chpwd() {
+  if (( $DIRSTACKSIZE <= 0 )) || [[ -z $dirstack_file ]]; then return; fi
+  local -ax my_stack
+  my_stack=( ${PWD} ${dirstack} )
+  builtin print -l ${(u)my_stack} >! ${dirstack_file}
 }
-
-dirpersiststore () {
-    dirs -p | perl -e 'foreach (reverse <STDIN>) {chomp;s/([& ])/\\$1/g ;print "if [ -d $_ ]; then pushd -q $_; fi\n"}' > $zdirstore
-}
-
-dirpersistrestore () {
-    if [ -f $zdirstore ]; then
-        source $zdirstore
-    fi
-}
-
-DIRSTACKSIZE=10
-setopt autopushd pushdminus pushdsilent pushdtohome pushdignoredups
-
-dirpersistinstall
-dirpersistrestore
-
-# Make popd changes permanent without having to wait for logout
-alias popd="popd;dirpersiststore"

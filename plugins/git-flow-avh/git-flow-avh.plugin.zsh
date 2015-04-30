@@ -41,6 +41,9 @@ _git-flow ()
 				'hotfix:Manage your hotfix branches.'
 				'support:Manage your support branches.'
 				'version:Shows version information.'
+				'finish:Finish the branch you are currently on.'
+				'delete:Delete the branch you are currently on.'
+				'publish:Publish the branch you are currently on.'
 			)
 			_describe -t commands 'git flow' subcommands
 		;;
@@ -95,7 +98,7 @@ __git-flow-release ()
 				'list:List all your release branches. (Alias to `git flow release`)'
 				'publish:Publish release branch to remote.'
 				'track:Checkout remote release branch.'
-				'delet:Delete a release branch.'
+				'delete:Delete a release branch.'
 			)
 			_describe -t commands 'git flow release' subcommands
 			_arguments \

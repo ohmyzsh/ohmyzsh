@@ -1,14 +1,13 @@
-if [[ "$DISABLE_CORRECTION" == "true" ]]; then
-  return
-else
-  setopt correct_all
-  alias man='nocorrect man'
-  alias mv='nocorrect mv'
-  alias mysql='nocorrect mysql'
-  alias mkdir='nocorrect mkdir'
+if [[ "$ENABLE_CORRECTION" == "true" ]]; then
+  alias ebuild='nocorrect ebuild'
   alias gist='nocorrect gist'
   alias heroku='nocorrect heroku'
-  alias ebuild='nocorrect ebuild'
   alias hpodder='nocorrect hpodder'
+  alias man='nocorrect man'
+  alias mkdir='nocorrect mkdir'
+  alias mv='nocorrect mv'
+  alias mysql='nocorrect mysql'
   alias sudo='nocorrect sudo'
+
+  setopt correct_all
 fi

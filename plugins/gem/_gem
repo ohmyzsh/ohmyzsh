@@ -4,10 +4,11 @@
 # gem zsh completion, based on homebrew completion
 
 _gem_installed() {
-  installed_gems=(`gem list --local --no-versions`)
+  installed_gems=(${(f)"$(gem list --local --no-versions)"})
 }
 
 local -a _1st_arguments
+
 _1st_arguments=(
   'build:Build a gem from a gemspec'
   'cert:Manage RubyGems certificates and signing settings'
@@ -55,6 +56,11 @@ if (( CURRENT == 1 )); then
 fi
 
 case "$words[1]" in
+  build)
+    _files -g "*.gemspec"
+    ;;
+  install)
+    _files ;;
   list)
       if [[ "$state" == forms ]]; then
         _gem_installed

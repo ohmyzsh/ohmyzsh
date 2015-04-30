@@ -1,8 +1,6 @@
-#-------------------------------------------------------------------------------
-# Sunrise theme for oh-my-zsh by Adam Lindberg (eproxus@gmail.com)
+# Sunrise theme for oh-my-zsh
 # Intended to be used with Solarized: http://ethanschoonover.com/solarized
 # (Needs Git plugin for current_branch method)
-#-------------------------------------------------------------------------------
 
 # Color shortcuts
 R=$fg_no_bold[red]
@@ -12,7 +10,7 @@ Y=$fg_no_bold[yellow]
 B=$fg_no_bold[blue]
 RESET=$reset_color
 
-if [ "$(whoami)" = "root" ]; then
+if [ "$USER" = "root" ]; then
     PROMPTCOLOR="%{$R%}" PREFIX="-!-";
 else
     PROMPTCOLOR="" PREFIX="---";

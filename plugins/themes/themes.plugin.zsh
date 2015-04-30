@@ -1,6 +1,6 @@
 function theme
 {
-    if [ "$1" = "random" ]; then
+    if [ -z "$1" ] || [ "$1" = "random" ]; then
 	themes=($ZSH/themes/*zsh-theme)
 	N=${#themes[@]}
 	((N=(RANDOM%N)+1))

@@ -1,9 +1,10 @@
-# From : http://golang.org/misc/zsh/go?m=text
+# install in /etc/zsh/zshrc or your personal .zshrc
+
 # gc
 prefixes=(5 6 8)
 for p in $prefixes; do
-    compctl -g "*.${p}" ${p}l
-    compctl -g "*.go" ${p}g
+	compctl -g "*.${p}" ${p}l
+	compctl -g "*.go" ${p}g
 done
 
 # standard go tools
@@ -19,8 +20,10 @@ __go_tool_complete() {
     'build[compile packages and dependencies]'
     'clean[remove object files]'
     'doc[run godoc on package sources]'
+    'env[print Go environment information]'
     'fix[run go tool fix on packages]'
     'fmt[run gofmt on package sources]'
+    'generate[generate Go files by processing source]'
     'get[download and install packages and dependencies]'
     'help[display help]'
     'install[compile and install packages and dependencies]'
@@ -39,12 +42,17 @@ __go_tool_complete() {
   build_flags=(
     '-a[force reinstallation of packages that are already up-to-date]'
     '-n[print the commands but do not run them]'
-    "-p[number of parallel builds]:number"
+    '-p[number of parallel builds]:number'
+    '-race[enable data race detection]'
     '-x[print the commands]'
-    "-work[print temporary directory name and keep it]"
-    "-gcflags[flags for 5g/6g/8g]:flags"
-    "-ldflags[flags for 5l/6l/8l]:flags"
-    "-gccgoflags[flags for gccgo]:flags"
+    '-work[print temporary directory name and keep it]'
+    '-ccflags[flags for 5c/6c/8c]:flags'
+    '-gcflags[flags for 5g/6g/8g]:flags'
+    '-ldflags[flags for 5l/6l/8l]:flags'
+    '-gccgoflags[flags for gccgo]:flags'
+    '-compiler[name of compiler to use]:name'
+    '-installsuffix[suffix to add to package directory]:suffix'
+    '-tags[list of build tags to consider satisfied]:tags'
   )
   __go_list() {
       local expl importpaths
@@ -62,7 +70,7 @@ __go_tool_complete() {
   install)
       _arguments -s -w : ${build_flags[@]} \
         "-v[show package names]" \
-    '*:importpaths:__go_list'
+        '*:importpaths:__go_list'
       ;;
   get)
       _arguments -s -w : \
@@ -87,7 +95,10 @@ __go_tool_complete() {
         "-cpu[values of GOMAXPROCS to use]:number list" \
         "-run[run tests and examples matching regexp]:regexp" \
         "-bench[run benchmarks matching regexp]:regexp" \
-        "-benchtime[run each benchmark during n seconds]:duration" \
+        "-benchmem[print memory allocation stats]" \
+        "-benchtime[run each benchmark until taking this long]:duration" \
+        "-blockprofile[write goroutine blocking profile to file]:file" \
+        "-blockprofilerate[set sampling rate of goroutine blocking profile]:number" \
         "-timeout[kill test after that duration]:duration" \
         "-cpuprofile[write CPU profile to file]:file:_files" \
         "-memprofile[write heap profile to file]:file:_files" \
@@ -97,7 +108,7 @@ __go_tool_complete() {
   help)
       _values "${commands[@]}" \
         'gopath[GOPATH environment variable]' \
-        'importpath[description of import paths]' \
+        'packages[description of package lists]' \
         'remote[remote import path syntax]' \
         'testflag[description of testing flags]' \
         'testfunc[description of testing functions]'
@@ -148,3 +159,6 @@ __go_tool_complete() {
 }
 
 compdef __go_tool_complete go
+
+# aliases
+alias gfa='go fmt . ./...'
