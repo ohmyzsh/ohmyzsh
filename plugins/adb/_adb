@@ -1,40 +1,423 @@
 #compdef adb
-#autoload
+# ------------------------------------------------------------------------------
+# Copyright (c) 2011 Github zsh-users - http://github.com/zsh-users
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * Neither the name of the zsh-users nor the
+#       names of its contributors may be used to endorse or promote products
+#       derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL ZSH-USERS BE LIABLE FOR ANY
+# DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for adb (Android Debug Bridge) 1.0.26
+#  (http://developer.android.com/guide/developing/tools/adb.html).
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Julien Nicoulaud <julien.nicoulaud@gmail.com>
+#
+# ------------------------------------------------------------------------------
 
-# in order to make this work, you will need to have the android adb tools
 
-# adb zsh completion, based on homebrew completion
+_adb() {
+  typeset -A opt_args
+  local context state line curcontext="$curcontext" adb_args
 
-local -a _1st_arguments
-_1st_arguments=(
-'bugreport:return all information from the device that should be included in a bug report.'
-'connect:connect to a device via TCP/IP Port 5555 is default.'
-'devices:list all connected devices'
-'disconnect:disconnect from a TCP/IP device. Port 5555 is default.'
-'emu:run emulator console command'
-'forward:forward socket connections'
-'help:show the help message'
-'install:push this package file to the device and install it'
-'jdwp:list PIDs of processes hosting a JDWP transport'
-'logcat:View device log'
-'pull:copy file/dir from device'
-'push:copy file/dir to device'
-'shell:run remote shell interactively'
-'sync:copy host->device only if changed (-l means list but dont copy)'
-‘tcpip:restart host adb in tcpip mode’
-'uninstall:remove this app package from the device'
-'version:show version num'
-)
+  local ret=1
 
-local expl
-local -a pkgs installed_pkgs
+  _arguments -C \
+    '(-e -s)-d[directs command to the only connected USB device, returns an error if more than one USB device is present]' \
+    '(-d -s)-e[directs command to the only running emulator, returns an error if more than one emulator is running]' \
+    '(-d -e)-s[directs command to the USB device or emulator with the given serial number]: :_adb_serial_numbers' \
+    '-p[simple product name or a relative/absolute path to a product out directory]: :_adb_products' \
+    '1: :_adb_cmds' \
+    '*::arg:->args' \
+  && ret=0
 
-_arguments \
-	'*:: :->subcmds' && return 0
+  adb_args="${(fkv)opt_args[(I)-d|-e|-s|-p]}"
 
-if (( CURRENT == 1 )); then
-	_describe -t commands "adb subcommand" _1st_arguments
-	return
-fi
+  case "$state" in
+    (args)
+      curcontext="${curcontext%:*:*}:adb-cmd-$words[1]:"
+      case $words[1] in
+        (help|version|devices|jdwp|bugreport|wait-for-device|start-server|kill-server|get-state|get-serialno|status-window|remount|reboot-bootloader|root|usb)
+          _message 'no more arguments' && ret=0
+        ;;
+        (connect|disconnect)
+          _arguments \
+            '1: :_adb_host_colon_ports' \
+          && ret=0
+        ;;
+        (push)
+          _arguments \
+            '1:local directory:_files -/' \
+            '2: :_adb_remote_files -/' \
+          && ret=0
+        ;;
+        (pull)
+          _arguments \
+            '1: :_adb_remote_files -/' \
+            '2:local directory:_files -/' \
+          && ret=0
+        ;;
+        (sideload)
+          _arguments \
+            '1:local directory:_files -/' \
+          && ret=0
+        ;;
+        (sync)
+          _arguments \
+            '-l[list but do not copy]' \
+            '1: :_adb_sync_directories' \
+          && ret=0
+        ;;
+        (shell|emu)
+          _arguments -C \
+            '1: :_adb_remote_commands' \
+            '*::remote-command-arg:->remote-command-args' \
+          && ret=0
+          case "$state" in
+            (remote-command-args)
+              curcontext="${curcontext%:*:*}:adb-remote-cmd-$words[1]:"
+              if (( $+functions[_adb_remote_command_$words[1]_args] )); then
+                _adb_remote_command_$words[1] && ret=0
+                # TODO Write handlers for following commands:
+                #  * am (Activity Manager)
+                #  * pm (Package Manager)
+                # TODO Reuse existing compdefs for standard commands (ls, id, ifconfig, kill, etc) ?
+                #      How do we tell them to use _remote_ files/pids/users/etc ?
+              else
+                _adb_remote_command_default && ret=0
+              fi
+            ;;
+          esac
+        ;;
+        (logcat)
+           local -a rotation_opts
+           [[ -n ${(M)words:#"-f"} ]] && rotation_opts+=('-r[rotates the log file every kbytes of output. The default value is 16]:value (in kb)')
+           [[ -n ${(M)words:#"-r"} ]] && rotation_opts+=('-n[sets the maximum number of rotated logs. The default value is 4]:count')
+          _arguments \
+            '-b[loads an alternate log buffer for viewing, such as event or radio. The main buffer is used by default]: :_adb_logcat_buffers' \
+            '-c[clears (flushes) the entire log and exits]' \
+            '-d[dumps the log to the screen and exits]' \
+            '-f[writes log message output to file. The default is stdout]: :_files' \
+            '-g[prints the size of the specified log buffer and exits]' \
+            '-s[sets the default filter spec to silent]' \
+            '-v[sets the output format for log messages]: :_adb_logcat_output_formats' \
+            "${rotation_opts[@]}" \
+            '*: :_adb_logcat_filter_specs' \
+          && ret=0
+        ;;
+        (forward)
+          _arguments \
+            '1: :_adb_local_forward_specs' \
+            '2: :_adb_remote_forward_specs' \
+          && ret=0
+        ;;
+        (install)
+          _arguments \
+            '-l[forward-lock the app]' \
+            '-r[reinstall the app, keeping its data]' \
+            '-s[install on SD card instead of internal storage]' \
+            '1: :_files' \
+          && ret=0
+        ;;
+        (uninstall)
+          _arguments \
+            '-k[keep the data and cache directories]' \
+            '1: :_adb_packages' \
+          && ret=0
+        ;;
+        (reboot)
+          _arguments \
+            '1:program:((bootloader:reboot\ into\ the\ bootloader\ program recovery:reboot\ into\ the\ recovery\ program))' \
+          && ret=0
+        ;;
+        (tcpip)
+          _arguments \
+            '1::port' \
+          && ret=0
+        ;;
+        (ppp)
+          # TODO Complete tty (See http://developer.android.com/guide/developing/tools/adb.html#commandsummary)
+          # TODO Complete PPP parameters (See http://ppp.samba.org/pppd.html)
+          _arguments \
+            '1::tty' \
+            '*::parameters' \
+          && ret=0
+        ;;
+      esac
+    ;;
+  esac
 
-_files
+  return ret
+}
+
+(( $+functions[_adb_cmds] )) ||
+_adb_cmds() {
+  _alternative \
+    'general-commands:general command:_adb_general_cmds' \
+    'device-commands:device command:_adb_device_cmds' \
+    'scripting-commands:scripting command:_adb_scripting_cmds'
+}
+
+(( $+functions[_adb_general_cmds] )) ||
+_adb_general_cmds() {
+  local commands; commands=(
+    'help:show help message'
+    'version:show version number'
+    'devices:list all connected devices'
+    'connect:connect to a device via TCP/IP'
+    'disconnect:disconnect from a TCP/IP device'
+  )
+  _describe -t general-commands 'general command' commands "$@"
+}
+
+(( $+functions[_adb_device_cmds] )) ||
+_adb_device_cmds() {
+  local commands; commands=(
+    'push:copy file/dir to device'
+    'pull:copy file/dir from device'
+    'sync:copy host->device only if changed'
+    'sideload:flash a package with sideload'
+    'shell:run remote shell interactively or command'
+    'emu:run emulator console command'
+    'logcat:view device log'
+    'forward:forward socket connections'
+    'jdwp:list PIDs of processes hosting a JDWP transport'
+    'install:push this padbage file to the device and install it'
+    'uninstall:remove this app padbage from the device'
+    'bugreport:return all information from the device'
+  )
+  _describe -t device-commands 'device command' commands "$@"
+}
+
+(( $+functions[_adb_scripting_cmds] )) ||
+_adb_scripting_cmds() {
+  local commands; commands=(
+    'wait-for-device:block until device is online'
+    'start-server:ensure that there is a server running'
+    'kill-server:kill the server if it is running'
+    'get-state:prints\: offline | bootloader | device'
+    'get-serialno:prints\: <serial-number>'
+    'status-window:continuously print device status for a specified device'
+    'remount:remounts the /system partition on the device read-write'
+    'reboot:reboots the device, optionally into the bootloader or recovery program'
+    'reboot-bootloader:reboots the device into the bootloader'
+    'root:restarts the adbd daemon with root permissions'
+    'usb:restarts the adbd daemon listening on USB'
+    'tcpip:restarts the adbd daemon listening on TCP on the specified port'
+    'ppp:run PPP over USB'
+  )
+  _describe -t scripting-commands 'scripting command' commands "$@"
+}
+
+(( $+functions[_adb_products] )) ||
+_adb_products() {
+  _alternative \
+    'product-names:product name:_adb_product_names' \
+    'directories:directory:_files -/'
+}
+
+(( $+functions[_adb_product_names] )) ||
+_adb_product_names() {
+  local ret=1
+  if [[ -n "$ANDROID_PRODUCT_OUT" ]]; then
+    local product_names; product_names=("$ANDROID_PRODUCT_OUT:default value set in ANDROID_PRODUCT_OUT environment variable")
+    _describe -t product-names 'product name' product_names && ret=0
+  else
+    _message -e product-names 'product name' && ret=0
+  fi
+  return ret
+}
+
+(( $+functions[_adb_serial_numbers] )) ||
+_adb_serial_numbers() {
+  local serial_numbers; serial_numbers=(${${(M)${(f)"$(_call_program devices $service devices)"}:#*device}%%[[:space:]]*}":connected device")
+  [[ -n "$ANDROID_SERIAL" ]] && serial_numbers+=("$ANDROID_SERIAL:default value set in ANDROID_SERIAL environment variable")
+  _describe -t serial-numbers 'serial number' serial_numbers "$@" && ret=0
+}
+
+(( $+functions[_adb_packages] )) ||
+_adb_packages() {
+  local packages; packages=(${${(ps:\r\n:)"$(_call_program packages $service $adb_args shell 'ls /data/data 2>/dev/null')"}:#\**\*})
+  _multi_parts . packages
+}
+
+(( $+functions[_adb_host_colon_ports] )) ||
+_adb_host_colon_ports() {
+  local ret=1
+  if compset -P '*:'; then
+    _message -e ports 'port' && ret=0
+  else
+    _wanted hosts expl 'host' _hosts -qS: && ret=0
+  fi
+  return ret
+}
+
+(( $+functions[_adb_remote_files] )) ||
+_adb_remote_files() {
+  local dirsonly command="ls -d ${(S)words[CURRENT]/\/*//}*/ 2>/dev/null"
+  zparseopts -D -E '/=dirsonly'
+  (( ! $#dirsonly )) && command+="; ls -d ${words[CURRENT]}* 2>/dev/null"
+  local files; files=(${${(ps:\r\n:)"$(_call_program files $service $adb_args shell "'$command'" 2>/dev/null)"}:#\**\*})
+  _multi_parts "$@" / files
+}
+
+(( $+functions[_adb_remote_commands] )) ||
+_adb_remote_commands() {
+  local commands; commands=(${${(ps:\r\n:)"$(_call_program commands $service $adb_args shell "'IFS=:;for path_dir in \$PATH; do ls \$path_dir 2>/dev/null; done'" 2>/dev/null)"}:#\**\*})
+  _describe -t remote-commands 'remote command' commands && ret=0
+}
+
+(( $+functions[_adb_local_forward_specs] )) ||
+_adb_local_forward_specs() {
+  local ret=1
+  if compset -P '*:'; then
+    case ${IPREFIX%:} in
+      (tcp)
+        _message -e ports 'port' && ret=0
+      ;;
+      (localabstract|localreserved)
+        _wanted sockets expl 'socket' _socket && ret=0
+      ;;
+      (localfilesystem)
+        _wanted socket-files expl 'socket file' _files && ret=0
+      ;;
+      (dev)
+        _wanted devices expl 'device' _files -g "/dev/**" && ret=0
+      ;;
+    esac
+  else
+    local modes; modes=(
+      'tcp:TCP socket'
+      'localabstract:local abstract socket'
+      'localreserved:local reserved socket'
+      'localfilesystem:local filesystem socket'
+      'dev:device'
+    )
+    _describe -t forward-modes 'forward mode' modes -qS: && ret=0
+  fi
+  return ret
+}
+
+(( $+functions[_adb_remote_forward_specs] )) ||
+_adb_remote_forward_specs() {
+  local ret=1
+  if compset -P '*:'; then
+    case ${IPREFIX%:} in
+      (tcp)
+        _message -e ports 'remote port' && ret=0
+      ;;
+      (localabstract|localreserved|localfilesystem)
+        _message -e sockets 'remote socket' && ret=0
+      ;;
+      (dev)
+        _message -e devices 'remote device' && ret=0
+      ;;
+      (jdwp)
+        local pids; pids=(${${(f)"$(_call_program pids $service $adb_args jdwp 2>/dev/null)"}:#\**\*})
+        _describe -t remote-pids 'remote pid' pids && ret=0
+      ;;
+    esac
+  else
+    local modes; modes=(
+      'tcp:TCP socket'
+      'localabstract:local abstract socket'
+      'localreserved:local reserved socket'
+      'localfilesystem:local filesystem socket'
+      'dev:device'
+      'jdwp:Java Debug Wire Protocol'
+    )
+    _describe -t forward-modes 'forward mode' modes -qS: && ret=0
+  fi
+  return ret
+}
+
+(( $+functions[_adb_sync_directories] )) ||
+_adb_sync_directories() {
+  _alternative \
+    'partitions:partition:((system:the\ /system\ partition data:the\ /data\ partition))' \
+    'directories:directory:_adb_remote_files -/'
+}
+
+(( $+functions[_adb_logcat_filter_specs] )) ||
+_adb_logcat_filter_specs() {
+  local ret=1
+  if compset -P '*:'; then
+    local priorities; priorities=(
+      'V:verbose (lowest priority)'
+      'D:debug'
+      'I:info'
+      'W:warning'
+      'E:error'
+      'F:fatal'
+      'S:silent (highest priority, on which nothing is ever printed)'
+    )
+    _describe -t log-priorities 'log priority' priorities "$@" && ret=0
+  else
+    local tags; tags=(${(u)${${${(f)"$(_call_program tags $service $adb_args logcat -d 2>/dev/null)"}%%[[:space:]]#\(*}##*\/}:#\**\*})
+    _describe -t log-tags 'log tag' tags -qS: "$@" && ret=0
+  fi
+  return ret
+}
+
+(( $+functions[_adb_logcat_output_formats] )) ||
+_adb_logcat_output_formats() {
+  local formats; formats=(
+    'brief:display priority/tag and PID of originating process (the default format)'
+    'process:display PID only'
+    'tag:display the priority/tag only'
+    'thread:display process:thread and priority/tag only'
+    'raw:display the raw log message, with no other metadata fields'
+    'time:display the date, invocation time, priority/tag, and PID of the originating process'
+    'long:display all metadata fields and separate messages with a blank lines'
+  )
+  _describe -t log-formats 'log format' formats "$@" && ret=0
+}
+
+(( $+functions[_adb_logcat_buffers] )) ||
+_adb_logcat_buffers() {
+  local buffers; buffers=(
+    'main:view the main log buffer (default)'
+    'radio:view the buffer that contains radio/telephony related messages'
+    'events:view the buffer containing events-related messages'
+  )
+  _describe -t log-buffers 'log buffer' buffers "$@" && ret=0
+}
+
+(( $+functions[_adb_remote_command_default] )) ||
+_adb_remote_command_default() {
+  _wanted remote-files expl 'remote file' _adb_remote_files
+}
+
+_adb "$@"
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et
