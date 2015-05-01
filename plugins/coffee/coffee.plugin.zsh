@@ -6,7 +6,7 @@ cf () {
 }
 # compile & copy to clipboard
 cfc () {
-  cf $1 | tail -n +2 | pbcopy
+  cf $1 | pbcopy
 }
 
 # compile from pasteboard & print
