@@ -5,6 +5,7 @@ if [[ $('uname') == 'Linux' ]]; then
     _sublime_linux_paths=(
         "$HOME/bin/sublime_text"
         "/opt/sublime_text/sublime_text"
+        "/opt/sublime_text_3/sublime_text"
         "/usr/bin/sublime_text"
         "/usr/local/bin/sublime_text"
         "/usr/bin/subl"
