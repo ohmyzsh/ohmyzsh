@@ -144,6 +144,8 @@ alias ggpur='git pull --rebase origin $(current_branch)'
 compdef ggpur=git
 alias ggpush='git push origin $(current_branch)'
 compdef ggpush=git
+alias ggfpush='git push origin +$(current_branch)'
+compdef ggfpush=git
 alias ggpnp='git pull origin $(current_branch) && git push origin $(current_branch)'
 compdef ggpnp=git
 
