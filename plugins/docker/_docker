@@ -6,6 +6,8 @@
 # Updates: Bob Maerten (@bobmaerten) for Docker v0.9+
 #          Paul van den Berg (@bergvandenp) for Docker v1.3+ 
 
+# Useful aliases
+alias dra='docker rm $(docker ps -a -q)'
 
 # ----- Helper functions
 # Output a selectable list of all running docker containers
