@@ -26,7 +26,9 @@ compdef _afu afu='sudo apt-file update'
 alias ppap='sudo ppa-purge'
 compdef _ppap ppap='sudo ppa-purge'
 
-alias ag='sudo apt-get'            # age - but without sudo
+if [[ -z $(command -v ag) ]]; then
+  alias ag='sudo apt-get'          # age - but without sudo
+fi
 alias aga='sudo apt-get autoclean' # aac
 alias agb='sudo apt-get build-dep' # abd
 alias agc='sudo apt-get clean'     # adc
@@ -39,7 +41,9 @@ alias agud='sudo apt-get update && sudo apt-get dist-upgrade' #adu
 alias agug='sudo apt-get upgrade' # ag
 alias aguu='sudo apt-get update && sudo apt-get upgrade'      #adg
 
-compdef _ag ag='sudo apt-get'
+if [[ -z $(command -v ag) ]]; then
+  compdef _ag ag='sudo apt-get'
+fi
 compdef _aga aga='sudo apt-get autoclean'
 compdef _agb agb='sudo apt-get build-dep'
 compdef _agc agc='sudo apt-get clean'
@@ -73,11 +77,11 @@ aar() {
 	else
 		read "PACKAGE?Type in the package name to install/upgrade with this ppa [${1##*/}]: "
 	fi
-	
+
 	if [ -z "$PACKAGE" ]; then
 		PACKAGE=${1##*/}
 	fi
-	
+
 	sudo apt-add-repository $1 && sudo apt-get update
 	sudo apt-get install $PACKAGE
 }
