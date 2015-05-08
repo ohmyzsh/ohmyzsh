@@ -94,6 +94,8 @@ If you find one, try it out and work with the author on a common solution.
 If not, then go ahead and submit a PR. Please copy to anyone relevant (_eg_ plugin
 maintainers) by mentioning their GitHub handle (starting with `@`) in your message.
 
+For any extensive change, _eg_ a new plugin, you will have to find testers to +1 your PR.
+
 ----
 
 ## Use the Search, Luke
