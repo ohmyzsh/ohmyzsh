@@ -3,10 +3,10 @@
 Oh-My-Zsh is a community-driven project. Contribution is welcome, encouraged and appreciated.
 It is also essential for the development of the project.
 
-These guidelines are an attempt at better addressing the brobdingnagian amount of pending
+These guidelines are an attempt at better addressing the huge amount of pending
 issues and pull requests. Please read them closely.
 
-Foremost, be so kind as to [search](#use-the-search-luke), thus ensuring any contribution
+Foremost, be so kind as to [search](#use-the-search-luke). This ensures any contribution
 you would make is not already covered.
 
 * [Issues](#reporting-issues)
@@ -98,7 +98,7 @@ maintainers) by mentioning their GitHub handle (starting with `@`) in your messa
 
 ## Use the Search, Luke
 
-> May the Force (of past experiences) be with you
+_May the Force (of past experiences) be with you_
 
 GitHub offers [many search features](https://help.github.com/articles/searching-github/)
 to help you check whether a similar contribution to yours already exists. Please search
