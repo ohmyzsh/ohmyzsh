@@ -122,11 +122,14 @@ bindkey "\e[1;3D" dirhistory_zle_dirhistory_back
 bindkey "\e\e[D" dirhistory_zle_dirhistory_back
 # GNU screen:
 bindkey "\eO3D" dirhistory_zle_dirhistory_back
+# OS X Terminal.app
+bindkey "^[b" dirhistory_zle_dirhistory_back
 
 zle -N dirhistory_zle_dirhistory_future
 bindkey "\e[3C" dirhistory_zle_dirhistory_future
 bindkey "\e[1;3C" dirhistory_zle_dirhistory_future
 bindkey "\e\e[C" dirhistory_zle_dirhistory_future
 bindkey "\eO3C" dirhistory_zle_dirhistory_future
-
+# OS X Terminal.app
+bindkey "^[f" dirhistory_zle_dirhistory_future
 
