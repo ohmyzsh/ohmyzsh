@@ -1,7 +1,7 @@
 # AVIT ZSH Theme
 
 PROMPT='
-$(_user_host)${_current_dir} $(git_prompt_info) $(_ruby_version)
+$(_user_host)${_current_dir}''${vcs_info_msg_0_}'' $(git_prompt_info) $(_ruby_version)
 ▶ '
 
 PROMPT2='%{$fg[grey]%}◀%{$reset_color%} '
@@ -95,8 +95,31 @@ ZSH_THEME_GIT_TIME_SHORT_COMMIT_MEDIUM="%{$fg[yellow]%}"
 ZSH_THEME_GIT_TIME_SINCE_COMMIT_LONG="%{$fg[red]%}"
 ZSH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL="%{$fg[grey]%}"
 
+# Set required options.
+setopt promptsubst
+
+# Load required functions.
+autoload -Uz add-zsh-hook
+autoload -Uz vcs_info
+add-zsh-hook precmd vcs_info
+
+# Formats:
+#   %b - branchname
+#   %u - unstagedstr (see below)
+#   %c - stagedstr (see below)
+local branch_format="${ZSH_THEME_GIT_PROMPT_PREFIX}%b %f%u%c"
+local unstaged_format="${ZSH_THEME_GIT_PROMPT_MODIFIED}${ZSH_THEME_GIT_PROMPT_SUFFIX}"
+local staged_format="${ZSH_THEME_GIT_PROMPT_ADDED} ${ZSH_THEME_GIT_PROMPT_SUFFIX}"
+
+# Set vcs_info parameters.
+zstyle ':vcs_info:*' enable bzr
+zstyle ':vcs_info:*:*' check-for-changes true
+zstyle ':vcs_info:*:*' unstagedstr "${unstaged_format}"
+zstyle ':vcs_info:*:*' stagedstr "${staged_format}"
+zstyle ':vcs_info:*:*' formats "${branch_format}"
+zstyle ':vcs_info:*:*' nvcsformats   ""
+
 # LS colors, made with http://geoff.greer.fm/lscolors/
 export LSCOLORS="exfxcxdxbxegedabagacad"
 export LS_COLORS='di=34;40:ln=35;40:so=32;40:pi=33;40:ex=31;40:bd=34;46:cd=34;43:su=0;41:sg=0;46:tw=0;42:ow=0;43:'
 export GREP_COLOR='1;33'
-
