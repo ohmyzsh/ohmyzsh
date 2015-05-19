@@ -1,0 +1,64 @@
+#compdef packer
+
+local -a _packer_cmds
+_packer_cmds=(
+    'build:Build image(s) from template'
+    'fix:Fixes templates from old versions of packer'
+    'inspect:See components of a template'
+    'push:Push template files to a Packer build service'
+    'validate:Check that a template is valid'
+    'version:Prints the Packer version'
+)
+
+__build() {
+    _arguments \
+      '-debug[Debug mode enabled for builds]' \
+      '-force[Force a build to continue if artifacts exist, deletes existing artifacts]' \
+      '-machine-readable[Machine-readable output]' \
+      '-except=[(foo,bar,baz) Build all builds other than these]' \
+      '-only=[(foo,bar,baz) Only build the given builds by name]' \
+      '-parallel=[(false) Disable parallelization (on by default)]' \
+      '-var[("key=value") Variable for templates, can be used multiple times.]' \
+      '-var-file=[(path) JSON file containing user variables.]'
+}
+
+
+__inspect() {
+  _arguments \
+    '-machine-readable[Machine-readable output]' 
+}
+
+__push() {
+  _arguments \
+    '-create[Create the build configuration if it does not exist].' \
+    '-token=[(<token>) Access token to use to upload.]'
+}
+
+__validate() {
+    _arguments \
+      '-syntax-only[Only check syntax. Do not verify config of the template.]' \
+      '-except=[(foo,bar,baz) Validate all builds other than these]' \
+      '-only=[(foo,bar,baz) Validate only these builds]' \
+      '-var[("key=value") Variable for templates, can be used multiple times.]' \
+      '-var-file=[(path) JSON file containing user variables.]'
+}
+
+
+_arguments '*:: :->command'
+
+if (( CURRENT == 1 )); then
+  _describe -t commands "packer command" _packer_cmds
+  return
+fi
+
+local -a _command_args
+case "$words[1]" in
+  build)
+    __build ;;
+  inspect)
+    __inspect ;;
+  push)
+    __push ;;
+  validate)
+    __validate ;;
+esac
