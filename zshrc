@@ -1,12 +1,13 @@
 # ezzsh - zshrc
 
+# load zpython
+# module_path=($module_path /usr/local/lib/zpython)
+# zmodload zsh/zpython
 
-module_path=($module_path /usr/local/lib/zpython)
-zmodload zsh/zpython
-
-
-# path to your zsh configuration.
-ZSH="$HOME/.zsh"
+# plugins to load (array)
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# plugins=(git command-not-found)
+plugins=(git)
 
 # export ZSH_THEME="random"
 # export ZSH_THEME="ezzsh" # name of zsh theme
@@ -32,11 +33,8 @@ DISABLE_AUTO_TITLE="false" # bool
 # Uncomment following line if you want disable red dots displayed while waiting for completion
 DISABLE_COMPLETION_WAITING_DOTS="false" # bool
 
-# plugins to load (array)
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# plugins=(git command-not-found)
-plugins=(git)
-
+# path to your zsh configuration.
+ZSH="$HOME/.zsh"
 
 # Customize to your needs...
 source $ZSH/zsh
@@ -57,13 +55,13 @@ export OS_TYPE="$(uname)"
 # $ZSH - Path to your zsh installation.
 export ZSH=$HOME/.zsh/
 
+# modify $PATH
 export PATH=$HOME/bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH
 
 # set $EDITOR
 export EDITOR='vim'
 
-### colors in man pages :)
-### ::: man pages: basic coloring :::
+# colors in man pages
 # export LESS_TERMCAP_mb=$'\E[01;31m'
 # export LESS_TERMCAP_md=$'\E[01;33m'
 export LESS_TERMCAP_me=$'\E[0m'
@@ -71,27 +69,24 @@ export LESS_TERMCAP_se=$'\E[0m'
 # export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 # export LESS_TERMCAP_us=$'\E[01;32m'
-### ::: man pages (more beautiful 256 coloring) :::
 export LESS_TERMCAP_mb=$'[38;5;171;01m'
 export LESS_TERMCAP_md=$'[38;5;81;01m'
 export LESS_TERMCAP_so=$'[38;5;80;01m'
 export LESS_TERMCAP_us=$'[38;5;214;01m'
 
-
-# zsh fix for ssh host completion from ~/.ssh/config
+# small zsh hack to fix ssh host completion from ~/.ssh/config
 [ -f ~/.ssh/config ] && : ${(A)ssh_config_hosts:=${${${${(@M)${(f)"$(<~/.ssh/config)"}:#Host *}#Host }:#*\**}:#*\?*}}
 
 # needed to keep backgrounded jobs running when exiting zsh:
 setopt NO_HUP
 
-# homebrew
-# githup api token, in the format, example: 
-# > export HOMEBREW_GITHUB_API_TOKEN=XXXXX
+# homebrew githup api token file to source, if any
+# needs to set HOMEBREW_GITHUB_API_TOKEN=...
 if [[ -e ~/.homebrew-github-api-token ]]; then
   source ~/.homebrew-github-api-token
 fi
 
-# mosh setup
+# mosh title
 # export MOSH_TITLE_NOPREFIX=1
 
 # jump/mark/unmark/marks stuff (make sure to load the "jump" plugin in plugins=() )
@@ -116,7 +111,7 @@ export LC_MEASUREMENT="en_US.UTF-8"
 export LC_IDENTIFICATION="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
 
-# set ls options
+# set custom ls options
 LS_OPTIONS="--color=auto --group-directories-first -F"
 
 # Mac OS X specific stuff:
@@ -148,6 +143,7 @@ else
   LS_COMMAND="ls"
 fi
 
+# FreeBSD specific stuff
 if [[ "$OS_TYPE" == "FreeBSD" ]]; then 
   if hash gls >/dev/null 2>&1; then
   alias ls='gls -al -F'
@@ -161,6 +157,7 @@ if [[ "$OS_TYPE" == "FreeBSD" ]]; then
   fi
 fi
 
+# Linux specific stuff
 if [[ "$OS_TYPE" == "Linux" ]]; then
   LS_COMMAND=ls
   dircolors_enable=1
@@ -174,7 +171,7 @@ if [ "$TERM" != "dumb" ]; then
   fi
 fi
 
-# set $SHELL:
+# set $SHELL (dirty hack, sorry for this)
 export SHELL="$(which zsh)"
 
 # keychain stuff
@@ -185,12 +182,10 @@ if [[ "$OS_TYPE" == "Linux" ]]; then
     echo "$(date)" > $HOME/.keychain-output
     # using keychain for gpg made problems, so we only use the id_rsa SSH key here:
     # keychain id_rsa 44248BA0
-    keychain id_rsa >> $HOME/.keychain-output 2>&1
+    keychain --eval --timeout 525600 --noask --nocolor --attempts 5 id_rsa >> $HOME/.keychain-output 2>&1
     [ -z "$HOSTNAME" ] && HOSTNAME=`uname -n`
-    [ -f $HOME/.keychain/$HOSTNAME-sh ] && \
-      . $HOME/.keychain/$HOSTNAME-sh
-    [ -f $HOME/.keychain/$HOSTNAME-sh-gpg ] && \
-      . $HOME/.keychain/$HOSTNAME-sh-gpg
+    [ -f $HOME/.keychain/$HOSTNAME-sh ] && . $HOME/.keychain/$HOSTNAME-sh
+    [ -f $HOME/.keychain/$HOSTNAME-sh-gpg ] && . $HOME/.keychain/$HOSTNAME-sh-gpg
     "$ssh_cmd" "$@"
   }
 fi
@@ -200,14 +195,10 @@ alias grep='grep --color=auto'
 
 # enable ls colorization: 
 if [ "$TERM" != "dumb" ]; then
-  #if [[ "$dircolors_enable" == 1 ]]; then
-  #  eval "$(dircolors "$ZSH"/dircolors)"
-  #  alias ls="$LS_COMMAND $LS_OPTIONS"
-  #fi
   alias ls="$LS_COMMAND $LS_OPTIONS"
 fi
 
-# Fix for KDEs stupid Konsole program
+# Fix for KDE Konsole
 if [[ ! "$KONSOLE_PROFILE_NAME" == "" ]]; then
   export TERM=xterm-256color
 fi
@@ -215,50 +206,39 @@ fi
 # do not autocorrect sudo commands (fixes "zsh: correct 'vim' to '.vim' [nyae]?")
 alias sudo='nocorrect sudo'
 
-# the more brutal attempt:
+# the more brutal attempt, disabling all corrections (whatever that means...)
 unsetopt correct{,all} 
 
 # colored grep / less
-alias grep="grep --color='always'"
 alias less='less -R'
-alias diff='colordiff'
 
-# sudo shell with "s"
+if type colordiff >/dev/null 2>&1; then
+  alias diff='colordiff'
+fi
+
+# sudo shell with "s" alias
 alias s="sudo -s -E"
 
-# don't require "rehash" after installing a package
+# don't require "rehash" after installing a package (seems to NOT work reliably)
 setopt nohashdirs
 
+# easy compile function
 function compile () {
   echo "[compile zsh function] $@"
   for file in "$@"; do gcc -o "${file%.}" "$file"; done
 }
 
-
-
-
-
-
+# load mine setup / word selection style
 autoload -U colors zsh-mime-setup select-word-style
 
+# enable some colorizations
 colors
 
+# minetype setup 
 zsh-mime-setup
 
+# use bash word selection style
 select-word-style bash
-autoload -U colors zsh-mime-setup select-word-style
-
-setopt PROMPT_SUBST
-color="blue"
-if [ "$USER" = "root" ]; then
-    color="red"
-fi;
-
-
-
-
-
-
 
 
 
