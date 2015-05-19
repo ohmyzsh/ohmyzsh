@@ -29,7 +29,8 @@ DISABLE_COMPLETION_WAITING_DOTS="false" # bool
 
 # plugins to load (array)
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git command-not-found)
+# plugins=(git command-not-found)
+plugins=(git)
 
 
 # Customize to your needs...
@@ -222,4 +223,9 @@ alias s="sudo -s -E"
 
 # don't require "rehash" after installing a package
 setopt nohashdirs
+
+function compile () {
+  echo "[compile zsh function] $@"
+  for file in "$@"; do gcc -o "${file%.}" "$file"; done
+}
 
