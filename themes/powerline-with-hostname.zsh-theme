@@ -48,7 +48,7 @@ prompt_rsegment() {
   else
     echo -n "%{$bg%}%{$fg%} "
   fi
-  CURRENT_BG=$1
+  CURRENT_BG=$2
   [[ -n $3 ]] && echo -n $3
 }
 
@@ -193,8 +193,8 @@ build_rprompt() {
   symbols=()
   drawrightprompt=0
   [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}⚙" && drawrightprompt=1
-  [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}⚡" && drawrightprompt=1
-  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}✘ $RETVAL" && drawrightprompt=1
+  [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}☠" && drawrightprompt=1
+  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}⧰ $RETVAL" && drawrightprompt=1
   if [[ "$drawrightprompt" -eq 1 ]]; then
 		prompt_rseperator %k 238
   fi

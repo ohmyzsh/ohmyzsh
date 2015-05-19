@@ -1,5 +1,10 @@
 # ezzsh - zshrc
 
+
+module_path=($module_path /usr/local/lib/zpython)
+zmodload zsh/zpython
+
+
 # path to your zsh configuration.
 ZSH="$HOME/.zsh"
 
@@ -228,4 +233,32 @@ function compile () {
   echo "[compile zsh function] $@"
   for file in "$@"; do gcc -o "${file%.}" "$file"; done
 }
+
+
+
+
+
+
+autoload -U colors zsh-mime-setup select-word-style
+
+colors
+
+zsh-mime-setup
+
+select-word-style bash
+autoload -U colors zsh-mime-setup select-word-style
+
+setopt PROMPT_SUBST
+color="blue"
+if [ "$USER" = "root" ]; then
+    color="red"
+fi;
+
+
+
+
+
+
+
+
 
