@@ -1,0 +1,177 @@
+#compdef consul
+
+local -a _1st_arguments
+_1st_arguments=(
+  'agent:Runs a Consul agent'
+  'event:Fire a new event'
+  'exec:Executes a command on Consul nodes'
+  'force-leave:Forces a member of the cluster to enter the "left" state'
+  'info:Provides:debugging information for operators'
+  'join:Tell Consul agent to join cluster'
+  'keygen:Generates a new encryption key'
+  'keyring:Manages gossip layer encryption keys'
+  'leave:Gracefully leaves the Consul cluster and shuts down'
+  'lock:Execute a command holding a lock'
+  'maint:Controls node or service maintenance mode'
+  'members:Lists the members of a Consul cluster'
+  'monitor:Stream logs from a Consul agent'
+  'reload:Triggers the agent to reload configuration files'
+  'version:Prints the Consul version'
+  'watch:Watch for changes in Consul'
+)
+
+_arguments \
+  '(--help)--help[Print help message]' \
+  '(--version)--version[Print version]' \
+  '*:: :->subcmds' && return 0
+
+if (( CURRENT == 1 )); then
+  _describe -t commands "consul subcommand" _1st_arguments
+  return
+fi
+
+__agent() {
+  _arguments \
+    '-advertise=[(addr) Sets the advertise address to use]' \
+    '-bind=[(0.0.0.0) Sets the bind address for cluster communication]' \
+    '-bootstrap-expect=[(0) Sets server to expect bootstrap mode]' \
+    '-bootstrap[Sets server to bootstrap mode]' \
+    '-client=[(127.0.0.1) Sets the address to bind for client access]' \
+    '-config-dir=[(foo) Path to a directory to read configuration files from]' \
+    '-config-file=[(foo) Path to a JSON file to read configuration from]' \
+    '-data-dir=[(path) Path to a data directory to store agent state]' \
+    '-dc=[(east-aws) Datacenter of the agent]' \
+    '-encrypt=[(key) Provides the gossip encryption key]' \
+    '-join=[(1.2.3.4) Address of an agent to join at start time]' \
+    '-log-level=[(info) Log level of the agent]' \
+    '-node=[(hostname) Name of this node. Must be unique in the cluster]' \
+    '-pid-file=[(path) Path to file to store agent PID]' \
+    '-protocol=[(N) Sets the protocol version. Defaults to latest]' \
+    '-rejoin[Ignores a previous leave and attempts to rejoin the cluster]' \
+    '-retry-interval=[(30s) Time to wait between join attempts]' \
+    '-retry-join=[(1.2.3.4) Address of an agent to join at start time with retires enabled. Can be specified multiple times]' \
+    '-retry-max=[(0) Maximum number of join attempts]' \
+    '-server[Switches agent to server mode]' \
+    '-syslog[Enables logging to syslog]' \
+    '-ui-dir=[(path) Path to directory containing the Web UI resources]'
+}
+
+__event() {
+  _arguments \
+    '-datacenter=[Datacenter to dispatch in]' \
+    '-http-addr=[(127.0.0.1:8500) HTTP address of the Consul agent]' \
+    '-name=[Name of the event]' \
+    '-node=[Regular expression to filter on node names]' \
+    '-service=[Regular expression to filter on service instances]' \
+    '-tag=[Regular expression to filter on service tags. Must be used with -service]'
+}
+
+__exec() {
+  _arguments \
+    '-datacenter=[Datacenter to dispatch in]' \
+    '-http-addr=[(127.0.0.1:8500) HTTP address of the Consul agent]' \
+    '-node=[Regular expression to filter on node names]' \
+    '-prefix=[("_rexec") Prefix in the KV store to use for request data]' \
+    '-service=[Regular expression to filter on service instances]' \
+    '-tag=[Regular expression to filter on service tags. Must be used with -service]' \
+    '-verbose[Enables verbose output]' \
+    '-wait-repl=[(200ms) Perio to wait for replication before firing event. This is an optimization to allow stale reads to be performed]' \
+    '-wait=[(2s) Period to wait with no responses before terminating execution]'
+}
+
+__force-leave() {
+  _arguments \
+    '-rpc-addr=[(127.0.0.1:8500) RPC address of the Consul agent]'
+}
+
+__info() {
+  _arguments \
+    '-rpc-addr=[(127.0.0.1:8400) RPC address of the Consul agent]'
+}
+
+__join() {
+  _arguments \
+    '-rpc-addr=[(127.0.0.1:8400) RPC address of the Consul agent]' \
+    '-wan[Joins a server to another server in the WAN pool]'
+}
+
+__keyring() {
+  _arguments \
+    '-install=[(<key>) Install a new encryption key. This will broadcast the new key to all members in the cluster]' \
+    '-use=[(key) Change the primary encryption key, which is used to encrypt messages. The key must already be installed before this operation can succeed]' \
+    '-remove=[(key) Remove the given key from the cluster. This operation may only be performed on keys which are not currently the primary key]' \
+    '-list=[(key) List all keys currently in use within the cluster]' \
+    '-rpc-addr=[(127.0.0.1:8400) RPC address of the Consul agent]'
+}
+
+__leave() {
+  _arguments \
+    '-rpc-addr=[(127.0.0.1:8400) RPC address of the Consul agent]'
+}
+
+__lock() {
+  _arguments \
+    '-http-addr=[(127.0.0.1:8500) HTTP address of the Consul agent]' \
+    '-n=[(1) Maximum number of allowed lock holders. If this value is one, it operates as a lock, otherwise a semaphore is used]' \
+    '-name=[Optional name to associate with lock session]' \
+    '-token=[ACL token to use. Defaults to that of agent]' \
+    '-verbose[Enables verbose output]'
+}
+
+__maint() {
+  _arguments \
+    '-enable[Enable maintenance mode]' \
+    '-disable[Dsiable maintenance mode]' \
+    '-reason=[(<string>) Text string describing the maintenance reason]' \
+    '-service=[(<serviceID>) Control maintenance mode for a specific service ID]' \
+    '-token=[ACL token to use. Defaults to that of agent]' \
+    '-http-addr=[(127.0.0.1:8500) HTTP address of the Consul agent]'
+}
+
+__members() {
+  _arguments \
+    '-detailed[Provides detailed information about nodes]' \
+    '-rpc-addr=[(127.0.0.1:8400) RPC address of the Consul agent]' \
+    '-status=[(<regexp>) If provided, output is filtered to only nodes matching the regular expression for status]' \
+    '-wan[If the agent is in server mode, this can be used to return other peers in the WAN pool]'
+}
+
+__monitor() {
+  _arguments \
+    '-log-level=[(info) Log level of the agent]' \
+    '-rpc-addr=[(127.0.0.1:8400) RPC address of the Consul agent]'
+}
+
+__reload() {
+  _arguments \
+    '-rpc-addr=[(127.0.0.1:8400) RPC address of the Consul agent]'
+}
+
+case "$words[1]" in
+  agent)
+    __agent ;;
+  event)
+    __event ;;
+  exec)
+    __exec ;;
+  force-leave)
+    __force-leave ;;
+  info)
+    __info ;;
+  join)
+    __join ;;
+  keyring)
+    __keyring ;;
+  leave)
+    __leave ;;
+  lock)
+    __lock ;;
+  maint)
+    __maint ;;
+  members)
+    __members ;;
+  monitor)
+    __monitor ;;
+  reload)
+    __reload ;;
+esac
