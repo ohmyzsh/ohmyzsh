@@ -1,4 +1,9 @@
-# get the name of the branch we are on
+# lib/git.zsh - Various functions for incorporating git status info 
+# into the zsh PROMPT.
+
+
+# Constructs the git info section of the prompt
+# This prompt section includes the current branch and a short clean/dirty indicator
 function git_prompt_info() {
   if [[ "$(command git config --get oh-my-zsh.hide-status 2>/dev/null)" != "1" ]]; then
     ref=$(command git symbolic-ref HEAD 2> /dev/null) || \
@@ -7,46 +12,104 @@ function git_prompt_info() {
   fi
 }
 
-
-# Checks if working tree is dirty
-parse_git_dirty() {
-  local STATUS=''
-  local FLAGS
-  FLAGS=('--porcelain')
+# A simple clean/dirty status check
+# Outputs a brief clean/dirty/timeout string that indicates whether the repo has uncommitted changes.
+# This is in contrast to git_prompt_info, which provides a
+# lengthier status string with more possible indicators.
+# This quick test does not require the full output of `git status`
+function git_prompt_dirty() {
+  local GIT_ARGS STATUS GIT_STATUS_OUT
+  # Always use visible error indicator even if theme doesn't define one, to avoid silently
+  # looking like a clean directory when we can't get info
+  local TIMEDOUT_TXT=${ZSH_THEME_GIT_PROMPT_TIMEDOUT:-???}
+  GIT_ARGS=(status '--porcelain')
   if [[ "$(command git config --get oh-my-zsh.hide-dirty)" != "1" ]]; then
     if [[ $POST_1_7_2_GIT -gt 0 ]]; then
-      FLAGS+='--ignore-submodules=dirty'
+      GIT_ARGS+='--ignore-submodules=dirty'
     fi
-    if [[ "$DISABLE_UNTRACKED_FILES_DIRTY" == "true" ]]; then
-      FLAGS+='--untracked-files=no'
+    if [[ $DISABLE_UNTRACKED_FILES_DIRTY == "true" ]]; then
+      GIT_ARGS+='--untracked-files=no'
     fi
-    STATUS=$(command git status ${FLAGS} 2> /dev/null | tail -n1)
   fi
-  if [[ -n $STATUS ]]; then
-    echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
+  # Use a serverized git run to timebox `git status` so slow repo access doesn't hang the prompt
+  _git_status_timeboxed_oneline
+  STATUS=$?
+  if [[ $STATUS != 0 ]]; then
+    echo $TIMEDOUT_TXT
+  elif [[ -n $GIT_STATUS_OUT ]]; then
+    echo $ZSH_THEME_GIT_PROMPT_DIRTY
   else
-    echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
+    echo $ZSH_THEME_GIT_PROMPT_CLEAN
   fi
 }
 
-# get the difference between the local and remote branches
-git_remote_status() {
-    remote=${$(command git rev-parse --verify ${hook_com[branch]}@{upstream} --symbolic-full-name 2>/dev/null)/refs\/remotes\/}
-    if [[ -n ${remote} ]] ; then
-        ahead=$(command git rev-list ${hook_com[branch]}@{upstream}..HEAD 2>/dev/null | wc -l)
-        behind=$(command git rev-list HEAD..${hook_com[branch]}@{upstream} 2>/dev/null | wc -l)
+# Back-compatibility alias for git_prompt_dirty()
+function parse_git_dirty() {
+  git_prompt_dirty
+}
 
-        if [ $ahead -eq 0 ] && [ $behind -gt 0 ]
-        then
-            echo "$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE"
-        elif [ $ahead -gt 0 ] && [ $behind -eq 0 ]
-        then
-            echo "$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE"
-        elif [ $ahead -gt 0 ] && [ $behind -gt 0 ]
-        then
-            echo "$ZSH_THEME_GIT_PROMPT_DIVERGED_REMOTE"
-        fi
+# A time-boxed serverized invocation of `git status` that gets just the 
+# first line of output. This prevents locking up the prompt on slow repos.
+# _git_status_timeboxed_one output_var
+#  IN: $GIT_ARGS - arguments to pass to git (array)
+#  OUT: $GIT_STATUS_OUT - output of the git command
+#  RETURN: 0 if git command completed, 1 if timed out or other error occurred
+function _git_status_timeboxed_oneline() {
+  local SYS_TMPDIR=${${TMPDIR:-$TEMP}:-/tmp}
+  if [[ ! -d $SYS_TMPDIR ]]; then
+    return 1
+  fi
+  local OMZ_TMPDIR=$SYS_TMPDIR/oh-my-zsh
+  if [[ ! -d $OMZ_TMPDIR ]]; then
+    if ! mkdir -p $OMZ_TMPDIR; then
+      return 1
     fi
+  fi
+  local GIT_FIFO=$OMZ_TMPDIR/omz-prompt-git.$$
+  # Clean up any leftover from previous aborted run
+  [[ -f $GIT_FIFO ]] && rm -f $GIT_FIFO
+  if ! mkfifo $GIT_FIFO; then
+    return 1
+  fi
+  command git $GIT_ARGS >$GIT_FIFO 2>/dev/null &
+  local GIT_PID=$!
+  # Use dummy "__unset__" to distinguish timeouts from empty output
+  local STATUS=__unset__
+  read -t $ZSH_THEME_SCM_CHECK_TIMEOUT STATUS <$GIT_FIFO
+
+  rm $GIT_FIFO
+  if [[ $STATUS == __unset__ ]]; then
+    # Variable didn't get set = read timeout
+    # Get rid of that git run if it's still going
+    kill -s KILL $GIT_PID &>/dev/null
+    GIT_STATUS_OUT=''
+    return 1
+  elif [[ -z $STATUS ]]; then
+    GIT_STATUS_OUT=''
+    return 0
+  else
+    # Get rid of that git run if it's still going
+    kill -s KILL $GIT_PID &>/dev/null
+    GIT_STATUS_OUT="$STATUS"
+    return 0
+  fi
+}
+
+# Gets the difference between the local and remote branches
+function git_remote_status() {
+  remote=${$(command git rev-parse --verify ${hook_com[branch]}@{upstream} --symbolic-full-name 2>/dev/null)/refs\/remotes\/}
+  if [[ -n ${remote} ]] ; then
+    ahead=$(command git rev-list ${hook_com[branch]}@{upstream}..HEAD 2>/dev/null | wc -l)
+    behind=$(command git rev-list HEAD..${hook_com[branch]}@{upstream} 2>/dev/null | wc -l)
+
+    if [ $ahead -eq 0 ] && [ $behind -gt 0 ]; then
+      echo "$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE"
+    elif [ $ahead -gt 0 ] && [ $behind -eq 0 ]; then
+      echo "$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE"
+    elif [ $ahead -gt 0 ] && [ $behind -gt 0 ]; then
+      echo "$ZSH_THEME_GIT_PROMPT_DIVERGED_REMOTE"
+    fi
+  fi
 }
 
 # Checks if there are commits ahead from remote
@@ -66,11 +129,13 @@ function git_commits_ahead() {
 
 # Formats prompt string for current git commit short SHA
 function git_prompt_short_sha() {
+  local SHA
   SHA=$(command git rev-parse --short HEAD 2> /dev/null) && echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
 }
 
 # Formats prompt string for current git commit long SHA
 function git_prompt_long_sha() {
+  local SHA
   SHA=$(command git rev-parse HEAD 2> /dev/null) && echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
 }
 
@@ -121,9 +186,11 @@ git_prompt_status() {
   echo $STATUS
 }
 
-#compare the provided version of git to the version installed and on path
-#prints 1 if input version <= installed version
-#prints -1 otherwise
+# Compares the provided version of git to the version installed and on path
+# Prints 1 if installed version > input version
+# Prints -1 if installed version < input version
+# Prints 0 if installed version = input version
+# Always returns 0
 function git_compare_version() {
   local INPUT_GIT_VERSION=$1;
   local INSTALLED_GIT_VERSION
@@ -144,7 +211,7 @@ function git_compare_version() {
   echo 0
 }
 
-#this is unlikely to change so make it all statically assigned
+# This is unlikely to change so make it all statically assigned
 POST_1_7_2_GIT=$(git_compare_version "1.7.2")
-#clean up the namespace slightly by removing the checker function
+# Clean up the namespace slightly by removing the checker function
 unset -f git_compare_version
