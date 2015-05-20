@@ -78,20 +78,13 @@ function git_prompt_long_sha() {
 git_prompt_status() {
   INDEX=$(command git status --porcelain -b 2> /dev/null)
   STATUS=""
-  if $(echo "$INDEX" | command grep -E '^\?\? ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_UNTRACKED$STATUS"
+  $(git diff --no-ext-diff --quiet --exit-code) ||  STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_MODIFIED"
+  repo_info=$(git rev-parse --git-dir --is-inside-git-dir --is-bare-repository --is-inside-work-tree --short HEAD 2>/dev/null)
+  if [ $? -eq 0 ]; then
+      $(git diff-index --cached --quiet HEAD --) ||  STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_ADDED"
   fi
-  if $(echo "$INDEX" | grep '^A  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
-  elif $(echo "$INDEX" | grep '^M  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
-  fi
-  if $(echo "$INDEX" | grep '^ M ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
-  elif $(echo "$INDEX" | grep '^AM ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
-  elif $(echo "$INDEX" | grep '^ T ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
+  if $(git ls-files --others --exclude-standard --error-unmatch -- ':/*' >/dev/null 2>/dev/null); then
+   STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_UNTRACKED"
   fi
   if $(echo "$INDEX" | grep '^R  ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_RENAMED$STATUS"
