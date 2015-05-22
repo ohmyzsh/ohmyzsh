@@ -11,8 +11,17 @@
 # Output a selectable list of all running docker containers
 __docker_containers() {
     declare -a cont_cmd
-    cont_cmd=($(docker ps | awk 'NR>1{print $1":[CON("$1")"$2"("$3")]"}'))
-    _describe 'containers' cont_cmd
+    cont_cmd=($(docker ps | awk 'NR>1{print $NF":[CON("$1")"$2"("$3")]"}'))
+    if [[  'X$cont_cmd' != 'X' ]]
+        _describe 'containers' cont_cmd
+}
+
+# Output a selectable list of all containers, even not running
+__docker_all_containers() {
+    declare -a cont_cmd
+    cont_cmd=($(docker ps -a | awk 'NR>1{print $NF":[CON("$1")"$2"("$3")]"}'))
+    if [[  'X$cont_cmd' != 'X' ]]
+        _describe 'containers' cont_cmd
 }
 
 # output a selectable list of all docker images
@@ -57,7 +66,7 @@ __diff() {
     __docker_containers
 }
 
-__events() {
+__events() {    
     _arguments \
         '--since=[Show previously created events and then stream.]'
 }
@@ -98,10 +107,12 @@ __insert() {
 
 __inspect() {
     __docker_images
-    __docker_containers
+    __docker_all_containers
 }
 
 __kill() {
+    _arguments \
+        '(-s,--signal=)'{-s,--signal=}'[KILL Signal]'
     __docker_containers
 }
 
@@ -162,7 +173,7 @@ __rm() {
         '(-f,--force=)'{-f,--force=}'[Force removal of running container]' \
         '(-l,--link=)'{-l,--link=}'[Remove the specified link and not the underlying container]' \
         '(-v,--volumes=)'{-v,--volumes=}'[Remove the volumes associated to the container]'
-    __docker_containers
+    __docker_all_containers
 }
 
 __rmi() {
@@ -216,6 +227,10 @@ __start() {
     _arguments \
         '(-a,--attach=)'{-a,--attach=}'[Attach container''s stdout/stderr and forward all signals to the process]' \
         '(-i,--interactive=)'{-i,--interactive=}'[Attach container''s stdin]'
+    __docker_all_containers
+}
+
+__stats() {
     __docker_containers
 }
 
@@ -280,6 +295,7 @@ _1st_arguments=(
     "save":"Save an image to a tar archive"
     "search":"Search for an image in the docker index"
     "start":"Start a stopped container"
+    "stats":"Display a live stream of one or more containers' resource usage statistics"
     "stop":"Stop a running container"
     "tag":"Tag an image into a repository"
     "top":"Lookup the running processes of a container"
@@ -351,6 +367,8 @@ case "$words[1]" in
         __save ;;
     search)
         __search ;;
+    stats)
+        __stats ;;
     start)
         __start ;;
     stop)
