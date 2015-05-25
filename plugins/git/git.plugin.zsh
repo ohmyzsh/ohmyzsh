@@ -31,6 +31,7 @@ alias gcmsg='git commit -m'
 compdef _git gcmsg=git-commit
 alias gco='git checkout'
 compdef _git gco=git-checkout
+alias gcop='git checkout --patch'
 alias gcm='git checkout master'
 alias gr='git remote'
 compdef _git gr=git-remote
