@@ -8,6 +8,8 @@ if [[ $('uname') == 'Linux' ]]; then
         "/usr/bin/sublime_text"
         "/usr/local/bin/sublime_text"
         "/usr/bin/subl"
+        "/opt/sublime_text_3/sublime_text"
+        "/usr/bin/subl3"
     )
     for _sublime_path in $_sublime_linux_paths; do
         if [[ -a $_sublime_path ]]; then
