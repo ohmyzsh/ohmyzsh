@@ -3,7 +3,7 @@ _homebrew-installed() {
 }
 
 _rbenv-from-homebrew-installed() {
-  brew ls rbenv &> /dev/null
+  [ -e "$(brew --prefix)/opt/rbenv" ]
 }
 
 FOUND_RBENV=0
