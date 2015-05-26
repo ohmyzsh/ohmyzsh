@@ -61,7 +61,7 @@ function svn_get_rev_nr() {
 function svn_dirty_choose() {
   if in_svn; then
     root=`svn info 2> /dev/null | sed -n 's/^Working Copy Root Path: //p'`
-    if $(svn status $root 2> /dev/null | grep -Eq '^\s*[ACDIM!?L]'); then
+    if $(svn status $root 2> /dev/null | command grep -Eq '^\s*[ACDIM!?L]'); then
       # Grep exits with 0 when "One or more lines were selected", return "dirty".
       echo $1
     else
@@ -78,7 +78,7 @@ function svn_dirty() {
 function svn_dirty_choose_pwd () {
   if in_svn; then
     root=$PWD
-    if $(svn status $root 2> /dev/null | grep -Eq '^\s*[ACDIM!?L]'); then
+    if $(svn status $root 2> /dev/null | command grep -Eq '^\s*[ACDIM!?L]'); then
       # Grep exits with 0 when "One or more lines were selected", return "dirty".
       echo $1
     else

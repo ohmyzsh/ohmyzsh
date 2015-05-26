@@ -27,7 +27,6 @@ unmark() {
 	rm -i "$MARKPATH/$1"
 }
 
-autoload colors
 marks() {
 	for link in $MARKPATH/*(@); do
 		local markname="$fg[cyan]${link:t}$reset_color"
