@@ -111,6 +111,13 @@ alias gsta='git stash'
 alias gstp='git stash pop'
 alias gstd='git stash drop'
 
+# Bisect aliases
+alias gbs='git bisect'
+alias gbss='git bisect start'
+alias gbsg='git bisect good'
+alias gbsb='git bisect bad'
+alias gbsr='git bisect reset'
+
 # Will cd into the top of the current repository
 # or submodule.
 alias grt='cd $(git rev-parse --show-toplevel || echo ".")'
