@@ -26,7 +26,7 @@ for rbenvdir in "${rbenvdirs[@]}" ; do
     alias gemsets="rbenv gemset list"
 
     function current_ruby() {
-      echo "$(rbenv version-name)"
+      echo "${ZSH_THEME_RBENV_PROMPT_PREFIX=(}$(rbenv version-name)${ZSH_THEME_RBENV_PROMPT_SUFFIX=)}"
     }
 
     function current_gemset() {
