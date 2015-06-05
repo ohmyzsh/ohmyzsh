@@ -60,6 +60,7 @@
 # of values:
 #
 #     verbose       show number of commits ahead/behind (+/-) upstream
+#     name          if verbose, then also show the upstream abbrev name
 #     legacy        don't use the '--count' option available in recent
 #                   versions of git-rev-list
 #     git           always compare HEAD to @{upstream}
@@ -84,13 +85,17 @@
 # the colored output of "git status -sb" and are available only when
 # using __git_ps1 for PROMPT_COMMAND or precmd.
 
+# check whether printf supports -v
+__git_printf_supports_v=
+printf -v __git_printf_supports_v -- '%s' yes >/dev/null 2>&1
+
 # stores the divergence from upstream in $p
 # used by GIT_PS1_SHOWUPSTREAM
 __git_ps1_show_upstream ()
 {
 	local key value
 	local svn_remote svn_url_pattern count n
-	local upstream=git legacy="" verbose=""
+	local upstream=git legacy="" verbose="" name=""
 
 	svn_remote=()
 	# get some config options from git-config
@@ -106,7 +111,7 @@ __git_ps1_show_upstream ()
 			;;
 		svn-remote.*.url)
 			svn_remote[$((${#svn_remote[@]} + 1))]="$value"
-			svn_url_pattern+="\\|$value"
+			svn_url_pattern="$svn_url_pattern\\|$value"
 			upstream=svn+git # default upstream is SVN if available, else git
 			;;
 		esac
@@ -118,6 +123,7 @@ __git_ps1_show_upstream ()
 		git|svn) upstream="$option" ;;
 		verbose) verbose=1 ;;
 		legacy)  legacy=1  ;;
+		name)    name=1 ;;
 		esac
 	done
 
@@ -200,6 +206,9 @@ __git_ps1_show_upstream ()
 		*)	    # diverged from upstream
 			p=" u+${count#*	}-${count%	*}" ;;
 		esac
+		if [[ -n "$count" && -n "$name" ]]; then
+			p="$p $(git rev-parse --abbrev-ref "$upstream" 2>/dev/null)"
+		fi
 	fi
 
 }
@@ -248,6 +257,13 @@ __git_ps1_colorize_gitstring ()
 		u="$bad_color$u"
 	fi
 	r="$c_clear$r"
+}
+
+eread ()
+{
+	f="$1"
+	shift
+	test -r "$f" && read "$@" <"$f"
 }
 
 # __git_ps1 accepts 0 or 1 arguments (i.e., format string)
@@ -312,9 +328,9 @@ __git_ps1 ()
 	local step=""
 	local total=""
 	if [ -d "$g/rebase-merge" ]; then
-		read b 2>/dev/null <"$g/rebase-merge/head-name"
-		read step 2>/dev/null <"$g/rebase-merge/msgnum"
-		read total 2>/dev/null <"$g/rebase-merge/end"
+		eread "$g/rebase-merge/head-name" b
+		eread "$g/rebase-merge/msgnum" step
+		eread "$g/rebase-merge/end" total
 		if [ -f "$g/rebase-merge/interactive" ]; then
 			r="|REBASE-i"
 		else
@@ -322,10 +338,10 @@ __git_ps1 ()
 		fi
 	else
 		if [ -d "$g/rebase-apply" ]; then
-			read step 2>/dev/null <"$g/rebase-apply/next"
-			read total 2>/dev/null <"$g/rebase-apply/last"
+			eread "$g/rebase-apply/next" step
+			eread "$g/rebase-apply/last" total
 			if [ -f "$g/rebase-apply/rebasing" ]; then
-				read b 2>/dev/null <"$g/rebase-apply/head-name"
+				eread "$g/rebase-apply/head-name" b
 				r="|REBASE"
 			elif [ -f "$g/rebase-apply/applying" ]; then
 				r="|AM"
@@ -349,7 +365,7 @@ __git_ps1 ()
 			b="$(git symbolic-ref HEAD 2>/dev/null)"
 		else
 			local head=""
-			if ! read head 2>/dev/null <"$g/HEAD"; then
+			if ! eread "$g/HEAD" head; then
 				if [ $pcmode = yes ]; then
 					PS1="$ps1pc_start$ps1pc_end"
 				fi
@@ -433,7 +449,7 @@ __git_ps1 ()
 	local gitstring="$c${b##refs/heads/}${f:+$z$f}$r$p"
 
 	if [ $pcmode = yes ]; then
-		if [[ -n ${ZSH_VERSION-} ]]; then
+		if [ "${__git_printf_supports_v-}" != yes ]; then
 			gitstring=$(printf -- "$printf_format" "$gitstring")
 		else
 			printf -v gitstring -- "$printf_format" "$gitstring"
