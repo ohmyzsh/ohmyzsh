@@ -207,7 +207,7 @@ function _omz_diag_dump_one_big_text() {
   # to help with diagnosing behavior differences between bash and zsh
   cfgfiles=( /etc/zshenv /etc/zprofile /etc/zshrc /etc/zlogin /etc/zlogout 
     $zdotdir/.zshenv $zdotdir/.zprofile $zdotdir/.zshrc $zdotdir/.zlogin $zdotdir/.zlogout
-    ~/.zsh-pre-oh-my-zsh
+    ~/.zsh.pre-oh-my-zsh
     /etc/bashrc /etc/profile ~/.bashrc ~/.profile ~/.bash_profile ~/.bash_logout )
   command ls -lad $cfgfiles 2>&1
   builtin echo
