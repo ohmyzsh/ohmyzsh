@@ -104,12 +104,12 @@ function _omz_diag_dump_one_big_text() {
   command date
   command uname -a
   builtin echo OSTYPE=$OSTYPE
-  command zsh --version
+  builtin echo ZSH_VERSION=$ZSH_VERSION
   builtin echo User: $USER
   builtin echo
 
   # Installed programs
-  programs=(sh zsh ksh bash sed cat grep find git posh)
+  programs=(sh zsh ksh bash sed cat grep ls find git posh)
   for program in $programs; do
     local md5_str="" md5="" link_str="" extra_str=""
     progfile=$(builtin which $program)
@@ -119,7 +119,7 @@ function _omz_diag_dump_one_big_text() {
           extra_str+=" $(md5 -q $progfile)"
         fi
         if [[ -h "$progfile" ]]; then
-          extra_str+=" ( -> ${file:A} )"
+          extra_str+=" ( -> ${progfile:A} )"
         fi
       fi
       builtin printf '%-9s %-20s %s\n' "$program is" "$progfile" "$extra_str"
@@ -128,8 +128,9 @@ function _omz_diag_dump_one_big_text() {
     fi
   done
   builtin echo
-  builtin echo Versions:
+  builtin echo Command Versions:
   builtin echo "zsh: $(zsh --version)"
+  builtin echo "this zsh session: $ZSH_VERSION"
   builtin echo "bash: $(bash --version | command grep bash)"
   builtin echo "git: $(git --version)"
   builtin echo "grep: $(grep --version)"
@@ -199,8 +200,12 @@ function _omz_diag_dump_one_big_text() {
   local zdotdir=${ZDOTDIR:-$HOME}
   builtin echo "Zsh configuration files:"
   local cfgfile cfgfiles
+  # Some files for bash that zsh does not use are intentionally included
+  # to help with diagnosing behavior differences between bash and zsh
   cfgfiles=( /etc/zshenv /etc/zprofile /etc/zshrc /etc/zlogin /etc/zlogout 
-    $zdotdir/.zshenv $zdotdir/.zprofile $zdotdir/.zshrc $zdotdir/.zlogin $zdotdir/.zlogout )
+    $zdotdir/.zshenv $zdotdir/.zprofile $zdotdir/.zshrc $zdotdir/.zlogin $zdotdir/.zlogout
+    ~/.zsh-pre-oh-my-zsh
+    /etc/bashrc /etc/profile ~/.bashrc ~/.profile ~/.bash_profile ~/.bash_logout )
   command ls -lad $cfgfiles 2>&1
   builtin echo
   if [[ $verbose -ge 1 ]]; then
@@ -208,6 +213,7 @@ function _omz_diag_dump_one_big_text() {
       _omz_diag_dump_echo_file_w_header $cfgfile
     done
   fi
+  builtin echo
   builtin echo "Zsh compdump files:"
   local dumpfile dumpfiles
   command ls -lad $zdotdir/.zcompdump*
@@ -274,6 +280,12 @@ function _omz_diag_dump_echo_file_w_header() {
     command cat $file
     builtin echo "========== end $file =========="
     builtin echo
+  elif [[ -d $file ]]; then
+    builtin echo "File '$file' is a directory"
+  elif [[ ! -e $file ]]; then
+    builtin echo "File '$file' does not exist"
+  else
+    command ls -lad "$file"
   fi
 }
 
