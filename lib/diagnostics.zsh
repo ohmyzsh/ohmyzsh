@@ -163,6 +163,9 @@ function _omz_diag_dump_one_big_text() {
   builtin echo Zsh configuration:
   builtin echo setopt: $(builtin setopt)
   builtin echo
+  builtin echo zstyle:
+  builtin zstyle
+  builtin echo
 
   # Oh-my-zsh installation
   builtin echo oh-my-zsh installation:
