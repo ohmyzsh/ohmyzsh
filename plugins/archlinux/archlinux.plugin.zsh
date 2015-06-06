@@ -63,7 +63,7 @@ alias pacmir='sudo pacman -Syy'                # Force refresh of all package li
 
 # https://bbs.archlinux.org/viewtopic.php?id=93683
 paclist() {
-  sudo pacman -Qei $(pacman -Qu|cut -d" " -f 1)|awk ' BEGIN {FS=":"}/^Name/{printf("\033[1;36m%s\033[1;37m", $2)}/^Description/{print $2}'
+  LC_ALL=C pacman -Qei $(pacman -Qu|cut -d" " -f 1)|awk ' BEGIN {FS=":"}/^Name/{printf("\033[1;36m%s\033[1;37m", $2)}/^Description/{print $2}'
 }
 
 alias paclsorphans='sudo pacman -Qdt'
