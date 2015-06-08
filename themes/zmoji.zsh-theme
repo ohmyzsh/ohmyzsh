@@ -56,7 +56,9 @@ function setprompt {
     PROMPT='[%{$fg[yellow]%}%2~%{$reset_color%}]%(0T.$EMOJI[$ICONLIST[24]].%(1T.$EMOJI[$ICONLIST[1]].%(2T.$EMOJI[$ICONLIST[2]].%(3T.$EMOJI[$ICONLIST[3]].%(4T.$EMOJI[$ICONLIST[4]].%(5T.$EMOJI[$ICONLIST[5]].%(6T.$EMOJI[$ICONLIST[6]].%(7T.$EMOJI[$ICONLIST[7]].%(8T.$EMOJI[$ICONLIST[8]].%(9T.$EMOJI[$ICONLIST[9]].%(10T.$EMOJI[$ICONLIST[10]].%(11T.$EMOJI[$ICONLIST[11]].%(12T.$EMOJI[$ICONLIST[12]].%(13T.$EMOJI[$ICONLIST[13]].%(14T.$EMOJI[$ICONLIST[14]].%(15T.$EMOJI[$ICONLIST[15]].%(16T.$EMOJI[$ICONLIST[16]].%(17T.$EMOJI[$ICONLIST[17]].%(18T.$EMOJI[$ICONLIST[18]].%(19T.$EMOJI[$ICONLIST[19]].%(20T.$EMOJI[$ICONLIST[20]].%(21T.$EMOJI[$ICONLIST[21]].%(22T.$EMOJI[$ICONLIST[22]].%(23T.$EMOJI[$ICONLIST[23]].\$))))))))))))))))))))))))  %{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%}% %{$reset_color%}'
     # This includes exit status, battery monitor, clock, and moon phase
     # RPROMPT='$(vi_mode_prompt_info) %{$fg_bold[red]%}%(0?..[%?])%{$reset_color%}$(battery_level_gauge) %T %(17T.$EMOJI[BEER_MUG].$(emoji-clock))  $(printmoon)'
-    RPROMPT='$(vi_mode_prompt_info) %{$fg_bold[red]%}%(0?..[%?])%{$reset_color%}$(battery_level_gauge) $(printmoon)'
+    # RPROMPT='$(vi_mode_prompt_info) %{$fg_bold[red]%}%(0?..[%?])%{$reset_color%}$(battery_level_gauge) $(printmoon)'
+    # And the same without the battery gauge
+    RPROMPT='$(vi_mode_prompt_info) %{$fg_bold[red]%}%(0?..[%?])%{$reset_color%} $(printmoon)'
   fi
 }
 
