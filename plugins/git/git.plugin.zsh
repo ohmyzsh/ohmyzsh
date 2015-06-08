@@ -1,5 +1,4 @@
 # Query/use custom command for `git`.
-local git_cmd
 zstyle -s ":vcs_info:git:*:-all-" "command" git_cmd
 : ${git_cmd:=git}
 
