@@ -63,11 +63,11 @@ function svn_current_revision() {
 function svn_status_info() {
   local svn_status_string="$ZSH_THEME_SVN_PROMPT_CLEAN"
   local svn_status="$(svn status 2> /dev/null)";
-  if grep -E '^\s*A' &> /dev/null <<< $svn_status; then svn_status_string="$svn_status_string ${ZSH_THEME_SVN_PROMPT_ADDITIONS:-+}"; fi
-  if grep -E '^\s*D' &> /dev/null <<< $svn_status; then svn_status_string="$svn_status_string ${ZSH_THEME_SVN_PROMPT_DELETIONS:-✖}"; fi
-  if grep -E '^\s*M' &> /dev/null <<< $svn_status; then svn_status_string="$svn_status_string ${ZSH_THEME_SVN_PROMPT_MODIFICATIONS:-✎}"; fi
-  if grep -E '^\s*[R~]' &> /dev/null <<< $svn_status; then svn_status_string="$svn_status_string ${ZSH_THEME_SVN_PROMPT_REPLACEMENTS:-∿}"; fi
-  if grep -E '^\s*\?' &> /dev/null <<< $svn_status; then svn_status_string="$svn_status_string ${ZSH_THEME_SVN_PROMPT_UNTRACKED:-?}"; fi
-  if grep -E '^\s*[CI!L]' &> /dev/null <<< $svn_status; then svn_status_string="$svn_status_string ${ZSH_THEME_SVN_PROMPT_DIRTY:-'!'}"; fi
+  if command grep -E '^\s*A' &> /dev/null <<< $svn_status; then svn_status_string="$svn_status_string ${ZSH_THEME_SVN_PROMPT_ADDITIONS:-+}"; fi
+  if command grep -E '^\s*D' &> /dev/null <<< $svn_status; then svn_status_string="$svn_status_string ${ZSH_THEME_SVN_PROMPT_DELETIONS:-✖}"; fi
+  if command grep -E '^\s*M' &> /dev/null <<< $svn_status; then svn_status_string="$svn_status_string ${ZSH_THEME_SVN_PROMPT_MODIFICATIONS:-✎}"; fi
+  if command grep -E '^\s*[R~]' &> /dev/null <<< $svn_status; then svn_status_string="$svn_status_string ${ZSH_THEME_SVN_PROMPT_REPLACEMENTS:-∿}"; fi
+  if command grep -E '^\s*\?' &> /dev/null <<< $svn_status; then svn_status_string="$svn_status_string ${ZSH_THEME_SVN_PROMPT_UNTRACKED:-?}"; fi
+  if command grep -E '^\s*[CI!L]' &> /dev/null <<< $svn_status; then svn_status_string="$svn_status_string ${ZSH_THEME_SVN_PROMPT_DIRTY:-'!'}"; fi
   echo $svn_status_string
 }

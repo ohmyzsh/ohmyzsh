@@ -44,19 +44,29 @@ mvn-color()
 # aliases
 alias mvncie='mvn clean install eclipse:eclipse'
 alias mvnci='mvn clean install'
+alias mvncist='mvn clean install -DskipTests'
 alias mvne='mvn eclipse:eclipse'
 alias mvnce='mvn clean eclipse:clean eclipse:eclipse'
 alias mvnd='mvn deploy'
 alias mvnp='mvn package'
 alias mvnc='mvn clean'
 alias mvncom='mvn compile'
+alias mvnct='mvn clean test'
 alias mvnt='mvn test'
 alias mvnag='mvn archetype:generate'
+alias mvn-updates='mvn versions:display-dependency-updates'
+alias mvntc7='mvn tomcat7:run' 
+alias mvntc='mvn tomcat:run'
+alias mvnjetty='mvn jetty:run'
+alias mvndt='mvn dependency:tree'
+alias mvns='mvn site'
+alias mvnsrc='mvn dependency:sources'
+alias mvndocs='mvn dependency:resolve -Dclassifier=javadoc'
 
 function listMavenCompletions { 
      reply=(
         # common lifecycle
-        clean process-resources compile process-test-resources test-compile test package verify install deploy site
+        clean process-resources compile process-test-resources test-compile test integration-test package verify install deploy site
         
         # common plugins
         deploy failsafe install site surefire checkstyle javadoc jxr pmd ant antrun archetype assembly dependency enforcer gpg help release repository source eclipse idea jetty cargo jboss tomcat tomcat6 tomcat7 exec versions war ear ejb android scm buildnumber nexus repository sonar license hibernate3 liquibase flyway gwt
@@ -121,6 +131,10 @@ function listMavenCompletions {
         tomcat6:run tomcat6:run-war tomcat6:run-war-only tomcat6:stop tomcat6:deploy tomcat6:undeploy
         # tomcat7
         tomcat7:run tomcat7:run-war tomcat7:run-war-only tomcat7:deploy
+	# tomee
+        tomee:run tomee:run-war tomee:run-war-only tomee:stop tomee:deploy tomee:undeploy	
+        # spring-boot
+        spring-boot:run spring-boot:repackage
         # exec
         exec:exec exec:java
         # versions

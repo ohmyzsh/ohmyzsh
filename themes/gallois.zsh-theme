@@ -11,15 +11,11 @@ git_custom_status() {
   fi
 }
 
-#RVM and git settings
-if [[ -s ~/.rvm/scripts/rvm ]] ; then
-  RPS1='$(git_custom_status)%{$fg[red]%}[`~/.rvm/bin/rvm-prompt`]%{$reset_color%} $EPS1'
-else
-  if which rbenv &> /dev/null; then
-    RPS1='$(git_custom_status)%{$fg[red]%}[`rbenv version | sed -e "s/ (set.*$//"`]%{$reset_color%} $EPS1'
-  else
-    RPS1='$(git_custom_status) $EPS1'
-  fi
-fi
+# RVM component of prompt
+ZSH_THEME_RVM_PROMPT_PREFIX="%{$fg[red]%}["
+ZSH_THEME_RVM_PROMPT_SUFFIX="]%{$reset_color%}"
+
+# Combine it all into a final right-side prompt
+RPS1='$(git_custom_status)$(ruby_prompt_info) $EPS1'
 
 PROMPT='%{$fg[cyan]%}[%~% ]%(?.%{$fg[green]%}.%{$fg[red]%})%B$%b '

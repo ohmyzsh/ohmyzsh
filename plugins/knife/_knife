@@ -31,7 +31,7 @@ _knife() {
   
   case $state in
   knifecmd)
-    compadd -Q "$@" bootstrap client configure cookbook "cookbook site" "data bag" diff exec environment index node recipe role search ssh status upload windows $cloudproviders
+    compadd -Q "$@" bootstrap client configure cookbook "cookbook site" "data bag" diff exec environment index node recipe role search ssh status upload vault windows $cloudproviders
   ;;
   knifesubcmd)
     case $words[2] in
@@ -64,6 +64,9 @@ _knife() {
     ;; 
     upload)
      _arguments '*:file or directory:_files -g "*"'
+    ;;
+    vault)
+      compadd -Q "$@" create decrypt delete edit remove "rotate all keys" "rotate keys" show update
     ;;
     windows)
       compadd "$@" bootstrap

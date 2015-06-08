@@ -3,7 +3,6 @@
 #
 
 # ls, the common ones I use a lot shortened for rapid fire usage
-alias ls='ls --color' #I like color
 alias l='ls -lFh'     #size,show type,human readable
 alias la='ls -lAFh'   #long list,show almost all,show type,human readable
 alias lr='ls -tRFh'   #sorted by date,recursive,show type,human readable
@@ -21,12 +20,6 @@ alias sgrep='grep -R -n -H -C 5 --exclude-dir={.git,.svn,CVS} '
 
 alias t='tail -f'
 
-# because typing 'cd' is A LOT of work!!
-alias ..='cd ../'
-alias ...='cd ../../'
-alias ....='cd ../../../'
-alias .....='cd ../../../../'
-
 # Command line head / tail shortcuts
 alias -g H='| head'
 alias -g T='| tail'
@@ -39,7 +32,7 @@ alias -g NE="2> /dev/null"
 alias -g NUL="> /dev/null 2>&1"
 alias -g P="2>&1| pygmentize -l pytb"
 
-alias dud='du --max-depth=1 -h'
+alias dud='du -d 1 -h'
 alias duf='du -sh *'
 alias fd='find . -type d -name'
 alias ff='find . -type f -name'
@@ -47,7 +40,6 @@ alias ff='find . -type f -name'
 alias h='history'
 alias hgrep="fc -El 0 | grep"
 alias help='man'
-alias j='jobs'
 alias p='ps -f'
 alias sortnr='sort -n -r'
 alias unexport='unset'
@@ -71,7 +63,7 @@ if [ ${ZSH_VERSION//\./} -ge 420 ]; then
   _image_fts=(jpg jpeg png gif mng tiff tif xpm)
   for ft in $_image_fts ; do alias -s $ft=$XIVIEWER; done
 
-  _media_fts=(avi mpg mpeg ogm mp3 wav ogg ape rm mov mkv)
+  _media_fts=(ape avi flv mkv mov mp3 mpeg mpg ogg ogm rm wav webm)
   for ft in $_media_fts ; do alias -s $ft=mplayer ; done
 
   #read documents
