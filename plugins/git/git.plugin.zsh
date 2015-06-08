@@ -1,5 +1,4 @@
 # Query/use custom command for `git`.
-local git_cmd=
 zstyle -s ":vcs_info:git:*:-all-" "command" git_cmd
 : ${git_cmd:=git}
 
@@ -12,7 +11,7 @@ zstyle -s ":vcs_info:git:*:-all-" "command" git_cmd
 # Using '--quiet' with 'symbolic-ref' will not cause a fatal error (128) if
 # it's not a symbolic ref, but in a Git repo.
 function current_branch() {
-  local ref=
+  local ref
   ref=$($git_cmd symbolic-ref --quiet HEAD 2> /dev/null)
   local ret=$?
   if [[ $ret != 0 ]]; then
