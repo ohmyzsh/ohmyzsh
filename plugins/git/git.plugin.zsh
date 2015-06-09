@@ -80,7 +80,12 @@ alias gcp='git cherry-pick'
 alias gcs='git commit -S'
 
 alias gd='git diff'
+
+#Dont add alias if gdc (GCC D Compiler) is present
+command -v gdc >/dev/null 2>&1 || {
 alias gdc='git diff --cached'
+}
+
 alias gdt='git diff-tree --no-commit-id --name-only -r'
 gdv() { git diff -w "$@" | view - }
 compdef _git gdv=git-diff
