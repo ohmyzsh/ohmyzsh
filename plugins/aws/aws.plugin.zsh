@@ -13,7 +13,8 @@ function agp {
 }
 function asp {
   export AWS_DEFAULT_PROFILE=$1
-  export RPROMPT="<aws:$AWS_DEFAULT_PROFILE>"
+  export AWS_PROFILE=$1
+  export RPROMPT="<aws:$AWS_DEFAULT_PROFILE>$RPROMPT"
 }
 function aws_profiles {
   reply=($(grep profile $AWS_HOME/config|sed -e 's/.*profile \([a-zA-Z0-9_-]*\).*/\1/'))
