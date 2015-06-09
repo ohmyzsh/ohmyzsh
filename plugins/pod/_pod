@@ -64,8 +64,8 @@ local -a _inherited_options
 _inherited_options=(
     '(--silent)--silent[Show nothing]' \
     '(--version)--version[Show the version of CocoaPods]' \
-    '(--no-color)--no-color[Show output without color]' \
     '(--verbose)--verbose[Show more debugging information]' \
+    '(--no-ansi)--no-ansi[Show output without ANSI codes]' \
     '(--help)--help[Show help banner of specified command]'
 )
 
