@@ -21,7 +21,6 @@ _1st_arguments=(
     'list:List pods'
     'outdated:Show outdated project dependencies'
     'podfile-info:Shows information on installed Pods'
-    'push:Push new specifications to a spec-repo'
     'repo:Manage spec-repositories'
     'search:Searches for pods'
     'setup:Setup the CocoaPods environment'
@@ -35,6 +34,7 @@ _repo_arguments=(
     'lint:Validates all specs in a repo'
     'remove:Remove a spec repo.'
     'update:Update a spec repo'
+    'push:Push new specifications to a spec-repo'
 )
 
 local -a _spec_arguments
@@ -108,10 +108,11 @@ _podfile_info_options=(
     '*:script or directory:_files'
 )
 
-local -a _push_options
-_push_options=(
+local -a _repo_push_options
+_repo_push_options=(
     '(--allow-warnings)--allow-warnings[Allows pushing even if there are warnings]' \
     '(--local-only)--local-only[Does not perform the step of pushing REPO to its remote]' \
+    '(--use-libraries)--use-libraries[Linter uses static libraries to install the spec]' \
     '*:script or directory:_files'
 )
 
@@ -200,6 +201,12 @@ __pod-repo() {
                     _arguments \
                         $_inherited_options \
                         ':feature:__repo_list'
+                ;;
+                (push)
+                    _arguments \
+                        $_inherited_options \
+                        $_repo_push_options \
+                        ':repo:__repo_list'
                 ;;
             esac
         ;;
