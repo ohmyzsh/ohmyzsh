@@ -1,9 +1,16 @@
-# Grab the current version of ruby in use: [ruby-1.8.7]
-JARIN_CURRENT_RUBY_="%{$fg[white]%}[%{$fg[red]%}\$(ruby_prompt_info)%{$fg[white]%}]%{$reset_color%}"
-
 # Grab the current filepath, use shortcuts: ~/Desktop
 # Append the current git branch, if in a git repository
-JARIN_CURRENT_LOCA_="%{$fg_bold[cyan]%}%~\$(git_prompt_info)%{$reset_color%}"
+#
+# %n is username
+# %m is servername
+# %c is path
+
+# Simple Prompt
+EYSTEIN_CURRENT_LOCA_="%{$fg_bold[cyan]%}%~\$(git_prompt_info)%{$reset_color%}"
+
+# Prompt with user
+#EYSTEIN_CURRENT_LOCA_='[%{$fg_bold[blue]%}%n@%m%{$reset_color%} %{$fg[cyan]%}%c%{$reset_color%} $(git_prompt_info)%{$reset_color%}]$ '
+
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[white]%} <%{$fg[magenta]%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$fg[white]%}"
 
@@ -14,4 +21,4 @@ ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[white]%}>"
 ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[white]%}> %{$fg[yellow]%}✗"
 
 # Put it all together!
-PROMPT="$JARIN_CURRENT_RUBY_ $JARIN_CURRENT_LOCA_ "
+PROMPT="$EYSTEIN_CURRENT_LOCA_ "
