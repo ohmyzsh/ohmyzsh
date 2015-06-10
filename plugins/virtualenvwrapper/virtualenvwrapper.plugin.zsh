@@ -1,10 +1,18 @@
 virtualenvwrapper='virtualenvwrapper.sh'
 
 if (( $+commands[$virtualenvwrapper] )); then
-  source ${${virtualenvwrapper}:c}
+  function {
+    setopt local_options
+    unsetopt equals
+    source ${${virtualenvwrapper}:c}
+  }
 elif [[ -f "/etc/bash_completion.d/virtualenvwrapper" ]]; then
-  virtualenvwrapper="/etc/bash_completion.d/virtualenvwrapper"
-  source "/etc/bash_completion.d/virtualenvwrapper"
+  function {
+    setopt local_options
+    unsetopt equals
+    virtualenvwrapper="/etc/bash_completion.d/virtualenvwrapper"
+    source "/etc/bash_completion.d/virtualenvwrapper"
+  }
 else
   print "zsh virtualenvwrapper plugin: Cannot find ${virtualenvwrapper}.\n"\
         "Please install with \`pip install virtualenvwrapper\`" >&2
