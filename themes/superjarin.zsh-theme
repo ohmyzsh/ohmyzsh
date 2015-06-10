@@ -15,3 +15,4 @@ ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[white]%}> %{$fg[yellow]%}✗"
 
 # Put it all together!
 PROMPT="$JARIN_CURRENT_RUBY_ $JARIN_CURRENT_LOCA_ "
+
