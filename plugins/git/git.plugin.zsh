@@ -99,21 +99,29 @@ git push --force origin "${b:=$1}"
 }
 compdef _git ggf=git-checkout
 ggl() {
-[[ "$#" != 1 ]] && local b="$(current_branch)"
-git pull origin "${b:=$1}"
+[[ "$#" == 0 ]] && local b="$(current_branch)"
+git pull origin "${b:=$1}" "${*[2,-1]}"
 }
 compdef _git ggl=git-checkout
 alias ggpull='ggl'
 compdef _git ggpull=git-checkout
 ggp() {
-[[ "$#" != 1 ]] && local b="$(current_branch)"
+if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
+git push origin "${*}"
+else
+[[ "$#" == 0 ]] && local b="$(current_branch)"
 git push origin "${b:=$1}"
+fi
 }
 compdef _git ggp=git-checkout
 alias ggpush='ggp'
 compdef _git ggpush=git-checkout
 ggpnp() {
-ggl "$1" && ggp "$1"
+if [[ "$#" == 0 ]]; then
+ggl && ggp
+else
+ggl "${*}" && ggp "${*}"
+fi
 }
 compdef _git ggpnp=git-checkout
 alias ggsup='git branch --set-upstream-to=origin/$(current_branch)'
