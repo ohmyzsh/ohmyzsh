@@ -104,11 +104,15 @@ ggl() {
 git pull origin "${b:=$1}"
 }
 compdef _git ggl=git-checkout
+alias ggpull='ggl'
+compdef _git ggpull=git-checkout
 ggp() {
 [[ "$#" != 1 ]] && b="$(current_branch)"
 git push origin "${b:=$1}"
 }
 compdef _git ggp=git-checkout
+alias ggpush='ggp'
+compdef _git ggpush=git-checkout
 ggpnp() {
 ggl "$1" && ggp "$1"
 }
@@ -119,6 +123,8 @@ ggu() {
 git pull --rebase origin "${b:=$1}"
 }
 compdef _git ggu=git-checkout
+alias ggpur='ggu'
+compdef _git ggpur=git-checkout
 
 alias gignore='git update-index --assume-unchanged'
 alias gignored='git ls-files -v | grep "^[[:lower:]]"'
