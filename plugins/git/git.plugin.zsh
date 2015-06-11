@@ -94,19 +94,19 @@ alias gfo='git fetch origin'
 alias gg='git gui citool'
 alias gga='git gui citool --amend'
 ggf() {
-[[ "$#" != 1 ]] && b="$(current_branch)"
+[[ "$#" != 1 ]] && local b="$(current_branch)"
 git push --force origin "${b:=$1}"
 }
 compdef _git ggf=git-checkout
 ggl() {
-[[ "$#" != 1 ]] && b="$(current_branch)"
+[[ "$#" != 1 ]] && local b="$(current_branch)"
 git pull origin "${b:=$1}"
 }
 compdef _git ggl=git-checkout
 alias ggpull='ggl'
 compdef _git ggpull=git-checkout
 ggp() {
-[[ "$#" != 1 ]] && b="$(current_branch)"
+[[ "$#" != 1 ]] && local b="$(current_branch)"
 git push origin "${b:=$1}"
 }
 compdef _git ggp=git-checkout
@@ -118,7 +118,7 @@ ggl "$1" && ggp "$1"
 compdef _git ggpnp=git-checkout
 alias ggsup='git branch --set-upstream-to=origin/$(current_branch)'
 ggu() {
-[[ "$#" != 1 ]] && b="$(current_branch)"
+[[ "$#" != 1 ]] && local b="$(current_branch)"
 git pull --rebase origin "${b:=$1}"
 }
 compdef _git ggu=git-checkout
