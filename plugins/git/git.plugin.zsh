@@ -48,6 +48,8 @@ function work_in_progress() {
 alias g='git'
 
 alias ga='git add'
+alias gaa='git add --all'
+alias gapa='git add --patch'
 
 alias gb='git branch'
 alias gba='git branch -a'
@@ -79,7 +81,7 @@ alias gcp='git cherry-pick'
 alias gcs='git commit -S'
 
 alias gd='git diff'
-alias gdc='git diff --cached'
+alias gdca='git diff --cached'
 alias gdt='git diff-tree --no-commit-id --name-only -r'
 gdv() { git diff -w "$@" | view - }
 compdef _git gdv=git-diff
