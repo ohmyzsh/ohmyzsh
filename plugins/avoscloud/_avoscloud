@@ -1,0 +1,37 @@
+#compdef avoscloud
+#autoload
+
+# in order to make this work, you will need to have the LeanCloud avoscloud-code tool.
+
+# avoscloud zsh completion, based on adb completion
+
+local -a _1st_arguments
+_1st_arguments=(
+'deploy: 部署云代码到 LeanCloud 平台开发环境'
+'undeploy: 从 LeanCloud 平台清除云代码部署，包括生产环境和开发环境'
+'status: 查询当前部署状态'
+'search <keyword>: 根据关键字查询开发文档'
+'publish: 发布开发环境代码到生产环境'
+'new: 创建云代码项目'
+'logs: 查看云代码日志'
+'clear: 清除本地状态，在输入 app id 或者 master key 错误的情况下使用'
+'upload <file-or-directory>: 导入文件到 LeanCloud 平台，如果是目录，则会将该目录下的文件递归导入。'
+'app [list]: 显示当前应用，deploy、status 等命令运行在当前应用上，如果加上 list ，则显示所有的应用信息。'
+'checkout <app>: 切换到一个应用，deploy、status 等命令将运行在该应用上。'
+'add <app>: 添加一个应用。'
+'rm <app>: 移除一个应用。'
+'cql: 进入 CQL 查询交互。'
+)
+
+local expl
+local -a pkgs installed_pkgs
+
+_arguments \
+	'*:: :->subcmds' && return 0
+
+if (( CURRENT == 1 )); then
+	_describe -t commands "avoscloud subcommand" _1st_arguments
+	return
+fi
+
+_files
