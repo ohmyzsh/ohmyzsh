@@ -1,7 +1,6 @@
 # Query/use custom command for `git`.
-local git_cmd
-zstyle -s ":vcs_info:git:*:-all-" "command" git_cmd
-: ${git_cmd:=git}
+zstyle -s ":vcs_info:git:*:-all-" "command" _omz_git_git_cmd
+: ${_omz_git_git_cmd:=git}
 
 #
 # Functions
@@ -13,20 +12,20 @@ zstyle -s ":vcs_info:git:*:-all-" "command" git_cmd
 # it's not a symbolic ref, but in a Git repo.
 function current_branch() {
   local ref
-  ref=$($git_cmd symbolic-ref --quiet HEAD 2> /dev/null)
+  ref=$($_omz_git_git_cmd symbolic-ref --quiet HEAD 2> /dev/null)
   local ret=$?
   if [[ $ret != 0 ]]; then
     [[ $ret == 128 ]] && return  # no git repo.
-    ref=$($git_cmd rev-parse --short HEAD 2> /dev/null) || return
+    ref=$($_omz_git_git_cmd rev-parse --short HEAD 2> /dev/null) || return
   fi
   echo ${ref#refs/heads/}
 }
 # The list of remotes
 function current_repository() {
-  if ! $git_cmd rev-parse --is-inside-work-tree &> /dev/null; then
+  if ! $_omz_git_git_cmd rev-parse --is-inside-work-tree &> /dev/null; then
     return
   fi
-  echo $($git_cmd remote -v | cut -d':' -f 2)
+  echo $($_omz_git_git_cmd remote -v | cut -d':' -f 2)
 }
 # Pretty log messages
 function _git_log_prettily(){
@@ -49,6 +48,8 @@ function work_in_progress() {
 alias g='git'
 
 alias ga='git add'
+alias gaa='git add --all'
+alias gapa='git add --patch'
 
 alias gb='git branch'
 alias gba='git branch -a'
@@ -80,7 +81,7 @@ alias gcp='git cherry-pick'
 alias gcs='git commit -S'
 
 alias gd='git diff'
-alias gdc='git diff --cached'
+alias gdca='git diff --cached'
 alias gdt='git diff-tree --no-commit-id --name-only -r'
 gdv() { git diff -w "$@" | view - }
 compdef _git gdv=git-diff
@@ -95,30 +96,44 @@ alias gfo='git fetch origin'
 alias gg='git gui citool'
 alias gga='git gui citool --amend'
 ggf() {
-[[ "$#" != 1 ]] && b="$(current_branch)"
+[[ "$#" != 1 ]] && local b="$(current_branch)"
 git push --force origin "${b:=$1}"
 }
 compdef _git ggf=git-checkout
 ggl() {
-[[ "$#" != 1 ]] && b="$(current_branch)"
-git pull origin "${b:=$1}"
+[[ "$#" == 0 ]] && local b="$(current_branch)"
+git pull origin "${b:=$1}" "${*[2,-1]}"
 }
 compdef _git ggl=git-checkout
+alias ggpull='ggl'
+compdef _git ggpull=git-checkout
 ggp() {
-[[ "$#" != 1 ]] && b="$(current_branch)"
+if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
+git push origin "${*}"
+else
+[[ "$#" == 0 ]] && local b="$(current_branch)"
 git push origin "${b:=$1}"
+fi
 }
 compdef _git ggp=git-checkout
+alias ggpush='ggp'
+compdef _git ggpush=git-checkout
 ggpnp() {
-ggl "$1" && ggp "$1"
+if [[ "$#" == 0 ]]; then
+ggl && ggp
+else
+ggl "${*}" && ggp "${*}"
+fi
 }
 compdef _git ggpnp=git-checkout
 alias ggsup='git branch --set-upstream-to=origin/$(current_branch)'
 ggu() {
-[[ "$#" != 1 ]] && b="$(current_branch)"
+[[ "$#" != 1 ]] && local b="$(current_branch)"
 git pull --rebase origin "${b:=$1}"
 }
 compdef _git ggu=git-checkout
+alias ggpur='ggu'
+compdef _git ggpur=git-checkout
 
 alias gignore='git update-index --assume-unchanged'
 alias gignored='git ls-files -v | grep "^[[:lower:]]"'
@@ -199,4 +214,4 @@ alias gupv='git pull --rebase -v'
 alias gvt='git verify-tag'
 
 alias gwch='git whatchanged -p --abbrev-commit --pretty=medium'
-alias gwip='git add -A; git rm $(git ls-files --deleted); git commit -m "--wip--"'
+alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit -m "--wip--"'
