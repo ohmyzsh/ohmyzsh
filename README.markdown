@@ -67,6 +67,8 @@ To use a different theme, simple change the value to match the name of your desi
 
 Open up a new terminal window and your prompt should look something like...
 
+In case you did not find a suitable theme for your needs, please have a look at the wiki for [more themes](https://github.com/robbyrussell/oh-my-zsh/wiki/External-themes).
+
 ## Advanced Topics
 
 If you're the type that likes to get their hands dirty... these sections might resonate.
@@ -154,7 +156,7 @@ We also need people to test out pull-requests. So take a look through [the open 
 
 ### Do NOT Send Us Themes
 
-We have (more than) enough themes for the time being. Please fork the project and add one in there – you can let people know how to grab it from there.
+We have (more than) enough themes for the time being. Please add your theme to the [external themes](https://github.com/robbyrussell/oh-my-zsh/wiki/External-themes) wiki page.
 
 ## Contributors
 
