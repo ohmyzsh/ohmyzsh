@@ -3,12 +3,12 @@
 
 # -----------------------------------------------------------------------------
 #          FILE:  _pod
-#   DESCRIPTION:  Cocoapods (0.27.1) autocomplete plugin for Oh-My-Zsh
+#   DESCRIPTION:  Cocoapods (0.32.1) autocomplete plugin for Oh-My-Zsh
 #                 http://cocoapods.org
 #        AUTHOR:  Alexandre Joly (alexandre.joly@mekanics.ch)
 #        GITHUB:  https://github.com/mekanics
 #       TWITTER:  @jolyAlexandre
-#       VERSION:  0.0.3
+#       VERSION:  0.0.4
 #       LICENSE:  MIT
 # -----------------------------------------------------------------------------
 
@@ -18,9 +18,9 @@ _1st_arguments=(
     'init:Generate a Podfile for the current directory'
     'install:Install project dependencies'
     'ipc:Inter-process communication'
+    'lib:Develop pods'
     'list:List pods'
     'outdated:Show outdated project dependencies'
-    'podfile-info:Shows information on installed Pods'
     'push:Push new specifications to a spec-repo'
     'repo:Manage spec-repositories'
     'search:Searches for pods'
@@ -55,6 +55,12 @@ _ipc_arguments=(
     'update-search-index:Updates the search index'
 )
 
+local -a _lib_arguments
+_lib_arguments=(
+    'create:Creates a new Pod'
+    'lint:Validates a Pod'
+)
+
 local -a _list_arguments
 _list_arguments=(
     'new:Lists pods introduced in the master spec-repo since the last check'
@@ -64,7 +70,7 @@ local -a _inherited_options
 _inherited_options=(
     '(--silent)--silent[Show nothing]' \
     '(--version)--version[Show the version of CocoaPods]' \
-    '(--no-color)--no-color[Show output without color]' \
+    '(--no-ansi)--no-ansi[Show output without ANSI codes]' \
     '(--verbose)--verbose[Show more debugging information]' \
     '(--help)--help[Show help banner of specified command]'
 )
@@ -99,13 +105,6 @@ _search_options=(
 local -a _list_options
 _list_options=(
     '(--update)--update[Run `pod repo update` before listing]'
-)
-
-local -a _podfile_info_options
-_podfile_info_options=(
-    '(--all)--all[Show information about all Pods with dependencies that are used in a project]' \
-    '(--md)--md[Output information in Markdown format]' \
-    '*:script or directory:_files'
 )
 
 local -a _push_options
@@ -154,7 +153,7 @@ __first_command_list ()
     local expl
     declare -a tasks
 
-    tasks=(install ipc list outdated podfile-info push repo search setup spec update)
+    tasks=(init install ipc lib list outdated push repo search setup spec try update)
 
     _wanted tasks expl 'help' compadd $tasks
 }
@@ -278,6 +277,28 @@ __pod-ipc() {
     esac
 }
 
+__pod-lib() {
+    local curcontext="$curcontext" state line
+    typeset -A opt_args
+
+    _arguments -C \
+        ':command:->command' \
+        '*::options:->options'
+
+    case $state in
+        (command)
+            _describe -t commands "pod lib" _lib_arguments
+            return
+        ;;
+
+        (options)
+            _arguments -C \
+                $_inherited_options
+            return
+        ;;
+    esac
+}
+
 __pod-list() {
     local curcontext="$curcontext" state line
     typeset -A opt_args
@@ -344,6 +365,10 @@ case $state in
             __pod-ipc
         ;;
 
+        (lib)
+            __pod-lib
+        ;;
+
         (list)
             __pod-list
         ;;
@@ -370,12 +395,6 @@ case $state in
             _arguments \
                 $_inherited_options \
                 $_search_options
-        ;;
-
-        (podfile-info)
-            _arguments \
-                $_inherited_options \
-                $_podfile_info_options
         ;;
 
         (setup)
