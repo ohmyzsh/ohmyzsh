@@ -43,7 +43,7 @@ then
     else
       echo "[Oh My Zsh] Would you like to check for updates?"
       echo "Type Y to update oh-my-zsh: \c"
-      read line
+      read -k 1 line; echo
       if [ "$line" = Y ] || [ "$line" = y ]; then
         _upgrade_zsh
       else
