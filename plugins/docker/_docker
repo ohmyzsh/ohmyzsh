@@ -52,11 +52,10 @@ __build() {
 
 __commit() {
     _arguments \
-        '(-a,--author=)'{-a,--author=}'[Author (eg. "John Hannibal Smith <hannibal@a-team.com>"]' \
+        '(-a,--author=)'{-a,--author=}'[Author (e.g. "John Hannibal Smith <hannibal@a-team.com>")]' \
+        '(-c,--change=)'{-c,--change=}'[Apply Dockerfile instruction to the created image]' \
         '(-m,--message=)'{-m,--message=}'[Commit message]' \
-        '--run=[Config automatically applied when the image is run.]'
         '(-p,--pause=)'{-p,--pause=}'[Pause container during commit]' \
-    __docker_containers
 }
 
 __cp() {
@@ -70,7 +69,8 @@ __create() {
         '--add-host=[Add a custom host-to-IP mapping]' \
         '--cap-add=[Add Linux capabilities]' \
         '--cap-drop=[Drop Linux capabilities]' \
-        '(-c,--cpu-shares=)'{-c,--cpu-shares=}':[CPU shares (relative weight)]' \
+        '--cpuset-cpus=[CPUs in which to allow execution (0-3, 0,1)]' \
+        '(-c,--cpu-shares=)'{-c,--cpu-shares=}'[CPU shares (relative weight)]' \
         '--cidfile=[Write the container ID to the file]' \
         '--device=[Add a host device to the container]' \
         '--dns=[Set custom dns servers]' \
@@ -227,7 +227,8 @@ __run() {
         '--add-host=[Add a custom host-to-IP mapping]' \
         '--cap-add=[Add Linux capabilities]' \
         '--cap-drop=[Drop Linux capabilities]' \
-        '(-c,--cpu-shares=)'{-c,--cpu-shares=}':[CPU shares (relative weight)]' \
+        '--cpuset-cpus=[CPUs in which to allow execution (0-3, 0,1)]' \
+        '(-c,--cpu-shares=)'{-c,--cpu-shares=}'[CPU shares (relative weight)]' \
         '--cidfile=[Write the container ID to the file]' \
         '(-d,--detach=)'{-d,--detach=}'[Run container in the background, print new container id]' \
         '--device=[Add a host device to the container]' \
