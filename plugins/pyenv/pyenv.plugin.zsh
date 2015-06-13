@@ -23,6 +23,10 @@ for pyenvdir in "${pyenvdirs[@]}" ; do
             eval "$(pyenv virtualenv-init - zsh)"
         fi
 
+        if [[ -d $pyenvdir/plugins/pyenv-virtualenv ]] ; then
+            eval "$(pyenv virtualenv-init -)"
+        fi
+
         function pyenv_prompt_info() {
             echo "$(pyenv version-name)"
         }
