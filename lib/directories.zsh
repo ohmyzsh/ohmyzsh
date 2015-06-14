@@ -3,10 +3,16 @@ setopt auto_pushd
 setopt pushd_ignore_dups
 setopt pushdminus
 
-alias -g ...='../..'
-alias -g ....='../../..'
-alias -g .....='../../../..'
-alias -g ......='../../../../..'
+resolve-dot() {
+	if [[ $LBUFFER = *.. ]]; then
+		LBUFFER+=/..
+	else
+		LBUFFER+=.
+	fi
+}
+zle -N resolve-dot
+bindkey . resolve-dot
+bindkey -M isearch . self-insert
 
 alias 1='cd -'
 alias 2='cd -2'
