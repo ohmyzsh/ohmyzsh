@@ -42,12 +42,15 @@
 * `zsw` aliases `rm .zeus.sock`
 * `zweep` aliases `rm .zeus.sock`
 
-`zdbr` aliases `zeus rake db:reset db:test:prepare`
-`zdbreset` aliases `zeus rake db:reset db:test:prepare`
+* `zdbr` aliases `zeus rake db:reset db:test:prepare`
+* `zdbreset` aliases `zeus rake db:reset db:test:prepare`
 
-`zdbm` aliases `zeus rake db:migrate db:test:prepare`
-`zdbmigrate` aliases `zeus rake db:migrate db:test:prepare`
+* `zdbm` aliases `zeus rake db:migrate db:test:prepare`
+* `zdbmigrate` aliases `zeus rake db:migrate db:test:prepare`
 
-`zdbc` aliases `zeus rake db:create`
+* `zdbc` aliases `zeus rake db:create`
 
-`zdbcm` aliases `zeus rake db:create db:migrate db:test:prepare`
+* `zdbcm` aliases `zeus rake db:create db:migrate db:test:prepare`
+
+## Installation
+Add zeus to the plugins line of your `.zshconfig` file (e.g. `plugins=(rails git zeus)`)
