@@ -1,7 +1,7 @@
 # fino-time.zsh-theme
 
 # Use with a dark background and 256-color terminal!
-# Meant for people with RVM and git. Tested only on OS X 10.7.
+# Meant for people with RVM/rbenv/chruby and git. Tested only on OS X 10.7.
 
 # You can set your computer name in the ~/.box-name file if you want.
 
@@ -25,12 +25,12 @@ function box_name {
 }
 
 
-local rvm_ruby='‹$(rvm-prompt i v g)›%{$reset_color%}'
+local ruby_info='‹$(ruby_prompt_info)›%{$reset_color%}'
 local current_dir='${PWD/#$HOME/~}'
 local git_info='$(git_prompt_info)'
 
 
-PROMPT="╭─%{$FG[040]%}%n%{$reset_color%} %{$FG[239]%}at%{$reset_color%} %{$FG[033]%}$(box_name)%{$reset_color%} %{$FG[239]%}in%{$reset_color%} %{$terminfo[bold]$FG[226]%}${current_dir}%{$reset_color%}${git_info} %{$FG[239]%}using%{$FG[243]%} ${rvm_ruby} %D - %*
+PROMPT="╭─%{$FG[040]%}%n%{$reset_color%} %{$FG[239]%}at%{$reset_color%} %{$FG[033]%}$(box_name)%{$reset_color%} %{$FG[239]%}in%{$reset_color%} %{$terminfo[bold]$FG[226]%}${current_dir}%{$reset_color%}${git_info} %{$FG[239]%}using%{$FG[243]%} ${ruby_info} %D - %*
 ╰─$(virtualenv_info)$(prompt_char) "
 
 ZSH_THEME_GIT_PROMPT_PREFIX=" %{$FG[239]%}on%{$reset_color%} %{$fg[255]%}"
