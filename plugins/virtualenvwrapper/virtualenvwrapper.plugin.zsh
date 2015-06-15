@@ -36,14 +36,25 @@ if [[ ! $DISABLE_VENV_CD -eq 1 ]]; then
   function workon_cwd {
     if [ ! $WORKON_CWD ]; then
       WORKON_CWD=1
-      # Check if this is a Git repo
-      PROJECT_ROOT=`pwd`
-      while [[ "$PROJECT_ROOT" != "/" && ! -e "$PROJECT_ROOT/.venv" ]]; do
-        PROJECT_ROOT=`realpath $PROJECT_ROOT/..`
-      done
-      if [[ "$PROJECT_ROOT" == "/" ]]; then
-        PROJECT_ROOT="."
+      
+      # Check whether realpath is installed (it isn't on a mac...)
+      if type "$realpath" > /dev/null; then
+        # If we have realpath, can auto switch virtualenv based on git name
+        # Check if this is a Git repo
+        PROJECT_ROOT=`pwd`
+        while [[ "$PROJECT_ROOT" != "/" && ! -e "$PROJECT_ROOT/.venv" ]]; do
+          PROJECT_ROOT=`realpath $PROJECT_ROOT/..`
+        done
+        if [[ "$PROJECT_ROOT" == "/" ]]; then
+          PROJECT_ROOT="."
+        fi
+      else
+        PROJECT_ROOT=`git rev-parse --show-toplevel 2> /dev/null`
+        if (( $? != 0 )); then
+          PROJECT_ROOT="."
+        fi
       fi
+      
       # Check for virtualenv name override
       if [[ -f "$PROJECT_ROOT/.venv" ]]; then
         ENV_NAME=`cat "$PROJECT_ROOT/.venv"`
