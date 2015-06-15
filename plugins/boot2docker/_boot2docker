@@ -35,11 +35,14 @@ _1st_arguments=(
 
 _arguments \
   '(--basevmdk)--basevmdk[Path to VMDK to use as base for persistent partition]' \
+  '(--cpus)'{-c,--cpus}'[number of CPUs for boot2docker.]' \
+  '(--clobber)--clobber[overwrite Docker client binary on boot2docker upgrade]' \
   '(--dhcp)--dhcp[enable VirtualBox host-only network DHCP.]' \
   '(--dhcpip)--dhcpip[VirtualBox host-only network DHCP server address.]' \
   '(-s --disksize)'{-s,--disksize}'[boot2docker disk image size (in MB).]' \
   '(--dockerport)--dockerport[host Docker port (forward to port 2376 in VM). (deprecated - use with care)]' \
   '(--driver)--driver[hypervisor driver.]' \
+  '(--force-upgrade-download)--force-upgrade-download[always download on boot2docker upgrade, never skip.]' \
   '(--hostip)--hostip[VirtualBox host-only network IP address.]' \
   '(--iso)--iso[path to boot2docker ISO image.]' \
   '(--iso-url)--iso-url[/api.github.com/repos/boot2docker/boot2docker/releases": source URL to provision the boot2docker ISO image.]' \
