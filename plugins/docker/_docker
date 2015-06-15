@@ -100,11 +100,6 @@ __info() {
     # no arguments
 }
 
-__insert() {
-    __docker_images
-    _arguments '*:files:_files'
-}
-
 __inspect() {
     __docker_images
     __docker_all_containers
@@ -278,7 +273,6 @@ _1st_arguments=(
     "images":"List images"
     "import":"Create a new filesystem image from the contents of a tarball"
     "info":"Display system-wide information"
-    "insert":"Insert a file in an image"
     "inspect":"Return low-level information on a container"
     "kill":"Kill a running container"
     "load":"Load an image from a tar archive"
@@ -335,8 +329,6 @@ case "$words[1]" in
         __import ;;
     info)
         __info ;;
-    insert)
-        __insert ;;
     inspect)
         __inspect ;;
     kill)

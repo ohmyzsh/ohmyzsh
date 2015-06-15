@@ -16,14 +16,22 @@ _1st_arguments=(
 'help:show the help message'
 'install:push this package file to the device and install it'
 'jdwp:list PIDs of processes hosting a JDWP transport'
-'logcat:View device log'
+'kill-server:kill the server if it is running'
+'logcat:view device log'
 'pull:copy file/dir from device'
 'push:copy file/dir to device'
+'reboot:reboots the device, optionally into the bootloader or recovery program'
+'reboot-bootloader:reboots the device into the bootloader'
+'remount:remounts the partitions on the device read-write'
+'root:restarts the adbd daemon with root permissions'
+'sideload:push a ZIP to device and install it'
 'shell:run remote shell interactively'
 'sync:copy host->device only if changed (-l means list but dont copy)'
-‘tcpip:restart host adb in tcpip mode’
+'start-server:ensure that there is a server running'
+'tcpip:restart host adb in tcpip mode'
 'uninstall:remove this app package from the device'
 'version:show version num'
+'wait-for-device:block until device is online'
 )
 
 local expl
