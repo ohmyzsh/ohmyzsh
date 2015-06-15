@@ -161,16 +161,16 @@ function itunes() {
 		vol)
 			opt="set sound volume to $1" #$1 Due to the shift
 			;;
-    status|nowplaying)
-      local state=`osascript -e 'tell application "iTunes" to player state as string'`
-      echo "iTunes is currently $state"
-      if [ "$state" = "playing" ]; then
-        artist=`osascript -e 'tell application "iTunes" to artist of current track as string'`
-        track=`osascript -e 'tell application "iTunes" to name of current track as string'`
-        echo "Current track: $artist / $track";
-      fi
-      return 0
-      ;;
+		status|nowplaying)
+			local state=`osascript -e 'tell application "iTunes" to player state as string'`
+			echo "iTunes is currently $state"
+			if [ "$state" = "playing" ]; then
+				artist=`osascript -e 'tell application "iTunes" to artist of current track as string'`
+				track=`osascript -e 'tell application "iTunes" to name of current track as string'`
+				echo "Current track: $artist / $track";
+			fi
+			return 0
+			;;
 		shuf|shuff|shuffle)
 			# The shuffle property of current playlist can't be changed in iTunes 12,
 			# so this workaround uses AppleScript to simulate user input instead.
