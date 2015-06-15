@@ -1,6 +1,6 @@
 ## Load smart urls if available
 for d in $fpath; do
-	if [[ -e "$d/url-quote-magic"]]; then
+	if [[ -e "$d/url-quote-magic" ]]; then
 		autoload -U url-quote-magic
 		zle -N self-insert url-quote-magic
 	fi
