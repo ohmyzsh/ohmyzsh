@@ -14,7 +14,3 @@ for _atom_path in $_atom_paths; do
 done
 
 alias att='at .'
-
-
-
-
