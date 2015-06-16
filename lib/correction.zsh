@@ -1,4 +1,4 @@
-if [[ "$ENABLE_CORRECTION" == "true" ]]; then
+if [[ "${ENABLE_CORRECTION:-}" == "true" ]]; then
   alias ebuild='nocorrect ebuild'
   alias gist='nocorrect gist'
   alias heroku='nocorrect heroku'

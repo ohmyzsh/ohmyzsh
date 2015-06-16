@@ -21,7 +21,7 @@ alias please='sudo'
 alias afind='ack-grep -il'
 
 # only define LC_CTYPE if undefined
-if [[ -z "$LC_CTYPE" && -z "$LC_ALL" ]]; then
+if [[ -z "${LC_CTYPE:-}" && -z "${LC_ALL:-}" ]]; then
 	export LC_CTYPE=${LANG%%:*} # pick the first entry from LANG
 fi
 

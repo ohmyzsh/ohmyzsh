@@ -1,6 +1,6 @@
 # Check for updates on initial load...
-if [ "$DISABLE_AUTO_UPDATE" != "true" ]; then
-  env ZSH=$ZSH DISABLE_UPDATE_PROMPT=$DISABLE_UPDATE_PROMPT zsh -f $ZSH/tools/check_for_upgrade.sh
+if [ "${DISABLE_AUTO_UPDATE:-}" != "true" ]; then
+  env ZSH=$ZSH DISABLE_UPDATE_PROMPT=${DISABLE_UPDATE_PROMPT:-} zsh -f $ZSH/tools/check_for_upgrade.sh
 fi
 
 # Initializes Oh My Zsh
@@ -10,13 +10,13 @@ fpath=($ZSH/functions $ZSH/completions $fpath)
 
 # Set ZSH_CUSTOM to the path where your custom config files
 # and plugins exists, or else we will use the default custom/
-if [[ -z "$ZSH_CUSTOM" ]]; then
+if [[ -z "${ZSH_CUSTOM:-}" ]]; then
     ZSH_CUSTOM="$ZSH/custom"
 fi
 
 # Set ZSH_CACHE_DIR to the path where cache files should be created
 # or else we will use the default cache/
-if [[ -z "$ZSH_CACHE_DIR" ]]; then
+if [[ -z "${ZSH_CACHE_DIR:-}" ]]; then
   ZSH_CACHE_DIR="$ZSH/cache/"
 fi
 
@@ -60,7 +60,7 @@ else
 fi
 
 # Save the location of the current completion dump file.
-if [ -z "$ZSH_COMPDUMP" ]; then
+if [ -z "${ZSH_COMPDUMP:-}" ]; then
   ZSH_COMPDUMP="${ZDOTDIR:-${HOME}}/.zcompdump-${SHORT_HOST}-${ZSH_VERSION}"
 fi
 
