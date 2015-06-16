@@ -13,7 +13,8 @@ function agp {
 }
 function asp {
   export AWS_DEFAULT_PROFILE=$1
-  export RPROMPT="<aws:$AWS_DEFAULT_PROFILE>"
+  export AWS_PROFILE=$1
+  export RPROMPT="<aws:$AWS_DEFAULT_PROFILE>$RPROMPT"
 }
 function aws_profiles {
   reply=($(grep profile $AWS_HOME/config|sed -e 's/.*profile \([a-zA-Z0-9_-]*\).*/\1/'))
@@ -22,7 +23,7 @@ function aws_profiles {
 compctl -K aws_profiles asp
 
 if _homebrew-installed && _awscli-homebrew-installed ; then
-  _aws_zsh_completer_path=$(brew --prefix)/opt/awscli/libexec/bin/aws_zsh_completer.sh
+  _aws_zsh_completer_path=$(brew --prefix awscli)/libexec/bin/aws_zsh_completer.sh
 else
   _aws_zsh_completer_path=$(which aws_zsh_completer.sh)
 fi
