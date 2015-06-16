@@ -25,5 +25,5 @@ alias sfcw='sf cache:warmup'
 alias sfroute='sf router:debug'
 alias sfcontainer='sf container:debug'
 alias sfgb='sf generate:bundle'
-alias dev="sf --env=dev"
-alias prod="sf --env=prod"
+alias sfdev='sf --env=dev'
+alias sfprod='sf --env=prod'
