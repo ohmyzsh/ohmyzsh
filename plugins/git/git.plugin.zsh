@@ -101,8 +101,12 @@ git push --force origin "${b:=$1}"
 }
 compdef _git ggf=git-checkout
 ggl() {
+if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
+git pull origin "${*}"
+else
 [[ "$#" == 0 ]] && local b="$(current_branch)"
-git pull origin "${b:=$1}" "${*[2,-1]}"
+git pull origin "${b:=$1}"
+fi
 }
 compdef _git ggl=git-checkout
 alias ggpull='git pull origin $(current_branch)'
