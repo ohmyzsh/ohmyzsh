@@ -30,7 +30,7 @@ function omz_termsupport_precmd {
     return
   fi
 
-  title $ZSH_THEME_TERM_TAB_TITLE_IDLE $ZSH_THEME_TERM_TITLE_IDLE
+  title ${MANUAL_TITLE:-$ZSH_THEME_TERM_TAB_TITLE_IDLE} ${MANUAL_TITLE:-$ZSH_THEME_TERM_TITLE_IDLE}
 }
 
 # Runs before executing the command
@@ -43,8 +43,8 @@ function omz_termsupport_preexec {
   setopt extended_glob
 
   # cmd name only, or if this is sudo or ssh, the next cmd
-  local CMD=${1[(wr)^(*=*|sudo|ssh|rake|-*)]:gs/%/%%}
-  local LINE="${2:gs/%/%%}"
+  local CMD=${MANUAL_TITLE:-${1[(wr)^(*=*|sudo|ssh|rake|-*)]:gs/%/%%}}
+  local LINE=${MANUAL_TITLE:-"${2:gs/%/%%}"}
 
   title '$CMD' '%100>...>$LINE%<<'
 }
