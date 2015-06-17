@@ -105,7 +105,7 @@ ggl() {
 git pull origin "${b:=$1}" "${*[2,-1]}"
 }
 compdef _git ggl=git-checkout
-alias ggpull='ggl'
+alias ggpull='git pull origin $(current_branch)'
 compdef _git ggpull=git-checkout
 ggp() {
 if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
@@ -116,7 +116,7 @@ git push origin "${b:=$1}"
 fi
 }
 compdef _git ggp=git-checkout
-alias ggpush='ggp'
+alias ggpush='git push origin $(current_branch)'
 compdef _git ggpush=git-checkout
 ggpnp() {
 if [[ "$#" == 0 ]]; then
