@@ -37,7 +37,7 @@
 | yarem        | yaourt -Rns                             | Remove the specified package(s), its configuration(s) and unneeded dependencies                                     |
 | yarep        | yaourt -Si                              | Display information about a given package in the repositories                                                       |
 | yareps       | yaourt -Ss                              | Search for package(s) in the repositories                                                                           |
-| yasu         | yaourt --sucre                          | Same as yaupg, but without confirmation                                                                             |
+| yasu         | yaourt -Syua --no-confirm               | Same as yaupg, but without confirmation                                                                             |
 | yaupd        | yaourt -Sy && sudo abs && sudo aur      | Update and refresh the local package, ABS and AUR databases against repositories                                    |
 | yaupd        | yaourt -Sy && sudo abs                  | Update and refresh the local package and ABS databases against repositories                                         |
 | yaupd        | yaourt -Sy && sudo aur                  | Update and refresh the local package and AUR databases against repositories                                         |
