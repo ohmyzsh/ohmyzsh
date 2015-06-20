@@ -209,6 +209,7 @@ EOF
 			echo "\tnext|previous\tplay next or previous track"
 			echo "\tshuf|shuffle [on|off|toggle]\tSet shuffled playback. Default: toggle. Note: toggle doesn't support the MiniPlayer."
 			echo "\tvol\tSet the volume, takes an argument from 0 to 100"
+			echo "\tstatus|nowplaying\tShow iTunes status. If playing, shows current artist and track name."
 			echo "\thelp\tshow this message and exit"
 			return 0
 			;;
