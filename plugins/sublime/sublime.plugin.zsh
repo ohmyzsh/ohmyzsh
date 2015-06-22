@@ -41,6 +41,22 @@ elif  [[ "$OSTYPE" = darwin* ]]; then
             break
         fi
     done
+
+elif  [[ "$OSTYPE" == cygwin ]]; then
+    local _sublime_cygwin_paths > /dev/null 2>&1
+    _sublime_cygwin_paths=(
+        "/cygdrive/c/Program Files/Sublime Text 2/sublime_text.exe"
+        "/cygdrive/c/Program Files (x86)/Sublime Text 2/sublime_text.exe"
+    )
+
+    IFS=$'\n'
+    for _sublime_path in $_sublime_cygwin_paths; do
+        if [[ -a $_sublime_path ]]; then
+            subl() { "$_sublime_path" $* }
+            alias st=subl
+            break
+        fi
+    done
 fi
 
 alias stt='st .'
