@@ -72,6 +72,7 @@ _1st_arguments=(
   "pg\:unfollow":"stop a replica from following and make it a read/write database"
   "pg\:upgrade":"unfollow a database and upgrade it to the latest PostgreSQL version"
   "pg\:wait":"monitor database creation, exit when complete"
+  "pg\:backups":"Interact with built-in backups"
   "pgbackups":"list captured backups"
   "pgbackups\:url":"get a temporary URL for a backup"
   "pgbackups\:capture":"capture a backup from a database id"
