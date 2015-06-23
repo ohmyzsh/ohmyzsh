@@ -3,12 +3,17 @@
 # Pressing enter in a git directory runs `git status`
 # in other directories `ls`
 magic-enter () {
+
+  # If commands are not already set, use the defaults
+  [ -z "$MAGIC_ENTER_GIT_COMMAND" ] && MAGIC_ENTER_GIT_COMMAND="git status -u ."
+  [ -z "$MAGIC_ENTER_OTHER_COMMAND" ] && MAGIC_ENTER_OTHER_COMMAND="ls -lh ."
+
   if [[ -z $BUFFER ]]; then
     echo ""
     if git rev-parse --is-inside-work-tree &>/dev/null; then
-      git status -u .
+      eval "$MAGIC_ENTER_GIT_COMMAND"
     else
-      ls -lh
+      eval "$MAGIC_ENTER_OTHER_COMMAND"
     fi
     zle redisplay
   else
