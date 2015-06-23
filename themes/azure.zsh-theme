@@ -122,6 +122,8 @@ setopt AUTO_MENU
   
 autoload -U compinit 
 compinit 
+autoload -U select-word-style
+select-word-style whitespace
   
 #自动补全缓存 
 #zstyle ':completion::complete:*' use-cache on 
