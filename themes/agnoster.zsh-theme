@@ -29,7 +29,7 @@ CURRENT_BG='NONE'
 
 # Fix odd char on mac
 if [[ `uname` == 'Darwin' ]]; then
-    SEGMENT_SEPARATOR='\ue0b0'
+    SEGMENT_SEPARATOR='\u2b80'
 else
     SEGMENT_SEPARATOR=''
 fi
