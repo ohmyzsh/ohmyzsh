@@ -49,7 +49,7 @@ open_jira_issue () {
     else
       $open_cmd  "$jira_url/browse/$jira_prefix$1"
     fi
-  else 
+
     local addcomment=''
     if [[ "$2" == "m" ]]; then
       addcomment="#add-comment"
