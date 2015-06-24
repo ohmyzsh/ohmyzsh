@@ -39,7 +39,7 @@ if [[ ! $DISABLE_VENV_CD -eq 1 ]]; then
       # Look for a proper PROJECT_ROOT path
       PROJECT_ROOT=`pwd`
       while [[ "$PROJECT_ROOT" != "/" && ! -e "$PROJECT_ROOT/.venv" ]]; do
-        PROJECT_ROOT=$(cd -P "$PROJECT_ROOT/.."; pwd)
+        PROJECT_ROOT=${PROJECT_ROOT:A:h}
       done
       if [[ "$PROJECT_ROOT" == "/" ]]; then
         PROJECT_ROOT="."
