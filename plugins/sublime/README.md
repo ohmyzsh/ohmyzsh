@@ -14,4 +14,6 @@ Plugin for Sublime Text, a cross platform text and code editor, available for Li
 
  * If `st` is passed a file, open it in Sublime Text
 
- * if `stt` command is called, it is equivalent to `st .`, opening the current folder in Sublime Text
+ * If `stt` command is called, it is equivalent to `st .`, opening the current folder in Sublime Text
+ 
+ * If `sst` command is called, it is like `sudo st`, opening the file or folder in Sublime Text. Useful for editing system protected files.

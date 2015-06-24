@@ -1,10 +1,18 @@
 virtualenvwrapper='virtualenvwrapper.sh'
 
 if (( $+commands[$virtualenvwrapper] )); then
-  source ${${virtualenvwrapper}:c}
+  function {
+    setopt local_options
+    unsetopt equals
+    source ${${virtualenvwrapper}:c}
+  }
 elif [[ -f "/etc/bash_completion.d/virtualenvwrapper" ]]; then
-  virtualenvwrapper="/etc/bash_completion.d/virtualenvwrapper"
-  source "/etc/bash_completion.d/virtualenvwrapper"
+  function {
+    setopt local_options
+    unsetopt equals
+    virtualenvwrapper="/etc/bash_completion.d/virtualenvwrapper"
+    source "/etc/bash_completion.d/virtualenvwrapper"
+  }
 else
   print "zsh virtualenvwrapper plugin: Cannot find ${virtualenvwrapper}.\n"\
         "Please install with \`pip install virtualenvwrapper\`" >&2
@@ -29,8 +37,11 @@ if [[ ! $DISABLE_VENV_CD -eq 1 ]]; then
     if [ ! $WORKON_CWD ]; then
       WORKON_CWD=1
       # Check if this is a Git repo
-      PROJECT_ROOT=`git rev-parse --show-toplevel 2> /dev/null`
-      if (( $? != 0 )); then
+      PROJECT_ROOT=`pwd`
+      while [[ "$PROJECT_ROOT" != "/" && ! -e "$PROJECT_ROOT/.venv" ]]; do
+        PROJECT_ROOT=`realpath $PROJECT_ROOT/..`
+      done
+      if [[ "$PROJECT_ROOT" == "/" ]]; then
         PROJECT_ROOT="."
       fi
       # Check for virtualenv name override

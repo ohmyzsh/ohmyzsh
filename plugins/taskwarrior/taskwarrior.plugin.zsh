@@ -8,7 +8,7 @@
 # TaskWarrior<http://taskwarrior.org/>. It uses the zsh tab completion
 # script (_task) distributed with TaskWarrior for the completion definitions.
 #
-# Typing task[tabtab] will give you a list of current tasks, task 66[tabtab]
+# Typing task [tabtab] will give you a list of current tasks, task 66[tabtab]
 # gives a list of available modifications for that task, etc.
 ################################################################################
 
