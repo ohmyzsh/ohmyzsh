@@ -15,9 +15,9 @@ To learn more, visit http://ohmyz.sh and/or follow [ohmyzsh](https://twitter.com
 __Disclaimer:__ _Oh My Zsh works best on Mac OS X and Linux._
 
 * Unix-based operating system (Mac OS X or Linux)
-* [Zsh](http://www.zsh.org) should be installed (v4.3.9 or more recent)
-  * This is commonly pre-installed. (`zsh --version` to confirm)
+* [Zsh](http://www.zsh.org) should be installed (v4.3.9 or more recent). If not pre-installed (`zsh --version` to confirm), check the following instruction here: [Installing-ZSH](https://github.com/robbyrussell/oh-my-zsh/wiki/Installing-ZSH)
 * `curl` or `wget` should be installed
+* `git` should be installed
 
 ### Basic Installation
 
@@ -25,11 +25,11 @@ Oh My Zsh is installed by running one of the following commands in your terminal
 
 #### via curl
 
-`curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh`
+`sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"`
 
 #### via wget
 
-`wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O - | sh`
+`sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"`
 
 ## Using Oh My Zsh
 
@@ -51,7 +51,7 @@ Most plugins (should! we're working on this) include a __README__, which documen
 
 ### Themes
 
-We'll admit it. Early in the Oh My Zsh world... we may have gotten a far too theme happy. We have over one hundred themes now bundled. Most of them have [screenshots](https://wiki.github.com/robbyrussell/oh-my-zsh/themes) on the wiki. Check them out!
+We'll admit it. Early in the Oh My Zsh world... we may have gotten far too theme happy. We have over one hundred themes now bundled. Most of them have [screenshots](https://wiki.github.com/robbyrussell/oh-my-zsh/themes) on the wiki. Check them out!
 
 #### Selecting a Theme
 
@@ -66,6 +66,8 @@ To use a different theme, simple change the value to match the name of your desi
 `ZSH_THEME="agnoster"` (this is one of the fancy ones)
 
 Open up a new terminal window and your prompt should look something like...
+
+In case you did not find a suitable theme for your needs, please have a look at the wiki for [more themes](https://github.com/robbyrussell/oh-my-zsh/wiki/External-themes).
 
 ## Advanced Topics
 
@@ -154,7 +156,7 @@ We also need people to test out pull-requests. So take a look through [the open 
 
 ### Do NOT Send Us Themes
 
-We have (more than) enough themes for the time being. Please fork the project and add one in there – you can let people know how to grab it from there.
+We have (more than) enough themes for the time being. Please add your theme to the [external themes](https://github.com/robbyrussell/oh-my-zsh/wiki/External-themes) wiki page.
 
 ## Contributors
 
