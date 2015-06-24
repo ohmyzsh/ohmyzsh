@@ -43,10 +43,18 @@ elif  [[ "$OSTYPE" = darwin* ]]; then
     done
 
 elif  [[ "$OSTYPE" == cygwin ]]; then
+    local cygprogfiles=""
+    cygprogfiles=$(cygpath "$PROGRAMFILES")
+    local cygprogfiles_x86=""
+    cygprogfiles_x86=$(cmd /c "echo %ProgramFiles(x86)%")
+    cygprogfiles_x86=${cygprogfiles_x86/[\\r\\n]//}
+    cygprogfiles_x86=$(cygpath "$cygprogfiles_x86")
     local _sublime_cygwin_paths > /dev/null 2>&1
     _sublime_cygwin_paths=(
-        "/cygdrive/c/Program Files/Sublime Text 2/sublime_text.exe"
-        "/cygdrive/c/Program Files (x86)/Sublime Text 2/sublime_text.exe"
+        "$cygprogfiles/Sublime Text 2/sublime_text.exe"
+        "$cygprogfiles/Sublime Text 3/sublime_text.exe"
+        "$cygprogfiles_x86/Sublime Text 2/sublime_text.exe"
+        "$cygprogfiles_x86/Sublime Text 3/sublime_text.exe"
     )
 
     IFS=$'\n'
