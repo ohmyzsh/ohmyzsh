@@ -1,5 +1,6 @@
-# get the name of the branch we are on
+# Outputs current branch info in prompt format
 function git_prompt_info() {
+  local ref
   if [[ "$(command git config --get oh-my-zsh.hide-status 2>/dev/null)" != "1" ]]; then
     ref=$(command git symbolic-ref HEAD 2> /dev/null) || \
     ref=$(command git rev-parse --short HEAD 2> /dev/null) || return 0
@@ -7,9 +8,8 @@ function git_prompt_info() {
   fi
 }
 
-
 # Checks if working tree is dirty
-parse_git_dirty() {
+function parse_git_dirty() {
   local STATUS=''
   local FLAGS
   FLAGS=('--porcelain')
@@ -29,32 +29,26 @@ parse_git_dirty() {
   fi
 }
 
-# get the difference between the local and remote branches
-git_remote_status() {
+# Gets the difference between the local and remote branches
+function git_remote_status() {
+    local remote ahead behind git_remote_status git_remote_status_detailed
     remote=${$(command git rev-parse --verify ${hook_com[branch]}@{upstream} --symbolic-full-name 2>/dev/null)/refs\/remotes\/}
-    if [[ -n ${remote} ]] ; then
+    if [[ -n ${remote} ]]; then
         ahead=$(command git rev-list ${hook_com[branch]}@{upstream}..HEAD 2>/dev/null | wc -l)
         behind=$(command git rev-list HEAD..${hook_com[branch]}@{upstream} 2>/dev/null | wc -l)
 
-        if [ $ahead -eq 0 ] && [ $behind -eq 0 ]
-        then
-          	git_remote_status="$ZSH_THEME_GIT_PROMPT_EQUAL_REMOTE"
-        elif [ $ahead -gt 0 ] && [ $behind -eq 0 ]
-        then
+        if [[ $ahead -gt 0 ]] && [[ $behind -eq 0 ]]; then
             git_remote_status="$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE"
             git_remote_status_detailed="$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE_COLOR$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE$((ahead))%{$reset_color%}"
-        elif [ $behind -gt 0 ] && [ $ahead -eq 0 ] 
-        then
+        elif [[ $behind -gt 0 ]] && [[ $ahead -eq 0 ]]; then
             git_remote_status="$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE"
             git_remote_status_detailed="$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE_COLOR$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE$((behind))%{$reset_color%}"
-        elif [ $ahead -gt 0 ] && [ $behind -gt 0 ]
-        then
+        elif [[ $ahead -gt 0 ]] && [[ $behind -gt 0 ]]; then
             git_remote_status="$ZSH_THEME_GIT_PROMPT_DIVERGED_REMOTE"
             git_remote_status_detailed="$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE_COLOR$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE$((ahead))%{$reset_color%}$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE_COLOR$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE$((behind))%{$reset_color%}"
         fi
 
-        if [ $ZSH_THEME_GIT_PROMPT_REMOTE_STATUS_DETAILED ]
-        then
+        if [[ -n $ZSH_THEME_GIT_PROMPT_REMOTE_STATUS_DETAILED ]]; then
             git_remote_status="$ZSH_THEME_GIT_PROMPT_REMOTE_STATUS_PREFIX$remote$git_remote_status_detailed$ZSH_THEME_GIT_PROMPT_REMOTE_STATUS_SUFFIX"
         fi
 
@@ -62,31 +56,47 @@ git_remote_status() {
     fi
 }
 
+# Outputs the name of the current branch
+# Usage example: git pull origin $(git_current_branch)
+# Using '--quiet' with 'symbolic-ref' will not cause a fatal error (128) if
+# it's not a symbolic ref, but in a Git repo.
+function git_current_branch() {
+  local ref
+  ref=$(command git symbolic-ref --quiet HEAD 2> /dev/null)
+  local ret=$?
+  if [[ $ret != 0 ]]; then
+    [[ $ret == 128 ]] && return  # no git repo.
+    ref=$(command git rev-parse --short HEAD 2> /dev/null) || return
+  fi
+  echo ${ref#refs/heads/}
+}
+
+
 # Gets the number of commits ahead from remote
 function git_commits_ahead() {
   if $(echo "$(command git log @{upstream}..HEAD 2> /dev/null)" | grep '^commit' &> /dev/null); then
-    COMMITS=$(command git log @{upstream}..HEAD | grep '^commit' | wc -l | tr -d ' ')
+    local COMMITS=$(command git log @{upstream}..HEAD | grep '^commit' | wc -l | tr -d ' ')
     echo "$ZSH_THEME_GIT_COMMITS_AHEAD_PREFIX$COMMITS$ZSH_THEME_GIT_COMMITS_AHEAD_SUFFIX"
   fi
 }
 
 # Outputs if current branch is ahead of remote
 function git_prompt_ahead() {
-  if [[ -n "$(command git rev-list origin/$(current_branch)..HEAD 2> /dev/null)" ]]; then
+  if [[ -n "$(command git rev-list origin/$(git_current_branch)..HEAD 2> /dev/null)" ]]; then
     echo "$ZSH_THEME_GIT_PROMPT_AHEAD"
   fi
 }
 
 # Outputs if current branch is behind remote
 function git_prompt_behind() {
-  if [[ -n "$(command git rev-list HEAD..origin/$(current_branch) 2> /dev/null)" ]]; then
+  if [[ -n "$(command git rev-list HEAD..origin/$(git_current_branch) 2> /dev/null)" ]]; then
     echo "$ZSH_THEME_GIT_PROMPT_BEHIND"
   fi
 }
 
 # Outputs if current branch exists on remote or not
 function git_prompt_remote() {
-  if [[ -n "$(command git show-ref origin/$(current_branch) 2> /dev/null)" ]]; then
+  if [[ -n "$(command git show-ref origin/$(git_current_branch) 2> /dev/null)" ]]; then
     echo "$ZSH_THEME_GIT_PROMPT_REMOTE_EXISTS"
   else
     echo "$ZSH_THEME_GIT_PROMPT_REMOTE_MISSING"
@@ -95,16 +105,17 @@ function git_prompt_remote() {
 
 # Formats prompt string for current git commit short SHA
 function git_prompt_short_sha() {
-  SHA=$(command git rev-parse --short HEAD 2> /dev/null) && echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
+  local SHA=$(command git rev-parse --short HEAD 2> /dev/null) && echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
 }
 
 # Formats prompt string for current git commit long SHA
 function git_prompt_long_sha() {
-  SHA=$(command git rev-parse HEAD 2> /dev/null) && echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
+  local SHA=$(command git rev-parse HEAD 2> /dev/null) && echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
 }
 
 # Get the status of the working tree
-git_prompt_status() {
+function git_prompt_status() {
+  local INDEX STATUS
   INDEX=$(command git status --porcelain -b 2> /dev/null)
   STATUS=""
   if $(echo "$INDEX" | command grep -E '^\?\? ' &> /dev/null); then
@@ -150,9 +161,9 @@ git_prompt_status() {
   echo $STATUS
 }
 
-#compare the provided version of git to the version installed and on path
-#prints 1 if input version <= installed version
-#prints -1 otherwise
+# Compares the provided version of git to the version installed and on path
+# Outputs -1, 0, or 1 if the installed version is less than, equal to, or
+# greater than the input version, respectively.
 function git_compare_version() {
   local INPUT_GIT_VERSION=$1;
   local INSTALLED_GIT_VERSION
@@ -173,7 +184,7 @@ function git_compare_version() {
   echo 0
 }
 
-#this is unlikely to change so make it all statically assigned
+# This is unlikely to change so make it all statically assigned
 POST_1_7_2_GIT=$(git_compare_version "1.7.2")
-#clean up the namespace slightly by removing the checker function
+# Clean up the namespace slightly by removing the checker function
 unset -f git_compare_version
