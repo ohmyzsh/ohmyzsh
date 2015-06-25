@@ -17,6 +17,7 @@ bundled_commands=(
   jekyll
   kitchen
   knife
+  lotus
   middleman
   nanoc
   pry
