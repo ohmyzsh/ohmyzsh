@@ -13,15 +13,15 @@ function vundle-init () {
 
 function vundle () {
   vundle-init
-  vim -c "execute \"PluginInstall\" | q | q"
+  vim -c "execute \"PluginInstall\" | qa"
 }
 
 function vundle-update () {
   vundle-init
-  vim -c "execute \"PluginInstall!\" | q | q"
+  vim -c "execute \"PluginInstall!\" | qa"
 }
 
 function vundle-clean () {
   vundle-init
-  vim -c "execute \"PluginClean!\" | q | q"
+  vim -c "execute \"PluginClean!\" | qa"
 }
