@@ -24,9 +24,9 @@ alias d='dirs -v | head -10'
 
 # List directory contents
 alias lsa='ls -lah'
-alias l='ls -lah'
+alias l='ls'
 alias ll='ls -lh'
-alias la='ls -lAh'
+alias la='ls -A'
 
 # Push and pop directories on directory stack
 alias pu='pushd'
