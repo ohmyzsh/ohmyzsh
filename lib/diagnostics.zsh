@@ -106,6 +106,7 @@ function _omz_diag_dump_one_big_text() {
   builtin echo OSTYPE=$OSTYPE
   builtin echo ZSH_VERSION=$ZSH_VERSION
   builtin echo User: $USER
+  builtin echo umask: $(umask)
   builtin echo
 
   # Installed programs
@@ -159,12 +160,18 @@ function _omz_diag_dump_one_big_text() {
   command locale
   builtin echo
 
-  # Zsh configuration
+  # Zsh installation and configuration
   builtin echo Zsh configuration:
   builtin echo setopt: $(builtin setopt)
   builtin echo
   builtin echo zstyle:
   builtin zstyle
+  builtin echo
+  builtin echo 'compaudit output:'
+  compaudit
+  builtin echo 
+  builtin echo '$fpath directories:'
+  command ls -lad $fpath
   builtin echo
 
   # Oh-my-zsh installation
@@ -195,7 +202,7 @@ function _omz_diag_dump_one_big_text() {
     builtin bindkey
     builtin echo
     builtin echo "infocmp:"
-    command infocmp
+    command infocmp -L
     builtin echo
   fi
 
