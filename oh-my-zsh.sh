@@ -5,14 +5,14 @@ fi
 
 # Initializes Oh My Zsh
 
-# add a function path
-fpath=($ZSH/functions $ZSH/completions $fpath)
-
 # Set ZSH_CUSTOM to the path where your custom config files
 # and plugins exists, or else we will use the default custom/
 if [[ -z "$ZSH_CUSTOM" ]]; then
     ZSH_CUSTOM="$ZSH/custom"
 fi
+
+# add a function path
+fpath=($ZSH/functions $ZSH/completions $ZSH_CUSTOM/completions $fpath)
 
 # Set ZSH_CACHE_DIR to the path where cache files should be created
 # or else we will use the default cache/
