@@ -2,7 +2,7 @@
 
 () {
 if [[ "$OSTYPE" == 'linux-gnu' ]]; then
-    local _sublime_linux_paths > /dev/null 2>&1
+    local _sublime_linux_paths
     _sublime_linux_paths=(
         "$HOME/bin/sublime_text"
         "/opt/sublime_text/sublime_text"
@@ -24,7 +24,7 @@ if [[ "$OSTYPE" == 'linux-gnu' ]]; then
     done
 
 elif  [[ "$OSTYPE" = darwin* ]]; then
-    local _sublime_darwin_paths > /dev/null 2>&1
+    local _sublime_darwin_paths
     _sublime_darwin_paths=(
         "/usr/local/bin/subl"
         "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"
@@ -50,7 +50,7 @@ elif  [[ "$OSTYPE" == cygwin ]]; then
     cygprogfiles_x86=$(cmd /c "echo %ProgramFiles(x86)%")
     cygprogfiles_x86=${cygprogfiles_x86/[\\r\\n]//}
     cygprogfiles_x86=$(cygpath "$cygprogfiles_x86")
-    local _sublime_cygwin_paths > /dev/null 2>&1
+    local _sublime_cygwin_paths
     _sublime_cygwin_paths=(
         "$cygprogfiles/Sublime Text 2/sublime_text.exe"
         "$cygprogfiles/Sublime Text 3/sublime_text.exe"
@@ -66,7 +66,7 @@ elif  [[ "$OSTYPE" == cygwin ]]; then
             break
         fi
     done
-    IFS=$OLDIFS
+    IFS="$OLDIFS"
     unset OLDIFS
 fi
 
