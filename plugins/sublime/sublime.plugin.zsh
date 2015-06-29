@@ -56,7 +56,7 @@ elif  [[ "$OSTYPE" == cygwin ]]; then
         "$cygprogfiles_x86/Sublime Text 2/sublime_text.exe"
         "$cygprogfiles_x86/Sublime Text 3/sublime_text.exe"
     )
-
+    local OLDIFS="$IFS"
     IFS=$'\n'
     for _sublime_path in $_sublime_cygwin_paths; do
         if [[ -a $_sublime_path ]]; then
@@ -65,6 +65,8 @@ elif  [[ "$OSTYPE" == cygwin ]]; then
             break
         fi
     done
+    IFS=$OLDIFS
+    unset OLDIFS
 fi
 
 alias stt='st .'
