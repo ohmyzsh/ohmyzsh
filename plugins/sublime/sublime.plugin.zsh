@@ -60,7 +60,7 @@ elif  [[ "$OSTYPE" == cygwin ]]; then
     IFS=$'\n'
     for _sublime_path in $_sublime_cygwin_paths; do
         if [[ -a $_sublime_path ]]; then
-            subl() { "$_sublime_path" $(cygpath -aw $*) }
+            subl() { "$_sublime_path" $(cygpath -aw ${*:-.}) }
             alias st=subl
             break
         fi
