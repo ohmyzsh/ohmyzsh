@@ -1,5 +1,7 @@
 # Sublime Text 2 Aliases
 
+() {
+
 if [[ $('uname') == 'Linux' ]]; then
     local _sublime_linux_paths > /dev/null 2>&1
     _sublime_linux_paths=(
@@ -66,5 +68,7 @@ elif  [[ "$OSTYPE" == cygwin ]]; then
         fi
     done
 fi
+
+}
 
 alias stt='st .'
