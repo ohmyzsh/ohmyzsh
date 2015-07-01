@@ -68,4 +68,3 @@ alias zdbc='zeus rake db:create'
 
 # Create, migrate and prepare database
 alias zdbcm='zeus rake db:create db:migrate db:test:prepare'
-
