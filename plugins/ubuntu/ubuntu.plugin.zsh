@@ -28,6 +28,7 @@ compdef _ppap ppap='sudo ppa-purge'
 
 alias ag='sudo apt-get'            # age - but without sudo
 alias aga='sudo apt-get autoclean' # aac
+alias agar='sudo apt-get autoremove'
 alias agb='sudo apt-get build-dep' # abd
 alias agc='sudo apt-get clean'     # adc
 alias agd='sudo apt-get dselect-upgrade' # ads
@@ -41,6 +42,7 @@ alias aguu='sudo apt-get update && sudo apt-get upgrade'      #adg
 
 compdef _ag ag='sudo apt-get'
 compdef _aga aga='sudo apt-get autoclean'
+compdef _agar agar='sudo apt-get autoremove'
 compdef _agb agb='sudo apt-get build-dep'
 compdef _agc agc='sudo apt-get clean'
 compdef _agd agd='sudo apt-get dselect-upgrade'
@@ -65,7 +67,7 @@ alias mydeb='time dpkg-buildpackage -rfakeroot -us -uc'
 
 # apt-add-repository with automatic install/upgrade of the desired package
 # Usage: aar ppa:xxxxxx/xxxxxx [packagename]
-# If packagename is not given as 2nd arument the function will ask for it and guess the defaupt by taking
+# If packagename is not given as 2nd argument the function will ask for it and guess the default by taking
 # the part after the / from the ppa name wich is sometimes the right name for the package you want to install
 aar() {
 	if [ -n "$2" ]; then
