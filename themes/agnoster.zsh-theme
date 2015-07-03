@@ -32,17 +32,19 @@ CURRENT_BG='NONE'
 
 # Special Powerline characters
 
-# NOTE: This segment separator character is correct.  In 2012, Powerline changed
-# the code points they use for their special characters. This is the new code point.
-# If this is not working for you, you probably have an old version of the 
-# Powerline-patched fonts installed. Download and install the new version.
-# Do not submit PRs to change this unless you have reviewed the Powerline code point
-# history and have new information.
-# This is defined using a Unicode escape sequence so it is unambiguously readable, regardless of
-# what font the user is viewing this source code in. Do not replace the
-# escape sequence with a single literal character.
-SEGMENT_SEPARATOR='\ue0b0' # 
-
+() {
+  local LC_ALL="" LC_CTYPE="en_US.UTF-8"
+  # NOTE: This segment separator character is correct.  In 2012, Powerline changed
+  # the code points they use for their special characters. This is the new code point.
+  # If this is not working for you, you probably have an old version of the 
+  # Powerline-patched fonts installed. Download and install the new version.
+  # Do not submit PRs to change this unless you have reviewed the Powerline code point
+  # history and have new information.
+  # This is defined using a Unicode escape sequence so it is unambiguously readable, regardless of
+  # what font the user is viewing this source code in. Do not replace the
+  # escape sequence with a single literal character.
+  SEGMENT_SEPARATOR=$'\ue0b0' # 
+}
 
 # Begin a segment
 # Takes two arguments, background and foreground. Both can be omitted,
@@ -83,7 +85,12 @@ prompt_context() {
 
 # Git: branch/detached head, dirty status
 prompt_git() {
-  local PL_BRANCH_CHAR='\ue0a0'         # 
+
+  local PL_BRANCH_CHAR
+  () {
+    local LC_ALL="" LC_CTYPE="en_US.UTF-8"
+    PL_BRANCH_CHAR=$'\ue0a0'         # 
+  }
   local ref dirty mode repo_path
   repo_path=$(git rev-parse --git-dir 2>/dev/null)
 
