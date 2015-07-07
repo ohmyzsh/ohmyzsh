@@ -54,7 +54,7 @@ open_jira_issue () {
       echo "Opening issue #$1"
     fi
     
-    if [[ "$JIRA_RAPID_BOARD" = "true" ]]; then
+    if [[ "$JIRA_RAPID_BOARD" == "true" ]]; then
       $open_cmd  "$jira_url/issues/$jira_prefix$1$addcomment"
     else
       $open_cmd  "$jira_url/browse/$jira_prefix$1$addcomment"
