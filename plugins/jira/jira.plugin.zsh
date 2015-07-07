@@ -76,24 +76,24 @@ jira_name () {
 }
 
 jira_query () {
-    verb="$1"
-    if [[ "${verb}" = "reported" ]]; then
-      lookup=reporter
-      preposition=by
-    elif [[ "${verb}" = "assigned" ]]; then
-      lookup=assignee
-      preposition=to
-    else
-      echo "not a valid lookup $verb"
-      return 1
-    fi
-    shift 1
-    jira_name $@
-    if [[ $? = 1 ]]; then
-        return 1
-    fi
-    echo "Browsing issues ${verb} ${preposition} ${jira_name}"
-    $open_cmd "${jira_url}/secure/IssueNavigator.jspa?reset=true&jqlQuery=${lookup}+%3D+%22${jira_name}%22+AND+resolution+%3D+unresolved+ORDER+BY+priority+DESC%2C+created+ASC"
+  verb="$1"
+  if [[ "${verb}" = "reported" ]]; then
+    lookup=reporter
+    preposition=by
+  elif [[ "${verb}" = "assigned" ]]; then
+    lookup=assignee
+    preposition=to
+  else
+    echo "not a valid lookup $verb"
+    return 1
+  fi
+  shift 1
+  jira_name $@
+  if [[ $? = 1 ]]; then
+    return 1
+  fi
+  echo "Browsing issues ${verb} ${preposition} ${jira_name}"
+  $open_cmd "${jira_url}/secure/IssueNavigator.jspa?reset=true&jqlQuery=${lookup}+%3D+%22${jira_name}%22+AND+resolution+%3D+unresolved+ORDER+BY+priority+DESC%2C+created+ASC"
 }
 
 alias jira='open_jira_issue'
