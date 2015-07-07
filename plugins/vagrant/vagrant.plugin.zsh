@@ -5,12 +5,14 @@ alias vd="vagrant destroy"
 alias vdf="vagrant destroy -f"
 
 alias vssh="vagrant ssh"
+alias vsshc="vagrant ssh-config"
 alias vrdp="vagrant rdp"
 
 alias vh="vagrant halt"
 alias vssp="vagrant suspend"
 alias vst="vagrant status"
 alias vre="vagrant resume"
+alias vgs="vagrant global-status"
 
 alias vpr="vagrant provision"
 alias vr="vagrant reload"
