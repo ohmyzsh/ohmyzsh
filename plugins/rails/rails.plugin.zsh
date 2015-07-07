@@ -58,6 +58,7 @@ alias rdmtc='rake db:migrate db:test:clone'
 alias rlc='rake log:clear'
 alias rn='rake notes'
 alias rr='rake routes'
+alias rrg='rake routes | grep '
 
 # legacy stuff
 alias sstat='thin --stats "/thin/stats" start'
