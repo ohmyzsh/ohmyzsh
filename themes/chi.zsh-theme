@@ -42,11 +42,16 @@ function git_prompt_info() {
   echo "$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_PREFIX$(current_branch)$ZSH_THEME_GIT_PROMPT_SUFFIXS"
 }
 
+function prompt_char {
+  git branch >/dev/null 2>/dev/null && echo '○' && return
+  echo '>'
+}
+
 # ########## PROMPT VARIABLE ###########
 
 PROMPT='
 %{$fg[green]%}$(get_pwd)%{$reset_color%} 🕕  %{$fg[green]%}%*%{$reset_color%}$(put_spacing)$(git_prompt_info)
-> '
+$(prompt_char) '
 
 # ########## ZSH GIT THEME VARIABLES ###########
 
