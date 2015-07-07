@@ -57,9 +57,9 @@ open_jira_issue () {
     fi
 
     if [[ "$JIRA_RAPID_BOARD" == "true" ]]; then
-      $open_cmd "$jira_url/issues/$jira_prefix$1$addcomment"
+      $open_cmd "${jira_url}/issues/${jira_prefix}${1}${addcomment}"
     else
-      $open_cmd "$jira_url/browse/$jira_prefix$1$addcomment"
+      $open_cmd "${jira_url}/browse/${jira_prefix}${1}${addcomment}"
     fi
   fi
 }
