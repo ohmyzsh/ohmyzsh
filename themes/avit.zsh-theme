@@ -38,32 +38,35 @@ function _ruby_version() {
 # Determine the time since last commit. If branch is clean,
 # use a neutral color, otherwise colors will vary according to time.
 function _git_time_since_commit() {
-# Only proceed if there is actually a commit.
-  if git log -1 > /dev/null 2>&1; then
-    # Get the last commit.
-    last_commit=$(git log --pretty=format:'%at' -1 2> /dev/null)
-    now=$(date +%s)
-    seconds_since_last_commit=$((now-last_commit))
+  # Turn off fetching time if oh-my-zsh.hide-status == 1
+  if [[ "$(command git config --get oh-my-zsh.hide-status 2>/dev/null)" != "1" ]]; then
+    # Only proceed if there is actually a commit.
+    if git log -1 > /dev/null 2>&1; then
+      # Get the last commit.
+      last_commit=$(git log --pretty=format:'%at' -1 2> /dev/null)
+      now=$(date +%s)
+      seconds_since_last_commit=$((now-last_commit))
 
-    # Totals
-    minutes=$((seconds_since_last_commit / 60))
-    hours=$((seconds_since_last_commit/3600))
+      # Totals
+      minutes=$((seconds_since_last_commit / 60))
+      hours=$((seconds_since_last_commit/3600))
 
-    # Sub-hours and sub-minutes
-    days=$((seconds_since_last_commit / 86400))
-    sub_hours=$((hours % 24))
-    sub_minutes=$((minutes % 60))
+      # Sub-hours and sub-minutes
+      days=$((seconds_since_last_commit / 86400))
+      sub_hours=$((hours % 24))
+      sub_minutes=$((minutes % 60))
 
-    if [ $hours -gt 24 ]; then
-      commit_age="${days}d"
-    elif [ $minutes -gt 60 ]; then
-      commit_age="${sub_hours}h${sub_minutes}m"
-    else
-      commit_age="${minutes}m"
+      if [ $hours -gt 24 ]; then
+        commit_age="${days}d"
+      elif [ $minutes -gt 60 ]; then
+        commit_age="${sub_hours}h${sub_minutes}m"
+      else
+        commit_age="${minutes}m"
+      fi
+
+      color=$ZSH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL
+      echo "$color$commit_age%{$reset_color%}"
     fi
-
-    color=$ZSH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL
-    echo "$color$commit_age%{$reset_color%}"
   fi
 }
 
