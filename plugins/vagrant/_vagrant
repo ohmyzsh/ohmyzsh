@@ -19,6 +19,7 @@ _1st_arguments=(
     'provision:Run the provisioner'
     'reload:Reload the vagrant environment'
     'resume:Resumes a suspend vagrant environment'
+    'rsync:Forces vagrant to resync shared folders'
     'share:Shares the Vagrant environment and allows remote access'
     'ssh:SSH into the currently running environment'
     'ssh-config:outputs .ssh/config valid syntax for connecting to this environment via ssh'
