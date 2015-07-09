@@ -1,4 +1,4 @@
-if [ $commands[thefuck] ]; then
+if [[ -n $commands[thefuck] ]]; then
   alias fuck='eval $(thefuck $(fc -ln -1 | tail -n 1)); fc -R'
   alias FUCK='fuck'
 else
