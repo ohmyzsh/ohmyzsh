@@ -5,7 +5,7 @@ zsh-node_modules-bin-update-path() {
   fi
 
   if [[ ! -r $(which npm-path) ]]; then
-    echo "npm-path must be available for the oh-my-zshell npm-path module to update your PATH"
+    echo "WARNING: npm-path must be available for the oh-my-zshell npm-path module to update your PATH. Perhaps \`npm --global install npm-path\` will help."
     return
   fi
 
