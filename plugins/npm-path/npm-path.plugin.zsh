@@ -1,4 +1,4 @@
-zsh-node_modules-bin-update-path() {
+zsh-npm-path() {
   if [[ ! -x $(which npm) ]]; then
     # there is no npm
     return
@@ -12,4 +12,4 @@ zsh-node_modules-bin-update-path() {
   export PATH=$(npm-path)
 }
 
-precmd_functions+="zsh-node_modules-bin-update-path"
+precmd_functions+="zsh-npm-path"
