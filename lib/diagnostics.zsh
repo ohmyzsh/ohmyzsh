@@ -55,6 +55,8 @@
 function omz_diagnostic_dump() {
   emulate -L zsh
 
+  builtin echo "Generating diagnostic dump; please be patient..."
+  
   local thisfcn=omz_diagnostic_dump
   local -A opts
   local opt_verbose opt_noverbose opt_outfile
@@ -107,6 +109,8 @@ function _omz_diag_dump_one_big_text() {
   builtin echo ZSH_VERSION=$ZSH_VERSION
   builtin echo User: $USER
   builtin echo umask: $(umask)
+  builtin echo
+  _omz_diag_dump_os_specific_version
   builtin echo
 
   # Installed programs
@@ -299,4 +303,28 @@ function _omz_diag_dump_echo_file_w_header() {
   fi
 }
 
+function _omz_diag_dump_os_specific_version() {
+  local osname osver version_file version_files
+  case "$OSTYPE" in
+    darwin*)
+      osname=$(command sw_vers -productName)
+      osver=$(command sw_vers -productVersion)      
+      builtin echo "OS Version: $osname $osver build $(sw_vers -buildVersion)"
+      ;;
+    cygwin)
+      command systeminfo | command grep "^OS Name\|^OS Version"
+      ;;
+  esac
+
+  if builtin which lsb_release >/dev/null; then
+    builtin echo "OS Release: $(command lsb_release -s -d)"
+  fi
+
+  version_files=( /etc/*-release(N) /etc/*-version(N) /etc/*_version(N) )
+  for version_file in $version_files; do
+    builtin echo "$version_file:"
+    command cat "$version_file"
+    builtin echo
+  done
+}
 
