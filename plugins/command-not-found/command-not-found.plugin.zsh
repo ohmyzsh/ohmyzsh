@@ -23,3 +23,9 @@ if [ -f /usr/libexec/pk-command-not-found ]; then
         return $retval
     }
 fi
+
+# OSX (brew) command-not-found suport. You must install the brew package first:
+# https://github.com/Homebrew/homebrew-command-not-found
+if [[ -e /usr/local/bin/brew ]] && (brew command command-not-found-init > /dev/null); then
+    eval "$(brew command-not-found-init)"
+fi
