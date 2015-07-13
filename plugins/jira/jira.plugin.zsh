@@ -42,12 +42,19 @@ open_jira_issue () {
     $open_cmd "${jira_url}/secure/CreateIssue!default.jspa"
   elif [[ "$1" = "assigned" || "$1" = "reported" ]]; then
     jira_query $@
-  else
-    echo "Opening issue #$1"
-    if [[ "x$JIRA_RAPID_BOARD" = "xtrue" ]]; then
-      $open_cmd  "$jira_url/issues/$jira_prefix$1"
+  else 
+    local addcomment=''
+    if [[ "$2" == "m" ]]; then
+      addcomment="#add-comment"
+      echo "Add comment to issue #$1"
     else
-      $open_cmd  "$jira_url/browse/$jira_prefix$1"
+      echo "Opening issue #$1"
+    fi
+    
+    if [[ "x$JIRA_RAPID_BOARD" = "xtrue" ]]; then
+      $open_cmd  "$jira_url/issues/$jira_prefix$1$addcomment"
+    else
+      $open_cmd  "$jira_url/browse/$jira_prefix$1$addcomment"
     fi
   fi
 }
