@@ -25,7 +25,7 @@ open_jira_issue () {
   elif [[ "x$JIRA_URL" != "x" ]]; then
     jira_url=$JIRA_URL
   else
-    echo "JIRA url is not specified anywhere."
+    jira_url_help
     return 1
   fi
 
@@ -57,6 +57,16 @@ open_jira_issue () {
       $open_cmd  "$jira_url/browse/$jira_prefix$1$addcomment"
     fi
   fi
+}
+
+jira_url_help() {
+  cat << EOF
+JIRA url is not specified anywhere.
+Valid options, in order of preference:
+  .jira-url file
+  $HOME/.jira-url file
+  JIRA_URL environment variable
+EOF
 }
 
 jira_name () {
