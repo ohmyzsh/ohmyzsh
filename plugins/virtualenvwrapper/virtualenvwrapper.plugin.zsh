@@ -30,16 +30,17 @@ if [[ "$WORKON_HOME" == "" ]]; then
 fi
 
 if [[ ! $DISABLE_VENV_CD -eq 1 ]]; then
-  # Automatically activate Git projects's virtual environments based on the
+  # Automatically activate Git projects' virtual environments based on the
   # directory name of the project. Virtual environment name can be overridden
   # by placing a .venv file in the project root with a virtualenv name in it
   function workon_cwd {
     if [ ! $WORKON_CWD ]; then
       WORKON_CWD=1
       # Check if this is a Git repo
-      PROJECT_ROOT=`pwd`
+      # Get absolute path, resolving symlinks
+      PROJECT_ROOT="${PWD:A}"
       while [[ "$PROJECT_ROOT" != "/" && ! -e "$PROJECT_ROOT/.venv" ]]; do
-        PROJECT_ROOT=`realpath $PROJECT_ROOT/..`
+        PROJECT_ROOT="${PROJECT_ROOT:h}"
       done
       if [[ "$PROJECT_ROOT" == "/" ]]; then
         PROJECT_ROOT="."
@@ -50,7 +51,7 @@ if [[ ! $DISABLE_VENV_CD -eq 1 ]]; then
       elif [[ -f "$PROJECT_ROOT/.venv/bin/activate" ]];then
         ENV_NAME="$PROJECT_ROOT/.venv"
       elif [[ "$PROJECT_ROOT" != "." ]]; then
-        ENV_NAME=`basename "$PROJECT_ROOT"`
+        ENV_NAME="${PROJECT_ROOT:t}"
       else
         ENV_NAME=""
       fi
