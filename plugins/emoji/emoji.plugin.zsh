@@ -2,71 +2,7 @@
 #
 # Makes emoji support available within ZSH
 #
-# This plugin provides support for working with emoji characters in zsh using human-readable
-# identifiers. It provides global variables which map emoji names to the actual
-# characters, and some anmed groupings of emoji. It also provides associated functions 
-# for displaying them.
-#
-# Global variables:
-#   $emoji          - Maps emoji names to characters
-#   $emoji2         - Auxiliary and combining characters
-#   $emoji_flags    - Maps country names to flag characters (using region-indicators)
-#   $emoji_skintone - Skin tone modifiers (from Unicode 8.0)
-#   $emoji_groups   - Named groups of emoji. Keys are group names; values are whitespace-separated 
-#                       lists of character names
-#
-# Functions:
-#   random_emoji   - Prints a random emoji character
-#   display_emoji  - Displays emoji, along with their names
-#
-# The emoji names and codes are sourced from Unicode Technical Report #51, which provides
-# information on emoji support in Unicode. It can be found at http://www.unicode.org/reports/tr51/index.html.
-#
-# The group definitions are added by this OMZ plugin. They are not based on external definitions.
-#
-# The emoji in the main $emoji map are standalone character sequences which can all be output on their
-# own, without worrying about combining effects. The values may actually be multi-code-point sequences, 
-# instead of a single code point, and may include combining characters in those sequences. But they're
-# arranged so their effects do not extend beyond that sequence.
-#
-# Usage and Examples:
-#
-# To output a specific emoji, use:
-#    $> echo $emoji[<name>]
-# E.g.: 
-#    $> echo $emoji[mouse_face]
-#
-# To output a random emoji, use:
-#    $> random_emoji
-# To output a random emoji from a particular group, use:
-#    $> random_emoji <group>
-# E.g.:
-#    $> random_emoji fruits
-#    $> random_emoji animals
-#    $> random_emoji vehicles
-#    $> random_emoji faces
-# The valid group names can be found with `echo ${(k)emoji_groups}`
-#
-# To list all available emoji with their names, use:
-#    $> display_emoji
-#    $> display_emoji fruits
-#    $> display_emoji animals
-#    $> display_emoji vehicles
-#    $> display_emoji faces
-#
-# To use emoji in a prompt:
-#    PROMPT="$emoji[penguin]  > ""
-#    PROMPT='$(random_emoji fruits)  > '
-#    surfer=$emoji[surfer]
-#    PROMPT="$surfer  > "
-#
-#
-# TODO: Move doco to a README
-# TODO: Factor out parsing from generation in update_emoji.pl
-# TODO: Incorporate CLDR data for ordering and groupings
-# TODO: Short :bracket: style names (from gemoji)
-# TODO: Country codes for flags
-# TODO: ZWJ combining function?
+# See the README for documentation.
 
 _omz_emoji_plugin_dir="${0:h}"
 
