@@ -1,0 +1,156 @@
+#compdef spring
+
+# spring boot autocompletion for oh-my-zsh
+# Requires: Spring Boot installed
+# Author: linux_china (@linux_china)
+
+
+# ----- spring boot commands
+__spring_run() {
+    _arguments \
+        '--autoconfigure[Add autoconfigure compiler transformations (default: true)]' \
+        '--watch[Watch the specified file for changes]' \
+        '--quiet[Quiet logging]' \
+        '-q[Quiet logging]' \
+        '--verbose[Verbose logging of dependency resolution]' \
+        '-v[Verbose logging of dependency resolution]' \
+        '--no-guess-dependencies[Do not attempt to guess dependencies]' \
+        '--no-guess-imports[Do not attempt to guess imports]' \
+        '--classpath[Additional classpath entries]' \
+        '--cp[Additional classpath entries]'
+}
+
+__spring_test() {
+    _arguments \
+        '--autoconfigure[Add autoconfigure compiler transformations (default: true)]' \
+        '--no-guess-dependencies[Do not attempt to guess dependencies]' \
+        '--no-guess-imports[Do not attempt to guess imports]' \
+        '--classpath[Additional classpath entries]' \
+        '--cp[Additional classpath entries]'
+}
+
+__spring_install() {
+    _arguments \
+        '--autoconfigure[Add autoconfigure compiler transformations (default: true)]' \
+        '--no-guess-dependencies[Do not attempt to guess dependencies]' \
+        '--no-guess-imports[Do not attempt to guess imports]' \
+        '--classpath[Additional classpath entries]' \
+        '--cp[Additional classpath entries]'
+}
+
+__spring_uninstall() {
+    _arguments \
+        '--autoconfigure[Add autoconfigure compiler transformations (default: true)]' \
+        '--no-guess-dependencies[Do not attempt to guess dependencies]' \
+        '--no-guess-imports[Do not attempt to guess imports]' \
+        '--all[Uninstall all]' \
+        '--classpath[Additional classpath entries]' \
+        '--cp[Additional classpath entries]'
+}
+
+__spring_jar() {
+    _arguments \
+        '--autoconfigure[Add autoconfigure compiler transformations (default: true)]' \
+        '--exclude[Pattern applied to directories on the claspath to find files to exclude from the resulting jar (default: )]' \
+        '--include[Pattern applied to directories on the classpath to find files to include in the resulting jar (default: )]' \
+        '--no-guess-dependencies[Do not attempt to guess dependencies]' \
+        '--no-guess-imports[Do not attempt to guess imports]' \
+        '--classpath[Additional classpath entries]' \
+        '--cp[Additional classpath entries]'
+}
+
+__spring_encrypt() {
+    _arguments \
+        '--alias[An alias for the the key in a keyfile (assuming the --key option is a KetStore file).]' \
+        '--key[Specify key (symmetric secret, or pem- encoded key). If the value starts with @ it is interpreted as a file location.]' \
+        '-k[Specify key (symmetric secret, or pem- encoded key). If the value starts with @ it is interpreted as a file location.]' \
+        '--property[A name for the encrypted value. Output will be in a form that can be pasted in to a properties file.]' \
+        '-p[A name for the encrypted value. Output will be in a form that can be pasted in to a properties file.]' \
+        '--password[A password for the keyfile (assuming the --key option is a KetStore file).]'
+}
+
+__spring_decrypt() {
+    _arguments \
+        '--alias[An alias for the the key in a keyfile (assuming the --key option is a KetStore file).]' \
+        '--key[Specify key (symmetric secret, or pem- encoded key). If the value starts with @ it is interpreted as a file location.]' \
+        '-k[Specify key (symmetric secret, or pem- encoded key). If the value starts with @ it is interpreted as a file location.]' \
+        '--password[A password for the keyfile (assuming the --key option is a KetStore file).]'
+}
+
+__spring_init() {
+    _arguments \
+        '--artifactId[Project coordinates; infer archive name (for example 'test')]' \
+        '-a[Project coordinates; infer archive name (for example 'test')]' \
+        '--boot-version[Spring Boot version (for example '1.2.0.RELEASE')]' \
+        '-b[Spring Boot version (for example '1.2.0.RELEASE')]' \
+        '--build[Build system to use (for example 'maven' or 'gradle') (default: maven)]' \
+        '--dependencies[Comma-separated list of dependency identifiers to include in the generated project]' \
+        '-d[Comma-separated list of dependency identifiers to include in the generated project]' \
+        '--description[Project description]' \
+        '--force[Force overwrite of existing files]' \
+        '--format[Format of the generated content (for example 'build' for a build file,'project' for a project archive) (default: project)]' \
+        '-f[Format of the generated content (for example 'build' for a build file,'project' for a project archive) (default: project)]' \
+        '--groupId[Project coordinates (for example 'org.test')]' \
+        '-g[Project coordinates (for example 'org.test')]' \
+        '--java-version[Language level (for example '1.8')]' \
+        '-j[Language level (for example '1.8')]' \
+        '--language[Programming language  (for example 'java')]' \
+        '-l[Programming language  (for example 'java')]' \
+        '--name[Project name; infer application name]' \
+        '-n[Project name; infer application name]' \
+        '--packaging[Project packaging (for example 'jar')]' \
+        '-p[Project packaging (for example 'jar')]' \
+        '--target[URL of the service to use (default:https://start.spring.io)]' \
+        '--version[Project version (for example '0.0.1-SNAPSHOT')]' \
+        '-v[Project version (for example '0.0.1-SNAPSHOT')]' \
+        '--extract[Extract the project archive. Inferred if a location is specified without an extension]' \
+        '-x[Extract the project archive. Inferred if a location is specified without an extension]' \
+        '--type[Project type. Not normally needed if you use --build and/or --format. Check the capabilities of the service (--list) for more details]' \
+        '-t[Project type. Not normally needed if you use --build and/or --format. Check the capabilities of the service (--list) for more details]' \
+        '--list[List all the capabilities of the service]'
+}
+
+local -a _1st_arguments
+_1st_arguments=(
+    "encrypt":"Encrypt a string so, for instance, it can be added to source control"
+    "decrypt":"Decrypt a string previsouly encrypted with the same key (or key pair)"
+    "run":"Run a spring groovy script"
+    "test":"Run a spring groovy script test"
+    "grab":"Download a spring groovy script's dependencies to ./repository"
+    "jar":"Create a self-contained executable jar file from a Spring Groovy script"
+    "install":"Install dependencies to the lib directory"
+    "uninstall":"Uninstall dependencies from the lib directory"
+    "init":"Initialize a new project using Spring Initialzr (start.spring.io)"
+    "shellp":"Start a nested shell"
+    "version":"Display Spring Boot version"
+    "help":"Get help on commands"
+)
+
+_arguments '*:: :->command'
+
+if (( CURRENT == 1 )); then
+    _describe -t commands "spring command" _1st_arguments
+    return
+fi
+
+
+local -a _command_args
+case "$words[1]" in
+    run)
+       __spring_run ;;
+    init)
+       __spring_init ;;
+    encrypt)
+       __spring_encrypt ;;
+    decrypt)
+       __spring_decrypt ;;
+    test)
+       __spring_test ;;
+    jar)
+       __spring_jar ;;
+    install)
+       __spring_install ;;
+    uninstall)
+       __spring_uninstall ;;
+esac
+
