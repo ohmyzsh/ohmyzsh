@@ -18,7 +18,7 @@
 
 PROMPT='%{$BG[028]%}%{$fg[white]%} $(collapse_pwd) \
 %{$BG[056]%}%{$fg[white]%}$(git_prompt_short_sha)\
-%{$bg[blue]%}%{$fg[black]%}$(git_prompt_info)\
+%{$BG[019]%}%{$fg[white]%}$(git_prompt_info)\
 %{$reset_color%}$(git_prompt_status)
 %{$reset_color%}> '
 
@@ -27,7 +27,7 @@ ZSH_THEME_GIT_PROMPT_SHA_AFTER="  "
 ZSH_THEME_GIT_PROMPT_PREFIX=" ⑀ "
 ZSH_THEME_GIT_PROMPT_SUFFIX=""
 ZSH_THEME_GIT_PROMPT_DIRTY=" %{$bg[yellow]%}%{$fg[black]%} ⸭ "
-ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[black]%} ☩ "
+ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[white]%} ☩ "
 
 # RPROMPT='$(git_prompt_status) %{$reset_color%}'
 
