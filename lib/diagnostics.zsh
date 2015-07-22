@@ -101,7 +101,9 @@ function _omz_diag_dump_one_big_text() {
 
   builtin echo oh-my-zsh diagnostic dump
   builtin echo
-
+  builtin echo $outfile
+  builtin echo 
+  
   # Basic system and zsh information
   command date
   command uname -a
