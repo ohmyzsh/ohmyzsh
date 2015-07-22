@@ -53,27 +53,26 @@ if [[ ! $DISABLE_VENV_CD -eq 1 ]]; then
       elif [[ "$PROJECT_ROOT" != "." ]]; then
         ENV_NAME="${PROJECT_ROOT:t}"
       else
-        ENV_NAME=""
+        FOLDER_NAME=`pwd`
+        ENV_NAME=`basename "$FOLDER_NAME"`
       fi
-      if [[ "$ENV_NAME" != "" ]]; then
-        # Activate the environment only if it is not already active
-        if [[ "$VIRTUAL_ENV" != "$WORKON_HOME/$ENV_NAME" ]]; then
-          if [[ -e "$WORKON_HOME/$ENV_NAME/bin/activate" ]]; then
-            workon "$ENV_NAME" && export CD_VIRTUAL_ENV="$ENV_NAME"
-          elif [[ -e "$ENV_NAME/bin/activate" ]]; then
-            source $ENV_NAME/bin/activate && export CD_VIRTUAL_ENV="$ENV_NAME"
-          fi
+      # Activate the environment only if it is not already active
+      if [[ "$VIRTUAL_ENV" != "$WORKON_HOME/$ENV_NAME" ]]; then
+        if [[ -e "$WORKON_HOME/$ENV_NAME/bin/activate" ]]; then
+          workon "$ENV_NAME" && export CD_VIRTUAL_ENV=`pwd`
+        elif [[ -e "$ENV_NAME/bin/activate" ]]; then
+          source $ENV_NAME/bin/activate && export CD_VIRTUAL_ENV=`pwd`
+        elif [[ `pwd` != "$CD_VIRTUAL_ENV"* ]]; then
+          # We've just left the repo, deactivate the environment
+          # Note: this only happens if the virtualenv was activated automatically
+          deactivate && unset CD_VIRTUAL_ENV
         fi
-      elif [[ -n $CD_VIRTUAL_ENV && -n $VIRTUAL_ENV ]]; then
-        # We've just left the repo, deactivate the environment
-        # Note: this only happens if the virtualenv was activated automatically
-        deactivate && unset CD_VIRTUAL_ENV
       fi
       unset PROJECT_ROOT
       unset WORKON_CWD
     fi
   }
-
+  
   # Append workon_cwd to the chpwd_functions array, so it will be called on cd
   # http://zsh.sourceforge.net/Doc/Release/Functions.html
   if ! (( $chpwd_functions[(I)workon_cwd] )); then
