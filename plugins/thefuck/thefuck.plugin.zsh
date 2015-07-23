@@ -3,8 +3,8 @@ if [[ -z $commands[thefuck] ]]; then
     return -1
 fi
 
-alias fuck='eval $(thefuck $(fc -ln -1 | tail -n 1)); fc -R'
-alias FUCK='fuck'
+# Register alias
+eval "$(thefuck-alias)"
 
 fuck-command-line() {
     FUCK="$(thefuck $(fc -ln -1 | tail -n 1) 2> /dev/null)"
