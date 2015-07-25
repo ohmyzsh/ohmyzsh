@@ -41,3 +41,6 @@ alias ios='open /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimul
 alias code='~/Dropbox/Code'
 alias dw='~/Dropbox'
 alias dp='~/Dropbox\ \(Personal\)'
+
+# Docker
+alias dockup="boot2docker init && boot2docker up && eval \"\$(boot2docker shellinit)\""
