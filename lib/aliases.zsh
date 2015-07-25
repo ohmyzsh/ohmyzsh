@@ -58,4 +58,10 @@ alias code='~/Dropbox/Code'
 alias dw='~/Dropbox'
 >>>>>>> Updated Dropbox aliases with new softlinks
 alias dp='~/Dropbox\ \(Personal\)'
+<<<<<<< HEAD
 >>>>>>> Changed Dropbox aliases
+=======
+
+# Docker
+alias dockup="boot2docker init && boot2docker up && eval \"\$(boot2docker shellinit)\""
+>>>>>>> Add Boot2Docker alias.
