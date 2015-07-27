@@ -70,7 +70,13 @@
 # A few utility functions to make it easy and re-usable to draw segmented prompts
 
 CURRENT_BG='NONE'
-SEGMENT_SEPARATOR=''
+
+# Fix odd char on mac
+if [[ `uname` == 'Darwin' ]]; then
+    SEGMENT_SEPARATOR='\ue0b0'
+else
+    SEGMENT_SEPARATOR=''
+fi
 
 # Begin a segment
 # Takes two arguments, background and foreground. Both can be omitted,
@@ -183,8 +189,13 @@ prompt_hg() {
       if `hg st | grep -q "^\?"`; then
         prompt_segment "$AGNOSTER_HG_NEWFILE_BG" "$AGNOSTER_HG_NEWFILE_FG"
         st='±'
+<<<<<<< HEAD
       elif `hg st | grep -q "^(M|A)"`; then
         prompt_segment "$AGNOSTER_HG_CHANGED_BG" "$AGNOSTER_HG_CHANGED_FG"
+=======
+      elif `hg st | grep -q "^[MA]"`; then
+        prompt_segment yellow black
+>>>>>>> a207a38d634cc10441636bc4359cd8a18c502dea
         st='±'
       else
         prompt_segment "$AGNOSTER_HG_CLEAN_BG" "$AGNOSTER_HG_CLEAN_FG"
