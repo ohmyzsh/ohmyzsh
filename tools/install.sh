@@ -23,14 +23,14 @@ fi
 
 echo "\033[0;34mUsing the Oh My Zsh template file and adding it to ~/.zshrc\033[0m"
 cp $ZSH/templates/zshrc.zsh-template ~/.zshrc
-sed -i -e "/^export ZSH=/ c\\
+cat ~/.zshrc | sed -e "/^export ZSH=/ c\\
 export ZSH=$ZSH
-" ~/.zshrc
+" > ~/.zshrc
 
 echo "\033[0;34mCopying your current PATH and adding it to the end of ~/.zshrc for you.\033[0m"
-sed -i -e "/export PATH=/ c\\
+cat ~/.zshrc | sed -e "/export PATH=/ c\\
 export PATH=\"$PATH\"
-" ~/.zshrc
+" > ~/.zshrc
 
 TEST_CURRENT_SHELL=$(expr "$SHELL" : '.*/\(.*\)')
 if [ "$TEST_CURRENT_SHELL" != "zsh" ]; then
