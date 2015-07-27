@@ -105,6 +105,18 @@ prompt_end() {
   CURRENT_BG=''
 }
 
+git_toplevel() {
+	local repo_root=$(git rev-parse --show-toplevel)
+	if [[ $repo_root = '' ]]; then
+		# We are in a bare repo. Use git dir as root
+		repo_root=$(git rev-parse --git-dir)
+		if [[ $repo_root = '.' ]]; then
+			repo_root=$(pwd)
+		fi
+	fi
+	echo -n $repo_root
+}
+
 ### Prompt components
 # Each component will draw itself, and hide itself if no information needs to be shown
 
@@ -116,11 +128,7 @@ prompt_context() {
 }
 
 prompt_git_relative() {
-  local repo_root=$(git rev-parse --show-toplevel)
-	if [[ $repo_root = '' ]]; then
-		# We are in a bare repo. Use git dir as root
-		repo_root=$(git rev-parse --git-dir)
-	fi
+  local repo_root=$(git_toplevel)
   local path_in_repo=$(pwd | sed "s/^$(echo "$repo_root" | sed 's:/:\\/:g;s/\$/\\$/g')//;s:^/::;s:/$::;")
   if [[ $path_in_repo != '' ]]; then
     prompt_segment "$AGNOSTER_DIR_BG" "$AGNOSTER_DIR_FG" "$path_in_repo"
@@ -204,7 +212,7 @@ prompt_hg() {
 prompt_dir() {
   if [[ $AGNOSTER_GIT_INLINE == 'true' ]] && $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
     # Git repo and inline path enabled, hence only show the git root
-    prompt_segment "$AGNOSTER_DIR_BG" "$AGNOSTER_DIR_FG" "$(git rev-parse --show-toplevel | sed "s:^$HOME:~:")"
+    prompt_segment "$AGNOSTER_DIR_BG" "$AGNOSTER_DIR_FG" "$(git_toplevel | sed "s:^$HOME:~:")"
   else
     prompt_segment "$AGNOSTER_DIR_BG" "$AGNOSTER_DIR_FG" '%~'
   fi
