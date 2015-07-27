@@ -189,13 +189,8 @@ prompt_hg() {
       if `hg st | grep -q "^\?"`; then
         prompt_segment "$AGNOSTER_HG_NEWFILE_BG" "$AGNOSTER_HG_NEWFILE_FG"
         st='±'
-<<<<<<< HEAD
-      elif `hg st | grep -q "^(M|A)"`; then
-        prompt_segment "$AGNOSTER_HG_CHANGED_BG" "$AGNOSTER_HG_CHANGED_FG"
-=======
       elif `hg st | grep -q "^[MA]"`; then
-        prompt_segment yellow black
->>>>>>> a207a38d634cc10441636bc4359cd8a18c502dea
+        prompt_segment "$AGNOSTER_HG_CHANGED_BG" "$AGNOSTER_HG_CHANGED_FG"
         st='±'
       else
         prompt_segment "$AGNOSTER_HG_CLEAN_BG" "$AGNOSTER_HG_CLEAN_FG"
