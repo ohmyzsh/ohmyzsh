@@ -111,6 +111,10 @@ prompt_context() {
 
 prompt_git_relative() {
   local repo_root=$(git rev-parse --show-toplevel)
+	if [[ $repo_root = '' ]]; then
+		# We are in a bare repo. Use git dir as root
+		repo_root=$(git rev-parse --git-dir)
+	fi
   local path_in_repo=$(pwd | sed "s/^$(echo "$repo_root" | sed 's:/:\\/:g;s/\$/\\$/g')//;s:^/::;s:/$::;")
   if [[ $path_in_repo != '' ]]; then
     prompt_segment "$AGNOSTER_DIR_BG" "$AGNOSTER_DIR_FG" "$path_in_repo"
