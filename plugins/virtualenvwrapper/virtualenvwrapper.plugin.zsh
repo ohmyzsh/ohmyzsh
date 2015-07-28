@@ -1,10 +1,18 @@
 virtualenvwrapper='virtualenvwrapper.sh'
 
 if (( $+commands[$virtualenvwrapper] )); then
-  source ${${virtualenvwrapper}:c}
+  function {
+    setopt local_options
+    unsetopt equals
+    source ${${virtualenvwrapper}:c}
+  }
 elif [[ -f "/etc/bash_completion.d/virtualenvwrapper" ]]; then
-  virtualenvwrapper="/etc/bash_completion.d/virtualenvwrapper"
-  source "/etc/bash_completion.d/virtualenvwrapper"
+  function {
+    setopt local_options
+    unsetopt equals
+    virtualenvwrapper="/etc/bash_completion.d/virtualenvwrapper"
+    source "/etc/bash_completion.d/virtualenvwrapper"
+  }
 else
   print "zsh virtualenvwrapper plugin: Cannot find ${virtualenvwrapper}.\n"\
         "Please install with \`pip install virtualenvwrapper\`" >&2
@@ -22,15 +30,19 @@ if [[ "$WORKON_HOME" == "" ]]; then
 fi
 
 if [[ ! $DISABLE_VENV_CD -eq 1 ]]; then
-  # Automatically activate Git projects's virtual environments based on the
+  # Automatically activate Git projects' virtual environments based on the
   # directory name of the project. Virtual environment name can be overridden
   # by placing a .venv file in the project root with a virtualenv name in it
   function workon_cwd {
     if [ ! $WORKON_CWD ]; then
       WORKON_CWD=1
       # Check if this is a Git repo
-      PROJECT_ROOT=`git rev-parse --show-toplevel 2> /dev/null`
-      if (( $? != 0 )); then
+      # Get absolute path, resolving symlinks
+      PROJECT_ROOT="${PWD:A}"
+      while [[ "$PROJECT_ROOT" != "/" && ! -e "$PROJECT_ROOT/.venv" ]]; do
+        PROJECT_ROOT="${PROJECT_ROOT:h}"
+      done
+      if [[ "$PROJECT_ROOT" == "/" ]]; then
         PROJECT_ROOT="."
       fi
       # Check for virtualenv name override
@@ -39,7 +51,7 @@ if [[ ! $DISABLE_VENV_CD -eq 1 ]]; then
       elif [[ -f "$PROJECT_ROOT/.venv/bin/activate" ]];then
         ENV_NAME="$PROJECT_ROOT/.venv"
       elif [[ "$PROJECT_ROOT" != "." ]]; then
-        ENV_NAME=`basename "$PROJECT_ROOT"`
+        ENV_NAME="${PROJECT_ROOT:t}"
       else
         ENV_NAME=""
       fi
