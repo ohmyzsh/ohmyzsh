@@ -62,9 +62,9 @@ open_jira_issue () {
 jira_url_help() {
   cat << EOF
 JIRA url is not specified anywhere.
-Valid options, in order of preference:
+Valid options, in order of precedence:
   .jira-url file
-  $HOME/.jira-url file
+  \$HOME/.jira-url file
   JIRA_URL environment variable
 EOF
 }
