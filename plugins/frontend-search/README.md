@@ -17,9 +17,16 @@ plugins=( <your-plugins-list>... frontend-search)
 
 ## Commands ##
 
-All command searches are accept only in format
+All command searches are accept only in formats
 
 * `frontend <search-content> <search-term>`
+* `<search-content> <search-term>`
+
+For more informations, please run help command (are similars)
+
+* `frontend -h`
+* `frontend --help`
+* `frontend help`
 
 The search content are
 

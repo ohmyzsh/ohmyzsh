@@ -10,6 +10,27 @@ function frontend() {
     open_cmd='xdg-open'
   fi
 
+  # show help for commands list
+  if [[ $1 =~ '(help|--help|-h)' ]];
+  then
+      echo "Usage:"
+      echo "\n\tfrontend <search-content>\n\t<search-content>\n\tfrontend <search-content> <search-term>"
+      echo ""
+      echo "Where <search-content> is one of:"
+      echo "jquery, mdn, compass, html5please, caniuse, aurajs, dartlang, qunit, fontello,"
+      echo "bootsnipp, cssflow, codepen, unheap, bem, smacss, angularjs, reactjs, emberjs"
+      echo "help"
+      echo ""
+      echo "Where <search-term> is a term to search in allowed repositories"
+      echo ""
+      echo "frontend --help       show plugin help"
+      echo "frontend -h           show plugin help"
+      echo ""
+      echo "It is allowed to directly access all search contents."
+      echo ""
+      return 1
+  fi
+
   # no keyword provided, simply show how call methods
   if [[ $# -le 1 ]]; then
     echo "Please provide a search-content and a search-term for app.\nEx:\nfrontend <search-content> <search-term>\n"
