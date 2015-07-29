@@ -14,6 +14,8 @@ open_jira_issue () {
   local open_cmd
   if [[ "$OSTYPE" = darwin* ]]; then
     open_cmd='open'
+  elif [[ $(uname -o) == 'Cygwin' ]]; then
+    open_cmd='cygstart -o'
   else
     open_cmd='xdg-open'
   fi
