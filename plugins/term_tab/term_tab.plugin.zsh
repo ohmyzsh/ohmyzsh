@@ -15,15 +15,27 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 
 function _term_list(){
-  local -a w
+  local -a expl
+  local -au dirs
 
-  for SESSION in $(pidof  zsh); do
-    w+=${(D)$(readlink -n /proc/${SESSION}/cwd)}
-  done
+  PREFIX="$IPREFIX$PREFIX"
+  IPREFIX=
+  SUFFIX="$SUFFIX$ISUFFIX"
+  ISUFFIX=
 
-  compadd -aQS '' w
+  [[ -o magicequalsubst ]] && compset -P '*='
+
+  case $OSTYPE in
+    solaris*) dirs=( ${(M)${${(f)"$(pgrep -U $UID -x zsh|xargs pwdx)"}:#$$:*}%%/*} ) ;;
+    linux*) dirs=( /proc/${^$(pidof zsh):#$$}/cwd(N:A) ) ;;
+  esac
+  dirs=( ${(D)dirs} )
+
+  compstate[pattern_match]='*'
+  _wanted directories expl 'current directory from other shell' \
+      compadd -Q -M "r:|/=* r:|=*" -f -a dirs
 }
 
 zle -C term_list menu-complete _generic
 bindkey "^v" term_list
-zstyle ':completion:term_list:*' completer _term_list
+zstyle ':completion:term_list::::' completer _term_list
