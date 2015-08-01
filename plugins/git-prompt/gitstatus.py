@@ -4,16 +4,13 @@ from __future__ import print_function
 # change this symbol to whatever you prefer
 prehash = ':'
 
+import sys
 import subprocess
 from subprocess import Popen, PIPE
 
-import sys
-gitsym = Popen(['git', 'symbolic-ref', 'HEAD'], stdout=PIPE, stderr=PIPE)
-branch, error = gitsym.communicate()
+branch, error = Popen(['git', 'symbolic-ref', 'HEAD'], stdout=PIPE, stderr=PIPE).communicate()
 
-error_string = error.decode('utf-8')
-
-if 'fatal: Not a git repository' in error_string:
+if 'fatal: Not a git repository' in error.decode('utf-8'):
     sys.exit(0)
 
 branch = branch.decode("utf-8").strip()[11:]
