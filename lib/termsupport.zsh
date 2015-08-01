@@ -7,6 +7,9 @@
 # (In screen, only short_tab_title is used)
 # Limited support for Apple Terminal (Terminal can't set window and tab separately)
 function title {
+  emulate -L zsh
+  setopt prompt_subst
+  
   [[ "$EMACS" == *term* ]] && return
 
   # if $2 is unset use $1 as default
