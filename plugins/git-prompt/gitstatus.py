@@ -5,25 +5,40 @@ from __future__ import print_function
 prehash = ':'
 
 import sys
-import subprocess
 from subprocess import Popen, PIPE
 
-branch, error = Popen(['git', 'symbolic-ref', 'HEAD'], stdout=PIPE, stderr=PIPE).communicate()
 
-if 'fatal: Not a git repository' in error.decode('utf-8'):
-    sys.exit(0)
+# `git status --porcelain -b` can collect all information
+# branch, remote_branch, untracked, staged, changed, conflicts, ahead, behind
+po = Popen(['git', 'status', '--porcelain', '-b'], stdout=PIPE, stderr=PIPE)
+stdout, sterr = po.communicate()
+if po.returncode != 0:
+    sys.exit(0)  # Not a git repository
 
-branch = branch.decode("utf-8").strip()[11:]
-
-# Get git status (staged, change, conflicts and untracked)
-try:
-    res = subprocess.check_output(['git', 'status', '--porcelain'])
-except subprocess.CalledProcessError:
-    sys.exit(0)
-status = [(st[0], st[1], st[2:]) for st in res.splitlines()]
+# collect git status information
 untracked, staged, changed, conflicts = [], [], [], []
+ahead, behind = 0, 0
+status = [(line[0], line[1], line[2:]) for line in stdout.splitlines()]
 for st in status:
-    if st[0] == '?' and st[1] == '?':
+    if st[0] == '#' and st[1] == '#':
+        if len(st[2].strip().split('...')) == 1:
+            branch = st[2].strip()
+        else:
+            # current and remote branch info
+            branch, rest = st[2].strip().split('...')
+            if len(rest.split(' ')) == 1:
+                # remote_branch = rest.split(' ')[0]
+                pass
+            else:
+                # ahead or behind
+                divergence = ' '.join(rest.split(' ')[1:])
+                divergence = divergence.lstrip('[').rstrip(']')
+                for div in divergence.split(', '):
+                    if 'ahead' in div:
+                        ahead = int(div[len('ahead '):].strip())
+                    elif 'behind' in div:
+                        behind = int(div[len('behind '):].strip())
+    elif st[0] == '?' and st[1] == '?':
         untracked.append(st)
     else:
         if st[1] == 'M':
@@ -32,26 +47,6 @@ for st in status:
             conflicts.append(st)
         elif st[0] != ' ':
             staged.append(st)
-
-ahead, behind = 0,0
-
-if not branch: # not on any branch
-    branch = prehash + Popen(['git','rev-parse','--short','HEAD'], stdout=PIPE).communicate()[0].decode("utf-8")[:-1]
-else:
-    remote_name = Popen(['git','config','branch.%s.remote' % branch], stdout=PIPE).communicate()[0].decode("utf-8").strip()
-    if remote_name:
-        merge_name = Popen(['git','config','branch.%s.merge' % branch], stdout=PIPE).communicate()[0].decode("utf-8").strip()
-        if remote_name == '.': # local
-            remote_ref = merge_name
-        else:
-            remote_ref = 'refs/remotes/%s/%s' % (remote_name, merge_name[11:])
-        revgit = Popen(['git', 'rev-list', '--left-right', '%s...HEAD' % remote_ref],stdout=PIPE, stderr=PIPE)
-        revlist = revgit.communicate()[0]
-        if revgit.poll(): # fallback to local
-            revlist = Popen(['git', 'rev-list', '--left-right', '%s...HEAD' % merge_name],stdout=PIPE, stderr=PIPE).communicate()[0]
-        behead = revlist.decode("utf-8").splitlines()
-        ahead = len([x for x in behead if x[0]=='>'])
-        behind = len(behead) - ahead
 
 out = ' '.join([
     branch,
