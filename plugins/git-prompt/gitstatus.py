@@ -18,7 +18,7 @@ if po.returncode != 0:
 # collect git status information
 untracked, staged, changed, conflicts = [], [], [], []
 ahead, behind = 0, 0
-status = [(line[0], line[1], line[2:]) for line in stdout.splitlines()]
+status = [(line[0], line[1], line[2:]) for line in stdout.decode('utf-8').splitlines()]
 for st in status:
     if st[0] == '#' and st[1] == '#':
         if len(st[2].strip().split('...')) == 1:
@@ -58,4 +58,3 @@ out = ' '.join([
     str(len(untracked)),
 ])
 print(out, end='')
-
