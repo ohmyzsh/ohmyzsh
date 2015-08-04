@@ -4,7 +4,7 @@ Plugin for Terraform, a tool from Hashicorp for managing infrastructure safely a
 
 ### Requirements
 
- * [Terraform](https://teraform.io/)
+ * [Terraform](https://terraform.io/)
 
 ### Usage
 
