@@ -14,32 +14,38 @@ elif [[ -f "/etc/bash_completion.d/virtualenvwrapper" ]]; then
     source "/etc/bash_completion.d/virtualenvwrapper"
   }
 else
-  print "zsh virtualenvwrapper plugin: Cannot find ${virtualenvwrapper}.\n"\
+  print "[oh-my-zsh] virtualenvwrapper plugin: Cannot find ${virtualenvwrapper}.\n"\
         "Please install with \`pip install virtualenvwrapper\`" >&2
   return
 fi
 if ! type workon &>/dev/null; then
-  print "zsh virtualenvwrapper plugin: shell function 'workon' not defined.\n"\
+  print "[oh-my-zsh] virtualenvwrapper plugin: shell function 'workon' not defined.\n"\
         "Please check ${virtualenvwrapper}" >&2
   return
 fi
 
 if [[ "$WORKON_HOME" == "" ]]; then
-  print "\$WORKON_HOME is not defined so ZSH plugin virtualenvwrapper will not work" >&2
+  print "[oh-my-zsh] \$WORKON_HOME is not defined so plugin virtualenvwrapper will not work" >&2
   return
 fi
 
 if [[ ! $DISABLE_VENV_CD -eq 1 ]]; then
-  # Automatically activate Git projects' virtual environments based on the
+  # Automatically activate Git projects or other customized virtualenvwrapper projects based on the
   # directory name of the project. Virtual environment name can be overridden
-  # by placing a .venv file in the project root with a virtualenv name in it
+  # by placing a .venv file in the project root with a virtualenv name in it.
   function workon_cwd {
-    if [ ! $WORKON_CWD ]; then
-      WORKON_CWD=1
+    if [[ -z "$WORKON_CWD" ]]; then
+      local WORKON_CWD=1
       # Check if this is a Git repo
+      local GIT_REPO_ROOT=""
+      local GIT_TOPLEVEL=$(git rev-parse --show-toplevel 2> /dev/null)
+      if [[ $? == 0 ]]; then
+        GIT_REPO_ROOT="$GIT_TOPLEVEL"
+      fi
       # Get absolute path, resolving symlinks
-      PROJECT_ROOT="${PWD:A}"
-      while [[ "$PROJECT_ROOT" != "/" && ! -e "$PROJECT_ROOT/.venv" ]]; do
+      local PROJECT_ROOT="${PWD:A}"
+      while [[ "$PROJECT_ROOT" != "/" && ! -e "$PROJECT_ROOT/.venv" \
+               && ! -d "$PROJECT_ROOT/.git"  && "$PROJECT_ROOT" != "$GIT_REPO_ROOT" ]]; do
         PROJECT_ROOT="${PROJECT_ROOT:h}"
       done
       if [[ "$PROJECT_ROOT" == "/" ]]; then
@@ -47,7 +53,7 @@ if [[ ! $DISABLE_VENV_CD -eq 1 ]]; then
       fi
       # Check for virtualenv name override
       if [[ -f "$PROJECT_ROOT/.venv" ]]; then
-        ENV_NAME=`cat "$PROJECT_ROOT/.venv"`
+        ENV_NAME=`cat "$PROJECT_ROOT/.venv"`        
       elif [[ -f "$PROJECT_ROOT/.venv/bin/activate" ]];then
         ENV_NAME="$PROJECT_ROOT/.venv"
       elif [[ "$PROJECT_ROOT" != "." ]]; then
@@ -69,8 +75,6 @@ if [[ ! $DISABLE_VENV_CD -eq 1 ]]; then
         # Note: this only happens if the virtualenv was activated automatically
         deactivate && unset CD_VIRTUAL_ENV
       fi
-      unset PROJECT_ROOT
-      unset WORKON_CWD
     fi
   }
 
