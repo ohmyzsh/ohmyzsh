@@ -140,3 +140,7 @@ function apt-list-packages {
     sort -n | \
     awk '{print $1" "$2}'
 }
+
+# Copy output to clipboard (requires xclip)
+# Usage: ls | clip
+alias clip='xclip -sel clip'
