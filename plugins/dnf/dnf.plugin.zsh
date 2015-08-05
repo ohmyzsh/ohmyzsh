@@ -12,9 +12,9 @@ alias dngl="dnf group list"
 
 
 # Privileged
-alias dni="$(if [[ $EUID -ne 0 ]]; then echo "sudo"; fi) dnf install"
-alias dnu="$(if [[ $EUID -ne 0 ]]; then echo "sudo"; fi) dnf upgrade"
-alias dnr="$(if [[ $EUID -ne 0 ]]; then echo "sudo"; fi) dnf remove"
-alias dngi="$(if [[ $EUID -ne 0 ]]; then echo "sudo"; fi) dnf group install"
-alias dngr="$(if [[ $EUID -ne 0 ]]; then echo "sudo"; fi) dnf group remove"
-alias dngu="$(if [[ $EUID -ne 0 ]]; then echo "sudo"; fi) dnf group upgrade"
+alias dni="sudo dnf install"
+alias dnu="sudo dnf upgrade"
+alias dnr="sudo dnf remove"
+alias dngi="sudo dnf group install"
+alias dngr="sudo dnf group remove"
+alias dngu="sudo dnf group upgrade"
