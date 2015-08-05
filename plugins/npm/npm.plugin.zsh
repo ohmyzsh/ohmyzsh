@@ -14,4 +14,4 @@ alias npmS="npm i -S "
 alias npmD="npm i -D "
 # Execute command from node_modules folder based on current directory
 # i.e npmE gulp
-alias npmE="'PATH=$(npm bin):$PATH'"
+alias npmE="PATH=$(npm bin):$PATH"
