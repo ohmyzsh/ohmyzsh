@@ -69,12 +69,16 @@ ZSH_THEME="robbyrussell"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 <<<<<<< HEAD
 # Add wisely, as too many plugins slow down shell startup.
+<<<<<<< HEAD
 plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 =======
 plugins=(battery capistrano common-aliases git github laravel4 rbenv sublime systemadmin)
 >>>>>>> Added Laravel4 plug-in for autocomplete
+=======
+plugins=(common-aliases git rbenv systemadmin)
+>>>>>>> Remove old Capistrano and Laravel4 plugin support.
 
 source $ZSH/oh-my-zsh.sh
 
