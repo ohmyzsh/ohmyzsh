@@ -12,10 +12,7 @@ function xc {
   fi
 }
 
-function xcsel {
-  sudo xcode-select --switch "$*"
-}
-
+alias xcsel='sudo xcode-select --switch'
 alias xcb='xcodebuild'
 alias xcp='xcode-select --print-path'
 alias xcdd='rm -rf ~/Library/Developer/Xcode/DerivedData/*'
