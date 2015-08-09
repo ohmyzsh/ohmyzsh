@@ -2,7 +2,6 @@
 
 if (( ${+commands[fbterm]} )); then
 	if [[ "$TTY" = /dev/tty* ]] ; then
-		fbterm
-		exit
+		fbterm && exit
 	fi
 fi
