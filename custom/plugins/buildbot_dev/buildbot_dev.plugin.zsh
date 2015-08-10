@@ -5,6 +5,9 @@ alias cdp='cd $BUILDBOT_PROJECT_PATH'
 alias cdd='cd $HOME/projects/dev-tools'
 
 alias c='cactus'
+alias cl='cactus log'
+alias clc='cactus log -l cactus.log'
+alias clm='cactus log -l master.log'
 alias cj='cactus jump'
 alias ct='cactus trial'
 alias cjh='cactus jump home'
@@ -21,13 +24,14 @@ alias css='cactus slaves stop'
 alias csr='cactus slaves restart'
 alias cs='cactus stop'
 alias cr='cactus restart'
+alias crcl='cactus restart ; cactus log'
 alias ck='cactus kill'
-alias crcsr='cactus restart; cactus slaves restart'
-alias crcsrci='cactus restart; cactus slaves restart; cactus info'
-alias cscss='cactus stop; cactus slaves stop'
-alias cscssci='cactus stop; cactus slaves stop; cactus info'
-alias ckcss='cactus kill; cactus slaves restart'
-alias ckcssci='cactus kill; cactus slaves restart; cactus info'
+alias crcsr='cactus restart ; cactus slaves restart'
+alias crcsrci='cactus restart ; cactus slaves restart ; cactus info'
+alias cscss='cactus stop ; cactus slaves stop'
+alias cscssci='cactus stop ; cactus slaves stop ; cactus info'
+alias ckcss='cactus kill ; cactus slaves restart'
+alias ckcssci='cactus kill ; cactus slaves restart ; cactus info'
 
 alias m='make'
 alias s='subl'
@@ -38,6 +42,7 @@ alias saguysaguysagay='sudo apt-get update -y && sudo apt-get upgrade -y && sudo
 alias update-my-ubuntu='saguysaguysagay'
 
 alias bing='notify-send "Stacked work finished" "Work being done in your favorite terminal is now finished. You can come back" -i /usr/share/pixmaps/apple-red.png -t 6000'
+alias b='bing'
 
 function bb_env()
 {
