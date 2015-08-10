@@ -80,3 +80,4 @@ unsetopt correctall
 
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
+# export PYTHONPATH=/usr/local/lib/python2.7/dist-packages/:/usr/lib/python2.7/dist-packages/:/usr/lib/python2.7/dist-packages/gtk-2.0:$PYTHONPATH
