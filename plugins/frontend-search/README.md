@@ -1,24 +1,19 @@
 ## Rationale ##
 
-The idea for this script is to help searches in important doc contents from frontend.
+> Searches for your Frontend contents more easier
+
 
 ## Instalation ##
 
-I will send a Pull Request with this plugin for .oh-my-zsh official repository. If accept them, it's only add in plugins list that exists in ```.zshrc``` file.
 
-For now, you can clone this repository and add in ```custom/plugins``` folder
-
-```bash
-$ git clone git://github.com/willmendesneto/frontend-search.git ~/.oh-my-zsh/custom/plugins/frontend-search
-```
-
-After this, restart your terminal and frontend-search plugin is configurated in you CLI.
+Open your `.zshrc` file and load `frontend-search` plugin
 
 ```bash
 ...
 plugins=( <your-plugins-list>... frontend-search)
 ...
 ```
+
 
 ## Commands ##
 
@@ -47,6 +42,7 @@ The search content are
 * `angularjs <google.com/search?as_q=<search-term>&as_sitesearch=angularjs.org>`
 * `reactjs <google.com/search?as_q=<search-term>&as_sitesearch=facebook.github.io/react>`
 * `emberjs <emberjs.com>`
+* `stackoverflow <stackoverflow.com>`
 
 
 ## Aliases ##
@@ -72,10 +68,13 @@ There are a few aliases presented as well:
 * `angularjs` A shorthand for `frontend angularjs`
 * `reactjs` A shorthand for `frontend reactjs`
 * `emberjs` A shorthand for `frontend emberjs`
+* `stackoverflow` A shorthand for `frontend stackoverflow`
+
 
 ## Author
 
 **Wilson Mendes (willmendesneto)**
++ <https://plus.google.com/+WilsonMendes>
 + <https://twitter.com/willmendesneto>
 + <http://github.com/willmendesneto>
 

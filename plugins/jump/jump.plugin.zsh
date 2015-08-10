@@ -31,7 +31,7 @@ function jump()
 
 function mark()
 {
-  if (( $# == 0 )); then
+  if [[ ( $# == 0 ) || ( "$1" == "." ) ]]; then
     MARK=$(basename "$(pwd)")
   else
     MARK="$1"

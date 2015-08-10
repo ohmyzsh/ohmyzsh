@@ -5,9 +5,12 @@ if [[ $('uname') == 'Linux' ]]; then
     _sublime_linux_paths=(
         "$HOME/bin/sublime_text"
         "/opt/sublime_text/sublime_text"
+        "/opt/sublime_text_3/sublime_text"
         "/usr/bin/sublime_text"
         "/usr/local/bin/sublime_text"
         "/usr/bin/subl"
+        "/opt/sublime_text_3/sublime_text"
+        "/usr/bin/subl3"
     )
     for _sublime_path in $_sublime_linux_paths; do
         if [[ -a $_sublime_path ]]; then
@@ -33,7 +36,7 @@ elif  [[ "$OSTYPE" = darwin* ]]; then
 
     for _sublime_path in $_sublime_darwin_paths; do
         if [[ -a $_sublime_path ]]; then
-            alias subl="'$_sublime_path'"
+            subl () { "$_sublime_path" $* }
             alias st=subl
             break
         fi
