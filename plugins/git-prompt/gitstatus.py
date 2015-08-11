@@ -5,6 +5,8 @@ from __future__ import print_function
 prehash = ':'
 
 import sys
+import re
+import subprocess
 from subprocess import Popen, PIPE
 
 
@@ -21,8 +23,13 @@ ahead, behind = 0, 0
 status = [(line[0], line[1], line[2:]) for line in stdout.decode('utf-8').splitlines()]
 for st in status:
     if st[0] == '#' and st[1] == '#':
-        if len(st[2].strip().split('...')) == 1:
+        if re.search('Initial commit on', st[2]):
+            branch = st[2].split(' ')[-1]
+        elif len(st[2].strip().split('...')) == 1:
             branch = st[2].strip()
+            if branch == 'HEAD (no branch)':
+                cmd = ['git', 'log', '-1', '--format="%h"']
+                branch = subprocess.check_output(cmd).strip().strip('"')
         else:
             # current and remote branch info
             branch, rest = st[2].strip().split('...')
