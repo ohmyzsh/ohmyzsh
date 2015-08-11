@@ -1,18 +1,14 @@
 #!/usr/bin/env python
 from __future__ import print_function
 
-# change this symbol to whatever you prefer
-prehash = ':'
-
 import sys
 import re
-import subprocess
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE, check_output
 
 
-# `git status --porcelain -b` can collect all information
+# `git status --porcelain --branch` can collect all information
 # branch, remote_branch, untracked, staged, changed, conflicts, ahead, behind
-po = Popen(['git', 'status', '--porcelain', '-b'], stdout=PIPE, stderr=PIPE)
+po = Popen(['git', 'status', '--porcelain', '--branch'], stdout=PIPE, stderr=PIPE)
 stdout, sterr = po.communicate()
 if po.returncode != 0:
     sys.exit(0)  # Not a git repository
@@ -25,11 +21,10 @@ for st in status:
     if st[0] == '#' and st[1] == '#':
         if re.search('Initial commit on', st[2]):
             branch = st[2].split(' ')[-1]
+        elif re.search('no branch', st[2]):
+            branch = check_output(['git', 'rev-parse', '--short', 'HEAD']).decode('utf-8').strip()
         elif len(st[2].strip().split('...')) == 1:
             branch = st[2].strip()
-            if branch == 'HEAD (no branch)':
-                cmd = ['git', 'log', '-1', '--format="%h"']
-                branch = subprocess.check_output(cmd).strip().strip('"')
         else:
             # current and remote branch info
             branch, rest = st[2].strip().split('...')
