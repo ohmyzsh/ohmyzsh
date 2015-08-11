@@ -119,7 +119,19 @@ _knife() {
      _arguments '4:Subsubsubcommands:($(_chef_$words[2]_$words[3]s_remote))'
     ;;
      file)
-     _arguments '*:file or directory:_files -g "*.(rb|json)"'
+      case $words[2] in
+      environment)
+        _arguments '*:files:_path_files -g "*.(rb|json)" -W "$(_chef_root)/environments"'
+      ;;
+      node)
+        _arguments '*:files:_path_files -g "*.(rb|json)" -W "$(_chef_root)/nodes"'
+      ;;
+      role)
+        _arguments '*:files:_path_files -g "*.(rb|json)" -W "$(_chef_root)/roles"'
+      ;;
+      *)
+        _arguments '*:Subsubcommands:($(_knife_options3))'
+      esac 
     ;;
       list)
      compadd -a "$@" knife_general_flags
@@ -132,11 +144,22 @@ _knife() {
       if (( versioncomp > 0 )); then
         compadd "$@" attributes definitions files libraries providers recipes resources templates
       else
-       _arguments '*:Subsubcommands:($(_knife_options2))'
+      case $words[5] in 
+        file)
+          _arguments '*:directory:_path_files -/ -W "$(_chef_root)/data_bags" -qS \ '
+        ;;
+        *) _arguments '*:Subsubcommands:($(_knife_options2))'
+      esac
       fi
     ;; 
     knifesubcmd5) 
-      _arguments '*:Subsubcommands:($(_knife_options3))'
+      case $words[5] in 
+        file) 
+          _arguments '*:files:_path_files -g "*.json" -W "$(_chef_root)/data_bags/$words[6]"'
+        ;;
+        *) 
+          _arguments '*:Subsubcommands:($(_knife_options3))'
+      esac
    esac
 }
 
@@ -196,6 +219,18 @@ _chef_cookbooks_local() {
 # This function extracts the available cookbook versions on the chef server
 _cookbook_versions() {
   (knife cookbook show $words[4] | grep -v $words[4] | grep -v -E '\]|\[|\{|\}' | sed 's/ //g' | sed 's/"//g')
+}
+
+# Searches up from current directory to find the closest folder that has a .chef folder 
+# Useful for the knife upload/from file commands 
+_chef_root () {
+  slashes=${PWD//[^\/]/}
+  directory="$PWD"
+  for (( n=${#slashes}; n>0; --n ))
+  do
+    test -e "$directory/.chef" && echo "$directory" && return
+    directory="$directory/.."
+  done
 }
 
 _knife "$@"
