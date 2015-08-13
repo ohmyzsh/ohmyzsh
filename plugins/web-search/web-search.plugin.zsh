@@ -14,16 +14,6 @@ function web_search() {
     github      "https://github.com/search?q="
   )
 
-  # define the open command
-  case "$OSTYPE" in
-    darwin*)  open_cmd="open" ;;
-    cygwin*)  open_cmd="cygstart" ;;
-    linux*)   open_cmd="xdg-open" ;;
-    *)        echo "Platform $OSTYPE not supported"
-              return 1
-              ;;
-  esac
-
   # check whether the search engine is supported
   if [[ -z "$urls[$1]" ]]; then
     echo "Search engine $1 not supported."
@@ -41,7 +31,7 @@ function web_search() {
     url="${(j://:)${(s:/:)urls[$1]}[1,2]}"
   fi
 
-  nohup $open_cmd "$url" &>/dev/null
+  open_command "$url"
 }
 
 
