@@ -2,14 +2,6 @@
 
 function frontend() {
 
-  # get the open command
-  local open_cmd
-  if [[ $(uname -s) == 'Darwin' ]]; then
-    open_cmd='open'
-  else
-    open_cmd='xdg-open'
-  fi
-
   # no keyword provided, simply show how call methods
   if [[ $# -le 1 ]]; then
     echo "Please provide a search-content and a search-term for app.\nEx:\nfrontend <search-content> <search-term>\n"
@@ -113,7 +105,7 @@ function frontend() {
 
   echo "$url"
 
-  $open_cmd "$url"
+  open_command "$url"
 
 }
 
