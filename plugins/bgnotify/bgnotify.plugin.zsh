@@ -22,8 +22,8 @@ fi
 currentWindowId () {
   if hash osascript 2>/dev/null; then #osx
     osascript -e 'tell application (path to frontmost application as text) to id of front window' 2&> /dev/null || echo "0"
-  elif hash notify-send 2>/dev/null; then #ubuntu!
-    xprop -root | awk '/NET_ACTIVE_WINDOW/ { print $5; exit }'
+  elif (hash notify-send 2>/dev/null || hash kdialog 2>/dev/null); then #ubuntu!
+    xprop -root 2> /dev/null | awk '/NET_ACTIVE_WINDOW/{print $5;exit} END{exit !$5}' || echo "0"
   else
     echo $EPOCHSECONDS #fallback for windows
   fi
@@ -31,11 +31,23 @@ currentWindowId () {
 
 bgnotify () {
   if hash terminal-notifier 2>/dev/null; then #osx
-    terminal-notifier -message "$2" -title "$1"
+    if [[ "$TERM_PROGRAM" == 'iTerm.app' ]]; then
+      term_id='com.googlecode.iterm2'
+    elif [[ "$TERM_PROGRAM" == 'Apple_Terminal' ]]; then
+      term_id='com.apple.terminal'
+    fi
+
+    if [ -z "$term_id" ]; then
+      terminal-notifier -message "$2" -title "$1" >/dev/null
+    else
+      terminal-notifier -message "$2" -title "$1" -activate "$term_id" -sender "$term_id" >/dev/null
+    fi
   elif hash growlnotify 2>/dev/null; then #osx growl
     growlnotify -m "$1" "$2"
-  elif hash notify-send 2>/dev/null; then #ubuntu!
+  elif hash notify-send 2>/dev/null; then #ubuntu gnome!
     notify-send "$1" "$2"
+  elif hash kdialog 2>/dev/null; then #ubuntu kde!
+    kdialog  -title "$1" --passivepopup  "$2" 5
   elif hash notifu 2>/dev/null; then #cygwyn support!
     notifu /m "$2" /p "$1"
   fi
@@ -63,5 +75,8 @@ bgnotify_end() {
   bgnotify_timestamp=0 #reset it to 0!
 }
 
-add-zsh-hook preexec bgnotify_begin
-add-zsh-hook precmd bgnotify_end
+## only enable if a local (non-ssh) connection
+if [ -z "$SSH_CLIENT" ] && [ -z "$SSH_TTY" ]; then
+  add-zsh-hook preexec bgnotify_begin
+  add-zsh-hook precmd bgnotify_end
+fi
