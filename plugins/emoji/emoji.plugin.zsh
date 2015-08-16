@@ -76,8 +76,6 @@ emoji_skintone[6]=$'\U1F3FF'
 # These are stored in a single associative array, $emoji_groups, to avoid cluttering up the global
 # namespace, and to allow adding additional group definitions at run time.
 # The keys are the group names, and the values are whitespace-separated lists of emoji character names.
-#
-# These extra local arrays are used to allow more convenient formatting of the source code.
 
 emoji_groups[fruits]="
   tomato
