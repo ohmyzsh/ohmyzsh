@@ -257,7 +257,8 @@ function random_emoji() {
   else
 	names=(${=emoji_groups[$group]})
   fi
-  local list_size=$#names
+  local list_size=${#names}
+  [[ $list_size -eq 0 ]] && return 1
   local random_index=$(( ( RANDOM % $list_size ) + 1 ))
   local name=${names[$random_index]}
   echo ${emoji[$name]}
