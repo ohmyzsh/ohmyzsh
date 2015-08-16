@@ -255,7 +255,7 @@ function random_emoji() {
   if [[ -z "$group" || "$group" == "all" ]]; then
   	names=(${(k)emoji})
   else
-  	names=(${=emoji_groups[$group_name]})
+	names=(${=emoji_groups[$group]})
   fi
   local list_size=$#names
   local random_index=$(( ( RANDOM % $list_size ) + 1 ))
