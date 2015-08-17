@@ -3,7 +3,29 @@ from __future__ import print_function
 
 import sys
 import re
+import shlex
 from subprocess import Popen, PIPE, check_output
+
+
+def get_tagname_or_hash():
+    """return tagname if exists else hash"""
+    cmd = 'git log -1 --format="%h%d"'
+    output = check_output(shlex.split(cmd)).decode('utf-8').strip()
+    hash_, tagname = None, None
+    # get hash
+    m = re.search('\(.*\)$', output)
+    if m:
+        hash_ = output[:m.start()-1]
+    # get tagname
+    m = re.search('tag: .*[,\)]', output)
+    if m:
+        tagname = 'tags/' + output[m.start()+len('tag: '): m.end()-1]
+
+    if tagname:
+        return tagname
+    elif hash_:
+        return hash_
+    return None
 
 
 # `git status --porcelain --branch` can collect all information
@@ -21,8 +43,8 @@ for st in status:
     if st[0] == '#' and st[1] == '#':
         if re.search('Initial commit on', st[2]):
             branch = st[2].split(' ')[-1]
-        elif re.search('no branch', st[2]):
-            branch = check_output(['git', 'rev-parse', '--short', 'HEAD']).decode('utf-8').strip()
+        elif re.search('no branch', st[2]):  # detached status
+            branch = get_tagname_or_hash()
         elif len(st[2].strip().split('...')) == 1:
             branch = st[2].strip()
         else:
