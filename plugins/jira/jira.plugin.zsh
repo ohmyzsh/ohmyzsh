@@ -40,7 +40,7 @@ function jira() {
   elif [[ -n "${JIRA_URL}" ]]; then
     jira_url=${JIRA_URL}
   else
-    jira_url_help
+    _jira_url_help
     return 1
   fi
 
@@ -59,7 +59,7 @@ function jira() {
     echo "Opening new issue"
     open_command "${jira_url}/secure/CreateIssue!default.jspa"
   elif [[ "$action" == "assigned" || "$action" == "reported" ]]; then
-    jira_query $@
+    _jira_query $@
   elif [[ "$action" == "dashboard" ]]; then
     echo "Opening dashboard"
     open_command "${jira_url}/secure/Dashboard.jspa"
@@ -82,7 +82,7 @@ function jira() {
   fi
 }
 
-function jira_url_help() {
+function _jira_url_help() {
   cat << EOF
 JIRA url is not specified anywhere.
 Valid options, in order of precedence:
@@ -92,7 +92,7 @@ Valid options, in order of precedence:
 EOF
 }
 
-function jira_query() {
+function _jira_query() {
   local verb="$1"
   local jira_name lookup preposition query
   if [[ "${verb}" == "reported" ]]; then
