@@ -67,3 +67,4 @@
 - Martin Putniorz - mputniorz@gmail.com
 - MatthR3D - matthr3d@gmail.com
 - ornicar - thibault.duplessis@gmail.com
+- Juraj Fiala - doctorjellyface@riseup.net
