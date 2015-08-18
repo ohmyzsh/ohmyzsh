@@ -1,4 +1,4 @@
-# Control Spotify at OS X Terminal
+# Spotify at OS X Terminal
 
 An AppleScript for controlling Spotify through a terminal:
 
@@ -18,17 +18,6 @@ allow.
 * OS X Mavericks (10.9)
 * OS X Mountain Lion (10.8)
 * OS X Lion (10.7)
-
-## Installation
-
-The simplest way to install the script is to `clone` the repository,
-`cd` into repository's directory, and run this command below
-to make a symbolic link into `/usr/local/bin/`:
-
-```bash
-ln -s $(pwd)/spotify /usr/local/bin/spotify
-```
-
 
 ## Usage
 
@@ -53,13 +42,3 @@ seconds to jump backwards.
 * To toggle shuffle, type `spotify shuffle`.
 * To toggle repeat, type `spotify repeat`.
 * To show a list of these commands, just type `spotify`.
-
-### Over SSH
-
-To enable the SSH server on OS X, go to Sharing in the System Preferences
-and enable Remote Login. The Sharing screen will also then tell you the
-command to use to connect to your Mac in the local network.
-
-## License
-
-You may use, adapt, modify, and etc. Any way you want.

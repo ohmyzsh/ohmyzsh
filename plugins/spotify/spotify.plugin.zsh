@@ -1,3 +1,11 @@
+# ------------------------------------------------------------------------------
+# FILE: spotify.plugin.zsh
+# DESCRIPTION: oh-my-zsh Spotify plugin file. Spotify controls at OS X Terminal.
+# AUTHOR: Rafael Corrêa Gomes (rafaelcgstz at gmail dot com)
+# FORK: https://github.com/dronir/SpotifyControl
+# VERSION: 1.0.0
+# ------------------------------------------------------------------------------
+
 #!/usr/bin/env osascript
 on run argv
   if count of argv is equal to 0 then
@@ -148,4 +156,3 @@ on run argv
     end tell
   end using terms from
 end run
-
