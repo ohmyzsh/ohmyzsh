@@ -4,7 +4,7 @@ set -e
 # supports them.
 ncolors=$(tput colors)
 if [ -t 1 ] && [ -n "$ncolors" ] && [ "$ncolors" -ge 8 ]; then
-  RED=="$(tput setaf 1)"
+  RED="$(tput setaf 1)"
   GREEN="$(tput setaf 2)"
   YELLOW="$(tput setaf 3)"
   BLUE="$(tput setaf 4)"
@@ -70,7 +70,7 @@ echo ''
 echo ''
 echo 'Please look over the ~/.zshrc file to select plugins, themes, and options.'
 echo ''
-echo 'p.s. Follow us at http://twitter.com/ohmyzsh.'
+echo 'p.s. Follow us at https://twitter.com/ohmyzsh.'
 echo ''
 echo 'p.p.s. Get stickers and t-shirts at http://shop.planetargon.com.'
 echo ''
