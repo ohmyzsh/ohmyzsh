@@ -80,7 +80,9 @@ Commands:
 	rm <point>	Removes the given warp point
 	show		Print warp points to current directory
 	show <point>	Print path to given warp point
-	ls		Print all stored warp points
+	list	        Print all stored warp points
+ls  <point>     Show files from given warp point
+path <point>    Show the path to given warp point
 	clean!		Remove points warping to nonexistent directories
 
 	-v | --version	Print version
@@ -96,7 +98,7 @@ wd_exit_fail()
 {
     local msg=$1
 
-    wd_print_msg $WD_RED $1
+    wd_print_msg $WD_RED $msg
     WD_EXIT_CODE=1
 }
 
@@ -106,6 +108,22 @@ wd_exit_warn()
 
     wd_print_msg $WD_YELLOW $msg
     WD_EXIT_CODE=1
+}
+
+wd_getdir()
+{
+    local name_arg=$1
+
+    point=$(wd_show $name_arg)
+    dir=${point:28+$#name_arg+7}
+
+    if [[ -z $name_arg ]]; then
+        wd_exit_fail "You must enter a warp point"
+        break
+    elif [[ -z $dir ]]; then
+        wd_exit_fail "Unknown warp point '${name_arg}'"
+        break
+    fi
 }
 
 # core
@@ -199,6 +217,18 @@ wd_list_all()
             fi
         fi
     done <<< $(sed "s:${HOME}:~:g" $WD_CONFIG)
+}
+
+wd_ls()
+{
+    wd_getdir $1
+    ls $dir
+}
+
+wd_path()
+{
+    wd_getdir $1
+    echo $(echo $dir | sed "s:${HOME}:~:g")
 }
 
 wd_show()
@@ -316,7 +346,7 @@ do
 done < $WD_CONFIG
 
 # get opts
-args=$(getopt -o a:r:c:lhs -l add:,rm:,clean\!,ls,help,show -- $*)
+args=$(getopt -o a:r:c:lhs -l add:,rm:,clean\!,list,ls:,path:,help,show -- $*)
 
 # check if no arguments were given, and that version is not set
 if [[ ($? -ne 0 || $#* -eq 0) && -z $wd_print_version ]]
@@ -349,8 +379,16 @@ else
                 wd_remove $2
                 break
                 ;;
-            -l|--list|ls)
+            -l|list)
                 wd_list_all
+                break
+                ;;
+            -ls|ls)
+                wd_ls $2
+                break
+                ;;
+            -p|--path|path)
+                wd_path $2
                 break
                 ;;
             -h|--help|help)

@@ -15,6 +15,22 @@ function take() {
   cd $1
 }
 
+function open_command() {
+  local open_cmd
+
+  # define the open command
+  case "$OSTYPE" in
+    darwin*)  open_cmd="open" ;;
+    cygwin*)  open_cmd="cygstart" ;;
+    linux*)   open_cmd="xdg-open" ;;
+    *)        echo "Platform $OSTYPE not supported"
+              return 1
+              ;;
+  esac
+
+  nohup $open_cmd "$@" &>/dev/null
+}
+
 #
 # Get the value of an alias.
 #

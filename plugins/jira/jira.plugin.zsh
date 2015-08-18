@@ -11,13 +11,6 @@
 # Usage: jira           # opens a new issue
 #        jira ABC-123   # Opens an existing issue
 open_jira_issue () {
-  local open_cmd
-  if [[ "$OSTYPE" = darwin* ]]; then
-    open_cmd='open'
-  else
-    open_cmd='xdg-open'
-  fi
-
   if [ -f .jira-url ]; then
     jira_url=$(cat .jira-url)
   elif [ -f ~/.jira-url ]; then
@@ -39,15 +32,22 @@ open_jira_issue () {
 
   if [ -z "$1" ]; then
     echo "Opening new issue"
-    $open_cmd "${jira_url}/secure/CreateIssue!default.jspa"
+    open_command "${jira_url}/secure/CreateIssue!default.jspa"
   elif [[ "$1" = "assigned" || "$1" = "reported" ]]; then
     jira_query $@
-  else
-    echo "Opening issue #$1"
-    if [[ "x$JIRA_RAPID_BOARD" = "xtrue" ]]; then
-      $open_cmd  "$jira_url/issues/$jira_prefix$1"
+  else 
+    local addcomment=''
+    if [[ "$2" == "m" ]]; then
+      addcomment="#add-comment"
+      echo "Add comment to issue #$1"
     else
-      $open_cmd  "$jira_url/browse/$jira_prefix$1"
+      echo "Opening issue #$1"
+    fi
+    
+    if [[ "x$JIRA_RAPID_BOARD" = "xtrue" ]]; then
+      open_command  "$jira_url/issues/$jira_prefix$1$addcomment"
+    else
+      open_command  "$jira_url/browse/$jira_prefix$1$addcomment"
     fi
   fi
 }
@@ -83,7 +83,7 @@ jira_query () {
         return 1
     fi
     echo "Browsing issues ${verb} ${preposition} ${jira_name}"
-    $open_cmd "${jira_url}/secure/IssueNavigator.jspa?reset=true&jqlQuery=${lookup}+%3D+%22${jira_name}%22+AND+resolution+%3D+unresolved+ORDER+BY+priority+DESC%2C+created+ASC"
+    open_command "${jira_url}/secure/IssueNavigator.jspa?reset=true&jqlQuery=${lookup}+%3D+%22${jira_name}%22+AND+resolution+%3D+unresolved+ORDER+BY+priority+DESC%2C+created+ASC"
 }
 
 alias jira='open_jira_issue'
