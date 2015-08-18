@@ -33,6 +33,6 @@ alias la='ls -lAh'
 
 alias afind='ack-grep -il'
 
-alias dpssh='ssh -i ~/.ssh/id_rsa -p 58422 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null '
+alias dpssh='ssh -i ~/.ssh/id_rsa_bak -p 58422 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null '
 alias lm='ls -al | more'
 
