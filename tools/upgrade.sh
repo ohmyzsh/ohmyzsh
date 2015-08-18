@@ -30,7 +30,7 @@ then
   printf '%s\n' '\____/_/ /_/  /_/ /_/ /_/\__, /    /___/____/_/ /_/  '
   printf '%s\n' '                        /____/                       '
   printf "${BLUE}%s\n" "Hooray! Oh My Zsh has been updated and/or is at the current version."
-  printf "${BLUE}${BOLD}%s${NORMAL}\n" "To keep up on the latest news and updates, follow us on twitter: http://twitter.com/ohmyzsh"
+  printf "${BLUE}${BOLD}%s${NORMAL}\n" "To keep up on the latest news and updates, follow us on twitter: https://twitter.com/ohmyzsh"
   printf "${BLUE}${BOLD}%s${NORMAL}\n" "Get your Oh My Zsh swag at:  http://shop.planetargon.com/"
 else
   printf "${RED}%s${NORMAL}\n" 'There was an error updating. Try again later?'
