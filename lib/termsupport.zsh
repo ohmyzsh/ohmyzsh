@@ -7,6 +7,7 @@
 # (In screen, only short_tab_title is used)
 # Limited support for Apple Terminal (Terminal can't set window and tab separately)
 function title {
+  emulate -L zsh
   [[ "$EMACS" == *term* ]] && return
 
   # if $2 is unset use $1 as default
@@ -26,6 +27,7 @@ ZSH_THEME_TERM_TITLE_IDLE="%n@%m: %~"
 
 # Runs before showing the prompt
 function omz_termsupport_precmd {
+  emulate -L zsh
   if [[ $DISABLE_AUTO_TITLE == true ]]; then
     return
   fi
@@ -35,11 +37,11 @@ function omz_termsupport_precmd {
 
 # Runs before executing the command
 function omz_termsupport_preexec {
+  emulate -L zsh
   if [[ $DISABLE_AUTO_TITLE == true ]]; then
     return
   fi
 
-  emulate -L zsh
   setopt extended_glob
 
   # cmd name only, or if this is sudo or ssh, the next cmd
@@ -61,6 +63,7 @@ if [[ "$TERM_PROGRAM" == "Apple_Terminal" ]] && [[ -z "$INSIDE_EMACS" ]]; then
 
   # Emits the control sequence to notify Terminal.app of the cwd
   function update_terminalapp_cwd() {
+    emulate -L zsh
     # Identify the directory using a "file:" scheme URL, including
     # the host name to disambiguate local vs. remote paths.
 
