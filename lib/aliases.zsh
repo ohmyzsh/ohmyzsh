@@ -62,6 +62,7 @@ alias dp='~/Dropbox\ \(Personal\)'
 >>>>>>> Changed Dropbox aliases
 =======
 
+<<<<<<< HEAD
 # Docker
 <<<<<<< HEAD
 alias dockup="boot2docker init && boot2docker up && eval \"\$(boot2docker shellinit)\""
@@ -69,3 +70,9 @@ alias dockup="boot2docker init && boot2docker up && eval \"\$(boot2docker shelli
 =======
 alias dockup="docker-machine create --driver virtualbox dev && eval \"\$(docker-machine env dev)\""
 >>>>>>> Update dockup alias for Docker Machine
+=======
+# Docker Machine
+alias dminit="docker-machine create --driver virtualbox dev"
+alias dmup="docker-machine start dev && eval \"\$(docker-machine env dev)\""
+alias dm="docker-machine"
+>>>>>>> Added Docker Machine aliases.
