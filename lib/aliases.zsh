@@ -42,5 +42,7 @@ alias code='~/Dropbox/Code'
 alias dw='~/Dropbox'
 alias dp='~/Dropbox\ \(Personal\)'
 
-# Docker
-alias dockup="docker-machine create --driver virtualbox dev && eval \"\$(docker-machine env dev)\""
+# Docker Machine
+alias dminit="docker-machine create --driver virtualbox dev"
+alias dmup="docker-machine start dev && eval \"\$(docker-machine env dev)\""
+alias dm="docker-machine"
