@@ -7,6 +7,9 @@
 # (In screen, only short_tab_title is used)
 # Limited support for Apple Terminal (Terminal can't set window and tab separately)
 function title {
+  emulate -L zsh
+  setopt prompt_subst
+  
   [[ "$EMACS" == *term* ]] && return
 
   # if $2 is unset use $1 as default
@@ -23,6 +26,10 @@ function title {
 
 ZSH_THEME_TERM_TAB_TITLE_IDLE="%15<..<%~%<<" #15 char left truncated PWD
 ZSH_THEME_TERM_TITLE_IDLE="%n@%m: %~"
+# Avoid duplication of directory in terminals with independent dir display
+if [[ $TERM_PROGRAM == Apple_Terminal ]]; then
+  ZSH_THEME_TERM_TITLE_IDLE="%n@%m"
+fi
 
 # Runs before showing the prompt
 function omz_termsupport_precmd {
@@ -43,7 +50,7 @@ function omz_termsupport_preexec {
   setopt extended_glob
 
   # cmd name only, or if this is sudo or ssh, the next cmd
-  local CMD=${1[(wr)^(*=*|sudo|ssh|rake|-*)]:gs/%/%%}
+  local CMD=${1[(wr)^(*=*|sudo|ssh|mosh|rake|-*)]:gs/%/%%}
   local LINE="${2:gs/%/%%}"
 
   title '$CMD' '%100>...>$LINE%<<'

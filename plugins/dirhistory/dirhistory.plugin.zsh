@@ -49,7 +49,8 @@ function push_future() {
 }
 
 # Called by zsh when directory changes
-function chpwd() {
+chpwd_functions+=(chpwd_dirhistory)
+function chpwd_dirhistory() {
   push_past $PWD
   # If DIRHISTORY_CD is not set...
   if [[ -z "${DIRHISTORY_CD+x}" ]]; then
