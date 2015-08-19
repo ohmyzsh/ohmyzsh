@@ -63,5 +63,9 @@ alias dp='~/Dropbox\ \(Personal\)'
 =======
 
 # Docker
+<<<<<<< HEAD
 alias dockup="boot2docker init && boot2docker up && eval \"\$(boot2docker shellinit)\""
 >>>>>>> Add Boot2Docker alias.
+=======
+alias dockup="docker-machine create --driver virtualbox dev && eval \"\$(docker-machine env dev)\""
+>>>>>>> Update dockup alias for Docker Machine
