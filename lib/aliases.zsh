@@ -43,4 +43,4 @@ alias dw='~/Dropbox'
 alias dp='~/Dropbox\ \(Personal\)'
 
 # Docker
-alias dockup="boot2docker init && boot2docker up && eval \"\$(boot2docker shellinit)\""
+alias dockup="docker-machine create --driver virtualbox dev && eval \"\$(docker-machine env dev)\""
