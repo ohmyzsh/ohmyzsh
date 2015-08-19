@@ -6,6 +6,18 @@ if [[ -x `command -v yaourt` ]]; then
   upgrade () {
     yaourt -Syu
   }
+elif [[ -x `command -v pacaur` ]]; then
+  upgrade () {
+    pacaur -Syu
+  }
+else
+ upgrade() {
+   sudo pacman -Syu
+ }
+fi
+
+
+if [[ -x `command -v yaourt` ]]; then
   alias yaconf='yaourt -C'        # Fix all configuration files with vimdiff
   # Pacman - https://wiki.archlinux.org/index.php/Pacman_Tips
   alias yaupg='yaourt -Syua'        # Synchronize with repositories before upgrading packages (AUR packages too) that are out of date on the local system.
@@ -32,11 +44,10 @@ if [[ -x `command -v yaourt` ]]; then
   fi
   alias yainsd='yaourt -S --asdeps'        # Install given package(s) as dependencies of another package
   alias yamir='yaourt -Syy'                # Force refresh of all package lists after updating /etc/pacman.d/mirrorlist
-# If no yaourt, look for pacaur, and add useful functions and aliases to it too
-elif [[ -x `command -v pacaur` ]]; then
-  upgrade () {
-    pacaur -Syu
-  }
+fi
+
+# Look for pacaur, and add useful functions and aliases to it too
+if [[ -x `command -v pacaur` ]]; then
   alias paupg='pacaur -Syu'          # Synchronize with repositories before upgrading packages (AUR too) that are out of date on the local system.
   alias paupgd='pacaur -Syu --devel' # Synchronize with repositories before upgrading packages (AUR and devel too) that are out of date on the local system.
   alias paupga='pacaur -u'           # Upgrade all AUR packages
@@ -63,10 +74,6 @@ elif [[ -x `command -v pacaur` ]]; then
   fi
   alias painsd='pacaur -S --asdeps'        # Install given package(s) as dependencies of another package
   alias pamir='pacaur -Syy'                # Force refresh of all package lists after updating /etc/pacman.d/mirrorlist
-else
- upgrade() {
-   sudo pacman -Syu
- }
 fi
 
 # Pacman - https://wiki.archlinux.org/index.php/Pacman_Tips
