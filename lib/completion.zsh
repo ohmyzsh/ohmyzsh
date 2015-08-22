@@ -60,7 +60,11 @@ zstyle '*' single-ignored show
 
 if [[ $COMPLETION_WAITING_DOTS = true ]]; then
   expand-or-complete-with-dots() {
+    # toggle line-wrapping off and back on again
+    [[ -n "$terminfo[rmam]" && -n "$terminfo[smam]" ]] && echoti rmam
     print -Pn "%{%F{red}......%f%}"
+    [[ -n "$terminfo[rmam]" && -n "$terminfo[smam]" ]] && echoti smam
+
     zle expand-or-complete
     zle redisplay
   }
