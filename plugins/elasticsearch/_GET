@@ -1,0 +1,28 @@
+#compdef GET
+
+local -a options 
+options=(
+    '_cache/clear:Allows to clear all caches for all indices'
+    '_cluster/health:Cluster status health'
+    '_cluster/nodes/_local/_shutdown:Shutdown local node'
+    '_cluster/pending_tasks:Returns a list of any cluster-level changes which have not yet been executed'
+    '_cluster/settings:Cluster settings' 
+    '_cluster/state:Allows to get a comprehensive state information of the whole cluster'
+    '_cluster/stats:Allows to retrieve statistics from a cluster wide perspective' 
+    '_flush:Allows to flush all indices'
+    '_nodes/hot_threads:Allowing to get the current hot threads on each node in the cluster'
+    '_nodes/stats/indices:Field data memory usage on node level'
+    '_nodes/stats:Allows to retrieve all of the cluster nodes statistics'
+    '_nodes:Allows to retrieve all of the cluster nodes information'
+    '_optimize?max_num_segments=1:Allows to optimize all indices'
+    '_recovery:Cluster-wide recovery status'
+    '_recovery?detailed=true:Cluster-wide recovery status with details'
+    '_refresh:Allows to explicitly refresh all indices'
+    '_segments:Include segments for all indices'
+    '_shutdown:Shutdown all nodes'
+    '_stats/fielddata:Field data memory usage on index level'
+    '_stats:High level aggregation and index level stats for all indices'
+    '_status:Status information of all indices'
+    '_template:List of all index templates'
+)
+_describe 'values' options
