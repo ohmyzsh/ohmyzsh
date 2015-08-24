@@ -230,12 +230,11 @@ _cookbook_versions() {
 # Searches up from current directory to find the closest folder that has a .chef folder 
 # Useful for the knife upload/from file commands 
 _chef_root () {
-  slashes=${PWD//[^\/]/}
   directory="$PWD"
-  for (( n=${#slashes}; n>0; --n ))
+  while [ $directory != '/' ]
   do
     test -e "$directory/.chef" && echo "$directory" && return
-    directory="$directory/.."
+    directory="${directory:h}"
   done
 }
 
