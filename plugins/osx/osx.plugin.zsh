@@ -35,6 +35,7 @@ EOF
           set current_session to current session
           tell current_session
             write text "${command}"
+            keystroke return
           end tell
         end tell
       end tell
@@ -137,23 +138,6 @@ function man-preview() {
   man -t "$@" | open -f -a Preview
 }
 
-function trash() {
-  local trash_dir="${HOME}/.Trash"
-  local temp_ifs=$IFS
-  IFS=$'\n'
-  for item in "$@"; do
-    if [[ -e "$item" ]]; then
-      item_name="$(basename $item)"
-      if [[ -e "${trash_dir}/${item_name}" ]]; then
-        mv -f "$item" "${trash_dir}/${item_name} $(date "+%H-%M-%S")"
-      else
-        mv -f "$item" "${trash_dir}/"
-      fi
-    fi
-  done
-  IFS=$temp_ifs
-}
-
 function vncviewer() {
   open vnc://$@
 }
@@ -174,12 +158,47 @@ function itunes() {
 		next|previous)
 			opt="$opt track"
 			;;
+		vol)
+			opt="set sound volume to $1" #$1 Due to the shift
+			;;
+		shuf|shuff|shuffle)
+			# The shuffle property of current playlist can't be changed in iTunes 12,
+			# so this workaround uses AppleScript to simulate user input instead.
+			# Defaults to toggling when no options are given.
+			# The toggle option depends on the shuffle button being visible in the Now playing area.
+			# On and off use the menu bar items.
+			local state=$1
+
+			if [[ -n "$state" && ! "$state" =~ "^(on|off|toggle)$" ]]
+			then
+				print "Usage: itunes shuffle [on|off|toggle]. Invalid option."
+				return 1
+			fi
+
+			case "$state" in
+				on|off)
+					# Inspired by: http://stackoverflow.com/a/14675583
+					osascript 1>/dev/null 2>&1 <<-EOF
+					tell application "System Events" to perform action "AXPress" of (menu item "${state}" of menu "Shuffle" of menu item "Shuffle" of menu "Controls" of menu bar item "Controls" of menu bar 1 of application process "iTunes" )
+EOF
+					return 0
+					;;
+				toggle|*)
+					osascript 1>/dev/null 2>&1 <<-EOF
+					tell application "System Events" to perform action "AXPress" of (button 2 of process "iTunes"'s window "iTunes"'s scroll area 1)
+EOF
+					return 0
+					;;
+			esac
+			;;
 		""|-h|--help)
 			echo "Usage: itunes <option>"
 			echo "option:"
 			echo "\tlaunch|play|pause|stop|rewind|resume|quit"
 			echo "\tmute|unmute\tcontrol volume set"
 			echo "\tnext|previous\tplay next or previous track"
+			echo "\tshuf|shuffle [on|off|toggle]\tSet shuffled playback. Default: toggle. Note: toggle doesn't support the MiniPlayer."
+			echo "\tvol\tSet the volume, takes an argument from 0 to 100"
 			echo "\thelp\tshow this message and exit"
 			return 0
 			;;
@@ -190,4 +209,3 @@ function itunes() {
 	esac
 	osascript -e "tell application \"iTunes\" to $opt"
 }
-

@@ -3,16 +3,32 @@ function zsh_stats() {
 }
 
 function uninstall_oh_my_zsh() {
-  /usr/bin/env ZSH=$ZSH /bin/sh $ZSH/tools/uninstall.sh
+  env ZSH=$ZSH /bin/sh $ZSH/tools/uninstall.sh
 }
 
 function upgrade_oh_my_zsh() {
-  /usr/bin/env ZSH=$ZSH /bin/sh $ZSH/tools/upgrade.sh
+  env ZSH=$ZSH /bin/sh $ZSH/tools/upgrade.sh
 }
 
 function take() {
   mkdir -p $1
   cd $1
+}
+
+function open_command() {
+  local open_cmd
+
+  # define the open command
+  case "$OSTYPE" in
+    darwin*)  open_cmd="open" ;;
+    cygwin*)  open_cmd="cygstart" ;;
+    linux*)   open_cmd="xdg-open" ;;
+    *)        echo "Platform $OSTYPE not supported"
+              return 1
+              ;;
+  esac
+
+  nohup $open_cmd "$@" &>/dev/null
 }
 
 #

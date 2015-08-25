@@ -26,7 +26,13 @@
 # A few utility functions to make it easy and re-usable to draw segmented prompts
 
 CURRENT_BG='NONE'
-SEGMENT_SEPARATOR=''
+
+# Fix odd char on mac
+if [[ `uname` == 'Darwin' ]]; then
+    SEGMENT_SEPARATOR='\ue0b0'
+else
+    SEGMENT_SEPARATOR=''
+fi
 
 # Begin a segment
 # Takes two arguments, background and foreground. Both can be omitted,
@@ -60,10 +66,8 @@ prompt_end() {
 
 # Context: user@hostname (who am I and where am I)
 prompt_context() {
-  local user=`whoami`
-
-  if [[ "$user" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-    prompt_segment black default "%(!.%{%F{yellow}%}.)$user@%m"
+  if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
+    prompt_segment black default "%(!.%{%F{yellow}%}.)$USER@%m"
   fi
 }
 
@@ -125,10 +129,10 @@ prompt_hg() {
       st=""
       rev=$(hg id -n 2>/dev/null | sed 's/[^-0-9]//g')
       branch=$(hg id -b 2>/dev/null)
-      if `hg st | grep -Eq "^\?"`; then
+      if `hg st | grep -q "^\?"`; then
         prompt_segment red black
         st='±'
-      elif `hg st | grep -Eq "^(M|A)"`; then
+      elif `hg st | grep -q "^[MA]"`; then
         prompt_segment yellow black
         st='±'
       else
