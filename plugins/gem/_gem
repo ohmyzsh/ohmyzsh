@@ -59,6 +59,8 @@ case "$words[1]" in
   build)
     _files -g "*.gemspec"
     ;;
+  install)
+    _files ;;
   list)
       if [[ "$state" == forms ]]; then
         _gem_installed

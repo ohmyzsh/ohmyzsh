@@ -7,14 +7,14 @@
 # git untracked files modification from Brian Carper:
 # http://briancarper.net/blog/570/git-info-in-your-zsh-prompt
 
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+
 function virtualenv_info {
     [ $VIRTUAL_ENV ] && echo '('$fg[blue]`basename $VIRTUAL_ENV`%{$reset_color%}') '
 }
 PR_GIT_UPDATE=1
 
 setopt prompt_subst
-autoload colors
-colors
 
 autoload -U add-zsh-hook
 autoload -Uz vcs_info
@@ -81,7 +81,7 @@ add-zsh-hook chpwd steeef_chpwd
 function steeef_precmd {
     if [[ -n "$PR_GIT_UPDATE" ]] ; then
         # check for untracked files or updated submodules, since vcs_info doesn't
-        if git ls-files --other --exclude-standard --directory 2> /dev/null | grep -q "."; then
+        if git ls-files --other --exclude-standard 2> /dev/null | grep -q "."; then
             PR_GIT_UPDATE=1
             FMT_BRANCH="(%{$turquoise%}%b%u%c%{$hotpink%}●${PR_RST})"
         else

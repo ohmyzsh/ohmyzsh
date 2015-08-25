@@ -4,7 +4,7 @@ function vundle-init () {
     mkdir -p ~/.vim/bundle/vundle/
   fi
 
-  if [ ! -d ~/.vim/bundle/vundle/.git/ ]
+  if [ ! -d ~/.vim/bundle/vundle/.git ] && [ ! -f ~/.vim/bundle/vundle/.git ]
   then
     git clone http://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
     echo "\n\tRead about vim configuration for vundle at https://github.com/gmarik/vundle\n"
@@ -13,15 +13,15 @@ function vundle-init () {
 
 function vundle () {
   vundle-init
-  vim -c "execute \"BundleInstall\" | q | q"
+  vim -c "execute \"PluginInstall\" | qa"
 }
 
 function vundle-update () {
   vundle-init
-  vim -c "execute \"BundleInstall!\" | q | q"
+  vim -c "execute \"PluginInstall!\" | qa"
 }
 
 function vundle-clean () {
   vundle-init
-  vim -c "execute \"BundleClean!\" | q | q"
+  vim -c "execute \"PluginClean!\" | qa"
 }

@@ -1,11 +1,5 @@
-# Grab the current version of ruby in use (via RVM): [ruby-1.8.7]
-if [ -e ~/.rvm/bin/rvm-prompt ]; then
-  JARIN_CURRENT_RUBY_="%{$fg[white]%}[%{$fg[red]%}\$(~/.rvm/bin/rvm-prompt i v)%{$fg[white]%}]%{$reset_color%}"
-else
-  if which rbenv &> /dev/null; then
-    JARIN_CURRENT_RUBY_="%{$fg[white]%}[%{$fg[red]%}\$(rbenv version | sed -e 's/ (set.*$//')%{$fg[white]%}]%{$reset_color%}"
-  fi
-fi
+# Grab the current version of ruby in use: [ruby-1.8.7]
+JARIN_CURRENT_RUBY_="%{$fg[white]%}[%{$fg[red]%}\$(ruby_prompt_info)%{$fg[white]%}]%{$reset_color%}"
 
 # Grab the current filepath, use shortcuts: ~/Desktop
 # Append the current git branch, if in a git repository
