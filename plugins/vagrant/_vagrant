@@ -1,4 +1,4 @@
-#compdef vagrant 
+#compdef vagrant
 #autoload
 
 # vagrant zsh completion
@@ -6,37 +6,45 @@
 local -a _1st_arguments
 _1st_arguments=(
     'box:Box commands'
-    'connect:Connects to a shared, remote Vagrant environment'
+    'connect:Connects to a remotely shared Vagrant environment'
     'destroy:Destroys the vagrant environment'
-    'docker-logs:Shows Docker logs'
-    'docker-run:Run one-off commands against a Docker container'
+    'docker-logs:Outputs the logs from the Docker container'
+    'docker-run:Run a one-off command in the context of a container'
     'global-status:Reports the status of all active Vagrant environments on the system'
     'halt:Halts the currently running vagrant environment'
+    'help:Shows the help for a subcommand'
     'init:[box_name] [box_url] Initializes current folder for Vagrant usage'
+    'list-commands:Outputs all available Vagrant subcommands, even non-primary ones'
     'login:Authenticates against a Vagrant Cloud server to access protected boxes'
     'package:Packages a vagrant environment for distribution'
     'plugin:Plugin commands'
     'provision:Run the provisioner'
+    'push:Deploys code in this environment to a configured destination'
+    'rdp:Connects to machine via RDP'
     'reload:Reload the vagrant environment'
     'resume:Resumes a suspend vagrant environment'
-    'share:Shares the Vagrant environment and allows remote access'
+    'rsync:Syncs rsync synced folders to remote machine'
+    'rsync-auto:Syncs rsync synced folders automatically when files change'
+    'share:Shares your Vagrant environment with anyone in the world'
     'ssh:SSH into the currently running environment'
-    'ssh-config:outputs .ssh/config valid syntax for connecting to this environment via ssh'
+    'ssh-config:Outputs .ssh/config valid syntax for connecting to this environment via ssh'
     'status:Shows the status of the current Vagrant environment'
     'suspend:Suspends the currently running vagrant environment'
     'up:Creates the vagrant environment'
-    'version:Prints the currently installed Vagrant version and checks for new updates'
+    'version:Prints current and latest Vagrant version'
     '--help:[TASK] Describe available tasks or one specific task'
     '--version:Prints the Vagrant version information'
 )
 
 local -a _box_arguments
 _box_arguments=(
-    'add:NAME URI Add a box to the system'
-    'help:COMMAND Describe subcommands or one specific subcommand'
+    'add:ADDRESS Adds a box to the system'
+    'help:COMMAND List subcommands'
     'list:Lists all installed boxes'
-    'remove:NAME Remove a box from the system'
-    'repackage:NAME Repackage an installed box into a `.box` file.'
+    'outdated:Checks if a box has newer version'
+    'remove:NAME Removes a box from the system'
+    'repackage:NAME PROVIDER VERSION Repackages an installed box into a `.box` file'
+    'update:Updates box to a newer version, if available'
 )
 
 __task_list ()
@@ -78,7 +86,7 @@ __vagrant-box ()
        (options)
            case $line[1] in
                (repackage|remove)
-                   _arguments ':feature:__box_list' 
+                   _arguments ':feature:__box_list'
                ;;
            esac
        ;;
@@ -107,14 +115,14 @@ case $state in
   (options)
     case $line[1] in
       (help)
-         _arguments ':feature:__task_list' 
+         _arguments ':feature:__task_list'
       ;;
 
       (box)
           __vagrant-box
       ;;
       (up|provision|package|destroy|reload|ssh|ssh-config|halt|resume|status)
-	_arguments ':feature:__vm_list'
+      _arguments ':feature:__vm_list'
     esac
   ;;
 esac
