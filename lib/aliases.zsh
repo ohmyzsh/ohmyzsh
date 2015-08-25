@@ -75,4 +75,13 @@ alias dockup="docker-machine create --driver virtualbox dev && eval \"\$(docker-
 alias dminit="docker-machine create --driver virtualbox dev"
 alias dmup="docker-machine start dev && eval \"\$(docker-machine env dev)\""
 alias dm="docker-machine"
+<<<<<<< HEAD
 >>>>>>> Added Docker Machine aliases.
+=======
+
+# Docker Compose
+alias dc="docker-compose"
+alias dcup="docker-compose up -d"
+alias dcdown="docker-compose stop"
+alias dcrm="docker-compose stop && docker-compose rm -f"
+>>>>>>> Add Docker Compose aliases.
