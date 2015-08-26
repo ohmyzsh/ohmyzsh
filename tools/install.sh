@@ -5,7 +5,7 @@ then
 fi
 
 echo "\033[0;34mCloning Oh My Zsh...\033[0m"
-hash git >/dev/null && /usr/bin/env git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh || {
+hash git >/dev/null && /usr/bin/env git clone git@github.com:nathanstilwell/oh-my-zsh.git ~/.oh-my-zsh || {
   echo "git not installed"
   exit
 }
@@ -16,12 +16,6 @@ then
   echo "\033[0;33mFound ~/.zshrc.\033[0m \033[0;32mBacking up to ~/.zshrc.pre-oh-my-zsh\033[0m";
   mv ~/.zshrc ~/.zshrc.pre-oh-my-zsh;
 fi
-
-echo "\033[0;34mUsing the Oh My Zsh template file and adding it to ~/.zshrc\033[0m"
-cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
-
-echo "\033[0;34mCopying your current PATH and adding it to the end of ~/.zshrc for you.\033[0m"
-echo "export PATH=\$PATH:$PATH" >> ~/.zshrc
 
 echo "\033[0;34mTime to change your default shell to zsh!\033[0m"
 chsh -s `which zsh`
