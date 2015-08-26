@@ -65,7 +65,7 @@ Once you find a theme that you want to use, you will need to edit the `~/.zshrc`
 ZSH_THEME="robbyrussell"
 ```
 
-To use a different theme, simple change the value to match the name of your desired theme. For example:
+To use a different theme, simply change the value to match the name of your desired theme. For example:
 
 ```shell
 ZSH_THEME="agnoster" # (this is one of the fancy ones)
