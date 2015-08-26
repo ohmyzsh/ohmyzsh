@@ -18,8 +18,8 @@ if [[ -x `which curl` ]]; then
         W=$(echo "$Q" | sed -e 's/.*\/quotes\///g' -e 's/<.*//g' -e 's/.*">//g')
         if [ "$W" -a "$TXT" ]; then
           echo "${WHO_COLOR}${W}${COLON_COLOR}: ${TEXT_COLOR}“${TXT}”${END_COLOR}"
-        else
-          quote
+        # else
+        #   quote
         fi
     }
     #quote
