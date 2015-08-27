@@ -140,12 +140,12 @@ d0() {
 
 # gather external ip address
 geteip() {
-    echo "$(curl -s -S http://ipecho.net/plain)"
+    curl -s -S https://icanhazip.com
 }
 
 # determine local IP address
 getip() {
-    if [ $(hash | grep '^ip=') ]; then
+    if (( ${+commands[ip]} )); then
         ip addr | grep "inet " | grep -v '127.0.0.1' | awk '{print $2}'
     else
         ifconfig  | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}'
