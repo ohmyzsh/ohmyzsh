@@ -9,7 +9,7 @@ function frontend() {
   fi
 
   # check whether the search engine is supported
-  if [[ ! $1 =~ '(jquery|mdn|compass|html5please|caniuse|aurajs|dartlang|qunit|fontello|bootsnipp|cssflow|codepen|unheap|bem|smacss|angularjs|reactjs|emberjs|stackoverflow)' ]];
+  if [[ ! $1 =~ '(jquery|mdn|compass|html5please|caniuse|aurajs|dartlang|qunit|fontello|bootsnipp|cssflow|codepen|unheap|bem|smacss|angularjs|reactjs|emberjs|stackoverflow|npmjs)' ]];
   then
     echo "Search valid search content $1 not supported."
     echo "Valid contents: (formats 'frontend <search-content>' or '<search-content>')"
@@ -33,6 +33,7 @@ function frontend() {
     echo "* reactjs"
     echo "* emberjs"
     echo "* stackoverflow"
+    echo "* npmjs"
     echo ""
 
     return 1
@@ -99,6 +100,9 @@ function frontend() {
     "stackoverflow")
       url="${url}stackoverflow.com"
       url="${url}/search?q=$2" ;;
+    "npmjs")
+      url="${url}www.npmjs.com"
+      url="${url}/search?q=$2" ;;
     *) echo "INVALID PARAM!"
        return ;;
   esac
@@ -148,3 +152,4 @@ alias emberjs='frontend emberjs'
 
 # search websites
 alias stackoverflow='frontend stackoverflow'
+alias npmjs='frontend npmjs'
