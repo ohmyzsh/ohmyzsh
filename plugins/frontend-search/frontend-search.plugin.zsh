@@ -1,6 +1,33 @@
 # frontend from terminal
 
 function frontend() {
+  emulate -L zsh
+
+  # define search content URLS
+  typeset -A urls
+  urls=(
+    angularjs      'https://google.com/search?as_sitesearch=angularjs.org&as_q='
+    aurajs         'http://aurajs.com/api/#stq='
+    bem            'https://google.com/search?as_sitesearch=bem.info&as_q='
+    bootsnipp      'http://bootsnipp.com/search?q='
+    caniuse        'http://caniuse.com/#search='
+    codepen        'http://codepen.io/search?q='
+    compass        'http://compass-style.org/search?q='
+    cssflow        'http://www.cssflow.com/search?q='
+    dartlang       'https://api.dartlang.org/apidocs/channels/stable/dartdoc-viewer/dart:'
+    emberjs        'http://emberjs.com/api/#stp=1&stq='
+    fontello       'http://fontello.com/#search='
+    html5please    'http://html5please.com/#'
+    jquery         'https://api.jquery.com/?s='
+    lodash         'https://devdocs.io/lodash/index#'
+    mdn            'https://developer.mozilla.org/search?q='
+    npmjs          'https://www.npmjs.com/search?q='
+    qunit          'https://api.qunitjs.com/?s='
+    reactjs        'https://google.com/search?as_sitesearch=facebook.github.io/react&as_q='
+    smacss         'https://google.com/search?as_sitesearch=smacss.com&as_q='
+    stackoverflow  'http://stackoverflow.com/search?q='
+    unheap         'http://www.unheap.com/?s='
+  )
 
   # no keyword provided, simply show how call methods
   if [[ $# -le 1 ]]; then
@@ -9,7 +36,7 @@ function frontend() {
   fi
 
   # check whether the search engine is supported
-  if [[ ! $1 =~ '(jquery|mdn|compass|html5please|caniuse|aurajs|dartlang|qunit|fontello|bootsnipp|cssflow|codepen|unheap|bem|smacss|angularjs|reactjs|emberjs|stackoverflow|npmjs)' ]];
+  if [[ -z "$urls[$1]" ]]; then
   then
     echo "Search valid search content $1 not supported."
     echo "Valid contents: (formats 'frontend <search-content>' or '<search-content>')"
@@ -39,73 +66,10 @@ function frontend() {
     return 1
   fi
 
-  local url="http://"
-  local query=""
-
-  case "$1" in
-    "jquery")
-      url="${url}api.jquery.com"
-      url="${url}/?s=$2" ;;
-    "mdn")
-      url="${url}developer.mozilla.org"
-      url="${url}/search?q=$2" ;;
-    "compass")
-      url="${url}compass-style.org"
-      url="${url}/search?q=$2" ;;
-    "html5please")
-      url="${url}html5please.com"
-      url="${url}/#$2" ;;
-    "caniuse")
-      url="${url}caniuse.com"
-      url="${url}/#search=$2" ;;
-    "aurajs")
-      url="${url}aurajs.com"
-      url="${url}/api/#stq=$2" ;;
-    "dartlang")
-      url="${url}api.dartlang.org/apidocs/channels/stable/dartdoc-viewer"
-      url="${url}/dart-$2" ;;
-    "qunit")
-      url="${url}api.qunitjs.com"
-      url="${url}/?s=$2" ;;
-    "fontello")
-      url="${url}fontello.com"
-      url="${url}/#search=$2" ;;
-    "bootsnipp")
-      url="${url}bootsnipp.com"
-      url="${url}/search?q=$2" ;;
-    "cssflow")
-      url="${url}cssflow.com"
-      url="${url}/search?q=$2" ;;
-    "codepen")
-      url="${url}codepen.io"
-      url="${url}/search?q=$2" ;;
-    "unheap")
-      url="${url}www.unheap.com"
-      url="${url}/?s=$2" ;;
-    "bem")
-      url="${url}google.com"
-      url="${url}/search?as_q=$2&as_sitesearch=bem.info" ;;
-    "smacss")
-      url="${url}google.com"
-      url="${url}/search?as_q=$2&as_sitesearch=smacss.com" ;;
-    "angularjs")
-      url="${url}google.com"
-      url="${url}/search?as_q=$2&as_sitesearch=angularjs.org" ;;
-    "reactjs")
-      url="${url}google.com"
-      url="${url}/search?as_q=$2&as_sitesearch=facebook.github.io/react" ;;
-    "emberjs")
-      url="${url}emberjs.com"
-      url="${url}/api/#stq=$2&stp=1" ;;
-    "stackoverflow")
-      url="${url}stackoverflow.com"
-      url="${url}/search?q=$2" ;;
-    "npmjs")
-      url="${url}www.npmjs.com"
-      url="${url}/search?q=$2" ;;
-    *) echo "INVALID PARAM!"
-       return ;;
-  esac
+  # build search url:
+  # join arguments passed with '+', then append to search engine URL
+  # TODO substitute for proper urlencode method
+  url="${urls[$1]}${(j:+:)@[2,-1]}"
 
   echo "$url"
 
