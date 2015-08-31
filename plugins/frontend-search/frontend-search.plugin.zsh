@@ -1,3 +1,25 @@
+alias angularjs='frontend angularjs'
+alias aurajs='frontend aurajs'
+alias bem='frontend bem'
+alias bootsnipp='frontend bootsnipp'
+alias caniuse='frontend caniuse'
+alias codepen='frontend codepen'
+alias compass='frontend compass'
+alias cssflow='frontend cssflow'
+alias dartlang='frontend dartlang'
+alias emberjs='frontend emberjs'
+alias fontello='frontend fontello'
+alias html5please='frontend html5please'
+alias jquery='frontend jquery'
+alias lodash='frontend lodash'
+alias mdn='frontend mdn'
+alias npmjs='frontend npmjs'
+alias qunit='frontend qunit'
+alias reactjs='frontend reactjs'
+alias smacss='frontend smacss'
+alias stackoverflow='frontend stackoverflow'
+alias unheap='frontend unheap'
+
 function frontend() {
   emulate -L zsh
 
@@ -67,44 +89,3 @@ function frontend() {
 
   open_command "$url"
 }
-
-# javascript
-alias jquery='frontend jquery'
-alias mdn='frontend mdn'
-
-# pre processors frameworks
-alias compassdoc='frontend compass'
-
-# important links
-alias html5please='frontend html5please'
-alias caniuse='frontend caniuse'
-
-# components and libraries
-alias aurajs='frontend aurajs'
-alias dartlang='frontend dartlang'
-alias lodash='frontend lodash'
-
-#tests
-alias qunit='frontend qunit'
-
-#fonts
-alias fontello='frontend fontello'
-
-# snippets
-alias bootsnipp='frontend bootsnipp'
-alias cssflow='frontend cssflow'
-alias codepen='frontend codepen'
-alias unheap='frontend unheap'
-
-# css architecture
-alias bem='frontend bem'
-alias smacss='frontend smacss'
-
-# frameworks
-alias angularjs='frontend angularjs'
-alias reactjs='frontend reactjs'
-alias emberjs='frontend emberjs'
-
-# search websites
-alias stackoverflow='frontend stackoverflow'
-alias npmjs='frontend npmjs'
