@@ -3,6 +3,7 @@
 local -a options 
 options=(
     '_cache/clear:Allows to clear all caches for all indices'
+    '_cat:List of all cat commands'
     '_cluster/health:Cluster status health'
     '_cluster/nodes/_local/_shutdown:Shutdown local node'
     '_cluster/pending_tasks:Returns a list of any cluster-level changes which have not yet been executed'
