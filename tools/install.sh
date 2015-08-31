@@ -18,6 +18,12 @@ else
   BOLD=""
   NORMAL=""
 fi
+CHECK_ZSH_INSTALLED=$(grep /zsh$ /etc/shells | wc -l)
+if [ ! $CHECK_ZSH_INSTALLED -ge 1 ]; then
+  echo "${YELLOW}Zsh is not installed!${NORMAL} Please install zsh first!"
+  exit
+fi
+unset CHECK_ZSH_INSTALLED
 
 if [ ! -n "$ZSH" ]; then
   ZSH=~/.oh-my-zsh
@@ -43,14 +49,16 @@ fi
 
 printf "${BLUE}Using the Oh My Zsh template file and adding it to ~/.zshrc${NORMAL}\n"
 cp $ZSH/templates/zshrc.zsh-template ~/.zshrc
-sed -i -e "/^export ZSH=/ c\\
+sed "/^export ZSH=/ c\\
 export ZSH=$ZSH
-" ~/.zshrc
+" ~/.zshrc > ~/.zshrc-omztemp
+mv -f ~/.zshrc-omztemp ~/.zshrc
 
 printf "${BLUE}Copying your current PATH and adding it to the end of ~/.zshrc for you.${NORMAL}\n"
-sed -i -e "/export PATH=/ c\\
+sed "/export PATH=/ c\\
 export PATH=\"$PATH\"
-" ~/.zshrc
+" ~/.zshrc > ~/.zshrc-omztemp
+mv -f ~/.zshrc-omztemp ~/.zshrc
 
 TEST_CURRENT_SHELL=$(expr "$SHELL" : '.*/\(.*\)')
 if [ "$TEST_CURRENT_SHELL" != "zsh" ]; then
