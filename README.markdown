@@ -77,6 +77,14 @@ Open up a new terminal window and your prompt should look something like...
 
 In case you did not find a suitable theme for your needs, please have a look at the wiki for [more of them](https://github.com/robbyrussell/oh-my-zsh/wiki/External-themes).
 
+If you're feeling feisty, you can let the computer select one randomly for you each time you open a new terminal window.
+
+
+```shell
+ZSH_THEME="random" # (...please let it be pie... please be some pie..)
+```
+
+
 ## Advanced Topics
 
 If you're the type that likes to get their hands dirty, these sections might resonate.
