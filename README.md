@@ -16,9 +16,11 @@ How to install
 
 ### In your ~/.zshrc
 
-* Download the script or clone this repository:
+* Clone this repository:
 
         git clone git://github.com/zsh-users/zsh-syntax-highlighting.git
+
+  (or [download a snapshot](https://github.com/zsh-users/zsh-syntax-highlighting/archive/master.tar.gz))
 
 * Source the script **at the end** of `~/.zshrc`:
 
