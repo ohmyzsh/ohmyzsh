@@ -3,11 +3,11 @@
 #         .jira-url in the current directory takes precedence
 #
 # If you prefer the jira command to show your dashboard, set:
-#JIRA_DASHBOARD="true"
+#   JIRA_DEFAULT_ACTION="dashboard"
 # in you .zshrc
 #
 # If you use Rapid Board, set:
-#JIRA_RAPID_BOARD="true"
+#   JIRA_RAPID_BOARD="true"
 # in you .zshrc
 #
 # Setup: cd to/my/project
@@ -35,7 +35,7 @@ open_jira_issue () {
   fi
 
   if [ -z "$1" ]; then
-    if [[ "$JIRA_DASHBOARD" = "true" ]]; then
+    if [[ "$JIRA_DEFAULT_ACTION" = "dashboard" ]]; then
       open_command "${jira_url}/secure/Dashboard.jspa"
     else
       open_command "${jira_url}/secure/CreateIssue!default.jspa"
