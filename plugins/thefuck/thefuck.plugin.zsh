@@ -4,7 +4,7 @@ if [[ -z $commands[thefuck] ]]; then
 fi
 
 # Register alias
-eval "$(thefuck-alias)"
+eval "$(thefuck --alias)"
 
 fuck-command-line() {
     local FUCK="$(THEFUCK_REQUIRE_CONFIRMATION=0 thefuck $(fc -ln -1 | tail -n 1) 2> /dev/null)"
