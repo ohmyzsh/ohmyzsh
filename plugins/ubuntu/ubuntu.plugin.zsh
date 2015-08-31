@@ -3,6 +3,7 @@
 # https://github.com/dbb
 # https://github.com/Mappleconfusers
 # Nicolas Jonas nextgenthemes.com
+# https://github.com/loctauxphilippe
 #
 # Debian, Ubuntu and friends related zsh aliases and functions for zsh
 
@@ -38,6 +39,7 @@ alias agu='sudo apt-get update'   # ad
 alias agud='sudo apt-get update && sudo apt-get dist-upgrade' #adu
 alias agug='sudo apt-get upgrade' # ag
 alias aguu='sudo apt-get update && sudo apt-get upgrade'      #adg
+alias agar='sudo apt-get autoremove'
 
 compdef _ag ag='sudo apt-get'
 compdef _aga aga='sudo apt-get autoclean'
@@ -51,6 +53,7 @@ compdef _agu agu='sudo apt-get update'
 compdef _agud agud='sudo apt-get update && sudo apt-get dist-upgrade'
 compdef _agug agug='sudo apt-get upgrade'
 compdef _aguu aguu='sudo apt-get update && sudo apt-get upgrade'
+compdef _agar agar='sudo apt-get autoremove'
 
 # Remove ALL kernel images and headers EXCEPT the one in use
 alias kclean='sudo aptitude remove -P ?and(~i~nlinux-(ima|hea) \
