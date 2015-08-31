@@ -1,9 +1,7 @@
-# frontend from terminal
-
 function frontend() {
   emulate -L zsh
 
-  # define search content URLS
+  # define search context URLS
   typeset -A urls
   urls=(
     angularjs      'https://google.com/search?as_sitesearch=angularjs.org&as_q='
@@ -29,74 +27,45 @@ function frontend() {
     unheap         'http://www.unheap.com/?s='
   )
 
-  # show help for commands list
-  if [[ $1 =~ '(help|--help|-h)' ]]
+  # show help for command list
+  if [[ $# -lt 2 ]]
   then
-      echo "Usage:"
-      echo "\n\tfrontend <search-content>\n\t<search-content>\n\tfrontend <search-content> <search-term>"
-      echo ""
-      echo "Where <search-content> is one of:"
-      echo "jquery, mdn, compass, html5please, caniuse, aurajs, dartlang, qunit, fontello,"
-      echo "bootsnipp, cssflow, codepen, unheap, bem, smacss, angularjs, reactjs, emberjs"
-      echo "help"
-      echo ""
-      echo "Where <search-term> is a term to search in allowed repositories"
-      echo ""
-      echo "frontend --help       show plugin help"
-      echo "frontend -h           show plugin help"
-      echo ""
-      echo "It is allowed to directly access all search contents."
-      echo ""
+      print -P "Usage: frontend %Ucontext%u %Uterm%u [...%Umore%u] (or just: %Ucontext%u %Uterm%u [...%Umore%u])"
+      print -P ""
+      print -P "%Uterm%u and what follows is what will be searched for in the %Ucontext%u website,"
+      print -P "and %Ucontext%u is one of the following:"
+      print -P ""
+      print -P "  angularjs, aurajs, bem, bootsnipp, caniuse, codepen, compass, cssflow,"
+      print -P "  dartlang, emberjs, fontello, html5please, jquery, lodash, mdn, npmjs,"
+      print -P "  qunit, reactjs, smacss, stackoverflow, unheap"
+      print -P ""
+      print -P "For example: frontend npmjs mocha (or just: npmjs mocha)."
+      print -P ""
       return 1
   fi
 
-  # no keyword provided, simply show how call methods
-  if [[ $# -le 1 ]]
-  then
-    echo "Please provide a search-content and a search-term for app.\nEx:\nfrontend <search-content> <search-term>\n"
-    return 1
-  fi
-
-  # check whether the search engine is supported
+  # check whether the search context is supported
   if [[ -z "$urls[$1]" ]]
   then
-    echo "Search valid search content $1 not supported."
-    echo "Valid contents: (formats 'frontend <search-content>' or '<search-content>')"
-    echo "* jquery"
-    echo "* mdn"
-    echo "* compass"
-    echo "* html5please"
-    echo "* caniuse"
-    echo "* aurajs"
-    echo "* dartlang"
-    echo "* lodash"
-    echo "* qunit"
-    echo "* fontello"
-    echo "* bootsnipp"
-    echo "* cssflow"
-    echo "* codepen"
-    echo "* unheap"
-    echo "* bem"
-    echo "* smacss"
-    echo "* angularjs"
-    echo "* reactjs"
-    echo "* emberjs"
-    echo "* stackoverflow"
-    echo "* npmjs"
+    echo "Search context \"$1\" currently not supported."
     echo ""
-
+    echo "Valid contexts are:"
+    echo ""
+    echo "  angularjs, aurajs, bem, bootsnipp, caniuse, codepen, compass, cssflow, "
+    echo "  dartlang, emberjs, fontello, html5please, jquery, lodash, mdn, npmjs,  "
+    echo "  qunit, reactjs, smacss, stackoverflow, unheap"
+    echo ""
     return 1
   fi
 
   # build search url:
-  # join arguments passed with '+', then append to search engine URL
+  # join arguments passed with '+', then append to search context URL
   # TODO substitute for proper urlencode method
   url="${urls[$1]}${(j:+:)@[2,-1]}"
 
-  echo "$url"
+  echo "Opening $url ..."
 
   open_command "$url"
-
 }
 
 # javascript
