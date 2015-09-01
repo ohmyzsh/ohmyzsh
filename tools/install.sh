@@ -41,6 +41,12 @@ export PATH=\"$PATH\"
 " ~/.zshrc > ~/.zshrc-omztemp
 mv -f ~/.zshrc-omztemp ~/.zshrc
 
+TEST_ZSH_INSTALLED=$(dpkg -l | grep -w 'zsh' | grep -v 'zsh-' | grep 'ii')
+if [ "$TEST_ZSH_INSTALLED" = "" ]; then
+    echo "\033[0;34mInstalling zsh shell\033[0m"
+    sudo apt-get install -y zsh
+fi
+
 TEST_CURRENT_SHELL=$(expr "$SHELL" : '.*/\(.*\)')
 if [ "$TEST_CURRENT_SHELL" != "zsh" ]; then
     echo "\033[0;34mTime to change your default shell to zsh!\033[0m"
