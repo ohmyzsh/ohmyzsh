@@ -47,6 +47,14 @@ How to install
         source ~/.zshrc
 
 
+FAQ
+---
+
+### Why must `zsh-syntax-highlighting.zsh` be sourced at the end of the `.zshrc` file?
+
+`zsh-syntax-highlighting.zsh` wraps ZLE widgets.  It must be sourced after all
+custom widgets have been created (i.e., after all `zle -N` calls).
+
 How to tweak
 ------------
 
