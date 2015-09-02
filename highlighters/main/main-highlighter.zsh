@@ -70,8 +70,8 @@ _zsh_highlight_main_add_region_highlight() {
   (( start -= $#PREBUFFER ))
   (( end -= $#PREBUFFER ))
 
-  (( end < 0 )) && return # bug
-  (( start < 0 )) && start=0 # normal with e.g. multiline strings
+  (( end < 0 )) && return # having end<0 would be a bug
+  (( start < 0 )) && start=0 # having start<0 is normal with e.g. multiline strings
   region_highlight+=("$start $end $style")
 }
 
@@ -102,6 +102,7 @@ _zsh_highlight_main_highlighter()
     local substr_color=0
     local style_override=""
     [[ $start_pos -eq 0 && $arg = 'noglob' ]] && highlight_glob=false
+    # advance $start_pos, skipping over whitespace in $buf.
     ((start_pos+=${#buf[$start_pos+1,-1]}-${#${buf[$start_pos+1,-1]##([[:space:]]|\\[[:space:]])#}}))
     ((end_pos=$start_pos+${#arg}))
 
