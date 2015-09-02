@@ -102,28 +102,24 @@ _zsh_highlight_main_highlighter()
     local substr_color=0
     local style_override=""
     [[ $start_pos -eq 0 && $arg = 'noglob' ]] && highlight_glob=false
-    # advance $start_pos, skipping over whitespace in $buf.
-    ((start_pos+=${#buf[$start_pos+1,-1]}-${#${buf[$start_pos+1,-1]##([[:space:]]|\\[[:space:]])#}}))
-    ((end_pos=$start_pos+${#arg}))
 
-    # Deal with faked colons.
-    #
-    # We can't use the (Z+n+) flag because that elides the end-of-command
-    # token altogether, so 'echo foo\necho bar' (two commands) becomes
-    # indistinguishable from 'echo foo echo bar' (one command with three
-    # words for arguments).
+    # advance $start_pos, skipping over whitespace in $buf.
     if [[ $arg == ';' ]] ; then
-      if [[ $buf[start_pos+1] == ';' ]] ; then
-        # Literally-input colon. That's the normal case.
-      elif [[ $buf[start_pos] == $'\n' ]] ; then
-        # Newline token rendered as a colon.  Empirically we're off-by-one.
-        (( start_pos -= 1 ))
-        (( end_pos -= 1 ))
-      else
-        # Currently, there aren't any other sources of ";" (SEPER) tokens
-        # besides literally-input semicolons and (Z+n+)-converted newlines,
-        # If that ever changes, handle them here.
-      fi
+      # We're looking for either a semicolon or a newline, whichever comes
+      # first.  Both of these are rendered as a ";" (SEPER) by the ${(z)..}
+      # flag.
+      #
+      # We can't use the (Z+n+) flag because that elides the end-of-command
+      # token altogether, so 'echo foo\necho bar' (two commands) becomes
+      # indistinguishable from 'echo foo echo bar' (one command with three
+      # words for arguments).
+      local needle=$'[;\n]'
+      integer offset=${${buf[start_pos+1,-1]}[(i)$needle]}
+      (( start_pos += offset ))
+      (( end_pos += offset ))
+    else
+      ((start_pos+=${#buf[$start_pos+1,-1]}-${#${buf[$start_pos+1,-1]##([[:space:]]|\\[[:space:]])#}}))
+      ((end_pos=$start_pos+${#arg}))
     fi
 
     # Parse the sudo command line
