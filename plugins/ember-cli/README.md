@@ -1,6 +1,6 @@
 # Ember-cli
 
-**Maintainer:*[BilalBudhani](http://www.github.com/BilalBudhani)
+**Maintainer:**[BilalBudhani](http://www.github.com/BilalBudhani)
 
 Ember-cli (http://www.ember-cli.com/)
 
