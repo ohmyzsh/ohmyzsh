@@ -1,5 +1,5 @@
-# Ember ClI 
-# visit http://www.ember-cli.com/ to view user guid 
+# Ember CLI
+# Visit http://www.ember-cli.com/ to view user guide
 
 alias es='ember serve'
 alias ea='ember addon'
@@ -8,9 +8,6 @@ alias ed='ember destroy'
 alias eg='ember generate'
 alias eh='ember help'
 alias ein='ember init'
-alias eia='ember install:addon'
-alias eib='ember install:bower'
-alias ein='ember install:npm'
 alias ei='ember install'
 alias et='ember test'
 alias eu='ember update'
