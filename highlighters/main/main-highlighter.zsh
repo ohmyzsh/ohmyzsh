@@ -60,6 +60,21 @@ _zsh_highlight_main_highlighter_predicate()
   _zsh_highlight_buffer_modified
 }
 
+# Helper to deal with tokens crossing line boundaries.
+_zsh_highlight_main_add_region_highlight() {
+  integer start=$1 end=$2
+  local style=$3
+
+  # The calculation was relative to $PREBUFFER$BUFFER, but region_highlight is
+  # relative to $BUFFER.
+  (( start -= $#PREBUFFER ))
+  (( end -= $#PREBUFFER ))
+
+  (( end < 0 )) && return # having end<0 would be a bug
+  (( start < 0 )) && start=0 # having start<0 is normal with e.g. multiline strings
+  region_highlight+=("$start $end $style")
+}
+
 # Main syntax highlighting function.
 _zsh_highlight_main_highlighter()
 {
@@ -69,6 +84,7 @@ _zsh_highlight_main_highlighter()
   typeset -a ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR
   typeset -a ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS
   typeset -a ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS
+  local buf="$PREBUFFER$BUFFER"
   region_highlight=()
 
   ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR=(
@@ -82,12 +98,30 @@ _zsh_highlight_main_highlighter()
     $ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR $ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS
   )
 
-  for arg in ${(z)BUFFER}; do
+  for arg in ${(z)buf}; do
     local substr_color=0
     local style_override=""
     [[ $start_pos -eq 0 && $arg = 'noglob' ]] && highlight_glob=false
-    ((start_pos+=${#BUFFER[$start_pos+1,-1]}-${#${BUFFER[$start_pos+1,-1]##[[:space:]]#}}))
-    ((end_pos=$start_pos+${#arg}))
+
+    # advance $start_pos, skipping over whitespace in $buf.
+    if [[ $arg == ';' ]] ; then
+      # We're looking for either a semicolon or a newline, whichever comes
+      # first.  Both of these are rendered as a ";" (SEPER) by the ${(z)..}
+      # flag.
+      #
+      # We can't use the (Z+n+) flag because that elides the end-of-command
+      # token altogether, so 'echo foo\necho bar' (two commands) becomes
+      # indistinguishable from 'echo foo echo bar' (one command with three
+      # words for arguments).
+      local needle=$'[;\n]'
+      integer offset=${${buf[start_pos+1,-1]}[(i)$needle]}
+      (( start_pos += offset ))
+      (( end_pos += offset ))
+    else
+      ((start_pos+=${#buf[$start_pos+1,-1]}-${#${buf[$start_pos+1,-1]##([[:space:]]|\\[[:space:]])#}}))
+      ((end_pos=$start_pos+${#arg}))
+    fi
+
     # Parse the sudo command line
     if $sudo; then
       case "$arg" in
@@ -140,13 +174,13 @@ _zsh_highlight_main_highlighter()
       case $arg in
         '--'*)   style=$ZSH_HIGHLIGHT_STYLES[double-hyphen-option];;
         '-'*)    style=$ZSH_HIGHLIGHT_STYLES[single-hyphen-option];;
-        "'"*"'") style=$ZSH_HIGHLIGHT_STYLES[single-quoted-argument];;
-        '"'*'"') style=$ZSH_HIGHLIGHT_STYLES[double-quoted-argument]
-                 region_highlight+=("$start_pos $end_pos $style")
+        "'"*)    style=$ZSH_HIGHLIGHT_STYLES[single-quoted-argument];;
+        '"'*)    style=$ZSH_HIGHLIGHT_STYLES[double-quoted-argument]
+                 _zsh_highlight_main_add_region_highlight $start_pos $end_pos $style
                  _zsh_highlight_main_highlighter_highlight_string
                  substr_color=1
                  ;;
-        '`'*'`') style=$ZSH_HIGHLIGHT_STYLES[back-quoted-argument];;
+        '`'*)    style=$ZSH_HIGHLIGHT_STYLES[back-quoted-argument];;
         *"*"*)   $highlight_glob && style=$ZSH_HIGHLIGHT_STYLES[globbing] || style=$ZSH_HIGHLIGHT_STYLES[default];;
         *)       if _zsh_highlight_main_highlighter_check_path; then
                    style=$ZSH_HIGHLIGHT_STYLES[path]
@@ -162,7 +196,7 @@ _zsh_highlight_main_highlighter()
     fi
     # if a style_override was set (eg in _zsh_highlight_main_highlighter_check_path), use it
     [[ -n $style_override ]] && style=$ZSH_HIGHLIGHT_STYLES[$style_override]
-    [[ $substr_color = 0 ]] && region_highlight+=("$start_pos $end_pos $style")
+    [[ $substr_color = 0 ]] && _zsh_highlight_main_add_region_highlight $start_pos $end_pos $style
     [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS:#"$arg"} ]] && new_expression=true
     start_pos=$end_pos
   done
@@ -235,6 +269,6 @@ _zsh_highlight_main_highlighter_highlight_string()
       *) [[ $varflag -eq 0 ]] && continue ;;
 
     esac
-    region_highlight+=("$j $k $style")
+    _zsh_highlight_main_add_region_highlight $j $k $style
   done
 }

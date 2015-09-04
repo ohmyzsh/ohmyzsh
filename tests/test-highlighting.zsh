@@ -60,13 +60,13 @@ ZSH_HIGHLIGHT_HIGHLIGHTERS=($1)
 for data_file in ${0:h:h}/highlighters/$1/test-data/*; do
 
   # Load the data and prepare checking it.
-  BUFFER= ; expected_region_highlight=(); errors=()
+  PREBUFFER= BUFFER= ; expected_region_highlight=(); errors=()
   echo -n "* ${data_file:t:r}: "
   . $data_file
 
-  # Check the data declares $BUFFER.
-  if [[ ${#BUFFER} -eq 0 ]]; then
-    errors+=("'BUFFER' is not declared or blank.")
+  # Check the data declares $PREBUFFER or $BUFFER.
+  if [[ ${#PREBUFFER} -eq 0 && ${#BUFFER} -eq 0 ]]; then
+    errors+=("Either 'PREBUFFER' or 'BUFFER' must be declared and non-blank")
   else
 
     # Check the data declares $expected_region_highlight.
