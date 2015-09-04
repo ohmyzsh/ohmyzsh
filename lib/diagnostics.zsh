@@ -117,13 +117,16 @@ function _omz_diag_dump_one_big_text() {
 
   # Installed programs
   programs=(sh zsh ksh bash sed cat grep ls find git posh)
+  local progfile="" extra_str="" sha_str=""
   for program in $programs; do
-    local md5_str="" md5="" link_str="" extra_str=""
+    extra_str="" sha_str=""
     progfile=$(builtin which $program)
     if [[ $? == 0 ]]; then
       if [[ -e $progfile ]]; then
-        if builtin whence md5 &>/dev/null; then
-          extra_str+=" $(md5 -q $progfile)"
+        if builtin whence shasum &>/dev/null; then
+          sha_str=($(command shasum $progfile))
+          sha_str=$sha_str[1]
+          extra_str+=" SHA $sha_str"
         fi
         if [[ -h "$progfile" ]]; then
           extra_str+=" ( -> ${progfile:A} )"
@@ -314,7 +317,7 @@ function _omz_diag_dump_os_specific_version() {
       builtin echo "OS Version: $osname $osver build $(sw_vers -buildVersion)"
       ;;
     cygwin)
-      command systeminfo | command grep "^OS Name\|^OS Version"
+      command systeminfo | command head -4 | command tail -2
       ;;
   esac
 
