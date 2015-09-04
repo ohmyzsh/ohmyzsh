@@ -1,25 +1,3 @@
-# ------------------------------------------------------------------------------
-# Description
-# -----------
-#
-# You can use Elastichsearch GET API like in Marvel sense console:
-# GET /
-# GET _cluster/health
-# GET _nodes/stats
-# GET _stats/fielddata?fields=*
-# GET _nodes/stats/indices/fielddata?fields=*
-#
-# You have do install json_reformat (http://dev.man-online.org/package/main/yajl-tools/)
-# to format json
-#
-# ------------------------------------------------------------------------------
-# Author
-# -------
-#
-# * Fedele Mantuano (Twitter: @fedelemantuano)
-#
-# ------------------------------------------------------------------------------
-
 alias ech='GET _cluster/health'
 alias ecs='GET _cluster/state'
 alias ens='GET _nodes/stats'
