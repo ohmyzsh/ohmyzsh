@@ -17,8 +17,15 @@ alias xcb='xcodebuild'
 alias xcp='xcode-select --print-path'
 alias xcdd='rm -rf ~/Library/Developer/Xcode/DerivedData/*'
 
-if [[ -d $(xcode-select -p)/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app ]]; then
-  alias simulator='open $(xcode-select -p)/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
-else
-  alias simulator='open $(xcode-select -p)/Applications/iOS\ Simulator.app'
-fi
+function simulator {
+  local devfolder
+  devfolder="$(xcode-select -p)"
+
+  # Xcode ≤ 5.x
+  if [[ -d "${devfolder}/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone Simulator.app" ]]; then
+    open "${devfolder}/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone Simulator.app"
+  # Xcode ≥ 6.x
+  else
+    open "${devfolder}/Applications/iOS Simulator.app"
+  fi
+}
