@@ -81,6 +81,7 @@ _zsh_highlight_main_highlighter()
   emulate -L zsh
   setopt localoptions extendedglob bareglobqual
   local start_pos=0 end_pos highlight_glob=true new_expression=true arg style sudo=false sudo_arg=false
+  local redirection=false # true when we've seen a redirection operator before seeing the command word
   typeset -a ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR
   typeset -a ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS
   typeset -a ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS
@@ -138,7 +139,7 @@ _zsh_highlight_main_highlighter()
                      ;;
       esac
     fi
-    if $new_expression; then
+    if $new_expression && ! $redirection; then # $arg is the command word
       new_expression=false
      if [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS:#"$arg"} ]]; then
       style=$ZSH_HIGHLIGHT_STYLES[precommand]
@@ -164,13 +165,20 @@ _zsh_highlight_main_highlighter()
                           style=$ZSH_HIGHLIGHT_STYLES[path]
                         elif [[ $arg[0,1] == $histchars[0,1] || $arg[0,1] == $histchars[2,2] ]]; then
                           style=$ZSH_HIGHLIGHT_STYLES[history-expansion]
+                        elif [[ $arg[1] == '<' || $arg[1] == '>' ]]; then
+                          style=$ZSH_HIGHLIGHT_STYLE[redirection]
+                          redirection=true
                         else
                           style=$ZSH_HIGHLIGHT_STYLES[unknown-token]
                         fi
                         ;;
       esac
      fi
-    else
+    else # $arg is the file target of a prefix redirection, or a non-command word
+      if $redirection; then
+        redirection=false
+        new_expression=true
+      fi
       case $arg in
         '--'*)   style=$ZSH_HIGHLIGHT_STYLES[double-hyphen-option];;
         '-'*)    style=$ZSH_HIGHLIGHT_STYLES[single-hyphen-option];;
