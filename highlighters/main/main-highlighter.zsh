@@ -160,7 +160,11 @@ _zsh_highlight_main_highlighter()
         *': hashed')    style=$ZSH_HIGHLIGHT_STYLES[hashed-command];;
         *)              if _zsh_highlight_main_highlighter_check_assign; then
                           style=$ZSH_HIGHLIGHT_STYLES[assign]
-                          new_expression=true
+                          if [[ $arg[-1] != '(' ]]; then
+                            # assignment to a scalar parameter.
+                            # (For array assignments, the command doesn't start until the ")" token.)
+                            new_expression=true
+                          fi
                         elif _zsh_highlight_main_highlighter_check_path; then
                           style=$ZSH_HIGHLIGHT_STYLES[path]
                         elif [[ $arg[0,1] == $histchars[0,1] || $arg[0,1] == $histchars[2,2] ]]; then
