@@ -25,6 +25,7 @@ This highlighter defines the following styles:
 * `unknown-token` - unknown tokens / errors
 * `reserved-word` - shell reserved words
 * `alias` - aliases
+* `suffix-alias` - suffix aliases (requires zsh 5.1.1 or newer)
 * `builtin` - shell builtin commands
 * `function` - functions
 * `command` - commands
