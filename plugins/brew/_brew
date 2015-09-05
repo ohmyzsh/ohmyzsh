@@ -25,6 +25,7 @@ _1st_arguments=(
   'cat:display formula file for a formula'
   'cleanup:uninstall unused and old versions of packages'
   'commands:show a list of commands'
+  'config:show homebrew and system configuration'
   'create:create a new formula'
   'deps:list dependencies of a formula'
   'doctor:audits your installation for common issues'
@@ -56,6 +57,7 @@ _1st_arguments=(
   'update:pull latest repository'
   'upgrade:upgrade outdated formulae'
   'uses:show formulae which depend on a formula'
+  `brew commands --quiet --include-aliases`
 )
 
 local expl
@@ -64,7 +66,6 @@ local -a formulae installed_formulae installed_taps outdated_formulae
 _arguments \
   '(-v)-v[verbose]' \
   '(--cellar)--cellar[brew cellar]' \
-  '(--config)--config[brew configuration]' \
   '(--env)--env[brew environment]' \
   '(--repository)--repository[brew repository]' \
   '(--version)--version[version information]' \
@@ -79,7 +80,7 @@ if (( CURRENT == 1 )); then
 fi
 
 case "$words[1]" in
-  install|reinstall|audit|home|homepage|log|info|abv|uses|cat|deps|edit|options)
+  install|reinstall|audit|home|homepage|log|info|abv|uses|cat|deps|edit|options|switch)
     _brew_all_formulae
     _wanted formulae expl 'all formulae' compadd -a formulae ;;
   list|ls)
@@ -100,9 +101,9 @@ case "$words[1]" in
     _arguments \
       '(--macports)--macports[search the macports repository]' \
       '(--fink)--fink[search the fink repository]' ;;
-  untap)
+  untap|tap-info)
     _brew_installed_taps
-    _wanted installed_taps expl 'installed taps' compadd -a installed_taps ;;
+    _wanted installed_taps expl 'installed taps' compadd -a installed_taps ;;
   upgrade)
     _brew_outdated_formulae
     _wanted outdated_formulae expl 'outdated formulae' compadd -a outdated_formulae ;;
