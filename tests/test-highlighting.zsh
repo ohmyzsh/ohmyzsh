@@ -49,6 +49,7 @@
 
 local -a errors highlight_zone
 local -A observed_result
+integer something_failed=0
 
 # Load the main script.
 . ${0:h:h}/zsh-syntax-highlighting.zsh
@@ -107,9 +108,12 @@ for data_file in ${0:h:h}/highlighters/$1/test-data/*; do
     echo "OK"
   else
     echo "KO"
+    (( something_failed=1 ))
     for error in $errors; do
       echo "   - $error"
     done
   fi
 
 done
+
+exit $something_failed
