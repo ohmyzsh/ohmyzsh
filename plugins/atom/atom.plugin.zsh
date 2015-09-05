@@ -5,8 +5,10 @@ _atom_paths=(
 )
 
 for _atom_path in $_atom_paths; do
-    if [[ -a $_atom_path ]]; then
-        alias at="open -a '$_atom_path'"
+    if [[ "$OSTYPE" == "linux-gnu" ]]; then
+          alias at="/usr/bin/atom"
+    elif [[ -a $_atom_path ]]; then
+          alias at="open -a '$_atom_path'"
         break
     fi
 done
