@@ -13,6 +13,7 @@ How to install
 
 * Arch Linux: [community/zsh-syntax-highlighting](https://www.archlinux.org/packages/zsh-syntax-highlighting) / [AUR/zsh-syntax-highlighting-git](https://aur.archlinux.org/packages/zsh-syntax-highlighting-git)
 * Gentoo: [mv overlay](http://gpo.zugaina.org/app-shells/zsh-syntax-highlighting)
+* Mac OS X / Homebrew: [brew install zsh-syntax-highlighting](https://github.com/Homebrew/homebrew/blob/master/Library/Formula/zsh-syntax-highlighting.rb)
 
 ### In your ~/.zshrc
 
