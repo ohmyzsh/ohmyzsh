@@ -35,6 +35,8 @@ _box_arguments=(
     'add:NAME URI Add a box to the system'
     'help:COMMAND Describe subcommands or one specific subcommand'
     'list:Lists all installed boxes'
+    'update:NAME Updates the box if outdated'
+    'outdated:NAME Check if a box is outdated'
     'remove:NAME Remove a box from the system'
     'repackage:NAME Repackage an installed box into a `.box` file.'
 )
