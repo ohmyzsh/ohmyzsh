@@ -42,10 +42,10 @@ typeset -ga ZSH_HIGHLIGHT_HIGHLIGHTERS
 # This function is supposed to be called whenever the ZLE state changes.
 _zsh_highlight()
 {
-  setopt localoptions nowarncreateglobal
-
   # Store the previous command return code to restore it whatever happens.
   local ret=$?
+
+  setopt localoptions nowarncreateglobal
 
   # Do not highlight if there are more than 300 chars in the buffer. It's most
   # likely a pasted command or a huge list of files in that case..
