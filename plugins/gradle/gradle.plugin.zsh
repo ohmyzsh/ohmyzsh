@@ -82,7 +82,11 @@ _gradlew_tasks () {
   if [ in_gradle ]; then
     _gradle_arguments
     if _gradle_does_task_list_need_generating; then
-     gradlew tasks --all | grep "^[ ]*[a-zA-Z0-9:]*\ -\ " | sed "s/ - .*$//" | sed "s/[\ ]*//" > .gradletasknamecache
+      cmd=gradlew
+      if ! type "gradlew" > /dev/null; then
+        cmd=./gradlew
+      fi
+      $cmd tasks --all | grep "^[ ]*[a-zA-Z0-9:]*\ -\ " | sed "s/ - .*$//" | sed "s/[\ ]*//" > .gradletasknamecache
     fi
     compadd -X "==== Gradlew Tasks ====" `cat .gradletasknamecache`
   fi
