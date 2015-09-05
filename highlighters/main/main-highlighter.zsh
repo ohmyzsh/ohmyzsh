@@ -218,7 +218,7 @@ _zsh_highlight_main_highlighter()
 _zsh_highlight_main_highlighter_check_assign()
 {
     setopt localoptions extended_glob
-    [[ $arg == [[:alpha:]_][[:alnum:]_]#(|\[*\])=* ]]
+    [[ $arg == [[:alpha:]_][[:alnum:]_]#(|\[*\])(|[+])=* ]]
 }
 
 # Check if the argument is a path.
