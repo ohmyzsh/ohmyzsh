@@ -89,3 +89,27 @@ function env_default() {
     env | grep -q "^$1=" && return 0 
     export "$1=$2"       && return 3
 }
+
+#
+# Prepends the PATH variable with the input path
+#
+# Arguments:
+#    1. path - The path that will be prepened
+# Return value:
+#    0 if PATH is exported to ENV
+#
+function prepend_path() {
+    [[ -d "$1" ]] && export PATH="$1":$PATH && return 0
+}
+
+#
+# Append the PATH variable with the input path
+#
+# Arguments:
+#    1. path - The path that will be append
+# Return value:
+#    0 if PATH is exported to ENV
+#
+function append_path() {
+    [[ -d "$1" ]] && export PATH=$PATH:"$1" && return 0
+}
