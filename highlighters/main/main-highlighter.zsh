@@ -147,7 +147,7 @@ _zsh_highlight_main_highlighter()
       style=$ZSH_HIGHLIGHT_STYLES[precommand]
       sudo=true
      else
-      res=$(LC_ALL=C builtin type -w $arg 2>/dev/null)
+      local res=$(LC_ALL=C builtin type -w $arg 2>/dev/null)
       case $res in
         *': reserved')  style=$ZSH_HIGHLIGHT_STYLES[reserved-word];;
         *': alias')     style=$ZSH_HIGHLIGHT_STYLES[alias]
