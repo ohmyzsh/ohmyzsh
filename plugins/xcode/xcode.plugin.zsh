@@ -1,4 +1,10 @@
-#xc function courtesy of http://gist.github.com/subdigital/5420709
+alias xcb='xcodebuild'
+alias xcdd='rm -rf ~/Library/Developer/Xcode/DerivedData/*'
+alias xcp='xcode-select --print-path'
+alias xcsel='sudo xcode-select --switch'
+
+# original author: @subdigital
+# source: http://gist.github.com/subdigital/5420709
 function xc {
   local xcode_proj
   xcode_proj=(*.{xcworkspace,xcodeproj}(N))
@@ -11,12 +17,6 @@ function xc {
     open "${xcode_proj[1]}"
   fi
 }
-
-alias xcsel='sudo xcode-select --switch'
-alias xcb='xcodebuild'
-alias xcp='xcode-select --print-path'
-alias xcdd='rm -rf ~/Library/Developer/Xcode/DerivedData/*'
-
 
 # "XCode-SELect by Version" - select Xcode by just version number
 # Uses naming convention:
