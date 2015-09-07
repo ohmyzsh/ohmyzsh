@@ -13,12 +13,13 @@ plugins=(... xcode)
 
 ## Aliases
 
-| Alias | Description                           | Command                                        |
-|-------|---------------------------------------|------------------------------------------------|
-| xcsel | Change active developer directory     | sudo xcode-select --switch                     |
-| xcp   | Show currently active dev. directory  | xcode-select --print-path                      |
-| xcb   | Build Xcode projects and workspaces   | xcodebuild                                     |
-| xcdd  | Purge all temporary build information | rm -rf ~/Library/Developer/Xcode/DerivedData/* |
+| Alias | Description                              | Command                                        |
+|-------|------------------------------------------|------------------------------------------------|
+| xcb   | Build Xcode projects and workspaces      | xcodebuild                                     |
+| xcdd  | Purge all temporary build information    | rm -rf ~/Library/Developer/Xcode/DerivedData/* |
+| xcp   | Show currently selected Xcode directory  | xcode-select --print-path                      |
+| xcsel | Select different Xcode directory by path | sudo xcode-select --switch                     |
+
 
 
 ## Functions
@@ -29,3 +30,6 @@ plugins=(... xcode)
 
 - **`simulator`**:
   Open the iOS Simulator from your command line, dependant on whichever is the active developer directory for Xcode.
+
+- **`xcselv`**:
+  Select different Xcode by version. Example: `xcselv 6.2`
