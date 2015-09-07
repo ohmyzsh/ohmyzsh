@@ -102,7 +102,9 @@ _zsh_highlight_main_highlighter()
   for arg in ${(z)buf}; do
     local substr_color=0
     local style_override=""
-    [[ $start_pos -eq 0 && $arg = 'noglob' ]] && highlight_glob=false
+    if $new_expression && [[ $arg = 'noglob' ]]; then
+      highlight_glob=false
+    fi
 
     # advance $start_pos, skipping over whitespace in $buf.
     if [[ $arg == ';' ]] ; then
@@ -134,7 +136,7 @@ _zsh_highlight_main_highlighter()
                        sudo_arg=false
                      else
                        sudo=false
-                       new_expression=true
+                       new_expression=true; highlight_glob=true
                      fi
                      ;;
       esac
@@ -163,7 +165,7 @@ _zsh_highlight_main_highlighter()
                           if [[ $arg[-1] != '(' ]]; then
                             # assignment to a scalar parameter.
                             # (For array assignments, the command doesn't start until the ")" token.)
-                            new_expression=true
+                            new_expression=true; highlight_glob=true
                           fi
                         elif _zsh_highlight_main_highlighter_check_path; then
                           style=$ZSH_HIGHLIGHT_STYLES[path]
@@ -181,7 +183,7 @@ _zsh_highlight_main_highlighter()
     else # $arg is the file target of a prefix redirection, or a non-command word
       if $redirection; then
         redirection=false
-        new_expression=true
+        new_expression=true; highlight_glob=true
       fi
       case $arg in
         '--'*)   style=$ZSH_HIGHLIGHT_STYLES[double-hyphen-option];;
@@ -210,6 +212,7 @@ _zsh_highlight_main_highlighter()
     [[ -n $style_override ]] && style=$ZSH_HIGHLIGHT_STYLES[$style_override]
     [[ $substr_color = 0 ]] && _zsh_highlight_main_add_region_highlight $start_pos $end_pos $style
     [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS:#"$arg"} ]] && new_expression=true
+    [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR:#"$arg"} ]] && highlight_glob=true
     start_pos=$end_pos
   done
 }
