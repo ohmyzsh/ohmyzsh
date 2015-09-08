@@ -34,7 +34,7 @@
 : ${ZSH_HIGHLIGHT_STYLES[unknown-token]:=fg=red,bold}
 : ${ZSH_HIGHLIGHT_STYLES[reserved-word]:=fg=yellow}
 : ${ZSH_HIGHLIGHT_STYLES[alias]:=fg=green}
-: ${ZSH_HIGHLIGHT_STYLES[suffix-alias]:=fg=green}
+: ${ZSH_HIGHLIGHT_STYLES[suffix-alias]:=fg=green,underline}
 : ${ZSH_HIGHLIGHT_STYLES[builtin]:=fg=green}
 : ${ZSH_HIGHLIGHT_STYLES[function]:=fg=green}
 : ${ZSH_HIGHLIGHT_STYLES[command]:=fg=green}
