@@ -92,6 +92,22 @@ _zsh_highlight()
 
     done
 
+    # Re-apply zle_highlight settings
+    () {
+      if (( REGION_ACTIVE )) ; then
+        # zle_highlight[region] defaults to 'standout' if unspecified
+        local region="${${zle_highlight[(r)region:*]#region:}:-standout}"
+        integer start end
+        if (( MARK > CURSOR )) ; then
+          start=$CURSOR end=$MARK
+        else
+          start=$MARK end=$CURSOR
+        fi
+        region_highlight+=("$start $end $region")
+      fi
+    }
+
+
   } always {
     _ZSH_HIGHLIGHT_PRIOR_BUFFER=$BUFFER
     _ZSH_HIGHLIGHT_PRIOR_CURSOR=$CURSOR
