@@ -51,6 +51,7 @@
 : ${ZSH_HIGHLIGHT_STYLES[back-quoted-argument]:=none}
 : ${ZSH_HIGHLIGHT_STYLES[single-quoted-argument]:=fg=yellow}
 : ${ZSH_HIGHLIGHT_STYLES[double-quoted-argument]:=fg=yellow}
+: ${ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]:=fg=yellow}
 : ${ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]:=fg=cyan}
 : ${ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]:=fg=cyan}
 : ${ZSH_HIGHLIGHT_STYLES[assign]:=none}
@@ -197,6 +198,8 @@ _zsh_highlight_main_highlighter()
                  _zsh_highlight_main_add_region_highlight $start_pos $end_pos $style
                  _zsh_highlight_main_highlighter_highlight_string
                  substr_color=1
+                 ;;
+        \$\'*)   style=$ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]
                  ;;
         '`'*)    style=$ZSH_HIGHLIGHT_STYLES[back-quoted-argument];;
         *[*?]*)  $highlight_glob && style=$ZSH_HIGHLIGHT_STYLES[globbing] || style=$ZSH_HIGHLIGHT_STYLES[default];;

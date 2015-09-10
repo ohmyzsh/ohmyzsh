@@ -42,6 +42,7 @@ This highlighter defines the following styles:
 * `back-quoted-argument` - backquoted expressions (`` `foo` ``)
 * `single-quoted-argument` - single quoted arguments (`` 'foo' ``)
 * `double-quoted-argument` - double quoted arguments (`` "foo" ``)
+* `dollar-quoted-argument` - dollar quoted arguments (`` $'foo' ``)
 * `dollar-double-quoted-argument` -  dollar double quoted arguments ($foo inside "")
 * `back-double-quoted-argument` -  back double quoted arguments (\x inside "")
 * `assign` - variable assignments
