@@ -49,6 +49,9 @@ This highlighter defines the following styles:
 
 To override one of those styles, change its entry in `ZSH_HIGHLIGHT_STYLES`, for example in `~/.zshrc`:
 
+    # Declare the variable
+    typeset -A ZSH_HIGHLIGHT_STYLES
+
     # To differentiate aliases from other command types
     ZSH_HIGHLIGHT_STYLES[alias]='fg=magenta,bold'
     
@@ -58,4 +61,5 @@ To override one of those styles, change its entry in `ZSH_HIGHLIGHT_STYLES`, for
     # To disable highlighting of globbing expressions
     ZSH_HIGHLIGHT_STYLES[globbing]='none'
 
-The syntax for declaring styles is [documented here](http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#SEC135).
+The syntax for declaring styles is documented in [the `zshzle(1)` manual
+page](http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#SEC135).
