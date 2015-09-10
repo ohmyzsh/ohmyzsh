@@ -1,6 +1,5 @@
 # get the nvm-controlled node.js version
 function nvm_prompt_info() {
-  [[ -f "$NVM_DIR/nvm.sh" ]] || return
   local nvm_prompt
   which nvm &>/dev/null || return
   nvm_prompt=$(nvm current)
