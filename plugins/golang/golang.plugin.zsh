@@ -55,8 +55,13 @@ __go_tool_complete() {
     '-tags[list of build tags to consider satisfied]:tags'
   )
   __go_packages() {
-      _path_files -W "$(go env GOROOT)/src" -/
-      _path_files -W "$(go env GOPATH)/src" -/
+      local gopaths
+      declare -a gopaths
+      gopaths=("${(s/:/)$(go env GOPATH)}")
+      gopaths+=("$(go env GOROOT)")
+      for p in $gopaths; do
+        _path_files -W "$p/src" -/
+      done
   }
   __go_identifiers() {
       compadd $(godoc -templates $ZSH/plugins/golang/templates ${words[-2]} 2> /dev/null)
