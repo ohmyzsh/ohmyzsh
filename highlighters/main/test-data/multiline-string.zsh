@@ -32,6 +32,6 @@ PREBUFFER=$'echo "foo1\n'
 BUFFER='foo2" ./'
 
 expected_region_highlight=(
-  "0 5 $ZSH_HIGHLIGHT_STYLES[double-quoted-argument]" # 'foo2"'
+  "1 5 $ZSH_HIGHLIGHT_STYLES[double-quoted-argument]" # 'foo2"'
   "7 8 $ZSH_HIGHLIGHT_STYLES[path]" # './'
 )

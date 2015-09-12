@@ -32,9 +32,9 @@ PREBUFFER=$'echo foo; echo bar\n\n\n'
 BUFFER=' echo baz; echo qux'
 
 expected_region_highlight=(
-  "1 5 $ZSH_HIGHLIGHT_STYLES[builtin]" # echo
-  "6 8 $ZSH_HIGHLIGHT_STYLES[default]" # baz
-  "9 10 $ZSH_HIGHLIGHT_STYLES[default]" # semicolon
+  "2 5 $ZSH_HIGHLIGHT_STYLES[builtin]" # echo
+  "7 9 $ZSH_HIGHLIGHT_STYLES[default]" # baz
+  "10 10 $ZSH_HIGHLIGHT_STYLES[default]" # semicolon
   "12 15 $ZSH_HIGHLIGHT_STYLES[builtin]" # echo
   "17 19 $ZSH_HIGHLIGHT_STYLES[default]" # qux
 )
