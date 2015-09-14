@@ -76,8 +76,6 @@ emoji_skintone[6]=$'\U1F3FF'
 # These are stored in a single associative array, $emoji_groups, to avoid cluttering up the global
 # namespace, and to allow adding additional group definitions at run time.
 # The keys are the group names, and the values are whitespace-separated lists of emoji character names.
-#
-# These extra local arrays are used to allow more convenient formatting of the source code.
 
 emoji_groups[fruits]="
   tomato
@@ -255,9 +253,10 @@ function random_emoji() {
   if [[ -z "$group" || "$group" == "all" ]]; then
   	names=(${(k)emoji})
   else
-  	names=(${=emoji_groups[$group_name]})
+	names=(${=emoji_groups[$group]})
   fi
-  local list_size=$#names
+  local list_size=${#names}
+  [[ $list_size -eq 0 ]] && return 1
   local random_index=$(( ( RANDOM % $list_size ) + 1 ))
   local name=${names[$random_index]}
   echo ${emoji[$name]}

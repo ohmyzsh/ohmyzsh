@@ -88,7 +88,7 @@ typeset -gAH emoji_mod
 			}
 			# Modifiers are included in both the main set and their separate map,
 			# because they have a standalone representation as a color swatch.
-			if ( $modifier_status == "modifier" ) {
+			if ( $modifier_status eq "modifier" ) {
 				$outfh->print("emoji_mod[$omz_name]=\$'$zsh_code'\n");
 			}
 		} else {
