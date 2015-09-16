@@ -1,14 +1,3 @@
-function stack_sandbox_info() {
-    stack_files=(*.stack(N))
-    if [ $#stack_files -gt 0 ]; then
-        if [ -f stack.sandbox.config ]; then
-            echo "%{$fg[green]%}sandboxed%{$reset_color%}"
-        else
-            echo "%{$fg[red]%}not sandboxed%{$reset_color%}"
-        fi
-    fi
-}
-
 function _stack_commands() {
     local ret=1 state
     _arguments ':subcommand:->subcommand' && ret=0
@@ -46,4 +35,3 @@ function _stack_commands() {
 }
 
 compdef _stack_commands stack
-
