@@ -42,6 +42,7 @@ mvn-color()
 #alias mvn="mvn-color"
 
 # aliases
+alias mvncini='mvn clean initialize'
 alias mvncie='mvn clean install eclipse:eclipse'
 alias mvnci='mvn clean install'
 alias mvncist='mvn clean install -DskipTests'
@@ -66,10 +67,10 @@ alias mvndocs='mvn dependency:resolve -Dclassifier=javadoc'
 function listMavenCompletions { 
      reply=(
         # common lifecycle
-        clean process-resources compile process-test-resources test-compile test integration-test package verify install deploy site
+        clean process-resources compile process-test-resources test-compile test integration-test package verify initialize install deploy site
         
         # common plugins
-        deploy failsafe install site surefire checkstyle javadoc jxr pmd ant antrun archetype assembly dependency enforcer gpg help release repository source eclipse idea jetty cargo jboss tomcat tomcat6 tomcat7 exec versions war ear ejb android scm buildnumber nexus repository sonar license hibernate3 liquibase flyway gwt
+        deploy failsafe initialize install site surefire checkstyle javadoc jxr pmd ant antrun archetype assembly dependency enforcer gpg help release repository source eclipse idea jetty cargo jboss tomcat tomcat6 tomcat7 exec versions war ear ejb android scm buildnumber nexus repository sonar license hibernate3 liquibase flyway gwt
        
         # deploy
         deploy:deploy-file
