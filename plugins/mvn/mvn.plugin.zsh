@@ -67,10 +67,10 @@ alias mvndocs='mvn dependency:resolve -Dclassifier=javadoc'
 function listMavenCompletions { 
      reply=(
         # common lifecycle
-        clean process-resources compile process-test-resources test-compile test integration-test package verify initialize install deploy site
+        clean initialize process-resources compile process-test-resources test-compile test integration-test package verify install deploy site
         
         # common plugins
-        deploy failsafe initialize install site surefire checkstyle javadoc jxr pmd ant antrun archetype assembly dependency enforcer gpg help release repository source eclipse idea jetty cargo jboss tomcat tomcat6 tomcat7 exec versions war ear ejb android scm buildnumber nexus repository sonar license hibernate3 liquibase flyway gwt
+        deploy failsafe install site surefire checkstyle javadoc jxr pmd ant antrun archetype assembly dependency enforcer gpg help release repository source eclipse idea jetty cargo jboss tomcat tomcat6 tomcat7 exec versions war ear ejb android scm buildnumber nexus repository sonar license hibernate3 liquibase flyway gwt
        
         # deploy
         deploy:deploy-file
