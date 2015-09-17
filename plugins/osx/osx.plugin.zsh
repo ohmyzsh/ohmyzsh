@@ -166,7 +166,7 @@ function itunes() {
 			if [ "$state" = "playing" ]; then
 				currenttrack=`osascript -e 'tell application "iTunes" to name of current track as string'`
 				currentartist=`osascript -e 'tell application "iTunes" to artist of current track as string'`
-				echo "Listening to %F{yellow}$currenttrack%f by %F{yellow}$currentartist%f";
+				print -P "Listening to %F{yellow}$currenttrack%f by %F{yellow}$currentartist%f";
 			fi
 			return 0
 			;;
