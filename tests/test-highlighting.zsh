@@ -49,7 +49,9 @@
 
 local -a errors highlight_zone
 local -A observed_result
+local -A save_ZSH_HIGHLIGHT_STYLES
 integer something_failed=0
+local unused_highlight='bg=red,underline' # a style unused by anything else, for tests to use
 
 # Load the main script.
 . ${0:h:h}/zsh-syntax-highlighting.zsh
@@ -57,12 +59,16 @@ integer something_failed=0
 # Activate the highlighter.
 ZSH_HIGHLIGHT_HIGHLIGHTERS=($1)
 
+# Cache a pristine set of styles.
+save_ZSH_HIGHLIGHT_STYLES=( "${(@kv)ZSH_HIGHLIGHT_STYLES}" )
+
 # Process each test data file in test data directory.
 for data_file in ${0:h:h}/highlighters/$1/test-data/*.zsh; do
 
   # Load the data and prepare checking it.
   PREBUFFER= BUFFER= ; expected_region_highlight=(); errors=()
   echo -n "* ${data_file:t:r}: "
+  ZSH_HIGHLIGHT_STYLES=( "${(@kv)save_ZSH_HIGHLIGHT_STYLES}" )
   . $data_file
 
   # Check the data declares $PREBUFFER or $BUFFER.
