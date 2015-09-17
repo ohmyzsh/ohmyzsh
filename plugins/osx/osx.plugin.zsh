@@ -161,9 +161,9 @@ function itunes() {
 		vol)
 			opt="set sound volume to $1" #$1 Due to the shift
 			;;
-		playing)
+		playing|status)
 			local state=`osascript -e 'tell application "iTunes" to player state as string'`
-			if [ "$state" = "playing" ]; then
+			if [[ "$state" = "playing" ]]; then
 				currenttrack=`osascript -e 'tell application "iTunes" to name of current track as string'`
 				currentartist=`osascript -e 'tell application "iTunes" to artist of current track as string'`
 				print -P "Listening to %F{yellow}$currenttrack%f by %F{yellow}$currentartist%f";
