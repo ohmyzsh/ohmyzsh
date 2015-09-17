@@ -120,8 +120,8 @@ _zsh_highlight_main_highlighter()
       # words for arguments).
       local needle=$'[;\n]'
       integer offset=${${buf[start_pos+1,-1]}[(i)$needle]}
-      (( start_pos += offset ))
-      (( end_pos += offset ))
+      (( start_pos += offset - 1 ))
+      (( end_pos = start_pos + $#arg ))
     else
       ((start_pos+=${#buf[$start_pos+1,-1]}-${#${buf[$start_pos+1,-1]##([[:space:]]|\\[[:space:]])#}}))
       ((end_pos=$start_pos+${#arg}))
