@@ -58,7 +58,7 @@ integer something_failed=0
 ZSH_HIGHLIGHT_HIGHLIGHTERS=($1)
 
 # Process each test data file in test data directory.
-for data_file in ${0:h:h}/highlighters/$1/test-data/*; do
+for data_file in ${0:h:h}/highlighters/$1/test-data/*.zsh; do
 
   # Load the data and prepare checking it.
   PREBUFFER= BUFFER= ; expected_region_highlight=(); errors=()
