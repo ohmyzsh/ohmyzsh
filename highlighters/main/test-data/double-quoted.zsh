@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 # -------------------------------------------------------------------------------------------------
-# Copyright (c) 2015 zsh-syntax-highlighting contributors
+# Copyright (c) 2010-2011 zsh-syntax-highlighting contributors
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -28,13 +28,10 @@
 # vim: ft=zsh sw=2 ts=2 et
 # -------------------------------------------------------------------------------------------------
 
-PREBUFFER=$'echo foo; echo bar\n\n\n'
-BUFFER=' echo baz; echo qux'
+BUFFER=': "foo$bar"'
 
 expected_region_highlight=(
-  "2 5 $ZSH_HIGHLIGHT_STYLES[builtin]" # echo
-  "7 9 $ZSH_HIGHLIGHT_STYLES[default]" # baz
-  "10 10 $ZSH_HIGHLIGHT_STYLES[default]" # semicolon
-  "12 15 $ZSH_HIGHLIGHT_STYLES[builtin]" # echo
-  "17 19 $ZSH_HIGHLIGHT_STYLES[default]" # qux
+  "3 6 $ZSH_HIGHLIGHT_STYLES[double-quoted-argument]" # "foo
+  "7 10 $ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]" # $bar
+  "11 11 $ZSH_HIGHLIGHT_STYLES[double-quoted-argument]" # "
 )

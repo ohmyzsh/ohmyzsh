@@ -84,7 +84,10 @@ for data_file in ${0:h:h}/highlighters/$1/test-data/*; do
       observed_result=()
       for i in {1..${#region_highlight}}; do
         highlight_zone=${(z)region_highlight[$i]}
-        for j in {$highlight_zone[1]..$highlight_zone[2]}; do
+        integer start=$highlight_zone[1] end=$highlight_zone[2]
+        (( --end )) # region_highlight ranges are half-open
+        (( ++start, ++end )) # region_highlight is 0-indexed; expected_region_highlight is 1-indexed
+        for j in {$start..$end}; do
           observed_result[$j]=$highlight_zone[3]
         done
       done

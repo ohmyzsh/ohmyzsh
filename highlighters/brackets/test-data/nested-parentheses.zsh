@@ -31,10 +31,10 @@
 BUFFER='echo $(echo ${(z)array})'
 
 expected_region_highlight=(
-  "6  6  $ZSH_HIGHLIGHT_STYLES[bracket-level-1]" # (
-  "13 13 $ZSH_HIGHLIGHT_STYLES[bracket-level-2]" # {
-  "14 14 $ZSH_HIGHLIGHT_STYLES[bracket-level-3]" # (
-  "16 16 $ZSH_HIGHLIGHT_STYLES[bracket-level-3]" # )
-  "22 22 $ZSH_HIGHLIGHT_STYLES[bracket-level-2]" # }
-  "23 23 $ZSH_HIGHLIGHT_STYLES[bracket-level-1]" # )
+  "7  7  $ZSH_HIGHLIGHT_STYLES[bracket-level-1]" # (
+  "14 14 $ZSH_HIGHLIGHT_STYLES[bracket-level-2]" # {
+  "15 15 $ZSH_HIGHLIGHT_STYLES[bracket-level-3]" # (
+  "17 17 $ZSH_HIGHLIGHT_STYLES[bracket-level-3]" # )
+  "23 23 $ZSH_HIGHLIGHT_STYLES[bracket-level-2]" # }
+  "24 24 $ZSH_HIGHLIGHT_STYLES[bracket-level-1]" # )
 )

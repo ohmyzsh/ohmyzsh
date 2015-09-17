@@ -32,5 +32,5 @@ PREBUFFER=$'echo \\\n'
 BUFFER='noglob'
 
 expected_region_highlight=(
-  "0 6 none" # 'noglob' highlighted as a string, not as a precomand
+  "1 6 none" # 'noglob' highlighted as a string, not as a precomand
 )
