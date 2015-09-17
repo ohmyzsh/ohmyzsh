@@ -34,5 +34,5 @@ BUFFER='ls ~D/path-tilde-named.zsh'
 
 expected_region_highlight=(
   "1 2  $ZSH_HIGHLIGHT_STYLES[command]" # ls
-  "4 23 $ZSH_HIGHLIGHT_STYLES[path]"    # ~D/path-tilde-named.zsh
+  "4 26 $ZSH_HIGHLIGHT_STYLES[path]"    # ~D/path-tilde-named.zsh
 )
