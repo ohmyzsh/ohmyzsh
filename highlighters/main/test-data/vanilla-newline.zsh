@@ -34,7 +34,7 @@ BUFFER=' echo baz; echo qux'
 expected_region_highlight=(
   "2 5 $ZSH_HIGHLIGHT_STYLES[builtin]" # echo
   "7 9 $ZSH_HIGHLIGHT_STYLES[default]" # baz
-  "10 10 $ZSH_HIGHLIGHT_STYLES[default]" # semicolon
+  "10 10 $ZSH_HIGHLIGHT_STYLES[commandseparator]" # semicolon
   "12 15 $ZSH_HIGHLIGHT_STYLES[builtin]" # echo
   "17 19 $ZSH_HIGHLIGHT_STYLES[default]" # qux
 )
