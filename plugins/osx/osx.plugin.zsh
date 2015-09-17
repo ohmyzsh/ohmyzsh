@@ -167,6 +167,8 @@ function itunes() {
 				currenttrack=`osascript -e 'tell application "iTunes" to name of current track as string'`
 				currentartist=`osascript -e 'tell application "iTunes" to artist of current track as string'`
 				print -P "Listening to %F{yellow}$currenttrack%f by %F{yellow}$currentartist%f";
+			else
+				print "iTunes is" $state;
 			fi
 			return 0
 			;;
@@ -208,7 +210,7 @@ EOF
 			echo "\tnext|previous\tplay next or previous track"
 			echo "\tshuf|shuffle [on|off|toggle]\tSet shuffled playback. Default: toggle. Note: toggle doesn't support the MiniPlayer."
 			echo "\tvol\tSet the volume, takes an argument from 0 to 100"
-			echo "\tplaying\tShow what song is currently playing in iTunes."
+			echo "\tplaying|status\tShow what song is currently playing in iTunes."
 			echo "\thelp\tshow this message and exit"
 			return 0
 			;;
