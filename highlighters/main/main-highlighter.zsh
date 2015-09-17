@@ -260,7 +260,7 @@ _zsh_highlight_main_highlighter_check_path()
 _zsh_highlight_main_highlighter_highlight_string()
 {
   setopt localoptions noksharrays
-  local i j k style varflag
+  local i j k style
   local AA
   # Starting quote is at 1, so start parsing at offset 2 in the string.
   for (( i = 2 ; i < end_pos - start_pos ; i += 1 )) ; do
@@ -268,7 +268,11 @@ _zsh_highlight_main_highlighter_highlight_string()
     (( k = j + 1 ))
     case "$arg[$i]" in
       '$' ) style=$ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]
-            (( varflag = 1))
+            # Look for an alphanumeric parameter name.
+            if [[ ${arg:$i} =~ ^([A-Za-z_][A-Za-z0-9_]*|[0-9]+) ]] ; then
+              (( k += $#MATCH )) # highlight the parameter name
+              (( i += $#MATCH )) # skip past it
+            fi
             ;;
       "\\") style=$ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]
             for (( c = i + 1 ; c < end_pos - start_pos ; c += 1 )); do
@@ -283,13 +287,8 @@ _zsh_highlight_main_highlighter_highlight_string()
               (( k += 1 )) # Color following char too.
               (( i += 1 )) # Skip parsing the escaped char.
             fi
-              (( varflag = 0 )) # End of variable
             ;;
-      ([^a-zA-Z0-9_]))
-            (( varflag = 0 )) # End of variable
-            continue
-            ;;
-      *) [[ $varflag -eq 0 ]] && continue ;;
+      *) continue ;;
 
     esac
     _zsh_highlight_main_add_region_highlight $j $k $style
