@@ -30,6 +30,7 @@
 
 alias alias1="unused expansion"
 alias -s alias2="echo"
+alias1() {} # to check that it's highlighted as an alias, not as a function
 
 ZSH_HIGHLIGHT_STYLES[alias]=$unused_highlight
 BUFFER='x.alias2; alias1'
