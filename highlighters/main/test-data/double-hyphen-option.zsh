@@ -28,10 +28,9 @@
 # vim: ft=zsh sw=2 ts=2 et
 # -------------------------------------------------------------------------------------------------
 
-ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]=$unused_highlight
-BUFFER=": \$'*' 'foo'"
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=$unused_highlight
+BUFFER='hello --world'
 
 expected_region_highlight=(
-  "3 6 $ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]" # $'*' - not a glob
-  "8 12 $ZSH_HIGHLIGHT_STYLES[single-quoted-argument]" # 'foo'
+  "7 13 $ZSH_HIGHLIGHT_STYLES[double-hyphen-option]" # --world
 )
