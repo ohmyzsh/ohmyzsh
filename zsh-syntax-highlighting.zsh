@@ -121,12 +121,12 @@ _zsh_highlight()
       fi
     }
 
+    return $ret
 
 
   } always {
     _ZSH_HIGHLIGHT_PRIOR_BUFFER=$BUFFER
     _ZSH_HIGHLIGHT_PRIOR_CURSOR=$CURSOR
-    return $ret
   }
 }
 
