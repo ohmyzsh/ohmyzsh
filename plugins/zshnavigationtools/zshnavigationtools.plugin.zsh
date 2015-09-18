@@ -1,7 +1,7 @@
 # The preamble comments apply when using ZNT as autoload functions
 # https://github.com/psprint/zsh-navigation-tools
 # License is GPLv3
-# ff7aa5840399c624ab753b58e2f3b18ef8ffebd3 refs/heads/master
+# d24c34e1fac51a25d8fa6ca9622d982dc584b6d9 refs/heads/master
 
 n-aliases() {
 # Copy this file into /usr/share/zsh/site-functions/
@@ -1032,7 +1032,6 @@ n-preview() {
 emulate -L zsh
 
 zmodload zsh/curses
-zmodload zsh/zprof
 
 setopt localoptions typesetsilent localtraps extendedglob
 trap "return" TERM INT QUIT
@@ -1053,8 +1052,6 @@ _vpreview_exit() {
     zcurses 2>/dev/null delwin status
     zcurses 2>/dev/null refresh
     zcurses end
-
-    zprof
 }
 
 # Outputs a message in the bottom of the screen
