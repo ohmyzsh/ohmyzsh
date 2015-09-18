@@ -28,6 +28,7 @@
 # vim: ft=zsh sw=2 ts=2 et
 # -------------------------------------------------------------------------------------------------
 
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument]=$unused_highlight
 BUFFER=$'echo "foo1\n'
 
 expected_region_highlight=(

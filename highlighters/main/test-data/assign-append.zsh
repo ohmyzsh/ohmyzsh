@@ -28,6 +28,7 @@
 # vim: ft=zsh sw=2 ts=2 et
 # -------------------------------------------------------------------------------------------------
 
+ZSH_HIGHLIGHT_STYLES[assign]=$unused_highlight
 BUFFER='a+=(lorem ipsum)'
 
 expected_region_highlight=(

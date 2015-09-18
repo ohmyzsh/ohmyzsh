@@ -28,6 +28,7 @@
 # vim: ft=zsh sw=2 ts=2 et
 # -------------------------------------------------------------------------------------------------
 
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=$unused_highlight
 BUFFER='sudo -u otheruser ls /'
 
 expected_region_highlight=(
