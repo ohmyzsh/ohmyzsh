@@ -1,4 +1,4 @@
-printf '\033[0;34m%s\033[0m\n' "Upgrading Oh My Zsh"
+printf '\033[0;34m%s\033[0m\n' "Updating Oh My Zsh"
 cd "$ZSH"
 if git pull --rebase --stat origin master
 then
