@@ -16,6 +16,13 @@ if [ -d "$ZSH" ]; then
   exit
 fi
 
+# Prevent the cloned repository from having insecure permissions. Failing to do
+# so causes compinit() calls to fail with "command not found: compdef" errors
+# for users with insecure umasks (e.g., "002", allowing group writability). Note
+# that this will be ignored under Cygwin by default, as Windows ACLs take
+# precedence over umasks except for filesystems mounted with option "noacl".
+umask g-w,o-w
+
 echo "\033[0;34mCloning Oh My Zsh...\033[0m"
 hash git >/dev/null 2>&1 && env git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git $ZSH || {
   echo "git not installed"
@@ -41,12 +48,17 @@ export PATH=\"$PATH\"
 " ~/.zshrc > ~/.zshrc-omztemp
 mv -f ~/.zshrc-omztemp ~/.zshrc
 
-TEST_CURRENT_SHELL=$(expr "$SHELL" : '.*/\(.*\)')
-if [ "$TEST_CURRENT_SHELL" != "zsh" ]; then
+# If this user's login shell is not already "zsh", attempt to switch.
+if [ "$(expr "$SHELL" : '.*/\(.*\)')" != "zsh" ]; then
+  # If this platform provides a "chsh" command (not Cygwin), do it, man!
+  if hash chsh >/dev/null 2>&1; then
     echo "\033[0;34mTime to change your default shell to zsh!\033[0m"
     chsh -s $(grep /zsh$ /etc/shells | tail -1)
+  # Else, suggest the user do so manually.
+  else
+    echo "\033[0;34mPlease manually change your default shell to zsh!\033[0m"
+  fi
 fi
-unset TEST_CURRENT_SHELL
 
 echo "\033[0;32m"'         __                                     __   '"\033[0m"
 echo "\033[0;32m"'  ____  / /_     ____ ___  __  __   ____  _____/ /_  '"\033[0m"
