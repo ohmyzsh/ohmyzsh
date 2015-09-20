@@ -1,0 +1,8 @@
+autoload znt-usetty-wrapper n-history
+local NLIST_START_IN_SEARCH_MODE=1
+local NLIST_START_IN_UNIQ_MODE=1
+
+znt-usetty-wrapper n-history "$@"
+
+unset NLIST_START_IN_SEARCH_MODE
+unset NLIST_START_IN_UNIQ_MODE

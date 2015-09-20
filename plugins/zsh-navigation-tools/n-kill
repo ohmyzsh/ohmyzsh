@@ -1,0 +1,96 @@
+# Copy this file into /usr/share/zsh/site-functions/
+# and add 'autoload n-kill` to .zshrc
+#
+# This function allows to choose a process and a signal to send to it
+#
+# Uses n-list
+
+emulate -L zsh
+
+setopt extendedglob
+zmodload zsh/curses
+
+local IFS="
+"
+
+[ -f ~/.config/znt/n-list.conf ] && . ~/.config/znt/n-list.conf
+[ -f ~/.config/znt/n-kill.conf ] && . ~/.config/znt/n-kill.conf
+
+typeset -A signals
+signals=(
+     1       "1  - HUP"
+     2       "2  - INT"
+     3       "3  - QUIT"
+     6       "6  - ABRT"
+     9       "9  - KILL"
+     14      "14 - ALRM"
+     15      "15 - TERM"
+     17      "17 - STOP"
+     19      "19 - CONT"
+)
+
+local list
+local selected
+local signal
+local -a signal_names
+local title
+
+NLIST_REMEMBER_STATE=0
+
+typeset -a NLIST_NONSELECTABLE_ELEMENTS
+NLIST_NONSELECTABLE_ELEMENTS=( 1 )
+
+type ps 2>/dev/null 1>&2 || { echo >&2 "Error: \`ps' not found"; return 1 }
+
+case "$(uname)" in
+    CYGWIN*) list=( `command ps -Wa` )  ;;
+    *) list=( `command ps -o pid,uid,command -A` ) ;;
+esac
+
+# Ask of PID
+title=$'\x1b[00;31m'"${list[1]}"$'\x1b[00;00m\0'
+shift list
+list=( "$title" "${(@M)list:#(#i)*$1*}" )
+
+local NLIST_GREP_STRING="$1"
+
+if [ "$#list" -eq 1 ]; then
+    echo "No matching processes"
+    return 1
+fi
+
+n-list "$list[@]"
+
+# Got answer? (could be Ctrl-C or 'q')
+if [ "$REPLY" -gt 0 ]; then
+    selected="$reply[REPLY]"
+    selected="${selected## #}"
+    pid="${selected%% *}"
+
+    # Now ask of signal
+    signal_names=( ${(vin)signals} )
+    typeset -a NLIST_HOP_INDEXES
+    NLIST_HOP_INDEXES=( 3 6 8 )
+    unset NLIST_COLORING_PATTERN
+    n-list $'\x1b[00;31mSelect signal:\x1b[00;00m' "$signal_names[@]"
+
+    if [ "$REPLY" -gt 0 ]; then
+        selected="$reply[REPLY]"
+        signal="${(k)signals[(r)$selected]}"
+
+        # ZLE?
+        if [ "${(t)CURSOR}" = "integer-local-special" ]; then
+            zle redisplay
+            zle kill-whole-line
+            zle -U "kill -$signal $pid"
+        else
+            print -zr "kill -$signal $pid"
+        fi
+    else
+        [ "${(t)CURSOR}" = "integer-local-special" ] && zle redisplay
+    fi
+else
+    [ "${(t)CURSOR}" = "integer-local-special" ] && zle redisplay
+fi
+
+# vim: set filetype=zsh:
