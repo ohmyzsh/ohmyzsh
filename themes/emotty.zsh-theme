@@ -51,7 +51,7 @@ root_prompt="$emoji[skull]"
 warn_prompt="$emoji[collision_symbol]"
 
 vcs_unstaged_glyph="%{$emoji[circled_latin_capital_letter_m]$emoji2[emoji_style] %2G%}"
-vcs_staged_glyph="%{$emoji[high_voltage_sign] %1G%}"
+vcs_staged_glyph="%{$emoji[high_voltage_sign] %2G%}"
 vcs_branch_glyph=$(print -P $'\Ue0a0') #  
 vcs_action_glyph=$(print -P $'\U276f') # ❯
 
@@ -60,7 +60,7 @@ yellow="$FG[003]"
 green="$FG[002]"
 cyan="$FG[014]"
 
-prompt_glyph="%{%(#.${root_prompt}.${user_prompt})%1G%}"
+prompt_glyph="%{%(#.${root_prompt}.${user_prompt}) %2G%}"
 
 # Uncomment the next line if you also like to see the warn_prompt in the prompt on the right.
 #last_command_failed="%(?.. %F{red}%1{${warn_prompt} %1G%}%?%f)"
@@ -80,7 +80,7 @@ zstyle ':vcs_info:*' stagedstr "${green}${vcs_staged_glyph}"
 # %(K|F){color} set (back|fore)ground color
 # %(k|f) reset (back|fore)ground color
 zstyle ':vcs_info:*' max-exports 3
-zstyle ':vcs_info:*' nvcsformats "${prompt_glyph} " '%3~' ''
+zstyle ':vcs_info:*' nvcsformats "${prompt_glyph}" '%3~' ''
 zstyle ':vcs_info:*' formats "${yellow}%u%c%b${vcs_branch_glyph}%f" '%S|' "$FX[bold]%r$FX[no-bold]" 
 zstyle ':vcs_info:*' actionformats "${red}%K{white}%a${vcs_action_glyph}%k%f" '%S|' "$FX[bold]%r$FX[no-bold]"
 
