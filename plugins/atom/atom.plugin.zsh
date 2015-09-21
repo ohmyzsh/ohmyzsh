@@ -1,23 +1,9 @@
-if [ Cygwin = "$(uname -o 2>/dev/null)" ]; then
-    local _atom_path > /dev/null 2>&1
+# Gets OS Type
+unamestr=$(uname -s)
 
-    _atom_path=${LOCALAPPDATA}/atom/bin/atom
-
-    if [[ -a $_atom_path ]]; then
-        cyg_open_atom()
-        {
-            if [[ -n $1 ]]; then
-                ${_atom_path} `cygpath -w $1`
-            else
-                ${_atom_path}
-            fi
-        }
-
-        alias at=cyg_open_atom
-    fi
-else
+# If OSX
+if [[ "$unamestr" == 'Darwin' ]]; then
     local _atom_paths > /dev/null 2>&1
-
     _atom_paths=(
         "$HOME/Applications/Atom.app"
         "/Applications/Atom.app"
@@ -29,6 +15,8 @@ else
             break
         fi
     done
+# If Linux
+elif [[ "$unamestr" == 'Linux' ]]; then
+    # Alerts the user if 'atom' is not a found command.
+    type atom >/dev/null 2>&1 && alias at="atom" || { echo >&2 "You have enabled the atom oh-my-zsh plugin on Linux, but atom is not a recognized command. Please make sure you have it installed before using this plugin."; }
 fi
-
-alias att='at .'
