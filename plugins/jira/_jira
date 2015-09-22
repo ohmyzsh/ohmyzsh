@@ -1,0 +1,22 @@
+#compdef jira
+#autoload
+
+local -a _1st_arguments
+_1st_arguments=(
+  'new:create a new issue'
+  'dashboard:open the dashboard'
+  'reported:search for issues reported by a user'
+  'assigned:search for issues assigned to a user'
+  'dumpconfig:display effective jira configuration'
+)
+
+_arguments -C \
+  ':command:->command' \
+  '*::options:->options'
+
+case $state in
+  (command)
+    _describe -t commands "jira subcommand" _1st_arguments
+    return
+   ;;
+esac
