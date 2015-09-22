@@ -89,6 +89,12 @@ function gerrit_setup () {
 
 function gerrit () {
 
+  gitRemoteUrl=`git config --get remote.origin.url`;
+  if [[ $gitRemoteUrl != *"gerrit"* ]]; then
+    echo "This repository isn't on Gerrit Host.";
+    return;
+  fi
+
   ref=$(git symbolic-ref HEAD 2> /dev/null);
   branch=${ref#refs/heads/};
 
@@ -104,5 +110,4 @@ function gerrit () {
     [ "$1" = "clone" ] && gerrit_clone "$2";
     [ "$1" = "setup" ] && gerrit_setup;
   fi
-
 }
