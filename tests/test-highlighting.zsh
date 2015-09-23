@@ -91,11 +91,16 @@ for data_file in ${0:h:h}/highlighters/$1/test-data/*.zsh; do
       for i in {1..${#region_highlight}}; do
         highlight_zone=${(z)region_highlight[$i]}
         integer start=$highlight_zone[1] end=$highlight_zone[2]
-        (( --end )) # region_highlight ranges are half-open
-        (( ++start, ++end )) # region_highlight is 0-indexed; expected_region_highlight is 1-indexed
-        for j in {$start..$end}; do
-          observed_result[$j]=$highlight_zone[3]
-        done
+        if (( start < end )) # region_highlight ranges are half-open
+        then
+          (( --end )) # convert to closed range, like expected_region_highlight
+          (( ++start, ++end )) # region_highlight is 0-indexed; expected_region_highlight is 1-indexed
+          for j in {$start..$end}; do
+            observed_result[$j]=$highlight_zone[3]
+          done
+        else
+          # noop range; ignore.
+        fi
       done
 
       # Then we compare the observed result with the expected one.
