@@ -84,10 +84,28 @@ setup_ohmyzsh() {
 }
 
 setup_zshrc() {
+	# Keep most recent old .zshrc at .zshrc.pre-oh-my-zsh, and older ones
+	# with datestamp of installation that moved them aside, so we never actually
+	# destroy a user's original zshrc
 	echo "${BLUE}Looking for an existing zsh config...${RESET}"
+
+	# Must use this exact name so uninstall.sh can find it
+	OLD_ZSHRC=~/.zshrc.pre-oh-my-zsh
 	if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]; then
-		echo "${YELLOW}Found ~/.zshrc.${GREEN} Backing up to ~/.zshrc.pre-oh-my-zsh.${RESET}"
-		mv ~/.zshrc ~/.zshrc.pre-oh-my-zsh
+		if [ -e "$OLD_ZSHRC" ]; then
+			OLD_OLD_ZSHRC="${OLD_ZSHRC}-$(date +%Y-%m-%d_%H-%M-%S)"
+			if [ -e "$OLD_OLD_ZSHRC" ]; then
+				error "$OLD_OLD_ZSHRC exists. Can't back up ${OLD_ZSHRC}"
+				error "re-run the installer again in a couple of seconds"
+				exit 1
+			fi
+			mv "$OLD_ZSHRC" "${OLD_OLD_ZSHRC}"
+
+			echo "${YELLOW}Found old ~/.zshrc.pre-oh-my-zsh." \
+				"${GREEN}Backing up to ${OLD_OLD_ZSHRC}${RESET}"
+		fi
+		echo "${YELLOW}Found ~/.zshrc.${RESET} ${GREEN}Backing up to ${OLD_ZSHRC}${RESET}"
+		mv ~/.zshrc "$OLD_ZSHRC"
 	fi
 
 	echo "${BLUE}Using the Oh My Zsh template file and adding it to ~/.zshrc.${RESET}"
