@@ -29,7 +29,7 @@
 # -------------------------------------------------------------------------------------------------
 
 hash zsh_syntax_highlighting_hash=/doesnotexist
-ZSH_HIGHLIGHT_STYLES[hashed]=$unused_highlight
+ZSH_HIGHLIGHT_STYLES[hashed-command]=$unused_highlight
 BUFFER='zsh_syntax_highlighting_hash'
 
 expected_region_highlight=(
