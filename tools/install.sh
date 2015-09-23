@@ -58,6 +58,30 @@ main() {
     exit 1
   }
 
+  # Keep most recent old .zshrc at .zshrc.pre-oh-my-zsh, and older ones
+  # with datestamp of installation that moved them aside, so we never actually
+  # destroy a user's original zshrc
+  printf "${BLUE}Looking for an existing zsh config...${NORMAL}\n"
+  # Must use this exact name so uninstall.sh can find it
+  OLD_ZSHRC=~/.zshrc.pre-oh-my-zsh
+  if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]; then
+    if [ -e "$OLD_ZSHRC" ]; then
+      TIMESTAMP="$(date +%Y-%m-%d_%H-%M-%S)"
+      OLD_OLD_ZSHRC="${OLD_ZSHRC}-${TIMESTAMP}"
+      if [ -e "$OLD_OLD_ZSHRC" ]; then
+        echo "Error: $OLD_OLD_ZSHRC exists" >&2
+        echo "Just re-run this again in a couple seconds" &>2
+        exit 1
+      fi
+      mv "$OLD_ZSHRC" "${OLD_OLD_ZSHRC}"
+      # intentional omitted newline
+      printf "${YELLOW}Found old ~/.zshrc.pre-oh-my-zsh.${NORMAL} "
+      printf "${GREEN}Backing up to ${OLD_OLD_ZSHRC}${NORMAL}\n"
+    fi
+    printf "${YELLOW}Found ~/.zshrc.${NORMAL} ${GREEN}Backing up to ${OLD_ZSHRC}${NORMAL}\n"
+    mv ~/.zshrc "$OLD_ZSHRC";
+  fi
+
   # The Windows (MSYS) Git is not compatible with normal use on cygwin
   if [ "$OSTYPE" = cygwin ]; then
     if git --version | grep msysgit > /dev/null; then
