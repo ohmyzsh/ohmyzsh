@@ -58,6 +58,13 @@ custom widgets have been created (i.e., after all `zle -N` calls and after
 running `compinit`).  Widgets created later will work, but will not update the
 syntax highlighting.
 
+### How are new releases announced?
+
+There is currently no "push" announcements channel.  However, the following alternatives exist:
+
+- GitHub's RSS feed of releases: https://github.com/zsh-users/zsh-syntax-highlighting/releases.atom
+- An anitya entry: https://release-monitoring.org/project/7552/
+
 How to tweak
 ------------
 
