@@ -20,7 +20,7 @@ alias hgca='hg qimport -r tip ; hg qrefresh -e ; hg qfinish tip'
 alias hgun='hg resolve --list'
 
 function in_hg() {
-  if [[ -d .hg ]] || $(hg summary > /dev/null 2>&1); then
+  if [[ -d .hg ]] || $(hg root > /dev/null 2>&1); then
     echo 1
   fi
 }
@@ -42,13 +42,20 @@ $ZSH_THEME_REPO_NAME_COLOR$_DISPLAY$ZSH_PROMPT_BASE_COLOR$ZSH_PROMPT_BASE_COLOR$
 
 function hg_dirty_choose {
   if [ $(in_hg) ]; then
-    hg status 2> /dev/null | command grep -Eq '^\s*[ACDIM!?L]'
-    if [ $pipestatus[-1] -eq 0 ]; then
-      # Grep exits with 0 when "One or more lines were selected", return "dirty".
-      echo $1
-    else
-      # Otherwise, no lines were found, or an error occurred. Return clean.
+    # Allow turning off the 'hg status' call. Useful in large repos where that
+    # can take a while. Mirror the functionality of the git plugin by just
+    # showing the "clean" prompt in this case.
+    if [[ "$(command hg config oh-my-zsh.hide-dirty)" = "1" ]]; then
       echo $2
+    else
+      hg status 2> /dev/null | command grep -Eq '^\s*[ACDIM!?L]'
+      if [ $pipestatus[-1] -eq 0 ]; then
+        # Grep exits with 0 when "One or more lines were selected", return "dirty".
+        echo $1
+      else
+        # Otherwise, no lines were found, or an error occurred. Return clean.
+        echo $2
+      fi
     fi
   fi
 }
