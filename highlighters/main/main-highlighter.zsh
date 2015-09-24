@@ -183,6 +183,19 @@ _zsh_highlight_main_highlighter()
                         elif [[ $arg[1] == '<' || $arg[1] == '>' ]]; then
                           style=$ZSH_HIGHLIGHT_STYLES[redirection]
                           redirection=true
+                        elif [[ $arg[1,2] == '((' ]]; then
+                          # Arithmetic evaluation.
+                          #
+                          # Note: prior to zsh-5.1.1-52-g4bed2cf (workers/36669), the ${(z)...}
+                          # splitter would only output the '((' token if the matching '))' had
+                          # been typed.  Therefore, under those versions of zsh, BUFFER="(( 42"
+                          # would be highlighted as an error until the matching "))" are typed.
+                          #
+                          # We highlight just the opening parentheses, as a reserved word; this
+                          # is how [[ ... ]] is highlighted, too.
+                          style=$ZSH_HIGHLIGHT_STYLES[reserved-word]
+                          _zsh_highlight_main_add_region_highlight $start_pos $((start_pos + 2)) $style
+                          substr_color=1
                         else
                           if _zsh_highlight_main_highlighter_check_path; then
                             style=$ZSH_HIGHLIGHT_STYLES[path]
