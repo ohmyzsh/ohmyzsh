@@ -45,7 +45,7 @@ _zsh_highlight()
   # Store the previous command return code to restore it whatever happens.
   local ret=$?
 
-  setopt localoptions nowarncreateglobal
+  setopt localoptions warncreateglobal
 
   # Do not highlight if there are more than 300 chars in the buffer. It's most
   # likely a pasted command or a huge list of files in that case..
@@ -125,8 +125,8 @@ _zsh_highlight()
 
 
   } always {
-    _ZSH_HIGHLIGHT_PRIOR_BUFFER=$BUFFER
-    _ZSH_HIGHLIGHT_PRIOR_CURSOR=$CURSOR
+    typeset -g _ZSH_HIGHLIGHT_PRIOR_BUFFER=$BUFFER
+    typeset -gi _ZSH_HIGHLIGHT_PRIOR_CURSOR=$CURSOR
   }
 }
 
