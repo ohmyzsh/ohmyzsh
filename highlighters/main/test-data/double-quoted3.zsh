@@ -28,10 +28,11 @@
 # vim: ft=zsh sw=2 ts=2 et
 # -------------------------------------------------------------------------------------------------
 
-BUFFER=': "$42foo"'
+BUFFER=': "$" "$42foo"'
 
 expected_region_highlight=(
-  "3 3 $ZSH_HIGHLIGHT_STYLES[double-quoted-argument]" # "
-  "4 6 $ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]" # $42
-  "7 10 $ZSH_HIGHLIGHT_STYLES[double-quoted-argument]" # foo"
+  "3 5 $ZSH_HIGHLIGHT_STYLES[double-quoted-argument]" # "$"
+  "7 7 $ZSH_HIGHLIGHT_STYLES[double-quoted-argument]" # "
+  "8 10 $ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]" # $42
+  "11 14 $ZSH_HIGHLIGHT_STYLES[double-quoted-argument]" # foo"
 )
