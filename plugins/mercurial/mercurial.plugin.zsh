@@ -26,22 +26,24 @@ function in_hg() {
 }
 
 function hg_get_branch_name() {
-  if [ $(in_hg) ]; then
+  if [ $_INHG ]; then
     echo $(hg branch)
   fi
 }
 
 function hg_prompt_info {
-  if [ $(in_hg) ]; then
+  _INHG=$(in_hg)
+  if [ $_INHG ]; then
     _DISPLAY=$(hg_get_branch_name)
     echo "$ZSH_PROMPT_BASE_COLOR$ZSH_THEME_HG_PROMPT_PREFIX\
 $ZSH_THEME_REPO_NAME_COLOR$_DISPLAY$ZSH_PROMPT_BASE_COLOR$ZSH_PROMPT_BASE_COLOR$(hg_dirty)$ZSH_THEME_HG_PROMPT_SUFFIX$ZSH_PROMPT_BASE_COLOR"
     unset _DISPLAY
   fi
+  unset _INHG
 }
 
 function hg_dirty_choose {
-  if [ $(in_hg) ]; then
+  if [ $_INHG ]; then
     # Allow turning off the 'hg status' call. Useful in large repos where that
     # can take a while. Mirror the functionality of the git plugin by just
     # showing the "clean" prompt in this case.
