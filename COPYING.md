@@ -1,4 +1,4 @@
-Copyright (c) 2010-2011 zsh-syntax-highlighting contributors
+Copyright (c) 2010-2015 zsh-syntax-highlighting contributors
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted
