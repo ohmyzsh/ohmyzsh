@@ -1,7 +1,8 @@
 # Sublime Text 2 Aliases
 
-if [[ $('uname') == 'Linux' ]]; then
-    local _sublime_linux_paths > /dev/null 2>&1
+() {
+if [[ "$OSTYPE" == 'linux-gnu' ]]; then
+    local _sublime_linux_paths
     _sublime_linux_paths=(
         "$HOME/bin/sublime_text"
         "/opt/sublime_text/sublime_text"
@@ -23,7 +24,7 @@ if [[ $('uname') == 'Linux' ]]; then
     done
 
 elif  [[ "$OSTYPE" = darwin* ]]; then
-    local _sublime_darwin_paths > /dev/null 2>&1
+    local _sublime_darwin_paths
     _sublime_darwin_paths=(
         "/usr/local/bin/subl"
         "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"
@@ -41,6 +42,34 @@ elif  [[ "$OSTYPE" = darwin* ]]; then
             break
         fi
     done
+
+elif  [[ "$OSTYPE" == cygwin ]]; then
+    local cygprogfiles=""
+    cygprogfiles=$(cygpath "$PROGRAMFILES")
+    local cygprogfiles_x86=""
+    cygprogfiles_x86=$(cmd /c "echo %ProgramFiles(x86)%")
+    cygprogfiles_x86=${cygprogfiles_x86/[\\r\\n]//}
+    cygprogfiles_x86=$(cygpath "$cygprogfiles_x86")
+    local _sublime_cygwin_paths
+    _sublime_cygwin_paths=(
+        "$cygprogfiles/Sublime Text 2/sublime_text.exe"
+        "$cygprogfiles/Sublime Text 3/sublime_text.exe"
+        "$cygprogfiles_x86/Sublime Text 2/sublime_text.exe"
+        "$cygprogfiles_x86/Sublime Text 3/sublime_text.exe"
+    )
+    local OLDIFS="$IFS"
+    IFS=$'\n'
+    for _sublime_path in $_sublime_cygwin_paths; do
+        if [[ -a $_sublime_path ]]; then
+            subl() { "$_sublime_path" $(cygpath -aw ${*:-.}) }
+            alias st=subl
+            break
+        fi
+    done
+    IFS="$OLDIFS"
+    unset OLDIFS
 fi
+
+}
 
 alias stt='st .'
