@@ -55,6 +55,7 @@
 : ${ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]:=fg=cyan}
 : ${ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]:=fg=cyan}
 : ${ZSH_HIGHLIGHT_STYLES[assign]:=none}
+: ${ZSH_HIGHLIGHT_STYLES[redirection]:=none}
 
 # Whether the highlighter should be called or not.
 _zsh_highlight_main_highlighter_predicate()
@@ -177,7 +178,7 @@ _zsh_highlight_main_highlighter()
                         elif [[ $arg[0,1] == $histchars[0,1] || $arg[0,1] == $histchars[2,2] ]]; then
                           style=$ZSH_HIGHLIGHT_STYLES[history-expansion]
                         elif [[ $arg[1] == '<' || $arg[1] == '>' ]]; then
-                          style=$ZSH_HIGHLIGHT_STYLE[redirection]
+                          style=$ZSH_HIGHLIGHT_STYLES[redirection]
                           redirection=true
                         else
                           style=$ZSH_HIGHLIGHT_STYLES[unknown-token]
@@ -209,6 +210,8 @@ _zsh_highlight_main_highlighter()
                    style=$ZSH_HIGHLIGHT_STYLES[history-expansion]
                  elif [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR:#"$arg"} ]]; then
                    style=$ZSH_HIGHLIGHT_STYLES[commandseparator]
+                 elif [[ $arg[1] == '<' || $arg[1] == '>' ]]; then
+                   style=$ZSH_HIGHLIGHT_STYLES[redirection]
                  else
                    style=$ZSH_HIGHLIGHT_STYLES[default]
                  fi

@@ -46,6 +46,7 @@ This highlighter defines the following styles:
 * `dollar-double-quoted-argument` -  dollar double quoted arguments ($foo inside "")
 * `back-double-quoted-argument` -  back double quoted arguments (\x inside "")
 * `assign` - variable assignments
+* `redirection` - redirection operators (`<`, `>`, etc)
 * `default` - parts of the buffer that do not match anything
 
 To override one of those styles, change its entry in `ZSH_HIGHLIGHT_STYLES`, for example in `~/.zshrc`:
