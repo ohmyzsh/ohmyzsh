@@ -332,6 +332,10 @@ _zsh_highlight_main_highlighter_highlight_dollar_string()
               (( k += $#MATCH ))
               (( i += $#MATCH ))
             else
+              if (( $#arg > $i+1 )) && [[ $arg[$i+1] == [xXuU] ]]; then
+                # \x not followed by hex digits is probably an error
+                style=$ZSH_HIGHLIGHT_STYLES[unknown-token]
+              fi
               (( k += 1 )) # Color following char too.
               (( i += 1 )) # Skip parsing the escaped char.
             fi
