@@ -102,7 +102,11 @@ _zsh_highlight_main_highlighter()
   )
 
   for arg in ${(z)buf}; do
-    local substr_color=0
+    # substr_color is set to 1 to disable adding an entry to region_highlight
+    # for this iteration.  Currently, that is done for "" strings,
+    # which add the entry early so escape sequences within the string override
+    # the string's color.
+    integer substr_color=0
     local style_override=""
     if $new_expression && [[ $arg = 'noglob' ]]; then
       highlight_glob=false
