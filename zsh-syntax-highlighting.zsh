@@ -55,6 +55,7 @@ _zsh_highlight()
   [[ $PENDING -gt 0 ]] && return $ret
 
   # Reset region highlight to build it from scratch
+  typeset -ga region_highlight
   region_highlight=();
 
   {
