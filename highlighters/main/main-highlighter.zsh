@@ -311,7 +311,7 @@ _zsh_highlight_main_highlighter_highlight_dollar_string()
     (( k = j + 1 ))
     case "$arg[$i]" in
       "\\") style=$ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]
-            for (( c = i + 1 ; c < end_pos - start_pos ; c += 1 )); do
+            for (( c = i + 1 ; c <= end_pos - start_pos ; c += 1 )); do
               [[ "$arg[$c]" != ([0-9xXuUa-fA-F]) ]] && break
             done
             AA=$arg[$i+1,$c-1]

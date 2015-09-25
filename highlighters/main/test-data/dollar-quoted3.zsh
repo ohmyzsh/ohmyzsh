@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 # -------------------------------------------------------------------------------------------------
-# Copyright (c) 2010-2011 zsh-syntax-highlighting contributors
+# Copyright (c) 2015 zsh-syntax-highlighting contributors
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -28,11 +28,12 @@
 # vim: ft=zsh sw=2 ts=2 et
 # -------------------------------------------------------------------------------------------------
 
-# Similar to dollar-quoted3.zsh
-# This test checks that the 'r' gets highlighted correctly.  Do not append to the BUFFER.
-BUFFER=': "foo$bar'
+# Similar to double-quoted2.zsh
+ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]=$unused_highlight
+# This test checks that the '1' gets highlighted correctly.  Do not append to the BUFFER.
+BUFFER=": \$'\xa1"
 
 expected_region_highlight=(
-  "3 6 $ZSH_HIGHLIGHT_STYLES[double-quoted-argument]" # "foo
-  "7 10 $ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]" # $bar
+  "3 4 $ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]" # $'
+  "5 8 $ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]" # \xa1
 )
