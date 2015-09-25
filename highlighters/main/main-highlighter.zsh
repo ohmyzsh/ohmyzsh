@@ -54,6 +54,7 @@
 : ${ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]:=fg=yellow}
 : ${ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]:=fg=cyan}
 : ${ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]:=fg=cyan}
+: ${ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]:=fg=cyan}
 : ${ZSH_HIGHLIGHT_STYLES[assign]:=none}
 
 # Whether the highlighter should be called or not.
@@ -103,7 +104,7 @@ _zsh_highlight_main_highlighter()
 
   for arg in ${(z)buf}; do
     # substr_color is set to 1 to disable adding an entry to region_highlight
-    # for this iteration.  Currently, that is done for "" strings,
+    # for this iteration.  Currently, that is done for "" and $'' strings,
     # which add the entry early so escape sequences within the string override
     # the string's color.
     integer substr_color=0
@@ -204,6 +205,9 @@ _zsh_highlight_main_highlighter()
                  substr_color=1
                  ;;
         \$\'*)   style=$ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]
+                 _zsh_highlight_main_add_region_highlight $start_pos $end_pos $style
+                 _zsh_highlight_main_highlighter_highlight_dollar_string
+                 substr_color=1
                  ;;
         '`'*)    style=$ZSH_HIGHLIGHT_STYLES[back-quoted-argument];;
         *[*?]*)  $highlight_glob && style=$ZSH_HIGHLIGHT_STYLES[globbing] || style=$ZSH_HIGHLIGHT_STYLES[default];;
@@ -265,8 +269,6 @@ _zsh_highlight_main_highlighter_highlight_string()
 {
   setopt localoptions noksharrays
   local i j k style
-  local AA
-  integer c
   # Starting quote is at 1, so start parsing at offset 2 in the string.
   for (( i = 2 ; i < end_pos - start_pos ; i += 1 )) ; do
     (( j = i + start_pos - 1 ))
@@ -282,6 +284,33 @@ _zsh_highlight_main_highlighter_highlight_string()
             fi
             ;;
       "\\") style=$ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]
+            if [[ \\\`\"\$ == *$arg[$i+1]* ]]; then
+              (( k += 1 )) # Color following char too.
+              (( i += 1 )) # Skip parsing the escaped char.
+            else
+              continue
+            fi
+            ;;
+      *) continue ;;
+
+    esac
+    _zsh_highlight_main_add_region_highlight $j $k $style
+  done
+}
+
+# Highlight special chars inside dollar-quoted strings
+_zsh_highlight_main_highlighter_highlight_dollar_string()
+{
+  setopt localoptions noksharrays
+  local i j k style
+  local AA
+  integer c
+  # Starting dollar-quote is at 1:2, so start parsing at offset 3 in the string.
+  for (( i = 3 ; i < end_pos - start_pos ; i += 1 )) ; do
+    (( j = i + start_pos - 1 ))
+    (( k = j + 1 ))
+    case "$arg[$i]" in
+      "\\") style=$ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]
             for (( c = i + 1 ; c < end_pos - start_pos ; c += 1 )); do
               [[ "$arg[$c]" != ([0-9,xX,a-f,A-F]) ]] && break
             done

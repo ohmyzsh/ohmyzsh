@@ -29,7 +29,7 @@
 # -------------------------------------------------------------------------------------------------
 
 BUFFER=': "foo$bar:\`:\":\$:'
-BUFFER+=\\\':\"
+BUFFER+=\\\\:\"
 
 expected_region_highlight=(
   "3 6 $ZSH_HIGHLIGHT_STYLES[double-quoted-argument]" # "foo
@@ -41,6 +41,6 @@ expected_region_highlight=(
   "17 17 $ZSH_HIGHLIGHT_STYLES[double-quoted-argument]" # :
   "18 19 $ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]" # \"
   "20 20 $ZSH_HIGHLIGHT_STYLES[double-quoted-argument]" # :
-  "21 22 $ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]" # \'
+  "21 22 $ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]" # \\
   "23 24 $ZSH_HIGHLIGHT_STYLES[double-quoted-argument]" # :"
 )
