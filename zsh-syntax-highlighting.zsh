@@ -126,7 +126,7 @@ _zsh_highlight()
 
 
   } always {
-    typeset -g _ZSH_HIGHLIGHT_PRIOR_BUFFER=$BUFFER
+    typeset -g _ZSH_HIGHLIGHT_PRIOR_BUFFER="$BUFFER"
     typeset -gi _ZSH_HIGHLIGHT_PRIOR_CURSOR=$CURSOR
   }
 }
