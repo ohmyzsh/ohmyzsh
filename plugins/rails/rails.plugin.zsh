@@ -54,10 +54,12 @@ alias rdrs='rake db:reset'
 alias rdtc='rake db:test:clone'
 alias rdtp='rake db:test:prepare'
 alias rdmtc='rake db:migrate db:test:clone'
-
 alias rlc='rake log:clear'
 alias rn='rake notes'
 alias rr='rake routes'
+alias rrg='rake routes | grep'
+alias rt='rake test'
+
 
 # legacy stuff
 alias sstat='thin --stats "/thin/stats" start'
