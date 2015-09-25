@@ -29,10 +29,12 @@
 # -------------------------------------------------------------------------------------------------
 
 ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]=$unused_highlight
-BUFFER=": \$'foo\xbar'"
+BUFFER=": \$'foo\xbar\udeadbeef'"
 
 expected_region_highlight=(
   "3 7 $ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]" # $'foo
   "8 11 $ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]" # \xba
-  "12 13 $ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]" # r'
+  "12 12 $ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]" # r
+  "13 18 $ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]" # \dead
+  "19 23 $ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]" # beef'
 )

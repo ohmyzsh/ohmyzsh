@@ -312,11 +312,15 @@ _zsh_highlight_main_highlighter_highlight_dollar_string()
     case "$arg[$i]" in
       "\\") style=$ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]
             for (( c = i + 1 ; c < end_pos - start_pos ; c += 1 )); do
-              [[ "$arg[$c]" != ([0-9xXa-fA-F]) ]] && break
+              [[ "$arg[$c]" != ([0-9xXuUa-fA-F]) ]] && break
             done
             AA=$arg[$i+1,$c-1]
             # Matching for HEX and OCT values like \0xA6, \xA6 or \012
-            if [[ "$AA" =~ "^((x|X)[0-9a-fA-F]{1,2})" || "$AA" =~ "^(0[0-7]{1,3})" ]];then
+            if [[    "$AA" =~ "^(x|X)[0-9a-fA-F]{1,2}"
+                  || "$AA" =~ "^0[0-7]{1,3}"
+                  || "$AA" =~ "^u[0-9a-fA-F]{1,4}"
+                  || "$AA" =~ "^U[0-9a-fA-F]{1,8}"
+               ]]; then
               (( k += $#MATCH ))
               (( i += $#MATCH ))
             else
