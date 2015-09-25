@@ -262,6 +262,7 @@ _zsh_highlight_main_highlighter_highlight_string()
   setopt localoptions noksharrays
   local i j k style
   local AA
+  integer c
   # Starting quote is at 1, so start parsing at offset 2 in the string.
   for (( i = 2 ; i < end_pos - start_pos ; i += 1 )) ; do
     (( j = i + start_pos - 1 ))
