@@ -243,8 +243,8 @@ _zsh_highlight_load_highlighters "${ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR:-${${0:A}:h}/
 # Reset scratch variables when commandline is done.
 _zsh_highlight_preexec_hook()
 {
-  _ZSH_HIGHLIGHT_PRIOR_BUFFER=
-  _ZSH_HIGHLIGHT_PRIOR_CURSOR=
+  typeset -g _ZSH_HIGHLIGHT_PRIOR_BUFFER=
+  typeset -gi _ZSH_HIGHLIGHT_PRIOR_CURSOR=
 }
 autoload -U add-zsh-hook
 add-zsh-hook preexec _zsh_highlight_preexec_hook 2>/dev/null || {
