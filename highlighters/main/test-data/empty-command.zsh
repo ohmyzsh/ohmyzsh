@@ -28,7 +28,8 @@
 # vim: ft=zsh sw=2 ts=2 et
 # -------------------------------------------------------------------------------------------------
 
-BUFFER='echo; ; ' # without the trailing space, it's highlighted as path_approx
+# without the trailing space, it's highlighted as path_approx (issue #187, issue #204)
+BUFFER='echo; ; '
 
 expected_region_highlight=(
   "5 5 $ZSH_HIGHLIGHT_STYLES[commandseparator]" # ;
