@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 # -------------------------------------------------------------------------------------------------
-# Copyright (c) 2010-2011 zsh-syntax-highlighting contributors
+# Copyright (c) 2015 zsh-syntax-highlighting contributors
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -28,13 +28,13 @@
 # vim: ft=zsh sw=2 ts=2 et
 # -------------------------------------------------------------------------------------------------
 
-BUFFER=': "$" "$42foo"'
-BUFFER+=\ \"\\\'\\x\"
+ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]=$unused_highlight
+BUFFER=": \$'foo\xbar\udeadbeef'"
 
 expected_region_highlight=(
-  "3 5 $ZSH_HIGHLIGHT_STYLES[double-quoted-argument]" # "$"
-  "7 7 $ZSH_HIGHLIGHT_STYLES[double-quoted-argument]" # "
-  "8 10 $ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]" # $42
-  "11 14 $ZSH_HIGHLIGHT_STYLES[double-quoted-argument]" # foo"
-  "16 21 $ZSH_HIGHLIGHT_STYLES[double-quoted-argument]" # "\'\x" - \' and \x are not escape sequences
+  "3 7 $ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]" # $'foo
+  "8 11 $ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]" # \xba
+  "12 12 $ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]" # r
+  "13 18 $ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]" # \dead
+  "19 23 $ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]" # beef'
 )

@@ -28,6 +28,7 @@
 # vim: ft=zsh sw=2 ts=2 et
 # -------------------------------------------------------------------------------------------------
 
+# Similar to dollar-quoted3.zsh
 # This test checks that the 'r' gets highlighted correctly.  Do not append to the BUFFER.
 BUFFER=': "foo$bar'
 
