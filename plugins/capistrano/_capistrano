@@ -14,7 +14,7 @@ _arguments -C \
 _cap_tasks() {
   if [[ -f config/deploy.rb || -f Capfile ]]; then
     if [[ ! -f .cap_tasks~ ]]; then
-      shipit -v --tasks | sed 's/\(\[\)\(.*\)\(\]\)/\2:/' | awk '{command=$2; $1=$2=$3=""; gsub(/^[ \t\r\n]+/, "", $0); gsub(":", "\\:", command); print command"["$0"]"}' > .cap_tasks~
+      shipit --tasks | sed 's/\(\[\)\(.*\)\(\]\)/\2:/' | awk '{command=$2; $1=$2=$3=""; gsub(/^[ \t\r\n]+/, "", $0); gsub(":", "\\:", command); print command"["$0"]"}' > .cap_tasks~
     fi
 
     OLD_IFS=$IFS
