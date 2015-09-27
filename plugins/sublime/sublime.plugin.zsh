@@ -38,7 +38,6 @@ elif  [[ "$OSTYPE" = darwin* ]]; then
             break
         fi
     done
-fi
 
 elif [[ "$OSTYPE" = 'cygwin' ]]; then
     local _sublime_cygwin_paths > /dev/null 2>&1
@@ -53,5 +52,7 @@ elif [[ "$OSTYPE" = 'cygwin' ]]; then
             break
         fi
     done
+
+fi
 
 alias stt='st .'
