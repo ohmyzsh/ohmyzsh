@@ -1,7 +1,10 @@
 
 # Use colors, but only if connected to a terminal, and that terminal
 # supports them.
-ncolors=$(tput colors)
+tput=$(which tput)
+if [ -n "$tput" ]; then
+    ncolors=$(tput colors)
+fi
 if [ -t 1 ] && [ -n "$ncolors" ] && [ "$ncolors" -ge 8 ]; then
   RED="$(tput setaf 1)"
   GREEN="$(tput setaf 2)"

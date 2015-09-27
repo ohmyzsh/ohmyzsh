@@ -38,7 +38,7 @@ git_remote_status() {
 
         if [ $ahead -eq 0 ] && [ $behind -eq 0 ]
         then
-          echo "$ZSH_THEME_GIT_PROMPT_EQUAL_REMOTE"
+          	git_remote_status="$ZSH_THEME_GIT_PROMPT_EQUAL_REMOTE"
         elif [ $ahead -gt 0 ] && [ $behind -eq 0 ]
         then
             git_remote_status="$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE"

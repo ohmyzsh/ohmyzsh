@@ -2,7 +2,10 @@ set -e
 
 # Use colors, but only if connected to a terminal, and that terminal
 # supports them.
-ncolors=$(tput colors)
+tput=$(which tput)
+if [ -n "$tput" ]; then
+    ncolors=$($tput colors)
+fi
 if [ -t 1 ] && [ -n "$ncolors" ] && [ "$ncolors" -ge 8 ]; then
   RED="$(tput setaf 1)"
   GREEN="$(tput setaf 2)"
@@ -43,10 +46,23 @@ fi
 umask g-w,o-w
 
 printf "${BLUE}Cloning Oh My Zsh...${NORMAL}\n"
-hash git >/dev/null 2>&1 && env git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git $ZSH || {
-  printf "git not installed\n"
-  exit
+hash git >/dev/null 2>&1 || {
+  echo "Error: git is not installed"
+  exit 1
 }
+env git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git $ZSH || {
+  printf "Error: git clone of oh-my-zsh repo failed\n"
+  exit 1
+}
+
+# The Windows (MSYS) Git is not compatible with normal use on cygwin
+if [ "$OSTYPE" = cygwin ]; then
+  if git --version | grep msysgit > /dev/null; then
+    echo "Error: Windows/MSYS Git is not supported on Cygwin"
+    echo "Error: Make sure the Cygwin git package is installed and is first on the path"
+    exit 1
+  fi
+fi
 
 printf "${BLUE}Looking for an existing zsh config...${NORMAL}\n"
 if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]; then
@@ -68,13 +84,15 @@ export PATH=\"$PATH\"
 mv -f ~/.zshrc-omztemp ~/.zshrc
 
 # If this user's login shell is not already "zsh", attempt to switch.
-if [ "$(expr "$SHELL" : '.*/\(.*\)')" != "zsh" ]; then
+TEST_CURRENT_SHELL=$(expr "$SHELL" : '.*/\(.*\)')
+if [ "$TEST_CURRENT_SHELL" != "zsh" ]; then
   # If this platform provides a "chsh" command (not Cygwin), do it, man!
   if hash chsh >/dev/null 2>&1; then
     printf "${BLUE}Time to change your default shell to zsh!${NORMAL}\n"
     chsh -s $(grep /zsh$ /etc/shells | tail -1)
   # Else, suggest the user do so manually.
   else
+    printf "I can't change your shell automatically because this system does not have chsh.\n"
     printf "${BLUE}Please manually change your default shell to zsh!${NORMAL}\n"
   fi
 fi
