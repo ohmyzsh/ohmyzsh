@@ -167,6 +167,16 @@ function itunes() {
 		vol)
 			opt="set sound volume to $1" #$1 Due to the shift
 			;;
+		status|nowplaying)
+			local state=`osascript -e 'tell application "iTunes" to player state as string'`
+			echo "iTunes is currently $state"
+			if [ "$state" = "playing" ]; then
+				artist=`osascript -e 'tell application "iTunes" to artist of current track as string'`
+				track=`osascript -e 'tell application "iTunes" to name of current track as string'`
+				echo "Current track: $artist / $track";
+			fi
+			return 0
+			;;
 		shuf|shuff|shuffle)
 			# The shuffle property of current playlist can't be changed in iTunes 12,
 			# so this workaround uses AppleScript to simulate user input instead.
@@ -205,6 +215,7 @@ EOF
 			echo "\tnext|previous\tplay next or previous track"
 			echo "\tshuf|shuffle [on|off|toggle]\tSet shuffled playback. Default: toggle. Note: toggle doesn't support the MiniPlayer."
 			echo "\tvol\tSet the volume, takes an argument from 0 to 100"
+			echo "\tstatus|nowplaying\tShow iTunes status. If playing, shows current artist and track name."
 			echo "\thelp\tshow this message and exit"
 			return 0
 			;;
