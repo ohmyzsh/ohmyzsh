@@ -36,7 +36,10 @@ git_remote_status() {
         ahead=$(command git rev-list ${hook_com[branch]}@{upstream}..HEAD 2>/dev/null | wc -l)
         behind=$(command git rev-list HEAD..${hook_com[branch]}@{upstream} 2>/dev/null | wc -l)
 
-        if [ $ahead -gt 0 ] && [ $behind -eq 0 ]
+        if [ $ahead -eq 0 ] && [ $behind -eq 0 ]
+        then
+          	git_remote_status="$ZSH_THEME_GIT_PROMPT_EQUAL_REMOTE"
+        elif [ $ahead -gt 0 ] && [ $behind -eq 0 ]
         then
             git_remote_status="$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE"
             git_remote_status_detailed="$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE_COLOR$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE$((ahead))%{$reset_color%}"

@@ -35,7 +35,6 @@ elif  [[ "$OSTYPE" = darwin* ]]; then
         "$HOME/Applications/Sublime Text 3.app/Contents/SharedSupport/bin/subl"
         "$HOME/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl"
     )
-
     for _sublime_path in $_sublime_darwin_paths; do
         if [[ -a $_sublime_path ]]; then
             subl () { "$_sublime_path" $* }
@@ -43,6 +42,21 @@ elif  [[ "$OSTYPE" = darwin* ]]; then
             break
         fi
     done
+
+elif [[ "$OSTYPE" = 'cygwin' ]]; then
+    local _sublime_cygwin_paths > /dev/null 2>&1
+    _sublime_cygwin_paths=(
+        "$(cygpath $ProgramW6432/Sublime\ Text\ 2)/sublime_text.exe"
+        "$(cygpath $ProgramW6432/Sublime\ Text\ 3)/sublime_text.exe"
+    )
+    for _sublime_path in $_sublime_cygwin_paths; do
+        if [[ -a $_sublime_path ]]; then
+            subl () { "$_sublime_path" $* }
+            alias st=subl
+            break
+        fi
+    done
+
 fi
 
 alias stt='st .'

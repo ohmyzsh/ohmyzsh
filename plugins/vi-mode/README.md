@@ -61,8 +61,8 @@ Insertion
 Delete and Insert
 -----------------
 
-- `ctrl-h`      : While in *Insert mode*: delete character after the cursor
-- `ctrl-w`      : While in *Insert mode*: delete word after the cursor
+- `ctrl-h`      : While in *Insert mode*: delete character before the cursor
+- `ctrl-w`      : While in *Insert mode*: delete word before the cursor
 - `d{motion}`   : Delete text that {motion} moves over
 - `dd`          : Delete line
 - `D`           : Delete characters under the cursor until the end of the line
