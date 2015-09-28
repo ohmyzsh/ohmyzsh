@@ -13,7 +13,7 @@ patches: <patches|join( → )|pre_applied(%{$fg[yellow]%})|post_applied(%{$reset
 }
 
 function box_name {
-    [ -f ~/.box-name ] && cat ~/.box-name || echo $SHORT_HOST || echo $HOST
+    [ -f ~/.box-name ] && cat ~/.box-name || echo ${SHORT_HOST:-$HOST}
 }
 
 PROMPT='

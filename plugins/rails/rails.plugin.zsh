@@ -50,16 +50,19 @@ alias rdr='rake db:rollback'
 alias rdc='rake db:create'
 alias rds='rake db:seed'
 alias rdd='rake db:drop'
+alias rdrs='rake db:reset'
 alias rdtc='rake db:test:clone'
 alias rdtp='rake db:test:prepare'
 alias rdmtc='rake db:migrate db:test:clone'
-
 alias rlc='rake log:clear'
 alias rn='rake notes'
 alias rr='rake routes'
+alias rrg='rake routes | grep'
+alias rt='rake test'
+
 
 # legacy stuff
-alias ss='thin --stats "/thin/stats" start'
+alias sstat='thin --stats "/thin/stats" start'
 alias sg='ruby script/generate'
 alias sd='ruby script/destroy'
 alias sp='ruby script/plugin'
