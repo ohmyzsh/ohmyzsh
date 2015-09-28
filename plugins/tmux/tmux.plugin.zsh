@@ -39,8 +39,6 @@ fi
 [[ -n "$ZSH_TMUX_FIXTERM_WITH_256COLOR" ]] || ZSH_TMUX_FIXTERM_WITH_256COLOR="screen-256color"
 
 
-# Get the absolute path to the current directory
-local zsh_tmux_plugin_path=${0:h}
 
 # Determine if the terminal supports 256 colors
 if [[ `tput colors` == "256" ]]; then
@@ -52,10 +50,10 @@ fi
 # Set the correct local config file to use.
 if [[ "$ZSH_TMUX_ITERM2" != "true" ]] && [[ -f $HOME/.tmux.conf || -h $HOME/.tmux.conf ]]; then
   #use this when they have a ~/.tmux.conf
-  export _ZSH_TMUX_FIXED_CONFIG="$zsh_tmux_plugin_path/tmux.extra.conf"
+  export _ZSH_TMUX_FIXED_CONFIG="${0:h}/tmux.extra.conf"
 else
   #use this when they don't have a ~/.tmux.conf
-  export _ZSH_TMUX_FIXED_CONFIG="$zsh_tmux_plugin_path/tmux.only.conf"
+  export _ZSH_TMUX_FIXED_CONFIG="${0:h}/tmux.only.conf"
 fi
 
 # Wrapper function for tmux.
