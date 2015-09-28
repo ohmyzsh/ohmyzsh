@@ -48,7 +48,7 @@ if which tmux &> /dev/null
 	fi
 
 	# Set the correct local config file to use.
-    if [[ "$ZSH_TMUX_ITERM2" == "false" ]] && [[ -f $HOME/.tmux.conf || -h $HOME/.tmux.conf ]]
+	if [[ "$ZSH_TMUX_ITERM2" == "false" ]] && [[ -f $HOME/.tmux.conf || -h $HOME/.tmux.conf ]]
 	then
 		#use this when they have a ~/.tmux.conf
 		export _ZSH_TMUX_FIXED_CONFIG="$zsh_tmux_plugin_path/tmux.extra.conf"
@@ -60,8 +60,12 @@ if which tmux &> /dev/null
 	# Wrapper function for tmux.
 	function _zsh_tmux_plugin_run()
 	{
+		# We attach to existing or start new session
+		if [[ -n "${@[(r)attach]}" || -n "${@[(r)new-session]}" ]]
+		then
+			\tmux `[[ "$ZSH_TMUX_ITERM2" == "true" ]] && echo '-CC '` $@
 		# We have other arguments, just run them
-		if [[ -n "$@" ]]
+		elif [[ -n "$@" ]]
 		then
 			\tmux $@
 		# Try to connect to an existing session.
