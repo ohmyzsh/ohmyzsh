@@ -37,6 +37,8 @@ fi
 # Tmux states this should be screen-256color, but you may need to change it on
 # systems without the proper terminfo
 [[ -n "$ZSH_TMUX_FIXTERM_WITH_256COLOR" ]] || ZSH_TMUX_FIXTERM_WITH_256COLOR="screen-256color"
+# Force tmux to assume the terminal supports 256 colors.
+[[ -n "$ZSH_TMUX_FORCE_256COLOR" ]] || ZSH_TMUX_FORCE_256COLOR=false
 
 
 
@@ -60,6 +62,7 @@ fi
 function _zsh_tmux_plugin_run() {
   local tmux_cmd
   tmux_cmd=(command tmux)
+  [[ "$ZSH_TMUX_FORCE_256COLOR" == "true" ]] && tmux_cmd+="-2"
   [[ "$ZSH_TMUX_ITERM2" == "true" ]] && tmux_cmd+="-CC"
   [[ "$ZSH_TMUX_FIXTERM" == "true" ]] && tmux_cmd+=(-f $_ZSH_TMUX_FIXED_CONFIG)
   if [[ -n "$@" ]]; then
