@@ -10,7 +10,7 @@ alias tkss='tmux kill-session -t'
 
 # Only run if tmux is actually installed
 if ! which tmux &> /dev/null; then
-  print "zsh tmux plugin: tmux not found. Please install tmux before using this plugin."
+  print "zsh tmux plugin: tmux not found. Please install tmux before using this plugin." >&2
   return 1
 fi
 
@@ -40,7 +40,7 @@ fi
 
 
 # Get the absolute path to the current directory
-local zsh_tmux_plugin_path="$(cd "$(dirname "$0")" && pwd)"
+local zsh_tmux_plugin_path=${0:h}
 
 # Determine if the terminal supports 256 colors
 if [[ `tput colors` == "256" ]]; then
@@ -60,17 +60,25 @@ fi
 
 # Wrapper function for tmux.
 function _zsh_tmux_plugin_run() {
-  # We have other arguments, just run them
+  local tmux_cmd
+  tmux_cmd=(command tmux)
+  [[ "$ZSH_TMUX_ITERM2" == "true" ]] && tmux_cmd+="-CC"
+  [[ "$ZSH_TMUX_FIXTERM" == "true" ]] && tmux_cmd+=(-f $_ZSH_TMUX_FIXED_CONFIG)
   if [[ -n "$@" ]]; then
+    # We have other arguments, just run them
     \tmux $@
-  # Try to connect to an existing session.
   elif [[ "$ZSH_TMUX_AUTOCONNECT" == "true" ]]; then
-    \tmux `[[ "$ZSH_TMUX_ITERM2" == "true" ]] && echo '-CC '` attach || \tmux `[[ "$ZSH_TMUX_ITERM2" == "true" ]] && echo '-CC '` `[[ "$ZSH_TMUX_FIXTERM" == "true" ]] && echo '-f '$_ZSH_TMUX_FIXED_CONFIG` new-session
-    [[ "$ZSH_TMUX_AUTOQUIT" == "true" ]] && exit
-      # Just run tmux, fixing the TERM variable if requested.
+    # Try to connect to an existing session.
+    $tmux_cmd attach || $tmux_cmd new-session
+    if [[ "$ZSH_TMUX_AUTOQUIT" == "true" ]]; then
+      exit
+    fi
   else
-    \tmux `[[ "$ZSH_TMUX_ITERM2" == "true" ]] && echo '-CC '` `[[ "$ZSH_TMUX_FIXTERM" == "true" ]] && echo '-f '$_ZSH_TMUX_FIXED_CONFIG`
-    [[ "$ZSH_TMUX_AUTOQUIT" == "true" ]] && exit
+    # Just run tmux, fixing the TERM variable if requested.
+    $tmux_cmd
+    if [[ "$ZSH_TMUX_AUTOQUIT" == "true" ]]; then
+      exit
+    fi
   fi
 }
 
