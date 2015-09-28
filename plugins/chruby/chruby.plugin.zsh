@@ -24,7 +24,7 @@ _homebrew-installed() {
 }
 
 _chruby-from-homebrew-installed() {
-  [ -r $(brew --prefix chruby)] &> /dev/null
+  [ -r $(brew --prefix chruby) ] &> /dev/null
 }
 
 _ruby-build_installed() {
@@ -45,11 +45,11 @@ _source_from_omz_settings() {
     zstyle -s :omz:plugins:chruby path _chruby_path
     zstyle -s :omz:plugins:chruby auto _chruby_auto
 
-    if ${_chruby_path} && [[ -r ${_chruby_path} ]]; then
+    if [[ -r ${_chruby_path} ]]; then
         source ${_chruby_path}
     fi
 
-    if ${_chruby_auto} && [[ -r ${_chruby_auto} ]]; then
+    if [[ -r ${_chruby_auto} ]]; then
         source ${_chruby_auto}
     fi
 }

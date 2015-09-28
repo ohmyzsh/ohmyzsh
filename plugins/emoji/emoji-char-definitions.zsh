@@ -7,8 +7,12 @@
 #   $emoji         - which maps character names to Unicode characters
 #   $emoji_flags   - maps country names to Unicode flag characters using region indicators 
 
+# Main emoji
 typeset -gAH emoji
+# National flags
 typeset -gAH emoji_flags
+# Combining modifiers
+typeset -gAH emoji_mod
 
 emoji[copyright_sign]=$'\U00A9'
 emoji[registered_sign]=$'\U00AE'
@@ -448,10 +452,15 @@ emoji[badminton_racquet_and_shuttlecock]=$'\U1F3F8'
 emoji[bow_and_arrow]=$'\U1F3F9'
 emoji[amphora]=$'\U1F3FA'
 emoji[emoji_modifier_fitzpatrick_type_1_2]=$'\U1F3FB'
+emoji_mod[emoji_modifier_fitzpatrick_type_1_2]=$'\U1F3FB'
 emoji[emoji_modifier_fitzpatrick_type_3]=$'\U1F3FC'
+emoji_mod[emoji_modifier_fitzpatrick_type_3]=$'\U1F3FC'
 emoji[emoji_modifier_fitzpatrick_type_4]=$'\U1F3FD'
+emoji_mod[emoji_modifier_fitzpatrick_type_4]=$'\U1F3FD'
 emoji[emoji_modifier_fitzpatrick_type_5]=$'\U1F3FE'
+emoji_mod[emoji_modifier_fitzpatrick_type_5]=$'\U1F3FE'
 emoji[emoji_modifier_fitzpatrick_type_6]=$'\U1F3FF'
+emoji_mod[emoji_modifier_fitzpatrick_type_6]=$'\U1F3FF'
 emoji[rat]=$'\U1F400'
 emoji[mouse]=$'\U1F401'
 emoji[ox]=$'\U1F402'
