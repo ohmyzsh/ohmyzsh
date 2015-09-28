@@ -65,7 +65,7 @@ Once you find a theme that you want to use, you will need to edit the `~/.zshrc`
 ZSH_THEME="robbyrussell"
 ```
 
-To use a different theme, simple change the value to match the name of your desired theme. For example:
+To use a different theme, simply change the value to match the name of your desired theme. For example:
 
 ```shell
 ZSH_THEME="agnoster" # (this is one of the fancy ones)
@@ -76,6 +76,14 @@ Open up a new terminal window and your prompt should look something like...
 ![Agnoster theme](https://cloud.githubusercontent.com/assets/2618447/6316862/70f58fb6-ba03-11e4-82c9-c083bf9a6574.png)
 
 In case you did not find a suitable theme for your needs, please have a look at the wiki for [more of them](https://github.com/robbyrussell/oh-my-zsh/wiki/External-themes).
+
+If you're feeling feisty, you can let the computer select one randomly for you each time you open a new terminal window.
+
+
+```shell
+ZSH_THEME="random" # (...please let it be pie... please be some pie..)
+```
+
 
 ## Advanced Topics
 
