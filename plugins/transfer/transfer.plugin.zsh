@@ -1,20 +1,25 @@
+# From https://transfer.sh/
+# Modified by Gabriel Kaam <gabriel@kaam.fr>
+
 function transfer() {
-  if [ $# -eq 0 ]; then
-    echo "No arguments specified. Usage:\necho transfer /tmp/test.md\ncat /tmp/test.md | transfer test.md"
+  if [[ $# -eq 0 ]]; then
+    cat<<EOF
+No arguments specified. Usage:
+transfer /tmp/test.md
+cat /tmp/test.md | transfer test.md
+EOF
     return 1
   fi
 
-  tmpfile=$( mktemp -t transferXXX )
+  basefile=$(omz_urlencode "${1:t}")
+
   if tty -s; then
-    basefile=$(basename "$1" | sed -e 's/[^a-zA-Z0-9._-]/-/g')
-    curl --progress-bar --upload-file "$1" "https://transfer.sh/$basefile" >> $tmpfile
+    url=$(curl --progress-bar --upload-file "$1" "https://transfer.sh/$basefile")
   else
-    curl --progress-bar --upload-file "-" "https://transfer.sh/$1" >> $tmpfile
+    url=$(curl --progress-bar --upload-file "-" "https://transfer.sh/$basefile")
   fi
 
-  cat $tmpfile
-  rm -f $tmpfile
+  echo $url
 }
 
 alias transfer=transfer
-
