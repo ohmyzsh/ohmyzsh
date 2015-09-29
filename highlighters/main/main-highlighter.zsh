@@ -254,14 +254,14 @@ _zsh_highlight_main_highlighter()
   done
 }
 
-# Check if the argument is variable assignment
+# Check if $arg is variable assignment
 _zsh_highlight_main_highlighter_check_assign()
 {
     setopt localoptions extended_glob
     [[ $arg == [[:alpha:]_][[:alnum:]_]#(|\[*\])(|[+])=* ]]
 }
 
-# Check if the argument is a path.
+# Check if $arg is a path.
 _zsh_highlight_main_highlighter_check_path()
 {
   setopt localoptions nonomatch
