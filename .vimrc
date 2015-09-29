@@ -166,7 +166,7 @@ endif
 " let g:SuperTabDefaultCompletionType = 'context'
 map <C-Space> :ScalaSearch<CR>
 
-set wildignore=*.o,*.obj,*.bak,*.swp,*.class,*.pyc,*.java,*.md,*.min,*.txt,*.xml,*.log,*resources/golden*,*.properties,*.sql,*.q,*/node_modules/*,*/target/*
+set wildignore=*.o,*.obj,*.bak,*.swp,*.class,*.pyc,*.md,*.min,*.txt,*.xml,*.jar,*.xml.gz,*.log,*resources/golden*,*.sql,*.q,*/node_modules/*,target/selenium/*,*/target/*,*/repo_universe/*,*/screenshots/*,*.json.gz,*.png,*.xml.gz,*/target/*
 " au FileType java :so /Users/ahirreddy/.vim/bundle/JavaKit/vim/JavaKit.vim"
 
 " CommandT Options
@@ -174,3 +174,10 @@ let g:CommandTMaxFiles=10000000
 let g:CommandTFileScanner="git"
 
 :set hidden
+
+if has("gui_running")
+   let s:uname = system("uname")
+   if s:uname == "Darwin\n"
+      set guifont=Inconsolata\ for\ Powerline:h15
+   endif
+endif

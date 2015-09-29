@@ -54,6 +54,7 @@ export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 
 alias glc='git log --graph --pretty="format:%C(yellow)%h%Cgreen%d%Creset %s %C(white) %an, %ar%Creset"'
+alias gd='git difftool -d --tool=meld'
 
 source $ZSH/oh-my-zsh.sh
 
