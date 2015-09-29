@@ -157,7 +157,9 @@ _zsh_highlight_main_highlighter()
       style=$ZSH_HIGHLIGHT_STYLES[precommand]
       sudo=true
      else
-      local res="$(LC_ALL=C builtin type -w ${(Q)arg} 2>/dev/null)"
+      _zsh_highlight_main_highlighter_expand_path $arg
+      local expanded_arg="$REPLY"
+      local res="$(LC_ALL=C builtin type -w ${expanded_arg} 2>/dev/null)"
       case $res in
         *': reserved')  style=$ZSH_HIGHLIGHT_STYLES[reserved-word];;
         *': suffix alias')
@@ -264,8 +266,9 @@ _zsh_highlight_main_highlighter_check_assign()
 # Check if $arg is a path.
 _zsh_highlight_main_highlighter_check_path()
 {
-  setopt localoptions nonomatch
-  local expanded_path; : ${expanded_path:=${(Q)~arg}}
+  _zsh_highlight_main_highlighter_expand_path $arg;
+  local expanded_path="$REPLY"
+
   [[ -z $expanded_path ]] && return 1
   [[ -e $expanded_path ]] && return 0
   # Search the path in CDPATH
@@ -359,4 +362,18 @@ _zsh_highlight_main_highlighter_highlight_dollar_string()
     esac
     _zsh_highlight_main_add_region_highlight $j $k $style
   done
+}
+
+# Called with a single positional argument.
+# Perform filename expansion (tilde expansion) on the argument and set $REPLY to the expanded value.
+#
+# Does not perform filename generation (globbing).
+_zsh_highlight_main_highlighter_expand_path()
+{
+  (( $# == 1 )) || echo "zsh-syntax-highlighting: BUG: _zsh_highlight_main_highlighter_expand_path: called without argument" >&2
+
+  # The $~1 syntax normally performs filename generation, but not when it's on the right-hand side of ${x:=y}.
+  setopt localoptions nonomatch
+  unset REPLY
+  : ${REPLY:=${(Q)~1}}
 }
