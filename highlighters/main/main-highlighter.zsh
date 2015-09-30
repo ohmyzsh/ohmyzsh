@@ -271,21 +271,27 @@ _zsh_highlight_main_highlighter_check_path()
 
   [[ -z $expanded_path ]] && return 1
   [[ -e $expanded_path ]] && return 0
+
   # Search the path in CDPATH
   local cdpath_dir
   for cdpath_dir in $cdpath ; do
     [[ -e "$cdpath_dir/$expanded_path" ]] && return 0
   done
+
+  # If dirname($arg) doesn't exist, neither does $arg.
   [[ ! -e ${expanded_path:h} ]] && return 1
+
+  # If this word ends the buffer, check if it's the prefix of a valid path.
   if [[ ${BUFFER[1]} != "-" && ${#BUFFER} == $end_pos ]]; then
     local -a tmp
-    # got a path prefix?
     tmp=( ${expanded_path}*(N) )
     (( $#tmp > 0 )) && style_override=path_prefix && return 0
     # or maybe an approximate path?
     tmp=( (#a1)${expanded_path}*(N) )
     (( $#tmp > 0 )) && style_override=path_approx && return 0
   fi
+
+  # It's not a path.
   return 1
 }
 
