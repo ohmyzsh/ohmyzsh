@@ -23,11 +23,8 @@ if [ -e "$ZSHRC_ORIG" ]; then
   fi
 
   mv "$ZSHRC_ORIG" ~/.zshrc;
-
-  source ~/.zshrc;
 else
-  if hash chsh >/dev/null 2>&1
-  then
+  if hash chsh >/dev/null 2>&1; then
     echo "Switching back to bash"
     chsh -s /bin/bash
   else
