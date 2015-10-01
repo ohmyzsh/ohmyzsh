@@ -1,12 +1,25 @@
 # Activates autoenv or reports its failure
-if ! type autoenv_init &>/dev/null && ! source $HOME/.autoenv/activate.sh 2>/dev/null; then
-  echo '-------- AUTOENV ---------'
-  echo 'Could not find autoenv_init function or ~/.autoenv/activate.sh.'
-  echo 'Please check if autoenv is correctly installed.'
-  echo 'In the meantime the autoenv plugin is DISABLED.'
-  echo '--------------------------'
-  return 1
+() {
+if ! type autoenv_init >/dev/null; then
+  for d (~/.autoenv /usr/local/opt/autoenv); do
+    if [[ -e $d/activate.sh ]]; then
+      autoenv_dir=$d
+      break
+    fi
+  done
+  if [[ -z $autoenv_dir ]]; then 
+    cat <<END >&2
+-------- AUTOENV ---------
+Could not locate autoenv installation.
+Please check if autoenv is correctly installed.
+In the meantime the autoenv plugin is DISABLED.
+--------------------------
+END
+    return 1
+  fi
 fi
+}
+[[ $? != 0 ]] && return $?
 
 # The use_env call below is a reusable command to activate/create a new Python
 # virtualenv, requiring only a single declarative line of code in your .env files.
