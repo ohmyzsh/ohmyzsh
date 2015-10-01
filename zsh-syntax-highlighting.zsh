@@ -29,7 +29,16 @@
 # -------------------------------------------------------------------------------------------------
 
 
-ZSH_HIGHLIGHT_VERSION=$(<"$0:h"/.version)
+if [[ -o function_argzero ]]; then
+  # $0 is reliable
+  ZSH_HIGHLIGHT_VERSION=$(<"$0:h"/.version)
+else
+  # $0 is unreliable, so the call to _zsh_highlight_load_highlighters will fail.
+  # TODO: If 'zmodload zsh/parameter' is available, ${funcsourcetrace[1]%:*} might serve as a substitute?
+  # TODO: also check POSIX_ARGZERO, but not it's not available in older zsh
+  echo "zsh-syntax-highlighting: error: not compatible with FUNCTION_ARGZERO" >&2
+  return 1
+fi
 
 # -------------------------------------------------------------------------------------------------
 # Core highlighting update system
