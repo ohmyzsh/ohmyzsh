@@ -18,6 +18,6 @@ Originally by Github user [aforty](https://github.com/aforty) for OSX, modified 
 
 ### Examples
 
- * Open the current dir in atom: `at .`
+ * Open the current dir in atom: `att` (alias of `at .`)
  * Open another dir in atom: `at path/to/folder`
  * Open a file: `at filename.extension`
