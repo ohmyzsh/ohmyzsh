@@ -35,3 +35,5 @@ linux*)
     # Alerts the user if 'atom' is not a found command.
     type atom >/dev/null 2>&1 && alias at="atom" || { echo >&2 "You have enabled the atom oh-my-zsh plugin on Linux, but atom is not a recognized command. Please make sure you have it installed before using this plugin."; }
 esac
+
+alias att="at ."
