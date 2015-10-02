@@ -159,7 +159,7 @@ _zsh_highlight_main_highlighter()
      else
       _zsh_highlight_main_highlighter_expand_path $arg
       local expanded_arg="$REPLY"
-      local res="$(LC_ALL=C builtin type -w ${expanded_arg} 2>/dev/null)"
+      local res="$(LC_ALL=C builtin type -w -- ${expanded_arg} 2>/dev/null)"
       case $res in
         *': reserved')  style=$ZSH_HIGHLIGHT_STYLES[reserved-word];;
         *': suffix alias')
