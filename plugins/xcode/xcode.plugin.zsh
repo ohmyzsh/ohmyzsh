@@ -179,7 +179,10 @@ function simulator {
   if [[ -d "${devfolder}/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone Simulator.app" ]]; then
     open "${devfolder}/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone Simulator.app"
   # Xcode ≥ 6.x
-  else
+  elif [[ -d "${devfolder}/Applications/iOS Simulator.app" ]]; then
     open "${devfolder}/Applications/iOS Simulator.app"
+  # Xcode ≥ 7.x
+  else
+    open "${devfolder}/Applications/Simulator.app"
   fi
 }
