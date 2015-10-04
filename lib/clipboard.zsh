@@ -31,15 +31,21 @@ function clipcopy() {
       cat $file > /dev/clipboard
     fi
   else
-    which xclip &>/dev/null
-    if [[ $? != 0 ]]; then
-      print "clipcopy: Platform $OSTYPE not supported or xclip not installed" >&2
-      return 1
-    fi
-    if [[ -z $file ]]; then
-      xclip -in -selection clipboard
+    if which xclip &>/dev/null; then
+      if [[ -z $file ]]; then
+        xclip -in -selection clipboard
+      else
+        xclip -in -selection clipboard $file
+      fi
+    elif which xsel &>/dev/null; then
+      if [[ -z $file ]]; then
+        xsel --clipboard --input 
+      else
+        cat "$file" | xsel --clipboard --input
+      fi
     else
-      xclip -in -selection clipboard $file
+      print "clipcopy: Platform $OSTYPE not supported or xclip/xsel not installed" >&2
+      return 1
     fi
   fi
 }
@@ -50,6 +56,17 @@ function clipcopy() {
 #
 #   clippaste   - writes clipboard's contents to stdout
 #
+#   clippaste | <command>    - pastes contents and pipes it to another process
+#
+#   clippaste > <file>      - paste contents to a file
+#
+# Examples:
+#
+#   # Pipe to another process
+#   clippaste | grep foo
+#
+#   # Paste to a file
+#   clippaste > file.txt
 function clippaste() {
   emulate -L zsh
   if [[ $OSTYPE == darwin* ]]; then
@@ -57,11 +74,13 @@ function clippaste() {
   elif [[ $OSTYPE == cygwin* ]]; then
     cat /dev/clipboard
   else
-    which xclip &>/dev/null 
-    if [[ $? != 0 ]]; then
-      print "clipcopy: Platform $OSTYPE not supported or xclip not installed" >&2
+    if which xclip &>/dev/null; then
+      xclip -out -selection clipboard
+    elif which xsel &>/dev/null; then
+      xsel --clipboard --output
+    else
+      print "clipcopy: Platform $OSTYPE not supported or xclip/xsel not installed" >&2
       return 1
     fi
-    xclip -out -selection clipboard
   fi
 }
