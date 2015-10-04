@@ -19,8 +19,8 @@
 # Grabs all available tasks from the `gulpfile.js`
 # in the current directory.
 #
-function $$gulp_completion() {
-    compls=$(grep -Eo "gulp.task\((['\"](([a-zA-Z0-9]|-)*)['\"],)" gulpfile.js 2>/dev/null | grep -Eo "['\"](([a-zA-Z0-9]|-)*)['\"]" | sed s/"['\"]"//g | sort)"
+function $$gulp_completion {
+    compls="$(grep -Eo "gulp.task\((['\"](([a-zA-Z0-9]|-)*)['\"],)" gulpfile.js 2>/dev/null | grep -Eo "['\"](([a-zA-Z0-9]|-)*)['\"]" | sed s/"['\"]"//g | sort)"
 
     completions=(${=compls})
     compadd -- $completions

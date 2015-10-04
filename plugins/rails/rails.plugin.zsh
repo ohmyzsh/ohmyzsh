@@ -59,7 +59,7 @@ alias rn='rake notes'
 alias rr='rake routes'
 alias rrg='rake routes | grep'
 alias rt='rake test'
-
+alias rmd='rake middleware'
 
 # legacy stuff
 alias sstat='thin --stats "/thin/stats" start'
