@@ -1,7 +1,7 @@
 # Activates autoenv or reports its failure
-if ! source $HOME/.autoenv/activate.sh 2>/dev/null; then
+if ! type autoenv_init &>/dev/null && ! source $HOME/.autoenv/activate.sh 2>/dev/null; then
   echo '-------- AUTOENV ---------'
-  echo 'Could not find ~/.autoenv/activate.sh.'
+  echo 'Could not find autoenv_init function or ~/.autoenv/activate.sh.'
   echo 'Please check if autoenv is correctly installed.'
   echo 'In the meantime the autoenv plugin is DISABLED.'
   echo '--------------------------'
