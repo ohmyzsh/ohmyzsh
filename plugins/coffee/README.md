@@ -7,11 +7,13 @@ When writing Coffeescript it's very common to want to preview the output of a
 certain snippet of code, either because you want to test the output or because
 you'd like to execute it in a browser console which doesn't accept Coffeescript.
 
-Preview the compiled result of your coffeescript with `cf "code"` as per the
-following:
+Preview the compiled result of your coffeescript with `cf "code"`, as shown in this example:
 
 ```zsh
-$ cf 'if a then be else c'
+$ cf 'if a then b else c'
+```
+which would output the following:
+```zsh
 if (a) {
   b;
 } else {
