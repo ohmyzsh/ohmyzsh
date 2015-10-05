@@ -9,8 +9,6 @@ function gerrit_usage {
   echo  "   reset            Reset hard to origin/master";
   echo  "   review           Submit changes for review";
   echo  "   draft            Submit changes for review as draft";
-  echo  "   setup-reviewers  Set current repo to automatically have reviewers from your team";
-  echo  "   add-reviewer     Add a reviewer to the repo";
   echo  "   clone            Clone a repo from gerrit, requires repo name";
   echo  "   setup            Add gerrit commit hook to a repo";
   echo
@@ -88,12 +86,7 @@ function gerrit_setup () {
 }
 
 function gerrit () {
-
   gitRemoteUrl=`git config --get remote.origin.url`;
-  if [[ $gitRemoteUrl != *"gerrit"* ]]; then
-    echo "This repository isn't on Gerrit Host.";
-    return;
-  fi
 
   ref=$(git symbolic-ref HEAD 2> /dev/null);
   branch=${ref#refs/heads/};
@@ -101,13 +94,17 @@ function gerrit () {
   if [ -z "$1" ]; then
     gerrit_usage;
   else
+    [ "$1" = "clone" ] && gerrit_clone "$2";
+    if [[ $gitRemoteUrl != *"gerrit"* ]]; then
+      echo "This repository isn't on Gerrit Host.";
+      return;
+    fi
     [ "$1" = "patch" ] && gerrit_patch "$2"
     [ "$1" = "push" ] && gerrit_push "$branch";
     [ "$1" = "review" ] && gerrit_review "$branch";
     [ "$1" = "reset" ] && gerrit_reset;
     [ "$1" = "draft" ] && gerrit_draft "$branch";
     [ "$1" = "pull" ] && gerrit_pull "$branch";
-    [ "$1" = "clone" ] && gerrit_clone "$2";
     [ "$1" = "setup" ] && gerrit_setup;
   fi
 }
