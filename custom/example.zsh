@@ -3,3 +3,4 @@
 #
 # brainstormr=/Users/robbyrussell/Projects/development/planetargon/brainstormr
 #
+[[ $TERM != "screen" ]] && exec tmux
