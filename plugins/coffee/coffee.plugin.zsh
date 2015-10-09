@@ -6,11 +6,11 @@ cf () {
 }
 # compile & copy to clipboard
 cfc () {
-  cf "$1" | pbcopy
+  cf "$1" | clipcopy
 }
 
-# compile from pasteboard & print
-alias cfp='coffeeMe "$(pbpaste)"'
+# compile from clipboard & print
+alias cfp='coffeeMe "$(clippaste)"'
 
-# compile from pasteboard and copy to clipboard
-alias cfpc='cfp | pbcopy'
+# compile from clipboard and copy to clipboard
+alias cfpc='cfp | clipcopy'
