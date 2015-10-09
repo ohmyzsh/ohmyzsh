@@ -1,3 +1,10 @@
+read -r -p "Are you sure you want to remove Oh My Zsh? [y/N] " confirmation
+if ! [[ $confirmation =~ ^[yY]$ ]]
+then
+    echo "Uninstall cancelled"
+    exit
+fi
+
 echo "Removing ~/.oh-my-zsh"
 if [ -d ~/.oh-my-zsh ]
 then
