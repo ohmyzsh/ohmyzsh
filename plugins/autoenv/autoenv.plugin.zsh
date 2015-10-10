@@ -17,6 +17,7 @@ In the meantime the autoenv plugin is DISABLED.
 END
     return 1
   fi
+  source $autoenv_dir/activate.sh
 fi
 }
 [[ $? != 0 ]] && return $?
