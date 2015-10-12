@@ -17,3 +17,7 @@ for c in $all_commands; do; alias sc-u-$c="systemctl --user $c"; done
 alias sc-enable-now="sc-enable --now"
 alias sc-disable-now="sc-disable --now"
 alias sc-mask-now="sc-mask --now"
+
+alias sc-u-enable-now="sc-u-enable --now"
+alias sc-u-disable-now="sc-u-disable --now"
+alias sc-u-mask-now="sc-u-mask --now"
