@@ -21,12 +21,12 @@ else
   BOLD=""
   NORMAL=""
 fi
-CHECK_ZSH_INSTALLED=$((grep /zsh$ /etc/shells || whereis zsh) | wc -l)
-if [ ! $CHECK_ZSH_INSTALLED -ge 1 ]; then
+CHECK_ZSH_INSTALLED=$(grep /zsh$ /etc/shells | wc -l)
+CHECK_ZSH_INSTALLED_NON_GLOBALLY=$(which zsh >/dev/null 2>&1; echo $?)
+if [ ! "$CHECK_ZSH_INSTALLED" -ge 1 ] && [ ! "$CHECK_ZSH_INSTALLED_NON_GLOBALLY" -eq 0 ]; then
   printf "${YELLOW}Zsh is not installed!${NORMAL} Please install zsh first!\n"
   exit
 fi
-unset CHECK_ZSH_INSTALLED
 
 if [ ! -n "$ZSH" ]; then
   ZSH=~/.oh-my-zsh
@@ -86,10 +86,15 @@ mv -f ~/.zshrc-omztemp ~/.zshrc
 # If this user's login shell is not already "zsh", attempt to switch.
 TEST_CURRENT_SHELL=$(expr "$SHELL" : '.*/\(.*\)')
 if [ "$TEST_CURRENT_SHELL" != "zsh" ]; then
-  # If this platform provides a "chsh" command (not Cygwin), do it, man!
-  if hash chsh >/dev/null 2>&1; then
+  # If this platform provides a "chsh" command (not Cygwin) and ZSH is installed
+  # globally, do it, man!
+  if hash chsh >/dev/null 2>&1 && [ "$CHECK_ZSH_INSTALLED" -ge 1 ]; then
     printf "${BLUE}Time to change your default shell to zsh!${NORMAL}\n"
     chsh -s $(grep /zsh$ /etc/shells | tail -1)
+  # If ZSH only installed non-globally.
+  elif [ "$CHECK_ZSH_INSTALLED_NON_GLOBALLY" -eq 0 ] && [ ! "$CHECK_ZSH_INSTALLED" -ge 1 ]; then
+    printf "I can't change your shell automatically because ZSH is not installed globally.\n"
+    printf "${BLUE}You need to start ZSH in your prefered way every time!${NORMAL}\n"
   # Else, suggest the user do so manually.
   else
     printf "I can't change your shell automatically because this system does not have chsh.\n"
