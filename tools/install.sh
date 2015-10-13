@@ -93,8 +93,8 @@ if [ "$TEST_CURRENT_SHELL" != "zsh" ]; then
     chsh -s $(grep /zsh$ /etc/shells | tail -1)
   # If ZSH only installed non-globally.
   elif [ "$CHECK_ZSH_INSTALLED_NON_GLOBALLY" -eq 0 ] && [ ! "$CHECK_ZSH_INSTALLED" -ge 1 ]; then
-    printf "I can't change your shell automatically because ZSH is not installed globally.\n"
-    printf "${BLUE}You need to start ZSH in your prefered way every time!${NORMAL}\n"
+    printf "I can't change your shell automatically.\n"
+    printf "${BLUE}You need to start ZSH in your preferred way every time!${NORMAL}\n"
   # Else, suggest the user do so manually.
   else
     printf "I can't change your shell automatically because this system does not have chsh.\n"
