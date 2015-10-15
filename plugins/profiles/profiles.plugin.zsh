@@ -6,7 +6,11 @@ parts=(${(s:.:)HOST})
 for i in {${#parts}..1}; do
   profile=${(j:.:)${parts[$i,${#parts}]}}
   file=$ZSH_CUSTOM/profiles/$profile
-  if [ -f $file ]; then
+  if [ -d $file ]; then
+    for config_file ($file/*.zsh(N)); do
+      source $config_file
+    done
+  elif [ -f $file ]; then
     source $file
   fi
 done
