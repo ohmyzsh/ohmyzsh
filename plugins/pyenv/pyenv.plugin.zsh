@@ -17,7 +17,8 @@ for pyenvdir in "${pyenvdirs[@]}" ; do
         FOUND_PYENV=1
         export PYENV_ROOT=$pyenvdir
         export PATH=${pyenvdir}/bin:$PATH
-        eval "$(pyenv init --no-rehash - zsh)"
+        eval "$(pyenv init - zsh)"
+        eval "$(pyenv virtualenv-init - zsh)"
 
         function pyenv_prompt_info() {
             echo "$(pyenv version-name)"
