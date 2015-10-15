@@ -45,6 +45,8 @@ mvn-color()
 alias mvncie='mvn clean install eclipse:eclipse'
 alias mvnci='mvn clean install'
 alias mvncist='mvn clean install -DskipTests'
+alias mvncv='mvn clean verify'
+alias mvncvst='mvn clean verify -DskipTests'
 alias mvne='mvn eclipse:eclipse'
 alias mvnce='mvn clean eclipse:clean eclipse:eclipse'
 alias mvnd='mvn deploy'
