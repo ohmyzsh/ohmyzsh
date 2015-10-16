@@ -1,5 +1,12 @@
+read -r -p "Are you sure you want to remove Oh My Zsh? [y/N] " confirmation
+if ! [[ $confirmation =~ ^[yY]$ ]]
+then
+    echo "Uninstall cancelled"
+    exit
+fi
+
 echo "Removing ~/.oh-my-zsh"
-if [[ -d ~/.oh-my-zsh ]]
+if [ -d ~/.oh-my-zsh ]
 then
   rm -rf ~/.oh-my-zsh
 fi
@@ -20,9 +27,13 @@ then
 
   source ~/.zshrc;
 else
-  echo "Switching back to bash"
-  chsh -s /bin/bash
-  source /etc/profile
+  if hash chsh >/dev/null 2>&1
+  then
+    echo "Switching back to bash"
+    chsh -s /bin/bash
+  else
+    echo "You can edit /etc/passwd to switch your default shell back to bash"
+  fi
 fi
 
 echo "Thanks for trying out Oh My Zsh. It's been uninstalled."
