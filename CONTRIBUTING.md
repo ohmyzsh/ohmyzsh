@@ -36,7 +36,7 @@ Then, you can go ahead and create an issue with as much detail as you can provid
 It should include the data gathered as indicated above, along with:
 
 1. How to reproduce the problem
-2. What the correct behavior should be
+2. What the expected behavior should be
 3. What the actual behavior is
 
 Please copy to anyone relevant (_eg_ plugin maintainers) by mentioning their GitHub handle
