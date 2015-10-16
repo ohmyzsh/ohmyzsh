@@ -2,6 +2,10 @@ user_commands=(
   list-units is-active status show help list-unit-files
   is-enabled list-jobs show-environment cat)
 
+dash_user_commands=(
+  start stop status enable disable edit
+  )
+
 sudo_commands=(
   start stop reload restart try-restart isolate kill
   reset-failed enable disable reenable preset mask unmask
@@ -9,6 +13,7 @@ sudo_commands=(
   edit)
 
 for c in $user_commands; do; alias sc-$c="systemctl $c"; done
+for c in $dash_user_commands; do; alias sc-user-$c="systemctl --user $c"; done
 for c in $sudo_commands; do; alias sc-$c="sudo systemctl $c"; done
 
 alias sc-enable-now="sc-enable --now"
