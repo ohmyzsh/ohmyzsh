@@ -67,7 +67,7 @@ function try_alias_value() {
 #
 # Arguments:
 #    1. name - The variable to set
-#    2. val  - The default value 
+#    2. val  - The default value
 # Return value:
 #    0 if the variable exists, 3 if it was set
 #
@@ -81,12 +81,12 @@ function default() {
 #
 # Arguments:
 #    1. name - The env variable to set
-#    2. val  - The default value 
+#    2. val  - The default value
 # Return value:
 #    0 if the env variable exists, 3 if it was set
 #
 function env_default() {
-    env | grep -q "^$1=" && return 0 
+    env | grep -q "^$1=" && return 0
     export "$1=$2"       && return 3
 }
 
@@ -101,7 +101,7 @@ zmodload zsh/langinfo
 #
 # By default, reserved characters and unreserved "mark" characters are
 # not escaped by this function. This allows the common usage of passing
-# an entire URL in, and encoding just special characters in it, with 
+# an entire URL in, and encoding just special characters in it, with
 # the expectation that reserved and mark characters are used appropriately.
 # The -r and -m options turn on escaping of the reserved and mark characters,
 # respectively, which allows arbitrary strings to be fully escaped for
@@ -112,7 +112,7 @@ zmodload zsh/langinfo
 #
 # Usage:
 #  omz_urlencode [-r] [-m] <string>
-#  
+#
 #    -r causes reserved characters (;/?:@&=+$,) to be escaped
 #
 #    -m causes "mark" characters (_.!~*''()-) to be escaped
@@ -120,12 +120,15 @@ zmodload zsh/langinfo
 #    -P causes spaces to be encoded as '%20' instead of '+'
 function omz_urlencode() {
   emulate -L zsh
-  zparseopts -D -E -a opts r m P
+  local -a opt_path opt_reserved opt_mark
+  zparseopts -D -E r=opt_reserved m=opt_mark P=opt_path
 
   local in_str=$1
   local url_str=""
-  local spaces_as_plus
-  if [[ -z $opts[(r)-P] ]]; then spaces_as_plus=1; fi
+  local spaces_as_plus=1
+  if [[ ! -z $opt_path ]]; then
+    spaces_as_plus=
+  fi
   local str="$in_str"
 
   # URLs must use UTF-8 encoding; convert str to UTF-8 if required
@@ -146,11 +149,11 @@ function omz_urlencode() {
   local reserved=';/?:@&=+$,'
   local mark='_.!~*''()-'
   local dont_escape="[A-Za-z0-9"
-  if [[ -z $opts[(r)-r] ]]; then
+  if [[ ! -z $opt_reserved ]]; then
     dont_escape+=$reserved
   fi
   # $mark must be last because of the "-"
-  if [[ -z $opts[(r)-m] ]]; then
+  if [[ ! -z $opt_mark ]]; then
     dont_escape+=$mark
   fi
   dont_escape+="]"
@@ -177,8 +180,8 @@ function omz_urlencode() {
 # URL-decode a string
 #
 # Decodes a RFC 2396 URL-encoded (%-escaped) string.
-# This decodes the '+' and '%' escapes in the input string, and leaves 
-# other characters unchanged. Does not enforce that the input is a 
+# This decodes the '+' and '%' escapes in the input string, and leaves
+# other characters unchanged. Does not enforce that the input is a
 # valid URL-encoded string. This is a convenience to allow callers to
 # pass in a full URL or similar strings and decode them for human
 # presentation.
@@ -196,7 +199,7 @@ function omz_urldecode {
   local caller_encoding=$langinfo[CODESET]
   local LC_ALL=C
   export LC_ALL
-  
+
   # Change + back to ' '
   local tmp=${encoded_url:gs/+/ /}
   # Protect other escapes to pass through the printf unchanged
