@@ -77,12 +77,20 @@ prompt_end() {
 # Each component will draw itself, and hide itself if no information needs to be shown
 
 # Context: user@hostname (who am I and where am I)
+PROMPT_CONTEXT_BG=${PROMPT_CONTEXT_BG:-black}
+PROMPT_CONTEXT_FG=${PROMPT_CONTEXT_FG:-default}
 prompt_context() {
   if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-    prompt_segment black default "%(!.%{%F{yellow}%}.)$USER@%m"
+    prompt_segment $PROMPT_CONTEXT_BG $PROMPT_CONTEXT_FG "%(!.%{%F{yellow}%}.)$USER@%m"
   fi
 }
 
+PROMPT_VCS_UNTRACKED_BG=${PROMPT_VCS_UNTRACKED_BG:-red}
+PROMPT_VCS_UNTRACKED_FG=${PROMPT_VCS_UNTRACKED_FG:-white}
+PROMPT_VCS_CLEAN_BG=${PROMPT_VCS_CLEAN_BG:-green}
+PROMPT_VCS_CLEAN_FG=${PROMPT_VCS_CLEAN_FG:-black}
+PROMPT_VCS_DIRTY_BG=${PROMPT_VCS_DIRTY_BG:-yellow}
+PROMPT_VCS_DIRTY_FG=${PROMPT_VCS_DIRTY_FG:-black}
 # Git: branch/detached head, dirty status
 prompt_git() {
 
@@ -98,9 +106,9 @@ prompt_git() {
     dirty=$(parse_git_dirty)
     ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="➦ $(git rev-parse --short HEAD 2> /dev/null)"
     if [[ -n $dirty ]]; then
-      prompt_segment yellow black
+      prompt_segment $PROMPT_VCS_DIRTY_BG $PROMPT_VCS_DIRTY_FG
     else
-      prompt_segment green black
+      prompt_segment $PROMPT_VCS_CLEAN_BG $PROMPT_VCS_CLEAN_FG
     fi
 
     if [[ -e "${repo_path}/BISECT_LOG" ]]; then
@@ -132,15 +140,15 @@ prompt_hg() {
     if $(hg prompt >/dev/null 2>&1); then
       if [[ $(hg prompt "{status|unknown}") = "?" ]]; then
         # if files are not added
-        prompt_segment red white
+        prompt_segment ${PROMPT_VCS_UNTRACKED_BG} ${PROMPT_VCS_UNTRACKED_FG}
         st='±'
       elif [[ -n $(hg prompt "{status|modified}") ]]; then
         # if any modification
-        prompt_segment yellow black
+        prompt_segment ${PROMPT_VCS_DIRTY_BG} ${PROMPT_VCS_DIRTY_FG}
         st='±'
       else
         # if working copy is clean
-        prompt_segment green black
+        prompt_segment ${PROMPT_VCS_CLEAN_BG} ${PROMPT_VCS_CLEAN_FG}
       fi
       echo -n $(hg prompt "☿ {rev}@{branch}") $st
     else
@@ -148,13 +156,13 @@ prompt_hg() {
       rev=$(hg id -n 2>/dev/null | sed 's/[^-0-9]//g')
       branch=$(hg id -b 2>/dev/null)
       if `hg st | grep -q "^\?"`; then
-        prompt_segment red black
+        prompt_segment ${PROMPT_VCS_UNTRACKED_BG} ${PROMPT_VCS_UNTRACKED_FG}
         st='±'
       elif `hg st | grep -q "^[MA]"`; then
-        prompt_segment yellow black
+        prompt_segment ${PROMPT_VCS_DIRTY_BG} ${PROMPT_VCS_DIRTY_FG}
         st='±'
       else
-        prompt_segment green black
+        prompt_segment ${PROMPT_VCS_CLEAN_BG} ${PROMPT_VCS_CLEAN_FG}
       fi
       echo -n "☿ $rev@$branch" $st
     fi
@@ -162,15 +170,19 @@ prompt_hg() {
 }
 
 # Dir: current working directory
+PROMPT_DIR_BG=${PROMPT_DIR_BG:-blue}
+PROMPT_DIR_FG=${PROMPT_DIR_FG:-black}
 prompt_dir() {
-  prompt_segment blue black '%~'
+  prompt_segment $PROMPT_DIR_BG $PROMPT_DIR_FG '%~'
 }
 
 # Virtualenv: current working virtualenv
+PROMPT_VENV_BG=${PROMPT_VENV_BG:-blue}
+PROMPT_VENV_FG=${PROMPT_VENV_FG:-black}
 prompt_virtualenv() {
   local virtualenv_path="$VIRTUAL_ENV"
   if [[ -n $virtualenv_path && -n $VIRTUAL_ENV_DISABLE_PROMPT ]]; then
-    prompt_segment blue black "(`basename $virtualenv_path`)"
+    prompt_segment $PROMPT_VENV_BG $PROMPT_VENV_FG "(`basename $virtualenv_path`)"
   fi
 }
 
