@@ -39,7 +39,7 @@ How to install
         cd ~/.oh-my-zsh/custom/plugins
         git clone git://github.com/zsh-users/zsh-syntax-highlighting.git
 
-* Activate the plugin in `~/.zshrc` (in **last** position):
+* Activate the plugin in `~/.zshrc`:
 
         plugins=( [plugins...] zsh-syntax-highlighting)
 
@@ -47,6 +47,8 @@ How to install
 
         source ~/.zshrc
 
+Note that `zsh-syntax-highlighting` must be the last plugin sourced,
+so make it the last element of the `$plugins` array.
 
 FAQ
 ---
