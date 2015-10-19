@@ -10,7 +10,12 @@ all:
 
 install:
 	$(INSTALL) -d $(SHARE_DIR)
-	cp -r zsh-syntax-highlighting.zsh highlighters $(SHARE_DIR)
+	cp -r .version zsh-syntax-highlighting.zsh highlighters $(SHARE_DIR)
+	if [ x"true" = x"`git rev-parse --is-inside-work-tree 2>/dev/null`" ]; then \
+		git rev-parse HEAD; \
+	else \
+		cat .revision-hash; \
+	fi > $(SHARE_DIR)/.revision-hash
 
 test:
 	@result=0
