@@ -22,7 +22,7 @@ test:
 	@for test in highlighters/*; do \
 		if [ -d $$test/test-data ]; then \
 			echo "Running test $${test##*/}"; \
-			zsh tests/test-highlighting.zsh "$${test##*/}"; \
+			zsh -f tests/test-highlighting.zsh "$${test##*/}"; \
 			: $$(( result |= $$? )); \
 		fi \
 	done
