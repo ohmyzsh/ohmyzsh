@@ -6,7 +6,7 @@ up to 9a3c7d19609ca8c426a54b252b8509faf63b0bd5
 
 ## Added highlighting of:
 
-- suffix aliases:
+- suffix aliases (requires zsh 5.1.1 or newer):
 
         alias -s png=display
         foo.png
