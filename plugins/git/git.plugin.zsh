@@ -176,6 +176,7 @@ alias gpd='git push --dry-run'
 alias gpoat='git push origin --all && git push origin --tags'
 compdef _git gpoat=git-push
 alias gpu='git push upstream'
+alias gpub='git push --set-upstream origin $(current_branch)'
 alias gpv='git push -v'
 
 alias gr='git remote'
