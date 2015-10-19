@@ -4,6 +4,10 @@ INSTALL?=install -c
 PREFIX?=/usr/local
 SHARE_DIR=$(DESTDIR)$(PREFIX)/share/$(NAME)
 
+# Have the default target do nothing.
+all:
+	@ :
+
 install:
 	$(INSTALL) -d $(SHARE_DIR)
 	cp -r zsh-syntax-highlighting.zsh highlighters $(SHARE_DIR)
