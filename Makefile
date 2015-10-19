@@ -1,5 +1,6 @@
 NAME=zsh-syntax-highlighting
 
+INSTALL?=install -c
 PREFIX?=/usr/local
 SHARE_DIR=$(DESTDIR)$(PREFIX)/share/$(NAME)
 
