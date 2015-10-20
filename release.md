@@ -12,3 +12,4 @@
 - Push with `git push --tags`
 - Notify downstreams (OS packages)
   - anitya should autodetect the tag
+- Update /topic on IRC
