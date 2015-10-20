@@ -1,4 +1,3 @@
-#!/usr/bin/env zsh
 # -------------------------------------------------------------------------------------------------
 # Copyright (c) 2015 zsh-syntax-highlighting contributors
 # All rights reserved.
