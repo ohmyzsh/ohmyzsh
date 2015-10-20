@@ -1,6 +1,3 @@
-up to c687bddea311a8adc964fd91496e07150368bbfd
-
-
 # Changes in version 0.3.0
 
 
