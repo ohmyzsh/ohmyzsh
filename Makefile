@@ -27,3 +27,5 @@ test:
 		fi \
 	done
 	@exit $$result
+
+.PHONY: all install test
