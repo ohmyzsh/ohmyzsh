@@ -57,6 +57,7 @@ _zsh_highlight()
   local ret=$?
 
   setopt localoptions warncreateglobal
+  local REPLY # don't leak $REPLY into global scope
 
   # Do not highlight if there are more than 300 chars in the buffer. It's most
   # likely a pasted command or a huge list of files in that case..
