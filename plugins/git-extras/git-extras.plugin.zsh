@@ -302,7 +302,7 @@ zstyle ':completion:*:*:git:*' user-commands \
     count:'count commits' \
     create-branch:'create local and remote branch' \
     delete-branch:'delete local and remote branch' \
-    delete-merged-brancees:'delete merged branches'\
+    delete-merged-branches:'delete merged branches'\
     delete-submodule:'delete submodule' \
     delete-tag:'delete local and remote tag' \
     effort:'display effort statistics' \
