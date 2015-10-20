@@ -37,7 +37,7 @@ if which tmux &> /dev/null
 
 
 	# Get the absolute path to the current directory
-	local zsh_tmux_plugin_path="$(cd "$(dirname "$0")" && pwd)"
+	local zsh_tmux_plugin_path="$(builtin cd "$(dirname "$0")" && builtin pwd)"
 
 	# Determine if the terminal supports 256 colors
 	if [[ `tput colors` == "256" ]]
