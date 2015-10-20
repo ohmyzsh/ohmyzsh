@@ -18,14 +18,14 @@ install:
 	fi > $(SHARE_DIR)/.revision-hash
 
 test:
-	@result=0
-	@for test in highlighters/*; do \
+	@result=0; \
+	for test in highlighters/*; do \
 		if [ -d $$test/test-data ]; then \
 			echo "Running test $${test##*/}"; \
 			zsh -f tests/test-highlighting.zsh "$${test##*/}"; \
 			: $$(( result |= $$? )); \
 		fi \
-	done
-	@exit $$result
+	done; \
+	exit $$result
 
 .PHONY: all install test
