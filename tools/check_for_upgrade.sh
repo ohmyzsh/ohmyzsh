@@ -26,6 +26,9 @@ fi
 # oh-my-zsh directory.
 [[ -w "$ZSH" ]] || return 0
 
+# Cancel upgrade if no git command is available on this system.
+whence git >/dev/null || return 0
+
 if [ -f ~/.zsh-update ]
 then
   . ~/.zsh-update
