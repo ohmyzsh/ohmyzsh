@@ -5,6 +5,11 @@ zsh-syntax-highlighting
 
 *Requirements: zsh 4.3.17+.*
 
+This package provides syntax highlighing for the shell zsh.  It enables
+highlighing of commands whilst they are typed at a zsh prompt into an
+interactive terminal.  This helps in reviewing commands before running
+them, particularly in catching syntax errors.
+
 
 How to install
 --------------
