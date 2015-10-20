@@ -36,8 +36,7 @@ How to install
 
 * Download the script or clone this repository in [oh-my-zsh](http://github.com/robbyrussell/oh-my-zsh) plugins directory:
 
-        cd ~/.oh-my-zsh/custom/plugins
-        git clone git://github.com/zsh-users/zsh-syntax-highlighting.git
+        git clone git://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 
 * Activate the plugin in `~/.zshrc`:
 
