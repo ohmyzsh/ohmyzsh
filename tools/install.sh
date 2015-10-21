@@ -1,4 +1,3 @@
-function main() {
 # Use colors, but only if connected to a terminal, and that terminal
 # supports them.
 if which tput >/dev/null 2>&1; then
@@ -117,6 +116,3 @@ echo 'p.p.s. Get stickers and t-shirts at http://shop.planetargon.com.'
 echo ''
 printf "${NORMAL}"
 env zsh
-}
-
-main
