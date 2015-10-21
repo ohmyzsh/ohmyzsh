@@ -31,24 +31,36 @@ if [[ "$TERM" == screen* ]]; then
   function screen_set()
   {
     # set the tab window title (%t) for screen
-    print -nR $'\033k'$1$'\033'\\\
+    print -nR $'\033k'"$1"$'\033'\\\
 
     # set hardstatus of tab window (%h) for screen
-    print -nR $'\033]0;'$2$'\a'
+    print -nR $'\033_'"$2"$'\033'\\\
   }
   # called by zsh before executing a command
   function preexec()
   {
-    local -a cmd; cmd=(${(z)1}) # the command string
-    eval "tab_title=$TAB_TITLE_PREFIX:$TAB_TITLE_EXEC"
-    eval "tab_hardstatus=$TAB_HARDSTATUS_PREFIX:$TAB_HARDSTATUS_EXEC"
+    local -a cmd; cmd=(${(z)3}) # the command string
+    if [ "$TITLE" != "" ]
+    then
+      eval "tab_title=\"$TITLE\":$TAB_TITLE_EXEC"
+      eval "tab_hardstatus=\"$TITLE\":$TAB_HARDSTATUS_EXEC"
+    else
+      eval "tab_title=$TAB_TITLE_PREFIX:$TAB_TITLE_EXEC"
+      eval "tab_hardstatus=$TAB_HARDSTATUS_PREFIX:$TAB_HARDSTATUS_EXEC"
+    fi
     screen_set $tab_title $tab_hardstatus
   }
   # called by zsh before showing the prompt
   function precmd()
   {
-    eval "tab_title=$TAB_TITLE_PREFIX:$TAB_TITLE_PROMPT"
-    eval "tab_hardstatus=$TAB_HARDSTATUS_PREFIX:$TAB_HARDSTATUS_PROMPT"
+    if [ "$TITLE" != "" ]
+    then
+      eval "tab_title=\"$TITLE\":$TAB_TITLE_PROMPT"
+      eval "tab_hardstatus=\"$TITLE\":$TAB_HARDSTATUS_PROMPT"
+    else
+      eval "tab_title=$TAB_TITLE_PREFIX:$TAB_TITLE_PROMPT"
+      eval "tab_hardstatus=$TAB_HARDSTATUS_PREFIX:$TAB_HARDSTATUS_PROMPT"
+    fi
     screen_set $tab_title $tab_hardstatus
   }
 fi
