@@ -10,7 +10,7 @@ cfc () {
 }
 
 # compile from clipboard & print
-alias cfp='coffeeMe "$(clippaste)"'
+alias cfp='cf "$(clippaste)"'
 
 # compile from clipboard and copy to clipboard
 alias cfpc='cfp | clipcopy'
