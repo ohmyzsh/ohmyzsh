@@ -1,5 +1,3 @@
-Modified version to get a better research history (with arrow-keys) with oh-my-zsh.
-
 ![Oh My Zsh](https://s3.amazonaws.com/ohmyzsh/oh-my-zsh-logo.png)
 
 
