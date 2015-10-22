@@ -4,16 +4,20 @@
 
 # Make sure that the terminal is in application mode when zle is active, since
 # only then values from $terminfo are valid
-#if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
-#  function zle-line-init() {
-#    echoti smkx
-#  }
-#  function zle-line-finish() {
-#    echoti rmkx
-#  }
-#  zle -N zle-line-init
-#  zle -N zle-line-finish
-#fi
+if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
+  function zle-line-init() {
+    echoti smkx
+  }
+  function zle-line-finish() {
+    echoti rmkx
+  }
+  zle -N zle-line-init
+  zle -N zle-line-finish
+  autoload -U up-line-or-beginning-search
+  autoload -U down-line-or-beginning-search
+  zle -N up-line-or-beginning-search
+  zle -N down-line-or-beginning-search 
+fi
 
 bindkey -e                                            # Use emacs key bindings
 
@@ -23,26 +27,16 @@ bindkey '^r' history-incremental-search-backward      # [Ctrl-r] - Search backwa
 if [[ "${terminfo[kpp]}" != "" ]]; then
   bindkey "${terminfo[kpp]}" up-line-or-history       # [PageUp] - Up a line of history
 fi
+if [[ "${terminfo[knp]}" != "" ]]; then
+  bindkey "${terminfo[knp]}" down-line-or-history     # [PageDown] - Down a line of history
+fi
 
-# New functionality !
-autoload -U up-line-or-beginning-search
-autoload -U down-line-or-beginning-search
-zle -N up-line-or-beginning-search
-zle -N down-line-or-beginning-search
-bindkey "^[[A" up-line-or-beginning-search # Up
-bindkey "^[[B" down-line-or-beginning-search # Down
-# End of new functionality
-
-#if [[ "${terminfo[knp]}" != "" ]]; then
-#  bindkey "${terminfo[knp]}" down-line-or-history     # [PageDown] - Down a line of history
-#fi
-#
-#if [[ "${terminfo[kcuu1]}" != "" ]]; then
-#  bindkey "${terminfo[kcuu1]}" up-line-or-search      # start typing + [Up-Arrow] - fuzzy find history forward
-#fi
-#if [[ "${terminfo[kcud1]}" != "" ]]; then
-#  bindkey "${terminfo[kcud1]}" down-line-or-search    # start typing + [Down-Arrow] - fuzzy find history backward
-#fi
+if [[ "${terminfo[kcuu1]}" != "" ]]; then
+  bindkey "${terminfo[kcuu1]}" up-line-or-beginning-search      # start typing + [Up-Arrow] - fuzzy find history forward
+fi
+if [[ "${terminfo[kcud1]}" != "" ]]; then
+  bindkey "${terminfo[kcud1]}" down-line-or-beginning-search    # start typing + [Down-Arrow] - fuzzy find history backward
+fi
 
 if [[ "${terminfo[khome]}" != "" ]]; then
   bindkey "${terminfo[khome]}" beginning-of-line      # [Home] - Go to beginning of line
