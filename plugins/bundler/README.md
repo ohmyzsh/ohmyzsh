@@ -39,7 +39,7 @@ This will exclude the `foreman` and `spin` gems (i.e. their executable) from bei
 
 ## Excluded gems
 
-These gems should not be called with `bundle exec`. Please see the Issues on GitHub for clarification.
+These gems should not be called with `bundle exec`. Please see [issue #2923](https://github.com/robbyrussell/oh-my-zsh/pull/2923) on GitHub for clarification.
 
 `berks`
 `foreman`
