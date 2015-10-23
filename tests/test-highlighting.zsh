@@ -31,20 +31,20 @@
 
 # Check an highlighter was given as argument.
 [[ -n "$1" ]] || {
-  echo "You must provide the name of a valid highlighter as argument." >&2
-  exit 1
+  echo >&2 "Bail out! You must provide the name of a valid highlighter as argument."
+  exit 2
 }
 
 # Check the highlighter is valid.
 [[ -f ${0:h:h}/highlighters/$1/$1-highlighter.zsh ]] || {
-  echo "Could not find highlighter '$1'." >&2
-  exit 1
+  echo >&2 "Bail out! Could not find highlighter '$1'."
+  exit 2
 }
 
 # Check the highlighter has test data.
 [[ -d ${0:h:h}/highlighters/$1/test-data ]] || {
-  echo "Highlighter '$1' has no test data." >&2
-  exit 1
+  echo >&2 "Bail out! Highlighter '$1' has no test data."
+  exit 2
 }
 
 # Load the main script.
