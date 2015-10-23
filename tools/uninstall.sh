@@ -18,14 +18,14 @@ then
 
   if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]
   then
-    ZSHRC_SAVE=".zshrc.omz-uninstalled-`date +%Y%m%d%H%M%S`";
+    ZSHRC_SAVE=".zshrc.omz-uninstalled-$(date +%Y%m%d%H%M%S)";
     echo "Found ~/.zshrc -- Renaming to ~/${ZSHRC_SAVE}";
-    mv ~/.zshrc ~/${ZSHRC_SAVE};
+    mv ~/.zshrc ~/"${ZSHRC_SAVE}";
   fi
 
   mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc;
 
-  source ~/.zshrc;
+  . ~/.zshrc;
 else
   if hash chsh >/dev/null 2>&1
   then
