@@ -110,7 +110,7 @@ run_test() {
 integer something_failed=0
 for data_file in ${0:h:h}/highlighters/$1/test-data/*.zsh; do
   echo "# ${data_file:t:r}"
-  (run_test "$data_file") | tee >(cat) | grep '^not ok' | grep -qv ' # TODO' && (( something_failed=1 ))
+  (run_test "$data_file") | tee >(cat) | grep -v '^not ok.*# TODO' | grep -q '^not ok\|^ok.*# TODO' && (( something_failed=1 ))
   (( $pipestatus[1] )) && exit 2
 done
 
