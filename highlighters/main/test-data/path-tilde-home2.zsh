@@ -27,10 +27,11 @@
 # vim: ft=zsh sw=2 ts=2 et
 # -------------------------------------------------------------------------------------------------
 
-HOME="."
+HOME="/nonexistent"
 BUFFER='ls ~'
 
 expected_region_highlight=(
   "1 2 $ZSH_HIGHLIGHT_STYLES[command]" # ls
-  "4 4 $ZSH_HIGHLIGHT_STYLES[path]"    # ~
+  "4 4 $ZSH_HIGHLIGHT_STYLES[default]"    # ~
 )
+
