@@ -18,4 +18,6 @@ if [ $commands[autojump] ]; then # check if autojump is installed
   elif [ $commands[brew] -a -f `brew --prefix`/etc/autojump.sh ]; then # mac os x with brew
     . `brew --prefix`/etc/autojump.sh
   fi
+else
+  echo 'Please install autojump to enable the plugin (https://github.com/wting/autojump)';
 fi
