@@ -75,7 +75,7 @@ run_test() {
   # Overlapping regions can be declared in region_highlight, so we first build an array of the
   # observed highlighting.
   local -A observed_result
-  for i in {1..${#region_highlight}}; do
+  for ((i=1; i<=${#region_highlight}; i++)); do
     highlight_zone=${(z)region_highlight[$i]}
     integer start=$highlight_zone[1] end=$highlight_zone[2]
     if (( start < end )) # region_highlight ranges are half-open
@@ -92,7 +92,7 @@ run_test() {
 
   # Then we compare the observed result with the expected one.
   echo "1..${#expected_region_highlight}"
-  for i in {1..${#expected_region_highlight}}; do
+  for ((i=1; i<=${#expected_region_highlight}; i++)); do
     local todo=
     highlight_zone=${(z)expected_region_highlight[$i]}
     [[ -n "$highlight_zone[4]" ]] && todo=" # TODO $highlight_zone[4]"
