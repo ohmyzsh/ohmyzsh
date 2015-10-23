@@ -30,7 +30,7 @@
 BUFFER='tar cf - * | (cd /target; tar xfp -)'
 
 expected_region_highlight=(
-  "1 3 $ZSH_HIGHLIGHT_STYLES[command] 'not yet implemented'" # tar
+  "1 3 $ZSH_HIGHLIGHT_STYLES[command]" # tar
   "15 16 $ZSH_HIGHLIGHT_STYLES[command] 'not yet implemented'" # cd
-  "27 29 $ZSH_HIGHLIGHT_STYLES[command] 'not yet implemented'" # tar
+  "27 29 $ZSH_HIGHLIGHT_STYLES[command]" # tar
 )

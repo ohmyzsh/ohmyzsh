@@ -91,9 +91,9 @@ run_test() {
   done
 
   # Then we compare the observed result with the expected one.
-  local todo
   echo "1..${#expected_region_highlight}"
   for i in {1..${#expected_region_highlight}}; do
+    local todo=
     highlight_zone=${(z)expected_region_highlight[$i]}
     [[ -n "$highlight_zone[4]" ]] && todo=" # TODO $highlight_zone[4]"
     for j in {$highlight_zone[1]..$highlight_zone[2]}; do
