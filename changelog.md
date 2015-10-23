@@ -1,3 +1,23 @@
+up to c4a9fe93792b11d26f20028cba6f97b0ede8beb7
+
+# Changes in version 0.3.1 
+
+## Other changes:
+
+- Fix initialization when sourcing `zsh-syntax-highlighting.zsh` via a symlink
+  (083c47b00707)
+
+
+## Developer-visible changes:
+
+- Run each test in a separate subprocess, isolating them from each other
+  (d99aa58aaaef, et seq)
+
+- Fix test failure with nonexisting $HOME
+  (#216, b2ac98b98150)
+
+
+
 # Changes in version 0.3.0
 
 
