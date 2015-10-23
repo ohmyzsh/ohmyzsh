@@ -54,6 +54,15 @@ How to install
 Note that `zsh-syntax-highlighting` must be the last plugin sourced,
 so make it the last element of the `$plugins` array.
 
+### System-wide installation
+
+Either of the above methods is suitable for a single-user installation, which requires
+no special privileges.  If, however, you desire to install zsh-syntax-highlighting
+system-wide, you may do so by running `make install` and directing your users to
+add `source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh`
+in their `.zshrc`s.
+
+
 FAQ
 ---
 
