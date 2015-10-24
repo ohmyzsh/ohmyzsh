@@ -42,6 +42,7 @@ alias rp='rails plugin'
 alias ru='rails runner'
 alias rs='rails server'
 alias rsd='rails server --debugger'
+alias rsp='rails server --port'
 
 # Rake aliases
 alias rdm='rake db:migrate'
@@ -59,7 +60,7 @@ alias rn='rake notes'
 alias rr='rake routes'
 alias rrg='rake routes | grep'
 alias rt='rake test'
-
+alias rmd='rake middleware'
 
 # legacy stuff
 alias sstat='thin --stats "/thin/stats" start'

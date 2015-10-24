@@ -24,7 +24,7 @@ _homebrew-installed() {
 }
 
 _chruby-from-homebrew-installed() {
-  [ -r $(brew --prefix chruby)] &> /dev/null
+  [ -r $(brew --prefix chruby) ] &> /dev/null
 }
 
 _ruby-build_installed() {

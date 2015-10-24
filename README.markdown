@@ -5,7 +5,7 @@ Oh My Zsh is an open source, community-driven framework for managing your [zsh](
 
 __Oh My Zsh is a way of life!__ Once installed, your terminal prompt will become the talk of the town _or your money back!_ Each time you interact with your command prompt, you'll be able take advantage of the hundreds of bundled plugins and pretty themes. Strangers will come up to you in cafés and ask you, _"that is amazing. are you some sort of genius?"_ Finally, you'll begin to get the sort of attention that you always felt that you deserved. ...or maybe you'll just use the time that you saved to start flossing more often.
 
-To learn more, visit http://ohmyz.sh and/or follow [ohmyzsh](https://twitter.com/ohmyzsh) on Twitter.
+To learn more, visit [ohmyz.sh](http://ohmyz.sh) and/or follow [ohmyzsh](https://twitter.com/ohmyzsh) on Twitter.
 
 ## Getting Started
 
@@ -25,11 +25,15 @@ Oh My Zsh is installed by running one of the following commands in your terminal
 
 #### via curl
 
-`sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"`
+```shell
+sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+```
 
 #### via wget
 
-`sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"`
+```shell
+sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+```
 
 ## Using Oh My Zsh
 
@@ -100,7 +104,7 @@ The default location is `~/.oh-my-zsh` (hidden in your home directory)
 If you'd like to change the install directory with the `ZSH` environment variable, either by running `export ZSH=/your/path` before installing, or by setting it before the end of the install pipeline like this:
 
 ```shell
-curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | ZSH=~/.dotfiles/zsh sh
+export ZSH="~/.dotfiles/oh-my-zsh"; sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 ```
 
 #### Manual Installation
