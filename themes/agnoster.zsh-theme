@@ -43,7 +43,7 @@ CURRENT_BG='NONE'
   # This is defined using a Unicode escape sequence so it is unambiguously readable, regardless of
   # what font the user is viewing this source code in. Do not replace the
   # escape sequence with a single literal character.
-  SEGMENT_SEPARATOR=$'\ue0b0' # 
+  SEGMENT_SEPARATOR=$'\u2b80' # ⮀
 }
 
 # Begin a segment
