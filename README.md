@@ -10,6 +10,8 @@ highlighing of commands whilst they are typed at a zsh prompt into an
 interactive terminal.  This helps in reviewing commands before running
 them, particularly in catching syntax errors.
 
+[![Screenshot](images/preview-smaller.png)](images/preview.png)
+
 
 How to install
 --------------
