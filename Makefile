@@ -26,7 +26,7 @@ test:
 			$(ZSH) -f tests/test-highlighting.zsh "$${test##*/}"; \
 			: $$(( result |= $$? )); \
 		fi \
-	done; \
+	done | $(ZSH) -f tests/tap-colorizer.zsh; \
 	exit $$result
 
 .PHONY: all install test
