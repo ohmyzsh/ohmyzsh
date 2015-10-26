@@ -19,5 +19,5 @@ if [ $commands[autojump] ]; then # check if autojump is installed
     . `brew --prefix`/etc/autojump.sh
   fi
 else
-  echo 'Please install autojump to enable the plugin (https://github.com/wting/autojump)';
+  echo 'Please install autojump to enable the plugin (https://github.com/wting/autojump)'
 fi
