@@ -28,11 +28,12 @@
 # -------------------------------------------------------------------------------------------------
 
 # Assumes that '/bin/sh' exists and '/bin/s' does not exist.
-# Related to path_prefix2.zsh
+# Related to path_prefix.zsh
 
 ZSH_HIGHLIGHT_STYLES[path_prefix]=$unused_highlight
 BUFFER='ls /bin/s'
+WIDGET=accept-line
 
 expected_region_highlight=(
-  "4 9 $ZSH_HIGHLIGHT_STYLES[path_prefix]"    # /bin/s
+  "4 9 $ZSH_HIGHLIGHT_STYLES[default] 'implemented by next commit'"    # /bin/s
 )
