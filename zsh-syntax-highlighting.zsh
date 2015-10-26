@@ -178,6 +178,14 @@ _zsh_highlight_cursor_moved()
 # Setup functions
 # -------------------------------------------------------------------------------------------------
 
+# Helper for _zsh_highlight_bind_widgets
+# $1 is name of widget to call
+_zsh_highlight_call_widget()
+{
+  builtin zle "$@" && 
+  _zsh_highlight
+}
+
 # Rebind all ZLE widgets to make them invoke _zsh_highlights.
 _zsh_highlight_bind_widgets()
 {
@@ -197,16 +205,16 @@ _zsh_highlight_bind_widgets()
 
       # User defined widget: override and rebind old one with prefix "orig-".
       user:*) eval "zle -N orig-$cur_widget ${widgets[$cur_widget]#*:}; \
-                    _zsh_highlight_widget_$cur_widget() { builtin zle orig-$cur_widget -- \"\$@\" && _zsh_highlight }; \
+                    _zsh_highlight_widget_$cur_widget() { _zsh_highlight_call_widget orig-$cur_widget -- \"\$@\" }; \
                     zle -N $cur_widget _zsh_highlight_widget_$cur_widget";;
 
       # Completion widget: override and rebind old one with prefix "orig-".
       completion:*) eval "zle -C orig-$cur_widget ${${widgets[$cur_widget]#*:}/:/ }; \
-                          _zsh_highlight_widget_$cur_widget() { builtin zle orig-$cur_widget -- \"\$@\" && _zsh_highlight }; \
+                          _zsh_highlight_widget_$cur_widget() { _zsh_highlight_call_widget orig-$cur_widget -- \"\$@\" }; \
                           zle -N $cur_widget _zsh_highlight_widget_$cur_widget";;
 
       # Builtin widget: override and make it call the builtin ".widget".
-      builtin) eval "_zsh_highlight_widget_$cur_widget() { builtin zle .$cur_widget -- \"\$@\" && _zsh_highlight }; \
+      builtin) eval "_zsh_highlight_widget_$cur_widget() { _zsh_highlight_call_widget .$cur_widget -- \"\$@\" }; \
                      zle -N $cur_widget _zsh_highlight_widget_$cur_widget";;
 
       # Default: unhandled case.
