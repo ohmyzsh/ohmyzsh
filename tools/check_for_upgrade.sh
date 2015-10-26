@@ -1,6 +1,10 @@
 #!/usr/bin/env zsh
 
-zmodload zsh/datetime
+if [[ -n $ZSH_MODULE_PATH ]]; then
+    module_path=$ZSH_MODULE_PATH zmodload zsh/datetime
+else
+    zmodload zsh/datetime
+fi
 
 function _current_epoch() {
   echo $(( $EPOCHSECONDS / 60 / 60 / 24 ))

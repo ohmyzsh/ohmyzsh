@@ -8,7 +8,11 @@ setopt always_to_end
 
 WORDCHARS=''
 
-zmodload -i zsh/complist
+if [[ -n $ZSH_MODULE_PATH ]]; then
+    module_path=$ZSH_MODULE_PATH zmodload -i zsh/complist
+else
+    zmodload -i zsh/complist
+fi
 
 ## case-insensitive (all),partial-word and then substring completion
 if [ "x$CASE_SENSITIVE" = "xtrue" ]; then

@@ -92,7 +92,12 @@ function env_default() {
 
 
 # Required for $langinfo
-zmodload zsh/langinfo
+if [[ -n $ZSH_MODULE_PATH ]]; then
+    module_path=$ZSH_MODULE_PATH zmodload zsh/langinfo
+else
+    zmodload zsh/langinfo
+fi
+
 
 # URL-encode a string
 #
