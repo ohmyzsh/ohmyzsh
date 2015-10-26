@@ -42,7 +42,6 @@
 : ${ZSH_HIGHLIGHT_STYLES[hashed-command]:=fg=green}
 : ${ZSH_HIGHLIGHT_STYLES[path]:=underline}
 : ${ZSH_HIGHLIGHT_STYLES[path_prefix]:=underline}
-: ${ZSH_HIGHLIGHT_STYLES[path_approx]:=fg=yellow,underline}
 : ${ZSH_HIGHLIGHT_STYLES[globbing]:=fg=blue}
 : ${ZSH_HIGHLIGHT_STYLES[history-expansion]:=fg=blue}
 : ${ZSH_HIGHLIGHT_STYLES[single-hyphen-option]:=none}
@@ -285,9 +284,6 @@ _zsh_highlight_main_highlighter_check_path()
     local -a tmp
     tmp=( ${expanded_path}*(N) )
     (( $#tmp > 0 )) && style_override=path_prefix && return 0
-    # or maybe an approximate path?
-    tmp=( (#a1)${expanded_path}*(N) )
-    (( $#tmp > 0 )) && style_override=path_approx && return 0
   fi
 
   # It's not a path.

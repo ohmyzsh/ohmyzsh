@@ -34,7 +34,6 @@ This highlighter defines the following styles:
 * `hashed-command` - hashed commands
 * `path` - paths
 * `path_prefix` - path prefixes
-* `path_approx` - approximated paths
 * `globbing` - globbing expressions (`*.txt`)
 * `history-expansion` - history expansion expressions (`!foo` and `^foo^bar`)
 * `single-hyphen-option` - single hyphen options (-o)
