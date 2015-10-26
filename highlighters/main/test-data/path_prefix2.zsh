@@ -35,5 +35,5 @@ BUFFER='ls /bin/s'
 WIDGET=accept-line
 
 expected_region_highlight=(
-  "4 9 $ZSH_HIGHLIGHT_STYLES[default] 'implemented by next commit'"    # /bin/s
+  "4 9 $ZSH_HIGHLIGHT_STYLES[default]"    # /bin/s
 )

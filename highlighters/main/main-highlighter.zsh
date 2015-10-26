@@ -59,7 +59,9 @@
 # Whether the highlighter should be called or not.
 _zsh_highlight_main_highlighter_predicate()
 {
-  _zsh_highlight_buffer_modified
+  # accept-* may trigger removal of path_prefix highlighting
+  [[ $WIDGET == accept-* ]] ||
+    _zsh_highlight_buffer_modified
 }
 
 # Helper to deal with tokens crossing line boundaries.
@@ -280,7 +282,8 @@ _zsh_highlight_main_highlighter_check_path()
   [[ ! -e ${expanded_path:h} ]] && return 1
 
   # If this word ends the buffer, check if it's the prefix of a valid path.
-  if [[ ${BUFFER[1]} != "-" && ${#BUFFER} == $end_pos ]]; then
+  if [[ ${BUFFER[1]} != "-" && ${#BUFFER} == $end_pos ]] &&
+     [[ $WIDGET != accept-* ]]; then
     local -a tmp
     tmp=( ${expanded_path}*(N) )
     (( $#tmp > 0 )) && style_override=path_prefix && return 0
