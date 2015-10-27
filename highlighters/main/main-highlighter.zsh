@@ -144,7 +144,7 @@ _zsh_highlight_main_highlighter()
                        sudo_arg=false
                      else
                        sudo=false
-                       new_expression=true; highlight_glob=true
+                       new_expression=true
                      fi
                      ;;
       esac
@@ -178,7 +178,7 @@ _zsh_highlight_main_highlighter()
                           if [[ $arg[-1] != '(' ]]; then
                             # assignment to a scalar parameter.
                             # (For array assignments, the command doesn't start until the ")" token.)
-                            new_expression=true; highlight_glob=true
+                            new_expression=true
                           fi
                         elif [[ $arg[0,1] == $histchars[0,1] || $arg[0,1] == $histchars[2,2] ]]; then
                           style=$ZSH_HIGHLIGHT_STYLES[history-expansion]
@@ -211,7 +211,7 @@ _zsh_highlight_main_highlighter()
     else # $arg is the file target of a prefix redirection, or a non-command word
       if $redirection; then
         redirection=false
-        new_expression=true; highlight_glob=true
+        new_expression=true
       fi
       case $arg in
         '--'*)   style=$ZSH_HIGHLIGHT_STYLES[double-hyphen-option];;
