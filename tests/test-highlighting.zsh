@@ -59,6 +59,8 @@ run_test() {
   local -a highlight_zone
   local unused_highlight='bg=red,underline' # a style unused by anything else, for tests to use
 
+  echo "# ${1:t:r}"
+
   # Load the data and prepare checking it.
   PREBUFFER= BUFFER= ;
   . "$1"
@@ -109,8 +111,7 @@ run_test() {
 # Process each test data file in test data directory.
 integer something_failed=0
 for data_file in ${0:h:h}/highlighters/$1/test-data/*.zsh; do
-  echo "# ${data_file:t:r}"
-  (run_test "$data_file") | tee >(cat) | grep -v '^not ok.*# TODO' | grep -q '^not ok\|^ok.*# TODO' && (( something_failed=1 ))
+  (run_test "$data_file") | tee >(${0:A:h}/tap-colorizer.zsh) | grep -v '^not ok.*# TODO' | grep -q '^not ok\|^ok.*# TODO' && (( something_failed=1 ))
   (( $pipestatus[1] )) && exit 2
 done
 

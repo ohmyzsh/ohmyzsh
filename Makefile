@@ -26,7 +26,7 @@ test:
 			$(ZSH) -f tests/test-highlighting.zsh "$${test##*/}"; \
 			: $$(( result |= $$? )); \
 		fi \
-	done | $(ZSH) -f tests/tap-colorizer.zsh; \
+	done; \
 	exit $$result
 
 perf:
