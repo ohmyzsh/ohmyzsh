@@ -29,4 +29,15 @@ test:
 	done | $(ZSH) -f tests/tap-colorizer.zsh; \
 	exit $$result
 
+perf:
+	@result=0; \
+	for test in highlighters/*; do \
+		if [ -d $$test/test-data ]; then \
+			echo "Running test $${test##*/}"; \
+			$(ZSH) -f tests/test-perfs.zsh "$${test##*/}"; \
+			: $$(( result |= $$? )); \
+		fi \
+	done; \
+	exit $$result
+
 .PHONY: all install test

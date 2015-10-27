@@ -32,3 +32,7 @@ performance test
 [`test-perfs.zsh`](tests/test-perfs.zsh) measures the time spent doing the highlighting. Usage:
 
     zsh test-perfs.zsh <HIGHLIGHTER NAME>
+
+All tests may be run with
+
+    make perf
