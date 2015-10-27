@@ -84,7 +84,7 @@ _zsh_highlight_main_highlighter()
 {
   emulate -L zsh
   setopt localoptions extendedglob bareglobqual
-  local start_pos=0 end_pos highlight_glob=true new_expression=true arg style
+  local start_pos=0 end_pos highlight_glob=true arg style
   local redirection=false # true when we've seen a redirection operator before seeing the command word
   typeset -a ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR
   typeset -a ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS
@@ -112,7 +112,7 @@ _zsh_highlight_main_highlighter()
     # the string's color.
     integer already_added=0
     local style_override=""
-    if $new_expression && [[ $arg = 'noglob' ]]; then
+    if [[ $this_word == *':start:'* ]] && [[ $arg = 'noglob' ]]; then
       highlight_glob=false
     fi
 
@@ -142,13 +142,12 @@ _zsh_highlight_main_highlighter()
         '-'[Cgprtu]) next_word=':sudo_arg:';;
         # This prevents misbehavior with sudo -u -otherargument
         '-'*)        next_word+=':sudo_opt:';;
-        *)           this_word+=':start:'; new_expression=true;;
+        *)           this_word+=':start:';;
       esac
     elif [[ $this_word == *':sudo_arg:'* ]]; then
       next_word+=':sudo_opt:'
     fi
-    if $new_expression && ! $redirection; then # $arg is the command word
-      new_expression=false
+    if [[ $this_word == *':start:'* ]] && ! $redirection; then # $arg is the command word
      if [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS:#"$arg"} ]]; then
       style=$ZSH_HIGHLIGHT_STYLES[precommand]
      elif [[ "$arg" = "sudo" ]]; then
@@ -176,7 +175,7 @@ _zsh_highlight_main_highlighter()
                           if [[ $arg[-1] != '(' ]]; then
                             # assignment to a scalar parameter.
                             # (For array assignments, the command doesn't start until the ")" token.)
-                            new_expression=true
+                            next_word+=':start:'
                           fi
                         elif [[ $arg[0,1] == $histchars[0,1] || $arg[0,1] == $histchars[2,2] ]]; then
                           style=$ZSH_HIGHLIGHT_STYLES[history-expansion]
@@ -209,7 +208,7 @@ _zsh_highlight_main_highlighter()
     else # $arg is the file target of a prefix redirection, or a non-command word
       if $redirection; then
         redirection=false
-        new_expression=true
+        next_word+=':start:'
       fi
       case $arg in
         '--'*)   style=$ZSH_HIGHLIGHT_STYLES[double-hyphen-option];;
@@ -248,7 +247,7 @@ _zsh_highlight_main_highlighter()
     # if a style_override was set (eg in _zsh_highlight_main_highlighter_check_path), use it
     [[ -n $style_override ]] && style=$ZSH_HIGHLIGHT_STYLES[$style_override]
     (( already_added )) || _zsh_highlight_main_add_region_highlight $start_pos $end_pos $style
-    [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS:#"$arg"} ]] && new_expression=true
+    [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS:#"$arg"} ]] && next_word+=':start:'
     [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR:#"$arg"} ]] && highlight_glob=true
     start_pos=$end_pos
     this_word=$next_word
