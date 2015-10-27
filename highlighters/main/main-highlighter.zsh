@@ -88,7 +88,6 @@ _zsh_highlight_main_highlighter()
   local redirection=false # true when we've seen a redirection operator before seeing the command word
   typeset -a ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR
   typeset -a ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS
-  typeset -a ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS
   local buf="$PREBUFFER$BUFFER"
   region_highlight=()
 
@@ -97,10 +96,6 @@ _zsh_highlight_main_highlighter()
   )
   ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS=(
     'builtin' 'command' 'exec' 'nocorrect' 'noglob'
-  )
-  # Tokens that are always immediately followed by a command.
-  ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS=(
-    $ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR $ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS
   )
 
   # State machine
@@ -178,7 +173,7 @@ _zsh_highlight_main_highlighter()
                         ;;
         *': alias')     style=$ZSH_HIGHLIGHT_STYLES[alias]
                         local aliased_command="${"$(alias -- $arg)"#*=}"
-                        [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS:#"$aliased_command"} && -z ${(M)ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS:#"$arg"} ]] && ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS+=($arg)
+                        [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS:#"$aliased_command"} && -z ${(M)ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS:#"$arg"} ]] && ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS+=($arg)
                         ;;
         *': builtin')   style=$ZSH_HIGHLIGHT_STYLES[builtin];;
         *': function')  style=$ZSH_HIGHLIGHT_STYLES[function];;
