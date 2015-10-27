@@ -85,7 +85,6 @@ _zsh_highlight_main_highlighter()
   emulate -L zsh
   setopt localoptions extendedglob bareglobqual
   local start_pos=0 end_pos highlight_glob=true arg style
-  local redirection=false # true when we've seen a redirection operator before seeing the command word
   typeset -a ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR
   typeset -a ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS
   local buf="$PREBUFFER$BUFFER"
@@ -112,9 +111,21 @@ _zsh_highlight_main_highlighter()
   # The tokens are always added with both leading and trailing colons to serve as
   # word delimiters (an improvised array); [[ $x == *:foo:* ]] and x=${x//:foo:/} 
   # will DTRT regardless of how many elements or repetitions $x has..
+  #
+  # Handling of redirections: upon seeing a redirection token, we must stall
+  # the current state --- both $this_word and $next_word --- for two iterations
+  # (one for the redirection operator, one for the word following it representing
+  # the redirection target).  Therefore, we set $in_redirection to 2 upon seeing a
+  # redirection operator, decrement it each iteration, and stall the current state
+  # when it is non-zero.
   local this_word=':start:' next_word
+  integer in_redirection
   for arg in ${(z)buf}; do
-    next_word=':regular:'
+    if (( in_redirection == 0 )); then
+      next_word=':regular:'
+    else
+      (( --in_redirection ))
+    fi
     # $already_added is set to 1 to disable adding an entry to region_highlight
     # for this iteration.  Currently, that is done for "" and $'' strings,
     # which add the entry early so escape sequences within the string override
@@ -145,18 +156,21 @@ _zsh_highlight_main_highlighter()
     fi
 
     # Parse the sudo command line
-    if [[ $this_word == *':sudo_opt:'* ]]; then
-      case "$arg" in
-        # Flag that requires an argument
-        '-'[Cgprtu]) next_word=':sudo_arg:';;
-        # This prevents misbehavior with sudo -u -otherargument
-        '-'*)        next_word+=':sudo_opt:';;
-        *)           this_word+=':start:';;
-      esac
-    elif [[ $this_word == *':sudo_arg:'* ]]; then
-      next_word+=':sudo_opt:'
+    if (( ! in_redirection )); then
+      if [[ $this_word == *':sudo_opt:'* ]]; then
+        case "$arg" in
+          # Flag that requires an argument
+          '-'[Cgprtu]) next_word=':sudo_arg:';;
+          # This prevents misbehavior with sudo -u -otherargument
+          '-'*)        next_word+=':sudo_opt:';;
+          *)           this_word+=':start:';;
+        esac
+      elif [[ $this_word == *':sudo_arg:'* ]]; then
+        next_word+=':sudo_opt:'
+      fi
     fi
-    if [[ $this_word == *':start:'* ]] && ! $redirection; then # $arg is the command word
+
+    if [[ $this_word == *':start:'* ]] && (( in_redirection == 0 )); then # $arg is the command word
      if [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS:#"$arg"} ]]; then
       style=$ZSH_HIGHLIGHT_STYLES[precommand]
      elif [[ "$arg" = "sudo" ]]; then
@@ -190,7 +204,7 @@ _zsh_highlight_main_highlighter()
                           style=$ZSH_HIGHLIGHT_STYLES[history-expansion]
                         elif [[ $arg[1] == '<' || $arg[1] == '>' ]]; then
                           style=$ZSH_HIGHLIGHT_STYLES[redirection]
-                          redirection=true
+                          (( in_redirection=2 ))
                         elif [[ $arg[1,2] == '((' ]]; then
                           # Arithmetic evaluation.
                           #
@@ -214,11 +228,7 @@ _zsh_highlight_main_highlighter()
                         ;;
       esac
      fi
-    else # $arg is the file target of a prefix redirection, or a non-command word
-      if $redirection; then
-        redirection=false
-        next_word+=':start:'
-      fi
+    else # $arg is a non-command word
       case $arg in
         '--'*)   style=$ZSH_HIGHLIGHT_STYLES[double-hyphen-option];;
         '-'*)    style=$ZSH_HIGHLIGHT_STYLES[single-hyphen-option];;
@@ -243,6 +253,7 @@ _zsh_highlight_main_highlighter()
                    style=$ZSH_HIGHLIGHT_STYLES[commandseparator]
                  elif [[ $arg[1] == '<' || $arg[1] == '>' ]]; then
                    style=$ZSH_HIGHLIGHT_STYLES[redirection]
+                   (( in_redirection=2 ))
                  else
                    if _zsh_highlight_main_highlighter_check_path; then
                      style=$ZSH_HIGHLIGHT_STYLES[path]
@@ -266,7 +277,7 @@ _zsh_highlight_main_highlighter()
     fi
     [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR:#"$arg"} ]] && highlight_glob=true
     start_pos=$end_pos
-    this_word=$next_word
+    (( in_redirection == 0 )) && this_word=$next_word
   done
 }
 

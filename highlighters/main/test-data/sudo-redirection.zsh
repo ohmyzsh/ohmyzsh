@@ -35,5 +35,5 @@ expected_region_highlight=(
   "9 9 $ZSH_HIGHLIGHT_STYLES[redirection]" # >
   "10 13 $ZSH_HIGHLIGHT_STYLES[path]" # /tmp
   "15 23 $ZSH_HIGHLIGHT_STYLES[default]" # otheruser
-  "25 26 $ZSH_HIGHLIGHT_STYLES[command] 'issue #221'" # ls
+  "25 26 $ZSH_HIGHLIGHT_STYLES[command]" # ls
 )
