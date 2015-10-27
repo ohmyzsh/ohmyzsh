@@ -55,6 +55,7 @@
 : ${ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]:=fg=cyan}
 : ${ZSH_HIGHLIGHT_STYLES[assign]:=none}
 : ${ZSH_HIGHLIGHT_STYLES[redirection]:=none}
+: ${ZSH_HIGHLIGHT_STYLES[comment]:=fg=black,bold}
 
 # Whether the highlighter should be called or not.
 _zsh_highlight_main_highlighter_predicate()
@@ -82,6 +83,9 @@ _zsh_highlight_main_add_region_highlight() {
 # Main syntax highlighting function.
 _zsh_highlight_main_highlighter()
 {
+  if [[ -o interactive_comments ]]; then
+    local interactive_comments= # set to empty
+  fi
   emulate -L zsh
   setopt localoptions extendedglob bareglobqual
   local start_pos=0 end_pos highlight_glob=true arg style
@@ -148,7 +152,8 @@ _zsh_highlight_main_highlighter()
   #
   local this_word=':start:' next_word
   integer in_redirection
-  for arg in ${(z)buf}; do
+  for arg in ${interactive_comments-${(z)buf}} \
+             ${interactive_comments+${(zZ+c+)buf}}; do
     if (( in_redirection )); then
       (( --in_redirection ))
     fi
@@ -182,6 +187,14 @@ _zsh_highlight_main_highlighter()
     else
       ((start_pos+=${#buf[$start_pos+1,-1]}-${#${buf[$start_pos+1,-1]##([[:space:]]|\\[[:space:]])#}}))
       ((end_pos=$start_pos+${#arg}))
+    fi
+
+    if [[ ${interactive_comments+'set'} && $arg[1] == $histchars[3] ]]; then
+      # TODO: check $this_word
+      style=$ZSH_HIGHLIGHT_STYLES[comment]
+      _zsh_highlight_main_add_region_highlight $start_pos $end_pos $style
+      already_added=1
+      continue
     fi
 
     # Parse the sudo command line
