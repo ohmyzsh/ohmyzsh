@@ -101,6 +101,9 @@ _zsh_highlight_main_highlighter()
   # Tokens that, at (naively-determined) "command position", are followed by
   # a de jure command position.  All of these are reserved words.
   ZSH_HIGHLIGHT_TOKENS_CONTROL_FLOW=(
+    $'\x7b' # block
+    $'\x28' # subshell
+    '()' # anonymous function
     'while'
     'until'
     'if'
@@ -247,6 +250,9 @@ _zsh_highlight_main_highlighter()
                           style=$ZSH_HIGHLIGHT_STYLES[reserved-word]
                           _zsh_highlight_main_add_region_highlight $start_pos $((start_pos + 2)) $style
                           already_added=1
+                        elif [[ $arg == '()' ]]; then
+                          # anonymous function
+                          style=$ZSH_HIGHLIGHT_STYLES[reserved-word]
                         else
                           if _zsh_highlight_main_highlighter_check_path; then
                             style=$ZSH_HIGHLIGHT_STYLES[path]
