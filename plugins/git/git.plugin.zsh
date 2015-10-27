@@ -177,6 +177,7 @@ alias gpoat='git push origin --all && git push origin --tags'
 compdef _git gpoat=git-push
 alias gpu='git push upstream'
 alias gpv='git push -v'
+alias gpcb='git push origin $(current_branch)'
 
 alias gr='git remote'
 alias gra='git remote add'
