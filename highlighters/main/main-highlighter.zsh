@@ -102,11 +102,11 @@ _zsh_highlight_main_highlighter()
   )
 
   for arg in ${(z)buf}; do
-    # substr_color is set to 1 to disable adding an entry to region_highlight
+    # $already_added is set to 1 to disable adding an entry to region_highlight
     # for this iteration.  Currently, that is done for "" and $'' strings,
     # which add the entry early so escape sequences within the string override
     # the string's color.
-    integer substr_color=0
+    integer already_added=0
     local style_override=""
     if $new_expression && [[ $arg = 'noglob' ]]; then
       highlight_glob=false
@@ -195,7 +195,7 @@ _zsh_highlight_main_highlighter()
                           # is how [[ ... ]] is highlighted, too.
                           style=$ZSH_HIGHLIGHT_STYLES[reserved-word]
                           _zsh_highlight_main_add_region_highlight $start_pos $((start_pos + 2)) $style
-                          substr_color=1
+                          already_added=1
                         else
                           if _zsh_highlight_main_highlighter_check_path; then
                             style=$ZSH_HIGHLIGHT_STYLES[path]
@@ -218,12 +218,12 @@ _zsh_highlight_main_highlighter()
         '"'*)    style=$ZSH_HIGHLIGHT_STYLES[double-quoted-argument]
                  _zsh_highlight_main_add_region_highlight $start_pos $end_pos $style
                  _zsh_highlight_main_highlighter_highlight_string
-                 substr_color=1
+                 already_added=1
                  ;;
         \$\'*)   style=$ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]
                  _zsh_highlight_main_add_region_highlight $start_pos $end_pos $style
                  _zsh_highlight_main_highlighter_highlight_dollar_string
-                 substr_color=1
+                 already_added=1
                  ;;
         '`'*)    style=$ZSH_HIGHLIGHT_STYLES[back-quoted-argument];;
         [*?]*|*[^\\][*?]*)
@@ -247,7 +247,7 @@ _zsh_highlight_main_highlighter()
     fi
     # if a style_override was set (eg in _zsh_highlight_main_highlighter_check_path), use it
     [[ -n $style_override ]] && style=$ZSH_HIGHLIGHT_STYLES[$style_override]
-    [[ $substr_color = 0 ]] && _zsh_highlight_main_add_region_highlight $start_pos $end_pos $style
+    (( already_added )) || _zsh_highlight_main_add_region_highlight $start_pos $end_pos $style
     [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS:#"$arg"} ]] && new_expression=true
     [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR:#"$arg"} ]] && highlight_glob=true
     start_pos=$end_pos
