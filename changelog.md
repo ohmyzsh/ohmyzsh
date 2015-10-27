@@ -1,4 +1,4 @@
-up to c0dafd1d850e582291b41d693369794d1ea31343
+up to 1933de83be0bbfb41c44d182fe581ad85012b71a
 
 
 
@@ -34,6 +34,28 @@ up to c0dafd1d850e582291b41d693369794d1ea31343
         ( foo )
         { foo }
 
+- command names enabled by the `PATH_DIRS` option
+  (#228, 96ee5116b182)
+
+        # When ~/bin/foo/bar exists, is executable, ~/bin is in $PATH,
+        # and 'setopt PATH_DIRS' is in effect
+        foo/bar
+
+- parameter expansions with braces inside double quotes
+  (#186, 6e3720f39d84)
+
+        echo "${foo}"
+
+- parameter expansions in command word
+  (#101, 4fcfb15913a2)
+
+        x=/bin/ls
+        $x -l
+
+- the command separators '|&', '&!', '&|'
+
+        view file.pdf &!  ls
+
 
 ## Fixed highlighting of:
 
@@ -59,6 +81,9 @@ up to c0dafd1d850e582291b41d693369794d1ea31343
         A=1;
 
     (The semicolon used to be highlighted as a mistake)
+
+- cursor highlighter: Remove the cursor highlighting when accepting a line.
+  (#109, 4f0c293fdef0)
 
 
 ## Removed features:
@@ -88,6 +113,18 @@ up to c0dafd1d850e582291b41d693369794d1ea31343
   `WARN_CREATE_GLOBAL` improvements).
   (d3deffbf46a4)
 
+- 'make install': Permit setting `$(SHARE_DIR)` from the environment.
+  (e1078a8b4cf1)
+
+- driver: Tolerate KSH_ARRAYS being set in the calling context.
+  (#162, 8f19af6b319d)
+
+- 'make install': Install documentation fully and properly.
+  (#219, b1619c001390, et seq)
+
+- docs: Improve 'main' highlighter's documentation.
+  (00de155063f5, 7d4252f5f596)
+
 
 ## Developer-visible changes:
 
@@ -112,6 +149,8 @@ up to c0dafd1d850e582291b41d693369794d1ea31343
 - tests: Add 'make perf' target
   (4513eaea71d7)
 
+- tests: Run each test in a sandbox directory
+  (c01533920245)
 
 
 # Changes in version 0.3.0
