@@ -84,7 +84,7 @@ _zsh_highlight_main_highlighter()
 {
   emulate -L zsh
   setopt localoptions extendedglob bareglobqual
-  local start_pos=0 end_pos highlight_glob=true new_expression=true arg style sudo=false sudo_arg=false
+  local start_pos=0 end_pos highlight_glob=true new_expression=true arg style
   local redirection=false # true when we've seen a redirection operator before seeing the command word
   typeset -a ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR
   typeset -a ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS
@@ -103,7 +103,9 @@ _zsh_highlight_main_highlighter()
     $ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR $ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS
   )
 
+  local this_word=':start:' next_word
   for arg in ${(z)buf}; do
+    next_word=':regular:'
     # $already_added is set to 1 to disable adding an entry to region_highlight
     # for this iteration.  Currently, that is done for "" and $'' strings,
     # which add the entry early so escape sequences within the string override
@@ -134,20 +136,16 @@ _zsh_highlight_main_highlighter()
     fi
 
     # Parse the sudo command line
-    if $sudo; then
+    if [[ $this_word == *':sudo_opt:'* ]]; then
       case "$arg" in
         # Flag that requires an argument
-        '-'[Cgprtu]) sudo_arg=true;;
+        '-'[Cgprtu]) next_word=':sudo_arg:';;
         # This prevents misbehavior with sudo -u -otherargument
-        '-'*)        sudo_arg=false;;
-        *)           if $sudo_arg; then
-                       sudo_arg=false
-                     else
-                       sudo=false
-                       new_expression=true
-                     fi
-                     ;;
+        '-'*)        next_word+=':sudo_opt:';;
+        *)           this_word+=':start:'; new_expression=true;;
       esac
+    elif [[ $this_word == *':sudo_arg:'* ]]; then
+      next_word+=':sudo_opt:'
     fi
     if $new_expression && ! $redirection; then # $arg is the command word
       new_expression=false
@@ -155,7 +153,7 @@ _zsh_highlight_main_highlighter()
       style=$ZSH_HIGHLIGHT_STYLES[precommand]
      elif [[ "$arg" = "sudo" ]]; then
       style=$ZSH_HIGHLIGHT_STYLES[precommand]
-      sudo=true
+      next_word+=':sudo_opt:'
      else
       _zsh_highlight_main_highlighter_expand_path $arg
       local expanded_arg="$REPLY"
@@ -253,6 +251,7 @@ _zsh_highlight_main_highlighter()
     [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_FOLLOWED_BY_COMMANDS:#"$arg"} ]] && new_expression=true
     [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR:#"$arg"} ]] && highlight_glob=true
     start_pos=$end_pos
+    this_word=$next_word
   done
 }
 
