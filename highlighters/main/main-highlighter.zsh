@@ -212,6 +212,9 @@ _zsh_highlight_main_highlighter()
                           fi
                         elif [[ $arg[0,1] == $histchars[0,1] || $arg[0,1] == $histchars[2,2] ]]; then
                           style=$ZSH_HIGHLIGHT_STYLES[history-expansion]
+                        elif [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR:#"$arg"} ]] &&
+                             [[ $this_word == *':regular:'* ]]; then
+                          style=$ZSH_HIGHLIGHT_STYLES[commandseparator]
                         elif [[ $arg[1] == '<' || $arg[1] == '>' ]]; then
                           style=$ZSH_HIGHLIGHT_STYLES[redirection]
                           (( in_redirection=2 ))
@@ -282,8 +285,7 @@ _zsh_highlight_main_highlighter()
       next_word=':start:'
     elif
        [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS:#"$arg"} && $this_word == *':start:' ]]; then
-      # TODO should this be '=' or '+=' ?  $next_word is probably :regular: and nothing looks for that value.
-      next_word+=':start:'
+      next_word=':start:'
     fi
     [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR:#"$arg"} ]] && highlight_glob=true
     start_pos=$end_pos
