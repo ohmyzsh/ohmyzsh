@@ -1,11 +1,23 @@
-up to c4a9fe93792b11d26f20028cba6f97b0ede8beb7
+up to 98aee7f8b9a34c639352034087ac31193256b898
+
+
+
 
 # Changes in version 0.3.1 
+
+## Removed features:
+
+- Removed highlighting of approximate paths (`path_approx`).
+  (#187, 98aee7f8b9a3)
+
 
 ## Other changes:
 
 - Fix initialization when sourcing `zsh-syntax-highlighting.zsh` via a symlink
   (083c47b00707)
+
+- docs: Add screenshot.
+  (57624bb9f64b)
 
 
 ## Developer-visible changes:
@@ -15,6 +27,13 @@ up to c4a9fe93792b11d26f20028cba6f97b0ede8beb7
 
 - Fix test failure with nonexisting $HOME
   (#216, b2ac98b98150)
+
+- Document `make install`
+  (a18a7427fd2c)
+
+- tests: Allow specifying the zsh binary to use.
+  (557bb7e0c6a0)
+
 
 
 
