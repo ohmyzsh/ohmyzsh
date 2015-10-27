@@ -261,8 +261,12 @@ _zsh_highlight_main_highlighter()
     # if a style_override was set (eg in _zsh_highlight_main_highlighter_check_path), use it
     [[ -n $style_override ]] && style=$ZSH_HIGHLIGHT_STYLES[$style_override]
     (( already_added )) || _zsh_highlight_main_add_region_highlight $start_pos $end_pos $style
-    if [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR:#"$arg"} ]] ||
+    if [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR:#"$arg"} ]]; then
+      # TODO maybe check *':regular:'* here?
+      next_word=':start:'
+    elif
        [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS:#"$arg"} && $this_word == *':start:' ]]; then
+      # TODO should this be '=' or '+=' ?  $next_word is probably :regular: and nothing looks for that value.
       next_word+=':start:'
     fi
     [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR:#"$arg"} ]] && highlight_glob=true
