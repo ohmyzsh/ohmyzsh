@@ -1,4 +1,4 @@
-up to 1933de83be0bbfb41c44d182fe581ad85012b71a
+up to 952a97dbc99a54bd86141b7a57625e748941a937
 
 
 
@@ -124,6 +124,15 @@ up to 1933de83be0bbfb41c44d182fe581ad85012b71a
 
 - docs: Improve 'main' highlighter's documentation.
   (00de155063f5, 7d4252f5f596)
+
+- docs: Moved to a new docs/ tree; assorted minor updates
+  (c575f8f37567, 5b34c23cfad5, et seq)
+
+- docs: Split README.md into INSTALL.md
+  (0b3183f6cb9a)
+
+- driver: Report `$ZSH_HIGHLIGHT_REVISION` when running from git
+  (84734ba95026)
 
 
 ## Developer-visible changes:
