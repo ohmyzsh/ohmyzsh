@@ -113,18 +113,28 @@ _zsh_highlight_main_highlighter()
   # will DTRT regardless of how many elements or repetitions $x has..
   #
   # Handling of redirections: upon seeing a redirection token, we must stall
-  # the current state --- both $this_word and $next_word --- for two iterations
+  # the current state --- that is, the value of $this_word --- for two iterations
   # (one for the redirection operator, one for the word following it representing
   # the redirection target).  Therefore, we set $in_redirection to 2 upon seeing a
   # redirection operator, decrement it each iteration, and stall the current state
-  # when it is non-zero.
+  # when it is non-zero.  Thus, upon reaching the next word (the one that follows
+  # the redirection operator and target), $this_word will still contain values
+  # appropriate for the word immediately following the word that preceded the
+  # redirection operator.
+  #
+  # The "the previous word was a redirection operator" state is not communicated
+  # to the next iteration via $next_word/$this_word as usual, but via
+  # $in_redirection.  The value of $next_word from the iteration that processed
+  # the operator is discarded.
+  #
   local this_word=':start:' next_word
   integer in_redirection
   for arg in ${(z)buf}; do
+    if (( in_redirection )); then
+      (( --in_redirection ))
+    fi
     if (( in_redirection == 0 )); then
       next_word=':regular:'
-    else
-      (( --in_redirection ))
     fi
     # $already_added is set to 1 to disable adding an entry to region_highlight
     # for this iteration.  Currently, that is done for "" and $'' strings,
