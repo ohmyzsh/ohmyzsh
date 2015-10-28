@@ -99,13 +99,18 @@ _zsh_highlight_main_highlighter()
   )
 
   # Tokens that, at (naively-determined) "command position", are followed by
-  # a de jure command position.
+  # a de jure command position.  All of these are reserved words.
   ZSH_HIGHLIGHT_TOKENS_CONTROL_FLOW=(
     'while'
+    'until'
     'if'
     'then'
+    'elif'
     'else'
     'do'
+    'time'
+    'coproc'
+    '!' # reserved word; unrelated to $histchars[1]
   )
 
   # State machine
