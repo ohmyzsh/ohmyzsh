@@ -104,6 +104,7 @@ _zsh_highlight_main_highlighter()
     'while'
     'if'
     'then'
+    'else'
     'do'
   )
 

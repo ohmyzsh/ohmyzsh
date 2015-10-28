@@ -28,7 +28,7 @@
 # -------------------------------------------------------------------------------------------------
 
 ZSH_HIGHLIGHT_STYLES[alias]=$unused_highlight
-BUFFER='while if echo Hello; then ls /; fi; do stat "x"; done'
+BUFFER='while if echo Hello; then ls /; else ls; fi; do stat "x"; done'
 
 expected_region_highlight+=(
   "1 5 $ZSH_HIGHLIGHT_STYLES[reserved-word]" # while
@@ -38,9 +38,12 @@ expected_region_highlight+=(
   "22 25 $ZSH_HIGHLIGHT_STYLES[reserved-word]" # then
   "27 28 $ZSH_HIGHLIGHT_STYLES[command]" # ls
   "30 30 $ZSH_HIGHLIGHT_STYLES[path]" # /
-  "33 34 $ZSH_HIGHLIGHT_STYLES[reserved-word]" # fi
-  "37 38 $ZSH_HIGHLIGHT_STYLES[reserved-word]" # do
-  "40 43 $ZSH_HIGHLIGHT_STYLES[command]" # stat
-  "45 47 $ZSH_HIGHLIGHT_STYLES[double-quoted-argument]" # "x"
-  "50 53 $ZSH_HIGHLIGHT_STYLES[reserved-word]" # done
+  "31 31 $ZSH_HIGHLIGHT_STYLES[commandseparator]" # ;
+  "33 36 $ZSH_HIGHLIGHT_STYLES[reserved-word]" # else
+  "38 39 $ZSH_HIGHLIGHT_STYLES[command]" # ls
+  "42 43 $ZSH_HIGHLIGHT_STYLES[reserved-word]" # fi
+  "46 47 $ZSH_HIGHLIGHT_STYLES[reserved-word]" # do
+  "49 52 $ZSH_HIGHLIGHT_STYLES[command]" # stat
+  "54 56 $ZSH_HIGHLIGHT_STYLES[double-quoted-argument]" # "x"
+  "59 62 $ZSH_HIGHLIGHT_STYLES[reserved-word]" # done
 )
