@@ -206,6 +206,7 @@ _zsh_highlight_main_highlighter()
      elif [[ "$arg" = "sudo" ]]; then
       style=$ZSH_HIGHLIGHT_STYLES[precommand]
       next_word+=':sudo_opt:'
+      next_word=${next_word//:regular:/}
      else
       _zsh_highlight_main_highlighter_expand_path $arg
       local expanded_arg="$REPLY"
