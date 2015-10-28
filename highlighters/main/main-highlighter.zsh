@@ -189,7 +189,8 @@ _zsh_highlight_main_highlighter()
       if [[ $this_word == *':sudo_opt:'* ]]; then
         case "$arg" in
           # Flag that requires an argument
-          '-'[Cgprtu]) next_word=':sudo_arg:';;
+          '-'[Cgprtu]) this_word=${this_word//:start:/};
+                       next_word=':sudo_arg:';;
           # This prevents misbehavior with sudo -u -otherargument
           '-'*)        next_word+=':sudo_opt:';;
           *)           this_word+=':start:';;
