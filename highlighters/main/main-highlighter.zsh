@@ -192,11 +192,14 @@ _zsh_highlight_main_highlighter()
           '-'[Cgprtu]) this_word=${this_word//:start:/};
                        next_word=':sudo_arg:';;
           # This prevents misbehavior with sudo -u -otherargument
-          '-'*)        next_word+=':sudo_opt:';;
-          *)           this_word+=':start:';;
+          '-'*)        this_word=${this_word//:start:/};
+                       next_word+=':start:';
+                       next_word+=':sudo_opt:';;
+          *)           ;;
         esac
       elif [[ $this_word == *':sudo_arg:'* ]]; then
         next_word+=':sudo_opt:'
+        next_word+=':start:'
       fi
     fi
 
@@ -205,8 +208,9 @@ _zsh_highlight_main_highlighter()
       style=$ZSH_HIGHLIGHT_STYLES[precommand]
      elif [[ "$arg" = "sudo" ]]; then
       style=$ZSH_HIGHLIGHT_STYLES[precommand]
-      next_word+=':sudo_opt:'
       next_word=${next_word//:regular:/}
+      next_word+=':sudo_opt:'
+      next_word+=':start:'
      else
       _zsh_highlight_main_highlighter_expand_path $arg
       local expanded_arg="$REPLY"
