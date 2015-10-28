@@ -87,6 +87,7 @@ _zsh_highlight_main_highlighter()
   local start_pos=0 end_pos highlight_glob=true arg style
   typeset -a ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR
   typeset -a ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS
+  typeset -a ZSH_HIGHLIGHT_TOKENS_CONTROL_FLOW
   local buf="$PREBUFFER$BUFFER"
   region_highlight=()
 
@@ -95,6 +96,15 @@ _zsh_highlight_main_highlighter()
   )
   ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS=(
     'builtin' 'command' 'exec' 'nocorrect' 'noglob'
+  )
+
+  # Tokens that, at (naively-determined) "command position", are followed by
+  # a de jure command position.
+  ZSH_HIGHLIGHT_TOKENS_CONTROL_FLOW=(
+    'while'
+    'if'
+    'then'
+    'do'
   )
 
   # State machine
@@ -284,6 +294,7 @@ _zsh_highlight_main_highlighter()
       # TODO maybe check *':regular:'* here?
       next_word=':start:'
     elif
+       [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_CONTROL_FLOW:#"$arg"} && $this_word == *':start:' ]] ||
        [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS:#"$arg"} && $this_word == *':start:' ]]; then
       next_word=':start:'
     fi

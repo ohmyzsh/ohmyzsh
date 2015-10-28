@@ -32,15 +32,15 @@ BUFFER='while if echo Hello; then ls /; fi; do stat "x"; done'
 
 expected_region_highlight+=(
   "1 5 $ZSH_HIGHLIGHT_STYLES[reserved-word]" # while
-  "7 8 $ZSH_HIGHLIGHT_STYLES[reserved-word] 'issue #207'" # if
-  "10 13 $ZSH_HIGHLIGHT_STYLES[builtin] 'issue #207'" # echo
+  "7 8 $ZSH_HIGHLIGHT_STYLES[reserved-word]" # if
+  "10 13 $ZSH_HIGHLIGHT_STYLES[builtin]" # echo
   "15 19 $ZSH_HIGHLIGHT_STYLES[default]" # Hello
   "22 25 $ZSH_HIGHLIGHT_STYLES[reserved-word]" # then
-  "27 28 $ZSH_HIGHLIGHT_STYLES[command] 'issue #207'" # ls
+  "27 28 $ZSH_HIGHLIGHT_STYLES[command]" # ls
   "30 30 $ZSH_HIGHLIGHT_STYLES[path]" # /
   "33 34 $ZSH_HIGHLIGHT_STYLES[reserved-word]" # fi
   "37 38 $ZSH_HIGHLIGHT_STYLES[reserved-word]" # do
-  "40 43 $ZSH_HIGHLIGHT_STYLES[command] 'issue #207'" # stat
+  "40 43 $ZSH_HIGHLIGHT_STYLES[command]" # stat
   "45 47 $ZSH_HIGHLIGHT_STYLES[double-quoted-argument]" # "x"
   "50 53 $ZSH_HIGHLIGHT_STYLES[reserved-word]" # done
 )
