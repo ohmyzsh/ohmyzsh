@@ -103,6 +103,20 @@ _zsh_highlight_main_highlighter()
     $ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR $ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS
   )
 
+  # State machine
+  #
+  # The states are:
+  # - :start:      Command word
+  # - :sudo_opt:   A leading-dash option to sudo (such as "-u" or "-i")
+  # - :sudo_arg:   The argument to a sudo leading-dash option that takes one,
+  #                when given as a separate word; i.e., "foo" in "-u foo" (two
+  #                words) but not in "-ufoo" (one word).
+  # - :regular:    "Not a command word".
+  #                Mainly used to detect premature termination of commands.
+  #
+  # The tokens are always added with both leading and trailing colons to serve as
+  # word delimiters (an improvised array); [[ $x == *:foo:* ]] and x=${x//:foo:/} 
+  # will DTRT regardless of how many elements or repetitions $x has..
   local this_word=':start:' next_word
   for arg in ${(z)buf}; do
     next_word=':regular:'
