@@ -33,6 +33,6 @@ BUFFER='repeat "1" do done'
 expected_region_highlight=(
   "1 6 $ZSH_HIGHLIGHT_STYLES[reserved-word]" # repeat
   "8 10 $ZSH_HIGHLIGHT_STYLES[double-quoted-argument]" # "1"
-  "12 13 $ZSH_HIGHLIGHT_STYLES[reserved-word] 'issue #222'" # do
-  "15 18 $ZSH_HIGHLIGHT_STYLES[reserved-word] 'fallout of previous test point'" # done
+  "12 13 $ZSH_HIGHLIGHT_STYLES[reserved-word]" # do
+  "15 18 $ZSH_HIGHLIGHT_STYLES[reserved-word]" # done
 )

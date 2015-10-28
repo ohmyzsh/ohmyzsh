@@ -342,6 +342,14 @@ _zsh_highlight_main_highlighter()
        [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_CONTROL_FLOW:#"$arg"} && $this_word == *':start:' ]] ||
        [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS:#"$arg"} && $this_word == *':start:' ]]; then
       next_word=':start:'
+    elif [[ $arg == "repeat" && $this_word == *':start:'* ]]; then
+      # skip the repeat-count word
+      in_redirection=2
+      # The redirection mechanism assumes $this_word describes the word
+      # following the redirection.  Make it so.
+      #
+      # The repeat-count word will be handled like a redirection target.
+      this_word=':start:'
     fi
     [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR:#"$arg"} ]] && highlight_glob=true
     start_pos=$end_pos

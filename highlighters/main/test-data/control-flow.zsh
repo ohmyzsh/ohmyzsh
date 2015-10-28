@@ -47,5 +47,5 @@ expected_region_highlight+=(
   "54 56 $ZSH_HIGHLIGHT_STYLES[double-quoted-argument]" # "x"
   "59 62 $ZSH_HIGHLIGHT_STYLES[reserved-word]" # done
   "65 70 $ZSH_HIGHLIGHT_STYLES[reserved-word]" # repeat
-  "75 76 $ZSH_HIGHLIGHT_STYLES[command] 'issue #222'" # ls
+  "75 76 $ZSH_HIGHLIGHT_STYLES[command]" # ls
 )
