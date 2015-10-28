@@ -1,16 +1,17 @@
 # vim:ft=zsh ts=2 sw=2 sts=2
 #
 function svn_prompt_info() {
+  local _DISPLAY
   if in_svn; then
     if [ "x$SVN_SHOW_BRANCH" = "xtrue" ]; then
       unset SVN_SHOW_BRANCH
       _DISPLAY=$(svn_get_branch_name)
     else
       _DISPLAY=$(svn_get_repo_name)
+      _DISPLAY=$(omz_urldecode "${_DISPLAY}")
     fi
     echo "$ZSH_PROMPT_BASE_COLOR$ZSH_THEME_SVN_PROMPT_PREFIX\
 $ZSH_THEME_REPO_NAME_COLOR$_DISPLAY$ZSH_PROMPT_BASE_COLOR$ZSH_THEME_SVN_PROMPT_SUFFIX$ZSH_PROMPT_BASE_COLOR$(svn_dirty)$(svn_dirty_pwd)$ZSH_PROMPT_BASE_COLOR"
-    unset _DISPLAY
   fi
 }
 
@@ -30,7 +31,7 @@ function svn_get_repo_name() {
 }
 
 function svn_get_branch_name() {
-  _DISPLAY=$(
+  local _DISPLAY=$(
     svn info 2> /dev/null | \
       awk -F/ \
       '/^URL:/ { \
@@ -49,7 +50,6 @@ function svn_get_branch_name() {
   else
     echo $_DISPLAY
   fi
-  unset _DISPLAY
 }
 
 function svn_get_rev_nr() {
@@ -60,8 +60,8 @@ function svn_get_rev_nr() {
 
 function svn_dirty_choose() {
   if in_svn; then
-    root=`svn info 2> /dev/null | sed -n 's/^Working Copy Root Path: //p'`
-    if $(svn status $root 2> /dev/null | grep -Eq '^\s*[ACDIM!?L]'); then
+    local root=`svn info 2> /dev/null | sed -n 's/^Working Copy Root Path: //p'`
+    if $(svn status $root 2> /dev/null | command grep -Eq '^\s*[ACDIM!?L]'); then
       # Grep exits with 0 when "One or more lines were selected", return "dirty".
       echo $1
     else
@@ -77,8 +77,8 @@ function svn_dirty() {
 
 function svn_dirty_choose_pwd () {
   if in_svn; then
-    root=$PWD
-    if $(svn status $root 2> /dev/null | grep -Eq '^\s*[ACDIM!?L]'); then
+    local root=$PWD
+    if $(svn status $root 2> /dev/null | command grep -Eq '^\s*[ACDIM!?L]'); then
       # Grep exits with 0 when "One or more lines were selected", return "dirty".
       echo $1
     else

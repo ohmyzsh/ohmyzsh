@@ -13,9 +13,12 @@
 # ------------------------------------------------------------------------------
 
 sudo-command-line() {
-[[ -z $BUFFER ]] && zle up-history
-[[ $BUFFER != sudo\ * ]] && BUFFER="sudo $BUFFER"
-zle end-of-line 
+    [[ -z $BUFFER ]] && zle up-history
+    if [[ $BUFFER == sudo\ * ]]; then
+        LBUFFER="${LBUFFER#sudo }"
+    else
+        LBUFFER="sudo $LBUFFER"
+    fi
 }
 zle -N sudo-command-line
 # Defined shortcut keys: [Esc] [Esc]

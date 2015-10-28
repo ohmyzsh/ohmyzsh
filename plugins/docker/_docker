@@ -4,20 +4,30 @@
 # Requires: Docker installed
 # Author: Azaan (@aeonazaan)
 # Updates: Bob Maerten (@bobmaerten) for Docker v0.9+
+#          Paul van den Berg (@bergvandenp) for Docker v1.3+ 
 
 
 # ----- Helper functions
 # Output a selectable list of all running docker containers
 __docker_containers() {
     declare -a cont_cmd
-    cont_cmd=($(docker ps | awk 'NR>1{print $1":[CON("$1")"$2"("$3")]"}'))
-    _describe 'containers' cont_cmd
+    cont_cmd=($(docker ps | awk 'NR>1{print $NF":[CON("$1")"$2"("$3")]"}'))
+    if [[  'X$cont_cmd' != 'X' ]]
+        _describe 'containers' cont_cmd
+}
+
+# Output a selectable list of all containers, even not running
+__docker_all_containers() {
+    declare -a cont_cmd
+    cont_cmd=($(docker ps -a | awk 'NR>1{print $NF":[CON("$1")"$2"("$3")]"}'))
+    if [[  'X$cont_cmd' != 'X' ]]
+        _describe 'containers' cont_cmd
 }
 
 # output a selectable list of all docker images
 __docker_images() {
     declare -a img_cmd
-    img_cmd=($(docker images | awk 'NR>1{print $1}'))
+    img_cmd=($(docker images | awk 'NR>1{print $1}'| sed 's/:/\\:/g'))
     _describe 'images' img_cmd
 }
 
@@ -26,7 +36,7 @@ __docker_images() {
 # ---------------------------
 __attach() {
     _arguments \
-        '--no-stdin[Do not attach stdin]' \
+        '--no-stdin[Do not attach STDIN]' \
         '--sig-proxy[Proxify all received signal to the process (even in non-tty mode)]'
     __docker_containers
 }
@@ -42,21 +52,64 @@ __build() {
 
 __commit() {
     _arguments \
-        '(-a,--author=)'{-a,--author=}'[Author (eg. "John Hannibal Smith <hannibal@a-team.com>"]' \
+        '(-a,--author=)'{-a,--author=}'[Author (e.g. "John Hannibal Smith <hannibal@a-team.com>")]' \
+        '(-c,--change=)'{-c,--change=}'[Apply Dockerfile instruction to the created image]' \
         '(-m,--message=)'{-m,--message=}'[Commit message]' \
-        '--run=[Config automatically applied when the image is run.]'
-    __docker_containers
+        '(-p,--pause=)'{-p,--pause=}'[Pause container during commit]' \
 }
 
 __cp() {
     __docker_containers
 }
 
+__create() {
+    _arguments \
+        '(-P,--publish-all=)'{-P,--publish-all=}'[Publish all exposed ports to the host interfaces]' \
+        '(-a,--attach=)'{-a,--attach=}'[Attach to STDIN, STDOUT or STDERR]' \
+        '--add-host=[Add a custom host-to-IP mapping]' \
+        '--cap-add=[Add Linux capabilities]' \
+        '--cap-drop=[Drop Linux capabilities]' \
+        '--cpuset-cpus=[CPUs in which to allow execution (0-3, 0,1)]' \
+        '(-c,--cpu-shares=)'{-c,--cpu-shares=}'[CPU shares (relative weight)]' \
+        '--cidfile=[Write the container ID to the file]' \
+        '--device=[Add a host device to the container]' \
+        '--dns=[Set custom dns servers]' \
+        '--dns-search=[Set custom DNS search domains]' \
+        '(-e,--env=)'{-e,--env=}'[Set environment variables]' \
+        '--env-file=[Read in a file of environment variables]' \
+        '--entrypoint=[Overwrite the default entrypoint of the image]' \
+        '--expose=[Expose a port from the container without publishing it to your host]' \
+        '(-h,--hostname=)'{-h,--hostname=}'[Container host name]' \
+        '(-i,--interactive=)'{-i,--interactive=}'[Keep STDIN open even if not attached]' \
+        '--ipc=[IPC namespace to use]' \
+        '(-l,--label=)'{-l,--label=}'[Set meta data on a container]' \
+        '--link=[Add link to another container (name:alias)]' \
+        '--log-driver=[Logging driver for the container]' \
+        '--lxc-conf=[Add custom LXC options]' \
+        '--mac-address=[Container MAC address (e.g. 92:d0:c6:0a:29:33)]' \
+        '(-m,--memory=)'{-m,--memory=}'[Memory limit (format: <number><optional unit>, where unit = b, k, m or g)]' \
+        '--net=[Set the Network mode for the container]' \
+        '--name=[Assign a name to the container]' \
+        '--pid=[PID namespace to use]' \
+        '(-p,--publish=)'{-p,--publish=}'[Publish a container''s port to the host (format: ip:hostPort:containerPort/protocol)]' \
+        '--privileged=[Give extended privileges to this container]' \
+        '--restart=[Restart policy to apply when a container exits]' \
+        '--security-opt=[Security Options]' \
+        '--sig-proxy=[Proxify all received signal to the process (even in non-tty mode)]' \
+        '(-t,--tty=)'{-t,--tty=}'[Allocate a pseudo-tty]' \
+        '(-u,--user=)'{-u,--user=}'[Username or UID]' \
+        '--ulimit=[Ulimit options]' \
+        '(-v,--volume=)'{-v,--volume=}'[Bind mount a volume (e.g. -v /host:/container or -v /container)]' \
+        '--volumes-from=[Mount volumes from the specified container(s)]' \
+        '(-w,--workdir=)'{-w,--workdir=}'[Working directory inside the container]'
+    __docker_images
+}
+
 __diff() {
     __docker_containers
 }
 
-__events() {
+__events() {    
     _arguments \
         '--since=[Show previously created events and then stream.]'
 }
@@ -90,17 +143,14 @@ __info() {
     # no arguments
 }
 
-__insert() {
-    __docker_images
-    _arguments '*:files:_files'
-}
-
 __inspect() {
     __docker_images
-    __docker_containers
+    __docker_all_containers
 }
 
 __kill() {
+    _arguments \
+        '(-s,--signal=)'{-s,--signal=}'[KILL Signal]'
     __docker_containers
 }
 
@@ -161,7 +211,7 @@ __rm() {
         '(-f,--force=)'{-f,--force=}'[Force removal of running container]' \
         '(-l,--link=)'{-l,--link=}'[Remove the specified link and not the underlying container]' \
         '(-v,--volumes=)'{-v,--volumes=}'[Remove the volumes associated to the container]'
-    __docker_containers
+    __docker_all_containers
 }
 
 __rmi() {
@@ -173,28 +223,43 @@ __rmi() {
 __run() {
     _arguments \
         '(-P,--publish-all=)'{-P,--publish-all=}'[Publish all exposed ports to the host interfaces]' \
-        '(-a,--attach=)'{-a,--attach=}'[Attach to stdin, stdout or stderr.]' \
-        '(-c,--cpu-shares=)'{-c,--cpu-shares=}': CPU shares (relative weight)]' \
+        '(-a,--attach=)'{-a,--attach=}'[Attach to STDIN, STDOUT or STDERR]' \
+        '--add-host=[Add a custom host-to-IP mapping]' \
+        '--cap-add=[Add Linux capabilities]' \
+        '--cap-drop=[Drop Linux capabilities]' \
+        '--cpuset-cpus=[CPUs in which to allow execution (0-3, 0,1)]' \
+        '(-c,--cpu-shares=)'{-c,--cpu-shares=}'[CPU shares (relative weight)]' \
         '--cidfile=[Write the container ID to the file]' \
-        '(-d,--detach=)'{-d,--detach=}'[Detached mode: Run container in the background, print new container id]' \
+        '(-d,--detach=)'{-d,--detach=}'[Run container in the background, print new container id]' \
+        '--device=[Add a host device to the container]' \
         '--dns=[Set custom dns servers]' \
+        '--dns-search=[Set custom DNS search domains]' \
         '(-e,--env=)'{-e,--env=}'[Set environment variables]' \
+        '--env-file=[Read in a file of environment variables]' \
         '--entrypoint=[Overwrite the default entrypoint of the image]' \
         '--expose=[Expose a port from the container without publishing it to your host]' \
         '(-h,--hostname=)'{-h,--hostname=}'[Container host name]' \
-        '(-i,--interactive=)'{-i,--interactive=}'[Keep stdin open even if not attached]' \
+        '(-i,--interactive=)'{-i,--interactive=}'[Keep STDIN open even if not attached]' \
+        '--ipc=[IPC namespace to use]' \
+        '(-l,--label=)'{-l,--label=}'[Set meta data on a container]' \
         '--link=[Add link to another container (name:alias)]' \
-        '--lxc-conf=[Add custom lxc options -lxc-conf="lxc.cgroup.cpuset.cpus = 0,1"]' \
+        '--log-driver=[Logging driver for the container]' \
+        '--lxc-conf=[Add custom LXC options]' \
+        '--mac-address=[Container MAC address (e.g. 92:d0:c6:0a:29:33)]' \
         '(-m,--memory=)'{-m,--memory=}'[Memory limit (format: <number><optional unit>, where unit = b, k, m or g)]' \
-        '(-n,--networking=)'{-n,--networking=}'[Enable networking for this container]' \
+        '--net=[Set the Network mode for the container]' \
         '--name=[Assign a name to the container]' \
-        '(-p,--publish=)'{-p,--publish=}'[Publish a container''s port to the host (format: ip:hostPort:containerPort | ip::containerPort | hostPort:containerPort) (use "docker port" to see the actual mapping)]' \
+        '--pid=[PID namespace to use]' \
+        '(-p,--publish=)'{-p,--publish=}'[Publish a container''s port to the host (format: ip:hostPort:containerPort/protocol)]' \
         '--privileged=[Give extended privileges to this container]' \
+        '--restart=[Restart policy to apply when a container exits]' \
         '--rm=[Automatically remove the container when it exits (incompatible with -d)]' \
+        '--security-opt=[Security Options]' \
         '--sig-proxy=[Proxify all received signal to the process (even in non-tty mode)]' \
         '(-t,--tty=)'{-t,--tty=}'[Allocate a pseudo-tty]' \
         '(-u,--user=)'{-u,--user=}'[Username or UID]' \
-        '(-v,--volume=)'{-v,--volume=}'[Bind mount a volume (e.g. from the host: -v /host:/container, from docker: -v /container)]' \
+        '--ulimit=[Ulimit options]' \
+        '(-v,--volume=)'{-v,--volume=}'[Bind mount a volume (e.g. -v /host:/container or -v /container)]' \
         '--volumes-from=[Mount volumes from the specified container(s)]' \
         '(-w,--workdir=)'{-w,--workdir=}'[Working directory inside the container]'
     __docker_images
@@ -213,8 +278,12 @@ __save() {
 
 __start() {
     _arguments \
-        '(-a,--attach=)'{-a,--attach=}'[Attach container''s stdout/stderr and forward all signals to the process]' \
-        '(-i,--interactive=)'{-i,--interactive=}'[Attach container''s stdin]'
+        '(-a,--attach=)'{-a,--attach=}'[Attach container''s STDOUT/STDERR and forward all signals to the process]' \
+        '(-i,--interactive=)'{-i,--interactive=}'[Attach container''s STDIN]'
+    __docker_all_containers
+}
+
+__stats() {
     __docker_containers
 }
 
@@ -238,6 +307,14 @@ __wait() {
     __docker_containers
 }
 
+__exec() {
+    _arguments \
+      '(-d,--detach=)'{-d,--detach=}'[Detached mode: run command in the background]' \
+      '(-i,--interactive=)'{-i,--interactive=}'[Keep STDIN open even if not attached]' \
+      '(-t,--tty=)'{-t,--tty=}'[Allocate a pseudo-TTY]'
+    __docker_containers
+}
+
 # end commands ---------
 # ----------------------
 
@@ -247,6 +324,7 @@ _1st_arguments=(
     "build":"Build a container from a Dockerfile"
     "commit":"Create a new image from a container's changes"
     "cp":"Copy files/folders from the containers filesystem to the host path"
+    "create":"Create new container without running it"
     "diff":"Inspect changes on a container's filesystem"
     "events":"Get real time events from the server"
     "export":"Stream the contents of a container as a tar archive"
@@ -254,7 +332,6 @@ _1st_arguments=(
     "images":"List images"
     "import":"Create a new filesystem image from the contents of a tarball"
     "info":"Display system-wide information"
-    "insert":"Insert a file in an image"
     "inspect":"Return low-level information on a container"
     "kill":"Kill a running container"
     "load":"Load an image from a tar archive"
@@ -271,11 +348,13 @@ _1st_arguments=(
     "save":"Save an image to a tar archive"
     "search":"Search for an image in the docker index"
     "start":"Start a stopped container"
+    "stats":"Display a live stream of one or more containers' resource usage statistics"
     "stop":"Stop a running container"
     "tag":"Tag an image into a repository"
     "top":"Lookup the running processes of a container"
     "version":"Show the docker version information"
     "wait":"Block until a container stops, then print its exit code"
+    "exec":"Run a task inside a running container"
 )
 
 _arguments '*:: :->command'
@@ -295,6 +374,8 @@ case "$words[1]" in
         __commit ;;
     cp)
         __cp ;;
+    create)
+        __create ;;
     diff)
         __diff ;;
     events)
@@ -309,8 +390,6 @@ case "$words[1]" in
         __import ;;
     info)
         __info ;;
-    insert)
-        __insert ;;
     inspect)
         __inspect ;;
     kill)
@@ -341,6 +420,8 @@ case "$words[1]" in
         __save ;;
     search)
         __search ;;
+    stats)
+        __stats ;;
     start)
         __start ;;
     stop)
@@ -353,4 +434,6 @@ case "$words[1]" in
         __version ;;
     wait)
         __wait ;;
+    exec)
+        __exec ;;
 esac

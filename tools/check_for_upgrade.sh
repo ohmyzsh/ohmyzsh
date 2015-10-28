@@ -22,11 +22,12 @@ if [[ -z "$epoch_target" ]]; then
   epoch_target=13
 fi
 
-[ -f ~/.profile ] && source ~/.profile
-
 # Cancel upgrade if the current user doesn't have write permissions for the
 # oh-my-zsh directory.
 [[ -w "$ZSH" ]] || return 0
+
+# Cancel upgrade if git is unavailable on the system
+whence git >/dev/null || return 0
 
 if [ -f ~/.zsh-update ]
 then
@@ -43,10 +44,9 @@ then
     then
       _upgrade_zsh
     else
-      echo "[Oh My Zsh] Would you like to check for updates?"
-      echo "Type Y to update oh-my-zsh: \c"
+      echo "[Oh My Zsh] Would you like to check for updates? [Y/n]: \c"
       read line
-      if [ "$line" = Y ] || [ "$line" = y ]; then
+      if [ "$line" = Y ] || [ "$line" = y ] || [ -z "$line" ]; then
         _upgrade_zsh
       else
         _update_zsh_update
@@ -57,4 +57,3 @@ else
   # create the zsh file
   _update_zsh_update
 fi
-

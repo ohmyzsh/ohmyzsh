@@ -15,7 +15,12 @@ if [ "x$CASE_SENSITIVE" = "xtrue" ]; then
   zstyle ':completion:*' matcher-list 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
   unset CASE_SENSITIVE
 else
-  zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+  if [ "x$HYPHEN_INSENSITIVE" = "xtrue" ]; then
+    zstyle ':completion:*' matcher-list 'm:{a-zA-Z-_}={A-Za-z_-}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+    unset HYPHEN_INSENSITIVE
+  else
+    zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+  fi
 fi
 
 zstyle ':completion:*' list-colors ''
@@ -34,11 +39,10 @@ fi
 
 # disable named-directories autocompletion
 zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-directories
-cdpath=(.)
 
 # Use caching so that commands like apt and dpkg complete are useable
 zstyle ':completion::complete:*' use-cache 1
-zstyle ':completion::complete:*' cache-path $ZSH/cache/
+zstyle ':completion::complete:*' cache-path $ZSH_CACHE_DIR
 
 # Don't complete uninteresting users
 zstyle ':completion:*:*:*:users' ignored-patterns \
@@ -54,9 +58,13 @@ zstyle ':completion:*:*:*:users' ignored-patterns \
 # ... unless we really want to.
 zstyle '*' single-ignored show
 
-if [ "x$COMPLETION_WAITING_DOTS" = "xtrue" ]; then
+if [[ $COMPLETION_WAITING_DOTS = true ]]; then
   expand-or-complete-with-dots() {
-    echo -n "\e[31m......\e[0m"
+    # toggle line-wrapping off and back on again
+    [[ -n "$terminfo[rmam]" && -n "$terminfo[smam]" ]] && echoti rmam
+    print -Pn "%{%F{red}......%f%}"
+    [[ -n "$terminfo[rmam]" && -n "$terminfo[smam]" ]] && echoti smam
+
     zle expand-or-complete
     zle redisplay
   }
