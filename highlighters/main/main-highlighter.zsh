@@ -190,8 +190,11 @@ _zsh_highlight_main_highlighter()
     fi
 
     if [[ ${interactive_comments+'set'} && $arg[1] == $histchars[3] ]]; then
-      # TODO: check $this_word
-      style=$ZSH_HIGHLIGHT_STYLES[comment]
+      if [[ $this_word == *(':regular:'|':start:')* ]]; then
+        style=$ZSH_HIGHLIGHT_STYLES[comment]
+      else
+        style=$ZSH_HIGHLIGHT_STYLES[unknown-token] # prematurely terminated
+      fi
       _zsh_highlight_main_add_region_highlight $start_pos $end_pos $style
       already_added=1
       continue
