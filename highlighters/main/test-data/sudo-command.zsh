@@ -32,7 +32,7 @@ ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=$unused_highlight
 # * -i  (no argument)
 # * -C3 (pasted argument)
 # * -u otheruser (non-pasted argument)
-BUFFER='sudo -C3 -u otheruser -i ls /; sudo ;'
+BUFFER='sudo -C3 -u otheruser -i ls /; sudo ; sudo -u ;'
 
 expected_region_highlight=(
   "1 4 $ZSH_HIGHLIGHT_STYLES[precommand]" # sudo
@@ -43,4 +43,5 @@ expected_region_highlight=(
   "26 27 $ZSH_HIGHLIGHT_STYLES[command]" # ls
   "29 29 $ZSH_HIGHLIGHT_STYLES[path]" # /
   "37 37 $ZSH_HIGHLIGHT_STYLES[unknown-token]" # ;, error because empty command
+  "47 47 $ZSH_HIGHLIGHT_STYLES[unknown-token]" # ;, error because incomplete command
 )

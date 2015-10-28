@@ -239,6 +239,8 @@ _zsh_highlight_main_highlighter()
                           style=$ZSH_HIGHLIGHT_STYLES[history-expansion]
                         elif [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR:#"$arg"} ]] &&
                              [[ $this_word == *':regular:'* ]]; then
+                          # This highlights empty commands (semicolon follows nothing) as an error.
+                          # Zsh accepts them, though.
                           style=$ZSH_HIGHLIGHT_STYLES[commandseparator]
                         elif [[ $arg[1] == '<' || $arg[1] == '>' ]]; then
                           style=$ZSH_HIGHLIGHT_STYLES[redirection]
@@ -291,7 +293,11 @@ _zsh_highlight_main_highlighter()
                  elif [[ $arg[0,1] = $histchars[0,1] ]]; then
                    style=$ZSH_HIGHLIGHT_STYLES[history-expansion]
                  elif [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR:#"$arg"} ]]; then
-                   style=$ZSH_HIGHLIGHT_STYLES[commandseparator]
+                   if [[ $this_word == *':regular:'* ]]; then
+                     style=$ZSH_HIGHLIGHT_STYLES[commandseparator]
+                   else
+                     style=$ZSH_HIGHLIGHT_STYLES[unknown-token]
+                   fi
                  elif [[ $arg[1] == '<' || $arg[1] == '>' ]]; then
                    style=$ZSH_HIGHLIGHT_STYLES[redirection]
                    (( in_redirection=2 ))
@@ -309,7 +315,6 @@ _zsh_highlight_main_highlighter()
     [[ -n $style_override ]] && style=$ZSH_HIGHLIGHT_STYLES[$style_override]
     (( already_added )) || _zsh_highlight_main_add_region_highlight $start_pos $end_pos $style
     if [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR:#"$arg"} ]]; then
-      # TODO maybe check *':regular:'* here?
       next_word=':start:'
     elif
        [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_CONTROL_FLOW:#"$arg"} && $this_word == *':start:' ]] ||
