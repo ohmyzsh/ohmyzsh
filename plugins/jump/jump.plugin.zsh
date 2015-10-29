@@ -13,7 +13,7 @@ jump() {
 }
 
 mark() {
-	if (( $# == 0 )); then
+	if [[ ( $# == 0 ) || ( "$1" == "." ) ]]; then
 		MARK=$(basename "$PWD")
 	else
 		MARK="$1"
@@ -27,7 +27,6 @@ unmark() {
 	rm -i "$MARKPATH/$1"
 }
 
-autoload colors
 marks() {
 	for link in $MARKPATH/*(@); do
 		local markname="$fg[cyan]${link:t}$reset_color"

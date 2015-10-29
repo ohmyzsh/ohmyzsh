@@ -42,7 +42,7 @@ GREEN_BASE_START="${PR_RESET}${PR_GREY}>${PR_RESET}${PR_GREEN}>${PR_BRIGHT_GREEN
 GREEN_START_P1="${PR_RESET}${GREEN_BASE_START}${PR_RESET} "
 DIVISION="${PR_RESET}${PR_RED} < ${PR_RESET}"
 VCS_DIRTY_COLOR="${PR_RESET}${PR_YELLOW}"
-Vcs_CLEAN_COLOR="${PR_RESET}${PR_GREEN}"
+VCS_CLEAN_COLOR="${PR_RESET}${PR_GREEN}"
 VCS_SUFIX_COLOR="${PR_RESET}${PR_RED}› ${PR_RESET}"
 # ########## COLOR ###########
 # ########## SVN ###########
@@ -69,17 +69,17 @@ function precmd {
         #Choose from all databases, regardless of whether they are considered "offensive"
         fortune -a
     }
-    #obtains the tip 
+    #obtains the tip
     ps1_command_tip () {
         wget -qO - http://www.commandlinefu.com/commands/random/plaintext | sed 1d | sed '/^$/d'
-    }  
+    }
     prompt_header () {
         if [[ "true" == "$ENABLE_COMMAND_TIP" ]]; then
             ps1_command_tip
         else
             ps1_fortune
-        fi 
-    }   
+        fi
+    }
     PROMPT_HEAD="${RED_START}${PR_YELLOW}$(prompt_header)${PR_RESET}"
     # set a simple variable to show when in screen
     if [[ -n "${WINDOW}" ]]; then
@@ -99,11 +99,8 @@ prompt_context () {
 set_prompt () {
     # required for the prompt
     setopt prompt_subst
-    autoload colors zsh/terminfo
-    if [[ "$terminfo[colors]" -gt 8 ]]; then
-        colors
-    fi 
-    
+    autoload zsh/terminfo
+
     # ######### PROMPT #########
     PROMPT='${PROMPT_HEAD}
 ${RED_START}$(prompt_context)

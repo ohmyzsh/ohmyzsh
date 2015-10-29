@@ -1,6 +1,6 @@
 #!zsh
 ##############################################################################
-# A descriptive listing of core Gradle commands 
+# A descriptive listing of core Gradle commands
 ############################################################################
 function _gradle_core_commands() {
     local ret=1 state
@@ -32,14 +32,22 @@ function _gradle_arguments() {
     '--stop[Stop the Gradle daemon]' \
     '--daemon[Use the Gradle daemon]' \
     '--no-daemon[Do not use the Gradle daemon]' \
-    '--no-opt[Do not perform any task optimization]' \
+    '--rerun-task [Specifies that any task optimization is ignored.]' \
     '-i[Log at the info level]' \
     '-m[Dry run]' \
     '-P[Set a project property]' \
+    '-p[Specifies the start directory]' \
     '--profile[Profile the build time]' \
     '-q[Log at the quiet level (only show errors)]' \
     '-v[Print the Gradle version info]' \
     '-x[Specify a task to be excluded]' \
+    '-b[Specifies the build file.]' \
+    '-c[Specifies the settings file.]' \
+    '--continue[Continues task execution after a task failure.]' \
+    '-g[Specifies the Gradle user home directory.]' \
+    '-I[Specifies an initialization script.]' \
+    '--refresh-dependencies[Refresh the state of dependencies.]' \
+    '-u[Don''t search in parent directories for a settings.gradle file.]' \
     '*::command:->command' \
     && return 0
 }
@@ -72,7 +80,7 @@ _gradle_tasks () {
   if [ in_gradle ]; then
     _gradle_arguments
     if _gradle_does_task_list_need_generating; then
-     gradle tasks --all | grep "^[ ]*[a-zA-Z0-9]*\ -\ " | sed "s/ - .*$//" | sed "s/[\ ]*//" > .gradletasknamecache
+     gradle tasks --all | grep "^[ ]*[a-zA-Z0-9:]*\ -\ " | sed "s/ - .*$//" | sed "s/[\ ]*//" > .gradletasknamecache
     fi
     compadd -X "==== Gradle Tasks ====" `cat .gradletasknamecache`
   fi
@@ -82,7 +90,7 @@ _gradlew_tasks () {
   if [ in_gradle ]; then
     _gradle_arguments
     if _gradle_does_task_list_need_generating; then
-     gradlew tasks --all | grep "^[ ]*[a-zA-Z0-9]*\ -\ " | sed "s/ - .*$//" | sed "s/[\ ]*//" > .gradletasknamecache
+     ./gradlew tasks --all | grep "^[ ]*[a-zA-Z0-9:]*\ -\ " | sed "s/ - .*$//" | sed "s/[\ ]*//" > .gradletasknamecache
     fi
     compadd -X "==== Gradlew Tasks ====" `cat .gradletasknamecache`
   fi
