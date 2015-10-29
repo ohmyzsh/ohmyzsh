@@ -131,6 +131,11 @@ _zsh_highlight_main_highlighter()
   # - :regular:    "Not a command word".
   #                Mainly used to detect premature termination of commands.
   #
+  # When the kind of a word is not yet known, $this_word / $next_word may contain
+  # multiple states.  For example, after "sudo -i", the next word may be either
+  # another --flag or a command name, hence the state would include both :start:
+  # and :sudo_opt:.
+  #
   # The tokens are always added with both leading and trailing colons to serve as
   # word delimiters (an improvised array); [[ $x == *:foo:* ]] and x=${x//:foo:/} 
   # will DTRT regardless of how many elements or repetitions $x has..
