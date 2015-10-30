@@ -278,6 +278,9 @@ _zsh_highlight_main_highlighter()
                           # is how [[ ... ]] is highlighted, too.
                           style=$ZSH_HIGHLIGHT_STYLES[reserved-word]
                           _zsh_highlight_main_add_region_highlight $start_pos $((start_pos + 2)) $style
+                          if [[ $arg[-2,-1] == '))' ]]; then
+                            _zsh_highlight_main_add_region_highlight $((end_pos - 2)) $end_pos $style
+                          fi
                           already_added=1
                         elif [[ $arg == '()' || $arg == $'\x28' ]]; then
                           # anonymous function
