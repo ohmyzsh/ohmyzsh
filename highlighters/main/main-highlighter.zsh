@@ -279,8 +279,9 @@ _zsh_highlight_main_highlighter()
                           style=$ZSH_HIGHLIGHT_STYLES[reserved-word]
                           _zsh_highlight_main_add_region_highlight $start_pos $((start_pos + 2)) $style
                           already_added=1
-                        elif [[ $arg == '()' ]]; then
+                        elif [[ $arg == '()' || $arg == $'\x28' ]]; then
                           # anonymous function
+                          # subshell
                           style=$ZSH_HIGHLIGHT_STYLES[reserved-word]
                         else
                           if _zsh_highlight_main_highlighter_check_path; then
