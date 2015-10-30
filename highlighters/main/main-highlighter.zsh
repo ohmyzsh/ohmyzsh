@@ -299,6 +299,8 @@ _zsh_highlight_main_highlighter()
      fi
     else # $arg is a non-command word
       case $arg in
+        $'\x29') style=$ZSH_HIGHLIGHT_STYLES[reserved-word];; # subshell
+        $'\x7d') style=$ZSH_HIGHLIGHT_STYLES[reserved-word];; # block
         '--'*)   style=$ZSH_HIGHLIGHT_STYLES[double-hyphen-option];;
         '-'*)    style=$ZSH_HIGHLIGHT_STYLES[single-hyphen-option];;
         "'"*)    style=$ZSH_HIGHLIGHT_STYLES[single-quoted-argument];;
