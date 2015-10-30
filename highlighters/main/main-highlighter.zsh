@@ -406,8 +406,8 @@ _zsh_highlight_main_highlighter()
       next_word=':start:'
       highlight_glob=true
     elif
-       [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_CONTROL_FLOW:#"$arg"} && $this_word == *':start:' ]] ||
-       [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS:#"$arg"} && $this_word == *':start:' ]]; then
+       [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_CONTROL_FLOW:#"$arg"} && $this_word == *':start:'* ]] ||
+       [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS:#"$arg"} && $this_word == *':start:'* ]]; then
       next_word=':start:'
     elif [[ $arg == "repeat" && $this_word == *':start:'* ]]; then
       # skip the repeat-count word
