@@ -194,7 +194,7 @@ _zsh_highlight_main_highlighter()
       ((end_pos=$start_pos+${#arg}))
     fi
 
-    if [[ ${interactive_comments+'set'} && $arg[1] == $histchars[3] ]]; then
+    if [[ -n ${interactive_comments+'set'} && $arg[1] == $histchars[3] ]]; then
       if [[ $this_word == *(':regular:'|':start:')* ]]; then
         style=$ZSH_HIGHLIGHT_STYLES[comment]
       else
