@@ -389,6 +389,8 @@ _zsh_highlight_main_highlighter_check_path()
 _zsh_highlight_main_highlighter_highlight_string()
 {
   setopt localoptions noksharrays
+  local -a match mbegin mend
+  local MATCH; integer MBEGIN MEND
   local i j k style
   # Starting quote is at 1, so start parsing at offset 2 in the string.
   for (( i = 2 ; i < end_pos - start_pos ; i += 1 )) ; do
@@ -423,6 +425,8 @@ _zsh_highlight_main_highlighter_highlight_string()
 _zsh_highlight_main_highlighter_highlight_dollar_string()
 {
   setopt localoptions noksharrays
+  local -a match mbegin mend
+  local MATCH; integer MBEGIN MEND
   local i j k style
   local AA
   integer c
