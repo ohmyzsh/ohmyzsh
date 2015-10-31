@@ -74,7 +74,7 @@ if [[ "$TERM_PROGRAM" == "Apple_Terminal" ]] && [[ -z "$INSIDE_EMACS" ]]; then
     # the host name to disambiguate local vs. remote paths.
 
     # Percent-encode the pathname.
-    local URL_PATH=$(omz_urlencode -P $PWD)
+    local URL_PATH="$(omz_urlencode -P $PWD)"
     [[ $? != 0 ]] && return 1
     local PWD_URL="file://$HOST$URL_PATH"
     # Undocumented Terminal.app-specific control sequence

@@ -114,7 +114,7 @@ zmodload zsh/langinfo
 # Returns nonzero if encoding failed.
 #
 # Usage:
-#  omz_urlencode [-r] [-m] <string>
+#  omz_urlencode [-r] [-m] [-P] <string>
 #
 #    -r causes reserved characters (;/?:@&=+$,) to be escaped
 #
