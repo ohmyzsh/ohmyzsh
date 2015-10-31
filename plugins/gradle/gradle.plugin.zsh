@@ -1,6 +1,10 @@
 #!zsh
 ##############################################################################
+<<<<<<< HEAD
 # A descriptive listing of core Gradle commands
+=======
+# A descriptive listing of core Gradle commands 
+>>>>>>> c0134a9450e486251b247735e022d7efeb496b9c
 ############################################################################
 function _gradle_core_commands() {
     local ret=1 state
@@ -32,15 +36,23 @@ function _gradle_arguments() {
     '--stop[Stop the Gradle daemon]' \
     '--daemon[Use the Gradle daemon]' \
     '--no-daemon[Do not use the Gradle daemon]' \
+<<<<<<< HEAD
     '--rerun-task [Specifies that any task optimization is ignored.]' \
     '-i[Log at the info level]' \
     '-m[Dry run]' \
     '-P[Set a project property]' \
     '-p[Specifies the start directory]' \
+=======
+    '--no-opt[Do not perform any task optimization]' \
+    '-i[Log at the info level]' \
+    '-m[Dry run]' \
+    '-P[Set a project property]' \
+>>>>>>> c0134a9450e486251b247735e022d7efeb496b9c
     '--profile[Profile the build time]' \
     '-q[Log at the quiet level (only show errors)]' \
     '-v[Print the Gradle version info]' \
     '-x[Specify a task to be excluded]' \
+<<<<<<< HEAD
     '-b[Specifies the build file.]' \
     '-c[Specifies the settings file.]' \
     '--continue[Continues task execution after a task failure.]' \
@@ -48,6 +60,8 @@ function _gradle_arguments() {
     '-I[Specifies an initialization script.]' \
     '--refresh-dependencies[Refresh the state of dependencies.]' \
     '-u[Don''t search in parent directories for a settings.gradle file.]' \
+=======
+>>>>>>> c0134a9450e486251b247735e022d7efeb496b9c
     '*::command:->command' \
     && return 0
 }

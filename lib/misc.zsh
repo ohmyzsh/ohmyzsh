@@ -1,4 +1,5 @@
 ## Load smart urls if available
+<<<<<<< HEAD
 # bracketed-paste-magic is known buggy in zsh 5.1.1 (only), so skip it there; see #4434
 autoload -Uz is-at-least
 if [[ $ZSH_VERSION != 5.1.1 ]]; then
@@ -14,6 +15,18 @@ if [[ $ZSH_VERSION != 5.1.1 ]]; then
   	fi
   done
 fi
+=======
+for d in $fpath; do
+	if [[ -e "$d/url-quote-magic" ]]; then
+		if [[ -e "$d/bracketed-paste-magic" ]]; then
+			autoload -Uz bracketed-paste-magic
+			zle -N bracketed-paste bracketed-paste-magic
+		fi
+		autoload -U url-quote-magic
+		zle -N self-insert url-quote-magic
+	fi
+done
+>>>>>>> c0134a9450e486251b247735e022d7efeb496b9c
 
 ## jobs
 setopt long_list_jobs
@@ -27,7 +40,12 @@ alias _='sudo'
 alias please='sudo'
 
 ## more intelligent acking for ubuntu users
+<<<<<<< HEAD
 if which ack-grep &> /dev/null; then
+=======
+if which ack-grep &> /dev/null;
+then
+>>>>>>> c0134a9450e486251b247735e022d7efeb496b9c
   alias afind='ack-grep -il'
 else
   alias afind='ack -il'

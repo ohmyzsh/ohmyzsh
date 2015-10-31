@@ -26,9 +26,12 @@ fi
 # oh-my-zsh directory.
 [[ -w "$ZSH" ]] || return 0
 
+<<<<<<< HEAD
 # Cancel upgrade if git is unavailable on the system
 whence git >/dev/null || return 0
 
+=======
+>>>>>>> c0134a9450e486251b247735e022d7efeb496b9c
 if [ -f ~/.zsh-update ]
 then
   . ~/.zsh-update
@@ -57,3 +60,7 @@ else
   # create the zsh file
   _update_zsh_update
 fi
+<<<<<<< HEAD
+=======
+
+>>>>>>> c0134a9450e486251b247735e022d7efeb496b9c

@@ -1,7 +1,12 @@
 
 # Use colors, but only if connected to a terminal, and that terminal
 # supports them.
+<<<<<<< HEAD
 if which tput >/dev/null 2>&1; then
+=======
+tput=$(which tput)
+if [ -n "$tput" ]; then
+>>>>>>> c0134a9450e486251b247735e022d7efeb496b9c
     ncolors=$(tput colors)
 fi
 if [ -t 1 ] && [ -n "$ncolors" ] && [ "$ncolors" -ge 8 ]; then

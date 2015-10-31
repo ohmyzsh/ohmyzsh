@@ -52,9 +52,12 @@
 # * Consider whether to move default output file location to TMPDIR. More robust
 #     but less user friendly.
 #
+<<<<<<< HEAD
 
 autoload -Uz is-at-least
 
+=======
+>>>>>>> c0134a9450e486251b247735e022d7efeb496b9c
 function omz_diagnostic_dump() {
   emulate -L zsh
 
@@ -250,7 +253,11 @@ function _omz_diag_dump_one_big_text() {
 
 function _omz_diag_dump_check_core_commands() {
   builtin echo "Core command check:"
+<<<<<<< HEAD
   local redefined name builtins externals reserved_words
+=======
+  local redefined name builtins externals
+>>>>>>> c0134a9450e486251b247735e022d7efeb496b9c
   redefined=()
   # All the zsh non-module builtin commands
   # These are taken from the zsh reference manual for 5.0.2
@@ -258,6 +265,7 @@ function _omz_diag_dump_check_core_commands() {
   # (For back-compatibility, if any of these are newish, they should be removed,
   # or at least made conditional on the version of the current running zsh.)
   # "history" is also excluded because OMZ is known to redefine that
+<<<<<<< HEAD
   reserved_words=( do done esac then elif else fi for case if while function 
     repeat time until select coproc nocorrect foreach end '!' '[[' '{' '}' 
     )
@@ -284,6 +292,19 @@ function _omz_diag_dump_check_core_commands() {
       redefined+=$name
     fi
   done
+=======
+  builtins=( alias autoload bg bindkey break builtin bye cd chdir command
+    comparguments compcall compctl compdescribe compfiles compgroups compquote comptags
+    comptry compvalues continue declare dirs disable disown echo echotc echoti emulate
+    enable eval exec exit export false fc fg float functions getln getopts hash
+    integer jobs kill let limit local log logout noglob popd print printf
+    pushd pushln pwd r read readonly rehash return sched set setopt shift
+    source suspend test times trap true ttyctl type typeset ulimit umask unalias
+    unfunction unhash unlimit unset unsetopt vared wait whence where which zcompile
+    zle zmodload zparseopts zregexparse zstyle )
+  builtins_fatal=( builtin command local )
+  externals=( zsh )
+>>>>>>> c0134a9450e486251b247735e022d7efeb496b9c
   for name in $builtins; do
     if [[ $(builtin whence -w $name) != "$name: builtin" ]]; then
       builtin echo "builtin '$name' has been redefined"
