@@ -5,7 +5,7 @@ _symfony_console () {
 }
 
 _symfony2_get_command_list () {
-   `_symfony_console` --no-ansi | sed "1,/Available commands/d" | awk '/^  ?[a-z]+/ { print $1 }'
+   `_symfony_console` --no-ansi | sed "1,/Available commands/d" | awk '/^  ?[^ ]+ / { print $1 }'
 }
 
 _symfony2 () {

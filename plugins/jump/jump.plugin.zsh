@@ -13,7 +13,7 @@ jump() {
 }
 
 mark() {
-	if (( $# == 0 )); then
+	if [[ ( $# == 0 ) || ( "$1" == "." ) ]]; then
 		MARK=$(basename "$PWD")
 	else
 		MARK="$1"

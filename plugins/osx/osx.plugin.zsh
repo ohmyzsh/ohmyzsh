@@ -5,29 +5,35 @@
 #       VERSION:  1.1.0
 # ------------------------------------------------------------------------------
 
-function tab() {
-  local command="cd \\\"$PWD\\\"; clear; "
-  (( $# > 0 )) && command="${command}; $*"
-
-  the_app=$(
+function _omz_osx_get_frontmost_app() {
+  local the_app=$(
     osascript 2>/dev/null <<EOF
       tell application "System Events"
         name of first item of (every process whose frontmost is true)
       end tell
 EOF
   )
+  echo "$the_app"
+}
 
-  [[ "$the_app" == 'Terminal' ]] && {
-    osascript 2>/dev/null <<EOF
+function tab() {
+  # Must not have trailing semicolon, for iTerm compatibility
+  local command="cd \\\"$PWD\\\"; clear"
+  (( $# > 0 )) && command="${command}; $*"
+
+  local the_app=$(_omz_osx_get_frontmost_app)
+
+  if [[ "$the_app" == 'Terminal' ]]; then
+    # Discarding stdout to quash "tab N of window id XXX" output
+    osascript >/dev/null <<EOF
       tell application "System Events"
         tell process "Terminal" to keystroke "t" using command down
-        tell application "Terminal" to do script "${command}" in front window
       end tell
+      tell application "Terminal" to do script "${command}" in front window
 EOF
-  }
 
-  [[ "$the_app" == 'iTerm' ]] && {
-    osascript 2>/dev/null <<EOF
+  elif [[ "$the_app" == 'iTerm' ]]; then
+    osascript <<EOF
       tell application "iTerm"
         set current_terminal to current terminal
         tell current_terminal
@@ -35,29 +41,27 @@ EOF
           set current_session to current session
           tell current_session
             write text "${command}"
-            keystroke return
           end tell
         end tell
       end tell
 EOF
-  }
+
+  else
+    echo "tab: unsupported terminal app: $the_app"
+    false
+
+  fi
 }
 
 function vsplit_tab() {
-  local command="cd \\\"$PWD\\\""
+  local command="cd \\\"$PWD\\\"; clear"
   (( $# > 0 )) && command="${command}; $*"
 
-  the_app=$(
-    osascript 2>/dev/null <<EOF
-      tell application "System Events"
-        name of first item of (every process whose frontmost is true)
-      end tell
-EOF
-  )
+  local the_app=$(_omz_osx_get_frontmost_app)
 
-  [[ "$the_app" == 'iTerm' ]] && {
-    osascript 2>/dev/null <<EOF
-      tell application "iTerm" to activate
+  if [[ "$the_app" == 'iTerm' ]]; then
+    osascript <<EOF
+      -- tell application "iTerm" to activate
 
       tell application "System Events"
         tell process "iTerm"
@@ -65,26 +69,24 @@ EOF
             click
           end tell
         end tell
-        keystroke "${command}; clear;"
-        keystroke return
+        keystroke "${command} \n"
       end tell
 EOF
-  }
+
+  else
+    echo "$0: unsupported terminal app: $the_app" >&2
+    false
+
+  fi
 }
 
 function split_tab() {
-  local command="cd \\\"$PWD\\\""
+  local command="cd \\\"$PWD\\\"; clear"
   (( $# > 0 )) && command="${command}; $*"
 
-  the_app=$(
-    osascript 2>/dev/null <<EOF
-      tell application "System Events"
-        name of first item of (every process whose frontmost is true)
-      end tell
-EOF
-  )
+  local the_app=$(_omz_osx_get_frontmost_app)
 
-  [[ "$the_app" == 'iTerm' ]] && {
+  if [[ "$the_app" == 'iTerm' ]]; then
     osascript 2>/dev/null <<EOF
       tell application "iTerm" to activate
 
@@ -94,11 +96,15 @@ EOF
             click
           end tell
         end tell
-        keystroke "${command}; clear;"
-        keystroke return
+        keystroke "${command} \n"
       end tell
 EOF
-  }
+
+  else
+    echo "$0: unsupported terminal app: $the_app" >&2
+    false
+
+  fi
 }
 
 function pfd() {
@@ -138,23 +144,6 @@ function man-preview() {
   man -t "$@" | open -f -a Preview
 }
 
-function trash() {
-  local trash_dir="${HOME}/.Trash"
-  local temp_ifs="$IFS"
-  IFS=$'\n'
-  for item in "$@"; do
-    if [[ -e "$item" ]]; then
-      item_name="$(basename $item)"
-      if [[ -e "${trash_dir}/${item_name}" ]]; then
-        mv -f "$item" "${trash_dir}/${item_name} $(date "+%H-%M-%S")"
-      else
-        mv -f "$item" "${trash_dir}/"
-      fi
-    fi
-  done
-  IFS=$temp_ifs
-}
-
 function vncviewer() {
   open vnc://$@
 }
@@ -177,6 +166,17 @@ function itunes() {
 			;;
 		vol)
 			opt="set sound volume to $1" #$1 Due to the shift
+			;;
+		playing|status)
+			local state=`osascript -e 'tell application "iTunes" to player state as string'`
+			if [[ "$state" = "playing" ]]; then
+				currenttrack=`osascript -e 'tell application "iTunes" to name of current track as string'`
+				currentartist=`osascript -e 'tell application "iTunes" to artist of current track as string'`
+				echo -E "Listening to $fg[yellow]$currenttrack$reset_color by $fg[yellow]$currentartist$reset_color";
+			else
+				echo "iTunes is" $state;
+			fi
+			return 0
 			;;
 		shuf|shuff|shuffle)
 			# The shuffle property of current playlist can't be changed in iTunes 12,
@@ -216,6 +216,7 @@ EOF
 			echo "\tnext|previous\tplay next or previous track"
 			echo "\tshuf|shuffle [on|off|toggle]\tSet shuffled playback. Default: toggle. Note: toggle doesn't support the MiniPlayer."
 			echo "\tvol\tSet the volume, takes an argument from 0 to 100"
+			echo "\tplaying|status\tShow what song is currently playing in iTunes."
 			echo "\thelp\tshow this message and exit"
 			return 0
 			;;
