@@ -23,6 +23,9 @@ else
   fi
 fi
 
+# Update automatically commands auto-completation list. Uncomment to enable.
+# zstyle ':completion:*' rehash true
+
 zstyle ':completion:*' list-colors ''
 
 # should this be in keybindings?
