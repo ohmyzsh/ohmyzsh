@@ -102,6 +102,16 @@ ggf() {
 [[ "$#" != 1 ]] && local b="$(current_branch)"
 git push --force origin "${b:=$1}"
 }
+ggfr() {
+local answer
+vared -p "Do you want to rebase first? Y/N " -c anwser
+case $anwser in
+[Yy]* ) git rebase master;;
+[Nn]* ) :;;
+* ) echo "Please answer yes or no" && return;;
+esac
+ggf
+}
 compdef _git ggf=git-checkout
 ggl() {
 if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
