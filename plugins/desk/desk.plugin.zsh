@@ -29,14 +29,17 @@ _desk() {
     case $state in
         (cmds)
             _values "desk commands" \
+                '.[Activate a desk]' \
                 'go[Activate a desk]' \
+                'ls[List all desks along with description]' \
+                'list[List all desks along with description]' \
                 'init[Initialize desk configuration]' \
-                'list[List all desks along with description]'
+                'version[Show version information]'
             ret=0
             ;;
         (desk)
             case $words[2] in
-                (go)
+                (go|.)
                     _values "available desks" ${desks[@]}
                     ret=0
                     ;;
