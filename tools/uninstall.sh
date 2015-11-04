@@ -21,7 +21,7 @@ if [ -f ~/.zshrc.pre-oh-my-zsh ] || [ -h ~/.zshrc.pre-oh-my-zsh ]; then
 
   mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc;
 
-  . ~/.zshrc;
+  echo "Your original zsh config was restored. Please restart your session."
 else
   if hash chsh >/dev/null 2>&1; then
     echo "Switching back to bash"
