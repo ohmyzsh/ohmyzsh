@@ -180,6 +180,8 @@ function listMavenCompletions {
         archetype:generate generate-sources 
         cobertura:cobertura
         -Dtest= `if [ -d ./src/test/java ] ; then find ./src/test/java -type f -name '*.java' | grep -v svn | sed 's?.*/\([^/]*\)\..*?-Dtest=\1?' ; fi`
+        # list modules, useful combined with -rf
+        : `ls */pom.xml | sed -E 's;([^/]*)/pom.xml;:\1;'`
     ); 
 }
 
