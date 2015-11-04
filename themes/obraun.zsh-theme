@@ -1,4 +1,4 @@
-if [ "$(whoami)" = "root" ]; then CARETCOLOR="red"; else CARETCOLOR="blue"; fi
+if [ "$USER" = "root" ]; then CARETCOLOR="red"; else CARETCOLOR="blue"; fi
 
 local return_code="%(?..%{$fg[red]%}%? ↵%{$reset_color%})"
 

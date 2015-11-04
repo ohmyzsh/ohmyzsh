@@ -7,6 +7,7 @@ _arguments \
     {--configuration,-c}"[configuration file]:FILENAME:_files" \
     {--nodaemon,-n}"[run in the foreground (same as 'nodaemon true' in config file)]" \
     {--help,-h}"[print this usage message and exit]:" \
+    {--version,-v}"[print supervisord version number and exit]:" \
     {--user,-u}"[run supervisord as this user]:USER:_users" \
     {--umask,-m}"[use this umask for daemon subprocess (default is 022)]" \
     {--directory,-d}"[directory to chdir to when daemonized]" \
