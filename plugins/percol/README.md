@@ -7,7 +7,8 @@ Provides some useful function to make [percol](https://github.com/mooz/percol) w
 
 ### Requirements
 
-```pip install percol
+```shell
+pip install percol
 ```
 
 And [jump](https://github.com/robbyrussell/oh-my-zsh/blob/master/plugins/jump/jump.plugin.zsh) for `oh-my-zsh` is a optional requirement.
