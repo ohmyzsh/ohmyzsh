@@ -23,7 +23,7 @@ else
   fi
 fi
 
-# Update automatically commands auto-completation list. Uncomment to enable.
+# Update automatically commands auto-completion list. Uncomment to enable.
 # zstyle ':completion:*' rehash true
 
 zstyle ':completion:*' list-colors ''
