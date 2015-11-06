@@ -3,7 +3,7 @@ user_commands=(
   is-enabled list-jobs show-environment cat)
 
 dash_user_commands=(
-  start stop status enable disable edit
+  start stop restart status enable disable edit cat
   )
 
 sudo_commands=(
