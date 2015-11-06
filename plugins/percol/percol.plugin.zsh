@@ -9,14 +9,14 @@ if which percol &> /dev/null; then
 
     zle -N percol_select_history
     bindkey '^R' percol_select_history
-fi
 
-if which marks &> /dev/null; then
-    function percol_select_marks() {
-        BUFFER=$(marks | percol --query "$LBUFFER" | awk '{print $3}')
-        CURSOR=$#BUFFER # move cursor
-        zle -R -c       # refresh
-    }
-    zle -N percol_select_marks
-    bindkey '^B' percol_select_marks
+    if which marks &> /dev/null; then
+        function percol_select_marks() {
+            BUFFER=$(marks | percol --query "$LBUFFER" | awk '{print $3}')
+            CURSOR=$#BUFFER # move cursor
+            zle -R -c       # refresh
+        }
+        zle -N percol_select_marks
+        bindkey '^B' percol_select_marks
+    fi
 fi
