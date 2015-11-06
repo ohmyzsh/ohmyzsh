@@ -63,6 +63,32 @@ function try_alias_value() {
 }
 
 #
+# Alias only if not already a command/function/alias
+# Use option ALLOW_OVERRIDE_ALIASES to force overriding
+#
+# Arguments:
+#    1. my_alias='my alias value'
+#       Same argument you would pass to the "alias" built-in
+# Return value:
+#    0 if the alias was safely created, 73 otherwise
+#
+function safe_alias() {
+    emulate -L zsh
+    local cmd lhs rhs
+    cmd=(${(s:=:)1})
+    lhs=$cmd[1]
+    rhs=$cmd[2,-1]
+    if (( $+commands[$lhs] || $+functions[$lhs] || $+aliases[$lhs] )); then
+        if [[ $ALLOW_OVERRIDE_ALIASES = "true" ]]; then
+            >&2 echo "WARN: override \"$lhs\" with alias \"$rhs\""
+        else
+            return 73  # os.EX_CANTCREAT
+        fi
+    fi
+    alias $lhs="$rhs"
+}
+
+#
 # Set variable "$1" to default value "$2" if "$1" is not yet defined.
 #
 # Arguments:

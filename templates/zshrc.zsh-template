@@ -37,6 +37,11 @@ ZSH_THEME="robbyrussell"
 # much, much faster.
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
 
+# Uncomment the following line to allow aliases defined in libs and plugins to
+# override existing commands/functions/aliases. A warning will be printed for
+# every alias overriding an existing name.
+# ALLOW_OVERRIDE_ALIASES="true"
+
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
 # The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
