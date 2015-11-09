@@ -23,6 +23,7 @@ function open_command() {
     darwin*)  open_cmd="open" ;;
     cygwin*)  open_cmd="cygstart" ;;
     linux*)   open_cmd="xdg-open" ;;
+    msys*)    open_cmd="start" ;;
     *)        echo "Platform $OSTYPE not supported"
               return 1
               ;;
