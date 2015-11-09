@@ -5,41 +5,7 @@
 
 local -a _1st_arguments
 _1st_arguments=(
-    'app.start:Start all registered apps'
-    'archive:List all archives'
-    'archive.build:Archive this project into a .ez file'
-    'archive.install:Install an archive locally'
-    'archive.uninstall:Uninstall archives'
-    'clean:Delete generated application files'
-    'cmd:Executes the given command'
-    'compile:Compile source files'
-    'compile.protocols:Consolidates all protocols in all paths'
-    'deps:List dependencies and their status'
-    "deps.clean:Remove the given dependencies' files"
-    'deps.compile:Compile dependencies'
-    'deps.get:Get all out of date dependencies'
-    'deps.unlock:Unlock the given dependencies'
-    'deps.update:Update the given dependencies'
-    'do:Executes the tasks separated by comma'
-    'escript.build:Builds an escript for the project'
-    'help:Print help information for tasks'
-    'hex:Print hex help information'
-    'hex.config:Read or update hex config'
-    'hex.docs:Publish docs for package'
-    'hex.info:Print hex information'
-    'hex.key:Hex API key tasks'
-    'hex.outdated:Shows outdated hex deps for the current project'
-    'hex.owner:Hex package ownership tasks'
-    'hex.publish:Publish a new package version'
-    'hex.search:Search for package names'
-    'hex.user:Hex user tasks'
-    'loadconfig:Loads and persists the given configuration'
-    'local:List local tasks'
-    'local.hex:Install hex locally'
-    'local.rebar:Install rebar locally'
-    'new:Create a new Elixir project'
-    'run:Run the given file or expression'
-    "test:Run a project's tests"
+    "${(@f)$(mix help | egrep "^mix " | tail -n+2 | sed 's/^mix //;s/\s\+#\s/:/')}"
     '--help:Describe available tasks'
     '--version:Prints the Elixir version information'
 )
