@@ -43,7 +43,7 @@ $ZSH_THEME_REPO_NAME_COLOR$_DISPLAY$ZSH_PROMPT_BASE_COLOR$ZSH_PROMPT_BASE_COLOR$
 }
 
 function hg_dirty_choose {
-  hg status -mar . 2> /dev/null | command grep -Eq '^\s*[ACDIM!?L]'
+  hg status -mar 2> /dev/null | command grep -Eq '^\s*[ACDIM!?L]'
   if [ $? -eq 0 ]; then
     if [ $pipestatus[-1] -eq 0 ]; then
       # Grep exits with 0 when "One or more lines were selected", return "dirty".
