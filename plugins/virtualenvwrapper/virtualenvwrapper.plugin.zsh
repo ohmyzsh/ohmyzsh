@@ -61,7 +61,7 @@ if [[ ! $DISABLE_VENV_CD -eq 1 ]]; then
       else
         ENV_NAME=""
       fi
-      if [[ "$ENV_NAME" != "" ]]; then
+      if [[ "$ENV_NAME" != "" && ("$ENV_NAME" = "$CD_VIRTUAL_ENV" || "$CD_VIRTUAL_ENV" = "" ) ]]; then
         # Activate the environment only if it is not already active
         if [[ "$VIRTUAL_ENV" != "$WORKON_HOME/$ENV_NAME" ]]; then
           if [[ -e "$WORKON_HOME/$ENV_NAME/bin/activate" ]]; then
