@@ -8,9 +8,9 @@ function theme
 	source "$RANDOM_THEME"
 	echo "[oh-my-zsh] Random theme '$RANDOM_THEME' loaded..."
     else
-	if [ -f "$ZSH_CUSTOM/$1.zsh-theme" ]
+	if [ -f "$ZSH_CUSTOM/themes/$1.zsh-theme" ]
 	then
-	    source "$ZSH_CUSTOM/$1.zsh-theme"
+	    source "$ZSH_CUSTOM/themes/$1.zsh-theme"
 	else
 	    source "$ZSH/themes/$1.zsh-theme"
 	fi
@@ -19,6 +19,5 @@ function theme
 
 function lstheme
 {
-    cd $ZSH/themes
-    ls *zsh-theme | sed 's,\.zsh-theme$,,'
+    find "$ZSH"/themes "$ZSH_CUSTOM"/themes -name '*.zsh-theme' | sort -u | sed 's:.*/\(.*\)\.zsh-theme:\1:'
 }
