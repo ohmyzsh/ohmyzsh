@@ -3,7 +3,9 @@ zsh-syntax-highlighting / tests
 
 Utility scripts for testing zsh-syntax-highlighting highlighters.
 
-The tests expect the highlighter directory to contain a `test-data` directory with test data files. See the [main highlighter](../highlighters/main/test-data) for examples.
+The tests harness expects the highlighter directory to contain a `test-data`
+directory with test data files.
+See the [main highlighter](../highlighters/main/test-data) for examples.
 
 Each test should define the array parameter `$expected_region_highlight`.
 The value of that parameter is a list of `"$i $j $style [$todo]"` strings.
@@ -12,6 +14,10 @@ that is, `$i` and `$j` specify a range, 1-indexed, inclusive of both endpoints.
 If `$todo` exists, the test point is marked as TODO (the failure of that test point will not fail the test), and `$todo` is used as the explanation.
 
 _Note_: `$region_highlight` uses the same `"$i $j $style"` syntax but interprets the indexes differently.
+
+**Isolation**: Each test is run in a separate subshell, so any variables, aliases, functions, etc.,
+it defines will be visible to the tested code (that computes `$region_highlight`), but will not affect
+subsequent tests.
 
 
 highlighting test
