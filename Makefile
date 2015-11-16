@@ -2,7 +2,7 @@ NAME=zsh-syntax-highlighting
 
 INSTALL?=install -c
 PREFIX?=/usr/local
-SHARE_DIR=$(DESTDIR)$(PREFIX)/share/$(NAME)
+SHARE_DIR?=$(DESTDIR)$(PREFIX)/share/$(NAME)
 ZSH?=zsh # zsh binary to run tests with
 
 # Have the default target do nothing.
