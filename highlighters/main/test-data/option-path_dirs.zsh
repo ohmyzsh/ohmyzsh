@@ -37,5 +37,5 @@ path+=( "$PWD"/foo )
 BUFFER='bar/testing-issue-228'
 
 expected_region_highlight=(
-  "1 21 $ZSH_HIGHLIGHT_STYLES[command] 'issue #228'" # bar/testing-issue-228
+  "1 21 $ZSH_HIGHLIGHT_STYLES[command]" # bar/testing-issue-228
 )

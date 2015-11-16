@@ -83,18 +83,32 @@ _zsh_highlight_main_add_region_highlight() {
 # Main syntax highlighting function.
 _zsh_highlight_main_highlighter()
 {
+  ## Before we even 'emulate -L', we must test a few options that would reset.
   if [[ -o interactive_comments ]]; then
     local interactive_comments= # set to empty
   fi
+  if [[ -o path_dirs ]]; then
+    integer path_dirs_was_set=1
+  else
+    integer path_dirs_was_set=0
+  fi
   emulate -L zsh
   setopt localoptions extendedglob bareglobqual
+
+  ## Variable declarations and initializations
   local start_pos=0 end_pos highlight_glob=true arg style
   local in_array_assignment=false # true between 'a=(' and the matching ')'
   typeset -a ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR
   typeset -a ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS
   typeset -a ZSH_HIGHLIGHT_TOKENS_CONTROL_FLOW
+  local -a options_to_set
   local buf="$PREBUFFER$BUFFER"
   region_highlight=()
+
+  if (( path_dirs_was_set )); then
+    options_to_set+=( PATH_DIRS )
+  fi
+  unset path_dirs_was_set
 
   ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR=(
     '|' '||' ';' '&' '&&'
@@ -239,7 +253,12 @@ _zsh_highlight_main_highlighter()
      else
       _zsh_highlight_main_highlighter_expand_path $arg
       local expanded_arg="$REPLY"
-      local res="$(LC_ALL=C builtin type -w -- ${expanded_arg} 2>/dev/null)"
+      local res="$(
+        if (( $#options_to_set )); then
+          setopt $options_to_set;
+        fi
+        LC_ALL=C builtin type -w -- ${expanded_arg} 2>/dev/null
+      )"
       case $res in
         *': reserved')  style=$ZSH_HIGHLIGHT_STYLES[reserved-word];;
         *': suffix alias')
