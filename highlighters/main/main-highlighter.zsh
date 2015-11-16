@@ -89,6 +89,7 @@ _zsh_highlight_main_highlighter()
   emulate -L zsh
   setopt localoptions extendedglob bareglobqual
   local start_pos=0 end_pos highlight_glob=true arg style
+  local in_array_assignment=false # true between 'a=(' and the matching ')'
   typeset -a ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR
   typeset -a ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS
   typeset -a ZSH_HIGHLIGHT_TOKENS_CONTROL_FLOW
@@ -171,8 +172,11 @@ _zsh_highlight_main_highlighter()
     # the string's color.
     integer already_added=0
     local style_override=""
-    if [[ $this_word == *':start:'* ]] && [[ $arg = 'noglob' ]]; then
-      highlight_glob=false
+    if [[ $this_word == *':start:'* ]]; then
+      in_array_assignment=false
+      if [[ $arg == 'noglob' ]]; then
+        highlight_glob=false
+      fi
     fi
 
     # advance $start_pos, skipping over whitespace in $buf.
@@ -251,7 +255,9 @@ _zsh_highlight_main_highlighter()
         *': hashed')    style=$ZSH_HIGHLIGHT_STYLES[hashed-command];;
         *)              if _zsh_highlight_main_highlighter_check_assign; then
                           style=$ZSH_HIGHLIGHT_STYLES[assign]
-                          if [[ $arg[-1] != '(' ]]; then
+                          if [[ $arg[-1] == '(' ]]; then
+                            in_array_assignment=true
+                          else
                             # assignment to a scalar parameter.
                             # (For array assignments, the command doesn't start until the ")" token.)
                             next_word+=':start:'
@@ -299,7 +305,13 @@ _zsh_highlight_main_highlighter()
      fi
     else # $arg is a non-command word
       case $arg in
-        $'\x29') style=$ZSH_HIGHLIGHT_STYLES[reserved-word];; # subshell
+        $'\x29') # subshell or end of array assignment
+                 if $in_array_assignment; then
+                   style=$ZSH_HIGHLIGHT_STYLES[assign]
+                   in_array_assignment=false
+                 else
+                   style=$ZSH_HIGHLIGHT_STYLES[reserved-word]
+                 fi;;
         $'\x7d') style=$ZSH_HIGHLIGHT_STYLES[reserved-word];; # block
         '--'*)   style=$ZSH_HIGHLIGHT_STYLES[double-hyphen-option];;
         '-'*)    style=$ZSH_HIGHLIGHT_STYLES[single-hyphen-option];;
