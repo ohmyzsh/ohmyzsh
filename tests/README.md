@@ -17,7 +17,8 @@ _Note_: `$region_highlight` uses the same `"$i $j $style"` syntax but interprets
 
 **Isolation**: Each test is run in a separate subshell, so any variables, aliases, functions, etc.,
 it defines will be visible to the tested code (that computes `$region_highlight`), but will not affect
-subsequent tests.
+subsequent tests.  The current working directory of tests is set to a newly-created empty directory,
+which is automatically cleaned up after the test exits.
 
 
 highlighting test

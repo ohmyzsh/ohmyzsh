@@ -27,9 +27,11 @@
 # vim: ft=zsh sw=2 ts=2 et
 # -------------------------------------------------------------------------------------------------
 
-BUFFER='ls highlighters/main/test-data/path.zsh'
+mkdir A
+touch A/mu
+BUFFER='ls A/mu'
 
 expected_region_highlight=(
-  "1 2  $ZSH_HIGHLIGHT_STYLES[command]" # ls
-  "4 39 $ZSH_HIGHLIGHT_STYLES[path]"    # highlighters/main/test-data/path.zsh
+  "1 2 $ZSH_HIGHLIGHT_STYLES[command]" # ls
+  "4 7 $ZSH_HIGHLIGHT_STYLES[path]"     # A/mu
 )

@@ -27,11 +27,13 @@
 # vim: ft=zsh sw=2 ts=2 et
 # -------------------------------------------------------------------------------------------------
 
-hash -d D=highlighters/main/test-data
+mkdir mydir
+touch mydir/path-tilde-named.test
+hash -d D=mydir
 
-BUFFER='ls ~D/path-tilde-named.zsh'
+BUFFER='ls ~D/path-tilde-named.test'
 
 expected_region_highlight=(
   "1 2  $ZSH_HIGHLIGHT_STYLES[command]" # ls
-  "4 26 $ZSH_HIGHLIGHT_STYLES[path]"    # ~D/path-tilde-named.zsh
+  "4 27 $ZSH_HIGHLIGHT_STYLES[path]"    # ~D/path-tilde-named.test
 )

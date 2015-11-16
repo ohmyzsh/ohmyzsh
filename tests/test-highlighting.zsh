@@ -55,15 +55,19 @@ ZSH_HIGHLIGHT_HIGHLIGHTERS=($1)
 
 # Runs a highlighting test
 # $1: data file
-run_test() {
+run_test_internal() {
   local -a highlight_zone
   local unused_highlight='bg=red,underline' # a style unused by anything else, for tests to use
+
+  local tests_tempdir="$1"; shift
+  local srcdir="$PWD"
+  builtin cd -q -- "$tests_tempdir" || { echo >&2 "Bail out! cd failed: $?"; return 1 }
 
   echo "# ${1:t:r}"
 
   # Load the data and prepare checking it.
   PREBUFFER= BUFFER= ;
-  . "$1"
+  . "$srcdir"/"$1"
 
   # Check the data declares $PREBUFFER or $BUFFER.
   [[ -z $PREBUFFER && -z $BUFFER ]] && { echo >&2 "Bail out! Either 'PREBUFFER' or 'BUFFER' must be declared and non-blank"; return 1; }
@@ -106,6 +110,21 @@ run_test() {
     done
     echo "ok $i$todo"
   done
+}
+
+run_test() {
+  # Do not combine the declaration and initialization: «local x="$(false)"» does not set $?.
+  local __tests_tempdir; __tests_tempdir="$(mktemp -d)"
+  if [[ $? -ne 0 ]] || [[ -z $__tests_tempdir ]] || [[ ! -d $__tests_tempdir ]]; then
+    echo >&2 "Bail out! mktemp failed"; return 1
+  fi
+  typeset -r __tests_tempdir # don't allow tests to override the variable that we will 'rm -rf' later on
+
+  {
+    run_test_internal "$__tests_tempdir" "$@"
+  } always {
+    rm -rf -- "$__tests_tempdir"
+  }
 }
 
 # Process each test data file in test data directory.
