@@ -1,7 +1,7 @@
 zsh-syntax-highlighting / highlighters / brackets
 =================================================
 
-This is the `brackets` highlighter, that highlights brackets, parenthesis and
+This is the `brackets` highlighter, that highlights brackets and parentheses, and
 matches them.
 
 
