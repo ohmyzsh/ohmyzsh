@@ -1,19 +1,17 @@
 zsh-syntax-highlighting / highlighters / pattern
-================================================
+------------------------------------------------
 
 This is the `pattern` highlighter, that highlights user defined patterns.
 
 
-How to activate it
-------------------
+### How to activate it
 
 To activate it, add it to `ZSH_HIGHLIGHT_HIGHLIGHTERS`:
 
     ZSH_HIGHLIGHT_HIGHLIGHTERS=( [...] pattern)
 
 
-How to tweak it
----------------
+### How to tweak it
 
 To use this highlighter, associate patterns with styles in the
 `ZSH_HIGHLIGHT_PATTERNS` array, for example in `~/.zshrc`:

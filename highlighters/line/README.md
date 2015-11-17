@@ -1,19 +1,17 @@
 zsh-syntax-highlighting / highlighters / line
-=============================================
+---------------------------------------------
 
 This is the `line` highlighter, that highlights the whole line.
 
 
-How to activate it
-------------------
+### How to activate it
 
 To activate it, add it to `ZSH_HIGHLIGHT_HIGHLIGHTERS`:
 
     ZSH_HIGHLIGHT_HIGHLIGHTERS=( [...] line)
 
 
-How to tweak it
----------------
+### How to tweak it
 
 This highlighter defines the following styles:
 

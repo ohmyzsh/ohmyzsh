@@ -1,5 +1,5 @@
 zsh-syntax-highlighting / highlighters / main
-=============================================
+---------------------------------------------
 
 This is the `main` highlighter, that highlights:
 
@@ -9,8 +9,7 @@ This is the `main` highlighter, that highlights:
 * Paths
 * Strings
 
-How to activate it
-------------------
+### How to activate it
 
 To activate it, add it to `ZSH_HIGHLIGHT_HIGHLIGHTERS`:
 
@@ -19,8 +18,7 @@ To activate it, add it to `ZSH_HIGHLIGHT_HIGHLIGHTERS`:
 This highlighter is active by default.
 
 
-How to tweak it
----------------
+### How to tweak it
 
 This highlighter defines the following styles:
 

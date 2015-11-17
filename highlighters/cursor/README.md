@@ -1,19 +1,17 @@
 zsh-syntax-highlighting / highlighters / cursor
-===============================================
+-----------------------------------------------
 
 This is the `cursor` highlighter, that highlights the cursor.
 
 
-How to activate it
-------------------
+### How to activate it
 
 To activate it, add it to `ZSH_HIGHLIGHT_HIGHLIGHTERS`:
 
     ZSH_HIGHLIGHT_HIGHLIGHTERS=( [...] cursor)
 
 
-How to tweak it
----------------
+### How to tweak it
 
 This highlighter defines the following styles:
 
