@@ -400,6 +400,7 @@ _zsh_highlight_main_highlighter()
     (( already_added )) || _zsh_highlight_main_add_region_highlight $start_pos $end_pos $style
     if [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR:#"$arg"} ]]; then
       next_word=':start:'
+      highlight_glob=true
     elif
        [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_CONTROL_FLOW:#"$arg"} && $this_word == *':start:' ]] ||
        [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS:#"$arg"} && $this_word == *':start:' ]]; then
@@ -413,7 +414,6 @@ _zsh_highlight_main_highlighter()
       # The repeat-count word will be handled like a redirection target.
       this_word=':start:'
     fi
-    [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR:#"$arg"} ]] && highlight_glob=true
     start_pos=$end_pos
     (( in_redirection == 0 )) && this_word=$next_word
   done
