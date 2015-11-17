@@ -37,7 +37,9 @@ All tests may be run with
 
     make test
 
-which will run all highlighting tests and report results in [TAP](http://testanything.org/) format.
+which will run all highlighting tests and report results in [TAP format][TAP].
+
+[TAP]: http://testanything.org/
 
 
 Performance test
