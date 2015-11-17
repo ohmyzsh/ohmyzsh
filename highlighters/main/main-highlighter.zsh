@@ -80,6 +80,19 @@ _zsh_highlight_main_add_region_highlight() {
   region_highlight+=("$start $end $style")
 }
 
+# Wrapper around 'type -w'.
+#
+# Takes a single argument and outputs the output of 'type -w $1'.
+#
+# NOTE: This runs 'setopt', but that should be safe since it'll only ever be
+# called inside a $(...) subshell, so the effects will be local.
+_zsh_highlight_main__type() {
+  if (( $#options_to_set )); then
+    setopt $options_to_set;
+  fi
+  LC_ALL=C builtin type -w -- $1 2>/dev/null
+}
+
 # Main syntax highlighting function.
 _zsh_highlight_main_highlighter()
 {
@@ -101,7 +114,7 @@ _zsh_highlight_main_highlighter()
   typeset -a ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR
   typeset -a ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS
   typeset -a ZSH_HIGHLIGHT_TOKENS_CONTROL_FLOW
-  local -a options_to_set
+  local -a options_to_set # used in callees
   local buf="$PREBUFFER$BUFFER"
   region_highlight=()
 
@@ -253,12 +266,7 @@ _zsh_highlight_main_highlighter()
      else
       _zsh_highlight_main_highlighter_expand_path $arg
       local expanded_arg="$REPLY"
-      local res="$(
-        if (( $#options_to_set )); then
-          setopt $options_to_set;
-        fi
-        LC_ALL=C builtin type -w -- ${expanded_arg} 2>/dev/null
-      )"
+      local res="$(_zsh_highlight_main__type ${expanded_arg})"
       case $res in
         *': reserved')  style=$ZSH_HIGHLIGHT_STYLES[reserved-word];;
         *': suffix alias')
