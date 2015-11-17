@@ -30,8 +30,8 @@
 
 if [[ -o function_argzero ]]; then
   # $0 is reliable
-  ZSH_HIGHLIGHT_VERSION=$(<"$0:A:h"/.version)
-  ZSH_HIGHLIGHT_REVISION=$(<"$0:A:h"/.revision-hash)
+  ZSH_HIGHLIGHT_VERSION=$(<"${0:A:h}"/.version)
+  ZSH_HIGHLIGHT_REVISION=$(<"${0:A:h}"/.revision-hash)
   if [[ $ZSH_HIGHLIGHT_REVISION == \$Format:* ]]; then
     # When running from a source tree without 'make install', $ZSH_HIGHLIGHT_REVISION
     # would be set to '$Format:%H$' literally.  That's an invalid value, and obtaining
@@ -63,6 +63,7 @@ _zsh_highlight()
   local ret=$?
 
   setopt localoptions warncreateglobal
+  setopt localoptions noksharrays
   local REPLY # don't leak $REPLY into global scope
 
   # Do not highlight if there are more than 300 chars in the buffer. It's most
@@ -189,6 +190,8 @@ _zsh_highlight_call_widget()
 # Rebind all ZLE widgets to make them invoke _zsh_highlights.
 _zsh_highlight_bind_widgets()
 {
+  setopt localoptions noksharrays
+
   # Load ZSH module zsh/zleparameter, needed to override user defined widgets.
   zmodload zsh/zleparameter 2>/dev/null || {
     echo 'zsh-syntax-highlighting: failed loading zsh/zleparameter.' >&2
@@ -229,6 +232,8 @@ _zsh_highlight_bind_widgets()
 #   1) Path to the highlighters directory.
 _zsh_highlight_load_highlighters()
 {
+  setopt localoptions noksharrays
+
   # Check the directory exists.
   [[ -d "$1" ]] || {
     echo "zsh-syntax-highlighting: highlighters directory '$1' not found." >&2
