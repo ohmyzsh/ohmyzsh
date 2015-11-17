@@ -43,7 +43,7 @@ WP-CLI is a set of command-line tools for managing WordPress installations. You 
 - wpps='search'
 - wppst='status'
 - wppt='toggle'
-- wppu='uninstall'
+- wppun='uninstall'
 - wppu='update'
 
 ### Post
@@ -55,7 +55,7 @@ WP-CLI is a set of command-line tools for managing WordPress installations. You 
 - wppol='wp post list'
 - wppom='wp post meta'
 - wppou='wp post update'
-- wppou='wp post url'
+- wppourl='wp post url'
 
 ### Sidebar
 - wpsbl='wp sidebar list'
