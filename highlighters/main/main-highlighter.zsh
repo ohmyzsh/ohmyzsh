@@ -448,6 +448,9 @@ _zsh_highlight_main_highlighter_highlight_string()
             if [[ ${arg:$i} =~ ^([A-Za-z_][A-Za-z0-9_]*|[0-9]+) ]] ; then
               (( k += $#MATCH )) # highlight the parameter name
               (( i += $#MATCH )) # skip past it
+            elif [[ ${arg:$i} =~ ^[{]([A-Za-z_][A-Za-z0-9_]*|[0-9]+)[}] ]] ; then
+              (( k += $#MATCH )) # highlight the parameter name and braces
+              (( i += $#MATCH )) # skip past it
             else
               continue
             fi
