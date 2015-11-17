@@ -20,4 +20,5 @@ To use this highlighter, associate patterns with styles in the `ZSH_HIGHLIGHT_PA
     # To have commands starting with `rm -rf` in red:
     ZSH_HIGHLIGHT_PATTERNS+=('rm -rf *' 'fg=white,bold,bg=red')
 
-The syntax for declaring styles is [documented here](http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#SEC135).
+The syntax for declaring styles is documented in [the `zshzle(1)` manual
+page](http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#SEC135).
