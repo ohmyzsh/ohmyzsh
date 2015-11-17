@@ -114,14 +114,14 @@ run_test_internal() {
 
 run_test() {
   # Do not combine the declaration and initialization: «local x="$(false)"» does not set $?.
-  local __tests_tempdir; __tests_tempdir="$(mktemp -d)"
-  if [[ $? -ne 0 ]] || [[ -z $__tests_tempdir ]] || [[ ! -d $__tests_tempdir ]]; then
+  local __tests_tempdir
+  __tests_tempdir="$(mktemp -d)" && [[ -d $__tests_tempdir ]] || {
     echo >&2 "Bail out! mktemp failed"; return 1
-  fi
+  }
   typeset -r __tests_tempdir # don't allow tests to override the variable that we will 'rm -rf' later on
 
   {
-    run_test_internal "$__tests_tempdir" "$@"
+    (run_test_internal "$__tests_tempdir" "$@")
   } always {
     rm -rf -- "$__tests_tempdir"
   }
@@ -130,7 +130,7 @@ run_test() {
 # Process each test data file in test data directory.
 integer something_failed=0
 for data_file in ${0:h:h}/highlighters/$1/test-data/*.zsh; do
-  (run_test "$data_file") | tee >(${0:A:h}/tap-colorizer.zsh) | grep -v '^not ok.*# TODO' | grep -q '^not ok\|^ok.*# TODO' && (( something_failed=1 ))
+  run_test "$data_file" | tee >(${0:A:h}/tap-colorizer.zsh) | grep -v '^not ok.*# TODO' | grep -q '^not ok\|^ok.*# TODO' && (( something_failed=1 ))
   (( $pipestatus[1] )) && exit 2
 done
 
