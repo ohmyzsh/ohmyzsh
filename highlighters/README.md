@@ -31,7 +31,7 @@ How to implement a new highlighter
 To create your own ***myhighlighter*** highlighter:
 
 * Create your script at **highlighters/*myhighlighter*/*myhighlighter*-highlighter.zsh**.
-* Implement the `_zsh_highlight_myhighlighter_highlighter_predicate` function. This function must return 0 when the highlighter needs to be called, for example:
+* Implement the `_zsh_highlight_myhighlighter_highlighter_predicate` function. This function must return 0 when the highlighter needs to be called and non-zero otherwise, for example:
 
         _zsh_highlight_myhighlighter_highlighter_predicate() {
           # Call this highlighter in SVN repositories
