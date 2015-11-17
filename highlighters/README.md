@@ -22,7 +22,9 @@ To activate an highlighter, add it to the `ZSH_HIGHLIGHT_HIGHLIGHTERS` array in 
 How to tweak highlighters
 -------------------------
 
-Highlighters look up styles from the `ZSH_HIGHLIGHT_STYLES` array. Navigate into each highlighter directory to see what styles it defines and how to configure it.
+Highlighters look up styles from the `ZSH_HIGHLIGHT_STYLES` array.
+Navigate into each highlighter directory to see what styles it defines
+and how to configure it.
 
 
 How to implement a new highlighter
@@ -31,14 +33,19 @@ How to implement a new highlighter
 To create your own `myhighlighter` highlighter:
 
 * Create your script at `highlighters/${myhighlighter}/${myhighlighter}-highlighter.zsh`.
-* Implement the `_zsh_highlight_myhighlighter_highlighter_predicate` function. This function must return 0 when the highlighter needs to be called and non-zero otherwise, for example:
+
+* Implement the `_zsh_highlight_myhighlighter_highlighter_predicate` function.
+  This function must return 0 when the highlighter needs to be called and
+  non-zero otherwise, for example:
 
         _zsh_highlight_myhighlighter_highlighter_predicate() {
           # Call this highlighter in SVN repositories
           [[ -d .svn ]]
         }
 
-* Implement the `_zsh_highlight_myhighlighter_highlighter` function. This function does the actual syntax highlighting, by modifying `region_highlight`, for example:
+* Implement the `_zsh_highlight_myhighlighter_highlighter` function.
+  This function does the actual syntax highlighting, by modifying
+  `region_highlight`, for example:
 
         _zsh_highlight_myhighlighter_highlighter() {
           # Colorize the whole buffer with blue background
