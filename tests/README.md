@@ -8,12 +8,14 @@ directory with test data files.
 See the [main highlighter](../highlighters/main/test-data) for examples.
 
 Each test should define the array parameter `$expected_region_highlight`.
-The value of that parameter is a list of `"$i $j $style [$todo]"` strings.
+The value of that parameter is a list of strings of the form  `"$i $j $style"`.
+or `"$i $j $style $todo"`.
 Each string specifies the highlighting that `$BUFFER[$i,$j]` should have;
 that is, `$i` and `$j` specify a range, 1-indexed, inclusive of both endpoints.
-If `$todo` exists, the test point is marked as TODO (the failure of that test point will not fail the test), and `$todo` is used as the explanation.
+If `$todo` exists, the test point is marked as TODO (the failure of that test
+point will not fail the test), and `$todo` is used as the explanation.
 
-_Note_: `$region_highlight` uses the same `"$i $j $style"` syntax but interprets the indexes differently.
+**Note**: `$region_highlight` uses the same `"$i $j $style"` syntax but interprets the indexes differently.
 
 **Isolation**: Each test is run in a separate subshell, so any variables, aliases, functions, etc.,
 it defines will be visible to the tested code (that computes `$region_highlight`), but will not affect
