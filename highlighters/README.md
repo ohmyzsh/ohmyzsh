@@ -3,12 +3,12 @@ zsh-syntax-highlighting / highlighters
 
 Syntax highlighting is done by pluggable highlighters:
 
-* [***main***](main) - the base highlighter, and the only one active by default.
-* [***brackets***](brackets) - matches brackets and parenthesis.
-* [***pattern***](pattern) - matches user-defined patterns.
-* [***cursor***](cursor) - matches the cursor position.
-* [***root***](root) - triggered if the current user is root.
-* [***line***](line) - applied to the whole command line
+* [`main`](main) - the base highlighter, and the only one active by default.
+* [`brackets`](brackets) - matches brackets and parenthesis.
+* [`pattern`](pattern) - matches user-defined patterns.
+* [`cursor`](cursor) - matches the cursor position.
+* [`root`](root) - triggered if the current user is root.
+* [`line`](line) - applied to the whole command line
 
 
 How to activate highlighters
@@ -28,9 +28,9 @@ Highlighters look up styles from the `ZSH_HIGHLIGHT_STYLES` array. Navigate into
 How to implement a new highlighter
 ----------------------------------
 
-To create your own ***myhighlighter*** highlighter:
+To create your own `myhighlighter` highlighter:
 
-* Create your script at **highlighters/*myhighlighter*/*myhighlighter*-highlighter.zsh**.
+* Create your script at `highlighters/${myhighlighter}/${myhighlighter}-highlighter.zsh`.
 * Implement the `_zsh_highlight_myhighlighter_highlighter_predicate` function. This function must return 0 when the highlighter needs to be called and non-zero otherwise, for example:
 
         _zsh_highlight_myhighlighter_highlighter_predicate() {

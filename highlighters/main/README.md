@@ -1,7 +1,7 @@
 zsh-syntax-highlighting / highlighters / main
 =============================================
 
-This is the ***main*** highlighter, that highlights:
+This is the `main` highlighter, that highlights:
 
 * Commands
 * Options

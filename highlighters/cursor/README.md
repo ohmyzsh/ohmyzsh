@@ -1,7 +1,7 @@
 zsh-syntax-highlighting / highlighters / cursor
 =================================================
 
-This is the ***cursor*** highlighter, that highlights the cursor.
+This is the `cursor` highlighter, that highlights the cursor.
 
 
 How to activate it
