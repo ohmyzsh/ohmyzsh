@@ -1,9 +1,12 @@
 zsh-syntax-highlighting
 =======================
 
-**[Fish shell](http://www.fishshell.com) like syntax highlighting for Zsh.**
+**[Fish shell][fish]-like like syntax highlighting for [Zsh][zsh].**
 
 *Requirements: zsh 4.3.17+.*
+
+[fish]: http://www.fishshell.com/
+[zsh]: http://www.zsh.org/
 
 This package provides syntax highlighing for the shell zsh.  It enables
 highlighing of commands whilst they are typed at a zsh prompt into an
