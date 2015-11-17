@@ -125,6 +125,10 @@ _zsh_highlight_main_highlighter()
 
   ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR=(
     '|' '||' ';' '&' '&&'
+    '|&'
+    '&!' '&|'
+    # ### 'case' syntax, but followed by a pattern, not by a command
+    # ';;' ';&' ';|'
   )
   ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS=(
     'builtin' 'command' 'exec' 'nocorrect' 'noglob'
