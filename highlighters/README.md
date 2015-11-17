@@ -14,7 +14,8 @@ Syntax highlighting is done by pluggable highlighters:
 How to activate highlighters
 ----------------------------
 
-To activate an highlighter, add it to the `ZSH_HIGHLIGHT_HIGHLIGHTERS` array in `~/.zshrc`, for example:
+To activate an highlighter, add it to the `ZSH_HIGHLIGHT_HIGHLIGHTERS` array in
+`~/.zshrc`, for example:
 
     ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
 
@@ -32,7 +33,8 @@ How to implement a new highlighter
 
 To create your own `myhighlighter` highlighter:
 
-* Create your script at `highlighters/${myhighlighter}/${myhighlighter}-highlighter.zsh`.
+* Create your script at
+    `highlighters/${myhighlighter}/${myhighlighter}-highlighter.zsh`.
 
 * Implement the `_zsh_highlight_myhighlighter_highlighter_predicate` function.
   This function must return 0 when the highlighter needs to be called and

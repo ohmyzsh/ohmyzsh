@@ -52,7 +52,8 @@ This highlighter defines the following styles:
 * `comment` - comments, when `setopt INTERACTIVE_COMMENTS` is in effect (`echo # foo`)
 * `default` - everything else
 
-To override one of those styles, change its entry in `ZSH_HIGHLIGHT_STYLES`, for example in `~/.zshrc`:
+To override one of those styles, change its entry in `ZSH_HIGHLIGHT_STYLES`,
+for example in `~/.zshrc`:
 
     # Declare the variable
     typeset -A ZSH_HIGHLIGHT_STYLES

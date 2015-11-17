@@ -76,10 +76,11 @@ so make it the last element of the `$plugins` array.
 
 ### System-wide installation
 
-Either of the above methods is suitable for a single-user installation, which requires
-no special privileges.  If, however, you desire to install zsh-syntax-highlighting
-system-wide, you may do so by running `make install` and directing your users to
-add `source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh`
+Either of the above methods is suitable for a single-user installation,
+which requires no special privileges.  If, however, you desire to install
+zsh-syntax-highlighting system-wide, you may do so by running `make install`
+and directing your users to add
+  `source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh`
 in their `.zshrc`s.
 
 
@@ -95,7 +96,8 @@ syntax highlighting.
 
 ### How are new releases announced?
 
-There is currently no "push" announcements channel.  However, the following alternatives exist:
+There is currently no "push" announcements channel.  However, the following
+alternatives exist:
 
 - GitHub's RSS feed of releases: https://github.com/zsh-users/zsh-syntax-highlighting/releases.atom
 - An anitya entry: https://release-monitoring.org/project/7552/

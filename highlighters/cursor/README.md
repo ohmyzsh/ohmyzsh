@@ -19,7 +19,8 @@ This highlighter defines the following styles:
 
 * `cursor` - the style for the current cursor position
 
-To override one of those styles, change its entry in `ZSH_HIGHLIGHT_STYLES`, for example in `~/.zshrc`:
+To override one of those styles, change its entry in `ZSH_HIGHLIGHT_STYLES`,
+for example in `~/.zshrc`:
 
     ZSH_HIGHLIGHT_STYLES[cursor]='bg=blue'
 

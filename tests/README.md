@@ -15,18 +15,21 @@ that is, `$i` and `$j` specify a range, 1-indexed, inclusive of both endpoints.
 If `$todo` exists, the test point is marked as TODO (the failure of that test
 point will not fail the test), and `$todo` is used as the explanation.
 
-**Note**: `$region_highlight` uses the same `"$i $j $style"` syntax but interprets the indexes differently.
+**Note**: `$region_highlight` uses the same `"$i $j $style"` syntax but
+interprets the indexes differently.
 
-**Isolation**: Each test is run in a separate subshell, so any variables, aliases, functions, etc.,
-it defines will be visible to the tested code (that computes `$region_highlight`), but will not affect
-subsequent tests.  The current working directory of tests is set to a newly-created empty directory,
+**Isolation**: Each test is run in a separate subshell, so any variables,
+aliases, functions, etc., it defines will be visible to the tested code (that
+computes `$region_highlight`), but will not affect subsequent tests.  The
+current working directory of tests is set to a newly-created empty directory,
 which is automatically cleaned up after the test exits.
 
 
 Highlighting test
 -----------------
 
-[`test-highlighting.zsh`](tests/test-highlighting.zsh) tests the correctness of the highlighting. Usage:
+[`test-highlighting.zsh`](tests/test-highlighting.zsh) tests the correctness of
+the highlighting. Usage:
 
     zsh test-highlighting.zsh <HIGHLIGHTER NAME>
 
@@ -40,7 +43,8 @@ which will run all highlighting tests and report results in [TAP](http://testany
 Performance test
 ----------------
 
-[`test-perfs.zsh`](tests/test-perfs.zsh) measures the time spent doing the highlighting. Usage:
+[`test-perfs.zsh`](tests/test-perfs.zsh) measures the time spent doing the
+highlighting. Usage:
 
     zsh test-perfs.zsh <HIGHLIGHTER NAME>
 
