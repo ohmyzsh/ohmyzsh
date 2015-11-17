@@ -34,11 +34,15 @@
 # Whether the cursor highlighter should be called or not.
 _zsh_highlight_cursor_highlighter_predicate()
 {
-  _zsh_highlight_cursor_moved
+  # accept-* may trigger removal of cursor highlighting
+  [[ $WIDGET == accept-* ]] ||
+    _zsh_highlight_cursor_moved
 }
 
 # Cursor highlighting function.
 _zsh_highlight_cursor_highlighter()
 {
+  [[ $WIDGET == accept-* ]] && return
+  
   region_highlight+=("$CURSOR $(( $CURSOR + 1 )) $ZSH_HIGHLIGHT_STYLES[cursor]")
 }
