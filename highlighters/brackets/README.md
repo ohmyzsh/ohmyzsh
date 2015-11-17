@@ -5,13 +5,6 @@ This is the `brackets` highlighter, that highlights brackets and parentheses, an
 matches them.
 
 
-### How to activate it
-
-To activate it, add it to `ZSH_HIGHLIGHT_HIGHLIGHTERS`:
-
-    ZSH_HIGHLIGHT_HIGHLIGHTERS=( [...] brackets)
-
-
 ### How to tweak it
 
 This highlighter defines the following styles:

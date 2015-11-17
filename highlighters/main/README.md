@@ -9,12 +9,6 @@ This is the `main` highlighter, that highlights:
 * Paths
 * Strings
 
-### How to activate it
-
-To activate it, add it to `ZSH_HIGHLIGHT_HIGHLIGHTERS`:
-
-    ZSH_HIGHLIGHT_HIGHLIGHTERS=( [...] main)
-
 This highlighter is active by default.
 
 
