@@ -23,6 +23,7 @@ which is automatically cleaned up after the test exits.
 
 highlighting test
 -----------------
+
 [`test-highlighting.zsh`](tests/test-highlighting.zsh) tests the correctness of the highlighting. Usage:
 
     zsh test-highlighting.zsh <HIGHLIGHTER NAME>
@@ -36,6 +37,7 @@ which will run all highlighting tests and report results in [TAP](http://testany
 
 performance test
 ----------------
+
 [`test-perfs.zsh`](tests/test-perfs.zsh) measures the time spent doing the highlighting. Usage:
 
     zsh test-perfs.zsh <HIGHLIGHTER NAME>

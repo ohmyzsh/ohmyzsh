@@ -6,6 +6,7 @@ This is the ***brackets*** highlighter, that highlights brackets, parenthesis an
 
 How to activate it
 ------------------
+
 To activate it, add it to `ZSH_HIGHLIGHT_HIGHLIGHTERS`:
 
     ZSH_HIGHLIGHT_HIGHLIGHTERS=( [...] brackets)
@@ -13,6 +14,7 @@ To activate it, add it to `ZSH_HIGHLIGHT_HIGHLIGHTERS`:
 
 How to tweak it
 ---------------
+
 This highlighter defines the following styles:
 
 * `bracket-error` - unmatched brackets

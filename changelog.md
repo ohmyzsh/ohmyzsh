@@ -3,7 +3,7 @@ up to 1933de83be0bbfb41c44d182fe581ad85012b71a
 
 
 
-# Changes in version 0.3.1 
+# Changes in version 0.3.1
 
 
 ## Added highlighting of:
