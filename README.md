@@ -58,7 +58,7 @@ Oh-my-zsh is a zsh configuration framework.  It lives at
 
 To install zsh-syntax-highlighting under oh-my-zsh:
 
-1. Download the script or clone this repository in oh-my-zsh's plugins directory:
+1. Clone this repository in oh-my-zsh's plugins directory:
 
         git clone git://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 
