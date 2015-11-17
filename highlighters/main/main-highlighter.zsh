@@ -267,6 +267,20 @@ _zsh_highlight_main_highlighter()
       _zsh_highlight_main_highlighter_expand_path $arg
       local expanded_arg="$REPLY"
       local res="$(_zsh_highlight_main__type ${expanded_arg})"
+      () {
+        # Special-case: command word is '$foo', like that, without braces or anything.
+        #
+        # That's not entirely correct --- if the parameter's value happens to be a reserved
+        # word, the parameter expansion will be highlighted as a reserved word --- but that
+        # incorrectness is outweighed by the usability improvement of permitting the use of
+        # parameters that refer to commands, functions, and builtins.
+        local -a match mbegin mend
+        local MATCH; integer MBEGIN MEND
+        if [[ $res == *': none' ]] && (( ${+parameters} )) &&
+           [[ ${arg[1]} == \$ ]] && [[ ${arg:1} =~ ^([A-Za-z_][A-Za-z0-9_]*|[0-9]+)$ ]]; then
+          res="$(_zsh_highlight_main__type ${(P)MATCH})"
+        fi
+      }
       case $res in
         *': reserved')  style=$ZSH_HIGHLIGHT_STYLES[reserved-word];;
         *': suffix alias')
