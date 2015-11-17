@@ -156,7 +156,7 @@ _zsh_highlight_main_highlighter()
   # - :sudo_arg:   The argument to a sudo leading-dash option that takes one,
   #                when given as a separate word; i.e., "foo" in "-u foo" (two
   #                words) but not in "-ufoo" (one word).
-  # - :regular:    "Not a command word".
+  # - :regular:    "Not a command word", and command delimiters are permitted.
   #                Mainly used to detect premature termination of commands.
   #
   # When the kind of a word is not yet known, $this_word / $next_word may contain
@@ -191,7 +191,10 @@ _zsh_highlight_main_highlighter()
       (( --in_redirection ))
     fi
     if (( in_redirection == 0 )); then
+      # Initialize $next_word to its default value.
       next_word=':regular:'
+    else
+      # Stall $next_word.
     fi
     # $already_added is set to 1 to disable adding an entry to region_highlight
     # for this iteration.  Currently, that is done for "" and $'' strings,
