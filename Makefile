@@ -52,4 +52,4 @@ perf:
 	done; \
 	exit $$result
 
-.PHONY: all install test
+.PHONY: all install test perf
