@@ -1,5 +1,5 @@
 zsh-syntax-highlighting / highlighters / cursor
-=================================================
+===============================================
 
 This is the `cursor` highlighter, that highlights the cursor.
 

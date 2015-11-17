@@ -1,5 +1,5 @@
 zsh-syntax-highlighting / highlighters / root
-=================================================
+=============================================
 
 This is the `root` highlighter, that highlights the whole line if the current user is root.
 
