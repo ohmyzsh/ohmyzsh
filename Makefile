@@ -6,11 +6,13 @@ SHARE_DIR?=$(DESTDIR)$(PREFIX)/share/$(NAME)
 DOC_DIR?=$(DESTDIR)$(PREFIX)/share/doc/$(NAME)
 ZSH?=zsh # zsh binary to run tests with
 
-# Have the default target do nothing.
 all:
-	@ :
+	cd docs && \
+	cp highlighters.md all.md && \
+	printf '\n\nIndividual highlighters documentation\n=====================================' >> all.md && \
+	for doc in highlighters/*.md; do printf '\n\n'; cat "$$doc"; done >> all.md
 
-install:
+install: all
 	$(INSTALL) -d $(SHARE_DIR)
 	$(INSTALL) -d $(DOC_DIR)
 	cp .version zsh-syntax-highlighting.zsh $(SHARE_DIR)
@@ -25,10 +27,12 @@ install:
 # equivalent of) NONOMATCH in effect, and highlighters/*.zsh has no matches.
 	for dirname in highlighters highlighters/*/ ; do \
 		$(INSTALL) -d $(SHARE_DIR)/"$$dirname"; \
-		$(INSTALL) -d $(DOC_DIR)/"$$dirname"; \
 		for fname in "$$dirname"/*.zsh ; do [ -e "$$fname" ] && cp "$$fname" $(SHARE_DIR)"/$$dirname"; done; \
-		for fname in "$$dirname"/*.md ; do  [ -e "$$fname" ] && cp "$$fname" $(DOC_DIR)"/$$dirname"; done; \
 	done
+	cp -R docs/* $(DOC_DIR)
+
+clean:
+	rm -f docs/all.md
 
 test:
 	@result=0; \
@@ -52,4 +56,4 @@ perf:
 	done; \
 	exit $$result
 
-.PHONY: all install test perf
+.PHONY: all install clean test perf
