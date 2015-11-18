@@ -13,8 +13,8 @@ all:
 install:
 	$(INSTALL) -d $(SHARE_DIR)
 	$(INSTALL) -d $(DOC_DIR)
-	$(INSTALL) .version zsh-syntax-highlighting.zsh $(SHARE_DIR)
-	$(INSTALL) COPYING.md README.md changelog.md $(DOC_DIR)
+	cp .version zsh-syntax-highlighting.zsh $(SHARE_DIR)
+	cp COPYING.md README.md changelog.md $(DOC_DIR)
 	if [ x"true" = x"`git rev-parse --is-inside-work-tree 2>/dev/null`" ]; then \
 		git rev-parse HEAD; \
 	else \
@@ -26,8 +26,8 @@ install:
 	for dirname in highlighters highlighters/*/ ; do \
 		$(INSTALL) -d $(SHARE_DIR)/"$$dirname"; \
 		$(INSTALL) -d $(DOC_DIR)/"$$dirname"; \
-		for fname in "$$dirname"/*.zsh ; do [ -e "$$fname" ] && $(INSTALL) "$$fname" $(SHARE_DIR)"/$$dirname"; done; \
-		for fname in "$$dirname"/*.md ; do  [ -e "$$fname" ] && $(INSTALL) "$$fname" $(DOC_DIR)"/$$dirname"; done; \
+		for fname in "$$dirname"/*.zsh ; do [ -e "$$fname" ] && cp "$$fname" $(SHARE_DIR)"/$$dirname"; done; \
+		for fname in "$$dirname"/*.md ; do  [ -e "$$fname" ] && cp "$$fname" $(DOC_DIR)"/$$dirname"; done; \
 	done
 
 test:
