@@ -72,6 +72,7 @@ alias gcam='git commit -a -m'
 alias gcb='git checkout -b'
 alias gcf='git config --list'
 alias gcl='git clone --recursive'
+ghc() { git clone "https://github.com/$1" }
 alias gclean='git clean -fd'
 alias gpristine='git reset --hard && git clean -dfx'
 alias gcm='git checkout master'
