@@ -24,10 +24,10 @@ install:
 # The [ -e ] check below is to because sh evaluates this with (the moral
 # equivalent of) NONOMATCH in effect, and highlighters/*.zsh has no matches.
 	for dirname in highlighters highlighters/*/ ; do \
-		$(INSTALL) -d "$(SHARE_DIR)/$$dirname"; \
-		$(INSTALL) -d "$(DOC_DIR)/$$dirname"; \
-		for fname in "$$dirname"/*.zsh ; do [ -e "$$fname" ] && $(INSTALL) "$$fname" "$(SHARE_DIR)/$$dirname"; done; \
-		for fname in "$$dirname"/*.md ; do  [ -e "$$fname" ] && $(INSTALL) "$$fname" "$(DOC_DIR)/$$dirname"; done; \
+		$(INSTALL) -d $(SHARE_DIR)/"$$dirname"; \
+		$(INSTALL) -d $(DOC_DIR)/"$$dirname"; \
+		for fname in "$$dirname"/*.zsh ; do [ -e "$$fname" ] && $(INSTALL) "$$fname" $(SHARE_DIR)"/$$dirname"; done; \
+		for fname in "$$dirname"/*.md ; do  [ -e "$$fname" ] && $(INSTALL) "$$fname" $(DOC_DIR)"/$$dirname"; done; \
 	done
 
 test:
