@@ -6,7 +6,8 @@ __timer_format_duration() {
   local mins=$(printf '%.0f' $(($1 / 60)))
   local secs=$(printf "%.${TIMER_PRECISION:-1}f" $(($1 - 60 * mins)))
   local duration_str=$(echo "${mins}m${secs}s")
-  echo "${TIMER_SYMBOL:-\`}${duration_str#0m}"
+  local format="${TIMER_FORMAT:-/%d}"
+  echo "${format//\%d/${duration_str#0m}}"
 }
 
 preexec() {
