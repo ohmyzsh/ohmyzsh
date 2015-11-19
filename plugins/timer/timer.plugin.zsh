@@ -10,11 +10,11 @@ __timer_format_duration() {
   echo "${format//\%d/${duration_str#0m}}"
 }
 
-preexec() {
+__timer_save_time_preexec() {
   __timer_cmd_start_time=$(__timer_current_time)
 }
 
-precmd() {
+__timer_display_timer_precmd() {
   if [ -n "${__timer_cmd_start_time}" ]; then
     local cmd_end_time=$(__timer_current_time)
     local tdiff=$((cmd_end_time - __timer_cmd_start_time))
@@ -24,3 +24,6 @@ precmd() {
     echo -e "\033[1A\033[${cols}C ${tdiffstr}"
   fi
 }
+
+preexec_functions+=(__timer_save_time_preexec)
+precmd_functions+=(__timer_display_timer_precmd)
