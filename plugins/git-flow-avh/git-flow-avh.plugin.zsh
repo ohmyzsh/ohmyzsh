@@ -38,6 +38,7 @@ _git-flow ()
 				'feature:Manage your feature branches.'
 				'config:Manage your configuration.'
 				'release:Manage your release branches.'
+				'bugfix:Manage your bugfix branches.'
 				'hotfix:Manage your hotfix branches.'
 				'support:Manage your support branches.'
 				'version:Shows version information.'
@@ -61,6 +62,10 @@ _git-flow ()
 
 					(hotfix)
 						__git-flow-hotfix
+					;;
+
+					(bugfix)
+						__git-flow-bugfix
 					;;
 
 					(release)
@@ -199,6 +204,108 @@ __git-flow-hotfix ()
 						-f'[Force deletion]' \
 						-r'[Delete remote branch]' \
 						':hotfix:__git_flow_hotfix_list'
+				;;
+
+				*)
+					_arguments \
+						-v'[Verbose (more) output]'
+				;;
+			esac
+		;;
+	esac
+}
+
+__git-flow-bugfix ()
+{
+	local curcontext="$curcontext" state line
+	typeset -A opt_args
+
+	_arguments -C \
+		':command:->command' \
+		'*::options:->options'
+
+	case $state in
+		(command)
+
+			local -a subcommands
+			subcommands=(
+				'start:Start a new bugfix branch.'
+				'finish:Finish a bugfix branch.'
+				'publish:Publish bugfix branch to remote.'
+				'track:Checkout remote bugfix branch.'
+				'diff:Show all changes.'
+				'rebase:Rebase from integration branch.'
+				'checkout:Checkout local bugfix branch.'
+				'pull:Pull changes from remote.'
+				'delete:Delete a bugfix branch.'
+				'list:List all your bugfix branches. (Alias to `git flow bugfix`)'
+			)
+			_describe -t commands 'git flow bugfix' subcommands
+			_arguments \
+				-v'[Verbose (more) output]'
+		;;
+
+		(options)
+			case $line[1] in
+
+				(start)
+					_arguments \
+						-F'[Fetch from origin before performing finish]'\
+						':bugfix:__git_flow_bugfix_list'\
+						':branch-name:__git_branch_names'
+				;;
+
+				(finish)
+					_arguments \
+						--keeplocal'[Keep the local branch]'\
+						--keepremote'[Keep the remote branch]'\
+						--no-ff'[Never fast-forward during the merge]'\
+						-D'[Force delete bugfix branch after finish]'\
+						-F'[Fetch from origin before performing finish]'\
+						-k'[Keep branch after performing finish]'\
+						-p'[Preserve merges while rebasing]'\
+						-r'[Rebase before merging]' \
+						-S'[Squash bugfix during merge]'\
+						':bugfix:__git_flow_bugfix_list'
+				;;
+
+				(publish)
+					_arguments \
+						':bugfix:__git_flow_bugfix_list'\
+				;;
+
+				(track)
+					_arguments \
+						':bugfix:__git_flow_bugfix_list'\
+				;;
+
+				(diff)
+					_arguments \
+						':branch:__git_branch_names'\
+				;;
+
+				(rebase)
+					_arguments \
+						-i'[Do an interactive rebase]' \
+						-p'[Preserve merges while rebasing]'\
+						':branch:__git_branch_names'
+				;;
+
+				(checkout)
+					_arguments \
+						':branch:__git_flow_bugfix_list'\
+				;;
+
+				(pull)
+					_arguments \
+						':remote:__git_remotes'\
+						':branch:__git_branch_names'
+
+				(delete)
+					_arguments \
+						-f'[Force deletion]' \
+						-r'[Delete remote branch]' \
+						':bugfix:__git_flow_bugfix_list'
 				;;
 
 				*)
@@ -396,6 +503,17 @@ __git_flow_hotfix_list ()
 	__git_command_successful || return
 
 	_wanted hotfixes expl 'hotfix' compadd $hotfixes
+}
+
+__git_flow_bugfix_list ()
+{
+	local expl
+	declare -a bugfixes
+
+	bugfixes=(${${(f)"$(_call_program bugfixes git flow bugfix list 2> /dev/null | tr -d ' |*')"}})
+	__git_command_successful || return
+
+	_wanted bugfixes expl 'bugfix' compadd $bugfixes
 }
 
 __git_branch_names () {
