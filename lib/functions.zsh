@@ -17,6 +17,7 @@ function take() {
 
 function open_command() {
   local open_cmd
+  local nohup
 
   # define the open command
   case "$OSTYPE" in
@@ -28,7 +29,14 @@ function open_command() {
               ;;
   esac
 
-  nohup $open_cmd "$@" &>/dev/null
+  # Use nohup command
+  if [ ${TMUX:-NOT_USE_TMUX} = "NOT_USE_TMUX" ]; then
+    nohup="nohup"
+  else
+    nohup=""
+  fi
+
+  $nohup $open_cmd "$@" &>/dev/null
 }
 
 #
