@@ -11,11 +11,49 @@ else
     rvm_ruby='%{$fg[red]%}‹$(rbenv version | sed -e "s/ (set.*$//")›%{$reset_color%}'
   fi
 fi
-local git_branch='$(git_prompt_info)%{$reset_color%}'
 
-PROMPT="╭─${user_host} ${current_dir} ${rvm_ruby} ${git_branch}
-╰─%B$%b "
+setopt prompt_subst
+
+PROMPT="╭ ${user_host} %t ${current_dir} ${rvm_ruby}
+╰ %B$%b "
+RPROMPT=""
 RPS1="${return_code}"
 
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[yellow]%}‹"
 ZSH_THEME_GIT_PROMPT_SUFFIX="› %{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_CLEAN="✔"
+ZSH_THEME_GIT_PROMPT_DIRTY="✗"
+
+ASYNC_PROC=0
+function precmd() {
+    function async() {
+        # save to temp file
+        printf "%s" "$(git_prompt_info)" > "${HOME}/.zsh_tmp_prompt"
+
+        # signal parent
+        kill -s USR1 $$
+    }
+
+    # do not clear RPROMPT, let it persist
+
+    # kill child if necessary
+    if [[ "${ASYNC_PROC}" != 0 ]]; then
+        kill -s HUP $ASYNC_PROC >/dev/null 2>&1 || :
+    fi
+
+    # start background computation
+    async &!
+    ASYNC_PROC=$!
+}
+
+function TRAPUSR1() {
+    # read from temp file
+    PROMPT="╭ ${user_host} %t ${current_dir} ${rvm_ruby} $(cat ${HOME}/.zsh_tmp_prompt)
+╰ %B$%b "
+
+    # reset proc number
+    ASYNC_PROC=0
+
+    # redisplay
+    zle && zle reset-prompt
+}
