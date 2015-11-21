@@ -1,4 +1,3 @@
-#!zsh
 ##############################################################################
 # A descriptive listing of core Gradle commands
 ############################################################################
@@ -54,22 +53,11 @@ function _gradle_arguments() {
 
 
 ##############################################################################
-# Are we in a directory containing a build.gradle file?
-############################################################################
-function in_gradle() {
-    if [[ -f build.gradle ]]; then
-        echo 1
-    fi
-}
-
-############################################################################## Examine the build.gradle file to see if its
-# timestamp has changed, and if so, regen
-# the .gradle_tasks cache file
+# Examine the build.gradle file to see if its timestamp has changed;
+# and if so, regenerate the .gradle_tasks cache file
 ############################################################################
 _gradle_does_task_list_need_generating () {
-  [ ! -f .gradletasknamecache ] && return 0;
-  [ build.gradle -nt .gradletasknamecache ] && return 0;
-  return 1;
+  [[ ! -f .gradletasknamecache ]] || [[ build.gradle -nt .gradletasknamecache ]]
 }
 
 
@@ -77,22 +65,22 @@ _gradle_does_task_list_need_generating () {
 # Discover the gradle tasks by running "gradle tasks --all"
 ############################################################################
 _gradle_tasks () {
-  if [ in_gradle ]; then
+  if [[ -f build.gradle ]]; then
     _gradle_arguments
     if _gradle_does_task_list_need_generating; then
-     gradle tasks --all | grep "^[ ]*[a-zA-Z0-9:]*\ -\ " | sed "s/ - .*$//" | sed "s/[\ ]*//" > .gradletasknamecache
+      gradle tasks --all | awk '/[a-zA-Z0-9:-]* - / {print $1}' > .gradletasknamecache
     fi
-    compadd -X "==== Gradle Tasks ====" `cat .gradletasknamecache`
+    compadd -X "==== Gradle Tasks ====" $(cat .gradletasknamecache)
   fi
 }
 
 _gradlew_tasks () {
-  if [ in_gradle ]; then
+  if [[ -f build.gradle ]]; then
     _gradle_arguments
     if _gradle_does_task_list_need_generating; then
-     ./gradlew tasks --all | grep "^[ ]*[a-zA-Z0-9:]*\ -\ " | sed "s/ - .*$//" | sed "s/[\ ]*//" > .gradletasknamecache
+      ./gradlew tasks --all | awk '/[a-zA-Z0-9:-]* - / {print $1}' > .gradletasknamecache
     fi
-    compadd -X "==== Gradlew Tasks ====" `cat .gradletasknamecache`
+    compadd -X "==== Gradlew Tasks ====" $(cat .gradletasknamecache)
   fi
 }
 
@@ -102,13 +90,3 @@ _gradlew_tasks () {
 ############################################################################
 compdef _gradle_tasks gradle
 compdef _gradlew_tasks gradlew
-
-
-##############################################################################
-# Open questions for future improvements:
-# 1) Should 'gradle tasks' use --all or just the regular set?
-# 2) Should gradlew use the same approach as gradle?
-# 3) Should only the " - " be replaced with a colon so it can work
-#     with the richer descriptive method of _arguments?
-#     gradle tasks | grep "^[a-zA-Z0-9]*\ -\ " | sed "s/ - /\:/"
-#############################################################################
