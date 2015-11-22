@@ -1,4 +1,4 @@
-# Fino-time theme by Aexander Berezovsky (http://berezovsky.me) based on Fino by Max Masnick (http://max.masnick.me)
+# fino-time.zsh-theme
 
 # Use with a dark background and 256-color terminal!
 # Meant for people with RVM and git. Tested only on OS X 10.7.
@@ -21,7 +21,7 @@ function prompt_char {
 }
 
 function box_name {
-    [ -f ~/.box-name ] && cat ~/.box-name || hostname -s
+    [ -f ~/.box-name ] && cat ~/.box-name || echo ${SHORT_HOST:-$HOST}
 }
 
 

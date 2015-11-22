@@ -163,14 +163,18 @@ function history-substring-search-down() {
 zle -N history-substring-search-up
 zle -N history-substring-search-down
 
-bindkey '\e[A' history-substring-search-up
-bindkey '\e[B' history-substring-search-down
+zmodload zsh/terminfo
+if [[ -n "$terminfo[kcuu1]" ]]; then
+  bindkey "$terminfo[kcuu1]" history-substring-search-up
+fi
+if [[ -n "$terminfo[kcud1]" ]]; then
+  bindkey "$terminfo[kcud1]" history-substring-search-down
+fi
 
 #-----------------------------------------------------------------------------
 # implementation details
 #-----------------------------------------------------------------------------
 
-setopt extendedglob
 zmodload -F zsh/parameter
 
 #
@@ -279,6 +283,7 @@ if [[ $+functions[_zsh_highlight] -eq 0 ]]; then
 fi
 
 function _history-substring-search-begin() {
+  setopt localoptions extendedglob
   _history_substring_search_move_cursor_eol=false
   _history_substring_search_query_highlight=
 
@@ -345,6 +350,7 @@ function _history-substring-search-begin() {
 }
 
 function _history-substring-search-end() {
+  setopt localoptions extendedglob
   _history_substring_search_result=$BUFFER
 
   # move the cursor to the end of the command line
