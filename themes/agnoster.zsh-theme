@@ -43,7 +43,7 @@ CURRENT_BG='NONE'
   # This is defined using a Unicode escape sequence so it is unambiguously readable, regardless of
   # what font the user is viewing this source code in. Do not replace the
   # escape sequence with a single literal character.
-  SEGMENT_SEPARATOR=$'\ue0b0' # 
+  SEGMENT_SEPARATOR='⮀'
 }
 
 # Begin a segment
@@ -89,7 +89,7 @@ prompt_git() {
   local PL_BRANCH_CHAR
   () {
     local LC_ALL="" LC_CTYPE="en_US.UTF-8"
-    PL_BRANCH_CHAR=$'\ue0a0'         # 
+    PL_BRANCH_CHAR='⭠'        # 
   }
   local ref dirty mode repo_path
   repo_path=$(git rev-parse --git-dir 2>/dev/null)
