@@ -2,23 +2,20 @@
 ### Usage
 Update .zshrc:
 
-1. Add name to the list of plugins, e.g. `plugins = (..., mercurial, ...)`
+1. Add name to the list of plugins, e.g. `plugins=(... mercurial ...)`
    (that is pretty obvious).
-2. Change PROMPT variable of current theme to contain current folder mercurial repo info:
+2. Switch to a theme which uses `hg_prompt_info`.
 
-   robbyrussel theme is used by default, so you need to modify PROMPT var
-   from [this file](https://github.com/robbyrussell/oh-my-zsh/blob/master/themes/robbyrussell.zsh-theme)
-   by adding `$(hg_prompt_info)` after `$(git_prompt_info)`, so currently it
-   looks next:
+   Or, customize the `$PROMPT` variable of your current theme to contain current folder mercurial repo info. This can be done by putting a custom version of the theme in `$ZSH_CUSTOM` or by changing `$PROMPT` in `.zshrc` after loading the theme.
 
-   ```diff
-   - PROMPT='${ret_status}%{$fg_bold[green]%}%p %{$fg[cyan]%}%c %{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}'
-   + PROMPT='${ret_status}%{$fg_bold[green]%}%p %{$fg[cyan]%}%c %{$fg_bold[blue]%}$(git_prompt_info)$(hg_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}'
+   The `robbyrussell` theme is used by default, so you need to modify `$PROMPT` var by adding `$(hg_prompt_info)` after `$(git_prompt_info)`, so it looks like this:
+
+   ```zsh
+   PROMPT='${ret_status}%{$fg_bold[green]%}%p %{$fg[cyan]%}%c %{$fg_bold[blue]%}$(git_prompt_info)$(hg_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}'
    ```
-   
-   and put modified var at the end of **.zshrc**.
+
 3. Initialize additional vars used in plugin. So in short put next in **.zshrc**:
-   
+
    ```
    ZSH_THEME_HG_PROMPT_PREFIX="%{$fg_bold[magenta]%}hg:(%{$fg[red]%}"
    ZSH_THEME_HG_PROMPT_SUFFIX="%{$reset_color%}"
@@ -55,8 +52,7 @@ Update .zshrc:
 #### Displays repo branch and directory status in prompt
 This is the same as git plugin does.
 
-**Note**: additional changes to **.zshrc** are required in order for this to
-work.
+**Note**: Additional changes to **.zshrc**, or using a theme designed to use `hg_prompt_info`, are required in order for this to work.
 
 ### Mantainers
 [ptrv](https://github.com/ptrv) - original creator
