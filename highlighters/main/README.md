@@ -1,7 +1,7 @@
 zsh-syntax-highlighting / highlighters / main
 =============================================
 
-This is the ***main*** highlighter, that highlights:
+This is the `main` highlighter, that highlights:
 
 * Commands
 * Options
@@ -11,6 +11,7 @@ This is the ***main*** highlighter, that highlights:
 
 How to activate it
 ------------------
+
 To activate it, add it to `ZSH_HIGHLIGHT_HIGHLIGHTERS`:
 
     ZSH_HIGHLIGHT_HIGHLIGHTERS=( [...] main)
@@ -20,6 +21,7 @@ This highlighter is active by default.
 
 How to tweak it
 ---------------
+
 This highlighter defines the following styles:
 
 * `unknown-token` - unknown tokens / errors
@@ -50,7 +52,8 @@ This highlighter defines the following styles:
 * `comment` - comments, when `setopt INTERACTIVE_COMMENTS` is in effect (`echo # foo`)
 * `default` - everything else
 
-To override one of those styles, change its entry in `ZSH_HIGHLIGHT_STYLES`, for example in `~/.zshrc`:
+To override one of those styles, change its entry in `ZSH_HIGHLIGHT_STYLES`,
+for example in `~/.zshrc`:
 
     # Declare the variable
     typeset -A ZSH_HIGHLIGHT_STYLES
