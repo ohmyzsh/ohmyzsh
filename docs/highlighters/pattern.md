@@ -1,7 +1,7 @@
 zsh-syntax-highlighting / highlighters / pattern
 ------------------------------------------------
 
-This is the `pattern` highlighter, that highlights user defined patterns.
+This is the `pattern` highlighter, that highlights user-defined patterns.
 
 
 ### How to tweak it
