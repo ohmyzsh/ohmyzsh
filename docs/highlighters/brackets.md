@@ -22,5 +22,8 @@ for example in `~/.zshrc`:
     ZSH_HIGHLIGHT_STYLES[bracket-level-3]='fg=yellow,bold'
     ZSH_HIGHLIGHT_STYLES[bracket-level-4]='fg=magenta,bold'
 
-The syntax for declaring styles is documented in [the `zshzle(1)` manual
-page](http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#SEC135).
+The syntax for values is the same as the syntax of "types of highlighting" of
+the zsh builtin `$zle_highlight` array, which is documented in [the `zshzle(1)`
+manual page][zshzle-Character-Highlighting].
+
+[zshzle-Character-Highlighting]: http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#Character-Highlighting
