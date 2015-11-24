@@ -3,15 +3,15 @@
 autoload -Uz is-at-least
 if [[ $ZSH_VERSION != 5.1.1 ]]; then
   for d in $fpath; do
-  	if [[ -e "$d/url-quote-magic" ]]; then
-  		if is-at-least 5.1; then
-  			autoload -Uz bracketed-paste-magic
-  			zle -N bracketed-paste bracketed-paste-magic
-  		fi
-  		autoload -Uz url-quote-magic
-  		zle -N self-insert url-quote-magic
+    if [[ -e "$d/url-quote-magic" ]]; then
+      if is-at-least 5.1; then
+        autoload -Uz bracketed-paste-magic
+        zle -N bracketed-paste bracketed-paste-magic
+      fi
+      autoload -Uz url-quote-magic
+      zle -N self-insert url-quote-magic
       break
-  	fi
+    fi
   done
 fi
 
@@ -35,7 +35,7 @@ fi
 
 # only define LC_CTYPE if undefined
 if [[ -z "$LC_CTYPE" && -z "$LC_ALL" ]]; then
-	export LC_CTYPE=${LANG%%:*} # pick the first entry from LANG
+  export LC_CTYPE=${LANG%%:*} # pick the first entry from LANG
 fi
 
 # recognize comments

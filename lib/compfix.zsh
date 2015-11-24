@@ -17,14 +17,14 @@ function handle_completion_insecurities() {
   #     /usr/share/zsh/5.0.6
   #
   # Since the ignorable first line is printed to stderr and thus not captured,
-  # stderr is squelched to prevent this output from leaking to the user. 
+  # stderr is squelched to prevent this output from leaking to the user.
   local -aU insecure_dirs
   insecure_dirs=( ${(f@):-"$(compaudit 2>/dev/null)"} )
 
   # If no such directories exist, get us out of here.
   if (( ! ${#insecure_dirs} )); then
-      print "[oh-my-zsh] No insecure completion-dependent directories detected."
-      return
+    print "[oh-my-zsh] No insecure completion-dependent directories detected."
+    return
   fi
 
   # List ownership and permissions of all insecure directories.

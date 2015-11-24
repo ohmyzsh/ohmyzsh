@@ -6,7 +6,7 @@
 # Fully supports screen, iterm, and probably most modern xterm and rxvt
 # (In screen, only short_tab_title is used)
 # Limited support for Apple Terminal (Terminal can't set window and tab separately)
-function title {
+function title() {
   emulate -L zsh
   setopt prompt_subst
 
@@ -49,7 +49,7 @@ if [[ "$TERM_PROGRAM" == Apple_Terminal ]]; then
 fi
 
 # Runs before showing the prompt
-function omz_termsupport_precmd {
+function omz_termsupport_precmd() {
   emulate -L zsh
 
   if [[ "$DISABLE_AUTO_TITLE" == true ]]; then
@@ -60,7 +60,7 @@ function omz_termsupport_precmd {
 }
 
 # Runs before executing the command
-function omz_termsupport_preexec {
+function omz_termsupport_preexec() {
   emulate -L zsh
   setopt extended_glob
 
