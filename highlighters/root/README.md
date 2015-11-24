@@ -1,1 +1,1 @@
-../docs/highlighters/root.md
+../../docs/highlighters/root.md

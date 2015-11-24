@@ -1,1 +1,1 @@
-../docs/highlighters/brackets.md
+../../docs/highlighters/brackets.md

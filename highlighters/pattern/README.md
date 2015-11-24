@@ -1,1 +1,1 @@
-../docs/highlighters/pattern.md
+../../docs/highlighters/pattern.md

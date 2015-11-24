@@ -1,1 +1,1 @@
-../docs/highlighters/main.md
+../../docs/highlighters/main.md

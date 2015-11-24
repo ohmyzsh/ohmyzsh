@@ -1,1 +1,1 @@
-../docs/highlighters/line.md
+../../docs/highlighters/line.md

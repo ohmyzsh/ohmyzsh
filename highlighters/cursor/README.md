@@ -1,1 +1,1 @@
-../docs/highlighters/cursor.md
+../../docs/highlighters/cursor.md
