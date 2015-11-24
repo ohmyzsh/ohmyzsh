@@ -1,4 +1,5 @@
 if [[ "$ENABLE_CORRECTION" == "true" ]]; then
+  alias cp='nocorrect cp'
   alias ebuild='nocorrect ebuild'
   alias gist='nocorrect gist'
   alias heroku='nocorrect heroku'
