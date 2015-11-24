@@ -23,9 +23,16 @@ To activate an highlighter, add it to the `ZSH_HIGHLIGHT_HIGHLIGHTERS` array in
 How to tweak highlighters
 -------------------------
 
-Highlighters look up styles from the `ZSH_HIGHLIGHT_STYLES` array.
-Navigate into each highlighter directory to see what styles it defines
-and how to configure it.
+Highlighters look up styles from the `ZSH_HIGHLIGHT_STYLES` associative array.
+Navigate into each highlighter directory to see what styles (keys) it defines;
+the syntax for values is the same as the syntax of "types of highlighting" of
+the zsh builtin `$zle_highlight` array, which is documented in [the `zshzle(1)`
+manual page][zshzle-Character-Highlighting].
+
+[zshzle-Character-Highlighters]: http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#Character-Highlighting
+
+Some highlighters support additional configuration parameters; see each
+highlighter's documentation for details.
 
 
 How to implement a new highlighter
