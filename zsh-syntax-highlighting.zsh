@@ -36,7 +36,7 @@ if [[ -o function_argzero ]]; then
     # When running from a source tree without 'make install', $ZSH_HIGHLIGHT_REVISION
     # would be set to '$Format:%H$' literally.  That's an invalid value, and obtaining
     # the valid value (via `git rev-parse HEAD`, as Makefile does) might be costly, so:
-    unset ZSH_HIGHLIGHT_REVISION
+    ZSH_HIGHLIGHT_REVISION=HEAD
   fi
 else
   # $0 is unreliable, so the call to _zsh_highlight_load_highlighters will fail.
