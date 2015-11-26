@@ -56,10 +56,15 @@ so make it the last element of the `$plugins` array.
 
 Either of the above methods is suitable for a single-user installation,
 which requires no special privileges.  If, however, you desire to install
-zsh-syntax-highlighting system-wide, you may do so by running `make install`
+zsh-syntax-highlighting system-wide, you may do so by running
+
+    make install
+
 and directing your users to add
-  `source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh`
-in their `.zshrc`s.
+
+    source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+to their `.zshrc`s.
 
 
 
