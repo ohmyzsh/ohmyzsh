@@ -19,6 +19,9 @@ To activate an highlighter, add it to the `ZSH_HIGHLIGHT_HIGHLIGHTERS` array in
 
     ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
 
+By default, `$ZSH_HIGHLIGHT_HIGHLIGHTERS` is unset and only the `main`
+highlighter is active.
+
 
 How to tweak highlighters
 -------------------------
@@ -48,7 +51,7 @@ To create your own `myhighlighter` highlighter:
   non-zero otherwise, for example:
 
         _zsh_highlight_myhighlighter_highlighter_predicate() {
-          # Call this highlighter in SVN repositories
+          # Call this highlighter in SVN working copies
           [[ -d .svn ]]
         }
 
