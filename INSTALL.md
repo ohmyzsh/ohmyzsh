@@ -15,22 +15,18 @@ How to install
 
 ### In your ~/.zshrc
 
-* Clone this repository:
+Simply clone this repository and source the script:
 
         git clone git://github.com/zsh-users/zsh-syntax-highlighting.git
+        echo "source ${(q-)PWD}/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ~/.zshrc
+        source ~/.zshrc
 
-  If `git` is not installed, you could download a snapshot of the latest
+  If `git` is not installed, download and extract a snapshot of the latest
   development tree from:
 
         https://github.com/zsh-users/zsh-syntax-highlighting/archive/master.tar.gz
 
-* Source the script **at the end** of `~/.zshrc`:
-
-        source /path/to/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-* Source `~/.zshrc`  to take changes into account:
-
-        source ~/.zshrc
+  Note the `source` command must be **at the end** of `~/.zshrc`.
 
 
 ### With oh-my-zsh
