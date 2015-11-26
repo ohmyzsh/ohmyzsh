@@ -35,7 +35,7 @@ manual page][zshzle-Character-Highlighting].
 [zshzle-Character-Highlighting]: http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#Character-Highlighting
 
 Some highlighters support additional configuration parameters; see each
-highlighter's documentation for details.
+highlighter's documentation for details and examples.
 
 
 How to implement a new highlighter
