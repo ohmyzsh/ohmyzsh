@@ -27,10 +27,11 @@ How to tweak highlighters
 -------------------------
 
 Highlighters look up styles from the `ZSH_HIGHLIGHT_STYLES` associative array.
-Navigate into each highlighter directory to see what styles (keys) it defines;
-the syntax for values is the same as the syntax of "types of highlighting" of
-the zsh builtin `$zle_highlight` array, which is documented in [the `zshzle(1)`
-manual page][zshzle-Character-Highlighting].
+Navigate into the [individual highlighters' documentation](highlighters/) to
+see what styles (keys) each highlighter defines; the syntax for values is the
+same as the syntax of "types of highlighting" of the zsh builtin
+`$zle_highlight` array, which is documented in [the `zshzle(1)` manual
+page][zshzle-Character-Highlighting].
 
 [zshzle-Character-Highlighting]: http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#Character-Highlighting
 
