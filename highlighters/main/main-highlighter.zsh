@@ -312,11 +312,14 @@ _zsh_highlight_main_highlighter()
                           fi
                         elif [[ $arg[0,1] == $histchars[0,1] || $arg[0,1] == $histchars[2,2] ]]; then
                           style=$ZSH_HIGHLIGHT_STYLES[history-expansion]
-                        elif [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR:#"$arg"} ]] &&
-                             [[ $this_word == *':regular:'* ]]; then
-                          # This highlights empty commands (semicolon follows nothing) as an error.
-                          # Zsh accepts them, though.
-                          style=$ZSH_HIGHLIGHT_STYLES[commandseparator]
+                        elif [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR:#"$arg"} ]]; then
+                          if [[ $this_word == *':regular:'* ]]; then
+                            # This highlights empty commands (semicolon follows nothing) as an error.
+                            # Zsh accepts them, though.
+                            style=$ZSH_HIGHLIGHT_STYLES[commandseparator]
+                          else
+                            style=$ZSH_HIGHLIGHT_STYLES[unknown-token]
+                          fi
                         elif [[ $arg[1] == '<' || $arg[1] == '>' ]]; then
                           style=$ZSH_HIGHLIGHT_STYLES[redirection]
                           (( in_redirection=2 ))
