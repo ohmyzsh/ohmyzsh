@@ -45,5 +45,5 @@ How to tweak
 ------------
 
 Syntax highlighting is done by pluggable highlighter scripts.  See the
-[`highlighters` directory](./highlighters) for documentation and configuration
-settings.
+[documentation on highlighters](docs/highlighters.md) for details and
+configuration settings.
