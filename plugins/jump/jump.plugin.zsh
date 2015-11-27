@@ -29,14 +29,14 @@ unmark() {
 }
 
 marks() {
-	local max=0
-	for link in $MARKPATH/*(@); do
+	local link max=0
+	for link in $MARKPATH/{,.}*(@); do
 		if [[ ${#link:t} -gt $max ]]; then
 			max=${#link:t}
 		fi
 	done
 	local printf_markname_template="$(printf -- "%%%us " "$max")"
-	for link in $MARKPATH/*(@); do
+	for link in $MARKPATH/{,.}*(@); do
 		local markname="$fg[cyan]${link:t}$reset_color"
 		local markpath="$fg[blue]$(readlink $link)$reset_color"
 		printf -- "$printf_markname_template" "$markname"
@@ -45,13 +45,13 @@ marks() {
 }
 
 _completemarks() {
-	reply=("${MARKPATH}"/*(N:t))
+	reply=("${MARKPATH}"/{,.}*(@N:t))
 }
 compctl -K _completemarks jump
 compctl -K _completemarks unmark
 
 _mark_expansion() {
-	setopt extendedglob
+	setopt localoptions extendedglob
 	autoload -U modify-current-argument
 	modify-current-argument '$(readlink "$MARKPATH/$ARG")'
 }
