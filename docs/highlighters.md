@@ -7,7 +7,7 @@ Syntax highlighting is done by pluggable highlighters:
 * `brackets` - matches brackets and parenthesis.
 * `pattern` - matches user-defined patterns.
 * `cursor` - matches the cursor position.
-* `root` - triggered if the current user is root.
+* `root` - highlights the whole command line if the current user is root.
 * `line` - applied to the whole command line
 
 
