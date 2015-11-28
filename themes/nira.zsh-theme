@@ -1,4 +1,4 @@
-# Based on bira zsh theme with nvm, rvm and jenv support
+# Based on bira zsh theme but with NVM instead of RVM - Preview: http://i.imgur.com/TnIzmkD.jpg
 local return_code="%(?..%{$fg[red]%}%? ↵%{$reset_color%})"
 
 local user_host='%{$terminfo[bold]$fg[green]%}%n@%m%{$reset_color%}'
