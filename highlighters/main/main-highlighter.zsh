@@ -320,7 +320,8 @@ _zsh_highlight_main_highlighter()
                           else
                             style=$ZSH_HIGHLIGHT_STYLES[unknown-token]
                           fi
-                        elif [[ $arg[1] == '<' || $arg[1] == '>' ]]; then
+                        elif [[ $arg == (<0-9>|)(\<|\>)* ]]; then
+                          # A '<' or '>', possibly followed by a digit
                           style=$ZSH_HIGHLIGHT_STYLES[redirection]
                           (( in_redirection=2 ))
                         elif [[ $arg[1,2] == '((' ]]; then
@@ -389,7 +390,7 @@ _zsh_highlight_main_highlighter()
                    else
                      style=$ZSH_HIGHLIGHT_STYLES[unknown-token]
                    fi
-                 elif [[ $arg[1] == '<' || $arg[1] == '>' ]]; then
+                 elif [[ $arg == (<0-9>|)(\<|\>)* ]]; then
                    style=$ZSH_HIGHLIGHT_STYLES[redirection]
                    (( in_redirection=2 ))
                  else
