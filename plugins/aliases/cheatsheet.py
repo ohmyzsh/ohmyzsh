@@ -34,12 +34,12 @@ def pretty_print_group(key, aliases, hightlight=None):
     group_formatter = lambda g: termcolor.colored('[%s]' % g, 'red')
     alias_formatter = lambda alias: termcolor.colored('\t%s = %s' % alias[0:2], 'green')
     if hightlight and len(hightlight)>0:
-        print group_hl_formatter(key, hightlight)
-        print '\n'.join([alias_hl_formatter(alias, hightlight) for alias in aliases])
+        print (group_hl_formatter(key, hightlight))
+        print ('\n'.join([alias_hl_formatter(alias, hightlight) for alias in aliases]))
     else:
-        print group_formatter(key)
-        print '\n'.join([alias_formatter(alias) for alias in aliases])
-    print
+        print (group_formatter(key))
+        print ('\n'.join([alias_formatter(alias) for alias in aliases]))
+    print ('')
 
 def pretty_print(cheatsheet, wfilter):
     sorted_key = sorted(cheatsheet.keys())
