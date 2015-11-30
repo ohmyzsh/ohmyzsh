@@ -261,18 +261,15 @@ while (( 1 )); do
             local search_buffer="${NLIST_SEARCH_BUFFER%% ##}"
             search_buffer="${search_buffer## ##}"
             search_buffer="${search_buffer//(#m)[][*?|#~^()><\\]/\\$MATCH}"
+            local search_pattern=""
+            local colsearch_pattern=""
             if [ -n "$search_buffer" ]; then
                 # Patterns will be *foo*~^*bar* and foo|bar)
-                local search_pattern="${search_buffer// ##/*~^*}"
-                local colsearch_pattern="${search_buffer// ##/|}"
+                search_pattern="${search_buffer// ##/*~^*}"
+                colsearch_pattern="${search_buffer// ##/|}"
 
                 list=( "${(@M)list:#(#i)*$~search_pattern*}" )
                 last_element="$#list"
-
-                local red=$'\x1b[00;31m' reset=$'\x1b[00;00m'
-                col_list=( "${(@)list//(#mi)($~colsearch_pattern)/$red${MATCH}$reset}" )
-            else
-                col_list=( "$list[@]" )
             fi
 
             # Called after processing list
@@ -286,7 +283,12 @@ while (( 1 )); do
 
         if [ "$prev_start_idx" -ne "$NLIST_FROM_WHAT_IDX_LIST_IS_SHOWN" ]; then
             prev_start_idx="$NLIST_FROM_WHAT_IDX_LIST_IS_SHOWN"
-            disp_list=( "${(@)col_list[NLIST_FROM_WHAT_IDX_LIST_IS_SHOWN, end_idx]}" )
+            disp_list=( "${(@)list[NLIST_FROM_WHAT_IDX_LIST_IS_SHOWN, end_idx]}" )
+
+            if [ -n "$colsearch_pattern" ]; then
+                local red=$'\x1b[00;31m' reset=$'\x1b[00;00m'
+                disp_list=( "${(@)disp_list//(#mi)($~colsearch_pattern)/$red${MATCH}$reset}" )
+            fi
 
             # We have display list, lets replace newlines with "\n" when needed (1/3)
             [ "$NLIST_REPLACE_NEWLINES" -eq 1 ] && disp_list=( "${(@)disp_list//$'\n'/\\n}" )
