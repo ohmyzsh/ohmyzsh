@@ -1,0 +1,84 @@
+# Copy this file into /usr/share/zsh/site-functions/
+# and add 'autoload n-options` to .zshrc
+#
+# This function allows to browse and toggle shell's options
+#
+# Uses n-list
+
+#emulate -L zsh
+
+zmodload zsh/curses
+
+local IFS="
+"
+
+unset NLIST_COLORING_PATTERN
+
+[ -f ~/.config/znt/n-list.conf ] && . ~/.config/znt/n-list.conf
+[ -f ~/.config/znt/n-options.conf ] && . ~/.config/znt/n-options.conf
+
+# TODO restore options
+unsetopt localoptions
+
+integer kshoptionprint=0
+[[ -o kshoptionprint ]] && kshoptionprint=1
+setopt kshoptionprint
+
+local list
+local selected
+local option
+local state
+
+# 0 - don't remember, 1 - remember, 2 - init once, then remember
+NLIST_REMEMBER_STATE=2
+
+local NLIST_GREP_STRING="${1:=}"
+
+while (( 1 )); do
+    list=( `setopt` )
+    list=( "${(M)list[@]:#*${1:=}*}" )
+    list=( "${list[@]:#kshoptionprint*}" )
+
+    if [ "$#list" -eq 0 ]; then
+        echo "No matching options"
+        break
+    fi
+
+    local red=$'\x1b[00;31m' green=$'\x1b[00;32m' reset=$'\x1b[00;00m'
+    list=( "${list[@]/ off/${red} off$reset}" )
+    #list=( "${list[@]/ on/${green} on$reset}" )
+    list=( "${(i)list[@]}" )
+
+    n-list "${list[@]}"
+
+    if [ "$REPLY" -gt 0 ]; then
+        [[ -o ksharrays ]] && selected="${reply[$(( REPLY - 1 ))]}" || selected="${reply[$REPLY]}"
+        option="${selected%% *}"
+        state="${selected##* }"
+
+        if [[ -o globsubst ]]; then
+            unsetopt globsubst
+            state="${state%$reset}"
+            setopt globsubst
+        else
+            state="${state%$reset}"
+        fi
+
+        # Toggle the option
+        if [ "$state" = "on" ]; then
+            echo "Setting |$option| to off"
+            unsetopt "$option"
+        else
+            echo "Setting |$option| to on"
+            setopt "$option"
+        fi
+    else
+        break
+    fi
+done
+
+NLIST_REMEMBER_STATE=0
+
+[[ "$kshoptionprint" -eq 0 ]] && unsetopt kshoptionprint
+
+# vim: set filetype=zsh:
