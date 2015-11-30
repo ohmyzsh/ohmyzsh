@@ -16,14 +16,17 @@ function take() {
 }
 
 function open_command() {
+  emulate -L zsh
+  setopt shwordsplit
+
   local open_cmd
 
   # define the open command
   case "$OSTYPE" in
-    darwin*)  open_cmd="open" ;;
-    cygwin*)  open_cmd="cygstart" ;;
-    linux*)   open_cmd="xdg-open" ;;
-    msys*)    open_cmd="start \"\"" ;;
+    darwin*)  open_cmd='open' ;;
+    cygwin*)  open_cmd='cygstart' ;;
+    linux*)   open_cmd='xdg-open' ;;
+    msys*)    open_cmd='start ""' ;;
     *)        echo "Platform $OSTYPE not supported"
               return 1
               ;;
@@ -33,7 +36,7 @@ function open_command() {
   if [[ "$OSTYPE" == darwin* ]]; then
     $open_cmd "$@" &>/dev/null
   else
-    nohup ${(z)open_cmd} "$@" &>/dev/null
+    nohup $open_cmd "$@" &>/dev/null
   fi
 }
 
