@@ -10,6 +10,7 @@ emulate -L zsh
 
 setopt extendedglob
 zmodload zsh/curses
+zmodload zsh/parameter
 
 local IFS="
 "
@@ -24,16 +25,16 @@ local selected
 
 NLIST_REMEMBER_STATE=0
 
-list=( `builtin history -rn 1` )
+list=( "$history[@]" )
 list=( "${(@M)list:#(#i)*$1*}" )
-
-local NLIST_GREP_STRING="$1"
 
 if [ "$#list" -eq 0 ]; then
     echo "No matching history entries"
     return 1
 fi
 
+local NLIST_GREP_STRING="$1"
+local NLIST_REPLACE_NEWLINES="1"
 n-list "${list[@]}"
 
 if [ "$REPLY" -gt 0 ]; then
