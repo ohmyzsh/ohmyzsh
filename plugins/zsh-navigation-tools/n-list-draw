@@ -1,0 +1,131 @@
+# Copy this file into /usr/share/zsh/site-functions/
+# and add 'autoload n-list-draw` to .zshrc
+#
+# This is an internal function not for direct use
+
+emulate -L zsh
+
+zmodload zsh/curses
+
+setopt typesetsilent extendedglob
+
+_nlist_print_with_ansi() {
+    local win="$1" text="$2" out col chunk Xout
+    integer text_offset="$3" max_text_len="$4" text_len=0 no_match=0 nochunk_text_len to_skip_from_chunk to_chop_off_from_chunk before_len
+
+    # 1 - non-escaped text, 2 - first number in the escaped text, with ;
+    # 3 - second number, 4 - text after whole escape text
+
+    typeset -a c
+    c=( black red green yellow blue magenta cyan white )
+
+    while [[ -n "$text" && "$no_match" -eq 0 ]]; do
+        if [[ "$text" = (#b)([^$'\x1b']#)$'\x1b'\[([0-9](#c0,2))(#B)(\;|)(#b)([0-9](#c0,2))m(*) ]]; then
+            # Text for further processing
+            text="$match[4]"
+            # Text chunk to output now
+            out="$match[1]"
+            # Save color
+            col="$match[2]"
+            (( match[3] >= 30 && match[3] <= 37 )) && col="$match[3]"
+        else
+            out="$text"
+            no_match=1
+        fi
+
+        if [ -n "$out" ]; then
+################ Expand tabs ################
+            chunk="$out"
+            before_len="$text_len"
+            Xout=""
+
+            while [ -n "$chunk" ]; do
+                [[ "$chunk" = (#b)([^$'\t']#)$'\t'(*) ]] && {
+                    (( all_text_len=((before_len+${#match[1]})/8+1)*8 ))
+
+                    Xout+="${(r:all_text_len-before_len:: :)match[1]}"
+
+                    before_len+=all_text_len-before_len
+                    chunk="$match[2]"
+                } || {
+                    Xout+="$chunk"
+                    break
+                }
+            done
+#############################################
+
+            # Input text length without the current chunk
+            nochunk_text_len=text_len
+            # Input text length up to current chunk
+            text_len+="$#Xout"
+
+            # Should start displaying with this chunk?
+            # I.e. stop skipping left part of the input text?
+            if (( text_len > text_offset )); then
+                to_skip_from_chunk=text_offset-nochunk_text_len
+
+                # LEFT - is chunk off the left skip boundary? +1 for 1-based index in string
+                (( to_skip_from_chunk > 0 )) && Xout="${Xout[to_skip_from_chunk+1,-1]}"
+
+                # RIGHT - is text off the screen?
+                if (( text_len-text_offset > max_text_len )); then
+                    to_chop_off_from_chunk=0+(text_len-text_offset)-max_text_len
+                    Xout="${Xout[1,-to_chop_off_from_chunk-1]}"
+                fi
+                
+                [ -n "$Xout" ] && zcurses string "$win" "$Xout"
+            fi
+        fi
+
+        if (( no_match == 0 )); then
+            if (( col >= 30 && col <= 37 )); then
+                zcurses attr "$win" $c[col-29]/black
+            elif [[ "$col" -eq 0 ]]; then
+                zcurses attr "$win" white/black
+            fi
+        fi
+    done
+}
+
+integer highlight="$1"
+integer page_height="$2"
+integer page_width="$3"
+local y_offset="$4"
+local x_offset="$5"
+local text_offset="$6"
+local win="$7"
+shift 7
+integer max_text_len=page_width-x_offset
+
+[ "$bold" = "0" ] && bold="" || bold="+bold"
+[[ "$active_text" = "underline" || "$active_text" = "reverse" ]] || active_text="reverse"
+# With Linux terminal underline won't work properly
+[ "$TERM" = "linux" ] && active_text="reverse"
+
+integer max_idx=page_height
+integer end_idx=max_idx
+[ "$end_idx" -gt "$#" ] && end_idx="$#"
+integer y=y_offset
+
+zcurses attr "$win" $bold white/black
+
+integer i text_len
+local text
+for (( i=1; i<=end_idx; i++ )); do
+    zcurses move "$win" $y "$x_offset"
+
+    [ "$i" = "$highlight" ] && zcurses attr "$win" +"$active_text"
+    _nlist_print_with_ansi "$win" "$@[i]" "$text_offset" "$max_text_len"
+    zcurses clear "$win" eol
+    [ "$i" = "$highlight" ] && zcurses attr "$win" -"$active_text"
+
+    y+=1
+done
+
+if [ "$end_idx" -lt "$max_idx" ]; then
+    zcurses move "$win" $y "$x_offset"
+    zcurses clear "$win" eol
+fi
+
+zcurses attr "$win" white/black
+# vim: set filetype=zsh:
