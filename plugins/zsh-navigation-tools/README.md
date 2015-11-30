@@ -2,16 +2,17 @@
 
 http://imageshack.com/a/img633/7967/ps6rKR.png
 
-A tool generating a selectable curses-based list of elements that has access to
-current Zsh session, i.e. has broad capabilities to work together with it.
-That's n-list. The files n-cd, n-env, n-kill, etc. are applications of
-the tool. Feature highlights include incremental multi-word searching, ANSI
+Set of tools like n-history – multi-word history searcher, n-cd – directory
+bookmark manager, n-kill – htop like kill utility, and more. Based on
+n-list, a tool generating selectable curses-based list of elements that has
+access to current Zsh session, i.e. has broad capabilities to work together
+with it. Feature highlights include incremental multi-word searching, ANSI
 coloring, unique mode, horizontal scroll, non-selectable elements, grepping and
 various integrations with Zsh.
 
 ## History Widget
 
-To have n-history as the incremental searcher bound to Ctrl-R copy znt-*
+To have n-history as multi-word incremental searcher bound to Ctrl-R copy znt-*
 files into the */site-functions dir (unless you use Oh My Zsh) and
 add:
 
@@ -21,12 +22,15 @@ add:
 
 to .zshrc. This is done automatically when using Oh My Zsh. Two other
 widgets exist, znt-cd-widget and znt-kill-widget, they can be too assigned
-to key combinations:
+to key combinations (no need for autoload when using Oh My Zsh):
 
     zle -N znt-cd-widget
     bindkey "^T" znt-cd-widget
     zle -N znt-kill-widget
     bindkey "^Y" znt-kill-widget
+
+Oh My Zsh stores history into ~/.zsh_history. When you switch to OMZ you could
+want to copy your previous data (from e.g. ~/.zhistory) into the new location.
 
 ## Introduction
 
@@ -99,3 +103,9 @@ expressions, (#s) is ^, (#e) is $, # is *, ## is +. Alternative
 will work when in parenthesis, i.e. (a|b). BTW by using this method you can
 colorize output of the tools, via their config files (check out e.g. n-cd.conf,
 it uses this).
+
+## Performance
+ZNT is fastest with Zsh before 5.0.8 and starting from 5.2 (the version yet to
+be released).
+
+# vim:filetype=conf
