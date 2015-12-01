@@ -99,7 +99,7 @@ if [[ "$ZSH_THEME" == "random" ]]; then
   fi
   N=${#themes[@]}
   ((N=(RANDOM%N)+1))
-  RANDOM_THEME=${themes[$N]}
+  export RANDOM_THEME=${themes[$N]}
   source "$RANDOM_THEME"
   echo "[oh-my-zsh] Random theme '$RANDOM_THEME' loaded..."
 else
