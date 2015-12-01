@@ -7,6 +7,12 @@ export ZSH=$HOME/.oh-my-zsh
 # time that oh-my-zsh is loaded.
 ZSH_THEME="robbyrussell"
 
+# Set list of themes to load
+# Setting this variable when ZSH_THEME=random
+# cause zsh load theme from this variable instead of
+# looking in ~/.oh-my-zsh/themes/
+# ZSH_THEME_RANDOM_CANDICATES=()
+
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
 
