@@ -16,12 +16,21 @@ function title {
   # if it is set and empty, leave it as is
   : ${2=$1}
 
-  if [[ "$TERM" == screen* ]]; then
-    print -Pn "\ek$1:q\e\\" #set screen hardstatus, usually truncated at 20 chars
-  elif [[ "$TERM" == xterm* ]] || [[ "$TERM" == putty* ]] || [[ "$TERM" == rxvt* ]] || [[ "$TERM" == ansi ]] || [[ "$TERM" == cygwin ]] || [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
-    print -Pn "\e]2;$2:q\a" #set window name
-    print -Pn "\e]1;$1:q\a" #set icon (=tab) name
-  fi
+  case "$TERM" in
+    cygwin|xterm*|putty*|rxvt*|ansi)
+      print -Pn "\e]2;$2:q\a" # set window name
+      print -Pn "\e]1;$1:q\a" # set tab name
+      ;;
+    screen*)
+      print -Pn "\ek$1:q\e\\" # set screen hardstatus
+      ;;
+    *)
+      if [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
+        print -Pn "\e]2;$2:q\a" # set window name
+        print -Pn "\e]1;$1:q\a" # set tab name
+      fi
+      ;;
+  esac
 }
 
 ZSH_THEME_TERM_TAB_TITLE_IDLE="%15<..<%~%<<" #15 char left truncated PWD
