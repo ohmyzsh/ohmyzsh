@@ -36,14 +36,15 @@ function title {
 ZSH_THEME_TERM_TAB_TITLE_IDLE="%15<..<%~%<<" #15 char left truncated PWD
 ZSH_THEME_TERM_TITLE_IDLE="%n@%m: %~"
 # Avoid duplication of directory in terminals with independent dir display
-if [[ $TERM_PROGRAM == Apple_Terminal ]]; then
+if [[ "$TERM_PROGRAM" == Apple_Terminal ]]; then
   ZSH_THEME_TERM_TITLE_IDLE="%n@%m"
 fi
 
 # Runs before showing the prompt
 function omz_termsupport_precmd {
   emulate -L zsh
-  if [[ $DISABLE_AUTO_TITLE == true ]]; then
+
+  if [[ "$DISABLE_AUTO_TITLE" == true ]]; then
     return
   fi
 
@@ -53,11 +54,11 @@ function omz_termsupport_precmd {
 # Runs before executing the command
 function omz_termsupport_preexec {
   emulate -L zsh
-  if [[ $DISABLE_AUTO_TITLE == true ]]; then
+  setopt extended_glob
+
+  if [[ "$DISABLE_AUTO_TITLE" == true ]]; then
     return
   fi
-
-  setopt extended_glob
 
   # cmd name only, or if this is sudo or ssh, the next cmd
   local CMD=${1[(wr)^(*=*|sudo|ssh|mosh|rake|-*)]:gs/%/%%}
