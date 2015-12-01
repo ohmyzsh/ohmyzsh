@@ -20,6 +20,9 @@ compdef _ags ags='apt-get source'
 alias acp='apt-cache policy' # app
 compdef _acp acp='apt-cache policy'
 
+alias acsp='apt-cache showpkg'
+compdef _acsp acsp='apt-cache showpkg'
+
 # superuser operations ######################################################
 alias afu='sudo apt-file update'
 compdef _afu afu='sudo apt-file update'
