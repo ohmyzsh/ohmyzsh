@@ -50,7 +50,7 @@ if [[ $use_sudo -eq 1 ]]; then
     alias adg='sudo $apt_pref update && sudo $apt_pref $apt_upgr'
     alias adu='sudo $apt_pref update && sudo $apt_pref dist-upgrade'
     alias afu='sudo apt-file update'
-    alias ag='sudo $apt_pref $apt_upgr'
+    alias au='sudo $apt_pref $apt_upgr'
     alias ai='sudo $apt_pref install'
     # Install all packages given on the command line while using only the first word of each line:
     # acs ... | ail
@@ -85,7 +85,7 @@ else
     alias adg='su -lc \'$apt_pref update && aptitude $apt_upgr\' root'
     alias adu='su -lc \'$apt_pref update && aptitude dist-upgrade\' root'
     alias afu='su -lc "apt-file update"'
-    alias ag='su -lc \'$apt_pref $apt_upgr\' root'
+    alias au='su -lc \'$apt_pref $apt_upgr\' root'
     ai() {
         cmd="su -lc 'aptitude -P install $@' root"
         print "$cmd"
