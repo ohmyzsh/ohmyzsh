@@ -46,7 +46,7 @@ then
     else
       echo "[Oh My Zsh] Would you like to check for updates? [Y/n]: \c"
       read line
-      if [ "$line" = Y ] || [ "$line" = y ] || [ -z "$line" ]; then
+      if [[ "$line" == Y* ]] || [[ "$line" == y* ]] || [ -z "$line" ]; then
         _upgrade_zsh
       else
         _update_zsh_update
