@@ -36,7 +36,7 @@ CURRENT_BG='NONE'
   local LC_ALL="" LC_CTYPE="en_US.UTF-8"
   # NOTE: This segment separator character is correct.  In 2012, Powerline changed
   # the code points they use for their special characters. This is the new code point.
-  # If this is not working for you, you probably have an old version of the 
+  # If this is not working for you, you probably have an old version of the
   # Powerline-patched fonts installed. Download and install the new version.
   # Do not submit PRs to change this unless you have reviewed the Powerline code point
   # history and have new information.
@@ -118,7 +118,7 @@ prompt_git() {
     zstyle ':vcs_info:*' get-revision true
     zstyle ':vcs_info:*' check-for-changes true
     zstyle ':vcs_info:*' stagedstr '✚'
-    zstyle ':vcs_info:git:*' unstagedstr '●'
+    zstyle ':vcs_info:*' unstagedstr '●'
     zstyle ':vcs_info:*' formats ' %u%c'
     zstyle ':vcs_info:*' actionformats ' %u%c'
     vcs_info
