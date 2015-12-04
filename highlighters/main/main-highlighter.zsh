@@ -132,6 +132,7 @@ _zsh_highlight_main_highlighter()
   )
   ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS=(
     'builtin' 'command' 'exec' 'nocorrect' 'noglob'
+    'pkexec' # immune to #121 because it's usually not passed --option flags
   )
 
   # Tokens that, at (naively-determined) "command position", are followed by
