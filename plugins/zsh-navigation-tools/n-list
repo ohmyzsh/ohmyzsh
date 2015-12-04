@@ -224,7 +224,11 @@ zcurses timeout main -1
 key=""
 keypad=""
 
-list=( "$@" )
+# This loop makes script faster on some Zsh's (e.g. 5.0.8)
+repeat 1; do
+    list=( "$@" )
+done
+
 last_element="$#list"
 
 while (( 1 )); do
