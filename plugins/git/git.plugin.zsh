@@ -224,3 +224,9 @@ alias gvt='git verify-tag'
 
 alias gwch='git whatchanged -p --abbrev-commit --pretty=medium'
 alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit -m "--wip--"'
+
+gchid() {
+  [[ -n $1 ]] && {git config user.name $1}
+  [[ -n $2 ]] && {git config user.email $2}
+}
+
