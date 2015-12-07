@@ -363,6 +363,11 @@ while (( 1 )); do
     fi
 
     zcurses border main
+
+    local top_msg="${(C)ZSH_NAME} $ZSH_VERSION, shell level $SHLVL, $USER"
+    zcurses move main 0 $(( term_width / 2 - $#top_msg / 2 ))
+    zcurses string main $top_msg
+
     zcurses refresh main inner
     zcurses move main $(( term_height - 1 - 1 )) $(( status_msg_strlen + 2 ))
 
