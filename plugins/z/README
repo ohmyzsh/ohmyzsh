@@ -6,7 +6,7 @@ NAME
        z - jump around
 
 SYNOPSIS
-       z [-chlrt] [regex1 regex2 ... regexn]
+       z [-chlrtx] [regex1 regex2 ... regexn]
 
 AVAILABILITY
        bash, zsh
@@ -15,10 +15,13 @@ DESCRIPTION
        Tracks your most used directories, based on 'frecency'.
 
        After  a  short  learning  phase, z will take you to the most 'frecent'
-       directory that matches ALL of the regexes given on the command line.
+       directory that matches ALL of the regexes given on the command line, in
+       order.
+
+       For example, z foo bar would match /foo/bar but not /bar/foo.
 
 OPTIONS
-       -c     restrict matches to subdirectories of the current directory.
+       -c     restrict matches to subdirectories of the current directory
 
        -h     show a brief help message
 
@@ -28,10 +31,12 @@ OPTIONS
 
        -t     match by recent access only
 
+       -x     remove the current directory from the datafile
+
 EXAMPLES
        z foo         cd to most frecent dir matching foo
 
-       z foo bar     cd to most frecent dir matching foo and bar
+       z foo bar     cd to most frecent dir matching foo, then bar
 
        z -r foo      cd to highest ranked dir matching foo
 
@@ -55,8 +60,9 @@ NOTES
               Set $_Z_NO_RESOLVE_SYMLINKS to prevent symlink resolution.
               Set $_Z_NO_PROMPT_COMMAND to handle PROMPT_COMMAND/precmd  your-
               self.
-              Set $_Z_EXCLUDE_DIRS to an array of directories to exclude.
-              (These  settings  should  go  in .bashrc/.zshrc before the lines
+              Set $_Z_EXCLUDE_DIRS to an array of directory trees to  exclude.
+              Set $_Z_OWNER to allow usage when in 'sudo -s' mode.
+              (These  settings  should  go  in  .bashrc/.zshrc before the line
               added above.)
               Install   the   provided   man   page   z.1    somewhere    like
               /usr/local/man/man1.
@@ -64,12 +70,12 @@ NOTES
    Aging:
        The rank of directories maintained by z undergoes aging based on a sim-
        ple formula. The rank of each entry is incremented  every  time  it  is
-       accessed.  When  the  sum  of ranks is greater than 6000, all ranks are
-       multiplied by 0.99. Entries with a rank lower than 1 are forgotten.
+       accessed.  When the sum of ranks is over 9000, all ranks are multiplied
+       by 0.99. Entries with a rank lower than 1 are forgotten.
 
    Frecency:
-       Frecency is a portmantaeu of 'recent' and 'frequency'. It is a weighted
-       rank  that  depends on how often and how recently something occured. As
+       Frecency is a portmanteau of 'recent' and 'frequency'. It is a weighted
+       rank  that depends on how often and how recently something occurred. As
        far as I know, Mozilla came up with the term.
 
        To z, a directory that has low ranking but has been  accessed  recently
@@ -107,20 +113,23 @@ ENVIRONMENT
        resolving  of  symlinks.  If  it  is  not  set,  symbolic links will be
        resolved when added to the datafile.
 
-       In bash, z prepends a command to the PROMPT_COMMAND  environment  vari-
-       able  to  maintain its database. In zsh, z appends a function _z_precmd
-       to the precmd_functions array.
+       In bash, z appends a command to the PROMPT_COMMAND environment variable
+       to maintain its database. In zsh, z appends a function _z_precmd to the
+       precmd_functions array.
 
        The environment variable $_Z_NO_PROMPT_COMMAND can be set if  you  want
        to handle PROMPT_COMMAND or precmd yourself.
 
        The  environment  variable  $_Z_EXCLUDE_DIRS  can be set to an array of
-       directories to exclude from tracking. $HOME is always excluded.  Direc-
-       tories must be full paths without trailing slashes.
+       directory trees to exclude from tracking.  $HOME  is  always  excluded.
+       Directories must be full paths without trailing slashes.
+
+       The  environment  variable  $_Z_OWNER  can  be set to your username, to
+       allow usage of z when your sudo enviroment keeps $HOME set.
 
 FILES
-       Data  is  stored  in  $HOME/.z.  This  can be overridden by setting the
-       $_Z_DATA environment variable. When initialized, z will raise an  error
+       Data is stored in $HOME/.z. This  can  be  overridden  by  setting  the
+       $_Z_DATA  environment variable. When initialized, z will raise an error
        if this path is a directory, and not function correctly.
 
        A man page (z.1) is provided.

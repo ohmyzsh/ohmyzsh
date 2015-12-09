@@ -1,0 +1,238 @@
+# Copy this file into /usr/share/zsh/site-functions/
+# and add 'autoload n-list-input` to .zshrc
+#
+# This is an internal function not for direct use
+
+emulate -L zsh
+
+zmodload zsh/curses
+
+setopt typesetsilent
+
+# Compute first to show index
+_nlist_compute_first_to_show_idx() {
+    from_what_idx_list_is_shown=0+((current_idx-1)/page_height)*page_height+1
+}
+
+typeset -ga reply
+reply=( -1 '' )
+integer current_idx="$1"
+integer from_what_idx_list_is_shown="$2"
+integer page_height="$3"
+integer page_width="$4"
+integer last_element="$5"
+integer hscroll="$6"
+local key="$7"
+integer search="$8"
+local buffer="$9"
+integer uniq_mode="$10"
+
+#
+# Listening for input
+#
+
+if [ "$search" = "0" ]; then
+
+case "$key" in
+    (UP|k|$'\C-P')
+        # Are there any elements before the current one?
+        [ "$current_idx" -gt 1 ] && current_idx=current_idx-1;
+        _nlist_compute_first_to_show_idx
+        ;;
+    (DOWN|j|$'\C-N')
+        # Are there any elements after the current one?
+        [ "$current_idx" -lt "$last_element" ] && current_idx=current_idx+1;
+        _nlist_compute_first_to_show_idx
+        ;;
+    (PPAGE)
+        current_idx=current_idx-page_height
+        [ "$current_idx" -lt 1 ] && current_idx=1;
+        _nlist_compute_first_to_show_idx
+        ;;
+    (NPAGE|" ")
+        current_idx=current_idx+page_height
+        [ "$current_idx" -gt "$last_element" ] && current_idx=last_element;
+        _nlist_compute_first_to_show_idx
+        ;;
+    ($'\C-U')
+        current_idx=current_idx-page_height/2
+        [ "$current_idx" -lt 1 ] && current_idx=1;
+        _nlist_compute_first_to_show_idx
+        ;;
+    ($'\C-D')
+        current_idx=current_idx+page_height/2
+        [ "$current_idx" -gt "$last_element" ] && current_idx=last_element;
+        _nlist_compute_first_to_show_idx
+        ;;
+    (HOME|g)
+        current_idx=1
+        _nlist_compute_first_to_show_idx
+        ;;
+    (END|G)
+        current_idx=last_element
+        _nlist_compute_first_to_show_idx
+        ;;
+    ($'\n')
+        # Is that element selectable?
+        # Check for this only when there is no search
+        if [[ "$NLIST_SEARCH_BUFFER" != "" || "$NLIST_IS_UNIQ_MODE" -eq 1 ||
+            ${NLIST_NONSELECTABLE_ELEMENTS[(r)$current_idx]} != $current_idx ]]
+        then
+            # Save current element in the result variable
+            reply=( $current_idx SELECT )
+        fi
+        ;;
+    (q)
+        reply=( -1 QUIT )
+        ;;
+    (/)
+        search=1
+        _nlist_cursor_visibility 1
+        ;;
+    ($'\t')
+        reply=( $current_idx LEAVE )
+        ;;
+    ($'\C-L')
+        reply=( -1 REDRAW )
+        ;;
+    (\])
+        [[ "${(t)NLIST_HOP_INDEXES}" = "array" || "${(t)NLIST_HOP_INDEXES}" = "array-local" ]] &&
+        [ -z "$NLIST_SEARCH_BUFFER" ] && [ "$NLIST_IS_UNIQ_MODE" -eq 0 ] &&
+        for idx in "${(n)NLIST_HOP_INDEXES[@]}"; do
+            if [ "$idx" -gt "$current_idx" ]; then
+                current_idx=$idx
+                _nlist_compute_first_to_show_idx
+                break
+            fi
+        done
+        ;;
+    (\[)
+        [[ "${(t)NLIST_HOP_INDEXES}" = "array" || "${(t)NLIST_HOP_INDEXES}" = "array-local" ]] &&
+        [ -z "$NLIST_SEARCH_BUFFER" ] && [ "$NLIST_IS_UNIQ_MODE" -eq 0 ] &&
+        for idx in "${(nO)NLIST_HOP_INDEXES[@]}"; do
+            if [ "$idx" -lt "$current_idx" ]; then
+                current_idx=$idx
+                _nlist_compute_first_to_show_idx
+                break
+            fi
+        done
+        ;;
+    ('<'|'{'|LEFT|'h')
+        hscroll=hscroll-7
+        [ "$hscroll" -lt 0 ] && hscroll=0
+        ;;
+    ('>'|'}'|RIGHT|'l')
+        hscroll+=7
+        ;;
+    ($'\E')
+        buffer=""
+        ;;
+    (o|$'\C-O')
+        uniq_mode=1-uniq_mode
+        ;;
+    (*)
+        ;;
+esac
+
+else
+
+case "$key" in
+    ($'\n')
+        search=0
+        _nlist_cursor_visibility 0
+        ;;
+    ($'\C-L')
+        reply=( -1 REDRAW )
+        ;;
+
+    #
+    # Slightly limited navigation
+    #
+
+    (UP|$'\C-P')
+        [ "$current_idx" -gt 1 ] && current_idx=current_idx-1;
+        _nlist_compute_first_to_show_idx
+        ;;
+    (DOWN|$'\C-N')
+        [ "$current_idx" -lt "$last_element" ] && current_idx=current_idx+1;
+        _nlist_compute_first_to_show_idx
+        ;;
+    (PPAGE)
+        current_idx=current_idx-page_height
+        [ "$current_idx" -lt 1 ] && current_idx=1;
+        _nlist_compute_first_to_show_idx
+        ;;
+    (NPAGE)
+        current_idx=current_idx+page_height
+        [ "$current_idx" -gt "$last_element" ] && current_idx=last_element;
+        _nlist_compute_first_to_show_idx
+        ;;
+    ($'\C-U')
+        current_idx=current_idx-page_height/2
+        [ "$current_idx" -lt 1 ] && current_idx=1;
+        _nlist_compute_first_to_show_idx
+        ;;
+    ($'\C-D')
+        current_idx=current_idx+page_height/2
+        [ "$current_idx" -gt "$last_element" ] && current_idx=last_element;
+        _nlist_compute_first_to_show_idx
+        ;;
+    (HOME)
+        current_idx=1
+        _nlist_compute_first_to_show_idx
+        ;;
+    (END)
+        current_idx=last_element
+        _nlist_compute_first_to_show_idx
+        ;;
+    (LEFT)
+        hscroll=hscroll-7
+        [ "$hscroll" -lt 0 ] && hscroll=0
+        ;;
+    (RIGHT)
+        hscroll+=7
+        ;;
+    (F1|F2|F3|F4|F5|F6|F7|F8|F9|F10)
+        # ignore
+        ;;
+
+    #
+    # The input
+    #
+
+    ($'\b'|$'\C-?'|BACKSPACE)
+        buffer="${buffer%?}"
+        ;;
+    ($'\C-W')
+        [ "$buffer" = "${buffer% *}" ] && buffer="" || buffer="${buffer% *}"
+        ;;
+    ($'\C-K')
+        buffer=""
+        ;;
+    ($'\E')
+        buffer=""
+        search=0
+        _nlist_cursor_visibility 0
+        ;;
+    ($'\C-O')
+        uniq_mode=1-uniq_mode
+        ;;
+    (*)
+        if [[ $#key == 1 && $((#key)) -lt 31 ]]; then
+            # ignore all other control keys
+        else
+            buffer+="$key"
+        fi
+        ;;
+esac
+
+fi
+
+reply[3]="$current_idx"
+reply[4]="$from_what_idx_list_is_shown"
+reply[5]="$hscroll"
+reply[6]="$search"
+reply[7]="$buffer"
+reply[8]="$uniq_mode"
+
+# vim: set filetype=zsh:
