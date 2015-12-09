@@ -18,6 +18,11 @@ EOH
     return 0
   fi
 
+  if [[ -z "$(gvim --serverlist)" ]]; then
+    gvim "$@"
+    return 0
+  fi
+
   local cmd=""
   local before="<esc>"
   local after=""
