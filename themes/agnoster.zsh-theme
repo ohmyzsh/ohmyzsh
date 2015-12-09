@@ -16,6 +16,10 @@
 # using it on Mac OS X, [iTerm 2](http://www.iterm2.com/) over Terminal.app -
 # it has significantly better color fidelity.
 #
+# If using with "light" variant of the Solarized color schema, set
+# SOLARIZED_THEME variable to "light". If you don't specify, we'll assume
+# you're using the "dark" variant.
+#
 # # Goals
 #
 # The aim of this theme is to only show you *relevant* information. Like most
@@ -29,7 +33,11 @@
 # A few utility functions to make it easy and re-usable to draw segmented prompts
 
 CURRENT_BG='NONE'
-CURRENT_FG='black'
+
+case ${SOLARIZED_THEME:-dark} in
+    light) CURRENT_FG='white';;
+    *)     CURRENT_FG='black';;
+esac
 
 # Special Powerline characters
 
