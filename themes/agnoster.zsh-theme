@@ -29,6 +29,7 @@
 # A few utility functions to make it easy and re-usable to draw segmented prompts
 
 CURRENT_BG='NONE'
+CURRENT_FG='black'
 
 # Special Powerline characters
 
@@ -101,7 +102,7 @@ prompt_git() {
     if [[ -n $dirty ]]; then
       prompt_segment yellow black
     else
-      prompt_segment green black
+      prompt_segment green $CURRENT_FG
     fi
 
     if [[ -e "${repo_path}/BISECT_LOG" ]]; then
@@ -141,7 +142,7 @@ prompt_hg() {
         st='±'
       else
         # if working copy is clean
-        prompt_segment green black
+        prompt_segment green $CURRENT_FG
       fi
       echo -n $(hg prompt "☿ {rev}@{branch}") $st
     else
@@ -155,7 +156,7 @@ prompt_hg() {
         prompt_segment yellow black
         st='±'
       else
-        prompt_segment green black
+        prompt_segment green $CURRENT_FG
       fi
       echo -n "☿ $rev@$branch" $st
     fi
@@ -164,7 +165,7 @@ prompt_hg() {
 
 # Dir: current working directory
 prompt_dir() {
-  prompt_segment blue black '%~'
+  prompt_segment blue $CURRENT_FG '%~'
 }
 
 # Virtualenv: current working virtualenv
