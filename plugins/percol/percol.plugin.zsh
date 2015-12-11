@@ -1,7 +1,7 @@
 if which percol &> /dev/null; then
     function percol_select_history() {
         local tac
-        tac="tail -r"
+        which gtac &> /dev/null && tac="gtac" || { which tac &> /dev/null && tac="tac" || { tac="tail -r" } }
         BUFFER=$(fc -l -n 1 | eval $tac | percol --query "$LBUFFER")
         CURSOR=$#BUFFER
         zle -R -c
