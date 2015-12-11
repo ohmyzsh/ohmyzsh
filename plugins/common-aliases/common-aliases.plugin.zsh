@@ -52,7 +52,7 @@ alias mv='mv -i'
 
 # zsh is able to auto-do some kungfoo
 # depends on the SUFFIX :)
-if [ ${ZSH_VERSION//\./} -ge 420 ]; then
+if is-at-least 4.2.0; then
   # open browser on urls
   _browser_fts=(htm html de org net com at cx nl se dk dk php)
   for ft in $_browser_fts ; do alias -s $ft=$BROWSER ; done
