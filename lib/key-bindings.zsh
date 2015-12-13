@@ -13,6 +13,10 @@ if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
   }
   zle -N zle-line-init
   zle -N zle-line-finish
+  autoload -U up-line-or-beginning-search
+  autoload -U down-line-or-beginning-search
+  zle -N up-line-or-beginning-search
+  zle -N down-line-or-beginning-search 
 fi
 
 bindkey -e                                            # Use emacs key bindings
@@ -28,10 +32,10 @@ if [[ "${terminfo[knp]}" != "" ]]; then
 fi
 
 if [[ "${terminfo[kcuu1]}" != "" ]]; then
-  bindkey "${terminfo[kcuu1]}" up-line-or-search      # start typing + [Up-Arrow] - fuzzy find history forward
+  bindkey "${terminfo[kcuu1]}" up-line-or-beginning-search      # start typing + [Up-Arrow] - fuzzy find history forward
 fi
 if [[ "${terminfo[kcud1]}" != "" ]]; then
-  bindkey "${terminfo[kcud1]}" down-line-or-search    # start typing + [Down-Arrow] - fuzzy find history backward
+  bindkey "${terminfo[kcud1]}" down-line-or-beginning-search    # start typing + [Down-Arrow] - fuzzy find history backward
 fi
 
 if [[ "${terminfo[khome]}" != "" ]]; then
