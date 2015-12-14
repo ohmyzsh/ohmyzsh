@@ -4,23 +4,23 @@
 
 function branch_prompt_info() {
   # Defines path as current directory
-  path=$(pwd)
+  local current_dir=$PWD
   # While current path is not root path
-  while [ $path != '/' ];
+  while [[ $current_dir != '/' ]]
   do
     # Git repository
-    if [ -d ${path}/.git ];
+    if [[ -d "${current_dir}/.git" ]]
     then
-      echo '±' $(/bin/cat ${path}/.git/HEAD | /usr/bin/cut -d / -f 3-)
+      echo '±' ${"$(<"$current_dir/.git/HEAD")"##*/}
       return;
     fi
     # Mercurial repository
-    if [ -d ${path}/.hg ];
+    if [[ -d "${current_dir}/.hg" ]]
     then
-      echo '☿' $(/bin/cat ${path}/.hg/branch)
+      echo '☿' $(<"$current_dir/.hg/branch")
       return;
     fi
     # Defines path as parent directory and keeps looking for :)
-    path=$(/usr/bin/dirname $path)
+    current_dir="${current_dir:h}"
   done
 }
