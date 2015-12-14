@@ -19,8 +19,15 @@ if [[ -n "$terminfo[kcuu1]" ]]; then
   bindkey -M emacs "$terminfo[kcuu1]" history-substring-search-up
   bindkey -M viins "$terminfo[kcuu1]" history-substring-search-up
 fi
+if [[ -n "$terminfo[cuu1]" ]]; then
+  bindkey -M emacs "$terminfo[cuu1]" history-substring-search-up
+  bindkey -M viins "$terminfo[cuu1]" history-substring-search-up
+fi
 if [[ -n "$terminfo[kcud1]" ]]; then
   bindkey -M emacs "$terminfo[kcud1]" history-substring-search-down
   bindkey -M viins "$terminfo[kcud1]" history-substring-search-down
 fi
-
+if [[ -n "$terminfo[cud1]" ]]; then
+  bindkey -M emacs "$terminfo[cud1]" history-substring-search-down
+  bindkey -M viins "$terminfo[cud1]" history-substring-search-down
+fi
