@@ -6,7 +6,7 @@
 # To achieve git-flow completion nirvana:
 #
 #  0. Update your zsh's git-completion module to the newest version.
-#     From here. http://sourceforge.net/p/zsh/code/ci/master/tree/Completion/Unix/Command/_git?format=raw
+#     From here. https://raw.githubusercontent.com/zsh-users/zsh/master/Completion/Unix/Command/_git
 #
 #  1. Install this file. Either:
 #
