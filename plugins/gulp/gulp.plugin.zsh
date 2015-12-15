@@ -20,7 +20,7 @@
 # in the current directory.
 #
 function $$gulp_completion {
-    compls=$(gulp --tasks-simple >/dev/null | sort)
+    compls=$(gulp --tasks-simple 2>/dev/null)
 
     completions=(${=compls})
     compadd -- $completions
