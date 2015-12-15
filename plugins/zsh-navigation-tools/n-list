@@ -243,7 +243,9 @@ while (( 1 )); do
 
             # Take all elements, including duplicates and non-selectables
             typeset +U list
-            list=( "$@" )
+            repeat 1; do
+                list=( "$@" )
+            done
 
             # Remove non-selectable elements
             [ "$#NLIST_NONSELECTABLE_ELEMENTS" -gt 0 ] && for i in "${(nO)NLIST_NONSELECTABLE_ELEMENTS[@]}"; do
@@ -309,7 +311,9 @@ while (( 1 )); do
 
             # Take all elements, including duplicates and non-selectables
             typeset +U list
-            list=( "$@" )
+            repeat 1; do
+                list=( "$@" )
+            done
 
             # Remove non-selectable elements only when in uniq mode
             [ "$NLIST_IS_UNIQ_MODE" -eq 1 ] && [ "$#NLIST_NONSELECTABLE_ELEMENTS" -gt 0 ] &&
