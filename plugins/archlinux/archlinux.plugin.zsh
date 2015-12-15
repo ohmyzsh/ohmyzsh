@@ -2,7 +2,7 @@
 # Usage is also described at https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins
 
 # Look for yaourt, and add some useful functions if we have it.
-if [[ -x `command -v yaourt` ]]; then
+if (( $+commands[yaourt] )); then
   upgrade () {
     yaourt -Syu
   }
@@ -21,11 +21,11 @@ if [[ -x `command -v yaourt` ]]; then
   alias yalst='yaourt -Qe'         # List installed packages, even those installed from AUR (they're tagged as "local")
   alias yaorph='yaourt -Qtd'       # Remove orphans using yaourt
   # Additional yaourt alias examples
-  if [[ -x `command -v abs` && -x `command -v aur` ]]; then
+  if (( $+commands[abs] && $+commands[aur] )); then
     alias yaupd='yaourt -Sy && sudo abs && sudo aur'  # Update and refresh the local package, ABS and AUR databases against repositories
-  elif [[ -x `command -v abs` ]]; then
+  elif (( $+commands[abs] )); then
     alias yaupd='yaourt -Sy && sudo abs'   # Update and refresh the local package and ABS databases against repositories
-  elif [[ -x `command -v aur` ]]; then
+  elif (( $+commands[aur] )); then
     alias yaupd='yaourt -Sy && sudo aur'   # Update and refresh the local package and AUR databases against repositories
   else
     alias yaupd='yaourt -Sy'               # Update and refresh the local package database against repositories
@@ -49,11 +49,11 @@ alias pacreps='pacman -Ss'             # Search for package(s) in the repositori
 alias pacloc='pacman -Qi'              # Display information about a given package in the local database
 alias paclocs='pacman -Qs'             # Search for package(s) in the local database
 # Additional pacman alias examples
-if [[ -x `command -v abs` && -x `command -v aur` ]]; then
+if (( $+commands[abs] && $+commands[aur] )); then
   alias pacupd='sudo pacman -Sy && sudo abs && sudo aur'  # Update and refresh the local package, ABS and AUR databases against repositories
-elif [[ -x `command -v abs` ]]; then
+elif (( $+commands[abs] )); then
   alias pacupd='sudo pacman -Sy && sudo abs'              # Update and refresh the local package and ABS databases against repositories
-elif [[ -x `command -v aur` ]]; then
+elif (( $+commands[aur] )); then
   alias pacupd='sudo pacman -Sy && sudo aur'              # Update and refresh the local package and AUR databases against repositories
 else
   alias pacupd='sudo pacman -Sy'     # Update and refresh the local package database against repositories
