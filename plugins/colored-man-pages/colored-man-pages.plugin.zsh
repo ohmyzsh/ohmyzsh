@@ -1,6 +1,6 @@
-if [ "$OSTYPE" = solaris* ]
+if [[ "$OSTYPE" = solaris* ]]
 then
-	if [ ! -x "$HOME/bin/nroff" ]
+	if [[ ! -x "$HOME/bin/nroff" ]]
 	then
 		mkdir -p "$HOME/bin"
 		cat > "$HOME/bin/nroff" <<EOF
