@@ -34,9 +34,20 @@ else
 fi
 
 # only define LC_CTYPE if undefined
-if [[ -z "$LC_CTYPE" && -z "$LC_ALL" ]]; then
-	export LC_CTYPE=${LANG%%:*} # pick the first entry from LANG
-fi
+LC_CTYPE=${LC_CTYPE:-${LC_ALL:-${LANG:-C}}}
+case $LC_CTYPE in
+   *.utf8|*.UTF-8)
+    # All is correct
+    ;;
+   *)
+    # Need to select an UTF-8 locale
+    local -a available
+    available=("${(f)$(locale -a 2> /dev/null)}")
+    export LC_CTYPE=${${${${(@M)available:#*.UTF-8}[1]}:-${${(@M)available:#*.utf8}[1]}}:-C.UTF-8}
+    unset available
+   ;;
+esac
+export LC_CTYPE
 
 # recognize comments
 setopt interactivecomments
