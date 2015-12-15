@@ -7,6 +7,15 @@ function git_prompt_info() {
   fi
 }
 
+# Get the number of lines changed between the index and the working tree
+function git_changes_info() {
+  changes=$(command git diff --numstat 2>/dev/null) || return
+  if [[ -z "$changes" ]]; then
+    return
+  fi
+  changes=$(echo $changes | awk 'NF==3 {plus+=$1; minus+=$2} END {printf("+%d/-%d", plus, minus)}')
+  echo "$ZSH_THEME_GIT_CHANGES_PREFIX${changes}$ZSH_THEME_GIT_CHANGES_SUFFIX"
+}
 
 # Checks if working tree is dirty
 parse_git_dirty() {
