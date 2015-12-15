@@ -20,9 +20,9 @@
 # in the current directory.
 #
 function $$gulp_completion {
-    local compls=$(gulp --tasks-simple 2>/dev/null)
+    compls=$(gulp --tasks-simple 2>/dev/null)
 
-    local completions=(${=compls})
+    completions=(${=compls})
     compadd -- $completions
 }
 
