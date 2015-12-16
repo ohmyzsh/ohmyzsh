@@ -46,6 +46,7 @@ alias gapa='git add --patch'
 
 alias gb='git branch'
 alias gba='git branch -a'
+alias gbd='git branch -D'
 alias gbda='git branch --merged | command grep -vE "^(\*|\s*master\s*$)" | command xargs -n 1 git branch -d'
 alias gbl='git blame -b -w'
 alias gbnm='git branch --no-merged'
