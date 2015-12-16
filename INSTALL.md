@@ -4,10 +4,10 @@ How to install
 ### Using packages
 
 * Arch Linux: [community/zsh-syntax-highlighting][arch-package] / [AUR/zsh-syntax-highlighting-git][AUR-package]
-* Debian: [in "unstable"][debian-package]
+* Debian: `zsh-syntax-highlighting` package [in `stretch`][debian-package]
 * Gentoo: [mv overlay][gentoo-overlay]
 * Mac OS X / Homebrew: [brew install zsh-syntax-highlighting][brew-package]
-* Ubuntu: [in Xenial][ubuntu-package]
+* Ubuntu: `zsh-syntax-highlighting` package [in Xenial][ubuntu-package]
 
 [arch-package]: https://www.archlinux.org/packages/zsh-syntax-highlighting
 [AUR-package]: https://aur.archlinux.org/packages/zsh-syntax-highlighting-git
