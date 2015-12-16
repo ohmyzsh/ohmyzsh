@@ -37,6 +37,7 @@ _git-flow ()
 				'init:Initialize a new git repo with support for the branching model.'
 				'feature:Manage your feature branches.'
 				'config:Manage your configuration.'
+				'bugfix:Manage your bugfix branches.'
 				'release:Manage your release branches.'
 				'hotfix:Manage your hotfix branches.'
 				'support:Manage your support branches.'
@@ -61,6 +62,10 @@ _git-flow ()
 
 					(hotfix)
 						__git-flow-hotfix
+					;;
+
+					(bugfix)
+						__git-flow-bugfix
 					;;
 
 					(release)
@@ -210,6 +215,8 @@ __git-flow-hotfix ()
 	esac
 }
 
+
+
 __git-flow-feature ()
 {
 	local curcontext="$curcontext" state line
@@ -305,6 +312,103 @@ __git-flow-feature ()
 	esac
 }
 
+
+
+__git-flow-bugfix ()
+{
+	local curcontext="$curcontext" state line
+	typeset -A opt_args
+
+	_arguments -C \
+		':command:->command' \
+		'*::options:->options'
+
+	case $state in
+		(command)
+
+			local -a subcommands
+			subcommands=(
+				'start:Start a new bugfix branch.'
+				'finish:Finish a bugfix branch.'
+				'delete:Delete a bugfix branch.'
+				'list:List all your bugfix branches. (Alias to `git flow bugfix`)'
+				'publish:Publish bugfix branch to remote.'
+				'track:Checkout remote bugfix branch.'
+				'diff:Show all changes.'
+				'rebase:Rebase from integration branch.'
+				'checkout:Checkout local bugfix branch.'
+				'pull:Pull changes from remote.'
+			)
+			_describe -t commands 'git flow bugfix' subcommands
+			_arguments \
+				-v'[Verbose (more) output]'
+		;;
+
+		(options)
+			case $line[1] in
+
+				(start)
+					_arguments \
+						-F'[Fetch from origin before performing finish]'\
+						':bugfix:__git_flow_bugfix_list'\
+						':branch-name:__git_branch_names'
+				;;
+
+				(finish)
+					_arguments \
+						-F'[Fetch from origin before performing finish]' \
+						-r'[Rebase instead of merge]'\
+						':bugfix:__git_flow_bugfix_list'
+				;;
+
+				(delete)
+					_arguments \
+						-f'[Force deletion]' \
+						-r'[Delete remote branch]' \
+						':bugfix:__git_flow_bugfix_list'
+				;;
+
+				(publish)
+					_arguments \
+						':bugfix:__git_flow_bugfix_list'\
+				;;
+
+				(track)
+					_arguments \
+						':bugfix:__git_flow_bugfix_list'\
+				;;
+
+				(diff)
+					_arguments \
+						':branch:__git_branch_names'\
+				;;
+
+				(rebase)
+					_arguments \
+						-i'[Do an interactive rebase]' \
+						':branch:__git_branch_names'
+				;;
+
+				(checkout)
+					_arguments \
+						':branch:__git_flow_bugfix_list'\
+				;;
+
+				(pull)
+					_arguments \
+						':remote:__git_remotes'\
+						':branch:__git_branch_names'
+				;;
+
+				*)
+					_arguments \
+						-v'[Verbose (more) output]'
+				;;
+			esac
+		;;
+	esac
+}
+
 __git-flow-config ()
 {
 	local curcontext="$curcontext" state line
@@ -368,6 +472,17 @@ __git_flow_feature_list ()
 	__git_command_successful || return
 
 	_wanted features expl 'feature' compadd $features
+}
+
+__git_flow_bugfix_list ()
+{
+	local expl
+	declare -a bugfixs
+
+	bugfixs=(${${(f)"$(_call_program bugfixs git flow bugfix list 2> /dev/null | tr -d ' |*')"}})
+	__git_command_successful || return
+
+	_wanted bugfixs expl 'bugfix' compadd $bugfixs
 }
 
 __git_remotes () {
