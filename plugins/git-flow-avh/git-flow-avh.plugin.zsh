@@ -215,8 +215,6 @@ __git-flow-hotfix ()
 	esac
 }
 
-
-
 __git-flow-feature ()
 {
 	local curcontext="$curcontext" state line
@@ -311,8 +309,6 @@ __git-flow-feature ()
 		;;
 	esac
 }
-
-
 
 __git-flow-bugfix ()
 {
