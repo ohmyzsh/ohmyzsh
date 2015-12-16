@@ -105,8 +105,7 @@ colorize output of the tools, via their config files (check out e.g. n-cd.conf,
 it uses this).
 
 ## Performance
-ZNT are fastest with Zsh before 5.0.8 and starting from 5.2 (the version yet to
-be released).
+ZNT are fastest with Zsh before 5.0.6 and starting from 5.2
 
 
 vim:filetype=conf

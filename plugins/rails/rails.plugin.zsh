@@ -61,6 +61,7 @@ alias rr='rake routes'
 alias rrg='rake routes | grep'
 alias rt='rake test'
 alias rmd='rake middleware'
+alias rsts='rake stats'
 
 # legacy stuff
 alias sstat='thin --stats "/thin/stats" start'

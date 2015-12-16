@@ -116,15 +116,15 @@ _nlist_setup_user_vars() {
     fi
 }
 
-_nlist_coloring_list_into_col_list() {
+_nlist_colorify_disp_list() {
     local col=$'\x1b[00;34m' reset=$'\x1b[0m'
     [ -n "$NLIST_COLORING_COLOR" ] && col="$NLIST_COLORING_COLOR"
     [ -n "$NLIST_COLORING_END_COLOR" ] && reset="$NLIST_COLORING_END_COLOR"
 
     if [ "$NLIST_COLORING_MATCH_MULTIPLE" -eq 1 ]; then
-        col_list=( "${(@)list//(#mi)$~NLIST_COLORING_PATTERN/$col${MATCH}$reset}" )
+        disp_list=( "${(@)disp_list//(#mi)$~NLIST_COLORING_PATTERN/$col${MATCH}$reset}" )
     else
-        col_list=( "${(@)list/(#mi)$~NLIST_COLORING_PATTERN/$col${MATCH}$reset}" )
+        disp_list=( "${(@)disp_list/(#mi)$~NLIST_COLORING_PATTERN/$col${MATCH}$reset}" )
     fi
 }
 
@@ -154,7 +154,7 @@ integer inner_width=term_width-3
 integer page_height=inner_height
 integer page_width=inner_width
 
-typeset -a list col_list disp_list
+typeset -a list disp_list
 integer last_element=$#
 local action
 local final_key
@@ -224,19 +224,17 @@ zcurses timeout main -1
 key=""
 keypad=""
 
-list=( "$@" )
-last_element="$#list"
+# This loop makes script faster on some Zsh's (e.g. 5.0.8)
+repeat 1; do
+    list=( "$@" )
+done
 
-integer is_colored=0
-if [[ -z "$NLIST_SEARCH_BUFFER" && -n "$NLIST_COLORING_PATTERN" ]]; then
-    is_colored=1
-    _nlist_coloring_list_into_col_list
-fi
+last_element="$#list"
 
 while (( 1 )); do
     # Do searching (filtering with string)
     if [ -n "$NLIST_SEARCH_BUFFER" ]; then
-        # Compute new list, col_list ?
+        # Compute new list?
         if [[ "$NLIST_SEARCH_BUFFER" != "$prev_search_buffer" || "$NLIST_IS_UNIQ_MODE" -ne "$prev_uniq_mode" ]]; then
             prev_search_buffer="$NLIST_SEARCH_BUFFER"
             prev_uniq_mode="$NLIST_IS_UNIQ_MODE"
@@ -245,7 +243,9 @@ while (( 1 )); do
 
             # Take all elements, including duplicates and non-selectables
             typeset +U list
-            list=( "$@" )
+            repeat 1; do
+                list=( "$@" )
+            done
 
             # Remove non-selectable elements
             [ "$#NLIST_NONSELECTABLE_ELEMENTS" -gt 0 ] && for i in "${(nO)NLIST_NONSELECTABLE_ELEMENTS[@]}"; do
@@ -290,7 +290,7 @@ while (( 1 )); do
                 disp_list=( "${(@)disp_list//(#mi)($~colsearch_pattern)/$red${MATCH}$reset}" )
             fi
 
-            # We have display list, lets replace newlines with "\n" when needed (1/3)
+            # We have display list, lets replace newlines with "\n" when needed (1/2)
             [ "$NLIST_REPLACE_NEWLINES" -eq 1 ] && disp_list=( "${(@)disp_list//$'\n'/\\n}" )
         fi
 
@@ -302,7 +302,7 @@ while (( 1 )); do
         # There is no search, but there was in previous loop
         # OR
         # Uniq mode was entered or left out
-        # -> compute new list (maybe also col_list)
+        # -> compute new list
         if [[ -n "$prev_search_buffer" || "$NLIST_IS_UNIQ_MODE" -ne "$prev_uniq_mode" ]]; then
             prev_search_buffer=""
             prev_uniq_mode="$NLIST_IS_UNIQ_MODE"
@@ -311,7 +311,9 @@ while (( 1 )); do
 
             # Take all elements, including duplicates and non-selectables
             typeset +U list
-            list=( "$@" )
+            repeat 1; do
+                list=( "$@" )
+            done
 
             # Remove non-selectable elements only when in uniq mode
             [ "$NLIST_IS_UNIQ_MODE" -eq 1 ] && [ "$#NLIST_NONSELECTABLE_ELEMENTS" -gt 0 ] &&
@@ -321,13 +323,6 @@ while (( 1 )); do
 
             # Remove duplicates when in uniq mode
             [ "$NLIST_IS_UNIQ_MODE" -eq 1 ] && typeset -U list
-
-            # Apply coloring pattern (when not with search query)
-            is_colored=0
-            if [ -n "$NLIST_COLORING_PATTERN" ]; then
-                is_colored=1
-                _nlist_coloring_list_into_col_list 
-            fi
 
             last_element="$#list"
             # Called after processing list
@@ -340,22 +335,14 @@ while (( 1 )); do
         integer end_idx=$(( NLIST_FROM_WHAT_IDX_LIST_IS_SHOWN + page_height - 1 ))
         [ "$end_idx" -gt "$last_element" ] && end_idx=last_element
 
-        if [ "$is_colored" -eq 0 ]; then
-            if [ "$prev_start_idx" -ne "$NLIST_FROM_WHAT_IDX_LIST_IS_SHOWN" ]; then
-                prev_start_idx="$NLIST_FROM_WHAT_IDX_LIST_IS_SHOWN"
-                disp_list=( "${(@)list[NLIST_FROM_WHAT_IDX_LIST_IS_SHOWN, end_idx]}" )
+        if [ "$prev_start_idx" -ne "$NLIST_FROM_WHAT_IDX_LIST_IS_SHOWN" ]; then
+            prev_start_idx="$NLIST_FROM_WHAT_IDX_LIST_IS_SHOWN"
+            disp_list=( "${(@)list[NLIST_FROM_WHAT_IDX_LIST_IS_SHOWN, end_idx]}" )
 
-                # We have display list, lets replace newlines with "\n" when needed (2/3)
-                [ "$NLIST_REPLACE_NEWLINES" -eq 1 ] && disp_list=( "${(@)disp_list//$'\n'/\\n}" )
-            fi
-        else
-            if [ "$prev_start_idx" -ne "$NLIST_FROM_WHAT_IDX_LIST_IS_SHOWN" ]; then
-                prev_start_idx="$NLIST_FROM_WHAT_IDX_LIST_IS_SHOWN"
-                disp_list=( "${(@)col_list[NLIST_FROM_WHAT_IDX_LIST_IS_SHOWN, end_idx]}" )
+            [ -n "$NLIST_COLORING_PATTERN" ] && _nlist_colorify_disp_list
 
-                # We have display list, lets replace newlines with "\n" when needed (3/3)
-                [ "$NLIST_REPLACE_NEWLINES" -eq 1 ] && disp_list=( "${(@)disp_list//$'\n'/\\n}" )
-            fi
+            # We have display list, lets replace newlines with "\n" when needed (2/2)
+            [ "$NLIST_REPLACE_NEWLINES" -eq 1 ] && disp_list=( "${(@)disp_list//$'\n'/\\n}" )
         fi
 
         # Output the list
@@ -380,6 +367,11 @@ while (( 1 )); do
     fi
 
     zcurses border main
+
+    local top_msg="${(C)ZSH_NAME} $ZSH_VERSION, shell level $SHLVL, $USER"
+    zcurses move main 0 $(( term_width / 2 - $#top_msg / 2 ))
+    zcurses string main $top_msg
+
     zcurses refresh main inner
     zcurses move main $(( term_height - 1 - 1 )) $(( status_msg_strlen + 2 ))
 
