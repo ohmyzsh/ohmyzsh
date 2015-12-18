@@ -7,6 +7,11 @@ alias bu="bundle update"
 alias bi="bundle_install"
 alias bcn="bundle clean"
 
+<<<<<<< HEAD
+# The following is based on https://github.com/gma/bundler-exec
+
+bundled_commands=(annotate berks cap capify cucumber foodcritic foreman guard jekyll kitchen middleman nanoc rackup rainbows rake rspec ruby shotgun spec spin spork strainer tailor taps thin thor unicorn unicorn_rails puma)
+=======
 bundled_commands=(
   annotate
   cap
@@ -39,6 +44,7 @@ bundled_commands=(
   unicorn
   unicorn_rails
 )
+>>>>>>> upstream/master
 
 # Remove $UNBUNDLED_COMMANDS from the bundled_commands list
 for cmd in $UNBUNDLED_COMMANDS; do
