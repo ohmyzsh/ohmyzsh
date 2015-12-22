@@ -12,7 +12,12 @@ _rake_does_task_list_need_generating () {
 }
 
 _rake_generate () {
-  rake --silent --tasks | cut -d " " -f 2 > .rake_tasks
+  rake --silent --tasks \
+    | sed "s/^rake //"  \
+    | sed "s/\:/\\\:/g" \
+    | sed "s/\[.*\]//g" \
+    | sed "s/ *# /\:/"  \
+    > .rake_tasks
 }
 
 _rake () {
@@ -21,7 +26,9 @@ _rake () {
       echo "\nGenerating .rake_tasks..." > /dev/stderr
       _rake_generate
     fi
-    compadd `cat .rake_tasks`
+    local -a rake_options
+    rake_options=( "${(f)mapfile[.rake_tasks]}" )
+    _describe 'values' rake_options
   fi
 }
 
