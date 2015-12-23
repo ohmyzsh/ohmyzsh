@@ -1,4 +1,20 @@
-alias brews='brew list -1'
 alias bubo='brew update && brew outdated'
 alias bubc='brew upgrade && brew cleanup'
 alias bubu='bubo && bubc'
+
+alias bb="brew bundle"
+alias bdr="brew doctor"
+alias bt="brew tap"
+alias bcl="brew cleanup"
+alias bill="brew install"
+alias brein="brew reinstall"
+alias bupd="brew update"
+alias bgrad="brew upgrade"
+alias brch="brew search"
+alias blink="brew link"
+alias bli="brew list"
+alias bsl="brew services list"
+alias bcat="brew cat"
+alias bcmds="brew commands"
+alias bcre="brew create"
+alias binfo="brew info"
