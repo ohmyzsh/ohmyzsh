@@ -1,6 +1,6 @@
 _enumerateGrailsScripts() {
     # Default directoryies
-    directories=($GRAILS_HOME/scripts ~/.grails/scripts ./scripts)
+    directories=($GRAILS_HOME/scripts ~/.grails/scripts ./scripts .sdkman/grails/current/scripts)
 
     # Check all of the plugins directories, if they exist
     if [ -d plugins ]
