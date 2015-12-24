@@ -72,15 +72,15 @@ elif [[ $(uname) == "Linux"  ]] ; then
 
   function battery_pct() {
     if (( $+commands[acpi] )) ; then
-      echo "$(acpi | grep '^Battery.*Discharging' | cut -f2 -d ',' | tr -cd '[:digit:]')"
+      echo "$(acpi | egrep '^Battery.*(Disc|C)harging' | cut -f2 -d ',' | tr -cd '[:digit:]')"
     fi
   }
 
   function battery_pct_remaining() {
-    if [ ! $(battery_is_charging) ] ; then
-      battery_pct
-    else
+    if battery_is_charging ; then
       echo "External Power"
+    else
+      battery_pct
     fi
   }
 
