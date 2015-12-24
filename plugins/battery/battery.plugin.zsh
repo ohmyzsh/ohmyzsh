@@ -72,7 +72,7 @@ elif [[ $(uname) == "Linux"  ]] ; then
 
   function battery_pct() {
     if (( $+commands[acpi] )) ; then
-      echo "$(acpi | cut -f2 -d ',' | tr -cd '[:digit:]')"
+      echo "$(acpi | grep '^Battery.*Discharging' | cut -f2 -d ',' | tr -cd '[:digit:]')"
     fi
   }
 
@@ -86,7 +86,7 @@ elif [[ $(uname) == "Linux"  ]] ; then
 
   function battery_time_remaining() {
     if [[ $(acpi 2&>/dev/null | grep -c '^Battery.*Discharging') -gt 0 ]] ; then
-      echo $(acpi | cut -f3 -d ',')
+      echo $(acpi | grep '^Battery.*Discharging' | cut -f3 -d ',')
     fi
   }
 
