@@ -39,12 +39,12 @@ alias drcml="drush cc module-list"
 alias drcr="drush core-cron"
 alias drct="drush cc theme-registry"
 alias drcv="drush cc views"
+alias drif="drush image-flush --all"
 alias drpm="drush pm-list --type=module"
 alias drst="drush core-status"
 alias drup="drush updatedb"
 alias drups="drush updatedb-status"
 alias drv="drush version"
-alias drif="drush image-flush --all"
 
 # Enable drush autocomplete support
 autoload bashcompinit
