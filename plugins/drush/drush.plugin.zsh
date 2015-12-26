@@ -1,7 +1,7 @@
 # Drush support.
 
 function dren() {
-	drush en $@ -y
+  drush en $@ -y
 }
 
 function dris() {
@@ -45,3 +45,8 @@ alias drup="drush updatedb"
 alias drups="drush updatedb-status"
 alias drv="drush version"
 alias drif="drush image-flush --all"
+
+# Enable drush autocomplete support
+autoload bashcompinit
+bashcompinit
+source $(dirname $0)/drush.complete.sh
