@@ -2,8 +2,8 @@
 #autoload
 
 
-# pkgsrc autocomplete plugin
-# Requires pkgin: pkgsrc package management from Joyent.
+# pkgsrc autocomplete plugin.
+# Requires pkgin: pkgsrc binary package management from Joyent.
 # Author: Jeff LANCE
 
 

@@ -1,4 +1,4 @@
-# Aliases
+# pkgin aliases
 alias pkgls="pkgin ls"            # show installed packages
 alias pkgav="pkgin av"            # show available packages
 alias pkgse="pkgin se $1"         # search packages
