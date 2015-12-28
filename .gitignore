@@ -1,10 +1,10 @@
 locals.zsh
 log/.zsh_history
 projects.zsh
-!custom/plugins/pkgsrc
+custom/plugins/_*
 !custom/plugins/example
 !custom/example.zsh
-custom
+custom/*.zsh
 *.swp
 !custom/example.zshcache
 cache/
