@@ -1,0 +1,227 @@
+#compdef docker-machine
+
+# Docker Machine autocompletion for oh-my-zsh
+# Requires: Docker Machine installed
+# Author: Valentin Bud (@valentinbud)
+
+
+# ----- Helper functions
+# Output a selectable list of all running docker machines
+__docker_machines() {
+    declare -a mach_cmd
+    mach_cmd=($(docker-machine ls | grep Running | awk '{print $1":[MACH("$1")("$4")("$3")]"}'))
+    if [[  'X$mach_cmd' != 'X' ]]
+        _describe 'machines' mach_cmd
+}
+
+# Output a selectable list of all machines, even not running
+__docker_all_machines() {
+    declare -a mach_cmd
+    mach_cmd=($(docker-machine ls | awk 'NR>1{print $1":[MACH("$1")("$4")("$3")]"}'))
+    if [[  'X$mach_cmd' != 'X' ]]
+        _describe 'machines' mach_cmd
+}
+
+# Output a selectable list of all stopped/saved machines
+__docker_stopped_machines() {
+    declare -a mach_cmd
+    mach_cmd=($(docker-machine ls | grep -v Running | awk 'NR>1{print $1":[MACH("$1")("$4")("$3")]"}'))
+    if [[  'X$mach_cmd' != 'X' ]]
+        _describe 'machines' mach_cmd
+}
+
+# ----- Commands
+# Seperate function for each command, makes extension easier later
+# ---------------------------
+__active() {
+    # no arguments
+}
+
+__config() {
+    _arguments \
+        '--swarm[Display the Swarm config instead of the Docker daemon]'
+    __docker_machines
+}
+
+__create() {
+    _arguments \
+        '(--driver,-d)'{--driver,-d}'[Driver to create machine with]' \
+        '--engine-install-url[Custom URL to use for engine installation (https://get.docker.com) $MACHINE_DOCKER_INSTALL_URL]' \
+        '--engine-opt[Specify arbitrary flags to include with the created engine in the form flag=value]' \
+        '--engine-insecure-registry[Specify insecure registries to allow with the created engine]' \
+        '--engine-registry-mirror[Specify registry mirrors to use]' \
+        '--engine-label[Specify labels for the created engine]' \
+        '--engine-storage-driver[Specify a storage driver to use with the engine]' \
+        '--engine-env[Specify environment variables to set in the engine]' \
+        '--swarm[Configure Machine with Swarm]' \
+        '--swarm-image[Specify Docker image to use for Swarm (swarm:latest) $MACHINE_SWARM_IMAGE]' \
+        '--swarm-master[Configure Machine to be a Swarm master]' \
+        '--swarm-discovery[Discovery service to use with Swarm]' \
+        '--swarm-strategy[Define a default scheduling strategy for Swarm (spread)]' \
+        '--swarm-opt[Define arbitrary flags for swarm]' \
+        '--swarm-host[IP/socket to listen on for Swarm master (tcp://0.0.0.0:3376)]' \
+        '--swarm-addr[Addres to advertise for Swarm (default: detect and use the machine IP)]' \
+        '--tls-san[Support extra SANs for TLS certs]'
+
+}
+
+__env() {
+    _arguments \
+        '(--unset, -u)'{--unset,-u}'[Unset variables instead of setting them]' \
+        '--swarm[Display the Swarm config instead of the Docker daemon]' \
+        '--shell[Force environment to be configured for a specified shell: fish, cmd, powershell, default is sh/bash]' \
+        '--no-proxy[Add machine IP to NO_PROXY environment variable]'
+    __docker_machines
+}
+
+__inspect() {
+    _arguments \
+        '(--format,-f)'{--format,-f}'[Format the output using the given go template]'
+    __docker_all_machines
+}
+
+__ip() {
+    __docker_machines
+}
+
+__kill() {
+    __docker_machines
+}
+
+__ls() {
+    # no arguments
+}
+
+__regenerate-certs() {
+    _arguments \
+        '(--force,-f)'{--force,-f}'[Force rebuild and do not prompt]'
+    __docker_machines
+}
+
+__restart() {
+    __docker_all_machines
+}
+
+__rm() {
+    _arguments \
+        '(-f,--force=)'{-f,--force=}'[Remove local configuration even if machine cannot be removed, also implies an automatic yes (-y)]' \
+        '-y[Assumes automatic yes to proceed with remove, without prompting further user confirmation]'
+    __docker_all_machines
+}
+
+__ssh() {
+    __docker_machines
+}
+
+__scp() {
+    _arguments \
+        '(--recursive,-r)'{--recursive,-r}'[Copy files recursively (required to copy directories)]'
+    __docker_machines
+}
+
+__start() {
+    __docker_stopped_machines
+}
+
+__status() {
+    __docker_all_machines
+}
+
+__stop() {
+    __docker_machines
+}
+
+__upgrade() {
+    __docker_machines
+}
+
+__url() {
+    __docker_machines
+}
+
+__version() {
+    __docker_machines
+}
+
+__help() {
+    _describe -t commands "docker-machine command" _1st_arguments   
+}
+# end commands ---------
+# ----------------------
+
+local -a _1st_arguments
+_1st_arguments=(
+    "active":"Print which machine is active"
+    "config":"Print the connection config for machine"
+    "create":"Create a machine"
+    "env":"Display the commands to set up the environment for the Docker client"
+    "inspect":"Inspect information about a machine"
+    "ip":"Get the IP address of a machine"
+    "kill":"Kill a machine"
+    "ls":"List machines"
+    "regenerate-certs":"Regenerate TLS Certificates for a machine"
+    "restart":"Restart a machine"
+    "rm":"Remove a machine"
+    "ssh":"Log into or run a command on a machine with SSH"
+    "scp":"Copy files between machines"
+    "start":"Start a machine"
+    "status":"Get the status of a machine"
+    "stop":"Stop a machine"
+    "upgrade":"Upgrade a machine to the latest version of Docker"
+    "url":"Get the URL of a machine"
+    "version":"Show the Docker Machine version or a machine docker version"
+    "help":"Shows a list of commands or help for one command"
+)
+
+_arguments '*:: :->command'
+
+if (( CURRENT == 1 )); then
+    _describe -t commands "docker-machine command" _1st_arguments
+    return
+fi
+
+local -a _command_args
+case "$words[1]" in
+    active)
+       __active ;;
+    config)
+        __config ;;
+    env)
+        __env ;;
+    cp)
+        __cp ;;
+    create)
+        __create ;;
+    inspect)
+        __inspect ;;
+    ip)
+        __ip ;;
+    ls)
+        __ls ;;
+    kill)
+        __kill ;;
+    regenerate-certs)
+        __regenerate-certs ;;
+    restart)
+        __restart ;;
+    rm)
+        __rm ;;
+    ssh)
+        __ssh ;;
+    scp) 
+        __scp ;;
+    status)
+        __status ;;
+    start)
+        __start ;;
+    stop)
+        __stop ;;
+    version)
+        __version ;;
+    help)
+        __help ;;
+    upgrade)
+        __upgrade ;;
+    url);
+        __url ;;
+esac
