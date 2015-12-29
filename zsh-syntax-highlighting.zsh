@@ -113,33 +113,13 @@ _zsh_highlight()
     done
 
     # Re-apply zle_highlight settings
-    () {
-      if (( REGION_ACTIVE )) ; then
-        # zle_highlight[region] defaults to 'standout' if unspecified
-        local region="${${zle_highlight[(r)region:*]#region:}:-standout}"
-        integer start end
-        if (( MARK > CURSOR )) ; then
-          start=$CURSOR end=$MARK
-        else
-          start=$MARK end=$CURSOR
-        fi
-        region_highlight+=("$start $end $region")
-      fi
-    }
-    # YANK_ACTIVE is only available in zsh-5.1.1 and newer
-    (( $+YANK_ACTIVE )) && () {
-      if (( YANK_ACTIVE )) ; then
-        # zle_highlight[paste] defaults to 'standout' if unspecified
-        local paste="${${zle_highlight[(r)paste:*]#paste:}:-standout}"
-        integer start end
-        if (( YANK_END > YANK_START )) ; then
-          start=$YANK_START end=$YANK_END
-        else
-          start=$YANK_END end=$YANK_START
-        fi
-        region_highlight+=("$start $end $paste")
-      fi
-    }
+
+    # region
+    (( REGION_ACTIVE )) && _zsh_highlight_apply_zle_highlight region standout "$MARK" "$CURSOR"
+
+    # yank / paste (zsh-5.1.1 and newer)
+    (( $+YANK_ACTIVE )) && (( YANK_ACTIVE )) && _zsh_highlight_apply_zle_highlight paste standout "$YANK_START" "$YANK_END"
+
 
     return $ret
 
@@ -148,6 +128,42 @@ _zsh_highlight()
     typeset -g _ZSH_HIGHLIGHT_PRIOR_BUFFER="$BUFFER"
     typeset -gi _ZSH_HIGHLIGHT_PRIOR_CURSOR=$CURSOR
   }
+}
+
+# Apply highlighting based on entries in the zle_highligh array.
+# This function takes four arguments:
+# 1. The exact entry (no patterns) in the zle_highlight array:
+#    region, paste, isearch, or suffix
+# 2. The default highlighting that should be applied if the entry is unset
+# 3. and 4. Two integer values describing the beginning and end of the
+#    range. The order does not matter.
+_zsh_highlight_apply_zle_highlight() {
+  local entry="$1" default="$2"
+  integer first="$3" second="$4"
+
+  # read the relevant entry from zle_highlight
+  local region="${zle_highlight[(r)$entry:*]}"
+
+  if [[ -z "$region" ]]; then
+    # entry not specified at all, use default value
+    region=$default
+  else
+    # strip prefix
+    region="${region#$entry:}"
+
+    # no highlighting when set to the empty string or to 'none'
+    if [[ -z "$region" ]] || [[ "$region" == none ]]; then
+      return
+    fi
+  fi
+
+  integer start end
+  if (( first < second )); then
+    start=$first end=$second
+  else
+    start=$second end=$first
+  fi
+  region_highlight+=("$start $end $region")
 }
 
 
