@@ -49,8 +49,9 @@ ZSH_THEME="azure"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git)
+plugins=(git vi-mode)
 
+source ~/.bash_profile
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -59,7 +60,7 @@ export JAVA_HOME=/home/users/shiludeng/.jumbo/opt/sun-java6
 export HADOOP_INSTALL=/home/users/shiludeng/data/dev/hadoop/hadoop
 #/home/tools/tools/maven/apache-maven-2.2.1/bin
 export PATH=$HOME/bin:$HADOOP_INSTALL/bin:/usr/local/bin:$PATH
-bash ~/.bash_profile
+
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment

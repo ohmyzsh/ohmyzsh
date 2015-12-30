@@ -11,7 +11,7 @@ FINISH="%{$terminfo[sgr0]%}"
 #}}} 
   
 #命令提示符 
-RPROMPT=$(echo "$RED%D %T$FINISH") 
+#RPROMPT=$(echo "$RED%D %T$FINISH") 
 PROMPT=$(echo "$CYAN%n@$YELLOW%M:$GREEN%/$_YELLOW>$FINISH ") 
   
 #PROMPT=$(echo "$BLUE%M$GREEN%/ 
@@ -120,8 +120,8 @@ setopt AUTO_MENU
 #开启此选项，补全时会直接选中菜单项 
 #setopt MENU_COMPLETE 
   
-autoload -U compinit 
-compinit 
+#autoload -U compinit 
+#compinit 
 autoload -U select-word-style
 select-word-style whitespace
   
@@ -214,18 +214,6 @@ esac
 } 
 zle -N user-complete 
 bindkey "\t" user-complete 
-#}}} 
-  
-##在命令前插入 sudo {{{ 
-#定义功能 
-sudo-command-line() { 
-[[ -z $BUFFER ]] && zle up-history
-[[ $BUFFER != sudo\ * ]] && BUFFER="sudo $BUFFER"
-zle end-of-line                 #光标移动到行末 
-} 
-zle -N sudo-command-line 
-#定义快捷键为： [Esc] [Esc] 
-bindkey "\e\e" sudo-command-line 
 #}}} 
   
 #命令别名 {{{ 
@@ -352,8 +340,8 @@ autoload -U ~/.zsh/functions/*(:t)
 
 # Set the prompt.
 local ret_status="%(?:%{$fg_bold[green]%}➜ :%{$fg_bold[red]%}➜ %s)"
-PROMPT='%{${fg[cyan]}%}┌%n@%{${fg[yellow]}%}%M:%{${fg[cyan]}%}%B%~%{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%}$(svn_prompt_info)%{${fg[default]}%}%{$fg[cyan]%}
-└> %'
+PROMPT='%{${fg[cyan]}%}%n@%{${fg[yellow]}%}%M:%{${fg[cyan]}%}%B%/%{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%}$(svn_prompt_info)%{${fg[default]}%}%{$fg[cyan]%}
+> %'
 
 ZSH_PROMPT_BASE_COLOR="%{$fg_bold[blue]%}"
 ZSH_THEME_REPO_NAME_COLOR="%{$fg_bold[yello]%}"
