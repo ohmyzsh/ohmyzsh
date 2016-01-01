@@ -121,6 +121,8 @@ run_test() {
   typeset -r __tests_tempdir # don't allow tests to override the variable that we will 'rm -rf' later on
 
   {
+    # Use a subshell to isolate tests from each other.
+    # (So tests can alter global shell state using 'cd', 'hash', etc)
     (run_test_internal "$__tests_tempdir" "$@")
   } always {
     rm -rf -- "$__tests_tempdir"
