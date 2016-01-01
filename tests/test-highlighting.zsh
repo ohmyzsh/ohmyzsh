@@ -112,6 +112,9 @@ run_test_internal() {
   done
 }
 
+# Run a single test file.  The exit status is 1 if the test harness had
+# an error and 0 otherwise.  The exit status does not depend on whether
+# test points succeeded or failed.
 run_test() {
   # Do not combine the declaration and initialization: «local x="$(false)"» does not set $?.
   local __tests_tempdir
