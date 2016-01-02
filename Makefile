@@ -45,6 +45,9 @@ test:
 	done; \
 	exit $$result
 
+quiet-test:
+	$(MAKE) test QUIET=y
+
 perf:
 	@result=0; \
 	for test in highlighters/*; do \

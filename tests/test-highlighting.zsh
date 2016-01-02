@@ -132,10 +132,23 @@ run_test() {
   }
 }
 
+# Set up results_filter
+local results_filter
+if [[ $QUIET == y ]]; then
+  if type -w perl >/dev/null; then
+    results_filter=${0:A:h}/tap-filter
+  else
+    echo >&2 "Bail out! quiet mode not supported: perl not found"; exit 2
+  fi
+else
+  results_filter=cat
+fi
+[[ -n $results_filter ]] || { echo >&2 "Bail out! BUG setting \$results_filter"; exit 2 }
+
 # Process each test data file in test data directory.
 integer something_failed=0
 for data_file in ${0:h:h}/highlighters/$1/test-data/*.zsh; do
-  run_test "$data_file" | tee >(${0:A:h}/tap-colorizer.zsh) | grep -v '^not ok.*# TODO' | grep -q '^not ok\|^ok.*# TODO' && (( something_failed=1 ))
+  run_test "$data_file" | tee >($results_filter | ${0:A:h}/tap-colorizer.zsh) | grep -v '^not ok.*# TODO' | grep -q '^not ok\|^ok.*# TODO' && (( something_failed=1 ))
   (( $pipestatus[1] )) && exit 2
 done
 

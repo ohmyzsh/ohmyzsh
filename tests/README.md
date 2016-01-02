@@ -38,6 +38,9 @@ All tests may be run with
     make test
 
 which will run all highlighting tests and report results in [TAP format][TAP].
+By default, the results of all tests will be printed; to show only "interesting"
+results (tests that failed but were expected to succeed, or vice-versa), run
+`make quiet-test` (or `make test QUIET=y`).
 
 [TAP]: http://testanything.org/
 
