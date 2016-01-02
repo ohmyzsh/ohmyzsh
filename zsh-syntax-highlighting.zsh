@@ -204,7 +204,7 @@ _zsh_highlight_bind_widgets()
     case $widgets[$cur_widget] in
 
       # Already rebound event: do nothing.
-      user:$cur_widget|user:_zsh_highlight_widget_*);;
+      user:_zsh_highlight_widget_*);;
 
       # User defined widget: override and rebind old one with prefix "orig-".
       user:*) eval "zle -N orig-$cur_widget ${widgets[$cur_widget]#*:}; \
