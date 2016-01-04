@@ -62,6 +62,18 @@ alias rrg='rake routes | grep'
 alias rt='rake test'
 alias rmd='rake middleware'
 alias rsts='rake stats'
+alias rtasks = 'rake --tasks'
+alias ra = 'rake about'
+alias rdv = 'rake db:version'
+alias rtcc = 'rake tmp:cache:clear'
+alias rtsc = 'rake tmp:sessions:clear'
+alias rtssc = 'rake tmp:sessions:clear'
+alias rtsc = 'rake tmp:sockets:clear'
+alias rtc = 'rake tmp:clear'
+alias rtmp = 'rake tmp:create'
+alias rst = 'rake secret'
+alias rtz = 'rake time:zones:all'
+
 
 # legacy stuff
 alias sstat='thin --stats "/thin/stats" start'
