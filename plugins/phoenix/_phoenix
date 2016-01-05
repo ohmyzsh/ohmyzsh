@@ -1,0 +1,59 @@
+#compdef mix
+#autoload
+
+# Elixir mix zsh completion
+
+local -a _1st_arguments
+_1st_arguments=(
+    'ecto.create:Create the storage for the repo'
+    'ecto.drop:Drop the storage for the repo'
+    'ecto.gen.migration:Generates a new migration for the repo'
+    'ecto.gen.repo:Generate a new repository'
+    'ecto.migrate:Run migrations up on a repo'
+    'ecto.rollback:Rollback migrations from a repo'
+    'phoenix.digest:Digests and compress static files'
+    'phoenix.gen.channel:Generates a Phoenix channel'
+    'phoenix.gen.html:Generates controller, model, and views for an HTML based resource'
+    'phoenix.gen.json:Generates a controller and model for a JSON based resource'
+    'phoenix.gen.model:Generates an Ecto model'
+    'phoenix.gen.secret:Generates a secret'
+    'phoenix.new:Create a new Phoenix application'
+    'phoenix.routes:Prints all the Phoenix routes'
+    'phoenix.server:Starts the Phoenix Web Server'
+    '--help:Describe available tasks'
+    '--version:Prints the Phoenix version information'
+)
+
+__task_list ()
+{
+    local expl
+    declare -a tasks
+
+    tasks=(ecto.create ecto.drop ecto.gen.migration ecto.gen.repo ecto.migrate ecto.rollback phoenix.digest phoenix.gen.channel phoenix.gen.html phoenix.gen.json phoenix.gen.model phoenix.gen.secret phoenix.new phoenix.routes phoenix.server)
+
+    _wanted tasks expl 'help' compadd $tasks
+}
+
+local expl
+
+local curcontext="$curcontext" state line
+typeset -A opt_args
+
+_arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+case $state in
+  (command)
+      _describe -t commands "mix subcommand" _1st_arguments
+      return
+  ;;
+
+  (options)
+    case $line[1] in
+      (help)
+         _arguments ':feature:__task_list'
+    esac
+  ;;
+esac
+
