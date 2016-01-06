@@ -1,9 +1,6 @@
 #compdef task
-# zsh completion for taskwarrior
 #
-# taskwarrior - a command line task list manager.
-#
-# Copyright 2010 - 2011 Johannes Schlatow
+# Copyright 2010 - 2015 Johannes Schlatow
 # Copyright 2009 P.C. Shyamshankar
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -30,31 +27,40 @@ typeset -g _task_cmds _task_projects _task_tags _task_config _task_modifiers
 _task_projects=($(task _projects))
 _task_tags=($(task _tags))
 _task_ids=($(task _ids))
+_task_zshids=( ${(f)"$(task _zshids)"} )
 _task_config=($(task _config))
 _task_columns=($(task _columns))
 _task_modifiers=(
-	'before' \
-	'after' \
-	'none' \
-	'any' \
-	'is' \
-	'isnt' \
-	'has' \
-	'hasnt' \
-	'startswith' \
-	'endswith' \
-	'word' \
-	'noword'
+  'before' \
+  'after' \
+  'none' \
+  'any' \
+  'is' \
+  'isnt' \
+  'has' \
+  'hasnt' \
+  'startswith' \
+  'endswith' \
+  'word' \
+  'noword'
 )
 _task_conjunctions=(
-   'and' \
-   'or' \
-	'xor' \
-	'\)'
-	'\('
+  'and' \
+  'or' \
+  'xor' \
+  '\)' \
+  '\(' \
+  '<' \
+  '<=' \
+  '=' \
+  '!=' \
+  '>=' \
+  '>'
 )
-_task_cmds=($(task _commands))
-_task_zshcmds=( ${(f)"$(task _zshcommands)"} )
+_task_cmds=($(task _commands; task _aliases))
+_task_zshcmds=( ${(f)"$(task _zshcommands)"} sentinel:sentinel:sentinel )
+
+_task_aliases=($(task _aliases))
 
 _task() {
     _arguments -s -S \
@@ -68,110 +74,130 @@ word=$'[^\0]#\0'
 # priorities
 local -a task_priorities
 _regex_words values 'task priorities' \
-	'H:High' \
-	'M:Middle' \
-	'L:Low'
+  'H:High' \
+  'M:Middle' \
+  'L:Low'
 task_priorities=("$reply[@]")
 
 # projects
 local -a task_projects
 task_projects=(
-	/"$word"/
-	":values:task projects:compadd -a _task_projects"
+  /"$word"/
+  ":values:task projects:compadd -a _task_projects"
 )
 
 local -a _task_dates
 _regex_words values 'task dates' \
-	'tod*ay:Today' \
-	'yes*terday:Yesterday' \
-	'tom*orrow:Tomorrow' \
-	'sow:Start of week' \
-	'soww:Start of work week' \
-	'socw:Start of calendar week' \
-	'som:Start of month' \
-	'soy:Start of year' \
-	'eow:End of week' \
-	'eoww:End of work week' \
-	'eocw:End of calendar week' \
-	'eom:End of month' \
-	'eoy:End of year' \
-	'mon:Monday' \
-	'tue:Tuesday'\
-	'wed:Wednesday' \
-	'thu:Thursday' \
-	'fri:Friday' \
-	'sat:Saturday' \
-	'sun:Sunday'
+  'tod*ay:Today' \
+  'yes*terday:Yesterday' \
+  'tom*orrow:Tomorrow' \
+  'sow:Start of week' \
+  'soww:Start of work week' \
+  'socw:Start of calendar week' \
+  'som:Start of month' \
+  'soq:Start of quarter' \
+  'soy:Start of year' \
+  'eow:End of week' \
+  'eoww:End of work week' \
+  'eocw:End of calendar week' \
+  'eom:End of month' \
+  'eoq:End of quarter' \
+  'eoy:End of year' \
+  'mon:Monday' \
+  'tue:Tuesday'\
+  'wed:Wednesday' \
+  'thu:Thursday' \
+  'fri:Friday' \
+  'sat:Saturday' \
+  'sun:Sunday' \
+  'good*friday:Good Friday' \
+  'easter:Easter' \
+  'eastermonday:Easter Monday' \
+  'ascension:Ascension' \
+  'pentecost:Pentecost' \
+  'midsommar:Midsommar' \
+  'midsommarafton:Midsommarafton' \
+  'later:Later' \
+  'someday:Some Day'
 _task_dates=("$reply[@]")
 
 local -a _task_reldates
 _regex_words values 'task reldates' \
-	'hrs:n hours' \
-	'day:n days' \
-	'1st:first' \
-	'2nd:second' \
-	'3rd:third' \
-	'th:4th, 5th, etc.' \
-	'wks:weeks'
+  'hrs:n hours' \
+  'day:n days' \
+  '1st:first' \
+  '2nd:second' \
+  '3rd:third' \
+  'th:4th, 5th, etc.' \
+  'wks:weeks'
 _task_reldates=("$reply[@]")
 
 task_dates=(
-	\( "$_task_dates[@]" \|
+  \( "$_task_dates[@]" \|
     \( /$'[0-9][0-9]#'/- \( "$_task_reldates[@]" \) \)
-	\)
+  \)
 )
 
+local -a task_zshids
+_regex_words values 'task IDs' $_task_zshids
+task_zshids=("$reply[@]")
+
 _regex_words values 'task frequencies' \
-	'daily:Every day' \
-	'day:Every day' \
-	'weekdays:Every day skipping weekend days' \
-	'weekly:Every week' \
-	'biweekly:Every two weeks' \
-	'fortnight:Every two weeks' \
-+ 'monthly:Every month' \
-	'quarterly:Every three months' \
-	'semiannual:Every six months' \
-	'annual:Every year' \
-	'yearly:Every year' \
-	'biannual:Every two years' \
-	'biyearly:Every two years'
+  'daily:Every day' \
+  'day:Every day' \
+  'weekdays:Every day skipping weekend days' \
+  'weekly:Every week' \
+  'biweekly:Every two weeks' \
+  'fortnight:Every two weeks' \
+  'monthly:Every month' \
+  'quarterly:Every three months' \
+  'semiannual:Every six months' \
+  'annual:Every year' \
+  'yearly:Every year' \
+  'biannual:Every two years' \
+  'biyearly:Every two years'
 _task_freqs=("$reply[@]")
 
 local -a _task_frequencies
 _regex_words values 'task frequencies' \
-	'd:days' \
-	'w:weeks' \
-	'q:quarters' \
-	'y:years'
+  'd:days' \
+  'w:weeks' \
+  'q:quarters' \
+  'y:years'
 _task_frequencies=("$reply[@]")
 
 task_freqs=(
-	\( "$_task_freqs[@]" \|
+  \( "$_task_freqs[@]" \|
      \( /$'[0-9][0-9]#'/- \( "$_task_frequencies[@]" \) \)
-	\)
+  \)
 )
 
 # attributes
 local -a task_attributes
 _regex_words -t ':' default 'task attributes' \
-	'pro*ject:Project name:$task_projects' \
-	'du*e:Due date:$task_dates' \
-	'wa*it:Date until task becomes pending:$task_dates' \
-	're*cur:Recurrence frequency:$task_freqs' \
-	'pri*ority:priority:$task_priorities' \
-	'un*til:Recurrence end date:$task_dates' \
-	'fg:Foreground color' \
-	'bg:Background color' \
-	'li*mit:Desired number of rows in report'
+  'des*cription:Task description text' \
+  'status:Status of task - pending, completed, deleted, waiting' \
+  'pro*ject:Project name:$task_projects' \
+  'pri*ority:priority:$task_priorities' \
+  'du*e:Due date:$task_dates' \
+  're*cur:Recurrence frequency:$task_freqs' \
+  'un*til:Expiration date:$task_dates' \
+  'li*mit:Desired number of rows in report' \
+  'wa*it:Date until task becomes pending:$task_dates' \
+  'ent*ry:Date task was created:$task_dates' \
+  'end:Date task was completed/deleted:$task_dates' \
+  'st*art:Date task was started:$task_dates' \
+  'sc*heduled:Date task is scheduled to start:$task_dates' \
+  'dep*ends:Other tasks that this task depends upon:$task_zshids'
 task_attributes=("$reply[@]")
 
 args=(
-	\( "$task_attributes[@]" \|
-	\( /'(project|due|wait|recur|priority|until|fg|bg|limit).'/- \( /$'[^:]#:'/ ":default:modifiers:compadd -S ':' -a _task_modifiers" \) \) \|
-	\( /'(rc).'/- \( /$'[^:]#:'/ ":arguments:config:compadd -S ':' -a _task_config" \) \) \|
-	\( /'(+|-)'/- \( /"$word"/ ":values:remove tag:compadd -a _task_tags" \) \) \|
-	\( /"$word"/ \)
-	\) \#
+  \( "$task_attributes[@]" \|
+  \( /'(project|description|status|entry|end|start|scheduled|depends|due|wait|recur|priority|until|limit).'/- \( /$'[^:]#:'/ ":default:modifiers:compadd -S ':' -a _task_modifiers" \) \) \|
+  \( /'(rc).'/- \( /$'[^:]#:'/ ":arguments:config:compadd -S ':' -a _task_config" \) \) \|
+  \( /'(+|-)'/- \( /"$word"/ ":values:remove tag:compadd -a _task_tags" \) \) \|
+  \( /"$word"/ \)
+  \) \#
 )
 _regex_arguments _task_attributes "${args[@]}"
 
@@ -180,43 +206,50 @@ _regex_arguments _task_attributes "${args[@]}"
 # filter completion
 (( $+functions[_task_filter] )) ||
 _task_filter() {
-	_task_attributes "$@"
+  _task_attributes "$@"
 
-	# TODO complete conjunctions only if the previous word is a filter expression, i.e. attribute, ID, any non-command
-	_describe -t default 'task conjunctions' _task_conjunctions
-}
-
-# merge completion
-(( $+functions[_task_merge] )) ||
-_task_merge() {
-	# TODO match URIs in .taskrc
-	_files
-}
-
-# push completion
-(( $+functions[_task_push] )) ||
-_task_push() {
-	# TODO match URIs in .taskrc
-	_files
-}
-
-# pull completion
-(( $+functions[_task_pull] )) ||
-_task_pull() {
-	# TODO match URIs in .taskrc
-	_files
+  # TODO complete conjunctions only if the previous word is a filter expression, i.e. attribute, ID, any non-command
+  _describe -t default 'task conjunctions' _task_conjunctions
 }
 
 # execute completion
 (( $+functions[_task_execute] )) ||
 _task_execute() {
-	_files
+  _files
 }
 
 # id-only completion
 (( $+functions[_task_id] )) ||
 _task_id() {
-	_describe -t values 'task IDs' _task_zshids
+  _describe -t values 'task IDs' _task_zshids
+}
+
+# subcommand-only function
+(( $+functions[_task_subcommands] )) ||
+_task_subcommands() {
+  local -a subcommands
+  local _zshcmd
+  local cmd category desc
+  local lastcategory=''
+  # The list is sorted by category, in the right order.
+  for _zshcmd in "$_task_zshcmds[@]"; do
+    # Parse out the three fields
+    cmd=${_zshcmd%%:*}
+    category=${${_zshcmd#*:}%%:*}
+    desc=${_zshcmd#*:*:}
+
+    # Present each category as soon as the first entry in the *next* category
+    # is seen.
+    if [[ $category != $lastcategory && -n $lastcategory ]]; then
+      _describe -t ${lastcategory}-commands "task ${lastcategory} command" subcommands
+      subcommands=()
+    fi
+
+    # Log the subcommand; we will process it in some future iteration.
+    subcommands+=( "$cmd:$desc" )
+
+    lastcategory=$category
+  done
 }
 
 ## first level completion => task sub-command completion
@@ -224,27 +257,28 @@ _task_id() {
 _task_default() {
     local cmd ret=1
 
-	integer i=1
-	while (( i < $#words ))
-	do
-		cmd="${_task_cmds[(r)$words[$i]]}"
-		if (( $#cmd )); then
-			_call_function ret _task_${cmd} ||
-				_call_function ret _task_filter ||
-					_message "No command remaining."
-			return ret
-		fi
-		(( i++ ))
-	done
+  integer i=1
+  while (( i < $#words ))
+  do
+    cmd="${_task_cmds[(r)$words[$i]]}"
+    if (( $#cmd )); then
+      _call_function ret _task_${cmd} ||
+        _call_function ret _task_filter ||
+          _message "No command remaining."
+      return ret
+    fi
+    (( i++ ))
+  done
 
-	# update IDs
-	_task_zshids=( ${(f)"$(task _zshids)"} )
+  # update IDs
+  _task_zshids=( ${(f)"$(task _zshids)"} )
 
-	_describe -t commands 'task command' _task_zshcmds
-	_describe -t values 'task IDs' _task_zshids
-	_call_function ret _task_filter
+  _task_subcommands
+  _describe -t tasks 'task IDs' _task_zshids
+  _describe -t aliases 'task aliases' _task_aliases
+  _call_function ret _task_filter
 
-	return ret
+  return ret
 }
 
-_task
+_task "$@"
