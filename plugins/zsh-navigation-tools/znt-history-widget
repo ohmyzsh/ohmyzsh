@@ -1,7 +1,11 @@
 autoload znt-usetty-wrapper n-history
 local NLIST_START_IN_SEARCH_MODE=1
 local NLIST_START_IN_UNIQ_MODE=1
-local NLIST_SET_SEARCH_TO="$BUFFER"
+
+# Only if current $BUFFER doesn't come from history
+if [ "$HISTCMD" = "$HISTNO" ]; then
+    local NLIST_SET_SEARCH_TO="$BUFFER"
+fi
 
 znt-usetty-wrapper n-history "$@"
 
