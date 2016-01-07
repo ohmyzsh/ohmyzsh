@@ -31,7 +31,6 @@ success_upgrading() {
   printf "${BLUE}%s\n" "Hooray! Oh My Zsh has been updated and/or is at the current version."
   printf "${BLUE}${BOLD}%s${NORMAL}\n" "To keep up on the latest news and updates, follow us on twitter: https://twitter.com/ohmyzsh"
   printf "${BLUE}${BOLD}%s${NORMAL}\n" "Get your Oh My Zsh swag at:  http://shop.planetargon.com/"
-  exit 0
 }
 
 error_upgrading() {
@@ -42,9 +41,9 @@ error_upgrading() {
 run_upgrade() {
   if git pull --rebase --stat origin master
   then
-    success_updating
+    success_upgrading
   else
-    error_updating
+    error_upgrading
   fi
 }
 
@@ -53,14 +52,18 @@ cd "$ZSH"
 
 if output=$(git status --porcelain); then
   while true; do
-    printf "${RED}%s${NORMAL}\n" "You have changes that are preventing Oh My Zsh from upgrading."
-    printf "${RED}%s${NORMAL}" "Do you want to stash these changes and continue? "
-    read -p "" answer
-    case $answer in
-      [Yy]* ) git stash; run_update;;
-      [Nn]* ) exit;;
-      * ) echo "Please answer yes or no.";;
-    esac
+  printf "${RED}%s${NORMAL}\n" "You have changes that are preventing Oh My Zsh from upgrading."
+  printf "${RED}%s${NORMAL}" "Do you want to stash these changes and continue? "
+  read -p "" answer
+  case $answer in
+    [Yy]* )
+      git stash;
+      run_upgrade;
+      printf "${RED}%s${NORMAL}\n" "Run 'cd ~/.oh-my-zsh && git stash pop' if you need the stashed changes back.";
+      exit;;
+    [Nn]* ) exit;;
+    * ) echo "Please answer yes or no.";;
+  esac
   done
 else
   run_update
