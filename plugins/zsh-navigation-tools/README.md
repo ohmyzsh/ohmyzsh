@@ -25,7 +25,7 @@ widgets exist, znt-cd-widget and znt-kill-widget, they can be too assigned
 to key combinations (no need for autoload when using Oh My Zsh):
 
     zle -N znt-cd-widget
-    bindkey "^T" znt-cd-widget
+    bindkey "^A" znt-cd-widget
     zle -N znt-kill-widget
     bindkey "^Y" znt-kill-widget
 
