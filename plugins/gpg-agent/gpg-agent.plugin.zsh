@@ -1,5 +1,9 @@
 local GPG_ENV=$HOME/.gnupg/gpg-agent.env
 
+# Enable SSH support by adding this line to your .zshrc file:
+# zstyle :omz:plugins:gpg-agent ssh-support on
+local _plugin__ssh_support
+
 function start_agent_nossh {
     eval $(/usr/bin/env gpg-agent --quiet --daemon --write-env-file ${GPG_ENV} 2> /dev/null)
     chmod 600 ${GPG_ENV}
@@ -26,13 +30,14 @@ if ! gpg-connect-agent --quiet /bye > /dev/null 2> /dev/null; then
 
     # check again if another agent is running using the newly sourced settings
     if ! gpg-connect-agent --quiet /bye > /dev/null 2> /dev/null; then
-        # check for existing ssh-agent
-        if ssh-add -l > /dev/null 2> /dev/null; then
-            # ssh-agent running, start gpg-agent without ssh support
-            start_agent_nossh;
-        else
-            # otherwise start gpg-agent with ssh support
+        # check if ssh support is set
+        zstyle -b :omz:plugins:gpg-agent ssh-support _plugin__ssh_support
+        if [[ ${_plugin__ssh_support} == "yes" ]]; then
+            # start gpg-agent with ssh support
             start_agent_withssh;
+        else
+            # otherwise start gpg-agent without ssh support
+            start_agent_nossh;
         fi
     fi
 fi
