@@ -5,6 +5,8 @@ wd
 
 `wd` (*warp directory*) lets you jump to custom directories in zsh, without using `cd`. Why? Because `cd` seems ineffecient when the folder is frequently visited or has a long path.
 
+*NOTE*: If you are not using zsh, check out the `ruby` branch which has `wd` implemented as a gem.
+
 
 ### Setup
 
@@ -33,7 +35,7 @@ Run either in terminal:
  * Add `wd` function to `.zshrc` (or `.profile` etc.):
 
         wd() {
-            . ~/paht/to/wd/wd.sh
+            . ~/path/to/cloned/repo/wd/wd.sh
         }
 
  * Install manpage. From `wd`'s base directory (requires root permissions):
@@ -84,7 +86,15 @@ Also, you may have to force a rebuild of `zcompdump` by running:
 
  * List all warp points (stored in `~/.warprc`):
 
-        $ wd ls
+        $ wd list
+
+ * List files in given warp point:
+
+        $ wd ls foo
+
+ * Show path of given warp point:
+
+        $ wd path foo
 
  * List warp points to current directory, or optionally, path to given warp point:
 

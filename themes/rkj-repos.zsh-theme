@@ -15,8 +15,8 @@ ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg[yellow]%}✱"
 ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[red]%}✗"
 ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[blue]%}➦"
 ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[magenta]%}✂"
-ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[grey]%}✈"
-ZSH_THEME_GIT_PROMPT_SHA_BEFORE=" %{$fg[grey]%}"
+ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[blue]%}✈"
+ZSH_THEME_GIT_PROMPT_SHA_BEFORE=" %{$fg[blue]%}"
 ZSH_THEME_GIT_PROMPT_SHA_AFTER="%{$reset_color%}"
 
 function mygit() {

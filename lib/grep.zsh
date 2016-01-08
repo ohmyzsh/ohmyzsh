@@ -3,11 +3,15 @@ grep-flag-available() {
     echo | grep $1 "" >/dev/null 2>&1
 }
 
+GREP_OPTIONS=""
+
 # color grep results
-GREP_OPTIONS="--color=auto"
+if grep-flag-available --color=auto; then
+    GREP_OPTIONS+=" --color=auto"
+fi
 
 # ignore VCS folders (if the necessary grep flags are available)
-VCS_FOLDERS="{.bzr,.cvs,.git,.hg,.svn}"
+VCS_FOLDERS="{.bzr,CVS,.git,.hg,.svn}"
 
 if grep-flag-available --exclude-dir=.cvs; then
     GREP_OPTIONS+=" --exclude-dir=$VCS_FOLDERS"
