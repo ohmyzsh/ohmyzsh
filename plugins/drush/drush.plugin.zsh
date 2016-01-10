@@ -65,6 +65,7 @@ function drnew() {
 }
 
 # Aliases, sorted alphabetically.
+alias dr="drush"
 alias drcb="drush cc block" # Deprecated for Drush 8
 alias drca="drush cc all" # Deprecated for Drush 8
 alias drcg="drush cc registry" # Deprecated for Drush 8
@@ -74,6 +75,11 @@ alias drcml="drush cc module-list"
 alias drcr="drush core-cron"
 alias drct="drush cc theme-registry"
 alias drcv="drush cc views"
+alias drdmp="drush sql-dump --ordered-dump --result-file=dump.sql"
+alias drf="drush features"
+alias drfr="drush features-revert -y"
+alias drfu="drush features-update -y"
+alias drfra="drush features-revert-all"
 alias drif="drush image-flush --all"
 alias drpm="drush pm-list --type=module"
 alias drst="drush core-status"
