@@ -2,7 +2,7 @@
 
 The [mvn](https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/mvn) plugin provides many [aliases](#Aliases).
 
-Enable it by adding _mvn_ to the [_plugins array_](https://github.com/robbyrussell/oh-my-zsh/blob/master/templates/zshrc.zsh-template#L48) before sourcing OMZ (see [[Plugins]]).
+Enable it by adding _mvn_ to the [_plugins array_](https://github.com/robbyrussell/oh-my-zsh/blob/master/templates/zshrc.zsh-template#L48) before sourcing OMZ (see [Plugins](https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins)).
 
 ## Aliases
 
