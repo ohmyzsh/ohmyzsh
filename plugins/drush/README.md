@@ -5,7 +5,7 @@ This plugin offers aliases and functions to make the work with drush easier and 
 
 To enable it, add the `drush` to your `plugins` array in `~/.zshrc`:
 
-```zsh
+```
 plugins=(... drush)
 ```
 
@@ -50,6 +50,13 @@ Must be invoked with one or more parameters. e.g.:
 Uninstall one or more modules.
 Must be invoked with one or more parameters. e.g.:
 `drpu devel` or `drpu devel module_filter views`
+
+### drnew
+Creates a brand new drupal website.
+Note: As soon as the installation is complete, drush will print a username and a random password into the terminal:
+```
+Installation complete.  User name: admin  User password: cf7t8yqNEm
+```
 
 ## Additional features
 
