@@ -66,8 +66,8 @@ function drnew() {
 
 # Aliases, sorted alphabetically.
 alias dr="drush"
-alias drcb="drush cc block" # Deprecated for Drush 8
 alias drca="drush cc all" # Deprecated for Drush 8
+alias drcb="drush cc block" # Deprecated for Drush 8
 alias drcg="drush cc registry" # Deprecated for Drush 8
 alias drcj="drush cc css-js"
 alias drcm="drush cc menu"

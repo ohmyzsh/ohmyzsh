@@ -12,6 +12,7 @@ plugins=(... drush)
 ## Aliases
 | Alias | Description                                                           | Command                     |
 |-------|-----------------------------------------------------------------------|-----------------------------|
+| dr    | Display drush help                                                    | drush                       |
 | drca  | Clear all drupal caches.                                              | drush cc all                |
 | drcb  | Clear block cache.                                                    | drush cc block              |
 | drcg  | Clear registry cache.                                                 | drush cc registry           |
@@ -21,6 +22,11 @@ plugins=(... drush)
 | drcr  | Run all cron hooks in all active modules for specified site.          | drush core-cron             |
 | drct  | Clear theme-registry cache.                                           | drush cc theme-registry     |
 | drcv  | Clear views cache. (Make sure that the views module is enabled)       | drush cc views              |
+| drdmp | Backup database in a new dump.sql file                                | drush drush sql-dump --ordered-dump --result-file=dump.sql|
+| drf   | Display features status                                               | drush features              |
+| drfr  | Revert a feature module on your site.                                 | drush features-revert -y    |
+| drfu  | Update a feature module on your site.                                 | drush features-update -y    |
+| drfra | Revert all enabled feature module on your site.                       | drush features-revert-all   |
 | drif  | Flush all derived images.                                             | drush image-flush --all     |
 | drpm  | Show a list of available modules.                                     | drush pm-list --type=module |
 | drst  | Provides a birds-eye view of the current Drupal installation, if any. | drush core-status           |
