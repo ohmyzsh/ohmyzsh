@@ -294,9 +294,28 @@ _zsh_highlight_main_highlighter()
         *': suffix alias')
                         style=$ZSH_HIGHLIGHT_STYLES[suffix-alias]
                         ;;
-        *': alias')     style=$ZSH_HIGHLIGHT_STYLES[alias]
-                        local aliased_command="${"$(alias -- $arg)"#*=}"
-                        [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS:#"$aliased_command"} && -z ${(M)ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS:#"$arg"} ]] && ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS+=($arg)
+        *': alias')     () {
+                          integer insane_alias
+                          case $arg in 
+                            # Issue #263: aliases with '=' on their LHS.
+                            #
+                            # There are three cases:
+                            #
+                            # - Unsupported, breaks 'alias -L' output, but invokable:
+                            ('='*) :;;
+                            # - Unsupported, not invokable:
+                            (*'='*) insane_alias=1;;
+                            # - The common case:
+                            (*) :;;
+                          esac
+                          if (( insane_alias )); then
+                            style=$ZSH_HIGHLIGHT_STYLES[unknown-token]
+                          else
+                            style=$ZSH_HIGHLIGHT_STYLES[alias]
+                            local aliased_command="${"$(alias -- $arg)"#*=}"
+                            [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS:#"$aliased_command"} && -z ${(M)ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS:#"$arg"} ]] && ZSH_HIGHLIGHT_TOKENS_PRECOMMANDS+=($arg)
+                          fi
+                        }
                         ;;
         *': builtin')   style=$ZSH_HIGHLIGHT_STYLES[builtin];;
         *': function')  style=$ZSH_HIGHLIGHT_STYLES[function];;
