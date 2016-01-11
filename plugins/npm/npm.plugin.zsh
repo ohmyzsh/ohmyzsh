@@ -17,3 +17,6 @@ alias npmD="npm i -D "
 # Execute command from node_modules folder based on current directory
 # i.e npmE gulp
 alias npmE='PATH="$(npm bin)":"$PATH"'
+
+# List all packages installed at root level
+alias npmL='npm ls --depth=0'
