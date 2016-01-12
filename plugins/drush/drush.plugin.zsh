@@ -86,6 +86,9 @@ alias drst="drush core-status"
 alias drup="drush updatedb"
 alias drups="drush updatedb-status"
 alias drv="drush version"
+alias drvd="drush variable-del"
+alias drvg="drush variable-get"
+alias drvs="drush variable-set"
 
 # Enable drush autocomplete support
 autoload bashcompinit

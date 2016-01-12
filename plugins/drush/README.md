@@ -33,7 +33,9 @@ plugins=(... drush)
 | drup  | Apply any database updates required (as with running update.php).     | drush updatedb              |
 | drups | List any pending database updates.                                    | drush updatedb-status       |
 | drv   | Show drush version.                                                   | drush version               |
-
+| drvd	| Delete a variable.																										| drush variable-del					|
+| drvg	| Get a list of some or all site variables and values.									| drush variable-get					|
+| drvs	| Set a variable.																												| drush variable-set					|
 
 ## Functions
 
