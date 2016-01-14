@@ -91,7 +91,7 @@ elif [[ $(uname) == "Linux"  ]] ; then
   }
 
   function battery_pct_prompt() {
-    b=$(battery_pct_remaining) 
+    b=$(battery_pct_remaining)
     if [[ $(acpi 2&>/dev/null | grep -c '^Battery.*Discharging') -gt 0 ]] ; then
       if [ $b -gt 50 ] ; then
         color='green'
@@ -136,7 +136,7 @@ function battery_level_gauge() {
   local battery_remaining_percentage=$(battery_pct);
 
   if [[ $battery_remaining_percentage =~ [0-9]+ ]]; then
-    local filled=$(((( $battery_remaining_percentage + $gauge_slots - 1) / $gauge_slots)));
+    local filled=$(((( $battery_remaining_percentage * $gauge_slots) / 100)));
     local empty=$(($gauge_slots - $filled));
 
     if [[ $filled -gt $green_threshold ]]; then local gauge_color=$color_green;
