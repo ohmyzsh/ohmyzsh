@@ -1,6 +1,7 @@
 # $1, $2, ... - elements of the list
 # $NLIST_NONSELECTABLE_ELEMENTS - array of indexes (1-based) that cannot be selected
 # $REPLY is the output variable - contains index (1-based) or -1 when no selection
+# $reply (array) is the second part of the output - use the index (REPLY) to get selected element
 #
 # Copy this file into /usr/share/zsh/site-functions/
 # and add 'autoload n-list` to .zshrc
@@ -164,6 +165,7 @@ integer current_difference=0
 local prev_search_buffer=""
 integer prev_uniq_mode=0
 integer prev_start_idx=-1
+local MBEGIN MEND MATCH mbegin mend match
 
 # Ability to remember the list between calls
 if [[ -z "$NLIST_REMEMBER_STATE" || "$NLIST_REMEMBER_STATE" -eq 0 || "$NLIST_REMEMBER_STATE" -eq 2 ]]; then
@@ -264,11 +266,15 @@ while (( 1 )); do
             local search_pattern=""
             local colsearch_pattern=""
             if [ -n "$search_buffer" ]; then
-                # Patterns will be *foo*~^*bar* and foo|bar)
+                # Patterns will be *foo*~^*bar* and (foo|bar)
                 search_pattern="${search_buffer// ##/*~^*}"
                 colsearch_pattern="${search_buffer// ##/|}"
 
-                list=( "${(@M)list:#(#i)*$~search_pattern*}" )
+                # The repeat will make the matching work on a fresh heap
+                repeat 1; do
+                    list=( "${(@M)list:#(#i)*$~search_pattern*}" )
+                done
+
                 last_element="$#list"
             fi
 
@@ -287,7 +293,10 @@ while (( 1 )); do
 
             if [ -n "$colsearch_pattern" ]; then
                 local red=$'\x1b[00;31m' reset=$'\x1b[00;00m'
-                disp_list=( "${(@)disp_list//(#mi)($~colsearch_pattern)/$red${MATCH}$reset}" )
+                # The repeat will make the matching work on a fresh heap
+                repeat 1; do
+                    disp_list=( "${(@)disp_list//(#mi)($~colsearch_pattern)/$red${MATCH}$reset}" )
+                done
             fi
 
             # We have display list, lets replace newlines with "\n" when needed (1/2)
@@ -380,7 +389,7 @@ while (( 1 )); do
 
     # Get the special (i.e. "keypad") key or regular key
     if [ -n "$key" ]; then
-        final_key="$key" 
+        final_key="$key"
     elif [ -n "$keypad" ]; then
         final_key="$keypad"
     else
