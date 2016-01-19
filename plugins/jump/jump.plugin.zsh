@@ -18,8 +18,14 @@ mark() {
 	else
 		MARK="$1"
 	fi
-	if read -q \?"Mark $PWD as ${MARK}? (y/n) "; then
-		mkdir -p "$MARKPATH"; ln -s "$PWD" "$MARKPATH/$MARK"
+	link="$MARKPATH/$MARK"
+	if [ -e "$link" ]; then
+		if read -q \?"Override mark ${MARK} to $(readlink $link) with $PWD? (y/n) "; then
+			rm -f "$link"
+			ln -s "$PWD" "$link"
+		fi
+	elif read -q \?"Mark $PWD as ${MARK}? (y/n) "; then
+		mkdir -p "$MARKPATH"; ln -s "$PWD" "$link"
 	fi
 }
 
