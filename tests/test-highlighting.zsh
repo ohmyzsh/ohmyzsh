@@ -37,13 +37,13 @@
 
 # Check the highlighter is valid.
 [[ -f ${0:h:h}/highlighters/$1/$1-highlighter.zsh ]] || {
-  echo >&2 "Bail out! Could not find highlighter '$1'."
+  echo >&2 "Bail out! Could not find highlighter ${(qq)1}."
   exit 2
 }
 
 # Check the highlighter has test data.
 [[ -d ${0:h:h}/highlighters/$1/test-data ]] || {
-  echo >&2 "Bail out! Highlighter '$1' has no test data."
+  echo >&2 "Bail out! Highlighter ${(qq)1} has no test data."
   exit 2
 }
 
@@ -104,7 +104,7 @@ run_test_internal() {
     [[ -n "$highlight_zone[4]" ]] && todo=" # TODO $highlight_zone[4]"
     for j in {$highlight_zone[1]..$highlight_zone[2]}; do
       if [[ "$observed_result[$j]" != "$highlight_zone[3]" ]]; then
-        echo "not ok $i '$BUFFER[$highlight_zone[1],$highlight_zone[2]]' [$highlight_zone[1],$highlight_zone[2]]: expected '$highlight_zone[3]', observed '$observed_result[$j]'.$todo"
+        echo "not ok $i ${(qqq)BUFFER[$highlight_zone[1],$highlight_zone[2]]} [$highlight_zone[1],$highlight_zone[2]]: expected ${(qqq)highlight_zone[3]}, observed ${(qqq)observed_result[$j]}.$todo"
         continue 2
       fi
     done

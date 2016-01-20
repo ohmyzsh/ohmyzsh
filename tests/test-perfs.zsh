@@ -37,13 +37,13 @@
 
 # Check the highlighter is valid.
 [[ -f ${0:h:h}/highlighters/$1/$1-highlighter.zsh ]] || {
-  echo >&2 "Bail out! Could not find highlighter '$1'."
+  echo >&2 "Bail out! Could not find highlighter ${(qq)1}."
   exit 2
 }
 
 # Check the highlighter has test data.
 [[ -d ${0:h:h}/highlighters/$1/test-data ]] || {
-  echo >&2 "Bail out! Highlighter '$1' has no test data."
+  echo >&2 "Bail out! Highlighter ${(qq)1} has no test data."
   exit 2
 }
 
