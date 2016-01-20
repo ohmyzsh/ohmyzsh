@@ -31,5 +31,5 @@ alias x=command
 BUFFER='x ls'
 
 expected_region_highlight=(
-  "3 4 $ZSH_HIGHLIGHT_STYLES[command]" # ls
+  "3 4 ${(q-)ZSH_HIGHLIGHT_STYLES[command]}" # ls
 )

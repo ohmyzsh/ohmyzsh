@@ -33,6 +33,6 @@ touch ';'
 BUFFER='echo; ;'
 
 expected_region_highlight=(
-  "5 5 $ZSH_HIGHLIGHT_STYLES[commandseparator]" # ;
-  "7 7 $ZSH_HIGHLIGHT_STYLES[unknown-token]" # ;
+  "5 5 ${(q-)ZSH_HIGHLIGHT_STYLES[commandseparator]}" # ;
+  "7 7 ${(q-)ZSH_HIGHLIGHT_STYLES[unknown-token]}" # ;
 )

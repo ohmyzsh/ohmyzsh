@@ -30,10 +30,10 @@
 BUFFER='>/tmp >/tmp sudo echo >/tmp foo'
 
 expected_region_highlight=(
-  "2  5  $ZSH_HIGHLIGHT_STYLES[path]"       # /tmp
-  "8  11 $ZSH_HIGHLIGHT_STYLES[path]"       # /tmp
-  "13 16 $ZSH_HIGHLIGHT_STYLES[precommand]" # sudo
-  "18 21 $ZSH_HIGHLIGHT_STYLES[builtin]"    # echo
-  "24 27 $ZSH_HIGHLIGHT_STYLES[path]"       # /tmp
-  "29 31 $ZSH_HIGHLIGHT_STYLES[default]"    # foo
+  "2  5  ${(q-)ZSH_HIGHLIGHT_STYLES[path]}"       # /tmp
+  "8  11 ${(q-)ZSH_HIGHLIGHT_STYLES[path]}"       # /tmp
+  "13 16 ${(q-)ZSH_HIGHLIGHT_STYLES[precommand]}" # sudo
+  "18 21 ${(q-)ZSH_HIGHLIGHT_STYLES[builtin]}"    # echo
+  "24 27 ${(q-)ZSH_HIGHLIGHT_STYLES[path]}"       # /tmp
+  "29 31 ${(q-)ZSH_HIGHLIGHT_STYLES[default]}"    # foo
 )

@@ -31,11 +31,11 @@ ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]=$unused_highlight
 BUFFER=": \$'foo\xbar\udeadbeef\uzzzz'"
 
 expected_region_highlight=(
-  "3 7 $ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]" # $'foo
-  "8 11 $ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]" # \xba
-  "12 12 $ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]" # r
-  "13 18 $ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]" # \dead
-  "19 22 $ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]" # beef
-  "23 24 $ZSH_HIGHLIGHT_STYLES[unknown-token]" # \u
-  "25 29 $ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]" # zzzz'
+  "3 7 ${(q-)ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]}" # $'foo
+  "8 11 ${(q-)ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]}" # \xba
+  "12 12 ${(q-)ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]}" # r
+  "13 18 ${(q-)ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]}" # \dead
+  "19 22 ${(q-)ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]}" # beef
+  "23 24 ${(q-)ZSH_HIGHLIGHT_STYLES[unknown-token]}" # \u
+  "25 29 ${(q-)ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]}" # zzzz'
 )

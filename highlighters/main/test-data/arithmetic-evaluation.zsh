@@ -35,6 +35,6 @@
 BUFFER='(( x == 42 ))'
 
 expected_region_highlight=(
-  "1 2 $ZSH_HIGHLIGHT_STYLES[reserved-word]" # ((
-  "12 13 $ZSH_HIGHLIGHT_STYLES[reserved-word]" # ))
+  "1 2 ${(q-)ZSH_HIGHLIGHT_STYLES[reserved-word]}" # ((
+  "12 13 ${(q-)ZSH_HIGHLIGHT_STYLES[reserved-word]}" # ))
 )

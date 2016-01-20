@@ -31,17 +31,17 @@ ZSH_HIGHLIGHT_STYLES[redirection]=$unused_highlight
 BUFFER='sudo -u >/tmp otheruser ls; sudo ls; sudo -i ls'
 
 expected_region_highlight=(
-  "1 4 $ZSH_HIGHLIGHT_STYLES[precommand]" # sudo
-  "6 7 $ZSH_HIGHLIGHT_STYLES[single-hyphen-option]" # -u
-  "9 9 $ZSH_HIGHLIGHT_STYLES[redirection]" # >
-  "10 13 $ZSH_HIGHLIGHT_STYLES[path]" # /tmp
-  "15 23 $ZSH_HIGHLIGHT_STYLES[default]" # otheruser
-  "25 26 $ZSH_HIGHLIGHT_STYLES[command]" # ls
-  "27 27 $ZSH_HIGHLIGHT_STYLES[commandseparator]" # ;
-  "29 32 $ZSH_HIGHLIGHT_STYLES[precommand]" # sudo
-  "34 35 $ZSH_HIGHLIGHT_STYLES[command]" # ls
-  "36 36 $ZSH_HIGHLIGHT_STYLES[commandseparator]" # ;
-  "38 41 $ZSH_HIGHLIGHT_STYLES[precommand]" # sudo
-  "43 44 $ZSH_HIGHLIGHT_STYLES[single-hyphen-option]" # -i
-  "46 47 $ZSH_HIGHLIGHT_STYLES[command]" # ls
+  "1 4 ${(q-)ZSH_HIGHLIGHT_STYLES[precommand]}" # sudo
+  "6 7 ${(q-)ZSH_HIGHLIGHT_STYLES[single-hyphen-option]}" # -u
+  "9 9 ${(q-)ZSH_HIGHLIGHT_STYLES[redirection]}" # >
+  "10 13 ${(q-)ZSH_HIGHLIGHT_STYLES[path]}" # /tmp
+  "15 23 ${(q-)ZSH_HIGHLIGHT_STYLES[default]}" # otheruser
+  "25 26 ${(q-)ZSH_HIGHLIGHT_STYLES[command]}" # ls
+  "27 27 ${(q-)ZSH_HIGHLIGHT_STYLES[commandseparator]}" # ;
+  "29 32 ${(q-)ZSH_HIGHLIGHT_STYLES[precommand]}" # sudo
+  "34 35 ${(q-)ZSH_HIGHLIGHT_STYLES[command]}" # ls
+  "36 36 ${(q-)ZSH_HIGHLIGHT_STYLES[commandseparator]}" # ;
+  "38 41 ${(q-)ZSH_HIGHLIGHT_STYLES[precommand]}" # sudo
+  "43 44 ${(q-)ZSH_HIGHLIGHT_STYLES[single-hyphen-option]}" # -i
+  "46 47 ${(q-)ZSH_HIGHLIGHT_STYLES[command]}" # ls
 )

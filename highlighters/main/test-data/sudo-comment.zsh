@@ -32,7 +32,7 @@ setopt interactive_comments
 BUFFER='sudo -u # comment'
 
 expected_region_highlight=(
-  "1 4 $ZSH_HIGHLIGHT_STYLES[precommand]" # sudo
-  "6 7 $ZSH_HIGHLIGHT_STYLES[single-hyphen-option]" # -u
-  "9 17 $ZSH_HIGHLIGHT_STYLES[unknown-token]" # "# comment" - error because argument missed
+  "1 4 ${(q-)ZSH_HIGHLIGHT_STYLES[precommand]}" # sudo
+  "6 7 ${(q-)ZSH_HIGHLIGHT_STYLES[single-hyphen-option]}" # -u
+  "9 17 ${(q-)ZSH_HIGHLIGHT_STYLES[unknown-token]}" # "# comment" - error because argument missed
 )

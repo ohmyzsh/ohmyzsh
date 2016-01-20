@@ -32,8 +32,8 @@ ZSH_HIGHLIGHT_STYLES[commandseparator]=$unused_highlight
 BUFFER=':; pwd &! ls'
 
 expected_region_highlight=(
-  "2 2 $ZSH_HIGHLIGHT_STYLES[commandseparator]" # ;
-  "4 6 $ZSH_HIGHLIGHT_STYLES[builtin]" # pwd
-  "8 9 $ZSH_HIGHLIGHT_STYLES[commandseparator]" # &!
-  "11 12 $ZSH_HIGHLIGHT_STYLES[command]" # ls
+  "2 2 ${(q-)ZSH_HIGHLIGHT_STYLES[commandseparator]}" # ;
+  "4 6 ${(q-)ZSH_HIGHLIGHT_STYLES[builtin]}" # pwd
+  "8 9 ${(q-)ZSH_HIGHLIGHT_STYLES[commandseparator]}" # &!
+  "11 12 ${(q-)ZSH_HIGHLIGHT_STYLES[command]}" # ls
 )

@@ -43,9 +43,9 @@ BUFFER='x.alias2; alias1'
 expected_region_highlight=()
 if [[ "$(type -w x.alias2)" == *suffix* ]]; then
   expected_region_highlight+=(
-    "1 8 $ZSH_HIGHLIGHT_STYLES[suffix-alias]" # x.alias2
+    "1 8 ${(q-)ZSH_HIGHLIGHT_STYLES[suffix-alias]}" # x.alias2
   )
 fi
 expected_region_highlight+=(
-  "11 16 $ZSH_HIGHLIGHT_STYLES[alias]" # alias1
+  "11 16 ${(q-)ZSH_HIGHLIGHT_STYLES[alias]}" # alias1
 )

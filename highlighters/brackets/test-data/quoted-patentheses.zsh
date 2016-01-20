@@ -30,5 +30,5 @@
 BUFFER='echo "foo ( bar"'
 
 expected_region_highlight=(
-"1  16 $ZSH_HIGHLIGHT_STYLES[none]" # We expect the brackets highlighter to do nothing 
+"1  16 ${(q-)ZSH_HIGHLIGHT_STYLES[none]}" # We expect the brackets highlighter to do nothing
 )

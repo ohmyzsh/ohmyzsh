@@ -30,5 +30,5 @@
 BUFFER='^foo^bar'
 
 expected_region_highlight=(
-  "1 8 $ZSH_HIGHLIGHT_STYLES[history-expansion]" # ^foo^bar
+  "1 8 ${(q-)ZSH_HIGHLIGHT_STYLES[history-expansion]}" # ^foo^bar
 )

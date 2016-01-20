@@ -30,6 +30,6 @@
 BUFFER='noglob echo *; echo *'
 
 expected_region_highlight=(
-  "13 13 $ZSH_HIGHLIGHT_STYLES[default]" # *
-  "21 21 $ZSH_HIGHLIGHT_STYLES[globbing]" # *
+  "13 13 ${(q-)ZSH_HIGHLIGHT_STYLES[default]}" # *
+  "21 21 ${(q-)ZSH_HIGHLIGHT_STYLES[globbing]}" # *
 )

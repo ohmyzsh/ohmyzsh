@@ -31,6 +31,6 @@ x=/usr/bin/env
 BUFFER='$x "argument"'
 
 expected_region_highlight=(
-  "1 2 $ZSH_HIGHLIGHT_STYLES[command]" # $x
-  "4 13 $ZSH_HIGHLIGHT_STYLES[double-quoted-argument]" # "argument"
+  "1 2 ${(q-)ZSH_HIGHLIGHT_STYLES[command]}" # $x
+  "4 13 ${(q-)ZSH_HIGHLIGHT_STYLES[double-quoted-argument]}" # "argument"
 )

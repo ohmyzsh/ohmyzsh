@@ -31,7 +31,7 @@ ZSH_HIGHLIGHT_STYLES[assign]=$unused_highlight
 BUFFER=': command zzzzzz'
 
 expected_region_highlight=(
-  "1 1 $ZSH_HIGHLIGHT_STYLES[command]" # ls
-  "3 9 $ZSH_HIGHLIGHT_STYLES[default]" # not precommand
-  "11 16 $ZSH_HIGHLIGHT_STYLES[default]" # not unknown-token (since 'zzzzzz' is not a command)
+  "1 1 ${(q-)ZSH_HIGHLIGHT_STYLES[command]}" # ls
+  "3 9 ${(q-)ZSH_HIGHLIGHT_STYLES[default]}" # not precommand
+  "11 16 ${(q-)ZSH_HIGHLIGHT_STYLES[default]}" # not unknown-token (since 'zzzzzz' is not a command)
 )

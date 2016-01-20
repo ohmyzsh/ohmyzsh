@@ -30,11 +30,11 @@
 BUFFER='() echo hello; () { echo world }'
 
 expected_region_highlight=(
-  "1 2 $ZSH_HIGHLIGHT_STYLES[reserved-word]" # () 
-  "4 7 $ZSH_HIGHLIGHT_STYLES[command]" # echo
-  "9 13 $ZSH_HIGHLIGHT_STYLES[default]" # hello
-  "14 14 $ZSH_HIGHLIGHT_STYLES[commandseparator]" # ;
-  "16 17 $ZSH_HIGHLIGHT_STYLES[reserved-word]" # ()
-  "19 19 $ZSH_HIGHLIGHT_STYLES[reserved-word]" # {
-  "21 24 $ZSH_HIGHLIGHT_STYLES[command]" # echo
+  "1 2 ${(q-)ZSH_HIGHLIGHT_STYLES[reserved-word]}" # ()
+  "4 7 ${(q-)ZSH_HIGHLIGHT_STYLES[command]}" # echo
+  "9 13 ${(q-)ZSH_HIGHLIGHT_STYLES[default]}" # hello
+  "14 14 ${(q-)ZSH_HIGHLIGHT_STYLES[commandseparator]}" # ;
+  "16 17 ${(q-)ZSH_HIGHLIGHT_STYLES[reserved-word]}" # ()
+  "19 19 ${(q-)ZSH_HIGHLIGHT_STYLES[reserved-word]}" # {
+  "21 24 ${(q-)ZSH_HIGHLIGHT_STYLES[command]}" # echo
 )

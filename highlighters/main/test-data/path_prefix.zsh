@@ -34,5 +34,5 @@ ZSH_HIGHLIGHT_STYLES[path_prefix]=$unused_highlight
 BUFFER='ls /bin/s'
 
 expected_region_highlight=(
-  "4 9 $ZSH_HIGHLIGHT_STYLES[path_prefix]"    # /bin/s
+  "4 9 ${(q-)ZSH_HIGHLIGHT_STYLES[path_prefix]}"    # /bin/s
 )

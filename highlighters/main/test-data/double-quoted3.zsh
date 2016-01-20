@@ -31,9 +31,9 @@ BUFFER=': "$" "$42foo"'
 BUFFER+=\ \"\\\'\\x\"
 
 expected_region_highlight=(
-  "3 5 $ZSH_HIGHLIGHT_STYLES[double-quoted-argument]" # "$"
-  "7 7 $ZSH_HIGHLIGHT_STYLES[double-quoted-argument]" # "
-  "8 10 $ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]" # $42
-  "11 14 $ZSH_HIGHLIGHT_STYLES[double-quoted-argument]" # foo"
-  "16 21 $ZSH_HIGHLIGHT_STYLES[double-quoted-argument]" # "\'\x" - \' and \x are not escape sequences
+  "3 5 ${(q-)ZSH_HIGHLIGHT_STYLES[double-quoted-argument]}" # "$"
+  "7 7 ${(q-)ZSH_HIGHLIGHT_STYLES[double-quoted-argument]}" # "
+  "8 10 ${(q-)ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]}" # $42
+  "11 14 ${(q-)ZSH_HIGHLIGHT_STYLES[double-quoted-argument]}" # foo"
+  "16 21 ${(q-)ZSH_HIGHLIGHT_STYLES[double-quoted-argument]}" # "\'\x" - \' and \x are not escape sequences
 )

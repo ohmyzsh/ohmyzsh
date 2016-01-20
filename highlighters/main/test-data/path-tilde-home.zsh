@@ -31,6 +31,6 @@ HOME="."
 BUFFER='ls ~'
 
 expected_region_highlight=(
-  "1 2 $ZSH_HIGHLIGHT_STYLES[command]" # ls
-  "4 4 $ZSH_HIGHLIGHT_STYLES[path]"    # ~
+  "1 2 ${(q-)ZSH_HIGHLIGHT_STYLES[command]}" # ls
+  "4 4 ${(q-)ZSH_HIGHLIGHT_STYLES[path]}"    # ~
 )

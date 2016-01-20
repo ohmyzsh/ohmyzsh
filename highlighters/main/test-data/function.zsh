@@ -39,8 +39,8 @@ BUFFER='cd;ls'
 # Use $unused_highlight to see that function highlighting has precedence over command and builtin
 
 expected_region_highlight=(
-  "1 2 $ZSH_HIGHLIGHT_STYLES[function]" # cd
-  "4 5 $ZSH_HIGHLIGHT_STYLES[function]" # ls
+  "1 2 ${(q-)ZSH_HIGHLIGHT_STYLES[function]}" # cd
+  "4 5 ${(q-)ZSH_HIGHLIGHT_STYLES[function]}" # ls
 )
 
 # don't 'unfunction cd ls', since cd() and ls() should still be a functions

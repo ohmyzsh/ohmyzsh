@@ -103,8 +103,8 @@ run_test_internal() {
     highlight_zone=${(z)expected_region_highlight[$i]}
     [[ -n "$highlight_zone[4]" ]] && todo=" # TODO $highlight_zone[4]"
     for j in {$highlight_zone[1]..$highlight_zone[2]}; do
-      if [[ "$observed_result[$j]" != "$highlight_zone[3]" ]]; then
-        echo "not ok $i ${(qqq)BUFFER[$highlight_zone[1],$highlight_zone[2]]} [$highlight_zone[1],$highlight_zone[2]]: expected ${(qqq)highlight_zone[3]}, observed ${(qqq)observed_result[$j]}.$todo"
+      if [[ "$observed_result[$j]" != "${(Q)highlight_zone[3]}" ]]; then
+        echo "not ok $i ${(qqq)BUFFER[$highlight_zone[1],$highlight_zone[2]]} [$highlight_zone[1],$highlight_zone[2]]: expected ${(Q)highlight_zone[3]}, observed ${(qqq)observed_result[$j]}.$todo"
         continue 2
       fi
     done

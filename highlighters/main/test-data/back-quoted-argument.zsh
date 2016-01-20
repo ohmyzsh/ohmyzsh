@@ -31,5 +31,5 @@ ZSH_HIGHLIGHT_STYLES[back-quoted-argument]=$unused_highlight
 BUFFER='echo `echo 42`'
 
 expected_region_highlight=(
-  "6 14 $ZSH_HIGHLIGHT_STYLES[back-quoted-argument]"
+  "6 14 ${(q-)ZSH_HIGHLIGHT_STYLES[back-quoted-argument]}"
 )

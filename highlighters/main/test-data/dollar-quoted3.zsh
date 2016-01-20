@@ -33,6 +33,6 @@ ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]=$unused_highlight
 BUFFER=": \$'\xa1"
 
 expected_region_highlight=(
-  "3 4 $ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]" # $'
-  "5 8 $ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]" # \xa1
+  "3 4 ${(q-)ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]}" # $'
+  "5 8 ${(q-)ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]}" # \xa1
 )

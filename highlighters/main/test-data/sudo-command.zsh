@@ -35,13 +35,13 @@ ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=$unused_highlight
 BUFFER='sudo -C3 -u otheruser -i ls /; sudo ; sudo -u ;'
 
 expected_region_highlight=(
-  "1 4 $ZSH_HIGHLIGHT_STYLES[precommand]" # sudo
-  "6 8 $ZSH_HIGHLIGHT_STYLES[single-hyphen-option]" # -C3
-  "10 11 $ZSH_HIGHLIGHT_STYLES[single-hyphen-option]" # -u
-  "13 21 $ZSH_HIGHLIGHT_STYLES[default]" # otheruser
-  "23 24 $ZSH_HIGHLIGHT_STYLES[single-hyphen-option]" # -i
-  "26 27 $ZSH_HIGHLIGHT_STYLES[command]" # ls
-  "29 29 $ZSH_HIGHLIGHT_STYLES[path]" # /
-  "37 37 $ZSH_HIGHLIGHT_STYLES[unknown-token]" # ;, error because empty command
-  "47 47 $ZSH_HIGHLIGHT_STYLES[unknown-token]" # ;, error because incomplete command
+  "1 4 ${(q-)ZSH_HIGHLIGHT_STYLES[precommand]}" # sudo
+  "6 8 ${(q-)ZSH_HIGHLIGHT_STYLES[single-hyphen-option]}" # -C3
+  "10 11 ${(q-)ZSH_HIGHLIGHT_STYLES[single-hyphen-option]}" # -u
+  "13 21 ${(q-)ZSH_HIGHLIGHT_STYLES[default]}" # otheruser
+  "23 24 ${(q-)ZSH_HIGHLIGHT_STYLES[single-hyphen-option]}" # -i
+  "26 27 ${(q-)ZSH_HIGHLIGHT_STYLES[command]}" # ls
+  "29 29 ${(q-)ZSH_HIGHLIGHT_STYLES[path]}" # /
+  "37 37 ${(q-)ZSH_HIGHLIGHT_STYLES[unknown-token]}" # ;, error because empty command
+  "47 47 ${(q-)ZSH_HIGHLIGHT_STYLES[unknown-token]}" # ;, error because incomplete command
 )

@@ -34,5 +34,5 @@ ZSH_HIGHLIGHT_STYLES[alias]=$unused_highlight
 BUFFER='x=y ls'
 
 expected_region_highlight=(
-  "1 3 $ZSH_HIGHLIGHT_STYLES[unknown-token]" # x=y
+  "1 3 ${(q-)ZSH_HIGHLIGHT_STYLES[unknown-token]}" # x=y
 )

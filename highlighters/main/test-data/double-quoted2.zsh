@@ -32,6 +32,6 @@
 BUFFER=': "foo$bar'
 
 expected_region_highlight=(
-  "3 6 $ZSH_HIGHLIGHT_STYLES[double-quoted-argument]" # "foo
-  "7 10 $ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]" # $bar
+  "3 6 ${(q-)ZSH_HIGHLIGHT_STYLES[double-quoted-argument]}" # "foo
+  "7 10 ${(q-)ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]}" # $bar
 )

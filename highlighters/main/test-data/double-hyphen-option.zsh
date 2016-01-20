@@ -31,5 +31,5 @@ ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=$unused_highlight
 BUFFER='hello --world'
 
 expected_region_highlight=(
-  "7 13 $ZSH_HIGHLIGHT_STYLES[double-hyphen-option]" # --world
+  "7 13 ${(q-)ZSH_HIGHLIGHT_STYLES[double-hyphen-option]}" # --world
 )

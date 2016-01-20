@@ -31,5 +31,5 @@ ZSH_HIGHLIGHT_STYLES[assign]=$unused_highlight
 BUFFER='a+=(lorem ipsum)'
 
 expected_region_highlight=(
-  "1 4 $ZSH_HIGHLIGHT_STYLES[assign]" # a+=(
+  "1 4 ${(q-)ZSH_HIGHLIGHT_STYLES[assign]}" # a+=(
 )

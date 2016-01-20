@@ -35,5 +35,5 @@ BUFFER='ls /bin/s'
 WIDGET=accept-line
 
 expected_region_highlight=(
-  "4 9 $ZSH_HIGHLIGHT_STYLES[default]"    # /bin/s
+  "4 9 ${(q-)ZSH_HIGHLIGHT_STYLES[default]}"    # /bin/s
 )

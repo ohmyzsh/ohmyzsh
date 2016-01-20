@@ -30,5 +30,5 @@
 BUFFER='ls'
 
 expected_region_highlight=(
-  "1 2 $ZSH_HIGHLIGHT_STYLES[command]" # ls
+  "1 2 ${(q-)ZSH_HIGHLIGHT_STYLES[command]}" # ls
 )

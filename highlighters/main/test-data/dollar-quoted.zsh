@@ -31,6 +31,6 @@ ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]=$unused_highlight
 BUFFER=": \$'*' 'foo'"
 
 expected_region_highlight=(
-  "3 6 $ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]" # $'*' - not a glob
-  "8 12 $ZSH_HIGHLIGHT_STYLES[single-quoted-argument]" # 'foo'
+  "3 6 ${(q-)ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]}" # $'*' - not a glob
+  "8 12 ${(q-)ZSH_HIGHLIGHT_STYLES[single-quoted-argument]}" # 'foo'
 )
