@@ -52,3 +52,7 @@ alias dc="docker-compose"
 alias dcup="docker-compose up -d"
 alias dcdown="docker-compose stop"
 alias dcrm="docker-compose stop && docker-compose rm -f"
+
+# SSH
+alias casapps="ssh 10.26.0.80"
+alias casdb="ssh 10.26.192.133"
