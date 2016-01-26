@@ -33,6 +33,13 @@ function work_in_progress() {
   fi
 }
 
+# Rebase current branch with the most updated master
+# 
+function rebase_with_master() {
+    local b=$(git_current_branch)
+    git checkout master && git pull --rebase && git checkout $b && git rebase master
+}
+
 #
 # Aliases
 # (sorted alphabetically)
@@ -174,6 +181,7 @@ alias gpv='git push -v'
 alias gr='git remote'
 alias gra='git remote add'
 alias grb='git rebase'
+alias grbb='rebase_with_master'
 alias grba='git rebase --abort'
 alias grbc='git rebase --continue'
 alias grbi='git rebase -i'
