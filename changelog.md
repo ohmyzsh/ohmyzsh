@@ -1,9 +1,15 @@
-up to 952a97dbc99a54bd86141b7a57625e748941a937
+up to 952a97dbc99a54bd86141b7a57625e748941a937 + 0.4.1
 
 
 
 
 # Changes in version 0.4.1
+
+## Fixes:
+
+- Arguments to widgets were not properly dash-escaped.  Only matters for widgets
+  that take arguments (i.e., that are invoked as `zle ${widget} -- ${args}`).
+  (282c7134e8ac, reverts c808d2187a73)
 
 
 # Changes in version 0.4.0
@@ -107,7 +113,7 @@ up to 952a97dbc99a54bd86141b7a57625e748941a937
   (57624bb9f64b)
 
 - widgets wrapping: Don't add '--' when invoking widgets.
-  (c808d2187a73)
+  (c808d2187a73) [_reverted in 0.4.1_]
 
 - Refresh highlighting upon `accept-*` widgets (`accept-line` et al).
   (59fbdda64c21)
