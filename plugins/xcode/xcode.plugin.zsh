@@ -14,8 +14,9 @@ function xc {
     return 1
   else
     echo "Found ${xcode_proj[1]}"
-    XCODEPATH=`xcode-select -p`
-    open -a ${XCODEPATH%/*/*} "${xcode_proj[1]}"
+    active_path=$(xcode-select -p)
+    active_path=${active_path%%/Contents/Developer*}
+    open -a "${active_path}" "${xcode_proj[1]}"
   fi
 }
 
