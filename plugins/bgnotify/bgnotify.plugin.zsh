@@ -44,7 +44,7 @@ bgnotify () { ## args: (title, subtitle)
   elif hash kdialog 2>/dev/null; then #ubuntu kde!
     kdialog  -title "$1" --passivepopup  "$2" 5
   elif hash notifu 2>/dev/null; then #cygwyn support!
-    notifu /m "$2" /p "$1"
+    (notifu /m "$2" /p "$1" &)
   fi
 }
 
