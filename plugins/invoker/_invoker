@@ -1,0 +1,52 @@
+#compdef invoker
+
+# Invoker autocompletion for oh-my-zsh
+# Requires: invoker gem installed
+# Author: Amitava (https://github.com/abasak)
+
+local curcontext="$curcontext" state line ret=1
+
+_arguments -C \
+  '1: :->cmds' \
+  '*:: :->args' && ret=0
+
+case $state in
+  cmds)
+    _values 'invoker command' \
+      'add[Add a program to Invoker server]' \
+      'add_http[Add an external process to Invoker DNS server]' \
+      'help[Describe available commands or one specific command]' \
+      'list[List all running processes]' \
+      'reload[Reload a process managed by Invoker]' \
+      'remove[Stop a process managed by Invoker]' \
+      'setup[Run Invoker setup]' \
+      'start[Start Invoker server]' \
+      'stop[Stop Invoker daemon]' \
+      'tail[Tail a particular process]' \
+      'uninstall[Uninstall Invoker and all installed files]' \
+      'version[Print Invoker version]'
+    ret=0
+    ;;
+
+  args)
+    case $line[1] in
+      help)
+        if (( CURRENT == 2 )); then
+          _values 'commands' \
+            'add' 'add_http' 'list' 'reload' 'remove' 'setup' 'start' 'stop' 'tail' 'uninstall' 'version'
+        fi
+        ret=0
+        ;;
+
+      start)
+        _arguments \
+          '(-d --daemon)'{-d,--daemon}'[Daemonize the server into the background]' \
+          '(--port)--port[Port series to be used for starting rack servers]' \
+          '1:config file:_path_files'
+        ret=0
+        ;;
+    esac
+    ;;
+esac
+
+return ret
