@@ -23,3 +23,11 @@ if [ -f /usr/libexec/pk-command-not-found ]; then
         return $retval
     }
 fi
+
+# OSX command-not-found support
+# https://github.com/Homebrew/homebrew-command-not-found
+if type brew &> /dev/null; then
+  if brew command command-not-found-init > /dev/null 2>&1; then
+    eval "$(brew command-not-found-init)";
+  fi
+fi
