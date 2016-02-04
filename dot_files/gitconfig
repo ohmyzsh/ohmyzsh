@@ -15,6 +15,10 @@
    loo = log --pretty=oneline --abbrev-commit
    lol = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
    lola = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all
+   loa = log --graph --abbrev-commit --all
+   llc = log --decorate --pretty=oneline --abbrev-commit -1
+   lc = show HEAD
+   id = rev-parse HEAD
 
    rewrite-history = rebase -i HEAD~2
    rewrite-history1 = rebase -i HEAD~
@@ -33,35 +37,49 @@
    sync = fetch --all
    root = rev-parse --show-toplevel
 
-[color]
-ui = auto
 
 [core]
-editor = vim
+   editor = vim
 
 [cola]
    fontdiff = Courier 10 Pitch,9,-1,5,50,0,0,0,0,0
    tabwidth = 4
 
 [commit]
-template = /home/username/.gitmessage
+   template = /home/username/.gitmessage
 
 [merge]
-tool = kdiff3
+   tool = kdiff3
 
 [guitool "mergetool"]
-cmd = git mergetool --no-prompt
+   cmd = git mergetool --no-prompt
 
 [push]
   default = current
 
-
 [color]
-    ui = auto
+   ui = auto
+   lc = show HEAD
+   id = rev-parse HEAD
+   lc = show HEAD
+   id = rev-parse HEAD
 
-[core]
-  editor = vim
-#  abbrev = 12
+[color "branch"]
+   current = yellow reverse
+   local = yellow
+   remote = green
+
+[color "diff"]
+   meta = yellow bold
+   frag = magenta bold
+   old = red bold
+   new = green bold
+   whitespace = red reverse
+
+[color "status"]
+   added = yellow
+   changed = green
+   untracked = cyan
 
 [user]
     email = gaetan@xeberon.net
