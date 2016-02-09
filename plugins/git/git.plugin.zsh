@@ -55,6 +55,7 @@ alias gbsb='git bisect bad'
 alias gbsg='git bisect good'
 alias gbsr='git bisect reset'
 alias gbss='git bisect start'
+alias gbvv='git branch -vv'
 
 alias gc='git commit -v'
 alias gc!='git commit -v --amend'
