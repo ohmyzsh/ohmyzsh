@@ -1,7 +1,7 @@
 #compdef brew
 #autoload
 
-# imported from https://github.com/Homebrew/homebrew/blob/master/Library/Contributions/brew_zsh_completion.zsh
+# imported from https://github.com/Homebrew/homebrew/blob/29f73d2212c2b202fe25f69dcbf440d8391fa4c9/Library/Contributions/brew_zsh_completion.zsh
 
 # Brew ZSH completion function
 # Drop this somewhere in your $fpath (like /usr/share/zsh/site-functions)
