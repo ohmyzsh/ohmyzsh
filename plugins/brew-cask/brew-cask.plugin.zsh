@@ -31,21 +31,22 @@ _brew-cask()
           if (( CURRENT == 3 )); then
             local -a subcommands
             subcommands=(
-              "alfred:used to modify Alfred's scope to include the Caskroom"
               'audit:verifies installability of casks'
-              'checklinks:checks for bad cask links'
-              'cleanup:cleans up cached downloads'
-              'create:creates a cask of the given name and opens it in an editor'
+              'cat:dump raw source of the given Cask to the standard output'
+              'cleanup:cleans up cached downloads and tracker symlinks'
+              'create:creates the given Cask and opens it in an editor'
               'doctor:checks for configuration issues'
-              'edit:edits the cask of the given name'
-              'fetch:downloads Cask resources to local cache'
-              'home:opens the homepage of the cask of the given name'
-              'info:displays information about the cask of the given name'
-              'install:installs the cask of the given name'
-              'list:with no args, lists installed casks; given installed casks, lists installed files'
+              'edit:edits the given Cask'
+              'fetch:downloads remote application files to local cache'
+              'home:opens the homepage of the given Cask'
+              'info:displays information about the given Cask'
+              'install:installs the given Cask'
+              'list:with no args, lists installed Casks; given installed Casks, lists staged files'
               'search:searches all known casks'
-              'uninstall:uninstalls the cask of the given name'
+              'style:checks Cask style using RuboCop'
+              'uninstall:uninstalls the given Cask'
               "update:a synonym for 'brew update'"
+              'zap:zaps all files associated with the given Cask'
             )
             _describe -t commands "brew cask subcommand" subcommands
           fi ;;
@@ -58,10 +59,10 @@ _brew-cask()
       local -a casks installed_casks
       local expl
       case "$line[2]" in
-        list|uninstall)
+        list|uninstall|zap)
           __brew_installed_casks
           _wanted installed_casks expl 'installed casks' compadd -a installed_casks ;;
-        audit|edit|home|info|install)
+        audit|cat|edit|fetch|home|info|install|style)
           __brew_all_casks
           _wanted casks expl 'all casks' compadd -a casks ;;
       esac ;;
