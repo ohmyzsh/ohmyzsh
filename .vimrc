@@ -14,6 +14,8 @@ set tw=100
 filetype off
 
 set rtp+=~/.vim/bundle/vundle/
+set ignorecase
+set smartcase
 call vundle#rc()
 
 " let Vundle manage Vundle
@@ -44,6 +46,7 @@ Bundle 'vim-scripts/LustyExplorer'
 Bundle 'vim-scripts/yavdb'
 Bundle 'junkblocker/patchreview-vim'
 Bundle 'codegram/vim-codereview'
+" Bundle 'ensime/ensime-vim'
 
 " Scala Bundles
 " You need to check out appropriate ensime branch by hand by running ie.
@@ -181,3 +184,47 @@ if has("gui_running")
       set guifont=Inconsolata\ for\ Powerline:h15
    endif
 endif
+
+set noerrorbells
+set novisualbell
+set t_vb=
+autocmd! GUIEnter * set vb t_vb=
+
+autocmd QuickFixCmdPost *grep* cwindow
+
+" Define a command to make it easier to use
+command! -nargs=+ QFDo call QFDo(<q-args>)
+
+" Function that does the work
+function! QFDo(command)
+    " Create a dictionary so that we can
+    " get the list of buffers rather than the
+    " list of lines in buffers (easy way
+    " to get unique entries)
+    let buffer_numbers = {}
+    " For each entry, use the buffer number as 
+    " a dictionary key (won't get repeats)
+    for fixlist_entry in getqflist()
+        let buffer_numbers[fixlist_entry['bufnr']] = 1
+    endfor
+    " Make it into a list as it seems cleaner
+    let buffer_number_list = keys(buffer_numbers)
+
+    " For each buffer
+    for num in buffer_number_list
+        " Select the buffer
+        exe 'buffer' num
+        " Run the command that's passed as an argument
+        exe a:command
+        " Save if necessary
+        update
+    endfor
+endfunction
+
+function! CopyMatches(reg)
+  let hits = []
+  %s//\=len(add(hits, submatch(0))) ? submatch(0) : ''/ge
+  let reg = empty(a:reg) ? '+' : a:reg
+  execute 'let @'.reg.' = join(hits, "\n") . "\n"'
+endfunction
+command! -register CopyMatches call CopyMatches(<q-reg>)
