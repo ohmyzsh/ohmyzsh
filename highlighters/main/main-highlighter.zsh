@@ -108,12 +108,12 @@ _zsh_highlight_main_highlighter()
   emulate -L zsh
   setopt localoptions extendedglob bareglobqual
 
-  # At the PS3 prompt, highlight nothing.
+  # At the PS3 prompt and in vared, highlight nothing.
   #
   # (We can't check this in _zsh_highlight_main_highlighter_predicate because
   # if the predicate returns false, the previous value of region_highlight
   # would be reused.)
-  if [[ $CONTEXT == 'select' ]]; then
+  if [[ $CONTEXT == (select|vared) ]]; then
     return
   fi
 
