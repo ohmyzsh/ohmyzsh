@@ -125,6 +125,7 @@ _zsh_highlight_main_highlighter()
   typeset -a ZSH_HIGHLIGHT_TOKENS_CONTROL_FLOW
   local -a options_to_set # used in callees
   local buf="$PREBUFFER$BUFFER"
+  integer len="${#buf}"
   region_highlight=()
 
   if (( path_dirs_was_set )); then
@@ -234,11 +235,13 @@ _zsh_highlight_main_highlighter()
       # indistinguishable from 'echo foo echo bar' (one command with three
       # words for arguments).
       local needle=$'[;\n]'
-      integer offset=${${buf[start_pos+1,-1]}[(i)$needle]}
+      # Len-start_pos drops one character, but it should do it, as start_pos
+      # starts from next, not from "start_pos", character
+      integer offset=${${buf: start_pos: len-start_pos}[(i)$needle]}
       (( start_pos += offset - 1 ))
       (( end_pos = start_pos + $#arg ))
     else
-      ((start_pos+=${#buf[$start_pos+1,-1]}-${#${buf[$start_pos+1,-1]##([[:space:]]|\\[[:space:]])#}}))
+      ((start_pos+=(len-start_pos)-${#${${buf: start_pos: len-start_pos}##([[:space:]]|\\[[:space:]])#}}))
       ((end_pos=$start_pos+${#arg}))
     fi
 
