@@ -4,7 +4,7 @@ alias bem='frontend bem'
 alias bootsnipp='frontend bootsnipp'
 alias caniuse='frontend caniuse'
 alias codepen='frontend codepen'
-alias compass='frontend compass'
+alias compassdoc='frontend compassdoc'
 alias cssflow='frontend cssflow'
 alias dartlang='frontend dartlang'
 alias emberjs='frontend emberjs'
@@ -32,7 +32,7 @@ function frontend() {
     bootsnipp      'http://bootsnipp.com/search?q='
     caniuse        'http://caniuse.com/#search='
     codepen        'http://codepen.io/search?q='
-    compass        'http://compass-style.org/search?q='
+    compassdoc     'http://compass-style.org/search?q='
     cssflow        'http://www.cssflow.com/search?q='
     dartlang       'https://api.dartlang.org/apidocs/channels/stable/dartdoc-viewer/dart:'
     emberjs        'http://emberjs.com/api/#stp=1&stq='
@@ -57,7 +57,7 @@ function frontend() {
       print -P "%Uterm%u and what follows is what will be searched for in the %Ucontext%u website,"
       print -P "and %Ucontext%u is one of the following:"
       print -P ""
-      print -P "  angularjs, aurajs, bem, bootsnipp, caniuse, codepen, compass, cssflow,"
+      print -P "  angularjs, aurajs, bem, bootsnipp, caniuse, codepen, compassdoc, cssflow,"
       print -P "  dartlang, emberjs, fontello, html5please, jquery, lodash, mdn, npmjs,"
       print -P "  qunit, reactjs, smacss, stackoverflow, unheap"
       print -P ""
@@ -73,7 +73,7 @@ function frontend() {
     echo ""
     echo "Valid contexts are:"
     echo ""
-    echo "  angularjs, aurajs, bem, bootsnipp, caniuse, codepen, compass, cssflow, "
+    echo "  angularjs, aurajs, bem, bootsnipp, caniuse, codepen, compassdoc, cssflow, "
     echo "  dartlang, emberjs, fontello, html5please, jquery, lodash, mdn, npmjs,  "
     echo "  qunit, reactjs, smacss, stackoverflow, unheap"
     echo ""
