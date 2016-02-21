@@ -1,28 +1,43 @@
-#compdef mix 
+#compdef mix
 #autoload
 
 # Elixir mix zsh completion
 
 local -a _1st_arguments
 _1st_arguments=(
-    'archive:Archive this project into a .ez file'
-    'clean:Clean generated application files'
+    'app.start:Start all registered apps'
+    'archive:List all archives'
+    'archive.build:Archive this project into a .ez file'
+    'archive.install:Install an archive locally'
+    'archive.uninstall:Uninstall archives'
+    'clean:Delete generated application files'
+    'cmd:Executes the given command'
     'compile:Compile source files'
+    'compile.protocols:Consolidates all protocols in all paths'
     'deps:List dependencies and their status'
-    "deps.clean:Remove dependencies' files"
+    "deps.clean:Remove the given dependencies' files"
     'deps.compile:Compile dependencies'
     'deps.get:Get all out of date dependencies'
     'deps.unlock:Unlock the given dependencies'
-    'deps.update:Update dependencies'
-    'do:Executes the commands separated by comma'
-    'escriptize:Generates an escript for the project'
+    'deps.update:Update the given dependencies'
+    'do:Executes the tasks separated by comma'
+    'escript.build:Builds an escript for the project'
     'help:Print help information for tasks'
+    'hex:Print hex help information'
+    'hex.config:Read or update hex config'
+    'hex.docs:Publish docs for package'
+    'hex.info:Print hex information'
+    'hex.key:Hex API key tasks'
+    'hex.outdated:Shows outdated hex deps for the current project'
+    'hex.owner:Hex package ownership tasks'
+    'hex.publish:Publish a new package version'
+    'hex.search:Search for package names'
+    'hex.user:Hex user tasks'
+    'loadconfig:Loads and persists the given configuration'
     'local:List local tasks'
-    'local.install:Install a task or an archive locally'
+    'local.hex:Install hex locally'
     'local.rebar:Install rebar locally'
-    'local.uninstall:Uninstall local tasks or archives'
-    'local.hex:Install Hex locally'
-    'new:Creates a new Elixir project'
+    'new:Create a new Elixir project'
     'run:Run the given file or expression'
     "test:Run a project's tests"
     '--help:Describe available tasks'
@@ -34,7 +49,7 @@ __task_list ()
     local expl
     declare -a tasks
 
-    tasks=(archive clean compile deps deps.clean deps.compile deps.get deps.unlock deps.update do escriptize help local local.install local.rebar local.uninstall new run test)
+    tasks=(app.start archive archive.build archive.install archive.uninstall clean cmd compile compile.protocols deps deps.clean deps.compile deps.get deps.unlock deps.update do escript.build help hex hex.config hex.docs hex.info hex.key hex.outdated hex.owner hex.publish hex.search hex.user loadconfig local local.hex local.rebar new run test)
 
     _wanted tasks expl 'help' compadd $tasks
 }
@@ -57,7 +72,7 @@ case $state in
   (options)
     case $line[1] in
       (help)
-         _arguments ':feature:__task_list' 
+         _arguments ':feature:__task_list'
     esac
   ;;
 esac

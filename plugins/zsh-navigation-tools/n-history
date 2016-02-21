@@ -1,0 +1,54 @@
+# Copy this file into /usr/share/zsh/site-functions/
+# and add 'autoload n-history` to .zshrc
+#
+# This function allows to browse Z shell's history and use the
+# entries
+#
+# Uses n-list
+
+emulate -L zsh
+
+setopt extendedglob
+zmodload zsh/curses
+zmodload zsh/parameter
+
+local IFS="
+"
+
+unset NLIST_COLORING_PATTERN
+
+[ -f ~/.config/znt/n-list.conf ] && . ~/.config/znt/n-list.conf
+[ -f ~/.config/znt/n-history.conf ] && . ~/.config/znt/n-history.conf
+
+local list
+local selected
+
+NLIST_REMEMBER_STATE=0
+
+list=( "$history[@]" )
+list=( "${(@M)list:#(#i)*$1*}" )
+
+if [ "$#list" -eq 0 ]; then
+    echo "No matching history entries"
+    return 1
+fi
+
+local NLIST_GREP_STRING="$1"
+local NLIST_REPLACE_NEWLINES="1"
+n-list "${list[@]}"
+
+if [ "$REPLY" -gt 0 ]; then
+    selected="$reply[REPLY]"
+    # ZLE?
+    if [ "${(t)CURSOR}" = "integer-local-special" ]; then
+        zle redisplay
+        zle kill-buffer
+        zle -U "$selected"
+    else
+        print -zr "$selected"
+    fi
+else
+    [ "${(t)CURSOR}" = "integer-local-special" ] && zle redisplay
+fi
+
+# vim: set filetype=zsh:
