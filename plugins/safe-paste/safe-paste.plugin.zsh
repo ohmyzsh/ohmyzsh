@@ -17,9 +17,10 @@ bindkey -M paste -s '^M' '^J'
 
 zle -N _start_paste
 zle -N _end_paste
-zle -N zle-line-init _zle_line_init
-zle -N zle-line-finish _zle_line_finish
 zle -N paste-insert _paste_insert
+
+zle_line_init_functions+=_omz_safe_paste_line_init
+zle_line_finish_functions+=_omz_safe_paste_line_finish
 
 # switch the active keymap to paste mode
 function _start_paste() {
@@ -41,12 +42,12 @@ function _paste_insert() {
   _paste_content+=$KEYS
 }
 
-function _zle_line_init() {
+function _omz_safe_paste_line_init() {
   # Tell terminal to send escape codes around pastes.
   [[ $TERM == rxvt-unicode || $TERM == xterm || $TERM = xterm-256color || $TERM = screen || $TERM = screen-256color ]] && printf '\e[?2004h'
 }
 
-function _zle_line_finish() {
+function _omz_safe_paste_line_finish() {
   # Tell it to stop when we leave zle, so pasting in other programs
   # doesn't get the ^[[200~ codes around the pasted text.
   [[ $TERM == rxvt-unicode || $TERM == xterm || $TERM = xterm-256color || $TERM = screen || $TERM = screen-256color ]] && printf '\e[?2004l'

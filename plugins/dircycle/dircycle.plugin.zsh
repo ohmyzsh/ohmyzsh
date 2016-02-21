@@ -44,11 +44,5 @@ insert-cycledright () {
 zle -N insert-cycledright
 
 
-# These sequences work for xterm, Apple Terminal.app, and probably others.
-# Not for rxvt-unicode, but it doesn't seem differentiate Ctrl-Shift-Arrow
-# from plain Shift-Arrow, at least by default.
-# iTerm2 does not have these key combinations defined by default; you will need
-# to add them under "Keys" in your profile if you want to use this. You can do
-# this conveniently by loading the "xterm with Numeric Keypad" preset.
-bindkey "\e[1;6D" insert-cycledleft
-bindkey "\e[1;6C" insert-cycledright
+omz_bindkey -c ctrl-shift left insert-cycledleft
+omz_bindkey -c ctrl-shift right insert-cycledright

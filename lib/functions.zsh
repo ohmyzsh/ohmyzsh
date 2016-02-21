@@ -223,3 +223,13 @@ function omz_urldecode {
 
   echo -E "$decoded"
 }
+
+# Print input iff $_OMZ_DEBUG is enabled (>0)
+# All arguments are passed verbatim to print()
+function _omz_dbg_print() {
+  if ! (( $_OMZ_DEBUG )); then
+    return
+  fi
+  print "$@"
+}
+
