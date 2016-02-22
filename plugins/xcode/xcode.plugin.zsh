@@ -15,8 +15,13 @@ function xc {
   else
     echo "Found ${xcode_proj[1]}"
     active_path=$(xcode-select -p)
-    active_path=${active_path%%/Contents/Developer*}
-    open -a "${active_path}" "${xcode_proj[1]}"
+    if [[ ${active_path} =~ "Xcode" ]]; then
+        active_path=${active_path%%/Contents/Developer*}
+        echo "Opening with ${active_path}"
+        open -a "${active_path}" "${xcode_proj[1]}"
+    else # No Xcode installed
+        open "${xcode_proj[1]}" # Fall back to using Finder suggested application
+    fi
   fi
 }
 
