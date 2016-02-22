@@ -6,6 +6,12 @@
 alias colorize='colorize_via_pygmentize'
 
 colorize_via_pygmentize() {
+    # https://github.com/jingweno/ccat
+    if [ -x "$(which ccat)" ]; then
+        ccat $@
+        return 0
+    fi
+
     if [ ! -x "$(which pygmentize)" ]; then
         echo "package \'pygmentize\' is not installed!"
         return -1
