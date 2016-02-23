@@ -16,9 +16,9 @@
 # $FG[125] - strawberry
 # $FG[145] - white
 
-PROMPT='%{$BG[028]%}%{$fg[white]%} $(collapse_pwd) \
+PROMPT='%{$BG[008]%}%{$fg[white]%} $(collapse_pwd) \
 %{$BG[056]%}%{$fg[white]%}$(git_prompt_short_sha)\
-%{$BG[019]%}%{$fg[white]%}$(git_prompt_info)\
+%{$BG[093]%}%{$fg[white]%}$(git_prompt_info)\
 %{$reset_color%}$(git_prompt_status)
 %{$reset_color%}> '
 
@@ -51,5 +51,3 @@ function collapse_pwd {
 #	Some Special Characters if you want to swap out the prompts
 #	-----------------------------------------------------------
 #	✰ ✼ ✪ ✙ ♔ ♘ ♜ ♛ ♚ ♞ ♬ ⏀ ⌦ ⌘ ≫ ⇪ ☩ ☀ ☂ ★ ⚓ Ө β δ Σ Ω μ Δ ↪
-
-
