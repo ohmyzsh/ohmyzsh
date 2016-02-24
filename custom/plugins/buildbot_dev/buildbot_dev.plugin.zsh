@@ -63,6 +63,10 @@ alias update-to-next-version='do-release-upgrade'
 alias bing='notify-send "Stacked work finished" "Work being done in your favorite terminal is now finished. You can come back !!" -i /usr/share/pixmaps/apple-red.png -t 6000'
 alias b='bing'
 
+alias grinpy="grin -I '*.py'"
+alias grinyaml="grin -I '*.yaml'"
+alias grinsh="grin -I '*.sh'"
+
 function bb_env()
 {
     local BASE
