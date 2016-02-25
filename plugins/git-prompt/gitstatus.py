@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: UTF-8 -*-
 from __future__ import print_function
 
 import os
@@ -46,7 +47,10 @@ if po.returncode != 0:
 # collect git status information
 untracked, staged, changed, conflicts = [], [], [], []
 ahead, behind = 0, 0
-status = [(line[0], line[1], line[2:]) for line in stdout.decode('utf-8').splitlines()]
+# Remove « .decode('utf-8') » because it breaks status line if an accent (e.g.: « é ») is present.
+# For example, with .decode('utf-8'), git-prompt does not display with this kind of branch name: « feature/8113_liens_supplémentaires »
+# was: « status = [(line[0], line[1], line[2:]) for line in stdout.decode('utf-8').splitlines()] »
+status = [(line[0], line[1], line[2:]) for line in stdout.splitlines()]
 for st in status:
     if st[0] == '#' and st[1] == '#':
         if re.search('Initial commit on', st[2]) or re.search('No commits yet on', st[2]):
