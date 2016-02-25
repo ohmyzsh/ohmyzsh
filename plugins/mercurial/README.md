@@ -4,12 +4,19 @@
 Update .zshrc:
 
 1. Add name to the list of plugins, e.g. `plugins=(... mercurial ...)`
-   (that is pretty obvious).
-2. Switch to a theme which uses `hg_prompt_info`.
 
-   Or, customize the `$PROMPT` variable of your current theme to contain current folder mercurial repo info. This can be done by putting a custom version of the theme in `$ZSH_CUSTOM` or by changing `$PROMPT` in `.zshrc` after loading the theme.
+2. Switch to a theme that uses the `hg_prompt_info` function.
 
-   The `robbyrussell` theme is used by default, so you need to modify `$PROMPT` var by adding `$(hg_prompt_info)` after `$(git_prompt_info)`, so it looks like this:
+   _Or_, customize the `$PROMPT` variable of your current theme to use the `hg_prompt_info` function.
+   You can do this 2 ways:
+   
+   - Copy the theme into `$ZSH_CUSTOM` and modify the `$PROMPT` variable there.
+
+   - Change the `$PROMPT` variable in `.zshrc`, after loading oh-my-zsh.
+
+   **WARNING:** do not change the theme directly in the `themes/` folder. That will cause conflicts when trying to update.
+
+   Example: if you're using the `robbyrussell` theme, you need to modify the `$PROMPT` var by appending `$(hg_prompt_info)` to it, so it looks like this:
 
    ```zsh
    PROMPT='${ret_status} %{$fg[cyan]%}%c%{$reset_color%} $(git_prompt_info)$(hg_prompt_info)'
