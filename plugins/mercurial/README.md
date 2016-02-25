@@ -1,4 +1,5 @@
 # Mercurial plugin
+
 ### Usage
 Update .zshrc:
 
@@ -11,7 +12,7 @@ Update .zshrc:
    The `robbyrussell` theme is used by default, so you need to modify `$PROMPT` var by adding `$(hg_prompt_info)` after `$(git_prompt_info)`, so it looks like this:
 
    ```zsh
-   PROMPT='${ret_status}%{$fg_bold[green]%}%p %{$fg[cyan]%}%c %{$fg_bold[blue]%}$(git_prompt_info)$(hg_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}'
+   PROMPT='${ret_status} %{$fg[cyan]%}%c%{$reset_color%} $(git_prompt_info)$(hg_prompt_info)'
    ```
 
 3. Initialize additional vars used in plugin. So in short put next in **.zshrc**:
