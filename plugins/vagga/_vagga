@@ -1,0 +1,26 @@
+#compdef vagga
+#autoload
+
+# This implements autocomplete for vagga daemonless containerization tool
+# src: https://github.com/tailhook/vagga
+# doc: https://vagga.readthedocs.org/
+
+_get_vagga_commands() {
+  vagga 2>&1 | sed '0,/Available commands:/d' | sed 's/^\s*//'
+}
+
+local -a _vagga_commands
+
+_vagga_commands=($(_get_vagga_commands))
+
+_arguments \
+  '(-h --help)'{-h,--help}'[show this help message and exit]' \
+  '(-V --version)'{-V,--version}'[Show vagga version and exit]' \
+  '(-E --env --environ)'{-E,--env,--environ}'[NAME=VALUE Set environment variable for running command]:environment variable KEY=VAL: ' \
+  '(-e --use-env)'{-e,--use-env}'[VAR Propagate variable VAR into command environment]:environment variable VAR: ' \
+  '(--ignore-owner-check)--ignore-owner-check[Ignore checking owner of the project directory]' \
+  "(--no-build)--no-build[Do not build container even if it is out of date. Return error code 29 if it's out of date.]" \
+  '(--no-version-check)--no-version-check[Do not run versioning code, just pick whatever container version with the name was run last (or actually whatever is symlinked under `.vagga/container_name`). Implies `--no-build`]' \
+  '*:: :->subcommand' && return 0
+
+_describe -t commands "vagga subcommand" _vagga_commands
