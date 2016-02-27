@@ -1,11 +1,3 @@
-_homebrew-installed() {
-  type brew &> /dev/null
-}
-
-_awscli-homebrew-installed() {
-  brew list awscli &> /dev/null
-}
-
 export AWS_HOME=~/.aws
 
 function agp {
@@ -27,8 +19,8 @@ function aws_profiles {
 
 compctl -K aws_profiles asp
 
-if _homebrew-installed && _awscli-homebrew-installed ; then
-  _aws_zsh_completer_path=$(brew --prefix awscli)/libexec/bin/aws_zsh_completer.sh
+if [ -f /usr/local/opt/awscli/libexec/bin/aws_zsh_completer.sh ]; then
+  _aws_zsh_completer_path=/usr/local/opt/awscli/libexec/bin/aws_zsh_completer.sh
 else
   _aws_zsh_completer_path=$(which aws_zsh_completer.sh)
 fi
