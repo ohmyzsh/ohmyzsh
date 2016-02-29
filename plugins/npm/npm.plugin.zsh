@@ -1,4 +1,12 @@
-eval "$(npm completion 2>/dev/null)"
+__NPM_COMPLETION_DIR="${0:A:h}"
+__NPM_COMPLETION_FILE="${__NPM_COMPLETION_DIR}/npm_completion"
+
+if [[ ! -f $__NPM_COMPLETION_FILE ]]; then
+    npm completion > $__NPM_COMPLETION_FILE || rm -f $__NPM_COMPLETION_FILE
+    compinit -i -d "${ZSH_COMPDUMP}"
+fi
+
+source $__NPM_COMPLETION_FILE
 
 # Install dependencies globally
 alias npmg="npm i -g "
