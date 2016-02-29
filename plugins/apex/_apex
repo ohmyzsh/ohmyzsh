@@ -1,0 +1,39 @@
+#compdef apex
+
+__function_list() {
+    declare -a func_cmd
+    func_cmd=($(apex list 2>/dev/null))
+    if [ -n "$cont_cmd" ]
+        _describe 'functions' func_cmd
+}
+
+local -a _1st_arguments
+_1st_arguments=(
+    'deploy:Deploy functions and config'
+    'invoke:Invoke functions'
+    'delete:Delete functions'
+    'rollback:Rollback a function'
+    'build:Build a function'
+    'list:List functions'
+    'metrics:Output function metrics'
+    'logs:Output function logs'
+    'docs:Output documentation'
+    'version:Print version of Apex'
+    'upgrade:Ugrade apex to the latest stable release'
+)
+
+_arguments '*:: :->command'
+
+if (( CURRENT == 1 )); then
+    _describe -t commands "apex command" _1st_arguments
+    return
+fi
+
+local -a _command_args
+case "$words[1]" in
+    deploy)
+        _command_args=(
+            '(-c|--concurrency)'{-c,--concurrency}'[Concurrent deploys (default 5)]' \
+        )
+        ;;
+esac
