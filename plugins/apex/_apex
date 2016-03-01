@@ -2,9 +2,64 @@
 
 __function_list() {
     declare -a func_cmd
-    func_cmd=($(apex list 2>/dev/null))
-    if [ -n "$cont_cmd" ]
+    func_cmd=($(apex list 2>/dev/null | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g" | cut -d' ' -f3))
+    if [ -n "$func_cmd" ]
         _describe 'functions' func_cmd
+}
+
+__deploy() {
+    _arguments \
+       '(-c|--concurrency)'{-c,--concurrency}'[Concurrent deploys (default 5)]'
+    __function_list
+}
+
+__invoke() {
+    _arguments \
+       '(-L|--logs)'{-l,--logs}'[Print logs]'
+    __function_list
+}
+
+__delete() {
+    _arguments \
+       '(-f|--force)'{-f,--force}'[Force deletion]'
+    __function_list
+}
+
+__rollback() {
+    if ((CURRENT == 3)); then
+        return
+    fi
+    __function_list
+}
+
+__build() {
+    if ((CURRENT == 3)); then
+        return
+    fi
+    __function_list
+}
+
+__list() {
+    _arguments \
+       '--tfvars[Output as Terraform variables]'
+}
+
+__metrics() {
+    _arguments \
+        '(-s,--start)'{-s,--start}'[Start time of the results (default 24h0m0s)]'
+    __function_list
+}
+
+__logs() {
+    _arguments \
+        '(-F,--filter)'{-f,--filter}'[Filter logs with pattern]' \
+        '(-f,--follow)'{-f,--filter}'[Follow tail logs for updates]' \
+        '(-s,--start)'{-s,--start}'[Start time of the search (default 5m0s)]'
+    __function_list
+}
+
+__docs() {
+    _arguments '*:files:_files'
 }
 
 local -a _1st_arguments
@@ -32,8 +87,21 @@ fi
 local -a _command_args
 case "$words[1]" in
     deploy)
-        _command_args=(
-            '(-c|--concurrency)'{-c,--concurrency}'[Concurrent deploys (default 5)]' \
-        )
-        ;;
+        __deploy ;;
+    invoke)
+        __invoke ;;
+    delete)
+        __delete ;;
+    rollback)
+        __rollback ;;
+    build)
+        __build ;;
+    list)
+        __list ;;
+    metrics)
+        __metrics ;;
+    logs)
+        __logs ;;
+    docs)
+        __docs ;;
 esac
