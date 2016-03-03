@@ -16,7 +16,8 @@
 # $FG[125] - strawberry
 # $FG[145] - white
 
-PROMPT='%{$BG[008]%}%{$fg[white]%} $(collapse_pwd) \
+PROMPT='%{$BG[237]%}%{$fg[white]%} $(hostname) \
+%{$BG[008]%}%{$fg[white]%} $(collapse_pwd) \
 %{$BG[056]%}%{$fg[white]%}$(git_prompt_short_sha)\
 %{$BG[093]%}%{$fg[white]%}$(git_prompt_info)\
 %{$reset_color%}$(git_prompt_status)
