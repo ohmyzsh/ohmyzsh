@@ -66,6 +66,7 @@ alias b='bing'
 alias grinpy="grin -I '*.py'"
 alias grinyaml="grin -I '*.yaml'"
 alias grinsh="grin -I '*.sh'"
+alias grinlog="grin -I '*.log'"
 
 function bb_env()
 {
