@@ -1,0 +1,25 @@
+#compdef kirby
+
+local -a options
+options=('install'
+'install\ --kit\ plainkit'
+'install\ --kit\ langkit'
+'install\ --kit\ starterkit'
+'install\:core'
+'install\:panel'
+'install\:index.php'
+'install\:htaccess'
+'update'
+'plugin\:install'
+'plugin\:update'
+'make\:blueprint'
+'make\:controller'
+'make\:snippet'
+'make\:template'
+'make\:user'
+'make\:tag'
+'make\:plugin'
+'clear\:cache'
+'clear\:thumbs'
+'version')
+_describe 'values' options
