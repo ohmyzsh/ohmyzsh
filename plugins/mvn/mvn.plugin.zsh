@@ -27,11 +27,20 @@ mvn-color()
   (
   # Filter mvn output using sed. Before filtering set the locale to C, so invalid characters won't break some sed implementations
   unset LANG
-  LC_CTYPE=C mvn $@ | sed -e "s/\(\[INFO\]\)\(.*\)/${TEXT_BLUE}${BOLD}\1${RESET_FORMATTING}\2/g" \
-               -e "s/\(\[INFO\]\ BUILD SUCCESSFUL\)/${BOLD}${TEXT_GREEN}\1${RESET_FORMATTING}/g" \
-               -e "s/\(\[WARNING\]\)\(.*\)/${BOLD}${TEXT_YELLOW}\1${RESET_FORMATTING}\2/g" \
-               -e "s/\(\[ERROR\]\)\(.*\)/${BOLD}${TEXT_RED}\1${RESET_FORMATTING}\2/g" \
-               -e "s/Tests run: \([^,]*\), Failures: \([^,]*\), Errors: \([^,]*\), Skipped: \([^,]*\)/${BOLD}${TEXT_GREEN}Tests run: \1${RESET_FORMATTING}, Failures: ${BOLD}${TEXT_RED}\2${RESET_FORMATTING}, Errors: ${BOLD}${TEXT_RED}\3${RESET_FORMATTING}, Skipped: ${BOLD}${TEXT_YELLOW}\4${RESET_FORMATTING}/g"
+  LC_CTYPE=C mvn $@ | sed -e "s/\(\[INFO\]\)\(.*\)/${BOLD}${TEXT_BLUE}\1${RESET_FORMATTING}\2/g" | \
+                       # match "[INFO] BUILD SUCCESS" and "[INFO] BUILD SUCCESSFUL" (ugly regex, because of the coloring for "[INFO].*") \
+                       # the "[INFO] BUILD SUCCESS"-line was changed to "^[[1m^[[34m[INFO]^[(B^[[m BUILD SUCCESS" \
+                       # so we need this ugly replacement \
+                      sed -e "s/\(\[INFO\]\)\(.*\)\(BUILD SUCCESS\(FUL\)\?\)/${BOLD}${TEXT_GREEN}\1\2${BOLD}${TEXT_GREEN}\3${RESET_FORMATTING}/g" | \
+                       # match "[INFO] BUILD FAILURE" \
+                      sed -e "s/\(\[INFO\]\)\(.*\)\(BUILD FAILURE\)/${BOLD}${TEXT_RED}\1\2${BOLD}${TEXT_RED}\3${RESET_FORMATTING}/g" | \
+                      sed -e "s/\(\[WARNING\]\)\(.*\)/${BOLD}${TEXT_YELLOW}\1${RESET_FORMATTING}\2/g" | \
+                      sed -e "s/\(\[ERROR\]\)\(.*\)/${BOLD}${TEXT_RED}\1${RESET_FORMATTING}\2/g" | \
+                      sed -e "s/Tests run: \([^,]*\), Failures: \([^,]*\), Errors: \([^,]*\), Skipped: \([^,]*\)/${BOLD}${TEXT_GREEN}Tests run: \1${RESET_FORMATTING}, Failures: ${BOLD}${TEXT_RED}\2${RESET_FORMATTING}, Errors: ${BOLD}${TEXT_RED}\3${RESET_FORMATTING}, Skipped: ${BOLD}${TEXT_YELLOW}\4${RESET_FORMATTING}/g" | \
+                       # here can you color your package name to find your package in stacktraces or logs
+                      sed -e "s/\(com\.your\.package\)/${BOLD}${TEXT_MAGENTA}\1${RESET_FORMATTING}/g"
+
+
  
   # Make sure formatting is reset
   echo -ne ${RESET_FORMATTING}
