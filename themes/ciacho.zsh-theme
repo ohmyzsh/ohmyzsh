@@ -23,7 +23,7 @@ SEGMENT_SEPARATOR="\ue0b0"
 
 PLUSMINUS="\u00b1"
 BRANCH="\ue0a0"
-BRANCH_BEGIN="‹ \ue0a0"
+BRANCH_BEGIN="‹"
 BRANCH_END="›"
 DETACHED="\u27a6"
 CROSS="\u2718"
@@ -39,22 +39,22 @@ prompt_segment() {
   [[ -n $1 ]] && bg="%K{$1}" || bg="%k"
   [[ -n $2 ]] && fg="%F{$2}" || fg="%f"
   if [[ $CURRENT_BG != 'NONE' && $1 != $CURRENT_BG ]]; then
-    echo -ne "%{$bg%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR%{$fg%}"
+    print -n "%{$bg%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR%{$fg%}"
   else
-    echo -ne "%{$bg%}%{$fg%}"
+    print -n "%{$bg%}%{$fg%}"
   fi
   CURRENT_BG=$1
-  [[ -n $3 ]] && echo -n $3
+  [[ -n $3 ]] && print -n $3
 }
 
 # End the prompt, closing any open segments
 prompt_end() {
   if [[ -n $CURRENT_BG ]]; then
-    echo -ne "%{%k%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR"
+    print -n "%{%k%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR"
   else
-    echo -ne "%{%k%}"
+    print -n "%{%k%}"
   fi
-  echo -ne "%{%f%}"
+  print -n "%{%f%}"
   CURRENT_BG=''
 }
 
@@ -82,11 +82,11 @@ symbols=()
 function prompt_ciacho_status() {
   local symbols
   symbols=()
-  [[ -n $SSH_CLIENT ]] && symbols+="%{%F{cyan}[SSH]"
-  [[ -f /etc/vps ]] && symbols+="%{%F{yellow}[VPS]"
   [[ $UID -eq 0 ]] && symbols+="%{%F{red}%}[ROOT]"
   [[ $LANG == "pl_PL.UTF-8" ]] && symbols+="%{%F{green}%}[UTF]"
   [[ $LANG == "pl_PL" ]] && symbols+="%{%F{green}%}[ISO]"
+  [[ -n $SSH_CLIENT ]] && symbols+="%{%F{cyan}[SSH]"
+  [[ -f /etc/vps ]] && symbols+="%{%F{yellow}[VPS]"
 
   [[ -n "$symbols" ]] && prompt_segment black default "$symbols "
 }
@@ -106,47 +106,12 @@ prompt_ciacho_git() {
       ref="${ref} "
     fi
     if [[ "${ref/.../}" == "$ref" ]]; then
-      ref="$BRANCH_BEGIN $ref $BRANCH_END"
+      ref="$BRANCH_BEGIN $BRANCH $ref $BRANCH_END"
     else
       ref="$DETACHED ${ref/.../}"
     fi
     prompt_segment $color $PRIMARY_FG
     print -Pn " $ref"
-  fi
-}
-
-prompt_ciacho_hg() {
-  local rev status
-  if $(hg id >/dev/null 2>&1); then
-    if $(hg prompt >/dev/null 2>&1); then
-      if [[ $(hg prompt "{status|unknown}") = "?" ]]; then
-        # if files are not added
-        prompt_segment red white
-        st='±'
-      elif [[ -n $(hg prompt "{status|modified}") ]]; then
-        # if any modification
-        prompt_segment yellow black
-        st='±'
-      else
-        # if working copy is clean
-        prompt_segment green black
-      fi
-      echo -n $(hg prompt "☿ {rev}@{branch}") $st
-    else
-      st=""
-      rev=$(hg id -n 2>/dev/null | sed 's/[^-0-9]//g')
-      branch=$(hg id -b 2>/dev/null)
-      if `hg st | grep -q "^\?"`; then
-        prompt_segment red black
-        st='±'
-      elif `hg st | grep -q "^[MA]"`; then
-        prompt_segment yellow black
-        st='±'
-      else
-        prompt_segment green black
-      fi
-      echo -n "☿ $rev@$branch" $st
-    fi
   fi
 }
 
@@ -193,7 +158,6 @@ prompt_ciacho_main() {
 	prompt_ciacho_battery
 	prompt_ciacho_context
   prompt_ciacho_git
-  prompt_ciacho_hg
   prompt_ciacho_dir
   prompt_end
   prompt_ciacho_hash
@@ -225,4 +189,3 @@ prompt_ciacho_setup() {
 prompt_ciacho_setup "$@"
 
 
-PROMPT='%{%f%b%k%}$(build_prompt) '
