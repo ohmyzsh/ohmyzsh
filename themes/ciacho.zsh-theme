@@ -129,18 +129,12 @@ prompt_ciacho_context() {
   if [[ $(whoami) == root ]]; then
 		# red @ cyan 
 		uid_color=red
-		host_color=white
 	elif [[ $(uname) == Darwin ]]; then
 		uid_color=cyan
-		host_color=cyan
-	elif [[ $(uname) == Darwin && $(whoami) == root ]]; then
-		uid_color=red
-		host_color=cyan
 	else
 		uid_color=white
-		host_color=white
 	fi
-   prompt_segment black default "%(!.%{%F{$uid_color}%}.)$USER%(!.%{%F{white}%}.)@%(!.%{%F{$host_color}%}.)%m"
+   prompt_segment black $uid_color "$USER@%m"
  
 }
 
