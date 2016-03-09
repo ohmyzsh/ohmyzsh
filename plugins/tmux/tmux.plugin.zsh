@@ -70,6 +70,11 @@ if which tmux &> /dev/null
 		[[ -n $INACTIVE_SESSIONS ]] && echo $INACTIVE_SESSIONS
 	}
 
+	function _all_sessions {
+		ALL_SESSIONS=`tmux ls | grep "$ZSH_TMUX_SESSION_NAME_PREFIX" | cut -d: -f1`
+		[[ -n $ALL_SESSIONS ]] && echo $ALL_SESSIONS
+	}
+
 	# Wrapper function for tmux.
 	function _zsh_tmux_plugin_run()
 	{
@@ -85,7 +90,7 @@ if which tmux &> /dev/null
 			then
 				\tmux `[[ "$ZSH_TMUX_ITERM2" == "true" ]] && echo '-CC '` attach -t `_inactive_sessions | head -n1`
 			else
-				\tmux `[[ "$ZSH_TMUX_ITERM2" == "true" ]] && echo '-CC '` `[[ "$ZSH_TMUX_FIXTERM" == "true" ]] && echo '-f '$_ZSH_TMUX_FIXED_CONFIG` new-session -s "$ZSH_TMUX_SESSION_NAME_PREFIX`_inactive_sessions | tail -n1 | cut -d- -f4 | _incr`"
+				\tmux `[[ "$ZSH_TMUX_ITERM2" == "true" ]] && echo '-CC '` `[[ "$ZSH_TMUX_FIXTERM" == "true" ]] && echo '-f '$_ZSH_TMUX_FIXED_CONFIG` new-session -s "$ZSH_TMUX_SESSION_NAME_PREFIX`_incr $(_all_sessions | tail -n1 | cut -d- -f4)`"
 			fi
 			[[ "$ZSH_TMUX_AUTOQUIT" == "true" ]] && exit
 		# Just run tmux, fixing the TERM variable if requested.
