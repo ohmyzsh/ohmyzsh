@@ -35,6 +35,8 @@ if which tmux &> /dev/null
 	# systems without the proper terminfo
 	[[ -n "$ZSH_TMUX_FIXTERM_WITH_256COLOR" ]] || ZSH_TMUX_FIXTERM_WITH_256COLOR="screen-256color"
 
+        ZSH_TMUX_SESSION_NAME_PREFIX="`whoami`-zsh-tmux-"
+
 
 	# Get the absolute path to the current directory
 	local zsh_tmux_plugin_path="$(cd "$(dirname "$0")" && pwd)"
@@ -57,6 +59,17 @@ if which tmux &> /dev/null
 		export _ZSH_TMUX_FIXED_CONFIG="$zsh_tmux_plugin_path/tmux.only.conf"
 	fi
 
+        # helper functions
+	function _incr() {
+		var=$(($1 + 1))
+		echo $var
+	}
+
+	function _inactive_sessions {
+		INACTIVE_SESSIONS=`tmux ls | grep -v attached | grep "$ZSH_TMUX_SESSION_NAME_PREFIX" | cut -d: -f1`
+		[[ -n $INACTIVE_SESSIONS ]] && echo $INACTIVE_SESSIONS
+	}
+
 	# Wrapper function for tmux.
 	function _zsh_tmux_plugin_run()
 	{
@@ -64,10 +77,16 @@ if which tmux &> /dev/null
 		if [[ -n "$@" ]]
 		then
 			\tmux $@
-		# Try to connect to an existing session.
+		# Try to connect to an existing named session.
 		elif [[ "$ZSH_TMUX_AUTOCONNECT" == "true" ]]
 		then
-			\tmux `[[ "$ZSH_TMUX_ITERM2" == "true" ]] && echo '-CC '` attach || \tmux `[[ "$ZSH_TMUX_ITERM2" == "true" ]] && echo '-CC '` `[[ "$ZSH_TMUX_FIXTERM" == "true" ]] && echo '-f '$_ZSH_TMUX_FIXED_CONFIG` new-session
+			# See if we need to create a new named session
+			if [[ `_inactive_sessions | wc -l` != 0 ]]
+			then
+				\tmux `[[ "$ZSH_TMUX_ITERM2" == "true" ]] && echo '-CC '` attach -t `_inactive_sessions | head -n1`
+			else
+				\tmux `[[ "$ZSH_TMUX_ITERM2" == "true" ]] && echo '-CC '` `[[ "$ZSH_TMUX_FIXTERM" == "true" ]] && echo '-f '$_ZSH_TMUX_FIXED_CONFIG` new-session -s "$ZSH_TMUX_SESSION_NAME_PREFIX`_inactive_sessions | tail -n1 | cut -d- -f4 | _incr`"
+			fi
 			[[ "$ZSH_TMUX_AUTOQUIT" == "true" ]] && exit
 		# Just run tmux, fixing the TERM variable if requested.
 		else
