@@ -200,6 +200,10 @@ __push() {
     # no arguments
 }
 
+__rename() {
+    __docker_all_containers
+}
+
 __restart() {
     _arguments \
         '(-t,--time=)'{-t,--time=}'[Number of seconds to try to stop for before killing the container. Once killed it will then be restarted. Default=10]'
@@ -341,6 +345,7 @@ _1st_arguments=(
     "ps":"List containers"
     "pull":"Pull an image or a repository from the docker registry server"
     "push":"Push an image or a repository to the docker registry server"
+    "rename":"Rename a container"
     "restart":"Restart a running container"
     "rm":"Remove one or more containers"
     "rmi":"Remove one or more images"
@@ -408,6 +413,8 @@ case "$words[1]" in
         __pull ;;
     push)
         __push ;;
+    rename)
+        __rename ;;
     restart)
         __restart ;;
     rm)
