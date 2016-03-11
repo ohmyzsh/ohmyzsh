@@ -151,6 +151,8 @@ function git_prompt_long_sha() {
 function git_prompt_status() {
   emulate -L zsh
 
+  [[ "$(__git_prompt_git config --get oh-my-zsh.hide-status 2>/dev/null)" = 1 ]] && return
+
   local INDEX STATUS
   INDEX=$(__git_prompt_git status --porcelain -b 2> /dev/null) || return 0
   STATUS=""
