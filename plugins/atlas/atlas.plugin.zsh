@@ -17,7 +17,11 @@ function atlas_new {
   if [ -z "$1" ]; then
     echo "need a name of new map";
   else
-    touch ~/.hosts/$1;
+    if [[ -e "/Users/nstilwell/.hosts/template" ]]; then
+      cp /Users/nstilwell/.hosts/template ~/.hosts/$1;
+    else
+      touch ~/.hosts/$1;
+    fi
     echo "Created $1 at ~/.hosts/$1";
   fi
 }
