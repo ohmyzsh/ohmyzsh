@@ -342,7 +342,9 @@ _zsh_highlight_main_highlighter()
                             # (For array assignments, the command doesn't start until the ")" token.)
                             next_word+=':start:'
                           fi
-                        elif [[ $arg[0,1] == $histchars[0,1] || $arg[0,1] == $histchars[2,2] ]]; then
+                        elif [[ $arg[0,1] = $histchars[0,1] ]] && (( $#arg[0,2] == 2 )); then
+                          style=$ZSH_HIGHLIGHT_STYLES[history-expansion]
+                        elif [[ $arg[0,1] == $histchars[2,2] ]]; then
                           style=$ZSH_HIGHLIGHT_STYLES[history-expansion]
                         elif [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR:#"$arg"} ]]; then
                           if [[ $this_word == *':regular:'* ]]; then
@@ -414,7 +416,7 @@ _zsh_highlight_main_highlighter()
         [*?]*|*[^\\][*?]*)
                  $highlight_glob && style=$ZSH_HIGHLIGHT_STYLES[globbing] || style=$ZSH_HIGHLIGHT_STYLES[default];;
         *)       if false; then
-                 elif [[ $arg[0,1] = $histchars[0,1] ]]; then
+                 elif [[ $arg[0,1] = $histchars[0,1] ]] && (( $#arg[0,2] == 2 )); then
                    style=$ZSH_HIGHLIGHT_STYLES[history-expansion]
                  elif [[ -n ${(M)ZSH_HIGHLIGHT_TOKENS_COMMANDSEPARATOR:#"$arg"} ]]; then
                    if [[ $this_word == *':regular:'* ]]; then
