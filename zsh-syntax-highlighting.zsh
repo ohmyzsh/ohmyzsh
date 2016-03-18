@@ -222,18 +222,21 @@ _zsh_highlight_bind_widgets()
       # Already rebound event: do nothing.
       user:_zsh_highlight_widget_*);;
 
+      # The "eval"'s are required to make $cur_widget a closure: the value of the parameter at function
+      # definition time is used.
+
       # User defined widget: override and rebind old one with prefix "orig-".
       user:*) zle -N orig-$cur_widget ${widgets[$cur_widget]#*:}
-              _zsh_highlight_widget_$cur_widget() { _zsh_highlight_call_widget orig-$cur_widget -- "$@" };
+              eval "_zsh_highlight_widget_$cur_widget() { _zsh_highlight_call_widget orig-$cur_widget -- \"\$@\" }";
               zle -N $cur_widget _zsh_highlight_widget_$cur_widget;;
 
       # Completion widget: override and rebind old one with prefix "orig-".
       completion:*) zle -C orig-$cur_widget ${${widgets[$cur_widget]#*:}/:/ }; \
-                    _zsh_highlight_widget_$cur_widget() { _zsh_highlight_call_widget orig-$cur_widget -- "$@" }; \
+                    eval "_zsh_highlight_widget_$cur_widget() { _zsh_highlight_call_widget orig-$cur_widget -- \"\$@\" }"; \
                     zle -N $cur_widget _zsh_highlight_widget_$cur_widget;;
 
       # Builtin widget: override and make it call the builtin ".widget".
-      builtin) _zsh_highlight_widget_$cur_widget() { _zsh_highlight_call_widget .$cur_widget -- "$@" }; \
+      builtin) eval "_zsh_highlight_widget_$cur_widget() { _zsh_highlight_call_widget .$cur_widget -- \"\$@\" }";
                zle -N $cur_widget _zsh_highlight_widget_$cur_widget;;
 
       # Default: unhandled case.
