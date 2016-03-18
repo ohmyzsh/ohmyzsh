@@ -234,7 +234,7 @@ _zsh_highlight_bind_widgets()
               zle -N $cur_widget _zsh_highlight_widget_$cur_widget;;
 
       # Completion widget: override and rebind old one with prefix "orig-".
-      completion:*) zle -C orig-$cur_widget ${${widgets[$cur_widget]#*:}/:/ }
+      completion:*) zle -C orig-$cur_widget ${${(s.:.)widgets[complete-word]}[2,3]} 
                     eval "_zsh_highlight_widget_${(q)cur_widget}() { _zsh_highlight_call_widget orig-${(q)cur_widget} -- \"\$@\" }"
                     zle -N $cur_widget _zsh_highlight_widget_$cur_widget;;
 
