@@ -40,10 +40,13 @@ function listSchemacrawlerCompletions {
 		-server=db2 -server=h2 -server=hsqldb -server=mariadb -server=mysql -server=offline -server=oracle -server=postgresql -server=sqlite -server=sqlserver -server=sybaseiq
 		
 		# connection options
-        -url= -user= -password=
+                -url= -url=jdbc:postgresql://HOST:PORT/DB
+
+                # authentication options
+                 -user= -password=
 		
 		# info level options
-		-infolevel=minimum -infolevel=standard -infolevel=detailed -infolevel=maximum
+                -infolevel=minimum -infolevel=standard -infolevel=detailed -infolevel=maximum
 		
 		# filtering options
 		-schemas= -tabletypes= -tables= -excludecolumns= -routinetypes= -routines= -excludeinout= -synonyms= -sequences=
