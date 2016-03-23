@@ -59,6 +59,11 @@ function listSchemacrawlerCompletions {
 		
 		# Application options
 		-loglevel= -loglevel=OFF -loglevel=SEVERE -loglevel=WARNING -loglevel=INFO -loglevel=CONFIG -loglevel=FINE -loglevel=FINER -loglevel=FINEST  -loglevel=ALL
+
+                # output options
+                -outputfile= -outputformat=txt -outputformat=json -outputformat=html -outputformat=pdf -outputformat=png
+
+                
 		
 		# help commands
 		-? -h -help --help
