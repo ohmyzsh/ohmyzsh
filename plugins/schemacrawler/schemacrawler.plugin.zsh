@@ -63,7 +63,8 @@ function listSchemacrawlerCompletions {
                 # output options
                 -outputfile= -outputformat=txt -outputformat=json -outputformat=html -outputformat=pdf -outputformat=png
 
-                
+                # linter options
+                -linterconfigs=
 		
 		# help commands
 		-? -h -help --help
