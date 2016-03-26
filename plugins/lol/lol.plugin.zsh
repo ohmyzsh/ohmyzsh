@@ -49,3 +49,5 @@ alias yolo='git commit -m "$(curl -s http://whatthecommit.com/index.txt)"'
 alias letcat='git checkout'
 alias violenz='git rebase'
 
+# Flip a coin function. http://twitter.com/#!/climagic/status/195158151534882817
+flipcoin() { [[ $(( $RANDOM % 2 )) == 0 ]] && echo heads || echo tails; }
