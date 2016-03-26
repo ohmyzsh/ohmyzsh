@@ -270,3 +270,8 @@ function grename() {
     git push --set-upstream origin "$2"
   fi
 }
+
+# Remove from repo all files deleted
+alias gitstrm="git st | egrep 'deleted' | sed -e 's/#//' -e 's/deleted:/git rm/' | sh"
+
+alias gitgcprune="git remote prune origin ; git gc --prune --aggressive"
