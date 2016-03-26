@@ -5,9 +5,7 @@
 # Format:
 # <login>@<host>:<pwd> <rvm_prompt> <git_prompt><hg_prompt>
 # $ _
-#
-# You can see a screenshot at
-# http://tinogomes.files.wordpress.com/2012/01/screen-shot-2012-01-28-at-15-09-00.png
+
 
 ZSH_THEME_GIT_PROMPT_PREFIX=" %{$fg[green]%}("
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$fg[green]%})%{$reset_color%}"
