@@ -2,6 +2,7 @@ fpath=($rvm_path/scripts/zsh/Completion $fpath)
 
 alias rubies='rvm list rubies'
 alias gemsets='rvm gemset list'
+alias rvms='rvm gemset'
 
 local ruby18='ruby-1.8.7'
 local ruby19='ruby-1.9.3'
