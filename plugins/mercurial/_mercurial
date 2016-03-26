@@ -1,0 +1,638 @@
+#compdef hg
+#autoload
+
+local -a _1st_arguments
+
+_1st_arguments=(
+	'add:add the specified files on the next commit'
+	'addremove:add all new files, delete all missing files'
+	{annotate,blame}':show changeset information by line for each file'
+	'archive:create an unversioned archive of a repository revision'
+	'backout:reverse effect of earlier changeset'
+	'bisect:subdivision search of changesets'
+	'bookmarks:track a line of development with movable markers'
+	'branch:set or show the current branch name'
+	'branches:list repository named branches'
+	'bundle:create a changegroup file'
+	'cat:output the current or given revision of files'
+	'clone:make a copy of an existing repository'
+	{commit,ci}':commit the specified files or all outstanding changes'
+	{copy,cp}':mark files as copied for the next commit'
+	'diff:diff repository (or selected files)'
+	'export:dump the header and diffs for one or more changesets'
+	'fetch:pull changes from a remote repository, merge new changes if needed. (FetchExtension)'
+	'forget:forget the specified files on the next commit'
+	'grep:search for a pattern in specified files and revisions'
+	'heads:show current repository heads or show branch heads'
+	'help:show help for a given topic or a help overview'
+	{identify,id}:'identify the working copy or specified revision'
+	{import,patch}':import an ordered set of patches'
+	{incoming,in}':show new changesets found in source'
+	'init:create a new repository in the given directory'
+	'locate:locate files matching specific patterns'
+	{log,history}':show revision history of entire repository or files'
+	'manifest:output the current or given revision of the project manifest'
+	'merge:merge working directory with another revision'
+	{outgoing,out}':show changesets not found in the destination'
+	'parents:show the parents of the working directory or revision'
+	'paths:show aliases for remote repositories'
+	'pull:pull changes from the specified source'
+	'push:push changes to the specified destination'
+	'rebase:move changeset (and descendants) to a different branch (RebaseExtension)'
+	'recover:roll back an interrupted transaction'
+	{remove,rm}':remove the specified files on the next commit'
+	{rename,move,mv}':rename files; equivalent of copy + remove'
+	'resolve:redo merges or set/view the merge status of files'
+	'revert:restore individual files or directories to an earlier state'
+	'rollback:roll back the last transaction (dangerous)'
+	'root:print the root (top) of the current working directory'
+	'serve:start stand-alone webserver'
+	{showconfig,debugconfig}':show combined config settings from all hgrc files'
+	{status,st}':show changed files in the working directory'
+	{summary,sum}':summarize working directory state'
+	'tag:add one or more tags for the current or given revision'
+	'tags:list repository tags'
+	'tip:show the tip revision'
+	'transplant:transplant changesets from another branch (TransplantExtension)'
+	'unbundle:apply one or more changegroup files'
+	{update,up,checkout,co}':update working directory or switch revisions'
+	'verify:verify the integrity of the repository'
+	'version:output version and copyright information'
+	# additional help topics
+	'config:Configuration Files'
+	'dates:Date Formats'
+	'patterns:File Name Patterns'
+	'environment:Environment Variables'
+	'revisions:Specifying Single Revisions'
+	'multirevs:Specifying Multiple Revisions'
+	'revsets:Specifying Revision Sets'
+	'diffs:Diff Formats'
+	'merge-tools:Merge Tools'
+	'templating:Template Usage'
+	'urls:URL Paths'
+	'extensions:Using additional features'
+	'subrepos:Subrepositories'
+	'hgweb:Configuring hgweb'
+	'glossary:Glossary'
+)
+
+local expl
+
+_arguments \
+	'(-h --help)'{-h,--help}'[show help]' \
+	'*:: :->subcmds' && return 0
+
+if (( CURRENT == 1 )); then
+	_describe -t commands "hg subcommand" _1st_arguments
+	return
+fi
+
+local -a _global_options
+
+_global_options=(
+	'(-R --repository REPO)'{-R,--repository}'[repository root directory or name of overlay bundle file]'
+	'(--cwd DIR)'--cwd'[change working directory]'
+	'(-y --noninteractive)'{-y,--noninteractive}'[do not prompt, assume `yes` for any required answers]'
+	'(-q --quiet)'{-q,--quiet}'[suppress output]'
+	'(-v --verbose)'{-v,--verbose}'[enable additional output]'
+	'(--config CONFIG [+])'--config'[set/override config option (use `section.name=value`)]'
+	'(--debug)'--debug'[enable debugging output]'
+	'(--debugger)'--debugger'[start debugger]'
+	'(--encoding ENCODE)'--encoding'[set the charset encoding (default: UTF-8)]'
+	'(--encodingmode MODE)'--encodingmode'[set the charset encoding mode (default: strict)]'
+	'(--traceback)'--traceback'[always print a traceback on exception]'
+	'(--time)'--time'[time how long the command takes]'
+	'(--profile)'--profile'[print command execution profile]'
+	'(--version)'--version'[output version information and exit]'
+	'(-h --help)'{-h,--help}'[display help and exit]'
+	"*::archieve file:_files -g '(#i)*.*'"
+)
+
+local -a _command_options
+
+case "$words[1]" in
+	add)
+		_command_options=(
+			'(-I --include PATTERN [+])'{-I,--include}'[include names matching the given patterns]'
+			'(-X --exclude PATTERN [+])'{-X,--exclude}'[exclude names matching the given patterns]'
+			'(-S --subrepos)'{-S,--subrepos}'[recurse into subrepositories]'
+			'(-n --dry-run)'{-n,--dry-run}'[do not perform actions, just print output]'
+		)
+		;;
+	addremove)
+		_command_options=(
+			'(-s --similarity SIMILARITY)'{-s,--similarity}'[guess renamed files by similarity (0<=s<=100)]'
+			'(-I --include PATTERN [+])'{-I,--include}'[include names matching the given patterns]'
+			'(-X --exclude PATTERN [+])'{-X,--exclude}'[exclude names matching the given patterns]'
+			'(-n --dry-run)'{-n,--dry-run}'[do not perform actions, just print output]'
+		)
+		;;
+	annotate|blame)
+		_command_options=(
+			'(-r --rev REV)'{-r,--rev}'[annotate the specified revision]'
+			'(--no-follow)--no-follow[do not follow copies and renames]'
+			'(-a --text)'{-a,--text}'[treat all files as text]'
+			'(-u --user)'{-u,--user}'[list the author (long with -v)]'
+			'(-f --file)'{-f,--file}'[list the filename]'
+			'(-d --date)'{-d,--date}'[list the date (short with -q)]'
+			'(-n --number)'{-n,--number}'[list the revision number (default)]'
+			'(-c --changeset)'{-c,--changeset}'[list the changeset]'
+			'(-l --line-number)'{-l,--line-number}'[show line number at the first appearance]'
+			'(-I --include PATTERN [+])'{-I,--include}'[include names matching the given patterns]'
+			'(-X --exclude PATTERN [+])'{-X,--exclude}'[exclude names matching the given patterns]'
+		)
+		;;
+	archive)
+		_command_options=(
+			'(--no-decode)--no-decode[do not pass files through decoders]'
+			'(-p --prefix PREFIX)'{-p,--prefix}'[directory prefix for files in archive]'
+			'(-r --rev REV)'{-r,--rev}'[revision to distribute]'
+			'(-t --type TYPE)'{-t,--type}'[type of distribution to create]'
+			'(-S --subrepos)'{-S,--subrepos}'[recurse into subrepositories]'
+			'(-I --include PATTERN [+])'{-I,--include}'[include names matching the given patterns]'
+			'(-X --exclude PATTERN [+])'{-X,--exclude}'[exclude names matching the given patterns]'
+		)
+		;;
+	backout)
+		_command_options=(
+			'(--merge)--merge[merge with old dirstate parent after backout]'
+			'(--parent REV)--parent[parent to choose when backing out merge]'
+			'(-t --tool VALUE)'{-t,--tool}'[specify merge tool]'
+			'(-r --rev REV)'{-r,--rev}'[revision to backout]'
+			'(-I --include PATTERN [+])'{-I,--include}'[include names matching the given patterns]'
+			'(-X --exclude PATTERN [+])'{-X,--exclude}'[exclude names matching the given patterns]'
+			'(-m --message TEXT)'{-m,--message}'[use text as commit message]'
+			'(-l --logfile FILE)'{-l,--logfile}'[read commit message from file]'
+			'(-d --date DATE)'{-d,--date}'[record the specified date as commit date]'
+			'(-u --user USER)'{-u,--user}'[record the specified user as committer]'
+		)
+		;;
+	bisect)
+		_command_options=(
+			'(-r --reset)'{-r,--reset}'[reset bisect state]'
+			'(-g --good)'{-g,--good}'[mark changeset good]'
+			'(-b --bad)'{-b,--bad}'[mark changeset bad]'
+			'(-s --skip)'{-s,--skip}'[skip testing changeset]'
+			'(-c --command CMD)'{-c,--command}'[use command to check changeset state]'
+			'(-U --noupdate)'{-U,--noupdate}'[do not update to target]'
+		)
+		;;
+	bookmarks)
+		_command_options=(
+			'(-f --force)'{-f,--force}'[force]'
+			'(-r --rev REV)'{-r,--rev}'[revision]'
+			'(-d --delete)'{-d,--delete}'[delete a given bookmark]'
+			'(-m --rename NAME)'{-m,--rename}'[rename a given bookmark]'
+		)
+		;;
+	branch)
+		_command_options=(
+			'(-f --force)-f[set branch name even if it shadows an existing branch]'
+			'(-C --clean)-C[reset branch name to parent branch name]'
+		)
+		;;
+	branches)
+		_command_options=(
+			'(-a --active)'{-a,--active}'[show only branches that have unmerged heads]'
+			'(-c --closed)'{-c,--closed}'[show normal and closed branches]'
+		)
+		;;
+	bundle)
+		_command_options=(
+			'(-f --force)'{-f,--force}'[run even when the destination is unrelated]'
+			'(-r --rev REV [+])'{-r,--rev}'[a changeset intended to be added to the destination]'
+			'(-b --branch BRANCH [+])'{-b,--branch}'[a specific branch you would like to bundle]'
+			'(--base REV [+])--base[a base changeset assumed to be available at the destination]'
+			'(-a --all)'{-a,--all}'[bundle all changesets in the repository]'
+			'(-t --type TYPE)'{-t,--type}'[bundle compression type to use (default: bzip2)]'
+			'(-e --ssh CMD)'{-e,--ssh}'[specify ssh command to use]'
+			'(--remotecmd CMD)--remotecmd[specify hg command to run on the remote side]'
+			'(--insecure)--insecure[do not verify server certificate (ignoring web.cacerts config)]'
+		)
+		;;
+	cat)
+		_command_options=(
+			'(-o --output FORMAT)'{-o,--output}'[print output to file with formatted name]'
+			'(-r --rev REV)'{-r,--rev}'[print the given revision]'
+			'(--decode)--decode[apply any matching decode filter]'
+			'(-I --include PATTERN [+])'{-I,--include}'[include names matching the given patterns]'
+			'(-X --exclude PATTERN [+])'{-X,--exclude}'[exclude names matching the given patterns]'
+		)
+		;;
+	clone)
+		_command_options=(
+			'(-U --noupdate)'{-U,--noupdate}'[the clone will include an empty working copy (only a repository)]'
+			'(-u --updaterev REV)'{-u,--updaterev}'[revision, tag or branch to check out]'
+			'(-r --rev REV [+])'{-r,--rev}'[include the specified changeset]'
+			'(-b --branch BRANCH [+])'{-b,--branch}'[clone only the specified branch]'
+			'(--pull)--pull[use pull protocol to copy metadata]'
+			'(--uncompressed)--uncompressed[use uncompressed transfer (fast over LAN)]'
+			'(-e --ssh CMD)'{-e,--ssh}'[specify ssh command to use]'
+			'(--remotecmd CMD)--remotecmd[specify hg command to run on the remote side]'
+			'(--insecure)--insecure[do not verify server certificate (ignoring web.cacerts config)]'
+		)
+		;;
+	commit|ci)
+		_command_options=(
+			'(-A --addremove)'{-A,--addremove}'[mark new/missing files as added/removed before committing]'
+			'(--close-branch)--close-branch[mark a branch as closed, hiding it from the branch list]'
+			'(-I --include PATTERN [+])'{-I,--include}'[include names matching the given patterns]'
+			'(-X --exclude PATTERN [+])'{-X,--exclude}'[exclude names matching the given patterns]'
+			'(-m --message TEXT)'{-m,--message}'[use text as commit message]'
+			'(-l --logfile FILE)'{-l,--logfile}'[read commit message from file]'
+			'(-d --date DATE)'{-d,--date}'[record the specified date as commit date]'
+			'(-u --user USER)'{-u,--user}'[record the specified user as committer]'
+		)
+		;;
+	copy|cp)
+		_command_options=(
+			'(-A --after)'{-A,--after}'[record a copy that has already occurred]'
+			'(-f --force)'{-f,--force}'[forcibly copy over an existing managed file]'
+			'(-I --include PATTERN [+])'{-I,--include}'[include names matching the given patterns]'
+			'(-X --exclude PATTERN [+])'{-X,--exclude}'[exclude names matching the given patterns]'
+			'(-n --dry-run)'{-n,--dry-run}'[do not perform actions, just print output]'
+		)
+		;;
+	diff)
+		_command_options=(
+			'(-r --rev REV [+])'{-r,--rev}'[revision]'
+			'(-c --change REV)'{-c,--change}'[change made by revision]'
+			'(-a --text)'{-a,--text}'[treat all files as text]'
+			'(-g --git)'{-g,--git}'[use git extended diff format]'
+			'(--nodates)--nodates[omit dates from diff headers]'
+			'(-p --show-function)'{-p,--show-function}'[show which function each change is in]'
+			'(--reverse)--reverse[produce a diff that undoes the changes]'
+			'(-w --ignore-all-space)'{-w,--ignore-all-space}'[ignore white space when comparing lines]'
+			'(-b --ignore-space-change)-b[ignore changes in the amount of white space]'
+			'(-B --ignore-blank-lines)'{-B,--ignore-blank-lines}'[ignore changes whose lines are all blank]'
+			'(-U --unified NUM)'{-U,--unified}'[number of lines of context to show]'
+			'(--stat)--stat[output diffstat-style summary of changes]'
+			'(-I --include PATTERN [+])'{-I,--include}'[include names matching the given patterns]'
+			'(-X --exclude PATTERN [+])'{-X,--exclude}'[exclude names matching the given patterns]'
+			'(-S --subrepos)'{-S,--subrepos}'[recurse into subrepositories]'
+		)
+		;;
+	export)
+		_command_options=(
+			'(-o --output FORMAT)'{-o,--output}'[print output to file with formatted name]'
+			'(--switch-parent)--switch-parent[diff against the second parent]'
+			'(-r --rev REV [+])'{-r,--rev}'[revisions to export]'
+			'(-a --text)'{-a,--text}'[treat all files as text]'
+			'(-g --git)'{-g,--git}'[use git extended diff format]'
+			'(--nodates)--nodates[omit dates from diff headers]'
+		)
+		;;
+	fetch)
+		_command_options=(
+			'(-r --rev REV [+])'{-r,--rev}'[a specific revision you would like to pull]'
+			'(-e --edit)'{-e,--edit}'[edit commit message]'
+			'(--switch-parent)--switch-parent[switch parents when merging]'
+			'(-m --message TEXT)'{-m,--message}'[use text as commit message]'
+			'(-l --logfile FILE)'{-l,--logfile}'[read commit message from file]'
+			'(-d --date)'{-d,--date}'[record the specified date as commit date]'
+			'(-u --user USER)'{-u,--user}'[record the specified user as committer]'
+			'(-e --ssh CMD)'{-e,--ssh}'[specify ssh command to use]'
+			'(--remotecmd CMD)--remotecmd[specify hg command to run on the remote side]'
+			'(--insecure)--insecure[do not verify server certificate (ignoring web.cacerts config)]'
+		)
+		;;
+	forget)
+		_command_options=(
+			'(-I --include PATTERN [+])'{-I,--include}'[include names matching the given patterns]'
+			'(-X --exclude PATTERN [+])'{-X,--exclude}'[exclude names matching the given patterns]'
+		)
+		;;
+	grep)
+		_command_options=(
+			'(-0 --print0)'{-0,--print0}'[end fields with NUL]'
+			'(--all)--all[print all revisions that match]'
+			'(-f --follow)'{-f,--follow}'[follow changeset history, or file history across copies and renames]'
+			'(-i --ignore-case)'{-i,--ignore-case}'[ignore case when matching]'
+			'(-l --files-with-matches)'{-l,--files-with-matches}'[print only filenames and revisions that match]'
+			'(-n --line-number)'{-n,--line-number}'[print matching line numbers]'
+			'(-r --rev REV [+])'{-r,--rev}'[only search files changed within revision range]'
+			'(-u --user)'{-u,--user}'[list the author (long with -v)]'
+			'(-d --date)'{-d,--date}'[list the date (short with -q)]'
+			'(-I --include PATTERN [+])'{-I,--include}'[include names matching the given patterns]'
+			'(-X --exclude PATTERN [+])'{-X,--exclude}'[exclude names matching the given patterns]'
+		)
+		;;
+	heads)
+		_command_options=(
+			'(-r --rev STARTREV)'{-r,--rev}'[show only heads which are descendants of STARTREV]'
+			'(-t --topo)'{-t,--topo}'[show topological heads only]'
+			'(-c --closed)'{-c,--closed}'[show normal and closed branch heads]'
+			'(--style STYLE)--style[display using template map file]'
+			'(--template TEMPLATE)--template[display with template]'
+		)
+		;;
+	identify|id)
+		_command_options=(
+			'(-r --rev REV)'{-r,--rev}'[identify the specified revision]'
+			'(-n --num)'{-n,--num}'[show local revision number]'
+			'(-i --id)'{-i,--id}'[show global revision id]'
+			'(-b --branch)'{-b,--branch}'[show branch]'
+			'(-t --tags)'{-t,--tags}'[show tags]'
+			'(-B --bookmarks)'{-B,--bookmarks}'[show bookmarks]'
+		)
+		;;
+	import|patch)
+		_command_options=(
+			'(-p --strip NUM)'{-p,--strip}'[directory strip option for patch. This has the same meaning as the corresponding patch option (default: 1)]'
+			'(-b --base PATH)'{-b,--base}'[base path]'
+			'(-f --force)'{-f,--force}'[skip check for outstanding uncommitted changes]'
+			'(--no-commit)--no-commit[do not commit, just update the working directory]'
+			'(--exact)--exact[apply patch to the nodes from which it was generated]'
+			'(--import-branch)--import-branch[use any branch information in patch (implied by --exact)]'
+			'(-m --message TEXT)'{-m,--message}'[use text as commit message]'
+			'(-l --logfile FILE)'{-l,--logfile}'[read commit message from file]'
+			'(-d --date DATE)'{-d,--date}'[record the specified date as commit date]'
+			'(-u --user USER)'{-u,--user}'[record the specified user as committer]'
+			'(-s --similarity SIMILARITY)'{-s,--similarity}'[guess renamed files by similarity (0<=s<=100)]'
+		)
+		;;
+	incoming|in)
+		_command_options=(
+			'(-f --force)'{-f,--force}'[run even if remote repository is unrelated]'
+			'(-n --newest-first)'{-n,--newest-first}'[show newest record first]'
+			'(--bundle FILE)--bundle[file to store the bundles into]'
+			'(-r --rev REV [+])'{-r,--rev}'[a remote changeset intended to be added]'
+			'(-B --bookmarks)'{-B,--bookmarks}'[compare bookmarks]'
+			'(-b --branch BRANCH [+])'{-b,--branch}'[a specific branch you would like to pull]'
+			'(-p --patch)'{-p,--patch}'[show patch]'
+			'(-g --git)'{-g,--git}'[use git extended diff format]'
+			'(-l --limit NUM)'{-l,--limit}'[limit number of changes displayed]'
+			'(-M --no-merges)'{-M,--no-merges}'[do not show merges]'
+			'(--stat)--stat[output diffstat-style summary of changes]'
+			'(--style STYLE)--style[display using template map file]'
+			'(--template TEMPLATE)--template[display with template]'
+			'(-e --ssh CMD)'{-e,--ssh}'[specify ssh command to use]'
+			'(--remotecmd CMD)--remotecmd[specify hg command to run on the remote side]'
+			'(--insecure)--insecure[do not verify server certificate (ignoring web.cacerts config)]'
+			'(-S --subrepos)'{-S,--subrepos}'[recurse into subrepositories]'
+		)
+		;;
+	init)
+		_command_options=(
+			'(-e --ssh CMD)'{-e,--ssh}'[specify ssh command to use]'
+			'(--remotecmd CMD)--remotecmd[specify hg command to run on the remote side]'
+			'(--insecure)--insecure[do not verify server certificate (ignoring web.cacerts config)]'
+		)
+		;;
+	locate)
+		_command_options=(
+			'(-r --rev REV)'{-r,--rev}'[search the repository as it is in REV]'
+			'(-0 --print0)'{-0,--print0}'[end filenames with NUL, for use with xargs]'
+			'(-f --fullpath)'{-f,--fullpath}'[print complete paths from the filesystem root]'
+			'(-I --include PATTERN [+])'{-I,--include}'[include names matching the given patterns]'
+			'(-X --exclude PATTERN [+])'{-X,--exclude}'[exclude names matching the given patterns]'
+		)
+		;;
+	log|history)
+		_command_options=(
+			'(-f --follow)'{-f,--follow}'[follow changeset history, or file history across copies and renames]'
+			'(--follow-first)--follow-first[only follow the first parent of merge changesets]'
+			'(-d --date DATE)'{-d,--date}'[show revisions matching date spec]'
+			'(-C --copies)'{-C,--copies}'[show copied files]'
+			'(-k --keyword TEXT [+])'{-k,--keyword}'[do case-insensitive search for a given text]'
+			'(-r --rev REV [+])'{-r,--rev}'[show the specified revision or range]'
+			'(--removed)--removed[include revisions where files were removed]'
+			'(-m --only-merges)'{-m,--only-merges}'[show only merges]'
+			'(-u --user USER [+])'{-u,--user}'[revisions committed by user]'
+			'(-b --branch BRANCH [+])'{-b,--branch}'[show changesets within the given named branch]'
+			'(-P --prune REV [+])'{-P,--prune}'[do not display revision or any of its ancestors]'
+			'(-p --patch)'{-p,--patch}'[show patch]'
+			'(-g --git)'{-g,--git}'[use git extended diff format]'
+			'(-l --limit NUM)'{-l,--limit}'[limit number of changes displayed]'
+			'(-M --no-merges)'{-M,--no-merges}'[do not show merges]'
+			'(--stat)--stat[output diffstat-style summary of changes]'
+			'(--style STYLE)--style[display using template map file]'
+			'(--template TEMPLATE)--template[display with template]'
+			'(-I --include PATTERN [+])'{-I,--include}'[include names matching the given patterns]'
+			'(-X --exclude PATTERN [+])'{-X,--exclude}'[exclude names matching the given patterns]'
+		)
+		;;
+	manifest)
+		_command_options=(
+		'(-r --rev REV)'{-r,--rev}'[revision to display]'
+		)
+		;;
+	merge)
+		_command_options=(
+			'(-f --force)'{-f,--force}'[force a merge with outstanding changes]'
+			'(-t --tool VALUE)'{-t,--tool}'[specify merge tool]'
+			'(-r --rev REV)'{-r,--rev}'[revision to merge]'
+			'(-P --preview)'{-P,--preview}'[review revisions to merge (no merge is performed)]'
+		)
+		;;
+	outgoing|out)
+		_command_options=(
+			'(-f --force)'{-f,--force}'[run even when the destination is unrelated]'
+			'(-r --rev REV [+])'{-r,--rev}'[a changeset intended to be included in the destination]'
+			'(-n --newest-first)'{-n,--newest-first}'[show newest record first]'
+			'(-B --bookmarks)'{-B,--bookmarks}'[compare bookmarks]'
+			'(-b --branch BRANCH [+])'{-b,--branch}'[a specific branch you would like to push]'
+			'(-p --patch)'{-p,--patch}'[show patch]'
+			'(-g --git)'{-g,--git}'[use git extended diff format]'
+			'(-l --limit NUM)'{-l,--limit}'[limit number of changes displayed]'
+			'(-M --no-merges)'{-M,--no-merges}'[do not show merges]'
+			'(--stat)--stat[output diffstat-style summary of changes]'
+			'(--style STYLE)--style[display using template map file]'
+			'(--template TEMPLATE)--template[display with template]'
+			'(-e --ssh CMD)'{-e,--ssh}'[specify ssh command to use]'
+			'(--remotecmd CMD)--remotecmd[specify hg command to run on the remote side]'
+			'(--insecure)--insecure[do not verify server certificate (ignoring web.cacerts config)]'
+			'(-S --subrepos)'{-S,--subrepos}'[recurse into subrepositories]'
+		)
+		;;
+	parents)
+		_command_options=(
+			'(-r --rev REV)'{-r,--rev}'[show parents of the specified revision]'
+			'(--style STYLE)--style[display using template map file]'
+			'(--template TEMPLATE)--template[display with template]'
+		)
+		;;
+	pull)
+		_command_options=(
+			'(-u --update)'{-u,--update}'[update to new branch head if changesets were pulled]'
+			'(-f --force)'{-f,--force}'[run even when remote repository is unrelated]'
+			'(-r --rev REV [+])'{-r,--rev}'[a remote changeset intended to be added]'
+			'(-B --bookmark BOOKMARK [+])'{-B,--bookmark}'[bookmark to pull]'
+			'(-b --branch BRANCH [+])'{-b,--branch}'[a specific branch you would like to pull]'
+			'(-e --ssh CMD)'{-e,--ssh}'[specify ssh command to use]'
+			'(--remotecmd CMD)--remotecmd[specify hg command to run on the remote side]'
+			'(--insecure)--insecure[do not verify server certificate (ignoring web.cacerts config)]'
+		)
+		;;
+	push)
+		_command_options=(
+			'(-f --force)'{-f,--force}'[force push]'
+			'(-r --rev REV [+])'{-r,--rev}'[a changeset intended to be included in the destination]'
+			'(-B --bookmark BOOKMARK [+])'{-B,--bookmark}'[bookmark to push]'
+			'(-b --branch BRANCH [+])'{-b,--branch}'[a specific branch you would like to push]'
+			'(--new-branch)--new-branch[allow pushing a new branch]'
+			'(-e --ssh CMD)'{-e,--ssh}'[specify ssh command to use]'
+			'(--remotecmd CMD)--remotecmd[specify hg command to run on the remote side]'
+			'(--insecure)--insecure[do not verify server certificate (ignoring web.cacerts config)]'
+		)
+		;;
+	rebase)
+		_command_options(
+			'(-s --source REV)'{-s,--source}'[rebase from the specified changeset]'
+			'(--base REV)--base[rebase from the base of the specified changeset (up to greatest common ancestor of base and dest)]'
+			'(-d --dest REV)'{-d,--dest}'[rebase onto the specified changeset]'
+			'(--collapse)--collapse[collapse the rebased changesets]'
+			'(--keep)--keep[keep original changesets]'
+			'(--keepbranches)--keepbranches[keep original branch names]'
+			'(-detach)-detach[force detaching of source from its original branch]'
+			'(-c --continue)'{-c,--continue}'[continue an interrupted rebase]'
+			'(-a --abort){-a,--abort}[abort an interrupted rebase]'
+			'(--style STYLE)--style[display using template map file]'
+			'(--template TEMPLATE)--template[display with template]'
+	    )
+	    ;;
+	remove|rm)
+		_command_options=(
+			'(-A --after)'{-A,--after}'[record delete for missing files]'
+			'(-f --force)'{-f,--force}'[remove (and delete) file even if added or modified]'
+			'(-I --include PATTERN [+])'{-I,--include}'[include names matching the given patterns]'
+			'(-X --exclude PATTERN [+])'{-X,--exclude}'[exclude names matching the given patterns]'
+		)
+		;;
+	rename|move|mv)
+		_command_options=(
+			'(-A --after)'{-A,--after}'[record a rename that has already occurred]'
+			'(-f --force)'{-f,--force}'[forcibly copy over an existing managed file]'
+			'(-I --include PATTERN [+])'{-I,--include}'[include names matching the given patterns]'
+			'(-X --exclude PATTERN [+])'{-X,--exclude}'[exclude names matching the given patterns]'
+			'(-n --dry-run)'{-n,--dry-run}'[do not perform actions, just print output]'
+		)
+		;;
+	resolve)
+		_command_options=(
+			'(-a --all)'{-a,--all}'[select all unresolved files]'
+			'(-l --list)'{-l,--list}'[list state of files needing merge]'
+			'(-m --mark)'{-m,--mark}'[mark files as resolved]'
+			'(-u --unmark)'{-u,--unmark}'[mark files as unresolved]'
+			'(-t --tool VALUE)'{-t,--tool}'[specify merge tool]'
+			'(-n --no-status)'{-n,--no-status}'[hide status prefix]'
+			'(-I --include PATTERN [+])'{-I,--include}'[include names matching the given patterns]'
+			'(-X --exclude PATTERN [+])'{-X,--exclude}'[exclude names matching the given patterns]'
+		)
+		;;
+	revert)
+		_command_options=(
+			'(-a --all)'{-a,--all}'[revert all changes when no arguments given]'
+			'(-d --date DATE)'{-d,--date}'[tipmost revision matching date]'
+			'(-r --rev REV)'{-r,--rev}'[revert to the specified revision]'
+			'(--no-backup)--no-backup[do not save backup copies of files]'
+			'(-I --include PATTERN [+])'{-I,--include}'[include names matching the given patterns]'
+			'(-X --exclude PATTERN [+])'{-X,--exclude}'[exclude names matching the given patterns]'
+			'(-n --dry-run)'{-n,--dry-run}'[do not perform actions, just print output]'
+		)
+		;;
+	rollback)
+		_command_options=(
+			'(-n --dry-run)'{-n,--dry-run}'[do not perform actions, just print output]'
+		)
+		;;
+	serve)
+		_command_options=(
+			'(-A --accesslog FILE)'{-A,--accesslog}'[name of access log file to write to]'
+			'(-d --daemon)'{-d,--daemon}'[run server in background]'
+			'(--daemon-pipefds NUM)--daemon-pipefds[used internally by daemon mode]'
+			'(-E --errorlog FILE)'{-E,--errorlog}'[name of error log file to write to]'
+			'(-p --port PORT)'{-p,--port}'[port to listen on (default: 8000)]'
+			'(-a --address ADDR)'{-a,--address}'[address to listen on (default: all interfaces)]'
+			'(--prefix PREFIX)--prefix[prefix path to serve from (default: server root)]'
+			'(-n --name NAME)'{-n,--name}'[name to show in web pages (default: working directory)]'
+			'(--web-conf FILE)--web-conf[name of the hgweb config file (see "hg help hgweb")]'
+			'(--pid-file FILE)--pid-file[name of file to write process ID to]'
+			'(--stdio)--stdio[for remote clients]'
+			'(-t --templates TEMPLATE)'{-t,--templates}'[web templates to use]'
+			'(--style STYLE)--style[template style to use]'
+			'(-6 --ipv6)'{-6,--ipv6}'[use IPv6 in addition to IPv4]'
+			'(--certificate FILE)--certificate[SSL certificate file]'
+		)
+		;;
+	showconfig|debugconfig)
+		_command_options=(
+			'(-u -untrusted)'{-u,-untrusted}'[show untrusted configuration options]'
+		)
+		;;
+	status|st)
+		_command_options=(
+			'(-A --all)'{-A,--all}'[show status of all files]'
+			'(-m --modified)'{-m,--modified}'[show only modified files]'
+			'(-a --added)'{-a,--added}'[show only added files]'
+			'(-r --removed)'{-r,--removed}'[show only removed files]'
+			'(-d --deleted)'{-d,--deleted}'[show only deleted (but tracked) files]'
+			'(-c --clean)'{-c,--clean}'[show only files without changes]'
+			'(-u --unknown)'{-u,--unknown}'[show only unknown (not tracked) files]'
+			'(-i --ignored)'{-i,--ignored}'[show only ignored files]'
+			'(-n --no-status)'{-n,--no-status}'[hide status prefix]'
+			'(-C --copies)'{-C,--copies}'[show source of copied files]'
+			'(-0 --print0)'{-0,--print0}'[end filenames with NUL, for use with xargs]'
+			'(--rev REV [+])--rev[show difference from revision]'
+			'(--change REV)--change[list the changed files of a revision]'
+			'(-I --include PATTERN [+])'{-I,--include}'[include names matching the given patterns]'
+			'(-X --exclude PATTERN [+])'{-X,--exclude}'[exclude names matching the given patterns]'
+			'(-S --subrepos)'{-S,--subrepos}'[recurse into subrepositories]'
+		)
+		;;
+	summary|sum)
+		_command_options=(
+			'(--remote)--remote[check for push and pull]'
+		)
+		;;
+	tag)
+		_command_options=(
+			'(-f --force)'{-f,--force}'[force tag]'
+			'(-l --local)'{-l,--local}'[make the tag local]'
+			'(-r --rev REV)'{-r,--rev}'[revision to tag]'
+			'(--remove)--remove[remove a tag]'
+			'(-e --edit)'{-e,--edit}'[edit commit message]'
+			'(-m --message TEXT)'{-m,--message}'[use <text> as commit message]'
+			'(-d --date DATE)'{-d,--date}'[record the specified date as commit date]'
+			'(-u --user USER)'{-u,--user}'[record the specified user as committer]'
+		)
+		;;
+	transplant)
+		_command_options=(
+			'(-s --source REPO)'{-s,--source}'[pull patches from REPO]'
+			'(-b --branch BRANCH [+])'{-b,--branch}'[pull patches from branch BRANCH]'
+			'(-a --all)'{-a,--all}'[pull all changesets up to BRANCH]'
+			'(-p --prune REV [+])'{-p,--prune}'[skip over REV]'
+			'(-m --merge REV [+])'{-m,--merge}'[merge at REV]'
+			'(--log)--log[append transplant info to log message]'
+			'(-c --continue)'{-c,--continue}'[continue last transplant session after repair]'
+			'(--filter CMD)--filter[filter changesets through command]'
+		)
+		;;
+	tip)
+		_command_options=(
+			'(-p --patch)'{-p,--patch}'[show patch]'
+			'(-g --git)'{-g,--git}'[use git extended diff format]'
+			'(--style STYLE)--style[display using template map file]'
+			'(--template TEMPLATE)--template[display with template]'
+		)
+		;;
+	unbundle)
+		_command_options=(
+			'(-u --update)'{-u,--update}'[update to new branch head if changesets were unbundled]'
+		)
+		;;
+	update|up|checkout|co)
+		_command_options=(
+			'(-C --clean)'{-C,--clean}'[discard uncommitted changes (no backup)]'
+			'(-c --check)'{-c,--check}'[update across branches if no uncommitted changes]'
+			'(-d --date DATE)'{-d,--date}'[tipmost revision matching date]'
+			'(-r --rev REV)'{-r,--rev}'[revision]'
+		)
+		;;
+	*)
+esac
+
+_arguments \
+	$_global_options \
+	$_command_options
