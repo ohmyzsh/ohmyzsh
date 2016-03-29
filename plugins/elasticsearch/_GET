@@ -23,7 +23,6 @@ options=(
     '_shutdown:Shutdown all nodes'
     '_stats/fielddata:Field data memory usage on index level'
     '_stats:High level aggregation and index level stats for all indices'
-    '_status:Status information of all indices'
     '_template:List of all index templates'
 )
 _describe 'values' options

@@ -1,4 +1,4 @@
-elasticsearch
+Elasticsearch
 =======
 This plugin makes easy to use Elasticsearch API and it also offering autocomplete for common APIs. 
 There are [`GET`](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-get.html), 
@@ -16,6 +16,15 @@ Examples usage:
 - `DELETE twitter`
 
 You should install [`json_reformat`](http://dev.man-online.org/package/main/yajl-tools/) to format json output.
+
+Instructions
+-------
+
+If you'd prefer to specify an explicit Elasticsearch node client to query, you can set variable like so in `.zshrc`:
+
+`export CLIENT_ELK_NODE=client_node`
+
+Default is `localhost`.
 
 Aliases
 -------
