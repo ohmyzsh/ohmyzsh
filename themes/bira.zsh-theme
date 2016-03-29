@@ -10,6 +10,7 @@ fi
 
 local current_dir='%{$terminfo[bold]$fg[blue]%} %~%{$reset_color%}'
 local rvm_ruby=''
+
 if which rvm-prompt &> /dev/null; then
   rvm_ruby='%{$fg[red]%}‹$(rvm-prompt i v g)›%{$reset_color%}'
 else
@@ -17,6 +18,14 @@ else
     rvm_ruby='%{$fg[red]%}‹$(rbenv version | sed -e "s/ (set.*$//")›%{$reset_color%}'
   fi
 fi
+
+# Adds support to show current virtualenv integrating virtualenvwrapper hooks
+if $VIRTUAL_ENV; then
+  ZSH_THEME_VIRTUALENV_PREFIX="%{$fg[red]%}‹"
+  ZSH_THEME_VIRTUALENV_SUFFIX="›%{$reset_color%}"
+  rvm_ruby='$(virtualenv_prompt_info)'
+fi
+
 local git_branch='$(git_prompt_info)%{$reset_color%}'
 
 PROMPT="╭─${user_host} ${current_dir} ${rvm_ruby} ${git_branch}
