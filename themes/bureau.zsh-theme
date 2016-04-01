@@ -64,7 +64,7 @@ bureau_git_status() {
 }
 
 bureau_git_prompt () {
-  if git rev-parse --git-dir > /dev/null 2>&1; then
+  if $(command git rev-parse --git-dir > /dev/null 2>&1); then
     local _branch=$(bureau_git_branch)
     local _status=$(bureau_git_status)
     local _result="$ZSH_THEME_GIT_PROMPT_PREFIX$_branch"
