@@ -1,0 +1,2 @@
+#Alias
+alias gn='geeknote'
