@@ -2,6 +2,7 @@ eval "$(npm completion 2>/dev/null)"
 
 # Install dependencies globally
 alias npmg="npm i -g "
+alias snpmg="sudo npm i -g "
 
 # npm package names are lowercase
 # Thus, we've used camelCase for the following aliases:
