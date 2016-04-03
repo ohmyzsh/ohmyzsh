@@ -35,11 +35,13 @@ git_prompt() {
   fi
 }
 
-local smiley="%(?,%{$fg[green]%}☺%{$reset_color%},%{$fg[red]%}☹%{$reset_color%})"
+local psign="%(?,%%,%{$fg[red]%}%%%{$reset_color%})"
+local user="%{$bg[blue]%}%n%{$reset_color%}"
+local host="%{$bg[blue]%}@%m%{$reset_color%}"
 
 PROMPT='
-%~
-${smiley}  %{$reset_color%}'
+${user}${host} %3~
+ ${psign} '
 
 if [[ -d ~/.rvm ]]; then
     rvm_prompt='$(~/.rvm/bin/rvm-prompt)'
