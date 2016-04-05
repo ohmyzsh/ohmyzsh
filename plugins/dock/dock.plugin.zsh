@@ -11,7 +11,8 @@ USAGE
 
 function dock_clean {
   docker rm $(docker ps -a -q);
-  docker rmi $(docker images | grep "^<none>" | awk "{print $3}");
+
+  [ "$1" = "images" ] && docker rmi $(docker images -q);
 }
 
 function dock_info {
