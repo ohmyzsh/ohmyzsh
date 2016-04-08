@@ -1,136 +1,157 @@
 #compdef geeknote
-# --------------- ------------------------------------------------------------
-#           Name : _geeknote
-#       Synopsis : zsh completion for geeknote
-#         Author : Ján Koščo <3k.stanley@gmail.com>
-#       HomePage : http://www.geeknote.me
-#        Version : 0.1
-#            Tag : [ shell, zsh, completion, evernote ]
-#      Copyright : © 2014 by Ján Koščo,
-#                  Released under current GPL license.
-# --------------- ------------------------------------------------------------
+
+# Geeknote Autocomplete plugin for Zsh
+# Requires: Geeknote installed
+# Author : Ján Koščo (@s7anley)
+
+__login() {
+    # no arguments
+}
+
+__logout() {
+    _arguments \
+        '--force[Do not ask about logging out.]'
+}
+
+__settings() {
+    _arguments \
+        "--editor+[Set the editor, which use to edit and create notes.]::"
+}
+
+__create() {
+    _arguments \
+        '--title+[The note title.]::' \
+        '--content+[The note content.]::' \
+        '--tags+[One tag or the list of tags which will be added to the note.]::' \
+        '--notebook+[Set the notebook where to save note.]::' \
+        '--resource+[Add a resource to the note.]::'
+}
+
+__edit() {
+    _arguments \
+        '--note+[The name or ID from the previous search of a note to edit.]::' \
+        '--title+[Set new title of the note.]::' \
+        '--content+[Set new content of the note.]::' \
+        '--tags+[Set new list o tags for the note.]::' \
+        '--notebook+[Assign new notebook for the note.]::' \
+        '--resource+[Add a resource to the note.]::'
+}
+
+__find() {
+    _arguments \
+        '--search+[Text to search.]::' \
+        '--tags+[Notes with which tag/tags to search.]::' \
+        '--notebook+[In which notebook search the note.]::' \
+        '--date+[Set date in format dd.mm.yyyy or date range dd.mm.yyyy-dd.mm.yyyy.]::' \
+        '--count+[How many notes show in the result list.]::' \
+        '--with-url[Add direct url of each note in results to Evernote web-version.]' \
+        '--content-search[Search by content, not by title.]' \
+        '--exact-entry[Search for exact entry of the request.]'
+}
+
+__show() {
+    _arguments \
+        '--note+[The name or ID from the previous search of a note to show.]::' \
+        '--raw[Show the raw note body.]'
+}
+
+__remove() {
+    _arguments \
+        '--note+[The name or ID from the previous search of a note to remove.]::' \
+        '--force[Do not ask about removing.]'
+}
+
+__notebook-list() {
+    # no arguments
+}
+
+__notebook-create() {
+    _arguments \
+        '--title+[Set the title of new notebook.]::'
+}
+
+__notebook-edit() {
+    _arguments \
+        '--title+[Set the title of new notebook.]::' \
+        '--notebook+[The name of a notebook to rename.]::'
+}
+
+__tag-list() {
+    # no arguments
+}
+
+__tag-create() {
+    _arguments \
+        '--title+[Set the title of new tag.]::'
+}
+
+__tag-edit() {
+    _arguments \
+        '--tagname+[The name of a tag to rename.]::' \
+        '--title+[Set the new name of tag.]::'
+}
+
+__user() {
+    _arguments \
+        '--full[Show full information.]'
+}
 
 local -a _1st_arguments
 _1st_arguments=(
-  'login'
-  'logout'
-  'settings'
-  'create'
-  'edit'
-  'find'
-  'show'
-  'remove'
-  'notebook-list'
-  'notebook-create'
-  'notebook-edit'
-  'tag-list'
-  'tag-create'
-  'tag-edit'
-  'tag-remove'
-  'gnsync'
-  'user'
+    'login':'Authorize in Evernote.'
+    'logout':'Logout from Evernote.'
+    'settings':'Show and edit current settings.'
+    'create':'Create note in Evernote.'
+    'edit':'Edit note in Evernote.'
+    'find':'Search notes in Evernote.'
+    'show':'Output note in the terminal.'
+    'remove':'Remove note from Evernote.'
+    'notebook-list':'Show the list of existing notebooks in your Evernote.'
+    'notebook-create':'Create new notebook.'
+    'notebook-edit':'Edit/rename notebook.'
+    'tag-list':'Show the list of existing tags in your Evernote.'
+    'tag-create':'Create new tag.'
+    'tag-edit':'Edit/rename tag.'
+    'user':'Show information about active user.'
 )
 
 _arguments '*:: :->command'
 
 if (( CURRENT == 1 )); then
-  _describe -t commands "geeknote command" _1st_arguments
-  return
+    _describe -t commands "geeknote command" _1st_arguments
+    return
 fi
 
 local -a _command_args
 case "$words[1]" in
-  user)
-    _command_args=(
-      '(--full)--full' \
-    )
-    ;;
-  logout)
-    _command_args=(
-      '(--force)--force' \
-    )
-    ;;
-  settings)
-    _command_args=(
-      '(--editor)--editor' \
-    )
-    ;;
-  create)
-    _command_args=(
-      '(-t|--title)'{-t,--title}'[note title]' \
-      '(-c|--content)'{-c,--content}'[note content]' \
-      '(-tg|--tags)'{-tg,--tags}'[one tag or the list of tags which will be added to the note]' \
-      '(-nb|--notebook)'{-nb,--notebook}'[name of notebook where to save note]' \
-    )
-    ;;
-  edit)
-    _command_args=(
-      '(-n|--note)'{-n,--note}'[name or ID from the previous search of a note to edit]' \
-      '(-t|--title)'{-t,--title}'[note title]' \
-      '(-c|--content)'{-c,--content}'[note content]' \
-      '(-tg|--tags)'{-tg,--tags}'[one tag or the list of tags which will be added to the note]' \
-      '(-nb|--notebook)'{-nb,--notebook}'[name of notebook where to save note]' \
-    )
-    ;;
-  remove)
-    _command_args=(
-      '(-n|--note)'{-n,--note}'[name or ID from the previous search of a note to edit]' \
-      '(--force)--force' \
-    )
-    ;;
-  show)
-    _command_args=(
-      '(-n|--note)'{-n,--note}'[name or ID from the previous search of a note to edit]' \
-    )
-    ;;
-  find)
-    _command_args=(
-      '(-s|--search)'{-s,--search}'[text to search]' \
-      '(-tg|--tags)'{-tg,--tags}'[notes with which tag/tags to search]' \
-      '(-nb|--notebook)'{-nb,--notebook}'[in which notebook search the note]' \
-      '(-d|--date)'{-d,--date}'[date in format dd.mm.yyyy or date range dd.mm.yyyy-dd.mm.yyyy]' \
-      '(-cn|--count)'{-cn,--count}'[how many notes show in the result list]' \
-      '(-uo|--url-only)'{-uo,--url-only}'[add direct url of each note in results to Evernote web-version]' \
-      '(-ee|--exact-entry)'{-ee,--exact-entry}'[search for exact entry of the request]' \
-      '(-cs|--content-search)'{-cs,--content-search}'[search by content, not by title]' \
-    )
-    ;;
-  notebook-create)
-    _command_args=(
-      '(-t|--title)'{-t,--title}'[notebook title]' \
-    )
-    ;;
-  notebook-edit)
-    _command_args=(
-      '(-nb|--notebook)'{-nb,--notebook}'[name of notebook to rename]' \
-      '(-t|--title)'{-t,--title}'[new notebook title]' \
-    )
-    ;;
-  notebook-remove)
-    _command_args=(
-      '(-nb|--notebook)'{-nb,--notebook}'[name of notebook to remove]' \
-      '(--force)--force' \
-    )
-    ;;
-  tag-create)
-    _command_args=(
-      '(-t|--title)'{-t,--title}'[title of tag]' \
-    )
-    ;;
-  tag-edit)
-    _command_args=(
-      '(-tgn|--tagname)'{-tgn,--tagname}'[tag to edit]' \
-      '(-t|--title)'{-t,--title}'[new tag name]' \
-    )
-    ;;
-  tag-remove)
-    _command_args=(
-      '(-tgn|--tagname)'{-tgn,--tagname}'[tag to remove]' \
-      '(--force)--force' \
-    )
-    ;;
-  esac
-
-_arguments \
-  $_command_args \
-  &&  return 0
+    login)
+       __login ;;
+    logout)
+        __logout ;;
+    settings)
+        __settings ;;
+    create)
+        __create ;;
+    edit)
+        __edit ;;
+    find)
+        __find ;;
+    show)
+        __show ;;
+    remove)
+        __remove ;;
+    notebook-list)
+        __notebook-list ;;
+    notebook-create)
+        __notebook-create ;;
+    notebook-edit)
+        __notebook-edit ;;
+    tag-list)
+        __tag-list ;;
+    tag-create)
+        __tag-create ;;
+    tag-edit)
+        __tag-edit ;;
+    user)
+        __user ;;
+esac
