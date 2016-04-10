@@ -18,7 +18,7 @@ then
     gls --color -d . &>/dev/null 2>&1 && alias ls='gls --color=tty'
     colorls -G -d . &>/dev/null 2>&1 && alias ls='colorls -G'
   else
-    ls --color -d . &>/dev/null 2>&1 && alias ls='ls --color=tty' || alias ls='ls -G'
+    ls --color -d . &>/dev/null 2>&1 && alias ls='ls --color=tty' || ls -G . &>/dev/null 2>&1 && alias ls='ls -G'
   fi
 fi
 
