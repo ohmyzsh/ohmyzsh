@@ -17,7 +17,7 @@ def get_tagname_or_hash():
     if m:
         hash_ = output[:m.start()-1]
     # get tagname
-    m = re.search('tag: .*[,\)]', output)
+    m = re.search('tag: .*?[,\)]', output)
     if m:
         tagname = 'tags/' + output[m.start()+len('tag: '): m.end()-1]
 
