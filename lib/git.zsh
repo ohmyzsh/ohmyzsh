@@ -200,6 +200,22 @@ function git_current_user_email() {
   command git config user.email 2>/dev/null
 }
 
+# Output the name of the directory that contains the git repository
+# e.g. if repo is '~/src/repo/.git', this gives 'repo' back
+# Usage example: $(git_current_user_email)
+function git_repo_name() {
+  local repo_path repo_name
+  if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
+    repo_path=$(git rev-parse --git-dir 2>/dev/null)
+    if [[ "$repo_path" == ".git" ]]; then
+      repo_name=$(basename $(pwd));
+    else
+      repo_name=$(basename $(dirname $repo_path));
+    fi
+    echo $repo_name
+  fi
+}
+
 # This is unlikely to change so make it all statically assigned
 POST_1_7_2_GIT=$(git_compare_version "1.7.2")
 # Clean up the namespace slightly by removing the checker function
