@@ -1,0 +1,3 @@
+[submodule "plugins/git-prune"]
+	path = plugins/git-prune
+	url = git@github.com:Seinh/git-prune.git
