@@ -6,6 +6,7 @@ alias bout="bundle outdated"
 alias bu="bundle update"
 alias bi="bundle_install"
 alias bcn="bundle clean"
+alias bck="bundle check"
 
 bundled_commands=(
   annotate
