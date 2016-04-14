@@ -14,6 +14,7 @@ function web_search() {
     github      "https://github.com/search?q="
     baidu       "https://www.baidu.com/s?wd="
     ecosia      "https://www.ecosia.org/search?q="
+    dockerhub   "https://hub.docker.com/search/?q="
   )
 
   # check whether the search engine is supported
@@ -45,6 +46,7 @@ alias yandex='web_search yandex'
 alias github='web_search github'
 alias baidu='web_search baidu'
 alias ecosia='web_search ecosia'
+alias dockerhub='web_search dockerhub'
 
 #add your own !bang searches here
 alias wiki='web_search duckduckgo \!w'
