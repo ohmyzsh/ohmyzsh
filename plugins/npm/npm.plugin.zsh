@@ -10,6 +10,9 @@ alias npmg="npm i -g "
 # npms is used by https://www.npmjs.com/package/npms
 alias npmS="npm i -S "
 
+# Install and save the exact version of dependencies in your package.json
+alias npmSE="npm i -SE "
+
 # Install and save to dev-dependencies in your package.json
 # npmd is used by https://github.com/dominictarr/npmd
 alias npmD="npm i -D "
