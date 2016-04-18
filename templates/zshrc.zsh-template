@@ -1,5 +1,5 @@
 # Path to your oh-my-zsh installation.
-  export ZSH=/home/c4dev/.oh-my-zsh
+  export ZSH=$HOME/.oh-my-zsh
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -53,7 +53,7 @@ plugins=(git common-aliases )
 
 # User configuration
 
-  export PATH="/var/lib/ccache/bin:/c4shares/auto/tools/bin:/home/c4dev/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11:/usr/games:/opt/accurev/bin:/opt/CmTools/shbin:/re/bin:/re/thirdparty_tools/java/tags/linux/Production/bin:/opt/pegasus/bin:/re/thirdparty_tools/ant/tags/Production/bin:/c4shares/auto/devutils/bin"
+export PATH=$HOME/bin:/usr/local/bin:$PATH
 # export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh
