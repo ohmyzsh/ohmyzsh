@@ -3,9 +3,12 @@ export ZSH=$HOME/.oh-my-zsh
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
 ZSH_THEME="robbyrussell"
+# Optionally, if you set this to "random", it'll load a random non-custom
+# theme each time that oh-my-zsh is loaded.
+# ZSH_THEME="random"
+# This can also be a list of specific themes to be chosen between at random
+# ZSH_THEME=(arrow gallifrey robbyrussell smt wedisagree)
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"

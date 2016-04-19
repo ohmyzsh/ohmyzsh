@@ -92,6 +92,13 @@ for config_file ($ZSH_CUSTOM/*.zsh(N)); do
 done
 unset config_file
 
+if [[ "$(declare -p ZSH_THEME) 2>/dev/null" =~ "(declare|typeset) -a" ]]; then
+  # Choose randomly from multiple specified themes
+  THEME_COUNT=${#ZSH_THEME[@]}
+  ((THEME_N=(RANDOM%THEME_COUNT)+1))
+  ZSH_THEME=${ZSH_THEME[$THEME_N]}
+fi
+
 # Load the theme
 if [ "$ZSH_THEME" = "random" ]; then
   themes=($ZSH/themes/*zsh-theme)
