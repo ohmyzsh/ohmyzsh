@@ -162,6 +162,27 @@ prompt_hg() {
   fi
 }
 
+prompt_bzr() {
+  local rev status branch
+  branch=`bzr nick 2>/dev/null`
+  if [[ -n $branch ]]; then
+    if [[ -n `bzr status | grep unknown` ]]; then
+      # if files are not added
+      prompt_segment red white
+      st='±'
+    elif [[ -n `bzr status | grep -E "added|modified"` ]]; then
+      # if any modification
+      prompt_segment yellow black
+      st='±'
+    else
+      # if working copy is clean
+      prompt_segment green black
+    fi
+    rev=`bzr tip --line 2>/dev/null | cut -d ':' -f 1`
+    echo -n "⛗ $rev@$branch" $st
+  fi
+}
+
 # Dir: current working directory
 prompt_dir() {
   prompt_segment blue black '%~'
@@ -198,6 +219,7 @@ build_prompt() {
   prompt_dir
   prompt_git
   prompt_hg
+  prompt_bzr
   prompt_end
 }
 
