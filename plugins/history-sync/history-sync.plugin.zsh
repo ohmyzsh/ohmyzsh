@@ -70,8 +70,6 @@ function history_sync_push() {
     esac
   done
 
-  echo $recipients
-
   # Encrypt
   if ! [[ ${#recipients[@]} > 0 ]]; then      
     echo -n "Please enter GPG recipient name: "
