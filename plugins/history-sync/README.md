@@ -1,6 +1,6 @@
 ## An Oh My Zsh plugin for GPG encrypted, Internet synchronized Zsh history using Git
 <br />
-That is, if you'd like an easy way to securely synchronise your zsh_history across many computers connected to the Internet, this plugin will help you. ** Be creative with this - I dare you. **
+That is, if you'd like an easy way to securely synchronise your zsh_history across many computers connected to the Internet, this plugin will help you. **Be creative with this - I dare you.**
 
 ### What tooling do I need?
 ##### 1. GnuPG
@@ -16,13 +16,13 @@ history-sync uses Git to push/pull your zsh_history to/from a remote repository.
    - `git clone git@github.com:wulfgarpro/history-sync.git $HOME/.oh-my-zsh/plugins/.`
 3. Export environment variables (or use defaults found in the plugin file history-sync.plugin.zsh)
    <br />These are:
-   - ** ZSH_HISTORY_FILE **<br />
+   - **ZSH_HISTORY_FILE**<br />
    Your zsh_history file location
-   - ** ZSH_HISTORY_PROJ **<br /> 
+   - **ZSH_HISTORY_PROJ**<br /> 
    Your Git project for housing your zsh_history file
-   - ** ZSH_HISTORY_FILE_ENC **<br />
+   - **ZSH_HISTORY_FILE_ENC**<br />
    Your encrypted zsh_history file location
-   - ** GIT_COMMIT_MSG **<br />
+   - **GIT_COMMIT_MSG**<br />
    Your default message when pushing to $ZSH_HISTORY_PROJ
 4. Ensure your GPG setup is complete and you have a public/private key pair for encrypting/decrypting: `man gpg`
 5. Run `zhpl` to pull
