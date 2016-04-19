@@ -12,21 +12,27 @@ ZSH_HISTORY_FILE_ENC=$ZSH_HISTORY_PROJ/zsh_history
 GIT_COMMIT_MSG="latest $(date)"
 
 function print_git_error_msg() {
-  echo "$bold_color$fg[red]Fix your git repo...${reset_color}";
+echo "$bold_color$fg[red]Fix your git repo...${reset_color}";
 }
 
 function print_gpg_encrypt_error_msg() {
-  echo "$bold_color$fg[red]GPG failed to encrypt history file... exiting.${reset_color}"; 
+echo "$bold_color$fg[red]GPG failed to encrypt history file... exiting.${reset_color}"; 
 }
 
 function print_gpg_decrypt_error_msg() {
-  echo "$bold_color$fg[red]GPG failed to decrypt history file... exiting.${reset_color}"; 
+echo "$bold_color$fg[red]GPG failed to decrypt history file... exiting.${reset_color}"; 
 }
 
-# Pull current master and merge with .zsh_history
+function usage() { 
+echo "$bold_color$fg[red]Usage: $0 [-r <string> -r <string>...]${reset_color}" 1>&2; return; 
+}
+
+# Pull current master, decrypt, and merge with .zsh_history
 function history_sync_pull() {
+  # Backup
   cp -a $HOME/{.zsh_history,.zsh_history.backup}
   DIR=$CWD
+  # Pull
   cd $ZSH_HISTORY_PROJ && git pull
   if [[ $? != 0 ]]; then
     print_git_error_msg
@@ -42,20 +48,45 @@ function history_sync_pull() {
     return
   fi
 
-  # Merge using sort unique
+  # Merge
   cat $HOME/.zsh_history zsh_history_decrypted | sort -u > $HOME/.zsh_history 
   rm zsh_history_decrypted
   cd $DIR
 }
 
-# Push current history to master
+# Encrypt and push current history to master
 function history_sync_push() {
-  echo -n "Please enter GPG recipient name: "
-  read name
+  # Get option recipients
+  local recipients=()
+  while getopts -r: opt; do
+    case "$opt" in
+      r)
+        recipients+="$OPTARG"
+        ;;
+      *)
+        usage
+        return
+        ;;
+    esac
+  done
 
-# Encrypt
-  if [[ -n $name ]]; then
-    gpg -v -r $NAME --encrypt --sign --armor --output $ZSH_HISTORY_FILE_ENC $ZSH_HISTORY_FILE
+  echo $recipients
+
+  # Encrypt
+  if ! [[ ${#recipients[@]} > 0 ]]; then      
+    echo -n "Please enter GPG recipient name: "
+    read name
+    recipients+=$name
+  fi
+
+  ENCRYPT_CMD="gpg -v "
+  for r in $recipients; do
+    ENCRYPT_CMD+="-r \"$r\" "
+  done
+
+  if [[ $ENCRYPT_CMD =~ '.(-r).+.' ]]; then 
+    ENCRYPT_CMD+="--encrypt --sign --armor --output $ZSH_HISTORY_FILE_ENC $ZSH_HISTORY_FILE"
+    eval ${ENCRYPT_CMD}
     if [[ $? != 0 ]]; then
       print_gpg_encrypt_error_msg
       return
@@ -80,7 +111,7 @@ function history_sync_push() {
                   return
                 fi
                 cd $DIR
-              ;;
+                ;;
             esac
           fi
 
@@ -89,11 +120,11 @@ function history_sync_push() {
             cd $DIR
             return
           fi
-        ;;
+          ;;
         [Nn]* )
-        ;;
+          ;;
         * )
-        ;;
+          ;;
       esac          
     fi
   fi
@@ -102,4 +133,3 @@ function history_sync_push() {
 alias zhpl=history_sync_pull
 alias zhps=history_sync_push
 alias zhsync="history_sync_pull && history_sync_push"
-

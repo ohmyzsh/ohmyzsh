@@ -1,6 +1,6 @@
-## An oh-my-zsh plugin for gpg encrypted, internet synchronized zsh history using git.
+## An oh-my-zsh plugin for gpg encrypted, internet synchronized zsh history using git
 <br />
-That is, if you'd like an easy way to securely synchronise your zsh_history across many computers connected to the internet, this plugin will help you. You could even automate it using something like cron for a daily or even hourly sync.
+That is, if you'd like an easy way to securely synchronise your zsh_history across many computers connected to the Internet, this plugin will help you. You could even automate it using something like cron for a daily or even hourly sync.
 
 ### How do I  use it?
 
