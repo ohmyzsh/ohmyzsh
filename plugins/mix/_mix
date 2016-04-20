@@ -73,6 +73,10 @@ case $state in
     case $line[1] in
       (help)
          _arguments ':feature:__task_list'
+         ;;
+      (test)
+         _files
+         ;;
     esac
   ;;
 esac
