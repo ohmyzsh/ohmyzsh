@@ -82,6 +82,7 @@ alias gdt='git diff-tree --no-commit-id --name-only -r'
 gdv() { git diff -w "$@" | view - }
 compdef _git gdv=git-diff
 alias gdw='git diff --word-diff'
+alias gdmc='git diff --name-only --diff-filter=U'
 
 alias gf='git fetch'
 alias gfa='git fetch --all --prune'
