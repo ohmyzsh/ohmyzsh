@@ -23,6 +23,9 @@ for i; do
     fi
 done
 
+# Don't leave positional parameters being set
+set --
+
 #
 # Load functions
 #
