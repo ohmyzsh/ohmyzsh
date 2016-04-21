@@ -114,6 +114,15 @@ function vi-backward-delete-char-incr
 	fi
 }
 
+function backward-delete-char-incr
+{
+	correct-prediction
+	remove-prediction
+	if zle backward-delete-char; then
+		show-prediction
+	fi
+}
+
 function expand-or-complete-prefix-incr
 {
 	correct-prediction
@@ -124,18 +133,6 @@ function expand-or-complete-prefix-incr
 		zle list-choices
 	else
 		remove-prediction
-		zle expand-or-complete-prefix-prefix
-	fi  
-}
-
-
-function backward-delete-char-incr
-{
-	correct-prediction
-	remove-prediction
-	if zle backward-delete-char; then
-		show-prediction
+		zle expand-or-complete-prefix
 	fi
 }
-
-
