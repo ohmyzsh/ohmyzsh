@@ -72,8 +72,9 @@ alias dockup="docker-machine create --driver virtualbox dev && eval \"\$(docker-
 >>>>>>> Update dockup alias for Docker Machine
 =======
 # Docker Machine
-alias dminit="docker-machine create --driver virtualbox dev"
-alias dmup="docker-machine start dev && eval \"\$(docker-machine env dev)\""
+alias dminit="docker-machine create --driver virtualbox default"
+alias dmup="docker-machine start default; eval $(docker-machine env default)"
+alias dmdown="docker-machine stop"
 alias dm="docker-machine"
 <<<<<<< HEAD
 >>>>>>> Added Docker Machine aliases.
@@ -87,6 +88,9 @@ alias dcrm="docker-compose stop && docker-compose rm -f"
 <<<<<<< HEAD
 >>>>>>> Add Docker Compose aliases.
 =======
+
+# Setup Docker Development Environment
+alias devup="docker-machine start default; eval $(docker-machine env default); docker-compose -f ~/Dropbox/Code/docker/development/docker-compose.yml up -d"
 
 # SSH
 alias casapps="ssh 10.26.0.80"
