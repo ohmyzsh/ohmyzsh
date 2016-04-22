@@ -62,6 +62,10 @@ alias dcrm="docker-compose stop && docker-compose rm -f"
 # Setup Docker Development Environment
 alias devup="docker-machine start default; eval \"\$(docker-machine env default)\"; docker-compose -f ~/Dropbox/Code/docker/development/docker-compose.yml up -d"
 
+# Enter Docker containers
+alias devweb="docker exec -it web bash"
+alias devdb="docker exec -it db bash"
+
 # SSH
 alias casapps="ssh 10.26.0.80"
 alias casdb="ssh 10.26.192.133"
