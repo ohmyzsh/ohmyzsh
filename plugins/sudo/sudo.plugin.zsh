@@ -2,7 +2,7 @@
 # Description
 # -----------
 #
-# sudo will be inserted before the command
+# sudo or sudoedit will be inserted before the command
 #
 # ------------------------------------------------------------------------------
 # Authors
