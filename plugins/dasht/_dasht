@@ -1,0 +1,14 @@
+#compdef dasht
+_main() {
+
+  local commands
+  commands=(`dasht-docsets 2>/dev/null`)
+
+  if (( CURRENT >= 3 )); then
+    _describe -t commands 'commands' commands
+  fi
+
+  return 0
+}
+
+_main
