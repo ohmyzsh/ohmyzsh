@@ -42,6 +42,7 @@ alias cr='composer require'
 alias ci='composer install'
 alias ccp='composer create-project'
 alias cdu='composer dump-autoload'
+alias cda='composer dump-autoload'
 alias cgu='composer global update'
 alias cgr='composer global require'
 
