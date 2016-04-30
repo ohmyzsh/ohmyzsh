@@ -17,8 +17,8 @@ local IFS="
 
 unset NLIST_COLORING_PATTERN
 
-[ -f ~/.config/znt/n-list.conf ] && . ~/.config/znt/n-list.conf
-[ -f ~/.config/znt/n-panelize.conf ] && . ~/.config/znt/n-panelize.conf
+[ -f ~/.config/znt/n-list.conf ] && builtin source ~/.config/znt/n-list.conf
+[ -f ~/.config/znt/n-panelize.conf ] && builtin source ~/.config/znt/n-panelize.conf
 
 local list
 local selected
