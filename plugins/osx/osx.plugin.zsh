@@ -46,6 +46,16 @@ EOF
       end tell
 EOF
 
+  elif [[ "$the_app" == 'iTerm2' ]]; then
+      osascript <<EOF
+        tell application "iTerm"
+          tell current window
+            create tab with default profile
+            tell current session to write text "${command}"
+          end tell
+        end tell
+EOF
+
   else
     echo "tab: unsupported terminal app: $the_app"
     false
@@ -73,6 +83,19 @@ function vsplit_tab() {
       end tell
 EOF
 
+  elif [[ "$the_app" == 'iTerm2' ]]; then
+      osascript <<EOF
+        tell application "iTerm"
+          tell current session of first window
+            set newSession to (split vertically with same profile)
+            tell newSession
+              write text "${command}"
+              select
+            end tell
+          end tell
+        end tell
+EOF
+
   else
     echo "$0: unsupported terminal app: $the_app" >&2
     false
@@ -98,6 +121,19 @@ function split_tab() {
         end tell
         keystroke "${command} \n"
       end tell
+EOF
+
+  elif [[ "$the_app" == 'iTerm2' ]]; then
+      osascript <<EOF
+        tell application "iTerm"
+          tell current session of first window
+            set newSession to (split horizontally with same profile)
+            tell newSession
+              write text "${command}"
+              select
+            end tell
+          end tell
+        end tell
 EOF
 
   else

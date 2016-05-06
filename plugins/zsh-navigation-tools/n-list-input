@@ -44,7 +44,7 @@ case "$key" in
         [ "$current_idx" -lt "$last_element" ] && current_idx=current_idx+1;
         _nlist_compute_first_to_show_idx
         ;;
-    (PPAGE)
+    (PPAGE|$'\b'|$'\C-?'|BACKSPACE)
         current_idx=current_idx-page_height
         [ "$current_idx" -lt 1 ] && current_idx=1;
         _nlist_compute_first_to_show_idx
@@ -72,7 +72,7 @@ case "$key" in
         current_idx=last_element
         _nlist_compute_first_to_show_idx
         ;;
-    ($'\n')
+    ($'\n'|ENTER)
         # Is that element selectable?
         # Check for this only when there is no search
         if [[ "$NLIST_SEARCH_BUFFER" != "" || "$NLIST_IS_UNIQ_MODE" -eq 1 ||
@@ -137,7 +137,7 @@ esac
 else
 
 case "$key" in
-    ($'\n')
+    ($'\n'|ENTER)
         search=0
         _nlist_cursor_visibility 0
         ;;

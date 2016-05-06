@@ -6,19 +6,12 @@ zstyle -s ":vcs_info:git:*:-all-" "command" _omz_git_git_cmd
 # Functions
 #
 
-# The current branch name
-# Usage example: git pull origin $(current_branch)
-# Using '--quiet' with 'symbolic-ref' will not cause a fatal error (128) if
-# it's not a symbolic ref, but in a Git repo.
+# The name of the current branch
+# Back-compatibility wrapper for when this function was defined here in
+# the plugin, before being pulled in to core lib/git.zsh as git_current_branch()
+# to fix the core -> git plugin dependency.
 function current_branch() {
-  local ref
-  ref=$($_omz_git_git_cmd symbolic-ref --quiet HEAD 2> /dev/null)
-  local ret=$?
-  if [[ $ret != 0 ]]; then
-    [[ $ret == 128 ]] && return  # no git repo.
-    ref=$($_omz_git_git_cmd rev-parse --short HEAD 2> /dev/null) || return
-  fi
-  echo ${ref#refs/heads/}
+  git_current_branch
 }
 # The list of remotes
 function current_repository() {
@@ -99,7 +92,7 @@ alias gfo='git fetch origin'
 alias gg='git gui citool'
 alias gga='git gui citool --amend'
 ggf() {
-[[ "$#" != 1 ]] && local b="$(current_branch)"
+[[ "$#" != 1 ]] && local b="$(git_current_branch)"
 git push --force origin "${b:=$1}"
 }
 compdef _git ggf=git-checkout
@@ -107,23 +100,23 @@ ggl() {
 if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
 git pull origin "${*}"
 else
-[[ "$#" == 0 ]] && local b="$(current_branch)"
+[[ "$#" == 0 ]] && local b="$(git_current_branch)"
 git pull origin "${b:=$1}"
 fi
 }
 compdef _git ggl=git-checkout
-alias ggpull='git pull origin $(current_branch)'
+alias ggpull='git pull origin $(git_current_branch)'
 compdef _git ggpull=git-checkout
 ggp() {
 if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
 git push origin "${*}"
 else
-[[ "$#" == 0 ]] && local b="$(current_branch)"
+[[ "$#" == 0 ]] && local b="$(git_current_branch)"
 git push origin "${b:=$1}"
 fi
 }
 compdef _git ggp=git-checkout
-alias ggpush='git push origin $(current_branch)'
+alias ggpush='git push origin $(git_current_branch)'
 compdef _git ggpush=git-checkout
 ggpnp() {
 if [[ "$#" == 0 ]]; then
@@ -133,9 +126,9 @@ ggl "${*}" && ggp "${*}"
 fi
 }
 compdef _git ggpnp=git-checkout
-alias ggsup='git branch --set-upstream-to=origin/$(current_branch)'
+alias ggsup='git branch --set-upstream-to=origin/$(git_current_branch)'
 ggu() {
-[[ "$#" != 1 ]] && local b="$(current_branch)"
+[[ "$#" != 1 ]] && local b="$(git_current_branch)"
 git pull --rebase origin "${b:=$1}"
 }
 compdef _git ggu=git-checkout
@@ -153,15 +146,15 @@ alias gke='\gitk --all $(git log -g --pretty=format:%h)'
 compdef _git gke='gitk'
 
 alias gl='git pull'
-alias glg='git log --stat --color'
-alias glgp='git log --stat --color -p'
-alias glgg='git log --graph --color'
+alias glg='git log --stat'
+alias glgp='git log --stat -p'
+alias glgg='git log --graph'
 alias glgga='git log --graph --decorate --all'
 alias glgm='git log --graph --max-count=10'
-alias glo='git log --oneline --decorate --color'
+alias glo='git log --oneline --decorate'
 alias glol="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias glola="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all"
-alias glog='git log --oneline --decorate --color --graph'
+alias glog='git log --oneline --decorate --graph'
 alias glp="_git_log_prettily"
 compdef _git glp=git-log
 
@@ -219,8 +212,6 @@ alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
 alias gup='git pull --rebase'
 alias gupv='git pull --rebase -v'
 alias glum='git pull upstream master'
-
-alias gvt='git verify-tag'
 
 alias gwch='git whatchanged -p --abbrev-commit --pretty=medium'
 alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit -m "--wip--"'

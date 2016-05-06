@@ -28,6 +28,14 @@ function title {
       if [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
         print -Pn "\e]2;$2:q\a" # set window name
         print -Pn "\e]1;$1:q\a" # set tab name
+      else
+        # Try to use terminfo to set the title
+        # If the feature is available set title
+        if [[ -n "$terminfo[fsl]" ]] && [[ -n "$terminfo[tsl]" ]]; then
+	  echoti tsl
+	  print -Pn "$1"
+	  echoti fsl
+	fi
       fi
       ;;
   esac

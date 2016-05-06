@@ -42,7 +42,7 @@ if [ "$REPLY" -gt 0 ]; then
     # ZLE?
     if [ "${(t)CURSOR}" = "integer-local-special" ]; then
         zle redisplay
-        zle kill-whole-line
+        zle kill-buffer
         zle -U "$selected"
     else
         print -zr "$selected"

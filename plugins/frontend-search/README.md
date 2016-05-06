@@ -38,7 +38,7 @@ Available search contexts are:
 | bootsnipp     | `http://bootsnipp.com/search?q=`                                         |
 | caniuse       | `http://caniuse.com/#search=`                                            |
 | codepen       | `http://codepen.io/search?q=`                                            |
-| compass       | `http://compass-style.org/search?q=`                                     |
+| compassdoc    | `http://compass-style.org/search?q=`                                     |
 | cssflow       | `http://www.cssflow.com/search?q=`                                       |
 | dartlang      | `https://api.dartlang.org/apidocs/channels/stable/dartdoc-viewer/dart:`  |
 | emberjs       | `http://emberjs.com/api/#stp=1&stq=`                                     |
