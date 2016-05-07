@@ -344,10 +344,18 @@ _vault_read() {
         ': ::' && ret=0
 }
 
+_vault_list() {
+    _arguments : \
+        ${general_args[@]} \
+        '(-format)-format=-[The format for output. By default it is a whitespace-delimited table. This can also be json.]:format:(json table)' \
+        ': ::' && ret=0
+}
+
 _vault_commands() {
     local -a commands
 
     commands=(
+        "list":"List data from Vault"
         "delete":"Delete operation on secrets in Vault"
         "path-help":"Look up the help for a path"
         "read":"Read data or secrets from Vault"
