@@ -1,3 +1,6 @@
+# modified by andrewei1316
+# http://github.com/andrewei1316
+#
 # prompt style and colors based on half-life theme:
 # http://github.com/sjl/oh-my-zsh/blob/master/themes/half-life.zsh-theme
 #
