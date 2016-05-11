@@ -40,6 +40,8 @@ function work_in_progress() {
 
 alias g='git'
 
+alias g-='git checkout @{-1}' # ie. 'git checkout -'
+
 alias ga='git add'
 alias gaa='git add --all'
 alias gapa='git add --patch'
