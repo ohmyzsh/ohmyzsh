@@ -5,6 +5,11 @@ export ZSH=$HOME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
+# You may specify THEMES_FILE in case you want an specific set of themes
+# with it, oh-my-zsh-theme-remove will ease erasing the current theme 
+# from the THEMES_FILE.
+# ls $ZSH/themes/*.zsh-theme | xargs -n1 basename > $THEMES_FILE
+# THEMES_FILE="$HOME/.omz-themes"
 ZSH_THEME="robbyrussell"
 
 # Uncomment the following line to use case-sensitive completion.
