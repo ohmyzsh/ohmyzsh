@@ -1,10 +1,10 @@
 # ls colors
 autoload -U colors && colors
-export LSCOLORS="Gxfxcxdxbxegedabagacad"
 
 # Enable ls colors
 if [ "$DISABLE_LS_COLORS" != "true" ]
 then
+  export LSCOLORS="Gxfxcxdxbxegedabagacad"
   # Find the option for using colors in ls, depending on the version: Linux or BSD
   if [[ "$(uname -s)" == "NetBSD" ]]; then
     # On NetBSD, test if "gls" (GNU ls) is installed (this one supports colors);
