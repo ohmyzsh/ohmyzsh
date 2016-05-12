@@ -7,3 +7,4 @@ custom
 *.swp
 !custom/example.zshcache
 cache/
+.DS_Store
