@@ -65,7 +65,13 @@ if [[ ${_plugin__forwarding} == "yes" && -n "$SSH_AUTH_SOCK" ]]; then
 elif [ -f "${_plugin__ssh_env}" ]; then
   # Source SSH settings, if applicable
   . ${_plugin__ssh_env} > /dev/null
-  ps x | grep ${SSH_AGENT_PID} | grep ssh-agent > /dev/null || {
+  PLATFORM=`uname`
+  if [[ ${PLATFORM} == "Darwin" ]]; then
+    PS_FLAGS="-ef"
+  else
+    PS_FLAGS="x"
+  fi
+  ps ${PS_FLAGS} | grep ${SSH_AGENT_PID} | grep ssh-agent > /dev/null || {
     _plugin__start_agent;
   }
 else
