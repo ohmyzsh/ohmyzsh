@@ -53,7 +53,7 @@ plugins=(git bundler osx rake ruby)
 
 #### Using Plugins
 
-Most plugins (should! we're working on this) include a __README__, which documents how to use them.
+Most plugins (should! we're working on this) include a __README__, with documents how to use them.
 
 ### Themes
 
