@@ -1,3 +1,8 @@
+# Installed via Homebrew
+if [[ -x `which brew` && -d `brew --prefix`/share/python ]] ; then
+  export PATH="$(brew --prefix)/share/python:$PATH"
+fi
+
 # Find python file
 alias pyfind='find . -name "*.py"'
 
