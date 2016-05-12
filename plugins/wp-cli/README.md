@@ -4,7 +4,9 @@
 
 WordPress Command Line Interface (http://wp-cli.org/)
 
-WP-CLI is a set of command-line tools for managing WordPress installations. You can update plugins, set up multisite installs and much more, without using a web browser. 
+WP-CLI is a set of command-line tools for managing WordPress installations. You can update plugins, set up multisite installs and much more, without using a web browser.
+
+This plugin adds [tab completion](http://wp-cli.org/#complete) for `wp-cli` as well as several aliases.
 
 ## List of Aliases
 
