@@ -8,6 +8,10 @@ function uninstall_oh_my_zsh() {
 
 function upgrade_oh_my_zsh() {
   env ZSH=$ZSH /bin/sh $ZSH/tools/upgrade.sh
+  if [ -x $ZSH/custom/tools/upgrade.sh ]
+  then
+    env ZSH=$ZSH /bin/sh $ZSH/custom/tools/upgrade.sh
+  fi
 }
 
 function take() {
