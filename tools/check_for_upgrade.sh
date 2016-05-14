@@ -11,7 +11,7 @@ function _update_zsh_update() {
 }
 
 function _upgrade_zsh() {
-  env ZSH=$ZSH /bin/sh $ZSH/tools/upgrade.sh
+  env ZSH=$ZSH ZSH_CUSTOM=$ZSH_CUSTOM  /bin/sh $ZSH/tools/upgrade.sh
   # update the zsh file
   _update_zsh_update
 }

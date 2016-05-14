@@ -34,6 +34,12 @@ then
   printf "${BLUE}%s\n" "Hooray! Oh My Zsh has been updated and/or is at the current version."
   printf "${BLUE}${BOLD}%s${NORMAL}\n" "To keep up on the latest news and updates, follow us on twitter: https://twitter.com/ohmyzsh"
   printf "${BLUE}${BOLD}%s${NORMAL}\n" "Get your Oh My Zsh swag at:  http://shop.planetargon.com/"
+
+  if [ -f $ZSH_CUSTOM/tools/custom_event.sh ]; then
+    # Notify user's custom code of upgrades
+    env ZSH=$ZSH ZSH_CUSTOM=$ZSH_CUSTOM /bin/sh $ZSH_CUSTOM/tools/custom_event.sh upgrade
+  fi
+
 else
   printf "${RED}%s${NORMAL}\n" 'There was an error updating. Try again later?'
 fi
