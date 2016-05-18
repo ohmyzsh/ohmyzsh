@@ -207,7 +207,16 @@ __git_ps1_show_upstream ()
 			p=" u+${count#*	}-${count%	*}" ;;
 		esac
 		if [[ -n "$count" && -n "$name" ]]; then
-			p="$p $(git rev-parse --abbrev-ref "$upstream" 2>/dev/null)"
+			__git_ps1_upstream_name=$(git rev-parse \
+				--abbrev-ref "$upstream" 2>/dev/null)
+			if [ $pcmode = yes ] && [ $ps1_expanded = yes ]; then
+				p="$p \${__git_ps1_upstream_name}"
+			else
+				p="$p ${__git_ps1_upstream_name}"
+				# not needed anymore; keep user's
+				# environment clean
+				unset __git_ps1_upstream_name
+			fi
 		fi
 	fi
 
@@ -259,7 +268,7 @@ __git_ps1_colorize_gitstring ()
 	r="$c_clear$r"
 }
 
-eread ()
+__git_eread ()
 {
 	f="$1"
 	shift
@@ -297,6 +306,43 @@ __git_ps1 ()
 		;;
 	esac
 
+	# ps1_expanded:  This variable is set to 'yes' if the shell
+	# subjects the value of PS1 to parameter expansion:
+	#
+	#   * bash does unless the promptvars option is disabled
+	#   * zsh does not unless the PROMPT_SUBST option is set
+	#   * POSIX shells always do
+	#
+	# If the shell would expand the contents of PS1 when drawing
+	# the prompt, a raw ref name must not be included in PS1.
+	# This protects the user from arbitrary code execution via
+	# specially crafted ref names.  For example, a ref named
+	# 'refs/heads/$(IFS=_;cmd=sudo_rm_-rf_/;$cmd)' might cause the
+	# shell to execute 'sudo rm -rf /' when the prompt is drawn.
+	#
+	# Instead, the ref name should be placed in a separate global
+	# variable (in the __git_ps1_* namespace to avoid colliding
+	# with the user's environment) and that variable should be
+	# referenced from PS1.  For example:
+	#
+	#     __git_ps1_foo=$(do_something_to_get_ref_name)
+	#     PS1="...stuff...\${__git_ps1_foo}...stuff..."
+	#
+	# If the shell does not expand the contents of PS1, the raw
+	# ref name must be included in PS1.
+	#
+	# The value of this variable is only relevant when in pcmode.
+	#
+	# Assume that the shell follows the POSIX specification and
+	# expands PS1 unless determined otherwise.  (This is more
+	# likely to be correct if the user has a non-bash, non-zsh
+	# shell and safer than the alternative if the assumption is
+	# incorrect.)
+	#
+	local ps1_expanded=yes
+	[ -z "$ZSH_VERSION" ] || [[ -o PROMPT_SUBST ]] || ps1_expanded=no
+	[ -z "$BASH_VERSION" ] || shopt -q promptvars || ps1_expanded=no
+
 	local repo_info rev_parse_exit_code
 	repo_info="$(git rev-parse --git-dir --is-inside-git-dir \
 		--is-bare-repository --is-inside-work-tree \
@@ -328,9 +374,9 @@ __git_ps1 ()
 	local step=""
 	local total=""
 	if [ -d "$g/rebase-merge" ]; then
-		eread "$g/rebase-merge/head-name" b
-		eread "$g/rebase-merge/msgnum" step
-		eread "$g/rebase-merge/end" total
+		__git_eread "$g/rebase-merge/head-name" b
+		__git_eread "$g/rebase-merge/msgnum" step
+		__git_eread "$g/rebase-merge/end" total
 		if [ -f "$g/rebase-merge/interactive" ]; then
 			r="|REBASE-i"
 		else
@@ -338,10 +384,10 @@ __git_ps1 ()
 		fi
 	else
 		if [ -d "$g/rebase-apply" ]; then
-			eread "$g/rebase-apply/next" step
-			eread "$g/rebase-apply/last" total
+			__git_eread "$g/rebase-apply/next" step
+			__git_eread "$g/rebase-apply/last" total
 			if [ -f "$g/rebase-apply/rebasing" ]; then
-				eread "$g/rebase-apply/head-name" b
+				__git_eread "$g/rebase-apply/head-name" b
 				r="|REBASE"
 			elif [ -f "$g/rebase-apply/applying" ]; then
 				r="|AM"
@@ -365,7 +411,7 @@ __git_ps1 ()
 			b="$(git symbolic-ref HEAD 2>/dev/null)"
 		else
 			local head=""
-			if ! eread "$g/HEAD" head; then
+			if ! __git_eread "$g/HEAD" head; then
 				if [ $pcmode = yes ]; then
 					PS1="$ps1pc_start$ps1pc_end"
 				fi
@@ -445,8 +491,14 @@ __git_ps1 ()
 		__git_ps1_colorize_gitstring
 	fi
 
+	b=${b##refs/heads/}
+	if [ $pcmode = yes ] && [ $ps1_expanded = yes ]; then
+		__git_ps1_branch_name=$b
+		b="\${__git_ps1_branch_name}"
+	fi
+
 	local f="$w$i$s$u"
-	local gitstring="$c${b##refs/heads/}${f:+$z$f}$r$p"
+	local gitstring="$c$b${f:+$z$f}$r$p"
 
 	if [ $pcmode = yes ]; then
 		if [ "${__git_printf_supports_v-}" != yes ]; then
