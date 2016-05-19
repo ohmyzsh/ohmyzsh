@@ -43,6 +43,7 @@ alias g='git'
 alias ga='git add'
 alias gaa='git add --all'
 alias gapa='git add --patch'
+alias gac='git add --all && git commit -m'
 
 alias gb='git branch'
 alias gba='git branch -a'
