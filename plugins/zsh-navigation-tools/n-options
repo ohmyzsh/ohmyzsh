@@ -14,8 +14,8 @@ local IFS="
 
 unset NLIST_COLORING_PATTERN
 
-[ -f ~/.config/znt/n-list.conf ] && . ~/.config/znt/n-list.conf
-[ -f ~/.config/znt/n-options.conf ] && . ~/.config/znt/n-options.conf
+[ -f ~/.config/znt/n-list.conf ] && builtin source ~/.config/znt/n-list.conf
+[ -f ~/.config/znt/n-options.conf ] && builtin source ~/.config/znt/n-options.conf
 
 # TODO restore options
 unsetopt localoptions
