@@ -29,7 +29,7 @@ _nlist_exit() {
     setopt localoptions
     setopt extendedglob
 
-    [[ "$REPLY" = -(#c0,1)[0-9]## ]] || REPLY="-1"
+    [[ "$REPLY" = -(#c0,1)[0-9]## || "$REPLY" = F<-> || "$REPLY" = "EDIT" || "$REPLY" = "HELP" ]] || REPLY="-1"
     zcurses 2>/dev/null delwin inner
     zcurses 2>/dev/null delwin main
     zcurses 2>/dev/null refresh
@@ -167,6 +167,26 @@ integer prev_uniq_mode=0
 integer prev_start_idx=-1
 local MBEGIN MEND MATCH mbegin mend match
 
+# Iteration over predefined keywords
+integer curkeyword nkeywords
+local keywordisfresh="0"
+if [[ "${(t)keywords}" != *array* ]]; then
+    local -a keywords
+    keywords=()
+fi
+curkeyword=0
+nkeywords=${#keywords}
+
+# Iteration over themes
+integer curtheme nthemes
+local themeisfresh="0"
+if [[ "${(t)themes}" != *array* ]]; then
+    local -a themes
+    themes=()
+fi
+curtheme=0
+nthemes=${#themes}
+
 # Ability to remember the list between calls
 if [[ -z "$NLIST_REMEMBER_STATE" || "$NLIST_REMEMBER_STATE" -eq 0 || "$NLIST_REMEMBER_STATE" -eq 2 ]]; then
     NLIST_FROM_WHAT_IDX_LIST_IS_SHOWN=1
@@ -175,6 +195,7 @@ if [[ -z "$NLIST_REMEMBER_STATE" || "$NLIST_REMEMBER_STATE" -eq 0 || "$NLIST_REM
     NLIST_SEARCH_BUFFER=""
     NLIST_TEXT_OFFSET=0
     NLIST_IS_UNIQ_MODE=0
+    NLIST_IS_F_MODE=0
 
     # Zero - because it isn't known, unless we
     # confirm that first element is selectable
@@ -207,11 +228,18 @@ zcurses delwin main 2>/dev/null
 zcurses delwin inner 2>/dev/null
 zcurses addwin main "$term_height" "$term_width" 0 0
 zcurses addwin inner "$inner_height" "$inner_width" 1 2
-zcurses bg main white/black
-zcurses bg inner white/black
+# From n-list.conf
+[ "$colorpair" = "" ] && colorpair="white/black"
+[ "$border" = "0" ] || border="1"
+local background="${colorpair#*/}"
+local backuptheme="$colorpair/$bold"
+zcurses bg main "$colorpair"
+zcurses bg inner "$colorpair"
 if [ "$NLIST_IS_SEARCH_MODE" -ne 1 ]; then
     _nlist_cursor_visibility 0
 fi
+
+zcurses refresh
 
 #
 # Listening for input
@@ -237,9 +265,12 @@ while (( 1 )); do
     # Do searching (filtering with string)
     if [ -n "$NLIST_SEARCH_BUFFER" ]; then
         # Compute new list?
-        if [[ "$NLIST_SEARCH_BUFFER" != "$prev_search_buffer" || "$NLIST_IS_UNIQ_MODE" -ne "$prev_uniq_mode" ]]; then
+        if [[ "$NLIST_SEARCH_BUFFER" != "$prev_search_buffer" || "$NLIST_IS_UNIQ_MODE" -ne "$prev_uniq_mode"
+                || "$NLIST_IS_F_MODE" -ne "$prev_f_mode" ]]
+        then
             prev_search_buffer="$NLIST_SEARCH_BUFFER"
             prev_uniq_mode="$NLIST_IS_UNIQ_MODE"
+            prev_f_mode="$NLIST_IS_F_MODE"
             # regenerating list -> regenerating disp_list
             prev_start_idx=-1
 
@@ -251,7 +282,9 @@ while (( 1 )); do
 
             # Remove non-selectable elements
             [ "$#NLIST_NONSELECTABLE_ELEMENTS" -gt 0 ] && for i in "${(nO)NLIST_NONSELECTABLE_ELEMENTS[@]}"; do
-                list[$i]=()
+                if [[ "$i" = <-> ]]; then
+                    list[$i]=()
+                fi
             done
 
             # Remove duplicates
@@ -266,13 +299,22 @@ while (( 1 )); do
             local search_pattern=""
             local colsearch_pattern=""
             if [ -n "$search_buffer" ]; then
-                # Patterns will be *foo*~^*bar* and (foo|bar)
-                search_pattern="${search_buffer// ##/*~^*}"
-                colsearch_pattern="${search_buffer// ##/|}"
-
                 # The repeat will make the matching work on a fresh heap
                 repeat 1; do
-                    list=( "${(@M)list:#(#i)*$~search_pattern*}" )
+                    if [ "$NLIST_IS_F_MODE" -eq "1" ]; then
+                        search_pattern="${search_buffer// ##/*~^(#a1)*}"
+                        colsearch_pattern="${search_buffer// ##/|(#a1)}"
+                        list=( "${(@M)list:#(#ia1)*$~search_pattern*}" )
+                    elif [ "$NLIST_IS_F_MODE" -eq "2" ]; then
+                        search_pattern="${search_buffer// ##/*~^(#a2)*}"
+                        colsearch_pattern="${search_buffer// ##/|(#a2)}"
+                        list=( "${(@M)list:#(#ia2)*$~search_pattern*}" )
+                    else
+                        # Patterns will be *foo*~^*bar* and (foo|bar)
+                        search_pattern="${search_buffer// ##/*~^*}"
+                        colsearch_pattern="${search_buffer// ##/|}"
+                        list=( "${(@M)list:#(#i)*$~search_pattern*}" )
+                    fi
                 done
 
                 last_element="$#list"
@@ -295,7 +337,13 @@ while (( 1 )); do
                 local red=$'\x1b[00;31m' reset=$'\x1b[00;00m'
                 # The repeat will make the matching work on a fresh heap
                 repeat 1; do
-                    disp_list=( "${(@)disp_list//(#mi)($~colsearch_pattern)/$red${MATCH}$reset}" )
+                    if [ "$NLIST_IS_F_MODE" -eq "1" ]; then
+                        disp_list=( "${(@)disp_list//(#mia1)($~colsearch_pattern)/$red${MATCH}$reset}" )
+                    elif [ "$NLIST_IS_F_MODE" -eq "2" ]; then
+                        disp_list=( "${(@)disp_list//(#mia2)($~colsearch_pattern)/$red${MATCH}$reset}" )
+                    else
+                        disp_list=( "${(@)disp_list//(#mi)($~colsearch_pattern)/$red${MATCH}$reset}" )
+                    fi
                 done
             fi
 
@@ -304,6 +352,7 @@ while (( 1 )); do
         fi
 
         # Output colored list
+        zcurses clear inner
         n-list-draw "$(( (NLIST_CURRENT_IDX-1) % page_height + 1 ))" \
             "$page_height" "$page_width" 0 0 "$NLIST_TEXT_OFFSET" inner \
             "$disp_list[@]"
@@ -327,7 +376,9 @@ while (( 1 )); do
             # Remove non-selectable elements only when in uniq mode
             [ "$NLIST_IS_UNIQ_MODE" -eq 1 ] && [ "$#NLIST_NONSELECTABLE_ELEMENTS" -gt 0 ] &&
             for i in "${(nO)NLIST_NONSELECTABLE_ELEMENTS[@]}"; do
-                list[$i]=()
+                if [[ "$i" = <-> ]]; then
+                    list[$i]=()
+                fi
             done
 
             # Remove duplicates when in uniq mode
@@ -355,29 +406,46 @@ while (( 1 )); do
         fi
 
         # Output the list
+        zcurses clear inner
         n-list-draw "$(( (NLIST_CURRENT_IDX-1) % page_height + 1 ))" \
             "$page_height" "$page_width" 0 0 "$NLIST_TEXT_OFFSET" inner \
             "$disp_list[@]"
     fi
 
     local status_msg_strlen
-    if [ "$NLIST_IS_SEARCH_MODE" = "1" ]; then
-        local _txt2=""
-        [ "$NLIST_IS_UNIQ_MODE" -eq 1 ] && _txt2="[-UNIQ-] "
-        _nlist_status_msg "${_txt2}Filtering with: ${NLIST_SEARCH_BUFFER// /+}"
-    elif [[ ${NLIST_NONSELECTABLE_ELEMENTS[(r)$NLIST_CURRENT_IDX]} != $NLIST_CURRENT_IDX ||
-            -n "$NLIST_SEARCH_BUFFER" || "$NLIST_IS_UNIQ_MODE" -eq 1 ]]; then
-        local _txt="" _txt2=""
-        [ -n "$NLIST_GREP_STRING" ] && _txt=" [$NLIST_GREP_STRING]"
-        [ "$NLIST_IS_UNIQ_MODE" -eq 1 ] && _txt2="[-UNIQ-] "
-        _nlist_status_msg "${_txt2}Current #$NLIST_USER_CURRENT_IDX (of #$NLIST_USER_LAST_ELEMENT entries)$_txt"
-    else
-        _nlist_status_msg ""
+    local keywordmsg=""
+    if [ "$keywordisfresh" = "1" ]; then
+        keywordmsg="($curkeyword/$nkeywords) "
+        keywordisfresh="0"
     fi
 
-    zcurses border main
+    local thememsg=""
+    if [ "$themeisfresh" = "1" ]; then
+        local theme="$backuptheme"
+        [ "$curtheme" -gt 0 ] && theme="${themes[curtheme]}"
+        thememsg="($curtheme/$nthemes $theme) "
+        themeisfresh="0"
+    fi
 
-    local top_msg="${(C)ZSH_NAME} $ZSH_VERSION, shell level $SHLVL, $USER"
+    local _txt2="" _txt3=""
+    [ "$NLIST_IS_UNIQ_MODE" -eq 1 ] && _txt2="[-UNIQ-] "
+    [ "$NLIST_IS_F_MODE" -eq 1 ] && _txt3="[-FIX-] "
+    [ "$NLIST_IS_F_MODE" -eq 2 ] && _txt3="[-FIX2-] "
+
+    if [ "$NLIST_IS_SEARCH_MODE" = "1" ]; then
+        _nlist_status_msg "${_txt2}${_txt3}${keywordmsg}${thememsg}Filtering with: ${NLIST_SEARCH_BUFFER// /+}"
+    elif [[ ${NLIST_NONSELECTABLE_ELEMENTS[(r)$NLIST_CURRENT_IDX]} != $NLIST_CURRENT_IDX ||
+            -n "$NLIST_SEARCH_BUFFER" || "$NLIST_IS_UNIQ_MODE" -eq 1 ]]; then
+        local _txt=""
+        [ -n "$NLIST_GREP_STRING" ] && _txt=" [$NLIST_GREP_STRING]"
+        _nlist_status_msg "${_txt2}${_txt3}${keywordmsg}${thememsg}Current #$NLIST_USER_CURRENT_IDX (of #$NLIST_USER_LAST_ELEMENT entries)$_txt"
+    else
+        _nlist_status_msg "${keywordmsg}${thememsg}"
+    fi
+
+    [ "$border" = "1" ] && zcurses border main
+
+    local top_msg=" F1-change view, ${(C)ZSH_NAME} $ZSH_VERSION, shell level $SHLVL "
     zcurses move main 0 $(( term_width / 2 - $#top_msg / 2 ))
     zcurses string main $top_msg
 
@@ -400,7 +468,7 @@ while (( 1 )); do
     n-list-input "$NLIST_CURRENT_IDX" "$NLIST_FROM_WHAT_IDX_LIST_IS_SHOWN" \
                     "$page_height" "$page_width" "$last_element" "$NLIST_TEXT_OFFSET" \
                     "$final_key" "$NLIST_IS_SEARCH_MODE" "$NLIST_SEARCH_BUFFER" \
-                    "$NLIST_IS_UNIQ_MODE"
+                    "$NLIST_IS_UNIQ_MODE" "$NLIST_IS_F_MODE"
 
     selection="$reply[1]"
     action="$reply[2]"
@@ -410,8 +478,11 @@ while (( 1 )); do
     NLIST_IS_SEARCH_MODE="$reply[6]"
     NLIST_SEARCH_BUFFER="$reply[7]"
     NLIST_IS_UNIQ_MODE="$reply[8]"
+    NLIST_IS_F_MODE="$reply[9]"
 
-    if [ "$action" = "SELECT" ]; then
+    if [ -z "$action" ]; then
+        continue
+    elif [ "$action" = "SELECT" ]; then
         REPLY="$selection"
         reply=( "$list[@]" )
         break
@@ -422,6 +493,18 @@ while (( 1 )); do
     elif [ "$action" = "REDRAW" ]; then
         zcurses clear main redraw
         zcurses clear inner redraw
+    elif [[ "$action" = F<-> ]]; then
+        REPLY="$action"
+        reply=( "$list[@]" )
+        break
+    elif [[ "$action" = "EDIT" ]]; then
+        REPLY="EDIT"
+        reply=( "$list[@]" )
+        break
+    elif [[ "$action" = "HELP" ]]; then
+        REPLY="HELP"
+        reply=( "$list[@]" )
+        break
     fi
 done
 

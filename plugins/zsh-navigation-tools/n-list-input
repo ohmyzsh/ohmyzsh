@@ -14,6 +14,52 @@ _nlist_compute_first_to_show_idx() {
     from_what_idx_list_is_shown=0+((current_idx-1)/page_height)*page_height+1
 }
 
+_nlist_update_from_keywords() {
+    keywordisfresh="1"
+    if [ "$nkeywords" -gt 0 ]; then
+        curkeyword=$(( (curkeyword+1) % (nkeywords+1) ))
+        if [ "$curkeyword" -eq "0" ]; then
+            buffer=""
+        else
+            buffer="${keywords[curkeyword]}"
+        fi
+    fi
+}
+
+_nlist_iterate_theme() {
+    themeisfresh="1"
+    if [ "$1" = "1" ]; then
+        curtheme=$(( (curtheme+1) % (nthemes+1) ))
+    else
+        curtheme=curtheme-1
+        [ "$curtheme" -lt 0 ] && curtheme=nthemes
+    fi
+
+    if [ "$nthemes" -gt 0 ]; then
+        local theme=${themes[curtheme]}
+        [ "$curtheme" -eq "0" ] && theme="$backuptheme"
+
+        colorpair="${theme%/*}"
+        bold="${theme##*/}"
+        background="${colorpair#*/}"
+        zcurses bg main "$colorpair"
+        zcurses bg inner "$colorpair"
+    fi
+}
+
+_nlist_rotate_buffer() {
+    setopt localoptions noglob
+
+    local -a words
+    words=( ${(s: :)buffer} )
+    words=( ${words[-1]} ${words[1,-2]} )
+
+    local space=""
+    [ "${buffer[-1]}" = " " ] && space=" "
+
+    buffer="${(j: :)words}$space"
+}
+
 typeset -ga reply
 reply=( -1 '' )
 integer current_idx="$1"
@@ -26,6 +72,7 @@ local key="$7"
 integer search="$8"
 local buffer="$9"
 integer uniq_mode="$10"
+integer f_mode="$11"
 
 #
 # Listening for input
@@ -79,21 +126,36 @@ case "$key" in
             ${NLIST_NONSELECTABLE_ELEMENTS[(r)$current_idx]} != $current_idx ]]
         then
             # Save current element in the result variable
-            reply=( $current_idx SELECT )
+            reply=( $current_idx "SELECT" )
         fi
         ;;
+    (H|'?')
+        # This event needs to be enabled
+        if [[ "${NLIST_ENABLED_EVENTS[(r)HELP]}" = "HELP" ]]; then
+            reply=( -1 "HELP" )
+        fi
+        ;;
+    (F1)
+        # This event needs to be enabled
+        if [[ "${NLIST_ENABLED_EVENTS[(r)F1]}" = "F1" ]]; then
+            reply=( -1 "$key" )
+        fi
+        ;;
+    (F4|F5|F6|F7|F8|F9|F10|DC)
+        # ignore; F2, F3 are used below
+        ;;
     (q)
-        reply=( -1 QUIT )
+        reply=( -1 "QUIT" )
         ;;
     (/)
         search=1
         _nlist_cursor_visibility 1
         ;;
     ($'\t')
-        reply=( $current_idx LEAVE )
+        reply=( $current_idx "LEAVE" )
         ;;
     ($'\C-L')
-        reply=( -1 REDRAW )
+        reply=( -1 "REDRAW" )
         ;;
     (\])
         [[ "${(t)NLIST_HOP_INDEXES}" = "array" || "${(t)NLIST_HOP_INDEXES}" = "array-local" ]] &&
@@ -127,8 +189,40 @@ case "$key" in
     ($'\E')
         buffer=""
         ;;
+    (F3)
+        if [ "$search" = "1" ]; then
+            search=0
+            _nlist_cursor_visibility 0
+        else
+            search=1
+            _nlist_cursor_visibility 1
+        fi
+        ;;
     (o|$'\C-O')
         uniq_mode=1-uniq_mode
+        ;;
+    (f|$'\C-F')
+        (( f_mode=(f_mode+1) % 3 ))
+        ;;
+    ($'\x1F'|F2|$'\C-X')
+        search=1
+        _nlist_cursor_visibility 1
+        _nlist_update_from_keywords
+        ;;
+    ($'\C-T')
+        _nlist_iterate_theme 1
+        ;;
+    ($'\C-G')
+        _nlist_iterate_theme 0
+        ;;
+    ($'\C-E'|e)
+        # This event needs to be enabled
+        if [[ "${NLIST_ENABLED_EVENTS[(r)EDIT]}" = "EDIT" ]]; then
+            reply=( -1 "EDIT" )
+        fi
+        ;;
+    ($'\C-A')
+        _nlist_rotate_buffer
         ;;
     (*)
         ;;
@@ -138,11 +232,19 @@ else
 
 case "$key" in
     ($'\n'|ENTER)
-        search=0
-        _nlist_cursor_visibility 0
+        if [ "$NLIST_INSTANT_SELECT" = "1" ]; then
+            if [[ "$NLIST_SEARCH_BUFFER" != "" || "$NLIST_IS_UNIQ_MODE" -eq 1 ||
+                ${NLIST_NONSELECTABLE_ELEMENTS[(r)$current_idx]} != $current_idx ]]
+            then
+                reply=( $current_idx "SELECT" )
+            fi
+        else
+            search=0
+            _nlist_cursor_visibility 0
+        fi
         ;;
     ($'\C-L')
-        reply=( -1 REDRAW )
+        reply=( -1 "REDRAW" )
         ;;
 
     #
@@ -192,8 +294,14 @@ case "$key" in
     (RIGHT)
         hscroll+=7
         ;;
-    (F1|F2|F3|F4|F5|F6|F7|F8|F9|F10)
-        # ignore
+    (F1)
+        # This event needs to be enabled
+        if [[ "${NLIST_ENABLED_EVENTS[(r)F1]}" = "F1" ]]; then
+            reply=( -1 "$key" )
+        fi
+        ;;
+    (F4|F5|F6|F7|F8|F9|F10|DC)
+        # ignore; F2, F3 are used below
         ;;
 
     #
@@ -214,8 +322,38 @@ case "$key" in
         search=0
         _nlist_cursor_visibility 0
         ;;
+    (F3)
+        if [ "$search" = "1" ]; then
+            search=0
+            _nlist_cursor_visibility 0
+        else
+            search=1
+            _nlist_cursor_visibility 1
+        fi
+        ;;
     ($'\C-O')
         uniq_mode=1-uniq_mode
+        ;;
+    ($'\C-F')
+        (( f_mode=(f_mode+1) % 3 ))
+        ;;
+    ($'\x1F'|F2|$'\C-X')
+        _nlist_update_from_keywords
+        ;;
+    ($'\C-T')
+        _nlist_iterate_theme 1
+        ;;
+    ($'\C-G')
+        _nlist_iterate_theme 0
+        ;;
+    ($'\C-E')
+        # This event needs to be enabled
+        if [[ "${NLIST_ENABLED_EVENTS[(r)EDIT]}" = "EDIT" ]]; then
+            reply=( -1 "EDIT" )
+        fi
+        ;;
+    ($'\C-A')
+        _nlist_rotate_buffer
         ;;
     (*)
         if [[ $#key == 1 && $((#key)) -lt 31 ]]; then
@@ -234,5 +372,6 @@ reply[5]="$hscroll"
 reply[6]="$search"
 reply[7]="$buffer"
 reply[8]="$uniq_mode"
+reply[9]="$f_mode"
 
 # vim: set filetype=zsh:

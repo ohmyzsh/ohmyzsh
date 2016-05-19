@@ -79,9 +79,9 @@ _nlist_print_with_ansi() {
 
         if (( no_match == 0 )); then
             if (( col >= 30 && col <= 37 )); then
-                zcurses attr "$win" $c[col-29]/black
+                zcurses attr "$win" $c[col-29]/"$background"
             elif [[ "$col" -eq 0 ]]; then
-                zcurses attr "$win" white/black
+                zcurses attr "$win" "$colorpair"
             fi
         fi
     done
@@ -97,17 +97,19 @@ local win="$7"
 shift 7
 integer max_text_len=page_width-x_offset
 
-[ "$bold" = "0" ] && bold="" || bold="+bold"
+[[ "$bold" = "0" || "$bold" = "-bold" ]] && bold="-bold" || bold="+bold"
 [[ "$active_text" = "underline" || "$active_text" = "reverse" ]] || local active_text="reverse"
-# With Linux terminal underline won't work properly
-[ "$TERM" = "linux" ] && active_text="reverse"
+# Linux has ncv 18, screen* has ncv 3 - underline won't work properly
+(( ${terminfo[ncv]:-0} & 2 )) && active_text="reverse"
+# FreeBSD uses TERM=xterm for newcons but doesn't actually support underline
+[[ "$TERM" = "xterm" && -z "$DISPLAY" ]] && active_text="reverse"
 
 integer max_idx=page_height
 integer end_idx=max_idx
 [ "$end_idx" -gt "$#" ] && end_idx="$#"
 integer y=y_offset
 
-zcurses attr "$win" $bold white/black
+zcurses attr "$win" "$bold" "$colorpair"
 
 integer i text_len
 local text
