@@ -72,6 +72,7 @@ _bower ()
         compadd "$@" $(echo $bower_package_list)
         ;;
         *)
+        _arguments \
         $_no_color \
         ;;
     esac
