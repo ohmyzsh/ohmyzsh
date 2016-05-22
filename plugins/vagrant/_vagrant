@@ -31,6 +31,7 @@ _1st_arguments=(
     'ssh-config:Outputs .ssh/config valid syntax for connecting to this environment via ssh'
     'status:Shows the status of the current Vagrant environment'
     'suspend:Suspends the currently running vagrant environment'
+    'snapshot:Used to manage snapshots with the guest machine'
     'up:Creates the vagrant environment'
     'version:Prints current and latest Vagrant version'
     '--help:[TASK] Describe available tasks or one specific task'
