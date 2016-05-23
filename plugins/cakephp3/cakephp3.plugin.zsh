@@ -12,6 +12,7 @@ _cakephp3_get_3rd_argument () {
 }
 
 _cakephp3 () {
+  has3rdargument=("all" "controller" "fixture" "model" "template")
   if [ -f bin/cake ]; then
 		if (( CURRENT == 2 )); then
 			compadd `_cakephp3_get_command_list`
@@ -26,8 +27,6 @@ _cakephp3 () {
 		fi
   fi
 }
-
-has3rdargument=("all" "controller" "fixture" "model" "template")
 
 compdef _cakephp3 bin/cake
 compdef _cakephp3 cake
