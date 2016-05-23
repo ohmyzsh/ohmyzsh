@@ -273,5 +273,5 @@ function grename() {
 
 # Remove from repo all files deleted
 alias gitstrm="git st | egrep 'deleted' | sed -e 's/#//' -e 's/deleted:/git rm/' | sh"
-alias gitrmdeleted="git ls-files --deleted -z | xargs -0 git rm -r"
 alias gitgcprune="git remote prune origin ; git gc --prune --aggressive"
+alias gitrmdeleted="git ls-files --deleted -z | xargs -0 git rm -r"
