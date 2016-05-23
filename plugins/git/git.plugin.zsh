@@ -217,5 +217,3 @@ alias gwch='git whatchanged -p --abbrev-commit --pretty=medium'
 alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit -m "--wip--"'
 
 alias gitrmdeleted="git ls-files --deleted -z | xargs -0 git rm -r"
-
-alias gitgcprune="git remote prune origin ; git gc --prune --aggressive"
