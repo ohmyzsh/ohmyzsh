@@ -8,21 +8,22 @@ _cakephp3_get_sub_command_list () {
 }
 
 _cakephp3_get_3rd_argument () {
-	bin/cake ${words[2]} ${words[3]} | grep '\-\ '| awk '{print $2}'
+	bin/cake ${words[2]} ${words[3]} | \grep '\-\ '| \awk '{print $2}'
 }
 
 _cakephp3 () {
-  has3rdargument=("all" "controller" "fixture" "model" "template")
-  if [ -f bin/cake ]; then
+	local -a has3rdargument
+	has3rdargument=("all" "controller" "fixture" "model" "template")
+	if [ -f bin/cake ]; then
 		if (( CURRENT == 2 )); then
-			compadd `_cakephp3_get_command_list`
+			compadd $(_cakephp3_get_command_list)
 		fi
 		if (( CURRENT == 3 )); then
-			compadd `_cakephp3_get_sub_command_list`
+			compadd $(_cakephp3_get_sub_command_list)
 		fi
 		if (( CURRENT == 4 )); then
-			if [[ ${has3rdargument[(i)${words[3]}]} -le ${#has3rdargument} ]] ; then ;
-			 compadd `_cakephp3_get_3rd_argument`
+			if [[ ${has3rdargument[(i)${words[3]}]} -le ${#has3rdargument} ]]; then
+				compadd $(_cakephp3_get_3rd_argument)
 			fi
 		fi
   fi
