@@ -5,6 +5,9 @@ alias wtf='dmesg'
 alias onoz='cat /var/log/errors.log'
 alias rtfm='man'
 
+alias yolo='sudo'
+alias lulz='rm -rf *'
+
 alias :3='echo'
 alias visible='echo'
 alias invisible='cat'
@@ -40,6 +43,7 @@ alias kthxbai='halt'
 alias pwned='ssh'
 
 alias hackzor='git init'
+alias takez='git clone'
 alias rulz='git push'
 alias bringz='git pull'
 alias chicken='git add'
