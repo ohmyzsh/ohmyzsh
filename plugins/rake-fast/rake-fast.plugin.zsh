@@ -8,17 +8,7 @@ _rake_refresh () {
 }
 
 _rake_does_task_list_need_generating () {
-  if [ ! -f .rake_tasks ]; then return 0;
-  else
-    if [[ "$OSTYPE" = darwin* ]]; then
-      accurate=$(stat -f%m .rake_tasks)
-      changed=$(stat -f%m Rakefile)
-    else
-      accurate=$(stat -c%Y .rake_tasks)
-      changed=$(stat -c%Y Rakefile)
-    fi
-    return $(expr $accurate '>=' $changed)
-  fi
+  [[ ! -f .rake_tasks ]] || [[ Rakefile -nt .rake_tasks ]]
 }
 
 _rake_generate () {

@@ -1,10 +1,49 @@
-#compdef cap
+#compdef capit
 #autoload
 
-if [[ -f config/deploy.rb || -f Capfile ]]; then
-  if [[ ! -f .cap_tasks~ || config/deploy.rb -nt .cap_tasks~ ]]; then
-    echo "\nGenerating .cap_tasks~..." > /dev/stderr
-    cap -v --tasks | grep '#' | cut -d " " -f 2 > .cap_tasks~
+# Added `capit` because `cap` is a reserved word. `cap` completion doesn't work.
+# http://zsh.sourceforge.net/Doc/Release/Zsh-Modules.html#The-zsh_002fcap-Module
+
+local curcontext="$curcontext" state line ret=1
+local -a _configs
+
+_arguments -C \
+  '1: :->cmds' \
+  '2:: :->args' && ret=0
+
+_cap_tasks() {
+  if [[ -f config/deploy.rb || -f Capfile ]]; then
+    if [[ ! -f .cap_tasks~ ]]; then
+      capit --tasks | sed 's/\(\[\)\(.*\)\(\]\)/\2:/' | awk '{command=$2; $1=$2=$3=""; gsub(/^[ \t\r\n]+/, "", $0); gsub(":", "\\:", command); print command"["$0"]"}' > .cap_tasks~
+    fi
+
+    OLD_IFS=$IFS
+    IFS=$'\n'
+    _values 'cap commands' $(< .cap_tasks~)
+    IFS=$OLD_IFS
+    # zmodload zsh/mapfile
+    # _values ${(f)mapfile[.cap_tasks~]}
   fi
-  compadd `cat .cap_tasks~`
-fi
+}
+
+_cap_stages() {
+  compadd $(find config/deploy -name \*.rb | cut -d/ -f3 | sed s:.rb::g)
+}
+
+case $state in
+  cmds)
+    # check if it uses multistage
+    if [[ -d config/deploy ]]; then
+      _cap_stages
+    else
+      _cap_tasks
+    fi
+    ret=0
+    ;;
+  args)
+    _cap_tasks
+    ret=0
+    ;;
+esac
+
+return ret

@@ -1,3 +1,5 @@
+# Copies the pathname of the current directory to the system or X Windows clipboard
 function copydir {
-  pwd | tr -d "\r\n" | pbcopy
+  emulate -L zsh
+  print -n $PWD | clipcopy
 }
