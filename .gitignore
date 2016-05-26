@@ -1,10 +1,8 @@
-locals.zsh
-log/.zsh_history
-projects.zsh
 #custom
+# custom files
 #!custom/plugins/example
 #!custom/example.zsh
-*.swp
+
 *.un~
 cache/
 .metadata/
