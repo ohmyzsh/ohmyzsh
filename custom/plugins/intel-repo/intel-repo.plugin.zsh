@@ -1,13 +1,19 @@
-alias rs='repo sync -a'
+alias rs='repo sync'
 compdef _repo rs='repo sync'
 
-alias rs.='repo sync -a .'
+alias rsa='repo sync -a'
+
+alias rs.='repo sync .'
 compdef _repo rs.='repo sync'
 
-alias rsrra='repo sync -a ; repo rebase --auto-stash'
+alias rsa.='repo sync -a .'
+
+alias rsrra='repo sync ; repo rebase --auto-stash'
+alias rsarra='repo sync -a ; repo rebase --auto-stash'
 compdef _repo rsrra='repo rebase'
 
-alias rsrra.='repo sync -a .; repo rebase --auto-stash .'
+alias rsrra.='repo sync .; repo rebase --auto-stash .'
+alias rsarra.='repo sync -a . ; repo rebase --auto-stash .'
 compdef _repo rsrra.='repo rebase'
 
 function rsbrsrra()
