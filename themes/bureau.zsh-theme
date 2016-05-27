@@ -53,7 +53,7 @@ bureau_git_status() {
     num=$(echo "$_AHEAD_BEHIND" | command sed 's/.*ahead \([0-9]*\).*/\1/')
     _STATUS="$_STATUS%{$fg[$ZSH_THEME_GIT_PROMPT_AHEAD_COLOR]%}$ZSH_THEME_GIT_PROMPT_AHEAD$num%{$reset_color%}"
   fi
-  if $(echo "$_INDEX" | command grep -q '^## .*behind [0-9]*'); then
+  if $(echo "$_AHEAD_BEHIND" | command grep -q 'behind'); then
     num=$(echo "$_AHEAD_BEHIND" | command sed 's/.*behind \([0-9]*\).*/\1/')
     _STATUS="$_STATUS%{$fg[$ZSH_THEME_GIT_PROMPT_BEHIND_COLOR]%}$ZSH_THEME_GIT_PROMPT_BEHIND$num%{$reset_color%}"
   fi
