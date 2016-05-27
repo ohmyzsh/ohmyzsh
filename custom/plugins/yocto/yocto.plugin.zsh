@@ -2,6 +2,7 @@
 autoload -U +X bashcompinit && bashcompinit
 
 alias bb='bitbake'
+alias cdy='cd ~/projects/yocto'
 
 function bb-enter-env(){
     cd ~/projects/yocto

@@ -36,6 +36,7 @@
    remotes = remote -v
    sync = fetch --all
    root = rev-parse --show-toplevel
+   parents = show --pretty=%P
 
 
 [core]
