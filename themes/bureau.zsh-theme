@@ -10,8 +10,10 @@ ZSH_THEME_NVM_PROMPT_SUFFIX=""
 ZSH_THEME_GIT_PROMPT_PREFIX="[%{$fg_bold[green]%}±%{$reset_color%}%{$fg_bold[white]%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}]"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg_bold[green]%}✓%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_AHEAD="%{$fg[cyan]%}▴%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_BEHIND="%{$fg[magenta]%}▾%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_AHEAD="▴"
+ZSH_THEME_GIT_PROMPT_AHEAD_COLOR="cyan"
+ZSH_THEME_GIT_PROMPT_BEHIND="▾"
+ZSH_THEME_GIT_PROMPT_BEHIND_COLOR="magenta"
 ZSH_THEME_GIT_PROMPT_STAGED="%{$fg_bold[green]%}●%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_UNSTAGED="%{$fg_bold[yellow]%}●%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg_bold[red]%}●%{$reset_color%}"
@@ -46,11 +48,14 @@ bureau_git_status() {
 
   # check status of local repository
   _INDEX=$(command git status --porcelain -b 2> /dev/null)
-  if $(echo "$_INDEX" | command grep -q '^## .*ahead'); then
-    _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_AHEAD"
+  _AHEAD_BEHIND=$(echo $_INDEX | grep '^## .*[ahead|behind] \[*[0-9]\+*\]' | sed 's/.*\[\([^]]*\)\].*/\1/g')
+  if $(echo "$_AHEAD_BEHIND" | command grep -q 'ahead'); then
+    num=$(echo "$_AHEAD_BEHIND" | command sed 's/.*ahead \([0-9]*\).*/\1/')
+    _STATUS="$_STATUS%{$fg[$ZSH_THEME_GIT_PROMPT_AHEAD_COLOR]%}$ZSH_THEME_GIT_PROMPT_AHEAD$num%{$reset_color%}"
   fi
-  if $(echo "$_INDEX" | command grep -q '^## .*behind'); then
-    _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_BEHIND"
+  if $(echo "$_INDEX" | command grep -q '^## .*behind [0-9]*'); then
+    num=$(echo "$_AHEAD_BEHIND" | command sed 's/.*behind \([0-9]*\).*/\1/')
+    _STATUS="$_STATUS%{$fg[$ZSH_THEME_GIT_PROMPT_BEHIND_COLOR]%}$ZSH_THEME_GIT_PROMPT_BEHIND$num%{$reset_color%}"
   fi
   if $(echo "$_INDEX" | command grep -q '^## .*diverged'); then
     _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_DIVERGED"
