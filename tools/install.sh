@@ -17,14 +17,16 @@ command_exists() {
 	command -v "$@" >/dev/null 2>&1
 }
 
-main() {
-	# Use colors, but only if connected to a terminal, and that terminal
-	# supports them.
+# Set up color sequences
+setup_color() {
 	if command_exists tput; then
 		ncolors=$(tput colors)
+	else
+		ncolors=0
 	fi
 
-	if [ -t 1 ] && [ -n "$ncolors" ] && [ "$ncolors" -ge 8 ]; then
+	# Only use colors if connected to a terminal that supports them
+	if [ -t 1 ] && [ $ncolors -ge 8 ]; then
 		RED="$(tput setaf 1)"
 		GREEN="$(tput setaf 2)"
 		YELLOW="$(tput setaf 3)"
@@ -39,20 +41,9 @@ main() {
 		BOLD=""
 		NORMAL=""
 	fi
+}
 
-	if ! command_exists zsh; then
-		echo "${YELLOW}Zsh is not installed!${NORMAL} Please install zsh first!"
-		exit 1
-	fi
-
-	if [ -d "$ZSH" ]; then
-		cat <<-EOF
-			${YELLOW}You already have Oh My Zsh installed.${NORMAL}
-			You'll need to remove $ZSH if you want to re-install.
-		EOF
-		exit 1
-	fi
-
+setup_ohmyzsh() {
 	# Prevent the cloned repository from having insecure permissions. Failing to do
 	# so causes compinit() calls to fail with "command not found: compdef" errors
 	# for users with insecure umasks (e.g., "002", allowing group writability). Note
@@ -79,11 +70,13 @@ main() {
 		echo "Error: git clone of oh-my-zsh repo failed"
 		exit 1
 	}
+}
 
+setup_zshrc() {
 	echo "${BLUE}Looking for an existing zsh config...${NORMAL}"
 	if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]; then
 		echo "${YELLOW}Found ~/.zshrc.${GREEN} Backing up to ~/.zshrc.pre-oh-my-zsh.${NORMAL}"
-		mv ~/.zshrc ~/.zshrc.pre-oh-my-zsh;
+		mv ~/.zshrc ~/.zshrc.pre-oh-my-zsh
 	fi
 
 	echo "${BLUE}Using the Oh My Zsh template file and adding it to ~/.zshrc.${NORMAL}"
@@ -93,7 +86,9 @@ main() {
 export ZSH=\"$ZSH\"
 " ~/.zshrc > ~/.zshrc-omztemp
 	mv -f ~/.zshrc-omztemp ~/.zshrc
+}
 
+setup_shell() {
 	# If this user's login shell is not already "zsh", attempt to switch.
 	TEST_CURRENT_SHELL=$(basename "$SHELL")
 	if [ "$TEST_CURRENT_SHELL" != "zsh" ]; then
@@ -109,6 +104,27 @@ export ZSH=\"$ZSH\"
 			EOF
 		fi
 	fi
+}
+
+main() {
+	setup_color
+
+	if ! command_exists zsh; then
+		echo "${YELLOW}Zsh is not installed.${NORMAL} Please install zsh first."
+		exit 1
+	fi
+
+	if [ -d "$ZSH" ]; then
+		cat <<-EOF
+			${YELLOW}You already have Oh My Zsh installed.${NORMAL}
+			You'll need to remove $ZSH if you want to reinstall.
+		EOF
+		exit 1
+	fi
+
+	setup_ohmyzsh
+	setup_zshrc
+	setup_shell
 
 	printf "$GREEN"
 	cat <<-'EOF'
