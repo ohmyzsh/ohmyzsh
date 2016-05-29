@@ -60,11 +60,11 @@ alias dcdown="docker-compose stop"
 alias dcrm="docker-compose stop && docker-compose rm -f"
 
 # Setup Docker Development Environment
-alias devup="docker-machine start default; eval \"\$(docker-machine env default)\"; docker-compose -f ~/Dropbox/Code/docker/development/docker-compose.yml up -d"
+alias devup="docker-compose -f ~/Dropbox/Code/docker/development/docker-compose.yml up -d"
 
 # Enter Docker containers
-alias devweb="eval \"\$(docker-machine env default)\"; docker exec -it web bash"
-alias devdb="eval \"\$(docker-machine env default)\"; docker exec -it db bash"
+alias devweb="docker exec -it web bash"
+alias devdb="docker exec -it db bash"
 
 # SSH
 alias casapps="ssh 10.26.0.80"
