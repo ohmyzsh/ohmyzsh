@@ -17,7 +17,12 @@ function branch_prompt_info() {
     # Mercurial repository
     if [[ -d "${current_dir}/.hg" ]]
     then
-      echo '☿' $(<"$current_dir/.hg/branch")
+      if [[ -f "$current_dir/.hg/branch" ]]
+      then
+        echo '☿' $(<"$current_dir/.hg/branch")
+      else
+        echo '☿ default'
+      fi
       return;
     fi
     # Defines path as parent directory and keeps looking for :)
