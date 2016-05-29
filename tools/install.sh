@@ -1,8 +1,16 @@
+#!/bin/sh
+set -e
+
+# Test command existence (POSIX compatible)
+command_exists() {
+  command -v "$@" >/dev/null 2>&1
+}
+
 main() {
   # Use colors, but only if connected to a terminal, and that terminal
   # supports them.
-  if which tput >/dev/null 2>&1; then
-      ncolors=$(tput colors)
+  if command_exists tput; then
+    ncolors=$(tput colors)
   fi
   if [ -t 1 ] && [ -n "$ncolors" ] && [ "$ncolors" -ge 8 ]; then
     RED="$(tput setaf 1)"
@@ -20,13 +28,9 @@ main() {
     NORMAL=""
   fi
 
-  # Only enable exit-on-error after the non-critical colorization stuff,
-  # which may fail on systems lacking tput or terminfo
-  set -e
-
-  if ! command -v zsh >/dev/null 2>&1; then
+  if ! command_exists zsh; then
     printf "${YELLOW}Zsh is not installed!${NORMAL} Please install zsh first!\n"
-    exit
+    exit 1
   fi
 
   if [ ! -n "$ZSH" ]; then
@@ -36,7 +40,7 @@ main() {
   if [ -d "$ZSH" ]; then
     printf "${YELLOW}You already have Oh My Zsh installed.${NORMAL}\n"
     printf "You'll need to remove $ZSH if you want to re-install.\n"
-    exit
+    exit 1
   fi
 
   # Prevent the cloned repository from having insecure permissions. Failing to do
@@ -47,7 +51,7 @@ main() {
   umask g-w,o-w
 
   printf "${BLUE}Cloning Oh My Zsh...${NORMAL}\n"
-  command -v git >/dev/null 2>&1 || {
+  command_exists git || {
     echo "Error: git is not installed"
     exit 1
   }
@@ -82,7 +86,7 @@ main() {
   TEST_CURRENT_SHELL=$(basename "$SHELL")
   if [ "$TEST_CURRENT_SHELL" != "zsh" ]; then
     # If this platform provides a "chsh" command (not Cygwin), do it, man!
-    if hash chsh >/dev/null 2>&1; then
+    if command_exists chsh; then
       printf "${BLUE}Time to change your default shell to zsh!${NORMAL}\n"
       chsh -s $(grep /zsh$ /etc/shells | tail -1)
     # Else, suggest the user do so manually.
