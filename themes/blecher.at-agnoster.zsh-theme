@@ -28,6 +28,7 @@
 
 CURRENT_BG='NONE'
 SEGMENT_SEPARATOR=''
+DIR_COLOR='blue'
 
 # Begin a segment
 # Takes two arguments, background and foreground. Both can be omitted,
@@ -62,7 +63,10 @@ prompt_end() {
 # Context: user@hostname (who am I and where am I)
 prompt_context() {
   local user=`whoami`
-
+  if [[ "$user" == "root" ]]; then
+    DIR_COLOR=red
+  fi
+ 
   if [[ "$user" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
     prompt_segment black default "%(!.%{%F{yellow}%}.)$user@%m"
   fi
@@ -83,7 +87,7 @@ prompt_git() {
 
 # Dir: current working directory
 prompt_dir() {
-  prompt_segment blue black '%~'
+  prompt_segment $DIR_COLOR black '%~'
 }
 
 # Fast method to get the current branch in git from https://gist.github.com/wolever/6525437
