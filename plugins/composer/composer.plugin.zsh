@@ -43,6 +43,8 @@ alias cdo='composer dump-autoload -o'
 alias cgu='composer global update'
 alias cgr='composer global require'
 alias cgrm='composer global remove'
+alias co='composer outdated'
+alias cod='composer outdated --direct'
 
 # install composer in the current directory
 alias cget='curl -s https://getcomposer.org/installer | php'
