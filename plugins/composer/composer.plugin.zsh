@@ -44,6 +44,8 @@ alias ccp='composer create-project'
 alias cdu='composer dump-autoload'
 alias cgu='composer global update'
 alias cgr='composer global require'
+alias co='composer outdated'
+alias cod='composer outdated --direct'
 
 # install composer in the current directory
 alias cget='curl -s https://getcomposer.org/installer | php'
