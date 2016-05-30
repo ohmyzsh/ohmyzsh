@@ -13,6 +13,8 @@ function _rails_command () {
 function _rake_command () {
   if [ -e "bin/rake" ]; then
     bin/rake $@
+  elif type bundle &> /dev/null && [ -e "Gemfile" ]; then
+    bundle exec rake $@
   else
     command rake $@
   fi
