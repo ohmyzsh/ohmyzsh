@@ -25,6 +25,9 @@ alias gfl='git flow'
 alias gcd='git checkout develop'
 alias gch='git checkout hotfix'
 alias gcr='git checkout release'
+alias gff='git flow feature'
+alias gfh='git flow hotfix'
+alias gfr='git flow release'
 
 _git-flow ()
 {
