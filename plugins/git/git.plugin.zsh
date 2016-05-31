@@ -137,6 +137,8 @@ compdef _git ggu=git-checkout
 alias ggpur='ggu'
 compdef _git ggpur=git-checkout
 
+alias gh='git help'
+
 alias gignore='git update-index --assume-unchanged'
 alias gignored='git ls-files -v | grep "^[[:lower:]]"'
 alias git-svn-dcommit-push='git svn dcommit && git push github master:svntrunk'
