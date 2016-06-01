@@ -5,7 +5,7 @@
 
 alias ara='arc amend'
 alias arb='arc branch'
-alias arc='arc cover'
+alias arco='arc cover'
 alias arci='arc commit'
 
 alias ard='arc diff'
@@ -18,4 +18,4 @@ alias arh='arc help'
 alias arl='arc land'
 alias arli='arc lint'
 alias arls='arc list'
-alias arp='arc patch'
+alias arpa='arc patch'
