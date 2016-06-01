@@ -31,6 +31,9 @@ alias gflr='git flow release'
 alias gflfs='git flow feature start'
 alias gflhs='git flow hotfix start'
 alias gflrs='git flow release start'
+alias gflff='git flow feature finish'
+alias gflhf='git flow hotfix finish'
+alias gflrf='git flow release finish'
 
 _git-flow ()
 {
