@@ -23,7 +23,8 @@ git_mode() {
 
 git_dirty() {
   if [[ "$repo_path" != '.' && `git ls-files -m` != "" ]]; then
-    echo " %{$fg_bold[grey]%}✗%{$reset_color%}"
+    #echo " %{$fg_bold[grey]%}✗%{$reset_color%}"
+    echo " %{$fg_bold[grey]%}X%{$reset_color%}"
   fi
 }
 
