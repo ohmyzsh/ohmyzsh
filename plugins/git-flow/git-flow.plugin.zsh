@@ -22,6 +22,7 @@
 
 #Alias
 alias gfl='git flow'
+alias gfli='git flow init'
 alias gcd='git checkout develop'
 alias gch='git checkout hotfix'
 alias gcr='git checkout release'
