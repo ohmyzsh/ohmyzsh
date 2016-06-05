@@ -48,6 +48,7 @@ __build() {
         '--rm[Remove intermediate containers after a successful build]' \
         '(-t,--tag=)'{-t,--tag=}'[Repository name (and optionally a tag) to be applied to the resulting image in case of success]' \
         '*:files:_files'
+    __docker_images
 }
 
 __commit() {
@@ -194,10 +195,11 @@ __ps() {
 __pull() {
     _arguments \
         '(-t,--tag=)'{-t,--tag=}'[Download tagged image in repository]'
+    __docker_images
 }
 
 __push() {
-    # no arguments
+    __docker_images
 }
 
 __restart() {
