@@ -2,8 +2,21 @@
 
 ### NVM
 
+BUREAU_THEME_NVM_SHOW="${BUREAU_THEME_NVM_SHOW:-true}"
 ZSH_THEME_NVM_PROMPT_PREFIX="%B⬡%b "
-ZSH_THEME_NVM_PROMPT_SUFFIX=""
+ZSH_THEME_NVM_PROMPT_SUFFIX=" "
+
+### VIRTUALENV
+
+BUREAU_THEME_VENV_SHOW="${BUREAU_THEME_VENV_SHOW:-true}"
+BUREAU_THEME_VENV_PROMPT_PREFIX="%{$fg_bold[green]%}⟆ %{$fg_no_bold[green]%}"
+BUREAU_THEME_VENV_PROMPT_SUFFIX=" "
+
+### RUBY (RVM/RBENV/CHRUBY)
+
+BUREAU_THEME_RUBY_SHOW="${BUREAU_THEME_RUBY_SHOW:-true}"
+BUREAU_THEME_RUBY_PROMPT_PREFIX="%{$fg_bold[red]%}◊ %{$fg_no_bold[red]%}"
+BUREAU_THEME_RUBY_PROMPT_SUFFIX=" "
 
 ### Git [±master ▾●]
 
@@ -77,6 +90,31 @@ bureau_git_prompt () {
   echo $_result
 }
 
+bureau_venv_prompt() {
+  [[ $BUREAU_THEME_VENV_SHOW == false ]] && return
+
+  # Check if the current directory running via Virtualenv
+  [ -n "$VIRTUAL_ENV" ] && $(type deactivate >/dev/null 2>&1) || return
+  echo -n "${BUREAU_THEME_VENV_PROMPT_PREFIX}$(basename $VIRTUAL_ENV)${BUREAU_THEME_VENV_PROMPT_SUFFIX}%{$reset_color%}"
+}
+
+bureau_ruby_prompt() {
+  [[ $BUREAU_THEME_RUBY_SHOW == false ]] && return
+
+  if command -v rvm-prompt > /dev/null 2>&1; then
+    if rvm gemset list | grep "=> (default)" > /dev/null 2>&1; then
+      ruby_version=$(rvm-prompt i v g)
+    fi
+  elif command -v chruby > /dev/null 2>&1; then
+    ruby_version=$(chruby | sed -n -e 's/ \* //p')
+  elif command -v rbenv > /dev/null 2>&1; then
+    ruby_version=$(rbenv version | sed -e 's/ (set.*$//')
+  else
+    return
+  fi
+  echo -n "${BUREAU_THEME_RUBY_PROMPT_PREFIX}${ruby_version}${BUREAU_THEME_RUBY_PROMPT_SUFFIX}%{$reset_color%}"
+}
+
 
 _PATH="%{$fg_bold[white]%}%~%{$reset_color%}"
 
@@ -117,7 +155,8 @@ bureau_precmd () {
 
 setopt prompt_subst
 PROMPT='> $_LIBERTY '
-RPROMPT='$(nvm_prompt_info) $(bureau_git_prompt)'
+RPROMPT='$(nvm_prompt_info)$(bureau_venv_prompt)$(bureau_ruby_prompt)$(bureau_git_prompt)'
+
 
 autoload -U add-zsh-hook
 add-zsh-hook precmd bureau_precmd
