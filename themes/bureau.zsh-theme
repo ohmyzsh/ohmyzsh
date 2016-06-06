@@ -90,6 +90,11 @@ bureau_git_prompt () {
   echo $_result
 }
 
+bureau_nvm_prompt() {
+  [[ $BUREAU_THEME_NVM_SHOW == false ]] && return
+  echo -n "$(nvm_prompt_info)"
+}
+
 bureau_venv_prompt() {
   [[ $BUREAU_THEME_VENV_SHOW == false ]] && return
 
@@ -155,7 +160,7 @@ bureau_precmd () {
 
 setopt prompt_subst
 PROMPT='> $_LIBERTY '
-RPROMPT='$(nvm_prompt_info)$(bureau_venv_prompt)$(bureau_ruby_prompt)$(bureau_git_prompt)'
+RPROMPT='$(bureau_nvm_prompt)$(bureau_venv_prompt)$(bureau_ruby_prompt)$(bureau_git_prompt)'
 
 
 autoload -U add-zsh-hook
