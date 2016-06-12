@@ -23,7 +23,8 @@ git_mode() {
 
 git_dirty() {
   if [[ "$repo_path" != '.' && `git ls-files -m` != "" ]]; then
-    echo " %{$fg_bold[grey]%}✗%{$reset_color%}"
+    #echo " %{$fg_bold[grey]%}✗%{$reset_color%}"
+    echo " %{$fg_bold[grey]%}X%{$reset_color%}"
   fi
 }
 
@@ -35,10 +36,18 @@ git_prompt() {
   fi
 }
 
-local smiley="%(?,%{$fg[green]%}☺%{$reset_color%},%{$fg[red]%}☹%{$reset_color%})"
+local psign="%(?,%%,%{$fg[red]%}%%%{$reset_color%})"
+local user="%{$bg[blue]%}%n%{$reset_color%}"
+local host="%{$bg[blue]%}@%m%{$reset_color%}"
 
 PROMPT='
-%~
-${smiley}  %{$reset_color%}'
+${user}${host} %3~
+ ${psign} '
 
-RPROMPT='%{$fg[white]%} $(~/.rvm/bin/rvm-prompt)$(git_prompt)%{$reset_color%}'
+if [[ -d ~/.rvm ]]; then
+    rvm_prompt='$(~/.rvm/bin/rvm-prompt)'
+else
+    rvm_prompt=''
+fi
+
+RPROMPT='%{$fg[white]%} $rvm_prompt$(git_prompt)%{$reset_color%}'
