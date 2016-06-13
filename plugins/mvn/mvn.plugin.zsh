@@ -134,7 +134,7 @@ function listMavenCompletions {
 	# tomee
         tomee:run tomee:run-war tomee:run-war-only tomee:stop tomee:deploy tomee:undeploy	
         # spring-boot
-        spring-boot:run spring-boot:repackage
+        spring-boot:run spring-boot:repackage spring-boot:start spring-boot:stop
         # exec
         exec:exec exec:java
         # versions
