@@ -46,18 +46,26 @@ function drnew() {
 
   drush dl drupal --drupal-project-rename=$WEBSITE_NAME
 
-  echo "Moving to /var/www"
-  mv $WEBSITE_NAME /var/www
-  cd /var/www/$WEBSITE_NAME
+  echo "Type your localhost directory: (Leave empty for /var/www/html/)"
+  read DIRECTORY
+
+  if [[ $DIRECTORY == "" ]] then
+    DIRECTORY="/var/www/html/"
+  fi
+
+  echo "Moving to $DIRECTORY$WEBSITE_NAME"
+  sudo mv $WEBSITE_NAME $DIRECTORY
+  cd $DIRECTORY$WEBSITE_NAME
 
   echo "Database's user: "
   read DATABASE_USR
   echo "Database's password: "
   read -s DATABASE_PWD
-  echo "Database's name: "
+  echo "Database's name for your project: "
   read DATABASE
 
-  drush site-install standard --db-url="mysql://$DATABASE_USR:$DATABASE_PWD@localhost/$DATABASE" --site-name=$WEBSITE_NAME
+  DB_URL="mysql://$DATABASE_USR:$DATABASE_PWD@localhost/$DATABASE"
+  drush site-install standard --db-url=$DB_URL --site-name=$WEBSITE_NAME
 
   open_command $HOST$WEBSITE_NAME
   echo "Done"
