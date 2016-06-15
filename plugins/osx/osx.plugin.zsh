@@ -1,10 +1,3 @@
-# ------------------------------------------------------------------------------
-#          FILE:  osx.plugin.zsh
-#   DESCRIPTION:  oh-my-zsh plugin file.
-#        AUTHOR:  Sorin Ionescu (sorin.ionescu@gmail.com)
-#       VERSION:  1.1.0
-# ------------------------------------------------------------------------------
-
 # Open the current directory in a Finder window
 alias ofd='open_command $PWD'
 
@@ -154,14 +147,6 @@ function pfd() {
 EOF
 }
 
-function ofd() {
-  osascript 2>/dev/null <<EOF
-    tell application "Finder" 
-      open POSIX file "$PWD"
-    end tell
-EOF
-}
-
 function pfs() {
   osascript 2>/dev/null <<EOF
     set output to ""
@@ -190,6 +175,7 @@ function quick-look() {
 function man-preview() {
   man -t "$@" | open -f -a Preview
 }
+compdef man-preview=man
 
 function vncviewer() {
   open vnc://$@
