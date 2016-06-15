@@ -151,6 +151,14 @@ function pfd() {
 EOF
 }
 
+function ofd() {
+  osascript 2>/dev/null <<EOF
+    tell application "Finder" 
+      open POSIX file "$PWD"
+    end tell
+EOF
+}
+
 function pfs() {
   osascript 2>/dev/null <<EOF
     set output to ""
