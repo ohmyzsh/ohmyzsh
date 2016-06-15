@@ -154,7 +154,7 @@ EOF
 function ofd() {
   osascript 2>/dev/null <<EOF
     tell application "Finder" 
-      open POSIX file "`pwd`"
+      open POSIX file "$PWD"
     end tell
 EOF
 }
