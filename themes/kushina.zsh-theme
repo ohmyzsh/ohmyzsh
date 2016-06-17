@@ -11,7 +11,7 @@ else
 fi
 
 # Get the host name (first 4 chars)
-HOST_PROMPT_="%{$fg_bold[red]%}@$HOST[0,8] at %{$fg_bold[cyan]%}%c "
+HOST_PROMPT_="%{$fg_bold[red]%}@$HOST[0,7] at %{$fg_bold[cyan]%}%c "
 GIT_PROMPT_="%{$fg_bold[blue]%}\$(git_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}"
 # http://stackoverflow.com/questions/3005963/how-can-i-have-a-newline-in-a-string-in-sh
 STR=$'\n%{$fg_bold[red]%}➜ %{$reset_color%}'
