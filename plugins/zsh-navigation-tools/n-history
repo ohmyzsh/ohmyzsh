@@ -157,7 +157,7 @@ _nhistory_generate_most_frequent() {
         vk+="$v"$'\t'"$k"
     done
 
-    print -rl "$title" "${(On)vk[@]}" > "$most_frequent_db"
+    print -rl -- "$title" "${(On)vk[@]}" > "$most_frequent_db"
 }
 
 # Load configuration
@@ -337,16 +337,16 @@ if [ "$REPLY" -gt 0 ]; then
     selected="$reply[REPLY]"
     # ZLE?
     if [ "${(t)CURSOR}" = "integer-local-special" ]; then
-        zle redisplay
-        zle kill-buffer
+        zle .redisplay
+        zle .kill-buffer
         LBUFFER+="$selected"
 
         # Append to private history
         local newline=$'\n'
         selected="${selected//$newline/\\$newline}"
-        [ "$active_view" = "0" ] && print -r "$selected" >> "$private_history_db"
+        [ "$active_view" = "0" ] && print -r -- "$selected" >> "$private_history_db"
     else
-        print -zr "$selected"
+        print -zr -- "$selected"
     fi
 else
     [ "${(t)CURSOR}" = "integer-local-special" ] && zle redisplay
