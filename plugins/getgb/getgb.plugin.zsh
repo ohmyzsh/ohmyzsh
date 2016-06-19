@@ -15,6 +15,7 @@ function _gb_commands() {
           "info:info returns information about this project"
           "list:list the packages named by the importpaths"
           "test:test packages"
+          "vendor:manage your vendored dependencies"
         )
         _describe -t subcommands 'gb subcommands' subcommands && ret=0
       ;;
@@ -48,6 +49,8 @@ function _gb_commands() {
               -race'[enable data race detection]' \
               -tags'["tag list" additional build tags]'
             ;;
+          (vendor)
+            __gb-vendor
         esac
       ;;
     esac
@@ -56,3 +59,56 @@ function _gb_commands() {
 }
 
 compdef _gb_commands gb
+
+__gb-vendor ()
+{
+  local curcontext="$curcontext" state line
+
+  _arguments -C ':command:->command' '*::options:->options'
+
+	case $state in
+		(command)
+
+			local -a subcommands
+			subcommands=(
+				'delete:deletes a local dependency'
+				'fetch:fetch a remote dependency'
+				'list:lists dependencies, one per line'
+        'purge:remove all unreferenced dependencies'
+				'restore:restore dependencies from the manifest'
+				'update:update a local dependency'
+			)
+			_describe -t subcommands 'gb vendor subcommands' subcommands && ret=0
+		;;
+
+		(options)
+			case $line[1] in
+				(delete)
+					_arguments \
+						-all'[remove all dependencies]'
+				  ;;
+        (fetch)
+          _arguments \
+            -branch'[fetch from a particular branch]' \
+            -no-recurse'[do not fetch recursively]' \
+            -tag'[fetch the specified tag]' \
+            -revision'[fetch the specific revision from the branch (if supplied)]' \
+            -precaire'[allow the use of insecure protocols]' \
+          ;;
+        (list)
+          _arguments \
+            -f'[controls the template used for printing each manifest entry]'
+          ;;
+        (restore)
+          _arguments \
+            -precaire'[allow the use of insecure protocols]'
+          ;;
+        (update)
+          _arguments \
+            -all'[update all dependencies in the manifest or supply a given dependency]' \
+            -precaire'[allow the use of insecure protocols]'
+          ;;
+			esac
+		;;
+	esac
+}
