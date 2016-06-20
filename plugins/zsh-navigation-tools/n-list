@@ -445,7 +445,10 @@ while (( 1 )); do
 
     [ "$border" = "1" ] && zcurses border main
 
-    local top_msg=" F1-change view, ${(C)ZSH_NAME} $ZSH_VERSION, shell level $SHLVL "
+    local top_msg=" ${(C)ZSH_NAME} $ZSH_VERSION, shell level $SHLVL "
+    if [[ "${NLIST_ENABLED_EVENTS[(r)F1]}" = "F1" ]]; then
+        top_msg=" F1-change view,$top_msg"
+    fi
     zcurses move main 0 $(( term_width / 2 - $#top_msg / 2 ))
     zcurses string main $top_msg
 

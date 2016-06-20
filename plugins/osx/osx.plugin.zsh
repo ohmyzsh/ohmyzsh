@@ -1,9 +1,5 @@
-# ------------------------------------------------------------------------------
-#          FILE:  osx.plugin.zsh
-#   DESCRIPTION:  oh-my-zsh plugin file.
-#        AUTHOR:  Sorin Ionescu (sorin.ionescu@gmail.com)
-#       VERSION:  1.1.0
-# ------------------------------------------------------------------------------
+# Open the current directory in a Finder window
+alias ofd='open_command $PWD'
 
 function _omz_osx_get_frontmost_app() {
   local the_app=$(
@@ -179,6 +175,7 @@ function quick-look() {
 function man-preview() {
   man -t "$@" | open -f -a Preview
 }
+compdef man-preview=man
 
 function vncviewer() {
   open vnc://$@

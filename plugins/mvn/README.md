@@ -15,6 +15,7 @@ plugins=(... mvn)
 | `mvncie`             | `mvn clean install eclipse:eclipse`             |
 | `mvnci`              | `mvn clean install`                             |
 | `mvncist`            | `mvn clean install -DskipTests`                 |
+| `mvncisto`           | `mvn clean install -DskipTests --offline`       |
 | `mvne`               | `mvn eclipse:eclipse`                           |
 | `mvnd`               | `mvn deploy`                                    |
 | `mvnp`               | `mvn package`                                   |
