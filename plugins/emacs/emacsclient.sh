@@ -1,6 +1,6 @@
 #!/bin/sh
 
-function _emacsfun
+_emacsfun()
 {
     # get list of available X windows.
     x=`emacsclient --alternate-editor '' --eval '(x-display-list)' 2>/dev/null`
@@ -18,7 +18,8 @@ function _emacsfun
 # adopted from https://github.com/davidshepherd7/emacs-read-stdin/blob/master/emacs-read-stdin.sh
 # If the second argument is - then write stdin to a tempfile and open the
 # tempfile. (first argument will be `--no-wait` passed in by the plugin.zsh)
-if [[ $# -ge 2 ]] && [[ "$2" == - ]]; then
+if [ "$#" -ge "2" -a "$2" = "-" ]
+then
     tempfile="$(mktemp emacs-stdin-$USER.XXXXXXX --tmpdir)"
     cat - > "$tempfile"
     _emacsfun --no-wait $tempfile
