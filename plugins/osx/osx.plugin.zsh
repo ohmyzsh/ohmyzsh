@@ -175,7 +175,7 @@ function quick-look() {
 function man-preview() {
   man -t "$@" | open -f -a Preview
 }
-compdef man-preview=man
+compdef _man man-preview
 
 function vncviewer() {
   open vnc://$@
