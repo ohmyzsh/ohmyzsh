@@ -1,0 +1,23 @@
+#compdef react-native
+#autoload
+
+local -a _1st_arguments
+_1st_arguments=(
+    'start:starts the webserver'
+    'bundle:builds the javascript bundle for offline use'
+    'new-library:generates a native library bridge'
+    'android:generates an Android project for your app'
+    'run-android:builds your app and starts it on a connected Android emulator or device'
+    'upgrade:upgrade your apps template files to the latest version; run this after updating the react-native version in your package.json and running npm install'
+)
+
+
+_arguments \
+    '(--version)--version[show version]' \
+    '(--help)--help[show help]' \
+    '*:: :->subcmds' && return 0
+
+if (( CURRENT == 1 )); then
+  _describe -t commands "react-native subcommand" _1st_arguments
+  return
+fi

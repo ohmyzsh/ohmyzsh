@@ -38,7 +38,7 @@ if [[ ! $DISABLE_VENV_CD -eq 1 ]]; then
       local WORKON_CWD=1
       # Check if this is a Git repo
       local GIT_REPO_ROOT=""
-      local GIT_TOPLEVEL=$(git rev-parse --show-toplevel 2> /dev/null)
+      local GIT_TOPLEVEL="$(git rev-parse --show-toplevel 2> /dev/null)"
       if [[ $? == 0 ]]; then
         GIT_REPO_ROOT="$GIT_TOPLEVEL"
       fi
@@ -53,7 +53,7 @@ if [[ ! $DISABLE_VENV_CD -eq 1 ]]; then
       fi
       # Check for virtualenv name override
       if [[ -f "$PROJECT_ROOT/.venv" ]]; then
-        ENV_NAME=`cat "$PROJECT_ROOT/.venv"`        
+        ENV_NAME="$(cat "$PROJECT_ROOT/.venv")"
       elif [[ -f "$PROJECT_ROOT/.venv/bin/activate" ]];then
         ENV_NAME="$PROJECT_ROOT/.venv"
       elif [[ "$PROJECT_ROOT" != "." ]]; then

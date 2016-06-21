@@ -26,6 +26,9 @@ fi
 # oh-my-zsh directory.
 [[ -w "$ZSH" ]] || return 0
 
+# Cancel upgrade if git is unavailable on the system
+whence git >/dev/null || return 0
+
 if [ -f ~/.zsh-update ]
 then
   . ~/.zsh-update
@@ -43,7 +46,7 @@ then
     else
       echo "[Oh My Zsh] Would you like to check for updates? [Y/n]: \c"
       read line
-      if [ "$line" = Y ] || [ "$line" = y ] || [ -z "$line" ]; then
+      if [[ "$line" == Y* ]] || [[ "$line" == y* ]] || [ -z "$line" ]; then
         _upgrade_zsh
       else
         _update_zsh_update
@@ -54,4 +57,3 @@ else
   # create the zsh file
   _update_zsh_update
 fi
-

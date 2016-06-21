@@ -19,7 +19,7 @@ function _frontend() {
   commands=(
     'jquery: Search in jQuery website'
     'mdn: Search in MDN website'
-    'compass: Search in COMPASS website'
+    'compassdoc: Search in COMPASS website'
     'html5please: Search in HTML5 Please website'
     'caniuse: Search in Can I Use website'
     'aurajs: Search in AuraJs website'
@@ -37,6 +37,7 @@ function _frontend() {
     'reactjs: Search in React website'
     'emberjs: Search in Ember website'
     'stackoverflow: Search in StackOverflow website'
+    'npmjs: Search in NPMJS website'
   )
 
   _arguments -C \
@@ -56,7 +57,7 @@ function _frontend() {
         mdn)
           _describe -t points "Warp points" frontend_points && ret=0
           ;;
-        compass)
+        compassdoc)
           _describe -t points "Warp points" frontend_points && ret=0
           ;;
         html5please)
@@ -108,6 +109,9 @@ function _frontend() {
           _describe -t points "Warp points" frontend_points && ret=0
           ;;
         stackoverflow)
+          _describe -t points "Warp points" frontend_points && ret=0
+          ;;
+        npmjs)
           _describe -t points "Warp points" frontend_points && ret=0
           ;;
       esac

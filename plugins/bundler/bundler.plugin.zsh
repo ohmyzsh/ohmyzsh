@@ -2,6 +2,7 @@ alias be="bundle exec"
 alias bl="bundle list"
 alias bp="bundle package"
 alias bo="bundle open"
+alias bout="bundle outdated"
 alias bu="bundle update"
 alias bi="bundle_install"
 alias bcn="bundle clean"
@@ -57,7 +58,7 @@ bundle_install() {
     if [[ $bundler_version > '1.4.0' || $bundler_version = '1.4.0' ]]; then
       if [[ "$OSTYPE" = darwin* ]]
       then
-        local cores_num="$(sysctl hw.ncpu | awk '{print $2}')"
+        local cores_num="$(sysctl -n hw.ncpu)"
       else
         local cores_num="$(nproc)"
       fi

@@ -11,7 +11,7 @@ Preview the compiled result of your coffeescript with `cf "code"` as per the
 following:
 
 ```zsh
-$ cf 'if a then be else c'
+$ cf 'if a then b else c'
 if (a) {
   b;
 } else {

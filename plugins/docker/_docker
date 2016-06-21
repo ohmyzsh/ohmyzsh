@@ -27,7 +27,7 @@ __docker_all_containers() {
 # output a selectable list of all docker images
 __docker_images() {
     declare -a img_cmd
-    img_cmd=($(docker images | awk 'NR>1{print $1}'))
+    img_cmd=($(docker images | awk 'NR>1{print $1}'| sed 's/:/\\:/g'))
     _describe 'images' img_cmd
 }
 

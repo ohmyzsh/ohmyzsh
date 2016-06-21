@@ -2,14 +2,11 @@ _homebrew-installed() {
   type brew &> /dev/null
 }
 
-_rbenv-from-homebrew-installed() {
-  brew --prefix rbenv &> /dev/null
-}
-
 FOUND_RBENV=0
 rbenvdirs=("$HOME/.rbenv" "/usr/local/rbenv" "/opt/rbenv" "/usr/local/opt/rbenv")
-if _homebrew-installed && _rbenv-from-homebrew-installed ; then
-    rbenvdirs=($(brew --prefix rbenv) "${rbenvdirs[@]}")
+if _homebrew-installed && rbenv_homebrew_path=$(brew --prefix rbenv 2>/dev/null); then
+    rbenvdirs=($rbenv_homebrew_path "${rbenvdirs[@]}")
+    unset rbenv_homebrew_path
 fi
 
 for rbenvdir in "${rbenvdirs[@]}" ; do
