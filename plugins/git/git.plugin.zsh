@@ -78,6 +78,7 @@ alias gcp='git cherry-pick'
 alias gcs='git commit -S'
 
 alias gd='git diff'
+alias gda='git checkout -- .'
 alias gdca='git diff --cached'
 alias gdct='git describe --tags `git rev-list --tags --max-count=1`'
 alias gdt='git diff-tree --no-commit-id --name-only -r'
