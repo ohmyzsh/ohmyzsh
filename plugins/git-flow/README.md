@@ -16,9 +16,21 @@
        
     $ source ~/.git-flow-completion.zsh
 ```
-## Git flow
+## Your new git-flow alias 
 
 ```bash
-apt-get install git-flow
-```
-
+alias gfl='git flow'
+alias gfli='git flow init'
+alias gcd='git checkout develop'
+alias gch='git checkout hotfix'
+alias gcr='git checkout release'
+alias gflf='git flow feature'
+alias gflh='git flow hotfix'
+alias gflr='git flow release'
+alias gflfs='git flow feature start'
+alias gflhs='git flow hotfix start'
+alias gflrs='git flow release start'
+alias gflff='git flow feature finish'
+alias gflhf='git flow hotfix finish'
+alias gflrf='git flow release finish'
+``` 
