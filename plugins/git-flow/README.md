@@ -1,12 +1,14 @@
 # Git flow plugin installation
 
-    1) $ git clone https://github.com/robbyrussell/oh-my-zsh.git 
+```bash
 
-    2) $ cp oh-my-zsh/plugins/git-flow/git-flow.plugin.zsh ~/.git-flow-completion.zsh
+git clone https://github.com/robbyrussell/oh-my-zsh.git 
 
-    3) $ gedit ~/.zshrc
+cp oh-my-zsh/plugins/git-flow/git-flow.plugin.zsh ~/.git-flow-completion.zsh
 
-    4) add git-flow in plugins like this plugins=(git git-flow)
+vi ~/.zshrc
+
+```
 
 ```bash
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
