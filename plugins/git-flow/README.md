@@ -16,4 +16,9 @@
        
     $ source ~/.git-flow-completion.zsh
 ```
+## Git flow
+
+```bash
+apt-get install git-flow
+```
 
