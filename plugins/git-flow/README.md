@@ -2,11 +2,11 @@
 
 ```bash
 
-git clone https://github.com/robbyrussell/oh-my-zsh.git 
+    $ git clone https://github.com/robbyrussell/oh-my-zsh.git 
 
-cp oh-my-zsh/plugins/git-flow/git-flow.plugin.zsh ~/.git-flow-completion.zsh
+    $ cp oh-my-zsh/plugins/git-flow/git-flow.plugin.zsh ~/.git-flow-completion.zsh
 
-vi ~/.zshrc
+    $ vim ~/.zshrc
 
     # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
     # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
