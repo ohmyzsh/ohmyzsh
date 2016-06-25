@@ -37,7 +37,7 @@ function _plugin__start_agent()
   zstyle -s :omz:plugins:ssh-agent lifetime lifetime
 
   # start ssh-agent and setup environment
-  /usr/bin/env ssh-agent ${lifetime:+-t} ${lifetime} | sed 's/^echo/#echo/' > ${_plugin__ssh_env}
+  (umask 0077; /usr/bin/env ssh-agent ${lifetime:+-t} ${lifetime} | sed 's/^echo/#echo/' > ${_plugin__ssh_env})
   chmod 600 ${_plugin__ssh_env}
   . ${_plugin__ssh_env} > /dev/null
 
@@ -60,7 +60,10 @@ fi
 zstyle -b :omz:plugins:ssh-agent agent-forwarding _plugin__forwarding
 if [[ ${_plugin__forwarding} == "yes" && -n "$SSH_AUTH_SOCK" ]]; then
   # Add a nifty symlink for screen/tmux if agent forwarding
-  [[ -L $SSH_AUTH_SOCK ]] || ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USER-screen
+  if [[ ! -L $SSH_AUTH_SOCK ]]; then
+    (umask 0077; ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USER-screen)
+    export SSH_AUTH_SOCK="/tmp/ssh-agent-$USER-screen"
+  fi
 
 elif [ -f "${_plugin__ssh_env}" ]; then
   # Source SSH settings, if applicable
