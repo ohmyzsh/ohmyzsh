@@ -167,6 +167,13 @@ prompt_dir() {
   prompt_segment blue black '%~'
 }
 
+# Nvm: current node version if nvmrc is present.
+prompt_nvm() {
+  if [[ -f .nvmrc && -r .nvmrc ]]; then
+    prompt_segment black green "⬡ $(nvm_prompt_info)"
+  fi
+}
+
 # Virtualenv: current working virtualenv
 prompt_virtualenv() {
   local virtualenv_path="$VIRTUAL_ENV"
@@ -194,6 +201,7 @@ build_prompt() {
   RETVAL=$?
   prompt_status
   prompt_virtualenv
+  prompt_nvm
   prompt_context
   prompt_dir
   prompt_git
