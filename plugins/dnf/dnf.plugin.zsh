@@ -1,11 +1,11 @@
 ## Aliases
 
-alias dnfl="dnf list"                       # List packages
-alias dnfli="dnf list installed"            # List installed packages
-alias dnfgl="dnf grouplist"                 # List package groups
-alias dnfmc="dnf makecache"                 # Generate metadata cache
-alias dnfp="dnf info"                       # Show package information
-alias dnfs="dnf search"                     # Search package
+alias dnfl="sudo dnf list"                  # List packages
+alias dnfli="sudo dnf list installed"       # List installed packages
+alias dnfgl="sudo dnf grouplist"            # List package groups
+alias dnfmc="sudo dnf makecache"            # Generate metadata cache
+alias dnfp="sudo dnf info"                  # Show package information
+alias dnfs="sudo dnf search"                # Search package
 
 alias dnfu="sudo dnf upgrade"               # Upgrade package
 alias dnfi="sudo dnf install"               # Install package
