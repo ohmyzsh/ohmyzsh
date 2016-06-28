@@ -62,3 +62,6 @@ unsetopt correctall
 if [ -e ~/.profile ]; then source ~/.profile; fi
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+
+# added by travis gem
+[ -f /Users/gaetan/.travis/travis.sh ] && source /Users/gaetan/.travis/travis.sh
