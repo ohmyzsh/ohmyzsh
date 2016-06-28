@@ -41,4 +41,10 @@ PROMPT='
 %~
 ${smiley}  %{$reset_color%}'
 
-RPROMPT='%{$fg[white]%} $(~/.rvm/bin/rvm-prompt)$(git_prompt)%{$reset_color%}'
+if [[ -d ~/.rvm ]] && [[ -e ~/.rvm/bin/rvm-prompt ]]; then
+    rvm_prompt='$(~/.rvm/bin/rvm-prompt)'
+else
+    rvm_prompt=''
+fi
+
+RPROMPT='%{$fg[white]%} $rvm_prompt$(git_prompt)%{$reset_color%}'
