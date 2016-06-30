@@ -24,12 +24,10 @@ main() {
   # which may fail on systems lacking tput or terminfo
   set -e
 
-  CHECK_ZSH_INSTALLED=$(grep /zsh$ /etc/shells | wc -l)
-  if [ ! $CHECK_ZSH_INSTALLED -ge 1 ]; then
+  if ! type zsh >/dev/null 2>&1; then
     printf "${YELLOW}Zsh is not installed!${NORMAL} Please install zsh first!\n"
     exit
   fi
-  unset CHECK_ZSH_INSTALLED
 
   if [ ! -n "$ZSH" ]; then
     ZSH=~/.oh-my-zsh
@@ -62,10 +60,18 @@ main() {
     fi
   fi
   env git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git $ZSH || {
-    printf "Error: git clone of oh-my-zsh repo failed\n"
-    exit 1
+    printf "Error: git clone of oh-my-zsh repo failed (https)\n"
+    GIT_CLONE_ERROR=1
   }
-
+  # Support for git compiled without SSL
+  if [ $GIT_CLONE_ERROR -ge 1 ]; then
+    printf "Retry with ssh\n"
+    env git clone --depth=1 git@github.com:robbyrussell/oh-my-zsh.git $ZSH || {
+      printf "Error: git clone of oh-my-zsh repo failed (ssh)\n"
+      exit 1
+    }
+  fi
+  unset GIT_CLONE_ERROR
 
   printf "${BLUE}Looking for an existing zsh config...${NORMAL}\n"
   if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]; then
