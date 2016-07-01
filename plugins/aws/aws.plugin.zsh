@@ -30,8 +30,8 @@ compctl -K aws_profiles asp
 if _homebrew-installed && _awscli-homebrew-installed ; then
   _aws_zsh_completer_path=$(brew --prefix awscli)/libexec/bin/aws_zsh_completer.sh
 else
-  _aws_zsh_completer_path=$(which aws_zsh_completer.sh)
+  _aws_zsh_completer_path=$(which aws_zsh_completer.sh 2>/dev/null)
 fi
 
-[ -x $_aws_zsh_completer_path ] && source $_aws_zsh_completer_path
+[ -n "$_aws_zsh_completer_path" ] && [ -x $_aws_zsh_completer_path ] && source $_aws_zsh_completer_path
 unset _aws_zsh_completer_path
