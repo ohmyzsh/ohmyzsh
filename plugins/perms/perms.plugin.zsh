@@ -1,47 +1,78 @@
-# http://gneatgeek.github.io
-# Rory Hardy [GneatGeek]
 # Some useful commands for setting permissions.
+#
+# Rory Hardy [GneatGeek]
+# Andrew Janke [apjanke]
 
 ### Aliases
 
 # Set all files' permissions to 644 recursively in a directory
-alias set644='find -type f -exec chmod 644 {} \;'
- 
+alias set644='find . -type f -print0 | xargs -0 chmod 644'
+
 # Set all directories' permissions to 755 recursively in a directory
-alias set755='find -type d -exec chmod 755 {} \;'
+alias set755='find . -type d -print0 | xargs -0 chmod 755'
 
 ### Functions
 
-# fixperms - useful combination of the above two aliases. Will apply to supplied dir or current dir.
+# fixperms - fix permissions on files and directories, with confirmation
+# Returns 0 on success, nonzero if any errors occurred
 fixperms () {
-  if [ "${#}" -gt "1" -o  "${1}" = "--help" ]; then
-    echo "Usage: fixperms [source]"
-  else
-    confirm=""
-    while [ "${confirm}" = "" -o "${confirm}" = "y" ]; do
-      if [ -d "${1}" ]; then
-        if [ "${confirm}" = "" ]; then
-          echo "Fixing perms on ${1}?"
-        else
-          find "${1}" -type f -exec chmod 644 {} \;
-          find "${1}" -type d -exec chmod 755 {} \;
-        fi
-      else
-        if [ "${confirm}" = "" ]; then
-          echo "Fixing perms on ${PWD##*/}?"
-        else
-          find -type f -exec chmod 644 {} \;
-          find -type d -exec chmod 755 {} \;
-        fi
-      fi
-      if [ "${confirm}" = "" ]; then
-        echo "Proceed? (y|n) "
-        read confirm
-      else
-        echo "Complete"
-        confirm=n
-      fi
-    done
-  fi
-}
+  local opts confirm target exit_status chmod_opts use_slow_mode
+  zparseopts -E -D -a opts -help -slow v+=chmod_opts
+  if [[ $# > 1 || -n "${opts[(r)--help]}" ]]; then
+    cat <<EOF
+Usage: fixperms [-v] [--help] [--slow] [target]
 
+  target  is the file or directory to change permissions on. If omitted,
+          the current directory is taken to be the target.
+
+  -v      enables verbose output (may be supplied multiple times)
+
+  --slow  will use a slower but more robust mode, which is effective if
+          directories themselves have permissions that forbid you from
+          traversing them.
+
+EOF
+    exit_status=$(( $# > 1 ))
+    return $exit_status
+  fi
+
+  if [[ $# == 0 ]]; then
+    target="."
+  else
+    target="$1"
+  fi
+  if [[ -n ${opts[(r)--slow]} ]]; then use_slow=true; else use_slow=false; fi
+
+  # Because this requires confirmation, bail in noninteractive shells
+  if [[ ! -o interactive ]]; then
+    echo "fixperms: cannot run in noninteractive shell"
+    return 1
+  fi
+
+  echo "Fixing perms on $target?"
+  printf '%s' "Proceed? (y|n) "
+  read confirm
+  if [[ "$confirm" != y ]]; then
+    # User aborted
+    return 1
+  fi
+
+  # This xargs form is faster than -exec chmod <N> {} \; but will encounter
+  # issues if the directories themselves have permissions such that you can't
+  # recurse in to them. If that happens, just rerun this a few times.
+  exit_status=0;
+  if [[ $use_slow == true ]]; then
+    # Process directories first so non-traversable ones are fixed as we go
+    find "$target" -type d -exec chmod $chmod_opts 755 {} \;
+    if [[ $? != 0 ]]; then exit_status=$?; fi
+    find "$target" -type f -exec chmod $chmod_opts 644 {} \;
+    if [[ $? != 0 ]]; then exit_status=$?; fi
+  else
+    find "$target" -type d -print0 | xargs -0 chmod $chmod_opts 755
+    if [[ $? != 0 ]]; then exit_status=$?; fi
+    find "$target" -type f -print0 | xargs -0 chmod $chmod_opts 644
+    if [[ $? != 0 ]]; then exit_status=$?; fi
+  fi
+  echo "Complete"
+  return $exit_status
+}
