@@ -1,3 +1,6 @@
+#compdef gb
+#autoload
+
 _gb () {
 	local ret=1 state
 	_arguments -C ':command:->command' '*::options:->options' && ret=0
@@ -56,8 +59,6 @@ _gb () {
 	return ret
 }
 
-compdef _gb gb
-
 _gb-vendor () {
 	local curcontext="$curcontext" state line
 	_arguments -C ':command:->command' '*::options:->options'
@@ -106,3 +107,5 @@ _gb-vendor () {
 		;;
 	esac
 }
+
+_gb
