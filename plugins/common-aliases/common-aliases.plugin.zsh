@@ -8,6 +8,7 @@ alias la='ls -lAFh'   #long list,show almost all,show type,human readable
 alias lr='ls -tRFh'   #sorted by date,recursive,show type,human readable
 alias lt='ls -ltFh'   #long list,sorted by date,show type,human readable
 alias ll='ls -l'      #long list
+alias lh='ls -lh'     #humane long list
 alias ldot='ls -ld .*'
 alias lS='ls -1FSsh'
 alias lart='ls -1Fcart'
@@ -44,11 +45,19 @@ alias p='ps -f'
 alias sortnr='sort -n -r'
 alias unexport='unset'
 
-alias whereami=display_info
-
 alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
+
+# Aliases for setting file permissions
+for p (r w x); do
+    for o (+ -); do
+        for d (a g o u); do
+            alias "s$d$o$p"="sudo chmod $d$o$p"
+            alias "$d$o$p"="chmod $d$o$p"
+        done
+    done
+done
 
 # zsh is able to auto-do some kungfoo
 # depends on the SUFFIX :)
@@ -83,4 +92,3 @@ fi
 
 # Make zsh know about hosts already accessed by SSH
 zstyle -e ':completion:*:(ssh|scp|sftp|rsh|rsync):hosts' hosts 'reply=(${=${${(f)"$(cat {/etc/ssh_,~/.ssh/known_}hosts(|2)(N) /dev/null)"}%%[# ]*}//,/ })'
-
