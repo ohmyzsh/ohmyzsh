@@ -128,6 +128,10 @@ prompt_git() {
 }
 
 prompt_hg() {
+  which hg > /dev/null 2>&1
+  if [[ $? -ne 0 ]]; then
+    return
+  fi
   local rev status
   if $(hg id >/dev/null 2>&1); then
     if $(hg prompt >/dev/null 2>&1); then
