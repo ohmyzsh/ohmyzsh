@@ -45,6 +45,14 @@ ZSH_THEME="robbyrussell"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
+# If you want exclude some modules from loading,
+# you'll need to specify file names only (without extension) to do this.
+# Example: config_exclude=(bzr)
+# This will prevent loading ${ZSH}/lib/bzr.zsh and ${ZSH_CUSTOM}/lib/bzr.zsh,
+# if any.
+# However, you may load modules by yourself in any time.
+config_exclude=()
+
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)

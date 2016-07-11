@@ -27,12 +27,16 @@ fi
 
 
 # Load all of the config files in ~/oh-my-zsh that end in .zsh
-# TIP: Add files you don't want in git to .gitignore
-for config_file ($ZSH/lib/*.zsh); do
+# TIP: Add file names you don't want in array "config_exclude"
+for config_file (${ZSH}/lib/*.zsh); do
+  config_name=${config_file:r:t}
   custom_config_file="${ZSH_CUSTOM}/lib/${config_file:t}"
+  if [ -n "${config_exclude[(r)${config_name}]}" ]; then
+    continue
+  fi
   [ -f "${custom_config_file}" ] && config_file=${custom_config_file}
-  source $config_file
-done
+  source ${config_file}
+done; unset config_file config_name custom_config_file
 
 
 is_plugin() {
