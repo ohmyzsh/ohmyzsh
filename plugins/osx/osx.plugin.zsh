@@ -1,33 +1,35 @@
-# ------------------------------------------------------------------------------
-#          FILE:  osx.plugin.zsh
-#   DESCRIPTION:  oh-my-zsh plugin file.
-#        AUTHOR:  Sorin Ionescu (sorin.ionescu@gmail.com)
-#       VERSION:  1.1.0
-# ------------------------------------------------------------------------------
+# Open the current directory in a Finder window
+alias ofd='open_command $PWD'
 
-function tab() {
-  local command="cd \\\"$PWD\\\"; clear; "
-  (( $# > 0 )) && command="${command}; $*"
-
-  the_app=$(
+function _omz_osx_get_frontmost_app() {
+  local the_app=$(
     osascript 2>/dev/null <<EOF
       tell application "System Events"
         name of first item of (every process whose frontmost is true)
       end tell
 EOF
   )
+  echo "$the_app"
+}
 
-  [[ "$the_app" == 'Terminal' ]] && {
-    osascript 2>/dev/null <<EOF
+function tab() {
+  # Must not have trailing semicolon, for iTerm compatibility
+  local command="cd \\\"$PWD\\\"; clear"
+  (( $# > 0 )) && command="${command}; $*"
+
+  local the_app=$(_omz_osx_get_frontmost_app)
+
+  if [[ "$the_app" == 'Terminal' ]]; then
+    # Discarding stdout to quash "tab N of window id XXX" output
+    osascript >/dev/null <<EOF
       tell application "System Events"
         tell process "Terminal" to keystroke "t" using command down
-        tell application "Terminal" to do script "${command}" in front window
       end tell
+      tell application "Terminal" to do script "${command}" in front window
 EOF
-  }
 
-  [[ "$the_app" == 'iTerm' ]] && {
-    osascript 2>/dev/null <<EOF
+  elif [[ "$the_app" == 'iTerm' ]]; then
+    osascript <<EOF
       tell application "iTerm"
         set current_terminal to current terminal
         tell current_terminal
@@ -39,24 +41,33 @@ EOF
         end tell
       end tell
 EOF
-  }
+
+  elif [[ "$the_app" == 'iTerm2' ]]; then
+      osascript <<EOF
+        tell application "iTerm"
+          tell current window
+            create tab with default profile
+            tell current session to write text "${command}"
+          end tell
+        end tell
+EOF
+
+  else
+    echo "tab: unsupported terminal app: $the_app"
+    false
+
+  fi
 }
 
 function vsplit_tab() {
-  local command="cd \\\"$PWD\\\""
+  local command="cd \\\"$PWD\\\"; clear"
   (( $# > 0 )) && command="${command}; $*"
 
-  the_app=$(
-    osascript 2>/dev/null <<EOF
-      tell application "System Events"
-        name of first item of (every process whose frontmost is true)
-      end tell
-EOF
-  )
+  local the_app=$(_omz_osx_get_frontmost_app)
 
-  [[ "$the_app" == 'iTerm' ]] && {
-    osascript 2>/dev/null <<EOF
-      tell application "iTerm" to activate
+  if [[ "$the_app" == 'iTerm' ]]; then
+    osascript <<EOF
+      -- tell application "iTerm" to activate
 
       tell application "System Events"
         tell process "iTerm"
@@ -64,26 +75,37 @@ EOF
             click
           end tell
         end tell
-        keystroke "${command}; clear;"
-        keystroke return
+        keystroke "${command} \n"
       end tell
 EOF
-  }
+
+  elif [[ "$the_app" == 'iTerm2' ]]; then
+      osascript <<EOF
+        tell application "iTerm"
+          tell current session of first window
+            set newSession to (split vertically with same profile)
+            tell newSession
+              write text "${command}"
+              select
+            end tell
+          end tell
+        end tell
+EOF
+
+  else
+    echo "$0: unsupported terminal app: $the_app" >&2
+    false
+
+  fi
 }
 
 function split_tab() {
-  local command="cd \\\"$PWD\\\""
+  local command="cd \\\"$PWD\\\"; clear"
   (( $# > 0 )) && command="${command}; $*"
 
-  the_app=$(
-    osascript 2>/dev/null <<EOF
-      tell application "System Events"
-        name of first item of (every process whose frontmost is true)
-      end tell
-EOF
-  )
+  local the_app=$(_omz_osx_get_frontmost_app)
 
-  [[ "$the_app" == 'iTerm' ]] && {
+  if [[ "$the_app" == 'iTerm' ]]; then
     osascript 2>/dev/null <<EOF
       tell application "iTerm" to activate
 
@@ -93,11 +115,28 @@ EOF
             click
           end tell
         end tell
-        keystroke "${command}; clear;"
-        keystroke return
+        keystroke "${command} \n"
       end tell
 EOF
-  }
+
+  elif [[ "$the_app" == 'iTerm2' ]]; then
+      osascript <<EOF
+        tell application "iTerm"
+          tell current session of first window
+            set newSession to (split horizontally with same profile)
+            tell newSession
+              write text "${command}"
+              select
+            end tell
+          end tell
+        end tell
+EOF
+
+  else
+    echo "$0: unsupported terminal app: $the_app" >&2
+    false
+
+  fi
 }
 
 function pfd() {
@@ -136,23 +175,7 @@ function quick-look() {
 function man-preview() {
   man -t "$@" | open -f -a Preview
 }
-
-function trash() {
-  local trash_dir="${HOME}/.Trash"
-  local temp_ifs=$IFS
-  IFS=$'\n'
-  for item in "$@"; do
-    if [[ -e "$item" ]]; then
-      item_name="$(basename $item)"
-      if [[ -e "${trash_dir}/${item_name}" ]]; then
-        mv -f "$item" "${trash_dir}/${item_name} $(date "+%H-%M-%S")"
-      else
-        mv -f "$item" "${trash_dir}/"
-      fi
-    fi
-  done
-  IFS=$temp_ifs
-}
+compdef _man man-preview
 
 function vncviewer() {
   open vnc://$@
@@ -174,12 +197,59 @@ function itunes() {
 		next|previous)
 			opt="$opt track"
 			;;
+		vol)
+			opt="set sound volume to $1" #$1 Due to the shift
+			;;
+		playing|status)
+			local state=`osascript -e 'tell application "iTunes" to player state as string'`
+			if [[ "$state" = "playing" ]]; then
+				currenttrack=`osascript -e 'tell application "iTunes" to name of current track as string'`
+				currentartist=`osascript -e 'tell application "iTunes" to artist of current track as string'`
+				echo -E "Listening to $fg[yellow]$currenttrack$reset_color by $fg[yellow]$currentartist$reset_color";
+			else
+				echo "iTunes is" $state;
+			fi
+			return 0
+			;;
+		shuf|shuff|shuffle)
+			# The shuffle property of current playlist can't be changed in iTunes 12,
+			# so this workaround uses AppleScript to simulate user input instead.
+			# Defaults to toggling when no options are given.
+			# The toggle option depends on the shuffle button being visible in the Now playing area.
+			# On and off use the menu bar items.
+			local state=$1
+
+			if [[ -n "$state" && ! "$state" =~ "^(on|off|toggle)$" ]]
+			then
+				print "Usage: itunes shuffle [on|off|toggle]. Invalid option."
+				return 1
+			fi
+
+			case "$state" in
+				on|off)
+					# Inspired by: http://stackoverflow.com/a/14675583
+					osascript 1>/dev/null 2>&1 <<-EOF
+					tell application "System Events" to perform action "AXPress" of (menu item "${state}" of menu "Shuffle" of menu item "Shuffle" of menu "Controls" of menu bar item "Controls" of menu bar 1 of application process "iTunes" )
+EOF
+					return 0
+					;;
+				toggle|*)
+					osascript 1>/dev/null 2>&1 <<-EOF
+					tell application "System Events" to perform action "AXPress" of (button 2 of process "iTunes"'s window "iTunes"'s scroll area 1)
+EOF
+					return 0
+					;;
+			esac
+			;;
 		""|-h|--help)
 			echo "Usage: itunes <option>"
 			echo "option:"
 			echo "\tlaunch|play|pause|stop|rewind|resume|quit"
 			echo "\tmute|unmute\tcontrol volume set"
 			echo "\tnext|previous\tplay next or previous track"
+			echo "\tshuf|shuffle [on|off|toggle]\tSet shuffled playback. Default: toggle. Note: toggle doesn't support the MiniPlayer."
+			echo "\tvol\tSet the volume, takes an argument from 0 to 100"
+			echo "\tplaying|status\tShow what song is currently playing in iTunes."
 			echo "\thelp\tshow this message and exit"
 			return 0
 			;;
@@ -190,4 +260,3 @@ function itunes() {
 	esac
 	osascript -e "tell application \"iTunes\" to $opt"
 }
-

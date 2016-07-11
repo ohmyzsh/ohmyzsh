@@ -1,0 +1,19 @@
+#compdef xcselv
+#autoload
+
+function _xcselv_compl_list_versions() {
+  _omz_xcode_list_versions short
+}
+
+_arguments \
+  '(-l -L -p)-h[prints a help message]' \
+  '(-L -p -h)-l[lists installed Xcode versions]' \
+  '(-l -p -h)-L[lists installed Xcode versions (long form)]' \
+  '(-h -l -L)-p[prints active Xcode version]' \
+  && ret=0
+
+local _xcode_versions
+_xcode_versions=($(_xcselv_compl_list_versions))
+_describe -t _xcode_versions 'version' _xcode_versions
+
+return 1

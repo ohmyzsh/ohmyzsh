@@ -1,4 +1,4 @@
-#compdef pip
+#compdef pip pip2 pip-2.7 pip3 pip-3.2 pip-3.3 pip-3.4
 #autoload
 
 # pip zsh completion, based on homebrew completion

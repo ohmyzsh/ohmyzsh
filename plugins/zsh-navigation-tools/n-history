@@ -1,0 +1,355 @@
+# Copy this file into /usr/share/zsh/site-functions/
+# and add 'autoload n-history` to .zshrc
+#
+# This function allows to browse Z shell's history and use the
+# entries
+#
+# Uses n-list
+
+emulate -L zsh
+
+setopt extendedglob
+zmodload zsh/curses
+zmodload zsh/parameter
+
+local IFS="
+"
+
+# Variables to save list's state when switching views
+# The views are: history and "most frequent history words"
+local one_NLIST_FROM_WHAT_IDX_LIST_IS_SHOWN
+local one_NLIST_CURRENT_IDX
+local one_NLIST_IS_SEARCH_MODE
+local one_NLIST_SEARCH_BUFFER
+local one_NLIST_TEXT_OFFSET
+local one_NLIST_IS_UNIQ_MODE
+local one_NLIST_IS_F_MODE
+local one_NLIST_GREP_STRING
+local one_NLIST_NONSELECTABLE_ELEMENTS
+local one_NLIST_REMEMBER_STATE
+local one_NLIST_ENABLED_EVENTS
+
+local two_NLIST_FROM_WHAT_IDX_LIST_IS_SHOWN
+local two_NLIST_CURRENT_IDX
+local two_NLIST_IS_SEARCH_MODE
+local two_NLIST_SEARCH_BUFFER
+local two_NLIST_TEXT_OFFSET
+local two_NLIST_IS_UNIQ_MODE
+local two_NLIST_IS_F_MODE
+local two_NLIST_GREP_STRING
+local two_NLIST_NONSELECTABLE_ELEMENTS
+local two_NLIST_REMEMBER_STATE
+local two_NLIST_ENABLED_EVENTS
+
+local three_NLIST_FROM_WHAT_IDX_LIST_IS_SHOWN
+local three_NLIST_CURRENT_IDX
+local three_NLIST_IS_SEARCH_MODE
+local three_NLIST_SEARCH_BUFFER
+local three_NLIST_TEXT_OFFSET
+local three_NLIST_IS_UNIQ_MODE
+local three_NLIST_IS_F_MODE
+local three_NLIST_GREP_STRING
+local three_NLIST_NONSELECTABLE_ELEMENTS
+local three_NLIST_REMEMBER_STATE
+local three_NLIST_ENABLED_EVENTS
+
+# history view
+integer active_view=0
+
+# Lists are "0", "1", "2" - 1st, 2nd, 3rd
+# Switching is done in cyclic manner
+# i.e. 0 -> 1, 1 -> 2, 2 -> 0
+_nhistory_switch_lists_states() {
+    # First argument is current, newly selected list, i.e. $active_view
+    # This implies that we are switching from previous view
+   
+    if [ "$1" = "0" ]; then
+        # Switched to 1st list, save 3rd list's state
+        three_NLIST_FROM_WHAT_IDX_LIST_IS_SHOWN=$NLIST_FROM_WHAT_IDX_LIST_IS_SHOWN
+        three_NLIST_CURRENT_IDX=$NLIST_CURRENT_IDX
+        three_NLIST_IS_SEARCH_MODE=$NLIST_IS_SEARCH_MODE
+        three_NLIST_SEARCH_BUFFER=$NLIST_SEARCH_BUFFER
+        three_NLIST_TEXT_OFFSET=$NLIST_TEXT_OFFSET
+        three_NLIST_IS_UNIQ_MODE=$NLIST_IS_UNIQ_MODE
+        three_NLIST_IS_F_MODE=$NLIST_IS_F_MODE
+        three_NLIST_GREP_STRING=$NLIST_GREP_STRING
+        three_NLIST_NONSELECTABLE_ELEMENTS=( ${NLIST_NONSELECTABLE_ELEMENTS[@]} )
+        three_NLIST_REMEMBER_STATE=$NLIST_REMEMBER_STATE
+        three_NLIST_ENABLED_EVENTS=( ${NLIST_ENABLED_EVENTS[@]} )
+
+        # ..and restore 1st list's state
+        NLIST_FROM_WHAT_IDX_LIST_IS_SHOWN=$one_NLIST_FROM_WHAT_IDX_LIST_IS_SHOWN
+        NLIST_CURRENT_IDX=$one_NLIST_CURRENT_IDX
+        NLIST_IS_SEARCH_MODE=$one_NLIST_IS_SEARCH_MODE
+        NLIST_SEARCH_BUFFER=$one_NLIST_SEARCH_BUFFER
+        NLIST_TEXT_OFFSET=$one_NLIST_TEXT_OFFSET
+        NLIST_IS_UNIQ_MODE=$one_NLIST_IS_UNIQ_MODE
+        NLIST_IS_F_MODE=$one_NLIST_IS_F_MODE
+        NLIST_GREP_STRING=$one_NLIST_GREP_STRING
+        NLIST_NONSELECTABLE_ELEMENTS=( ${one_NLIST_NONSELECTABLE_ELEMENTS[@]} )
+        NLIST_REMEMBER_STATE=$one_NLIST_REMEMBER_STATE
+        NLIST_ENABLED_EVENTS=( ${one_NLIST_ENABLED_EVENTS[@]} )
+    elif [ "$1" = "1" ]; then
+        # Switched to 2nd list, save 1st list's state
+        one_NLIST_FROM_WHAT_IDX_LIST_IS_SHOWN=$NLIST_FROM_WHAT_IDX_LIST_IS_SHOWN
+        one_NLIST_CURRENT_IDX=$NLIST_CURRENT_IDX
+        one_NLIST_IS_SEARCH_MODE=$NLIST_IS_SEARCH_MODE
+        one_NLIST_SEARCH_BUFFER=$NLIST_SEARCH_BUFFER
+        one_NLIST_TEXT_OFFSET=$NLIST_TEXT_OFFSET
+        one_NLIST_IS_UNIQ_MODE=$NLIST_IS_UNIQ_MODE
+        one_NLIST_IS_F_MODE=$NLIST_IS_F_MODE
+        one_NLIST_GREP_STRING=$NLIST_GREP_STRING
+        one_NLIST_NONSELECTABLE_ELEMENTS=( ${NLIST_NONSELECTABLE_ELEMENTS[@]} )
+        one_NLIST_REMEMBER_STATE=$NLIST_REMEMBER_STATE
+        one_NLIST_ENABLED_EVENTS=( ${NLIST_ENABLED_EVENTS[@]} )
+
+        # ..and restore 2nd list's state
+        NLIST_FROM_WHAT_IDX_LIST_IS_SHOWN=$two_NLIST_FROM_WHAT_IDX_LIST_IS_SHOWN
+        NLIST_CURRENT_IDX=$two_NLIST_CURRENT_IDX
+        NLIST_IS_SEARCH_MODE=$two_NLIST_IS_SEARCH_MODE
+        NLIST_SEARCH_BUFFER=$two_NLIST_SEARCH_BUFFER
+        NLIST_TEXT_OFFSET=$two_NLIST_TEXT_OFFSET
+        NLIST_IS_UNIQ_MODE=$two_NLIST_IS_UNIQ_MODE
+        NLIST_IS_F_MODE=$two_NLIST_IS_F_MODE
+        NLIST_GREP_STRING=$two_NLIST_GREP_STRING
+        NLIST_NONSELECTABLE_ELEMENTS=( ${two_NLIST_NONSELECTABLE_ELEMENTS[@]} )
+        NLIST_REMEMBER_STATE=$two_NLIST_REMEMBER_STATE
+        NLIST_ENABLED_EVENTS=( ${two_NLIST_ENABLED_EVENTS[@]} )
+    elif [ "$1" = "2" ]; then
+        # Switched to 3rd list, save 2nd list's state
+        two_NLIST_FROM_WHAT_IDX_LIST_IS_SHOWN=$NLIST_FROM_WHAT_IDX_LIST_IS_SHOWN
+        two_NLIST_CURRENT_IDX=$NLIST_CURRENT_IDX
+        two_NLIST_IS_SEARCH_MODE=$NLIST_IS_SEARCH_MODE
+        two_NLIST_SEARCH_BUFFER=$NLIST_SEARCH_BUFFER
+        two_NLIST_TEXT_OFFSET=$NLIST_TEXT_OFFSET
+        two_NLIST_IS_UNIQ_MODE=$NLIST_IS_UNIQ_MODE
+        two_NLIST_IS_F_MODE=$NLIST_IS_F_MODE
+        two_NLIST_GREP_STRING=$NLIST_GREP_STRING
+        two_NLIST_NONSELECTABLE_ELEMENTS=( ${NLIST_NONSELECTABLE_ELEMENTS[@]} )
+        two_NLIST_REMEMBER_STATE=$NLIST_REMEMBER_STATE
+        two_NLIST_ENABLED_EVENTS=( ${NLIST_ENABLED_EVENTS[@]} )
+
+        # ..and restore 3rd list's state
+        NLIST_FROM_WHAT_IDX_LIST_IS_SHOWN=$three_NLIST_FROM_WHAT_IDX_LIST_IS_SHOWN
+        NLIST_CURRENT_IDX=$three_NLIST_CURRENT_IDX
+        NLIST_IS_SEARCH_MODE=$three_NLIST_IS_SEARCH_MODE
+        NLIST_SEARCH_BUFFER=$three_NLIST_SEARCH_BUFFER
+        NLIST_TEXT_OFFSET=$three_NLIST_TEXT_OFFSET
+        NLIST_IS_UNIQ_MODE=$three_NLIST_IS_UNIQ_MODE
+        NLIST_IS_F_MODE=$three_NLIST_IS_F_MODE
+        NLIST_GREP_STRING=$three_NLIST_GREP_STRING
+        NLIST_NONSELECTABLE_ELEMENTS=( ${three_NLIST_NONSELECTABLE_ELEMENTS[@]} )
+        NLIST_REMEMBER_STATE=$three_NLIST_REMEMBER_STATE
+        NLIST_ENABLED_EVENTS=( ${three_NLIST_ENABLED_EVENTS[@]} )
+    fi
+}
+
+local most_frequent_db="$HOME/.config/znt/mostfrequent.db"
+_nhistory_generate_most_frequent() {
+    local title=$'\x1b[00;31m'"Most frequent history words:"$'\x1b[00;00m\0'
+
+    typeset -A uniq
+    for k in "${historywords[@]}"; do
+        uniq[$k]=$(( ${uniq[$k]:-0} + 1 ))
+    done
+    vk=()
+    for k v in ${(kv)uniq}; do
+        vk+="$v"$'\t'"$k"
+    done
+
+    print -rl -- "$title" "${(On)vk[@]}" > "$most_frequent_db"
+}
+
+# Load configuration
+unset NLIST_COLORING_PATTERN
+[ -f ~/.config/znt/n-list.conf ] && builtin source ~/.config/znt/n-list.conf
+[ -f ~/.config/znt/n-history.conf ] && builtin source ~/.config/znt/n-history.conf
+
+local list
+local selected
+local private_history_db="$HOME/.config/znt/privhist.db"
+
+local NLIST_GREP_STRING="$1"
+# 2 is: init once, then remember
+local NLIST_REMEMBER_STATE=2
+two_NLIST_REMEMBER_STATE=2
+three_NLIST_REMEMBER_STATE=2
+
+# Only Private history has EDIT
+local -a NLIST_ENABLED_EVENTS
+NLIST_ENABLED_EVENTS=( "F1" "HELP" )
+two_NLIST_ENABLED_EVENTS=( "F1" "EDIT" "HELP" )
+three_NLIST_ENABLED_EVENTS=( "F1" "HELP" )
+
+# All view should attempt to replace new lines with \n
+local NLIST_REPLACE_NEWLINES="1"
+two_NLIST_REPLACE_NEWLINES="1"
+three_NLIST_REPLACE_NEWLINES="1"
+
+# Only second and third view has non-selectable first entry
+local -a NLIST_NONSELECTABLE_ELEMENTS
+NLIST_NONSELECTABLE_ELEMENTS=( )
+two_NLIST_NONSELECTABLE_ELEMENTS=( 1 )
+three_NLIST_NONSELECTABLE_ELEMENTS=( 1 )
+
+while (( 1 )); do
+
+    #
+    # View 1 - history
+    #
+    if [ "$active_view" = "0" ]; then
+        list=( "$history[@]" )
+        list=( "${(@M)list:#(#i)*$NLIST_GREP_STRING*}" )
+
+        if [ "$#list" -eq 0 ]; then
+            echo "No matching history entries"
+            return 1
+        fi
+
+        n-list "${list[@]}"
+
+        # Selection or quit?
+        if [[ "$REPLY" = -(#c0,1)[0-9]## && ("$REPLY" -lt 0 || "$REPLY" -gt 0) ]]; then
+            break
+        fi
+
+        # View change?
+        if [ "$REPLY" = "F1" ]; then
+            # Target view: 2
+            active_view=1
+            _nhistory_switch_lists_states "1"
+        elif [ "$REPLY" = "HELP" ]; then
+            n-help
+        fi
+
+    #
+    # View 3 - most frequent words in history
+    #
+    elif [ "$active_view" = "2" ]; then
+        local -a dbfile
+        dbfile=( $most_frequent_db(Nm+1) )
+
+        # Compute most frequent history words
+        if [[ "${#NHISTORY_WORDS}" -eq "0" || "${#dbfile}" -ne "0" ]]; then
+            # Read the list if it's there
+            local -a list
+            list=()
+            [ -s "$most_frequent_db" ] && list=( ${(f)"$(<$most_frequent_db)"} )
+
+            # Will wait for the data?
+            local message=0
+            if [[ "${#list}" -eq 0 ]]; then
+                message=1
+                _nlist_alternate_screen 1
+                zcurses init
+                zcurses delwin info 2>/dev/null
+                zcurses addwin info "$term_height" "$term_width" 0 0
+                zcurses bg info white/black
+                zcurses string info "Computing most frequent history words..."$'\n'
+                zcurses string info "(This is done once per day, from now on transparently)"$'\n'
+                zcurses refresh info
+                sleep 3
+            fi
+
+            # Start periodic list regeneration?
+            if [[ "${#list}" -eq 0 || "${#dbfile}" -ne "0" ]]; then
+                # Mark the file with current time, to prevent double
+                # regeneration (on quick double change of view)
+                print >> "$most_frequent_db"
+                (_nhistory_generate_most_frequent &) &> /dev/null
+            fi
+
+            # Ensure we got the list, wait for it if needed
+            while [[ "${#list}" -eq 0 ]]; do
+                zcurses string info "."
+                zcurses refresh info
+                LANG=C sleep 0.5
+                [ -s "$most_frequent_db" ] && list=( ${(f)"$(<$most_frequent_db)"} )
+            done
+
+            NHISTORY_WORDS=( "${list[@]}" )
+
+            if [ "$message" -eq "1" ]; then
+                zcurses delwin info 2>/dev/null
+                zcurses refresh
+                zcurses end
+                _nlist_alternate_screen 0
+            fi
+        else
+            # Reuse most frequent history words
+            local -a list
+            list=( "${NHISTORY_WORDS[@]}" )
+        fi
+
+        n-list "${list[@]}"
+
+        if [ "$REPLY" = "F1" ]; then
+            # Target view: 1
+            active_view=0
+            _nhistory_switch_lists_states "0"
+        elif [[ "$REPLY" = -(#c0,1)[0-9]## && "$REPLY" -lt 0 ]]; then
+            break
+        elif [[ "$REPLY" = -(#c0,1)[0-9]## && "$REPLY" -gt 0 ]]; then
+            local word="${reply[REPLY]#(#s) #[0-9]##$'\t'}"
+            one_NLIST_SEARCH_BUFFER="$word"
+            one_NLIST_SEARCH_BUFFER="${one_NLIST_SEARCH_BUFFER## ##}"
+
+            # Target view: 1
+            active_view=0
+            _nhistory_switch_lists_states "0"
+        elif [ "$REPLY" = "HELP" ]; then
+            n-help
+        fi
+
+    #
+    # View 2 - private history
+    #
+    elif [ "$active_view" = "1" ]; then
+        if [ -s "$private_history_db" ]; then
+            local title=$'\x1b[00;32m'"Private history:"$'\x1b[00;00m\0'
+            () { fc -ap -R "$private_history_db"; list=( "$title" ${history[@]} ) }
+        else
+            list=( "Private history - history entries selected via this tool will be put here" )
+        fi
+
+        n-list "${list[@]}"
+
+        # Selection or quit?
+        if [[ "$REPLY" = -(#c0,1)[0-9]## && ("$REPLY" -lt 0 || "$REPLY" -gt 0) ]]; then
+            break
+        fi
+
+        # View change?
+        if [ "$REPLY" = "F1" ]; then
+            # Target view: 3
+            active_view=2
+            _nhistory_switch_lists_states "2"
+        # Edit of the history?
+        elif [ "$REPLY" = "EDIT" ]; then
+            "${EDITOR:-vim}" "$private_history_db"
+        elif [ "$REPLY" = "HELP" ]; then
+            n-help
+        fi
+    fi
+done
+
+if [ "$REPLY" -gt 0 ]; then
+    selected="$reply[REPLY]"
+    # ZLE?
+    if [ "${(t)CURSOR}" = "integer-local-special" ]; then
+        zle .redisplay
+        zle .kill-buffer
+        LBUFFER+="$selected"
+
+        # Append to private history
+        local newline=$'\n'
+        selected="${selected//$newline/\\$newline}"
+        [ "$active_view" = "0" ] && print -r -- "$selected" >> "$private_history_db"
+    else
+        print -zr -- "$selected"
+    fi
+else
+    [ "${(t)CURSOR}" = "integer-local-special" ] && zle redisplay
+fi
+
+# vim: set filetype=zsh:

@@ -5,8 +5,8 @@
 #
 # To achieve git-flow completion nirvana:
 #
-#  0. Update your zsh's git-completion module to the newest verion.
-#     From here. http://zsh.git.sourceforge.net/git/gitweb.cgi?p=zsh/zsh;a=blob_plain;f=Completion/Unix/Command/_git;hb=HEAD
+#  0. Update your zsh's git-completion module to the newest version.
+#     From here. https://raw.githubusercontent.com/zsh-users/zsh/master/Completion/Unix/Command/_git
 #
 #  1. Install this file. Either:
 #
@@ -17,11 +17,11 @@
 #
 #            source ~/.git-flow-completion.zsh
 #
-#     c. Or, use this file as a oh-my-zsh plugin.
+#     c. Or, use this file as an oh-my-zsh plugin.
 #
 
 #Alias
-alias gf='git flow'
+alias gfl='git flow'
 alias gcd='git checkout develop'
 alias gch='git checkout hotfix'
 alias gcr='git checkout release'

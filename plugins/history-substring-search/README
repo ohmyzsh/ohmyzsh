@@ -1,7 +1,0 @@
-To activate this script, load it into an interactive ZSH session:
-
-  % source history-substring-search.zsh
-
-See the "history-substring-search.zsh" file for more information:
-
-  % sed -n '2,/^$/s/^#//p' history-substring-search.zsh | more

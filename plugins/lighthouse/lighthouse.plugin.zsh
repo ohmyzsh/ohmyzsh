@@ -9,7 +9,7 @@ open_lighthouse_ticket () {
   else
     lighthouse_url=$(cat .lighthouse-url);
     echo "Opening ticket #$1";
-    `open $lighthouse_url/tickets/$1`;
+    open_command "$lighthouse_url/tickets/$1";
   fi
 }
 
