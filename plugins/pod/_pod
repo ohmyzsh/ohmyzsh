@@ -1,34 +1,91 @@
 #compdef pod
-#autoload
 # setopt XTRACE VERBOSE
 # vim: ft=zsh sw=2 ts=2 et
 
-
 # -----------------------------------------------------------------------------
 #          FILE:  _pod
-#   DESCRIPTION:  Cocoapods (0.33.1) autocomplete plugin for Oh-My-Zsh
+#   DESCRIPTION:  Cocoapods (1.0.1) autocomplete plugin for Oh-My-Zsh
 #                 http://cocoapods.org
-#                 Generated with `pod --completion-script
-#        AUTHOR:  Alexandre Joly (alexandre.joly@mekanics.ch)
-#        GITHUB:  https://github.com/mekanics
-#       TWITTER:  @jolyAlexandre
-#       VERSION:  0.0.5
+#                 Generated with `pod --completion-script`
+#        AUTHOR:  Alasdair McCall (alasdair.mccall@gmail.com)
+#        GITHUB:  https://github.com/ajmccall
+#       TWITTER:  @aljmccall
+#       VERSION:  1.0.1
 # -----------------------------------------------------------------------------
 
 local -a _subcommands
 local -a _options
 
 case "$words[2]" in
-  help)
+  cache)
     case "$words[3]" in
-      *) # pod help
+      clean)
+        case "$words[4]" in
+          *) # pod cache clean
+            _options=(
+              "--all:Remove all the cached pods without asking"
+              "--help:Show help banner of specified command"
+              "--no-ansi:Show output without ANSI codes"
+              "--silent:Show nothing"
+              "--verbose:Show more debugging information"
+            )
+            _describe -t options "pod cache clean options" _options
+          ;;
+        esac
+      ;;
+      list)
+        case "$words[4]" in
+          *) # pod cache list
+            _options=(
+              "--help:Show help banner of specified command"
+              "--no-ansi:Show output without ANSI codes"
+              "--short:Only print the path relative to the cache root"
+              "--silent:Show nothing"
+              "--verbose:Show more debugging information"
+            )
+            _describe -t options "pod cache list options" _options
+          ;;
+        esac
+      ;;
+      *) # pod cache
+        _subcommands=(
+          "clean:Remove the cache for pods"
+          "list:List the paths of pod caches for each known pod"
+        )
+        _describe -t commands "pod cache subcommands" _subcommands
         _options=(
           "--help:Show help banner of specified command"
           "--no-ansi:Show output without ANSI codes"
           "--silent:Show nothing"
           "--verbose:Show more debugging information"
         )
-        _describe -t options "pod help options" _options
+        _describe -t options "pod cache options" _options
+      ;;
+    esac
+  ;;
+  deintegrate)
+    case "$words[3]" in
+      *) # pod deintegrate
+        _options=(
+          "--help:Show help banner of specified command"
+          "--no-ansi:Show output without ANSI codes"
+          "--project-directory=/project/dir/:The path to the root of the project directory"
+          "--silent:Show nothing"
+          "--verbose:Show more debugging information"
+        )
+        _describe -t options "pod deintegrate options" _options
+      ;;
+    esac
+  ;;
+  env)
+    case "$words[3]" in
+      *) # pod env
+        _options=(
+          "--help:Show help banner of specified command"
+          "--no-ansi:Show output without ANSI codes"
+          "--verbose:Show more debugging information"
+        )
+        _describe -t options "pod env options" _options
       ;;
     esac
   ;;
@@ -53,6 +110,7 @@ case "$words[2]" in
             _options=(
               "--help:Show help banner of specified command"
               "--no-ansi:Show output without ANSI codes"
+              "--project-directory=/project/dir/:The path to the root of the project directory"
               "--silent:Show nothing"
               "--verbose:Show more debugging information"
             )
@@ -66,6 +124,7 @@ case "$words[2]" in
             _options=(
               "--help:Show help banner of specified command"
               "--no-ansi:Show output without ANSI codes"
+              "--project-directory=/project/dir/:The path to the root of the project directory"
               "--silent:Show nothing"
               "--verbose:Show more debugging information"
             )
@@ -101,11 +160,11 @@ case "$words[2]" in
       ;;
       *) # pod ipc
         _subcommands=(
-          "list:Lists the specifications known to CocoaPods."
-          "podfile:Converts a Podfile to YAML."
-          "repl:The repl listens to commands on standard input."
-          "spec:Converts a podspec to JSON."
-          "update-search-index:Updates the search index."
+          "list:Lists the specifications known to CocoaPods"
+          "podfile:Converts a Podfile to YAML"
+          "repl:The repl listens to commands on standard input"
+          "spec:Converts a podspec to JSON"
+          "update-search-index:Updates the search index"
         )
         _describe -t commands "pod ipc subcommands" _subcommands
         _options=(
@@ -137,9 +196,8 @@ case "$words[2]" in
         _options=(
           "--help:Show help banner of specified command"
           "--no-ansi:Show output without ANSI codes"
-          "--no-clean:Leave SCM dirs like \`.git\` and \`.svn\` intact after downloading"
-          "--no-integrate:Skip integration of the Pods libraries in the Xcode project(s)"
-          "--no-repo-update:Skip running \`pod repo update\` before install"
+          "--project-directory=/project/dir/:The path to the root of the project directory"
+          "--repo-update:Force running \`pod repo update\` before install"
           "--silent:Show nothing"
           "--verbose:Show more debugging information"
         )
@@ -156,6 +214,7 @@ case "$words[2]" in
               "--help:Show help banner of specified command"
               "--no-ansi:Show output without ANSI codes"
               "--silent:Show nothing"
+              "--template-url=URL:The URL of the git repo containing a compatible template"
               "--verbose:Show more debugging information"
             )
             _describe -t options "pod lib create options" _options
@@ -166,14 +225,18 @@ case "$words[2]" in
         case "$words[4]" in
           *) # pod lib lint
             _options=(
+              "--allow-warnings:Lint validates even if warnings are present"
+              "--fail-fast:Lint stops on the first failing platform or subspec"
               "--help:Show help banner of specified command"
               "--no-ansi:Show output without ANSI codes"
               "--no-clean:Lint leaves the build directory intact for inspection"
               "--no-subspecs:Lint skips validation of subspecs"
-              "--only-errors:Lint validates even if warnings are present"
+              "--private:Lint skips checks that apply only to public specs"
               "--quick:Lint skips checks that would require to download and build the spec"
               "--silent:Show nothing"
+              "--sources=https://github.com/artsy/Specs,master:The sources from which to pull dependent pods (defaults to https://github.com/CocoaPods/Specs.git). Multiple sources must be comma-delimited."
               "--subspec=NAME:Lint validates only the given subspec"
+              "--use-libraries:Lint uses static libraries to install the spec"
               "--verbose:Show more debugging information"
             )
             _describe -t options "pod lib lint options" _options
@@ -198,29 +261,12 @@ case "$words[2]" in
   ;;
   list)
     case "$words[3]" in
-      new)
-        case "$words[4]" in
-          *) # pod list new
-            _options=(
-              "--help:Show help banner of specified command"
-              "--no-ansi:Show output without ANSI codes"
-              "--silent:Show nothing"
-              "--update:Run \`pod repo update\` before listing"
-              "--verbose:Show more debugging information"
-            )
-            _describe -t options "pod list new options" _options
-          ;;
-        esac
-      ;;
       *) # pod list
-        _subcommands=(
-          "new:Lists pods introduced in the master spec-repo since the last check"
-        )
-        _describe -t commands "pod list subcommands" _subcommands
         _options=(
           "--help:Show help banner of specified command"
           "--no-ansi:Show output without ANSI codes"
           "--silent:Show nothing"
+          "--stats:Show additional stats (like GitHub watchers and forks)"
           "--update:Run \`pod repo update\` before listing"
           "--verbose:Show more debugging information"
         )
@@ -235,6 +281,7 @@ case "$words[2]" in
           "--help:Show help banner of specified command"
           "--no-ansi:Show output without ANSI codes"
           "--no-repo-update:Skip running \`pod repo update\` before install"
+          "--project-directory=/project/dir/:The path to the root of the project directory"
           "--silent:Show nothing"
           "--verbose:Show more debugging information"
         )
@@ -257,6 +304,18 @@ case "$words[2]" in
           ;;
         esac
       ;;
+      installed)
+        case "$words[4]" in
+          *) # pod plugins installed
+            _options=(
+              "--help:Show help banner of specified command"
+              "--no-ansi:Show output without ANSI codes"
+              "--verbose:Show more debugging information"
+            )
+            _describe -t options "pod plugins installed options" _options
+          ;;
+        esac
+      ;;
       list)
         case "$words[4]" in
           *) # pod plugins list
@@ -266,6 +325,19 @@ case "$words[2]" in
               "--verbose:Show more debugging information"
             )
             _describe -t options "pod plugins list options" _options
+          ;;
+        esac
+      ;;
+      publish)
+        case "$words[4]" in
+          *) # pod plugins publish
+            _options=(
+              "--help:Show help banner of specified command"
+              "--no-ansi:Show output without ANSI codes"
+              "--silent:Show nothing"
+              "--verbose:Show more debugging information"
+            )
+            _describe -t options "pod plugins publish options" _options
           ;;
         esac
       ;;
@@ -285,7 +357,9 @@ case "$words[2]" in
       *) # pod plugins
         _subcommands=(
           "create:Creates a new plugin"
+          "installed:List plugins installed on your machine"
           "list:List all known plugins"
+          "publish:Request to add the plugin to the official plugins list"
           "search:Search for known plugins"
         )
         _describe -t commands "pod plugins subcommands" _subcommands
@@ -299,19 +373,6 @@ case "$words[2]" in
       ;;
     esac
   ;;
-  push)
-    case "$words[3]" in
-      *) # pod push
-        _options=(
-          "--help:Show help banner of specified command"
-          "--no-ansi:Show output without ANSI codes"
-          "--silent:Show nothing"
-          "--verbose:Show more debugging information"
-        )
-        _describe -t options "pod push options" _options
-      ;;
-    esac
-  ;;
   repo)
     case "$words[3]" in
       add)
@@ -320,7 +381,6 @@ case "$words[2]" in
             _options=(
               "--help:Show help banner of specified command"
               "--no-ansi:Show output without ANSI codes"
-              "--shallow:Create a shallow clone (fast clone, but no push capabilities)"
               "--silent:Show nothing"
               "--verbose:Show more debugging information"
             )
@@ -342,15 +402,33 @@ case "$words[2]" in
           ;;
         esac
       ;;
+      list)
+        case "$words[4]" in
+          *) # pod repo list
+            _options=(
+              "--count-only:Show the total number of repos"
+              "--help:Show help banner of specified command"
+              "--no-ansi:Show output without ANSI codes"
+              "--silent:Show nothing"
+              "--verbose:Show more debugging information"
+            )
+            _describe -t options "pod repo list options" _options
+          ;;
+        esac
+      ;;
       push)
         case "$words[4]" in
           *) # pod repo push
             _options=(
               "--allow-warnings:Allows pushing even if there are warnings"
+              "--commit-message="Fix bug in pod":Add custom commit message. Opens default editor if no commit message is specified."
               "--help:Show help banner of specified command"
               "--local-only:Does not perform the step of pushing REPO to its remote"
               "--no-ansi:Show output without ANSI codes"
+              "--no-private:Lint includes checks that apply only to public repos"
               "--silent:Show nothing"
+              "--sources=https://github.com/artsy/Specs,master:The sources from which to pull dependent pods (defaults to all available repos). Multiple sources must be comma-delimited."
+              "--use-libraries:Linter uses static libraries to install the spec"
               "--verbose:Show more debugging information"
             )
             _describe -t options "pod repo push options" _options
@@ -385,11 +463,12 @@ case "$words[2]" in
       ;;
       *) # pod repo
         _subcommands=(
-          "add:Add a spec repo."
-          "lint:Validates all specs in a repo."
+          "add:Add a spec repo"
+          "lint:Validates all specs in a repo"
+          "list:List repos"
           "push:Push new specifications to a spec-repo"
           "remove:Remove a spec repo"
-          "update:Update a spec repo."
+          "update:Update a spec repo"
         )
         _describe -t commands "pod repo subcommands" _subcommands
         _options=(
@@ -406,13 +485,17 @@ case "$words[2]" in
     case "$words[3]" in
       *) # pod search
         _options=(
-          "--full:Search by name, summary, and description"
           "--help:Show help banner of specified command"
           "--ios:Restricts the search to Pods supported on iOS"
           "--no-ansi:Show output without ANSI codes"
+          "--no-pager:Do not pipe search results into a pager"
           "--osx:Restricts the search to Pods supported on OS X"
+          "--regex:Interpret the \`QUERY\` as a regular expression"
+          "--simple:Search only by name"
           "--stats:Show additional stats (like GitHub watchers and forks)"
+          "--tvos:Restricts the search to Pods supported on tvOS"
           "--verbose:Show more debugging information"
+          "--watchos:Restricts the search to Pods supported on watchOS"
           "--web:Searches on cocoapods.org"
         )
         _describe -t options "pod search options" _options
@@ -425,8 +508,6 @@ case "$words[2]" in
         _options=(
           "--help:Show help banner of specified command"
           "--no-ansi:Show output without ANSI codes"
-          "--no-shallow:Clone full history so push will work"
-          "--push:Use this option to enable push access once granted"
           "--silent:Show nothing"
           "--verbose:Show more debugging information"
         )
@@ -442,6 +523,7 @@ case "$words[2]" in
             _options=(
               "--help:Show help banner of specified command"
               "--no-ansi:Show output without ANSI codes"
+              "--regex:Interpret the \`QUERY\` as a regular expression"
               "--show-all:Pick from all versions of the given podspec"
               "--silent:Show nothing"
               "--verbose:Show more debugging information"
@@ -469,7 +551,8 @@ case "$words[2]" in
             _options=(
               "--help:Show help banner of specified command"
               "--no-ansi:Show output without ANSI codes"
-              "--show-all:Pick which spec to edit from all available versions of the given podspec"
+              "--regex:Interpret the \`QUERY\` as a regular expression"
+              "--show-all:Pick from all versions of the given podspec"
               "--silent:Show nothing"
               "--verbose:Show more debugging information"
             )
@@ -481,14 +564,18 @@ case "$words[2]" in
         case "$words[4]" in
           *) # pod spec lint
             _options=(
+              "--allow-warnings:Lint validates even if warnings are present"
+              "--fail-fast:Lint stops on the first failing platform or subspec"
               "--help:Show help banner of specified command"
               "--no-ansi:Show output without ANSI codes"
               "--no-clean:Lint leaves the build directory intact for inspection"
               "--no-subspecs:Lint skips validation of subspecs"
-              "--only-errors:Lint validates even if warnings are present"
+              "--private:Lint skips checks that apply only to public specs"
               "--quick:Lint skips checks that would require to download and build the spec"
               "--silent:Show nothing"
+              "--sources=https://github.com/artsy/Specs,master:The sources from which to pull dependent pods (defaults to https://github.com/CocoaPods/Specs.git). Multiple sources must be comma-delimited."
               "--subspec=NAME:Lint validates only the given subspec"
+              "--use-libraries:Lint uses static libraries to install the spec"
               "--verbose:Show more debugging information"
             )
             _describe -t options "pod spec lint options" _options
@@ -501,6 +588,7 @@ case "$words[2]" in
             _options=(
               "--help:Show help banner of specified command"
               "--no-ansi:Show output without ANSI codes"
+              "--regex:Interpret the \`QUERY\` as a regular expression"
               "--show-all:Print all versions of the given podspec"
               "--silent:Show nothing"
               "--verbose:Show more debugging information"
@@ -511,11 +599,11 @@ case "$words[2]" in
       ;;
       *) # pod spec
         _subcommands=(
-          "cat:Prints a spec file."
+          "cat:Prints a spec file"
           "create:Create spec file stub."
-          "edit:Edit a spec file."
-          "lint:Validates a spec file."
-          "which:Prints the path of the given spec."
+          "edit:Edit a spec file"
+          "lint:Validates a spec file"
+          "which:Prints the path of the given spec"
         )
         _describe -t commands "pod spec subcommands" _subcommands
         _options=(
@@ -540,6 +628,45 @@ case "$words[2]" in
               "--verbose:Show more debugging information"
             )
             _describe -t options "pod trunk add-owner options" _options
+          ;;
+        esac
+      ;;
+      delete)
+        case "$words[4]" in
+          *) # pod trunk delete
+            _options=(
+              "--help:Show help banner of specified command"
+              "--no-ansi:Show output without ANSI codes"
+              "--silent:Show nothing"
+              "--verbose:Show more debugging information"
+            )
+            _describe -t options "pod trunk delete options" _options
+          ;;
+        esac
+      ;;
+      deprecate)
+        case "$words[4]" in
+          *) # pod trunk deprecate
+            _options=(
+              "--help:Show help banner of specified command"
+              "--no-ansi:Show output without ANSI codes"
+              "--silent:Show nothing"
+              "--verbose:Show more debugging information"
+            )
+            _describe -t options "pod trunk deprecate options" _options
+          ;;
+        esac
+      ;;
+      info)
+        case "$words[4]" in
+          *) # pod trunk info
+            _options=(
+              "--help:Show help banner of specified command"
+              "--no-ansi:Show output without ANSI codes"
+              "--silent:Show nothing"
+              "--verbose:Show more debugging information"
+            )
+            _describe -t options "pod trunk info options" _options
           ;;
         esac
       ;;
@@ -582,6 +709,7 @@ case "$words[2]" in
               "--help:Show help banner of specified command"
               "--no-ansi:Show output without ANSI codes"
               "--silent:Show nothing"
+              "--use-libraries:Linter uses static libraries to install the spec"
               "--verbose:Show more debugging information"
             )
             _describe -t options "pod trunk push options" _options
@@ -602,12 +730,29 @@ case "$words[2]" in
           ;;
         esac
       ;;
+      remove-owner)
+        case "$words[4]" in
+          *) # pod trunk remove-owner
+            _options=(
+              "--help:Show help banner of specified command"
+              "--no-ansi:Show output without ANSI codes"
+              "--silent:Show nothing"
+              "--verbose:Show more debugging information"
+            )
+            _describe -t options "pod trunk remove-owner options" _options
+          ;;
+        esac
+      ;;
       *) # pod trunk
         _subcommands=(
           "add-owner:Add an owner to a pod"
+          "delete:Deletes a version of a pod."
+          "deprecate:Deprecates a pod."
+          "info:Returns information about a Pod."
           "me:Display information about your sessions"
           "push:Publish a podspec"
           "register:Manage sessions"
+          "remove-owner:Remove an owner from a pod"
         )
         _describe -t commands "pod trunk subcommands" _subcommands
         _options=(
@@ -626,6 +771,7 @@ case "$words[2]" in
         _options=(
           "--help:Show help banner of specified command"
           "--no-ansi:Show output without ANSI codes"
+          "--no-repo-update:Skip running \`pod repo update\` before install"
           "--silent:Show nothing"
           "--verbose:Show more debugging information"
         )
@@ -639,9 +785,8 @@ case "$words[2]" in
         _options=(
           "--help:Show help banner of specified command"
           "--no-ansi:Show output without ANSI codes"
-          "--no-clean:Leave SCM dirs like \`.git\` and \`.svn\` intact after downloading"
-          "--no-integrate:Skip integration of the Pods libraries in the Xcode project(s)"
           "--no-repo-update:Skip running \`pod repo update\` before install"
+          "--project-directory=/project/dir/:The path to the root of the project directory"
           "--silent:Show nothing"
           "--verbose:Show more debugging information"
         )
@@ -651,22 +796,23 @@ case "$words[2]" in
   ;;
   *) # pod
     _subcommands=(
-      "help:Show help for the given command."
+      "cache:Manipulate the CocoaPods cache"
+      "deintegrate:Deintegrate CocoaPods from your project"
+      "env:Display pod environment"
       "ipc:Inter-process communication"
-      "init:Generate a Podfile for the current directory."
-      "install:Install project dependencies"
+      "init:Generate a Podfile for the current directory"
+      "install:Install project dependencies according to versions from a Podfile.lock"
       "lib:Develop pods"
       "list:List pods"
       "outdated:Show outdated project dependencies"
       "plugins:Show available CocoaPods plugins"
-      "push:Temporary alias for the \`pod repo push\` command"
       "repo:Manage spec-repositories"
-      "search:Searches for pods"
+      "search:Search for pods"
       "setup:Setup the CocoaPods environment"
       "spec:Manage pod specs"
       "trunk:Interact with the CocoaPods API (e.g. publishing new specs)"
       "try:Try a Pod!"
-      "update:Update outdated project dependencies"
+      "update:Update outdated project dependencies and create new Podfile.lock"
     )
     _describe -t commands "pod subcommands" _subcommands
     _options=(
