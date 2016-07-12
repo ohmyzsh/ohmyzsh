@@ -127,9 +127,8 @@ prompt_git() {
   fi
 }
 
-prompt_hg() {
-  which hg > /dev/null 2>&1
-  if [[ $? -ne 0 ]]; then
+prompt_hg()
+  if ! type hg &> /dev/null ; then
     return
   fi
   local rev status
