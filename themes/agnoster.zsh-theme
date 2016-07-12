@@ -127,7 +127,7 @@ prompt_git() {
   fi
 }
 
-prompt_hg()
+prompt_hg() {
   if ! type hg &> /dev/null; then
     return
   fi
