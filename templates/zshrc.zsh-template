@@ -54,7 +54,7 @@ plugins=(git)
 zstyle ':completion:*:descriptions' format '%B%d%b'
 # User configuration
 
-export PATH=$HOME/bin:/usr/local/bin:$PATH
+# export PATH="/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
 # export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh

@@ -88,7 +88,7 @@ alias gdw='git diff --word-diff'
 alias gf='git fetch'
 alias gfa='git fetch --all --prune'
 function gfg() { git ls-files | grep $@ }
-compdef gfg=grep
+compdef _grep gfg
 alias gfo='git fetch origin'
 
 alias gg='git gui citool'
@@ -199,7 +199,7 @@ alias gsps='git show --pretty=short --show-signature'
 alias gsr='git svn rebase'
 alias gss='git status -s'
 alias gst='git status'
-alias gsta='git stash'
+alias gsta='git stash save'
 alias gstaa='git stash apply'
 alias gstd='git stash drop'
 alias gstl='git stash list'
