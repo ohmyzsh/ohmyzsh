@@ -38,6 +38,16 @@
    root = rev-parse --show-toplevel
    parents = show --pretty=%P
 
+   # For Git hub - uncomment if you don't have git extras
+   #
+   # Easily checkout local copies of pull requests from GitHub remotes:
+   #
+   # git pr 4 - creates local branch pr/4 from the origin remote and checks it out
+   # git pr 4 upstream - creates local branch pr/4 from upstream remote and checks it out
+   # git pr-clean - removes all pr/* branches from your local repo
+   # pr  = "!f() { git fetch -fu ${2:-origin} refs/pull/$1/head:pr/$1 && git checkout pr/$1; }; f"
+   # pr-clean = "!git for-each-ref refs/heads/pr/* --format='%(refname)' | while read ref ; do branch=${ref#refs/heads/} ; git branch -D $branch ; done"
+
 
 [core]
    editor = vim

@@ -16,6 +16,9 @@ alias rsrra.='repo sync .; repo rebase --auto-stash .'
 alias rsarra.='repo sync -a . ; repo rebase --auto-stash .'
 compdef _repo rsrra.='repo rebase'
 
+alias gPoHrfm='git push origin HEAD:refs/for/master'
+alias git-push-refs-for-master='git push origin HEAD:refs/for/master'
+
 function rsbrsrra()
 {
     if [[ -z $1 ]]; then

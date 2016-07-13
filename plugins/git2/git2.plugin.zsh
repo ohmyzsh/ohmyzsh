@@ -38,6 +38,8 @@ compdef _git gl=git-pull
 # Git pull and rebase
 alias gpr='git pull --rebase'
 compdef _git gpr=git-pull
+# Git rebase current master branch against master branch on upstream
+alias gprum='git pull --rebase upstream master'
 
 ###############
 # git push (gP)
@@ -61,6 +63,10 @@ compdef _git gPd=git-push
 alias gPf='git push --force'
 compdef _git gPf=git-push
 alias gPhm='git push heroku master'
+# git push origin
+alias gPof='git push origin'
+# git push origin force
+alias gPof='git push origin --force'
 
 ################
 # Git Fetch (gf)
@@ -238,8 +244,8 @@ compdef _git gwc=git-whatchanged
 alias gls='git ls-files | grep'
 compdef _git gls=git-ls-files
 
-alias gpoat='git push origin --all && git push origin --tags'
-compdef _git gpoat=git-push
+alias gPoat='git push origin --all && git push origin --tags'
+compdef _git gPoat=git-push
 alias gmt='git mergetool --no-prompt'
 compdef _git gmt=git-mergetool
 alias gmtvim='git mergetool --no-prompt --tool=vimdiff'

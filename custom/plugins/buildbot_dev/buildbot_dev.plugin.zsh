@@ -54,6 +54,7 @@ alias cKcssci='cactus kill ; cactus slaves restart ; cactus info'
 
 alias m='make'
 alias s='subl'
+alias a='atom'
 
 alias sagiy='sudo apt-get install -y'
 alias saguysaguy='sudo apt-get update -y ; sudo apt-get upgrade -y'
