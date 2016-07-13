@@ -36,7 +36,7 @@ plugins=(git2 python repo intel-repo cp buildbot rsync git-extras git-remote-bra
          command-not-found debian dircycle encode64 lol extract launch_trial \
          vim-scp ufw sublime pylint pep8 autopep8 \
          common-aliases buildbot_dev zsh-syntax-highlighting \
-         txw jump grin pip colored-man)
+         txw jump grin pip colored-man osx)
 
 source $ZSH/oh-my-zsh.sh
 # User configuration
@@ -62,3 +62,6 @@ unsetopt correctall
 if [ -e ~/.profile ]; then source ~/.profile; fi
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+
+# added by travis gem
+[ -f /Users/gaetan/.travis/travis.sh ] && source /Users/gaetan/.travis/travis.sh
