@@ -35,6 +35,16 @@ function flash-bootimage(){
     )
 }
 
+function flash-fls-in-cwd(){
+    (
+        cd ~/projects/yocto/out/pub/sofia-lte/images/sofia-lte/signed_fls
+        /opt/intel/platformflashtool/bin/downloadTool \
+            --library=/opt/intel/platformflashtool/lib/libDownloadTool.so \
+            --verbose 4 \
+            *.fls
+    )
+}
+
 function flash-all(){
     (
         cd ~/projects/yocto/out/pub/sofia-lte/images/sofia-lte/signed_fls
