@@ -97,8 +97,10 @@ _gradle_tasks () {
   if [[ -f build.gradle ]]; then
     _gradle_arguments
     if _gradle_does_task_list_need_generating; then
-      # First make an empty file
-      echo '' > .gradletasknamecache
+      # First empty the old cache file
+      if [ -f .gradletasknamecache ]; then
+       rm .gradletasknamecache
+      fi
       # Then append the rest of the lines to that file
       output=$(gradle tasks --all)
       _gradle_parse_tasks_to_gradletasknamecache $output
@@ -111,8 +113,10 @@ _gradlew_tasks () {
   if [[ -f build.gradle ]]; then
     _gradle_arguments
     if _gradle_does_task_list_need_generating; then
-      # First make an empty file
-      echo '' > .gradletasknamecache
+      # First empty the old cache file
+      if [ -f .gradletasknamecache ]; then
+       rm .gradletasknamecache
+      fi
       # Then append the rest of the lines to that file
       output=$(./gradlew tasks --all)
       _gradle_parse_tasks_to_gradletasknamecache $output
