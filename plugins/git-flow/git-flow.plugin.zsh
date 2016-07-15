@@ -35,10 +35,11 @@
  
  # hotfix
  alias gflh='git flow hotfix'
- alias gflh='git checkout hotfix'
+ alias gch='git checkout hotfix'
  alias gflhs='git flow hotfix start'
  alias gflhf='git flow hotfix finish'
- 
+ alias gflhl='git flow hotfix list'
+
  # release
  alias gflr='git flow release'
  alias gcr='git checkout release'
