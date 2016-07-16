@@ -23,7 +23,8 @@
  # Git flow alias
  alias gfl='git flow'
  alias gfli='git flow init'
- 
+ alias gflv='git flow version'
+
  # feature
  alias gflf='git flow feature'
  alias gflfs='git flow feature start'
@@ -47,6 +48,7 @@
  alias gflrf='git flow release finish'
  alias gcr='git checkout release'
  alias gflrp='git flow release publish'
+ alias gflrl='git flow release list'
 
 _git-flow ()
 {
