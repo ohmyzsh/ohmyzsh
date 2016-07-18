@@ -2,15 +2,15 @@
 
 _emacsfun()
 {
-    # get list of available X windows.
-    x=`emacsclient --alternate-editor '' --eval '(x-display-list)' 2>/dev/null`
+    # get list of emacs frames.
+    frameslist=`emacsclient --alternate-editor '' --eval '(frame-list)' 2>/dev/null | egrep -o '(frame)+'`
 
-    if [ -z "$x" ] || [ "$x" = "nil" ] ;then
-        # Create one if there is no X window yet.
-        emacsclient --alternate-editor "" --create-frame "$@"
-    else
+    if [ "$(echo "$frameslist" | sed -n '$=')" -ge 2 ] ;then
         # prevent creating another X frame if there is at least one present.
         emacsclient --alternate-editor "" "$@"
+    else
+        # Create one if there is no X window yet.
+        emacsclient --alternate-editor "" --create-frame "$@"
     fi
 }
 
