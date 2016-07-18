@@ -67,7 +67,7 @@ else
     sudo pacman -Syu
   }
 fi
-
+if (( $+commands[pacman] )); then
 # Pacman - https://wiki.archlinux.org/index.php/Pacman_Tips
 alias pacupg='sudo pacman -Syu'
 alias pacin='sudo pacman -S'
@@ -134,3 +134,4 @@ pacmansignkeys() {
       --no-permission-warning --command-fd 0 --edit-key $key
   done
 }
+fi
