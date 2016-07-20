@@ -128,9 +128,7 @@ prompt_git() {
 }
 
 prompt_hg() {
-  if ! type hg &> /dev/null; then
-    return
-  fi
+  (( $+commands[hg] )) || return
   local rev status
   if $(hg id >/dev/null 2>&1); then
     if $(hg prompt >/dev/null 2>&1); then
