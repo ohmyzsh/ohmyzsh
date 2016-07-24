@@ -43,4 +43,3 @@ alias npmst="npm start"
 
 # Run npm test
 alias npmt="npm test"
-
