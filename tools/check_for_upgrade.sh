@@ -11,9 +11,9 @@ function _update_zsh_update() {
 }
 
 function _upgrade_zsh() {
-  env ZSH=$ZSH /bin/sh $ZSH/tools/upgrade.sh
   # update the zsh file
   _update_zsh_update
+  env ZSH=$ZSH /bin/sh $ZSH/tools/upgrade.sh
 }
 
 epoch_target=$UPDATE_ZSH_DAYS
