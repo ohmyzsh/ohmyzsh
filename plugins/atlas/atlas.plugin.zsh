@@ -43,6 +43,24 @@ function atlas_map {
   fi
 }
 
+function atlas_show {
+  if [ -d "/Users/nstilwell/.hosts" ] && [ -e "/Users/nstilwell/.hosts/$1" ]; then
+    head -n 4 /etc/hosts;
+  else
+    echo "Atlas not initialized";
+    atlas_usage;
+  fi
+}
+
+function atlas_list {
+  if [ -d "/Users/nstilwell/.hosts" ] && [ -e "/Users/nstilwell/.hosts/$1" ]; then
+    ls ~/.hosts;
+  else
+    echo "Atlas not initialized";
+    atlas_usage;
+  fi
+}
+
 function atlas {
   if [ -z "$1" ]; then
     atlas_usage;
@@ -50,5 +68,7 @@ function atlas {
     [ "$1" = "new" ] && atlas_new "$2";
     [ "$1" = "init" ] && atlas_init;
     [ "$1" = "map" ] && atlas_map "$2";
+    [ "$1" = "show" ] && atlas_show;
+    [ "$1" = "list" ] && atlas_list;
   fi
 }
