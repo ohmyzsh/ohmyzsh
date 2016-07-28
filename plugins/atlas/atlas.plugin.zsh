@@ -8,6 +8,8 @@ function atlas_usage {
       new     Create new hosts map file
       init    Create ~/.hosts to store host maps in
       map     link /etc/hosts to map supplying map name
+      list    show what host configs exist
+      show    show which config is linked
 
 
 USAGE
