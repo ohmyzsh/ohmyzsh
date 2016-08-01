@@ -1,7 +1,9 @@
 #compdef nvm
 #autoload
 
-[[ -s ~/.nvm/nvm.sh ]] || return 0
+if ![ -f $HOME/.nvm/nvm.sh ] && ![ $commands[brew] -a -f `brew --prefix`/opt/nvm/nvm.sh ]; then
+  return 0
+fi
 
 local -a _1st_arguments
 _1st_arguments=(
