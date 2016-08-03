@@ -5,7 +5,7 @@ export LSCOLORS="Gxfxcxdxbxegedabagacad"
 # Enable ls colors
 if [ "$DISABLE_LS_COLORS" != "true" ]
 then
-  # Find the option for using colors in ls, depending on the version: Linux, BSD or IBM i
+  # Find the option for using colors in ls, depending on the version: Linux or BSD
   if [[ "$(uname -s)" == "NetBSD" ]]; then
     # On NetBSD, test if "gls" (GNU ls) is installed (this one supports colors);
     # otherwise, leave ls as is, because NetBSD's ls doesn't support -G
@@ -17,8 +17,6 @@ then
     # coreutils, so prefer it to "gls".
     gls --color -d . &>/dev/null 2>&1 && alias ls='gls --color=tty'
     colorls -G -d . &>/dev/null 2>&1 && alias ls='colorls -G'
-  elif [[ "$(uname -s)" == "OS400" ]]; then
-    # On IBM i ls doesn't support colors
   else
     ls --color -d . &>/dev/null 2>&1 && alias ls='ls --color=tty' || alias ls='ls -G'
   fi
