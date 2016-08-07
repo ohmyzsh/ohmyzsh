@@ -1,3 +1,4 @@
 # The addition 'nvm install' attempts in ~/.profile
 
-[[ -s ~/.nvm/nvm.sh ]] && . ~/.nvm/nvm.sh
+NVM_DIR="${NVM_DIR:=~/.nvm}"
+[[ -s "${NVM_DIR}/nvm.sh" ]] && . "${NVM_DIR}/nvm.sh"
