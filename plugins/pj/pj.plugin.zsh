@@ -2,7 +2,6 @@ alias pjo="pj open"
 
 pj () {
     emulate -L zsh
-    setopt shwordsplit
 
     cmd="cd"
     project=$1
@@ -10,7 +9,7 @@ pj () {
     if [[ "open" == "$project" ]]; then
         shift
         project=$*
-        cmd=$EDITOR
+        cmd=${=EDITOR}
     else
         project=$*
     fi
