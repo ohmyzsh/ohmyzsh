@@ -64,7 +64,7 @@ alias gPf='git push --force'
 compdef _git gPf=git-push
 alias gPhm='git push heroku master'
 # git push origin
-alias gPof='git push origin'
+alias gPo='git push origin'
 # git push origin force
 alias gPof='git push origin --force'
 
