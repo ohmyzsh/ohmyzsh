@@ -1,29 +1,31 @@
 alias pjo="pj open"
 
-function pj () {
-    cmd="cd"
-    file=$1
+pj () {
+    emulate -L zsh
+    setopt shwordsplit
 
-    if [[ "open" == "$file" ]] then
+    cmd="cd"
+    project=$1
+
+    if [[ "open" == "$project" ]]; then
         shift
-        file=$*
-        cmd=(${(s: :)EDITOR})
+        project=$*
+        cmd=$EDITOR
     else
-        file=$*
+        project=$*
     fi
 
-    for project in $PROJECT_PATHS; do
-        if [[ -d $project/$file ]] then
-            $cmd "$project/$file"
-            unset project # Unset project var
+    for basedir ($PROJECT_PATHS); do
+        if [[ -d "$basedir/$project" ]]; then
+            $cmd "$basedir/$project"
             return
         fi
     done
 
-    echo "No such project $1"
+    echo "No such project '${project}'."
 }
 
-function _pj () {
+_pj () {
     emulate -L zsh
 
     typeset -a projects
