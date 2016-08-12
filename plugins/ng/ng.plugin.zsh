@@ -1,5 +1,5 @@
 
-ng_opts='addon asset-sizes b build completion d destroy doc e2e g generate get h help i init install lint make-this-awesome new s serve server set t test v version -h --help'
+ng_opts='addon asset-sizes b build completion d destroy doc e2e g generate get github-pages:deploy gh-pages:deploy h help i init install lint make-this-awesome new s serve server set t test v version -h --help'
 
 _ng_completion () {
   local words cword opts
@@ -16,12 +16,8 @@ _ng_completion () {
       opts='-o --output-path'
       ;;
 
-    completion | i | install)
-      opts=''
-      ;;
-
     b | build )
-      opts='--environment --output-path --suppress-sizes --watch --watcher -dev -e -prod'
+      opts='--environment --output-path --suppress-sizes --target --watch --watcher -dev -e -prod'
       ;;
 
     d | destroy )
@@ -29,7 +25,11 @@ _ng_completion () {
       ;;
 
     g | generate )
-      opts='component directive pipe route service --generate -d --dry-run --verbose -v --pod -p --classic -c --dummy -dum -id --in-repo --in-repo-addon -ir'
+      opts='class component directive enum module pipe route service --generate -d --dry-run --verbose -v --pod -p --classic -c --dummy -dum -id --in-repo --in-repo-addon -ir'
+      ;;
+
+    gh-pages:deploy | github-pages:deploy )
+      opts='--environment --gh-token --gh-username --skip-build --user-page --message'
       ;;
 
     h | help | -h | --help)
@@ -45,7 +45,7 @@ _ng_completion () {
       ;;
 
     s | serve | server )
-      opts='--environment --host --insecure-proxy --inspr --live-reload --live-reload-host --live-reload-port --output-path --port --proxy --ssl --ssl-cert --ssl-key --watcher -H -dev -e -lr -lrbu -lrh -lrp -op -out -p -pr -prod -pxy -w'
+      opts='--environment --host --insecure-proxy --inspr --live-reload --live-reload-base-url --live-reload-host --live-reload-live-css --live-reload-port --output-path --port --proxy --ssl --ssl-cert --ssl-key --target --watcher -H -dev -e -lr -lrbu -lrh -lrp -op -out -p -pr -prod -pxy -t -w'
       ;;
 
     set )
@@ -60,8 +60,12 @@ _ng_completion () {
       opts='--verbose'
       ;;
 
-    ng | *)
+    ng )
       opts=$ng_opts
+      ;;
+
+    * )
+      opts=''
       ;;
   esac
 
