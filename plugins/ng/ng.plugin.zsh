@@ -16,7 +16,7 @@ _ng_completion () {
       opts='-o --output-path'
       ;;
 
-    i | install)
+    completion | i | install)
       opts=''
       ;;
 
