@@ -8,7 +8,19 @@ _rake_refresh () {
 }
 
 _rake_does_task_list_need_generating () {
-  [[ ! -f .rake_tasks ]] || [[ Rakefile -nt .rake_tasks ]]
+  [[ ! -f .rake_tasks ]] || [[ Rakefile -nt .rake_tasks ]] || (_is_rails_app && _tasks_changed)
+}
+
+_is_rails_app () {
+  [[ -e "bin/rails" ]] || [ -e "script/rails" ]
+}
+
+_tasks_changed () {
+  local is_changed=1
+  for file in lib/tasks/**/*.rake; do
+    if [[ $file -nt .rake_tasks ]]; then is_changed=0; fi
+  done
+  return is_changed
 }
 
 _rake_generate () {
