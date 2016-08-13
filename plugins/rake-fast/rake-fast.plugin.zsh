@@ -8,7 +8,23 @@ _rake_refresh () {
 }
 
 _rake_does_task_list_need_generating () {
-  [[ ! -f .rake_tasks ]] || [[ Rakefile -nt .rake_tasks ]]
+  _rake_tasks_missing || _rakefile_has_changes || _sub_rake_files_have_changes
+}
+
+_rake_tasks_missing () {
+  [[ ! -f .rake_tasks ]]
+}
+
+_rakefile_has_changes () {
+  [[ Rakefile -nt .rake_tasks ]]
+}
+
+_sub_rake_files_have_changes () {
+  if find . -type f -name "*.rake" 2>/dev/null | grep -q .; then
+    [[ $(find ./**/*.rake(.om[1])) -nt .rake_tasks ]]
+  else
+    false
+  fi
 }
 
 _rake_generate () {
