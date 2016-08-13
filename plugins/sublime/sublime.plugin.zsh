@@ -1,5 +1,9 @@
+# Sublime Text Aliases
+
+() {
+
 if [[ $('uname') == 'Linux' ]]; then
-    local _sublime_linux_paths > /dev/null 2>&1
+    local _sublime_linux_paths _sublime_path
     _sublime_linux_paths=(
         "$HOME/bin/sublime_text"
         "/opt/sublime_text/sublime_text"
@@ -21,7 +25,7 @@ if [[ $('uname') == 'Linux' ]]; then
     done
 
 elif  [[ "$OSTYPE" = darwin* ]]; then
-    local _sublime_darwin_paths > /dev/null 2>&1
+    local _sublime_darwin_paths _sublime_path
     _sublime_darwin_paths=(
         "/usr/local/bin/subl"
         "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"
@@ -56,3 +60,5 @@ elif [[ "$OSTYPE" = 'cygwin' ]]; then
 fi
 
 alias stt='st .'
+
+}
