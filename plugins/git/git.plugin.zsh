@@ -75,6 +75,8 @@ alias gco='git checkout'
 alias gcount='git shortlog -sn'
 compdef gcount=git
 alias gcp='git cherry-pick'
+alias gcpa='git cherry-pick --abort'
+alias gcpc='git cherry-pick --continue'
 alias gcs='git commit -S'
 
 alias gd='git diff'
