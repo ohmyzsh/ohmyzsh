@@ -20,11 +20,35 @@
 #     c. Or, use this file as an oh-my-zsh plugin.
 #
 
-#Alias
-alias gfl='git flow'
-alias gcd='git checkout develop'
-alias gch='git checkout hotfix'
-alias gcr='git checkout release'
+ # Git flow alias
+ alias gfl='git flow'
+ alias gfli='git flow init'
+ alias gflv='git flow version'
+
+ # feature
+ alias gflf='git flow feature'
+ alias gflfs='git flow feature start'
+ alias gflff='git flow feature finish'
+ alias gflfd='git flow feature diff'
+ 
+ # develop
+ alias gcd='git checkout develop'
+ 
+ # hotfix
+ alias gflh='git flow hotfix'
+ alias gch='git checkout hotfix'
+ alias gflhs='git flow hotfix start'
+ alias gflhf='git flow hotfix finish'
+ alias gflhl='git flow hotfix list'
+
+ # release
+ alias gflr='git flow release'
+ alias gcr='git checkout release'
+ alias gflrs='git flow release start'
+ alias gflrf='git flow release finish'
+ alias gcr='git checkout release'
+ alias gflrp='git flow release publish'
+ alias gflrl='git flow release list'
 
 _git-flow ()
 {
