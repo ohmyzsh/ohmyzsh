@@ -1,0 +1,5 @@
+master_ip_default = localhost
+master_ip = localhost
+ros_distro_default = 
+ros_interface = 
+ros_workspace = 
