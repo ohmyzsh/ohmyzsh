@@ -1,36 +1,31 @@
-# Git flow plugin installation
+# Git-Flow plugin
 
-```bash
-git clone https://github.com/robbyrussell/oh-my-zsh.git 
+This plugin adds completion and aliases for the `git-flow` command. More information
+at https://github.com/nvie/gitflow.
 
-cp oh-my-zsh/plugins/git-flow/git-flow.plugin.zsh ~/.git-flow-completion.zsh
-
-vim ~/.zshrc
-
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-
-plugins=(git git-flow)
-      
-source ~/.git-flow-completion.zsh
+Enable git-flow plugin in your zshrc file:
 ```
-## Your new git-flow alias 
+plugins=(... git-flow)
+```
 
-```bash
-alias gfl='git flow'
-alias gfli='git flow init'
-alias gcd='git checkout develop'
-alias gch='git checkout hotfix'
-alias gcr='git checkout release'
-alias gflf='git flow feature'
-alias gflh='git flow hotfix'
-alias gflr='git flow release'
-alias gflfs='git flow feature start'
-alias gflhs='git flow hotfix start'
-alias gflrs='git flow release start'
-alias gflff='git flow feature finish'
-alias gflhf='git flow hotfix finish'
-alias gflrf='git flow release finish'
-``` 
+## Aliases
+
+More information about `git-flow` commands: 
+https://github.com/nvie/gitflow/wiki/Command-Line-Arguments
+
+| Alias   | Command                   | Description                            |
+|---------|---------------------------|----------------------------------------|
+| `gfl`   | `git flow`                | Git-Flow command                       |
+| `gfli`  | `git flow init`           | Initialize git-flow repository         |
+| `gcd`   | `git checkout develop`    | Check out develop branch               |
+| `gch`   | `git checkout hotfix`     | Check out hotfix branch                |
+| `gcr`   | `git checkout release`    | Check out release branch               |
+| `gflf`  | `git flow feature`        | List existing feature branches         |
+| `gflh`  | `git flow hotfix`         | List existing hotfix branches          |
+| `gflr`  | `git flow release`        | List existing release branches         |
+| `gflfs` | `git flow feature start`  | Start a new feature: `gflfs <name>`    |
+| `gflhs` | `git flow hotfix start`   | Start a new hotfix: `gflhs <version>`  |
+| `gflrs` | `git flow release start`  | Start a new release: `gflrs <version>` |
+| `gflff` | `git flow feature finish` | Finish feature: `gflff <name>`         |
+| `gflhf` | `git flow hotfix finish`  | Finish hotfix: `gflhf <version>`       |
+| `gflrf` | `git flow release finish` | Finish release: `gflrf <version>`      |
