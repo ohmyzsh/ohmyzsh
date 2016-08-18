@@ -17,14 +17,18 @@ hg_prompt_info()
 	local STATUS=""
 	if $(hg id >/dev/null 2>&1); then
 		local BRANCH=$(hg branch 2>/dev/null)
-		if `hg status | grep -q "^\?"`; then
+		local STATUS_OUTPUT=$(hg status)
+		if echo $STATUS_OUTPUT | grep -q "^\?"; then
 			STATUS="$ZSH_THEME_HG_PROMPT_UNTRACKED"
 		fi
-		if `hg status | grep -q "^[A]"`; then
+		if echo $STATUS_OUTPUT | grep -q "^[A]"; then
 			STATUS="$ZSH_THEME_HG_PROMPT_ADDED$STATUS"
 		fi
-		if `hg status | grep -q "^[M]"`; then
+		if echo $STATUS_OUTPUT | grep -q "^[M]"; then
 			STATUS="$ZSH_THEME_HG_PROMPT_MODIFIED$STATUS"
+		fi
+		if [ ! "$STATUS" = "" ] ; then
+			 STATUS=" $STATUS"
 		fi
 		echo "$BRANCH$STATUS"
 	fi
