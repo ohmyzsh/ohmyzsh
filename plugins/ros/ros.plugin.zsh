@@ -315,7 +315,7 @@ ros_prompt_info() {
   local master_ip=$(rosmaster)
   if [ "$master_ip" ]; then
     ros_status+="$ZSH_THEME_ROS_PROMPT_PREFIX%{$fg_no_bold[white]%}"
-    curl -m 0.1 -s -o /dev/null \
+    LC_ALL=C curl -m 0.1 -s -o /dev/null \
     --request POST "$ROS_MASTER_URI/RPC2" --data "<?xml version='1.0'?>
     <methodCall><methodName>getUri</methodName><params><param><value><string>
     </string></value></param></params></methodCall>"
