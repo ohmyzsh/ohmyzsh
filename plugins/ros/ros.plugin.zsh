@@ -202,7 +202,7 @@ rosworkspace() {
   case "$1" in
     list)
       [ $# -ne 1 ] && >&2 echo "Usage : $0 list" && return 1
-      _omz_ros_workspace_get_list | sed 's/[[:space:]]\+/\n/g' | nl
+      echo "$ros_workspaces" | sed 's/[[:space:]]\+/\n/g' | nl
       ;;
 
     add)
