@@ -69,6 +69,27 @@ paclist() {
 alias paclsorphans='sudo pacman -Qdt'
 alias pacrmorphans='sudo pacman -Rs $(pacman -Qtdq)'
 
+# list of files in package
+alias pacls='pacman -Ql'
+
+# who owns this file?
+alias pacowns='pacman -Qo'
+alias pacown='pacowns'
+
+# goto package's Arch Linux webpage
+if [[ -x "$(which xdg-open)" ]]; then
+  pacweb() {
+    pkg="$1"
+    infos="$(pacman -Si "$pkg")"
+    if [[ -z "$infos" ]]; then
+      return
+    fi
+    repo="$(grep '^Repo' <<< "$infos" | grep -oP '[^ ]+$')"
+    arch="$(grep '^Arch' <<< "$infos" | grep -oP '[^ ]+$')"
+    xdg-open "https://www.archlinux.org/packages/$repo/$arch/$pkg/" 2>&1 >/dev/null &
+  }
+fi
+
 pacdisowned() {
   tmp=${TMPDIR-/tmp}/pacman-disowned-$UID-$$
   db=$tmp/db
