@@ -70,6 +70,7 @@ alias gcl='git clone --recursive'
 alias gclean='git clean -fd'
 alias gpristine='git reset --hard && git clean -dfx'
 alias gcm='git checkout master'
+alias gcd="git remote show origin | awk '/HEAD branch:/ {print \$3}' | xargs git checkout"
 alias gcmsg='git commit -m'
 alias gco='git checkout'
 alias gcount='git shortlog -sn'
