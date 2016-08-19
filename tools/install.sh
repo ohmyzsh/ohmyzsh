@@ -191,9 +191,9 @@ main() {
   printf "${NORMAL}"
   
   if [ -n "$CHSH_ZSH" ]; then
-    env "$CHSH_ZSH" -l
+    exec env "$CHSH_ZSH" -l
   elif [ -n "$ENV_ZSH" ]; then
-    env "$ENV_ZSH"
+    exec env "$ENV_ZSH"
   fi
 }
 
