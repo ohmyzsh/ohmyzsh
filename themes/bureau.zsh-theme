@@ -22,36 +22,42 @@ bureau_git_branch () {
   echo "${ref#refs/heads/}"
 }
 
-bureau_git_status () {
+bureau_git_status() {
   _STATUS=""
-  if [[ $(command git status --short 2> /dev/null) != "" ]]; then
-    _INDEX=$(command git status --porcelain -b 2> /dev/null)
-    if $(echo "$_INDEX" | command grep '^[AMRD]. ' &> /dev/null); then
+
+  # check status of files
+  _INDEX=$(command git status --porcelain 2> /dev/null)
+  if [[ -n "$_INDEX" ]]; then
+    if $(echo "$_INDEX" | command grep -q '^[AMRD]. '); then
       _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_STAGED"
     fi
-    if $(echo "$_INDEX" | command grep '^.[MTD] ' &> /dev/null); then
+    if $(echo "$_INDEX" | command grep -q '^.[MTD] '); then
       _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_UNSTAGED"
     fi
-    if $(echo "$_INDEX" | command grep -E '^\?\? ' &> /dev/null); then
+    if $(echo "$_INDEX" | command grep -q -E '^\?\? '); then
       _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_UNTRACKED"
     fi
-    if $(echo "$_INDEX" | command grep '^UU ' &> /dev/null); then
+    if $(echo "$_INDEX" | command grep -q '^UU '); then
       _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_UNMERGED"
-    fi
-    if $(command git rev-parse --verify refs/stash >/dev/null 2>&1); then
-      _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_STASHED"
-    fi
-    if $(echo "$_INDEX" | command grep '^## .*ahead' &> /dev/null); then
-      _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_AHEAD"
-    fi
-    if $(echo "$_INDEX" | command grep '^## .*behind' &> /dev/null); then
-      _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_BEHIND"
-    fi
-    if $(echo "$_INDEX" | command grep '^## .*diverged' &> /dev/null); then
-      _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_DIVERGED"
     fi
   else
     _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_CLEAN"
+  fi
+
+  # check status of local repository
+  _INDEX=$(command git status --porcelain -b 2> /dev/null)
+  if $(echo "$_INDEX" | command grep -q '^## .*ahead'); then
+    _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_AHEAD"
+  fi
+  if $(echo "$_INDEX" | command grep -q '^## .*behind'); then
+    _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_BEHIND"
+  fi
+  if $(echo "$_INDEX" | command grep -q '^## .*diverged'); then
+    _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_DIVERGED"
+  fi
+
+  if $(command git rev-parse --verify refs/stash &> /dev/null); then
+    _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_STASHED"
   fi
 
   echo $_STATUS

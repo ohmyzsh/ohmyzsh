@@ -15,8 +15,8 @@ zmodload zsh/curses
 local IFS="
 "
 
-[ -f ~/.config/znt/n-list.conf ] && . ~/.config/znt/n-list.conf
-[ -f ~/.config/znt/n-env.conf ] && . ~/.config/znt/n-env.conf
+[ -f ~/.config/znt/n-list.conf ] && builtin source ~/.config/znt/n-list.conf
+[ -f ~/.config/znt/n-env.conf ] && builtin source ~/.config/znt/n-env.conf
 
 local list
 local selected
