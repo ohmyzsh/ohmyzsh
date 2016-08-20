@@ -91,7 +91,7 @@ main() {
       ENV_ZSH="$(which zsh)" # $(type -P zsh) would be better but not POSIX sh
 
       # Will it blend?
-      if ! "$ENV_ZSH" -c 'exit 0' >/dev/null 2>&1; then
+      if [ -z "$("$ENV_ZSH" -c 'echo $ZSH_VERSION')" ]; then
         unset ENV_ZSH
       fi
 
@@ -104,7 +104,7 @@ main() {
         # -- We know at least one is in there because of an earlier check in this script.
         GREP_ZSH="$(grep /zsh$ /etc/shells | tail -1)"
         # Will it blend?
-        if "$GREP_ZSH" -c 'exit 0' >/dev/null 2>&1; then
+        if [ -z "$("$GREP_ZSH" -c 'echo $ZSH_VERSION')" ]; then
           # Yep, let's use that zsh entry.
           CHSH_ZSH="$GREP_ZSH"
         else
