@@ -129,7 +129,7 @@ main() {
           # CTRL-C at the chsh password prompt will bubble up and kill this script,
           # so we set a benign trap on the INT signal to stop the bubbling.
           trap 'true' INT
-          # We need a while loop so the user can retry after entering a bad password.
+          # We need a loop so the user can retry after entering a bad password.
           while true; do
             # Attempt to change the default login shell.
             CHSH_ZSH_STDERR="$(chsh -s "$CHSH_ZSH" 2>&1)" && {
