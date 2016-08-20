@@ -104,7 +104,7 @@ main() {
         # -- We know at least one is in there because of an earlier check in this script.
         GREP_ZSH="$(grep /zsh$ /etc/shells | tail -1)"
         # Will it blend?
-        if [ -z "$("$GREP_ZSH" -c 'echo $ZSH_VERSION')" ]; then
+        if [ -n "$("$GREP_ZSH" -c 'echo $ZSH_VERSION')" ]; then
           # Yep, let's use that zsh entry.
           CHSH_ZSH="$GREP_ZSH"
         else
