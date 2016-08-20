@@ -91,7 +91,7 @@ main() {
       ENV_ZSH="$(which zsh)" # $(type -P zsh) would be better but not POSIX sh
 
       # Will it blend?
-      if [ -z "$("$ENV_ZSH" -c 'echo $ZSH_VERSION')" ]; then
+      if [ -z "$("$ENV_ZSH" -c 'print $ZSH_VERSION')" ]; then
         unset ENV_ZSH
       fi
 
@@ -104,7 +104,7 @@ main() {
         # -- We know at least one is in there because of an earlier check in this script.
         GREP_ZSH="$(grep /zsh$ /etc/shells | tail -1)"
         # Will it blend?
-        if [ -n "$("$GREP_ZSH" -c 'echo $ZSH_VERSION')" ]; then
+        if [ -n "$("$GREP_ZSH" -c 'print $ZSH_VERSION')" ]; then
           # Yep, let's use that zsh entry.
           CHSH_ZSH="$GREP_ZSH"
         else
@@ -126,44 +126,52 @@ main() {
         # If this platform provides a "chsh" command (not Cygwin), do it, man!
         if hash chsh >/dev/null 2>&1; then
           printf "${BLUE}Time to change your default shell to ${CHSH_ZSH}!${NORMAL}\n"
+          # CTRL-C at the chsh password prompt will bubble up and kill this script,
+          # so we set a benign trap on the INT signal to stop the bubbling.
+          trap 'true' INT
+          # We need a while loop so the user can retry after entering a bad password.
           while true; do
-            set +e
-            trap 'CHSH_ZSH_ERRNO=$?' INT
-            CHSH_ZSH_STDERR="$(chsh -s "$CHSH_ZSH" 2>&1)"
-            CHSH_ZSH_ERRNO=${CHSH_ZSH_ERRNO-$?}
-            case $CHSH_ZSH_ERRNO in
-              0)
-                # Great. It worked.
-                # Update the $SHELL export for this session.
-                SHELL="$CHSH_ZSH"
-                break
-              ;;
-              130)
-                printf "${RED}Change of default login shell has been cancelled!${NORMAL}\n"
-                printf "${BLUE}To try again, run the following command at any time:\n${NORMAL}"
-                printf '    %schsh -s "%s"%s\n' "${BLUE}" "$CHSH_ZSH" "${NORMAL}"
-                break
-              ;;
-              *)
-                case "$CHSH_ZSH_STDERR" in
-                  *Credentials*)
-                    printf "${RED}Wrong password.${NORMAL} ${GREEN}Press CTRL-C to cancel.${NORMAL}\n"
-                  ;;
-                  *)
-                    printf "${RED}There was a problem changing the default login shell!${NORMAL}\n"
-                    printf "${RED}${CHSH_ZSH_STDERR}${NORMAL}\n"
-                    # Probably best to fall back to the environment zsh if it exists.
-                    if [ -n "$ENV_ZSH" ]; then
-                      unset CHSH_ZSH
-                    fi
-                    break
-                  ;;
-                esac
-              ;;
-            esac
-            trap - INT
-            set -e
+            # Attempt to change the default login shell.
+            CHSH_ZSH_STDERR="$(chsh -s "$CHSH_ZSH" 2>&1)" && {
+              # Great. It worked.
+              printf "${BLUE}Default login shell changed to: ${CHSH_ZSH}\n${NORMAL}"
+              # Update the $SHELL export for this session.
+              SHELL="$CHSH_ZSH"
+              break
+            } || {
+              case $? in
+                # On CTRL-C, chsh returns 130.
+                130)
+                  # The user cancelled changing the default login shell at the password prompt.
+                  printf "${RED}Change of default login shell has been cancelled!${NORMAL}\n"
+                  printf "${BLUE}To try again, run the following command at any time:\n${NORMAL}"
+                  printf '    %schsh -s "%s"%s\n' "${BLUE}" "$CHSH_ZSH" "${NORMAL}"
+                  break
+                ;;
+                # Some other error code.
+                *)
+                  case "$CHSH_ZSH_STDERR" in
+                    # The user entered a wrong password.
+                    *Credentials*)
+                      printf "${RED}Wrong password.${NORMAL} ${GREEN}Press CTRL-C to cancel.${NORMAL}\n"
+                    ;;
+                    # Something other unhandled error.
+                    *)
+                      printf "${RED}There was a problem changing the default login shell!${NORMAL}\n"
+                      printf "${RED}${CHSH_ZSH_STDERR}${NORMAL}\n"
+                      # Probably best to fall back to the environment zsh if it exists.
+                      if [ -n "$ENV_ZSH" ]; then
+                        unset CHSH_ZSH
+                      fi
+                      break
+                    ;;
+                  esac
+                ;;
+              esac
+            }
           done
+          # Unset the INT trap.
+          trap - INT
         # Else, suggest the user change the login shell manually.
         else
           printf "I can't change your shell automatically because this system does not have chsh.\n"
