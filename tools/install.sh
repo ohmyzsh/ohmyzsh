@@ -155,7 +155,7 @@ main() {
                     *Credentials*)
                       printf "${RED}Wrong password.${NORMAL} ${GREEN}Press CTRL-C to cancel.${NORMAL}\n"
                     ;;
-                    # Something other unhandled error.
+                    # Unhandled error.
                     *)
                       printf "${RED}There was a problem changing the default login shell!${NORMAL}\n"
                       printf "${RED}${CHSH_ZSH_STDERR}${NORMAL}\n"
