@@ -150,6 +150,8 @@ main() {
                     printf "${RED}Wrong password.${NORMAL} ${GREEN}Press CTRL-C to cancel.${NORMAL}\n"
                   ;;
                   *)
+                    printf "${RED}There was a problem changing the default login shell!${NORMAL}\n"
+                    printf "${RED}${CHSH_ZSH_STDERR}${NORMAL}\n"
                     # Probably best to fall back to the environment zsh if it exists.
                     if [ -n "$ENV_ZSH" ]; then
                       unset CHSH_ZSH
