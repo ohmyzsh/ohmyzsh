@@ -14,11 +14,6 @@ pj () {
         project=$*
     fi
 
-    if [[ -z "$project" ]]; then
-        echo "You have to specify a project name."
-        return
-    fi
-
     for basedir ($PROJECT_PATHS); do
         if [[ -d "$basedir/$project" ]]; then
             $cmd "$basedir/$project"
