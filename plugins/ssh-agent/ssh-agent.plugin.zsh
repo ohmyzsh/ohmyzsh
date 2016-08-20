@@ -1,32 +1,3 @@
-#
-# INSTRUCTIONS
-#
-#   To enable agent forwarding support add the following to
-#   your .zshrc file:
-#
-#     zstyle :omz:plugins:ssh-agent agent-forwarding on
-#
-#   To load multiple identities use the identities style, For
-#   example:
-#
-#     zstyle :omz:plugins:ssh-agent identities id_rsa id_rsa2 id_github
-#
-#   To set the maximum lifetime of the identities, use the
-#   lifetime style. The lifetime may be specified in seconds
-#   or as described in sshd_config(5) (see TIME FORMATS)
-#   If left unspecified, the default lifetime is forever.
-#
-#     zstyle :omz:plugins:ssh-agent lifetime 4h
-#
-# CREDITS
-#
-#   Based on code from Joseph M. Reagle
-#   http://www.cygwin.com/ml/cygwin/2001-06/msg00537.html
-#
-#   Agent forwarding support based on ideas from
-#   Florent Thoumie and Jonas Pfenniger
-#
-
 local _plugin__ssh_env
 local _plugin__forwarding
 
@@ -76,4 +47,3 @@ fi
 unfunction _plugin__start_agent
 unset _plugin__forwarding
 unset _plugin__ssh_env
-
