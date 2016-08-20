@@ -1,49 +1,42 @@
-local _plugin__ssh_env
-local _plugin__forwarding
+typeset _agent_forwarding _ssh_env_cache
 
-function _plugin__start_agent()
-{
-  local -a identities
-  local lifetime
-  zstyle -s :omz:plugins:ssh-agent lifetime lifetime
+function _start_agent() {
+	local lifetime
+	local -a identities
 
-  # start ssh-agent and setup environment
-  ssh-agent ${lifetime:+-t} ${lifetime} | sed 's/^echo/#echo/' >! ${_plugin__ssh_env}
-  chmod 600 ${_plugin__ssh_env}
-  . ${_plugin__ssh_env} > /dev/null
+	# start ssh-agent and setup environment
+	zstyle -s :omz:plugins:ssh-agent lifetime lifetime
 
-  # load identies
-  zstyle -a :omz:plugins:ssh-agent identities identities
-  echo starting ssh-agent...
+	ssh-agent ${lifetime:+-t} ${lifetime} | sed 's/^echo/#echo/' >! $_ssh_env_cache
+	chmod 600 $_ssh_env_cache
+	. $_ssh_env_cache > /dev/null
 
-  ssh-add $HOME/.ssh/${^identities}
+	# load identies
+	zstyle -a :omz:plugins:ssh-agent identities identities
+
+	echo starting ssh-agent...
+	ssh-add $HOME/.ssh/${^identities}
 }
 
 # Get the filename to store/lookup the environment from
-if (( $+commands[scutil] )); then
-  # It's OS X!
-  _plugin__ssh_env="$HOME/.ssh/environment-$(scutil --get ComputerName)"
-else
-  _plugin__ssh_env="$HOME/.ssh/environment-$HOST"
-fi
+_ssh_env_cache="$HOME/.ssh/environment-$SHORT_HOST"
 
 # test if agent-forwarding is enabled
-zstyle -b :omz:plugins:ssh-agent agent-forwarding _plugin__forwarding
-if [[ ${_plugin__forwarding} == "yes" && -n "$SSH_AUTH_SOCK" ]]; then
-  # Add a nifty symlink for screen/tmux if agent forwarding
-  [[ -L $SSH_AUTH_SOCK ]] || ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USER-screen
+zstyle -b :omz:plugins:ssh-agent agent-forwarding _agent_forwarding
 
-elif [ -f "${_plugin__ssh_env}" ]; then
-  # Source SSH settings, if applicable
-  . ${_plugin__ssh_env} > /dev/null
-  ps x | grep ${SSH_AGENT_PID} | grep ssh-agent > /dev/null || {
-    _plugin__start_agent;
-  }
+if [[ $_agent_forwarding == "yes" && -n "$SSH_AUTH_SOCK" ]]; then
+	# Add a nifty symlink for screen/tmux if agent forwarding
+	[[ -L $SSH_AUTH_SOCK ]] || ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USER-screen
+elif [[ -f "$_ssh_env_cache" ]]; then
+	# Source SSH settings, if applicable
+	. $_ssh_env_cache > /dev/null
+	ps x | grep $SSH_AGENT_PID | grep ssh-agent > /dev/null || {
+		_start_agent
+	}
 else
-  _plugin__start_agent;
+	_start_agent
 fi
 
 # tidy up after ourselves
-unfunction _plugin__start_agent
-unset _plugin__forwarding
-unset _plugin__ssh_env
+unset _agent_forwarding _ssh_env_cache
+unfunction _start_agent
