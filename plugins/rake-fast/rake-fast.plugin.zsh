@@ -16,11 +16,16 @@ _is_rails_app () {
 }
 
 _tasks_changed () {
-  local is_changed=1
-  for file in lib/tasks/**/*.rake; do
-    if [[ $file -nt .rake_tasks ]]; then is_changed=0; fi
+  local -a paths
+  paths=(lib/tasks lib/tasks/**/*(N))
+
+  for path in $paths; do
+    if [[ "$path" -nt .rake_tasks ]]; then
+      return 0
+    fi
   done
-  return is_changed
+
+  return 1
 }
 
 _rake_generate () {
