@@ -30,7 +30,7 @@ if [[ $_agent_forwarding == "yes" && -n "$SSH_AUTH_SOCK" ]]; then
 elif [[ -f "$_ssh_env_cache" ]]; then
 	# Source SSH settings, if applicable
 	. $_ssh_env_cache > /dev/null
-	ps x | grep $SSH_AGENT_PID | grep ssh-agent > /dev/null || {
+	ps -o cmd -p $SSH_AGENT_PID | grep -q ssh-agent || {
 		_start_agent
 	}
 else
