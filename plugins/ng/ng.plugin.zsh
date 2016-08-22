@@ -1,5 +1,5 @@
 
-ng_opts='addon asset-sizes b build completion d destroy doc e2e g generate get github-pages:deploy gh-pages:deploy h help i init install lint make-this-awesome new s serve server set t test v version -h --help'
+ng_opts='b build completion doc e2e g generate get github-pages:deploy gh-pages:deploy h help i init install lint make-this-awesome new s serve server set t test v version -h --help'
 
 _ng_completion () {
   local words cword opts
@@ -8,20 +8,8 @@ _ng_completion () {
   let cword-=1
 
   case $words[cword] in
-    addon )
-      opts='-b --blueprint -d -dir --directory --dry-run -sb --skip-bower -sg --skip-git -sn --skip-npm -v --verbose'
-      ;;
-
-    asset-sizes )
-      opts='-o --output-path'
-      ;;
-
     b | build )
       opts='--environment --output-path --suppress-sizes --target --watch --watcher -dev -e -prod'
-      ;;
-
-    d | destroy )
-      opts='--dry-run --verbose --pod --classic --dummy --in-repo --in-repo-addon -d -v -p -c -dum -id -ir'
       ;;
 
     g | generate )
@@ -45,7 +33,7 @@ _ng_completion () {
       ;;
 
     s | serve | server )
-      opts='--environment --host --insecure-proxy --inspr --live-reload --live-reload-base-url --live-reload-host --live-reload-live-css --live-reload-port --output-path --port --proxy --ssl --ssl-cert --ssl-key --target --watcher -H -dev -e -lr -lrbu -lrh -lrp -op -out -p -pr -prod -pxy -t -w'
+      opts='--environment --host --insecure-proxy --inspr --live-reload --live-reload-base-url --live-reload-host --live-reload-live-css --live-reload-port --port --proxy --ssl --ssl-cert --ssl-key --target --watcher -H -dev -e -lr -lrbu -lrh -lrp -p -pr -prod -pxy -t -w'
       ;;
 
     set )
