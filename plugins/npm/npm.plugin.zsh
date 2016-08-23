@@ -4,9 +4,9 @@
     if [[ ! -f $__NPM_COMPLETION_FILE ]]; then
         npm completion >! $__NPM_COMPLETION_FILE || rm -f $__NPM_COMPLETION_FILE
     fi
-}
 
-source $__NPM_COMPLETION_FILE
+    source $__NPM_COMPLETION_FILE
+}
 
 # Install dependencies globally
 alias npmg="npm i -g "
