@@ -1,8 +1,10 @@
-__NPM_COMPLETION_FILE="${ZSH_CACHE_DIR}/npm_completion"
+(( $+commands[npm] )) && {
+    __NPM_COMPLETION_FILE="${ZSH_CACHE_DIR}/npm_completion"
 
-if [[ ! -f $__NPM_COMPLETION_FILE ]]; then
-    npm completion >! $__NPM_COMPLETION_FILE || rm -f $__NPM_COMPLETION_FILE
-fi
+    if [[ ! -f $__NPM_COMPLETION_FILE ]]; then
+        npm completion >! $__NPM_COMPLETION_FILE || rm -f $__NPM_COMPLETION_FILE
+    fi
+}
 
 source $__NPM_COMPLETION_FILE
 
