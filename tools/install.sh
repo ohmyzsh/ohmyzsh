@@ -209,7 +209,7 @@ main() {
     # Zsh exits immeditaly after invocation if STDIN is not a TTY, so it would be
     # pointless to exec it in the first place. Let's just print a message instead.
     printf "${BLUE}No input TTY! To begin using Oh My Zsh, start a new zsh session!${NORMAL}\n"
-    exit 0
+    exit
   elif [ -n "$CHSH_ZSH" ]; then
     exec "$CHSH_ZSH" --LOGIN
   else
