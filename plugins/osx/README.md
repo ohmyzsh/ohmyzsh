@@ -27,3 +27,6 @@ Original author: [Sorin Ionescu](https://github.com/sorin-ionescu)
 | `man-preview`   | Open a specified man page in Preview app         |
 | `showfiles`     | Show hidden files                                |
 | `hidefiles`     | Hide the hidden files                            |
+| `split_tab`     | Split the current terminal tab horizontally      |
+| `vsplit_tab`    | Split the current terminal tab vertically        |
+| `itunes`        | Control iTunes. User `itunes -h` for more information   |
