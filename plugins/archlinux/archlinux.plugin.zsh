@@ -68,6 +68,8 @@ paclist() {
 }
 
 pacdisowned() {
+  emulate -L zsh
+
   tmp=${TMPDIR-/tmp}/pacman-disowned-$UID-$$
   db=$tmp/db
   fs=$tmp/fs
@@ -84,12 +86,14 @@ pacdisowned() {
 }
 
 pacmanallkeys() {
-  curl https://www.archlinux.org/{developers,trustedusers}/ | \
+  emulate -L zsh
+  curl -s https://www.archlinux.org/people/{developers,trustedusers}/ | \
     awk -F\" '(/pgp.mit.edu/) { sub(/.*search=0x/,""); print $1}' | \
     xargs sudo pacman-key --recv-keys
 }
 
 pacmansignkeys() {
+  emulate -L zsh
   for key in $*; do
     sudo pacman-key --recv-keys $key
     sudo pacman-key --lsign-key $key
