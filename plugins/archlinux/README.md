@@ -43,6 +43,26 @@
 | yaupd        | yaourt -Sy && sudo aur                  | Update and refresh the local package and AUR databases against repositories                                         |
 | yaupd        | yaourt -Sy                              | Update and refresh the local package database against repositories                                                  |
 | yaupg        | yaourt -Syua                            | Synchronize with repositories before upgrading packages (AUR packages too) that are out of date on the local system |
+| paupg        | pacaur -Syu                             | Synchronize with repositories before upgrading packages (AUR too) that are out of date on the local system.
+| paupgd       | pacaur -Syu --devel                     | Synchronize with repositories before upgrading packages (AUR and devel too) that are out of date on the local system.
+| paupga       | pacaur -u                               | Upgrade all AUR packages
+| paupgda      | pacaur -u --devel                       | Upgrade all AUR and devel (-git, -svn, etc.) packages
+| pain         | pacaur -S                               | Install specific package(s) from the AUR
+| pains        | pacaur -U                               | Install specific package not from the repositories but from a file
+| pare         | pacaur -R                               | Remove the specified package(s), retaining its configuration(s) and required dependencies
+| parem        | pacaur -Rns                             | Remove the specified package(s), its configuration(s) and unneeded dependencies
+| parep        | pacaur -Si                              | Display information about a given package in the repositories or the AUR
+| pareps       | pacaur -Ss                              | Search for package(s) in the repositories and the AUR
+| parepsa      | pacaur -s                               | Search for package(s) in the repositories and the AUR
+| paloc        | pacaur -Qi                              | Display information about a given package in the local database
+| palocs       | pacaur -Qs                              | Search for package(s) in the local database
+| palst        | pacaur -Qe                              | List manually installed packages, even those installed from AUR
+| paupd        | pacaur -Sy && sudo abs && sudo aur      | Update and refresh the local package, ABS and AUR databases against repositories
+| paupd        | pacaur -Sy && sudo abs                  | Update and refresh the local package and ABS databases against repositories
+| paupd        | pacaur -Sy && sudo aur                  | Update and refresh the local package and AUR databases against repositories
+| paupd        | pacaur -Sy                              | Update and refresh the local package database against repositories
+| painsd       | pacaur -S --asdeps                      | Install given package(s) as dependencies of another package
+| pamir        | pacaur -Syy                             | Force refresh of all package lists after updating /etc/pacman.d/mirrorlist
 
 | Function       | Description                                                                                                       |
 |----------------|:------------------------------------------------------------------------------------------------------------------|
@@ -60,5 +80,6 @@
  - Martin Putniorz - mputniorz@gmail.com
  - MatthR3D - matthr3d@gmail.com
  - ornicar - thibault.duplessis@gmail.com
+ - Juraj Fiala - doctorjellyface@riseup.net
 
 ---
