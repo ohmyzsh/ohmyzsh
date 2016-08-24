@@ -7,7 +7,7 @@ function _current_epoch() {
 }
 
 function _update_zsh_update() {
-  echo "LAST_EPOCH=$(_current_epoch)" >! ~/.zsh-update
+  echo "LAST_EPOCH=$(_current_epoch)" >! ${ZSH_CACHE_DIR}/.zsh-update
 }
 
 function _upgrade_zsh() {
@@ -29,9 +29,9 @@ fi
 # Cancel upgrade if git is unavailable on the system
 whence git >/dev/null || return 0
 
-if [ -f ~/.zsh-update ]
+if [ -f ${ZSH_CACHE_DIR}/.zsh-update ]
 then
-  . ~/.zsh-update
+  . ${ZSH_CACHE_DIR}/.zsh-update
 
   if [[ -z "$LAST_EPOCH" ]]; then
     _update_zsh_update && return 0;
