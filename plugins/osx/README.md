@@ -18,6 +18,8 @@ Original author: [Sorin Ionescu](https://github.com/sorin-ionescu)
 | Command         | Description                                      |
 | :-------------- | :----------------------------------------------- |
 | `tab`           | Open the current directory in a new tab          |
+| `split_tab`     | Split the current terminal tab horizontally      |
+| `vsplit_tab`    | Split the current terminal tab vertically        |
 | `ofd`           | Open the current directory in a Finder window    |
 | `pfd`           | Return the path of the frontmost Finder window   |
 | `pfs`           | Return the current Finder selection              |
@@ -27,3 +29,4 @@ Original author: [Sorin Ionescu](https://github.com/sorin-ionescu)
 | `man-preview`   | Open a specified man page in Preview app         |
 | `showfiles`     | Show hidden files                                |
 | `hidefiles`     | Hide the hidden files                            |
+| `itunes`        | Control iTunes. User `itunes -h` for usage details |
