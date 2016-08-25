@@ -12,13 +12,18 @@ _rake_does_task_list_need_generating () {
 }
 
 _is_rails_app () {
-  [[ -e "bin/rails" ]] || [ -e "script/rails" ]
+  [[ -e "bin/rails" ]] || [[ -e "script/rails" ]]
 }
 
 _tasks_changed () {
-  local is_changed=1
-  for file in lib/tasks/**/*.rake; do
-    if [[ $file -nt .rake_tasks ]]; then is_changed=0; fi
+  local is_changed paths
+  is_changed=1
+  paths=(lib/tasks lib/tasks/**/*(:f))
+  for path in $paths; do
+    if [[ $path -nt .rake_tasks ]]; then
+      is_changed=0
+      break
+    fi
   done
   return is_changed
 }
