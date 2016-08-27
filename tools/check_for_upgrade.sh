@@ -1,5 +1,9 @@
 #!/usr/bin/env zsh
 
+if [ -z "$ZSH_UPDATE" ]; then
+  ZSH_UPDATE="$ZSH/cache/.zsh-update"
+fi
+
 zmodload zsh/datetime
 
 function _current_epoch() {
@@ -7,7 +11,7 @@ function _current_epoch() {
 }
 
 function _update_zsh_update() {
-  echo "LAST_EPOCH=$(_current_epoch)" >! ${ZDOTDIR:-${HOME}}/.zsh-update
+  echo "LAST_EPOCH=$(_current_epoch)" >! $ZSH_UPDATE
 }
 
 function _upgrade_zsh() {
@@ -29,9 +33,9 @@ fi
 # Cancel upgrade if git is unavailable on the system
 whence git >/dev/null || return 0
 
-if [ -f ${ZDOTDIR:-${HOME}}/.zsh-update ]
+if [ -f $ZSH_UPDATE ]
 then
-  . ${ZDOTDIR:-${HOME}}/.zsh-update
+  . $ZSH_UPDATE
 
   if [[ -z "$LAST_EPOCH" ]]; then
     _update_zsh_update && return 0;
