@@ -44,7 +44,7 @@ EOF
 
   elif [[ "$the_app" == 'iTerm2' ]]; then
       osascript <<EOF
-        tell application "iTerm"
+        tell application "iTerm2"
           tell current window
             create tab with default profile
             tell current session to write text "${command}"
@@ -81,7 +81,7 @@ EOF
 
   elif [[ "$the_app" == 'iTerm2' ]]; then
       osascript <<EOF
-        tell application "iTerm"
+        tell application "iTerm2"
           tell current session of first window
             set newSession to (split vertically with same profile)
             tell newSession
@@ -121,7 +121,7 @@ EOF
 
   elif [[ "$the_app" == 'iTerm2' ]]; then
       osascript <<EOF
-        tell application "iTerm"
+        tell application "iTerm2"
           tell current session of first window
             set newSession to (split horizontally with same profile)
             tell newSession
@@ -260,3 +260,7 @@ EOF
 	esac
 	osascript -e "tell application \"iTunes\" to $opt"
 }
+
+# Show/hide hidden files in the Finder
+alias showfiles="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
+alias hidefiles="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"

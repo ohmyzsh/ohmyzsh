@@ -70,11 +70,14 @@ alias gcl='git clone --recursive'
 alias gclean='git clean -fd'
 alias gpristine='git reset --hard && git clean -dfx'
 alias gcm='git checkout master'
+alias gcd='git checkout develop'
 alias gcmsg='git commit -m'
 alias gco='git checkout'
 alias gcount='git shortlog -sn'
 compdef gcount=git
 alias gcp='git cherry-pick'
+alias gcpa='git cherry-pick --abort'
+alias gcpc='git cherry-pick --continue'
 alias gcs='git commit -S'
 
 alias gd='git diff'
@@ -147,6 +150,9 @@ alias ggpush='git push origin $(git_current_branch)'
 compdef _git ggpush=git-checkout
 
 alias ggsup='git branch --set-upstream-to=origin/$(git_current_branch)'
+alias gpsup='git push --set-upstream origin $(git_current_branch)'
+
+alias ghh='git help'
 
 alias gignore='git update-index --assume-unchanged'
 alias gignored='git ls-files -v | grep "^[[:lower:]]"'
@@ -212,6 +218,7 @@ alias gss='git status -s'
 alias gst='git status'
 alias gsta='git stash save'
 alias gstaa='git stash apply'
+alias gstc='git stash clear'
 alias gstd='git stash drop'
 alias gstl='git stash list'
 alias gstp='git stash pop'

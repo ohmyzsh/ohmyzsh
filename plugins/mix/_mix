@@ -38,6 +38,15 @@ _1st_arguments=(
     'local.hex:Install hex locally'
     'local.rebar:Install rebar locally'
     'new:Create a new Elixir project'
+    'phoenix.digest:Digests and compress static files'
+    'phoenix.gen.channel:Generates a Phoenix channel'
+    'phoenix.gen.html:Generates controller, model and views for an HTML based resource'
+    'phoenix.gen.json:Generates a controller and model for a JSON based resource'
+    'phoenix.gen.model:Generates an Ecto model'
+    'phoenix.gen.secret:Generates a secret'
+    'phoenix.new:Create a new Phoenix application'
+    'phoenix.routes:Prints all routes'
+    'phoenix.server:Starts applications and their servers'
     'run:Run the given file or expression'
     "test:Run a project's tests"
     '--help:Describe available tasks'
@@ -49,7 +58,7 @@ __task_list ()
     local expl
     declare -a tasks
 
-    tasks=(app.start archive archive.build archive.install archive.uninstall clean cmd compile compile.protocols deps deps.clean deps.compile deps.get deps.unlock deps.update do escript.build help hex hex.config hex.docs hex.info hex.key hex.outdated hex.owner hex.publish hex.search hex.user loadconfig local local.hex local.rebar new run test)
+    tasks=(app.start archive archive.build archive.install archive.uninstall clean cmd compile compile.protocols deps deps.clean deps.compile deps.get deps.unlock deps.update do escript.build help hex hex.config hex.docs hex.info hex.key hex.outdated hex.owner hex.publish hex.search hex.user loadconfig local local.hex local.rebar new phoenix.digest phoenix.gen.channel phoenix.gen.html phoenix.gen.json phoenix.gen.model phoenix.gen.secret phoenix.new phoenix.routes phoenix.server run test)
 
     _wanted tasks expl 'help' compadd $tasks
 }
@@ -80,4 +89,3 @@ case $state in
     esac
   ;;
 esac
-
