@@ -7,11 +7,11 @@ _is_rails_app () {
 }
 
 _tasks_changed () {
-  local -a paths
-  paths=(lib/tasks lib/tasks/**/*(N))
+  local -a files
+  files=(lib/tasks lib/tasks/**/*(N))
 
-  for path in $paths; do
-    if [[ "$path" -nt .rake_tasks ]]; then
+  for file in $files; do
+    if [[ "$file" -nt .rake_tasks ]]; then
       return 0
     fi
   done
