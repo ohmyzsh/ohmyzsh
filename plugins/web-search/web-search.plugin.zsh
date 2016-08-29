@@ -6,15 +6,16 @@ function web_search() {
   # define search engine URLS
   typeset -A urls
   urls=(
-    google      "https://www.google.com/search?q="
-    bing        "https://www.bing.com/search?q="
-    yahoo       "https://search.yahoo.com/search?p="
-    duckduckgo  "https://www.duckduckgo.com/?q="
-    startpage   "https://www.startpage.com/do/search?q="
-    yandex      "https://yandex.ru/yandsearch?text="
-    github      "https://github.com/search?q="
-    baidu       "https://www.baidu.com/s?wd="
-    ecosia      "https://www.ecosia.org/search?q="
+    google         "https://www.google.com/search?q="
+    bing           "https://www.bing.com/search?q="
+    yahoo          "https://search.yahoo.com/search?p="
+    duckduckgo     "https://www.duckduckgo.com/?q="
+    startpage      "https://www.startpage.com/do/search?q="
+    yandex         "https://yandex.ru/yandsearch?text="
+    github         "https://github.com/search?q="
+    baidu          "https://www.baidu.com/s?wd="
+    ecosia         "https://www.ecosia.org/search?q="
+    stackoverflow  "https://stackoverflow.com/search?q="
   )
 
   # check whether the search engine is supported
@@ -47,6 +48,7 @@ alias yandex='web_search yandex'
 alias github='web_search github'
 alias baidu='web_search baidu'
 alias ecosia='web_search ecosia'
+alias stackoverflow='web_search stackoverflow'
 
 #add your own !bang searches here
 alias wiki='web_search duckduckgo \!w'
