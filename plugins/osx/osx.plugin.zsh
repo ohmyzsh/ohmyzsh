@@ -335,8 +335,14 @@ function spotify() {
         break ;;
 
       "pause"    )
-        cecho "Pausing Spotify.";
-        osascript -e 'tell application "Spotify" to pause';
+        state=$(osascript -e 'tell application "Spotify" to player state as string');
+        if [ "$state" = "playing" ]; then
+          cecho "Pausing Spotify.";
+        else
+          cecho "Playing Spotify.";
+        fi
+
+        osascript -e 'tell application "Spotify" to playpause';
         break ;;
 
       "quit"    ) 
