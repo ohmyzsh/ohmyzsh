@@ -263,6 +263,7 @@ EOF
 
 # Spotify control function
 function spotify() {
+  
   showHelp () {
     echo "Usage:";
     echo;
@@ -277,11 +278,33 @@ function spotify() {
     echo "  pos [time]                   # Jumps to a time (in secs) in the current song.";
     echo "  quit                         # Stops playback and quits Spotify.";
     echo;
+    echo "  vol up                       # Increases the volume by 10%.";
+    echo "  vol down                     # Decreases the volume by 10%.";
     echo "  vol [amount]                 # Sets the volume to an amount between 0 and 100.";
     echo "  vol show                     # Shows the current Spotify volume.";
     echo;
+    echo "  status                       # Shows the current player status.";
+    echo "  share                        # Copies the current song URL to the clipboard."
+    echo "  info                         # Shows Full Information about song that is playing.";
+    echo;
     echo "  toggle shuffle               # Toggles shuffle playback mode.";
     echo "  toggle repeat                # Toggles repeat playback mode.";
+  }
+
+  showStatus () {
+      state=$(osascript -e 'tell application "Spotify" to player state as string');
+      echo "Spotify is currently $state.";
+      if [ "$state" = "playing" ]; then
+        artist=$(osascript -e 'tell application "Spotify" to artist of current track as string');
+        album=$(osascript -e 'tell application "Spotify" to album of current track as string');
+        track=$(osascript -e 'tell application "Spotify" to name of current track as string');
+        duration=$(osascript -e 'tell application "Spotify" to duration of current track as string');
+        duration=$(echo "scale=2; $duration / 60 / 1000" | bc);
+        position=$(osascript -e 'tell application "Spotify" to player position as string' | tr ',' '.');
+        position=$(echo "scale=2; $position / 60" | bc | awk '{printf "%0.2f", $0}');
+
+        echo "$reset""Artist: $artist\nAlbum: $album\nTrack: $track \nPosition: $position / $duration";
+      fi
   }
 
   if [ $# = 0 ]; then
@@ -366,6 +389,51 @@ function spotify() {
         echo "Adjusting Spotify play position."
         osascript -e "tell application \"Spotify\" to set player position to $2";
         break;;
+
+      "status" )
+        showStatus;
+        break ;;
+
+      "info" )
+        info=$(osascript -e 'tell application "Spotify"
+          set tM to round (duration of current track / 60) rounding down
+          set tS to duration of current track mod 60
+          set pos to player position as text
+          set myTime to tM as text & "min " & tS as text & "s"
+          set nM to round (player position / 60) rounding down
+          set nS to round (player position mod 60) rounding down
+          set nowAt to nM as text & "min " & nS as text & "s"
+          set info to "" & "\nArtist:         " & artist of current track
+          set info to info & "\nTrack:          " & name of current track
+          set info to info & "\nAlbum Artist:   " & album artist of current track
+          set info to info & "\nAlbum:          " & album of current track
+          set info to info & "\nSeconds:        " & duration of current track
+          set info to info & "\nSeconds played: " & pos
+          set info to info & "\nDuration:       " & mytime
+          set info to info & "\nNow at:         " & nowAt
+          set info to info & "\nPlayed Count:   " & played count of current track
+          set info to info & "\nTrack Number:   " & track number of current track
+          set info to info & "\nPopularity:     " & popularity of current track
+          set info to info & "\nId:             " & id of current track
+          set info to info & "\nSpotify URL:    " & spotify url of current track
+          set info to info & "\nArtwork:        " & artwork of current track
+          set info to info & "\nPlayer:         " & player state
+          set info to info & "\nVolume:         " & sound volume
+          set info to info & "\nShuffle:        " & shuffling
+          set info to info & "\nRepeating:      " & repeating
+          end tell
+          return info')
+        echo "$info";
+        break ;;
+
+    "share"     )
+      url=$(osascript -e 'tell application "Spotify" to spotify url of current track');
+      remove='spotify:track:'
+      url=${url#$remove}
+      url="http://open.spotify.com/track/$url"
+      echo "Share URL: $url";
+      echo -n "$url" | pbcopy
+      break;;
 
       -h|--help| *)
         showHelp;
