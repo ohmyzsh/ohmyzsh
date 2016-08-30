@@ -350,6 +350,29 @@ function spotify() {
           }
 
           case $2 in
+            "list"  )
+              _args=${array[*]:2:$len};
+              Q=$_args;
+
+              cecho "Searching playlists for: $Q";
+
+              results=$( \
+                curl -s -G $SPOTIFY_SEARCH_API --data-urlencode "q=$Q" -d "type=playlist&limit=10&offset=0" -H "Accept: application/json" \
+                | grep -E -o "spotify:user:[a-zA-Z0-9_]+:playlist:[a-zA-Z0-9]+" -m 10 \
+                )
+
+              count=$( \
+                echo "$results" | grep -c "spotify:user" \
+                )
+
+              if [ "$count" -gt 0 ]; then
+                random=$(( RANDOM % count));
+
+                SPOTIFY_PLAY_URI=$( \
+                  echo "$results" | awk -v random="$random" '/spotify:user:[a-zA-Z0-9]+:playlist:[a-zA-Z0-9]+/{i++}i==random{print; exit}' \
+                  )
+              fi;;
+
             "album" | "artist" | "track"    )
               _args=${array[*]:2:$len};
               searchAndPlay "$2" "$_args";;
@@ -367,12 +390,12 @@ function spotify() {
           else
             cecho "No results when searching for $Q";
           fi
-      else
-        # play is the only param
-        cecho "Playing Spotify.";
-        osascript -e 'tell application "Spotify" to play';
-      fi
-      break ;;
+        else
+          # play is the only param
+          cecho "Playing Spotify.";
+          osascript -e 'tell application "Spotify" to play';
+        fi
+        break ;;
 
       "pause"    )
         state=$(osascript -e 'tell application "Spotify" to player state as string');
