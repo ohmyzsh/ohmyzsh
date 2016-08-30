@@ -327,6 +327,22 @@ function spotify() {
         if [[ "$2" = "show" || "$2" = "" ]]; then
           echo "Current Spotify volume level is $vol.";
           break ;
+        elif [ "$2" = "up" ]; then
+          if [ "$vol" -le 90 ]; then
+            newvol=$(( vol+10 ));
+            echo "Increasing Spotify volume to $newvol.";
+          else
+            newvol=100;
+            echo "Spotify volume level is at max.";
+          fi
+        elif [ "$2" = "down" ]; then
+          if [ "$vol" -ge 10 ]; then
+            newvol=$(( vol-10 ));
+            echo "Reducing Spotify volume to $newvol.";
+          else
+            newvol=0;
+            echo "Spotify volume level is at min.";
+          fi
         elif [ "$2" -ge 0 ]; then
           newvol=$2;
         fi
