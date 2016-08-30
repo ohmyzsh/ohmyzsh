@@ -263,7 +263,7 @@ EOF
 
 # Spotify control function
 function spotify() {
-  
+
   showHelp () {
     echo "Usage:";
     echo;
@@ -291,9 +291,16 @@ function spotify() {
     echo "  toggle repeat                # Toggles repeat playback mode.";
   }
 
+  cecho(){
+    bold=$(tput bold);
+    green=$(tput setaf 2);
+    reset=$(tput sgr0);
+    echo "$bold$green$1$reset";
+  }
+
   showStatus () {
       state=$(osascript -e 'tell application "Spotify" to player state as string');
-      echo "Spotify is currently $state.";
+      cecho "Spotify is currently $state.";
       if [ "$state" = "playing" ]; then
         artist=$(osascript -e 'tell application "Spotify" to artist of current track as string');
         album=$(osascript -e 'tell application "Spotify" to album of current track as string');
@@ -306,6 +313,8 @@ function spotify() {
         echo "$reset""Artist: $artist\nAlbum: $album\nTrack: $track \nPosition: $position / $duration";
       fi
   }
+
+
 
   if [ $# = 0 ]; then
     showHelp;
@@ -321,50 +330,50 @@ function spotify() {
 
     case $arg in
       "play"    )
-        echo "Playing Spotify.";
+        cecho "Playing Spotify.";
         osascript -e 'tell application "Spotify" to play';
         break ;;
 
       "pause"    )
-        echo "Pausing Spotify.";
+        cecho "Pausing Spotify.";
         osascript -e 'tell application "Spotify" to pause';
         break ;;
 
       "quit"    ) 
-        echo "Quitting Spotify.";
+        cecho "Quitting Spotify.";
         osascript -e 'tell application "Spotify" to quit';
         exit 1 ;;
 
       "next"    ) 
-        echo "Going to next track." ;
+        cecho "Going to next track." ;
         osascript -e 'tell application "Spotify" to next track';
         break ;;
 
       "prev"    ) 
-        echo "Going to previous track.";
+        cecho "Going to previous track.";
         osascript -e 'tell application "Spotify" to previous track';
         break ;;
 
       "vol"    )
         vol=$(osascript -e 'tell application "Spotify" to sound volume as integer');
         if [[ "$2" = "show" || "$2" = "" ]]; then
-          echo "Current Spotify volume level is $vol.";
+          cecho "Current Spotify volume level is $vol.";
           break ;
         elif [ "$2" = "up" ]; then
           if [ "$vol" -le 90 ]; then
             newvol=$(( vol+10 ));
-            echo "Increasing Spotify volume to $newvol.";
+            cecho "Increasing Spotify volume to $newvol.";
           else
             newvol=100;
-            echo "Spotify volume level is at max.";
+            cecho "Spotify volume level is at max.";
           fi
         elif [ "$2" = "down" ]; then
           if [ "$vol" -ge 10 ]; then
             newvol=$(( vol-10 ));
-            echo "Reducing Spotify volume to $newvol.";
+            cecho "Reducing Spotify volume to $newvol.";
           else
             newvol=0;
-            echo "Spotify volume level is at min.";
+            cecho "Spotify volume level is at min.";
           fi
         elif [ "$2" -ge 0 ]; then
           newvol=$2;
@@ -377,16 +386,16 @@ function spotify() {
         if [ "$2" = "shuffle" ]; then
           osascript -e 'tell application "Spotify" to set shuffling to not shuffling';
           curr=$(osascript -e 'tell application "Spotify" to shuffling');
-          echo "Spotify shuffling set to $curr";
+          cecho "Spotify shuffling set to $curr";
         elif [ "$2" = "repeat" ]; then
           osascript -e 'tell application "Spotify" to set repeating to not repeating';
           curr=$(osascript -e 'tell application "Spotify" to repeating');
-          echo "Spotify repeating set to $curr";
+          cecho "Spotify repeating set to $curr";
         fi
         break ;;
 
       "pos"   )
-        echo "Adjusting Spotify play position."
+        cecho "Adjusting Spotify play position."
         osascript -e "tell application \"Spotify\" to set player position to $2";
         break;;
 
@@ -431,8 +440,8 @@ function spotify() {
       remove='spotify:track:'
       url=${url#$remove}
       url="http://open.spotify.com/track/$url"
-      echo "Share URL: $url";
-      echo -n "$url" | pbcopy
+      cecho "Share URL: $url";
+      cecho -n "$url" | pbcopy
       break;;
 
       -h|--help| *)
