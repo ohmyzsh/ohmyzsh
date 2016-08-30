@@ -261,6 +261,104 @@ EOF
 	osascript -e "tell application \"iTunes\" to $opt"
 }
 
+# Spotify control function
+function spotify() {
+  showHelp () {
+    echo "Usage:";
+    echo;
+    echo "  $(basename "$0") <command>";
+    echo;
+    echo "Commands:";
+    echo;
+    echo "  play                         # Resumes playback where Spotify last left off.";
+    echo "  pause                        # Pauses Spotify playback.";
+    echo "  next                         # Skips to the next song in a playlist.";
+    echo "  prev                         # Returns to the previous song in a playlist.";
+    echo "  pos [time]                   # Jumps to a time (in secs) in the current song.";
+    echo "  quit                         # Stops playback and quits Spotify.";
+    echo;
+    echo "  vol [amount]                 # Sets the volume to an amount between 0 and 100.";
+    echo "  vol show                     # Shows the current Spotify volume.";
+    echo;
+    echo "  toggle shuffle               # Toggles shuffle playback mode.";
+    echo "  toggle repeat                # Toggles repeat playback mode.";
+  }
+
+  if [ $# = 0 ]; then
+    showHelp;
+  else
+    if [ "$(osascript -e 'application "Spotify" is running')" = "false" ]; then
+      osascript -e 'tell application "Spotify" to activate'
+      sleep 2
+    fi
+  fi
+
+  while [ $# -gt 0 ]; do
+    arg=$1;
+
+    case $arg in
+      "play"    )
+        echo "Playing Spotify.";
+        osascript -e 'tell application "Spotify" to play';
+        break ;;
+
+      "pause"    )
+        echo "Pausing Spotify.";
+        osascript -e 'tell application "Spotify" to pause';
+        break ;;
+
+      "quit"    ) 
+        echo "Quitting Spotify.";
+        osascript -e 'tell application "Spotify" to quit';
+        exit 1 ;;
+
+      "next"    ) 
+        echo "Going to next track." ;
+        osascript -e 'tell application "Spotify" to next track';
+        break ;;
+
+      "prev"    ) 
+        echo "Going to previous track.";
+        osascript -e 'tell application "Spotify" to previous track';
+        break ;;
+
+      "vol"    )
+        vol=$(osascript -e 'tell application "Spotify" to sound volume as integer');
+        if [[ "$2" = "show" || "$2" = "" ]]; then
+          echo "Current Spotify volume level is $vol.";
+          break ;
+        elif [ "$2" -ge 0 ]; then
+          newvol=$2;
+        fi
+
+        osascript -e "tell application \"Spotify\" to set sound volume to $newvol";
+        break ;;
+
+      "toggle"  )
+        if [ "$2" = "shuffle" ]; then
+          osascript -e 'tell application "Spotify" to set shuffling to not shuffling';
+          curr=$(osascript -e 'tell application "Spotify" to shuffling');
+          echo "Spotify shuffling set to $curr";
+        elif [ "$2" = "repeat" ]; then
+          osascript -e 'tell application "Spotify" to set repeating to not repeating';
+          curr=$(osascript -e 'tell application "Spotify" to repeating');
+          echo "Spotify repeating set to $curr";
+        fi
+        break ;;
+
+      "pos"   )
+        echo "Adjusting Spotify play position."
+        osascript -e "tell application \"Spotify\" to set player position to $2";
+        break;;
+
+      -h|--help| *)
+        showHelp;
+        break ;;
+    esac
+  done
+}
+
+
 # Show/hide hidden files in the Finder
 alias showfiles="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
 alias hidefiles="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
