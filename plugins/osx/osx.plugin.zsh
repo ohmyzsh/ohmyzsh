@@ -330,9 +330,49 @@ function spotify() {
 
     case $arg in
       "play"    )
+        if [ $# != 1 ]; then
+          # There are additional arguments, so find out how many
+          array=( $@ );
+          len=${#array[@]};
+          SPOTIFY_SEARCH_API="https://api.spotify.com/v1/search"
+          SPOTIFY_PLAY_URI="";
+
+          searchAndPlay() {
+            type="$1"
+            Q="$2"
+
+            cecho "Searching ${type}s for: $Q";
+
+            SPOTIFY_PLAY_URI=$( \
+              curl -s -G $SPOTIFY_SEARCH_API --data-urlencode "q=$Q" -d "type=$type&limit=1&offset=0" -H "Accept: application/json" \
+              | grep -E -o "spotify:$type:[a-zA-Z0-9]+" -m 1
+              )
+          }
+
+          case $2 in
+            "album" | "artist" | "track"    )
+              _args=${array[*]:2:$len};
+              searchAndPlay "$2" "$_args";;
+
+            *   )
+              _args=${array[*]:1:$len};
+              searchAndPlay track "$_args";;
+          esac
+
+          if [ "$SPOTIFY_PLAY_URI" != "" ]; then
+            cecho "Playing ($Q Search) -> Spotify URL: $";
+
+            osascript -e "tell application \"Spotify\" to play track \"$SPOTIFY_PLAY_URI\"";
+
+          else
+            cecho "No results when searching for $Q";
+          fi
+      else
+        # play is the only param
         cecho "Playing Spotify.";
         osascript -e 'tell application "Spotify" to play';
-        break ;;
+      fi
+      break ;;
 
       "pause"    )
         state=$(osascript -e 'tell application "Spotify" to player state as string');
