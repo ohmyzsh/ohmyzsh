@@ -387,7 +387,7 @@ function spotify() {
           esac
 
           if [ "$SPOTIFY_PLAY_URI" != "" ]; then
-            cecho "Playing ($Q Search) -> Spotify URL: $";
+            cecho "Playing ($Q Search) -> Spotify URL: $SPOTIFY_PLAY_URI";
 
             osascript -e "tell application \"Spotify\" to play track \"$SPOTIFY_PLAY_URI\"";
 
