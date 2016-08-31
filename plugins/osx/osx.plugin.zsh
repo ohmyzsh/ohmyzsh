@@ -272,6 +272,10 @@ function spotify() {
     echo "Commands:";
     echo;
     echo "  play                         # Resumes playback where Spotify last left off.";
+    echo "  play [song name]             # Finds a song by name and plays it.";
+    echo "  play album [album name]      # Finds an album by name and plays it.";
+    echo "  play artist [artist name]    # Finds an artist by name and plays it.";
+    echo "  play list [playlist name]    # Finds a playlist by name and plays it.";
     echo "  pause                        # Pauses Spotify playback.";
     echo "  next                         # Skips to the next song in a playlist.";
     echo "  prev                         # Returns to the previous song in a playlist.";
