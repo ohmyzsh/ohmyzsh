@@ -18,7 +18,7 @@ FOUND_COMPOSER=0
 composerdirs=("$HOME/.composer" "$HOME/.config/composer")
 
 for composerdir in "${composerdirs[@]}" ; do
-    if [ -d $composerdir/bin -a $FOUND_COMPOSER -eq 0 ] ; then
+    if [ -d $composerdir/vendor/bin -a $FOUND_COMPOSER -eq 0 ] ; then
         FOUND_RBENV=1
         
         # Add Composer's global binaries to PATH
