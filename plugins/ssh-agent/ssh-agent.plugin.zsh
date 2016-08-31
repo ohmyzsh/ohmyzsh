@@ -30,6 +30,26 @@
 local _plugin__ssh_env
 local _plugin__forwarding
 
+# This function is intended to be portable by OS.  This works by creating a
+# shadow directory ("${file}.lock"), then declaring an trap that removes the
+# directory.  The remainder of the arguments specify the action to be
+# executed while the lock is held.  This function declares that its traps
+# are local, and therefore do not interfere with other traps.
+function _plugin__with_lockfile()
+{
+  local file="$1"
+
+  shift
+  setopt localtraps
+
+  while :; do
+    mkdir "${file}.lock" 2>/dev/null && break
+    sleep 0.1
+  done
+  trap "rm -rf ${file}.lock" EXIT INT QUIT ABRT TERM
+  $*
+}
+
 function _plugin__start_agent()
 {
   local -a identities
@@ -48,32 +68,39 @@ function _plugin__start_agent()
   /usr/bin/ssh-add $HOME/.ssh/${^identities}
 }
 
-# Get the filename to store/lookup the environment from
-if (( $+commands[scutil] )); then
-  # It's OS X!
-  _plugin__ssh_env="$HOME/.ssh/environment-$(scutil --get ComputerName)"
-else
-  _plugin__ssh_env="$HOME/.ssh/environment-$HOST"
-fi
+function _plugin__run()
+{
+  # Get the filename to store/lookup the environment from
+  if (( $+commands[scutil] )); then
+    # It's OS X!
+    _plugin__ssh_env="$HOME/.ssh/environment-$(scutil --get ComputerName)"
+  else
+    _plugin__ssh_env="$HOME/.ssh/environment-$HOST"
+  fi
 
-# test if agent-forwarding is enabled
-zstyle -b :omz:plugins:ssh-agent agent-forwarding _plugin__forwarding
-if [[ ${_plugin__forwarding} == "yes" && -n "$SSH_AUTH_SOCK" ]]; then
-  # Add a nifty symlink for screen/tmux if agent forwarding
-  [[ -L $SSH_AUTH_SOCK ]] || ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USER-screen
+  # test if agent-forwarding is enabled
+  zstyle -b :omz:plugins:ssh-agent agent-forwarding _plugin__forwarding
+  if [[ ${_plugin__forwarding} == "yes" && -n "$SSH_AUTH_SOCK" ]]; then
+    # Add a nifty symlink for screen/tmux if agent forwarding
+    [[ -L $SSH_AUTH_SOCK ]] || ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USER-screen
 
-elif [ -f "${_plugin__ssh_env}" ]; then
-  # Source SSH settings, if applicable
-  . ${_plugin__ssh_env} > /dev/null
-  ps x | grep ${SSH_AGENT_PID} | grep ssh-agent > /dev/null || {
+  elif [ -f "${_plugin__ssh_env}" ]; then
+    # Source SSH settings, if applicable
+    . ${_plugin__ssh_env} > /dev/null
+    ps x | grep ${SSH_AGENT_PID} | grep ssh-agent > /dev/null || {
+      _plugin__start_agent;
+    }
+  else
     _plugin__start_agent;
-  }
-else
-  _plugin__start_agent;
-fi
+  fi
+}
+
+_plugin__with_lockfile "$HOME/.ssh/omz-start-agent" _plugin__run
 
 # tidy up after ourselves
+unfunction _plugin__with_lockfile
 unfunction _plugin__start_agent
+unfunction _plugin__run
 unset _plugin__forwarding
 unset _plugin__ssh_env
 
