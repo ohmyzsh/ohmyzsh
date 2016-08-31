@@ -310,7 +310,7 @@ function spotify() {
         position=$(osascript -e 'tell application "Spotify" to player position as string' | tr ',' '.');
         position=$(echo "scale=2; $position / 60" | bc | awk '{printf "%0.2f", $0}');
 
-        echo "$reset""Artist: $artist\nAlbum: $album\nTrack: $track \nPosition: $position / $duration";
+        printf "$reset""Artist: %s\nAlbum: %s\nTrack: %s \nPosition: %s / %s" "$artist" "$album" "$track" "$position" "$duration";
       fi
   }
 
