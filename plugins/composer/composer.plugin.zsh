@@ -14,6 +14,19 @@ _composer_get_required_list () {
     $_comp_command1 show -s --no-ansi 2>/dev/null | sed '1,/requires/d' | awk 'NF > 0 && !/^requires \(dev\)/{ print $1 }'
 }
 
+FOUND_COMPOSER=0
+composerdirs=("$HOME/.composer" "$HOME/.config/composer")
+
+for composerdir in "${composerdirs[@]}" ; do
+    if [ -d $composerdir/bin -a $FOUND_COMPOSER -eq 0 ] ; then
+        FOUND_RBENV=1
+        
+        # Add Composer's global binaries to PATH
+        export PATH=${composerdir}/vendor/bin:$PATH
+    fi
+done
+unset composerdir
+
 _composer () {
   local curcontext="$curcontext" state line
   typeset -A opt_args
@@ -47,6 +60,3 @@ alias cgr='composer global require'
 
 # install composer in the current directory
 alias cget='curl -s https://getcomposer.org/installer | php'
-
-# Add Composer's global binaries to PATH
-export PATH=$PATH:~/.composer/vendor/bin
