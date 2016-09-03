@@ -18,6 +18,12 @@
 #
 #     zstyle :omz:plugins:ssh-agent lifetime 4h
 #
+#	To make the plugin not ouput anything use the quiet style. 
+#	This prevents ouput messages and ssh-add, which might ask 
+#	for a passphrase.
+#
+#     zstyle :omz:plugins:ssh-agent quiet yes
+#
 # CREDITS
 #
 #   Based on code from Joseph M. Reagle
@@ -32,7 +38,6 @@ local _plugin__forwarding
 
 function _plugin__start_agent()
 {
-  local -a identities
   local lifetime
   zstyle -s :omz:plugins:ssh-agent lifetime lifetime
 
@@ -41,11 +46,16 @@ function _plugin__start_agent()
   chmod 600 ${_plugin__ssh_env}
   . ${_plugin__ssh_env} > /dev/null
 
-  # load identies
-  zstyle -a :omz:plugins:ssh-agent identities identities
-  echo starting ssh-agent...
+  local quiet
+  zstyle -b :omz:plugins:ssh-agent quiet quiet
+  if [[ ! ${quiet} == "yes" ]]; then
+    local -a identities
+    # load identities
+    zstyle -a :omz:plugins:ssh-agent identities identities
+    echo starting ssh-agent...
 
-  /usr/bin/ssh-add $HOME/.ssh/${^identities}
+    /usr/bin/ssh-add $HOME/.ssh/${^identities}
+  fi
 }
 
 # Get the filename to store/lookup the environment from
