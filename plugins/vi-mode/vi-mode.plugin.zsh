@@ -28,6 +28,15 @@ bindkey '^?' backward-delete-char
 bindkey '^h' backward-delete-char
 bindkey '^w' backward-kill-word
 
+# allow ctrl-r for searching history backward (insert mode)
+bindkey '^r' history-incremental-search-backward
+# allow ctrl-s for searching history forward (insert mode)
+bindkey '^s' history-incremental-search-forward
+# allow ctrl-a to go to beginning of line (insert mode)
+bindkey '^a' beginning-of-line
+# allow ctrl-e to go to end of line (insert mode)
+bindkey '^e' end-of-line
+
 # if mode indicator wasn't setup by theme, define default
 if [[ "$MODE_INDICATOR" == "" ]]; then
   MODE_INDICATOR="%{$fg_bold[red]%}<%{$fg[red]%}<<%{$reset_color%}"
