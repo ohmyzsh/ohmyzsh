@@ -2,12 +2,12 @@
 # Aliases
 #
 
-alias ta='tmux attach -t'
-alias tad='tmux attach -d -t'
-alias ts='tmux new-session -s'
-alias tl='tmux list-sessions'
-alias tksv='tmux kill-server'
-alias tkss='tmux kill-session -t'
+alias ta='tmux -2 attach -t'
+alias tad='tmux -2 attach -d -t'
+alias ts='tmux -2 new-session -s'
+alias tl='tmux -2 list-sessions'
+alias tksv='tmux -2 kill-server'
+alias tkss='tmux -2 kill-session -t'
 
 # Only run if tmux is actually installed
 if which tmux &> /dev/null
