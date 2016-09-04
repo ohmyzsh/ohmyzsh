@@ -9,7 +9,7 @@ else
 
   alias yaconf='yaourt -C'
   alias yaupg='yaourt -Syua'
-  alias yasu='yaourt --Syua --no-confirm'
+  alias yasu='yaourt -Syua --no-confirm'
   alias yain='yaourt -S'
   alias yains='yaourt -U'
   alias yare='yaourt -R'
