@@ -19,6 +19,8 @@ for nodenvdir in "${nodenvdirs[@]}" ; do
     export PATH=${nodenvdir}/bin:$PATH
     eval "$(nodenv init --no-rehash - zsh)"
 
+    alias nodes="nodenv versions"
+
     function current_node() {
       echo "$(nodenv version-name)"
     }
