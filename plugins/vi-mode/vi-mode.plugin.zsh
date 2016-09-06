@@ -28,6 +28,96 @@ bindkey '^?' backward-delete-char
 bindkey '^h' backward-delete-char
 bindkey '^w' backward-kill-word
 
+bindkey -M vicmd 'cc' vi-change-whole-line
+bindkey -M vicmd 'dd' kill-whole-line
+
+delete-in() {
+  local char lchar rchar lsearch rsearch count
+  read -k char
+  if [[ "$char" == 'w' ]];then
+    zle vi-backward-word
+    lsearch="$CURSOR"
+    zle vi-forward-word
+    rsearch="$CURSOR"
+    RBUFFER="$BUFFER[$rsearch+1,${#BUFFER}]"
+    LBUFFER="$LBUFFER[1,$lsearch]"
+    return
+  elif [[ "$char" == '(' || "$char" == ')' ]];then
+    lchar='('
+    rchar=')'
+  elif [[ "$char" == '[' || "$char" == ']' ]];then
+    lchar='['
+    rchar=']'
+  elif [[ "$char" == '{' || "$char" == '}' ]];then
+    lchar='{'
+    rchar='}'
+  else
+    lsearch="${#LBUFFER}"
+    while (( lsearch > 0 )) && [[ "$LBUFFER[$lsearch]" != "$char" ]]; do
+      (( lsearch-- ))
+    done
+    rsearch=0
+    while [[ $rsearch -lt (( ${#RBUFFER} + 1 )) ]] && [[ "$RBUFFER[$rsearch]" != "$char" ]]; do
+      (( rsearch++ ))
+    done
+    RBUFFER="$RBUFFER[$rsearch,${#RBUFFER}]"
+    LBUFFER="$LBUFFER[1,$lsearch]"
+    return
+  fi
+  count=1
+  lsearch="${#LBUFFER}"
+  while (( lsearch > 0 )) && (( count > 0 )); do
+    (( lsearch-- ))
+    if [[ "$LBUFFER[$lsearch]" == "$rchar" ]];then
+      (( count++ ))
+    fi
+    if [[ "$LBUFFER[$lsearch]" == "$lchar" ]];then
+      (( count-- ))
+    fi
+  done
+  count=1
+  rsearch=0
+  while (( "$rsearch" < ${#RBUFFER} + 1 )) && [[ "$count" > 0 ]]; do
+    (( rsearch++ ))
+    if [[ $RBUFFER[$rsearch] == "$lchar" ]];then
+      (( count++ ))
+    fi
+    if [[ $RBUFFER[$rsearch] == "$rchar" ]];then
+      (( count-- ))
+    fi
+  done
+  RBUFFER="$RBUFFER[$rsearch,${#RBUFFER}]"
+  LBUFFER="$LBUFFER[1,$lsearch]"
+}
+zle -N delete-in
+bindkey -M vicmd 'di' delete-in
+
+delete-around() {
+  zle delete-in
+  zle vi-backward-char
+  zle vi-delete-char
+  zle vi-delete-char
+}
+zle -N delete-around
+bindkey -M vicmd 'da' delete-around
+
+change-in() {
+  zle delete-in
+  zle vi-insert
+}
+zle -N change-in
+bindkey -M vicmd 'ci' change-in
+
+change-around() {
+  zle delete-in
+  zle vi-backward-char
+  zle vi-delete-char
+  zle vi-delete-char
+  zle vi-insert
+}
+zle -N change-around
+bindkey -M vicmd 'ca' change-around
+
 # if mode indicator wasn't setup by theme, define default
 if [[ "$MODE_INDICATOR" == "" ]]; then
   MODE_INDICATOR="%{$fg_bold[red]%}<%{$fg[red]%}<<%{$reset_color%}"
