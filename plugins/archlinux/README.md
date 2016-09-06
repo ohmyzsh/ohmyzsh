@@ -24,7 +24,7 @@
 | yaupd   | yaourt -Sy && sudo aur             | Update and refresh the local package and AUR databases              |
 | yaupd   | yaourt -Sy                         | Update and refresh the local package database                       |
 | yaupg   | yaourt -Syua                       | Sync with repositories before upgrading all packages (from AUR too) |
-| yasu    | yaourt -Syua --no-confirm          | Same as `yaupg`, but without confirmation                           |
+| yasu    | yaourt -Syua --noconfirm          | Same as `yaupg`, but without confirmation                           |
 | upgrade | yaourt -Syu                        | Sync with repositories before upgrading packages                    |
 
 #### PACMAN
