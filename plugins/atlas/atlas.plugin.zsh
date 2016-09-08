@@ -56,7 +56,7 @@ function atlas_show {
 
 function atlas_list {
   if [ -d "/Users/nstilwell/.hosts" ] && [ -e "/Users/nstilwell/.hosts/$1" ]; then
-    ls ~/.hosts;
+    ls -F ~/.hosts | grep -v /$;
   else
     echo "Atlas not initialized";
     atlas_usage;
