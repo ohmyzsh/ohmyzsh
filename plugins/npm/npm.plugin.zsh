@@ -6,7 +6,7 @@
         [[ $? -ne 0 ]] && rm -f $__NPM_COMPLETION_FILE
     fi
 
-    source $__NPM_COMPLETION_FILE
+    [[ -f $__NPM_COMPLETION_FILE ]] && source $__NPM_COMPLETION_FILE
 }
 
 # Install dependencies globally
