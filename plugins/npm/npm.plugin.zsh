@@ -7,6 +7,8 @@
     fi
 
     [[ -f $__NPM_COMPLETION_FILE ]] && source $__NPM_COMPLETION_FILE
+
+    unset __NPM_COMPLETION_FILE
 }
 
 # Install dependencies globally
