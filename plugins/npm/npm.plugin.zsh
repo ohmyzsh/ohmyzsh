@@ -35,3 +35,7 @@ alias npmst="npm start"
 # Run npm test
 alias npmt="npm test"
 
+# aliases for versioning commands
+alias npmvM='npm version major '
+alias npmvm='npm version minor '
+alias mpmvp='npm version patch '
