@@ -33,6 +33,10 @@ _brew_outdated_formulae() {
   outdated_formulae=(`brew outdated`)
 }
 
+_brew_installed_services() {
+  installed_services=(`brew services list | awk '{print $1}' | tail -n+2`)
+}
+
 local -a _1st_arguments
 _1st_arguments=(
   'audit:check formulae for Homebrew coding style'
@@ -64,6 +68,7 @@ _1st_arguments=(
   'prune:remove dead links'
   'remove:remove a formula'
   'search:search for a formula (/regex/ or string)'
+  'services:manage services'
   'switch:switch between different versions of a formula'
   'tap:tap a new formula repository from GitHub, or list existing taps'
   'tap-info:information about a tap'
@@ -82,7 +87,7 @@ _1st_arguments=(
 )
 
 local expl
-local -a formulae installed_formulae installed_taps official_taps outdated_formulae
+local -a formulae installed_formulae installed_taps official_taps outdated_formulae installed_services
 
 _arguments \
   '(-v)-v[verbose]' \
@@ -142,4 +147,28 @@ case "$words[1]" in
   upgrade)
     _brew_outdated_formulae
     _wanted outdated_formulae expl 'outdated formulae' compadd -a outdated_formulae ;;
+  services)
+     _arguments -C \
+      '1: :->command' \
+      '2: :->service' && return 0
+
+    local -a commands
+
+    commands=(
+      'cleanup:Get rid of stale services and unused plists'
+      'list:List all services managed by brew services'
+      'restart:Gracefully restart selected service'
+      'start:Start selected service'
+      'stop:Stop selected service'
+    )
+
+    case $state in
+      command)
+        _describe -t commands 'Action' commands
+        ;;
+      service)
+        _brew_installed_services
+       _describe -t subcommands 'Services' installed_services
+       ;;
+    esac
 esac
