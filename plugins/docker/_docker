@@ -4,7 +4,7 @@
 # Requires: Docker installed
 # Author: Azaan (@aeonazaan)
 # Updates: Bob Maerten (@bobmaerten) for Docker v0.9+
-#          Paul van den Berg (@bergvandenp) for Docker v1.3+ 
+#          Paul van den Berg (@bergvandenp) for Docker v1.3+
 
 
 # ----- Helper functions
@@ -56,6 +56,8 @@ __commit() {
         '(-c,--change=)'{-c,--change=}'[Apply Dockerfile instruction to the created image]' \
         '(-m,--message=)'{-m,--message=}'[Commit message]' \
         '(-p,--pause=)'{-p,--pause=}'[Pause container during commit]' \
+    __docker_all_containers
+    __docker_images
 }
 
 __cp() {
@@ -109,7 +111,7 @@ __diff() {
     __docker_containers
 }
 
-__events() {    
+__events() {
     _arguments \
         '--since=[Show previously created events and then stream.]'
 }
