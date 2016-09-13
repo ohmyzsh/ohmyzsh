@@ -34,18 +34,14 @@ function work_in_progress() {
 }
 #change current branch old email with new eamil
 gmvemail() {
-  export GMVEMAIL_GIT_EMAIL_OLD=$1
-  export GMVEMAIL_GIT_EMAIL_NEW=$2
-  git filter-branch --commit-filter '
-    if [ "$GIT_AUTHOR_EMAIL" = "$GMVEMAIL_GIT_EMAIL_OLD" ];
+  OLD_EMAIL=$1 NEW_EMAIL=$2 git filter-branch --commit-filter '
+    if [ "$GIT_AUTHOR_EMAIL" = "$OLD_EMAIL" ];
     then
-            GIT_AUTHOR_EMAIL="$GMVEMAIL_GIT_EMAIL_NEW";
-            git commit-tree "$@";
+      GIT_AUTHOR_EMAIL="$NEW_EMAIL";
+      git commit-tree "$@";
     else
-            git commit-tree "$@";
+      git commit-tree "$@";
     fi' HEAD
-  unset GMVEMAIL_GIT_EMAIL_OLD
-  unset GMVEMAIL_GIT_EMAIL_NEW
   git update-ref -d refs/original/refs/heads/$(git symbolic-ref --short HEAD)
 }
 
