@@ -45,6 +45,7 @@ alias code='~/Dropbox/Code'
 # SSHuttle
 alias tunnel='sshuttle -D --pidfile=/tmp/sshuttle.pid -r abiggs@10.26.0.80 10.26.196.0/24'
 alias stoptunnel='[[ -f /tmp/sshuttle.pid ]] && kill `cat /tmp/sshuttle.pid`'
+<<<<<<< HEAD
 =======
 alias code='~/Dropbox\ \(Univ.\ of\ Oklahoma\)/Code'
 <<<<<<< HEAD
@@ -55,12 +56,21 @@ alias pdrop='~/Dropbox\ \(Personal\)'
 alias dw='~/Dropbox\ \(Univ.\ of\ Oklahoma\)'
 =======
 alias code='~/Dropbox/Code'
+=======
+
+# Dropbox
+>>>>>>> Add find and remove conflicted Dropbox files alias
 alias dw='~/Dropbox'
 >>>>>>> Updated Dropbox aliases with new softlinks
 alias dp='~/Dropbox\ \(Personal\)'
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> Changed Dropbox aliases
 =======
+=======
+alias dpfc='find . -type f -name "* conflicted *"'
+alias dprc='find . -type f -name "* conflicted *" -exec rm -f {} \;'
+>>>>>>> Add find and remove conflicted Dropbox files alias
 
 <<<<<<< HEAD
 # Docker
