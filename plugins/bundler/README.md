@@ -6,6 +6,7 @@
   - `bl` aliased to `bundle list`
   - `bp` aliased to `bundle package`
   - `bo` aliased to `bundle open`
+  - `bout` aliased to `bundle outdated`
   - `bu` aliased to `bundle update`
   - `bi` aliased to `bundle install --jobs=<cpu core count>` (only for bundler `>= 1.4.0`)
 - adds a wrapper for common gems:
@@ -39,7 +40,7 @@ This will exclude the `foreman` and `spin` gems (i.e. their executable) from bei
 
 ## Excluded gems
 
-These gems should not be called with `bundle exec`. Please see the Issues on GitHub for clarification.
+These gems should not be called with `bundle exec`. Please see [issue #2923](https://github.com/robbyrussell/oh-my-zsh/pull/2923) on GitHub for clarification.
 
 `berks`
 `foreman`

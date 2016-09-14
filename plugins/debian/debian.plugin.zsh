@@ -9,8 +9,10 @@
 # You can just set apt_pref='apt-get' to override it.
 if [[ -e $( which -p aptitude 2>&1 ) ]]; then
     apt_pref='aptitude'
+    apt_upgr='safe-upgrade'
 else
     apt_pref='apt-get'
+    apt_upgr='upgrade'
 fi
 
 # Use sudo by default if it's installed
@@ -45,10 +47,10 @@ if [[ $use_sudo -eq 1 ]]; then
     alias abd='sudo $apt_pref build-dep'
     alias ac='sudo $apt_pref clean'
     alias ad='sudo $apt_pref update'
-    alias adg='sudo $apt_pref update && sudo $apt_pref upgrade'
+    alias adg='sudo $apt_pref update && sudo $apt_pref $apt_upgr'
     alias adu='sudo $apt_pref update && sudo $apt_pref dist-upgrade'
     alias afu='sudo apt-file update'
-    alias ag='sudo $apt_pref upgrade'
+    alias ag='sudo $apt_pref $apt_upgr'
     alias ai='sudo $apt_pref install'
     # Install all packages given on the command line while using only the first word of each line:
     # acs ... | ail
@@ -80,10 +82,10 @@ else
     }
     alias ac='su -ls \'$apt_pref clean\' root'
     alias ad='su -lc \'$apt_pref update\' root'
-    alias adg='su -lc \'$apt_pref update && aptitude safe-upgrade\' root'
+    alias adg='su -lc \'$apt_pref update && aptitude $apt_upgr\' root'
     alias adu='su -lc \'$apt_pref update && aptitude dist-upgrade\' root'
     alias afu='su -lc "apt-file update"'
-    alias ag='su -lc \'$apt_pref safe-upgrade\' root'
+    alias ag='su -lc \'$apt_pref $apt_upgr\' root'
     ai() {
         cmd="su -lc 'aptitude -P install $@' root"
         print "$cmd"
@@ -136,7 +138,7 @@ apt_pref_compdef abd "build-dep"
 apt_pref_compdef ac  "clean"
 apt_pref_compdef ad  "update"
 apt_pref_compdef afu "update"
-apt_pref_compdef ag  "upgrade"
+apt_pref_compdef ag  "$apt_upgr"
 apt_pref_compdef ai  "install"
 apt_pref_compdef ail "install"
 apt_pref_compdef ap  "purge"

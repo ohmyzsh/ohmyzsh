@@ -6,7 +6,7 @@
 # To achieve git-flow completion nirvana:
 #
 #  0. Update your zsh's git-completion module to the newest version.
-#     From here. http://zsh.git.sourceforge.net/git/gitweb.cgi?p=zsh/zsh;a=blob_plain;f=Completion/Unix/Command/_git;hb=HEAD
+#     From here. https://raw.githubusercontent.com/zsh-users/zsh/master/Completion/Unix/Command/_git
 #
 #  1. Install this file. Either:
 #
@@ -21,10 +21,20 @@
 #
 
 #Alias
-alias gf='git flow'
+alias gfl='git flow'
+alias gfli='git flow init'
 alias gcd='git checkout develop'
 alias gch='git checkout hotfix'
 alias gcr='git checkout release'
+alias gflf='git flow feature'
+alias gflh='git flow hotfix'
+alias gflr='git flow release'
+alias gflfs='git flow feature start'
+alias gflhs='git flow hotfix start'
+alias gflrs='git flow release start'
+alias gflff='git flow feature finish'
+alias gflhf='git flow hotfix finish'
+alias gflrf='git flow release finish'
 
 _git-flow ()
 {

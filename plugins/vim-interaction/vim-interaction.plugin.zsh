@@ -4,17 +4,6 @@
 # Derek Wyatt (derek@{myfirstnamemylastname}.org
 # 
 
-function resolveFile
-{
-  if [ -f "$1" ]; then
-    echo $(readlink -f "$1")
-  elif [[ "${1#/}" == "$1" ]]; then
-    echo "$PWD/$1"
-  else
-    echo $1
-  fi
-}
-
 function callvim
 {
   if [[ $# == 0 ]]; then
@@ -48,13 +37,10 @@ EOH
   if [[ ${before#:} != $before && ${before%<cr>} == $before ]]; then
     before="$before<cr>"
   fi
-  local files=""
-  for f in $@
-  do
-    files="$files $(resolveFile $f)"
-  done
-  if [[ -n $files ]]; then
-    files=':args! '"$files<cr>"
+  local files
+  if [[ $# -gt 0 ]]; then
+    # absolute path of files resolving symlinks (:A) and quoting special chars (:q)
+    files=':args! '"${@:A:q}<cr>"
   fi
   cmd="$before$files$after"
   gvim --remote-send "$cmd"

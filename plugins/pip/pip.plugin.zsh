@@ -76,3 +76,6 @@ zsh-pip-test-clean-packages() {
         echo "the djangopypi2 index is fine"
     fi
 }
+
+alias pip="noglob pip" # allows square brackets for pip command invocation
+

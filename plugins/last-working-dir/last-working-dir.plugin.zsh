@@ -8,14 +8,15 @@ mkdir -p $ZSH_CACHE_DIR
 cache_file="$ZSH_CACHE_DIR/last-working-dir"
 
 # Updates the last directory once directory is changed.
-function chpwd() {
+chpwd_functions+=(chpwd_last_working_dir)
+function chpwd_last_working_dir() {
   # Use >| in case noclobber is set to avoid "file exists" error
 	pwd >| "$cache_file"
 }
 
 # Changes directory to the last working directory.
 function lwd() {
-	[[ ! -r "$cache_file" ]] || cd `cat "$cache_file"`
+	[[ ! -r "$cache_file" ]] || cd "`cat "$cache_file"`"
 }
 
 # Automatically jump to last working directory unless this isn't the first time
