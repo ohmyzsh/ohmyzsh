@@ -66,7 +66,7 @@ _gradle_does_task_list_need_generating () {
 # are considered to be tasks. If and when gradle adds support for listing tasks
 # for programmatic parsing, this method can be deprecated.
 ##############
-_gradle_parse_tasks_to_gradletasknamecache () {
+_gradle_parse_tasks () {
   lines_might_be_tasks=false
   task_name_buffer=""
   while read -r line; do
@@ -78,7 +78,7 @@ _gradle_parse_tasks_to_gradletasknamecache () {
       if [[ "$lines_might_be_tasks" = true ]]; then
         # If a newline is found, send the buffer to .gradletasknamecache
         while read -r task; do
-          echo $task | awk '/[a-zA-Z0-9:-]+/ {print $1}' >> .gradletasknamecache
+          echo $task | awk '/[a-zA-Z0-9:-]+/ {print $1}'
         done <<< "$task_name_buffer"
         # Empty buffer, because we are done with the tasks
         task_name_buffer=""
@@ -97,13 +97,7 @@ _gradle_tasks () {
   if [[ -f build.gradle ]]; then
     _gradle_arguments
     if _gradle_does_task_list_need_generating; then
-      # First empty the old cache file
-      if [ -f .gradletasknamecache ]; then
-       rm .gradletasknamecache
-      fi
-      # Then append the rest of the lines to that file
-      output=$(gradle tasks --all)
-      _gradle_parse_tasks_to_gradletasknamecache $output
+      _gradle_parse_tasks "$(gradle tasks --all)" > .gradletasknamecache
     fi
     compadd -X "==== Gradle Tasks ====" $(cat .gradletasknamecache)
   fi
@@ -113,13 +107,7 @@ _gradlew_tasks () {
   if [[ -f build.gradle ]]; then
     _gradle_arguments
     if _gradle_does_task_list_need_generating; then
-      # First empty the old cache file
-      if [ -f .gradletasknamecache ]; then
-       rm .gradletasknamecache
-      fi
-      # Then append the rest of the lines to that file
-      output=$(./gradlew tasks --all)
-      _gradle_parse_tasks_to_gradletasknamecache $output
+      _gradle_parse_tasks "$(./gradlew tasks --all)" > .gradletasknamecache
     fi
     compadd -X "==== Gradlew Tasks ====" $(cat .gradletasknamecache)
   fi
