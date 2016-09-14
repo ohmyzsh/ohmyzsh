@@ -22,6 +22,10 @@ if [[ "$OSTYPE" = darwin* ]] ; then
     [ $(ioreg -rc AppleSmartBattery | grep -c '^.*"ExternalConnected"\ =\ Yes') -eq 1 ]
   }
 
+  function fully_charged() {
+    [[ $(ioreg -rc "AppleSmartBattery"| grep '^.*"FullyCharged"\ =\ ' | sed -e 's/^.*"FullyCharged"\ =\ //') == "Yes" ]]
+  }
+
   function battery_pct_remaining() {
     if plugged_in ; then
       echo "External Power"
@@ -70,9 +74,16 @@ elif [[ $(uname) == "Linux"  ]] ; then
     ! [[ $(acpi 2&>/dev/null | grep -c '^Battery.*Discharging') -gt 0 ]]
   }
 
+  function plugged_in() {
+    battery_is_charging
+  }
+
+  function fully_charged() {
+  }
+
   function battery_pct() {
     if (( $+commands[acpi] )) ; then
-      echo "$(acpi | cut -f2 -d ',' | tr -cd '[:digit:]')"
+      echo "$(acpi 2&>/dev/null | cut -f2 -d ',' | tr -cd '[:digit:]')"
     fi
   }
 
@@ -91,7 +102,7 @@ elif [[ $(uname) == "Linux"  ]] ; then
   }
 
   function battery_pct_prompt() {
-    b=$(battery_pct_remaining) 
+    b=$(battery_pct_remaining)
     if [[ $(acpi 2&>/dev/null | grep -c '^Battery.*Discharging') -gt 0 ]] ; then
       if [ $b -gt 50 ] ; then
         color='green'
@@ -107,7 +118,17 @@ elif [[ $(uname) == "Linux"  ]] ; then
   }
 
 else
+
   # Empty functions so we don't cause errors in prompts
+  function plugged_in() {
+  }
+
+  function fully_charged() {
+  }
+
+  function battery_is_charging() {
+  }
+
   function battery_pct_remaining() {
   }
 
