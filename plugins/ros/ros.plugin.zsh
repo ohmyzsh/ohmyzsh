@@ -337,7 +337,7 @@ ros_prompt_info() {
         ;;
       *)
         # Unexpected
-        ros_status+="$ZSH_THEME_ROS_PROMPT_MASTER_OUT"
+        ros_status+="$ZSH_THEME_ROS_PROMPT_MASTER_UNEXPECTED[$?]"
         ;;
     esac
     ros_status+="$master_ip%{$fg_no_bold[white]%}"
@@ -366,4 +366,5 @@ ZSH_THEME_ROS_PROMPT_SUFFIX="%{$fg_bold[blue]%})"
 ZSH_THEME_ROS_PROMPT_MASTER_UP="%{$fg_bold[green]%}"
 ZSH_THEME_ROS_PROMPT_MASTER_DOWN="%{$fg_bold[red]%}"
 ZSH_THEME_ROS_PROMPT_MASTER_OUT="%{$fg_bold[magenta]%}"
+ZSH_THEME_ROS_PROMPT_MASTER_UNEXPECTED="$ZSH_THEME_ROS_PROMPT_MASTER_OUT"
 
