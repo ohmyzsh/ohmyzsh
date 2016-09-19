@@ -76,7 +76,11 @@ rosmaster() {
 
 rosinterface() {
 
-  [ $# -eq 0 ] && echo "$ROS_IP" && return 0
+  if [ $# -eq 0 ]; then
+    [ "$ROS_IP" ] && ifconfig | sed '/./{H;$!d};x;/'"$ROS_IP"'/!d' |
+    egrep -o '^[[:alnum:]]+'
+    return 0
+  fi
 
   local ros_interface_tag='ros_interface'
   local ros_interfaces="$(_omz_ros_config_get_line $ros_interface_tag)"
