@@ -269,11 +269,9 @@ rosworkspace() {
 _omz_ros_config_init() {
   [ ! -d "$ZSH_CACHE_DIR" ] && mkdir -p "$ZSH_CACHE_DIR"
   if [ ! -f "$ZSH_CACHE_DIR/ros.cache" ]; then
-    cp "$_OMZ_ROS_DIR/ros.cache.default" "$ZSH_CACHE_DIR/ros.cache" || \
-    return "$?"
-    [ ! "$(_omz_ros_config_get_line 'ros_distro_default')" ] && \
-    _omz_ros_config_set_line 'ros_distro_default' \
-    $(_omz_ros_distro_get_list | tail -n 1) || return "$?"
+    touch "$ZSH_CACHE_DIR/ros.cache" && \
+    rosdistro default "$(_omz_ros_distro_get_list | tail -n 1)" && \
+    rosmaster default 'localhost' || return "$?"
   fi
 
   return 0
