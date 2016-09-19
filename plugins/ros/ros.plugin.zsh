@@ -17,7 +17,7 @@ rosmaster() {
   && return 0
 
   local master_ip_tag='master_ip'
-  local masters="$(_omz_ros_config_get_line $master_ip_tag)"
+  local masters="$(_omz_ros_config_get_line "$master_ip_tag")"
   local finded=""
 
   [ $# -eq 2 ] && finded=$(echo "$masters" | grep -o "$2")
@@ -45,7 +45,8 @@ rosmaster() {
     default)
       local master_ip_default_tag='master_ip_default'
       [ $# -ne 2 ] && >&2 echo "Usage : $0 default <ros_master_ip>" && return 1
-      [ ! "$finded" ] && _omz_ros_config_add_to_line "$master_ip_default_tag" "$2"
+      [ ! "$finded" ] && \
+      _omz_ros_config_add_to_line "$master_ip_tag" "$2"
       _omz_ros_config_set_line "$master_ip_default_tag" "$2"
       ;;
 
@@ -54,20 +55,32 @@ rosmaster() {
         rosinterface set "$3" && \
         export ROS_MASTER_URI="http://$2:11311" || return "$?"
       elif [ $# -eq 2 ]; then
-        export ROS_MASTER_URI="http://$2:11311"
+        export ROS_MASTER_URI="http://$2:11311" || return "$?"
       else
-        >&2 echo "Usage : $0 set <ros_master_ip> <ros_workspace>" && return 1
+        >&2 echo "Usage : $0 set <ros_master_ip> [<ros_interface>]" && return 1
       fi
       ;;
 
     autoset)
       [ $# -ne 1 ] && >&2 echo "Usage : $0 autoset" && return 1
       local master_ip_default=$(_omz_ros_config_get_line 'master_ip_default')
-      rosmaster set "$master_ip_default"
+      [ "$master_ip_default" ] && rosmaster set "$master_ip_default" || \
+      return 3
       ;;
 
-    *)
-      >&2 echo "Usage : $0 <command> [option]" && return 1
+    help|*)
+      >&2 cat <<\EOF
+Usage : rosmaster [<command>] [<args>]
+
+The rosmaster commands are:
+   add      Add an URI to the ROS master URI list
+   autoset  Set the ROS master URI to the default URI
+   default  Set the default ROS master URI
+   help     Display help about rosmaster (this page)
+   list     Display the ROS master URI list
+   remove   Remove an URI from the ROS master URI list
+   set      Set the current ROS master URI
+EOF
       ;;
   esac
 
@@ -83,7 +96,7 @@ rosinterface() {
   fi
 
   local ros_interface_tag='ros_interface'
-  local ros_interfaces="$(_omz_ros_config_get_line $ros_interface_tag)"
+  local ros_interfaces="$(_omz_ros_config_get_line "$ros_interface_tag")"
   local finded=""
 
   [ $# -eq 2 ] && finded=$(echo "$ros_interfaces" | grep -o "$2")
@@ -138,11 +151,9 @@ rosinterface() {
       local ros_interface=""
       for ros_interface in $(echo "$ros_interfaces_candidate"); do
         local ip=$(_omz_ros_interface_to_ip "$ros_interface")
-        if [ "$ip" ]; then
-          export ROS_IP="$ip"
-          break
-        fi
+        [ "$ip" ] && export ROS_IP="$ip" && return 0
       done
+      return 3
       ;;
 
     *)
@@ -155,8 +166,7 @@ rosinterface() {
 
 rosdistro() {
 
-  [ $# -eq 0 ] && \
-  echo "$ROS_DISTRO" && return 0
+  [ $# -eq 0 ] && echo "$ROS_DISTRO" && return 0
 
   case "$1" in
     list)
@@ -168,7 +178,7 @@ rosdistro() {
       [ $# -ne 2 ] && >&2 echo "Usage : $0 default <ros_distro>" && return 1
       local exist=$(_omz_ros_distro_get_list | grep -o "$2")
       [ ! "$exist" ] && >&2 echo "Distro $2 is not available" && return 3
-      _omz_ros_config_set_line "ros_distro_default" "$2"
+      _omz_ros_config_set_line 'ros_distro_default' "$2"
       ;;
 
     set)
@@ -181,9 +191,8 @@ rosdistro() {
     autoset)
       [ $# -ne 1 ] && >&2 echo "Usage : $0 autoset" && return 1
       local ros_distro_default=$(_omz_ros_config_get_line 'ros_distro_default')
-      [ ! "$ros_distro_default" ] && >&2 echo "Default distro not set" && \
+      [ "$ros_distro_default" ] && rosdistro set "$ros_distro_default" || \
       return 3
-      rosdistro set "$ros_distro_default"
       ;;
 
     *)
@@ -267,7 +276,7 @@ rosworkspace() {
 }
 
 _omz_ros_config_init() {
-  [ ! -d "$ZSH_CACHE_DIR" ] && mkdir -p "$ZSH_CACHE_DIR"
+  [ ! -d "$ZSH_CACHE_DIR" ] && mkdir -p "$ZSH_CACHE_DIR" || return "$?"
   if [ ! -f "$ZSH_CACHE_DIR/ros.cache" ]; then
     touch "$ZSH_CACHE_DIR/ros.cache" && \
     rosdistro default "$(_omz_ros_distro_get_list | tail -n 1)" && \
@@ -305,7 +314,7 @@ _omz_ros_config_remove_from_line() {
 _omz_ros_config_do() {
   local line_exist="$(cat "$ZSH_CACHE_DIR/ros.cache" | grep "^\s*$1\s*=" )"
   [ ! "$line_exist" ] && echo "$1 =" >> "$ZSH_CACHE_DIR/ros.cache"
-  sed -ir "\#^\s*$1\s*=#s#$2#$3#" "$ZSH_CACHE_DIR/ros.cache"
+  sed -ri "\#^\s*$1\s*=#s#$2#$3#" "$ZSH_CACHE_DIR/ros.cache"
 }
 
 _omz_ros_workspace_get_list() {
@@ -334,7 +343,7 @@ _omz_ros_distro_get_list() {
 
 ros_prompt_info() {
   local ros_status=""
-  local master_ip=$(rosmaster)
+  local master_ip="$(rosmaster)"
   if [ "$master_ip" ]; then
     ros_status+="$ZSH_THEME_ROS_PROMPT_PREFIX%{$fg_no_bold[white]%}"
     LC_ALL=C curl -m 0.1 -s -o /dev/null \
@@ -344,7 +353,7 @@ ros_prompt_info() {
     case "$?" in
       0)
         # master up and responding
-        [ "$(rosparam get use_sim_time 2>&1 | grep "true")" ] && \
+        [ "$(rosparam get use_sim_time 2>&1 | grep 'true')" ] && \
         ros_status+="$ZSH_THEME_ROS_PROMPT_USE_SIM_TIME%{$fg_no_bold[white]%}"
         ros_status+="$ZSH_THEME_ROS_PROMPT_MASTER_UP"
         ;;
@@ -371,8 +380,8 @@ ros_prompt_info() {
 
 _omz_ros_config_init
 
-[ ! "$ROS_IP" ] && rosinterface autoset
-[ ! "$ROS_MASTER_URI" ] && rosmaster autoset
+[ ! "$(rosinterface)" ] && rosinterface autoset
+[ ! "$(rosmaster)" ] && rosmaster autoset
 [ ! "$(rosworkspace)" ] && rosworkspace autoset
 [ ! "$(rosdistro)" ] && rosdistro autoset
 
