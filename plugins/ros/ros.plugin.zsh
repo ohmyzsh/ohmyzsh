@@ -13,8 +13,8 @@
 
 rosmaster() {
 
-  [ $# -eq 0 ] && \
-  echo "$ROS_MASTER_URI" | sed 's/http:\/\/\([^:]\+\):11311/\1/' && return 0
+  [ $# -eq 0 ] && echo "$ROS_MASTER_URI" | sed -r 's#http://([^:]+):11311#\1#' \
+  && return 0
 
   local master_ip_tag='master_ip'
   local masters="$(_omz_ros_config_get_line $master_ip_tag)"
@@ -25,7 +25,7 @@ rosmaster() {
   case "$1" in
     list)
       [ $# -ne 1 ] && >&2 echo "Usage : $0 list" && return 1
-      echo "$masters" | sed 's/[[:space:]]\+/\n/g' | nl
+      echo "$masters" | sed -r 's#\s+#\n#g'
       ;;
 
     add)
@@ -87,7 +87,7 @@ rosinterface() {
   case "$1" in
     list)
       [ $# -ne 1 ] && >&2 echo "Usage : $0 list" && return 1
-      echo "$ros_interfaces" | sed 's/[[:space:]]\+/\n/g' | nl
+      echo "$ros_interfaces" | sed -r 's#\s+#\n#g'
       ;;
 
     add)
@@ -130,7 +130,7 @@ rosinterface() {
     autoset)
       [ $# -ne 1 ] && >&2 echo "Usage : $0 autoset" && return 1
       local ros_interfaces_candidate="$(echo "$ros_interfaces" |
-      grep -E "$(_omz_ros_interface_get_available | tr ' ' '|')")"
+      egrep "$(_omz_ros_interface_get_available | tr ' ' '|')")"
       local ros_interface=""
       for ros_interface in $(echo "$ros_interfaces_candidate"); do
         local ip=$(_omz_ros_interface_to_ip "$ros_interface")
@@ -157,7 +157,7 @@ rosdistro() {
   case "$1" in
     list)
       [ $# -ne 1 ] && >&2 echo "Usage : $0 list" && return 1
-      _omz_ros_distro_get_list | sed 's/[[:space:]]\+/\n/g' | nl
+      _omz_ros_distro_get_list | sed -r 's#\s+#\n#g'
       ;;
 
     default)
@@ -172,7 +172,6 @@ rosdistro() {
       local exist=$(_omz_ros_distro_get_list | grep -o "$2")
       [ ! "$exist" ] && >&2 echo "Distro $2 is not available" && return 3
       source "/opt/ros/$2/setup.zsh"
-      rosworkspace source
       ;;
 
     autoset)
@@ -193,43 +192,42 @@ rosdistro() {
 
 rosworkspace() {
 
-  local workspace_tag='ros_workspace'
-  local ros_workspaces="$(_omz_ros_config_get_line $workspace_tag)"
+  [ $# -eq 0 ] && echo "$ROS_PACKAGE_PATH" | tr ':' '\n' | grep -v '/opt/ros/' |
+  sed 's#/src$##' && return 0
+
+  local ros_workspace_tag='ros_workspace'
+  local workspaces="$(_omz_ros_config_get_line "$ros_workspace_tag")"
   local finded=""
+  local workspace_candidate=""
 
-  [ $# -eq 2 ] && finded=$(echo "$ros_workspaces" | grep -o "$2")
-
+  [ $# -eq 2 ] && workspace_candidate="$(readlink -e "$2")" && \
+  finded=$(echo "$workspaces" | grep -o "$workspace_candidate")
   case "$1" in
     list)
       [ $# -ne 1 ] && >&2 echo "Usage : $0 list" && return 1
-      echo "$ros_workspaces" | sed 's/[[:space:]]\+/\n/g' | nl
+      echo "$workspaces" | sed -r 's#\s+#\n#g'
       ;;
 
     add)
       [ $# -ne 2 ] && >&2 echo "Usage : $0 add <new_ros_workspace>" && return 1
-      [ ! -f "$2/.catkin_workspace" ] && \
-      >&2 echo "Workspace $2 does not exist" && return 3
-      [ "$finded" ] && >&2 echo "Workspace $2 is already registered" && return 3
-      local sed_path=$(echo "$2" | sed 's/\//\\\//g')
-      _omz_ros_config_add_to_line "$workspace_tag" "$sed_path"
-      rosworkspace source
+      [ ! -f "$workspace_candidate/.catkin_workspace" ] && \
+      >&2 echo "Workspace $workspace_candidate does not exist" && return 3
+      [ "$finded" ] && \
+      >&2 echo "Workspace $workspace_candidate is already registered" && \
+      return 3
+      _omz_ros_config_add_to_line "$ros_workspace_tag" "$workspace_candidate"
       ;;
 
     remove)
       [ $# -ne 2 ] && \
-      >&2 echo "Usage : $0 remove <ros_registered_workspace_to_remove>" && \
+       echo "Usage : $0 remove <ros_registered_workspace_to_remove>" && \
       return 1
-      [ ! "$finded" ] && >&2 echo "Workspace $2 is not registered" && return 3
-      local sed_path=$(echo "$2" | sed 's/\//\\\//g')
-      _omz_ros_config_remove_from_line "$workspace_tag" "$sed_path"
+      [ ! "$finded" ] && \
+      >&2 echo "Workspace $workspace_candidate is not registered" && return 3
+      _omz_ros_config_remove_from_line "$ros_workspace_tag" \
+      "$workspace_candidate"
       ;;
 
-    source)
-      [ $# -ne 1 ] && >&2 echo "Usage : $0 source" && return 1
-      local ros_workspace=""
-      for ros_workspace in $(echo "$ros_workspaces"); do
-        source "$ros_workspace/devel/setup.zsh" || return "$?"
-      done
       ;;
 
     *)
@@ -255,7 +253,7 @@ _omz_ros_config_init() {
 
 _omz_ros_config_get_line() {
   cat "$ZSH_CACHE_DIR/ros.cache" |
-  grep "^[[:space:]]*$1[[:space:]]*=" | sed 's/.*=[[:space:]]*\(.*\)/\1/'
+  grep "^\s*$1\s*=" | sed -r 's#^.*=\s*(.*)$#\1#'
 }
 
 _omz_ros_config_set_line() {
@@ -263,45 +261,43 @@ _omz_ros_config_set_line() {
 }
 
 _omz_ros_config_up() {
-  _omz_ros_config_do "$1" "\([^[:space:]=]\+\)[[:space:]]\+$2" "$2 \1"
+  _omz_ros_config_do "$1" "([^\s=]+)\s+$2" "$2 \1"
 }
 
 _omz_ros_config_down() {
-  _omz_ros_config_do "$1" "$2[[:space:]]\+\([^[:space:]]*\)" "\1 $2"
+  _omz_ros_config_do "$1" "$2\s+([^\s]*)" "\1 $2"
 }
 
 _omz_ros_config_add_to_line() {
-  _omz_ros_config_do "$1" '[[:space:]]*$' " $2"
+  _omz_ros_config_do "$1" '\s*$' " $2"
 }
 
 _omz_ros_config_remove_from_line() {
-  _omz_ros_config_do "$1" "[[:space:]]*$2[[:space:]]*" ' '
+  _omz_ros_config_do "$1" "\s*$2\s*" ' '
 }
 
 _omz_ros_config_do() {
-  local line_exist="$(cat "$ZSH_CACHE_DIR/ros.cache" |
-  grep "^[[:space:]]*$1[[:space:]]*=" )"
+  local line_exist="$(cat "$ZSH_CACHE_DIR/ros.cache" | grep "^\s*$1\s*=" )"
   [ ! "$line_exist" ] && echo "$1 =" >> "$ZSH_CACHE_DIR/ros.cache"
-  sed -i "/^[[:space:]]*$1[[:space:]]*=/s/$2/$3/" \
-  "$ZSH_CACHE_DIR/ros.cache"
+  sed -ir "\#^\s*$1\s*=#s#$2#$3#" "$ZSH_CACHE_DIR/ros.cache"
 }
 
 _omz_ros_workspace_get_list() {
   echo "$ROS_PACKAGE_PATH" | tr ':' '\n' | grep -v '/opt/ros' |
-  sed 's/\/src$//' | paste -sd ' '
+  sed -r 's#/src$##' | paste -sd ' '
 }
 
 _omz_ros_interface_get_list() {
-   ip link show | grep -E '^[0-9]+: ' | sed 's/ //g' | cut -d ':' -f 2 |
+   ip link show | egrep '^[0-9]+: ' | sed -r 's# ##g' | cut -d ':' -f 2 |
    paste -sd ' '
 }
 
 _omz_ros_interface_get_available() {
-   ifconfig | grep -oE "^[[:alnum:]]+" | paste -sd ' '
+   ifconfig | egrep -o '^[[:alnum:]]+' | paste -sd ' '
 }
 
 _omz_ros_interface_to_ip() {
-  ifconfig | sed '/./{H;$!d};x;/'"$1"'/!d' | grep -o 'inet addr:[0-9.]\+' |
+  ifconfig | sed '/./{H;$!d};x;/'"$1"'/!d' | egrep -o 'inet addr:[0-9.]+' |
   cut -d ':' -f 2
 }
 
@@ -351,7 +347,9 @@ _omz_ros_config_init
 
 [ ! "$ROS_IP" ] && rosinterface autoset
 [ ! "$ROS_MASTER_URI" ] && rosmaster autoset
-[ ! "$ROS_DISTRO" ] && rosdistro autoset || rosworkspace source
+[ ! "$(rosworkspace)" ] && rosworkspace autoset
+[ ! "$(rosdistro)" ] && rosdistro autoset
+
 
 # Default values for the appearance of the prompt.
 if [ "$(fc-list | grep 'FontAwesome')" ]; then
