@@ -232,6 +232,30 @@ rosworkspace() {
       "$workspace_candidate"
       ;;
 
+    default)
+      local ros_workspace_default_tag='ros_workspace_default'
+      [ $# -ne 2 ] && >&2 echo "Usage : $0 default <ros_workspace>" && return 1
+      [ ! -f "$workspace_candidate/.catkin_workspace" ] && \
+      >&2 echo "Workspace $workspace_candidate does not exist" && return 3
+      [ ! "$finded" ] && rosworkspace add "$workspace_candidate"
+      _omz_ros_config_set_line "$ros_workspace_default_tag" \
+      "$workspace_candidate"
+      ;;
+
+    set)
+      [ $# -ne 2 ] && \
+      >&2 echo "Usage : $0 set <ros_master_ip> <ros_workspace>" && return 1
+      [ ! -f "$workspace_candidate/.catkin_workspace" ] && \
+      >&2 echo "Workspace $workspace_candidate does not exist" && return 3
+      source "$workspace_candidate/devel/setup.zsh" || return "$?"
+      ;;
+
+    autoset)
+      [ $# -ne 1 ] && >&2 echo "Usage : $0 autoset" && return 1
+      local ros_workspace_default=$(_omz_ros_config_get_line \
+      'ros_workspace_default')
+      [ "$ros_workspace_default" ] && \
+      rosworkspace set "$ros_workspace_default" || return 3
       ;;
 
     *)
