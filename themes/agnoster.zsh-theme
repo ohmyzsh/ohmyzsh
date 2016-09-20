@@ -201,14 +201,14 @@ prompt_battery() {
       PLUG_CHAR='🔌'
     }
 
-    local LEVEL1 LEVEL2 LEVEL3 LEVEL4
+    local LEVEL1 LEVEL2 LEVEL3 LEVEL4 online
     LEVEL1=95
     LEVEL2=50
     LEVEL3=15
     LEVEL4=5
 
-    if [ $(< /sys/class/power_supply/AC0/online) -ne '0' ]
-    then
+    online=$(< /sys/class/power_supply/AC0/online)
+    if [ ${online} -ne 0 ]; then
       prompt_segment blue grey "${PLUG_CHAR} "
     fi
 
@@ -226,7 +226,11 @@ prompt_battery() {
         else                            bg="magenta"; fg="yellow"
         fi
 
-        prompt_segment ${bg} ${fg} "[${BAT} "${cap}"/"${sign}${power}"W]"
+				if [ ${online} -ne 0 ]; then
+					prompt_segment ${bg} ${fg} "[${BAT} "${cap}"W]"
+				else
+					prompt_segment ${bg} ${fg} "[${BAT} "${cap}"/"${sign}${power}"W]"
+				fi
 
     done
 
