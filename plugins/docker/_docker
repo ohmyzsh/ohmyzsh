@@ -228,7 +228,7 @@ __docker_get_log_options() {
     journald_options=("env" "labels" "tag")
     json_file_options=("env" "labels" "max-file" "max-size")
     syslog_options=("env" "labels" "syslog-address" "syslog-facility" "syslog-format" "syslog-tls-ca-cert" "syslog-tls-cert" "syslog-tls-key" "syslog-tls-skip-verify" "tag")
-    splunk_options=("env" "labels" "splunk-caname" "splunk-capath" "splunk-format" "splunk-index" "splunk-insecureskipverify" "splunk-source" "splunk-sourcetype" "splunk-token" "splunk-url" "splunk-verify-connection" "tag")
+    splunk_options=("env" "labels" "splunk-caname" "splunk-capath" "splunk-format" "splunk-gzip" "splunk-gzip-level" "splunk-index" "splunk-insecureskipverify" "splunk-source" "splunk-sourcetype" "splunk-token" "splunk-url" "splunk-verify-connection" "tag")
 
     [[ $log_driver = (awslogs|all) ]] && _describe -t awslogs-options "awslogs options" awslogs_options "$@" && ret=0
     [[ $log_driver = (fluentd|all) ]] && _describe -t fluentd-options "fluentd options" fluentd_options "$@" && ret=0
@@ -434,7 +434,7 @@ __docker_complete_events_filter() {
             (event)
                 local -a event_opts
                 event_opts=('attach' 'commit' 'connect' 'copy' 'create' 'delete' 'destroy' 'detach' 'die' 'disconnect' 'exec_create' 'exec_detach'
-                'exec_start' 'export' 'import' 'kill' 'load'  'mount' 'oom' 'pause' 'pull' 'push' 'reload' 'rename' 'resize' 'restart' 'save' 'start'
+                'exec_start' 'export' 'health_status' 'import' 'kill' 'load'  'mount' 'oom' 'pause' 'pull' 'push' 'reload' 'rename' 'resize' 'restart' 'save' 'start'
                 'stop' 'tag' 'top' 'unmount' 'unpause' 'untag' 'update')
                 _describe -t event-filter-opts "event filter options" event_opts && ret=0
                 ;;
@@ -792,7 +792,7 @@ __docker_node_commands() {
         "ls:List nodes in the swarm"
         "promote:Promote a node as manager in the swarm"
         "rm:Remove one or more nodes from the swarm"
-        "ps:List tasks running on a node"
+        "ps:List tasks running on a node, defaults to current node"
         "update:Update a node"
     )
     _describe -t docker-node-commands "docker node command" _docker_node_subcommands
@@ -1083,6 +1083,7 @@ __docker_service_subcommand() {
         "($help)*--constraint=[Placement constraints]:constraint: "
         "($help)--endpoint-mode=[Placement constraints]:mode:(dnsrr vip)"
         "($help)*"{-e=,--env=}"[Set environment variables]:env: "
+        "($help)*--group-add=[Add additional user groups to the container]:group:_groups"
         "($help)*--label=[Service labels]:label: "
         "($help)--limit-cpu=[Limit CPUs]:value: "
         "($help)--limit-memory=[Limit Memory]:value: "
@@ -1177,6 +1178,7 @@ __docker_service_subcommand() {
                 "($help)--arg=[Service command args]:arguments: _normal" \
                 "($help)*--container-label-add=[Add or update container labels]:label: " \
                 "($help)*--container-label-rm=[Remove a container label by its key]:label: " \
+                "($help)*--group-rm=[Remove previously added user groups from the container]:group:_groups" \
                 "($help)--image=[Service image tag]:image:__docker_repositories" \
                 "($help -)1:service:__docker_complete_services" && ret=0
             ;;
@@ -1658,7 +1660,8 @@ __docker_subcommand() {
                 $opts_help \
                 "($help)*"{-f=,--filter=}"[Filter values]:filter:__docker_complete_events_filter" \
                 "($help)--since=[Events created since this timestamp]:timestamp: " \
-                "($help)--until=[Events created until this timestamp]:timestamp: " && ret=0
+                "($help)--until=[Events created until this timestamp]:timestamp: " \
+                "($help)--format=[Format the output using the given go template]:template: " && ret=0
             ;;
         (exec)
             local state
@@ -1701,7 +1704,7 @@ __docker_subcommand() {
                 "($help -a --all)"{-a,--all}"[Show all images]" \
                 "($help)--digests[Show digests]" \
                 "($help)*"{-f=,--filter=}"[Filter values]:filter:->filter-options" \
-                "($help)--format[Pretty-print containers using a Go template]:template: " \
+                "($help)--format[Pretty-print images using a Go template]:template: " \
                 "($help)--no-trunc[Do not truncate output]" \
                 "($help -q --quiet)"{-q,--quiet}"[Only show numeric IDs]" \
                 "($help -): :__docker_repositories" && ret=0
