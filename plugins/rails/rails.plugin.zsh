@@ -36,6 +36,7 @@ alias -g RET='RAILS_ENV=test'
 
 # Rails aliases
 alias rc='rails console'
+alias rcs='rails console --sandbox'
 alias rd='rails destroy'
 alias rdb='rails dbconsole'
 alias rg='rails generate'

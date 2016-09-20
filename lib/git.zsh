@@ -76,16 +76,21 @@ function git_current_branch() {
 
 # Gets the number of commits ahead from remote
 function git_commits_ahead() {
-  if $(command git rev-parse --git-dir > /dev/null 2>&1); then
-    local COMMITS="$(git rev-list --count @{upstream}..HEAD)"
-    echo "$ZSH_THEME_GIT_COMMITS_AHEAD_PREFIX$COMMITS$ZSH_THEME_GIT_COMMITS_AHEAD_SUFFIX"
+  if command git rev-parse --git-dir &>/dev/null; then
+    local commits="$(git rev-list --count @{upstream}..HEAD)"
+    if [[ "$commits" != 0 ]]; then
+      echo "$ZSH_THEME_GIT_COMMITS_AHEAD_PREFIX$commits$ZSH_THEME_GIT_COMMITS_AHEAD_SUFFIX"
+    fi
   fi
 }
 
 # Gets the number of commits behind remote
 function git_commits_behind() {
-  if $(command git rev-parse --git-dir > /dev/null 2>&1); then
-    echo $(git rev-list --count HEAD..@{upstream})
+  if command git rev-parse --git-dir &>/dev/null; then
+    local commits="$(git rev-list --count HEAD..@{upstream})"
+    if [[ "$commits" != 0 ]]; then
+      echo "$ZSH_THEME_GIT_COMMITS_BEHIND_PREFIX$commits$ZSH_THEME_GIT_COMMITS_BEHIND_SUFFIX"
+    fi
   fi
 }
 
@@ -160,13 +165,13 @@ function git_prompt_status() {
   if $(echo "$INDEX" | grep '^UU ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_UNMERGED$STATUS"
   fi
-  if $(echo "$INDEX" | grep '^## .*ahead' &> /dev/null); then
+  if $(echo "$INDEX" | grep '^## [^ ]\+ .*ahead' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_AHEAD$STATUS"
   fi
-  if $(echo "$INDEX" | grep '^## .*behind' &> /dev/null); then
+  if $(echo "$INDEX" | grep '^## [^ ]\+ .*behind' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_BEHIND$STATUS"
   fi
-  if $(echo "$INDEX" | grep '^## .*diverged' &> /dev/null); then
+  if $(echo "$INDEX" | grep '^## [^ ]\+ .*diverged' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_DIVERGED$STATUS"
   fi
   echo $STATUS

@@ -33,6 +33,8 @@ function _lein_commands() {
           "version:print leiningen's version"
         )
         _describe -t subcommands 'leiningen subcommands' subcommands && ret=0
+        ;;
+      *) _files
     esac
 
     return ret
