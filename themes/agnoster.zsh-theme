@@ -128,6 +128,7 @@ prompt_git() {
 }
 
 prompt_bzr() {
+    (( $+commands[bzr] )) || return
     if (bzr status >/dev/null 2>&1); then
         status_mod=`bzr status | head -n1 | grep "modified" | wc -m`
         status_all=`bzr status | head -n1 | wc -m`
