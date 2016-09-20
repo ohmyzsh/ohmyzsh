@@ -12,6 +12,6 @@
 #  -- - everything after this is an argument, even if it looks like an option
 
 cpv() {
-    rsync -poghb --backup-dir=/tmp/rsync -e /dev/null --progress -- "$@"
+    rsync -pogb -hhh --backup-dir=/tmp/rsync -e /dev/null --progress -- "$@"
 }
 compdef _files cpv
