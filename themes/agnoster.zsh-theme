@@ -190,10 +190,54 @@ prompt_status() {
   [[ -n "$symbols" ]] && prompt_segment black default "$symbols"
 }
 
+# Battery status
+prompt_battery() {
+  if $(ls -d /sys/class/power_supply/BAT* &> /dev/null)
+  then
+
+    local PLUG_CHAR
+    () {
+      local LC_ALL="" LC_CTYPE="en_US.UTF-8"
+      PLUG_CHAR='🔌'
+    }
+
+    local LEVEL1 LEVEL2 LEVEL3 LEVEL4
+    LEVEL1=95
+    LEVEL2=50
+    LEVEL3=15
+    LEVEL4=5
+
+    if [ $(< /sys/class/power_supply/AC0/online) -ne '0' ]
+    then
+      prompt_segment blue grey "${PLUG_CHAR} "
+    fi
+
+    for BAT in $(basename $(dirname /sys/class/power_supply/*/capacity))
+    do
+        cap=$(< /sys/class/power_supply/$BAT/capacity)
+        power=$(< /sys/class/power_supply/$BAT/power_now )
+        let power=power/1000000
+
+        local bg fg
+        if [ $cap -gt $LEVEL1 ];   then bg="blue";    fg="grey"
+        elif [ $cap -gt $LEVEL2 ]; then bg="green";   fg="black"
+        elif [ $cap -gt $LEVEL3 ]; then bg="yellow";  fg="black"
+        elif [ $cap -gt $LEVEL4 ]; then bg="red";     fg="yellow"
+        else                            bg="magenta"; fg="yellow"
+        fi
+
+        prompt_segment ${bg} ${fg} "[${BAT} "${cap}"/"${sign}${power}"W]"
+
+    done
+
+  fi
+}
+
 ## Main prompt
 build_prompt() {
   RETVAL=$?
   prompt_status
+  prompt_battery
   prompt_virtualenv
   prompt_context
   prompt_dir
