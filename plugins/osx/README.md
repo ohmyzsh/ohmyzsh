@@ -30,3 +30,4 @@ Original author: [Sorin Ionescu](https://github.com/sorin-ionescu)
 | `showfiles`     | Show hidden files                                |
 | `hidefiles`     | Hide the hidden files                            |
 | `itunes`        | Control iTunes. User `itunes -h` for usage details |
+| `spotify`       | Control Spotify and search by artist, album, track and etc.|
