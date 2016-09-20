@@ -138,7 +138,7 @@ __docker_containers_names() {
     __docker_get_containers all names "$@"
 }
 
-__docker_complete_info_plugins() {
+__docker_plugins() {
     [[ $PREFIX = -* ]] && return 1
     integer ret=1
     emulate -L zsh
@@ -228,7 +228,7 @@ __docker_get_log_options() {
     journald_options=("env" "labels" "tag")
     json_file_options=("env" "labels" "max-file" "max-size")
     syslog_options=("env" "labels" "syslog-address" "syslog-facility" "syslog-format" "syslog-tls-ca-cert" "syslog-tls-cert" "syslog-tls-key" "syslog-tls-skip-verify" "tag")
-    splunk_options=("env" "labels" "splunk-caname" "splunk-capath" "splunk-format" "splunk-index" "splunk-insecureskipverify" "splunk-source" "splunk-sourcetype" "splunk-token" "splunk-url" "splunk-verify-connection" "tag")
+    splunk_options=("env" "labels" "splunk-caname" "splunk-capath" "splunk-index" "splunk-insecureskipverify" "splunk-source" "splunk-sourcetype" "splunk-token" "splunk-url" "tag")
 
     [[ $log_driver = (awslogs|all) ]] && _describe -t awslogs-options "awslogs options" awslogs_options "$@" && ret=0
     [[ $log_driver = (fluentd|all) ]] && _describe -t fluentd-options "fluentd options" fluentd_options "$@" && ret=0
@@ -340,7 +340,7 @@ __docker_complete_ps_filters() {
                 __docker_networks && ret=0
                 ;;
             (status)
-                status_opts=('created' 'dead' 'exited' 'paused' 'restarting' 'running' 'removing')
+                status_opts=('created' 'dead' 'exited' 'paused' 'restarting' 'running')
                 _describe -t status-filter-opts "Status Filter Options" status_opts && ret=0
                 ;;
             (volume)
@@ -463,8 +463,6 @@ __docker_complete_events_filter() {
     return ret
 }
 
-# BO network
-
 __docker_network_complete_ls_filters() {
     [[ $PREFIX = -* ]] && return 1
     integer ret=1
@@ -472,7 +470,7 @@ __docker_network_complete_ls_filters() {
     if compset -P '*='; then
         case "${${words[-1]%=*}#*=}" in
             (driver)
-                __docker_complete_info_plugins Network && ret=0
+                __docker_plugins Network && ret=0
                 ;;
             (id)
                 __docker_networks_ids && ret=0
@@ -631,7 +629,6 @@ __docker_network_subcommand() {
                 $opts_help \
                 "($help)--no-trunc[Do not truncate the output]" \
                 "($help)*"{-f=,--filter=}"[Provide filter values]:filter:->filter-options" \
-                "($help)--format=[Pretty-print networks using a Go template]:template: " \
                 "($help -q --quiet)"{-q,--quiet}"[Only display numeric IDs]" && ret=0
             case $state in
                 (filter-options)
@@ -651,8 +648,6 @@ __docker_network_subcommand() {
 
     return ret
 }
-
-# EO network
 
 # BO node
 
@@ -721,6 +716,7 @@ __docker_nodes() {
     [[ $filter != "none" ]] && args=("-f $filter")
 
     lines=(${(f)"$(_call_program commands docker $docker_options node ls $args)"})
+
     # Parse header line to find columns
     local i=1 j=1 k header=${lines[1]}
     declare -A begin end
@@ -846,7 +842,6 @@ __docker_node_subcommand() {
                 "($help -a --all)"{-a,--all}"[Display all instances]" \
                 "($help)*"{-f=,--filter=}"[Provide filter values]:filter:->filter-options" \
                 "($help)--no-resolve[Do not map IDs to Names]" \
-                "($help)--no-trunc[Do not truncate output]" \
                 "($help -)1:node:__docker_complete_nodes" && ret=0
             case $state in
                 (filter-options)
@@ -1162,7 +1157,6 @@ __docker_service_subcommand() {
                 "($help -a --all)"{-a,--all}"[Display all tasks]" \
                 "($help)*"{-f=,--filter=}"[Provide filter values]:filter:->filter-options" \
                 "($help)--no-resolve[Do not map IDs to Names]" \
-                "($help)--no-trunc[Do not truncate output]" \
                 "($help -)1:service:__docker_complete_services" && ret=0
             case $state in
                 (filter-options)
@@ -1256,8 +1250,6 @@ __docker_swarm_subcommand() {
 
 # EO swarm
 
-# BO volume
-
 __docker_volume_complete_ls_filters() {
     [[ $PREFIX = -* ]] && return 1
     integer ret=1
@@ -1269,7 +1261,7 @@ __docker_volume_complete_ls_filters() {
                 _describe -t dangling-filter-opts "Dangling Filter Options" dangling_opts && ret=0
                 ;;
             (driver)
-                __docker_complete_info_plugins Volume && ret=0
+                __docker_plugins Volume && ret=0
                 ;;
             (name)
                 __docker_volumes && ret=0
@@ -1279,7 +1271,7 @@ __docker_volume_complete_ls_filters() {
                 ;;
         esac
     else
-        opts=('dangling' 'driver' 'label' 'name')
+        opts=('dangling' 'driver' 'name')
         _describe -t filter-opts "Filter Options" opts -qS "=" && ret=0
     fi
 
@@ -1338,12 +1330,12 @@ __docker_volume_subcommand() {
 
     case "$words[1]" in
         (create)
-            _arguments $(__docker_arguments) -A '-*' \
+            _arguments $(__docker_arguments) \
                 $opts_help \
                 "($help -d --driver)"{-d=,--driver=}"[Volume driver name]:Driver name:(local)" \
                 "($help)*--label=[Set metadata for a volume]:label=value: " \
-                "($help)*"{-o=,--opt=}"[Driver specific options]:Driver option: " \
-                "($help -)1:Volume name: " && ret=0
+                "($help)--name=[Volume name]" \
+                "($help)*"{-o=,--opt=}"[Driver specific options]:Driver option: " && ret=0
             ;;
         (inspect)
             _arguments $(__docker_arguments) \
@@ -1355,7 +1347,6 @@ __docker_volume_subcommand() {
             _arguments $(__docker_arguments) \
                 $opts_help \
                 "($help)*"{-f=,--filter=}"[Provide filter values]:filter:->filter-options" \
-                "($help)--format=[Pretty-print volumes using a Go template]:template: " \
                 "($help -q --quiet)"{-q,--quiet}"[Only display volume names]" && ret=0
             case $state in
                 (filter-options)
@@ -1366,7 +1357,6 @@ __docker_volume_subcommand() {
         (rm)
             _arguments $(__docker_arguments) \
                 $opts_help \
-                "($help -f --force)"{-f,--force}"[Force the removal of one or more volumes]" \
                 "($help -):volume:__docker_volumes" && ret=0
             ;;
         (help)
@@ -1376,8 +1366,6 @@ __docker_volume_subcommand() {
 
     return ret
 }
-
-# EO volume
 
 __docker_caching_policy() {
   oldp=( "$1"(Nmh+1) )     # 1 hour
@@ -1701,7 +1689,7 @@ __docker_subcommand() {
                 "($help -a --all)"{-a,--all}"[Show all images]" \
                 "($help)--digests[Show digests]" \
                 "($help)*"{-f=,--filter=}"[Filter values]:filter:->filter-options" \
-                "($help)--format[Pretty-print containers using a Go template]:template: " \
+                "($help)--format[Pretty-print containers using a Go template]:format: " \
                 "($help)--no-trunc[Do not truncate output]" \
                 "($help -q --quiet)"{-q,--quiet}"[Only show numeric IDs]" \
                 "($help -): :__docker_repositories" && ret=0
@@ -1722,8 +1710,7 @@ __docker_subcommand() {
             ;;
         (info|version)
             _arguments $(__docker_arguments) \
-                $opts_help \
-		"($help -f --format)"{-f=,--format=}"[Format the output using the given go template]:template: " && ret=0
+                $opts_help && ret=0
             ;;
         (inspect)
             local state
@@ -1819,23 +1806,6 @@ __docker_subcommand() {
                 $opts_help \
                 "($help -)*:containers:__docker_runningcontainers" && ret=0
             ;;
-        (plugin)
-            local curcontext="$curcontext" state
-            _arguments $(__docker_arguments) \
-                $opts_help \
-                "($help -): :->command" \
-                "($help -)*:: :->option-or-argument" && ret=0
-
-            case $state in
-                (command)
-                    __docker_plugin_commands && ret=0
-                    ;;
-                (option-or-argument)
-                    curcontext=${curcontext%:*:*}:docker-${words[-1]}:
-                    __docker_plugin_subcommand && ret=0
-                    ;;
-            esac
-            ;;
         (port)
             _arguments $(__docker_arguments) \
                 $opts_help \
@@ -1848,9 +1818,9 @@ __docker_subcommand() {
                 "($help -a --all)"{-a,--all}"[Show all containers]" \
                 "($help)--before=[Show only container created before...]:containers:__docker_containers" \
                 "($help)*"{-f=,--filter=}"[Filter values]:filter:__docker_complete_ps_filters" \
-                "($help)--format[Pretty-print containers using a Go template]:template: " \
+                "($help)--format[Pretty-print containers using a Go template]:format: " \
                 "($help -l --latest)"{-l,--latest}"[Show only the latest created container]" \
-                "($help -n --last)"{-n=,--last=}"[Show n last created containers (includes all states)]:n:(1 5 10 25 50)" \
+                "($help)-n[Show n last created containers, include non-running one]:n:(1 5 10 25 50)" \
                 "($help)--no-trunc[Do not truncate output]" \
                 "($help -q --quiet)"{-q,--quiet}"[Only show numeric IDs]" \
                 "($help -s --size)"{-s,--size}"[Display total file sizes]" \
