@@ -23,7 +23,11 @@ else
   fi
 fi
 
-zstyle ':completion:*' list-colors ''
+if [ "x$LS_COLORS" = "x" ]; then
+    zstyle ':completion:*' list-colors ''
+else
+    zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+fi
 
 # should this be in keybindings?
 bindkey -M menuselect '^o' accept-and-infer-next-history
