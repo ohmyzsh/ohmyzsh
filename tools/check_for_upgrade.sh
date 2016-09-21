@@ -10,10 +10,19 @@ function _update_zsh_update() {
   echo "LAST_EPOCH=$(_current_epoch)" >! ~/.zsh-update
 }
 
+function _create_lock() {
+  touch ~/.zsh-update.lock
+}
+function _remove_lock() {
+  rm ~/.zsh-update.lock
+}
+
 function _upgrade_zsh() {
+  _create_lock
   env ZSH=$ZSH sh $ZSH/tools/upgrade.sh
   # update the zsh file
   _update_zsh_update
+  _remove_lock
 }
 
 epoch_target=$UPDATE_ZSH_DAYS
@@ -21,6 +30,9 @@ if [[ -z "$epoch_target" ]]; then
   # Default to old behavior
   epoch_target=13
 fi
+
+# Cancel upgrade if upgrade is already in progress
+[[ ! -f ~/.zsh-update.lock ]] || return 0
 
 # Cancel upgrade if the current user doesn't have write permissions for the
 # oh-my-zsh directory.
