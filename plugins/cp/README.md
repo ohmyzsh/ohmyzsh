@@ -30,5 +30,3 @@ The enabled options for rsync are:
 * `-e /dev/null`: only work on local files (disable remote shells).
 
 * `--progress`: display progress.
-
-* `--`: everything after this is an argument, even if it starts with a hyphen.
