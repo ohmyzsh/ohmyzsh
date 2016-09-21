@@ -21,6 +21,8 @@ The enabled options for rsync are:
 
 * `-b`: make a backup of the original file instead of overwriting it, if it exists.
 
+* `-r`: recurse directories.
+
 * `-hhh`: outputs numbers in human-readable format, in units of 1024 (K, M, G, T).
 
 * `--backup-dir=/tmp/rsync`: move backup copies to "/tmp/rsync".
