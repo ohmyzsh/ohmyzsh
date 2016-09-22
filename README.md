@@ -1,10 +1,12 @@
-<p align="center">
-  <img src="https://s3.amazonaws.com/ohmyzsh/oh-my-zsh-logo.png" alt="Oh My Zsh">
-</p>
 
 ##Whats different?
 
 This fork of Oh My Zsh adds a status symbol to the agnoster theme to show if there is a vagrant box running for your currect directory.
+
+<p align="center">
+  <img src="https://s3.amazonaws.com/ohmyzsh/oh-my-zsh-logo.png" alt="Oh My Zsh">
+</p>
+
 
 
 
