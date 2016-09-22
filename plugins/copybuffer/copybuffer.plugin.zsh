@@ -5,7 +5,7 @@ copybuffer () {
   if which clipcopy &>/dev/null; then
     echo $BUFFER | clipcopy
   else
-    echo "you must install clipcopy to use this keybinding"
+    echo "clipcopy function not found. Please make sure you have Oh My Zsh installed correctly."
   fi
 }
 
