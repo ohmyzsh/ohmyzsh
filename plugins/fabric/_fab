@@ -5,7 +5,10 @@ local curcontext=$curcontext state line
 declare -A opt_args
 
 declare target_list
-target_list=(`fab --shortlist 2>/dev/null`)
+IFS="$(printf '\n+')" target_list=($(fab -l | awk '{
+    if(NR > 2)
+        printf "%s:%s\n", $1, substr($0, index($0, $2))
+}' 2>/dev/null))
 
 _targets() {
     _describe -t commands "fabric targets" target_list
