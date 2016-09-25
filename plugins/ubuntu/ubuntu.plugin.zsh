@@ -27,7 +27,7 @@ compdef _afu afu='sudo apt-file update'
 alias ppap='sudo ppa-purge'
 compdef _ppap ppap='sudo ppa-purge'
 
-alias ag='sudo apt-get'            # age - but without sudo
+alias age='sudo apt-get'
 alias aga='sudo apt-get autoclean' # aac
 alias agar='sudo apt-get autoremove'
 alias agb='sudo apt-get build-dep' # abd
