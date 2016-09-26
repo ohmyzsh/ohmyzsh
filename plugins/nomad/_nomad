@@ -1,0 +1,51 @@
+#compdef nomad
+
+local -a _nomad_cmds
+_nomad_cmds=(
+  'agent:Runs a Nomad agent'
+  'agent-info:Display status information about the local agent'
+  'alloc-status:Display allocation status information and metadata'
+  'client-config:View or modify client configuration details'
+  'eval-status:Display evaluation status and placement failure reasons'
+  'fs:Inspect the contents of an allocation directory'
+  'init:Create an example job file'
+  'inspect:Inspect a submitted job'
+  'logs:Streams the logs of a task.'
+  'node-drain:Toggle drain mode on a given node'
+  'node-status:Display status information about nodes'
+  'plan:Dry-run a job update to determine its effects'
+  'run:Run a new job or update an existing'
+  'server-force-leave:Force a server into the left state'
+  'server-join:Join server nodes together'
+  'server-members:Display a list of known servers and their'
+  'status:Display status information about jobs'
+  'stop:Stop a running job'
+  'validate:Checks if a given job specification is valid'
+  'version:Prints the Nomad version'
+)
+
+
+__allocstatus() {
+  _arguments \
+    '-address=[(addr) The address of the Nomad server. Overrides the NOMAD_ADDR environment variable if set. Default = http://127.0.0.1:4646]' \
+    '-region=[(region) The region of the Nomad servers to forward commands to. Overrides the NOMAD_REGION environment variable if set. Defaults to the Agent s local region.]' \
+    '-no-color[Disables colored command output.]' \
+    '-short[Display short output. Shows only the most recent task event.]' \
+    '-stats[Display detailed resource usage statistics.]' \
+    '-verbose[Show full information.]' \
+    '-json[Output the allocation in its JSON format.]' \
+    '-t[Format and display allocation using a Go template.]'
+}
+
+_arguments '*:: :->command'
+
+if (( CURRENT == 1 )); then
+  _describe -t commands "nomad command" _nomad_cmds
+  return
+fi
+
+local -a _command_args
+case "$words[1]" in
+  alloc-status)
+    __allocstatus ;;
+esac
