@@ -23,6 +23,9 @@ alias md='mkdir -p'
 alias rd=rmdir
 alias d='dirs -v | head -10'
 
+# navigate directories
+alias up="cd ../"
+
 # List directory contents
 alias lsa='ls -lah'
 alias l='ls -lah'
