@@ -29,31 +29,36 @@ fi
 # Cancel upgrade if git is unavailable on the system
 whence git >/dev/null || return 0
 
-if [ -f ~/.zsh-update ]
+if mkdir "$ZSH/log/update.lock" 2>/dev/null
 then
-  . ~/.zsh-update
-
-  if [[ -z "$LAST_EPOCH" ]]; then
-    _update_zsh_update && return 0;
-  fi
-
-  epoch_diff=$(($(_current_epoch) - $LAST_EPOCH))
-  if [ $epoch_diff -gt $epoch_target ]
+  if [ -f ~/.zsh-update ]
   then
-    if [ "$DISABLE_UPDATE_PROMPT" = "true" ]
+    . ~/.zsh-update
+
+    if [[ -z "$LAST_EPOCH" ]]; then
+      _update_zsh_update && return 0;
+    fi
+
+    epoch_diff=$(($(_current_epoch) - $LAST_EPOCH))
+    if [ $epoch_diff -gt $epoch_target ]
     then
-      _upgrade_zsh
-    else
-      echo "[Oh My Zsh] Would you like to check for updates? [Y/n]: \c"
-      read line
-      if [[ "$line" == Y* ]] || [[ "$line" == y* ]] || [ -z "$line" ]; then
+      if [ "$DISABLE_UPDATE_PROMPT" = "true" ]
+      then
         _upgrade_zsh
       else
-        _update_zsh_update
+        echo "[Oh My Zsh] Would you like to check for updates? [Y/n]: \c"
+        read line
+        if [[ "$line" == Y* ]] || [[ "$line" == y* ]] || [ -z "$line" ]; then
+          _upgrade_zsh
+        else
+          _update_zsh_update
+        fi
       fi
     fi
+  else
+    # create the zsh file
+    _update_zsh_update
   fi
-else
-  # create the zsh file
-  _update_zsh_update
+
+  rm -r $ZSH/log/update.lock
 fi
