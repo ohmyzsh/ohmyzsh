@@ -1,3 +1,4 @@
+<<<<<<< 38da9b9bb479d3abae6558ba738ec63403ffa2b0
 (( $+commands[npm] )) && {
     __NPM_COMPLETION_FILE="${ZSH_CACHE_DIR}/npm_completion"
 
@@ -10,6 +11,14 @@
 
     unset __NPM_COMPLETION_FILE
 }
+=======
+completion=~/.npm_completion
+if [ ! -f $completion ]; then
+  npm completion 2>/dev/null > $completion
+fi
+source $completion
+(rm $completion; npm completion 2>/dev/null > $completion &)
+>>>>>>> prevent error on first launch
 
 # Install dependencies globally
 alias npmg="npm i -g "
