@@ -1,6 +1,7 @@
 # `svn` plugin
 
-This plugin adds some utility functions to display additional information regarding your current svn reositiory. See http://subversion.apache.org/ for the full svn documentation
+This plugin adds some utility functions to display additional information regarding your current
+svn repsitiory. See http://subversion.apache.org/ for the full svn documentation.
 
 ## Functions
 
