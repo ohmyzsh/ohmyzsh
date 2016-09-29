@@ -10,13 +10,14 @@ svn repsitiory. See http://subversion.apache.org/ for the full svn documentation
 |svn_prompt_info         | prompt for some themes                  |
 |in_svn                  | within svn directory                    |
 |svn_get_repo_name       |                                         |
-|svn_get_branch_name     | branch name (bug: returns the first path element if branches not used) |
+|svn_get_branch_name     | branch name (see caveats)              |
 |svn_get_rev_nr          | revision number                         |
 |svn_dirty               | changes in this subversion repo         |
 
 ## Caveats
 
-The plugin expects the first directory to be the current branch / tag / trunk.
+The plugin expects the first directory to be the current branch / tag / trunk. So, it returns
+the first path element if you don't use branches.
 
 ## Usage
 
