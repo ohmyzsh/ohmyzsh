@@ -25,14 +25,14 @@ function in_svn() {
 
 function svn_get_repo_name() {
   if in_svn; then
-    svn info | sed -n 's/Repository\ Root:\ .*\///p' | read SVN_ROOT
-    svn info | sed -n "s/URL:\ .*$SVN_ROOT\///p"
+    LANG=C svn info | sed -n 's/^Repository\ Root:\ .*\///p' | read SVN_ROOT
+    LANG=C svn info | sed -n "s/^URL:\ .*$SVN_ROOT\///p"
   fi
 }
 
 function svn_get_branch_name() {
   local _DISPLAY=$(
-    svn info 2> /dev/null | \
+    LANG=C svn info 2> /dev/null | \
       awk -F/ \
       '/^URL:/ { \
         for (i=0; i<=NF; i++) { \
@@ -54,13 +54,13 @@ function svn_get_branch_name() {
 
 function svn_get_rev_nr() {
   if in_svn; then
-    svn info 2> /dev/null | sed -n 's/Revision:\ //p'
+    LANG=C svn info 2> /dev/null | sed -n 's/Revision:\ //p'
   fi
 }
 
 function svn_dirty_choose() {
   if in_svn; then
-    local root=`svn info 2> /dev/null | sed -n 's/^Working Copy Root Path: //p'`
+    local root=`LANG=C svn info 2> /dev/null | sed -n 's/^Working Copy Root Path: //p'`
     if $(svn status $root 2> /dev/null | command grep -Eq '^\s*[ACDIM!?L]'); then
       # Grep exits with 0 when "One or more lines were selected", return "dirty".
       echo $1
