@@ -30,6 +30,12 @@ function svn_get_repo_name() {
   fi
 }
 
+function svn_get_repo_url() {
+  if in_svn; then
+    svn info | sed -n "s/^URL:\ //p"
+  fi
+}
+
 function svn_get_branch_name() {
   local _DISPLAY=$(
     svn info 2> /dev/null | \
