@@ -1,10 +1,62 @@
-## svn
+# `svn` plugin
 
-**Maintainer:** 
+This plugin adds some utility functions to display additional information regarding your current svn reositiory. See http://subversion.apache.org/ for the full svn documentation
 
-This plugin adds some useful functions.
+## Functions
 
-### Usage
+| Command                | Description                             |
+|:-----------------------|:----------------------------------------|
+|svn_prompt_info         | prompt for some themes                  |
+|in_svn                  | within svn directory                    |
+|svn_get_repo_name       |                                         |
+|svn_get_branch_name     | branch name (bug: returns the first path element if branches not used) |
+|svn_get_rev_nr          | revision number                         |
+|svn_dirty               | changes in this subversion repo         |
 
-See the [wiki](https://github.com/robbyrussell/oh-my-zsh/wiki/Plugin:svn) for a list of functions provided by the plugin.
+## Caveats
+
+The plugin expects the first directory to be the current branch / tag / trunk.
+
+## Usage
+
+To use it, add `svn` to your plugins array:
+```sh
+plugins=(... svn)
+```
+
+### Agnoster theme git-like prompt
+
+Enable the svn plugin and add the followind lines to your ```~/.zshrc```
+
+```shell
+prompt_svn() {
+    local rev branch
+    if in_svn; then
+        rev=$(svn_get_rev_nr)
+        branch=$(svn_get_branch_name)
+        if [ `svn_dirty_choose_pwd 1 0` -eq 1 ]; then
+            prompt_segment yellow black
+            echo -n "$rev@$branch"
+            echo -n "±"
+        else
+            prompt_segment green black
+            echo -n "$rev@$branch"
+        fi
+    fi
+}
+```
+
+override the agnoster build_prompt() function:
+
+```shell
+build_prompt() {
+    RETVAL=$?
+    prompt_status
+    prompt_context
+    prompt_dir
+    prompt_git
+    prompt_svn
+    prompt_end
+}
+```
 
