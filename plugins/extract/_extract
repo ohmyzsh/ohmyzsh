@@ -4,5 +4,3 @@
 _arguments \
   '(-r --remove)'{-r,--remove}'[Remove archive.]' \
   "*::archive file:_files -g '(#i)*.(tar|tgz|tbz|tbz2|txz|tlz|gz|bz2|xz|lzma|Z|zip|ipsw|rar|7z|deb)(-.)'" && return 0
-
-
