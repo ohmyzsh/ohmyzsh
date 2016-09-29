@@ -2,11 +2,17 @@
 {
 
   COMPLETION="${ZSH_CACHE_DIR}/npm_completion"
-  [[ ! -f $COMPLETION ]] && npm completion 2>/dev/null >! $COMPLETION
-  source $COMPLETION
-  npm completion 2>/dev/null >! $COMPLETION &
-  
+
+  if [[ ! -f $COMPLETION ]]; then
+    npm completion 2>/dev/null >! $COMPLETION
+    source $COMPLETION
+  else
+    source $COMPLETION
+    npm completion 2>/dev/null >! $COMPLETION &
+  fi
+
   unset COMPLETION
+
   # Install dependencies globally
   alias npmg="npm i -g "
 
