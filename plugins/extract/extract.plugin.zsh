@@ -56,8 +56,8 @@ extract() {
 				mkdir -p "$extract_dir/data"
 				cd "$extract_dir"; ar vx "../${1}" > /dev/null
 				cd control; tar xzvf ../control.tar.gz
-				cd ../data; tar xzvf ../data.tar.gz
-				cd ..; rm *.tar.gz debian-binary
+				cd ../data; extract ../data.tar.*
+				cd ..; rm *.tar.* debian-binary
 				cd ..
 			;;
 			(*)
