@@ -3,7 +3,6 @@ alias x=extract
 extract() {
 	local remove_archive
 	local success
-	local file_name
 	local extract_dir
 
 	if (( $# == 0 )); then
@@ -29,8 +28,7 @@ extract() {
 		fi
 
 		success=0
-		file_name="$( basename "$1" )"
-		extract_dir="$( echo "$file_name" | sed "s/\.${1##*.}//g" )"
+		extract_dir="${1:t:r}"
 		case "$1" in
 			(*.tar.gz|*.tgz) (( $+commands[pigz] )) && { pigz -dc "$1" | tar xv } || tar zxvf "$1" ;;
 			(*.tar.bz2|*.tbz|*.tbz2) tar xvjf "$1" ;;
