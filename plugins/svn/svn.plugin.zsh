@@ -25,7 +25,7 @@ function in_svn() {
 
 function svn_get_repo_name() {
   if in_svn; then
-    LANG=C svn info | sed -n 's/Repository\ Root:\ .*\///p' | read SVN_ROOT
+    LANG=C svn info | sed -n 's/^Repository\ Root:\ .*\///p' | read SVN_ROOT
     LANG=C svn info | sed -n "s/^URL:\ .*$SVN_ROOT\///p"
   fi
 }
