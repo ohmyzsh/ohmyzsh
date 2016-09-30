@@ -314,7 +314,7 @@ function spotify() {
         position=$(osascript -e 'tell application "Spotify" to player position as string' | tr ',' '.');
         position=$(echo "scale=2; $position / 60" | bc | awk '{printf "%0.2f", $0}');
 
-        printf "$reset""Artist: %s\nAlbum: %s\nTrack: %s \nPosition: %s / %s" "$artist" "$album" "$track" "$position" "$duration";
+        printf "$reset""Artist: %s\nAlbum: %s\nTrack: %s \nPosition: %s / %s\n" "$artist" "$album" "$track" "$position" "$duration";
       fi
   }
 
@@ -412,17 +412,17 @@ function spotify() {
         osascript -e 'tell application "Spotify" to playpause';
         break ;;
 
-      "quit"    ) 
+      "quit"    )
         cecho "Quitting Spotify.";
         osascript -e 'tell application "Spotify" to quit';
         exit 1 ;;
 
-      "next"    ) 
+      "next"    )
         cecho "Going to next track." ;
         osascript -e 'tell application "Spotify" to next track';
         break ;;
 
-      "prev"    ) 
+      "prev"    )
         cecho "Going to previous track.";
         osascript -e 'tell application "Spotify" to previous track';
         break ;;
