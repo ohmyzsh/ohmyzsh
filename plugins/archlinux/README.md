@@ -49,7 +49,7 @@
 | paupd   | pacaur -Sy                         | Update and refresh the local package database                       |
 | paupg   | pacaur -Syua                       | Sync with repositories before upgrading all packages (from AUR too) |
 | pasu    | pacaur -Syua --no-confirm          | Same as `paupg`, but without confirmation                           |
-| upgrade | pacaur -Syu
+| upgrade | pacaur -Syu                        | Sync with repositories before upgrading packages                    |
 
 #### PACMAN
 
