@@ -27,7 +27,7 @@
 | yasu    | yaourt -Syua --no-confirm          | Same as `yaupg`, but without confirmation                           |
 | upgrade | yaourt -Syu                        | Sync with repositories before upgrading packages                    |
 
-### pacaur
+### PACAUR
 
 | Alias   | Command                            | Description                                                         |
 |---------|------------------------------------|---------------------------------------------------------------------|
