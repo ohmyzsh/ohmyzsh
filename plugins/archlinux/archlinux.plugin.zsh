@@ -4,7 +4,7 @@ if ! (( $+commands[yaourt] )); then
   }
 else
   upgrade () {
-    yaourt -Syu
+    yaourt -Syua
   }
 
   alias yaconf='yaourt -C'
