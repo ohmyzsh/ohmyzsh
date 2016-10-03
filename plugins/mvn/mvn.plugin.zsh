@@ -110,6 +110,8 @@ function listMavenCompletions {
         help:active-profiles help:all-profiles help:describe help:effective-pom help:effective-settings help:evaluate help:expressions help:system
         # release
         release:clean release:prepare release:rollback release:perform release:stage release:branch release:update-versions
+	# jgitflow
+	jgitflow:feature-start jgitflow:feature-finish jgitflow:release-start jgitflow:release-finish jgitflow:hotfix-start jgitflow:hotfix-finish jgitflow:build-number
         # repository
         repository:bundle-create repository:bundle-pack
         # source
