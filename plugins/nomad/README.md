@@ -1,11 +1,15 @@
-## About
+# Nomad
 
-Plugin for Nomad, a tool from Hashicorp for easily deploy applications at any scale.
+The `nomad` plugin provides a simple autocompletion for [Nomad](https://nomadproject.io/), a tool from Hashicorp for easily deploy applications at any scale.
 
-### Requirements
+## Usage
 
- * [Nomad](https://nomadproject.io/)
+1. Enable the `nomad` plugin:
 
-### Usage
+   ```zsh
+   plugins=(... nomad)
+   ```
 
- * Type `nomad` into your prompt and hit `TAB` to see available completion options
+2.  Install [Nomad](https://nomadproject.io/)
+
+3.  Type `nomad` into your prompt and hit `TAB` to see available completion options.
