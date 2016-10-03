@@ -1,36 +1,37 @@
 # ls colors
 autoload -U colors && colors
-export LSCOLORS="Gxfxcxdxbxegedabagacad"
 
 # Enable ls colors
-if [ "$DISABLE_LS_COLORS" != "true" ]
-then
-  # Find the option for using colors in ls, depending on the version: Linux or BSD
+export LSCOLORS="Gxfxcxdxbxegedabagacad"
+
+if [[ "$DISABLE_LS_COLORS" != "true" ]]; then
+  # Find the option for using colors in ls, depending on the version
   if [[ "$(uname -s)" == "NetBSD" ]]; then
     # On NetBSD, test if "gls" (GNU ls) is installed (this one supports colors);
     # otherwise, leave ls as is, because NetBSD's ls doesn't support -G
-    gls --color -d . &>/dev/null 2>&1 && alias ls='gls --color=tty'
+    gls --color -d . &>/dev/null && alias ls='gls --color=tty'
   elif [[ "$(uname -s)" == "OpenBSD" ]]; then
     # On OpenBSD, "gls" (ls from GNU coreutils) and "colorls" (ls from base,
     # with color and multibyte support) are available from ports.  "colorls"
     # will be installed on purpose and can't be pulled in by installing
     # coreutils, so prefer it to "gls".
-    gls --color -d . &>/dev/null 2>&1 && alias ls='gls --color=tty'
-    colorls -G -d . &>/dev/null 2>&1 && alias ls='colorls -G'
+    gls --color -d . &>/dev/null && alias ls='gls --color=tty'
+    colorls -G -d . &>/dev/null && alias ls='colorls -G'
   else
-    ls --color -d . &>/dev/null 2>&1 && alias ls='ls --color=tty' || alias ls='ls -G'
+    # For GNU ls, we use the default ls color theme. They can later be overwritten by themes.
+    if [[ -z "$LS_COLORS" ]]; then
+      (( $+commands[dircolors] )) && eval "$(dircolors -b)"
+    fi
+
+    ls --color -d . &>/dev/null && alias ls='ls --color=tty' || alias ls='ls -G'
   fi
 fi
 
 setopt auto_cd
 setopt multios
+setopt prompt_subst
 
-if [[ x$WINDOW != x ]]
-then
-    SCREEN_NO="%B$WINDOW%b "
-else
-    SCREEN_NO=""
-fi
+[[ -n "$WINDOW" ]] && SCREEN_NO="%B$WINDOW%b " || SCREEN_NO=""
 
 # Apply theming defaults
 PS1="%n@%m:%~%# "
@@ -40,6 +41,3 @@ ZSH_THEME_GIT_PROMPT_PREFIX="git:("         # Prefix at the very beginning of th
 ZSH_THEME_GIT_PROMPT_SUFFIX=")"             # At the very end of the prompt
 ZSH_THEME_GIT_PROMPT_DIRTY="*"              # Text to display if the branch is dirty
 ZSH_THEME_GIT_PROMPT_CLEAN=""               # Text to display if the branch is clean
-
-# Setup the prompt with pretty colors
-setopt prompt_subst
