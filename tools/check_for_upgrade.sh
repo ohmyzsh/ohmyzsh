@@ -60,5 +60,5 @@ then
     _update_zsh_update
   fi
 
-  rm -r $ZSH/log/update.lock
+  rmdir $ZSH/log/update.lock
 fi
