@@ -3,8 +3,7 @@ autoload -U colors && colors
 export LSCOLORS="Gxfxcxdxbxegedabagacad"
 
 # Enable ls colors
-if [ "$DISABLE_LS_COLORS" != "true" ]
-then
+if [ "$DISABLE_LS_COLORS" != "true" ]; then
   # Find the option for using colors in ls, depending on the version: Linux or BSD
   if [[ "$(uname -s)" == "NetBSD" ]]; then
     # On NetBSD, test if "gls" (GNU ls) is installed (this one supports colors);
@@ -25,11 +24,10 @@ fi
 setopt auto_cd
 setopt multios
 
-if [[ x$WINDOW != x ]]
-then
-    SCREEN_NO="%B$WINDOW%b "
+if [[ x$WINDOW != x ]]; then
+  SCREEN_NO="%B$WINDOW%b "
 else
-    SCREEN_NO=""
+  SCREEN_NO=""
 fi
 
 # Apply theming defaults
