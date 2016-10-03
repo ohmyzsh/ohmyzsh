@@ -29,10 +29,8 @@ fi
 # Cancel upgrade if git is unavailable on the system
 whence git >/dev/null || return 0
 
-if mkdir "$ZSH/log/update.lock" 2>/dev/null
-then
-  if [ -f ~/.zsh-update ]
-  then
+if mkdir "$ZSH/log/update.lock" 2>/dev/null; then
+  if [ -f ~/.zsh-update ]; then
     . ~/.zsh-update
 
     if [[ -z "$LAST_EPOCH" ]]; then
@@ -40,10 +38,8 @@ then
     fi
 
     epoch_diff=$(($(_current_epoch) - $LAST_EPOCH))
-    if [ $epoch_diff -gt $epoch_target ]
-    then
-      if [ "$DISABLE_UPDATE_PROMPT" = "true" ]
-      then
+    if [ $epoch_diff -gt $epoch_target ]; then
+      if [ "$DISABLE_UPDATE_PROMPT" = "true" ]; then
         _upgrade_zsh
       else
         echo "[Oh My Zsh] Would you like to check for updates? [Y/n]: \c"
