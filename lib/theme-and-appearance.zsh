@@ -19,7 +19,9 @@ then
     colorls -G -d . &>/dev/null 2>&1 && alias ls='colorls -G'
   else
     # For GNU ls, we use the default ls color theme. They can later be overwritten by themes.
-    (( $+commands[dircolors] )) && eval "$(dircolors)"
+    if [[ -z "$LS_COLORS" ]]; then
+      (( $+commands[dircolors] )) && eval "$(dircolors -b)"
+    fi
 
     ls --color -d . &>/dev/null 2>&1 && alias ls='ls --color=tty' || alias ls='ls -G'
   fi
