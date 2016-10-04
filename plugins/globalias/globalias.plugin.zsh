@@ -5,7 +5,7 @@ globalias() {
 }
 zle -N globalias
 
-# space expands all global aliases
+# space expands all aliases, including global
 bindkey -M emacs " " globalias
 bindkey -M viins " " globalias
 
