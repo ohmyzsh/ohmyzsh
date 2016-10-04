@@ -4,8 +4,11 @@ globalias() {
    zle self-insert
 }
 zle -N globalias
-bindkey -e " " globalias
-bindkey -v " " globalias
-bindkey -e "^ " magic-space           # control-space to bypass completion
-bindkey -v "^ " magic-space
-bindkey -M isearch " " magic-space # normal space during searches
+
+# space expands all global aliases
+bindkey -M emacs " " globalias
+bindkey -M viins " " globalias
+
+# control-space to make a normal space
+bindkey -M emacs "^ " magic-space
+bindkey -M viins "^ " magic-space
