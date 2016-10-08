@@ -21,41 +21,41 @@ alias acp='apt-cache policy' # app
 compdef _acp acp='apt-cache policy'
 
 # superuser operations ######################################################
-alias afu='sudo apt-file update'
-compdef _afu afu='sudo apt-file update'
+alias safu='sudo apt-file update'
+compdef _safu safu='sudo apt-file update'
 
-alias ppap='sudo ppa-purge'
-compdef _ppap ppap='sudo ppa-purge'
+alias sppap='sudo ppa-purge'
+compdef _sppap sppap='sudo ppa-purge'
 
-alias ag='sudo apt-get'            # age - but without sudo
-alias aga='sudo apt-get autoclean' # aac
-alias agar='sudo apt-get autoremove'
-alias agb='sudo apt-get build-dep' # abd
-alias agc='sudo apt-get clean'     # adc
-alias agd='sudo apt-get dselect-upgrade' # ads
-alias agi='sudo apt-get install'  # ai
-alias agp='sudo apt-get purge'    # ap
-alias agr='sudo apt-get remove'   # ar
-alias agu='sudo apt-get update'   # ad
-alias agud='sudo apt-get update && sudo apt-get dist-upgrade' #adu
-alias agug='sudo apt-get upgrade' # ag
-alias aguu='sudo apt-get update && sudo apt-get upgrade'      #adg
-alias agar='sudo apt-get autoremove'
+alias sag='sudo apt-get'            # age - but without sudo
+alias saga='sudo apt-get autoclean' # aac
+alias sagar='sudo apt-get autoremove'
+alias sagb='sudo apt-get build-dep' # abd
+alias sagc='sudo apt-get clean'     # adc
+alias sagd='sudo apt-get dselect-upgrade' # ads
+alias sagi='sudo apt-get install'  # ai
+alias sagp='sudo apt-get purge'    # ap
+alias sagr='sudo apt-get remove'   # ar
+alias sagu='sudo apt-get update'   # ad
+alias sagud='sudo apt-get update && sudo apt-get dist-upgrade' #adu
+alias sagug='sudo apt-get upgrade' # ag
+alias saguu='sudo apt-get update && sudo apt-get upgrade'      #adg
+alias sagar='sudo apt-get autoremove'
 
-compdef _ag ag='sudo apt-get'
-compdef _aga aga='sudo apt-get autoclean'
-compdef _agar agar='sudo apt-get autoremove'
-compdef _agb agb='sudo apt-get build-dep'
-compdef _agc agc='sudo apt-get clean'
-compdef _agd agd='sudo apt-get dselect-upgrade'
-compdef _agi agi='sudo apt-get install'
-compdef _agp agp='sudo apt-get purge'
-compdef _agr agr='sudo apt-get remove'
-compdef _agu agu='sudo apt-get update'
-compdef _agud agud='sudo apt-get update && sudo apt-get dist-upgrade'
-compdef _agug agug='sudo apt-get upgrade'
-compdef _aguu aguu='sudo apt-get update && sudo apt-get upgrade'
-compdef _agar agar='sudo apt-get autoremove'
+compdef _sag sag='sudo apt-get'
+compdef _saga saga='sudo apt-get autoclean'
+compdef _sagar sagar='sudo apt-get autoremove'
+compdef _sagb sagb='sudo apt-get build-dep'
+compdef _sagc sagc='sudo apt-get clean'
+compdef _sagd sagd='sudo apt-get dselect-upgrade'
+compdef _sagi sagi='sudo apt-get install'
+compdef _sagp sagp='sudo apt-get purge'
+compdef _sagr sagr='sudo apt-get remove'
+compdef _sagu sagu='sudo apt-get update'
+compdef _sagud sagud='sudo apt-get update && sudo apt-get dist-upgrade'
+compdef _sagug sagug='sudo apt-get upgrade'
+compdef _saguu saguu='sudo apt-get update && sudo apt-get upgrade'
+compdef _sagar sagar='sudo apt-get autoremove'
 
 # Remove ALL kernel images and headers EXCEPT the one in use
 alias kclean='sudo aptitude remove -P ?and(~i~nlinux-(ima|hea) \
