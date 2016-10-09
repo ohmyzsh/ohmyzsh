@@ -29,7 +29,6 @@ compdef _ppap ppap='sudo ppa-purge'
 
 alias ag='sudo apt-get'            # age - but without sudo
 alias aga='sudo apt-get autoclean' # aac
-alias agar='sudo apt-get autoremove'
 alias agb='sudo apt-get build-dep' # abd
 alias agc='sudo apt-get clean'     # adc
 alias agd='sudo apt-get dselect-upgrade' # ads
@@ -44,7 +43,6 @@ alias agar='sudo apt-get autoremove'
 
 compdef _ag ag='sudo apt-get'
 compdef _aga aga='sudo apt-get autoclean'
-compdef _agar agar='sudo apt-get autoremove'
 compdef _agb agb='sudo apt-get build-dep'
 compdef _agc agc='sudo apt-get clean'
 compdef _agd agd='sudo apt-get dselect-upgrade'
