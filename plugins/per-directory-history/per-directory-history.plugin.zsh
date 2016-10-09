@@ -1,1 +1,1 @@
-per-directory-history.zsh
+$(dirname "$0")/per-directory-history.zsh
