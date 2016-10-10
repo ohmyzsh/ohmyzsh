@@ -1,1 +1,1 @@
-gradle.plugin.zsh
+source ${0:a:h}/gradle.plugin.zsh
