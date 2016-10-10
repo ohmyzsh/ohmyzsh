@@ -6,7 +6,7 @@ export LSCOLORS="Gxfxcxdxbxegedabagacad"
 
 if [[ "$DISABLE_LS_COLORS" != "true" ]]; then
   # Find the option for using colors in ls, depending on the version
-  if [[ "$OSTYPE" == netbsd* ]]; then
+  if [[ "$OSTYPE" == netbsd* ]] || [[ "$OSTYPE" == darwin* ]]; then
     # On NetBSD, test if "gls" (GNU ls) is installed (this one supports colors);
     # otherwise, leave ls as is, because NetBSD's ls doesn't support -G
     gls --color -d . &>/dev/null && alias ls='gls --color=tty'
