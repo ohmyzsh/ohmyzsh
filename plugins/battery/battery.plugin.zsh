@@ -64,7 +64,7 @@ if [[ "$OSTYPE" = darwin* ]] ; then
     [[ $(ioreg -rc "AppleSmartBattery"| grep '^.*"IsCharging"\ =\ ' | sed -e 's/^.*"IsCharging"\ =\ //') == "Yes" ]]
   }
 
-elif [[ $(uname) == "Linux"  ]] ; then
+elif [[ "$OSTYPE" = linux*  ]] ; then
 
   function battery_is_charging() {
     ! [[ $(acpi 2>/dev/null | grep -c '^Battery.*Discharging') -gt 0 ]]
