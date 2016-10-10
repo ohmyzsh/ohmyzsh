@@ -6,11 +6,11 @@ export LSCOLORS="Gxfxcxdxbxegedabagacad"
 
 if [[ "$DISABLE_LS_COLORS" != "true" ]]; then
   # Find the option for using colors in ls, depending on the version
-  if [[ "$(uname -s)" == "NetBSD" ]]; then
+  if [[ "$OSTYPE" == netbsd* ]]; then
     # On NetBSD, test if "gls" (GNU ls) is installed (this one supports colors);
     # otherwise, leave ls as is, because NetBSD's ls doesn't support -G
     gls --color -d . &>/dev/null && alias ls='gls --color=tty'
-  elif [[ "$(uname -s)" == "OpenBSD" ]]; then
+  elif [[ "$OSTYPE" == openbsd* ]]; then
     # On OpenBSD, "gls" (ls from GNU coreutils) and "colorls" (ls from base,
     # with color and multibyte support) are available from ports.  "colorls"
     # will be installed on purpose and can't be pulled in by installing

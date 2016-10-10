@@ -1,4 +1,4 @@
-if [[ $('uname') == 'Linux' ]]; then
+if [[ "$OSTYPE" == linux* ]]; then
     local _sublime_linux_paths > /dev/null 2>&1
     _sublime_linux_paths=(
         "$HOME/bin/sublime_text"
