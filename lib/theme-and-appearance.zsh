@@ -24,6 +24,9 @@ if [[ "$DISABLE_LS_COLORS" != "true" ]]; then
     fi
 
     ls --color -d . &>/dev/null && alias ls='ls --color=tty' || alias ls='ls -G'
+
+    # Take advantage of $LS_COLORS for completion as well.
+    zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
   fi
 fi
 
