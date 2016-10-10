@@ -1,15 +1,20 @@
-function git_fetch_on_chpwd {
-  ([[ -d .git ]] && [[ ! -f ".git/NO_AUTO_FETCH" ]] && git fetch --all &>! .git/FETCH_LOG &)
+function git-fetch-on-chpwd {
+  (`git rev-parse --is-inside-work-tree 2>/dev/null` &&
+  dir=`git rev-parse --git-dir` &&
+  [[ ! -f $dir/NO_AUTO_FETCH ]] &&
+  git fetch --all &>! $dir/FETCH_LOG &)
 }
 
 function git-auto-fetch {
-  [[ ! -d .git ]] && return
-  if [[ -f ".git/NO_AUTO_FETCH" ]]; then
-    rm ".git/NO_AUTO_FETCH" && echo "${fg_bold[red]}disabled${reset_color}"
-  else
-    touch ".git/NO_AUTO_FETCH" && echo "${fg_bold[green]}enabled${reset_color}"
-  fi
+  `git rev-parse --is-inside-work-tree 2>/dev/null` || return
+  guard="`git rev-parse --git-dir`/NO_AUTO_FETCH"
+
+  (rm $guard 2>/dev/null &&
+    echo "${fg_bold[green]}enabled${reset_color}") ||
+  (touch $guard &&
+    echo "${fg_bold[red]}disabled${reset_color}")
 }
-chpwd_functions+=(git_fetch_on_chpwd)
-git_fetch_on_chpwd
-unset git_fetch_on_chpwd
+
+chpwd_functions+=(git-fetch-on-chpwd)
+git-fetch-on-chpwd
+unset git-fetch-on-chpwd
