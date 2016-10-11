@@ -7,10 +7,19 @@ alias xcsel='sudo xcode-select --switch'
 # source: http://gist.github.com/subdigital/5420709
 function xc {
   local xcode_proj
-  xcode_proj=(*.{xcworkspace,xcodeproj}(N))
+  if [[ $# == 0 ]]; then
+    xcode_proj=(*.{xcworkspace,xcodeproj}(N))
+  else
+    xcode_proj=($1/*.{xcworkspace,xcodeproj}(N))
+  fi
+
 
   if [[ ${#xcode_proj} -eq 0 ]]; then
-    echo "No xcworkspace/xcodeproj file found in the current directory."
+    if [[ $# == 0 ]]; then
+      echo "No xcworkspace/xcodeproj file found in the current directory."
+    else
+      echo "No xcworkspace/xcodeproj file found in $1."
+    fi
     return 1
   else
     echo "Found ${xcode_proj[1]}"

@@ -2,9 +2,15 @@
   <img src="https://s3.amazonaws.com/ohmyzsh/oh-my-zsh-logo.png" alt="Oh My Zsh">
 </p>
 
-Oh My Zsh is an open source, community-driven framework for managing your [zsh](http://www.zsh.org/) configuration. That sounds boring. Let's try this again.
+Oh My Zsh is an open source, community-driven framework for managing your [zsh](http://www.zsh.org/) configuration.
 
-__Oh My Zsh is a way of life!__ Once installed, your terminal prompt will become the talk of the town _or your money back!_ Each time you interact with your command prompt, you'll be able to take advantage of the hundreds of bundled plugins and pretty themes. Strangers will come up to you in cafés and ask you, _"that is amazing. are you some sort of genius?"_ Finally, you'll begin to get the sort of attention that you always felt that you deserved. ...or maybe you'll just use the time that you saved to start flossing more often.
+That sounds boring. Let's try this again.
+
+__Oh My Zsh is a way of life!__
+
+Once installed, your terminal shell will become the talk of the town _or your money back!_ With each keystroke in your command prompt, you'll take advantage of the hundreds of powerful plugins and beautiful themes. Strangers will come up to you in cafés and ask you, _"that is amazing! are you some sort of genius?"_
+
+Finally, you'll begin to get the sort of attention that you have always felt you deserved. ...or maybe you'll use the time that you're saving to start flossing more often.
 
 To learn more, visit [ohmyz.sh](http://ohmyz.sh) and follow [@ohmyzsh](https://twitter.com/ohmyzsh) on Twitter.
 
@@ -202,7 +208,10 @@ Thank you so much!
 
 ## Follow Us
 
-We have an [@ohmyzsh](https://twitter.com/ohmyzsh) Twitter account. You should follow it.
+We're on the social medias.
+
+* [@ohmyzsh](https://twitter.com/ohmyzsh) on Twitter. You should follow it.
+* [Oh My Zsh](https://www.facebook.com/Oh-My-Zsh-296616263819290/) on Facebook.
 
 ## Merchandise
 
@@ -211,3 +220,9 @@ We have [stickers](http://shop.planetargon.com/products/ohmyzsh-stickers-set-of-
 ## License
 
 Oh My Zsh is released under the [MIT license](LICENSE.txt).
+
+## About Planet Argon
+
+![Planet Argon](http://pa-github-assets.s3.amazonaws.com/PARGON_logo_digital_COL-small.jpg)
+
+Oh My Zsh was started by the team at [Planet Argon](https://www.planetargon.com/?utm_source=github), a [Ruby on Rails development agency](https://www.planetargon.com/skills/ruby-on-rails-development?utm_source=github).

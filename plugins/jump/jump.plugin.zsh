@@ -9,24 +9,8 @@
 
 export MARKPATH=$HOME/.marks
 
-function jump()
-{
-  if [[ -z $1 ]]; then
-    echo "Error: no mark name given"
-    echo "available marks:"
-    marks
-    return
-  fi
-  if [[ $1 == "--help" ]]; then
-    echo "Jump plugin:"
-    echo "  'jump FOO': jump to a mark named FOO"
-    echo "  'mark FOO': create a mark named FOO"
-    echo "  'unmark FOO': delete a mark"
-    echo "  'marks': lists all marks"
-    return
-  fi
-
-  cd -P "$MARKPATH/$1" 2>/dev/null || echo "No such mark: $1"
+jump() {
+	cd -P "$MARKPATH/$1" 2>/dev/null || {echo "No such mark: $1"; return 1}
 }
 
 function mark()
