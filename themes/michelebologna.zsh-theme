@@ -1,5 +1,5 @@
 # Michele Bologna's theme
-# http://michelebologna.net
+# https://www.michelebologna.net
 #
 # This a theme for oh-my-zsh. Features a colored prompt with:
 # * username@host: [jobs] [git] workdir % 
