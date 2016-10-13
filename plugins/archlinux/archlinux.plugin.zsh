@@ -1,12 +1,4 @@
-if ! (( $+commands[yaourt] )); then
-  upgrade() {
-    sudo pacman -Syu
-  }
-else
-  upgrade () {
-    yaourt -Syu
-  }
-
+if (( $+commands[yaourt] )); then
   alias yaconf='yaourt -C'
   alias yaupg='yaourt -Syua'
   alias yasu='yaourt -Syua --noconfirm'
@@ -33,6 +25,47 @@ else
   else
     alias yaupd='yaourt -Sy'
   fi
+fi
+
+if (( $+commands[pacaur] )); then
+  alias paupg='pacaur -Syua'
+  alias pasu='pacaur -Syua --noconfirm'
+  alias pain='pacaur -S'
+  alias pains='pacaur -U'
+  alias pare='pacaur -R'
+  alias parem='pacaur -Rns'
+  alias parep='pacaur -Si'
+  alias pareps='pacaur -Ss'
+  alias paloc='pacaur -Qi'
+  alias palocs='pacaur -Qs'
+  alias palst='pacaur -Qe'
+  alias paorph='pacaur -Qtd'
+  alias painsd='pacaur -S --asdeps'
+  alias pamir='pacaur -Syy'
+
+  if (( $+commands[abs] && $+commands[aur] )); then
+    alias paupd='pacaur -Sy && sudo abs && sudo aur'
+  elif (( $+commands[abs] )); then
+    alias paupd='pacaur -Sy && sudo abs'
+  elif (( $+commands[aur] )); then
+    alias paupd='pacaur -Sy && sudo aur'
+  else
+    alias paupd='pacaur -Sy'
+  fi
+fi
+
+if (( $+commands[pacaur] )); then
+  upgrade() {
+    pacaur -Syu
+  }
+elif (( $+commands[yaourt] )); then
+  upgrade() {
+    yaourt -Syu
+  }
+else
+  upgrade() {
+    sudo pacman -Syu
+  }
 fi
 
 # Pacman - https://wiki.archlinux.org/index.php/Pacman_Tips

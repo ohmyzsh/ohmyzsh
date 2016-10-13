@@ -6,10 +6,10 @@
 ### Aliases
 
 # Set all files' permissions to 644 recursively in a directory
-alias set644='find . -type f -print0 | xargs -0 chmod 644'
+alias set644='find . -type f ! -perm 644 -print0 | xargs -0 chmod 644'
 
 # Set all directories' permissions to 755 recursively in a directory
-alias set755='find . -type d -print0 | xargs -0 chmod 755'
+alias set755='find . -type d ! -perm 755 -print0 | xargs -0 chmod 755'
 
 ### Functions
 
@@ -63,14 +63,14 @@ EOF
   exit_status=0;
   if [[ $use_slow == true ]]; then
     # Process directories first so non-traversable ones are fixed as we go
-    find "$target" -type d -exec chmod $chmod_opts 755 {} \;
+    find "$target" -type d ! -perm 755 -exec chmod $chmod_opts 755 {} \;
     if [[ $? != 0 ]]; then exit_status=$?; fi
-    find "$target" -type f -exec chmod $chmod_opts 644 {} \;
+    find "$target" -type f ! -perm 644 -exec chmod $chmod_opts 644 {} \;
     if [[ $? != 0 ]]; then exit_status=$?; fi
   else
-    find "$target" -type d -print0 | xargs -0 chmod $chmod_opts 755
+    find "$target" -type d ! -perm 755 -print0 | xargs -0 chmod $chmod_opts 755
     if [[ $? != 0 ]]; then exit_status=$?; fi
-    find "$target" -type f -print0 | xargs -0 chmod $chmod_opts 644
+    find "$target" -type f ! -perm 644 -print0 | xargs -0 chmod $chmod_opts 644
     if [[ $? != 0 ]]; then exit_status=$?; fi
   fi
   echo "Complete"
