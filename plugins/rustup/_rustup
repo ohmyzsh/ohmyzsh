@@ -1,0 +1,128 @@
+#compdef rustup
+#autoload
+
+# Rustup zsh autocompletion
+
+local -a _commands
+_commands=(
+    'show: Show the active and installed toolchains'
+    'update:[NAME] Update Rust toolchains'
+    'default:<toolchain> Set the default toolchain'
+    'toolchain:[FLAGS] [toolchain] Modify or query the installed toolchains'
+    'target:[SUBCOMMAND] Modify a toolchains supported targets'
+    'override:[SUBCOMMAND] Modify directory toolchain overrides'
+    'run:<toolchain> <command> Run a command with an environment configured for a given toolchain'
+    'which:Display which binary will be run for a given command'
+    'doc:Open the documentation for the current toolchain'
+    'man:View the man page for a given command'
+    'self:[SUBCOMMAND] Modify the rustup installation'
+    'set:Alter rustup settings'
+    'help:Prints a detailed description of the options for this command'
+)
+
+subcommands() {
+    local curcontext="$curcontext" state line
+    typeset -A opt_args
+
+    _arguments -C \
+               ':command:->command' \
+               '*::options:->options'
+
+    case $state in
+        (command)
+            _describe -t commands "gem subcommand" $1
+            return
+            ;;
+    esac
+}
+
+local -a _target_subcommands
+_target_subcommands=(
+    'list:List installed and available targets'
+    'add:Add a target to a Rust toolchain'
+    'remove:Remove a target  from a Rust toolchain'
+    'help:Prints a detailed description of the options for this subcommand'
+)
+_target() { subcommands _target_subcommands }
+
+local -a _override_subcommands
+_override_subcommands=(
+    'list:List directory toolchain overrides'
+    'set:Set the override toolchain for a directory'
+    'unset:Remove the override toolchain for a directory'
+    'help:Prints a detailed description of the options for this subcommand'
+)
+_override() { subcommands _override_subcommands }
+
+local -a _self_subcommands
+_self_subcommands=(
+    'update: Download and install updates to rustup'
+    'uninstall: Uninstall rustup.'
+    'upgrade-data: Upgrade the internal data format.'
+    'help: Prints a detailed description of the options for this subcommand'
+)
+_self() { subcommands _self_subcommands }
+
+local -a _set_subcommands
+_set_subcommands=(
+    'default-host: The triple used to identify toolchains when not specified'
+    'help: Prints a detailed description of the options for this subcommand'
+)
+_set() { subcommands _set_subcommands }
+
+local -a _toolchain_subcommands
+_toolchain_subcommands=(
+    'list:List installed toolchains'
+    'install:Install or update a given toolchain'
+    'uninstall:Uninstall a toolchain'
+    'link:Create a custom toolchain by symlinking to a directory'
+    'help:Prints a detailed description of the options for this subcommand'
+)
+_toolchain() { subcommands _toolchain_subcommands }
+
+
+local -a _doc_subcommands
+_doc_subcommands=(
+    '--book:The Rust Programming Language book'
+    '--help:Prints help information'
+    '--std:Standard library API documentation'
+)
+_doc() { subcommands _doc_subcommands }
+
+
+local curcontext="$curcontext" state line
+typeset -A opt_args
+
+_arguments -C \
+           ':command:->command' \
+           '*::options:->options'
+
+case $state in
+    (command)
+        _describe -t commands "gem subcommand" _commands
+        return
+        ;;
+
+    (options)
+        case $line[1] in
+            (target)
+                _arguments ":feature:_target"
+                ;;
+             (override)
+                 _arguments ':feature:_override'
+                 ;;
+             (self)
+                 _arguments ':feature:_self'
+                 ;;
+             (set)
+                 _arguments ':feature:_set'
+                 ;;
+             (toolchain)
+                 _arguments ':feature:_toolchain'
+                 ;;
+             (doc)
+                 _arguments ':feature:_doc'
+                 ;;
+        esac
+        ;;
+esac
