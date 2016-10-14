@@ -112,7 +112,13 @@ export PATH=:/usr/local/bin:$HOME/.composer/vendor/bin:$HOME/bin:$PATH
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+<<<<<<< HEAD
 =======
 # ssh
 # export SSH_KEY_PATH="~/.ssh/dsa_id"
 >>>>>>> Moved '$ZSH/oh-my-zsh.sh' back above User Config.
+=======
+
+# Add SSH passphrase to Keychain
+ssh-add -A 2>/dev/null
+>>>>>>> Add SSH passphrase to Keychain on startup
