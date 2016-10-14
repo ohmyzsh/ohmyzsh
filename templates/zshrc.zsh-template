@@ -82,3 +82,6 @@ export PATH=:/usr/local/bin:$HOME/.composer/vendor/bin:$HOME/bin:$PATH
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# Add SSH passphrase to Keychain
+ssh-add -A 2>/dev/null
