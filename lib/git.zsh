@@ -129,53 +129,103 @@ function git_prompt_long_sha() {
   SHA=$(command git rev-parse HEAD 2> /dev/null) && echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
 }
 
-# Get the status of the working tree
 function git_prompt_status() {
-  local INDEX STATUS
-  INDEX=$(command git status --porcelain -b 2> /dev/null)
-  STATUS=""
-  if $(echo "$INDEX" | command grep -E '^\?\? ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_UNTRACKED$STATUS"
+  local status_prompt=""
+
+  # A lookup table of each git status encountered
+  local -A statuses_seen
+
+  # Maps a git status prefix to an internal constant
+  # This cannot use the prompt constants, as they may be empty
+  local -A prefix_constant_map=(
+    '?? '       'UNTRACKED'
+    'A  '       'ADDED'
+    'M  '       'ADDED'
+    ' M '       'MODIFIED'
+    'AM '       'MODIFIED'
+    ' T '       'MODIFIED'
+    'R  '       'RENAMED'
+    ' D '       'DELETED'
+    'D  '       'DELETED'
+    'UU '       'UNMERGED'
+    'ahead'     'AHEAD'
+    'behind'    'BEHIND'
+    'diverged'  'DIVERGED'
+    'stashed'   'STASHED'
+  )
+
+  # Maps the internal constant to the prompt theme
+  local -A constant_prompt_map=(
+    'UNTRACKED' "$ZSH_THEME_GIT_PROMPT_UNTRACKED"
+    'ADDED'     "$ZSH_THEME_GIT_PROMPT_ADDED"
+    'MODIFIED'  "$ZSH_THEME_GIT_PROMPT_MODIFIED"
+    'RENAMED'   "$ZSH_THEME_GIT_PROMPT_RENAMED"
+    'DELETED'   "$ZSH_THEME_GIT_PROMPT_DELETED"
+    'UNMERGED'  "$ZSH_THEME_GIT_PROMPT_UNMERGED"
+    'AHEAD'     "$ZSH_THEME_GIT_PROMPT_AHEAD"
+    'BEHIND'    "$ZSH_THEME_GIT_PROMPT_BEHIND"
+    'DIVERGED'  "$ZSH_THEME_GIT_PROMPT_DIVERGED"
+    'STASHED'   "$ZSH_THEME_GIT_PROMPT_STASHED"
+  )
+
+  # The order that the prompt displays should be added to the prompt
+  local status_constants=(UNTRACKED ADDED MODIFIED RENAMED DELETED STASHED
+                          UNMERGED AHEAD BEHIND DIVERGED)
+
+  local status_text=$(command git status --porcelain -b 2> /dev/null)
+
+  # Don't continue on a catastrophic failure
+  if [[ $? -eq 128 ]]; then
+    return 1
   fi
-  if $(echo "$INDEX" | grep '^A  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
-  elif $(echo "$INDEX" | grep '^M  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
-  fi
-  if $(echo "$INDEX" | grep '^ M ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
-  elif $(echo "$INDEX" | grep '^AM ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
-  elif $(echo "$INDEX" | grep '^ T ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
-  fi
-  if $(echo "$INDEX" | grep '^R  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_RENAMED$STATUS"
-  fi
-  if $(echo "$INDEX" | grep '^ D ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
-  elif $(echo "$INDEX" | grep '^D  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
-  elif $(echo "$INDEX" | grep '^AD ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
-  fi
+
   if $(command git rev-parse --verify refs/stash >/dev/null 2>&1); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_STASHED$STATUS"
+    statuses_seen['STASHED']=1
   fi
-  if $(echo "$INDEX" | grep '^UU ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_UNMERGED$STATUS"
+
+  local status_lines=("${(@f)${status_text}}");
+
+  # If the tracking line exists, get and parse it
+  if [[ $status_lines[1] =~ "^## [^ ]+ \[(.*)\]" ]]; then
+    local branch_statuses=("${(@s/,/)match}")
+    for branch_status in $branch_statuses; do
+      if [[ ! $branch_status =~ "(behind|diverged|ahead) ([0-9]+)?" ]]; then
+        continue
+      fi
+      local last_parsed_status=$prefix_constant_map[$match[1]]
+      statuses_seen[$last_parsed_status]=$match[2]
+    done
+    shift status_lines
   fi
-  if $(echo "$INDEX" | grep '^## [^ ]\+ .*ahead' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_AHEAD$STATUS"
-  fi
-  if $(echo "$INDEX" | grep '^## [^ ]\+ .*behind' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_BEHIND$STATUS"
-  fi
-  if $(echo "$INDEX" | grep '^## [^ ]\+ .*diverged' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_DIVERGED$STATUS"
-  fi
-  echo $STATUS
+
+  # This not only gives us a status lookup, but the count of each type
+  for status_line in ${status_lines}; do
+    local status_prefix=${status_line[1, 3]}
+    local status_constant=${(v)prefix_constant_map[$status_prefix]}
+
+    if [[ -z $status_constant ]]; then
+      continue
+    fi
+    
+    (( statuses_seen[$status_constant]++ ))
+  done
+
+  # At this point, the statuses_seen hash contains:
+  # - Tracking      => The difference between tracked and current
+  # - Modifications => The count of that type of modification
+  # - Stash         => Whether or not a stash exists
+  # Might be useful for someone?
+
+  for status_constant in $status_constants; do
+    if [[ ${+statuses_seen[$status_constant]} -eq 1 ]]; then
+      local next_display=$constant_prompt_map[$status_constant]
+      status_prompt="$next_display$status_prompt"
+    fi
+  done
+
+  echo $status_prompt
 }
+
 
 # Compares the provided version of git to the version installed and on path
 # Outputs -1, 0, or 1 if the installed version is less than, equal to, or
