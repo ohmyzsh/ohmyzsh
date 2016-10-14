@@ -50,6 +50,12 @@ alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
 
+# Change ll to your favorite ls type
+# I use ls -lha
+alias ..='cd ..  && ll'         # Go up 1 directory
+alias ...='cd ../.. && ll'     # Go up 2 directories
+alias ....='cd ../../.. && ll'     # Go up 3 directories
+
 # zsh is able to auto-do some kungfoo
 # depends on the SUFFIX :)
 if is-at-least 4.2.0; then
