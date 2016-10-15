@@ -18,7 +18,7 @@ Original author: [Sorin Ionescu](https://github.com/sorin-ionescu)
 | Command         | Description                                      |
 | :-------------- | :----------------------------------------------- |
 | `tab`           | Open the current directory in a new tab          |
-| `split_tab`     | Split the current terminal tab horizontally      |
+| `split_tab`     | Split the current terminal tab horizontally. Use Alt+&#8984;+[&#8592;, &#8594;, &#8593;, &#8595;] to switch tabs|
 | `vsplit_tab`    | Split the current terminal tab vertically        |
 | `ofd`           | Open the current directory in a Finder window    |
 | `pfd`           | Return the path of the frontmost Finder window   |
