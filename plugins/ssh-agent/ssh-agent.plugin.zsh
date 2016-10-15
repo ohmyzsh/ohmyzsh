@@ -1,6 +1,6 @@
 if [[ ! -d $HOME/.ssh ]]; then
-    echo $HOME/.ssh not found, exiting...
-    return 1
+    echo "$HOME/.ssh not found, creating now..."
+    mkdir ~/.ssh && chmod 700 ~/.ssh
 fi
 
 typeset _agent_forwarding _ssh_env_cache
