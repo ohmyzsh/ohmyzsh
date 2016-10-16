@@ -18,7 +18,7 @@ Original author: [Sorin Ionescu](https://github.com/sorin-ionescu)
 | Command         | Description                                      |
 | :-------------- | :----------------------------------------------- |
 | `tab`           | Open the current directory in a new tab          |
-| `split_tab`     | Split the current terminal tab horizontally. Use Alt+&#8984;+[&#8592;, &#8594;, &#8593;, &#8595;] to switch tabs|
+| `split_tab`     | Split the current terminal tab horizontally.     |
 | `vsplit_tab`    | Split the current terminal tab vertically        |
 | `ofd`           | Open the current directory in a Finder window    |
 | `pfd`           | Return the path of the frontmost Finder window   |
@@ -31,3 +31,7 @@ Original author: [Sorin Ionescu](https://github.com/sorin-ionescu)
 | `hidefiles`     | Hide the hidden files                            |
 | `itunes`        | Control iTunes. User `itunes -h` for usage details |
 | `spotify`       | Control Spotify and search by artist, album, track and etc.|
+
+### split_tab & vsplit_tab usage
+
+Use `ALT` + `⌘` + arrow keys (←, →, ↑, ↓) to switch tabs.
