@@ -59,9 +59,12 @@ fi
 if [[ -x `which subl3` ]]; then
     alias s=subl3
 fi
+if [ "$SSH_TTY$DISPLAY" = "${DISPLAY#*:[1-9][0-9]}" ]; then
+  export EDITOR=gedit
+else
+  export EDITOR=vim
+fi
 
-
-export EDITOR=vim
 export VISUAL=$EDITOR
 
 if [ -d "$HOME/bin" ] ; then
@@ -74,9 +77,7 @@ fi
 
 #npm
 
-if [ -d "$HOME/.npm/bin" ] ; then
-  export PATH=${HOME}/.npm/bin:${PATH}
-fi
+export PATH=node_modules/.bin:${PATH}
 
 #go
 if [ -d "${HOME}/Projects/go" ] ; then
