@@ -1,8 +1,6 @@
 #!/usr/bin/env zsh
 
-if [ -z "$ZSH_UPDATE" ]; then
-  ZSH_UPDATE="$ZSH/cache/.zsh-update"
-fi
+ZSH_UPDATE="$ZSH/cache/.zsh-update"
 
 zmodload zsh/datetime
 
@@ -11,7 +9,7 @@ function _current_epoch() {
 }
 
 function _update_zsh_update() {
-  echo "LAST_EPOCH=$(_current_epoch)" >! $ZSH_UPDATE
+  echo "LAST_EPOCH=$(_current_epoch)" >! "$ZSH_UPDATE"
 }
 
 function _upgrade_zsh() {
@@ -34,8 +32,8 @@ fi
 whence git >/dev/null || return 0
 
 if mkdir "$ZSH/log/update.lock" 2>/dev/null; then
-  if [ -f $ZSH_UPDATE ]; then
-    . $ZSH_UPDATE
+  if [ -f "$ZSH_UPDATE" ]; then
+    . "$ZSH_UPDATE"
 
     if [[ -z "$LAST_EPOCH" ]]; then
       _update_zsh_update && return 0;
