@@ -110,6 +110,8 @@ function listMavenCompletions {
         help:active-profiles help:all-profiles help:describe help:effective-pom help:effective-settings help:evaluate help:expressions help:system
         # release
         release:clean release:prepare release:rollback release:perform release:stage release:branch release:update-versions
+	# jgitflow
+	jgitflow:feature-start jgitflow:feature-finish jgitflow:release-start jgitflow:release-finish jgitflow:hotfix-start jgitflow:hotfix-finish jgitflow:build-number
         # repository
         repository:bundle-create repository:bundle-pack
         # source
@@ -172,7 +174,7 @@ function listMavenCompletions {
         gwt:browser gwt:clean gwt:compile gwt:compile-report gwt:css gwt:debug gwt:eclipse gwt:eclipseTest gwt:generateAsync gwt:help gwt:i18n gwt:mergewebxml gwt:resources gwt:run gwt:sdkInstall gwt:source-jar gwt:soyc gwt:test
 
         # options
-        -Dmaven.test.skip=true -DskipTests -Dmaven.surefire.debug -DenableCiProfile -Dpmd.skip=true -Dcheckstyle.skip=true -Dtycho.mode=maven -Dmaven.test.failure.ignore=true
+        -Dmaven.test.skip=true -DskipTests -DskipITs -Dmaven.surefire.debug -DenableCiProfile -Dpmd.skip=true -Dcheckstyle.skip=true -Dtycho.mode=maven -Dmaven.test.failure.ignore=true -DgroupId= -DartifactId= -Dversion= -Dpackaging=jar -Dfile=
 
         # arguments
         -am -amd -B -C -c -cpu -D -e -emp -ep -f -fae -ff -fn -gs -h -l -N -npr -npu -nsu -o -P -pl -q -rf -s -T -t -U -up -V -v -X
@@ -181,6 +183,7 @@ function listMavenCompletions {
         archetype:generate generate-sources 
         cobertura:cobertura
         -Dtest= `if [ -d ./src/test/java ] ; then find ./src/test/java -type f -name '*.java' | grep -v svn | sed 's?.*/\([^/]*\)\..*?-Dtest=\1?' ; fi`
+        -Dit.test= `if [ -d ./src/test/java ] ; then find ./src/test/java -type f -name '*.java' | grep -v svn | sed 's?.*/\([^/]*\)\..*?-Dit.test=\1?' ; fi`
     ); 
 }
 

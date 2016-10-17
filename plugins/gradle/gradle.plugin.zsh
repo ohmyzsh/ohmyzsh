@@ -60,6 +60,35 @@ _gradle_does_task_list_need_generating () {
   [[ ! -f .gradletasknamecache ]] || [[ build.gradle -nt .gradletasknamecache ]]
 }
 
+##############
+# Parse the tasks from `gradle(w) tasks --all` into .gradletasknamecache
+# All lines in the output from gradle(w) that are between /^-+$/ and /^\s*$/
+# are considered to be tasks. If and when gradle adds support for listing tasks
+# for programmatic parsing, this method can be deprecated.
+##############
+_gradle_parse_tasks () {
+  lines_might_be_tasks=false
+  task_name_buffer=""
+  while read -r line; do
+    if [[ $line =~ ^-+$ ]]; then
+      lines_might_be_tasks=true
+      # Empty buffer, because it contains items that are not tasks
+      task_name_buffer=""
+    elif [[ $line =~ ^\s*$ ]]; then
+      if [[ "$lines_might_be_tasks" = true ]]; then
+        # If a newline is found, send the buffer to .gradletasknamecache
+        while read -r task; do
+          echo $task | awk '/[a-zA-Z0-9:-]+/ {print $1}'
+        done <<< "$task_name_buffer"
+        # Empty buffer, because we are done with the tasks
+        task_name_buffer=""
+      fi
+      lines_might_be_tasks=false
+    elif [[ "$lines_might_be_tasks" = true ]]; then
+      task_name_buffer="${task_name_buffer}\n${line}"
+    fi
+  done <<< "$1"
+}
 
 ##############################################################################
 # Discover the gradle tasks by running "gradle tasks --all"
@@ -68,7 +97,7 @@ _gradle_tasks () {
   if [[ -f build.gradle ]]; then
     _gradle_arguments
     if _gradle_does_task_list_need_generating; then
-      gradle tasks --all | awk '/[a-zA-Z0-9:-]* - / {print $1}' > .gradletasknamecache
+      _gradle_parse_tasks "$(gradle tasks --all)" > .gradletasknamecache
     fi
     compadd -X "==== Gradle Tasks ====" $(cat .gradletasknamecache)
   fi
@@ -78,7 +107,7 @@ _gradlew_tasks () {
   if [[ -f build.gradle ]]; then
     _gradle_arguments
     if _gradle_does_task_list_need_generating; then
-      ./gradlew tasks --all | awk '/[a-zA-Z0-9:-]* - / {print $1}' > .gradletasknamecache
+      _gradle_parse_tasks "$(./gradlew tasks --all)" > .gradletasknamecache
     fi
     compadd -X "==== Gradlew Tasks ====" $(cat .gradletasknamecache)
   fi
