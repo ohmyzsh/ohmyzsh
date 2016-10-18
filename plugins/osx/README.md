@@ -7,7 +7,7 @@ This plugin provides a few utilities to make it more enjoyable on OSX.
 To start using it, add the `macOS` plugin to your plugins array in `~/.zshrc`:
 
 ```zsh
-plugins=(... osx)
+plugins=(... macOS)
 ```
 
 Original author: [Sorin Ionescu](https://github.com/sorin-ionescu)
