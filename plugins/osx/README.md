@@ -1,10 +1,10 @@
-# OSX plugin
+# macOS plugin
 
 ## Description
 
 This plugin provides a few utilities to make it more enjoyable on OSX.
 
-To start using it, add the `osx` plugin to your plugins array in `~/.zshrc`:
+To start using it, add the `macOS` plugin to your plugins array in `~/.zshrc`:
 
 ```zsh
 plugins=(... osx)
