@@ -30,7 +30,7 @@
 #
 ################################################################################
 #
-# Copyright (c) 2012 Jim Hester
+# Copyright (c) 2014 Jim Hester
 #
 # This software is provided 'as-is', without any express or implied warranty. 
 # In no event will the authors be held liable for any damages arising from the
@@ -57,6 +57,7 @@
 #-------------------------------------------------------------------------------
 
 [[ -z $HISTORY_BASE ]] && HISTORY_BASE="$HOME/.directory_history"
+[[ -z $PER_DIRECTORY_HISTORY_TOGGLE ]] && PER_DIRECTORY_HISTORY_TOGGLE='^G'
 
 #-------------------------------------------------------------------------------
 # toggle global/directory history used for searching - ctrl-G by default
@@ -76,7 +77,7 @@ function per-directory-history-toggle-history() {
 
 autoload per-directory-history-toggle-history
 zle -N per-directory-history-toggle-history
-bindkey '^G' per-directory-history-toggle-history
+bindkey $PER_DIRECTORY_HISTORY_TOGGLE per-directory-history-toggle-history
 
 #-------------------------------------------------------------------------------
 # implementation details
@@ -108,7 +109,7 @@ function _per-directory-history-change-directory() {
 }
 
 function _per-directory-history-addhistory() {
-  print -Sr -- ${1%%$'\n'}
+  print -Sr -- "${1%%$'\n'}"
   fc -p $_per_directory_history_directory
 }
 
@@ -140,8 +141,9 @@ function _per-directory-history-set-global-history() {
 
 
 #add functions to the exec list for chpwd and zshaddhistory
-chpwd_functions=(${chpwd_functions[@]} "_per-directory-history-change-directory")
-zshaddhistory_functions=(${zshaddhistory_functions[@]} "_per-directory-history-addhistory")
+autoload -U add-zsh-hook
+add-zsh-hook chpwd _per-directory-history-change-directory
+add-zsh-hook zshaddhistory _per-directory-history-addhistory
 
 #start in directory mode
 mkdir -p ${_per_directory_history_directory:h}
