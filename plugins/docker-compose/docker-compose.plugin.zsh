@@ -12,6 +12,7 @@ alias dco='docker-compose'
 
 alias dcb='docker-compose build'
 alias dce='docker-compose exec'
+alias dcd='docker-compose down'
 alias dcps='docker-compose ps'
 alias dcrestart='docker-compose restart'
 alias dcrm='docker-compose rm'
