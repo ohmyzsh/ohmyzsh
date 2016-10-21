@@ -20,10 +20,6 @@ _homebrew-installed() {
     whence brew &> /dev/null
 }
 
-_chruby-from-homebrew-installed() {
-  [ -r $(brew --prefix chruby) ] &> /dev/null
-}
-
 _ruby-build_installed() {
     whence ruby-build &> /dev/null
 }
@@ -63,18 +59,22 @@ _chruby_dirs() {
     done
 }
 
-if _homebrew-installed && _chruby-from-homebrew-installed ; then
-    source $(brew --prefix chruby)/share/chruby/chruby.sh
-    source $(brew --prefix chruby)/share/chruby/auto.sh
-    _chruby_dirs
-elif [[ -r "/usr/local/share/chruby/chruby.sh" ]] ; then
-    source /usr/local/share/chruby/chruby.sh
-    source /usr/local/share/chruby/auto.sh
-    _chruby_dirs
-else
-    _source_from_omz_settings
-    _chruby_dirs
-fi
+function () {
+    local _chruby_homebrew_prefix=$(brew --prefix chruby) &> /dev/null
+
+    if _homebrew-installed && [ -r ${_chruby_homebrew_prefix} ] ; then
+        source ${_chruby_homebrew_prefix}/share/chruby/chruby.sh
+        source ${_chruby_homebrew_prefix}/share/chruby/auto.sh
+        _chruby_dirs
+    elif [[ -r "/usr/local/share/chruby/chruby.sh" ]] ; then
+        source /usr/local/share/chruby/chruby.sh
+        source /usr/local/share/chruby/auto.sh
+        _chruby_dirs
+    else
+        _source_from_omz_settings
+        _chruby_dirs
+    fi
+}
 
 function ensure_chruby() {
     $(whence chruby)
