@@ -81,8 +81,7 @@ function ensure_chruby() {
 }
 
 function current_ruby() {
-    local _ruby
-    _ruby="$(chruby |grep \* |tr -d '* ')"
+    local _ruby="$(chruby |grep \* |tr -d '* ')"
     if [[ $(chruby |grep -c \*) -eq 1 ]]; then
         echo ${_ruby}
     else
