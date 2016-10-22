@@ -55,8 +55,8 @@ _source_from_omz_settings() {
 }
 
 _chruby_dirs() {
-    chrubydirs=($HOME/.rubies/ $PREFIX/opt/rubies)
-    for dir in chrubydirs; do
+    local _chrubydirs=($HOME/.rubies/ $PREFIX/opt/rubies)
+    for dir in _chrubydirs; do
         if [[ -d $dir ]]; then
             RUBIES+=$dir
         fi
