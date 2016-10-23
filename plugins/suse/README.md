@@ -21,8 +21,8 @@ plugins=(... suse)
 | zps              | `sudo zypper ps`              | list process using deleted files                               |
 | zshell           | `sudo zypper shell`           | open a zypper shell session                                    |
 | zsource-download | `sudo zypper source-download` | download source rpms for all installed packages                |
-| ztos             | `sudo zypper tos`             | shows  the  ID string of the target operating system           |
-| zvcmp            | `sudo zypper vcmp`            | tell whether version1 is older or newer than version2          |
+| ztos             | `zypper tos`                  | shows the ID string of the target operating system             |
+| zvcmp            | `zypper vcmp`                 | tell whether version1 is older or newer than version2          |
 
 ## Packages commands
 
@@ -39,8 +39,8 @@ plugins=(... suse)
 | Alias  | Commands            | Description            |
 | ------ | ------------------- | ---------------------- |
 | zdup   | `sudo zypper dup`   | upgrade packages       |
-| zlp    | `sudo zypper lp`    | list necessary patches |
-| zlu    | `sudo zypper lu`    | list updates           |
+| zlp    | `zypper lp`         | list necessary patches |
+| zlu    | `zypper lu`         | list updates           |
 | zpchk  | `sudo zypper pchk`  | check for patches      |
 | zup    | `sudo zypper up`    | update packages        |
 | zpatch | `sudo zypper patch` | install patches        |
@@ -66,7 +66,7 @@ plugins=(... suse)
 | ----- | ------------------- | ---------------------------------------- |
 | zar   | `sudo zypper ar`    | add a repository                         |
 | zcl   | `sudo zypper clean` | clean cache                              |
-| zlr   | `sudo zypper lr`    | list repositories                        |
+| zlr   | `zypper lr`         | list repositories                        |
 | zmr   | `sudo zypper mr`    | modify repositories                      |
 | znr   | `sudo zypper nr`    | rename repositories (for the alias only) |
 | zref  | `sudo zypper ref`   | refresh repositories                     |
@@ -79,12 +79,12 @@ plugins=(... suse)
 | zms   | `sudo zypper ms`   | modify properties of specified services                        |
 | zrefs | `sudo zypper refs` | refreshing a service mean executing the service's special task |
 | zrs   | `sudo zypper rs`   | remove specified repository index service from the system      |
-| zls   | `sudo zypper ls`   | list services defined on the system                            |
+| zls   | `zypper ls`        | list services defined on the system                            |
 
 ## Package Locks Management commands
 | Alias | Commands         | Description                         |
 | ----- | ---------------- | ----------------------------------- |
 | zal   | `sudo zypper al` | add a package lock                  |
 | zcl   | `sudo zypper cl` | remove unused locks                 |
-| zll   | `sudo zypper ll` | list currently active package locks |
+| zll   | `zypper ll`      | list currently active package locks |
 | zrl   | `sudo zypper rl` | remove specified package lock       |
