@@ -9,7 +9,7 @@ alias zps='zypper ps' #list process using deleted files
 alias zshell='sudo zypper shell' #open a zypper shell session
 alias zsource-download='sudo zypper source-download' #download source rpms for all installed packages
 alias ztos='zypper tos' #shows  the  ID string of the target operating system
-alias zvcmp='sudo zypper vcmp' #tell whether version1 is older or newer than version2
+alias zvcmp='zypper vcmp' #tell whether version1 is older or newer than version2
 
 #Packages commands
 alias zin='sudo zypper in' #install packages
@@ -35,8 +35,8 @@ alias zproduct-info='zypper patch-info' #display info about products
 alias zpch='zypper pch' #list all patches
 alias zpd='zypper pd' #list products
 alias zpt='zypper pt' #list patterns
-alias zse='sudo zypper se' #search for packages
-alias zwp='sudo zypper wp' #list all packages providing the specified capability
+alias zse='zypper se' #search for packages
+alias zwp='zypper wp' #list all packages providing the specified capability
 
 #Repositories commands
 alias zar='sudo zypper ar' #add a repository
