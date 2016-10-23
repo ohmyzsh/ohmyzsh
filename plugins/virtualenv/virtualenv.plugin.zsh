@@ -5,3 +5,5 @@ function virtualenv_prompt_info(){
 
 # disables prompt mangling in virtual_env/bin/activate
 export VIRTUAL_ENV_DISABLE_PROMPT=1
+
+alias activate='source $(find . -maxdepth 3 -name "activate") 2> /dev/null || echo "No virtualenv detected"'
