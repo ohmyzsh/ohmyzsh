@@ -18,9 +18,9 @@ To learn more, visit [ohmyz.sh](http://ohmyz.sh) and follow [@ohmyzsh](https://t
 
 ### Prerequisites
 
-__Disclaimer:__ _Oh My Zsh works best on OS X and Linux._
+__Disclaimer:__ _Oh My Zsh works best on macOS and Linux._
 
-* Unix-based operating system (OS X or Linux)
+* Unix-based operating system (macOS or Linux)
 * [Zsh](http://www.zsh.org) should be installed (v4.3.9 or more recent). If not pre-installed (`zsh --version` to confirm), check the following instruction here: [Installing ZSH](https://github.com/robbyrussell/oh-my-zsh/wiki/Installing-ZSH)
 * `curl` or `wget` should be installed
 * `git` should be installed
@@ -49,7 +49,7 @@ Oh My Zsh comes with a shit load of plugins to take advantage of. You can take a
 
 #### Enabling Plugins
 
-If you spot a plugin (or several) that you would like to use with Oh My Zsh, you will need to edit the `~/.zshrc` file. Once you open it with your favorite editor, you'll see a spot to list all the plugins that you'd like Oh My Zsh to load in initialization.
+If you spot a plugin (or several) that you would like to use with Oh My Zsh, you will need to edit the `~/.zshrc` file. Once you open it with your favorite editor, you'll see a spot to list all the plugins that you'd like Oh My Zsh to load on initialization.
 
 For example, this line might begin to look like...
 
@@ -67,7 +67,7 @@ We'll admit it. Early in the Oh My Zsh world, we may have gotten a bit too theme
 
 #### Selecting a Theme
 
-_Robby's theme is the default one. It's not the fanciest one. It's not the simplest one. It's just right (for him)._
+_Robby's theme is the default one. It's not the fanciest one. It's not the simplest one. It's just the right one (for him)._
 
 Once you find a theme that you want to use, you will need to edit the `~/.zshrc` file. You'll see an environment variable (all caps) in there that looks like:
 
@@ -81,7 +81,7 @@ To use a different theme, simply change the value to match the name of your desi
 ZSH_THEME="agnoster" # (this is one of the fancy ones)
 ```
 
-Open up a new terminal window and your prompt should look something like...
+Open up a new terminal window and your prompt should look something like this:
 
 ![Agnoster theme](https://cloud.githubusercontent.com/assets/2618447/6316862/70f58fb6-ba03-11e4-82c9-c083bf9a6574.png)
 
@@ -129,7 +129,7 @@ cp ~/.zshrc ~/.zshrc.orig
 
 ##### 3. Create a new zsh configuration file
 
-You can create a new zsh config file by copying the template that we included for you.
+You can create a new zsh config file by copying the template that we have included for you.
 
 ```shell
 cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
@@ -208,7 +208,7 @@ Thank you so much!
 
 ## Follow Us
 
-We're on the social medias.
+We're on the social media.
 
 * [@ohmyzsh](https://twitter.com/ohmyzsh) on Twitter. You should follow it.
 * [Oh My Zsh](https://www.facebook.com/Oh-My-Zsh-296616263819290/) on Facebook.
