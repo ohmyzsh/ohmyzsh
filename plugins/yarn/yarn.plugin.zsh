@@ -1,15 +1,10 @@
 alias yi="yarn install"
 
-_yarn_installed_packages () {
-    yarn_package_list=$(yarn ls --no-color 2>/dev/null| awk 'NR>3{print p}{p=$0}'| cut -d ' ' -f 2|sed 's/#.*//')
-}
 _yarn ()
 {
-    local -a _1st_arguments _no_color _dopts _dev _production
+    local -a _1st_arguments _dopts _dev _production
     local expl
     typeset -A opt_args
-
-    _no_color=('--no-color[Do not print colors (available in all commands)]')
 
     _dopts=(
         '(--force)--force[This refetches all packages, even ones that were previously installed.]'
@@ -27,26 +22,25 @@ _yarn ()
     _production=('(--production)--production[Do not install project devDependencies]')
 
     _1st_arguments=(
-    'help:Display help information about yarn' \
-    'init:Initialize for the development of a package.' \
-    'add:Add a package to use in your current package.' \
-    'install:Install all the dependencies listed within package.json in the local node_modules folder.' \
-    'publish:Publish a package to a package manager.' \
-    'remove:Remove a package that will no longer be used in your current package.' \
-    'cache:Clear the local cache. It will be populated again the next time yarn or yarn install is run.' \
-    'clean:Frees up space by removing unnecessary files and folders from dependencies.' \
-    'check:Verifies that versions of the package dependencies in the current project’s package.json matches that of yarn’s lock file.' \
-    'ls:List all installed packages.' \
-    'global:Makes binaries available to use on your operating system.' \
-    'info:<package> [<field>] - fetch information about a package and return it in a tree format.' \
-    'outdated:Checks for outdated package dependencies.' \
-    'run:Runs a defined package script.' \
-    'self-update:Updates Yarn to the latest version.' \
-    'upgrade:Upgrades packages to their latest version based on the specified range.' \
-    'why:<query> - Show information about why a package is installed.'
+      'help:Display help information about yarn' \
+      'init:Initialize for the development of a package.' \
+      'add:Add a package to use in your current package.' \
+      'install:Install all the dependencies listed within package.json in the local node_modules folder.' \
+      'publish:Publish a package to a package manager.' \
+      'remove:Remove a package that will no longer be used in your current package.' \
+      'cache:Clear the local cache. It will be populated again the next time yarn or yarn install is run.' \
+      'clean:Frees up space by removing unnecessary files and folders from dependencies.' \
+      'check:Verifies that versions of the package dependencies in the current project’s package.json matches that of yarn’s lock file.' \
+      'ls:List all installed packages.' \
+      'global:Makes binaries available to use on your operating system.' \
+      'info:<package> [<field>] - fetch information about a package and return it in a tree format.' \
+      'outdated:Checks for outdated package dependencies.' \
+      'run:Runs a defined package script.' \
+      'self-update:Updates Yarn to the latest version.' \
+      'upgrade:Upgrades packages to their latest version based on the specified range.' \
+      'why:<query> - Show information about why a package is installed.'
     )
     _arguments \
-    $_no_color \
     '*:: :->subcmds' && return 0
 
     if (( CURRENT == 1 )); then
@@ -59,7 +53,6 @@ _yarn ()
         _arguments \
         $_dopts \
         $_dev \
-        $_no_color \
         $_production
         ;;
         install)
@@ -72,21 +65,14 @@ _yarn ()
         ;;
         update)
         _arguments \
-        $_dopts \
-        $_no_color \
-        _yarn_installed_packages
-        compadd "$@" $(echo $yarn_package_list)
-        ;;
-        uninstall)
-        _arguments \
-        $_no_color \
         $_dopts
-        _yarn_installed_packages
-        compadd "$@" $(echo $yarn_package_list)
+        ;;
+        remove)
+        _arguments \
+        $_dopts
         ;;
         *)
         _arguments \
-        $_no_color \
         ;;
     esac
 
