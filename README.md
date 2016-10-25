@@ -79,6 +79,8 @@ To use a different theme, simply change the value to match the name of your desi
 
 ```shell
 ZSH_THEME="agnoster" # (this is one of the fancy ones)
+# you might need to install a special Powerline font on your console's host for this to work
+# see https://github.com/robbyrussell/oh-my-zsh/wiki/Themes#agnoster
 ```
 
 Open up a new terminal window and your prompt should look something like this:
