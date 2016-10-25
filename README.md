@@ -49,7 +49,14 @@ Oh My Zsh comes with a shit load of plugins to take advantage of. You can take a
 
 #### Enabling Plugins
 
-If you spot a plugin (or several) that you would like to use with Oh My Zsh, you will need to edit the `~/.zshrc` file. Once you open it with your favorite editor, you'll see a spot to list all the plugins that you'd like Oh My Zsh to load on initialization.
+If you spot a plugin (or several) that you would like to use with Oh My Zsh, you will need to edit the `~/.zshrc` file.
+
+To open `~/.zshrc` file, you can use any text editor. For example, `atom`
+
+```shell
+atom ~/.zshrc 
+```
+Once you open it with your favorite editor, you'll see a spot to list all the plugins that you'd like Oh My Zsh to load on initialization.
 
 For example, this line might begin to look like...
 
