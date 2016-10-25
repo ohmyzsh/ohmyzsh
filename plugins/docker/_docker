@@ -57,7 +57,7 @@ __docker_get_containers() {
     type=$1; shift
     [[ $kind = (stopped|all) ]] && args=($args -a)
 
-    lines=(${(f)"$(_call_program commands docker $docker_options ps --format 'table' --no-trunc $args)"})
+    lines=(${(f)${:-"$(_call_program commands docker $docker_options ps --format 'table' --no-trunc $args)"$'\n'}})
 
     # Parse header line to find columns
     local i=1 j=1 k header=${lines[1]}
@@ -153,7 +153,7 @@ __docker_images() {
     [[ $PREFIX = -* ]] && return 1
     integer ret=1
     declare -a images
-    images=(${${${(f)"$(_call_program commands docker $docker_options images)"}[2,-1]}/(#b)([^ ]##) ##([^ ]##) ##([^ ]##)*/${match[3]}:${(r:15:: :::)match[2]} in ${match[1]}})
+    images=(${${${(f)${:-"$(_call_program commands docker $docker_options images)"$'\n'}}[2,-1]}/(#b)([^ ]##) ##([^ ]##) ##([^ ]##)*/${match[3]}:${(r:15:: :::)match[2]} in ${match[1]}})
     _describe -t docker-images "images" images && ret=0
     __docker_repositories_with_tags && ret=0
     return ret
@@ -162,7 +162,7 @@ __docker_images() {
 __docker_repositories() {
     [[ $PREFIX = -* ]] && return 1
     declare -a repos
-    repos=(${${${(f)"$(_call_program commands docker $docker_options images)"}%% *}[2,-1]})
+    repos=(${${${(f)${:-"$(_call_program commands docker $docker_options images)"$'\n'}}%% *}[2,-1]})
     repos=(${repos#<none>})
     _describe -t docker-repos "repositories" repos
 }
@@ -172,7 +172,7 @@ __docker_repositories_with_tags() {
     integer ret=1
     declare -a repos onlyrepos matched
     declare m
-    repos=(${${${${(f)"$(_call_program commands docker $docker_options images)"}[2,-1]}/ ##/:::}%% *})
+    repos=(${${${${(f)${:-"$(_call_program commands docker $docker_options images)"$'\n'}}[2,-1]}/ ##/:::}%% *})
     repos=(${${repos%:::<none>}#<none>})
     # Check if we have a prefix-match for the current prefix.
     onlyrepos=(${repos%::*})
@@ -208,7 +208,7 @@ __docker_search() {
     if ( [[ ${(P)+cachename} -eq 0 ]] || _cache_invalid ${cachename#_} ) \
         && ! _retrieve_cache ${cachename#_}; then
         _message "Searching for ${searchterm}..."
-        result=(${${${(f)"$(_call_program commands docker $docker_options search $searchterm)"}%% *}[2,-1]})
+        result=(${${${(f)${:-"$(_call_program commands docker $docker_options search $searchterm)"$'\n'}}%% *}[2,-1]})
         _store_cache ${cachename#_} result
     fi
     _wanted dockersearch expl 'available images' compadd -a result
@@ -219,7 +219,7 @@ __docker_get_log_options() {
 
     integer ret=1
     local log_driver=${opt_args[--log-driver]:-"all"}
-    local -a awslogs_options fluentd_options gelf_options journald_options json_file_options syslog_options splunk_options
+    local -a awslogs_options fluentd_options gelf_options journald_options json_file_options logentries_options syslog_options splunk_options
 
     awslogs_options=("awslogs-region" "awslogs-group" "awslogs-stream")
     fluentd_options=("env" "fluentd-address" "fluentd-async-connect" "fluentd-buffer-limit" "fluentd-retry-wait" "fluentd-max-retries" "labels" "tag")
@@ -227,6 +227,7 @@ __docker_get_log_options() {
     gelf_options=("env" "gelf-address" "gelf-compression-level" "gelf-compression-type" "labels" "tag")
     journald_options=("env" "labels" "tag")
     json_file_options=("env" "labels" "max-file" "max-size")
+    logentries_options=("logentries-token")
     syslog_options=("env" "labels" "syslog-address" "syslog-facility" "syslog-format" "syslog-tls-ca-cert" "syslog-tls-cert" "syslog-tls-key" "syslog-tls-skip-verify" "tag")
     splunk_options=("env" "labels" "splunk-caname" "splunk-capath" "splunk-format" "splunk-gzip" "splunk-gzip-level" "splunk-index" "splunk-insecureskipverify" "splunk-source" "splunk-sourcetype" "splunk-token" "splunk-url" "splunk-verify-connection" "tag")
 
@@ -236,6 +237,7 @@ __docker_get_log_options() {
     [[ $log_driver = (gelf|all) ]] && _describe -t gelf-options "gelf options" gelf_options "$@" && ret=0
     [[ $log_driver = (journald|all) ]] && _describe -t journald-options "journald options" journald_options "$@" && ret=0
     [[ $log_driver = (json-file|all) ]] && _describe -t json-file-options "json-file options" json_file_options "$@" && ret=0
+    [[ $log_driver = (logentries|all) ]] && _describe -t logentries-options "logentries options" logentries_options "$@" && ret=0
     [[ $log_driver = (syslog|all) ]] && _describe -t syslog-options "syslog options" syslog_options "$@" && ret=0
     [[ $log_driver = (splunk|all) ]] && _describe -t splunk-options "splunk options" splunk_options "$@" && ret=0
 
@@ -332,6 +334,9 @@ __docker_complete_ps_filters() {
                 ;;
             (id)
                 __docker_containers_ids && ret=0
+                ;;
+            (is-task)
+                _describe -t boolean-filter-opts "filter options" boolean_opts && ret=0
                 ;;
             (name)
                 __docker_containers_names && ret=0
@@ -504,7 +509,7 @@ __docker_get_networks() {
 
     type=$1; shift
 
-    lines=(${(f)"$(_call_program commands docker $docker_options network ls)"})
+    lines=(${(f)${:-"$(_call_program commands docker $docker_options network ls)"$'\n'}})
 
     # Parse header line to find columns
     local i=1 j=1 k header=${lines[1]}
@@ -720,7 +725,7 @@ __docker_nodes() {
     filter=$1; shift
     [[ $filter != "none" ]] && args=("-f $filter")
 
-    lines=(${(f)"$(_call_program commands docker $docker_options node ls $args)"})
+    lines=(${(f)${:-"$(_call_program commands docker $docker_options node ls $args)"$'\n'}})
     # Parse header line to find columns
     local i=1 j=1 k header=${lines[1]}
     declare -A begin end
@@ -792,7 +797,7 @@ __docker_node_commands() {
         "ls:List nodes in the swarm"
         "promote:Promote a node as manager in the swarm"
         "rm:Remove one or more nodes from the swarm"
-        "ps:List tasks running on a node, defaults to current node"
+        "ps:List tasks running on one or more nodes, defaults to current node"
         "update:Update a node"
     )
     _describe -t docker-node-commands "docker node command" _docker_node_subcommands
@@ -847,7 +852,7 @@ __docker_node_subcommand() {
                 "($help)*"{-f=,--filter=}"[Provide filter values]:filter:->filter-options" \
                 "($help)--no-resolve[Do not map IDs to Names]" \
                 "($help)--no-trunc[Do not truncate output]" \
-                "($help -)1:node:__docker_complete_nodes" && ret=0
+                "($help -)*:node:__docker_complete_nodes" && ret=0
             case $state in
                 (filter-options)
                     __docker_node_complete_ps_filters && ret=0
@@ -881,7 +886,7 @@ __docker_complete_plugins() {
     local line s
     declare -a lines plugins
 
-    lines=(${(f)"$(_call_program commands docker $docker_options plugin ls)"})
+    lines=(${(f)${:-"$(_call_program commands docker $docker_options plugin ls)"$'\n'}})
 
     # Parse header line to find columns
     local i=1 j=1 k header=${lines[1]}
@@ -1007,7 +1012,7 @@ __docker_services() {
 
     type=$1; shift
 
-    lines=(${(f)"$(_call_program commands docker $docker_options service ls)"})
+    lines=(${(f)${:-"$(_call_program commands docker $docker_options service ls)"$'\n'}})
 
     # Parse header line to find columns
     local i=1 j=1 k header=${lines[1]}
@@ -1103,6 +1108,8 @@ __docker_service_subcommand() {
         "($help)--stop-grace-period=[Time to wait before force killing a container]:grace period: "
         "($help)--update-delay=[Delay between updates]:delay: "
         "($help)--update-failure-action=[Action on update failure]:mode:(pause continue)"
+        "($help)--update-max-failure-ratio=[Failure rate to tolerate during an update]:fraction: "
+        "($help)--update-monitor=[Duration after each task update to monitor for failure]:window: "
         "($help)--update-parallelism=[Maximum number of tasks updated simultaneously]:number: "
         "($help -u --user)"{-u=,--user=}"[Username or UID]:user:_users"
         "($help)--with-registry-auth[Send registry authentication details to swarm agents]"
@@ -1178,8 +1185,10 @@ __docker_service_subcommand() {
                 "($help)--arg=[Service command args]:arguments: _normal" \
                 "($help)*--container-label-add=[Add or update container labels]:label: " \
                 "($help)*--container-label-rm=[Remove a container label by its key]:label: " \
+                "($help)--force[Force update]" \
                 "($help)*--group-rm=[Remove previously added user groups from the container]:group:_groups" \
                 "($help)--image=[Service image tag]:image:__docker_repositories" \
+                "($help)--rollback[Rollback to previous specification]" \
                 "($help -)1:service:__docker_complete_services" && ret=0
             ;;
         (help)
@@ -1293,7 +1302,7 @@ __docker_volumes() {
     integer ret=1
     declare -a lines volumes
 
-    lines=(${(f)"$(_call_program commands docker $docker_options volume ls)"})
+    lines=(${(f)${:-"$(_call_program commands docker $docker_options volume ls)"$'\n'}})
 
     # Parse header line to find columns
     local i=1 j=1 k header=${lines[1]}
@@ -1506,6 +1515,7 @@ __docker_subcommand() {
                 $opts_build_create_run \
                 $opts_build_create_run_update \
                 "($help)*--build-arg[Build-time variables]:<varname>=<value>: " \
+                "($help)--compress[Compress the build context using gzip]" \
                 "($help -f --file)"{-f=,--file=}"[Name of the Dockerfile]:Dockerfile:_files" \
                 "($help)--force-rm[Always remove intermediate containers]" \
                 "($help)*--label=[Set metadata for an image]:label=value: " \
@@ -1594,6 +1604,7 @@ __docker_subcommand() {
                 "($help -g --graph)"{-g=,--graph=}"[Root of the Docker runtime]:path:_directories" \
                 "($help -H --host)"{-H=,--host=}"[tcp://host:port to bind/connect to]:host: " \
                 "($help)--icc[Enable inter-container communication]" \
+                "($help)--init-path=[Path to the docker-init binary]:docker-init binary:_files" \
                 "($help)*--insecure-registry=[Enable insecure registry communication]:registry: " \
                 "($help)--ip=[Default IP when binding container ports]" \
                 "($help)--ip-forward[Enable net.ipv4.ip_forward]" \
@@ -1669,6 +1680,7 @@ __docker_subcommand() {
                 $opts_help \
                 $opts_attach_exec_run_start \
                 "($help -d --detach)"{-d,--detach}"[Detached mode: leave the container running in the background]" \
+                "($help -e --env)"{-e,--env}"[Set environment variables]" \
                 "($help -i --interactive)"{-i,--interactive}"[Keep stdin open even if not attached]" \
                 "($help)--privileged[Give extended Linux capabilities to the command]" \
                 "($help -t --tty)"{-t,--tty}"[Allocate a pseudo-tty]" \
@@ -1704,7 +1716,7 @@ __docker_subcommand() {
                 "($help -a --all)"{-a,--all}"[Show all images]" \
                 "($help)--digests[Show digests]" \
                 "($help)*"{-f=,--filter=}"[Filter values]:filter:->filter-options" \
-                "($help)--format[Pretty-print images using a Go template]:template: " \
+                "($help)--format=[Pretty-print images using a Go template]:template: " \
                 "($help)--no-trunc[Do not truncate output]" \
                 "($help -q --quiet)"{-q,--quiet}"[Only show numeric IDs]" \
                 "($help -): :__docker_repositories" && ret=0
@@ -1726,7 +1738,7 @@ __docker_subcommand() {
         (info|version)
             _arguments $(__docker_arguments) \
                 $opts_help \
-		"($help -f --format)"{-f=,--format=}"[Format the output using the given go template]:template: " && ret=0
+                "($help -f --format)"{-f=,--format=}"[Format the output using the given go template]:template: " && ret=0
             ;;
         (inspect)
             local state
@@ -1851,7 +1863,7 @@ __docker_subcommand() {
                 "($help -a --all)"{-a,--all}"[Show all containers]" \
                 "($help)--before=[Show only container created before...]:containers:__docker_containers" \
                 "($help)*"{-f=,--filter=}"[Filter values]:filter:__docker_complete_ps_filters" \
-                "($help)--format[Pretty-print containers using a Go template]:template: " \
+                "($help)--format=[Pretty-print containers using a Go template]:template: " \
                 "($help -l --latest)"{-l,--latest}"[Show only the latest created container]" \
                 "($help -n --last)"{-n=,--last=}"[Show n last created containers (includes all states)]:n:(1 5 10 25 50)" \
                 "($help)--no-trunc[Do not truncate output]" \
@@ -1878,11 +1890,17 @@ __docker_subcommand() {
                 "($help -):old name:__docker_containers" \
                 "($help -):new name: " && ret=0
             ;;
-        (restart|stop)
+        (stop)
             _arguments $(__docker_arguments) \
                 $opts_help \
                 "($help -t --time)"{-t=,--time=}"[Number of seconds to try to stop for before killing the container]:seconds to before killing:(1 5 10 30 60)" \
                 "($help -)*:containers:__docker_runningcontainers" && ret=0
+            ;;
+        (restart)
+            _arguments $(__docker_arguments) \
+                $opts_help \
+                "($help -t --time)"{-t=,--time=}"[Number of seconds to try to stop for before killing the container]:seconds to before killing:(1 5 10 30 60)" \
+                "($help -)*:containers:__docker_containers_ids" && ret=0
             ;;
         (rm)
             _arguments $(__docker_arguments) \
@@ -1999,6 +2017,7 @@ __docker_subcommand() {
             _arguments $(__docker_arguments) \
                 $opts_help \
                 "($help -a --all)"{-a,--all}"[Show all containers (default shows just running)]" \
+                "($help)--format=[Pretty-print images using a Go template]:template: " \
                 "($help)--no-stream[Disable streaming stats and only pull the first result]" \
                 "($help -)*:containers:__docker_runningcontainers" && ret=0
             ;;
