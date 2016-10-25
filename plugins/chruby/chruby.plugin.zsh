@@ -50,29 +50,17 @@ _source_from_omz_settings() {
     fi
 }
 
-_chruby_dirs() {
-    local _chrubydirs=($HOME/.rubies/ $PREFIX/opt/rubies)
-    for dir in _chrubydirs; do
-        if [[ -d $dir ]]; then
-            RUBIES+=$dir
-        fi
-    done
-}
-
 function () {
     local _chruby_homebrew_prefix=$(brew --prefix chruby) &> /dev/null
 
     if _homebrew-installed && [ -r ${_chruby_homebrew_prefix} ] ; then
         source ${_chruby_homebrew_prefix}/share/chruby/chruby.sh
         source ${_chruby_homebrew_prefix}/share/chruby/auto.sh
-        _chruby_dirs
     elif [[ -r "/usr/local/share/chruby/chruby.sh" ]] ; then
         source /usr/local/share/chruby/chruby.sh
         source /usr/local/share/chruby/auto.sh
-        _chruby_dirs
     else
         _source_from_omz_settings
-        _chruby_dirs
     fi
 }
 
