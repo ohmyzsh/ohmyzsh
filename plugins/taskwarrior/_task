@@ -1,6 +1,6 @@
 #compdef task
 #
-# Copyright 2010 - 2015 Johannes Schlatow
+# Copyright 2010 - 2016 Johannes Schlatow
 # Copyright 2009 P.C. Shyamshankar
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -26,7 +26,6 @@
 typeset -g _task_cmds _task_projects _task_tags _task_config _task_modifiers
 _task_projects=($(task _projects))
 _task_tags=($(task _tags))
-_task_ids=($(task _ids))
 _task_zshids=( ${(f)"$(task _zshids)"} )
 _task_config=($(task _config))
 _task_columns=($(task _columns))
@@ -139,8 +138,10 @@ task_dates=(
 )
 
 local -a task_zshids
-_regex_words values 'task IDs' $_task_zshids
-task_zshids=("$reply[@]")
+if (( $#_task_zshids )); then
+  _regex_words values 'task IDs' $_task_zshids
+  task_zshids=("$reply[@]")
+fi
 
 _regex_words values 'task frequencies' \
   'daily:Every day' \
