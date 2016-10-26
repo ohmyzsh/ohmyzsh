@@ -25,8 +25,3 @@ function zle-line-init () {
   original-zle-line-init
 }
 zle -N zle-line-init
-
-# chpwd_functions+=(git-fetch-on-chpwd)
-# git-fetch-on-chpwd
-unset git-auto-fetch
-unset original-zle-line-init
