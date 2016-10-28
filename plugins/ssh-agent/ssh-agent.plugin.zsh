@@ -81,7 +81,7 @@ elif [[ -f "$_ssh_env_cache" ]]; then
 	ps $FILTER | grep ssh-agent | grep -q $SSH_AGENT_PID || {
 		_start_agent
 	}
-else
+elif [[ -d $HOME/.ssh ]]; then
 	_start_agent
 fi
 
