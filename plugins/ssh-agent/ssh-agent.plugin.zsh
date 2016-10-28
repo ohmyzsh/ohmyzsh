@@ -1,3 +1,15 @@
+lockdir=/tmp/oh-my-zsh-ssh-agent.lock
+
+while true; do
+    if mkdir "$lockdir" 2>/dev/null
+    then    # directory did not exist, but was created successfully
+        trap 'rm -rf "$lockdir"' 0    # remove directory when script finishes
+        break    # continue with script
+    else
+        sleep 0.1  # sleep for 0.2 and try again
+    fi
+done
+
 typeset _agent_forwarding _ssh_env_cache
 
 function _start_agent() {
@@ -78,3 +90,5 @@ _add_identities
 # tidy up after ourselves
 unset _agent_forwarding _ssh_env_cache
 unfunction _start_agent _add_identities
+
+rm -rf "$lockdir"
