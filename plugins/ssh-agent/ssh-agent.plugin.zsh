@@ -10,7 +10,7 @@ while true; do
     fi
 done
 
-typeset _agent_forwarding _ssh_env_cache
+typeset _ssh_env_cache
 
 function _start_agent() {
 	local lifetime
@@ -64,10 +64,7 @@ function _add_identities() {
 # Get the filename to store/lookup the environment from
 _ssh_env_cache="$HOME/.ssh/environment-$SHORT_HOST"
 
-# test if agent-forwarding is enabled
-zstyle -b :omz:plugins:ssh-agent agent-forwarding _agent_forwarding
-
-if [[ $_agent_forwarding == "yes" && -n "$SSH_AUTH_SOCK" ]]; then
+if zstyle -t :omz:plugins:ssh-agent agent-forwarding && [[ -n "$SSH_AUTH_SOCK" ]]; then
 	# Add a nifty symlink for screen/tmux if agent forwarding
 	[[ -L $SSH_AUTH_SOCK ]] || ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USER-screen
 elif [[ -f "$_ssh_env_cache" ]]; then
@@ -90,7 +87,7 @@ if ! zstyle -t :omz:plugins:ssh-agent lazy; then
 fi
 
 # tidy up after ourselves
-unset _agent_forwarding _ssh_env_cache
+unset _ssh_env_cache
 unfunction _start_agent _add_identities
 
 rm -rf "$lockdir"
