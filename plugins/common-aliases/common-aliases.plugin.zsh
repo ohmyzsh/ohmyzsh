@@ -24,6 +24,7 @@ alias t='tail -f'
 alias -g H='| head'
 alias -g T='| tail'
 alias -g G='| grep'
+alias -g Gi='| grep -i'
 alias -g L="| less"
 alias -g M="| most"
 alias -g LL="2>&1 | less"
