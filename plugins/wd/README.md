@@ -68,6 +68,8 @@ Also, you may have to force a rebuild of `zcompdump` by running:
 
     Note, a warp point cannot contain colons, or only consist of only spaces and dots. The first will conflict in how `wd` stores the warp points, and the second will conflict other features, as below.
 
+    You can omit point name to use the current directory's name instead.
+
  * From an other directory (not necessarily), warp to `foo` with:
 
         $ wd foo
@@ -83,6 +85,8 @@ Also, you may have to force a rebuild of `zcompdump` by running:
  * Remove warp point test point:
 
         $ wd rm foo
+
+        You can omit point name to use the current directory's name instead.
 
  * List all warp points (stored in `~/.warprc`):
 
