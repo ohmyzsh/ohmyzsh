@@ -95,6 +95,5 @@ function steeef_precmd {
 }
 add-zsh-hook precmd steeef_precmd
 
-PROMPT=$'
-%{$purple%}[${PR_RST} %{$limegreen%}%~${PR_RST} %{$purple%}]${PR_RST} $vcs_info_msg_0_$(virtualenv_info)
+PROMPT=$'%{$purple%}[${PR_RST} %{$limegreen%}%~${PR_RST} %{$purple%}]${PR_RST} $vcs_info_msg_0_$(virtualenv_info)
 $ '
