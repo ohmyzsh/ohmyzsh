@@ -307,7 +307,7 @@ while (( 1 )); do
     elif [ "$active_view" = "1" ]; then
         if [ -s "$private_history_db" ]; then
             local title=$'\x1b[00;32m'"Private history:"$'\x1b[00;00m\0'
-            () { fc -ap -R "$private_history_db"; list=( "$title" ${history[@]} ) }
+            () { fc -Rap "$private_history_db" 20000 0; list=( "$title" ${history[@]} ) }
         else
             list=( "Private history - history entries selected via this tool will be put here" )
         fi
@@ -335,21 +335,37 @@ done
 
 if [ "$REPLY" -gt 0 ]; then
     selected="$reply[REPLY]"
+
+    # Append to private history
+    if [[ "$active_view" = "0" ]]; then
+        local newline=$'\n'
+        local selected_ph="${selected//$newline/\\$newline}"
+        print -r -- "$selected_ph" >> "$private_history_db"
+    fi
+
+    # TMUX?
+    if [[ "$ZNT_TMUX_MODE" = "1" ]]; then
+        tmux send -t "$ZNT_TMUX_ORIGIN_SESSION:$ZNT_TMUX_ORIGIN_WINDOW.$ZNT_TMUX_ORIGIN_PANE" "$selected"
+        tmux kill-window
+        return 0
     # ZLE?
-    if [ "${(t)CURSOR}" = "integer-local-special" ]; then
+    elif [ "${(t)CURSOR}" = "integer-local-special" ]; then
         zle .redisplay
         zle .kill-buffer
         LBUFFER+="$selected"
-
-        # Append to private history
-        local newline=$'\n'
-        selected="${selected//$newline/\\$newline}"
-        [ "$active_view" = "0" ] && print -r -- "$selected" >> "$private_history_db"
     else
         print -zr -- "$selected"
     fi
 else
-    [ "${(t)CURSOR}" = "integer-local-special" ] && zle redisplay
+    # TMUX?
+    if [[ "$ZNT_TMUX_MODE" = "1" ]]; then
+        tmux kill-window
+    # ZLE?
+    elif [[ "${(t)CURSOR}" = "integer-local-special" ]]; then
+        zle redisplay
+    fi
 fi
+
+return 0
 
 # vim: set filetype=zsh:
