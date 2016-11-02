@@ -54,8 +54,10 @@ alias mv='mv -i'
 # depends on the SUFFIX :)
 if is-at-least 4.2.0; then
   # open browser on urls
-  _browser_fts=(htm html de org net com at cx nl se dk dk)
-  for ft in $_browser_fts ; do alias -s $ft=$BROWSER ; done
+  if [[ -n "$BROWSER" ]]; then
+    _browser_fts=(htm html de org net com at cx nl se dk dk)
+    for ft in $_browser_fts ; do alias -s $ft=$BROWSER ; done
+  fi
 
   _editor_fts=(cpp cxx cc c hh h inl asc txt TXT tex)
   for ft in $_editor_fts ; do alias -s $ft=$EDITOR ; done
