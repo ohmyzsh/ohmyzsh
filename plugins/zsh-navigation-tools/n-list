@@ -310,8 +310,9 @@ while (( 1 )); do
                         colsearch_pattern="${search_buffer// ##/|(#a2)}"
                         list=( "${(@M)list:#(#ia2)*$~search_pattern*}" )
                     else
-                        # Patterns will be *foo*~^*bar* and (foo|bar)
+                        # Pattern will be *foo*~^*bar* (inventor: Mikael Magnusson)
                         search_pattern="${search_buffer// ##/*~^*}"
+                        # Pattern will be (foo|bar)
                         colsearch_pattern="${search_buffer// ##/|}"
                         list=( "${(@M)list:#(#i)*$~search_pattern*}" )
                     fi
