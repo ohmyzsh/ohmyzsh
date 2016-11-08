@@ -81,6 +81,7 @@ alias gcp='git cherry-pick'
 alias gcpa='git cherry-pick --abort'
 alias gcpc='git cherry-pick --continue'
 alias gcs='git commit -S'
+alias gct='git checkout -t'
 
 alias gd='git diff'
 alias gdca='git diff --cached'
