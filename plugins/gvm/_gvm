@@ -1,0 +1,30 @@
+#compdef gvm
+#autoload
+
+[[ -f "$GVM_ROOT/scripts/gvm" ]] || return 0
+
+local -a _1st_arguments
+_1st_arguments=(
+  'version:print the gvm version number'
+  'get:gets the latest code (for debugging)'
+  'use:select a go version to use (--default to set permanently)'
+  'diff:view changes to Go root'
+  'help:display this usage text'
+  'implode:completely remove gvm'
+  'install:install go versions'
+  'uninstall:uninstall go versions'
+  'cross:install go cross compilers'
+  'linkthis:link this directory into GOPATH'
+  'list:list installed go versions'
+  'listall:list available versions'
+  'alias:manage go version aliases'
+  'pkgset:manage go packages sets'
+  'pkgenv:edit the environment for a package set'
+)
+
+_arguments -C '*:: :->subcmds' && return 0
+
+if (( CURRENT == 1 )); then
+  _describe -t commands "gvm subcommand" _1st_arguments
+  return
+fi
