@@ -1,10 +1,7 @@
 ## Command history configuration
-if [ -z "$HISTFILE" ]; then
-    HISTFILE=$HOME/.zsh_history
-fi
-
-HISTSIZE=10000
-SAVEHIST=10000
+env_default HISTFILE "$HOME/.zsh_history"
+env_default HISTSIZE 10000
+env_default SAVEHIST 10000
 
 # Show history
 case $HIST_STAMPS in
