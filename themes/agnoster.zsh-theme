@@ -164,7 +164,11 @@ prompt_hg() {
 
 # Dir: current working directory
 prompt_dir() {
-  prompt_segment blue black '%~'
+  # if AGNOSTER_SHORT_PATH is set use %1~ for the path value
+  # that will turn '~/.oh-my-zsh/custom/themes' in to 'themes'
+  [ -n "${AGNOSTER_SHORT_PATH}" ] && AGNOSTER_CURRENT_PATH='%1~'
+
+  prompt_segment blue black "${AGNOSTER_CURRENT_PATH:=%~}"
 }
 
 # Virtualenv: current working virtualenv
