@@ -37,3 +37,11 @@ then
 else
   printf "${RED}%s${NORMAL}\n" 'There was an error updating. Try again later?'
 fi
+
+printf "${BLUE}%s${NORMAL}\n" "Updating Custom Plugins"
+cd "$ZSH/custom/plugins"
+for dir in ./*; do
+    if [[ -d $dir && -d $dir/.git ]]; then
+        git -C $dir pull --rebase --stat origin master
+    fi
+done
