@@ -22,7 +22,7 @@ fi
 
 printf "${BLUE}%s${NORMAL}\n" "Updating Oh My Zsh"
 cd "$ZSH"
-if git pull --rebase --stat origin master
+if [ -d .git/refs/upsteam ] git pull --rebase --stat upstream master || git pull --rebase --stat origin master
 then
   printf '%s' "$GREEN"
   printf '%s\n' '         __                                     __   '
