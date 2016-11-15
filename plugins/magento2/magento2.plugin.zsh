@@ -4,9 +4,6 @@
 # Copyright (c) 2016 Denis Ristic <me@denisristic.com>
 # Depend of Oh My Zsh (https://github.com/robbyrussell/oh-my-zsh)
 #
-# Distributed under the GNU GPL v2. For full terms see the file LICENSE.
-#
-
 
 _magento2_console () {
   echo "php $(find . -maxdepth 2 -mindepth 1 -name 'magento' -type f | head -n 1)"
