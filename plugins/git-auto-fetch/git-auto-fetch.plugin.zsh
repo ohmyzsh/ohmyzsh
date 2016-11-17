@@ -4,7 +4,7 @@ function git-fetch-all {
   (`git rev-parse --is-inside-work-tree 2>/dev/null` &&
   dir=`git rev-parse --git-dir` &&
   [[ ! -f $dir/NO_AUTO_FETCH ]] &&
-  (( `date +%s` - `date -r $dir/FETCH_LOG +%s` > $GIT_AUTO_FETCH_INTERVAL )) &&
+  (( `date +%s` - `date -r $dir/FETCH_LOG +%s 2>/dev/null || echo 0` > $GIT_AUTO_FETCH_INTERVAL )) &&
   git fetch --all &>! $dir/FETCH_LOG &)
 }
 
