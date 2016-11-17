@@ -172,7 +172,8 @@ function listMavenCompletions {
         flyway:clean flyway:history flyway:init flyway:migrate flyway:status flyway:validate
         # gwt
         gwt:browser gwt:clean gwt:compile gwt:compile-report gwt:css gwt:debug gwt:eclipse gwt:eclipseTest gwt:generateAsync gwt:help gwt:i18n gwt:mergewebxml gwt:resources gwt:run gwt:sdkInstall gwt:source-jar gwt:soyc gwt:test
-
+	# Ascidoctor
+	asciidoctor:process-asciidoc asciidoctor:auto-refresh asciidoctor:http asciidoctor:zip
         # options
         -Dmaven.test.skip=true -DskipTests -DskipITs -Dmaven.surefire.debug -DenableCiProfile -Dpmd.skip=true -Dcheckstyle.skip=true -Dtycho.mode=maven -Dmaven.test.failure.ignore=true -DgroupId= -DartifactId= -Dversion= -Dpackaging=jar -Dfile=
 
