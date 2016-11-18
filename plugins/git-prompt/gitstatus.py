@@ -73,7 +73,7 @@ for st in status:
             staged.append(st)
 
 out = ' '.join([
-    branch,
+    branch.replace(' ', '_'), 
     str(ahead),
     str(behind),
     str(len(staged)),
