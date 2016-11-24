@@ -60,9 +60,13 @@ if [[ ! $DISABLE_VENV_CD -eq 1 ]]; then
             workon "$ENV_NAME" && export CD_VIRTUAL_ENV="$ENV_NAME"
           elif [[ -e "$ENV_NAME/bin/activate" ]]; then
             source $ENV_NAME/bin/activate && export CD_VIRTUAL_ENV="$ENV_NAME"
+          else
+            ENV_NAME=""
           fi
         fi
-      elif [[ -n $CD_VIRTUAL_ENV && -n $VIRTUAL_ENV ]]; then
+      fi
+
+      if [[ "$ENV_NAME" == "" && -n $CD_VIRTUAL_ENV && -n $VIRTUAL_ENV ]]; then
         # We've just left the repo, deactivate the environment
         # Note: this only happens if the virtualenv was activated automatically
         deactivate && unset CD_VIRTUAL_ENV
