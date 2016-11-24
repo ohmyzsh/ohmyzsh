@@ -95,6 +95,8 @@ alias gf='git fetch'
 alias gfa='git fetch --all --prune'
 alias gfo='git fetch origin'
 
+alias gsize='git count-objects -vH'
+
 function gfg() { git ls-files | grep $@ }
 compdef _grep gfg
 
