@@ -36,27 +36,19 @@ if [[ ! $DISABLE_VENV_CD -eq 1 ]]; then
   function workon_cwd {
     if [[ -z "$WORKON_CWD" ]]; then
       local WORKON_CWD=1
-      # Check if this is a Git repo
-      local GIT_REPO_ROOT=""
-      local GIT_TOPLEVEL="$(git rev-parse --show-toplevel 2> /dev/null)"
-      if [[ $? == 0 ]]; then
-        GIT_REPO_ROOT="$GIT_TOPLEVEL"
-      fi
       # Get absolute path, resolving symlinks
       local PROJECT_ROOT="${PWD:A}"
       while [[ "$PROJECT_ROOT" != "/" && ! -e "$PROJECT_ROOT/.venv" \
-               && ! -d "$PROJECT_ROOT/.git"  && "$PROJECT_ROOT" != "$GIT_REPO_ROOT" ]]; do
+          && ! -d "$PROJECT_ROOT/.git" ]]; do
         PROJECT_ROOT="${PROJECT_ROOT:h}"
       done
-      if [[ "$PROJECT_ROOT" == "/" ]]; then
-        PROJECT_ROOT="."
-      fi
+
       # Check for virtualenv name override
       if [[ -f "$PROJECT_ROOT/.venv" ]]; then
         ENV_NAME="$(cat "$PROJECT_ROOT/.venv")"
       elif [[ -f "$PROJECT_ROOT/.venv/bin/activate" ]];then
         ENV_NAME="$PROJECT_ROOT/.venv"
-      elif [[ "$PROJECT_ROOT" != "." ]]; then
+      elif [[ "$PROJECT_ROOT" != "/" ]]; then
         ENV_NAME="${PROJECT_ROOT:t}"
       else
         ENV_NAME=""
