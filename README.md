@@ -32,7 +32,7 @@ Oh My Zsh is installed by running one of the following commands in your terminal
 #### via curl
 
 ```shell
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/LinuxGogley/oh-my-zsh/blob/master/tools/install.sh)"
 ```
 
 #### via wget
