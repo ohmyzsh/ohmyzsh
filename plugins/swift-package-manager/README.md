@@ -12,11 +12,11 @@ plugins=(... swift-package-manager)
 
 ## Aliases
 
-| Alias | Description                         | Command                          |
-|-------|-------------------------------------|----------------------------------|
-| spi   | Initialize a new package            | swift package init               |
-| spf   | Fetch package dependencies          | swift package fetch              |
-| spu   | Update package dependencies         | swift package update             |
-| spx   | Generates an Xcode project          | swift package generate-xcodeproj |
-| sps   | Print the resolved dependency graph | swift package show-dependencies  |
-| spd   | Print parsed Package.swift as JSON  | swift package dump-package       |
+| Alias | Description                         | Command                            |
+|-------|-------------------------------------|------------------------------------|
+| `spi` | Initialize a new package            | `swift package init`               |
+| `spf` | Fetch package dependencies          | `swift package fetch`              |
+| `spu` | Update package dependencies         | `swift package update`             |
+| `spx` | Generates an Xcode project          | `swift package generate-xcodeproj` |
+| `sps` | Print the resolved dependency graph | `swift package show-dependencies`  |
+| `spd` | Print parsed Package.swift as JSON  | `swift package dump-package`       |
