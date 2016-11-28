@@ -4,10 +4,10 @@
 
 This plugin provides a few utilities that make you faster on your daily work with the [Swift Package Manager](https://github.com/apple/swift-package-manager).
 
-To start using it, add the `swift-package-manager` plugin to your `plugins` array in `~/.zshrc`:
+To start using it, add the `swift-pm` plugin to your `plugins` array in `~/.zshrc`:
 
 ```zsh
-plugins=(... swift-package-manager)
+plugins=(... swift-pm)
 ```
 
 ## Aliases
