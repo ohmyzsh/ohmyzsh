@@ -4,7 +4,16 @@ function git_prompt_info() {
   if [[ "$(command git config --get oh-my-zsh.hide-status 2>/dev/null)" != "1" ]]; then
     ref=$(command git symbolic-ref HEAD 2> /dev/null) || \
     ref=$(command git rev-parse --short HEAD 2> /dev/null) || return 0
-    echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
+    echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$(parse_git_upstream_branch)$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
+  fi
+}
+
+# Display upstream remote branch name
+function parse_git_upstream_branch() {
+  if [[ $(git rev-parse --abbrev-ref HEAD 2> /dev/null) != 'HEAD' ]]; then
+    if [[ "$(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD))" ]]; then
+      echo " $ZSH_THEME_GIT_UPSTREAM_REMOTE $(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD))"
+    fi
   fi
 }
 
