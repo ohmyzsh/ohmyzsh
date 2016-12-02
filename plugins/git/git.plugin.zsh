@@ -94,6 +94,7 @@ compdef _git gdv=git-diff
 alias gf='git fetch'
 alias gfa='git fetch --all --prune'
 alias gfo='git fetch origin'
+alias gfu='git fetch upstream'
 
 function gfg() { git ls-files | grep $@ }
 compdef _grep gfg
