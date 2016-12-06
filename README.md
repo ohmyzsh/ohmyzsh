@@ -190,7 +190,9 @@ Magic!
 
 Oh My Zsh isn't for everyone. We'll miss you, but we want to make this an easy breakup.
 
-If you want to uninstall `oh-my-zsh`, just run `uninstall_oh_my_zsh` from the command-line. It will remove itself and revert your previous `bash` or `zsh` configuration.
+If you want to uninstall `oh-my-zsh`, just run `uninstall_oh_my_zsh` from the command-line. It will remove itself from your local file system. In order to revert back to your bash system you must run the following command once oh-my-zsh is uninstalled.
+
+```chsh -s /bin/bash```
 
 ## Contributing
 
