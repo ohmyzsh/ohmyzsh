@@ -108,7 +108,7 @@ apt-history () {
         awk '{print $4"="$5}'
       ;;
     list)
-      zcat $(ls -rt /var/log/dpkg*)
+      zgrep --no-filename '' $(ls -rt /var/log/dpkg*)
       ;;
     *)
       echo "Parameters:"
