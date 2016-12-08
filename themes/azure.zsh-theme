@@ -340,8 +340,10 @@ autoload -U ~/.zsh/functions/*(:t)
 
 # Set the prompt.
 local ret_status="%(?:%{$fg_bold[green]%}➜ :%{$fg_bold[red]%}➜ %s)"
-PROMPT='%{${fg[cyan]}%}%n@%{${fg[yellow]}%}%M:%{${fg[cyan]}%}%B%/%{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%}$(svn_prompt_info)%{${fg[default]}%}%{$fg[cyan]%}
-> %'
+export MODE_INDICATOR="<<<vi>>>"
+RPS2="$(vi_mode_prompt_info)"
+PROMPT='%{${fg[cyan]}%}%n@%{${fg[yellow]}%}%M:%{${fg[cyan]}%}%B%/%{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%}$(svn_prompt_info)%{${fg[default]}%}%{$fg[cyan]%}$(vi_mode_prompt_info)
+> '
 
 ZSH_PROMPT_BASE_COLOR="%{$fg_bold[blue]%}"
 ZSH_THEME_REPO_NAME_COLOR="%{$fg_bold[yello]%}"
