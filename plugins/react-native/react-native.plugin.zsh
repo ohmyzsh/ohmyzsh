@@ -1,3 +1,5 @@
+alias rn='react-native'
+alias rns='react-native start'
 alias rnand='react-native run-android'
 alias rnios4s='react-native run-ios --simulator "iPhone 4s"'
 alias rnios5='react-native run-ios --simulator "iPhone 5"'
