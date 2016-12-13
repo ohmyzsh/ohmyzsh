@@ -1,0 +1,191 @@
+#compdef rustc
+
+local -a _rustc_opts_switches _rustc_opts_lint _rustc_opts_debug
+
+typeset -A opt_args
+
+_rustc_debuginfo_levels=(
+    "0[no debug info]"
+    "1[line-tables only (for stacktraces and breakpoints)]"
+    "2[full debug info with variable and type information (same as -g)]"
+)
+
+_rustc_crate_types=(
+    'bin'
+    'lib'
+    'rlib'
+    'dylib'
+    'staticlib'
+)
+
+_rustc_emit_types=(
+    'asm'
+    'bc'
+    'ir'
+    'obj'
+    'link'
+)
+_rustc_pretty_types=(
+    'normal[un-annotated source]'
+    'expanded[crates expanded]'
+    'typed[crates  expanded,  with  type  annotations]'
+    'identified[fully parenthesized, AST nodes and blocks with IDs]'
+    'flowgraph=[graphviz formatted flowgraph for node]:NODEID:'
+)
+_rustc_color_types=(
+    'auto[colorize, if output goes to a tty (default)]'
+    'always[always colorize output]'
+    'never[never colorize output]'
+)
+
+_rustc_opts_vals=(
+    --crate-name='[Specify the name of the crate being built]'
+    --crate-type='[Comma separated list of types of crates for the compiler to emit]:TYPES:_values -s "," "Crate types"  "$_rustc_crate_types[@]"'
+    --emit='[Comma separated list of types of output for the compiler to emit]:TYPES:_values -s "," "Emit Targets" "$_rustc_emit_types[@]"'
+    --debuginfo='[Emit DWARF debug info to the objects created]:LEVEL:_values "Debug Levels" "$_rustc_debuginfo_levels[@]"'
+    --dep-info='[Output dependency info to <filename> after compiling]::FILE:_files -/'
+    --sysroot='[Override the system root]:PATH:_files -/'
+    --cfg='[Configure the compilation environment]:SPEC:'
+    --out-dir='[Write output to compiler-chosen filename in <dir>.  Ignored  if  -o  is  specified. (default the current directory)]:DIR:_files -/'
+    -o'[Write output to <filename>. Ignored if more than one --emit is specified.]:FILENAME:_files'
+    --opt-level='[Optimize with possible levels 0-3]:LEVEL:(0 1 2 3)'
+    --pretty='[Pretty-print the input instead of compiling]::TYPE:_values "TYPES" "$_rustc_pretty_types[@]"'
+    -L'[Add a directory to the library search path]:DIR:_files -/'
+    --target='[Target triple cpu-manufacturer-kernel\[-os\] to compile]:TRIPLE:'
+    --color='[Configure coloring of output]:CONF:_values "COLORS" "$_rustc_color_types[@]"'
+    {-v,--version}'[Print version info and exit]::VERBOSE:(verbose)'
+    --explain='[Provide a detailed explanation of an error message]:OPT:'
+    --extern'[Specify where an external rust library is located]:ARG:'
+)
+
+_rustc_opts_switches=(
+    -g'[Equivalent to --debuginfo=2]'
+    {-h,--help}'[Display this message]'
+    --no-analysis'[Parse and expand the output, but run no analysis or produce output]'
+    --no-trans'[Run all passes except translation; no output]'
+    -O'[Equivalent to --opt-level=2]'
+    --parse-only'[Parse only; do not compile, assemble, or link]'
+    --print-crate-name'[Output the crate name and exit]'
+    --print-file-name'[Output the file(s) that would be written if compilation continued and exit]'
+    --test'[Build a test harness]'
+)
+_rustc_opts_codegen=(
+    'ar=[Path to the archive utility to use when assembling archives.]:BIN:_path_files'
+    'linker=[Path to the linker utility to use when linking libraries, executables, and objects.]:BIN:_path_files'
+    'link-args=[A space-separated list of extra arguments to pass to the linker when the linker is invoked.]:ARGS:'
+    'target-cpu=[Selects a target processor. If the value is "help", then a list of  available  CPUs is printed.]:CPU:'
+    'target-feature=[A space-separated list of features to enable or disable for the target. A preceding "+" enables a feature while a preceding "-" disables it. Available features can be discovered through target-cpu=help.]:FEATURE:'
+    'passes=[A space-separated list of extra LLVM passes to run. A value of "list" will cause rustc to print all known passes and exit. The passes specified are appended at the end of the normal pass manager.]:LIST:'
+    'llvm-args=[A space-separated list of arguments to pass through to LLVM.]:ARGS:'
+    'save-temps[If specified, the compiler will save more files (.bc, .o, .no-opt.bc) generated throughout compilation in the output directory.]'
+    'rpath[If specified, then the rpath value for dynamic libraries will be set in either dynamic library or executable outputs.]'
+    'no-prepopulate-passes[Suppresses pre-population of the LLVM pass manager that is run over the module.]'
+    'no-vectorize-loops[Suppresses running the loop vectorization LLVM pass, regardless of optimization level.]'
+    'no-vectorize-slp[Suppresses running the LLVM SLP vectorization pass, regardless of optimization level.]'
+    'soft-float[Generates software floating point library calls instead of hardware instructions.]'
+    'prefer-dynamic[Prefers dynamic linking to static linking.]'
+    "no-integrated-as[Force usage of an external assembler rather than LLVM's integrated one.]"
+    'no-redzone[disable the use of the redzone]'
+    'relocation-model=[The relocation model to use. (default: pic)]:MODEL:(pic static dynamic-no-pic)'
+    'code-model=[choose the code model to use (llc -code-model for details)]:MODEL:'
+    'metadata=[metadata to mangle symbol names with]:VAL:'
+    'extra-filenames=[extra data to put in each output filename]:VAL:'
+    'codegen-units=[divide crate into N units to optimize in parallel]:N:'
+    'help[Show all codegen options]'
+)
+
+_rustc_opts_lint=(
+    'help[Show a list of all lints]'
+    'experimental[detects use of #\[experimental\] items]'
+    'heap-memory[use of any (Box type or @ type) heap memory]'
+    'managed-heap-memory[use of managed (@ type) heap memory]'
+    'missing-doc[detects missing documentation for public members]'
+    'non-uppercase-statics[static constants should have uppercase identifiers]'
+    'owned-heap-memory[use of owned (~ type) heap memory]'
+    'unnecessary-qualification[detects unnecessarily qualified names]'
+    'unsafe-block[usage of an `unsafe` block]'
+    'unstable[detects use of #\[unstable\] items (incl. items with no stability attribute)]'
+    'unused-result[unused result of an expression in a statement]'
+    'variant-size-difference[detects enums with widely varying variant sizes]'
+    'ctypes[proper use of libc types in foreign modules]'
+    'dead-assignment[detect assignments that will never be read]'
+    'dead-code[detect piece of code that will never be used]'
+    'deprecated[detects use of #\[deprecated\] items]'
+    'non-camel-case-types[types, variants and traits should have camel case names]'
+    'non-snake-case[methods, functions, lifetime parameters and modules should have snake case names]'
+    'path-statement[path statements with no effect]'
+    'raw-pointer-deriving[uses of #\[deriving\] with raw pointers are rarely correct]'
+    'type-limits[comparisons made useless by limits of the types involved]'
+    'type-overflow[literal out of range for its type]'
+    'unnecessary-allocation[detects unnecessary allocations that can be eliminated]'
+    'unnecessary-parens[`if`, `match`, `while` and `return` do not need parentheses]'
+    'unreachable-code[detects unreachable code]'
+    'unrecognized-lint[unrecognized lint attribute]'
+    'unsigned-negate[using an unary minus operator on unsigned type]'
+    'unused-attribute[detects attributes that were not used by the compiler]'
+    'unused-imports[imports that are never used]'
+    'unused-must-use[unused result of a type flagged as #\[must_use\]]'
+    "unused-mut[detect mut variables which don't need to be mutable]"
+    'unused-unsafe[unnecessary use of an `unsafe` block]'
+    'unused-variable[detect variables which are not used in any way]'
+    'visible-private-types[detect use of private types in exported type signatures]'
+    'warnings[mass-change the level for lints which produce warnings]'
+    'while-true[suggest using `loop { }` instead of `while true { }`]'
+    'unknown-crate-type[unknown crate type found in #\[crate_type\] directive]'
+    'unknown-features[unknown features found in crate-level #\[feature\] directives]'
+    'bad-style[group of non_camel_case_types, non_snake_case, non_uppercase_statics]'
+    'unused[group of unused_imports, unused_variable, dead_assignment, dead_code, unused_mut, unreachable_code]'
+)
+
+_rustc_opts_debug=(
+    'verbose[in general, enable more debug printouts]'
+    'time-passes[measure time of each rustc pass]'
+    'count-llvm-insns[count where LLVM instrs originate]'
+    'time-llvm-passes[measure time of each LLVM pass]'
+    'trans-stats[gather trans statistics]'
+    'asm-comments[generate comments into the assembly (may change behavior)]'
+    'no-verify[skip LLVM verification]'
+    'borrowck-stats[gather borrowck statistics]'
+    'no-landing-pads[omit landing pads for unwinding]'
+    'debug-llvm[enable debug output from LLVM]'
+    'show-span[show spans for compiler debugging]'
+    'count-type-sizes[count the sizes of aggregate types]'
+    'meta-stats[gather metadata statistics]'
+    'no-opt[do not optimize, even if -O is passed]'
+    'print-link-args[Print the arguments passed to the linker]'
+    'gc[Garbage collect shared data (experimental)]'
+    'print-llvm-passes[Prints the llvm optimization passes being run]'
+    'lto[Perform LLVM link-time optimizations]'
+    'ast-json[Print the AST as JSON and halt]'
+    'ast-json-noexpand[Print the pre-expansion AST as JSON and halt]'
+    'ls[List the symbols defined by a library crate]'
+    'save-analysis[Write syntax and type analysis information in addition to normal output]'
+    'flowgraph-print-loans[Include loan analysis data in --pretty flowgraph output]'
+    'flowgraph-print-moves[Include move analysis data in --pretty flowgraph output]'
+    'flowgraph-print-assigns[Include assignment analysis data in --pretty flowgraph output]'
+    'flowgraph-print-all[Include all dataflow analysis data in --pretty flowgraph output]'
+)
+
+_rustc_opts_fun_lint(){
+    _values -s , 'options' \
+        "$_rustc_opts_lint[@]"
+}
+
+_rustc_opts_fun_debug(){
+    _values 'options' "$_rustc_opts_debug[@]"
+}
+
+_rustc_opts_fun_codegen(){
+    _values 'options' "$_rustc_opts_codegen[@]"
+}
+
+_arguments -s :  \
+    '(-W --warn)'{-W,--warn=}'[Set lint warnings]:lint options:_rustc_opts_fun_lint' \
+    '(-A --allow)'{-A,--allow=}'[Set lint allowed]:lint options:_rustc_opts_fun_lint' \
+    '(-D --deny)'{-D,--deny=}'[Set lint denied]:lint options:_rustc_opts_fun_lint' \
+    '(-F --forbid)'{-F,--forbid=}'[Set lint forbidden]:lint options:_rustc_opts_fun_lint' \
+    '*-Z[Set internal debugging options]:debug options:_rustc_opts_fun_debug' \
+    '*-C[Set internal Codegen options]:codegen options:_rustc_opts_fun_codegen' \
+    "$_rustc_opts_switches[@]" \
+    "$_rustc_opts_vals[@]" \
+    '::files:_files -g "*.rs"'
