@@ -146,3 +146,23 @@ _arguments \
   '(--help)--help[help about the current command]' \
   &&  return 0
 
+# Alias overriding default "heroku" command to ease setting app or remote name.
+#
+# heroku @@foo info -> heroku info -a foo
+# heroku @foo info -> heroku info -r foo
+
+heroku() {
+  if [ $# -gt 0 ] && [ ${1:0:2} = "@@" ]
+  then
+    app=${1:2}
+    shift
+    command heroku $@ -a $app
+  elif [ $# -gt 0 ] && [ ${1:0:1} = "@" ]
+  then
+    remote=${1:1}
+    shift
+    command heroku $@ -r $remote
+  else
+    command heroku $@
+  fi
+}
