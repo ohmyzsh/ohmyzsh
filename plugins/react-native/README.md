@@ -1,18 +1,23 @@
-# React Native
+# React Native plugin
 
-**Maintainers:**
-[BilalBudhani](https://github.com/BilalBudhani)
-[MauroPorrasP](https://github.com/mauroporrasp)
+This plugin adds completion for [`react-native`](https://facebook.github.io/react-native/).
+It also defines a few [aliases](#aliases) for the commands more frequently used.
 
-### List of Aliases
+To enable, add `react-native` to your `plugins` array in your zshrc file:
 
-Alias | React Native command
-------|---------------------
-**rn** | *react-native*
-**rns** | *react-native start*
-**rnand** | *react-native run-android*
-**rnios** | *react-native run-ios*
-**rnios4s** | *react-native run-ios --simulator "iPhone 4s"*
-**rnios5** | *react-native run-ios --simulator "iPhone 5"*
-**rnios5s** | *react-native run-ios --simulator "iPhone 5s"*
+```zsh
+plugins=(... react-native)
+```
 
+## Aliases
+
+| Alias       | React Native command                           |
+|:------------|:-----------------------------------------------|
+| **rn**      | `react-native`                                 |
+| **rns**     | `react-native start`                           |
+| _App testing_                                                |
+| **rnand**   | `react-native run-android`                     |
+| **rnios**   | `react-native run-ios`                         |
+| **rnios4s** | `react-native run-ios --simulator "iPhone 4s"` |
+| **rnios5**  | `react-native run-ios --simulator "iPhone 5"`  |
+| **rnios5s** | `react-native run-ios --simulator "iPhone 5s"` |
