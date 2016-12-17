@@ -148,4 +148,4 @@ _arguments \
   '(--app)--app[the app name]' \
   '(--remote)--remote[the remote name]' \
   '(--help)--help[help about the current command]' \
-  &&  return 0
+  && return 0
