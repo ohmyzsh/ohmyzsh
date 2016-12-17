@@ -6,4 +6,4 @@ alias rnios6='react-native run-ios --simulator "iPhone 6"'
 alias rnios6s='react-native run-ios --simulator "iPhone 6s"'
 alias rnios='react-native run-ios'
 alias rnlink='react-native link'
-
+alias rnstart='react-native start'
