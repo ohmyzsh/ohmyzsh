@@ -31,6 +31,10 @@ _1st_arguments=(
   "domains\:add":"add a custom domain to an app"
   "domains\:remove":"remove a custom domain from an app"
   "domains\:clear":"remove all custom domains from an app"
+  "features":"list available app features"
+  "features\:disable":"disables a feature"
+  "features\:enable":"enables an feature"
+  "features\:info":"displays additional information about feature"
   "help":"list available commands or display help for a specific command"
   "keys":"display keys for the current user"
   "keys\:add":"add a key for the current user"
@@ -144,5 +148,4 @@ _arguments \
   '(--app)--app[the app name]' \
   '(--remote)--remote[the remote name]' \
   '(--help)--help[help about the current command]' \
-  &&  return 0
-
+  && return 0
