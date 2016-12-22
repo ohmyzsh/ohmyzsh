@@ -79,3 +79,14 @@ _yarn ()
 }
 
 compdef _yarn yarn
+
+# Aliases
+# https://yarnpkg.com/en/docs/cli/
+alias ya="yarn add"
+alias yad="yarn add --dev"
+alias yins="yarn install"
+alias yls="yarn ls"
+alias yrm="yarn rm"
+alias yrun="yarn run"
+alias yt="yarn test"
+alias yup="yarn upgrade"
