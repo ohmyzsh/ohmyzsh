@@ -1,0 +1,26 @@
+#compdef nvm
+#autoload
+
+[[ -f "$NVM_DIR/nvm.sh" ]] || return 0
+
+local -a _1st_arguments
+_1st_arguments=(
+  'help:show help'
+  'install:download and install a version'
+  'uninstall:uninstall a version'
+  'use:modify PATH to use version'
+  'run:run version with given arguments'
+  'ls:list installed versions or versions matching a given description'
+  'ls-remote:list remote versions available for install'
+  'deactivate:undo effects of NVM on current shell'
+  'alias:show or set aliases'
+  'unalias:deletes an alias'
+  'copy-packages:install global NPM packages to current version'
+)
+
+_arguments -C '*:: :->subcmds' && return 0
+
+if (( CURRENT == 1 )); then
+  _describe -t commands "nvm subcommand" _1st_arguments
+  return
+fi

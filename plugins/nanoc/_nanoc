@@ -1,0 +1,44 @@
+#compdef nanoc
+#autoload
+
+# nanoc zsh completion - based on the homebrew zsh completion
+# requires the 'nanoc' gem to be installed
+
+local -a _1st_arguments
+_1st_arguments=(
+  'autocompile:start the autocompiler'
+  'compile:compile items of this site'
+  'create-item:create an item'
+  'create-layout:create a layout'
+  'create-site:create a site'
+  'deploy:deploy the compiled site'
+  'help:show help'
+  'prune:remove files not managed by nanoc from the output directory'
+  'show-data:show data in this site'
+  'show-plugins:show all available plugins'
+  'show-rules:describe the rules for each item'
+  'update:update the data stored by the data source to a newer version'
+  'validate-css:validate the site’s CSS'
+  'validate-html:validate the site’s HTML'
+  'validate-links:validate links in site'
+  'view:start the web server that serves static files'
+  'watch:start the watcher'
+)
+
+local expl
+local -a pkgs installed_pkgs
+
+_arguments \
+  '(--color)--color[enable color]' \
+  '(--debug)--debug[enable debugging]' \
+  '(--help)--help[show the help message and quit]' \
+  '(--no-color)--no-color[disable color]' \
+  '(--verbose)--verbose[make nanoc output more detailed]' \
+  '(--version)--version[show version information and quit]' \
+  '(--warn)--warn[enable warnings]' \
+  '*:: :->subcmds' && return 0
+
+if (( CURRENT == 1 )); then
+  _describe -t commands "nanoc subcommand" _1st_arguments
+  return
+fi

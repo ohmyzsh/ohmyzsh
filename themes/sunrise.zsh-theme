@@ -1,22 +1,18 @@
-#-------------------------------------------------------------------------------
-# Sunrise theme for oh-my-zsh by Adam Lindberg (eproxus@gmail.com)
+# Sunrise theme for oh-my-zsh
 # Intended to be used with Solarized: http://ethanschoonover.com/solarized
-# (Needs Git plugin for current_branch method)
-#-------------------------------------------------------------------------------
 
 # Color shortcuts
-R=$fg[red]
-G=$fg[green]
-M=$fg[magenta]
-RB=$fg_bold[red]
-YB=$fg_bold[yellow]
-BB=$fg_bold[blue]
+R=$fg_no_bold[red]
+G=$fg_no_bold[green]
+M=$fg_no_bold[magenta]
+Y=$fg_no_bold[yellow]
+B=$fg_no_bold[blue]
 RESET=$reset_color
 
-if [ "$(whoami)" = "root" ]; then
-    PROMPTCOLOR="%{$RB%}" PREFIX="-!-";
+if [ "$USER" = "root" ]; then
+    PROMPTCOLOR="%{$R%}" PROMPTPREFIX="-!-";
 else
-    PROMPTCOLOR="" PREFIX="---";
+    PROMPTCOLOR="" PROMPTPREFIX="---";
 fi
 
 local return_code="%(?..%{$R%}%? ↵%{$RESET%})"
@@ -70,16 +66,17 @@ function custom_git_prompt() {
 }
 
 # %B sets bold text
-PROMPT='%B$PREFIX %2~ $(custom_git_prompt)%{$M%}%B»%b%{$RESET%} '
+PROMPT='%B$PROMPTPREFIX %2~ $(custom_git_prompt)%{$M%}%B»%b%{$RESET%} '
 RPS1="${return_code}"
 
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$YB%}‹"
-ZSH_THEME_GIT_PROMPT_SUFFIX="%{$YB%}›%{$RESET%} "
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$Y%}‹"
+ZSH_THEME_GIT_PROMPT_SUFFIX="%{$Y%}›%{$RESET%} "
 
 ZSH_THEME_GIT_PROMPT_DIRTY="%{$R%}*"
 ZSH_THEME_GIT_PROMPT_CLEAN=""
 
-ZSH_THEME_GIT_PROMPT_AHEAD="%{$BB%}➔"
+ZSH_THEME_GIT_PROMPT_AHEAD="%{$B%}➔"
+
 
 ZSH_THEME_GIT_STATUS_PREFIX=" "
 
@@ -90,7 +87,7 @@ ZSH_THEME_GIT_PROMPT_STAGED_RENAMED="%{$G%}R"
 ZSH_THEME_GIT_PROMPT_STAGED_DELETED="%{$G%}D"
 
 # Not-staged
-ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$R%}⁇"
+ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$R%}?"
 ZSH_THEME_GIT_PROMPT_MODIFIED="%{$R%}M"
 ZSH_THEME_GIT_PROMPT_DELETED="%{$R%}D"
 ZSH_THEME_GIT_PROMPT_UNMERGED="%{$R%}UU"

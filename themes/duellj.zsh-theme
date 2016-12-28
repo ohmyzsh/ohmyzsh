@@ -1,4 +1,3 @@
-
 # user, host, full path, and time/date
 # on two lines for easier vgrepping
 # entry in a nice long thread on the Arch Linux forums: http://bbs.archlinux.org/viewtopic.php?pid=521888#p521888

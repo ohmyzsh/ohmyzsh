@@ -1,6 +1,4 @@
 setopt prompt_subst
-autoload colors
-colors
 
 autoload -U add-zsh-hook
 autoload -Uz vcs_info

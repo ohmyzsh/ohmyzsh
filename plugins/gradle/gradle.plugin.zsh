@@ -1,6 +1,5 @@
-#!zsh
 ##############################################################################
-# A descriptive listing of core Gradle commands 
+# A descriptive listing of core Gradle commands
 ############################################################################
 function _gradle_core_commands() {
     local ret=1 state
@@ -32,72 +31,104 @@ function _gradle_arguments() {
     '--stop[Stop the Gradle daemon]' \
     '--daemon[Use the Gradle daemon]' \
     '--no-daemon[Do not use the Gradle daemon]' \
-    '--no-opt[Do not perform any task optimization]' \
+    '--rerun-task [Specifies that any task optimization is ignored.]' \
     '-i[Log at the info level]' \
     '-m[Dry run]' \
     '-P[Set a project property]' \
+    '-p[Specifies the start directory]' \
     '--profile[Profile the build time]' \
     '-q[Log at the quiet level (only show errors)]' \
     '-v[Print the Gradle version info]' \
     '-x[Specify a task to be excluded]' \
+    '-b[Specifies the build file.]' \
+    '-c[Specifies the settings file.]' \
+    '--continue[Continues task execution after a task failure.]' \
+    '-g[Specifies the Gradle user home directory.]' \
+    '-I[Specifies an initialization script.]' \
+    '--refresh-dependencies[Refresh the state of dependencies.]' \
+    '-u[Don''t search in parent directories for a settings.gradle file.]' \
     '*::command:->command' \
     && return 0
 }
 
 
 ##############################################################################
-# Are we in a directory containing a build.gradle file?
-############################################################################
-function in_gradle() {
-    if [[ -f build.gradle ]]; then
-        echo 1
-    fi
-}
-
-############################################################################
-# Define the stat_cmd command based on platform behavior
-##########################################################################
-stat -f%m . > /dev/null 2>&1
-if [ "$?" = 0 ]; then
-	stat_cmd=(stat -f%m)
-else
-	stat_cmd=(stat -L --format=%Y)
-fi
-
-############################################################################## Examine the build.gradle file to see if its
-# timestamp has changed, and if so, regen
-# the .gradle_tasks cache file
+# Examine the build.gradle file to see if its timestamp has changed;
+# and if so, regenerate the .gradle_tasks cache file
 ############################################################################
 _gradle_does_task_list_need_generating () {
-  if [ ! -f .gradletasknamecache ]; then return 0;
-  else
-    accurate=$($stat_cmd .gradletasknamecache)
-    changed=$($stat_cmd build.gradle)
-    return $(expr $accurate '>=' $changed)
-  fi
+  [[ ! -f .gradletasknamecache ]] || [[ build.gradle -nt .gradletasknamecache ]]
 }
 
+##############
+# Parse the tasks from `gradle(w) tasks --all` and return them to the calling function.
+# All lines in the output from gradle(w) that are between /^-+$/ and /^\s*$/
+# are considered to be tasks. If and when gradle adds support for listing tasks
+# for programmatic parsing, this method can be deprecated.
+##############
+_gradle_parse_tasks () {
+  lines_might_be_tasks=false
+  task_name_buffer=""
+  while read -r line; do
+    if [[ $line =~ ^-+$ ]]; then
+      lines_might_be_tasks=true
+      # Empty buffer, because it contains items that are not tasks
+      task_name_buffer=""
+    elif [[ $line =~ ^\s*$ ]]; then
+      if [[ "$lines_might_be_tasks" = true ]]; then
+        # If a newline is found, echo the buffer to the calling function
+        while read -r task; do
+          echo $task | awk '/[a-zA-Z0-9:-]+/ {print $1}'
+        done <<< "$task_name_buffer"
+        # Empty buffer, because we are done with the tasks
+        task_name_buffer=""
+      fi
+      lines_might_be_tasks=false
+    elif [[ "$lines_might_be_tasks" = true ]]; then
+      task_name_buffer="${task_name_buffer}\n${line}"
+    fi
+  done <<< "$1"
+}
+
+
+##############
+# Gradle tasks from subprojects are allowed to be executed without specifying
+# the subproject; that task will then be called on all subprojects.
+# gradle(w) tasks --all only lists tasks per subproject, but when autocompleting
+# we often want to be able to run a specific task on all subprojects, e.g.
+# "gradle clean".
+# This function uses the list of tasks from "gradle tasks --all", and for each
+# line grabs everything after the last ":" and combines that output with the original
+# output. The combined list is returned as the result of this function.
+##############
+_gradle_parse_and_extract_tasks () {
+  # All tasks
+  tasks=$(_gradle_parse_tasks "$1")
+  # Task name without sub project(s) prefix
+  simple_tasks=$(echo $tasks | awk 'BEGIN { FS = ":" } { print $NF }')
+  echo "$tasks\n$simple_tasks"
+}
 
 ##############################################################################
 # Discover the gradle tasks by running "gradle tasks --all"
 ############################################################################
 _gradle_tasks () {
-  if [ in_gradle ]; then
+  if [[ -f build.gradle ]]; then
     _gradle_arguments
     if _gradle_does_task_list_need_generating; then
-     gradle tasks --all | grep "^[ ]*[a-zA-Z0-9]*\ -\ " | sed "s/ - .*$//" | sed "s/[\ ]*//" > .gradletasknamecache
+      _gradle_parse_and_extract_tasks "$(gradle tasks --all)" > .gradletasknamecache
     fi
-    compadd -X "==== Gradle Tasks ====" `cat .gradletasknamecache`
+    compadd -X "==== Gradle Tasks ====" $(cat .gradletasknamecache)
   fi
 }
 
 _gradlew_tasks () {
-  if [ in_gradle ]; then
+  if [[ -f build.gradle ]]; then
     _gradle_arguments
     if _gradle_does_task_list_need_generating; then
-     gradlew tasks --all | grep "^[ ]*[a-zA-Z0-9]*\ -\ " | sed "s/ - .*$//" | sed "s/[\ ]*//" > .gradletasknamecache
+      _gradle_parse_and_extract_tasks "$(./gradlew tasks --all)" > .gradletasknamecache
     fi
-    compadd -X "==== Gradlew Tasks ====" `cat .gradletasknamecache`
+    compadd -X "==== Gradlew Tasks ====" $(cat .gradletasknamecache)
   fi
 }
 
@@ -107,13 +138,3 @@ _gradlew_tasks () {
 ############################################################################
 compdef _gradle_tasks gradle
 compdef _gradlew_tasks gradlew
-
-
-##############################################################################
-# Open questions for future improvements:
-# 1) Should 'gradle tasks' use --all or just the regular set?
-# 2) Should gradlew use the same approach as gradle?
-# 3) Should only the " - " be replaced with a colon so it can work
-#     with the richer descriptive method of _arguments?
-#     gradle tasks | grep "^[a-zA-Z0-9]*\ -\ " | sed "s/ - /\:/"
-#############################################################################

@@ -1,25 +1,15 @@
-stat -f%m . > /dev/null 2>&1
-if [ "$?" = 0 ]; then
-	stat_cmd=(stat -f%m)
-else
-	stat_cmd=(stat -L --format=%Y)
-fi
-
 _ant_does_target_list_need_generating () {
-  if [ ! -f .ant_targets ]; then return 0;
-  else
-    accurate=$($stat_cmd .ant_targets)
-    changed=$($stat_cmd build.xml)
-    return $(expr $accurate '>=' $changed)
-  fi
+  [ ! -f .ant_targets ] && return 0;
+  [ build.xml -nt .ant_targets ] && return 0;
+  return 1;
 }
 
 _ant () {
   if [ -f build.xml ]; then
     if _ant_does_target_list_need_generating; then
-     sed -n '/<target/s/<target.*name="\([^"]*\).*$/\1/p' build.xml > .ant_targets
+    	ant -p | awk -F " " 'NR > 5 { print lastTarget }{lastTarget = $1}' > .ant_targets
     fi
-    compadd `cat .ant_targets`
+    compadd -- `cat .ant_targets`
   fi
 }
 
