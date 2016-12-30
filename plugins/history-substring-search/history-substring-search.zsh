@@ -244,7 +244,7 @@ _history-substring-search-end() {
 
   _history_substring_search_result=$BUFFER
 
-  # the search was succesful so display the result properly by clearing away
+  # the search was successful so display the result properly by clearing away
   # existing highlights and moving the cursor to the end of the result buffer
   if [[ $_history_substring_search_refresh_display -eq 1 ]]; then
     region_highlight=()
