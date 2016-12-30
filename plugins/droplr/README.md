@@ -1,6 +1,6 @@
 # droplr
 
-Use [Droplr](https://droplr.com/) from the comand line to upload files and shorten
+Use [Droplr](https://droplr.com/) from the command line to upload files and shorten
 links. It needs to have [Droplr.app](https://droplr.com/apps) installed and logged
 in. MacOS only.
 
