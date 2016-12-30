@@ -323,7 +323,7 @@ function spotify() {
   if [ $# = 0 ]; then
     showHelp;
   else
-    if [ "$(osascript -e 'application "Spotify" is running')" = "false" ]; then
+    if [ "$1" != "quit" ] && [ "$(osascript -e 'application "Spotify" is running')" = "false" ]; then
       osascript -e 'tell application "Spotify" to activate'
       sleep 2
     fi
@@ -413,9 +413,13 @@ function spotify() {
         break ;;
 
       "quit"    )
-        cecho "Quitting Spotify.";
-        osascript -e 'tell application "Spotify" to quit';
-        exit 1 ;;
+        if [ "$(osascript -e 'application "Spotify" is running')" = "false" ]; then
+          cecho "Spotify was not running."
+        else
+          cecho "Closing Spotify.";
+          osascript -e 'tell application "Spotify" to quit';
+        fi
+        break ;;
 
       "next"    )
         cecho "Going to next track." ;
@@ -470,7 +474,7 @@ function spotify() {
       "pos"   )
         cecho "Adjusting Spotify play position."
         osascript -e "tell application \"Spotify\" to set player position to $2";
-        break;;
+        break ;;
 
       "status" )
         showStatus;
