@@ -10,7 +10,7 @@ By now you already can guess almost all aliases
 
 There are two exeptions since ...  
 agu  = sudo Apt-Get Update  - we have ...  
-agug = sudo Apt-Get UpGrade - as the exeptional 4 letter alias for a single command.
+agug = sudo Apt-Get UpGrade - as the exceptional 4 letter alias for a single command.
 
 afs = Apt-File Search --regexp - this has the regexp switch on without being represented in the alias, I guess this makes sense since the debian plugin has it, I never used that command.
 

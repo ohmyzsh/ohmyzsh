@@ -61,7 +61,7 @@ cmd_exec_time() {
     [ $elapsed -gt 5 ] && echo ${elapsed}s
 }
 
-# Get the intial timestamp for cmd_exec_time
+# Get the initial timestamp for cmd_exec_time
 #
 preexec() {
     cmd_timestamp=`date +%s`
