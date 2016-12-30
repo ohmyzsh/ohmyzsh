@@ -416,7 +416,7 @@ function spotify() {
         if [ "$(osascript -e 'application "Spotify" is running')" = "false" ]; then
           cecho "Spotify was not running."
         else
-          cecho "Quitting Spotify.";
+          cecho "Closing Spotify.";
           osascript -e 'tell application "Spotify" to quit';
         fi
         break ;;
