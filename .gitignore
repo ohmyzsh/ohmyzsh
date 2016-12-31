@@ -2,5 +2,5 @@
 custom
 
 # temp files directories
-cache
-log
+cache/
+log/
