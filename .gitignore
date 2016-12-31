@@ -1,8 +1,6 @@
 # custom files
-custom/
-!custom/plugins/example
-!custom/example.zsh
+custom
 
 # temp files directories
-cache/
-log/
+cache
+log
