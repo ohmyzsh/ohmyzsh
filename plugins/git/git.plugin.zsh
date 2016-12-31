@@ -227,10 +227,7 @@ alias gstl='git stash list'
 alias gstp='git stash pop'
 alias gsts='git stash show --text'
 alias gsu='git submodule update'
-
-alias gts='git tag -s'
 alias gtv='git tag | sort -V'
-
 alias gunignore='git update-index --no-assume-unchanged'
 alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
 alias gup='git pull --rebase'
