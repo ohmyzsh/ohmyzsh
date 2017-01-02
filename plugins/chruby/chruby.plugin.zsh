@@ -43,19 +43,19 @@ _source_from_omz_settings() {
     zstyle -s :omz:plugins:chruby path _chruby_path
     zstyle -s :omz:plugins:chruby auto _chruby_auto
 
-    if [[ -r "${_chruby_path}" ]]; then
-        source "${_chruby_path}"
+    if [[ -r "$_chruby_path" ]]; then
+        source "$_chruby_path"
     fi
 
-    if [[ -r "${_chruby_auto}" ]]; then
-        source "${_chruby_auto}"
+    if [[ -r "$_chruby_auto" ]]; then
+        source "$_chruby_auto"
     fi
 }
 
 function () {
     local _chruby_homebrew_prefix="$(brew --prefix chruby) &> /dev/null"
 
-    if _homebrew-installed && [ -r "${_chruby_homebrew_prefix}" ] ; then
+    if _homebrew-installed && [[ -r "$_chruby_homebrew_prefix" ]] ; then
         source "${_chruby_homebrew_prefix}/share/chruby/chruby.sh"
         source "${_chruby_homebrew_prefix}/share/chruby/auto.sh"
     elif [[ -r "/usr/local/share/chruby/chruby.sh" ]] ; then
@@ -72,8 +72,8 @@ function ensure_chruby() {
 
 function current_ruby() {
     local _ruby="$(chruby | grep \* | tr -d '* ')"
-    if [[ -n "${_ruby}" ]]; then
-        echo "${_ruby}"
+    if [[ -n "$_ruby" ]]; then
+        echo "$_ruby"
     else
         echo "system"
     fi
