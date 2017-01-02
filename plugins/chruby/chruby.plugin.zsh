@@ -53,7 +53,7 @@ _source_from_omz_settings() {
 }
 
 function () {
-    local _chruby_homebrew_prefix="$(brew --prefix chruby) &> /dev/null"
+    local _chruby_homebrew_prefix="$(brew --prefix chruby 2> /dev/null)"
 
     if _homebrew-installed && [[ -r "$_chruby_homebrew_prefix" ]] ; then
         source "${_chruby_homebrew_prefix}/share/chruby/chruby.sh"
