@@ -27,9 +27,9 @@ compdef _afu afu='sudo apt-file update'
 alias ppap='sudo ppa-purge'
 compdef _ppap ppap='sudo ppa-purge'
 
-AG_COMMAND=$(command -v ag)
-if [[ -z $AG_COMMAND ]]; then
-    alias ag='sudo apt-get'            # age - but without sudo
+local has_ag_command=$(command -v ag)
+if [[ -z $has_ag_command ]]; then
+  alias ag='sudo apt-get'            # age - but without sudo
 fi
 alias aga='sudo apt-get autoclean' # aac
 alias agb='sudo apt-get build-dep' # abd
@@ -44,8 +44,8 @@ alias agug='sudo apt-get upgrade' # ag
 alias aguu='sudo apt-get update && sudo apt-get upgrade'      #adg
 alias agar='sudo apt-get autoremove'
 
-if [[ -z $AG_COMMAND ]]; then
-    compdef _ag ag='sudo apt-get'
+if [[ -z $has_ag_command ]]; then
+  compdef _ag ag='sudo apt-get'
 fi
 compdef _aga aga='sudo apt-get autoclean'
 compdef _agb agb='sudo apt-get build-dep'
