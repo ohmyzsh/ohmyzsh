@@ -143,6 +143,8 @@ function apt-list-packages {
     awk '{print $1" "$2}'
 }
 
+# Spotify client control commands
+# Based on: https://gist.github.com/wandernauta/6800547
 function spotify-ctl {
   ## CONSTANTS ##
   SP_DEST="org.mpris.MediaPlayer2.spotify"
