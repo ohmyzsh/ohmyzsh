@@ -31,7 +31,7 @@ case $state in
                     '--no-default-features[do not build the default features]' \
                     '--no-run[compile but do not run]' \
                     '(-p,--package)'{-p=,--package=}'[package to run benchmarks for]:packages:_get_package_names' \
-                    '--target=[target triple]' \
+                    '--target=[target triple]: :_get_targets' \
                     '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
                     '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
                     '--color=:colorization option:(auto always never)' \
@@ -48,7 +48,7 @@ case $state in
                     '--no-default-features[do not build the default features]' \
                     '(-p,--package)'{-p=,--package=}'[package to build]:packages:_get_package_names' \
                     '--release=[build in release mode]' \
-                    '--target=[target triple]' \
+                    '--target=[target triple]: :_get_targets' \
                     '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
                     '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
                     '--color=:colorization option:(auto always never)' \
@@ -61,7 +61,7 @@ case $state in
                     '(-p,--package)'{-p=,--package=}'[package to clean]:packages:_get_package_names' \
                     '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
                     '--release[whether or not to clean release artifacts]' \
-                    '--target=[target triple(default:all)]' \
+                    '--target=[target triple(default:all)]: :_get_targets' \
                     '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
                     '--color=:colorization option:(auto always never)' \
                     ;;
@@ -79,7 +79,7 @@ case $state in
                     '(-p, --package)'{-p,--package}'=[package to document]' \
                     '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
                     '--release[build artifacts in release mode, with optimizations]' \
-                    '--target=[build for the target triple]' \
+                    '--target=[build for the target triple]: :_get_targets' \
                     '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
                     '--color=:colorization option:(auto always never)' \
                     ;;
@@ -276,7 +276,7 @@ case $state in
                     '--profile=[profile to build the selected target for]' \
                     '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
                     '--release[build artifacts in release mode, with optimizations]' \
-                    '--target=[target triple which compiles will be for]' \
+                    '--target=[target triple which compiles will be for]: :_get_targets' \
                     '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
                     "${command_scope_spec[@]}" \
                     ;;
@@ -294,7 +294,7 @@ case $state in
                     '(-p, --package)'{-p,--package}'=[package to document]' \
                     '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
                     '--release[build artifacts in release mode, with optimizations]' \
-                    '--target=[build for the target triple]' \
+                    '--target=[build for the target triple]: :_get_targets' \
                     '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
                     "${command_scope_spec[@]}" \
                     ;;
@@ -323,7 +323,7 @@ case $state in
                     '(-p,--package)'{-p=,--package=}'[package to run tests for]:packages:_get_package_names' \
                     '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
                     '--release[build artifacts in release mode, with optimizations]' \
-                    '--target=[target triple]' \
+                    '--target=[target triple]: :_get_targets' \
                     '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
                     '--color=:colorization option:(auto always never)' \
                     '1: :_test_names' \
@@ -482,6 +482,37 @@ _test_names()
 _benchmark_names()
 {
     _get_names_from_array "bench"
+}
+
+#Gets the target names from config files
+_get_targets()
+{
+    local CURRENT_PATH
+    if [[ $(uname -o) = "Cygwin" && -f "$PWD"/Cargo.toml ]]; then
+            CURRENT_PATH=$PWD
+    else
+            CURRENT_PATH=$(_locate_manifest)
+    fi
+    if [[ -z "$CURRENT_PATH" ]]; then
+            return 1
+    fi
+    local -a TARGETS
+    local -a FIND_PATHS=( "/" )
+    local -a FLINES
+    local FIND_PATH FLINE
+    while [[ "$CURRENT_PATH" != "/" ]]; do
+        FIND_PATHS+=( "$CURRENT_PATH" )
+        CURRENT_PATH=$(dirname $CURRENT_PATH)
+    done
+    for FIND_PATH in ${FIND_PATHS[@]}; do
+        if [[ -f "$FIND_PATH"/.cargo/config ]]; then
+            FLINES=( `grep "$FIND_PATH"/.cargo/config -e "^\[target\."` )
+            for FLINE in ${FLINES[@]}; do
+                TARGETS+=(`sed 's/^\[target\.\(.*\)\]$/\1/' <<< $FLINE`)
+            done
+        fi
+    done
+    _describe 'target' TARGETS
 }
 
 # These flags are mutally exclusive specifiers for the scope of a command; as
