@@ -541,12 +541,12 @@ __docker_container_subcommand() {
         "($help)*--group=[Set one or more supplementary user groups for the container]:group:_groups"
         "($help -h --hostname)"{-h=,--hostname=}"[Container host name]:hostname:_hosts"
         "($help -i --interactive)"{-i,--interactive}"[Keep stdin open even if not attached]"
-        "($help)--ip=[Container IPv4 address]:IPv4: "
-        "($help)--ip6=[Container IPv6 address]:IPv6: "
+        "($help)--ip=[IPv4 address]:IPv4: "
+        "($help)--ip6=[IPv6 address]:IPv6: "
         "($help)--ipc=[IPC namespace to use]:IPC namespace: "
         "($help)--isolation=[Container isolation technology]:isolation:(default hyperv process)"
         "($help)*--link=[Add link to another container]:link:->link"
-        "($help)*--link-local-ip=[Add a link-local address for the container]:IPv4/IPv6: "
+        "($help)*--link-local-ip=[Container IPv4/IPv6 link-local addresses]:IPv4/IPv6: "
         "($help)*"{-l=,--label=}"[Container metadata]:label: "
         "($help)--log-driver=[Default driver for container logs]:logging driver:__docker_complete_log_drivers"
         "($help)*--log-opt=[Log driver specific options]:log driver options:__docker_complete_log_options"
@@ -917,7 +917,7 @@ __docker_image_subcommand() {
                 "($help)*--label=[Set metadata for an image]:label=value: " \
                 "($help -m --memory)"{-m=,--memory=}"[Memory limit]:Memory limit: " \
                 "($help)--memory-swap=[Total memory limit with swap]:Memory limit: " \
-                "($help)--network=[Connect a container to a network]:network mode:(bridge none container host)"
+                "($help)--network=[Connect a container to a network]:network mode:(bridge none container host)" \
                 "($help)--no-cache[Do not use cache when building the image]" \
                 "($help)--pull[Attempt to pull a newer version of the image]" \
                 "($help -q --quiet)"{-q,--quiet}"[Suppress verbose build output]" \
@@ -1142,8 +1142,8 @@ __docker_network_subcommand() {
             _arguments $(__docker_arguments) \
                 $opts_help \
                 "($help)*--alias=[Add network-scoped alias for the container]:alias: " \
-                "($help)--ip=[Container IPv4 address]:IPv4: " \
-                "($help)--ip6=[Container IPv6 address]:IPv6: " \
+                "($help)--ip=[IPv4 address]:IPv4: " \
+                "($help)--ip6=[IPv6 address]:IPv6: " \
                 "($help)*--link=[Add a link to another container]:link:->link" \
                 "($help)*--link-local-ip=[Add a link-local address for the container]:IPv4/IPv6: " \
                 "($help -)1:network:__docker_complete_networks" \
