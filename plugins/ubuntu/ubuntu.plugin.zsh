@@ -32,6 +32,7 @@ alias aga='sudo apt-get autoclean' # aac
 alias agb='sudo apt-get build-dep' # abd
 alias agc='sudo apt-get clean'     # adc
 alias agd='sudo apt-get dselect-upgrade' # ads
+alias agdu='sudo apt-get dist-upgrade'
 alias agi='sudo apt-get install'  # ai
 alias agp='sudo apt-get purge'    # ap
 alias agr='sudo apt-get remove'   # ar
@@ -46,6 +47,7 @@ compdef _aga aga='sudo apt-get autoclean'
 compdef _agb agb='sudo apt-get build-dep'
 compdef _agc agc='sudo apt-get clean'
 compdef _agd agd='sudo apt-get dselect-upgrade'
+compdef _agdu agdu='sudo apt-get dist-upgrade'
 compdef _agi agi='sudo apt-get install'
 compdef _agp agp='sudo apt-get purge'
 compdef _agr agr='sudo apt-get remove'
@@ -54,6 +56,10 @@ compdef _agud agud='sudo apt-get update && sudo apt-get dist-upgrade'
 compdef _agug agug='sudo apt-get upgrade'
 compdef _aguu aguu='sudo apt-get update && sudo apt-get upgrade'
 compdef _agar agar='sudo apt-get autoremove'
+
+# Update/Upgrade all your packages and remove all unused packages safely
+alias safe-upgrade-clean='sudo apt-get update && sudo apt-get dist-upgrade \
+  && sudo apt-get autoremove && sudo apt-get autoclean'
 
 # Remove ALL kernel images and headers EXCEPT the one in use
 alias kclean='sudo aptitude remove -P ?and(~i~nlinux-(ima|hea) \
@@ -241,7 +247,7 @@ function spotify-ctl {
 
   # Prints usage information.
   function sp-help {
-    echo "Usage: soptify-ctl [command]"
+    echo "Usage: spotify-ctl [command]"
     echo "Control a running Spotify instance from the command line."
     echo ""
     echo "  spotify-ctl play       - Play Spotify"
@@ -250,15 +256,15 @@ function spotify-ctl {
     echo "  spotify-ctl next       - Go to next track"
     echo "  spotify-ctl prev       - Go to previous track"
     echo ""
-    echo "  spotify-ctl current    - Format the currently playing track"
-    echo "  spotify-ctl metadata   - Dump the current track's metadata"
-    echo "  spotify-ctl eval       - Return the metadata as a shell script"
-    echo "  spotify-ctl art        - Print the URL to the current track's album artwork"
+    echo "  spotify-ctl current    - Displays the current track metadata"
+    echo "  spotify-ctl metadata   - Displays the current track raw metadata"
+    echo "  spotify-ctl eval       - Returns the current track metadata as a shell variables. SPOTIFY_(title|album|artist|trackid|trackNumber)"
+    echo "  spotify-ctl art        - Prints the URL to the current track's album artwork"
     echo ""
-    echo "  spotify-ctl url        - Print the HTTP URL for the currently playing track"
-    echo "  spotify-ctl http       - Open the HTTP URL in a web browser"
+    echo "  spotify-ctl url        - Prints the URL for the currently playing track"
+    echo "  spotify-ctl http       - Open the current track in a web browser"
     echo ""
-    echo "  spotify-ctl open <uri> - Open a spotify: uri"
+    echo "  spotify-ctl open <uri> - Opens a Spotify URI in the client"
     echo "  spotify-ctl search <q> - Start playing the best search result for the given query"
     echo ""
     echo "  spotify-ctl help       - Show this information"
