@@ -15,6 +15,7 @@ function web_search() {
     github      "https://github.com/search?q="
     baidu       "https://www.baidu.com/s?wd="
     ecosia      "https://www.ecosia.org/search?q="
+    mdn         "https://developer.mozilla.org/en-US/search?q="
   )
 
   # check whether the search engine is supported
@@ -47,6 +48,7 @@ alias yandex='web_search yandex'
 alias github='web_search github'
 alias baidu='web_search baidu'
 alias ecosia='web_search ecosia'
+alias mdn='web_search mdn'
 
 #add your own !bang searches here
 alias wiki='web_search duckduckgo \!w'
