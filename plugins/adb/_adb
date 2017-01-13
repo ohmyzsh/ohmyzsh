@@ -34,13 +34,29 @@ _1st_arguments=(
 'wait-for-device:block until device is online'
 )
 
+local -a serial
+serial=(
+'-s:run command only for the selected device by device code or ip:port from adb devices'
+)
+
 local expl
 local -a pkgs installed_pkgs
 
 _arguments \
 	'*:: :->subcmds' && return 0
 
-if (( CURRENT == 1 )); then
+if ((CURRENT == 1)) then
+	_describe -t commands "adb subcommand" _1st_arguments
+	_describe -t commands "adb subcommand" serial
+	return
+fi
+
+if ((CURRENT == 2)) then
+	return
+fi
+
+
+if ((CURRENT == 3)) then
 	_describe -t commands "adb subcommand" _1st_arguments
 	return
 fi
