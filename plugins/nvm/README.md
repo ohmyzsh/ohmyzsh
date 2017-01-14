@@ -20,3 +20,7 @@ plugins=(... nvm)
 - **`NVM_LAZY`**: if you want the plugin to defer the load of nvm to speed-up the start of your zsh session,
   set `NVM_LAZY` to `1`. This will use the `--no-use` parameter when loading nvm, and will create a function
   for `node`, `npm` and `yarn`, so when you call either of these three, nvm will load with `nvm use default`.
+
+- **`NVM_AUTOLOAD`**: if `NVM_AUTOLOAD` is set to `1`, the plugin will automatically load a node version when
+  if finds a [`.nvmrc` file](https://github.com/nvm-sh/nvm#nvmrc) in the current working directory indicating
+  which node version to load.
