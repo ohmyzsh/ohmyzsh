@@ -39,8 +39,7 @@ else
 fi
 
 printf "${BLUE}%s${NORMAL}\n" "Updating Custom Plugins"
-cd "$ZSH/custom/plugins"
-for dir in ./*; do
+for dir in $ZSH_CUSTOM/plugins/*; do
     if [[ -d $dir && -d $dir/.git ]]; then
         git -C $dir pull --rebase --stat origin master
     fi
