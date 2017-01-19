@@ -60,6 +60,7 @@
 | pacinsd      | sudo pacman -S --asdeps                 | Install packages as dependencies of another package          |
 | pacloc       | pacman -Qi                              | Display information about a package in the local database    |
 | paclocs      | pacman -Qs                              | Search for packages in the local database                    |
+| pacql        | pacman -Ql                              | List package contents                                        |
 | paclsorphans | sudo pacman -Qdt                        | List all orphaned packages                                   |
 | pacmir       | sudo pacman -Syy                        | Force refresh of all package lists after updating mirrorlist |
 | pacre        | sudo pacman -R                          | Remove packages, keeping its settings and dependencies       |
