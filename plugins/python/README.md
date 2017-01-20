@@ -14,3 +14,4 @@ plugins=(... python)
 | `pyfind`         | Finds .py files recursively in the current directory                            |
 | `pyclean [dirs]` | Deletes byte-code and cache files from a list of directories or the current one |
 | `pygrep <text>`  | Looks for `text` in .py files                                                   |
+| `ipython`        | Runs the appropriate `ipython` version according to the activated virtualenv    |

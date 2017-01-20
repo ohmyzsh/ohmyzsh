@@ -14,3 +14,5 @@ function pyclean() {
 # Grep among .py files
 alias pygrep='grep -r --include="*.py"'
 
+# Run proper IPython regarding current virtualenv (if any)
+alias ipython="python -c 'import IPython; IPython.terminal.ipapp.launch_new_instance()'"
