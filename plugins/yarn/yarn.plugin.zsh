@@ -21,6 +21,11 @@ _yarn ()
 
     _production=('(--production)--production[Do not install project devDependencies]')
 
+    _upgrade=(
+        '(--exact)--exact[Install exact version]'
+        '(--tilde)--tilde[Install most recent release with the same minor version]'
+     )
+
     _1st_arguments=(
       'help:Display help information about yarn' \
       'init:Initialize for the development of a package.' \
@@ -38,6 +43,7 @@ _yarn ()
       'run:Runs a defined package script.' \
       'self-update:Updates Yarn to the latest version.' \
       'upgrade:Upgrades packages to their latest version based on the specified range.' \
+      'upgrade-interactive:Selectively upgrades specific packages in a simple way' \
       'why:<query> - Show information about why a package is installed.'
     )
     _arguments \
@@ -70,6 +76,10 @@ _yarn ()
         remove)
         _arguments \
         $_dopts
+        ;;
+        upgrade-interactive)
+        _arguments \
+        $_upgrade
         ;;
         *)
         _arguments \
