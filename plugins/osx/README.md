@@ -24,6 +24,7 @@ Original author: [Sorin Ionescu](https://github.com/sorin-ionescu)
 | `pfd`           | Return the path of the frontmost Finder window   |
 | `pfs`           | Return the current Finder selection              |
 | `cdf`           | `cd` to the current Finder directory             |
+| `cdx`           | `cd` to the current Xcode project directory      |
 | `pushdf`        | `pushd` to the current Finder directory          |
 | `quick-look`    | Quick-Look a specified file                      |
 | `man-preview`   | Open a specified man page in Preview app         |

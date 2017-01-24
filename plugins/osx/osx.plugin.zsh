@@ -160,12 +160,25 @@ function pfs() {
 EOF
 }
 
+function xcodeprojdir() {
+  dirname $(osascript 2>/dev/null <<EOF
+    tell application "Xcode"
+      return path of active workspace document
+    end tell
+EOF
+) 2>/dev/null
+}
+
 function cdf() {
   cd "$(pfd)"
 }
 
 function pushdf() {
   pushd "$(pfd)"
+}
+
+function cdx() {
+  cd "$(xcodeprojdir)"
 }
 
 function quick-look() {
