@@ -22,6 +22,8 @@ Original author: [Sorin Ionescu](https://github.com/sorin-ionescu)
 | `pfs`           | Return the current Finder selection                   |
 | `cdf`           | `cd` to the current Finder directory                  |
 | `pushdf`        | `pushd` to the current Finder directory               |
+| `pxd`           | Return the current Xcode project directory            |
+| `cdx`           | `cd` to the current Xcode project directory           |
 | `quick-look`    | Quick-Look a specified file                           |
 | `man-preview`   | Open a specified man page in Preview app              |
 | `showfiles`     | Show hidden files                                     |

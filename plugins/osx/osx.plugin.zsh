@@ -193,6 +193,21 @@ function pushdf() {
   pushd "$(pfd)"
 }
 
+function pxd() {
+  dirname $(osascript 2>/dev/null <<EOF
+    if application "Xcode" is running then
+      tell application "Xcode"
+        return path of active workspace document
+      end tell
+    end if
+EOF
+)
+}
+
+function cdx() {
+  cd "$(pxd)"
+}
+
 function quick-look() {
   (( $# > 0 )) && qlmanage -p $* &>/dev/null &
 }
