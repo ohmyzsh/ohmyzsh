@@ -65,7 +65,8 @@ _aptible() {
                 db:tunnel)
                     _arguments \
                         '--environment=[ENVIRONMENT]: :_aptible_envs' \
-                        '--port=[N]'
+                        '--port=[N]' \
+                        ':: :_aptible_dbs'
                     ;;
                 domains)
                     _arguments \
