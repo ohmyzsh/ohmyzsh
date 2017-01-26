@@ -47,11 +47,30 @@ ZSH_THEME="robbyrussell"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
+# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/available/*)
+# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/available/
+# Example format:
+#   plugs=(rails git textmate ruby lighthouse)
+#   customplugs=(custom1 custom2)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+
+plugs=(git)
+customplugs=(example)
+
+for i in $plugs; do
+  if [ ! -d "$ZSH/plugins/enable/$i" ]; then
+    ln -s $ZSH/plugins/available/$i/ $ZSH/plugins/enable/git
+  fi
+done
+
+for i in $customplugs; do
+  if [ ! -d "$ZSH/custom/plugins/enable/$i" ]; then
+    ln -s $ZSH/custom/plugins/available/$i/ $ZSH/custom/plugins/enable/$i
+  fi
+done
+
+plugins=($(ls -1 $ZSH/custom/plugins/enable/ | tr '\n' ' ' | xargs -0 -n 1 basename | sed s'/.$//') 
+$(ls -1 $ZSH/plugins/enable/ | tr '\n' ' ' | xargs -0 -n 1 basename | sed s'/.$//'))
 
 source $ZSH/oh-my-zsh.sh
 
