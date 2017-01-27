@@ -15,10 +15,18 @@ function agp {
 function asp {
   local rprompt=${RPROMPT/<aws:$(agp)>/}
 
-  export AWS_DEFAULT_PROFILE=$1
-  export AWS_PROFILE=$1
+  switch_profile $1
 
   export RPROMPT="<aws:$AWS_DEFAULT_PROFILE>$rprompt"
+}
+
+function acp {
+  switch_profile $1
+}
+
+function switch_profile {
+  export AWS_DEFAULT=$1
+  export AWS_PROFILE=$1
 }
 
 function aws_profiles {
@@ -26,6 +34,7 @@ function aws_profiles {
 }
 
 compctl -K aws_profiles asp
+compctl -K aws_profiles acp
 
 if _homebrew-installed && _awscli-homebrew-installed ; then
   _aws_zsh_completer_path=$(brew --prefix awscli)/libexec/bin/aws_zsh_completer.sh
