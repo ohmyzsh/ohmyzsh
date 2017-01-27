@@ -154,6 +154,19 @@ If you have any hiccups installing, here are a few common fixes.
 * You _might_ need to modify your `PATH` in `~/.zshrc` if you're not able to find some commands after switching to `oh-my-zsh`.
 * If you installed manually or changed the install location, check the `ZSH` environment variable in `~/.zshrc`.
 
+### Troubleshooting 
+
+If you are seeing invalid symbols like question mark after installation, you may want to update powerline fonts.
+
+```shell
+git clone https://github.com/powerline/fonts
+cd fonts
+./install.sh
+```
+finally change your font preferences eg. iTerm2 -> Preferences -> Change Font -> 12pt Meslo LG S DZ Regular for Powerline
+
+
+
 ### Custom Plugins and Themes
 
 If you want to override any of the default behaviors, just add a new file (ending in `.zsh`) in the `custom/` directory.
