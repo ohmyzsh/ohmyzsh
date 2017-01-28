@@ -163,7 +163,7 @@ git clone https://github.com/powerline/fonts
 cd fonts
 ./install.sh
 ```
-finally change your font preferences eg. iTerm2 -> Preferences -> Change Font -> 12pt Meslo LG S DZ Regular for Powerline
+finally change your font preferences eg. iTerm2 -> Preferences -> Profiles -> Text -> Change Font -> Family[12pt Meslo LG S DZ Regular for Powerline
 
 
 
