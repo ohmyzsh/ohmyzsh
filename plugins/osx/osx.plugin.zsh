@@ -162,9 +162,11 @@ EOF
 
 function pxd() {
   dirname $(osascript 2>/dev/null <<EOF
-    tell application "Xcode"
-      return path of active workspace document
-    end tell
+    if application "Xcode" is running then
+	  tell application "Xcode"
+	    return path of active workspace document
+	  end tell
+	end if
 EOF
 ) 2>/dev/null
 }
