@@ -122,7 +122,7 @@ gitbranch() {
 	read head < "$gitdir/HEAD"
 	case "$head" in
 		ref:*)
-			branch="${head##*/}"
+			branch="${head#*/*/}"
 			;;
 		"")
 			branch=""
