@@ -19,6 +19,7 @@ plugins=(... mvn)
 | `mvne`               | `mvn eclipse:eclipse`                           |
 | `mvncv`              | `mvn clean verify`                              |
 | `mvnd`               | `mvn deploy`                                    |
+| `mvncd`              | `mvn clean deploy`                              |
 | `mvnp`               | `mvn package`                                   |
 | `mvnc`               | `mvn clean`                                     |
 | `mvncom`             | `mvn compile`                                   |
