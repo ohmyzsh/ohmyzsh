@@ -18,6 +18,7 @@ plugins=(... mvn)
 | `mvncisto`           | `mvn clean install -DskipTests --offline`       |
 | `mvne`               | `mvn eclipse:eclipse`                           |
 | `mvnd`               | `mvn deploy`                                    |
+| `mvncd`              | `mvn clean deploy`                              |
 | `mvnp`               | `mvn package`                                   |
 | `mvnc`               | `mvn clean`                                     |
 | `mvncom`             | `mvn compile`                                   |
