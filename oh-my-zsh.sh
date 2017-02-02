@@ -1,3 +1,9 @@
+
+# Load the micro profiling framework
+source "$ZSH/lib/profiler.sh"
+# Start profiling
+start_profiling "TOTAL"
+
 # Check for updates on initial load...
 if [ "$DISABLE_AUTO_UPDATE" != "true" ]; then
   env ZSH=$ZSH DISABLE_UPDATE_PROMPT=$DISABLE_UPDATE_PROMPT zsh -f $ZSH/tools/check_for_upgrade.sh
@@ -77,22 +83,34 @@ else
   compinit -i -d "${ZSH_COMPDUMP}"
 fi
 
+
 # Load all of the plugins that were defined in ~/.zshrc
+start_profiling "  loading plugins"
 for plugin ($plugins); do
+  start_profiling "    $plugin"
   if [ -f $ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh ]; then
     source $ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh
   elif [ -f $ZSH/plugins/$plugin/$plugin.plugin.zsh ]; then
     source $ZSH/plugins/$plugin/$plugin.plugin.zsh
   fi
+  stop_profiling "    $plugin"
 done
+stop_profiling  "  loading plugins"
+
 
 # Load all of your custom configurations from custom/
+start_profiling "  loading custom configurations"
 for config_file ($ZSH_CUSTOM/*.zsh(N)); do
+  start_profiling "    $(basename $config_file)"
   source $config_file
+  stop_profiling "    $(basename $config_file)"
 done
+stop_profiling  "  loading custom configurations"
 unset config_file
 
+
 # Load the theme
+start_profiling "  loading theme"
 if [ "$ZSH_THEME" = "random" ]; then
   themes=($ZSH/themes/*zsh-theme)
   N=${#themes[@]}
@@ -111,3 +129,9 @@ else
     fi
   fi
 fi
+stop_profiling "  loading theme"
+
+# Stop profiling
+stop_profiling "TOTAL"
+# Print the profiling results
+print_profiling
