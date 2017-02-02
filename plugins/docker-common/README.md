@@ -12,6 +12,16 @@ docker dstop dserve-myStaticFolder
 docker rm dserve-myStaticFolder
 ```
 
+## Dserve-php
+```bash
+cd /myStaticFolder
+dserve-php # It will lift an apache and output the port used on the host
+# After you used it you can stop and remove it easily by name
+# all the created container names will start with the dserve-php prefix
+docker dstop dserve-php-myStaticFolder
+docker rm dserve-php-myStaticFolder
+```
+
 ### Doc
 This run command has many scenarios, this is just a basic configuration.
 ```bash
