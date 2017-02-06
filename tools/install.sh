@@ -110,7 +110,12 @@ main() {
   echo 'p.p.s. Get stickers and t-shirts at http://shop.planetargon.com.'
   echo ''
   printf "${NORMAL}"
-  env zsh
+
+  # Check if the user wants to switch into zsh right after the installation
+  # (! $1 = "--no-env-zsh")
+  if [ ! $1 = "--no-env-zsh" ]; then
+    env zsh
+  fi
 }
 
 main
