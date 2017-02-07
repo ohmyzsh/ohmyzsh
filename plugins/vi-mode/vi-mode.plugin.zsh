@@ -54,7 +54,7 @@ zle -N edit-command-line
 
 bindkey -v
 
-# allow v to edit the command line (standard behaviour)
+# allow v to edit the command line (standard psql)
 autoload -Uz edit-command-line
 bindkey -M vicmd '\e' edit-command-line
 
