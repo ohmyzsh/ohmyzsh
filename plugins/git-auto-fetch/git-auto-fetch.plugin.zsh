@@ -18,10 +18,10 @@ function git-auto-fetch {
     echo "${fg_bold[red]}disabled${reset_color}")
 }
 
-eval "original-$(declare -f zle-line-init)"
+eval "override-git-auto-fetch-$(declare -f zle-line-init)"
 
 function zle-line-init () {
   git-fetch-all
-  original-zle-line-init
+  override-git-auto-fetch-zle-line-init
 }
 zle -N zle-line-init
