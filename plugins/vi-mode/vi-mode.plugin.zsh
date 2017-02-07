@@ -1,23 +1,62 @@
 # Updates editor information when the keymap changes.
+
+if [ ! -n "${VIM_NORMAL_COLOR+x}" ]; then
+  if [ $TERM = "screen" ]; then
+    VIM_NORMAL_COLOR='\033P\033]12;#FF3333\007\033\\'
+  else
+    VIM_NORMAL_COLOR="\033]12;#FF3333\007"
+  fi
+fi
+
+if [ ! -n "${VIM_INSERT_COLOR+x}" ]; then
+  if [ $TERM = "screen" ]; then
+    VIM_INSERT_COLOR='\033P\033]12;#99FF33\007\033\\'
+  else
+    VIM_INSERT_COLOR="\033]12;#00FF00\007"
+  fi
+fi
+
 function zle-keymap-select() {
   zle reset-prompt
   zle -R
-}
+  if [ $TERM = "screen" ]; then
+    if [ $KEYMAP = vicmd ]; then
+      echo -ne $VIM_NORMAL_COLOR
+    else
+      echo -ne $VIM_INSERT_COLOR
+    fi
+  elif [ $TERM != "linux" ]; then
+    if [ $KEYMAP = vicmd ]; then
+      echo -ne $VIM_NORMAL_COLOR
+    else
+      echo -ne $VIM_INSERT_COLOR
+    fi
+  fi
+}; zle -N zle-keymap-select
 
-# Ensure that the prompt is redrawn when the terminal size changes.
-TRAPWINCH() {
-  zle &&  zle -R
-}
+zle-line-init () {
+  if [ $TERM = "screen" ]; then
+    echo -ne $VIM_INSERT_COLOR
+  elif [ $TERM != "linux" ]; then
+    echo -ne $VIM_INSERT_COLOR
+  fi
+}; zle -N zle-line-init
 
-zle -N zle-keymap-select
+autoload -U select-quoted
+zle -N select-quoted
+for m in visual viopp; do
+  for c in {a,i}{\',\",\`}; do
+    bindkey -M $m $c select-quoted
+  done
+done
+
 zle -N edit-command-line
-
 
 bindkey -v
 
 # allow v to edit the command line (standard behaviour)
 autoload -Uz edit-command-line
-bindkey -M vicmd 'v' edit-command-line
+bindkey -M vicmd '\e' edit-command-line
 
 # allow ctrl-p, ctrl-n for navigate history (standard behaviour)
 bindkey '^P' up-history
@@ -34,17 +73,3 @@ bindkey '^r' history-incremental-search-backward
 # allow ctrl-a and ctrl-e to move to beginning/end of line
 bindkey '^a' beginning-of-line
 bindkey '^e' end-of-line
-
-# if mode indicator wasn't setup by theme, define default
-if [[ "$MODE_INDICATOR" == "" ]]; then
-  MODE_INDICATOR="%{$fg_bold[red]%}<%{$fg[red]%}<<%{$reset_color%}"
-fi
-
-function vi_mode_prompt_info() {
-  echo "${${KEYMAP/vicmd/$MODE_INDICATOR}/(main|viins)/}"
-}
-
-# define right prompt, if it wasn't defined by a theme
-if [[ "$RPS1" == "" && "$RPROMPT" == "" ]]; then
-  RPS1='$(vi_mode_prompt_info)'
-fi
