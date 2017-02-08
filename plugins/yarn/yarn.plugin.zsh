@@ -31,7 +31,7 @@ _yarn ()
       'cache:Clear the local cache. It will be populated again the next time yarn or yarn install is run.' \
       'clean:Frees up space by removing unnecessary files and folders from dependencies.' \
       'check:Verifies that versions of the package dependencies in the current project’s package.json matches that of yarn’s lock file.' \
-      'ls:List all installed packages.' \
+      'list:List all installed packages.' \
       'global:Makes binaries available to use on your operating system.' \
       'info:<package> [<field>] - fetch information about a package and return it in a tree format.' \
       'outdated:Checks for outdated package dependencies.' \
