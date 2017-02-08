@@ -44,3 +44,5 @@ alias npmst="npm start"
 # Run npm test
 alias npmt="npm test"
 
+# List run scripts
+alias npmr="npm run"
