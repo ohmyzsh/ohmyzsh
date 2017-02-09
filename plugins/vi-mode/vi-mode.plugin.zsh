@@ -34,12 +34,14 @@ function zle-keymap-select() {
   fi
 }; zle -N zle-keymap-select
 
+eval "override-vi-mode-$(declare -f zle-line-init)"
 zle-line-init () {
   if [ $TERM = "screen" ]; then
     echo -ne $VIM_INSERT_COLOR
   elif [ $TERM != "linux" ]; then
     echo -ne $VIM_INSERT_COLOR
   fi
+  override-vi-mode-zle-line-init
 }; zle -N zle-line-init
 
 autoload -U select-quoted
