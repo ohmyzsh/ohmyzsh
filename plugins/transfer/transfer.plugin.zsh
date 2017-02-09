@@ -9,6 +9,7 @@
 # Author:
 #   Remco Verhoef <remco@dutchcoders.io>
 #   https://gist.github.com/nl5887/a511f172d3fb3cd0e42d
+#   Modified to use tar command instead of zip
 #
 
 curl --version 2>&1 > /dev/null
@@ -43,11 +44,12 @@ transfer() {
         
         if [ -d $file ];
         then
-            # zip directory and transfer
-            zipfile=$( mktemp -t transferXXX.zip )
-            cd $(dirname $file) && zip -r -q - $(basename $file) >> $zipfile
-            curl --progress-bar --upload-file "$zipfile" "https://transfer.sh/$basefile.zip" >> $tmpfile
-            rm -f $zipfile
+            echo $file
+            # tar directory and transfer
+            tarfile=$( mktemp -t transferXXX.tar.gz )
+            cd $(dirname $file) && tar -czf $tarfile $(basename $file)
+            curl --progress-bar --upload-file "$tarfile" "https://transfer.sh/$basefile.tar.gz" >> $tmpfile
+            rm -f $tarfile
         else
             # transfer file
             curl --progress-bar --upload-file "$file" "https://transfer.sh/$basefile" >> $tmpfile
