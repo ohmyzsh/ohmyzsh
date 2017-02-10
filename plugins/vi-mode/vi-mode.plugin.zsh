@@ -44,6 +44,10 @@ zle-line-init () {
   override-vi-mode-zle-line-init
 }; zle -N zle-line-init
 
+zle-line-finish () {
+  zle -K viins
+}; zle -N zle-line-finish
+
 autoload -U select-quoted
 zle -N select-quoted
 for m in visual viopp; do
