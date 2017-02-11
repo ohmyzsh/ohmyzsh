@@ -6,7 +6,7 @@ DIRSTACKSIZE=${DIRSTACKSIZE:-20}
 dirstack_file=${dirstack_file:-${HOME}/.zdirs}
 
 if [[ -f ${dirstack_file} ]] && [[ ${#dirstack[*]} -eq 0 ]] ; then
-  dirstack=( ${(f)"$(< $dirstack_file)"} )
+  dirstack=( ${(uf)"$(< $dirstack_file)"} )
   # "cd -" won't work after login by just setting $OLDPWD, so
   [[ -d $dirstack[1] ]] && cd $dirstack[1] && cd $OLDPWD
 fi
