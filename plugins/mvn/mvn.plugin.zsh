@@ -187,4 +187,4 @@ function listMavenCompletions {
     ); 
 }
 
-compctl -K listMavenCompletions mvn
+compctl -K listMavenCompletions mvn mvnw
