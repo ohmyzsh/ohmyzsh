@@ -18,6 +18,9 @@ if grep-flag-available --exclude-dir=.cvs; then
 elif grep-flag-available --exclude=.cvs; then
     GREP_OPTIONS+=" --exclude=$VCS_FOLDERS"
 fi
+if grep-flag-available '-C 3'; then
+    GREP_OPTIONS+=" -C 3"
+fi
 
 # export grep settings
 alias grep="grep $GREP_OPTIONS"
