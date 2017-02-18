@@ -41,6 +41,21 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/mas
 sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
 ```
 
+#### Batch mode
+
+When installing using both approaches above, `zsh` will be launched at the end of the installation.
+This can be problematic if installing Oh My Zsh from a script, since nothing will be run after Oh My Zsh
+is started.
+
+To fix this, simply append `--batch` to the end of the previous commands, as an additional argument to the script.
+This will perform all the installation steps as before, except launching `zsh` at the end.
+
+For instance, with `curl`:
+
+```shell
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" --batch && echo "Install complete!"
+```
+
 ## Using Oh My Zsh
 
 ### Plugins
