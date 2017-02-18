@@ -53,7 +53,7 @@ This will perform all the installation steps as before, except launching `zsh` a
 For instance, with `curl`:
 
 ```shell
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" --batch && echo "Install complete!"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" -s --batch && echo "Install complete!"
 ```
 
 ## Using Oh My Zsh
