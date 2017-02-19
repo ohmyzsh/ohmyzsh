@@ -100,7 +100,7 @@ elif [[ $(uname) == "Linux"  ]] ; then
       else
         color='red'
       fi
-      echo "%{$fg[$color]%}[$(battery_pct_remaining)%%]%{$reset_color%}"
+      echo "%{$fg[$color]%}$(battery_pct_remaining)%%%{$reset_color%}"
     else
       echo "∞"
     fi
