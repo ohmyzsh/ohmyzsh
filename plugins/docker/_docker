@@ -917,7 +917,7 @@ __docker_image_subcommand() {
                 "($help)*--label=[Set metadata for an image]:label=value: " \
                 "($help -m --memory)"{-m=,--memory=}"[Memory limit]:Memory limit: " \
                 "($help)--memory-swap=[Total memory limit with swap]:Memory limit: " \
-                "($help)--network=[Connect a container to a network]:network mode:(bridge none container host)"
+                "($help)--network=[Connect a container to a network]:network mode:(bridge none container host)" \
                 "($help)--no-cache[Do not use cache when building the image]" \
                 "($help)--pull[Attempt to pull a newer version of the image]" \
                 "($help -q --quiet)"{-q,--quiet}"[Suppress verbose build output]" \
