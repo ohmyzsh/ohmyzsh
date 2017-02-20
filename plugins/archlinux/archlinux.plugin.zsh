@@ -82,6 +82,7 @@ alias pacinsd='sudo pacman -S --asdeps'
 alias pacmir='sudo pacman -Syy'
 alias paclsorphans='sudo pacman -Qdt'
 alias pacrmorphans='sudo pacman -Rs $(pacman -Qtdq)'
+alias pacql="pacman -Ql"
 
 
 if (( $+commands[abs] && $+commands[aur] )); then
