@@ -202,12 +202,21 @@ prompt_virtualenv() {
 # - was there an error
 # - am I root
 # - are there background jobs?
+# - is there a vagrant box - if yes, is it running?
 prompt_status() {
   local symbols
   symbols=()
   [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}✘"
   [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}⚡"
   [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}⚙"
+
+  if [[ -d ./.vagrant/machines ]]; then
+    if [[ $(VBoxManage list runningvms | grep -c $(/bin/cat .vagrant/machines/*/*/id)) -gt 0 ]]; then
+      symbols+="%{%F{green}%}▶"
+    else
+      symbols+="%{%F{red}%}◾"
+    fi
+  fi
 
   [[ -n "$symbols" ]] && prompt_segment black default "$symbols"
 }
