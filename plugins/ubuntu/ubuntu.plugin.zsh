@@ -7,59 +7,96 @@
 #
 # Debian, Ubuntu and friends related zsh aliases and functions for zsh
 
-alias acs='apt-cache search'
-compdef _acs acs='apt-cache search'
+## apt ##
 
-alias afs='apt-file search --regexp'
-compdef _afs afs='apt-file search --regexp'
+alias alist='apt list'    # al command mono-devel, ali command mailutils-mh, nmh
+compdef _alist al='apt list'
 
-# These are apt-get only
+alias alu='apt list --upgradable'
+compdef _alu alu='apt list --upgradable'
+
+alias au='sudo apt update'
+
+alias aug='sudo apt upgrade'
+compdef _aug aug='sudo apt upgrade'
+
+alias af='sudo apt full-upgrade'
+compdef _af af='sudo apt full-upgrade'
+
+alias ase='apt search' # as is linux command for GNU Portable Assembler
+compdef _ase ase='apt search'
+
+alias ashow='apt show' # ash is a part of dash
+compdef _ashow ash='apt show'
+
+alias aa='sudo apt autoremove' # overwrites command form astronomical-almanac
+compdef _aa aa='sudo apt autoremove'
+
+## apt-get ## ( comments are the aliases from the debian plugin )
+
+alias ag='sudo apt-get'            # age - but without sudo
+compdef _ag ag='sudo apt-get'
+
+alias aga='sudo apt-get autoclean' # aac
+compdef _aga aga='sudo apt-get autoclean'
+
+alias agar='sudo apt-get autoremove'
+compdef _agar agar='sudo apt-get autoremove'
+
+alias agb='sudo apt-get build-dep' # abd
+compdef _agb agb='sudo apt-get build-dep'
+
+alias agc='sudo apt-get clean'     # adc
+compdef _agc agc='sudo apt-get clean'
+
+alias agd='sudo apt-get dselect-upgrade' # ads
+compdef _agd agd='sudo apt-get dselect-upgrade'
+
+alias agi='sudo apt-get install'  # ai
+compdef _agi agi='sudo apt-get install'
+
+alias agp='sudo apt-get purge'    # ap
+compdef _agp agp='sudo apt-get purge'
+
+alias agr='sudo apt-get remove'   # ar
+compdef _agr agr='sudo apt-get remove'
+
 alias ags='apt-get source'   # asrc
 compdef _ags ags='apt-get source'
+
+alias agu='sudo apt-get update'   # ad
+compdef _agu agu='sudo apt-get update'
+
+alias agud='sudo apt-get update && sudo apt-get dist-upgrade' #adu
+compdef _agud agud='sudo apt-get update && sudo apt-get dist-upgrade'
+
+alias agug='sudo apt-get upgrade' # ag
+compdef _agug agug='sudo apt-get upgrade'
+
+alias aguu='sudo apt-get update && sudo apt-get upgrade'      #adg
+compdef _aguu aguu='sudo apt-get update && sudo apt-get upgrade'
+
+# others
+
+alias acs='apt-cache search'
+compdef _acs acs='apt-cache search'
 
 alias acp='apt-cache policy' # app
 compdef _acp acp='apt-cache policy'
 
-# superuser operations ######################################################
+alias afs='apt-file search --regexp'
+compdef _afs afs='apt-file search --regexp'
+
 alias afu='sudo apt-file update'
 compdef _afu afu='sudo apt-file update'
 
 alias ppap='sudo ppa-purge'
 compdef _ppap ppap='sudo ppa-purge'
 
-alias ag='sudo apt-get'            # age - but without sudo
-alias aga='sudo apt-get autoclean' # aac
-alias agb='sudo apt-get build-dep' # abd
-alias agc='sudo apt-get clean'     # adc
-alias agd='sudo apt-get dselect-upgrade' # ads
-alias agi='sudo apt-get install'  # ai
-alias agp='sudo apt-get purge'    # ap
-alias agr='sudo apt-get remove'   # ar
-alias agu='sudo apt-get update'   # ad
-alias agud='sudo apt-get update && sudo apt-get dist-upgrade' #adu
-alias agug='sudo apt-get upgrade' # ag
-alias aguu='sudo apt-get update && sudo apt-get upgrade'      #adg
-alias agar='sudo apt-get autoremove'
-
-compdef _ag ag='sudo apt-get'
-compdef _aga aga='sudo apt-get autoclean'
-compdef _agb agb='sudo apt-get build-dep'
-compdef _agc agc='sudo apt-get clean'
-compdef _agd agd='sudo apt-get dselect-upgrade'
-compdef _agi agi='sudo apt-get install'
-compdef _agp agp='sudo apt-get purge'
-compdef _agr agr='sudo apt-get remove'
-compdef _agu agu='sudo apt-get update'
-compdef _agud agud='sudo apt-get update && sudo apt-get dist-upgrade'
-compdef _agug agug='sudo apt-get upgrade'
-compdef _aguu aguu='sudo apt-get update && sudo apt-get upgrade'
-compdef _agar agar='sudo apt-get autoremove'
-
 # Remove ALL kernel images and headers EXCEPT the one in use
 alias kclean='sudo aptitude remove -P ?and(~i~nlinux-(ima|hea) \
 	?not(~n`uname -r`))'
 
-# Misc. #####################################################################
 # print all installed packages
 alias allpkgs='dpkg --get-selections | grep -v deinstall'
 
@@ -76,11 +113,11 @@ aar() {
 	else
 		read "PACKAGE?Type in the package name to install/upgrade with this ppa [${1##*/}]: "
 	fi
-	
+
 	if [ -z "$PACKAGE" ]; then
 		PACKAGE=${1##*/}
 	fi
-	
+
 	sudo apt-add-repository $1 && sudo apt-get update
 	sudo apt-get install $PACKAGE
 }
