@@ -102,12 +102,19 @@ if [ "$ZSH_THEME" = "random" ]; then
   echo "[oh-my-zsh] Random theme '$RANDOM_THEME' loaded..."
 else
   if [ ! "$ZSH_THEME" = ""  ]; then
-    if [ -f "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme" ]; then
-      source "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme"
-    elif [ -f "$ZSH_CUSTOM/themes/$ZSH_THEME.zsh-theme" ]; then
-      source "$ZSH_CUSTOM/themes/$ZSH_THEME.zsh-theme"
-    else
-      source "$ZSH/themes/$ZSH_THEME.zsh-theme"
+    # Split by commas and randomly select a theme
+    themes=("${(s/,/)ZSH_THEME}")
+    N=${#themes[@]}
+    ((N=(RANDOM%N)+1))
+    SELECTED_THEME=${themes[$N]}
+  
+    if [ -f "$ZSH_CUSTOM/$SELECTED_THEME.zsh-theme" ]; then
+      source "$ZSH_CUSTOM/$SELECTED_THEME.zsh-theme"
+    elif [ -f "$ZSH_CUSTOM/themes/$SELECTED_THEME.zsh-theme" ]; then
+      source "$ZSH_CUSTOM/themes/$SELECTED_THEME.zsh-theme"
+    else  
+      source "$ZSH/themes/$SELECTED_THEME.zsh-theme"
     fi
-  fi
+  fi                                                                                                                                                                                                             
 fi
+
