@@ -20,10 +20,9 @@ BACKGROUND_CYAN=`tput setab 6`
 BACKGROUND_WHITE=`tput setab 7`
 RESET_FORMATTING=`tput sgr0`
 
- 
+
 # Wrapper function for Maven's mvn command.
-mvn-color()
-{
+mvn-color() {
   (
   # Filter mvn output using sed. Before filtering set the locale to C, so invalid characters won't break some sed implementations
   unset LANG
@@ -37,7 +36,7 @@ mvn-color()
   echo -ne ${RESET_FORMATTING}
   )
 }
- 
+
 # Override the mvn command with the colorized one.
 #alias mvn="mvn-color"
 
@@ -65,13 +64,13 @@ alias mvnsrc='mvn dependency:sources'
 alias mvndocs='mvn dependency:resolve -Dclassifier=javadoc'
 
 function listMavenCompletions { 
-     reply=(
+    reply=(
         # common lifecycle
         clean process-resources compile process-test-resources test-compile test integration-test package verify install deploy site
-        
+
         # common plugins
         deploy failsafe install site surefire checkstyle javadoc jxr pmd ant antrun archetype assembly dependency enforcer gpg help release repository source eclipse idea jetty cargo jboss tomcat tomcat6 tomcat7 exec versions war ear ejb android scm buildnumber nexus repository sonar license hibernate3 liquibase flyway gwt
-       
+
         # deploy
         deploy:deploy-file
         # failsafe
@@ -82,7 +81,7 @@ function listMavenCompletions {
         site:site site:deploy site:run site:stage site:stage-deploy
         # surefire
         surefire:test
-            
+
         # checkstyle
         checkstyle:checkstyle checkstyle:check
         # javadoc
@@ -110,18 +109,18 @@ function listMavenCompletions {
         help:active-profiles help:all-profiles help:describe help:effective-pom help:effective-settings help:evaluate help:expressions help:system
         # release
         release:clean release:prepare release:rollback release:perform release:stage release:branch release:update-versions
-	# jgitflow
-	jgitflow:feature-start jgitflow:feature-finish jgitflow:release-start jgitflow:release-finish jgitflow:hotfix-start jgitflow:hotfix-finish jgitflow:build-number
+        # jgitflow
+        jgitflow:feature-start jgitflow:feature-finish jgitflow:release-start jgitflow:release-finish jgitflow:hotfix-start jgitflow:hotfix-finish jgitflow:build-number
         # repository
         repository:bundle-create repository:bundle-pack
         # source
         source:aggregate source:jar source:jar-no-fork
-            
+
         # eclipse
         eclipse:clean eclipse:eclipse
         # idea
         idea:clean idea:idea
-            
+
         # jetty
         jetty:run jetty:run-exploded
         # cargo
@@ -134,7 +133,7 @@ function listMavenCompletions {
         tomcat6:run tomcat6:run-war tomcat6:run-war-only tomcat6:stop tomcat6:deploy tomcat6:undeploy
         # tomcat7
         tomcat7:run tomcat7:run-war tomcat7:run-war-only tomcat7:deploy
-	# tomee
+        # tomee
         tomee:run tomee:run-war tomee:run-war-only tomee:stop tomee:deploy tomee:undeploy	
         # spring-boot
         spring-boot:run spring-boot:repackage
@@ -172,7 +171,8 @@ function listMavenCompletions {
         flyway:clean flyway:history flyway:init flyway:migrate flyway:status flyway:validate
         # gwt
         gwt:browser gwt:clean gwt:compile gwt:compile-report gwt:css gwt:debug gwt:eclipse gwt:eclipseTest gwt:generateAsync gwt:help gwt:i18n gwt:mergewebxml gwt:resources gwt:run gwt:sdkInstall gwt:source-jar gwt:soyc gwt:test
-
+        # asciidoctor
+        asciidoctor:process-asciidoc asciidoctor:auto-refresh asciidoctor:http asciidoctor:zip
         # options
         -Dmaven.test.skip=true -DskipTests -DskipITs -Dmaven.surefire.debug -DenableCiProfile -Dpmd.skip=true -Dcheckstyle.skip=true -Dtycho.mode=maven -Dmaven.test.failure.ignore=true -DgroupId= -DartifactId= -Dversion= -Dpackaging=jar -Dfile=
 
