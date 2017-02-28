@@ -187,7 +187,7 @@ prompt_hg() {
 
 # Dir: current working directory
 prompt_dir() {
-  if type shrink_path &>/dev/null; then
+  if (( $+functions[shrink_path] )); then
     prompt_segment blue black "$(shrink_path -t -l)"
   else
     prompt_segment blue black '%~'
