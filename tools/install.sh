@@ -25,7 +25,7 @@ main() {
   set -e
 
   CHECK_ZSH_INSTALLED=$(grep /zsh$ /etc/shells | wc -l)
-  if [ ! $CHECK_ZSH_INSTALLED -ge 1 ]; then
+  if [ ! $CHECK_ZSH_INSTALLED -ge 1 ] && ! which zsh 2> /dev/null; then
     printf "${YELLOW}Zsh is not installed!${NORMAL} Please install zsh first!\n"
     exit
   fi
