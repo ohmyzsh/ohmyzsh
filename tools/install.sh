@@ -24,9 +24,12 @@ main() {
   # which may fail on systems lacking tput or terminfo
   set -e
 
-  CHECK_ZSH_INSTALLED=$(grep /zsh$ /etc/shells | wc -l)
-  if [ ! $CHECK_ZSH_INSTALLED -ge 1 ] && ! which zsh 2> /dev/null; then
-    printf "${YELLOW}Zsh is not installed!${NORMAL} Please install zsh first!\n"
+  ZSH_LOCATION=$(grep /zsh$ /etc/shells | tail -1)
+  if [ -z "$ZSH_LOCATION" ]; then
+    ZSH_LOCATION=$(which zsh 2>/dev/null)
+  fi
+  if [ -z "$ZSH_LOCATION" ]; then
+    printf "${YELLOW}Can't find zsh!${NORMAL} Please ensure it is installed!\n"
     exit
   fi
   unset CHECK_ZSH_INSTALLED
@@ -86,7 +89,7 @@ main() {
     # If this platform provides a "chsh" command (not Cygwin), do it, man!
     if hash chsh >/dev/null 2>&1; then
       printf "${BLUE}Time to change your default shell to zsh!${NORMAL}\n"
-      chsh -s $(grep /zsh$ /etc/shells | tail -1)
+      chsh -s "$ZSH_LOCATION"
     # Else, suggest the user do so manually.
     else
       printf "I can't change your shell automatically because this system does not have chsh.\n"
