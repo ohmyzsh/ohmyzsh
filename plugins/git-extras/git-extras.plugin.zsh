@@ -308,7 +308,7 @@ zstyle ':completion:*:*:git:*' user-commands \
     effort:'display effort statistics' \
     extras:'git-extras' \
     feature:'create a feature branch' \
-    fork:'fork a repo on github' \
+    fork:'fork a repo on GitHub' \
     fresh-branch:'create empty local branch' \
     gh-pages:'create the GitHub Pages branch' \
     graft:'merge commits from source branch to destination branch' \
