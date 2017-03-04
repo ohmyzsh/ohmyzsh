@@ -72,6 +72,10 @@ __gitex_specific_branch_names() {
     _wanted branch-names expl branch-name compadd $* - $branch_names
 }
 
+__gitex_chore_branch_names() {
+    __gitex_specific_branch_names 'chore'
+}
+
 __gitex_feature_branch_names() {
     __gitex_specific_branch_names 'feature'
 }
@@ -102,6 +106,11 @@ __gitex_author_names() {
 }
 
 # subcommands
+_git-authors() {
+    _arguments  -C \
+        '(--list -l)'{--list,-l}'[show authors]' \
+        '--no-email[without email]' \
+}
 
 _git-bug() {
     local curcontext=$curcontext state line ret=1
@@ -136,6 +145,32 @@ _git-changelog() {
         '(-l --list)'{-l,--list}'[list commits]' \
 }
 
+_git-chore() {
+    local curcontext=$curcontext state line ret=1
+    declare -A opt_args
+
+    _arguments -C \
+        ': :->command' \
+        '*:: :->option-or-argument' && ret=0
+
+    case $state in
+        (command)
+            declare -a commands
+            commands=(
+                'finish:merge and delete the chore branch'
+            )
+            _describe -t commands command commands && ret=0
+            ;;
+        (option-or-argument)
+            curcontext=${curcontext%:*}-$line[1]:
+            case $line[1] in
+                (finish)
+                    _arguments -C \
+                        ':branch-name:__gitex_chore_branch_names'
+                    ;;
+            esac
+    esac
+}
 
 
 _git-contrib() {
@@ -224,13 +259,19 @@ _git-feature() {
     esac
 }
 
-
 _git-graft() {
     _arguments \
         ':src-branch-name:__gitex_branch_names' \
         ':dest-branch-name:__gitex_branch_names'
 }
 
+_git-guilt() {
+    _arguments -C \
+        '(--email -e)'{--email,-e}'[display author emails instead of names]' \
+        '(--ignore-whitespace -w)'{--ignore-whitespace,-w}'[ignore whitespace only changes]' \
+        '(--debug -d)'{--debug,-d}'[output debug information]' \
+        '-h[output usage information]'
+}
 
 _git-ignore() {
     _arguments  -C \
@@ -238,6 +279,23 @@ _git-ignore() {
         '(--global -g)'{--global,-g}'[show global gitignore]'
 }
 
+
+_git-ignore() {
+    _arguments  -C \
+        '(--append -a)'{--append,-a}'[append .gitignore]' \
+        '(--replace -r)'{--replace,-r}'[replace .gitignore]' \
+        '(--list-in-table -l)'{--list-in-table,-l}'[print available types in table format]' \
+        '(--list-alphabetically -L)'{--list-alphabetically,-L}'[print available types in alphabetical order]' \
+        '(--search -s)'{--search,-s}'[search word in available types]'
+}
+
+
+_git-merge-into() {
+    _arguments '--ff-only[merge only fast-forward]'
+    _arguments \
+        ':src:__gitex_branch_names' \
+        ':dest:__gitex_branch_names'
+}
 
 _git-missing() {
     _arguments \
@@ -279,6 +337,11 @@ _git-squash() {
         ':branch-name:__gitex_branch_names'
 }
 
+_git-stamp() {
+    _arguments  -C \
+         '(--replace -r)'{--replace,-r}'[replace stamps with same id]'
+}
+
 _git-summary() {
     _arguments '--line[summarize with lines rather than commits]'
     __gitex_commits
@@ -293,43 +356,65 @@ _git-undo(){
 
 zstyle ':completion:*:*:git:*' user-commands \
     alias:'define, search and show aliases' \
-    archive-file:'export the current HEAD of the git repository to a archive' \
+    archive-file:'export the current head of the git repository to an archive' \
+    authors:'generate authors report' \
     back:'undo and stage latest commits' \
-    bug:'create a bug branch' \
-    changelog:'populate changelog file with commits since the previous tag' \
-    commits-since:'list commits since a given date' \
-    contrib:'display author contributions' \
-    count:'count commits' \
-    create-branch:'create local and remote branch' \
-    delete-branch:'delete local and remote branch' \
-    delete-merged-branches:'delete merged branches'\
-    delete-submodule:'delete submodule' \
-    delete-tag:'delete local and remote tag' \
-    effort:'display effort statistics' \
-    extras:'git-extras' \
-    feature:'create a feature branch' \
+    bug:'create bug branch' \
+    changelog:'generate a changelog report' \
+    chore:'create chore branch' \
+    clear-soft:'soft clean up a repository' \
+    clear:'rigorously clean up a repository' \
+    commits-since:'show commit logs since some date' \
+    contrib:'show user contributions' \
+    count:'show commit count' \
+    create-branch:'create branches' \
+    delete-branch:'delete branches' \
+    delete-merged-branches:'delete merged branches' \
+    delete-submodule:'delete submodules' \
+    delete-tag:'delete tags' \
+    delta:'lists changed files' \
+    effort:'show effort statistics on file(s)' \
+    extras:'awesome git utilities' \
+    feature:'create/merge feature branch' \
+    force-clone:'overwrite local repositories with clone' \
     fork:'fork a repo on github' \
-    fresh-branch:'create empty local branch' \
-    gh-pages:'create the GitHub Pages branch' \
-    graft:'merge commits from source branch to destination branch' \
-    ignore:'add patterns to .gitignore' \
-    info:'show info about the repository' \
-    local-commits:'list unpushed commits on the local branch' \
+    fresh-branch:'create fresh branches' \
+    gh-pages:'create the github pages branch' \
+    graft:'merge and destroy a given branch' \
+    guilt:'calculate change between two revisions' \
+    ignore-io:'get sample gitignore file' \
+    ignore:'add .gitignore patterns' \
+    info:'returns information on current repository' \
+    local-commits:'list local commits' \
     lock:'lock a file excluded from version control' \
     locked:'ls files that have been locked' \
+    merge-into:'merge one branch into another' \
+    merge-repo:'merge two repo histories' \
     missing:'show commits missing from another branch' \
+    obliterate:'rewrite past commits to remove some files' \
     pr:'checks out a pull request locally' \
+    psykorebase:'rebase a branch with a merge commit' \
+    pull-request:'create pull request to GitHub project' \
+    reauthor:'replace the author and/or committer identities in commits and tags' \
     rebase-patch:'rebases a patch' \
-    refactor:'create a refactor branch' \
+    refactor:'create refactor branch' \
     release:'commit, tag and push changes to the repository' \
+    rename-branch:'rename a branch' \
     rename-tag:'rename a tag' \
-    repl:'read-eval-print-loop' \
+    repl:'git read-eval-print-loop' \
     reset-file:'reset one file' \
     root:'show path of root' \
-    setup:'setup a git repository' \
+    scp:'copy files to ssh compatible `git-remote`' \
+    sed:'replace patterns in git-controlled files' \
+    setup:'set up a git repository' \
+    show-merged-branches:'show merged branches' \
     show-tree:'show branch tree of commit history' \
-    squash:'merge commits from source branch into the current one as a single commit' \
-    summary:'repository summary' \
-    touch:'one step creation of new files' \
-    undo:'remove the latest commit' \
+    show-unmerged-branches:'show unmerged branches' \
+    squash:'import changes from a branch' \
+    stamp:'stamp the last commit message' \
+    standup:'recall the commit history' \
+    summary:'show repository summary' \
+    sync:'sync local branch with remote branch' \
+    touch:'touch and add file to the index' \
+    undo:'remove latest commits' \
     unlock:'unlock a file excluded from version control'
