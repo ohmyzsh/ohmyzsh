@@ -115,6 +115,6 @@ else
     else  
       source "$ZSH/themes/$SELECTED_THEME.zsh-theme"
     fi
-  fi                                                                                                                                                                                                             
+  fi
 fi
 
