@@ -1,6 +1,7 @@
+script_root=${0:a:h}
+
 _mongodbs() {
-	mypath=$(dirname $0)
-	compadd $(mongo --quiet $mypath/load_databases.js)
+	compadd $(mongo --quiet $script_root/load_databases.js)
 }
 compdef _mongodbs mongo
 
