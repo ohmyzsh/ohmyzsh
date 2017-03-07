@@ -19,6 +19,7 @@ bundled_commands=(
   kitchen
   knife
   middleman
+  mina
   nanoc
   pry
   puma
