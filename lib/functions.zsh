@@ -229,3 +229,41 @@ function omz_urldecode {
 
   echo -E "$decoded"
 }
+
+# Archive extract and create function.
+# Usage:
+#   ark e <any archive> - extract here
+#   ark c [tbz, tgz, tar, bz2, gz, zip, 7z] <file or folder> - create archive.
+#     example: arc c tgz <file or folder>
+#              arc c zip <file or folder>
+#              
+function ark () {
+  case $1 in
+    (e) case $2 in
+      (*.tar.xz) tar xvJf $2 ;;
+      (*.tar.bz2) tar xvjf $2 ;;
+      (*.tar.gz) tar xvzf $2 ;;
+      (*.bz2) bunzip2 $2 ;;
+      (*.rar) unrar x $2 ;;
+      (*.gz) gunzip $2 ;;
+      (*.tar) tar xvf $2 ;;
+      (*.tbz2) tar xvjf $2 ;;
+      (*.tgz) tar xvzf $2 ;;
+      (*.zip) unzip $2 ;;
+      (*.Z) uncompress $2 ;;
+      (*.7z) 7z x $2 ;;
+      (*) echo "'$2' неправильный архив" ;;
+    esac ;;
+    (c) case $2 in
+      (tbz) tar cjvf $3.tar.bz2 $3 ;;
+      (tgz) tar czvf $3.tar.gz $3 ;;
+      (tar) tar cpvf $3.tar $3 ;;
+      (bz2) bzip $3 ;;
+      (gz) gzip -c -9 -n $3 > $3.gz ;;
+      (zip) zip -r $3.zip $3 ;;
+      (7z) 7z a $3.7z $3 ;;
+      (*) echo "такого я не умею(" ;;
+    esac ;;
+    (*) echo "WATT?" ;;
+  esac
+}
