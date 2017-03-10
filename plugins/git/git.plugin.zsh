@@ -149,7 +149,7 @@ compdef _git ggpur=git-checkout
 alias ggpull='git pull origin $(git_current_branch)'
 compdef _git ggpull=git-checkout
 
-alias ggpush='git push origin $(git_current_branch)'
+alias ggpush='git push origin $(git_current_branch) --force-with-lease'
 compdef _git ggpush=git-checkout
 
 alias ggsup='git branch --set-upstream-to=origin/$(git_current_branch)'
