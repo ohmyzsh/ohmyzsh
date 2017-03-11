@@ -32,6 +32,7 @@ Available search contexts are:
 
 | context       | URL                                                                      |
 |---------------|--------------------------------------------------------------------------|
+| angular       | `https://angular.io/docs/ts/latest/api/#!?query=`                        |
 | angularjs     | `https://google.com/search?as_sitesearch=angularjs.org&as_q=`            |
 | aurajs        | `http://aurajs.com/api/#stq=`                                            |
 | bem           | `https://google.com/search?as_sitesearch=bem.info&as_q=`                 |
