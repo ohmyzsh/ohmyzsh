@@ -2,9 +2,15 @@
   <img src="https://s3.amazonaws.com/ohmyzsh/oh-my-zsh-logo.png" alt="Oh My Zsh">
 </p>
 
-Oh My Zsh is an open source, community-driven framework for managing your [zsh](http://www.zsh.org/) configuration. That sounds boring. Let's try this again.
+Oh My Zsh is an open source, community-driven framework for managing your [zsh](http://www.zsh.org/) configuration.
 
-__Oh My Zsh is a way of life!__ Once installed, your terminal prompt will become the talk of the town _or your money back!_ Each time you interact with your command prompt, you'll be able to take advantage of the hundreds of bundled plugins and pretty themes. Strangers will come up to you in cafés and ask you, _"that is amazing. are you some sort of genius?"_ Finally, you'll begin to get the sort of attention that you always felt that you deserved. ...or maybe you'll just use the time that you saved to start flossing more often.
+Sounds boring. Let's try again.
+
+__Oh My Zsh will not make you a 10x developer...but you might feel like one.__
+
+Once installed, your terminal shell will become the talk of the town _or your money back!_ With each keystroke in your command prompt, you'll take advantage of the hundreds of powerful plugins and beautiful themes. Strangers will come up to you in cafés and ask you, _"that is amazing! are you some sort of genius?"_
+
+Finally, you'll begin to get the sort of attention that you have always felt you deserved. ...or maybe you'll use the time that you're saving to start flossing more often.
 
 To learn more, visit [ohmyz.sh](http://ohmyz.sh) and follow [@ohmyzsh](https://twitter.com/ohmyzsh) on Twitter.
 
@@ -12,9 +18,9 @@ To learn more, visit [ohmyz.sh](http://ohmyz.sh) and follow [@ohmyzsh](https://t
 
 ### Prerequisites
 
-__Disclaimer:__ _Oh My Zsh works best on OS X and Linux._
+__Disclaimer:__ _Oh My Zsh works best on macOS and Linux._
 
-* Unix-based operating system (OS X or Linux)
+* Unix-like operating system (macOS or Linux)
 * [Zsh](http://www.zsh.org) should be installed (v4.3.9 or more recent). If not pre-installed (`zsh --version` to confirm), check the following instruction here: [Installing ZSH](https://github.com/robbyrussell/oh-my-zsh/wiki/Installing-ZSH)
 * `curl` or `wget` should be installed
 * `git` should be installed
@@ -43,9 +49,9 @@ Oh My Zsh comes with a shit load of plugins to take advantage of. You can take a
 
 #### Enabling Plugins
 
-If you spot a plugin (or several) that you would like to use with Oh My Zsh, you will need to edit the `~/.zshrc` file. Once you open it with your favorite editor, you'll see a spot to list all the plugins that you'd like Oh My Zsh to load in initialization.
+Once you spot a plugin (or several) that you'd like to use with Oh My Zsh, you'll need to enable them in the `.zshrc` file. You'll find the zshrc file in your `$HOME` directory. Open it with your favorite text editor and you'll see a spot to list all the plugins you want to load.
 
-For example, this line might begin to look like...
+For example, this line might begin to look like this:
 
 ```shell
 plugins=(git bundler osx rake ruby)
@@ -61,7 +67,7 @@ We'll admit it. Early in the Oh My Zsh world, we may have gotten a bit too theme
 
 #### Selecting a Theme
 
-_Robby's theme is the default one. It's not the fanciest one. It's not the simplest one. It's just right (for him)._
+_Robby's theme is the default one. It's not the fanciest one. It's not the simplest one. It's just the right one (for him)._
 
 Once you find a theme that you want to use, you will need to edit the `~/.zshrc` file. You'll see an environment variable (all caps) in there that looks like:
 
@@ -73,9 +79,11 @@ To use a different theme, simply change the value to match the name of your desi
 
 ```shell
 ZSH_THEME="agnoster" # (this is one of the fancy ones)
+# you might need to install a special Powerline font on your console's host for this to work
+# see https://github.com/robbyrussell/oh-my-zsh/wiki/Themes#agnoster
 ```
 
-Open up a new terminal window and your prompt should look something like...
+Open up a new terminal window and your prompt should look something like this:
 
 ![Agnoster theme](https://cloud.githubusercontent.com/assets/2618447/6316862/70f58fb6-ba03-11e4-82c9-c083bf9a6574.png)
 
@@ -123,7 +131,7 @@ cp ~/.zshrc ~/.zshrc.orig
 
 ##### 3. Create a new zsh configuration file
 
-You can create a new zsh config file by copying the template that we included for you.
+You can create a new zsh config file by copying the template that we have included for you.
 
 ```shell
 cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
@@ -202,7 +210,10 @@ Thank you so much!
 
 ## Follow Us
 
-We have an [@ohmyzsh](https://twitter.com/ohmyzsh) Twitter account. You should follow it.
+We're on the social media.
+
+* [@ohmyzsh](https://twitter.com/ohmyzsh) on Twitter. You should follow it.
+* [Oh My Zsh](https://www.facebook.com/Oh-My-Zsh-296616263819290/) on Facebook.
 
 ## Merchandise
 
@@ -211,3 +222,9 @@ We have [stickers](http://shop.planetargon.com/products/ohmyzsh-stickers-set-of-
 ## License
 
 Oh My Zsh is released under the [MIT license](LICENSE.txt).
+
+## About Planet Argon
+
+![Planet Argon](http://pa-github-assets.s3.amazonaws.com/PARGON_logo_digital_COL-small.jpg)
+
+Oh My Zsh was started by the team at [Planet Argon](https://www.planetargon.com/?utm_source=github), a [Ruby on Rails development agency](https://www.planetargon.com/skills/ruby-on-rails-development?utm_source=github).

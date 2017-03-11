@@ -53,11 +53,6 @@ main() {
     echo "Error: git is not installed"
     exit 1
   }
-  env git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git $ZSH || {
-    printf "Error: git clone of oh-my-zsh repo failed\n"
-    exit 1
-  }
-
   # The Windows (MSYS) Git is not compatible with normal use on cygwin
   if [ "$OSTYPE" = cygwin ]; then
     if git --version | grep msysgit > /dev/null; then
@@ -66,6 +61,11 @@ main() {
       exit 1
     fi
   fi
+  env git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git $ZSH || {
+    printf "Error: git clone of oh-my-zsh repo failed\n"
+    exit 1
+  }
+
 
   printf "${BLUE}Looking for an existing zsh config...${NORMAL}\n"
   if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]; then
@@ -77,12 +77,6 @@ main() {
   cp $ZSH/templates/zshrc.zsh-template ~/.zshrc
   sed "/^export ZSH=/ c\\
   export ZSH=$ZSH
-  " ~/.zshrc > ~/.zshrc-omztemp
-  mv -f ~/.zshrc-omztemp ~/.zshrc
-
-  printf "${BLUE}Copying your current PATH and adding it to the end of ~/.zshrc for you.${NORMAL}\n"
-  sed "/export PATH=/ c\\
-  export PATH=\"$PATH\"
   " ~/.zshrc > ~/.zshrc-omztemp
   mv -f ~/.zshrc-omztemp ~/.zshrc
 
