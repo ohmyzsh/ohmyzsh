@@ -1,6 +1,4 @@
 
-ng_opts='addon asset-sizes b build completion d destroy doc e2e g generate get github-pages:deploy gh-pages:deploy h help i init install lint make-this-awesome new s serve server set t test v version -h --help'
-
 _ng_completion () {
   local words cword opts
   read -Ac words
@@ -8,65 +6,36 @@ _ng_completion () {
   let cword-=1
 
   case $words[cword] in
-    addon )
-      opts='-b --blueprint -d -dir --directory --dry-run -sb --skip-bower -sg --skip-git -sn --skip-npm -v --verbose'
-      ;;
-
-    asset-sizes )
-      opts='-o --output-path'
-      ;;
-
-    b | build )
-      opts='--environment --output-path --suppress-sizes --target --watch --watcher -dev -e -prod'
-      ;;
-
-    d | destroy )
-      opts='--dry-run --verbose --pod --classic --dummy --in-repo --in-repo-addon -d -v -p -c -dum -id -ir'
-      ;;
-
-    g | generate )
-      opts='class component directive enum module pipe route service --generate -d --dry-run --verbose -v --pod -p --classic -c --dummy -dum -id --in-repo --in-repo-addon -ir'
-      ;;
-
-    gh-pages:deploy | github-pages:deploy )
-      opts='--environment --gh-token --gh-username --skip-build --user-page --message'
-      ;;
-
-    h | help | -h | --help)
-      opts='--json --verbose -v'
-      ;;
-
-    init )
-      opts='--blueprint --dry-run --link-cli --mobile --name --prefix --skip-bower --skip-npm --source-dir --style --verbose -b -d -lc -n -p -sb -sd -sn -v'
-      ;;
-
-    new )
-      opts='--blueprint --directory --dry-run --link-cli --mobile --prefix --skip-bower --skip-git --skip-npm --source-dir --style --verbose -b -d -dir -lc -p -sb -sd -sg -sn -v'
-      ;;
-
-    s | serve | server )
-      opts='--environment --host --insecure-proxy --inspr --live-reload --live-reload-base-url --live-reload-host --live-reload-live-css --live-reload-port --output-path --port --proxy --ssl --ssl-cert --ssl-key --target --watcher -H -dev -e -lr -lrbu -lrh -lrp -op -out -p -pr -prod -pxy -t -w'
-      ;;
-
-    set )
-      opts='--global -g'
-      ;;
-
-    t | test )
-      opts='--browsers --colors --config-file --environment --filter --host --launch --log-level --module --path --port --query --reporter --server --silent --test-page --test-port --watch -H -c -cf -e -f -m -r -s -tp -w'
-      ;;
-
-    v | version )
-      opts='--verbose'
-      ;;
-
-    ng )
-      opts=$ng_opts
-      ;;
-
-    * )
-      opts=''
-      ;;
+    ng | help)
+		  opts='--version -v b build completion doc e e2e eject g generate get help l lint new s serve server set t test v version xi18n' ;;
+    b | build)
+		  opts='--aot --app --base-href --deploy-url --environment --extract-css --i18n-file --i18n-format --locale --output-hashing --output-path --poll --progress --sourcemap --stats-json --target --vendor-chunk --verbose --watch -a -aot -bh -d -e -ec -i18nFile -i18nFormat -locale -oh -op -poll -pr -sm -statsJson -t -v -vc -w' ;;
+    completion)
+		  opts='--all --bash --zsh -a -b -z' ;;
+    e | e2e)
+		  opts='--aot --app --base-href --config --deploy-url --element-explorer --environment --extract-css --hmr --host --i18n-file --i18n-format --live-reload --live-reload-client --locale --open --output-hashing --output-path --poll --port --progress --proxy-config --serve --sourcemap --specs --ssl --ssl-cert --ssl-key --target --vendor-chunk --verbose --watch --webdriver-update -H -a -aot -bh -c -d -e -ec -ee -hmr -i18nFile -i18nFormat -liveReloadClient -locale -lr -o -oh -op -p -pc -poll -pr -s -sm -sp -ssl -sslCert -sslKey -t -v -vc -w -wu' ;;
+    eject)
+		  opts='--aot --app --base-href --deploy-url --environment --extract-css --force --i18n-file --i18n-format --locale --output-hashing --output-path --poll --progress --sourcemap --target --vendor-chunk --verbose --watch -a -aot -bh -d -e -ec -force -i18nFile -i18nFormat -locale -oh -op -poll -pr -sm -t -v -vc -w' ;;
+    g | generate)
+		  opts='class component directive enum guard interface module pipe service--dry-run --verbose -d -v' ;;
+    get)
+		  opts='--global -global' ;;
+    l | lint)
+		  opts='--fix --force --format -fix -force -format' ;;
+    new)
+		  opts='--directory --dry-run --inline-style --inline-template --link-cli --ng4 --prefix --routing --skip-commit --skip-git --skip-install --skip-tests --source-dir --style --verbose -d -dir -is -it -lc -ng4 -p -routing -sc -sd -sg -si -st -style -v' ;;
+    s | serve | server)
+		  opts='--aot --app --base-href --deploy-url --environment --extract-css --hmr --host --i18n-file --i18n-format --live-reload --live-reload-client --locale --open --output-hashing --output-path --poll --port --progress --proxy-config --sourcemap --ssl --ssl-cert --ssl-key --target --vendor-chunk --verbose --watch -H -a -aot -bh -d -e -ec -hmr -i18nFile -i18nFormat -liveReloadClient -locale -lr -o -oh -op -p -pc -poll -pr -sm -ssl -sslCert -sslKey -t -v -vc -w' ;;
+    set)
+		  opts='--global -g' ;;
+    t | test)
+		  opts='--app --browsers --code-coverage --colors --config --log-level --poll --port --progress --reporters --single-run --sourcemap --watch -a -browsers -c -cc -colors -logLevel -poll -port -progress -reporters -sm -sr -w' ;;
+    --version | -v | v | version)
+		  opts='--verbose -verbose' ;;
+    xi18n)
+		  opts='--app --i18n-format --locale --out-file --output-path --progress --verbose -a -f -l -of -op -progress -verbose' ;;
+    *)
+		  opts='' ;;
   esac
 
   setopt shwordsplit
