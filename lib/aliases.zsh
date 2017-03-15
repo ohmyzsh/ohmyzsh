@@ -107,7 +107,7 @@ alias dcrm="docker-compose stop && docker-compose rm -f"
 =======
 
 # Setup Docker Development Environment
-alias devup="docker-compose -f ~/Dropbox/Code/docker/development/docker-compose.yml up -d"
+alias devup="docker-compose -f ~/Dropbox/Code/docker/development-local/docker-compose.yml up -d"
 
 # Enter Docker containers
 alias devweb="docker exec -it web bash"
@@ -116,4 +116,9 @@ alias devdb="docker exec -it db bash"
 # SSH
 alias casapps="ssh 10.26.0.80"
 alias casdb="ssh 10.26.192.133"
+<<<<<<< HEAD
 >>>>>>> Add SSH aliases
+=======
+alias casappsdev="ssh 10.26.0.230"
+alias casdbdev="ssh 10.26.192.193"
+>>>>>>> Update Docker and SSH aliases
