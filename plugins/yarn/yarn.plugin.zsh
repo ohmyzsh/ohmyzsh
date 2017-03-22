@@ -36,7 +36,7 @@ _yarn ()
       'info:<package> [<field>] - fetch information about a package and return it in a tree format.' \
       'outdated:Checks for outdated package dependencies.' \
       'run:Runs a defined package script.' \
-      'upgrade:<package> Upgrades packages to their latest version based on the specified range.' \
+      'upgrade:[package] Upgrades packages to their latest version based on the specified range.' \
       'upgrade-interactive:Opens an interactive GUI to update packages.' \
       'why:<package> - Show information about why a package is installed.'
     )
