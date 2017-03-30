@@ -72,13 +72,13 @@ _"Fixes #XXXX"_ for issue number XXXX.
 ### You have a solution
 
 Please be so kind as to [search](#use-the-search-luke) for any open issue already covering
-your [problem](#you-have-a-problem), and any pending PR covering your solution.
+your [problem](#you-have-a-problem), and any pending/merged/rejected PR covering your solution.
 
 If the solution is already reported, try it out and +1 the pull request if the
 solution works ok. On the other hand, if you think your solution is better, post
-it so we can have both solutions to compare.
+it with a reference to the other one so we can have both solutions to compare.
 
-If not, then go ahead and submit a PR. Please copy to anyone relevant (_eg_ plugin
+If not, then go ahead and submit a PR. Please copy to anyone relevant (e.g. plugin
 maintainers) by mentioning their GitHub handle (starting with `@`) in your message.
 
 ### You have an addition
@@ -86,8 +86,8 @@ maintainers) by mentioning their GitHub handle (starting with `@`) in your messa
 Please [do not](https://github.com/robbyrussell/oh-my-zsh/wiki/Themes#dont-send-us-your-theme-for-now)
 send themes for now.
 
-Please be so kind as to [search](#use-the-search-luke) for any pending PR covering or
-related to what you want to add.
+Please be so kind as to [search](#use-the-search-luke) for any pending, merged or rejected Pull Requests
+covering or related to what you want to add.
 
 If you find one, try it out and work with the author on a common solution.
 
