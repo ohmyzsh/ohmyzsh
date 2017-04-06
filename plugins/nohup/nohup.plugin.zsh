@@ -15,16 +15,17 @@
 nohup-command-line() {
     [[ -z $BUFFER ]] && zle up-history
     if [[ $BUFFER == nohup\ * ]]; then
-        LBUFFER="${LBUFFER#nohup }"
-        LBUFFER="${LBUFFER%\ &\>*}"
+        BUFFER="${BUFFER#nohup }"
+        BUFFER="${BUFFER%\ &\>*}"
     else
-		tokens=("${(@s/ /)LBUFFER}")
+		tokens_slash=("${(@s|/|)BUFFER}")
+		tokens_space=("${(@s/ /)tokens_slash[-1]}")
 		i=1
-		if [[ $tokens[1] == sudo ]]; then
+		if [[ $tokens_slash[1] == sudo ]]; then
 		    (( i++ ))
 		fi
 		
-		LBUFFER="nohup $LBUFFER &> $tokens[$i].out &"
+		BUFFER="nohup $BUFFER &> $tokens_space[$i].out &"
     fi
 }
 zle -N nohup-command-line
