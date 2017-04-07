@@ -18,14 +18,12 @@ nohup-command-line() {
         BUFFER="${BUFFER#nohup }"
         BUFFER="${BUFFER%\ &\>*}"
     else
-		tokens_slash=("${(@s|/|)BUFFER}")
+		base="${BUFFER#sudo }"
+		tokens_slash=("${(@s|/|)base}")
 		tokens_space=("${(@s/ /)tokens_slash[-1]}")
-		i=1
-		if [[ $tokens_slash[1] == sudo ]]; then
-		    (( i++ ))
-		fi
+		command=("$tokens_space[1]")
 		
-		BUFFER="nohup $BUFFER &> $tokens_space[$i].out &"
+		BUFFER="nohup $BUFFER &> $command.out &"
     fi
 }
 zle -N nohup-command-line
