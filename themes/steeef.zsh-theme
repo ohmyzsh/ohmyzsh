@@ -9,8 +9,12 @@
 
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 
-function virtualenv_info {
-    [ $VIRTUAL_ENV ] && echo '('%F{blue}`basename $VIRTUAL_ENV`%f') '
+function virtualenv_or_conda_info {
+    if [[ -n "$VIRTUAL_ENV" ]]; then
+        echo '('%F{blue}`basename $VIRTUAL_ENV`%f') '
+    elif [[ -n "$CONDA_DEFAULT_ENV" ]]; then
+        echo '('%F{blue}`basename $CONDA_DEFAULT_ENV`%f') '
+    fi
 }
 PR_GIT_UPDATE=1
 
@@ -96,5 +100,5 @@ function steeef_precmd {
 add-zsh-hook precmd steeef_precmd
 
 PROMPT=$'
-%{$purple%}%n${PR_RST} at %{$orange%}%m${PR_RST} in %{$limegreen%}%~${PR_RST} $vcs_info_msg_0_$(virtualenv_info)
+%{$purple%}%n${PR_RST} at %{$orange%}%m${PR_RST} in %{$limegreen%}%~${PR_RST} $vcs_info_msg_0_$(virtualenv_or_conda_info)
 $ '
