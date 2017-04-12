@@ -17,8 +17,8 @@ function ace_prompt () {
   local spade="♤ ";
   local fill_spade="♠︎ ";
 
-  ref=$(git symbolic-ref HEAD 2> /dev/null);
-  branch=${ref#refs/heads/};
+  local ref=$(git symbolic-ref HEAD 2> /dev/null);
+  local branch=${ref#refs/heads/};
 
   if [[ ! -z $branch ]]; then
     if [[ $branch == "master" ]]; then
@@ -44,6 +44,8 @@ function ace_prompt () {
 	unset prompt;
 	unset red;
 	unset blue;
+  unset branch;
+  unset ref;
 	unset stop;
 }
 
@@ -53,4 +55,3 @@ function directory () {
 
 PROMPT=' $(ace_prompt) $(collapse_pwd)
   > '
-

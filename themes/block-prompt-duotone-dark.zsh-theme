@@ -42,13 +42,10 @@ ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$BG[008]%}%{$fg[black]%} ✰ %{$reset_color%}"
 #
 #	Convert the home directory to "~"
 #	(Courtesy of Mr. Steve Losh)
-#෴
+#
 
 function collapse_pwd {
   echo $(pwd | sed -e "s,^$HOME,~,")
 }
 
-#
-#	Some Special Characters if you want to swap out the prompts
-#	-----------------------------------------------------------
-#	✰ ✼ ✪ ✙ ♔ ♘ ♜ ♛ ♚ ♞ ♬ ⏀ ⌦ ⌘ ≫ ⇪ ☩ ☀ ☂ ★ ⚓ Ө β δ Σ Ω μ Δ ↪
+#	✰ ✼ ✪ ✙ ♔ ♘ ☩ ★

@@ -11,7 +11,6 @@ function atlas_usage {
       list    show what host configs exist
       show    show which config is linked
 
-
 USAGE
 }
 
@@ -46,7 +45,7 @@ function atlas_map {
 }
 
 function atlas_show {
-  if [ -d "/Users/nstilwell/.hosts" ] && [ -e "/Users/nstilwell/.hosts/$1" ]; then
+  if [ -d "/Users/nstilwell/.hosts" ] && [ -e "/Users/nstilwell/.hosts/" ]; then
     head -n 4 /etc/hosts;
   else
     echo "Atlas not initialized";
@@ -55,7 +54,7 @@ function atlas_show {
 }
 
 function atlas_list {
-  if [ -d "/Users/nstilwell/.hosts" ] && [ -e "/Users/nstilwell/.hosts/$1" ]; then
+  if [ -d "/Users/nstilwell/.hosts" ] && [ -e "/Users/nstilwell/.hosts/" ]; then
     ls -F ~/.hosts | grep -v /$;
   else
     echo "Atlas not initialized";
