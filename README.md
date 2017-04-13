@@ -4,9 +4,9 @@
 
 Oh My Zsh is an open source, community-driven framework for managing your [zsh](http://www.zsh.org/) configuration.
 
-That sounds boring. Let's try this again.
+Sounds boring. Let's try again.
 
-__Oh My Zsh is a way of life!__
+__Oh My Zsh will not make you a 10x developer...but you might feel like one.__
 
 Once installed, your terminal shell will become the talk of the town _or your money back!_ With each keystroke in your command prompt, you'll take advantage of the hundreds of powerful plugins and beautiful themes. Strangers will come up to you in cafés and ask you, _"that is amazing! are you some sort of genius?"_
 
@@ -20,7 +20,7 @@ To learn more, visit [ohmyz.sh](http://ohmyz.sh) and follow [@ohmyzsh](https://t
 
 __Disclaimer:__ _Oh My Zsh works best on macOS and Linux._
 
-* Unix-based operating system (macOS or Linux)
+* Unix-like operating system (macOS or Linux)
 * [Zsh](http://www.zsh.org) should be installed (v4.3.9 or more recent). If not pre-installed (`zsh --version` to confirm), check the following instruction here: [Installing ZSH](https://github.com/robbyrussell/oh-my-zsh/wiki/Installing-ZSH)
 * `curl` or `wget` should be installed
 * `git` should be installed

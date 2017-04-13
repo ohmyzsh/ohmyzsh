@@ -9,6 +9,8 @@
 #  pushd -N: start counting from right of `dirs' output
 
 switch-to-dir () {
+	[[ ${#dirstack} -eq 0 ]] && return
+
 	while ! builtin pushd -q $1 &>/dev/null; do
 		# We found a missing directory: pop it out of the dir stack
 		builtin popd -q $1
