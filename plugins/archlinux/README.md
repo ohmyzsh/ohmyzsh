@@ -73,6 +73,8 @@
 | pacupd       | sudo pacman -Sy                         | Update and refresh the local package database                |
 | pacupg       | sudo pacman -Syu                        | Sync with repositories before upgrading packages             |
 | upgrade      | sudo pacman -Syu                        | Sync with repositories before upgrading packages             |
+| pacfileupg   | sudo pacman -Fy                         | Download fresh package databases from the server             |
+| pacfiles     | pacman -Fs                              | Search package file names for matching strings.              |
 
 | Function       | Description                                          |
 |----------------|------------------------------------------------------|
