@@ -32,6 +32,23 @@ function work_in_progress() {
     echo "WIP!!"
   fi
 }
+# Remove control characters (colors) and spaces from a string
+function git_prompt_unescape() {
+    echo "$1" | sed -re 's/%[{}]//g' -e 's/\s+//'
+}
+# Print a legend about the git prompt characters
+function git_prompt_legend() {
+    echo "${reset_color}Index is dirty:      "`git_prompt_unescape "$ZSH_THEME_GIT_PROMPT_DIRTY"`
+    echo "${reset_color}Repository is clean: "`git_prompt_unescape "$ZSH_THEME_GIT_PROMPT_CLEAN"`
+    echo "${reset_color}New files:           "`git_prompt_unescape "$ZSH_THEME_GIT_PROMPT_ADDED"`
+    echo "${reset_color}Modified files:      "`git_prompt_unescape "$ZSH_THEME_GIT_PROMPT_MODIFIED"`
+    echo "${reset_color}Deleted files:       "`git_prompt_unescape "$ZSH_THEME_GIT_PROMPT_DELETED"`
+    echo "${reset_color}Renamed files:       "`git_prompt_unescape "$ZSH_THEME_GIT_PROMPT_RENAMED"`
+    echo "${reset_color}Unmerged files:      "`git_prompt_unescape "$ZSH_THEME_GIT_PROMPT_UNMERGED"`
+    echo "${reset_color}Untracked files:     "`git_prompt_unescape "$ZSH_THEME_GIT_PROMPT_UNTRACKED"`
+    echo -n "$reset_color"
+}
+
 
 #
 # Aliases
