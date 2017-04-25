@@ -37,6 +37,7 @@ compdef _composer composer.phar
 # Aliases
 alias c='composer'
 alias csu='composer self-update'
+alias chu='composer update --working-dir=$(composer config -g home)'
 alias cu='composer update'
 alias cr='composer require'
 alias crm='composer remove'
