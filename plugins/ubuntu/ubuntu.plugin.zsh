@@ -35,6 +35,7 @@ alias agd='sudo apt-get dselect-upgrade' # ads
 alias agi='sudo apt-get install'  # ai
 alias agp='sudo apt-get purge'    # ap
 alias agr='sudo apt-get remove'   # ar
+alias agar='sudo apt-get autoremove'
 alias agu='sudo apt-get update'   # ad
 alias agud='sudo apt-get update && sudo apt-get dist-upgrade' #adu
 alias agug='sudo apt-get upgrade' # ag
@@ -142,3 +143,7 @@ function apt-list-packages {
     sort -n | \
     awk '{print $1" "$2}'
 }
+
+# Copy output to clipboard (requires xclip)
+# Usage: ls | clip
+alias clip='xclip -sel clip'
