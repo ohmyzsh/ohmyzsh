@@ -1,0 +1,48 @@
+#compdef meteor
+#autoload
+
+# Meteor Autocomplete plugin for Oh-My-Zsh, based on homebrew completion
+# Original author: Dimitri JORGE (https://github.com/jorge-d)
+
+_meteor_all_packages() {
+  packages=(`meteor list | cut -d" " -f1`)
+}
+_meteor_installed_packages() {
+  installed_packages=(`meteor list --using`)
+}
+
+local -a _1st_arguments
+_1st_arguments=(
+  'run:[Default] Run this project in local development mode'
+  'create:Create a new project'
+  'update:Upgrade this project to the latest version of Meteor'
+  'add:Add a package to this project'
+  'remove:Remove a package from this project'
+  'list:List available packages'
+  'help:Display Meteor help'
+  'bundle:Pack this project up into a tarball'
+  'mongo:Connect to the Mongo database for the specified site'
+  'deploy:Deploy this project to Meteor'
+  'logs:Show logs for specified site'
+  'reset:Reset the project state. Erases the local database.'
+  'test-packages:Test one or more packages'
+)
+
+local expl
+local -a packages installed_packages
+
+if (( CURRENT == 2 )); then
+  _describe -t commands "meteor subcommand" _1st_arguments
+  return
+fi
+
+case "$words[2]" in
+    help)
+      _describe -t commands "meteor subcommand" _1st_arguments ;;
+    remove)
+      _meteor_installed_packages
+      _wanted installed_packages expl 'installed packages' compadd -a installed_packages ;;
+    add)
+      _meteor_all_packages
+      _wanted packages expl 'all packages' compadd -a packages ;;
+esac

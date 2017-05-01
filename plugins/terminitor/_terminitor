@@ -1,0 +1,38 @@
+#compdef terminitor
+#autoload
+
+# terminitor zsh completion
+
+_terminitor_available_scripts() {
+  scripts=(`for SCRIPT in ~/.config/terminitor/*.term ; do basename $SCRIPT .term ; done`)
+}
+
+local -a _1st_arguments
+_1st_arguments=(
+    'create:create a Termfile in directory'
+    'delete:delete terminitor script'
+    'edit:open termitor script'
+    'fetch:clone the designated repo and run setup'
+    'help:Describe available tasks or one specific task'
+    'init:create initial root terminitor folder'
+    'list:lists all terminitor scripts'
+    'setup:execute setup in the terminitor script'
+    'start:runs the terminitor script'
+    'update:update Terminitor to new global path(.config/.terminitor)'
+)
+
+local expl
+
+_arguments \
+  '*:: :->subcmds' && return 0
+
+if (( CURRENT == 1 )); then
+  _describe -t commands "terminitor task" _1st_arguments
+  return
+fi
+
+case "$words[1]" in
+  start|edit|delete|setup)
+    _terminitor_available_scripts
+    _wanted scripts expl 'installed scripts' compadd -a scripts ;;
+esac

@@ -1,0 +1,98 @@
+#compdef pip pip2 pip-2.7 pip3 pip-3.2 pip-3.3 pip-3.4
+#autoload
+
+# pip zsh completion, based on last stable release (pip8)
+# homebrew completion and backwards compatibility
+
+_pip_all() {
+  # we cache the list of packages (originally from the macports plugin)
+  if (( ! $+piplist )); then
+      zsh-pip-cache-packages
+      piplist=($(cat $ZSH_PIP_CACHE_FILE))
+  fi
+}
+
+_pip_installed() {
+  installed_pkgs=(`pip freeze | cut -d '=' -f 1`)
+}
+
+local -a _1st_arguments
+_1st_arguments=(
+  'install:install packages'
+  'download:download packages'
+  'uninstall:uninstall packages'
+  'freeze:output all currently installed packages (exact versions) to stdout'
+  'list:list installed packages'
+  'show:show information about installed packages'
+  'search:search PyPI'
+  'wheel:build individual wheel archives for your requirements and dependencies'
+  'hash:compute a hash of a local package archive'
+  'help:show available commands'
+  'bundle:create pybundles (archives containing multiple packages)(deprecated)'
+  'unzip:unzip individual packages(deprecated)'
+  'zip:zip individual packages(deprecated)'
+)
+
+local expl
+local -a all_pkgs installed_pkgs
+
+_arguments \
+  '(-h --help)'{-h,--help}'[show help]' \
+  '(--isolated)--isolated[run pip in isolated mode, ignores environment variables and user configuration]' \
+  '(-v --verbose)'{-v,--verbose}'[give more output]' \
+  '(-V --version)'{-V,--version}'[show version number of program and exit]' \
+  '(-q --quiet)'{-q,--quiet}'[give less output]' \
+  '(--log)--log[log file location]' \
+  '(--proxy)--proxy[proxy in form user:passwd@proxy.server:port]' \
+  '(--retries)--retries[max number of retries per connection (default 5 times)]' \
+  '(--timeout)--timeout[socket timeout (default 15s)]' \
+  '(--exists-action)--exists-action[default action when a path already exists: (s)witch, (i)gnore, (w)ipe, (b)ackup]' \
+  '(--trusted-host)--trusted-host[mark this host as trusted]' \
+  '(--cert)--cert[path to alternate CA bundle]' \
+  '(--client-cert)--client-cert[path to SSL client certificate]' \
+  '(--cache-dir)--cache-dir[store the cache data in specified directory]' \
+  '(--no-cache-dir)--no-cache-dir[disable de cache]' \
+  '(--disable-pip-version-check)--disable-pip-version-check[do not check periodically for new pip version downloads]' \
+  '(-E --environment)'{-E,--environment}'[virtualenv environment to run pip in (deprecated)]' \
+  '(-s --enable-site-packages)'{-s,--enable-site-packages}'[include site-packages in virtualenv (deprecated)]' \
+  '*:: :->subcmds' && return 0
+
+if (( CURRENT == 1 )); then
+  _describe -t commands "pip subcommand" _1st_arguments
+  return
+fi
+
+case "$words[1]" in
+  search)
+    _arguments \
+      '(--index)--index[base URL of Python Package Index]' ;;
+  freeze)
+    _arguments \
+      '(-l --local)'{-l,--local}'[report only virtualenv packages]' ;;
+  install)
+    _arguments \
+      '(-U --upgrade)'{-U,--upgrade}'[upgrade all packages to the newest available version]' \
+      '(-f --find-links)'{-f,--find-links}'[URL for finding packages]' \
+      '(-r --requirement)'{-r,--requirement}'[Requirements file for packages to install]:File:_files' \
+      '(--no-deps --no-dependencies)'{--no-deps,--no-dependencies}'[iIgnore package dependencies]' \
+      '(--no-install)--no-install[only download packages]' \
+      '(--no-download)--no-download[only install downloaded packages]' \
+      '(--install-option)--install-option[extra arguments to be supplied to the setup.py]' \
+      '(--single-version-externally-managed)--single-version-externally-managed[do not download/install dependencies. requires --record or --root]'\
+      '(--root)--root[treat this path as a fake chroot, installing into it. implies --single-version-externally-managed]'\
+      '(--record)--record[file to record all installed files to.]'\
+      '(-r --requirement)'{-r,--requirement}'[requirements file]: :_files'\
+      '(-e --editable)'{-e,--editable}'[path of or url to source to link to instead of installing.]: :_files -/'\
+      '1: :->packages' &&  return 0
+
+      if [[ "$state" == packages ]]; then
+        _pip_all
+        _wanted piplist expl 'packages' compadd -a piplist
+      fi ;;
+  uninstall)
+    _pip_installed
+    _wanted installed_pkgs expl 'installed packages' compadd -a installed_pkgs ;;
+  show)
+    _pip_installed
+    _wanted installed_pkgs expl 'installed packages' compadd -a installed_pkgs ;;
+esac

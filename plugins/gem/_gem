@@ -1,0 +1,72 @@
+#compdef gem
+#autoload
+
+# gem zsh completion, based on homebrew completion
+
+_gem_installed() {
+  installed_gems=(${(f)"$(gem list --local --no-versions)"})
+}
+
+local -a _1st_arguments
+
+_1st_arguments=(
+  'build:Build a gem from a gemspec'
+  'cert:Manage RubyGems certificates and signing settings'
+  'check:Check a gem repository for added or missing files'
+  'cleanup:Clean up old versions of installed gems in the local repository'
+  'contents:Display the contents of the installed gems'
+  'dependency:Show the dependencies of an installed gem'
+  'environment:Display information about the RubyGems environment'
+  'fetch:Download a gem and place it in the current directory'
+  'generate_index:Generates the index files for a gem server directory'
+  'help:Provide help on the `gem` command'
+  'install:Install a gem into the local repository'
+  'list:Display gems whose name starts with STRING'
+  'lock:Generate a lockdown list of gems'
+  'mirror:Mirror all gem files (requires rubygems-mirror)'
+  'outdated:Display all gems that need updates'
+  'owner:Manage gem owners on RubyGems.org.'
+  'pristine:Restores installed gems to pristine condition from files located in the gem cache'
+  'push:Push a gem up to RubyGems.org'
+  'query:Query gem information in local or remote repositories'
+  'rdoc:Generates RDoc for pre-installed gems'
+  'search:Display all gems whose name contains STRING'
+  'server:Documentation and gem repository HTTP server'
+  'sources:Manage the sources and cache file RubyGems uses to search for gems'
+  'specification:Display gem specification (in yaml)'
+  'stale:List gems along with access times'
+  'uninstall:Uninstall gems from the local repository'
+  'unpack:Unpack an installed gem to the current directory'
+  'update:Update installed gems to the latest version'
+  'which:Find the location of a library file you can require'
+  'yank:Remove a specific gem version release from RubyGems.org'
+)
+
+local expl
+local -a gems installed_gems
+
+_arguments \
+  '(-v --version)'{-v,--version}'[show version]' \
+  '(-h --help)'{-h,--help}'[show help]' \
+  '*:: :->subcmds' && return 0
+
+if (( CURRENT == 1 )); then
+  _describe -t commands "gem subcommand" _1st_arguments
+  return
+fi
+
+case "$words[1]" in
+  build)
+    _files -g "*.gemspec"
+    ;;
+  install)
+    _files ;;
+  list)
+      if [[ "$state" == forms ]]; then
+        _gem_installed
+        _requested installed_gems expl 'installed gems' compadd -a installed_gems
+      fi ;;
+  uninstall|update)
+    _gem_installed
+    _wanted installed_gems expl 'installed gems' compadd -a installed_gems ;;
+esac
