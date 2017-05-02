@@ -9,6 +9,12 @@
 
 THEMES_DIR="$ZSH/themes"
 FAVLIST="${HOME}/.zsh_favlist"
+
+if [ -z "$ZSH" ]; then
+    echo "You probably need to set the environment value $ZSH, e.g. 'export ZSH; $0'"
+    exit
+fi
+
 source $ZSH/oh-my-zsh.sh
 
 function noyes() {
