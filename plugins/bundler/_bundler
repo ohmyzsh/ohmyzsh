@@ -90,6 +90,15 @@ case $state in
 					_values 'gems' $_gems && ret=0
 				fi
 				;;
+			outdated)
+				_arguments \
+		      '(--pre)--pre[Check for newer pre-release gems]' \
+    	  	'(--source)--source[Check against a specific source]' \
+      		'(--local)--local[Do not attempt to fetch gems remotely and use the gem cache instead]' \
+      		'(--no-color)--no-color[Disable colorization in output]' \
+					'(--verbose)--verbose[Enable verbose output mode]'
+				ret=0
+				;;
 			*)
 				_opts=(  $(bundle help $line[1] | sed -e '/^  \[-/!d; s/^  \[\(-[^=]*\)=.*/\1/') )
 				_opts+=( $(bundle help $line[1] | sed -e '/^  -/!d; s/^  \(-.\), \[\(-[^=]*\)=.*/\1 \2/') )
