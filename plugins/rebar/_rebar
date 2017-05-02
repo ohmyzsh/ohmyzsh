@@ -43,6 +43,7 @@ _rebar () {
         'overlay[Run reltool overlays only]' \
         'generate-appups[Generate appup files]' \
         'generate-upgrade[Build an upgrade package]' \
+        'escriptize[Create stand-alone escript executable]' \
         'eunit[Run eunit tests]' \
         'ct[Run common_test suites]' \
         'qc[Test QuickCheck properties]' \
@@ -51,18 +52,21 @@ _rebar () {
         'version[Show version information]' \
         'apps[Application names to process]:' \
         'case[Common Test case]:' \
-        'dump_spec[Dump reltool spec]:' \
+        'dump_spec[Dump reltool spec]::flag:(1)' \
         'jobs[Number of workers]::workers:(0 1 2 3 4 5 6 7 8 9)' \
         'suites[Common Test suites]::suite name:_path_files -W "(src test)" -g "*.erl(:r)"' \
         'verbose[Verbosity level]::verbosity level:(0 1 2 3)' \
         'appid[Application id]:' \
+        'overlay_vars[Overlay variables file]:' \
         'previous_release[Previous release path]:' \
         'nodeid[Node id]:' \
         'root_dir[Reltool config root directory]::directory:_files -/' \
         'skip_deps[Skip deps]::flag:(true false)' \
         'skip_apps[Application names to not process]::flag:(true false)' \
+        'target_dir[Target directory]:' \
         'template[Template name]:' \
         'template_dir[Template directory]::directory:_files -/' \
+        'tests[Run eunit tests whose name starts with given string]:' \
         && ret=0
       ;;
   esac
