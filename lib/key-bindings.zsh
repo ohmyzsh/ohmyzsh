@@ -91,3 +91,6 @@ bindkey "^[m" copy-prev-shell-word
 ## Fix weird sequence that rxvt produces
 #bindkey -s '^[[Z' '\t'
 #
+
+# rebind key for editor with edit-command-line
+bindkey '\C-x\C-e' edit-command-line
