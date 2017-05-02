@@ -34,6 +34,7 @@ alias as="aptitude -F \"* %p -> %d \n(%v/%V)\" \
 
 # apt-file
 alias afs='apt-file search --regexp'
+alias afl='apt-file list'
 
 
 # These are apt-get only
@@ -52,6 +53,7 @@ if [[ $use_sudo -eq 1 ]]; then
     alias afu='sudo apt-file update'
     alias ag='sudo $apt_pref $apt_upgr'
     alias ai='sudo $apt_pref install'
+    alias arei='sudo $apt_pref reinstall'
     # Install all packages given on the command line while using only the first word of each line:
     # acs ... | ail
     alias ail="sed -e 's/  */ /g' -e 's/ *//' | cut -s -d ' ' -f 1 | "' xargs sudo $apt_pref install'
