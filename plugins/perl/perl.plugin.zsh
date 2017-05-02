@@ -12,6 +12,12 @@ alias pbo='perlbrew off'
 alias pbs='perlbrew switch'
 alias pbu='perlbrew use'
 
+perlbrew-prompt () {
+  perlversion=$PERLBREW_PERL
+  [[ -z $perlversion ]] && perlversion="system perl"
+  echo $perlversion
+}
+
 # Perl ############
 
 # perldoc`
