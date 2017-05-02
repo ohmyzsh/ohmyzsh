@@ -572,8 +572,8 @@ __git_complete_remote_or_refspec ()
 		cur_="${cur_#*:}"
 		lhs=0
 		;;
-	+*)
-		pfx="+"
+	*)
+		pfx=""
 		cur_="${cur_#+}"
 		;;
 	esac
