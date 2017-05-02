@@ -3,6 +3,8 @@
 function _prompt_char() {
   if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
     echo "%{%F{blue}%}±%{%f%k%b%}"
+  elif $(hg root > /dev/null 2>&1); then
+    echo "%{%F{blue}%}☿%{%f%k%b%}"
   else
     echo ' '
   fi
