@@ -1,4 +1,4 @@
-read -r -p "Are you sure you want to remove Oh My Zsh? [y/N] " confirmation
+read -r -p "Are you sure you want to remove Oh My Zsh? [Y/N] " confirmation
 if [ "$confirmation" != y ] && [ "$confirmation" != Y ]; then
   echo "Uninstall cancelled"
   exit
