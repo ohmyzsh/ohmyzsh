@@ -20,7 +20,11 @@ _tasks_changed () {
 }
 
 _rake_generate () {
-  rake --silent --tasks | cut -d " " -f 2 > .rake_tasks
+  if type bundled_rake &> /dev/null && type _rake_command &> /dev/null; then
+    _rake_command --silent --tasks | cut -d " " -f 2 > .rake_tasks
+  else
+    command rake --silent --tasks | cut -d " " -f 2 > .rake_tasks
+  fi
 }
 
 _rake () {
