@@ -48,3 +48,5 @@ These gems should not be called with `bundle exec`. Please see [issue #2923](htt
 `rails`
 `ruby`
 `spin`
+
+For curiours: Why you shouldn't prepend `rails` with `bundle exec` https://github.com/bundler/bundler/commit/2c838255ccadadeab5298b7c2bbc39035e59f248
