@@ -1,0 +1,7 @@
+alias sb='script/bootstrap'
+alias sst='script/setup'
+alias su='script/update'
+alias ss='script/server'
+alias st='script/test'
+alias sci='script/cibuild'
+alias sc='script/console'
