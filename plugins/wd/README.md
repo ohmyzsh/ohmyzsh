@@ -1,5 +1,4 @@
-wd
-==
+# wd plugin
 
 [![Build Status](https://travis-ci.org/mfaerevaag/wd.png?branch=master)](https://travis-ci.org/mfaerevaag/wd)
 
@@ -68,6 +67,8 @@ Also, you may have to force a rebuild of `zcompdump` by running:
 
     Note, a warp point cannot contain colons, or only consist of only spaces and dots. The first will conflict in how `wd` stores the warp points, and the second will conflict other features, as below.
 
+    You can omit the point name to use the current directory's name instead.
+
  * From an other directory (not necessarily), warp to `foo` with:
 
         $ wd foo
@@ -78,11 +79,13 @@ Also, you may have to force a rebuild of `zcompdump` by running:
         $ wd ...
 
     This is a wrapper for the zsh `dirs` function.
-    (You might need `setopt AUTO_PUSHD` in your `.zshrc` if you hare not using [oh-my-zshell](https://github.com/robbyrussell/oh-my-zsh)).
+    (You might need `setopt AUTO_PUSHD` in your `.zshrc` if you are not using [Oh My Zsh](https://github.com/robbyrussell/oh-my-zsh)).
 
  * Remove warp point test point:
 
         $ wd rm foo
+
+   You can omit the point name to use the current directory's name instead.
 
  * List all warp points (stored in `~/.warprc`):
 
