@@ -1,0 +1,503 @@
+*winmanager*       Plugin for a classical Windows style IDE for Vim 6.0
+                         For Vim version 6.0.
+              Last Change: Sun Mar 31 11:00 PM 2002 PST
+
+                            By Srinath Avadhanula
+                            (srinath@fastmail.fm)
+
+                                                         *winmanager-plugin*
+
+winmanager.vim is a plugin which implements a classical windows type IDE in
+Vim-6.0, where the directory and buffer browsers are displayed in 2 windows on
+the left and the current editing is done on the right. When you open up a new
+vim window, simply type in :WMToggle. This will start up winmanager.
+
+Note This plugin is available only if 'compatible' is not set
+     You can avoid loading this plugin by setting the "loaded_winmanager"
+     variable >
+        :let loaded_winmanager = 1
+
+{Vi does not have any of this}
+===========================================================================
+OVERVIEW                                              *winmanager-overview*
+
+|winmanager-installing|  Please follow these instructions for installing
+                         winmanager. 
+
+|winmanager-customizing| Describes ways of customizing the window layout, i.e
+                         how to club various explorers into groups, how to
+                         change their relative position, etc.
+
+|winmanager-details|     details of using winmanager. keyboard shortcuts
+                         and other usage details.
+
+|winmanager-commands|    commands provided to the user. its useful to
+                         set keyboard shortcuts to these commands.
+
+|winmanager-settings|    settings (typically made in ~/.vimrc) which
+                         affect the behavior of winmanager.
+
+|winmanager-adding|      one of the most important new features of this
+                         version is the creation of a framework whereby adding
+                         other plugins like explorer.vim or bufexplorer.vim to
+                         winmanager. This section describes briefly the
+                         implementation of winmanager and then describes how
+                         to add a new plugin to winmanager
+
+|add-local-help|         how to use this text file as a vim help file.
+|winmanager-bug|         bug reports are welcome.
+|winmanager-thanks|      thanks to the many people who helped!
+
+===========================================================================
+UPDATES                                                *winmanager-updates*
+
+The official releases can be found at: >
+    http://vim.sourceforge.net/scripts/script.php?script_id=95
+However, I will only update the vim.sf.net version of winmanager.zip in case
+of a major bug or new feature. For small (and not so bothersome) bug-fixes, I
+will put the latest version at: >
+    http://robotics.eecs.berkeley.edu/~srinath/vim/winmanager-2.0.htm
+and also announce it in vim@vim.org when an update occurs.
+Therefore if you want to keep to be kept abreast of updates, you could
+check occassionally at vim@vim.org. (you can also use your mail server's
+filtering capability to effectively subscribe to the announcement).
+
+============================================================================
+INSTALLING                                          *winmanager-installing*
+
+winmanager.vim should start working as soon as you restart vim after unzipping
+the .zip file you got this from into ~/.vim (unix) or ~\vimfiles (dos)
+
+winmanager only recognizes plugins whose name appears in the global variable >
+    g:winManagerWindowLayout
+<  
+By default this global variable has the value >
+    g:winManagerWindowLayout = 'FileExplorer,TagsExplorer|BufExplorer'
+<
+(which is the value which winmanager uses if its not set in the user's .vimrc)
+
+This global variable is responsible for making winmanager recognize the
+existence of the explorers and simultaneously custome the window layout.  See
+the next section for how to set this variable for various custom layouts of
+winmanager.
+
+============================================================================
+CUSTOMIZING                                         *winmanager-customizing*
+
+The layout of winmanager is controlled by changing the value of the
+"g:winManagerWindowLayout" variable. The general form of this variable is
+>
+   g:winManagerWindowLayout =
+   'Group1_Member1,Group1_Member2|Group2_Member_1,Group2_Member_2'
+<
+i.e, explorer "groups" are seperated by the '|' character. Within each group,
+individual explorer plugin names are seperated by the comma (',') character.
+What winmanager does is display only 1 member from each group in a window. The
+user can go to a window and press <C-n> to display the next explorer belonging
+to that group. This ability to "group" windows is valuable to preserve screen
+real-estate by using them only as needed.
+
+Thus for the default value of 'g:winManagerWindowLayout', winmanager will
+split the vim window as follows:
+        +-----------+-------------------+
+        |           |                   |
+        | File      |                   |
+        | explorer  |    File being     |
+        |           |     edited        |
+        |           |                   |
+        +-----------+                   |
+        | Buffer    |                   |
+        | explorer  |                   |
+        |           |                   |
+        +-----------+-------------------+
+
+The user can go the [File List] window and press <C-n> to goto the
+'TagsExplorer' view. 
+
+Removing a plugin name from the 'g:winManagerWindowLayout' variable means
+winmanager no longer sees that variable.
+
+============================================================================
+COMMANDS                                               *winmanager-commands*
+
+:WMToggle                 :toggles the visibility of winmanager. This can
+                           also be used to start winmanager for the first
+                           time. A handy mapping is: >
+            :map <c-w><c-t> :WMToggle<cr> 
+<                          mnemonic: window-toggle : <c-W><c-T>
+
+:FirstExplorerWindow      :directly takes you to the first explorer window
+                           from the top left corner which is visible. >
+            :map <c-w><c-f> :FirstExplorerWindow<cr>
+<                          mnemonic: window-first  : <c-W><c-F>
+
+:BottomExplorerWindow     :directly takes you to the last explorere window
+                           from the top-left which is visible. >
+            :map <c-w><c-b> :BottomExplorerWindow<cr>
+<                          mnemonic: window-last   : <c-W><c-B>
+
+NOTE: winmanager does not provide any mappings by default. These have to set
+in the user's .vimrc if you want to use mappings.
+
+============================================================================
+SETTINGS                                               *winmanager-settings*
+
+The values of the following global variables should be set in your .vimrc
+file if you want a different value than the default:
+
+g:persistentBehaviour: if set to 0, then as soon as you quit all the files
+    and only the explorer windows are the ones left, vim will quit. the
+    default is 1, which means that the explorer windows persist even if
+    they are the only ones visible.
+
+g:winManagerWidth: the width of the explorer areas. 
+    (default 25)
+
+g:defaultExplorer:  If you want winmanager to assume the functioning of the
+    default explorer.vim which ships with vim, set this variable to 0.
+    (default 1). If this variable is set to 1, then winmanager will behave as
+    follows:
+    . if the user starts off vim with a command such as
+      ":vim some/dir/" then winmanager starts off the window layout with
+      FileExplorer at the top left window. as of now it changes the
+      g:windowLayout variable so that file explorer appears in the top left
+      window.
+    . if on the other hand the user does ":e some/dir/" while _inside_ vim,
+      then the behavior is consistent with the original behavior of the
+      explorer.vim plugin which ships with vim, i.e, the directory is opened
+      in a buffer and the user can use that to open a file in that window.
+    Note that the commands ":Explore" and ":Sexplore" are still available if
+    you set this variable to 1.
+    winfileexplorer.vim, the modification of explorer.vim which ships with
+    this version is different from the standard explorer.vim in that it has
+    display caching. i.e, the directory is read and sorted only the first
+    time. From the second time on, the directory list is cached in a script
+    variable so display is faster.
+
+                                            *winmanager-fileexplorer-settings*
+See |explorer| for details. 
+NOTE: Some of the settings used in explorer.vim are not utlized in
+winmanager.
+                                            *winmanager-bufexplorer-settings*
+g:bufExplorerMaxHeight: the buffer list window dynamicall rescales itself to
+    occupy only the minimum space required to display all the windows. you
+    can set a maximum number of lines for this window. (defualt 15)
+See |bufexplorer| for details on additional options. 
+NOTE: Some of the settings used in bufexplorer.vim are not utlized in
+winmanager.
+
+=============================================================================
+DETAILED HELP                                            *winmanager-details*
+
+When winmanager starts up, it divides up the whole vim window into 2
+"regions". The region on the left is the "explorer area" where the various
+explorer plugins are displayed. The region on the right is the "file editing
+area", where the user works on his current editing session. 
+
+        +--------+-------------------+
+        |        |                   |
+        |        |      2(i)         |
+        | 1(i)   |                   |
+        |        +-------------------+
+        |        |                   |
+        +--------+      2(ii)        |
+        | 1(ii)  |                   |
+        +--------+-------------------+
+
+The explorer area (area 1) might contain multiple windows each of which might
+contain multiple explorers. In the default configuration (for
+g:winManagerWindowLayout = 'FileExplorer,TagsExplorer|BufExplorer'), the first
+window can be thought of as containing 2 explorers, the file explorer plugin
+and the tags explorer plugin, while the bottom window contains bufexplorer by
+itself.
+
+When a window contains multiple explorers, then the user can cycle between
+them by pressing <c-n> (mnemonic: next) or <c-p> (mnemonic: previous). 
+
+This section describes the various keyboard shortcuts for the 3 plugins which
+are used with winmanager by default.
+NOTE: Other plugins might be distributed as add-ins to winmanager. In that
+case, please refer to the help which ships with that plugin.
+ 
+1. File Explorer plugin
+This plugin displays the current directory. Its a modification of the standard
+explorer.vim which ships with vim6.0. The following keyboard shortcuts are
+available with this plugin:
+<enter>          if on a directory, enters it and displays it in the same
+                 area. If on a file, then opens it in the File Editing Area.
+                 Attempts to open in the same window as the one visited
+                 before, otherwise split open a new window horizontally. if
+                 this sounds a bit confusing, it isnt. its the most intuitive
+                 behaviour that one expects.
+<2-leftmouse>   (doubleclick) the same as <enter>
+<tab>            open the file or directory in a new window in the FileEditing
+                 area. 
+c                change the pwd to the directory currently displayed 
+C                change the currently displayed directory to pwd (converse of
+                 c) this helps in changing to different drives in windows.
+                 i.e, if you are currently on the c: drive and you want to
+                 change to the d: drive, you will have to do 
+                 cd d:\
+                 and then press 'C' in the file explorer area.
+s                select sort field (size, date, name) 
+r                reverse direction of sort 
+f                add current directory to list of favorites.
+R                rename file 
+D                delete file (or range of files in visual mode)
+-                move up one level
+<F5>             refresh the file list
+
+2. Buffer Explorer plugin
+See |bufexplorer-usage| for details.
+NOTE: In addition to those shortcuts, winmanager adds the following:
+<tab>             Opens the buffer under the cursor in a split window even if
+                  the current buffer is not modified.
+
+This window is dynamically rescaled and re-displayed. i.e, when a new window
+opens somehwere, the buffer list is automatically updated. also, it tries to
+occupy the minimum possible space required to display the files. 
+
+3. File Editing Area
+The area where normal editing takes place. The commands in the File Explorer
+and Buffer Explorer shouldnt affect the layout of the windows here. Some
+mappings which I find useful (which should be placed in your .vimrc if you
+plan on using WManager often) is 
+>
+    map <c-w><c-b> :BottomExplorerWindow<cr>
+    map <c-w><c-f> :FirstExplorerWindow<cr>
+    map <c-w><c-t> :WMToggle<cr>
+
+Pressing CTRL-W-B should then take you directly to the last explorer window
+Similarly pressing CTRL-W-F should take you to the first explorer window.
+CTRL-W-T will toggle between the winmanager visible and invisible.
+
+=============================================================================
+ADDING NEW PLUGINS                                        *winmanager-adding*
+
+This section is of interest only to people who might want to extend winmanager
+by adding other plugins to it. The casual user can skip it.
+
+One of the most important new features of winmanager2.x is the ability to let
+other users add IDE type plugins to winmanager.vim with a minimum of effort.
+The way winmanager ships, it usually contains the following plugins:
+>
+    (FileExplorer, TagsExplorer)
+    (BufExplorer)
+
+i.e, FileExplorer and TagsExplorer occupy one window as a single group, while
+BufExplorer occupies another window. "Adding" a plugin means that you will be
+able to add a seperate IDE plugin, (call it "YourPlugin" henceforth) either to
+one of these groups or seperately by itself. This section describes how to
+accomplish this. Although the section is somewhat lengthy, please rest assured
+that its really quite simple to do. Have a look at |wintagexplorer|.vim for a
+small plugin which accomplishes this.
+
+To better understand the process, its helpful to give a short description of
+the workings of winmanager. When a user wants to use your plugin, he
+"registers" it with winmanager, i.e he adds the "name" of the plugin to the
+variable g:winManagerWindowLayout in his .vimrc as:
+
+    " this line goes in the user's .vimrc
+    let g:winManagerWindowLayout = "FileExplorer,TagsExplorer|YourPlugin"
+
+When winmanager starts up, it remembers the string "YourPlugin" internally as
+the plugins "name". (The reason for making this a part of the user's .vimrc
+is that that way, he can customize the window layout according to his
+preferences).
+
+In addition to registering, the plugin itself initializes a variable called
+the "title" which starts with the name, such as: >
+
+    " this line goes in your script file.
+    let g:YourPlugin_title = "[My Plugin Title]"
+
+<
+NOTE: Just like the rest of the hooks provided by your plugin, this global
+variable name is formed according the rule: g:<YourPluginName>_title.
+
+When winmanager starts up, it performs the following 2 actions:
+    1. It opens a new file with the "title" provided by the plugin. This
+       automatically ensures that the same buffer is opened for multiple
+       invokations of the plugin.
+       NOTE: It is very important for this reason that the plugin's name be
+       distinct so that there is a low (ideally zero) probability of a file
+       with the same name existing on a user's system.
+    2. It modifies the "name" string (in this case "YourPlugin") to form 
+       "call YourPlugin_Start()" and then |exec|s this string. Thus winmanager
+       communicates with your plugin by using a number of such "hooks" or
+       global functions which all start with the string "YourPlugin" which are
+       defined in the script file you create.
+
+In order to enable the dynamic nature of winmanager, where you can have your
+plugin change its display every time a |BufEnter| or |BufDelete| event occurs,
+it is necessary to provide a few other hooks. Every time a BufEnter or
+BufDelete event occurs, winmanager makes a loop over all the visible buffers.
+Then it "refreshes" the display of that plugin if it is "invalid". The
+following paragraphs describe the hooks that have to be provided to enable
+this.
+
+                                                           *winmanager-hooks*
+
+The following is a list of hooks which should be provided. A few of them are
+optional. Consider the case where you want to add a plugin which you have
+named "YourPlugin". In the following discussion, a "hook" simply refers to a
+globally visible function which is formed according to the rule that it start
+with the string "YourPlugin_", where "YourPlugin" is the name of your plugin.
+
+                                                       *winmanager-hook-start* 
+YourPlugin_Start()       This function is called during initialization.  It
+{Mandatory}              can be assumed (and _should_ be) that the focus is
+                         already in the buffer where stuff needs to be
+                         displayed. i.e, the plugin shouldnt open some other
+                         buffer during this function. (i.e, commands such as
+                         ":e", ":vsplit", ":wincmd h" etc in this stage are
+                         bad. If however, you absolutely need to switch
+                         buffers or something which will cause |BufEnter| or
+                         |BufDelete| events, then you need to temporarily
+                         switch winmanager off by using
+                         |WinManagerSuspendAUs|)
+
+                                                    *winmanager-hook-isvalid*
+YourPlugin_IsValid()     winmanager is dynamic in the sense that it allows the
+{Mandatory}              plugins to change their displays when a BufEnter event
+                         occurs. At each BufEnter event, winmanager will cycle
+                         through all the visible explorers asking them if
+                         their display is "valid". If it isn't, then they will
+                         be redrawn by calling the next function.
+
+                         For plugins such as bufexplorer which change with
+                         every BufEnter, it is sufficient to make this always
+                         return 1. For plugins such as fileexplorer, the
+                         display never changes with the BufEnter even. hence
+                         in its case, it will always return 0.
+
+                                                     *winmanager-hook-refresh*
+YourPlugin_Refresh()      If the YourPlugin_IsValid() function returns 0, then
+{Optional}                this function is called to update the display. if the
+                          first function always returns 1, then this function
+                          need not be defined.
+                          NOTE: It is not clear at this time whether this
+                          function is really necessary. It might be obsoleted
+                          in the future. Future versions might call the
+                          _Start() function instead.
+                          NOTE: It has been obsoleted as of version 2.1
+
+                                                      *winmanager-hook-resize*
+YourPlugin_ReSize()       The plugins can also be dynamically resizable.  (the
+{Optional}                current bufexplorer which ships with the winmanager
+                          exhibits this behavior).  If a plugin creates such a
+                          function, then it will be called after its Refresh()
+                          function. The reason for not letting the plugin make
+                          this a part of its Refresh() function is that
+                          sometimes resizing is not allowed, such as in
+                          instances where there is no window above or below the
+                          plugin to take the slack of a resize.
+
+
+In addition, the plugin should also initialize the following global variable
+
+                                                       *winmanager-hook-title*
+g:YourPlugin_title        This is the name of the buffer associated with
+                          this plugin. The reason for a title in addition to a
+                          name is that the name should be such that a global
+                          function of that name can be defined.  However, the
+                          title can be more descriptive and contain spaces
+                          etc. For example, the present distribution of
+                          FileExplorer has the title "[File List]". Also,
+                          winmanager opens a file with this name (using an
+                          equivalent of ":e g:YourPlugin_title"), which
+                          automatically ensures that new buffers are not eaten
+                          up in multiple invokations of winmanager, toggling
+                          visibility of buffers, etc. 
+                          NOTE: It is very important for this reason that the
+                          plugin's name be distinct so that there is a low
+                          (ideally zero) probability of a file with the same
+                          name existing on a user's system. 
+
+In addition to YourPlugin providing winmanager with hooks, winmanager also
+provides the following hooks for use by YourPlugin:
+
+                                                        *WinManagerFileEdit*
+WinManagerFileEdit({filename}, {split})
+                          This function _must_ be used when the plugin wants
+                          to open a new file in the file editing area for
+                          editing. Its not sufficient to do something like
+                          ":wincmd p" and then ":e filename", because first of
+                          all the ":wincmd p" command gets screwed
+                          (unfortunately) in the presence of winmanager
+                          because of the (sometimes) large movement winmanager
+                          does over all visible windows to maintain the
+                          dynamic nature. Secondly, doing a simple ":e
+                          filename" will not preserve the @# and the @%
+                          registers properly, causing handy commands such as
+                          |CTRL-^| to totally mis-behave.
+
+                          The first argument should be (preferably) the
+                          (complete) name of the file to be opened (including
+                          the full path to it if possible).  The second
+                          argument decides whether winmanager should attempt
+                          to open the file in the same window as the last
+                          window or to split a new window to open the file.
+
+                                                     *WinManagerSuspendAUs*
+WinManagerSuspendAUs()    This makes winmanager stop responding to the
+                          |BufEnter| or |BufDelete| autocommands like it
+                          normally does. Please use this function with care.
+                          You will need to use this when you are performing
+                          some action which causes these events but you dont
+                          want to have winmanager go through the whole
+                          isvalid/refresh cycle. NOTE: Take care to definitely
+                          reset the behavior by using the next function.
+
+                                                     *WinManagerResumeAUs*
+WinManagerResumeAUs()     This is the converse of |WinManagerSuspendAUs()|. It
+                          makes winmanager start responding to events with the
+                          usual isvalid/refresh cycle.
+
+                                                   *WinManagerForceReSize* 
+WinManagerForceReSize()   Normally, winmanager calls the YourPlugin_ReSize()
+                          function after the YourPlugin_Refresh(). However,
+                          this happens only every |BufEnter| event. When the
+                          plugin performs some function which requires it to
+                          resize even when there was no |BufEnter| or
+                          |BufDelete| event, use this function. Please avoid
+                          making a call to YourPlugin_ReSize() because a
+                          number of safety checks have to be performed before
+                          a resizing is "legal".
+                          
+Finally, if you do plan on making an addin to winmanager, feel free to contact
+me for help/comments/suggestions. You might also want to take a look at: >
+    http://robotics.eecs.berkeley.edu/~srinath/vim/explorerSample.vim
+for a simple template of an add-in plugin.
+
+=============================================================================
+BUGS                                                         *winmanager-bug*
+
+Please send any comments for improvements or bug-reports to >
+    srinath@fastmail.fm
+If the bug is repeatable, then it will be of great help if a short description
+of the events leading to the bug are also given.
+
+Note "I dont like winmanager" is not a bug report, only an opinion ;-)
+
+=============================================================================
+THANKS                                                    *winmanager-thanks*
+
+I am really grateful to all those who emailed me with bug-reports and comments
+for improvement. Most of all, a huge thanks to Xiangjiang Ma for his enormous
+support and extremeley helpful QA. 
+
+Other people who helped greatly:
+   Madoka Machitani: fixed a couple of typos and gave some ideas for making
+      things more robust.
+   Colin Dearing: gave many useful suggestions for improvement which lead to
+      the fast redraw capability of winmanager
+   Jeff Lanzarotta: for agreeing to make changes to bufexplorer.vim so that
+      bufexplorer.vim would be compatible with the latest version of
+      winmanager.vim
+
+   and finally all the great support I got from vim@vim.org and comp.editors
+   helped a lot.
+
+
+vim:tw=78:et:ts=4:ft=help:norl:
