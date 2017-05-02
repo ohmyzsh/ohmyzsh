@@ -1,0 +1,164 @@
+#compdef fleetctl
+
+# Fleetctl autocompletion for oh-my-zsh
+# Requires: fleetctl installed
+# Author: Simon Gate (@smgt)
+
+# ----- Helper functions
+__fleet_machines() {
+  declare -a machine_cmd
+  machine_cmd=($(fleetctl list-machines --fields=machine,ip --no-legend -l|awk '{print $1":["$2"]"}'))
+  _describe 'list-machines' machine_cmd
+}
+
+__fleet_units() {
+  declare -a unit_cmd
+  unit_cmd=($(fleetctl list-units -fields=unit --no-legend|awk '{print $1}'))
+  _describe 'list-units' unit_cmd
+}
+
+# ----- Commands
+# Seperate function for each command, makes extension easier later
+# ---------------------------
+
+
+__cat() {
+  __fleet_units
+}
+
+__destroy() {
+  __fleet_units
+}
+
+__journal() {
+  _arguments \
+    '--lines=[Number of recent log lines to return]' \
+    '(-f,--follow)'{-f,--follow}'[Continuously print new entries as they are appended to the journal."]'
+  __fleet_units
+}
+
+__list_machines() {
+  _arguments \
+    '--fields=[Columns to print for each Machine. Valid fields are "ip,metadata,machine"]' \
+    '(-l,--full)'{-l,--full}'[Do not ellipsize fields on output]' \
+    '--no-legend[Do not print a legend (column headers)]'
+}
+
+__list_unit_files() {
+  _arguments \
+    '--fields=[Columns to print for each Unit file. Valid fields are "desc,dstate,global,hash,state,target,tmachine,unit"]' \
+    '(-l,--full)'{-l,--full}'[Do not ellipsize fields on output]' \
+    '--no-legend[Do not print a legend (column headers)]'
+}
+
+__list_units() {
+  _arguments \
+    '--fields=[Columns to print for each Unit. Valid fields are "active,hash,load,machine,sub,unit"]' \
+    '(-l,--full)'{-l,--full}'[Do not ellipsize fields on output]' \
+    '--no-legend[Do not print a legend (column headers)]'
+}
+
+__load() {
+  _arguments \
+    '--block-attempts=[Wait until the jobs are loaded, performing up to N attempts before giving up. A value of 0 indicates no limit. Does not apply to global units.]' \
+    '--no-block[Do not wait until the jobs have been loaded before exiting. Always the case for global units.]'
+  __fleet_units
+}
+
+__ssh() {
+  _arguments \
+    '(-A,--forward-agent)'{-A,--forward-agent}'[Forward local ssh-agent to target machine.]' \
+    '--machine=[Open SSH connection to a specific machine.]' \
+    '--unit=[Open SSH connection to machine running provided unit.]'
+  __fleet_machines
+}
+
+__start() {
+  _arguments \
+    '--block-attempts=[Wait until the units are launched, performing up to N attempts before giving up. A value of 0 indicates no limit. Does not apply to global units.]' \
+    '--no-block[Do not wait until the units have launched before exiting. Always the case for global units.]'
+  __fleet_units
+}
+
+__status() {
+  __fleet_units
+}
+
+__stop() {
+  _arguments \
+    '--block-attempts=[Wait until the units are stopped, performing up to N attempts before giving up. A value of 0 indicates no limit. Does not apply to global units.]' \
+    '--no-block[Do not wait until the units have stopped before exiting. Always the case for global units.]'
+  __fleet_units
+}
+
+__submit() {
+  _arguments '*:files:_files'
+}
+
+__unload() {
+  _arguments \
+    '--block-attempts=[Wait until the units are inactive, performing up to N attempts before giving up. A value of 0 indicates no limit.]' \
+    '--no-block[Do not wait until the units have become inactive before exiting.]'
+  __fleet_units
+}
+
+# end commands ---------
+# ----------------------
+
+local -a _1st_arguments
+_1st_arguments=(
+  "cat":"Output the contents of a submitted unit"
+  "destroy":"Destroy one or more units in the cluster"
+  "help":"Show a list of commands or help for one command"
+  "journal":"Print the journal of a unit in the cluster to stdout"
+  "list-machines":"Enumerate the current hosts in the cluster"
+  "list-unit-files":"List the units that exist in the cluster."
+  "list-units":"List the current state of units in the cluster"
+  "load":"Schedule one or more units in the cluster, first submitting them if necessary."
+  "ssh":"Open interactive shell on a machine in the cluster"
+  "start":"Instruct systemd to start one or more units in the cluster, first submitting and oading if necessary."
+  "status":"Output the status of one or more units in the cluster"
+  "stop":"Instruct systemd to stop one or more units in the cluster."
+  "submit":"Upload one or more units to the cluster without starting them"
+  "unload":"Unschedule one or more units in the cluster."
+  "version":"Print the version and exit"
+)
+
+_arguments '*:: :->command'
+
+if (( CURRENT == 1 )); then
+    _describe -t commands "fleetctl command" _1st_arguments
+    return
+fi
+
+local -a _command_args
+case "$words[1]" in
+  cat)
+    __cat ;;
+  destory)
+    __destroy;;
+  journal)
+    __journal ;;
+  list-machines)
+    __list_machines;;
+  list-unit-files)
+    __list_unit_files ;;
+  list-units)
+    __list_units ;;
+  load)
+    __load ;;
+  ssh)
+    __ssh ;;
+  start)
+    __start ;;
+  status)
+    __status ;;
+  stop)
+    __stop ;;
+  submit)
+    __submit ;;
+  unload)
+    __unload ;;
+  version)
+    __version ;;
+esac
