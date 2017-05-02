@@ -1,0 +1,20 @@
+# Symfony3 basic command completion
+
+_symfony3_get_command_list () {
+	php bin/console --no-ansi | sed "1,/Available commands/d" | awk '/^  [a-z]+/ { print $1 }'
+}
+
+_symfony3 () {
+  if [ -f bin/console ]; then
+    compadd `_symfony3_get_command_list`
+  fi
+}
+
+compdef _symfony3 bin/console
+compdef _symfony3 sf
+
+#Alias
+alias sf='php bin/console'
+alias sfcl='php bin/console cache:clear'
+alias sfroute='php bin/console router:debug'
+alias sfgb='php bin/console generate:bundle'
