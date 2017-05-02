@@ -48,3 +48,5 @@ alias ooanward='git commit -am'
 alias letcat='git checkout'
 alias violenz='git rebase'
 
+alias bythepowerofgreyskull='sudo'
+
