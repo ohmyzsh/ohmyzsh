@@ -1,0 +1,5 @@
+#compdef chefvm
+
+_arguments \
+  "1:Commands:($(__chefvm_commands))" \
+  "*:Configurations:($(__chefvm_configs))"
