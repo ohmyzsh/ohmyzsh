@@ -1,0 +1,1 @@
+zsh-syntax-highlighting.zsh
