@@ -65,12 +65,12 @@ function vsplit_tab() {
 
   local the_app=$(_omz_osx_get_frontmost_app)
 
-  if [[ "$the_app" == 'iTerm' ]]; then
+  if [[ "$the_app" == 'iTerm' || "$the_app" == 'iTerm2' ]]; then
     osascript <<EOF
-      -- tell application "iTerm" to activate
+      -- tell application "${the_app}" to activate
 
       tell application "System Events"
-        tell process "iTerm"
+        tell process "${the_app}"
           tell menu item "Split Vertically With Current Profile" of menu "Shell" of menu bar item "Shell" of menu bar 1
             click
           end tell
@@ -105,12 +105,12 @@ function split_tab() {
 
   local the_app=$(_omz_osx_get_frontmost_app)
 
-  if [[ "$the_app" == 'iTerm' ]]; then
+  if [[ "$the_app" == 'iTerm' || "$the_app" == 'iTerm2' ]]; then
     osascript 2>/dev/null <<EOF
-      tell application "iTerm" to activate
+      tell application "${the_app}" to activate
 
       tell application "System Events"
-        tell process "iTerm"
+        tell process "${the_app}"
           tell menu item "Split Horizontally With Current Profile" of menu "Shell" of menu bar item "Shell" of menu bar 1
             click
           end tell
