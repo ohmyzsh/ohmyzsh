@@ -25,3 +25,8 @@ function vundle-clean () {
   vundle-init
   vim -c "execute \"PluginClean!\" | qa"
 }
+
+function vundle-clean () {
+  vundle-init
+  vim -c "execute \"BundleClean\" | q | q"
+}
