@@ -1,0 +1,1 @@
+/Users/svesely/Dropbox/svesely/dotfiles/vesopolis.zsh-theme
