@@ -91,3 +91,9 @@ bindkey "^[m" copy-prev-shell-word
 ## Fix weird sequence that rxvt produces
 #bindkey -s '^[[Z' '\t'
 #
+
+#Completion in the middle of a line
+bindkey '^i' expand-or-complete-prefix
+##pushes current command on command stack and gives blank line, after that line runs command stack is popped
+bindkey "^t" push-line-or-edit
+
