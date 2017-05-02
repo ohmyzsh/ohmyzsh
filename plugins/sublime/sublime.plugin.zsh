@@ -52,6 +52,7 @@ elif [[ "$OSTYPE" = 'cygwin' ]]; then
             break
         fi
     done
+fi
 
 fi
 
