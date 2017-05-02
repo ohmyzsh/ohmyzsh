@@ -1,0 +1,147 @@
+#compdef omz
+
+# Completion for the omz-plugin command
+# Author: github.com/ncanceill
+
+_omz () {
+  local curcontext=$curcontext state line
+  declare -A opt_args
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options' && ret=0
+  case $state in
+    (command)
+      declare -a commands
+      commands=(
+        'plugin:manage plugins'
+        'theme:manage themes'
+        )
+      _describe -t commands 'command' commands && ret=0
+    ;;
+    (options)
+      case $line[1] in
+        (plugin)
+          _omz-plugin && ret=0
+        ;;
+        (theme)
+          _omz-theme && ret=0
+        ;;
+      esac
+    ;;
+  esac
+  return ret
+}
+
+_omz-plugin () {
+  local curcontext=$curcontext state line
+  declare -A opt_args
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options' && ret=0
+  case $state in
+    (command)
+      declare -a commands
+      commands=(
+        'ls:list available plugins'
+        'on:enable a plugin'
+        'off:disable a plugin'
+        'up:update a plugin'
+        'get:download and enable a plugin'
+        )
+      _describe -t commands 'sub-command' commands && ret=0
+      ;;
+    (options)
+      case $line[1] in
+        (on)
+          _plugins_off && ret=0
+          ;;
+        (off)
+          _plugins_on && ret=0
+          ;;
+        (up)
+          _plugins && ret=0
+          ;;
+      esac
+    ;;
+  esac
+  return ret
+}
+
+_plugins () {
+  declare -a plugins
+  plugins=()
+  for plugin ($ZSH/plugins/* $ZSH_CUSTOM/plugins/*(N)); do
+    plugins+=$plugin:t:r
+  done
+  _describe -t plugins 'plugin' plugins && return 0
+}
+
+_plugins_on () {
+  declare -a plugins_on
+  plugins_on=()
+  for plugin ($ZSH/plugins/* $ZSH_CUSTOM/plugins/*(N)); do
+    local plugin_name=$plugin:t:r
+    _map_exists plugins $plugin_name
+    if [[ $? -eq 0 ]]; then
+      plugins_on+=$plugin_name
+    fi
+  done
+  _describe -t plugins_on 'plugin' plugins_on && return 0
+}
+
+_plugins_off () {
+  declare -a plugins_off
+  plugins_off=()
+  for plugin ($ZSH/plugins/* $ZSH_CUSTOM/plugins/*(N)); do
+    local plugin_name=$plugin:t:r
+    _map_exists plugins $plugin_name
+    if [[ $? -ne 0 ]]; then
+      plugins_off+=$plugin_name
+    fi
+  done
+  _describe -t plugins_off 'plugin' plugins_off && return 0
+}
+
+_omz-theme () {
+  local curcontext=$curcontext state line
+  declare -A opt_args
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options' && ret=0
+  case $state in
+    (command)
+      declare -a commands
+      commands=(
+        'ls:list available themes'
+        'set:set a theme'
+        'up:update a theme'
+        'get:download and enable a theme'
+        )
+      _describe -t commands 'sub-command' commands && ret=0
+      ;;
+    (options)
+      case $line[1] in
+        (set)
+          _arguments \
+            ':theme:_themes' && ret=0
+          ;;
+        (up)
+          _arguments \
+            ':theme:_themes' && ret=0
+          ;;
+      esac
+      ;;
+  esac
+  return ret
+}
+
+_themes () {
+  declare -a themes
+  themes=()
+  for theme ($ZSH/themes/*zsh-theme $ZSH_CUSTOM/*zsh-theme(N)); do
+    themes+=$theme:t:r
+  done
+  _describe -t themes 'theme' themes && return 0
+}
+
+_omz
