@@ -9,13 +9,13 @@
 #
 # -----------------------------------------------------------------------------
 #
-#  Version     : 0.1.2
+#  Version     : 0.2.0
 #  Author      : Yonchu <yuyuchu3333@gmail.com>
 #  License     : MIT License
 #  Repository  : https://github.com/yonchu/grunt-zsh-completion
-#  Last Change : 20 Aug 2014.
+#  Last Change : 23 Jun 2015.
 #
-#  Copyright (c) 2013 Yonchu.
+#  Copyright (c) 2015 Yonchu.
 #
 # -----------------------------------------------------------------------------
 # USAGE
@@ -114,7 +114,7 @@ function __grunt() {
 #   The cache variable name: __grunt_version __grunt_gruntfile __grunt_opts __grunt_tasks
 function __grunt_update_cache() {
     # TODO
-    local version='0.1.2'
+    local version='0.2.0'
     local is_updating=0
     local gruntfile="$1"
     local grunt_info no_update_options cache_path
@@ -174,50 +174,76 @@ function __grunt_update_cache() {
 }
 
 function __grunt_get_tasks() {
-    echo -E "$1" \
-        | grep 'Available tasks' -A 100 \
-        | grep '^ ' \
-        | sed -e 's/^[[:blank:]]*//' -e 's/[[:blank:]]*$//' \
-        | sed -e 's/:/\\:/g' \
-        | sed -e 's/  /:/'
+    echo -E "$1" | awk \
+    'BEGIN {
+        TASK = ""
+        SUB_NR = 0
+    }
+    /Available tasks$/, NF == 0 {
+        SUB_NR++
+        if (SUB_NR == 1 || NF == 0) next
+        if ($0 ~ /^[[:blank:]]+[^[:blank:]]+  [^[:blank:]]/) {
+            if (TASK != "") {
+                print TASK
+                TASK = ""
+            }
+            sub(/^[ \t]+/, "")
+            sub(/[ \t]+$/, "")
+            gsub(/:/, "\\:")
+            sub(/[ ][ ]/, ":")
+            TASK = $0
+        } else {
+            sub(/^[ \t]+/, "")
+            sub(/[ \t]+$/, "")
+            gsub(/:/, "\\:")
+            TASK = TASK " " $0
+        }
+    }
+    END {
+        if (TASK != "") {
+            print TASK
+        }
+    }'
 }
 
 function __grunt_get_opts() {
-    local opt_hunk opt_sep opt_num line opt
-    opt_hunk=$(echo -E "$1" \
-        | grep 'Options$' -A 100 \
-        | sed '1 d' \
-        | sed -e 's/[[:blank:]]*$//' \
-    )
-
-    opt_sep=()
-    opt_hunk=(${(f)opt_hunk})
-    opt_num=0
-    for line in "$opt_hunk[@]"; do
-        opt=$(echo -E "$line" | sed -e 's/^[[:blank:]]*//')
-        if [[ $line == $opt ]]; then
-            break
-        fi
-        if [[ $opt != ${opt#-} ]]; then
-            # Start with -
-            (( opt_num++ ))
-            opt=$(echo -E "$opt" | sed 's/^\(\(--[^ ]*\)\(, \(-[^ ]*\)\)*\)  */\2\\t\4\\\t/')
-        fi
-        opt_sep[$opt_num]=("${opt_sep[$opt_num]}${opt}")
-    done
-
-    for line in "$opt_sep[@]"; do
-        opt=(${(s:\t:)line})
-        if [[ ${opt[1]} == '--help' ]]; then
-            continue
-        fi
-        if [[ ${#opt} -eq 2 ]]; then
-            echo -E "(${opt[1]})${opt[1]}[${opt[2]}]"
-        else
-            echo -E "(${opt[1]},${opt[2]})${opt[1]}[${opt[3]}]"
-            echo -E "(${opt[1]},${opt[2]})${opt[2]}[${opt[3]}]"
-        fi
-    done
+    # ex.)
+    # before:
+    # --xxx, -y  description....
+    # after:
+    # (--xxx,-y)--xxx[description]"
+    # (--xxx,-y)-y[description]"
+    echo -E "$1" | awk \
+        'BEGIN {
+            OPT_COMP_NUM = -1
+            SUB_NR = 0
+        }
+        /Options$/, NF == 0 {
+            SUB_NR++
+            if (SUB_NR == 1 || NF == 0) next
+            sub(/^[ \t]+/, "")
+            sub(/[ \t]+$/, "")
+            if ($0 ~ /^-.*  [^[:blank:]]/) {
+                OPT_COMP_NUM++
+                OPT_COMP[OPT_COMP_NUM] = $0
+            } else {
+                OPT_COMP[OPT_COMP_NUM] = OPT_COMP[OPT_COMP_NUM] " " $0
+            }
+        }
+        END {
+            for (i = 0; i <= OPT_COMP_NUM; i++) {
+                split(OPT_COMP[i], opt_desc, "  ")
+                opt_hunk = opt_desc[1]
+                desc = opt_desc[2]
+                gsub(/ /, "", opt_hunk)
+                if (opt_hunk == "--help,-h") continue
+                split(opt_hunk, opts, ",")
+                for (opt in opts) {
+                    printf "(%s)%s[%s]", opt_hunk, opts[opt], desc
+                    print ""
+                }
+            }
+        }'
 }
 
 function __grunt_get_gruntfile() {
@@ -252,4 +278,4 @@ function __grunt_caching_policy() {
     (( $#oldp ))
 }
 
-compdef __grunt grunt
+__grunt "$@"
