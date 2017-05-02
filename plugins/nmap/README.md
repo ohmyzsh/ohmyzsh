@@ -34,4 +34,5 @@ Nmap options are:
  * nmap_traceroute - Try to traceroute using the most common ports
  * nmap_full_with_scripts - Same as nmap_full but also runs all the scripts
  * nmap_web_safe_osscan - Little "safer" scan for OS version  as connecting to only HTTP and HTTPS ports doesn't look so attacking.
+ * nmap_ping_scan - Scan subnets over ICMP
 
