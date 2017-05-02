@@ -49,6 +49,7 @@ if [[ $use_sudo -eq 1 ]]; then
     alias ad='sudo $apt_pref update'
     alias adg='sudo $apt_pref update && sudo $apt_pref $apt_upgr'
     alias adu='sudo $apt_pref update && sudo $apt_pref dist-upgrade'
+    alias adus="sudo $apt_pref update && sudo $apt_pref-s  dist-upgrade"
     alias afu='sudo apt-file update'
     alias ag='sudo $apt_pref $apt_upgr'
     alias ai='sudo $apt_pref install'
