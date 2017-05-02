@@ -1,0 +1,2 @@
+#compdef c
+_files -W ~/code -/
