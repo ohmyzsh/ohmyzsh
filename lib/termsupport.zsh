@@ -72,7 +72,7 @@ function omz_termsupport_preexec {
   local CMD=${1[(wr)^(*=*|sudo|ssh|mosh|rake|-*)]:gs/%/%%}
   local LINE="${2:gs/%/%%}"
 
-  title '$CMD' '%100>...>$LINE%<<'
+  title "$CMD" "%100>...>$LINE%<<"
 }
 
 precmd_functions+=(omz_termsupport_precmd)
