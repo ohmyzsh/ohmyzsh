@@ -18,7 +18,7 @@ function asp {
   export AWS_DEFAULT_PROFILE=$1
   export AWS_PROFILE=$1
 
-  export RPROMPT="<aws:$AWS_DEFAULT_PROFILE>$rprompt"
+  [[ ${ZSH_AWS_SKIPRPROMPT} == "true" ]] || export RPROMPT="<aws:$AWS_DEFAULT_PROFILE>$rprompt"
 }
 
 function aws_profiles {
