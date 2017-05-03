@@ -48,3 +48,17 @@ function vi_mode_prompt_info() {
 if [[ "$RPS1" == "" && "$RPROMPT" == "" ]]; then
   RPS1='$(vi_mode_prompt_info)'
 fi
+
+# vi-mode cursor indicator
+echo -ne "\e[6 q"  # vertical bar
+zle-keymap-select () {
+    if [ "$TERM" = "rxvt-unicode-256color" ]; then
+        if [ $KEYMAP = vicmd ]; then
+            # the command mode for vi
+            echo -ne "\e[2 q"  # block
+        else
+            # the insert mode for vi
+            echo -ne "\e[6 q"  # bar
+        fi
+    fi
+}
