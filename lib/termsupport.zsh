@@ -75,8 +75,9 @@ function omz_termsupport_preexec {
   title '$CMD' '%100>...>$LINE%<<'
 }
 
-precmd_functions+=(omz_termsupport_precmd)
-preexec_functions+=(omz_termsupport_preexec)
+autoload -U add-zsh-hook
+add-zsh-hook precmd omz_termsupport_precmd
+add-zsh-hook preexec omz_termsupport_preexec
 
 
 # Keep Apple Terminal.app's current working directory updated
@@ -99,7 +100,7 @@ if [[ "$TERM_PROGRAM" == "Apple_Terminal" ]] && [[ -z "$INSIDE_EMACS" ]]; then
   }
 
   # Use a precmd hook instead of a chpwd hook to avoid contaminating output
-  precmd_functions+=(update_terminalapp_cwd)
+  add-zsh-hook precmd update_terminalapp_cwd
   # Run once to get initial cwd set
   update_terminalapp_cwd
 fi
