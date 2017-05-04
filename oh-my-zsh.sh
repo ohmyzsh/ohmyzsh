@@ -76,6 +76,8 @@ if [[ $ZSH_DISABLE_COMPFIX != true ]]; then
 else
   compinit -i -d "${ZSH_COMPDUMP}"
 fi
+# Enable dotfiles completion
+_comp_options+=(globdots)
 
 # Load all of the plugins that were defined in ~/.zshrc
 for plugin ($plugins); do
