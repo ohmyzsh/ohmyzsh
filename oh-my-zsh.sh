@@ -87,7 +87,7 @@ for plugin ($plugins); do
 done
 
 # Load all of your custom configurations from custom/
-for config_file ($ZSH_CUSTOM/*.zsh(N)); do
+for config_file ($ZSH_CUSTOM/**/*.zsh(N)); do
   source $config_file
 done
 unset config_file
