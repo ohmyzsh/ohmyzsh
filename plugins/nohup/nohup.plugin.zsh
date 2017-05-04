@@ -23,7 +23,7 @@ nohup-command-line() {
 		tokens_space=("${(@s/ /)tokens_slash[-1]}")
 		command=("$tokens_space[1]")
 		
-		BUFFER="nohup $BUFFER &> $command.out &"
+		BUFFER="nohup $BUFFER &> $command.out &!"
     fi
 }
 zle -N nohup-command-line
