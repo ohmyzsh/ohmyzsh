@@ -29,24 +29,99 @@ preexec_functions+=(preexec_update_git_vars)
 
 
 ## Function definitions
-function update_current_git_vars() {
-    unset __CURRENT_GIT_STATUS
 
-    local gitstatus="$__GIT_PROMPT_DIR/gitstatus.py"
-    _GIT_STATUS=$(python ${gitstatus} 2>/dev/null)
-     __CURRENT_GIT_STATUS=("${(@s: :)_GIT_STATUS}")
-    GIT_BRANCH=$__CURRENT_GIT_STATUS[1]
-    GIT_AHEAD=$__CURRENT_GIT_STATUS[2]
-    GIT_BEHIND=$__CURRENT_GIT_STATUS[3]
-    GIT_STAGED=$__CURRENT_GIT_STATUS[4]
-    GIT_CONFLICTS=$__CURRENT_GIT_STATUS[5]
-    GIT_CHANGED=$__CURRENT_GIT_STATUS[6]
-    GIT_UNTRACKED=$__CURRENT_GIT_STATUS[7]
+function get_tagname_or_hash() {
+    local log_string
+    local refs ref
+    local ret_hash ret_tag
+    log_string="$(git log -1 --decorate=full --format="%h%d" 2> /dev/null)"
+    if [[ "$log_string" == *' ('*')' ]]; then
+        ret_hash="${log_string%% (*)}"
+        refs="${(M)log_string%% (*)}"
+        refs="${refs# \(}"
+        refs="${refs%\)}"
+        for ref in ${(s:, :)refs}; do
+            if [[ "$ref" == 'refs/tags/'* ]]; then # git 1.7.x
+                ret_tag="${ref#refs/tags/}"
+            elif [[ "$ref" == 'tag: refs/tags/'* ]]; then # git 2.1.x
+                ret_tag="${ref#tag: refs/tags/}"
+            fi
+            if [[ "$ret_tag" != "" ]]; then
+                TAG_OR_HASH="tags/$ret_tag"
+                return
+            fi
+        done
+        TAG_OR_HASH="$ret_hash"
+    fi
+}
+
+function update_current_git_vars() {
+    local branch branch_description branch_parts
+    local ahead=0 behind=0
+    local staged=0 conflict=0 changed=0 untracked=0
+    local status_string status_line
+    local divergence div
+
+    __CURRENT_GIT_STATUS=0
+    status_string="$(git status --branch --porcelain -z 2> /dev/null)"
+    if [[ $? -ne 0 ]]; then
+        # not a git repository
+        return
+    fi
+    __CURRENT_GIT_STATUS=1
+
+    for status_line in ${(0)status_string}; do
+        if [[ "${status_line:0:2}" == '##' ]]; then
+            branch_description="${status_line:2}"
+            if [[ "$branch_description" == *'Initial commit on '* ]]; then
+                branch="${branch_description/#*'Initial commit on '/}"
+            elif [[ "$branch_description" == *'no branch'* ]]; then
+                get_tagname_or_hash
+                branch="$TAG_OR_HASH"
+            elif [[ "$branch_description" != *'...'* ]]; then
+                branch="${branch_description# }"
+            else
+                # local and remote branch info
+                branch_parts=(${(s:...:)branch_description})
+                branch="${branch_parts[1]# }"
+                if [[ $#branch_parts -ne 1 ]]; then
+                    # ahead or behind
+                    divergence="${(M)branch_parts[2]%\[*\]}"
+                    divergence="${divergence#\[}"
+                    divergence="${divergence%\]}"
+                    for div in ${(s:, :)divergence}; do
+                        if [[ "$div" == 'ahead '* ]]; then
+                            ahead="${div#ahead }"
+                        elif [[ "$div" == 'behind '* ]]; then
+                            behind="${div#behind }"
+                        fi
+                    done
+                fi
+            fi
+        elif [[ "${status_line:0:2}" == '??' ]]; then
+            untracked=$((untracked + 1))
+        else
+            if [[ "${status_line:1:1}" == 'M' ]]; then
+                changed=$((changed + 1))
+            elif [[ "${status_line:0:1}" == 'U' ]]; then
+                conflict=$((conflict + 1))
+            elif [[ "${status_line:0:1}" != ' ' ]]; then
+                staged=$((staged + 1))
+            fi
+        fi
+    done
+    GIT_BRANCH="$branch"
+    GIT_AHEAD="$ahead"
+    GIT_BEHIND="$behind"
+    GIT_STAGED="$staged"
+    GIT_CONFLICTS="$conflict"
+    GIT_CHANGED="$changed"
+    GIT_UNTRACKED="$untracked"
 }
 
 git_super_status() {
     precmd_update_git_vars
-    if [ -n "$__CURRENT_GIT_STATUS" ]; then
+    if [ "$__CURRENT_GIT_STATUS" -eq 1 ]; then
       STATUS="$ZSH_THEME_GIT_PROMPT_PREFIX$ZSH_THEME_GIT_PROMPT_BRANCH$GIT_BRANCH%{${reset_color}%}"
       if [ "$GIT_BEHIND" -ne "0" ]; then
           STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_BEHIND$GIT_BEHIND%{${reset_color}%}"
