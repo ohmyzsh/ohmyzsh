@@ -54,6 +54,8 @@ ZSH_THEME="robbyrussell"
 plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
+source ~/.profile
+unsetopt correct_all
 
 # User configuration
 
