@@ -12,10 +12,10 @@
 #
 #     a. Place it in your .zshrc:
 #
-#     b. Or, copy it somewhere (e.g. ~/.git-flow-completion.zsh) and put the following line in
+#     b. Or, copy it somewhere (e.g. ~/.git-flow-avh.plugin.zsh) and put the following line in
 #        your .zshrc:
 #
-#            source ~/.git-flow-completion.zsh
+#            source ~/.git-flow-avh.plugin.zsh
 #
 #     c. Or, use this file as a oh-my-zsh plugin.
 #
