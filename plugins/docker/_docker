@@ -151,6 +151,10 @@ __docker_complete_info_plugins() {
 
 __docker_complete_images() {
     [[ $PREFIX = -* ]] && return 1
+
+    # Prevent autocomplete when there are no images
+    [[ $(_call_program commands docker $docker_options images --format "{{.ID}}") ]] || return 1
+
     integer ret=1
     declare -a images
     images=(${${${(f)${:-"$(_call_program commands docker $docker_options images)"$'\n'}}[2,-1]}/(#b)([^ ]##) ##([^ ]##) ##([^ ]##)*/${match[3]}:${(r:15:: :::)match[2]} in ${match[1]}})
