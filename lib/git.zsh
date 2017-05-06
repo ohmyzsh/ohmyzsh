@@ -139,10 +139,10 @@ function git_prompt_status() {
   fi
   if $(echo "$INDEX" | grep '^A  ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
-  elif $(echo "$INDEX" | grep '^M  ' &> /dev/null); then
+  elif $(echo "$INDEX" | grep '^M[M ] ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
   fi
-  if $(echo "$INDEX" | grep '^ M ' &> /dev/null); then
+  if $(echo "$INDEX" | grep '^[M ]M ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
   elif $(echo "$INDEX" | grep '^AM ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
