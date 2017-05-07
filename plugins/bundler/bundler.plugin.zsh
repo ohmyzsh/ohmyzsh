@@ -26,9 +26,9 @@ bundled_commands=(
   rainbows
   rake
   rspec
+  shoryuken
   shotgun
   sidekiq
-  shoryuken
   spec
   spork
   spring
