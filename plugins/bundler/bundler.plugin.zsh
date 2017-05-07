@@ -28,6 +28,7 @@ bundled_commands=(
   rspec
   shotgun
   sidekiq
+  shoryuken
   spec
   spork
   spring
