@@ -1,0 +1,29 @@
+#compdef forever
+#autoload
+
+# forever zsh completion
+
+_forever() {
+
+    local -a commands
+    commands=(
+        'start:Start SCRIPT as a daemon'
+        'stop:Stop the daemon SCRIPT'
+        'stopall:Stop all the running forever scripts'
+        'restart:Restart the daemon SCRIPT'
+        'restartall:Restart all the running forever scripts'
+        'list:List all running forever scripts'
+        'logs:Lists log files for all forever processes'
+        'logs:<script|index> Tails the logs for specified script'
+        'config:Lists all forever user configuration'
+        'cleanlogs:[CAREFUL] Deletes all historical forever log files'
+    )
+
+    if (( CURRENT == 2 )); then
+        _describe -t commands 'commands' commands
+    fi
+
+    return 0
+}
+
+_forever

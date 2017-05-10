@@ -1,0 +1,10 @@
+# Forever
+
+----
+
+### Maintainer: [Rolf Koenders](http://www.rolfkoenders.nl)
+
+This plugin provides some autocompletion for the Node tool [Forever](https://github.com/nodejitsu/forever)
+
+### Todo
+I was thinking of adding some aliases and make the autocompletion a bit more smart. 
