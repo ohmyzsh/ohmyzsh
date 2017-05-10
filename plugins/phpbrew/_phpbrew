@@ -1,0 +1,45 @@
+#compdef phpbrew
+#autoload
+
+
+# phpbrew zsh completion
+
+local -a _1st_arguments
+
+_1st_arguments=(
+  'init:Initialize phpbrew config file.'
+  'known:list known PHP versions'
+  'install:install php'
+  'list:list installed PHP versions'
+  'use:use php, switch version temporarily'
+  'switch:switch default php version.'
+  'info:show current php information'
+  'env:export environment variables'
+  'ext:List extensions or execute extension subcommands'
+  'variants:list php variants'
+  'path:Show paths of the current PHP.'
+  'cd:Change to directories'
+  'download:download php'
+  'clean:clean up php distribution'
+  'enable:command is now moved to `phpbrew ext enable`'
+  'install-ext:command is now moved to `phpbrew ext install`'
+  'self-update:self-update, default to master version'
+  'remove:remove installed php version.'
+  'purge:remove installed php version and config files.'
+  'off:temporarily go back to the system php'
+  'switch-off:definitely go back to the system php'
+  'help:show help message of a command'
+)
+
+_arguments \
+  '(--version --version)'{--version,--version}'[show version]' \
+  '(-h --help)'{-h,--help}'[show help]' \
+  '(-q --quiet)'{-q,--quiet}'[Be quiet]' \
+  '(-d --debug)'{-d,--debug}'[Print debug message]' \
+  '(-v --verbose)'{-v,--verbose}'[Print verbose message]' \
+  '*:: :->subcmds' && return 0
+
+if (( CURRENT == 1 )); then
+  _describe -t commands "phpbrew subcommand" _1st_arguments
+  return
+fi
