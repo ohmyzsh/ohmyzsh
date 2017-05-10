@@ -13,6 +13,9 @@ zstyle -s ":vcs_info:git:*:-all-" "command" _omz_git_git_cmd
 function current_branch() {
   git_current_branch
 }
+
+alias c_b=current_branch
+
 # The list of remotes
 function current_repository() {
   if ! $_omz_git_git_cmd rev-parse --is-inside-work-tree &> /dev/null; then
