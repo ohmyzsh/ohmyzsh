@@ -1,0 +1,5 @@
+#compdef c
+_files -W ~/code -/
+
+#compdef h
+_files -W ~ -/
