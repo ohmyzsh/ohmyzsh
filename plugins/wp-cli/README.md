@@ -8,6 +8,10 @@ WP-CLI is a set of command-line tools for managing WordPress installations. You 
 
 This plugin adds [tab completion](http://wp-cli.org/#complete) for `wp-cli` as well as several aliases.
 
+## Tab completion
+
+This plugin also includes [tab completions](http://wp-cli.org/#complete).
+
 ## List of Aliases
 
 ### Core
