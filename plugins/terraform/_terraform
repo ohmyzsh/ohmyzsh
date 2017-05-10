@@ -49,8 +49,8 @@ __console() {
 }
 
 __debug() {
-	__arguments \
-		'json2dot[Convert json graph log to dot]'
+    _arguments \
+	'json2dot[Convert json graph log to dot]'
 
 }
 
@@ -71,7 +71,7 @@ __destroy() {
 }
 
 __env() {
-    __arguments \
+    _arguments \
         'list[List environments.]' \
         'select[Select an environment.]' \
         'new[Create a new environment.]' \
@@ -79,7 +79,7 @@ __env() {
 }
 
 __fmt() {
-    __arguments \
+    _arguments \
         '-list=[(true) List files whose formatting differs (always false if using STDIN)]' \
         '-write=[(true) Write result to source file instead of STDOUT (always false if using STDIN)]' \
         '-diff=[(false) Display diffs of formatting changes]'
@@ -212,7 +212,7 @@ __taint() {
 }
 
 __validate() {
-    __arguments \
+    _arguments \
         '-no-color[If specified, output wont contain any color.]' \
 }
 
