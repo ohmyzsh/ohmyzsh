@@ -14,7 +14,7 @@ plugins=(git man dotenv)
 
 ## Usage
 
-Create `.env` file inside your project directory and put your local ENV variables there.
+Create `.env` file inside your project directory and put your local ENV variables there. The contents of `.env` are run in the context of the current shell session. Do not forget to `export` the variables, otherwise they will only be available within the current shell session and not be part of ENV (unless they were already in ENV beforehand).
 
 For example:
 ```sh
