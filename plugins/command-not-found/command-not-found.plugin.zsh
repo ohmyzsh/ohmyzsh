@@ -39,13 +39,13 @@ case "$SYS_KERNEL" in
     *WSL*|*Microsoft*) command_not_found_handler () {
         commandsent="$@"
         buffer=("${(@s/ /)commandsent}")
-        which $buffer[1].exe>/dev/null
+        which $buffer[1].exe>/dev/null # Does binary exist in path?
         if [ $? -eq 0 ]; then
             buffer[1]=$buffer[1].exe
             $buffer
-            return 0
+            exit # Returns exit code from Windows binary
         else
-            return 1
+            return 1 # Returns 'command not found'
         fi
     } ;;
     *) ;;
