@@ -22,6 +22,7 @@ fi
 
 printf "${BLUE}%s${NORMAL}\n" "Updating Oh My Zsh"
 cd "$ZSH"
+git submodule update
 if git pull --rebase --stat origin master
 then
   printf '%s' "$GREEN"
