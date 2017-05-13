@@ -31,3 +31,22 @@ if type brew &> /dev/null; then
     eval "$(brew command-not-found-init)";
   fi
 fi
+
+# Bash on Windows support
+# https://github.com/Microsoft/BashOnWindows/issues/423#issuecomment-221627364
+SYS_KERNEL=`cat /proc/sys/kernel/osrelease`
+case "$SYS_KERNEL" in
+    *WSL*|*Microsoft*) command_not_found_handler () {
+        commandsent="$@"
+        buffer=("${(@s/ /)commandsent}")
+        which $buffer[1].exe>/dev/null
+        if [ $? -eq 0 ]; then
+            buffer[1]=$buffer[1].exe
+            $buffer
+            return 0
+        else
+            return 1
+        fi
+    } ;;
+    *) ;;
+esac
