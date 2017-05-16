@@ -110,7 +110,7 @@ main() {
   echo 'p.p.s. Get stickers and t-shirts at http://shop.planetargon.com.'
   echo ''
   printf "${NORMAL}"
-  env zsh
+  env SHELL=$(which zsh) zsh
 }
 
 main
