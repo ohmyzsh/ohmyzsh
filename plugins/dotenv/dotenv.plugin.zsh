@@ -2,7 +2,13 @@
 
 source_env() {
   if [[ -f .env ]]; then
-    source .env
+    if [[ -o a ]]; then
+      source .env
+    else
+      set -a
+      source .env
+      set +a
+    fi
   fi
 }
 
