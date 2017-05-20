@@ -19,6 +19,9 @@ compdef _symfony2 sf
 
 #Alias
 alias sf='`_symfony_console`'
+alias sfp='SYMFONY_ENV=prod sf'
+alias sfd='SYMFONY_ENV=dev sf'
+alias sft='SYMFONY_ENV=test sf'
 alias sfcl='sf cache:clear'
 alias sfsr='sf server:run -vvv'
 alias sfcw='sf cache:warmup'
