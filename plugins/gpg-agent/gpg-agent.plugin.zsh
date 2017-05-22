@@ -15,7 +15,7 @@ function start_agent_withssh {
 }
 
 # check if another agent is running
-if ! gpg-connect-agent --quiet /bye > /dev/null 2> /dev/null; then
+if ! gpg-agent -q > /dev/null 2> /dev/null; then
     # source settings of old agent, if applicable
     if [ -f "${GPG_ENV}" ]; then
         . ${GPG_ENV} > /dev/null
