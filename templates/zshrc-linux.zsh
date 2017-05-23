@@ -39,7 +39,8 @@ plugins=(git2 python repo intel-repo cp buildbot rsync git-extras git-remote-bra
          command-not-found debian dircycle encode64 lol extract launch_trial \
          vim-scp ufw sublime pylint pep8 autopep8 \
          common-aliases buildbot_dev zsh-syntax-highlighting \
-         tmux txw jump grin pip colored-man docker yocto tig)
+         tmux txw jump grin pip colored-man docker yocto tig \
+         intel-docker )
 
 source $ZSH/oh-my-zsh.sh
 
@@ -81,3 +82,6 @@ unsetopt correctall
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
 # export PYTHONPATH=/usr/local/lib/python2.7/dist-packages/:/usr/lib/python2.7/dist-packages/:/usr/lib/python2.7/dist-packages/gtk-2.0:$PYTHONPATH
+
+# added by travis gem
+[ -f /home/gsemet/.travis/travis.sh ] && source /home/gsemet/.travis/travis.sh

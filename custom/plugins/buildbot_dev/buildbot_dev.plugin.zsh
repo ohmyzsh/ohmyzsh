@@ -3,6 +3,8 @@ BUILDBOT_PROJECT_PATH="$HOME/projects/buildbot/"
 alias cdb='cd $BUILDBOT_PROJECT_PATH/main'
 alias cdp='cd $BUILDBOT_PROJECT_PATH'
 alias cdd='cd $HOME/projects/dev-tools'
+alias cdg='cd $HOME/projects/dev-tools/guake'
+alias cdg3='cd $HOME/projects/dev-tools/guake-gtk3'
 
 alias c='cactus'
 alias ci='cactus info'
@@ -69,6 +71,8 @@ alias grinpy="grin -I '*.py'"
 alias grinyaml="grin -I '*.yaml'"
 alias grinsh="grin -I '*.sh'"
 alias grinlog="grin -I '*.log'"
+
+alias ssh_bbnext_sh='ssh sys_bbstage@buildbot-next.sh.intel.com'
 
 function bb_env()
 {
