@@ -294,7 +294,7 @@ wd_clean() {
             key=${arr[1]}
             val=${arr[2]}
 
-            if [ -d "$val" ]
+            if [ -d "`eval echo ${val//>}`" ]
             then
                 wd_tmp=$wd_tmp"\n"`echo $line`
             else
