@@ -10,7 +10,7 @@ else
     local user_symbol='$'
 fi
 
-local current_dir='%{$terminfo[bold]$fg[blue]%} %~%{$reset_color%}'
+local current_dir='%{$terminfo[bold]$fg[blue]%}%~%{$reset_color%}'
 local rvm_ruby=''
 if which rvm-prompt &> /dev/null; then
   rvm_ruby='%{$fg[red]%}‹$(rvm-prompt i v g)›%{$reset_color%}'

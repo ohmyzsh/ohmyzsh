@@ -4,9 +4,9 @@
 
 Oh My Zsh is an open source, community-driven framework for managing your [zsh](http://www.zsh.org/) configuration.
 
-That sounds boring. Let's try this again.
+Sounds boring. Let's try again.
 
-__Oh My Zsh is a way of life!__
+__Oh My Zsh will not make you a 10x developer...but you might feel like one.__
 
 Once installed, your terminal shell will become the talk of the town _or your money back!_ With each keystroke in your command prompt, you'll take advantage of the hundreds of powerful plugins and beautiful themes. Strangers will come up to you in cafés and ask you, _"that is amazing! are you some sort of genius?"_
 
@@ -20,7 +20,7 @@ To learn more, visit [ohmyz.sh](http://ohmyz.sh) and follow [@ohmyzsh](https://t
 
 __Disclaimer:__ _Oh My Zsh works best on macOS and Linux._
 
-* Unix-based operating system (macOS or Linux)
+* Unix-like operating system (macOS or Linux)
 * [Zsh](http://www.zsh.org) should be installed (v4.3.9 or more recent). If not pre-installed (`zsh --version` to confirm), check the following instruction here: [Installing ZSH](https://github.com/robbyrussell/oh-my-zsh/wiki/Installing-ZSH)
 * `curl` or `wget` should be installed
 * `git` should be installed
@@ -49,9 +49,9 @@ Oh My Zsh comes with a shit load of plugins to take advantage of. You can take a
 
 #### Enabling Plugins
 
-If you spot a plugin (or several) that you would like to use with Oh My Zsh, you will need to edit the `~/.zshrc` file. Once you open it with your favorite editor, you'll see a spot to list all the plugins that you'd like Oh My Zsh to load on initialization.
+Once you spot a plugin (or several) that you'd like to use with Oh My Zsh, you'll need to enable them in the `.zshrc` file. You'll find the zshrc file in your `$HOME` directory. Open it with your favorite text editor and you'll see a spot to list all the plugins you want to load.
 
-For example, this line might begin to look like...
+For example, this line might begin to look like this:
 
 ```shell
 plugins=(git bundler osx rake ruby)
@@ -79,6 +79,8 @@ To use a different theme, simply change the value to match the name of your desi
 
 ```shell
 ZSH_THEME="agnoster" # (this is one of the fancy ones)
+# you might need to install a special Powerline font on your console's host for this to work
+# see https://github.com/robbyrussell/oh-my-zsh/wiki/Themes#agnoster
 ```
 
 Open up a new terminal window and your prompt should look something like this:
