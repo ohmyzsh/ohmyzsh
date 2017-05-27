@@ -8,7 +8,7 @@ deepest one), we automatically add its .bin folder to PATH (node_modules/.bin).
 
 We try to keep project dependencies as isolated as possible and we avoid
 installing them globally to our machines. One such dependency is
-[Flow](https://flow.org/). Editors with Flow extensions search for the `flow`
+[Flow](https://flow.org/). Text editors with Flow extensions search for the `flow`
 binary on path. Thus, before opening our editor, we must first remember to add
 the project's node_module/.bin folder to path.
 
