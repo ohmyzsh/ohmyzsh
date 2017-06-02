@@ -5,9 +5,12 @@
 #
 # Debian-related zsh aliases and functions for zsh
 
-# Use aptitude if installed, or apt-get if not.
+# Use apt or aptitude if installed, fallback is apt-get
 # You can just set apt_pref='apt-get' to override it.
-if [[ -e $( which -p aptitude 2>&1 ) ]]; then
+if [[ -e $( which -p apt 2>&1 ) ]]; then
+    apt_pref='apt'
+    apt_upgr='upgrade'
+elif [[ -e $( which -p aptitude 2>&1 ) ]]; then
     apt_pref='aptitude'
     apt_upgr='safe-upgrade'
 else
