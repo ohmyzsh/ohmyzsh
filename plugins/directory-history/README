@@ -1,0 +1,7 @@
+For this plugin to run you need the dirhist and dirlog command-line tools.
+Also please deactivate the history-substring-search plugin in case you are using it since this plugin comes with a modified version of the history-substring-search plugin.
+
+Please get dirhist and dirlog here: https://github.com/tymm/directory-history
+Install dirhist and dirlog by placing them into /usr/bin or any other directory in your PATH environment variable.
+You also need to make those two scripts executable by doing "chmod +x /usr/bin/dirhost /usr/bin/dirlog".
+After that you need to configure the history-substring-search plugin if you haven't done that already (see https://github.com/zsh-users/zsh-history-substring-search).
