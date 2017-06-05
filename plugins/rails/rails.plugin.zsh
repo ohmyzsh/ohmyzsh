@@ -49,6 +49,7 @@ alias rsp='rails server --port'
 
 # Rake aliases
 alias rdm='rake db:migrate'
+alias rdmr='rake db:migrate:redo'
 alias rdms='rake db:migrate:status'
 alias rdr='rake db:rollback'
 alias rdc='rake db:create'
