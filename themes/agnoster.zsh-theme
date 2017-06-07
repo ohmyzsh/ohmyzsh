@@ -198,6 +198,23 @@ prompt_virtualenv() {
   fi
 }
 
+# vaulted: current vaulted shell
+prompt_vaulted() {
+  if [[ -z $VAULTED_ENV ]]; then
+    return
+  fi
+  local exp=$(echo $VAULTED_ENV_EXPIRATION | sed 's/Z/+0000/')
+  local valid_until=$(date -j -f %Y-%m-%dT%H:%M:%S%z $exp +%s)
+  local bg=009 #orange
+  local fg=black
+  if [[ $valid_until -lt $(date +%s) ]]; then
+    fg=blue
+  fi
+  if [[ -n $VAULTED_ENV ]]; then
+    prompt_segment $bg $fg "$VAULTED_ENV"
+  fi
+}
+
 # Status:
 # - was there an error
 # - am I root
@@ -217,6 +234,7 @@ build_prompt() {
   RETVAL=$?
   prompt_status
   prompt_virtualenv
+  prompt_vaulted
   prompt_context
   prompt_dir
   prompt_git
