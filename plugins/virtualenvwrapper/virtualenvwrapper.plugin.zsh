@@ -14,8 +14,6 @@ elif [[ -f "/etc/bash_completion.d/virtualenvwrapper" ]]; then
     source "/etc/bash_completion.d/virtualenvwrapper"
   }
 else
-  print "[oh-my-zsh] virtualenvwrapper plugin: Cannot find ${virtualenvwrapper}.\n"\
-        "Please install with \`pip install virtualenvwrapper\`" >&2
   return
 fi
 if ! type workon &>/dev/null; then
