@@ -1,7 +1,15 @@
 # Symfony2 basic command completion
 
+_symfony_console_script () {
+  echo "`find . -maxdepth 2 -mindepth 1 -name 'console' -type f | head -n 1`"
+}
+
 _symfony_console () {
-  echo "php $(find . -maxdepth 2 -mindepth 1 -name 'console' -type f | head -n 1)"
+  echo "php `_symfony_console_script`"
+}
+
+_symfony_xdebug_console () {
+  echo "php -dxdebug.remote_autostart=1 `_symfony_console_script`"
 }
 
 _symfony2_get_command_list () {
@@ -27,3 +35,9 @@ alias sfcontainer='sf debug:container'
 alias sfgb='sf generate:bundle'
 alias sfdev='sf --env=dev'
 alias sfprod='sf --env=prod'
+
+#Xdebug enabled aliases (useful for debugging purposes)
+alias sfx='`_symfony_xdebug_console`'
+alias sfxcl='sfx cache:clear'
+alias sfxcw='sfx cache:warmup'
+alias sfxdev='sfx --env=dev'
