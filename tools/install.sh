@@ -1,4 +1,4 @@
-main() {
+init() {
   # Use colors, but only if connected to a terminal, and that terminal
   # supports them.
   if which tput >/dev/null 2>&1; then
@@ -23,7 +23,27 @@ main() {
   # Only enable exit-on-error after the non-critical colorization stuff,
   # which may fail on systems lacking tput or terminfo
   set -e
+}
 
+check_optional_args() {
+  # Set default values
+  LAUNCH_ZSH_AFTER=1
+
+  # Evaluate arguments
+  for arg in $@; do
+    case "$arg" in
+      --batch)
+        LAUNCH_ZSH_AFTER=0
+        printf "${BLUE}--batch:${NORMAL} zsh will not be started after installation\n"
+        ;;
+      *)
+        printf "${YELLOW}Unrecognized argument: ${BLUE}${arg}${NORMAL}\n"
+        ;;
+    esac
+  done
+}
+
+main() {
   CHECK_ZSH_INSTALLED=$(grep /zsh$ /etc/shells | wc -l)
   if [ ! $CHECK_ZSH_INSTALLED -ge 1 ]; then
     printf "${YELLOW}Zsh is not installed!${NORMAL} Please install zsh first!\n"
@@ -110,7 +130,14 @@ main() {
   echo 'p.p.s. Get stickers and t-shirts at http://shop.planetargon.com.'
   echo ''
   printf "${NORMAL}"
-  env zsh
+
+  # Launch zsh, unless defined otherwise
+  if [ $LAUNCH_ZSH_AFTER -eq 1 ]; then
+    env zsh
+  fi
 }
 
+init
+check_optional_args $@
 main
+
