@@ -15,6 +15,7 @@ alias ardpc='arc diff --plan-changes'
 
 alias are='arc export'
 alias arh='arc help'
+alias arho='arc hotfix'
 alias arl='arc land'
 alias arli='arc lint'
 alias arls='arc list'
