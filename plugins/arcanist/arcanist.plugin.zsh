@@ -5,6 +5,7 @@
 
 alias ara='arc amend'
 alias arb='arc branch'
+alias arbl='arc bland'
 alias arco='arc cover'
 alias arci='arc commit'
 
