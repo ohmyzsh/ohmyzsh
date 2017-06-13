@@ -169,3 +169,4 @@ _gradlew_tasks () {
 ############################################################################
 compdef _gradle_tasks gradle
 compdef _gradlew_tasks gradlew
+compdef _gradlew_tasks gw
