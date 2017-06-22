@@ -36,7 +36,7 @@ plugins=(git2 python repo intel-repo cp buildbot rsync git-extras git-remote-bra
          command-not-found debian dircycle encode64 lol extract launch_trial \
          vim-scp ufw sublime pylint pep8 autopep8 \
          common-aliases buildbot_dev zsh-syntax-highlighting \
-         txw jump grin pip colored-man osx tig)
+         txw jump grin pip colored-man osx tig brew)
 
 source $ZSH/oh-my-zsh.sh
 # User configuration
@@ -47,9 +47,6 @@ zstyle ':completion:*:descriptions' format '%B%d%b'
 # Language configuration
 if [ -z "$LC_ALL" ]; then export LC_ALL=en_US.UTF-8; fi
 if [ -z "$LANG" ]; then export LANG=en_US.UTF-8; fi
-
-# MacOSX specific aliases
-alias bu='brew update && brew upgrade'
 
 source $ZSH/oh-my-zsh.sh
 

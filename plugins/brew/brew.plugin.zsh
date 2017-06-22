@@ -2,6 +2,7 @@ alias brews='brew list -1'
 alias bubo='brew update && brew outdated'
 alias bubc='brew upgrade && brew cleanup'
 alias bubu='bubo && bubc'
+alias brewup='brew update && brew upgrade && brew prune && brew cleanup && brew doctor'
 
 if command mkdir "$ZSH_CACHE_DIR/.brew-completion-message" 2>/dev/null; then
 	print -P '%F{yellow}'Oh My Zsh brew plugin:
