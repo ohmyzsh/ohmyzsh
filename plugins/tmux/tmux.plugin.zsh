@@ -34,7 +34,7 @@ if which tmux &> /dev/null
 	# The TERM to use for 256 color terminals.
 	# Tmux states this should be screen-256color, but you may need to change it on
 	# systems without the proper terminfo
-	[[ -n "$ZSH_TMUX_FIXTERM_WITH_256COLOR" ]] || ZSH_TMUX_FIXTERM_WITH_256COLOR="screen-256color"
+	[[ -n "$ZSH_TMUX_FIXTERM_WITH_256COLOR" ]] || ZSH_TMUX_FIXTERM_WITH_256COLOR="xterm-256color"
 
 
 	# Get the absolute path to the current directory
@@ -49,7 +49,7 @@ if which tmux &> /dev/null
 	fi
 
 	# Set the correct local config file to use.
-    if [[ "$ZSH_TMUX_ITERM2" == "false" ]] && [[ -f $HOME/.tmux.conf || -h $HOME/.tmux.conf ]]
+    if [[ "$ZSH_TMUX_ITERM2" == "false" ]] && [[ -e "$HOME/.tmux.conf" ]]
 	then
 		#use this when they have a ~/.tmux.conf
 		export _ZSH_TMUX_FIXED_CONFIG="$zsh_tmux_plugin_path/tmux.extra.conf"
@@ -61,19 +61,37 @@ if which tmux &> /dev/null
 	# Wrapper function for tmux.
 	function _zsh_tmux_plugin_run()
 	{
+	    if [[ "$ZSH_TMUX_ITERM2" == "true" ]]
+	    then _fix='-CC'
+	    else _fix=''
+	    fi
+	    if [[ "$ZSH_TMUX_FIXTERM" == "true" && "$ZSH_TMUX_ITERM2" == "false" ]]
+	    then _file="-f $_ZSH_TMUX_FIXED_CONFIG"
+	    else _file='' # Can't use -f with -CC
+	    fi
+	    if [[ "$ZSH_TMUX_AUTOQUIT" == "true" ]]
+	    then _exit='exit'
+	    else _exit=''
+	    fi
 		# We have other arguments, just run them
 		if [[ -n "$@" ]]
 		then
-			\tmux $@
+			\tmux "$@"
 		# Try to connect to an existing session.
 		elif [[ "$ZSH_TMUX_AUTOCONNECT" == "true" ]]
 		then
-			\tmux `[[ "$ZSH_TMUX_ITERM2" == "true" ]] && echo '-CC '` attach || \tmux `[[ "$ZSH_TMUX_ITERM2" == "true" ]] && echo '-CC '` `[[ "$ZSH_TMUX_FIXTERM" == "true" ]] && echo '-f '$_ZSH_TMUX_FIXED_CONFIG` new-session
-			[[ "$ZSH_TMUX_AUTOQUIT" == "true" ]] && exit
+		    if (tmux has)
+		    then
+			\tmux $_fix attach
+			$_exit
+		    else
+		        \tmux $_fix $_file new
+			$_exit
+		    fi
 		# Just run tmux, fixing the TERM variable if requested.
 		else
-			\tmux `[[ "$ZSH_TMUX_ITERM2" == "true" ]] && echo '-CC '` `[[ "$ZSH_TMUX_FIXTERM" == "true" ]] && echo '-f '$_ZSH_TMUX_FIXED_CONFIG`
-			[[ "$ZSH_TMUX_AUTOQUIT" == "true" ]] && exit
+			\tmux $_fix $_file new
+			$_exit
 		fi
 	}
 
