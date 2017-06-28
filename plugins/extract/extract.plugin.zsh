@@ -29,7 +29,7 @@ extract() {
 
 		success=0
 		extract_dir="${1:t:r}"
-		case "$1" in
+		case "${1:l}" in
 			(*.tar.gz|*.tgz) (( $+commands[pigz] )) && { pigz -dc "$1" | tar xv } || tar zxvf "$1" ;;
 			(*.tar.bz2|*.tbz|*.tbz2) tar xvjf "$1" ;;
 			(*.tar.xz|*.txz)
