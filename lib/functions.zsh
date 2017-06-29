@@ -252,7 +252,7 @@ function ark () {
       (*.zip) unzip $2 ;;
       (*.Z) uncompress $2 ;;
       (*.7z) 7z x $2 ;;
-      (*) echo "'$2' неправильный архив" ;;
+      (*) echo "'$2' Wrong archive!" ;;
     esac ;;
     (c) case $2 in
       (tbz) tar cjvf $3.tar.bz2 $3 ;;
@@ -262,8 +262,8 @@ function ark () {
       (gz) gzip -c -9 -n $3 > $3.gz ;;
       (zip) zip -r $3.zip $3 ;;
       (7z) 7z a $3.7z $3 ;;
-      (*) echo "такого я не умею(" ;;
+      (*) echo "Can't do it." ;;
     esac ;;
-    (*) echo "WATT?" ;;
+    (*) echo "Wrong command!" ;;
   esac
 }
