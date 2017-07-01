@@ -287,10 +287,6 @@ function spotify() {
     echo "Commands:";
     echo;
     echo "  play                         # Resumes playback where Spotify last left off.";
-    echo "  play [song name]             # Finds a song by name and plays it.";
-    echo "  play album [album name]      # Finds an album by name and plays it.";
-    echo "  play artist [artist name]    # Finds an artist by name and plays it.";
-    echo "  play list [playlist name]    # Finds a playlist by name and plays it.";
     echo "  pause                        # Pauses Spotify playback.";
     echo "  next                         # Skips to the next song in a playlist.";
     echo "  prev                         # Returns to the previous song in a playlist.";
@@ -349,71 +345,8 @@ function spotify() {
 
     case $arg in
       "play"    )
-        if [ $# != 1 ]; then
-          # There are additional arguments, so find out how many
-          array=( $@ );
-          len=${#array[@]};
-          SPOTIFY_SEARCH_API="https://api.spotify.com/v1/search"
-          SPOTIFY_PLAY_URI="";
-
-          searchAndPlay() {
-            type="$1"
-            Q="$2"
-
-            cecho "Searching ${type}s for: $Q";
-
-            SPOTIFY_PLAY_URI=$( \
-              curl -s -G $SPOTIFY_SEARCH_API --data-urlencode "q=$Q" -d "type=$type&limit=1&offset=0" -H "Accept: application/json" \
-              | grep -E -o "spotify:$type:[a-zA-Z0-9]+" -m 1
-              )
-          }
-
-          case $2 in
-            "list"  )
-              _args=${array[*]:2:$len};
-              Q=$_args;
-
-              cecho "Searching playlists for: $Q";
-
-              results=$( \
-                curl -s -G $SPOTIFY_SEARCH_API --data-urlencode "q=$Q" -d "type=playlist&limit=10&offset=0" -H "Accept: application/json" \
-                | grep -E -o "spotify:user:[a-zA-Z0-9_]+:playlist:[a-zA-Z0-9]+" -m 10 \
-                )
-
-              count=$( \
-                echo "$results" | grep -c "spotify:user" \
-                )
-
-              if [ "$count" -gt 0 ]; then
-                random=$(( RANDOM % count));
-
-                SPOTIFY_PLAY_URI=$( \
-                  echo "$results" | awk -v random="$random" '/spotify:user:[a-zA-Z0-9]+:playlist:[a-zA-Z0-9]+/{i++}i==random{print; exit}' \
-                  )
-              fi;;
-
-            "album" | "artist" | "track"    )
-              _args=${array[*]:2:$len};
-              searchAndPlay "$2" "$_args";;
-
-            *   )
-              _args=${array[*]:1:$len};
-              searchAndPlay track "$_args";;
-          esac
-
-          if [ "$SPOTIFY_PLAY_URI" != "" ]; then
-            cecho "Playing ($Q Search) -> Spotify URL: $SPOTIFY_PLAY_URI";
-
-            osascript -e "tell application \"Spotify\" to play track \"$SPOTIFY_PLAY_URI\"";
-
-          else
-            cecho "No results when searching for $Q";
-          fi
-        else
-          # play is the only param
-          cecho "Playing Spotify.";
-          osascript -e 'tell application "Spotify" to play';
-        fi
+        cecho "Playing Spotify.";
+        osascript -e 'tell application "Spotify" to play';
         break ;;
 
       "pause"    )
