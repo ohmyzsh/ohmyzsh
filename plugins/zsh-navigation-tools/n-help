@@ -1,0 +1,135 @@
+autoload colors
+colors
+
+local h1="$fg_bold[magenta]"
+local h2="$fg_bold[green]"
+local h3="$fg_bold[blue]"
+local h4="$fg_bold[yellow]"
+local h5="$fg_bold[cyan]"
+local rst="$reset_color"
+
+LESS="-iRc" less <<<"
+${h1}Key Bindings${rst}
+
+${h2}H${rst}, ${h2}?${rst} (from n-history) - run n-help
+${h2}Ctrl-A${rst} - rotate entered words (1+2+3 -> 3+1+2)
+${h2}Ctrl-F${rst} - fix mode (approximate matching)
+${h2}Ctrl-L${rst} - redraw of whole display
+${h2}Ctrl-T${rst} - browse themes (next theme)
+${h2}Ctrl-G${rst} - browse themes (previous theme)
+${h2}Ctrl-U${rst} - half page up
+${h2}Ctrl-D${rst} - half page down
+${h2}Ctrl-P${rst} - previous element (also done with vim's k)
+${h2}Ctrl-N${rst} - next element (also done with vim's j)
+${h2}[${rst}, ${h2}]${rst} - jump directory bookmarks in n-cd and typical signals in n-kill
+${h2}g, ${h2}G${rst} - beginning and end of the list
+${h2}/${rst} - show incremental search
+${h2}F3${rst} - show/hide incremental search
+${h2}Esc${rst} - exit incremental search, clearing filter
+${h2}Ctrl-W${rst} (in incremental search) - delete whole word
+${h2}Ctrl-K${rst} (in incremental search) - delete whole line
+${h2}Ctrl-O, ${h2}o${rst} - enter uniq mode (no duplicate lines)
+${h2}Ctrl-E, ${h2}e${rst} - edit private history (when in private history view)
+${h2}F1${rst} - (in n-history) - switch view
+${h2}F2${rst}, ${h2}Ctrl-X${rst}, ${h2}Ctrl-/${rst} - search predefined keywords (defined in config files)
+
+${h1}Configuration files${rst}
+
+Location of the files is ${h3}~/.config/znt${rst}. Skeletons are copied there
+when using ${h3}zsh-navigation-tools.plugin.zsh${rst} file (sourcing it or using
+a plugin manager). There's a main config file ${h3}n-list.conf${rst} and files
+for each tool.
+
+To have a skeleton copied again into ${h3}~/.config/znt${rst}, delete it from
+there and restart Zsh a few times (3-7 or so; there's a random check
+that optimizes startup time).
+
+${h1}Predefined search keywords${rst}
+
+Following block of code in e.g. ${h3}~/.config/znt/n-history.conf${rst} defines
+set of keywords that can be invoked (i.e. searched for) via ${h2}F2${rst}, ${h2}Ctrl-X${rst}
+or ${h2}Ctrl-/${rst}:
+
+    ${h4}# Search keywords, iterated with F2 or Ctrl-X or Ctrl-/${rst}
+    ${h2}local${rst} -a keywords
+    keywords=( ${h2}\"git\" \"vim\" \"mplayer\"${rst} )
+
+${h1}Search query rotation${rst}
+
+When searching, after pressing ${h2}Ctrl-A${rst}, words 1 2 3 will become 3 1 2, etc.
+This can be used to edit some not-last word.
+
+${h1}Fix mode${rst}
+
+Approximate matching - pressing ${h2}f${rst} or ${h2}Ctrl-F${rst} will enter "FIX" mode, in which
+1 or 2 errors are allowed in what's searched. This utilizes original Zsh
+approximate matching features and is intended to be used after entering
+search query, when a typo is discovered.
+
+${h1}Color themes${rst}
+
+Following block of code in ${h3}~/.config/znt/n-list.conf${rst} defines set of
+themes that can be browsed with ${h2}Ctrl-T${rst} and ${h2}Ctrl-G${rst}:
+
+    ${h4}# Combinations of colors to try out with Ctrl-T and Ctrl-G
+    # The last number is the bold option, 0 or 1${rst}
+    ${h2}local${rst} -a themes
+    themes=( ${h2}\"white/black/1\" \"green/black/0\" \"green/black/1\"${rst}
+             ${h2}\"white/blue/0\" \"white/blue/1\" \"magenta/black/0\"${rst}
+             ${h2}\"magenta/black/1\"${rst} )
+
+It's \"foreground/background/bold\". There's support for 256-color themes
+for Zsh > 5.2, defined like e.g.: 
+
+    themes=( ${h2}\"white/17/0\" \"10/17/1\" \"white/24/1\"${rst} )
+
+i.e. with use of numbers, from 0 to 254.
+
+${h1}Private history${rst}
+
+N-history stores what's selected in its own history file. It can be
+edited. Use ${h2}e${rst} or ${h2}Ctrl-E${rst} for that when in n-history. Your \$EDITOR will
+start. This is a way to have handy set of bookmarks prepared in private
+history's file.
+
+Private history is instantly shared among sessions.
+
+${h1}Zshrc integration${rst}
+
+There are 5 standard configuration variables that can be set in zshrc:
+
+${h4}znt_history_active_text${rst}
+\"underline\" or \"reverse\" - how should be active element highlighted
+${h4}znt_history_nlist_coloring_pattern${rst}
+Pattern that can be used to colorize elements
+${h4}znt_history_nlist_coloring_color${rst}
+Color with which to colorize via the pattern
+${h4}znt_history_nlist_coloring_match_multiple${rst}
+Should multiple matches be colorized (${h2}\"0\"${rst} or ${h2}\"1\"${rst})
+${h4}znt_history_keywords ${h2}(array)${rst}
+Search keywords activated with Ctrl-X, F2, Ctrl-/, e.g. ( ${h2}\"git\"${rst} ${h2}\"vim\"${rst} )
+
+Above variables will work for n-history tool. For other tools, change
+\"_history_\" to e.g. \"_cd_\", for the n-cd tool. The same works for
+all 8 tools.
+
+Common configuration of the tools uses variables with \"_list_\" in them:
+
+${h4}znt_list_bold${rst}
+Should draw text in bold (${h2}\"0\"${rst} or ${h2}\"1\"${rst})
+${h4}znt_list_colorpair${rst}
+Main pair of colors to be used, e.g ${h2}\"green/black\"${rst}
+${h4}znt_list_border${rst}
+Should draw borders around windows (${h2}\"0\"${rst} or ${h2}\"1\"${rst})
+${h4}znt_list_themes ${h2}(array)${rst}
+List of themes to try out with Ctrl-T, e.g. ( ${h2}\"white/black/1\"${rst}
+${h2}\"green/black/0\"${rst} )
+${h4}znt_list_instant_select${rst}
+Should pressing enter in search mode leave tool (${h2}\"0\"${rst} or ${h2}\"1\"${rst})
+
+If you used ZNT before v2.1.12 then remove old configuration files
+${h3}~/.config/znt/*.conf${rst} so that ZNT can update them to the latest versions
+that support integration with Zshrc. If you used installer then run it
+again (after the remove of configuration files), that is not needed when
+using as plugin.
+"

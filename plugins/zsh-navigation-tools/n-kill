@@ -13,8 +13,8 @@ zmodload zsh/curses
 local IFS="
 "
 
-[ -f ~/.config/znt/n-list.conf ] && . ~/.config/znt/n-list.conf
-[ -f ~/.config/znt/n-kill.conf ] && . ~/.config/znt/n-kill.conf
+[ -f ~/.config/znt/n-list.conf ] && builtin source ~/.config/znt/n-list.conf
+[ -f ~/.config/znt/n-kill.conf ] && builtin source ~/.config/znt/n-kill.conf
 
 typeset -A signals
 signals=(
@@ -42,8 +42,8 @@ NLIST_NONSELECTABLE_ELEMENTS=( 1 )
 
 type ps 2>/dev/null 1>&2 || { echo >&2 "Error: \`ps' not found"; return 1 }
 
-case "$(uname)" in
-    CYGWIN*) list=( `command ps -Wa` )  ;;
+case "$OSTYPE" in
+    cygwin*) list=( `command ps -Wa` )  ;;
     *) list=( `command ps -o pid,uid,command -A` ) ;;
 esac
 

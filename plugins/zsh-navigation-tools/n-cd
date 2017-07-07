@@ -16,8 +16,8 @@ local IFS="
 # Unset before configuration is read
 unset NLIST_COLORING_PATTERN
 
-[ -f ~/.config/znt/n-list.conf ] && . ~/.config/znt/n-list.conf
-[ -f ~/.config/znt/n-cd.conf ] && . ~/.config/znt/n-cd.conf
+[ -f ~/.config/znt/n-list.conf ] && builtin source ~/.config/znt/n-list.conf
+[ -f ~/.config/znt/n-cd.conf ] && builtin source ~/.config/znt/n-cd.conf
 
 local list
 local selected
@@ -53,13 +53,16 @@ if [ "$REPLY" -gt 0 ]; then
 
     (( NCD_DONT_PUSHD )) && setopt NO_AUTO_PUSHD
     cd "$selected"
+    local code=$?
     (( NCD_DONT_PUSHD )) && setopt AUTO_PUSHD
 
-    # ZLE?
-    if [ "${(t)CURSOR}" = "integer-local-special" ]; then
-        zle -M "You have selected $selected"
-    else
-        echo "You have selected $selected"
+    if [ "$code" -eq "0" ]; then
+        # ZLE?
+        if [ "${(t)CURSOR}" = "integer-local-special" ]; then
+            zle -M "You have selected $selected"
+        else
+            echo "You have selected $selected"
+        fi
     fi
 else
     [ "${(t)CURSOR}" = "integer-local-special" ] && zle redisplay
