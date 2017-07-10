@@ -51,7 +51,7 @@ ZSH_CUSTOM=$HOME/.zsh-custom-conf
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(fasd zhs-256color zsh-syntax-highlighting)
+plugins=(fasd zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
