@@ -24,10 +24,11 @@ alias rd=rmdir
 alias d='dirs -v | head -10'
 
 # List directory contents
-alias lsa='ls -lah'
-alias l='ls -lah'
+# alias lsa='ls -lah'
+alias l='ls'
 alias ll='ls -lh'
-alias la='ls -lAh'
+alias la='ls -Ah'
+alias lla='ls -lah'
 
 # Push and pop directories on directory stack
 alias pu='pushd'
