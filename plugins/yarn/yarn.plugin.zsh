@@ -38,6 +38,7 @@ _yarn ()
       'run:Runs a defined package script.' \
       'self-update:Updates Yarn to the latest version.' \
       'upgrade:Upgrades packages to their latest version based on the specified range.' \
+      'upgrade-interactive:Shows outdated packages and lets you upgrade them individually.' \
       'why:<query> - Show information about why a package is installed.'
     )
     _arguments \
