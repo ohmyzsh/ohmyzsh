@@ -31,7 +31,6 @@ _1st_arguments=(
     'ssh-config:Outputs .ssh/config valid syntax for connecting to this environment via ssh'
     'status:Shows the status of the current Vagrant environment'
     'suspend:Suspends the currently running vagrant environment'
-    'snapshot:Used to manage snapshots with the guest machine'
     'up:Creates the vagrant environment'
     'version:Prints current and latest Vagrant version'
     '--help:[TASK] Describe available tasks or one specific task'
@@ -49,6 +48,15 @@ _box_arguments=(
     'update:Updates box to a newer version, if available'
 )
 
+_snapshot_arguments=(
+    'delete:This command will delete the named snapshot'
+    'list:This command will list all the snapshots taken'
+    'pop:This command is the inverse of vagrant snapshot push'
+    'push:This takes a snapshot and pushes it onto the snapshot stack'
+    'restore:This command restores the named snapshot'
+    'save:This command saves a new named snapshot'
+)
+
 __task_list ()
 {
     local expl
@@ -61,13 +69,13 @@ __task_list ()
 
 __box_list ()
 {
-    _wanted application expl 'command' compadd $(command vagrant box list | sed -e 's/ /\\ /g')
+    _wanted application expl 'command' compadd $(command vagrant box list | awk -F ' ' '{print $1}')
 }
 
 __vm_list ()
 {
-    _wanted application expl 'command' compadd $(command grep Vagrantfile -oe '^[^#]*\.vm\.define *[:"]\([a-zA-Z0-9_-]\+\)' 2>/dev/null | awk '{print substr($2, 2)}')
-    _wanted application expl 'command' compadd $(command ls .vagrant/machines/ 2>/dev/null)
+    vm_list=(`vagrant global-status| sed -e '/^ $/,$d' | awk -F ' ' 'NR>2{print $1":"$2}'`)
+    _describe -t commands "gem subcommand" vm_list
 }
 
 __vagrant-box ()
@@ -88,6 +96,7 @@ __vagrant-box ()
        (options)
            case $line[1] in
                (repackage|remove)
+                   echo $line
                    _arguments ':feature:__box_list'
                ;;
            esac
@@ -97,6 +106,27 @@ __vagrant-box ()
 
 
 
+__vagrant-snapshot ()
+{
+    local curcontext="$curcontext" state line
+    typeset -A opt_args
+
+    _arguments -C \
+        ':command:->command' \
+        '*::options:->options'
+
+   case $state in
+       (command)
+           _describe -t commands "gem subcommand" _snapshot_arguments
+           return
+       ;;
+
+       (options)
+           __vm_list
+           return
+       ;;
+    esac
+}
 
 local expl
 local -a boxes installed_boxes
@@ -123,8 +153,13 @@ case $state in
       (box)
           __vagrant-box
       ;;
+
+      (snapshot)
+          __vagrant-snapshot
+      ;;
       (up|provision|package|destroy|reload|ssh|ssh-config|halt|resume|status)
-      _arguments ':feature:__vm_list'
+          __vm_list
+          return
     esac
   ;;
 esac
