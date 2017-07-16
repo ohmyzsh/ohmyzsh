@@ -7,6 +7,7 @@ if [[ "$ENABLE_CORRECTION" == "true" ]]; then
   alias mkdir='nocorrect mkdir'
   alias mv='nocorrect mv'
   alias mysql='nocorrect mysql'
+  alias su='nocorrect su'
   alias sudo='nocorrect sudo'
 
   setopt correct_all

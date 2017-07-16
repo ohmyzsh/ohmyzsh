@@ -1,0 +1,8 @@
+alias vssh='vagrant ssh'
+alias vup='vagrant up'
+alias vupp='vagrant up --provision'
+alias vprov='vagrant provision'
+alias vhalt='vagrant halt'
+alias vdestroy='vagrant destroy'
+alias vstatus='vagrant status'
+alias vst='vstatus'
