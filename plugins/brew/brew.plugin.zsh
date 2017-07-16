@@ -7,6 +7,11 @@ alias bubu='bubo && bubc'
 alias bcubo='brew update && brew cask outdated'
 alias bcubc='brew cask reinstall $(brew cask outdated) && brew cleanup'
 
+alias bsl='brew services list'
+alias bsr='brew services run'
+alias bson='brew services start'
+alias bsoff='brew services stop'
+
 if command mkdir "$ZSH_CACHE_DIR/.brew-completion-message" 2>/dev/null; then
 	print -P '%F{yellow}'Oh My Zsh brew plugin:
 	cat <<-'EOF'
