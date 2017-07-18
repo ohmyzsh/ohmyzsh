@@ -40,8 +40,12 @@ $ZSH_THEME_REPO_NAME_COLOR$_DISPLAY$ZSH_PROMPT_BASE_COLOR$ZSH_PROMPT_BASE_COLOR$
 }
 
 function hg_dirty_choose {
+  local FLAGS
   if [ $(in_hg) ]; then
-    hg status 2> /dev/null | command grep -Eq '^\s*[ACDIM!?L]'
+    if [[ "$DISABLE_UNTRACKED_FILES_DIRTY" == "true" ]]; then
+      FLAGS+='--quiet'
+    fi
+    hg status ${FLAGS} 2> /dev/null | command grep -Eq '^\s*[ACDIM!?L]'
     if [ $pipestatus[-1] -eq 0 ]; then
       # Grep exits with 0 when "One or more lines were selected", return "dirty".
       echo $1
