@@ -450,9 +450,9 @@ __docker_complete_events_filter() {
                 ;;
             (event)
                 local -a event_opts
-                event_opts=('attach' 'commit' 'connect' 'copy' 'create' 'delete' 'destroy' 'detach' 'die' 'disconnect' 'exec_create' 'exec_detach'
-                'exec_start' 'export' 'health_status' 'import' 'kill' 'load'  'mount' 'oom' 'pause' 'pull' 'push' 'reload' 'rename' 'resize' 'restart' 'save' 'start'
-                'stop' 'tag' 'top' 'unmount' 'unpause' 'untag' 'update')
+                event_opts=('attach' 'commit' 'connect' 'copy' 'create' 'delete' 'destroy' 'detach' 'die' 'disable' 'disconnect' 'enable' 'exec_create' 'exec_detach'
+                'exec_start' 'export' 'health_status' 'import' 'install' 'kill' 'load'  'mount' 'oom' 'pause' 'pull' 'push' 'reload' 'remove' 'rename' 'resize'
+                'restart' 'save' 'start' 'stop' 'tag' 'top' 'unmount' 'unpause' 'untag' 'update')
                 _describe -t event-filter-opts "event filter options" event_opts && ret=0
                 ;;
             (image)
