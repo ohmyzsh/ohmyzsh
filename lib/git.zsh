@@ -1,11 +1,19 @@
+# Checks hide-status config
+function git_prompt_hidden() {
+  if [[ "$(command git config --get oh-my-zsh.hide-status 2>/dev/null)" == "1" ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
 # Outputs current branch info in prompt format
 function git_prompt_info() {
+  git_prompt_hidden && return 0
   local ref
-  if [[ "$(command git config --get oh-my-zsh.hide-status 2>/dev/null)" != "1" ]]; then
-    ref=$(command git symbolic-ref HEAD 2> /dev/null) || \
-    ref=$(command git rev-parse --short HEAD 2> /dev/null) || return 0
-    echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
-  fi
+  ref=$(command git symbolic-ref HEAD 2> /dev/null) || \
+  ref=$(command git rev-parse --short HEAD 2> /dev/null) || return 0
+  echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
 }
 
 # Checks if working tree is dirty
@@ -31,6 +39,7 @@ function parse_git_dirty() {
 
 # Gets the difference between the local and remote branches
 function git_remote_status() {
+    git_prompt_hidden && return 0
     local remote ahead behind git_remote_status git_remote_status_detailed
     remote=${$(command git rev-parse --verify ${hook_com[branch]}@{upstream} --symbolic-full-name 2>/dev/null)/refs\/remotes\/}
     if [[ -n ${remote} ]]; then
@@ -76,6 +85,7 @@ function git_current_branch() {
 
 # Gets the number of commits ahead from remote
 function git_commits_ahead() {
+  git_prompt_hidden && return 0
   if command git rev-parse --git-dir &>/dev/null; then
     local commits="$(git rev-list --count @{upstream}..HEAD)"
     if [[ "$commits" != 0 ]]; then
@@ -86,6 +96,7 @@ function git_commits_ahead() {
 
 # Gets the number of commits behind remote
 function git_commits_behind() {
+  git_prompt_hidden && return 0
   if command git rev-parse --git-dir &>/dev/null; then
     local commits="$(git rev-list --count HEAD..@{upstream})"
     if [[ "$commits" != 0 ]]; then
@@ -96,6 +107,7 @@ function git_commits_behind() {
 
 # Outputs if current branch is ahead of remote
 function git_prompt_ahead() {
+  git_prompt_hidden && return 0
   if [[ -n "$(command git rev-list origin/$(git_current_branch)..HEAD 2> /dev/null)" ]]; then
     echo "$ZSH_THEME_GIT_PROMPT_AHEAD"
   fi
@@ -103,6 +115,7 @@ function git_prompt_ahead() {
 
 # Outputs if current branch is behind remote
 function git_prompt_behind() {
+  git_prompt_hidden && return 0
   if [[ -n "$(command git rev-list HEAD..origin/$(git_current_branch) 2> /dev/null)" ]]; then
     echo "$ZSH_THEME_GIT_PROMPT_BEHIND"
   fi
@@ -110,6 +123,7 @@ function git_prompt_behind() {
 
 # Outputs if current branch exists on remote or not
 function git_prompt_remote() {
+  git_prompt_hidden && return 0
   if [[ -n "$(command git show-ref origin/$(git_current_branch) 2> /dev/null)" ]]; then
     echo "$ZSH_THEME_GIT_PROMPT_REMOTE_EXISTS"
   else
@@ -119,18 +133,21 @@ function git_prompt_remote() {
 
 # Formats prompt string for current git commit short SHA
 function git_prompt_short_sha() {
+  git_prompt_hidden && return 0
   local SHA
   SHA=$(command git rev-parse --short HEAD 2> /dev/null) && echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
 }
 
 # Formats prompt string for current git commit long SHA
 function git_prompt_long_sha() {
+  git_prompt_hidden && return 0
   local SHA
   SHA=$(command git rev-parse HEAD 2> /dev/null) && echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
 }
 
 # Get the status of the working tree
 function git_prompt_status() {
+  git_prompt_hidden && return 0
   local INDEX STATUS
   INDEX=$(command git status --porcelain -b 2> /dev/null)
   STATUS=""
