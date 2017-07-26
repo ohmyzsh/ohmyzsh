@@ -5,6 +5,7 @@ _aptible() {
         '1: :_aptible_cmds' \
         '*:: :->args'
 
+    local -a counts; counts=(0 1 2 3 4 5 6 7 8 9);
     local -a sizes; sizes=(512 1024 2048 4096 8192 16384 32768 65536);
     case $state in
         args)
@@ -32,7 +33,9 @@ _aptible() {
                         '--app=[APP]: :_aptible_apps' \
                         '--environment=[ENVIRONMENT]: :_aptible_envs' \
                         '(-r, --remote)'{-r,--remote}'[REMOTE]' \
-                        '--size=[N]: :{_describe "N" sizes}'
+                        '--container-count=[Number of container(s)]: :{_describe "values" counts}' \
+                        '--container-size=[Size of container(s)]: :{_describe "values" sizes}' \
+                        '--size=[DEPRECATED, use --container-size]: :{_describe "values" sizes}'
                     ;;
                 backup:list)
                     _arguments \
@@ -43,6 +46,7 @@ _aptible() {
                 backup:restore)
                     _arguments \
                         '--handle=[HANDLE]: :_aptible_dbs' \
+                        '--container-size=[Size of container(s)]: :{_describe "values" sizes}' \
                         '--size=[N]: :{_describe "N" sizes}'
                     ;;
                 db:backup|db:clone|db:deprovision|db:dump)
@@ -53,6 +57,7 @@ _aptible() {
                 db:create)
                     _arguments \
                         '--type=[TYPE, Default\: postgresql]' \
+                        '--container-size=[Size of container(s)]: :{_describe "values" sizes}' \
                         '--size=[N, Default\: 10]' \
                         '--environment=[ENVIRONMENT]: :_aptible_envs'
                     ;;
@@ -66,6 +71,18 @@ _aptible() {
                     _arguments \
                         '--environment=[ENVIRONMENT]: :_aptible_envs' \
                         '--port=[N]' \
+                        ':: :_aptible_dbs'
+                    ;;
+                db:reload)
+                    _arguments \
+                        '--environment=[ENVIRONMENT]: :_aptible_envs' \
+                        ':: :_aptible_dbs'
+                    ;;
+                db:restart)
+                    _arguments \
+                        '--container-size=[Size of container(s)]: :{_describe "values" sizes}' \
+                        '--disk-size=[N]' \
+                        '--environment=[ENVIRONMENT]: :_aptible_envs' \
                         ':: :_aptible_dbs'
                     ;;
                 domains)
@@ -193,6 +210,8 @@ _aptible_cmds() {
     "db\:dump:Dump a remote database to file"
     "db\:execute:Executes sql against a database"
     "db\:list:List all databases"
+    "db\:reload:Reload a database"
+    "db\:restart:Restart a database"
     "db\:tunnel:Create a local tunnel to a database"
     "domains:Print an app's current virtual domains"
     "help:Describe available commands or one specific command"
