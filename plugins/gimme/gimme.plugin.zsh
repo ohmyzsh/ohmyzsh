@@ -9,7 +9,10 @@ load-go() {
 Run install-gimme and make sure to add ~/bin to your PATH."
     return 1
   fi
-  if [[ "$#" == 0 ]] ; then
+  if [[ "$#" > 1 ]] ; then
+    echo "Usage: load-go GO_VERSION"
+    return 0
+  elif [[ "$#" == 0 ]] ; then
     eval "$(gimme stable)"
   else
     eval "$(gimme ${*})"
