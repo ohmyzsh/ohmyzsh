@@ -39,7 +39,16 @@ remove-go() {
     echo "Usage: remove-go GO_VERSION"
     return 0
   else
-    if [ "$1" = "stable" ] ; then
+    if [ "$1" = "tip" ] ; then
+      if ! [ -e ~/.gimme/versions/go ] ; then
+        echo "go version tip is not installed"
+        return 0
+      fi
+      rm -rf ~/.gimme/versions/go || return 1
+      rm ~/.gimme/envs/gotip.env || return 1
+      rm ~/.gimme/envs/go.git.* || return 1
+      return 0
+    elif [ "$1" = "stable" ] ; then
       if ! [ -e ~/.gimme/versions/stable ] ; then
         echo "go version stable is not installed"
         return 0
@@ -116,5 +125,19 @@ __load-go_completion() {
   _values 'go_versions' ${go_versions[@]}
 }
 
+__remove-go_completion() {
+  local context state state_descr line
+  typeset -a installed_versions
+  if [ "$(ls ~/.gimme/versions | grep stable)" ] ; then
+    installed_versions+=('stable')
+  fi
+  if [ -d ~/.gimme/versions/go ] ; then
+    installed_versions+=('tip')
+  fi
+  installed_versions+=($(ls ~/.gimme/versions | egrep -oZ '[0-9].[0-9].[0-9]'))
+  _values -w 'installed_versions' ${installed_versions[@]}
+}
+
 compdef __gimme_completion gimme
 compdef __load-go_completion load-go
+compdef __remove-go_completion remove-go

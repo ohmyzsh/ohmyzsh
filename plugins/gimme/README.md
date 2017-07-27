@@ -11,7 +11,7 @@ Provides following functions/aliases:
     If called without argument, the 'stable' version will be loaded.
   - ```remove-go```: Remove the go version specified by the first argument from
     ~/.gimme/*
-  - Completions for ```gimme``` and ```load-go```
+  - Completions for ```gimme```, ```load-go``` and ```remove-go```
 
 ```gimme``` is assumed to be in ```~/bin```, so make
 sure to add this folder to the $PATH variable.
