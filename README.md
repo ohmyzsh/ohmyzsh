@@ -164,13 +164,13 @@ If you would like to override the functionality of a plugin distributed with Oh 
 
 ## Getting Updates
 
-By default, you will be prompted to check for upgrades every few weeks. If you would like `oh-my-zsh` to automatically upgrade itself without prompting you, set the following in your `~/.zshrc`:
+By default, you will be prompted to check for updates every few weeks. If you would like `oh-my-zsh` to automatically update itself without prompting you, set the following in your `~/.zshrc`:
 
 ```shell
 DISABLE_UPDATE_PROMPT=true
 ```
 
-To disable automatic upgrades, set the following in your `~/.zshrc`:
+To disable automatic updates, set the following in your `~/.zshrc`:
 
 ```shell
 DISABLE_AUTO_UPDATE=true
@@ -178,10 +178,10 @@ DISABLE_AUTO_UPDATE=true
 
 ### Manual Updates
 
-If you'd like to upgrade at any point in time (maybe someone just released a new plugin and you don't want to wait a week?) you just need to run:
+If you'd like to update at any point in time (maybe someone just released a new plugin and you don't want to wait a week?) you just need to run:
 
 ```shell
-upgrade_oh_my_zsh
+update_oh_my_zsh
 ```
 
 Magic!

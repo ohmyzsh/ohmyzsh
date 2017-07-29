@@ -6,8 +6,8 @@ function uninstall_oh_my_zsh() {
   env ZSH=$ZSH sh $ZSH/tools/uninstall.sh
 }
 
-function upgrade_oh_my_zsh() {
-  env ZSH=$ZSH sh $ZSH/tools/upgrade.sh
+function update_oh_my_zsh() {
+  env ZSH=$ZSH sh $ZSH/tools/update.sh
 }
 
 function take() {
