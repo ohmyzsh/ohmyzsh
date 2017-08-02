@@ -4,3 +4,5 @@ alias sgem='sudo gem'
 
 # Find ruby file
 alias rfind='find . -name "*.rb" | xargs grep -n'
+alias rhttpd='ruby -run -e httpd'
+alias rrun='ruby -run -e'
