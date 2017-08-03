@@ -50,6 +50,9 @@ alias cp='cp -i'
 alias mv='mv -i'
 
 # Aliases for setting file permissions
+# Creates alias like:
+# a+x = chmod a+x
+# su-r = sudo chmod u-r
 for p (r w x); do
     for o (+ -); do
         for d (a g o u); do
