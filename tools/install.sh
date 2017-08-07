@@ -34,7 +34,7 @@ check_optional_args() {
     case "$arg" in
       --batch)
         LAUNCH_ZSH_AFTER=0
-        printf "${BLUE}--batch:${NORMAL} zsh will not be started after installation\n"
+        printf "%s\n" "${BLUE}--batch:${NORMAL} zsh will not be started after installation"
         ;;
       *)
         printf "${YELLOW}Unrecognized argument: ${BLUE}${arg}${NORMAL}\n"
