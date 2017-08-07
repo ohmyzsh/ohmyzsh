@@ -101,7 +101,7 @@ main() {
   mv -f ~/.zshrc-omztemp ~/.zshrc
 
   # If this user's login shell is not already "zsh", attempt to switch.
-  TEST_CURRENT_SHELL=$(expr "$SHELL" : '.*/\(.*\)')
+  TEST_CURRENT_SHELL=$(expr "${SHELL:=/bin/false}" : '.*/\(.*\)')
   if [ "$TEST_CURRENT_SHELL" != "zsh" ]; then
     # If this platform provides a "chsh" command (not Cygwin), do it, man!
     if hash chsh >/dev/null 2>&1; then
