@@ -1,6 +1,23 @@
+function _stack_package_name() {
+  grep "^name: [^ ]*" *.cabal | sed "s/name: *//" | sed "s/--.*//"
+}
+
+function _stack_exes() {
+  grep "^executable [^ ]*" *.cabal | sed "s/executable //" | sed "s/--.*//"
+}
+
+function _stack_tests() {
+  PACK_NAME="$(_stack_package_name)"
+  grep "^test-suite [^ ]*" *.cabal | sed "s/test-suite //" | sed "s/--.*//" | sed "s/\(.*\)/$PACK_NAME:\1/"
+}
+
 function _stack_commands() {
-    local ret=1 state
-    _arguments ':subcommand:->subcommand' && ret=0
+    local ret=1
+
+    _arguments \
+    '1: :->subcommand'\
+    '2: :->options'\
+    '*: :->flags' && ret=0
 
     case $state in
       subcommand)
@@ -29,8 +46,25 @@ function _stack_commands() {
           "docker:Subcommands specific to Docker use"
         )
         _describe -t subcommands 'stack subcommands' subcommands && ret=0
+        ;;
+      options)
+        case $words[2] in
+          'exec')
+            compadd "$@" `_stack_exes`
+            ;;
+          'test')
+            compadd "$@" `_stack_tests`
+            ;;
+          *)
+            _files
+        esac
+        ;;
+      *)
+        case $words[2] in
+          *)
+            _files
+        esac
     esac
-
     return ret
 }
 
