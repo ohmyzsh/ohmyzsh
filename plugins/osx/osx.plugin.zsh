@@ -355,6 +355,7 @@ function spotify() {
           len=${#array[@]};
           SPOTIFY_SEARCH_API="https://api.spotify.com/v1/search"
           SPOTIFY_PLAY_URI="";
+          SPOTIFY_AUTH="Authorization: Bearer $SPOTIFY_OAUTH_TOKEN"
 
           searchAndPlay() {
             type="$1"
@@ -363,7 +364,7 @@ function spotify() {
             cecho "Searching ${type}s for: $Q";
 
             SPOTIFY_PLAY_URI=$( \
-              curl -s -G $SPOTIFY_SEARCH_API --data-urlencode "q=$Q" -d "type=$type&limit=1&offset=0" -H "Accept: application/json" \
+              curl -s -G $SPOTIFY_SEARCH_API --data-urlencode "q=$Q" -d "type=$type&limit=1&offset=0" -H "Accept: application/json" -H $SPOTIFY_AUTH \
               | grep -E -o "spotify:$type:[a-zA-Z0-9]+" -m 1
               )
           }
@@ -376,7 +377,7 @@ function spotify() {
               cecho "Searching playlists for: $Q";
 
               results=$( \
-                curl -s -G $SPOTIFY_SEARCH_API --data-urlencode "q=$Q" -d "type=playlist&limit=10&offset=0" -H "Accept: application/json" \
+                curl -s -G $SPOTIFY_SEARCH_API --data-urlencode "q=$Q" -d "type=playlist&limit=10&offset=0" -H "Accept: application/json" -H $SPOTIFY_AUTH \
                 | grep -E -o "spotify:user:[a-zA-Z0-9_]+:playlist:[a-zA-Z0-9]+" -m 10 \
                 )
 

@@ -9,12 +9,8 @@ To start using it, add the `osx` plugin to your plugins array in `~/.zshrc`:
 ```zsh
 plugins=(... osx)
 ```
-
 Original author: [Sorin Ionescu](https://github.com/sorin-ionescu)
-
-
 ## Commands
-
 | Command         | Description                                      |
 | :-------------- | :----------------------------------------------- |
 | `tab`           | Open the current directory in a new tab          |
@@ -31,3 +27,12 @@ Original author: [Sorin Ionescu](https://github.com/sorin-ionescu)
 | `hidefiles`     | Hide the hidden files                            |
 | `itunes`        | Control iTunes. User `itunes -h` for usage details |
 | `spotify`       | Control Spotify and search by artist, album, track and etc.|
+
+
+Note: Spotify command requires OAUTH token for searching music. It can be generated
+from [Spotify Web API Console](https://developer.spotify.com/web-api/console/get-search-item/).
+Do not make your Spotify OAUTH token public.
+
+```zsh
+export SPOTIFY_OAUTH_TOKEN="..."
+```
