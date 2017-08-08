@@ -154,7 +154,7 @@ _managepy-makemessages(){
     "--no-default-ignore[Don't ignore the common glob-style patterns 'CVS', '.*', '*~' and '*.pyc'.]" \
     "--no-wrap[Don't break long message lines into several lines.]" \
     "--no-location[Don't write '#: filename:line' lines.]" \
-    '--no-obsolete[emove obsolete message strings.]' \
+    '--no-obsolete[Remove obsolete message strings.]' \
     '--keep-pot[Keep .pot file after making messages.]' \
     $nul_args && ret=0
 }
