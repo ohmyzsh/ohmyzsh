@@ -47,4 +47,22 @@ if [[ "$OSTYPE" == darwin* ]] && [[ -n "$ITERM_SESSION_ID" ]] ; then
     ITERM_PROFILE="$profile"
   }
 
+  ###
+  # iterm2_tab_color(): Changes the color of iTerm2's currently active tab.
+  # Usage: iterm2_tab_color <red> <green> <blue>
+  #        where red/green/blue are on the range 0-255.
+  function iterm2_tab_color() {
+    _iterm2_command "6;1;bg;red;brightness;$1"
+    _iterm2_command "6;1;bg;green;brightness;$2"
+    _iterm2_command "6;1;bg;blue;brightness;$3"
+  }
+
+
+  ###
+  # iterm2_tab_color_reset(): Resets the color of iTerm2's current tab back to
+  # default.
+  function iterm2_tab_color_reset() {
+    _iterm2_command "6;1;bg;*;default"
+  }
+
 fi
