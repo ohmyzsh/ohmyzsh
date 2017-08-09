@@ -8,6 +8,27 @@
 if [[ "$OSTYPE" == darwin* ]] && [[ -n "$ITERM_SESSION_ID" ]] ; then
 
   ###
+  # Executes an arbitrary iTerm2 command via an escape code sequce.
+  # See https://iterm2.com/documentation-escape-codes.html for all supported commands.
+  # Example: $ _iterm2_command "1337;StealFocus"
+  function _iterm2_command() {
+    local cmd="$1"
+
+    # Escape codes for wrapping commands for iTerm2.
+    local iterm2_prefix="\x1B]"
+    local iterm2_suffix="\x07"
+
+    # If we're in tmux, a special escape code must be prepended/appended so that
+    # the iTerm2 escape code is passed on into iTerm2.
+    if [[ -n $TMUX ]]; then
+      local tmux_prefix="\x1BPtmux;\x1B"
+      local tmux_suffix="\x1B\\"
+    fi
+
+    echo -n "${tmux_prefix}${iterm2_prefix}${cmd}${iterm2_suffix}${tmux_suffix}"
+  }
+
+  ###
   # iterm2_profile(): Function for changing the current terminal window's
   # profile (colors, fonts, settings, etc).
   # To change the current iTerm2 profile, call this function and pass in a name
@@ -16,20 +37,11 @@ if [[ "$OSTYPE" == darwin* ]] && [[ -n "$ITERM_SESSION_ID" ]] ; then
     # Desired name of profile
     local profile="$1"
 
-    # iTerm2 escape code for changing profile
-    local iterm2_code="\x1b]50;SetProfile=$profile\x7"
-
-    # If we're in tmux, a special escape code must be prepended
-    # so that the iTerm2 escape code is passed on into iTerm2.
-    local prefix=''
-    local suffix=''
-    if [[ -n $TMUX ]]; then
-      prefix='\033Ptmux;\033'
-      suffix='\033\\'
-    fi
+    # iTerm2 command for changing profile
+    local cmd="1337;SetProfile=$profile"
 
     # send the sequence
-    echo -n "${prefix}${iterm2_code}${suffix}"
+    _iterm2_command "${cmd}"
 
     # update shell variable
     ITERM_PROFILE="$profile"
