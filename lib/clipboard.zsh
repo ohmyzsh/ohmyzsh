@@ -75,6 +75,9 @@ function detect-clipboard() {
   elif (( ${+commands[win32yank]} )); then
     function clipcopy() { win32yank -i < "${1:-/dev/stdin}"; }
     function clippaste() { win32yank -o; }
+  elif [[ $OSTYPE == linux-android* ]] && (( $+commands[termux-clipboard-set] )); then
+    function clipcopy() { termux-clipboard-set "${1:-/dev/stdin}"; }
+    function clippaste() { termux-clipboard-get; }
   elif [ -n "${TMUX:-}" ] && (( ${+commands[tmux]} )); then
     function clipcopy() { tmux load-buffer "${1:--}"; }
     function clippaste() { tmux save-buffer -; }
