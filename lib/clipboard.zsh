@@ -30,6 +30,17 @@ function clipcopy() {
     else
       cat $file > /dev/clipboard
     fi
+  elif [[ $OSTYPE == linux-android ]]; then
+    if (( $+commands[termux-clipboard-set] )); then
+      if [[ -z $file ]]; then
+        termux-clipboard-set
+      else
+        cat "$file" | termux-clipboard-set
+      fi
+    else
+      print "clipcopy: termux-api not installed: https://github.com/termux/termux-api-package" >&2
+      return 1
+    fi
   else
     if (( $+commands[xclip] )); then
       if [[ -z $file ]]; then
@@ -73,13 +84,20 @@ function clippaste() {
     pbpaste
   elif [[ $OSTYPE == cygwin* ]]; then
     cat /dev/clipboard
+  elif [[ $OSTYPE == linux-android ]]; then
+    if (( $+commands[termux-clipboard-get] )); then
+      termux-clipboard-get
+    else
+      print "clippaste: termux-api not installed: https://github.com/termux/termux-api-package" >&2
+      return 1
+    fi
   else
     if (( $+commands[xclip] )); then
       xclip -out -selection clipboard
     elif (( $+commands[xsel] )); then
       xsel --clipboard --output
     else
-      print "clipcopy: Platform $OSTYPE not supported or xclip/xsel not installed" >&2
+      print "clippaste: Platform $OSTYPE not supported or xclip/xsel not installed" >&2
       return 1
     fi
   fi
