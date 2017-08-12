@@ -8,7 +8,7 @@
 #
 #    zstyle :omz:plugins:chruby path /local/path/to/chruby.sh
 #    zstyle :omz:plugins:chruby auto /local/path/to/auto.sh
-# 
+#
 # TODO
 #  - autodetermine correct source path on non OS X systems
 #  - completion if ruby-install exists
@@ -36,33 +36,34 @@ if _ruby-build_installed; then
     compdef _ruby-build ruby-build
 fi
 
-_source_from_omz_settings() {
-    local _chruby_path
-    local _chruby_auto
-    
-    zstyle -s :omz:plugins:chruby path _chruby_path
-    zstyle -s :omz:plugins:chruby auto _chruby_auto
-
-    if [[ -r "$_chruby_path" ]]; then
-        source "$_chruby_path"
-    fi
-
-    if [[ -r "$_chruby_auto" ]]; then
-        source "$_chruby_auto"
-    fi
-}
-
 function () {
-    local _chruby_homebrew_prefix="$(brew --prefix chruby 2> /dev/null)"
+    local _path
+    local _auto
+    local _prefix="/usr/local/share/chruby"
 
-    if _homebrew-installed && [[ -r "$_chruby_homebrew_prefix" ]] ; then
-        source "${_chruby_homebrew_prefix}/share/chruby/chruby.sh"
-        source "${_chruby_homebrew_prefix}/share/chruby/auto.sh"
-    elif [[ -r "/usr/local/share/chruby/chruby.sh" ]] ; then
-        source /usr/local/share/chruby/chruby.sh
-        source /usr/local/share/chruby/auto.sh
-    else
-        _source_from_omz_settings
+    # Honor explicit user preference
+    zstyle -s :omz:plugins:chruby path _path
+    zstyle -s :omz:plugins:chruby auto _auto
+
+    # Default to /usr/local/share/chruby if either is not defined
+    [[ -r "$_path" ]] || _path="${_prefix}/chruby.sh"
+    [[ -r "$_auto" ]] || _auto="${_prefix}/auto.sh"
+
+    # Fall back on homebrew
+    if [[ ! ( -r "$_path" && -r "$_auto" ) ]]; then
+        if _homebrew-installed; then
+            _prefix="$(brew --prefix chruby 2> /dev/null)/share/chruby"
+            [[ -r "$_path" ]] || _path="${_prefix}/chruby.sh"
+            [[ -r "$_auto" ]] || _auto="${_prefix}/auto.sh"
+        fi
+    fi
+
+    if [[ -r "$_path" ]]; then
+        source "$_path"
+    fi
+
+    if [[ -r "$_auto" ]]; then
+        source "$_auto"
     fi
 }
 
