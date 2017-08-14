@@ -1,0 +1,160 @@
+#compdef lxc-start lxc-stop lxc-console lxc-restart lxc-create lxc-destroy lxc-monitor lxc-cgroup lxc-checkpoint lxc-execute lxc-freeze lxc-unfreeze lxc-info lxc-netstat lxc-ps lxc-wait
+#=====================================================================================================
+# Copied from https://gist.github.com/sabottenda/9870189/e0c4d5b999441d0c67562b068ebdf79ea8374773
+# original source is here: https://lists.linuxcontainers.org/pipermail/lxc-devel/2010-April/001172.html
+#=====================================================================================================
+
+
+_lxc_containers() {
+	local -a containers
+	containers=( $(/bin/ls /var/lib/lxc) )
+	compadd "$@" -a containers
+}
+
+
+_lxc_common_opts=(
+	'(-o --logfile)'{-o,--logfile=}'[Output log to FILE instead of stderr]:logfile:_files'
+	'(-l --logpriority)'{-l,--logpriority=}'[Set log priority to LEVEL]:level:'
+	'(-q --quiet)'{-q,--quiet}'[Dont produce any output]'
+	'(-h --help)'{-h,--help}'[Help list]'
+	'--usage[Give a short usage message]'
+)
+
+_lxc_name_opt=(
+	'(-n --name)'{-n,--name=}'[Name of the container]:name:_lxc_containers'
+)
+
+_lxc_start_opts=(
+	'(-d --daemon)'{-d,--daemon}'[Daemonize the container]'
+	'(-f --rcfile)'{-f,--rcfile=}'[Load configuration file FILE]:config:_files'
+	'(-s --define)'{-s,--define}'[Assign VAL to configuration variable KEY]'
+)
+
+_lxc_console_opts=(
+	'(-t --tty)'{-t,--tty=}'[Console TTY number]'
+	'(-e --escape)'{-e,--escape=}'[Prefix for escape command]'
+)
+
+_lxc_restart_opts=(
+	'(-p --pause)'{-p,--pause}'[Do not release the container after the restart]'
+	'(-d --directory)'{-d,--directory=}'[Name of statefile]:name:_files'
+	'(-f --rcfile)'{-f,--rcfile=}'[Load configuration file FILE]:config:_files'
+	'(-s --define)'{-s,--define}'[Assign VAL to configuration variable KEY]'
+)
+
+_lxc_create_opts=(
+	'(-n --name)'{-n,--name=}'[Name of the container]:name'
+	'(-f --config)'{-f,--config=}'[Load configuration file FILE]:config:_files'
+	'(-t --template)'{-t,--template=}'[LXC template script]:tpl:_files'
+	'(-h --help)'{-h,--help}'[Help list]'
+)
+
+_lxc_checkpoint_opts=(
+	'(-k --kill)'{-k,--kill}'[Stop the container after the checkpoint]'
+	'(-p --pause)'{-p,--pause}'[Dont unfreeze the container after the checkpoint]'
+	'(-d --directory)'{-d,--directory=}'[Where to store the statefile]:statefile:_files'
+)
+
+_lxc_execute_opts=(
+	'(-f --rcfile)'{-f,--rcfile=}'[Load configuration file FILE]:config:_files'
+	'(-s --define)'{-s,--define}'[Assign VAL to configuration variable KEY]'
+)
+
+_lxc_ps_opts=(
+	'--help[Display the help]'
+	'--usage[Display the command usage]'
+	'--name[Display processes related to given containers. Containers are identified by a comma separated list of their names.]'
+	'--lxc[Display processes related to all LXC containers]'
+)
+
+_lxc_wait_opts=(
+	'(-s --state)'{-s,--state=}'[ORed states to wait for: STOPPED, STARTING, RUNNING, STOPPING, ABORTING, FREEZING, FROZEN]:state'
+)
+
+# Dispatcher
+
+_lxc() {
+	case "$service" in
+		lxc-start)
+			_arguments -s : \
+				"$_lxc_name_opt[@]" \
+				"$_lxc_start_opts[@]" \
+				"$_lxc_common_opts[@]"
+			;;
+		lxc-stop)
+			_arguments -s : \
+				"$_lxc_name_opt[@]" \
+				"$_lxc_common_opts[@]" \
+			;;
+		lxc-console)
+			_arguments -s : \
+				"$_lxc_name_opt[@]" \
+				"$_lxc_console_opts[@]" \
+				"$_lxc_common_opts[@]"
+			;;
+		lxc-restart)
+			_arguments -s : \
+				"$_lxc_name_opt[@]" \
+				"$_lxc_restart_opts[@]" \
+				"$_lxc_common_opts[@]"
+			;;
+		lxc-create)
+			_arguments -s : "$_lxc_create_opts[@]"
+			;;
+		lxc-destroy)
+			_arguments -s : "$_lxc_name_opt[@]"
+			;;
+		lxc-monitor)
+			_arguments -s : \
+				"$_lxc_name_opt[@]" \
+				"$_lxc_common_opts[@]"
+			;;
+		lxc-cgroup)
+			_arguments -s : \
+				"$_lxc_name_opt[@]" \
+				"$_lxc_common_opts[@]"
+			;;
+		lxc-checkpoint)
+			_arguments -s : \
+				"$_lxc_name_opt[@]" \
+				"$_lxc_checkpoint_opts[@]" \
+				"$_lxc_common_opts[@]"
+			;;
+		lxc-execute)
+			_arguments -s : \
+				"$_lxc_name_opt[@]" \
+				"$_lxc_execute_opts[@]" \
+				"$_lxc_common_opts[@]"
+			;;
+		lxc-freeze)
+			_arguments -s : \
+				"$_lxc_name_opt[@]" \
+				"$_lxc_common_opts[@]"
+			;;
+		lxc-unfreeze)
+			_arguments -s : \
+				"$_lxc_name_opt[@]" \
+				"$_lxc_common_opts[@]"
+			;;
+		lxc-info)
+			_arguments -s : \
+				"$_lxc_name_opt[@]" \
+				"$_lxc_common_opts[@]"
+			;;
+		lxc-netstat)
+			_arguments -s : "$_lxc_name_opt[@]"
+			;;
+		lxc-ps)
+			_arguments -s : "$_lxc_ps_opts[@]"
+			;;
+		lxc-wait)
+			_arguments -s : \
+				"$_lxc_name_opt[@]" \
+				"$_lxc_wait_opts[@]"
+			;;
+		*)
+			return 1
+	esac
+}
+
+_lxc "$@"
