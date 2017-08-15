@@ -93,9 +93,13 @@ if [[ "$TERM_PROGRAM" == "Apple_Terminal" ]] && [[ -z "$INSIDE_EMACS" ]]; then
     # Percent-encode the pathname.
     local URL_PATH="$(omz_urlencode -P $PWD)"
     [[ $? != 0 ]] && return 1
+    
+    # Percent-encode the hostname.
+    local URL_HOST="$(omz_urlencode -P $HOST)"
+    [[ $? != 0 ]] && return 1
 
     # Undocumented Terminal.app-specific control sequence
-    printf '\e]7;%s\a' "file://$HOST$URL_PATH"
+    printf '\e]7;%s\a' "file://$URL_HOST$URL_PATH"
   }
 
   # Use a precmd hook instead of a chpwd hook to avoid contaminating output
