@@ -189,6 +189,8 @@ alias gmum='git merge upstream/master'
 
 alias gp='git push'
 alias gpd='git push --dry-run'
+alias gpf='git push --force'
+alias gpfl='git push --force-with-lease'
 alias gpoat='git push origin --all && git push origin --tags'
 compdef _git gpoat=git-push
 alias gpu='git push upstream'
