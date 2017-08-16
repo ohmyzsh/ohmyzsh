@@ -1,12 +1,37 @@
 user_commands=(
-  list-units is-active status show help list-unit-files
-  is-enabled list-jobs show-environment cat list-timers)
+  cat
+  help
+  is-active
+  is-enabled
+  list-jobs
+  list-timers
+  list-unit-files
+  list-units
+  show
+  show-environment
+  status)
 
 sudo_commands=(
-  start stop reload restart try-restart isolate kill
-  reset-failed enable disable reenable preset mask unmask
-  link load cancel set-environment unset-environment
-  edit)
+  cancel
+  disable
+  edit
+  enable
+  isolate
+  kill
+  link
+  load
+  mask
+  preset
+  reenable
+  reload
+  reset-failed
+  restart
+  set-environment
+  start
+  stop
+  try-restart
+  unmask
+  unset-environment)
 
 for c in $user_commands; do; alias sc-$c="systemctl $c"; done
 for c in $sudo_commands; do; alias sc-$c="sudo systemctl $c"; done
