@@ -264,7 +264,7 @@ wd_show()
         wd_matches=()
         # do a reverse lookup to check whether PWD is in $points
         PWD="${PWD/$HOME/~}"
-        if [[ ${points[(r)$PWD]} == $PWD ]]
+        if [[ ${points[(r)${PWD/\~/\\~}]} == $PWD ]]
         then
             for name in ${(k)points}
             do
