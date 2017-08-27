@@ -1,0 +1,28 @@
+#compdef org
+
+_org(){
+	local state
+
+	local f_dirname=~/.config/org_notes.location
+	touch $f_dirname
+	
+	local f_dir=$(cat $f_dirname)
+	if [ "$f_dir" = "" ]; then
+	   echo -e "-> No location set in $f_dirname"
+	   return -1
+	fi
+
+	local f_dir=$(readlink -f $f_dir)
+
+	_arguments \
+	   '1: :->org_files'\
+	   '*: :->args'
+
+	local frels=$(find ${f_dir} -name '*.org' | sed "s|^${f_dir}/||" | sed "s|.org$||")
+
+	case $state in
+       	     (org_files) _arguments "1:files:($frels)" ;;
+       	esac
+}
+
+_org "$@"
