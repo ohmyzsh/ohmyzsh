@@ -29,6 +29,9 @@
 # A few utility functions to make it easy and re-usable to draw segmented prompts
 
 CURRENT_BG='NONE'
+if [[ -z "$PRIMARY_FG" ]]; then
+  PRIMARY_FG=black
+fi
 
 # Special Powerline characters
 
@@ -80,7 +83,7 @@ prompt_end() {
 # Context: user@hostname (who am I and where am I)
 prompt_context() {
   if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-    prompt_segment black default "%(!.%{%F{yellow}%}.)$USER@%m"
+    prompt_segment $PRIMARY_FG default "%(!.%{%F{yellow}%}.)$USER@%m"
   fi
 }
 
@@ -99,9 +102,9 @@ prompt_git() {
     dirty=$(parse_git_dirty)
     ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="➦ $(git rev-parse --short HEAD 2> /dev/null)"
     if [[ -n $dirty ]]; then
-      prompt_segment yellow black
+      prompt_segment yellow $PRIMARY_FG
     else
-      prompt_segment green black
+      prompt_segment green $PRIMARY_FG
     fi
 
     if [[ -e "${repo_path}/BISECT_LOG" ]]; then
@@ -134,15 +137,15 @@ prompt_bzr() {
         status_all=`bzr status | head -n1 | wc -m`
         revision=`bzr log | head -n2 | tail -n1 | sed 's/^revno: //'`
         if [[ $status_mod -gt 0 ]] ; then
-            prompt_segment yellow black
+            prompt_segment yellow $PRIMARY_FG
             echo -n "bzr@"$revision "✚ "
         else
             if [[ $status_all -gt 0 ]] ; then
-                prompt_segment yellow black
+                prompt_segment yellow $PRIMARY_FG
                 echo -n "bzr@"$revision
 
             else
-                prompt_segment green black
+                prompt_segment green $PRIMARY_FG
                 echo -n "bzr@"$revision
             fi
         fi
@@ -160,11 +163,11 @@ prompt_hg() {
         st='±'
       elif [[ -n $(hg prompt "{status|modified}") ]]; then
         # if any modification
-        prompt_segment yellow black
+        prompt_segment yellow $PRIMARY_FG
         st='±'
       else
         # if working copy is clean
-        prompt_segment green black
+        prompt_segment green $PRIMARY_FG
       fi
       echo -n $(hg prompt "☿ {rev}@{branch}") $st
     else
@@ -172,13 +175,13 @@ prompt_hg() {
       rev=$(hg id -n 2>/dev/null | sed 's/[^-0-9]//g')
       branch=$(hg id -b 2>/dev/null)
       if `hg st | grep -q "^\?"`; then
-        prompt_segment red black
+        prompt_segment red $PRIMARY_FG
         st='±'
       elif `hg st | grep -q "^[MA]"`; then
-        prompt_segment yellow black
+        prompt_segment yellow $PRIMARY_FG
         st='±'
       else
-        prompt_segment green black
+        prompt_segment green $PRIMARY_FG
       fi
       echo -n "☿ $rev@$branch" $st
     fi
@@ -187,14 +190,14 @@ prompt_hg() {
 
 # Dir: current working directory
 prompt_dir() {
-  prompt_segment blue black '%~'
+  prompt_segment blue $PRIMARY_FG '%~'
 }
 
 # Virtualenv: current working virtualenv
 prompt_virtualenv() {
   local virtualenv_path="$VIRTUAL_ENV"
   if [[ -n $virtualenv_path && -n $VIRTUAL_ENV_DISABLE_PROMPT ]]; then
-    prompt_segment blue black "(`basename $virtualenv_path`)"
+    prompt_segment blue $PRIMARY_FG "(`basename $virtualenv_path`)"
   fi
 }
 
@@ -209,7 +212,7 @@ prompt_status() {
   [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}⚡"
   [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}⚙"
 
-  [[ -n "$symbols" ]] && prompt_segment black default "$symbols"
+  [[ -n "$symbols" ]] && prompt_segment $PRIMARY_FG default "$symbols"
 }
 
 ## Main prompt
