@@ -16,15 +16,14 @@ or run the install script."
     local delete=$2
 
     case $file in
-	"")
-	    #tree $(cat $org_loc) | grep -v '~' | sed "s||";
-	    tree -CD -I '*~' -rt $org_dir\
+	"")    
+	    tree -CD -P '*.org' -rt $org_dir\
 		| sed "s|${org_dir}|\nYou have the following org-mode notes:\n|"\
 		| sed -r 's|([^[].*)\s(\[.*\])\s(.*)|\t\2\t\1\3|'
 
 	    return -1;
 	    ;;
-	-h);;
+	-h);&
 	--help)
 	    echo "
      `basename $0` <filename> [--delete]
@@ -48,7 +47,18 @@ Generates an org-notes file in a folder location set in the $org_loc file
 	
 	if [ -e $eloc ]; then
 	    echo -n "Remove $file? [y/n] "; read ans;
-	    [ "$ans" = "y" ] && rm $eloc && echo "Deleted."
+	    if [ "$ans" = "y" ]; then
+		rm `dirname ${eloc}`/\#`basename ${eloc}`\# ${eloc}\~ 2>/dev/null # remove temp files
+		rm ${eloc} && echo "Deleted."
+
+		# cleanup
+		# - Remove unused directories
+		local stack_count=6  # can't expect more than 6 nested dirs, surely...
+		while [ $stack_count -gt 0 ]; do
+		    stack_count=$(( $stack_count - 1 ))
+		    find ${org_dir} -type d -exec rmdir {} \; 2>/dev/null
+		done
+	    fi
 	else
 	    echo "Cannot find $file. Aborting."
 	fi
