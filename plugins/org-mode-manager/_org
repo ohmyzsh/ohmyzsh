@@ -3,7 +3,7 @@
 _org(){
 	local state
 
-	local f_dirname=~/.config/org_notes.location
+	local f_dirname=~/.config/org_file.location
 	touch $f_dirname
 	
 	local f_dir=$(cat $f_dirname)
