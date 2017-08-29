@@ -1,0 +1,114 @@
+#!/usr/bin/env python3
+
+import sys
+import os.path
+
+from xdg.BaseDirectory import xdg_cache_home, xdg_config_home
+
+class AliasRC:
+
+    def __init__(self):
+        #self.cachefile = os.path.join(xdg_cache_home, 'alias.map')
+        #AliasRC.__filesanity(self.cachefile)
+        
+        self.aliasrc = os.path.join(xdg_config_home, 'mkalias.source')
+        AliasRC.__filesanity(self.aliasrc)
+
+        self.map = {}
+        self.__readMap()
+
+    
+    @staticmethod
+    def __filesanity(file):
+        if not os.path.exists(file):  # touch
+            with open(file,'w') as f:
+                f.write("")
+        
+
+    def __readMap(self):
+        with open(self.aliasrc, 'r') as f:
+            for line in f:
+                alias, command = line.splitlines()[0].split('="')
+
+                alias = alias.split('alias ')[-1]
+                command = command[:-1]                                # last character will always be '"'
+                self.map[alias] = command
+            f.close()
+
+
+    def __writeMap(self):
+        with open(self.aliasrc, 'w') as f:
+            for alias, command in self.map.items():
+                f.write('alias %s="%s"\n' % (alias, command))
+            f.close()
+
+
+    def insertAlias(self, alias, command):
+        if alias in self.map:
+            print("[Error] ", alias, "already defined. Overwrite? [Y/n]:", file=sys.stderr, end="")
+
+            ans = input().strip()
+            if ans[0].lower() == 'y' or len(ans) == 0:
+                del self.map[alias]
+                self.insertAlias(alias, command)
+                return 0
+
+            print("Cancelled.", file=sys.stderr)
+            return 1
+
+        self.map[alias] = command
+        self.__writeMap()
+        
+        print("Inserted.", file=sys.stderr)
+        print("alias %s=\"%s\"" % (alias, alias_command))
+
+
+    
+    def removeAlias(self, alias, write=False):
+        try:
+            del self.map[alias]
+            if write:
+                self.__writeMap()
+            print("Removed", file=sys.stderr)
+            print("unalias %s" % alias)
+
+
+        except KeyError:
+            print("Unable to find alias:", alias, file=sys.stderr)
+
+
+
+
+def _help():
+    title = sys.argv[0].split(os.path.sep)[-1]
+    padd  = "".join([" " for x in title])
+
+    print('''
+     %s insert rmf "rm -rf"
+ or  %s remove rmf
+
+An alias management tool that preserves across shells/boots''' % (title, padd),
+          file=sys.stderr)
+    exit(-1)
+
+
+if __name__ == "__main__":
+
+    try:
+        command = sys.argv[1]                           # insert, remove
+        alias= sys.argv[2]
+
+        al = AliasRC()
+
+        if command == "insert":
+            alias_command = sys.argv[3]
+            al.insertAlias(alias, alias_command)
+        elif command == "remove":
+            al.removeAlias(alias, True)
+        else:
+            _help()
+
+    except IndexError:
+        _help()
+
+
