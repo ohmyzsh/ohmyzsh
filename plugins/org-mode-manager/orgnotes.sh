@@ -52,10 +52,12 @@ Generates an org-notes file in a folder location set in the $org_loc file
 	    ;;
     esac
 
-    if [ "$command" = "--delete" ] || [[ "$command" =~ "--move=" ]]; then
-    else
-	echo "Unable to parse: $command"
-	return -1
+    if [[ "$command" =~ "--" ]]; then
+	if [ "$command" = "--delete" ] || [[ "$command" =~ "--move=" ]]; then
+	else
+	    echo "Unable to parse: $command"
+	    return -1
+	fi
     fi
 
     local ext=$( echo $file | awk -F'.' '{print $NF}' )   
