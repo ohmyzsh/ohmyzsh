@@ -45,7 +45,7 @@ alias gaa='git add --all'
 alias gapa='git add --patch'
 alias gau='git add --update'
 
-alias gb='git branch'
+#alias gb='git branch'
 alias gba='git branch -a'
 alias gbd='git branch -d'
 alias gbda='git branch --no-color --merged | command grep -vE "^(\*|\s*(master|develop|dev)\s*$)" | command xargs -n 1 git branch -d'

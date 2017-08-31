@@ -111,3 +111,25 @@ else
     fi
   fi
 fi
+
+
+
+alias cnult="ssh pi@82.182.129.23 -p 15231"
+alias cnhandskak="ssh niro@handskak.com"
+alias cnhome="ssh niro@192.168.1.9"
+alias cnpi2="ssh niro@192.168.1.65"
+export LIBRARY_PATH="$LIBRARY_PATH:/usr/local/lib"
+
+export GOROOT="/usr/local/go"
+export GOPATH="$HOME/go"
+
+export CARGO_HOME=$HOME/.cargo
+
+export PATH="$PATH:$CARGO_HOME/bin:$GOROOT/bin:$GOPATH/bin"
+
+export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
+alias npm4gb='node --max-old-space-size=4096 /usr/local/bin/npm'
+
+
+
+
