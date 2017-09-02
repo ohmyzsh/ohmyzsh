@@ -1,7 +1,7 @@
 function theme
 {
     if [ -z "$1" ] || [ "$1" = "random" ]; then
-        themes=($ZSH/themes/*.zsh-theme)
+        themes=($(find $ZSH_CUSTOM $ZSH_CUSTOM/themes/ $ZSH/themes -name '*.zsh-theme'))
         N=${#themes[@]}
         ((N=(RANDOM%N)+1))
         RANDOM_THEME=${themes[$N]}
@@ -9,7 +9,9 @@ function theme
         RANDOM_THEME_NAME=`echo "$RANDOM_THEME"|xargs -d '\n' -n 1 basename|sed 's/\(.*\)\..*/\1/'`
         echo "[oh-my-zsh] Random theme '$RANDOM_THEME_NAME' loaded."
     else
-        if [ -f "$ZSH_CUSTOM/themes/$1.zsh-theme" ]; then
+	    if [ -f "$ZSH_CUSTOM/$1.zsh-theme" ]; then
+            source "$ZSH_CUSTOM/$1.zsh-theme"
+        elif [ -f "$ZSH_CUSTOM/themes/$1.zsh-theme" ]; then
             source "$ZSH_CUSTOM/themes/$1.zsh-theme"
         elif [ -f "$ZSH/themes/$1.zsh-theme" ]; then
             source "$ZSH/themes/$1.zsh-theme"
@@ -21,8 +23,8 @@ function theme
 
 function lstheme
 {
-    ls -1 $ZSH/themes/*.zsh-theme $ZSH_CUSTOM/themes/*.zsh-theme \
+    find $ZSH_CUSTOM $ZSH_CUSTOM/themes/ $ZSH/themes -name '*.zsh-theme' \
     | xargs -d '\n' -n 1 basename \
     | sed 's/\(.*\)\..*/\1/' \
-    | uniq | sort | column
+    | sort -u | column
 }
