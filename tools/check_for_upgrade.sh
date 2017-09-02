@@ -23,6 +23,9 @@ function _upgrade_zsh() {
   # -L follow redirect, -s silent,
   # --max-time overall operation timeout, -I only download headers
   whence curl > /dev/null && curl -L -s --max-time 3 -I ${REMOTE} > /dev/null || return 0
+  # the curl call could be replaced by:
+  # `ping -q -c 1 -W 1 8.8.8.8 >/dev/null` without DNS resolution
+  # or `ping -q -c 1 -W 1 github.com >/dev/null`
   env ZSH=$ZSH sh $ZSH/tools/upgrade.sh
   # update the zsh file
   _update_zsh_update
