@@ -29,6 +29,12 @@ fi
 # Cancel upgrade if git is unavailable on the system
 whence git >/dev/null || return 0
 
+# Skip when no internet connectivity, depends on curl
+REMOTE=$(cd "$ZSH" && git remote get-url --all origin)
+# -L follow redirect, -s silent,
+# --max-time overall operation timeout, -I only download headers
+whence curl > /dev/null && curl -L -s --max-time 3 -I ${REMOTE} || return 0
+
 if mkdir "$ZSH/log/update.lock" 2>/dev/null; then
   if [ -f ~/.zsh-update ]; then
     . ~/.zsh-update
