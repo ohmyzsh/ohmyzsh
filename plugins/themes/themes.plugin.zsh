@@ -9,7 +9,7 @@ function theme
         RANDOM_THEME_NAME=`echo "$RANDOM_THEME"|xargs -d '\n' -n 1 basename|sed 's/\(.*\)\..*/\1/'`
         echo "[oh-my-zsh] Random theme '$RANDOM_THEME_NAME' loaded."
     else
-	    if [ -f "$ZSH_CUSTOM/$1.zsh-theme" ]; then
+        if [ -f "$ZSH_CUSTOM/$1.zsh-theme" ]; then
             source "$ZSH_CUSTOM/$1.zsh-theme"
         elif [ -f "$ZSH_CUSTOM/themes/$1.zsh-theme" ]; then
             source "$ZSH_CUSTOM/themes/$1.zsh-theme"
