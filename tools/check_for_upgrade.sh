@@ -31,6 +31,12 @@ whence git >/dev/null || return 0
 
 # Skip when no internet connectivity, depends on curl
 REMOTE=$(cd "$ZSH" && git remote get-url --all origin)
+echo "$REMOTE" | grep -qa 'git@'
+if [ $? -eq 0 ]
+then
+  # convert the remote protocol to https
+  REMOTE=$(echo $REMOTE | tr ':' '/' | sed -e "s#git@#https://#")
+fi
 # -L follow redirect, -s silent,
 # --max-time overall operation timeout, -I only download headers
 whence curl > /dev/null && curl -L -s --max-time 3 -I ${REMOTE} || return 0
