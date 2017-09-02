@@ -39,7 +39,7 @@ then
 fi
 # -L follow redirect, -s silent,
 # --max-time overall operation timeout, -I only download headers
-whence curl > /dev/null && curl -L -s --max-time 3 -I ${REMOTE} || return 0
+whence curl > /dev/null && curl -L -s --max-time 3 -I ${REMOTE} > /dev/null || return 0
 
 if mkdir "$ZSH/log/update.lock" 2>/dev/null; then
   if [ -f ~/.zsh-update ]; then
