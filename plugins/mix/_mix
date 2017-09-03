@@ -47,6 +47,9 @@ _1st_arguments=(
     'phoenix.new:Create a new Phoenix application'
     'phoenix.routes:Prints all routes'
     'phoenix.server:Starts applications and their servers'
+    'phx.new:Creates a new Phoenix v1.3.0 application'
+    'phx.new.ecto:Creates a new Ecto project within an umbrella project'
+    'phx.new.web:Creates a new Phoenix web project within an umbrella project'
     'run:Run the given file or expression'
     "test:Run a project's tests"
     '--help:Describe available tasks'
