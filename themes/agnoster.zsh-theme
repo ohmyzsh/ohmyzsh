@@ -198,13 +198,24 @@ prompt_virtualenv() {
   fi
 }
 
+epoch_date() {
+  unamestr=`uname`
+  if [[ "$unamestr" == 'Linux' ]]; then
+    echo $(date -d $1 +%s)
+  elif [[ "$unamestr" == 'Darwin' ]]; then
+    echo $(date -j -f %Y-%m-%dT%H:%M:%S%z $1 +%s)
+  else # TODO - other platforms?
+    echo $(date -j -f %Y-%m-%dT%H:%M:%S%z $1 +%s)
+  fi
+}
+
 # vaulted: current vaulted shell
 prompt_vaulted() {
   if [[ -z $VAULTED_ENV ]]; then
     return
   fi
   local exp=$(echo $VAULTED_ENV_EXPIRATION | sed 's/Z/+0000/')
-  local valid_until=$(date -j -f %Y-%m-%dT%H:%M:%S%z $exp +%s)
+  local valid_until=$(epoch_date $exp)
   local bg=009 #orange
   local fg=black
   if [[ $valid_until -lt $(date +%s) ]]; then
