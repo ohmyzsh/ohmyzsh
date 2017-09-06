@@ -3,7 +3,7 @@
 _org(){
 	local state
 
-	local f_dirname=~/.config/org_file.location
+	local f_dirname=~/.config/org_notes.location
 	touch $f_dirname
 	
 	local f_dir=$(cat $f_dirname)
@@ -18,11 +18,24 @@ _org(){
 	   '1: :->org_files'\
 	   '*: :->args'
 
-	local frels=$(find ${f_dir} -name '*.org' | sed "s|^${f_dir}/||" | sed "s|.org$||")
+	### Attempt to make org print out everything at a subdirectory by tabbing a suggestion, one subdir (depth 1) at a time
+	#local dirs_at_loc=$(find ${f_dir} -maxdepth 1 -type d);
+	#local files_at_loc=$(find ${f_dir} -type f -name '*.org' | sed "s|^${f_dir}/||" | sed "s|.org$||")
+
+	#case $state in
+	#      (org_files)
+	#            _arguments "1:files:($files_at_loc $dirs_at_loc)";
+	#            org --subdir=${org_files}
+	#	    return 0
+	#	    ;;
+       	#esac
+
+	local all=$(find ${f_dir} -type f -name '*.org' | sed "s|^${f_dir}/||" | sed "s|.org$||")
 
 	case $state in
-       	     (org_files) _arguments "1:files:($frels)" ;;
-       	esac
+	     (org_files) _arguments "1:files:($all)" ;;
+	esac
+
 }
 
 _org "$@"
