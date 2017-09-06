@@ -32,6 +32,7 @@ Original author: [Sorin Ionescu](https://github.com/sorin-ionescu)
 | `music`         | Control Apple Music. Use `music -h` for usage details |
 | `spotify`       | Control Spotify and search by artist, album, track…   |
 | `rmdsstore`     | Remove .DS\_Store files recursively in a directory    |
+| `btrestart`     | Restart the Bluetooth daemon                          |
 
 ## Acknowledgements
 
