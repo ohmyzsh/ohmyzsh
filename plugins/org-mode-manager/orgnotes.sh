@@ -61,11 +61,15 @@ or run the install script."
     local file=$1
     local command=$2
 
-
+    # Is file an existing subfolder?
+    local sub_dir=""
+    if [ -d ${org_dir}/$file ]; then
+	sub_dir=$file
+	file=""
+    fi
+	
     case $file in
-	"");&
-	--subdir=*)
-	    local sub_dir=`echo $file | sed 's|--subdir=||'`
+	"") # applies to subdirs too
 	    local title="You have the following org-mode notes:"
 	    if [ "$sub_dir" != "" ]; then
 		title=`echo $title | sed "s|:| [${sub_dir}]:|"`
@@ -82,9 +86,9 @@ or run the install script."
 	-h);&
 	--help)
 	    echo "
-     `basename $0` [--help] [--sync] [--subdir=<dest>] <filename [--delete] [--move=<dest>] [--encrypt] [--decrypt]>
+     `basename $0` [--help] [--sync] [sub-folder] <filename [--delete] [--move=<dest>] [--encrypt] [--decrypt]>
 
-Generates an org-notes file in a folder location set in the $org_loc file
+Generates an org-notes file in a folder location set in the $org_loc file, or a given sub-folder
 ";
 	    return -1;
 	    ;;
