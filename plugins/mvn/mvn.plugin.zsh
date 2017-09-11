@@ -33,8 +33,8 @@ mvn-color() {
                -e "s/Tests run: \([^,]*\), Failures: \([^,]*\), Errors: \([^,]*\), Skipped: \([^,]*\)/${BOLD}${TEXT_GREEN}Tests run: \1${RESET_FORMATTING}, Failures: ${BOLD}${TEXT_RED}\2${RESET_FORMATTING}, Errors: ${BOLD}${TEXT_RED}\3${RESET_FORMATTING}, Skipped: ${BOLD}${TEXT_YELLOW}\4${RESET_FORMATTING}/g"
  
   # Make sure formatting is reset
-  echo -ne ${RESET_FORMATTING}
-  )
+  echo -ne "${RESET_FORMATTING}"
+    )
 }
 
 # Override the mvn command with the colorized one.
@@ -223,7 +223,7 @@ function listMavenCompletions {
         toolchain:toolchain
         
         # options
-        -Dmaven.test.skip=true -DskipTests -DskipITs -Dmaven.surefire.debug -DenableCiProfile -Dpmd.skip=true -Dcheckstyle.skip=true -Dtycho.mode=maven -Dmaven.test.failure.ignore=true -DgroupId= -DartifactId= -Dversion= -Dpackaging=jar -Dfile=
+        "-Dmaven.test.skip=true" -DskipTests -DskipITs -Dmaven.surefire.debug -DenableCiProfile "-Dpmd.skip=true" "-Dcheckstyle.skip=true" "-Dtycho.mode=maven" "-Dmaven.test.failure.ignore=true" "-DgroupId=" "-DartifactId=" "-Dversion=" "-Dpackaging=jar" "-Dfile="
 
         # arguments
         -am --also-make
@@ -267,8 +267,8 @@ function listMavenCompletions {
         cli:execute cli:execute-phase 
         archetype:generate generate-sources 
         cobertura:cobertura
-        -Dtest= $(if [ -d ./src/test/java ] ; then find ./src/test/java -type f -name '*.java' | grep -v svn | sed 's?.*/\([^/]*\)\..*?-Dtest=\1?' ; fi)
-        -Dit.test= $(if [ -d ./src/test/java ] ; then find ./src/test/java -type f -name '*.java' | grep -v svn | sed 's?.*/\([^/]*\)\..*?-Dit.test=\1?' ; fi)
+        "-Dtest=$(if [ -d ./src/test/java ] ; then find ./src/test/java -type f -name '*.java' | grep -v svn | sed 's?.*/\([^/]*\)\..*?-Dtest=\1?' ; fi)"
+        "-Dit.test=$(if [ -d ./src/test/java ] ; then find ./src/test/java -type f -name '*.java' | grep -v svn | sed 's?.*/\([^/]*\)\..*?-Dit.test=\1?' ; fi)"
     ); 
 }
 
