@@ -3,12 +3,13 @@
 _org(){
 	local state
 
-	local f_dirname=~/.config/org_notes.location
+	local f_dirname=~/.config/org_notes.conf
 	touch $f_dirname
 	
-	local f_dir=$(cat $f_dirname)
-	if [ "$f_dir" = "" ]; then
-	   echo -e "-> No location set in $f_dirname"
+	local f_dir=$(grep "^location" $f_dirname | sed -r 's|^location\s*=\s*(.*)\s*|\1|' )
+
+	if [ "$f_dir" = "" ] || ! [ -d $f_dir ]; then
+	   echo -e "-> No valid location set in $f_dirname"
 	   return -1
 	fi
 
