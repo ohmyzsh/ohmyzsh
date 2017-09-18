@@ -53,7 +53,7 @@ alias cget='curl -s https://getcomposer.org/installer | php'
 
 # Add Composer's global binaries to PATH, using Composer if available.
 if hash composer 2>/dev/null; then
-  export PATH=$PATH:$(composer global config bin-dir --absolute) 2>/dev/null
+  export PATH=$PATH:$(composer global config bin-dir --absolute 2>/dev/null)
 else
   export PATH=$PATH:~/.composer/vendor/bin
   export PATH=$PATH:~/.config/composer/vendor/bin
