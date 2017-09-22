@@ -56,6 +56,7 @@ alias mvn="mvn-or-mvnw"
 alias mvncini='mvn clean initialize'
 alias mvncie='mvn clean install eclipse:eclipse'
 alias mvnci='mvn clean install'
+alias mvncp='mvn clean package'
 alias mvncist='mvn clean install -DskipTests'
 alias mvncisto='mvn clean install -DskipTests --offline'
 alias mvne='mvn eclipse:eclipse'
