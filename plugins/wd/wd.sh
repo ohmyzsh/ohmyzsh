@@ -354,9 +354,8 @@ fi
 typeset -A points
 while read -r line
 do
-    arr=(${(s,:,)line})
-    key=${arr[1]}
-    val=${arr[2]}
+    key=${line%%:*}
+    val=${line#*:}
 
     points[$key]=$val
 done < $WD_CONFIG
