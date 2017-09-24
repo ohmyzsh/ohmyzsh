@@ -2,9 +2,9 @@
 
 local return_status="%{$fg[red]%}%(?..⏎)%{$reset_color%}"
 
-local host_color="green"
+host_color="green"
 if [ -n "$SSH_CLIENT" ]; then
-  local host_color="red"
+  host_color="red"
 fi
 
 PROMPT='
@@ -12,7 +12,7 @@ PROMPT='
 %{$fg_bold[cyan]%}❯%{$reset_color%} '
 
 
-RPROMPT='${return_status}%{$reset_color%}'
+RPROMPT=${return_status}'%{$reset_color%}'
 
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[grey]%}(%{$fg[red]%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"

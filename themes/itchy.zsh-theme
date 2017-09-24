@@ -6,8 +6,8 @@ local user="%{$fg[cyan]%}%n%{$reset_color%}"
 local host="%{$fg[cyan]%}@%m%{$reset_color%}"
 local pwd="%{$fg[yellow]%}%~%{$reset_color%}"
 
-PROMPT='${user}${host} ${pwd}
-${smiley}  '
+PROMPT="${user}${host} ${pwd}
+${smiley}  "
 
 RPROMPT='$(rvm-prompt || rbenv version) %{$fg[white]%}$(git_prompt_info)%{$reset_color%}'
 
