@@ -32,6 +32,18 @@ function work_in_progress() {
     echo "WIP!!"
   fi
 }
+#change current branch old email with new eamil
+gmvemail() {
+  OLD_EMAIL=$1 NEW_EMAIL=$2 git filter-branch --commit-filter '
+    if [ "$GIT_AUTHOR_EMAIL" = "$OLD_EMAIL" ];
+    then
+      GIT_AUTHOR_EMAIL="$NEW_EMAIL";
+      git commit-tree "$@";
+    else
+      git commit-tree "$@";
+    fi' HEAD
+  git update-ref -d refs/original/refs/heads/$(git symbolic-ref --short HEAD)
+}
 
 #
 # Aliases
