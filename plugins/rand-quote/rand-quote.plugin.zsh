@@ -10,7 +10,7 @@ TEXT_COLOR="\e[0;35m"
 COLON_COLOR="\e[0;35m"
 END_COLOR="\e[m"
 
-if [[ -x `which curl` ]]; then
+if $(type curl > /dev/null); then
     function quote()
     {
         Q=$(curl -s --connect-timeout 2 "http://www.quotationspage.com/random.php3" | iconv -c -f ISO-8859-1 -t UTF-8 | grep -m 1 "dt ")
