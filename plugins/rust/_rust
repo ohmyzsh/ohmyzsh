@@ -173,6 +173,9 @@ _rustc_opts_lint=(
 
 _rustc_opts_debug=(
     'verbose[in general, enable more debug printouts]'
+    'span-free-formats[when debug-printing compiler state, do not include spans]'
+    "identify-regions[make unnamed regions display as '# (where # is some non-ident unique id)]"
+    'emit-end-regions[emit EndRegion as part of MIR; enable transforms that solely process EndRegion]'
     'time-passes[measure time of each rustc pass]'
     'count-llvm-insns[count where LLVM instrs originate]'
     'time-llvm-passes[measure time of each LLVM pass]'
