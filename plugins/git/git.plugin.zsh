@@ -18,7 +18,7 @@ function current_repository() {
   if ! $_omz_git_git_cmd rev-parse --is-inside-work-tree &> /dev/null; then
     return
   fi
-  echo $($_omz_git_git_cmd remote -v | cut -d':' -f 2)
+  echo $($_omz_git_git_cmd remote -v | awk 'BEGIN { FS = "github.com[\:\/]" } { print $NF }')
 }
 # Pretty log messages
 function _git_log_prettily(){
