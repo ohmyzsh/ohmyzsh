@@ -61,7 +61,14 @@ main() {
       exit 1
     fi
   fi
-  env git clone --depth=1 $(git remote get-url origin) $ZSH || {
+  
+  branch="$(env git symbolic-ref --short HEAD)"
+  if [[ "$?" != "0" ]] || [[ "$branch" == "" ]]; then
+    printf "Error: failed to get current git branch\n"
+    exit 1
+  fi
+  
+  env git clone --depth=1 $(git remote get-url origin) -b "$branch" $ZSH || {
     printf "Error: git clone of oh-my-zsh repo failed\n"
     exit 1
   }
