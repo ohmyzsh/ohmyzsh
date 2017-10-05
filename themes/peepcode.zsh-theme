@@ -28,7 +28,7 @@ git_dirty() {
 }
 
 git_prompt() {
-  local cb=$(current_branch)
+  local cb=$(git_current_branch)
   if [ -n "$cb" ]; then
     local repo_path=$(git_repo_path)
     echo " %{$fg_bold[grey]%}$cb %{$fg[white]%}$(git_commit_id)%{$reset_color%}$(git_mode)$(git_dirty)"
@@ -41,4 +41,4 @@ PROMPT='
 %~
 ${smiley}  %{$reset_color%}'
 
-RPROMPT='%{$fg[white]%} $(~/.rvm/bin/rvm-prompt)$(git_prompt)%{$reset_color%}'
+RPROMPT='%{$fg[white]%} $(ruby_prompt_info)$(git_prompt)%{$reset_color%}'

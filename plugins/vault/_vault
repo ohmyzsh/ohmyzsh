@@ -1,0 +1,400 @@
+#compdef vault
+
+typeset -a main_args
+main_args=(
+    '(-version)-version[Prints the Vault version]'
+    '(-help)-help[Prints Vault Help]'
+)
+
+typeset -a general_args
+general_args=(
+    '(-help)-help[Prints Help]'
+    '(-address)-address=-[The address of the Vault server. Overrides the VAULT_ADDR environment variable if set.]:address:'
+    '(-ca-cert)-ca-cert=-[Path to a PEM encoded CA cert file to use to verify the Vault server SSL certificate. Overrides the VAULT_CACERT environment variable if set.]:file:_files -g "*.pem"'
+    '(-ca-path)-ca-path=-[Path to a directory of PEM encoded CA cert files to verify the Vault server SSL certificate. If both -ca-cert and -ca-path are specified, -ca-path is used.Overrides the VAULT_CAPATH environment variable if set.]:directory:_directories'
+    '(-client-cert)-client-cert=-[Path to a PEM encoded client certificate for TLS authentication to the Vault server. Must also specify -client-key. Overrides the VAULT_CLIENT_CERT environment variable if set.]:file:_files -g "*.pem"'
+    '(-client-key)-client-key=-[Path to an unencrypted PEM encoded private key matching the client certificate from -client-cert. Overrides the VAULT_CLIENT_KEY environment variable if set.]:file:_files -g "*.pem"'
+    '(-tls-skip-verify)-tls-skip-verify[Do not verify TLS certificate. This is highly not recommended. Verification will also be skipped if VAULT_SKIP_VERIFY is set.]'
+)
+
+typeset -a audit_enable_args
+audit_enable_args=(
+    '(-description)-description=-[A human-friendly description for the backend. This shows up only when querying the enabled backends.]:description:'
+    '(-id)-id=-[Specify a unique ID for this audit backend. This is purely for referencing this audit backend. By default this will be the backend type.]:id:'
+)
+
+typeset -a auth_args
+auth_args=(
+    '(-method)-method=-[Outputs help for the authentication method with the given name for the remote server. If this authentication method is not available, exit with code 1.]:method:(cert ldap github userpass app-id)'
+    '(-method-help)-method-help[If set, the help for the selected method will be shown.]'
+    '(-methods)-methods[List the available auth methods.]'
+    '(-no-verify)-no-verify[Do not verify the token after creation; avoids a use count]'
+)
+
+typeset -a auth_enable_args
+auth_enable_args=(
+    '(-description)-description=-[Human-friendly description of the purpose for the auth provider. This shows up in the auth-list command.]:description:'
+    '(-path)-path=-[Mount point for the auth provider. This defaults to the type of the mount. This will make the auth provider available at "/auth/<path>"]:path:'
+)
+
+typeset -a init_args
+init_args=(
+    '(-key-shares)-key-shares=-[(default: 5) The number of key shares to split the master key into.]:keyshares:'
+    '(-key-threshold)-key-threshold=-[(default: 3) The number of key shares required to reconstruct the master key.]:keythreshold:'
+    '(-pgp-keys)-pgp-keys[If provided, must be a comma-separated list of files on disk containing binary- or base64-format public PGP keys. The number of files must match "key-shares". The output unseal keys will encrypted and hex-encoded, in order, with the given public keys. If you want to use them with the "vault unseal" command, you will need to hex decode and decrypt; this will be the plaintext unseal key.]:pgpkeys:_files'
+)
+
+typeset -a mount_tune_args
+mount_tune_args=(
+    '(-default-lease-ttl)-default-lease-ttl=-[Default lease time-to-live for this backend. If not specified, uses the system default, or the previously set value. Set to "system" to explicitly set it to use the system default.]:defaultleasettl:'
+    '(-max-lease-ttl)-max-lease-ttl=-[Max lease time-to-live for this backend. If not specified, uses the system default, or the previously set value. Set to "system" to explicitly set it to use the system default.]:maxleasettl:'
+)
+
+typeset -a mount_args
+mount_args=(
+    $mount_tune_args
+    '(-path)-path=-[Mount point for the logical backend. This defauls to the type of the mount.]:path:'
+    '(-description)-description=-[Human-friendly description of the purpose for the mount. This shows up in the mounts command.]:description:'
+)
+
+typeset -a rekey_args
+rekey_args=(
+    $init_args
+    '(-init)-init[Initialize the rekey operation by setting the desired number of shares and the key threshold. This can only be done if no rekey is already initiated.]:init:'
+    '(-cancel)-cancel[Reset the rekey process by throwing away prior keys and the rekey configuration.]:cancel:'
+    '(-status)-status[Prints the status of the current rekey operation. This can be used to see the status without attempting to provide an unseal key.]:status:'
+)
+
+typeset -a ssh_args
+ssh_args=(
+    '(-role)-role[Role to be used to create the key. ]:role:'
+    '(-no-exec)-no-exec[Shows the credentials but does not establish connection.]:noexec:'
+    '(-mount-point)-mount-point[Mount point of SSH backend. If the backend is mounted at "ssh", which is the default as well, this parameter can be skipped.]:mountpoint:'
+    '(-format)-format[If no-exec option is enabled, then the credentials will be printed out and SSH connection will not be established. The format of the output can be "json" or "table". JSON output is useful when writing scripts. Default is "table".]:format:(json table)'
+)
+
+typeset -a token_create_args
+token_create_args=(
+    '(-id)-id=-[The token value that clients will use to authenticate with vault. If not provided this defaults to a 36 character UUID. A root token is required to specify the ID of a token.]:id:'
+    '(-display-name)-display-name=-[A display name to associate with this token. This is a non-security sensitive value used to help identify created secrets, i.e. prefixes.]:displayname:'
+    '(-ttl)-ttl=-[TTL to associate with the token. This option enables the tokens to be renewable.]:ttl:'
+    '*-metadata=-[Metadata to associate with the token. This shows up in the audit log. This can be specified multiple times.]:metadata:'
+    '(-orphan)-orphan[If specified, the token will have no parent. Only root tokens can create orphan tokens. This prevents the new token from being revoked with your token.]:orphan:'
+    '(-no-default-policy)-no-default-policy[If specified, the token will not have the "default" policy included in its policy set.]:nodefaultpolicy:'
+    '*-policy=-[Policy to associate with this token. This can be specified multiple times.]:policy:__vault_policies'
+    '(-use-limit)-use-limit=-[The number of times this token can be used until it is automatically revoked.]:uselimit:'
+    '(-format)-format=-[The format for output. By default it is a whitespace-delimited table. This can also be json.]:format:(json table)'
+)
+
+typeset -a server_args
+server_args=(
+    '*-config=-[Path to the configuration file or directory. This can be specified multiple times. If it is a directory, all files with a ".hcl" or ".json" suffix will be loaded.]:config:_files'
+    '-dev[Enables Dev mode. In this mode, Vault is completely in-memory and unsealed. Do not run the Dev server in production!]:dev:'
+    '-log-level=-[Log verbosity. Defaults to "info", will be outputtedto stderr. Supported values: "trace", "debug", "info", "warn", "err"]:loglevel:(trace debug info warn err)'
+)
+
+_vault_audit-list() {
+    _arguments : \
+        ${general_args[@]} && ret=0
+}
+
+_vault_audit-disable() {
+    # vault audit-list doesn't print the backend id so for now
+    # no *smart* autocompletion for this subcommand.
+    _arguments : \
+        ${general_args[@]} \
+        ':::(file syslog)' && ret=0
+}
+
+_vault_audit-enable() {
+    _arguments : \
+        ${general_args[@]} \
+        ${audit_enable_args[@]} \
+        ': :->backends' \
+        '*:: :->backendconfig' && ret=0
+
+    case $state in
+        backends)
+            local -a backends
+            backends=(
+                'file:The "file" audit backend writes audit logs to a file.'
+                'syslog:The "syslog" audit backend writes audit logs to syslog.'
+            )
+            _describe -t backends 'vault audit backends' backends && ret=0
+            ;;
+        backendconfig)
+            case ${line[1]} in
+                file)
+                    _values -w "Audit Backend File" \
+                        'path[(required) - The path to where the file will be written. If this path exists, the audit backend will append to it.]:file:_files' \
+                        'log_raw[(optional) Should security sensitive information be logged raw. Defaults to "false".]:log_raw:(true false)' && ret=0
+                    ;;
+                syslog)
+                    _values -w "Audit Backend Syslog" \
+                        'facility[(optional) - The syslog facility to use. Defaults to "AUTH".]:facility:(kern user mail daemon auth syslog lpr news uucp authpriv ftp cron local0 local1 local2 local3 local4 local5 local6 local7)' \
+                        'tag[(optional) - The syslog tag to use. Defaults to "vault".]:tag:' \
+                        'log_raw[(optional) Should security sensitive information be logged raw.]:log_raw:(true false)' && ret=0
+                            ;;
+            esac
+            ;;
+    esac
+}
+
+_vault_auth() {
+    _arguments : \
+        ${general_args[@]} \
+        ${auth_args[@]} && ret=0
+}
+
+_vault_auth-enable() {
+    _arguments : \
+        ${general_args[@]} \
+        ${auth_enable_args[@]} \
+        ':::(cert ldap github userpass app-id)' && ret=0
+}
+
+__vault_auth_methods() {
+    local -a authmethods
+    authmethods=($(vault auth -methods | awk 'NR>1{split ($1,a,"/"); print a[1]":["$2"]"}'))
+    _describe -t authmethods 'authmethods' authmethods && ret=0
+}
+
+_vault_auth-disable() {
+    _arguments : \
+        ${general_args[@]} \
+        ':::__vault_auth_methods' && ret=0
+
+}
+
+_vault_init() {
+    _arguments : \
+        ${general_args[@]} \
+        ${init_args[@]} && ret=0
+}
+
+_vault_key-status() {
+    _arguments : \
+        ${general_args[@]} && ret=0
+}
+
+__vault_mounts() {
+    local -a mounts
+    mounts=($(vault mounts | awk 'NR>1{split ($1,a,"/"); print a[1]":["$2"]"}'))
+    _describe -t mounts 'mounts' mounts && ret=0
+}
+
+_vault_mounts() {
+    _arguments : \
+        ${general_args[@]} && ret=0
+}
+
+_vault_mount() {
+    # to find out how many types of backens are there
+    _arguments : \
+        ${general_args[@]} \
+        ${mount_args[@]} \
+        ':::(generic ssh)' && ret=0
+}
+
+_vault_mount-tune() {
+    _arguments : \
+        ${general_args[@]} \
+        ${mount_tune_args[@]} \
+        ':::__vault_mounts' && ret=0
+}
+
+_vault_unmount() {
+    _arguments : \
+        ${general_args[@]} \
+        ':::__vault_mounts' && ret=0
+}
+
+_vault_remount() {
+    _arguments : \
+        ${general_args[@]} \
+        ':::__vault_mounts' \
+        ':::'  && ret=0
+}
+
+__vault_policies() {
+    local -a policies
+    policies=($(vault policies | awk '{print $1":["$1"]"}'))
+    _describe -t policies 'policies' policies && ret=0
+}
+
+_vault_policies() {
+    _arguments : \
+        ${general_args[@]} \
+        ':::__vault_policies' && ret=0
+}
+
+_vault_policy-delete() {
+    _arguments : \
+        ${general_args[@]} \
+        ':::__vault_policies' && ret=0
+}
+
+_vault_policy-write() {
+    _arguments : \
+        ${general_args[@]} \
+        ': ::' \
+        '::policy:_files' && ret=0
+}
+
+_vault_status() {
+    _arguments : \
+        ${general_args[@]} && ret=0
+}
+
+_vault_rekey() {
+    _arguments : \
+        ${general_args[@]} \
+        ${rekey_args[@]} \
+        ': ::' && ret=0
+}
+
+_vault_rotate() {
+    _arguments : \
+        ${general_args[@]} && ret=0
+}
+
+_vault_seal() {
+    _arguments : \
+        ${general_args[@]} && ret=0
+}
+
+_vault_ssh() {
+    _arguments : \
+        ${general_args[@]} \
+        ${ssh_args[@]} \
+        ': ::' && ret=0
+}
+
+_vault_token-create() {
+    _arguments : \
+        ${general_args[@]} \
+        ${token_create_args[@]} && ret=0
+}
+
+_vault_token-renew() {
+    _arguments : \
+        ${general_args[@]} \
+        '(-format)-format=-[The format for output. By default it is a whitespace-delimited table. This can also be json.]:format:(json table)' \
+        ': ::' \
+        ': ::' && ret=0
+}
+
+_vault_token-revoke() {
+    _arguments : \
+        ${general_args[@]} \
+        '(-mode)-mode=-[The type of revocation to do. See the documentation above for more information.]:mode:(  orphan path)' \
+        ': ::' && ret=0
+}
+
+_vault_unseal() {
+    _arguments : \
+        ${general_args[@]} \
+        '(-reset)-reset[Reset the unsealing process by throwing away prior keys in process to unseal the vault.]:reset:' \
+        ': ::' && ret=0
+}
+
+_vault_version() {
+    # no args
+}
+
+_vault_delete() {
+    _arguments : \
+        ${general_args[@]} \
+        ': ::' && ret=0
+}
+
+_vault_path-help() {
+    _arguments : \
+        ${general_args[@]} \
+        ': ::' && ret=0
+}
+
+_vault_revoke() {
+    _arguments : \
+        ${general_args[@]} \
+        '(-format)-format=-[The format for output. By default it is a whitespace-delimited table. This can also be json.]:format:(json table)' \
+        ': ::' \
+        ': ::' && ret=0
+}
+
+_vault_server() {
+    _arguments : \
+        ${server_args[@]} && ret=0
+
+}
+
+_vault_write() {
+    _arguments : \
+        ${general_args[@]} \
+        '(-f -force)'{-f,-force}'[Force the write to continue without any data values specified. This allows writing to keys that do not need or expect any fields to be specified.]:force:' \
+        ': ::' \
+        ': ::' && ret=0
+}
+
+_vault_read() {
+    _arguments : \
+        ${general_args[@]} \
+        '(-format)-format=-[The format for output. By default it is a whitespace-delimited table. This can also be json.]:format:(json table)' \
+        '(-field)-field=-[If included, the raw value of the specified field will be output raw to stdout.]:field:' \
+        ': ::' && ret=0
+}
+
+_vault_commands() {
+    local -a commands
+
+    commands=(
+        "delete":"Delete operation on secrets in Vault"
+        "path-help":"Look up the help for a path"
+        "read":"Read data or secrets from Vault"
+        "renew":"Renew the lease of a secret"
+        "revoke":"Revoke a secret"
+        "server":"Start a Vault server"
+        "status":"Outputs status of whether Vault is sealed and if HA mode is enabled"
+        "write":"Write secrets or configuration into Vault"
+        "audit-disable":"Disable an audit backend"
+        "audit-enable":"Enable an audit backend"
+        "audit-list":"Lists enabled audit backends in Vault"
+        "auth":"Prints information about how to authenticate with Vault"
+        "auth-disable":"Disable an auth provider"
+        "auth-enable":"Enable a new auth provider"
+        "init":"Initialize a new Vault server"
+        "key-status":"Provides information about the active encryption key"
+        "mount":"Mount a logical backend"
+        "mount-tune":"Tune mount configuration parameters"
+        "mounts":"Lists mounted backends in Vault"
+        "policies":"List the policies on the server"
+        "policy-delete":"Delete a policy from the server"
+        "policy-write":"Write a policy to the server"
+        "rekey":"Rekeys Vault to generate new unseal keys"
+        "remount":"Remount a secret backend to a new path"
+        "rotate":"Rotates the backend encryption key used to persist data"
+        "seal":"Seals the vault server"
+        "ssh":"Initiate a SSH session"
+        "token-create":"Create a new auth token"
+        "token-renew":"Renew an auth token if there is an associated lease"
+        "token-revoke":"Revoke one or more auth tokens"
+        "unmount":"Unmount a secret backend"
+        "unseal":"Unseals the vault server"
+        "version":"Prints the Vault version"
+    )
+
+    _describe -t commands 'vault command' commands && ret=0
+}
+
+local curcontext=$curcontext ret=1
+_arguments : \
+    ${main_args[@]} \
+    '*:: :->subcommands' && ret=0
+if ((CURRENT == 1 )); then
+    _vault_commands && ret=0
+fi
+if [[ $state == subcommands ]]; then
+    # (( CURRENT -- ))
+    curcontext="${curcontext%:*:*}:vault-$words[1]:"
+    _call_function ret _vault_$words[1]
+fi

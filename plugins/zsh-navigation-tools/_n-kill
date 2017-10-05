@@ -1,0 +1,41 @@
+#compdef n-kill
+
+local context ret=1
+
+typeset -a list linewords
+typeset -aU words wordbits
+local line word
+integer cygwin=0
+
+local IFS="
+"
+
+case "$OSTYPE" in
+    cygwin*) list=( `command ps -Wa` ); cygwin=1 ;;
+    *) list=( `command ps -o pid,uid,command -A` ) ;;
+esac
+
+shift list
+
+IFS=" "
+for line in "${list[@]}"; do
+    linewords=( $=line )
+    if [ "$cygwin" = "1" ]; then
+        linewords=( "${(@)linewords[8,-1]}" )
+    else
+        linewords=( "${(@)linewords[3,-1]}" )
+    fi
+    for word in "${linewords[@]}"; do
+        if [ "$cygwin" = "1" ]; then
+            wordbits=( "${(@s:\:)word}" )
+        else
+            wordbits=( "${(@s:/:)word}" )
+        fi
+        words+=( "${wordbits[@]}" )
+    done
+done
+
+_wanted bits expl "Processes' name bits" \
+    compadd "$@" -a - words && ret=0
+
+return "$ret"

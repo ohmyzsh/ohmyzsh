@@ -63,7 +63,7 @@ alias wppp='wp plugin path'
 alias wpps='wp plugin search'
 alias wppst='wp plugin status'
 alias wppt='wp plugin toggle'
-alias wppu='wp plugin uninstall'
+alias wppun='wp plugin uninstall'
 alias wppu='wp plugin update'
 
 # Post
@@ -75,7 +75,7 @@ alias wppog='wp post get'
 alias wppol='wp post list'
 alias wppom='wp post meta'
 alias wppou='wp post update'
-alias wppou='wp post url'
+alias wppourl='wp post url'
 
 # Rewrite
 

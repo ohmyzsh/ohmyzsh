@@ -1,7 +1,7 @@
 ## Coffeescript Plugin
 
 This plugin provides aliases for quickly compiling and previewing your
-cofeescript code.
+coffeescript code.
 
 When writing Coffeescript it's very common to want to preview the output of a
 certain snippet of code, either because you want to test the output or because
@@ -11,7 +11,7 @@ Preview the compiled result of your coffeescript with `cf "code"` as per the
 following:
 
 ```zsh
-$ cf 'if a then be else c'
+$ cf 'if a then b else c'
 if (a) {
   b;
 } else {

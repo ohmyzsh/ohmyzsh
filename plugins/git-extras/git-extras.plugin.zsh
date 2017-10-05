@@ -1,9 +1,12 @@
-#compdef git
 # ------------------------------------------------------------------------------
 # Description
 # -----------
 #
 #  Completion script for git-extras (http://github.com/tj/git-extras).
+#
+#  This depends on and reuses some of the internals of the _git completion
+#  function that ships with zsh itself. It will not work with the _git that ships
+#  with git.
 #
 # ------------------------------------------------------------------------------
 # Authors
@@ -22,16 +25,18 @@
 # ------------------------------------------------------------------------------
 
 
-__git_command_successful () {
-    if (( ${#pipestatus:#0} > 0 )); then
-        _message 'not a git repository'
-        return 1
-    fi
-    return 0
+# Internal functions
+# These are a lot like their __git_* equivalents inside _git
+
+__gitex_command_successful () {
+  if (( ${#*:#0} > 0 )); then
+    _message 'not a git repository'
+    return 1
+  fi
+  return 0
 }
 
-
-__git_commits() {
+__gitex_commits() {
     declare -A commits
     git log --oneline -15 | sed 's/\([[:alnum:]]\{7\}\) /\1:/' | while read commit
     do
@@ -42,7 +47,7 @@ __git_commits() {
     _describe -t commits commit commits && ret=0
 }
 
-__git_tag_names() {
+__gitex_tag_names() {
     local expl
     declare -a tag_names
     tag_names=(${${(f)"$(_call_program tags git for-each-ref --format='"%(refname)"' refs/tags 2>/dev/null)"}#refs/tags/})
@@ -51,7 +56,7 @@ __git_tag_names() {
 }
 
 
-__git_branch_names() {
+__gitex_branch_names() {
     local expl
     declare -a branch_names
     branch_names=(${${(f)"$(_call_program branchrefs git for-each-ref --format='"%(refname)"' refs/heads 2>/dev/null)"}#refs/heads/})
@@ -59,7 +64,7 @@ __git_branch_names() {
     _wanted branch-names expl branch-name compadd $* - $branch_names
 }
 
-__git_specific_branch_names() {
+__gitex_specific_branch_names() {
     local expl
     declare -a branch_names
     branch_names=(${${(f)"$(_call_program branchrefs git for-each-ref --format='"%(refname)"' refs/heads/"$1" 2>/dev/null)"}#refs/heads/$1/})
@@ -67,32 +72,28 @@ __git_specific_branch_names() {
     _wanted branch-names expl branch-name compadd $* - $branch_names
 }
 
-
-__git_feature_branch_names() {
-    __git_specific_branch_names 'feature'
+__gitex_feature_branch_names() {
+    __gitex_specific_branch_names 'feature'
 }
 
-
-__git_refactor_branch_names() {
-    __git_specific_branch_names 'refactor'
+__gitex_refactor_branch_names() {
+    __gitex_specific_branch_names 'refactor'
 }
 
-
-__git_bug_branch_names() {
-    __git_specific_branch_names 'bug'
+__gitex_bug_branch_names() {
+    __gitex_specific_branch_names 'bug'
 }
 
-
-__git_submodule_names() {
+__gitex_submodule_names() {
     local expl
     declare -a submodule_names
-    submodule_names=(${(f)"$(_call_program branchrefs git submodule status | awk '{print $2}')"})
+    submodule_names=(${(f)"$(_call_program branchrefs git submodule status | awk '{print $2}')"})  # '
     __git_command_successful || return
     _wanted submodule-names expl submodule-name compadd $* - $submodule_names
 }
 
 
-__git_author_names() {
+__gitex_author_names() {
     local expl
     declare -a author_names
     author_names=(${(f)"$(_call_program branchrefs git log --format='%aN' | sort -u)"})
@@ -123,7 +124,7 @@ _git-bug() {
             case $line[1] in
                 (finish)
                     _arguments -C \
-                        ':branch-name:__git_bug_branch_names'
+                        ':branch-name:__gitex_bug_branch_names'
                     ;;
             esac
     esac
@@ -139,7 +140,7 @@ _git-changelog() {
 
 _git-contrib() {
     _arguments \
-        ':author:__git_author_names'
+        ':author:__gitex_author_names'
 }
 
 
@@ -151,19 +152,19 @@ _git-count() {
 
 _git-delete-branch() {
     _arguments \
-        ':branch-name:__git_branch_names'
+        ':branch-name:__gitex_branch_names'
 }
 
 
 _git-delete-submodule() {
     _arguments \
-        ':submodule-name:__git_submodule_names'
+        ':submodule-name:__gitex_submodule_names'
 }
 
 
 _git-delete-tag() {
     _arguments \
-        ':tag-name:__git_tag_names'
+        ':tag-name:__gitex_tag_names'
 }
 
 
@@ -171,6 +172,7 @@ _git-effort() {
     _arguments \
         '--above[ignore file with less than x commits]'
 }
+
 
 _git-extras() {
     local curcontext=$curcontext state line ret=1
@@ -216,7 +218,7 @@ _git-feature() {
             case $line[1] in
                 (finish)
                     _arguments -C \
-                        ':branch-name:__git_feature_branch_names'
+                        ':branch-name:__gitex_feature_branch_names'
                     ;;
             esac
     esac
@@ -225,8 +227,8 @@ _git-feature() {
 
 _git-graft() {
     _arguments \
-        ':src-branch-name:__git_branch_names' \
-        ':dest-branch-name:__git_branch_names'
+        ':src-branch-name:__gitex_branch_names' \
+        ':dest-branch-name:__gitex_branch_names'
 }
 
 
@@ -236,11 +238,13 @@ _git-ignore() {
         '(--global -g)'{--global,-g}'[show global gitignore]'
 }
 
+
 _git-missing() {
     _arguments \
-        ':first-branch-name:__git_branch_names' \
-        ':second-branch-name:__git_branch_names'
+        ':first-branch-name:__gitex_branch_names' \
+        ':second-branch-name:__gitex_branch_names'
 }
+
 
 _git-refactor() {
     local curcontext=$curcontext state line ret=1
@@ -263,7 +267,7 @@ _git-refactor() {
             case $line[1] in
                 (finish)
                     _arguments -C \
-                        ':branch-name:__git_refactor_branch_names'
+                        ':branch-name:__gitex_refactor_branch_names'
                     ;;
             esac
     esac
@@ -272,12 +276,12 @@ _git-refactor() {
 
 _git-squash() {
     _arguments \
-        ':branch-name:__git_branch_names'
+        ':branch-name:__gitex_branch_names'
 }
 
 _git-summary() {
-    _arguments '--line[summarize with lines other than commits]'
-    __git_commits
+    _arguments '--line[summarize with lines rather than commits]'
+    __gitex_commits
 }
 
 
@@ -298,7 +302,7 @@ zstyle ':completion:*:*:git:*' user-commands \
     count:'count commits' \
     create-branch:'create local and remote branch' \
     delete-branch:'delete local and remote branch' \
-    delete-merged-brancees:'delete merged branches'\
+    delete-merged-branches:'delete merged branches'\
     delete-submodule:'delete submodule' \
     delete-tag:'delete local and remote tag' \
     effort:'display effort statistics' \
