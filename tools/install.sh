@@ -61,11 +61,14 @@ main() {
       exit 1
     fi
   fi
-  env git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git $ZSH || {
+  env git clone --depth=1 $(git remote get-url origin) $ZSH || {
     printf "Error: git clone of oh-my-zsh repo failed\n"
     exit 1
   }
-
+  (cd $ZSH && env git submodule init && env git submodule update) || {
+    printf "Error: failed to init and update submodules\n"
+    exit 1
+  }
 
   printf "${BLUE}Looking for an existing zsh config...${NORMAL}\n"
   if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]; then
