@@ -38,7 +38,7 @@ DISABLE_VENV_CD="true"
 plugins=(git2 python repo intel-repo cp buildbot rsync git-extras git-remote-branch\
          command-not-found debian dircycle encode64 lol extract launch_trial \
          vim-scp ufw sublime pylint pep8 autopep8 \
-         common-aliases buildbot_dev zsh-syntax-highlighting \
+         common-aliases work-aliases zsh-syntax-highlighting \
          tmux txw jump grin pip colored-man docker yocto tig \
          docker-rswl )
 

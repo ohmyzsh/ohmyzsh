@@ -1,10 +1,7 @@
-BUILDBOT_PROJECT_PATH="$HOME/projects/buildbot/"
+BUILDBOT_PROJECT_PATH="$HOME/Projects/buildbot/"
 
 alias cdb='cd $BUILDBOT_PROJECT_PATH/main'
 alias cdp='cd $BUILDBOT_PROJECT_PATH'
-alias cdd='cd $HOME/projects/dev-tools'
-alias cdg='cd $HOME/projects/dev-tools/guake'
-alias cdg3='cd $HOME/projects/dev-tools/guake-gtk3'
 
 alias c='cactus'
 alias ci='cactus info'
@@ -54,24 +51,6 @@ alias cKcrcl='cactus kill ; cactus restart ; cactus log'
 alias cKcss='cactus kill ; cactus slaves restart'
 alias cKcssci='cactus kill ; cactus slaves restart ; cactus info'
 
-alias m='make'
-alias s='subl'
-alias a='atom'
-
-alias sagiy='sudo apt-get install -y'
-alias saguysaguy='sudo apt-get update -y ; sudo apt-get upgrade -y'
-alias saguysaguysagay='sudo apt-get update -y ; sudo apt-get upgrade -y && sudo apt-get autoremove -y'
-alias update-my-ubuntu='saguysaguysagay'
-alias update-to-next-version='do-release-upgrade'
-
-alias bing='notify-send "Stacked work finished" "Work being done in your favorite terminal is now finished. You can come back !!" -i /usr/share/pixmaps/apple-red.png -t 6000'
-alias b='bing'
-
-alias grinpy="grin -I '*.py'"
-alias grinyaml="grin -I '*.yaml'"
-alias grinsh="grin -I '*.sh'"
-alias grinlog="grin -I '*.log'"
-
 alias ssh_bbnext_sh='ssh sys_bbstage@buildbot-next.sh.intel.com'
 
 function bb_env()
@@ -100,8 +79,6 @@ function bb_envrestore()
     # export PATH=$__PATHBKP
     # export PS1=$__PS1BKP
 }
-
-alias autopep8_cur_directory='autopep8 --ignore=E501 -i **/*.py'
 
 function bb_repo_upload()
 {

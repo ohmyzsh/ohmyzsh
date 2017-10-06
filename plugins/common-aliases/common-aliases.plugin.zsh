@@ -75,7 +75,25 @@ alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
 
+alias m='make'
+alias s='subl'
+alias a='atom'
+
 alias saguagu="sudo apt-get update && sudo apt-get upgrade"
+alias sagiy='sudo apt-get install -y'
+alias saguysaguy='sudo apt-get update -y ; sudo apt-get upgrade -y'
+alias saguysaguysagay='sudo apt-get update -y ; sudo apt-get upgrade -y && sudo apt-get autoremove -y'
+alias update-my-ubuntu='saguysaguysagay'
+alias update-to-next-version='do-release-upgrade'
+
+alias bing='notify-send "Stacked work finished" "Work being done in your favorite terminal is now finished. You can come back !!" -i /usr/share/pixmaps/apple-red.png -t 6000'
+alias b='bing'
+
+alias grinpy="grin -I '*.py'"
+alias grinyaml="grin -I '*.yaml'"
+alias grinsh="grin -I '*.sh'"
+alias grinlog="grin -I '*.log'"
+
 
 # Use Git’s colored diff when available
 hash git &>/dev/null
