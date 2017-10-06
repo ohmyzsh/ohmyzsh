@@ -1,0 +1,1 @@
+alias docker-build="docker build --build-arg http_proxy=http://localhost:911 --build-arg https_proxy=http://localhost:911 --build-arg ftp_proxy=http://localhost:911 --build-arg no_proxy=localhost,127.0.0.1,10.0.0.0/8,.tls.renault.fr,tls.renault.fr,10.214.201.215,10.214.201.218  -q=false"
