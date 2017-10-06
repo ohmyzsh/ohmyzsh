@@ -68,7 +68,7 @@ main() {
     exit 1
   fi
   
-  env git clone --depth=1 $(git remote get-url origin) -b "$branch" $ZSH || {
+  env git clone --depth=1 $(git config --get remote.origin.url) -b "$branch" $ZSH || {
     printf "Error: git clone of oh-my-zsh repo failed\n"
     exit 1
   }
