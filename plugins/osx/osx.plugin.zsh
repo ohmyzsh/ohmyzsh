@@ -355,6 +355,8 @@ function spotify() {
           len=${#array[@]};
           SPOTIFY_SEARCH_API="https://api.spotify.com/v1/search"
           SPOTIFY_PLAY_URI="";
+          SPOTIFY_CALL_TOKEN=$(python2 -c "import base64; print base64.standard_b64encode('$SPOTIFY_CLIENT_ID:$SPOTIFY_CLIENT_SECRET')")
+          SPOTIFY_OAUTH_TOKEN=$(curl -s -X "POST" -H "Authorization: Basic $SPOTIFY_CALL_TOKEN" -d grant_type=client_credentials https://accounts.spotify.com/api/token | python2 -c "import sys, json; print json.load(sys.stdin)['access_token']")
           SPOTIFY_AUTH="Authorization: Bearer $SPOTIFY_OAUTH_TOKEN"
 
           searchAndPlay() {

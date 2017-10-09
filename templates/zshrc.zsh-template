@@ -57,6 +57,11 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
+# Uncomment the following lines if you want to enable spotify search.
+# Spotify data can be found creating an app in https://developer.spotify.com/my-applications
+# SPOTIFY_CLIENT_ID=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+# SPOTIFY_CLIENT_SECRET=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
