@@ -21,11 +21,11 @@
 # Sep-Oct 2017 Pandu POLUAN <pepoluan@gmail.com>
 
 # VCS
-YS_VCS_PROMPT_PREFIX1=" %{$fg[white]%}on%{$reset_color%} "
-YS_VCS_PROMPT_PREFIX2=":%{$fg[cyan]%}"
+YS_VCS_PROMPT_PREFIX1=" %F{white}on%{$reset_color%} "
+YS_VCS_PROMPT_PREFIX2=":%F{cyan}"
 YS_VCS_PROMPT_SUFFIX="%{$reset_color%}"
-YS_VCS_PROMPT_DIRTY=" %{$fg[red]%}x"
-YS_VCS_PROMPT_CLEAN=" %{$fg[green]%}o"
+YS_VCS_PROMPT_DIRTY=" %F{red}x"
+YS_VCS_PROMPT_CLEAN=" %F{green}o"
 
 # Git info
 local git_info='$(git_prompt_info)'
@@ -50,30 +50,30 @@ ys_hg_prompt_info() {
 	fi
 }
 
-local exit_code="%(?,,C:%{$fg[red]%}%?%{$reset_color%} )"
+local exit_code="%(?,,C:%F{red}%?%{$reset_color%} )"
 
 ### BEGIN: pepoluan changes ###
-local dgrey="$terminfo[bold]$fg[black]"
+local dgrey="%B%F{black}"
 
 # Show my IP Address
 ZSH_THEME_SHOW_IP=1
 yspep_my_ip() {
   [[ $ZSH_THEME_SHOW_IP != 1 ]] && return
-  echo -n "%{$dgrey%}[%{$fg[green]%}"
+  echo -n "${dgrey}[%F{green}"
   local i
   if [[ ${(L)_system_name} == cygwin ]]; then
     echo -n $(ipconfig | awk '$1 ~ /IP/ && $2 ~ /[Aa]ddress/ {sub(/.*:/, "", $0); gsub(/[ \t\r]/, "", $0); print $0}')
   else
     echo -n $(ip -o addr show | awk -v atype=${1:-inet} '$2 != "lo" && $3 == atype {gsub(/\/[0-9]+/, "", $4); print $4}')
   fi
-  echo "%{$dgrey%}]"
+  echo "${dgrey}]"
 }
 local ip_info='$(yspep_my_ip)'
 
 # Show Virtualenv
 ZSH_THEME_VIRTUALENV_PREFIX=" V:"
 ZSH_THEME_VIRTUALENV_SUFFIX=" "
-local venv_info="%{$terminfo[bold]$fg[blue]\$(virtualenv_prompt_info)$reset_color%}"
+local venv_info="%B%F{blue}\$(virtualenv_prompt_info)%{$reset_color%}"
 
 # Other info, you can override this function in .zshrc
 yspep_other_info() {
@@ -92,14 +92,14 @@ local other_info='$(yspep_other_info)'
 # % ys @ ys-mbp in ~/.oh-my-zsh on git:master x [21:47:42] C:0
 # $
 PROMPT="
-%{$dgrey%}[%*]%{$reset_color%} \
-%(#,%{$bg[yellow]%}%{$fg[black]%}%n%{$reset_color%},%{$fg[cyan]%}%n)\
-%{$fg[white]%}@%{$fg[green]%}%m$ip_info%{$dgrey%}:%{$reset_color%}\
-%{$terminfo[bold]$fg[yellow]%}%~%{$reset_color%}\
+${dgrey}[%*]%{$reset_color%} \
+%(#,%K{yellow}%F{black}%n%{$reset_color%},%F{cyan}%n)\
+%F{white}@%F{green}%m$ip_info$dgrey:%{$reset_color%}\
+%B%F{yellow}%~%{$reset_color%}\
 ${hg_info}\
 ${git_info}\
  $exit_code$venv_info$other_info
-%{$terminfo[bold]$fg[red]%}$ %{$reset_color%}"
+%B%F{red}%# %{$reset_color%}"
 
 unset RPROMPT
 
