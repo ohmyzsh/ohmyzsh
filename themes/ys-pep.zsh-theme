@@ -55,9 +55,6 @@ local exit_code="%(?,,C:%{$fg[red]%}%?%{$reset_color%} )"
 ### BEGIN: pepoluan changes ###
 local dgrey="$terminfo[bold]$fg[black]"
 
-# Local need: Show the GCE_PROJECT var
-local gce_env="%{\${GCE_PROJECT:+$fg[yellow] GCE:}\$GCE_PROJECT$reset_color%}"
-
 # Show my IP Address
 ZSH_THEME_SHOW_IP=1
 yspep_my_ip() {
@@ -78,6 +75,13 @@ ZSH_THEME_VIRTUALENV_PREFIX=" V:"
 ZSH_THEME_VIRTUALENV_SUFFIX=" "
 local venv_info="%{$terminfo[bold]$fg[blue]\$(virtualenv_prompt_info)$reset_color%}"
 
+# Other info, you can override this function in .zshrc
+yspep_other_info() {
+  # Example: Show the GCE_PROJECT variable in yellow:
+  : echo "%{\${GCE_PROJECT:+$fg[yellow] GCE:}\$GCE_PROJECT%}"
+}
+local other_info='$(yspep_other_info)'
+
 # Prompt format:
 #
 # PRIVILEGES USER @ MACHINE in DIRECTORY on git:BRANCH STATE [TIME] C:LAST_EXIT_CODE V:VIRTUALENV
@@ -94,7 +98,7 @@ PROMPT="
 %{$terminfo[bold]$fg[yellow]%}%~%{$reset_color%}\
 ${hg_info}\
 ${git_info}\
- $exit_code$gce_env$venv_info
+ $exit_code$venv_info$other_info
 %{$terminfo[bold]$fg[red]%}$ %{$reset_color%}"
 
 unset RPROMPT
