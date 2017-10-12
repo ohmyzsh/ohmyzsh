@@ -91,3 +91,5 @@ ${git_info}\
 
 unset RPROMPT
 
+# vim: set ai ts=2 sts=2 et :
+#
