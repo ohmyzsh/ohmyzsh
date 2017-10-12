@@ -59,8 +59,17 @@ local dgrey="$terminfo[bold]$fg[black]"
 local gce_env="%{\${GCE_PROJECT:+$fg[yellow] GCE:}\$GCE_PROJECT$reset_color%}"
 
 # Show my IP Address
+ZSH_THEME_SHOW_IP=1
 yspep_my_ip() {
-  echo $(ip -o addr show | awk -v atype=${1:-inet} '$2 != "lo" && $3 == atype {gsub(/\/[0-9]+/, "", $4); print $4}')
+  [[ $ZSH_THEME_SHOW_IP != 1 ]] && return
+  echo -n "%{$dgrey%}[%{$fg[green]%}"
+  local i
+  if [[ ${(L)_system_name} == cygwin ]]; then
+    echo -n $(ipconfig | awk '$1 ~ /IP/ && $2 ~ /[Aa]ddress/ {sub(/.*:/, "", $0); gsub(/[ \t\r]/, "", $0); print $0}')
+  else
+    echo -n $(ip -o addr show | awk -v atype=${1:-inet} '$2 != "lo" && $3 == atype {gsub(/\/[0-9]+/, "", $4); print $4}')
+  fi
+  echo "%{$dgrey%}]"
 }
 local ip_info='$(yspep_my_ip)'
 
@@ -81,8 +90,7 @@ local venv_info="%{$terminfo[bold]$fg[blue]\$(virtualenv_prompt_info)$reset_colo
 PROMPT="
 %{$dgrey%}[%*]%{$reset_color%} \
 %(#,%{$bg[yellow]%}%{$fg[black]%}%n%{$reset_color%},%{$fg[cyan]%}%n)\
-%{$fg[white]%}@%{$fg[green]%}%m\
-%{$dgrey%}[%{$fg[green]%}$ip_info%{$dgrey%}]::%{$reset_color%}\
+%{$fg[white]%}@%{$fg[green]%}%m$ip_info%{$dgrey%}:%{$reset_color%}\
 %{$terminfo[bold]$fg[yellow]%}%~%{$reset_color%}\
 ${hg_info}\
 ${git_info}\
