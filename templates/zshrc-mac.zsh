@@ -36,7 +36,8 @@ plugins=(git2 python repo cp buildbot rsync git-extras git-remote-branch\
          command-not-found debian dircycle encode64 lol extract launch_trial \
          vim-scp ufw sublime pylint pep8 autopep8 \
          common-aliases work-aliases zsh-syntax-highlighting \
-         txw jump grin pip colored-man osx tig brew)
+         txw jump grin pip colored-man osx tig brew \
+         subliminal)
 
 source $ZSH/oh-my-zsh.sh
 # User configuration
