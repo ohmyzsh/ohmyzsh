@@ -169,6 +169,8 @@ alias gb='git branch'
 compdef _git gb=git-branch
 alias gba='git branch -a'
 compdef _git gba=git-branch
+alias gbsutom='git branch --set-upstream-to=origin/master'
+alias git-track-upstream-master='gbsutom'
 
 ##############
 # Git Log (gl)
@@ -362,5 +364,3 @@ alias gignored='git ls-files -v | grep "^[[:lower:]]"'
 # Tig aliases
 alias tg='tig --all'
 alias tiga='tig --all'
-
-
