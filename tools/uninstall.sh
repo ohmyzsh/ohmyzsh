@@ -21,6 +21,12 @@ if [ -f ~/.zshrc.pre-oh-my-zsh ] || [ -h ~/.zshrc.pre-oh-my-zsh ]; then
 
   mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc;
 
+  if [ -f ~/.default-shell.pre-oh-my-zsh ] && hash chsh >/dev/null 2>&1; then
+    previous=$(cat ~/.default-shell.pre-oh-my-zsh)
+    echo "Switching your shell back to $previous"
+    chsh -s $previous
+  fi
+
   echo "Your original zsh config was restored. Please restart your session."
 else
   if hash chsh >/dev/null 2>&1; then
