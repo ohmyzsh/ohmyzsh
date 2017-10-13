@@ -22,14 +22,23 @@ if [ -e "$ZSHRC_ORIG" ]; then
 
   mv "$ZSHRC_ORIG" ~/.zshrc
 
-  echo "Your original zsh config was restored. Please restart your session."
-else
-  if hash chsh >/dev/null 2>&1; then
-    echo "Switching back to bash"
-    chsh -s /bin/bash
+  echo "Your original zsh config was restored."
+fi
+
+if hash chsh >/dev/null 2>&1; then
+  if [ -f ~/.shell.pre-oh-my-zsh ]; then
+    old_shell=$(cat ~/.shell.pre-oh-my-zsh)
   else
-    echo "You can edit /etc/passwd to switch your default shell back to bash"
+	old_shell=/bin/bash
+  fi
+  echo "Switching your shell back to '$old_shell':"
+  if chsh -s "$old_shell"; then
+    rm -f ~/.shell.pre-oh-my-zsh
+  else
+    echo "Could not change default shell. Change it manually by running chsh"
+	echo "or editing the /etc/passwd file."
   fi
 fi
 
 echo "Thanks for trying out Oh My Zsh. It's been uninstalled."
+echo "Don't forget to restart your terminal!"

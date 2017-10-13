@@ -184,6 +184,13 @@ setup_shell() {
 		fi
 	fi
 
+	# We're going to change the default shell, so back up the current one
+	if [ -n $SHELL ]; then
+		echo $SHELL > ~/.shell.pre-oh-my-zsh
+	else
+		grep "^$USER:" /etc/passwd | awk -F: '{print $7}' > ~/.shell.pre-oh-my-zsh
+	fi
+
 	# Actually change the default shell to zsh
 	if ! chsh -s "$zsh"; then
 		error "chsh command unsuccessful. Change your default shell manually."
