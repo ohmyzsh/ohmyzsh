@@ -156,7 +156,7 @@ alias ggsup='git branch --set-upstream-to=origin/$(git_current_branch)'
 alias gpsup='git push --set-upstream origin $(git_current_branch)'
 
 alias ghh='git help'
-alias ghidden='git ls-files -v . | grep ^S'
+alias ghidden='git ls-files -v . | grep ^S | awk '\''{ print $2 }'\'''
 alias ghide='git update-index --skip-worktree'
 
 alias gignore='git update-index --assume-unchanged'
@@ -234,6 +234,7 @@ alias gts='git tag -s'
 alias gtv='git tag | sort -V'
 
 alias gunhide='git update-index --no-skip-worktree'
+alias gunhidea='cd $(git rev-parse --show-toplevel || echo ".") && ghidden | xargs gunhide'
 alias gunignore='git update-index --no-assume-unchanged'
 alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
 alias gup='git pull --rebase'
