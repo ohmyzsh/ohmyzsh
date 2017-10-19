@@ -234,7 +234,7 @@ alias gts='git tag -s'
 alias gtv='git tag | sort -V'
 
 alias gunhide='git update-index --no-skip-worktree'
-alias gunhidea='cd $(git rev-parse --show-toplevel || echo ".") && ghidden | xargs gunhide'
+alias gunhidea='cd $(git rev-parse --show-toplevel || echo ".") && ghidden | while read -r i; do gunhide "$i"; done'
 alias gunignore='git update-index --no-assume-unchanged'
 alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
 alias gup='git pull --rebase'
