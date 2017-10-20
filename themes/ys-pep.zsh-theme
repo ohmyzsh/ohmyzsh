@@ -59,21 +59,20 @@ local dgrey="%B%F{black}"
 ZSH_THEME_SHOW_IP=1
 yspep_my_ip() {
   [[ $ZSH_THEME_SHOW_IP != 1 ]] && return
-  echo -n "${dgrey}[%F{green}"
-  local i
+  echo -n "${dgrey}[%b%F{green}"
   if [[ ${(L)_system_name} == cygwin ]]; then
     echo -n $(ipconfig | awk '$1 ~ /IP/ && $2 ~ /[Aa]ddress/ {sub(/.*:/, "", $0); gsub(/[ \t\r]/, "", $0); print $0}')
   else
     echo -n $(ip -o addr show | awk -v atype=${1:-inet} '$2 != "lo" && $3 == atype {gsub(/\/[0-9]+/, "", $4); print $4}')
   fi
-  echo "${dgrey}]"
+  echo "${dgrey}]%b"
 }
 local ip_info='$(yspep_my_ip)'
 
 # Show Virtualenv
 ZSH_THEME_VIRTUALENV_PREFIX=" V:"
 ZSH_THEME_VIRTUALENV_SUFFIX=" "
-local venv_info="%B%F{blue}\$(virtualenv_prompt_info)%{$reset_color%}"
+local venv_info="%B%F{blue}\$(virtualenv_prompt_info)%b"
 
 # Other info, you can override this function in .zshrc
 yspep_other_info() {
@@ -92,14 +91,14 @@ local other_info='$(yspep_other_info)'
 # % ys @ ys-mbp in ~/.oh-my-zsh on git:master x [21:47:42] C:0
 # $
 PROMPT="
-${dgrey}[%*]%{$reset_color%} \
-%(#,%K{yellow}%F{black}%n%{$reset_color%},%F{cyan}%n)\
-%F{white}@%F{green}%m$ip_info$dgrey:%{$reset_color%}\
-%B%F{yellow}%~%{$reset_color%}\
+${dgrey}[%*]%b \
+%(#,%K{yellow}%F{black}%n%k,%F{cyan}%n)\
+%F{white}@%F{green}%m$ip_info$dgrey:%b\
+%B%F{yellow}%~%b\
 ${hg_info}\
 ${git_info}\
  $exit_code$venv_info$other_info
-%{%B%F{red}%}%#%{%b%f$reset_color%} "
+%B%F{red}%#%b%f "
 
 unset RPROMPT
 
