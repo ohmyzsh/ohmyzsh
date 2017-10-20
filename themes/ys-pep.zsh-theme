@@ -99,7 +99,7 @@ ${dgrey}[%*]%{$reset_color%} \
 ${hg_info}\
 ${git_info}\
  $exit_code$venv_info$other_info
-%B%F{red}%# %{$reset_color%}"
+%{%B%F{red}%}%#%{%b%f$reset_color%} "
 
 unset RPROMPT
 
