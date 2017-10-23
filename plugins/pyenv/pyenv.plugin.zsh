@@ -33,3 +33,5 @@ unset pyenvdir
 if [ $FOUND_PYENV -eq 0 ] ; then
     function pyenv_prompt_info() { echo "system: $(python -V 2>&1 | cut -f 2 -d ' ')" }
 fi
+
+alias brew="env PATH=${PATH//$(pyenv root)\/shims:/} brew"
