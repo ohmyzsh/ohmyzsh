@@ -44,6 +44,7 @@ alias app='apt-cache policy'
 if [[ $use_sudo -eq 1 ]]; then
 # commands using sudo #######
     alias aac='sudo $apt_pref autoclean'
+    alias aar='sudo apt-get --purge autoremove' #this command is only with apt-get
     alias abd='sudo $apt_pref build-dep'
     alias ac='sudo $apt_pref clean'
     alias ad='sudo $apt_pref update'
@@ -75,6 +76,7 @@ if [[ $use_sudo -eq 1 ]]; then
 # commands using su #########
 else
     alias aac='su -ls \'$apt_pref autoclean\' root'
+    alias aar='su -lc "apt-get --purge autoremove" root' #this command is only with apt-get
     abd() {
         cmd="su -lc '$apt_pref build-dep $@' root"
         print "$cmd"
