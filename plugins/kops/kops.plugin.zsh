@@ -1,4 +1,4 @@
-# Autocompletion for kubectl, the command line interface for Kubernetes
+# Autocompletion for kops, the command line interface for creating/managing Kubernetes clusters
 #
 # Author: https://github.com/whithajess
 
