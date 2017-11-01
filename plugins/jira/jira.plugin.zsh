@@ -2,13 +2,19 @@
 #
 # See README.md for details
 
-: ${JIRA_DEFAULT_ACTION:=new}
-
 function jira() {
   emulate -L zsh
-  local action=${1:=$JIRA_DEFAULT_ACTION}
+  local action jira_url jira_prefix
+  if [[ -f .jira-default-action ]]; then
+    action=$(cat .jira-default-action)
+  elif [[ -f ~/.jira-default-action ]]; then
+    action=$(cat ~/.jira-default-action)
+  elif [[ -n "${JIRA_DEFAULT_ACTION}" ]]; then
+    action=${JIRA_DEFAULT_ACTION}
+  else
+    action="new"
+  fi
 
-  local jira_url jira_prefix
   if [[ -f .jira-url ]]; then
     jira_url=$(cat .jira-url)
   elif [[ -f ~/.jira-url ]]; then
