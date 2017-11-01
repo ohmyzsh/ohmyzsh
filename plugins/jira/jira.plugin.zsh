@@ -2,13 +2,19 @@
 #
 # See README.md for details
 
-: ${JIRA_DEFAULT_ACTION:=new}
-
 function jira() {
   emulate -L zsh
-  local action=${1:=$JIRA_DEFAULT_ACTION}
+  local action jira_url jira_prefix
+  if [[ -f .jira-default-action ]]; then
+    action=$(cat .jira-default-action)
+  elif [[ -f ~/.jira-default-action ]]; then
+    action=$(cat ~/.jira-default-action)
+  elif [[ -n "${JIRA_DEFAULT_ACTION}" ]]; then
+    action=${JIRA_DEFAULT_ACTION}
+  else
+    action="new"
+  fi
 
-  local jira_url jira_prefix
   if [[ -f .jira-url ]]; then
     jira_url=$(cat .jira-url)
   elif [[ -f ~/.jira-url ]]; then
@@ -51,8 +57,14 @@ function jira() {
     echo "JIRA_DEFAULT_ACTION=$JIRA_DEFAULT_ACTION"
   else
     # Anything that doesn't match a special action is considered an issue name
-    local issue_arg=$action
-    local issue="${jira_prefix}${issue_arg}"
+    # but `branch` is a special case that will parse the current git branch
+    if [[ "$action" == "br" ]]; then
+      local issue_arg=$(git rev-parse --abbrev-ref HEAD)
+      local issue="${jira_prefix}${issue_arg}"
+    else
+      local issue_arg=$action
+      local issue="${jira_prefix}${issue_arg}"
+    fi
     local url_fragment=''
     if [[ "$2" == "m" ]]; then
       url_fragment="#add-comment"

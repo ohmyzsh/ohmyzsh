@@ -16,6 +16,19 @@ function _wd() {
 
   warp_points=( "${(f)mapfile[$CONFIG]//$HOME/~}" )
 
+  typeset -A points
+  while read -r line
+  do
+    arr=(${(s,:,)line})
+    name=${arr[1]}
+    path=${arr[2]}
+
+    # replace ~ from path to fix completion (#17)
+    path=${path/#\~/$HOME}
+
+    points[$name]=$path
+  done < $CONFIG
+
   commands=(
     'add:Adds the current working directory to your warp points'
     'add!:Overwrites existing warp point'
@@ -34,13 +47,15 @@ function _wd() {
     '1: :->first_arg' \
     '2: :->second_arg' && ret=0
 
+  local target=$words[2]
+
   case $state in
     first_arg)
       _describe -t warp_points "Warp points" warp_points && ret=0
       _describe -t commands "Commands" commands && ret=0
       ;;
     second_arg)
-      case $words[2] in
+      case $target in
         add\!|rm)
           _describe -t points "Warp points" warp_points && ret=0
           ;;
@@ -55,6 +70,10 @@ function _wd() {
           ;;
         path)
           _describe -t points "Warp points" warp_points && ret=0
+          ;;
+        *)
+          # complete sub directories from the warp point
+          _path_files -W "(${points[$target]})" -/ && ret=0
           ;;
       esac
       ;;
