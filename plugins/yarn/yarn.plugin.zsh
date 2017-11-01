@@ -1,4 +1,7 @@
 alias yi="yarn install"
+alias ycc="yarn cache clean"
+alias ygu="yarn global upgrade"
+alias yuc="ygu && ycc"
 
 _yarn ()
 {
