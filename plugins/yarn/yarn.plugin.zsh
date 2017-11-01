@@ -1,4 +1,9 @@
 alias yi="yarn install"
+alias yg="yarn upgrade"
+alias ya="yarn add"
+alias yad="yarn add -D"
+alias yap="yarn add -P"
+alias ym="yarn remove"
 
 _yarn ()
 {
