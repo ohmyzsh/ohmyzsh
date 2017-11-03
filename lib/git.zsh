@@ -20,7 +20,7 @@ function parse_git_dirty() {
     if [[ "$DISABLE_UNTRACKED_FILES_DIRTY" == "true" ]]; then
       FLAGS+='--untracked-files=no'
     fi
-    STATUS=$(command git status ${FLAGS} 2> /dev/null | tail -n1)
+    STATUS=$(command git status ${FLAGS} 2> /dev/null | tail -1)
   fi
   if [[ -n $STATUS ]]; then
     echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
