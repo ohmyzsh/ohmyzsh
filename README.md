@@ -100,7 +100,7 @@ ZSH_THEME="random" # (...please let it be pie... please be some pie..)
 And if you want to pick random theme from a list of your favorite themes:
 
 ```shell
-ZSH_THEM_RANDOM_CANDIDATES=(
+ZSH_THEME_RANDOM_CANDIDATES=(
   "robbyrussell"
   "agnoster"
 )
