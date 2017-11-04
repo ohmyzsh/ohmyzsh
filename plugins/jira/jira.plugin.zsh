@@ -5,7 +5,9 @@
 function jira() {
   emulate -L zsh
   local action jira_url jira_prefix
-  if [[ -f .jira-default-action ]]; then
+  if [[ -n "$1" ]]; then
+    action=$1
+  elif [[ -f .jira-default-action ]]; then
     action=$(cat .jira-default-action)
   elif [[ -f ~/.jira-default-action ]]; then
     action=$(cat ~/.jira-default-action)
