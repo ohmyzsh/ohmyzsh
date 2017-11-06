@@ -5,3 +5,7 @@
 if [ $commands[kubectl] ]; then
   source <(kubectl completion zsh)
 fi
+
+if [ $commands[kops] ]; then
+  source <(kops completion zsh)
+fi
