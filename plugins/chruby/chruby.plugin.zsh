@@ -8,7 +8,7 @@
 #
 #    zstyle :omz:plugins:chruby path /local/path/to/chruby.sh
 #    zstyle :omz:plugins:chruby auto /local/path/to/auto.sh
-# 
+#
 # TODO
 #  - autodetermine correct source path on non OS X systems
 #  - completion if ruby-install exists
@@ -18,10 +18,6 @@ alias rubies='chruby'
 
 _homebrew-installed() {
     whence brew &> /dev/null
-}
-
-_chruby-from-homebrew-installed() {
-  [ -r $(brew --prefix chruby) ] &> /dev/null
 }
 
 _ruby-build_installed() {
@@ -34,57 +30,51 @@ _ruby-install-installed() {
 
 # Simple definition completer for ruby-build
 if _ruby-build_installed; then
-    _ruby-build() { compadd $(ruby-build --definitions) }
+    _ruby-build() {
+        compadd $(ruby-build --definitions)
+    }
     compdef _ruby-build ruby-build
 fi
 
-_source_from_omz_settings() {
-    local _chruby_path
-    local _chruby_auto
-    
-    zstyle -s :omz:plugins:chruby path _chruby_path
-    zstyle -s :omz:plugins:chruby auto _chruby_auto
+function () {
+    local _path
+    local _auto
+    local _prefix="/usr/local/share/chruby"
 
-    if [[ -r ${_chruby_path} ]]; then
-        source ${_chruby_path}
-    fi
+    # Honor explicit user preference
+    zstyle -s :omz:plugins:chruby path _path
+    zstyle -s :omz:plugins:chruby auto _auto
 
-    if [[ -r ${_chruby_auto} ]]; then
-        source ${_chruby_auto}
-    fi
-}
+    # Default to /usr/local/share/chruby if either is not defined
+    [[ -r "$_path" ]] || _path="${_prefix}/chruby.sh"
+    [[ -r "$_auto" ]] || _auto="${_prefix}/auto.sh"
 
-_chruby_dirs() {
-    chrubydirs=($HOME/.rubies/ $PREFIX/opt/rubies)
-    for dir in chrubydirs; do
-        if [[ -d $dir ]]; then
-            RUBIES+=$dir
+    # Fall back on homebrew
+    if [[ ! ( -r "$_path" && -r "$_auto" ) ]]; then
+        if _homebrew-installed; then
+            _prefix="$(brew --prefix chruby 2> /dev/null)/share/chruby"
+            [[ -r "$_path" ]] || _path="${_prefix}/chruby.sh"
+            [[ -r "$_auto" ]] || _auto="${_prefix}/auto.sh"
         fi
-    done
-}
+    fi
 
-if _homebrew-installed && _chruby-from-homebrew-installed ; then
-    source $(brew --prefix chruby)/share/chruby/chruby.sh
-    source $(brew --prefix chruby)/share/chruby/auto.sh
-    _chruby_dirs
-elif [[ -r "/usr/local/share/chruby/chruby.sh" ]] ; then
-    source /usr/local/share/chruby/chruby.sh
-    source /usr/local/share/chruby/auto.sh
-    _chruby_dirs
-else
-    _source_from_omz_settings
-    _chruby_dirs
-fi
+    if [[ -r "$_path" ]]; then
+        source "$_path"
+    fi
+
+    if [[ -r "$_auto" ]]; then
+        source "$_auto"
+    fi
+}
 
 function ensure_chruby() {
     $(whence chruby)
 }
 
 function current_ruby() {
-    local _ruby
-    _ruby="$(chruby |grep \* |tr -d '* ')"
-    if [[ $(chruby |grep -c \*) -eq 1 ]]; then
-        echo ${_ruby}
+    local _ruby="$(chruby | grep \* | tr -d '* ')"
+    if [[ -n "$_ruby" ]]; then
+        echo "$_ruby"
     else
         echo "system"
     fi
