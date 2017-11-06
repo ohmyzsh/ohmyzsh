@@ -26,8 +26,8 @@ if ! gpg-connect-agent --quiet /bye > /dev/null 2> /dev/null; then
 
     # check again if another agent is running using the newly sourced settings
     if ! gpg-connect-agent --quiet /bye > /dev/null 2> /dev/null; then
-        # check for existing ssh-agent
-        if ssh-add -l > /dev/null 2> /dev/null; then
+        # check for existing ssh-agent 
+        if [[ $(kill -0 $SSH_AGENT_PID) != '0' ]]; then
             # ssh-agent running, start gpg-agent without ssh support
             start_agent_nossh;
         else
