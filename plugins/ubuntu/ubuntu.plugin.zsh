@@ -2,6 +2,7 @@
 # https://github.com/AlexBio
 # https://github.com/dbb
 # https://github.com/Mappleconfusers
+# https://github.com/trinaldi
 # Nicolas Jonas nextgenthemes.com
 # https://github.com/loctauxphilippe
 #
@@ -36,7 +37,7 @@ alias agi='sudo apt-get install'  # ai
 alias agp='sudo apt-get purge'    # ap
 alias agr='sudo apt-get remove'   # ar
 alias agu='sudo apt-get update'   # ad
-alias agud='sudo apt-get update && sudo apt-get dist-upgrade' #adu
+alias agud='sudo apt-get update && sudo apt-get full-upgrade' #adu
 alias agug='sudo apt-get upgrade' # ag
 alias aguu='sudo apt-get update && sudo apt-get upgrade'      #adg
 alias agar='sudo apt-get autoremove'
@@ -50,7 +51,7 @@ compdef _agi agi='sudo apt-get install'
 compdef _agp agp='sudo apt-get purge'
 compdef _agr agr='sudo apt-get remove'
 compdef _agu agu='sudo apt-get update'
-compdef _agud agud='sudo apt-get update && sudo apt-get dist-upgrade'
+compdef _agud agud='sudo apt-get update && sudo apt-get full-upgrade'
 compdef _agug agug='sudo apt-get upgrade'
 compdef _aguu aguu='sudo apt-get update && sudo apt-get upgrade'
 compdef _agar agar='sudo apt-get autoremove'
