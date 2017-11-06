@@ -59,6 +59,8 @@ compdef _git gPgPum=git-push
 # git push dry run
 alias gPd='git push --dry-run'
 compdef _git gPd=git-push
+# git push --tags
+alias gPt='git push --tags'
 # git push force
 alias gPf='git push --force'
 compdef _git gPf=git-push
@@ -283,7 +285,7 @@ compdef _git gke='gitk'
 
 # Clean
 # Remove all .orig, .BASE.*, .REMOTE.*, .LOCAL.*, *.BACKUP files
-alias gclean='find $(git rev-parse --show-toplevel) -name "*.orig" -or -name "*.REMOTE.*" -or -name "*.LOCAL.*" -or -name "*.BACKUP.*" -or -name "*.BASE.*" | xargs -r rm -v'
+alias gclean='find $(git rev-parse --show-toplevel) -name "*.orig" -or -name "*_REMOTE_*" -or -name "*_LOCAL_*" -or -name "*_BACKUP_*" -or -name "*_BASE_*" | xargs -r rm -v'
 alias gcleanreset='(cd $(git rev-parse --show-toplevel) && git reset --hard && git clean -dfx)'
 
 # Edit global Git configuration files
