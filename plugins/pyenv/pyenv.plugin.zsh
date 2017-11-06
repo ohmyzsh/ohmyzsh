@@ -2,14 +2,11 @@ _homebrew-installed() {
     type brew &> /dev/null
 }
 
-_pyenv-from-homebrew-installed() {
-    brew --prefix pyenv &> /dev/null
-}
-
 FOUND_PYENV=0
-pyenvdirs=("$HOME/.pyenv" "/usr/local/pyenv" "/opt/pyenv")
-if _homebrew-installed && _pyenv-from-homebrew-installed ; then
-    pyenvdirs=($(brew --prefix pyenv) "${pyenvdirs[@]}")
+pyenvdirs=("$HOME/.pyenv" "/usr/local/pyenv" "/opt/pyenv" "/usr/local/opt/pyenv")
+if _homebrew-installed && pyenv_homebrew_path=$(brew --prefix pyenv 2>/dev/null); then
+    pyenvdirs=($pyenv_homebrew_path "${pyenvdirs[@]}")
+    unset pyenv_homebrew_path
 fi
 
 for pyenvdir in "${pyenvdirs[@]}" ; do
@@ -17,7 +14,7 @@ for pyenvdir in "${pyenvdirs[@]}" ; do
         FOUND_PYENV=1
         export PYENV_ROOT=$pyenvdir
         export PATH=${pyenvdir}/bin:$PATH
-        eval "$(pyenv init - zsh)"
+        eval "$(pyenv init --no-rehash - zsh)"
 
         if pyenv commands | command grep -q virtualenv-init; then
             eval "$(pyenv virtualenv-init - zsh)"
