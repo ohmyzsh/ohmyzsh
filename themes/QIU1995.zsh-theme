@@ -20,7 +20,15 @@ precmd(){
     Q_PROMPT=${Q_PROMPT}${Q_FRAME_END}' ';
     Q_PROMPT=${Q_PROMPT}${Q_ERRNO_STR};
     echo $Q_PROMPT;
-    PROMPT="%(?:%{$fg_bold[grey]%}:%{$fg_bold[red]%})"$(printf "[0x%02X|%03d]" $Q_ERRNO $Q_ERRNO)"%{$fg_bold[cyan]%}➜ %{$reset_color%}";
+    PROMPT='';
+    PROMPT=${PROMPT}"%{$fg_bold[magenta]%}[";
+    PROMPT=${PROMPT}"%(?:%{$fg_bold[grey]%}:%{$fg_bold[red]%})";
+    PROMPT=${PROMPT}$(printf "0x%02X" $Q_ERRNO)
+    PROMPT=${PROMPT}"%{$fg_bold[magenta]%}|";
+    PROMPT=${PROMPT}"%(?:%{$fg_bold[grey]%}:%{$fg_bold[red]%})";
+    PROMPT=${PROMPT}$(printf "%04d" $Q_ERRNO);
+    PROMPT=${PROMPT}"%{$fg_bold[magenta]%}]";
+    PROMPT=${PROMPT}"%{$fg_bold[cyan]%}➜ %{$reset_color%}";
     RPROMPT="%{$fg[green]%}$(date +'%Y/%m/%d %H:%M:%S')%{$reset_color%}";
 }
 
