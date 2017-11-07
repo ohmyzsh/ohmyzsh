@@ -9,3 +9,13 @@ Plugin for Terraform, a tool from Hashicorp for managing infrastructure safely a
 ### Usage
 
  * Type `terraform` into your prompt and hit `TAB` to see available completion options
+
+### Expanding ZSH prompt with current Terraform workspace name
+
+If you want to get current Terraform workspace name in your ZSH prompt open 
+your .zsh-theme file and in a choosen place insert:
+
+```
+$FG[045]\
+$(terraform_prompt_info)\
+```
