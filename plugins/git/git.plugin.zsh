@@ -107,6 +107,10 @@ ggf() {
   [[ "$#" != 1 ]] && local b="$(git_current_branch)"
   git push --force origin "${b:=$1}"
 }
+ggfl() {
+[[ "$#" != 1 ]] && local b="$(git_current_branch)"
+git push --force-with-lease origin "${b:=$1}"
+}
 compdef _git ggf=git-checkout
 
 ggl() {
