@@ -21,12 +21,12 @@ function _wd() {
   do
     arr=(${(s,:,)line})
     name=${arr[1]}
-    path=${arr[2]}
+    target_path=${arr[2]}
 
     # replace ~ from path to fix completion (#17)
-    path=${path/#\~/$HOME}
+    target_path=${path/#\~/$HOME}
 
-    points[$name]=$path
+    points[$name]=$target_path
   done < $CONFIG
 
   commands=(
