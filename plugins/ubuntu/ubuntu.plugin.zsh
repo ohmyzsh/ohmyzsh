@@ -21,7 +21,16 @@ compdef _ags ags='apt-get source'
 alias acp='apt-cache policy' # app
 compdef _acp acp='apt-cache policy'
 
+#List all installed packages
+alias agli='apt list --installed'
+compdef _agli agli='apt list --installed'
+
 # superuser operations ######################################################
+
+# List available updates only
+alias aglu='sudo apt-get -u upgrade --assume-no'
+compdef _aglu aglu='sudo apt-get -u upgrade --assume-no'
+
 alias afu='sudo apt-file update'
 compdef _afu afu='sudo apt-file update'
 
