@@ -24,7 +24,7 @@ function _wd() {
     target_path=${arr[2]}
 
     # replace ~ from path to fix completion (#17)
-    target_path=${path/#\~/$HOME}
+    target_path=${target_path/#\~/$HOME}
 
     points[$name]=$target_path
   done < $CONFIG
