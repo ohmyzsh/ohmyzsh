@@ -17,5 +17,5 @@ your .zsh-theme file and in a choosen place insert:
 
 ```
 $FG[045]\
-$(terraform_prompt_info)\
+$(tf_prompt_info)\
 ```
