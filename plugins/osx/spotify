@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+function spotify() {
 # Copyright (c) 2012--2017 Harish Narayanan <mail@harishnarayanan.org>
 #
 # Contains numerous helpful contributions from Jorge Colindres, Thomas
@@ -416,3 +417,4 @@ while [ $# -gt 0 ]; do
             break ;;
     esac
 done
+}

@@ -276,6 +276,9 @@ EOF
 	osascript -e "tell application \"iTunes\" to $opt"
 }
 
+# Spotify control function
+source ./spotify
+
 # Show/hide hidden files in the Finder
 alias showfiles="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
 alias hidefiles="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
