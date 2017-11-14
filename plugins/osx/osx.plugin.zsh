@@ -277,7 +277,7 @@ EOF
 }
 
 # Spotify control function
-source ./spotify
+source ${ZSH}/plugins/osx/spotify
 
 # Show/hide hidden files in the Finder
 alias showfiles="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
