@@ -21,6 +21,10 @@ _awscli-homebrew-installed() {
   [ -r $_brew_prefix/libexec/bin/aws_zsh_completer.sh ] &> /dev/null
 }
 
+_awscli-rpm-installed() {
+  which rpm &>/dev/null && rpm -q --quiet awscli
+}
+
 export AWS_HOME=~/.aws
 
 function agp {
@@ -45,7 +49,11 @@ if which aws_zsh_completer.sh &>/dev/null; then
   _aws_zsh_completer_path=$(which aws_zsh_completer.sh 2>/dev/null)
 elif _homebrew-installed && _awscli-homebrew-installed; then
   _aws_zsh_completer_path=$_brew_prefix/libexec/bin/aws_zsh_completer.sh
+elif _awscli-rpm-installed; then
+  _aws_zsh_completer_path="/usr/share/zsh/site-functions/aws_zsh_completer.sh"
+else
+  _aws_zsh_completer_path=$(which aws_zsh_completer.sh)
 fi
 
-[ -n "$_aws_zsh_completer_path" ] && [ -x $_aws_zsh_completer_path ] && source $_aws_zsh_completer_path
+[ -n "$_aws_zsh_completer_path" ] && [ -r $_aws_zsh_completer_path ] && source $_aws_zsh_completer_path
 unset _aws_zsh_completer_path
