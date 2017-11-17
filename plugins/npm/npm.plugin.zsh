@@ -38,9 +38,17 @@ alias npmV="npm -v"
 # List packages
 alias npmL="npm list"
 
+# List top-level installed packages
+alias npmL0="npm ls --depth=0"
+
 # Run npm start
 alias npmst="npm start"
 
 # Run npm test
 alias npmt="npm test"
 
+# Run npm scripts
+alias npmR="npm run"
+
+# Run npm publish 
+alias npmP="npm publish"

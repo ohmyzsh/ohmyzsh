@@ -1,6 +1,6 @@
 # Laravel5 basic command completion
 _laravel5_get_command_list () {
-	php artisan --no-ansi | sed "1,/Available commands/d" | awk '/^ +[a-z]+/ { print $1 }'
+	php artisan --raw --no-ansi list | sed "s/[[:space:]].*//g"
 }
 
 _laravel5 () {
