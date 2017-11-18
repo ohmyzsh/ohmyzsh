@@ -1,6 +1,8 @@
 # user, host, full path, and time/date
 # on two lines for easier vgrepping
 # entry in a nice long thread on the Arch Linux forums: http://bbs.archlinux.org/viewtopic.php?pid=521888#p521888
+source /home/emejia/utec/ide/zsh-git-prompt/zshrc.sh
+GIT_PROMPT_EXECUTABLE="haskell"
 
 function hg_prompt_info {
     hg prompt --angle-brackets "\
@@ -27,10 +29,10 @@ function mygit() {
   fi
 }
 
-function retcode() {}
+function retcode() {echo "%{$fg_bold[grey]%}%40>...>%~%>>"}
 
 # alternate prompt with git & hg
-PROMPT=$'%{$fg_bold[blue]%}┌─[%{$fg_bold[green]%}%n%b%{$fg[black]%}@%{$fg[cyan]%}%m%{$fg_bold[blue]%}]%{$reset_color%} - %{$fg_bold[blue]%}[%{$fg_bold[white]%}%~%{$fg_bold[blue]%}]%{$reset_color%} - %{$fg_bold[blue]%}[%b%{$fg[yellow]%}'%D{"%Y-%m-%d %I:%M:%S"}%b$'%{$fg_bold[blue]%}]
-%{$fg_bold[blue]%}└─[%{$fg_bold[magenta]%}%?$(retcode)%{$fg_bold[blue]%}] <$(mygit)$(hg_prompt_info)>%{$reset_color%} '
+PROMPT=$'%{$fg_bold[blue]%}┌─<[%{$fg[grey]%}%n%b%{$fg[white]%}@%{$fg[magenta]%}%m%{$fg_bold[blue]%}]%{$reset_color%} - %{$fg_bold[blue]%}[$(retcode)%{$fg_bold[blue]%}] $(git_super_status)%{$reset_color%} 
+%{$fg_bold[blue]%}└─>[%b%{$fg[yellow]%}'%D{"%I:%M:%S"}%b$'%{$fg_bold[blue]%}] [%{$fg_bold[white]%}%1~%{$fg_bold[blue]%}]%{$reset_color%}$ '
 PS2=$' \e[0;34m%}%B>%{\e[0m%}%b '
 
