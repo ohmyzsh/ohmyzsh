@@ -32,7 +32,8 @@ function mygit() {
 function retcode() {echo "%{$fg_bold[grey]%}%40>...>%~%>>"}
 
 # alternate prompt with git & hg
-PROMPT=$'%{$fg_bold[blue]%}┌─<[%{$fg[grey]%}%n%b%{$fg[white]%}@%{$fg[magenta]%}%m%{$fg_bold[blue]%}]%{$reset_color%} - %{$fg_bold[blue]%}[$(retcode)%{$fg_bold[blue]%}] $(git_super_status)%{$reset_color%} 
-%{$fg_bold[blue]%}└─>>>[%b%{$fg[yellow]%}'%D{"%I:%M:%S"}%b$'%{$fg_bold[blue]%}] [%{$fg_bold[cyan]%}%1~%{$fg_bold[blue]%}]%{$reset_color%}$ '
+PROMPT=$'
+%{$fg_bold[blue]%}┌─[%{$fg[grey]%}%n%b%{$fg[white]%}@%{$fg[magenta]%}%m%{$fg_bold[blue]%}]%{$reset_color%} - %{$fg_bold[blue]%}[$(retcode)%{$fg_bold[blue]%}] $(git_super_status)%{$reset_color%} 
+%{$fg_bold[blue]%}└─>>>>>[%b%{$fg[yellow]%}'%D{"%I:%M:%S"}%b$'%{$fg_bold[blue]%}] [%{$fg_bold[cyan]%}%1~%{$fg_bold[blue]%}]%{$reset_color%}$ '
 PS2=$' \e[0;34m%}%B>%{\e[0m%}%b '
 
