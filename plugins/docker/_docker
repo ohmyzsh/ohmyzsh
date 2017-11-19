@@ -897,6 +897,7 @@ __docker_container_subcommand() {
                 "($help -a --all)"{-a,--all}"[Show all containers (default shows just running)]" \
                 "($help)--format=[Pretty-print images using a Go template]:template: " \
                 "($help)--no-stream[Disable streaming stats and only pull the first result]" \
+                "($help)--no-trunc[Do not truncate output]" \
                 "($help -)*:containers:__docker_complete_running_containers" && ret=0
             ;;
         (stop)
