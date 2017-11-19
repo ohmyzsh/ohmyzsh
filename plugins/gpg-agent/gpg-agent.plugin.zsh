@@ -1,5 +1,7 @@
+#Define GPG_AGENT_SOCKET
+GPG_AGENT_SOCKET=`gpgconf --list-dirs agent-ssh-socket`
+
 # Enable gpg-agent if it is not running
-GPG_AGENT_SOCKET="${XDG_RUNTIME_DIR}/gnupg/S.gpg-agent.ssh"
 if [ ! -S $GPG_AGENT_SOCKET ]; then
   gpg-agent --daemon >/dev/null 2>&1
   export GPG_TTY=$(tty)
