@@ -1,3 +1,16 @@
+# UPDATE INSTRUCTION
+
+```bash
+git clone https://github.com/estarter/oh-my-zsh.git
+cd oh-my-zsh
+git remote add upstream https://github.com/robbyrussell/oh-my-zsh.git
+git fetch upstream
+git merge upstream/master
+git push
+```
+
+# ORIGINAL
+
 <p align="center">
   <img src="https://s3.amazonaws.com/ohmyzsh/oh-my-zsh-logo.png" alt="Oh My Zsh">
 </p>
