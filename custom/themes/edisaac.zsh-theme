@@ -38,8 +38,8 @@ function gettime(){echo "%b%{$fg[yellow]%}%D{"%I:%M:%S"}%b%{$reset_color%}"}
 function dirpwd() {echo "%{$fg_bold[blue]%}%1~%{$reset_color%}"}
 # alternate prompt with git & hg
 PROMPT=$'
-$COLOR_ROOT┌─ $(dirpwd)  $(getruta) 
-$COLOR_ROOT|
+$COLOR_ROOT┌─< $(dirpwd)  $(getruta) 
+$COLOR_ROOT|   $(gettime)
 $COLOR_ROOT└─>%{$reset_color%} $(git_super_status)$ '
 PS2=$' \e[0;34m%}%B>%{\e[0m%}%b '
 
