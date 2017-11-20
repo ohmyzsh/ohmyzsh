@@ -34,7 +34,7 @@ COLOR_ROOT="%{$fg_bold[green]%}"
 function getruta() {echo "%{$fg[cyan]%}[%~]%{$reset_color%}"}
 function getrutalength() {echo "[%{$fg_bold[grey]%}%30>...>%~%>>]%{$reset_color%}"}
 function getusername(){echo "%{$fg[green]%}%n%b%{$fg[yellow]%}@%{$fg[magenta]%}%m%{$reset_color%}"}
-function gettime(){echo "%b%{$fg[yellow]%}%D{"%I:%M:%S"}%b%{$reset_color%}"}
+function gettime(){echo "%b%{$fg[yellow]%}%D{"%H:%M:%S"}%b%{$reset_color%}"}
 function dirpwd() {echo "%{$fg_bold[cyan]%}%1~%{$reset_color%}"}
 # alternate prompt with git & hg
 PROMPT=$'
