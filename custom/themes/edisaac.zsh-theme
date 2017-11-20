@@ -31,11 +31,11 @@ function mygit() {
 
 COLOR_ROOT="%{$fg_bold[green]%}"
 
-function getruta() {echo "%{$fg_bold[grey]%}[%~]%{$reset_color%}"}
+function getruta() {echo "%{$fg[cyan]%}[%~]%{$reset_color%}"}
 function getrutalength() {echo "[%{$fg_bold[grey]%}%30>...>%~%>>]%{$reset_color%}"}
-function getusername(){echo "%{$fg[green]%}%n%b%{$fg[cyan]%}@%{$fg[magenta]%}%m%{$reset_color%}"}
+function getusername(){echo "%{$fg[green]%}%n%b%{$fg[yellow]%}@%{$fg[magenta]%}%m%{$reset_color%}"}
 function gettime(){echo "%b%{$fg[yellow]%}%D{"%I:%M:%S"}%b%{$reset_color%}"}
-function dirpwd() {echo "%{$fg_bold[blue]%}%1~%{$reset_color%}"}
+function dirpwd() {echo "%{$fg_bold[cyan]%}%1~%{$reset_color%}"}
 # alternate prompt with git & hg
 PROMPT=$'
 $COLOR_ROOT┌─< $(dirpwd)  $(getruta) 
