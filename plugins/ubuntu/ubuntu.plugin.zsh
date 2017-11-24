@@ -51,7 +51,7 @@ alias agug='sudo apt-get upgrade' # ag
 alias aguu='sudo apt-get update && sudo apt-get upgrade'      #adg
 alias agar='sudo apt-get autoremove'
 
-compdef _ag apg='sudo apt-get'
+compdef _apg apg='sudo apt-get'
 compdef _aga aga='sudo apt-get autoclean'
 compdef _agb agb='sudo apt-get build-dep'
 compdef _agc agc='sudo apt-get clean'
