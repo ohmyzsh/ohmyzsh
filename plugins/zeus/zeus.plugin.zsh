@@ -19,8 +19,8 @@ alias zsr='zeus server'
 alias zerver='zeus server'
 
 # Rake
-alias zr='zeus rake'
-alias zake='zeus rake'
+alias zr='noglob zeus rake'
+alias zake='noglob zeus rake'
 
 # Generate
 alias zg='zeus generate'

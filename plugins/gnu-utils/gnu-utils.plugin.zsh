@@ -29,7 +29,10 @@ if [[ -x "${commands[gwhoami]}" ]]; then
     'gunexpand' 'guniq' 'gunlink' 'guptime' 'gusers' 'gvdir' 'gwc' 'gwho'
     'gwhoami' 'gyes')
 
-    # Not part of coreutils, installed separately.
+    # findutils
+    gcmds+=('gfind' 'gxargs' 'glocate')
+
+    # Not part of either coreutils or findutils, installed separately.
     gcmds+=('gsed' 'gtar' 'gtime')
 
     for gcmd in "${gcmds[@]}"; do
@@ -49,7 +52,7 @@ if [[ -x "${commands[gwhoami]}" ]]; then
 
       #
       # This method is inflexible since the aliases are at risk of being
-      # overriden resulting in the BSD coreutils being called.
+      # overridden resulting in the BSD coreutils being called.
       #
       # (( ${+commands[$gcmd]} )) && \
       # alias "$gcmd[2,-1]"="${prefix}/${gcmd//"["/"\\["}"
