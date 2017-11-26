@@ -15,6 +15,7 @@ zle -N edit-command-line
 
 bindkey -v
 
+
 # allow v to edit the command line (standard behaviour)
 autoload -Uz edit-command-line
 bindkey -M vicmd 'v' edit-command-line
@@ -45,6 +46,6 @@ function vi_mode_prompt_info() {
 }
 
 # define right prompt, if it wasn't defined by a theme
-if [[ "$RPS1" == "" && "$RPROMPT" == "" ]]; then
-  RPS1='$(vi_mode_prompt_info)'
-fi
+#if [[ "$RPS1" == "" && "$RPROMPT" == "" ]]; then
+  RPS1="$RPS1"'$(vi_mode_prompt_info)'"$RPROMPT"
+#fi
