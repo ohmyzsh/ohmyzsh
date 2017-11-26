@@ -76,7 +76,7 @@ function svn_dirty_choose() {
 }
 
 svn_dirty_pwd () {
-      svn_dirty_choose_pwd $ZSH_THEME_SVN_PROMPT_DIRTY_PWD $ZSH_THEME_SVN_PROMPT_CLEAN_PWD
+  svn_dirty_choose_pwd $ZSH_THEME_SVN_PROMPT_DIRTY_PWD $ZSH_THEME_SVN_PROMPT_CLEAN_PWD
 }
 
 function svn_dirty_choose_pwd () {
