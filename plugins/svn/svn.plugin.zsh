@@ -62,9 +62,8 @@ function svn_get_rev_nr() {
 
 function svn_dirty_choose() {
   if in_svn; then
-    root=`svn info 2> /dev/null | sed -n 's/^Working Copy Root Path: //p'`
-    status_str=`svn status $root 2> /dev/null`
-    if $(echo $status_str | grep -Eq '^\s*[ACDIM!L]'); then
+    local root=$(LANG=C svn info 2> /dev/null | sed -n 's/^Working Copy Root Path: //p')
+    if svn status $root 2> /dev/null | command grep -Eq '^\s*[ACDIM!?L]'; then
       # Grep exits with 0 when "One or more lines were selected", return "dirty".
       echo $1
     elif $(echo $status_str | grep -Eq '^\s*[?]'); then
@@ -76,8 +75,8 @@ function svn_dirty_choose() {
   fi
 }
 
-function svn_dirty() {
-  svn_dirty_choose $ZSH_THEME_SVN_PROMPT_DIRTY $ZSH_THEME_SVN_PROMPT_UNTRACKED $ZSH_THEME_SVN_PROMPT_CLEAN
+svn_dirty_pwd () {
+      svn_dirty_choose_pwd $ZSH_THEME_SVN_PROMPT_DIRTY_PWD $ZSH_THEME_SVN_PROMPT_CLEAN_PWD
 }
 
 function svn_dirty_choose_pwd () {
