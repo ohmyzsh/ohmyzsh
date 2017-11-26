@@ -42,8 +42,10 @@ svn_get_branch_name() {
 
   if [[ -z "$_DISPLAY" ]]; then
     svn_get_repo_name
+  elif [ "x$_DISPLAY" = "xtrunk" ]; then
+    echo "trunk"
   else
-    echo $_DISPLAY
+    echo "NOT trunk"
   fi
 }
 
@@ -63,9 +65,11 @@ svn_dirty_choose() {
     if svn status $root 2> /dev/null | command grep -Eq '^\s*[ACDIM!?L]'; then
       # Grep exits with 0 when "One or more lines were selected", return "dirty".
       echo $1
+    elif $(echo $status_str | grep -Eq '^\s*[?]'); then
+      echo $2
     else
       # Otherwise, no lines were found, or an error occurred. Return clean.
-      echo $2
+      echo $3
     fi
   fi
 }
