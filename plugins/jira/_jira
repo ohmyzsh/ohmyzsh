@@ -7,6 +7,7 @@ _1st_arguments=(
   'dashboard:open the dashboard'
   'reported:search for issues reported by a user'
   'assigned:search for issues assigned to a user'
+  'br:open the issue named after the git branch of the current directory'
   'dumpconfig:display effective jira configuration'
 )
 
