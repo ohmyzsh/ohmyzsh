@@ -3,16 +3,17 @@ wd
 
 [![Build Status](https://travis-ci.org/mfaerevaag/wd.png?branch=master)](https://travis-ci.org/mfaerevaag/wd)
 
-`wd` (*warp directory*) lets you jump to custom directories in zsh, without using `cd`. Why? Because `cd` seems ineffecient when the folder is frequently visited or has a long path.
+`wd` (*warp directory*) lets you jump to custom directories in zsh, without using `cd`. Why? Because `cd` seems inefficient when the folder is frequently visited or has a long path.
 
-*NOTE*: If you are not using zsh, check out the `ruby` branch which has `wd` implemented as a gem.
+![tty.gif](https://raw.githubusercontent.com/mfaerevaag/wd/master/tty.gif)
 
+*NEWS*: If you are not using zsh, check out the c-port, [wd-c](https://github.com/mfaerevaag/wd-c), which works with all shells using wrapper functions.
 
 ### Setup
 
 ### oh-my-zsh
 
-`wd` comes bundles with [oh-my-zshell](https://github.com/robbyrussell/oh-my-zsh)!
+`wd` comes bundled with [oh-my-zshell](https://github.com/robbyrussell/oh-my-zsh)!
 
 Just add the plugin in your `~/.zshrc` file:
 
@@ -26,6 +27,10 @@ Run either in terminal:
  * `curl -L https://github.com/mfaerevaag/wd/raw/master/install.sh | sh`
 
  * `wget --no-check-certificate https://github.com/mfaerevaag/wd/raw/master/install.sh -O - | sh`
+
+##### Arch ([AUR](https://aur.archlinux.org/))
+
+    # yaourt -S zsh-plugin-wd-git
 
 
 #### Manual
@@ -48,7 +53,7 @@ Run either in terminal:
 
 #### Completion
 
-If you're NOT using [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) and you want to utelize the zsh-completion feature, you will also need to add the path to your `wd` installation (`~/bin/wd` if you used the automatic installer) to your `fpath`. E.g. in your `~/.zshrc`:
+If you're NOT using [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) and you want to utilize the zsh-completion feature, you will also need to add the path to your `wd` installation (`~/bin/wd` if you used the automatic installer) to your `fpath`. E.g. in your `~/.zshrc`:
 
     fpath=(~/path/to/wd $fpath)
 
@@ -66,7 +71,9 @@ Also, you may have to force a rebuild of `zcompdump` by running:
 
     If a warp point with the same name exists, use `add!` to overwrite it.
 
-    Note, a warp point cannot contain colons, or only consist of only spaces and dots. The first will conflict in how `wd` stores the warp points, and the second will conflict other features, as below.
+    Note, a warp point cannot contain colons, or only consist of only spaces and dots. The first will conflict in how `wd` stores the warp points, and the second will conflict with other features, as below.
+
+    You can omit point name to use the current directory's name instead.
 
  * From an other directory (not necessarily), warp to `foo` with:
 
@@ -83,6 +90,8 @@ Also, you may have to force a rebuild of `zcompdump` by running:
  * Remove warp point test point:
 
         $ wd rm foo
+
+    You can omit point name to use the current directory's name instead.
 
  * List all warp points (stored in `~/.warprc`):
 
@@ -143,8 +152,8 @@ The project is licensed under the [MIT-license](https://github.com/mfaerevaag/wd
 
 ### Finally
 
-If you have issues, feedback or improvements, don't hesitate to report it or submit a pull-request. In the case of an issue, we would much appreciate if you would include a failing test in `test/tests.sh`. Explanation on how to run the tests, read the section "Testing" in this README.
+If you have issues, feedback or improvements, don't hesitate to report it or submit a pull-request. In the case of an issue, we would much appreciate if you would include a failing test in `test/tests.sh`. For an explanation on how to run the tests, read the section "Testing" in this README.
 
-Credit to [altschuler](https://github.com/altschuler) for awesome idea.
+Credit to [altschuler](https://github.com/altschuler) for an awesome idea.
 
 Hope you enjoy!

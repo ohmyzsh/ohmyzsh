@@ -5,6 +5,8 @@ if [ $commands[autojump] ]; then # check if autojump is installed
     . $HOME/.autojump/share/autojump/autojump.zsh
   elif [ -f $HOME/.nix-profile/etc/profile.d/autojump.zsh ]; then # nix installation
     . $HOME/.nix-profile/etc/profile.d/autojump.zsh
+  elif [ -f /run/current-system/sw/share/autojump/autojump.zsh ]; then # nixos installation
+    . /run/current-system/sw/share/autojump/autojump.zsh
   elif [ -f /usr/share/autojump/autojump.zsh ]; then # debian and ubuntu package
     . /usr/share/autojump/autojump.zsh
   elif [ -f /etc/profile.d/autojump.zsh ]; then # manual installation
