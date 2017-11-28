@@ -67,6 +67,7 @@ alias gPhm='git push heroku master'
 alias gPo='git push origin'
 # git push origin force
 alias gPof='git push origin --force'
+alias gPt='git push --tags'
 
 ################
 # Git Fetch (gf)
@@ -364,3 +365,23 @@ alias gignored='git ls-files -v | grep "^[[:lower:]]"'
 # Tig aliases
 alias tg='tig --all'
 alias tiga='tig --all'
+
+function git-change-author() {
+  DEFAULT_NAME="$(git config user.name)"
+  DEFAULT_EMAIL="$(git config user.email)"
+  export OLD_NAME="${1:-$DEFAULT_NAME}"
+  export NEW_NAME="${2:-$DEFAULT_NAME}"
+  export NEW_EMAIL="${3:-$DEFAULT_EMAIL}"
+
+  echo "Old:" $OLD_NAME "<*>"
+  echo "New:" "$NEW_NAME <$NEW_EMAIL>"
+  echo "To undo, use: git reset $(git rev-parse HEAD)"
+
+  git filter-branch -f --env-filter \
+  'if [ "$GIT_AUTHOR_NAME" = "${OLD_NAME}" ]; then
+      export GIT_AUTHOR_NAME="${NEW_NAME}"
+      export GIT_AUTHOR_EMAIL="${NEW_EMAIL}"
+      export GIT_COMMITTER_NAME="${NEW_NAME}"
+      export GIT_COMMITTER_EMAIL="${NEW_EMAIL}"
+  fi'
+}
