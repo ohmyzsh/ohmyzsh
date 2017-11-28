@@ -1,0 +1,4 @@
+[submodule "plugins/fz"]
+	path = plugins/fz
+	url = https://github.com/changyuheng/fz.git
+	branch = master
