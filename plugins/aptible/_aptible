@@ -22,7 +22,7 @@ _aptible() {
                     _arguments \
                         '--environment=[ENVIRONMENT]: :_aptible_envs'
                     ;;
-                apps:deprovision|config*|ps|rebuild)
+                apps:deprovision|config*|ps|rebuild|services)
                     _arguments \
                         '--app=[APP]: :_aptible_apps' \
                         '--environment=[ENVIRONMENT]: :_aptible_envs' \
@@ -57,6 +57,7 @@ _aptible() {
                 db:create)
                     _arguments \
                         '--type=[TYPE, Default\: postgresql]' \
+                        '--version=[VERSION]' \
                         '--container-size=[Size of container(s)]: :{_describe "values" sizes}' \
                         '--size=[N, Default\: 10]' \
                         '--environment=[ENVIRONMENT]: :_aptible_envs'
@@ -85,12 +86,136 @@ _aptible() {
                         '--environment=[ENVIRONMENT]: :_aptible_envs' \
                         ':: :_aptible_dbs'
                     ;;
+                db:url)
+                    _arguments \
+                        '--type=[TYPE, Default\: postgresql]' \
+                        '--environment=[ENVIRONMENT]: :_aptible_envs' \
+                        ':: :_aptible_dbs'
+                    ;;
+                deploy)
+                    _arguments \
+                        '--git-commitish=[GIT_COMMITISH, Deploy a specific git commit or branch: the commitish must have been pushed to Aptible beforehand]' \
+                        '--git-detach[Detach this app from its git repository: its Procfile, Dockerfile, and .aptible.yml will be ignored until you deploy again with git]' \
+                        '--no-git-detach[Detach this app from its git repository: its Procfile, Dockerfile, and .aptible.yml will be ignored until you deploy again with git]' \
+                        '--docker-image=[APTIBLE_DOCKER_IMAGE, Shorthand for APTIBLE_DOCKER_IMAGE=...]' \
+                        '--private-registry-email=[APTIBLE_PRIVATE_REGISTRY_EMAIL, Shorthand for APTIBLE_PRIVATE_REGISTRY_EMAIL=...]' \
+                        '--private-registry-username=[APTIBLE_PRIVATE_REGISTRY_USERNAME, Shorthand for APTIBLE_PRIVATE_REGISTRY_USERNAME=...]' \
+                        '--private-registry-password=[APTIBLE_PRIVATE_REGISTRY_PASSWORD, Shorthand for APTIBLE_PRIVATE_REGISTRY_PASSWORD=...]' \
+                        '--app=[APP]: :_aptible_apps' \
+                        '--environment=[ENVIRONMENT]: :_aptible_envs' \
+                        '(-r, --remote)'{-r,--remote}'[REMOTE]'
+                    ;;
                 domains)
                     _arguments \
                         '--environment=[ENVIRONMENT]: :_aptible_envs' \
                         '--app=[APP]: :_aptible_apps' \
                         '(-r, --remote)'{-r,--remote}'[REMOTE]' \
                         '(-v, --verbose)'{-v,--verbose}'[VERBOSE]'
+                    ;;
+                endpoints:database:create)
+                    _arguments \
+                        '--environment=[ENVIRONMENT]: :_aptible_envs' \
+                        '--ip-whitelist=[one two three, A list of IPv4 sources (addresses or CIDRs) to which to restrict traffic to this Endpoint]'
+                    ;;
+                endpoints:deprovision|endpoints:list)
+                    _arguments \
+                        '--app=[APP]: :_aptible_apps' \
+                        '--environment=[ENVIRONMENT]: :_aptible_envs' \
+                        '(-r, --remote)'{-r,--remote}'[REMOTE]' \
+                        '--database=[DATABASE]: :_aptible_dbs'
+                    ;;
+                endpoints:https:create)
+                    _arguments \
+                        '--app=[APP]: :_aptible_apps' \
+                        '--environment=[ENVIRONMENT]: :_aptible_envs' \
+                        '(-r, --remote)'{-r,--remote}'[REMOTE]' \
+                        '--default-domain[Enable Default Domain on this Endpoint]' \
+                        '--no-default-domain[Disable Default Domain on this Endpoint]' \
+                        '--internal[Restrict this Endpoint to internal traffic]' \
+                        '--no-internal[Make this Endpoint public]' \
+                        '--port=[N, A port to expose on this Endpoint]' \
+                        '--ip-whitelist=[one two three, A list of IPv4 sources (addresses or CIDRs) to which to restrict traffic to this Endpoint]' \
+                        '--certificate-file=[CERTIFICATE_FILE, A file containing a certificate to use on this Endpoint]: :_files' \
+                        '--private-key-file=[PRIVATE_KEY_FILE, A file containing a private key to use on this Endpoint]: :_files' \
+                        '--managed-tls[Enable Managed TLS on this Endpoint]' \
+                        '--no-managed-tls[Disable Managed TLS on this Endpoint]' \
+                        '--managed-tls-domain=[MANAGED_TLS_DOMAIN, A domain to use for Managed TLS]' \
+                        '--certificate-fingerprint=[CERTIFICATE_FINGERPRINT, The fingerprint of an existing Certificate to use on this Endpoint]'
+                    ;;
+                endpoints:https:modify)
+                    _arguments \
+                        '--app=[APP]: :_aptible_apps' \
+                        '--environment=[ENVIRONMENT]: :_aptible_envs' \
+                        '(-r, --remote)'{-r,--remote}'[REMOTE]' \
+                        '--port=[N, A port to expose on this Endpoint]' \
+                        '--ip-whitelist=[one two three, A list of IPv4 sources (addresses or CIDRs) to which to restrict traffic to this Endpoint]' \
+                        '--no-ip-whitelist[Disable IP Whitelist]' \
+                        '--certificate-file=[CERTIFICATE_FILE, A file containing a certificate to use on this Endpoint]: :_files' \
+                        '--private-key-file=[PRIVATE_KEY_FILE, A file containing a private key to use on this Endpoint]: :_files' \
+                        '--managed-tls[Enable Managed TLS on this Endpoint]' \
+                        '--no-managed-tls[Disable Managed TLS on this Endpoint]' \
+                        '--managed-tls-domain=[MANAGED_TLS_DOMAIN, A domain to use for Managed TLS]' \
+                        '--certificate-fingerprint=[CERTIFICATE_FINGERPRINT, The fingerprint of an existing Certificate to use on this Endpoint]'
+                    ;;
+                endpoints:renew)
+                    _arguments \
+                        '--app=[APP]: :_aptible_apps' \
+                        '--environment=[ENVIRONMENT]: :_aptible_envs' \
+                        '(-r, --remote)'{-r,--remote}'[REMOTE]'
+                    ;;
+                endpoints:tcp:create)
+                    _arguments \
+                        '--app=[APP]: :_aptible_apps' \
+                        '--environment=[ENVIRONMENT]: :_aptible_envs' \
+                        '(-r, --remote)'{-r,--remote}'[REMOTE]' \
+                        '--default-domain[Enable Default Domain on this Endpoint]' \
+                        '--no-default-domain[Disable Default Domain on this Endpoint]' \
+                        '--internal[Restrict this Endpoint to internal traffic]' \
+                        '--no-internal[Make this Endpoint public]' \
+                        '--ports=[one two three, A list of ports to expose on this Endpoint]' \
+                        '--ip-whitelist=[one two three, A list of IPv4 sources (addresses or CIDRs) to which to restrict traffic to this Endpoint]'
+                    ;;
+                endpoints:tcp:modify)
+                    _arguments \
+                        '--app=[APP]: :_aptible_apps' \
+                        '--environment=[ENVIRONMENT]: :_aptible_envs' \
+                        '(-r, --remote)'{-r,--remote}'[REMOTE]' \
+                        '--ports=[one two three, A list of ports to expose on this Endpoint]' \
+                        '--no-ip-whitelist[Disable IP Whitelist]' \
+                        '--ip-whitelist=[one two three, A list of IPv4 sources (addresses or CIDRs) to which to restrict traffic to this Endpoint]'
+                    ;;
+                endpoints:tls:create)
+                    _arguments \
+                        '--app=[APP]: :_aptible_apps' \
+                        '--environment=[ENVIRONMENT]: :_aptible_envs' \
+                        '(-r, --remote)'{-r,--remote}'[REMOTE]' \
+                        '--default-domain[Enable Default Domain on this Endpoint]' \
+                        '--no-default-domain[Disable Default Domain on this Endpoint]' \
+                        '--internal[Restrict this Endpoint to internal traffic]' \
+                        '--no-internal[Make this Endpoint public]' \
+                        '--ports=[one two three, A list of ports to expose on this Endpoint]' \
+                        '--ip-whitelist=[one two three, A list of IPv4 sources (addresses or CIDRs) to which to restrict traffic to this Endpoint]' \
+                        '--certificate-file=[CERTIFICATE_FILE, A file containing a certificate to use on this Endpoint]: :_files' \
+                        '--private-key-file=[PRIVATE_KEY_FILE, A file containing a private key to use on this Endpoint]: :_files' \
+                        '--managed-tls[Enable Managed TLS on this Endpoint]' \
+                        '--no-managed-tls[Disable Managed TLS on this Endpoint]' \
+                        '--managed-tls-domain=[MANAGED_TLS_DOMAIN, A domain to use for Managed TLS]' \
+                        '--certificate-fingerprint=[CERTIFICATE_FINGERPRINT, The fingerprint of an existing Certificate to use on this Endpoint]'
+                    ;;
+                endpoints:tls:modify)
+                    _arguments \
+                        '--app=[APP]: :_aptible_apps' \
+                        '--environment=[ENVIRONMENT]: :_aptible_envs' \
+                        '(-r, --remote)'{-r,--remote}'[REMOTE]' \
+                        '--ports=[one two three, A list of ports to expose on this Endpoint]' \
+                        '--ip-whitelist=[one two three, A list of IPv4 sources (addresses or CIDRs) to which to restrict traffic to this Endpoint]' \
+                        '--no-ip-whitelist[Disable IP Whitelist]' \
+                        '--certificate-file=[CERTIFICATE_FILE, A file containing a certificate to use on this Endpoint]: :_files' \
+                        '--private-key-file=[PRIVATE_KEY_FILE, A file containing a private key to use on this Endpoint]: :_files' \
+                        '--managed-tls[Enable Managed TLS on this Endpoint]' \
+                        '--no-managed-tls[Disable Managed TLS on this Endpoint]' \
+                        '--managed-tls-domain=[MANAGED_TLS_DOMAIN, A domain to use for Managed TLS]' \
+                        '--certificate-fingerprint=[CERTIFICATE_FINGERPRINT, The fingerprint of an existing Certificate to use on this Endpoint]'
                     ;;
                 login)
                     _arguments \
@@ -213,7 +338,20 @@ _aptible_cmds() {
     "db\:reload:Reload a database"
     "db\:restart:Restart a database"
     "db\:tunnel:Create a local tunnel to a database"
+    "db\:url:Display a database URL"
+    "db\:versions:List available database versions"
+    "deploy:Deploy an app"
     "domains:Print an app's current virtual domains"
+    "endpoints\:database\:create:Create a Database Endpoint"
+    "endpoints\:deprovision:Deprovision an App or Database Endpoint"
+    "endpoints\:https\:create:Create an App HTTPS Endpoint"
+    "endpoints\:https\:modify:Modify an App HTTPS Endpoint"
+    "endpoints\:list:List Endpoints for an App or Database"
+    "endpoints\:renew:Renew an App Managed TLS Endpoint"
+    "endpoints\:tcp\:create:Create an App TCP Endpoint"
+    "endpoints\:tcp\:modify:Modify an App TCP Endpoint"
+    "endpoints\:tls\:create:Create an App TLS Endpoint"
+    "endpoints\:tls\:modify:Modify an App TLS Endpoint"
     "help:Describe available commands or one specific command"
     "login:Log in to Aptible"
     "logs:Follows logs from a running app or database"
@@ -221,6 +359,7 @@ _aptible_cmds() {
     "ps:Display running processes for an app - DEPRECATED"
     "rebuild:Rebuild an app, and restart its services"
     "restart:Restart all services associated with an app"
+    "services:List Services for an App"
     "ssh:Run a command against an app"
     "version:Print Aptible CLI version"
     );
