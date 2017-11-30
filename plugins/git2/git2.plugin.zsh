@@ -36,7 +36,7 @@ compdef _git gdv=git-diff
 alias gp='git pull'
 compdef _git gl=git-pull
 # Git pull and rebase
-alias gpr='git pull --rebase'
+alias gpr='git pull --rebase --recurse-submodules'
 compdef _git gpr=git-pull
 # Git rebase current master branch against master branch on upstream
 alias gprum='git pull --rebase upstream master'
@@ -82,7 +82,7 @@ alias gfa='git fetch --all'
 compdef _git gfa='git-fetch'
 # reset your work to the latest status of the code base (and fetch all other branches).
 # (git fetch all branch and rebase)
-alias gfagpr='git fetch --all && git pull --rebase'
+alias gfagpr='git fetch --all --recurse-submodules && git pull --rebase --recurse-submodules'
 compdef _git gfagpr='git-pull'
 alias gfgpr='git fetch && git pull --rebase'
 compdef _git gfgpr='git-pull'
