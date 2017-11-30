@@ -387,3 +387,7 @@ function git-change-author() {
       export GIT_COMMITTER_EMAIL="${NEW_EMAIL}"
   fi'
 }
+
+# Gerrit helper
+# push current change to upstream gerrit for review on the master branch
+alias gPuhrfm='git push upstream HEAD:refs/for/master'
