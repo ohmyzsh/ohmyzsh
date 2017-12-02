@@ -55,9 +55,9 @@ source $ZSH/oh-my-zsh.sh
 # User configuration
 
 if [[ -z $JAVA_HOME ]]; then
-    export JAVA_HOME=/home/users/shiludeng/.jumbo/opt/sun-java6
+    export JAVA_HOME=$HOME/.jumbo/opt/sun-java6
 fi
-export HADOOP_INSTALL=/home/users/shiludeng/data/dev/hadoop/hadoop
+export HADOOP_INSTALL=$HOME/data/dev/hadoop/hadoop
 #/home/tools/tools/maven/apache-maven-2.2.1/bin
 export PATH=$HOME/programs/ccover/bin:$HOME/programs/bin/:$HOME/bin:$HADOOP_INSTALL/bin:/usr/local/bin:$PATH
 # 避免超时退出
@@ -65,15 +65,15 @@ TMOUT=
 export TMOUT
 #source ~/.bash_profile
 #source ~/.bashrc
-[[ -s "/home/users/shiludeng/.jumbo/etc/bashrc" ]] && source "/home/users/shiludeng/.jumbo/etc/bashrc"
+[[ -s "$HOME/.jumbo/etc/bashrc" ]] && source "$HOME/.jumbo/etc/bashrc"
 export MAC=64
 export LANG="zh_CN.UTF-8"
 export LC_ALL="zh_CN.UTF-8"
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
-hash -d weigou="/home/users/shiludeng/data/dev/app/ecom/weigou"
-hash -d moviese="/home/users/shiludeng/data/dev/app/search/movie/user/se"
+#hash -d weigou="/home/users/shiludeng/data/dev/app/ecom/weigou"
+#hash -d moviese="/home/users/shiludeng/data/dev/app/search/movie/user/se"
 export SVN_EDITOR=vim
 # You may need to manually set your language environment
 #export LANG=en_US.UTF-8
