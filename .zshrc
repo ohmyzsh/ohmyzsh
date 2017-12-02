@@ -93,3 +93,7 @@ export SVN_EDITOR=vim
 # ssh
 # export SSH_KEY_PATH="~/.ssh/dsa_id"
 setopt no_nomatch
+
+function get_ftp_addr() {
+    echo "wget $HOST:$(cd `dirname $1` && pwd)/`basename $1`"
+}

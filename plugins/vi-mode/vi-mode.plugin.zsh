@@ -35,6 +35,8 @@ bindkey '^r' history-incremental-search-backward
 # allow ctrl-a and ctrl-e to move to beginning/end of line
 bindkey '^a' beginning-of-line
 bindkey '^e' end-of-line
+bindkey '^f' forward-char
+bindkey '\e.' insert-last-word
 
 # if mode indicator wasn't setup by theme, define default
 if [[ "$MODE_INDICATOR" == "" ]]; then
