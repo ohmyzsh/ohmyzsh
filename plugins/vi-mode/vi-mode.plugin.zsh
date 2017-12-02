@@ -49,5 +49,6 @@ function vi_mode_prompt_info() {
 
 # define right prompt, if it wasn't defined by a theme
 #if [[ "$RPS1" == "" && "$RPROMPT" == "" ]]; then
-  RPS1="$RPS1"'$(vi_mode_prompt_info)'"$RPROMPT"
+  RPS1='$(vi_mode_prompt_info)'
+  #RPS1="$RPS1"'$(vi_mode_prompt_info)'"$RPROMPT"
 #fi
