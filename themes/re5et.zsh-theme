@@ -14,6 +14,10 @@ ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg_bold[red]%} ±"
 ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[cyan]%} ?"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg_bold[red]%} ♥"
 
+#以下字符视为单词的一部分
+WORDCHARS='*?_-[]~=&;!#$%^(){}<>/\'
+#}}}
+
 #漂亮又实用的命令高亮界面 
 setopt extended_glob 
  TOKENS_FOLLOWED_BY_COMMANDS=('|' '||' ';' '&' '&&' 'sudo' 'do' 'time' 'strace') 
