@@ -11,14 +11,6 @@ export ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="re5et"
 #ZSH_THEME="fox"
 
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-alias astyle="astyle --style=kr --convert-tabs --indent=spaces=4 --add-brackets \
---pad-header --unpad-paren --pad-oper --max-code-length=100 --formatted --align-pointer=type \
---align-reference=type -Y"
-#alias eagle.py="eagle.py -f"
-
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
 
@@ -68,9 +60,15 @@ fi
 export HADOOP_INSTALL=/home/users/shiludeng/data/dev/hadoop/hadoop
 #/home/tools/tools/maven/apache-maven-2.2.1/bin
 export PATH=$HOME/programs/ccover/bin:$HOME/programs/bin/:$HOME/bin:$HADOOP_INSTALL/bin:/usr/local/bin:$PATH
-source ~/.bash_profile
-source ~/.bashrc
+# 避免超时退出
+TMOUT=
+export TMOUT
+#source ~/.bash_profile
+#source ~/.bashrc
+[[ -s "/home/users/shiludeng/.jumbo/etc/bashrc" ]] && source "/home/users/shiludeng/.jumbo/etc/bashrc"
 export MAC=64
+export LANG="zh_CN.UTF-8"
+export LC_ALL="zh_CN.UTF-8"
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -97,3 +95,15 @@ setopt no_nomatch
 function get_ftp_addr() {
     echo "wget $HOST:$(cd `dirname $1` && pwd)/`basename $1`"
 }
+
+PATH=$HOME/.BCloud/bin:$PATH
+PATH=$HOME/baidu/tools/build_submitter/usr/bin:$PATH
+export PATH
+
+# Example aliases
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
+#alias astyle="astyle --style=kr --convert-tabs --indent=spaces=4 --add-brackets \
+#--pad-header --unpad-paren --pad-oper --max-code-length=100 --formatted --align-pointer=type \
+#--align-reference=type -Y"
+#alias eagle.py="eagle.py -f"
