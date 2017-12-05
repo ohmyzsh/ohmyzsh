@@ -24,7 +24,7 @@ main() {
   # which may fail on systems lacking tput or terminfo
   set -e
 
-  CHECK_ZSH_INSTALLED=$(grep /zsh$ /etc/shells | wc -l)
+  CHECK_ZSH_INSTALLED=$(grep -E ^"${USER}:" /etc/passwd|cut -d : -f 7)
   if [ ! $CHECK_ZSH_INSTALLED -ge 1 ]; then
     printf "${YELLOW}Zsh is not installed!${NORMAL} Please install zsh first!\n"
     exit
