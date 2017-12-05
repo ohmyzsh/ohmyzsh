@@ -9,9 +9,8 @@ fi
 export GPG_TTY=$(tty)
 
 # Set SSH to use gpg-agent if it's enabled
-GPG_SSH_AUTH_SOCK="${AGENT_SOCK}.ssh"
-if [ -S ${GPG_SSH_AUTH_SOCK} ]; then
-  export SSH_AUTH_SOCK=$GPG_SSH_AUTH_SOCK
+if [ -S "${AGENT_SOCK}.ssh" ]; then
+  export SSH_AUTH_SOCK="${AGENT_SOCK}.ssh"
   unset SSH_AGENT_PID
 fi
 
