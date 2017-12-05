@@ -3,7 +3,7 @@ if [ "$USER" = "root" ]; then CARETCOLOR="red"; else CARETCOLOR="magenta"; fi
 local return_code="%(?..%{$fg_bold[red]%}:( %?%{$reset_color%})"
 
 PROMPT='
-%{$fg_bold[cyan]%}%n%{$reset_color%}%{$fg[yellow]%}@%{$reset_color%}%{$fg_bold[blue]%}%M%{$reset_color%}:%{${fg_bold[green]}%}%~%{$reset_color%}$(git_prompt_info)
+%{$fg_bold[cyan]%}%n%{$reset_color%}%{$fg[yellow]%}@%{$reset_color%}%{$fg_bold[yellow]%}%M%{$reset_color%}:%{${fg_bold[green]}%}%~%{$reset_color%}$(git_prompt_info)$(svn_prompt_info)
 %{${fg[$CARETCOLOR]}%}%# %{${reset_color}%}'
 
 RPS1='${return_code} %D - %*'"$RPS1"
@@ -13,6 +13,12 @@ ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg_bold[red]%} ±"
 ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[cyan]%} ?"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg_bold[red]%} ♥"
+
+ZSH_THEME_SVN_PROMPT_PREFIX="%{$fg_bold[magenta]%} -svn- %{$reset_color%}%{$fg_bold[yellow]%}"
+ZSH_THEME_SVN_PROMPT_SUFFIX="%{$reset_color%}"
+ZSH_THEME_SVN_PROMPT_UNTRACKED="%{$fg[cyan]%} ?"
+ZSH_THEME_SVN_PROMPT_DIRTY="%{$fg_bold[red]%} ±"
+ZSH_THEME_SVN_PROMPT_CLEAN="%{$fg_bold[red]%} ♥"
 
 #以下字符视为单词的一部分
 WORDCHARS='*?_-[]~=&;!#$%^(){}<>/\'
