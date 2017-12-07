@@ -48,8 +48,8 @@ _arguments \
 
 case "$state" in
 	specify_device)
-	_values  'devices' $(adb devices|awk 'NR>1&& $1 ~ /^[a-zA-Z0-9].*$/ \
-		{printf "%s[Device_%d:%s] ",$1,++i,$2 }')
+	_values  'devices' $(adb devices -l|awk 'NR>1&& $1 ~ /^[a-zA-Z0-9].*$/ \
+		{printf "%s[%s] ",$1,$6 }')
 	return
 	;;
 esac
