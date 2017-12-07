@@ -188,6 +188,7 @@ alias glp="_git_log_prettily"
 compdef _git glp=git-log
 
 alias gm='git merge'
+alias gmnf='git merge --no-ff'
 alias gmom='git merge origin/master'
 alias gmt='git mergetool --no-prompt'
 alias gmtvim='git mergetool --no-prompt --tool=vimdiff'
