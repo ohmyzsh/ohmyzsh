@@ -533,7 +533,7 @@ function spotify() {
       url=${url#$remove}
       url="http://open.spotify.com/track/$url"
       cecho "Share URL: $url";
-      cecho -n "$url" | pbcopy
+      echo -n "$url" | pbcopy
       break;;
 
       -h|--help| *)
