@@ -62,9 +62,9 @@ alias dcup="docker-compose up -d"
 alias dcdown="docker-compose stop"
 alias dcrm="docker-compose stop && docker-compose rm -f"
 
-# Setup Docker Development Environment
-alias devup="docker-compose -f ~/Dropbox/Code/docker/development-local/docker-compose.yml up -d"
-alias devdown="docker-compose -f ~/Dropbox/Code/docker/development-local/docker-compose.yml stop"
+# Setup Docker Test Environment
+alias devup="docker-compose -f ~/Dropbox/Code/docker/test/docker-compose.yml up -d"
+alias devdown="docker-compose -f ~/Dropbox/Code/docker/test/docker-compose.yml stop"
 
 # Enter Docker containers
 alias devweb="docker exec -it web bash"
