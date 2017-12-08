@@ -5,17 +5,17 @@ function my_git_prompt() {
   STATUS=""
 
   # is branch ahead?
-  if $(echo "$(git log origin/$(current_branch)..HEAD 2> /dev/null)" | grep '^commit' &> /dev/null); then
+  if $(echo "$(git log origin/$(git_current_branch)..HEAD 2> /dev/null)" | grep '^commit' &> /dev/null); then
     STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_AHEAD"
   fi
 
   # is anything staged?
-  if $(echo "$INDEX" | grep -E -e '^(D[ M]|[MARC][ MD]) ' &> /dev/null); then
+  if $(echo "$INDEX" | command grep -E -e '^(D[ M]|[MARC][ MD]) ' &> /dev/null); then
     STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_STAGED"
   fi
 
   # is anything unstaged?
-  if $(echo "$INDEX" | grep -E -e '^[ MARC][MD] ' &> /dev/null); then
+  if $(echo "$INDEX" | command grep -E -e '^[ MARC][MD] ' &> /dev/null); then
     STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_UNSTAGED"
   fi
 
@@ -25,7 +25,7 @@ function my_git_prompt() {
   fi
 
   # is anything unmerged?
-  if $(echo "$INDEX" | grep -E -e '^(A[AU]|D[DU]|U[ADU]) ' &> /dev/null); then
+  if $(echo "$INDEX" | command grep -E -e '^(A[AU]|D[DU]|U[ADU]) ' &> /dev/null); then
     STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_UNMERGED"
   fi
 
@@ -37,7 +37,7 @@ function my_git_prompt() {
 }
 
 function my_current_branch() {
-  echo $(current_branch || echo "(no branch)")
+  echo $(git_current_branch || echo "(no branch)")
 }
 
 function ssh_connection() {

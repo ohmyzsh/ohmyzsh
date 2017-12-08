@@ -30,7 +30,7 @@ function retlog() {
 }
 
 alias ping='ping -c 5'
-alias clr='clear;echo "Currently logged in on $(tty), as $(whoami) in directory $(pwd)."'
+alias clr='clear;echo "Currently logged in on $(tty), as $USER in directory $PWD."'
 alias path='echo -e ${PATH//:/\\n}'
 alias mkdir='mkdir -pv'
 # get top process eating memory
@@ -140,12 +140,16 @@ d0() {
 
 # gather external ip address
 geteip() {
-    curl http://ifconfig.me
+    curl -s -S https://icanhazip.com
 }
 
 # determine local IP address
 getip() {
-    ifconfig  | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}'
+    if (( ${+commands[ip]} )); then
+        ip addr | grep "inet " | grep -v '127.0.0.1' | awk '{print $2}'
+    else
+        ifconfig  | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}'
+    fi
 }
 
 # Clear zombie processes

@@ -2,8 +2,10 @@ alias be="bundle exec"
 alias bl="bundle list"
 alias bp="bundle package"
 alias bo="bundle open"
+alias bout="bundle outdated"
 alias bu="bundle update"
 alias bi="bundle_install"
+alias bcn="bundle clean"
 
 bundled_commands=(
   annotate
@@ -54,9 +56,9 @@ bundle_install() {
   if _bundler-installed && _within-bundled-project; then
     local bundler_version=`bundle version | cut -d' ' -f3`
     if [[ $bundler_version > '1.4.0' || $bundler_version = '1.4.0' ]]; then
-      if [[ "$(uname)" == 'Darwin' ]]
+      if [[ "$OSTYPE" = darwin* ]]
       then
-        local cores_num="$(sysctl hw.ncpu | awk '{print $2}')"
+        local cores_num="$(sysctl -n hw.ncpu)"
       else
         local cores_num="$(nproc)"
       fi

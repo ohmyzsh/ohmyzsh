@@ -21,7 +21,7 @@ local user="%(!.%{$fg[blue]%}.%{$fg[blue]%})%n%{$reset_color%}"
 
 # Hostname part.  compressed and colorcoded per host_repr array
 # if not found, regular hostname in default color
-local host="@${host_repr[$(hostname)]:-$(hostname)}%{$reset_color%}"
+local host="@${host_repr[$HOST]:-$HOST}%{$reset_color%}"
 
 # Compacted $PWD
 local pwd="%{$fg[blue]%}%c%{$reset_color%}"

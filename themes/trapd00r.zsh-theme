@@ -36,7 +36,7 @@ local c12=$(printf "\e[38;5;142m\e[1m")
 local c13=$(printf "\e[38;5;196m\e[1m")
 
 
-# We dont want to use the extended colorset in the TTY / VC.
+# We don't want to use the extended colorset in the TTY / VC.
 if [ "$TERM" = "linux" ]; then
     c1=$( printf "\e[34;1m")
     c2=$( printf "\e[35m")
@@ -71,7 +71,7 @@ prompt_jnrowe_precmd () {
     PROMPT='%{$fg_bold[green]%}%p%{$reset_color%}${vcs_info_msg_0_}${dir_status} ${ret_status}%{$reset_color%}
 > '
 
-# modified, to be commited
+# modified, to be committed
   elif [[ $(git diff --cached --name-status 2>/dev/null ) != "" ]]; then
     dir_status="%{$c1%}%n%{$c4%}@%{$c2%}%m%{$c0%}:%{$c3%}%l%{$c6%}->%{$(zsh_path)%} %{$c0%}(%{$c5%}%?%{$c0%})"
     PROMPT='${vcs_info_msg_0_}%{$30%} %{$bg_bold[red]%}%{$fg_bold[cyan]%}C%{$fg_bold[black]%}OMMIT%{$reset_color%}
@@ -86,7 +86,7 @@ prompt_jnrowe_precmd () {
   else
     dir_status="%{$c1%}%n%{$c4%}@%{$c2%}%m%{$c0%}:%{$c3%}%l%{$c6%}->%{$(zsh_path)%} %{$c0%}(%{$c5%}%?%{$c0%})"
     PROMPT='${vcs_info_msg_0_}
-%{$fg_bold[green]%}%p%{$reset_color%}${dir_status} ${vcs_info_msg_0_}%{$reset_color%}
+%{$fg_bold[green]%}%p%{$reset_color%}${dir_status}%{$reset_color%}
 > '
 fi
 }

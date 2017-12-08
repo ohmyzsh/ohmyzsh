@@ -16,15 +16,28 @@
 # rvm and rbenv plugins also provide this alias
 alias rubies='chruby'
 
-local _chruby_path
-local _chruby_auto
 
 _homebrew-installed() {
     whence brew &> /dev/null
+    _xit=$?
+    if [ $_xit -eq 0 ];then
+    	# ok , we have brew installed
+	# speculatively we check default brew prefix
+        if [ -h  /usr/local/opt/chruby ];then
+		_brew_prefix="/usr/local/opt/chruby"
+	else
+		# ok , it is not default prefix 
+		# this call to brew is expensive ( about 400 ms ), so at least let's make it only once
+		_brew_prefix=$(brew --prefix chruby)
+	fi
+	return 0
+   else
+        return $_xit
+   fi
 }
 
 _chruby-from-homebrew-installed() {
-    brew --prefix chruby &> /dev/null
+  [ -r _brew_prefix ] &> /dev/null
 }
 
 _ruby-build_installed() {
@@ -42,14 +55,17 @@ if _ruby-build_installed; then
 fi
 
 _source_from_omz_settings() {
+    local _chruby_path
+    local _chruby_auto
+    
     zstyle -s :omz:plugins:chruby path _chruby_path
     zstyle -s :omz:plugins:chruby auto _chruby_auto
 
-    if _chruby_path && [[ -r _chruby_path ]]; then
+    if [[ -r ${_chruby_path} ]]; then
         source ${_chruby_path}
     fi
 
-    if _chruby_auto && [[ -r _chruby_auto ]]; then
+    if [[ -r ${_chruby_auto} ]]; then
         source ${_chruby_auto}
     fi
 }
@@ -64,8 +80,8 @@ _chruby_dirs() {
 }
 
 if _homebrew-installed && _chruby-from-homebrew-installed ; then
-    source $(brew --prefix chruby)/share/chruby/chruby.sh
-    source $(brew --prefix chruby)/share/chruby/auto.sh
+    source $_brew_prefix/share/chruby/chruby.sh
+    source $_brew_prefix/share/chruby/auto.sh
     _chruby_dirs
 elif [[ -r "/usr/local/share/chruby/chruby.sh" ]] ; then
     source /usr/local/share/chruby/chruby.sh

@@ -3,7 +3,7 @@
 #   that the user has changed to in the past, and ALT-RIGHT undoes ALT-LEFT.
 # 
 
-dirhistory_past=(`pwd`)
+dirhistory_past=($PWD)
 dirhistory_future=()
 export dirhistory_past
 export dirhistory_future
@@ -49,8 +49,9 @@ function push_future() {
 }
 
 # Called by zsh when directory changes
-function chpwd() {
-  push_past `pwd`
+chpwd_functions+=(chpwd_dirhistory)
+function chpwd_dirhistory() {
+  push_past $PWD
   # If DIRHISTORY_CD is not set...
   if [[ -z "${DIRHISTORY_CD+x}" ]]; then
     # ... clear future.
@@ -73,7 +74,7 @@ function dirhistory_back() {
   pop_past cw 
   if [[ "" == "$cw" ]]; then
     # Someone overwrote our variable. Recover it.
-    dirhistory_past=(`pwd`)
+    dirhistory_past=($PWD)
     return
   fi
 

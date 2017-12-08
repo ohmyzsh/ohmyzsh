@@ -1,5 +1,3 @@
-autoload -U colors && colors
-
 autoload -Uz vcs_info
 
 zstyle ':vcs_info:*' stagedstr '%F{green}●'

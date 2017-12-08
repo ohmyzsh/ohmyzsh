@@ -1,0 +1,106 @@
+#compdef tugboat
+#autoload
+
+# Tugboat zsh autocompletion
+
+
+local -a _commands
+_commands=(
+  'add-key:[NAME] Upload an ssh public key.'
+  'authorize:Authorize a DigitalOcean account with tugboat.'
+  'create:[NAME] Create a droplet.'
+  'destroy:[FUZZY_NAME] Destroy a droplet.'
+  'destroy_image:[FUZZY_NAME] Destroy an image.'
+  'droplets:Retrieve a list of your droplets.'
+  'halt:[FUZZY_NAME] Shutdown a droplet.'
+  'help:[COMMAND] Describe commands or a specific command.'
+  'images:Retrieve a list of your images.'
+  'info:[FUZZY_NAME] [OPTIONS] Show a droplets information.'
+  'info_image:[FUZZY_NAME] [OPTIONS] Show an images information.'
+  'keys:Show available SSH keys.'
+  'password-reset:[FUZZY_NAME] Reset root password.'
+  'rebuild:[FUZZY_NAME] [IMAGE_NAME] Rebuild a droplet.'
+  'regions:Show regions.'
+  'resize:[FUZZY_NAME -s, --size=N] Resize a droplet.'
+  'restart:[FUZZY_NAME] Restart a droplet.'
+  'sizes:Show available droplet sizes.'
+  'snapshot:[SNAPSHOT_NAME] [FUZZY_NAME] [OPTIONS] Queue a snapshot of the droplet.'
+  'ssh:[FUZZY_NAME] SSH into a droplet.'
+  'start:[FUZZY_NAME] Start a droplet.'
+  'verify:Check your DigitalOcean credentials.'
+  'version:Show version.'
+  'wait:[FUZZY_NAME] Wait for a droplet to reach a state.'
+)
+
+local -a _create_arguments
+_create_arguments=(
+  '-s:[--size=N] The size_id of the droplet'
+  '-i:[--image=N] The image_id of the droplet'
+  '-r:[--region=N] The region_id of the droplet'
+  '-k:[--keys=KEYS] A comma separated list of SSH key ids to add to the droplet'
+  '-p:[--private-networking] Enable private networking on the droplet'
+  '-b:[--backups-enabled] Enable backups on the droplet'
+  '-q:[--quiet]'
+)
+
+__task_list ()
+{
+  local expl
+  declare -a tasks
+
+  arguments=(add-key authorize create destroy destroy_image droplets halt help images info info_image keys password-reset rebuild regions resize restart sizes snapshot ssh start verify version wait)
+
+  _wanted tasks expl 'help' compadd $arguments
+}
+
+__droplets_list ()
+{
+    _wanted application expl 'command' compadd $(command tugboat droplets | cut -d " " -f1)
+}
+
+__tugboat-create ()
+{
+    local curcontext="$curcontext" state line
+    typeset -A opt_args
+
+    _arguments -C \
+        ':command:->command' \
+        '*::options:->options'
+
+    case $state in
+        (command)
+            _describe -t commands "gem subcommand" _create_arguments
+            return
+        ;;
+    esac
+}
+
+local curcontext="$curcontext" state line
+typeset -A opt_args
+
+_arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+case $state in
+  (command)
+    _describe -t commands "gem subcommand" _commands
+    return
+  ;;
+
+  (options)
+    case $line[1] in
+      (help)
+        _arguments ':feature:__task_list'
+      ;;
+
+      (ssh)
+        _arguments ':feature:__droplets_list'
+      ;;
+
+      (create)
+        _arguments ':feature:__tugboat-create'
+      ;;
+    esac
+  ;;
+esac
