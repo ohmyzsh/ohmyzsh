@@ -20,6 +20,14 @@ BACKGROUND_CYAN=$(tput setab 6)
 BACKGROUND_WHITE=$(tput setab 7)
 RESET_FORMATTING=$(tput sgr0)
 
+# if found a ./mvnw file execute it otherwise execute orignal mvn
+mvn-or-mvnw() {
+	if [ -f ./mvnw ] ; then
+		./mvnw "$@";
+	else
+		mvn "$@";
+	fi
+}
 
 # Wrapper function for Maven's mvn command.
 mvn-color() {
@@ -39,6 +47,9 @@ mvn-color() {
 
 # Override the mvn command with the colorized one.
 #alias mvn="mvn-color"
+
+# either use orignal mvn oder the mvn wrapper
+alias mvn="mvn-or-mvnw"
 
 # aliases
 alias mvncie='mvn clean install eclipse:eclipse'
@@ -274,3 +285,5 @@ function listMavenCompletions {
 }
 
 compctl -K listMavenCompletions mvn
+compctl -K listMavenCompletions mvn-or-mvnw
+
