@@ -23,6 +23,7 @@ RESET_FORMATTING=$(tput sgr0)
 # if found a ./mvnw file execute it otherwise execute orignal mvn
 mvn-or-mvnw() {
 	if [ -f ./mvnw ] ; then
+		echo "executing mvnw instead of mvn"		
 		./mvnw "$@";
 	else
 		mvn "$@";
