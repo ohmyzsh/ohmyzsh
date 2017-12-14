@@ -64,17 +64,16 @@ bureau_git_status() {
 }
 
 bureau_git_prompt () {
-  local _branch=$(bureau_git_branch)
-  local _status=$(bureau_git_status)
-  local _result=""
-  if [[ "${_branch}x" != "x" ]]; then
-    _result="$ZSH_THEME_GIT_PROMPT_PREFIX$_branch"
-    if [[ "${_status}x" != "x" ]]; then
+  if $(command git rev-parse --git-dir > /dev/null 2>&1); then
+    local _branch=$(bureau_git_branch)
+    local _status=$(bureau_git_status)
+    local _result="$ZSH_THEME_GIT_PROMPT_PREFIX$_branch"
+    if [[ -n "$_status" ]]; then
       _result="$_result $_status"
     fi
     _result="$_result$ZSH_THEME_GIT_PROMPT_SUFFIX"
+    echo $_result
   fi
-  echo $_result
 }
 
 
