@@ -78,7 +78,10 @@ plugins=(battery capistrano common-aliases git github laravel4 rbenv sublime sys
 >>>>>>> Added Laravel4 plug-in for autocomplete
 =======
 plugins=(common-aliases git rbenv systemadmin)
+<<<<<<< HEAD
 >>>>>>> Remove old Capistrano and Laravel4 plugin support.
+=======
+>>>>>>> Fix plugins call
 
 source $ZSH/oh-my-zsh.sh
 
