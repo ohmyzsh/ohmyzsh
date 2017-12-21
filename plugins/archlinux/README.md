@@ -51,6 +51,12 @@
 | pasu    | pacaur -Syua --no-confirm          | Same as `paupg`, but without confirmation                           |
 | upgrade | pacaur -Syu                        | Sync with repositories before upgrading packages                    |
 
+### TRIZEN
+
+| Alias   | Command                            | Description                                                         |
+|---------|------------------------------------|---------------------------------------------------------------------|
+| upgrade | trizen -Syu                        | Sync with repositories before upgrading packages                    |
+
 #### PACMAN
 
 | Alias        | Command                                 | Description                                                  |
@@ -95,3 +101,4 @@
 - ornicar - thibault.duplessis@gmail.com
 - Juraj Fiala - doctorjellyface@riseup.net
 - Majora320 (Moses Miller) - Majora320@gmail.com
+- Damián Cravacuore - cravacuore.dev@gmail.com
