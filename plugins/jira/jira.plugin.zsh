@@ -64,7 +64,7 @@ function jira() {
       local issue_arg=$(git rev-parse --abbrev-ref HEAD)
       local issue="${jira_prefix}${issue_arg}"
     else
-      local issue_arg=$action
+      local issue_arg=$( tr '[a-z]' '[A-Z]' <<< $action)
       local issue="${jira_prefix}${issue_arg}"
     fi
     local url_fragment=''
