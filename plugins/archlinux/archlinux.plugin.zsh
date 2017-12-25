@@ -56,15 +56,15 @@ fi
 
 if (( $+commands[pacaur] )); then
   upgrade() {
-    pacaur -Syu
+    pacaur -Syu $@
   }
 elif (( $+commands[yaourt] )); then
   upgrade() {
-    yaourt -Syu
+    yaourt -Syu $@
   }
 else
   upgrade() {
-    sudo pacman -Syu
+    sudo pacman -Syu $@
   }
 fi
 
@@ -83,7 +83,7 @@ alias pacmir='sudo pacman -Syy'
 alias paclsorphans='sudo pacman -Qdt'
 alias pacrmorphans='sudo pacman -Rs $(pacman -Qtdq)'
 alias pacfileupg='sudo pacman -Fy'
-alias pacfiles='pacman tFs'
+alias pacfiles='pacman -Fs'
 
 
 if (( $+commands[abs] && $+commands[aur] )); then
