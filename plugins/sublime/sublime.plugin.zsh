@@ -84,4 +84,35 @@ find_project()
     st $FINAL_DEST
 }
 
+function create_project() {
+
+    local _target=$1
+
+    if [[ "${_target}" == "" ]]; then
+        _target=$(pwd);
+    elif [[ ! -d ${_target} ]]; then
+        echo "${_target} is not a valid directory"
+        return 1
+    fi
+
+    local _sublime_project_file=$_target/$(basename $_target).sublime-project
+
+    if [[ ! -f $_sublime_project_file ]]; then
+        
+        touch $_sublime_project_file
+
+        echo -e "{"                         >> $_sublime_project_file
+        echo -e "\t\"folders\":"            >> $_sublime_project_file
+        echo -e "\t\t[{"                    >> $_sublime_project_file
+        echo -e "\t\t\t\"path\": \".\","    >> $_sublime_project_file
+        echo -e "\t\t\t\"file_exclude_patterns\": []" >> $_sublime_project_file
+        echo -e "\t\t}]"                    >> $_sublime_project_file
+        echo -e "}"                         >> $_sublime_project_file
+
+        echo -e "New Sublime Text project created:\n\t${_sublime_project_file}"
+
+    fi
+}
+
 alias stp=find_project
+alias stn=create_project
