@@ -23,7 +23,7 @@ fi
 
 alias yubi-init="pkill ssh-agent; pkill gpg-agent; ssh-agent -s > $_sshpath; source $_sshpath"
 alias yubi-insert="ssh-add -s $OPENSC"
-alias yubi-eject="ssh-add -d $OPENSC"
+alias yubi-eject="ssh-add -e $OPENSC"
 
 if [[ -r $_sshpath ]]; then
     echo "Common SSH Agent detected."
