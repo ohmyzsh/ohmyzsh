@@ -1,4 +1,4 @@
-# ys-pep Theme, based on ys Theme by Yad Smood
+# ys-pep Theme version 2, based on ys Theme by Yad Smood
 #
 # ----- BEGIN Original Description -----
 #
@@ -19,6 +19,13 @@
 #   * Fix Mercurial detection
 #
 # Sep-Oct 2017 Pandu POLUAN <pepoluan@gmail.com>
+#
+# Changes to ys-pep theme:
+#   * Split the prompt definition to 3 sections for better maintainability
+#   * Add "leftbar" to more easily identify the prompt after a monstrous scroll
+#   * Better IP address detection -- skips link-local, loopback, and DOWN ifaces
+#
+# Nov-Dec 2017 Pandu POLUAN <pepoluan@gmail.com>
 
 # VCS
 YS_VCS_PROMPT_PREFIX1=" %F{white}on%{$reset_color%} "
