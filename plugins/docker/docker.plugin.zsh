@@ -8,3 +8,12 @@ drmf='docker container rm -f'
 ds='docker container stop'
 dt='docker top'
 dv='docker version'
+dpo='docker container port'
+dpu='docker pull'
+dx='docker exec'
+dbl='docker build'
+dhh='docker help'
+
+#docker images
+dirm='docker image rm'
+dils='docker image ls'
