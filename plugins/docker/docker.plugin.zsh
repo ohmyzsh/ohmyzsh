@@ -32,5 +32,6 @@ alias dncn='docker network connect'
 alias dndcn='docker network disconnect'
 
 #docker volume
-alias dvl='docker volume ls'
+alias dvls='docker volume ls'
+alias dvi='docker volume inspect'
 alias dvclean='docker volume rm $(docker volume ls -qf dangling=true)'
