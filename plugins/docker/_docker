@@ -226,7 +226,7 @@ __docker_get_log_options() {
     common_options=("max-buffer-size" "mode")
     common_options2=("env" "env-regex" "labels")
     awslogs_options=($common_options "awslogs-create-group" "awslogs-datetime-format" "awslogs-group" "awslogs-multiline-pattern" "awslogs-region" "awslogs-stream" "tag")
-    fluentd_options=($common_options $common_options2 "fluentd-address" "fluentd-async-connect" "fluentd-buffer-limit" "fluentd-retry-wait" "fluentd-max-retries" "tag")
+    fluentd_options=($common_options $common_options2 "fluentd-address" "fluentd-async-connect" "fluentd-buffer-limit" "fluentd-retry-wait" "fluentd-max-retries" "fluentd-sub-second-precision" "tag")
     gcplogs_options=($common_options $common_options2 "gcp-log-cmd" "gcp-meta-id" "gcp-meta-name" "gcp-meta-zone" "gcp-project")
     gelf_options=($common_options $common_options2 "gelf-address" "gelf-compression-level" "gelf-compression-type" "tag")
     journald_options=($common_options $common_options2 "tag")
@@ -745,6 +745,7 @@ __docker_container_subcommand() {
                 "($help)--privileged[Give extended Linux capabilities to the command]" \
                 "($help -t --tty)"{-t,--tty}"[Allocate a pseudo-tty]" \
                 "($help -u --user)"{-u=,--user=}"[Username or UID]:user:_users" \
+                "($help -w --workdir)"{-w=,--workdir=}"[Working directory inside the container]:directory:_directories" \
                 "($help -):containers:__docker_complete_running_containers" \
                 "($help -)*::command:->anycommand" && ret=0
             case $state in
@@ -1393,7 +1394,7 @@ __docker_nodes() {
     # Names
     if [[ $type = (names|all) ]]; then
         for line in $lines; do
-            s="${line[${begin[NAME]},${end[NAME]}]%% ##}"
+            s="${line[${begin[HOSTNAME]},${end[HOSTNAME]}]%% ##}"
             nodes=($nodes $s)
         done
     fi
@@ -1955,6 +1956,7 @@ __docker_service_subcommand() {
         "($help)--health-retries=[Consecutive failures needed to report unhealthy]:retries:(1 2 3 4 5)"
         "($help)--health-timeout=[Maximum time to allow one check to run]:time: "
         "($help)--hostname=[Service container hostname]:hostname: " \
+        "($help)--isolation=[Service container isolation mode]:isolation:(default process hyperv)" \
         "($help)*--label=[Service labels]:label: "
         "($help)--limit-cpu=[Limit CPUs]:value: "
         "($help)--limit-memory=[Limit Memory]:value: "
@@ -2168,9 +2170,9 @@ __docker_stacks() {
     end[${header[$i,$((j-1))]}]=-1
     lines=(${lines[2,-1]})
 
-    # Service ID
+    # Service NAME
     for line in $lines; do
-        s="${line[${begin[ID]},${end[ID]}]%% ##}"
+        s="${line[${begin[NAME]},${end[NAME]}]%% ##}"
         stacks=($stacks $s)
     done
 
@@ -2631,7 +2633,6 @@ __docker_subcommand() {
                 "($help)--default-gateway-v6[Container default gateway IPv6 address]:IPv6 address: " \
                 "($help)--default-shm-size=[Default shm size for containers]:size:" \
                 "($help)*--default-ulimit=[Default ulimits for containers]:ulimit: " \
-                "($help)--disable-legacy-registry[Disable contacting legacy registries (default true)]" \
                 "($help)*--dns=[DNS server to use]:DNS: " \
                 "($help)*--dns-opt=[DNS options to use]:DNS option: " \
                 "($help)*--dns-search=[DNS search domains to use]:DNS search: " \
