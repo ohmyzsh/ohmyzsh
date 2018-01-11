@@ -15,59 +15,93 @@ _rustc_crate_types=(
     'lib'
     'rlib'
     'dylib'
+    'cdylib'
     'staticlib'
+    'proc-macro'
 )
 
 _rustc_emit_types=(
     'asm'
-    'bc'
-    'ir'
+    'llvm-bc'
+    'llvm-ir'
     'obj'
+    'metadata'
     'link'
+    'dep-info'
+    'mir'
+)
+_rustc_print_types=(
+    'crate-name'
+    'file-names'
+    'sysroot'
+    'cfg'
+    'target-list'
+    'target-cpus'
+    'target-features'
+    'relocation-models'
+    'code-models'
+    'target-spec-json'
+    'native-static-libs'
 )
 _rustc_pretty_types=(
     'normal[un-annotated source]'
     'expanded[crates expanded]'
-    'typed[crates  expanded,  with  type  annotations]'
-    'identified[fully parenthesized, AST nodes and blocks with IDs]'
+    'expanded,identified[fully parenthesized, AST nodes with IDs]'
+)
+_rustc_unpretty_types=(
+    'normal[un-annotated source]'
+    'expanded[crates expanded]'
+    'expanded,identified[fully parenthesized, AST nodes with IDs]'
     'flowgraph=[graphviz formatted flowgraph for node]:NODEID:'
+    'everybody_loops[all function bodies replaced with `loop {}`]'
+    'hir[the HIR]'
+    'hir,identified'
+    'hir,typed[HIR with types for each node]'
 )
 _rustc_color_types=(
     'auto[colorize, if output goes to a tty (default)]'
     'always[always colorize output]'
     'never[never colorize output]'
 )
+_rustc_error_format=(
+    'human'
+    'json'
+)
 
 _rustc_opts_vals=(
+    --cfg='[Configure the compilation environment]:SPEC:'
+    -L'[Add a directory to the library search path]:DIR:_files -/'
     --crate-name='[Specify the name of the crate being built]'
     --crate-type='[Comma separated list of types of crates for the compiler to emit]:TYPES:_values -s "," "Crate types"  "$_rustc_crate_types[@]"'
     --emit='[Comma separated list of types of output for the compiler to emit]:TYPES:_values -s "," "Emit Targets" "$_rustc_emit_types[@]"'
+    --print='[Comma separated list of compiler information to print on stdout]:TYPES:_values -s "," "Printable info" "$_rustc_print_types[@]"'
+    -o'[Write output to <filename>. Ignored if more than one --emit is specified.]:FILENAME:_files'
+    --out-dir='[Write output to compiler-chosen filename in <dir>.  Ignored  if  -o  is  specified. (default the current directory)]:DIR:_files -/'
+    --explain='[Provide a detailed explanation of an error message]:OPT:'
+    --target='[Target triple cpu-manufacturer-kernel\[-os\] to compile]:TRIPLE:'
+    --extern'[Specify where an external rust library is located]:ARG:'
+    --sysroot='[Override the system root]:PATH:_files -/'
+    --error-format='[How errors and other messages are produced]:TYPES:_values "$_rustc_error_format"'
     --debuginfo='[Emit DWARF debug info to the objects created]:LEVEL:_values "Debug Levels" "$_rustc_debuginfo_levels[@]"'
     --dep-info='[Output dependency info to <filename> after compiling]::FILE:_files -/'
-    --sysroot='[Override the system root]:PATH:_files -/'
-    --cfg='[Configure the compilation environment]:SPEC:'
-    --out-dir='[Write output to compiler-chosen filename in <dir>.  Ignored  if  -o  is  specified. (default the current directory)]:DIR:_files -/'
-    -o'[Write output to <filename>. Ignored if more than one --emit is specified.]:FILENAME:_files'
     --opt-level='[Optimize with possible levels 0-3]:LEVEL:(0 1 2 3)'
     --pretty='[Pretty-print the input instead of compiling]::TYPE:_values "TYPES" "$_rustc_pretty_types[@]"'
-    -L'[Add a directory to the library search path]:DIR:_files -/'
-    --target='[Target triple cpu-manufacturer-kernel\[-os\] to compile]:TRIPLE:'
+    --unpretty='[Present the input source, unstable (and less-pretty)]::TYPE:_values "TYPES" "$_rustc_unpretty_types[@]"'
     --color='[Configure coloring of output]:CONF:_values "COLORS" "$_rustc_color_types[@]"'
     {-v,--version}'[Print version info and exit]::VERBOSE:(verbose)'
-    --explain='[Provide a detailed explanation of an error message]:OPT:'
-    --extern'[Specify where an external rust library is located]:ARG:'
 )
 
 _rustc_opts_switches=(
     -g'[Equivalent to --debuginfo=2]'
+    -O'[Equivalent to --opt-level=2]'
+    --test'[Build a test harness]'
+    --verbose'[Use verbose output]'
     {-h,--help}'[Display this message]'
     --no-analysis'[Parse and expand the output, but run no analysis or produce output]'
     --no-trans'[Run all passes except translation; no output]'
-    -O'[Equivalent to --opt-level=2]'
     --parse-only'[Parse only; do not compile, assemble, or link]'
     --print-crate-name'[Output the crate name and exit]'
     --print-file-name'[Output the file(s) that would be written if compilation continued and exit]'
-    --test'[Build a test harness]'
 )
 _rustc_opts_codegen=(
     'ar=[Path to the archive utility to use when assembling archives.]:BIN:_path_files'
@@ -139,6 +173,9 @@ _rustc_opts_lint=(
 
 _rustc_opts_debug=(
     'verbose[in general, enable more debug printouts]'
+    'span-free-formats[when debug-printing compiler state, do not include spans]'
+    "identify-regions[make unnamed regions display as '# (where # is some non-ident unique id)]"
+    'emit-end-regions[emit EndRegion as part of MIR; enable transforms that solely process EndRegion]'
     'time-passes[measure time of each rustc pass]'
     'count-llvm-insns[count where LLVM instrs originate]'
     'time-llvm-passes[measure time of each LLVM pass]'
