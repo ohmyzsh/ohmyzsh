@@ -108,7 +108,11 @@ main() {
   echo 'p.p.s. Get stickers, shirts, and coffee mugs at https://shop.planetargon.com/collections/oh-my-zsh.'
   echo ''
   printf "${NORMAL}"
-  env zsh -l
+  if [ "$1" == "--silent" ]; then
+    printf "Skipping launch of zsh shell. You can launch it yourself or restart your terminal."
+  else
+    env zsh -l
+  fi
 }
 
-main
+main "$@"
