@@ -14,7 +14,7 @@ plugins=(... ssh-agent)
 To enable **agent forwarding support** add the following to your zshrc file:
 
 ```zsh
-zstyle :omz:plugins:ssh-agent agent-forwarding on
+zstyle :omz:plugins:ssh-agent agent-forwarding yes
 ```
 
 To **load multiple identities** use the `identities` style, For example:
