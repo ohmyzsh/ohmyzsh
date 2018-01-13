@@ -172,8 +172,9 @@ alias gb='git branch'
 compdef _git gb=git-branch
 alias gba='git branch -a'
 compdef _git gba=git-branch
-alias gbsutom='git branch --set-upstream-to=origin/master'
-alias git-track-upstream-master='gbsutom'
+alias gbsutum='git branch --set-upstream-to=upstream/master'
+alias git-track-origin-master='git branch --set-upstream-to=origin/master'
+alias git-track-upstream-master='gbsutum'
 
 ##############
 # Git Log (gl)
