@@ -78,7 +78,7 @@ alias gPt='git push --tags'
 alias gf='git fetch'
 compdef _git gf='git-fetch'
 # Git fetch all branches
-alias gfa='git fetch --all'
+alias gfa='git fetch --all --recurse-submodules'
 compdef _git gfa='git-fetch'
 # reset your work to the latest status of the code base (and fetch all other branches).
 # (git fetch all branch and rebase)
@@ -216,6 +216,14 @@ compdef _git grH=git-reset
 # Hard reset to HEAD
 alias grhH='git reset HEAD --hard'
 compdef _git grhH=git-reset
+function git-reset-with-submodules() {
+  git clean -xfdf
+  git submodule foreach --recursive git clean -xfd
+  git reset --hard
+  git submodule foreach --recursive git reset --hard
+  git submodule update --init --recursive
+}
+
 
 ################
 # Git merge (gm)
