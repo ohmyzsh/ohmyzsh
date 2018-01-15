@@ -70,6 +70,7 @@ ZSH_THEME="robbyrussell"
 <<<<<<< HEAD
 # Add wisely, as too many plugins slow down shell startup.
 <<<<<<< HEAD
+<<<<<<< HEAD
 plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
@@ -82,6 +83,9 @@ plugins=(common-aliases git rbenv systemadmin)
 >>>>>>> Remove old Capistrano and Laravel4 plugin support.
 =======
 >>>>>>> Fix plugins call
+=======
+plugins=(common-aliases git rbenv systemadmin laravel5)
+>>>>>>> Add Laraval5 plugin
 
 source $ZSH/oh-my-zsh.sh
 
