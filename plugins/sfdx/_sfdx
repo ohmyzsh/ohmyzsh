@@ -123,7 +123,7 @@ case "$words[1]" in
  force:data:bulk:delete)
  _command_args=(
  '(-s|--sobjecttype)'{-s,--sobjecttype}'[the sObject type of the records you’re deleting]' \
- '(-f|--csvfile)'{-f,--csvfile}'[the path to the CSV file containing the ids of the records to delete]' \
+ '(-f|--csvfile)'{-f,--csvfile}'[the path to the CSV file containing the ids of the records to delete]:file:_files' \
  '(-w|--wait)'{-w,--wait}'[the number of minutes to wait for the command to complete before displaying the results]' \
  '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
  '(--json)--json[format output as json]' \
@@ -142,7 +142,7 @@ case "$words[1]" in
  force:data:bulk:upsert)
  _command_args=(
  '(-s|--sobjecttype)'{-s,--sobjecttype}'[the sObject type of the records you want to upsert]' \
- '(-f|--csvfile)'{-f,--csvfile}'[the path to the CSV file that defines the records to upsert]' \
+ '(-f|--csvfile)'{-f,--csvfile}'[the path to the CSV file that defines the records to upsert]:file:_files' \
  '(-i|--externalid)'{-i,--externalid}'[the column name of the external ID; if not provided, an arbitrary ID is used]' \
  '(-w|--wait)'{-w,--wait}'[the number of minutes to wait for the command to complete before displaying the results]' \
  '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
@@ -199,16 +199,16 @@ case "$words[1]" in
  ;;
  force:mdapi:convert)
  _command_args=(
- '(-r|--rootdir)'{-r,--rootdir}'[the root directory containing the Metadata API source]' \
- '(-d|--outputdir)'{-d,--outputdir}'[the output directory to store the sfdx source]' \
+ '(-r|--rootdir)'{-r,--rootdir}'[the root directory containing the Metadata API source]:file:_files' \
+ '(-d|--outputdir)'{-d,--outputdir}'[the output directory to store the sfdx source]:file:_files' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
  )
  ;;
  force:source:convert)
  _command_args=(
- '(-r|--rootdir)'{-r,--rootdir}'[the source directory for the source to be converted]' \
- '(-d|--outputdir)'{-d,--outputdir}'[the output directory to export the Metadata API source to]' \
+ '(-r|--rootdir)'{-r,--rootdir}'[the source directory for the source to be converted]:file:_files' \
+ '(-d|--outputdir)'{-d,--outputdir}'[the output directory to export the Metadata API source to]:file:_files' \
  '(-n|--packagename)'{-n,--packagename}'[the name of the package to associate with the Metadata API source]' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
@@ -216,7 +216,7 @@ case "$words[1]" in
  ;;
  force:org:create)
  _command_args=(
- '(-f|--definitionfile)'{-f,--definitionfile}'[path to a scratch org definition file]' \
+ '(-f|--definitionfile)'{-f,--definitionfile}'[path to a scratch org definition file]:file:_files' \
  '(-j|--definitionjson)'{-j,--definitionjson}'[scratch org definition in json format ]' \
  '(-n|--nonamespace)'{-n,--nonamespace}'[creates the scratch org with no namespace]' \
  '(-c|--noancestors)'{-c,--noancestors}'[do not include second-generation package ancestors in the scratch org]' \
@@ -244,7 +244,7 @@ case "$words[1]" in
  ;;
  force:user:create)
  _command_args=(
- '(-f|--definitionfile)'{-f,--definitionfile}'[file path to a user definition]' \
+ '(-f|--definitionfile)'{-f,--definitionfile}'[file path to a user definition]:file:_files' \
  '(-a|--setalias)'{-a,--setalias}'[set an alias for the created username to reference within the CLI]' \
  '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
  '(-v|--targetdevhubusername)'{-v,--targetdevhubusername}'[username or alias for the dev hub org; overrides default dev hub org]' \
@@ -261,7 +261,7 @@ case "$words[1]" in
  '(-l|--loginurl)'{-l,--loginurl}'[Salesforce instance login URL (https://login.salesforce.com*)]' \
  '(-x|--sourceapiversion)'{-x,--sourceapiversion}'[source API version number (41.0*)]' \
  '(-s|--namespace)'{-s,--namespace}'[project associated namespace]' \
- '(-p|--defaultpackagedir)'{-p,--defaultpackagedir}'[default package directory name (force-app*)]' \
+ '(-p|--defaultpackagedir)'{-p,--defaultpackagedir}'[default package directory name (force-app*)]:file:_files' \
  '(--json)--json[JSON output]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
  )
@@ -278,7 +278,7 @@ case "$words[1]" in
  force:mdapi:deploy)
  _command_args=(
  '(-c|--checkonly)'{-c,--checkonly}'[validate deploy but don’t save to the org (default:false)]' \
- '(-d|--deploydir)'{-d,--deploydir}'[root of directory tree of files to deploy]' \
+ '(-d|--deploydir)'{-d,--deploydir}'[root of directory tree of files to deploy]:file:_files' \
  '(-w|--wait)'{-w,--wait}'[wait time for command to finish in minutes (default: 0)]' \
  '(-i|--jobid)'{-i,--jobid}'[WARNING: The flag "jobid" has been deprecated and will be removed in v41.01.0 or later. Instead, use "sfdx force:mdapi:deploy:report -i <jobId>".]' \
  '(-l|--testlevel)'{-l,--testlevel}'[deployment testing level (NoTestRun,RunSpecifiedTests,RunLocalTests,RunAllTestsInOrg)]' \
@@ -286,7 +286,7 @@ case "$words[1]" in
  '(-e|--rollbackonerror)'{-e,--rollbackonerror}'[WARNING: The flag "rollbackonerror" has been deprecated and will be removed in v41.01.0 or later. Instead, use "ignoreerrors".]' \
  '(-o|--ignoreerrors)'{-o,--ignoreerrors}'[ignore any errors and do not roll back deployment (default:false)]' \
  '(-g|--ignorewarnings)'{-g,--ignorewarnings}'[whether a warning will allow a deployment to complete successfully (default:false)]' \
- '(-f|--zipfile)'{-f,--zipfile}'[path to .zip file of metadata to deploy]' \
+ '(-f|--zipfile)'{-f,--zipfile}'[path to .zip file of metadata to deploy]:file:_files' \
  '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
@@ -332,7 +332,7 @@ case "$words[1]" in
  ;;
  force:apex:execute)
  _command_args=(
- '(-f|--apexcodefile)'{-f,--apexcodefile}'[path to a local file containing Apex code]' \
+ '(-f|--apexcodefile)'{-f,--apexcodefile}'[path to a local file containing Apex code]:file:_files' \
  '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
@@ -385,7 +385,7 @@ case "$words[1]" in
  force:auth:jwt:grant)
  _command_args=(
  '(-u|--username)'{-u,--username}'[authentication username]' \
- '(-f|--jwtkeyfile)'{-f,--jwtkeyfile}'[path to a file containing the private key]' \
+ '(-f|--jwtkeyfile)'{-f,--jwtkeyfile}'[path to a file containing the private key]:file:_files' \
  '(-i|--clientid)'{-i,--clientid}'[OAuth client ID (sometimes called the consumer key)]' \
  '(-r|--instanceurl)'{-r,--instanceurl}'[the login URL of the instance the org lives on]' \
  '(-d|--setdefaultdevhubusername)'{-d,--setdefaultdevhubusername}'[set the authenticated org as the default dev hub org for scratch org creation]' \
@@ -398,9 +398,9 @@ case "$words[1]" in
  force:lightning:lint)
  _command_args=(
  '(-i|--ignore)'{-i,--ignore}'[pattern used to ignore some folders]' \
- '(--files)--files[pattern used to include specific files]' \
+ '(--files)--files[pattern used to include specific files]:file:_files' \
  '(-j|--json)'{-j,--json}'[format output as JSON]' \
- '(--config)--config[path to a custom ESLint configuration file]' \
+ '(--config)--config[path to a custom ESLint configuration file]:file:_files' \
  '(--verbose)--verbose[report warnings in addition to errors]' \
  '(--exit)--exit[exit with error code 1 if there are lint issues]' \
  )
@@ -459,7 +459,7 @@ case "$words[1]" in
  ;;
  force:org:open)
  _command_args=(
- '(-p|--path)'{-p,--path}'[navigation URL path]' \
+ '(-p|--path)'{-p,--path}'[navigation URL path]:file:_files' \
  '(-r|--urlonly)'{-r,--urlonly}'[display navigation URL, but don’t launch browser]' \
  '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
  '(--json)--json[format output as json]' \
@@ -468,7 +468,7 @@ case "$words[1]" in
  ;;
  force:source:open)
  _command_args=(
- '(-f|--sourcefile)'{-f,--sourcefile}'[file to edit]' \
+ '(-f|--sourcefile)'{-f,--sourcefile}'[file to edit]:file:_files' \
  '(-r|--urlonly)'{-r,--urlonly}'[generate a navigation URL; don’t launch the editor]' \
  '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
  '(--json)--json[format output as json]' \
@@ -572,8 +572,8 @@ case "$words[1]" in
  _command_args=(
  '(-a|--apiversion)'{-a,--apiversion}'[target API version for the retrieve (default 41.0)]' \
  '(-w|--wait)'{-w,--wait}'[wait time for command to finish in minutes (default: -1 (no limit))]' \
- '(-r|--retrievetargetdir)'{-r,--retrievetargetdir}'[directory root for the retrieved files]' \
- '(-k|--unpackaged)'{-k,--unpackaged}'[file path of manifest of components to retrieve]' \
+ '(-r|--retrievetargetdir)'{-r,--retrievetargetdir}'[directory root for the retrieved files]:file:_files' \
+ '(-k|--unpackaged)'{-k,--unpackaged}'[file path of manifest of components to retrieve]:file:_files' \
  '(-d|--sourcedir)'{-d,--sourcedir}'[source dir to use instead of default manifest sfdx-project.xml]' \
  '(-p|--packagenames)'{-p,--packagenames}'[a comma-separated list of packages to retrieve]' \
  '(-s|--singlepackage)'{-s,--singlepackage}'[a single-package retrieve (default: false)]' \
@@ -587,7 +587,7 @@ case "$words[1]" in
  force:mdapi:retrieve:report)
  _command_args=(
  '(-w|--wait)'{-w,--wait}'[wait time for command to finish in minutes (default: -1 (no limit))]' \
- '(-r|--retrievetargetdir)'{-r,--retrievetargetdir}'[directory root for the retrieved files]' \
+ '(-r|--retrievetargetdir)'{-r,--retrievetargetdir}'[directory root for the retrieved files]:file:_files' \
  '(-i|--jobid)'{-i,--jobid}'[job ID of the retrieve you want to check]' \
  '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
  '(--json)--json[format output as json]' \
@@ -603,14 +603,14 @@ case "$words[1]" in
  ;;
  force:config:set)
  _command_args=(
- '(-g|--global)'{-g,--global}'[set config var globally (to be used from any directory)]' \
+ '(-g|--global)'{-g,--global}'[set config var globally (to be used from any directory)]:file:_files' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
  )
  ;;
  force:auth:sfdxurl:store)
  _command_args=(
- '(-f|--sfdxurlfile)'{-f,--sfdxurlfile}'[path to a file containing the sfdx url]' \
+ '(-f|--sfdxurlfile)'{-f,--sfdxurlfile}'[path to a file containing the sfdx url]:file:_files' \
  '(-d|--setdefaultdevhubusername)'{-d,--setdefaultdevhubusername}'[set the authenticated org as the default dev hub org for scratch org creation]' \
  '(-s|--setdefaultusername)'{-s,--setdefaultusername}'[set the authenticated org as the default username that all commands run against]' \
  '(-a|--setalias)'{-a,--setalias}'[set an alias for the authenticated org]' \
@@ -700,7 +700,7 @@ case "$words[1]" in
  _command_args=(
  '(-i|--testrunid)'{-i,--testrunid}'[ID of test run]' \
  '(-c|--codecoverage)'{-c,--codecoverage}'[retrieve code coverage results]' \
- '(-d|--outputdir)'{-d,--outputdir}'[directory to store test run files]' \
+ '(-d|--outputdir)'{-d,--outputdir}'[directory to store test run files]:file:_files' \
  '(-r|--resultformat)'{-r,--resultformat}'[test result format emitted to stdout; --json flag overrides this parameter (human*,tap,junit,json)]' \
  '(-w|--wait)'{-w,--wait}'[the streaming client socket timeout (in minutes) (default:6, min:2)]' \
  '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
@@ -714,7 +714,7 @@ case "$words[1]" in
  '(-n|--classnames)'{-n,--classnames}'[comma-separated list of Apex test class names to execute]' \
  '(-s|--suitenames)'{-s,--suitenames}'[comma-separated list of Apex test suite names to execute]' \
  '(-c|--codecoverage)'{-c,--codecoverage}'[retrieve code coverage results]' \
- '(-d|--outputdir)'{-d,--outputdir}'[directory to store test run files]' \
+ '(-d|--outputdir)'{-d,--outputdir}'[directory to store test run files]:file:_files' \
  '(-l|--testlevel)'{-l,--testlevel}'[testlevel enum value (RunLocalTests,RunAllTestsInOrg,RunSpecifiedTests)]' \
  '(-r|--resultformat)'{-r,--resultformat}'[test result format emitted to stdout; --json flag overrides this parameter (human*,tap,junit,json)]' \
  '(-w|--wait)'{-w,--wait}'[the streaming client socket timeout (in minutes) (default:6, min:2)]' \
@@ -729,9 +729,9 @@ case "$words[1]" in
  force:lightning:test:run)
  _command_args=(
  '(-a|--appname)'{-a,--appname}'[name of your Lightning test application]' \
- '(-d|--outputdir)'{-d,--outputdir}'[directory path to store test run artifacts: for example, log files and test results]' \
+ '(-d|--outputdir)'{-d,--outputdir}'[directory path to store test run artifacts: for example, log files and test results]:file:_files' \
  '(-r|--resultformat)'{-r,--resultformat}'[test result format emitted to stdout; --json flag overrides this parameter (human*,tap,junit,json)]' \
- '(-f|--configfile)'{-f,--configfile}'[path to config file for the test]' \
+ '(-f|--configfile)'{-f,--configfile}'[path to config file for the test]:file:_files' \
  '(-o|--leavebrowseropen)'{-o,--leavebrowseropen}'[leave browser open]' \
  '(-t|--timeout)'{-t,--timeout}'[time (ms) to wait for results element in dom (default:60000)]' \
  '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
@@ -741,10 +741,10 @@ case "$words[1]" in
  ;;
  force:data:tree:export)
  _command_args=(
- '(-q|--query)'{-q,--query}'[soql query, or filepath of file containing a soql query, to retrieve records]' \
+ '(-q|--query)'{-q,--query}'[soql query, or filepath of file containing a soql query, to retrieve records]:file:_files' \
  '(-p|--plan)'{-p,--plan}'[generate mulitple sobject tree files and a plan definition file for aggregated import]' \
  '(-x|--prefix)'{-x,--prefix}'[prefix of generated files]' \
- '(-d|--outputdir)'{-d,--outputdir}'[directory to store files]' \
+ '(-d|--outputdir)'{-d,--outputdir}'[directory to store files]:file:_files' \
  '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
@@ -752,8 +752,8 @@ case "$words[1]" in
  ;;
  force:data:tree:import)
  _command_args=(
- '(-f|--sobjecttreefiles)'{-f,--sobjecttreefiles}'[comma-delimited, ordered paths of json files containing collection of record trees to insert]' \
- '(-p|--plan)'{-p,--plan}'[path to plan to insert multiple data files that have master-detail relationships]' \
+ '(-f|--sobjecttreefiles)'{-f,--sobjecttreefiles}'[comma-delimited, ordered paths of json files containing collection of record trees to insert]:file:_files' \
+ '(-p|--plan)'{-p,--plan}'[path to plan to insert multiple data files that have master-detail relationships]:file:_files' \
  '(-c|--contenttype)'{-c,--contenttype}'[if data file extension is not .json, provide content type (applies to all files)]' \
  '(--confighelp)--confighelp[display schema information for the --plan configuration file to stdout; if you use this option, all other options except --json are ignored]' \
  '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
@@ -827,7 +827,7 @@ case "$words[1]" in
  force:package2:version:create)
  _command_args=(
  '(-i|--package2id)'{-i,--package2id}'[ID of the parent package (starts with 0Ho)]' \
- '(-d|--directory)'{-d,--directory}'[path to directory that contains the contents of the package version]' \
+ '(-d|--directory)'{-d,--directory}'[path to directory that contains the contents of the package version]:file:_files' \
  '(-b|--branch)'{-b,--branch}'[the package version’s branch]' \
  '(-t|--tag)'{-t,--tag}'[the package version’s tag]' \
  '(-k|--installationkey)'{-k,--installationkey}'[installation key for key-protected package (default: null)]' \
