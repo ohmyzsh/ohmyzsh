@@ -21,12 +21,18 @@ if [ $commands[kubectl] ]; then
   alias kccc='k config current-context'
 
   # Pod management.
-  alias kgp='k get pods'
-  alias kgpa='k get pods --all-namespaces'
+  alias kgp='k get pods -owide'
+  alias kgpa='k get pods -owide --all-namespaces'
   alias klp='k logs pods'
   alias kep='k edit pods'
   alias kdp='k describe pods'
   alias kdelp='k delete pods'
+  alias ktp='k top pods'
+  
+  # Horizontal Pod Autoscaler Management
+  alias kdhpa='k describe hpa'
+  alias kehpa='k edit hpa'
+  alias kdelhpa='k delete hpa'
 
   # Service management.
   alias kgs='k get svc'
@@ -56,6 +62,7 @@ if [ $commands[kubectl] ]; then
   # Node management
   alias kgn='k get nodes'
   alias kdn='k describe nodes'
+  alias ktn='k top nodes'
 
   # Port Forwarding
   alias kpf='k port-forward'
