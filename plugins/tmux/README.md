@@ -1,4 +1,4 @@
-# Git plugin
+# tmux plugin
 
 
 
