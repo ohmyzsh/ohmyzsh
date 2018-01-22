@@ -24,6 +24,7 @@ alias klp='k logs pods'
 alias kep='k edit pods'
 alias kdp='k describe pods'
 alias kdelp='k delete pods'
+alias kgpall='k get pods --all-namespaces -o wide'
 
 # Service management.
 alias kgs='k get svc'
