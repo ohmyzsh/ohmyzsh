@@ -19,6 +19,8 @@
 | yarem   | yaourt -Rns                        | Remove packages, including its settings and unneeded dependencies   |
 | yarep   | yaourt -Si                         | Display information about a package in the repositories             |
 | yareps  | yaourt -Ss                         | Search for packages in the repositories                             |
+| yacc    | yaourt -Sc                         | Remove old packages from cache directory                            |
+| yacac   | yaourt -Scc                        | Remove all packages from cache directory                            |
 | yaupd   | yaourt -Sy && sudo abs && sudo aur | Update and refresh local package, ABS and AUR databases             |
 | yaupd   | yaourt -Sy && sudo abs             | Update and refresh the local package and ABS databases              |
 | yaupd   | yaourt -Sy && sudo aur             | Update and refresh the local package and AUR databases              |
@@ -66,6 +68,8 @@
 | pacrem       | sudo pacman -Rns                        | Remove packages, including its settings and dependencies     |
 | pacrep       | pacman -Si                              | Display information about a package in the repositories      |
 | pacreps      | pacman -Ss                              | Search for packages in the repositories                      |
+| paccc        | pacman -Sc                              | Remove old packages from cache directory                     |
+| paccac       | pacman -Scc                             | Remove all packages from cache directory                     |
 | pacrmorphans | sudo pacman -Rs $(pacman -Qtdq)         | Delete all orphaned packages                                 |
 | pacupd       | sudo pacman -Sy && sudo abs && sudo aur | Update and refresh the local package, ABS and AUR databases  |
 | pacupd       | sudo pacman -Sy && sudo abs             | Update and refresh the local package and ABS databases       |
@@ -95,3 +99,4 @@
 - ornicar - thibault.duplessis@gmail.com
 - Juraj Fiala - doctorjellyface@riseup.net
 - Majora320 (Moses Miller) - Majora320@gmail.com
+- Dmitry Kryukov - remasik@gmail.com
