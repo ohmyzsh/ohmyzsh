@@ -85,6 +85,7 @@ alias gcpc='git cherry-pick --continue'
 alias gcs='git commit -S'
 
 alias gd='git diff'
+alias gda='git checkout -- .'
 alias gdca='git diff --cached'
 alias gdcw='git diff --cached --word-diff'
 alias gdct='git describe --tags `git rev-list --tags --max-count=1`'
