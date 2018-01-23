@@ -2,6 +2,7 @@
 
 alias y="yarn "
 alias ya="yarn add"
+alias yad="yarn add --dev"
 alias ycc="yarn cache clean"
 alias yh="yarn help"
 alias yo="yarn outdated"
