@@ -25,10 +25,19 @@ _n98_magerun () {
 compdef _n98_magerun n98-magerun.phar
 compdef _n98_magerun n98-magerun
 
+compdef _n98_magerun n98-magerun2.phar
+compdef _n98_magerun n98-magerun2
+
+if type "n98-magerun.phar" > /dev/null; then
+    alias n98='n98-magerun.phar'
+    alias mage='n98-magerun.phar'
+else
+    alias n98='n98-magerun'
+    alias mage='n98-magerun'
+fi
+
 # Aliases
-alias n98='n98-magerun.phar'
-alias mage='n98-magerun.phar'
-alias magefl='n98-magerun.phar cache:flush'
+alias magefl='n98 cache:flush'
 
 # Install n98-magerun into the current directory
 alias mage-get='wget https://raw.github.com/netz98/n98-magerun/master/n98-magerun.phar'
