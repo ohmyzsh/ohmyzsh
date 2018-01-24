@@ -8,3 +8,4 @@ source_env() {
 
 autoload -U add-zsh-hook
 add-zsh-hook chpwd source_env
+add-zsh-hook precmd source_env
