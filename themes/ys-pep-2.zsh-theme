@@ -75,7 +75,9 @@ yspep_my_ip() {
   else
     echo -n $(
       while read num dev etc; do
-        ip -d -o addr sh ${dev:0: -1} |
+        dev="${dev:0: -1}"  # Remove trailing colon
+        dev="${dev//@*/}"   # Remove "@xxx" prefix
+        ip -d -o addr sh ${dev} |
           awk '$3 == "inet" {sub(/\/[0-9]+/, "", $4); print "%F{022}"$2":%F{green}"$4}';
       done <<<"$(
         ip -d -o link sh |
