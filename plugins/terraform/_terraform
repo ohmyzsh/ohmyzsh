@@ -20,6 +20,7 @@ _terraform_cmds=(
 
 __apply() {
     _arguments \
+        '-auto-approve[Skip interactive approval of plan before applying.]' \
         '-backup=[(path) Path to backup the existing state file before modifying. Defaults to the "-state-out" path with ".backup" extension. Set to "-" to disable backup.]' \
         '-input=[(true) Ask for input for variables if not directly set.]' \
         '-no-color[If specified, output will not contain any color.]' \
