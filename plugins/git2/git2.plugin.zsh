@@ -39,7 +39,8 @@ compdef _git gl=git-pull
 alias gpr='git pull --rebase --recurse-submodules'
 compdef _git gpr=git-pull
 # Git rebase current master branch against master branch on upstream
-alias gprum='git pull --rebase upstream master'
+alias gprum='git pull --rebase --recurse-submodules upstream master'
+alias gprom='git pull --rebase --recurse-submodules origin master'
 
 ###############
 # git push (gP)
