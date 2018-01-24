@@ -77,6 +77,8 @@ source $ZSH/oh-my-zsh.sh
 export EDITOR='vim'
 export LESS='-RX'
 
+[ "$TERM" = "xterm-256color" ] && export EDITOR='code'
+
 unsetopt correctall
 
 ### Added by the Heroku Toolbelt and user local bin
