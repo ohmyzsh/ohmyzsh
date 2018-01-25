@@ -2,7 +2,7 @@
 # Description
 # -----------
 #
-#  Completion script for git-extras (http://github.com/tj/git-extras).
+#  Completion script for git-extras (https://github.com/tj/git-extras).
 #
 #  This depends on and reuses some of the internals of the _git completion
 #  function that ships with zsh itself. It will not work with the _git that ships
@@ -19,8 +19,8 @@
 # Inspirations
 # -----------
 #
-#  * git-extras (http://github.com/tj/git-extras)
-#  * git-flow-completion (http://github.com/bobthecow/git-flow-completion)
+#  * git-extras (https://github.com/tj/git-extras)
+#  * git-flow-completion (https://github.com/bobthecow/git-flow-completion)
 #
 # ------------------------------------------------------------------------------
 

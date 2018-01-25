@@ -26,8 +26,8 @@
 # Copyright (C) 2008 by Daniel Friesel <derf@xxxxxxxxxxxxxxxxxx>
 # License: WTFPL <http://sam.zoy.org/wtfpl>
 #
-# Ref: http://www.zsh.org/mla/workers/2009/msg00415.html
-#      http://www.zsh.org/mla/workers/2009/msg00419.html
+# Ref: https://www.zsh.org/mla/workers/2009/msg00415.html
+#      https://www.zsh.org/mla/workers/2009/msg00419.html
 
 shrink_path () {
         setopt localoptions

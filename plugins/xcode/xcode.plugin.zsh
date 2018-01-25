@@ -4,7 +4,7 @@ alias xcp='xcode-select --print-path'
 alias xcsel='sudo xcode-select --switch'
 
 # original author: @subdigital
-# source: http://gist.github.com/subdigital/5420709
+# source: https://gist.github.com/subdigital/5420709
 function xc {
   local xcode_proj
   if [[ $# == 0 ]]; then
