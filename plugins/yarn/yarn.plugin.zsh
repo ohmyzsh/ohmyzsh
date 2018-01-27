@@ -5,6 +5,7 @@ alias ya="yarn add"
 alias ycc="yarn cache clean"
 alias yh="yarn help"
 alias yo="yarn outdated"
+alias yr="yarn remove"
 alias yui="yarn upgrade-interactive"
 
 _yarn ()
