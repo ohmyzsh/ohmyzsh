@@ -15,7 +15,10 @@ Finally, you'll begin to get the sort of attention that you have always felt you
 To learn more, visit [ohmyz.sh](http://ohmyz.sh) and follow [@ohmyzsh](https://twitter.com/ohmyzsh) on Twitter.
 
 ## About this ___Oh My Zsh___ fork
-This fork of _Oh My Zsh_ has been adapted to redirect all internal links to this repository.
+This repository is a fork of [robbyrussell repository](https://github.com/robbyrussell/oh-my-zsh).
+This fork of _Oh My Zsh_ has been modified in the following ways:
+- All internal links are redirected to this repository, instead of the original repository.
+- Some themes have been modified to suit my needs and likes.
 
 ## Getting Started
 
@@ -94,7 +97,7 @@ To use a different theme, simply change the value to match the name of your desi
 
 ```shell
 ZSH_THEME="agnoster" # (this is one of the fancy ones)
-# see https://github.com/robbyrussell/oh-my-zsh/wiki/Themes#agnoster
+# see https://github.com/bluekrow/oh-my-zsh/wiki/Themes#agnoster
 ```
 
 _Note: many themes require installing the [Powerline Fonts](https://github.com/powerline/fonts) in order to render properly._
