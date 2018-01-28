@@ -1,6 +1,6 @@
 # DISCLAIMER
 
-This repository is a fork of [robbyrussell repository]((https://github.com/robbyrussell/oh-my-zsh).
+This repository is a fork of [robbyrussell repository](https://github.com/robbyrussell/oh-my-zsh).
 The objective of this fork is to customize some configurations to better suit my needs and likes.
 
 If you want to contribute, it will be more adequate you do so in the original repository, and due to this reason, I've left unchanged the links in this document (unlike the links in the other documents in this repository).
