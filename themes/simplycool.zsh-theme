@@ -1,7 +1,7 @@
 if [[ $EUID > 0 ]] ; then
     local symbol=$
 else
-	local symbol=#
+    local symbol=#
 fi
 
 local symbol="%(?:%{$fg_bold[green]%}${symbol}:%{$fg_bold[red]%}${symbol})"
