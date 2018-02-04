@@ -5,7 +5,7 @@ function kgp {
 }
 
 function ksp {
-  local rprompt=${RPROMPT/<aws:$(kgp)>/}
+  local rprompt=${RPROMPT/<k8s:$(kgp)>/}
 
   export KUBE_PROFILE=$1
   export KUBECONFIG=$KUBE_HOME/$1-config
