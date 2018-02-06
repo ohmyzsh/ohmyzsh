@@ -2,9 +2,6 @@
 	path = plugins/fz
 	url = https://github.com/changyuheng/fz.git
 	branch = master
-[submodule "custom/plugins/zce"]
-	path = custom/plugins/zce
-	url = https://github.com/hchbaw/zce.zsh
 [submodule "custom/plugins/zsh-autosuggestions"]
 	path = custom/plugins/zsh-autosuggestions
 	url = https://github.com/zsh-users/zsh-autosuggestions
@@ -17,3 +14,6 @@
 [submodule "custom/plugins/cd-gitroot"]
 	path = custom/plugins/cd-gitroot
 	url = https://github.com/mollifier/cd-gitroot
+[submodule "custom/plugins/zce"]
+	path = custom/plugins/zce
+	url = https://github.com/15cm/zce.zsh
