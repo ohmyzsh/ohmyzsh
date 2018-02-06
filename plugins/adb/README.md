@@ -1,7 +1,7 @@
 # adb autocomplete plugin
 
 * Adds autocomplete options for all adb commands.
-
+* Add autocomplete for `adb -s`
 
 ## Requirements
 
