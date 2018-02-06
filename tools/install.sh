@@ -86,6 +86,8 @@ main() {
     # If this platform provides a "chsh" command (not Cygwin), do it, man!
     if hash chsh >/dev/null 2>&1; then
       printf "${BLUE}Time to change your default shell to zsh!${NORMAL}\n"
+      # Store current shell
+      grep $USER /etc/passwd | awk -F ":" '{print $7}' >> ~/.shell.pre-oh-my-zsh
       chsh -s $(grep /zsh$ /etc/shells | tail -1)
     # Else, suggest the user do so manually.
     else
