@@ -16,6 +16,7 @@ _terraform_cmds=(
     'show:Inspect Terraform state or plan'
     'taint:Manually forcing a destroy and recreate on the next plan/apply'
     'version:Prints the Terraform version'
+    'workspace:Create, change and delete Terraform workspaces'
 )
 
 __apply() {
@@ -143,6 +144,18 @@ __taint() {
         '-state-out=[(path) Path to write updated state file. By default, the "-state" path will be used.]'
 }
 
+__workspace() {
+    local -a _terraform_workspace_subcommands
+    _terraform_workspace_subcommands=(
+        'show:Show the current workspace name'
+        'list:List workspaces'
+        'select:Select a workspace'
+        'new:Create a new workspace'
+        'delete:Delete an existing workspace'
+    )
+    _describe -t terraform-workspace-commands "terraform workspace command" _terraform_workspace_subcommands
+}
+
 _arguments '*:: :->command'
 
 if (( CURRENT == 1 )); then
@@ -176,4 +189,6 @@ case "$words[1]" in
     __show ;;
   taint)
     __taint ;;
+  workspace)
+    __workspace ;;
 esac
