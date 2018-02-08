@@ -19,4 +19,4 @@
 	url = https://github.com/15cm/zce.zsh
 [submodule "custom/plugins/yadm"]
 	path = custom/plugins/yadm
-	url = git@github.com:15cm/yadm-zsh.git
+	url = https://github.com/15cm/yadm-zsh.git
