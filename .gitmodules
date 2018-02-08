@@ -16,7 +16,7 @@
 	url = https://github.com/mollifier/cd-gitroot
 [submodule "custom/plugins/zce"]
 	path = custom/plugins/zce
-	url = https://github.com/15cm/zce.zsh
+	url = git@github.com:15cm/zce.zsh.git
 [submodule "custom/plugins/yadm"]
 	path = custom/plugins/yadm
-	url = https://github.com/15cm/yadm-zsh.git
+	url = git@github.com:15cm/yadm-zsh.git
