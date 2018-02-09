@@ -20,6 +20,3 @@
 [submodule "custom/plugins/yadm"]
 	path = custom/plugins/yadm
 	url = git@github.com:15cm/yadm-zsh.git
-[submodule "custom/plugins/fzf-tab-completion"]
-	path = custom/plugins/fzf-tab-completion
-	url = git@github.com:15cm/fzf-tab-completion.git
