@@ -67,24 +67,21 @@ local leftbar3="%F{148}┗%f"
 
 # Show my IP Address
 ZSH_THEME_SHOW_IP=1
+ZSH_THEME_SHOW_IP6=0
 yspep_my_ip() {
   [[ $ZSH_THEME_SHOW_IP != 1 ]] && return
   echo -n "${dgrey}[%b%F{green}"
   if [[ ${(L)_system_name} == cygwin ]]; then
     echo -n $(ipconfig | awk '$1 ~ /IP/ && $2 ~ /[Aa]ddress/ {sub(/.*:/, "", $0); gsub(/[ \t\r]/, "", $0); print $0}')
   else
-    echo -n $(
-      while read num dev etc; do
-        dev="${dev:0: -1}"  # Remove trailing colon
-        dev="${dev//@*/}"   # Remove "@xxx" prefix
-        ip -d -o addr sh ${dev} |
-          awk '$3 == "inet" {sub(/\/[0-9]+/, "", $4); print "%F{022}"$2":%F{green}"$4}';
-      done <<<"$(
-        ip -d -o link sh |
-          sed -r -e '/link\/loopback/d' -e '/state DOWN/d'
-        )"
-    )
-    # echo -n $(ip -o addr show | awk -v atype=${1:-inet} '$2 != "lo" && $3 == atype {gsub(/\/[0-9]+/, "", $4); print $4}')
+    addrs=()
+    while read num dev fam addr etc; do
+      [[ $dev =~ ^lo ]] && continue   # skip loopback
+      [[ $fam =~ ^inet ]] || continue  # skip non-inet addr's (what could they be?)
+      [[ $fam == inet6 && $ZSH_THEME_SHOW_IP6 != 1 ]] && continue
+      addrs+=( "%F{022}$dev:%F{green}${addr%/*}" )
+    done < <(ip -d -o addr sh)
+    echo -n "${(j: :)addrs}"
   fi
   echo "${dgrey}]%b"
 }
