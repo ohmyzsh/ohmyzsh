@@ -67,22 +67,21 @@ local leftbar3="%F{148}┗%f"
 
 # Show my IP Address
 ZSH_THEME_SHOW_IP=1
+ZSH_THEME_SHOW_IP6=0
 yspep_my_ip() {
   [[ $ZSH_THEME_SHOW_IP != 1 ]] && return
   echo -n "${dgrey}[%b%F{green}"
   if [[ ${(L)_system_name} == cygwin ]]; then
     echo -n $(ipconfig | awk '$1 ~ /IP/ && $2 ~ /[Aa]ddress/ {sub(/.*:/, "", $0); gsub(/[ \t\r]/, "", $0); print $0}')
   else
-    echo -n $(
-      while read num dev etc; do
-        ip -d -o addr sh ${dev:0: -1} |
-          awk '$3 == "inet" {sub(/\/[0-9]+/, "", $4); print "%F{022}"$2":%F{green}"$4}';
-      done <<<"$(
-        ip -d -o link sh |
-          sed -r -e '/link\/loopback/d' -e '/state DOWN/d'
-        )"
-    )
-    # echo -n $(ip -o addr show | awk -v atype=${1:-inet} '$2 != "lo" && $3 == atype {gsub(/\/[0-9]+/, "", $4); print $4}')
+    addrs=()
+    while read num dev fam addr etc; do
+      [[ $dev =~ ^lo ]] && continue   # skip loopback
+      [[ $fam =~ ^inet ]] || continue  # skip non-inet addr's (what could they be?)
+      [[ $fam == inet6 && $ZSH_THEME_SHOW_IP6 != 1 ]] && continue
+      addrs+=( "%F{022}$dev:%F{green}${addr%/*}" )
+    done < <(ip -d -o addr sh)
+    echo -n "${(j: :)addrs}"
   fi
   echo "${dgrey}]%b"
 }
@@ -96,25 +95,17 @@ local venv_info="%B%F{blue}\$(virtualenv_prompt_info)%b"
 # Other info, you can override this function in .zshrc
 yspep_other_info() {
   # Example: Show the GCE_PROJECT variable in yellow:
-  : echo "%{\${GCE_PROJECT:+$fg[yellow] GCE:}\$GCE_PROJECT%}"
+  : echo "%{${GCE_PROJECT:+$fg[yellow] GCE:}$GCE_PROJECT%}"
+
+  # IMPORTANT: You should *not* escape the vars in the above echo!
 }
 local other_info='$(yspep_other_info)'
 
-# Prompt format:
-#
-# PRIVILEGES USER @ MACHINE in DIRECTORY on git:BRANCH STATE [TIME] C:LAST_EXIT_CODE V:VIRTUALENV
-# $ COMMAND
-#
-# For example:
-#
-# % ys @ ys-mbp in ~/.oh-my-zsh on git:master x [21:47:42] C:0
-# $
-
-# First Line (notice the newline!)
+# First Line (notice the newline at end!)
 PROMPT="$leftbar1$ip_info
 "
 
-# Second Line (notice the newline!)
+# Second Line (notice the newline at end!)
 PROMPT+="$leftbar2${dgrey}[%*]%b \
 %(#,%K{yellow}%F{black}%n%k,%F{cyan}%n)\
 %F{white}@%F{green}%m$dgrey:%b\

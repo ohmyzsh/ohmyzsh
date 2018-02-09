@@ -14,6 +14,7 @@ bundled_commands=(
   cucumber
   foodcritic
   guard
+  hanami
   irb
   jekyll
   kitchen
