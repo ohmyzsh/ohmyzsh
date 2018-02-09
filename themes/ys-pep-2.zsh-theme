@@ -95,7 +95,9 @@ local venv_info="%B%F{blue}\$(virtualenv_prompt_info)%b"
 # Other info, you can override this function in .zshrc
 yspep_other_info() {
   # Example: Show the GCE_PROJECT variable in yellow:
-  : echo "%{\${GCE_PROJECT:+$fg[yellow] GCE:}\$GCE_PROJECT%}"
+  : echo "%{${GCE_PROJECT:+$fg[yellow] GCE:}$GCE_PROJECT%}"
+
+  # IMPORTANT: You should *not* escape the vars in the above echo!
 }
 local other_info='$(yspep_other_info)'
 
