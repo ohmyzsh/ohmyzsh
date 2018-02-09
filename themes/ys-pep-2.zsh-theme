@@ -101,21 +101,11 @@ yspep_other_info() {
 }
 local other_info='$(yspep_other_info)'
 
-# Prompt format:
-#
-# PRIVILEGES USER @ MACHINE in DIRECTORY on git:BRANCH STATE [TIME] C:LAST_EXIT_CODE V:VIRTUALENV
-# $ COMMAND
-#
-# For example:
-#
-# % ys @ ys-mbp in ~/.oh-my-zsh on git:master x [21:47:42] C:0
-# $
-
-# First Line (notice the newline!)
+# First Line (notice the newline at end!)
 PROMPT="$leftbar1$ip_info
 "
 
-# Second Line (notice the newline!)
+# Second Line (notice the newline at end!)
 PROMPT+="$leftbar2${dgrey}[%*]%b \
 %(#,%K{yellow}%F{black}%n%k,%F{cyan}%n)\
 %F{white}@%F{green}%m$dgrey:%b\
