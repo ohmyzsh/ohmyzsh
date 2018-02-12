@@ -212,11 +212,29 @@ prompt_status() {
   [[ -n "$symbols" ]] && prompt_segment black default "$symbols"
 }
 
+#AWS Profile:
+# - display current AWS_PROFILE name
+# - displays yellow on red if profile name contains 'production' or
+#   ends in '-prod'
+# - displays black on green otherwise
+prompt_aws_profile() {
+  local aws_profile="$AWS_PROFILE"
+  if [[ -n $aws_profile ]]; then
+    if [[ $aws_profile == *"-prod" || $aws_profile == *"production"* ]]; then
+      prompt_segment red yellow  "$aws_profile"
+    else
+      prompt_segment green black "$aws_profile" 
+    fi
+  fi
+}
+
+
 ## Main prompt
 build_prompt() {
   RETVAL=$?
   prompt_status
   prompt_virtualenv
+  prompt_aws_profile
   prompt_context
   prompt_dir
   prompt_git
