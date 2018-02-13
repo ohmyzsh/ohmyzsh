@@ -228,7 +228,6 @@ prompt_aws_profile() {
   fi
 }
 
-
 ## Main prompt
 build_prompt() {
   RETVAL=$?
