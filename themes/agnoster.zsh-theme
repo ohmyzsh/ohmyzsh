@@ -221,9 +221,9 @@ prompt_aws_profile() {
   local aws_profile="$AWS_PROFILE"
   if [[ -n $aws_profile ]]; then
     if [[ $aws_profile == *"-prod" || $aws_profile == *"production"* ]]; then
-      prompt_segment red yellow  "$aws_profile"
+      prompt_segment red yellow  "AWS: $aws_profile"
     else
-      prompt_segment green black "$aws_profile" 
+      prompt_segment green black "AWS: $aws_profile" 
     fi
   fi
 }
