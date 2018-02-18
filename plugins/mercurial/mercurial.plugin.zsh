@@ -18,24 +18,60 @@ alias hgca='hg commit --amend'
 # list unresolved files (since hg does not list unmerged files in the status command)
 alias hgun='hg resolve --list'
 
+# Configuration
+
+# Comment this line if you don't want to show if the branch is dirty or not.
+# This can save a lot of time of very large repositories.
+SHOW_DIRTY_BRANCH=1
+
+function hg_get_dir() {
+  # Defines path as current directory
+  local current_dir=$PWD
+  # While current path is not root path
+  while [[ $current_dir != '/' ]]; do
+    if [[ -d "${current_dir}/.hg" ]]; then
+      echo "${current_dir}/.hg"
+      return
+    fi
+    # Defines path as parent directory and keeps looking for
+    current_dir="${current_dir:h}"
+  done
+}
+
 function in_hg() {
-  if [[ -d .hg ]] || $(hg summary > /dev/null 2>&1); then
+  if [[ $(hg_get_dir) != "" ]]; then
     echo 1
   fi
 }
 
+function hg_get_branch_id() {
+  local hg_id_tip=`hg log -T "{node|short}" -l 1 -b .`
+  local hg_id=`hg id -i -r .`
+
+  if [[ $hg_id != $hg_id_tip ]]; then
+    echo "@${hg_id}"
+  fi
+}
+
 function hg_get_branch_name() {
-  if [ $(in_hg) ]; then
-    echo $(hg branch)
+  local hg_dir=$(hg_get_dir)
+  if [[ $hg_dir != "" ]]; then
+    local hg_id=$(hg_get_branch_id)
+    if [[ -f "${hg_dir}/branch" ]]; then
+      echo $(<"${hg_dir}/branch")$hg_id
+    else
+      echo "default${hg_id}"
+    fi
   fi
 }
 
 function hg_prompt_info {
-  if [ $(in_hg) ]; then
-    _DISPLAY=$(hg_get_branch_name)
-    echo "$ZSH_PROMPT_BASE_COLOR$ZSH_THEME_HG_PROMPT_PREFIX\
-$ZSH_THEME_REPO_NAME_COLOR$_DISPLAY$ZSH_PROMPT_BASE_COLOR$ZSH_PROMPT_BASE_COLOR$(hg_dirty)$ZSH_THEME_HG_PROMPT_SUFFIX$ZSH_PROMPT_BASE_COLOR"
-    unset _DISPLAY
+  local branch=$(hg_get_branch_name)
+  if [[ $branch != "" ]]; then
+    if [[ $SHOW_DIRTY_BRANCH == 1 ]]; then
+      branch="${branch}$(hg_dirty)"
+    fi
+    echo "$ZSH_THEME_HG_PROMPT_PREFIX${branch}$ZSH_THEME_HG_PROMPT_SUFFIX"
   fi
 }
 
@@ -57,9 +93,9 @@ function hg_dirty {
 }
 
 function hgic() {
-    hg incoming "$@" | grep "changeset" | wc -l
+  hg incoming "$@" | grep "changeset" | wc -l
 }
 
 function hgoc() {
-    hg outgoing "$@" | grep "changeset" | wc -l
+  hg outgoing "$@" | grep "changeset" | wc -l
 }
