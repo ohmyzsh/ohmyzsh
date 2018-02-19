@@ -50,14 +50,7 @@ function hg_prompt_info {
     dirty="$ZSH_THEME_HG_PROMPT_CLEAN"
   fi
 
-  echo "${ZSH_PROMPT_BASE_COLOR}\
-${ZSH_THEME_HG_PROMPT_PREFIX}\
-${ZSH_THEME_REPO_NAME_COLOR}\
-${branch}\
-${ZSH_PROMPT_BASE_COLOR}\
-${dirty}\
-${ZSH_THEME_HG_PROMPT_SUFFIX}\
-${ZSH_PROMPT_BASE_COLOR}"
+  echo "${ZSH_THEME_HG_PROMPT_PREFIX}${branch}${dirty}${ZSH_THEME_HG_PROMPT_SUFFIX}"
 }
 
 function hg_dirty_choose {
