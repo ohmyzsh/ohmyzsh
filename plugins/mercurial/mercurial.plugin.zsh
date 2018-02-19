@@ -62,8 +62,7 @@ function hg_get_branch_name() {
 function hg_prompt_info {
   local branch=$(hg_get_branch_name)
   if [[ $branch != "" ]]; then
-    echo "$ZSH_PROMPT_BASE_COLOR$ZSH_THEME_HG_PROMPT_PREFIX\
-$ZSH_THEME_REPO_NAME_COLOR${branch}$ZSH_PROMPT_BASE_COLOR$ZSH_PROMPT_BASE_COLOR$(hg_dirty)$ZSH_THEME_HG_PROMPT_SUFFIX$ZSH_PROMPT_BASE_COLOR"
+    echo "$ZSH_THEME_HG_PROMPT_PREFIX${branch}$(hg_dirty)$ZSH_THEME_HG_PROMPT_SUFFIX"
   fi
 }
 
