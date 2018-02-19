@@ -18,6 +18,10 @@ alias hgca='hg commit --amend'
 # list unresolved files (since hg does not list unmerged files in the status command)
 alias hgun='hg resolve --list'
 
+# Comment this line if you don't want to show if the branch is dirty or not.
+# This can save a lot of time of very large repositories.
+SHOW_DIRTY_BRANCH=1
+
 function hg_get_dir() {
   # Defines path as current directory
   local current_dir=$PWD
@@ -62,7 +66,10 @@ function hg_get_branch_name() {
 function hg_prompt_info {
   local branch=$(hg_get_branch_name)
   if [[ $branch != "" ]]; then
-    echo "$ZSH_THEME_HG_PROMPT_PREFIX${branch}$(hg_dirty)$ZSH_THEME_HG_PROMPT_SUFFIX"
+    if [[ $SHOW_DIRTY_BRANCH == 1 ]]; then
+      branch="${branch}$(hg_dirty)"
+    fi
+    echo "$ZSH_THEME_HG_PROMPT_PREFIX${branch}$ZSH_THEME_HG_PROMPT_SUFFIX"
   fi
 }
 
