@@ -36,7 +36,8 @@ compdef _git gdv=git-diff
 alias gp='git pull'
 compdef _git gl=git-pull
 # Git pull and rebase
-alias gpr='git pull --rebase --recurse-submodules'
+alias gpr='git pull --rebase'
+alias gprs='git pull --rebase && git submodule update --remote'
 compdef _git gpr=git-pull
 # Git rebase current master branch against master branch on upstream
 alias gprum='git pull --rebase --recurse-submodules upstream master'
