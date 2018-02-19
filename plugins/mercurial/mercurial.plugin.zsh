@@ -38,13 +38,23 @@ function in_hg() {
   fi
 }
 
+function hg_get_branch_id() {
+  local hg_id_tip=`hg log -T "{node|short}" -l 1 -b .`
+  local hg_id=`hg id -i -r .`
+
+  if [[ $hg_id != $hg_id_tip ]]; then
+    echo "@${hg_id}"
+  fi
+}
+
 function hg_get_branch_name() {
   local hg_dir=$(hg_get_dir)
   if [[ $hg_dir != "" ]]; then
+    local hg_id=$(hg_get_branch_id)
     if [[ -f "${hg_dir}/branch" ]]; then
-      echo $(<"${hg_dir}/branch")
+      echo $(<"${hg_dir}/branch")$hg_id
     else
-      echo "default"
+      echo "default${hg_id}"
     fi
   fi
 }
