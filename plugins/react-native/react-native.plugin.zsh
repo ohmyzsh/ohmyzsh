@@ -9,3 +9,6 @@ alias rnios5='react-native run-ios --simulator "iPhone 5"'
 alias rnios5s='react-native run-ios --simulator "iPhone 5s"'
 alias rnios6='react-native run-ios --simulator "iPhone 6"'
 alias rnios6s='react-native run-ios --simulator "iPhone 6s"'
+
+alias rnland='react-native log-android'
+alias rnlios='react-native log-ios'
