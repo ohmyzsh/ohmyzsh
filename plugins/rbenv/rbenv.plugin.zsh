@@ -12,6 +12,10 @@ if _homebrew-installed && rbenv_homebrew_path=$(brew --prefix rbenv 2>/dev/null)
     fi
 fi
 
+if [[ -n "$RBENV_ROOT" ]]; then
+  rbenvdirs=($RBENV_ROOT "${rbenvdirs[@]}")
+fi
+
 for rbenvdir in "${rbenvdirs[@]}" ; do
   if [ -d $rbenvdir/bin -a $FOUND_RBENV -eq 0 ] ; then
     FOUND_RBENV=1
