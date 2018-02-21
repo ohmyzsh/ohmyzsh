@@ -25,6 +25,9 @@ alias kep='k edit pods'
 alias kdp='k describe pods'
 alias kdelp='k delete pods'
 
+# get pod by label: kgpl "app=myapp" -n myns
+alias kgpl='function _kgpl(){ label=$1; shift; kgp -l $label $*; };_kgpl'
+
 # Service management.
 alias kgs='k get svc'
 alias kes='k edit svc'
@@ -48,3 +51,6 @@ alias krsd='k rollout status deployment'
 alias kgrs='k get rs'
 alias krh='k rollout history'
 alias kru='k rollout undo'
+
+# Port forwarding
+alias kpf="k port-forward"
