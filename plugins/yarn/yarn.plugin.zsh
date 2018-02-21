@@ -2,9 +2,13 @@
 
 alias y="yarn "
 alias ya="yarn add"
+alias yac="yarn autoclean"
 alias ycc="yarn cache clean"
+alias yga="yarn global add"
+alias ygr="yarn global remove"
 alias yh="yarn help"
-alias yo="yarn outdated"
+alias yl="yarn list"
+alias yout="yarn outdated"
 alias yui="yarn upgrade-interactive"
 
 _yarn ()
