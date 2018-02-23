@@ -9,6 +9,9 @@ fi
 # This command is used ALOT both below and in daily life
 alias k=kubectl
 
+# Node management.
+alias kgn='k get nodes'
+
 # Drop into an interactive terminal on a container
 alias keti='k exec -ti'
 
