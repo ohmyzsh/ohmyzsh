@@ -52,3 +52,6 @@ alias npmR="npm run"
 
 # Run npm publish 
 alias npmP="npm publish"
+
+# Run npm init
+alias npmI="npm init"
