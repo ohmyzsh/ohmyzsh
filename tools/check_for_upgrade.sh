@@ -42,9 +42,7 @@ if mkdir "$ZSH/log/update.lock" 2>/dev/null; then
       if [ "$DISABLE_UPDATE_PROMPT" = "true" ]; then
         _upgrade_zsh
       else
-        echo "[Oh My Zsh] Would you like to check for updates? [Y/n]: \c"
-        read line
-        if [[ "$line" == Y* ]] || [[ "$line" == y* ]] || [ -z "$line" ]; then
+        if read -q line\?"[Oh My Zsh] Would you like to check for updates? [Y/n]: " && echo; then
           _upgrade_zsh
         else
           _update_zsh_update
