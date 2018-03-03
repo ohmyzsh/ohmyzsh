@@ -45,6 +45,7 @@ alias bringz='git pull'
 alias chicken='git add'
 alias oanward='git commit -m'
 alias ooanward='git commit -am'
+alias yolo='git commit -m "$(curl -s whatthecommit.com/index.txt)"'
 alias letcat='git checkout'
 alias violenz='git rebase'
 

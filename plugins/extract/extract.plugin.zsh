@@ -10,7 +10,7 @@ extract() {
 			Usage: extract [-option] [file ...]
 
 			Options:
-			    -r, --remove    Remove archive.
+			    -r, --remove    Remove archive after unpacking.
 		EOF
 	fi
 
