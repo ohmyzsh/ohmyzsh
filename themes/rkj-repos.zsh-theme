@@ -1,6 +1,12 @@
 # user, host, full path, and time/date
 # on two lines for easier vgrepping
-# entry in a nice long thread on the Arch Linux forums: http://bbs.archlinux.org/viewtopic.php?pid=521888#p521888
+# entry in a nice long thread on the Arch Linux forums: http://bbs.archlinux.org/viewtopic.php?pid=521888#p521888 (dead link)
+
+if ! grep -q "prompt" ~/.hgrc
+then 
+  echo "This theme requires 'hg prompt' (https://bitbucket.org/sjl/hg-prompt/overview)"
+  return 1
+fi
 
 function hg_prompt_info {
     hg prompt --angle-brackets "\
