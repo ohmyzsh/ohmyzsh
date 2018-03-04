@@ -12,7 +12,10 @@ alias k=kubectl
 # Drop into an interactive terminal on a container
 alias keti='k exec -ti'
 
-# Manage configuration quickly to switch contexts between local, dev ad staging.
+# Forward a local port to a pod
+alias kpf='k port-forward'
+
+# Manage configuration quickly to switch contexts between local, dev and staging.
 alias kcuc='k config use-context'
 alias kcsc='k config set-context'
 alias kcdc='k config delete-context'
