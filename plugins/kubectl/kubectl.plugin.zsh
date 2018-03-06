@@ -9,6 +9,9 @@ fi
 # This command is used ALOT both below and in daily life
 alias k=kubectl
 
+# Apply a YML file
+alias kaf='k apply -f'
+
 # Drop into an interactive terminal on a container
 alias keti='k exec -ti'
 
