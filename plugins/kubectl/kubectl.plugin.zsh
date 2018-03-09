@@ -20,7 +20,7 @@ alias kccc='k config current-context'
 
 # Pod management.
 alias kgp='k get pods'
-alias klp='k logs pods'
+alias klp='k logs'
 alias kep='k edit pods'
 alias kdp='k describe pods'
 alias kdelp='k delete pods'
