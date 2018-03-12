@@ -120,6 +120,7 @@ compdef _git gco=git-checkout
 # Git checkout master
 alias gcom='git checkout master'
 compdef _git gcom=git-checkout
+alias gcoB='git checkout -B'
 
 # Git Remote (gre)
 alias gre='git remote'
