@@ -9,6 +9,9 @@ fi
 # This command is used ALOT both below and in daily life
 alias k=kubectl
 
+# Apply a YML file
+alias kaf='k apply -f'
+
 # Drop into an interactive terminal on a container
 alias keti='k exec -ti'
 
@@ -20,7 +23,6 @@ alias kccc='k config current-context'
 
 # Pod management.
 alias kgp='k get pods'
-alias klp='k logs pods'
 alias kep='k edit pods'
 alias kdp='k describe pods'
 alias kdelp='k delete pods'
@@ -54,3 +56,7 @@ alias kru='k rollout undo'
 
 # Port forwarding
 alias kpf="k port-forward"
+
+# Logs
+alias kl='k logs'
+alias klf='k logs -f'
