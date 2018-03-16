@@ -52,7 +52,7 @@ if [[ -x "${commands[gwhoami]}" ]]; then
 
       #
       # This method is inflexible since the aliases are at risk of being
-      # overridden resulting in the BSD coreutils being called.
+      # overriden resulting in the BSD coreutils being called.
       #
       # (( ${+commands[$gcmd]} )) && \
       # alias "$gcmd[2,-1]"="${prefix}/${gcmd//"["/"\\["}"
