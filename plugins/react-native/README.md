@@ -24,3 +24,6 @@ plugins=(... react-native)
 | **rnios5s** | `react-native run-ios --simulator "iPhone 5s"` |
 | **rnios6**  | `react-native run-ios --simulator "iPhone 6"`  |
 | **rnios6s** | `react-native run-ios --simulator "iPhone 6s"` |
+| _Logging_                                                    |
+| **rnland**  | `react-native log-android`                     |
+| **rnlios**  | `react-native log-ios`                         |

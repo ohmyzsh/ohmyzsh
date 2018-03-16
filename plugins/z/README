@@ -125,7 +125,7 @@ ENVIRONMENT
        Directories must be full paths without trailing slashes.
 
        The  environment  variable  $_Z_OWNER  can  be set to your username, to
-       allow usage of z when your sudo enviroment keeps $HOME set.
+       allow usage of z when your sudo environment keeps $HOME set.
 
 FILES
        Data is stored in $HOME/.z. This  can  be  overridden  by  setting  the
