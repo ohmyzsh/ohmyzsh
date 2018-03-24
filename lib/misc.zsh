@@ -19,8 +19,8 @@ fi
 setopt long_list_jobs
 
 ## pager
-env_default PAGER 'less'
-env_default LESS '-R'
+[[ -n "$PAGER" ]] || export PAGER='less'
+[[ -n "$PAGER" ]] || export PAGER='less'
 
 ## super user alias
 alias _='sudo'
