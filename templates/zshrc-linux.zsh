@@ -106,11 +106,15 @@ if [ -z "$LANG" ]; then export LANG=en_US.utf8; fi
 [ -f $HOME/.profile ] && source $HOME/.profile
 
 [ "$TERM" = "xterm" ] && TERM="xterm-256color"
+if [[ "$TERM" == "xterm-256color" ]]; then
+   export EDITOR=code
+else
+  export EDITOR='vim'
+fi
 
 source $ZSH/oh-my-zsh.sh
 
 # Enviroment variables overwrite
-export EDITOR='vim'
 export LESS='-RX'
 
 [ "$TERM" = "xterm-256color" ] && export EDITOR='code'
