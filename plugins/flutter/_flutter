@@ -1,0 +1,46 @@
+#compdef flutter
+#autoload
+
+# in order to make this work, you will need to have Flutter installed
+#
+# flutter zsh completion, based on adb completion
+
+local -a _1st_arguments
+_1st_arguments=(
+  'analyze:Analyze the project''s Dart code'
+  'attach:Attach to a running application'
+  'bash-completion:Output command line shell completion setup scripts'
+  'build:Flutter build commands'
+  'channel:List or switch flutter channels'
+  'clean:Delete the build/ directory'
+  'config:Configure Flutter settings'
+  'create:Create a new Flutter project'
+  'devices:List all connected devices'
+  'doctor:Show information about the installed tooling'
+  'drive:Runs Flutter Driver tests for the current project'
+  'emulators:List, launch and create emulators'
+  'format:Format one or more dart files'
+  'fuchsia_reload:Hot reload on Fuchsia'
+  'help:Display help information for flutter'
+  'install:Install a Flutter app on an attached device'
+  'logs:Show log output for running Flutter apps'
+  'packages:Commands for managing Flutter packages'
+  'precache:Populates the Flutter tool''s cache of binary artifacts'
+  'run:Runyour Flutter app on an attached device'
+  'screenshot:Take a screenshot from a connected device'
+  'stop:Stop your Flutter app on an attached device'
+  'test:Run Flutter unit tests for the current project'
+  'trace:Start and stop tracing for a running Flutter app'
+  'upgrade:Upgrade your copy of Flutter'
+)
+
+_arguments -C \
+  ':command:->command' \
+  '*::options:->options'
+
+case $state in
+  (command)
+    _describe -t commands "flutter subcommand" _1st_arguments
+    return
+   ;;
+esac
