@@ -410,6 +410,13 @@ __git_refs_remotes ()
 	done
 }
 
+# return only local branches
+__git_refs_local ()
+{
+	git for-each-ref --format='%(refname:short)' refs/heads/
+	return
+}
+
 __git_remotes ()
 {
 	local d="$(__gitdir)"
@@ -1033,7 +1040,11 @@ _git_checkout ()
 		if [ -n "$(__git_find_on_cmdline "$flags")" ]; then
 			track=''
 		fi
-		__gitcomp_nl "$(__git_refs '' $track)"
+		if [ -z ${GITFAST_CHECKOUT_LOCAL_ONLY+x} ]; then
+			__gitcomp_nl "$(__git_refs '' $track)"
+		else
+			__gitcomp_nl "$(__git_refs_local)"
+		fi
 		;;
 	esac
 }
