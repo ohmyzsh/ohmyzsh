@@ -15,6 +15,7 @@ zle -N edit-command-line
 
 bindkey -v
 
+
 # allow v to edit the command line (standard behaviour)
 autoload -Uz edit-command-line
 bindkey -M vicmd 'v' edit-command-line
@@ -34,6 +35,8 @@ bindkey '^r' history-incremental-search-backward
 # allow ctrl-a and ctrl-e to move to beginning/end of line
 bindkey '^a' beginning-of-line
 bindkey '^e' end-of-line
+bindkey '^f' forward-char
+bindkey '\e.' insert-last-word
 
 # if mode indicator wasn't setup by theme, define default
 if [[ "$MODE_INDICATOR" == "" ]]; then
@@ -45,6 +48,7 @@ function vi_mode_prompt_info() {
 }
 
 # define right prompt, if it wasn't defined by a theme
-if [[ "$RPS1" == "" && "$RPROMPT" == "" ]]; then
+#if [[ "$RPS1" == "" && "$RPROMPT" == "" ]]; then
   RPS1='$(vi_mode_prompt_info)'
-fi
+  #RPS1="$RPS1"'$(vi_mode_prompt_info)'"$RPROMPT"
+#fi
