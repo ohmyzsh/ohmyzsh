@@ -5,3 +5,6 @@ example.zsh
 # temp files directories
 cache/
 log/
+
+lib/clipboard.zsh
+lib/grep.zsh

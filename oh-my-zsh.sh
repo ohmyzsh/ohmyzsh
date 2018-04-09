@@ -64,6 +64,11 @@ if [ -z "$ZSH_COMPDUMP" ]; then
   ZSH_COMPDUMP="${ZDOTDIR:-${HOME}}/.zcompdump-${SHORT_HOST}-${ZSH_VERSION}"
 fi
 
+# On slow systems, checking the cached .zcompdump file to see if it must be 
+# regenerated adds a noticable delay to zsh startup.  This little hack restricts 
+# it to once a day.  It should be pasted into your own completion file.
+#https://gist.github.com/ctechols/ca1035271ad134841284
+setopt extendedglob
 if [[ $ZSH_DISABLE_COMPFIX != true ]]; then
   # If completion insecurities exist, warn the user without enabling completions.
   if ! compaudit &>/dev/null; then
@@ -71,10 +76,20 @@ if [[ $ZSH_DISABLE_COMPFIX != true ]]; then
     handle_completion_insecurities
   # Else, enable and cache completions to the desired file.
   else
-    compinit -d "${ZSH_COMPDUMP}"
+    if [[ -n "${ZSH_COMPDUMP}"(#qN.mh+24) ]]; then
+      compinit -d "${ZSH_COMPDUMP}"
+      compdump
+    else
+      compinit -C
+    fi
   fi
 else
-  compinit -i -d "${ZSH_COMPDUMP}"
+  if [[ -n "${ZSH_COMPDUMP}"(#qN.mh+24) ]]; then
+    compinit -i -d "${ZSH_COMPDUMP}"
+    compdump
+  else
+    compinit -C
+  fi
 fi
 
 # Load all of the plugins that were defined in ~/.zshrc
