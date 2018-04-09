@@ -81,7 +81,7 @@ __vagrant-box ()
 
    case $state in
        (command)
-           _describe -t commands "gem subcommand" _box_arguments
+           _describe -t commands "vagrant subcommand" _box_arguments
            return
        ;;
 
@@ -110,7 +110,7 @@ _arguments -C \
 
 case $state in
   (command)
-      _describe -t commands "gem subcommand" _1st_arguments
+      _describe -t commands "vagrant subcommand" _1st_arguments
       return
   ;;
 
