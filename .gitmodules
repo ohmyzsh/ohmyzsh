@@ -20,3 +20,6 @@
 [submodule "custom/plugins/yadm"]
 	path = custom/plugins/yadm
 	url = git@github.com:15cm/yadm-zsh.git
+[submodule "custom/plugins/alias-tips"]
+	path = custom/plugins/alias-tips
+	url = https://github.com/djui/alias-tips
