@@ -179,8 +179,8 @@ function git_prompt_status() {
     return 1
   fi
 
-  if $(command git rev-parse --verify refs/stash >/dev/null 2>&1); then
-    statuses_seen['STASHED']=1
+  if command git rev-parse --verify refs/stash &>/dev/null; then
+    statuses_seen[STASHED]=1
   fi
 
   local status_lines=("${(@f)${status_text}}");
