@@ -14,15 +14,11 @@ year_progress() {
     # progress=current/year
     value=`echo "$current $len" | awk '{printf ("%.2f\n",$1/$2)}'`
 
-    # Get the number of columns in the terminal
-    tput init 
-    cols=`tput cols`
-
     val2=$(($current*100/$len))
 
     info=$val2%'  '$current/$len
 
-    cols=$(($cols-${#info}))
+    cols=$(($COLUMNS-${#info}))
 
     # Fill the proportion of the screen
     scale=`echo "$cols" | awk '{printf ("%.2f\n",$1/100)}'`
