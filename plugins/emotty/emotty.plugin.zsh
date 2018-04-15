@@ -32,7 +32,8 @@ function emotty() {
 }
 
 function display_emotty() {
-  local name=$1
+  local name=${1:-$emotty_set}
+  echo $name
   for i in ${=_emotty_sets[$name]}; do
     printf "${emoji[$i]}${emoji2[emoji_style]}  "
   done
