@@ -99,7 +99,9 @@
 | pacupg       | sudo pacman -Syu                        | Sync with repositories before upgrading packages             |
 | upgrade      | sudo pacman -Syu                        | Sync with repositories before upgrading packages             |
 | pacfileupg   | sudo pacman -Fy                         | Download fresh package databases from the server             |
-| pacfiles     | pacman -Fs                              | Search package file names for matching strings.              |
+| pacfiles     | pacman -Fs                              | Search package file names for matching strings               |
+| pacls        | pacman -Ql                              | List files in a package                                      |
+| pacown       | pacman -Qo                              | Show which package owns a file                               |
 
 | Function       | Description                                          |
 |----------------|------------------------------------------------------|
@@ -107,6 +109,7 @@
 | paclist        | List all installed packages with a short description |
 | pacmanallkeys  | Get all keys for developers and trusted users        |
 | pacmansignkeys | Locally trust all keys passed as parameters          |
+| pacweb         | Open the website of an ArchLinux package             |
 
 ---
 
