@@ -58,6 +58,10 @@ if (( $+commands[pacaur] )); then
   upgrade() {
     pacaur -Syu
   }
+elif (( $+commands[trizen] )); then
+  upgrade() {
+    trizen -Syu
+  }
 elif (( $+commands[yaourt] )); then
   upgrade() {
     yaourt -Syu
