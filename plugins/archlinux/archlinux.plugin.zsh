@@ -1,3 +1,32 @@
+if (( $+commands[trizen] )); then
+  alias trconf='trizen -C'
+  alias trupg='trizen -Syua'
+  alias trsu='trizen -Syua --noconfirm'
+  alias trin='trizen -S'
+  alias trins='trizen -U'
+  alias trre='trizen -R'
+  alias trrem='trizen -Rns'
+  alias trrep='trizen -Si'
+  alias trreps='trizen -Ss'
+  alias trloc='trizen -Qi'
+  alias trlocs='trizen -Qs'
+  alias trlst='trizen -Qe'
+  alias trorph='trizen -Qtd'
+  alias trinsd='trizen -S --asdeps'
+  alias trmir='trizen -Syy'
+
+
+  if (( $+commands[abs] && $+commands[aur] )); then
+    alias trupd='trizen -Sy && sudo abs && sudo aur'
+  elif (( $+commands[abs] )); then
+    alias trupd='trizen -Sy && sudo abs'
+  elif (( $+commands[aur] )); then
+    alias trupd='trizen -Sy && sudo aur'
+  else
+    alias trupd='trizen -Sy'
+  fi
+fi
+
 if (( $+commands[yaourt] )); then
   alias yaconf='yaourt -C'
   alias yaupg='yaourt -Syua'
@@ -54,7 +83,11 @@ if (( $+commands[pacaur] )); then
   fi
 fi
 
-if (( $+commands[pacaur] )); then
+if (( $+commands[trizen] )); then
+  upgrade() {
+    trizen -Syu
+  }
+elif (( $+commands[pacaur] )); then
   upgrade() {
     pacaur -Syu
   }
