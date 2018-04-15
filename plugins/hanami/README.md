@@ -1,29 +1,32 @@
 # Hanami Plugin #
-This plugin adds convinient ways to work with [Hanami](http://hanamirb.org/) via console. It's inspired by Rails plugin, so if you've used it, you'll be like home.
+This plugin adds convenient ways to work with [Hanami](http://hanamirb.org/) via console.
+It's inspired by Rails plugin, so if you've used it, you'll feel like home.
 
 ## Usage ##
-For example, type `hc` into your console when you're within Hanami project directory to run application console.
-You can read about available commands [here](http://hanamirb.org/guides/command-line/applications/), almost all of them have shortcut aliases with this plugin.
+
+For example, type `hc` into your console when you're within Hanami project directory to run
+the application console. Have a look at available shortcuts below. You can read more about
+these commands [on the official website](http://hanamirb.org/guides/command-line/applications/).
 
 ## Aliases ##
 
-| Alias | Description                              | Command                                        |
-|-------|------------------------------------------|------------------------------------------------|
-| HED | Set environment variable HANAMI_ENV to development | HANAMI_ENV=development |
-| HEP | Set environment variable HANAMI_ENV to production | HANAMI_ENV=production |
-| HET | Set environment variable HANAMI_ENV to test | HANAMI_ENV=test |
-| hc | Run application console | hanami console |
-| hd | Remove specified hanami resource (model, action, migration, etc.) | hanami destroy |
-| hg | Create specified hanami resource (model, action, migration, etc.) | hanami generate | hanami generate |
-| hgm | Create migration file | hanami generate migration |
-| hs | Launch server with hanami application | hanami server |
-| hsp | Launch server with specified port | hanami server -p |
-| hr | List application routes | hanami routes |
-| hdc | Create application database | hanami db create |
-| hdd | Delete application database | hanami db drop |
-| hdp | Create application database, load schema (if any), run pending migrations | hanami db prepare |
-| hda | Run pending migrations, dump schema, delete all migration files | hanami db apply |
-| hdv | Print current database version (timestamp of last applied migration) | hanami db version |
-| hdrs | Drop and recreate application database | hdd && hdp |
-| hdtp | Actualize test environment database | HET hdp |
-| hrg | Grep hanami routes with specified pattern | hr &#124; grep |
+| Alias | Command                   | Description                                             |
+|-------|---------------------------|---------------------------------------------------------|
+| HED   | HANAMI_ENV=development    | Set environment variable HANAMI_ENV to development      |
+| HEP   | HANAMI_ENV=production     | Set environment variable HANAMI_ENV to production       |
+| HET   | HANAMI_ENV=test           | Set environment variable HANAMI_ENV to test             |
+| hc    | hanami console            | Run application console                                 |
+| hd    | hanami destroy            | Remove specified hanami resource                        |
+| hg    | hanami generate           | Create specified hanami resource                        |
+| hgm   | hanami generate migration | Create migration file                                   |
+| hs    | hanami server             | Launch server with hanami application                   |
+| hsp   | hanami server -p          | Launch server with specified port                       |
+| hr    | hanami routes             | List application routes                                 |
+| hdc   | hanami db create          | Create application database                             |
+| hdd   | hanami db drop            | Delete application database                             |
+| hdp   | hanami db prepare         | Prepare database for the current environment            |
+| hda   | hanami db apply           | Recreates a fresh schema after migrations (destructive) |
+| hdv   | hanami db version         | Print current database version                          |
+| hdrs  | hdd && hdp                | Drop and recreate application database                  |
+| hdtp  | HET hdp                   | Actualize test environment database                     |
+| hrg   | hr &#124; grep            | Grep hanami routes with specified pattern               |
