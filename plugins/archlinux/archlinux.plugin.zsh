@@ -117,6 +117,8 @@ alias paclsorphans='sudo pacman -Qdt'
 alias pacrmorphans='sudo pacman -Rs $(pacman -Qtdq)'
 alias pacfileupg='sudo pacman -Fy'
 alias pacfiles='pacman -Fs'
+alias pacls='pacman -Ql'
+alias pacown='pacman -Qo'
 
 
 if (( $+commands[abs] && $+commands[aur] )); then
@@ -169,3 +171,16 @@ function pacmansignkeys() {
       --no-permission-warning --command-fd 0 --edit-key $key
   done
 }
+
+if (( $+commands[xdg-open] )); then
+  function pacweb() {
+    pkg="$1"
+    infos="$(pacman -Si "$pkg")"
+    if [[ -z "$infos" ]]; then
+      return
+    fi
+    repo="$(grep '^Repo' <<< "$infos" | grep -oP '[^ ]+$')"
+    arch="$(grep '^Arch' <<< "$infos" | grep -oP '[^ ]+$')"
+    xdg-open "https://www.archlinux.org/packages/$repo/$arch/$pkg/" &>/dev/null
+  }
+fi
