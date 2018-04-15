@@ -84,19 +84,19 @@ if (( $+commands[pacaur] )); then
 fi
 
 if (( $+commands[trizen] )); then
-  upgrade() {
+  function upgrade() {
     trizen -Syu
   }
 elif (( $+commands[pacaur] )); then
-  upgrade() {
+  function upgrade() {
     pacaur -Syu
   }
 elif (( $+commands[yaourt] )); then
-  upgrade() {
+  function upgrade() {
     yaourt -Syu
   }
 else
-  upgrade() {
+  function upgrade() {
     sudo pacman -Syu
   }
 fi
@@ -129,13 +129,13 @@ else
   alias pacupd='sudo pacman -Sy'
 fi
 
-paclist() {
+function paclist() {
   # Source: https://bbs.archlinux.org/viewtopic.php?id=93683
   LC_ALL=C pacman -Qei $(pacman -Qu | cut -d " " -f 1) | \
     awk 'BEGIN {FS=":"} /^Name/{printf("\033[1;36m%s\033[1;37m", $2)} /^Description/{print $2}'
 }
 
-pacdisowned() {
+function pacdisowned() {
   emulate -L zsh
 
   tmp=${TMPDIR-/tmp}/pacman-disowned-$UID-$$
@@ -153,14 +153,14 @@ pacdisowned() {
   comm -23 "$fs" "$db"
 }
 
-pacmanallkeys() {
+function pacmanallkeys() {
   emulate -L zsh
   curl -s https://www.archlinux.org/people/{developers,trustedusers}/ | \
     awk -F\" '(/pgp.mit.edu/) { sub(/.*search=0x/,""); print $1}' | \
     xargs sudo pacman-key --recv-keys
 }
 
-pacmansignkeys() {
+function pacmansignkeys() {
   emulate -L zsh
   for key in $*; do
     sudo pacman-key --recv-keys $key
