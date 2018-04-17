@@ -12,31 +12,32 @@ year_progress() {
     fi
 
     # progress=current/year
-    value=`echo "$current $len" | awk '{printf ("%.2f\n",$1/$2)}'`
+    percent=$(($current*100/$len))
 
-    val2=$(($current*100/$len))
+    # The information to be displayed is used to calculate the length.
+    info=$percent%'  '$current/$len
 
-    info=$val2%'  '$current/$len
-
+    # progress bar length = $COLUMNS - info.length
     cols=$(($COLUMNS-${#info}))
 
     # Fill the proportion of the screen
     scale=`echo "$cols" | awk '{printf ("%.2f\n",$1/100)}'`
 
-    val=`echo "$val2 $scale" | awk '{printf ("%.0f\n",$1*$2)}'`
+    # The length of the progress bar can be shown on a proportional basis.
+    valLen=`echo "$percent $scale" | awk '{printf ("%.0f\n",$1*$2)}'`
 
     echo 
 
-    echo -n $val2%' '
+    echo -n $percent%' '
 
     # Previous days
-    for ((i=0; i<$val; i++))  
+    for ((i=0; i<$valLen; i++))  
     do
         echo -n "▓"
     done
 
     # The remaining days
-    for ((i=0; i<$((cols-$val)); i ++))  
+    for ((i=0; i<$(($cols-$valLen)); i++))  
     do
         echo -n "░"
     done
