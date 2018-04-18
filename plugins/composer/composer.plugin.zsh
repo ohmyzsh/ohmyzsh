@@ -55,6 +55,6 @@ alias cget='curl -s https://getcomposer.org/installer | php'
 if hash composer 2>/dev/null; then
   export PATH=$PATH:$(composer global config bin-dir --absolute 2>/dev/null)
 else
-  export PATH=$PATH:~/.composer/vendor/bin
-  export PATH=$PATH:~/.config/composer/vendor/bin
+  [ -d $HOME/.composer/vendor/bin ] && export PATH=$PATH:$HOME/.composer/vendor/bin
+  [ -d $HOME/.config/composer/vendor/bin] && export PATH=$PATH:$HOME/.config/composer/vendor/bin
 fi
