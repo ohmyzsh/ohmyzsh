@@ -1,6 +1,6 @@
 # Autocompletion for helm.
 #
-# Author: https://github.com/alzubaidi
+# Authors: https://github.com/fleeto, https://github.com/alzubaidi
 
 if [ $commands[helm] ]; then
   source <(helm completion zsh)
