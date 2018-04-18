@@ -2,6 +2,7 @@
 # https://github.com/AlexBio
 # https://github.com/dbb
 # https://github.com/Mappleconfusers
+# https://github.com/trinaldi
 # Nicolas Jonas nextgenthemes.com
 # https://github.com/loctauxphilippe
 #
@@ -20,14 +21,23 @@ compdef _ags ags='apt-get source'
 alias acp='apt-cache policy' # app
 compdef _acp acp='apt-cache policy'
 
+#List all installed packages
+alias agli='apt list --installed'
+compdef _agli agli='apt list --installed'
+
 # superuser operations ######################################################
+
+# List available updates only
+alias aglu='sudo apt-get -u upgrade --assume-no'
+compdef _aglu aglu='sudo apt-get -u upgrade --assume-no'
+
 alias afu='sudo apt-file update'
 compdef _afu afu='sudo apt-file update'
 
 alias ppap='sudo ppa-purge'
 compdef _ppap ppap='sudo ppa-purge'
 
-alias ag='sudo apt-get'            # age - but without sudo
+alias apg='sudo apt-get'            # age - but without sudo
 alias aga='sudo apt-get autoclean' # aac
 alias agb='sudo apt-get build-dep' # abd
 alias agc='sudo apt-get clean'     # adc
@@ -36,12 +46,12 @@ alias agi='sudo apt-get install'  # ai
 alias agp='sudo apt-get purge'    # ap
 alias agr='sudo apt-get remove'   # ar
 alias agu='sudo apt-get update'   # ad
-alias agud='sudo apt-get update && sudo apt-get dist-upgrade' #adu
+alias agud='sudo apt-get update && sudo apt-get full-upgrade' #adu
 alias agug='sudo apt-get upgrade' # ag
 alias aguu='sudo apt-get update && sudo apt-get upgrade'      #adg
 alias agar='sudo apt-get autoremove'
 
-compdef _ag ag='sudo apt-get'
+compdef _ag apg='sudo apt-get'
 compdef _aga aga='sudo apt-get autoclean'
 compdef _agb agb='sudo apt-get build-dep'
 compdef _agc agc='sudo apt-get clean'
@@ -50,7 +60,7 @@ compdef _agi agi='sudo apt-get install'
 compdef _agp agp='sudo apt-get purge'
 compdef _agr agr='sudo apt-get remove'
 compdef _agu agu='sudo apt-get update'
-compdef _agud agud='sudo apt-get update && sudo apt-get dist-upgrade'
+compdef _agud agud='sudo apt-get update && sudo apt-get full-upgrade'
 compdef _agug agug='sudo apt-get upgrade'
 compdef _aguu aguu='sudo apt-get update && sudo apt-get upgrade'
 compdef _agar agar='sudo apt-get autoremove'

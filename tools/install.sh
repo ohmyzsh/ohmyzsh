@@ -49,7 +49,7 @@ main() {
   umask g-w,o-w
 
   printf "${BLUE}Cloning Oh My Zsh...${NORMAL}\n"
-  hash git >/dev/null 2>&1 || {
+  command -v git >/dev/null 2>&1 || {
     echo "Error: git is not installed"
     exit 1
   }
@@ -107,7 +107,7 @@ main() {
   echo ''
   echo 'p.s. Follow us at https://twitter.com/ohmyzsh.'
   echo ''
-  echo 'p.p.s. Get stickers and t-shirts at http://shop.planetargon.com.'
+  echo 'p.p.s. Get stickers and t-shirts at https://shop.planetargon.com.'
   echo ''
   printf "${NORMAL}"
   env zsh
