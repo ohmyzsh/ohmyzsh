@@ -1,16 +1,13 @@
 # user, host, full path, and time/date on two lines for easier vgrepping
 
-if ! grep -q "prompt" ~/.hgrc; then 
-  echo "This theme requires 'hg prompt' (https://bitbucket.org/sjl/hg-prompt/overview)"
-  return 1
-fi
-
 function hg_prompt_info {
+  if (( $+commands[hg] )) && grep -q "prompt" ~/.hgrc; then
     hg prompt --angle-brackets "\
 <hg:%{$fg[magenta]%}<branch>%{$reset_color%}><:%{$fg[magenta]%}<bookmark>%{$reset_color%}>\
 </%{$fg[yellow]%}<tags|%{$reset_color%}, %{$fg[yellow]%}>%{$reset_color%}>\
 %{$fg[red]%}<status|modified|unknown><update>%{$reset_color%}<
 patches: <patches|join( → )|pre_applied(%{$fg[yellow]%})|post_applied(%{$reset_color%})|pre_unapplied(%{$fg_bold[black]%})|post_unapplied(%{$reset_color%})>>" 2>/dev/null
+  fi
 }
 
 ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[cyan]%}+"
