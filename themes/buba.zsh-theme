@@ -1,0 +1,1 @@
+PROMPT='%{$fg_bold[white]%}[ %{$fg[cyan]%n%}%{$fg[white]%}:%{$fg[green]home%} $fg[white]] $fg[blue]${PWD/#$HOME/~} $fg[magenta]$%{$reset_color%}%{%} %{$reset_color%} '
