@@ -1,50 +1,17 @@
-_homebrew-installed() {
-    type brew &> /dev/null
-}
+# This plugin loads pyenv into the current shell and provides prompt info via
+# the 'pyenv_prompt_info' function. Also loads pyenv-virtualenv if available.
 
-_pyenv-from-homebrew-installed() {
-    brew --prefix pyenv &> /dev/null
-}
-
-FOUND_PYENV=0
-pyenvdirs=("$HOME/.pyenv" "/usr/local/pyenv" "/opt/pyenv")
-
-for pyenvdir in "${pyenvdirs[@]}" ; do
-    if [ -d $pyenvdir/bin -a $FOUND_PYENV -eq 0 ] ; then
-        FOUND_PYENV=1
-        export PYENV_ROOT=$pyenvdir
-        export PATH=${pyenvdir}/bin:$PATH
-        eval "$(pyenv init - zsh)"
-
-        if pyenv commands | command grep -q virtualenv-init; then
-            eval "$(pyenv virtualenv-init - zsh)"
-        fi
-
-        function pyenv_prompt_info() {
-            echo "$(pyenv version-name)"
-        }
+if (( $+commands[pyenv] )); then
+    eval "$(pyenv init - zsh)"
+    if (( $+commands[pyenv-virtualenv-init] )); then
+        eval "$(pyenv virtualenv-init - zsh)"
     fi
-done
-unset pyenvdir
-
-if [ $FOUND_PYENV -eq 0 ] ; then
-    pyenvdir=$(brew --prefix pyenv 2> /dev/null)
-    if [ $? -eq 0 -a -d $pyenvdir/bin ] ; then
-        FOUND_PYENV=1
-        export PYENV_ROOT=$pyenvdir
-        export PATH=${pyenvdir}/bin:$PATH
-        eval "$(pyenv init - zsh)"
-
-        if pyenv commands | command grep -q virtualenv-init; then
-            eval "$(pyenv virtualenv-init - zsh)"
-        fi
-
-        function pyenv_prompt_info() {
-            echo "$(pyenv version-name)"
-        }
-    fi
-fi
-
-if [ $FOUND_PYENV -eq 0 ] ; then
-    function pyenv_prompt_info() { echo "system: $(python -V 2>&1 | cut -f 2 -d ' ')" }
+    function pyenv_prompt_info() {
+        echo "$(pyenv version-name)"
+    }
+else
+    # fallback to system python
+    function pyenv_prompt_info() {
+        echo "system: $(python -V 2>&1 | cut -f 2 -d ' ')"
+    }
 fi
