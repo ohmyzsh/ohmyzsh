@@ -7,7 +7,7 @@ _pyenv-from-homebrew-installed() {
 }
 
 FOUND_PYENV=0
-pyenvdirs=("$HOME/.pyenv" "/usr/local/pyenv" "/opt/pyenv")
+pyenvdirs=("$HOME/.pyenv" "/usr/local/pyenv" "/opt/pyenv" "/usr/local/opt/pyenv")
 
 for pyenvdir in "${pyenvdirs[@]}" ; do
     if [ -d $pyenvdir/bin -a $FOUND_PYENV -eq 0 ] ; then
