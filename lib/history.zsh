@@ -14,7 +14,7 @@ function omz_history {
   else
     # otherwise, call `fc -l 1` to show all available
     # history (and pass additional parameters)
-    builtin fc "$@" -l 1
+    builtin fc -l 1 "$@"
   fi
 }
 
