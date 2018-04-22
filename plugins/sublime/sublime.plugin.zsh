@@ -1,5 +1,9 @@
+# Sublime Text Aliases
+
+() {
+
 if [[ "$OSTYPE" == linux* ]]; then
-    local _sublime_linux_paths > /dev/null 2>&1
+    local _sublime_linux_paths _sublime_path
     _sublime_linux_paths=(
         "$HOME/bin/sublime_text"
         "/opt/sublime_text/sublime_text"
@@ -19,9 +23,8 @@ if [[ "$OSTYPE" == linux* ]]; then
             break
         fi
     done
-
 elif  [[ "$OSTYPE" = darwin* ]]; then
-    local _sublime_darwin_paths > /dev/null 2>&1
+    local _sublime_darwin_paths _sublime_path
     _sublime_darwin_paths=(
         "/usr/local/bin/subl"
         "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"
@@ -38,10 +41,9 @@ elif  [[ "$OSTYPE" = darwin* ]]; then
             break
         fi
     done
-
 elif [[ "$OSTYPE" = 'cygwin' ]]; then
-    local _sublime_cygwin_paths > /dev/null 2>&1
-    _sublime_cygwin_paths=(
+    local sublime_cygwin_paths _sublime_path
+    sublime_cygwin_paths=(
         "$(cygpath $ProgramW6432/Sublime\ Text\ 2)/sublime_text.exe"
         "$(cygpath $ProgramW6432/Sublime\ Text\ 3)/sublime_text.exe"
     )
@@ -52,8 +54,9 @@ elif [[ "$OSTYPE" = 'cygwin' ]]; then
             break
         fi
     done
-
 fi
+
+}
 
 alias stt='st .'
 
