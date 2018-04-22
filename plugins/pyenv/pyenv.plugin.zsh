@@ -1,9 +1,9 @@
 # This plugin loads pyenv into the current shell and provides prompt info via
 # the 'pyenv_prompt_info' function. Also loads pyenv-virtualenv if available.
 
-if which pyenv > /dev/null; then
+if (( $+commands[pyenv] )); then
     eval "$(pyenv init - zsh)"
-    if which pyenv-virtualenv-init > /dev/null; then
+    if (( $+commands[pyenv-virtualenv-init] )); then
         eval "$(pyenv virtualenv-init - zsh)"
     fi
     function pyenv_prompt_info() {
