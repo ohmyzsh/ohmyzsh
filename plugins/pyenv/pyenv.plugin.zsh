@@ -1,11 +1,3 @@
-_homebrew-installed() {
-    type brew &> /dev/null
-}
-
-_pyenv-from-homebrew-installed() {
-    brew --prefix pyenv &> /dev/null
-}
-
 FOUND_PYENV=0
 pyenvdirs=("$HOME/.pyenv" "/usr/local/pyenv" "/opt/pyenv")
 
