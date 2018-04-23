@@ -74,5 +74,12 @@ git.io() {
   curl -i -s https://git.io -F "url=$1" | grep "Location" | cut -f 2 -d " "
 }
 
+# clone_gh [AUTHOR/NAME_OF_REPO] [DIRECTORY]
+#
+# use this when clone repo
+clone_gh() { # [AUTHOR/NAME_OF_REPO]
+    git clone git@github.com:${1}.git ${2}
+}
+
 # End Functions #############################################################
 
