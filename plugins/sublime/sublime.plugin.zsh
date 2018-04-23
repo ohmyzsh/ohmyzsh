@@ -3,7 +3,7 @@
 () {
 
 if [[ "$OSTYPE" == linux* ]]; then
-    local _sublime_linux_paths _sublime_path
+    local _sublime_linux_paths
     _sublime_linux_paths=(
         "$HOME/bin/sublime_text"
         "/opt/sublime_text/sublime_text"
@@ -24,7 +24,7 @@ if [[ "$OSTYPE" == linux* ]]; then
         fi
     done
 elif  [[ "$OSTYPE" = darwin* ]]; then
-    local _sublime_darwin_paths _sublime_path
+    local _sublime_darwin_paths
     _sublime_darwin_paths=(
         "/usr/local/bin/subl"
         "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"
@@ -42,7 +42,7 @@ elif  [[ "$OSTYPE" = darwin* ]]; then
         fi
     done
 elif [[ "$OSTYPE" = 'cygwin' ]]; then
-    local sublime_cygwin_paths _sublime_path
+    local sublime_cygwin_paths
     sublime_cygwin_paths=(
         "$(cygpath $ProgramW6432/Sublime\ Text\ 2)/sublime_text.exe"
         "$(cygpath $ProgramW6432/Sublime\ Text\ 3)/sublime_text.exe"
