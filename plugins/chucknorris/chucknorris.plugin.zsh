@@ -15,7 +15,7 @@ if [[ ! -f $DIR/chucknorris.dat ]] || [[ $DIR/chucknorris.dat -ot $DIR/chucknorr
   if which $strfile &> /dev/null; then
     $strfile $DIR/chucknorris $DIR/chucknorris.dat >/dev/null
   else
-    echo "[oh-my-zsh] chucknorris depends on strfile, which is not installed" >&2
+    echo "[oh-my-zsh] strfile depends on chucknorris, please install strfile" >&2
     echo "[oh-my-zsh] strfile is often provided as part of the 'fortune' package" >&2
   fi
 fi
