@@ -2,6 +2,9 @@
 if [ "$DISABLE_AUTO_UPDATE" != "true" ]; then
   env ZSH=$ZSH DISABLE_UPDATE_PROMPT=$DISABLE_UPDATE_PROMPT zsh -f $ZSH/tools/check_for_upgrade.sh
 fi
+export ZSH_THEME="philips"
+#add plugins
+plugins=(git ubuntu vi-mode screen man)
 
 # Initializes Oh My Zsh
 
@@ -115,3 +118,4 @@ else
     fi
   fi
 fi
+eval "$(rbenv init -)"
