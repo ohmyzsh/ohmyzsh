@@ -50,6 +50,7 @@ alias agud='sudo apt-get update && sudo apt-get full-upgrade' #adu
 alias agug='sudo apt-get upgrade' # ag
 alias aguu='sudo apt-get update && sudo apt-get upgrade'      #adg
 alias agar='sudo apt-get autoremove'
+alias agrs='sudo apt-get remove -s'   # agr --simulate 
 
 compdef _ag apg='sudo apt-get'
 compdef _aga aga='sudo apt-get autoclean'
