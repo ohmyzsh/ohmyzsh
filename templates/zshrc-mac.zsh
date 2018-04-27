@@ -35,14 +35,13 @@ DISABLE_VENV_CD="true"
 plugins=(
     autopep8
     brew
-    buildbot
-    cask
     colored-man
     command-not-found
     common-aliases
     cp
     debian
     dircycle
+    docker
     encode64
     extract
     git-extras
