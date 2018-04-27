@@ -47,3 +47,11 @@ alias npmst="npm start"
 # Run npm test
 alias npmt="npm test"
 
+# Run npm scripts
+alias npmR="npm run"
+
+# Run npm publish 
+alias npmP="npm publish"
+
+# Run npm init
+alias npmI="npm init"

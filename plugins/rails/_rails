@@ -51,6 +51,9 @@ _arguments \
 if (( CURRENT == 1 )); then
   _describe -t commands "rails subcommand" _1st_arguments
   return
+else
+  _files
+  return
 fi
 
 case "$words[1]" in
