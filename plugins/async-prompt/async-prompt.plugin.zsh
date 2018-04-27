@@ -18,6 +18,7 @@ function precmd() {
     }
 
     # do not clear RPROMPT, let it persist
+    RPROMPT="${ZSH_THEME_ASYNC_PROMPT_OLD_PREFIX}${RPROMPT}${ZSH_THEME_ASYNC_PROMPT_OLD_SUFFIX}"
 
     # kill child if necessary
     if [[ "${ASYNC_PROC}" != 0 ]]; then
