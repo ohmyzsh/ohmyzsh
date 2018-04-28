@@ -33,6 +33,12 @@ alias kes='k edit svc'
 alias kds='k describe svc'
 alias kdels='k delete svc'
 
+# Ingress management
+alias kgi='k get ingress'
+alias kei='k edit ingress'
+alias kdi='k describe ingress'
+alias kdeli='k delete ingress'
+
 # Secret management
 alias kgsec='k get secret'
 alias kdsec='k describe secret'
