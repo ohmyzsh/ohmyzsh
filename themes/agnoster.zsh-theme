@@ -87,15 +87,14 @@ prompt_context() {
 prompt_kubernetes() {
 
   local cluster=$(kubectl config current-context)
-  local short_cluster=$(grep --colour=never -o '^[^.]*\.[^.]*'<<< "$cluster")
   local namespace=$(kubectl config get-contexts ${cluster} --no-headers | awk '{print $5}')
   if [[ -z "$namespace" ]] || [[ "$namespace" == 'default' ]]; then 
-    prompt_segment magenta black "☁️ ${short_cluster}☁️ "
+    prompt_segment magenta black "☁️ ${cluster}☁️ "
   else
-    if [[ "$namespace" =~ .*[Pp][Rr][Oo][Dd].* ]]; then 
-      prompt_segment red black "☁️ ${short_cluster}|${namespace}☁️ "
+    if [[ "$namespace" =~ [Pp][Rr][Oo][Dd].* ]]; then 
+      prompt_segment red black "☁️ ${cluster}|${namespace}☁️ "
     else 
-      prompt_segment magenta black "☁️ ${short_cluster}|${namespace}☁️ "
+      prompt_segment magenta black "☁️ ${cluster}|${namespace}☁️ "
     fi
   fi 
 }
