@@ -86,8 +86,18 @@ prompt_context() {
 
 prompt_kubernetes() {
 
-  local cluster=$(kubectl config current-context | grep --colour=never -o '^[^.]*\.[^.]*')
-  prompt_segment magenta black "☁️ ${cluster}☁️ "
+  local cluster=$(kubectl config current-context)
+  local short_cluster=$(grep --colour=never -o '^[^.]*\.[^.]*'<<< "$cluster")
+  local namespace=$(kubectl config get-contexts ${cluster} --no-headers | awk '{print $5}')
+  if [[ -z "$namespace" ]] || [[ "$namespace" == 'default' ]]; then 
+    prompt_segment magenta black "☁️ ${short_cluster}☁️ "
+  else
+    if [[ "$namespace" =~ .*[Pp][Rr][Oo][Dd].* ]]; then 
+      prompt_segment red black "☁️ ${short_cluster}|${namespace}☁️ "
+    else 
+      prompt_segment magenta black "☁️ ${short_cluster}|${namespace}☁️ "
+    fi
+  fi 
 }
 
 # Git: branch/detached head, dirty status
@@ -222,7 +232,7 @@ prompt_status() {
 build_prompt() {
   RETVAL=$?
   prompt_status
-  prompt_kubernetes 
+  test -e ~/.kube/config && prompt_kubernetes 
   prompt_virtualenv
   prompt_context
   prompt_dir
