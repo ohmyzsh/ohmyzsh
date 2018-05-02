@@ -21,14 +21,23 @@ alias kcsc='k config set-context'
 alias kcdc='k config delete-context'
 alias kccc='k config current-context'
 
+# General aliases
+alias kga='k get all'
+alias kdel='k delete'
+alias kdelf='k delete -f'
+
 # Pod management.
 alias kgp='k get pods'
+alias kgpw='kgp --watch'
+alias kgpwide='kgp -o wide'
 alias kep='k edit pods'
 alias kdp='k describe pods'
 alias kdelp='k delete pods'
 
 # Service management.
 alias kgs='k get svc'
+alias kgsw='kgs --watch'
+alias kgswide='kgs -o wide'
 alias kes='k edit svc'
 alias kds='k describe svc'
 alias kdels='k delete svc'
@@ -46,6 +55,8 @@ alias kdelsec='k delete secret'
 
 # Deployment management.
 alias kgd='k get deployment'
+alias kgdw='kgd --watch'
+alias kgdwide='kgd -o wide'
 alias ked='k edit deployment'
 alias kdd='k describe deployment'
 alias kdeld='k delete deployment'
