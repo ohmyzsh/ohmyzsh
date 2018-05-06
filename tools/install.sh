@@ -24,10 +24,9 @@ main() {
   # which may fail on systems lacking tput or terminfo
   set -e
 
-  if command -v zsh >/dev/null 2>&1; then
+  command -v zsh >/dev/null 2>&1 || {
     printf "${YELLOW}Zsh is not installed!${NORMAL} Please install zsh first!\n"
-    exit
-  fi
+  }
 
   if [ ! -n "$ZSH" ]; then
     ZSH=~/.oh-my-zsh
