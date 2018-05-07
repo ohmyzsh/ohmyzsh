@@ -66,6 +66,9 @@ function steeef_preexec {
         *git*)
             PR_GIT_UPDATE=1
             ;;
+        *hub*)
+            PR_GIT_UPDATE=1
+            ;;
         *svn*)
             PR_GIT_UPDATE=1
             ;;
