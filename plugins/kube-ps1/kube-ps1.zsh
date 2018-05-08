@@ -17,15 +17,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Debug
-[[ -n $DEBUG ]] && set -x
-
+# Default values for the prompt
+# Override these values in ~/.zshrc or ~/.bashrc
 setopt PROMPT_SUBST
 add-zsh-hook precmd _kube_ps1_load
 zmodload zsh/stat
 
-# Default values for the prompt
-# Override these values in ~/.zshrc or ~/.bashrc
 KUBE_PS1_DEFAULT="${KUBE_PS1_DEFAULT:=true}"
 KUBE_PS1_PREFIX="("
 KUBE_PS1_DEFAULT_LABEL="${KUBE_PS1_DEFAULT_LABEL:="⎈ "}"
@@ -72,7 +69,9 @@ _kube_ps1_load() {
   KUBECONFIG="${KUBECONFIG:=$HOME/.kube/config}"
 
   for conf in $(_kube_ps1_split : "${KUBECONFIG}"); do
-    # TODO: check existence of $conf
+    if [ ! -f "${conf}" ]; then
+      return
+    fi
     if _kube_ps1_file_newer_than "${conf}" "${KUBE_PS1_LAST_TIME}"; then
       _kube_ps1_get_context_ns
       return
@@ -104,7 +103,7 @@ _kube_ps1_get_context_ns() {
 kube_ps1_label
 
 # Build our prompt
-kube_ps1 () {
+prompt_kube_ps1 () {
   local reset_color="%f"
   local blue="%F{blue}"
   local red="%F{red}"

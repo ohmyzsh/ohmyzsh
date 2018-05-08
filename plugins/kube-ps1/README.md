@@ -40,14 +40,12 @@ Supported platforms:
 * ocp - OpenShift
 
 ## Install
-
-1. Clone this repository
-2. Source the kube-ps1.zsh in your ~./.zshrc
-
-ZSH:
+In your ~/.zshrc
+1. Add kube-ps1 in plugins variable
+2. Add kube_ps1 in your PROMPT_ELEMENTS varaible 
+ie for powerlevel9k theme
 ```
-source path/kube-ps1.sh
-PROMPT='$(kube_ps1) '
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(kube_ps1 context dir virtualenv rbenv vcs)
 ```
 
 ## Colors
@@ -74,3 +72,6 @@ The default settings can be overridden in ~/.zshrc
 ## Contributors
 
 Jared Yanovich
+
+## Updated by
+David ALEXANDRE
