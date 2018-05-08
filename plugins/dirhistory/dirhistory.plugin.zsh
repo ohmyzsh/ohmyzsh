@@ -144,12 +144,12 @@ bindkey "\eO3C" dirhistory_zle_dirhistory_future
 
 # Move up in hierarchy
 function dirhistory_up() {
-  cd ..
+  cd .. || return 1
 }
 
 # Move down in hierarchy
 function dirhistory_down() {
-  cd "`find . -mindepth 1 -maxdepth 1 -type d | sort -n | head -n 1`"
+  cd "$(find . -mindepth 1 -maxdepth 1 -type d | sort -n | head -n 1)" || return 1
 }
 
 
