@@ -22,6 +22,10 @@ fi
 
 printf "${BLUE}%s${NORMAL}\n" "Updating Oh My Zsh"
 cd "$ZSH"
+PREV_AUTOCRLF = git config --global --get core.autocrlf
+if [ PREV_AUTOCRLF = 'true' ]; then
+  git config --global core.autocrlf false
+fi
 if git pull --rebase --stat origin master
 then
   printf '%s' "$GREEN"
@@ -36,4 +40,7 @@ then
   printf "${BLUE}${BOLD}%s${NORMAL}\n" "Get your Oh My Zsh swag at:  https://shop.planetargon.com/"
 else
   printf "${RED}%s${NORMAL}\n" 'There was an error updating. Try again later?'
+fi
+if [ PREV_AUTOCRLF = 'true' ]; then
+  git config --global core.autocrlf true
 fi
