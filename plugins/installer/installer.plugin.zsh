@@ -11,7 +11,7 @@
 source "${0:h}/core.sh"
 
 case $OS in
-    'mac') 
+    'mac')
         alias in='brew install'
         alias up='brew upgrade'
         ;;

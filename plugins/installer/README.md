@@ -9,7 +9,7 @@ On Debian/Ubuntu it's apt-get
 include the installer as a plugin in your ~/.zshrc
 
 to install a new app run
-install <app>
+in <app>
 
 you can upgrade an app with
-upgrade <app>
+up <app>
