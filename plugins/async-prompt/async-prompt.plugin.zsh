@@ -4,6 +4,10 @@
 # To use in your theme, define an `rprompt` function that echoes whatever you
 # want to have on the right-hand-side prompt.
 #
+# Copyright
+#	2015, Anish Athalye (initial idea and code)
+#	2018, Olivier Mehani <shtrom+zsh@ssji.net> (this plugin), MIT licensed
+#
 setopt prompt_subst # enable command substition in prompt
 
 local _RPROMPT_FILE=$(umask 7077; mktemp /tmp/zsh_async_prompt.$$.XXXXXX)
