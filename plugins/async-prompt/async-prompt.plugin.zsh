@@ -6,12 +6,14 @@
 #
 setopt prompt_subst # enable command substition in prompt
 
+local _RPROMPT_FILE=$(umask 7077; mktemp /tmp/zsh_async_prompt.$$.XXXXXX)
+
 ASYNC_PROC=0
 function precmd() {
     function async() {
 
         # save to temp file
-	printf "%s" "$(rprompt)" > "/tmp/zsh_prompt_$$"
+	printf "%s" "$(rprompt)" > "${_RPROMPT_FILE}"
 
         # signal parent
         kill -s USR1 $$
@@ -32,7 +34,7 @@ function precmd() {
 
 function TRAPUSR1() {
     # read from temp file
-    RPROMPT="$(cat /tmp/zsh_prompt_$$)"
+    RPROMPT="$(cat ${_RPROMPT_FILE})"
 
     # reset proc number
     ASYNC_PROC=0
@@ -40,3 +42,10 @@ function TRAPUSR1() {
     # redisplay
     zle && zle reset-prompt
 }
+
+function async_zshexit() {
+	rm ${_RPROMPT_FILE}
+}
+
+autoload -U add-zsh-hook
+add-zsh-hook zshexit async_zshexit
