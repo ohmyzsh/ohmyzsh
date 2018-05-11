@@ -6,7 +6,7 @@
 local _RUNTIME_FILE=$(umask 7077; mktemp /tmp/zsh_runtime.$$.XXXXXX)
 
 function runtime() {
-	local last=$(cat ${_RUNTIME_FILE})
+	local last=$(cat ${_RUNTIME_FILE} 2>/dev/null)
 	if [[ -n $last ]]; then
 		echo "$(date '+%s')-$last" | bc -ql
 		echo > ${_RUNTIME_FILE}
@@ -18,7 +18,7 @@ function runtime_preexec() {
 }
 
 function runtime_zshexit() {
-	rm ${_RUNTIME_FILE}
+	rm -f ${_RUNTIME_FILE}
 }
 
 autoload -U add-zsh-hook
