@@ -38,7 +38,7 @@ function precmd() {
 
 function TRAPUSR1() {
     # read from temp file
-    RPROMPT="$(cat ${_RPROMPT_FILE})"
+    RPROMPT="$(cat ${_RPROMPT_FILE} 2>/dev/null)"
 
     # reset proc number
     ASYNC_PROC=0
@@ -48,7 +48,7 @@ function TRAPUSR1() {
 }
 
 function async_zshexit() {
-	rm ${_RPROMPT_FILE}
+	rm -f ${_RPROMPT_FILE}
 }
 
 autoload -U add-zsh-hook
