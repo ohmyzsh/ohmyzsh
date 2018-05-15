@@ -1,0 +1,25 @@
+[submodule "plugins/fz"]
+	path = plugins/fz
+	url = https://github.com/changyuheng/fz.git
+	branch = master
+[submodule "custom/plugins/zsh-autosuggestions"]
+	path = custom/plugins/zsh-autosuggestions
+	url = https://github.com/zsh-users/zsh-autosuggestions
+[submodule "custom/plugins/zsh-nvm"]
+	path = custom/plugins/zsh-nvm
+	url = https://github.com/lukechilds/zsh-nvm
+[submodule "custom/plugins/zsh-syntax-highlighting"]
+	path = custom/plugins/zsh-syntax-highlighting
+	url = https://github.com/zsh-users/zsh-syntax-highlighting
+[submodule "custom/plugins/cd-gitroot"]
+	path = custom/plugins/cd-gitroot
+	url = https://github.com/mollifier/cd-gitroot
+[submodule "custom/plugins/zce"]
+	path = custom/plugins/zce
+	url = git@github.com:15cm/zce.zsh.git
+[submodule "custom/plugins/yadm"]
+	path = custom/plugins/yadm
+	url = git@github.com:15cm/yadm-zsh.git
+[submodule "custom/plugins/alias-tips"]
+	path = custom/plugins/alias-tips
+	url = https://github.com/djui/alias-tips
