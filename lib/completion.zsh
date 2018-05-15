@@ -11,7 +11,11 @@ setopt always_to_end
 
 # should this be in keybindings?
 bindkey -M menuselect '^o' accept-and-infer-next-history
-zstyle ':completion:*:*:*:*:*' menu select
+
+# These versions delete the prompt on CTRL+C while on menu selection
+if ! [[ $ZSH_VERSION == 5.1.1 || $ZSH_VERSION == 5.2 ]]; then
+  zstyle ':completion:*' menu select
+fi
 
 # case insensitive (all), partial-word and substring completion
 if [[ "$CASE_SENSITIVE" = true ]]; then
