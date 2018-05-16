@@ -94,6 +94,11 @@ shrink_path () {
         (( tilde )) && dir=${dir/$HOME/\~}
         tree=(${(s:/:)dir})
         (
+                # unset chpwd_functions since we'll be calling `cd` and don't
+                # want any side-effects (eg., if the user was using auto-ls)
+                chpwd_functions=()
+                # unset chpwd since even if chpwd_functions is (), zsh will
+                # attempt to execute chpwd
                 unfunction chpwd 2> /dev/null
                 if [[ $tree[1] == \~* ]] {
                         cd ${~tree[1]}
