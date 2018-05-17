@@ -889,7 +889,7 @@ __docker_container_subcommand() {
                 $opts_help \
                 $opts_attach_exec_run_start \
                 "($help -a --attach)"{-a,--attach}"[Attach container's stdout/stderr and forward all signals]" \
-                "($help -i --interactive)"{-i,--interactive}"[Attach container's stding]" \
+                "($help -i --interactive)"{-i,--interactive}"[Attach container's stdin]" \
                 "($help -)*:containers:__docker_complete_stopped_containers" && ret=0
             ;;
         (stats)
