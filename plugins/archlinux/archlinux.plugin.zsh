@@ -119,7 +119,7 @@ alias pacfileupg='sudo pacman -Fy'
 alias pacfiles='pacman -Fs'
 alias pacls='pacman -Ql'
 alias pacown='pacman -Qo'
-
+alias pacarm=sudo pacman -Qdtq | sudo pacman -Rs -
 
 if (( $+commands[abs] && $+commands[aur] )); then
   alias pacupd='sudo pacman -Sy && sudo abs && sudo aur'
