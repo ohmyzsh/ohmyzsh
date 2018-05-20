@@ -2,8 +2,15 @@
 #
 # Author: https://github.com/pstadler
 
+KUBECTL_COMPLETION_FILENAME="$TMPPREFIX-kubectl-completion-zsh"
+
+if [[ ! -f "$KUBECTL_COMPLETION_FILENAME" ]]
+then
+    kubectl completion zsh > "$KUBECTL_COMPLETION_FILENAME"
+fi
+
 if [ $commands[kubectl] ]; then
-  source <(kubectl completion zsh)
+  source "$KUBECTL_COMPLETION_FILENAME"
 fi
 
 # This command is used ALOT both below and in daily life
