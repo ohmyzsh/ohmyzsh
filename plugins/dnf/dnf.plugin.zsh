@@ -6,6 +6,8 @@ alias dnfgl="dnf grouplist"                 # List package groups
 alias dnfmc="dnf makecache"                 # Generate metadata cache
 alias dnfp="dnf info"                       # Show package information
 alias dnfs="dnf search"                     # Search package
+alias dnfpr="dnf provides"                  # Search packages that provides a file
+alias dnfd="dnf download"                   # Download rpm and srpm
 
 alias dnfu="sudo dnf upgrade"               # Upgrade package
 alias dnfi="sudo dnf install"               # Install package
