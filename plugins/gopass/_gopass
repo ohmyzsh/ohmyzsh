@@ -1,0 +1,6 @@
+# The slightly more awesome standard unix password manager for teams
+#
+# https://www.justwatch.com/gopass
+# https://github.com/justwatchcom/gopass
+
+source <(gopass completion zsh)
