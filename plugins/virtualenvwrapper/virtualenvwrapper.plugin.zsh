@@ -1,6 +1,14 @@
 virtualenvwrapper='virtualenvwrapper.sh'
+virtualenvwrapper_lazy='virtualenvwrapper_lazy.sh'
 
-if (( $+commands[$virtualenvwrapper] )); then
+if (( $+commands[$virtualenvwrapper_lazy] )); then
+  function {
+    setopt local_options
+    unsetopt equals
+    virtualenvwrapper=${${virtualenvwrapper_lazy}:c}
+    source ${${virtualenvwrapper_lazy}:c}
+  }
+elif (( $+commands[$virtualenvwrapper] )); then
   function {
     setopt local_options
     unsetopt equals
