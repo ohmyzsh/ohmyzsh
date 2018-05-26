@@ -1,16 +1,13 @@
-# Autocompletion for kubectl, the command line interface for Kubernetes
-#
-# Author: https://github.com/pstadler
+if (( $+commands[kubectl] )); then
+    __KUBECTL_COMPLETION_FILE="${ZSH_CACHE_DIR}/kubectl_completion"
 
-KUBECTL_COMPLETION_FILENAME="$TMPPREFIX-kubectl-completion-zsh"
+    if [[ ! -f $__KUBECTL_COMPLETION_FILE ]]; then
+        kubectl completion zsh >! $__KUBECTL_COMPLETION_FILE
+    fi
 
-if [[ ! -f "$KUBECTL_COMPLETION_FILENAME" ]]
-then
-    kubectl completion zsh > "$KUBECTL_COMPLETION_FILENAME"
-fi
+    [[ -f $__KUBECTL_COMPLETION_FILE ]] && source $__KUBECTL_COMPLETION_FILE
 
-if [ $commands[kubectl] ]; then
-  source "$KUBECTL_COMPLETION_FILENAME"
+    unset __KUBECTL_COMPLETION_FILE
 fi
 
 # This command is used ALOT both below and in daily life
