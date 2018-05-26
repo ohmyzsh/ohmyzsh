@@ -88,10 +88,10 @@ shrink_path () {
 
         if (( named )) {
                 for part in ${(k)nameddirs}; {
-                        [[ $dir == ${nameddirs[$part]}(/*|) ]] && dir=${dir/${nameddirs[$part]}/\~$part}
+                        [[ $dir == ${nameddirs[$part]}(/*|) ]] && dir=${dir/#${nameddirs[$part]}/\~$part}
                 }
         }
-        (( tilde )) && dir=${dir/$HOME/\~}
+        (( tilde )) && dir=${dir/#$HOME/\~}
         tree=(${(s:/:)dir})
         (
                 if [[ $tree[1] == \~* ]] {
