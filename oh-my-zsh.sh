@@ -63,15 +63,14 @@ if [ -z "$ZSH_COMPDUMP" ]; then
 fi
 
 if [[ $ZSH_DISABLE_COMPFIX != true ]]; then
-  # If completion insecurities exist, warn the user without enabling completions.
+  # If completion insecurities exist, warn the user
   if ! compaudit &>/dev/null; then
-    # This function resides in the "lib/compfix.zsh" script sourced above.
     handle_completion_insecurities
-  # Else, enable and cache completions to the desired file.
-  else
-    compinit -d "${ZSH_COMPDUMP}"
   fi
+  # Load only from secure directories
+  compinit -i -d "${ZSH_COMPDUMP}"
 else
+  # If the user wants it, load from all found directories
   compinit -u -d "${ZSH_COMPDUMP}"
 fi
 
