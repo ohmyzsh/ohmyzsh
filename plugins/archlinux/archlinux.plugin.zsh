@@ -122,7 +122,7 @@ elif (( $+commands[pacaur] )); then
   }
 elif (( $+commands[yaourt] )); then
   function upgrade() {
-    yay -Syu
+    yaourt -Syu
   }
 elif (( $+commands[yay] )); then
   function upgrade() {
