@@ -120,6 +120,11 @@ elif (( $+commands[pacaur] )); then
   function upgrade() {
     pacaur -Syu
   }
+  }
+elif (( $+commands[yaourt] )); then
+  function upgrade() {
+    yay -Syu
+  }
 elif (( $+commands[yay] )); then
   function upgrade() {
     yay -Syu
