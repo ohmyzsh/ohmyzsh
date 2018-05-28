@@ -35,6 +35,15 @@ ys_hg_prompt_info() {
 	fi
 }
 
+# Virtualenv info
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+local virtualenv_info='$(virtualenv_prompt_info)'
+virtualenv_prompt_info() {
+    if [ ! -z "${VIRTUAL_ENV}" ] ; then
+        echo -n " ve:$fg[cyan]$(basename $VIRTUAL_ENV)"
+    fi
+}
+
 local exit_code="%(?,,C:%{$fg[red]%}%?%{$reset_color%})"
 
 # Prompt format:
@@ -53,6 +62,7 @@ PROMPT="
 %{$fg[green]%}%m \
 %{$fg[white]%}in \
 %{$terminfo[bold]$fg[yellow]%}%~%{$reset_color%}\
+${virtualenv_info}\
 ${hg_info}\
 ${git_info}\
  \
