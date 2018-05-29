@@ -83,6 +83,35 @@ if (( $+commands[pacaur] )); then
   fi
 fi
 
+if (( $+commands[pikaur] )); then
+  alias piconf='pikaur -C'
+  alias piupg='pikaur -Syua'
+  alias pisu='pikaur -Syua --noconfirm'
+  alias piin='pikaur -S'
+  alias piins='pikaur -U'
+  alias pire='pikaur -R'
+  alias pirem='pikaur -Rns'
+  alias pirep='pikaur -Si'
+  alias pireps='pikaur -Ss'
+  alias piloc='pikaur -Qi'
+  alias pilocs='pikaur -Qs'
+  alias pilst='pikaur -Qe'
+  alias piorph='pikaur -Qtd'
+  alias piinsd='pikaur -S --asdeps'
+  alias pimir='pikaur -Syy'
+
+
+  if (( $+commands[abs] && $+commands[aur] )); then
+    alias piupd='pikaur -Sy && sudo abs && sudo aur'
+  elif (( $+commands[abs] )); then
+    alias piupd='pikaur -Sy && sudo abs'
+  elif (( $+commands[aur] )); then
+    alias piupd='pikaur -Sy && sudo aur'
+  else
+    alias piupd='pikaur -Sy'
+  fi
+fi
+
 if (( $+commands[trizen] )); then
   function upgrade() {
     trizen -Syu
@@ -94,6 +123,10 @@ elif (( $+commands[pacaur] )); then
 elif (( $+commands[yaourt] )); then
   function upgrade() {
     yaourt -Syu
+  }
+elif (( $+commands[pikaur] )); then
+  function upgrade() {
+    pikaur -Syu
   }
 else
   function upgrade() {
