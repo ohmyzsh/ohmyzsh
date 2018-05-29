@@ -52,6 +52,31 @@
 | yasu    | yaourt -Syua --no-confirm          | Same as `yaupg`, but without confirmation                           |
 | upgrade | yaourt -Syu                        | Sync with repositories before upgrading packages                    |
 
+#### PIKAUR
+
+| Alias   | Command                            | Description                                                         |
+|---------|------------------------------------|---------------------------------------------------------------------|
+| piconf  | pikaur -C                          | Fix all configuration files with vimdiff                            |
+| piin    | pikaur -S                          | Install packages from the repositories                              |
+| piins   | pikaur -U                          | Install a package from a local file                                 |
+| piinsd  | pikaur -S --asdeps                 | Install packages as dependencies of another package                 |
+| piloc   | pikaur -Qi                         | Display information about a package in the local database           |
+| pilocs  | pikaur -Qs                         | Search for packages in the local database                           |
+| pilst   | pikaur -Qe                         | List installed packages including from AUR (tagged as "local")      |
+| pimir   | pikaur -Syy                        | Force refresh of all package lists after updating mirrorlist        |
+| piorph  | pikaur -Qtd                        | Remove orphans using pikaur                                         |
+| pire    | pikaur -R                          | Remove packages, keeping its settings and dependencies              |
+| pirem   | pikaur -Rns                        | Remove packages, including its settings and unneeded dependencies   |
+| pirep   | pikaur -Si                         | Display information about a package in the repositories             |
+| pireps  | pikaur -Ss                         | Search for packages in the repositories                             |
+| piupd   | pikaur -Sy && sudo abs && sudo aur | Update and refresh local package, ABS and AUR databases             |
+| piupd   | pikaur -Sy && sudo abs             | Update and refresh the local package and ABS databases              |
+| piupd   | pikaur -Sy && sudo aur             | Update and refresh the local package and AUR databases              |
+| piupd   | pikaur -Sy                         | Update and refresh the local package database                       |
+| piupg   | pikaur -Syua                       | Sync with repositories before upgrading all packages (from AUR too) |
+| pisu    | pikaur -Syua --noconfirm           | Same as `piupg`, but without confirmation                           |
+| upgrade | pikaur -Syu                        | Sync with repositories before upgrading packages                    |
+
 #### PACAUR
 
 | Alias   | Command                            | Description                                                         |
@@ -124,3 +149,4 @@
 - Juraj Fiala - doctorjellyface@riseup.net
 - Majora320 (Moses Miller) - Majora320@gmail.com
 - Ybalrid (Arthur Brainville) - ybalrid@ybalrid.info
+- Byeonghoon Yoo - bh322yoo@gmail.com
