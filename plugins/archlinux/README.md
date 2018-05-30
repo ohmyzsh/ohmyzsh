@@ -76,6 +76,30 @@
 | pasu    | pacaur -Syua --no-confirm          | Same as `paupg`, but without confirmation                           |
 | upgrade | pacaur -Syu                        | Sync with repositories before upgrading packages                    |
 
+#### PACAUR
+
+| Alias   | Command                            | Description                                                         |
+|---------|------------------------------------|---------------------------------------------------------------------|
+| auin    | aurman -S                          | Install packages from the repositories                              |
+| auins   | aurman -U                          | Install a package from a local file                                 |
+| auinsd  | aurman -S --asdeps                 | Install packages as dependencies of another package                 |
+| auloc   | aurman -Qi                         | Display information about a package in the local database           |
+| aulocs  | aurman -Qs                         | Search for packages in the local database                           |
+| aulst   | aurman -Qe                         | List installed packages including from AUR (tagged as "local")      |
+| aumir   | aurman -Syy                        | Force refresh of all package lists after updating mirrorlist        |
+| auorph  | aurman -Qtd                        | Remove orphans using aurman                                         |
+| aure    | aurman -R                          | Remove packages, keeping its settings and dependencies              |
+| aurem   | aurman -Rns                        | Remove packages, including its settings and unneeded dependencies   |
+| aurep   | aurman -Si                         | Display information about a package in the repositories             |
+| aureps  | aurman -Ss                         | Search for packages in the repositories                             |
+| auupd   | aurman -Sy && sudo abs && sudo aur | Update and refresh local package, ABS and AUR databases             |
+| auupd   | aurman -Sy && sudo abs             | Update and refresh the local package and ABS databases              |
+| auupd   | aurman -Sy && sudo aur             | Update and refresh the local package and AUR databases              |
+| auupd   | aurman -Sy                         | Update and refresh the local package database                       |
+| auupg   | aurman -Syua                       | Sync with repositories before upgrading all packages (from AUR too) |
+| ausu    | aurman -Syua --no-confirm          | Same as `auupg`, but without confirmation                           |
+| upgrade | aurman -Syu                        | Sync with repositories before upgrading packages                    |
+
 #### PACMAN
 
 | Alias        | Command                                 | Description                                                  |

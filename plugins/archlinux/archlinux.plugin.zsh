@@ -83,7 +83,38 @@ if (( $+commands[pacaur] )); then
   fi
 fi
 
-if (( $+commands[trizen] )); then
+if (( $+commands[aurman] )); then
+  alias auupg='aurman -Syu'
+  alias ausu='aurman -Syu --noconfirm'
+  alias auin='aurman -S'
+  alias auins='aurman -U'
+  alias aure='aurman -R'
+  alias aurem='aurman -Rns'
+  alias aurep='aurman -Si'
+  alias aureps='aurman -Ss'
+  alias auloc='aurman -Qi'
+  alias aulocs='aurman -Qs'
+  alias aulst='aurman -Qe'
+  alias auorph='aurman -Qtd'
+  alias auinsd='aurman -S --asdeps'
+  alias aumir='aurman -Syy'
+
+  if (( $+commands[abs] && $+commands[aur] )); then
+    alias auupd='aurman -Sy && sudo abs && sudo aur'
+  elif (( $+commands[abs] )); then
+    alias auupd='aurman -Sy && sudo abs'
+  elif (( $+commands[aur] )); then
+    alias auupd='aurman -Sy && sudo aur'
+  else
+    alias auupd='aurman -Sy'
+  fi
+fi
+
+if (( $+commands[aurman] )); then
+  function upgrade() {
+    aurman -Syu
+  }
+elif (( $+commands[trizen] )); then
   function upgrade() {
     trizen -Syu
   }
