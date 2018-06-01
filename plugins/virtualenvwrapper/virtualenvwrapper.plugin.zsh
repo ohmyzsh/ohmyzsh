@@ -1,7 +1,7 @@
 virtualenvwrapper='virtualenvwrapper.sh'
 virtualenvwrapper_lazy='virtualenvwrapper_lazy.sh'
 
-if (( $+commands[$virtualenvwrapper_lazy] )); then
+if (( $+commands[$virtualenvwrapper_lazy] )) && [ "$WORKON_HOME" != "" ]; then
   function {
     setopt local_options
     unsetopt equals
