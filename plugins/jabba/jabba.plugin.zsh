@@ -36,14 +36,14 @@ _jabba () {
     subcommand)
       case $words[2] in
         use)
-	  compadd $(_jabba_get_installed_list)
-	  ;;
-	install)
-	  compadd $(_jabba_get_available_list)
-	  ;;
-	uninstall)
-	  compadd $(_jabba_get_installed_list)
-	  ;;
+          compadd $(_jabba_get_installed_list)
+          ;;
+        install)
+          compadd $(_jabba_get_available_list)
+          ;;
+        uninstall)
+          compadd $(_jabba_get_installed_list)
+          ;;
       esac
       ;;
   esac
