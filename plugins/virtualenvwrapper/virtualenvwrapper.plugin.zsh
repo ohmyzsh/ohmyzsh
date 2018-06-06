@@ -40,11 +40,6 @@ if ! type workon &>/dev/null; then
   return
 fi
 
-if [[ "$WORKON_HOME" == "" ]]; then
-  print "[oh-my-zsh] \$WORKON_HOME is not defined so plugin virtualenvwrapper will not work" >&2
-  return
-fi
-
 if [[ ! $DISABLE_VENV_CD -eq 1 ]]; then
   # Automatically activate Git projects or other customized virtualenvwrapper projects based on the
   # directory name of the project. Virtual environment name can be overridden
