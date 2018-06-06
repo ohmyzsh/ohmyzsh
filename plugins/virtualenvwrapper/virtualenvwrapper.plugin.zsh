@@ -7,6 +7,7 @@ if (( $+commands[$virtualenvwrapper_lazy] )); then
     unsetopt equals
     virtualenvwrapper=${${virtualenvwrapper_lazy}:c}
     source ${${virtualenvwrapper_lazy}:c}
+    [[ -z "$WORKON_HOME" ]] && WORKON_HOME="$HOME/.virtualenvs"
   }
 elif (( $+commands[$virtualenvwrapper] )); then
   function {
