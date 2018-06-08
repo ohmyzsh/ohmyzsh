@@ -43,6 +43,7 @@ alias g='git'
 alias ga='git add'
 alias gaa='git add --all'
 alias gapa='git add --patch'
+alias ganpa='git add --intent-to-add . && git add --patch'
 alias gau='git add --update'
 alias gap='git apply'
 
