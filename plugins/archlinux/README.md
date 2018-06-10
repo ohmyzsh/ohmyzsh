@@ -23,7 +23,7 @@
 | trupd   | trizen -Sy && sudo abs             | Update and refresh the local package and ABS databases              |
 | trupd   | trizen -Sy && sudo aur             | Update and refresh the local package and AUR databases              |
 | trupd   | trizen -Sy                         | Update and refresh the local package database                       |
-| trupd   | trizen -Syua                       | Sync with repositories before upgrading all packages (from AUR too) |
+| trupg   | trizen -Syua                       | Sync with repositories before upgrading all packages (from AUR too) |
 | trsu    | trizen -Syua --no-confirm          | Same as `trupg`, but without confirmation                           |
 | upgrade | trizen -Syu                        | Sync with repositories before upgrading packages                    |
 
