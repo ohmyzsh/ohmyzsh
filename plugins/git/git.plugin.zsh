@@ -211,6 +211,7 @@ alias grbc='git rebase --continue'
 alias grbi='git rebase -i'
 alias grbm='git rebase master'
 alias grbs='git rebase --skip'
+alias gref='alias | grep git | grep' # Reference for unkown git aliases
 alias grh='git reset HEAD'
 alias grhh='git reset HEAD --hard'
 alias grmv='git remote rename'
