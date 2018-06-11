@@ -8,7 +8,8 @@ local _RUNTIME_FILE=$(umask 7077; mktemp /tmp/zsh_runtime.$$.XXXXXX)
 function runtime() {
 	local last=$(cat ${_RUNTIME_FILE} 2>/dev/null)
 	if [[ -n $last ]]; then
-		echo "$(date '+%s')-$last" | bc -ql
+		now=$(date '+%s')
+		echo "$((now-last))"
 		echo > ${_RUNTIME_FILE}
 	fi
 }
