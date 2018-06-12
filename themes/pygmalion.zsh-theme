@@ -23,10 +23,19 @@ prompt_pygmalion_precmd(){
 
   local nl=""
 
-  if [[ $prompt_length -gt 40 ]]; then
-    nl=$'\n%{\r%}';
+  if [ $prompt_length -gt 40 ] 
+  then
+    nl=$'\n%{\r%}'
   fi
-  PROMPT="$base_prompt$gitinfo$nl$post_prompt"
+  
+  if [ ${#VIRTUAL_ENV} -gt 3 ]
+  then
+    venv=$' %{$fg[blue]%}[${VIRTUAL_ENV:t}]%{$reset_color%} '
+  else
+    venv=$''
+  fi
+
+  PROMPT="$base_prompt$gitinfo$nl$venv$post_prompt"
 }
 
 prompt_setup_pygmalion
