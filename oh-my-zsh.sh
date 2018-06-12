@@ -39,14 +39,33 @@ is_plugin() {
   test -f $base_dir/plugins/$name/$name.plugin.zsh \
     || test -f $base_dir/plugins/$name/_$name
 }
+
+add_plugin_fpath() {
+    local plugin=$1
+    if is_plugin $ZSH_CUSTOM $plugin; then
+        fpath=($ZSH_CUSTOM/plugins/$plugin $fpath)
+    elif is_plugin $ZSH $plugin; then
+        fpath=($ZSH/plugins/$plugin $fpath)
+    fi
+}
+
+sourced_plugins={}
+typeset -A sourced_plugins
+
+source_plugin_zsh() {
+    local plugin=$1
+    if [ -f $ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh ]; then
+        source $ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh
+    elif [ -f $ZSH/plugins/$plugin/$plugin.plugin.zsh ]; then
+        source $ZSH/plugins/$plugin/$plugin.plugin.zsh
+    fi
+    sourced_plugins[$1]=$1
+}
+
 # Add all defined plugins to fpath. This must be done
 # before running compinit.
 for plugin ($plugins); do
-  if is_plugin $ZSH_CUSTOM $plugin; then
-    fpath=($ZSH_CUSTOM/plugins/$plugin $fpath)
-  elif is_plugin $ZSH $plugin; then
-    fpath=($ZSH/plugins/$plugin $fpath)
-  fi
+    add_plugin_fpath $plugin
 done
 
 # Figure out the SHORT hostname
@@ -76,12 +95,18 @@ fi
 
 # Load all of the plugins that were defined in ~/.zshrc
 for plugin ($plugins); do
-  if [ -f $ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh ]; then
-    source $ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh
-  elif [ -f $ZSH/plugins/$plugin/$plugin.plugin.zsh ]; then
-    source $ZSH/plugins/$plugin/$plugin.plugin.zsh
-  fi
+    source_plugin_zsh $plugin
 done
+
+load_plugin() {
+    if [ -z ${sourced_plugins[$1]} ]; then
+        add_plugin_fpath $1
+        compinit -i
+        source_plugin_zsh $1
+    else
+        echo "[oh-my-zsh] '$1' already loaded."
+    fi
+}
 
 # Load all of your custom configurations from custom/
 for config_file ($ZSH_CUSTOM/*.zsh(N)); do
