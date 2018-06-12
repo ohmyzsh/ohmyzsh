@@ -9,7 +9,7 @@
 alias sbc='sbt compile'
 alias sbco='sbt console'
 alias sbcq='sbt console-quick'
-alias sbcl='sbt clean'
+alias sbcln='sbt clean'
 alias sbcp='sbt console-project'
 alias sbd='sbt doc'
 alias sbdc='sbt dist:clean'
