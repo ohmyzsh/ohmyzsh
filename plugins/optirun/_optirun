@@ -1,0 +1,19 @@
+#compdef optirun
+
+local curcontext="$curcontext" environ e
+local -a args
+
+zstyle -a ":completion:${curcontext}:" environ environ
+
+for e in "${environ[@]}"
+do local -x "$e"
+done
+
+args=(
+       '-V[show version]'
+       '-h[show help]'
+)
+
+_arguments $args \
+'(-):command: _command_names -e' \
+'*::arguments: _normal'
