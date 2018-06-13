@@ -76,7 +76,7 @@
 | pasu    | pacaur -Syua --no-confirm          | Same as `paupg`, but without confirmation                           |
 | upgrade | pacaur -Syu                        | Sync with repositories before upgrading packages                    |
 
-#### PACAUR
+#### AURMAN
 
 | Alias   | Command                            | Description                                                         |
 |---------|------------------------------------|---------------------------------------------------------------------|
