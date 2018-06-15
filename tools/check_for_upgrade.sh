@@ -7,7 +7,12 @@ function _current_epoch() {
 }
 
 function _update_zsh_update() {
-  echo "LAST_EPOCH=$(_current_epoch)" >! ~/.zsh-update
+  echo "LAST_EPOCH=$(_current_epoch)" >! ${ZSH_CACHE_DIR}/.zsh-update
+  #if user has ~/.zhs-update move it to ${ZSH_CACHE_DIR}/.zsh-update
+  if [ -f ~/.zsh-update ] && [ ! -f ${ZSH_CACHE_DIR}/.zsh-update ]; then
+    mv ~/.zsh-update ${ZSH_CACHE_DIR}/.zsh-update
+  fi
+  
 }
 
 function _upgrade_zsh() {
