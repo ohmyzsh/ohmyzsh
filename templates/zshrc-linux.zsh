@@ -42,8 +42,8 @@ plugins=(
     command-not-found
     common-aliases
     cp
-    debian
     dircycle
+    django
     docker
     docker-rswl
     encode64
@@ -58,6 +58,7 @@ plugins=(
     kubectl
     launch_trial
     lol
+    minikube
     mv
     npm
     pep8

@@ -39,9 +39,9 @@ plugins=(
     command-not-found
     common-aliases
     cp
-    debian
     dircycle
     docker
+    django
     encode64
     extract
     git-extras
@@ -53,6 +53,7 @@ plugins=(
     kubectl
     launch_trial
     lol
+    minikube
     mv
     npm
     osx
