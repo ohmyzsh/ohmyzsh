@@ -2,9 +2,12 @@
 
 alias y="yarn "
 alias ya="yarn add"
+alias yb="yarn build"
 alias ycc="yarn cache clean"
 alias yh="yarn help"
 alias yo="yarn outdated"
+alias ys="yarn start"
+alias yt="yarn test"
 alias yui="yarn upgrade-interactive"
 
 _yarn ()
