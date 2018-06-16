@@ -4,7 +4,7 @@ alias y="yarn "
 alias ya="yarn add"
 alias ycc="yarn cache clean"
 alias yh="yarn help"
-alias yout="yarn outdated" # yo would conflict with yeoman which is quite popular in yarn community
+alias yout="yarn outdated"
 alias yui="yarn upgrade-interactive"
 
 _yarn ()
