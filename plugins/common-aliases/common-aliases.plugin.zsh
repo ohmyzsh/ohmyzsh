@@ -44,8 +44,6 @@ alias p='ps -f'
 alias sortnr='sort -n -r'
 alias unexport='unset'
 
-alias whereami=display_info
-
 alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
