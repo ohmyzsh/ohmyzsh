@@ -123,7 +123,7 @@ export LESS='-RX'
 unsetopt correctall
 
 ### Added by the Heroku Toolbelt and user local bin
-export PATH="/usr/local/heroku/bin:$HOME/.local/bin/:$PATH"
+[ -d $HOME/.local/bin/ ] && export PATH="$HOME/.local/bin/:$PATH"
 # export PYTHONPATH=/usr/local/lib/python2.7/dist-packages/:/usr/lib/python2.7/dist-packages/:/usr/lib/python2.7/dist-packages/gtk-2.0:$PYTHONPATH
 
 # added by travis gem
