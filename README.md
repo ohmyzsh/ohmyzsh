@@ -135,6 +135,15 @@ If you'd like to change the install directory with the `ZSH` environment variabl
 ```shell
 export ZSH="$HOME/.dotfiles/oh-my-zsh"; sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 ```
+#### Custom Configuration folder
+
+The default folder is `~` (hidden in your home directory)
+
+If you'd like to install for a different user in a custom home folder path, you can specify that with `ZSHRC_PATH` environment variable, either by running `export ZSHRC_PATH=/home/custom_user` before installing, or by setting it before the end of the install pipeline like this:
+
+```shell
+export ZSHRC_PATH="/home/custom_user"; sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+```
 
 #### Manual Installation
 
