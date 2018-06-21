@@ -48,6 +48,12 @@ alias kgsec='k get secret'
 alias kdsec='k describe secret'
 alias kdelsec='k delete secret'
 
+# ConfigMap management
+alias kgc='k get configmap'
+alias kec='k edit configmap'
+alias kdc='k describe configmap'
+alias kdelc='k delete configmap'
+
 # Deployment management.
 alias kgd='k get deployment'
 alias ked='k edit deployment'
