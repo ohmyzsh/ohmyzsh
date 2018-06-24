@@ -29,8 +29,12 @@ main() {
     exit
   fi
 
+  if [ ! -n "$ZSHRC_PATH" ]; then
+    ZSHRC_PATH=~
+  fi
+
   if [ ! -n "$ZSH" ]; then
-    ZSH=~/.oh-my-zsh
+    ZSH=$ZSHRC_PATH/.oh-my-zsh
   fi
 
   if [ -d "$ZSH" ]; then
@@ -66,17 +70,17 @@ main() {
 
 
   printf "${BLUE}Looking for an existing zsh config...${NORMAL}\n"
-  if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]; then
-    printf "${YELLOW}Found ~/.zshrc.${NORMAL} ${GREEN}Backing up to ~/.zshrc.pre-oh-my-zsh${NORMAL}\n";
-    mv ~/.zshrc ~/.zshrc.pre-oh-my-zsh;
+  if [ -f $ZSHRC_PATH/.zshrc ] || [ -h $ZSHRC_PATH/.zshrc ]; then
+    printf "${YELLOW}Found $ZSHRC_PATH/.zshrc.${NORMAL} ${GREEN}Backing up to $ZSHRC_PATH/.zshrc.pre-oh-my-zsh${NORMAL}\n";
+    mv $ZSHRC_PATH/.zshrc $ZSHRC_PATH/.zshrc.pre-oh-my-zsh;
   fi
 
-  printf "${BLUE}Using the Oh My Zsh template file and adding it to ~/.zshrc${NORMAL}\n"
-  cp "$ZSH"/templates/zshrc.zsh-template ~/.zshrc
+  printf "${BLUE}Using the Oh My Zsh template file and adding it to $ZSHRC_PATH/.zshrc${NORMAL}\n"
+  cp "$ZSH"/templates/zshrc.zsh-template $ZSHRC_PATH/.zshrc
   sed "/^export ZSH=/ c\\
   export ZSH=\"$ZSH\"
-  " ~/.zshrc > ~/.zshrc-omztemp
-  mv -f ~/.zshrc-omztemp ~/.zshrc
+  " $ZSHRC_PATH/.zshrc > $ZSHRC_PATH/.zshrc-omztemp
+  mv -f $ZSHRC_PATH/.zshrc-omztemp $ZSHRC_PATH/.zshrc
 
   # If this user's login shell is not already "zsh", attempt to switch.
   TEST_CURRENT_SHELL=$(expr "$SHELL" : '.*/\(.*\)')
@@ -101,7 +105,7 @@ main() {
   echo '                        /____/                       ....is now installed!'
   echo ''
   echo ''
-  echo 'Please look over the ~/.zshrc file to select plugins, themes, and options.'
+  echo 'Please look over the $ZSHRC_PATH/.zshrc file to select plugins, themes, and options.'
   echo ''
   echo 'p.s. Follow us at https://twitter.com/ohmyzsh.'
   echo ''
