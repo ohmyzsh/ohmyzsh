@@ -65,7 +65,12 @@ function jira() {
     # but `branch` is a special case that will parse the current git branch
     if [[ "$action" == "branch" ]]; then
       local issue_arg=$(git rev-parse --abbrev-ref HEAD)
-      local issue="${jira_prefix}${issue_arg}"
+      issue_arg=($(echo $issue_arg | cut -d'_' -f1)) 
+      if [[ $(echo ${issue_arg} | grep ${jira_prefix}) ]]; then
+        local issue="${issue_arg}"
+      else
+        local issue="${jira_prefix}${issue_arg}"
+      fi
     else
       local issue_arg=${(U)action}
       local issue="${jira_prefix}${issue_arg}"
