@@ -75,6 +75,7 @@
 | paupg   | pacaur -Syua                       | Sync with repositories before upgrading all packages (from AUR too) |
 | pasu    | pacaur -Syua --no-confirm          | Same as `paupg`, but without confirmation                           |
 | upgrade | pacaur -Syu                        | Sync with repositories before upgrading packages                    |
+| paclean | pacaur -Sc                         | Clean out old files from previous versions and git files from AUR   |
 
 #### PACMAN
 
@@ -98,6 +99,7 @@
 | pacupd       | sudo pacman -Sy                         | Update and refresh the local package database                |
 | pacupg       | sudo pacman -Syu                        | Sync with repositories before upgrading packages             |
 | upgrade      | sudo pacman -Syu                        | Sync with repositories before upgrading packages             |
+| pacclean     | sudo pacman -Sc                         | Clean out old caches and packages                            |
 | pacfileupg   | sudo pacman -Fy                         | Download fresh package databases from the server             |
 | pacfiles     | pacman -Fs                              | Search package file names for matching strings               |
 | pacls        | pacman -Ql                              | List files in a package                                      |
