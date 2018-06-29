@@ -16,9 +16,6 @@ function take() {
 }
 
 function open_command() {
-  emulate -L zsh
-  setopt shwordsplit
-
   local open_cmd
 
   # define the open command
@@ -36,9 +33,9 @@ function open_command() {
 
   # don't use nohup on OSX
   if [[ "$OSTYPE" == darwin* ]]; then
-    $open_cmd "$@" &>/dev/null
+    ${=open_cmd} "$@" &>/dev/null
   else
-    nohup $open_cmd "$@" &>/dev/null
+    nohup ${=open_cmd} "$@" &>/dev/null
   fi
 }
 
