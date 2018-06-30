@@ -9,6 +9,7 @@ alias bcn="bundle clean"
 
 bundled_commands=(
   annotate
+  berks
   cap
   capify
   cucumber
@@ -27,6 +28,7 @@ bundled_commands=(
   rainbows
   rake
   rspec
+  rubocop
   shotgun
   sidekiq
   spec
