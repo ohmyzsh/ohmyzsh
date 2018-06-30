@@ -15,7 +15,6 @@ bundled_commands=(
   foodcritic
   guard
   hanami
-  irb
   jekyll
   kitchen
   knife
