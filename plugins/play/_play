@@ -1,0 +1,32 @@
+#compdef play
+#autoload
+
+local -a _play_commands
+_play_commands=(
+  'classpath:Display the project classpath'
+  'clean:Clean all generated files'
+  'clean-all:Force clean all generated directories including the SBT cache'
+  'compile:Compile the current application'
+  '~compile:Compile the current application continuously with automatic reloading'
+  'console:Launch the interactive Scala console (use :quit to exit)'
+  'dependencies:Display the dependencies summary'
+  'dist:Construct standalone application package'
+  'package:Package your application as a JAR'
+  'publish:Publish your application in a remote repository'
+  'publish-local:Publish your application in the local repository'
+  'reload:Reload the current application build file'
+  'run:Run the current application in DEV mode'
+  '~run:Run the current application in DEV mode with automatic reloading'
+  'test:Run Junit tests and/or Specs from the command line'
+  '~test:Run Junit tests and/or Specs continuously with automatic reloading'
+  'eclipse:Generate eclipse project file'
+  'idea:Generate Intellij IDEA project file'
+  'start:Start the current application in another JVM in PROD mode'
+  'update:Update application dependencies'
+)
+
+
+local expl
+
+_describe -t commands "play subcommand" _play_commands
+return
