@@ -12,6 +12,7 @@ bundled_commands=(
   cap
   capify
   cucumber
+  fontello
   foodcritic
   guard
   hanami
