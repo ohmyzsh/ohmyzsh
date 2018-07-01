@@ -7,10 +7,13 @@ _cargo() {
 
 _arguments \
     '(- 1 *)'{-h,--help}'[show help message]' \
+    '(- 1 *)'{-V,--version}'[show version information]' \
     '(- 1 *)'--list'[list installed commands]' \
+    '(- 1 *)'--explain'[Run `rustc --explain CODE`]' \
     '(- 1 *)'{-v,--verbose}'[use verbose output]' \
     '(- 1 *)'--color'[colorization option]' \
-    '(- 1 *)'{-V,--version}'[show version information]' \
+    '(- 1 *)'--frozen'[Require Cargo.lock and cache are up to date]' \
+    '(- 1 *)'--locked'[Require Cargo.lock is up to date]' \
     '1: :_cargo_cmds' \
     '*:: :->args'
 
