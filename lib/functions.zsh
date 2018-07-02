@@ -11,8 +11,7 @@ function upgrade_oh_my_zsh() {
 }
 
 function take() {
-  mkdir -p $1
-  cd $1
+  mkdir -p $@ && cd ${@:$#}
 }
 
 function open_command() {
