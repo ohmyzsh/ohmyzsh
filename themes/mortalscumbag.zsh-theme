@@ -10,7 +10,7 @@ function my_git_prompt() {
   fi
 
   # is branch behind?
-  if $(echo "$(git log HEAD..origin/$(current_branch) 2> /dev/null)" | grep '^commit' &> /dev/null); then
+  if $(echo "$(git log HEAD..origin/$(git_current_branch) 2> /dev/null)" | grep '^commit' &> /dev/null); then
     STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_BEHIND"
   fi
 
