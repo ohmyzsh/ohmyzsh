@@ -10,7 +10,7 @@ if (( $+commands[kubectl] )); then
     unset __KUBECTL_COMPLETION_FILE
 fi
 
-# This command is used ALOT both below and in daily life
+# This command is used a LOT both below and in daily life
 alias k=kubectl
 
 # Apply a YML file
