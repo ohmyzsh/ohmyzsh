@@ -59,10 +59,12 @@ alias mvn-updates='mvn versions:display-dependency-updates'
 alias mvntc7='mvn tomcat7:run' 
 alias mvntc='mvn tomcat:run'
 alias mvnjetty='mvn jetty:run'
+alias mvnboot='mvn spring-boot:run'
 alias mvndt='mvn dependency:tree'
 alias mvns='mvn site'
 alias mvnsrc='mvn dependency:sources'
 alias mvndocs='mvn dependency:resolve -Dclassifier=javadoc'
+
 
 function listMavenCompletions { 
     reply=(
