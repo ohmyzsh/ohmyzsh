@@ -24,6 +24,16 @@
 # hostname to whether the last call exited with an error to whether background
 # jobs are running in this shell will all be displayed automatically when
 # appropriate.
+#
+# # Performance
+#
+# Checking for the existence of multiple version control systems is time
+# consuming and can delay your prompt.
+# You can use environment variables to disable the parts you don't use much:
+# 
+#     AGNOSTER_NO_BZR=1
+#     AGNOSTER_NO_HG=1
+#     AGNOSTER_NO_GIT=1
 
 ### Segment drawing
 # A few utility functions to make it easy and re-usable to draw segmented prompts
@@ -219,9 +229,9 @@ build_prompt() {
   prompt_virtualenv
   prompt_context
   prompt_dir
-  prompt_git
-  prompt_bzr
-  prompt_hg
+  (( $AGNOSTER_NO_GIT )) || prompt_git
+  (( $AGNOSTER_NO_BZR )) || prompt_bzr
+  (( $AGNOSTER_NO_HG )) || prompt_hg
   prompt_end
 }
 
