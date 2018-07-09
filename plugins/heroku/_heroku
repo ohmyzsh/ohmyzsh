@@ -45,6 +45,18 @@ _1st_arguments=(
   "logs\:drains":"manage syslog drains"
   "maintenance\:on":"put the app into maintenance mode"
   "maintenance\:off":"take the app out of maintenance mode"
+  "pipelines":"list pipelines you have access to"
+  "pipelines\:add":"add this app to a pipeline"
+  "pipelines\:create":"create a new pipeline"
+  "pipelines\:destroy":"destroy a pipeline"
+  "pipelines\:diff":"compares the latest release of this app to its downstream app(s)"
+  "pipelines\:info":"show list of apps in a pipeline"
+  "pipelines\:list":"list pipelines you have access to"
+  "pipelines\:open":"open a pipeline in dashboard"
+  "pipelines\:promote":"promote the latest release of this app to its downstream app(s)"
+  "pipelines\:remove":"remove this app from its pipeline"
+  "pipelines\:rename":"rename a pipeline"
+  "pipelines\:update":"update this app's stage in a pipeline"
   "pg\:credentials":"display the DATABASE credentials"
   "pg\:diagnose":"run diagnostics report on DATABASE"
   "pg\:info":"display database information"
@@ -60,6 +72,7 @@ _1st_arguments=(
   "pg\:unfollow":"stop a replica from following and make it a read/write database"
   "pg\:upgrade":"unfollow a database and upgrade it to the latest PostgreSQL version"
   "pg\:wait":"monitor database creation, exit when complete"
+  "pg\:backups":"Interact with built-in backups"
   "pgbackups":"list captured backups"
   "pgbackups\:url":"get a temporary URL for a backup"
   "pgbackups\:capture":"capture a backup from a database id"
@@ -129,6 +142,41 @@ case "$words[1]" in
       '(-p|--ps)'{-p,--ps}'[only display logs from the given process]' \
       '(-s|--source)'{-s,--source}'[only display logs from the given source]' \
       '(-t|--tail)'{-t,--tail}'[continually stream logs]' \
+    )
+    ;;
+  pipelines)
+    _command_args=(
+      '(--json)'--json'[output in json format]' \
+    )
+    ;;
+  pipelines:add)
+    _command_args=(
+      '(-s|--stage)'{-s,--stage}'[stage of first app in pipeline]' \
+    )
+    ;;
+  pipelines:create)
+    _command_args=(
+      '(-s|--stage)'{-s,--stage}'[stage of first app in pipeline]' \
+    )
+    ;;
+  pipelines:info)
+    _command_args=(
+      '(--json)'--json'[output in json format]' \
+    )
+    ;;
+  pipelines:list)
+    _command_args=(
+      '(--json)'--json'[output in json format]' \
+    )
+    ;;
+  pipelines:promote)
+    _command_args=(
+      '(-t|--to)'{-t,--to}'[comma separated list of apps to promote to]' \
+    )
+    ;;
+  pipelines:update)
+    _command_args=(
+      '(-s|--stage)'{-s,--stage}'[stage of first app in pipeline]' \
     )
     ;;
   pgbackups:capture)
