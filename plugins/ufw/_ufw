@@ -45,8 +45,6 @@ _arguments -C \
   '3:: :->subsubcmds' \
 && return 0
 
-echo "DEBUG: $(date)| $state | $line[1] | $line| $word[1]| $word| $CURRENT|" >> log.log
-
 local rules
 
 case "$state" in
