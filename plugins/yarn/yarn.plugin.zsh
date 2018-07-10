@@ -1,7 +1,8 @@
 # Alias sorted alphabetically
 
-alias y="yarn "
+alias y="yarn"
 alias ya="yarn add"
+alias yr="yarn remove"
 alias ycc="yarn cache clean"
 alias yh="yarn help"
 alias yout="yarn outdated"
