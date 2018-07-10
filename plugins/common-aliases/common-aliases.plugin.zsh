@@ -35,7 +35,7 @@ alias lS='ls -1FSsh'
 alias lart='ls -1Fcart'
 alias lrt='ls -1Fcrt'
 
-alias zshrc='$EDITOR ~/.zshrc' # Quick access to the ~/.zshrc file
+alias zshrc='${=EDITOR} ~/.zshrc' # Quick access to the ~/.zshrc file
 
 alias grep='grep --color'
 alias sgrep='grep -R -n -H -C 5 --exclude-dir={.git,.svn,CVS} '
@@ -65,8 +65,6 @@ alias help='man'
 alias p='ps -f'
 alias sortnr='sort -n -r'
 alias unexport='unset'
-
-alias whereami=display_info
 
 alias week='date +%V'
 alias hexdump='hexdump -C'
