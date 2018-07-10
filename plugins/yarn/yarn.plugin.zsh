@@ -28,24 +28,30 @@ _yarn ()
 
     _production=('(--production)--production[Do not install project devDependencies]')
 
+    _upgrade=(
+        '(--exact)--exact[Install exact version]'
+        '(--tilde)--tilde[Install most recent release with the same minor version]'
+     )
+
     _1st_arguments=(
       'help:Display help information about yarn' \
-      'init:Initialize for the development of a package.' \
-      'add:Add a package to use in your current package.' \
-      'install:Install all the dependencies listed within package.json in the local node_modules folder.' \
-      'publish:Publish a package to a package manager.' \
-      'remove:Remove a package that will no longer be used in your current package.' \
-      'cache:Clear the local cache. It will be populated again the next time yarn or yarn install is run.' \
-      'clean:Frees up space by removing unnecessary files and folders from dependencies.' \
-      'check:Verifies that versions of the package dependencies in the current project’s package.json matches that of yarn’s lock file.' \
-      'ls:List all installed packages.' \
-      'global:Makes binaries available to use on your operating system.' \
-      'info:<package> [<field>] - fetch information about a package and return it in a tree format.' \
-      'outdated:Checks for outdated package dependencies.' \
-      'run:Runs a defined package script.' \
-      'self-update:Updates Yarn to the latest version.' \
-      'upgrade:Upgrades packages to their latest version based on the specified range.' \
-      'why:<query> - Show information about why a package is installed.'
+      'init:Initialize for the development of a package' \
+      'add:Add a package to use in your current package' \
+      'install:Install all the dependencies listed within package.json in the local node_modules folder' \
+      'publish:Publish a package to a package manager' \
+      'remove:Remove a package that will no longer be used in your current package' \
+      'cache:Clear the local cache. It will be populated again the next time yarn or yarn install is run' \
+      'clean:Frees up space by removing unnecessary files and folders from dependencies' \
+      'check:Verifies that versions of the package dependencies in the current project’s package.json matches that of yarn’s lock file' \
+      'ls:List all installed packages' \
+      'global:Makes binaries available to use on your operating system' \
+      'info:<package> [<field>] - fetch information about a package and return it in a tree format' \
+      'outdated:Checks for outdated package dependencies' \
+      'run:Runs a defined package script' \
+      'self-update:Updates Yarn to the latest version' \
+      'upgrade:Upgrades packages to their latest version based on the specified range' \
+      'upgrade-interactive:Selectively upgrades specific packages in a simple way' \
+      'why:<query> - Show information about why a package is installed'
     )
     _arguments \
     '*:: :->subcmds' && return 0
@@ -77,6 +83,10 @@ _yarn ()
         remove)
         _arguments \
         $_dopts
+        ;;
+        upgrade-interactive)
+        _arguments \
+        $_upgrade
         ;;
         *)
         _arguments \
