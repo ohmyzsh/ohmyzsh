@@ -135,7 +135,7 @@ __go_tool_complete() {
   run)
       _arguments -s -w : \
           ${build_flags[@]} \
-          '*:file:_path_files -g "*.go"'
+          '*:file:_files -g "*.go"'
       ;;
   tool)
       if (( CURRENT == 3 )); then
