@@ -10,7 +10,7 @@
 # "zsh-pip-clear-cache".
 
 ZSH_PIP_CACHE_FILE=~/.pip/zsh-cache
-ZSH_PIP_INDEXES=(https://pypi.python.org/simple/)
+ZSH_PIP_INDEXES=(https://pypi.org/simple/)
 
 zsh-pip-clear-cache() {
   rm $ZSH_PIP_CACHE_FILE
