@@ -75,7 +75,7 @@ This plugin adds [tab completion](http://wp-cli.org/#complete) for `wp-cli` as w
 - wptp='wp theme path'
 - wpts='wp theme search'
 - wptst='wp theme status'
-- wptu='wp theme updatet'
+- wptu='wp theme update'
 
 ### User
 - wpuac='wp user add-cap'
