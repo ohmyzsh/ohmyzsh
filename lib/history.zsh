@@ -19,16 +19,13 @@ function omz_history {
 }
 
 # Timestamp format
-if [ ! -z "$HIST_STAMPS" ]; then
-  case $HIST_STAMPS in
-    "mm/dd/yyyy") alias history='omz_history -f' ;;
-    "dd.mm.yyyy") alias history='omz_history -E' ;;
-    "yyyy-mm-dd") alias history='omz_history -i' ;;
-    *) alias history='omz_history -t "$HIST_STAMPS"' ;;
-  esac
-else
-  alias history='omz_history'
-fi
+case $HIST_STAMPS in
+  "mm/dd/yyyy") alias history='omz_history -f' ;;
+  "dd.mm.yyyy") alias history='omz_history -E' ;;
+  "yyyy-mm-dd") alias history='omz_history -i' ;;
+  "") alias history='omz_history' ;;
+  *) alias history="omz_history -t '$HIST_STAMPS'" ;;
+esac
 
 ## History file configuration
 [ -z "$HISTFILE" ] && HISTFILE="$HOME/.zsh_history"
