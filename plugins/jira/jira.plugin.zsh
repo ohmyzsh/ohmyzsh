@@ -60,7 +60,7 @@ function jira() {
   else
     # Anything that doesn't match a special action is considered an issue name
     # but `branch` is a special case that will parse the current git branch
-    if [[ "$action" == "br" ]]; then
+    if [[ "$action" == "branch" ]]; then
       local issue_arg=$(git rev-parse --abbrev-ref HEAD)
       local issue="${jira_prefix}${issue_arg}"
     else

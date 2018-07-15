@@ -27,6 +27,17 @@ function xc {
   fi
 }
 
+# Opens a file or files in the Xcode IDE. Multiple files are opened in multi-file browser
+# original author: @possen
+function xx {
+  if [[ $# == 0 ]]; then
+    echo "Specify file(s) to open in xcode."
+    return 1
+  fi
+  echo "${xcode_files}"
+  open -a "Xcode.app" "$@"
+}
+
 # "XCode-SELect by Version" - select Xcode by just version number
 # Uses naming convention:
 #  - different versions of Xcode are named Xcode-<version>.app or stored
@@ -70,7 +81,7 @@ function xcselv {
 
 function _omz_xcode_print_xcselv_usage {
   cat << EOF >&2
-Usage: 
+Usage:
   xcselv <version>
   xcselv [options]
 
