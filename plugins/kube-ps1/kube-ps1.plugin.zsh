@@ -1,9 +1,10 @@
 #!/bin/zsh
 
 # Kubernetes prompt helper for bash/zsh
+# ported to oh-my-zsh
 # Displays current context and namespace
 
-# Copyright 2017 Jon Mosco
+# Copyright 2018 Jon Mosco
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,32 +22,39 @@
 [[ -n $DEBUG ]] && set -x
 
 setopt PROMPT_SUBST
-add-zsh-hook precmd _kube_ps1_load
+autoload -U add-zsh-hook
+add-zsh-hook precmd _kube_ps1_update_cache
 zmodload zsh/stat
+zmodload zsh/datetime
 
 # Default values for the prompt
-# Override these values in ~/.zshrc or ~/.bashrc
-KUBE_PS1_DEFAULT="${KUBE_PS1_DEFAULT:=true}"
-KUBE_PS1_PREFIX="("
-KUBE_PS1_DEFAULT_LABEL="${KUBE_PS1_DEFAULT_LABEL:="⎈ "}"
-KUBE_PS1_DEFAULT_LABEL_IMG="${KUBE_PS1_DEFAULT_LABEL_IMG:=false}"
-KUBE_PS1_SEPERATOR="|"
-KUBE_PS1_PLATFORM="${KUBE_PS1_PLATFORM:="kubectl"}"
-KUBE_PS1_DIVIDER=":"
-KUBE_PS1_SUFFIX=")"
-KUBE_PS1_UNAME=$(uname)
+# Override these values in ~/.zshrc
+KUBE_PS1_BINARY="${KUBE_PS1_BINARY:-kubectl}"
+KUBE_PS1_SYMBOL_ENABLE="${KUBE_PS1_SYMBOL_ENABLE:-true}"
+KUBE_PS1_SYMBOL_DEFAULT="${KUBE_PS1_SYMBOL_DEFAULT:-\u2388 }"
+KUBE_PS1_SYMBOL_USE_IMG="${KUBE_PS1_SYMBOL_USE_IMG:-false}"
+KUBE_PS1_NS_ENABLE="${KUBE_PS1_NS_ENABLE:-true}"
+KUBE_PS1_SEPARATOR="${KUBE_PS1_SEPARATOR-|}"
+KUBE_PS1_DIVIDER="${KUBE_PS1_DIVIDER-:}"
+KUBE_PS1_PREFIX="${KUBE_PS1_PREFIX-(}"
+KUBE_PS1_SUFFIX="${KUBE_PS1_SUFFIX-)}"
 KUBE_PS1_LAST_TIME=0
 
-kube_ps1_label () {
+_kube_ps1_binary_check() {
+  command -v "$1" >/dev/null
+}
 
-  [[ "${KUBE_PS1_DEFAULT_LABEL_IMG}" == false ]] && return
+_kube_ps1_symbol() {
+  [[ "${KUBE_PS1_SYMBOL_ENABLE}" == false ]] && return
 
-  if [[ "${KUBE_PS1_DEFAULT_LABEL_IMG}" == true ]]; then
-    local KUBE_LABEL="☸️ "
+  KUBE_PS1_SYMBOL="${KUBE_PS1_SYMBOL_DEFAULT}"
+  KUBE_PS1_SYMBOL_IMG="\u2638 "
+
+  if [[ "${KUBE_PS1_SYMBOL_USE_IMG}" == true ]]; then
+    KUBE_PS1_SYMBOL="${KUBE_PS1_SYMBOL_IMG}"
   fi
 
-  KUBE_PS1_DEFAULT_LABEL="${KUBE_LABEL}"
-
+  echo "${KUBE_PS1_SYMBOL}"
 }
 
 _kube_ps1_split() {
@@ -56,23 +64,45 @@ _kube_ps1_split() {
 }
 
 _kube_ps1_file_newer_than() {
-
   local mtime
   local file=$1
   local check_time=$2
-  mtime=$(stat +mtime "${file}")
 
-  [ "${mtime}" -gt "${check_time}" ]
+  zmodload -e "zsh/stat"
+  if [[ "$?" -eq 0 ]]; then
+    mtime=$(stat +mtime "${file}")
+  elif stat -c "%s" /dev/null &> /dev/null; then
+    # GNU stat
+    mtime=$(stat -c %Y "${file}")
+  else
+    # BSD stat
+    mtime=$(stat -f %m "$file")
+  fi
 
+  [[ "${mtime}" -gt "${check_time}" ]]
 }
 
-_kube_ps1_load() {
+_kube_ps1_update_cache() {
+  KUBECONFIG="${KUBECONFIG:=$HOME/.kube/config}"
+  if ! _kube_ps1_binary_check "${KUBE_PS1_BINARY}"; then
+    # No ability to fetch context/namespace; display N/A.
+    KUBE_PS1_CONTEXT="BINARY-N/A"
+    KUBE_PS1_NAMESPACE="N/A"
+    return
+  fi
+
+  if [[ "${KUBECONFIG}" != "${KUBE_PS1_KUBECONFIG_CACHE}" ]]; then
+    # User changed KUBECONFIG; unconditionally refetch.
+    KUBE_PS1_KUBECONFIG_CACHE=${KUBECONFIG}
+    _kube_ps1_get_context_ns
+    return
+  fi
+
   # kubectl will read the environment variable $KUBECONFIG
   # otherwise set it to ~/.kube/config
-  KUBECONFIG="${KUBECONFIG:=$HOME/.kube/config}"
-
-  for conf in $(_kube_ps1_split : "${KUBECONFIG}"); do
-    # TODO: check existence of $conf
+  local conf
+  for conf in $(_kube_ps1_split : "${KUBECONFIG:-${HOME}/.kube/config}"); do
+    [[ -r "${conf}" ]] || continue
     if _kube_ps1_file_newer_than "${conf}" "${KUBE_PS1_LAST_TIME}"; then
       _kube_ps1_get_context_ns
       return
@@ -83,25 +113,19 @@ _kube_ps1_load() {
 _kube_ps1_get_context_ns() {
 
   # Set the command time
-  KUBE_PS1_LAST_TIME=$(date +%s)
+  KUBE_PS1_LAST_TIME=$EPOCHSECONDS
 
-  if [[ "${KUBE_PS1_DEFAULT}" == true ]]; then
-    local KUBE_BINARY="${KUBE_PS1_PLATFORM}"
-  elif [[ "${KUBE_PS1_DEFAULT}" == false ]] && [[ "${KUBE_PS1_PLATFORM}" == "kubectl" ]];then
-    local KUBE_BINARY="kubectl"
-  elif [[ "${KUBE_PS1_PLATFORM}" == "oc" ]]; then
-    local KUBE_BINARY="oc"
+  KUBE_PS1_CONTEXT="$(${KUBE_PS1_BINARY} config current-context 2>/dev/null)"
+  if [[ -z "${KUBE_PS1_CONTEXT}" ]]; then
+    KUBE_PS1_CONTEXT="N/A"
+    KUBE_PS1_NAMESPACE="N/A"
+    return
+  elif [[ "${KUBE_PS1_NS_ENABLE}" == true ]]; then
+    KUBE_PS1_NAMESPACE="$(${KUBE_PS1_BINARY} config view --minify --output 'jsonpath={..namespace}' 2>/dev/null)"
+    # Set namespace to 'default' if it is not defined
+    KUBE_PS1_NAMESPACE="${KUBE_PS1_NAMESPACE:-default}"
   fi
-
-  KUBE_PS1_CONTEXT="$(${KUBE_BINARY} config current-context)"
-  KUBE_PS1_NAMESPACE="$(${KUBE_BINARY} config view --minify --output 'jsonpath={..namespace}')"
-  # Set namespace to default if it is not defined
-  KUBE_PS1_NAMESPACE="${KUBE_PS1_NAMESPACE:-default}"
-
 }
-
-# source our symbol
-kube_ps1_label
 
 # Build our prompt
 kube_ps1 () {
@@ -111,7 +135,7 @@ kube_ps1 () {
   local cyan="%F{cyan}"
 
   KUBE_PS1="${reset_color}$KUBE_PS1_PREFIX"
-  KUBE_PS1+="${blue}$KUBE_PS1_DEFAULT_LABEL"
+  KUBE_PS1+="${blue}$(_kube_ps1_symbol)"
   KUBE_PS1+="${reset_color}$KUBE_PS1_SEPERATOR"
   KUBE_PS1+="${red}$KUBE_PS1_CONTEXT${reset_color}"
   KUBE_PS1+="$KUBE_PS1_DIVIDER"
