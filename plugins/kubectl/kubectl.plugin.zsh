@@ -1,13 +1,20 @@
-# Autocompletion for kubectl, the command line interface for Kubernetes
-#
-# Author: https://github.com/pstadler
+if (( $+commands[kubectl] )); then
+    __KUBECTL_COMPLETION_FILE="${ZSH_CACHE_DIR}/kubectl_completion"
 
-if [ $commands[kubectl] ]; then
-  source <(kubectl completion zsh)
+    if [[ ! -f $__KUBECTL_COMPLETION_FILE ]]; then
+        kubectl completion zsh >! $__KUBECTL_COMPLETION_FILE
+    fi
+
+    [[ -f $__KUBECTL_COMPLETION_FILE ]] && source $__KUBECTL_COMPLETION_FILE
+
+    unset __KUBECTL_COMPLETION_FILE
 fi
 
-# This command is used ALOT both below and in daily life
+# This command is used a LOT both below and in daily life
 alias k=kubectl
+
+# Apply a YML file
+alias kaf='k apply -f'
 
 # Drop into an interactive terminal on a container
 alias keti='k exec -ti'
@@ -20,7 +27,6 @@ alias kccc='k config current-context'
 
 # Pod management.
 alias kgp='k get pods'
-alias klp='k logs pods'
 alias kep='k edit pods'
 alias kdp='k describe pods'
 alias kdelp='k delete pods'
@@ -30,6 +36,12 @@ alias kgs='k get svc'
 alias kes='k edit svc'
 alias kds='k describe svc'
 alias kdels='k delete svc'
+
+# Ingress management
+alias kgi='k get ingress'
+alias kei='k edit ingress'
+alias kdi='k describe ingress'
+alias kdeli='k delete ingress'
 
 # Secret management
 alias kgsec='k get secret'
@@ -48,3 +60,7 @@ alias krsd='k rollout status deployment'
 alias kgrs='k get rs'
 alias krh='k rollout history'
 alias kru='k rollout undo'
+
+# Logs
+alias kl='k logs'
+alias klf='k logs -f'

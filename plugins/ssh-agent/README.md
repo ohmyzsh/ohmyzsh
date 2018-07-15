@@ -11,6 +11,8 @@ plugins=(... ssh-agent)
 
 ## Instructions
 
+**IMPORTANT: put these settings _before_ the line that sources oh-my-zsh**
+
 To enable **agent forwarding support** add the following to your zshrc file:
 
 ```zsh

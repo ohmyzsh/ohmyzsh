@@ -1,5 +1,5 @@
 (( $+commands[npm] )) && {
-    __NPM_COMPLETION_FILE="${ZSH_CACHE_DIR}/npm_completion"
+    __NPM_COMPLETION_FILE="${ZSH_CACHE_DIR:-$ZSH/cache}/npm_completion"
 
     if [[ ! -f $__NPM_COMPLETION_FILE ]]; then
         npm completion >! $__NPM_COMPLETION_FILE 2>/dev/null
@@ -52,3 +52,6 @@ alias npmR="npm run"
 
 # Run npm publish 
 alias npmP="npm publish"
+
+# Run npm init
+alias npmI="npm init"
