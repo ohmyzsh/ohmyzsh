@@ -88,19 +88,18 @@ shrink_path () {
 
         if (( named )) {
                 for part in ${(k)nameddirs}; {
-                        [[ $dir == ${nameddirs[$part]}(/*|) ]] && dir=${dir/${nameddirs[$part]}/\~$part}
+                        [[ $dir == ${nameddirs[$part]}(/*|) ]] && dir=${dir/#${nameddirs[$part]}/\~$part}
                 }
         }
-        (( tilde )) && dir=${dir/$HOME/\~}
+        (( tilde )) && dir=${dir/#$HOME/\~}
         tree=(${(s:/:)dir})
         (
-                unfunction chpwd 2> /dev/null
                 if [[ $tree[1] == \~* ]] {
-                        cd ${~tree[1]}
+                        cd -q ${~tree[1]}
                         result=$tree[1]
                         shift tree
                 } else {
-                        cd /
+                        cd -q /
                 }
                 for dir in $tree; {
                         if (( lastfull && $#tree == 1 )) {
@@ -117,7 +116,7 @@ shrink_path () {
                                 (( short )) && break
                         done
                         result+="/$part"
-                        cd $dir
+                        cd -q $dir
                         shift tree
                 }
                 echo ${result:-/}
