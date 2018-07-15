@@ -27,6 +27,35 @@ if (( $+commands[yaourt] )); then
   fi
 fi
 
+if (( $+commands[yay] )); then
+  alias yyconf='yay -C'
+  alias yyupg='yay -Syua'
+  alias yysu='yay -Syua --noconfirm'
+  alias yyin='yay -S'
+  alias yyins='yay -U'
+  alias yyre='yay -R'
+  alias yyrem='yay -Rns'
+  alias yyrep='yay -Si'
+  alias yyreps='yay -Ss'
+  alias yyloc='yay -Qi'
+  alias yylocs='yay -Qs'
+  alias yylst='yay -Qe'
+  alias yyorph='yay -Qtd'
+  alias yyinsd='yay -S --asdeps'
+  alias yymir='yay -Syy'
+
+
+  if (( $+commands[abs] && $+commands[aur] )); then
+    alias yyupd='yay -Sy && sudo abs && sudo aur'
+  elif (( $+commands[abs] )); then
+    alias yyupd='yay -Sy && sudo abs'
+  elif (( $+commands[aur] )); then
+    alias yyupd='yay -Sy && sudo aur'
+  else
+    alias yyupd='yay -Sy'
+  fi
+fi
+
 if (( $+commands[pacaur] )); then
   alias paupg='pacaur -Syu'
   alias pasu='pacaur -Syu --noconfirm'
