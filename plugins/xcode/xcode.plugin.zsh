@@ -22,8 +22,11 @@ function xc {
     fi
     return 1
   else
-    echo "Found ${xcode_proj[1]}"
-    open "${xcode_proj[1]}"
+    local active_path
+    active_path=$(xcode-select -p)
+    active_path=${active_path%%/Contents/Developer*}
+    echo "Found ${xcode_proj[1]}. Opening with ${active_path}"
+    open -a "$active_path" "${xcode_proj[1]}"
   fi
 }
 
