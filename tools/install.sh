@@ -149,7 +149,7 @@ main() {
 	EOF
 	printf "$NORMAL"
 
-	env zsh -l
+	exec zsh -l
 }
 
 main
