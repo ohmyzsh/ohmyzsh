@@ -20,7 +20,7 @@ setopt long_list_jobs
 
 ## pager
 env_default PAGER 'less'
-env_default LESS '-R'
+env_default LESS '-FRX'
 
 ## super user alias
 alias _='sudo'
