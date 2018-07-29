@@ -68,8 +68,14 @@ ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE=">"
 ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE="<"
 ZSH_THEME_GIT_PROMPT_DIVERGED_REMOTE="$red<>"
 
+ZSH_THEME_HG_PROMPT_MODIFIED="$red*"
+ZSH_THEME_HG_PROMPT_ADDED="$green+"
+ZSH_THEME_HG_PROMPT_UNTRACKED="$blue%%"
+
 PROMPT='$username_output$hostname_output:$current_dir_output%1(j. [$jobs_bg].)'
 GIT_PROMPT='$(out=$(git_prompt_info)$(git_prompt_status)$(git_remote_status);if [[ -n $out ]]; then printf %s " $white($green$out$white)$reset";fi)'
 PROMPT+="$GIT_PROMPT"
+HG_PROMPT='$(out=$(hg_prompt_info);if [[ -n $out ]]; then printf %s " $white($green$out$white)$reset";fi)'
+PROMPT+="$HG_PROMPT"
 PROMPT+=" $last_command_output%#$reset "
 RPROMPT=''
