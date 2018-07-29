@@ -34,3 +34,18 @@ if [ -n "$ZSH_VERSION" ]; then
   }
 fi
 
+alias pch="pipenv check"
+alias pcl="pipenv clean"
+alias pgr="pipenv graph"
+alias pi="pipenv install"
+alias pidev="pipenv install --dev"
+alias pl="pipenv lock"
+alias po="pipenv open"
+alias pr="pipenv run"
+alias psh="pipenv shell"
+alias psy="pipenv sync"
+alias pu="pipenv uninstall"
+
+alias pwh="pipenv --where"
+alias pv="pipenv --venv"
+alias ppy="pipenv --py"
