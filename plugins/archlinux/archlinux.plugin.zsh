@@ -82,14 +82,40 @@ if (( $+commands[pacaur] )); then
     alias paupd='pacaur -Sy'
   fi
 fi
+if (( $+commands[aurman] )); then
+  alias amupg='aurman -Syu'
+  alias amsu='aurman -Syu --noconfirm'
+  alias amin='aurman -S'
+  alias amins='aurman -U'
+  alias amre='aurman -R'
+  alias amrem='aurman -Rns'
+  alias amrep='aurman -Si'
+  alias amreps='aurman -Ss'
+  alias amloc='aurman -Qi'
+  alias amlocs='aurman -Qs'
+  alias amlst='aurman -Qe'
+  alias amorph='aurman -Qtd'
+  alias aminsd='aurman -S --asdeps'
+  alias ammir='aurman -Syy'
+
+  if (( $+commands[abs] && $+commands[aur] )); then
+    alias amupd='aurman -Sy && sudo abs && sudo aur'
+  elif (( $+commands[abs] )); then
+    alias amupd='aurman -Sy && sudo abs'
+  elif (( $+commands[aur] )); then
+    alias amupd='aurman -Sy && sudo aur'
+  else
+    alias amupd='aurman -Sy'
+  fi
+fi
 
 if (( $+commands[trizen] )); then
   function upgrade() {
     trizen -Syu
   }
-elif (( $+commands[pacaur] )); then
+elif (( $+commands[aurman] )); then
   function upgrade() {
-    pacaur -Syu
+    aurman -Syu
   }
 elif (( $+commands[yaourt] )); then
   function upgrade() {
