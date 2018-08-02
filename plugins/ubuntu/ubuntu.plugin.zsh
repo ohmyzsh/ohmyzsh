@@ -40,33 +40,33 @@ compdef _afu afu='sudo apt-file update'
 alias ppap='sudo ppa-purge'
 compdef _ppap ppap='sudo ppa-purge'
 
-alias ag="sudo $APT"               # age - but without sudo
-alias aga="sudo $APT autoclean"    # aac
-alias agb="sudo $APT build-dep"    # abd
-alias agc="sudo $APT clean"        # adc
-alias agd="sudo $APT dselect-upgrade" # ads
-alias agi="sudo $APT install"      # ai
-alias agp="sudo $APT purge"        # ap
-alias agr="sudo $APT remove"       # ar
-alias agu="sudo $APT update"       # ad
-alias agud="sudo $APT update && sudo $APT dist-upgrade" #adu
-alias agug="sudo $APT upgrade"     # ag
-alias aguu="sudo $APT update && sudo $APT upgrade"      #adg
-alias agar="sudo $APT autoremove"
+alias sag="sudo $APT"               # age - but without sudo
+alias saga="sudo $APT autoclean"    # aac
+alias sagb="sudo $APT build-dep"    # abd
+alias sagc="sudo $APT clean"        # adc
+alias sagd="sudo $APT dselect-upgrade" # ads
+alias sagi="sudo $APT install"      # ai
+alias sagp="sudo $APT purge"        # ap
+alias sagr="sudo $APT remove"       # ar
+alias sagu="sudo $APT update"       # ad
+alias sagud="sudo $APT update && sudo $APT dist-upgrade" #adu
+alias sagug="sudo $APT upgrade"     # ag
+alias saguu="sudo $APT update && sudo $APT upgrade"      #adg
+alias sagar="sudo $APT autoremove"
 
-compdef _ag ag="sudo $APT"
-compdef _aga aga="sudo $APT autoclean"
-compdef _agb agb="sudo $APT build-dep"
-compdef _agc agc="sudo $APT clean"
-compdef _agd agd="sudo $APT dselect-upgrade"
-compdef _agi agi="sudo $APT install"
-compdef _agp agp="sudo $APT purge"
-compdef _agr agr="sudo $APT remove"
-compdef _agu agu="sudo $APT update"
-compdef _agud agud="sudo $APT update && sudo $APT dist-upgrade"
-compdef _agug agug="sudo $APT upgrade"
-compdef _aguu aguu="sudo $APT update && sudo $APT upgrade"
-compdef _agar agar="sudo $APT autoremove"
+compdef _sag sag="sudo $APT"
+compdef _saga saga="sudo $APT autoclean"
+compdef _sagb sagb="sudo $APT build-dep"
+compdef _sagc sagc="sudo $APT clean"
+compdef _sagd sagd="sudo $APT dselect-upgrade"
+compdef _sagi sagi="sudo $APT install"
+compdef _sagp sagp="sudo $APT purge"
+compdef _sagr sagr="sudo $APT remove"
+compdef _sagu sagu="sudo $APT update"
+compdef _sagud sagud="sudo $APT update && sudo $APT dist-upgrade"
+compdef _sagug sagug="sudo $APT upgrade"
+compdef _saguu saguu="sudo $APT update && sudo $APT upgrade"
+compdef _sagar sagar="sudo $APT autoremove"
 
 # Remove ALL kernel images and headers EXCEPT the one in use
 alias kclean='sudo aptitude remove -P ?and(~i~nlinux-(ima|hea) \
@@ -89,11 +89,11 @@ aar() {
 	else
 		read "PACKAGE?Type in the package name to install/upgrade with this ppa [${1##*/}]: "
 	fi
-	
+
 	if [ -z "$PACKAGE" ]; then
 		PACKAGE=${1##*/}
 	fi
-	
+
 	sudo apt-add-repository $1 && sudo $APT update
 	sudo $APT install $PACKAGE
 }
