@@ -6,9 +6,9 @@ feature, where you can type in any part of any previously entered command
 and press the UP and DOWN arrow keys to cycle through the matching commands.
 You can also use K and J in VI mode or ^P and ^N in EMACS mode for the same.
 
-[1]: http://fishshell.com
-[2]: http://www.zsh.org/mla/users/2009/msg00818.html
-[3]: http://sourceforge.net/projects/fizsh/
+[1]: https://fishshell.com
+[2]: https://www.zsh.org/mla/users/2009/msg00818.html
+[3]: https://sourceforge.net/projects/fizsh/
 [4]: https://github.com/robbyrussell/oh-my-zsh/pull/215
 [5]: https://github.com/zsh-users/zsh-history-substring-search
 [6]: https://github.com/zsh-users/zsh-syntax-highlighting

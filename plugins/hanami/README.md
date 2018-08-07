@@ -1,12 +1,12 @@
 # Hanami Plugin #
-This plugin adds convenient ways to work with [Hanami](http://hanamirb.org/) via console.
+This plugin adds convenient ways to work with [Hanami](https://hanamirb.org/) via console.
 It's inspired by Rails plugin, so if you've used it, you'll feel like home.
 
 ## Usage ##
 
 For example, type `hc` into your console when you're within Hanami project directory to run
 the application console. Have a look at available shortcuts below. You can read more about
-these commands [on the official website](http://hanamirb.org/guides/command-line/applications/).
+these commands [on the official website](https://hanamirb.org/guides/command-line/applications/).
 
 ## Aliases ##
 
