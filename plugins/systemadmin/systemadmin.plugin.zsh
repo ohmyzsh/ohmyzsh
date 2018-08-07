@@ -3,7 +3,6 @@
 # -----------
 #
 # This is one for the system administrator, operation and maintenance.
-# Some of which come from http://justinlilly.com/dotfiles/zsh.html
 #
 # ------------------------------------------------------------------------------
 # Authors

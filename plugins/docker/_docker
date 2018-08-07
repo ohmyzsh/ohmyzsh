@@ -1,6 +1,6 @@
 #compdef docker dockerd
 #
-# zsh completion for docker (http://docker.com)
+# zsh completion for docker (https://docker.com)
 #
 # version:  0.3.0
 # github:   https://github.com/felixr/docker-zsh-completion
