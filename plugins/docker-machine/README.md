@@ -1,3 +1,10 @@
+
+## docker-machine autocomplete plugin
+
+A copy of the completion script from the
+[docker](https://github.com/docker/machine/blob/master/contrib/completion/zsh/_docker-machine)
+git repo.
+
 # docker-machine plugin for oh my zsh
 
 ### Usage
@@ -17,3 +24,4 @@ You need to call either this or docker-up when opening a new terminal
 #### docker-stop
 This will stop your "dev" docker-machine
 To stop a named machine use "docker-stop foobar"
+
