@@ -54,18 +54,48 @@ autoload -Uz is-at-least
 if is-at-least 4.2.0; then
   # open browser on urls
   if [[ -n "$BROWSER" ]]; then
-    _browser_fts=(htm html de org net com at cx nl se dk)
+    _browser_fts=(htm html xhtml de org net com at cx nl se dk)
     for ft in $_browser_fts; do alias -s $ft='$BROWSER'; done
   fi
 
   # open editable text files in text editor
   if [[ -n "$VISUAL" ]] || [[ -n "$EDITOR" ]]; then
-    _editor_fts=(cpp cxx cc c hh h inl asc txt TXT tex)
-    if [[ -n "$VISUAL" ]]; then
-      for ft in $_editor_fts; do alias -s $ft='$VISUAL'; done
-    else
-      for ft in $_editor_fts; do alias -s $ft='$EDITOR'; done
-    fi
+    _aliases_launch_editor() {
+      # directly launch matched files with executable bit and shebang present
+      if [[ -x "${1}" ]]; then
+        read -r <"${1}"
+        if [[ ${#REPLY} -ge 3 ]] && [[ ${REPLY:0:2} = '#!' ]]; then
+          "$@"
+          return $?
+        fi
+      fi
+
+      if [[ -n "$VISUAL" ]]; then
+        $VISUAL "$@"
+      else
+        $EDITOR "$@"
+      fi
+    }
+    # Taken from the /language/metadata/property[name="globs"] sections of the
+    # gtksourceview language definition files in
+    # /usr/share/gtksourceview-3.0/language-specs/*.lang
+    _editor_fts=(
+      abnf as adb ads 4th forth asp am awk prg bib bsv boo cg h c cmake ctest
+      cbl cob cbd cdb cdc hh hp hpp h++ cpp cxx cc C c++ cs css CSSL csv cu cuh
+      desktop kdelnk diff patch rej d docbook bat cmd sys dot gv dpatch dtd dtl
+      e eif erl hrl fcl frt fs f f90 f95 for F F90 fs g gd gi gap gdb gs glslv
+      glslf go groovy hs lhs hx pro idl igm ini jade pug java js node ijs json
+      geojson topojson jl kt tex ltx sty cls dtx ins bbl l lex flex la lai lo
+      ll logcat lua m4 ac in make mak mk page markdown md mkd m mac MAC dem DEM
+      wxm WXM build mo mop mxml n nrx nai nsh m j ml mli mll mly ocl ooc sign
+      impl cl p pas txt TXT pl pm al perl t php php3 php4 phtml pig pc po pot
+      prolog proto pp py3 py pyw R Rout r Rhistory Rtspec rst rb rake gemspe rs
+      scala scm sce sci sh bash sml sig rq sql rnw Rnw snw Snw swift sv svh t2t
+      tcl tk tera texi texinfo thrift toml tml lock vala vapi vb v vhd xml xspf
+      siv smil smi sml kino xul xbel abw zabw glabe jnlp mml rdf rss wml xmi fo
+      xslfo xslt xsl y yacc yaml yml
+    )
+    for ft in $_editor_fts; do alias -s $ft=_aliases_launch_editor; done
   fi
 
   # open image files in image viewer
