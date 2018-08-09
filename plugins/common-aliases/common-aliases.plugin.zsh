@@ -54,7 +54,7 @@ autoload -Uz is-at-least
 if is-at-least 4.2.0; then
   # open browser on urls
   if [[ -n "$BROWSER" ]]; then
-    _browser_fts=(htm html xhtml de org net com at cx nl se dk)
+    _browser_fts=(htm html xhtml)
     for ft in $_browser_fts; do alias -s $ft='$BROWSER'; done
   fi
 
