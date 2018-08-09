@@ -61,8 +61,25 @@ if is-at-least 4.2.0; then
   _editor_fts=(cpp cxx cc c hh h inl asc txt TXT tex)
   for ft in $_editor_fts; do alias -s $ft='$EDITOR'; done
 
+  # open image files in image viewer
   if [[ -n "$XIVIEWER" ]]; then
-    _image_fts=(jpg jpeg png gif mng tiff tif xpm)
+    # List inspired by https://en.wikipedia.org/wiki/Image_file_formats
+    _image_fts=(
+      #: Raster formats
+      # JPEG, JPEG2000, HEIF/HEVC, JBIG
+      jpg jpeg jpe jif jfif jfi jp2 j2k jpf jpx jpm mj2 heif heic jbg jbig
+      # BMP, BPG, GIF, ICO/ANI, PCX, PNG+MNG, TGA, TIFF, WebP (Web)
+      bmp bpg gif dib ico cur ani pcx png mng tga tiff tif webp
+      # NetPBM, XBM/XPM/XWD (ASCII)
+      pbm bgm ppm pnm xbm xpm xwd
+      # CIFF, DNG, DPX, ECW, FITS, ICS, RGBE (HDR & Raw)
+      crw dng dpx ecw fits ics ids fit fts hdr
+      # DDS ICNS OpenRaster SunRaster (Other)
+      dds icns ora ras sun
+      #: Vector formats
+      # CGM WMF Gerber IGES SVG
+      cgm wmf emf wmz emz gbr iges svg svgz
+    )
     for ft in $_image_fts; do alias -s $ft='$XIVIEWER'; done
   fi
 
