@@ -138,9 +138,28 @@ if is-at-least 4.2.0; then
     for ft in $_media_fts; do alias -s $ft=$XMVIEWER; done
   fi
 
-  # read documents with the platform's default application
-  _doc_fts=(pdf ps dvi chm djvu)
-  for ft in $_doc_fts; do alias -s $ft=open_command; done
+  #open complex document formats using the system viewer
+  _document_fts=(
+    # Long-term storage formats
+    djvu dvi fb2 epub pdf ps rtf
+    # Office Binary & Office OpenXML
+    doc docx docm ppt pptx pptm xls xlsx xlsm
+    # OpenDocument
+    odt fodt ods fods odp fodp odg fodg odf
+    # Uniform Office Format
+    uof uot uos uop
+    # StarOffice
+    sdw sxw sdc sxc sdd sci sda sxd smf sxm
+    # WordPerfect
+    wpd wp wp4 wp5 wp6 wp7
+    # Others
+    abw gnm gnumeric pages hwp
+  )
+  if type xdg-open >/dev/null; then
+    for ft in $_document_fts; do alias -s $ft=xdg-open; done
+  elif type open >/dev/null; then
+    for ft in $_document_fts; do alias -s $ft=open; done
+  fi
 
   #list what's inside packed file
   alias -s zip="unzip -l"
