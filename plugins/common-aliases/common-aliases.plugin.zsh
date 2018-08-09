@@ -122,8 +122,10 @@ if is-at-least 4.2.0; then
     for ft in $_image_fts; do alias -s $ft='$XIVIEWER'; done
   fi
 
-  _media_fts=(ape avi flv m4a mkv mov mp3 mpeg mpg ogg ogm rm wav webm)
-  for ft in $_media_fts; do alias -s $ft=mplayer; done
+  if [[ -n "$XMVIEWER" ]]; then
+    _media_fts=(ape avi flv m4a mkv mov mp3 mpeg mpg ogg ogm rm wav webm)
+    for ft in $_media_fts; do alias -s $ft=$XMVIEWER; done
+  fi
 
   # read documents with the platform's default application
   _doc_fts=(pdf ps dvi chm djvu)
