@@ -58,8 +58,15 @@ if is-at-least 4.2.0; then
     for ft in $_browser_fts; do alias -s $ft='$BROWSER'; done
   fi
 
-  _editor_fts=(cpp cxx cc c hh h inl asc txt TXT tex)
-  for ft in $_editor_fts; do alias -s $ft='$EDITOR'; done
+  # open editable text files in text editor
+  if [[ -n "$VISUAL" ]] || [[ -n "$EDITOR" ]]; then
+    _editor_fts=(cpp cxx cc c hh h inl asc txt TXT tex)
+    if [[ -n "$VISUAL" ]]; then
+      for ft in $_editor_fts; do alias -s $ft='$VISUAL'; done
+    else
+      for ft in $_editor_fts; do alias -s $ft='$EDITOR'; done
+    fi
+  fi
 
   # open image files in image viewer
   if [[ -n "$XIVIEWER" ]]; then
