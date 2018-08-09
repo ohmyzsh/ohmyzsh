@@ -121,7 +121,18 @@ if is-at-least 4.2.0; then
   fi
 
   if [[ -n "$XMVIEWER" ]]; then
-    _media_fts=(ape avi flv m4a mkv mov mp3 mpeg mpg ogg ogm rm wav webm)
+    _media_fts=(
+      #: Audio (container) formats
+      # https://en.wikipedia.org/wiki/Audio_file_format#List_of_formats
+      aac act aiff ape au awb dct dss flac gsm m4a m4b mp3 mpc oga opus ra sln
+      tta vox wav wma wv
+      #: Video (container) formats
+      # https://en.wikipedia.org/wiki/Video_file_format#List_of_video_file_formats
+      mkv flv f4v f4p f4a f4b vob ogv drc gifv avi mov qt wmv yuv rmvb asf amv
+      m4v mpg mp2 m2v mpeg mpe mpv svi 3g2 mxf nsv
+      #: Container formats that may store both
+      3gp ogg mogg mp4 m4p rm webm
+    )
     for ft in $_media_fts; do alias -s $ft=$XMVIEWER; done
   fi
 
