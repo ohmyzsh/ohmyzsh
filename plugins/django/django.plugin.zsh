@@ -326,6 +326,22 @@ _managepy-validate() {
     $nul_args && ret=0
 }
 
+#south migrations
+_managepy-schemamigration(){
+  _arguments -s : \
+    '--initial' \
+    '--auto' \
+    '*::appname:_applist' \
+    $nul_args && ret=0
+
+}
+_managepy-migrate(){
+  _arguments -s : \
+    '*::appname:_applist' \
+    $nul_args && ret=0
+    
+}
+
 _managepy-commands() {
   local -a commands
 
@@ -366,6 +382,9 @@ _managepy-commands() {
     'test:Runs the test suite for the specified applications, or the entire site if no apps are specified.'
     'testserver:Runs a development server with data from the given fixture(s).'
     'validate:Validates all installed models.'
+    'schemamigration: South migrations preparation'
+    'migrate: South migration for specific app'
+
   )
 
   _describe -t commands 'manage.py command' commands && ret=0
