@@ -1,4 +1,4 @@
-alias be="bundle exec"
+alias be="bundle exec "
 alias bl="bundle list"
 alias bp="bundle package"
 alias bo="bundle open"
@@ -55,7 +55,7 @@ done
 
 bundle_install() {
   if _bundler-installed && _within-bundled-project; then
-    local bundler_version=`bundle version | cut -d' ' -f3`
+    local bundler_version=`bundle --version | cut -d' ' -f3`
     if [[ $bundler_version > '1.4.0' || $bundler_version = '1.4.0' ]]; then
       if [[ "$OSTYPE" = (darwin|freebsd)* ]]
       then

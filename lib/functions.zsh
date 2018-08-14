@@ -11,23 +11,20 @@ function upgrade_oh_my_zsh() {
 }
 
 function take() {
-  mkdir -p $1
-  cd $1
+  mkdir -p $@ && cd ${@:$#}
 }
 
 function open_command() {
-  emulate -L zsh
-  setopt shwordsplit
-
   local open_cmd
 
   # define the open command
   case "$OSTYPE" in
     darwin*)  open_cmd='open' ;;
     cygwin*)  open_cmd='cygstart' ;;
-    linux*)   [[ $(uname -a) =~ "Microsoft" ]] && \
-                open_cmd='cmd.exe /c start' || \
-                open_cmd='xdg-open' ;;
+    linux*)   ! [[ $(uname -a) =~ "Microsoft" ]] && open_cmd='xdg-open' || {
+                open_cmd='cmd.exe /c start ""'
+                [[ -e "$1" ]] && { 1="$(wslpath -w "${1:a}")" || return 1 }
+              } ;;
     msys*)    open_cmd='start ""' ;;
     *)        echo "Platform $OSTYPE not supported"
               return 1
@@ -36,9 +33,9 @@ function open_command() {
 
   # don't use nohup on OSX
   if [[ "$OSTYPE" == darwin* ]]; then
-    $open_cmd "$@" &>/dev/null
+    ${=open_cmd} "$@" &>/dev/null
   else
-    nohup $open_cmd "$@" &>/dev/null
+    nohup ${=open_cmd} "$@" &>/dev/null
   fi
 }
 
@@ -54,8 +51,7 @@ function open_command() {
 #    1 if it does not exist
 #
 function alias_value() {
-    alias "$1" | sed "s/^$1='\(.*\)'$/\1/"
-    test $(alias "$1")
+    (( $+aliases[$1] )) && echo $aliases[$1]
 }
 
 #

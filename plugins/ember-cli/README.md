@@ -1,8 +1,8 @@
 # Ember CLI
 
-**Maintainers:** [BilalBudhani](http://www.github.com/BilalBudhani), [eubenesa](http://www.github.com/eubenesa)
+**Maintainers:** [BilalBudhani](https://github.com/BilalBudhani), [eubenesa](https://github.com/eubenesa)
 
-Ember CLI (http://www.ember-cli.com/)
+Ember CLI (https://www.ember-cli.com/)
 
 ### List of Aliases
 
