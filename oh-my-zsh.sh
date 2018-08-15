@@ -1,3 +1,13 @@
+# Set ZSH_CACHE_DIR to the path where cache files should be created
+# or else we will use the default cache/
+if [[ -z "$ZSH_CACHE_DIR" ]]; then
+  ZSH_CACHE_DIR="$ZSH/cache"
+fi
+
+# Migrate .zsh-update file to $ZSH_CACHE_DIR
+if [ -f ~/.zsh-update ] && [ ! -f ${ZSH_CACHE_DIR}/.zsh-update ]; then
+    mv ~/.zsh-update ${ZSH_CACHE_DIR}/.zsh-update
+fi
 
 # Load the micro profiling framework
 source "$ZSH/lib/profiler.sh"
@@ -6,7 +16,7 @@ start_profiling "TOTAL"
 
 # Check for updates on initial load...
 if [ "$DISABLE_AUTO_UPDATE" != "true" ]; then
-  env ZSH=$ZSH DISABLE_UPDATE_PROMPT=$DISABLE_UPDATE_PROMPT zsh -f $ZSH/tools/check_for_upgrade.sh
+  env ZSH=$ZSH ZSH_CACHE_DIR=$ZSH_CACHE_DIR DISABLE_UPDATE_PROMPT=$DISABLE_UPDATE_PROMPT zsh -f $ZSH/tools/check_for_upgrade.sh
 fi
 
 # Initializes Oh My Zsh
@@ -17,18 +27,10 @@ fpath=($ZSH/functions $ZSH/completions $fpath)
 # Load all stock functions (from $fpath files) called below.
 autoload -U compaudit compinit
 
-: ${ZSH_DISABLE_COMPFIX:=true}
-
 # Set ZSH_CUSTOM to the path where your custom config files
 # and plugins exists, or else we will use the default custom/
 if [[ -z "$ZSH_CUSTOM" ]]; then
     ZSH_CUSTOM="$ZSH/custom"
-fi
-
-# Set ZSH_CACHE_DIR to the path where cache files should be created
-# or else we will use the default cache/
-if [[ -z "$ZSH_CACHE_DIR" ]]; then
-  ZSH_CACHE_DIR="$ZSH/cache"
 fi
 
 
@@ -71,16 +73,15 @@ if [ -z "$ZSH_COMPDUMP" ]; then
 fi
 
 if [[ $ZSH_DISABLE_COMPFIX != true ]]; then
-  # If completion insecurities exist, warn the user without enabling completions.
+  # If completion insecurities exist, warn the user
   if ! compaudit &>/dev/null; then
-    # This function resides in the "lib/compfix.zsh" script sourced above.
     handle_completion_insecurities
-  # Else, enable and cache completions to the desired file.
-  else
-    compinit -d "${ZSH_COMPDUMP}"
   fi
-else
+  # Load only from secure directories
   compinit -i -d "${ZSH_COMPDUMP}"
+else
+  # If the user wants it, load from all found directories
+  compinit -u -d "${ZSH_COMPDUMP}"
 fi
 
 
@@ -111,8 +112,12 @@ unset config_file
 
 # Load the theme
 start_profiling "  loading theme"
-if [ "$ZSH_THEME" = "random" ]; then
-  themes=($ZSH/themes/*zsh-theme)
+if [[ "$ZSH_THEME" == "random" ]]; then
+  if [[ "${(t)ZSH_THEME_RANDOM_CANDIDATES}" = "array" ]] && [[ "${#ZSH_THEME_RANDOM_CANDIDATES[@]}" -gt 0 ]]; then
+    themes=($ZSH/themes/${^ZSH_THEME_RANDOM_CANDIDATES}.zsh-theme)
+  else
+    themes=($ZSH/themes/*zsh-theme)
+  fi
   N=${#themes[@]}
   ((N=(RANDOM%N)+1))
   RANDOM_THEME=${themes[$N]}

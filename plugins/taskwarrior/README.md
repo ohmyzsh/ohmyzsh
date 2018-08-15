@@ -1,6 +1,6 @@
 # taskwarrior
 
-This plugin adds smart tab completion for [TaskWarrior](http://taskwarrior.org/).
+This plugin adds smart tab completion for [TaskWarrior](https://taskwarrior.org/).
 It uses the zsh tab completion script (`_task`) shipped with TaskWarrior for the
 completion definitions.
 

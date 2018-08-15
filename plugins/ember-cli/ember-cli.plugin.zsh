@@ -1,5 +1,5 @@
 # Ember CLI
-# Visit http://www.ember-cli.com/ to view user guide
+# Visit https://www.ember-cli.com/ to view user guide
 
 alias es='ember serve'
 alias ea='ember addon'
