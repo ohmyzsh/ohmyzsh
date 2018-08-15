@@ -4,9 +4,21 @@ typeset -A _time_by_keys
 # Store the order the measurements were taken
 _ordered_keys=()
 
+
+
+# The GNU date for both Linux, Unix and macOS
+# From https://stackoverflow.com/questions/592620/how-to-check-if-a-program-exists-from-a-bash-script
+function _gnu_date() {
+    if hash gdate 2>/dev/null; then
+        gdate "$@"
+    else
+        date "$@"
+    fi
+}
+
 # Return a timestamp in milliseconds
 function _time_in_ms() {
-    echo $(( $(date +%s%N) / 1000000 ))
+    echo $(( $(_gnu_date +%s%N) / 1000000 ))
 }
 
 # Start recording the elapsed time
