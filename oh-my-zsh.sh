@@ -12,7 +12,7 @@ fi
 # Load the micro profiling framework
 source "$ZSH/lib/profiler.sh"
 # Start profiling
-start_profiling "TOTAL"
+start_profiling 0 "TOTAL"
 
 # Check for updates on initial load...
 if [ "$DISABLE_AUTO_UPDATE" != "true" ]; then
@@ -61,7 +61,7 @@ done
 
 # Figure out the SHORT hostname
 if [[ "$OSTYPE" = darwin* ]]; then
-  # macOS's $HOST changes with dhcp, etc. Use ComputerName if possible.
+  # macOSs $HOST changes with dhcp, etc. Use ComputerName if possible.
   SHORT_HOST=$(scutil --get ComputerName 2>/dev/null) || SHORT_HOST=${HOST/.*/}
 else
   SHORT_HOST=${HOST/.*/}
@@ -86,32 +86,32 @@ fi
 
 
 # Load all of the plugins that were defined in ~/.zshrc
-start_profiling "  loading plugins"
+start_profiling 1 "Loading plugins"
 for plugin ($plugins); do
-  start_profiling "    $plugin"
+  start_profiling 2 "$plugin"
   if [ -f $ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh ]; then
     source $ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh
   elif [ -f $ZSH/plugins/$plugin/$plugin.plugin.zsh ]; then
     source $ZSH/plugins/$plugin/$plugin.plugin.zsh
   fi
-  stop_profiling "    $plugin"
+  stop_profiling "$plugin"
 done
-stop_profiling  "  loading plugins"
+stop_profiling  "Loading plugins"
 
 
 # Load all of your custom configurations from custom/
-start_profiling "  loading custom configurations"
+start_profiling 1 "Loading custom configurations"
 for config_file ($ZSH_CUSTOM/*.zsh(N)); do
-  start_profiling "    $(basename $config_file)"
+  start_profiling 2 "$(basename $config_file)"
   source $config_file
-  stop_profiling "    $(basename $config_file)"
+  stop_profiling "$(basename $config_file)"
 done
-stop_profiling  "  loading custom configurations"
+stop_profiling  "Loading custom configurations"
 unset config_file
 
 
 # Load the theme
-start_profiling "  loading theme"
+start_profiling 1 "Loading theme"
 if [[ "$ZSH_THEME" == "random" ]]; then
   if [[ "${(t)ZSH_THEME_RANDOM_CANDIDATES}" = "array" ]] && [[ "${#ZSH_THEME_RANDOM_CANDIDATES[@]}" -gt 0 ]]; then
     themes=($ZSH/themes/${^ZSH_THEME_RANDOM_CANDIDATES}.zsh-theme)
@@ -121,10 +121,13 @@ if [[ "$ZSH_THEME" == "random" ]]; then
   N=${#themes[@]}
   ((N=(RANDOM%N)+1))
   RANDOM_THEME=${themes[$N]}
+  start_profiling 2 "$RANDOM_THEME"
   source "$RANDOM_THEME"
+  stop_profiling "$RANDOM_THEME"
   echo "[oh-my-zsh] Random theme '$RANDOM_THEME' loaded..."
 else
   if [ ! "$ZSH_THEME" = ""  ]; then
+    start_profiling 2 "$ZSH_THEME"
     if [ -f "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme" ]; then
       source "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme"
     elif [ -f "$ZSH_CUSTOM/themes/$ZSH_THEME.zsh-theme" ]; then
@@ -132,9 +135,10 @@ else
     else
       source "$ZSH/themes/$ZSH_THEME.zsh-theme"
     fi
+    stop_profiling "$ZSH_THEME"
   fi
 fi
-stop_profiling "  loading theme"
+stop_profiling "Loading theme"
 
 # Stop profiling
 stop_profiling "TOTAL"
