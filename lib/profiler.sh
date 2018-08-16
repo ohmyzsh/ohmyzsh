@@ -57,9 +57,25 @@ function stop_profiling() {
 function print_profiling() {
     [[ $ENABLE_PROFILING = "true" ]] || return
 
-    local dots1='..................................................'
+    local dots1='...............................................................'
     local dots2='......'
 
+    echo $fg_bold[white]
+    echo " ==============================================================================="
+    echo " ZSH Startup Profiler Report"
+    echo " ==============================================================================="
+    echo $reset_color
+    echo " This report can be disabled by commenting out 'ENABLE_PROFILING' in '~/.zshrc'."
+    echo
+    echo " This report is a very simple profiling of the active plugins and custom "
+    echo " configurations, but is very useful to pinpoint slow scripts!"
+    echo
+    echo " This report has two colored thresholds (yellow and red) that are defined in"
+    echo " the file '~/.oh-my-zsh/lib/profiler.sh' and are currently valued to:"
+    echo " - warning when percentage ⩾ $_percentage_warning %"
+    echo "               or duration ⩾ $_duration_warning ms"
+    echo " - error when percentage ⩾ $_percentage_error %"
+    echo "             or duration ⩾ $_duration_error ms"
     echo
 
     for key in $_ordered_keys; do
@@ -88,5 +104,7 @@ function print_profiling() {
         printf " %s ${percent_color}%s%%${reset_color}\n" "${dots2:$length2}" $percent
     done
 
-    echo
+    echo $fg_bold[white]
+    echo " ==============================================================================="
+    echo $reset_color
 }
