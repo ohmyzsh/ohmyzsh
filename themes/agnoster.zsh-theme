@@ -198,6 +198,19 @@ prompt_virtualenv() {
   fi
 }
 
+# Anaconda: current working conda env
+# To replace the conda modification of PS1 do `conda config --set changeps1 False`
+# or add 'changeps1: False' to your .condarc file.
+prompt_conda() {
+  local conda_env="$CONDA_DEFAULT_ENV"
+  if [[ -n $conda_env ]]; then
+    local conda_changeps1="`conda config --show changeps1`" 
+    if [[ $conda_changeps1 == "changeps1: False" && $conda_env != "base" ]]; then
+      prompt_segment blue black "($CONDA_DEFAULT_ENV)"
+    fi
+  fi
+}
+
 # Status:
 # - was there an error
 # - am I root
@@ -216,6 +229,7 @@ prompt_status() {
 build_prompt() {
   RETVAL=$?
   prompt_status
+  prompt_conda
   prompt_virtualenv
   prompt_context
   prompt_dir
