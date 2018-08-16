@@ -3,6 +3,12 @@
 typeset -A _time_by_keys
 # Store the order the measurements were taken
 _ordered_keys=()
+# Thresholds in percent used for report highlighting
+_percentage_warning=5
+_percentage_error=10
+# Thresholds in milliseconds used for report highlighting
+_duration_warning=10
+_duration_error=100
 
 
 
@@ -55,15 +61,32 @@ function print_profiling() {
     local dots2='......'
 
     echo
-    for key in $_ordered_keys; do
-        local value=$_time_by_keys[$key]
-        local percent=$(($_time_by_keys[$key] * 100 / $_time_by_keys[TOTAL]))
 
-        local length1=$(( ${#key} + ${#value} ))
-        printf "%s %s %s ms " $key "${dots1:$length1}" $value
+    for key in $_ordered_keys; do
+        local duration=$_time_by_keys[$key]
+        local percent=$(($_time_by_keys[$key] * 100 / $_time_by_keys[TOTAL]))
+        local duration_color=
+        local percent_color=
+
+        if [ $percent -ge $_percentage_warning ]; then
+            percent_color=$fg_bold[yellow]
+        fi
+        if [ $percent -ge $_percentage_error ]; then
+            percent_color=$fg_bold[red]
+        fi
+        if [ $duration -ge $_duration_warning ]; then
+            duration_color=$fg_bold[yellow]
+        fi
+        if [ $duration -ge $_duration_error ]; then
+            duration_color=$fg_bold[red]
+        fi
+
+        local length1=$(( ${#key} + ${#duration} ))
+        printf " %s %s ${duration_color}%s ms${reset_color} " $key "${dots1:$length1}" $duration
 
         local length2=$(( ${#percent} ))
-        printf "%s %s%%\n" "${dots2:$length2}" $percent
+        printf " %s ${percent_color}%s%%${reset_color}\n" "${dots2:$length2}" $percent
     done
+
     echo
 }
