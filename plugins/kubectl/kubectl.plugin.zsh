@@ -64,3 +64,6 @@ alias kru='kubectl rollout undo'
 # Logs
 alias kl='kubectl logs'
 alias klf='kubectl logs -f'
+
+# File copy
+alias kcp='kubectl cp'
