@@ -51,8 +51,7 @@ function open_command() {
 #    1 if it does not exist
 #
 function alias_value() {
-    alias "$1" | sed "s/^$1='\(.*\)'$/\1/"
-    test $(alias "$1")
+    (( $+aliases[$1] )) && echo $aliases[$1]
 }
 
 #

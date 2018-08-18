@@ -1,11 +1,11 @@
 ## bbedit
 
-Plugin for BBEdit, an HTML and text editor for Mac OS X 
+Plugin for BBEdit, an HTML and text editor for Mac OS X
 
 ### Requirements
 
- * [BBEdit](http://www.barebones.com/products/bbedit/)
- * [BBEdit Command-Line Tools](http://www.barebones.com/support/bbedit/cmd-line-tools.html)
+ * [BBEdit](https://www.barebones.com/products/bbedit/)
+ * [BBEdit Command-Line Tools](https://www.barebones.com/support/bbedit/cmd-line-tools.html)
 
 ### Usage
 

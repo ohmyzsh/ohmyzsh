@@ -2,7 +2,7 @@
 
 Automatically load your project ENV variables from `.env` file when you `cd` into project root directory.
 
-Storing configuration in the environment is one of the tenets of a [twelve-factor app](http://www.12factor.net). Anything that is likely to change between deployment environments, such as resource handles for databases or credentials for external services, should be extracted from the code into environment variables.
+Storing configuration in the environment is one of the tenets of a [twelve-factor app](https://www.12factor.net). Anything that is likely to change between deployment environments, such as resource handles for databases or credentials for external services, should be extracted from the code into environment variables.
 
 ## Installation
 

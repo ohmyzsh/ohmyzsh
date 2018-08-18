@@ -21,7 +21,7 @@ alias pd='perldoc'
 alias ple='perl -wlne'
 
 # show the latest stable release of Perl
-alias latest-perl='curl -s http://www.perl.org/get.html | perl -wlne '\''if (/perl\-([\d\.]+)\.tar\.gz/) { print $1; exit;}'\'
+alias latest-perl='curl -s https://www.perl.org/get.html | perl -wlne '\''if (/perl\-([\d\.]+)\.tar\.gz/) { print $1; exit;}'\'
 
 
 

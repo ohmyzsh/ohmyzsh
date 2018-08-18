@@ -241,7 +241,7 @@ if [[ ! -z "$playlist" ]]; then
 
 			case "$state" in
 				on|off)
-					# Inspired by: http://stackoverflow.com/a/14675583
+					# Inspired by: https://stackoverflow.com/a/14675583
 					osascript 1>/dev/null 2>&1 <<-EOF
 					tell application "System Events" to perform action "AXPress" of (menu item "${state}" of menu "Shuffle" of menu item "Shuffle" of menu "Controls" of menu bar item "Controls" of menu bar 1 of application process "iTunes" )
 EOF
