@@ -16,6 +16,15 @@ fi
 local nvm_node=''
 nvm_node='%{$fg[green]%}‹node-$(nvm_prompt_info)›%{$reset_color%}'
 
+
+if ! type "jenv_prompt_info" | grep -q 'shell function'; then
+  jenv_prompt_info()
+  {
+    echo -n
+  }
+fi
+
+
 local jenv_java=''
 jenv_java='%{$fg[blue]%}‹$(jenv_prompt_info)›%{$reset_color%}'
 
