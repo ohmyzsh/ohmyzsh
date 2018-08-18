@@ -1,6 +1,6 @@
 #compdef scw
 #
-# zsh completion for scw (http://scaleway.com)
+# zsh completion for scw (https://www.scaleway.com)
 #
 # Inspired by https://github.com/felixr/docker-zsh-completion
 

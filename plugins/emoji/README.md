@@ -71,7 +71,7 @@ PROMPT="$surfer  > "
 
 ##  Technical Details
 
-The emoji names and codes are sourced from Unicode Technical Report \#51, which provides information on emoji support in Unicode. It can be found at http://www.unicode.org/reports/tr51/index.html.
+The emoji names and codes are sourced from Unicode Technical Report \#51, which provides information on emoji support in Unicode. It can be found at https://www.unicode.org/reports/tr51/index.html.
 
 The group definitions are added by this OMZ plugin. They are not based on external definitions. (As far as I can tell. -apjanke)
 
@@ -108,7 +108,7 @@ The `$emoji_skintone` associative array maps skin tone IDs to the variation sele
 echo "$emoji[smiling_face_with_open_mouth]$emoji_skintone[4]"
 ```
 
-Note that `$emoji_skintone` is an associative array, and its keys are the *names* of "Fitzpatrick Skin Type" groups, not linear indexes into a normal array. The names are `1_2`, `3`, `4`, `5`, and `6`. (Types 1 and 2 are combined into a single color.) See the [Diversity section in Unicode TR 51](http://www.unicode.org/reports/tr51/index.html#Diversity) for details.
+Note that `$emoji_skintone` is an associative array, and its keys are the *names* of "Fitzpatrick Skin Type" groups, not linear indexes into a normal array. The names are `1_2`, `3`, `4`, `5`, and `6`. (Types 1 and 2 are combined into a single color.) See the [Diversity section in Unicode TR 51](https://www.unicode.org/reports/tr51/index.html#Diversity) for details.
 
 ##  TODO
 
@@ -130,6 +130,6 @@ This does *not* mean that it should use Gemoji at run time. None of the `zsh` pl
 
 ####  ZWJ combining function
 
-One of the newer features of Unicode emoji is the ability to use the "Zero-Width Joiner" character to compose multiple emoji characters in to a single "emoji ligature" glyph. For example, this is [how Apple supports "family" emoji with various genders and skin tones](http://www.unicode.org/reports/tr51/index.html#ZWJ_Sequences).
+One of the newer features of Unicode emoji is the ability to use the "Zero-Width Joiner" character to compose multiple emoji characters in to a single "emoji ligature" glyph. For example, this is [how Apple supports "family" emoji with various genders and skin tones](https://www.unicode.org/reports/tr51/index.html#ZWJ_Sequences).
 
 These are a pain to write out (and probably worse to read), and it might be convenient to have a couple functions for concisely composing them, if wider support for them appears.

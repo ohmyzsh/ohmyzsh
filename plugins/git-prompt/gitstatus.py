@@ -22,7 +22,7 @@ def get_tagname_or_hash():
         tagname = 'tags/' + output[m.start()+len('tag: '): m.end()-1]
 
     if tagname:
-        return tagname
+        return tagname.replace(' ', '')
     elif hash_:
         return hash_
     return None

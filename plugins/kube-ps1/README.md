@@ -1,13 +1,12 @@
-Kubernetes prompt for zsh
-=========================
+# Kubernetes prompt for zsh
 
-A Kubernetes (k8s) zsh prompt that displays the current cluster cluster
+A Kubernetes zsh prompt that displays the current cluster cluster
 and the namespace.
 
 Inspired by several tools used to simplify usage of kubectl
 
-NOTE: If you are not using zsh, check out [kube-ps1](https://github.com/jonmosco/kube-ps1) designed for bash
-as well as zsh.
+NOTE: If you are not using zsh, check out [kube-ps1](https://github.com/jonmosco/kube-ps1)
+designed for bash as well as zsh.
 
 ## Requirements
 
@@ -32,28 +31,33 @@ fast switching between clusters and namespaces.
 The prompt layout is:
 
 ```
-(<logo>|<cluster>:<namespace>)
+(<symbol>|<cluster>:<namespace>)
 ```
 
-Supported platforms:
-* k8s - Kubernetes
-* ocp - OpenShift
+## Enabling
 
-## Install
+In order to use kube-ps1 with Oh My Zsh, you'll need to enable them in the
+.zshrc file. You'll find the zshrc file in your $HOME directory. Open it with
+your favorite text editor and you'll see a spot to list all the plugins you
+want to load.
 
-1. Clone this repository
-2. Source the kube-ps1.zsh in your ~./.zshrc
-
-ZSH:
+```shell
+vim $HOME/.zshrc
 ```
-source path/kube-ps1.sh
-PROMPT='$(kube_ps1) '
+
+Add kube-ps1 to the list of enabled plugins:
+
+```shell
+plugins=(
+  git
+  kube-ps1
+)
 ```
 
 ## Colors
 
-The colors are of my opinion. Blue was used as the prefix to match the Kubernetes
-color as closely as possible. Red was chosen as the cluster name to stand out, and cyan
+Blue was used as the prefix to match the Kubernetes color as closely as
+possible. Red was chosen as the cluster name to stand out, and cyan
 for the namespace.  These can of course be changed.
 
 ## Customization
@@ -62,14 +66,15 @@ The default settings can be overridden in ~/.zshrc
 
 | Variable | Default | Meaning |
 | :------- | :-----: | ------- |
-| `KUBE_PS1_DEFAULT` | `true` | Default settings for the prompt |
+| `KUBE_PS1_BINARY` | `kubectl` | Default Kubernetes binary |
 | `KUBE_PS1_PREFIX` | `(` | Prompt opening character  |
-| `KUBE_PS1_DEFAULT_LABEL` | `⎈ ` | Default prompt symbol |
+| `KUBE_PS1_SYMBOL_ENABLE` | `true ` | Display the prompt Symbol. If set to `false`, this will also disable `KUBE_PS1_SEPARATOR` |
+| `KUBE_PS1_SYMBOL_DEFAULT` | `⎈ ` | Default prompt symbol. Unicode `\u2388` |
+| `KUBE_PS1_SYMBOL_USE_IMG` | `false` | ☸️  ,  Unicode `\u2638` as the prompt symbol |
+| `KUBE_PS1_NS_ENABLE` | `true` | Display the namespace. If set to `false`, this will also disable `KUBE_PS1_DIVIDER` |
 | `KUBE_PS1_SEPERATOR` | `\|` | Separator between symbol and cluster name |
-| `KUBE_PS1_PLATFORM` | `kubectl` | Cluster type and binary to use |
 | `KUBE_PS1_DIVIDER` | `:` | Separator between cluster and namespace |
 | `KUBE_PS1_SUFFIX` | `)` | Prompt closing character |
-| `KUBE_PS1_DEFAULT_LABEL_IMG` | `false` | Use Kubernetes img as the label: ☸️  |
 
 ## Contributors
 

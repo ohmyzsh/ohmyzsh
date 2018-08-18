@@ -4,7 +4,7 @@ alias xcp='xcode-select --print-path'
 alias xcsel='sudo xcode-select --switch'
 
 # original author: @subdigital
-# source: http://gist.github.com/subdigital/5420709
+# source: https://gist.github.com/subdigital/5420709
 function xc {
   local xcode_proj
   if [[ $# == 0 ]]; then
@@ -22,8 +22,11 @@ function xc {
     fi
     return 1
   else
-    echo "Found ${xcode_proj[1]}"
-    open "${xcode_proj[1]}"
+    local active_path
+    active_path=$(xcode-select -p)
+    active_path=${active_path%%/Contents/Developer*}
+    echo "Found ${xcode_proj[1]}. Opening with ${active_path}"
+    open -a "$active_path" "${xcode_proj[1]}"
   fi
 }
 
