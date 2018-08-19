@@ -10,7 +10,7 @@ if [ -f ~/.zsh-update ] && [ ! -f ${ZSH_CACHE_DIR}/.zsh-update ]; then
 fi
 
 # Load the micro profiling framework
-source "$ZSH/lib/profiler.sh"
+source "$ZSH/lib/profiler.zsh"
 # Start profiling
 start_profiling 0 "TOTAL"
 
