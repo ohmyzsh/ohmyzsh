@@ -27,4 +27,4 @@ else
     function jenv_prompt_info() { echo "system: $(java -version 2>&1 | cut -f 2 -d ' ')" }
 fi
 
-unset jenvdir FOUND_JENV
+unset jenvdir jenvdirs FOUND_JENV
