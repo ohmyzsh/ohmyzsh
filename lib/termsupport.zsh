@@ -80,7 +80,7 @@ preexec_functions+=(omz_termsupport_preexec)
 
 
 # Keep Apple Terminal.app's current working directory updated
-# Based on this answer: http://superuser.com/a/315029
+# Based on this answer: https://superuser.com/a/315029
 # With extra fixes to handle multibyte chars and non-UTF-8 locales
 
 if [[ "$TERM_PROGRAM" == "Apple_Terminal" ]] && [[ -z "$INSIDE_EMACS" ]]; then

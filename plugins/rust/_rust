@@ -88,14 +88,14 @@ _rustc_opts_vals=(
     --pretty='[Pretty-print the input instead of compiling]::TYPE:_values "TYPES" "$_rustc_pretty_types[@]"'
     --unpretty='[Present the input source, unstable (and less-pretty)]::TYPE:_values "TYPES" "$_rustc_unpretty_types[@]"'
     --color='[Configure coloring of output]:CONF:_values "COLORS" "$_rustc_color_types[@]"'
-    {-v,--version}'[Print version info and exit]::VERBOSE:(verbose)'
 )
 
 _rustc_opts_switches=(
     -g'[Equivalent to --debuginfo=2]'
     -O'[Equivalent to --opt-level=2]'
     --test'[Build a test harness]'
-    --verbose'[Use verbose output]'
+    {-v,--verbose}'[Use verbose output]'
+    {-V,--version}'[Print version info and exit]'
     {-h,--help}'[Display this message]'
     --no-analysis'[Parse and expand the output, but run no analysis or produce output]'
     --no-trans'[Run all passes except translation; no output]'

@@ -2,7 +2,7 @@
 # Adds handy command line aliases useful for dealing with URLs
 #
 # Taken from:
-# http://ruslanspivak.com/2010/06/02/urlencode-and-urldecode-from-a-command-line/
+# https://ruslanspivak.com/2010/06/02/urlencode-and-urldecode-from-a-command-line/
 
 if [[ $(whence $URLTOOLS_METHOD) = "" ]]; then
     URLTOOLS_METHOD=""
