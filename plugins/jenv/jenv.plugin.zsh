@@ -10,7 +10,7 @@ done
 
 if [[ $FOUND_JENV -eq 0 ]]; then
     if (( $+commands[brew] )) && jenvdir="$(brew --prefix jenv)"; then
-        FOUND_JENV=1
+        [[ -d "${jenvdir}/bin" ]] && FOUND_JENV=1
     fi
 fi
 
