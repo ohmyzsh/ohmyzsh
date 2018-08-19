@@ -1,4 +1,8 @@
 
+zmodload zsh/datetime
+
+
+
 # Store the 0-based level of the measurements by the key (name)
 typeset -A _level_by_keys
 # Store the measurements indexed by the key (name)
@@ -14,19 +18,9 @@ _duration_error=100
 
 
 
-# The GNU date for both Linux, Unix and macOS
-# From https://stackoverflow.com/questions/592620/how-to-check-if-a-program-exists-from-a-bash-script
-function _gnu_date() {
-    if hash gdate 2>/dev/null; then
-        gdate "$@"
-    else
-        date "$@"
-    fi
-}
-
 # Return a timestamp in milliseconds
 function _time_in_ms() {
-    echo $(( $(_gnu_date +%s%N) / 1000000 ))
+    printf %.0f $(( EPOCHREALTIME * 1000 ))
 }
 
 # Start recording the elapsed time
