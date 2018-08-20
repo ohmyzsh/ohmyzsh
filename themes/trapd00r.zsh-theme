@@ -50,30 +50,28 @@ zsh_path() {
     17  '%F{202}'   18  '%F{166}'
   )
 
-  local c i=1
-  for c (${(s::)PWD}); do
-    if [[ $c = "/" ]]; then
-      if [[ $i -eq 1 ]]; then
-        if [[ $colors -ge 256 ]]; then
-          print -Pn "%F{065}%B /%b"
-        else
-          print -Pn "\e[31;1m /"
-        fi
+  local dir i=1
+  for dir (${(s:/:)PWD}); do
+    if [[ $i -eq 1 ]]; then
+      if [[ $colors -ge 256 ]]; then
+        print -Pn "%F{065}%B /%b"
       else
-        if [[ $colors -ge 256 ]]; then
-          print -Pn "${yellow[$i]:-%f} » "
-        else
-          print -Pn "%F{yellow} > "
-        fi
+        print -Pn "\e[31;1m /"
       fi
-
-      (( i++ ))
     else
       if [[ $colors -ge 256 ]]; then
-        print -Pn "%F{065}$c"
+        print -Pn "${yellow[$i]:-%f} » "
       else
-        print -Pn "%F{blue}$c"
+        print -Pn "%F{yellow} > "
       fi
+    fi
+
+    (( i++ ))
+
+    if [[ $colors -ge 256 ]]; then
+      print -Pn "%F{065}$dir"
+    else
+      print -Pn "%F{blue}$dir"
     fi
   done
   print -Pn "%f"
