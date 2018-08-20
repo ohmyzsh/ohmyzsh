@@ -55,28 +55,29 @@ zsh_path() {
     if [[ $c = "/" ]]; then
       if [[ $i -eq 1 ]]; then
         if [[ $colors -ge 256 ]]; then
-          print -Pn '%F{065}%B /%b%f'
+          print -Pn "%F{065}%B /%b"
         else
-          print -Pn '\e[31;1m /%f'
+          print -Pn "\e[31;1m /"
         fi
         (( i++ ))
         continue
       fi
 
       if [[ $colors -ge 256 ]]; then
-        print -Pn "${yellow[$i]:-%f} » %f"
+        print -Pn "${yellow[$i]:-%f} » "
       else
-        print -Pn "%F{yellow} > %f"
+        print -Pn "%F{yellow} > "
       fi
       (( i += 6 ))
     else
       if [[ $colors -ge 256 ]]; then
-        print -Pn "%F{065}$c%f"
+        print -Pn "%F{065}$c"
       else
-        print -Pn "%F{blue}$c%f"
+        print -Pn "%F{blue}$c"
       fi
     fi
   done
+  print -Pn "%f"
 }
 
 
