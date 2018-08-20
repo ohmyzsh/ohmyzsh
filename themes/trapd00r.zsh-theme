@@ -36,54 +36,46 @@ local c11=$(printf "\e[38;5;208m\e[1m")
 local c12=$(printf "\e[38;5;142m\e[1m")
 local c13=$(printf "\e[38;5;196m\e[1m")
 
-local zsh_path_pl=' 
 
-use strict;
-use Term::ExtendedColor "fg";
+zsh_path() {
+  local -A yellow
+  yellow=(
+    1  '%F{228}'   2  '%F{222}'   3  '%F{192}'   4  '%F{186}'
+    5  '%F{227}'   6  '%F{221}'   7  '%F{191}'   8  '%F{185}'
+    9  '%F{226}'   10  '%F{220}'   11  '%F{190}'   12  '%F{184}'
+    13  '%F{214}'   14  '%F{178}'  15  '%F{208}'   16  '%F{172}'
+    17  '%F{202}'   18  '%F{166}'
+  )
 
-chomp(my $pwd = `pwd`);
+  local c i=1
+  for c (${(s::)PWD}); do
+    if [[ $c = "/" ]]; then
+      if [[ $i -eq 1 ]]; then
+        if [[ -n "$DISPLAY" ]]; then
+          print -Pn '%F{065}%B /%b%f'
+        else
+          print -Pn '\e[31;1m /%f'
+        fi
+        (( i++ ))
+        continue
+      fi
 
-my @chars = split//, $pwd;
-
-my $i = 1;
-
-for(@chars) {
-  if($_ eq "/") {
-    if(defined($ENV{DISPLAY})) {
-      if($i == 1) {
-        print fg("green28", fg("bold", " /"));
-        $i++;
-        next;
-      }
-    }
-    else {
-      if($i == 1) {
-        print "\e[31;1m /\e[0m";
-        $i++;
-        next;
-      }
-    }
-
-    if(defined($ENV{DISPLAY})) {
-      print fg("yellow$i", " » ");
-      $i += 6
-    }
-    else {
-      print "\e[33m > \e[0m";
-      $i += 6;
-    }
-  }
-  else {
-    if(defined($ENV{DISPLAY})) {
-      print fg("green28", $_);
-    }
-    else {
-      print "\e[34m$_\e[0m";
-    }
-  }
+      if [[ -n "$DISPLAY" ]]; then
+        print -Pn "${yellow[$i]:-%f} » %f"
+      else
+        print -Pn "%F{yellow} > %f"
+      fi
+      (( i += 6 ))
+    else
+      if [[ -n "$DISPLAY" ]]; then
+        print -Pn "%F{065}$c%f"
+      else
+        print -Pn "%F{blue}$c%f"
+      fi
+    fi
+  done
 }
 
-'
 
 # We don't want to use the extended colorset in the TTY / VC.
 if [ "$TERM" = "linux" ]; then
@@ -116,24 +108,24 @@ add-zsh-hook precmd prompt_jnrowe_precmd
 prompt_jnrowe_precmd () {
   vcs_info
   if [ "${vcs_info_msg_0_}" = "" ]; then
-    dir_status="%{$c1%}%n%{$c4%}@%{$c2%}%m%{$c0%}:%{$c3%}%l%{$c6%}->%{$(echo $zsh_path_pl | perl)%} %{$c0%}(%{$c5%}%?%{$c0%})"
+    dir_status="%{$c1%}%n%{$c4%}@%{$c2%}%m%{$c0%}:%{$c3%}%l%{$c6%}->%{$(zsh_path)%} %{$c0%}(%{$c5%}%?%{$c0%})"
     PROMPT='%{$fg_bold[green]%}%p%{$reset_color%}${vcs_info_msg_0_}${dir_status} ${ret_status}%{$reset_color%}
 > '
 
 # modified, to be committed
   elif [[ $(git diff --cached --name-status 2>/dev/null ) != "" ]]; then
-    dir_status="%{$c1%}%n%{$c4%}@%{$c2%}%m%{$c0%}:%{$c3%}%l%{$c6%}->%{$(echo $zsh_path_pl | perl)%} %{$c0%}(%{$c5%}%?%{$c0%})"
+    dir_status="%{$c1%}%n%{$c4%}@%{$c2%}%m%{$c0%}:%{$c3%}%l%{$c6%}->%{$(zsh_path)%} %{$c0%}(%{$c5%}%?%{$c0%})"
     PROMPT='${vcs_info_msg_0_}%{$30%} %{$bg_bold[red]%}%{$fg_bold[cyan]%}C%{$fg_bold[black]%}OMMIT%{$reset_color%}
 %{$fg_bold[green]%}%p%{$reset_color%}${dir_status}%{$reset_color%}
 > '
 
   elif [[ $(git diff --name-status 2>/dev/null ) != "" ]]; then
-    dir_status="%{$c1%}%n%{$c4%}@%{$c2%}%m%{$c0%}:%{$c3%}%l%{$c6%}->%{$(echo $zsh_path_pl | perl)%} %{$c0%}(%{$c5%}%?%{$c0%})"
+    dir_status="%{$c1%}%n%{$c4%}@%{$c2%}%m%{$c0%}:%{$c3%}%l%{$c6%}->%{$(zsh_path)%} %{$c0%}(%{$c5%}%?%{$c0%})"
     PROMPT='${vcs_info_msg_0_}%{$bg_bold[red]%}%{$fg_bold[blue]%}D%{$fg_bold[black]%}IRTY%{$reset_color%}
 %{$fg_bold[green]%}%p%{$reset_color%}${dir_status}%{$reset_color%}
 %{$c13%}>%{$c0%} '
   else
-    dir_status="%{$c1%}%n%{$c4%}@%{$c2%}%m%{$c0%}:%{$c3%}%l%{$c6%}->%{$(echo $zsh_path_pl | perl)%} %{$c0%}(%{$c5%}%?%{$c0%})"
+    dir_status="%{$c1%}%n%{$c4%}@%{$c2%}%m%{$c0%}:%{$c3%}%l%{$c6%}->%{$(zsh_path)%} %{$c0%}(%{$c5%}%?%{$c0%})"
     PROMPT='${vcs_info_msg_0_}
 %{$fg_bold[green]%}%p%{$reset_color%}${dir_status}%{$reset_color%}
 > '
