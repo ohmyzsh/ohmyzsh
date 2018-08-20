@@ -9,11 +9,6 @@ if [ -f ~/.zsh-update ] && [ ! -f ${ZSH_CACHE_DIR}/.zsh-update ]; then
     mv ~/.zsh-update ${ZSH_CACHE_DIR}/.zsh-update
 fi
 
-# Load the micro profiling framework
-source "$ZSH/lib/profiler.zsh"
-# Start profiling
-start_profiling 0 "TOTAL"
-
 # Check for updates on initial load...
 if [ "$DISABLE_AUTO_UPDATE" != "true" ]; then
   env ZSH=$ZSH ZSH_CACHE_DIR=$ZSH_CACHE_DIR DISABLE_UPDATE_PROMPT=$DISABLE_UPDATE_PROMPT zsh -f $ZSH/tools/check_for_upgrade.sh
@@ -42,6 +37,8 @@ for config_file ($ZSH/lib/*.zsh); do
   source $config_file
 done
 
+# Start profiling
+start_profiling 0 "TOTAL"
 
 is_plugin() {
   local base_dir=$1
