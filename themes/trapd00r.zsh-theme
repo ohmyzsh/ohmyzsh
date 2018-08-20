@@ -59,16 +59,15 @@ zsh_path() {
         else
           print -Pn "\e[31;1m /"
         fi
-        (( i++ ))
-        continue
+      else
+        if [[ $colors -ge 256 ]]; then
+          print -Pn "${yellow[$i]:-%f} » "
+        else
+          print -Pn "%F{yellow} > "
+        fi
       fi
 
-      if [[ $colors -ge 256 ]]; then
-        print -Pn "${yellow[$i]:-%f} » "
-      else
-        print -Pn "%F{yellow} > "
-      fi
-      (( i += 6 ))
+      (( i++ ))
     else
       if [[ $colors -ge 256 ]]; then
         print -Pn "%F{065}$c"
