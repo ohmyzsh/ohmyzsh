@@ -1,8 +1,9 @@
 # trapd00r.zsh-theme
 #
-# This theme needs a terminal supporting 256 colors as well as unicode. It also
-# needs the script that splits up the current path and makes it fancy as located
-# here: https://github.com/trapd00r/utils/blob/master/zsh_path
+# This theme needs a terminal supporting 256 colors as well as unicode.
+# In order to avoid external dependencies, it also embeds a (possibly old)
+# copy of the perl script located at https://github.com/trapd00r/utils/blob/master/zsh_path,
+# which splits up the current path and makes it fancy.
 #
 # By default it spans over two lines like so:
 #
@@ -35,6 +36,54 @@ local c11=$(printf "\e[38;5;208m\e[1m")
 local c12=$(printf "\e[38;5;142m\e[1m")
 local c13=$(printf "\e[38;5;196m\e[1m")
 
+local zsh_path_pl=' 
+
+use strict;
+use Term::ExtendedColor "fg";
+
+chomp(my $pwd = `pwd`);
+
+my @chars = split//, $pwd;
+
+my $i = 1;
+
+for(@chars) {
+  if($_ eq "/") {
+    if(defined($ENV{DISPLAY})) {
+      if($i == 1) {
+        print fg("green28", fg("bold", " /"));
+        $i++;
+        next;
+      }
+    }
+    else {
+      if($i == 1) {
+        print "\e[31;1m /\e[0m";
+        $i++;
+        next;
+      }
+    }
+
+    if(defined($ENV{DISPLAY})) {
+      print fg("yellow$i", " » ");
+      $i += 6
+    }
+    else {
+      print "\e[33m > \e[0m";
+      $i += 6;
+    }
+  }
+  else {
+    if(defined($ENV{DISPLAY})) {
+      print fg("green28", $_);
+    }
+    else {
+      print "\e[34m$_\e[0m";
+    }
+  }
+}
+
+'
 
 # We don't want to use the extended colorset in the TTY / VC.
 if [ "$TERM" = "linux" ]; then
@@ -67,28 +116,29 @@ add-zsh-hook precmd prompt_jnrowe_precmd
 prompt_jnrowe_precmd () {
   vcs_info
   if [ "${vcs_info_msg_0_}" = "" ]; then
-    dir_status="%{$c1%}%n%{$c4%}@%{$c2%}%m%{$c0%}:%{$c3%}%l%{$c6%}->%{$(zsh_path)%} %{$c0%}(%{$c5%}%?%{$c0%})"
+    dir_status="%{$c1%}%n%{$c4%}@%{$c2%}%m%{$c0%}:%{$c3%}%l%{$c6%}->%{$(echo $zsh_path_pl | perl)%} %{$c0%}(%{$c5%}%?%{$c0%})"
     PROMPT='%{$fg_bold[green]%}%p%{$reset_color%}${vcs_info_msg_0_}${dir_status} ${ret_status}%{$reset_color%}
 > '
 
 # modified, to be committed
   elif [[ $(git diff --cached --name-status 2>/dev/null ) != "" ]]; then
-    dir_status="%{$c1%}%n%{$c4%}@%{$c2%}%m%{$c0%}:%{$c3%}%l%{$c6%}->%{$(zsh_path)%} %{$c0%}(%{$c5%}%?%{$c0%})"
+    dir_status="%{$c1%}%n%{$c4%}@%{$c2%}%m%{$c0%}:%{$c3%}%l%{$c6%}->%{$(echo $zsh_path_pl | perl)%} %{$c0%}(%{$c5%}%?%{$c0%})"
     PROMPT='${vcs_info_msg_0_}%{$30%} %{$bg_bold[red]%}%{$fg_bold[cyan]%}C%{$fg_bold[black]%}OMMIT%{$reset_color%}
 %{$fg_bold[green]%}%p%{$reset_color%}${dir_status}%{$reset_color%}
 > '
 
   elif [[ $(git diff --name-status 2>/dev/null ) != "" ]]; then
-    dir_status="%{$c1%}%n%{$c4%}@%{$c2%}%m%{$c0%}:%{$c3%}%l%{$c6%}->%{$(zsh_path)%} %{$c0%}(%{$c5%}%?%{$c0%})"
+    dir_status="%{$c1%}%n%{$c4%}@%{$c2%}%m%{$c0%}:%{$c3%}%l%{$c6%}->%{$(echo $zsh_path_pl | perl)%} %{$c0%}(%{$c5%}%?%{$c0%})"
     PROMPT='${vcs_info_msg_0_}%{$bg_bold[red]%}%{$fg_bold[blue]%}D%{$fg_bold[black]%}IRTY%{$reset_color%}
 %{$fg_bold[green]%}%p%{$reset_color%}${dir_status}%{$reset_color%}
 %{$c13%}>%{$c0%} '
   else
-    dir_status="%{$c1%}%n%{$c4%}@%{$c2%}%m%{$c0%}:%{$c3%}%l%{$c6%}->%{$(zsh_path)%} %{$c0%}(%{$c5%}%?%{$c0%})"
+    dir_status="%{$c1%}%n%{$c4%}@%{$c2%}%m%{$c0%}:%{$c3%}%l%{$c6%}->%{$(echo $zsh_path_pl | perl)%} %{$c0%}(%{$c5%}%?%{$c0%})"
     PROMPT='${vcs_info_msg_0_}
 %{$fg_bold[green]%}%p%{$reset_color%}${dir_status}%{$reset_color%}
 > '
 fi
 }
+
 
 #  vim: set ft=zsh sw=2 et tw=0:
