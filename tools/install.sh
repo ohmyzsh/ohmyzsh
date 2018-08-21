@@ -99,15 +99,19 @@ main() {
       CHSH_ZSH="$ENV_ZSH"
     else
       # No? Then let's get the last zsh entry from the list of supported login shells.
-      # -- We know at least one is in there because of an earlier check in this script.
       GREP_ZSH="$(grep /zsh$ /etc/shells | tail -1)"
       # Will it blend?
-      if [ -n "$("$GREP_ZSH" -c 'print $ZSH_VERSION')" ]; then
+      if [ ! -n "$GREP_ZSH" ] && [ -n "$("$GREP_ZSH" -c 'print $ZSH_VERSION')" ]; then
         # Yep, let's use that zsh entry.
         CHSH_ZSH="$GREP_ZSH"
       else
-        # Nope, it's a bogus path.
-        printf "${RED}I can't change your shell automatically because there is a bad zsh entry in /etc/shells.${NORMAL}\n"
+        if [ ! -n "$GREP_ZSH" ]; then
+          # Nope, it's a blank path.
+          printf "${RED}I can't change your shell automatically because there is no zsh entry in /etc/shells.${NORMAL}\n"
+        else
+          # Nope, it's a bogus path.
+          printf "${RED}I can't change your shell automatically because there is a bad zsh entry in /etc/shells.${NORMAL}\n"
+        fi
         if [ -n "$ENV_ZSH" ]; then
           # If the environment zsh is real, suggest they add that to the list of supported login shells.
           printf "${BLUE}Consider adding $ENV_ZSH to /etc/shells and then manually change your default shell.${NORMAL}\n"
