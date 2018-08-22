@@ -42,13 +42,24 @@ if mkdir "$ZSH/log/update.lock" 2>/dev/null; then
       if [ "$DISABLE_UPDATE_PROMPT" = "true" ]; then
         _upgrade_zsh
       else
-        echo "[Oh My Zsh] Would you like to update? [Y/n]: \c"
-        read line
-        if [[ "$line" == Y* ]] || [[ "$line" == y* ]] || [ -z "$line" ]; then
-          _upgrade_zsh
-        else
-          _update_zsh_update
-        fi
+        while true; do
+          echo "[Oh My Zsh] Would you like to update? [Y/n/g/?]: \c"
+          read line
+          if [[ "$line" == Y* ]] || [[ "$line" == y* ]] || [ -z "$line" ]; then
+            _upgrade_zsh
+          elif [[ "$line" == G* ]] || [[ "$line" == g* ]]; then
+            (cd $ZSH; git log -p)
+            continue
+          elif [[ "$line" == "?" ]]; then
+            echo -e "Yy - yes
+Nn - no
+Gg - show git log with patches"
+            continue
+          else
+            _update_zsh_update
+          fi
+          break
+        done
       fi
     fi
   else
