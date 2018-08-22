@@ -36,7 +36,7 @@ new_gh() { # [DIRECTORY]
   print '.*'"\n"'*~' >> .gitignore
   git add [^.]* \
     || return
-  git add .gitignore \
+  git add -f .gitignore \
     || return
   git commit -m 'Initial commit.' \
     || return
