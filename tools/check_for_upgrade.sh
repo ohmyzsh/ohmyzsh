@@ -48,7 +48,6 @@ if mkdir "$ZSH/log/update.lock" 2>/dev/null; then
           if [[ "$line" == Y* ]] || [[ "$line" == y* ]] || [ -z "$line" ]; then
             _upgrade_zsh
           elif [[ "$line" == G* ]] || [[ "$line" == g* ]]; then
-           # (cd $ZSH; git log -p)
             cd $ZSH
             git fetch
             git log -p
