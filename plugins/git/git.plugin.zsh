@@ -252,3 +252,25 @@ alias glum='git pull upstream master'
 
 alias gwch='git whatchanged -p --abbrev-commit --pretty=medium'
 alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify -m "--wip-- [skip ci]"'
+
+gac() {
+  if [ $# -ge 2 ]; then
+    git add "${@: 1:-1}" && git commit -m "${@: -1}"
+  elif [ $# -eq 1 ]; then
+    git add -A && git commit -m "$1"
+  else
+    git add -A && git commit
+  fi
+}
+
+
+gacp() {
+  if [ $# -ge 2 ]; then
+    git add "${@: 1:-1}" && git commit -m "${@: -1}"
+  elif [ $# -eq 1 ]; then
+    git add -A && git commit -m "$1"
+  else
+    git add -A && git commit
+  fi
+  git push
+}
