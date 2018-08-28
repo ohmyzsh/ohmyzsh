@@ -49,6 +49,12 @@ alias kens='k edit namespace'
 alias kdns='k describe namespace'
 alias kdelns='k delete namespace'
 
+# ConfigMap management
+alias kgcm='k get configmaps'
+alias kecm='k edit configmap'
+alias kdcm='k describe configmap'
+alias kdelcm='k delete configmap'
+
 # Secret management
 alias kgsec='k get secret'
 alias kdsec='k describe secret'
