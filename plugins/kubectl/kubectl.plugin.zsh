@@ -66,7 +66,7 @@ alias kl='kubectl logs'
 alias klf='kubectl logs -f'
 
 # Node Management
-alias kgn='kubectl get nodes'
-alias ken='kubectl edit node'
-alias kdn='kubectl describe node'
-alias kdeln='kubectl delete node'
+alias kgno='kubectl get nodes'
+alias keno='kubectl edit node'
+alias kdno='kubectl describe node'
+alias kdelno='kubectl delete node'
