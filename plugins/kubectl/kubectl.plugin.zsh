@@ -43,6 +43,12 @@ alias kei='k edit ingress'
 alias kdi='k describe ingress'
 alias kdeli='k delete ingress'
 
+# Namespace management
+alias kgns='k get namespaces'
+alias kens='k edit namespace'
+alias kdns='k describe namespace'
+alias kdelns='k delete namespace'
+
 # Secret management
 alias kgsec='k get secret'
 alias kdsec='k describe secret'
