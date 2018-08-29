@@ -67,3 +67,9 @@ alias klf='kubectl logs -f'
 
 # File copy
 alias kcp='kubectl cp'
+
+# Node Management
+alias kgno='kubectl get nodes'
+alias keno='kubectl edit node'
+alias kdno='kubectl describe node'
+alias kdelno='kubectl delete node'
