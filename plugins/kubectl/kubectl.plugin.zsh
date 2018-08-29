@@ -65,6 +65,9 @@ alias kru='kubectl rollout undo'
 alias kl='kubectl logs'
 alias klf='kubectl logs -f'
 
+# File copy
+alias kcp='kubectl cp'
+
 # Node Management
 alias kgno='kubectl get nodes'
 alias keno='kubectl edit node'
