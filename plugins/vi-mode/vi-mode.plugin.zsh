@@ -9,14 +9,16 @@ function zle-keymap-select() {
   zle -R
 }
 
+# Ensures that MODE_INDICATOR is displayed on terminal start up.
 # Changes the cursor at a new line.
 function zle-line-init() {
+  zle reset-prompt
   echo -ne '\e[5 q'
 }
 
 # Ensure that the prompt is redrawn when the terminal size changes.
 TRAPWINCH() {
-  zle &&  zle -R
+  zle && { zle -R; zle reset-prompt }
 }
 
 zle -N zle-keymap-select

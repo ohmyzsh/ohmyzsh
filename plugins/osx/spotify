@@ -408,7 +408,7 @@ while [ $# -gt 0 ]; do
             uri=`osascript -e 'tell application "Spotify" to spotify url of current track'`;
             remove='spotify:track:'
             url=${uri#$remove}
-            url="http://open.spotify.com/track/$url"
+            url="https://open.spotify.com/track/$url"
 
             if [ "$2" = "" ]; then
                 cecho "Spotify URL: $url"
