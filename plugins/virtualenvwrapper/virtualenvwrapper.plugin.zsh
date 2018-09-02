@@ -1,7 +1,27 @@
 virtualenvwrapper='virtualenvwrapper.sh'
 virtualenvwrapper_lazy='virtualenvwrapper_lazy.sh'
+pyenv_virtualenvwrapper_lazy='pyenv-virtualenvwrapper_lazy'
+pyenv_virtualenvwrapper='pyenv-virtualenvwrapper'
 
-if (( $+commands[$virtualenvwrapper_lazy] )); then
+if (( ${+PYENV_SHELL} )); then
+  if (( $+commands[$pyenv_virtualenvwrapper_lazy] )); then
+    function {
+      setopt local_options
+      unsetopt equals
+      pyenv virtualenvwrapper_lazy
+    }
+  elif (( $+commands[$pyenv_virtualenvwrapper] )); then
+    function {
+      setopt local_options
+      unsetopt equals
+      pyenv virtualenvwrapper
+    }
+  else
+    print "[oh-my-zsh] You need pyenv-virtualenvwrapper to use virtualenvwrapper with pyenv.\n"\
+          "Please see: https://github.com/pyenv/pyenv-virtualenvwrapper" >&2
+    return
+  fi
+elif (( $+commands[$virtualenvwrapper_lazy] )); then
   function {
     setopt local_options
     unsetopt equals
