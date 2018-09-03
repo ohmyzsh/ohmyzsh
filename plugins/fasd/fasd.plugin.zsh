@@ -8,4 +8,5 @@ if [ $commands[fasd] ]; then # check if fasd is installed
 
   alias v="f -e \"$EDITOR\""
   alias o='a -e open_command'
+  alias j='zz'
 fi
