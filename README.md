@@ -3,6 +3,7 @@
 </p>
 
 Oh My Zsh is an open source, community-driven framework for managing your [zsh](https://www.zsh.org/) configuration.
+But I have forked it out to customise for myself.
 
 Sounds boring. Let's try again.
 
@@ -21,7 +22,7 @@ To learn more, visit [ohmyz.sh](https://ohmyz.sh) and follow [@ohmyzsh](https://
 __Disclaimer:__ _Oh My Zsh works best on macOS and Linux._
 
 * Unix-like operating system (macOS or Linux)
-* [Zsh](https://www.zsh.org) should be installed (v4.3.9 or more recent). If not pre-installed (`zsh --version` to confirm), check the following instruction here: [Installing ZSH](https://github.com/robbyrussell/oh-my-zsh/wiki/Installing-ZSH)
+* [Zsh](https://www.zsh.org) should be installed (v4.3.9 or more recent). If not pre-installed (`zsh --version` to confirm), check the following instruction here: [Installing ZSH](https://github.com/swwl1992/oh-my-zsh/wiki/Installing-ZSH)
 * `curl` or `wget` should be installed
 * `git` should be installed
 
@@ -32,20 +33,20 @@ Oh My Zsh is installed by running one of the following commands in your terminal
 #### via curl
 
 ```shell
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/swwl1992/oh-my-zsh/master/tools/install.sh)"
 ```
 
 #### via wget
 
 ```shell
-sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+sh -c "$(wget https://raw.githubusercontent.com/swwl1992/oh-my-zsh/master/tools/install.sh -O -)"
 ```
 
 ## Using Oh My Zsh
 
 ### Plugins
 
-Oh My Zsh comes with a shitload of plugins to take advantage of. You can take a look in the [plugins](https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins) directory and/or the [wiki](https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins) to see what's currently available.
+Oh My Zsh comes with a shitload of plugins to take advantage of. You can take a look in the [plugins](https://github.com/swwl1992/oh-my-zsh/tree/master/plugins) directory and/or the [wiki](https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins) to see what's currently available.
 
 #### Enabling Plugins
 
@@ -75,7 +76,7 @@ Most plugins (should! we're working on this) include a __README__, which documen
 
 ### Themes
 
-We'll admit it. Early in the Oh My Zsh world, we may have gotten a bit too theme happy. We have over one hundred themes now bundled. Most of them have [screenshots](https://wiki.github.com/robbyrussell/oh-my-zsh/themes) on the wiki. Check them out!
+We'll admit it. Early in the Oh My Zsh world, we may have gotten a bit too theme happy. We have over one hundred themes now bundled. Most of them have [screenshots](https://wiki.github.com/swwl1992/oh-my-zsh/themes) on the wiki. Check them out!
 
 #### Selecting a Theme
 
@@ -84,14 +85,14 @@ _Robby's theme is the default one. It's not the fanciest one. It's not the simpl
 Once you find a theme that you'd like to use, you will need to edit the `~/.zshrc` file. You'll see an environment variable (all caps) in there that looks like:
 
 ```shell
-ZSH_THEME="robbyrussell"
+ZSH_THEME="swwl1992"
 ```
 
 To use a different theme, simply change the value to match the name of your desired theme. For example:
 
 ```shell
 ZSH_THEME="agnoster" # (this is one of the fancy ones)
-# see https://github.com/robbyrussell/oh-my-zsh/wiki/Themes#agnoster
+# see https://github.com/swwl1992/oh-my-zsh/wiki/Themes#agnoster
 ```
 
 _Note: many themes require installing the [Powerline Fonts](https://github.com/powerline/fonts) in order to render properly._
@@ -100,7 +101,7 @@ Open up a new terminal window and your prompt should look something like this:
 
 ![Agnoster theme](https://cloud.githubusercontent.com/assets/2618447/6316862/70f58fb6-ba03-11e4-82c9-c083bf9a6574.png)
 
-In case you did not find a suitable theme for your needs, please have a look at the wiki for [more of them](https://github.com/robbyrussell/oh-my-zsh/wiki/External-themes).
+In case you did not find a suitable theme for your needs, please have a look at the wiki for [more of them](https://github.com/swwl1992/oh-my-zsh/wiki/External-themes).
 
 If you're feeling feisty, you can let the computer select one randomly for you each time you open a new terminal window.
 
@@ -113,7 +114,7 @@ And if you want to pick random theme from a list of your favorite themes:
 
 ```shell
 ZSH_THEME_RANDOM_CANDIDATES=(
-  "robbyrussell"
+  "swwl1992"
   "agnoster"
 )
 ```
@@ -133,7 +134,7 @@ The default location is `~/.oh-my-zsh` (hidden in your home directory)
 If you'd like to change the install directory with the `ZSH` environment variable, either by running `export ZSH=/your/path` before installing, or by setting it before the end of the install pipeline like this:
 
 ```shell
-export ZSH="$HOME/.dotfiles/oh-my-zsh"; sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+export ZSH="$HOME/.dotfiles/oh-my-zsh"; sh -c "$(curl -fsSL https://raw.githubusercontent.com/swwl1992/oh-my-zsh/master/tools/install.sh)"
 ```
 
 #### Manual Installation
@@ -141,7 +142,7 @@ export ZSH="$HOME/.dotfiles/oh-my-zsh"; sh -c "$(curl -fsSL https://raw.githubus
 ##### 1. Clone the repository:
 
 ```shell
-git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
+git clone https://github.com/swwl1992/oh-my-zsh.git ~/.oh-my-zsh
 ```
 
 ##### 2. *Optionally*, backup your existing `~/.zshrc` file:
@@ -217,11 +218,11 @@ If you want to uninstall `oh-my-zsh`, just run `uninstall_oh_my_zsh` from the co
 
 I'm far from being a [Zsh](https://www.zsh.org/) expert and suspect there are many ways to improve – if you have ideas on how to make the configuration easier to maintain (and faster), don't hesitate to fork and send pull requests!
 
-We also need people to test out pull-requests. So take a look through [the open issues](https://github.com/robbyrussell/oh-my-zsh/issues) and help where you can.
+We also need people to test out pull-requests. So take a look through [the open issues](https://github.com/swwl1992/oh-my-zsh/issues) and help where you can.
 
 ### Do NOT send us themes
 
-We have (more than) enough themes for the time being. Please add your theme to the [external themes](https://github.com/robbyrussell/oh-my-zsh/wiki/External-themes) wiki page.
+We have (more than) enough themes for the time being. Please add your theme to the [external themes](https://github.com/swwl1992/oh-my-zsh/wiki/External-themes) wiki page.
 
 ## Contributors
 
