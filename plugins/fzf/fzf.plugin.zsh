@@ -33,7 +33,7 @@ if [[ -n "${fzf_base}" ]]; then
 
   # Setup fzf
   # ---------
-  if [[ ! "$PATH" == *$fzf_base/bin* ]]; then
+  if ! (( ${+commands[fzf]} )) && [[ ! "$PATH" == *$fzf_base/bin* ]]; then
     export PATH="$PATH:$fzf_base/bin"
   fi
   
