@@ -11,7 +11,7 @@ _dash() {
     # Use defaults to get the array of docsets from preferences
     # Have to smash it into one big line so that each docset is an element of
     # our DOCSETS array
-    DOCSETS=("${(@f)$(defaults read com.kapeli.dash docsets | tr -d '\n' | grep -oE '\{.*?\}')}")
+    DOCSETS=("${(@f)$(defaults read com.kapeli.dashdoc docsets | tr -d '\n' | grep -oE '\{.*?\}')}")
 
     # remove all newlines since defaults prints so pretty like
     # Now get each docset and output each on their own line
@@ -35,36 +35,30 @@ _dash() {
           if [[ "$locator" == "platform" ]]; then
             # Since these are the only special cases right now, let's not do the
             # expensive processing unless we have to
-            if [[ "$keyword" == "python" ||  "$keyword" == "java" || \
-                  "$keyword" == "qt" || "$keyword" == "cocs2d" ]]; then
+            if [[ "$keyword" = (python|java|qt|cocos2d) ]]; then
               docsetName=`echo $doc | grep -Eo "docsetName = .*?;" | sed -e "s/docsetName = \(.*\);/\1/" -e "s/[\":]//g"`
-              if [[ "$keyword" == "python" ]]; then
-                if [[ "$docsetName" == "Python 2" ]]; then
-                  keyword="python2"
-                elif [[ "$docsetName" == "Python 3" ]]; then
-                  keyword="python3"
-                fi
-              elif [[ "$keyword" == "java" ]]; then
-                if [[ "$docsetName" == "Java SE7" ]]; then
-                  keyword="java7"
-                elif [[ "$docsetName" == "Java SE6" ]]; then
-                  keyword="java6"
-                elif [[ "$docsetName" == "Java SE8" ]]; then
-                  keyword="java8"
-                fi
-              elif [[ "$keyword" == "qt" ]]; then
-                if [[ "$docsetName" == "Qt 5" ]]; then
-                  keyword="qt5"
-                elif [[ "$docsetName" == "Qt 4" ]]; then
-                  keyword="qt4"
-                elif [[ "$docsetName" == "Qt" ]]; then
-                  keyword="qt4"
-                fi
-              elif [[ "$keyword" == "cocos2d" ]]; then
-                if [[ "$docsetName" == "Cocos3D" ]]; then
-                  keyword="cocos3d"
-                fi
-              fi
+              case "$keyword" in
+                python)
+                  case "$docsetName" in
+                    "Python 2") keyword="python2" ;;
+                    "Python 3") keyword="python3" ;;
+                  esac ;;
+                java)
+                  case "$docsetName" in
+                    "Java SE7") keyword="java7" ;;
+                    "Java SE6") keyword="java6" ;;
+                    "Java SE8") keyword="java8" ;;
+                  esac ;;
+                qt)
+                  case "$docsetName" in
+                    "Qt 5") keyword="qt5" ;;
+                    "Qt 4"|Qt) keyword="qt4" ;;
+                  esac ;;
+                cocos2d)
+                  case "$docsetName" in
+                    Cocos3D) keyword="cocos3d" ;;
+                  esac ;;
+              esac
             fi
           fi
 

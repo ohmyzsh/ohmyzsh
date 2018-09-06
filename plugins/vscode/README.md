@@ -8,6 +8,21 @@ To start using it, add the `vscode` plugin to your `plugins` array in `~/.zshrc`
 plugins=(... vscode)
 ```
 
+If you are using [Visual Studio Code Insiders](https://code.visualstudio.com/insiders/),
+add the following line in the oh-my-zsh settings section (between the `ZSH_THEME` and
+the `plugins=()` line). This will make the plugin use the Insiders version instead.
+
+```zsh
+ZSH_THEME=...
+
+# Add this line to use code-insiders instead of code
+VSCODE=code-insiders
+
+plugins=(... vscode)
+
+source $ZSH/oh-my-zsh.sh
+```
+
 ## Common aliases
 
 | Alias                   | Command                        | Description                                                                                                 |
@@ -25,7 +40,7 @@ plugins=(... vscode)
 
 | Alias                   | Command                                                          | Description                       |
 | ----------------------- | ---------------------------------------------------------------- | --------------------------------- |
-| vsce `dir`              | code --extensions-dir `dir`                                      | Set the root path for extensions. |
+| vsced `dir`             | code --extensions-dir `dir`                                      | Set the root path for extensions. |
 | vscie `id or vsix-path` | code --install-extension `extension-id> or <extension-vsix-path` | Installs an extension.            |
 | vscue `id or vsix-path` | code --uninstall-extension `id or vsix-path`                     | Uninstalls an extension.          |
 
@@ -35,4 +50,4 @@ plugins=(... vscode)
 | ------------ | ------------------------- | --------------------------------------------------------------------------------------------------------------------- |
 | vscv         | code --verbose            | Print verbose output (implies --wait).                                                                                |
 | vscl `level` | code --log `level`        | Log level to use. Default is 'info'. Allowed values are 'critical', 'error', 'warn', 'info', 'debug', 'trace', 'off'. |
-| vsced        | code --disable-extensions | Disable all installed extensions.                                                                                     |
+| vscde        | code --disable-extensions | Disable all installed extensions.                                                                                     |

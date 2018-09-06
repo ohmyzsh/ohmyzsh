@@ -21,7 +21,7 @@ function open_command() {
   case "$OSTYPE" in
     darwin*)  open_cmd='open' ;;
     cygwin*)  open_cmd='cygstart' ;;
-    linux*)   ! [[ $(uname -a) =~ "Microsoft" ]] && open_cmd='xdg-open' || {
+    linux*)   [[ "$(uname -r)" != *icrosoft* ]] && open_cmd='nohup xdg-open' || {
                 open_cmd='cmd.exe /c start ""'
                 [[ -e "$1" ]] && { 1="$(wslpath -w "${1:a}")" || return 1 }
               } ;;
@@ -31,12 +31,7 @@ function open_command() {
               ;;
   esac
 
-  # don't use nohup on OSX
-  if [[ "$OSTYPE" == darwin* ]]; then
-    ${=open_cmd} "$@" &>/dev/null
-  else
-    nohup ${=open_cmd} "$@" &>/dev/null
-  fi
+  ${=open_cmd} "$@" &>/dev/null
 }
 
 #
@@ -79,7 +74,7 @@ function try_alias_value() {
 #    0 if the variable exists, 3 if it was set
 #
 function default() {
-    test `typeset +m "$1"` && return 0
+    (( $+parameters[$1] )) && return 0
     typeset -g "$1"="$2"   && return 3
 }
 
@@ -93,8 +88,8 @@ function default() {
 #    0 if the env variable exists, 3 if it was set
 #
 function env_default() {
-    env | grep -q "^$1=" && return 0
-    export "$1=$2"       && return 3
+    (( ${${(@f):-$(typeset +xg)}[(I)$1]} )) && return 0
+    export "$1=$2" && return 3
 }
 
 
