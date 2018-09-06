@@ -24,6 +24,13 @@ fi
 
 if [[ -n "${fzf_base}" ]]; then
 
+  # Fix fzf shell directory for Archlinux package
+  if [[ ! -d "${fzf_base}/shell" ]] && [[ "$(uname -n)" == 'archlinux' ]]; then
+    fzf_shell="${fzf_base}"
+  else
+    fzf_shell="${fzf_base}/shell"
+  fi
+
   # Setup fzf
   # ---------
   if [[ ! "$PATH" == *$fzf_base/bin* ]]; then
@@ -33,13 +40,13 @@ if [[ -n "${fzf_base}" ]]; then
   # Auto-completion
   # ---------------
   if [[ ! "$DISABLE_FZF_AUTO_COMPLETION" == "true" ]]; then
-    [[ $- == *i* ]] && source "$fzf_base/shell/completion.zsh" 2> /dev/null
+    [[ $- == *i* ]] && source "${fzf_shell}/completion.zsh" 2> /dev/null
   fi
   
   # Key bindings
   # ------------
   if [[ ! "$DISABLE_FZF_KEY_BINDINGS" == "true" ]]; then
-    source "$fzf_base/shell/key-bindings.zsh"
+    source "${fzf_shell}/key-bindings.zsh"
   fi
 
 else
