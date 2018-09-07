@@ -25,7 +25,7 @@ fi
 if [[ -n "${fzf_base}" ]]; then
 
   # Fix fzf shell directory for Archlinux package
-  if [[ ! -d "${fzf_base}/shell" ]] && [[ "$(uname -n)" == 'archlinux' ]]; then
+  if [[ ! -d "${fzf_base}/shell" ]] && [[ -f /etc/arch-release ]]; then
     fzf_shell="${fzf_base}"
   else
     fzf_shell="${fzf_base}/shell"
