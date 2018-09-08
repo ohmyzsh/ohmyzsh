@@ -54,4 +54,4 @@ else
         "Please add \`export FZF_BASE=/path/to/fzf/install/dir\` to your .zshrc" >&2
 fi
 
-unset fzf_base
+unset fzf_base fzf_shell dir fzfdirs
