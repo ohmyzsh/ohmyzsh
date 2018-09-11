@@ -15,6 +15,10 @@ if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
   zle -N zle-line-finish
 fi
 
+#make ctrl+p and ctrl+n the same behaviours as arrow keys
+bindkey "^P" up-line-or-search
+bindkey "^N" down-line-or-search
+
 # Use emacs key bindings
 bindkey -e
 
