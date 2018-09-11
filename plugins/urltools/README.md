@@ -1,8 +1,6 @@
 # URLTools plugin
 
-## Description
-
-This plugin provides two aliases to URL encode and URL decode strings.
+This plugin provides two aliases to URL-encode and URL-decode strings.
 
 To start using it, add the `urltools` plugin to your plugins array in `~/.zshrc`:
 
@@ -15,10 +13,10 @@ Original idea and aliases: [Ruslan Spivak](https://ruslanspivak.wordpress.com/20
 
 ## Commands
 
-| Command         | Description                                         |
-| :-------------- | :-------------------------------------------------- |
-| `urlencode`     | URL encodes the given string                        |
-| `urldecode`     | URL decodes the given string                        |
+| Command     | Description                  |
+| :---------- | :--------------------------- |
+| `urlencode` | URL-encodes the given string |
+| `urldecode` | URL-decodes the given string |
 
 ## Examples
 
@@ -28,3 +26,4 @@ urlencode 'https://github.com/robbyrussell/oh-my-zsh/search?q=urltools&type=Code
 
 urldecode 'https%3A%2F%2Fgithub.com%2Frobbyrussell%2Foh-my-zsh%2Fsearch%3Fq%3Durltools%26type%3DCode'
 # returns https://github.com/robbyrussell/oh-my-zsh/search?q=urltools&type=Code
+```
