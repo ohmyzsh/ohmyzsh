@@ -1,4 +1,4 @@
-#Alias for Zypper according to the offical Zypper's alias
+#Alias for Zypper according to the official Zypper's alias
 
 #Main commands
 alias z='sudo zypper' #call zypper
@@ -51,7 +51,7 @@ alias zrr='sudo zypper rr' #remove repositories
 alias zas='sudo zypper as' #adds a service specified by URI to the system
 alias zms='sudo zypper ms' #modify properties of specified services
 alias zrefs='sudo zypper refs' #refreshing a service mean executing the service's special task
-alias zrs='sudo zypper rs' #remove specified repository index service from the sytem
+alias zrs='sudo zypper rs' #remove specified repository index service from the system
 alias zls='sudo zypper ls' #list services defined on the system
 
 #Package Locks Management commands

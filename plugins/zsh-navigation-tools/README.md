@@ -34,6 +34,60 @@ want to copy your previous data (from e.g. ~/.zhistory) into the new location.
 
 ## News
 
+* 06-10-2016
+  - Tmux-integration – Ctrl-b-h in Tmux to open n-history in new window.
+    Then select history entry, it will be copied to the original Tmux window.
+    Use this to execute local commands on remote hosts. All that is needed is
+    this line added to ~/.tmux.conf:
+
+    bind h run-shell -b "$ZNT_REPO_DIR/znt-tmux.zsh"
+
+* 16-05-2016
+  - n-kill has completion. It proposes *words* from what's in `ps -A`. Giving n-kill
+    arguments means grepping – it will start only with matching `ps` entries.
+
+* 15-05-2016
+  - Fixed problem where zsh-syntax-highlighting could render n-history slow (for
+    long history entries).
+
+* 14-05-2016
+  - Configuration can be set from zshrc. Example:
+
+    znt_list_instant_select=1
+    znt_list_border=0
+    znt_list_bold=1
+    znt_list_colorpair="green/black"
+    znt_functions_keywords=( "zplg" "zgen" "match" )
+    znt_cd_active_text="underline"
+    znt_env_nlist_coloring_color=$'\x1b[00;33m'
+    znt_cd_hotlist=( "~/.config/znt" "/usr/share/zsh/site-functions" "/usr/share/zsh"
+                     "/usr/local/share/zsh/site-functions" "/usr/local/share/zsh"
+                     "/usr/local/bin" )
+
+* 10-05-2016
+  - Search query rotation – use Ctrl-A to rotate entered words right.
+    Words `1 2 3` become `3 1 2`.
+
+* 09-05-2016
+  - New feature: n-help tool, available also from n-history via H key. It
+    displays help screen with various information on ZNT.
+
+* 08-05-2016
+  - Approximate matching – pressing f or Ctrl-F will enter FIX mode, in
+    which 1 or 2 errors are allowed in what is searched. This utilizes
+    original Zsh approximate matching features and is intended to be used
+    after entering search query, when a typo is discovered.
+
+* 06-05-2016
+  - Private history can be edited. Use e key or Ctrl-E for that when in
+    n-history. Your $EDITOR will start. This is a way to have handy set
+    of bookmarks prepared in private history's file.
+  - Border can be disabled. Use following snippet in ~/.config/znt/n-list.conf
+    or any other tool-targetted config file:
+
+    # Should draw the border?
+    local border=0
+
 * 30-04-2016
   - New feature: color themes. Use Ctrl-T and Ctrl-G to browse predefined
     themes. They are listed in ~/.config/znt/n-list.conf. Use the file to

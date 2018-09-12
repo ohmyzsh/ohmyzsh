@@ -64,7 +64,7 @@ if [[ "$OSTYPE" = darwin* ]] ; then
     [[ $(ioreg -rc "AppleSmartBattery"| grep '^.*"IsCharging"\ =\ ' | sed -e 's/^.*"IsCharging"\ =\ //') == "Yes" ]]
   }
 
-elif [[ $(uname) == "Linux"  ]] ; then
+elif [[ "$OSTYPE" = linux*  ]] ; then
 
   function battery_is_charging() {
     ! [[ $(acpi 2>/dev/null | grep -c '^Battery.*Discharging') -gt 0 ]]
@@ -100,7 +100,7 @@ elif [[ $(uname) == "Linux"  ]] ; then
       else
         color='red'
       fi
-      echo "%{$fg[$color]%}[$(battery_pct_remaining)%%]%{$reset_color%}"
+      echo "%{$fg[$color]%}$(battery_pct_remaining)%%%{$reset_color%}"
     else
       echo "∞"
     fi

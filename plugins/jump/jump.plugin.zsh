@@ -9,7 +9,7 @@
 export MARKPATH=$HOME/.marks
 
 jump() {
-	cd -P "$MARKPATH/$1" 2>/dev/null || echo "No such mark: $1"
+	cd -P "$MARKPATH/$1" 2>/dev/null || {echo "No such mark: $1"; return 1}
 }
 
 mark() {
@@ -32,7 +32,7 @@ marks() {
 		local markname="$fg[cyan]${link:t}$reset_color"
 		local markpath="$fg[blue]$(readlink $link)$reset_color"
 		printf "%s\t" $markname
-		printf "-> %s \t\n" $markpath
+		printf -- "-> %s \t\n" $markpath
 	done
 }
 

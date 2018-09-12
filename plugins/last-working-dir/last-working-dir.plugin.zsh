@@ -1,26 +1,25 @@
-#!/usr/bin/env zsh
-# Keeps track of the last used working directory and automatically jumps
-# into it for new shells.
-
-# Flag indicating if we've previously jumped to last directory.
+# Flag indicating if we've previously jumped to last directory
 typeset -g ZSH_LAST_WORKING_DIRECTORY
-mkdir -p $ZSH_CACHE_DIR
-cache_file="$ZSH_CACHE_DIR/last-working-dir"
 
-# Updates the last directory once directory is changed.
+# Updates the last directory once directory is changed
 chpwd_functions+=(chpwd_last_working_dir)
-function chpwd_last_working_dir() {
-  # Use >| in case noclobber is set to avoid "file exists" error
-	pwd >| "$cache_file"
+chpwd_last_working_dir() {
+	if [ "$ZSH_SUBSHELL" = 0 ]; then
+		local cache_file="$ZSH_CACHE_DIR/last-working-dir"
+		pwd >| "$cache_file"
+	fi
 }
 
-# Changes directory to the last working directory.
-function lwd() {
-	[[ ! -r "$cache_file" ]] || cd "`cat "$cache_file"`"
+# Changes directory to the last working directory
+lwd() {
+	local cache_file="$ZSH_CACHE_DIR/last-working-dir"
+	[[ -r "$cache_file" ]] && cd "$(cat "$cache_file")"
 }
 
-# Automatically jump to last working directory unless this isn't the first time
-# this plugin has been loaded.
-if [[ -z "$ZSH_LAST_WORKING_DIRECTORY" ]]; then
-	lwd 2>/dev/null && ZSH_LAST_WORKING_DIRECTORY=1 || true
-fi
+# Jump to last directory automatically unless:
+# - this isn't the first time the plugin is loaded
+# - it's not in $HOME directory
+[[ -n "$ZSH_LAST_WORKING_DIRECTORY" ]] && return
+[[ "$PWD" != "$HOME" ]] && return
+
+lwd 2>/dev/null && ZSH_LAST_WORKING_DIRECTORY=1 || true

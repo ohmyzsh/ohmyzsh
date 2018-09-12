@@ -1,0 +1,17 @@
+-------------------------------------
+CHANGES FROM PREVIOUS VERSIONS OF ZNT
+-------------------------------------
+
+Changes from 2.2.1 to 2.2.7
+---------------------------
+
+Tmux integration has been added – bind file znt-tmux.zsh in Tmux as
+described in README.md and e.g. run local history on remote hosts. Tmux
+opens new window with n-history, and pastes selected history entry into
+immediate previous window (e.g. a remote session). Fixed plugin.zsh file
+to not use (outer scope) positional parameters. This fixes problem with
+Grlm's Zsh configuration. The file now doesn't use "test" builtin (but
+[[ instead), because it can be shadowed by alias or command. Private
+history has been fixed to not overwrite its history file with the same
+content. This improves performance when switching to private history
+view.
