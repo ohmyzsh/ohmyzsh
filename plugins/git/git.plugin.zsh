@@ -206,6 +206,8 @@ alias gpu='git push upstream'
 alias gpv='git push -v'
 
 alias gr='git remote'
+alias grp='git remote prune'
+alias grpo='git remote prune origin'
 alias gra='git remote add'
 alias grb='git rebase'
 alias grba='git rebase --abort'
