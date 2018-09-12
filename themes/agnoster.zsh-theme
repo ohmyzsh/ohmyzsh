@@ -93,6 +93,21 @@ prompt_context() {
   fi
 }
 
+prompt_kubernetes() {
+
+  local cluster=$(kubectl config current-context)
+  local namespace=$(kubectl config get-contexts ${cluster} --no-headers | awk '{print $5}')
+  if [[ -z "$namespace" ]] || [[ "$namespace" == 'default' ]]; then 
+    prompt_segment magenta black "☁️ ${cluster}☁️ "
+  else
+    if [[ "$namespace" =~ [Pp][Rr][Oo][Dd].* ]]; then 
+      prompt_segment red black "☁️ ${cluster}|${namespace}☁️ "
+    else 
+      prompt_segment magenta black "☁️ ${cluster}|${namespace}☁️ "
+    fi
+  fi 
+}
+
 # Git: branch/detached head, dirty status
 prompt_git() {
   (( $+commands[git] )) || return
@@ -225,6 +240,7 @@ prompt_status() {
 build_prompt() {
   RETVAL=$?
   prompt_status
+  test -e ~/.kube/config && prompt_kubernetes 
   prompt_virtualenv
   prompt_context
   prompt_dir
