@@ -1,5 +1,7 @@
 function _rails_command () {
-  if [ -e "bin/rails" ]; then
+  if [ -e "bin/stubs/rails" ]; then
+    bin/stubs/rails $@
+  elif [ -e "bin/rails" ]; then
     bin/rails $@
   elif [ -e "script/rails" ]; then
     ruby script/rails $@
@@ -11,7 +13,9 @@ function _rails_command () {
 }
 
 function _rake_command () {
-  if [ -e "bin/rake" ]; then
+  if [ -e "bin/stubs/rake" ]; then
+    bin/stubs/rake $@
+  elif [ -e "bin/rake" ]; then
     bin/rake $@
   elif type bundle &> /dev/null && [ -e "Gemfile" ]; then
     bundle exec rake $@

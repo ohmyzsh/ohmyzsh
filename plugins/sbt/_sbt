@@ -17,6 +17,7 @@ _sbt_commands=(
   'package-src:produce a source artifact, such as a jar containing sources'
   'publish:publish artifacts to a repository'
   'publish-local:publish artifacts to the local repository'
+  'publish-m2:publish artifacts to the local Maven 2 repository'
   'run:run a main class'
   'run-main:run the main class selected by the first argument'
   'test:execute all tests'

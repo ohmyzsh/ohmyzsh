@@ -32,7 +32,7 @@ marks() {
 		local markname="$fg[cyan]${link:t}$reset_color"
 		local markpath="$fg[blue]$(readlink $link)$reset_color"
 		printf "%s\t" $markname
-		printf "-> %s \t\n" $markpath
+		printf -- "-> %s \t\n" $markpath
 	done
 }
 
