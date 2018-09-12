@@ -1,0 +1,74 @@
+#compdef git-remote
+
+# NOTE: --track is undocumented.
+# TODO: --track, -t, --master, and -m should take remote branches, I guess.
+# NOTE: --master is undocumented.
+# NOTE: --fetch is undocumented.
+_git-remote () {
+  local curcontext=$curcontext state line
+  declare -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options' && ret=0
+
+  case $state in
+    (command)
+      declare -a commands
+
+      commands=(
+        'add:add a new remote'
+        'show:show information about a given remote'
+        'prune:delete all stale tracking branches for a given remote'
+        'update:fetch updates for a set of remotes'
+        'rm:remove a remote from .git/config and all associated tracking branches'
+        'rename:rename a remote from .git/config and update all associated tracking branches'
+        'set-head:sets or deletes the default branch'
+        'set-branches:changes the list of branches tracked by the named remote.'
+        'set-url:changes URL remote points to.'
+        )
+
+      _describe -t commands 'sub-command' commands && ret=0
+      ;;
+    (options)
+      case $line[1] in
+        (add)
+          _arguments \
+            '*'{--track,-t}'[track given branch instead of default glob refspec]:branch:__git_branch_names' \
+            '(--master -m)'{--master,-m}'[set the remote'\''s HEAD to point to given master branch]:branch:__git_branch_names' \
+            '(--fetch -f)'{--fetch,-f}'[run git-fetch on the new remote after it has been created]' \
+            ':branch name:__git_remotes' \
+            ':url:_urls' && ret=0
+          ;;
+        (show)
+          _arguments \
+            '-n[do not contact the remote for a list of branches]' \
+            ':remote:__git_remotes' && ret=0
+          ;;
+        (prune)
+          _arguments \
+            '(--dry-run -n)'{-n,--dry-run}'[do not actually prune, only list what would be done]' \
+            ':remote:__git_remotes' && ret=0
+          ;;
+        (update)
+          __git_remote-groups && ret=0
+          ;;
+        (rm)
+          __git_remotes && ret=0
+          ;;
+        (rename)
+          __git_remotes && ret=0
+          ;;
+        (set-url)
+          _arguments \
+            '*--push[manipulate push URLs]' \
+            '(--add)--add[add URL]' \
+            '(--delete)--delete[delete URLs]' \
+            ':branch name:__git_remotes' \
+            ':url:_urls' && ret=0
+          ;;
+          
+      esac
+      ;;
+  esac
+}
