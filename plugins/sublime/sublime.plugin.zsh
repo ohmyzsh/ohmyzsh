@@ -1,5 +1,9 @@
+# Sublime Text Aliases
+
+() {
+
 if [[ "$OSTYPE" == linux* ]]; then
-    local _sublime_linux_paths > /dev/null 2>&1
+    local _sublime_linux_paths
     _sublime_linux_paths=(
         "$HOME/bin/sublime_text"
         "/opt/sublime_text/sublime_text"
@@ -19,9 +23,8 @@ if [[ "$OSTYPE" == linux* ]]; then
             break
         fi
     done
-
 elif  [[ "$OSTYPE" = darwin* ]]; then
-    local _sublime_darwin_paths > /dev/null 2>&1
+    local _sublime_darwin_paths
     _sublime_darwin_paths=(
         "/usr/local/bin/subl"
         "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"
@@ -38,10 +41,9 @@ elif  [[ "$OSTYPE" = darwin* ]]; then
             break
         fi
     done
-
 elif [[ "$OSTYPE" = 'cygwin' ]]; then
-    local _sublime_cygwin_paths > /dev/null 2>&1
-    _sublime_cygwin_paths=(
+    local sublime_cygwin_paths
+    sublime_cygwin_paths=(
         "$(cygpath $ProgramW6432/Sublime\ Text\ 2)/sublime_text.exe"
         "$(cygpath $ProgramW6432/Sublime\ Text\ 3)/sublime_text.exe"
     )
@@ -52,8 +54,9 @@ elif [[ "$OSTYPE" = 'cygwin' ]]; then
             break
         fi
     done
-
 fi
+
+}
 
 alias stt='st .'
 
@@ -84,4 +87,35 @@ find_project()
     st $FINAL_DEST
 }
 
+function create_project() {
+
+    local _target=$1
+
+    if [[ "${_target}" == "" ]]; then
+        _target=$(pwd);
+    elif [[ ! -d ${_target} ]]; then
+        echo "${_target} is not a valid directory"
+        return 1
+    fi
+
+    local _sublime_project_file=$_target/$(basename $_target).sublime-project
+
+    if [[ ! -f $_sublime_project_file ]]; then
+        
+        touch $_sublime_project_file
+
+        echo -e "{"                         >> $_sublime_project_file
+        echo -e "\t\"folders\":"            >> $_sublime_project_file
+        echo -e "\t\t[{"                    >> $_sublime_project_file
+        echo -e "\t\t\t\"path\": \".\","    >> $_sublime_project_file
+        echo -e "\t\t\t\"file_exclude_patterns\": []" >> $_sublime_project_file
+        echo -e "\t\t}]"                    >> $_sublime_project_file
+        echo -e "}"                         >> $_sublime_project_file
+
+        echo -e "New Sublime Text project created:\n\t${_sublime_project_file}"
+
+    fi
+}
+
 alias stp=find_project
+alias stn=create_project

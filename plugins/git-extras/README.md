@@ -1,6 +1,6 @@
 # git-extras
 
-This plugin provides completion definitions for some of the commands defined by [git-extras](http://github.com/tj/git-extras).
+This plugin provides completion definitions for some of the commands defined by [git-extras](https://github.com/tj/git-extras).
 
 ##  Setup notes
 

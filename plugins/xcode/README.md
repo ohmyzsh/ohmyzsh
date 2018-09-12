@@ -19,7 +19,7 @@ plugins=(... xcode)
 | xcdd  | Purge all temporary build information    | rm -rf ~/Library/Developer/Xcode/DerivedData/* |
 | xcp   | Show currently selected Xcode directory  | xcode-select --print-path                      |
 | xcsel | Select different Xcode directory by path | sudo xcode-select --switch                     |
-
+| xx    | Opens the files listed in Xcode          | open -a "Xcode.app"                            |
 
 
 ## Functions
@@ -28,6 +28,10 @@ plugins=(... xcode)
 
 Opens the current directory in Xcode as an Xcode project. This will open one of the `.xcworkspace` and `.xcodeproj` files that it can find in the current working directory. You can also specify a directory to look in for the Xcode files.
 Returns 1 if it didn't find any relevant files.
+
+###  `xx`
+
+Opens the files listed in Xcode, multiple files are opened in a multi-file browser.
 
 ###  `simulator`
 
