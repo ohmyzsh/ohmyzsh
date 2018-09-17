@@ -12,14 +12,21 @@ which nvm &> /dev/null && return
 
 if [[ -f "$NVM_DIR/nvm.sh" ]]; then
   # Load nvm if it exists in $NVM_DIR
-  source "$NVM_DIR/nvm.sh"
+  source "$NVM_DIR/nvm.sh" --no-use
 else
   # Otherwise try to load nvm installed via Homebrew
   # User can set this if they have an unusual Homebrew setup
   NVM_HOMEBREW="${NVM_HOMEBREW:-/usr/local/opt/nvm}"
   # Load nvm from Homebrew location if it exists
-  [[ -f "$NVM_HOMEBREW/nvm.sh" ]] && source "$NVM_HOMEBREW/nvm.sh"
+  [[ -f "$NVM_HOMEBREW/nvm.sh" ]] && source "$NVM_HOMEBREW/nvm.sh" --no-use
 fi
+
+# Call nvm when first using node, npm or yarn
+function node npm yarn {
+  unfunction node npm yarn
+  nvm use default
+  command "$0" "$@"
+}
 
 # Load nvm bash completion
 for nvm_completion in "$NVM_DIR/bash_completion" "$NVM_HOMEBREW/etc/bash_completion.d/nvm"; do
