@@ -13,7 +13,7 @@
 #  -O - enable OS detection
 #  -sA - TCP ACK scan
 #  -F - fast scan
-#  --script=vulscan - also access vulnerabilities in target
+#  --script=vuln - also access vulnerabilities in target
 
 alias nmap_open_ports="nmap --open"
 alias nmap_list_interfaces="nmap --iflist"
@@ -24,7 +24,7 @@ alias nmap_check_for_firewall="sudo nmap -sA -p1-65535 -v -T4"
 alias nmap_ping_through_firewall="nmap -PS -PA"
 alias nmap_fast="nmap -F -T5 --version-light --top-ports 300"
 alias nmap_detect_versions="sudo nmap -sV -p1-65535 -O --osscan-guess -T4 -Pn"
-alias nmap_check_for_vulns="nmap --script=vulscan"
+alias nmap_check_for_vulns="nmap --script=vuln"
 alias nmap_full_udp="sudo nmap -sS -sU -T4 -A -v -PE -PS22,25,80 -PA21,23,80,443,3389 "
 alias nmap_traceroute="sudo nmap -sP -PE -PS22,25,80 -PA21,23,80,3389 -PU -PO --traceroute "
 alias nmap_full_with_scripts="sudo nmap -sS -sU -T4 -A -v -PE -PP -PS21,22,23,25,80,113,31339 -PA80,113,443,10042 -PO --script all " 
