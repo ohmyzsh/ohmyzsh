@@ -21,19 +21,25 @@ switch-to-dir () {
 }
 
 insert-cycledleft () {
-	emulate -L zsh
-	setopt nopushdminus
-
+	setopt localoptions nopushdminus
 	switch-to-dir +1
+
+	local fn
+	for fn (precmd $precmd_functions); do
+		(( $+functions[$fn] )) && $fn
+	done
 	zle reset-prompt
 }
 zle -N insert-cycledleft
 
 insert-cycledright () {
-	emulate -L zsh
-	setopt nopushdminus
-
+	setopt localoptions nopushdminus
 	switch-to-dir -0
+
+	local fn
+	for fn (precmd $precmd_functions); do
+		(( $+functions[$fn] )) && $fn
+	done
 	zle reset-prompt
 }
 zle -N insert-cycledright
