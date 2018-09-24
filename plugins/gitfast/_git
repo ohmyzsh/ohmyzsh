@@ -67,6 +67,15 @@ __gitcomp ()
 	esac
 }
 
+__gitcomp_direct ()
+{
+	emulate -L zsh
+
+	local IFS=$'\n'
+	compset -P '*[=:]'
+	compadd -Q -- ${=1} && _ret=0
+}
+
 __gitcomp_nl ()
 {
 	emulate -L zsh
