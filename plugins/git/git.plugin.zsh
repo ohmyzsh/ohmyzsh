@@ -163,6 +163,7 @@ compdef _git ggpush=git-checkout
 
 alias ggsup='git branch --set-upstream-to=origin/$(git_current_branch)'
 alias gpsup='git push --set-upstream origin $(git_current_branch)'
+alias gpcb='git push 2> /dev/null || git push --set-upstream origin $(git_current_branch)'
 
 alias ghh='git help'
 
