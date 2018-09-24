@@ -10,24 +10,24 @@ zstyle -s ":vcs_info:git:*:-all-" "command" _omz_git_git_cmd
 # Back-compatibility wrapper for when this function was defined here in
 # the plugin, before being pulled in to core lib/git.zsh as git_current_branch()
 # to fix the core -> git plugin dependency.
-function current_branch() {
+current_branch() {
   git_current_branch
 }
 # The list of remotes
-function current_repository() {
+current_repository() {
   if ! $_omz_git_git_cmd rev-parse --is-inside-work-tree &> /dev/null; then
     return
   fi
   echo $($_omz_git_git_cmd remote -v | cut -d':' -f 2)
 }
 # Pretty log messages
-function _git_log_prettily(){
+_git_log_prettily(){
   if ! [ -z $1 ]; then
     git log --pretty=$1
   fi
 }
 # Warn if the current branch is a WIP
-function work_in_progress() {
+work_in_progress() {
   if $(git log -n 1 2>/dev/null | grep -q -c "\-\-wip\-\-"); then
     echo "WIP!!"
   fi
@@ -253,6 +253,7 @@ alias gtv='git tag | sort -V'
 
 alias gunignore='git update-index --no-assume-unchanged'
 alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
+alias gupff='git pull --ff'
 alias gup='git pull --rebase'
 alias gupv='git pull --rebase -v'
 alias gupa='git pull --rebase --autostash'
