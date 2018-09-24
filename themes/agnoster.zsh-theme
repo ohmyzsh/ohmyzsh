@@ -96,6 +96,9 @@ prompt_context() {
 # Git: branch/detached head, dirty status
 prompt_git() {
   (( $+commands[git] )) || return
+  if [[ "$(git config --get oh-my-zsh.hide-status 2>/dev/null)" = 1 ]]; then
+    return
+  fi
   local PL_BRANCH_CHAR
   () {
     local LC_ALL="" LC_CTYPE="en_US.UTF-8"
