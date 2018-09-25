@@ -9,7 +9,7 @@
 ################################################################################
 
 ###########################
-# Settings 
+# Settings
 
 # These can be overwritten any time.
 # If they are not set yet, they will be
@@ -33,10 +33,9 @@ default fastfile_var_prefix "§"
 function fastfile() {
     test "$2" || 2="."
     file=$(readlink -f "$2")
-    
+
     test "$1" || 1="$(basename "$file")"
     name=$(echo "$1" | tr " " "_")
-
 
     mkdir -p "${fastfile_dir}"
     echo "$file" > "$(fastfile_resolv "$name")"
@@ -88,12 +87,12 @@ function fastfile_print() {
 #    (=> fastfle_print) for each shortcut
 #
 function fastfile_ls() {
-    for f in "${fastfile_dir}"/*; do 
-	file=`basename "$f"` # To enable simpler handeling of spaces in file names
-	varkey=`echo "$file" | tr " " "_"`
+    for f in "${fastfile_dir}"/*; do
+        file=`basename "$f"` # To enable simpler handeling of spaces in file names
+        varkey=`echo "$file" | tr " " "_"`
 
-	# Special format for colums
-	echo "${fastfile_var_prefix}${varkey}|->|$(fastfile_get "$file")"
+        # Special format for colums
+        echo "${fastfile_var_prefix}${varkey}|->|$(fastfile_get "$file")"
     done | column -t -s "|"
 }
 
@@ -115,11 +114,11 @@ function fastfile_rm() {
 # Generate the aliases for the shortcuts
 #
 function fastfile_sync() {
-    for f in "${fastfile_dir}"/*; do 
-	file=`basename "$f"` # To enable simpler handeling of spaces in file names
-	varkey=`echo "$file" | tr " " "_"`
+    for f in "${fastfile_dir}"/*; do
+        file=`basename "$f"` # To enable simpler handeling of spaces in file names
+        varkey=`echo "$file" | tr " " "_"`
 
-	alias -g "${fastfile_var_prefix}${varkey}"="'$(fastfile_get "$file")'"
+        alias -g "${fastfile_var_prefix}${varkey}"="'$(fastfile_get "$file")'"
     done
 }
 
@@ -133,6 +132,6 @@ alias ffls=fastfile_ls
 alias ffsync=fastfile_sync
 
 ##################################
-# Init 
+# Init
 
 fastfile_sync
