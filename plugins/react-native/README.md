@@ -33,7 +33,6 @@ plugins=(... react-native)
 | **rniosxs**   | `react-native run-ios --simulator "iPhone XS"`     |
 | **rniosxsm**  | `react-native run-ios --simulator "iPhone XS Max"` |
 | **rniosxr**   | `react-native run-ios --simulator "iPhone XR"`     |
-
 | _Logging_     |
 | **rnland**    | `react-native log-android`                         |
 | **rnlios**    | `react-native log-ios`                             |
