@@ -215,8 +215,8 @@ prompt_virtualenv() {
 # - am I root
 # - are there background jobs?
 prompt_status() {
-  local symbols
-  symbols=()
+  local -a symbols
+
   [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}✘"
   [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}⚡"
   [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}⚙"
