@@ -28,6 +28,7 @@ __go_tool_complete() {
     'help[display help]'
     'install[compile and install packages and dependencies]'
     'list[list packages]'
+    'mod[module maintenance]'
     'run[compile and run Go program]'
     'test[test packages]'
     'tool[run specified go tool]'
@@ -123,6 +124,52 @@ __go_tool_complete() {
         "-memprofile[write heap profile to file]:file:_files" \
         "-memprofilerate[set heap profiling rate]:number" \
         "*:args:{ _alternative ':importpaths:__go_packages' ':files:_path_files -g \"*.go\"' }"
+      ;;
+  mod)
+      typeset -a mod_commands
+      mod_commands+=(
+        'edit[edit go.mod from tools or scripts]'
+        'download[download modules to local cache]'
+        'graph[print module requirement graph]'
+        'init[initialize new module in current directory]'
+        'tidy[add missing and remove unused modules]'
+        'vendor[make vendored copy of dependencies]'
+        'verify[verify dependencies have expected content]'
+        'why[explain why packages or modules are needed]'
+      )
+      if (( CURRENT == 3 )); then
+          _values 'go mod commands' ${mod_commands[@]} "help[display help]"
+          return
+      fi
+      case ${words[3]} in
+      help)
+        _values 'go mod commands' ${mod_commands[@]}
+        ;;
+      download)
+        # TODO
+        ;;
+      edit)
+        # TODO
+        ;;
+      graph)
+        # TODO
+        ;;
+      init)
+        # TODO
+        ;;
+      tidy)
+        # TODO
+        ;;
+      vendor)
+        # TODO
+        ;;
+      verify)
+        # TODO
+        ;;
+      why)
+        _alternative ':importpaths:__go_packages'
+        ;;
+      esac
       ;;
   help)
       _values "${commands[@]}" \
