@@ -1,0 +1,78 @@
+#!/bin/bash
+
+trap clean_up EXIT
+trap clean_up INT
+
+inosc=0
+
+function clean_up() {
+  if [[ $inosc == 1 ]]
+  then
+    print_st
+  fi
+}
+
+function show_help() {
+  echo "Usage: $(basename $0)" 1>& 2
+  echo "          Copies to clipboard from standard input" 1>& 2
+  echo "       $(basename $0) filename" 1>& 2
+  echo "          Copies to clipboard from file" 1>& 2
+}
+
+# tmux requires unrecognized OSC sequences to be wrapped with DCS tmux;
+# <sequence> ST, and for all ESCs in <sequence> to be replaced with ESC ESC. It
+# only accepts ESC backslash for ST.
+function print_osc() {
+    if [[ $TERM == screen* ]] ; then
+        printf "\033Ptmux;\033\033]"
+    else
+        printf "\033]"
+    fi
+}
+
+# More of the tmux workaround described above.
+function print_st() {
+    if [[ $TERM == screen* ]] ; then
+        printf "\a\033\\"
+    else
+        printf "\a"
+    fi
+}
+
+# Look for command line flags.
+while [ $# -gt 0 ]; do
+    case "$1" in
+    -h|--h|--help)
+        show_help
+        exit
+        ;;
+    -*)
+        error "Unknown option flag: $1"
+        show_help
+        exit 1
+      ;;
+    *)
+        if [ -r "$1" ] ; then
+            data=$(base64 < "$1")
+            print_osc
+            inosc=1
+            printf '1337;Copy=:%s' "$data"
+            print_st
+            inosc=0
+            exit 0
+        else
+            error "it2copy: $1: No such file or directory"
+            exit 2
+        fi
+        ;;
+    esac
+    shift
+done
+
+data=$(base64)
+print_osc
+inosc=1
+printf '1337;Copy=:%s' "$data"
+print_st
+inosc=0
+

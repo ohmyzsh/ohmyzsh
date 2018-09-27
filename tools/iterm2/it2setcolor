@@ -1,0 +1,116 @@
+#!/bin/bash
+open=0
+
+# tmux requires unrecognized OSC sequences to be wrapped with DCS tmux;
+# <sequence> ST, and for all ESCs in <sequence> to be replaced with ESC ESC. It
+# only accepts ESC backslash for ST.
+function print_osc() {
+    if [[ $TERM == screen* ]] ; then
+        printf "\033Ptmux;\033\033]"
+    else
+        printf "\033]"
+    fi
+}
+
+# More of the tmux workaround described above.
+function print_st() {
+    if [[ $TERM == screen* ]] ; then
+        printf "\a\033\\"
+    else
+        printf "\a"
+    fi
+}
+
+# set_color key rgb
+function set_color() {
+    print_osc
+    printf '1337;SetColors=%s=%s' "$1" "$2"
+    print_st
+}
+
+function error() {
+    echo "ERROR: $*" 1>&2
+}
+
+function show_help() {
+    if [ $open = 1 ]; then
+      print_st
+    fi
+    echo "Usage"
+    echo ""
+    echo "1) To set a specific color to an RGB value:"
+    echo "  it2setcolor name color [name color...]" 1>& 2
+    echo "For example:"
+    echo "  it2setcolor fg fff"
+    echo ""
+    echo "name is one of:"
+    echo "  fg bg bold link selbg selfg curbg curfg underline tab"
+    echo "  black red green yellow blue magenta cyan white"
+    echo "  br_black br_red br_green br_yellow br_blue br_magenta br_cyan br_white"
+    echo ""
+    echo "color is of the format:"
+    echo "  RGB        (three hex digits, like fff)"
+    echo "  RRGGBB     (six hex digits, like f0f0f0)"
+    echo "  cs:RGB     (cs is a color space name)"
+    echo "  cs:RRGGBB  (cs is a color space name)"
+    echo ""
+    echo "  The color space names accepted in the color are:"
+    echo "    srgb       (sRGB, the default if none is specified)"
+    echo "    rgb        (Apple's old device-independent colorspace)"
+    echo "    p3         (Apple's fancy large-gamut colorspace)"
+    echo ""
+    echo "2) To switch to a named color preset:"
+    echo "  it2setcolor preset name"
+    echo "For example:"
+    echo "  it2setcolor preset 'Light Background'"
+    echo ""
+    echo "3) To reset the current tab's color to the system default:"
+    echo "  it2setcolor tab default"
+}
+
+# Show help if no arguments and no stdin.
+if [ $# -eq 0 ]; then
+    show_help
+    exit
+fi
+
+# Look for command line flags.
+while [ $# -gt 0 ]; do
+    case "$1" in
+    -h|--h|--help)
+        show_help
+        exit
+        ;;
+    -*)
+        error "Unknown option flag: $1"
+        show_help
+        exit 1
+      ;;
+    *)
+	if [ $# -lt 2 ]; then
+          show_help
+          exit
+        fi
+        if [ $open = 0 ]; then
+          open=1
+          print_osc
+          printf '1337;SetColors='
+        else
+          printf ","
+        fi
+        # name is not checked for validity because we'd like this to work with future colors, too.
+        printf "%s=%s" "$1" "$2"
+        shift
+        ;;
+    esac
+    shift
+done
+
+if [ $open = 1 ]; then
+  print_st
+else
+  show_help
+fi
+
+exit 0
+
