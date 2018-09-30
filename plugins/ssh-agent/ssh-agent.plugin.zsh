@@ -2,20 +2,27 @@ typeset _agent_forwarding _ssh_env_cache
 
 function _start_agent() {
 	local lifetime
-	local -a identities
-
-	# start ssh-agent and setup environment
 	zstyle -s :omz:plugins:ssh-agent lifetime lifetime
 
+	# start ssh-agent and setup environment
+	echo starting ssh-agent...
 	ssh-agent -s ${lifetime:+-t} ${lifetime} | sed 's/^echo/#echo/' >! $_ssh_env_cache
 	chmod 600 $_ssh_env_cache
 	. $_ssh_env_cache > /dev/null
+}
 
-	# load identies
+function _add_identities() {
+	local id line
+	local -a identities ids
 	zstyle -a :omz:plugins:ssh-agent identities identities
 
-	echo starting ssh-agent...
-	ssh-add $HOME/.ssh/${^identities}
+	# get list of loaded identities
+	for line in ${(f)"$(ssh-add -l)"}; do ids+=${${(z)line}[3]}; done
+
+	# add identities if not already loaded
+	for id in ${^identities}; do
+		[[ ${ids[(I)$HOME/.ssh/$id]} -le 0 ]] && ssh-add $HOME/.ssh/$id
+	done
 }
 
 # Get the filename to store/lookup the environment from
@@ -42,6 +49,8 @@ else
 	_start_agent
 fi
 
+_add_identities
+
 # tidy up after ourselves
 unset _agent_forwarding _ssh_env_cache
-unfunction _start_agent
+unfunction _start_agent _add_identities
