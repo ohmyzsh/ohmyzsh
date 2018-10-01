@@ -22,6 +22,7 @@ DNF makes sure that the given packages and their dependencies are installed on t
 | dnfmc	  | dnf makecache"        	       | Generate metadata cache
 | dnfp    | dnf info"           	       | Show package information
 | dnfs    | dnf search"          	       | Search package
+| Use Sudo 													     |
 | dnfu	  | sudo dnf upgrade"    	       | Upgrade package
 | dnfi	  | sudo dnf install"                  | Install package
 | dnfgi	  | sudo dnf groupinstall" 	       | Install package group
