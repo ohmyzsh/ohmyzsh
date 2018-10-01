@@ -1,7 +1,7 @@
 
 DNF is a software package manager that installs, updates, and removes packages on RPM-based Linux distributions. It automatically computes dependencies and determines the actions required to install packages. DNF also makes it easier to maintain groups of machines, eliminating the need to manually update each one using rpm. Introduced in Fedora 18, it has been the default package manager since Fedora 22
 
-To use it, add dnf to the plugins array of your zshrc file:
+To use it, add `dnf` to the plugins array of your zshrc file:
 ```
 plugins=(... dnf)
 ```
