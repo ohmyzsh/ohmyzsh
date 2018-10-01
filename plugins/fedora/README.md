@@ -10,20 +10,19 @@ Then install DNF typing:
 dnf [options] install @<spec>...
 DNF makes sure that the given packages and their dependencies are installed on the system. Each <spec> can be either a <package-spec>, or a @<group-spec>.
 
-
-| Alias   | Command                    | Description                                   |
-|---------|----------------------------|-----------------------------------------------|                                                     |dnfl     |dnf list                    |List packages
-|dnfli	  |dnf list installed          |List installed packages
-|dnfgl	  |"dnf grouplist"             |List package groups
-|dnfmc	  |"dnf makecache"             |Generate metadata cache
-|dnfp     |"dnf info"                  |Show package information
-|dnfs     |dnf search"                 |Search package
-|dnfu	  |sudo dnf upgrade"           |Upgrade package
-|dnfi	  |sudo dnf install"           |Install package
-|dnfgi	  |sudo dnf groupinstall"      |Install package group
-|dnfr	  |sudo dnf remove"            |Remove package
-|dnfgr    |sudo dnf groupremove"       |Remove package group
-|dnfc	  |sudo dnf clean all"         |Clean cache
+| Alias   | Command                            | Description                                                         |
+|---------|------------------------------------|---------------------------------------------------------------------|                                                   |dnfl     |dnf list                 		|List packages
+|dnfli	  |dnf list installed     	       |List installed packages
+|dnfgl	  |"dnf grouplist"         	       |List package groups
+|dnfmc	  |"dnf makecache"        	       |Generate metadata cache
+|dnfp     |"dnf info"           	       |Show package information
+|dnfs     |dnf search"          	       |Search package
+|dnfu	  |sudo dnf upgrade"    	       |Upgrade package
+|dnfi	  |sudo dnf install"           	       |Install package
+|dnfgi	  |sudo dnf groupinstall" 	       |Install package group
+|dnfr	  |sudo dnf remove"        	       |Remove package
+|dnfgr    |sudo dnf groupremove"   	       |Remove package group
+|dnfc	  |sudo dnf clean all"     	       |Clean cache
 
 
 For a full list aliases and the functions just watch the plugins code https://github.com/robbyrussell/oh-my-zsh/blob/master/plugins/fedora/fedora.plugin.zsh.
