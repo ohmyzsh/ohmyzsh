@@ -38,7 +38,6 @@ DNF makes sure that the given packages and their dependencies are installed on t
 
 | Alias   | Command                            | Description                                                         |
 |---------|------------------------------------|---------------------------------------------------------------------| 
-
 | dnfl    | dnf list                	       | List packages
 | dnfli	  | dnf list installed     	       | List installed packages
 | dnfgl	  | dnf grouplist"         	       | List package groups
