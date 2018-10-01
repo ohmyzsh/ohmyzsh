@@ -9,6 +9,8 @@ Then install DNF typing:
 
 dnf [options] install @<spec>...
 DNF makes sure that the given packages and their dependencies are installed on the system. Each <spec> can be either a <package-spec>, or a @<group-spec>.
+	
+#### TRIZEN
 
 | Alias   | Command                            | Description                                                         |
 |---------|------------------------------------|---------------------------------------------------------------------|                                                   |dnfl     |dnf list                 		|List packages
