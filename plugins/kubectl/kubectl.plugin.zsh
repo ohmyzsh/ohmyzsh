@@ -44,16 +44,16 @@ alias kdi='k describe ingress'
 alias kdeli='k delete ingress'
 
 # Namespace management
-alias kgns='k get namespaces'
-alias kens='k edit namespace'
-alias kdns='k describe namespace'
-alias kdelns='k delete namespace'
+alias kgns='kubectl get namespaces'
+alias kens='kubectl edit namespace'
+alias kdns='kubectl describe namespace'
+alias kdelns='kubectl delete namespace'
 
 # ConfigMap management
-alias kgcm='k get configmaps'
-alias kecm='k edit configmap'
-alias kdcm='k describe configmap'
-alias kdelcm='k delete configmap'
+alias kgcm='kubectl get configmaps'
+alias kecm='kubectl edit configmap'
+alias kdcm='kubectl describe configmap'
+alias kdelcm='kubectl delete configmap'
 
 # Secret management
 alias kgsec='k get secret'
