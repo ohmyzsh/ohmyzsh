@@ -1,7 +1,6 @@
 # rsync
 
-This plugin adds 4 aliases for the open source [rsync](https://rsync.samba.org/) utility
-
+This plugin adds aliases for frequent [rsync](https://rsync.samba.org/) commands.
 
 To use it add `rsync` to the plugins array in you zshrc file.
 
