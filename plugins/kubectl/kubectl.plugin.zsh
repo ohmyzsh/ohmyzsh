@@ -25,8 +25,14 @@ alias kcsc='kubectl config set-context'
 alias kcdc='kubectl config delete-context'
 alias kccc='kubectl config current-context'
 
+# General aliases
+alias kdel='kubectl delete'
+alias kdelf='kubectl delete -f'
+
 # Pod management.
 alias kgp='kubectl get pods'
+alias kgpw='kgp --watch'
+alias kgpwide='kgp -o wide'
 alias kep='kubectl edit pods'
 alias kdp='kubectl describe pods'
 alias kdelp='kubectl delete pods'
@@ -36,6 +42,8 @@ alias kgpl='function _kgpl(){ label=$1; shift; kgp -l $label $*; };_kgpl'
 
 # Service management.
 alias kgs='kubectl get svc'
+alias kgsw='kgs --watch'
+alias kgswide='kgs -o wide'
 alias kes='kubectl edit svc'
 alias kds='kubectl describe svc'
 alias kdels='kubectl delete svc'
@@ -65,6 +73,8 @@ alias kdelsec='kubectl delete secret'
 
 # Deployment management.
 alias kgd='kubectl get deployment'
+alias kgdw='kgd --watch'
+alias kgdwide='kgd -o wide'
 alias ked='kubectl edit deployment'
 alias kdd='kubectl describe deployment'
 alias kdeld='kubectl delete deployment'
