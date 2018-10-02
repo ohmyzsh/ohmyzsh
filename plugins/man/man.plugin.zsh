@@ -5,7 +5,7 @@
 # * Jerry Ling<jerryling315@gmail.com>
 #
 # ------------------------------------------------------------------------------
-# Usgae
+# Usage
 # -----
 #
 # man will be inserted before the command
