@@ -17,7 +17,7 @@
 #             none:      not applicable
 #   Field 4 — Emoji_Sources:
 #             one or more values from {z, a, j, w, x}
-#             see the key in http://www.unicode.org/draft/reports/tr51/tr51.html#Major_Sources
+#             see the key in https://www.unicode.org/draft/reports/tr51/tr51.html#Major_Sources
 #             NA:        not applicable
 #   Comment — currently contains the version where the character was first encoded,
 #             followed by:
@@ -1200,7 +1200,7 @@
 1F1F2 1F1ED ;	emoji ;	L2 ;	none ;	x	# V6.0 (🇲🇭) flag for Marshall Islands
 1F1F2 1F1F0 ;	emoji ;	L2 ;	none ;	x	# V6.0 (🇲🇰) flag for Macedonia
 1F1F2 1F1F1 ;	emoji ;	L2 ;	none ;	x	# V6.0 (🇲🇱) flag for Mali
-1F1F2 1F1F2 ;	emoji ;	L2 ;	none ;	x	# V6.0 (🇲🇲) flag for Myanmar 
+1F1F2 1F1F2 ;	emoji ;	L2 ;	none ;	x	# V6.0 (🇲🇲) flag for Myanmar
 1F1F2 1F1F3 ;	emoji ;	L2 ;	none ;	x	# V6.0 (🇲🇳) flag for Mongolia
 1F1F2 1F1F4 ;	emoji ;	L2 ;	none ;	x	# V6.0 (🇲🇴) flag for Macau
 1F1F2 1F1F5 ;	emoji ;	L2 ;	none ;	x	# V6.0 (🇲🇵) flag for Northern Mariana Islands

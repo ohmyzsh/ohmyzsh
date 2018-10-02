@@ -11,6 +11,8 @@ plugins=(... ssh-agent)
 
 ## Instructions
 
+**IMPORTANT: put these settings _before_ the line that sources oh-my-zsh**
+
 To enable **agent forwarding support** add the following to your zshrc file:
 
 ```zsh
@@ -33,6 +35,6 @@ zstyle :omz:plugins:ssh-agent lifetime 4h
 
 ## Credits
 
-Based on code from Joseph M. Reagle: http://www.cygwin.com/ml/cygwin/2001-06/msg00537.html
+Based on code from Joseph M. Reagle: https://www.cygwin.com/ml/cygwin/2001-06/msg00537.html
 
 Agent-forwarding support based on ideas from Florent Thoumie and Jonas Pfenniger
