@@ -11,6 +11,7 @@ plugins=(... suse)
 ```
 
 ## Main commands
+
 | Alias            | Commands                      | Description                                                    |
 | ---------------- | ----------------------------- | -------------------------------------------------------------- |
 | z                | `sudo zypper`                 | call zypper                                                    |
@@ -24,15 +25,17 @@ plugins=(... suse)
 | zvcmp            | `sudo zypper vcmp`            | tell whether version1 is older or newer than version2          |
 
 ## Packages commands
+
 | Alias | Commands          | Description                                                        |
 | ----- | ----------------- | ------------------------------------------------------------------ |
 | zin   | `sudo zypper in`  | install packages                                                   |
-| zin   | `sudo zypper inr` | install newly added packages recommended by already installed ones |
+| zinr  | `sudo zypper inr` | install newly added packages recommended by already installed ones |
 | zrm   | `sudo zypper rm`  | remove packages                                                    |
 | zsi   | `sudo zypper si`  | install source of a package                                        |
 | zve   | `sudo zypper ve`  | verify dependencies of installed packages                          |
 
 ## Updates commands
+
 | Alias  | Commands            | Description            |
 | ------ | ------------------- | ---------------------- |
 | zdup   | `sudo zypper dup`   | upgrade packages       |
@@ -43,20 +46,22 @@ plugins=(... suse)
 | zpatch | `sudo zypper patch` | install patches        |
 
 ## Request commands
-| Alias         | Commands                 | Description                                          |
-| ------------- | ------------------------ | ---------------------------------------------------- |
-| zif           | `sudo zypper if`         | display info about packages                          |
-| zpa           | `sudo zypper pa`         | list packages                                        |
-| zpatch-info   | `sudo zypper patch-info` | display info about patches                           |
-| zpattern-info | `sudo zypper patch-info` | display info about patterns                          |
-| zproduct-info | `sudo zypper patch-info` | display info about products                          |
-| zpch          | `sudo zypper pch`        | list all patches                                     |
-| zpd           | `sudo zypper pd`         | list products                                        |
-| zpt           | `sudo zypper pt`         | list patterns                                        |
-| zse           | `sudo zypper se`         | search for packages                                  |
-| zwp           | `sudo zypper wp`         | list all packages providing the specified capability |
+
+| Alias         | Commands                   | Description                                          |
+| ------------- | -------------------------- | ---------------------------------------------------- |
+| zif           | `sudo zypper if`           | display info about packages                          |
+| zpa           | `sudo zypper pa`           | list packages                                        |
+| zpatch-info   | `sudo zypper patch-info`   | display info about patches                           |
+| zpattern-info | `sudo zypper pattern-info` | display info about patterns                          |
+| zproduct-info | `sudo zypper product-info` | display info about products                          |
+| zpch          | `sudo zypper pch`          | list all patches                                     |
+| zpd           | `sudo zypper pd`           | list products                                        |
+| zpt           | `sudo zypper pt`           | list patterns                                        |
+| zse           | `sudo zypper se`           | search for packages                                  |
+| zwp           | `sudo zypper wp`           | list all packages providing the specified capability |
 
 ## Repositories commands
+
 | Alias | Commands            | Description                              |
 | ----- | ------------------- | ---------------------------------------- |
 | zar   | `sudo zypper ar`    | add a repository                         |
