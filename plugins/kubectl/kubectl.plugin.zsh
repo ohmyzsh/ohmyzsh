@@ -65,7 +65,11 @@ alias krh='kubectl rollout history'
 alias kru='kubectl rollout undo'
 
 # Port forwarding
-alias kpf="k port-forward"
+alias kpf="kubectl port-forward"
+
+# Tools for accessing all information
+alias kga='kubectl get all'
+alias kgaa='kubectl get all --all-namespaces'
 
 # Logs
 alias kl='kubectl logs'
