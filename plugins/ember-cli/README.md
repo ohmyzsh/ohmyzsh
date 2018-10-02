@@ -1,8 +1,8 @@
 # Ember CLI
 
-**Maintainers:** [BilalBudhani](http://www.github.com/BilalBudhani), [eubenesa](http://www.github.com/eubenesa)
+**Maintainers:** [BilalBudhani](https://github.com/BilalBudhani), [eubenesa](https://github.com/eubenesa), [scottkidder](https://github.com/scottkidder]
 
-Ember CLI (http://www.ember-cli.com/)
+Ember CLI (https://www.ember-cli.com/)
 
 ### List of Aliases
 
@@ -17,5 +17,6 @@ Alias | Ember-CLI command
 **ein** | *ember init*
 **ei** | *ember install*
 **et** | *ember test*
+**ets** | *ember test --serve*
 **eu** | *ember update*
 **ev** | *ember version*
