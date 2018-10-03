@@ -16,3 +16,4 @@ plugins=(... mix)
 | Phoenix v1.3.0 and above| [Phoenix](https://hexdocs.pm/phoenix/Phoenix.html)       |
 | Ecto                    | [Ecto](https://hexdocs.pm/ecto/Ecto.html)                |
 | Hex                     | [Hex](https://hex.pm/)                                   |
+| Nerves                  | [Nerves](https://nerves-project.org/)                    |
