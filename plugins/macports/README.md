@@ -14,7 +14,7 @@ plugins=(... macports)
 | Alias | Command                            | Description                                                  |
 |-------|------------------------------------|--------------------------------------------------------------|
 | pc    | `sudo port clean --all installed`  | Clean up intermediate installation files for installed ports |
-| pi    | `sudo port install $1`             | Install package given as argument                            |
+| pi    | `sudo port install`                | Install package given as argument                            |
 | psu   | `sudo port selfupdate`             | Update ports tree with MacPorts repository                   |
 | puni  | `sudo port uninstall inactive`     | Uninstall inactive ports                                     |
 | puo   | `sudo port upgrade outdated`       | Upgrade ports with newer versions available                  |
