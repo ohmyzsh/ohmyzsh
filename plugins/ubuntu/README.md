@@ -7,10 +7,11 @@ To use it, add `ubuntu` to the plugins array in your zshrc file:
 ```zsh
 plugins=(... ubuntu)
 ```
-### Note: 
-Commands that use `$APT` will use apt if installed or defer to apt-get otherwise. 
 
 ## Aliases
+
+Commands that use `$APT` will use apt if installed or defer to apt-get otherwise. 
+
 | Alias   | Command                                                                | Description                                                                                       |
 |---------|------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------|
 | acs     | `apt-cache search`                                                     | Search the apt-cache with the specified criteria                                                  |
@@ -34,12 +35,13 @@ Commands that use `$APT` will use apt if installed or defer to apt-get otherwise
 | agar    | `sudo $APT autoremove`                                                 | Remove automatically installed packages no longer needed                                          | 
 | aguu    | `sudo $APT update && sudo $APT upgrade`                                | Update packages list and upgrade available packages                                               | 
 | allpkgs | `dpkg --get-selections \| grep -v deinstall`                           | Print all installed packages                                                                      | 
-| kclean  | `sudo aptitude remove -P ?and(\~i\~nlinux-(ima\|hea) ?not(uname -r))`  |Remove ALL kernel images and headers EXCEPT the one in use                                         |
+| kclean  | `sudo aptitude remove -P ?and(~i~nlinux-(ima\|hea) ?not(~n$(uname -r)))`  |Remove ALL kernel images and headers EXCEPT the one in use                                         |
 | mydeb   | `time dpkg-buildpackage -rfakeroot -us -uc`                            | Create a basic .deb package                                                                       |
 | ppap    | `sudo ppa-purge <ppa>`                                                 | Remove the specified PPA                                                                          | 
 
 
 ## Functions
+
 | Function          | Usage                                 |Description                                                               |
 |-------------------|---------------------------------------|--------------------------------------------------------------------------|
 | aar               | `aar ppa:xxxxxx/xxxxxx [packagename]` | apt-add-repository with automatic install/upgrade of the desired package |
