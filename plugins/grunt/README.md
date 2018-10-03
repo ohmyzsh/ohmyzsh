@@ -9,7 +9,7 @@ plugins=(... grunt)
 
 ## Enable caching
 
-If you want to use the cache, set the followings in your `.zshrc`:
+If you want to use the cache, set the following in your `.zshrc`:
 ```zsh
 zstyle ':completion:*' use-cache yes
 ```
