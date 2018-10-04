@@ -10,6 +10,8 @@
 			"/usr/bin/sublime_merge"
 			"/usr/local/bin/sublime_merge"
 			"/usr/bin/sublime_merge"
+			"/usr/local/bin/smerge"
+			"/usr/bin/smerge"
 			)
 		for _sublime_merge_path in $_sublime_linux_paths; do
 			if [[ -a $_sublime_merge_path ]]; then
@@ -23,9 +25,9 @@
 	elif  [[ "$OSTYPE" = darwin* ]]; then
 		local _sublime_darwin_paths
 		_sublime_darwin_paths=(
-			"/usr/local/bin/sublime_merge"
-			"/Applications/Sublime Merge.app/Contents/MacOS/sublime_merge"
-			"$HOME/Applications/Sublime Merge.app/Contents/MacOS/sublime_merge"
+			"/usr/local/bin/smerge"
+			"/Applications/Sublime Merge.app/Contents/SharedSupport/bin/smerge"
+			"$HOME/Applications/Sublime Merge.app/Contents/SharedSupport/bin/smerge"
 			)
 		for _sublime_merge_path in $_sublime_darwin_paths; do
 			if [[ -a $_sublime_merge_path ]]; then
