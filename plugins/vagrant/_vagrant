@@ -66,15 +66,8 @@ __box_list ()
 
 __vm_list ()
 {
-    # expand VAGRANT_CWD, if set
-    local vagrant_cwd=""
-    if [ "${VAGRANT_CWD}" != "" ]; then
-        vagrant_cwd="${VAGRANT_CWD}"
-        # add trailing slash if it's not present
-        [[ "${vagrant_cwd}" != */ ]] && vagrant_cwd="${vagrant_cwd}/"
-    fi
-    _wanted application expl 'command' compadd $(command grep "${vagrant_cwd}Vagrantfile" -oe '^[^#]*\.vm\.define *[:"]\([a-zA-Z0-9_-]\+\)' 2>/dev/null | awk '{print substr($2, 2)}')
-    _wanted application expl 'command' compadd $(command ls "${vagrant_cwd}.vagrant/machines/" 2>/dev/null)
+    _wanted application expl 'command' compadd $(command grep "${VAGRANT_CWD:-.}/Vagrantfile" -oe '^[^#]*\.vm\.define *[:"]\([a-zA-Z0-9_-]\+\)' 2>/dev/null | awk '{print substr($2, 2)}')
+    _wanted application expl 'command' compadd $(command ls "${VAGRANT_CWD:-.}/.vagrant/machines/" 2>/dev/null)
 }
 
 __vagrant-box ()
