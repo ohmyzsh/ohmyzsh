@@ -2,13 +2,9 @@
 
 Plugin for cycling through the directory stack
 
-## Description
+This plugins enables directory navigation similar when using back and forward on browsers or common file explorers like Finder or Nautilus.
 
-This plugins enables directory navigation similar when using back and forward on browsers, Finder on macOS, and Nautilus on several Linux distros.
-
-As from the [official wiki](https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins#dirhistory):
-
-> This is a small zle trick that lets you cycle your directory stack left or right using Ctrl+Shift+Left/Right. This is useful when moving back and forth between directories in development environments, and can be thought of as kind of a nondestructive pushd/popd.
+This is a small zle trick that lets you cycle your directory stack left or right using Ctrl+Shift+Left/Right. This is useful when moving back and forth between directories in development environments, and can be thought of as kind of a nondestructive pushd/popd.
 
 ## Enabling the plugin
 
@@ -33,17 +29,14 @@ As from the [official wiki](https://github.com/robbyrussell/oh-my-zsh/wiki/Plugi
 Say you opened these directories on the terminal:
 
 ```console
-~
-$ cd Projects
-
-~/Projects
-$ cd Hacktoberfest
-
-~/Projects/Hacktoberfest
-$ cd oh-my-zsh
-
-~/Projects/Hacktoberfest/oh-my-zsh
-$
+~$ cd Projects
+~/Projects$ cd Hacktoberfest
+~/Projects/Hacktoberfest$ cd oh-my-zsh
+~/Projects/Hacktoberfest/oh-my-zsh$ dirs -v
+0       ~/Projects/Hacktoberfest/oh-my-zsh
+1       ~/Projects/Hacktoberfest
+2       ~/Projects
+3       ~
 ```
 
 By pressing <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Left</kbd>, the current working directory or `$CWD` will be from `oh-my-zsh` to `Hacktoberfest`. Press it again and it will be at `Projects`.
@@ -74,4 +67,13 @@ Here's an asciinema cast demonstrating the example above:
 | -------------------- | --------------------------------------------------------------------------------------------------------- |
 | `insert-cycledleft`  | Change `$CWD` to the previous known stack, binded on <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Left</kbd> |
 | `insert-cycledright` | Change `$CWD` to the next known stack, binded on <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Right</kbd>    |
-| `switch-to-dir`      | For switching directories, used internally by `insert-cycledleft` and `insert-cycledright`                |
+
+You can bind these functions to other key sequences, as long as you know the bindkey sequence:
+
+For example, these commands bind to Alt+Shift+Left/Right in xterm-256color:
+```
+bindkey '^[[1;4D' insert-cycledleft
+bindkey '^[[1;4C' insert-cycledright
+```
+
+You can get the bindkey sequence pressing <kbd>Ctrl</kbd> + <kbd>V</kbd>, then pressing the keyboard shortcut you want to use.
