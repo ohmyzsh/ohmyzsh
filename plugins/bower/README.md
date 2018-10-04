@@ -5,7 +5,7 @@ This plugin adds completion for [Bower](https://bower.io/) and a few useful alia
 To use it, add `bower` to the plugins array in your zshrc file:
 
 ```
-plugins=(... yarn)
+plugins=(... bower)
 ```
 
 ## Aliases
