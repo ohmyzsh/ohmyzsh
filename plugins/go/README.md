@@ -1,8 +1,1 @@
-# Go plugin
-This is a duplicate plugin of the [Golang plugin](https://github.com/robbyrussell/oh-my-zsh/blob/master/plugins/golang), and now symlinks there.
-
-To use it, add `go` to the plugins array in your zshrc file:
-
-```zsh
-plugins=(... go)
-```
+The go plugin is deprecated. Use the [golang plugin](https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/golang) instead.
