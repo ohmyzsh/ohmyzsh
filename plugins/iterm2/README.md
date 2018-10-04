@@ -1,6 +1,11 @@
 # iTerm2 plugin
 
-**This plugin is only relevant if the terminal is iTerm2 on OSX**
+**This plugin is only relevant if the terminal is [iTerm2](https://www.iterm2.com/) on OSX**
+
+To use it, add _iterm2_ to the plugins array of your zshrc file:
+```
+plugins=(... iterm2)
+```
 
 ## Plugin commands
 
@@ -18,3 +23,7 @@ Usage: ```iterm2_tab_color <red> <green> <blue>``` where red/green/blue are on t
 
 * ```iterm2_tab_color_reset```  
 resets the color of iTerm2's current tab back to default.
+
+## Contributers
+
+[Aviv Rosenberg](github.com/avivrosenberg)
