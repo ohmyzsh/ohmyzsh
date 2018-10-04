@@ -2,7 +2,7 @@
 
 Plugin for cycling through the directory stack
 
-This plugins enables directory navigation similar when using back and forward on browsers or common file explorers like Finder or Nautilus. `dircycle` uses a small zle trick that lets you cycle your directory stack left or right using <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Left</kbd> / <kbd>Right</kbd> . This is useful when moving back and forth between directories in development environments, and can be thought of as kind of a nondestructive pushd/popd.
+This plugin enables directory navigation similar to using back and forward on browsers or common file explorers like Finder or Nautilus. It uses a small zle trick that lets you cycle through your directory stack left or right using <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Left</kbd> / <kbd>Right</kbd> . This is useful when moving back and forth between directories in development environments, and can be thought of as kind of a nondestructive pushd/popd.
 
 ## Enabling the plugin
 
@@ -75,4 +75,4 @@ bindkey '^[[1;4D' insert-cycledleft
 bindkey '^[[1;4C' insert-cycledright
 ```
 
-You can get the bindkey sequence pressing <kbd>Ctrl</kbd> + <kbd>V</kbd>, then pressing the keyboard shortcut you want to use.
+You can get the bindkey sequence by pressing <kbd>Ctrl</kbd> + <kbd>V</kbd>, then pressing the keyboard shortcut you want to use.
