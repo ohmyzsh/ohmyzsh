@@ -192,6 +192,7 @@ alias glog='git log --oneline --decorate --graph'
 alias gloga='git log --oneline --decorate --graph --all'
 alias glp="_git_log_prettily"
 compdef _git glp=git-log
+alias grl='git reflog --date=iso'
 
 alias gm='git merge'
 alias gmom='git merge origin/master'
