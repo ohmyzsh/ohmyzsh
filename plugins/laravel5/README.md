@@ -10,9 +10,9 @@ plugins=(... laravel5)
 
 ## Aliases
 
-| Alias | Command                                   | Description                                            |
-|-----------|-------------------------------------------|-------------------------------------------------------------|
-| la5       | `php artisan`                             | Main Artisan command                               |
-| la5cache  | `php artisan cache:clear`                 | Flush the application cache                        |
-| la5routes | `php artisan route:list`                  | List all registered routes                         |
-| la5vendor | `php artisan vendor:publish`              | Publish any publishable assets from vendor package |
+| Alias     | Command                      | Description                                        |
+|-----------|------------------------------|----------------------------------------------------|
+| la5       | `php artisan`                | Main Artisan command                               |
+| la5cache  | `php artisan cache:clear`    | Flush the application cache                        |
+| la5routes | `php artisan route:list`     | List all registered routes                         |
+| la5vendor | `php artisan vendor:publish` | Publish any publishable assets from vendor package |
