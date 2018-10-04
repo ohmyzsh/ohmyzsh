@@ -2,9 +2,7 @@
 
 Plugin for cycling through the directory stack
 
-This plugins enables directory navigation similar when using back and forward on browsers or common file explorers like Finder or Nautilus.
-
-This is a small zle trick that lets you cycle your directory stack left or right using Ctrl+Shift+Left/Right. This is useful when moving back and forth between directories in development environments, and can be thought of as kind of a nondestructive pushd/popd.
+This plugins enables directory navigation similar when using back and forward on browsers or common file explorers like Finder or Nautilus. `dircycle` uses a small zle trick that lets you cycle your directory stack left or right using <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Left</kbd> / <kbd>Right</kbd> . This is useful when moving back and forth between directories in development environments, and can be thought of as kind of a nondestructive pushd/popd.
 
 ## Enabling the plugin
 
@@ -68,10 +66,11 @@ Here's an asciinema cast demonstrating the example above:
 | `insert-cycledleft`  | Change `$CWD` to the previous known stack, binded on <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Left</kbd> |
 | `insert-cycledright` | Change `$CWD` to the next known stack, binded on <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Right</kbd>    |
 
-You can bind these functions to other key sequences, as long as you know the bindkey sequence:
+## Rebinding keys
 
-For example, these commands bind to Alt+Shift+Left/Right in xterm-256color:
-```
+You can bind these functions to other key sequences, as long as you know the bindkey sequence. For example, these commands bind to <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>Left</kbd> / <kbd>Right</kbd> in `xterm-256color`:
+
+```zsh
 bindkey '^[[1;4D' insert-cycledleft
 bindkey '^[[1;4C' insert-cycledright
 ```
