@@ -1,5 +1,4 @@
-##
-systemd plugin
+# Systemd plugin
 
 The systemd plugin provides completion as well as adding many useful aliases for systemd.
 
