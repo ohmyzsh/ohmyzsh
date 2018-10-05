@@ -10,19 +10,18 @@ plugins=(... yum)
 
 ## Aliases
 
-| Alias | Command                           | Description                         |
-|-------|-----------------------------------|-------------------------------------|
-| ys    | `yum search`                      | Search package                      |
-| yp    | `yum info`                        | Show package info                   |
-| yl    | `yum list`                        | List packages                       |
-| ygl   | `yum grouplist`                   | List package groups                 |
-| yli   | `yum list installed`              | Print all installed packages        |
-| ymc   | `yum makecache`                   | Rebuilds the yum package list       |
-| yu    | `sudo yum update`                 | Upgrate packages                    |
-| yi    | `sudo yum install`                | Install package                     |
-| ygi   | `sudo yum groupinstall`           | Install package group               |
-| yr    | `sudo yum remove`                 | Remove package                      |
-| ygr   | `sudo yum groupremove`            | Remove pagage group                 |
-| yrl   | `sudo yum remove --remove-leaves` | Remove package and leaves           |
-| yc    | `sudo yum clean all`              | Clean cache                         |
-
+| Alias | Command                           | Description                  |
+|-------|-----------------------------------|------------------------------|
+| ys    | `yum search`                      | Search package               |
+| yp    | `yum info`                        | Show package info            |
+| yl    | `yum list`                        | List packages                |
+| ygl   | `yum grouplist`                   | List package groups          |
+| yli   | `yum list installed`              | Print all installed packages |
+| ymc   | `yum makecache`                   | Rebuild the yum package list |
+| yu    | `sudo yum update`                 | Upgrade packages             |
+| yi    | `sudo yum install`                | Install package              |
+| ygi   | `sudo yum groupinstall`           | Install package group        |
+| yr    | `sudo yum remove`                 | Remove package               |
+| ygr   | `sudo yum groupremove`            | Remove pagage group          |
+| yrl   | `sudo yum remove --remove-leaves` | Remove package and leaves    |
+| yc    | `sudo yum clean all`              | Clean yum cache              |
