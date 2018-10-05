@@ -9,9 +9,9 @@ plugins=(... dirhistory)
 ```
 ## Keyboard Shortcuts
 
-| Shortcut                         | Description                                               |
-|----------------------------------|-----------------------------------------------------------|
-| <kbd>alt</kbd> + <kbd>left</kbd> | Go to previous directory                                  |
-| <kbd>alt</kbd> + <kbd>left</kbd> | Undo <kbd>alt</kbd> + <kbd>left</kbd>                     |
-| <kbd>alt</kbd> + <kbd>up</kbd>   | Move into the parent directory                            |
-| <kbd>alt</kbd> + <kbd>down</kbd> | Move into the first child directory by alphabetical order |
+| Shortcut                          | Description                                               |
+|-----------------------------------|-----------------------------------------------------------|
+| <kbd>alt</kbd> + <kbd>left</kbd>  | Go to previous directory                                  |
+| <kbd>alt</kbd> + <kbd>right</kbd> | Undo <kbd>alt</kbd> + <kbd>left</kbd>                     |
+| <kbd>alt</kbd> + <kbd>up</kbd>    | Move into the parent directory                            |
+| <kbd>alt</kbd> + <kbd>down</kbd>  | Move into the first child directory by alphabetical order |
