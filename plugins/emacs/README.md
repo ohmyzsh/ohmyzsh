@@ -7,6 +7,8 @@ This plugin utilizes the Emacs daemon capability, allowing the user to quickly o
 - You can share opened buffered across opened frames.
 - Configuration changes made at runtime are applied to all frames.
 
+**NOTE:** requires Emacs 24 and newer.
+
 To use it, add emacs to the plugins array in your zshrc file:
 
 ```zsh
@@ -15,18 +17,14 @@ plugins=(... emacs)
 
 ## Aliases
 
-The plugin utilizes this variable to call the emacs launcher:
+The plugin uses a custom launcher (which we'll call here `$EMACS_LAUNCHER`) that is just a wrapper around [`emacsclient`](https://www.emacswiki.org/emacs/EmacsClient).
 
-```zsh
-EMACS_PLUGIN_LAUNCHER="$ZSH/plugins/emacs/emacsclient.sh"
-```
-
-| Alias  | Command                                              | Description                                                                         |
-|--------|------------------------------------------------------|-------------------------------------------------------------------------------------|
-| emacs  | `"$EMACS_PLUGIN_LAUNCHER --no-wait"`                 | Opens a temporary emacsclient frame                                                 |
-| e      | `emacs`                                              | Same as emacs alias                                                                 |
-| te     | `"$EMACS_PLUGIN_LAUNCHER -nw"`                       | Open terminal emacsclient                                                           |
-| eeval  | `"$EMACS_PLUGIN_LAUNCHER --eval"`                    | Same as `M-x eval` but from outside Emacs                                           |
-| eframe | `'emacsclient --alternate-editor "" --create-frame'` | Create new X frame                                                                  |
-|        | efile                                                | Write to standard output the path to the file opened in the current buffer          |
-|        | ecd                                                  | Write to standard output the directory of the file opened in the the current buffer |
+| Alias  | Command                                            | Description                                                    |
+|--------|----------------------------------------------------|----------------------------------------------------------------|
+| emacs  | `$EMACS_LAUNCHER --no-wait`                        | Opens a temporary emacsclient frame                            |
+| e      | `emacs`                                            | Same as emacs alias                                            |
+| te     | `$EMACS_LAUNCHER -nw`                              | Open terminal emacsclient                                      |
+| eeval  | `$EMACS_LAUNCHER --eval`                           | Same as `M-x eval` but from outside Emacs                      |
+| eframe | `emacsclient --alternate-editor "" --create-frame` | Create new X frame                                             |
+| efile  | -                                                  | Print the path to the file open in the current buffer          |
+| ecd    | -                                                  | Print the directory of the file open in the the current buffer |
