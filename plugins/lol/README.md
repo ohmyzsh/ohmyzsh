@@ -69,7 +69,7 @@ Plugin for adding catspeak aliases, because why not
 # mkdir new-directory
 icanhas new-directory
 
-# kilall firefox
+# killall firefox
 nomnom firefox
 
 # chmod u=r,go= some.file
