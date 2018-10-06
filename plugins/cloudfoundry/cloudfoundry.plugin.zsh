@@ -31,4 +31,3 @@ function cfstg() { cf restage $1 }
 function cfdel() { cf delete $1 }
 function cfsrtall() {cf apps | awk '/stopped/ { system("cf start " $1)}'}
 function cfstpall() {cf apps | awk '/started/ { system("cf stop " $1)}'}
-~
