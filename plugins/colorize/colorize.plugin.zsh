@@ -7,7 +7,7 @@
 alias ccat='colorize_via_pygmentize'
 
 colorize_via_pygmentize() {
-    if (( $+commands[pygmentize] )); then
+    if ! (( $+commands[pygmentize] )); then
         echo "package 'Pygments' is not installed!"
         return 1
     fi
