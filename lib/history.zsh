@@ -1,7 +1,6 @@
 ## History wrapper
 function omz_history {
-  # Delete the history file if `-c' argument provided.
-  # This won't affect the `history' command output until the next login.
+  local clear list
   zparseopts -E c=clear l=list
 
   if [[ -n "$clear" ]]; then
@@ -12,9 +11,8 @@ function omz_history {
     # if -l provided, run as if calling `fc' directly
     builtin fc "$@"
   else
-    # otherwise, call `fc -l 1` to show all available
-    # history (and pass additional parameters)
-    builtin fc "$@" -l 1
+    # unless a number is provided, show all history events (starting from 1)
+    [[ ${@[-1]} = *[0-9]* ]] && builtin fc -l "$@" || builtin fc -l "$@" 1
   fi
 }
 

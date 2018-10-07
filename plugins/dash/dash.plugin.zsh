@@ -11,7 +11,7 @@ _dash() {
     # Use defaults to get the array of docsets from preferences
     # Have to smash it into one big line so that each docset is an element of
     # our DOCSETS array
-    DOCSETS=("${(@f)$(defaults read com.kapeli.dash docsets | tr -d '\n' | grep -oE '\{.*?\}')}")
+    DOCSETS=("${(@f)$(defaults read com.kapeli.dashdoc docsets | tr -d '\n' | grep -oE '\{.*?\}')}")
 
     # remove all newlines since defaults prints so pretty like
     # Now get each docset and output each on their own line

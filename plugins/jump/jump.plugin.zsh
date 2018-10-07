@@ -19,7 +19,7 @@ mark() {
 		MARK="$1"
 	fi
 	if read -q \?"Mark $PWD as ${MARK}? (y/n) "; then
-		mkdir -p "$MARKPATH"; ln -s "$PWD" "$MARKPATH/$MARK"
+		mkdir -p "$MARKPATH"; ln -sfn "$PWD" "$MARKPATH/$MARK"
 	fi
 }
 
