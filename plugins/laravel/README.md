@@ -1,6 +1,7 @@
 # Laravel
 
-Enable some cool aliases for Laravel [artisan console](https://laravel.com/docs/5.7/artisan). To use it, add `laravel` to the plugins array of your zshrc file:
+This plugin adds aliases and autocompletion for Laravel [Artisan](https://laravel.com/docs/artisan) and [Bob](http://daylerees.github.io/laravel-bob/) command-line interfaces.
+
 ```
 plugins=(... laravel)
 ```
