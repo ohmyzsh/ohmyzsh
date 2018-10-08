@@ -97,7 +97,7 @@ setup_shell() {
 		# If this platform provides a "chsh" command (not Cygwin), do it, man!
 		if command_exists chsh; then
 			echo "${BLUE}Time to change your default shell to zsh!${NORMAL}"
-			if ! chsh -s $(grep /zsh$ /etc/shells | tail -1); then
+			if ! chsh -s $(grep '^/.*/zsh$' /etc/shells | tail -1); then
 				error "chsh command unsuccessful. Change your default shell manually."
 			fi
 		# Else, suggest the user do so manually.
