@@ -17,17 +17,17 @@ plugins=(... kubectl)
 | kaf       | `kubectl apply -f`                                             | Apply a YML file                                                                  |
 | keti      | `kubectl exec -ti`                                             | Drop into an interactive terminal on a container                                  |
 |           |                                                                | **Manage configuration quickly to switch contexts between local, dev ad staging** |
-| kcuc      | `kubectl config use-context`                                   |                                                                                   |
-| kcsc      | `kubectl config set-context`                                   |                                                                                   |
-| kcdc      | `kubectl config delete-context`                                | ^^                                                                                |
-| kccc      | `kubectl config current-context`                               | ^^                                                                                |
+| kcuc      | `kubectl config use-context`                                   | Sets the current-context in a kubeconfig file                                     |
+| kcsc      | `kubectl config set-context`                                   | Sets a context entry in kubeconfig.                                               |
+| kcdc      | `kubectl config delete-context`                                | Delete the specified context from the kubeconfig                                  |
+| kccc      | `kubectl config current-context`                               | Displays the current-context                                                      |
 |           |                                                                | **General aliases**                                                               |
-| kdel      | `kubectl delete`                                               |                                                                                   |
-| kdelf     | `kubectl delete -f`                                            | ^^                                                                                |
+| kdel      | `kubectl delete`                                               | Delete resources by filenames, stdin, resources and names, or by resources and label selector. |
+| kdelf     | `kubectl delete -f`                                            | Delete a pod using the type and name specified in -f arguement.                   |
 |           |                                                                | **Pod management**                                                                |
-| kgp       | `kubectl get pods`                                             |                                                                                   |
-| kgpw      | `kgp --watch`                                                  | ^^                                                                                |
-| kgpwide   | `kgp -o wide`                                                  | ^^                                                                                |
+| kgp       | `kubectl get pods`                                             | List all pods in ps output format.                                                |
+| kgpw      | `kgp --watch`                                                  | After listing/getting the requested object, watch for changes                     |
+| kgpwide   | `kgp -o wide`                                                  | Output in the plain-text format with any additional information. For pods, the node name is included |
 | kep       | `kubectl edit pods`                                            | ^^                                                                                |
 | kdp       | `kubectl describe pods`                                        | ^^                                                                                |
 | kdelp     | `kubectl delete pods`                                          | ^^                                                                                |
@@ -86,3 +86,5 @@ plugins=(... kubectl)
 | keno      | `kubectl edit node`                                            | ^^                                                                                |
 | kdno      | `kubectl describe node`                                        | ^^                                                                                |
 | kdelno    | `kubectl delete node`                                          | ^^ |                                                                                                                                                    
+
+
