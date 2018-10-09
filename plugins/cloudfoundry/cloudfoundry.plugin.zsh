@@ -18,7 +18,7 @@ alias cfsc="cf scale"
 alias cfev="cf events"
 alias cfdor="cf delete-orphaned-routes"
 alias cfbpk="cf buildpacks"
-alias cfd="cf domains"
+alias cfdm="cf domains"
 alias cfsp="cf spaces"
 function cfap() { cf app $1 }
 function cfh.() { export CF_HOME=$PWD/.cf }
