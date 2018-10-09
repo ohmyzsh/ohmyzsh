@@ -10,7 +10,6 @@ alias cfbs="cf bind-service"
 alias cfus="cf unbind-service"
 alias cfds="cf delete-service"
 alias cfup="cf cups"
-alias cfp="cf push"
 alias cflg="cf logs"
 alias cfr="cf routes"
 alias cfe="cf env"
@@ -19,6 +18,8 @@ alias cfsc="cf scale"
 alias cfev="cf events"
 alias cfdor="cf delete-orphaned-routes"
 alias cfbpk="cf buildpacks"
+alias cfd="cf domains"
+alias cfsp="cf spaces"
 function cfap() { cf app $1 }
 function cfh.() { export CF_HOME=$PWD/.cf }
 function cfh~() { export CF_HOME=~/.cf }
