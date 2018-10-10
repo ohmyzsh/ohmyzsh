@@ -19,8 +19,10 @@ elif grep-flag-available --exclude=.cvs; then
     GREP_OPTIONS+=" --exclude=$EXC_FOLDERS"
 fi
 
-# export grep settings
+# export grep, egrep and fgrep settings
 alias grep="grep $GREP_OPTIONS"
+alias egrep="egrep $GREP_OPTIONS"
+alias fgrep="fgrep $GREP_OPTIONS"
 
 # clean up
 unset GREP_OPTIONS
