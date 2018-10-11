@@ -9,20 +9,28 @@
 [[ -e /usr/share/doc/pkgfile/command-not-found.zsh ]] && source /usr/share/doc/pkgfile/command-not-found.zsh
 
 # Fedora command-not-found support
-if [ -f /usr/libexec/pk-command-not-found ]; then
     command_not_found_handler () {
         runcnf=1
         retval=127
+        [ ! -f /usr/libexec/pk-command-not-found ] && runcnf=2
         [ ! -S /var/run/dbus/system_bus_socket ] && runcnf=0
         [ ! -x /usr/libexec/packagekitd ] && runcnf=0
         if [ $runcnf -eq 1 ]
             then
             /usr/libexec/pk-command-not-found $@
             retval=$?
+        # If 'pk-command-not-found' is not installed, you must install the package 
+	elif [ $runcnf -eq 2 ]; then
+	    echo "'pk-command-not-found' can be found in the following packages: " 1>&2
+	    echo " * PackageKit-command-not-found \n" 1>&2
+	    echo "Try: sudo dnf install PackageKit-command-not-found" 1>&2
         fi
         return $retval
     }
-fi
+#    else {
+#        "'pk-command-not-found' can be found in the following packages"
+#    }
+#fi
 
 # OSX command-not-found support
 # https://github.com/Homebrew/homebrew-command-not-found
