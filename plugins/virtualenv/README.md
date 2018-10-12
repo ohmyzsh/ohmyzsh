@@ -7,8 +7,9 @@ To use it, add `virtualenv` to the plugins array of your zshrc file:
 plugins=(... virtualenv)
 ```
 
-## Features
+The plugin creates a `virtualenv_prompt_info` function that you can use in your theme, which displays
+the basename of the current `$VIRTUAL_ENV`. It uses two variables to control how that is shown:
 
-| Function                 | Description                            |
-|--------------------------|----------------------------------------|
-| `virtualenv_prompt_info` | Displays virtual container information |
+- `ZSH_THEME_VIRTUALENV_PREFIX`: sets the prefix of the VIRTUAL_ENV. Defaults to `[`.
+
+- `ZSH_THEME_VIRTUALENV_SUFFIX`: sets the suffix of the VIRTUAL_ENV. Defaults to `]`.
