@@ -27,10 +27,6 @@
         fi
         return $retval
     }
-#    else {
-#        "'pk-command-not-found' can be found in the following packages"
-#    }
-#fi
 
 # OSX command-not-found support
 # https://github.com/Homebrew/homebrew-command-not-found
