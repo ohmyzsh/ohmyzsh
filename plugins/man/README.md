@@ -10,4 +10,4 @@ plugins=(... man)
 # Keyboard Shortcuts
 | Shortcut                          | Description                                                            |
 |-----------------------------------|------------------------------------------------------------------------|
-| <kpd>esc</kpd> + man              | add man before the previous command to see the manual for this command |
+| <kbd>Esc</kbd> + man              | add man before the previous command to see the manual for this command |
