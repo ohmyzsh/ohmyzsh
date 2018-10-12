@@ -11,3 +11,13 @@ To use it, add `command-not-found` to the plugins array of your zshrc file:
 plugins=(... command-not-found)
 ```
 
+An example of how this plugin works is here:
+```zsh
+mutt
+The program 'mutt' can be found in the following packages:
+ * mutt
+ * mutt-kz
+ * mutt-patched
+Try: sudo apt install <selected package>
+```
+
