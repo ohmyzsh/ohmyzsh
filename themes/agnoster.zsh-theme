@@ -116,15 +116,15 @@ prompt_git() {
       prompt_segment green $CURRENT_FG
     fi
 
-    local ahead behind aheadbehind
+    local ahead behind
     ahead=$(git log --oneline @{upstream}.. 2>/dev/null)
     behind=$(git log --oneline ..@{upstream} 2>/dev/null)
     if [[ -n "$ahead" ]] && [[ -n "$behind" ]]; then
-      aheadbehind=$'\u21c5 '
+      PL_BRANCH_CHAR=$'\u21c5'
     elif [[ -n "$ahead" ]]; then
-      aheadbehind=$'\u21b1 '
+      PL_BRANCH_CHAR=$'\u21b1'
     elif [[ -n "$behind" ]]; then
-      aheadbehind=$'\u21b0 '
+      PL_BRANCH_CHAR=$'\u21b0'
     fi
 
     if [[ -e "${repo_path}/BISECT_LOG" ]]; then
@@ -146,7 +146,7 @@ prompt_git() {
     zstyle ':vcs_info:*' formats ' %u%c'
     zstyle ':vcs_info:*' actionformats ' %u%c'
     vcs_info
-    echo -n "${ref/refs\/heads\//$aheadbehind$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode}"
+    echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode}"
   fi
 }
 
