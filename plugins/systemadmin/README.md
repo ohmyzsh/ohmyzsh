@@ -10,17 +10,17 @@ plugins=(... systemadmin)
 
 ## Aliases
 
-| Alias  | Command                                                                   | Description                                                        |
-|--------|---------------------------------------------------------------------------|--------------------------------------------------------------------|
-| ping   | `ping -c 5`                                                               | Sends only 5 ICMP Messages                                         |
-| clr    | `clear;echo "Currently logged in on $(tty), as $USER in directory $PWD."` | Clears the screen and prings the current user, TTY, and directory  |
-| path   | `echo -e ${PATH//:/\\n}`                                                  | Displays PATH with each entry on a separate line                   |
-| mkdir  | `mkdir -pv`                                                               | Automatically create parent directories and display verbose output |
-| psmem  | `ps -e -orss=,args= | sort -b -k1,1n`                                     | Display the processes using the most memory                        |
-| psmem10| `ps -e -orss=,args= | sort -b -k1,1n| head -10`                           | Display the top 10 processes using the most memory                 |
-| pscpu  | `ps -e -o pcpu,cpu,nice,state,cputime,args|sort -k1 -nr`                  | Display the top processes using the most CPU                       |
-| pscpu10| `ps -e -o pcpu,cpu,nice,state,cputime,args|sort -k1 -nr | head -10`       | Display the top 10 processes using the most CPU                    |
-| hist10 | `print -l ${(o)history%% *} | uniq -c | sort -nr | head -n 10`            | Display the top 10 most used commands in the history               |
+| Alias  | Command                                                                        | Description                                                        |
+|--------|--------------------------------------------------------------------------------|--------------------------------------------------------------------|
+| ping   | `ping -c 5`                                                                    | Sends only 5 ICMP Messages                                         |
+| clr    | `clear;echo "Currently logged in on $(tty), as $USER in directory $PWD."`      | Clears the screen and prings the current user, TTY, and directory  |
+| path   | `echo -e ${PATH//:/\\n}`                                                       | Displays PATH with each entry on a separate line                   |
+| mkdir  | `mkdir -pv`                                                                    | Automatically create parent directories and display verbose output |
+| psmem  | <code>ps -e -orss=,args= | sort -b -k1,1n</code>                               | Display the processes using the most memory                        |
+| psmem10| <code>ps -e -orss=,args= | sort -b -k1,1n| head -10</code>                     | Display the top 10 processes using the most memory                 |
+| pscpu  | <code>ps -e -o pcpu,cpu,nice,state,cputime,args|sort -k1 -nr</code>            | Display the top processes using the most CPU                       |
+| pscpu10| <code>ps -e -o pcpu,cpu,nice,state,cputime,args|sort -k1 -nr | head -10</code> | Display the top 10 processes using the most CPU                    |
+| hist10 | <code>print -l ${(o)history%% *} | uniq -c | sort -nr | head -n 10</code>      | Display the top 10 most used commands in the history               |
 
 
 ## Named Functions
