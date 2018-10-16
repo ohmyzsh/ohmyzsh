@@ -32,6 +32,7 @@
 # -------
 #
 #  * Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
+#  * Bond <https://github.com/bondz>
 #
 # ------------------------------------------------------------------------------
 
@@ -71,7 +72,7 @@ _global_commands=(
   'bin:Displays the location of the yarn bin folder'
   'remove:Remove installed package from dependencies updating package.json'
   'upgrade:Upgrades packages to their latest version based on the specified range'
-  'upgrade-interactive'
+  'upgrade-interactive:Interactively upgrade packages'
 )
 
 _yarn_commands_scripts() {
@@ -260,6 +261,11 @@ _yarn() {
             '--new-version:version:' \
             '--message:message:' \
             '--no-git-tag-version'
+        ;;
+
+        upgrade-interactive)
+          _arguments \
+            '--latest:use the version tagged latest in the registry:'
         ;;
 
         why)
