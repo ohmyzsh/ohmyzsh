@@ -13,7 +13,7 @@ plugins=(... systemadmin)
 | Alias  | Command                                                                           | Description                                                        |
 |--------|-----------------------------------------------------------------------------------|--------------------------------------------------------------------|
 | ping   | `ping -c 5`                                                                       | Sends only 5 ICMP Messages                                         |
-| clr    | `clear;echo "Currently logged in on $(tty), as $USER in directory $PWD."`         | Clears the screen and prings the current user, TTY, and directory  |
+| clr    | `clear;echo "Currently logged in on $(tty), as $USER in directory $PWD."`         | Clears the screen and prints the current user, TTY, and directory  |
 | path   | `echo -e ${PATH//:/\\n}`                                                          | Displays PATH with each entry on a separate line                   |
 | mkdir  | `mkdir -pv`                                                                       | Automatically create parent directories and display verbose output |
 | psmem  | <code>ps -e -orss=,args= \| sort -b -k1,1n</code>                                 | Display the processes using the most memory                        |
@@ -38,7 +38,7 @@ These functions are closer to aliases with complex arguments simplified (in most
 |-------------|---------------------------------------------------------------------------------------------------------------------------------------|
 | dls         | List only directories in the current directory                                                                                        |
 | psgrep      | List all processes that match the pattern input after the command                                                                     |
-| killit      | xargs sudo kill | Kills any process that matches a regulr expression passed to it                                                     |
+| killit      | xargs sudo kill | Kills any process that matches a regular expression passed to it                                                     |
 | tree        | List contents of directories in a tree-like format (if tree is installed)                                                             |
 | sortcons    | Sort connections by state                                                                                                             |
 | con80       | View all 80 Port Connections                                                                                                          |
