@@ -37,7 +37,7 @@ function asp {
 }
 
 function aws_profiles {
-  reply=($(grep profile $AWS_HOME/config|sed -e 's/.*profile \([a-zA-Z0-9_\.-]*\).*/\1/'))
+  reply=($(grep -e '^\[' $AWS_HOME/credentials | sed -e 's/^\[\(.*\)\]$/\1/'))
 }
 compctl -K aws_profiles asp
 
