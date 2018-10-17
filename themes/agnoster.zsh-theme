@@ -98,7 +98,6 @@ prompt_git() {
   (( $+commands[git] )) || return
   
   local ref dirty mode repo_path
-
   if $( ([ -d .git ] && echo .git) || git rev-parse --is-inside-work-tree >/dev/null 2>&1 ); then
     if [[ "$(git config --get oh-my-zsh.hide-status 2>/dev/null)" = 1 ]]; then
       return

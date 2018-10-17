@@ -144,7 +144,7 @@ __git_ps1_show_upstream ()
 		# (git-svn uses essentially the same procedure internally)
 		local -a svn_upstream
 		svn_upstream=($(git log --first-parent -1 \
-					--grep="^git-svn-id: \(${svn_url_pattern#??}\)" 2>/dev/null))
+					--grep="^git-svn-id: \(${svn_url_pattern#??}\)" HEAD^ 2>/dev/null))
 		if [[ 0 -ne ${#svn_upstream[@]} ]]; then
 			svn_upstream=${svn_upstream[${#svn_upstream[@]} - 2]}
 			svn_upstream=${svn_upstream%@*}
@@ -217,7 +217,7 @@ __git_ps1_show_upstream ()
 		esac
 		if [[ -n "$count" && -n "$name" ]]; then
 			__git_ps1_upstream_name=$(git rev-parse \
-				--abbrev-ref "$upstream" 2>/dev/null)
+				--abbrev-ref "$upstream" HEAD 2>/dev/null)
 			if [ $pcmode = yes ] && [ $ps1_expanded = yes ]; then
 				p="$p \${__git_ps1_upstream_name}"
 			else
@@ -476,21 +476,21 @@ __git_ps1 ()
 		if [ -n "${GIT_PS1_SHOWDIRTYSTATE-}" ] &&
 		   [ "$(git config --bool bash.showDirtyState)" != "false" ]
 		then
-			git diff --no-ext-diff --quiet || w="*"
-			git diff --no-ext-diff --cached --quiet || i="+"
+			git diff --no-ext-diff --quiet HEAD || w="*"
+			git diff --no-ext-diff --cached --quiet HEAD || i="+"
 			if [ -z "$short_sha" ] && [ -z "$i" ]; then
 				i="#"
 			fi
 		fi
 		if [ -n "${GIT_PS1_SHOWSTASHSTATE-}" ] &&
-		   git rev-parse --verify --quiet refs/stash >/dev/null
+		   git rev-parse --verify --quiet refs/stash HEAD >/dev/null
 		then
 			s="$"
 		fi
 
 		if [ -n "${GIT_PS1_SHOWUNTRACKEDFILES-}" ] &&
 		   [ "$(git config --bool bash.showUntrackedFiles)" != "false" ] &&
-		   git ls-files --others --exclude-standard --directory --no-empty-directory --error-unmatch -- ':/*' >/dev/null 2>/dev/null
+		   git ls-files --others --exclude-standard --directory --no-empty-directory --error-unmatch -- ':/*' HEAD >/dev/null 2>/dev/null
 		then
 			u="%${ZSH_VERSION+%}"
 		fi
