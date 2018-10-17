@@ -96,20 +96,20 @@ prompt_context() {
 # Git: branch/detached head, dirty status
 prompt_git() {
   (( $+commands[git] )) || return
-  if [[ "$(git config --get oh-my-zsh.hide-status 2>/dev/null)" = 1 ]]; then
-    return
-  fi
-  local PL_BRANCH_CHAR
-  () {
-    local LC_ALL="" LC_CTYPE="en_US.UTF-8"
-    PL_BRANCH_CHAR=$'\ue0a0'         # 
-  }
+  
   local ref dirty mode repo_path
+  if $( ([ -d .git ] && echo .git) || git rev-parse --is-inside-work-tree >/dev/null 2>&1 ); then
+    if [[ "$(git config --get oh-my-zsh.hide-status 2>/dev/null)" = 1 ]]; then
+      return
+    fi
+    local PL_BRANCH_CHAR
+    () {
+      local LC_ALL="" LC_CTYPE="en_US.UTF-8"
+      PL_BRANCH_CHAR=$'\ue0a0'         # 
+    }
 
-  if $(git rev-parse --is-inside-work-tree HEAD >/dev/null 2>&1); then
-    repo_path=$(git rev-parse --git-dir HEAD 2>/dev/null)
+    repo_path=$( ([ -d .git ] && echo .git) || git rev-parse --git-dir 2> /dev/null)
     dirty=$(parse_git_dirty)
-    ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="➦ $(git rev-parse --short HEAD 2> /dev/null)"
     if [[ -n $dirty ]]; then
       prompt_segment yellow black
     else
@@ -135,6 +135,7 @@ prompt_git() {
     zstyle ':vcs_info:*' formats ' %u%c'
     zstyle ':vcs_info:*' actionformats ' %u%c'
     vcs_info
+    ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="➦ $(git rev-parse --short HEAD 2> /dev/null)"
     echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode}"
   fi
 }
@@ -142,8 +143,9 @@ prompt_git() {
 prompt_bzr() {
     (( $+commands[bzr] )) || return
     if (bzr status >/dev/null 2>&1); then
-        status_mod=`bzr status | head -n1 | grep "modified" | wc -m`
-        status_all=`bzr status | head -n1 | wc -m`
+        local status_cache=`bzr status | head -n1`
+        status_mod=`$(echo $status_cache) | grep "modified" | wc -m`
+        status_all=`$(echo $status_cache) | wc -m`
         revision=`bzr log | head -n2 | tail -n1 | sed 's/^revno: //'`
         if [[ $status_mod -gt 0 ]] ; then
             prompt_segment yellow black
