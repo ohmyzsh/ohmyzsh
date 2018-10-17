@@ -28,5 +28,5 @@ plugins=(... sbt)
 | sbr   | `sbt run`             | Runs the main class for the project                          |
 | sbrm  | `sbt run-main`        | Runs the specified main class for the project                |
 | sbu   | `sbt update`          | Resolves and retrieves external dependencies                 |
-| sbt   | `sbt test`            | Compiles and runs all tests                                  |
+| sbx   | `sbt test`            | Compiles and runs all tests                                  |
 | sba   | `sbt assembly`        | Create a fat JAR with all dependencies                       |
