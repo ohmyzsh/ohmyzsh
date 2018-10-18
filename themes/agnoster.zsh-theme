@@ -125,7 +125,7 @@ prompt_git() {
     fi
 
     setopt promptsubst
-    autoload -Uz vcs_info
+    # autoload -Uz vcs_info
 
     zstyle ':vcs_info:*' enable git
     zstyle ':vcs_info:*' get-revision true
@@ -134,7 +134,7 @@ prompt_git() {
     zstyle ':vcs_info:*' unstagedstr '●'
     zstyle ':vcs_info:*' formats ' %u%c'
     zstyle ':vcs_info:*' actionformats ' %u%c'
-    vcs_info
+    # vcs_info
     echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode}"
   fi
 }
