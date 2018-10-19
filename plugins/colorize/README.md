@@ -1,15 +1,17 @@
 # colorize
 
-With this plugin you can syntax highlight file content of over 300 supported languages and other text formats. It highlights the content based on the filename extension. If no highlighting method supported for given extension then it tries guess it by looking for file content.
+With this plugin you can syntax-highlight file contents of over 300 supported languages and other text formats.
 
 To use it, add colorize to the plugins array of your zshrc file:
 ```
 plugins=(... colorize)
 ```
 
-## Prerequisites
+## Usage
 
-You have to install Pygments first: [pygments.org](pygments.org)
+* `ccat <file> [...files]`: prints the contents of the file (or files, if more than one are provided). 
+It highlights the content based on the filename extension. If it can't find a syntax-highlighting method for a given extension, it will try to find one by looking at the file contents. If all else fails, it will just cat the file without syntax highlighting.
 
-## Plugin commands
-* `ccat [FILE]` Shows output of the file on the command line.
+## Requirements
+
+You have to install Pygments first: [pygments.org](http://pygments.org/download/)
