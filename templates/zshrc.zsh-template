@@ -63,7 +63,7 @@ ZSH_THEME="agnoster"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-  git npm pass docker yarn tmux cargo asdf docker-common gitfast
+  git npm pass docker yarn tmux cargo asdf docker-common gitfast gitignore
 )
 
 source $ZSH/oh-my-zsh.sh
