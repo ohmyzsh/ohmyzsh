@@ -25,15 +25,11 @@ cd "$ZSH"
 if git pull --rebase --stat origin master
 then
   printf '%s' "$GREEN"
-  printf '%s\n' '         __                                     __   '
-  printf '%s\n' '  ____  / /_     ____ ___  __  __   ____  _____/ /_  '
-  printf '%s\n' ' / __ \/ __ \   / __ `__ \/ / / /  /_  / / ___/ __ \ '
-  printf '%s\n' '/ /_/ / / / /  / / / / / / /_/ /    / /_(__  ) / / / '
-  printf '%s\n' '\____/_/ /_/  /_/ /_/ /_/\__, /    /___/____/_/ /_/  '
-  printf '%s\n' '                        /____/                       '
-  printf "${BLUE}%s\n" "Hooray! Oh My Zsh has been updated and/or is at the current version."
-  printf "${BLUE}${BOLD}%s${NORMAL}\n" "To keep up on the latest news and updates, follow us on twitter: https://twitter.com/ohmyzsh"
-  printf "${BLUE}${BOLD}%s${NORMAL}\n" "Get your Oh My Zsh swag at:  https://shop.planetargon.com/"
+  printf '%s\n' ' _ __  _  ___ ___  ___  ___  _ __ ___  _ __ ___  _ '
+  printf '%s\n' "|  _ \| |/ __/ _ \/ __|/ _ \|  _   _ \| \ _  _ \| |"
+  printf '%s\n' "| | | | | (_| (_) \__ \ (_) | | | | | | | | | | | |"
+  printf '%s\n' "|_| |_|_|\___\___/|___/\___/|_| |_| |_|_| |_| |_|_|"
+  printf "${BLUE}%s\n" "Hooray! Oh My custom Zsh has been updated and/or is at the current version."
 else
   printf "${RED}%s${NORMAL}\n" 'There was an error updating. Try again later?'
 fi
