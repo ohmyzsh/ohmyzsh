@@ -19,13 +19,19 @@ plugins=(... yarn)
 | yap   | `yarn add --peer`                         | Install a package in peerDependencies (`package.json`)      |
 | yb    | `yarn build`                              | Run the build script defined in `package.json`              |
 | ycc   | `yarn cache clean`                        | Clean yarn's global cache of packages                       |
+| yga   | `yarn global add`                         | Install packages globally on your operating system          |
+| ygls  | `yarn global list`                        | Lists global installed packages                             |
+| ygrm  | `yarn global remove`                      | Remove global installed packages from your OS               |
 | ygu   | `yarn global upgrade`                     | Upgrade packages installed globally to their latest version |
 | yh    | `yarn help`                               | Show help for a yarn command                                |
+| yi    | `yarn init`                               | Interactively creates or updates a package.json file        |
 | yin   | `yarn install`                            | Install dependencies defined in `package.json`              |
 | yls   | `yarn list`                               | List installed packages                                     |
 | yout  | `yarn outdated`                           | Check for outdated package dependencies                     |
+| yp    | `yarn pack`                               | Create a compressed gzip archive of package dependencies    |
 | yrm   | `yarn remove`                             | Remove installed packages                                   |
 | yrun  | `yarn run`                                | Run a defined package script                                |
+| ys    | `yarn serve`                              | Start the dev server                                        |
 | yst   | `yarn start`                              | Run the start script defined in `package.json`              |
 | yt    | `yarn test`                               | Run the test script defined in `package.json`               |
 | yuc   | `yarn global upgrade && yarn cache clean` | Upgrade global packages and clean yarn's global cache       |
