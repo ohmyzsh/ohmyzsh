@@ -45,7 +45,7 @@ plugins=(... systemadmin)
 | c404        | List statistics on 404 connections in the nginx/access.log file or another log file if specified                      |
 | httpstatus  | List statistics based on http status in the nginx/access.log file or another log file if specified                    |
 | d0          | Delete 0 byte files recursively in the current directory or another if specified                                      |
-| geteip      | Gather information regarding an external IP address using [icanhazip.com](https://icanhazip.com)                      |
+| geteip      | Gather information regarding an external IP address using [ifconfig.co](https://ifconfig.co)                      |
 | getip       | Determine the local IP Address with `ip addr` or `ifconfig`                                                           |
 | clrz        | Clear zombie processes                                                                                                |
 | conssec     | Show number of concurrent connections per second based on ngnix/access.log file or another log file if specified      |
