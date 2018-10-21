@@ -1,6 +1,18 @@
 ##############################################################################
 # A descriptive listing of core Gradle commands
 ############################################################################
+
+gradle-or-gradlew() {
+	if [ -f ./gradlew ] ; then
+		echo "executing gradlew instead of gradle";
+		./gradlew "$@";
+	else
+		gradle "$@";
+	fi
+}
+
+alias gradle=gradle-or-gradlew;
+
 function _gradle_core_commands() {
     local ret=1 state
     _arguments ':subcommand:->subcommand' && ret=0

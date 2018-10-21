@@ -42,19 +42,20 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ## Commands
 
-| Command         | Description                                      |
-| :-------------- | :----------------------------------------------- |
-| `tab`           | Open the current directory in a new tab          |
-| `split_tab`     | Split the current terminal tab horizontally      |
-| `vsplit_tab`    | Split the current terminal tab vertically        |
-| `ofd`           | Open the current directory in a Finder window    |
-| `pfd`           | Return the path of the frontmost Finder window   |
-| `pfs`           | Return the current Finder selection              |
-| `cdf`           | `cd` to the current Finder directory             |
-| `pushdf`        | `pushd` to the current Finder directory          |
-| `quick-look`    | Quick-Look a specified file                      |
-| `man-preview`   | Open a specified man page in Preview app         |
-| `showfiles`     | Show hidden files                                |
-| `hidefiles`     | Hide the hidden files                            |
-| `itunes`        | Control iTunes. User `itunes -h` for usage details |
-| `spotify`       | Control Spotify and search by artist, album, track and etc.|
+| Command         | Description                                         |
+| :-------------- | :-------------------------------------------------- |
+| `tab`           | Open the current directory in a new tab             |
+| `split_tab`     | Split the current terminal tab horizontally         |
+| `vsplit_tab`    | Split the current terminal tab vertically           |
+| `ofd`           | Open the current directory in a Finder window       |
+| `pfd`           | Return the path of the frontmost Finder window      |
+| `pfs`           | Return the current Finder selection                 |
+| `cdf`           | `cd` to the current Finder directory                |
+| `pushdf`        | `pushd` to the current Finder directory             |
+| `quick-look`    | Quick-Look a specified file                         |
+| `man-preview`   | Open a specified man page in Preview app            |
+| `showfiles`     | Show hidden files                                   |
+| `hidefiles`     | Hide the hidden files                               |
+| `itunes`        | Control iTunes. Use `itunes -h` for usage details   |
+| `spotify`       | Control Spotify and search by artist, album, track… |
+| `rmdsstore`     | Remove .DS\_Store files recursively in a directory  |

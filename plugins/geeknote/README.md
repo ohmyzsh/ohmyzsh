@@ -1,6 +1,6 @@
 ## ZSH-Geeknote
 
-[Geeknote](https://github.com/VitaliyRodnenko/geeknote) plugin for [oh-my-zsh framework](http://github.com/robbyrussell/oh-my-zsh).
+[Geeknote](https://github.com/VitaliyRodnenko/geeknote) plugin for oh-my-zsh.
 
 Plugins provides:
 
