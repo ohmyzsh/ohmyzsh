@@ -46,6 +46,7 @@ alias gapa='git add --patch'
 alias gau='git add --update'
 alias gav='git add --verbose'
 alias gap='git apply'
+compdef _git ga=git-add
 
 alias gb='git branch'
 alias gba='git branch -a'
@@ -70,12 +71,15 @@ alias gcan!='git commit -v -a --no-edit --amend'
 alias gcans!='git commit -v -a -s --no-edit --amend'
 alias gcam='git commit -a -m'
 alias gcsm='git commit -s -m'
+alias gck='git checkout'
 alias gcb='git checkout -b'
+alias gckb='git checkout -b'
 alias gcf='git config --list'
 alias gcl='git clone --recurse-submodules'
 alias gclean='git clean -fd'
 alias gpristine='git reset --hard && git clean -dfx'
 alias gcm='git checkout master'
+alias gckm='git checkout master'
 alias gcd='git checkout develop'
 alias gcmsg='git commit -m'
 alias gco='git checkout'
@@ -85,6 +89,7 @@ alias gcp='git cherry-pick'
 alias gcpa='git cherry-pick --abort'
 alias gcpc='git cherry-pick --continue'
 alias gcs='git commit -S'
+compdef _git gck=git-checkout
 
 alias gd='git diff'
 alias gdca='git diff --cached'
@@ -99,23 +104,21 @@ compdef _git gdv=git-diff
 
 alias gf='git fetch'
 alias gfa='git fetch --all --prune'
+alias gfpa='git fetch --all --prune'
+alias gfp='git fetch --prune'
 alias gfo='git fetch origin'
 
 function gfg() { git ls-files | grep $@ }
 compdef _grep gfg
 
-alias gg='git gui citool'
+alias gg='git gui citool &'
 alias gga='git gui citool --amend'
 
-ggf() {
-  [[ "$#" != 1 ]] && local b="$(git_current_branch)"
-  git push --force origin "${b:=$1}"
-}
-ggfl() {
-[[ "$#" != 1 ]] && local b="$(git_current_branch)"
-git push --force-with-lease origin "${b:=$1}"
-}
-compdef _git ggf=git-checkout
+#ggf() {
+#  [[ "$#" != 1 ]] && local b="$(git_current_branch)"
+#  git push --force origin "${b:=$1}"
+#}
+#compdef _git ggf=git-checkout
 
 ggl() {
   if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
@@ -176,7 +179,10 @@ compdef _git gk='gitk'
 alias gke='\gitk --all $(git log -g --pretty=%h)'
 compdef _git gke='gitk'
 
+alias gp='git pull'
 alias gl='git pull'
+alias glt='git pull --tags'
+
 alias glg='git log --stat'
 alias glgp='git log --stat -p'
 alias glgg='git log --graph'
@@ -191,6 +197,8 @@ alias glola="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgr
 alias glog='git log --oneline --decorate --graph'
 alias gloga='git log --oneline --decorate --graph --all'
 alias glp="_git_log_prettily"
+alias glpn='git --no-pager log --pretty=oneline -n'
+alias glpn5='git --no-pager log --pretty=oneline -n 5'
 compdef _git glp=git-log
 
 alias gm='git merge'
@@ -200,14 +208,15 @@ alias gmtvim='git mergetool --no-prompt --tool=vimdiff'
 alias gmum='git merge upstream/master'
 alias gma='git merge --abort'
 
-alias gp='git push'
-alias gpd='git push --dry-run'
-alias gpf='git push --force-with-lease'
-alias gpf!='git push --force'
-alias gpoat='git push origin --all && git push origin --tags'
-compdef _git gpoat=git-push
-alias gpu='git push upstream'
-alias gpv='git push -v'
+alias gps='git push'
+alias gpsd='git push --dry-run'
+alias gpsdr='git push --dry-run'
+alias gpsoat='git push origin --all && git push origin --tags'
+compdef _git gpsoat=git-push
+alias gbr='git rev-parse --abbrev-ref HEAD'
+alias gpsu='git push -u origin $(gbr)'
+alias gpsup='git push upstream'
+alias gpsv='git push -v'
 
 alias gr='git remote'
 alias gra='git remote add'
@@ -242,7 +251,7 @@ alias gsta='git stash save'
 alias gstaa='git stash apply'
 alias gstc='git stash clear'
 alias gstd='git stash drop'
-alias gstl='git stash list'
+alias gstl='git --no-pager stash list'
 alias gstp='git stash pop'
 alias gsts='git stash show --text'
 alias gstall='git stash --all'
