@@ -23,7 +23,12 @@ env_default 'LESS' '-R'
 
 ## super user alias
 alias _='sudo'
-alias please='sudo'
+
+## repeat last command with sudo
+function please() {
+  CMD=$(history -1 | cut -d" " -f4-) ;
+  sudo $CMD ;
+}
 
 ## more intelligent acking for ubuntu users
 if which ack-grep &> /dev/null; then
