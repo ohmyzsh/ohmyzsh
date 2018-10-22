@@ -20,9 +20,9 @@ BACKGROUND_CYAN=$(tput setab 6)
 BACKGROUND_WHITE=$(tput setab 7)
 RESET_FORMATTING=$(tput sgr0)
 
-# if found a ./mvnw file execute it otherwise execute orignal mvn
+# if found an executable ./mvnw file execute it otherwise execute orignal mvn
 mvn-or-mvnw() {
-	if [ -f ./mvnw ] ; then
+	if [ -x ./mvnw ] ; then
 		echo "executing mvnw instead of mvn"		
 		./mvnw "$@";
 	else
