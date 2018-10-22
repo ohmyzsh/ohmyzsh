@@ -57,31 +57,31 @@ if (( $+commands[yaourt] )); then
 fi
 
 if (( $+commands[yay] )); then
-  alias yaconf='yay -Pg'
-  alias yaupg='yay -Syu'
-  alias yasu='yay -Syu --noconfirm'
-  alias yain='yay -S'
-  alias yains='yay -U'
-  alias yare='yay -R'
-  alias yarem='yay -Rns'
-  alias yarep='yay -Si'
-  alias yareps='yay -Ss'
-  alias yaloc='yay -Qi'
-  alias yalocs='yay -Qs'
-  alias yalst='yay -Qe'
-  alias yaorph='yay -Qtd'
-  alias yainsd='yay -S --asdeps'
-  alias yamir='yay -Syy'
+  alias yayconf='yay -Pg'
+  alias yayupg='yay -Syu'
+  alias yaysu='yay -Syu --noconfirm'
+  alias yayin='yay -S'
+  alias yayins='yay -U'
+  alias yayre='yay -R'
+  alias yayrem='yay -Rns'
+  alias yayrep='yay -Si'
+  alias yayreps='yay -Ss'
+  alias yayloc='yay -Qi'
+  alias yaylocs='yay -Qs'
+  alias yaylst='yay -Qe'
+  alias yayorph='yay -Qtd'
+  alias yayinsd='yay -S --asdeps'
+  alias yaymir='yay -Syy'
 
 
   if (( $+commands[abs] && $+commands[aur] )); then
-    alias yaupd='yay -Sy && sudo abs && sudo aur'
+    alias yayupd='yay -Sy && sudo abs && sudo aur'
   elif (( $+commands[abs] )); then
-    alias yaupd='yay -Sy && sudo abs'
+    alias yayupd='yay -Sy && sudo abs'
   elif (( $+commands[aur] )); then
-    alias yaupd='yay -Sy && sudo aur'
+    alias yayupd='yay -Sy && sudo aur'
   else
-    alias yaupd='yay -Sy'
+    alias yayupd='yay -Sy'
   fi
 fi
 
