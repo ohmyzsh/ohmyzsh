@@ -54,6 +54,7 @@ esac
   # escape sequence with a single literal character.
   # Do not change this! Do not make it '\u2b80'; that is the old, wrong code point.
   SEGMENT_SEPARATOR=$'\ue0b0'
+  SEGMENT_SEPARATOR_MID=''
 }
 
 # Begin a segment
@@ -64,7 +65,7 @@ prompt_segment() {
   [[ -n $1 ]] && bg="%K{$1}" || bg="%k"
   [[ -n $2 ]] && fg="%F{$2}" || fg="%f"
   if [[ $CURRENT_BG != 'NONE' && $1 != $CURRENT_BG ]]; then
-    echo -n " %{$bg%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR%{$fg%} "
+    echo -n " %{$bg%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR_MID%{$fg%} "
   else
     echo -n "%{$bg%}%{$fg%} "
   fi
@@ -75,13 +76,16 @@ prompt_segment() {
 # End the prompt, closing any open segments
 prompt_end() {
   if [[ -n $CURRENT_BG ]]; then
-    echo -n " %{%k%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR"
+    echo -n " \n%{%k%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR"
   else
-    echo -n "%{%k%}"
+    echo -n "\n%{%k%}"
   fi
   echo -n "%{%f%}"
   CURRENT_BG=''
 }
+
+### for geting more git status details
+source /home/gnaddaf/src/zsh-git-prompt/zshrc.sh
 
 ### Prompt components
 # Each component will draw itself, and hide itself if no information needs to be shown
@@ -102,7 +106,8 @@ prompt_git() {
   local PL_BRANCH_CHAR
   () {
     local LC_ALL="" LC_CTYPE="en_US.UTF-8"
-    PL_BRANCH_CHAR=$'\ue0a0'         # 
+    #PL_BRANCH_CHAR=$'\ue0a0'         # 
+    PL_BRANCH_CHAR=$'\u2693'          # anchor
   }
   local ref dirty mode repo_path
 
@@ -113,29 +118,57 @@ prompt_git() {
     if [[ -n $dirty ]]; then
       prompt_segment yellow black
     else
-      prompt_segment green $CURRENT_FG
+      prompt_segment yellow red
     fi
 
+    # from /home/gnaddaf/src/zsh-git-prompt/zshrc.sh
+    precmd_update_git_vars
+    if [ -n "$__CURRENT_GIT_STATUS" ]; then
+      if [ "$GIT_CHANGED" -ne "0" ]; then
+        mode+=" $ZSH_THEME_GIT_PROMPT_CHANGED$GIT_CHANGED"
+      fi
+      if [ "$GIT_STAGED" -ne "0" ]; then
+        mode+=" $ZSH_THEME_GIT_PROMPT_STAGED$GIT_STAGED"
+      fi
+      if [ "$GIT_BEHIND" -ne "0" ]; then
+        mode+=" %{%F{black}$ZSH_THEME_GIT_PROMPT_BEHIND$GIT_BEHIND%f%}"
+      fi
+      if [ "$GIT_AHEAD" -ne "0" ]; then
+        mode+=" %{%F{black}$ZSH_THEME_GIT_PROMPT_AHEAD$GIT_AHEAD%f%}"
+      fi
+      if [ "$GIT_CONFLICTS" -ne "0" ]; then
+		    mode+=" $ZSH_THEME_GIT_PROMPT_CONFLICTS$GIT_CONFLICTS"
+      fi
+      if [ "$GIT_UNTRACKED" -ne "0" ]; then
+        mode+=" %{%F{black}$ZSH_THEME_GIT_PROMPT_UNTRACKED$GIT_UNTRACKED%f%}"
+      fi
+      if [ "$GIT_CHANGED" -eq "0" ] && [ "$GIT_CONFLICTS" -eq "0" ] && [ "$GIT_STAGED" -eq "0" ] && [ "$GIT_UNTRACKED" -eq "0" ]; then
+        mode+=" %{%F{green}\u2691%f%}"
+      fi
+    fi
+    # end from /home/gnaddaf/src/zsh-git-prompt/zshrc.sh
+
     if [[ -e "${repo_path}/BISECT_LOG" ]]; then
-      mode=" <B>"
+      mode+=" <B>"
     elif [[ -e "${repo_path}/MERGE_HEAD" ]]; then
-      mode=" >M<"
+      mode+=" >M<"
     elif [[ -e "${repo_path}/rebase" || -e "${repo_path}/rebase-apply" || -e "${repo_path}/rebase-merge" || -e "${repo_path}/../.dotest" ]]; then
-      mode=" >R>"
+      mode+=" >R\u2225"
     fi
 
     setopt promptsubst
-    autoload -Uz vcs_info
+    #autoload -Uz vcs_info
 
-    zstyle ':vcs_info:*' enable git
-    zstyle ':vcs_info:*' get-revision true
-    zstyle ':vcs_info:*' check-for-changes true
-    zstyle ':vcs_info:*' stagedstr '✚'
-    zstyle ':vcs_info:*' unstagedstr '●'
-    zstyle ':vcs_info:*' formats ' %u%c'
-    zstyle ':vcs_info:*' actionformats ' %u%c'
-    vcs_info
-    echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode}"
+    #zstyle ':vcs_info:*' enable git
+    #zstyle ':vcs_info:*' get-revision true
+    #zstyle ':vcs_info:*' check-for-changes true
+    #zstyle ':vcs_info:*' stagedstr '✚'
+    #zstyle ':vcs_info:*' unstagedstr '%{%F{red}●%f%}'
+    #zstyle ':vcs_info:*' formats ' %u%c'
+    #zstyle ':vcs_info:*' actionformats ' %u%c'
+    #vcs_info
+    #echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode}"
+    echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR }${mode}"
   fi
 }
 
@@ -199,7 +232,8 @@ prompt_hg() {
 
 # Dir: current working directory
 prompt_dir() {
-  prompt_segment blue $CURRENT_FG '%~'
+#  prompt_segment blue black '%~'
+  prompt_segment  grey blue '%3~'
 }
 
 # Virtualenv: current working virtualenv
@@ -214,12 +248,18 @@ prompt_virtualenv() {
 # - was there an error
 # - am I root
 # - are there background jobs?
+# - time
 prompt_status() {
   local -a symbols
-
-  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}✘"
+  symbols=()
+  if [[ $RETVAL -ne 0 ]]; then
+    symbols+="%{%F{red}%}$RETVAL✘"
+  else
+    symbols+="%{%F{green}%}✓"
+  fi
   [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}⚡"
   [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}⚙"
+  symbols+="%{%F{white}[%T]%}"
 
   [[ -n "$symbols" ]] && prompt_segment black default "$symbols"
 }
@@ -229,7 +269,7 @@ build_prompt() {
   RETVAL=$?
   prompt_status
   prompt_virtualenv
-  prompt_context
+#  prompt_context
   prompt_dir
   prompt_git
   prompt_bzr
