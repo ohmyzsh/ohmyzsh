@@ -97,8 +97,9 @@ prompt_context() {
 prompt_git() {
   (( $+commands[git] )) || return
   
-  local ref dirty mode repo_path
-  if $( ([ -d .git ] && echo .git) || git rev-parse --is-inside-work-tree >/dev/null 2>&1 ); then
+  local repo_path
+  repo_path=$( [ -d ".git" ] && echo ".git" || [ -f "config" ] && echo ".")
+  if [[ -n $repo_path ]]; then
     if [[ "$(git config --get oh-my-zsh.hide-status 2>/dev/null)" = 1 ]]; then
       return
     fi
@@ -108,7 +109,8 @@ prompt_git() {
       PL_BRANCH_CHAR=$'\ue0a0'         # 
     }
 
-    repo_path=$( ([ -d .git ] && echo .git) || git rev-parse --git-dir 2> /dev/null)
+    local ref dirty mode 
+
     dirty=$(parse_git_dirty)
     if [[ -n $dirty ]]; then
       prompt_segment yellow black
@@ -136,6 +138,7 @@ prompt_git() {
     zstyle ':vcs_info:*' actionformats ' %u%c'
     vcs_info
     ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="➦ $(git rev-parse --short HEAD 2> /dev/null)"
+
     echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode}"
   fi
 }

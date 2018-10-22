@@ -15,7 +15,7 @@ function current_branch() {
 }
 # The list of remotes
 function current_repository() {
-  if ! $_omz_git_git_cmd rev-parse --is-inside-work-tree &> /dev/null; then
+  if ! $_omz_git_git_cmd rev-parse --is-inside-work-tree HEAD &> /dev/null; then
     return
   fi
   echo $($_omz_git_git_cmd remote -v | cut -d':' -f 2)

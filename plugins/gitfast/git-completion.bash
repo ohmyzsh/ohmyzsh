@@ -46,8 +46,9 @@ __gitdir ()
 			echo "$GIT_DIR"
 		elif [ -d .git ]; then
 			echo .git
-		else
-			git rev-parse --git-dir 2>/dev/null
+		elif [ -f config ]; then
+			echo .
+			# git rev-parse --git-dir HEAD 2>/dev/null
 		fi
 	elif [ -d "$1/.git" ]; then
 		echo "$1/.git"
