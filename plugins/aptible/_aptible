@@ -34,8 +34,8 @@ _aptible() {
                         '--environment=[ENVIRONMENT]: :_aptible_envs' \
                         '(-r, --remote)'{-r,--remote}'[REMOTE]' \
                         '--container-count=[Number of container(s)]: :{_describe "values" counts}' \
-                        '--container-size=[Size of container(s)]: :{_describe "values" sizes}' \
-                        '--size=[DEPRECATED, use --container-size]: :{_describe "values" sizes}'
+                        '--container-size=[SIZE_MB]: :{_describe "values" sizes}' \
+                        '--size=[DEPRECATED, use --container-size]'
                     ;;
                 backup:list)
                     _arguments \
@@ -46,8 +46,8 @@ _aptible() {
                 backup:restore)
                     _arguments \
                         '--handle=[HANDLE]: :_aptible_dbs' \
-                        '--container-size=[Size of container(s)]: :{_describe "values" sizes}' \
-                        '--size=[N]: :{_describe "N" sizes}'
+                        '--container-size=[SIZE_MB]: :{_describe "values" sizes}' \
+                        '--size=[SIZE_GB]'
                     ;;
                 db:backup|db:clone|db:deprovision|db:dump)
                     _arguments \
@@ -58,8 +58,8 @@ _aptible() {
                     _arguments \
                         '--type=[TYPE, Default\: postgresql]' \
                         '--version=[VERSION]' \
-                        '--container-size=[Size of container(s)]: :{_describe "values" sizes}' \
-                        '--size=[N, Default\: 10]' \
+                        '--container-size=[SIZE_MB]: :{_describe "values" sizes}' \
+                        '--size=[SIZE_GB, Default\: 10]' \
                         '--environment=[ENVIRONMENT]: :_aptible_envs'
                     ;;
                 db:execute)
@@ -81,8 +81,8 @@ _aptible() {
                     ;;
                 db:restart)
                     _arguments \
-                        '--container-size=[Size of container(s)]: :{_describe "values" sizes}' \
-                        '--disk-size=[N]' \
+                        '--container-size=[SIZE_MB]: :{_describe "values" sizes}' \
+                        '--size=[SIZE_GB]' \
                         '--environment=[ENVIRONMENT]: :_aptible_envs' \
                         ':: :_aptible_dbs'
                     ;;
