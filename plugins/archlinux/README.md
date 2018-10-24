@@ -4,8 +4,8 @@
 
 #### YAY
 
-| Alias   | Command                            | Description                                                         |
-|---------|------------------------------------|---------------------------------------------------------------------|
+| Alias    | Command                            | Description                                                         |
+|----------|------------------------------------|---------------------------------------------------------------------|
 | yayconf  | yay -Pg                            | Print current configuration                                         |
 | yayin    | yay -S                             | Install packages from the repositories                              |
 | yayins   | yay -U                             | Install a package from a local file                                 |
