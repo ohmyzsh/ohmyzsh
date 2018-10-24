@@ -21,8 +21,8 @@ Df, sed, awk and tr. Testet on Debian.
 
 ## FAQ
 
-Q: Prompt only updates when zsh is first started
+Q: Prompt only updates when zsh is first started  
 A: https://github.com/olivierverdier/zsh-git-prompt/issues/55#issuecomment-77440662
 
-Q: Which theme was used in the example?
+Q: Which theme was used in the example?  
 A: https://gist.github.com/mritzmann/85946d9ea5ca8bc2d07a7ab02947bead
