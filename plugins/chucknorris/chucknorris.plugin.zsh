@@ -23,6 +23,7 @@ fi
 # Aliases
 alias chuck="fortune -a $DIR"
 alias chuck_cow="chuck | cowthink"
+alias chuck_norris_cow="chuck | cowthink"
 }
 
 unset CHUCKNORRIS_PLUGIN_DIR
