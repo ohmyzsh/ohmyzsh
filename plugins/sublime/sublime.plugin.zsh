@@ -13,6 +13,7 @@ if [[ "$OSTYPE" == linux* ]]; then
         "/usr/bin/subl"
         "/opt/sublime_text_3/sublime_text"
         "/usr/bin/subl3"
+        "/snap/sublime-text/current/opt/sublime_text/sublime_text"
     )
     for _sublime_path in $_sublime_linux_paths; do
         if [[ -a $_sublime_path ]]; then
