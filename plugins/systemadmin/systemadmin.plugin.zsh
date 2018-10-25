@@ -145,9 +145,9 @@ geteip() {
 # determine local IP address(es)
 getip() {
     if (( ${+commands[ip]} )); then
-        ip addr | grep "inet " | grep -v '127.0.0.1' | awk '{print $2}'
+        ip addr | awk '/inet /{print $2}' | command grep -v 127.0.0.1
     else
-        ifconfig | grep "inet " | grep -Fv 127.0.0.1 | awk '{print $2}'
+        ifconfig | awk '/inet /{print $2}' | command grep -v 127.0.0.1
     fi
 }
 
