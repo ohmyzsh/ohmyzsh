@@ -19,6 +19,7 @@ plugins=(... symfony2)
 | `sfroute`     | sf debug:router              | Show the different routes     |
 | `sfcontainer` | sf debug:contaner            | List the different services   |
 | `sfgb`        | sf generate:bundle           | Generate a bundle             |
+| `sfgc`        | sf generate:command          | Generate a command            |
 | `sfge`        | sf doctrine:generate:entity  | Generate an entity            |
 | `sfsu`        | sf doctrine:schema:update    | Update the schema in Database |
 | `sfdev`       | sf --env=dev                 | Update environment to `dev`   |
