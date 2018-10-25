@@ -22,5 +22,6 @@ plugins=(... symfony2)
 | `sfgc`        | sf generate:command          | Generate a command            |
 | `sfge`        | sf doctrine:generate:entity  | Generate an entity            |
 | `sfsu`        | sf doctrine:schema:update    | Update the schema in Database |
+| `sfdc`        | sf doctrine:database:create  | Create the Database
 | `sfdev`       | sf --env=dev                 | Update environment to `dev`   |
 | `sfprod`      | sf --env=prod                | Update environment to `prod`  |
