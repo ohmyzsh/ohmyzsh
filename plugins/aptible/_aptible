@@ -45,6 +45,7 @@ _aptible() {
                     ;;
                 backup:restore)
                     _arguments \
+                        '--environment=[ENVIRONMENT]: :_aptible_envs' \
                         '--handle=[HANDLE]: :_aptible_dbs' \
                         '--container-size=[SIZE_MB]: :{_describe "values" sizes}' \
                         '--size=[SIZE_GB]'
