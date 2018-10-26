@@ -63,7 +63,7 @@ function _git_time_since_commit() {
     sub_hours=$((hours % 24))
     sub_minutes=$((minutes % 60))
 
-    if [ $hours -gt 24 ]; then
+    if [ $hours -ge 24 ]; then
       commit_age="${days}d"
     elif [ $minutes -gt 60 ]; then
       commit_age="${sub_hours}h${sub_minutes}m"
