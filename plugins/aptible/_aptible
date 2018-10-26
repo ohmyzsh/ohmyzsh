@@ -252,10 +252,26 @@ _aptible() {
     esac
 }
 
+_cache_time() {
+    if [[ `uname` == "Linux" ]]; then
+        stat -c %Y "$1"
+    else
+        stat -f %m "$1"
+    fi
+}
+
+_expiration() {
+    if [[ `uname` == "Linux" ]]; then
+        date -d "now - 1 day" +%s
+    else
+        date -v "-1d" +%s
+    fi
+}
+
 _aptible_dbs() {
     if [ -f "/tmp/aptible_dbs_zsh_cache" ]; then
-        local cache_time=$(stat -c %Y "/tmp/aptible_dbs_zsh_cache")
-        local expiration=$(date -d "now - 1 day" +%s)
+        local cache_time=$(_cache_time "/tmp/aptible_dbs_zsh_cache")
+        local expiration=$(_expiration)
         if [ $cache_time -gt $expiration ]; then
             local dbs; dbs=(
             $(cat "/tmp/aptible_dbs_zsh_cache")
@@ -276,8 +292,8 @@ _fetch_aptible_dbs() {
 
 _aptible_apps() {
     if [ -f "/tmp/aptible_apps_zsh_cache" ]; then
-        local cache_time=$(stat -c %Y "/tmp/aptible_apps_zsh_cache")
-        local expiration=$(date -d "now - 1 day" +%s)
+        local cache_time=$(_cache_time "/tmp/aptible_apps_zsh_cache")
+        local expiration=$(_expiration)
         if [ $cache_time -gt $expiration ]; then
             local apps; apps=(
             $(cat "/tmp/aptible_apps_zsh_cache")
@@ -300,8 +316,8 @@ _fetch_aptible() {
 
 _aptible_envs() {
     if [ -f "/tmp/aptible_envs_zsh_cache" ]; then
-        local cache_time=$(stat -c %Y "/tmp/aptible_envs_zsh_cache")
-        local expiration=$(date -d "now - 1 day" +%s)
+        local cache_time=$(_cache_time "/tmp/aptible_envs_zsh_cache")
+        local expiration=$(_expiration)
         if [ $cache_time -gt $expiration ]; then
             local apps; apps=(
             $(cat "/tmp/aptible_envs_zsh_cache")
