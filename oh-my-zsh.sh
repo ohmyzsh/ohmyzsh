@@ -67,16 +67,20 @@ if [ -z "$ZSH_COMPDUMP" ]; then
   ZSH_COMPDUMP="${ZDOTDIR:-${HOME}}/.zcompdump-${SHORT_HOST}-${ZSH_VERSION}"
 fi
 
-if [[ $ZSH_DISABLE_COMPFIX != true ]]; then
-  # If completion insecurities exist, warn the user
-  if ! compaudit &>/dev/null; then
-    handle_completion_insecurities
+# Skip compinit/compaudit entirely if the user wishes to run it manually
+# by defining $ZSH_DISABLE_COMPINIT
+if (( ! ${+ZSH_DISABLE_COMPINIT} )); then
+  if [[ $ZSH_DISABLE_COMPFIX != true ]]; then
+    # If completion insecurities exist, warn the user
+    if ! compaudit &>/dev/null; then
+      handle_completion_insecurities
+    fi
+    # Load only from secure directories
+    compinit -i -d "${ZSH_COMPDUMP}"
+  else
+    # If the user wants it, load from all found directories
+    compinit -u -d "${ZSH_COMPDUMP}"
   fi
-  # Load only from secure directories
-  compinit -i -d "${ZSH_COMPDUMP}"
-else
-  # If the user wants it, load from all found directories
-  compinit -u -d "${ZSH_COMPDUMP}"
 fi
 
 # Load all of the plugins that were defined in ~/.zshrc
