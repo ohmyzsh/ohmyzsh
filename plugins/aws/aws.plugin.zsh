@@ -21,8 +21,6 @@ _awscli-homebrew-installed() {
   [ -r $_brew_prefix/libexec/bin/aws_zsh_completer.sh ] &> /dev/null
 }
 
-export AWS_HOME=~/.aws
-
 function agp {
   echo $AWS_PROFILE
 }
@@ -37,7 +35,12 @@ function asp {
 }
 
 function aws_profiles {
-  reply=($(grep profile $AWS_HOME/config|sed -e 's/.*profile \([a-zA-Z0-9_\.-]*\).*/\1/'))
+  local aws_config_file=$AWS_CONFIG_FILE
+  if [ -z "${AWS_CONFIG_FILE+1}" ]; then
+    aws_config_file=~/.aws/config
+  fi
+
+  reply=($(grep profile "$aws_config_file"|sed -e 's/.*profile \([a-zA-Z0-9_\.-]*\).*/\1/'))
 }
 compctl -K aws_profiles asp
 
