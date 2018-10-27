@@ -3,7 +3,7 @@
 This plugin provides completion to set the AWS_PROFILE environment variable, as well as a
 function to get the current value of it.
 
-To use it add `aws` to th e plugins array in your zshrc file.
+To use it, add `aws` to the plugins array in your zshrc file.
 
 ```zsh
 plugins=(... aws)
