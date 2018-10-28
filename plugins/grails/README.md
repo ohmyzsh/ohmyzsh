@@ -1,6 +1,6 @@
 # Grails plugin
 
-Adds tab-completion of Grails script names to the command line use of grails.
+Adds tab-completion of [Grails](https://grails.org/) script names to the command line use of grails.
 
 To use it, add `grails` to the plugins array in your zshrc file:
 
