@@ -19,7 +19,7 @@ mark() {
 		MARK="$1"
 	fi
 	if read -q \?"Mark $PWD as ${MARK}? (y/n) "; then
-		mkdir -p "$MARKPATH"; ln -s "$PWD" "$MARKPATH/$MARK"
+		mkdir -p "$MARKPATH"; ln -sfn "$PWD" "$MARKPATH/$MARK"
 	fi
 }
 
@@ -32,7 +32,7 @@ marks() {
 		local markname="$fg[cyan]${link:t}$reset_color"
 		local markpath="$fg[blue]$(readlink $link)$reset_color"
 		printf "%s\t" $markname
-		printf "-> %s \t\n" $markpath
+		printf -- "-> %s \t\n" $markpath
 	done
 }
 

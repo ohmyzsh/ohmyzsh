@@ -1,6 +1,6 @@
 #compdef coffee
 # ------------------------------------------------------------------------------
-# Copyright (c) 2011 Github zsh-users - http://github.com/zsh-users
+# Copyright (c) 2011 Github zsh-users - https://github.com/zsh-users
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -28,7 +28,7 @@
 # Description
 # -----------
 #
-#  Completion script for Coffee.js v0.6.11 (http://coffeejs.org)
+#  Completion script for Coffee.js v0.6.11 (https://coffeescript.org)
 #
 # ------------------------------------------------------------------------------
 # Authors

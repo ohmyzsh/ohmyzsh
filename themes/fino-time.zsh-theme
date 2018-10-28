@@ -25,12 +25,15 @@ function box_name {
 }
 
 
-local rvm_ruby='‹$(rvm-prompt i v g)›%{$reset_color%}'
-local current_dir='${PWD/#$HOME/~}'
+rvm_ruby=''
+if type rvm-prompt &>/dev/null; then
+    rvm_ruby='using%{$FG[243]%}‹$(rvm-prompt i v g)›%{$reset_color%}'
+fi
+
 local git_info='$(git_prompt_info)'
 
 
-PROMPT="╭─%{$FG[040]%}%n%{$reset_color%} %{$FG[239]%}at%{$reset_color%} %{$FG[033]%}$(box_name)%{$reset_color%} %{$FG[239]%}in%{$reset_color%} %{$terminfo[bold]$FG[226]%}${current_dir}%{$reset_color%}${git_info} %{$FG[239]%}using%{$FG[243]%} ${rvm_ruby} %D - %*
+PROMPT="╭─%{$FG[040]%}%n%{$reset_color%} %{$FG[239]%}at%{$reset_color%} %{$FG[033]%}$(box_name)%{$reset_color%} %{$FG[239]%}in%{$reset_color%} %{$terminfo[bold]$FG[226]%}%~%{$reset_color%}${git_info} %{$FG[239]%}${rvm_ruby} %D - %*
 ╰─$(virtualenv_info)$(prompt_char) "
 
 ZSH_THEME_GIT_PROMPT_PREFIX=" %{$FG[239]%}on%{$reset_color%} %{$fg[255]%}"

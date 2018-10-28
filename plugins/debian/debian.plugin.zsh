@@ -5,9 +5,12 @@
 #
 # Debian-related zsh aliases and functions for zsh
 
-# Use aptitude if installed, or apt-get if not.
+# Use apt or aptitude if installed, fallback is apt-get
 # You can just set apt_pref='apt-get' to override it.
-if [[ -e $( which -p aptitude 2>&1 ) ]]; then
+if [[ -e $( which -p apt 2>&1 ) ]]; then
+    apt_pref='apt'
+    apt_upgr='upgrade'
+elif [[ -e $( which -p aptitude 2>&1 ) ]]; then
     apt_pref='aptitude'
     apt_upgr='safe-upgrade'
 else
@@ -50,7 +53,7 @@ if [[ $use_sudo -eq 1 ]]; then
     alias adg='sudo $apt_pref update && sudo $apt_pref $apt_upgr'
     alias adu='sudo $apt_pref update && sudo $apt_pref dist-upgrade'
     alias afu='sudo apt-file update'
-    alias ag='sudo $apt_pref $apt_upgr'
+    alias au='sudo $apt_pref $apt_upgr'
     alias ai='sudo $apt_pref install'
     # Install all packages given on the command line while using only the first word of each line:
     # acs ... | ail
@@ -176,7 +179,7 @@ apt-copy() {
 #   apt-history remove
 #   apt-history rollback
 #   apt-history list
-# Based On: http://linuxcommando.blogspot.com/2008/08/how-to-show-apt-log-history.html
+# Based On: https://linuxcommando.blogspot.com/2008/08/how-to-show-apt-log-history.html
 apt-history () {
   case "$1" in
     install)
@@ -192,7 +195,7 @@ apt-history () {
         awk '{print $4"="$5}'
       ;;
     list)
-      zcat $(ls -rt /var/log/dpkg*)
+      zgrep --no-filename '' $(ls -rt /var/log/dpkg*)
       ;;
     *)
       echo "Parameters:"

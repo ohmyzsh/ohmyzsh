@@ -3,15 +3,15 @@
 - Adds autocomplete options for all vault commands.
 
 ####Show help for all commands
-![General Help](http://i.imgur.com/yv5Db1r.png "Help for all commands")
+![General Help](https://i.imgur.com/yv5Db1r.png "Help for all commands")
 
 
 ####Create new Vault token
-![Create token](http://i.imgur.com/xMegNgh.png "Create token")
+![Create token](https://i.imgur.com/xMegNgh.png "Create token")
 
 
 ####Enable audit backends
-![Audit backends](http://i.imgur.com/fKLeiSF.png "Audit backends")
+![Audit backends](https://i.imgur.com/fKLeiSF.png "Audit backends")
 
 
 
