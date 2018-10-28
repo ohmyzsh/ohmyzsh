@@ -1,7 +1,8 @@
 # git-hubflow plugin
 
-This plugin adds completion for the [git-hubflow](http://datasift.github.io/gitflow/), as well as some aliases for common commands.
-HubFlow is a git extension to make it easy to use GitFlow with GitHub. Based on the original gitflow extension for git.
+This plugin adds completion for [HubFlow](https://datasift.github.io/gitflow/) (GitFlow for GitHub), as well as some
+aliases for common commands. HubFlow is a git extension to make it easy to use GitFlow with GitHub. Based on the
+original gitflow extension for git.
 
 The hubflow tool has to be [installed](https://github.com/datasift/gitflow#installation) separately.
 
