@@ -6,33 +6,7 @@
 # Author: Dimensi0n | Erwan ROUSSEL
 
 _adonis() {
-  local -a subcmds
-
-  subcmds=(
-    'addon:Create a new AdonisJs addon'
-    'install:'
-    'new'
-    'repl'
-    'serve'
-    'key\\:generate'
-    'make\\:command'
-    'make\\:controller'
-    'make\\:ehandler'
-    'make\\:exception'
-    'make\\:hook'
-    'make\\:listener'
-    'make\\:middleware'
-    'make\\:migration'
-    'make\\:model'
-    'make\\:provider'
-    'make\\:seed'
-    'make\\:trait'
-    'make\\:view'
-    'route\\:list'
-    'run\\:instructions'
-  )
-
-  _describe 'adonis' subcmds
+  compadd `adonis | cut -d " " -f 3 |  sed -E "s/.\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g" | tail -n+7 | sed '/^\s*$/d'`
 }
 
 compdef _adonis adonis
