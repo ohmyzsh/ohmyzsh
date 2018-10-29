@@ -19,6 +19,8 @@ function theme
 
 function lstheme
 {
-    cd $ZSH/themes
-    ls *zsh-theme | sed 's,\.zsh-theme$,,'
+    # Resources:
+    # http://zsh.sourceforge.net/Doc/Release/Expansion.html#Modifiers
+    # http://zsh.sourceforge.net/Doc/Release/Expansion.html#Glob-Qualifiers
+    print -l {$ZSH,$ZSH_CUSTOM}/themes/*.zsh-theme(N:t:r)
 }
