@@ -1,4 +1,4 @@
-# Bwan
+# Bwana
 
 This plugin provides a function to open `man` pages directly with [Bwana](https://www.bruji.com/bwana/).
 
