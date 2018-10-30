@@ -1,5 +1,7 @@
 # `transfer` plugin
 
+**Warning: This plugin will be deprecated as of November 30th, 2018. Please start looking for alternatives. 
+
 [`transfer.sh`](https://transfer.sh) is an easy to use file sharing service from the command line
 
 ## Usage

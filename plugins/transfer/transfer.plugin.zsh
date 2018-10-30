@@ -11,6 +11,7 @@
 #   https://gist.github.com/nl5887/a511f172d3fb3cd0e42d
 #   Modified to use tar command instead of zip
 #
+ echo -e "\033[1;33mWARN: You have loaded the 'transfer' plugin. It will be deprecated on November 30th 2018"; 
 
 curl --version 2>&1 > /dev/null
 if [ $? -ne 0 ]; then
@@ -22,7 +23,7 @@ transfer() {
     # check arguments
     if [ $# -eq 0 ]; 
     then 
-        echo "No arguments specified. Usage:\necho transfer /tmp/test.md\ncat /tmp/test.md | transfer test.md"
+        echo "No argumentsssss specified. Usage:\necho transfer /tmp/test.md\ncat /tmp/test.md | transfer test.md"
         return 1
     fi
 
