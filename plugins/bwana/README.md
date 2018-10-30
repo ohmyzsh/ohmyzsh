@@ -1,6 +1,6 @@
 # Bwan
 
-This plugin provides a function to open `man` files directly with [Bwana](https://www.bruji.com/bwana/).
+This plugin provides a function to open `man` pages directly with [Bwana](https://www.bruji.com/bwana/).
 
 To use it add bwana to the plugins array in your zshrc file.
 
