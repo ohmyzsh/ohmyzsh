@@ -12,6 +12,8 @@
 #   Modified to use tar command instead of zip
 #
 
+echo -e "\n\033[1;33mWARNING: The 'transfer' plugin will be deprecated soon\033[0m\n";
+
 curl --version 2>&1 > /dev/null
 if [ $? -ne 0 ]; then
   echo "Could not find curl."

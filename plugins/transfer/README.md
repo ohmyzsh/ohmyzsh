@@ -1,5 +1,11 @@
 # `transfer` plugin
 
+**NOTICE: The `transfer` plugin will be deprecated soon, since the [transfer.sh](https://transfer.sh) service will be shutdown on 30th November 2018.**
+
+**Please move your files to alternative file sharing service providers**
+
+<hr>
+
 [`transfer.sh`](https://transfer.sh) is an easy to use file sharing service from the command line
 
 ## Usage
