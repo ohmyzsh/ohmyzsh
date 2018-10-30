@@ -14,3 +14,6 @@ _ant () {
 }
 
 compdef _ant ant
+
+# Output colouring:
+export ANT_ARGS='-logger org.apache.tools.ant.listener.AnsiColorLogger'
