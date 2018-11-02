@@ -2,18 +2,16 @@
 function git_prompt_info() {
   local ref
   if [[ "$(command git config --get oh-my-zsh.hide-status 2>/dev/null)" != "1" ]]; then
-    if branch=$(command git symbolic-ref HEAD 2> /dev/null); then
+    if [[ "$(command git count-objects 2> /dev/null)" == "0 objects, 0 kilobytes" ]]; then
+        # Look for initialized folders
+        info="<initialized>"
+    elif branch=$(command git symbolic-ref HEAD 2> /dev/null); then
         # Branch name in the form "<upstream branch name>/<brach name>"
         ref=$(command git for-each-ref --format='%(upstream:short)' ${branch} 2> /dev/null) || return 0
         info=$(command echo "${ref#refs/heads/}")
         if [[ "${info}" == "" ]]; then
             # Handle for no remote branch
-            output=$(command git rev-parse --abbrev-ref HEAD 2>&1 /dev/null)
-            if [[ "$?" == 0 ]]; then
-              info=$(command echo "<no-remote>/$(command git rev-parse --abbrev-ref HEAD)" 2> /dev/null) || return 0
-            else
-              info="<initialized>"
-            fi
+            info=$(command echo "<no-remote>/$(command git rev-parse --abbrev-ref HEAD)" 2> /dev/null) || return 0
         fi
     elif [[ "$(command git tag --points-at 2>/dev/null)" != "" ]]; then
         # Detached at a tag
