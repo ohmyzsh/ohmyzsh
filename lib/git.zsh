@@ -2,11 +2,20 @@
 function git_prompt_info() {
   local ref
   if [[ "$(command git config --get oh-my-zsh.hide-status 2>/dev/null)" != "1" ]]; then
-    branch=$(command git symbolic-ref -q HEAD 2> /dev/null) || return 0
-    ref=$(command git for-each-ref --format='%(upstream:short)' ${branch} 2> /dev/null) || return 0
-    info=$(command echo "${ref#refs/heads/}")
-    if [[ "${info}" == "" ]]; then
-      info=$(command echo "<no-remote>/$(git rev-parse --abbrev-ref HEAD)" 2> /dev/null) || return 0
+    if branch=$(command git symbolic-ref HEAD 2> /dev/null); then
+        # Branch name in the form "<upstream branch name>/<brach name>"
+        ref=$(command git for-each-ref --format='%(upstream:short)' ${branch} 2> /dev/null) || return 0
+        info=$(command echo "${ref#refs/heads/}")
+        if [[ "${info}" == "" ]]; then
+            # Handle for no remote branch
+            info=$(command echo "<no-remote>/$(git rev-parse --abbrev-ref HEAD)" 2> /dev/null) || return 0
+        fi
+    elif [[ "$(command git tag --points-at 2>/dev/null)" != "" ]]; then
+        # Detached at a tag
+        info=$(command git tag --points-at 2>/dev/null)
+    else
+        # Detached at unnamed revision
+        info=$(command git rev-parse --short HEAD 2> /dev/null) || return 0
     fi
     echo "$ZSH_THEME_GIT_PROMPT_PREFIX${info}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
   fi
