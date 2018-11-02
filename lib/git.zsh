@@ -2,7 +2,8 @@
 function git_prompt_info() {
   local ref
   if [[ "$(command git config --get oh-my-zsh.hide-status 2>/dev/null)" != "1" ]]; then
-    if [[ "$(command git count-objects 2> /dev/null)" == "0 objects, 0 kilobytes" ]]; then
+    branches=$(command git branch --list -a 2> /dev/null)
+    if [[ "$branches" == "" && "$?" == "0" ]]; then
         # Look for initialized folders
         info="<initialized>"
     elif branch=$(command git symbolic-ref HEAD 2> /dev/null); then
