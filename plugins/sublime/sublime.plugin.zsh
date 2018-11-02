@@ -42,8 +42,8 @@ elif  [[ "$OSTYPE" = darwin* ]]; then
         fi
     done
 elif [[ "$OSTYPE" = 'cygwin' ]]; then
-    local sublime_cygwin_paths
-    sublime_cygwin_paths=(
+    local _sublime_cygwin_paths
+    _sublime_cygwin_paths=(
         "$(cygpath $ProgramW6432/Sublime\ Text\ 2)/sublime_text.exe"
         "$(cygpath $ProgramW6432/Sublime\ Text\ 3)/sublime_text.exe"
     )
