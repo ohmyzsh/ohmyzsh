@@ -8,7 +8,12 @@ function git_prompt_info() {
         info=$(command echo "${ref#refs/heads/}")
         if [[ "${info}" == "" ]]; then
             # Handle for no remote branch
-            info=$(command echo "<no-remote>/$(git rev-parse --abbrev-ref HEAD)" 2> /dev/null) || return 0
+            output=$(command git rev-parse --abbrev-ref HEAD 2>&1 /dev/null)
+            if [[ "$?" == 0 ]]; then
+              info=$(command echo "<no-remote>/$(command git rev-parse --abbrev-ref HEAD)" 2> /dev/null) || return 0
+            else
+              info="<initialized>"
+            fi
         fi
     elif [[ "$(command git tag --points-at 2>/dev/null)" != "" ]]; then
         # Detached at a tag
