@@ -2,9 +2,6 @@
 
 Provides some useful function to make [percol](https://github.com/mooz/percol) work with zsh history and [jump plugin](https://github.com/robbyrussell/oh-my-zsh/blob/master/plugins/jump/jump.plugin.zsh)
 
-### Preview
-![Preview](http://t1.qpic.cn/mblogpic/eb1c8f9d2b9f62d19fa8/2000.jpg)
-
 ### Requirements
 
 ```shell

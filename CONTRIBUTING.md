@@ -1,9 +1,9 @@
-# DISCLAIMER
-
-This repository is a fork of [robbyrussell repository](https://github.com/robbyrussell/oh-my-zsh).
-The objective of this fork is to customize some configurations to better suit my needs and likes.
-
-If you want to contribute, it will be more adequate you do so in the original repository, and due to this reason, I've left unchanged the links in this document (unlike the links in the other documents in this repository).
+ # DISCLAIMER
+ 
+ This repository is a fork of [robbyrussell repository](https://github.com/robbyrussell/oh-my-zsh).
+ The objective of this fork is to customize some configurations to better suit my needs and likes.
+ 
+ If you want to contribute, it will be more adequate you do so in the original repository, and due to this reason, I've left unchanged the links in this document (unlike the links in the other documents in this repository).
 
 # CONTRIBUTING GUIDELINES
 
@@ -16,14 +16,16 @@ issues and pull requests. Please read them closely.
 Foremost, be so kind as to [search](#use-the-search-luke). This ensures any contribution
 you would make is not already covered.
 
-* [Issues](#reporting-issues)
-  * [You have a problem](#you-have-a-problem)
-  * [You have a suggestion](#you-have-a-suggestion)
-* [Pull Requests](#submitting-pull-requests)
-  * [Getting started](#getting-started)
-  * [You have a solution](#you-have-a-solution)
-  * [You have an addition](#you-have-an-addition)
-* [Information sources (_aka_ search)](#use-the-search-luke)
+- [CONTRIBUTING GUIDELINES](#contributing-guidelines)
+    - [Reporting Issues](#reporting-issues)
+        - [You have a problem](#you-have-a-problem)
+        - [You have a suggestion](#you-have-a-suggestion)
+    - [Submitting Pull Requests](#submitting-pull-requests)
+        - [Getting started](#getting-started)
+        - [You have a solution](#you-have-a-solution)
+        - [You have an addition](#you-have-an-addition)
+    - [Use the Search, Luke](#use-the-search-luke)
+        - [You have spare time to volunteer](#you-have-spare-time-to-volunteer)
 
 **BONUS:** [Volunteering](#you-have-spare-time-to-volunteer)
 
