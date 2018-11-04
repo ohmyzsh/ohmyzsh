@@ -1,6 +1,6 @@
 ## Introduction
 
-The [mvn plugin](https://github.com/bluekrow/oh-my-zsh/tree/master/plugins/mvn) provides many
+The [mvn plugin](https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/mvn) provides many
 [useful aliases](#aliases) as well as completion for the `mvn` command.
 
 Enable it by adding `mvn` to the plugins array in your zshrc file:

@@ -16,4 +16,4 @@ Author: [Fabio Fernandes](https://github.com/fabiofl)
 
 - Upload a file: `droplr ./path/to/file/`
 
-- Shorten a link: `droplr http://example.com`
+- Shorten a link: `droplr https://example.com`

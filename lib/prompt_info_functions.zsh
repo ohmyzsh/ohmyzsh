@@ -12,7 +12,7 @@
 # Real implementations will be used when the respective plugins are loaded
 function chruby_prompt_info hg_prompt_info pyenv_prompt_info \
   rbenv_prompt_info svn_prompt_info vi_mode_prompt_info \
-  virtualenv_prompt_info {
+  virtualenv_prompt_info jenv_prompt_info {
   return 1
 }
 

@@ -4,7 +4,7 @@ Plugin for Sublime Text, a cross platform text and code editor, available for Li
 
 ### Requirements
 
- * [Sublime Text](http://www.sublimetext.com/)
+ * [Sublime Text](https://www.sublimetext.com/)
 
 ### Usage
 
