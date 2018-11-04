@@ -6,7 +6,11 @@ alias gdiff="git difftool -y --no-symlinks"
 alias gdiffdir="git difftool -d -y --no symlinks"
 alias vs="vstudio"
 alias vc="vcode"
-
+#EXPLORER
+alias explorehere="explorer.exe ."
+alias explore="explorer.exe"
+alias exp="explore"
+alias exphere="explorehere"
 
 ####FUNCTIONS#######
 function test()
