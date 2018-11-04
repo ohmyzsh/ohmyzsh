@@ -12,9 +12,8 @@ plugins=(... aws)
 
 ## Plugin commands
 
-* `asp <profile>`: Sets `AWS_PROFILE` and `AWS_DEFAULT_PROFILE` (legacy) to `<profile>`.
-It also adds it to your RPROMPT.
-
-* `agp`: Gets the current value of `AWS_PROFILE`.
-
-* `aws_profiles`: Lists the available profiles in the file referenced in `AWS_CONFIG_FILE` (default: ~/.aws/config). Used to provide completion for the `asp` function.
+| Alias  | Command              | Description   |
+|--------|----------------------|---------------|
+| asp  | `asp <profile>` | Sets `AWS_PROFILE`, `AWS_DEFAULT_PROFILE` (legacy) and `AWS_EB_PROFILE` to `<profile>`. It also adds it to your RPROMPT. |
+| agp | `echo $AWS_PROFILE` | Gets the current value of `AWS_PROFILE`. |
+| aws_profiles | `aws_profiles` | Lists the available profiles in the file referenced in `AWS_CONFIG_FILE` (default: ~/.aws/config). Used to provide completion for the `asp` function. |
