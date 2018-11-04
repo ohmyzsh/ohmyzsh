@@ -30,6 +30,7 @@ function asp {
 
   export AWS_DEFAULT_PROFILE=$1
   export AWS_PROFILE=$1
+  export AWS_EB_PROFILE=$1
 
   export RPROMPT="<aws:$AWS_PROFILE>$rprompt"
 }
