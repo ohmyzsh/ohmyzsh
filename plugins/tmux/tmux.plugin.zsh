@@ -56,7 +56,8 @@ function _zsh_tmux_plugin_run() {
     return $?
   fi
 
-  local -a tmux_cmd=(command tmux)
+  local -a tmux_cmd
+  tmux_cmd=(command tmux)
   [[ "$ZSH_TMUX_ITERM2" == "true" ]] && tmux_cmd+=(-CC)
 
   # Try to connect to an existing session.
@@ -79,7 +80,7 @@ compdef _tmux _zsh_tmux_plugin_run
 alias tmux=_zsh_tmux_plugin_run
 
 # Autostart if not already in tmux and enabled.
-if [[ -z "$TMUX" && "$ZSH_TMUX_AUTOSTART" == "true" ]]; then
+if [[ -z "$TMUX" && "$ZSH_TMUX_AUTOSTART" == "true" && -z "$INSIDE_EMACS" && -z "$EMACS" && -z "$VIM" ]]; then
   # Actually don't autostart if we already did and multiple autostarts are disabled.
   if [[ "$ZSH_TMUX_AUTOSTART_ONCE" == "false" || "$ZSH_TMUX_AUTOSTARTED" != "true" ]]; then
     export ZSH_TMUX_AUTOSTARTED=true

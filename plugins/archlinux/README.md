@@ -2,6 +2,26 @@
 
 ## Features
 
+#### YAY
+
+| Alias   | Command                            | Description                                                         |
+|---------|------------------------------------|---------------------------------------------------------------------|
+| yaconf  | yay -Pg                            | Print current configuration                                         |
+| yain    | yay -S                             | Install packages from the repositories                              |
+| yains   | yay -U                             | Install a package from a local file                                 |
+| yainsd  | yay -S --asdeps                    | Install packages as dependencies of another package                 |
+| yaloc   | yay -Qi                            | Display information about a package in the local database           |
+| yalocs  | yay -Qs                            | Search for packages in the local database                           |
+| yalst   | yay -Qe                            | List installed packages including from AUR (tagged as "local")      |
+| yamir   | yay -Syy                           | Force refresh of all package lists after updating mirrorlist        |
+| yaorph  | yay -Qtd                           | Remove orphans using yaourt                                         |
+| yare    | yay -R                             | Remove packages, keeping its settings and dependencies              |
+| yarem   | yay -Rns                           | Remove packages, including its settings and unneeded dependencies   |
+| yarep   | yay -Si                            | Display information about a package in the repositories             |
+| yareps  | yay -Ss                            | Search for packages in the repositories                             |
+| yaupg   | yay -Syu                           | Sync with repositories before upgrading packages                    |
+| yasu    | yay -Syu --no-confirm              | Same as `yaupg`, but without confirmation                           |
+
 #### TRIZEN
 
 | Alias   | Command                            | Description                                                         |
