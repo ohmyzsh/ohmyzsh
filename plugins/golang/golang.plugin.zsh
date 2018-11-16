@@ -126,6 +126,7 @@ __go_tool_complete() {
       ;;
   help)
       _values "${commands[@]}" \
+        'environment[show Go environment variables available]' \
         'gopath[GOPATH environment variable]' \
         'packages[description of package lists]' \
         'remote[remote import path syntax]' \
