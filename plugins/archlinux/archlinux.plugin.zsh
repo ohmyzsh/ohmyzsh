@@ -1,3 +1,32 @@
+if (( $+commands[trizen] )); then
+  alias trconf='trizen -C'
+  alias trupg='trizen -Syua'
+  alias trsu='trizen -Syua --noconfirm'
+  alias trin='trizen -S'
+  alias trins='trizen -U'
+  alias trre='trizen -R'
+  alias trrem='trizen -Rns'
+  alias trrep='trizen -Si'
+  alias trreps='trizen -Ss'
+  alias trloc='trizen -Qi'
+  alias trlocs='trizen -Qs'
+  alias trlst='trizen -Qe'
+  alias trorph='trizen -Qtd'
+  alias trinsd='trizen -S --asdeps'
+  alias trmir='trizen -Syy'
+
+
+  if (( $+commands[abs] && $+commands[aur] )); then
+    alias trupd='trizen -Sy && sudo abs && sudo aur'
+  elif (( $+commands[abs] )); then
+    alias trupd='trizen -Sy && sudo abs'
+  elif (( $+commands[aur] )); then
+    alias trupd='trizen -Sy && sudo aur'
+  else
+    alias trupd='trizen -Sy'
+  fi
+fi
+
 if (( $+commands[yaourt] )); then
   alias yaconf='yaourt -C'
   alias yaupg='yaourt -Syua'
@@ -24,6 +53,35 @@ if (( $+commands[yaourt] )); then
     alias yaupd='yaourt -Sy && sudo aur'
   else
     alias yaupd='yaourt -Sy'
+  fi
+fi
+
+if (( $+commands[yay] )); then
+  alias yaconf='yay -Pg'
+  alias yaupg='yay -Syu'
+  alias yasu='yay -Syu --noconfirm'
+  alias yain='yay -S'
+  alias yains='yay -U'
+  alias yare='yay -R'
+  alias yarem='yay -Rns'
+  alias yarep='yay -Si'
+  alias yareps='yay -Ss'
+  alias yaloc='yay -Qi'
+  alias yalocs='yay -Qs'
+  alias yalst='yay -Qe'
+  alias yaorph='yay -Qtd'
+  alias yainsd='yay -S --asdeps'
+  alias yamir='yay -Syy'
+
+
+  if (( $+commands[abs] && $+commands[aur] )); then
+    alias yaupd='yay -Sy && sudo abs && sudo aur'
+  elif (( $+commands[abs] )); then
+    alias yaupd='yay -Sy && sudo abs'
+  elif (( $+commands[aur] )); then
+    alias yaupd='yay -Sy && sudo aur'
+  else
+    alias yaupd='yay -Sy'
   fi
 fi
 
@@ -54,16 +112,24 @@ if (( $+commands[pacaur] )); then
   fi
 fi
 
-if (( $+commands[pacaur] )); then
-  upgrade() {
+if (( $+commands[trizen] )); then
+  function upgrade() {
+    trizen -Syu
+  }
+elif (( $+commands[pacaur] )); then
+  function upgrade() {
     pacaur -Syu
   }
 elif (( $+commands[yaourt] )); then
-  upgrade() {
+  function upgrade() {
     yaourt -Syu
   }
+elif (( $+commands[yay] )); then
+  function upgrade() {
+    yay -Syu
+  }
 else
-  upgrade() {
+  function upgrade() {
     sudo pacman -Syu
   }
 fi
@@ -83,7 +149,9 @@ alias pacmir='sudo pacman -Syy'
 alias paclsorphans='sudo pacman -Qdt'
 alias pacrmorphans='sudo pacman -Rs $(pacman -Qtdq)'
 alias pacfileupg='sudo pacman -Fy'
-alias pacfiles='pacman tFs'
+alias pacfiles='pacman -Fs'
+alias pacls='pacman -Ql'
+alias pacown='pacman -Qo'
 
 
 if (( $+commands[abs] && $+commands[aur] )); then
@@ -96,13 +164,13 @@ else
   alias pacupd='sudo pacman -Sy'
 fi
 
-paclist() {
+function paclist() {
   # Source: https://bbs.archlinux.org/viewtopic.php?id=93683
   LC_ALL=C pacman -Qei $(pacman -Qu | cut -d " " -f 1) | \
     awk 'BEGIN {FS=":"} /^Name/{printf("\033[1;36m%s\033[1;37m", $2)} /^Description/{print $2}'
 }
 
-pacdisowned() {
+function pacdisowned() {
   emulate -L zsh
 
   tmp=${TMPDIR-/tmp}/pacman-disowned-$UID-$$
@@ -120,14 +188,14 @@ pacdisowned() {
   comm -23 "$fs" "$db"
 }
 
-pacmanallkeys() {
+function pacmanallkeys() {
   emulate -L zsh
   curl -s https://www.archlinux.org/people/{developers,trustedusers}/ | \
     awk -F\" '(/pgp.mit.edu/) { sub(/.*search=0x/,""); print $1}' | \
     xargs sudo pacman-key --recv-keys
 }
 
-pacmansignkeys() {
+function pacmansignkeys() {
   emulate -L zsh
   for key in $*; do
     sudo pacman-key --recv-keys $key
@@ -136,3 +204,16 @@ pacmansignkeys() {
       --no-permission-warning --command-fd 0 --edit-key $key
   done
 }
+
+if (( $+commands[xdg-open] )); then
+  function pacweb() {
+    pkg="$1"
+    infos="$(pacman -Si "$pkg")"
+    if [[ -z "$infos" ]]; then
+      return
+    fi
+    repo="$(grep '^Repo' <<< "$infos" | grep -oP '[^ ]+$')"
+    arch="$(grep '^Arch' <<< "$infos" | grep -oP '[^ ]+$')"
+    xdg-open "https://www.archlinux.org/packages/$repo/$arch/$pkg/" &>/dev/null
+  }
+fi

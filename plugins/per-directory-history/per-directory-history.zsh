@@ -26,7 +26,7 @@
 #
 # [1]: http://www.compbiome.com/2010/07/bash-per-directory-bash-history.html
 # [2]: http://dieter.plaetinck.be/per_directory_bash
-# [3]: http://www.zsh.org/mla/users/1997/msg00226.html
+# [3]: https://www.zsh.org/mla/users/1997/msg00226.html
 #
 ################################################################################
 #

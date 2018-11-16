@@ -22,7 +22,7 @@ def get_tagname_or_hash():
         tagname = 'tags/' + output[m.start()+len('tag: '): m.end()-1]
 
     if tagname:
-        return tagname
+        return tagname.replace(' ', '')
     elif hash_:
         return hash_
     return None
@@ -41,7 +41,7 @@ ahead, behind = 0, 0
 status = [(line[0], line[1], line[2:]) for line in stdout.decode('utf-8').splitlines()]
 for st in status:
     if st[0] == '#' and st[1] == '#':
-        if re.search('Initial commit on', st[2]):
+        if re.search('Initial commit on', st[2]) or re.search('No commits yet on', st[2]):
             branch = st[2].split(' ')[-1]
         elif re.search('no branch', st[2]):  # detached status
             branch = get_tagname_or_hash()

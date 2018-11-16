@@ -6,16 +6,23 @@
 local -a _1st_arguments
 _1st_arguments=(
   'help:show help'
-  'install:download and install a version'
+  '--version:print out the latest released version of nvm'
+  'install:download and install a version in <node|iojs|node version number>'
   'uninstall:uninstall a version'
-  'use:modify PATH to use version'
-  'run:run version with given arguments'
+  'use:modify PATH to use <version>. Uses .nvmrc if available'
+  'exec:run <command> on <version>. Uses .nvmrc if available'
+  'run:run `node` on <version> with <args> as arguments. Uses .nvmrc if available'
+  'current:list installed versions'
   'ls:list installed versions or versions matching a given description'
+  'version:resolve the given description to a single local version'
+  'version-remote:resolve the given description to a single remote version'
   'ls-remote:list remote versions available for install'
-  'deactivate:undo effects of NVM on current shell'
+  'deactivate:undo effects of `nvm` on current shell'
   'alias:show or set aliases'
   'unalias:deletes an alias'
-  'copy-packages:install global NPM packages to current version'
+  'reinstall-packages:reinstall global `npm` packages contained in <version> to current version'
+  'unload:unload `nvm` from shell'
+  'which:display path to installed node version. Uses .nvmrc if available'
 )
 
 _arguments -C '*:: :->subcmds' && return 0

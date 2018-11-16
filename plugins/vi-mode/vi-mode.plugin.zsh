@@ -6,7 +6,7 @@ function zle-keymap-select() {
 
 # Ensure that the prompt is redrawn when the terminal size changes.
 TRAPWINCH() {
-  zle &&  zle -R
+  zle && { zle -R; zle reset-prompt }
 }
 
 zle -N zle-keymap-select
