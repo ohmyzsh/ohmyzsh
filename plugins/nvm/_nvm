@@ -1,7 +1,7 @@
 #compdef nvm
 #autoload
 
-[[ -f "$NVM_DIR/nvm.sh" ]] || return 0
+command -v nvm &>/dev/null || return 0
 
 local -a _1st_arguments
 _1st_arguments=(

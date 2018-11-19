@@ -1,5 +1,8 @@
-# Set NVM_DIR if it isn't already defined
-[[ -z "$NVM_DIR" ]] && export NVM_DIR="$HOME/.nvm"
-
-# Load nvm if it exists
-[[ -f "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
+export NVM_DIR=${NVM_DIR:-$HOME/.nvm}
+# This loads nvm
+if command -v brew &>/dev/null && [ -s $(brew --prefix nvm)/nvm.sh ]
+then
+  . $(brew --prefix nvm)/nvm.sh
+else
+  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+fi
