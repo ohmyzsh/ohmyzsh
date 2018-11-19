@@ -36,7 +36,7 @@ alias tkss='tmux kill-session -t'
 : ${ZSH_TMUX_FIXTERM_WITH_256COLOR:=screen-256color}
 
 # Determine if the terminal supports 256 colors
-if [[ $(tput colors) == 256 ]]; then
+if [[ $(echoti colors) == 256 ]]; then
   export ZSH_TMUX_TERM=$ZSH_TMUX_FIXTERM_WITH_256COLOR
 else
   export ZSH_TMUX_TERM=$ZSH_TMUX_FIXTERM_WITHOUT_256COLOR
@@ -80,7 +80,7 @@ compdef _tmux _zsh_tmux_plugin_run
 alias tmux=_zsh_tmux_plugin_run
 
 # Autostart if not already in tmux and enabled.
-if [[ -z "$TMUX" && "$ZSH_TMUX_AUTOSTART" == "true" ]]; then
+if [[ -z "$TMUX" && "$ZSH_TMUX_AUTOSTART" == "true" && -z "$INSIDE_EMACS" && -z "$EMACS" && -z "$VIM" ]]; then
   # Actually don't autostart if we already did and multiple autostarts are disabled.
   if [[ "$ZSH_TMUX_AUTOSTART_ONCE" == "false" || "$ZSH_TMUX_AUTOSTARTED" != "true" ]]; then
     export ZSH_TMUX_AUTOSTARTED=true

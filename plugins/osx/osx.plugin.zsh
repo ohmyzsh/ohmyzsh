@@ -209,7 +209,7 @@ if [[ ! -z "$playlist" ]]; then
 					opt="play"
 				else
 					opt="stop"
-				fi	
+				fi
                   else
                     opt="set allPlaylists to (get name of every playlist)"
                   fi
@@ -282,3 +282,8 @@ source ${ZSH}/plugins/osx/spotify
 # Show/hide hidden files in the Finder
 alias showfiles="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
 alias hidefiles="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
+
+# Remove .DS_Store files recursively in a directory, default .
+rmdsstore() {
+	find "${@:-.}" -type f -name .DS_Store -delete
+}
