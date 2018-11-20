@@ -1,0 +1,16 @@
+#compdef just
+#autload
+
+alias justl="\just --list"
+alias juste="\just --evaluate"
+
+local subcmds=()
+
+while read -r line ; do
+   if [[ ! $line == Available* ]] ;
+   then
+      subcmds+=(${line/[[:space:]]*\#/:})
+   fi
+done < <(just --list)
+
+_describe 'command' subcmds
