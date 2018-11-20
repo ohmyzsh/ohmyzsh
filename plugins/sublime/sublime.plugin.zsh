@@ -19,7 +19,7 @@ if [[ "$OSTYPE" == linux* ]]; then
             st_run() { $_sublime_path $@ >/dev/null 2>&1 &| }
             st_run_sudo() {sudo $_sublime_path $@ >/dev/null 2>&1}
             alias sst=st_run_sudo
-            alias st=st_run
+            alias sub=st_run
             break
         fi
     done
@@ -37,7 +37,7 @@ elif  [[ "$OSTYPE" = darwin* ]]; then
     for _sublime_path in $_sublime_darwin_paths; do
         if [[ -a $_sublime_path ]]; then
             subl () { "$_sublime_path" $* }
-            alias st=subl
+            alias sub=subl
             break
         fi
     done
@@ -50,7 +50,7 @@ elif [[ "$OSTYPE" = 'cygwin' ]]; then
     for _sublime_path in $_sublime_cygwin_paths; do
         if [[ -a $_sublime_path ]]; then
             subl () { "$_sublime_path" $* }
-            alias st=subl
+            alias sub=subl
             break
         fi
     done
@@ -58,7 +58,7 @@ fi
 
 }
 
-alias stt='st .'
+alias stt='sub .'
 
 find_project()
 {
@@ -84,7 +84,7 @@ find_project()
         fi
     fi
 
-    st $FINAL_DEST
+    sub $FINAL_DEST
 }
 
 function create_project() {
