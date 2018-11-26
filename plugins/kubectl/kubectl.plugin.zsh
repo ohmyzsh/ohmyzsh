@@ -16,6 +16,9 @@ alias k=kubectl
 # Apply a YML file
 alias kaf='kubectl apply -f'
 
+# Create a resource from a file
+alias kcf='kubectl create -f'
+
 # Drop into an interactive terminal on a container
 alias keti='kubectl exec -ti'
 
@@ -79,3 +82,15 @@ alias kgno='kubectl get nodes'
 alias keno='kubectl edit node'
 alias kdno='kubectl describe node'
 alias kdelno='kubectl delete node'
+
+# Namesapce management
+alias kgna='kubectl get namespaces'
+alias kena='kubectl edit namespaces'
+alias kdna='kubectl describe namespaces'
+alias kdelna='kubectl delete namespaces'
+
+# Endpoint management
+alias kged='kubectl get endpoints'
+alias keed='kubectl edit endpoints'
+alias kded='kubectl describe endpoints'
+alias kdeled='kubectl delete endpoints'
