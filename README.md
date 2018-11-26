@@ -1,7 +1,7 @@
 # UPDATE INSTRUCTION
 
 ```bash
-git clone https://github.com/estarter/oh-my-zsh.git
+git clone git@github.com:estarter/oh-my-zsh.git
 cd oh-my-zsh
 git remote add upstream https://github.com/robbyrussell/oh-my-zsh.git
 git fetch upstream
