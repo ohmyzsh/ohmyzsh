@@ -3,7 +3,7 @@
 # Warning : Jakefile should have the right case : Jakefile or jakefile
 # Tested on : MacOSX 10.7 (Lion), Ubuntu 11.10
 # Author : Alexandre Lacheze (@al3xstrat)
-# Inspiration : http://weblog.rubyonrails.org/2006/3/9/fast-rake-task-completion-for-zsh 
+# Inspiration : https://weblog.rubyonrails.org/2006/3/9/fast-rake-task-completion-for-zsh
 
 function _jake () {
   if [ -f Jakefile ]||[ -f jakefile ]; then

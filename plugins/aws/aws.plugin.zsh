@@ -21,10 +21,8 @@ _awscli-homebrew-installed() {
   [ -r $_brew_prefix/libexec/bin/aws_zsh_completer.sh ] &> /dev/null
 }
 
-export AWS_HOME=~/.aws
-
 function agp {
-  echo $AWS_DEFAULT_PROFILE
+  echo $AWS_PROFILE
 }
 
 function asp {
@@ -33,20 +31,19 @@ function asp {
   export AWS_DEFAULT_PROFILE=$1
   export AWS_PROFILE=$1
 
-  export RPROMPT="<aws:$AWS_DEFAULT_PROFILE>$rprompt"
+  export RPROMPT="<aws:$AWS_PROFILE>$rprompt"
 }
 
 function aws_profiles {
-  reply=($(grep profile $AWS_HOME/config|sed -e 's/.*profile \([a-zA-Z0-9_-]*\).*/\1/'))
+  reply=($(grep profile "${AWS_CONFIG_FILE:-$HOME/.aws/config}"|sed -e 's/.*profile \([a-zA-Z0-9_\.-]*\).*/\1/'))
 }
-
 compctl -K aws_profiles asp
 
-if _homebrew-installed && _awscli-homebrew-installed ; then
+if which aws_zsh_completer.sh &>/dev/null; then
+  _aws_zsh_completer_path=$(which aws_zsh_completer.sh 2>/dev/null)
+elif _homebrew-installed && _awscli-homebrew-installed; then
   _aws_zsh_completer_path=$_brew_prefix/libexec/bin/aws_zsh_completer.sh
-else
-  _aws_zsh_completer_path=$(which aws_zsh_completer.sh)
 fi
 
-[ -x $_aws_zsh_completer_path ] && source $_aws_zsh_completer_path
+[ -n "$_aws_zsh_completer_path" ] && [ -x $_aws_zsh_completer_path ] && source $_aws_zsh_completer_path
 unset _aws_zsh_completer_path

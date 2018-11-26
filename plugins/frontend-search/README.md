@@ -35,13 +35,13 @@ Available search contexts are:
 | angularjs     | `https://google.com/search?as_sitesearch=angularjs.org&as_q=`            |
 | aurajs        | `http://aurajs.com/api/#stq=`                                            |
 | bem           | `https://google.com/search?as_sitesearch=bem.info&as_q=`                 |
-| bootsnipp     | `http://bootsnipp.com/search?q=`                                         |
-| caniuse       | `http://caniuse.com/#search=`                                            |
-| codepen       | `http://codepen.io/search?q=`                                            |
+| bootsnipp     | `https://bootsnipp.com/search?q=`                                         |
+| caniuse       | `https://caniuse.com/#search=`                                            |
+| codepen       | `https://codepen.io/search?q=`                                            |
 | compassdoc    | `http://compass-style.org/search?q=`                                     |
 | cssflow       | `http://www.cssflow.com/search?q=`                                       |
 | dartlang      | `https://api.dartlang.org/apidocs/channels/stable/dartdoc-viewer/dart:`  |
-| emberjs       | `http://emberjs.com/api/#stp=1&stq=`                                     |
+| emberjs       | `https://emberjs.com/api/#stp=1&stq=`                                     |
 | fontello      | `http://fontello.com/#search=`                                           |
 | html5please   | `http://html5please.com/#`                                               |
 | jquery        | `https://api.jquery.com/?s=`                                             |
@@ -51,7 +51,7 @@ Available search contexts are:
 | qunit         | `https://api.qunitjs.com/?s=`                                            |
 | reactjs       | `https://google.com/search?as_sitesearch=facebook.github.io/react&as_q=` |
 | smacss        | `https://google.com/search?as_sitesearch=smacss.com&as_q=`               |
-| stackoverflow | `http://stackoverflow.com/search?q=`                                     |
+| stackoverflow | `https://stackoverflow.com/search?q=`                                     |
 | unheap        | `http://www.unheap.com/?s=`                                              |
 
 If you want to have another context, open an Issue and tell us!
@@ -62,4 +62,4 @@ If you want to have another context, open an Issue and tell us!
 **Wilson Mendes (willmendesneto)**
 + <https://plus.google.com/+WilsonMendes>
 + <https://twitter.com/willmendesneto>
-+ <http://github.com/willmendesneto>
++ <https://github.com/willmendesneto>

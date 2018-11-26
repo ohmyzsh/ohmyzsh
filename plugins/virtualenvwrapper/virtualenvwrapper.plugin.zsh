@@ -1,10 +1,26 @@
 virtualenvwrapper='virtualenvwrapper.sh'
+virtualenvwrapper_lazy='virtualenvwrapper_lazy.sh'
 
-if (( $+commands[$virtualenvwrapper] )); then
+if (( $+commands[$virtualenvwrapper_lazy] )); then
+  function {
+    setopt local_options
+    unsetopt equals
+    virtualenvwrapper=${${virtualenvwrapper_lazy}:c}
+    source ${${virtualenvwrapper_lazy}:c}
+    [[ -z "$WORKON_HOME" ]] && WORKON_HOME="$HOME/.virtualenvs"
+  }
+elif (( $+commands[$virtualenvwrapper] )); then
   function {
     setopt local_options
     unsetopt equals
     source ${${virtualenvwrapper}:c}
+  }
+elif [[ -f "/usr/local/bin/virtualenvwrapper.sh" ]]; then
+  function {
+    setopt local_options
+    unsetopt equals
+    virtualenvwrapper="/usr/local/bin/virtualenvwrapper.sh"
+    source "/usr/local/bin/virtualenvwrapper.sh"
   }
 elif [[ -f "/etc/bash_completion.d/virtualenvwrapper" ]]; then
   function {

@@ -3,11 +3,6 @@
 # Description
 # -----------
 #  zsh completion for docker-compose
-#  https://github.com/sdurrheimer/docker-compose-zsh-completion
-# -------------------------------------------------------------------------
-# Version
-# -------
-#  1.5.0
 # -------------------------------------------------------------------------
 # Authors
 # -------
@@ -199,7 +194,9 @@ __docker-compose_subcommand() {
         (build)
             _arguments \
                 $opts_help \
+                "*--build-arg=[Set build-time variables for one service.]:<varname>=<value>: " \
                 '--force-rm[Always remove intermediate containers.]' \
+                '--memory[Memory limit for the build container.]' \
                 '--no-cache[Do not use cache when building the image.]' \
                 '--pull[Always attempt to pull a newer version of the image.]' \
                 '*:services:__docker-compose_services_from_build' && ret=0
@@ -207,13 +204,16 @@ __docker-compose_subcommand() {
         (bundle)
             _arguments \
                 $opts_help \
+                '--push-images[Automatically push images for any services which have a `build` option specified.]' \
                 '(--output -o)'{--output,-o}'[Path to write the bundle file to. Defaults to "<project name>.dab".]:file:_files' && ret=0
             ;;
         (config)
             _arguments \
                 $opts_help \
                 '(--quiet -q)'{--quiet,-q}"[Only validate the configuration, don't print anything.]" \
-                '--services[Print the service names, one per line.]' && ret=0
+                '--resolve-image-digests[Pin image tags to digests.]' \
+                '--services[Print the service names, one per line.]' \
+                '--volumes[Print the volume names, one per line.]' && ret=0
             ;;
         (create)
             _arguments \
@@ -242,7 +242,7 @@ __docker-compose_subcommand() {
                 $opts_help \
                 '-d[Detached mode: Run command in the background.]' \
                 '--privileged[Give extended privileges to the process.]' \
-                '--user=[Run the command as this user.]:username:_users' \
+		'(-u --user)'{-u,--user=}'[Run the command as this user.]:username:_users' \
                 '-T[Disable pseudo-tty allocation. By default `docker-compose exec` allocates a TTY.]' \
                 '--index=[Index of the container if there are multiple instances of a service \[default: 1\]]:index: ' \
                 '(-):running services:__docker-compose_runningservices' \
@@ -252,6 +252,12 @@ __docker-compose_subcommand() {
         (help)
             _arguments ':subcommand:__docker-compose_commands' && ret=0
             ;;
+	(images)
+	    _arguments \
+		$opts_help \
+		'-q[Only display IDs]' \
+		'*:services:__docker-compose_services_all' && ret=0
+	    ;;
         (kill)
             _arguments \
                 $opts_help \
@@ -308,16 +314,17 @@ __docker-compose_subcommand() {
         (run)
             _arguments \
                 $opts_help \
+                $opts_no_deps \
                 '-d[Detached mode: Run container in the background, print new container name.]' \
                 '*-e[KEY=VAL Set an environment variable (can be used multiple times)]:environment variable KEY=VAL: ' \
                 '--entrypoint[Overwrite the entrypoint of the image.]:entry point: ' \
                 '--name=[Assign a name to the container]:name: ' \
-                $opts_no_deps \
                 '(-p --publish)'{-p,--publish=}"[Publish a container's port(s) to the host]" \
                 '--rm[Remove container after run. Ignored in detached mode.]' \
                 "--service-ports[Run command with the service's ports enabled and mapped to the host.]" \
                 '-T[Disable pseudo-tty allocation. By default `docker-compose run` allocates a TTY.]' \
                 '(-u --user)'{-u,--user=}'[Run as specified username or uid]:username or uid:_users' \
+                '(-v --volume)*'{-v,--volume=}'[Bind mount a volume]:volume: ' \
                 '(-w --workdir)'{-w,--workdir=}'[Working directory inside the container]:workdir: ' \
                 '(-):services:__docker-compose_services' \
                 '(-):command: _command_names -e' \
@@ -338,6 +345,11 @@ __docker-compose_subcommand() {
             _arguments \
                 $opts_help \
                 $opts_timeout \
+                '*:running services:__docker-compose_runningservices' && ret=0
+            ;;
+        (top)
+            _arguments \
+                $opts_help \
                 '*:running services:__docker-compose_runningservices' && ret=0
             ;;
         (unpause)
@@ -385,9 +397,17 @@ _docker-compose() {
     integer ret=1
     typeset -A opt_args
 
+    local file_description
+
+    if [[ -n ${words[(r)-f]} || -n ${words[(r)--file]} ]] ; then
+        file_description="Specify an override docker-compose file (default: docker-compose.override.yml)"
+    else
+        file_description="Specify an alternate docker-compose file (default: docker-compose.yml)"
+    fi
+
     _arguments -C \
         '(- :)'{-h,--help}'[Get help]' \
-        '(-f --file)'{-f,--file}'[Specify an alternate docker-compose file (default: docker-compose.yml)]:file:_files -g "*.yml"' \
+        '*'{-f,--file}"[${file_description}]:file:_files -g '*.yml'" \
         '(-p --project-name)'{-p,--project-name}'[Specify an alternate project name (default: directory name)]:project name:' \
         '--verbose[Show more output]' \
         '(- :)'{-v,--version}'[Print version and exit]' \
