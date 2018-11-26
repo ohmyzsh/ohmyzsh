@@ -108,3 +108,9 @@ alias kgno='kubectl get nodes'
 alias keno='kubectl edit node'
 alias kdno='kubectl describe node'
 alias kdelno='kubectl delete node'
+
+# Endpoint management
+alias kged='kubectl get endpoints'
+alias keed='kubectl edit endpoints'
+alias kded='kubectl describe endpoints'
+alias kdeled='kubectl delete endpoints'

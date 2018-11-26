@@ -15,6 +15,7 @@ plugins=(... kubectl)
 |:--------|:------------------------------------|:-------------------------------------------------------------------------------------------------|
 | k       | `kubectl`                           | The kubectl command                                                                              |
 | kaf     | `kubectl apply -f`                  | Apply a YML file                                                                                 |
+| kcf     | `kubectl create -f`                 | Create a resource from a file
 | keti    | `kubectl exec -ti`                  | Drop into an interactive terminal on a container                                                 |
 |         |                                     | **Manage configuration quickly to switch contexts between local, dev and staging**               |
 | kcuc    | `kubectl config use-context`        | Set the current-context in a kubeconfig file                                                     |
@@ -86,3 +87,8 @@ plugins=(... kubectl)
 | keno    | `kubectl edit node`                 | Edit nodes resource from the default editor                                                      |
 | kdno    | `kubectl describe node`             | Describe node resource in detail                                                                 |
 | kdelno  | `kubectl delete node`               | Delete the node                                                                                  |
+|         |                                     | **Endpoint management**                                                                          |
+| kged    | `kubectl get endpoints`             | List the endpoints in ps output format                                                           |
+| keed    | `kubectl edit endpoints`            | Edit endpoint resource from the default editor                                                   |
+| kded    | `kubectl describe endpoints`        | Describe endpoint resource in detail                                                             |
+| kdeked  | `kubectl delete endpoints`          | Delete the endpoints                                                                             |
