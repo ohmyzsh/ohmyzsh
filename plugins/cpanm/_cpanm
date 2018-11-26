@@ -6,9 +6,6 @@
 #
 # Current supported cpanm version: 1.4000 (Tue Mar  8 01:00:49 PST 2011)
 #
-# The latest code is always located at:
-#   https://github.com/rshhh/cpanminus/blob/master/etc/_cpanm
-#
 
 local arguments curcontext="$curcontext"
 typeset -A opt_args

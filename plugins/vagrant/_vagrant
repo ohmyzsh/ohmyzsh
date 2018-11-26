@@ -22,7 +22,7 @@ _1st_arguments=(
     'push:Deploys code in this environment to a configured destination'
     'rdp:Connects to machine via RDP'
     'reload:Reload the vagrant environment'
-    'resume:Resumes a suspend vagrant environment'
+    'resume:Resumes a suspended vagrant environment'
     'rsync:Syncs rsync synced folders to remote machine'
     'rsync-auto:Syncs rsync synced folders automatically when files change'
     'share:Shares your Vagrant environment with anyone in the world'
