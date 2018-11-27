@@ -96,7 +96,7 @@ cecho(){
     bold=$(tput bold);
     green=$(tput setaf 2);
     reset=$(tput sgr0);
-    echo $bold$green"$1"$reset;
+    echo "${bold}${green}${1}${reset}";
 }
 
 showStatus () {
@@ -128,7 +128,7 @@ showStatus () {
             end tell
             return nowAt'`;
 
-    echo -e $reset"Artist: $artist\nAlbum: $album\nTrack: $track \nPosition: $position / $duration";
+    echo -e "${reset}Artist: ${artist}\nAlbum: ${album}\nTrack: ${track} \nPosition: ${position} / ${duration}";
 }
 
 if [ $# = 0 ]; then
