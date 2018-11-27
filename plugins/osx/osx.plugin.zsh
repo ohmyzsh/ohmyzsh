@@ -284,6 +284,6 @@ alias showfiles="defaults write com.apple.finder AppleShowAllFiles -bool true &&
 alias hidefiles="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
 
 # Remove .DS_Store files recursively in a directory, default .
-rmdsstore() {
+function rmdsstore() {
 	find "${@:-.}" -type f -name .DS_Store -delete
 }
