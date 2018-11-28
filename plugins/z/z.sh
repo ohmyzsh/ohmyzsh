@@ -110,9 +110,9 @@ _z() {
 
     else
         # list/go
-        while [ "$1" ]; do case "$1" in
-            --) while [ "$1" ]; do shift; local fnd="$fnd${fnd:+ }$1";done;;
-            -*) local opt=${1:1}; while [ "$opt" ]; do case ${opt:0:1} in
+        while ! [ -z "$1" ]; do case "$1" in
+            --) while ! [ -z "$1" ]; do shift; local fnd="$fnd${fnd:+ }$1";done;;
+            -*) local opt=${1:1}; while ! [ -z "$opt" ]; do case ${opt:0:1} in
                     c) local fnd="^$PWD $fnd";;
                     e) local echo=1;;
                     h) echo "${_Z_CMD:-z} [-cehlrtx] args" >&2; return;;
@@ -205,8 +205,8 @@ _z() {
             }
         ')"
 
-        [ $? -eq 0 ] && [ "$cd" ] && {
-          if [ "$echo" ]; then echo "$cd"; else builtin cd "$cd"; fi
+        [ $? -eq 0 ] && ! [ -z "$cd" ] && {
+          if ! [ -z "$echo" ]; then echo "$cd"; else builtin cd "$cd"; fi
         }
     fi
 }
