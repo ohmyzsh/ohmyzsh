@@ -421,7 +421,7 @@ local -a commands;commands=(
 'verify-project:check Cargo.toml'
 'version:show version information'
 'yank:remove pushed file from index'
-$( cargo --list | sed -n '1!p' | tr -s ' ' | cut -d ' ' -f 2 | egrep -v "^bench$|^build$|^clean$|^doc$|^fetch$|^generate-lockfile$|^git-checkout$|^help$|^init$|^install$|^locate-project$|^login$|^metadata$|^new$|^owner$|^package$|^pkgid$|^publish$|^read-manifest$|^run$|^rustc$|^rustdoc$|^search$|^test$|^uninstall$|^update$|^verify-project$|^version$|^yank$" | sed -r "s/(.*)/echo \"\1:$\(cargo help \1 2>\&1 | head -n 1\)\"/" | sh )
+$( cargo --list | sed -n '1!p' | tr -s ' ' | cut -d ' ' -f 2 | egrep -v "^bench$|^build$|^clean$|^doc$|^fetch$|^generate-lockfile$|^git-checkout$|^help$|^init$|^install$|^locate-project$|^login$|^metadata$|^new$|^owner$|^package$|^pkgid$|^publish$|^read-manifest$|^run$|^rustc$|^rustdoc$|^search$|^test$|^uninstall$|^update$|^verify-project$|^version$|^yank$" | sed "s/\(.*\)/echo \"\1:$\(cargo help \1 2>\&1 | head -n 1\)\"/" | sh )
 )
 _describe 'command' commands
 
