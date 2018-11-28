@@ -115,7 +115,7 @@
 269B ;	text ;	L2 ;	none ;	x	# V4.1 (⚛) ATOM SYMBOL
 269C ;	text ;	L2 ;	none ;	x	# V4.1 (⚜) FLEUR-DE-LIS
 26A0 ;	text ;	L1 ;	none ;	j	# V4.0 (⚠) WARNING SIGN
-26A1 ;	emoji ;	L1 ;	none ;	a j	# V4.0 (⚡) HIGH VOLTAGE SIGN
+26A1 ;	emoji ;	L1 ;	none ;	a j	# V4.0 (⚡️) HIGH VOLTAGE SIGN
 26AA ;	emoji ;	L1 ;	none ;	j	# V4.1 (⚪) MEDIUM WHITE CIRCLE
 26AB ;	emoji ;	L1 ;	none ;	j w	# V4.1 (⚫) MEDIUM BLACK CIRCLE
 26B0 ;	text ;	L2 ;	none ;	x	# V4.1 (⚰) COFFIN
