@@ -11,7 +11,7 @@ if grep-flag-available --color=auto; then
 fi
 
 # ignore these folders (if the necessary grep flags are available)
-EXC_FOLDERS="{.bzr,CVS,.git,.hg,.svn,.idea}"
+EXC_FOLDERS="{.bzr,CVS,.git,.hg,.svn,.idea,.tox}"
 
 if grep-flag-available --exclude-dir=.cvs; then
     GREP_OPTIONS+=" --exclude-dir=$EXC_FOLDERS"
@@ -25,6 +25,5 @@ alias egrep="egrep $GREP_OPTIONS"
 alias fgrep="fgrep $GREP_OPTIONS"
 
 # clean up
-unset GREP_OPTIONS
-unset EXC_FOLDERS
+unset GREP_OPTIONS EXC_FOLDERS
 unfunction grep-flag-available
