@@ -13,7 +13,9 @@ set nocompatible
 set tw=100
 filetype off
 
-set rtp+=~/.vim/bundle/vundle/
+set rtp+=~/.vim/bundle/Vundle.vim/
+set rtp+=~/.vim/bundle/vim-jsonnet/syntax/
+set rtp+=~/.vim/bundle/vim-jsonnet/ftdetect/
 set ignorecase
 set smartcase
 call vundle#rc()
@@ -40,12 +42,21 @@ Bundle 'tpope/vim-surround'
 Bundle 'mephux/bro.vim'
 Bundle 'derekwyatt/vim-scala'
 Bundle 'wincent/Command-T'
-Bundle 'fholgado/minibufexpl.vim'
+" Bundle 'fholgado/minibufexpl.vim'
 Bundle 'vim-scripts/EasyGrep'
 Bundle 'vim-scripts/LustyExplorer'
 Bundle 'vim-scripts/yavdb'
 Bundle 'junkblocker/patchreview-vim'
 Bundle 'codegram/vim-codereview'
+Bundle 'google/vim-jsonnet'
+Bundle 'tpope/vim-sleuth'
+Bundle 'scrooloose/syntastic'
+Bundle 'Chiel92/vim-autoformat'
+Bundle 'ashisha/image.vim'
+Bundle 'google/vim-maktaba'
+Bundle 'bazelbuild/vim-bazel'
+Bundle 'chr4/nginx.vim'
+Bundle 'spwhitt/vim-nix'
 " Bundle 'ensime/ensime-vim'
 
 " Scala Bundles
@@ -122,6 +133,10 @@ let g:pymode_trim_whitespaces = 0
 
 " Don't autofold code
 let g:pymode_folding = 0
+
+" Syntastic python config
+let g:syntastic_python_checkers = ['prospector']
+let g:syntastic_python_prospector_args = "--profile python/prospector.yaml"
 
 " Highlight trailing white space and delete on save
 autocmd InsertLeave * match ErrorMsg '\s\+$'
@@ -228,3 +243,7 @@ function! CopyMatches(reg)
   execute 'let @'.reg.' = join(hits, "\n") . "\n"'
 endfunction
 command! -register CopyMatches call CopyMatches(<q-reg>)
+
+noremap <F5> :Autoformat<CR>
+let g:formatdef_scalafmt = '"scalafmt --config .scalafmt.conf"'
+let g:formatters_scala = ['scalafmt']
