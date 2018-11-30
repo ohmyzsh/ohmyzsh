@@ -19,10 +19,14 @@ elif grep-flag-available --exclude=.cvs; then
     GREP_OPTIONS+=" --exclude=$VCS_FOLDERS"
 fi
 
+TOX_FOLDER=".tox"
+GREP_OPTIONS+=" --exclude-dir=$TOX_FOLDER"
+
 # export grep settings
 alias grep="grep $GREP_OPTIONS"
 
 # clean up
 unset GREP_OPTIONS
+unset TOX_FOLDER
 unset VCS_FOLDERS
 unfunction grep-flag-available
