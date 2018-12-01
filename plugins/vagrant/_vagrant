@@ -6,6 +6,7 @@
 local -a _1st_arguments
 _1st_arguments=(
     'box:Box commands'
+    'cloud:Manages everything related to Vagrant Cloud'
     'connect:Connects to a remotely shared Vagrant environment'
     'destroy:Destroys the vagrant environment'
     'docker-logs:Outputs the logs from the Docker container'
