@@ -19,6 +19,7 @@ _1st_arguments=(
     'login:Authenticates against a Vagrant Cloud server to access protected boxes'
     'package:Packages a vagrant environment for distribution'
     'plugin:Plugin commands'
+    'port:Displays information about guest port mappings'
     'provision:Run the provisioner'
     'push:Deploys code in this environment to a configured destination'
     'rdp:Connects to machine via RDP'
@@ -55,7 +56,7 @@ __task_list ()
     local expl
     declare -a tasks
 
-    tasks=(box destroy halt init package provision reload resume ssh ssh_config status suspend up version)
+    tasks=(box destroy halt init package port provision reload resume ssh ssh_config status suspend up version)
 
     _wanted tasks expl 'help' compadd $tasks
 }
@@ -124,7 +125,7 @@ case $state in
       (box)
           __vagrant-box
       ;;
-      (up|provision|package|destroy|reload|ssh|ssh-config|halt|resume|status)
+      (up|provision|port|package|destroy|reload|ssh|ssh-config|halt|resume|status)
       _arguments ':feature:__vm_list'
     esac
   ;;
