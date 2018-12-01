@@ -35,6 +35,7 @@ _1st_arguments=(
     'suspend:Suspends the currently running vagrant environment'
     'snapshot:Used to manage snapshots with the guest machine'
     'up:Creates the vagrant environment'
+    'validate:Validates the Vagrantfile'
     'version:Prints current and latest Vagrant version'
     '--help:[TASK] Describe available tasks or one specific task'
     '--version:Prints the Vagrant version information'
