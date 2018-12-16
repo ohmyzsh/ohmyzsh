@@ -11,6 +11,11 @@ alias explorehere="explorer.exe ."
 alias explore="explorer.exe"
 alias exp="explore"
 alias exphere="explorehere"
+#GIT ALIASES
+alias gitdocs-probook="cmd.exe /C start https://bluekrow.github.io/assets/documents/gitprobook.pdf "
+alias gitdocs-cheatsheet="cmd.exe /C start https://bluekrow.github.io/assets/documents/gitsheet.pdf"
+alias gitdocs-ref="cmd.exe /C start https://git-scm.com/docs"
+alias gitdocs-labs="cmd.exe /C start http://gitimmersion.com/"
 
 ####FUNCTIONS#######
 function test()
@@ -32,4 +37,14 @@ function vstudio()
 function vcode()
 {
     (/mnt/c/Users/Nino/AppData/Local/Programs/Microsoft\ VS\ Code/Code.exe `echo $(pwd -P)/$1 | sed -r 's_/mnt/([[:alpha:]])_\u\1:_'` >/dev/null 2>&1 &)
+}
+
+function winpath
+{
+    `echo readlink -f $1` | sed 's_/mnt/d_D:_'
+}
+
+function winopen
+{
+    cmd.exe /C start `winpath $1`
 }
