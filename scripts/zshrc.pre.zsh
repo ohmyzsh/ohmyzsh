@@ -8,3 +8,4 @@ export TMPDIR='/mnt/c/Users/Nino/AppData/Local/Temp'
 export EDITOR='nano'
 #####OPTIONS#######
 unsetopt BG_NICE
+unsetopt BEEP
