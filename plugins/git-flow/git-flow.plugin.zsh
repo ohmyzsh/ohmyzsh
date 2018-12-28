@@ -23,9 +23,9 @@
 #Alias
 alias gfl='git flow'
 alias gfli='git flow init'
-alias gcd='git checkout develop'
-alias gch='git checkout hotfix'
-alias gcr='git checkout release'
+alias gcd='git checkout $(git config gitflow.branch.develop)'
+alias gch='git checkout $(git config gitflow.prefix.hotfix)'
+alias gcr='git checkout $(git config gitflow.prefix.release)'
 alias gflf='git flow feature'
 alias gflh='git flow hotfix'
 alias gflr='git flow release'
