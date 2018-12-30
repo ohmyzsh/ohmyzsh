@@ -33,6 +33,11 @@ function work_in_progress() {
   fi
 }
 
+function _omz_git_stash_command() {
+  [[ `git --version 2>/dev/null` =~ '^git version ([[:digit:]]+.[[:digit:]]+)' && "$match[1]" >= '2.13' ]] \
+  && echo push || echo save
+}
+
 #
 # Aliases
 # (sorted alphabetically)
@@ -238,7 +243,7 @@ alias gsps='git show --pretty=short --show-signature'
 alias gsr='git svn rebase'
 alias gss='git status -s'
 alias gst='git status'
-alias gsta='git stash save'
+alias gsta="git stash $(_omz_git_stash_command)"
 alias gstaa='git stash apply'
 alias gstc='git stash clear'
 alias gstd='git stash drop'
