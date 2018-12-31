@@ -28,11 +28,18 @@ unmark() {
 }
 
 marks() {
+	local max=0
+	for link in $MARKPATH/*(@); do
+		if [[ ${#link:t} -gt $max ]]; then
+			max=${#link:t}
+		fi
+	done
+	local printf_markname_template="$(printf -- "%%%us " "$max")"
 	for link in $MARKPATH/*(@); do
 		local markname="$fg[cyan]${link:t}$reset_color"
 		local markpath="$fg[blue]$(readlink $link)$reset_color"
-		printf "%s\t" $markname
-		printf -- "-> %s \t\n" $markpath
+		printf -- "$printf_markname_template" "$markname"
+		printf -- "-> %s\n" "$markpath"
 	done
 }
 
