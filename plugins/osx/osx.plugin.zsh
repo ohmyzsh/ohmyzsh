@@ -51,6 +51,17 @@ EOF
           end tell
         end tell
 EOF
+  elif [[ "$the_app" == 'Hyper' ]]; then
+    osascript >/dev/null <<EOF
+          tell application "System Events"
+            tell process "Hyper" to keystroke "t" using command down
+          end tell
+          delay 1
+          tell application "System Events"
+              keystroke "${command}"
+              key code 36  #(presses enter)
+            end tell
+EOF
 
   else
     echo "tab: unsupported terminal app: $the_app"
@@ -91,6 +102,19 @@ EOF
           end tell
         end tell
 EOF
+  
+  elif [[ "$the_app" == 'Hyper' ]]; then
+      osascript >/dev/null <<EOF
+      tell application "System Events"
+        tell process "Hyper"
+          tell menu item "Split Vertically" of menu "Shell" of menu bar 1
+            click
+          end tell
+        end tell
+        delay 1
+        keystroke "${command} \n"
+      end tell
+EOF
 
   else
     echo "$0: unsupported terminal app: $the_app" >&2
@@ -130,6 +154,19 @@ EOF
             end tell
           end tell
         end tell
+EOF
+
+  elif [[ "$the_app" == 'Hyper' ]]; then
+      osascript >/dev/null <<EOF
+      tell application "System Events"
+        tell process "Hyper"
+          tell menu item "Split Horizontally" of menu "Shell" of menu bar 1
+            click
+          end tell
+        end tell
+        delay 1
+        keystroke "${command} \n"
+      end tell
 EOF
 
   else
