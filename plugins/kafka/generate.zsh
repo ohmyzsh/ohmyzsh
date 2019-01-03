@@ -15,7 +15,7 @@ function kafka_retrieve_help_command() {
 	option=""
 	desc=""
 	help_output=`$cmd 2>&1`
-	arg_name="$(echo $cmd | tr - _)_args"
+	arg_name="_$(echo $cmd | tr - _)_args"
 	start_desc_column=`echo $help_output | grep Description | head -n 1`
 
 	# If a "Description" column is present 
@@ -44,16 +44,18 @@ function kafka_retrieve_help_command() {
 	# description 
 	IFS=$'\n'
 	for line in `echo $help_output`; do
-		if [[ $line =~ "^[ \t]*--[a-z][a-z\-\.]+" ]]; then
+		first_part_line=`echo $line | cut -c -$start_desc_column | tr '\t' ' '`
+		second_part_line=`echo $line | cut -c $start_desc_column- | tr '\t' ' '`
+		if [[ $first_part_line =~ "^[ \t]*--[a-z][a-z\-\.]+" ]]; then
 			if [ ! -z $option ]; then
 				echo "$arg_name+=('$option:${desc//\'/''}')" >> $OUT
 			fi	
 
-			option=`echo $line | sed -E 's/^\s*(--[a-z\.\\\-]+).*$/\1/'`
+			option=`echo $first_part_line | sed -E 's/^\s*(--[a-z\.\\\-]+).*$/\1/'`
 			desc=""
 		fi
 		IFS=" "
-		for word in `echo $line | cut -c $start_desc_column-`; do
+		for word in `echo $second_part_line`; do
 			desc="$desc $word"
 		done
 		IFS=$'\n'
@@ -82,9 +84,9 @@ cat << EOF > $OUT
 
 function _kafka-command() {
 	cmd=\$1
-	arg_name="\$(echo \$cmd | tr - _)_args"
+	arg_name="_\$(echo \$cmd | tr - _)_args"
 	typeset -a options
-	eval _describe 'values' options -- \$arg_name
+	eval _describe 'values' \$arg_name
 }
 
 EOF
