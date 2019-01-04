@@ -59,11 +59,17 @@ main() {
       exit 1
     fi
   fi
-  env git clone --depth=1 https://github.com/bluekrow/oh-my-zsh.git "$ZSH" || {
-    printf "Error: git clone of oh-my-zsh repo failed\n"
-    exit 1
-  }
-
+  if [ "$ISVXL" = "true" ]; then
+    env git clone git@github.com-bk/bluekrow/oh-my-zsh.git "$ZSH" || {
+      printf "Error: git clone of oh-my-zsh repo failed\n"
+      exit 1
+    }
+  else
+    env git clone git@github.com/bluekrow/oh-my-zsh.git "$ZSH" || {
+      printf "Error: git clone of oh-my-zsh repo failed\n"
+      exit 1
+    }
+  fi
 
   printf "${BLUE}Looking for an existing zsh config...${NORMAL}\n"
   if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]; then
