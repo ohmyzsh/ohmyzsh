@@ -13,15 +13,27 @@ function _start_agent() {
 
 function _add_identities() {
 	local id line
-	local -a identities ids
+	local -a identities ids sigs
 	zstyle -a :omz:plugins:ssh-agent identities identities
 
-	# get list of loaded identities
-	for line in ${(f)"$(ssh-add -l)"}; do ids+=${${(z)line}[3]}; done
+	# check for .ssh folder presence
+	if [[ ! -d $HOME/.ssh ]]; then
+		return
+	fi
+
+	# get list of loaded identities signatures
+	for line in ${(f)"$(ssh-add -l)"}; do ids+=${${(z)line}[2]}; done
+
+	# get signatures of private keys
+	for id in ${^identities}; do
+		sigs+="$(ssh-keygen -lf $HOME/.ssh/$id | awk '{ print $2 }')	${id}"
+	done
 
 	# add identities if not already loaded
-	for id in ${^identities}; do
-		[[ ${ids[(I)$HOME/.ssh/$id]} -le 0 ]] && ssh-add $HOME/.ssh/$id
+	for sigid in ${sigs}; do
+		id="$(echo ${sigid}|cut -f2)"
+		sig="$(echo ${sigid}|cut -f1)"
+		[[ ${ids[(I)$sig]} -le 0 ]] && ssh-add $HOME/.ssh/$id
 	done
 }
 
