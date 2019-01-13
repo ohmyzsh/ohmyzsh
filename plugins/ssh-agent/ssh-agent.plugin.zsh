@@ -13,7 +13,7 @@ function _start_agent() {
 
 function _add_identities() {
 	local id line
-	local -a identities ids
+	local -a identities ids not_loaded
 	zstyle -a :omz:plugins:ssh-agent identities identities
 
 	# get list of loaded identities
@@ -21,8 +21,9 @@ function _add_identities() {
 
 	# add identities if not already loaded
 	for id in ${^identities}; do
-		[[ ${ids[(I)$HOME/.ssh/$id]} -le 0 ]] && ssh-add $HOME/.ssh/$id
+		[[ ${ids[(I)$HOME/.ssh/$id]} -le 0 ]] && not_loaded+=$HOME/.ssh/$id
 	done
+	if [[ ! -z ${not_loaded} ]] && ssh-add ${^not_loaded}
 }
 
 # Get the filename to store/lookup the environment from
