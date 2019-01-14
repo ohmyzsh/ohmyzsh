@@ -13,7 +13,7 @@ function _start_agent() {
 
 function _add_identities() {
 	local id line sig
-	local -a identities loaded signatures
+	local -a identities loaded not_loaded signatures
 	zstyle -a :omz:plugins:ssh-agent identities identities
 
 	# check for .ssh folder presence
@@ -33,8 +33,10 @@ function _add_identities() {
 	for sig in $signatures; do
 		id="$(cut -f2 <<< $sig)"
 		sig="$(cut -f1 <<< $sig)"
-		[[ ${loaded[(I)$sig]} -le 0 ]] && ssh-add $HOME/.ssh/$id
+		[[ ${loaded[(I)$sig]} -le 0 ]] && not_loaded+="$HOME/.ssh/$id"
 	done
+
+	if [[ -n "$not_loaded" ]] && ssh-add ${^not_loaded}
 }
 
 # Get the filename to store/lookup the environment from
