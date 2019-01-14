@@ -75,13 +75,16 @@ function git_remote_status() {
 # it's not a symbolic ref, but in a Git repo.
 function git_current_branch() {
   local ref
-  ref=$(command git symbolic-ref --quiet HEAD 2> /dev/null)
+  #ref=$(command git symbolic-ref --quiet HEAD 2> /dev/null)
+  _tmp=$(command git symbolic-ref -q HEAD)
+  ref=$(command git for-each-ref --format='%(upstream:short)' ${_tmp})
   local ret=$?
   if [[ $ret != 0 ]]; then
     [[ $ret == 128 ]] && return  # no git repo.
     ref=$(command git rev-parse --short HEAD 2> /dev/null) || return
   fi
-  echo ${ref#refs/heads/}
+  #echo ${ref#refs/heads/}
+  echo ${ref}
 }
 
 
