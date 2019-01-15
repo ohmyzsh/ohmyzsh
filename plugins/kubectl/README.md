@@ -6,7 +6,7 @@ as well as some aliases for common kubectl commands.
 To use it, add `kubectl` to the plugins array in your zshrc file:
 
 ```zsh
-plugins=(... kubectl)
+plugins=(..., kubectl)
 ```
 
 ## Aliases
