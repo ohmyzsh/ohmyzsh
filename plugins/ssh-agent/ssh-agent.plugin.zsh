@@ -21,6 +21,16 @@ function _add_identities() {
 		return
 	fi
 
+	# add default keys if no identities were set up via zstyle
+	# this is to mimic the call to ssh-add with no identities
+	if [[ ${#identities} -eq 0 ]]; then
+		# key list found on `ssh-add` man page's DESCRIPTION section
+		for id in id_rsa id_dsa id_ecdsa id_ed25519 identity; do
+			# check if file exists
+			[[ -f "$HOME/.ssh/$id" ]] && identities+=$id
+		done
+	fi
+
 	# get list of loaded identities' signatures
 	for line in ${(f)"$(ssh-add -l)"}; do loaded+=${${(z)line}[2]}; done
 
@@ -36,7 +46,7 @@ function _add_identities() {
 		[[ ${loaded[(I)$sig]} -le 0 ]] && not_loaded+="$HOME/.ssh/$id"
 	done
 
-	if [[ -n "$not_loaded" ]] && ssh-add ${^not_loaded}
+	[[ -n "$not_loaded" ]] && ssh-add ${^not_loaded}
 }
 
 # Get the filename to store/lookup the environment from
