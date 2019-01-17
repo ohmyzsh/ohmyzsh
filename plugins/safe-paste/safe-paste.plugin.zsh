@@ -30,9 +30,15 @@ function _start_paste() {
 # command line. this has the nice effect of making the whole paste be
 # a single undo/redo event.
 function _end_paste() {
-#use bindkey -v here with vi mode probably. maybe you want to track
-#if you were in ins or cmd mode and restore the right one.
-  bindkey -e
+  if [[ "$(bindkey | grep -F vi-cmd-mode)" = *\^\[* ]]; then
+    # `bindkey` returned something like `"^[" vi-cmd-mode`, meaning we're most
+    # likely in vi mode. Restore vi mode functionality. Maybe we should track
+    # if we were in insert or command mode and restore that too.
+    bindkey -v
+  else
+    # by default assume emacs mode
+    bindkey -e
+  fi
   LBUFFER+=$_paste_content
   unset _paste_content
 }
