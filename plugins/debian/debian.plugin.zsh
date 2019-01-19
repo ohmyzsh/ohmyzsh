@@ -1,13 +1,13 @@
-# Use apt or aptitude if installed, fallback is apt-get
+# Use aptitude or apt if installed, fallback is apt-get
 # You can just set apt_pref='apt-get' to override it.
 
 if [[ -z $apt_pref || -z $apt_upgr ]]; then
-    if [[ -e $commands[apt] ]]; then
-        apt_pref='apt'
-        apt_upgr='upgrade'
-    elif [[ -e $commands[aptitude] ]]; then
+    if [[ -e $commands[aptitude] ]]; then
         apt_pref='aptitude'
         apt_upgr='safe-upgrade'
+    elif [[ -e $commands[apt] ]]; then
+        apt_pref='apt'
+        apt_upgr='upgrade'
     else
         apt_pref='apt-get'
         apt_upgr='upgrade'
