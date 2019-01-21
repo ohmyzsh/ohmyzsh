@@ -191,6 +191,12 @@ By default, you will be prompted to check for upgrades every few weeks. If you w
 DISABLE_UPDATE_PROMPT=true
 ```
 
+To automatically update custom plugins and themes in `$ZSH_CUSTOM` (disabled by default), set the following in your `~/.zshrc`:
+
+```shell
+AUTOUPDATE_CUSTOM_PLUGINS=true
+```
+
 To disable automatic upgrades, set the following in your `~/.zshrc`:
 
 ```shell
