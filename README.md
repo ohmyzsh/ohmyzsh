@@ -58,15 +58,7 @@ vi ~/.zshrc
 For example, this might begin to look like this:
 
 ```shell
-plugins=(
-  git
-  bundler
-  dotenv
-  osx
-  rake
-  rbenv
-  ruby
-)
+plugins=(git bundler dotenv osx rake rbenv ruby)
 ```
 
 #### Using Plugins
