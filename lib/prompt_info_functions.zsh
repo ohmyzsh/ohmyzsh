@@ -15,6 +15,7 @@ function chruby_prompt_info hg_prompt_info pyenv_prompt_info \
   virtualenv_prompt_info jenv_prompt_info {
   return 1
 }
+# virtualenv_prompt_info jenv_prompt_info kubectl_prompt_info {
 
 # oh-my-zsh supports an rvm prompt by default
 # get the name of the rvm ruby version
