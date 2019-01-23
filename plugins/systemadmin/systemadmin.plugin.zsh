@@ -134,12 +134,12 @@ geteip() {
     curl -s -S https://icanhazip.com
 }
 
-# determine local IP address
+# determine local IP address(es)
 getip() {
     if (( ${+commands[ip]} )); then
-        ip addr | grep "inet " | grep -v '127.0.0.1' | awk '{print $2}'
+        ip addr | awk '/inet /{print $2}' | command grep -v 127.0.0.1
     else
-        ifconfig  | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}'
+        ifconfig | awk '/inet /{print $2}' | command grep -v 127.0.0.1
     fi
 }
 
