@@ -20,6 +20,7 @@ plugins=(... mercurial)
 | `hgba` | `hg branches`                                                                                               |
 | `hgbk` | `hg bookmarks`                                                                                              |
 | `hgco` | `hg checkout`                                                                                               |
+| `hgu`  | `hg update`                                                                                                 |
 | `hgd`  | `hg diff`                                                                                                   |
 | `hged` | `hg diffmerge`                                                                                              |
 | `hgp`  | `hg push`                                                                                                   |

@@ -1,4 +1,4 @@
-# aliases
+# Mercurial
 alias hga='hg add'
 alias hgc='hg commit'
 alias hgca='hg commit --amend'
@@ -6,6 +6,7 @@ alias hgb='hg branch'
 alias hgba='hg branches'
 alias hgbk='hg bookmarks'
 alias hgco='hg checkout'
+alias hgu='hg update'
 alias hgd='hg diff'
 alias hged='hg diffmerge'
 alias hgp='hg push'
