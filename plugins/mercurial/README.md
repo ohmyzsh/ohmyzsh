@@ -26,6 +26,7 @@ Update .zshrc:
 ### What's inside?
 #### Adds handy aliases:
 ###### general
+* `hgu` - `hg update`
 * `hgc` - `hg commit`
 * `hgb` - `hg branch`
 * `hgba` - `hg branches`

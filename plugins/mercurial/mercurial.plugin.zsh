@@ -1,4 +1,5 @@
 # Mercurial
+alias hgu='hg update'
 alias hga='hg add'
 alias hgc='hg commit'
 alias hgb='hg branch'
