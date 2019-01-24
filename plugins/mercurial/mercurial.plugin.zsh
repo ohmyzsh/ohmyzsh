@@ -1,5 +1,4 @@
 # Mercurial
-alias hgu='hg update'
 alias hga='hg add'
 alias hgc='hg commit'
 alias hgb='hg branch'
@@ -9,6 +8,7 @@ alias hgco='hg checkout'
 alias hgd='hg diff'
 alias hged='hg diffmerge'
 # pull and update
+alias hgu='hg update'
 alias hgi='hg incoming'
 alias hgl='hg pull -u'
 alias hglr='hg pull --rebase'

@@ -26,7 +26,6 @@ Update .zshrc:
 ### What's inside?
 #### Adds handy aliases:
 ###### general
-* `hgu` - `hg update`
 * `hgc` - `hg commit`
 * `hgb` - `hg branch`
 * `hgba` - `hg branches`
@@ -36,6 +35,7 @@ Update .zshrc:
 * `hged` - `hg diffmerge`
 
 ###### pull and update
+* `hgu` - `hg update`
 * `hgi` - `hg incoming`
 * `hgl` - `hg pull -u`
 * `hglr` - `hg pull --rebase`
