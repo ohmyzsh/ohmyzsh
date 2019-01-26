@@ -83,7 +83,18 @@ main() {
   export ZSH=\"$ZSH\"
   " ~/.zshrc > ~/.zshrc-omztemp
   mv -f ~/.zshrc-omztemp ~/.zshrc
-
+  
+  printf "${BLUE}Using the zshrc template files and adding it to $ZSH/custom/scripts${NORMAL}\n"
+  if [[ "$(< /proc/sys/kernel/osrelease)" == *Microsoft ]]; then
+    printf Using WSL scripts 
+    cp "$ZSH"/templates/zshrc.wsl.pre.zsh-template "$ZSH"/custom/scripts/zshrc.pre.zsh
+    cp "$ZSH"/templates/zshrc.wsl.post.zsh-template "$ZSH"/custom/scripts/zshrc.post.zsh
+  else
+    printf Using Ubuntu scripts
+    cp "$ZSH"/templates/zshrc.nix.pre.zsh-template "$ZSH"/custom/scripts/zshrc.pre.zsh
+    cp "$ZSH"/templates/zshrc.nix.post.zsh-template "$ZSH"/custom/scripts/zshrc.post.zsh
+  fi
+  
   # If this user's login shell is not already "zsh", attempt to switch.
   TEST_CURRENT_SHELL=$(expr "$SHELL" : '.*/\(.*\)')
   if [ "$TEST_CURRENT_SHELL" != "zsh" ]; then

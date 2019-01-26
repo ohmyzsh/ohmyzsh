@@ -65,9 +65,9 @@ ZSH_THEME="agnoster"
 plugins=(
   git
 )
-source $ZSH/scripts/zshrc.pre.zsh
+source $ZSH/custom/scripts/zshrc.pre.zsh
 source $ZSH/oh-my-zsh.sh
-source $ZSH/scripts/zshrc.post.zsh
+source $ZSH/custom/scripts/zshrc.post.zsh
 
 # User configuration
 
