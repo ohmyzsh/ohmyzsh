@@ -1,0 +1,20 @@
+####PLUGINS CONFIGS#######
+plugins=(
+  git 
+  zsh-autosuggestions 
+  zsh-syntax-highlighting
+)
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=243'
+typeset -A ZSH_HIGHLIGHT_STYLES
+ZSH_HIGHLIGHT_STYLES[path]='fg=cyan'
+#####CONFIGURATIONS#######
+DEFAULT_USER="raven"
+eval `dircolors ~/.dircolors`
+ZSH_DISABLE_COMPFIX=true
+#####EXPORTS#######
+export PATH=$HOME/bin:/usr/local/bin:$PATH
+export TMPDIR='/mnt/3676D98A76D94AEF'
+export EDITOR='nano'
+#####OPTIONS#######
+unsetopt BG_NICE
+unsetopt BEEP
