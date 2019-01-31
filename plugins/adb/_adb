@@ -43,7 +43,16 @@ local expl
 local -a pkgs installed_pkgs
 
 _arguments \
+	'-s[devices]:specify device:->specify_device' \
 	'*:: :->subcmds' && return 0
+
+case "$state" in
+	specify_device)
+	_values -C 'devices' ${$(adb devices -l|awk 'NR>1&& $1 \
+		{sub(/ +/," ",$0);gsub(":","\\:",$1); printf "%s[%s] ",$1, $NF}'):-""}
+	return
+	;;
+esac
 
 if (( CURRENT == 1 )); then
 	_describe -t commands "adb subcommand" _1st_arguments

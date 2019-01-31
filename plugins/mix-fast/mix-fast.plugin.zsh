@@ -12,7 +12,7 @@ _mix_does_task_list_need_generating () {
 }
 
 _mix_generate () {
-  mix --help | grep -v 'iex -S' | tail -n +2 | cut -d " " -f 2 > .mix_tasks
+  mix help | grep -v 'iex -S' | tail -n +2 | cut -d " " -f 2 > .mix_tasks
 }
 
 _mix () {

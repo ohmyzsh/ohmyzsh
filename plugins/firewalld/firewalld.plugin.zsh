@@ -6,7 +6,7 @@ alias fwrp="sudo firewall-cmd --runtime-to-permanent"
 function fwl () {
   # converts output to zsh array ()
   # @f flag split on new line
-  zones=("${(@f)$(sudo firewall-cmd --get-active-zones | grep -v interfaces)}")
+  zones=("${(@f)$(sudo firewall-cmd --get-active-zones | grep -v 'interfaces\|sources')}")
 
   for i in $zones; do
     sudo firewall-cmd --zone $i --list-all

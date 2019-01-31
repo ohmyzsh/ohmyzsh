@@ -349,6 +349,7 @@ _managepy-commands() {
     'runfcgi:Run this project as a fastcgi (or some other protocol supported by flup) application,'
     'runserver:Starts a lightweight Web server for development.'
     'shell:Runs a Python interactive interpreter.'
+    'showmigrations:Shows all available migrations for the current project.'
     'sql:Prints the CREATE TABLE SQL statements for the given app name(s).'
     'sqlall:Prints the CREATE TABLE, custom SQL and CREATE INDEX SQL statements for the given model module name(s).'
     'sqlclear:Prints the DROP TABLE SQL statements for the given app name(s).'

@@ -7,7 +7,7 @@ function _current_epoch() {
 }
 
 function _update_zsh_update() {
-  echo "LAST_EPOCH=$(_current_epoch)" >! ~/.zsh-update
+  echo "LAST_EPOCH=$(_current_epoch)" >! ${ZSH_CACHE_DIR}/.zsh-update
 }
 
 function _upgrade_zsh() {
@@ -30,11 +30,11 @@ fi
 whence git >/dev/null || return 0
 
 if mkdir "$ZSH/log/update.lock" 2>/dev/null; then
-  if [ -f ~/.zsh-update ]; then
-    . ~/.zsh-update
+  if [ -f ${ZSH_CACHE_DIR}/.zsh-update ]; then
+    . ${ZSH_CACHE_DIR}/.zsh-update
 
     if [[ -z "$LAST_EPOCH" ]]; then
-      _update_zsh_update && return 0;
+      _update_zsh_update && return 0
     fi
 
     epoch_diff=$(($(_current_epoch) - $LAST_EPOCH))
@@ -42,7 +42,7 @@ if mkdir "$ZSH/log/update.lock" 2>/dev/null; then
       if [ "$DISABLE_UPDATE_PROMPT" = "true" ]; then
         _upgrade_zsh
       else
-        echo "[Oh My Zsh] Would you like to check for updates? [Y/n]: \c"
+        echo "[Oh My Zsh] Would you like to update? [Y/n]: \c"
         read line
         if [[ "$line" == Y* ]] || [[ "$line" == y* ]] || [ -z "$line" ]; then
           _upgrade_zsh

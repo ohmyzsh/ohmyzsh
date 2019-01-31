@@ -1,6 +1,6 @@
 # WP-CLI
 # A command line interface for WordPress
-# http://wp-cli.org/
+# https://wp-cli.org/
 
 # Cache
 
