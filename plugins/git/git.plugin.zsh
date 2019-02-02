@@ -117,15 +117,15 @@ ggfl() {
 }
 compdef _git ggf=git-checkout
 
-ggl() {
-  if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
-    git pull origin "${*}"
-  else
-    [[ "$#" == 0 ]] && local b="$(git_current_branch)"
-    git pull origin "${b:=$1}"
-  fi
-}
-compdef _git ggl=git-checkout
+# ggl() {
+#   if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
+#     git pull origin "${*}"
+#   else
+#     [[ "$#" == 0 ]] && local b="$(git_current_branch)"
+#     git pull origin "${b:=$1}"
+#   fi
+# }
+# compdef _git ggl=git-checkout
 
 ggp() {
   if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
