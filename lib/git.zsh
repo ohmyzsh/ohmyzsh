@@ -185,7 +185,7 @@ function git_prompt_status() {
 # Outputs -1, 0, or 1 if the installed version is less than, equal to, or
 # greater than the input version, respectively.
 function git_compare_version() {
-  local INPUT_GIT_VERSION INSTALLED_GIT_VERSION
+  local INPUT_GIT_VERSION INSTALLED_GIT_VERSION i
   INPUT_GIT_VERSION=(${(s/./)1})
   INSTALLED_GIT_VERSION=($(command git --version 2>/dev/null))
   INSTALLED_GIT_VERSION=(${(s/./)INSTALLED_GIT_VERSION[3]})

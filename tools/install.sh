@@ -78,7 +78,7 @@ main() {
   " ~/.zshrc > ~/.zshrc-omztemp
   mv -f ~/.zshrc-omztemp ~/.zshrc
 
-  TEST_LOGIN_SHELL=$(expr "$SHELL" : '.*/\(.*\)')
+  TEST_LOGIN_SHELL=$(basename "$SHELL")
   if [ "$TEST_LOGIN_SHELL" = "zsh" ]; then
     # No need to change login shell.
     ENV_ZSH="$SHELL"
