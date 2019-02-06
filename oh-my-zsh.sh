@@ -16,18 +16,17 @@ fi
 
 # Initializes Oh My Zsh
 
-# add a function path
-fpath=($ZSH/functions $ZSH/completions $fpath)
-
-# Load all stock functions (from $fpath files) called below.
-autoload -U compaudit compinit
-
 # Set ZSH_CUSTOM to the path where your custom config files
 # and plugins exists, or else we will use the default custom/
 if [[ -z "$ZSH_CUSTOM" ]]; then
     ZSH_CUSTOM="$ZSH/custom"
 fi
 
+ # add a function path
+fpath=($ZSH/functions $ZSH/completions $ZSH_CUSTOM/functions $ZSH_CUSTOM/completions $fpath)
+
+# Load all stock functions (from $fpath files) called below.
+autoload -U compaudit compinit
 
 is_plugin() {
   local base_dir=$1
