@@ -78,6 +78,7 @@ source $ZSH/oh-my-zsh.sh
 # User configuration
 if [ -e $HOME/bin ]; then export PATH="$HOME/bin:$PATH"; fi
 if [ -e /usr/local/bin ]; then export PATH="/usr/local/bin:$PATH"; fi
+if [ -e /usr/local/opt/gettext/bin ]; then export PATH="/usr/local/opt/gettext/bin:$PATH"; fi
 
 zstyle ':completion:*:descriptions' format '%B%d%b'
 # Language configuration
