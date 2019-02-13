@@ -126,6 +126,7 @@ __go_tool_complete() {
       ;;
   help)
       _values "${commands[@]}" \
+        'environment[show Go environment variables available]' \
         'gopath[GOPATH environment variable]' \
         'packages[description of package lists]' \
         'remote[remote import path syntax]' \
@@ -188,6 +189,9 @@ alias gofa='go fmt ./...'
 alias gog='go get'
 alias goi='go install'
 alias gol='go list'
+alias gop='cd $GOPATH'
+alias gopb='cd $GOPATH/bin'
+alias gops='cd $GOPATH/src'
 alias gor='go run'
 alias got='go test'
 alias gov='go vet'

@@ -10,6 +10,7 @@ alias eh='ember help'
 alias ein='ember init'
 alias ei='ember install'
 alias et='ember test'
+alias ets='ember test --serve'
 alias eu='ember update'
 
 # version
