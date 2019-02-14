@@ -195,9 +195,11 @@ compdef _git glp=git-log
 
 alias gm='git merge'
 alias gmom='git merge origin/master'
+alias gmod='git merge origin/develop'
 alias gmt='git mergetool --no-prompt'
 alias gmtvim='git mergetool --no-prompt --tool=vimdiff'
 alias gmum='git merge upstream/master'
+alias gmud='git merge upstream/develop'
 alias gma='git merge --abort'
 
 alias gp='git push'
