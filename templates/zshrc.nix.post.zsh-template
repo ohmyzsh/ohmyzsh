@@ -6,6 +6,9 @@ alias cdhome="cd ~/"
 #alias gdiffdir="git difftool -d -y --no symlinks"
 #alias vs="vstudio"
 alias vc="code"
+#SCREEN
+alias clr="clear"
+alias cls="clear"
 #EXPLORER
 #alias explorehere="explorer.exe ."
 #alias explore="explorer.exe"
