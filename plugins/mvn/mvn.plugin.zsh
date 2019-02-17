@@ -1,25 +1,3 @@
-# mvn-color based on https://gist.github.com/1027800
-BOLD=$(echoti bold)
-UNDERLINE_ON=$(echoti smul)
-UNDERLINE_OFF=$(echoti rmul)
-TEXT_BLACK=$(echoti setaf 0)
-TEXT_RED=$(echoti setaf 1)
-TEXT_GREEN=$(echoti setaf 2)
-TEXT_YELLOW=$(echoti setaf 3)
-TEXT_BLUE=$(echoti setaf 4)
-TEXT_MAGENTA=$(echoti setaf 5)
-TEXT_CYAN=$(echoti setaf 6)
-TEXT_WHITE=$(echoti setaf 7)
-BACKGROUND_BLACK=$(echoti setab 0)
-BACKGROUND_RED=$(echoti setab 1)
-BACKGROUND_GREEN=$(echoti setab 2)
-BACKGROUND_YELLOW=$(echoti setab 3)
-BACKGROUND_BLUE=$(echoti setab 4)
-BACKGROUND_MAGENTA=$(echoti setab 5)
-BACKGROUND_CYAN=$(echoti setab 6)
-BACKGROUND_WHITE=$(echoti setab 7)
-RESET_FORMATTING=$(echoti sgr0)
-
 # if found an executable ./mvnw file execute it otherwise execute orignal mvn
 mvn-or-mvnw() {
 	if [ -x ./mvnw ]; then
@@ -31,13 +9,21 @@ mvn-or-mvnw() {
 }
 
 # Wrapper function for Maven's mvn command.
+# based on https://gist.github.com/1027800
 mvn-color() {
+	local BOLD=$(echoti bold)
+	local TEXT_RED=$(echoti setaf 1)
+	local TEXT_GREEN=$(echoti setaf 2)
+	local TEXT_YELLOW=$(echoti setaf 3)
+	local TEXT_BLUE=$(echoti setaf 4)
+	local TEXT_WHITE=$(echoti setaf 7)
+	local RESET_FORMATTING=$(echoti sgr0)
 	(
 	# Filter mvn output using sed. Before filtering set the locale to C, so invalid characters won't break some sed implementations
 	unset LANG
 	LC_CTYPE=C mvn "$@" | sed \
 		-e "s/\(\[INFO\]\)\(.*\)/${TEXT_BLUE}${BOLD}\1${RESET_FORMATTING}\2/g" \
-		-e "s/\(\[DEBUG\]\)\(.*\)/${TEXT_RED}${BOLD}\1${RESET_FORMATTING}\2/g" \
+		-e "s/\(\[DEBUG\]\)\(.*\)/${TEXT_WHITE}${BOLD}\1${RESET_FORMATTING}\2/g" \
 		-e "s/\(\[INFO\]\ BUILD SUCCESSFUL\)/${BOLD}${TEXT_GREEN}\1${RESET_FORMATTING}/g" \
 		-e "s/\(\[WARNING\]\)\(.*\)/${BOLD}${TEXT_YELLOW}\1${RESET_FORMATTING}\2/g" \
 		-e "s/\(\[ERROR\]\)\(.*\)/${BOLD}${TEXT_RED}\1${RESET_FORMATTING}\2/g" \
