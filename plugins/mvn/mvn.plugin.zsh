@@ -26,7 +26,7 @@ mvn-or-mvnw() {
 		echo "executing mvnw instead of mvn"
 		./mvnw "$@"
 	else
-		mvn "$@"
+		command mvn "$@"
 	fi
 }
 
