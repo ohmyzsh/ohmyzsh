@@ -1,4 +1,4 @@
-# if found an executable ./mvnw file execute it otherwise execute orignal mvn
+# Calls ./mvnw if found, otherwise execute the original mvn
 mvn-or-mvnw() {
 	if [ -x ./mvnw ]; then
 		echo "executing mvnw instead of mvn"
@@ -8,8 +8,7 @@ mvn-or-mvnw() {
 	fi
 }
 
-# Wrapper function for Maven's mvn command.
-# based on https://gist.github.com/1027800
+# Wrapper function for Maven's mvn command. Based on https://gist.github.com/1027800
 mvn-color() {
 	local BOLD=$(echoti bold)
 	local TEXT_RED=$(echoti setaf 1)
@@ -34,40 +33,40 @@ mvn-color() {
 	)
 }
 
-# either use orignal mvn oder the mvn wrapper
+# either use orignal mvn or the mvn wrapper
 alias mvn="mvn-or-mvnw"
 
 # Run mvn against the pom found in a project's root directory (assumes a git repo)
 alias 'mvn!'='mvn -f $(git rev-parse --show-toplevel 2>/dev/null || echo ".")/pom.xml'
 
 # aliases
-alias mvncini='mvn clean initialize'
-alias mvncie='mvn clean install eclipse:eclipse'
+alias mvnag='mvn archetype:generate'
+alias mvnboot='mvn spring-boot:run'
+alias mvnc='mvn clean'
+alias mvncd='mvn clean deploy'
+alias mvnce='mvn clean eclipse:clean eclipse:eclipse'
 alias mvnci='mvn clean install'
-alias mvncp='mvn clean package'
+alias mvncie='mvn clean install eclipse:eclipse'
+alias mvncini='mvn clean initialize'
 alias mvncist='mvn clean install -DskipTests'
 alias mvncisto='mvn clean install -DskipTests --offline'
-alias mvne='mvn eclipse:eclipse'
-alias mvnce='mvn clean eclipse:clean eclipse:eclipse'
+alias mvncom='mvn compile'
+alias mvncp='mvn clean package'
+alias mvnct='mvn clean test'
 alias mvncv='mvn clean verify'
 alias mvncvst='mvn clean verify -DskipTests'
 alias mvnd='mvn deploy'
-alias mvncd='mvn clean deploy'
-alias mvnp='mvn package'
-alias mvnc='mvn clean'
-alias mvncom='mvn compile'
-alias mvnct='mvn clean test'
-alias mvnt='mvn test'
-alias mvnag='mvn archetype:generate'
-alias mvn-updates='mvn versions:display-dependency-updates'
-alias mvntc7='mvn tomcat7:run'
-alias mvntc='mvn tomcat:run'
-alias mvnjetty='mvn jetty:run'
-alias mvnboot='mvn spring-boot:run'
+alias mvndocs='mvn dependency:resolve -Dclassifier=javadoc'
 alias mvndt='mvn dependency:tree'
+alias mvne='mvn eclipse:eclipse'
+alias mvnjetty='mvn jetty:run'
+alias mvnp='mvn package'
 alias mvns='mvn site'
 alias mvnsrc='mvn dependency:sources'
-alias mvndocs='mvn dependency:resolve -Dclassifier=javadoc'
+alias mvnt='mvn test'
+alias mvntc='mvn tomcat:run'
+alias mvntc7='mvn tomcat7:run'
+alias mvn-updates='mvn versions:display-dependency-updates'
 
 
 function listMavenCompletions {

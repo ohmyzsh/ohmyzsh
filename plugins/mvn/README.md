@@ -10,26 +10,45 @@ plugins=(... mvn)
 
 ## Aliases
 
+The plugin aliases mvn to a either calls `mvnw` ([Maven Wrapper](https://github.com/takari/maven-wrapper))
+if it's found, or the mvn command otherwise.
+
 | Alias                | Command                                         |
 |:---------------------|:------------------------------------------------|
-| `mvncie`             | `mvn clean install eclipse:eclipse`             |
+| `mvn!`               | `mvn -f <root>/pom.xml`                         |
+| `mvnag`              | `mvn archetype:generate`                        |
+| `mvnboot`            | `mvn spring-boot:run`                           |
+| `mvnc`               | `mvn clean`                                     |
+| `mvncd`              | `mvn clean deploy`                              |
+| `mvnce`              | `mvn clean eclipse:clean eclipse:eclipse`       |
 | `mvnci`              | `mvn clean install`                             |
+| `mvncie`             | `mvn clean install eclipse:eclipse`             |
+| `mvncini`            | `mvn clean initialize`                          |
 | `mvncist`            | `mvn clean install -DskipTests`                 |
 | `mvncisto`           | `mvn clean install -DskipTests --offline`       |
-| `mvne`               | `mvn eclipse:eclipse`                           |
-| `mvncv`              | `mvn clean verify`                              |
-| `mvnd`               | `mvn deploy`                                    |
-| `mvncd`              | `mvn clean deploy`                              |
-| `mvnp`               | `mvn package`                                   |
-| `mvnc`               | `mvn clean`                                     |
 | `mvncom`             | `mvn compile`                                   |
+| `mvncp`              | `mvn clean package`                             |
 | `mvnct`              | `mvn clean test`                                |
-| `mvnt`               | `mvn test`                                      |
-| `mvnag`              | `mvn archetype:generate`                        |
-| `mvn-updates`        | `mvn versions:display-dependency-updates`       |
-| `mvntc7`             | `mvn tomcat7:run`                               |
-| `mvnjetty`           | `mvn jetty:run`                                 |
+| `mvncv`              | `mvn clean verify`                              |
+| `mvncvst`            | `mvn clean verify -DskipTests`                  |
+| `mvnd`               | `mvn deploy`                                    |
+| `mvndocs`            | `mvn dependency:resolve -Dclassifier=javadoc`   |
 | `mvndt`              | `mvn dependency:tree`                           |
+| `mvne`               | `mvn eclipse:eclipse`                           |
+| `mvnjetty`           | `mvn jetty:run`                                 |
+| `mvnp`               | `mvn package`                                   |
 | `mvns`               | `mvn site`                                      |
 | `mvnsrc`             | `mvn dependency:sources`                        |
-| `mvndocs`            | `mvn dependency:resolve -Dclassifier=javadoc`   |
+| `mvnt`               | `mvn test`                                      |
+| `mvntc`              | `mvn tomcat:run`                                |
+| `mvntc7`             | `mvn tomcat7:run`                               |
+| `mvn-updates`        | `mvn versions:display-dependency-updates`       |
+
+## mvn-color
+
+It's a function that wraps the mvn command to colorize it's output. Since Maven 3.5.0
+the mvn command adds colored output, so this function will be soon removed from the
+plugin.
+
+It also has a bug where it won't print when mvn prompts for user input, _e.g._ when
+using `archetype:generate`. See [#5052](https://github.com/robbyrussell/oh-my-zsh/issues/5052).
