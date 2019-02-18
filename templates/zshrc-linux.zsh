@@ -96,15 +96,43 @@ ZSH_HIGHLIGHT_STYLES[globbing]='none'
 zstyle ':completion:*:descriptions' format '%B%d%b'
 
 if [ -e $HOME/bin ]; then export PATH="$HOME/bin:$PATH"; fi
-# if [ -e $HOME/.local/bin ]; then export PATH="$HOME/.local/bin:$PATH"; fi
 # if [ -e $HOME/appengine ]; then export PATH="$HOME/appengine:$PATH"; fi
 # if [ -e $HOME/.cabal/bin ]; then export PATH="$HOME/.cabal/bin:$PATH"; fi
 #
 if [ -z "$LC_ALL" ]; then export LC_ALL=en_US.utf8; fi
 if [ -z "$LANG" ]; then export LANG=en_US.utf8; fi
 
+if [ -d "/usr/local/heroku/bin" ]; then
+    export PATH="/usr/local/heroku/bin:$PATH"
+fi
+
+if [ -d "$HOME/.local/bin/" ]; then
+    export PATH="$HOME/.local/bin/:$PATH"
+fi
+
+if [ -d "$HOME/.pyenv/bin" ]; then
+    export PATH="$HOME/.pyenv/bin:$PATH"
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
+fi
+
+# added by travis gem
+[ -f $HOME/.travis/travis.sh ] && source $HOME/.travis/travis.sh
+
+
 # source .profile is any (proxy settings,...)
+# Install pyenv with:
+#  curl -L https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash
+#   sudo apt-get update && sudo apt-get upgrade sudo apt-get install -y make build-essential \
+#        libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
+#        libncurses5-dev git
 [ -f $HOME/.profile ] && source $HOME/.profile
+if [[ -f $HOME/.pyenv/bin:$PATH ]]; then
+    export PATH="$HOME/.pyenv/bin:$PATH"
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
+fi
+
 
 [ "$TERM" = "xterm" ] && TERM="xterm-256color"
 if [[ "$TERM" == "xterm-256color" ]]; then
@@ -121,10 +149,3 @@ export LESS='-RX'
 [ "$TERM" = "xterm-256color" ] && export EDITOR='code'
 
 unsetopt correctall
-
-### Added by the Heroku Toolbelt and user local bin
-[ -d $HOME/.local/bin/ ] && export PATH="$HOME/.local/bin/:$PATH"
-# export PYTHONPATH=/usr/local/lib/python2.7/dist-packages/:/usr/lib/python2.7/dist-packages/:/usr/lib/python2.7/dist-packages/gtk-2.0:$PYTHONPATH
-
-# added by travis gem
-[ -f /home/gsemet/.travis/travis.sh ] && source /home/gsemet/.travis/travis.sh
