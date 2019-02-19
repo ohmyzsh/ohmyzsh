@@ -42,9 +42,6 @@ marks() {
 		printf -- "$printf_markname_template" "$markname"
 		printf -- "-> %s\n" "$markpath"
 	done
-  else
-    echo "No mark found."
-  fi
 }
 
 function _completemarks()
