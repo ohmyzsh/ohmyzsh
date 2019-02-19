@@ -397,9 +397,9 @@ __git_ps1 ()
 		__git_eread "$g/rebase-merge/msgnum" step
 		__git_eread "$g/rebase-merge/end" total
 		if [ -f "$g/rebase-merge/interactive" ]; then
-			r="|REBASE-i"
+			r="| REBASE-i"
 		else
-			r="|REBASE-m"
+			r="| REBASE-m"
 		fi
 	else
 		if [ -d "$g/rebase-apply" ]; then
@@ -407,20 +407,20 @@ __git_ps1 ()
 			__git_eread "$g/rebase-apply/last" total
 			if [ -f "$g/rebase-apply/rebasing" ]; then
 				__git_eread "$g/rebase-apply/head-name" b
-				r="|REBASE"
+				r="| REBASE"
 			elif [ -f "$g/rebase-apply/applying" ]; then
-				r="|AM"
+				r="| AM"
 			else
-				r="|AM/REBASE"
+				r="| AM/REBASE"
 			fi
 		elif [ -f "$g/MERGE_HEAD" ]; then
-			r="|MERGING"
+			r="| MERGING"
 		elif [ -f "$g/CHERRY_PICK_HEAD" ]; then
-			r="|CHERRY-PICKING"
+			r="| CHERRY-PICKING"
 		elif [ -f "$g/REVERT_HEAD" ]; then
-			r="|REVERTING"
+			r="| REVERTING"
 		elif [ -f "$g/BISECT_LOG" ]; then
-			r="|BISECTING"
+			r="| BISECTING"
 		fi
 
 		if [ -n "$b" ]; then
@@ -456,7 +456,7 @@ __git_ps1 ()
 	fi
 
 	if [ -n "$step" ] && [ -n "$total" ]; then
-		r="$r $step/$total"
+		r=" $r $step/$total"
 	fi
 
 	local w=""
