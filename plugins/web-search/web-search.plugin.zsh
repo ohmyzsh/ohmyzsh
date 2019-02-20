@@ -17,7 +17,8 @@ function web_search() {
     ecosia      "https://www.ecosia.org/search?q="
     goodreads   "https://www.goodreads.com/search?q="
     qwant       "https://www.qwant.com/?q="
-    stackoverflow  "https://stackoverflow.com/search?q="
+    stackoverflow  "https://stackoverflow.com/search?q=" 
+    gmail       "https://mail.google.com"
   )
 
   # check whether the search engine is supported
@@ -53,6 +54,7 @@ alias ecosia='web_search ecosia'
 alias goodreads='web_search goodreads'
 alias qwant='web_search qwant'
 alias stack='web_search stackoverflow'
+alias gmail='web_search gmail'
 
 #add your own !bang searches here
 alias wiki='web_search duckduckgo \!w'
