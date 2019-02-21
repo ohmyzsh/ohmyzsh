@@ -18,3 +18,7 @@ It also adds it to your RPROMPT.
 * `agp`: Gets the current value of `AWS_PROFILE`.
 
 * `aws_profiles`: Lists the available profiles in the file referenced in `AWS_CONFIG_FILE` (default: ~/.aws/config). Used to provide completion for the `asp` function.
+
+## Plugin options
+
+* Set `SHOW_AWS_PROMPT=false` in your zshrc file if you want to prevent the plugin from modifying your RPROMPT.
