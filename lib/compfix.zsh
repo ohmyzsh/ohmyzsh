@@ -42,3 +42,19 @@ function handle_completion_insecurities() {
 
 EOD
 }
+
+
+# Load zsh completions according to the user's security preferences.
+update_completions() {
+  if [[ $ZSH_DISABLE_COMPFIX != true ]]; then
+    # If completion insecurities exist, warn the user
+    if ! compaudit &>/dev/null; then
+      handle_completion_insecurities
+    fi
+    # Load only from secure directories
+    compinit -i -d "${ZSH_COMPDUMP}"
+  else
+    # If the user wants it, load from all found directories
+    compinit -u -d "${ZSH_COMPDUMP}"
+  fi
+}
