@@ -69,14 +69,12 @@ fi
 
 if [[ $ZSH_DISABLE_COMPFIX != true ]]; then
   # If completion insecurities exist, warn the user
-  if ! compaudit &>/dev/null; then
-    handle_completion_insecurities
-  fi
+  handle_completion_insecurities
   # Load only from secure directories
-  compinit -i -d "${ZSH_COMPDUMP}"
+  compinit -i -C -d "${ZSH_COMPDUMP}"
 else
   # If the user wants it, load from all found directories
-  compinit -u -d "${ZSH_COMPDUMP}"
+  compinit -u -C -d "${ZSH_COMPDUMP}"
 fi
 
 # Load all of the plugins that were defined in ~/.zshrc
