@@ -21,23 +21,29 @@ _awscli-homebrew-installed() {
   [ -r $_brew_prefix/libexec/bin/aws_zsh_completer.sh ] &> /dev/null
 }
 
-function agp {
+function aws_get_profile {
   echo $AWS_PROFILE
 }
 
-function asp {
-  local rprompt=${RPROMPT/<aws:$(agp)>/}
-
+function aws_set_profile {
   export AWS_DEFAULT_PROFILE=$1
   export AWS_PROFILE=$1
+}
 
-  export RPROMPT="<aws:$AWS_PROFILE>$rprompt"
+function aws_unset_profile {
+  export AWS_DEFAULT_PROFILE=
+  export AWS_PROFILE=
+}
+
+function aws_profile_prompt_info() {
+  [[ -n ${AWS_PROFILE} ]] || return
+  echo "${ZSH_THEME_AWS_PREFIX:=[}${AWS_PROFILE:t}${ZSH_THEME_AWS_SUFFIX:=]}"
 }
 
 function aws_profiles {
   reply=($(grep '\[profile' "${AWS_CONFIG_FILE:-$HOME/.aws/config}"|sed -e 's/.*profile \([a-zA-Z0-9_\.-]*\).*/\1/'))
 }
-compctl -K aws_profiles asp
+compctl -K aws_profiles aws_set_profile
 
 if which aws_zsh_completer.sh &>/dev/null; then
   _aws_zsh_completer_path=$(which aws_zsh_completer.sh 2>/dev/null)
