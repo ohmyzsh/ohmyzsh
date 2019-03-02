@@ -38,4 +38,4 @@ else
     }
 fi
 
-unset FOUND_PYENV dir
+unset FOUND_PYENV pyenvdirs dir
