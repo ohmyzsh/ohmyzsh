@@ -13,6 +13,9 @@ fi
 # This command is used a LOT both below and in daily life
 alias k=kubectl
 
+# Execute a kubectl command against all namespaces
+alias kca='f(){ kubectl "$@" --all-namespaces;  unset -f f; }; f'
+
 # Apply a YML file
 alias kaf='kubectl apply -f'
 
