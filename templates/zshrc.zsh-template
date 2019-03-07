@@ -96,3 +96,22 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+
+# export PATH="$HOME/.fastlane/bin:$HOME:$ANDROID_HOME/platform-tools:$PATH"
+
+# export ANDROID_HOME="~/Library/Android/sdk"
+
+
+# added by travis gem
+# [ -f ~/.travis/travis.sh ] && source ~/.travis/travis.sh
+
+alias clouddrive=cd "~/Library/Mobile\ Documents/com\~apple\~CloudDocs/logs"
+alias amasijar="pkill -f"
+alias processport='f() { lsof -nP -i4TCP:$1 | grep LISTEN. };f'
+alias killbyport='f() { processport $1 | cut -f 2 -d " " | xargs kill }; f'
