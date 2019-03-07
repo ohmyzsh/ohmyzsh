@@ -1,3 +1,13 @@
+# Own Quickstart
+
+## Install
+
+```shell
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/nicosommi/oh-my-zsh/master/tools/install.sh)"
+```
+
+---
+
 # Readme
 
 - Unix-like operating system (macOS or Linux)
@@ -97,8 +107,10 @@ The default location is `~/.oh-my-zsh` (hidden in your home directory)
 
 If you'd like to change the install directory with the `ZSH` environment variable, either by running `export ZSH=/your/path` before installing, or by setting it before the end of the install pipeline like this:
 
+In my case, just `oh-my-zsh`... no dot (hidden), to avoid default sync configurations (Megasync)
+
 ```shell
-export ZSH="$HOME/.dotfiles/oh-my-zsh"; sh -c "$(curl -fsSL https://raw.githubusercontent.com/nicosommi/oh-my-zsh/master/tools/install.sh)"
+export ZSH="$HOME/oh-my-zsh"; sh -c "$(curl -fsSL https://raw.githubusercontent.com/nicosommi/oh-my-zsh/master/tools/install.sh)"
 ```
 
 #### Manual Installation
