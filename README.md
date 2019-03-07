@@ -43,6 +43,14 @@ plugins=(
 )
 ```
 
+#### Using Plugins
+
+Most plugins (should! we're working on this) include a **README**, which documents how to use them.
+
+### Themes
+
+We'll admit it. Early in the Oh My Zsh world, we may have gotten a bit too theme happy. We have over one hundred themes now bundled. Most of them have [screenshots](https://github.com/robbyrussell/oh-my-zsh/wiki/Themes) on the wiki. Check them out!
+
 #### Selecting a Theme
 
 Once you find a theme that you'd like to use, you will need to edit the `~/.zshrc` file. You'll see an environment variable (all caps) in there that looks like:
@@ -163,6 +171,43 @@ upgrade_oh_my_zsh
 ```
 
 Magic! 🎉
+
+# <<<<<<< HEAD
+
+## Uninstalling Oh My Zsh
+
+Oh My Zsh isn't for everyone. We'll miss you, but we want to make this an easy breakup.
+
+If you want to uninstall `oh-my-zsh`, just run `uninstall_oh_my_zsh` from the command-line. It will remove itself and revert your previous `bash` or `zsh` configuration.
+
+## Contributing
+
+I'm far from being a [Zsh](https://www.zsh.org/) expert and suspect there are many ways to improve – if you have ideas on how to make the configuration easier to maintain (and faster), don't hesitate to fork and send pull requests!
+
+We also need people to test out pull-requests. So take a look through [the open issues](https://github.com/robbyrussell/oh-my-zsh/issues) and help where you can.
+
+### Do NOT send us themes
+
+We have (more than) enough themes for the time being. Please add your theme to the [external themes](https://github.com/robbyrussell/oh-my-zsh/wiki/External-themes) wiki page.
+
+## Contributors
+
+Oh My Zsh has a vibrant community of happy users and delightful contributors. Without all the time and help from our contributors, it wouldn't be so awesome.
+
+Thank you so much!
+
+## Follow Us
+
+We're on the social media.
+
+- [@ohmyzsh](https://twitter.com/ohmyzsh) on Twitter. You should follow it.
+- [Oh My Zsh](https://www.facebook.com/Oh-My-Zsh-296616263819290/) on Facebook.
+
+## Merchandise
+
+We have [stickers, shirts, and coffee mugs available](https://shop.planetargon.com/collections/oh-my-zsh?utm_source=github) for you to show off your love of Oh My Zsh. Again, you will become the talk of the town!
+
+> > > > > > > 52afbf77f63844abd719e565a15af2c34075de7f
 
 ## License
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 function spotify() {
-# Copyright (c) 2012--2017 Harish Narayanan <mail@harishnarayanan.org>
+# Copyright (c) 2012--2018 Harish Narayanan <mail@harishnarayanan.org>
 #
 # Contains numerous helpful contributions from Jorge Colindres, Thomas
 # Pritchard, iLan Epstein, Gabriele Bonetti, Sean Heller, Eric Martin
@@ -134,8 +134,13 @@ showStatus () {
 if [ $# = 0 ]; then
     showHelp;
 else
+	if [ ! -d /Applications/Spotify.app ] && [ ! -d $HOME/Applications/Spotify.app ]; then
+		echo "The Spotify application must be installed."
+		exit 1
+	fi
+
     if [ $(osascript -e 'application "Spotify" is running') = "false" ]; then
-        osascript -e 'tell application "Spotify" to activate'
+        osascript -e 'tell application "Spotify" to activate' || exit 1
         sleep 2
     fi
 fi
@@ -160,7 +165,7 @@ while [ $# -gt 0 ]; do
                     showAPIHelp;
                     exit 1;
                 fi
-                SHPOTIFY_CREDENTIALS=$(printf "${CLIENT_ID}:${CLIENT_SECRET}" | base64 | tr -d "\n");
+                SHPOTIFY_CREDENTIALS=$(printf "${CLIENT_ID}:${CLIENT_SECRET}" | base64 | tr -d "\n"|tr -d '\r');
                 SPOTIFY_PLAY_URI="";
 
                 getAccessToken() {
