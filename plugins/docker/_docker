@@ -350,6 +350,9 @@ __docker_complete_ps_filters() {
             (is-task)
                 _describe -t boolean-filter-opts "filter options" boolean_opts && ret=0
                 ;;
+            (is-task)
+                _describe -t boolean-filter-opts "filter options" boolean_opts && ret=0
+                ;;
             (name)
                 __docker_complete_containers_names && ret=0
                 ;;
