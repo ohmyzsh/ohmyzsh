@@ -51,3 +51,28 @@ plugins=(... systemd)
 
 You can use the above aliases as `--user` by using the prefix `scu` instead of `sc`.
 For example: `scu-list-units` will be aliased to `systemctl --user list-units`.
+
+### Unit Status Prompt
+
+You can add a token to your prompt in a similar way to the gitfast plugin.  
+To add the token to your prompt, drop `$(sc-prompt-status [UNIT]...)` into your prompt (more than one unit may be specified)
+The plugin will add the following to your prompt for each $UNIT (will convert to ALL CAPS):
+```
+$ZSH_THEME_SYSTEMD_PROMPT_PREFIX $UNIT: (ZSH_THEME_SYSTEMD_PROMPT_ACTIVE|ZSH_THEME_SYSTEMD_PROMPT_SUFFIX)$ZSH_THEME_SYSTEMD_PROMPT_NOTACTIVE
+
+```
+
+For example, if your prompt contains `PROMPT='$(sc-prompt-status dhcpd httpd)'` and you set the following variables:
+
+```
+ZSH_THEME_SYSTEMD_PROMPT_PREFIX="["
+ZSH_THEME_SYSTEMD_PROMPT_SUFFIX="]"
+ZSH_THEME_SYSTEMD_PROMPT_ACTIVE="+"
+ZSH_THEME_SYSTEMD_PROMPT_NOTACTIVE="X"
+
+```
+And if dhcpd is running, and httpd is not, Then your prompt will look like this:
+
+```
+[DHCPD: +][HTTPD: X]
+```
