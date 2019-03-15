@@ -72,7 +72,7 @@ ZSH_THEME_SYSTEMD_PROMPT_NOTACTIVE="X"
 ZSH_THEME_SYSTEMD_PROMPT_CAPS=1
 
 ```
-And if dhcpd is running, and httpd is not, Then your prompt will look like this:
+If dhcpd is running, and httpd is not, then your prompt will look like this:
 
 ```
 [DHCPD: +][HTTPD: X]
