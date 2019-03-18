@@ -83,7 +83,7 @@ __go_tool_complete() {
       "-x[print remove commands as it executes them]" \
       "*:importpaths:__go_packages"
       ;;
-  fix|fmt|list|vet)
+  fix|fmt|vet)
       _alternative ':importpaths:__go_packages' ':files:_path_files -g "*.go"'
       ;;
   install)
@@ -123,6 +123,21 @@ __go_tool_complete() {
         "-memprofile[write heap profile to file]:file:_files" \
         "-memprofilerate[set heap profiling rate]:number" \
         "*:args:{ _alternative ':importpaths:__go_packages' ':files:_path_files -g \"*.go\"' }"
+      ;;
+  list)
+      _arguments -s -w : \
+        "-f[alternative format for the list]" \
+        "-json[print data in json format]" \
+        "-compiled[set CompiledGoFiles to the Go source files presented to the compiler]" \
+        "-deps[iterate over not just the named packages but also all their dependencies]" \
+        "-e[change the handling of erroneous packages]" \
+        "-export[set the Export field to the name of a file containing up-to-date export information for the given package]" \
+        "-find[identify the named packages but not resolve their dependencies]" \
+        "-test[report not only the named packages but also their test binaries]" \
+        "-m[list modules instead of packages]" \
+        "-u[adds information about available upgrades]" \
+        "-versions[set the Module's Versions field to a list of all known versions of that module]" \
+        "*:args:{ _alternative ':importpaths:__go_packages'}"
       ;;
   help)
       _values "${commands[@]}" \
