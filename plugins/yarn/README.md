@@ -32,6 +32,7 @@ plugins=(... yarn)
 | yrm   | `yarn remove`                             | Remove installed packages                                   |
 | yrun  | `yarn run`                                | Run a defined package script                                |
 | ys    | `yarn serve`                              | Start the dev server                                        |
+| yd    | `yarn dev`                                | Run the dev script defined in `package.json`                |
 | yst   | `yarn start`                              | Run the start script defined in `package.json`              |
 | yt    | `yarn test`                               | Run the test script defined in `package.json`               |
 | yuc   | `yarn global upgrade && yarn cache clean` | Upgrade global packages and clean yarn's global cache       |
