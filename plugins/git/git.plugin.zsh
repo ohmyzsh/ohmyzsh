@@ -93,6 +93,8 @@ alias gdct='git describe --tags `git rev-list --tags --max-count=1`'
 alias gds='git diff --staged'
 alias gdt='git diff-tree --no-commit-id --name-only -r'
 alias gdw='git diff --word-diff'
+alias gcfix='git commit --fixup HEAD'
+alias gprum='git pull --rebase upstream master'
 
 gdv() { git diff -w "$@" | view - }
 compdef _git gdv=git-diff
