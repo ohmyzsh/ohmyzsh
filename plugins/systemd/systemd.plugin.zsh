@@ -22,12 +22,12 @@ alias scu-disable-now="scu-disable --now"
 alias scu-mask-now="scu-mask --now"
 
 function sc-prompt-status {
-	for UNIT in $@
-	do
-		[ -n "$ZSH_THEME_SYSTEMD_PROMPT_CAPS" ] && UNITDISPLAY=$(tr '[:lower:]' '[:upper:]' <<< $UNIT) || UNITDISPLAY=$UNIT
-		echo -n "$ZSH_THEME_SYSTEMD_PROMPT_PREFIX$UNITDISPLAY:"
-		[ "$(sc-is-active $UNIT)" = "active" ] && echo -n $ZSH_THEME_SYSTEMD_PROMPT_ACTIVE || echo -n $ZSH_THEME_SYSTEMD_PROMPT_NOTACTIVE
-		echo -en "$ZSH_THEME_SYSTEMD_PROMPT_SUFFIX"
-	done
+  for UNIT in $@
+  do
+    [ -n "$ZSH_THEME_SYSTEMD_PROMPT_CAPS" ] && UNITDISPLAY=$(tr '[:lower:]' '[:upper:]' <<< $UNIT) || UNITDISPLAY=$UNIT
+    echo -n "$ZSH_THEME_SYSTEMD_PROMPT_PREFIX$UNITDISPLAY:"
+    [ "$(sc-is-active $UNIT)" = "active" ] && echo -n $ZSH_THEME_SYSTEMD_PROMPT_ACTIVE || echo -n $ZSH_THEME_SYSTEMD_PROMPT_NOTACTIVE
+    echo -en "$ZSH_THEME_SYSTEMD_PROMPT_SUFFIX"
+  done
 }
 
