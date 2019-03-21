@@ -18,6 +18,7 @@ function web_search() {
     goodreads   "https://www.goodreads.com/search?q="
     qwant       "https://www.qwant.com/?q="
     stackoverflow  "https://stackoverflow.com/search?q="
+    wirecutter  "https://thewirecutter.com/search/?s="
   )
 
   # check whether the search engine is supported
@@ -53,6 +54,7 @@ alias ecosia='web_search ecosia'
 alias goodreads='web_search goodreads'
 alias qwant='web_search qwant'
 alias stack='web_search stackoverflow'
+alias wc='web_search wirecutter'
 
 #add your own !bang searches here
 alias wiki='web_search duckduckgo \!w'
