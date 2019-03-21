@@ -4,5 +4,6 @@ A bit of fun to lighten up your day. Get a Error-Message whenever you open your 
 
 Pay a visit to bofh.tips and follow @grauhut on Twitter. 
 
-Note: This is the no-lolcat Version. use bofh-color if you want crazy colors. 
+Note: This is the version that requires lolcat. Each message is displayed with random rainbows.
+
 ~niwiniwi
