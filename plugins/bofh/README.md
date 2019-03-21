@@ -1,7 +1,7 @@
-# Bastard Operator from Hell run by @Rem0te
+# Bastard Operator from Hell run by @grauhut
 
 A bit of fun to lighten up your day. Get a Error-Message whenever you open your Terminal and by running `bofh`.
 
-Pay a visit to bofh.tips and follow @Rem0te on Twitter. 
+Pay a visit to bofh.tips and follow @grauhut on Twitter. 
 
 ~niwiniwi
