@@ -44,6 +44,7 @@ is_plugin() {
   test -f $base_dir/plugins/$name/$name.plugin.zsh \
     || test -f $base_dir/plugins/$name/_$name
 }
+
 # Add all defined plugins to fpath. This must be done
 # before running compinit.
 for plugin ($plugins); do
@@ -51,6 +52,8 @@ for plugin ($plugins); do
     fpath=($ZSH_CUSTOM/plugins/$plugin $fpath)
   elif is_plugin $ZSH $plugin; then
     fpath=($ZSH/plugins/$plugin $fpath)
+  else
+    echo "Warning: plugin $plugin not found"
   fi
 done
 
@@ -83,8 +86,6 @@ for plugin ($plugins); do
     source $ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh
   elif [ -f $ZSH/plugins/$plugin/$plugin.plugin.zsh ]; then
     source $ZSH/plugins/$plugin/$plugin.plugin.zsh
-  else
-    echo "Warning: plugin $plugin not found"
   fi
 done
 
