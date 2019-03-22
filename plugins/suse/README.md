@@ -15,9 +15,9 @@ plugins=(... suse)
 | Alias            | Commands                      | Description                                                    |
 | ---------------- | ----------------------------- | -------------------------------------------------------------- |
 | z                | `sudo zypper`                 | call zypper                                                    |
-| zh               | `sudo zypper -h`              | print help                                                     |
-| zhse             | `sudo zypper -h se`           | print help for the search command                              |
-| zlicenses        | `sudo zypper licenses`        | prints a report about licenses and EULAs of installed packages |
+| zh               | `zypper -h`                   | print help                                                     |
+| zhse             | `zypper -h se`                | print help for the search command                              |
+| zlicenses        | `zypper licenses`             | prints a report about licenses and EULAs of installed packages |
 | zps              | `sudo zypper ps`              | list process using deleted files                               |
 | zshell           | `sudo zypper shell`           | open a zypper shell session                                    |
 | zsource-download | `sudo zypper source-download` | download source rpms for all installed packages                |
@@ -49,16 +49,16 @@ plugins=(... suse)
 
 | Alias         | Commands                   | Description                                          |
 | ------------- | -------------------------- | ---------------------------------------------------- |
-| zif           | `sudo zypper if`           | display info about packages                          |
-| zpa           | `sudo zypper pa`           | list packages                                        |
-| zpatch-info   | `sudo zypper patch-info`   | display info about patches                           |
-| zpattern-info | `sudo zypper pattern-info` | display info about patterns                          |
-| zproduct-info | `sudo zypper product-info` | display info about products                          |
-| zpch          | `sudo zypper pch`          | list all patches                                     |
-| zpd           | `sudo zypper pd`           | list products                                        |
-| zpt           | `sudo zypper pt`           | list patterns                                        |
-| zse           | `sudo zypper se`           | search for packages                                  |
-| zwp           | `sudo zypper wp`           | list all packages providing the specified capability |
+| zif           | `zypper if`                | display info about packages                          |
+| zpa           | `zypper pa`                | list packages                                        |
+| zpatch-info   | `zypper patch-info`        | display info about patches                           |
+| zpattern-info | `zypper pattern-info`      | display info about patterns                          |
+| zproduct-info | `zypper product-info`      | display info about products                          |
+| zpch          | `zypper pch`               | list all patches                                     |
+| zpd           | `zypper pd`                | list products                                        |
+| zpt           | `zypper pt`                | list patterns                                        |
+| zse           | `zypper se`                | search for packages                                  |
+| zwp           | `zypper wp`                | list all packages providing the specified capability |
 
 ## Repositories commands
 
