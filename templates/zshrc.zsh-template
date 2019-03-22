@@ -110,8 +110,3 @@ source $ZSH/oh-my-zsh.sh
 
 # added by travis gem
 # [ -f ~/.travis/travis.sh ] && source ~/.travis/travis.sh
-
-alias clouddrive=cd "~/Library/Mobile\ Documents/com\~apple\~CloudDocs/logs"
-alias amasijar="pkill -f"
-alias processport='f() { lsof -nP -i4TCP:$1 | grep LISTEN. };f'
-alias killbyport='f() { processport $1 | cut -f 2 -d " " | xargs kill }; f'

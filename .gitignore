@@ -1,8 +1,11 @@
 # custom files
-custom/
+# custom/
+custom/misc.zsh
 !custom/plugins/example
 !custom/example.zsh
 
 # temp files directories
 cache/
 log/
+
+*.DS_Store
