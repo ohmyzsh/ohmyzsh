@@ -83,7 +83,8 @@ for plugin ($plugins); do
     source $ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh
   elif [ -f $ZSH/plugins/$plugin/$plugin.plugin.zsh ]; then
     source $ZSH/plugins/$plugin/$plugin.plugin.zsh
-  else
+  elif ! [ -f $ZSH/plugins/$plugin/_$plugin ] \
+    && ! [ -f $ZSH_CUSTOM/plugins/$plugin/_$plugin ]; then
     echo "Warning: plugin $plugin not found"
   fi
 done
