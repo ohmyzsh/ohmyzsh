@@ -11,11 +11,13 @@ plugins=(... aws)
 
 ## Plugin commands
 
-* `asp <profile>`: Sets `AWS_PROFILE` and `AWS_DEFAULT_PROFILE` (legacy) to `<profile>`.
+* `asp [<profile>]`: Sets `$AWS_PROFILE` and `$AWS_DEFAULT_PROFILE` (legacy) to `<profile>`.
+  Run `asp` without arguments to clear the profile.
 
-* `agp`: Gets the current value of `AWS_PROFILE`.
+* `agp`: Gets the current value of `$AWS_PROFILE`.
 
-* `aws_profiles`: Lists the available profiles in the file referenced in `AWS_CONFIG_FILE` (default: ~/.aws/config). Used to provide completion for the `asp` function.
+* `aws_profiles`: Lists the available profiles in the  `$AWS_CONFIG_FILE` (default: `~/.aws/config`).
+  Used to provide completion for the `asp` function.
 
 ## Plugin options
 
@@ -23,8 +25,9 @@ plugins=(... aws)
 
 ## Theme
 
-The plugin creates a `aws_profile_prompt_info` function that you can use in your theme, which displays the current `$AWS_PROFILE`. It uses two variables to control how that is shown:
+The plugin creates an `aws_prompt_info` function that you can use in your theme, which displays
+the current `$AWS_PROFILE`. It uses two variables to control how that is shown:
 
-- ZSH_THEME_AWS_PREFIX: sets the prefix of the AWS_PROFILE. Defaults to [.
+- ZSH_THEME_AWS_PREFIX: sets the prefix of the AWS_PROFILE. Defaults to `<aws:`.
 
-- ZSH_THEME_AWS_SUFFIX: sets the suffix of the AWS_PROFILE. Defaults to ].
+- ZSH_THEME_AWS_SUFFIX: sets the suffix of the AWS_PROFILE. Defaults to `>`.

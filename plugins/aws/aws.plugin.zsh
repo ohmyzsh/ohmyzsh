@@ -7,6 +7,10 @@ function agp {
 function asp {
   export AWS_DEFAULT_PROFILE=$1
   export AWS_PROFILE=$1
+
+  if [[ -z "$1" ]]; then
+    echo AWS profile cleared.
+  fi
 }
 
 function aws_profiles {
@@ -18,8 +22,8 @@ compctl -K aws_profiles asp
 # AWS prompt
 
 function aws_prompt_info() {
-  [[ -n ${AWS_PROFILE} ]] || return
-  echo "${ZSH_THEME_AWS_PREFIX:=[}${AWS_PROFILE:t}${ZSH_THEME_AWS_SUFFIX:=]}"
+  [[ -z $AWS_PROFILE ]] && return
+  echo "${ZSH_THEME_AWS_PREFIX:=<aws:}${AWS_PROFILE}${ZSH_THEME_AWS_SUFFIX:=>}"
 }
 
 if [ "$SHOW_AWS_PROMPT" != false ]; then
