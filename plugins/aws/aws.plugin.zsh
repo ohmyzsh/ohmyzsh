@@ -15,18 +15,19 @@ function asp {
 }
 
 function aws_change_access_key {
-  if [[ "x$1" == "x" ]] then
-    echo "usage: $0 <profile.name>"
+  if [[ -z "$1" ]] then
+    echo "usage: $0 <profile>"
     return 1
-  else
-    echo "Insert the credentials when asked."
-    asp $1
-    aws iam create-access-key
-    aws configure --profile $1
-    echo "You can now safely delete the old access key running 'aws iam delete-access-key --access-key-id ID'"
-    echo "Your current keys are:"
-    aws iam list-access-keys
   fi
+
+  echo Insert the credentials when asked.
+  asp "$1"
+  aws iam create-access-key
+  aws configure --profile "$1"
+
+  echo You can now safely delete the old access key running \`aws iam delete-access-key --access-key-id ID\`
+  echo Your current keys are:
+  aws iam list-access-keys
 }
 
 function aws_profiles {
