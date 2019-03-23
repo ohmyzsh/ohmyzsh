@@ -1,13 +1,13 @@
-removeAllDockerContainers() {
+remove-all-docker-containers() {
   docker rm $(docker ps -a -q)
 }
 
-removeAllDockerImages() {
+remove-all-docker-images() {
   docker rmi $(docker images -q)
 }
 
-removeStoppedDockerContainers() {
-  docker ps -a | grep 'weeks ago' | awk '{print $1}' | xargs --no-run-if-empty docker rm
+remove-stopped-old-docker-containers() {
+  docker ps -a | grep 'weeks ago' | awk '{print $1}' | xargs docker rm
 }
 
 dserve() {
