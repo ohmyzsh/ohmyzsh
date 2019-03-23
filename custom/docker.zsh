@@ -1,12 +1,17 @@
+# requires { sure } from 00aa-lib.zsh
+
 remove-all-docker-containers() {
+  sure
   docker rm $(docker ps -a -q)
 }
 
 remove-all-docker-images() {
+  sure
   docker rmi $(docker images -q)
 }
 
 remove-stopped-old-docker-containers() {
+  sure
   docker ps -a | grep 'weeks ago' | awk '{print $1}' | xargs docker rm
 }
 
