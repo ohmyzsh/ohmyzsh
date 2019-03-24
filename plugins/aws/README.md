@@ -11,13 +11,15 @@ plugins=(... aws)
 
 ## Plugin commands
 
-* `asp [<profile>]`: Sets `$AWS_PROFILE` and `$AWS_DEFAULT_PROFILE` (legacy) to `<profile>`.
+* `asp [<profile>]`: sets `$AWS_PROFILE` and `$AWS_DEFAULT_PROFILE` (legacy) to `<profile>`.
   It also sets `$AWS_EB_PROFILE` to `<profile>` for the Elastic Beanstalk CLI.
   Run `asp` without arguments to clear the profile.
 
-* `agp`: Gets the current value of `$AWS_PROFILE`.
+* `agp`: gets the current value of `$AWS_PROFILE`.
 
-* `aws_profiles`: Lists the available profiles in the  `$AWS_CONFIG_FILE` (default: `~/.aws/config`).
+* `aws_change_access_key`: changes the AWS access key of a profile.
+
+* `aws_profiles`: lists the available profiles in the  `$AWS_CONFIG_FILE` (default: `~/.aws/config`).
   Used to provide completion for the `asp` function.
 
 ## Plugin options
