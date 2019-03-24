@@ -1,20 +1,34 @@
+# AWS profile selection
+
 function agp {
   echo $AWS_PROFILE
 }
 
 function asp {
-  local rprompt=${RPROMPT/<aws:$AWS_PROFILE>/}
-
   export AWS_DEFAULT_PROFILE=$1
   export AWS_PROFILE=$1
 
-  export RPROMPT="<aws:$AWS_PROFILE>$rprompt"
+  if [[ -z "$1" ]]; then
+    echo AWS profile cleared.
+  fi
 }
 
 function aws_profiles {
   reply=($(grep '\[profile' "${AWS_CONFIG_FILE:-$HOME/.aws/config}"|sed -e 's/.*profile \([a-zA-Z0-9_\.-]*\).*/\1/'))
 }
 compctl -K aws_profiles asp
+
+
+# AWS prompt
+
+function aws_prompt_info() {
+  [[ -z $AWS_PROFILE ]] && return
+  echo "${ZSH_THEME_AWS_PREFIX:=<aws:}${AWS_PROFILE}${ZSH_THEME_AWS_SUFFIX:=>}"
+}
+
+if [ "$SHOW_AWS_PROMPT" != false ]; then
+  export RPROMPT='$(aws_prompt_info)'"$RPROMPT"
+fi
 
 
 # Load awscli completions
