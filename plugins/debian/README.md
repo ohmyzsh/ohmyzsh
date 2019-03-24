@@ -73,3 +73,8 @@ plugins=(... debian)
 | `kerndeb`             | Builds kernel packages                                                        |
 | `apt-list-packages`   | List packages by size                                                         |
 
+## Authors
+
+- [@AlexBio](https://github.com/AlexBio)
+- [@dbb](https://github.com/dbb)
+- [@Mappleconfusers](https://github.com/Mappleconfusers)

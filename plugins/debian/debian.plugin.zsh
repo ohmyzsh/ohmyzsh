@@ -1,16 +1,9 @@
-# Authors:
-# https://github.com/AlexBio
-# https://github.com/dbb
-# https://github.com/Mappleconfusers
-#
-# Debian-related zsh aliases and functions for zsh
-
 # Use apt or aptitude if installed, fallback is apt-get
 # You can just set apt_pref='apt-get' to override it.
-if [[ -e $( which -p apt 2>&1 ) ]]; then
+if [[ -e $commands[apt] ]]; then
     apt_pref='apt'
     apt_upgr='upgrade'
-elif [[ -e $( which -p aptitude 2>&1 ) ]]; then
+elif [[ -e $commands[aptitude] ]]; then
     apt_pref='aptitude'
     apt_upgr='safe-upgrade'
 else
@@ -19,7 +12,7 @@ else
 fi
 
 # Use sudo by default if it's installed
-if [[ -e $( which -p sudo 2>&1 ) ]]; then
+if [[ -e $commands[sudo] ]]; then
     use_sudo=1
 fi
 
