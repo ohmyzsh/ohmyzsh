@@ -37,6 +37,7 @@ shrink_path () {
         typeset -i short=0
         typeset -i tilde=0
         typeset -i named=0
+        typeset -i glob=0
 
         if zstyle -t ':prompt:shrink_path' fish; then
                 lastfull=1
@@ -50,6 +51,7 @@ shrink_path () {
         zstyle -t ':prompt:shrink_path' last && lastfull=1
         zstyle -t ':prompt:shrink_path' short && short=1
         zstyle -t ':prompt:shrink_path' tilde && tilde=1
+        zstyle -t ':prompt:shrink_path' glob && glob=1
 
         while [[ $1 == -* ]]; do
                 case $1 in
@@ -58,9 +60,13 @@ shrink_path () {
                                 short=1
                                 tilde=1
                         ;;
+                        -g|--glob)
+                                glob=1
+                        ;;
                         -h|--help)
                                 print 'Usage: shrink_path [-f -l -s -t] [directory]'
                                 print ' -f, --fish      fish-simulation, like -l -s -t'
+                                print ' -g, --glob      Add asterix to allow globbing of shrunk path'
                                 print ' -l, --last      Print the last directory''s full name'
                                 print ' -s, --short     Truncate directory names to the first character'
                                 print ' -t, --tilde     Substitute ~ for the home directory'
@@ -115,6 +121,7 @@ shrink_path () {
                                 expn=($(echo ${part}*(-/)))
                                 (( short )) && break
                         done
+                        (( glob )) && if [ ${#expn} = 1 ]; then part+='*'; fi
                         result+="/$part"
                         cd -q $dir
                         shift tree
