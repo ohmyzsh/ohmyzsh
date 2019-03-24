@@ -57,7 +57,7 @@ Set `$apt_pref` and `$apt_upgr` to whatever command you want (before sourcing Oh
 | `adg`    | su -lc \'$apt_pref update && aptitude $apt_upgr\' root                        |
 | `adu`    | su -lc \'$apt_pref update && aptitude dist-upgrade\' root                     |
 | `afu`    | su -lc "apt-file update                                                       |
-| `ag`     | su -lc \'$apt_pref $apt_upgr\' root                                           |
+| `au`     | su -lc \'$apt_pref $apt_upgr\' root                                           |
 | `dia`    | su -lc "dpkg -i ./*.deb" root                                                 |
 
 ## Miscellaneous Aliases
