@@ -1,15 +1,15 @@
-#compdef pipenv
 _pipenv() {
   eval $(env COMMANDLINE="${words[1,$CURRENT]}" _PIPENV_COMPLETE=complete-zsh  pipenv)
 }
+compdef _pipenv pipenv
 
 _togglePipenvShell() {
   # deactivate shell if Pipfile doesn't exit and not in a sub dir
   if [[ ! -a "$PWD/Pipfile" ]]; then
-      if [[ "$PIPENV_ACTIVE" == 1 ]]; then
-          if [[ "$PWD" != "$pipfile_dir"* ]]; then
-            exit
-          fi
+    if [[ "$PIPENV_ACTIVE" == 1 ]]; then
+      if [[ "$PWD" != "$pipfile_dir"* ]]; then
+        exit
+      fi
     fi
   fi
 
@@ -22,17 +22,8 @@ _togglePipenvShell() {
   fi
 }
 
-if [[ "$(basename ${(%):-%x})" != "_pipenv" ]]; then
-  autoload -U compinit && compinit
-  compdef _pipenv pipenv
-fi
-
-export PROMPT_COMMAND=_togglePipenvShell
-if [ -n "$ZSH_VERSION" ]; then
-  function chpwd() {
-    _togglePipenvShell
-  }
-fi
+precmd_functions+=(_togglePipenvShell)
+chpwd_functions+=(_togglePipenvShell)
 
 alias pch="pipenv check"
 alias pcl="pipenv clean"
