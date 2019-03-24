@@ -1,6 +1,7 @@
 # debian
 
-This plugin provides debian related zsh aliases.
+This plugin provides Debian-related aliases and functions for zsh.
+
 To use it add `debian` to the plugins array in your zshrc file.
 
 ```zsh
@@ -27,7 +28,7 @@ plugins=(... debian)
 | `aac`    | sudo $apt_pref autoclean                                                                         | Clears out the local repository of retrieved package files                                  |
 | `abd`    | sudo $apt_pref build-dep                                                                         | Installs all dependencies for building packages                                             |
 | `ac`     | sudo $apt_pref clean                                                                             | Clears out the local repository of retrieved package files except lock files                |
-| `ad`     | sudo $apt_pref update                                                                            | Updates the package lists for upgrades for packages                                         | 
+| `ad`     | sudo $apt_pref update                                                                            | Updates the package lists for upgrades for packages                                         |
 | `adg`    | sudo $apt_pref update && sudo $apt_pref $apt_upgr                                                | Update and upgrade packages                                                                 |
 | `adu`    | sudo $apt_pref update && sudo $apt_pref dist-upgrade                                             | Smart upgrade that handles dependencies                                                     |
 | `afu`    | sudo apt-file update                                                                             | Update the files in packages                                                                |
@@ -44,6 +45,8 @@ plugins=(... debian)
 - `$apt_pref` - Use apt or aptitude if installed, fallback is apt-get.
 - `$apt_upgr` - Use upgrade.
 
+Set `$apt_pref` and `$apt_upgr` to whatever command you want (before sourcing Oh My Zsh) to override this behavior.
+
 ## Aliases - Commands using `su`
 
 | Alias    | Command                                                                       |
@@ -59,17 +62,17 @@ plugins=(... debian)
 
 ## Miscellaneous Aliases
 
-| Alias    | Command                                          | Description                             |
-| -------- | -------------------------------------------------|---------------------------------------- |
-| `allpkgs`| aptitude search -F "%p" --disable-columns ~i     | Display all installed packages          |  
-| `mydeb`  | time dpkg-buildpackage -rfakeroot -us -uc        | Create a basic .deb package             |
+| Alias     | Command                                          | Description                             |
+| ----------|--------------------------------------------------|---------------------------------------- |
+| `allpkgs` | aptitude search -F "%p" --disable-columns ~i     | Display all installed packages          |
+| `mydeb`   | time dpkg-buildpackage -rfakeroot -us -uc        | Create a basic .deb package             |
 
 ## Functions
 
 | Fucntion              | Description                                                                   |
 |-----------------------|-------------------------------------------------------------------------------|
 | `apt-copy`            | Create a simple script that can be used to 'duplicate' a system               |
-| `apt-history`         | Displays apt history for a command                                            | 
+| `apt-history`         | Displays apt history for a command                                            |
 | `kerndeb`             | Builds kernel packages                                                        |
 | `apt-list-packages`   | List packages by size                                                         |
 
