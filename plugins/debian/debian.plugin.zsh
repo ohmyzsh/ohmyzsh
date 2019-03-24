@@ -46,29 +46,29 @@ alias app='apt-cache policy'
 # superuser operations ######################################################
 if [[ $use_sudo -eq 1 ]]; then
 # commands using sudo #######
-    alias aac='sudo $apt_pref autoclean'
-    alias abd='sudo $apt_pref build-dep'
-    alias ac='sudo $apt_pref clean'
-    alias ad='sudo $apt_pref update'
-    alias adg='sudo $apt_pref update && sudo $apt_pref $apt_upgr'
-    alias adu='sudo $apt_pref update && sudo $apt_pref dist-upgrade'
-    alias afu='sudo apt-file update'
-    alias au='sudo $apt_pref $apt_upgr'
-    alias ai='sudo $apt_pref install'
+    alias aac="sudo $apt_pref autoclean"
+    alias abd="sudo $apt_pref build-dep"
+    alias ac="sudo $apt_pref clean"
+    alias ad="sudo $apt_pref update"
+    alias adg="sudo $apt_pref update && sudo $apt_pref $apt_upgr"
+    alias adu="sudo $apt_pref update && sudo $apt_pref dist-upgrade"
+    alias afu="sudo apt-file update"
+    alias au="sudo $apt_pref $apt_upgr"
+    alias ai="sudo $apt_pref install"
     # Install all packages given on the command line while using only the first word of each line:
     # acs ... | ail
-    alias ail="sed -e 's/  */ /g' -e 's/ *//' | cut -s -d ' ' -f 1 | "' xargs sudo $apt_pref install'
-    alias ap='sudo $apt_pref purge'
-    alias ar='sudo $apt_pref remove'
+    alias ail="sed -e 's/  */ /g' -e 's/ *//' | cut -s -d ' ' -f 1 | xargs sudo $apt_pref install"
+    alias ap="sudo $apt_pref purge"
+    alias ar="sudo $apt_pref remove"
 
     # apt-get only
-    alias ads='sudo apt-get dselect-upgrade'
+    alias ads="sudo apt-get dselect-upgrade"
 
     # Install all .deb files in the current directory.
     # Warning: you will need to put the glob in single quotes if you use:
     # glob_subst
-    alias dia='sudo dpkg -i ./*.deb'
-    alias di='sudo dpkg -i'
+    alias dia="sudo dpkg -i ./*.deb"
+    alias di="sudo dpkg -i"
 
     # Remove ALL kernel images and headers EXCEPT the one in use
     alias kclean='sudo aptitude remove -P ?and(~i~nlinux-(ima|hea) \
@@ -77,18 +77,18 @@ if [[ $use_sudo -eq 1 ]]; then
 
 # commands using su #########
 else
-    alias aac='su -ls \'$apt_pref autoclean\' root'
+    alias aac="su -ls '$apt_pref autoclean' root"
     abd() {
         cmd="su -lc '$apt_pref build-dep $@' root"
         print "$cmd"
         eval "$cmd"
     }
-    alias ac='su -ls \'$apt_pref clean\' root'
-    alias ad='su -lc \'$apt_pref update\' root'
-    alias adg='su -lc \'$apt_pref update && aptitude $apt_upgr\' root'
-    alias adu='su -lc \'$apt_pref update && aptitude dist-upgrade\' root'
-    alias afu='su -lc "apt-file update"'
-    alias ag='su -lc \'$apt_pref $apt_upgr\' root'
+    alias ac="su -ls '$apt_pref clean' root"
+    alias ad="su -lc '$apt_pref update' root"
+    alias adg="su -lc '$apt_pref update && aptitude $apt_upgr' root"
+    alias adu="su -lc '$apt_pref update && aptitude dist-upgrade' root"
+    alias afu="su -lc '$apt-file update'"
+    alias ag="su -lc '$apt_pref $apt_upgr' root"
     ai() {
         cmd="su -lc 'aptitude -P install $@' root"
         print "$cmd"
@@ -126,11 +126,11 @@ apt_pref_compdef() {
     f="_apt_pref_${2}"
 
     eval "function ${f}() {
-        shift words; 
-	service=\"\$apt_pref\"; 
-	words=(\"\$apt_pref\" '$2' \$words); 
-	((CURRENT++))
-	test \"\${apt_pref}\" = 'aptitude' && _aptitude || _apt
+        shift words;
+        service=\"\$apt_pref\";
+        words=(\"\$apt_pref\" '$2' \$words);
+        ((CURRENT++))
+        test \"\${apt_pref}\" = 'aptitude' && _aptitude || _apt
     }"
 
     compdef "$f" "$1"
@@ -213,7 +213,7 @@ kerndeb () {
     # temporarily unset MAKEFLAGS ( '-j3' will fail )
     MAKEFLAGS=$( print - $MAKEFLAGS | perl -pe 's/-j\s*[\d]+//g' )
     print '$MAKEFLAGS set to '"'$MAKEFLAGS'"
-	appendage='-custom' # this shows up in $ (uname -r )
+    appendage='-custom' # this shows up in $(uname -r )
     revision=$(date +"%Y%m%d") # this shows up in the .deb file name
 
     make-kpkg clean
