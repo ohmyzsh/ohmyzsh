@@ -112,8 +112,8 @@ ggf() {
   git push --force origin "${b:=$1}"
 }
 ggfl() {
-[[ "$#" != 1 ]] && local b="$(git_current_branch)"
-git push --force-with-lease origin "${b:=$1}"
+  [[ "$#" != 1 ]] && local b="$(git_current_branch)"
+  git push --force-with-lease origin "${b:=$1}"
 }
 compdef _git ggf=git-checkout
 
@@ -155,10 +155,10 @@ compdef _git ggu=git-checkout
 alias ggpur='ggu'
 compdef _git ggpur=git-checkout
 
-alias ggpull='git pull origin $(git_current_branch)'
+alias ggpull='git pull origin "$(git_current_branch)"'
 compdef _git ggpull=git-checkout
 
-alias ggpush='git push origin $(git_current_branch)'
+alias ggpush='git push origin "$(git_current_branch)"'
 compdef _git ggpush=git-checkout
 
 alias ggsup='git branch --set-upstream-to=origin/$(git_current_branch)'
@@ -220,6 +220,7 @@ alias grbm='git rebase master'
 alias grbs='git rebase --skip'
 alias grh='git reset'
 alias grhh='git reset --hard'
+alias groh='git reset origin/$(git_current_branch) --hard'
 alias grm='git rm'
 alias grmc='git rm --cached'
 alias grmv='git remote rename'

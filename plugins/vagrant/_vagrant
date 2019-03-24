@@ -6,6 +6,7 @@
 local -a _1st_arguments
 _1st_arguments=(
     'box:Box commands'
+    'cloud:Manages everything related to Vagrant Cloud'
     'connect:Connects to a remotely shared Vagrant environment'
     'destroy:Destroys the vagrant environment'
     'docker-logs:Outputs the logs from the Docker container'
@@ -18,6 +19,7 @@ _1st_arguments=(
     'login:Authenticates against a Vagrant Cloud server to access protected boxes'
     'package:Packages a vagrant environment for distribution'
     'plugin:Plugin commands'
+    'port:Displays information about guest port mappings'
     'provision:Run the provisioner'
     'push:Deploys code in this environment to a configured destination'
     'rdp:Connects to machine via RDP'
@@ -33,6 +35,7 @@ _1st_arguments=(
     'suspend:Suspends the currently running vagrant environment'
     'snapshot:Used to manage snapshots with the guest machine'
     'up:Creates the vagrant environment'
+    'validate:Validates the Vagrantfile'
     'version:Prints current and latest Vagrant version'
     '--help:[TASK] Describe available tasks or one specific task'
     '--version:Prints the Vagrant version information'
@@ -54,7 +57,7 @@ __task_list ()
     local expl
     declare -a tasks
 
-    tasks=(box destroy halt init package provision reload resume ssh ssh_config status suspend up version)
+    tasks=(box destroy halt init package port provision reload resume ssh ssh_config status suspend up version)
 
     _wanted tasks expl 'help' compadd $tasks
 }
@@ -123,7 +126,7 @@ case $state in
       (box)
           __vagrant-box
       ;;
-      (up|provision|package|destroy|reload|ssh|ssh-config|halt|resume|status)
+      (up|provision|port|package|destroy|reload|ssh|ssh-config|halt|resume|status)
       _arguments ':feature:__vm_list'
     esac
   ;;

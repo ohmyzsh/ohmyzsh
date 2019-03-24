@@ -14,6 +14,7 @@ plugins=(... kubectl)
 | Alias   | Command                             | Description                                                                                      |
 |:--------|:------------------------------------|:-------------------------------------------------------------------------------------------------|
 | k       | `kubectl`                           | The kubectl command                                                                              |
+| kca     | `kubectl --all-namespaces`          | The kubectl command targeting all namespaces                                                     |
 | kaf     | `kubectl apply -f`                  | Apply a YML file                                                                                 |
 | keti    | `kubectl exec -ti`                  | Drop into an interactive terminal on a container                                                 |
 |         |                                     | **Manage configuration quickly to switch contexts between local, dev and staging**               |
@@ -46,6 +47,7 @@ plugins=(... kubectl)
 | kdeli   | `kubectl delete ingress`            | Delete ingress resources matching passed argument                                                |
 |         |                                     | **Namespace management**                                                                         |
 | kgns    | `kubectl get namespaces`            | List the current namespaces in a cluster                                                         |
+| kcn     | `kubectl config set-context ...`    | Change current namespace |
 | kens    | `kubectl edit namespace`            | Edit namespace resource from the default editor                                                  |
 | kdns    | `kubectl describe namespace`        | Describe namespace resource in detail                                                            |
 | kdelns  | `kubectl delete namespace`          | Delete the namespace. WARNING! This deletes everything in the namespace                          |
@@ -67,6 +69,7 @@ plugins=(... kubectl)
 | kdeld   | `kubectl delete deployment`         | Delete the deployment                                                                            |
 | ksd     | `kubectl scale deployment`          | Scale a deployment                                                                               |
 | krsd    | `kubectl rollout status deployment` | Check the rollout status of a deployment                                                         |
+| kres    | `kubectl set env $@ REFRESHED_AT=...` | Recreate all pods in deployment with zero-downtime                                                         |
 |         |                                     | **Rollout management**                                                                           |
 | kgrs    | `kubectl get rs`                    | To see the ReplicaSet `rs` created by the deployment                                             |
 | krh     | `kubectl rollout history`           | Check the revisions of this deployment                                                           |
