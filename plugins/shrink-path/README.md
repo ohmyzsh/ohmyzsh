@@ -20,6 +20,7 @@ here are the results of calling `shrink_path <option> /home/me/foo/bar/quux`:
     -s|--short    /h/m/f/b/q
     -t|--tilde    ~/f/ba/q
     -f|--fish     ~/f/b/quux
+    -g|--glob     /h*/m*/foo/ba*/q*
 ```
 
 
@@ -37,6 +38,7 @@ The following options are available:
 
 ```
     -f, --fish       fish simulation, equivalent to -l -s -t.
+    -g, --global     Add asterix to allow globbing of shrunk path.
     -l, --last       Print the last directory's full name.
     -s, --short      Truncate directory names to the first character. Without
                      -s, names are truncated without making them ambiguous.
