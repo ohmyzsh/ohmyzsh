@@ -98,9 +98,20 @@ unset config_file
 # Load the theme
 if [[ "$ZSH_THEME" == "random" ]]; then
   if [[ "${(t)ZSH_THEME_RANDOM_CANDIDATES}" = "array" ]] && [[ "${#ZSH_THEME_RANDOM_CANDIDATES[@]}" -gt 0 ]]; then
-    themes=($ZSH/themes/${^ZSH_THEME_RANDOM_CANDIDATES}.zsh-theme)
+    themes=()
+    for candidate in "${ZSH_THEME_RANDOM_CANDIDATES[@]}"; do
+      theme_file=($ZSH_CUSTOM/themes/${candidate}.zsh-theme)
+      if [ -f $theme_file ]; then
+        themes+=($theme_file)
+      else
+        theme_file=($ZSH/themes/${candidate}.zsh-theme)
+        if [ -f $theme_file ]; then
+          themes+=($theme_file)
+        fi
+       fi
+    done
   else
-    themes=($ZSH/themes/*zsh-theme)
+    themes=($ZSH_CUSTOM/themes/*zsh-theme $ZSH/themes/*zsh-theme)
   fi
   N=${#themes[@]}
   ((N=(RANDOM%N)+1))
