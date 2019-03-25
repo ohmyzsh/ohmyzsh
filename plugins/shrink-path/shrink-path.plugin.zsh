@@ -115,13 +115,17 @@ shrink_path () {
                         expn=(a b)
                         part=''
                         i=0
+                        match=0
                         until [[ (( ${#expn} == 1 )) || $dir = $expn || $i -gt 99 ]]  do
                                 (( i++ ))
                                 part+=$dir[$i]
                                 expn=($(echo ${part}*(-/)))
+                                if [[ $dir = $expn ]] then match=1 fi
                                 (( short )) && break
                         done
-                        (( glob )) && if [ ${#expn} = 1 ]; then part+='*'; fi
+                        (( glob )) && if [[ $match -ne 0 && "$dir" != "$part" ]] then
+                                part+='*'
+                        fi
                         result+="/$part"
                         cd -q $dir
                         shift tree
