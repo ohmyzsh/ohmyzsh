@@ -21,7 +21,7 @@ alias afu='sudo apt-file update'
 
 alias ppap='sudo ppa-purge'
 
-alias ag="sudo $APT"
+alias age="sudo $APT"
 alias aga="sudo $APT autoclean"
 alias agb="sudo $APT build-dep"
 alias agc="sudo $APT clean"
