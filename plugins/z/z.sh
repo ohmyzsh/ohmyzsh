@@ -28,6 +28,8 @@
     echo "ERROR: z.sh's datafile (${_Z_DATA:-$HOME/.z}) is a directory."
 }
 
+declare -a _Z_EXCLUDE_DIRS
+
 _z() {
 
     local datafile="${_Z_DATA:-$HOME/.z}"
@@ -36,7 +38,7 @@ _z() {
     [ -h "$datafile" ] && datafile=$(readlink "$datafile")
 
     # bail if we don't own ~/.z and $_Z_OWNER not set
-    [ -z "$_Z_OWNER" -a -f "$datafile" -a ! -O "$datafile" ] && return
+    [ -n "${_Z_OWNER+set}" -a -f "$datafile" -a ! -O "$datafile" ] && return
 
     _z_dirs () {
         local line
@@ -89,7 +91,7 @@ _z() {
         if [ $? -ne 0 -a -f "$datafile" ]; then
             env rm -f "$tempfile"
         else
-            [ "$_Z_OWNER" ] && chown $_Z_OWNER:$(id -ng $_Z_OWNER) "$tempfile"
+            [ "${_Z_OWNER+set}" ] && chown "${_Z_OWNER}:$(id -ng "${_Z_OWNER}")" "$tempfile"
             env mv -f "$tempfile" "$datafile" || env rm -f "$tempfile"
         fi
 
@@ -213,13 +215,13 @@ _z() {
 
 alias ${_Z_CMD:-z}='_z 2>&1'
 
-[ "$_Z_NO_RESOLVE_SYMLINKS" ] || _Z_RESOLVE_SYMLINKS="-P"
+[ "${_Z_NO_RESOLVE_SYMLINKS+set}" ] || _Z_RESOLVE_SYMLINKS="-P"
 
 if type compctl >/dev/null 2>&1; then
     # zsh
-    [ "$_Z_NO_PROMPT_COMMAND" ] || {
+    [ "${_Z_NO_PROMPT_COMMAND+set}" ] || {
         # populate directory list, avoid clobbering any other precmds.
-        if [ "$_Z_NO_RESOLVE_SYMLINKS" ]; then
+        if [ "${_Z_NO_RESOLVE_SYMLINKS+set}" ]; then
             _z_precmd() {
                 (_z --add "${PWD:a}" &)
                 # Reference $RANDOM to refresh its value inside the subshell
@@ -249,7 +251,7 @@ elif type complete >/dev/null 2>&1; then
     # bash
     # tab completion
     complete -o filenames -C '_z --complete "$COMP_LINE"' ${_Z_CMD:-z}
-    [ "$_Z_NO_PROMPT_COMMAND" ] || {
+    [ "${_Z_NO_PROMPT_COMMAND+set}" ] || {
         # populate directory list. avoid clobbering other PROMPT_COMMANDs.
         grep "_z --add" <<< "$PROMPT_COMMAND" >/dev/null || {
             PROMPT_COMMAND="$PROMPT_COMMAND"$'\n''(_z --add "$(command pwd '$_Z_RESOLVE_SYMLINKS' 2>/dev/null)" 2>/dev/null &);'
