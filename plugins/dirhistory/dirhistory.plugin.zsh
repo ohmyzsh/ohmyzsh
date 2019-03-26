@@ -20,7 +20,7 @@ export DIRHISTORY_SIZE=30
 # otherwise returns empty string.
 function pop_past() {
   setopt localoptions no_ksh_arrays
-  eval "$1='$dirhistory_past[$#dirhistory_past]'"
+  typeset -g "$1=${dirhistory_past[-1]}"
   if [[ $#dirhistory_past -gt 0 ]]; then
     dirhistory_past[$#dirhistory_past]=()
   fi
@@ -28,7 +28,7 @@ function pop_past() {
 
 function pop_future() {
   setopt localoptions no_ksh_arrays
-  eval "$1='$dirhistory_future[$#dirhistory_future]'"
+  typeset -g "$1=${dirhistory_future[-1]}"
   if [[ $#dirhistory_future -gt 0 ]]; then
     dirhistory_future[$#dirhistory_future]=()
   fi
