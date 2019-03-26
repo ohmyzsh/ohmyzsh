@@ -1,4 +1,4 @@
-#compdef fd
+#compdef fd fdfind
 
 autoload -U is-at-least
 
