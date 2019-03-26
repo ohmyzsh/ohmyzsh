@@ -17,7 +17,7 @@ function parse_git_dirty() {
     if [[ $POST_1_7_2_GIT -gt 0 ]]; then
       FLAGS+='--ignore-submodules=dirty'
     fi
-    if [[ "$DISABLE_UNTRACKED_FILES_DIRTY" == "true" ]]; then
+    if [[ "${DISABLE_UNTRACKED_FILES_DIRTY:-false}" == "true" ]]; then
       FLAGS+='--untracked-files=no'
     fi
     STATUS=$(command git status ${FLAGS} 2> /dev/null | tail -n1)
