@@ -19,6 +19,7 @@ export DIRHISTORY_SIZE=30
 # Returns the element if the array was not empty,
 # otherwise returns empty string.
 function pop_past() {
+  setopt localoptions no_ksh_arrays
   eval "$1='$dirhistory_past[$#dirhistory_past]'"
   if [[ $#dirhistory_past -gt 0 ]]; then
     dirhistory_past[$#dirhistory_past]=()
@@ -26,6 +27,7 @@ function pop_past() {
 }
 
 function pop_future() {
+  setopt localoptions no_ksh_arrays
   eval "$1='$dirhistory_future[$#dirhistory_future]'"
   if [[ $#dirhistory_future -gt 0 ]]; then
     dirhistory_future[$#dirhistory_future]=()
@@ -35,6 +37,7 @@ function pop_future() {
 # Push a new element onto the end of dirhistory_past. If the size of the array 
 # is >= DIRHISTORY_SIZE, the array is shifted
 function push_past() {
+  setopt localoptions no_ksh_arrays
   if [[ $#dirhistory_past -ge $DIRHISTORY_SIZE ]]; then
     shift dirhistory_past
   fi
@@ -44,6 +47,7 @@ function push_past() {
 }
 
 function push_future() {
+  setopt localoptions no_ksh_arrays
   if [[ $#dirhistory_future -ge $DIRHISTORY_SIZE ]]; then
     shift dirhistory_future
   fi
