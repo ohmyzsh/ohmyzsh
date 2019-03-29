@@ -85,6 +85,7 @@ alias gcp='git cherry-pick'
 alias gcpa='git cherry-pick --abort'
 alias gcpc='git cherry-pick --continue'
 alias gcs='git commit -S'
+alias gcfix='git commit --fixup HEAD'
 
 alias gd='git diff'
 alias gdca='git diff --cached'
@@ -93,8 +94,6 @@ alias gdct='git describe --tags `git rev-list --tags --max-count=1`'
 alias gds='git diff --staged'
 alias gdt='git diff-tree --no-commit-id --name-only -r'
 alias gdw='git diff --word-diff'
-alias gcfix='git commit --fixup HEAD'
-alias gprum='git pull --rebase upstream master'
 
 gdv() { git diff -w "$@" | view - }
 compdef _git gdv=git-diff
@@ -261,6 +260,7 @@ alias gupv='git pull --rebase -v'
 alias gupa='git pull --rebase --autostash'
 alias gupav='git pull --rebase --autostash -v'
 alias glum='git pull upstream master'
+alias glrum='git pull --rebase upstream master'
 
 alias gwch='git whatchanged -p --abbrev-commit --pretty=medium'
 alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify -m "--wip-- [skip ci]"'
