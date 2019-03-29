@@ -1,7 +1,7 @@
-# Code from Mikael Magnusson: http://www.zsh.org/mla/users/2011/msg00367.html
+# Code from Mikael Magnusson: https://www.zsh.org/mla/users/2011/msg00367.html
 #
 # Requires xterm, urxvt, iTerm2 or any other terminal that supports bracketed
-# paste mode as documented: http://www.xfree86.org/current/ctlseqs.html
+# paste mode as documented: https://www.xfree86.org/current/ctlseqs.html
 
 # create a new keymap to use while pasting
 bindkey -N paste

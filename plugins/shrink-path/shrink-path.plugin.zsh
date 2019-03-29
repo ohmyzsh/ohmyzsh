@@ -24,10 +24,10 @@
 # Keywords: prompt directory truncate shrink collapse fish
 #
 # Copyright (C) 2008 by Daniel Friesel <derf@xxxxxxxxxxxxxxxxxx>
-# License: WTFPL <http://sam.zoy.org/wtfpl>
+# License: WTFPL <http://www.wtfpl.net>
 #
-# Ref: http://www.zsh.org/mla/workers/2009/msg00415.html
-#      http://www.zsh.org/mla/workers/2009/msg00419.html
+# Ref: https://www.zsh.org/mla/workers/2009/msg00415.html
+#      https://www.zsh.org/mla/workers/2009/msg00419.html
 
 shrink_path () {
         setopt localoptions
@@ -88,19 +88,18 @@ shrink_path () {
 
         if (( named )) {
                 for part in ${(k)nameddirs}; {
-                        [[ $dir == ${nameddirs[$part]}(/*|) ]] && dir=${dir/${nameddirs[$part]}/\~$part}
+                        [[ $dir == ${nameddirs[$part]}(/*|) ]] && dir=${dir/#${nameddirs[$part]}/\~$part}
                 }
         }
-        (( tilde )) && dir=${dir/$HOME/\~}
+        (( tilde )) && dir=${dir/#$HOME/\~}
         tree=(${(s:/:)dir})
         (
-                unfunction chpwd 2> /dev/null
                 if [[ $tree[1] == \~* ]] {
-                        cd ${~tree[1]}
+                        cd -q ${~tree[1]}
                         result=$tree[1]
                         shift tree
                 } else {
-                        cd /
+                        cd -q /
                 }
                 for dir in $tree; {
                         if (( lastfull && $#tree == 1 )) {
@@ -117,7 +116,7 @@ shrink_path () {
                                 (( short )) && break
                         done
                         result+="/$part"
-                        cd $dir
+                        cd -q $dir
                         shift tree
                 }
                 echo ${result:-/}

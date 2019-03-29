@@ -1,5 +1,5 @@
 #
-# Requires http://www.bruji.com/bwana/
+# Requires https://www.bruji.com/bwana/
 #
 if [[ -e /Applications/Bwana.app ]] ||
     ( system_profiler -detailLevel mini SPApplicationsDataType | grep -q Bwana )
@@ -9,5 +9,5 @@ then
   }
 else
   echo "Bwana lets you read man files in Safari through a man: URI scheme" 
-  echo "To use it within Zsh, install it from http://www.bruji.com/bwana/"
+  echo "To use it within Zsh, install it from https://www.bruji.com/bwana/"
 fi

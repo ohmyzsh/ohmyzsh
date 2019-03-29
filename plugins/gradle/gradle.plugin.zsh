@@ -1,6 +1,18 @@
 ##############################################################################
 # A descriptive listing of core Gradle commands
 ############################################################################
+
+gradle-or-gradlew() {
+	if [ -f ./gradlew ] ; then
+		echo "executing gradlew instead of gradle";
+		./gradlew "$@";
+	else
+		gradle "$@";
+	fi
+}
+
+alias gradle=gradle-or-gradlew;
+
 function _gradle_core_commands() {
     local ret=1 state
     _arguments ':subcommand:->subcommand' && ret=0
@@ -88,7 +100,7 @@ function _gradle_arguments() {
 # and if so, regenerate the .gradle_tasks cache file
 ############################################################################
 _gradle_does_task_list_need_generating () {
-  [[ ! -f .gradletasknamecache ]] || [[ build.gradle -nt .gradletasknamecache ]]
+  [[ ! -f .gradletasknamecache ]] || [[ build.gradle -nt .gradletasknamecache || build.gradle.kts -nt .gradletasknamecache ]]
 }
 
 ##############
@@ -144,7 +156,7 @@ _gradle_parse_and_extract_tasks () {
 # Discover the gradle tasks by running "gradle tasks --all"
 ############################################################################
 _gradle_tasks () {
-  if [[ -f build.gradle ]]; then
+  if [[ -f build.gradle || -f build.gradle.kts || -f settings.gradle || -f settings.gradle.kts ]]; then
     _gradle_arguments
     if _gradle_does_task_list_need_generating; then
       _gradle_parse_and_extract_tasks "$(gradle tasks --all)" > .gradletasknamecache
@@ -154,7 +166,7 @@ _gradle_tasks () {
 }
 
 _gradlew_tasks () {
-  if [[ -f build.gradle ]]; then
+  if [[ -f build.gradle || -f build.gradle.kts || -f settings.gradle || -f settings.gradle.kts ]]; then
     _gradle_arguments
     if _gradle_does_task_list_need_generating; then
       _gradle_parse_and_extract_tasks "$(./gradlew tasks --all)" > .gradletasknamecache
