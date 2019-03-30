@@ -33,15 +33,14 @@ fi
 for _sublime_path in $_sublime_paths; do
   if [[ -a $_sublime_path ]]; then
     alias subl="$_sublime_path"
-    alias subl_sudo="sudo '$_sublime_path'"
-    alias sst=subl_sudo
-    alias st=subl
+    (( $+commands[sudo] )) && alias sst="sudo '$_sublime_path'"
     break
   fi
 done
 
 unset _sublime_paths _sublime_path
 
+alias st=subl
 alias stt='st .'
 
 find_project()
