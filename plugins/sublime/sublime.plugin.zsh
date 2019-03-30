@@ -32,15 +32,15 @@ fi
 
 for _sublime_path in $_sublime_paths; do
   if [[ -a $_sublime_path ]]; then
-    subl () { "$_sublime_path" "$@" }
-    subl_sudo () {sudo "$_sublime_path" "$@" }
+    alias subl="$_sublime_path"
+    alias subl_sudo="sudo '$_sublime_path'"
     alias sst=subl_sudo
     alias st=subl
     break
   fi
 done
 
-unset _sublime_paths
+unset _sublime_paths _sublime_path
 
 alias stt='st .'
 
