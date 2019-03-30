@@ -1,4 +1,14 @@
-# Sublime Text Aliases
+# Sublime Text aliases
+
+alias st=subl
+alias stt='subl .'
+
+# Define sst only if sudo exists
+(( $+commands[sudo] )) && alias sst='sudo subl'
+
+alias stp=find_project
+alias stn=create_project
+
 
 # Search for the Sublime Text command if not found
 (( $+commands[subl] )) || {
@@ -12,7 +22,6 @@
       "/usr/bin/sublime_text"
       "/usr/local/bin/sublime_text"
       "/usr/bin/subl"
-      "/opt/sublime_text_3/sublime_text"
       "/usr/bin/subl3"
     )
   elif [[ "$OSTYPE" = darwin* ]]; then
@@ -43,11 +52,7 @@
   unset _sublime_paths _sublime_path
 }
 
-alias st=subl
-alias stt='st .'
-
-find_project()
-{
+function find_project() {
   local PROJECT_ROOT="${PWD}"
   local FINAL_DEST="."
 
@@ -70,11 +75,10 @@ find_project()
     fi
   fi
 
-  st $FINAL_DEST
+  subl $FINAL_DEST
 }
 
 function create_project() {
-
   local _target=$1
 
   if [[ "${_target}" == "" ]]; then
@@ -87,7 +91,6 @@ function create_project() {
   local _sublime_project_file=$_target/$(basename $_target).sublime-project
 
   if [[ ! -f $_sublime_project_file ]]; then
-
     touch $_sublime_project_file
 
     echo -e "{"                         >> $_sublime_project_file
@@ -99,9 +102,5 @@ function create_project() {
     echo -e "}"                         >> $_sublime_project_file
 
     echo -e "New Sublime Text project created:\n\t${_sublime_project_file}"
-
   fi
 }
-
-alias stp=find_project
-alias stn=create_project
