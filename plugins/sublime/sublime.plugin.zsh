@@ -15,15 +15,22 @@ alias stn=create_project
   declare -a _sublime_paths
 
   if [[ "$OSTYPE" == linux* ]]; then
-    _sublime_paths=(
-      "$HOME/bin/sublime_text"
-      "/opt/sublime_text/sublime_text"
-      "/opt/sublime_text_3/sublime_text"
-      "/usr/bin/sublime_text"
-      "/usr/local/bin/sublime_text"
-      "/usr/bin/subl"
-      "/usr/bin/subl3"
-    )
+    if [[ "$(uname -r)" = *Microsoft* ]]; then
+      _sublime_paths=(
+        "$(wslpath -u 'C:\Program Files\Sublime Text 3\subl.exe')"
+        "$(wslpath -u 'C:\Program Files\Sublime Text 2\subl.exe')"
+      )
+    else
+      _sublime_paths=(
+        "$HOME/bin/sublime_text"
+        "/opt/sublime_text/sublime_text"
+        "/opt/sublime_text_3/sublime_text"
+        "/usr/bin/sublime_text"
+        "/usr/local/bin/sublime_text"
+        "/usr/bin/subl"
+        "/usr/bin/subl3"
+      )
+    fi
   elif [[ "$OSTYPE" = darwin* ]]; then
     _sublime_paths=(
       "/usr/local/bin/subl"
