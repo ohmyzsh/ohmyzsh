@@ -16,10 +16,10 @@ if [[ "$OSTYPE" == linux* ]]; then
   )
   for _sublime_path in $_sublime_linux_paths; do
     if [[ -a $_sublime_path ]]; then
-      st_run() { $_sublime_path $@ >/dev/null 2>&1 &| }
-      st_run_sudo() {sudo $_sublime_path $@ >/dev/null 2>&1}
-      alias sst=st_run_sudo
-      alias st=st_run
+      subl () { $_sublime_path $@ >/dev/null 2>&1 &| }
+      subl_sudo () {sudo $_sublime_path $@ >/dev/null 2>&1}
+      alias sst=subl_sudo
+      alias st=subl
       break
     fi
   done
