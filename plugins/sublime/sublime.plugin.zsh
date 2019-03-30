@@ -39,6 +39,11 @@ alias stn=create_project
       "$(cygpath "$ProgramW6432/Sublime Text 2")/subl.exe"
       "$(cygpath "$ProgramW6432/Sublime Text 3")/subl.exe"
     )
+  elif [[ "$OSTYPE" = msys ]]; then
+    _sublime_paths=(
+      "/c/Program Files/Sublime Text 2/subl.exe"
+      "/c/Program Files/Sublime Text 3/subl.exe"
+    )
   fi
 
   for _sublime_path in $_sublime_paths; do
