@@ -55,7 +55,7 @@ alias stn=create_project
 
   for _sublime_path in $_sublime_paths; do
     if [[ -a $_sublime_path ]]; then
-      alias subl="$_sublime_path"
+      alias subl="'$_sublime_path'"
       (( $+commands[sudo] )) && alias sst="sudo '$_sublime_path'"
       break
     fi
