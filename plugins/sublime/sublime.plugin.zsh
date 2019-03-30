@@ -36,8 +36,8 @@ alias stn=create_project
     )
   elif [[ "$OSTYPE" = cygwin ]]; then
     _sublime_paths=(
-      "$(cygpath $ProgramW6432/Sublime\ Text\ 2)/sublime_text.exe"
-      "$(cygpath $ProgramW6432/Sublime\ Text\ 3)/sublime_text.exe"
+      "$(cygpath "$ProgramW6432/Sublime Text 2")/subl.exe"
+      "$(cygpath "$ProgramW6432/Sublime Text 3")/subl.exe"
     )
   fi
 
