@@ -22,7 +22,7 @@ Usage
 
 1.  Load this script into your interactive ZSH session:
 
-        % source zsh-per-directory-history.zsh
+        % source per-directory-history.zsh
 
 2.  The default mode if per directory history, interact with your history as normal.
 
