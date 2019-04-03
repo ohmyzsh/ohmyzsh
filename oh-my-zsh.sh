@@ -53,7 +53,7 @@ for plugin ($plugins); do
   elif is_plugin $ZSH $plugin; then
     fpath=($ZSH/plugins/$plugin $fpath)
   else
-    echo "Warning: Oh My Zsh plugin '$plugin' not found"
+    echo "[oh-my-zsh] plugin '$plugin' not found"
   fi
 done
 
