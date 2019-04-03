@@ -156,7 +156,7 @@ _gradle_parse_and_extract_tasks () {
 # Discover the gradle tasks by running "gradle tasks --all"
 ############################################################################
 _gradle_tasks () {
-  if [[ -f build.gradle || -f build.gradle.kts ]]; then
+  if [[ -f build.gradle || -f build.gradle.kts || -f settings.gradle || -f settings.gradle.kts ]]; then
     _gradle_arguments
     if _gradle_does_task_list_need_generating; then
       _gradle_parse_and_extract_tasks "$(gradle tasks --all)" > .gradletasknamecache
@@ -166,7 +166,7 @@ _gradle_tasks () {
 }
 
 _gradlew_tasks () {
-  if [[ -f build.gradle || -f build.gradle.kts ]]; then
+  if [[ -f build.gradle || -f build.gradle.kts || -f settings.gradle || -f settings.gradle.kts ]]; then
     _gradle_arguments
     if _gradle_does_task_list_need_generating; then
       _gradle_parse_and_extract_tasks "$(./gradlew tasks --all)" > .gradletasknamecache
