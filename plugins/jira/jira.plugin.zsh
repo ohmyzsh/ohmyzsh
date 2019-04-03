@@ -43,7 +43,11 @@ function jira() {
     echo "Opening new issue"
     open_command "${jira_url}/secure/CreateIssue!default.jspa"
   elif [[ "$action" == "assigned" || "$action" == "reported" ]]; then
-    _jira_query $@
+	if [[ -z "$@" ]]; then
+		_jira_query $action
+	else
+		_jira_query $@
+	fi
   elif [[ "$action" == "dashboard" ]]; then
     echo "Opening dashboard"
     if [[ "$JIRA_RAPID_BOARD" == "true" ]]; then
