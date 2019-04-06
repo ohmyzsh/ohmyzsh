@@ -88,6 +88,12 @@ kres(){
     kubectl set env $@ REFRESHED_AT=$(date +%Y%m%d%H%M%S)
 }
 
+# Cron Job management.
+alias kgcj='kubectl get cronjob'
+alias kecj='kubectl edit cronjob'
+alias kdcj='kubectl describe cronjob'
+alias kdelcj='kubectl delete cronjob'
+
 # Rollout management.
 alias kgrs='kubectl get rs'
 alias krh='kubectl rollout history'

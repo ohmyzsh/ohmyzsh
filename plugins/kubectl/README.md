@@ -70,6 +70,11 @@ plugins=(... kubectl)
 | ksd     | `kubectl scale deployment`          | Scale a deployment                                                                               |
 | krsd    | `kubectl rollout status deployment` | Check the rollout status of a deployment                                                         |
 | kres    | `kubectl set env $@ REFRESHED_AT=...` | Recreate all pods in deployment with zero-downtime                                                         |
+|         |                                     | **Cron Job management**                                                                          |
+| kgcj    | `kubectl get cronjob`               | List the cron jobs in ps output format                                                           |
+| kecj    | `kubectl edit cronjob`              | Edit cron job resource from the default editor                                                   |
+| kdcj    | `kubectl describe cronjob`          | Describe cron job resource in detail                                                             |
+| kdelcj  | `kubectl delete cronjob`            | Delete the cron job                                                                              |
 |         |                                     | **Rollout management**                                                                           |
 | kgrs    | `kubectl get rs`                    | To see the ReplicaSet `rs` created by the deployment                                             |
 | krh     | `kubectl rollout history`           | Check the revisions of this deployment                                                           |
