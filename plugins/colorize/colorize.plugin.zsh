@@ -9,7 +9,7 @@ colorize_via_pygmentize() {
 
     # pygmentize stdin if no arguments passed
     if [ $# -eq 0 ]; then
-        pygmentize -g
+        pygmentize -f terminal -g
         return $?
     fi
 
@@ -20,9 +20,9 @@ colorize_via_pygmentize() {
     do
         lexer=$(pygmentize -N "$FNAME")
         if [[ $lexer != text ]]; then
-            pygmentize -l "$lexer" "$FNAME"
+            pygmentize -f terminal -l "$lexer" "$FNAME"
         else
-            pygmentize -g "$FNAME"
+            pygmentize -f terminal -g "$FNAME"
         fi
     done
 }
