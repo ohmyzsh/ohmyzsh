@@ -19,6 +19,8 @@ function web_search() {
     qwant       "https://www.qwant.com/?q="
     stackoverflow  "https://stackoverflow.com/search?q=" 
     gmail       "https://mail.google.com"
+    givero      "https://www.givero.com/search?q="
+
   )
 
   # check whether the search engine is supported
@@ -53,8 +55,9 @@ alias baidu='web_search baidu'
 alias ecosia='web_search ecosia'
 alias goodreads='web_search goodreads'
 alias qwant='web_search qwant'
-alias stack='web_search stackoverflow'
 alias gmail='web_search gmail'
+alias givero='web_search givero'
+alias stackoverflow='web_search stackoverflow'
 
 #add your own !bang searches here
 alias wiki='web_search duckduckgo \!w'
