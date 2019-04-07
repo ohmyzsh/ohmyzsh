@@ -10,7 +10,7 @@ magic-enter () {
 
   if [[ -z $BUFFER ]]; then
     echo ""
-    if git rev-parse --is-inside-work-tree &>/dev/null; then
+    if git rev-parse --is-inside-work-tree HEAD &>/dev/null; then
       eval "$MAGIC_ENTER_GIT_COMMAND"
     else
       eval "$MAGIC_ENTER_OTHER_COMMAND"

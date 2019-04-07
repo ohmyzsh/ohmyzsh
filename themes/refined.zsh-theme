@@ -41,7 +41,7 @@ zstyle ':vcs_info:*:*' nvcsformats "%~" "" ""
 #
 git_dirty() {
     # Check if we're in a git repo
-    command git rev-parse --is-inside-work-tree &>/dev/null || return
+    command git rev-parse --is-inside-work-tree HEAD &>/dev/null || return
     # Check if it's dirty
     command git diff --quiet --ignore-submodules HEAD &>/dev/null; [ $? -eq 1 ] && echo "*"
 }

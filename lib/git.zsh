@@ -15,12 +15,15 @@ function parse_git_dirty() {
   FLAGS=('--porcelain')
   if [[ "$(command git config --get oh-my-zsh.hide-dirty)" != "1" ]]; then
     if [[ $POST_1_7_2_GIT -gt 0 ]]; then
-      FLAGS+='--ignore-submodules=dirty'
+      FLAGS+=(' --ignore-submodules=dirty')
     fi
     if [[ "$DISABLE_UNTRACKED_FILES_DIRTY" == "true" ]]; then
       FLAGS+='--untracked-files=no'
     fi
-    STATUS=$(command git status ${FLAGS} 2> /dev/null | tail -n1)
+    STATUS=$(command git status ${FLAGS} HEAD 2> /dev/null)
+    if [ "$STATUS" != "" ]; then
+      $STATUS=$(echo $STATUS | tail -n1)
+    fi
   fi
   if [[ -n $STATUS ]]; then
     echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
