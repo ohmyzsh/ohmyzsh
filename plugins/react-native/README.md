@@ -36,16 +36,16 @@ plugins=(... react-native)
 | _iPads_        |                                                                              |
 | **rnipad2**    | `react-native run-ios --simulator "iPad 2"`                                  |
 | **rnipadr**    | `react-native run-ios --simulator "iPad Retina"`                             |
-| **rnipada**    | 'react-native run-ios --simulator "iPad Air"'                                |
-| **rnipada2**   | 'react-native run-ios --simulator "iPad Air 2"'                              |
-| **rnipad5**    | 'react-native run-ios --simulator "iPad (5th generation)"'                   |
-| **rnipad9**    | 'react-native run-ios --simulator "iPad Pro (9.7-inch)"'                     |
-| **rnipad12**   | 'react-native run-ios --simulator "iPad Pro (12.9-inch)"'                    |
-| **rnipad122**  | 'react-native run-ios --simulator "iPad Pro (12.9-inch) (2nd generation)"'   |
-| **rnipad10**   | 'react-native run-ios --simulator "iPad Pro (10.5-inch)"'                    |
-| **rnipad6**    | 'react-native run-ios --simulator "iPad Pro (6th generation)"'               |
-| **rnipad11**   | 'react-native run-ios --simulator "iPad Pro (11-inch)"'                      |
-| **rnipad123**  | 'react-native run-ios --simulator "iPad Pro (12.9-inch) (3rd generation)"'   |
+| **rnipada**    | `react-native run-ios --simulator "iPad Air"`                                |
+| **rnipada2**   | `react-native run-ios --simulator "iPad Air 2"`                              |
+| **rnipad5**    | `react-native run-ios --simulator "iPad (5th generation)"`                   |
+| **rnipad9**    | `react-native run-ios --simulator "iPad Pro (9.7-inch)"`                     |
+| **rnipad12**   | `react-native run-ios --simulator "iPad Pro (12.9-inch)"`                    |
+| **rnipad122**  | `react-native run-ios --simulator "iPad Pro (12.9-inch) (2nd generation)"`   |
+| **rnipad10**   | `react-native run-ios --simulator "iPad Pro (10.5-inch)"`                    |
+| **rnipad6**    | `react-native run-ios --simulator "iPad Pro (6th generation)"`               |
+| **rnipad11**   | `react-native run-ios --simulator "iPad Pro (11-inch)"`                      |
+| **rnipad123**  | `react-native run-ios --simulator "iPad Pro (12.9-inch) (3rd generation)"`   |
 | _Apple TVs_    |                                                                              |
 | **rnatv**      | `react-native run-ios --simulator "Apple TV"`                                |
 | **rnatv4k**    | `react-native run-ios --simulator "Apple TV 4K"`                             |
