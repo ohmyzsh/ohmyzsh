@@ -1,11 +1,11 @@
-# Ubuntu plugin
+# Apt plugin
 
-This plugin adds completions and aliases for [Ubuntu](https://www.ubuntu.com/).
+This plugin mainly adds completions and aliases for `apt` or `apt-get`, and little debian-based commands.
 
-To use it, add `ubuntu` to the plugins array in your zshrc file: 
+To use it, add `apt` to the plugins array in your zshrc file: 
 
 ```zsh
-plugins=(... ubuntu)
+plugins=(... apt)
 ```
 
 ## Aliases

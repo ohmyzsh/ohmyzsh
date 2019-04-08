@@ -6,6 +6,7 @@
 # Nicolas Jonas nextgenthemes.com
 # https://github.com/loctauxphilippe
 # https://github.com/HaraldNordgren
+# https://github.com/jjangga0214 <bnbcmindnpass@gmail.com>
 #
 # Debian, Ubuntu and friends related zsh aliases and functions for zsh
 
