@@ -30,9 +30,9 @@ plugins=(... react-native)
 | **rnios8p**    | `react-native run-ios --simulator "iPhone 8 Plus"`                           |
 | **rniosse**    | `react-native run-ios --simulator "iPhone SE"`                               |
 | **rniosx**     | `react-native run-ios --simulator "iPhone X"`                                |
-| **rniosxs**    | `react-native run-ios --simulator "iPhone XS"`                               |
-| **rniosxsm**   | `react-native run-ios --simulator "iPhone XS Max"`                           |
-| **rniosxr**    | `react-native run-ios --simulator "iPhone XR"`                               |
+| **rniosxs**    | `react-native run-ios --simulator "iPhone Xs"`                               |
+| **rniosxsm**   | `react-native run-ios --simulator "iPhone Xs Max"`                           |
+| **rniosxr**    | `react-native run-ios --simulator "iPhone Xr"`                               |
 | _iPads_        |                                                                              |
 | **rnipad2**    | `react-native run-ios --simulator "iPad 2"`                                  |
 | **rnipadr**    | `react-native run-ios --simulator "iPad Retina"`                             |
