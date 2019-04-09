@@ -28,7 +28,12 @@ done
 # if no path found, try Homebrew
 if (( ! found && $+commands[brew] )); then
   file=$(brew --prefix)/etc/profile.d/autojump.sh
-  [[ -f "$file" ]] && source "$file"
+  if [[ -f "$file" ]]; then
+    source "$file"
+    found=1
+  fi
 fi
+
+(( ! found )) && echo '[oh-my-zsh] autojump script not found'
 
 unset autojump_paths file found
