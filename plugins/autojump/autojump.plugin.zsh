@@ -17,8 +17,8 @@ if [ $commands[autojump] ]; then # check if autojump is installed
     source /usr/local/share/autojump/autojump.zsh
   elif [ -f /opt/local/etc/profile.d/autojump.sh ]; then # mac os x with ports
     source /opt/local/etc/profile.d/autojump.sh
-  elif [ $commands[brew] -a -f `brew --prefix`/etc/autojump.sh ]; then # mac os x with brew
-    source `brew --prefix`/etc/autojump.sh
+  elif [ $commands[brew] -a -f $(brew --prefix)/etc/profile.d/autojump.sh ]; then # mac os x with brew
+    source $(brew --prefix)/etc/profile.d/autojump.sh
   fi
 else
   echo 'Please install autojump to enable the plugin (https://github.com/wting/autojump)'
