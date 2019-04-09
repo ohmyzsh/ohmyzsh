@@ -4,11 +4,6 @@ function zle-keymap-select() {
   zle -R
 }
 
-# Ensure that the prompt is redrawn when the terminal size changes.
-TRAPWINCH() {
-  zle && { zle -R; zle reset-prompt }
-}
-
 zle -N zle-keymap-select
 zle -N edit-command-line
 
