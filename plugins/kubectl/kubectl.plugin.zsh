@@ -10,9 +10,7 @@ if (( $+commands[kubectl] )); then
     unset __KUBECTL_COMPLETION_FILE
 fi
 
-# This command is used a LOT both below and in daily life
-# If supercrabtree/k exists use ku instead of k
-(( $+functions[k] )) && alias k=kubectl || alias ku=kubectl
+alias ku=kubectl
 
 # Execute a kubectl command against all namespaces
 alias kca='f(){ kubectl "$@" --all-namespaces;  unset -f f; }; f'
