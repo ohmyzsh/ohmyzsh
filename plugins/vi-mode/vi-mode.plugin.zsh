@@ -28,8 +28,9 @@ bindkey '^?' backward-delete-char
 bindkey '^h' backward-delete-char
 bindkey '^w' backward-kill-word
 
-# allow ctrl-r to perform backward search in history
+# allow ctrl-r and ctrl-s to search the history
 bindkey '^r' history-incremental-search-backward
+bindkey '^s' history-incremental-search-forward
 
 # allow ctrl-a and ctrl-e to move to beginning/end of line
 bindkey '^a' beginning-of-line
