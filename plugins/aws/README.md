@@ -25,6 +25,8 @@ plugins=(... aws)
 ## Plugin options
 
 * Set `SHOW_AWS_PROMPT=false` in your zshrc file if you want to prevent the plugin from modifying your RPROMPT.
+  Some themes might overwrite the value of RPROMPT instead of appending to it, so they'll need to be fixed to
+  see the AWS profile prompt.
 
 ## Theme
 
