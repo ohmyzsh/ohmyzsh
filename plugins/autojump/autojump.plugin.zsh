@@ -1,27 +1,34 @@
-if [ $commands[autojump] ]; then # check if autojump is installed
-  if [ -f $HOME/.autojump/etc/profile.d/autojump.zsh ]; then # manual user-local installation
-    source $HOME/.autojump/etc/profile.d/autojump.zsh
-  elif [ -f $HOME/.autojump/share/autojump/autojump.zsh ]; then # another manual user-local installation
-    source $HOME/.autojump/share/autojump/autojump.zsh
-  elif [ -f $HOME/.nix-profile/etc/profile.d/autojump.sh ]; then # nix installation
-    source $HOME/.nix-profile/etc/profile.d/autojump.sh
-  elif [ -f /run/current-system/sw/share/autojump/autojump.zsh ]; then # nixos installation
-    source /run/current-system/sw/share/autojump/autojump.zsh
-  elif [ -f /usr/share/autojump/autojump.zsh ]; then # debian and ubuntu package
-    source /usr/share/autojump/autojump.zsh
-  elif [ -f /etc/profile.d/autojump.zsh ]; then # manual installation
-    source /etc/profile.d/autojump.zsh
-  elif [ -f /etc/profile.d/autojump.sh ]; then # gentoo installation
-    source /etc/profile.d/autojump.sh
-  elif [ -f /usr/local/share/autojump/autojump.zsh ]; then # freebsd installation
-    source /usr/local/share/autojump/autojump.zsh
-  elif [ -f /opt/local/etc/profile.d/autojump.sh ]; then # mac os x with ports
-    source /opt/local/etc/profile.d/autojump.sh
-  elif [ -f /usr/local/etc/profile.d/autojump.sh ]; then # mac os x with brew
-    source /usr/local/etc/profile.d/autojump.sh
-  elif [ $commands[brew] -a -f $(brew --prefix)/etc/profile.d/autojump.sh ]; then # mac os x with brew
-    source $(brew --prefix)/etc/profile.d/autojump.sh
+(( $+commands[autojump] )) || {
+  echo '[oh-my-zsh] Please install autojump first (https://github.com/wting/autojump)'
+  return
+}
+
+declare -a autojump_paths
+autojump_paths=(
+  $HOME/.autojump/etc/profile.d/autojump.zsh         # manual installation
+  $HOME/.autojump/share/autojump/autojump.zsh        # manual installation
+  $HOME/.nix-profile/etc/profile.d/autojump.sh       # NixOS installation
+  /run/current-system/sw/share/autojump/autojump.zsh # NixOS installation
+  /usr/share/autojump/autojump.zsh                   # Debian and Ubuntu package
+  /etc/profile.d/autojump.zsh                        # manual installation
+  /etc/profile.d/autojump.sh                         # Gentoo installation
+  /usr/local/share/autojump/autojump.zsh             # FreeBSD installation
+  /opt/local/etc/profile.d/autojump.sh               # macOS with MacPorts
+  /usr/local/etc/profile.d/autojump.sh               # macOS with Homebrew (default)
+)
+
+for file in $autojump_paths; do
+  if [[ -f "$file" ]]; then
+    source "$file"
+    found=1
+    break
   fi
-else
-  echo 'Please install autojump to enable the plugin (https://github.com/wting/autojump)'
+done
+
+# if no path found, try Homebrew
+if (( ! found && $+commands[brew] )); then
+  file=$(brew --prefix)/etc/profile.d/autojump.sh
+  [[ -f "$file" ]] && source "$file"
 fi
+
+unset autojump_paths file found
