@@ -1,6 +1,17 @@
+# Set ZSH_CACHE_DIR to the path where cache files should be created
+# or else we will use the default cache/
+if [[ -z "$ZSH_CACHE_DIR" ]]; then
+  ZSH_CACHE_DIR="$ZSH/cache"
+fi
+
+# Migrate .zsh-update file to $ZSH_CACHE_DIR
+if [ -f ~/.zsh-update ] && [ ! -f ${ZSH_CACHE_DIR}/.zsh-update ]; then
+    mv ~/.zsh-update ${ZSH_CACHE_DIR}/.zsh-update
+fi
+
 # Check for updates on initial load...
 if [ "$DISABLE_AUTO_UPDATE" != "true" ]; then
-  env ZSH=$ZSH DISABLE_UPDATE_PROMPT=$DISABLE_UPDATE_PROMPT zsh -f $ZSH/tools/check_for_upgrade.sh
+  env ZSH=$ZSH ZSH_CACHE_DIR=$ZSH_CACHE_DIR DISABLE_UPDATE_PROMPT=$DISABLE_UPDATE_PROMPT zsh -f $ZSH/tools/check_for_upgrade.sh
 fi
 
 # Initializes Oh My Zsh
@@ -15,12 +26,6 @@ autoload -U compaudit compinit
 # and plugins exists, or else we will use the default custom/
 if [[ -z "$ZSH_CUSTOM" ]]; then
     ZSH_CUSTOM="$ZSH/custom"
-fi
-
-# Set ZSH_CACHE_DIR to the path where cache files should be created
-# or else we will use the default cache/
-if [[ -z "$ZSH_CACHE_DIR" ]]; then
-  ZSH_CACHE_DIR="$ZSH/cache"
 fi
 
 
@@ -39,6 +44,7 @@ is_plugin() {
   test -f $base_dir/plugins/$name/$name.plugin.zsh \
     || test -f $base_dir/plugins/$name/_$name
 }
+
 # Add all defined plugins to fpath. This must be done
 # before running compinit.
 for plugin ($plugins); do
@@ -46,6 +52,8 @@ for plugin ($plugins); do
     fpath=($ZSH_CUSTOM/plugins/$plugin $fpath)
   elif is_plugin $ZSH $plugin; then
     fpath=($ZSH/plugins/$plugin $fpath)
+  else
+    echo "[oh-my-zsh] plugin '$plugin' not found"
   fi
 done
 
@@ -64,14 +72,12 @@ fi
 
 if [[ $ZSH_DISABLE_COMPFIX != true ]]; then
   # If completion insecurities exist, warn the user
-  if ! compaudit &>/dev/null; then
-    handle_completion_insecurities
-  fi
+  handle_completion_insecurities
   # Load only from secure directories
-  compinit -i -d "${ZSH_COMPDUMP}"
+  compinit -i -C -d "${ZSH_COMPDUMP}"
 else
   # If the user wants it, load from all found directories
-  compinit -u -d "${ZSH_COMPDUMP}"
+  compinit -u -C -d "${ZSH_COMPDUMP}"
 fi
 
 # Load all of the plugins that were defined in ~/.zshrc

@@ -1,5 +1,5 @@
 # Uses the command-not-found package zsh support
-# as seen in http://www.porcheron.info/command-not-found-for-zsh/
+# as seen in https://www.porcheron.info/command-not-found-for-zsh/
 # this is installed in Ubuntu
 
 [[ -e /etc/zsh_command_not_found ]] && source /etc/zsh_command_not_found
@@ -30,4 +30,11 @@ if type brew &> /dev/null; then
   if brew command command-not-found-init > /dev/null 2>&1; then
     eval "$(brew command-not-found-init)";
   fi
+fi
+
+# NixOS command-not-found support
+if [ -x /run/current-system/sw/bin/command-not-found ]; then
+    command_not_found_handler () {
+        /run/current-system/sw/bin/command-not-found $@
+    }
 fi

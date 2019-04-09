@@ -1,5 +1,5 @@
 # ZSH Git Prompt Plugin from:
-# http://github.com/olivierverdier/zsh-git-prompt
+# https://github.com/olivierverdier/zsh-git-prompt
 
 __GIT_PROMPT_DIR="${0:A:h}"
 

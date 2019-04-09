@@ -105,7 +105,7 @@ aar() {
 #   apt-history remove
 #   apt-history rollback
 #   apt-history list
-# Based On: http://linuxcommando.blogspot.com/2008/08/how-to-show-apt-log-history.html
+# Based On: https://linuxcommando.blogspot.com/2008/08/how-to-show-apt-log-history.html
 apt-history () {
   case "$1" in
     install)

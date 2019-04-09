@@ -51,6 +51,17 @@ EOF
           end tell
         end tell
 EOF
+  elif [[ "$the_app" == 'Hyper' ]]; then
+    osascript >/dev/null <<EOF
+          tell application "System Events"
+            tell process "Hyper" to keystroke "t" using command down
+          end tell
+          delay 1
+          tell application "System Events"
+              keystroke "${command}"
+              key code 36  #(presses enter)
+            end tell
+EOF
 
   else
     echo "tab: unsupported terminal app: $the_app"
@@ -91,6 +102,19 @@ EOF
           end tell
         end tell
 EOF
+  
+  elif [[ "$the_app" == 'Hyper' ]]; then
+      osascript >/dev/null <<EOF
+      tell application "System Events"
+        tell process "Hyper"
+          tell menu item "Split Vertically" of menu "Shell" of menu bar 1
+            click
+          end tell
+        end tell
+        delay 1
+        keystroke "${command} \n"
+      end tell
+EOF
 
   else
     echo "$0: unsupported terminal app: $the_app" >&2
@@ -130,6 +154,19 @@ EOF
             end tell
           end tell
         end tell
+EOF
+
+  elif [[ "$the_app" == 'Hyper' ]]; then
+      osascript >/dev/null <<EOF
+      tell application "System Events"
+        tell process "Hyper"
+          tell menu item "Split Horizontally" of menu "Shell" of menu bar 1
+            click
+          end tell
+        end tell
+        delay 1
+        keystroke "${command} \n"
+      end tell
 EOF
 
   else
@@ -209,7 +246,7 @@ if [[ ! -z "$playlist" ]]; then
 					opt="play"
 				else
 					opt="stop"
-				fi	
+				fi
                   else
                     opt="set allPlaylists to (get name of every playlist)"
                   fi
@@ -241,7 +278,7 @@ if [[ ! -z "$playlist" ]]; then
 
 			case "$state" in
 				on|off)
-					# Inspired by: http://stackoverflow.com/a/14675583
+					# Inspired by: https://stackoverflow.com/a/14675583
 					osascript 1>/dev/null 2>&1 <<-EOF
 					tell application "System Events" to perform action "AXPress" of (menu item "${state}" of menu "Shuffle" of menu item "Shuffle" of menu "Controls" of menu bar item "Controls" of menu bar 1 of application process "iTunes" )
 EOF
@@ -282,3 +319,8 @@ source ${ZSH}/plugins/osx/spotify
 # Show/hide hidden files in the Finder
 alias showfiles="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
 alias hidefiles="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
+
+# Remove .DS_Store files recursively in a directory, default .
+function rmdsstore() {
+	find "${@:-.}" -type f -name .DS_Store -delete
+}
