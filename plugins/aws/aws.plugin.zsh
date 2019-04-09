@@ -44,7 +44,7 @@ function aws_prompt_info() {
 }
 
 if [ "$SHOW_AWS_PROMPT" != false ]; then
-  export RPROMPT='$(aws_prompt_info)'"$RPROMPT"
+  RPROMPT='$(aws_prompt_info)'"$RPROMPT"
 fi
 
 
