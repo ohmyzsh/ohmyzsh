@@ -9,8 +9,9 @@ plugins=(... python)
 
 ## Aliases
 
-| Command          | Description                                                                     |
-|------------------|---------------------------------------------------------------------------------|
-| `pyfind`         | Finds .py files recursively in the current directory                            |
-| `pyclean [dirs]` | Deletes byte-code and cache files from a list of directories or the current one |
-| `pygrep <text>`  | Looks for `text` in .py files                                                   |
+| Command          | Description                                                                      |
+|------------------|----------------------------------------------------------------------------------|
+| `pyfind`         | Finds .py files recursively in the current directory.                            |
+| `pyclean [dirs]` | Deletes byte-code and cache files from a list of directories or the current one. |
+| `pygrep <text>`  | Looks for `text` in .py files.                                                   |
+| `pyuserpaths`    | Add --user site-packages to PYTHONPATH, for all installed python versions.       |
