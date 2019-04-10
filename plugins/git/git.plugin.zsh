@@ -242,7 +242,8 @@ alias gst='git status'
 
 # use the default stash push on git 2.13 and newer
 autoload -Uz is-at-least
-is-at-least 2.13 "$(git --version 2>/dev/null | awk '{print $3}')" \
+is-at-least 2.13 `[[ $(git --version 2>/dev/null) =~ '^git version (([0-9]+.?)+)$' ]] \
+  && echo $match[1]` \
   && alias gsta='git stash push' \
   || alias gsta='git stash save'
 
