@@ -58,7 +58,7 @@ for plugin ($plugins); do
     if echo $plugin | grep ',$' > /dev/null; then
       commasInPluginsArray=true
     fi
-    if grep "source .*/$plugin.zsh" ~/.zshrc > /dev/null; then
+    if grep "^[^#]*source .*/$plugin.zsh" ~/.zshrc > /dev/null; then
       sourced="- sourced manually"
       pluginsSourcedManually=true
     else 
