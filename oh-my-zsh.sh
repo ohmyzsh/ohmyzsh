@@ -47,21 +47,39 @@ is_plugin() {
 
 # Add all defined plugins to fpath. This must be done
 # before running compinit.
+
+pluginsNotFound=()
 for plugin ($plugins); do
   if is_plugin $ZSH_CUSTOM $plugin; then
     fpath=($ZSH_CUSTOM/plugins/$plugin $fpath)
   elif is_plugin $ZSH $plugin; then
     fpath=($ZSH/plugins/$plugin $fpath)
   else
-    echo "[oh-my-zsh] plugin '$plugin' not found"
     if echo $plugin | grep ',$' > /dev/null; then
-      echo "  zsh arrays use spaces, not commas to separate entries"
+      commasInPluginsArray=true
     fi
     if grep "source .*/$plugin.zsh" ~/.zshrc > /dev/null; then
-      echo "  you sourced this plugin manually so don't need it in the plugins array"
+      sourced="- sourced manually"
+      pluginsSourcedManually=true
+    else 
+      sourced=""
     fi
+    pluginsNotFound+="$plugin $sourced"
   fi
 done
+
+if [[ ${#pluginsNotFound[@]} != 0 ]]; then
+  echo "[oh-my-zsh] the following plugins could not be found:"
+  for plugin ($pluginsNotFound); do
+    echo "  $plugin"
+  done
+  if [[ $commasInPluginsArray = true ]]; then
+    echo "zsh arrays use spaces, not commas to separate entries"
+  fi
+  if [[ $pluginsSourcedManually = true ]]; then
+    echo "some plugins where sourced manually so don't need to be in the plugins array"
+  fi
+fi
 
 # Figure out the SHORT hostname
 if [[ "$OSTYPE" = darwin* ]]; then
