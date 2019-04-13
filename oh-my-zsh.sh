@@ -77,7 +77,7 @@ if [[ ${#pluginsNotFound[@]} != 0 ]]; then
     echo "zsh arrays use spaces, not commas to separate entries"
   fi
   if [[ $pluginsSourcedManually = true ]]; then
-    echo "some plugins where sourced manually so don't need to be in the plugins array"
+    echo "some plugins were sourced manually so don't need to be in the plugins array"
   fi
 fi
 
