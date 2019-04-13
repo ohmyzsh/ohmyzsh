@@ -54,12 +54,6 @@ for plugin ($plugins); do
     fpath=($ZSH/plugins/$plugin $fpath)
   else
     echo "[oh-my-zsh] plugin '$plugin' not found"
-    if echo $plugin | grep ',$' > /dev/null; then
-      echo "  zsh arrays use spaces, not commas to separate entries"
-    fi
-    if grep "source .*/$plugin.zsh" ~/.zshrc > /dev/null; then
-      echo "  you sourced this plugin manually so don't need it in the plugins array"
-    fi
   fi
 done
 
