@@ -1,6 +1,6 @@
 #compdef docker dockerd
 #
-# zsh completion for docker (https://docker.com)
+# zsh completion for docker (http://docker.com)
 #
 # version:  0.3.0
 # github:   https://github.com/felixr/docker-zsh-completion
@@ -617,6 +617,7 @@ __docker_container_subcommand() {
         "($help)*--dns=[Custom DNS servers]:DNS server: "
         "($help)*--dns-option=[Custom DNS options]:DNS option: "
         "($help)*--dns-search=[Custom DNS search domains]:DNS domains: "
+        "($help)*--domainname=[Container NIS domain name]:domainname:_hosts"
         "($help)*"{-e=,--env=}"[Environment variables]:environment variable: "
         "($help)--entrypoint=[Overwrite the default entrypoint of the image]:entry point: "
         "($help)*--env-file=[Read environment variables from a file]:environment file:_files"
@@ -2214,7 +2215,7 @@ __docker_stack_subcommand() {
             _arguments $(__docker_arguments) \
                 $opts_help \
                 "($help)--bundle-file=[Path to a Distributed Application Bundle file]:dab:_files -g \"*.dab\"" \
-                "($help -c --compose-file)"{-c=,--compose-file=}"[Path to a Compose file]:compose file:_files -g \"*.(yml|yaml)\"" \
+                "($help -c --compose-file)"{-c=,--compose-file=}"[Path to a Compose file, or '-' to read from stdin]:compose file:_files -g \"*.(yml|yaml)\"" \
                 "($help)--with-registry-auth[Send registry authentication details to Swarm agents]" \
                 "($help -):stack:__docker_complete_stacks" && ret=0
             ;;
@@ -2285,6 +2286,9 @@ __docker_swarm_subcommand() {
                 $opts_help \
                 "($help)--advertise-addr=[Advertised address]:ip\:port: " \
                 "($help)--data-path-addr=[Data path IP or interface]:ip " \
+                "($help)--data-path-port=[Data Path Port]:port " \
+                "($help)--default-addr-pool=[Default address pool]" \
+                "($help)--default-addr-pool-mask-length=[Default address pool subnet mask length]" \
                 "($help)--autolock[Enable manager autolocking]" \
                 "($help)--availability=[Availability of the node]:availability:(active drain pause)" \
                 "($help)--cert-expiry=[Validity period for node certificates]:duration: " \
