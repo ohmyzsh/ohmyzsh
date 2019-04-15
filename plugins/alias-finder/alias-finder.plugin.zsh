@@ -1,5 +1,5 @@
 preexec() {
-  if [[ $1 != *\[*\]* ]] && [[ $1 != *\n* ]]; then
+  if [[ $1 != *\[*\]* ]] && [[ $1 != *\n* ]] && [[ $1 != *\\* ]]; then
     while [[ $1 != "" ]]; do
       if echo $1 | grep '^[^\ ]*$' > /dev/null; then
         finder=$1
