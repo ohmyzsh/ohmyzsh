@@ -7,3 +7,9 @@ To use it add bwana to the plugins array in your zshrc file.
 ```bash
 plugins=(... bwana)
 ```
+
+## Functions
+
+| Function | Description                              |
+| -------- | ---------------------------------------- |
+| `bwana`  | Works just like `man` |
