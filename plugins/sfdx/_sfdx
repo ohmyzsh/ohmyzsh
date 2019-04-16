@@ -14,10 +14,12 @@ _1st_arguments=(
 	"force\:apex\:execute":"execute anonymous Apex code"
 	"force\:apex\:log\:get":"fetch a debug log"
 	"force\:apex\:log\:list":"list debug logs"
+	"force\:apex\:log\:tail":"start debug logging and display logs"
 	"force\:apex\:test\:report":"display test results"
 	"force\:apex\:test\:run":"invoke Apex tests"
 	"force\:apex\:trigger\:create":"create an Apex trigger"
 	"force\:auth\:jwt\:grant":"authorize an org using the JWT flow"
+	"force\:auth\:logout":"log out from authorized orgs"
 	"force\:auth\:sfdxurl\:store":"authorize an org using an SFDX auth URL"
 	"force\:auth\:web\:login":"authorize an org using the web login flow"
 	"force\:config\:get":"get config var values for given names"
@@ -36,16 +38,17 @@ _1st_arguments=(
 	"force\:doc\:commands\:display":"display help for force commands"
 	"force\:doc\:commands\:list":"list the force commands"
 	"force\:lightning\:app\:create":"create a Lightning app"
-	"force\:lightning\:component\:create":"create a Lightning component"
+	"force\:lightning\:component\:create":"create a bundle for an Aura component or a Lightning web component"
 	"force\:lightning\:event\:create":"create a Lightning event"
 	"force\:lightning\:interface\:create":"create a Lightning interface"
 	"force\:lightning\:lint":"analyse (lint) Lightning component code"
 	"force\:lightning\:test\:create":"create a Lightning test"
 	"force\:lightning\:test\:install":"install Lightning Testing Service unmanaged package in your org"
-	"force\:lightning\:test\:run":"invoke Lightning component tests"
+	"force\:lightning\:test\:run":"invoke Aura component tests"
 	"force\:limits\:api\:display":"display current org’s limits"
-	"force\:mdapi\:convert":"convert Metadata API source into the Salesforce DX source format"
+	"force\:mdapi\:convert":"convert metadata from the Metadata API format into the source format"
 	"force\:mdapi\:deploy":"deploy metadata to an org using Metadata API"
+	"force\:mdapi\:deploy\:cancel":"cancel a metadata deployment"
 	"force\:mdapi\:deploy\:report":"check the status of a metadata deployment"
 	"force\:mdapi\:retrieve":"retrieve metadata from an org using Metadata API"
 	"force\:mdapi\:retrieve\:report":"check the status of a metadata retrieval"
@@ -57,32 +60,43 @@ _1st_arguments=(
 	"force\:org\:shape\:create":"create a snapshot of org edition, features, and licenses"
 	"force\:org\:shape\:delete":"delete all org shapes for a target org"
 	"force\:org\:shape\:list":"list all org shapes you’ve created"
+	"force\:org\:snapshot\:create":"snapshot a scratch org"
+	"force\:org\:snapshot\:delete":"delete a scratch org snapshot"
+	"force\:org\:snapshot\:get":"get details about a scratch org snapshot"
+	"force\:org\:snapshot\:list":"list scratch org snapshots"
 	"force\:package1\:version\:create":"create a first-generation package version in the release org"
 	"force\:package1\:version\:create\:get":"retrieve the status of a package version creation request"
 	"force\:package1\:version\:display":"display details about a first-generation package version"
 	"force\:package1\:version\:list":"list package versions for the specified first-generation package or for the org"
-	"force\:package2\:create":"create a second-generation package"
-	"force\:package2\:list":"list all second-generation packages in the Dev Hub org"
-	"force\:package2\:update":"update a second-generation package"
-	"force\:package2\:version\:create":"create a second-generation package version"
-	"force\:package2\:version\:create\:get":"retrieve a package version creation request"
-	"force\:package2\:version\:create\:list":"list package version creation requests"
-	"force\:package2\:version\:get":"retrieve a package version in the Dev Hub org"
-	"force\:package2\:version\:list":"list all package versions in the Dev Hub org"
-	"force\:package2\:version\:update":"update a second-generation package version"
+	"force\:package\:create":"create a package"
+	"force\:package\:hammertest\:list":"list the statuses of running and completed hammer tests"
+	"force\:package\:hammertest\:report":"display the status or results of a hammer test"
+	"force\:package\:hammertest\:run":"run ISV Hammer"
 	"force\:package\:install":"install a package in the target org"
-	"force\:package\:install\:get":"retrieve the status of a package installation request"
+	"force\:package\:install\:report":"retrieve the status of a package installation request"
 	"force\:package\:installed\:list":"list the org’s installed packages"
+	"force\:package\:list":"list all packages in the Dev Hub org"
 	"force\:package\:uninstall":"uninstall a second-generation package from the target org"
-	"force\:package\:uninstall\:get":"retrieve status of package uninstall request"
+	"force\:package\:uninstall\:report":"retrieve status of package uninstall request"
+	"force\:package\:update":"update package details"
+	"force\:package\:version\:create":"create a package version"
+	"force\:package\:version\:create\:list":"list package version creation requests"
+	"force\:package\:version\:create\:report":"retrieve details about a package version creation request"
+	"force\:package\:version\:list":"list all package versions in the Dev Hub org"
+	"force\:package\:version\:promote":"promote a package version to released"
+	"force\:package\:version\:report":"retrieve details about a package version in the Dev Hub org"
+	"force\:package\:version\:update":"update a package version"
 	"force\:project\:create":"create a new SFDX project"
 	"force\:project\:upgrade":"update project config files to the latest format"
 	"force\:schema\:sobject\:describe":"describe an object"
 	"force\:schema\:sobject\:list":"list all objects of a specified category"
-	"force\:source\:convert":"convert Salesforce DX source into the Metadata API source format"
+	"force\:source\:convert":"convert source into Metadata API format"
+	"force\:source\:delete":"delete source from your project and from a non-source-tracked org"
+	"force\:source\:deploy":"deploy source to a non-source-tracked org"
 	"force\:source\:open":"edit a Lightning Page with Lightning App Builder"
 	"force\:source\:pull":"pull source from the scratch org to the project"
-	"force\:source\:push":"push source to an org from the project"
+	"force\:source\:push":"push source to a scratch org from the project"
+	"force\:source\:retrieve":"retrieve source from a non-source-tracked org"
 	"force\:source\:status":"list local changes and/or changes in a scratch org"
 	"force\:user\:create":"create a user for a scratch org"
 	"force\:user\:display":"displays information about a user of a scratch org"
@@ -115,7 +129,7 @@ case "$words[1]" in
  '(-t|--template)'{-t,--template}'[template to use for file creation (DefaultLightningApp*)]' \
  '(-d|--outputdir)'{-d,--outputdir}'[folder for saving the created files]' \
  '(-r|--reflect)'{-r,--reflect}'[switch to return flag detailed information]' \
- '(-a|--apiversion)'{-a,--apiversion}'[API version number (41.0*,40.0)]' \
+ '(-a|--apiversion)'{-a,--apiversion}'[API version number (45.0*,44.0)]' \
  '(--json)--json[JSON output]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
  )
@@ -143,7 +157,7 @@ case "$words[1]" in
  _command_args=(
  '(-s|--sobjecttype)'{-s,--sobjecttype}'[the sObject type of the records you want to upsert]' \
  '(-f|--csvfile)'{-f,--csvfile}'[the path to the CSV file that defines the records to upsert]:file:_files' \
- '(-i|--externalid)'{-i,--externalid}'[the column name of the external ID; if not provided, an arbitrary ID is used]' \
+ '(-i|--externalid)'{-i,--externalid}'[the column name of the external ID]' \
  '(-w|--wait)'{-w,--wait}'[the number of minutes to wait for the command to complete before displaying the results]' \
  '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
  '(--json)--json[format output as json]' \
@@ -156,7 +170,7 @@ case "$words[1]" in
  '(-t|--template)'{-t,--template}'[template to use for file creation (DefaultApexClass*,ApexException,ApexUnitTest,InboundEmailService)]' \
  '(-d|--outputdir)'{-d,--outputdir}'[folder for saving the created files]' \
  '(-r|--reflect)'{-r,--reflect}'[switch to return flag detailed information]' \
- '(-a|--apiversion)'{-a,--apiversion}'[API version number (41.0*,40.0)]' \
+ '(-a|--apiversion)'{-a,--apiversion}'[API version number (45.0*,44.0)]' \
  '(--json)--json[JSON output]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
  )
@@ -169,7 +183,7 @@ case "$words[1]" in
  ;;
  force:doc:commands:list)
  _command_args=(
- '(-u|--usage)'{-u,--usage}'[list only docopts usage strings]' \
+ '(-u|--usage)'{-u,--usage}'[list only docopt usage strings]' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
  )
@@ -180,7 +194,7 @@ case "$words[1]" in
  '(-d|--outputdir)'{-d,--outputdir}'[folder for saving the created files]' \
  '(-r|--reflect)'{-r,--reflect}'[switch to return flag detailed information]' \
  '(-n|--componentname)'{-n,--componentname}'[name of the generated Visualforce component]' \
- '(-a|--apiversion)'{-a,--apiversion}'[API version number (41.0*,40.0)]' \
+ '(-a|--apiversion)'{-a,--apiversion}'[API version number (45.0*,44.0)]' \
  '(-l|--label)'{-l,--label}'[Visualforce component label]' \
  '(--json)--json[JSON output]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
@@ -192,24 +206,25 @@ case "$words[1]" in
  '(-t|--template)'{-t,--template}'[template to use for file creation (DefaultLightningCmp*)]' \
  '(-d|--outputdir)'{-d,--outputdir}'[folder for saving the created files]' \
  '(-r|--reflect)'{-r,--reflect}'[switch to return flag detailed information]' \
- '(-a|--apiversion)'{-a,--apiversion}'[API version number (41.0*,40.0)]' \
+ '(-a|--apiversion)'{-a,--apiversion}'[API version number (45.0*,44.0)]' \
+ '(--type)--type[type of the Lightning component (aura*,lwc)]' \
  '(--json)--json[JSON output]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
  )
  ;;
  force:mdapi:convert)
  _command_args=(
- '(-r|--rootdir)'{-r,--rootdir}'[the root directory containing the Metadata API source]:file:_files' \
- '(-d|--outputdir)'{-d,--outputdir}'[the output directory to store the sfdx source]:file:_files' \
+ '(-r|--rootdir)'{-r,--rootdir}'[the root directory containing the Metadata API–formatted metadata]:file:_files' \
+ '(-d|--outputdir)'{-d,--outputdir}'[the output directory to store the source–formatted files]:file:_files' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
  )
  ;;
  force:source:convert)
  _command_args=(
- '(-r|--rootdir)'{-r,--rootdir}'[the source directory for the source to be converted]:file:_files' \
- '(-d|--outputdir)'{-d,--outputdir}'[the output directory to export the Metadata API source to]:file:_files' \
- '(-n|--packagename)'{-n,--packagename}'[the name of the package to associate with the Metadata API source]' \
+ '(-r|--rootdir)'{-r,--rootdir}'[a source directory other than the default package to convert]:file:_files' \
+ '(-d|--outputdir)'{-d,--outputdir}'[output directory to store the Metadata API–formatted files in]:file:_files' \
+ '(-n|--packagename)'{-n,--packagename}'[name of the package to associate with the metadata-formatted files]' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
  )
@@ -231,12 +246,13 @@ case "$words[1]" in
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
  )
  ;;
- force:package2:create)
+ force:package:create)
  _command_args=(
  '(-n|--name)'{-n,--name}'[package name]' \
- '(-o|--containeroptions)'{-o,--containeroptions}'[\[*Managed | Unlocked | Locked\] container options for the package (Managed=DeveloperManagedSubscriberManaged, Unlocked=DeveloperControlledSubscriberEditable, Locked=DeveloperControlledSubscriberLocked)]' \
+ '(-t|--packagetype)'{-t,--packagetype}'[package type (Managed,Unlocked)]' \
  '(-d|--description)'{-d,--description}'[package description]' \
- '(-e|--nonamespace)'{-e,--nonamespace}'[creates the package with no namespace; available only for developer-controlled packages.]' \
+ '(-e|--nonamespace)'{-e,--nonamespace}'[creates the package with no namespace; available only for unlocked packages.]' \
+ '(-r|--path)'{-r,--path}'[path to directory that contains the contents of the package]:file:_files' \
  '(-v|--targetdevhubusername)'{-v,--targetdevhubusername}'[username or alias for the dev hub org; overrides default dev hub org]' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
@@ -259,9 +275,10 @@ case "$words[1]" in
  '(-d|--outputdir)'{-d,--outputdir}'[folder for saving the created files]' \
  '(-r|--reflect)'{-r,--reflect}'[switch to return flag detailed information]' \
  '(-l|--loginurl)'{-l,--loginurl}'[Salesforce instance login URL (https://login.salesforce.com*)]' \
- '(-x|--sourceapiversion)'{-x,--sourceapiversion}'[source API version number (41.0*)]' \
+ '(--sourceapiversion)--sourceapiversion[source API version number (45.0*)]' \
  '(-s|--namespace)'{-s,--namespace}'[project associated namespace]' \
- '(-p|--defaultpackagedir)'{-p,--defaultpackagedir}'[default package directory name (force-app*)]:file:_files' \
+ '(-p|--defaultpackagedir)'{-p,--defaultpackagedir}'[default package directory name (force-app*)]' \
+ '(-x|--manifest)'{-x,--manifest}'[generate a manifest (package.xml) for change-set-based development]' \
  '(--json)--json[JSON output]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
  )
@@ -275,17 +292,29 @@ case "$words[1]" in
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
  )
  ;;
+ force:source:delete)
+ _command_args=(
+ '(-r|--noprompt)'{-r,--noprompt}'[do not prompt for delete confirmation]' \
+ '(-w|--wait)'{-w,--wait}'[wait time for command to finish in minutes (default: 33) (default:33, min:1)]' \
+ '(-p|--sourcepath)'{-p,--sourcepath}'[comma-separated list of paths to the local metadata to delete]:file:_files' \
+ '(-m|--metadata)'{-m,--metadata}'[comma-separated list of names of metadata components to delete]' \
+ '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
+ '(--json)--json[format output as json]' \
+ '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
+ )
+ ;;
  force:mdapi:deploy)
  _command_args=(
  '(-c|--checkonly)'{-c,--checkonly}'[validate deploy but don’t save to the org (default:false)]' \
  '(-d|--deploydir)'{-d,--deploydir}'[root of directory tree of files to deploy]:file:_files' \
  '(-w|--wait)'{-w,--wait}'[wait time for command to finish in minutes (default: 0)]' \
- '(-i|--jobid)'{-i,--jobid}'[WARNING: The flag "jobid" has been deprecated and will be removed in v41.01.0 or later. Instead, use "sfdx force:mdapi:deploy:report -i <jobId>".]' \
+ '(-i|--jobid)'{-i,--jobid}'[(deprecated) job ID of the deployment you want to check; defaults to your most recent CLI deployment if not specified]' \
  '(-l|--testlevel)'{-l,--testlevel}'[deployment testing level (NoTestRun,RunSpecifiedTests,RunLocalTests,RunAllTestsInOrg)]' \
  '(-r|--runtests)'{-r,--runtests}'[tests to run if --testlevel RunSpecifiedTests]' \
- '(-e|--rollbackonerror)'{-e,--rollbackonerror}'[WARNING: The flag "rollbackonerror" has been deprecated and will be removed in v41.01.0 or later. Instead, use "ignoreerrors".]' \
+ '(-e|--rollbackonerror)'{-e,--rollbackonerror}'[(deprecated) roll back deployment for any failure (default:true)]' \
  '(-o|--ignoreerrors)'{-o,--ignoreerrors}'[ignore any errors and do not roll back deployment (default:false)]' \
  '(-g|--ignorewarnings)'{-g,--ignorewarnings}'[whether a warning will allow a deployment to complete successfully (default:false)]' \
+ '(-q|--validateddeployrequestid)'{-q,--validateddeployrequestid}'[request ID of the validated deployment to run a Quick Deploy]' \
  '(-f|--zipfile)'{-f,--zipfile}'[path to .zip file of metadata to deploy]:file:_files' \
  '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
  '(--json)--json[format output as json]' \
@@ -293,10 +322,30 @@ case "$words[1]" in
  '(--verbose)--verbose[verbose output of deploy results]' \
  )
  ;;
+ force:source:deploy)
+ _command_args=(
+ '(-w|--wait)'{-w,--wait}'[wait time for command to finish in minutes (default: 33) (default:33, min:1)]' \
+ '(-m|--metadata)'{-m,--metadata}'[comma-separated list of metadata component names]' \
+ '(-p|--sourcepath)'{-p,--sourcepath}'[comma-separated list of paths to the local source files to deploy]:file:_files' \
+ '(-x|--manifest)'{-x,--manifest}'[file path for manifest (package.xml) of components to deploy]:file:_files' \
+ '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
+ '(--json)--json[format output as json]' \
+ '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
+ )
+ ;;
+ force:mdapi:deploy:cancel)
+ _command_args=(
+ '(-w|--wait)'{-w,--wait}'[wait time for command to finish in minutes (default: 33) (default:33, min:1)]' \
+ '(-i|--jobid)'{-i,--jobid}'[job ID of the deployment you want to cancel; defaults to your most recent CLI deployment if not specified]' \
+ '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
+ '(--json)--json[format output as json]' \
+ '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
+ )
+ ;;
  force:mdapi:deploy:report)
  _command_args=(
  '(-w|--wait)'{-w,--wait}'[wait time for command to finish in minutes (default: 0)]' \
- '(-i|--jobid)'{-i,--jobid}'[job ID of the deployment you want to check]' \
+ '(-i|--jobid)'{-i,--jobid}'[job ID of the deployment you want to check; defaults to your most recent CLI deployment if not specified]' \
  '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
@@ -325,7 +374,7 @@ case "$words[1]" in
  '(-t|--template)'{-t,--template}'[template to use for file creation (DefaultLightningEvt*)]' \
  '(-d|--outputdir)'{-d,--outputdir}'[folder for saving the created files]' \
  '(-r|--reflect)'{-r,--reflect}'[switch to return flag detailed information]' \
- '(-a|--apiversion)'{-a,--apiversion}'[API version number (41.0*,40.0)]' \
+ '(-a|--apiversion)'{-a,--apiversion}'[API version number (45.0*,44.0)]' \
  '(--json)--json[JSON output]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
  )
@@ -345,18 +394,51 @@ case "$words[1]" in
  '(--verbose)--verbose[emit additional command output to stdout]' \
  )
  ;;
- force:package:install)
+ force:package:hammertest:list)
  _command_args=(
- '(-i|--id)'{-i,--id}'[ID of the package version to install (starts with 04t)]' \
- '(-w|--wait)'{-w,--wait}'[number of minutes to wait for installation status]' \
- '(-k|--installationkey)'{-k,--installationkey}'[installation key for key-protected package (default: null)]' \
- '(-p|--publishwait)'{-p,--publishwait}'[number of minutes to wait for subscriber package version ID to become available in the target org]' \
+ '(-i|--packageversionid)'{-i,--packageversionid}'[ID of the package version to list results for]' \
  '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
  )
  ;;
- force:package:install:get)
+ force:package:hammertest:report)
+ _command_args=(
+ '(-i|--requestid)'{-i,--requestid}'[ID of the hammer request to report on]' \
+ '(-s|--summary)'{-s,--summary}'[report only a results summary (hide Apex test failures)]' \
+ '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
+ '(--json)--json[format output as json]' \
+ '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
+ )
+ ;;
+ force:package:hammertest:run)
+ _command_args=(
+ '(-i|--packageversionid)'{-i,--packageversionid}'[ID of the package version to test]' \
+ '(-s|--subscriberorg)'{-s,--subscriberorg}'[comma-separated list of subscriber orgs IDs]' \
+ '(-f|--subscriberfile)'{-f,--subscriberfile}'[file with list of subscriber orgs IDs, one per line]' \
+ '(-d|--scheduledrundatetime)'{-d,--scheduledrundatetime}'[earliest date/time to run the test]' \
+ '(-p|--preview)'{-p,--preview}'[run the package hammer test in the Salesforce preview version]' \
+ '(-t|--apextests)'{-t,--apextests}'[run the apex tests in the subscriber org]' \
+ '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
+ '(--json)--json[format output as json]' \
+ '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
+ )
+ ;;
+ force:package:install)
+ _command_args=(
+ '(-w|--wait)'{-w,--wait}'[number of minutes to wait for installation status]' \
+ '(-k|--installationkey)'{-k,--installationkey}'[installation key for key-protected package (default: null)]' \
+ '(-b|--publishwait)'{-b,--publishwait}'[number of minutes to wait for subscriber package version ID to become available in the target org ]' \
+ '(-r|--noprompt)'{-r,--noprompt}'[allow Remote Site Settings and Content Security Policy websites to send or receive data without confirmation]' \
+ '(-p|--package)'{-p,--package}'[ID (starts with 04t) or alias of the package version to install]' \
+ '(-s|--securitytype)'{-s,--securitytype}'[security access type for the installed package (AllUsers,AdminsOnly)]' \
+ '(-t|--upgradetype)'{-t,--upgradetype}'[the upgrade type for the package installation (Mixed*,DeprecateOnly)]' \
+ '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
+ '(--json)--json[format output as json]' \
+ '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
+ )
+ ;;
+ force:package:install:report)
  _command_args=(
  '(-i|--requestid)'{-i,--requestid}'[ID of the package install request you want to check]' \
  '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
@@ -377,7 +459,7 @@ case "$words[1]" in
  '(-t|--template)'{-t,--template}'[template to use for file creation (DefaultLightningIntf*)]' \
  '(-d|--outputdir)'{-d,--outputdir}'[folder for saving the created files]' \
  '(-r|--reflect)'{-r,--reflect}'[switch to return flag detailed information]' \
- '(-a|--apiversion)'{-a,--apiversion}'[API version number (41.0*,40.0)]' \
+ '(-a|--apiversion)'{-a,--apiversion}'[API version number (45.0*,44.0)]' \
  '(--json)--json[JSON output]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
  )
@@ -391,16 +473,17 @@ case "$words[1]" in
  '(-d|--setdefaultdevhubusername)'{-d,--setdefaultdevhubusername}'[set the authenticated org as the default dev hub org for scratch org creation]' \
  '(-s|--setdefaultusername)'{-s,--setdefaultusername}'[set the authenticated org as the default username that all commands run against]' \
  '(-a|--setalias)'{-a,--setalias}'[set an alias for the authenticated org]' \
+ '(-p|--noprompt)'{-p,--noprompt}'[do not prompt for auth confirmation in demo mode]' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
  )
  ;;
  force:lightning:lint)
  _command_args=(
- '(-i|--ignore)'{-i,--ignore}'[pattern used to ignore some folders]' \
- '(--files)--files[pattern used to include specific files]:file:_files' \
- '(-j|--json)'{-j,--json}'[format output as JSON]' \
- '(--config)--config[path to a custom ESLint configuration file]:file:_files' \
+ '(--ignore)--ignore[pattern used to ignore some folders]' \
+ '(--files)--files[pattern used to include specific files]' \
+ '(--json)--json[format output as JSON]' \
+ '(--config)--config[path to a custom ESLint configuration file]' \
  '(--verbose)--verbose[report warnings in addition to errors]' \
  '(--exit)--exit[exit with error code 1 if there are lint issues]' \
  )
@@ -427,11 +510,12 @@ case "$words[1]" in
  '(--verbose)--verbose[list more information about each org]' \
  )
  ;;
- force:package2:list)
+ force:package:list)
  _command_args=(
  '(-v|--targetdevhubusername)'{-v,--targetdevhubusername}'[username or alias for the dev hub org; overrides default dev hub org]' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
+ '(--verbose)--verbose[display extended package detail]' \
  )
  ;;
  force:user:list)
@@ -444,7 +528,9 @@ case "$words[1]" in
  ;;
  force:apex:log:get)
  _command_args=(
+ '(-c|--color)'{-c,--color}'[colorize noteworthy log lines]' \
  '(-i|--logid)'{-i,--logid}'[ID of the log to display]' \
+ '(-n|--number)'{-n,--number}'[number of most recent logs to display (min:1, max:25)]' \
  '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
@@ -457,9 +543,28 @@ case "$words[1]" in
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
  )
  ;;
+ force:apex:log:tail)
+ _command_args=(
+ '(-c|--color)'{-c,--color}'[colorize noteworthy log lines]' \
+ '(-d|--debuglevel)'{-d,--debuglevel}'[debug level for trace flag]' \
+ '(-s|--skiptraceflag)'{-s,--skiptraceflag}'[skip trace flag setup]' \
+ '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
+ '(--json)--json[format output as json]' \
+ '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
+ )
+ ;;
+ force:auth:logout)
+ _command_args=(
+ '(-a|--all)'{-a,--all}'[include all authenticated orgs]' \
+ '(-p|--noprompt)'{-p,--noprompt}'[do not prompt for confirmation]' \
+ '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
+ '(--json)--json[format output as json]' \
+ '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
+ )
+ ;;
  force:org:open)
  _command_args=(
- '(-p|--path)'{-p,--path}'[navigation URL path]:file:_files' \
+ '(-p|--path)'{-p,--path}'[navigation URL path]' \
  '(-r|--urlonly)'{-r,--urlonly}'[display navigation URL, but don’t launch browser]' \
  '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
  '(--json)--json[format output as json]' \
@@ -481,7 +586,7 @@ case "$words[1]" in
  '(-d|--outputdir)'{-d,--outputdir}'[folder for saving the created files]' \
  '(-r|--reflect)'{-r,--reflect}'[switch to return flag detailed information]' \
  '(-n|--pagename)'{-n,--pagename}'[name of the generated Visualforce page]' \
- '(-a|--apiversion)'{-a,--apiversion}'[API version number (41.0*,40.0)]' \
+ '(-a|--apiversion)'{-a,--apiversion}'[API version number (45.0*,44.0)]' \
  '(-l|--label)'{-l,--label}'[Visualforce page label]' \
  '(--json)--json[JSON output]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
@@ -518,6 +623,7 @@ case "$words[1]" in
  _command_args=(
  '(-f|--forceoverwrite)'{-f,--forceoverwrite}'[ignore conflict warnings and overwrite changes to scratch org]' \
  '(-g|--ignorewarnings)'{-g,--ignorewarnings}'[deploy changes even if warnings are generated]' \
+ '(-r|--replacetokens)'{-r,--replacetokens}'[replace tokens in source files prior to deployment]' \
  '(-w|--wait)'{-w,--wait}'[wait time for command to finish in minutes (default: 33) (default:33, min:1)]' \
  '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
  '(--json)--json[format output as json]' \
@@ -529,6 +635,7 @@ case "$words[1]" in
  '(-s|--sobjecttype)'{-s,--sobjecttype}'[the type of the record you’re creating]' \
  '(-v|--values)'{-v,--values}'[the <fieldName>=<value> pairs you’re creating]' \
  '(-t|--usetoolingapi)'{-t,--usetoolingapi}'[create the record with tooling api]' \
+ '(--perflog)--perflog[get API performance data.]' \
  '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
@@ -540,6 +647,7 @@ case "$words[1]" in
  '(-i|--sobjectid)'{-i,--sobjectid}'[the ID of the record you’re deleting]' \
  '(-w|--where)'{-w,--where}'[a list of <fieldName>=<value> pairs to search for]' \
  '(-t|--usetoolingapi)'{-t,--usetoolingapi}'[delete the record with Tooling API]' \
+ '(--perflog)--perflog[get API performance data.]' \
  '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
@@ -551,6 +659,7 @@ case "$words[1]" in
  '(-i|--sobjectid)'{-i,--sobjectid}'[the ID of the record you’re retrieving]' \
  '(-w|--where)'{-w,--where}'[a list of <fieldName>=<value> pairs to search for]' \
  '(-t|--usetoolingapi)'{-t,--usetoolingapi}'[retrieve the record with Tooling API]' \
+ '(--perflog)--perflog[get API performance data.]' \
  '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
@@ -563,6 +672,7 @@ case "$words[1]" in
  '(-w|--where)'{-w,--where}'[a list of <fieldName>=<value> pairs to search for]' \
  '(-v|--values)'{-v,--values}'[the <fieldName>=<value> pairs you’re updating]' \
  '(-t|--usetoolingapi)'{-t,--usetoolingapi}'[update the record with Tooling API]' \
+ '(--perflog)--perflog[get API performance data.]' \
  '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
@@ -570,25 +680,36 @@ case "$words[1]" in
  ;;
  force:mdapi:retrieve)
  _command_args=(
- '(-a|--apiversion)'{-a,--apiversion}'[target API version for the retrieve (default 41.0)]' \
+ '(-a|--apiversion)'{-a,--apiversion}'[target API version for the retrieve (default 45.0)]' \
  '(-w|--wait)'{-w,--wait}'[wait time for command to finish in minutes (default: -1 (no limit))]' \
  '(-r|--retrievetargetdir)'{-r,--retrievetargetdir}'[directory root for the retrieved files]:file:_files' \
  '(-k|--unpackaged)'{-k,--unpackaged}'[file path of manifest of components to retrieve]:file:_files' \
- '(-d|--sourcedir)'{-d,--sourcedir}'[source dir to use instead of default manifest sfdx-project.xml]' \
+ '(-d|--sourcedir)'{-d,--sourcedir}'[source dir to use instead of default manifest sfdx-project.xml]:file:_files' \
  '(-p|--packagenames)'{-p,--packagenames}'[a comma-separated list of packages to retrieve]' \
  '(-s|--singlepackage)'{-s,--singlepackage}'[a single-package retrieve (default: false)]' \
- '(-i|--jobid)'{-i,--jobid}'[WARNING: The flag "jobid" has been deprecated and will be removed in v41.01.0 or later. Instead, use "sfdx force:mdapi:retrieve:report -i <jobId> -r <targetDir>".]' \
+ '(-i|--jobid)'{-i,--jobid}'[(deprecated) job ID of the retrieve you want to check; defaults to your most recent CLI retrieval if not specified]' \
  '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
  '(--verbose)--verbose[verbose output of retrieve result]' \
  )
  ;;
+ force:source:retrieve)
+ _command_args=(
+ '(-w|--wait)'{-w,--wait}'[wait time for command to finish in minutes (default: 33) (default:33, min:1)]' \
+ '(-x|--manifest)'{-x,--manifest}'[file path for manifest (package.xml) of components to retrieve]:file:_files' \
+ '(-m|--metadata)'{-m,--metadata}'[comma-separated list of metadata component names]' \
+ '(-p|--sourcepath)'{-p,--sourcepath}'[comma-separated list of source file paths to retrieve]:file:_files' \
+ '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
+ '(--json)--json[format output as json]' \
+ '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
+ )
+ ;;
  force:mdapi:retrieve:report)
  _command_args=(
  '(-w|--wait)'{-w,--wait}'[wait time for command to finish in minutes (default: -1 (no limit))]' \
  '(-r|--retrievetargetdir)'{-r,--retrievetargetdir}'[directory root for the retrieved files]:file:_files' \
- '(-i|--jobid)'{-i,--jobid}'[job ID of the retrieve you want to check]' \
+ '(-i|--jobid)'{-i,--jobid}'[job ID of the retrieve you want to check; defaults to your most recent CLI retrieval if not specified]' \
  '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
@@ -603,7 +724,7 @@ case "$words[1]" in
  ;;
  force:config:set)
  _command_args=(
- '(-g|--global)'{-g,--global}'[set config var globally (to be used from any directory)]:file:_files' \
+ '(-g|--global)'{-g,--global}'[set config var globally (to be used from any directory)]' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
  )
@@ -614,6 +735,7 @@ case "$words[1]" in
  '(-d|--setdefaultdevhubusername)'{-d,--setdefaultdevhubusername}'[set the authenticated org as the default dev hub org for scratch org creation]' \
  '(-s|--setdefaultusername)'{-s,--setdefaultusername}'[set the authenticated org as the default username that all commands run against]' \
  '(-a|--setalias)'{-a,--setalias}'[set an alias for the authenticated org]' \
+ '(-p|--noprompt)'{-p,--noprompt}'[do not prompt for auth confirmation in demo mode]' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
  )
@@ -640,9 +762,43 @@ case "$words[1]" in
  '(--verbose)--verbose[list more information about each org shape]' \
  )
  ;;
+ force:org:snapshot:create)
+ _command_args=(
+ '(-o|--sourceorg)'{-o,--sourceorg}'[ID or locally authenticated username or alias of scratch org to snapshot]' \
+ '(-n|--snapshotname)'{-n,--snapshotname}'[unique name of snapshot]' \
+ '(-d|--description)'{-d,--description}'[description of snapshot]' \
+ '(-v|--targetdevhubusername)'{-v,--targetdevhubusername}'[username or alias for the dev hub org; overrides default dev hub org]' \
+ '(--json)--json[format output as json]' \
+ '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
+ )
+ ;;
+ force:org:snapshot:delete)
+ _command_args=(
+ '(-s|--snapshot)'{-s,--snapshot}'[name or ID of snapshot to delete]' \
+ '(-v|--targetdevhubusername)'{-v,--targetdevhubusername}'[username or alias for the dev hub org; overrides default dev hub org]' \
+ '(--json)--json[format output as json]' \
+ '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
+ )
+ ;;
+ force:org:snapshot:get)
+ _command_args=(
+ '(-s|--snapshot)'{-s,--snapshot}'[name or ID of snapshot to retrieve]' \
+ '(-v|--targetdevhubusername)'{-v,--targetdevhubusername}'[username or alias for the dev hub org; overrides default dev hub org]' \
+ '(--json)--json[format output as json]' \
+ '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
+ )
+ ;;
+ force:org:snapshot:list)
+ _command_args=(
+ '(-v|--targetdevhubusername)'{-v,--targetdevhubusername}'[username or alias for the dev hub org; overrides default dev hub org]' \
+ '(--json)--json[format output as json]' \
+ '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
+ )
+ ;;
  force:schema:sobject:describe)
  _command_args=(
  '(-s|--sobjecttype)'{-s,--sobjecttype}'[the API name of the object to describe]' \
+ '(-t|--usetoolingapi)'{-t,--usetoolingapi}'[execute with Tooling API]' \
  '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
@@ -661,6 +817,7 @@ case "$words[1]" in
  '(-q|--query)'{-q,--query}'[SOQL query to execute]' \
  '(-t|--usetoolingapi)'{-t,--usetoolingapi}'[execute query with Tooling API]' \
  '(-r|--resultformat)'{-r,--resultformat}'[query result format emitted to stdout; --json flag overrides this parameter (human*,csv,json)]' \
+ '(--perflog)--perflog[get API performance data.]' \
  '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
@@ -711,8 +868,9 @@ case "$words[1]" in
  ;;
  force:apex:test:run)
  _command_args=(
- '(-n|--classnames)'{-n,--classnames}'[comma-separated list of Apex test class names to execute]' \
- '(-s|--suitenames)'{-s,--suitenames}'[comma-separated list of Apex test suite names to execute]' \
+ '(-n|--classnames)'{-n,--classnames}'[comma-separated list of Apex test class names to run]' \
+ '(-s|--suitenames)'{-s,--suitenames}'[comma-separated list of Apex test suite names to run]' \
+ '(-t|--tests)'{-t,--tests}'[comma-separated list of Apex test class names or IDs and, if applicable, test methods to run]' \
  '(-c|--codecoverage)'{-c,--codecoverage}'[retrieve code coverage results]' \
  '(-d|--outputdir)'{-d,--outputdir}'[directory to store test run files]:file:_files' \
  '(-l|--testlevel)'{-l,--testlevel}'[testlevel enum value (RunLocalTests,RunAllTestsInOrg,RunSpecifiedTests)]' \
@@ -741,7 +899,7 @@ case "$words[1]" in
  ;;
  force:data:tree:export)
  _command_args=(
- '(-q|--query)'{-q,--query}'[soql query, or filepath of file containing a soql query, to retrieve records]:file:_files' \
+ '(-q|--query)'{-q,--query}'[soql query, or filepath of file containing a soql query, to retrieve records]' \
  '(-p|--plan)'{-p,--plan}'[generate mulitple sobject tree files and a plan definition file for aggregated import]' \
  '(-x|--prefix)'{-x,--prefix}'[prefix of generated files]' \
  '(-d|--outputdir)'{-d,--outputdir}'[directory to store files]:file:_files' \
@@ -767,23 +925,23 @@ case "$words[1]" in
  '(-t|--template)'{-t,--template}'[template to use for file creation (ApexTrigger*)]' \
  '(-d|--outputdir)'{-d,--outputdir}'[folder for saving the created files]' \
  '(-r|--reflect)'{-r,--reflect}'[switch to return flag detailed information]' \
- '(-a|--apiversion)'{-a,--apiversion}'[API version number (41.0*,40.0)]' \
+ '(-a|--apiversion)'{-a,--apiversion}'[API version number (45.0*,44.0)]' \
  '(-s|--sobject)'{-s,--sobject}'[sObject to create a trigger on (SOBJECT*)]' \
- '(-e|--triggerevents)'{-e,--triggerevents}'[events that fire the trigger (before insert*,before upsert,before delete,after insert,after upsert,after delete,after undelete)]' \
+ '(-e|--triggerevents)'{-e,--triggerevents}'[events that fire the trigger (before insert*,before update,before delete,after insert,after update,after delete,after undelete)]' \
  '(--json)--json[JSON output]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
  )
  ;;
  force:package:uninstall)
  _command_args=(
- '(-i|--id)'{-i,--id}'[ID of the package to uninstall (starts with 04t)]' \
  '(-w|--wait)'{-w,--wait}'[number of minutes to wait for uninstall status]' \
+ '(-p|--package)'{-p,--package}'[ID (starts with 04t) or alias of the package version to uninstall]' \
  '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
  )
  ;;
- force:package:uninstall:get)
+ force:package:uninstall:report)
  _command_args=(
  '(-i|--requestid)'{-i,--requestid}'[ID of the package uninstall request you want to check]' \
  '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
@@ -791,11 +949,11 @@ case "$words[1]" in
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
  )
  ;;
- force:package2:update)
+ force:package:update)
  _command_args=(
- '(-i|--package2id)'{-i,--package2id}'[id of the package (starts with 0Ho)]' \
- '(-n|--name)'{-n,--name}'[package name]' \
- '(-d|--description)'{-d,--description}'[package description]' \
+ '(-p|--package)'{-p,--package}'[ID (starts with 0Ho) or alias of the package to update]' \
+ '(-n|--name)'{-n,--name}'[new package name]' \
+ '(-d|--description)'{-d,--description}'[new package description]' \
  '(-v|--targetdevhubusername)'{-v,--targetdevhubusername}'[username or alias for the dev hub org; overrides default dev hub org]' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
@@ -804,6 +962,28 @@ case "$words[1]" in
  force:project:upgrade)
  _command_args=(
  '(-f|--forceupgrade)'{-f,--forceupgrade}'[run all upgrades even if project has already been upgraded]' \
+ '(--json)--json[format output as json]' \
+ '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
+ )
+ ;;
+ force:package:version:create)
+ _command_args=(
+ '(-p|--package)'{-p,--package}'[ID (starts with 0Ho) or alias of the package to create a version of]' \
+ '(-d|--path)'{-d,--path}'[path to directory that contains the contents of the package]:file:_files' \
+ '(-f|--definitionfile)'{-f,--definitionfile}'[path to a definition file similar to scratch org definition file that contains the list of features and org preferences that the metadata of the package version depends on]:file:_files' \
+ '(-b|--branch)'{-b,--branch}'[the package version’s branch]' \
+ '(-t|--tag)'{-t,--tag}'[the package version’s tag]' \
+ '(-k|--installationkey)'{-k,--installationkey}'[installation key for key-protected package (either --installationkey or --installationkeybypass is required)]' \
+ '(-x|--installationkeybypass)'{-x,--installationkeybypass}'[bypass the installation key requirement (either --installationkey or --installationkeybypass is required)]' \
+ '(-r|--preserve)'{-r,--preserve}'[temp files are preserved that would otherwise be deleted]' \
+ '(-j|--validateschema)'{-j,--validateschema}'[sfdx-project.json is validated against JSON schema]' \
+ '(-w|--wait)'{-w,--wait}'[minutes to wait for the package version to be created (default:0)]' \
+ '(-s|--buildinstance)'{-s,--buildinstance}'[the instance where the package version will be created——for example, NA50]' \
+ '(-o|--sourceorg)'{-o,--sourceorg}'[the source org ID used to copy the org shape for the build org]' \
+ '(-a|--versionname)'{-a,--versionname}'[the name of the package version to be created]' \
+ '(-n|--versionnumber)'{-n,--versionnumber}'[the version number of the package version to be created]' \
+ '(-e|--versiondescription)'{-e,--versiondescription}'[the description of the package version to be created]' \
+ '(-v|--targetdevhubusername)'{-v,--targetdevhubusername}'[username or alias for the dev hub org; overrides default dev hub org]' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
  )
@@ -824,21 +1004,6 @@ case "$words[1]" in
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
  )
  ;;
- force:package2:version:create)
- _command_args=(
- '(-i|--package2id)'{-i,--package2id}'[ID of the parent package (starts with 0Ho)]' \
- '(-d|--directory)'{-d,--directory}'[path to directory that contains the contents of the package version]:file:_files' \
- '(-b|--branch)'{-b,--branch}'[the package version’s branch]' \
- '(-t|--tag)'{-t,--tag}'[the package version’s tag]' \
- '(-k|--installationkey)'{-k,--installationkey}'[installation key for key-protected package (default: null)]' \
- '(-p|--preserve)'{-p,--preserve}'[temp files are preserved that would otherwise be deleted]' \
- '(-j|--validateschema)'{-j,--validateschema}'[sfdx-project.json is validated against JSON schema]' \
- '(-w|--wait)'{-w,--wait}'[minutes to wait for the package version to be created (default:0)]' \
- '(-v|--targetdevhubusername)'{-v,--targetdevhubusername}'[username or alias for the dev hub org; overrides default dev hub org]' \
- '(--json)--json[format output as json]' \
- '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
- )
- ;;
  force:package1:version:create:get)
  _command_args=(
  '(-i|--requestid)'{-i,--requestid}'[PackageUploadRequest ID]' \
@@ -847,18 +1012,18 @@ case "$words[1]" in
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
  )
  ;;
- force:package2:version:create:get)
+ force:package:version:create:list)
  _command_args=(
- '(-i|--package2createrequestid)'{-i,--package2createrequestid}'[package2 version creation request ID (starts with 08c)]' \
+ '(-c|--createdlastdays)'{-c,--createdlastdays}'[created in the last specified number of days (starting at 00:00:00 of first day to now; 0 for today)]' \
+ '(-s|--status)'{-s,--status}'[filter the list by version creation request status (Queued,InProgress,Success,Error)]' \
  '(-v|--targetdevhubusername)'{-v,--targetdevhubusername}'[username or alias for the dev hub org; overrides default dev hub org]' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
  )
  ;;
- force:package2:version:create:list)
+ force:package:version:create:report)
  _command_args=(
- '(-c|--createdlastdays)'{-c,--createdlastdays}'[created in the last specified number of days (starting at 00:00:00 of first day to now; 0 for today)]' \
- '(-s|--status)'{-s,--status}'[filter the list by version creation request status (Queued,InProgress,Success,Error)]' \
+ '(-i|--packagecreaterequestid)'{-i,--packagecreaterequestid}'[package version creation request ID (starts with 08c)]' \
  '(-v|--targetdevhubusername)'{-v,--targetdevhubusername}'[username or alias for the dev hub org; overrides default dev hub org]' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
@@ -872,12 +1037,18 @@ case "$words[1]" in
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
  )
  ;;
- force:package2:version:get)
+ force:package:version:list)
  _command_args=(
- '(-i|--package2versionid)'{-i,--package2versionid}'[the package version ID (starts wtih 05i)]' \
+ '(-c|--createdlastdays)'{-c,--createdlastdays}'[created in the last specified number of days (starting at 00:00:00 of first day to now; 0 for today)]' \
+ '(-m|--modifiedlastdays)'{-m,--modifiedlastdays}'[list items modified in the specified last number of days (starting at 00:00:00 of first day to now; 0 for today)]' \
+ '(-p|--packages)'{-p,--packages}'[filter results on specified comma-delimited packages (aliases or 0Ho IDs)]' \
+ '(-r|--released)'{-r,--released}'[display released versions only]' \
+ '(-o|--orderby)'{-o,--orderby}'[order by the specified package version fields]' \
  '(-v|--targetdevhubusername)'{-v,--targetdevhubusername}'[username or alias for the dev hub org; overrides default dev hub org]' \
+ '(--concise)--concise[display limited package version details]' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
+ '(--verbose)--verbose[display extended package version details]' \
  )
  ;;
  force:package1:version:list)
@@ -888,29 +1059,32 @@ case "$words[1]" in
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
  )
  ;;
- force:package2:version:list)
+ force:package:version:promote)
  _command_args=(
- '(-c|--createdlastdays)'{-c,--createdlastdays}'[created in the last specified number of days (starting at 00:00:00 of first day to now; 0 for today)]' \
- '(-m|--modifiedlastdays)'{-m,--modifiedlastdays}'[list items modified in the specified last number of days (starting at 00:00:00 of first day to now; 0 for today)]' \
- '(-i|--package2ids)'{-i,--package2ids}'[filter results on specified comma-delimited package2 ids (start with 0Ho)]' \
- '(-r|--released)'{-r,--released}'[display released versions only]' \
- '(-o|--orderby)'{-o,--orderby}'[order by the specified package2 version fields]' \
+ '(-p|--package)'{-p,--package}'[ID (starts with 04t) or alias of the package version to promote]' \
+ '(-n|--noprompt)'{-n,--noprompt}'[no prompt to confirm setting the package version as released]' \
  '(-v|--targetdevhubusername)'{-v,--targetdevhubusername}'[username or alias for the dev hub org; overrides default dev hub org]' \
- '(--concise)--concise[display limited package2 version details]' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
- '(--verbose)--verbose[display extended package2 versions detail]' \
  )
  ;;
- force:package2:version:update)
+ force:package:version:report)
  _command_args=(
- '(-i|--package2versionid)'{-i,--package2versionid}'[the package version ID (starts wtih 05i)]' \
- '(-n|--name)'{-n,--name}'[the package version name]' \
- '(-d|--description)'{-d,--description}'[the package version description]' \
- '(-b|--branch)'{-b,--branch}'[the package version branch]' \
- '(-t|--tag)'{-t,--tag}'[the package version tag]' \
- '(-k|--installationkey)'{-k,--installationkey}'[installation key for key-protected package (default: null)]' \
- '(-s|--setasreleased)'{-s,--setasreleased}'[set the package version as released (can’t be undone)]' \
+ '(-p|--package)'{-p,--package}'[ID (starts with 04t) or alias of the package to retrieve details for]' \
+ '(-v|--targetdevhubusername)'{-v,--targetdevhubusername}'[username or alias for the dev hub org; overrides default dev hub org]' \
+ '(--json)--json[format output as json]' \
+ '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
+ '(--verbose)--verbose[displays extended package version details]' \
+ )
+ ;;
+ force:package:version:update)
+ _command_args=(
+ '(-p|--package)'{-p,--package}'[ID (starts with 04t) or alias of the package to update a version of]' \
+ '(-a|--versionname)'{-a,--versionname}'[new package version name]' \
+ '(-e|--versiondescription)'{-e,--versiondescription}'[new package version description]' \
+ '(-b|--branch)'{-b,--branch}'[new package version branch]' \
+ '(-t|--tag)'{-t,--tag}'[new package version tag]' \
+ '(-k|--installationkey)'{-k,--installationkey}'[new installation key for key-protected package (default: null)]' \
  '(-v|--targetdevhubusername)'{-v,--targetdevhubusername}'[username or alias for the dev hub org; overrides default dev hub org]' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
@@ -924,6 +1098,7 @@ case "$words[1]" in
  '(-s|--setdefaultusername)'{-s,--setdefaultusername}'[set the authenticated org as the default username that all commands run against]' \
  '(-a|--setalias)'{-a,--setalias}'[set an alias for the authenticated org]' \
  '(--disablemasking)--disablemasking[disable masking of user input (for use with problematic terminals)]' \
+ '(-p|--noprompt)'{-p,--noprompt}'[do not prompt for auth confirmation in demo mode]' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
  )
