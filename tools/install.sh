@@ -103,9 +103,9 @@ main() {
   echo ''
   echo 'Please look over the ~/.zshrc file to select plugins, themes, and options.'
   echo ''
-  echo 'p.s. Follow us at https://twitter.com/ohmyzsh.'
+  echo 'p.s. Follow us at https://twitter.com/ohmyzsh'
   echo ''
-  echo 'p.p.s. Get stickers, shirts, and coffee mugs at https://shop.planetargon.com/collections/oh-my-zsh.'
+  echo 'p.p.s. Get stickers, shirts, and coffee mugs at https://shop.planetargon.com/collections/oh-my-zsh'
   echo ''
   printf "${NORMAL}"
   env zsh -l
