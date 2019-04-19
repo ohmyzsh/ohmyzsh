@@ -34,11 +34,12 @@ colorize_via_pygmentize_less() (
     
     cleanup () {
         [[ ${#tmp_files} -gt 0 ]] && rm -f "${tmp_files[@]}"
+        exit
     }
     trap 'cleanup' EXIT HUP TERM INT
     
     while (( $# != 0 )); do     #TODO: filter out less opts
-        tmp_file="$(mktemp --tmpdir tmp.colorize.XXXX.$(sed 's/\//./g' <<< "$1"))"
+        tmp_file="$(mktemp --tmpdir "tmp.colorize.XXXX.$(sed 's/\//./g' <<< "$1")")"
         tmp_files+=("$tmp_file")
         colorize_via_pygmentize "$1" > "$tmp_file"
         shift 1
