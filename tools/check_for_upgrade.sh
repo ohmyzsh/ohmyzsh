@@ -34,7 +34,9 @@ if mkdir "$ZSH/log/update.lock" 2>/dev/null; then
     . ${ZSH_CACHE_DIR}/.zsh-update
 
     if [[ -z "$LAST_EPOCH" ]]; then
-      _update_zsh_update && return 0
+      _update_zsh_update
+      rmdir $ZSH/log/update.lock # TODO: fix later
+      return 0
     fi
 
     epoch_diff=$(($(_current_epoch) - $LAST_EPOCH))

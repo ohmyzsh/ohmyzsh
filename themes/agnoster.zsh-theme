@@ -152,7 +152,6 @@ prompt_bzr() {
             if [[ $status_all -gt 0 ]] ; then
                 prompt_segment yellow black
                 echo -n "bzr@"$revision
-
             else
                 prompt_segment green black
                 echo -n "bzr@"$revision

@@ -12,12 +12,12 @@ function omz_history {
     builtin fc "$@"
   else
     # unless a number is provided, show all history events (starting from 1)
-    [[ ${@[-1]} = *[0-9]* ]] && builtin fc -l "$@" || builtin fc -l "$@" 1
+    [[ ${@[-1]-} = *[0-9]* ]] && builtin fc -l "$@" || builtin fc -l "$@" 1
   fi
 }
 
 # Timestamp format
-case $HIST_STAMPS in
+case ${HIST_STAMPS-} in
   "mm/dd/yyyy") alias history='omz_history -f' ;;
   "dd.mm.yyyy") alias history='omz_history -E' ;;
   "yyyy-mm-dd") alias history='omz_history -i' ;;
