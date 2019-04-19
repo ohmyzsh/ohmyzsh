@@ -3,7 +3,6 @@ alias ccat='colorize_via_pygmentize'
 alias cless='colorize_via_pygmentize_less'  
 
 colorize_via_pygmentize() {
-    # # I have been having problems with pygmentize signal handling
     # trap 'exit' TERM INT EXIT;  # keep this at hand
 
     if ! (( $+commands[pygmentize] )); then
