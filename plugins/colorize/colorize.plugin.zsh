@@ -36,7 +36,7 @@ colorize_via_pygmentize_less() (
     
     cleanup () {
         [[ "${#tmp_files[@]}" != "0" ]] && rm -f "${tmp_files[@]}"
-        if [ -n "$1" ]; then kill -$1 $$; fi #signal propagation
+        #if [ -n "$1" ]; then kill -$1 $$; fi #signal propagation for wait on cooperative exit scenarios
     }
     trap 'cleanup' EXIT
     trap 'cleanup HUP' HUP
@@ -44,10 +44,10 @@ colorize_via_pygmentize_less() (
     trap 'cleanup INT' INT
     
     while (( $# != 0 )); do     #TODO: filter out less opts
-        tmp_file="$(mktemp --tmpdir tmp.colorize.XXXX.$( sed -E 's/[^a-Z0-9]/./g' <<< "$1"))"
+        tmp_file="$(mktemp --tmpdir tmp.colorize.XXXX.$( sed -E 's/[^a-zA-Z0-9-]/./g' <<< "$1"))"
         tmp_files+=("$tmp_file")
         colorize_via_pygmentize "$1" > "$tmp_file"
-        shift 1;
+        shift 1
     done
     less -f "${tmp_files[@]}"
 )
