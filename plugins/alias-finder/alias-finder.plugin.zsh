@@ -2,7 +2,7 @@ alias-finder() {
   for i in $@; do
     case $i in
       -e|--exact) local exact=true;;
-      -r|--relaxed) local relaxed=true;;
+      -l|--longer) local longer=true;;
       *) 
         if [[ ! -z $cmd ]]; then
           local cmd="$cmd $i"
@@ -15,7 +15,7 @@ alias-finder() {
   cmd=$(sed 's/[].\|$(){}?+*^[]/\\&/g' <<< $cmd)
   if [[ $cmd != *\n* ]]; then
     while [[ $cmd != "" ]]; do
-      if [[ $relaxed = true ]]; then
+      if [[ $longer = true ]]; then
         local wordStart="'{0,1}"
       else
         local multiWordEnd="'$"
@@ -26,7 +26,7 @@ alias-finder() {
         local finder="'$cmd$multiWordEnd"
       fi
       alias | grep -E "=$finder"
-      if [[ $exact = true || $relaxed = true ]]; then
+      if [[ $exact = true || $longer = true ]]; then
         break
       else
         cmd=$(sed -E 's/ {0,1}[^ ]*$//' <<< $cmd) # deletes last word
