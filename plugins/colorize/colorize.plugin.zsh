@@ -3,8 +3,6 @@ alias ccat='colorize_via_pygmentize'
 alias cless='colorize_via_pygmentize_less'  
 
 colorize_via_pygmentize() {
-    # trap 'exit' TERM INT EXIT;  # keep this at hand
-
     if ! (( $+commands[pygmentize] )); then
         echo "package 'Pygments' is not installed!"
         return 1
@@ -35,13 +33,9 @@ colorize_via_pygmentize_less() (
     declare -a tmp_files 
     
     cleanup () {
-        [[ "${#tmp_files[@]}" != "0" ]] && rm -f "${tmp_files[@]}"
-        #if [ -n "$1" ]; then kill -$1 $$; fi #signal propagation for wait on cooperative exit scenarios
+        [[ ${#tmp_files} -gt 0 ]] && rm -f "${tmp_files[@]}"
     }
-    trap 'cleanup' EXIT
-    trap 'cleanup HUP' HUP
-    trap 'cleanup TERM' TERM
-    trap 'cleanup INT' INT
+    trap 'cleanup' EXIT HUP TERM INT
     
     while (( $# != 0 )); do     #TODO: filter out less opts
         tmp_file="$(mktemp --tmpdir tmp.colorize.XXXX.$( sed -E 's/[^a-zA-Z0-9-]/./g' <<< "$1"))"
@@ -49,5 +43,6 @@ colorize_via_pygmentize_less() (
         colorize_via_pygmentize "$1" > "$tmp_file"
         shift 1
     done
+
     less -f "${tmp_files[@]}"
 )
