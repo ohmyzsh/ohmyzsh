@@ -19,6 +19,7 @@ plugins=(... golang)
 | gof     | `go fmt`                | Gofmt formats (aligns and indents) Go programs.               |
 | gofa    | `go fmt ./...`          | Run go fmt for all packages in current directory, recursively |
 | gog     | `go get`                | Downloads packages and then installs them to $GOPATH          |
+| gog     | `go get ./...`          | Installs all dependencies in current directory, recursively   |
 | goi     | `go install`            | Compiles and installs packages to $GOPATH                     |
 | gol     | `go list`               | Lists Go packages                                             |
 | gom     | `go mod`                | Access to operations on modules                               |
