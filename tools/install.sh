@@ -108,7 +108,18 @@ main() {
   echo 'p.p.s. Get stickers, shirts, and coffee mugs at https://shop.planetargon.com/collections/oh-my-zsh'
   echo ''
   printf "${NORMAL}"
-  env zsh -l
+
+	if [ ${no_interactive} ]; then
+		exit
+	fi
+
+	env zsh -l
 }
 
-main
+for arg in "$@"; do
+	case "$arg" in
+		--no-interactive) no_interactive=true
+	esac
+done
+
+main ${no_interactive}
