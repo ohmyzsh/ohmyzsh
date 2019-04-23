@@ -4,7 +4,17 @@ function git_prompt_info() {
   if [[ "$(command git config --get oh-my-zsh.hide-status 2>/dev/null)" != "1" ]]; then
     ref=$(command git symbolic-ref HEAD 2> /dev/null) || \
     ref=$(command git rev-parse --short HEAD 2> /dev/null) || return 0
-    echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
+
+    custom_ref=${ref#refs/heads/}
+    if [[ $CUSTOM_GIT_SHORT_BRANCH == "short" ]]; then
+      CUSTOM_GIT_SHORT_BRANCH_LENGTH=${CUSTOM_GIT_SHORT_BRANCH_LENGTH:-50}
+      cut_ref=$(echo "${custom_ref:0:$CUSTOM_GIT_SHORT_BRANCH_LENGTH}" | rev | cut -d"-" -f2- | rev)
+      if [[ $CUSTOM_GIT_SHORT_BRANCH_LENGTH < ${#custom_ref} && $custom_ref != $cut_ref ]]; then
+        custom_ref="$cut_ref-..."
+      fi
+    fi
+
+    echo "$ZSH_THEME_GIT_PROMPT_PREFIX${custom_ref}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
   fi
 }
 
