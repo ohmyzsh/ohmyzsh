@@ -109,11 +109,11 @@ main() {
   echo ''
   printf "${NORMAL}"
 
-	if [ ${no_interactive} ]; then
-		exit
-	fi
+  if [ ${no_interactive} ]; then
+    exit
+  fi
 
-	env zsh -l
+  env zsh -l
 }
 
 for arg in "$@"; do
