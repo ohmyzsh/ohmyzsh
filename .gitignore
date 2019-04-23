@@ -2,6 +2,7 @@
 custom/
 !custom/plugins/example
 !custom/example.zsh
+!custom/themes/
 
 # temp files directories
 cache/
