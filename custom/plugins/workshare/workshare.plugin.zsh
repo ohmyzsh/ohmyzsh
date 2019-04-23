@@ -29,7 +29,7 @@ function jwa { # jest watch all
   npm test -- --watchAll --runInBand --bail ${1}
 }
 
-function workFunctions {
+function workshare {
   echo "gpr - git rebase on master";
   echo "grebb - trigger rebase, allowing you to rebase all commits since branching off master";
   echo "greba <number of commits to rebase> - trigger rebase, allowing you to rebase all commits ever or ~X";

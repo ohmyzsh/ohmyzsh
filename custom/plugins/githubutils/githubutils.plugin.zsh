@@ -22,7 +22,7 @@ function greba { ## git rebase all
   fi;
 }
 
-function workFunctions {
+function githubutils {
   echo "gpr - git rebase on master";
   echo "grebb - trigger rebase, allowing you to rebase all commits since branching off master";
   echo "greba <number of commits to rebase> - trigger rebase, allowing you to rebase all commits ever or ~X";
