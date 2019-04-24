@@ -24,3 +24,11 @@ alias dcl='docker-compose logs'
 alias dclf='docker-compose logs -f'
 alias dcpull='docker-compose pull'
 alias dcstart='docker-compose start'
+
+# Function to show the IP address of a docker-compose service
+dcip() {
+    local dc_images=$(docker-compose ps -q $1 | xargs)
+    for dc_image in $( echo "$dc_images" ) ; do
+        docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ${dc_image}
+    done
+}
