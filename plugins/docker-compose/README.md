@@ -27,3 +27,9 @@ plugins=(... docker-compose)
 | dclf      | `docker-compose logs -f` | Show logs and follow output                                      |
 | dcpull    | `docker-compose pull`    | Pull image of a service                                          |
 | dcstart   | `docker-compose start`   | Start a container                                                |
+
+## Functions
+
+| Name | Description                                                              |
+|------|--------------------------------------------------------------------------|
+| dcip | Shows the IP address of a running service (if given), or of all services |
