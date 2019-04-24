@@ -13,6 +13,16 @@ function gcojira {
   git checkout master && git pull && git checkout -b "$BRANCH_NAME" && git push -u origin "$BRANCH_NAME"
 }
 
+function gcommitjira {
+  echo "WEB code:";
+  read CODE;
+  echo "Task:";
+  read TASK;
+  TR_TASK="$( echo "$TASK" | tr "[:upper:]" "[:lower:]" | tr ' ' '-' )";
+  BRANCH_NAME="WEB-$CODE-$TR_TASK"
+  git checkout master && git pull && git checkout -b "$BRANCH_NAME" && git push -u origin "$BRANCH_NAME"
+}
+
 ## Jest functions
 function jw { # jest watch
   ## -- means pass params to jest
@@ -30,10 +40,8 @@ function jwa { # jest watch all
 }
 
 function workshare {
-  echo "gpr - git rebase on master";
-  echo "grebb - trigger rebase, allowing you to rebase all commits since branching off master";
-  echo "greba <number of commits to rebase> - trigger rebase, allowing you to rebase all commits ever or ~X";
   echo "gcojira - Checkout a branch in the format required to correspond to a Jira issue";
+  echo "gcommitjira - Commit to a branch in the format required to correspond to a Jira issue";
   echo "jw <regex pattern for files> - Run tests, watch and bail";
   echo "jwnc <regex pattern for files> - Run tests, watch and bail";
   echo "jwa <regex pattern for files> - Run all tests, watch and bail";
