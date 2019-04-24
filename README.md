@@ -175,6 +175,13 @@ If you have any hiccups installing, here are a few common fixes.
 * You _might_ need to modify your `PATH` in `~/.zshrc` if you're not able to find some commands after switching to `oh-my-zsh`.
 * If you installed manually or changed the install location, check the `ZSH` environment variable in `~/.zshrc`.
 
+### Non-Interactive Installation
+
+If you would prefer not to enter zsh after the installation script finishes, set the `NO_INTERACTIVE` env variable
+```shell
+NO_INTERACTIVE=true sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+```
+
 ### Custom Plugins and Themes
 
 If you want to override any of the default behaviors, just add a new file (ending in `.zsh`) in the `custom/` directory.

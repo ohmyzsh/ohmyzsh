@@ -109,17 +109,11 @@ main() {
   echo ''
   printf "${NORMAL}"
 
-  if [ ${no_interactive} ]; then
+  if [ $NO_INTERACTIVE ]; then
     exit
   fi
 
   env zsh -l
 }
 
-for arg in "$@"; do
-	case "$arg" in
-		--no-interactive) no_interactive=true
-	esac
-done
-
-main ${no_interactive}
+main
