@@ -9,34 +9,33 @@ function gcojira {
   echo "Task:";
   read TASK;
   TR_TASK="$( echo "$TASK" | tr "[:upper:]" "[:lower:]" | tr ' ' '-' )";
-  BRANCH_NAME="WEB-$CODE-$TR_TASK"
-  git checkout master && git pull && git checkout -b "$BRANCH_NAME" && git push -u origin "$BRANCH_NAME"
+  BRANCH_NAME="WEB-$CODE-$TR_TASK";
+  git checkout master && git pull && git checkout -b "$BRANCH_NAME" && git push -u origin "$BRANCH_NAME";
 }
 
 function gcommitjira {
   echo "WEB code:";
   read CODE;
   echo "Task:";
-  read TASK;
-  TR_TASK="$( echo "$TASK" | tr "[:upper:]" "[:lower:]" | tr ' ' '-' )";
-  BRANCH_NAME="WEB-$CODE-$TR_TASK"
-  git checkout master && git pull && git checkout -b "$BRANCH_NAME" && git push -u origin "$BRANCH_NAME"
+  read MESSAGE;
+  COMMIT_MESSAGE="WEB-$CODE $MESSAGE";
+  git add --all && git commit -am "$COMMIT_MESSAGE";
 }
 
 ## Jest functions
 function jw { # jest watch
   ## -- means pass params to jest
-  npm test -- --watch --runInBand --bail ${1}
+  npm test -- --watch --runInBand --bail ${1};
 }
 
 function jwnc { # jest watch no cache
   ## -- means pass params to jest
-  npm test -- --watch --no-cache --runInBand --bail ${1}
+  npm test -- --watch --no-cache --runInBand --bail ${1};
 }
 
 function jwa { # jest watch all
   ## -- means pass params to jest
-  npm test -- --watchAll --runInBand --bail ${1}
+  npm test -- --watchAll --runInBand --bail ${1};
 }
 
 function workshare {
