@@ -16,9 +16,13 @@ plugins=(... react-native)
 | **rn**         | `react-native`                                                               |
 | **rns**        | `react-native start`                                                         |
 | **rnlink**     | `react-native link`                                                          |
+| _Logging_      |                                                                              |
+| **rnland**     | `react-native log-android`                                                   |
+| **rnlios**     | `react-native log-ios`                                                       |
 | _App Testing_  |                                                                              |
 | **rnand**      | `react-native run-android`                                                   |
 | **rnios**      | `react-native run-ios`                                                       |
+| _iPhone_       |                                                                              |
 | **rnios4s**    | `react-native run-ios --simulator "iPhone 4s"`                               |
 | **rnios5**     | `react-native run-ios --simulator "iPhone 5"`                                |
 | **rnios5s**    | `react-native run-ios --simulator "iPhone 5s"`                               |
@@ -35,7 +39,7 @@ plugins=(... react-native)
 | **rniosxs**    | `react-native run-ios --simulator "iPhone Xs"`                               |
 | **rniosxsm**   | `react-native run-ios --simulator "iPhone Xs Max"`                           |
 | **rniosxr**    | `react-native run-ios --simulator "iPhone Xʀ"`                               |
-| _iPads_        |                                                                              |
+| _iPad_         |                                                                              |
 | **rnipad2**    | `react-native run-ios --simulator "iPad 2"`                                  |
 | **rnipad5**    | `react-native run-ios --simulator "iPad (5th generation)"`                   |
 | **rnipad6**    | `react-native run-ios --simulator "iPad (6th generation)"`                   |
@@ -53,12 +57,12 @@ plugins=(... react-native)
 | **rnipadp10**  | `react-native run-ios --simulator "iPad Pro (10.5-inch)"`                    |
 | **rnipad11**   | `react-native run-ios --simulator "iPad Pro (11-inch)"`                      |
 | **rnipad123**  | `react-native run-ios --simulator "iPad Pro (12.9-inch) (3rd generation)"`   |
-| _Apple TVs_    |                                                                              |
+| _Apple TV_     |                                                                              |
 | **rnatv**      | `react-native run-ios --simulator "Apple TV"`                                |
 | **rnatv4k**    | `react-native run-ios --simulator "Apple TV 4K"`                             |
 | **rnatv4k1080**| `react-native run-ios --simulator "Apple TV 4K (at 1080p)"`                  |
 | **rnipad123**  | `react-native run-ios --simulator "iPad Pro (12.9-inch) (3rd generation)"`   |
-| _Apple Watchs_ |                                                                              |
+| _Apple Watch_  |                                                                              |
 | **rnaw38**     | `react-native run-ios --simulator "Apple Watch - 38mm"`                      |
 | **rnaw42**     | `react-native run-ios --simulator "Apple Watch - 42mm"`                      |
 | **rnaws238**   | `react-native run-ios --simulator "Apple Watch Series 2 - 38mm"`             |
@@ -67,6 +71,3 @@ plugins=(... react-native)
 | **rnaws342**   | `react-native run-ios --simulator "Apple Watch Series 3 - 42mm"`             |
 | **rnaws440**   | `react-native run-ios --simulator "Apple Watch Series 4 - 40mm"`             |
 | **rnaws444**   | `react-native run-ios --simulator "Apple Watch Series 4 - 44mm"`             |
-| _Logging_      |                                                                              |
-| **rnland**     | `react-native log-android`                                                   |
-| **rnlios**     | `react-native log-ios`                                                       |
