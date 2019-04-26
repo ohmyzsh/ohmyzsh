@@ -7,7 +7,7 @@ alias rnlios='react-native log-ios'
 alias rnand='react-native run-android'
 alias rnios='react-native run-ios'
 
-# IPhones
+# iPhone
 alias rnios4s='react-native run-ios --simulator "iPhone 4s"'
 alias rnios5='react-native run-ios --simulator "iPhone 5"'
 alias rnios5s='react-native run-ios --simulator "iPhone 5s"'
@@ -25,7 +25,7 @@ alias rniosxs='react-native run-ios --simulator "iPhone Xs"'
 alias rniosxsm='react-native run-ios --simulator "iPhone Xs Max"'
 alias rniosxr='react-native run-ios --simulator "iPhone Xʀ"'
 
-# IPads
+# iPad
 alias rnipad2='react-native run-ios --simulator "iPad 2"'
 alias rnipad5='react-native run-ios --simulator "iPad (5th generation)"'
 alias rnipad6='react-native run-ios --simulator "iPad (6th generation)"'
