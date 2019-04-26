@@ -139,7 +139,7 @@ function git_prompt_long_sha() {
 # Get the status of the working tree
 function git_prompt_status() {
   local INDEX STATUS
-  INDEX=$(command git status --porcelain -b 2> /dev/null)
+  INDEX=$(command git status --porcelain -b 2> /dev/null) || return 0
   STATUS=""
   if $(echo "$INDEX" | command grep -E '^\?\? ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_UNTRACKED$STATUS"
