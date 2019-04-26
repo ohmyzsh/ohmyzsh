@@ -144,30 +144,16 @@ function git_prompt_status() {
   if $(echo "$INDEX" | command grep -q '^?? ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_UNTRACKED$STATUS"
   fi
-  if $(echo "$INDEX" | command grep -q '^A  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
-  elif $(echo "$INDEX" | command grep -q '^M  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
-  elif $(echo "$INDEX" | command grep -q '^MM ' &> /dev/null); then
+  if $(echo "$INDEX" | command grep -qE '^(A |M |MM) ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
   fi
-  if $(echo "$INDEX" | command grep -q '^ M ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
-  elif $(echo "$INDEX" | command grep -q '^AM ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
-  elif $(echo "$INDEX" | command grep -q '^MM ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
-  elif $(echo "$INDEX" | command grep -q '^ T ' &> /dev/null); then
+  if $(echo "$INDEX" | command grep -qE '^([ AM]M| T) ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
   fi
   if $(echo "$INDEX" | command grep -q '^R  ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_RENAMED$STATUS"
   fi
-  if $(echo "$INDEX" | command grep -q '^ D ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
-  elif $(echo "$INDEX" | command grep -q '^D  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
-  elif $(echo "$INDEX" | command grep -q '^AD ' &> /dev/null); then
+  if $(echo "$INDEX" | command grep -qE '^([A ]D|D ) ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
   fi
   if $(command git rev-parse --verify refs/stash >/dev/null 2>&1); then
