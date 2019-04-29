@@ -70,6 +70,10 @@ _aws_zsh_completer_path="$commands[aws_zsh_completer.sh]"
 # otherwise check if installed via Homebrew
 if [[ -z $_aws_zsh_completer_path ]] && _awscli-homebrew-installed; then
   _aws_zsh_completer_path=$_brew_prefix/libexec/bin/aws_zsh_completer.sh
+elif [[ -e /usr/share/zsh/vendor-completions/_awscli ]]; then
+  _aws_zsh_completer_path=/usr/share/zsh/vendor-completions/_awscli
+else
+  _aws_zsh_completer_path=/usr/share/zsh/site-functions/aws_zsh_completer.sh
 fi
 
 [[ -r $_aws_zsh_completer_path ]] && source $_aws_zsh_completer_path
