@@ -13,7 +13,7 @@ plugins=(... kubectl)
 
 | Alias   | Command                             | Description                                                                                      |
 |:--------|:------------------------------------|:-------------------------------------------------------------------------------------------------|
-| ku      | `kubectl`                           | The kubectl command                                                                              |
+| k       | `kubectl`                           | The kubectl command                                                                              |
 | kca     | `kubectl --all-namespaces`          | The kubectl command targeting all namespaces                                                     |
 | kaf     | `kubectl apply -f`                  | Apply a YML file                                                                                 |
 | keti    | `kubectl exec -ti`                  | Drop into an interactive terminal on a container                                                 |

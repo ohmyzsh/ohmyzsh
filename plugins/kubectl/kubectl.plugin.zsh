@@ -10,7 +10,8 @@ if (( $+commands[kubectl] )); then
     unset __KUBECTL_COMPLETION_FILE
 fi
 
-alias ku=kubectl
+# This command is used a LOT both below and in daily life
+alias k=kubectl
 
 # Execute a kubectl command against all namespaces
 alias kca='f(){ kubectl "$@" --all-namespaces;  unset -f f; }; f'
