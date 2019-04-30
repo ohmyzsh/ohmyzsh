@@ -1,9 +1,11 @@
 # Set NVM_DIR if it isn't already defined
-[[ -z "$NVM_DIR" ]] && export NVM_DIR="$HOME/.nvm"
-
-# https://github.com/nvm-sh/nvm#installation-and-update
-if [[ ! -d "$NVM_DIR/" && -d "${XDG_CONFIG_HOME:-$HOME/.config}/nvm/" ]]; then
-	export NVM_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/nvm"
+# See https://github.com/nvm-sh/nvm#installation-and-update
+if [[ -z "$NVM_DIR" ]]; then
+    if [[ -d "$HOME/.nvm" ]]; then
+        export NVM_DIR="$HOME/.nvm"
+    elif [[ -d "${XDG_CONFIG_HOME:-$HOME/.config}/nvm" ]]; then
+        export NVM_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/nvm"
+    fi
 fi
 
 # Try to load nvm only if command not already available
