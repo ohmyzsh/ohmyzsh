@@ -82,6 +82,7 @@
 #     contains      relative to newer annotated tag (v1.6.3.2~35)
 #     branch        relative to newer tag or branch (master~4)
 #     describe      relative to older annotated tag (v1.6.3.1-13-gdd42c2f)
+#     tag           relative to any older tag (v1.6.3.1-13-gdd42c2f)
 #     default       exactly matching tag
 #
 # If you would like a colored hint about the current dirty state, set
@@ -355,8 +356,8 @@ __git_ps1 ()
 	# incorrect.)
 	#
 	local ps1_expanded=yes
-	[ -z "$ZSH_VERSION" ] || [[ -o PROMPT_SUBST ]] || ps1_expanded=no
-	[ -z "$BASH_VERSION" ] || shopt -q promptvars || ps1_expanded=no
+	[ -z "${ZSH_VERSION-}" ] || [[ -o PROMPT_SUBST ]] || ps1_expanded=no
+	[ -z "${BASH_VERSION-}" ] || shopt -q promptvars || ps1_expanded=no
 
 	local repo_info rev_parse_exit_code
 	repo_info="$(git rev-parse --git-dir --is-inside-git-dir \
@@ -368,7 +369,7 @@ __git_ps1 ()
 		return $exit
 	fi
 
-	local short_sha
+	local short_sha=""
 	if [ "$rev_parse_exit_code" = "0" ]; then
 		short_sha="${repo_info##*$'\n'}"
 		repo_info="${repo_info%$'\n'*}"
@@ -443,6 +444,8 @@ __git_ps1 ()
 					git describe --contains HEAD ;;
 				(branch)
 					git describe --contains --all HEAD ;;
+				(tag)
+					git describe --tags HEAD ;;
 				(describe)
 					git describe HEAD ;;
 				(* | default)

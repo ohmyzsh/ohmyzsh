@@ -45,20 +45,37 @@ want to load.
 vim $HOME/.zshrc
 ```
 
-Add kube-ps1 to the list of enabled plugins:
+Add kube-ps1 to the list of enabled plugins and enable it on the prompt:
 
 ```shell
 plugins=(
   git
   kube-ps1
 )
+
+PROMPT=$PROMPT'$(kube_ps1) '
+```
+
+Note: the `PROMPT` example above was tested with the theme `robbyrussell`
+
+## Enabling / Disabling on the current shell
+
+Sometimes the kubernetes information can be anoying, you can easily 
+switch it on and off with the following commands:
+
+```shell
+kubeon
+```
+
+```shell
+kubeoff
 ```
 
 ## Colors
 
 Blue was used as the prefix to match the Kubernetes color as closely as
 possible. Red was chosen as the cluster name to stand out, and cyan
-for the namespace.  These can of course be changed.
+for the namespace. Check the customization section for changing them.
 
 ## Customization
 
@@ -75,7 +92,12 @@ The default settings can be overridden in ~/.zshrc
 | `KUBE_PS1_SEPERATOR` | `\|` | Separator between symbol and cluster name |
 | `KUBE_PS1_DIVIDER` | `:` | Separator between cluster and namespace |
 | `KUBE_PS1_SUFFIX` | `)` | Prompt closing character |
+| `KUBE_PS1_COLOR_SYMBOL` | `"%F{blue}"` | Custom color for the symbol |
+| `KUBE_PS1_COLOR_CONTEXT` | `"%F{red}"` | Custom color for the context |
+| `KUBE_PS1_COLOR_NS` | `"%F{cyan}"` | Custom color for the namespace |
+| `KUBE_PS1_ENABLED` | `true` | Set to false to start disabled on any new shell, `kubeon`/`kubeoff` will flip this value on the current shell |
 
 ## Contributors
 
-Jared Yanovich
+- Jared Yanovich
+- Pedro Moranga
