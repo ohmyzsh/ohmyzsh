@@ -18,10 +18,11 @@ alias-finder() {
       if [[ $longer = true ]]; then
         local wordStart="'{0,1}"
       else
+        local wordEnd="$"
         local multiWordEnd="'$"
       fi
       if echo $cmd | grep '^[^ ]*$' > /dev/null; then
-        local finder=$wordStart$cmd
+        local finder=$wordStart$cmd$wordEnd
       else
         local finder="'$cmd$multiWordEnd"
       fi
