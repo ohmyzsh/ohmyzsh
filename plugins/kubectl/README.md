@@ -13,18 +13,21 @@ plugins=(... kubectl)
 
 | Alias   | Command                             | Description                                                                                      |
 |:--------|:------------------------------------|:-------------------------------------------------------------------------------------------------|
+|         |                                   | **General aliases**                                                                              |
 | k       | `kubectl`                           | The kubectl command                                                                              |
 | kca     | `kubectl --all-namespaces`          | The kubectl command targeting all namespaces                                                     |
 | kaf     | `kubectl apply -f`                  | Apply a YML file                                                                                 |
 | keti    | `kubectl exec -ti`                  | Drop into an interactive terminal on a container                                                 |
+| kg      | `kubectl get`                       | Issue a kubectl get on the specified resource                                                    |
+| kgans   | `kubectl get $@ --all-namespaces`   | Issue a kubectl get on the specified resource across all namespaces                               |
+| kd      | `kubectl describe`                  | Issue a kubectl describe no the specified resource                                                |
+| kdel    | `kubectl delete`                    | Delete resources by filenames, stdin, resources and names, or by resources and label selector    |
+| kdelf   | `kubectl delete -f`                 | Delete a resource via the specified YML file                                                      |
 |         |                                     | **Manage configuration quickly to switch contexts between local, dev and staging**               |
 | kcuc    | `kubectl config use-context`        | Set the current-context in a kubeconfig file                                                     |
 | kcsc    | `kubectl config set-context`        | Set a context entry in kubeconfig                                                                |
 | kcdc    | `kubectl config delete-context`     | Delete the specified context from the kubeconfig                                                 |
 | kccc    | `kubectl config current-context`    | Display the current-context                                                                      |
-|         |                                     | **General aliases**                                                                              |
-| kdel    | `kubectl delete`                    | Delete resources by filenames, stdin, resources and names, or by resources and label selector    |
-| kdelf   | `kubectl delete -f`                 | Delete a pod using the type and name specified in -f argument                                    |
 |         |                                     | **Pod management**                                                                               |
 | kgp     | `kubectl get pods`                  | List all pods in ps output format                                                                |
 | kgpw    | `kgp --watch`                       | After listing/getting the requested object, watch for changes                                    |
