@@ -89,3 +89,9 @@ plugins=(... kubectl)
 | keno    | `kubectl edit node`                 | Edit nodes resource from the default editor                                                      |
 | kdno    | `kubectl describe node`             | Describe node resource in detail                                                                 |
 | kdelno  | `kubectl delete node`               | Delete the node                                                                                  |
+|         |                                   | **Persistent Volume Claim management**                                                           |
+| kgpvc   | `kubectl get pvc`                   | List all PVCs                                                                                    |
+| kgpvcw  | `kgpvc --watch`                     | After listing/getting the requested object, watch for changes                                    |
+| kepvc   | `kubectl edit pvc`                  | Edit pvcs from the default editor                                                                |
+| kdpvc   | `kubectl describe pvc`              | Descirbe all pvcs                                                                                |
+| kdelpvc | `kubectl delete pvc`                | Delete all pvcs matching passed arguments                                                        |
