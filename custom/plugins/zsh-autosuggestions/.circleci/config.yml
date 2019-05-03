@@ -1,0 +1,16 @@
+version: 2
+jobs:
+  build:
+    parallelism: 4
+    shell: /bin/bash --login
+    docker:
+    - image: ericfreese/zsh-autosuggestions-test:latest
+      command: /sbin/init
+    steps:
+    - checkout
+    - run:
+        name: Running tests
+        command: |
+          for v in $(grep "^[^#]" ZSH_VERSIONS | awk "(NR + $CIRCLE_NODE_INDEX) % $CIRCLE_NODE_TOTAL == 0"); do
+            TEST_ZSH_BIN=zsh-$v make test || exit 1
+          done

@@ -1,6 +1,3 @@
-# Add your own custom plugins in the custom/plugins directory. Plugins placed
-# here will override ones with the same name in the main plugins directory.
-
 ## --------------- Work Functions ---------------
 
 function gcojira {
@@ -14,10 +11,11 @@ function gcojira {
 }
 
 function gcommitjira {
-  echo "WEB code:";
-  read CODE;
   echo "Task:";
   read MESSAGE;
+  BRANCH="$( echo "$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)" | tr '-' ' ' )";
+  ARR=(`echo ${BRANCH}`);
+  CODE=(`echo ${ARR[2]}`);
   COMMIT_MESSAGE="WEB-$CODE $MESSAGE";
   git add --all && git commit -am "$COMMIT_MESSAGE";
 }

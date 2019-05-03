@@ -1,0 +1,55 @@
+language: generic
+sudo: required
+
+env:
+  - ZSH=master
+  - ZSH=5.7.1
+  - ZSH=5.7
+  - ZSH=5.6.2
+  - ZSH=5.6.1
+  - ZSH=5.6
+  - ZSH=5.5.1
+  - ZSH=5.5
+  - ZSH=5.4.2
+  - ZSH=5.4.1
+  - ZSH=5.4
+  - ZSH=5.3.1
+  - ZSH=5.3
+  - ZSH=5.2
+  - ZSH=5.1.1
+  - ZSH=5.1
+  - ZSH=5.0.8
+  - ZSH=5.0.7
+  - ZSH=5.0.6
+  - ZSH=5.0.5
+  - ZSH=5.0.4
+  - ZSH=5.0.3
+  - ZSH=5.0.2
+  - ZSH=5.0.1
+  - ZSH=5.0.0
+  - ZSH=4.3.17
+  - ZSH=4.3.16
+  - ZSH=4.3.15
+  - ZSH=4.3.14
+  - ZSH=4.3.13
+  - ZSH=4.3.12
+  - ZSH=4.3.11
+
+script: docker run -v $PWD:/work -w /work zshusers/zsh-${ZSH} /bin/sh -c 'install_packages make procps && make test'
+
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/367e241cdea60cb2070b
+    on_success: change
+    on_failure: always
+    on_start: never
+  irc:
+    channels:
+      - "chat.freenode.net#zsh-syntax-highlighting"
+    on_success: change
+    on_failure: always
+    on_start: never
+    use_notice: true
+    template:
+      - "%{repository}/%{branch}#%{build_number}: %{message} Changes : %{compare_url} | Build : %{build_url}"

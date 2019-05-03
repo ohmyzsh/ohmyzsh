@@ -24,7 +24,7 @@ function rebaseBitBucketRepo {
   fi;
 }
 
-function codogo {
+function mcclowes {
   echo "editZSH - Edit zshrc config";
   echo "mcclowes-react-scripts < project name : new-project > - create new react project using mcclowes-scripts create react app config";
   echo "rebaseBitBucketRepo <destination> - rebase repo to new destination (with .git at the end)";

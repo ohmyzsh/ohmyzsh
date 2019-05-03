@@ -1,0 +1,16 @@
+# Zsh releases to run tests against
+# See https://github.com/zsh-users/zsh/releases
+#
+# When modifying this file, rebuild and push docker image:
+#   $ docker build -t ericfreese/zsh-autosuggestions-test .
+#   $ docker push ericfreese/zsh-autosuggestions-test
+4.3.11
+5.0.2
+5.0.8
+5.1.1
+5.2
+5.3.1
+5.4.2
+5.5.1
+5.6.2
+5.7.1
