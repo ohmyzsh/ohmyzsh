@@ -32,7 +32,7 @@ Available search contexts are:
 
 | context       | URL                                                                      |
 |---------------|--------------------------------------------------------------------------|
-| angularjs     | `https://google.com/search?as_sitesearch=angularjs.org&as_q=`            |
+| angularjs     | `https://angular.io/?search=`                                             |
 | aurajs        | `http://aurajs.com/api/#stq=`                                            |
 | bem           | `https://google.com/search?as_sitesearch=bem.info&as_q=`                 |
 | bootsnipp     | `https://bootsnipp.com/search?q=`                                         |

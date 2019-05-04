@@ -26,7 +26,7 @@ function frontend() {
   # define search context URLS
   typeset -A urls
   urls=(
-    angularjs      'https://google.com/search?as_sitesearch=angularjs.org&as_q='
+    angularjs      'https://angular.io/?search='
     aurajs         'http://aurajs.com/api/#stq='
     bem            'https://google.com/search?as_sitesearch=bem.info&as_q='
     bootsnipp      'https://bootsnipp.com/search?q='
@@ -53,7 +53,7 @@ function frontend() {
   if [[ $# -lt 2 ]]
   then
       print -P "Usage: frontend %Ucontext%u %Uterm%u [...%Umore%u] (or just: %Ucontext%u %Uterm%u [...%Umore%u])"
-      print -P ""
+      print -P "sample"
       print -P "%Uterm%u and what follows is what will be searched for in the %Ucontext%u website,"
       print -P "and %Ucontext%u is one of the following:"
       print -P ""
