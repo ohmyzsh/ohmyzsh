@@ -163,6 +163,7 @@ cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
 ```shell
 chsh -s /bin/zsh
 ```
+You must log out and log back in to see this change.
 
 ##### 5. Initialize your new zsh configuration
 
