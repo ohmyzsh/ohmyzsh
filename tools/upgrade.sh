@@ -37,3 +37,31 @@ then
 else
   printf "${RED}%s${NORMAL}\n" 'There was an error updating. Try again later?'
 fi
+
+if [ "$AUTOUPDATE_CUSTOM_PLUGINS" = "true" ]; then
+  printf "${GREEN}%s${NORMAL}\n" "Updating custom plugins"
+  cd "$ZSH_CUSTOM/plugins"
+  for dir in ./*; do
+      if [[ -d $dir && -d $dir/.git ]]; then
+          if git -C $dir pull --rebase --stat origin master
+          then
+              printf "${BLUE}%s${NORMAL}\n" "Hooray! Oh My Zsh custom plugin $dir has been updated and/or is at the current version."
+          else
+              printf "${RED}%s${NORMAL}\n" "There was an error updating custom plugin $dir. Try again later?"
+          fi
+      fi
+  done
+
+  printf "${GREEN}%s${NORMAL}\n" "Updating custom themes"
+  cd "$ZSH_CUSTOM/themes"
+  for dir in ./*; do
+      if [[ -d $dir && -d $dir/.git ]]; then
+        if git -C $dir pull --rebase --stat origin master
+        then
+            printf "${BLUE}%s${NORMAL}\n" "Hooray! Oh My Zsh custom theme $dir has been updated and/or is at the current version."
+        else
+            printf "${RED}%s${NORMAL}\n" "There was an error updating custom theme $dir. Try again later?"
+        fi
+      fi
+  done
+fi
