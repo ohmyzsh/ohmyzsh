@@ -53,7 +53,7 @@ function frontend() {
   if [[ $# -lt 2 ]]
   then
       print -P "Usage: frontend %Ucontext%u %Uterm%u [...%Umore%u] (or just: %Ucontext%u %Uterm%u [...%Umore%u])"
-      print -P "sample"
+      print -P ""
       print -P "%Uterm%u and what follows is what will be searched for in the %Ucontext%u website,"
       print -P "and %Ucontext%u is one of the following:"
       print -P ""
@@ -83,7 +83,7 @@ function frontend() {
   # build search url:
   # join arguments passed with '+', then append to search context URL
   # TODO substitute for proper urlencode method
-  url="${urls[$1]}${(j:+:)@[2,-1]}"
+  url="${urls[$1]}${(j:%20:)@[2,-1]}"
 
   echo "Opening $url ..."
 
