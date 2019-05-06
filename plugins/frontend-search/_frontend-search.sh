@@ -33,7 +33,8 @@ function _frontend() {
     'unheap: Search in unheap website'
     'bem: Search in BEM website'
     'smacss: Search in SMACSS website'
-    'angularjs: Search in Angular website'
+    'angular: Search in Angular website for Angular 2.x'
+    'angularjs: Search in Angular website for Angular 1.x'
     'reactjs: Search in React website'
     'emberjs: Search in Ember website'
     'stackoverflow: Search in StackOverflow website'
@@ -99,6 +100,9 @@ function _frontend() {
         smacss)
           _describe -t points "Warp points" frontend_points && ret=0
           ;;
+        angular)
+          _describe -t points "Warp points" frontend_points && ret=0
+        ;;
         angularjs)
           _describe -t points "Warp points" frontend_points && ret=0
           ;;

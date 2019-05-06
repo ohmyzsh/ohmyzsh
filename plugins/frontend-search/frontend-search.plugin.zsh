@@ -26,7 +26,8 @@ function frontend() {
   # define search context URLS
   typeset -A urls
   urls=(
-    angularjs      'https://angular.io/?search='
+    angular        'https://angular.io/?search='
+    angularjs      'https://google.com/search?as_sitesearch=angularjs.org&as_q='
     aurajs         'http://aurajs.com/api/#stq='
     bem            'https://google.com/search?as_sitesearch=bem.info&as_q='
     bootsnipp      'https://bootsnipp.com/search?q='
@@ -57,7 +58,7 @@ function frontend() {
       print -P "%Uterm%u and what follows is what will be searched for in the %Ucontext%u website,"
       print -P "and %Ucontext%u is one of the following:"
       print -P ""
-      print -P "  angularjs, aurajs, bem, bootsnipp, caniuse, codepen, compassdoc, cssflow,"
+      print -P "  angular (>= 2.0), angularjs (1.x), aurajs, bem, bootsnipp, caniuse, codepen, compassdoc, cssflow,"
       print -P "  dartlang, emberjs, fontello, html5please, jquery, lodash, mdn, npmjs,"
       print -P "  qunit, reactjs, smacss, stackoverflow, unheap"
       print -P ""
@@ -73,7 +74,7 @@ function frontend() {
     echo ""
     echo "Valid contexts are:"
     echo ""
-    echo "  angularjs, aurajs, bem, bootsnipp, caniuse, codepen, compassdoc, cssflow, "
+    echo "  angular (>= 2.0), angularjs (1.x), aurajs, bem, bootsnipp, caniuse, codepen, compassdoc, cssflow, "
     echo "  dartlang, emberjs, fontello, html5please, jquery, lodash, mdn, npmjs,  "
     echo "  qunit, reactjs, smacss, stackoverflow, unheap"
     echo ""
