@@ -10,7 +10,7 @@ extract() {
 			Usage: extract [-option] [file ...]
 
 			Options:
-			    -r, --remove    Remove archive.
+			    -r, --remove    Remove archive after unpacking.
 		EOF
 	fi
 
@@ -29,7 +29,7 @@ extract() {
 
 		success=0
 		extract_dir="${1:t:r}"
-		case "$1" in
+		case "${1:l}" in
 			(*.tar.gz|*.tgz) (( $+commands[pigz] )) && { pigz -dc "$1" | tar xv } || tar zxvf "$1" ;;
 			(*.tar.bz2|*.tbz|*.tbz2) tar xvjf "$1" ;;
 			(*.tar.xz|*.txz)
@@ -45,8 +45,8 @@ extract() {
 			(*.bz2) bunzip2 "$1" ;;
 			(*.xz) unxz "$1" ;;
 			(*.lzma) unlzma "$1" ;;
-			(*.Z) uncompress "$1" ;;
-			(*.zip|*.war|*.jar|*.sublime-package|*.ipsw|*.xpi|*.apk) unzip "$1" -d $extract_dir ;;
+			(*.z) uncompress "$1" ;;
+			(*.zip|*.war|*.jar|*.sublime-package|*.ipsw|*.xpi|*.apk|*.aar|*.whl) unzip "$1" -d $extract_dir ;;
 			(*.rar) unrar x -ad "$1" ;;
 			(*.7z) 7za x "$1" ;;
 			(*.deb)

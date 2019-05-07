@@ -1,20 +1,37 @@
 #compdef cargo
 
-typeset -A opt_args
 autoload -U regexp-replace
 
-_cargo() {
+zstyle -T ':completion:*:*:cargo:*' tag-order && \
+  zstyle ':completion:*:*:cargo:*' tag-order 'common-commands'
 
+_cargo() {
+local context state state_descr line
+typeset -A opt_args
+
+# leading items in parentheses are an exclusion list for the arguments following that arg
+# See: http://zsh.sourceforge.net/Doc/Release/Completion-System.html#Completion-Functions
+#   - => exclude all other options
+#   1 => exclude positional arg 1
+#   * => exclude all other args
+#   +blah => exclude +blah
 _arguments \
     '(- 1 *)'{-h,--help}'[show help message]' \
-    '(- 1 *)'--list'[list installed commands]' \
-    '(- 1 *)'{-v,--verbose}'[use verbose output]' \
-    '(- 1 *)'--color'[colorization option]' \
+    '(- 1 *)--list[list installed commands]' \
     '(- 1 *)'{-V,--version}'[show version information]' \
-    '1: :_cargo_cmds' \
+    {-v,--verbose}'[use verbose output]' \
+    --color'[colorization option]' \
+    '(+beta +nightly)+stable[use the stable toolchain]' \
+    '(+stable +nightly)+beta[use the beta toolchain]' \
+    '(+stable +beta)+nightly[use the nightly toolchain]' \
+    '1: :->command' \
     '*:: :->args'
 
 case $state in
+    command)
+      _alternative 'common-commands:common:_cargo_cmds' 'all-commands:all:_cargo_all_cmds'
+      ;;
+
     args)
         case $words[1] in
             bench)
@@ -45,6 +62,23 @@ case $state in
                     '--no-default-features[do not build the default features]' \
                     '(-p,--package)'{-p=,--package=}'[package to build]:packages:_get_package_names' \
                     '--release=[build in release mode]' \
+                    '--target=[target triple]' \
+                    '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
+                    '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
+                    '--color=:colorization option:(auto always never)' \
+                    ;;
+
+            check)
+                _arguments \
+                    '--features=[space separated feature list]' \
+                    '--all-features[enable all available features]' \
+                    '(-h, --help)'{-h,--help}'[show help message]' \
+                    '(-j, --jobs)'{-j,--jobs}'[number of parallel jobs, defaults to # of CPUs]' \
+                    "${command_scope_spec[@]}" \
+                    '--manifest-path=[path to manifest]: :_files -/' \
+                    '--no-default-features[do not check the default features]' \
+                    '(-p,--package)'{-p=,--package=}'[package to check]:packages:_get_package_names' \
+                    '--release=[check in release mode]' \
                     '--target=[target triple]' \
                     '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
                     '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
@@ -102,7 +136,7 @@ case $state in
             git-checkout)
                 _arguments \
                     '(-h, --help)'{-h,--help}'[show help message]' \
-                    'q(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
+                    '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
                     '--reference=[REF]' \
                     '--url=[URL]' \
                     '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
@@ -139,10 +173,10 @@ case $state in
                     '(-h, --help)'{-h,--help}'[show help message]' \
                     '(-j, --jobs)'{-j,--jobs}'[number of parallel jobs, defaults to # of CPUs]' \
                     '--no-default-features[do not build the default features]' \
-                    '--path=[local filesystem path to crate to install]' \
+                    '--path=[local filesystem path to crate to install]: :_files -/' \
                     '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
                     '--rev=[specific commit to use when installing from git]' \
-                    '--root=[directory to install packages into]' \
+                    '--root=[directory to install packages into]: :_files -/' \
                     '--tag=[tag to use when installing from git]' \
                     '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
                     '--vers=[version to install from crates.io]' \
@@ -267,7 +301,7 @@ case $state in
                     '--all-features[enable all available features]' \
                     '(-h, --help)'{-h,--help}'[show help message]' \
                     '(-j, --jobs)'{-j,--jobs}'=[number of parallel jobs, defaults to # of CPUs]' \
-                    '--manifest-path=[path to the manifest to fetch dependencies for]' \
+                    '--manifest-path=[path to the manifest to fetch dependencies for]: :_files -/' \
                     '--no-default-features[do not compile default features for the package]' \
                     '(-p, --package)'{-p,--package}'=[profile to compile for]' \
                     '--profile=[profile to build the selected target for]' \
@@ -285,7 +319,7 @@ case $state in
                     '--all-features[enable all available features]' \
                     '(-h, --help)'{-h,--help}'[show help message]' \
                     '(-j, --jobs)'{-j,--jobs}'=[number of parallel jobs, defaults to # of CPUs]' \
-                    '--manifest-path=[path to the manifest to document]' \
+                    '--manifest-path=[path to the manifest to document]: :_files -/' \
                     '--no-default-features[do not build the `default` feature]' \
                     '--open[open the docs in a browser after the operation]' \
                     '(-p, --package)'{-p,--package}'=[package to document]' \
@@ -324,6 +358,15 @@ case $state in
                     '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
                     '--color=:colorization option:(auto always never)' \
                     '1: :_test_names' \
+                    '(--doc --bin --example --test --bench)--lib[only test library]' \
+                    '(--lib --bin --example --test --bench)--doc[only test documentation]' \
+                    '(--lib --doc --example --test --bench)--bin=[binary name]' \
+                    '(--lib --doc --bin --test --bench)--example=[example name]' \
+                    '(--lib --doc --bin --example --bench)--test=[test name]' \
+                    '(--lib --doc --bin --example --test)--bench=[benchmark name]' \
+                    '--message-format:error format:(human json short)' \
+                    '--frozen[require lock and cache up to date]' \
+                    '--locked[require lock up to date]'
                     ;;
 
             uninstall)
@@ -332,7 +375,7 @@ case $state in
                     '--color=:colorization option:(auto always never)' \
                     '(-h, --help)'{-h,--help}'[show help message]' \
                     '(-q, --quiet)'{-q,--quiet}'[less output printed to stdout]' \
-                    '--root=[directory to uninstall packages from]' \
+                    '--root=[directory to uninstall packages from]: :_files -/' \
                     '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
                     ;;
 
@@ -383,19 +426,20 @@ esac
 _cargo_cmds(){
 local -a commands;commands=(
 'bench:execute all benchmarks of a local package'
-'build:compile the current project'
+'build:compile the current package'
+'check:check the current package without compiling'
 'clean:remove generated artifacts'
 'doc:build package documentation'
 'fetch:fetch package dependencies'
 'generate-lockfile:create lockfile'
 'git-checkout:git checkout'
 'help:get help for commands'
-'init:create new project in current directory'
+'init:create new package in current directory'
 'install:install a Rust binary'
 'locate-project:print "Cargo.toml" location'
 'login:login to remote server'
-'metadata:the metadata for a project in json'
-'new:create a new project'
+'metadata:the metadata for a package in json'
+'new:create a new package'
 'owner:manage the owners of a crate on the registry'
 'package:assemble local package into a distributable tarball'
 'pkgid:print a fully qualified package specification'
@@ -412,8 +456,12 @@ local -a commands;commands=(
 'version:show version information'
 'yank:remove pushed file from index'
 )
-_describe 'command' commands
+_describe -t common-commands 'common commands' commands
+}
 
+_cargo_all_cmds(){
+local -a commands;commands=($(cargo --list))
+_describe -t all-commands 'all commands' commands
 }
 
 
@@ -481,7 +529,7 @@ _benchmark_names()
     _get_names_from_array "bench"
 }
 
-# These flags are mutally exclusive specifiers for the scope of a command; as
+# These flags are mutually exclusive specifiers for the scope of a command; as
 # they are used in multiple places without change, they are expanded into the
 # appropriate command's `_arguments` where appropriate.
 set command_scope_spec
@@ -492,6 +540,5 @@ command_scope_spec=(
     '(--bench --bin --example --test)--lib=[library name]'
     '(--bench --bin --example --lib)--test=[test name]'
 )
-
 
 _cargo

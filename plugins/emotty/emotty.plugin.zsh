@@ -26,13 +26,14 @@ function emotty() {
   # Use emotty set defined by user, fallback to default
   local emotty=${_emotty_sets[${emotty_set:-$emotty_default_set}]}
   # Parse $TTY number, normalizing it to an emotty set index
-  (( tty = (${TTY##/dev/ttys} % ${#${=emotty}}) + 1 ))
+  (( tty = (${TTY##/dev/tty} % ${#${=emotty}}) + 1 ))
   local character_name=${${=emotty}[tty]}
   echo "${emoji[${character_name}]}${emoji2[emoji_style]}"
 }
 
 function display_emotty() {
-  local name=$1
+  local name=${1:-$emotty_set}
+  echo $name
   for i in ${=_emotty_sets[$name]}; do
     printf "${emoji[$i]}${emoji2[emoji_style]}  "
   done

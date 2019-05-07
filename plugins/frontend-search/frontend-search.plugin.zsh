@@ -1,3 +1,4 @@
+alias angular='frontend angular'
 alias angularjs='frontend angularjs'
 alias aurajs='frontend aurajs'
 alias bem='frontend bem'
@@ -26,16 +27,17 @@ function frontend() {
   # define search context URLS
   typeset -A urls
   urls=(
+    angular        'https://angular.io/?search='
     angularjs      'https://google.com/search?as_sitesearch=angularjs.org&as_q='
     aurajs         'http://aurajs.com/api/#stq='
     bem            'https://google.com/search?as_sitesearch=bem.info&as_q='
-    bootsnipp      'http://bootsnipp.com/search?q='
-    caniuse        'http://caniuse.com/#search='
-    codepen        'http://codepen.io/search?q='
+    bootsnipp      'https://bootsnipp.com/search?q='
+    caniuse        'https://caniuse.com/#search='
+    codepen        'https://codepen.io/search?q='
     compassdoc     'http://compass-style.org/search?q='
     cssflow        'http://www.cssflow.com/search?q='
     dartlang       'https://api.dartlang.org/apidocs/channels/stable/dartdoc-viewer/dart:'
-    emberjs        'http://emberjs.com/api/#stp=1&stq='
+    emberjs        'https://emberjs.com/api/#stp=1&stq='
     fontello       'http://fontello.com/#search='
     html5please    'http://html5please.com/#'
     jquery         'https://api.jquery.com/?s='
@@ -45,7 +47,7 @@ function frontend() {
     qunit          'https://api.qunitjs.com/?s='
     reactjs        'https://google.com/search?as_sitesearch=facebook.github.io/react&as_q='
     smacss         'https://google.com/search?as_sitesearch=smacss.com&as_q='
-    stackoverflow  'http://stackoverflow.com/search?q='
+    stackoverflow  'https://stackoverflow.com/search?q='
     unheap         'http://www.unheap.com/?s='
   )
 
@@ -57,9 +59,9 @@ function frontend() {
       print -P "%Uterm%u and what follows is what will be searched for in the %Ucontext%u website,"
       print -P "and %Ucontext%u is one of the following:"
       print -P ""
-      print -P "  angularjs, aurajs, bem, bootsnipp, caniuse, codepen, compassdoc, cssflow,"
-      print -P "  dartlang, emberjs, fontello, html5please, jquery, lodash, mdn, npmjs,"
-      print -P "  qunit, reactjs, smacss, stackoverflow, unheap"
+      print -P "  angular (>= 2.0), angularjs (1.x), aurajs, bem, bootsnipp, caniuse, codepen,"
+      print -P "  compassdoc, cssflow, dartlang, emberjs, fontello, html5please, jquery,"
+      print -P "  lodash, mdn, npmjs, qunit, reactjs, smacss, stackoverflow, unheap"
       print -P ""
       print -P "For example: frontend npmjs mocha (or just: npmjs mocha)."
       print -P ""
@@ -73,17 +75,17 @@ function frontend() {
     echo ""
     echo "Valid contexts are:"
     echo ""
-    echo "  angularjs, aurajs, bem, bootsnipp, caniuse, codepen, compassdoc, cssflow, "
-    echo "  dartlang, emberjs, fontello, html5please, jquery, lodash, mdn, npmjs,  "
-    echo "  qunit, reactjs, smacss, stackoverflow, unheap"
+    echo "  angular (>= 2.0), angularjs (1.x), aurajs, bem, bootsnipp, caniuse, codepen,"
+    echo "  compassdoc, cssflow, dartlang, emberjs, fontello, html5please, jquery,"
+    echo "  lodash, mdn, npmjs, qunit, reactjs, smacss, stackoverflow, unheap"
     echo ""
     return 1
   fi
 
   # build search url:
-  # join arguments passed with '+', then append to search context URL
+  # join arguments passed with '%20', then append to search context URL
   # TODO substitute for proper urlencode method
-  url="${urls[$1]}${(j:+:)@[2,-1]}"
+  url="${urls[$1]}${(j:%20:)@[2,-1]}"
 
   echo "Opening $url ..."
 

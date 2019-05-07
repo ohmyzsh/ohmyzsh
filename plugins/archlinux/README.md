@@ -2,6 +2,51 @@
 
 ## Features
 
+#### YAY
+
+| Alias   | Command                            | Description                                                         |
+|---------|------------------------------------|---------------------------------------------------------------------|
+| yaconf  | yay -Pg                            | Print current configuration                                         |
+| yain    | yay -S                             | Install packages from the repositories                              |
+| yains   | yay -U                             | Install a package from a local file                                 |
+| yainsd  | yay -S --asdeps                    | Install packages as dependencies of another package                 |
+| yaloc   | yay -Qi                            | Display information about a package in the local database           |
+| yalocs  | yay -Qs                            | Search for packages in the local database                           |
+| yalst   | yay -Qe                            | List installed packages including from AUR (tagged as "local")      |
+| yamir   | yay -Syy                           | Force refresh of all package lists after updating mirrorlist        |
+| yaorph  | yay -Qtd                           | Remove orphans using yay                                            |
+| yare    | yay -R                             | Remove packages, keeping its settings and dependencies              |
+| yarem   | yay -Rns                           | Remove packages, including its settings and unneeded dependencies   |
+| yarep   | yay -Si                            | Display information about a package in the repositories             |
+| yareps  | yay -Ss                            | Search for packages in the repositories                             |
+| yaupg   | yay -Syu                           | Sync with repositories before upgrading packages                    |
+| yasu    | yay -Syu --no-confirm              | Same as `yaupg`, but without confirmation                           |
+
+#### TRIZEN
+
+| Alias   | Command                            | Description                                                         |
+|---------|------------------------------------|---------------------------------------------------------------------|
+| trconf  | trizen -C                          | Fix all configuration files with vimdiff                            |
+| trin    | trizen -S                          | Install packages from the repositories                              |
+| trins   | trizen -U                          | Install a package from a local file                                 |
+| trinsd  | trizen -S --asdeps                 | Install packages as dependencies of another package                 |
+| trloc   | trizen -Qi                         | Display information about a package in the local database           |
+| trlocs  | trizen -Qs                         | Search for packages in the local database                           |
+| trlst   | trizen -Qe                         | List installed packages including from AUR (tagged as "local")      |
+| trmir   | trizen -Syy                        | Force refresh of all package lists after updating mirrorlist        |
+| trorph  | trizen -Qtd                        | Remove orphans using yaourt                                         |
+| trre    | trizen -R                          | Remove packages, keeping its settings and dependencies              |
+| trrem   | trizen -Rns                        | Remove packages, including its settings and unneeded dependencies   |
+| trrep   | trizen -Si                         | Display information about a package in the repositories             |
+| trreps  | trizen -Ss                         | Search for packages in the repositories                             |
+| trupd   | trizen -Sy && sudo abs && sudo aur | Update and refresh local package, ABS and AUR databases             |
+| trupd   | trizen -Sy && sudo abs             | Update and refresh the local package and ABS databases              |
+| trupd   | trizen -Sy && sudo aur             | Update and refresh the local package and AUR databases              |
+| trupd   | trizen -Sy                         | Update and refresh the local package database                       |
+| trupg   | trizen -Syua                       | Sync with repositories before upgrading all packages (from AUR too) |
+| trsu    | trizen -Syua --no-confirm          | Same as `trupg`, but without confirmation                           |
+| upgrade | trizen -Syu                        | Sync with repositories before upgrading packages                    |
+
 #### YAOURT
 
 | Alias   | Command                            | Description                                                         |
@@ -27,7 +72,7 @@
 | yasu    | yaourt -Syua --no-confirm          | Same as `yaupg`, but without confirmation                           |
 | upgrade | yaourt -Syu                        | Sync with repositories before upgrading packages                    |
 
-### PACAUR
+#### PACAUR
 
 | Alias   | Command                            | Description                                                         |
 |---------|------------------------------------|---------------------------------------------------------------------|
@@ -74,7 +119,9 @@
 | pacupg       | sudo pacman -Syu                        | Sync with repositories before upgrading packages             |
 | upgrade      | sudo pacman -Syu                        | Sync with repositories before upgrading packages             |
 | pacfileupg   | sudo pacman -Fy                         | Download fresh package databases from the server             |
-| pacfiles     | pacman -Fs                              | Search package file names for matching strings.              |
+| pacfiles     | pacman -Fs                              | Search package file names for matching strings               |
+| pacls        | pacman -Ql                              | List files in a package                                      |
+| pacown       | pacman -Qo                              | Show which package owns a file                               |
 
 | Function       | Description                                          |
 |----------------|------------------------------------------------------|
@@ -82,6 +129,7 @@
 | paclist        | List all installed packages with a short description |
 | pacmanallkeys  | Get all keys for developers and trusted users        |
 | pacmansignkeys | Locally trust all keys passed as parameters          |
+| pacweb         | Open the website of an ArchLinux package             |
 
 ---
 
@@ -95,3 +143,4 @@
 - ornicar - thibault.duplessis@gmail.com
 - Juraj Fiala - doctorjellyface@riseup.net
 - Majora320 (Moses Miller) - Majora320@gmail.com
+- Ybalrid (Arthur Brainville) - ybalrid@ybalrid.info
