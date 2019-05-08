@@ -8,6 +8,18 @@ To start using it, add the `vscode` plugin to your `plugins` array in `~/.zshrc`
 plugins=(... vscode)
 ```
 
+If you are using [Visual Studio Code Insiders](https://code.visualstudio.com/insiders/),
+add the following line between the `plugins` array and `source` command in `~/.zshrc` 
+
+```zsh
+plugins=(... vscode)
+
+# Add this line to use code-insiders instead of code
+VSCODE=code-insiders
+
+source $ZSH/oh-my-zsh.sh
+```
+
 ## Common aliases
 
 | Alias                   | Command                        | Description                                                                                                 |
