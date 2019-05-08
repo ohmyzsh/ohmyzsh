@@ -5,8 +5,11 @@
 # https://github.com/trinaldi
 # Nicolas Jonas nextgenthemes.com
 # https://github.com/loctauxphilippe
+# https://github.com/HaraldNordgren
 #
 # Debian, Ubuntu and friends related zsh aliases and functions for zsh
+
+(( $+commands[apt] )) && APT=apt || APT=apt-get
 
 alias acs='apt-cache search'
 compdef _acs acs='apt-cache search'
@@ -14,9 +17,9 @@ compdef _acs acs='apt-cache search'
 alias afs='apt-file search --regexp'
 compdef _afs afs='apt-file search --regexp'
 
-# These are apt-get only
-alias ags='apt-get source'   # asrc
-compdef _ags ags='apt-get source'
+# These are apt/apt-get only
+alias ags="$APT source"   # asrc
+compdef _ags ags="$APT source"
 
 alias acp='apt-cache policy' # app
 compdef _acp acp='apt-cache policy'
@@ -37,33 +40,33 @@ compdef _afu afu='sudo apt-file update'
 alias ppap='sudo ppa-purge'
 compdef _ppap ppap='sudo ppa-purge'
 
-alias apg='sudo apt-get'            # age - but without sudo
-alias aga='sudo apt-get autoclean' # aac
-alias agb='sudo apt-get build-dep' # abd
-alias agc='sudo apt-get clean'     # adc
-alias agd='sudo apt-get dselect-upgrade' # ads
-alias agi='sudo apt-get install'  # ai
-alias agp='sudo apt-get purge'    # ap
-alias agr='sudo apt-get remove'   # ar
-alias agu='sudo apt-get update'   # ad
-alias agud='sudo apt-get update && sudo apt-get full-upgrade' #adu
-alias agug='sudo apt-get upgrade' # ag
-alias aguu='sudo apt-get update && sudo apt-get upgrade'      #adg
-alias agar='sudo apt-get autoremove'
+alias ag="sudo $APT"               # age - but without sudo
+alias aga="sudo $APT autoclean"    # aac
+alias agb="sudo $APT build-dep"    # abd
+alias agc="sudo $APT clean"        # adc
+alias agd="sudo $APT dselect-upgrade" # ads
+alias agi="sudo $APT install"      # ai
+alias agp="sudo $APT purge"        # ap
+alias agr="sudo $APT remove"       # ar
+alias agu="sudo $APT update"       # ad
+alias agud="sudo $APT update && sudo $APT dist-upgrade" #adu
+alias agug="sudo $APT upgrade"     # ag
+alias aguu="sudo $APT update && sudo $APT upgrade"      #adg
+alias agar="sudo $APT autoremove"
 
-compdef _ag apg='sudo apt-get'
-compdef _aga aga='sudo apt-get autoclean'
-compdef _agb agb='sudo apt-get build-dep'
-compdef _agc agc='sudo apt-get clean'
-compdef _agd agd='sudo apt-get dselect-upgrade'
-compdef _agi agi='sudo apt-get install'
-compdef _agp agp='sudo apt-get purge'
-compdef _agr agr='sudo apt-get remove'
-compdef _agu agu='sudo apt-get update'
-compdef _agud agud='sudo apt-get update && sudo apt-get full-upgrade'
-compdef _agug agug='sudo apt-get upgrade'
-compdef _aguu aguu='sudo apt-get update && sudo apt-get upgrade'
-compdef _agar agar='sudo apt-get autoremove'
+compdef _ag ag="sudo $APT"
+compdef _aga aga="sudo $APT autoclean"
+compdef _agb agb="sudo $APT build-dep"
+compdef _agc agc="sudo $APT clean"
+compdef _agd agd="sudo $APT dselect-upgrade"
+compdef _agi agi="sudo $APT install"
+compdef _agp agp="sudo $APT purge"
+compdef _agr agr="sudo $APT remove"
+compdef _agu agu="sudo $APT update"
+compdef _agud agud="sudo $APT update && sudo $APT dist-upgrade"
+compdef _agug agug="sudo $APT upgrade"
+compdef _aguu aguu="sudo $APT update && sudo $APT upgrade"
+compdef _agar agar="sudo $APT autoremove"
 
 # Remove ALL kernel images and headers EXCEPT the one in use
 alias kclean='sudo aptitude remove -P ?and(~i~nlinux-(ima|hea) \
@@ -91,8 +94,8 @@ aar() {
 		PACKAGE=${1##*/}
 	fi
 	
-	sudo apt-add-repository $1 && sudo apt-get update
-	sudo apt-get install $PACKAGE
+	sudo apt-add-repository $1 && sudo $APT update
+	sudo $APT install $PACKAGE
 }
 
 # Prints apt history
@@ -102,7 +105,7 @@ aar() {
 #   apt-history remove
 #   apt-history rollback
 #   apt-history list
-# Based On: http://linuxcommando.blogspot.com/2008/08/how-to-show-apt-log-history.html
+# Based On: https://linuxcommando.blogspot.com/2008/08/how-to-show-apt-log-history.html
 apt-history () {
   case "$1" in
     install)

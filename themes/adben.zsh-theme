@@ -6,7 +6,7 @@
 # # a) displaying a pseudo-random message from a database of quotations
 # # (https://en.wikipedia.org/wiki/Fortune_%28Unix%29)
 # # b) displaying randomly command line tips from The command line fu
-# # (http://www.commandlinefu.com) community: in order to make use of this functionality
+# # (https://www.commandlinefu.com) community: in order to make use of this functionality
 # # you will need Internet connection.
 # # This theme provides as well information for the current user's context, like;
 # # branch and status for the current version control system (git and svn currently
@@ -23,11 +23,11 @@
 # # optionally:
 # # -Oh-myzsh vcs plug-ins git and svn.
 # # -Solarized theme (https://github.com/altercation/solarized/)
-# # -OS X: iTerm 2 (http://www.iterm2.com/)
+# # -OS X: iTerm 2 (https://iterm2.com/)
 # # -font Source code pro (https://github.com/adobe/source-code-pro)
 # #
 # # This theme's look and feel is based on the Aaron Toponce's zsh theme, more info:
-# # http://pthree.org/2008/11/23/727/
+# # https://pthree.org/2008/11/23/727/
 # # enjoy!
 ########## COLOR ###########
 for COLOR in CYAN WHITE YELLOW MAGENTA BLACK BLUE RED DEFAULT GREEN GREY; do

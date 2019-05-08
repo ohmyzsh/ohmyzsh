@@ -51,5 +51,10 @@ alias cgrm='composer global remove'
 # install composer in the current directory
 alias cget='curl -s https://getcomposer.org/installer | php'
 
-# Add Composer's global binaries to PATH
-export PATH=$PATH:$(composer global config bin-dir --absolute 2>/dev/null)
+# Add Composer's global binaries to PATH, using Composer if available.
+if (( $+commands[composer] )); then
+  export PATH=$PATH:$(composer global config bin-dir --absolute 2>/dev/null)
+else
+  [ -d $HOME/.composer/vendor/bin ] && export PATH=$PATH:$HOME/.composer/vendor/bin
+  [ -d $HOME/.config/composer/vendor/bin ] && export PATH=$PATH:$HOME/.config/composer/vendor/bin
+fi
