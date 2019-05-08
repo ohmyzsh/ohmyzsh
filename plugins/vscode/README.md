@@ -9,13 +9,16 @@ plugins=(... vscode)
 ```
 
 If you are using [Visual Studio Code Insiders](https://code.visualstudio.com/insiders/),
-add the following line between the `plugins` array and `source` command in `~/.zshrc` 
+add the following line in the oh-my-zsh settings section (between the `ZSH_THEME` and
+the `plugins=()` line). This will make the plugin use the Insiders version instead.
 
 ```zsh
-plugins=(... vscode)
+ZSH_THEME=...
 
 # Add this line to use code-insiders instead of code
 VSCODE=code-insiders
+
+plugins=(... vscode)
 
 source $ZSH/oh-my-zsh.sh
 ```
