@@ -5,13 +5,15 @@ function agp {
 }
 
 function asp {
+  if [[ -z "$1" ]]; then
+    unset AWS_DEFAULT_PROFILE AWS_PROFILE AWS_EB_PROFILE
+    echo AWS profile cleared.
+    return
+  fi
+
   export AWS_DEFAULT_PROFILE=$1
   export AWS_PROFILE=$1
   export AWS_EB_PROFILE=$1
-
-  if [[ -z "$1" ]]; then
-    echo AWS profile cleared.
-  fi
 }
 
 function aws_change_access_key {
