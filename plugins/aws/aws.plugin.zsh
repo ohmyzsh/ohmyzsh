@@ -10,6 +10,7 @@ function asp {
   export AWS_EB_PROFILE=$1
 
   if [[ -z "$1" ]]; then
+    unset -v AWS_DEFAULT_PROFILE AWS_PROFILE AWS_EB_PROFILE
     echo AWS profile cleared.
   fi
 }
