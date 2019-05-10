@@ -1,14 +1,24 @@
-# AWS profile selection
+_aws_profiles() {
+  grep '\[profile' "${AWS_CONFIG_FILE:-$HOME/.aws/config}"|sed -e 's/.*profile \([a-zA-Z0-9_\.-]*\).*/\1/'
+}
 
-function agp {
+agp() {
   echo $AWS_PROFILE
 }
 
-function asp {
+# AWS profile selection
+asp() {
   if [[ -z "$1" ]]; then
     unset AWS_DEFAULT_PROFILE AWS_PROFILE AWS_EB_PROFILE
     echo AWS profile cleared.
     return
+  fi
+
+  local available_profiles=($(_aws_profiles))
+  if [[ -z ${available_profiles[(r)$1]} ]] && [[ -n "$1" ]]; then
+    echo $fg[red]"Profile $1 is not available in ${AWS_CONFIG_FILE:-$HOME/.aws/config}" >&2
+    echo "Available profiles: ${available_profiles}" >&2
+    return 1
   fi
 
   export AWS_DEFAULT_PROFILE=$1
@@ -16,8 +26,8 @@ function asp {
   export AWS_EB_PROFILE=$1
 }
 
-function aws_change_access_key {
-  if [[ -z "$1" ]] then
+aws_change_access_key() {
+  if [[ -z "$1" ]]; then
     echo "usage: $0 <profile>"
     return 1
   fi
@@ -32,15 +42,13 @@ function aws_change_access_key {
   aws iam list-access-keys
 }
 
-function aws_profiles {
-  reply=($(grep '\[profile' "${AWS_CONFIG_FILE:-$HOME/.aws/config}"|sed -e 's/.*profile \([a-zA-Z0-9_\.-]*\).*/\1/'))
+_aws_profiles_completion() {
+  reply=($(_aws_profiles))
 }
-compctl -K aws_profiles asp aws_change_access_key
-
+compctl -K _aws_profiles_completion asp aws_change_access_key
 
 # AWS prompt
-
-function aws_prompt_info() {
+aws_prompt_info() {
   [[ -z $AWS_PROFILE ]] && return
   echo "${ZSH_THEME_AWS_PREFIX:=<aws:}${AWS_PROFILE}${ZSH_THEME_AWS_SUFFIX:=>}"
 }
