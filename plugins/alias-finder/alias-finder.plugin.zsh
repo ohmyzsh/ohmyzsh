@@ -37,8 +37,10 @@ alias-finder() {
   fi
 }
 
-preexec() {
+preexec_alias-finder() {
   if [[ $ZSH_ALIAS_FINDER_AUTOMATIC = true ]]; then
     alias-finder $1
   fi
 }
+
+preexec_functions+=(preexec_alias-finder)
