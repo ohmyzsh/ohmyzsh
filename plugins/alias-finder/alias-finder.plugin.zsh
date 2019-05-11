@@ -22,10 +22,10 @@ alias-finder() {
         wordEnd="$"
         multiWordEnd="'$"
       fi
-      if echo $cmd | grep '^[^ ]*$' > /dev/null; then
-        local finder=$wordStart$cmd$wordEnd
-      else
+      if [[ $cmd == *" "* ]] then
         local finder="'$cmd$multiWordEnd"
+      else
+        local finder=$wordStart$cmd$wordEnd
       fi
       alias | grep -E "=$finder"
       if [[ $exact = true || $longer = true ]]; then
