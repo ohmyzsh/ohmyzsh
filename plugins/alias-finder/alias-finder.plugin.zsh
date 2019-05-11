@@ -1,5 +1,7 @@
 alias-finder() {
   local cmd=""
+  local exact=""
+  local longer=""
   for i in $@; do
     case $i in
       -e|--exact) local exact=true;;
