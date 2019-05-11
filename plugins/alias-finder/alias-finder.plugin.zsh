@@ -1,16 +1,14 @@
 alias-finder() {
-  local cmd=""
-  local exact=""
-  local longer=""
+  local cmd="" exact="" longer="" wordStart="" wordEnd="" multiWordEnd=""
   for i in $@; do
     case $i in
-      -e|--exact) local exact=true;;
-      -l|--longer) local longer=true;;
+      -e|--exact) exact=true;;
+      -l|--longer) longer=true;;
       *) 
         if [[ -z $cmd ]]; then
-          local cmd=$i
+          cmd=$i
         else
-          local cmd="$cmd $i"
+          cmd="$cmd $i"
         fi
         ;;
     esac
@@ -19,10 +17,10 @@ alias-finder() {
   if [[ $(wc -l <<< $cmd) == 1 ]]; then
     while [[ $cmd != "" ]]; do
       if [[ $longer = true ]]; then
-        local wordStart="'{0,1}"
+        wordStart="'{0,1}"
       else
-        local wordEnd="$"
-        local multiWordEnd="'$"
+        wordEnd="$"
+        multiWordEnd="'$"
       fi
       if echo $cmd | grep '^[^ ]*$' > /dev/null; then
         local finder=$wordStart$cmd$wordEnd
