@@ -13,7 +13,7 @@ alias-finder() {
         ;;
     esac
   done
-  cmd=$(sed 's/[].\|$(){}?+*^[]/\\&/g' <<< $cmd)
+  cmd=$(sed 's/[].\|$(){}?+*^[]/\\&/g' <<< $cmd) # adds escaping for grep
   if [[ $(wc -l <<< $cmd) == 1 ]]; then
     while [[ $cmd != "" ]]; do
       if [[ $longer = true ]]; then
@@ -31,7 +31,7 @@ alias-finder() {
       if [[ $exact = true || $longer = true ]]; then
         break
       else
-        cmd=$(sed -E 's/ {0,1}[^ ]*$//' <<< $cmd) # deletes last word
+        cmd=$(sed -E 's/ {0,1}[^ ]*$//' <<< $cmd) # removes last word
       fi
     done
   fi
