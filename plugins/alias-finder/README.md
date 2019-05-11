@@ -10,7 +10,7 @@ plugins=(... alias-finder)
 ```
 
 ## Usage
-To see if there is an alias defined for the command, pass it as an argument to `alias-finder`. This can also run automatically before each command you input - add `export ZSH_ALIAS_FINDER_AUTOMATIC=true` to your zshrc if you want this.
+To see if there is an alias defined for the command, pass it as an argument to `alias-finder`. This can also run automatically before each command you input - add `ZSH_ALIAS_FINDER_AUTOMATIC=true` to your zshrc if you want this.
 
 ## Options
 
