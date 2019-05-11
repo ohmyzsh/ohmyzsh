@@ -1,9 +1,7 @@
 # alias-finder plugin
 
-## Description
 This plugin searches the defined aliases and outputs any that match the command inputted. This makes learning new aliases easier.
 
-## Enabling
 To use it, add `alias-finder` to the `plugins` array of your zshrc file:
 ```
 plugins=(... alias-finder)
