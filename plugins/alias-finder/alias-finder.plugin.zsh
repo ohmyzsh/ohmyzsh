@@ -7,10 +7,10 @@ alias-finder() {
       -e|--exact) local exact=true;;
       -l|--longer) local longer=true;;
       *) 
-        if [[ ! -z $cmd ]]; then
-          local cmd="$cmd $i"
-        else
+        if [[ -z $cmd ]]; then
           local cmd=$i
+        else
+          local cmd="$cmd $i"
         fi
         ;;
     esac
