@@ -16,7 +16,7 @@ alias-finder() {
     esac
   done
   cmd=$(sed 's/[].\|$(){}?+*^[]/\\&/g' <<< $cmd)
-  if [[ $cmd != *\n* ]]; then
+  if [[ $(wc -l <<< $cmd) == 1 ]]; then
     while [[ $cmd != "" ]]; do
       if [[ $longer = true ]]; then
         local wordStart="'{0,1}"
