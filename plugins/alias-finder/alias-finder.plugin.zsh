@@ -22,7 +22,7 @@ alias-finder() {
         wordEnd="$"
         multiWordEnd="'$"
       fi
-      if [[ $cmd == *" "* ]] then
+      if [[ $cmd == *" "* ]]; then
         local finder="'$cmd$multiWordEnd"
       else
         local finder=$wordStart$cmd$wordEnd
