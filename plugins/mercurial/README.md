@@ -33,6 +33,8 @@ Update .zshrc:
 * `hgco` - `hg checkout`
 * `hgd`  - `hg diff`
 * `hged` - `hg diffmerge`
+* `hglg` - `hg log --stat -v`
+* `hglgp` - `hg log --stat  -p -v`
 
 ###### pull and update
 * `hgi` - `hg incoming`

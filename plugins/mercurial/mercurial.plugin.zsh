@@ -7,6 +7,8 @@ alias hgbk='hg bookmarks'
 alias hgco='hg checkout'
 alias hgd='hg diff'
 alias hged='hg diffmerge'
+alias hglg='hg log --stat -v'
+alias hglgp='hg log --stat  -p -v'
 # pull and update
 alias hgi='hg incoming'
 alias hgl='hg pull -u'
