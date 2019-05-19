@@ -32,8 +32,16 @@ PORT=3001
 ```
 You can even mix both formats, although it's probably a bad idea.
 
-Custom `env` files can be configured by exporting your env file in `ZSH_DOTENV_FILE`.
-If nothing is exported to `ZSH_DOTENV_FILE` then it takes `.env` as default filename
+### ZSH_DOTENV_FILE
+
+You can also modify the name of the file to be loaded with the variable `ZSH_DOTENV_FILE`.
+If the variable isn't set, the plugin will default to use `.env`.
+For example, this will make the plugin look for files named `.dotenv` and load them:
+
+```
+# in ~/.zshrc, before Oh My Zsh is sourced:
+ZSH_DOTENV_FILE=.dotenv
+```
 
 ## Version Control
 
