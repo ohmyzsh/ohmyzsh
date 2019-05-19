@@ -169,11 +169,6 @@ You must log out and log back in to see this change.
 
 Once you open up a new terminal window, it should load zsh with Oh My Zsh's configuration.
 
-#### Settings & Configurations
-
-Custom `env` files can be configured by exporting your env file in `ZSH_DOTENV_FILE`.
-If nothing is exported to `ZSH_DOTENV_FILE` then it takes `.env` as default file name
-
 ### Installation Problems
 
 If you have any hiccups installing, here are a few common fixes.
