@@ -16,13 +16,13 @@ function svn_prompt_info() {
 
   if [[ -n $repo_need_upgrade ]]; then
     printf '%s%s%s%s%s%s%s\n' \
-      $ZSH_PROMPT_BASE_COLOR \
-      $ZSH_THEME_SVN_PROMPT_PREFIX \
-      $ZSH_PROMPT_BASE_COLOR \
-      $repo_need_upgrade \
-      $ZSH_PROMPT_BASE_COLOR \
-      $ZSH_THEME_SVN_PROMPT_SUFFIX \
-      $ZSH_PROMPT_BASE_COLOR
+      "$ZSH_PROMPT_BASE_COLOR" \
+      "$ZSH_THEME_SVN_PROMPT_PREFIX" \
+      "$ZSH_PROMPT_BASE_COLOR" \
+      "$repo_need_upgrade" \
+      "$ZSH_PROMPT_BASE_COLOR" \
+      "$ZSH_THEME_SVN_PROMPT_SUFFIX" \
+      "$ZSH_PROMPT_BASE_COLOR"
   else
     printf '%s%s%s%s %s%s%s:%s%s%s%s' \
       "$ZSH_PROMPT_BASE_COLOR" \
