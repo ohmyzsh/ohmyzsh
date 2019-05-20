@@ -3027,6 +3027,12 @@ _dockerd() {
 
 _docker "$@"
 
+# aliases 
+# remove docker intermediate images
+alias drmi='docker rmi -f  $(docker images -aq --filter dangling=true) 2> /dev/null'
+# wipe everything, kill all running processes, remove all containers and images
+alias dwipe='docker kill $(docker ps -q) 2> /dev/null ; docker rm $(docker ps -aq) 2> /dev/null ; docker rmi -f $(docker images -aq) 2> /dev/null'
+
 # Local Variables:
 # mode: Shell-Script
 # sh-indentation: 4
