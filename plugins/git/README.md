@@ -191,7 +191,6 @@ These are aliases that have been removed, renamed, or otherwise modified in a wa
 | Command                | Description                             |
 |:-----------------------|:----------------------------------------|
 | current_branch         | Return the name of the current branch   |
-| current_repository     | Return the names of the current remotes |
 | git_current_user_name  | Returns the `user.name` config value    |
 | git_current_user_email | Returns the `user.email` config value   |
 
@@ -204,3 +203,9 @@ These features allow to pause a branch development and switch to another one (_"
 | work_in_progress | Echoes a warning if the current branch is a wip |
 | gwip             | Commit wip branch                               |
 | gunwip           | Uncommit wip branch                             |
+
+### Deprecated
+
+| Command                | Description                             | Reason                                                          |
+|:-----------------------|:----------------------------------------|:----------------------------------------------------------------|
+| current_repository     | Return the names of the current remotes | Didn't work properly. Use `git remote -v` instead (`grv` alias) |
