@@ -22,6 +22,15 @@ alias kaf='kubectl apply -f'
 # Drop into an interactive terminal on a container
 alias keti='kubectl exec -ti'
 
+# Execute a kubectl get command on the provided resource
+alias kg='kubectl get'
+
+# Execute a kubectl get <resource> --all-namespaces  command on the provided resource
+alias kgans='f(){ kubectl get "$@" --all-namespaces;  unset -f f; }; f'
+
+# Execute a kubectl describe command on the provided resource
+alias kd='kubectl describe'
+
 # Manage configuration quickly to switch contexts between local, dev ad staging.
 alias kcuc='kubectl config use-context'
 alias kcsc='kubectl config set-context'
