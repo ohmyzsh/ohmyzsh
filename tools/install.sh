@@ -17,6 +17,10 @@ command_exists() {
 	command -v "$@" >/dev/null 2>&1
 }
 
+error() {
+	echo "Error: $@" >&2
+}
+
 # Set up color sequences
 setup_color() {
 	if command_exists tput; then
@@ -54,20 +58,18 @@ setup_ohmyzsh() {
 	echo "${BLUE}Cloning Oh My Zsh...${NORMAL}"
 
 	command_exists git || {
-		echo "Error: git is not installed"
+		error "git is not installed"
 		exit 1
 	}
 
 	if [ "$OSTYPE" = cygwin ] && git --version | grep -q msysgit; then
-		cat <<-EOF
-			Error: Windows/MSYS Git is not supported on Cygwin
-			Error: Make sure the Cygwin git package is installed and is first on the $PATH
-		EOF
+		error "Windows/MSYS Git is not supported on Cygwin"
+		error "Make sure the Cygwin git package is installed and is first on the \$PATH"
 		exit 1
 	fi
 
 	git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git "$ZSH" || {
-		echo "Error: git clone of oh-my-zsh repo failed"
+		error "git clone of oh-my-zsh repo failed"
 		exit 1
 	}
 }
@@ -96,7 +98,7 @@ setup_shell() {
 		if command_exists chsh; then
 			echo "${BLUE}Time to change your default shell to zsh!${NORMAL}"
 			if ! chsh -s $(grep /zsh$ /etc/shells | tail -1); then
-				echo "Error: chsh command unsuccessful. Change your default shell manually."
+				error "chsh command unsuccessful. Change your default shell manually."
 			fi
 		# Else, suggest the user do so manually.
 		else
@@ -119,7 +121,7 @@ main() {
 	if [ -d "$ZSH" ]; then
 		cat <<-EOF
 			${YELLOW}You already have Oh My Zsh installed.${NORMAL}
-			You'll need to remove $ZSH if you want to reinstall.
+			You'll need to remove '$ZSH' if you want to reinstall.
 		EOF
 		exit 1
 	fi
