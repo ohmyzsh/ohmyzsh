@@ -27,7 +27,7 @@ command_exists() {
 }
 
 error() {
-	echo "Error: $@" >&2
+	echo ${RED}"Error: $@"${RESET} >&2
 }
 
 # Set up color sequences
@@ -45,14 +45,14 @@ setup_color() {
 		YELLOW="$(tput setaf 3)"
 		BLUE="$(tput setaf 4)"
 		BOLD="$(tput bold)"
-		NORMAL="$(tput sgr0)"
+		RESET="$(tput sgr0)"
 	else
-		RED=""
-		GREEN=""
-		YELLOW=""
-		BLUE=""
-		BOLD=""
-		NORMAL=""
+		RED=$(printf '\033[31m')
+		GREEN=$(printf '\033[32m')
+		YELLOW=$(printf '\033[33m')
+		BLUE=$(printf '\033[34m')
+		BOLD=$(printf '\033[1m')
+		RESET=$(printf '\033[m')
 	fi
 }
 
@@ -64,7 +64,7 @@ setup_ohmyzsh() {
 	# precedence over umasks except for filesystems mounted with option "noacl".
 	umask g-w,o-w
 
-	echo "${BLUE}Cloning Oh My Zsh...${NORMAL}"
+	echo "${BLUE}Cloning Oh My Zsh...${RESET}"
 
 	command_exists git || {
 		error "git is not installed"
@@ -84,13 +84,13 @@ setup_ohmyzsh() {
 }
 
 setup_zshrc() {
-	echo "${BLUE}Looking for an existing zsh config...${NORMAL}"
+	echo "${BLUE}Looking for an existing zsh config...${RESET}"
 	if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]; then
-		echo "${YELLOW}Found ~/.zshrc.${GREEN} Backing up to ~/.zshrc.pre-oh-my-zsh.${NORMAL}"
+		echo "${YELLOW}Found ~/.zshrc.${GREEN} Backing up to ~/.zshrc.pre-oh-my-zsh.${RESET}"
 		mv ~/.zshrc ~/.zshrc.pre-oh-my-zsh
 	fi
 
-	echo "${BLUE}Using the Oh My Zsh template file and adding it to ~/.zshrc.${NORMAL}"
+	echo "${BLUE}Using the Oh My Zsh template file and adding it to ~/.zshrc.${RESET}"
 
 	cp "$ZSH/templates/zshrc.zsh-template" ~/.zshrc
 	sed "/^export ZSH=/ c\\
@@ -109,12 +109,12 @@ setup_shell() {
 	if ! command_exists chsh; then
 		cat <<-EOF
 			I can't change your shell automatically because this system does not have chsh.
-			${BLUE}Please manually change your default shell to zsh${NORMAL}
+			${BLUE}Please manually change your default shell to zsh${RESET}
 		EOF
 		return
 	fi
 
-	echo "${BLUE}Time to change your default shell to zsh!${NORMAL}"
+	echo "${BLUE}Time to change your default shell to zsh!${RESET}"
 
 	# Test for the right location of the "shells" file
 	if [ -f /etc/shells ]; then
@@ -146,13 +146,13 @@ main() {
 	setup_color
 
 	if ! command_exists zsh; then
-		echo "${YELLOW}Zsh is not installed.${NORMAL} Please install zsh first."
+		echo "${YELLOW}Zsh is not installed.${RESET} Please install zsh first."
 		exit 1
 	fi
 
 	if [ -d "$ZSH" ]; then
 		cat <<-EOF
-			${YELLOW}You already have Oh My Zsh installed.${NORMAL}
+			${YELLOW}You already have Oh My Zsh installed.${RESET}
 			You'll need to remove '$ZSH' if you want to reinstall.
 		EOF
 		exit 1
@@ -179,7 +179,7 @@ main() {
 		p.p.s. Get stickers, shirts, and coffee mugs at https://shop.planetargon.com/collections/oh-my-zsh
 
 	EOF
-	printf "$NORMAL"
+	printf "$RESET"
 
 	exec zsh -l
 }
