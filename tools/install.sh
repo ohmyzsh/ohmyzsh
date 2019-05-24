@@ -117,7 +117,18 @@ setup_shell() {
 		return
 	fi
 
-	if ! chsh -s $(grep '^/.*/zsh$' "$shells_file" | tail -1); then
+	# Get the path to the right zsh binary
+	# 1. Use the most preceding one based on $PATH, then check that it's in the shells file
+	# 2. If that fails, get a zsh path from the shells file, then check it actually exists
+	if ! zsh=$(which zsh) || ! grep -qx "$zsh" "$shells_file"; then
+		if ! zsh=$(grep '^/.*/zsh$' "$shells_file" | tail -1) || [ ! -f "$zsh" ]; then
+			error "no available zsh binary found. Change your default shell manually."
+			return
+		fi
+	fi
+
+	# Actually change the default shell to zsh
+	if ! chsh -s "$zsh"; then
 		error "chsh command unsuccessful. Change your default shell manually."
 	fi
 }
