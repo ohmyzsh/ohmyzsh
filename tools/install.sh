@@ -106,7 +106,18 @@ setup_shell() {
 	fi
 
 	echo "${BLUE}Time to change your default shell to zsh!${NORMAL}"
-	if ! chsh -s $(grep '^/.*/zsh$' /etc/shells | tail -1); then
+
+	# Test for the right location of the "shells" file
+	if [ -f /etc/shells ]; then
+		shells_file=/etc/shells
+	elif [ -f /usr/share/defaults/etc/shells ]; then # Solus OS
+		shells_file=/usr/share/defaults/etc/shells
+	else
+		error "could not find /etc/shells file. Change your default shell manually."
+		return
+	fi
+
+	if ! chsh -s $(grep '^/.*/zsh$' "$shells_file" | tail -1); then
 		error "chsh command unsuccessful. Change your default shell manually."
 	fi
 }
