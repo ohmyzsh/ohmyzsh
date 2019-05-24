@@ -45,5 +45,5 @@ colorize_via_pygmentize_less() (
         shift 1
     done
 
-    less -f "${tmp_files[@]}"
+    less -L -f "${tmp_files[@]}"
 )
