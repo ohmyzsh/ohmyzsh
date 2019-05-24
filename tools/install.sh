@@ -91,22 +91,23 @@ export ZSH=\"$ZSH\"
 }
 
 setup_shell() {
-	# If this user's login shell is not already "zsh", attempt to switch.
-	TEST_CURRENT_SHELL=$(basename "$SHELL")
-	if [ "$TEST_CURRENT_SHELL" != "zsh" ]; then
-		# If this platform provides a "chsh" command (not Cygwin), do it, man!
-		if command_exists chsh; then
-			echo "${BLUE}Time to change your default shell to zsh!${NORMAL}"
-			if ! chsh -s $(grep '^/.*/zsh$' /etc/shells | tail -1); then
-				error "chsh command unsuccessful. Change your default shell manually."
-			fi
-		# Else, suggest the user do so manually.
-		else
-			cat <<-EOF
-				I can't change your shell automatically because this system does not have chsh.
-				${BLUE}Please manually change your default shell to zsh${NORMAL}
-			EOF
-		fi
+	# If this user's login shell is already "zsh", do not attempt to switch.
+	if [ "$(basename "$SHELL")" = "zsh" ]; then
+		return
+	fi
+
+	# If this platform doesn't provide a "chsh" command, bail out.
+	if ! command_exists chsh; then
+		cat <<-EOF
+			I can't change your shell automatically because this system does not have chsh.
+			${BLUE}Please manually change your default shell to zsh${NORMAL}
+		EOF
+		return
+	fi
+
+	echo "${BLUE}Time to change your default shell to zsh!${NORMAL}"
+	if ! chsh -s $(grep '^/.*/zsh$' /etc/shells | tail -1); then
+		error "chsh command unsuccessful. Change your default shell manually."
 	fi
 }
 
