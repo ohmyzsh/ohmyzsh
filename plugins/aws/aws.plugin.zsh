@@ -1,7 +1,3 @@
-_aws_profiles() {
-  grep '\[profile' "${AWS_CONFIG_FILE:-$HOME/.aws/config}"|sed -e 's/.*profile \([a-zA-Z0-9_\.-]*\).*/\1/'
-}
-
 agp() {
   echo $AWS_PROFILE
 }
@@ -42,10 +38,15 @@ aws_change_access_key() {
   aws iam list-access-keys
 }
 
-_aws_profiles_completion() {
-  reply=($(_aws_profiles))
+aws_profiles() {
+  [[ -r "${AWS_CONFIG_FILE:-$HOME/.aws/config}" ]] || return 1
+  grep '\[profile' "${AWS_CONFIG_FILE:-$HOME/.aws/config}"|sed -e 's/.*profile \([a-zA-Z0-9_\.-]*\).*/\1/'
 }
-compctl -K _aws_profiles_completion asp aws_change_access_key
+
+_aws_profiles() {
+  reply=($(aws_profiles))
+}
+compctl -K _aws_profiles asp aws_change_access_key
 
 # AWS prompt
 aws_prompt_info() {
