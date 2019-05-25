@@ -10,10 +10,10 @@ asp() {
     return
   fi
 
-  local available_profiles=($(_aws_profiles))
-  if [[ -z ${available_profiles[(r)$1]} ]] && [[ -n "$1" ]]; then
-    echo $fg[red]"Profile $1 is not available in ${AWS_CONFIG_FILE:-$HOME/.aws/config}" >&2
-    echo "Available profiles: ${available_profiles}" >&2
+  local available_profiles=($(aws_profiles))
+  if [[ -z "${available_profiles[(r)$1]}" ]]; then
+    echo "${fg[red]}Profile '$1' not found in '${AWS_CONFIG_FILE:-$HOME/.aws/config}'" >&2
+    echo "Available profiles: ${(j:, :)available_profiles:-no profiles found}${reset_color}" >&2
     return 1
   fi
 
