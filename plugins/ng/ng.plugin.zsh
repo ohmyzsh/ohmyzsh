@@ -75,7 +75,7 @@ _ng_completion () {
 
   setopt shwordsplit
   reply=($opts)
-  unset shwordsplit
+  unsetopt shwordsplit
 }
 
 compctl -K _ng_completion ng
