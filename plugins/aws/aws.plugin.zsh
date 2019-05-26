@@ -1,14 +1,20 @@
-# AWS profile selection
-
-function agp {
+agp() {
   echo $AWS_PROFILE
 }
 
-function asp {
+# AWS profile selection
+asp() {
   if [[ -z "$1" ]]; then
     unset AWS_DEFAULT_PROFILE AWS_PROFILE AWS_EB_PROFILE
     echo AWS profile cleared.
     return
+  fi
+
+  local available_profiles=($(aws_profiles))
+  if [[ -z "${available_profiles[(r)$1]}" ]]; then
+    echo "${fg[red]}Profile '$1' not found in '${AWS_CONFIG_FILE:-$HOME/.aws/config}'" >&2
+    echo "Available profiles: ${(j:, :)available_profiles:-no profiles found}${reset_color}" >&2
+    return 1
   fi
 
   export AWS_DEFAULT_PROFILE=$1
@@ -16,14 +22,14 @@ function asp {
   export AWS_EB_PROFILE=$1
 }
 
-function aws_change_access_key {
-  if [[ -z "$1" ]] then
+aws_change_access_key() {
+  if [[ -z "$1" ]]; then
     echo "usage: $0 <profile>"
     return 1
   fi
 
   echo Insert the credentials when asked.
-  asp "$1"
+  asp "$1" || return 1
   aws iam create-access-key
   aws configure --profile "$1"
 
@@ -32,16 +38,18 @@ function aws_change_access_key {
   aws iam list-access-keys
 }
 
-function aws_profiles {
+aws_profiles() {
   [[ -r "${AWS_CONFIG_FILE:-$HOME/.aws/config}" ]] || return 1
-  reply=($(grep '\[profile' "${AWS_CONFIG_FILE:-$HOME/.aws/config}"|sed -e 's/.*profile \([a-zA-Z0-9_\.-]*\).*/\1/'))
+  grep '\[profile' "${AWS_CONFIG_FILE:-$HOME/.aws/config}"|sed -e 's/.*profile \([a-zA-Z0-9_\.-]*\).*/\1/'
 }
-compctl -K aws_profiles asp aws_change_access_key
 
+_aws_profiles() {
+  reply=($(aws_profiles))
+}
+compctl -K _aws_profiles asp aws_change_access_key
 
 # AWS prompt
-
-function aws_prompt_info() {
+aws_prompt_info() {
   [[ -z $AWS_PROFILE ]] && return
   echo "${ZSH_THEME_AWS_PREFIX:=<aws:}${AWS_PROFILE}${ZSH_THEME_AWS_SUFFIX:=>}"
 }
