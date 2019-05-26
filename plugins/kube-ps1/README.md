@@ -52,7 +52,7 @@ plugins=(
   git
   kube-ps1
 )
-
+source $ZSH/oh-my-zsh.sh
 PROMPT=$PROMPT'$(kube_ps1) '
 ```
 
