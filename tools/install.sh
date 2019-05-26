@@ -11,15 +11,16 @@
 #
 # Respects these environment variables for tweaking the installation process:
 #   REPO    - name of the GitHub repo to install from (default: robbyrussell/oh-my-zsh)
-#   BRANCH  - branch to check out immediately after install
+#   REMOTE  - full remote URL of the git repo to install (default: GitHub via HTTPS)
+#   BRANCH  - branch to check out immediately after install (default: master)
 #
 set -e
 
 # Default settings
 ZSH=${ZSH:-~/.oh-my-zsh}
 REPO=${REPO:-robbyrussell/oh-my-zsh}
+REMOTE=${REMOTE:-https://github.com/${REPO}.git}
 BRANCH=${BRANCH:-master}
-
 
 command_exists() {
 	command -v "$@" >/dev/null 2>&1
@@ -76,7 +77,7 @@ setup_ohmyzsh() {
 		exit 1
 	fi
 
-	git clone --depth=1 --branch "$BRANCH" "https://github.com/$REPO.git" "$ZSH" || {
+	git clone --depth=1 --branch "$BRANCH" "$REMOTE" "$ZSH" || {
 		error "git clone of oh-my-zsh repo failed"
 		exit 1
 	}
