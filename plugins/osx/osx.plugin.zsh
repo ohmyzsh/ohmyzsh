@@ -240,23 +240,15 @@ function itunes() {
 			if [[ $# -eq 0 ]]; then
 				echo "Current volume is ${volume}."
 				return 0
-			else
-				case $1 in
-					up)
-						new_volume=$((volume + 10))
-						;;
-					down)
-						new_volume=$((volume - 10))
-						;;
-					<0-100>)
-						new_volume=$1
-						;;
-					*)
-						echo "$1 is not a valid volume. Expected 0-100 or up or down."
-						return 0
-				esac
-				opt="set sound volume to ${new_volume}"
-				fi
+			fi
+			case $1 in
+				up) new_volume=$((volume + 10 < 100 ? volume + 10 : 100)) ;;
+				down) new_volume=$((volume - 10 > 0 ? volume - 10 : 0)) ;;
+				<0-100>) new_volume=$1 ;;
+				*) echo "'$1' is not valid. Expected <0-100>, up or down."
+				   return 1 ;;
+			esac
+			opt="set sound volume to ${new_volume}"
 			;;
 		playlist)
 		# Inspired by: https://gist.github.com/nakajijapan/ac8b45371064ae98ea7f
