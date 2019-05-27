@@ -9,7 +9,10 @@
 #   wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh
 #   sh install.sh
 #
-# Respects these environment variables for tweaking the installation process:
+# You can tweak the install behavior by setting variables when running the script. For
+# example, to change the path to the Oh My Zsh repository:
+#   ZSH=~/.zsh sh install.sh
+# Respects the following environment variables:
 #   ZSH     - path to the Oh My Zsh repository folder (default: $HOME/.oh-my-zsh)
 #   REPO    - name of the GitHub repo to install from (default: robbyrussell/oh-my-zsh)
 #   REMOTE  - full remote URL of the git repo to install (default: GitHub via HTTPS)
