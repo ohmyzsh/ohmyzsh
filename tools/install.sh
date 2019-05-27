@@ -10,9 +10,12 @@
 #   sh install.sh
 #
 # Respects these environment variables for tweaking the installation process:
+#   ZSH     - path to the Oh My Zsh repository folder (default: $HOME/.oh-my-zsh)
 #   REPO    - name of the GitHub repo to install from (default: robbyrussell/oh-my-zsh)
 #   REMOTE  - full remote URL of the git repo to install (default: GitHub via HTTPS)
 #   BRANCH  - branch to check out immediately after install (default: master)
+# Other options:
+#   CHSH    - set to no tells the installer not to change the default shell (default: yes)
 #
 set -e
 
@@ -21,6 +24,10 @@ ZSH=${ZSH:-~/.oh-my-zsh}
 REPO=${REPO:-robbyrussell/oh-my-zsh}
 REMOTE=${REMOTE:-https://github.com/${REPO}.git}
 BRANCH=${BRANCH:-master}
+
+# Other options
+CHSH=${CHSH:-yes}
+
 
 command_exists() {
 	command -v "$@" >/dev/null 2>&1
@@ -118,6 +125,11 @@ export ZSH=\"$ZSH\"
 }
 
 setup_shell() {
+	# Skip setup if the user wants or stdin is closed (not running interactively).
+	if [ $CHSH = no ] || ! [ -t 0 ]; then
+		return
+	fi
+
 	# If this user's login shell is already "zsh", do not attempt to switch.
 	if [ "$(basename "$SHELL")" = "zsh" ]; then
 		return
@@ -161,6 +173,14 @@ setup_shell() {
 }
 
 main() {
+	# Parse arguments
+	while [ $# -gt 0 ]; do
+		case $1 in
+			--skip-chsh) CHSH=no ;;
+		esac
+		shift
+	done
+
 	setup_color
 
 	if ! command_exists zsh; then
@@ -202,4 +222,4 @@ main() {
 	exec zsh -l
 }
 
-main
+main "$@"
