@@ -25,6 +25,9 @@ zle -N paste-insert _paste_insert
 
 # Switch the active keymap to paste mode
 function _start_paste() {
+  # Save the bindkey command to restore the active ("main") keymap
+  # Tokenise the restorative bindkey command into an array
+  _bracketed_paste_restore_keymap=( ${(z)"$(bindkey -lL main)"} )
   bindkey -A paste main
 }
 
@@ -32,11 +35,13 @@ function _start_paste() {
 # command line. This has the nice effect of making the whole paste be
 # a single undo/redo event.
 function _end_paste() {
-#use bindkey -v here with vi mode probably. maybe you want to track
-#if you were in ins or cmd mode and restore the right one.
-  bindkey -e
+  # Only execute the restore command if it starts with 'bindkey'
+  # Allow for option KSH_ARRAYS being set (indexing starts at 0)
+  if [ ${_bracketed_paste_restore_keymap[@]:0:1} = 'bindkey' ]; then
+    $_bracketed_paste_restore_keymap
+  fi
   LBUFFER+=$_paste_content
-  unset _paste_content
+  unset _paste_content _bracketed_paste_restore_keymap
 }
 
 function _paste_insert() {
