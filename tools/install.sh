@@ -15,7 +15,8 @@
 #   REMOTE  - full remote URL of the git repo to install (default: GitHub via HTTPS)
 #   BRANCH  - branch to check out immediately after install (default: master)
 # Other options:
-#   CHSH    - set to no tells the installer not to change the default shell (default: yes)
+#   CHSH    - 'no' means the installer will not change the default shell (default: yes)
+#   RUNZSH  - 'no' means the installer will not run zsh after the install (default: yes)
 #
 set -e
 
@@ -27,6 +28,7 @@ BRANCH=${BRANCH:-master}
 
 # Other options
 CHSH=${CHSH:-yes}
+RUNZSH=${RUNZSH:-yes}
 
 
 command_exists() {
@@ -126,7 +128,7 @@ export ZSH=\"$ZSH\"
 
 setup_shell() {
 	# Skip setup if the user wants or stdin is closed (not running interactively).
-	if [ $CHSH = no ] || ! [ -t 0 ]; then
+	if [ $CHSH = no ]; then
 		return
 	fi
 
@@ -173,9 +175,15 @@ setup_shell() {
 }
 
 main() {
+	if [ ! -t 0 ]; then
+		RUNZSH=no
+		CHSH=no
+	fi
+
 	# Parse arguments
 	while [ $# -gt 0 ]; do
 		case $1 in
+			--silent|--batch) RUNZSH=no; CHSH=no ;;
 			--skip-chsh) CHSH=no ;;
 		esac
 		shift
@@ -219,7 +227,7 @@ main() {
 	EOF
 	printf "$RESET"
 
-	if [ ! -t 0 ]; then
+	if [ $RUNZSH = no ]; then
 		echo "${YELLOW}Run zsh to try it out.${RESET}"
 		exit
 	fi
