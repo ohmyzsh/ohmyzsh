@@ -1,7 +1,10 @@
 # Code from Mikael Magnusson: https://www.zsh.org/mla/users/2011/msg00367.html
 #
-# Requires xterm, urxvt, iTerm2 or any other terminal that supports bracketed
-# paste mode as documented: https://www.xfree86.org/current/ctlseqs.html
+# Requires xterm, urxvt, iTerm2 or any other terminal that supports
+# Bracketed Paste Mode as documented:
+# https://www.xfree86.org/current/ctlseqs.html#Bracketed%20Paste%20Mode
+#
+# Additional technical details: https://cirw.in/blog/bracketed-paste
 
 # create a new keymap to use while pasting
 bindkey -N paste
@@ -26,8 +29,8 @@ function _start_paste() {
   bindkey -A paste main
 }
 
-# go back to our normal keymap, and insert all the pasted text in the
-# command line. this has the nice effect of making the whole paste be
+# Go back to our normal keymap, and insert all the pasted text in the
+# command line. This has the nice effect of making the whole paste be
 # a single undo/redo event.
 function _end_paste() {
 #use bindkey -v here with vi mode probably. maybe you want to track
