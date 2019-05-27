@@ -236,7 +236,7 @@ function itunes() {
 			opt="$opt track"
 			;;
 		vol)
-			local volume=$(osascript -e 'tell application "iTunes" to get sound volume')
+			local new_volume volume=$(osascript -e 'tell application "iTunes" to get sound volume')
 			if [[ $# -eq 0 ]]; then
 				echo "Current volume is ${volume}."
 				return 0
