@@ -6,16 +6,15 @@
 #
 # Additional technical details: https://cirw.in/blog/bracketed-paste
 
-# create a new keymap to use while pasting
+# Create a new keymap to use while pasting
 bindkey -N paste
 # Make everything in this new keymap enqueue characters for pasting
 bindkey -RM paste '\x00-\xFF' paste-insert
-# these are the codes sent around the pasted text in bracketed
-# paste mode.
+# These are the codes sent around the pasted text in bracketed paste mode
 # do the first one with both -M viins and -M vicmd in vi mode
 bindkey '^[[200~' _start_paste
 bindkey -M paste '^[[201~' _end_paste
-# insert newlines rather than carriage returns when pasting newlines
+# Insert newlines rather than carriage returns when pasting newlines
 bindkey -M paste -s '^M' '^J'
 
 zle -N _start_paste
@@ -24,7 +23,7 @@ zle -N zle-line-init _zle_line_init
 zle -N zle-line-finish _zle_line_finish
 zle -N paste-insert _paste_insert
 
-# switch the active keymap to paste mode
+# Switch the active keymap to paste mode
 function _start_paste() {
   bindkey -A paste main
 }
@@ -52,8 +51,8 @@ function _zle_line_init() {
 }
 
 function _zle_line_finish() {
-  # Tell it to stop when we leave zle, so pasting in other programs
-  # doesn't get the ^[[200~ codes around the pasted text.
+  # Turn off bracketed paste when we leave ZLE, so pasting in other programs
+  # doesn't get the ^[[200~ codes around the pasted text
   if [ $TERM =~ '^(rxvt-unicode|xterm(-256color)?|screen(-256color)?)$' ]; then
     printf '\e[?2004l'
   fi
