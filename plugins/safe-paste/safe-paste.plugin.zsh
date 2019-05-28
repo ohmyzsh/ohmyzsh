@@ -1,3 +1,25 @@
+# A good summary of the zsh 5.1 Bracketed Paste Mode changes is at:
+# https://archive.zhimingwang.org/blog/2015-09-21-zsh-51-and-bracketed-paste.html
+
+# zsh 5.1 (September 2015) introduced built-in support for Bracketed Paste Mode
+# https://github.com/zsh-users/zsh/blob/68405f31a043bdd5bf338eb06688ed3e1f740937/README#L38-L45
+#
+# zsh 5.1 breaks url-quote-magic and other widgets replacing self-insert
+# zsh-users' bracketed-paste-magic resolves these issues:
+# https://github.com/zsh-users/zsh/blob/f702e17b14d75aa21bff014168fa9048124db286/Functions/Zle/bracketed-paste-magic#L9-L12
+
+# Load bracketed-paste-magic if zsh version is >= 5.1
+if [[ ${ZSH_VERSION:0:3} -ge 5.1 ]]; then
+  set zle_bracketed_paste  # Explicitly restore this zsh default
+  autoload -Uz bracketed-paste-magic
+  zle -N bracketed-paste bracketed-paste-magic
+  return  ### The rest of this file is NOT executed on zsh version >= 5.1 ###
+fi
+
+######################################################################
+#    The rest of this file is ONLY executed if zsh version < 5.1
+######################################################################
+
 # Code from Mikael Magnusson: https://www.zsh.org/mla/users/2011/msg00367.html
 #
 # Requires xterm, urxvt, iTerm2 or any other terminal that supports
