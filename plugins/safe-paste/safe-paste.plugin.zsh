@@ -57,6 +57,7 @@ function _paste_insert() {
 }
 
 function _bracketed_paste_zle_init() {
+  _bracketed_paste_content=''
   # Tell terminal to send escape codes around pastes
   if [ $TERM =~ '^(rxvt-unicode|xterm(-256color)?|screen(-256color)?)$' ]; then
     printf '\e[?2004h'
