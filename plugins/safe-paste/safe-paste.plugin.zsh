@@ -73,10 +73,12 @@ _bracketed_paste_end() {
   unset _bracketed_paste_content _bracketed_paste_restore_keymap
 }
 
+# Append a pasted character to the content which is later inserted as a whole
 _bracketed_paste_enqueue() {
   _bracketed_paste_content+=$KEYS
 }
 
+# Run at zle-line-init
 _bracketed_paste_zle_init() {
   _bracketed_paste_content=''
   # Tell terminal to send escape codes around pastes
@@ -85,6 +87,7 @@ _bracketed_paste_zle_init() {
   fi
 }
 
+# Run at zle-line-finish
 _bracketed_paste_zle_finish() {
   # Turn off bracketed paste when we leave ZLE, so pasting in other programs
   # doesn't get the ^[[200~ codes around the pasted text
