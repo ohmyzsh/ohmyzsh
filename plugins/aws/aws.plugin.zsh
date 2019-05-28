@@ -1,9 +1,9 @@
-agp() {
+function agp() {
   echo $AWS_PROFILE
 }
 
 # AWS profile selection
-asp() {
+function asp() {
   if [[ -z "$1" ]]; then
     unset AWS_DEFAULT_PROFILE AWS_PROFILE AWS_EB_PROFILE
     echo AWS profile cleared.
@@ -22,7 +22,7 @@ asp() {
   export AWS_EB_PROFILE=$1
 }
 
-aws_change_access_key() {
+function aws_change_access_key() {
   if [[ -z "$1" ]]; then
     echo "usage: $0 <profile>"
     return 1
@@ -38,18 +38,18 @@ aws_change_access_key() {
   aws iam list-access-keys
 }
 
-aws_profiles() {
+function aws_profiles() {
   [[ -r "${AWS_CONFIG_FILE:-$HOME/.aws/config}" ]] || return 1
   grep '\[profile' "${AWS_CONFIG_FILE:-$HOME/.aws/config}"|sed -e 's/.*profile \([a-zA-Z0-9_\.-]*\).*/\1/'
 }
 
-_aws_profiles() {
+function _aws_profiles() {
   reply=($(aws_profiles))
 }
 compctl -K _aws_profiles asp aws_change_access_key
 
 # AWS prompt
-aws_prompt_info() {
+function aws_prompt_info() {
   [[ -z $AWS_PROFILE ]] && return
   echo "${ZSH_THEME_AWS_PREFIX:=<aws:}${AWS_PROFILE}${ZSH_THEME_AWS_SUFFIX:=>}"
 }
@@ -61,7 +61,7 @@ fi
 
 # Load awscli completions
 
-_awscli-homebrew-installed() {
+function _awscli-homebrew-installed() {
   # check if Homebrew is installed
   (( $+commands[brew] )) || return 1
 
