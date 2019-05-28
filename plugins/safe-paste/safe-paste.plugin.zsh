@@ -5,8 +5,8 @@
 
 # create a new keymap to use while pasting
 bindkey -N paste
-# make everything in this keymap call our custom widget
-bindkey -R -M paste "^@"-"\M-^?" paste-insert
+# Make everything in this new keymap enqueue characters for pasting
+bindkey -RM paste '\x00-\xFF' paste-insert
 # these are the codes sent around the pasted text in bracketed
 # paste mode.
 # do the first one with both -M viins and -M vicmd in vi mode
