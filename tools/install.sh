@@ -101,6 +101,8 @@ setup_ohmyzsh() {
 		error "git clone of oh-my-zsh repo failed"
 		exit 1
 	}
+
+	echo
 }
 
 setup_zshrc() {
@@ -128,13 +130,15 @@ setup_zshrc() {
 		mv ~/.zshrc "$OLD_ZSHRC"
 	fi
 
-	echo "${BLUE}Using the Oh My Zsh template file and adding it to ~/.zshrc.${RESET}"
+	echo "${GREEN}Using the Oh My Zsh template file and adding it to ~/.zshrc.${RESET}"
 
 	cp "$ZSH/templates/zshrc.zsh-template" ~/.zshrc
 	sed "/^export ZSH=/ c\\
 export ZSH=\"$ZSH\"
 " ~/.zshrc > ~/.zshrc-omztemp
 	mv -f ~/.zshrc-omztemp ~/.zshrc
+
+	echo
 }
 
 setup_shell() {
@@ -157,7 +161,7 @@ setup_shell() {
 		return
 	fi
 
-	echo "${BLUE}Time to change your default shell to zsh!${RESET}"
+	echo "${BLUE}Time to change your default shell to zsh:${RESET}"
 
 	# Test for the right location of the "shells" file
 	if [ -f /etc/shells ]; then
@@ -174,7 +178,8 @@ setup_shell() {
 	# 2. If that fails, get a zsh path from the shells file, then check it actually exists
 	if ! zsh=$(which zsh) || ! grep -qx "$zsh" "$shells_file"; then
 		if ! zsh=$(grep '^/.*/zsh$' "$shells_file" | tail -1) || [ ! -f "$zsh" ]; then
-			error "no available zsh binary found. Change your default shell manually."
+			error "no zsh binary found or not present in '$shells_file'"
+			error "change your default shell manually."
 			return
 		fi
 	fi
@@ -182,7 +187,12 @@ setup_shell() {
 	# Actually change the default shell to zsh
 	if ! chsh -s "$zsh"; then
 		error "chsh command unsuccessful. Change your default shell manually."
+	else
+		export SHELL="$zsh"
+		echo "${GREEN}Shell successfully changed to '$zsh'.${RESET}"
 	fi
+
+	echo
 }
 
 main() {
