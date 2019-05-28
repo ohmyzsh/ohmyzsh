@@ -12,14 +12,22 @@
 # You can tweak the install behavior by setting variables when running the script. For
 # example, to change the path to the Oh My Zsh repository:
 #   ZSH=~/.zsh sh install.sh
+#
 # Respects the following environment variables:
 #   ZSH     - path to the Oh My Zsh repository folder (default: $HOME/.oh-my-zsh)
 #   REPO    - name of the GitHub repo to install from (default: robbyrussell/oh-my-zsh)
 #   REMOTE  - full remote URL of the git repo to install (default: GitHub via HTTPS)
 #   BRANCH  - branch to check out immediately after install (default: master)
+#
 # Other options:
 #   CHSH    - 'no' means the installer will not change the default shell (default: yes)
 #   RUNZSH  - 'no' means the installer will not run zsh after the install (default: yes)
+#
+# You can also pass some arguments to the install script to set some these options:
+#   --skip-chsh: has the same behavior as setting CHSH to 'no'
+#   --unattended: sets both CHSH and RUNZSH to 'no'
+# For example:
+#   sh install.sh --unattended
 #
 set -e
 
@@ -178,6 +186,7 @@ setup_shell() {
 }
 
 main() {
+	# Run as unattended if stdin is closed
 	if [ ! -t 0 ]; then
 		RUNZSH=no
 		CHSH=no
@@ -186,7 +195,7 @@ main() {
 	# Parse arguments
 	while [ $# -gt 0 ]; do
 		case $1 in
-			--silent|--batch) RUNZSH=no; CHSH=no ;;
+			--unattended) RUNZSH=no; CHSH=no ;;
 			--skip-chsh) CHSH=no ;;
 		esac
 		shift
