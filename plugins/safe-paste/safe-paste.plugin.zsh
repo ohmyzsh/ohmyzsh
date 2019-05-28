@@ -19,9 +19,17 @@ bindkey -M paste -s '^M' '^J'
 
 zle -N _start_paste
 zle -N _end_paste
-zle -N zle-line-init _zle_line_init
-zle -N zle-line-finish _zle_line_finish
 zle -N paste-insert _paste_insert
+
+# Attempt to not clobber zle_line_{init,finish}
+# Use https://github.com/willghatch/zsh-hooks if available
+if typeset -f hooks-add-hook > /dev/null; then
+  hooks-add-hook zle_line_init_hook   _bracketed_paste_zle_init
+  hooks-add-hook zle_line_finish_hook _bracketed_paste_zle_finish
+else
+  zle -N zle-line-init   _bracketed_paste_zle_init
+  zle -N zle-line-finish _bracketed_paste_zle_finish
+fi
 
 # Switch the active keymap to paste mode
 function _start_paste() {
@@ -48,14 +56,14 @@ function _paste_insert() {
   _paste_content+=$KEYS
 }
 
-function _zle_line_init() {
+function _bracketed_paste_zle_init() {
   # Tell terminal to send escape codes around pastes
   if [ $TERM =~ '^(rxvt-unicode|xterm(-256color)?|screen(-256color)?)$' ]; then
     printf '\e[?2004h'
   fi
 }
 
-function _zle_line_finish() {
+function _bracketed_paste_zle_finish() {
   # Turn off bracketed paste when we leave ZLE, so pasting in other programs
   # doesn't get the ^[[200~ codes around the pasted text
   if [ $TERM =~ '^(rxvt-unicode|xterm(-256color)?|screen(-256color)?)$' ]; then
