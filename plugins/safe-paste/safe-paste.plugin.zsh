@@ -26,6 +26,8 @@ fi
 # Bracketed Paste Mode as documented:
 # https://www.xfree86.org/current/ctlseqs.html#Bracketed%20Paste%20Mode
 #
+# For tmux, use:   bind ] paste-buffer -p
+#
 # Additional technical details: https://cirw.in/blog/bracketed-paste
 
 # Create a new keymap to use while pasting
