@@ -51,6 +51,7 @@ if [[ $use_sudo -eq 1 ]]; then
     alias ac='sudo $apt_pref clean'
     alias ad='sudo $apt_pref update'
     alias adg='sudo $apt_pref update && sudo $apt_pref $apt_upgr'
+    alias alu='sudo $apt_pref update && sudo $apt_pref list -u && sudo $apt_pref $apt_upgr'
     alias adu='sudo $apt_pref update && sudo $apt_pref dist-upgrade'
     alias afu='sudo apt-file update'
     alias au='sudo $apt_pref $apt_upgr'
