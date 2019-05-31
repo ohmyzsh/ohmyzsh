@@ -31,7 +31,7 @@ alias api='aptitude'
 
 # Some self-explanatory aliases
 alias acs="apt-cache search"
-alias aps='aptitude search'
+alias aps='$apt_pref search'
 alias as="aptitude -F \"* %p -> %d \n(%v/%V)\" \
 		--no-gui --disable-columns search"	# search package
 
