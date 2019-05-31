@@ -33,11 +33,11 @@ alias api='aptitude'
 # Search for packages
 alias aps='$apt_pref search'
 
-# These are aptitude only
+# aptitude only
 alias as="aptitude -F \"* %p -> %d \n(%v/%V)\" \
         --no-gui --disable-columns search"  # search package
 
-# These are apt-get only
+# apt-get only
 alias asrc='apt-get source'
 alias acs='apt-cache search'
 alias app='apt-cache policy'
@@ -66,6 +66,7 @@ if [[ $use_sudo -eq 1 ]]; then
 
     # apt-get only
     alias ads='sudo apt-get dselect-upgrade'
+    alias aar='sudo apt-get autoremove'
 
     # Install all .deb files in the current directory.
     # Warning: you will need to put the glob in single quotes if you use:
