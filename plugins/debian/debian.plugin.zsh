@@ -2,6 +2,7 @@
 # https://github.com/AlexBio
 # https://github.com/dbb
 # https://github.com/Mappleconfusers
+# https://github.com/BjoernDaase
 #
 # Debian-related zsh aliases and functions for zsh
 
