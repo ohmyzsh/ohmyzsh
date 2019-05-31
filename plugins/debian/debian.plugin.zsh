@@ -30,19 +30,21 @@ fi
 alias age='apt-get'
 alias api='aptitude'
 
-# Some self-explanatory aliases
-alias acs="apt-cache search"
+# Search for packages
 alias aps='$apt_pref search'
+
+# These are aptitude only
 alias as="aptitude -F \"* %p -> %d \n(%v/%V)\" \
-		--no-gui --disable-columns search"	# search package
-
-# apt-file
-alias afs='apt-file search --regexp'
-
+        --no-gui --disable-columns search"  # search package
 
 # These are apt-get only
 alias asrc='apt-get source'
+alias acs='apt-cache search'
 alias app='apt-cache policy'
+
+
+# apt-file
+alias afs='apt-file search --regexp'
 
 # superuser operations ######################################################
 if [[ $use_sudo -eq 1 ]]; then
