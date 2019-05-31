@@ -67,6 +67,7 @@ if [[ $use_sudo -eq 1 ]]; then
     # apt-get only
     alias ads='sudo apt-get dselect-upgrade'
     alias aar='sudo apt-get autoremove'
+    alias alu='sudo apt-get update && apt list -u && sudo apt-get upgrade'
 
     # Install all .deb files in the current directory.
     # Warning: you will need to put the glob in single quotes if you use:
