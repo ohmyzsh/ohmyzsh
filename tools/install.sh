@@ -52,11 +52,7 @@ error() {
 
 # Set up color sequences
 setup_color() {
-	if command_exists tput; then
-		ncolors=$(tput colors)
-	else
-		ncolors=0
-	fi
+	ncolors=$(tput colors 2>/dev/null) || ncolors=0
 
 	# Only use colors if connected to a terminal that supports them
 	if [ -t 1 ] && [ $ncolors -ge 8 ]; then
