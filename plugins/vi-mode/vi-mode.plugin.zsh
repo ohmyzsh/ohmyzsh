@@ -23,11 +23,6 @@ bindkey -v
 bindkey -M vicmd '^J' vi-accept-line
 bindkey -M vicmd '^M' vi-accept-line
 
-# allow v to edit the command line (standard behaviour)
-autoload -Uz edit-command-line
-zle -N edit-command-line
-bindkey -M vicmd 'v' edit-command-line
-
 # allow ctrl-p, ctrl-n for navigate history (standard behaviour)
 bindkey '^P' up-history
 bindkey '^N' down-history
