@@ -38,7 +38,18 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/mas
 #### via wget
 
 ```shell
-sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+sh -c "$(wget -O- https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+```
+
+#### Manual inspection
+
+It's a good idea to inspect the install script from projects you don't yet know. You can do
+that by downloading the install script first, looking through it so everything looks normal,
+then running it:
+
+```shell
+curl -Lo install.sh https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh
+sh install.sh
 ```
 
 ## Using Oh My Zsh
@@ -68,6 +79,8 @@ plugins=(
   ruby
 )
 ```
+
+_Note that the plugins are separated by whitespace. **Do not** use commas between them._
 
 #### Using Plugins
 
@@ -124,16 +137,53 @@ If you're the type that likes to get their hands dirty, these sections might res
 
 ### Advanced Installation
 
-Some users may want to change the default path, or manually install Oh My Zsh.
+Some users may want to manually install Oh My Zsh, or change the default path or other settings that
+the installer accepts (these settings are also documented at the top of the install script).
 
 #### Custom Directory
 
 The default location is `~/.oh-my-zsh` (hidden in your home directory)
 
-If you'd like to change the install directory with the `ZSH` environment variable, either by running `export ZSH=/your/path` before installing, or by setting it before the end of the install pipeline like this:
+If you'd like to change the install directory with the `ZSH` environment variable, either by running
+`export ZSH=/your/path` before installing, or by setting it before the end of the install pipeline
+like this:
 
 ```shell
-export ZSH="$HOME/.dotfiles/oh-my-zsh"; sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+ZSH="$HOME/.dotfiles/oh-my-zsh" sh install.sh
+```
+
+#### Unattended install
+
+If you're running the Oh My Zsh install script as part of an automated install, you can pass the
+flag `--unattended` to the `install.sh` script. This will have the effect of not trying to change
+the default shell, and also won't run `zsh` when the installation has finished.
+
+```shell
+curl -Lo install.sh https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh
+sh install.sh --unattended
+```
+
+#### Installing from a forked repository
+
+The install script also accepts these variables to allow installation of a different repository:
+
+- `REPO` (default: `robbyrussell/oh-my-zsh`): this takes the form of `owner/repository`. If you set
+  this variable, the installer will look for a repository at `https://github.com/{owner}/{repository}`.
+
+- `REMOTE` (default: `https://github.com/${REPO}.git`): this is the full URL of the git repository
+  clone. You can use this setting if you want to install from a fork that is not on GitHub (GitLab,
+  Bitbucket...) or if you want to clone with SSH instead of HTTPS (`git@github.com:user/project.git`).
+
+  _NOTE: it's incompatible with setting the `REPO` variable. This setting will take precedence._
+
+- `BRANCH` (default: `master`): you can use this setting if you want to change the default branch to be
+  checked out when cloning the repository. This might be useful for testing a Pull Request, or if you
+  want to use a branch other than `master`.
+
+For example:
+
+```shell
+REPO=apjanke/oh-my-zsh BRANCH=edge sh install.sh
 ```
 
 #### Manual Installation
@@ -161,9 +211,10 @@ cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
 ##### 4. Change your default shell
 
 ```shell
-chsh -s /bin/zsh
+chsh -s $(which zsh)
 ```
-You must log out and log back in to see this change.
+
+You must log out from your user session and log back in to see this change.
 
 ##### 5. Initialize your new zsh configuration
 
@@ -173,8 +224,10 @@ Once you open up a new terminal window, it should load zsh with Oh My Zsh's conf
 
 If you have any hiccups installing, here are a few common fixes.
 
-* You _might_ need to modify your `PATH` in `~/.zshrc` if you're not able to find some commands after switching to `oh-my-zsh`.
-* If you installed manually or changed the install location, check the `ZSH` environment variable in `~/.zshrc`.
+* You _might_ need to modify your `PATH` in `~/.zshrc` if you're not able to find some commands after
+switching to `oh-my-zsh`.
+* If you installed manually or changed the install location, check the `ZSH` environment variable in
+`~/.zshrc`.
 
 ### Custom Plugins and Themes
 
