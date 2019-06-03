@@ -175,6 +175,7 @@ If you have any hiccups installing, here are a few common fixes.
 
 * You _might_ need to modify your `PATH` in `~/.zshrc` if you're not able to find some commands after switching to `oh-my-zsh`.
 * If you installed manually or changed the install location, check the `ZSH` environment variable in `~/.zshrc`.
+* If you encounter PAM authentification failure try this [workaround](https://askubuntu.com/questions/812420/chsh-always-asking-a-password-and-get-pam-authentication-failure).
 
 ### Custom Plugins and Themes
 
