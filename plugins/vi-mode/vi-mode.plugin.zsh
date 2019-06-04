@@ -1,3 +1,5 @@
+VI_KEYMAP=main
+
 # Updates editor information when the keymap changes.
 function zle-keymap-select() {
   # update keymap variable for the prompt
@@ -6,22 +8,22 @@ function zle-keymap-select() {
   zle reset-prompt
   zle -R
 }
-
 zle -N zle-keymap-select
 
-function vi-accept-line() {
+# These "echoti" statements were originally set in lib/key-bindings.zsh
+# Not sure the best way to extend without overriding.
+function zle-line-init() {
   VI_KEYMAP=main
-  zle accept-line
+  (( ! ${+terminfo[smkx]} )) || echoti smkx
 }
+zle -N zle-line-init
 
-zle -N vi-accept-line
-
+function zle-line-finish() {
+  (( ! ${+terminfo[rmkx]} )) || echoti rmkx
+}
+zle -N zle-line-finish
 
 bindkey -v
-
-# use custom accept-line widget to update $VI_KEYMAP
-bindkey -M vicmd '^J' vi-accept-line
-bindkey -M vicmd '^M' vi-accept-line
 
 # allow ctrl-p, ctrl-n for navigate history (standard behaviour)
 bindkey '^P' up-history
