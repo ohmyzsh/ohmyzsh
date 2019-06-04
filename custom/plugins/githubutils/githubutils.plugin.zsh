@@ -11,7 +11,8 @@ function gitCurrentBranch {
 alias gpr='gco master; git pull; gco -; git rebase master; git push --force-with-lease'
 
 function grebb { ## git rebase branch
-  git rebase -i $( git merge-base $( gitCurrentBranch ) master )
+  git rebase -i $( git merge-base $( gitCurrentBranch ) master );
+  git push --force;
 }
 
 function greba { ## git rebase all
@@ -20,6 +21,7 @@ function greba { ## git rebase all
   else;
     git rebase -i "master~$1";
   fi;
+  git push --force;
 }
 
 function githubutils {

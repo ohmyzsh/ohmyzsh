@@ -43,3 +43,30 @@ function workshare {
   echo "jwnc <regex pattern for files> - Run tests, watch and bail";
   echo "jwa <regex pattern for files> - Run all tests, watch and bail";
 }
+
+gcot () {
+  gco "$@";
+
+  BRANCH="$( echo "$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)" | tr '-' ' ' )";
+  ARR=(`echo ${BRANCH}`);
+  CODE=(`echo ${ARR[2]}`);
+  
+  t out;
+  t sheet workshare;
+  t in "WEB-$CODE";
+}
+
+cd () { 
+  builtin cd "$@"; 
+  cd_git_checker;
+
+  if [ -d .git ]; then
+    BRANCH="$( echo "$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)" | tr '-' ' ' )";
+    ARR=(`echo ${BRANCH}`);
+    CODE=(`echo ${ARR[2]}`);
+    
+    t out;
+    t sheet workshare;
+    t in "WEB-$CODE";
+  fi;
+}
