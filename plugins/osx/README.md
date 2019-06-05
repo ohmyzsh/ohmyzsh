@@ -59,3 +59,5 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 | `itunes`        | Control iTunes. Use `itunes -h` for usage details   |
 | `spotify`       | Control Spotify and search by artist, album, track… |
 | `rmdsstore`     | Remove .DS\_Store files recursively in a directory  |
+| `sshon`         | Enable ssh remote login                             |
+| `sshoff`        | Disable ssh remote login                            |
