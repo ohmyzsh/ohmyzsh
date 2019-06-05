@@ -336,3 +336,7 @@ alias hidefiles="defaults write com.apple.finder AppleShowAllFiles -bool false &
 function rmdsstore() {
 	find "${@:-.}" -type f -name .DS_Store -delete
 }
+
+# Enable / Disable ssh remote login
+alias sshon="systemsetup -setremotelogin on"
+alias sshoff="systemsetup -setremotelogin off"
