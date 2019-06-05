@@ -5,6 +5,13 @@ grep-flag-available() {
 
 GREP_OPTIONS=""
 
+# show line numbers in grep results
+if grep-flag-available --line-number; then
+    GREP_OPTIONS+=" --line-number"
+elif grep-flag-available -n; then
+    GREP_OPTIONS+=" -n"
+fi
+
 # color grep results
 if grep-flag-available --color=auto; then
     GREP_OPTIONS+=" --color=auto"
