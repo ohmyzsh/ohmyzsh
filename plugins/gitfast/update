@@ -1,7 +1,7 @@
 #!/bin/sh
 
 url="https://git.kernel.org/pub/scm/git/git.git/plain/contrib/completion"
-version="2.21.0"
+version="2.16.0"
 
 curl -s -o _git "${url}/git-completion.zsh?h=v${version}" &&
 curl -s -o git-completion.bash "${url}/git-completion.bash?h=v${version}" &&
