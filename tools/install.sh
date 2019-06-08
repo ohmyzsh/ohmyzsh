@@ -50,25 +50,22 @@ error() {
 	echo ${RED}"Error: $@"${RESET} >&2
 }
 
-# Set up color sequences
 setup_color() {
-	ncolors=$(tput colors 2>/dev/null) || ncolors=0
-
-	# Only use colors if connected to a terminal that supports them
-	if [ -t 1 ] && [ $ncolors -ge 8 ]; then
-		RED="$(tput setaf 1)"
-		GREEN="$(tput setaf 2)"
-		YELLOW="$(tput setaf 3)"
-		BLUE="$(tput setaf 4)"
-		BOLD="$(tput bold)"
-		RESET="$(tput sgr0)"
-	else
+	# Only use colors if connected to a terminal
+	if [ -t 1 ]; then
 		RED=$(printf '\033[31m')
 		GREEN=$(printf '\033[32m')
 		YELLOW=$(printf '\033[33m')
 		BLUE=$(printf '\033[34m')
 		BOLD=$(printf '\033[1m')
 		RESET=$(printf '\033[m')
+	else
+		RED=""
+		GREEN=""
+		YELLOW=""
+		BLUE=""
+		BOLD=""
+		RESET=""
 	fi
 }
 
