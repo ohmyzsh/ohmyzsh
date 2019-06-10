@@ -70,8 +70,8 @@ ZSH_THEME="astro"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
     git
-    git-prompt
     vi-mode
+    z
 )
 
 source $ZSH/oh-my-zsh.sh
