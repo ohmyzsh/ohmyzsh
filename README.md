@@ -1,3 +1,17 @@
+# oh my zsh
+
+## Install
+
+1. require `zsh curl git`
+
+1. oh-my-zsh
+
+```bash
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/snakewarhead/oh-my-zsh/master/tools/install.sh)"
+```
+
+---
+
 <p align="center">
   <img src="https://s3.amazonaws.com/ohmyzsh/oh-my-zsh-logo.png" alt="Oh My Zsh">
 </p>
