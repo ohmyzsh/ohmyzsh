@@ -71,7 +71,6 @@ ZSH_THEME="astro"
 plugins=(
     git
     vi-mode
-    autojump
 )
 
 source $ZSH/oh-my-zsh.sh
