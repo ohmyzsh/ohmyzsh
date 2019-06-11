@@ -12,5 +12,11 @@ alias kcd="kcuc"
 function lock(){
     /System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend
 }
+function reboot(){
+    sudo shutdown -r now
+}
 
 alias lk="lock"
+
+## golang code review
+alias glt="golangci-lint"
