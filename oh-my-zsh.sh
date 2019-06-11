@@ -47,7 +47,7 @@ for plugin ($plugins); do
     echo "[oh-my-zsh] plugin '$plugin' not found"
   fi
 done
-
+#Dig HostName
 # Figure out the SHORT hostname
 if [[ "$OSTYPE" = darwin* ]]; then
   # macOS's $HOST changes with dhcp, etc. Use ComputerName if possible.
