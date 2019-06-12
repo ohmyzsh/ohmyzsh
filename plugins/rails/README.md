@@ -66,7 +66,7 @@ plugins=(... rails)
 | `RET` | `RAILS_ENV=test`        | Sets `RAILS_ENV` to test        |
 
 These are global aliases. Use in combination with a command or just run them
-separately. For example: `RED rake db:migrate` will migrate the production db.
+separately. For example: `REP rake db:migrate` will migrate the production db.
 
 ### Legacy stuff
 
