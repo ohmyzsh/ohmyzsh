@@ -10,6 +10,19 @@
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/snakewarhead/oh-my-zsh/master/tools/install.sh)"
 ```
 
+## Issues
+
+[Can't set zsh as default shell](https://github.com/robbyrussell/oh-my-zsh/issues/5401#issuecomment-250828518)
+
+add code to `.bashrc` file to automatically start zsh:
+
+```bash
+if [[ $- == *i* ]]; then
+    export SHELL=zsh
+    zsh -l
+fi
+```
+
 ---
 
 <p align="center">
