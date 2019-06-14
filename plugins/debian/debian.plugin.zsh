@@ -61,6 +61,9 @@ if [[ $use_sudo -eq 1 ]]; then
     # apt-get only
     alias ads="sudo apt-get dselect-upgrade"
 
+    # apt only
+    alias alu="sudo apt update && apt list -u && sudo apt upgrade"
+
     # Install all .deb files in the current directory.
     # Warning: you will need to put the glob in single quotes if you use:
     # glob_subst
