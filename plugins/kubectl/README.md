@@ -96,3 +96,12 @@ plugins=(... kubectl)
 | kepvc   | `kubectl edit pvc`                  | Edit pvcs from the default editor                                                                |
 | kdpvc   | `kubectl describe pvc`              | Descirbe all pvcs                                                                                |
 | kdelpvc | `kubectl delete pvc`                | Delete all pvcs matching passed arguments                                                        |
+|         |                                     |                                                                                                  |
+| kgss    | `kubectl get statefulset`           | List the statefulsets in ps format                                                               |
+| kgssw   | `kgss --watch`                      | After getting the list of statefulsets, watch for changes                                        |
+| kgsswide| `kgss -o wide`                      | After getting the statefulsets, output in plain-text format with any additional information      |
+| kess    | `kubectl edit statefulset`          | Edit statefulset resource from the default editor                                                |
+| kdss    | `kubectl describe statefulset`      | Describe statefulset resource in detail                                                          |
+| kdelss  | `kubectl delete statefulset`        | Delete the statefulset                                                                           |
+| ksss    | `kubectl scale statefulset`         | Scale a statefulset                                                                              |
+| krsss   | `kubectl rollout status statefulset`| Check the rollout status of a deployment                                                         |
