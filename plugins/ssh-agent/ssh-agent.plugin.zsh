@@ -85,7 +85,9 @@ elif [[ -d $HOME/.ssh ]]; then
 	_start_agent
 fi
 
-_add_identities
+if ! zstyle -t :omz:plugins:ssh-agent lazy; then
+	_add_identities
+fi
 
 # tidy up after ourselves
 unset _agent_forwarding _ssh_env_cache
