@@ -19,42 +19,23 @@ alias hgca='hg commit --amend'
 # list unresolved files (since hg does not list unmerged files in the status command)
 alias hgun='hg resolve --list'
 
-function in_hg() {
-  if [[ -d .hg ]] || $(hg summary > /dev/null 2>&1); then
-    echo 1
-  fi
-}
-
-function hg_get_branch_name() {
-  if [ $(in_hg) ]; then
-    echo $(hg branch)
-  fi
-}
-
 function hg_prompt_info {
-  if [ $(in_hg) ]; then
-    _DISPLAY=$(hg_get_branch_name)
-    echo "$ZSH_PROMPT_BASE_COLOR$ZSH_THEME_HG_PROMPT_PREFIX\
-$ZSH_THEME_REPO_NAME_COLOR$_DISPLAY$ZSH_PROMPT_BASE_COLOR$ZSH_PROMPT_BASE_COLOR$(hg_dirty)$ZSH_THEME_HG_PROMPT_SUFFIX$ZSH_PROMPT_BASE_COLOR"
-    unset _DISPLAY
-  fi
-}
-
-function hg_dirty_choose {
-  if [ $(in_hg) ]; then
-    hg status 2> /dev/null | command grep -Eq '^\s*[ACDIM!?L]'
-    if [ $pipestatus[-1] -eq 0 ]; then
-      # Grep exits with 0 when "One or more lines were selected", return "dirty".
-      echo $1
+  _DISPLAY=$(hg id --id --branch 2>/dev/null)
+  if [ $_DISPLAY ]; then
+    _REV=$_DISPLAY[(w)1]
+    _BRANCH=$_DISPLAY[(w)2]
+    if [[ $_REV =~ "\+" ]]; then
+      _DIRTY=$ZSH_THEME_HG_PROMPT_DIRTY
     else
-      # Otherwise, no lines were found, or an error occurred. Return clean.
-      echo $2
+      _DIRTY=$ZSH_THEME_HG_PROMPT_CLEAN
     fi
+    echo "$ZSH_PROMPT_BASE_COLOR$ZSH_THEME_HG_PROMPT_PREFIX\
+$ZSH_THEME_REPO_NAME_COLOR$_BRANCH$ZSH_PROMPT_BASE_COLOR$ZSH_PROMPT_BASE_COLOR$_DIRTY$ZSH_THEME_HG_PROMPT_SUFFIX$ZSH_PROMPT_BASE_COLOR"
+    unset _REV
+    unset _BRANCH
+    unset _DIRTY
   fi
-}
-
-function hg_dirty {
-  hg_dirty_choose $ZSH_THEME_HG_PROMPT_DIRTY $ZSH_THEME_HG_PROMPT_CLEAN
+  unset _DISPLAY
 }
 
 function hgic() {
