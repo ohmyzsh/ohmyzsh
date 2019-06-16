@@ -35,12 +35,29 @@ function hg_get_branch_name() {
 }
 
 function hg_prompt_info {
-  _DISPLAY=`hg branch 2>/dev/null`
-  if [ $? -eq 0 ]; then
-    echo "$ZSH_PROMPT_BASE_COLOR$ZSH_THEME_HG_PROMPT_PREFIX\
-$ZSH_THEME_REPO_NAME_COLOR$_DISPLAY$ZSH_PROMPT_BASE_COLOR$ZSH_PROMPT_BASE_COLOR$(hg_dirty)$ZSH_THEME_HG_PROMPT_SUFFIX$ZSH_PROMPT_BASE_COLOR"
+  local info rev branch dirty
+
+  if ! info=$(hg id --id --branch 2>/dev/null); then
+    return
   fi
-  unset _DISPLAY
+
+  rev="${info[(w)1]}"
+  branch="${${info[(w)2]}:gs/%/%%}"
+
+  if [[ "$rev" = *+ ]]; then
+    dirty="$ZSH_THEME_HG_PROMPT_DIRTY"
+  else
+    dirty="$ZSH_THEME_HG_PROMPT_CLEAN"
+  fi
+
+  echo "${ZSH_PROMPT_BASE_COLOR}\
+${ZSH_THEME_HG_PROMPT_PREFIX}\
+${ZSH_THEME_REPO_NAME_COLOR}\
+${branch}\
+${ZSH_PROMPT_BASE_COLOR}\
+${dirty}\
+${ZSH_THEME_HG_PROMPT_SUFFIX}\
+${ZSH_PROMPT_BASE_COLOR}"
 }
 
 function hg_dirty_choose {
