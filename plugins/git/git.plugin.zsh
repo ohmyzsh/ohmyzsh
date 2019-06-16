@@ -188,6 +188,7 @@ alias gpf='git push --force-with-lease'
 alias gpf!='git push --force'
 alias gpoat='git push origin --all && git push origin --tags'
 alias gpu='git push upstream'
+alias gpt='git push --tags'
 alias gpv='git push -v'
 
 alias gr='git remote'
