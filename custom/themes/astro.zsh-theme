@@ -16,8 +16,8 @@ local ret_status="(?:%{$fg_bold[green]%}> :%{$fg_bold[red]%}> )"
 # VCS
 YS_VCS_PROMPT_PREFIX="%{$fg_bold[white]%}[%{$reset_color%}%{$fg_bold[cyan]%}"
 YS_VCS_PROMPT_SUFFIX="%{$reset_color%} "
-YS_VCS_PROMPT_DIRTY=" %{$fg[red]%}✗"
-YS_VCS_PROMPT_CLEAN=" %{$fg[green]%}●"
+YS_VCS_PROMPT_DIRTY=" %{$fg[red]%}X"
+YS_VCS_PROMPT_CLEAN=" %{$fg[green]%}O"
 
 # Git short sha
 local git_sha='$(git_prompt_short_sha)'
