@@ -1,9 +1,6 @@
 export GPG_TTY=$TTY
 
-gpg-connect-agent /bye &>/dev/null
-
-GNUPGCONFIG="${GNUPGHOME:-"$HOME/.gnupg"}/gpg-agent.conf"
-if [[ -r $GNUPGCONFIG ]] && command grep -q enable-ssh-support "$GNUPGCONFIG"; then
+if [[ -n $(gpgconf --list-options gpg-agent | awk -F: '$1=="enable-ssh-support" {print $10}') ]]; then
   unset SSH_AGENT_PID
   if [[ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]]; then
     export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
