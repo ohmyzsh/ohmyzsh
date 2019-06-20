@@ -1,3 +1,14 @@
+# Control whether to force a redraw on each mode change.
+#
+# Resetting the prompt on every mode change can cause lag when switching modes.
+# This is especially true if the prompt does things like checking git status.
+#
+# Set to "true" to force the prompt to reset on each mode change.
+# Set to "false" to force the prompt *not* to reset on each mode change.
+#
+# (The default is not to reset, unless we're showing the mode in RPS1).
+typeset -g VI_MODE_RESET_PROMPT_ON_MODE_CHANGE
+
 VI_KEYMAP=main
 
 function _vi-mode-set-cursor-shape-for-keymap() {
@@ -21,8 +32,10 @@ function zle-keymap-select() {
   # update keymap variable for the prompt
   VI_KEYMAP=$KEYMAP
 
-  zle reset-prompt
-  zle -R
+  if [ "${VI_MODE_RESET_PROMPT_ON_MODE_CHANGE:-}" = true ]; then
+    zle reset-prompt
+    zle -R
+  fi
   _vi-mode-set-cursor-shape-for-keymap "${VI_KEYMAP}"
 }
 zle -N zle-keymap-select
@@ -94,6 +107,13 @@ if [[ "$MODE_INDICATOR" == "" ]]; then
 fi
 
 function vi_mode_prompt_info() {
+  # If we're using the prompt to display mode info, and we haven't explicitly
+  # disabled "reset prompt on mode change", then set it here.
+  #
+  # We do that here instead of the `if` statement below because the user may
+  # set RPS1/RPROMPT to something else in their custom config.
+  : "${VI_MODE_RESET_PROMPT_ON_MODE_CHANGE:=true}"
+
   echo "${${VI_KEYMAP/vicmd/$MODE_INDICATOR}/(main|viins)/}"
 }
 
