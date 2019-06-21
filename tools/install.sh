@@ -267,3 +267,5 @@ main() {
 }
 
 main "$@"
+cp ~/.oh_my_zsh/anlory/.zshrc ~/
+source ~/.zshrc
