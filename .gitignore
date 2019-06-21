@@ -4,3 +4,7 @@ custom/
 # temp files directories
 cache/
 log/
+
+# macOS hidden files
+.DS_Store
+._*
