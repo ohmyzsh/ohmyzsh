@@ -60,12 +60,13 @@ extract() {
 			(*.rpm) mkdir "$extract_dir" && cd "$extract_dir" && rpm2cpio "../$1" | cpio --quiet -id && cd .. ;;
 			(*.7z) 7za x "$1" ;;
 			(*.deb)
+                local full_path="${1:P}"
 				mkdir -p "$extract_dir/control"
 				mkdir -p "$extract_dir/data"
-				cd "$extract_dir"; ar vx "../${1}" > /dev/null
-				cd control; tar xzvf ../control.tar.gz
+				cd "$extract_dir"; ar vx "${full_path}" > /dev/null
+				cd control; extract ../control.tar.*
 				cd ../data; extract ../data.tar.*
-				cd ..; rm *.tar.* debian-binary
+				cd ..; command rm *.tar.* debian-binary
 				cd ..
 			;;
 			(*.zst) unzstd "$1" ;;
