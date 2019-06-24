@@ -76,9 +76,15 @@ fi
 # Load all of the config files in ~/oh-my-zsh that end in .zsh
 # TIP: Add files you don't want in git to .gitignore
 for config_file ($ZSH/lib/*.zsh); do
-  custom_config_file="${ZSH_CUSTOM}/lib/${config_file:t}"
+  config_file_name=$(basename -- "$config_file")
+  config_file_name="${config_file_name%.*}"
+
+  if [ -z $excludeconfigs ] || [[ ${excludeconfigs[(ie)$config_file_name]} -gt ${#excludeconfigs} ]]
+  then
+    custom_config_file="${ZSH_CUSTOM}/lib/${config_file:t}"
   [ -f "${custom_config_file}" ] && config_file=${custom_config_file}
-  source $config_file
+    source $config_file
+  fi
 done
 
 # Load all of the plugins that were defined in ~/.zshrc
