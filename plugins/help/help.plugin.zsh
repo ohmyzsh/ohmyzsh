@@ -11,8 +11,8 @@ help-get-viewer() {
     else
         echo "No terminal Markdown viewer found." >&2
         echo "Please install 'mdless' or 'mdv'." >&2
-        echo "The standard pager 'less' is used for now." >&2
-        echo "less"
+        echo "The standard pager $PAGER is used for now." >&2
+        echo "cat"
     fi
 }
 
