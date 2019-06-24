@@ -34,4 +34,4 @@ alias mage2='n98-magerun2.phar'
 alias mage2fl='n98-magerun2.phar cache:flush'
 
 # Install n98-magerun2 into the current directory
-alias mage2-get='wget https://raw.github.com/netz98/n98-magerun2/master/n98-magerun2.phar'
+alias mage2-get='wget https://files.magerun.net/n98-magerun2.phar'
