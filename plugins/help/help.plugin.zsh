@@ -1,22 +1,24 @@
 help-get-viewer() {
-    if command -v mdless >/dev/null 2>&1
+    if command -v mdv >/dev/null 2>&1
     then
-        echo mdless
-    elif command -v mdv >/dev/null 2>&1
+        if [[ -z $MDV_THEME ]] && [[ -z $MDV_CODE_THEME ]]
+        then export MDV_THEME=785.6556
+        fi
+        echo "MDV_THEME= mdv"
+    elif command -v mdless >/dev/null 2>&1
     then
-        echo mdv
+        echo "mdless --no-pager"
     else
-        echo "No terminal Markdown viewer found."
-        echo "Please install 'mdless' or 'mdv'."
-        echo "The standard pager 'less' is used for now."
-        echo less
+        echo "No terminal Markdown viewer found." >&2
+        echo "Please install 'mdless' or 'mdv'." >&2
+        echo "The standard pager 'less' is used for now." >&2
+        echo "less"
     fi
 }
 
 help-plugin() {
     local plugin=$1
     local viewer=$(help-get-viewer)
-    viewer=mdless
 
     if [[ -z "$plugin" ]]
     then
@@ -28,7 +30,7 @@ help-plugin() {
     local readme="${ZSH}/plugins/${plugin}/README.md"
     if [[ -e "$readme" ]]
     then
-         "$viewer" "$readme" | less
+        eval "$viewer" "$readme" | "$PAGER"
     else
         echo "The plugin $plugin does not provide a README file."
         # TODO. Find zsh source file and cless this one.

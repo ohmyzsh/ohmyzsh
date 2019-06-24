@@ -5,9 +5,9 @@
 Get help for plugins right in the terminal.
 
 For example, type
-```
-help-plugin help
-```
+
+    help-plugin help
+
 to view this README.
 
 It is advised to install a terminal Markdown viewer, such as
