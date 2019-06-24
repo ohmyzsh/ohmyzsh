@@ -1,4 +1,3 @@
-# Get help for Yay aliases.
 help-get-viewer() {
     if command -v mdless >/dev/null 2>&1
     then
@@ -37,8 +36,6 @@ help-plugin() {
         return 1
     fi
 }
-
-alias help-yay="oh-my-zsh-plugins-help archlinux"
 
 function _help_plugin() {
     _describe 'help-plugin' plugins
