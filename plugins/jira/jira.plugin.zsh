@@ -65,7 +65,7 @@ function jira() {
     # but `branch` is a special case that will parse the current git branch
     if [[ "$action" == "branch" ]]; then
       local issue_arg=$(git rev-parse --abbrev-ref HEAD)
-      local issue="${jira_prefix}${issue_arg}"
+      local issue="${jira_prefix}${issue_arg##*/}"
     else
       local issue_arg=$action
       local issue="${jira_prefix}${issue_arg}"
@@ -77,11 +77,7 @@ function jira() {
     else
       echo "Opening issue #$issue"
     fi
-    if [[ "$JIRA_RAPID_BOARD" == "true" ]]; then
-      open_command "${jira_url}/issues/${issue}${url_fragment}"
-    else
-      open_command "${jira_url}/browse/${issue}${url_fragment}"
-    fi
+    open_command "${jira_url}/browse/${issue}${url_fragment}"
   fi
 }
 
