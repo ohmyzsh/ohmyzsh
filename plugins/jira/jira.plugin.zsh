@@ -67,7 +67,9 @@ function jira() {
     if [[ "$action" == "branch" ]]; then
       # Get name of the branch
       issue_arg=$(git rev-parse --abbrev-ref HEAD)
-      # Split by _ character and get the first element
+      # Strip prefixes like feature/ or bugfix/
+      issue_arg=${issue_arg##*/}
+      # Strip suffixes starting with _
       issue_arg=(${(s:_:)issue_arg})
       issue_arg=${issue_arg[1]}
       if [[ "$issue_arg" = ${jira_prefix}* ]]; then
@@ -87,11 +89,7 @@ function jira() {
     else
       echo "Opening issue #$issue"
     fi
-    if [[ "$JIRA_RAPID_BOARD" == "true" ]]; then
-      open_command "${jira_url}/issues/${issue}${url_fragment}"
-    else
-      open_command "${jira_url}/browse/${issue}${url_fragment}"
-    fi
+    open_command "${jira_url}/browse/${issue}${url_fragment}"
   fi
 }
 
