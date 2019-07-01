@@ -25,6 +25,7 @@
 #
 # You can also pass some arguments to the install script to set some these options:
 #   --skip-chsh: has the same behavior as setting CHSH to 'no'
+#   --skip-runzsh: has the same behavior as setting RUNZSH to 'no'
 #   --unattended: sets both CHSH and RUNZSH to 'no'
 # For example:
 #   sh install.sh --unattended
@@ -216,6 +217,7 @@ main() {
 		case $1 in
 			--unattended) RUNZSH=no; CHSH=no ;;
 			--skip-chsh) CHSH=no ;;
+			--skip-runzsh) RUNZSH=no ;;
 		esac
 		shift
 	done
