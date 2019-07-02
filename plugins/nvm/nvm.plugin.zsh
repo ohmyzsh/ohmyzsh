@@ -1,8 +1,12 @@
 # Set NVM_DIR if it isn't already defined
 [[ -z "$NVM_DIR" ]] && export NVM_DIR="$HOME/.nvm"
 
-# Try to load nvm only if command not already available
-if ! type "nvm" &> /dev/null; then
-    # Load nvm if it exists
-    [[ -f "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
-fi
+function load_nvm() {
+  [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"
+}
+
+# Initialize worker
+async_init
+async_start_worker nvm_worker -n
+async_register_callback nvm_worker load_nvm
+async_job nvm_worker sleep 0.1
