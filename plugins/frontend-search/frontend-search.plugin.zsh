@@ -65,7 +65,7 @@ function frontend() {
     nodejs         $(getSearchUrl 'nodejs.org/en/docs/')
     npmjs          'https://www.npmjs.com/search?q='
     qunit          'https://api.qunitjs.com/?s='
-    reactjs        $(getSearchUrl 'facebook.github.io/react')
+    reactjs        $(getSearchUrl 'reactjs.org/')
     smacss         $(getSearchUrl 'smacss.com')
     stackoverflow  'https://stackoverflow.com/search?q='
     typescript     $(getSearchUrl 'www.typescriptlang.org/docs')
