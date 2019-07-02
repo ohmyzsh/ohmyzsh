@@ -27,6 +27,16 @@ alias typescript='frontend typescript'
 alias unheap='frontend unheap'
 alias vuejs='frontend vuejs'
 
+function getSearchUrl() {
+  if [[ "$FRONTEND_SEARCH_FALLBACK_SEARCH_ENGINE" == 'duckduckgo' ]]; then
+    url="https://duckduckgo.com/?sites=$1&q="
+  else
+    url="https://google.com/search?as_sitesearch=$1&as_q="
+  fi
+
+  echo "$url"
+}
+
 function frontend() {
   emulate -L zsh
 
@@ -34,8 +44,8 @@ function frontend() {
   typeset -A urls
   urls=(
     angular        'https://angular.io/?search='
-    angularjs      'https://google.com/search?as_sitesearch=angularjs.org&as_q='
-    bem            'https://google.com/search?as_sitesearch=bem.info&as_q='
+    angularjs      $(getSearchUrl 'angularjs.org')
+    bem            $(getSearchUrl 'bem.info')
     bootsnipp      'https://bootsnipp.com/search?q='
     bundlephobia   'https://bundlephobia.com/result?p='
     caniuse        'https://caniuse.com/#search='
@@ -43,24 +53,24 @@ function frontend() {
     compassdoc     'http://compass-style.org/search?q='
     cssflow        'http://www.cssflow.com/search?q='
     dartlang       'https://api.dartlang.org/apidocs/channels/stable/dartdoc-viewer/dart:'
-    emberjs        'https://www.google.com/search?as_sitesearch=emberjs.com/&as_q='
-    flowtype       'https://google.com/search?as_sitesearch=flow.org/en/docs/&as_q='
+    emberjs        $(getSearchUrl 'emberjs.com/')
+    flowtype       $(getSearchUrl 'flow.org/en/docs/')
     fontello       'http://fontello.com/#search='
     github         'https://github.com/search?q='
     html5please    'https://html5please.com/#'
-    jestjs         'https://www.google.com/search?as_sitesearch=jestjs.io&as_q='
+    jestjs         $(getSearchUrl 'jestjs.io')
     jquery         'https://api.jquery.com/?s='
     lodash         'https://devdocs.io/lodash/index#'
     mdn            'https://developer.mozilla.org/search?q='
-    nodejs         'https://www.google.com/search?as_sitesearch=nodejs.org/en/docs/&as_q='
+    nodejs         $(getSearchUrl 'nodejs.org/en/docs/')
     npmjs          'https://www.npmjs.com/search?q='
     qunit          'https://api.qunitjs.com/?s='
-    reactjs        'https://google.com/search?as_sitesearch=facebook.github.io/react&as_q='
-    smacss         'https://google.com/search?as_sitesearch=smacss.com&as_q='
+    reactjs        $(getSearchUrl 'facebook.github.io/react')
+    smacss         $(getSearchUrl 'smacss.com')
     stackoverflow  'https://stackoverflow.com/search?q='
-    typescript     'https://google.com/search?as_sitesearch=www.typescriptlang.org/docs&as_q='
+    typescript     $(getSearchUrl 'www.typescriptlang.org/docs')
     unheap         'http://www.unheap.com/?s='
-    vuejs          'https://www.google.com/search?as_sitesearch=vuejs.org&as_q='
+    vuejs          $(getSearchUrl 'vuejs.org')
   )
 
   # show help for command list

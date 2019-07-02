@@ -62,6 +62,10 @@ Available search contexts are:
 
 If you want to have another context, open an Issue and tell us!
 
+## Changing the fallback search behaviour
+
+You can set the fallback search engine to DuckDuckGo by setting `FRONTEND_SEARCH_FALLBACK_SEARCH_ENGINE='duckduckgo'` in your `~/.zshrc` file.
+
 ## Author
 
 **Wilson Mendes (willmendesneto)**
