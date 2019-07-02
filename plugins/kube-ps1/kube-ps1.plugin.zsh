@@ -121,7 +121,7 @@ _kube_ps1_get_context_ns() {
   KUBE_PS1_LAST_TIME=$EPOCHSECONDS
 
   if [[ "${KUBE_PS1_EKS}" == true ]]; then
-    KUBE_PS1_CONTEXT="$(${KUBE_PS1_BINARY} config current-context | awk -F':' '{print $6}' | s    ed 's/cluster\///g' 2>/dev/null)"
+    KUBE_PS1_CONTEXT="$(${KUBE_PS1_BINARY} config current-context | awk -F':' '{print $6}' | sed 's/cluster\///g' 2>/dev/null)"
   else
     KUBE_PS1_CONTEXT="$(${KUBE_PS1_BINARY} config current-context 2>/dev/null)"
   fi
