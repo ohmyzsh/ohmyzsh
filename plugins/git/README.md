@@ -77,6 +77,7 @@ plugins=(... git)
 | ggpull               | git pull origin "$(git_current_branch)"                                                                                       |
 | ggpur                | ggu                                                                                                                           |
 | ggpush               | git push origin "$(git_current_branch)"                                                                                       |
+| ggpush!              | git push origin "$(git_current_branch)" --force                                                                              |
 | ggsup                | git branch --set-upstream-to=origin/$(git_current_branch)                                                                     |
 | ggu                  | git pull --rebase origin $(current_branch)                                                                                    |
 | gpsup                | git push --set-upstream origin $(git_current_branch)                                                                          |
