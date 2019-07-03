@@ -72,6 +72,7 @@ plugins=(
     git
     vi-mode
     history
+    history-substring-search
 )
 
 source $ZSH/oh-my-zsh.sh
