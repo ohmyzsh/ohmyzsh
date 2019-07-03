@@ -5,6 +5,7 @@
 
 ```shell
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/anlory/oh-my-zsh/master/tools/install.sh)"
+git config --add oh-my-zsh.hide-status 1 //去除git状态提示，解决进入git目录卡顿
 ```
 
 
