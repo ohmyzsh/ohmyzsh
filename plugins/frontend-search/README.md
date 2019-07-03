@@ -62,9 +62,9 @@ Available search contexts are:
 
 If you want to have another context, open an Issue and tell us!
 
-## Changing the fallback search behaviour
+## Fallback search behaviour
 
-You can set the fallback search engine to DuckDuckGo by setting `FRONTEND_SEARCH_FALLBACK_SEARCH_ENGINE='duckduckgo'` in your `~/.zshrc` file.
+The plugin will use Google as a fallback if the docs site for a search context does not have a search function. You can set the fallback search engine to DuckDuckGo by setting  `FRONTEND_SEARCH_FALLBACK_SEARCH_ENGINE='duckduckgo'` in your `~/.zshrc` file.
 
 ## Author
 
