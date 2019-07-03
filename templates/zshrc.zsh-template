@@ -92,6 +92,9 @@ source $ZSH/oh-my-zsh.sh
 #fi
 export EDITOR='vim'
 
+# Custom profile
+source ~/.zshrc_custom
+
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
