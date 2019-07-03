@@ -71,6 +71,7 @@ ZSH_THEME="astro"
 plugins=(
     git
     vi-mode
+    history
 )
 
 source $ZSH/oh-my-zsh.sh
