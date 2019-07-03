@@ -24,15 +24,15 @@ printf "${BLUE}%s${NORMAL}\n" "Updating Oh My Zsh"
 cd "$ZSH"
 if git pull --rebase --stat origin master
 then
-#  printf "\n${BLUE}%s\n" "update .zshrc"
-#
-#  cp "$ZSH/templates/zshrc.zsh-template" ~/.zshrc
-#	sed "/^export ZSH=/ c\\
-#export ZSH=\"$ZSH\"
-#" ~/.zshrc > ~/.zshrc-omztemp
-#	mv -f ~/.zshrc-omztemp ~/.zshrc
-#
-#  printf "%s\n" "update .zshrc end"
+  printf "\n${BLUE}%s\n" "update .zshrc"
+
+  cp "$ZSH/templates/zshrc.zsh-template" ~/.zshrc
+    sed "/^export ZSH=/ c\\
+export ZSH=\"$ZSH\"
+" ~/.zshrc > ~/.zshrc-omztemp
+    mv -f ~/.zshrc-omztemp ~/.zshrc
+
+  printf "%s\n" "update .zshrc end"
 
   printf '%s' "$GREEN"
   printf '%s\n' '         __                                     __   '
