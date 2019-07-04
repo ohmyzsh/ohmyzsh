@@ -3,7 +3,9 @@ function zle-line-init zle-keymap-select() {
   # update keymap variable for the prompt
   VI_KEYMAP=$KEYMAP
 
-  echoti smkx
+  if (( ${+terminfo[smkx]} )); then
+    echoti smkx
+  fi
   zle reset-prompt
   zle -R
 }
