@@ -27,14 +27,14 @@ bindkey -v
 bindkey -M vicmd '^J' vi-accept-line
 bindkey -M vicmd '^M' vi-accept-line
 
-# allow v to edit the command line (standard behaviour)
+# allow ctrl-v to edit the command line (standard behaviour)
 autoload -Uz edit-command-line
 zle -N edit-command-line
-bindkey -M vicmd 'v' edit-command-line
+bindkey -M vicmd '^V' edit-command-line
 
-# allow ctrl-p, ctrl-n for navigate history (standard behaviour)
-bindkey '^P' up-history
-bindkey '^N' down-history
+# allow ctrl-p, ctrl-n for navigate history and fuzzy find history
+bindkey '^P' up-line-or-beginning-search
+bindkey '^N' down-line-or-beginning-search
 
 # allow ctrl-h, ctrl-w, ctrl-? for char and word deletion (standard behaviour)
 bindkey '^?' backward-delete-char
@@ -58,6 +58,11 @@ if [[ "${terminfo[kend]}" != "" ]]; then
 fi
 if [[ "${terminfo[kdch1]}" != "" ]]; then
   bindkey -M vicmd "${terminfo[kdch1]}" delete-char            # [Delete] - delete forward
+fi
+
+# allow reverse menu complete
+if [[ "${terminfo[kcbt]}" != "" ]]; then
+  bindkey "${terminfo[kcbt]}" reverse-menu-complete   # [Shift-Tab] - move through the completion menu backwards
 fi
 
 # if mode indicator wasn't setup by theme, define default
