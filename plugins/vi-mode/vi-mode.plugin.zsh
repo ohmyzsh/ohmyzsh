@@ -1,12 +1,14 @@
 # Updates editor information when the keymap changes.
-function zle-keymap-select() {
+function zle-line-init zle-keymap-select() {
   # update keymap variable for the prompt
   VI_KEYMAP=$KEYMAP
 
+  echoti smkx
   zle reset-prompt
   zle -R
 }
 
+zle -N zle-line-init
 zle -N zle-keymap-select
 
 function vi-accept-line() {
@@ -44,6 +46,17 @@ bindkey '^s' history-incremental-search-forward
 # allow ctrl-a and ctrl-e to move to beginning/end of line
 bindkey '^a' beginning-of-line
 bindkey '^e' end-of-line
+
+# allow delete, home and end keys to work in normal mode as a default behaviour
+if [[ "${terminfo[khome]}" != "" ]]; then
+  bindkey -M vicmd "${terminfo[khome]}" beginning-of-line      # [Home] - Go to beginning of line
+fi
+if [[ "${terminfo[kend]}" != "" ]]; then
+  bindkey -M vicmd "${terminfo[kend]}"  end-of-line            # [End] - Go to end of line
+fi
+if [[ "${terminfo[kdch1]}" != "" ]]; then
+  bindkey -M vicmd "${terminfo[kdch1]}" delete-char            # [Delete] - delete forward
+fi
 
 # if mode indicator wasn't setup by theme, define default
 if [[ "$MODE_INDICATOR" == "" ]]; then
