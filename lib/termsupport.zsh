@@ -72,19 +72,22 @@ function omz_termsupport_preexec {
   local CMD=${1[(wr)^(*=*|sudo|ssh|mosh|rake|-*)]:gs/%/%%}
   local LINE="${2:gs/%/%%}"
 
+  # replace fg, possibly with argument, with description from jobs
   if [[ "$CMD" = fg ]]; then
-    # replace fg, possibly with argument, with description from jobs
     local JOB
     if [[ ${(z)1} = fg ]]; then # no arguments
-      JOB="$(jobs %%)"
+      JOB="$(jobs %% 2>/dev/null)"
     else # arguments
-      JOB="$(jobs ${${(z)1}[2]})"
+      JOB="$(jobs ${${(z)1}[2]} 2>/dev/null)"
     fi
-    JOB="${${(z)JOB}[4,$]}" # trim job number, +, pid, status
-    title ${JOB:gs/%/%%} ${JOB:gs/%/%%}
-  else
-    title '$CMD' '%100>...>$LINE%<<'
+    if [[ $? -eq 0 ]]; then
+      JOB="${${(z)JOB}[4,$]}" # trim job number, +, pid, status
+      title ${JOB:gs/%/%%} ${JOB:gs/%/%%}
+      return
+    fi
   fi
+
+  title '$CMD' '%100>...>$LINE%<<'
 }
 
 precmd_functions+=(omz_termsupport_precmd)
