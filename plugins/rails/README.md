@@ -18,7 +18,7 @@ plugins=(... rails)
 | `rcs` | `rails console --sandbox`  | Test code in a sandbox, without changing any data  |
 | `rd`  | `rails destroy`            | Undo a generate operation                          |
 | `rdb` | `rails dbconsole`          | Interact with your db from the console             |
-| `rg`  | `rails generate`           | Generate boilerplate code                          |
+| `rgen`  | `rails generate`           | Generate boilerplate code                          |
 | `rgm` | `rails generate migration` | Generate a db migration                            |
 | `rp`  | `rails plugin`             | Run a Rails plugin command                         |
 | `ru`  | `rails runner`             | Run Ruby code in the context of Rails              |
@@ -66,7 +66,7 @@ plugins=(... rails)
 | `RET` | `RAILS_ENV=test`        | Sets `RAILS_ENV` to test        |
 
 These are global aliases. Use in combination with a command or just run them
-separately. For example: `RED rake db:migrate` will migrate the production db.
+separately. For example: `REP rake db:migrate` will migrate the production db.
 
 ### Legacy stuff
 

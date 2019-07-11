@@ -29,15 +29,6 @@ if [[ -z "$ZSH_CUSTOM" ]]; then
 fi
 
 
-# Load all of the config files in ~/oh-my-zsh that end in .zsh
-# TIP: Add files you don't want in git to .gitignore
-for config_file ($ZSH/lib/*.zsh); do
-  custom_config_file="${ZSH_CUSTOM}/lib/${config_file:t}"
-  [ -f "${custom_config_file}" ] && config_file=${custom_config_file}
-  source $config_file
-done
-
-
 is_plugin() {
   local base_dir=$1
   local name=$2
@@ -71,6 +62,7 @@ if [ -z "$ZSH_COMPDUMP" ]; then
 fi
 
 if [[ $ZSH_DISABLE_COMPFIX != true ]]; then
+  source $ZSH/lib/compfix.zsh
   # If completion insecurities exist, warn the user
   handle_completion_insecurities
   # Load only from secure directories
@@ -79,6 +71,15 @@ else
   # If the user wants it, load from all found directories
   compinit -u -C -d "${ZSH_COMPDUMP}"
 fi
+
+
+# Load all of the config files in ~/oh-my-zsh that end in .zsh
+# TIP: Add files you don't want in git to .gitignore
+for config_file ($ZSH/lib/*.zsh); do
+  custom_config_file="${ZSH_CUSTOM}/lib/${config_file:t}"
+  [ -f "${custom_config_file}" ] && config_file=${custom_config_file}
+  source $config_file
+done
 
 # Load all of the plugins that were defined in ~/.zshrc
 for plugin ($plugins); do

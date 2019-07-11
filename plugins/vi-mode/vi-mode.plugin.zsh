@@ -8,13 +8,24 @@ function zle-keymap-select() {
 }
 
 zle -N zle-keymap-select
-zle -N edit-command-line
+
+function vi-accept-line() {
+  VI_KEYMAP=main
+  zle accept-line
+}
+
+zle -N vi-accept-line
 
 
 bindkey -v
 
+# use custom accept-line widget to update $VI_KEYMAP
+bindkey -M vicmd '^J' vi-accept-line
+bindkey -M vicmd '^M' vi-accept-line
+
 # allow v to edit the command line (standard behaviour)
 autoload -Uz edit-command-line
+zle -N edit-command-line
 bindkey -M vicmd 'v' edit-command-line
 
 # allow ctrl-p, ctrl-n for navigate history (standard behaviour)

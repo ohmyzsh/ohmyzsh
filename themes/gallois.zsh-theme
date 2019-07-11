@@ -14,8 +14,8 @@ git_custom_status() {
 }
 
 # RVM component of prompt
-ZSH_THEME_RVM_PROMPT_PREFIX="%{$fg[red]%}["
-ZSH_THEME_RVM_PROMPT_SUFFIX="]%{$reset_color%}"
+ZSH_THEME_RUBY_PROMPT_PREFIX="%{$fg[red]%}["
+ZSH_THEME_RUBY_PROMPT_SUFFIX="]%{$reset_color%}"
 
 # Combine it all into a final right-side prompt
 RPS1='$(git_custom_status)$(ruby_prompt_info) $EPS1'

@@ -29,6 +29,7 @@ zsh-pip-cache-packages() {
   if [[ ! -f $ZSH_PIP_CACHE_FILE ]]; then
       echo -n "(...caching package index...)"
       tmp_cache=/tmp/zsh_tmp_cache
+      touch $tmp_cache
       for index in $ZSH_PIP_INDEXES ; do
           # well... I've already got two problems
           curl -L $index 2>/dev/null | \

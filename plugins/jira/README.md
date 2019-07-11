@@ -21,6 +21,7 @@ jira new        # opens a new issue
 jira dashboard  # opens your JIRA dashboard
 jira reported [username]  # queries for issues reported by a user
 jira assigned [username]  # queries for issues assigned to a user
+jira myissues   # queries for you own issues
 jira branch     # opens an existing issue matching the current branch name
 jira ABC-123    # opens an existing issue
 jira ABC-123 m  # opens an existing issue for adding a comment

@@ -1,7 +1,3 @@
-# Query/use custom command for `git`.
-zstyle -s ":vcs_info:git:*:-all-" "command" _omz_git_git_cmd
-: ${_omz_git_git_cmd:=git}
-
 #
 # Functions
 #
@@ -13,19 +9,15 @@ zstyle -s ":vcs_info:git:*:-all-" "command" _omz_git_git_cmd
 function current_branch() {
   git_current_branch
 }
-# The list of remotes
-function current_repository() {
-  if ! $_omz_git_git_cmd rev-parse --is-inside-work-tree &> /dev/null; then
-    return
-  fi
-  echo $($_omz_git_git_cmd remote -v | cut -d':' -f 2)
-}
+
 # Pretty log messages
 function _git_log_prettily(){
   if ! [ -z $1 ]; then
     git log --pretty=$1
   fi
 }
+compdef _git _git_log_prettily=git-log
+
 # Warn if the current branch is a WIP
 function work_in_progress() {
   if $(git log -n 1 2>/dev/null | grep -q -c "\-\-wip\-\-"); then
@@ -80,7 +72,6 @@ alias gcd='git checkout develop'
 alias gcmsg='git commit -m'
 alias gco='git checkout'
 alias gcount='git shortlog -sn'
-compdef _git gcount
 alias gcp='git cherry-pick'
 alias gcpa='git cherry-pick --abort'
 alias gcpc='git cherry-pick --continue'
@@ -89,35 +80,35 @@ alias gcs='git commit -S'
 alias gd='git diff'
 alias gdca='git diff --cached'
 alias gdcw='git diff --cached --word-diff'
-alias gdct='git describe --tags `git rev-list --tags --max-count=1`'
+alias gdct='git describe --tags $(git rev-list --tags --max-count=1)'
 alias gds='git diff --staged'
 alias gdt='git diff-tree --no-commit-id --name-only -r'
 alias gdw='git diff --word-diff'
 
-gdv() { git diff -w "$@" | view - }
+function gdv() { git diff -w "$@" | view - }
 compdef _git gdv=git-diff
 
 alias gf='git fetch'
 alias gfa='git fetch --all --prune'
 alias gfo='git fetch origin'
 
-function gfg() { git ls-files | grep $@ }
-compdef _grep gfg
+alias gfg='git ls-files | grep'
 
 alias gg='git gui citool'
 alias gga='git gui citool --amend'
 
-ggf() {
+function ggf() {
   [[ "$#" != 1 ]] && local b="$(git_current_branch)"
   git push --force origin "${b:=$1}"
 }
-ggfl() {
+compdef _git ggf=git-checkout
+function ggfl() {
   [[ "$#" != 1 ]] && local b="$(git_current_branch)"
   git push --force-with-lease origin "${b:=$1}"
 }
-compdef _git ggf=git-checkout
+compdef _git ggfl=git-checkout
 
-ggl() {
+function ggl() {
   if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
     git pull origin "${*}"
   else
@@ -127,7 +118,7 @@ ggl() {
 }
 compdef _git ggl=git-checkout
 
-ggp() {
+function ggp() {
   if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
     git push origin "${*}"
   else
@@ -137,7 +128,7 @@ ggp() {
 }
 compdef _git ggp=git-checkout
 
-ggpnp() {
+function ggpnp() {
   if [[ "$#" == 0 ]]; then
     ggl && ggp
   else
@@ -146,20 +137,15 @@ ggpnp() {
 }
 compdef _git ggpnp=git-checkout
 
-ggu() {
+function ggu() {
   [[ "$#" != 1 ]] && local b="$(git_current_branch)"
   git pull --rebase origin "${b:=$1}"
 }
 compdef _git ggu=git-checkout
 
 alias ggpur='ggu'
-compdef _git ggpur=git-checkout
-
 alias ggpull='git pull origin "$(git_current_branch)"'
-compdef _git ggpull=git-checkout
-
 alias ggpush='git push origin "$(git_current_branch)"'
-compdef _git ggpush=git-checkout
 
 alias ggsup='git branch --set-upstream-to=origin/$(git_current_branch)'
 alias gpsup='git push --set-upstream origin $(git_current_branch)'
@@ -169,12 +155,9 @@ alias ghh='git help'
 alias gignore='git update-index --assume-unchanged'
 alias gignored='git ls-files -v | grep "^[[:lower:]]"'
 alias git-svn-dcommit-push='git svn dcommit && git push github master:svntrunk'
-compdef _git git-svn-dcommit-push=git
 
 alias gk='\gitk --all --branches'
-compdef _git gk='gitk'
 alias gke='\gitk --all $(git log -g --pretty=%h)'
-compdef _git gke='gitk'
 
 alias gl='git pull'
 alias glg='git log --stat'
@@ -191,7 +174,6 @@ alias glola="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgr
 alias glog='git log --oneline --decorate --graph'
 alias gloga='git log --oneline --decorate --graph --all'
 alias glp="_git_log_prettily"
-compdef _git glp=git-log
 
 alias gm='git merge'
 alias gmom='git merge origin/master'
@@ -205,7 +187,6 @@ alias gpd='git push --dry-run'
 alias gpf='git push --force-with-lease'
 alias gpf!='git push --force'
 alias gpoat='git push origin --all && git push origin --tags'
-compdef _git gpoat=git-push
 alias gpu='git push upstream'
 alias gpv='git push -v'
 
@@ -218,6 +199,7 @@ alias grbd='git rebase develop'
 alias grbi='git rebase -i'
 alias grbm='git rebase master'
 alias grbs='git rebase --skip'
+alias grev='git revert'
 alias grh='git reset'
 alias grhh='git reset --hard'
 alias groh='git reset origin/$(git_current_branch) --hard'
