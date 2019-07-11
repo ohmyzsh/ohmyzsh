@@ -123,6 +123,7 @@ plugins=(... git)
 | grbi                 | git rebase -i                                                                                                                 |
 | grbm                 | git rebase master                                                                                                             |
 | grbs                 | git rebase --skip                                                                                                             |
+| grev                 | git revert                                                                                                                   |
 | grh                  | git reset                                                                                                                     |
 | grhh                 | git reset --hard                                                                                                              |
 | groh                 | git reset origin/$(git_current_branch) --hard                                                                                 |
