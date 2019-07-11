@@ -159,19 +159,13 @@ _gradle_tasks () {
   if [[ -f build.gradle || -f build.gradle.kts || -f settings.gradle || -f settings.gradle.kts ]]; then
     _gradle_arguments
     if _gradle_does_task_list_need_generating; then
-      _gradle_parse_and_extract_tasks "$(gradle tasks --all)" > .gradletasknamecache
+      if [[ -f ./gradlew ]] ; then
+        _gradle_parse_and_extract_tasks "$(./gradlew tasks --all)" > .gradletasknamecache
+      else
+        _gradle_parse_and_extract_tasks "$(gradle tasks --all)" > .gradletasknamecache
+      fi
     fi
     compadd -X "==== Gradle Tasks ====" $(cat .gradletasknamecache)
-  fi
-}
-
-_gradlew_tasks () {
-  if [[ -f build.gradle || -f build.gradle.kts || -f settings.gradle || -f settings.gradle.kts ]]; then
-    _gradle_arguments
-    if _gradle_does_task_list_need_generating; then
-      _gradle_parse_and_extract_tasks "$(./gradlew tasks --all)" > .gradletasknamecache
-    fi
-    compadd -X "==== Gradlew Tasks ====" $(cat .gradletasknamecache)
   fi
 }
 
@@ -180,4 +174,5 @@ _gradlew_tasks () {
 # Register the completions against the gradle and gradlew commands
 ############################################################################
 compdef _gradle_tasks gradle
-compdef _gradlew_tasks gradlew
+compdef _gradle_tasks gradlew
+compdef _gradle_tasks gradle-or-gradlew
