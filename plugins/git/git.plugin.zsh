@@ -193,6 +193,7 @@ alias gmt='git mergetool --no-prompt'
 alias gmtvim='git mergetool --no-prompt --tool=vimdiff'
 alias gmum='git merge upstream/master'
 alias gma='git merge --abort'
+alias gmlm='LATEST_BRANCH=$(git rev-parse --abbrev-ref HEAD) ; gcm ; ggpull ; gco $LATEST_BRANCH ; unset LATEST_BRANCH ; gm master --no-edit'
 
 alias gp='git push'
 alias gpd='git push --dry-run'
