@@ -53,7 +53,8 @@ esac
   # what font the user is viewing this source code in. Do not replace the
   # escape sequence with a single literal character.
   # Do not change this! Do not make it '\u2b80'; that is the old, wrong code point.
-  SEGMENT_SEPARATOR=$'\ue0b0'
+  # SEGMENT_SEPARATOR=$'\ue0b0'
+  SEGMENT_SEPARATOR=$'\u2656'
   SEGMENT_SEPARATOR_MID=''
 }
 
@@ -85,7 +86,7 @@ prompt_end() {
 }
 
 ### for geting more git status details
-source /home/gnaddaf/src/zsh-git-prompt/zshrc.sh
+source /Users/gshirazi/src/oh-my-zsh/plugins/zsh-git-prompt/zshrc.sh
 
 ### Prompt components
 # Each component will draw itself, and hide itself if no information needs to be shown
@@ -121,7 +122,7 @@ prompt_git() {
       prompt_segment yellow red
     fi
 
-    # from /home/gnaddaf/src/zsh-git-prompt/zshrc.sh
+    # from zsh-git-prompt/zshrc.sh
     precmd_update_git_vars
     if [ -n "$__CURRENT_GIT_STATUS" ]; then
       if [ "$GIT_CHANGED" -ne "0" ]; then
@@ -137,16 +138,16 @@ prompt_git() {
         mode+=" %{%F{black}$ZSH_THEME_GIT_PROMPT_AHEAD$GIT_AHEAD%f%}"
       fi
       if [ "$GIT_CONFLICTS" -ne "0" ]; then
-		    mode+=" $ZSH_THEME_GIT_PROMPT_CONFLICTS$GIT_CONFLICTS"
+    		    mode+=" $ZSH_THEME_GIT_PROMPT_CONFLICTS$GIT_CONFLICTS"
       fi
       if [ "$GIT_UNTRACKED" -ne "0" ]; then
         mode+=" %{%F{black}$ZSH_THEME_GIT_PROMPT_UNTRACKED$GIT_UNTRACKED%f%}"
       fi
       if [ "$GIT_CHANGED" -eq "0" ] && [ "$GIT_CONFLICTS" -eq "0" ] && [ "$GIT_STAGED" -eq "0" ] && [ "$GIT_UNTRACKED" -eq "0" ]; then
-        mode+=" %{%F{green}\u2691%f%}"
+        mode+=" %{%F{blue}\u2691%f%}"
       fi
-    fi
-    # end from /home/gnaddaf/src/zsh-git-prompt/zshrc.sh
+     fi
+    # end from zsh-git-prompt/zshrc.sh
 
     if [[ -e "${repo_path}/BISECT_LOG" ]]; then
       mode+=" <B>"
@@ -233,7 +234,7 @@ prompt_hg() {
 # Dir: current working directory
 prompt_dir() {
 #  prompt_segment blue black '%~'
-  prompt_segment  grey blue '%3~'
+  prompt_segment  grey cyan '%3~'
 }
 
 # Virtualenv: current working virtualenv
