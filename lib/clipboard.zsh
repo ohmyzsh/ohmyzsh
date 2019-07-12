@@ -17,32 +17,17 @@
 #
 function clipcopy() {
   emulate -L zsh
-  local file=$1
+  local file="${1:-/dev/stdin}"
+
   if [[ $OSTYPE == darwin* ]]; then
-    if [[ -z $file ]]; then
-      pbcopy
-    else
-      cat $file | pbcopy
-    fi
+    pbcopy < "${file}"
   elif [[ $OSTYPE == cygwin* ]]; then
-    if [[ -z $file ]]; then
-      cat > /dev/clipboard
-    else
-      cat $file > /dev/clipboard
-    fi
+    cat "${file}" > /dev/clipboard
   else
     if (( $+commands[xclip] )); then
-      if [[ -z $file ]]; then
-        xclip -in -selection clipboard
-      else
-        xclip -in -selection clipboard $file
-      fi
+      xclip -in -selection clipboard < "${file}"
     elif (( $+commands[xsel] )); then
-      if [[ -z $file ]]; then
-        xsel --clipboard --input 
-      else
-        cat "$file" | xsel --clipboard --input
-      fi
+      xsel --clipboard --input  < "${file}"
     else
       print "clipcopy: Platform $OSTYPE not supported or xclip/xsel not installed" >&2
       return 1
