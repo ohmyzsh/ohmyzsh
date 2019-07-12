@@ -15,26 +15,9 @@
 #
 #  clipcopy <file>         - copies a file's contents to clipboard
 #
-function clipcopy() {
-  emulate -L zsh
-  local file="${1:-/dev/stdin}"
-
-  if [[ $OSTYPE == darwin* ]]; then
-    pbcopy < "${file}"
-  elif [[ $OSTYPE == cygwin* ]]; then
-    cat "${file}" > /dev/clipboard
-  else
-    if (( $+commands[xclip] )); then
-      xclip -in -selection clipboard < "${file}"
-    elif (( $+commands[xsel] )); then
-      xsel --clipboard --input  < "${file}"
-    else
-      print "clipcopy: Platform $OSTYPE not supported or xclip/xsel not installed" >&2
-      return 1
-    fi
-  fi
-}
-
+#
+##
+#
 # clippaste - "Paste" data from clipboard to stdout
 #
 # Usage:
@@ -52,20 +35,40 @@ function clipcopy() {
 #
 #   # Paste to a file
 #   clippaste > file.txt
-function clippaste() {
+#
+function detect-clipboard() {
   emulate -L zsh
+
   if [[ $OSTYPE == darwin* ]]; then
-    pbpaste
+    function clipcopy() { pbcopy < "${1:-/dev/stdin}"; }
+    function clippaste() { pbpaste; }
   elif [[ $OSTYPE == cygwin* ]]; then
-    cat /dev/clipboard
+    function clipcopy() { cat "${1:-/dev/stdin}" > /dev/clipboard; }
+    function clippaste() { cat /dev/clipboard; }
+  elif (( $+commands[xclip] )); then
+    function clipcopy() { xclip -in -selection clipboard < "${1:-/dev/stdin}"; }
+    function clippaste() { xclip -out -selection clipboard; }
+  elif (( $+commands[xsel] )); then
+    function clipcopy() { xsel --clipboard --input  < "${1:-/dev/stdin}"; }
+    function clippaste() { xsel --clipboard --output; }
   else
-    if (( $+commands[xclip] )); then
-      xclip -out -selection clipboard
-    elif (( $+commands[xsel] )); then
-      xsel --clipboard --output
-    else
-      print "clipcopy: Platform $OSTYPE not supported or xclip/xsel not installed" >&2
-      return 1
-    fi
+    function _retry_clipboard_detection_or_fail() {
+      local clipcmd="${1}"; shift
+      if detect-clipboard; then
+        "${clipcmd}" "$@"
+      else
+        print "${clipcmd}: Platform $OSTYPE not supported or xclip/xsel not installed" >&2
+        return 1
+      fi
+    }
+    function clipcopy() { _retry_clipboard_detection_or_fail clipcopy "$@"; }
+    function cilppaste() { _retry_clipboard_detection_or_fail clippaste "$@"; }
+    return 1
   fi
 }
+
+# Detect at startup. A non-zero exit here indicates that the dummy clipboards were set,
+# which is not really an error. If the user calls them, they will attempt to redetect
+# (for example, perhaps the user has now installed xclip) and then either print an error
+# or proceed successfully.
+detect-clipboard || true
