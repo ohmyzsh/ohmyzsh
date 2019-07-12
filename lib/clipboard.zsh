@@ -3,10 +3,23 @@
 # This file has support for doing system clipboard copy and paste operations
 # from the command line in a generic cross-platform fashion.
 #
-# On OS X and Windows, the main system clipboard or "pasteboard" is used. On other
-# Unix-like OSes, this considers the X Windows CLIPBOARD selection to be the
-# "system clipboard", and the X Windows `xclip` command must be installed.
-
+# This is uses essentially the same heuristic as neovim, with the additional
+# special support for Cygwin.
+# See: https://github.com/neovim/neovim/blob/e682d799fa3cf2e80a02d00c6ea874599d58f0e7/runtime/autoload/provider/clipboard.vim#L55-L121
+#
+# - pbcopy, pbpaste (macOS)
+# - cygwin (Windows running Cygwin)
+# - wl-copy, wl-paste (if $WAYLAND_DISPLAY is set)
+# - xclip (if $DISPLAY is set)
+# - xsel (if $DISPLAY is set)
+# - lemonade (for SSH) https://github.com/pocke/lemonade
+# - doitclient (for SSH) http://www.chiark.greenend.org.uk/~sgtatham/doit/
+# - win32yank (Windows)
+# - tmux (if $TMUX is set)
+#
+# Defines two functions, clipcopy and clippaste, based on the detected platform.
+##
+#
 # clipcopy - Copy data to clipboard
 #
 # Usage:
@@ -14,7 +27,6 @@
 #  <command> | clipcopy    - copies stdin to clipboard
 #
 #  clipcopy <file>         - copies a file's contents to clipboard
-#
 #
 ##
 #
@@ -39,18 +51,33 @@
 function detect-clipboard() {
   emulate -L zsh
 
-  if [[ $OSTYPE == darwin* ]]; then
+  if [[ "${OSTYPE}" == darwin* ]] && (( ${+commands[pbcopy]} )) && (( ${+commands[pbpaste]} )); then
     function clipcopy() { pbcopy < "${1:-/dev/stdin}"; }
     function clippaste() { pbpaste; }
-  elif [[ $OSTYPE == cygwin* ]]; then
+  elif [[ "${OSTYPE}" == cygwin* ]]; then
     function clipcopy() { cat "${1:-/dev/stdin}" > /dev/clipboard; }
     function clippaste() { cat /dev/clipboard; }
-  elif (( $+commands[xclip] )); then
+  elif [ -n "${WAYLAND_DISPLAY:-}" ] && (( ${+commands[wl-copy]} )) && (( ${+commands[wl-paste]} )); then
+    function clipcopy() { wl-copy < "${1:-/dev/stdin}"; }
+    function clippaste() { wl-paste; }
+  elif [ -n "${DISPLAY:-}" ] && (( ${+commands[xclip]} )); then
     function clipcopy() { xclip -in -selection clipboard < "${1:-/dev/stdin}"; }
     function clippaste() { xclip -out -selection clipboard; }
-  elif (( $+commands[xsel] )); then
-    function clipcopy() { xsel --clipboard --input  < "${1:-/dev/stdin}"; }
+  elif [ -n "${DISPLAY:-}" ] && $(( ${+commands[xsel]} )); then
+    function clipcopy() { xsel --clipboard --input < "${1:-/dev/stdin}"; }
     function clippaste() { xsel --clipboard --output; }
+  elif (( ${+commands[lemonade]} )); then
+    function clipcopy() { lemonade copy < "${1:-/dev/stdin}"; }
+    function clippaste() { lemonade paste; }
+  elif (( ${+commands[doitclient]} )); then
+    function clipcopy() { doitclient wclip < "${1:-/dev/stdin}"; }
+    function clippaste() { doitclient wclip -r; }
+  elif (( ${+commands[win32yank]} )); then
+    function clipcopy() { win32yank -i < "${1:-/dev/stdin}"; }
+    function clippaste() { win32yank -o; }
+  elif [ -n "${TMUX:-}" ] && (( ${+commands[tmux]} )); then
+    function clipcopy() { tmux load-buffer "${1:-/dev/stdin}"; }
+    function clippaste() { tmux save-buffer -; }
   else
     function _retry_clipboard_detection_or_fail() {
       local clipcmd="${1}"; shift
