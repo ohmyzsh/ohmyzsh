@@ -45,6 +45,9 @@ KUBE_PS1_COLOR_SYMBOL="%{$fg[blue]%}"
 KUBE_PS1_COLOR_CONTEXT="%{$fg[red]%}"
 KUBE_PS1_COLOR_NS="%{$fg[cyan]%}"
 
+KUBE_PS1_CLUSTER_FUNCTION="${KUBE_PS1_CLUSTER_FUNCTION}"
+KUBE_PS1_NAMESPACE_FUNCTION="${KUBE_PS1_NAMESPACE_FUNCTION}"
+
 _kube_ps1_binary_check() {
   command -v "$1" >/dev/null
 }
@@ -146,6 +149,14 @@ kubeoff(){
 kube_ps1 () {
   local reset_color="%{$reset_color%}"
   [[ ${KUBE_PS1_ENABLED} != 'true' ]] && return
+
+  if [[ ! -z "${KUBE_PS1_CLUSTER_FUNCTION}" ]]; then
+    KUBE_PS1_CONTEXT=$($KUBE_PS1_CLUSTER_FUNCTION $KUBE_PS1_CONTEXT)
+  fi
+
+  if [[ ! -z "${KUBE_PS1_NAMESPACE_FUNCTION}" ]]; then
+    KUBE_PS1_NAMESPACE=$($KUBE_PS1_NAMESPACE_FUNCTION $KUBE_PS1_NAMESPACE)
+  fi
 
   KUBE_PS1="${reset_color}$KUBE_PS1_PREFIX"
   KUBE_PS1+="${KUBE_PS1_COLOR_SYMBOL}$(_kube_ps1_symbol)"
