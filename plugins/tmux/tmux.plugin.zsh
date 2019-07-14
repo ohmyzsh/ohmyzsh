@@ -22,6 +22,8 @@ alias tkss='tmux kill-session -t'
 : ${ZSH_TMUX_AUTOCONNECT:=true}
 # Automatically close the terminal when tmux exits
 : ${ZSH_TMUX_AUTOQUIT:=$ZSH_TMUX_AUTOSTART}
+# Arguments to pass to tmux new-session (for example, to set the session name)
+: ${ZSH_TMUX_NEW_SESSION_ARGS:=}
 # Set term to screen or screen-256color based on current terminal support
 : ${ZSH_TMUX_FIXTERM:=true}
 # Set '-CC' option for iTerm2 tmux integration
@@ -66,7 +68,7 @@ function _zsh_tmux_plugin_run() {
   # If failed, just run tmux, fixing the TERM variable if requested.
   if [[ $? -ne 0 ]]; then
     [[ "$ZSH_TMUX_FIXTERM" == "true" ]] && tmux_cmd+=(-f "$_ZSH_TMUX_FIXED_CONFIG")
-    $tmux_cmd new-session
+    $tmux_cmd new-session $ZSH_TMUX_NEW_SESSION_ARGS
   fi
 
   if [[ "$ZSH_TMUX_AUTOQUIT" == "true" ]]; then
