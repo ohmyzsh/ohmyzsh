@@ -89,7 +89,7 @@ function detect-clipboard() {
       fi
     }
     function clipcopy() { _retry_clipboard_detection_or_fail clipcopy "$@"; }
-    function cilppaste() { _retry_clipboard_detection_or_fail clippaste "$@"; }
+    function clippaste() { _retry_clipboard_detection_or_fail clippaste "$@"; }
     return 1
   fi
 }
