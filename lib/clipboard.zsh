@@ -63,7 +63,7 @@ function detect-clipboard() {
   elif [ -n "${DISPLAY:-}" ] && (( ${+commands[xclip]} )); then
     function clipcopy() { xclip -in -selection clipboard < "${1:-/dev/stdin}"; }
     function clippaste() { xclip -out -selection clipboard; }
-  elif [ -n "${DISPLAY:-}" ] && $(( ${+commands[xsel]} )); then
+  elif [ -n "${DISPLAY:-}" ] && (( ${+commands[xsel]} )); then
     function clipcopy() { xsel --clipboard --input < "${1:-/dev/stdin}"; }
     function clippaste() { xsel --clipboard --output; }
   elif (( ${+commands[lemonade]} )); then
