@@ -16,6 +16,7 @@
 # - doitclient (for SSH) http://www.chiark.greenend.org.uk/~sgtatham/doit/
 # - win32yank (Windows)
 # - tmux (if $TMUX is set)
+# - tmpfile: Saves/loads the clipboard from a temporary file. Deleted on exit.
 #
 # Defines two functions, clipcopy and clippaste, based on the detected platform.
 ##
@@ -51,6 +52,9 @@
 function detect-clipboard() {
   emulate -L zsh
 
+  local use_fallback_clipboard
+  typeset -g __omz_fallback_clipboard_file
+
   if [[ "${OSTYPE}" == darwin* ]] && (( ${+commands[pbcopy]} )) && (( ${+commands[pbpaste]} )); then
     function clipcopy() { pbcopy < "${1:-/dev/stdin}"; }
     function clippaste() { pbpaste; }
@@ -85,18 +89,27 @@ function detect-clipboard() {
     function clipcopy() { clip.exe < "${1:-/dev/stdin}"; }
     function clippaste() { powershell.exe -noprofile -command Get-Clipboard; }
   else
-    function _retry_clipboard_detection_or_fail() {
-      local clipcmd="${1}"; shift
-      if detect-clipboard; then
-        "${clipcmd}" "$@"
-      else
-        print "${clipcmd}: Platform $OSTYPE not supported or xclip/xsel not installed" >&2
-        return 1
-      fi
-    }
-    function clipcopy() { _retry_clipboard_detection_or_fail clipcopy "$@"; }
-    function clippaste() { _retry_clipboard_detection_or_fail clippaste "$@"; }
-    return 1
+    use_fallback_clipboard=true
+    autoload -U add-zsh-hook
+
+    # If a fallback clipboard file didn't exist before, create it and set up
+    # the cleanup hook.
+    if [ -z "${__omz_fallback_clipboard_file:-}" ]; then
+      __omz_fallback_clipboard_file="$(mktemp -t omz-clipboard-${USER}.XXXXXXX)"
+      function __omz_cleanup_fallback_clipboard() { rm -f "${__omz_fallback_clipboard_file}"; }
+      add-zsh-hook zshexit __omz_cleanup_fallback_clipboard
+    fi
+    function clipcopy() { cat "${1:-/dev/stdin}" > "${__omz_fallback_clipboard_file}"; }
+    function clippaste() { cat "${__omz_fallback_clipboard_file}"; }
+  fi
+
+  # If we were using the fallback clipboard before, and now are not, clean up
+  # the file and remove the cleanup hook.
+  if [ -z "${use_fallback_clipboard}" ] && [ -n "${__omz_fallback_clipboard_file:-}" ]; then
+    add-zsh-hook -d zshexit __omz_cleanup_fallback_clipboard
+    __omz_cleanup_fallback_clipboard
+    unset __omz_cleanup_fallback_clipboard
+    unset __omz_fallback_clipboard_file
   fi
 }
 
