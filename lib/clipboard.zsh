@@ -76,7 +76,7 @@ function detect-clipboard() {
     function clipcopy() { win32yank -i < "${1:-/dev/stdin}"; }
     function clippaste() { win32yank -o; }
   elif [ -n "${TMUX:-}" ] && (( ${+commands[tmux]} )); then
-    function clipcopy() { tmux load-buffer "${1:-/dev/stdin}"; }
+    function clipcopy() { tmux load-buffer "${1:--}"; }
     function clippaste() { tmux save-buffer -; }
   else
     function _retry_clipboard_detection_or_fail() {
