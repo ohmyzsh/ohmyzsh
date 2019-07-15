@@ -1,5 +1,21 @@
 VI_KEYMAP=main
 
+function _vi-mode-set-cursor-shape-for-keymap() {
+  # https://vt100.net/docs/vt510-rm/DECSCUSR
+  local _shape=0
+  case "${1:-${VI_KEYMAP:-main}}" in
+    main)    _shape=6 ;; # vi insert: line
+    viins)   _shape=6 ;; # vi insert: line
+    isearch) _shape=6 ;; # inc search: line
+    command) _shape=6 ;; # read a command name
+    vicmd)   _shape=2 ;; # vi cmd: block
+    visual)  _shape=2 ;; # vi visual mode: block
+    viopp)   _shape=0 ;; # vi operation pending: blinking block
+    *)       _shape=0 ;;
+  esac
+  printf $'\e[%d q' "${_shape}"
+}
+
 # Updates editor information when the keymap changes.
 function zle-keymap-select() {
   # update keymap variable for the prompt
@@ -7,6 +23,7 @@ function zle-keymap-select() {
 
   zle reset-prompt
   zle -R
+  _vi-mode-set-cursor-shape-for-keymap "${VI_KEYMAP}"
 }
 zle -N zle-keymap-select
 
@@ -15,11 +32,13 @@ zle -N zle-keymap-select
 function zle-line-init() {
   VI_KEYMAP=main
   (( ! ${+terminfo[smkx]} )) || echoti smkx
+  _vi-mode-set-cursor-shape-for-keymap "${VI_KEYMAP}"
 }
 zle -N zle-line-init
 
 function zle-line-finish() {
   (( ! ${+terminfo[rmkx]} )) || echoti rmkx
+  _vi-mode-set-cursor-shape-for-keymap default
 }
 zle -N zle-line-finish
 
