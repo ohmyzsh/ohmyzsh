@@ -22,7 +22,7 @@ fi
 
 printf "${BLUE}%s${NORMAL}\n" "Updating Oh My Zsh"
 cd "$ZSH"
-if git pull --rebase --stat origin master
+if git pull --rebase --stat origin $(git symbolic-ref --short HEAD)
 then
   printf '%s' "$GREEN"
   printf '%s\n' '         __                                     __   '
