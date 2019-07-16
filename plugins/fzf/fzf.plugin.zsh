@@ -91,3 +91,5 @@ function indicate_error() {
 # Check for debian package first, because it easy to short cut
 # Indicate to user that fzf installation not found if nothing worked
 setup_using_debian_package || setup_using_base_dir || indicate_error
+
+unset -f setup_using_debian_package setup_using_base_dir indicate_error
