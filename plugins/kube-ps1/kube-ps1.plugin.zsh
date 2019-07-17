@@ -24,7 +24,7 @@
 setopt PROMPT_SUBST
 autoload -U add-zsh-hook
 add-zsh-hook precmd _kube_ps1_update_cache
-zmodload zsh/stat
+zmodload -F zsh/stat b:zstat
 zmodload zsh/datetime
 
 # Default values for the prompt
@@ -34,12 +34,15 @@ KUBE_PS1_SYMBOL_ENABLE="${KUBE_PS1_SYMBOL_ENABLE:-true}"
 KUBE_PS1_SYMBOL_DEFAULT="${KUBE_PS1_SYMBOL_DEFAULT:-\u2388 }"
 KUBE_PS1_SYMBOL_USE_IMG="${KUBE_PS1_SYMBOL_USE_IMG:-false}"
 KUBE_PS1_NS_ENABLE="${KUBE_PS1_NS_ENABLE:-true}"
+KUBE_PS1_CONTEXT_ENABLE="${KUBE_PS1_CONTEXT_ENABLE:-true}"
+KUBE_PS1_PREFIX="${KUBE_PS1_PREFIX-(}"
 KUBE_PS1_SEPARATOR="${KUBE_PS1_SEPARATOR-|}"
 KUBE_PS1_DIVIDER="${KUBE_PS1_DIVIDER-:}"
-KUBE_PS1_PREFIX="${KUBE_PS1_PREFIX-(}"
 KUBE_PS1_SUFFIX="${KUBE_PS1_SUFFIX-)}"
 KUBE_PS1_LAST_TIME=0
 KUBE_PS1_ENABLED=true
+KUBE_PS1_KUBECONFIG_CACHE="${KUBECONFIG}"
+KUBE_PS1_DISABLE_PATH="${HOME}/.kube/kube-ps1/disabled"
 
 KUBE_PS1_COLOR_SYMBOL="%{$fg[blue]%}"
 KUBE_PS1_COLOR_CONTEXT="%{$fg[red]%}"
@@ -75,19 +78,21 @@ _kube_ps1_file_newer_than() {
 
   zmodload -e "zsh/stat"
   if [[ "$?" -eq 0 ]]; then
-    mtime=$(stat +mtime "${file}")
+    mtime=$(zstat -L +mtime "${file}")
   elif stat -c "%s" /dev/null &> /dev/null; then
     # GNU stat
-    mtime=$(stat -c %Y "${file}")
+    mtime=$(stat -L -c %Y "${file}")
   else
     # BSD stat
-    mtime=$(stat -f %m "$file")
+    mtime=$(stat -L -f %m "$file")
   fi
 
   [[ "${mtime}" -gt "${check_time}" ]]
 }
 
 _kube_ps1_update_cache() {
+  [[ "${KUBE_PS1_ENABLED}" == "off" ]] && return
+
   KUBECONFIG="${KUBECONFIG:=$HOME/.kube/config}"
   if ! _kube_ps1_binary_check "${KUBE_PS1_BINARY}"; then
     # No ability to fetch context/namespace; display N/A.
@@ -132,20 +137,65 @@ _kube_ps1_get_context_ns() {
   fi
 }
 
-# function to disable the prompt on the current shell
-kubeon(){
-  KUBE_PS1_ENABLED=true
+_kubeon_usage() {
+  cat <<"EOF"
+Toggle kube-ps1 prompt on
+
+Usage: kubeon [-g | --global] [-h | --help]
+
+With no arguments, turn off kube-ps1 status for this shell instance (default).
+
+  -g --global  turn on kube-ps1 status globally
+  -h --help    print this message
+EOF
 }
 
-# function to disable the prompt on the current shell
-kubeoff(){
-  KUBE_PS1_ENABLED=false
+_kubeoff_usage() {
+  cat <<"EOF"
+Toggle kube-ps1 prompt off
+
+Usage: kubeoff [-g | --global] [-h | --help]
+
+With no arguments, turn off kube-ps1 status for this shell instance (default).
+
+  -g --global turn off kube-ps1 status globally
+  -h --help   print this message
+EOF
+}
+
+kubeon() {
+  if [[ "${1}" == '-h' || "${1}" == '--help' ]]; then
+    _kubeon_usage
+  elif [[ "${1}" == '-g' || "${1}" == '--global' ]]; then
+    rm -f -- "${KUBE_PS1_DISABLE_PATH}"
+  elif [[ "$#" -ne 0 ]]; then
+    echo -e "error: unrecognized flag ${1}\\n"
+    _kubeon_usage
+    return
+  fi
+
+  KUBE_PS1_ENABLED=on
+}
+
+kubeoff() {
+  if [[ "${1}" == '-h' || "${1}" == '--help' ]]; then
+    _kubeoff_usage
+  elif [[ "${1}" == '-g' || "${1}" == '--global' ]]; then
+    mkdir -p -- "$(dirname "${KUBE_PS1_DISABLE_PATH}")"
+    touch -- "${KUBE_PS1_DISABLE_PATH}"
+  elif [[ $# -ne 0 ]]; then
+    echo "error: unrecognized flag ${1}" >&2
+    _kubeoff_usage
+    return
+  fi
+
+  KUBE_PS1_ENABLED=off
 }
 
 # Build our prompt
 kube_ps1 () {
   local reset_color="%{$reset_color%}"
-  [[ ${KUBE_PS1_ENABLED} != 'true' ]] && return
+  [[ "${KUBE_PS1_ENABLED}" == "off" ]] && return
 
   KUBE_PS1="${reset_color}$KUBE_PS1_PREFIX"
   KUBE_PS1+="${KUBE_PS1_COLOR_SYMBOL}$(_kube_ps1_symbol)"

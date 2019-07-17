@@ -3,7 +3,7 @@
 A Kubernetes zsh prompt that displays the current cluster cluster
 and the namespace.
 
-Inspired by several tools used to simplify usage of kubectl
+Inspired by several tools used to simplify usage of `kubectl`.
 
 NOTE: If you are not using zsh, check out [kube-ps1](https://github.com/jonmosco/kube-ps1)
 designed for bash as well as zsh.
@@ -28,15 +28,21 @@ fast switching between clusters and namespaces.
 
 ## Prompt Structure
 
-The prompt layout is:
+The default prompt layout is:
 
 ```
 (<symbol>|<cluster>:<namespace>)
 ```
 
+If the current-context is not set, kube-ps1 will return the following:
+
+```
+(<symbol>|N/A:N/A)
+```
+
 ## Enabling
 
-In order to use kube-ps1 with Oh My Zsh, you'll need to enable them in the
+In order to use kube-ps1 with Oh My Zsh, it will need enabled in your
 .zshrc file. You'll find the zshrc file in your $HOME directory. Open it with
 your favorite text editor and you'll see a spot to list all the plugins you
 want to load.
@@ -58,17 +64,20 @@ PROMPT=$PROMPT'$(kube_ps1) '
 
 Note: the `PROMPT` example above was tested with the theme `robbyrussell`
 
-## Enabling / Disabling on the current shell
+## Enabling/Disabling
 
-Sometimes the kubernetes information can be anoying, you can easily 
-switch it on and off with the following commands:
+If you want to stop showing Kubernetes status on your prompt string temporarily
+run `kubeoff`. To disable the prompt for all shell sessions, run `kubeoff -g`.
+You can enable it again in the current shell by running `kubeon`, and globally
+with `kubeon -g`.
 
-```shell
-kubeon
 ```
-
-```shell
-kubeoff
+kubeon     : turn on kube-ps1 status for this shell.  Takes precedence over
+             global setting for current session
+kubeon -g  : turn on kube-ps1 status globally
+kubeoff    : turn off kube-ps1 status for this shell. Takes precedence over
+             global setting for current session
+kubeoff -g : turn off kube-ps1 status globally
 ```
 
 ## Colors
