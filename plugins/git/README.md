@@ -67,6 +67,7 @@ plugins=(... git)
 | gfa                  | git fetch --all --prune                                                                                                       |
 | gfg                  | git ls-files \| grep                                                                                                          |
 | gfo                  | git fetch origin                                                                                                              |
+| gfu                  | git fetch upstream                                                                                                              |
 | gg                   | git gui citool                                                                                                                |
 | gga                  | git gui citool --amend                                                                                                        |
 | ggf                  | git push --force origin $(current_branch)                                                                                     |
