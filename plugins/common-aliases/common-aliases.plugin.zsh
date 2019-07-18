@@ -48,6 +48,18 @@ alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
 
+# mkdir and cd to it
+mkcd () {
+  case "$1" in
+    */..|*/../) cd -- "$1";; # that doesn't make any sense unless the directory already exists
+    /*/../*) (cd "${1%/../*}/.." && mkdir -p "./${1##*/../}") && cd -- "$1";;
+    /*) mkdir -p "$1" && cd "$1";;
+    */../*) (cd "./${1%/../*}/.." && mkdir -p "./${1##*/../}") && cd "./$1";;
+    ../*) (cd .. && mkdir -p "${1#.}") && cd "$1";;
+    *) mkdir -p "./$1" && cd "./$1";;
+  esac
+}
+
 # zsh is able to auto-do some kungfoo
 # depends on the SUFFIX :)
 if is-at-least 4.2.0; then
