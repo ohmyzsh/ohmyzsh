@@ -56,17 +56,18 @@ gcot () {
   t in "WEB-$CODE";
 }
 
-cd () { 
-  builtin cd "$@"; 
-  cd_git_checker;
+# Automatically checkin to time tracker when opening a git repo
+# cd () { 
+#   builtin cd "$@"; 
+#   cd_git_checker;
 
-  if [ -d .git ]; then
-    BRANCH="$( echo "$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)" | tr '-' ' ' )";
-    ARR=(`echo ${BRANCH}`);
-    CODE=(`echo ${ARR[2]}`);
+#   if [ -d .git ]; then
+#     BRANCH="$( echo "$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)" | tr '-' ' ' )";
+#     ARR=(`echo ${BRANCH}`);
+#     CODE=(`echo ${ARR[2]}`);
     
-    t out;
-    t sheet workshare;
-    t in "WEB-$CODE";
-  fi;
-}
+#     t out;
+#     t sheet workshare;
+#     t in "WEB-$CODE";
+#   fi;
+# }
