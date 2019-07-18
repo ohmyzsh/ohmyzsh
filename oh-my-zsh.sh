@@ -107,7 +107,6 @@ if [[ "$ZSH_THEME" == "random" ]]; then
   ((N=(RANDOM%N)+1))
   RANDOM_THEME=${themes[$N]}
   source "$RANDOM_THEME"
-  echo "[oh-my-zsh] Random theme '$RANDOM_THEME' loaded..."
 else
   if [ ! "$ZSH_THEME" = ""  ]; then
     if [ -f "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme" ]; then
