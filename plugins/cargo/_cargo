@@ -106,6 +106,7 @@ case $state in
                     '--manifest-path=[path to manifest]: :_files -/' \
                     '--no-deps[do not build docs for dependencies]' \
                     '--no-default-features[do not build the default features]' \
+                    '--document-private-items[include non-public items in the documentation]' \
                     '--open[open docs in browser after the build]' \
                     '(-p, --package)'{-p,--package}'=[package to document]' \
                     '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
@@ -151,7 +152,7 @@ case $state in
 
             init)
                 _arguments \
-                    '--bin[use binary template]' \
+                    '--lib[use library template]' \
                     '--vcs:initialize a new repo with a given VCS:(git hg none)' \
                     '(-h, --help)'{-h,--help}'[show help message]' \
                     '--name=[set the resulting package name]' \
@@ -213,7 +214,7 @@ case $state in
 
             new)
                 _arguments \
-                    '--bin[use binary template]' \
+                    '--lib[use library template]' \
                     '--vcs:initialize a new repo with a given VCS:(git hg none)' \
                     '(-h, --help)'{-h,--help}'[show help message]' \
                     '--name=[set the resulting package name]' \
@@ -321,6 +322,7 @@ case $state in
                     '(-j, --jobs)'{-j,--jobs}'=[number of parallel jobs, defaults to # of CPUs]' \
                     '--manifest-path=[path to the manifest to document]: :_files -/' \
                     '--no-default-features[do not build the `default` feature]' \
+                    '--document-private-items[include non-public items in the documentation]' \
                     '--open[open the docs in a browser after the operation]' \
                     '(-p, --package)'{-p,--package}'=[package to document]' \
                     '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \

@@ -8,4 +8,4 @@ To use it, add `cargo` to the plugins array in your zshrc file:
 plugins=(... cargo)
 ```
 
-Updated on March 3rd, 2019, from [Cargo 0.34.0](https://github.com/rust-lang/cargo/releases/tag/0.34.0).
+Updated on July 19th, 2019, from [Cargo 0.37.0](https://github.com/rust-lang/cargo/releases/tag/0.37.0).
