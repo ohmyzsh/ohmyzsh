@@ -1,3 +1,6 @@
+# This code was inspired (basically copied) from
+# the cloud theme
+
 if [[ -z $ZSH_THEME__PREFIX ]]; then
     ZSH_THEME_FIRE_PREFIX='🔥'
 fi
