@@ -38,6 +38,16 @@ function rebaseBitBucketRepo {
   fi;
 }
 
+function moveImages {
+  FILES=(`echo '${PWD}/*.png'`)
+  for file in $FILES; do
+    echo "Provessing $file..."
+    #BRANCH="$( echo "$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)" | tr '-' ' ' )";
+    #FOLDER=(`echo ${ARR[0]}-${ARR[1]}`);
+    #mkdir ${FOLDER}
+  done
+}
+
 function mcclowes {
   echo "editZSH - Edit zshrc config";
   echo "mcclowes-react-scripts < project name : new-project > - create new react project using mcclowes-scripts create react app config";
