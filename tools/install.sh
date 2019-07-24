@@ -33,7 +33,7 @@ set -e
 
 # Default settings
 ZSH=${ZSH:-~/.oh-my-zsh}
-REPO=${REPO:-robbyrussell/oh-my-zsh}
+REPO=${REPO:-robbyrussel/oh-my-zsh}
 REMOTE=${REMOTE:-https://github.com/${REPO}.git}
 BRANCH=${BRANCH:-master}
 
@@ -123,13 +123,17 @@ setup_zshrc() {
 		mv ~/.zshrc "$OLD_ZSHRC"
 	fi
 
-	echo "${GREEN}Using the Oh My Zsh template file and adding it to ~/.zshrc.${RESET}"
+	echo "${GREEN}Using the Oh My Zsh template file and adding it to ${ZSH}/custom/zshrc.${RESET}"
 
-	cp "$ZSH/templates/zshrc.zsh-template" ~/.zshrc
+	cp "$ZSH/templates/zshrc.zsh-template" ${ZSH}/custom/zshrc
 	sed "/^export ZSH=/ c\\
 export ZSH=\"$ZSH\"
-" ~/.zshrc > ~/.zshrc-omztemp
-	mv -f ~/.zshrc-omztemp ~/.zshrc
+" ${ZSH}/custom/zshrc > ${ZSH}/custom/zshrc-omztemp
+	mv -f ${ZSH}/custom/zshrc-omztemp ${ZSH}/custom/zshrc
+    echo >~/.zshrc "#!/usr/bin/env zsh
+# Now we store zshrc in .oh-my-zsh/custom on new installs, so you can version control your entire zsh environment.
+source \${ZSH}/custom/zshrc
+"
 
 	echo
 }
