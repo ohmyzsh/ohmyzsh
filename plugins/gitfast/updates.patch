@@ -1,0 +1,56 @@
+diff --git b/plugins/gitfast/_git a/plugins/gitfast/_git
+index e2554130..a2e3bef5 100644
+--- b/plugins/gitfast/_git
++++ a/plugins/gitfast/_git
+@@ -30,7 +30,7 @@ if [ -z "$script" ]; then
+ 	local -a locations
+ 	local e
+ 	locations=(
+-		$(dirname ${funcsourcetrace[1]%:*})/git-completion.bash
++		"$(dirname ${funcsourcetrace[1]%:*})/git-completion.bash"
+ 		'/etc/bash_completion.d/git' # fedora, old debian
+ 		'/usr/share/bash-completion/completions/git' # arch, ubuntu, new debian
+ 		'/usr/share/bash-completion/git' # gentoo
+@@ -214,8 +214,10 @@ _git ()
+ 
+ 	if (( $+functions[__${service}_zsh_main] )); then
+ 		__${service}_zsh_main
+-	else
++	elif (( $+functions[__${service}_main] )); then
+ 		emulate ksh -c __${service}_main
++	elif (( $+functions[_${service}] )); then
++		emulate ksh -c _${service}
+ 	fi
+ 
+ 	let _ret && _default && _ret=0
+diff --git b/plugins/gitfast/git-completion.bash a/plugins/gitfast/git-completion.bash
+index 9c8f7380..14012cab 100644
+--- b/plugins/gitfast/git-completion.bash
++++ a/plugins/gitfast/git-completion.bash
+@@ -2915,6 +2915,6 @@ __git_complete gitk __gitk_main
+ # when the user has tab-completed the executable name and consequently
+ # included the '.exe' suffix.
+ #
+-if [ Cygwin = "$(uname -o 2>/dev/null)" ]; then
++if [[ "$OSTYPE" = cygwin* ]]; then
+ __git_complete git.exe __git_main
+ fi
+diff --git b/plugins/gitfast/git-prompt.sh a/plugins/gitfast/git-prompt.sh
+index 97eacd78..c1de34eb 100644
+--- b/plugins/gitfast/git-prompt.sh
++++ a/plugins/gitfast/git-prompt.sh
+@@ -502,9 +502,11 @@ __git_ps1 ()
+ 
+ 	local z="${GIT_PS1_STATESEPARATOR-" "}"
+ 
+-	# NO color option unless in PROMPT_COMMAND mode
+-	if [ $pcmode = yes ] && [ -n "${GIT_PS1_SHOWCOLORHINTS-}" ]; then
+-		__git_ps1_colorize_gitstring
++	# NO color option unless in PROMPT_COMMAND mode or it's Zsh
++	if [ -n "${GIT_PS1_SHOWCOLORHINTS-}" ]; then
++		if [ $pcmode = yes ] || [ -n "${ZSH_VERSION-}" ]; then
++			__git_ps1_colorize_gitstring
++		fi
+ 	fi
+ 
+ 	b=${b##refs/heads/}

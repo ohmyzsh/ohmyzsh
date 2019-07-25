@@ -1,7 +1,7 @@
-## Load smart urls if available
-# bracketed-paste-magic is known buggy in zsh 5.1.1 (only), so skip it there; see #4434
 autoload -Uz is-at-least
-if [[ $ZSH_VERSION != 5.1.1 ]]; then
+
+# *-magic is known buggy in some versions; disable if so
+if [[ $DISABLE_MAGIC_FUNCTIONS != true ]]; then
   for d in $fpath; do
   	if [[ -e "$d/url-quote-magic" ]]; then
   		if is-at-least 5.1; then
@@ -23,7 +23,6 @@ env_default 'LESS' '-R'
 
 ## super user alias
 alias _='sudo'
-alias please='sudo'
 
 ## more intelligent acking for ubuntu users
 if which ack-grep &> /dev/null; then
