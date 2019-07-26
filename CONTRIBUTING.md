@@ -19,15 +19,14 @@ Foremost, be so kind as to [search](#use-the-search-luke). This ensures any cont
 you would make is not already covered.
 
 - [CONTRIBUTING GUIDELINES](#contributing-guidelines)
-    - [Reporting Issues](#reporting-issues)
+    - [Issues](#reporting-issues)
         - [You have a problem](#you-have-a-problem)
         - [You have a suggestion](#you-have-a-suggestion)
-    - [Submitting Pull Requests](#submitting-pull-requests)
+    - [Pull Requests](#submitting-pull-requests)
         - [Getting started](#getting-started)
         - [You have a solution](#you-have-a-solution)
         - [You have an addition](#you-have-an-addition)
-    - [Use the Search, Luke](#use-the-search-luke)
-        - [You have spare time to volunteer](#you-have-spare-time-to-volunteer)
+    - [Information sources (_aka_ search)](#use-the-search-luke)
 
 **BONUS:** [Volunteering](#you-have-spare-time-to-volunteer)
 
