@@ -19,6 +19,7 @@ setopt prompt_subst
 autoload -U add-zsh-hook
 autoload -Uz vcs_info
 
+
 #use extended color palette if available
 if [[ $terminfo[colors] -ge 256 ]]; then
     turquoise="%F{81}"
@@ -26,12 +27,14 @@ if [[ $terminfo[colors] -ge 256 ]]; then
     purple="%F{135}"
     hotpink="%F{161}"
     limegreen="%F{118}"
+    lightsteelblue="%F{189}"
 else
     turquoise="%F{cyan}"
     orange="%F{yellow}"
     purple="%F{magenta}"
     hotpink="%F{red}"
     limegreen="%F{green}"
+    lightsteelblue="%F{blue}"
 fi
 
 # enable VCS systems you use
@@ -87,10 +90,18 @@ function steeef_precmd {
         if git ls-files --other --exclude-standard 2> /dev/null | grep -q "."; then
             PR_GIT_UPDATE=1
             FMT_BRANCH="(%{$turquoise%}%b%u%c%{$hotpink%}●${PR_RST})"
+
+            if [ "$(git stash list 2>/dev/null)" != "" ]; then
+                FMT_BRANCH="(%{$turquoise%}%b%u%c%{$hotpink%}●%{$lightsteelblue%}●${PR_RST})"
+            fi
         else
             FMT_BRANCH="(%{$turquoise%}%b%u%c${PR_RST})"
+
+            if [ "$(git stash list 2>/dev/null)" != "" ]; then
+                FMT_BRANCH="(%{$turquoise%}%b%u%c%{$hotpink%}●%{$lightsteelblue%}●${PR_RST})"
+            fi
         fi
-        zstyle ':vcs_info:*:prompt:*' formats "${FMT_BRANCH} "
+        zstyle ':vcs_info:*:prompt:*' formats "${FMT_BRANCH}"
 
         vcs_info 'prompt'
         PR_GIT_UPDATE=
