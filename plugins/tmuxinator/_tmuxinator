@@ -1,3 +1,6 @@
+#compdef tmuxinator mux
+#autoload
+
 _tmuxinator() {
   local commands projects
   commands=(${(f)"$(tmuxinator commands zsh)"})
@@ -17,5 +20,4 @@ _tmuxinator() {
   return
 }
 
-compdef _tmuxinator tmuxinator mux
-alias mux="tmuxinator"
+compdef _tmuxinator tmuxinator
