@@ -196,7 +196,7 @@ REPO=apjanke/oh-my-zsh BRANCH=edge sh install.sh
 ##### 1. Clone the repository:
 
 ```shell
-git clone git://github.com/bluekrow/oh-my-zsh.git ~/.oh-my-zsh
+git clone https://github.com/bluekrow/oh-my-zsh.git ~/.oh-my-zsh
 ```
 
 ##### 2. *Optionally*, backup your existing `~/.zshrc` file:
