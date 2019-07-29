@@ -133,3 +133,10 @@ alias kepvc='kubectl edit pvc'
 alias kdpvc='kubectl describe pvc'
 alias kdelpvc='kubectl delete pvc'
 
+# kubectl  prompt
+function kubectl_prompt_info() {
+  echo "<k8s:$(kccc)>"
+}
+if [ "$SHOW_K8S_PROMPT" != false ]; then
+  RPROMPT='$(kubectl_prompt_info)'"$RPROMPT"
+fi
