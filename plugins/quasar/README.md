@@ -26,7 +26,7 @@ These are not in the plugin these coming from quasar itself
 | ---------------------- | ------------------------------ | --------------------------------------------------------------------------- |
 | qd                     | quasar dev                     | Start a dev server for your App                                             |
 | qb                     | quasar build                   | Build your app for production                                               |
-| qc                     | quasar clean                   | Clean all build artifacts                                                   |
+| qcl                    | quasar clean                   | Clean all build artifacts                                                   |
 | qn                     | quasar new                     | Quickly scaffold page/layout/component/... vue file                         |
 | qnp                    | quasar new page                | Quickly scaffold page vue file                                              |
 | qnl                    | quasar new layout              | Quickly scaffold layout vue file                                            |
