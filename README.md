@@ -131,6 +131,10 @@ ZSH_THEME_RANDOM_CANDIDATES=(
 )
 ```
 
+### FAQ
+
+If you have some more questions or issues, you might find a solution in our [FAQ](https://github.com/robbyrussell/oh-my-zsh/wiki/FAQ).
+
 ## Advanced Topics
 
 If you're the type that likes to get their hands dirty, these sections might resonate.
