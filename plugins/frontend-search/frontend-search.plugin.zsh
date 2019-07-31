@@ -27,8 +27,9 @@ alias typescript='frontend typescript'
 alias unheap='frontend unheap'
 alias vuejs='frontend vuejs'
 
-function getSearchUrl() {
-  if [[ "$FRONTEND_SEARCH_FALLBACK_SEARCH_ENGINE" == 'duckduckgo' ]]; then
+function _frontend_fallback() {
+  local url
+  if [[ "$FRONTEND_SEARCH_FALLBACK" == duckduckgo ]]; then
     url="https://duckduckgo.com/?sites=$1&q="
   else
     url="https://google.com/search?as_sitesearch=$1&as_q="
@@ -44,8 +45,8 @@ function frontend() {
   typeset -A urls
   urls=(
     angular        'https://angular.io/?search='
-    angularjs      $(getSearchUrl 'angularjs.org')
-    bem            $(getSearchUrl 'bem.info')
+    angularjs      $(_frontend_fallback 'angularjs.org')
+    bem            $(_frontend_fallback 'bem.info')
     bootsnipp      'https://bootsnipp.com/search?q='
     bundlephobia   'https://bundlephobia.com/result?p='
     caniuse        'https://caniuse.com/#search='
@@ -53,24 +54,24 @@ function frontend() {
     compassdoc     'http://compass-style.org/search?q='
     cssflow        'http://www.cssflow.com/search?q='
     dartlang       'https://api.dartlang.org/apidocs/channels/stable/dartdoc-viewer/dart:'
-    emberjs        $(getSearchUrl 'emberjs.com/')
-    flowtype       $(getSearchUrl 'flow.org/en/docs/')
+    emberjs        $(_frontend_fallback 'emberjs.com/')
+    flowtype       $(_frontend_fallback 'flow.org/en/docs/')
     fontello       'http://fontello.com/#search='
     github         'https://github.com/search?q='
     html5please    'https://html5please.com/#'
-    jestjs         $(getSearchUrl 'jestjs.io')
+    jestjs         $(_frontend_fallback 'jestjs.io')
     jquery         'https://api.jquery.com/?s='
     lodash         'https://devdocs.io/lodash/index#'
     mdn            'https://developer.mozilla.org/search?q='
-    nodejs         $(getSearchUrl 'nodejs.org/en/docs/')
+    nodejs         $(_frontend_fallback 'nodejs.org/en/docs/')
     npmjs          'https://www.npmjs.com/search?q='
     qunit          'https://api.qunitjs.com/?s='
-    reactjs        $(getSearchUrl 'reactjs.org/')
-    smacss         $(getSearchUrl 'smacss.com')
+    reactjs        $(_frontend_fallback 'reactjs.org/')
+    smacss         $(_frontend_fallback 'smacss.com')
     stackoverflow  'https://stackoverflow.com/search?q='
-    typescript     $(getSearchUrl 'www.typescriptlang.org/docs')
+    typescript     $(_frontend_fallback 'www.typescriptlang.org/docs')
     unheap         'http://www.unheap.com/?s='
-    vuejs          $(getSearchUrl 'vuejs.org')
+    vuejs          $(_frontend_fallback 'vuejs.org')
   )
 
   # show help for command list
