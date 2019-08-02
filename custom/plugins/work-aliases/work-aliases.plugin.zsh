@@ -9,3 +9,5 @@ alias cdP='cd $HOME/Projects'
 
 alias pdf-1col-to-pdf-kindle="k2pdfopt -ui- -x -dev kpw -col 1"
 alias pdf-2cols-to-pdf-kindle="k2pdfopt -ui- -x -dev kpw -col 2"
+
+alias gx="gitx --commit"
