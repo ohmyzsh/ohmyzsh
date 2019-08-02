@@ -192,6 +192,8 @@ alias gpv='git push -v'
 
 alias gr='git remote'
 alias gra='git remote add'
+alias grau='git remote add upstream'
+alias grad='git remote add downstream'
 alias grb='git rebase'
 alias grba='git rebase --abort'
 alias grbc='git rebase --continue'
@@ -251,3 +253,12 @@ alias glum='git pull upstream master'
 
 alias gwch='git whatchanged -p --abbrev-commit --pretty=medium'
 alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign -m "--wip-- [skip ci]"'
+
+# Git-Duet (https://github.com/git-duet/git-duet) specific aliases
+alias gdc='git duet-commit -vs'
+alias gdci='git duet-commit -vs'
+alias gdr='git duet-revert -v'
+alias gdrv='git duet-revert -v'
+alias gdm='git duet-merge -v'
+alias gdmg='git duet-merge -v'
+
