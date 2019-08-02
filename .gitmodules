@@ -1,0 +1,6 @@
+[submodule "custom/plugins/zsh-apple-touchbar"]
+	path = custom/plugins/zsh-apple-touchbar
+	url = https://github.com/floor114/zsh-apple-touchbar
+[submodule "custom/plugins/zsh-iterm-touchbar"]
+	path = custom/plugins/zsh-iterm-touchbar
+	url = https://github.com/iam4x/zsh-iterm-touchbar.git

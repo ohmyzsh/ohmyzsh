@@ -35,13 +35,14 @@ DISABLE_VENV_CD="true"
 plugins=(
     autopep8
     brew
-    colored-man
+    cask
+    colored-man-pages
     command-not-found
     common-aliases
     cp
     dircycle
-    docker
     django
+    docker
     encode64
     extract
     git-extras
@@ -49,16 +50,18 @@ plugins=(
     git2
     grin
     helm
+    iterm2
     jump
     kubectl
     launch_trial
+    launchctl
     lol
     minikube
-    mv
     npm
     osx
     pep8
     pip
+    pyenv
     pylint
     python
     repo
@@ -66,11 +69,11 @@ plugins=(
     sublime
     subliminal
     tig
-    txw
     ufw
     vim-scp
     work-aliases
     yarn
+    zsh-iterm-touchbar
     zsh-syntax-highlighting
 )
 
@@ -97,5 +100,11 @@ if [ -e ~/.profile ]; then source ~/.profile; fi
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 
+[ -d "/Users/az02065/Library/Python/3.7/bin" ] && export PATH=/Users/az02065/Library/Python/3.7/bin:$PATH
+
 # added by travis gem
-[ -f /Users/gaetan/.travis/travis.sh ] && source /Users/gaetan/.travis/travis.sh
+[ -f $HOME/.travis/travis.sh ] && source $HOME/.travis/travis.sh
+
+[ -f $HOME/.pyenv/shims/python ] && export PIPENV_PYTHON=$HOME/.pyenv/shims/python
+[ -d $HOME/.local/bin ] && export PATH=$HOME/.local/bin:$PATH
+[ -f $HOME/.iterm2_shell_integration.zsh ] && source ~/.iterm2_shell_integration.zsh

@@ -1,0 +1,110 @@
+#compdef launchctl
+# zsh completion for OSX's launchctl
+
+# notes
+# - bslist: seems to not honor given [PID | ..]
+# - stdout|stderr: sub-command no longer do anything
+# - singleuser: function not implemented
+
+local -a _launchctl_verbs
+
+_launchctl_verbs=(
+'load:load configuration files and/or directories'
+'unload:unload configuration files and/or directories'
+'start:start specified job'
+'stop:stop specified job'
+'submit:submit a job from the command line'
+'remove:remove specified job'
+'bootstrap:bootstrap launchd'
+'list:list jobs and information about jobs'
+'setenv:set an environmental variable in launchd'
+'unsetenv:unset an environmental variable in launchd'
+'getenv:get an environmental variable from launchd'
+'export:export shell settings from launchd'
+'debug:set the waitfordebugger flag for the target job to true.'
+'limit:view and adjust launchd resource limits'
+'shutdown:prepare for system shutdown'
+'getrusage:get resource usage statistics from launchd'
+'log:adjust the logging level or mask of launchd'
+'umask:  change launchd`s umask'
+'bsexec:execute a process within a different mach bootstrap subset'
+'bslist:list mach bootstrap services and optional servers'
+'bstree:show the entire mach bootstrap tree. requires root privileges.'
+'managerpid:print the pid of the launchd managing this mach bootstrap.'
+'manageruid:print the uid of the launchd managing this mach bootstrap.'
+'managername:print the name of this mach bootstrap.'
+'asuser:execute a subcommand in the given user`s context.'
+'exit:exit the interactive invocation of launchctl'
+'quit:quit the interactive invocation of launchctl'
+'help:this help output'
+)
+
+_arguments '*:: :->subcmds'
+
+if (( CURRENT == 1 )); then
+	_describe -t commands "launchctl verbs" _launchctl_verbs
+fi
+
+_launchctl_jobs () { _arguments "*:jobs:(`launchctl list | awk '{print $3}'`)" }
+
+_launchctl_exports () { _arguments "*:environmental variables:(`launchctl export | cut -d '=' -f1`)" }
+
+case "$words[1]" in
+	load)
+		_arguments \
+			'-w[override disabled key, sets it to false]' \
+			'-F[force loading of plist, ignores disabled key]' \
+			'-S+[session type (use with -D)]:session type:(Aqua Login-Window Background StandardIO System)' \
+			'-D+[look for *.plist files for given domain]:(system local network all)' \
+			'*:paths:_files'
+		;;
+	unload)
+		_arguments \
+			'-w[override disabled key, sets it to false]' \
+			'-S+[session type (use with -D)]:session type:(Aqua Login-Window Background StandardIO System)' \
+			'-D+[look for *.plist files for given domain]:(system local network all)' \
+			'*:paths:_files'
+		;;
+	start) _arguments '*:jobs:_launchctl_jobs';;
+	stop) _arguments '*:jobs:_launchctl_jobs';;
+	submit)
+		_arguments \
+			'-l+[unique label (required)]:label' \
+			'-p+[program to really execute]:program' \
+			'-o+[path to send stdout]:path to stdout:_files' \
+			'-e+[path to send stderr]:path to stderr:_files' \
+			'--+[command (args)]:command:_files' \
+			':paths:_files'
+		;;
+	remove) _arguments '*:jobs:_launchctl_jobs';;
+	bootstrap)
+		_arguments \
+			'-s[run as server (does not return)]' \
+			'-S+[session type]:session type'
+		;;
+	list)
+		_launchctl_options () { _arguments '-x+[output as a XML property list]: :_launchctl_jobs' }
+		_alternative 'launchtl_options: :_launchctl_options' 'jobs: :_launchctl_jobs'
+		;;
+	setenv) _arguments '*: :_launchctl_exports';;
+	unsetenv) _arguments '*: :_launchctl_exports';;
+	getenv) _arguments '*: :_launchctl_exports';;
+	debug) _arguments ':label' ':value';;
+	limit)
+		_arguments \
+			':resources:(cpu filesize data stack core rss memlock maxproc maxfiles)' \
+			'*:limit [both|soft hard]'
+		;;
+	getrusage) _arguments '1:target:(self children)';;
+	log)
+		_launchctl_log_levels () { _arguments "*:log levels:(`launchctl log`)" }
+		_arguments \
+			':options:(level only mask)' \
+			'*:level:_launchctl_log_levels'
+		;;
+	umask) _arguments ':newmask:';;
+	bsexec) _arguments '1:PID:' '2:command:' '*:args:';;
+	bslist) _arguments '-j[show registering job]::';;
+	bstree) _arguments '-j[show registering job]::';;
+	asuser) _arguments ':UID' ':command' '*:arguments';;
+esac

@@ -38,7 +38,7 @@ DISABLE_VENV_CD="true"
 plugins=(
     autopep8
     buildbot
-    colored-man
+    colored-man-pages
     command-not-found
     common-aliases
     cp
@@ -59,7 +59,6 @@ plugins=(
     launch_trial
     lol
     minikube
-    mv
     npm
     pep8
     pip
@@ -70,7 +69,6 @@ plugins=(
     sublime
     tig
     tmux
-    txw
     ufw
     vim-scp
     work-aliases
