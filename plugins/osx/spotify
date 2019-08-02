@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 function spotify() {
-# Copyright (c) 2012--2018 Harish Narayanan <mail@harishnarayanan.org>
+# Copyright (c) 2012--2019 Harish Narayanan <mail@harishnarayanan.org>
 #
 # Contains numerous helpful contributions from Jorge Colindres, Thomas
 # Pritchard, iLan Epstein, Gabriele Bonetti, Sean Heller, Eric Martin
@@ -70,7 +70,7 @@ showHelp () {
     echo;
     echo "  next                         # Skips to the next song in a playlist.";
     echo "  prev                         # Returns to the previous song in a playlist.";
-    echo "  replay                       # Replays the current track from the begining.";
+    echo "  replay                       # Replays the current track from the beginning.";
     echo "  pos <time>                   # Jumps to a time (in secs) in the current song.";
     echo "  pause                        # Pauses (or resumes) Spotify playback.";
     echo "  stop                         # Stops playback.";
@@ -82,6 +82,9 @@ showHelp () {
     echo "  vol [show]                   # Shows the current Spotify volume.";
     echo;
     echo "  status                       # Shows the current player status.";
+    echo "  status artist                # Shows the currently playing artist.";
+    echo "  status album                 # Shows the currently playing album.";
+    echo "  status track                 # Shows the currently playing track.";
     echo;
     echo "  share                        # Displays the current song's Spotify URL and URI."
     echo "  share url                    # Displays the current song's Spotify URL and copies it to the clipboard."
@@ -99,12 +102,21 @@ cecho(){
     echo $bold$green"$1"$reset;
 }
 
+showArtist() {
+    echo `osascript -e 'tell application "Spotify" to artist of current track as string'`;
+}
+
+showAlbum() {
+    echo `osascript -e 'tell application "Spotify" to album of current track as string'`;
+}
+
+showTrack() {
+    echo `osascript -e 'tell application "Spotify" to name of current track as string'`;
+}
+
 showStatus () {
     state=`osascript -e 'tell application "Spotify" to player state as string'`;
     cecho "Spotify is currently $state.";
-    artist=`osascript -e 'tell application "Spotify" to artist of current track as string'`;
-    album=`osascript -e 'tell application "Spotify" to album of current track as string'`;
-    track=`osascript -e 'tell application "Spotify" to name of current track as string'`;
     duration=`osascript -e 'tell application "Spotify"
             set durSec to (duration of current track / 1000) as text
             set tM to (round (durSec / 60) rounding down) as text
@@ -128,7 +140,7 @@ showStatus () {
             end tell
             return nowAt'`;
 
-    echo -e $reset"Artist: $artist\nAlbum: $album\nTrack: $track \nPosition: $position / $duration";
+    echo -e $reset"Artist: $(showArtist)\nAlbum: $(showAlbum)\nTrack: $(showTrack) \nPosition: $position / $duration";
 }
 
 if [ $# = 0 ]; then
@@ -223,18 +235,18 @@ while [ $# -gt 0 ]; do
 
                         results=$( \
                             curl -s -G $SPOTIFY_SEARCH_API --data-urlencode "q=$Q" -d "type=playlist&limit=10&offset=0" -H "Accept: application/json" -H "Authorization: Bearer ${SPOTIFY_ACCESS_TOKEN}" \
-                            | grep -E -o "spotify:user:[a-zA-Z0-9_]+:playlist:[a-zA-Z0-9]+" -m 10 \
+                            | grep -E -o "spotify:playlist:[a-zA-Z0-9]+" -m 10 \
                         )
 
                         count=$( \
-                            echo "$results" | grep -c "spotify:user" \
+                            echo "$results" | grep -c "spotify:playlist" \
                         )
 
                         if [ "$count" -gt 0 ]; then
                             random=$(( $RANDOM % $count));
 
                             SPOTIFY_PLAY_URI=$( \
-                                echo "$results" | awk -v random="$random" '/spotify:user:[a-zA-Z0-9]+:playlist:[a-zA-Z0-9]+/{i++}i==random{print; exit}' \
+                                echo "$results" | awk -v random="$random" '/spotify:playlist:[a-zA-Z0-9]+/{i++}i==random{print; exit}' \
                             )
                         fi;;
 
@@ -295,7 +307,7 @@ while [ $# -gt 0 ]; do
 
         "quit"    ) cecho "Quitting Spotify.";
             osascript -e 'tell application "Spotify" to quit';
-            exit 1 ;;
+            exit 0 ;;
 
         "next"    ) cecho "Going to next track." ;
             osascript -e 'tell application "Spotify" to next track';
@@ -346,7 +358,7 @@ while [ $# -gt 0 ]; do
                 echo "  vol down                     # Decreases the volume by 10%.";
                 echo "  vol [amount]                 # Sets the volume to an amount between 0 and 100.";
                 echo "  vol                          # Shows the current Spotify volume.";
-                break
+                exit 1;
             fi
 
             osascript -e "tell application \"Spotify\" to set sound volume to $newvol";
@@ -365,7 +377,25 @@ while [ $# -gt 0 ]; do
             break ;;
 
         "status" )
-            showStatus;
+            if [ $# != 1 ]; then
+                # There are additional arguments, a status subcommand
+                case $2 in
+                    "artist" )
+                        showArtist;
+                        break ;;
+
+                    "album" )
+                        showAlbum;
+                        break ;;
+
+                    "track" )
+                        showTrack;
+                        break ;;
+                esac
+            else
+                # status is the only param
+                showStatus;
+            fi
             break ;;
 
         "info" )
@@ -428,16 +458,20 @@ while [ $# -gt 0 ]; do
                 cecho "Spotify URI: $uri";
                 echo -n $uri | pbcopy
             fi
-            break;;
+            break ;;
 
         "pos"   )
             cecho "Adjusting Spotify play position."
             osascript -e "tell application \"Spotify\" to set player position to $2";
-            break;;
+            break ;;
 
-        "help" | * )
+        "help" )
             showHelp;
             break ;;
+        * )
+            showHelp;
+            exit 1;
+
     esac
 done
 }

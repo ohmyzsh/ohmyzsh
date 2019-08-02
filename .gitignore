@@ -1,7 +1,6 @@
 #custom
 # custom files
 #!custom/plugins/example
-#!custom/example.zsh
 
 *.un~
 cache/

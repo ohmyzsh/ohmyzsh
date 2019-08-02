@@ -75,8 +75,8 @@ __git-hf-release ()
                 'finish:Finish a release branch.'
                 'list:List all your release branches. (Alias to `git hf release`)'
                 'cancel:Cancel release'
-                'push:Push release to github'
-                'pull:Pull release from github'
+                'push:Push release to GitHub'
+                'pull:Pull release from GitHub'
                 'track:Track release'
             )
             _describe -t commands 'git hf release' subcommands
@@ -133,8 +133,8 @@ __git-hf-hotfix ()
                 'list:List all your hotfix branches. (Alias to `git hf hotfix`)'
                 'publish:Publish the hotfix branch.'
                 'track:Track the hotfix branch.'
-                'pull:Pull the hotfix from github.'
-                'push:Push the hotfix to github.'
+                'pull:Pull the hotfix from GitHub.'
+                'push:Push the hotfix to GitHub.'
                 'cancel:Cancel the hotfix.'
             )
             _describe -t commands 'git hf hotfix' subcommands
@@ -195,8 +195,8 @@ __git-hf-feature ()
                 'diff:Diff'
                 'rebase:Rebase feature branch against develop'
                 'checkout:Checkout feature'
-                'pull:Pull feature branch from github'
-                'push:Push feature branch to github'
+                'pull:Pull feature branch from GitHub'
+                'push:Push feature branch to GitHub'
                 'cancel:Cancel feature'
             )
             _describe -t commands 'git hf feature' subcommands
