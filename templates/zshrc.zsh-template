@@ -99,3 +99,13 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# disable shared history among sessions
+setopt noincappendhistory
+setopt nosharehistory
+export PYTHONPATH=/home/xianshuli/proto:$PYTHONPATH
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/xianshuli/ufe/external_interfaces/x86_64-linux-gcc/
+if [ "x$YROOT_NAME" != "x" ]; then
+    CSCOPE_DB=~/$YROOT_NAME/cscope.out;
+    export CSCOPE_DB
+fi
