@@ -63,6 +63,7 @@ ZSH=${ZSH:-~/.oh-my-zsh}
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 REPO=${REPO:-ohmyzsh/ohmyzsh}
 =======
 REPO=${REPO:-robbyrussell/oh-my-zsh}
@@ -73,6 +74,9 @@ REPO=${REPO:-abiggs/oh-my-zsh}
 =======
 REPO=${REPO:-abiggs/.oh-my-zsh}
 >>>>>>> Fix oh-my-zsh path
+=======
+REPO=${REPO:-abiggs/oh-my-zsh}
+>>>>>>> Update repo path
 REMOTE=${REMOTE:-https://github.com/${REPO}.git}
 BRANCH=${BRANCH:-master}
 
