@@ -61,9 +61,13 @@ set -e
 # Default settings
 ZSH=${ZSH:-~/.oh-my-zsh}
 <<<<<<< HEAD
+<<<<<<< HEAD
 REPO=${REPO:-ohmyzsh/ohmyzsh}
 =======
 REPO=${REPO:-robbyrussell/oh-my-zsh}
+>>>>>>> Update install.sh
+=======
+REPO=${REPO:-abiggs/oh-my-zsh}
 >>>>>>> Update install.sh
 REMOTE=${REMOTE:-https://github.com/${REPO}.git}
 BRANCH=${BRANCH:-master}
