@@ -109,3 +109,4 @@ if [ "x$YROOT_NAME" != "x" ]; then
     CSCOPE_DB=~/$YROOT_NAME/cscope.out;
     export CSCOPE_DB
 fi
+export CSCOPE_EDITOR=vim
