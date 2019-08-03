@@ -33,7 +33,7 @@ set -e
 
 # Default settings
 ZSH=${ZSH:-~/.oh-my-zsh}
-REPO=${REPO:-abiggs/.oh-my-zsh}
+REPO=${REPO:-abiggs/oh-my-zsh}
 REMOTE=${REMOTE:-https://github.com/${REPO}.git}
 BRANCH=${BRANCH:-master}
 
