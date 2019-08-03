@@ -137,6 +137,7 @@ setup_ohmyzsh() {
 		exit 1
 	fi
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 	git clone -c core.eol=lf -c core.autocrlf=false \
@@ -147,6 +148,9 @@ setup_ohmyzsh() {
 =======
 =======
 	echo "git clone --depth=1 --branch $(BRANCH) $(REMOTE) $(ZSH)"
+>>>>>>> Update install.sh
+=======
+
 >>>>>>> Update install.sh
 	git clone --depth=1 --branch "$BRANCH" "$REMOTE" "$ZSH" || {
 >>>>>>> Update install.sh
