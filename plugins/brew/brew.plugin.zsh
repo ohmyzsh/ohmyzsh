@@ -5,7 +5,10 @@ alias bubo='brew update && brew outdated'
 alias bubc='brew upgrade && brew cleanup'
 alias bcbu='brew cleanup && brew upgrade'
 alias bubu='bubo && bubc'
+alias bcubo='brew update && brew cask outdated'
+alias bcubc='brew cask reinstall $(brew cask outdated) && brew cleanup'
 alias bucu='bubo && bcbu'
+
 
 if command mkdir "$ZSH_CACHE_DIR/.brew-completion-message" 2>/dev/null; then
 	print -P '%F{yellow}'Oh My Zsh brew plugin:

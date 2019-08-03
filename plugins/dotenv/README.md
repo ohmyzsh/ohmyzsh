@@ -32,6 +32,17 @@ PORT=3001
 ```
 You can even mix both formats, although it's probably a bad idea.
 
+### ZSH_DOTENV_FILE
+
+You can also modify the name of the file to be loaded with the variable `ZSH_DOTENV_FILE`.
+If the variable isn't set, the plugin will default to use `.env`.
+For example, this will make the plugin look for files named `.dotenv` and load them:
+
+```
+# in ~/.zshrc, before Oh My Zsh is sourced:
+ZSH_DOTENV_FILE=.dotenv
+```
+
 ## Version Control
 
 **It's strongly recommended to add `.env` file to `.gitignore`**, because usually it contains sensitive information such as your credentials, secret keys, passwords etc. You don't want to commit this file, it's supposed to be local only.

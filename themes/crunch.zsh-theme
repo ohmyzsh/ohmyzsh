@@ -29,13 +29,9 @@ ZSH_THEME_GIT_PROMPT_DIRTY=" $CRUNCH_GIT_DIRTY_COLOR✗"
 
 # Our elements:
 CRUNCH_TIME_="$CRUNCH_BRACKET_COLOR{$CRUNCH_TIME_COLOR%T$CRUNCH_BRACKET_COLOR}%{$reset_color%}"
-if [ -e ~/.rvm/bin/rvm-prompt ]; then
-  CRUNCH_RVM_="$CRUNCH_BRACKET_COLOR"["$CRUNCH_RVM_COLOR\${\$(~/.rvm/bin/rvm-prompt i v g)#ruby-}$CRUNCH_BRACKET_COLOR"]"%{$reset_color%}"
-else
-  if which rbenv &> /dev/null; then
-    CRUNCH_RVM_="$CRUNCH_BRACKET_COLOR"["$CRUNCH_RVM_COLOR\${\$(rbenv version | sed -e 's/ (set.*$//' -e 's/^ruby-//')}$CRUNCH_BRACKET_COLOR"]"%{$reset_color%}"
-  fi
-fi
+ZSH_THEME_RUBY_PROMPT_PREFIX="$CRUNCH_BRACKET_COLOR"["$CRUNCH_RVM_COLOR"
+ZSH_THEME_RUBY_PROMPT_SUFFIX="$CRUNCH_BRACKET_COLOR"]"%{$reset_color%}"
+CRUNCH_RVM_='$(ruby_prompt_info)'
 CRUNCH_DIR_="$CRUNCH_DIR_COLOR%~\$(git_prompt_info) "
 CRUNCH_PROMPT="$CRUNCH_BRACKET_COLOR➭ "
 
