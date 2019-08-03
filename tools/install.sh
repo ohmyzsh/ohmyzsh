@@ -89,7 +89,7 @@ setup_ohmyzsh() {
 		error "Make sure the Cygwin git package is installed and is first on the \$PATH"
 		exit 1
 	fi
-
+	echo "git clone --depth=1 --branch $(BRANCH) $(REMOTE) $(ZSH)"
 	git clone --depth=1 --branch "$BRANCH" "$REMOTE" "$ZSH" || {
 		error "git clone of oh-my-zsh repo failed"
 		exit 1
