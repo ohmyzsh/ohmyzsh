@@ -27,17 +27,6 @@ function mcclowes-react-scripts {
   create-react-app --scripts-version mcclowes-react-scripts $dirName;
 }
 
-function rebaseBitBucketRepo {
-  if [ $# -eq 0 ]; then # nor args
-    echo "No destination is set";
-  else;
-    git remote rename origin bitbucket;
-    git remote add origin ${1};
-    git push origin master;
-    git remote rm bitbucket; 
-  fi;
-}
-
 function moveImages {
   FILES=(`echo '${PWD}/*.png'`)
   for file in $FILES; do
@@ -51,5 +40,4 @@ function moveImages {
 function mcclowes {
   echo "editZSH - Edit zshrc config";
   echo "mcclowes-react-scripts < project name : new-project > - create new react project using mcclowes-scripts create react app config";
-  echo "rebaseBitBucketRepo <destination> - rebase repo to new destination (with .git at the end)";
 }

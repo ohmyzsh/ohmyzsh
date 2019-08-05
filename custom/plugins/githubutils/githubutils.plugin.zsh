@@ -24,8 +24,20 @@ function greba { ## git rebase all
   git push --force;
 }
 
+function moveBBtoGithub {
+  if [ $# -eq 0 ]; then # nor args
+    echo "No destination is set";
+  else;
+    git remote rename origin bitbucket;
+    git remote add origin ${1};
+    git push origin master;
+    git remote rm bitbucket; 
+  fi;
+}
+
 function githubutils {
   echo "gpr - git rebase on master";
   echo "grebb - trigger rebase, allowing you to rebase all commits since branching off master";
   echo "greba <number of commits to rebase> - trigger rebase, allowing you to rebase all commits ever or ~X";
+  echo "moveBBtoGithub <destination> - rebase repo to new destination (with .git at the end)";
 }
