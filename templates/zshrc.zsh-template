@@ -110,3 +110,4 @@ if [ "x$YROOT_NAME" != "x" ]; then
     export CSCOPE_DB
 fi
 export CSCOPE_EDITOR=vim
+export TERM=xterm-256color
