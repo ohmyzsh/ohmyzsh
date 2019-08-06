@@ -236,6 +236,16 @@ If you have many functions that go well together, you can put them as a `XYZ.plu
 
 If you would like to override the functionality of a plugin distributed with Oh My Zsh, create a plugin of the same name in the `custom/plugins/` directory and it will be loaded instead of the one in `plugins/`.
 
+### Configuration Exclusions
+
+If you want to simply exclude any of the default behaviors, create a zsh list named excludeconfigs of the filenames you wish to exclude in your `.zshrc`. For example, if you wanted to exclude `lib/theme-and-appearance.zsh` and `lib/nvm.zsh` you would add the following to your `.zshrc`:
+```
+excludeconfigs=(
+theme-and-appearance
+nvm
+)
+```
+
 ## Getting Updates
 
 By default, you will be prompted to check for upgrades every few weeks. If you would like `oh-my-zsh` to automatically upgrade itself without prompting you, set the following in your `~/.zshrc`:
