@@ -28,8 +28,6 @@ compdef _n98_magerun n98-magerun
 compdef _n98_magerun n98-magerun2.phar
 compdef _n98_magerun n98-magerun2
 
-# cd /var/www/html/m2-rigel && n98-magerun2.phar sys:info
-
 # Aliases
 alias n98='n98-magerun.phar'
 alias mage='n98-magerun.phar'
@@ -42,4 +40,3 @@ alias magerun2='n98-magerun2.phar'
 # Install n98-magerun into the current directory
 alias mage-get='wget https://files.magerun.net/n98-magerun.phar'
 alias mage2-get='wget https://files.magerun.net/n98-magerun2.phar'
-
