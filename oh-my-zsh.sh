@@ -36,6 +36,17 @@ is_plugin() {
     || test -f $base_dir/plugins/$name/_$name
 }
 
+load_plugins() {
+  for plugin ($plugins); do
+    if [ -f $ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh ]; then
+      source $ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh
+    elif [ -f $ZSH/plugins/$plugin/$plugin.plugin.zsh ]; then
+      source $ZSH/plugins/$plugin/$plugin.plugin.zsh
+    fi
+  done
+  unset $plugins
+}
+
 # Add all defined plugins to fpath. This must be done
 # before running compinit.
 for plugin ($plugins); do
@@ -82,17 +93,13 @@ for config_file ($ZSH/lib/*.zsh); do
 done
 
 # Load all of the plugins that were defined in ~/.zshrc
-for plugin ($plugins); do
-  if [ -f $ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh ]; then
-    source $ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh
-  elif [ -f $ZSH/plugins/$plugin/$plugin.plugin.zsh ]; then
-    source $ZSH/plugins/$plugin/$plugin.plugin.zsh
-  fi
-done
+load_plugins
 
 # Load all of your custom configurations from custom/
 for config_file ($ZSH_CUSTOM/*.zsh(N)); do
   source $config_file
+  # Load all of the plugins that were defined in the custom configurations
+  load_plugins
 done
 unset config_file
 
