@@ -204,7 +204,7 @@ prompt_dir() {
 # Virtualenv: current working virtualenv
 prompt_virtualenv() {
   local virtualenv_path="$VIRTUAL_ENV"
-  if [[ -n $virtualenv_path && -n $VIRTUAL_ENV_DISABLE_PROMPT ]]; then
+  if [[ -n $virtualenv_path && -n $VIRTUAL_ENV_DISABLE_PROMPT && ${VIRTUAL_ENV_DISABLE_PROMPT} != "YES_DISABLE_OMZ_PROMPT_TOO" ]]; then
     prompt_segment blue black "(`basename $virtualenv_path`)"
   fi
 }
