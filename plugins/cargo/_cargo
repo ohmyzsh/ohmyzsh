@@ -29,7 +29,7 @@ _arguments \
 
 case $state in
     command)
-      _alternative 'common-commands:common:_cargo_cmds' 'all-commands:all:_cargo_all_cmds'
+      _alternative 'common-commands:common:_cargo_cmds'
       ;;
 
     args)
@@ -424,44 +424,14 @@ esac
 }
 
 _cargo_cmds(){
-local -a commands;commands=(
-'bench:execute all benchmarks of a local package'
-'build:compile the current package'
-'check:check the current package without compiling'
-'clean:remove generated artifacts'
-'doc:build package documentation'
-'fetch:fetch package dependencies'
-'generate-lockfile:create lockfile'
-'git-checkout:git checkout'
-'help:get help for commands'
-'init:create new package in current directory'
-'install:install a Rust binary'
-'locate-project:print "Cargo.toml" location'
-'login:login to remote server'
-'metadata:the metadata for a package in json'
-'new:create a new package'
-'owner:manage the owners of a crate on the registry'
-'package:assemble local package into a distributable tarball'
-'pkgid:print a fully qualified package specification'
-'publish:upload package to the registry'
-'read-manifest:print manifest in JSON format'
-'run:run the main binary of the local package'
-'rustc:compile a package and all of its dependencies'
-'rustdoc:build documentation for a package'
-'search:search packages on crates.io'
-'test:execute all unit and tests of a local package'
-'uninstall:remove a Rust binary'
-'update:update dependencies'
-'verify-project:check Cargo.toml'
-'version:show version information'
-'yank:remove pushed file from index'
-)
-_describe -t common-commands 'common commands' commands
-}
+local IFS=$'\n'
+local cargo_list="$(cargo --list)"
+cargo_list="$(printf '%s\n help Get help for commands\n' "$cargo_list")"
 
-_cargo_all_cmds(){
-local -a commands;commands=($(cargo --list))
-_describe -t all-commands 'all commands' commands
+local -a common_commands;common_commands=($(printf '%s' "$cargo_list" | sed -n '1!p' | sed -n "s/^\s\+\([a-z-]\+\)\s\+\(.\+\)$/\1:\2/ip"))
+_describe -t common-commands 'common commands' common_commands
+local -a all_commands;all_commands=($(printf '%s' "$cargo_list" | sed -n '1!p' | sed -n "s/^\s\+\([a-z-]\+\)$/\1/ip"))
+_describe -t all-commands 'all commands' all_commands
 }
 
 
