@@ -29,6 +29,7 @@ zmodload zsh/datetime
 
 # Default values for the prompt
 # Override these values in ~/.zshrc
+KUBE_PS1_ALWAYS_SHOW_NAMESPACE="${KUBE_PS1_ALWAYS_SHOW_NAMESPACE:-true}"
 KUBE_PS1_BINARY="${KUBE_PS1_BINARY:-kubectl}"
 KUBE_PS1_SYMBOL_ENABLE="${KUBE_PS1_SYMBOL_ENABLE:-true}"
 KUBE_PS1_SYMBOL_DEFAULT="${KUBE_PS1_SYMBOL_DEFAULT:-\u2388 }"
@@ -151,8 +152,10 @@ kube_ps1 () {
   KUBE_PS1+="${KUBE_PS1_COLOR_SYMBOL}$(_kube_ps1_symbol)"
   KUBE_PS1+="${reset_color}$KUBE_PS1_SEPERATOR"
   KUBE_PS1+="${KUBE_PS1_COLOR_CONTEXT}$KUBE_PS1_CONTEXT${reset_color}"
-  KUBE_PS1+="$KUBE_PS1_DIVIDER"
-  KUBE_PS1+="${KUBE_PS1_COLOR_NS}$KUBE_PS1_NAMESPACE${reset_color}"
+  if [[ ${KUBE_PS1_ALWAYS_SHOW_NAMESPACE} == true ]] || [[ "${KUBE_PS1_NAMESPACE}" != 'default' ]]; then
+    KUBE_PS1+="$KUBE_PS1_DIVIDER"
+    KUBE_PS1+="${KUBE_PS1_COLOR_NS}$KUBE_PS1_NAMESPACE${reset_color}"
+  fi
   KUBE_PS1+="$KUBE_PS1_SUFFIX"
 
   echo "${KUBE_PS1}"

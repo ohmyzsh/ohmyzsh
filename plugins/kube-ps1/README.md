@@ -95,6 +95,7 @@ The default settings can be overridden in ~/.zshrc
 | `KUBE_PS1_COLOR_SYMBOL` | `"%F{blue}"` | Custom color for the symbol |
 | `KUBE_PS1_COLOR_CONTEXT` | `"%F{red}"` | Custom color for the context |
 | `KUBE_PS1_COLOR_NS` | `"%F{cyan}"` | Custom color for the namespace |
+| `KUBE_PS1_ALWAYS_SHOW_NAMESPACE` | `true` | When false, shows namespace only when not set to "default" |
 | `KUBE_PS1_ENABLED` | `true` | Set to false to start disabled on any new shell, `kubeon`/`kubeoff` will flip this value on the current shell |
 
 ## Contributors
