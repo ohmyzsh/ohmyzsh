@@ -20,7 +20,7 @@
 #   BRANCH  - branch to check out immediately after install (default: master)
 #
 # Other options:
-#   CHSH    - 'no' means the installer will not change the default shell (default: yes)
+#   CHSH    - 'no' means the installer will not change the default shell (default: ask)
 #   RUNZSH  - 'no' means the installer will not run zsh after the install (default: yes)
 #
 # You can also pass some arguments to the install script to set some these options:
@@ -38,7 +38,7 @@ REMOTE=${REMOTE:-https://github.com/${REPO}.git}
 BRANCH=${BRANCH:-master}
 
 # Other options
-CHSH=${CHSH:-yes}
+CHSH=${CHSH:-ask}
 RUNZSH=${RUNZSH:-yes}
 
 
@@ -154,16 +154,18 @@ setup_shell() {
 		return
 	fi
 
-	echo "${BLUE}Time to change your default shell to zsh:${RESET}"
+	if [ $CHSH = ask ]; then
+		echo "${BLUE}Time to change your default shell to zsh:${RESET}"
 
-	# Prompt for user choice on changing the default login shell
-	printf "${YELLOW}Do you want to change your default shell to zsh? [Y/n]${RESET} "
-	read opt
-	case $opt in
-		y*|Y*|"") echo "Changing the shell..." ;;
-		n*|N*) echo "Shell change skipped."; return ;;
-		*) echo "Invalid choice. Shell change skipped."; return ;;
-	esac
+		# Prompt for user choice on changing the default login shell
+		printf "${YELLOW}Do you want to change your default shell to zsh? [Y/n]${RESET} "
+		read opt
+		case $opt in
+			y*|Y*|"") echo "Changing the shell..." ;;
+			n*|N*) echo "Shell change skipped."; return ;;
+			*) echo "Invalid choice. Shell change skipped."; return ;;
+		esac
+	fi
 
 	# Test for the right location of the "shells" file
 	if [ -f /etc/shells ]; then
