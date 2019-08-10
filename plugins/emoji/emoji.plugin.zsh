@@ -58,7 +58,11 @@ function random_emoji() {
   [[ $list_size -eq 0 ]] && return 1
   local random_index=$(( ( RANDOM % $list_size ) + 1 ))
   local name=${names[$random_index]}
-  echo ${emoji[$name]}
+  if [[ "$group" == "flags" ]]; then 
+    echo ${emoji_flags[$name]}
+  else 
+    echo ${emoji[$name]}
+  fi
 }
 
 # Displays a listing of emoji with their names
