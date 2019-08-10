@@ -130,8 +130,9 @@ emoji[confused]=$'\U1F615'
 emoji[worried_face]=$'\U1F61F'
 emoji[worried]=$'\U1F61F'
 emoji[slightly_frowning_face]=$'\U1F641'
-emoji[frowning_face]=$'\U2639\UFE0F'
+emoji[slightly_frowning_face_1]=$'\U2639\UFE0F'
 emoji[frowning_face_unqualified]=$'\U2639'
+emoji[frowning_face]=$'\U2639'
 emoji[face_with_open_mouth]=$'\U1F62E'
 emoji[open_mouth]=$'\U1F62E'
 emoji[hushed_face]=$'\U1F62F'
@@ -269,7 +270,7 @@ emoji[eye_in_speech_bubble]=$'\U1F441\UFE0F\U200D\U1F5E8\UFE0F'
 emoji[eye_speech_bubble]=$'\U1F441\UFE0F\U200D\U1F5E8\UFE0F'
 emoji[eye_in_speech_bubble_unqualified]=$'\U1F441\U200D\U1F5E8\UFE0F'
 emoji[eye_in_speech_bubble_unqualified_1]=$'\U1F441\UFE0F\U200D\U1F5E8'
-emoji[eye_in_speech_bubble_unqualified]=$'\U1F441\U200D\U1F5E8'
+emoji[eye_in_speech_bubble_unqualified_2]=$'\U1F441\U200D\U1F5E8'
 emoji[left_speech_bubble]=$'\U1F5E8\UFE0F'
 emoji[left_speech_bubble_unqualified]=$'\U1F5E8'
 emoji[right_anger_bubble]=$'\U1F5EF\UFE0F'
@@ -509,6 +510,7 @@ emoji[flexed_biceps_medium_dark_skin_tone]=$'\U1F4AA\U1F3FE'
 emoji[flexed_biceps_dark_skin_tone]=$'\U1F4AA\U1F3FF'
 emoji[mechanical_arm]=$'\U1F9BE'
 emoji[mechanical_leg]=$'\U1F9BF'
+emoji[mechanical_leg_1]=$'\U1F9B5'
 emoji[leg]=$'\U1F9B5'
 emoji[leg_light_skin_tone]=$'\U1F9B5\U1F3FB'
 emoji[leg_medium_light_skin_tone]=$'\U1F9B5\U1F3FC'
@@ -543,8 +545,9 @@ emoji[brain]=$'\U1F9E0'
 emoji[tooth]=$'\U1F9B7'
 emoji[bone]=$'\U1F9B4'
 emoji[eyes]=$'\U1F440'
-emoji[eye]=$'\U1F441\UFE0F'
+emoji[eyes_1]=$'\U1F441\UFE0F'
 emoji[eye_unqualified]=$'\U1F441'
+emoji[eye]=$'\U1F441'
 emoji[tongue]=$'\U1F445'
 emoji[mouth]=$'\U1F444'
 emoji[lips]=$'\U1F444'
@@ -1308,7 +1311,7 @@ emoji[man_detective]=$'\U1F575\UFE0F\U200D\U2642\UFE0F'
 emoji[male_detective]=$'\U1F575\UFE0F\U200D\U2642\UFE0F'
 emoji[man_detective_unqualified]=$'\U1F575\U200D\U2642\UFE0F'
 emoji[man_detective_unqualified_1]=$'\U1F575\UFE0F\U200D\U2642'
-emoji[man_detective_unqualified]=$'\U1F575\U200D\U2642'
+emoji[man_detective_unqualified_2]=$'\U1F575\U200D\U2642'
 emoji[man_detective_light_skin_tone]=$'\U1F575\U1F3FB\U200D\U2642\UFE0F'
 emoji[man_detective_light_skin_tone_minimally]=$'\U1F575\U1F3FB\U200D\U2642'
 emoji[man_detective_medium_light_skin_tone]=$'\U1F575\U1F3FC\U200D\U2642\UFE0F'
@@ -1323,7 +1326,7 @@ emoji[woman_detective]=$'\U1F575\UFE0F\U200D\U2640\UFE0F'
 emoji[female_detective]=$'\U1F575\UFE0F\U200D\U2640\UFE0F'
 emoji[woman_detective_unqualified]=$'\U1F575\U200D\U2640\UFE0F'
 emoji[woman_detective_unqualified_1]=$'\U1F575\UFE0F\U200D\U2640'
-emoji[woman_detective_unqualified]=$'\U1F575\U200D\U2640'
+emoji[woman_detective_unqualified_2]=$'\U1F575\U200D\U2640'
 emoji[woman_detective_light_skin_tone]=$'\U1F575\U1F3FB\U200D\U2640\UFE0F'
 emoji[woman_detective_light_skin_tone_minimally]=$'\U1F575\U1F3FB\U200D\U2640'
 emoji[woman_detective_medium_light_skin_tone]=$'\U1F575\U1F3FC\U200D\U2640\UFE0F'
@@ -1979,6 +1982,7 @@ emoji[woman_dancing_medium_light_skin_tone]=$'\U1F483\U1F3FC'
 emoji[woman_dancing_medium_skin_tone]=$'\U1F483\U1F3FD'
 emoji[woman_dancing_medium_dark_skin_tone]=$'\U1F483\U1F3FE'
 emoji[woman_dancing_dark_skin_tone]=$'\U1F483\U1F3FF'
+emoji[woman_dancing_dark_skin_tone_1]=$'\U1F57A'
 emoji[man_dancing]=$'\U1F57A'
 emoji[man_dancing_light_skin_tone]=$'\U1F57A\U1F3FB'
 emoji[man_dancing_medium_light_skin_tone]=$'\U1F57A\U1F3FC'
@@ -2094,7 +2098,7 @@ emoji[man_golfing]=$'\U1F3CC\UFE0F\U200D\U2642\UFE0F'
 emoji[golfing_man]=$'\U1F3CC\UFE0F\U200D\U2642\UFE0F'
 emoji[man_golfing_unqualified]=$'\U1F3CC\U200D\U2642\UFE0F'
 emoji[man_golfing_unqualified_1]=$'\U1F3CC\UFE0F\U200D\U2642'
-emoji[man_golfing_unqualified]=$'\U1F3CC\U200D\U2642'
+emoji[man_golfing_unqualified_2]=$'\U1F3CC\U200D\U2642'
 emoji[man_golfing_light_skin_tone]=$'\U1F3CC\U1F3FB\U200D\U2642\UFE0F'
 emoji[man_golfing_light_skin_tone_minimally]=$'\U1F3CC\U1F3FB\U200D\U2642'
 emoji[man_golfing_medium_light_skin_tone]=$'\U1F3CC\U1F3FC\U200D\U2642\UFE0F'
@@ -2109,7 +2113,7 @@ emoji[woman_golfing]=$'\U1F3CC\UFE0F\U200D\U2640\UFE0F'
 emoji[golfing_woman]=$'\U1F3CC\UFE0F\U200D\U2640\UFE0F'
 emoji[woman_golfing_unqualified]=$'\U1F3CC\U200D\U2640\UFE0F'
 emoji[woman_golfing_unqualified_1]=$'\U1F3CC\UFE0F\U200D\U2640'
-emoji[woman_golfing_unqualified]=$'\U1F3CC\U200D\U2640'
+emoji[woman_golfing_unqualified_2]=$'\U1F3CC\U200D\U2640'
 emoji[woman_golfing_light_skin_tone]=$'\U1F3CC\U1F3FB\U200D\U2640\UFE0F'
 emoji[woman_golfing_light_skin_tone_minimally]=$'\U1F3CC\U1F3FB\U200D\U2640'
 emoji[woman_golfing_medium_light_skin_tone]=$'\U1F3CC\U1F3FC\U200D\U2640\UFE0F'
@@ -2232,7 +2236,7 @@ emoji[bouncing_ball_man]=$'\U26F9\UFE0F\U200D\U2642\UFE0F'
 emoji[basketball_man]=$'\U26F9\UFE0F\U200D\U2642\UFE0F'
 emoji[man_bouncing_ball_unqualified]=$'\U26F9\U200D\U2642\UFE0F'
 emoji[man_bouncing_ball_unqualified_1]=$'\U26F9\UFE0F\U200D\U2642'
-emoji[man_bouncing_ball_unqualified]=$'\U26F9\U200D\U2642'
+emoji[man_bouncing_ball_unqualified_2]=$'\U26F9\U200D\U2642'
 emoji[man_bouncing_ball_light_skin_tone]=$'\U26F9\U1F3FB\U200D\U2642\UFE0F'
 emoji[man_bouncing_ball_light_skin_tone_minimally]=$'\U26F9\U1F3FB\U200D\U2642'
 emoji[man_bouncing_ball_medium_light_skin_tone]=$'\U26F9\U1F3FC\U200D\U2642\UFE0F'
@@ -2248,7 +2252,7 @@ emoji[bouncing_ball_woman]=$'\U26F9\UFE0F\U200D\U2640\UFE0F'
 emoji[basketball_woman]=$'\U26F9\UFE0F\U200D\U2640\UFE0F'
 emoji[woman_bouncing_ball_unqualified]=$'\U26F9\U200D\U2640\UFE0F'
 emoji[woman_bouncing_ball_unqualified_1]=$'\U26F9\UFE0F\U200D\U2640'
-emoji[woman_bouncing_ball_unqualified]=$'\U26F9\U200D\U2640'
+emoji[woman_bouncing_ball_unqualified_2]=$'\U26F9\U200D\U2640'
 emoji[woman_bouncing_ball_light_skin_tone]=$'\U26F9\U1F3FB\U200D\U2640\UFE0F'
 emoji[woman_bouncing_ball_light_skin_tone_minimally]=$'\U26F9\U1F3FB\U200D\U2640'
 emoji[woman_bouncing_ball_medium_light_skin_tone]=$'\U26F9\U1F3FC\U200D\U2640\UFE0F'
@@ -2271,7 +2275,7 @@ emoji[man_lifting_weights]=$'\U1F3CB\UFE0F\U200D\U2642\UFE0F'
 emoji[weight_lifting_man]=$'\U1F3CB\UFE0F\U200D\U2642\UFE0F'
 emoji[man_lifting_weights_unqualified]=$'\U1F3CB\U200D\U2642\UFE0F'
 emoji[man_lifting_weights_unqualified_1]=$'\U1F3CB\UFE0F\U200D\U2642'
-emoji[man_lifting_weights_unqualified]=$'\U1F3CB\U200D\U2642'
+emoji[man_lifting_weights_unqualified_2]=$'\U1F3CB\U200D\U2642'
 emoji[man_lifting_weights_light_skin_tone]=$'\U1F3CB\U1F3FB\U200D\U2642\UFE0F'
 emoji[man_lifting_weights_light_skin_tone_minimally]=$'\U1F3CB\U1F3FB\U200D\U2642'
 emoji[man_lifting_weights_medium_light_skin_tone]=$'\U1F3CB\U1F3FC\U200D\U2642\UFE0F'
@@ -2286,7 +2290,7 @@ emoji[woman_lifting_weights]=$'\U1F3CB\UFE0F\U200D\U2640\UFE0F'
 emoji[weight_lifting_woman]=$'\U1F3CB\UFE0F\U200D\U2640\UFE0F'
 emoji[woman_lifting_weights_unqualified]=$'\U1F3CB\U200D\U2640\UFE0F'
 emoji[woman_lifting_weights_unqualified_1]=$'\U1F3CB\UFE0F\U200D\U2640'
-emoji[woman_lifting_weights_unqualified]=$'\U1F3CB\U200D\U2640'
+emoji[woman_lifting_weights_unqualified_2]=$'\U1F3CB\U200D\U2640'
 emoji[woman_lifting_weights_light_skin_tone]=$'\U1F3CB\U1F3FB\U200D\U2640\UFE0F'
 emoji[woman_lifting_weights_light_skin_tone_minimally]=$'\U1F3CB\U1F3FB\U200D\U2640'
 emoji[woman_lifting_weights_medium_light_skin_tone]=$'\U1F3CB\U1F3FC\U200D\U2640\UFE0F'
@@ -2543,36 +2547,36 @@ emoji[person_in_bed_dark_skin_tone]=$'\U1F6CC\U1F3FF'
 emoji[people_holding_hands]=$'\U1F9D1\U200D\U1F91D\U200D\U1F9D1'
 emoji[people_holding_hands_light_skin_tone]=$'\U1F9D1\U1F3FB\U200D\U1F91D\U200D\U1F9D1\U1F3FB'
 emoji[people_holding_hands_medium_light_skin_tone_light_skin_tone]=$'\U1F9D1\U1F3FC\U200D\U1F91D\U200D\U1F9D1\U1F3FB'
-emoji[people_holding_hands_medium_light_skin_tone]=$'\U1F9D1\U1F3FC\U200D\U1F91D\U200D\U1F9D1\U1F3FC'
+emoji[people_holding_hands_medium_light_skin_tone_light_skin_tone_1]=$'\U1F9D1\U1F3FC\U200D\U1F91D\U200D\U1F9D1\U1F3FC'
 emoji[people_holding_hands_medium_skin_tone_light_skin_tone]=$'\U1F9D1\U1F3FD\U200D\U1F91D\U200D\U1F9D1\U1F3FB'
 emoji[people_holding_hands_medium_skin_tone_medium_light_skin_tone]=$'\U1F9D1\U1F3FD\U200D\U1F91D\U200D\U1F9D1\U1F3FC'
-emoji[people_holding_hands_medium_skin_tone]=$'\U1F9D1\U1F3FD\U200D\U1F91D\U200D\U1F9D1\U1F3FD'
+emoji[people_holding_hands_medium_skin_tone_medium_light_skin_tone_1]=$'\U1F9D1\U1F3FD\U200D\U1F91D\U200D\U1F9D1\U1F3FD'
 emoji[people_holding_hands_medium_dark_skin_tone_light_skin_tone]=$'\U1F9D1\U1F3FE\U200D\U1F91D\U200D\U1F9D1\U1F3FB'
 emoji[people_holding_hands_medium_dark_skin_tone_medium_light_skin_tone]=$'\U1F9D1\U1F3FE\U200D\U1F91D\U200D\U1F9D1\U1F3FC'
 emoji[people_holding_hands_medium_dark_skin_tone_medium_skin_tone]=$'\U1F9D1\U1F3FE\U200D\U1F91D\U200D\U1F9D1\U1F3FD'
-emoji[people_holding_hands_medium_dark_skin_tone]=$'\U1F9D1\U1F3FE\U200D\U1F91D\U200D\U1F9D1\U1F3FE'
+emoji[people_holding_hands_medium_dark_skin_tone_medium_skin_tone_1]=$'\U1F9D1\U1F3FE\U200D\U1F91D\U200D\U1F9D1\U1F3FE'
 emoji[people_holding_hands_dark_skin_tone_light_skin_tone]=$'\U1F9D1\U1F3FF\U200D\U1F91D\U200D\U1F9D1\U1F3FB'
 emoji[people_holding_hands_dark_skin_tone_medium_light_skin_tone]=$'\U1F9D1\U1F3FF\U200D\U1F91D\U200D\U1F9D1\U1F3FC'
 emoji[people_holding_hands_dark_skin_tone_medium_skin_tone]=$'\U1F9D1\U1F3FF\U200D\U1F91D\U200D\U1F9D1\U1F3FD'
 emoji[people_holding_hands_dark_skin_tone_medium_dark_skin_tone]=$'\U1F9D1\U1F3FF\U200D\U1F91D\U200D\U1F9D1\U1F3FE'
-emoji[people_holding_hands_dark_skin_tone]=$'\U1F9D1\U1F3FF\U200D\U1F91D\U200D\U1F9D1\U1F3FF'
+emoji[people_holding_hands_dark_skin_tone_medium_dark_skin_tone_1]=$'\U1F9D1\U1F3FF\U200D\U1F91D\U200D\U1F9D1\U1F3FF'
 emoji[women_holding_hands]=$'\U1F46D'
 emoji[two_women_holding_hands]=$'\U1F46D'
 emoji[women_holding_hands_light_skin_tone]=$'\U1F46D\U1F3FB'
 emoji[women_holding_hands_medium_light_skin_tone_light_skin_tone]=$'\U1F469\U1F3FC\U200D\U1F91D\U200D\U1F469\U1F3FB'
-emoji[women_holding_hands_medium_light_skin_tone]=$'\U1F46D\U1F3FC'
+emoji[women_holding_hands_medium_light_skin_tone_light_skin_tone_1]=$'\U1F46D\U1F3FC'
 emoji[women_holding_hands_medium_skin_tone_light_skin_tone]=$'\U1F469\U1F3FD\U200D\U1F91D\U200D\U1F469\U1F3FB'
 emoji[women_holding_hands_medium_skin_tone_medium_light_skin_tone]=$'\U1F469\U1F3FD\U200D\U1F91D\U200D\U1F469\U1F3FC'
-emoji[women_holding_hands_medium_skin_tone]=$'\U1F46D\U1F3FD'
+emoji[women_holding_hands_medium_skin_tone_medium_light_skin_tone_1]=$'\U1F46D\U1F3FD'
 emoji[women_holding_hands_medium_dark_skin_tone_light_skin_tone]=$'\U1F469\U1F3FE\U200D\U1F91D\U200D\U1F469\U1F3FB'
 emoji[women_holding_hands_medium_dark_skin_tone_medium_light_skin_tone]=$'\U1F469\U1F3FE\U200D\U1F91D\U200D\U1F469\U1F3FC'
 emoji[women_holding_hands_medium_dark_skin_tone_medium_skin_tone]=$'\U1F469\U1F3FE\U200D\U1F91D\U200D\U1F469\U1F3FD'
-emoji[women_holding_hands_medium_dark_skin_tone]=$'\U1F46D\U1F3FE'
+emoji[women_holding_hands_medium_dark_skin_tone_medium_skin_tone_1]=$'\U1F46D\U1F3FE'
 emoji[women_holding_hands_dark_skin_tone_light_skin_tone]=$'\U1F469\U1F3FF\U200D\U1F91D\U200D\U1F469\U1F3FB'
 emoji[women_holding_hands_dark_skin_tone_medium_light_skin_tone]=$'\U1F469\U1F3FF\U200D\U1F91D\U200D\U1F469\U1F3FC'
 emoji[women_holding_hands_dark_skin_tone_medium_skin_tone]=$'\U1F469\U1F3FF\U200D\U1F91D\U200D\U1F469\U1F3FD'
 emoji[women_holding_hands_dark_skin_tone_medium_dark_skin_tone]=$'\U1F469\U1F3FF\U200D\U1F91D\U200D\U1F469\U1F3FE'
-emoji[women_holding_hands_dark_skin_tone]=$'\U1F46D\U1F3FF'
+emoji[women_holding_hands_dark_skin_tone_medium_dark_skin_tone_1]=$'\U1F46D\U1F3FF'
 emoji[woman_and_man_holding_hands]=$'\U1F46B'
 emoji[couple]=$'\U1F46B'
 emoji[woman_and_man_holding_hands_light_skin_tone]=$'\U1F46B\U1F3FB'
@@ -2581,42 +2585,42 @@ emoji[woman_and_man_holding_hands_light_skin_tone_medium_skin_tone]=$'\U1F469\U1
 emoji[woman_and_man_holding_hands_light_skin_tone_medium_dark_skin_tone]=$'\U1F469\U1F3FB\U200D\U1F91D\U200D\U1F468\U1F3FE'
 emoji[woman_and_man_holding_hands_light_skin_tone_dark_skin_tone]=$'\U1F469\U1F3FB\U200D\U1F91D\U200D\U1F468\U1F3FF'
 emoji[woman_and_man_holding_hands_medium_light_skin_tone_light_skin_tone]=$'\U1F469\U1F3FC\U200D\U1F91D\U200D\U1F468\U1F3FB'
-emoji[woman_and_man_holding_hands_medium_light_skin_tone]=$'\U1F46B\U1F3FC'
+emoji[woman_and_man_holding_hands_medium_light_skin_tone_light_skin_tone_1]=$'\U1F46B\U1F3FC'
 emoji[woman_and_man_holding_hands_medium_light_skin_tone_medium_skin_tone]=$'\U1F469\U1F3FC\U200D\U1F91D\U200D\U1F468\U1F3FD'
 emoji[woman_and_man_holding_hands_medium_light_skin_tone_medium_dark_skin_tone]=$'\U1F469\U1F3FC\U200D\U1F91D\U200D\U1F468\U1F3FE'
 emoji[woman_and_man_holding_hands_medium_light_skin_tone_dark_skin_tone]=$'\U1F469\U1F3FC\U200D\U1F91D\U200D\U1F468\U1F3FF'
 emoji[woman_and_man_holding_hands_medium_skin_tone_light_skin_tone]=$'\U1F469\U1F3FD\U200D\U1F91D\U200D\U1F468\U1F3FB'
 emoji[woman_and_man_holding_hands_medium_skin_tone_medium_light_skin_tone]=$'\U1F469\U1F3FD\U200D\U1F91D\U200D\U1F468\U1F3FC'
-emoji[woman_and_man_holding_hands_medium_skin_tone]=$'\U1F46B\U1F3FD'
+emoji[woman_and_man_holding_hands_medium_skin_tone_medium_light_skin_tone_1]=$'\U1F46B\U1F3FD'
 emoji[woman_and_man_holding_hands_medium_skin_tone_medium_dark_skin_tone]=$'\U1F469\U1F3FD\U200D\U1F91D\U200D\U1F468\U1F3FE'
 emoji[woman_and_man_holding_hands_medium_skin_tone_dark_skin_tone]=$'\U1F469\U1F3FD\U200D\U1F91D\U200D\U1F468\U1F3FF'
 emoji[woman_and_man_holding_hands_medium_dark_skin_tone_light_skin_tone]=$'\U1F469\U1F3FE\U200D\U1F91D\U200D\U1F468\U1F3FB'
 emoji[woman_and_man_holding_hands_medium_dark_skin_tone_medium_light_skin_tone]=$'\U1F469\U1F3FE\U200D\U1F91D\U200D\U1F468\U1F3FC'
 emoji[woman_and_man_holding_hands_medium_dark_skin_tone_medium_skin_tone]=$'\U1F469\U1F3FE\U200D\U1F91D\U200D\U1F468\U1F3FD'
-emoji[woman_and_man_holding_hands_medium_dark_skin_tone]=$'\U1F46B\U1F3FE'
+emoji[woman_and_man_holding_hands_medium_dark_skin_tone_medium_skin_tone_1]=$'\U1F46B\U1F3FE'
 emoji[woman_and_man_holding_hands_medium_dark_skin_tone_dark_skin_tone]=$'\U1F469\U1F3FE\U200D\U1F91D\U200D\U1F468\U1F3FF'
 emoji[woman_and_man_holding_hands_dark_skin_tone_light_skin_tone]=$'\U1F469\U1F3FF\U200D\U1F91D\U200D\U1F468\U1F3FB'
 emoji[woman_and_man_holding_hands_dark_skin_tone_medium_light_skin_tone]=$'\U1F469\U1F3FF\U200D\U1F91D\U200D\U1F468\U1F3FC'
 emoji[woman_and_man_holding_hands_dark_skin_tone_medium_skin_tone]=$'\U1F469\U1F3FF\U200D\U1F91D\U200D\U1F468\U1F3FD'
 emoji[woman_and_man_holding_hands_dark_skin_tone_medium_dark_skin_tone]=$'\U1F469\U1F3FF\U200D\U1F91D\U200D\U1F468\U1F3FE'
-emoji[woman_and_man_holding_hands_dark_skin_tone]=$'\U1F46B\U1F3FF'
+emoji[woman_and_man_holding_hands_dark_skin_tone_medium_dark_skin_tone_1]=$'\U1F46B\U1F3FF'
 emoji[men_holding_hands]=$'\U1F46C'
 emoji[two_men_holding_hands]=$'\U1F46C'
 emoji[men_holding_hands_light_skin_tone]=$'\U1F46C\U1F3FB'
 emoji[men_holding_hands_medium_light_skin_tone_light_skin_tone]=$'\U1F468\U1F3FC\U200D\U1F91D\U200D\U1F468\U1F3FB'
-emoji[men_holding_hands_medium_light_skin_tone]=$'\U1F46C\U1F3FC'
+emoji[men_holding_hands_medium_light_skin_tone_light_skin_tone_1]=$'\U1F46C\U1F3FC'
 emoji[men_holding_hands_medium_skin_tone_light_skin_tone]=$'\U1F468\U1F3FD\U200D\U1F91D\U200D\U1F468\U1F3FB'
 emoji[men_holding_hands_medium_skin_tone_medium_light_skin_tone]=$'\U1F468\U1F3FD\U200D\U1F91D\U200D\U1F468\U1F3FC'
-emoji[men_holding_hands_medium_skin_tone]=$'\U1F46C\U1F3FD'
+emoji[men_holding_hands_medium_skin_tone_medium_light_skin_tone_1]=$'\U1F46C\U1F3FD'
 emoji[men_holding_hands_medium_dark_skin_tone_light_skin_tone]=$'\U1F468\U1F3FE\U200D\U1F91D\U200D\U1F468\U1F3FB'
 emoji[men_holding_hands_medium_dark_skin_tone_medium_light_skin_tone]=$'\U1F468\U1F3FE\U200D\U1F91D\U200D\U1F468\U1F3FC'
 emoji[men_holding_hands_medium_dark_skin_tone_medium_skin_tone]=$'\U1F468\U1F3FE\U200D\U1F91D\U200D\U1F468\U1F3FD'
-emoji[men_holding_hands_medium_dark_skin_tone]=$'\U1F46C\U1F3FE'
+emoji[men_holding_hands_medium_dark_skin_tone_medium_skin_tone_1]=$'\U1F46C\U1F3FE'
 emoji[men_holding_hands_dark_skin_tone_light_skin_tone]=$'\U1F468\U1F3FF\U200D\U1F91D\U200D\U1F468\U1F3FB'
 emoji[men_holding_hands_dark_skin_tone_medium_light_skin_tone]=$'\U1F468\U1F3FF\U200D\U1F91D\U200D\U1F468\U1F3FC'
 emoji[men_holding_hands_dark_skin_tone_medium_skin_tone]=$'\U1F468\U1F3FF\U200D\U1F91D\U200D\U1F468\U1F3FD'
 emoji[men_holding_hands_dark_skin_tone_medium_dark_skin_tone]=$'\U1F468\U1F3FF\U200D\U1F91D\U200D\U1F468\U1F3FE'
-emoji[men_holding_hands_dark_skin_tone]=$'\U1F46C\U1F3FF'
+emoji[men_holding_hands_dark_skin_tone_medium_dark_skin_tone_1]=$'\U1F46C\U1F3FF'
 emoji[kiss]=$'\U1F48F'
 emoji[couplekiss]=$'\U1F48F'
 emoji[kiss_woman_man]=$'\U1F469\U200D\U2764\UFE0F\U200D\U1F48B\U200D\U1F468'
@@ -2670,17 +2674,19 @@ emoji_mod[light_skin_tone]=$'\U1F3FB'
 emoji_mod[medium_light_skin_tone]=$'\U1F3FC'
 emoji_mod[medium_skin_tone]=$'\U1F3FD'
 emoji_mod[medium_dark_skin_tone]=$'\U1F3FE'
-emoji_mod[dark_skin_tone]=$'\U1F3FF'
+emoji_mod[medium_dark_skin_tone_1]=$'\U1F3FF'
 emoji_mod[red_hair]=$'\U1F9B0'
 emoji_mod[curly_hair]=$'\U1F9B1'
 emoji_mod[white_hair]=$'\U1F9B3'
 emoji_mod[bald]=$'\U1F9B2'
 emoji[monkey_face]=$'\U1F435'
+emoji[monkey_face_1]=$'\U1F412'
 emoji[monkey]=$'\U1F412'
 emoji[gorilla]=$'\U1F98D'
 emoji[orangutan]=$'\U1F9A7'
 emoji[dog_face]=$'\U1F436'
-emoji[dog]=$'\U1F415'
+emoji[dog]=$'\U1F436'
+emoji[dog_face_1]=$'\U1F415'
 emoji[dog2]=$'\U1F415'
 emoji[guide_dog]=$'\U1F9AE'
 emoji[service_dog]=$'\U1F415\U200D\U1F9BA'
@@ -2690,15 +2696,18 @@ emoji[fox]=$'\U1F98A'
 emoji[fox_face]=$'\U1F98A'
 emoji[raccoon]=$'\U1F99D'
 emoji[cat_face]=$'\U1F431'
-emoji[cat]=$'\U1F408'
+emoji[cat]=$'\U1F431'
+emoji[cat_face_1]=$'\U1F408'
 emoji[cat2]=$'\U1F408'
 emoji[lion]=$'\U1F981'
 emoji[tiger_face]=$'\U1F42F'
-emoji[tiger]=$'\U1F405'
+emoji[tiger]=$'\U1F42F'
+emoji[tiger_face_1]=$'\U1F405'
 emoji[tiger2]=$'\U1F405'
 emoji[leopard]=$'\U1F406'
 emoji[horse_face]=$'\U1F434'
-emoji[horse]=$'\U1F40E'
+emoji[horse]=$'\U1F434'
+emoji[horse_face_1]=$'\U1F40E'
 emoji[racehorse]=$'\U1F40E'
 emoji[unicorn]=$'\U1F984'
 emoji[zebra]=$'\U1F993'
@@ -2709,7 +2718,8 @@ emoji[water_buffalo]=$'\U1F403'
 emoji[cow]=$'\U1F404'
 emoji[cow2]=$'\U1F404'
 emoji[pig_face]=$'\U1F437'
-emoji[pig]=$'\U1F416'
+emoji[pig]=$'\U1F437'
+emoji[pig_face_1]=$'\U1F416'
 emoji[pig2]=$'\U1F416'
 emoji[boar]=$'\U1F417'
 emoji[pig_nose]=$'\U1F43D'
@@ -2726,12 +2736,14 @@ emoji[elephant]=$'\U1F418'
 emoji[rhinoceros]=$'\U1F98F'
 emoji[hippopotamus]=$'\U1F99B'
 emoji[mouse_face]=$'\U1F42D'
-emoji[mouse]=$'\U1F401'
+emoji[mouse]=$'\U1F42D'
+emoji[mouse_face_1]=$'\U1F401'
 emoji[mouse2]=$'\U1F401'
 emoji[rat]=$'\U1F400'
 emoji[hamster]=$'\U1F439'
 emoji[rabbit_face]=$'\U1F430'
-emoji[rabbit]=$'\U1F407'
+emoji[rabbit]=$'\U1F430'
+emoji[rabbit_face_1]=$'\U1F407'
 emoji[rabbit2]=$'\U1F407'
 emoji[chipmunk]=$'\U1F43F\UFE0F'
 emoji[chipmunk_unqualified]=$'\U1F43F'
@@ -2772,12 +2784,14 @@ emoji[turtle]=$'\U1F422'
 emoji[lizard]=$'\U1F98E'
 emoji[snake]=$'\U1F40D'
 emoji[dragon_face]=$'\U1F432'
+emoji[dragon_face_1]=$'\U1F409'
 emoji[dragon]=$'\U1F409'
 emoji[sauropod]=$'\U1F995'
 emoji[T_Rex]=$'\U1F996'
 emoji[t-rex]=$'\U1F996'
 emoji[spouting_whale]=$'\U1F433'
-emoji[whale]=$'\U1F40B'
+emoji[whale]=$'\U1F433'
+emoji[spouting_whale_1]=$'\U1F40B'
 emoji[whale2]=$'\U1F40B'
 emoji[dolphin]=$'\U1F42C'
 emoji[flipper]=$'\U1F42C'
@@ -2809,6 +2823,7 @@ emoji[cherry_blossom]=$'\U1F338'
 emoji[white_flower]=$'\U1F4AE'
 emoji[rosette]=$'\U1F3F5\UFE0F'
 emoji[rosette_unqualified]=$'\U1F3F5'
+emoji[rosette_unqualified_1]=$'\U1F339'
 emoji[rose]=$'\U1F339'
 emoji[wilted_flower]=$'\U1F940'
 emoji[hibiscus]=$'\U1F33A'
@@ -2975,6 +2990,7 @@ emoji[chopsticks]=$'\U1F962'
 emoji[fork_and_knife_with_plate]=$'\U1F37D\UFE0F'
 emoji[fork_and_knife_with_plate_unqualified]=$'\U1F37D'
 emoji[plate_with_cutlery]=$'\U1F37D'
+emoji[fork_and_knife_with_plate_unqualified_1]=$'\U1F374'
 emoji[fork_and_knife]=$'\U1F374'
 emoji[spoon]=$'\U1F944'
 emoji[kitchen_knife]=$'\U1F52A'
@@ -2996,8 +3012,9 @@ emoji[compass]=$'\U1F9ED'
 emoji[snow_capped_mountain]=$'\U1F3D4\UFE0F'
 emoji[snow_capped_mountain_unqualified]=$'\U1F3D4'
 emoji[mountain_snow]=$'\U1F3D4'
-emoji[mountain]=$'\U26F0\UFE0F'
-emoji[mountain_unqualified]=$'\U26F0'
+emoji[snow_capped_mountain_unqualified_1]=$'\U26F0\UFE0F'
+emoji[snow_capped_mountain_unqualified_2]=$'\U26F0'
+emoji[mountain]=$'\U26F0'
 emoji[volcano]=$'\U1F30B'
 emoji[mount_fuji]=$'\U1F5FB'
 emoji[camping]=$'\U1F3D5\UFE0F'
@@ -3023,12 +3040,14 @@ emoji[houses]=$'\U1F3D8\UFE0F'
 emoji[houses_unqualified]=$'\U1F3D8'
 emoji[derelict_house]=$'\U1F3DA\UFE0F'
 emoji[derelict_house_unqualified]=$'\U1F3DA'
+emoji[derelict_house_unqualified_1]=$'\U1F3E0'
 emoji[house]=$'\U1F3E0'
 emoji[house_with_garden]=$'\U1F3E1'
 emoji[office_building]=$'\U1F3E2'
 emoji[office]=$'\U1F3E2'
 emoji[Japanese_post_office]=$'\U1F3E3'
-emoji[post_office]=$'\U1F3E4'
+emoji[post_office]=$'\U1F3E3'
+emoji[Japanese_post_office_1]=$'\U1F3E4'
 emoji[european_post_office]=$'\U1F3E4'
 emoji[hospital]=$'\U1F3E5'
 emoji[bank]=$'\U1F3E6'
@@ -3040,7 +3059,7 @@ emoji[department_store]=$'\U1F3EC'
 emoji[factory]=$'\U1F3ED'
 emoji[Japanese_castle]=$'\U1F3EF'
 emoji[japanese_castle]=$'\U1F3EF'
-emoji[castle]=$'\U1F3F0'
+emoji[Japanese_castle_1]=$'\U1F3F0'
 emoji[european_castle]=$'\U1F3F0'
 emoji[wedding]=$'\U1F492'
 emoji[Tokyo_tower]=$'\U1F5FC'
@@ -3061,6 +3080,7 @@ emoji[night_with_stars]=$'\U1F303'
 emoji[cityscape]=$'\U1F3D9\UFE0F'
 emoji[cityscape_unqualified]=$'\U1F3D9'
 emoji[sunrise_over_mountains]=$'\U1F304'
+emoji[sunrise_over_mountains_1]=$'\U1F305'
 emoji[sunrise]=$'\U1F305'
 emoji[cityscape_at_dusk]=$'\U1F306'
 emoji[city_sunset]=$'\U1F306'
@@ -3083,7 +3103,7 @@ emoji[high_speed_train]=$'\U1F684'
 emoji[bullettrain_side]=$'\U1F684'
 emoji[bullet_train]=$'\U1F685'
 emoji[bullettrain_front]=$'\U1F685'
-emoji[train]=$'\U1F686'
+emoji[bullet_train_1]=$'\U1F686'
 emoji[train2]=$'\U1F686'
 emoji[metro]=$'\U1F687'
 emoji[light_rail]=$'\U1F688'
@@ -3092,6 +3112,7 @@ emoji[tram]=$'\U1F68A'
 emoji[monorail]=$'\U1F69D'
 emoji[mountain_railway]=$'\U1F69E'
 emoji[tram_car]=$'\U1F68B'
+emoji[train]=$'\U1F68B'
 emoji[bus]=$'\U1F68C'
 emoji[oncoming_bus]=$'\U1F68D'
 emoji[trolleybus]=$'\U1F68E'
@@ -3244,6 +3265,7 @@ emoji[full_moon]=$'\U1F315'
 emoji[waning_gibbous_moon]=$'\U1F316'
 emoji[last_quarter_moon]=$'\U1F317'
 emoji[waning_crescent_moon]=$'\U1F318'
+emoji[waning_crescent_moon_1]=$'\U1F319'
 emoji[crescent_moon]=$'\U1F319'
 emoji[new_moon_face]=$'\U1F31A'
 emoji[new_moon_with_face]=$'\U1F31A'
@@ -3293,10 +3315,11 @@ emoji[wind_face_unqualified]=$'\U1F32C'
 emoji[cyclone]=$'\U1F300'
 emoji[rainbow]=$'\U1F308'
 emoji[closed_umbrella]=$'\U1F302'
-emoji[umbrella]=$'\U2602\UFE0F'
+emoji[closed_umbrella_1]=$'\U2602\UFE0F'
 emoji[open_umbrella]=$'\U2602\UFE0F'
 emoji[umbrella_unqualified]=$'\U2602'
 emoji[umbrella_with_rain_drops]=$'\U2614'
+emoji[umbrella]=$'\U2614'
 emoji[umbrella_on_ground]=$'\U26F1\UFE0F'
 emoji[umbrella_on_ground_unqualified]=$'\U26F1'
 emoji[parasol_on_ground]=$'\U26F1'
@@ -3344,6 +3367,7 @@ emoji[reminder_ribbon_unqualified]=$'\U1F397'
 emoji[admission_tickets]=$'\U1F39F\UFE0F'
 emoji[admission_tickets_unqualified]=$'\U1F39F'
 emoji[tickets]=$'\U1F39F'
+emoji[admission_tickets_unqualified_1]=$'\U1F3AB'
 emoji[ticket]=$'\U1F3AB'
 emoji[military_medal]=$'\U1F396\UFE0F'
 emoji[military_medal_unqualified]=$'\U1F396'
@@ -3610,6 +3634,7 @@ emoji[rolled_up_newspaper]=$'\U1F5DE\UFE0F'
 emoji[rolled_up_newspaper_unqualified]=$'\U1F5DE'
 emoji[newspaper_roll]=$'\U1F5DE'
 emoji[bookmark_tabs]=$'\U1F4D1'
+emoji[bookmark_tabs_1]=$'\U1F516'
 emoji[bookmark]=$'\U1F516'
 emoji[label]=$'\U1F3F7\UFE0F'
 emoji[label_unqualified]=$'\U1F3F7'
@@ -3659,8 +3684,9 @@ emoji[black_nib]=$'\U2712\UFE0F'
 emoji[black_nib_unqualified]=$'\U2712'
 emoji[fountain_pen]=$'\U1F58B\UFE0F'
 emoji[fountain_pen_unqualified]=$'\U1F58B'
-emoji[pen]=$'\U1F58A\UFE0F'
-emoji[pen_unqualified]=$'\U1F58A'
+emoji[fountain_pen_unqualified_1]=$'\U1F58A\UFE0F'
+emoji[fountain_pen_unqualified_2]=$'\U1F58A'
+emoji[pen]=$'\U1F58A'
 emoji[paintbrush]=$'\U1F58C\UFE0F'
 emoji[paintbrush_unqualified]=$'\U1F58C'
 emoji[crayon]=$'\U1F58D\UFE0F'
@@ -3709,6 +3735,7 @@ emoji[locked_with_pen]=$'\U1F50F'
 emoji[lock_with_ink_pen]=$'\U1F50F'
 emoji[locked_with_key]=$'\U1F510'
 emoji[closed_lock_with_key]=$'\U1F510'
+emoji[locked_with_key_1]=$'\U1F511'
 emoji[key]=$'\U1F511'
 emoji[old_key]=$'\U1F5DD\UFE0F'
 emoji[old_key_unqualified]=$'\U1F5DD'
@@ -3828,9 +3855,9 @@ emoji[up_arrow_unqualified]=$'\U2B06'
 emoji[up_right_arrow]=$'\U2197\UFE0F'
 emoji[arrow_upper_right]=$'\U2197\UFE0F'
 emoji[up_right_arrow_unqualified]=$'\U2197'
-emoji[right_arrow]=$'\U27A1\UFE0F'
+emoji[up_right_arrow_unqualified_1]=$'\U27A1\UFE0F'
 emoji[arrow_right]=$'\U27A1\UFE0F'
-emoji[right_arrow_unqualified]=$'\U27A1'
+emoji[up_right_arrow_unqualified_2]=$'\U27A1'
 emoji[down_right_arrow]=$'\U2198\UFE0F'
 emoji[arrow_lower_right]=$'\U2198\UFE0F'
 emoji[down_right_arrow_unqualified]=$'\U2198'
@@ -3840,9 +3867,9 @@ emoji[down_arrow_unqualified]=$'\U2B07'
 emoji[down_left_arrow]=$'\U2199\UFE0F'
 emoji[arrow_lower_left]=$'\U2199\UFE0F'
 emoji[down_left_arrow_unqualified]=$'\U2199'
-emoji[left_arrow]=$'\U2B05\UFE0F'
+emoji[down_left_arrow_unqualified_1]=$'\U2B05\UFE0F'
 emoji[arrow_left]=$'\U2B05\UFE0F'
-emoji[left_arrow_unqualified]=$'\U2B05'
+emoji[down_left_arrow_unqualified_2]=$'\U2B05'
 emoji[up_left_arrow]=$'\U2196\UFE0F'
 emoji[arrow_upper_left]=$'\U2196\UFE0F'
 emoji[up_left_arrow_unqualified]=$'\U2196'
@@ -3880,8 +3907,9 @@ emoji[top]=$'\U1F51D'
 emoji[place_of_worship]=$'\U1F6D0'
 emoji[atom_symbol]=$'\U269B\UFE0F'
 emoji[atom_symbol_unqualified]=$'\U269B'
-emoji[om]=$'\U1F549\UFE0F'
+emoji[atom_symbol_unqualified_1]=$'\U1F549\UFE0F'
 emoji[om_unqualified]=$'\U1F549'
+emoji[om]=$'\U1F549'
 emoji[star_of_David]=$'\U2721\UFE0F'
 emoji[star_of_david]=$'\U2721\UFE0F'
 emoji[star_of_David_unqualified]=$'\U2721'
@@ -3976,8 +4004,9 @@ emoji[vibration_mode]=$'\U1F4F3'
 emoji[mobile_phone_off]=$'\U1F4F4'
 emoji[female_sign]=$'\U2640\UFE0F'
 emoji[female_sign_unqualified]=$'\U2640'
+emoji[female_sign_unqualified_1]=$'\U2642\UFE0F'
 emoji[male_sign]=$'\U2642\UFE0F'
-emoji[male_sign_unqualified]=$'\U2642'
+emoji[female_sign_unqualified_2]=$'\U2642'
 emoji[medical_symbol]=$'\U2695\UFE0F'
 emoji[medical_symbol_unqualified]=$'\U2695'
 emoji[infinity]=$'\U267E\UFE0F'
@@ -4033,13 +4062,13 @@ emoji[double_exclamation_mark_unqualified]=$'\U203C'
 emoji[exclamation_question_mark]=$'\U2049\UFE0F'
 emoji[interrobang]=$'\U2049\UFE0F'
 emoji[exclamation_question_mark_unqualified]=$'\U2049'
-emoji[question_mark]=$'\U2753'
+emoji[exclamation_question_mark_unqualified_1]=$'\U2753'
 emoji[question]=$'\U2753'
 emoji[white_question_mark]=$'\U2754'
 emoji[grey_question]=$'\U2754'
 emoji[white_exclamation_mark]=$'\U2755'
 emoji[grey_exclamation]=$'\U2755'
-emoji[exclamation_mark]=$'\U2757'
+emoji[white_exclamation_mark_1]=$'\U2757'
 emoji[exclamation]=$'\U2757'
 emoji[heavy_exclamation_mark]=$'\U2757'
 emoji[wavy_dash]=$'\U3030\UFE0F'
@@ -4104,7 +4133,7 @@ emoji[a]=$'\U1F170\UFE0F'
 emoji[A_button_blood_type__unqualified]=$'\U1F170'
 emoji[AB_button_blood_type_]=$'\U1F18E'
 emoji[ab]=$'\U1F18E'
-emoji[B_button_blood_type_]=$'\U1F171\UFE0F'
+emoji[AB_button_blood_type__1]=$'\U1F171\UFE0F'
 emoji[b]=$'\U1F171\UFE0F'
 emoji[B_button_blood_type__unqualified]=$'\U1F171'
 emoji[CL_button]=$'\U1F191'
@@ -5277,7 +5306,7 @@ emoji_groups[vehicles]="
   railway_car
   high_speed_train
   bullet_train
-  train
+  bullet_train_1
   metro
   light_rail
   station
@@ -6332,7 +6361,7 @@ emoji_groups[people]="
   woman_dancing_medium_skin_tone
   woman_dancing_medium_dark_skin_tone
   woman_dancing_dark_skin_tone
-  man_dancing
+  woman_dancing_dark_skin_tone_1
   man_dancing_light_skin_tone
   man_dancing_medium_light_skin_tone
   man_dancing_medium_skin_tone
@@ -6649,35 +6678,35 @@ emoji_groups[people]="
   people_holding_hands
   people_holding_hands_light_skin_tone
   people_holding_hands_medium_light_skin_tone_light_skin_tone
-  people_holding_hands_medium_light_skin_tone
+  people_holding_hands_medium_light_skin_tone_light_skin_tone_1
   people_holding_hands_medium_skin_tone_light_skin_tone
   people_holding_hands_medium_skin_tone_medium_light_skin_tone
-  people_holding_hands_medium_skin_tone
+  people_holding_hands_medium_skin_tone_medium_light_skin_tone_1
   people_holding_hands_medium_dark_skin_tone_light_skin_tone
   people_holding_hands_medium_dark_skin_tone_medium_light_skin_tone
   people_holding_hands_medium_dark_skin_tone_medium_skin_tone
-  people_holding_hands_medium_dark_skin_tone
+  people_holding_hands_medium_dark_skin_tone_medium_skin_tone_1
   people_holding_hands_dark_skin_tone_light_skin_tone
   people_holding_hands_dark_skin_tone_medium_light_skin_tone
   people_holding_hands_dark_skin_tone_medium_skin_tone
   people_holding_hands_dark_skin_tone_medium_dark_skin_tone
-  people_holding_hands_dark_skin_tone
+  people_holding_hands_dark_skin_tone_medium_dark_skin_tone_1
   women_holding_hands
   women_holding_hands_light_skin_tone
   women_holding_hands_medium_light_skin_tone_light_skin_tone
-  women_holding_hands_medium_light_skin_tone
+  women_holding_hands_medium_light_skin_tone_light_skin_tone_1
   women_holding_hands_medium_skin_tone_light_skin_tone
   women_holding_hands_medium_skin_tone_medium_light_skin_tone
-  women_holding_hands_medium_skin_tone
+  women_holding_hands_medium_skin_tone_medium_light_skin_tone_1
   women_holding_hands_medium_dark_skin_tone_light_skin_tone
   women_holding_hands_medium_dark_skin_tone_medium_light_skin_tone
   women_holding_hands_medium_dark_skin_tone_medium_skin_tone
-  women_holding_hands_medium_dark_skin_tone
+  women_holding_hands_medium_dark_skin_tone_medium_skin_tone_1
   women_holding_hands_dark_skin_tone_light_skin_tone
   women_holding_hands_dark_skin_tone_medium_light_skin_tone
   women_holding_hands_dark_skin_tone_medium_skin_tone
   women_holding_hands_dark_skin_tone_medium_dark_skin_tone
-  women_holding_hands_dark_skin_tone
+  women_holding_hands_dark_skin_tone_medium_dark_skin_tone_1
   woman_and_man_holding_hands
   woman_and_man_holding_hands_light_skin_tone
   woman_and_man_holding_hands_light_skin_tone_medium_light_skin_tone
@@ -6685,41 +6714,41 @@ emoji_groups[people]="
   woman_and_man_holding_hands_light_skin_tone_medium_dark_skin_tone
   woman_and_man_holding_hands_light_skin_tone_dark_skin_tone
   woman_and_man_holding_hands_medium_light_skin_tone_light_skin_tone
-  woman_and_man_holding_hands_medium_light_skin_tone
+  woman_and_man_holding_hands_medium_light_skin_tone_light_skin_tone_1
   woman_and_man_holding_hands_medium_light_skin_tone_medium_skin_tone
   woman_and_man_holding_hands_medium_light_skin_tone_medium_dark_skin_tone
   woman_and_man_holding_hands_medium_light_skin_tone_dark_skin_tone
   woman_and_man_holding_hands_medium_skin_tone_light_skin_tone
   woman_and_man_holding_hands_medium_skin_tone_medium_light_skin_tone
-  woman_and_man_holding_hands_medium_skin_tone
+  woman_and_man_holding_hands_medium_skin_tone_medium_light_skin_tone_1
   woman_and_man_holding_hands_medium_skin_tone_medium_dark_skin_tone
   woman_and_man_holding_hands_medium_skin_tone_dark_skin_tone
   woman_and_man_holding_hands_medium_dark_skin_tone_light_skin_tone
   woman_and_man_holding_hands_medium_dark_skin_tone_medium_light_skin_tone
   woman_and_man_holding_hands_medium_dark_skin_tone_medium_skin_tone
-  woman_and_man_holding_hands_medium_dark_skin_tone
+  woman_and_man_holding_hands_medium_dark_skin_tone_medium_skin_tone_1
   woman_and_man_holding_hands_medium_dark_skin_tone_dark_skin_tone
   woman_and_man_holding_hands_dark_skin_tone_light_skin_tone
   woman_and_man_holding_hands_dark_skin_tone_medium_light_skin_tone
   woman_and_man_holding_hands_dark_skin_tone_medium_skin_tone
   woman_and_man_holding_hands_dark_skin_tone_medium_dark_skin_tone
-  woman_and_man_holding_hands_dark_skin_tone
+  woman_and_man_holding_hands_dark_skin_tone_medium_dark_skin_tone_1
   men_holding_hands
   men_holding_hands_light_skin_tone
   men_holding_hands_medium_light_skin_tone_light_skin_tone
-  men_holding_hands_medium_light_skin_tone
+  men_holding_hands_medium_light_skin_tone_light_skin_tone_1
   men_holding_hands_medium_skin_tone_light_skin_tone
   men_holding_hands_medium_skin_tone_medium_light_skin_tone
-  men_holding_hands_medium_skin_tone
+  men_holding_hands_medium_skin_tone_medium_light_skin_tone_1
   men_holding_hands_medium_dark_skin_tone_light_skin_tone
   men_holding_hands_medium_dark_skin_tone_medium_light_skin_tone
   men_holding_hands_medium_dark_skin_tone_medium_skin_tone
-  men_holding_hands_medium_dark_skin_tone
+  men_holding_hands_medium_dark_skin_tone_medium_skin_tone_1
   men_holding_hands_dark_skin_tone_light_skin_tone
   men_holding_hands_dark_skin_tone_medium_light_skin_tone
   men_holding_hands_dark_skin_tone_medium_skin_tone
   men_holding_hands_dark_skin_tone_medium_dark_skin_tone
-  men_holding_hands_dark_skin_tone
+  men_holding_hands_dark_skin_tone_medium_dark_skin_tone_1
   kiss
   kiss_woman_man
   kiss_man_man
@@ -6762,11 +6791,11 @@ emoji_groups[people]="
 
 emoji_groups[animals]="
   monkey_face
-  monkey
+  monkey_face_1
   gorilla
   orangutan
   dog_face
-  dog
+  dog_face_1
   guide_dog
   service_dog
   poodle
@@ -6774,13 +6803,13 @@ emoji_groups[animals]="
   fox
   raccoon
   cat_face
-  cat
+  cat_face_1
   lion
   tiger_face
-  tiger
+  tiger_face_1
   leopard
   horse_face
-  horse
+  horse_face_1
   unicorn
   zebra
   deer
@@ -6789,7 +6818,7 @@ emoji_groups[animals]="
   water_buffalo
   cow
   pig_face
-  pig
+  pig_face_1
   boar
   pig_nose
   ram
@@ -6803,11 +6832,11 @@ emoji_groups[animals]="
   rhinoceros
   hippopotamus
   mouse_face
-  mouse
+  mouse_face_1
   rat
   hamster
   rabbit_face
-  rabbit
+  rabbit_face_1
   chipmunk
   hedgehog
   bat
@@ -6842,11 +6871,11 @@ emoji_groups[animals]="
   lizard
   snake
   dragon_face
-  dragon
+  dragon_face_1
   sauropod
   T_Rex
   spouting_whale
-  whale
+  spouting_whale_1
   dolphin
   fish
   tropical_fish
@@ -6934,7 +6963,7 @@ emoji_groups[faces]="
   confused_face
   worried_face
   slightly_frowning_face
-  frowning_face
+  slightly_frowning_face_1
   face_with_open_mouth
   hushed_face
   astonished_face

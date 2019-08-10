@@ -137,8 +137,8 @@ for line in spec:
         omz_codes = code_to_omz(code_points)
         omz_name = name_to_omz(name, group, subgroup, status)
         # If this emoji has the same shortname as the preceding one
-        if omz_name == short_name_buffer:
-            omz_name = increment_name(omz_name)
+        if omz_name in short_name_buffer:
+            omz_name = increment_name(short_name_buffer)
         short_name_buffer = omz_name
         emoji_database.append(
             [omz_codes, status, emoji, omz_name, group, subgroup])
@@ -177,7 +177,7 @@ for _omz_codes, _status, _emoji, _omz_name, _group, _subgroup in emoji_database:
         emoji_map = "emoji_mod"
     if _group == "Flags":
         emoji_map = "emoji_flags"
-        # Adding country codes (Optional, see below)
+        # Adding country codes (Optional, see above)
         # names_for_this_emoji = country_iso(names_for_this_emoji, _omz_name)
 
     # Check if there is an alias available in the Gemoji DB
