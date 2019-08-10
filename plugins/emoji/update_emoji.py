@@ -51,21 +51,21 @@ typeset -gAH emoji_groups
 # Warning: country_converter is very verbose, and will print warnings all over
 # your terminal.
 
-import country_converter as coco # pylint: disable=wrong-import-position
-cc = coco.CountryConverter()
+# import country_converter as coco # pylint: disable=wrong-import-position
+# cc = coco.CountryConverter()
 
-def country_iso(_all_names, _omz_name):
-    """ Using the external library country_converter,
-        this funciton can detect the ISO2 and ISO3 codes
-        of the country. It takes as argument the array
-        with all the names of the emoji, and returns that array."""
-    omz_no_underscore = re.sub(r'_', r' ', _omz_name)
-    iso2 = cc.convert(names=[omz_no_underscore], to='ISO2')
-    if iso2 != 'not found':
-        _all_names.append(iso2)
-        iso3 = cc.convert(names=[omz_no_underscore], to='ISO3')
-        _all_names.append(iso3)
-    return _all_names
+# def country_iso(_all_names, _omz_name):
+#     """ Using the external library country_converter,
+#         this funciton can detect the ISO2 and ISO3 codes
+#         of the country. It takes as argument the array
+#         with all the names of the emoji, and returns that array."""
+#     omz_no_underscore = re.sub(r'_', r' ', _omz_name)
+#     iso2 = cc.convert(names=[omz_no_underscore], to='ISO2')
+#     if iso2 != 'not found':
+#         _all_names.append(iso2)
+#         iso3 = cc.convert(names=[omz_no_underscore], to='ISO3')
+#         _all_names.append(iso3)
+#     return _all_names
 
 
 #######
