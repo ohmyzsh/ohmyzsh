@@ -1,13 +1,13 @@
 on: pull_request
 name: Triage Pull Request
 jobs:
-  mainJob:
+  triage:
     name: Triage
-    if: github.event.action == 'opened' || github.event.action == 'synchronize'
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@master
+      if: github.event.action == 'opened' || github.event.action == 'synchronize'
     - name: Analyze and triage
       uses: ohmyzsh/github-actions/pull-request-triage@master
       env:
