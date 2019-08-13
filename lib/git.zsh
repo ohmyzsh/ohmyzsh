@@ -1,5 +1,6 @@
 # Touch
 # Touch again
+# Hit me baby one more time
 
 # Outputs current branch info in prompt format
 function git_prompt_info() {
