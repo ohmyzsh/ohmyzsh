@@ -12,10 +12,6 @@
 #
 # ------------------------------------------------------------------------------
 
-if [[ ${plugins[(r)vi-mode]} == vi-mode ]]; then
-  source $ZSH/plugins/vi-mode/vi-mode.plugin.zsh
-fi
-
 sudo-command-line() {
     [[ -z $BUFFER ]] && zle up-history
     if [[ $BUFFER == sudo\ * ]]; then
