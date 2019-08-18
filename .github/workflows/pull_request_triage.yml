@@ -12,3 +12,4 @@ jobs:
       uses: ohmyzsh/github-actions/pull-request-triage@master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        DEBUG_ACTIONS: ${{ secrets.DEBUG_ACTIONS }}
