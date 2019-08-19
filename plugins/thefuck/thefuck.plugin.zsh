@@ -15,4 +15,6 @@ fuck-command-line() {
 }
 zle -N fuck-command-line
 # Defined shortcut keys: [Esc] [Esc]
-bindkey "\e\e" fuck-command-line
+bindkey -M emacs '\e\e' sudo-command-line
+bindkey -M vicmd '\e\e' sudo-command-line
+bindkey -M viins '\e\e' sudo-command-line
