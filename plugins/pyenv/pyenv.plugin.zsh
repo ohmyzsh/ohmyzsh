@@ -4,7 +4,7 @@
 FOUND_PYENV=$+commands[pyenv]
 
 if [[ $FOUND_PYENV -ne 1 ]]; then
-    pyenvdirs=("$HOME/.pyenv" "/usr/local/pyenv" "/opt/pyenv")
+    pyenvdirs=("$HOME/.pyenv" "/usr/local/pyenv" "/opt/pyenv" "/usr/local/opt/pyenv")
     for dir in $pyenvdirs; do
         if [[ -d $dir/bin ]]; then
             export PATH="$PATH:$dir/bin"
@@ -38,4 +38,4 @@ else
     }
 fi
 
-unset FOUND_PYENV dir
+unset FOUND_PYENV pyenvdirs dir
