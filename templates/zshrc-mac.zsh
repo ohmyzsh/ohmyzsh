@@ -35,7 +35,6 @@ DISABLE_VENV_CD="true"
 plugins=(
     autopep8
     brew
-    cask
     colored-man-pages
     command-not-found
     common-aliases
