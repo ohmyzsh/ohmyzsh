@@ -50,6 +50,7 @@ plugins=(
     grin
     helm
     iterm2
+    jira
     jump
     kubectl
     launch_trial
