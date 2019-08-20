@@ -131,7 +131,9 @@ plugins=(... git)
 | grmc                 | git rm --cached                                                                                                               |
 | grmv                 | git remote rename                                                                                                             |
 | grrm                 | git remote remove                                                                                                             |
+| grs                  | git restore                                                                                                                   |
 | grset                | git remote set-url                                                                                                            |
+| grss                 | git restore --source                                                                                                          |
 | grt                  | cd "$(git rev-parse --show-toplevel \|\| echo .)"                                                                             |
 | gru                  | git reset --                                                                                                                  |
 | grup                 | git remote update                                                                                                             |
@@ -154,6 +156,8 @@ plugins=(... git)
 | gsts                 | git stash show --text                                                                                                         |
 | gstall               | git stash --all                                                                                                               |
 | gsu                  | git submodule update                                                                                                          |
+| gsw                  | git switch                                                                                                                    |
+| gswc                 | git switch -c                                                                                                                 |
 | gts                  | git tag -s                                                                                                                    |
 | gtv                  | git tag \| sort -V                                                                                                            |
 | gtl                  | gtl(){ git tag --sort=-v:refname -n -l ${1}* }; noglob gtl                                                                    |
