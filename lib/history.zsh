@@ -17,7 +17,7 @@ function omz_history {
 }
 
 # Timestamp format
-case ${HIST_STAMPS-} in
+case ${HIST_STAMPS} in
   "mm/dd/yyyy") alias history='omz_history -f' ;;
   "dd.mm.yyyy") alias history='omz_history -E' ;;
   "yyyy-mm-dd") alias history='omz_history -i' ;;
