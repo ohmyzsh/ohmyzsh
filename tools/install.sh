@@ -131,6 +131,9 @@ export ZSH=\"$ZSH\"
 " ~/.zshrc > ~/.zshrc-omztemp
 	mv -f ~/.zshrc-omztemp ~/.zshrc
 
+    # create ~/.zshrc_custom
+    touch ~/.zshrc_custom
+
 	echo
 }
 
