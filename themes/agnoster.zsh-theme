@@ -104,13 +104,16 @@ prompt_git() {
     local LC_ALL="" LC_CTYPE="en_US.UTF-8"
     PL_BRANCH_CHAR=$'\ue0a0'         # 
   }
-  local ref dirty mode repo_path
+  local ref dirty ahead mode repo_path
 
   if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
     repo_path=$(git rev-parse --git-dir 2>/dev/null)
     dirty=$(parse_git_dirty)
+    ahead=$(git log --oneline @{u}.. 2> /dev/null | wc -l | tr -d ' ')
     ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="➦ $(git rev-parse --short HEAD 2> /dev/null)"
-    if [[ -n $dirty ]]; then
+    if [[ "$ahead" -gt 0 ]] ; then
+      prompt_segment red black
+    elif [[ -n $dirty ]]; then
       prompt_segment yellow black
     else
       prompt_segment green $CURRENT_FG
