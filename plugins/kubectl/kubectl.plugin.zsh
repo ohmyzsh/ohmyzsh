@@ -133,3 +133,10 @@ alias kepvc='kubectl edit pvc'
 alias kdpvc='kubectl describe pvc'
 alias kdelpvc='kubectl delete pvc'
 
+# Job management 
+alias kgj='kubectl get jobs'
+alias kgjw='kgj --watch'
+alias kgjwide='kgj -o wide'
+alias kej='kubectl edit job'
+alias kdj='kubectl describe job'
+alias kdelj='kubectl delete job'
