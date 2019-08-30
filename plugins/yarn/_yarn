@@ -76,7 +76,7 @@ _global_commands=(
 
 _yarn_commands_scripts() {
   local -a scripts
-  scripts=($(yarn run --json 2>/dev/null | sed -E '/Commands available|possibleCommands/!d;s/.*Commands available from binary scripts: ([^"]+)".*/\1/;s/.*"items":\[([^]]+).*/\1/;s/[" ]//g' | tr , '\n' | sed -e 's/:/\\:/g'))
+  scripts=($(yarn run --json 2>/dev/null | sed -E '/possibleCommands/!d;s/.*Commands available from binary scripts: ([^"]+)".*/\1/;s/.*"items":\[([^]]+).*/\1/;s/[" ]//g' | tr , '\n' | sed -e 's/:/\\:/g'))
   _describe 'command or script' _commands -- _global_commands -- scripts
 }
 
