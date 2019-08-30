@@ -5,7 +5,8 @@
 # oh-my-zsh plugin
 #
 # @github.com/mfaerevaag/wd
+PATH_TO_WD=${0:A:h}
 
 wd() {
-    . $ZSH/plugins/wd/wd.sh
+    source ${PATH_TO_WD}/wd.sh
 }
