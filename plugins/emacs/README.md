@@ -48,5 +48,7 @@ Paste the following to ~/.emacs.d/init.el
 
 ## Step3
 Add the following to ~/.zshrc
+```
 export EMACS_LAUNCHER=/Applications/Emacs.app/Contents/MacOS/bin/emacsclient
+```
   
