@@ -149,37 +149,39 @@ function git_prompt_long_sha() {
 
 # Get the status of the working tree
 function git_prompt_status() {
+  emulate -L zsh
+
   local INDEX STATUS
   INDEX=$(__git_prompt_git status --porcelain -b 2> /dev/null) || return 0
   STATUS=""
-  if $(echo "$INDEX" | command grep -q '^?? ' &> /dev/null); then
+  if [[ "${INDEX}" =~ $'(^|\n)\\?\\? ' ]]; then
     STATUS="$ZSH_THEME_GIT_PROMPT_UNTRACKED$STATUS"
   fi
-  if $(echo "$INDEX" | command grep -qE '^(A |M |MM) ' &> /dev/null); then
+  if [[ "${INDEX}" =~ $'(^|\n)(A |M |MM) ' ]]; then
     STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
   fi
-  if $(echo "$INDEX" | command grep -qE '^([ AM]M| T) ' &> /dev/null); then
+  if [[ "${INDEX}" =~ $'(^|\n)([ AM]M| T) ' ]]; then
     STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
   fi
-  if $(echo "$INDEX" | command grep -q '^R  ' &> /dev/null); then
+  if [[ "${INDEX}" =~ $'(^|\n)R  ' ]]; then
     STATUS="$ZSH_THEME_GIT_PROMPT_RENAMED$STATUS"
   fi
-  if $(echo "$INDEX" | command grep -qE '^([A ]D|D ) ' &> /dev/null); then
+  if [[ "${INDEX}" =~ $'(^|\n)([A ]D|D ) ' ]]; then
     STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
   fi
   if $(__git_prompt_git rev-parse --verify refs/stash >/dev/null 2>&1); then
     STATUS="$ZSH_THEME_GIT_PROMPT_STASHED$STATUS"
   fi
-  if $(echo "$INDEX" | command grep -q '^UU ' &> /dev/null); then
+  if [[ "${INDEX}" =~ $'(^|\n)UU ' ]]; then
     STATUS="$ZSH_THEME_GIT_PROMPT_UNMERGED$STATUS"
   fi
-  if $(echo "$INDEX" | command grep -q '^## [^ ]\+ .*ahead' &> /dev/null); then
+  if [[ "${INDEX}" =~ $'(^|\n)## [^ ]\+ .*ahead' ]]; then
     STATUS="$ZSH_THEME_GIT_PROMPT_AHEAD$STATUS"
   fi
-  if $(echo "$INDEX" | command grep -q '^## [^ ]\+ .*behind' &> /dev/null); then
+  if [[ "${INDEX}" =~ $'(^|\n)## [^ ]\+ .*behind' ]]; then
     STATUS="$ZSH_THEME_GIT_PROMPT_BEHIND$STATUS"
   fi
-  if $(echo "$INDEX" | command grep -q '^## [^ ]\+ .*diverged' &> /dev/null); then
+  if [[ "${INDEX}" =~ $'(^|\n)## [^ ]\+ .*diverged' ]]; then
     STATUS="$ZSH_THEME_GIT_PROMPT_DIVERGED$STATUS"
   fi
   echo $STATUS
