@@ -30,9 +30,7 @@ The plugin uses a custom launcher (which we'll call here `$EMACS_LAUNCHER`) that
 | ecd    | -                                                  | Print the directory of the file open in the the current buffer |
 
 ## PS : Minimal configurtion on Mac Emacs to work with the plugin
-To make emacs ready with the plugin do the following
-
-Define an init.el with the following content
+The following will allow Emacs installed on Mac to work with the plugin. This doc assumes that you are using Mac and that you will launch an Emacs GUI first before trying to use commandline.
 
 ## Step1
 Install emacs using brew
