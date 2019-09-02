@@ -29,7 +29,7 @@ The plugin uses a custom launcher (which we'll call here `$EMACS_LAUNCHER`) that
 | efile  | -                                                  | Print the path to the file open in the current buffer          |
 | ecd    | -                                                  | Print the directory of the file open in the the current buffer |
 
-## PS : Making emacs ready for the plugin
+## PS : Minimal configurtion on Mac Emacs to work with the plugin
 To make emacs ready with the plugin do the following
 
 Define an init.el with the following content
