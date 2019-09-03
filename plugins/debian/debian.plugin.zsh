@@ -72,7 +72,7 @@ if [[ $use_sudo -eq 1 ]]; then
 # commands using su #########
 else
     alias aac="su -ls '$apt_pref autoclean' root"
-    abd() {
+    function abd() {
         cmd="su -lc '$apt_pref build-dep $@' root"
         print "$cmd"
         eval "$cmd"
@@ -83,17 +83,17 @@ else
     alias adu="su -lc '$apt_pref update && aptitude dist-upgrade' root"
     alias afu="su -lc '$apt-file update'"
     alias au="su -lc '$apt_pref $apt_upgr' root"
-    ai() {
+    function ai() {
         cmd="su -lc 'aptitude -P install $@' root"
         print "$cmd"
         eval "$cmd"
     }
-    ap() {
+    function ap() {
         cmd="su -lc '$apt_pref -P purge $@' root"
         print "$cmd"
         eval "$cmd"
     }
-    ar() {
+    function ar() {
         cmd="su -lc '$apt_pref -P remove $@' root"
         print "$cmd"
         eval "$cmd"
