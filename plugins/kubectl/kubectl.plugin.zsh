@@ -133,3 +133,5 @@ alias kepvc='kubectl edit pvc'
 alias kdpvc='kubectl describe pvc'
 alias kdelpvc='kubectl delete pvc'
 
+# List all horizontal pod autoscaler
+alias kgh='kubectl get hpa'
