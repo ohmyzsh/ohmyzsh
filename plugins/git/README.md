@@ -123,10 +123,11 @@ plugins=(... git)
 | grbi                 | git rebase -i                                                                                                                 |
 | grbm                 | git rebase master                                                                                                             |
 | grbs                 | git rebase --skip                                                                                                             |
-| grev                 | git revert                                                                                                                   |
+| grev                 | git revert                                                                                                                    |
 | grh                  | git reset                                                                                                                     |
 | grhh                 | git reset --hard                                                                                                              |
 | groh                 | git reset origin/$(git_current_branch) --hard                                                                                 |
+| gfroh                | git fetch origin && reset origin/$(git_current_branch) --hard                                                                 |
 | grm                  | git rm                                                                                                                        |
 | grmc                 | git rm --cached                                                                                                               |
 | grmv                 | git remote rename                                                                                                             |
