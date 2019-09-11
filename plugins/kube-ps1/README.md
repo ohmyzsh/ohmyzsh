@@ -56,7 +56,9 @@ plugins=(
 PROMPT=$PROMPT'$(kube_ps1) '
 ```
 
-Note: the `PROMPT` example above was tested with the theme `robbyrussell`
+Note: The `PROMPT` example above was tested with the theme `robbyrussell`.
+
+Note 2: Insert the `PROMPT=...` line *below* `source $ZSH/oh-my-zsh.sh`, otherwise it will have no effect.
 
 ## Enabling / Disabling on the current shell
 
