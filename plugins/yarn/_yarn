@@ -94,7 +94,7 @@ _yarn_scripts() {
     commands=("${scripts[@]}")
   else
     for script in "${scriptsUnescaped[@]}"; do
-      scriptCommand=$(echo $scriptsObject | jq --raw-output ".data.hints.\"$script\"")
+      scriptCommand=$(echo -E $scriptsObject | jq ".data.hints.\"$script\"")
       commands+=("$(echo "${script//:/\\:}"):$scriptCommand")
     done
 
