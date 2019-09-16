@@ -19,9 +19,11 @@ __timer_display_timer_precmd() {
     local cmd_end_time=$(__timer_current_time)
     local tdiff=$((cmd_end_time - __timer_cmd_start_time))
     unset __timer_cmd_start_time
-    local tdiffstr=$(__timer_format_duration ${tdiff})
-    local cols=$((COLUMNS - ${#tdiffstr} - 1))
-    echo -e "\033[1A\033[${cols}C ${tdiffstr}"
+    if [[ -z "${TIMER_THRESHOLD}" || ${tdiff} -ge "${TIMER_THRESHOLD}" ]]; then
+        local tdiffstr=$(__timer_format_duration ${tdiff})
+        local cols=$((COLUMNS - ${#tdiffstr} - 1))
+        echo -e "\033[1A\033[${cols}C ${tdiffstr}"
+    fi
   fi
 }
 
