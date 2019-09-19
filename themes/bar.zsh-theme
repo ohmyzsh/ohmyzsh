@@ -30,7 +30,7 @@ export ZSH_FIRST=1
 
 statusbar () {
   # Sections
-  _condaenv_=`[[ $CONDA_DEFAULT_ENV == 'base' ]] && V="" || V=" %{$FG[254]%}%{$BG[236]%} $CONDA_DEFAULT_ENV %{$reset_color%}"; echo $V`
+  _condaenv_=`[[ $CONDA_DEFAULT_ENV == 'base' || $CONDA_DEFAULT_ENV == '' ]] && V="" || V=" %{$FG[254]%}%{$BG[236]%} $CONDA_DEFAULT_ENV %{$reset_color%}"; echo $V`
   git=$(git_prompt_info)
   _git_=`[[ "$git" == ''  ]] && V="" || V=" %{$FG[254]%}%{$BG[236]%}$git%{$BG[236]%} %{$reset_color%}"; echo $V`
   _1LEFT="%{$BG[234]%}%{$FG[253]%}%~%{$reset_color%}"
