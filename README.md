@@ -18,9 +18,9 @@ To learn more, visit [ohmyz.sh](https://ohmyz.sh) and follow [@ohmyzsh](https://
 
 ### Prerequisites
 
-__Disclaimer:__ _Oh My Zsh works best on macOS and Linux._
+__Disclaimer:__ _Oh My Zsh works best on macOS, Linux and FreeBSD._
 
-* Unix-like operating system (macOS or Linux)
+* Unix-like operating system (macOS, Linux or FreeBSD)
 * [Zsh](https://www.zsh.org) should be installed (v4.3.9 or more recent). If not pre-installed (`zsh --version` to confirm), check the following instruction here: [Installing ZSH](https://github.com/robbyrussell/oh-my-zsh/wiki/Installing-ZSH)
 * `curl` or `wget` should be installed
 * `git` should be installed
