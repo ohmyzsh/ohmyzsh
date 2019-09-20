@@ -58,6 +58,16 @@ if [ "$SHOW_AWS_PROMPT" != false ]; then
   RPROMPT='$(aws_prompt_info)'"$RPROMPT"
 fi
 
+# ECR login
+function ecr_login() {
+  if [[ -n "$1" ]]; then
+    region="--region $1"
+  else
+    region=""
+  fi
+  
+  $(aws ecr get-login --no-include-email ${region})
+}
 
 # Load awscli completions
 
