@@ -21,9 +21,11 @@ if [[ -z "${CLOUDSDK_HOME}" ]]; then
 fi
 
 if (( ${+CLOUDSDK_HOME} )); then
-  if ! type "${CLOUDSDK_HOME}/bin/gcloud" > /dev/null; then
+  if (( ! $+commands[gcloud] )); then
     # Only source this if GCloud isn't already on the path
-    source "${CLOUDSDK_HOME}/path.zsh.inc"
+    if [[ -f "${CLOUDSDK_HOME}/path.zsh.inc" ]]; then
+      source "${CLOUDSDK_HOME}/path.zsh.inc"
+    fi
   fi
   source "${CLOUDSDK_HOME}/completion.zsh.inc"
   export CLOUDSDK_HOME
