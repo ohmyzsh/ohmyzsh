@@ -5,21 +5,45 @@ else
 fi
 
 function _do_sudo() {
-    integer glob=1
-    local -a run
-    run=( command sudo )
+    [[ -z ${__do_sudo_glob+x} ]] && __do_sudo_glob=1
+    [[ -z ${__do_sudo_expanded+x} ]] && declare -A __do_sudo_expanded
+    local -a args
+    local -a cmd_alias_arr
+    local cmd_alias
     while (($#)); do
         case "$1" in
         command|exec|-) shift; break ;;
         nocorrect) shift ;;
-        noglob) glob=0; shift ;;
-        *) break ;;
+        noglob) __do_sudo_glob=0; shift ;;
+        *)
+            cmd_alias="$(command -v 2>/dev/null -- "$1")"
+            if [[ "$?" -eq 0 ]]; then
+                if [[ "$cmd_alias" == 'alias'* ]] && [[ -z "$__do_sudo_expanded["$1"]" ]]; then
+                    __do_sudo_expanded["$1"]=1
+                    IFS=' ' read -A cmd_alias_arr <<< "$(sed -e "s/[^=]*=//" -e "s/^'//" -e "s/'$//" <<< "$cmd_alias")"
+                    args+=( "${cmd_alias_arr[@]}" )
+                else
+                    args+=( "$(sed "s/[^=]*=//" <<< "$(hash -v 2>/dev/null -- "$1")")" )
+                fi
+                shift
+                break
+            else
+                args+=( $1 )
+                shift
+            fi
+            ;;
         esac
     done
-    if ((glob)); then
-        PATH="/sbin:/usr/sbin:/usr/local/sbin:$PATH" $run $~==*
+    if [[ ${#cmd_alias_arr[@]} -gt 0 ]]; then
+        _do_sudo "${args[@]}" $==*
     else
-        PATH="/sbin:/usr/sbin:/usr/local/sbin:$PATH" $run $==*
+        if ((__do_sudo_glob)); then
+            PATH="/sbin:/usr/sbin:/usr/local/sbin:$PATH" command sudo "${args[@]}" $~==*
+        else
+            PATH="/sbin:/usr/sbin:/usr/local/sbin:$PATH" command sudo "${args[@]}" $==*
+        fi
+        unset __do_sudo_glob
+        unset __do_sudo_expanded
     fi
 }
 
