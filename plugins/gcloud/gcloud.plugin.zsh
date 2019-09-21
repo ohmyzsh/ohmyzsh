@@ -10,6 +10,7 @@ if [[ -z "${CLOUDSDK_HOME}" ]]; then
     "/usr/share/google-cloud-sdk"
     "/snap/google-cloud-sdk/current"
     "/usr/lib64/google-cloud-sdk/"
+    "/opt/google-cloud-sdk"
   )
 
   for gcloud_sdk_location in $search_locations; do
