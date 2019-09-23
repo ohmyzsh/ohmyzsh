@@ -5,7 +5,7 @@ local curcontext=$curcontext state line
 declare -A opt_args
 
 declare target_list
-target_list=(`fab --shortlist 2>/dev/null`)
+target_list=(`fab --shortlist 2>/dev/null || fab --complete 2>/dev/null`)
 
 _targets() {
     _describe -t commands "fabric targets" target_list

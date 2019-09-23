@@ -165,29 +165,37 @@ setup_shell() {
 		*) echo "Invalid choice. Shell change skipped."; return ;;
 	esac
 
-	# Test for the right location of the "shells" file
-	if [ -f /etc/shells ]; then
-		shells_file=/etc/shells
-	elif [ -f /usr/share/defaults/etc/shells ]; then # Solus OS
-		shells_file=/usr/share/defaults/etc/shells
-	else
-		error "could not find /etc/shells file. Change your default shell manually."
-		return
-	fi
+	# Check if we're running on Termux
+	case "$PREFIX" in
+		*com.termux*) termux=true; zsh=zsh ;;
+		*) termux=false ;;
+	esac
 
-	# Get the path to the right zsh binary
-	# 1. Use the most preceding one based on $PATH, then check that it's in the shells file
-	# 2. If that fails, get a zsh path from the shells file, then check it actually exists
-	if ! zsh=$(which zsh) || ! grep -qx "$zsh" "$shells_file"; then
-		if ! zsh=$(grep '^/.*/zsh$' "$shells_file" | tail -1) || [ ! -f "$zsh" ]; then
-			error "no zsh binary found or not present in '$shells_file'"
-			error "change your default shell manually."
+	if [ "$termux" != true ]; then
+		# Test for the right location of the "shells" file
+		if [ -f /etc/shells ]; then
+			shells_file=/etc/shells
+		elif [ -f /usr/share/defaults/etc/shells ]; then # Solus OS
+			shells_file=/usr/share/defaults/etc/shells
+		else
+			error "could not find /etc/shells file. Change your default shell manually."
 			return
+		fi
+
+		# Get the path to the right zsh binary
+		# 1. Use the most preceding one based on $PATH, then check that it's in the shells file
+		# 2. If that fails, get a zsh path from the shells file, then check it actually exists
+		if ! zsh=$(which zsh) || ! grep -qx "$zsh" "$shells_file"; then
+			if ! zsh=$(grep '^/.*/zsh$' "$shells_file" | tail -1) || [ ! -f "$zsh" ]; then
+				error "no zsh binary found or not present in '$shells_file'"
+				error "change your default shell manually."
+				return
+			fi
 		fi
 	fi
 
 	# We're going to change the default shell, so back up the current one
-	if [ -n $SHELL ]; then
+	if [ -n "$SHELL" ]; then
 		echo $SHELL > ~/.shell.pre-oh-my-zsh
 	else
 		grep "^$USER:" /etc/passwd | awk -F: '{print $7}' > ~/.shell.pre-oh-my-zsh
