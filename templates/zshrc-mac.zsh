@@ -107,4 +107,5 @@ PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 
 [ -f $HOME/.pyenv/shims/python ] && export PIPENV_PYTHON=$HOME/.pyenv/shims/python
 [ -d $HOME/.local/bin ] && export PATH=$HOME/.local/bin:$PATH
+[ -d $HOME/bin ] && export PATH=$HOME/bin:$PATH
 [ -f $HOME/.iterm2_shell_integration.zsh ] && source ~/.iterm2_shell_integration.zsh
