@@ -69,7 +69,7 @@ ZSH_THEME="robbyrussell"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 source $ZSH/plugins/z/z.sh
-plugins=(git extract sublime z)
+plugins=(git extract sublime z repo)
 
 source $ZSH/oh-my-zsh.sh
 
