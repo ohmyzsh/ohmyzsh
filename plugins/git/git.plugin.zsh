@@ -177,6 +177,8 @@ alias glp="_git_log_prettily"
 
 alias gm='git merge'
 alias gmom='git merge origin/master'
+alias gmod='git merge origin/develop'
+alias gmodl='git merge --log origin/develop'
 alias gmt='git mergetool --no-prompt'
 alias gmtvim='git mergetool --no-prompt --tool=vimdiff'
 alias gmum='git merge upstream/master'
