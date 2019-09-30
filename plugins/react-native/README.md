@@ -40,8 +40,8 @@ plugins=(... react-native)
 | **rniosxsm**   | `react-native run-ios --simulator "iPhone Xs Max"`                           |
 | **rniosxr**    | `react-native run-ios --simulator "iPhone Xʀ"`                               |
 | **rnios11**    | `react-native run-ios --simulator "iPhone 11"`                               |
-| **rnios11p**    | `react-native run-ios --simulator "iPhone 11 Pro"`                          |
-| **rnios11pm**    | `react-native run-ios --simulator "iPhone 11 Pro Max"`                     |
+| **rnios11p**   | `react-native run-ios --simulator "iPhone 11 Pro"`                           |
+| **rnios11pm**  | `react-native run-ios --simulator "iPhone 11 Pro Max"`                       |
 | _iPad_         |                                                                              |
 | **rnipad2**    | `react-native run-ios --simulator "iPad 2"`                                  |
 | **rnipad5**    | `react-native run-ios --simulator "iPad (5th generation)"`                   |
