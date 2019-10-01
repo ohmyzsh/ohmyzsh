@@ -19,6 +19,7 @@ plugins=(... yarn)
 | yap   | `yarn add --peer`                         | Install a package in peerDependencies (`package.json`)      |
 | yb    | `yarn build`                              | Run the build script defined in `package.json`              |
 | ycc   | `yarn cache clean`                        | Clean yarn's global cache of packages                       |
+| yd    | `yarn dev`                                | Run the dev script defined in `package.json`                |
 | yga   | `yarn global add`                         | Install packages globally on your operating system          |
 | ygls  | `yarn global list`                        | Lists global installed packages                             |
 | ygrm  | `yarn global remove`                      | Remove global installed packages from your OS               |
@@ -32,7 +33,6 @@ plugins=(... yarn)
 | yrm   | `yarn remove`                             | Remove installed packages                                   |
 | yrun  | `yarn run`                                | Run a defined package script                                |
 | ys    | `yarn serve`                              | Start the dev server                                        |
-| yd    | `yarn dev`                                | Run the dev script defined in `package.json`                |
 | yst   | `yarn start`                              | Run the start script defined in `package.json`              |
 | yt    | `yarn test`                               | Run the test script defined in `package.json`               |
 | yuc   | `yarn global upgrade && yarn cache clean` | Upgrade global packages and clean yarn's global cache       |
