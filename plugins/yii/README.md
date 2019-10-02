@@ -1,5 +1,4 @@
-
-# Yii autocompletion plugin
+# Yii plugin
 
 The plugin adds autocomplete commands and subcommands for [yii](https://www.yiiframework.com/).
 
@@ -9,6 +8,7 @@ plugins=(... yii)
 ```
 
 ## Aliases
+
 | Alias  | Command              |
 |--------|----------------------|
-| yiic  | `protected/yiic`      | 
+| yiic   | `protected/yiic`     |
