@@ -1,0 +1,1 @@
+alias tg="terragrunt"
