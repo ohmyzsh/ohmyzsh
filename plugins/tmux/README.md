@@ -1,6 +1,6 @@
 # tmux
 
-This plugin provides aliases for [tmux](http://tmux.github.io/), the terminal multiplexer.
+This plugin provides aliases for [tmux](https://tmux.github.io/), the terminal multiplexer.
 To use it add `tmux` to the plugins array in your zshrc file.
 
 ```zsh
