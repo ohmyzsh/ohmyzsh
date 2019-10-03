@@ -36,7 +36,7 @@ _z() {
     [ -h "$datafile" ] && datafile=$(readlink "$datafile")
 
     # bail if we don't own ~/.z and $_Z_OWNER not set
-    [ -z "$_Z_OWNER" -a -f "$datafile" -a ! -O "$datafile" ] && return
+    [ -z "${_Z_OWNER:-}" -a -f "$datafile" -a ! -O "$datafile" ] && return
 
     _z_dirs () {
         local line
@@ -56,7 +56,7 @@ _z() {
 
         # don't track excluded directory trees
         local exclude
-        for exclude in "${_Z_EXCLUDE_DIRS[@]}"; do
+        for exclude in "${_Z_EXCLUDE_DIRS[@]:-}"; do
             case "$*" in "$exclude*") return;; esac
         done
 
@@ -89,7 +89,7 @@ _z() {
         if [ $? -ne 0 -a -f "$datafile" ]; then
             env rm -f "$tempfile"
         else
-            [ "$_Z_OWNER" ] && chown $_Z_OWNER:"$(id -ng $_Z_OWNER)" "$tempfile"
+            [ "${_Z_OWNER:-}" ] && chown $_Z_OWNER:"$(id -ng $_Z_OWNER)" "$tempfile"
             env mv -f "$tempfile" "$datafile" || env rm -f "$tempfile"
         fi
 
