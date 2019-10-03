@@ -8,6 +8,24 @@
 # Use dco as alias for docker-compose, since dc on *nix is 'dc - an arbitrary precision calculator'
 # https://www.gnu.org/software/bc/manual/dc-1.05/html_mono/dc.html
 
+_docker-compose () {
+    compadd $(docker-compose ps --services)
+}
+
+compdef _docker-compose dcb
+compdef _docker-compose dce
+compdef _docker-compose dcps
+compdef _docker-compose dcrestart
+compdef _docker-compose dcrm
+compdef _docker-compose dcr
+compdef _docker-compose dcstop
+compdef _docker-compose dcup
+compdef _docker-compose dcupd
+compdef _docker-compose dcl
+compdef _docker-compose dclf
+compdef _docker-compose dcpull
+compdef _docker-compose dcstart
+
 alias dco='docker-compose'
 
 alias dcb='docker-compose build'
