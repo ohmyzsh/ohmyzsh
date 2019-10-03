@@ -14,7 +14,7 @@ function parse_git_dirty() {
   local -a FLAGS
   FLAGS=('--porcelain' '--ignore-submodules=dirty')
   if [[ "$(command git config --get oh-my-zsh.hide-dirty)" != "1" ]]; then
-    if [[ "$DISABLE_UNTRACKED_FILES_DIRTY" == "true" ]]; then
+    if [[ "${DISABLE_UNTRACKED_FILES_DIRTY:-}" == "true" ]]; then
       FLAGS+='--untracked-files=no'
     fi
     STATUS=$(command git status ${FLAGS} 2> /dev/null | tail -n1)
@@ -69,7 +69,6 @@ function git_current_branch() {
   fi
   echo ${ref#refs/heads/}
 }
-
 
 # Gets the number of commits ahead from remote
 function git_commits_ahead() {
