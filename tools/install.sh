@@ -20,12 +20,14 @@
 #   BRANCH  - branch to check out immediately after install (default: master)
 #
 # Other options:
-#   CHSH    - 'no' means the installer will not change the default shell (default: yes)
-#   RUNZSH  - 'no' means the installer will not run zsh after the install (default: yes)
+#   CHSH       - 'no' means the installer will not change the default shell (default: yes)
+#   RUNZSH     - 'no' means the installer will not run zsh after the install (default: yes)
+#   REPLACE_RC - 'no' means the installer will not replace an existing .zshrc (default: yes)
 #
 # You can also pass some arguments to the install script to set some these options:
 #   --skip-chsh: has the same behavior as setting CHSH to 'no'
 #   --unattended: sets both CHSH and RUNZSH to 'no'
+#   --noreplace-rc: sets REPLACE_RC to 'no'
 # For example:
 #   sh install.sh --unattended
 #
@@ -40,6 +42,7 @@ BRANCH=${BRANCH:-master}
 # Other options
 CHSH=${CHSH:-yes}
 RUNZSH=${RUNZSH:-yes}
+REPLACE_RC=${REPLACE_RC:-yes}
 
 
 command_exists() {
@@ -107,6 +110,11 @@ setup_zshrc() {
 	# Must use this exact name so uninstall.sh can find it
 	OLD_ZSHRC=~/.zshrc.pre-oh-my-zsh
 	if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]; then
+		# Skip this if the user doesn't want to replace an existing .zshrc
+		if [ $REPLACE_RC = no ]; then
+			echo "${YELLOW}Found ~/.zshrc.${RESET} ${GREEN}Keeping...${RESET}"
+			return
+		fi
 		if [ -e "$OLD_ZSHRC" ]; then
 			OLD_OLD_ZSHRC="${OLD_ZSHRC}-$(date +%Y-%m-%d_%H-%M-%S)"
 			if [ -e "$OLD_OLD_ZSHRC" ]; then
@@ -224,6 +232,7 @@ main() {
 		case $1 in
 			--unattended) RUNZSH=no; CHSH=no ;;
 			--skip-chsh) CHSH=no ;;
+			--noreplace-rc) REPLACE_RC=no ;;
 		esac
 		shift
 	done
