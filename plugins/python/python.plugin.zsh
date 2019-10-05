@@ -11,5 +11,5 @@ function pyclean() {
 }
 
 # Grep among .py files
-alias pygrep='grep --include="*.py"'
+alias pygrep='grep -r --include="*.py"'
 
