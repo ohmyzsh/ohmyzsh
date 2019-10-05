@@ -257,5 +257,5 @@ alias gwch='git whatchanged -p --abbrev-commit --pretty=medium'
 alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign -m "--wip-- [skip ci]"'
 
 function gcgh() { git clone "https://github.com/$1.git" }
-function ghgl() { git clone "https://gitlab.com/$1.git" }
+function gcgl() { git clone "https://gitlab.com/$1.git" }
 function gcbb() { git clone "https://$1@bitbucket.org/$2.git" }
