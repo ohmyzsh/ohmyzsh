@@ -274,6 +274,11 @@ We also need people to test out pull-requests. So take a look through [the open 
 
 See [Contributing](CONTRIBUTING.md) for more details.
 
+Or you can start helping just by clicking this button
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/<org>/<repo>)
+
+
 ### Do NOT send us themes
 
 We have (more than) enough themes for the time being. Please add your theme to the [external themes](https://github.com/robbyrussell/oh-my-zsh/wiki/External-themes) wiki page.
