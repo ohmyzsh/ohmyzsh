@@ -276,7 +276,7 @@ See [Contributing](CONTRIBUTING.md) for more details.
 
 Or you can start helping just by clicking this button
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/<org>/<repo>)
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/robbyrussell/oh-my-zsh)
 
 
 ### Do NOT send us themes
