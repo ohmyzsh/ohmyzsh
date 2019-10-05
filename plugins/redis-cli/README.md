@@ -9,6 +9,6 @@ plugins=(... redis-cli)
 ```
 ## Requirements
 
-In order to make this work, you will need to have the redis installed.
+In order to make this work, you will need to have redis installed.
 
 More info on the usage and install: https://redis.io/topics/quickstart
