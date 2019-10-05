@@ -42,12 +42,15 @@ plugins=(... git)
 | gcam                 | git commit -a -m                                                                                                              |
 | gcsm                 | git commit -s -m                                                                                                              |
 | gcb                  | git checkout -b                                                                                                               |
+| gcbb user team/project | git clone https://user@bitbucket.org/team/project.git                                                                       |
 | gcf                  | git config --list                                                                                                             |
 | gcl                  | git clone --recurse-submodules                                                                                                |
 | gclean               | git clean -id                                                                                                                 |
 | gpristine            | git reset --hard && git clean -dfx                                                                                            |
 | gcm                  | git checkout master                                                                                                           |
 | gcd                  | git checkout develop                                                                                                          |
+| gcgh user/project    | git clone https://github.com/username/project.git                                                                             |
+| gcgl user/project    | git clone https://gitlab.com/username/project.git                                                                             |
 | gcmsg                | git commit -m                                                                                                                 |
 | gco                  | git checkout                                                                                                                  |
 | gcount               | git shortlog -sn                                                                                                              |
