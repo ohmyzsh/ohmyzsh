@@ -12,4 +12,4 @@ plugins=(... pyenv)
 
 | Alias        | Command              | Description                                                                                                              |
 | -------------| -------------------- | -------------------------------------------------------------------------------------------------------------------------|
-| pyenv_prompt_info | `system: $(python -V 2>&1 | cut -f 2 -d ' ')` | Displays the global Python version, which is defined via pyenv  |                                         |
+| pyenv_prompt_info | `system: $(python -V 2>&1 \| cut -f 2 -d ' ')` | Displays the global Python version, which is defined via pyenv  |                                         |
