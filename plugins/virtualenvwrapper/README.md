@@ -8,11 +8,6 @@ To use it, add `virtualenvwrapper` to the plugins array in your zshrc file:
 plugins=(... virtualenvwrapper)
 ```
 
-Make sure to source your rc file:
-```
-source ~/.zshrc
-```
-
 ## Usage
 
 The plugin allows to automatically activate virtualenvs on cd into git repositories with a matching name:
@@ -35,7 +30,9 @@ myvirtualenv
 ➜  github $
 ```
 
-We can disable this behaviour by setting `DISABLE_VENV_CD=1`.
-
-
-
+We can disable this behaviour by setting `DISABLE_VENV_CD=1` before Oh My Zsh is sourced:
+```zsh
+DISABLE_VENV_CD=1
+plugins=(... virtualenvwrapper)
+source $ZSH/oh-my-zsh.sh
+```
