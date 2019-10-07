@@ -1,6 +1,7 @@
 # pow plugin
 
-This plugin adds completion and commands for [pow](http://pow.cx/).
+This plugin adds completion and commands for [pow](http://pow.cx/), a
+zero-configuration Rack server for macOS.
 
 To use it, add pow to the plugins array of your zshrc file:
 
@@ -8,21 +9,13 @@ To use it, add pow to the plugins array of your zshrc file:
 plugins=(... pow)
 ```
 
-## commands and aliases
+## Commands
 
-- `kapow` will restart an app
+- `kapow` will restart an app.
 
-    ```bash
-    kapow myapp
-    ```
+  ```bash
+  kapow myapp
+  ```
 
-- `kaput` will show the standard out from any pow app
-- `repow` will restart the process
-
-## command completion
-
-If you are not already using completion you might need to enable it with
-
-```bash
-autoload -U compinit compinit
-```
+- `kaput` will show the standard output from any pow app.
+- `repow` will restart the pow process.
