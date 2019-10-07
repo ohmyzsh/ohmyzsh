@@ -222,3 +222,5 @@ function omz_urldecode {
 
   echo -E "$decoded"
 }
+
+function mkcd() { mkdir -p "$@" && cd "$@";   }
