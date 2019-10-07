@@ -1,8 +1,8 @@
 # pyenv 
 
 This plugin looks for [pyenv](https://github.com/pyenv/pyenv), a Simple Python version
-management system, and loads it if it's found. It also defines a prompt function to
-display the Python version in use.
+management system, and loads it if it's found. It also loads pyenv-virtualenv, a pyenv
+plugin to manage virtualenv, if it's found.
 
 To use it, add `pyenv` to the plugins array in your zshrc file:
 
