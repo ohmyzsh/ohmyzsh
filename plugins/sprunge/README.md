@@ -2,7 +2,7 @@
 
 This plugin is used to upload data and fetch the URL from the pastebin [https://sprunge.us](https://sprunge.us)
 
-To use it, add PLUGIN to the plugins array of your zshrc file:
+To use it, add `sprunge` to the plugins array of your zshrc file:
 ```
 plugins=(... sprunge)
 ```
