@@ -1,11 +1,12 @@
-# UFW
-This plugin adds support for managing everybody's favorite Uncomplicated Firewall (UFW). Learn more about [`UFW`](https://wiki.ubuntu.com/UncomplicatedFirewall).
+# UFW plugin
+
+This plugin adds completion for managing everybody's favorite Uncomplicated Firewall (UFW),
+a simple interface for managing iptables. Learn more about [`UFW`](https://wiki.ubuntu.com/UncomplicatedFirewall).
 
 To use it, add ufw to the plugins array of your zshrc file:
 ```
 plugins=(... ufw)
 ```
-UFW is a simple Ubuntu interface for managing iptables. 
 
 Some of the commands include:
 
