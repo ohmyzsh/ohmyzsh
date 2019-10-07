@@ -1,6 +1,8 @@
 # pyenv 
 
-This plugin adds completion for [pyenv](https://github.com/pyenv/pyenv), a Simple Python version management system.
+This plugin looks for [pyenv](https://github.com/pyenv/pyenv), a Simple Python version
+management system, and loads it if it's found. It also defines a prompt function to
+display the Python version in use.
 
 To use it, add `pyenv` to the plugins array in your zshrc file:
 
@@ -8,8 +10,7 @@ To use it, add `pyenv` to the plugins array in your zshrc file:
 plugins=(... pyenv)
 ```
 
-## Aliases
+## Functions
 
-| Alias        | Command              | Description                                                                                                              |
-| -------------| -------------------- | -------------------------------------------------------------------------------------------------------------------------|
-| pyenv_prompt_info | `system: $(python -V 2>&1 \| cut -f 2 -d ' ')` | Displays the global Python version, which is defined via pyenv  |                                         |
+- `pyenv_prompt_info`: displays the Python version in use by pyenv; or the global Python
+  version, if pyenv wasn't found.
