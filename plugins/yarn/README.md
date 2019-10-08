@@ -35,6 +35,7 @@ plugins=(... yarn)
 | ys    | `yarn serve`                              | Start the dev server                                        |
 | yst   | `yarn start`                              | Run the start script defined in `package.json`              |
 | yt    | `yarn test`                               | Run the test script defined in `package.json`               |
+| ytc   | `yarn test --coverage`                    | Run the test script defined in `package.json` with coverage |
 | yuc   | `yarn global upgrade && yarn cache clean` | Upgrade global packages and clean yarn's global cache       |
 | yui   | `yarn upgrade-interactive`                | Prompt for which outdated packages to upgrade               |
 | yup   | `yarn upgrade`                            | Upgrade packages to their latest version                    |
