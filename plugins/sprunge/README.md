@@ -1,4 +1,4 @@
-#Sprunge plugin
+# Sprunge plugin
 
 This plugin uploads data and fetch URL from the pastebin http://sprunge.us
 
@@ -9,14 +9,14 @@ plugins=(... sprunge)
 ```
 
 
-##Usage
+## Usage
 
 sprunge filename.txt | uploads filename.txt|
 sprunge "this is a string" | uploads plain text| 
 sprunge < filename.txt | redirects filename.txt content to sprunge|
 piped data | sprunge | any piped data will be uploaded
 
-##Output
+## Output
 
 Once Sprunge has finished handling the input it will give you a unique HTTP address like the following:
 
