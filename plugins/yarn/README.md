@@ -39,5 +39,6 @@ plugins=(... yarn)
 | yuc   | `yarn global upgrade && yarn cache clean` | Upgrade global packages and clean yarn's global cache       |
 | yui   | `yarn upgrade-interactive`                | Prompt for which outdated packages to upgrade               |
 | yup   | `yarn upgrade`                            | Upgrade packages to their latest version                    |
+| yv    | `yarn version`                            | Update the version of your package                          |
 | yw    | `yarn workspace`                          | Run a command within a single workspace.                    |
 | yws   | `yarn workspaces`                         | Run a command within all defined workspaces.                |
