@@ -45,10 +45,9 @@ alias tunnel='sshuttle -D --pidfile=/tmp/sshuttle.pid -r abiggs@10.26.0.80 10.26
 alias stoptunnel='[[ -f /tmp/sshuttle.pid ]] && kill `cat /tmp/sshuttle.pid`'
 
 # Dropbox
-alias dbw='~/Dropbox'
-alias dbp='~/Dropbox\ \(Personal\)'
-alias dbfc='find . -type f -name "* conflicted *"'
-alias dbrc='find . -type f -name "* conflicted *" -exec rm -f {} \;'
+alias db='~/Dropbox'
+alias dbfc='find ~"/Dropbox (Univ. of Oklahoma)" -type f -name "* conflicted *"'
+alias dbrc='find ~"/Dropbox (Univ. of Oklahoma)" -type f -name "* conflicted *" -exec rm -f {} \;'
 
 # Docker Machine
 alias dminit="docker-machine create --driver virtualbox default"
