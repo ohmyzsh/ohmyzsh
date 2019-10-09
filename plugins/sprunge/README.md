@@ -24,7 +24,7 @@ Once Sprunge has finished handling the input it will give you a unique HTTP addr
 http://sprunge.us/aXZI
 ```
 
-##Notes
+## Notes
 -Sprunge accepts piped data, STDIN redirection, text strings as input. Sprunge can only accept one input at a time.
 -Argument precedence goes as follows: STDIN > piped input > text strings.
 -If a filename is mispelled or doesn't have the necessary path description, it will NOT generate an error, but instead treat it as a text string.
