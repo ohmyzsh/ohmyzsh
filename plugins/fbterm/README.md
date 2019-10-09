@@ -1,13 +1,9 @@
 # fbterm
-This plugin start fbterm automatically in /dev/tty*
 
-## How to enable the plugin
+This plugin automatically starts [fbterm](https://github.com/zhangyuanwei/fbterm)
+if on a real TTY (`/dev/tty*`).
 
-To use it, add PLUGIN to the plugins array of your zshrc file:
+To use it, add fbterm to the plugins array of your zshrc file:
 ```
 plugins=(... fbterm)
 ```
-
-## Contributors
-[mcornella](https://github.com/mcornella)
-[zasdfgbnm](https://github.com/zasdfgbnm)
