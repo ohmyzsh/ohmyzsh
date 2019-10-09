@@ -60,6 +60,7 @@ alias code='~/Dropbox/Code'
 
 # Dropbox
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> Add find and remove conflicted Dropbox files alias
 alias dw='~/Dropbox'
 >>>>>>> Updated Dropbox aliases with new softlinks
@@ -78,6 +79,11 @@ alias dbp='~/Dropbox\ \(Personal\)'
 alias dbfc='find . -type f -name "* conflicted *"'
 alias dbrc='find . -type f -name "* conflicted *" -exec rm -f {} \;'
 >>>>>>> Fix Dropbox aliases
+=======
+alias db='~/Dropbox'
+alias dbfc='find ~"/Dropbox (Univ. of Oklahoma)" -type f -name "* conflicted *"'
+alias dbrc='find ~"/Dropbox (Univ. of Oklahoma)" -type f -name "* conflicted *" -exec rm -f {} \;'
+>>>>>>> Update Dropbox conflict alias
 
 <<<<<<< HEAD
 # Docker
