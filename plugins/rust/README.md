@@ -7,9 +7,3 @@ To use it, add `rust` to the plugins array in your zshrc file:
 ```zsh
 plugins=(... rust)
 ```
-
-## Aliases
-
-| Command          | Description                                                                     |
-|------------------|---------------------------------------------------------------------------------|
-| `rustc`          | Compiler for the Rust language                                                  |
