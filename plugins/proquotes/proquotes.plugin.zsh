@@ -25,9 +25,13 @@ else # English
     _lkey="en"
 fi
 
-# check internet
-nc -z -w 5 8.8.8.8 53  >/dev/null 2>&1
-online=$?
+# check http connectivity
+case "$(curl -s --max-time 2 -I http://google.com | sed 's/^[^ ]*  *\([0-9]\).*/\1/; 1q')" in
+[23]) online=0;; # ok
+5) online=1;; # proxy declined connection
+*) online=1;; # connection is down or slow
+esac
+
 if [ $online -eq 0 ]; then # online
     _res=`curl -s https://$_api/quotes/random/$_lng`
     echo $_res >| $file_name
