@@ -39,11 +39,11 @@ else # offline
     if [ -f $file_name ]; then # file found
         _res=$(<$file_name)
         if [[ ! $_res == *"$_lkey"* ]]; then # lang not found
-            echo "ERR: proquotes run into an error. See you in the next zsh session ~ Dennis Murage"
+            echo "ERR: proquotes ran into an error. See you in the next zsh session ~ Dennis Murage"
             return
         fi
     else # no file
-        echo "ERR: proquotes run into an error. See you in the next zsh session ~ Dennis Murage"
+        echo "ERR: proquotes ran into an error. See you in the next zsh session ~ Dennis Murage"
         return
     fi
 fi
