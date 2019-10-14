@@ -15,11 +15,11 @@ To use it, add `rake` to the plugins array in your zshrc file:
 
 ## Aliases
 
-| Alias  | Command                         | Description                    |
-|--------|---------------------------------|--------------------------------|
+| Alias  | Command                         | Description                                    |
+|--------|---------------------------------|------------------------------------------------|
 | rake   | `noglob rake`                   | allows square brackts for rake task invocation |
 | brake  | `noglob bundle exec rake`       | execute the bundled rake gem                   |
 | srake  | `noglob sudo rake`              | execute rake as root                           |
-| sbrake | `noglob sudo bundle exec rake` | altogether now ...                              | 
+| sbrake | `noglob sudo bundle exec rake`  | altogether now ...                              | 
 
 
