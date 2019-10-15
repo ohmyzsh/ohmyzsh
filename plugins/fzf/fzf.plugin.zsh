@@ -1,9 +1,9 @@
 function setup_using_base_dir() {
-	# Declare all variables local not no mess with outside env in any way
-	local fzf_base
-	local fzf_shell
-	local fzfdirs
-	local dir
+    # Declare all variables local not no mess with outside env in any way
+    local fzf_base
+    local fzf_shell
+    local fzfdirs
+    local dir
 
     test -d "${FZF_BASE}" && fzf_base="${FZF_BASE}"
 
@@ -58,7 +58,7 @@ function setup_using_base_dir() {
 
 
 function setup_using_debian_package() {
-    dpkg -s fzf &> /dev/null
+    (( $+command[dpkg] )) && dpkg -s fzf &> /dev/null
     if (( $? )); then
         # Either not a debian based distro, or no fzf installed. In any case skip ahead
         return 1
