@@ -58,7 +58,7 @@ function setup_using_base_dir() {
 
 
 function setup_using_debian_package() {
-    (( $+command[dpkg] )) && dpkg -s fzf &> /dev/null
+    (( $+commands[dpkg] )) && dpkg -s fzf &> /dev/null
     if (( $? )); then
         # Either not a debian based distro, or no fzf installed. In any case skip ahead
         return 1
