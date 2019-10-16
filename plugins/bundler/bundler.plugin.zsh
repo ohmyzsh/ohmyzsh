@@ -95,7 +95,7 @@ _binstubbed() {
 _run-with-bundler() {
   if _bundler-installed && _within-bundled-project; then
     if _binstubbed $1; then
-      ./bin/$@
+      ./bin/${^^@}
     else
       bundle exec $@
     fi
