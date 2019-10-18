@@ -17,14 +17,10 @@ function _do_sudo() {
         noglob) __do_sudo_glob=0; shift ;;
         *)
             cmd_alias="$(command -v 2>/dev/null -- "$1")"
-            if [[ "$?" -eq 0 ]]; then
-                if [[ "$cmd_alias" == 'alias'* ]] && [[ -z "$__do_sudo_expanded["$1"]" ]]; then
-                    __do_sudo_expanded["$1"]=1
-                    IFS=' ' read -A cmd_alias_arr <<< "$(sed -e "s/[^=]*=//" -e "s/^'//" -e "s/'$//" <<< "$cmd_alias")"
-                    args+=( "${cmd_alias_arr[@]}" )
-                else
-                    args+=( "$(sed "s/[^=]*=//" <<< "$(hash -v 2>/dev/null -- "$1")")" )
-                fi
+            if [[ "$?" -eq 0 ]] && [[ "$cmd_alias" == 'alias'* ]] && [[ -z "$__do_sudo_expanded["$1"]" ]]; then
+                __do_sudo_expanded["$1"]=1
+                IFS=' ' read -A cmd_alias_arr <<< "$(sed -e "s/[^=]*=//" -e "s/^'//" -e "s/'$//" <<< "$cmd_alias")"
+                args+=( "${cmd_alias_arr[@]}" )
                 shift
                 break
             else
