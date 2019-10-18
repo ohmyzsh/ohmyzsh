@@ -6,3 +6,6 @@ To use it, add `eecms` to the plugins array of your `.zshrc` file:
 ```
 plugins=(... eecms)
 ```
+
+It also adds the alias `eecms` which finds the eecms file in the current project
+and runs it with php.
