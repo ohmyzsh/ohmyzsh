@@ -9,4 +9,6 @@ plugins=(... pass)
 ```
 # Configuration
 
-PASSWORD_STORE_DIR - set work directory
+| Variable          | Description       |
+|-------------------|-------------------|
+|PASSWORD_STORE_DIR | set work directory|
