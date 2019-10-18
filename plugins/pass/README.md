@@ -7,8 +7,16 @@ To use it, add `pass` to the plugins array in your zshrc file.
 ```
 plugins=(... pass)
 ```
-# Configuration
 
-| Variable          | Description       |
-|-------------------|-------------------|
-|PASSWORD_STORE_DIR | set work directory|
+## Configuration
+
+### Multiple repositories
+
+If you use multiple repositories, you can configure completion like this:
+```zsh
+compdef _pass workpass
+zstyle ':completion::complete:workpass::' prefix "$HOME/work/pass"
+workpass() {
+  PASSWORD_STORE_DIR=$HOME/work/pass pass $@
+}
+```
