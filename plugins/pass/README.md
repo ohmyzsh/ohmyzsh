@@ -7,3 +7,6 @@ To use it, add `pass` to the plugins array in your zshrc file.
 ```
 plugins=(... pass)
 ```
+# Configuration
+
+PASSWORD_STORE_DIR - set work directory
