@@ -135,6 +135,10 @@ export SSH_KEY_PATH="~/.ssh/id_rsa"
 alias f='find / 2>/dev/null'
 alias t='top'
 alias vb='virtualbox'
+alias vm='VBoxManage'
+alias vmls='VBoxManage list vms'
+alias vmclo='VBoxManage clonevm'     ## <UUID> --name "Ubuntu 18.04 C"
+alias vmreg='VBoxManage registervm"  ## ~/VirtualBox\ VMs/Ubuntu\ 18.04\ C/Ubuntu\ 18.04\ C.vbox
 alias grep='grep --color=auto'
 alias gck='git checkout'
 alias sublime='/Applications/Sublime.app/Contents/MacOS/Sublime'

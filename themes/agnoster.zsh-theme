@@ -86,7 +86,7 @@ prompt_end() {
 }
 
 ### for geting more git status details
-source /Users/gshirazi/src/oh-my-zsh/plugins/zsh-git-prompt/zshrc.sh
+source $ZSH/plugins/zsh-git-prompt/zshrc.sh
 
 ### Prompt components
 # Each component will draw itself, and hide itself if no information needs to be shown
