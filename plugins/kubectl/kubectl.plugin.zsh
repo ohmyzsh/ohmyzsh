@@ -19,6 +19,9 @@ alias kca='f(){ kubectl "$@" --all-namespaces;  unset -f f; }; f'
 # Apply a YML file
 alias kaf='kubectl apply -f'
 
+# Apply a Kustomize file
+alias kak='kubectl apply -k'
+
 # Drop into an interactive terminal on a container
 alias keti='kubectl exec -ti'
 
