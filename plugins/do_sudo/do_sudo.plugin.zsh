@@ -15,6 +15,7 @@ function _do_sudo() {
         command|exec|-) shift; break ;;
         nocorrect) shift ;;
         noglob) __do_sudo_glob=0; shift ;;
+        [1-9]) args+=( $1 ); shift ;;
         *)
             cmd_alias="$(command -v 2>/dev/null -- "$1")"
             if [[ "$?" -eq 0 ]] && [[ "$cmd_alias" == 'alias'* ]] && [[ -z "$__do_sudo_expanded["$1"]" ]]; then
