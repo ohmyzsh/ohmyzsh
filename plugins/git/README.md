@@ -59,6 +59,7 @@ plugins=(... git)
 | gdca                 | git diff --cached                                                                                                             |
 | gdcw                 | git diff --cached --word-diff                                                                                                 |
 | gdct                 | git describe --tags $(git rev-list --tags --max-count=1)                                                                      |
+| gdh                  | git diff HEAD~ HEAD                                                                                                           |
 | gds                  | git diff --staged                                                                                                             |
 | gdt                  | git diff-tree --no-commit-id --name-only -r                                                                                   |
 | gdv                  | git diff -w $@ \| view -                                                                                                      |
