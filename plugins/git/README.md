@@ -22,6 +22,7 @@ plugins=(... git)
 | gb                   | git branch                                                                                                                    |
 | gba                  | git branch -a                                                                                                                 |
 | gbd                  | git branch -d                                                                                                                 |
+| gbv                  | git branch -v                                                                                                                 |
 | gbda                 | git branch --no-color --merged \| command grep -vE "^(\+|\*\|\s*(master\|develop\|dev)\s*$)" \| command xargs -n 1 git branch -d |
 | gbD                  | git branch -D                                                                                                                 |
 | gbl                  | git blame -b -w                                                                                                               |
