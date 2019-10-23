@@ -25,7 +25,11 @@ function _do_sudo() {
                 shift
                 break
             else
-                args+=( $1 )
+                if ((__do_sudo_glob)); then
+                    args+=( $~==1 )
+                else
+                    args+=( $==1 )
+                fi
                 shift
             fi
             ;;
