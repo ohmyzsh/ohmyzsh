@@ -1,1 +1,0 @@
-per-directory-history.zsh
