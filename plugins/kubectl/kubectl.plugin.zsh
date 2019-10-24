@@ -23,6 +23,7 @@ alias kaf='kubectl apply -f'
 alias keti='kubectl exec -ti'
 
 # Manage configuration quickly to switch contexts between local, dev ad staging.
+alias kcv='kubectl config view'
 alias kcuc='kubectl config use-context'
 alias kcsc='kubectl config set-context'
 alias kcdc='kubectl config delete-context'
@@ -59,6 +60,12 @@ alias kgi='kubectl get ingress'
 alias kei='kubectl edit ingress'
 alias kdi='kubectl describe ingress'
 alias kdeli='kubectl delete ingress'
+
+# Job management
+alias kgj='kubectl get jobs'
+alias kgjwide='kubectl get jobs -o wide'
+alias kgcj='kubectl get cronjobs'
+alias kgcjwide='kubectl get cronjobs -o wide'
 
 # Namespace management
 alias kgns='kubectl get namespaces'
@@ -122,6 +129,7 @@ alias kcp='kubectl cp'
 
 # Node Management
 alias kgno='kubectl get nodes'
+alias kgnowide='kubectl get nodes -o wide'
 alias keno='kubectl edit node'
 alias kdno='kubectl describe node'
 alias kdelno='kubectl delete node'
