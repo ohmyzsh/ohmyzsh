@@ -36,7 +36,7 @@ function _history_here_set_isolated_history() {
 
     local _pwd=`pwd`
     _current_histfile="$_pwd/$_hist_file_name"
-    print -n "${fg[blue]}Using isloated history in this directory.${reset_color}"
+    print -n "${fg[blue]}Using isolated history in this directory.${reset_color}"
 
     export HISTFILE=$_current_histfile
     _history_here_is_global=false
