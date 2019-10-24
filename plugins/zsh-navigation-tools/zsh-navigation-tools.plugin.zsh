@@ -1,38 +1,43 @@
 #!/usr/bin/env zsh
 
-REPO_DIR="${0%/*}"
-CONFIG_DIR="$HOME/.config/znt"
+0="${(%):-%N}" # this gives immunity to functionargzero being unset
+export ZNT_REPO_DIR="${0%/*}"
+export ZNT_CONFIG_DIR="$HOME/.config/znt"
 
 #
 # Copy configs
 #
 
-if ! test -d "$HOME/.config"; then
-    mkdir "$HOME/.config"
+if [[ ! -d "$HOME/.config" ]]; then
+    command mkdir "$HOME/.config"
 fi
 
-if ! test -d "$CONFIG_DIR"; then
-    mkdir "$CONFIG_DIR"
+if [[ ! -d "$ZNT_CONFIG_DIR" ]]; then
+    command mkdir "$ZNT_CONFIG_DIR"
 fi
 
 # 9 files
-set n-aliases.conf n-env.conf n-history.conf n-list.conf n-panelize.conf n-cd.conf n-functions.conf n-kill.conf n-options.conf
+unset __ZNT_CONFIG_FILES
+typeset -ga __ZNT_CONFIG_FILES
+set +A __ZNT_CONFIG_FILES n-aliases.conf n-env.conf n-history.conf n-list.conf n-panelize.conf n-cd.conf n-functions.conf n-kill.conf n-options.conf
 
 # Check for random 2 files if they exist
 # This will shift 0 - 7 elements
-shift $(( RANDOM % 8 ))
-if ! test -f "$CONFIG_DIR/$1" || ! test -f "$CONFIG_DIR/$2"; then
+shift $(( RANDOM % 8 )) __ZNT_CONFIG_FILES
+if [[ ! -f "$ZNT_CONFIG_DIR/${__ZNT_CONFIG_FILES[1]}" || ! -f "$ZNT_CONFIG_DIR/${__ZNT_CONFIG_FILES[2]}" ]]; then
     # Something changed - examine every file
-    set n-aliases.conf n-env.conf n-history.conf n-list.conf n-panelize.conf n-cd.conf n-functions.conf n-kill.conf n-options.conf
-    for i; do
-        if ! test -f "$CONFIG_DIR/$i"; then
-            cp "$REPO_DIR/.config/znt/$i" "$CONFIG_DIR"
+    set +A __ZNT_CONFIG_FILES n-aliases.conf n-env.conf n-history.conf n-list.conf n-panelize.conf n-cd.conf n-functions.conf n-kill.conf n-options.conf
+    unset __ZNT_CONFIG_FILE
+    typeset -g __ZNT_CONFIG_FILE
+    for __ZNT_CONFIG_FILE in "${__ZNT_CONFIG_FILES[@]}"; do
+        if [[ ! -f "$ZNT_CONFIG_DIR/$__ZNT_CONFIG_FILE" ]]; then
+            command cp "$ZNT_REPO_DIR/.config/znt/$__ZNT_CONFIG_FILE" "$ZNT_CONFIG_DIR"
         fi
     done
+    unset __ZNT_CONFIG_FILE
 fi
 
-# Don't leave positional parameters being set
-set --
+unset __ZNT_CONFIG_FILES
 
 #
 # Load functions

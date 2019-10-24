@@ -1,35 +1,41 @@
-_homebrew-installed() {
-    type brew &> /dev/null
-}
+# This plugin loads pyenv into the current shell and provides prompt info via
+# the 'pyenv_prompt_info' function. Also loads pyenv-virtualenv if available.
 
-_pyenv-from-homebrew-installed() {
-    brew --prefix pyenv &> /dev/null
-}
+FOUND_PYENV=$+commands[pyenv]
 
-FOUND_PYENV=0
-pyenvdirs=("$HOME/.pyenv" "/usr/local/pyenv" "/opt/pyenv")
-if _homebrew-installed && _pyenv-from-homebrew-installed ; then
-    pyenvdirs=($(brew --prefix pyenv) "${pyenvdirs[@]}")
-fi
-
-for pyenvdir in "${pyenvdirs[@]}" ; do
-    if [ -d $pyenvdir/bin -a $FOUND_PYENV -eq 0 ] ; then
-        FOUND_PYENV=1
-        export PYENV_ROOT=$pyenvdir
-        export PATH=${pyenvdir}/bin:$PATH
-        eval "$(pyenv init - zsh)"
-
-        if pyenv commands | command grep -q virtualenv-init; then
-            eval "$(pyenv virtualenv-init - zsh)"
+if [[ $FOUND_PYENV -ne 1 ]]; then
+    pyenvdirs=("$HOME/.pyenv" "/usr/local/pyenv" "/opt/pyenv" "/usr/local/opt/pyenv")
+    for dir in $pyenvdirs; do
+        if [[ -d $dir/bin ]]; then
+            export PATH="$PATH:$dir/bin"
+            FOUND_PYENV=1
+            break
         fi
-
-        function pyenv_prompt_info() {
-            echo "$(pyenv version-name)"
-        }
-    fi
-done
-unset pyenvdir
-
-if [ $FOUND_PYENV -eq 0 ] ; then
-    function pyenv_prompt_info() { echo "system: $(python -V 2>&1 | cut -f 2 -d ' ')" }
+    done
 fi
+
+if [[ $FOUND_PYENV -ne 1 ]]; then
+    if (( $+commands[brew] )) && dir=$(brew --prefix pyenv 2>/dev/null); then
+        if [[ -d $dir/bin ]]; then
+            export PATH="$PATH:$dir/bin"
+            FOUND_PYENV=1
+        fi
+    fi
+fi
+
+if [[ $FOUND_PYENV -eq 1 ]]; then
+    eval "$(pyenv init - zsh)"
+    if (( $+commands[pyenv-virtualenv-init] )); then
+        eval "$(pyenv virtualenv-init - zsh)"
+    fi
+    function pyenv_prompt_info() {
+        echo "$(pyenv version-name)"
+    }
+else
+    # fallback to system python
+    function pyenv_prompt_info() {
+        echo "system: $(python -V 2>&1 | cut -f 2 -d ' ')"
+    }
+fi
+
+unset FOUND_PYENV pyenvdirs dir
