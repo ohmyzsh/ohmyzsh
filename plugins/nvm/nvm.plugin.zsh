@@ -7,8 +7,11 @@ if ! type "nvm" &> /dev/null; then
     if [[ -f "$NVM_DIR/nvm.sh" ]];
         source "$NVM_DIR/nvm.sh"
     else
-        # Load nvm from Homebrew location if it exists
+        # User can set this if they have an unusual Homebrew setup
         [[ -z "$NVM_HOMEBREW" ]] && export NVM_HOMEBREW="/usr/local/opt/nvm"
+        # Load nvm from Homebrew location if it exists
         [[ -f "$NVM_HOMEBREW/nvm.sh" ]] && source "$NVM_HOMEBREW/nvm.sh"
+        # Load nvm bash completion from Homebrew location if it exists
+        [[ -f "$NVM_HOMEBREW/etc/bash_completion.d/nvm" ]] && source "$NVM_HOMEBREW/etc/bash_completion.d/nvm"
     fi
 fi
