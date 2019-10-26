@@ -9,7 +9,7 @@ if ! type "nvm" &> /dev/null; then
         # This loads nvm
         [ -s "${nvm_sh_dir}/nvm.sh" ] && . "${nvm_sh_dir}/nvm.sh"
         # This loads nvm bash_completion
-        [ -s "${nvm_sh_dir}/etc/bash_completion" ] && . "${nvm_sh_dir}/etc/bash_completion"
+        [ -s "${nvm_sh_dir}/etc/bash_completion.d/nvm" ] && . "${nvm_sh_dir}/etc/bash_completion.d/nvm"
     else
         # This loads nvm
         [[ -f "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
