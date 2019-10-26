@@ -55,6 +55,8 @@ plugins=(
 
 # After the "source Oh My Zsh" line
 PROMPT=$PROMPT'$(kube_ps1) '
+# Or in double quotes, don't forget to escape
+PROMPT=$PROMPT"\$(kube_ps1) "
 ```
 
 Note: The `PROMPT` example above was tested with the theme `robbyrussell`.
