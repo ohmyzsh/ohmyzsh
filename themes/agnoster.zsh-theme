@@ -162,36 +162,42 @@ prompt_bzr() {
 
 prompt_hg() {
   (( $+commands[hg] )) || return
+  local PL_BRANCH_CHAR
+  () {
+    local LC_ALL="" LC_CTYPE="en_US.UTF-8"
+    PL_BRANCH_CHAR=$'\ue0a0'         # 
+  }
+
   local rev st branch
   if $(hg id >/dev/null 2>&1); then
     if $(hg prompt >/dev/null 2>&1); then
       if [[ $(hg prompt "{status|unknown}") = "?" ]]; then
         # if files are not added
         prompt_segment red white
-        st='±'
+        st='✚'
       elif [[ -n $(hg prompt "{status|modified}") ]]; then
         # if any modification
         prompt_segment yellow black
-        st='±'
+        st='●'
       else
         # if working copy is clean
         prompt_segment green $CURRENT_FG
       fi
-      echo -n $(hg prompt "☿ {rev}@{branch}") $st
+      echo -n $(hg prompt "${PL_BRANCH_CHAR} {rev}@{branch}") $st
     else
       st=""
       rev=$(hg id -n 2>/dev/null | sed 's/[^-0-9]//g')
       branch=$(hg id -b 2>/dev/null)
       if `hg st | grep -q "^\?"`; then
         prompt_segment red black
-        st='±'
+        st='✚'
       elif `hg st | grep -q "^[MA]"`; then
         prompt_segment yellow black
-        st='±'
+        st='●'
       else
         prompt_segment green $CURRENT_FG
       fi
-      echo -n "☿ $rev@$branch" $st
+      echo -n "${PL_BRANCH_CHAR} $rev@$branch" $st
     fi
   fi
 }
