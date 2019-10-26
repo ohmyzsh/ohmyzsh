@@ -4,7 +4,7 @@
 # Try to load nvm only if command not already available
 if ! type "nvm" &> /dev/null; then
     # Load nvm if it exists
-    if [[ -f "$NVM_DIR/nvm.sh" ]];
+    if [[ -f "$NVM_DIR/nvm.sh" ]]; then
         source "$NVM_DIR/nvm.sh"
     else
         # User can set this if they have an unusual Homebrew setup
