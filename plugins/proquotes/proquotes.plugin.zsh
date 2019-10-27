@@ -8,9 +8,7 @@
 export PRO_Q_HOME=~/.proquotes
 mkdir -p $PRO_Q_HOME
 file_name="$PRO_Q_HOME/quote.txt"
-local _res
-local _lng
-local _lkey
+
 _lngEN="lang/en"
 _lngSR="lang/sr"
 _api="programming-quotes-api.herokuapp.com"
@@ -49,7 +47,6 @@ else # offline
 fi
 
 # process quote
-local _qt
 if [[ $_lkey == "en" ]]; then # English
     _qt=`print $_res | python -c 'import json,sys; obj=json.load(sys.stdin);print obj["en"].encode("ascii", "ignore");'`
     else # Sr
@@ -60,4 +57,3 @@ _aut=`print $_res | sed -e 's/[{}]/''/g' | sed s/\"//g | awk -v RS=',' -F: '$1==
 
 # output
 echo "${_qt}" \~ "${_aut}"
-
