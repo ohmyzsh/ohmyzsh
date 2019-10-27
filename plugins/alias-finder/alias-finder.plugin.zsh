@@ -14,7 +14,7 @@ alias-finder() {
     esac
   done
   cmd=$(sed 's/[].\|$(){}?+*^[]/\\&/g' <<< $cmd) # adds escaping for grep
-  if [[ $(wc -l <<< $cmd) == 1 ]]; then
+  if (( $(wc -l <<< $cmd) == 1 )); then
     while [[ $cmd != "" ]]; do
       if [[ $longer = true ]]; then
         wordStart="'{0,1}"
