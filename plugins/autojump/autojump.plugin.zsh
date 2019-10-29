@@ -1,8 +1,3 @@
-(( $+commands[autojump] )) || {
-  echo '[oh-my-zsh] Please install autojump first (https://github.com/wting/autojump)'
-  return
-}
-
 declare -a autojump_paths
 autojump_paths=(
   $HOME/.autojump/etc/profile.d/autojump.zsh         # manual installation
