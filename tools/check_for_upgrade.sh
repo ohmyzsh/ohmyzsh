@@ -29,6 +29,11 @@ fi
 # Cancel upgrade if git is unavailable on the system
 whence git >/dev/null || return 0
 
+# Remove update.lock if already exist more than one hour
+if [[ $(find "$ZSH/log/update.lock" -mmin +60) ]]; then
+  rmdir $ZSH/log/update.lock
+fi
+
 if mkdir "$ZSH/log/update.lock" 2>/dev/null; then
   if [ -f ${ZSH_CACHE_DIR}/.zsh-update ]; then
     . ${ZSH_CACHE_DIR}/.zsh-update
