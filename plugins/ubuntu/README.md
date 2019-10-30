@@ -13,7 +13,7 @@ plugins=(... ubuntu)
 Commands that use `$APT` will use `apt` if installed or defer to `apt-get` otherwise.
 
 | Alias   | Command                                                                  | Description                                                                                       |
-|---------|--------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------|
+| ------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
 | age     | `sudo $APT`                                                              | Run apt-get with sudo                                                                             |
 | acs     | `apt-cache search`                                                       | Search the apt-cache with the specified criteria                                                  |
 | acp     | `apt-cache policy`                                                       | Display the package source priorities                                                             |
@@ -35,19 +35,20 @@ Commands that use `$APT` will use `apt` if installed or defer to `apt-get` other
 | agar    | `sudo $APT autoremove`                                                   | Remove automatically installed packages no longer needed                                          |
 | aguu    | `sudo $APT update && sudo $APT upgrade`                                  | Update packages list and upgrade available packages                                               |
 | allpkgs | `dpkg --get-selections \| grep -v deinstall`                             | Print all installed packages                                                                      |
-| kclean  | `sudo aptitude remove -P ?and(~i~nlinux-(ima\|hea) ?not(~n$(uname -r)))` |Remove ALL kernel images and headers EXCEPT the one in use                                         |
+| kclean  | `sudo aptitude remove -P ?and(~i~nlinux-(ima\|hea) ?not(~n$(uname -r)))` | Remove ALL kernel images and headers EXCEPT the one in use                                        |
 | mydeb   | `time dpkg-buildpackage -rfakeroot -us -uc`                              | Create a basic .deb package                                                                       |
 | ppap    | `sudo ppa-purge <ppa>`                                                   | Remove the specified PPA                                                                          |
 
 
 ## Functions
 
-| Function          | Usage                                 |Description                                                               |
-|-------------------|---------------------------------------|--------------------------------------------------------------------------|
-| aar               | `aar ppa:xxxxxx/xxxxxx [packagename]` | apt-add-repository with automatic install/upgrade of the desired package |
-| apt-history       | `apt-history <action>`                | Prints the Apt history of the specified action                           |
-| apt-list-packages | `apt-list-packages`                   | List packages by size                                                    |
-| kerndeb           | `kerndeb`                             | Kernel-package building shortcut                                         |
+| Function          | Usage                                 | Description                                                                                                   |
+| ----------------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| aar               | `aar ppa:xxxxxx/xxxxxx [packagename]` | apt-add-repository with automatic install/upgrade of the desired package                                      |
+| apt-history       | `apt-history <action>`                | Prints the Apt history of the specified action                                                                |
+| apt-list-packages | `apt-list-packages`                   | List packages by size                                                                                         |
+| kerndeb           | `kerndeb`                             | Kernel-package building shortcut                                                                              |
+| ubuntu-clist      | `ubuntu-clist`                        | Show some Ubuntu Plugins alias command in terminal for anybody forget and user doesn't need to see on website |
 
 ## Authors:
 
