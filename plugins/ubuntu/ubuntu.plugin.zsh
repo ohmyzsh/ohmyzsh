@@ -122,3 +122,36 @@ function apt-list-packages {
   sort -n | \
   awk '{print $1" "$2}'
 }
+
+function ubuntu-clist {
+  echo These are apt/apt-get only:
+  echo $(tput setaf 2)ags$(tput sgr 0) = $(tput setaf 3)"apt source"$(tput sgr 0)
+  echo ""
+  echo Misc.
+  echo $(tput setaf 2)acs$(tput sgr 0) = $(tput setaf 3)'apt-cache search'$(tput sgr 0)
+  echo $(tput setaf 2)afs$(tput sgr 0) = $(tput setaf 3)'apt-file search --regexp'$(tput sgr 0)
+  echo $(tput setaf 2)acp$(tput sgr 0) = $(tput setaf 3)'apt-cache policy'$(tput sgr 0)
+  echo ""
+  echo List all installed packages
+  echo $(tput setaf 2)agli$(tput sgr 0) = $(tput setaf 3)'apt list --installed'$(tput sgr 0)
+  echo ""
+  echo List available updates only
+  echo $(tput setaf 2)aglu$(tput sgr 0) = $(tput setaf 3)'apt list --upgradable'$(tput sgr 0)
+  echo ""
+  echo !Superuser Operations
+  echo $(tput setaf 2)afu$(tput sgr 0) = $(tput setaf 3)'sudo apt-file update'$(tput sgr 0)
+  echo $(tput setaf 2)ppap$(tput sgr 0) = $(tput setaf 3)'sudo ppa-purge'$(tput sgr 0)
+  echo $(tput setaf 2)age$(tput sgr 0) = $(tput setaf 3)"sudo apt"$(tput sgr 0)
+  echo $(tput setaf 2)aga$(tput sgr 0) = $(tput setaf 3)"sudo apt autoclean"$(tput sgr 0)
+  echo $(tput setaf 2)agb$(tput sgr 0) = $(tput setaf 3)"sudo apt build-dep"$(tput sgr 0)
+  echo $(tput setaf 2)agc$(tput sgr 0) = $(tput setaf 3)"sudo apt clean"$(tput sgr 0)
+  echo $(tput setaf 2)agd$(tput sgr 0) = $(tput setaf 3)"sudo apt dselect-upgrade"$(tput sgr 0)
+  echo $(tput setaf 2)agi$(tput sgr 0) = $(tput setaf 3)"sudo apt install"$(tput sgr 0)
+  echo $(tput setaf 2)agp$(tput sgr 0) = $(tput setaf 3)"sudo apt purge"$(tput sgr 0)
+  echo $(tput setaf 2)agr$(tput sgr 0) = $(tput setaf 3)"sudo apt remove"$(tput sgr 0)
+  echo $(tput setaf 2)agu$(tput sgr 0) = $(tput setaf 3)"sudo apt update"$(tput sgr 0)
+  echo $(tput setaf 2)agud$(tput sgr 0) = $(tput setaf 3)"sudo apt update && sudo apt dist-upgrade"$(tput sgr 0)
+  echo $(tput setaf 2)agug$(tput sgr 0) = $(tput setaf 3)"sudo apt upgrade"$(tput sgr 0)
+  echo $(tput setaf 2)aguu$(tput sgr 0) = $(tput setaf 3)"sudo apt update && sudo apt upgrade"$(tput sgr 0)
+  echo $(tput setaf 2)agar$(tput sgr 0) = $(tput setaf 3)"sudo apt autoremove"$(tput sgr 0)
+}
