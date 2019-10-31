@@ -110,8 +110,14 @@ prompt_git() {
     repo_path=$(git rev-parse --git-dir 2>/dev/null)
     dirty=$(parse_git_dirty)
     ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="➦ $(git rev-parse --short HEAD 2> /dev/null)"
+    n_modified=$(git status --porcelain 2>/dev/null | wc -l)
+    n_untracked=$(git status --porcelain 2>/dev/null | grep "^??" | wc -l)
     if [[ -n $dirty ]]; then
-      prompt_segment yellow black
+      if [ "$n_modified" -eq "$n_untracked" ]; then
+        prompt_segment yellow black
+      else
+        prompt_segment red black
+    fi
     else
       prompt_segment green $CURRENT_FG
     fi
