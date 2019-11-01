@@ -51,16 +51,40 @@ function _history_here_set_global_history() {
     _history_here_is_global=true
 }
 
-function _history_here_isolate_if_in_auto_change_dir() {
+function _history_here_toggle_isolation_based_on_pwd() {
 
+    local _in_isolated_dir=false
     local _pwd=`pwd`
+
+    # Check if we are in a directory that should be isolated
     for d in $HISTORY_HERE_AUTO_DIRS; do
         if [[ "$_pwd" =~ $d ]]; then
-            print "${fg[yellow]}Matched an auto history change directory:${reset_color} ${fg[green]}$d${reset_color}"
-            _history_here_set_isolated_history 
+            _in_isolated_dir=true
             break
         fi
     done
+
+    # Decide if we need to toggle isolation.
+    # If we are in an isolated directory and already
+    # isolating, do nothing.
+    if [[ $_in_isolated_dir == true && $_history_here_is_global == false ]]; then
+        return
+    fi
+
+    # If we were in an isolated directory, but have since
+    # moved out of one, return to using global history
+    if [[ $_in_isolated_dir == false && $_history_here_is_global == false ]]; then
+        _history_here_set_global_history
+        return
+    fi
+
+    # If we are now in a directory that should be isolated
+    # but we are not yet isolating, do it.
+    if [[ $_in_isolated_dir == true && $_history_here_is_global == true ]]; then
+        print "${fg[yellow]}In a history isolation directory:${reset_color} ${fg[green]}$d${reset_color}"
+        _history_here_set_isolated_history
+        return
+    fi
 }
 
 # bind the toggle
@@ -70,4 +94,4 @@ bindkey '^G' history_here_toggle
 
 # bind to cd, checking $HISTORY_HERE_AUTO_DIRS 
 autoload -U add-zsh-hook
-add-zsh-hook chpwd _history_here_isolate_if_in_auto_change_dir
+add-zsh-hook chpwd _history_here_toggle_isolation_based_on_pwd
