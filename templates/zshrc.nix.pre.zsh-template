@@ -12,8 +12,10 @@ DEFAULT_USER="raven"
 eval `dircolors ~/.dircolors`
 ZSH_DISABLE_COMPFIX=true
 #####EXPORTS#######
-export PATH=$HOME/bin:/usr/local/bin:$PATH
-export TMPDIR='/mnt/3676D98A76D94AEF'
+export PATH=$HOME/bin:/usr/local/bin:/snap/bin:$PATH
+if [ -d /mnt/3676D98A76D94AEF ]; then
+  export TMPDIR='/mnt/3676D98A76D94AEF'
+fi
 export EDITOR='nano'
 #####OPTIONS#######
 unsetopt BG_NICE
