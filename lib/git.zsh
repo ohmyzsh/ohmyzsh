@@ -17,12 +17,22 @@ function parse_git_dirty() {
     if [[ "$DISABLE_UNTRACKED_FILES_DIRTY" == "true" ]]; then
       FLAGS+='--untracked-files=no'
     fi
-    STATUS=$(command git status ${FLAGS} 2> /dev/null | tail -n1)
-  fi
-  if [[ -n $STATUS ]]; then
-    echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
-  else
-    echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
+
+    if [[ "$(command git config --get oh-my-zsh.fast-dirty-check)" == "1" ]]; then
+      command git diff --no-ext-diff --quiet --exit-code
+      if [[ $? == "0" ]]; then
+        echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
+      else
+        echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
+      fi
+    else
+      STATUS=$(command git status ${FLAGS} 2> /dev/null | tail -n1)
+      if [[ -n $STATUS ]]; then
+        echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
+      else
+        echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
+      fi
+    fi
   fi
 }
 
