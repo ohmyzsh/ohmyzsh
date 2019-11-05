@@ -1,12 +1,17 @@
 # VVVEnv plugin
 
-A shortcut for python virtual environments
+VVVenv helps keep track of Python virtual environments
 
-type `vv` in a directory to create a venv, if non exists
-if a venv already exists, activate it!
+type `vv` in a project directory
+If a virtualenv already exists, activate it
+Otherwise create a new one already!
 
 To use it, add `vvvenv` to the plugins array in your zshrc file:
 
 ```zsh
 plugins=(... vvvenv)
 ```
+
+### Requirements
+
+virtualenv
