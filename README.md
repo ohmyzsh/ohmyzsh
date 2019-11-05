@@ -6,7 +6,7 @@ Oh My Zsh is an open source, community-driven framework for managing your [zsh](
 
 Sounds boring. Let's try again.
 
-__Oh My Zsh will not make you a 10x developer...but you might feel like one.__
+__Oh My Zsh will not make you a 10x developer...but you may feel like one.__
 
 Once installed, your terminal shell will become the talk of the town _or your money back!_ With each keystroke in your command prompt, you'll take advantage of the hundreds of powerful plugins and beautiful themes. Strangers will come up to you in cafés and ask you, _"that is amazing! are you some sort of genius?"_
 
@@ -18,10 +18,8 @@ To learn more, visit [ohmyz.sh](https://ohmyz.sh) and follow [@ohmyzsh](https://
 
 ### Prerequisites
 
-__Disclaimer:__ _Oh My Zsh works best on macOS and Linux._
-
-* Unix-like operating system (macOS or Linux)
-* [Zsh](https://www.zsh.org) should be installed (v4.3.9 or more recent). If not pre-installed (`zsh --version` to confirm), check the following instruction here: [Installing ZSH](https://github.com/robbyrussell/oh-my-zsh/wiki/Installing-ZSH)
+* A Unix-like operating system: macOS, Linux, BSD. On Windows: WSL is preferred, but cygwin or msys also mostly work.
+* [Zsh](https://www.zsh.org) should be installed (v4.3.9 or more recent). If not pre-installed (run `zsh --version` to confirm), check the following instructions here: [Installing ZSH](https://github.com/robbyrussell/oh-my-zsh/wiki/Installing-ZSH)
 * `curl` or `wget` should be installed
 * `git` should be installed
 
@@ -38,7 +36,18 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/mas
 #### via wget
 
 ```shell
-sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+sh -c "$(wget -O- https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+```
+
+#### Manual inspection
+
+It's a good idea to inspect the install script from projects you don't yet know. You can do
+that by downloading the install script first, looking through it so everything looks normal,
+then running it:
+
+```shell
+curl -Lo install.sh https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh
+sh install.sh
 ```
 
 ## Using Oh My Zsh
@@ -68,6 +77,8 @@ plugins=(
   ruby
 )
 ```
+
+_Note that the plugins are separated by whitespace. **Do not** use commas between them._
 
 #### Using Plugins
 
@@ -124,16 +135,52 @@ If you're the type that likes to get their hands dirty, these sections might res
 
 ### Advanced Installation
 
-Some users may want to change the default path, or manually install Oh My Zsh.
+Some users may want to manually install Oh My Zsh, or change the default path or other settings that
+the installer accepts (these settings are also documented at the top of the install script).
 
 #### Custom Directory
 
 The default location is `~/.oh-my-zsh` (hidden in your home directory)
 
-If you'd like to change the install directory with the `ZSH` environment variable, either by running `export ZSH=/your/path` before installing, or by setting it before the end of the install pipeline like this:
+If you'd like to change the install directory with the `ZSH` environment variable, either by running
+`export ZSH=/your/path` before installing, or by setting it before the end of the install pipeline
+like this:
 
 ```shell
-export ZSH="$HOME/.dotfiles/oh-my-zsh"; sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+ZSH="$HOME/.dotfiles/oh-my-zsh" sh install.sh
+```
+
+#### Unattended install
+
+If you're running the Oh My Zsh install script as part of an automated install, you can pass the
+flag `--unattended` to the `install.sh` script. This will have the effect of not trying to change
+the default shell, and also won't run `zsh` when the installation has finished.
+
+```shell
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" "" --unattended
+```
+
+#### Installing from a forked repository
+
+The install script also accepts these variables to allow installation of a different repository:
+
+- `REPO` (default: `robbyrussell/oh-my-zsh`): this takes the form of `owner/repository`. If you set
+  this variable, the installer will look for a repository at `https://github.com/{owner}/{repository}`.
+
+- `REMOTE` (default: `https://github.com/${REPO}.git`): this is the full URL of the git repository
+  clone. You can use this setting if you want to install from a fork that is not on GitHub (GitLab,
+  Bitbucket...) or if you want to clone with SSH instead of HTTPS (`git@github.com:user/project.git`).
+
+  _NOTE: it's incompatible with setting the `REPO` variable. This setting will take precedence._
+
+- `BRANCH` (default: `master`): you can use this setting if you want to change the default branch to be
+  checked out when cloning the repository. This might be useful for testing a Pull Request, or if you
+  want to use a branch other than `master`.
+
+For example:
+
+```shell
+REPO=apjanke/oh-my-zsh BRANCH=edge sh install.sh
 ```
 
 #### Manual Installation
@@ -161,8 +208,10 @@ cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
 ##### 4. Change your default shell
 
 ```shell
-chsh -s /bin/zsh
+chsh -s $(which zsh)
 ```
+
+You must log out from your user session and log back in to see this change.
 
 ##### 5. Initialize your new zsh configuration
 
@@ -172,8 +221,10 @@ Once you open up a new terminal window, it should load zsh with Oh My Zsh's conf
 
 If you have any hiccups installing, here are a few common fixes.
 
-* You _might_ need to modify your `PATH` in `~/.zshrc` if you're not able to find some commands after switching to `oh-my-zsh`.
-* If you installed manually or changed the install location, check the `ZSH` environment variable in `~/.zshrc`.
+* You _might_ need to modify your `PATH` in `~/.zshrc` if you're not able to find some commands after
+switching to `oh-my-zsh`.
+* If you installed manually or changed the install location, check the `ZSH` environment variable in
+`~/.zshrc`.
 
 ### Custom Plugins and Themes
 
@@ -213,11 +264,15 @@ Oh My Zsh isn't for everyone. We'll miss you, but we want to make this an easy b
 
 If you want to uninstall `oh-my-zsh`, just run `uninstall_oh_my_zsh` from the command-line. It will remove itself and revert your previous `bash` or `zsh` configuration.
 
-## Contributing
+## How do I contribute to Oh My Zsh?
+
+Before you participate in our delightful community, please read the [code of conduct](CODE_OF_CONDUCT.md).
 
 I'm far from being a [Zsh](https://www.zsh.org/) expert and suspect there are many ways to improve – if you have ideas on how to make the configuration easier to maintain (and faster), don't hesitate to fork and send pull requests!
 
 We also need people to test out pull-requests. So take a look through [the open issues](https://github.com/robbyrussell/oh-my-zsh/issues) and help where you can.
+
+See [Contributing](CONTRIBUTING.md) for more details.
 
 ### Do NOT send us themes
 

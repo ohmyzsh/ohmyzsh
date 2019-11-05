@@ -51,6 +51,17 @@ EOF
           end tell
         end tell
 EOF
+  elif [[ "$the_app" == 'Hyper' ]]; then
+    osascript >/dev/null <<EOF
+          tell application "System Events"
+            tell process "Hyper" to keystroke "t" using command down
+          end tell
+          delay 1
+          tell application "System Events"
+              keystroke "${command}"
+              key code 36  #(presses enter)
+            end tell
+EOF
 
   else
     echo "tab: unsupported terminal app: $the_app"
@@ -91,6 +102,19 @@ EOF
           end tell
         end tell
 EOF
+  
+  elif [[ "$the_app" == 'Hyper' ]]; then
+      osascript >/dev/null <<EOF
+      tell application "System Events"
+        tell process "Hyper"
+          tell menu item "Split Vertically" of menu "Shell" of menu bar 1
+            click
+          end tell
+        end tell
+        delay 1
+        keystroke "${command} \n"
+      end tell
+EOF
 
   else
     echo "$0: unsupported terminal app: $the_app" >&2
@@ -130,6 +154,19 @@ EOF
             end tell
           end tell
         end tell
+EOF
+
+  elif [[ "$the_app" == 'Hyper' ]]; then
+      osascript >/dev/null <<EOF
+      tell application "System Events"
+        tell process "Hyper"
+          tell menu item "Split Horizontally" of menu "Shell" of menu bar 1
+            click
+          end tell
+        end tell
+        delay 1
+        keystroke "${command} \n"
+      end tell
 EOF
 
   else
@@ -199,7 +236,19 @@ function itunes() {
 			opt="$opt track"
 			;;
 		vol)
-			opt="set sound volume to $1" #$1 Due to the shift
+			local new_volume volume=$(osascript -e 'tell application "iTunes" to get sound volume')
+			if [[ $# -eq 0 ]]; then
+				echo "Current volume is ${volume}."
+				return 0
+			fi
+			case $1 in
+				up) new_volume=$((volume + 10 < 100 ? volume + 10 : 100)) ;;
+				down) new_volume=$((volume - 10 > 0 ? volume - 10 : 0)) ;;
+				<0-100>) new_volume=$1 ;;
+				*) echo "'$1' is not valid. Expected <0-100>, up or down."
+				   return 1 ;;
+			esac
+			opt="set sound volume to ${new_volume}"
 			;;
 		playlist)
 		# Inspired by: https://gist.github.com/nakajijapan/ac8b45371064ae98ea7f
@@ -262,7 +311,7 @@ EOF
 			echo "\tmute|unmute\tcontrol volume set"
 			echo "\tnext|previous\tplay next or previous track"
 			echo "\tshuf|shuffle [on|off|toggle]\tSet shuffled playback. Default: toggle. Note: toggle doesn't support the MiniPlayer."
-			echo "\tvol\tSet the volume, takes an argument from 0 to 100"
+			echo "\tvol [0-100|up|down]\tGet or set the volume. 0 to 100 sets the volume. 'up' / 'down' increases / decreases by 10 points. No argument displays current volume."
 			echo "\tplaying|status\tShow what song is currently playing in iTunes."
 			echo "\tplaylist [playlist name]\t Play specific playlist"
 			echo "\thelp\tshow this message and exit"
