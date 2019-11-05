@@ -46,7 +46,7 @@ extract() {
 			(*.xz) unxz "$1" ;;
 			(*.lzma) unlzma "$1" ;;
 			(*.z) uncompress "$1" ;;
-			(*.zip|*.war|*.jar|*.sublime-package|*.ipsw|*.xpi|*.apk|*.whl) unzip "$1" -d $extract_dir ;;
+			(*.zip|*.war|*.jar|*.sublime-package|*.ipsw|*.xpi|*.apk|*.aar|*.whl) unzip "$1" -d $extract_dir ;;
 			(*.rar) unrar x -ad "$1" ;;
 			(*.7z) 7za x "$1" ;;
 			(*.deb)

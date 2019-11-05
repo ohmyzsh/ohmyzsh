@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from __future__ import print_function
 
+import os
 import sys
 import re
 import shlex
@@ -30,7 +31,7 @@ def get_tagname_or_hash():
 
 # `git status --porcelain --branch` can collect all information
 # branch, remote_branch, untracked, staged, changed, conflicts, ahead, behind
-po = Popen(['git', 'status', '--porcelain', '--branch'], stdout=PIPE, stderr=PIPE)
+po = Popen(['git', 'status', '--porcelain', '--branch'], env=dict(os.environ, LANG="C"), stdout=PIPE, stderr=PIPE)
 stdout, sterr = po.communicate()
 if po.returncode != 0:
     sys.exit(0)  # Not a git repository

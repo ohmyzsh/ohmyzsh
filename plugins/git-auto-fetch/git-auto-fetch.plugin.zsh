@@ -5,7 +5,7 @@ function git-fetch-all {
   dir=`git rev-parse --git-dir` &&
   [[ ! -f $dir/NO_AUTO_FETCH ]] &&
   (( `date +%s` - `date -r $dir/FETCH_LOG +%s 2>/dev/null || echo 0` > $GIT_AUTO_FETCH_INTERVAL )) &&
-  git fetch --all &>! $dir/FETCH_LOG &)
+  git fetch --all 2>/dev/null &>! $dir/FETCH_LOG &)
 }
 
 function git-auto-fetch {
@@ -18,10 +18,18 @@ function git-auto-fetch {
     echo "${fg_bold[red]}disabled${reset_color}")
 }
 
-eval "override-git-auto-fetch-$(declare -f zle-line-init)"
-
-function zle-line-init () {
-  git-fetch-all
-  override-git-auto-fetch-zle-line-init
-}
+# Override zle-line-init if it exists
+if (( $+functions[zle-line-init] )); then
+  eval "override-git-auto-fetch-$(declare -f zle-line-init)"
+  
+  function zle-line-init () {
+    git-fetch-all
+    override-git-auto-fetch-zle-line-init
+  }
+else
+  function zle-line-init () {
+    git-fetch-all
+  }
+fi
+  
 zle -N zle-line-init
