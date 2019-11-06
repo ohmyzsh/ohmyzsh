@@ -133,3 +133,6 @@ alias kepvc='kubectl edit pvc'
 alias kdpvc='kubectl describe pvc'
 alias kdelpvc='kubectl delete pvc'
 
+# Resource Usage
+alias ktpo='kubectl top pod'
+alias ktno='kubectl top node'
