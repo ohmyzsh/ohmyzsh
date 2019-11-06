@@ -18,16 +18,13 @@ function parse_git_dirty() {
       FLAGS+='--untracked-files=no'
     fi
     case "$GIT_STATUS_IGNORE_SUBMODULES" in
-      "")
-        # if unset: ignore dirty submodules
-        FLAGS+="--ignore-submodules=dirty"
-        ;;
-      "git")
+      git)
         # let git decide (this respects per-repo config in .gitmodules)
         ;;
       *)
+        # if unset: ignore dirty submodules
         # other values are passed to --ignore-submodules
-        FLAGS+="--ignore-submodules=$GIT_STATUS_IGNORE_SUBMODULES"
+        FLAGS+="--ignore-submodules=${GIT_STATUS_IGNORE_SUBMODULES:-dirty}"
         ;;
     esac
     STATUS=$(command git status ${FLAGS} 2> /dev/null | tail -n1)
