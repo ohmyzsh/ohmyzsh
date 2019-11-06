@@ -12,7 +12,7 @@ function git_prompt_info() {
 function parse_git_dirty() {
   local STATUS
   local -a FLAGS
-  FLAGS=('--porcelain' '--ignore-submodules=dirty')
+  FLAGS=('--porcelain')
   if [[ "$(command git config --get oh-my-zsh.hide-dirty)" != "1" ]]; then
     if [[ "$DISABLE_UNTRACKED_FILES_DIRTY" == "true" ]]; then
       FLAGS+='--untracked-files=no'
