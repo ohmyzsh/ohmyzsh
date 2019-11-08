@@ -34,6 +34,10 @@ alias tkss='tmux kill-session -t'
 # Tmux states this should be screen-256color, but you may need to change it on
 # systems without the proper terminfo
 : ${ZSH_TMUX_FIXTERM_WITH_256COLOR:=screen-256color}
+# Create or attach to a session in a session group
+: ${ZSH_TMUX_SESSIONGROUP:=false}
+# The session group name to use
+: ${ZSH_TMUX_SESSIONGROUP_NAME:=tmux}
 
 # Determine if the terminal supports 256 colors
 if [[ $terminfo[colors] == 256 ]]; then
@@ -59,6 +63,7 @@ function _zsh_tmux_plugin_run() {
   local -a tmux_cmd
   tmux_cmd=(command tmux)
   [[ "$ZSH_TMUX_ITERM2" == "true" ]] && tmux_cmd+=(-CC)
+  [[ "$ZSH_TMUX_SESSIONGROUP" == "true" ]] && tmux_cmd+=(-t "$ZSH_TMUX_SESSIONGROUP_NAME")
 
   # Try to connect to an existing session.
   [[ "$ZSH_TMUX_AUTOCONNECT" == "true" ]] && $tmux_cmd attach
