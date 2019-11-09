@@ -16,7 +16,7 @@ EOF
 	fi
 fi
 
-function man() {
+function colored() {
 	env \
 		LESS_TERMCAP_mb=$(printf "\e[1;31m") \
 		LESS_TERMCAP_md=$(printf "\e[1;31m") \
@@ -28,5 +28,9 @@ function man() {
 		PAGER="${commands[less]:-$PAGER}" \
 		_NROFF_U=1 \
 		PATH="$HOME/bin:$PATH" \
-			man "$@"
+			"$@"
+}
+
+function man() {
+	colored man "$@"
 }
