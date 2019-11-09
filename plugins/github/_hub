@@ -58,6 +58,7 @@ __hub_setup_zsh_fns () {
       - set1 \
         '-m[message]' \
         '-F[file]' \
+        '--no-edit[use first commit message for pull request title/description]' \
         '-a[user]' \
         '-M[milestone]' \
         '-l[labels]' \
@@ -84,11 +85,16 @@ __hub_setup_zsh_fns () {
     hub_commands=(
       alias:'show shell instructions for wrapping git'
       pull-request:'open a pull request on GitHub'
+      pr:'list or checkout a GitHub pull request'
+      issue:'list or create a GitHub issue'
+      release:'list or create a GitHub release'
       fork:'fork origin repo on GitHub'
       create:'create new repo on GitHub for the current project'
+      delete:'delete a GitHub repo'
       browse:'browse the project on GitHub'
       compare:'open GitHub compare view'
-      ci-status:'lookup commit in GitHub Status API'
+      ci-status:'show status of GitHub checks for a commit'
+      sync:'update local branches from upstream'
     )
     _describe -t hub-commands 'hub command' hub_commands && ret=0
 
@@ -110,11 +116,16 @@ __hub_setup_bash_fns () {
     cat <<-EOF
 alias
 pull-request
+pr
+issue
+release
 fork
 create
+delete
 browse
 compare
 ci-status
+sync
 EOF
     __git_list_all_commands_without_hub
   }

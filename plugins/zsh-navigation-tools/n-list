@@ -310,8 +310,9 @@ while (( 1 )); do
                         colsearch_pattern="${search_buffer// ##/|(#a2)}"
                         list=( "${(@M)list:#(#ia2)*$~search_pattern*}" )
                     else
-                        # Patterns will be *foo*~^*bar* and (foo|bar)
+                        # Pattern will be *foo*~^*bar* (inventor: Mikael Magnusson)
                         search_pattern="${search_buffer// ##/*~^*}"
+                        # Pattern will be (foo|bar)
                         colsearch_pattern="${search_buffer// ##/|}"
                         list=( "${(@M)list:#(#i)*$~search_pattern*}" )
                     fi
@@ -445,7 +446,10 @@ while (( 1 )); do
 
     [ "$border" = "1" ] && zcurses border main
 
-    local top_msg=" F1-change view, ${(C)ZSH_NAME} $ZSH_VERSION, shell level $SHLVL "
+    local top_msg=" ${(C)ZSH_NAME} $ZSH_VERSION, shell level $SHLVL "
+    if [[ "${NLIST_ENABLED_EVENTS[(r)F1]}" = "F1" ]]; then
+        top_msg=" F1-change view,$top_msg"
+    fi
     zcurses move main 0 $(( term_width / 2 - $#top_msg / 2 ))
     zcurses string main $top_msg
 

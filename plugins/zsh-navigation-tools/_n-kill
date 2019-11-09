@@ -10,8 +10,8 @@ integer cygwin=0
 local IFS="
 "
 
-case "$(uname)" in
-    CYGWIN*) list=( `command ps -Wa` ); cygwin=1 ;;
+case "$OSTYPE" in
+    cygwin*) list=( `command ps -Wa` ); cygwin=1 ;;
     *) list=( `command ps -o pid,uid,command -A` ) ;;
 esac
 

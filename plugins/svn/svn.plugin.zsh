@@ -1,9 +1,7 @@
-# vim:ft=zsh ts=2 sw=2 sts=2
-#
-function svn_prompt_info() {
+svn_prompt_info() {
   local _DISPLAY
   if in_svn; then
-    if [ "x$SVN_SHOW_BRANCH" = "xtrue" ]; then
+    if [[ "$SVN_SHOW_BRANCH" = true ]]; then
       unset SVN_SHOW_BRANCH
       _DISPLAY=$(svn_get_branch_name)
     else
@@ -16,23 +14,20 @@ $ZSH_THEME_REPO_NAME_COLOR$_DISPLAY$ZSH_PROMPT_BASE_COLOR$ZSH_THEME_SVN_PROMPT_S
 }
 
 
-function in_svn() {
-  if $(svn info >/dev/null 2>&1); then
-    return 0
-  fi
-  return 1
+in_svn() {
+  svn info >/dev/null 2>&1
 }
 
-function svn_get_repo_name() {
+svn_get_repo_name() {
   if in_svn; then
-    svn info | sed -n 's/Repository\ Root:\ .*\///p' | read SVN_ROOT
-    svn info | sed -n "s/URL:\ .*$SVN_ROOT\///p"
+    LANG=C svn info | sed -n 's/^Repository\ Root:\ .*\///p' | read SVN_ROOT
+    LANG=C svn info | sed -n "s/^URL:\ .*$SVN_ROOT\///p"
   fi
 }
 
-function svn_get_branch_name() {
+svn_get_branch_name() {
   local _DISPLAY=$(
-    svn info 2> /dev/null | \
+    LANG=C svn info 2> /dev/null | \
       awk -F/ \
       '/^URL:/ { \
         for (i=0; i<=NF; i++) { \
@@ -44,41 +39,28 @@ function svn_get_branch_name() {
         } \
       }'
   )
-  
-  if [ "x$_DISPLAY" = "x" ]; then
+
+  if [[ -z "$_DISPLAY" ]]; then
     svn_get_repo_name
   else
     echo $_DISPLAY
   fi
 }
 
-function svn_get_rev_nr() {
+svn_get_rev_nr() {
   if in_svn; then
-    svn info 2> /dev/null | sed -n 's/Revision:\ //p'
+    LANG=C svn info 2> /dev/null | sed -n 's/Revision:\ //p'
   fi
 }
 
-function svn_dirty_choose() {
-  if in_svn; then
-    local root=`svn info 2> /dev/null | sed -n 's/^Working Copy Root Path: //p'`
-    if $(svn status $root 2> /dev/null | command grep -Eq '^\s*[ACDIM!?L]'); then
-      # Grep exits with 0 when "One or more lines were selected", return "dirty".
-      echo $1
-    else
-      # Otherwise, no lines were found, or an error occurred. Return clean.
-      echo $2
-    fi
-  fi
-}
-
-function svn_dirty() {
+svn_dirty() {
   svn_dirty_choose $ZSH_THEME_SVN_PROMPT_DIRTY $ZSH_THEME_SVN_PROMPT_CLEAN
 }
 
-function svn_dirty_choose_pwd () {
+svn_dirty_choose() {
   if in_svn; then
-    local root=$PWD
-    if $(svn status $root 2> /dev/null | command grep -Eq '^\s*[ACDIM!?L]'); then
+    local root=$(LANG=C svn info 2> /dev/null | sed -n 's/^Working Copy Root Path: //p')
+    if svn status $root 2> /dev/null | command grep -Eq '^\s*[ACDIM!?L]'; then
       # Grep exits with 0 when "One or more lines were selected", return "dirty".
       echo $1
     else
@@ -88,8 +70,18 @@ function svn_dirty_choose_pwd () {
   fi
 }
 
-function svn_dirty_pwd () {
+svn_dirty_pwd () {
   svn_dirty_choose_pwd $ZSH_THEME_SVN_PROMPT_DIRTY_PWD $ZSH_THEME_SVN_PROMPT_CLEAN_PWD
 }
 
-
+svn_dirty_choose_pwd () {
+  if in_svn; then
+    if svn status "$PWD" 2> /dev/null | command grep -Eq '^\s*[ACDIM!?L]'; then
+      # Grep exits with 0 when "One or more lines were selected", return "dirty".
+      echo $1
+    else
+      # Otherwise, no lines were found, or an error occurred. Return clean.
+      echo $2
+    fi
+  fi
+}

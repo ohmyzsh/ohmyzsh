@@ -44,12 +44,23 @@ EOF
 
   elif [[ "$the_app" == 'iTerm2' ]]; then
       osascript <<EOF
-        tell application "iTerm"
+        tell application "iTerm2"
           tell current window
             create tab with default profile
             tell current session to write text "${command}"
           end tell
         end tell
+EOF
+  elif [[ "$the_app" == 'Hyper' ]]; then
+    osascript >/dev/null <<EOF
+          tell application "System Events"
+            tell process "Hyper" to keystroke "t" using command down
+          end tell
+          delay 1
+          tell application "System Events"
+              keystroke "${command}"
+              key code 36  #(presses enter)
+            end tell
 EOF
 
   else
@@ -81,7 +92,7 @@ EOF
 
   elif [[ "$the_app" == 'iTerm2' ]]; then
       osascript <<EOF
-        tell application "iTerm"
+        tell application "iTerm2"
           tell current session of first window
             set newSession to (split vertically with same profile)
             tell newSession
@@ -90,6 +101,19 @@ EOF
             end tell
           end tell
         end tell
+EOF
+  
+  elif [[ "$the_app" == 'Hyper' ]]; then
+      osascript >/dev/null <<EOF
+      tell application "System Events"
+        tell process "Hyper"
+          tell menu item "Split Vertically" of menu "Shell" of menu bar 1
+            click
+          end tell
+        end tell
+        delay 1
+        keystroke "${command} \n"
+      end tell
 EOF
 
   else
@@ -121,7 +145,7 @@ EOF
 
   elif [[ "$the_app" == 'iTerm2' ]]; then
       osascript <<EOF
-        tell application "iTerm"
+        tell application "iTerm2"
           tell current session of first window
             set newSession to (split horizontally with same profile)
             tell newSession
@@ -130,6 +154,19 @@ EOF
             end tell
           end tell
         end tell
+EOF
+
+  elif [[ "$the_app" == 'Hyper' ]]; then
+      osascript >/dev/null <<EOF
+      tell application "System Events"
+        tell process "Hyper"
+          tell menu item "Split Horizontally" of menu "Shell" of menu bar 1
+            click
+          end tell
+        end tell
+        delay 1
+        keystroke "${command} \n"
+      end tell
 EOF
 
   else
@@ -175,7 +212,7 @@ function quick-look() {
 function man-preview() {
   man -t "$@" | open -f -a Preview
 }
-compdef man-preview=man
+compdef _man man-preview
 
 function vncviewer() {
   open vnc://$@
@@ -184,6 +221,7 @@ function vncviewer() {
 # iTunes control function
 function itunes() {
 	local opt=$1
+	local playlist=$2
 	shift
 	case "$opt" in
 		launch|play|pause|stop|rewind|resume|quit)
@@ -198,8 +236,33 @@ function itunes() {
 			opt="$opt track"
 			;;
 		vol)
-			opt="set sound volume to $1" #$1 Due to the shift
+			local new_volume volume=$(osascript -e 'tell application "iTunes" to get sound volume')
+			if [[ $# -eq 0 ]]; then
+				echo "Current volume is ${volume}."
+				return 0
+			fi
+			case $1 in
+				up) new_volume=$((volume + 10 < 100 ? volume + 10 : 100)) ;;
+				down) new_volume=$((volume - 10 > 0 ? volume - 10 : 0)) ;;
+				<0-100>) new_volume=$1 ;;
+				*) echo "'$1' is not valid. Expected <0-100>, up or down."
+				   return 1 ;;
+			esac
+			opt="set sound volume to ${new_volume}"
 			;;
+		playlist)
+		# Inspired by: https://gist.github.com/nakajijapan/ac8b45371064ae98ea7f
+if [[ ! -z "$playlist" ]]; then
+                    		osascript -e 'tell application "iTunes"' -e "set new_playlist to \"$playlist\" as string" -e "play playlist new_playlist" -e "end tell" 2>/dev/null;
+				if [[ $? -eq 0 ]]; then
+					opt="play"
+				else
+					opt="stop"
+				fi
+                  else
+                    opt="set allPlaylists to (get name of every playlist)"
+                  fi
+                ;;
 		playing|status)
 			local state=`osascript -e 'tell application "iTunes" to player state as string'`
 			if [[ "$state" = "playing" ]]; then
@@ -227,7 +290,7 @@ function itunes() {
 
 			case "$state" in
 				on|off)
-					# Inspired by: http://stackoverflow.com/a/14675583
+					# Inspired by: https://stackoverflow.com/a/14675583
 					osascript 1>/dev/null 2>&1 <<-EOF
 					tell application "System Events" to perform action "AXPress" of (menu item "${state}" of menu "Shuffle" of menu item "Shuffle" of menu "Controls" of menu bar item "Controls" of menu bar 1 of application process "iTunes" )
 EOF
@@ -248,8 +311,9 @@ EOF
 			echo "\tmute|unmute\tcontrol volume set"
 			echo "\tnext|previous\tplay next or previous track"
 			echo "\tshuf|shuffle [on|off|toggle]\tSet shuffled playback. Default: toggle. Note: toggle doesn't support the MiniPlayer."
-			echo "\tvol\tSet the volume, takes an argument from 0 to 100"
+			echo "\tvol [0-100|up|down]\tGet or set the volume. 0 to 100 sets the volume. 'up' / 'down' increases / decreases by 10 points. No argument displays current volume."
 			echo "\tplaying|status\tShow what song is currently playing in iTunes."
+			echo "\tplaylist [playlist name]\t Play specific playlist"
 			echo "\thelp\tshow this message and exit"
 			return 0
 			;;
@@ -259,4 +323,16 @@ EOF
 			;;
 	esac
 	osascript -e "tell application \"iTunes\" to $opt"
+}
+
+# Spotify control function
+source ${ZSH}/plugins/osx/spotify
+
+# Show/hide hidden files in the Finder
+alias showfiles="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
+alias hidefiles="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
+
+# Remove .DS_Store files recursively in a directory, default .
+function rmdsstore() {
+	find "${@:-.}" -type f -name .DS_Store -delete
 }

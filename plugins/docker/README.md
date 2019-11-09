@@ -1,19 +1,11 @@
-## Docker autocomplete plugin
+# Docker plugin
 
-- Adds autocomplete options for all docker commands.
-- Will also show containerIDs and Image names where applicable
+This plugin adds auto-completion for [docker](https://www.docker.com/).
 
-####Shows help for all commands
-![General Help](http://i.imgur.com/tUBO9jh.png "Help for all commands")
+To use it add `docker` to the plugins array in your zshrc file.
+```zsh
+plugins=(... docker)
+```
 
-
-####Shows your downloaded images where applicable
-![Images](http://i.imgur.com/R8ZsWO1.png "Images")
-
-
-####Shows your running containers where applicable
-![Containers](http://i.imgur.com/WQtbheg.png "Containers")
-
-
-
-Maintainer : Ahmed Azaan ([@aeonazaan](https://twitter.com/aeonazaan))
+A copy of the completion script from the docker/cli git repo:
+https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker
