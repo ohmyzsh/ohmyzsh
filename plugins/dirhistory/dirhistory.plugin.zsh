@@ -1,7 +1,7 @@
-## 
-#   Navigate directory history using ALT-LEFT and ALT-RIGHT. ALT-LEFT moves back to directories 
+##
+#   Navigate directory history using ALT-LEFT and ALT-RIGHT. ALT-LEFT moves back to directories
 #   that the user has changed to in the past, and ALT-RIGHT undoes ALT-LEFT.
-# 
+#
 #   Navigate directory hierarchy using ALT-UP and ALT-DOWN.
 #   ALT-UP moves to higher hierarchy (cd ..)
 #   ALT-DOWN moves into the first directory found in alphabetical order
@@ -14,8 +14,8 @@ export dirhistory_future
 
 export DIRHISTORY_SIZE=30
 
-# Pop the last element of dirhistory_past. 
-# Pass the name of the variable to return the result in. 
+# Pop the last element of dirhistory_past.
+# Pass the name of the variable to return the result in.
 # Returns the element if the array was not empty,
 # otherwise returns empty string.
 function pop_past() {
@@ -32,7 +32,7 @@ function pop_future() {
   fi
 }
 
-# Push a new element onto the end of dirhistory_past. If the size of the array 
+# Push a new element onto the end of dirhistory_past. If the size of the array
 # is >= DIRHISTORY_SIZE, the array is shifted
 function push_past() {
   if [[ $#dirhistory_past -ge $DIRHISTORY_SIZE ]]; then
@@ -76,7 +76,7 @@ function dirhistory_back() {
   local d=""
   # Last element in dirhistory_past is the cwd.
 
-  pop_past cw 
+  pop_past cw
   if [[ "" == "$cw" ]]; then
     # Someone overwrote our variable. Recover it.
     dirhistory_past=($PWD)
@@ -129,6 +129,9 @@ case "$TERM_PROGRAM" in
 iTerm.app) bindkey "^[^[[D" dirhistory_zle_dirhistory_back ;;   # iTerm2
 Apple_Terminal) bindkey "^[b" dirhistory_zle_dirhistory_back ;; # Terminal.app
 esac
+if (( ${+terminfo[kcub1]} )); then
+  bindkey "^[${terminfo[kcub1]}" dirhistory_zle_dirhistory_back  # urxvt
+fi
 
 zle -N dirhistory_zle_dirhistory_future
 bindkey "\e[3C" dirhistory_zle_dirhistory_future    # xterm in normal mode
@@ -139,11 +142,14 @@ case "$TERM_PROGRAM" in
 iTerm.app) bindkey "^[^[[C" dirhistory_zle_dirhistory_future ;;   # iTerm2
 Apple_Terminal) bindkey "^[f" dirhistory_zle_dirhistory_future ;; # Terminal.app
 esac
+if (( ${+terminfo[kcuf1]} )); then
+  bindkey "^[${terminfo[kcuf1]}" dirhistory_zle_dirhistory_future # urxvt
+fi
 
 
-# 
+#
 # HIERARCHY Implemented in this section, in case someone wants to split it to another plugin if it clashes bindings
-# 
+#
 
 # Move up in hierarchy
 function dirhistory_up() {
@@ -178,6 +184,9 @@ case "$TERM_PROGRAM" in
 iTerm.app) bindkey "^[^[[A" dirhistory_zle_dirhistory_up ;;     # iTerm2
 Apple_Terminal) bindkey "^[OA" dirhistory_zle_dirhistory_up ;;  # Terminal.app
 esac
+if (( ${+terminfo[kcuu1]} )); then
+  bindkey "^[${terminfo[kcuu1]}" dirhistory_zle_dirhistory_up # urxvt
+fi
 
 zle -N dirhistory_zle_dirhistory_down
 bindkey "\e[3B" dirhistory_zle_dirhistory_down    # xterm in normal mode
@@ -188,3 +197,6 @@ case "$TERM_PROGRAM" in
 iTerm.app) bindkey "^[^[[B" dirhistory_zle_dirhistory_down ;;     # iTerm2
 Apple_Terminal) bindkey "^[OB" dirhistory_zle_dirhistory_down ;;  # Terminal.app
 esac
+if (( ${+terminfo[kcud1]} )); then
+  bindkey "^[${terminfo[kcud1]}" dirhistory_zle_dirhistory_down # urxvt
+fi
