@@ -1,7 +1,7 @@
-## 
-#   Navigate directory history using ALT-LEFT and ALT-RIGHT. ALT-LEFT moves back to directories 
+##
+#   Navigate directory history using ALT-LEFT and ALT-RIGHT. ALT-LEFT moves back to directories
 #   that the user has changed to in the past, and ALT-RIGHT undoes ALT-LEFT.
-# 
+#
 #   Navigate directory hierarchy using ALT-UP and ALT-DOWN. (mac keybindings not yet implemented)
 #   ALT-UP moves to higher hierarchy (cd ..)
 #   ALT-DOWN moves into the first directory found in alphabetical order
@@ -14,8 +14,8 @@ export dirhistory_future
 
 export DIRHISTORY_SIZE=30
 
-# Pop the last element of dirhistory_past. 
-# Pass the name of the variable to return the result in. 
+# Pop the last element of dirhistory_past.
+# Pass the name of the variable to return the result in.
 # Returns the element if the array was not empty,
 # otherwise returns empty string.
 function pop_past() {
@@ -32,7 +32,7 @@ function pop_future() {
   fi
 }
 
-# Push a new element onto the end of dirhistory_past. If the size of the array 
+# Push a new element onto the end of dirhistory_past. If the size of the array
 # is >= DIRHISTORY_SIZE, the array is shifted
 function push_past() {
   if [[ $#dirhistory_past -ge $DIRHISTORY_SIZE ]]; then
@@ -75,7 +75,7 @@ function dirhistory_back() {
   local d=""
   # Last element in dirhistory_past is the cwd.
 
-  pop_past cw 
+  pop_past cw
   if [[ "" == "$cw" ]]; then
     # Someone overwrote our variable. Recover it.
     dirhistory_past=($PWD)
@@ -108,7 +108,7 @@ function dirhistory_forward() {
 function dirhistory_zle_dirhistory_back() {
   # Erase current line in buffer
   zle kill-buffer
-  dirhistory_back 
+  dirhistory_back
   zle accept-line
 }
 
@@ -131,6 +131,10 @@ fi
 bindkey "\e\e[D" dirhistory_zle_dirhistory_back
 # GNU screen:
 bindkey "\eO3D" dirhistory_zle_dirhistory_back
+# urxvt:
+if [[ "${terminfo[kcub1]}" != "" ]]; then
+    bindkey "^[${terminfo[kcub1]}" dirhistory_zle_dirhistory_back
+fi
 
 zle -N dirhistory_zle_dirhistory_future
 bindkey "\e[3C" dirhistory_zle_dirhistory_future
@@ -140,11 +144,15 @@ if [[ "$TERM_PROGRAM" == "Apple_Terminal" ]]; then
 fi
 bindkey "\e\e[C" dirhistory_zle_dirhistory_future
 bindkey "\eO3C" dirhistory_zle_dirhistory_future
+# urxvt:
+if [[ "${terminfo[kcuf1]}" != "" ]]; then
+    bindkey "^[${terminfo[kcuf1]}" dirhistory_zle_dirhistory_future
+fi
 
 
-# 
+#
 # HIERARCHY Implemented in this section, in case someone wants to split it to another plugin if it clashes bindings
-# 
+#
 
 # Move up in hierarchy
 function dirhistory_up() {
@@ -188,3 +196,11 @@ bindkey "\e[1;3B" dirhistory_zle_dirhistory_down
     #bindkey "^[?" dirhistory_zle_dirhistory_down #dont know it
 bindkey "\e\e[B" dirhistory_zle_dirhistory_down
 bindkey "\eO3B" dirhistory_zle_dirhistory_down
+
+# urxvt:
+if [[ "${terminfo[kcuu1]}" != "" ]]; then
+    bindkey "^[${terminfo[kcuu1]}" dirhistory_zle_dirhistory_up
+fi
+if [[ "${terminfo[kcud1]}" != "" ]]; then
+    bindkey "^[${terminfo[kcud1]}" dirhistory_zle_dirhistory_down
+fi
