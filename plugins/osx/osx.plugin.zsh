@@ -219,7 +219,7 @@ function vncviewer() {
 }
 
 # iTunes control function
-function itunes() {
+function music() {
 	local opt=$1
 	local playlist=$2
 	shift
@@ -236,7 +236,7 @@ function itunes() {
 			opt="$opt track"
 			;;
 		vol)
-			local new_volume volume=$(osascript -e 'tell application "iTunes" to get sound volume')
+			local new_volume volume=$(osascript -e 'tell application "Music" to get sound volume')
 			if [[ $# -eq 0 ]]; then
 				echo "Current volume is ${volume}."
 				return 0
@@ -253,7 +253,7 @@ function itunes() {
 		playlist)
 		# Inspired by: https://gist.github.com/nakajijapan/ac8b45371064ae98ea7f
 if [[ ! -z "$playlist" ]]; then
-                    		osascript -e 'tell application "iTunes"' -e "set new_playlist to \"$playlist\" as string" -e "play playlist new_playlist" -e "end tell" 2>/dev/null;
+                    		osascript -e 'tell application "Music"' -e "set new_playlist to \"$playlist\" as string" -e "play playlist new_playlist" -e "end tell" 2>/dev/null;
 				if [[ $? -eq 0 ]]; then
 					opt="play"
 				else
@@ -264,13 +264,13 @@ if [[ ! -z "$playlist" ]]; then
                   fi
                 ;;
 		playing|status)
-			local state=`osascript -e 'tell application "iTunes" to player state as string'`
+			local state=`osascript -e 'tell application "Music" to player state as string'`
 			if [[ "$state" = "playing" ]]; then
-				currenttrack=`osascript -e 'tell application "iTunes" to name of current track as string'`
-				currentartist=`osascript -e 'tell application "iTunes" to artist of current track as string'`
+				currenttrack=`osascript -e 'tell application "Music" to name of current track as string'`
+				currentartist=`osascript -e 'tell application "Music" to artist of current track as string'`
 				echo -E "Listening to $fg[yellow]$currenttrack$reset_color by $fg[yellow]$currentartist$reset_color";
 			else
-				echo "iTunes is" $state;
+				echo "Music is" $state;
 			fi
 			return 0
 			;;
@@ -284,7 +284,7 @@ if [[ ! -z "$playlist" ]]; then
 
 			if [[ -n "$state" && ! "$state" =~ "^(on|off|toggle)$" ]]
 			then
-				print "Usage: itunes shuffle [on|off|toggle]. Invalid option."
+				print "Usage: music shuffle [on|off|toggle]. Invalid option."
 				return 1
 			fi
 
@@ -305,14 +305,14 @@ EOF
 			esac
 			;;
 		""|-h|--help)
-			echo "Usage: itunes <option>"
+			echo "Usage: music <option>"
 			echo "option:"
 			echo "\tlaunch|play|pause|stop|rewind|resume|quit"
 			echo "\tmute|unmute\tcontrol volume set"
 			echo "\tnext|previous\tplay next or previous track"
 			echo "\tshuf|shuffle [on|off|toggle]\tSet shuffled playback. Default: toggle. Note: toggle doesn't support the MiniPlayer."
 			echo "\tvol [0-100|up|down]\tGet or set the volume. 0 to 100 sets the volume. 'up' / 'down' increases / decreases by 10 points. No argument displays current volume."
-			echo "\tplaying|status\tShow what song is currently playing in iTunes."
+			echo "\tplaying|status\tShow what song is currently playing in Music."
 			echo "\tplaylist [playlist name]\t Play specific playlist"
 			echo "\thelp\tshow this message and exit"
 			return 0
@@ -322,7 +322,7 @@ EOF
 			return 1
 			;;
 	esac
-	osascript -e "tell application \"iTunes\" to $opt"
+	osascript -e "tell application \"music\" to $opt"
 }
 
 # Spotify control function
