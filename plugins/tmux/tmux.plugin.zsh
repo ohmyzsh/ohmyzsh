@@ -67,9 +67,8 @@ function _zsh_tmux_plugin_run() {
 
   # If failed, just run tmux, fixing the TERM variable if requested.
   if [[ $? -ne 0 ]]; then
-    [[ "$ZSH_TMUX_FIXTERM" == "true" ]] && tmux_cmd+=(-f "$_ZSH_TMUX_FIXED_CONFIG") || \
-    [[ -e "$ZSH_TMUX_CONFIG" ]] && tmux_cmd+=(-f "$ZSH_TMUX_CONFIG")
-    $tmux_cmd new-session  
+    [[ "$ZSH_TMUX_FIXTERM" == "true" ]] && tmux_cmd+=(-f "$_ZSH_TMUX_FIXED_CONFIG")
+    $tmux_cmd new-session
   fi
 
   if [[ "$ZSH_TMUX_AUTOQUIT" == "true" ]]; then
