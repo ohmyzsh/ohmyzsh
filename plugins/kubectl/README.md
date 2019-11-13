@@ -105,3 +105,7 @@ plugins=(... kubectl)
 | kdelss  | `kubectl delete statefulset`        | Delete the statefulset                                                                           |
 | ksss    | `kubectl scale statefulset`         | Scale a statefulset                                                                              |
 | krsss   | `kubectl rollout status statefulset`| Check the rollout status of a deployment                                                         |
+|         |                                     | **Display Resource (CPU/Memory/Storage) usage**                                                           |
+| ktno    | `kubectl top node`                  | Display Resource (CPU/Memory/Storage) usage of nodes                                             |
+| ktpo    | `kubectl top pod`                   | Display Resource (CPU/Memory/Storage) usage of pods                                              |
+
