@@ -23,7 +23,7 @@ If using this with OpenShift, the oc tool needs installed.  It can be obtained f
 
 There are several great tools that make using kubectl very enjoyable.
 
-[kubectx and kubenx](https://github.com/ahmetb/kubectx) are great for
+[kubectx and kubens](https://github.com/ahmetb/kubectx) are great for
 fast switching between clusters and namespaces.
 
 ## Prompt Structure
