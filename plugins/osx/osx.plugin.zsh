@@ -219,7 +219,19 @@ function vncviewer() {
 }
 
 # iTunes control function
-function music() {
+function itunes music() {
+	autoload is-at-least
+	if is-at-least 10.15 $(sw_vers -productVersion); then
+		echo >&2 The itunes function name is deprecated. Use \`music\' instead.
+		return 1
+	fi
+
+	local APP_NAME
+	case $0 in
+		itunes) APP_NAME=iTunes ;;
+		music) APP_NAME=Music ;;
+	esac
+
 	local opt=$1
 	local playlist=$2
 	shift
@@ -236,7 +248,7 @@ function music() {
 			opt="$opt track"
 			;;
 		vol)
-			local new_volume volume=$(osascript -e 'tell application "Music" to get sound volume')
+			local new_volume volume=$(osascript -e "tell application \"$APP_NAME\" to get sound volume")
 			if [[ $# -eq 0 ]]; then
 				echo "Current volume is ${volume}."
 				return 0
@@ -251,23 +263,23 @@ function music() {
 			opt="set sound volume to ${new_volume}"
 			;;
 		playlist)
-		# Inspired by: https://gist.github.com/nakajijapan/ac8b45371064ae98ea7f
-if [[ ! -z "$playlist" ]]; then
-                    		osascript -e 'tell application "Music"' -e "set new_playlist to \"$playlist\" as string" -e "play playlist new_playlist" -e "end tell" 2>/dev/null;
+			# Inspired by: https://gist.github.com/nakajijapan/ac8b45371064ae98ea7f
+			if [[ ! -z "$playlist" ]]; then
+				osascript -e "tell application \"$APP_NAME\"" -e "set new_playlist to \"$playlist\" as string" -e "play playlist new_playlist" -e "end tell" 2>/dev/null;
 				if [[ $? -eq 0 ]]; then
 					opt="play"
 				else
 					opt="stop"
 				fi
-                  else
-                    opt="set allPlaylists to (get name of every playlist)"
-                  fi
-                ;;
+			else
+				opt="set allPlaylists to (get name of every playlist)"
+			fi
+			;;
 		playing|status)
-			local state=`osascript -e 'tell application "Music" to player state as string'`
+			local state=`osascript -e "tell application \"$APP_NAME\" to player state as string"`
 			if [[ "$state" = "playing" ]]; then
-				currenttrack=`osascript -e 'tell application "Music" to name of current track as string'`
-				currentartist=`osascript -e 'tell application "Music" to artist of current track as string'`
+				currenttrack=`osascript -e "tell application \"$APP_NAME\" to name of current track as string"`
+				currentartist=`osascript -e "tell application \"$APP_NAME\" to artist of current track as string"`
 				echo -E "Listening to $fg[yellow]$currenttrack$reset_color by $fg[yellow]$currentartist$reset_color";
 			else
 				echo "Music is" $state;
@@ -284,7 +296,7 @@ if [[ ! -z "$playlist" ]]; then
 
 			if [[ -n "$state" && ! "$state" =~ "^(on|off|toggle)$" ]]
 			then
-				print "Usage: music shuffle [on|off|toggle]. Invalid option."
+				print "Usage: $0 shuffle [on|off|toggle]. Invalid option."
 				return 1
 			fi
 
@@ -305,7 +317,7 @@ EOF
 			esac
 			;;
 		""|-h|--help)
-			echo "Usage: music <option>"
+			echo "Usage: $0 <option>"
 			echo "option:"
 			echo "\tlaunch|play|pause|stop|rewind|resume|quit"
 			echo "\tmute|unmute\tcontrol volume set"
@@ -322,7 +334,7 @@ EOF
 			return 1
 			;;
 	esac
-	osascript -e "tell application \"music\" to $opt"
+	osascript -e "tell application \"$APP_NAME\" to $opt"
 }
 
 # Spotify control function
