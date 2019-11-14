@@ -470,7 +470,7 @@ while [ $# -gt 0 ]; do
             break ;;
         * )
             showHelp;
-            exit 1;
+            break;
 
     esac
 done
