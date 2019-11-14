@@ -10,6 +10,7 @@ plugins=(... laravel)
 |:-:|:-:|
 | `artisan`  | `php artisan`  |
 | `pas`  | `php artisan serve` |
+| `pati`  | `php artisan tinker` |
 
 ## Database
 
@@ -38,3 +39,12 @@ plugins=(... laravel)
 | `pacoc`  |  `php artisan config:clear` |
 | `pavic`  |  `php artisan view:clear` |
 | `paroc`  |  `php artisan route:clear` |
+
+## Misc
+
+| Alias | Description |
+|:-:|:-:|
+| `pak`  |  `php artisan key:generate` |
+| `pasl`  |  `php artisan storage:link` |
+| `pav`  |  `php artisan vendor:publish` |
+
