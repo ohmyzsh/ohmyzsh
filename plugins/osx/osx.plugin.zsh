@@ -220,17 +220,17 @@ function vncviewer() {
 
 # iTunes control function
 function itunes music() {
+	local APP_NAME=Music
+
 	autoload is-at-least
 	if is-at-least 10.15 $(sw_vers -productVersion); then
-		echo >&2 The itunes function name is deprecated. Use \`music\' instead.
-		return 1
+		if [[ $0 = itunes ]]; then
+			echo >&2 The itunes function name is deprecated. Use \`music\' instead.
+			return 1
+		fi
+	else
+		APP_NAME=iTunes
 	fi
-
-	local APP_NAME
-	case $0 in
-		itunes) APP_NAME=iTunes ;;
-		music) APP_NAME=Music ;;
-	esac
 
 	local opt=$1
 	local playlist=$2
