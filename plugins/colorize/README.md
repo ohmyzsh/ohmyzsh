@@ -10,12 +10,23 @@ To use it, add colorize to the plugins array of your zshrc file:
 ```
 plugins=(... colorize)
 ```
+## Configuration
 
-## Styles
+### Colorize tool
+
+Colorize supports using either the `pygmentize` tool or the `chroma` tool.  By default colorize uses `pygmentize` unless it's not installed & `chroma` is installed.  However, you can override this with the `ZSH_COLORIZE_TOOL` environment variable:
+
+```
+ZSH_COLORIZE_TOOL=chroma
+```
+
+### Styles
 
 Pygments offers multiple styles. By default, the `default` style is used, but you can choose another theme by setting the `ZSH_COLORIZE_STYLE` environment variable:
 
-`ZSH_COLORIZE_STYLE="colorful"`
+```
+ZSH_COLORIZE_STYLE="colorful"
+```
 
 ## Usage
 
@@ -32,4 +43,6 @@ In the latter form, the file contents will be concatenated and presented by less
 
 ## Requirements
 
-You have to install Pygments first: [pygments.org](http://pygments.org/download/)
+You have to either install Pygments: [pygments.org](http://pygments.org/download/)
+
+Or install chroma: [https://github.com/alecthomas/chroma](https://github.com/alecthomas/chroma)
