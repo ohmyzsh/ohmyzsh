@@ -3,21 +3,46 @@ alias ccat='colorize_via_pygmentize'
 alias cless='colorize_via_pygmentize_less'
 
 colorize_via_pygmentize() {
-    if ! (( $+commands[pygmentize] )); then
-        echo "package 'Pygments' is not installed!"
+    
+    if [[ $ZSH_COLORIZE_TOOL != "chroma" && $ZSH_COLORIZE_TOOL != "pygmentize" ]]; then
+        echo "ZSH_COLORIZE_TOOL not recognized.  Options are 'pygmentize' or 'chroma'"
         return 1
     fi
 
-    # If the environment varianle ZSH_COLORIZE_STYLE
+    if [ -z $ZSH_COLORIZE_TOOL ]; then
+        if (( $+commands[pygmentize] )); then
+            ZSH_COLORIZE_TOOL="pygmentize"
+        elif (( $+commands[chroma] )); then
+            ZSH_COLORIZE_TOOL="chroma"
+        else
+            echo "niether 'Pygments' nor 'chroma' is not installed!"
+            return 1
+        fi
+    fi
+
+    echo "Tool: $ZSH_COLORIZE_TOOL"
+
+    # If the environment variable ZSH_COLORIZE_STYLE
     # is set, use that theme instead. Otherwise,
     # use the default.
     if [ -z $ZSH_COLORIZE_STYLE ]; then
-        ZSH_COLORIZE_STYLE="default"
+        if [[ $ZSH_COLORIZE_TOOL == "pygmentize" ]]; then
+            ZSH_COLORIZE_STYLE="default"
+        else
+            # Choosing 'emacs' to match pygmentize's default as per:
+            # https://github.com/pygments/pygments/blob/master/pygments/styles/default.py#L19
+            ZSH_COLORIZE_STYLE="emacs"
+        fi
     fi
 
+    echo "color style: $ZSH_COLORIZE_STYLE"
     # pygmentize stdin if no arguments passed
     if [ $# -eq 0 ]; then
-        pygmentize -O style="$ZSH_COLORIZE_STYLE" -g
+        if [[ $ZSH_COLORIZE_TOOL == "pygmentize" ]]; then
+            pygmentize -O style="$ZSH_COLORIZE_STYLE" -g
+        else
+            chroma --style="$ZSH_COLORIZE_STYLE"
+        fi
         return $?
     fi
 
@@ -27,11 +52,15 @@ colorize_via_pygmentize() {
     local FNAME lexer
     for FNAME in "$@"
     do
-        lexer=$(pygmentize -N "$FNAME")
-        if [[ $lexer != text ]]; then
-            pygmentize -O style="$ZSH_COLORIZE_STYLE" -l "$lexer" "$FNAME"
+        if [[ $ZSH_COLORIZE_TOOL == "pygmentize" ]]; then
+            lexer=$(pygmentize -N "$FNAME")
+            if [[ $lexer != text ]]; then
+                pygmentize -O style="$ZSH_COLORIZE_STYLE" -l "$lexer" "$FNAME"
+            else
+                pygmentize -O style="$ZSH_COLORIZE_STYLE" -g "$FNAME"
+            fi
         else
-            pygmentize -O style="$ZSH_COLORIZE_STYLE" -g "$FNAME"
+            chroma --style="$ZSH_COLORIZE_STYLE" "$FNAME"
         fi
     done
 }
