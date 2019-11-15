@@ -282,7 +282,7 @@ function itunes music() {
 				currentartist=`osascript -e "tell application \"$APP_NAME\" to artist of current track as string"`
 				echo -E "Listening to $fg[yellow]$currenttrack$reset_color by $fg[yellow]$currentartist$reset_color";
 			else
-				echo "Music is" $state;
+				echo "$APP_NAME is" $state;
 			fi
 			return 0
 			;;

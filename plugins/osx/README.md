@@ -56,6 +56,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 | `man-preview`   | Open a specified man page in Preview app              |
 | `showfiles`     | Show hidden files                                     |
 | `hidefiles`     | Hide the hidden files                                 |
+| `itunes`        | DEPRECATED. Use `music` from macOS Catalina on        |
 | `music`         | Control Apple Music. Use `music -h` for usage details |
 | `spotify`       | Control Spotify and search by artist, album, track…   |
 | `rmdsstore`     | Remove .DS\_Store files recursively in a directory    |
