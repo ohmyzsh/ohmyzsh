@@ -112,6 +112,7 @@ plugins=(... git)
 | gpf                  | git push --force-with-lease                                                                                                   |
 | gpf!                 | git push --force                                                                                                              |
 | gpoat                | git push origin --all && git push origin --tags                                                                               |
+| gpot                 | git push origin && git push origin --tags                                                                                     | 
 | gpu                  | git push upstream                                                                                                             |
 | gpv                  | git push -v                                                                                                                   |
 | gr                   | git remote                                                                                                                    |
@@ -123,7 +124,7 @@ plugins=(... git)
 | grbi                 | git rebase -i                                                                                                                 |
 | grbm                 | git rebase master                                                                                                             |
 | grbs                 | git rebase --skip                                                                                                             |
-| grev                 | git revert                                                                                                                   |
+| grev                 | git revert                                                                                                                    |
 | grh                  | git reset                                                                                                                     |
 | grhh                 | git reset --hard                                                                                                              |
 | groh                 | git reset origin/$(git_current_branch) --hard                                                                                 |
