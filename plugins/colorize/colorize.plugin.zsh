@@ -3,11 +3,7 @@ alias ccat='colorize_via_pygmentize'
 alias cless='colorize_via_pygmentize_less'
 
 colorize_via_pygmentize() {
-    
-    if [[ $ZSH_COLORIZE_TOOL != "chroma" && $ZSH_COLORIZE_TOOL != "pygmentize" ]]; then
-        echo "ZSH_COLORIZE_TOOL not recognized.  Options are 'pygmentize' or 'chroma'"
-        return 1
-    fi
+    local available_tools=("chroma" "pygmentize")
 
     if [ -z $ZSH_COLORIZE_TOOL ]; then
         if (( $+commands[pygmentize] )); then
@@ -15,12 +11,18 @@ colorize_via_pygmentize() {
         elif (( $+commands[chroma] )); then
             ZSH_COLORIZE_TOOL="chroma"
         else
-            echo "niether 'Pygments' nor 'chroma' is not installed!"
+            echo "Neither 'pygments' nor 'chroma' is installed!"
             return 1
         fi
     fi
 
-    echo "Tool: $ZSH_COLORIZE_TOOL"
+    if [[ ${available_tools[(Ie)$ZSH_COLORIZE_TOOL]} -eq 0 ]]; then
+        echo "ZSH_COLORIZE_TOOL '$ZSH_COLORIZE_TOOL' not recognized. Available options are 'pygmentize' and 'chroma'."
+        return 1
+    elif (( $+commands[$ZSH_COLORIZE_TOOL] )); then
+        echo "Package '$ZSH_COLORIZE_TOOL' is not installed!"
+        return 1
+    fi
 
     # If the environment variable ZSH_COLORIZE_STYLE
     # is set, use that theme instead. Otherwise,
@@ -35,7 +37,6 @@ colorize_via_pygmentize() {
         fi
     fi
 
-    echo "color style: $ZSH_COLORIZE_STYLE"
     # pygmentize stdin if no arguments passed
     if [ $# -eq 0 ]; then
         if [[ $ZSH_COLORIZE_TOOL == "pygmentize" ]]; then
