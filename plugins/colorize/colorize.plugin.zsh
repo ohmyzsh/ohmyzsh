@@ -28,13 +28,8 @@ colorize_via_pygmentize() {
     # is set, use that theme instead. Otherwise,
     # use the default.
     if [ -z $ZSH_COLORIZE_STYLE ]; then
-        if [[ $ZSH_COLORIZE_TOOL == "pygmentize" ]]; then
-            ZSH_COLORIZE_STYLE="default"
-        else
-            # Choosing 'emacs' to match pygmentize's default as per:
-            # https://github.com/pygments/pygments/blob/master/pygments/styles/default.py#L19
-            ZSH_COLORIZE_STYLE="emacs"
-        fi
+        # Both pygmentize & chroma support 'emacs'
+        ZSH_COLORIZE_STYLE="emacs"
     fi
 
     # pygmentize stdin if no arguments passed
