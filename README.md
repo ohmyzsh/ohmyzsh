@@ -3,6 +3,7 @@
 </p>
 
 [![Discord server](https://img.shields.io/discord/642496866407284746)](https://discord.gg/bpXWhnN)
+[![Follow @ohmyzsh](https://img.shields.io/twitter/follow/ohmyzsh?label=Follow+@ohmyzsh&style=flat)](https://twitter.com/intent/follow?screen_name=ohmyzsh)
 
 Oh My Zsh is an open source, community-driven framework for managing your [zsh](https://www.zsh.org/) configuration.
 
