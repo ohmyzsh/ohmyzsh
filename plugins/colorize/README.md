@@ -14,7 +14,7 @@ plugins=(... colorize)
 
 ### Colorize tool
 
-Colorize supports using either the `pygmentize` tool or the `chroma` tool.  By default colorize uses `pygmentize` unless it's not installed & `chroma` is installed.  However, you can override this with the `ZSH_COLORIZE_TOOL` environment variable:
+Colorize supports `pygmentize` and `chroma` as syntax highlighter. By default colorize uses `pygmentize` unless it's not installed and `chroma` is. This can be overridden by the `ZSH_COLORIZE_TOOL` environment variable:
 
 ```
 ZSH_COLORIZE_TOOL=chroma
@@ -30,7 +30,7 @@ ZSH_COLORIZE_STYLE="colorful"
 
 ## Usage
 
-* `ccat  <file> [files]`: colorize the contents of the file (or files, if more than one are provided). 
+* `ccat <file> [files]`: colorize the contents of the file (or files, if more than one are provided). 
   If no arguments are passed it will colorize the standard input or stdin.
 
 * `cless <file> [files]`: colorize the contents of the file (or files, if more than one are provided) and
