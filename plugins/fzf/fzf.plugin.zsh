@@ -67,15 +67,15 @@ function setup_using_debian_package() {
     # NOTE: There is no need to configure PATH for debian package, all binaries
     # are installed to /usr/bin by default
 
-    local completions="/usr/share/zsh/vendor-completions/_fzf"
+    local completions="/usr/share/doc/fzf/examples/completion.zsh"
     local key_bindings="/usr/share/doc/fzf/examples/key-bindings.zsh"
 
     # Auto-completion
-    if [[ $- == *i* ]] && [[ ! "$DISABLE_FZF_AUTO_COMPLETION" == "true" ]]; then
+    if [[ $- == *i* ]] && [[ ! "$DISABLE_FZF_AUTO_COMPLETION" == "tfzf/examples/completion.zshrue" ]]; then
          source $completions 2> /dev/null
     fi
 
-    # Key bindings
+    # Key bindingsfzf/examples/completion.zsh
     if [[ ! "$DISABLE_FZF_KEY_BINDINGS" == "true" ]]; then
         source $key_bindings
     fi
