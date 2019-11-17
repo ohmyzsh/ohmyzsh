@@ -25,6 +25,45 @@ function work_in_progress() {
   fi
 }
 
+# prune local branches that were merged to upstream
+# also support force (-f flag), to ignore any warnings
+function git_prune_local_branches {
+  OPTION="-d";
+  if [[ "$1" == "-f" ]]; then
+    echo "WARNING! Removing with force";
+    OPTION="-D";
+  fi;
+
+  TO_REMOVE_LINES=`git branch -r | awk "{print \\$1}" | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk "{print \\$1}" | wc -l`;
+
+  if [ "$TO_REMOVE_LINES" -ne "0" ]; then
+    TO_REMOVE=`git branch -r | awk "{print \\$1}" | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk "{print \\$1}"`;
+
+    echo "Removing branches...";
+    echo "";
+    printf "\n$TO_REMOVE\n\n";
+    echo "Proceed?";
+
+    select result in Yes No; do
+      if [[ "$result" == "Yes" ]]; then
+        echo "Removing in progress...";
+        echo "$TO_REMOVE" | xargs git branch "$OPTION";
+        if [ $? -ne 0 ]; then
+          echo ""
+          echo "Some branches were not removed, you have to do it manually!";
+        else
+          echo "All branches removed!";
+        fi
+      fi
+
+      break;
+    done;
+  else
+    echo "You have nothing to clean";
+  fi
+}
+
+
 #
 # Aliases
 # (sorted alphabetically)
@@ -186,6 +225,7 @@ alias gp='git push'
 alias gpd='git push --dry-run'
 alias gpf='git push --force-with-lease'
 alias gpf!='git push --force'
+alias gplb='git_prune_local_branches'
 alias gpoat='git push origin --all && git push origin --tags'
 alias gpu='git push upstream'
 alias gpv='git push -v'
