@@ -19,7 +19,7 @@ colorize_via_pygmentize() {
     if [[ ${available_tools[(Ie)$ZSH_COLORIZE_TOOL]} -eq 0 ]]; then
         echo "ZSH_COLORIZE_TOOL '$ZSH_COLORIZE_TOOL' not recognized. Available options are 'pygmentize' and 'chroma'."
         return 1
-    elif (( $+commands[$ZSH_COLORIZE_TOOL] )); then
+    elif (( $+commands["$ZSH_COLORIZE_TOOL"] )); then
         echo "Package '$ZSH_COLORIZE_TOOL' is not installed!"
         return 1
     fi
