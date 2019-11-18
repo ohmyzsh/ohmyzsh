@@ -32,4 +32,4 @@ In the latter form, the file contents will be concatenated and presented by less
 
 ## Requirements
 
-You have to install Pygments first: [pygments.org](http://pygments.org/download/)
+You have to install Pygments first: [pygments.org](http://pygments.org/download.html)
