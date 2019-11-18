@@ -29,6 +29,61 @@
 # jobs are running in this shell will all be displayed automatically when
 # appropriate.
 
+### Theme color defaults
+# Can be set from .zshrc
+# Either by name or by number. Works for 256color too!
+
+# Status indicator
+AGN_STATUS_BG=${AGN_STATUS_BG:-black}
+AGN_STATUS_ERROR=${AGN_STATUS_ERROR:-red}
+AGN_STATUS_ROOT=${AGN_STATUS_ROOT:-yellow}
+AGN_STATUS_BGJOBS=${AGN_STATUS_BGJOBS:-cyan}
+AGN_STATUS_SSHAGENT=${AGN_STATUS_SSHAGENT:-yellow}
+AGN_STATUS_SCREEN=${AGN_STATUS_SCREEN:-green}
+AGN_STATUS_SCREENWIN=${AGN_STATUS_SCREENWIN:-green}
+
+# The 'user@hostname' indicator
+AGN_CONTEXT_BG=${AGN_CONTEXT_BG:-black}
+AGN_CONTEXT_FG=${AGN_CONTEXT_FG:-default}
+AGN_CONTEXT_ROOT=${AGN_CONTEXT_ROOT:-yellow}
+
+# Current Working Directory indicator
+AGN_CWD_BG=${AGN_CWD_BG:-blue}
+AGN_CWD_FG=${AGN_CWD_FG:-black}
+# Fold overly long paths in prompt?
+AGN_CWD_FOLD=${AGN_CWD_FOLD:-}
+AGN_CWD_FOLD_LEN=${AGN_CWD_FOLD_LEN:30}
+
+# GIT
+AGN_GIT_DIRTY_BG=${AGN_GIT_DIRTY_BG:-yellow}
+AGN_GIT_DIRTY_FG=${AGN_GIT_DIRTY_FG:-black}
+AGN_GIT_CLEAN_BG=${AGN_GIT_CLEAN_BG:-green}
+AGN_GIT_CLEAN_FG=${AGN_GIT_CLEAN_FG:-black}
+
+# BZR
+AGN_BZR_DIRTY_BG=${AGN_BZR_DIRTY_BG:-yellow}
+AGN_BZR_DIRTY_FG=${AGN_BZR_DIRTY_FG:-black}
+AGN_BZR_CLEAN_BG=${AGN_BZR_CLEAN_BG:-green}
+AGN_BZR_CLEAN_FG=${AGN_BZR_CLEAN_FG:-black}
+
+# HG/Mercurial
+AGN_HG_UNTRACKED_BG=${AGN_HG_UNTRACKED_BG:-red}
+AGN_HG_UNTRACKED_FG=${AGN_HG_UNTRACKED_FG:-white}
+AGN_HG_DIRTY_BG=${AGN_HG_DIRTY_BG:-yellow}
+AGN_HG_DIRTY_FG=${AGN_HG_DIRTY_FG:-black}
+AGN_HG_CLEAN_BG=${AGN_HG_CLEAN_BG:-green}
+AGN_HG_CLEAN_FG=${AGN_HG_CLEAN_FG:-black}
+
+# VirtualEnv indicator
+AGN_VENV_BG=${AGN_VENV_BG:-blue}
+AGN_VENV_FG=${AGN_VENV_FG:-black}
+
+# AWS indicator
+AGN_AWS_PROD_BG=${AGN_AWS_PROD_BG:-red}
+AGN_AWS_PROD_FG=${AGN_AWS_PROD_FG:-yellow}
+AGN_AWS_DEF_BG=${AGN_AWS_DEF_BG:-green}
+AGN_AWS_DEB_BG=${AGN_AWS_DEF_FG:-black}
+
 ### Segment drawing
 # A few utility functions to make it easy and re-usable to draw segmented prompts
 
@@ -89,7 +144,7 @@ prompt_end() {
 # Context: user@hostname (who am I and where am I)
 prompt_context() {
   if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-    prompt_segment black default "%(!.%{%F{yellow}%}.)%n@%m"
+    prompt_segment "$AGN_CONTEXT_BG" "$AGN_CONTEXT_FG" "%(!.%{%F{yellow}%}.)%n@%m"
   fi
 }
 
@@ -111,9 +166,9 @@ prompt_git() {
     dirty=$(parse_git_dirty)
     ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="➦ $(git rev-parse --short HEAD 2> /dev/null)"
     if [[ -n $dirty ]]; then
-      prompt_segment yellow black
+      prompt_segment "$AGN_GIT_DIRTY_BG" "$AGN_GIT_DIRTY_FG"
     else
-      prompt_segment green $CURRENT_FG
+      prompt_segment "$AGN_GIT_CLEAN_BG" "$AGN_GIT_CLEAN_FG"
     fi
 
     if [[ -e "${repo_path}/BISECT_LOG" ]]; then
@@ -146,14 +201,14 @@ prompt_bzr() {
         status_all=`bzr status | head -n1 | wc -m`
         revision=`bzr log | head -n2 | tail -n1 | sed 's/^revno: //'`
         if [[ $status_mod -gt 0 ]] ; then
-            prompt_segment yellow black
+            prompt_segment "$AGN_BZR_DIRTY_BG" "AGN_BZR_DIRTY_FG"
             echo -n "bzr@"$revision "✚ "
         else
             if [[ $status_all -gt 0 ]] ; then
-                prompt_segment yellow black
+                prompt_segment "$AGN_BZR_DIRTY_BG" "AGN_BZR_DIRTY_FG"
                 echo -n "bzr@"$revision
             else
-                prompt_segment green black
+                prompt_segment "$AGN_BZR_CLEAN_BG" "AGN_BZR_CLEAN_FG"
                 echo -n "bzr@"$revision
             fi
         fi
@@ -167,15 +222,15 @@ prompt_hg() {
     if $(hg prompt >/dev/null 2>&1); then
       if [[ $(hg prompt "{status|unknown}") = "?" ]]; then
         # if files are not added
-        prompt_segment red white
+        prompt_segment "$AGN_HG_UNTRACKED_BG" "$AGN_HG_UNTRACKED_FG"
         st='±'
       elif [[ -n $(hg prompt "{status|modified}") ]]; then
         # if any modification
-        prompt_segment yellow black
+        prompt_segment "$AGN_HG_DIRTY_BG" "AGN_HG_DIRTY_FG"
         st='±'
       else
         # if working copy is clean
-        prompt_segment green $CURRENT_FG
+        prompt_segment "$AGN_HG_CLEAN_BG" "$AGN_HG_CLEAN_FG"
       fi
       echo -n $(hg prompt "☿ {rev}@{branch}") $st
     else
@@ -183,13 +238,13 @@ prompt_hg() {
       rev=$(hg id -n 2>/dev/null | sed 's/[^-0-9]//g')
       branch=$(hg id -b 2>/dev/null)
       if `hg st | grep -q "^\?"`; then
-        prompt_segment red black
+        prompt_segment "$AGN_HG_UNTRACKED_BG" "$AGN_HG_UNTRACKED_FG"
         st='±'
       elif `hg st | grep -q "^[MA]"`; then
-        prompt_segment yellow black
+        prompt_segment "$AGN_HG_DIRTY_BG" "AGN_HG_DIRTY_FG"
         st='±'
       else
-        prompt_segment green $CURRENT_FG
+        prompt_segment "$AGN_HG_CLEAN_BG" "$AGN_HG_CLEAN_FG"
       fi
       echo -n "☿ $rev@$branch" $st
     fi
@@ -198,29 +253,37 @@ prompt_hg() {
 
 # Dir: current working directory
 prompt_dir() {
-  prompt_segment blue $CURRENT_FG '%~'
+  if [[ -n $AGN_CWD_FOLD ]]; then
+     prompt_segment "$AGN_CWD_BG" "$AGN_CWD_FG" "%${AGN_CWD_FOLD_LEN}<.. <%~%<<"
+  else
+     prompt_segment "$AGN_CWD_BG" "$AGN_CWD_FG" '%~'
+  fi
 }
 
 # Virtualenv: current working virtualenv
 prompt_virtualenv() {
   local virtualenv_path="$VIRTUAL_ENV"
   if [[ -n $virtualenv_path && -n $VIRTUAL_ENV_DISABLE_PROMPT ]]; then
-    prompt_segment blue black "(`basename $virtualenv_path`)"
+    prompt_segment "$AGN_VENV_BG" "$AGN_VENV_FG" "(`basename $virtualenv_path`)"
   fi
 }
 
 # Status:
-# - was there an error
-# - am I root
+# - was there an error?
+# - am I root?
+# - is SSH key forwarding active?
+# - are we in a screen, if yes what window?
 # - are there background jobs?
 prompt_status() {
   local -a symbols
 
-  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}✘"
-  [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}⚡"
-  [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}⚙"
+  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{$AGN_STATUS_ERRO}%}✘"
+  [[ $UID -eq 0 ]] && symbols+="%{%F{$AGN_STATUS_ROOT}%}⚡"
+  [[ ! -z "$SSH_AUTH_SOCK" ]] && symbols+="%{%F{$AGN_STATUS_SSHAGENT}%}A"
+  [[ ! -z "$WINDOW" ]] && symbols+="%{%F{$AGN_STATUS_SCREEN}%}S%{%B%F{$AGN_STATUS_SCREENWIN}%b%}$WINDOW"
+  [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{$AGN_STATUS_BGJOBS}%}⚙"
 
-  [[ -n "$symbols" ]] && prompt_segment black default "$symbols"
+  [[ -n "$symbols" ]] && prompt_segment "$AGN_STATUS_BG" default "$symbols"
 }
 
 #AWS Profile:
@@ -231,8 +294,8 @@ prompt_status() {
 prompt_aws() {
   [[ -z "$AWS_PROFILE" ]] && return
   case "$AWS_PROFILE" in
-    *-prod|*production*) prompt_segment red yellow  "AWS: $AWS_PROFILE" ;;
-    *) prompt_segment green black "AWS: $AWS_PROFILE" ;;
+    *-prod|*production*) prompt_segment "$AGN_AWS_PROD_BG" "$AGN_AWS_PROD_FG" "AWS: $AWS_PROFILE" ;;
+    *) prompt_segment "$AGN_AWS_DEF_BG" "$AGN_AWS_DEF_FG" "AWS: $AWS_PROFILE" ;;
   esac
 }
 
