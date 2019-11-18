@@ -277,7 +277,7 @@ prompt_virtualenv() {
 prompt_status() {
   local -a symbols
 
-  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{$AGN_STATUS_ERRO}%}✘"
+  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{$AGN_STATUS_ERROR}%}✘"
   [[ $UID -eq 0 ]] && symbols+="%{%F{$AGN_STATUS_ROOT}%}⚡"
   [[ ! -z "$SSH_AUTH_SOCK" ]] && symbols+="%{%F{$AGN_STATUS_SSHAGENT}%}A"
   [[ ! -z "$WINDOW" ]] && symbols+="%{%F{$AGN_STATUS_SCREEN}%}S%{%B%F{$AGN_STATUS_SCREENWIN}%b%}$WINDOW"
