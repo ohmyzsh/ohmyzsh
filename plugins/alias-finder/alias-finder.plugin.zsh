@@ -4,7 +4,7 @@ alias-finder() {
     case $i in
       -e|--exact) exact=true;;
       -l|--longer) longer=true;;
-      *) 
+      *)
         if [[ -z $cmd ]]; then
           cmd=$i
         else
@@ -43,4 +43,6 @@ preexec_alias-finder() {
   fi
 }
 
-preexec_functions+=(preexec_alias-finder)
+if [[ ${preexec_functions[(ie)preexec_alias-finder]} -gt ${#preexec_functions} ]]; then
+  preexec_functions+=(preexec_alias-finder)
+fi
