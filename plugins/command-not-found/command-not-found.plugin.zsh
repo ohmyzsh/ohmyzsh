@@ -29,6 +29,8 @@ fi
 if type brew &> /dev/null; then
   if brew command command-not-found-init > /dev/null 2>&1; then
     eval "$(brew command-not-found-init)";
+  else
+    echo "Run \`brew tap homebrew/command-not-found\` to tap the Homebew Command Not Found repository"
   fi
 fi
 
