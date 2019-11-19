@@ -43,6 +43,5 @@ preexec_alias-finder() {
   fi
 }
 
-if [[ ${preexec_functions[(ie)preexec_alias-finder]} -gt ${#preexec_functions} ]]; then
-  preexec_functions+=(preexec_alias-finder)
-fi
+autoload -U add-zsh-hook
+add-zsh-hook preexec preexec_alias-finder
