@@ -44,7 +44,7 @@ plugins=(... rails)
 | `rlc`   | `rake log:clear`                | Clear Rails logs                                       |
 | `rn`    | `rake notes`                    | Search for notes (`FIXME`, `TODO`) in code comments    |
 | `rr`    | `rake routes`                   | List all defined routes                                |
-| `rrg`   | `rake routes | grep`            | List and filter the defined routes                     |
+| `rrg`   | `rake routes \| grep`            | List and filter the defined routes                     |
 | `rt`    | `rake test`                     | Run Rails tests                                        |
 | `rmd`   | `rake middleware`               | Interact with Rails middlewares                        |
 | `rsts`  | `rake stats`                    | Print code statistics                                  |
