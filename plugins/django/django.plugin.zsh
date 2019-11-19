@@ -374,7 +374,7 @@ _managepy-commands() {
 _applist() {
   local line
   local -a apps
-  _call_program help-command "python -c \"import sys; sys.path.remove("");\\
+  _call_program help-command "python -c \"import sys; del sys.path[0];\\
                                           import os.path as op, re, django.conf;\\
                                           bn=op.basename(op.abspath(op.curdir));[sys\\
                                           .stdout.write(str(re.sub(r'^%s\.(.*?)$' %
