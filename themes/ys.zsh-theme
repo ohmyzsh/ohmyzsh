@@ -26,10 +26,12 @@ ys_hg_prompt_info() {
 	if [ -d '.hg' ]; then
 		echo -n "${YS_VCS_PROMPT_PREFIX1}hg${YS_VCS_PROMPT_PREFIX2}"
 		echo -n $(hg branch 2>/dev/null)
-		if [ -n "$(hg status 2>/dev/null)" ]; then
-			echo -n "$YS_VCS_PROMPT_DIRTY"
-		else
-			echo -n "$YS_VCS_PROMPT_CLEAN"
+		if [[ "$(hg config oh-my-zsh.hide-dirty 2>/dev/null)" != "1" ]]; then
+			if [ -n "$(hg status 2>/dev/null)" ]; then
+				echo -n "$YS_VCS_PROMPT_DIRTY"
+			else
+				echo -n "$YS_VCS_PROMPT_CLEAN"
+			fi
 		fi
 		echo -n "$YS_VCS_PROMPT_SUFFIX"
 	fi
