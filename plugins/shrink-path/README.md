@@ -38,7 +38,7 @@ The following options are available:
 
 ```
     -f, --fish       fish simulation, equivalent to -l -s -t.
-    -g, --global     Add asterix to allow globbing of shrunk path.
+    -g, --glob     Add asterix to allow globbing of shrunk path.
     -l, --last       Print the last directory's full name.
     -s, --short      Truncate directory names to the first character. Without
                      -s, names are truncated without making them ambiguous.
