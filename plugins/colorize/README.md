@@ -43,6 +43,6 @@ In the latter form, the file contents will be concatenated and presented by less
 
 ## Requirements
 
-You have to either install Pygments: [pygments.org](http://pygments.org/download/)
+You have to either install Pygments: [pygments.org](http://pygments.org/download.html)
 
 Or install chroma: [https://github.com/alecthomas/chroma](https://github.com/alecthomas/chroma)

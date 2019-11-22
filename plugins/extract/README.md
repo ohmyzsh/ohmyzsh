@@ -27,6 +27,7 @@ plugins=(... extract)
 | `jar`             | Java Archive                         |
 | `lzma`            | LZMA archive                         |
 | `rar`             | WinRAR archive                       |
+| `rpm`             | RPM package                          |
 | `sublime-package` | Sublime Text package                 |
 | `tar`             | Tarball                              |
 | `tar.bz2`         | Tarball with bzip2 compression       |
