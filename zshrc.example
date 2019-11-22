@@ -18,6 +18,7 @@ plugins=(
   githubutils
   imagetools
   mcclowes
+  sublime
   workshare
   zsh-syntax-highlighting
 )
