@@ -133,7 +133,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(
 
 ### FAQ
 
-If you have some more questions or issues, you might find a solution in our [FAQ](https://github.com/robbyrussell/oh-my-zsh/wiki/FAQ).
+If you have some more questions or issues, you might find a solution in our [FAQ](https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ).
 
 ## Advanced Topics
 
