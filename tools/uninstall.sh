@@ -32,7 +32,7 @@ if hash chsh >/dev/null 2>&1 && [ -f ~/.shell.pre-oh-my-zsh ]; then
     rm -f ~/.shell.pre-oh-my-zsh
   else
     echo "Could not change default shell. Change it manually by running chsh"
-	echo "or editing the /etc/passwd file."
+    echo "or editing the /etc/passwd file."
   fi
 fi
 
