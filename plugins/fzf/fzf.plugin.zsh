@@ -71,11 +71,11 @@ function setup_using_debian_package() {
     local key_bindings="/usr/share/doc/fzf/examples/key-bindings.zsh"
 
     # Auto-completion
-    if [[ $- == *i* ]] && [[ ! "$DISABLE_FZF_AUTO_COMPLETION" == "tfzf/examples/completion.zshrue" ]]; then
+    if [[ $- == *i* ]] && [[ ! "$DISABLE_FZF_AUTO_COMPLETION" == "true" ]]; then
          source $completions 2> /dev/null
     fi
 
-    # Key bindingsfzf/examples/completion.zsh
+    # Key bindings
     if [[ ! "$DISABLE_FZF_KEY_BINDINGS" == "true" ]]; then
         source $key_bindings
     fi
