@@ -3,9 +3,15 @@
 Oh My Zsh comes with nearly 300 plugins for enhancing command and parameter completion for various languages and other conveniences.
 These are maintained in the [plugins](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins) directory and and also listed on the [wiki](https://github.com/ohmyzsh/ohmyzsh/wiki/Plugins).
 
-## Enabling Plugins
+## Understanding Plugins
 
 This document provides a quick synopsis of some featured plugin.
+As was mentioned earlier, there are "nearly 300 plugins" included, and so this list is very much a work in progress.
+Most plugins (should! we're working on this) include a __README__, which documents how to use them, and this early draft at least links to each (expected) README.
+You are invited to fork a copy of this README and update it with any Plugin 'Intro' that you'd like to add or improve.
+Please take a look at https://github.com/ohmyzsh/ohmyzsh/blob/master/CONTRIBUTING.md, to understand expectations of contributing.
+
+## Enabling Plugins
 
 Once you spot a plugin (or several) that you'd like to use with Oh My Zsh, you'll need to enable them in the `~/.zshrc` file, under the configuration for . You'll find the zshrc file in your `$HOME` directory. Open it with your favorite text editor and you'll see a spot to list all the plugins you want to load.
 
@@ -20,11 +26,7 @@ plugins=( git osx python)
 
 > Note that plugin names are separated ONLY by whitespace. **Do not** use commas between them.
 
-### Using Plugins
-
-Most plugins (should! we're working on this) include a __README__, which documents how to use them.
-
-### Plugins Index (alphabetical)
+## Plugins Index (alphabetical)
 
 - adb
   - Intro: Adds autocomplete options for all Android adb commands. See its [README](adb/README.md) for further detail.
