@@ -26,6 +26,21 @@ plugins=( git osx python)
 
 > Note that plugin names are separated ONLY by whitespace. **Do not** use commas between them.
 
+## Featured Plugins
+
+### AWS
+
+This plugin provides completion support for [awscli](https://docs.aws.amazon.com/cli/latest/reference/index.html)
+and a few utilities to manage AWS profiles and display them in the prompt.
+
+See its [README](aws/README.md) for further detail.
+
+### Homebrew (brew)
+
+Adds several aliases for the popular [Homebrew package manager for macOS](https://brew.sh).
+
+See its [README](brew/README.md) for further detail.
+
 ## Plugins Index (alphabetical)
 
 - adb
@@ -37,7 +52,7 @@ plugins=( git osx python)
 - ansible
   - Intro: Adds commands andn aliases for the Ansible IT automation tool. See its [README](ansible/README.md) for further detail.
 - ant
-  - Intro:  See its [README](ant/README.md) for further detail.
+  - Intro: This plugin provides completion for [Ant](https://ant.apache.org/). See its [README](ant/README.md) for further detail.
 - apache2-macports
   - Intro:  See its [README](apache2-macports/README.md) for further detail.
 - arcanist
@@ -53,7 +68,7 @@ plugins=( git osx python)
 - autopep8
   - Intro:  See its [README](autopep8/README.md) for further detail.
 - aws
-  - Intro:  See its [README](aws/README.md) for further detail.
+  - Intro: This plugin provides completion support for [awscli](https://docs.aws.amazon.com/cli/latest/reference/index.html) and a few utilities to manage AWS profiles and display them in the prompt. See its [README](aws/README.md) for further detail.
 - battery
   - Intro:  See its [README](battery/README.md) for further detail.
 - bbedit
@@ -67,7 +82,7 @@ plugins=( git osx python)
 - branch
   - Intro:  See its [README](branch/README.md) for further detail.
 - brew
-  - Intro:  See its [README](brew/README.md) for further detail.
+  - Intro: Adds several aliases for the popular [Homebrew package manager for macOS](https://brew.sh). See its [README](brew/README.md) for further detail.
 - bundler
   - Intro:  See its [README](bundler/README.md) for further detail.
 - cabal
