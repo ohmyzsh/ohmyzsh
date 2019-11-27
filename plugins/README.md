@@ -1,0 +1,573 @@
+# Oh My Zsh Plugins
+
+Oh My Zsh comes with nearly 300 plugins for enhancing command and parameter completion for various languages and other conveniences.
+These are maintained in the [plugins](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins) directory and and also listed on the [wiki](https://github.com/ohmyzsh/ohmyzsh/wiki/Plugins).
+
+## Enabling Plugins
+
+This document provides a quick synopsis of some featured plugin.
+
+Once you spot a plugin (or several) that you'd like to use with Oh My Zsh, you'll need to enable them in the `~/.zshrc` file, under the configuration for . You'll find the zshrc file in your `$HOME` directory. Open it with your favorite text editor and you'll see a spot to list all the plugins you want to load.
+
+```shell
+# Which plugins would you like to load?
+# Add wisely, as too many plugins slow down shell startup.
+# Standard plugins can be found at ~/.oh-my-zsh/plugins/*
+# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+plugins=( git osx python)
+```
+
+> Note that plugin names are separated ONLY by whitespace. **Do not** use commas between them.
+
+### Using Plugins
+
+Most plugins (should! we're working on this) include a __README__, which documents how to use them.
+
+### Plugins Index (alphabetical)
+
+- adb
+  - Intro: Adds autocomplete options for all Android adb commands. See its [README](adb/README.md) for further detail.
+- alias-finder
+  - Intro: This plugin searches all defined aliases (for a shell command), to help make learning new aliases easier. A shell command can be piped into alias-finder, or add ZSH_ALIAS_FINDER_AUTOMATIC=true (to your .zshrc) to run it automatically.
+  
+    See its [README](alias-finder/README.md) for further detail.
+- ansible
+  - Intro: Adds commands andn aliases for the Ansible IT automation tool. See its [README](ansible/README.md) for further detail.
+- ant
+  - Intro:  See its [README](ant/README.md) for further detail.
+- apache2-macports
+  - Intro:  See its [README](apache2-macports/README.md) for further detail.
+- arcanist
+  - Intro:  See its [README](arcanist/README.md) for further detail.
+- archlinux
+  - Intro:  See its [README](archlinux/README.md) for further detail.
+- asdf
+  - Intro:  See its [README](asdf/README.md) for further detail.
+- autoenv
+  - Intro:  See its [README](autoenv/README.md) for further detail.
+- autojump
+  - Intro:  See its [README](autojump/README.md) for further detail.
+- autopep8
+  - Intro:  See its [README](autopep8/README.md) for further detail.
+- aws
+  - Intro:  See its [README](aws/README.md) for further detail.
+- battery
+  - Intro:  See its [README](battery/README.md) for further detail.
+- bbedit
+  - Intro:  See its [README](bbedit/README.md) for further detail.
+- bgnotify
+  - Intro:  See its [README](bgnotify/README.md) for further detail.
+- boot2docker
+  - Intro:  See its [README](boot2docker/README.md) for further detail.
+- bower
+  - Intro:  See its [README](bower/README.md) for further detail.
+- branch
+  - Intro:  See its [README](branch/README.md) for further detail.
+- brew
+  - Intro:  See its [README](brew/README.md) for further detail.
+- bundler
+  - Intro:  See its [README](bundler/README.md) for further detail.
+- cabal
+  - Intro:  See its [README](cabal/README.md) for further detail.
+- cake
+  - Intro:  See its [README](cake/README.md) for further detail.
+- cakephp3
+  - Intro:  See its [README](cakephp3/README.md) for further detail.
+- capistrano
+  - Intro:  See its [README](capistrano/README.md) for further detail.
+- cargo
+  - Intro:  See its [README](cargo/README.md) for further detail.
+- cask
+  - Intro:  See its [README](cask/README.md) for further detail.
+- catimg
+  - Intro:  See its [README](catimg/README.md) for further detail.
+- celery
+  - Intro:  See its [README](celery/README.md) for further detail.
+- chruby
+  - Intro:  See its [README](chruby/README.md) for further detail.
+- chucknorris
+  - Intro:  See its [README](chucknorris/README.md) for further detail.
+- cloudapp
+  - Intro:  See its [README](cloudapp/README.md) for further detail.
+- cloudfoundry
+  - Intro:  See its [README](cloudfoundry/README.md) for further detail.
+- codeclimate
+  - Intro:  See its [README](codeclimate/README.md) for further detail.
+- coffee
+  - Intro:  See its [README](coffee/README.md) for further detail.
+- colemak
+  - Intro:  See its [README](colemak/README.md) for further detail.
+- colored-man-pages
+  - Intro:  See its [README](colored-man-pages/README.md) for further detail.
+- colorize
+  - Intro:  See its [README](colorize/README.md) for further detail.
+- command-not-found
+  - Intro:  See its [README](command-not-found/README.md) for further detail.
+- common-aliases
+  - Intro:  See its [README](common-aliases/README.md) for further detail.
+- compleat
+  - Intro:  See its [README](compleat/README.md) for further detail.
+- composer
+  - Intro:  See its [README](composer/README.md) for further detail.
+- copybuffer
+  - Intro:  See its [README](copybuffer/README.md) for further detail.
+- copydir
+  - Intro:  See its [README](copydir/README.md) for further detail.
+- copyfile
+  - Intro:  See its [README](copyfile/README.md) for further detail.
+- cp
+  - Intro:  See its [README](cp/README.md) for further detail.
+- cpanm
+  - Intro:  See its [README](cpanm/README.md) for further detail.
+- dash
+  - Intro:  See its [README](dash/README.md) for further detail.
+- debian
+  - Intro:  See its [README](debian/README.md) for further detail.
+- dircycle
+  - Intro:  See its [README](dircycle/README.md) for further detail.
+- dirhistory
+  - Intro:  See its [README](dirhistory/README.md) for further detail.
+- dirpersist
+  - Intro:  See its [README](dirpersist/README.md) for further detail.
+- django
+  - Intro:  See its [README](django/README.md) for further detail.
+- dnf
+  - Intro:  See its [README](dnf/README.md) for further detail.
+- dnote
+  - Intro:  See its [README](dnote/README.md) for further detail.
+- docker
+  - Intro:  See its [README](docker/README.md) for further detail.
+- docker-compose
+  - Intro:  See its [README](docker-compose/README.md) for further detail.
+- docker-machine
+  - Intro:  See its [README](docker-machine/README.md) for further detail.
+- doctl
+  - Intro:  See its [README](doctl/README.md) for further detail.
+- dotenv
+  - Intro:  See its [README](dotenv/README.md) for further detail.
+- droplr
+  - Intro:  See its [README](droplr/README.md) for further detail.
+- drush
+  - Intro:  See its [README](drush/README.md) for further detail.
+- eecms
+  - Intro:  See its [README](eecms/README.md) for further detail.
+- emacs
+  - Intro:  See its [README](emacs/README.md) for further detail.
+- ember-cli
+  - Intro:  See its [README](ember-cli/README.md) for further detail.
+- emoji
+  - Intro:  See its [README](emoji/README.md) for further detail.
+- emoji-clock
+  - Intro:  See its [README](emoji-clock/README.md) for further detail.
+- emotty
+  - Intro:  See its [README](emotty/README.md) for further detail.
+- encode64
+  - Intro:  See its [README](encode64/README.md) for further detail.
+- extract
+  - Intro:  See its [README](extract/README.md) for further detail.
+- fabric
+  - Intro:  See its [README](fabric/README.md) for further detail.
+- fancy-ctrl-z
+  - Intro:  See its [README](fancy-ctrl-z/README.md) for further detail.
+- fasd
+  - Intro:  See its [README](fasd/README.md) for further detail.
+- fastfile
+  - Intro:  See its [README](fastfile/README.md) for further detail.
+- fbterm
+  - Intro:  See its [README](fbterm/README.md) for further detail.
+- fd
+  - Intro:  See its [README](fd/README.md) for further detail.
+- fedora
+  - Intro:  See its [README](fedora/README.md) for further detail.
+- firewalld
+  - Intro:  See its [README](firewalld/README.md) for further detail.
+- flutter
+  - Intro:  See its [README](flutter/README.md) for further detail.
+- forklift
+  - Intro:  See its [README](forklift/README.md) for further detail.
+- fossil
+  - Intro:  See its [README](fossil/README.md) for further detail.
+- frontend-search
+  - Intro:  See its [README](frontend-search/README.md) for further detail.
+- fzf
+  - Intro:  See its [README](fzf/README.md) for further detail.
+- gas
+  - Intro:  See its [README](gas/README.md) for further detail.
+- gatsby
+  - Intro:  See its [README](gatsby/README.md) for further detail.
+- gb
+  - Intro:  See its [README](gb/README.md) for further detail.
+- gcloud
+  - Intro:  See its [README](gcloud/README.md) for further detail.
+- geeknote
+  - Intro:  See its [README](geeknote/README.md) for further detail.
+- gem
+  - Intro:  See its [README](gem/README.md) for further detail.
+- git
+  - Intro:  See its [README](git/README.md) for further detail.
+- git-auto-fetch
+  - Intro:  See its [README](git-auto-fetch/README.md) for further detail.
+- git-escape-magic
+  - Intro:  See its [README](git-escape-magic/README.md) for further detail.
+- git-extras
+  - Intro:  See its [README](git-extras/README.md) for further detail.
+- git-flow
+  - Intro:  See its [README](git-flow/README.md) for further detail.
+- git-flow-avh
+  - Intro:  See its [README](git-flow-avh/README.md) for further detail.
+- git-hubflow
+  - Intro:  See its [README](git-hubflow/README.md) for further detail.
+- git-prompt
+  - Intro:  See its [README](git-prompt/README.md) for further detail.
+- git-remote-branch
+  - Intro:  See its [README](git-remote-branch/README.md) for further detail.
+- gitfast
+  - Intro:  See its [README](gitfast/README.md) for further detail.
+- github
+  - Intro:  See its [README](github/README.md) for further detail.
+- gitignore
+  - Intro:  See its [README](gitignore/README.md) for further detail.
+- glassfish
+  - Intro:  See its [README](glassfish/README.md) for further detail.
+- globalias
+  - Intro:  See its [README](globalias/README.md) for further detail.
+- gnu-utils
+  - Intro:  See its [README](gnu-utils/README.md) for further detail.
+- go
+  - Intro:  See its [README](go/README.md) for further detail.
+- golang
+  - Intro:  See its [README](golang/README.md) for further detail.
+- gpg-agent
+  - Intro:  See its [README](gpg-agent/README.md) for further detail.
+- gradle
+  - Intro:  See its [README](gradle/README.md) for further detail.
+- grails
+  - Intro:  See its [README](grails/README.md) for further detail.
+- grunt
+  - Intro:  See its [README](grunt/README.md) for further detail.
+- gulp
+  - Intro:  See its [README](gulp/README.md) for further detail.
+- hanami
+  - Intro:  See its [README](hanami/README.md) for further detail.
+- helm
+  - Intro:  See its [README](helm/README.md) for further detail.
+- heroku
+  - Intro:  See its [README](heroku/README.md) for further detail.
+- history
+  - Intro:  See its [README](history/README.md) for further detail.
+- history-substring-search
+  - Intro:  See its [README](history-substring-search/README.md) for further detail.
+- homestead
+  - Intro:  See its [README](homestead/README.md) for further detail.
+- httpie
+  - Intro:  See its [README](httpie/README.md) for further detail.
+- iterm2
+  - Intro:  See its [README](iterm2/README.md) for further detail.
+- jake-node
+  - Intro:  See its [README](jake-node/README.md) for further detail.
+- jenv
+  - Intro:  See its [README](jenv/README.md) for further detail.
+- jhbuild
+  - Intro:  See its [README](jhbuild/README.md) for further detail.
+- jira
+  - Intro:  See its [README](jira/README.md) for further detail.
+- jruby
+  - Intro:  See its [README](jruby/README.md) for further detail.
+- jsontools
+  - Intro:  See its [README](jsontools/README.md) for further detail.
+- jump
+  - Intro:  See its [README](jump/README.md) for further detail.
+- kate
+  - Intro:  See its [README](kate/README.md) for further detail.
+- keychain
+  - Intro:  See its [README](keychain/README.md) for further detail.
+- kitchen
+  - Intro:  See its [README](kitchen/README.md) for further detail.
+- knife
+  - Intro:  See its [README](knife/README.md) for further detail.
+- knife_ssh
+  - Intro:  See its [README](knife_ssh/README.md) for further detail.
+- kops
+  - Intro:  See its [README](kops/README.md) for further detail.
+- kube-ps1
+  - Intro:  See its [README](kube-ps1/README.md) for further detail.
+- kubectl
+  - Intro:  See its [README](kubectl/README.md) for further detail.
+- laravel
+  - Intro:  See its [README](laravel/README.md) for further detail.
+- laravel4
+  - Intro:  See its [README](laravel4/README.md) for further detail.
+- laravel5
+  - Intro:  See its [README](laravel5/README.md) for further detail.
+- last-working-dir
+  - Intro:  See its [README](last-working-dir/README.md) for further detail.
+- lein
+  - Intro:  See its [README](lein/README.md) for further detail.
+- lighthouse
+  - Intro:  See its [README](lighthouse/README.md) for further detail.
+- lol
+  - Intro:  See its [README](lol/README.md) for further detail.
+- macports
+  - Intro:  See its [README](macports/README.md) for further detail.
+- magic-enter
+  - Intro:  See its [README](magic-enter/README.md) for further detail.
+- man
+  - Intro:  See its [README](man/README.md) for further detail.
+- marked2
+  - Intro:  See its [README](marked2/README.md) for further detail.
+- mercurial
+  - Intro:  See its [README](mercurial/README.md) for further detail.
+- meteor
+  - Intro:  See its [README](meteor/README.md) for further detail.
+- minikube
+  - Intro:  See its [README](minikube/README.md) for further detail.
+- mix
+  - Intro:  See its [README](mix/README.md) for further detail.
+- mix-fast
+  - Intro:  See its [README](mix-fast/README.md) for further detail.
+- mosh
+  - Intro:  See its [README](mosh/README.md) for further detail.
+- mvn
+  - Intro:  See its [README](mvn/README.md) for further detail.
+- mysql-macports
+  - Intro:  See its [README](mysql-macports/README.md) for further detail.
+- n98-magerun
+  - Intro:  See its [README](n98-magerun/README.md) for further detail.
+- nanoc
+  - Intro:  See its [README](nanoc/README.md) for further detail.
+- ng
+  - Intro:  See its [README](ng/README.md) for further detail.
+- nmap
+  - Intro:  See its [README](nmap/README.md) for further detail.
+- node
+  - Intro:  See its [README](node/README.md) for further detail.
+- nomad
+  - Intro:  See its [README](nomad/README.md) for further detail.
+- npm
+  - Intro:  See its [README](npm/README.md) for further detail.
+- npx
+  - Intro:  See its [README](npx/README.md) for further detail.
+- nvm
+  - Intro:  See its [README](nvm/README.md) for further detail.
+- nyan
+  - Intro:  See its [README](nyan/README.md) for further detail.
+- oc
+  - Intro:  See its [README](oc/README.md) for further detail.
+- osx
+  - Intro:  See its [README](osx/README.md) for further detail.
+- otp
+  - Intro:  See its [README](otp/README.md) for further detail.
+- pass
+  - Intro:  See its [README](pass/README.md) for further detail.
+- paver
+  - Intro:  See its [README](paver/README.md) for further detail.
+- pep8
+  - Intro:  See its [README](pep8/README.md) for further detail.
+- per-directory-history
+  - Intro:  See its [README](per-directory-history/README.md) for further detail.
+- percol
+  - Intro:  See its [README](percol/README.md) for further detail.
+- perl
+  - Intro:  See its [README](perl/README.md) for further detail.
+- perms
+  - Intro:  See its [README](perms/README.md) for further detail.
+- phing
+  - Intro:  See its [README](phing/README.md) for further detail.
+- pip
+  - Intro:  See its [README](pip/README.md) for further detail.
+- pipenv
+  - Intro:  See its [README](pipenv/README.md) for further detail.
+- pj
+  - Intro:  See its [README](pj/README.md) for further detail.
+- please
+  - Intro:  See its [README](please/README.md) for further detail.
+- pod
+  - Intro:  See its [README](pod/README.md) for further detail.
+- postgres
+  - Intro:  See its [README](postgres/README.md) for further detail.
+- pow
+  - Intro:  See its [README](pow/README.md) for further detail.
+- powder
+  - Intro:  See its [README](powder/README.md) for further detail.
+- powify
+  - Intro:  See its [README](powify/README.md) for further detail.
+- profiles
+  - Intro:  See its [README](profiles/README.md) for further detail.
+- pyenv
+  - Intro:  See its [README](pyenv/README.md) for further detail.
+- pylint
+  - Intro:  See its [README](pylint/README.md) for further detail.
+- python
+  - Intro:  See its [README](python/README.md) for further detail.
+- rails
+  - Intro:  See its [README](rails/README.md) for further detail.
+- rake
+  - Intro:  See its [README](rake/README.md) for further detail.
+- rake-fast
+  - Intro:  See its [README](rake-fast/README.md) for further detail.
+- rand-quote
+  - Intro:  See its [README](rand-quote/README.md) for further detail.
+- rbenv
+  - Intro:  See its [README](rbenv/README.md) for further detail.
+- rbfu
+  - Intro:  See its [README](rbfu/README.md) for further detail.
+- react-native
+  - Intro:  See its [README](react-native/README.md) for further detail.
+- rebar
+  - Intro:  See its [README](rebar/README.md) for further detail.
+- redis-cli
+  - Intro:  See its [README](redis-cli/README.md) for further detail.
+- repo
+  - Intro:  See its [README](repo/README.md) for further detail.
+- ripgrep
+  - Intro:  See its [README](ripgrep/README.md) for further detail.
+- ros
+  - Intro:  See its [README](ros/README.md) for further detail.
+- rsync
+  - Intro:  See its [README](rsync/README.md) for further detail.
+- ruby
+  - Intro:  See its [README](ruby/README.md) for further detail.
+- rust
+  - Intro:  See its [README](rust/README.md) for further detail.
+- rvm
+  - Intro:  See its [README](rvm/README.md) for further detail.
+- safe-paste
+  - Intro:  See its [README](safe-paste/README.md) for further detail.
+- salt
+  - Intro:  See its [README](salt/README.md) for further detail.
+- sbt
+  - Intro:  See its [README](sbt/README.md) for further detail.
+- scala
+  - Intro:  See its [README](scala/README.md) for further detail.
+- scd
+  - Intro:  See its [README](scd/README.md) for further detail.
+- screen
+  - Intro:  See its [README](screen/README.md) for further detail.
+- scw
+  - Intro:  See its [README](scw/README.md) for further detail.
+- sdk
+  - Intro:  See its [README](sdk/README.md) for further detail.
+- sfdx
+  - Intro:  See its [README](sfdx/README.md) for further detail.
+- sfffe
+  - Intro:  See its [README](sfffe/README.md) for further detail.
+- shrink-path
+  - Intro:  See its [README](shrink-path/README.md) for further detail.
+- singlechar
+  - Intro:  See its [README](singlechar/README.md) for further detail.
+- spring
+  - Intro:  See its [README](spring/README.md) for further detail.
+- sprunge
+  - Intro:  See its [README](sprunge/README.md) for further detail.
+- ssh-agent
+  - Intro:  See its [README](ssh-agent/README.md) for further detail.
+- stack
+  - Intro:  See its [README](stack/README.md) for further detail.
+- sublime
+  - Intro:  See its [README](sublime/README.md) for further detail.
+- sudo
+  - Intro:  See its [README](sudo/README.md) for further detail.
+- supervisor
+  - Intro:  See its [README](supervisor/README.md) for further detail.
+- suse
+  - Intro:  See its [README](suse/README.md) for further detail.
+- svcat
+  - Intro:  See its [README](svcat/README.md) for further detail.
+- svn
+  - Intro:  See its [README](svn/README.md) for further detail.
+- svn-fast-info
+  - Intro:  See its [README](svn-fast-info/README.md) for further detail.
+- swiftpm
+  - Intro:  See its [README](swiftpm/README.md) for further detail.
+- symfony
+  - Intro:  See its [README](symfony/README.md) for further detail.
+- symfony2
+  - Intro:  See its [README](symfony2/README.md) for further detail.
+- systemadmin
+  - Intro:  See its [README](systemadmin/README.md) for further detail.
+- systemd
+  - Intro:  See its [README](systemd/README.md) for further detail.
+- taskwarrior
+  - Intro:  See its [README](taskwarrior/README.md) for further detail.
+- terminitor
+  - Intro:  See its [README](terminitor/README.md) for further detail.
+- terraform
+  - Intro:  See its [README](terraform/README.md) for further detail.
+- textastic
+  - Intro:  See its [README](textastic/README.md) for further detail.
+- textmate
+  - Intro:  See its [README](textmate/README.md) for further detail.
+- thefuck
+  - Intro:  See its [README](thefuck/README.md) for further detail.
+- themes
+  - Intro:  See its [README](themes/README.md) for further detail.
+- thor
+  - Intro:  See its [README](thor/README.md) for further detail.
+- tig
+  - Intro:  See its [README](tig/README.md) for further detail.
+- timer
+  - Intro:  See its [README](timer/README.md) for further detail.
+- tmux
+  - Intro:  See its [README](tmux/README.md) for further detail.
+- tmux-cssh
+  - Intro:  See its [README](tmux-cssh/README.md) for further detail.
+- tmuxinator
+  - Intro:  See its [README](tmuxinator/README.md) for further detail.
+- torrent
+  - Intro:  See its [README](torrent/README.md) for further detail.
+- transfer
+  - Intro:  See its [README](transfer/README.md) for further detail.
+- tugboat
+  - Intro:  See its [README](tugboat/README.md) for further detail.
+- ubuntu
+  - Intro:  See its [README](ubuntu/README.md) for further detail.
+- ufw
+  - Intro:  See its [README](ufw/README.md) for further detail.
+- urltools
+  - Intro:  See its [README](urltools/README.md) for further detail.
+- vagrant
+  - Intro:  See its [README](vagrant/README.md) for further detail.
+- vagrant-prompt
+  - Intro:  See its [README](vagrant-prompt/README.md) for further detail.
+- vault
+  - Intro:  See its [README](vault/README.md) for further detail.
+- vi-mode
+  - Intro:  See its [README](vi-mode/README.md) for further detail.
+- vim-interaction
+  - Intro:  See its [README](vim-interaction/README.md) for further detail.
+- virtualenv
+  - Intro:  See its [README](virtualenv/README.md) for further detail.
+- virtualenvwrapper
+  - Intro:  See its [README](virtualenvwrapper/README.md) for further detail.
+- vscode
+  - Intro:  See its [README](vscode/README.md) for further detail.
+- vundle
+  - Intro:  See its [README](vundle/README.md) for further detail.
+- wakeonlan
+  - Intro:  See its [README](wakeonlan/README.md) for further detail.
+- wd
+  - Intro:  See its [README](wd/README.md) for further detail.
+- web-search
+  - Intro:  See its [README](web-search/README.md) for further detail.
+- wp-cli
+  - Intro:  See its [README](wp-cli/README.md) for further detail.
+- xcode
+  - Intro:  See its [README](xcode/README.md) for further detail.
+- yarn
+  - Intro:  See its [README](yarn/README.md) for further detail.
+- yii
+  - Intro:  See its [README](yii/README.md) for further detail.
+- yii2
+  - Intro:  See its [README](yii2/README.md) for further detail.
+- yum
+  - Intro:  See its [README](yum/README.md) for further detail.
+- z
+  - Intro:  See its [README](z/README.md) for further detail.
+- zeus
+  - Intro:  See its [README](zeus/README.md) for further detail.
+- zsh_reload
+  - Intro:  See its [README](zsh_reload/README.md) for further detail.
+- zsh-navigation-tools
+  - Intro:  See its [README](zsh-navigation-tools/README.md) for further detail.
+- 
