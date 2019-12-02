@@ -154,7 +154,7 @@ _managepy-makemessages(){
     "--no-default-ignore[Don't ignore the common glob-style patterns 'CVS', '.*', '*~' and '*.pyc'.]" \
     "--no-wrap[Don't break long message lines into several lines.]" \
     "--no-location[Don't write '#: filename:line' lines.]" \
-    '--no-obsolete[emove obsolete message strings.]' \
+    '--no-obsolete[Remove obsolete message strings.]' \
     '--keep-pot[Keep .pot file after making messages.]' \
     $nul_args && ret=0
 }
@@ -349,6 +349,7 @@ _managepy-commands() {
     'runfcgi:Run this project as a fastcgi (or some other protocol supported by flup) application,'
     'runserver:Starts a lightweight Web server for development.'
     'shell:Runs a Python interactive interpreter.'
+    'showmigrations:Shows all available migrations for the current project.'
     'sql:Prints the CREATE TABLE SQL statements for the given app name(s).'
     'sqlall:Prints the CREATE TABLE, custom SQL and CREATE INDEX SQL statements for the given model module name(s).'
     'sqlclear:Prints the DROP TABLE SQL statements for the given app name(s).'
@@ -373,7 +374,8 @@ _managepy-commands() {
 _applist() {
   local line
   local -a apps
-  _call_program help-command "python -c \"import os.path as op, re, django.conf, sys;\\
+  _call_program help-command "python -c \"import sys; del sys.path[0];\\
+                                          import os.path as op, re, django.conf;\\
                                           bn=op.basename(op.abspath(op.curdir));[sys\\
                                           .stdout.write(str(re.sub(r'^%s\.(.*?)$' %
                                           bn, r'\1', i)) + '\n') for i in django.conf.settings.\\

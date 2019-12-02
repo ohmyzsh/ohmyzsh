@@ -22,6 +22,9 @@ OPTIONS
 \fB\-c\fR
 restrict matches to subdirectories of the current directory
 .TP
+\fB\-e\fR
+echo the best match, don't cd
+.TP
 \fB\-h\fR
 show a brief help message
 .TP
@@ -90,7 +93,8 @@ Set \fB$_Z_OWNER\fR to allow usage when in 'sudo -s' mode.
 (These settings should go in .bashrc/.zshrc before the line added above.)
 .RE
 .RS
-Install the provided man page \fBz.1\fR somewhere like \fB/usr/local/man/man1\fR.
+Install the provided man page \fBz.1\fR somewhere in your \f$MANPATH, like
+\fB/usr/local/man/man1\fR.
 .RE
 .SS
 Aging:
@@ -151,7 +155,7 @@ directory trees to exclude from tracking. \fB$HOME\fR is always excluded.
 Directories must be full paths without trailing slashes.
 .P
 The environment variable \fB$_Z_OWNER\fR can be set to your username, to
-allow usage of \fBz\fR when your sudo enviroment keeps \fB$HOME\fR set.
+allow usage of \fBz\fR when your sudo environment keeps \fB$HOME\fR set.
 .SH
 FILES
 Data is stored in \fB$HOME/.z\fR. This can be overridden by setting the

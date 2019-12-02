@@ -1,0 +1,367 @@
+#compdef yarn
+# ------------------------------------------------------------------------------
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * Neither the name of the zsh-users nor the
+#       names of its contributors may be used to endorse or promote products
+#       derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL ZSH-USERS BE LIABLE FOR ANY
+# DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for yarn (https://yarnpkg.com/)
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
+#
+# ------------------------------------------------------------------------------
+
+_commands=(
+  'access'
+  'autoclean:Clean and remove unnecessary files from package dependencies'
+  'cache:List or clean every cached package'
+  "check:Verify package dependencies agains yarn's lock file"
+  'config:Manages the yarn configuration files'
+  'generate-lock-entry:Generates a lock file entry'
+  'global:Install packages globally on your operating system'
+  'help:Show information about a command'
+  'import:Generate yarn.lock from an existing npm-installed node_modules folder'
+  'info:Show information about a package'
+  'init:Interactively creates or updates a package.json file'
+  'install:Install all the dependencies listed within package.json'
+  'licenses:List licenses for installed packages'
+  'link:Symlink a package folder during development'
+  'list:List installed packages'
+  'login:Store registry username and email'
+  'logout:Clear registry username and email'
+  'outdated:Check for outdated package dependencies'
+  'owner:Manage package owners'
+  'pack:Create a compressed gzip archive of package dependencies'
+  'publish:Publish a package to the npm registry'
+  'run:Run a defined package script'
+  'tag:Add, remove, or list tags on a package'
+  'team:Maintain team memberships'
+  'unlink:Unlink a previously created symlink for a package'
+  'version:Update the package version'
+  'versions:Display version information of currently installed Yarn, Node.js, and its dependencies'
+  'why:Show information about why a package is installed'
+)
+
+_global_commands=(
+  'add:Installs a package and any packages that it depends on'
+  'bin:Displays the location of the yarn bin folder'
+  'remove:Remove installed package from dependencies updating package.json'
+  'upgrade:Upgrades packages to their latest version based on the specified range'
+  'upgrade-interactive:Interactively upgrade packages'
+)
+
+_yarn_commands_scripts() {
+  local -a scripts
+  scripts=($(yarn run --json 2>/dev/null | sed -E '/Commands available|possibleCommands/!d;s/.*Commands available from binary scripts: ([^"]+)".*/\1/;s/.*"items":\[([^]]+).*/\1/;s/[" ]//g' | tr , '\n' | sed -e 's/:/\\:/g'))
+  _describe 'command or script' _commands -- _global_commands -- scripts
+}
+
+_yarn_scripts() {
+  local -a commands binaries scripts
+  local -a scriptNames scriptCommands
+  local i runJSON
+
+  runJSON=$(yarn run --json 2>/dev/null)
+  binaries=($(sed -E '/Commands available/!d;s/.*Commands available from binary scripts: ([^"]+)".*/\1/;s/.*"items":\[([^]]+).*/\1/;s/[" ]//g;s/:/\\:/g;s/,/\n/g' <<< "$runJSON"))
+  scriptNames=($(sed -E '/possibleCommands/!d;s/.*"items":\[([^]]+).*/\1/;s/[" ]//g;s/:/\\:/g;s/,/\n/g' <<< "$runJSON"))
+  scriptCommands=("${(@f)$(sed -E '/possibleCommands/!d;s/.*"hints":\{([^}]+)\}.*/\1/;s/"[^"]+"://g;s/:/\\:/g;s/","/\n/g;s/(^"|"$)//g' <<< "$runJSON")}")
+
+  for (( i=1; i <= $#scriptNames; i++ )); do
+    scripts+=("${scriptNames[$i]}:${scriptCommands[$i]}")
+  done
+
+  commands=($scripts $binaries)
+  _describe 'command' commands
+}
+
+_yarn_global_commands() {
+  local -a cmds
+  cmds=('ls:List installed packages')
+  _describe 'command' _global_commands
+}
+
+_yarn_commands() {
+  _describe 'command' _commands -- _global_commands
+}
+
+_yarn() {
+  local context state state_descr line
+  typeset -A opt_args
+
+  _arguments \
+    '(-h --help)'{-h,--help}'[output usage information]' \
+    '(-V --version)'{-V,--version}'[output the version number]' \
+    '--verbose[output verbose messages on internal operations]' \
+    '--offline[trigger an error if any required dependencies are not available in local cache]' \
+    '--prefer-offline[use network only if dependencies are not available in local cache]' \
+    '--strict-semver' \
+    '--json' \
+    "--ignore-scripts[don't run lifecycle scripts]" \
+    '--har[save HAR output of network traffic]' \
+    '--ignore-platform[ignore platform checks]' \
+    '--ignore-engines[ignore engines check]' \
+    '--ignore-optional[ignore optional dependencies]' \
+    '--force[install and build packages even if they were built before, overwrite lockfile]' \
+    '--skip-integrity-check[run install without checking if node_modules is installed]' \
+    '--check-files[install will verify file tree of packages for consistency]' \
+    "--no-bin-links[don't generate bin links when setting up packages]" \
+    '--flat[only allow one version of a package]' \
+    '(--prod --production)'{--prod,--production} \
+    "--no-lockfile[don't read or generate a lockfile]" \
+    "--pure-lockfile[don't generate a lockfile]" \
+    "--frozen-lockfile[don't generate a lockfile and fail if an update is needed]" \
+    '--link-duplicates[create hardlinks to the repeated modules in node_modules]' \
+    '--global-folder=[modules folder]:folder:_files -/' \
+    '--modules-folder=[rather than installing modules into the node_modules folder relative to the cwd, output them here]:folder:_files -/' \
+    '--cache-folder=[specify a custom folder to store the yarn cache]:folder:_files -/' \
+    '--mutex=[use a mutex to ensure only one yarn instance is executing]:type[\:specifier]' \
+    '--no-emoji[disable emoji in output]' \
+    '(-s --silent)'{-s,--silent}'[skip Yarn console logs, other types of logs (script output) will be printed]' \
+    '--proxy=:host:_hosts' \
+    '--https-proxy=:host:_hosts' \
+    '--no-progress[disable progress bar]' \
+    '--network-concurrency=[maximum number of concurrent network requests]:number' \
+    '--network-timeout=[TCP timeout for network requests]:milliseconds' \
+    '--non-interactive[do not show interactive prompts]' \
+    '1: :_yarn_commands_scripts' \
+    '*:: :->command_args'
+
+
+  case $state in
+    command_args)
+      case $words[1] in
+        help)
+          _arguments \
+            '1: :_yarn_commands' \
+        ;;
+
+        access)
+          _arguments \
+            '1: :(public restricted grant revoke ls-packages ls-collaborators edit)'
+        ;;
+
+        add)
+          _arguments \
+            '(-D --dev)'{-D,--dev}'[install packages in devDependencies]' \
+            '(-P --peer)'{-P,--peer}'[install packages in peerDependencies]' \
+            '(-O --optional)'{-O,--optional}'[install packages in optionalDependencies]' \
+            '(-E --exact)'{-E,--exact}'[install packages as exact versions]' \
+            '(-T --tilde)'{-T,--tilde}'[install the most recent release of the packages that have the same minor version]' \
+            '*:package-name:'
+        ;;
+
+        cache)
+          _arguments \
+            '1: :(ls dir clean)'
+        ;;
+
+        check)
+          _arguments \
+            '--integrity' \
+            '--verify-tree'
+        ;;
+
+        config)
+          _arguments \
+            '1: :(set get delete list)' \
+            '*:: :->config_args'
+        ;;
+
+        global)
+          _arguments \
+            '--prefix=[bin prefix to use to install binaries]' \
+            '1: :_yarn_global_commands' \
+            '*:: :->command_args'
+        ;;
+
+        info)
+          _arguments \
+            '1:package:' \
+            '2:field'
+        ;;
+
+        init)
+          _arguments \
+            '(-y --yes)'{-y,--yes}'[install packages in devDependencies]'
+        ;;
+
+        licenses)
+          _arguments \
+            '1: :(ls generate-disclaimer)' \
+        ;;
+
+        link|unlink|outdated)
+          _arguments \
+            '1:package' \
+        ;;
+
+        list)
+          _arguments \
+            '--depth[Limit the depth of the shown dependencies]:depth'
+        ;;
+
+        owner)
+          _arguments \
+            '1: :(ls add rm)' \
+            '*:: :->owner_args'
+        ;;
+
+        pack)
+          _arguments \
+            '(-f --filename)'{-f,--filename}':filename:_files'
+        ;;
+
+        publish)
+          _arguments \
+            '--new-version:version:' \
+            '--message:message:' \
+            '--no-git-tag-version' \
+            '--access:access:' \
+            '--tag:tag:' \
+            '1: :_files'
+        ;;
+
+        remove|upgrade)
+          _arguments \
+            '*:package:'
+        ;;
+
+        run)
+          _arguments \
+            '1: :_yarn_scripts' \
+            '*:: :_default'
+        ;;
+
+        tag)
+          _arguments \
+            '1: :(ls add rm)' \
+            '*:: :->tag_args'
+        ;;
+
+        team)
+          _arguments \
+            '1: :(create destroy add rm ls)' \
+            '*:: :->team_args'
+        ;;
+
+        upgrade-interactive)
+          _arguments \
+            '--latest:use the version tagged latest in the registry:'
+        ;;
+
+        version)
+          _arguments \
+            '--new-version:version:' \
+            '--message:message:' \
+            '--no-git-tag-version'
+        ;;
+
+        why)
+          _arguments \
+            '1:query:_files'
+        ;;
+
+        *) 
+          _default
+        ;;
+      esac
+    ;;
+  esac
+
+  case $state in
+    config_args)
+      case $words[1] in
+        get|delete)
+          _arguments \
+            '1:key:'
+        ;;
+
+        set)
+          _arguments \
+            '(-g --global)'{-g,--global} \
+            '1:key:' \
+            '2:value:'
+        ;;
+      esac
+    ;;
+
+    owner_args)
+      case $words[1] in
+        ls)
+          _arguments \
+            '1:package:'
+        ;;
+
+        add|rm)
+          _arguments \
+            '1:user:' \
+            '2:package:'
+        ;;
+      esac
+    ;;
+
+    tag_args)
+      case $words[1] in
+        ls)
+          _arguments \
+            '1:package'
+        ;;
+
+        add|rm)
+          _arguments \
+            '1:package:' \
+            '2:tag:'
+        ;;
+      esac
+    ;;
+
+    team_args)
+      case $words[1] in
+        create|destroy|ls)
+          _arguments \
+            '1:scope\:team:'
+        ;;
+
+        add|rm)
+          _arguments \
+            '1:scope\:team:' \
+            '2:user:'
+        ;;
+      esac
+    ;;
+  esac
+}
+
+_yarn "$@"
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et

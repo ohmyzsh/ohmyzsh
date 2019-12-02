@@ -1,6 +1,4 @@
-dir=$(dirname $0)
-source $dir/../git/git.plugin.zsh
-source $dir/git-prompt.sh
+source "${0:A:h}/git-prompt.sh"
 
 function git_prompt_info() {
   dirty="$(parse_git_dirty)"
