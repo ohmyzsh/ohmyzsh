@@ -22,6 +22,13 @@ elif [[ -f "/usr/local/bin/virtualenvwrapper.sh" ]]; then
     virtualenvwrapper="/usr/local/bin/virtualenvwrapper.sh"
     source "/usr/local/bin/virtualenvwrapper.sh"
   }
+elif [[ -f "/usr/share/virtualenvwrapper/virtualenvwrapper.sh" ]]; then
+  function {
+    setopt local_options
+    unsetopt equals
+    virtualenvwrapper="/usr/share/virtualenvwrapper/virtualenvwrapper.sh"
+    source "/usr/share/virtualenvwrapper/virtualenvwrapper.sh"
+  }
 elif [[ -f "/etc/bash_completion.d/virtualenvwrapper" ]]; then
   function {
     setopt local_options
