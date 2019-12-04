@@ -29,6 +29,9 @@ alias npmD="npm i -D "
 # i.e npmE gulp
 alias npmE='PATH="$(npm bin)":"$PATH"'
 
+# Force npm to fetch remote resources even if a local copy exists on disk.
+alias npmF='npm i -f'
+
 # Check which npm modules are outdated
 alias npmO="npm outdated"
 
