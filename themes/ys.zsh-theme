@@ -37,6 +37,17 @@ ys_hg_prompt_info() {
 
 local exit_code="%(?,,C:%{$fg[red]%}%?%{$reset_color%})"
 
+# Virtualenv
+local venv_prompt='$(virtenv_prompt)'
+YS_THEME_VIRTUALENV_PROMPT_PREFIX=" %{$fg[green]%}"
+YS_THEME_VIRTUALENV_PROMPT_SUFFIX=" %{$reset_color%}%"
+virtenv_prompt() {
+	if [ $(virtualenv_prompt_info) ]; then
+		echo -n "${YS_THEME_VIRTUALENV_PROMPT_PREFIX}$(virtualenv_prompt_info)${YS_THEME_VIRTUALENV_PROMPT_SUFFIX}"
+	fi
+}
+
+
 # Prompt format:
 #
 # PRIVILEGES USER @ MACHINE in DIRECTORY on git:BRANCH STATE [TIME] C:LAST_EXIT_CODE
@@ -55,6 +66,7 @@ PROMPT="
 %{$terminfo[bold]$fg[yellow]%}%~%{$reset_color%}\
 ${hg_info}\
 ${git_info}\
+${venv_prompt}\
  \
 %{$fg[white]%}[%*] $exit_code
 %{$terminfo[bold]$fg[red]%}$ %{$reset_color%}"
