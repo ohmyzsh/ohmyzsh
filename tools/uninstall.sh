@@ -25,18 +25,14 @@ if [ -e "$ZSHRC_ORIG" ]; then
   echo "Your original zsh config was restored."
 fi
 
-if hash chsh >/dev/null 2>&1; then
-  if [ -f ~/.shell.pre-oh-my-zsh ]; then
-    old_shell=$(cat ~/.shell.pre-oh-my-zsh)
-  else
-	old_shell=/bin/bash
-  fi
+if hash chsh >/dev/null 2>&1 && [ -f ~/.shell.pre-oh-my-zsh ]; then
+  old_shell=$(cat ~/.shell.pre-oh-my-zsh)
   echo "Switching your shell back to '$old_shell':"
   if chsh -s "$old_shell"; then
     rm -f ~/.shell.pre-oh-my-zsh
   else
     echo "Could not change default shell. Change it manually by running chsh"
-	echo "or editing the /etc/passwd file."
+    echo "or editing the /etc/passwd file."
   fi
 fi
 

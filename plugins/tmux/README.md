@@ -40,3 +40,4 @@ The plugin also supports the following -
 | `ZSH_TMUX_SESSIONGROUP`             | Create or attach to a session in a session group (default: `false`)           |
 | `ZSH_TMUX_SESSIONGROUP_NAME`        | The session group name to use (default: `tmux`)                               |
 | `ZSH_TMUX_CONFIG`                   | The configuration path to use (default: `$HOME/.tmux.conf`)                   |
+| `ZSH_TMUX_UNICODE`                  | Set `tmux -u` option to support unicode                                       |

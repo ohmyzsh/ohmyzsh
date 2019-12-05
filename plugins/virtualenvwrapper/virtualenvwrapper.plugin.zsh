@@ -96,7 +96,6 @@ if [[ ! $DISABLE_VENV_CD -eq 1 ]]; then
 
   # Append workon_cwd to the chpwd_functions array, so it will be called on cd
   # http://zsh.sourceforge.net/Doc/Release/Functions.html
-  if ! (( $chpwd_functions[(I)workon_cwd] )); then
-    chpwd_functions+=(workon_cwd)
-  fi
+  autoload -U add-zsh-hook
+  add-zsh-hook chpwd workon_cwd
 fi
