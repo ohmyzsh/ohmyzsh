@@ -27,3 +27,20 @@ plugins=(... docker-compose)
 | dclf      | `docker-compose logs -f` | Show logs and follow output                                      |
 | dcpull    | `docker-compose pull`    | Pull image of a service                                          |
 | dcstart   | `docker-compose start`   | Start a container                                                |
+
+## ENV
+
+Use `DCO_FILE` to set docker-compose yaml file to be used.
+
+```sh
+# for one time use
+$ DCO_FILE=docker-compose.dev.yml dcps
+# = docker-compose -f docker-compose.dev.yml ps
+
+# for long time use (during a whole session)
+$ export DCO_FILE=docker-compose.dev.yml
+$ dcupd
+# = docker-compose -f docker-compose.dev.yml up -d
+$ dcps
+# = docker-compose -f docker-compose.dev.yml ps
+```
