@@ -55,4 +55,4 @@ has colored output, so this function will be soon removed from the plugin.
 ### Known bugs
 
 It has a bug where it will swallow mvn prompts for user input, _e.g._ when using
-`archetype:generate`. See [#5052](https://github.com/robbyrussell/oh-my-zsh/issues/5052).
+`archetype:generate`. See [#5052](https://github.com/ohmyzsh/ohmyzsh/issues/5052).

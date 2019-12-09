@@ -6,7 +6,7 @@ declare -A opt_args
 
 declare -a target_list
 target_list=("${(@f)$(fab -l 2>/dev/null | awk '{
-    if (NF == 0 || NR == 1) return
+    if (NF == 0 || NR == 1) next
     if (NF < 2) print $1
     else {
         docstring=substr($0, index($0,$2))

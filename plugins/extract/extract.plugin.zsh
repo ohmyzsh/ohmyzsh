@@ -41,13 +41,14 @@ extract() {
 				&& tar --lzma -xvf "$1" \
 				|| lzcat "$1" | tar xvf - ;;
 			(*.tar) tar xvf "$1" ;;
-			(*.gz) (( $+commands[pigz] )) && pigz -d "$1" || gunzip "$1" ;;
+			(*.gz) (( $+commands[pigz] )) && pigz -dk "$1" || gunzip -k "$1" ;;
 			(*.bz2) bunzip2 "$1" ;;
 			(*.xz) unxz "$1" ;;
 			(*.lzma) unlzma "$1" ;;
 			(*.z) uncompress "$1" ;;
 			(*.zip|*.war|*.jar|*.sublime-package|*.ipsw|*.xpi|*.apk|*.aar|*.whl) unzip "$1" -d $extract_dir ;;
 			(*.rar) unrar x -ad "$1" ;;
+			(*.rpm) mkdir "$extract_dir" && cd "$extract_dir" && rpm2cpio "../$1" | cpio --quiet -id && cd .. ;;
 			(*.7z) 7za x "$1" ;;
 			(*.deb)
 				mkdir -p "$extract_dir/control"

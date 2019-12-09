@@ -13,10 +13,10 @@ Easily prefix your current or previous commands with `sudo` by pressing <kbd>esc
     )
     ```
 
-2.  Reload the source file or restart your Terminal session:
+2.  Restart your shell or restart your Terminal session:
 
     ```console
-    $ source ~/.zshrc
+    $ exec zsh
     $
     ```
 
