@@ -4,7 +4,7 @@ alias cless='colorize_via_pygmentize_less'
 
 colorize_via_pygmentize() {
     if ! (( $+commands[pygmentize] )); then
-        echo "package 'Pygments' is not installed!"
+        echo "package 'Pygments' is not installed! (On Debian based systems: sudo apt install python-pygments)"
         return 1
     fi
 
