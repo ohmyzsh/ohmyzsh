@@ -67,7 +67,10 @@ function setup_using_debian_package() {
     # NOTE: There is no need to configure PATH for debian package, all binaries
     # are installed to /usr/bin by default
 
-    local completions="/usr/share/zsh/vendor-completions/_fzf"
+    # Determine completion file path: first bullseye/sid, then buster/stretch
+    local completions="/usr/share/doc/fzf/examples/completion.zsh"
+    [[ -f "$completions" ]] || completions="/usr/share/zsh/vendor-completions/_fzf"
+
     local key_bindings="/usr/share/doc/fzf/examples/key-bindings.zsh"
 
     # Auto-completion
