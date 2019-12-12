@@ -40,6 +40,10 @@ extract() {
 				tar --lzma --help &> /dev/null \
 				&& tar --lzma -xvf "$1" \
 				|| lzcat "$1" | tar xvf - ;;
+			(*.tar.zst|*.tzst)
+				tar --zstd --help &> /dev/null \
+				&& tar --zstd -xvf "$1" \
+				|| zstdcat "$1" | tar xvf - ;;
 			(*.tar) tar xvf "$1" ;;
 			(*.gz) (( $+commands[pigz] )) && pigz -dk "$1" || gunzip -k "$1" ;;
 			(*.bz2) bunzip2 "$1" ;;
@@ -59,6 +63,7 @@ extract() {
 				cd ..; rm *.tar.* debian-binary
 				cd ..
 			;;
+			(*.zst) unzstd "$1" ;;
 			(*)
 				echo "extract: '$1' cannot be extracted" >&2
 				success=1

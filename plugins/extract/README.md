@@ -34,15 +34,18 @@ plugins=(... extract)
 | `tar.gz`          | Tarball with gzip compression        |
 | `tar.xz`          | Tarball with lzma2 compression       |
 | `tar.zma`         | Tarball with lzma compression        |
+| `tar.zst`         | Tarball with zstd compression        |
 | `tbz`             | Tarball with bzip compression        |
 | `tbz2`            | Tarball with bzip2 compression       |
 | `tgz`             | Tarball with gzip compression        |
 | `tlz`             | Tarball with lzma compression        |
 | `txz`             | Tarball with lzma2 compression       |
+| `tzst`            | Tarball with zstd compression        |
 | `war`             | Web Application archive (Java-based) |
 | `xpi`             | Mozilla XPI module file              |
 | `xz`              | LZMA2 archive                        |
 | `zip`             | Zip archive                          |
+| `zst`             | Zstandard file (zstd)                |
 
 See [list of archive formats](https://en.wikipedia.org/wiki/List_of_archive_formats) for
 more information regarding archive formats.
