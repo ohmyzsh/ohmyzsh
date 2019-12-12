@@ -13,10 +13,10 @@ Plugin for adding catspeak aliases, because why not
    )
    ```
 
-2. Reload the source file or restart your Terminal session:
+2. Restart your terminal session or restart the shell:
 
    ```console
-   $ source ~/.zshrc
+   $ exec zsh
    $
    ```
 
