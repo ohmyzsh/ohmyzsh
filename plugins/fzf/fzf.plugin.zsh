@@ -12,6 +12,7 @@ function setup_using_base_dir() {
           "${HOME}/.fzf"
           "/usr/local/opt/fzf"
           "/usr/share/fzf"
+          "/usr/local/share/examples/fzf"
         )
         for dir in ${fzfdirs}; do
             if [[ -d "${dir}" ]]; then
