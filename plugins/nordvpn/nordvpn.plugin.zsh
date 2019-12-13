@@ -8,7 +8,8 @@ declare line
 function _nordvpn {
 
     _arguments -C \
-        "1: :((cities\:'Shows a list of cities where servers are available'
+        "1: :((account\:'Shows account information'
+               cities\:'Shows a list of cities where servers are available'
                connect\:'Connects you to VPN'
                countries\:'Shows a list of countries where servers are available'
                disconnect\:'Disconnects you from VPN'
@@ -33,32 +34,17 @@ function _nordvpn {
         connect)
             _connect 1
         ;;
-        countries)
-            _countries
-        ;;
-        disconnect)
-            _disconnect
-        ;;
-        groups)
-            _groups
-        ;;
         login)
             _login
-        ;;
-        logout)
-            _logout
         ;;
         set)
             _set
         ;;
-        settings)
-            _settings
-        ;;
-        status)
-            _status
-        ;;
         whitelist)
             _whitelist
+        ;;
+        *)
+            _show_help
         ;;
     esac
 }
@@ -94,24 +80,6 @@ function _connect {
 
 }
 
-function _countries {
-    _arguments \
-        "--help:Show help" \
-        "-h:Show help" 
-}
-
-function _disconnect {
-    _arguments \
-        "--help:Show help" \
-        "-h:Show help" 
-}
-
-function _groups {
-    _arguments \
-        "--help:Show help" \
-        "-h:Show help"
-}
-
 function _login {
     _arguments \
         '--username[Specify a user account]'\
@@ -120,12 +88,6 @@ function _login {
         '-p[Specify the password for the user specified in --username]' \
         '-h[Show help]' \
         '--help[Show help]'
-}
-
-function _logout {
-    _arguments \
-        "--help:Show help" \
-        "-h:Show help"
 }
 
 function _set {
@@ -171,19 +133,47 @@ function _set {
     esac
 }
 
-function _settings {
-    _arguments \
-        "--help:Show help" \
-        "-h:Show help"
-}
-
-function _status {
-    _arguments \
-        "--help:Show help" \
-        "-h:Show help"
-}
-
 function _whitelist {
+    _arguments \
+        "1: :((add\:'Adds an option to a whitelist.'
+               remove\:'Removes an option from a whitelist'))"  \
+        "--help:Show help" \
+        "-h:Show help"
+
+    if [[ -n ${line[2]} ]]; then
+        _arguments \
+            "2: :((port\:'${line[2]}s port to a whitelist'
+                   ports\:'${line[2]}s port range to a whitelist'
+                   subnet\:'${line[2]}s subnet to a whitelist'))"
+    fi
+
+    case $line[3] in
+        port)
+            _arguments "3: :((NUM\:'the port number to ${line[2]}'))"
+
+            if [[ -n ${line[4]} ]]; then
+                    _describe 'protocol-setting' "(TCP UDP)"
+            fi
+        ;;
+        ports)
+            _arguments "3: :((NUM\:'the beginning port number to ${line[2]}'))"
+            
+            if [[ -n ${line[4]} ]]; then
+                    _arguments "4: :((NUM\:'the ending port number to ${line[2]}'))"
+            fi  
+        
+            if [[ -n ${line[5]} ]]; then
+                    _describe 'protocol-setting' "(TCP UDP)"
+            fi  
+        ;;
+        subnet)
+            _arguments "3: :((CIDR\:'the address in CIDR notation to ${line[2]}'))"
+        ;;
+    esac
+
+}
+
+function _show_help {
     _arguments \
         "--help:Show help" \
         "-h:Show help"
