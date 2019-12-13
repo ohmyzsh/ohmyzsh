@@ -32,9 +32,9 @@ plugins=(... nordvpn)
  | .. set protocol    | `TCP`, `UDP`, `--help` and `-h`                                                                         |
  | .. settings        | `--help` and `-h`                                                                                       |
  | .. status          | `--help` and `-h`                                                                                       |
- | .. whitelist       | `--help` and `-h`                                                                                       |
-                         
-## Aliases
+ | .. whitelist       | add/remove options for ports and subnets as well as`--help` and `-h`                                    |
+ 
+ ## Aliases
 
  | Alias        | Command              | Description                                           |
  | ------------ | -------------------- | ----------------------------------------------------- |
