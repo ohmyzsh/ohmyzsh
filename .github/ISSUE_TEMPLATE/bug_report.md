@@ -19,13 +19,14 @@ Steps to reproduce the behavior:
 **Expected behavior**
 A clear and concise description of what you expected to happen.
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+**Screenshots and or Recordings**
+If applicable, add screenshots to help explain your problem. Also you can record an asciinema session (https://asciinema.org/)
 
 **Desktop (please complete the following information):**
- - OS - Distro: [e.g. Arch Linux]
- - Latest Update?: [e.g. Yes/No]
- - ZSH Version: [e.g. 4.2]
+ - OS / Distro: [e.g. Arch Linux, macOS]
+ - Latest ohmyzsh Update?: [e.g. Yes/No]
+ - ZSH Version: [e.g. 5.6]
+ - Terminal emulator [e.g. iTerm2]
 
 **Additional context**
 Add any other context about the problem here.
