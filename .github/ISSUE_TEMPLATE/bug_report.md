@@ -5,9 +5,13 @@ about: Create a report to help us improve ohmyzsh!
 ---
 
 **Describe the bug**
-A clear and concise description of what the bug is including themes.
+<!--
+Fill this out before posting. You can delete irrelevant sections, but
+an issue where no sections have been filled will be deleted without comment.
+-->
 
 **To Reproduce**
+For Example:
 Steps to reproduce the behavior:
 1. Enable this plugin '...'
 2. Run command '...' or try the autocomplete command '...'
@@ -16,7 +20,7 @@ Steps to reproduce the behavior:
 **Expected behavior**
 A clear and concise description of what you expected to happen.
 
-**Screenshots and or Recordings**
+**Screenshots and/or Recordings**
 If applicable, add screenshots to help explain your problem. Also you can record an asciinema session (https://asciinema.org/)
 
 **Desktop (please complete the following information):**
@@ -26,4 +30,4 @@ If applicable, add screenshots to help explain your problem. Also you can record
  - Terminal emulator [e.g. iTerm2]
 
 **Additional context**
-Add any other context about the problem here.
+Add any other context about the problem here. This can be themes, aliases, custom configs.
