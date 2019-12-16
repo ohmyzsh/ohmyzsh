@@ -1,6 +1,6 @@
 ## --------------- Work Functions ---------------
 
-function gcojira {
+function workshare-gcojira {
   echo "WEB code:";
   read CODE;
   echo "Task:";
@@ -10,7 +10,7 @@ function gcojira {
   git checkout master && git pull && git checkout -b "$BRANCH_NAME" && git push -u origin "$BRANCH_NAME";
 }
 
-function gcommitjira {
+function workshare-gcommitjira {
   echo "Task:";
   read MESSAGE;
   BRANCH="$( echo "$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)" | tr '-' ' ' )";
@@ -20,41 +20,23 @@ function gcommitjira {
   git add --all && git commit -am "$COMMIT_MESSAGE";
 }
 
-## Jest functions
-function jw { # jest watch
-  ## -- means pass params to jest
-  npm test -- --watch --runInBand --bail ${1};
-}
-
-function jwnc { # jest watch no cache
-  ## -- means pass params to jest
-  npm test -- --watch --no-cache --runInBand --bail ${1};
-}
-
-function jwa { # jest watch all
-  ## -- means pass params to jest
-  npm test -- --watchAll --runInBand --bail ${1};
-}
-
 function workshare {
-  echo "gcojira - Checkout a branch in the format required to correspond to a Jira issue";
-  echo "gcommitjira - Commit to a branch in the format required to correspond to a Jira issue";
-  echo "jw <regex pattern for files> - Run tests, watch and bail";
-  echo "jwnc <regex pattern for files> - Run tests, watch and bail";
-  echo "jwa <regex pattern for files> - Run all tests, watch and bail";
+  echo "workshare-gcojira - Checkout a branch in the format required to correspond to a Jira issue";
+  echo "workshare-gcommitjira - Commit to a branch in the format required to correspond to a Jira issue";
 }
 
-gcot () {
-  gco "$@";
+# Checkout branch and begin time tracker
+# gcot () {
+#   gco "$@";
 
-  BRANCH="$( echo "$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)" | tr '-' ' ' )";
-  ARR=(`echo ${BRANCH}`);
-  CODE=(`echo ${ARR[2]}`);
+#   BRANCH="$( echo "$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)" | tr '-' ' ' )";
+#   ARR=(`echo ${BRANCH}`);
+#   CODE=(`echo ${ARR[2]}`);
   
-  t out;
-  t sheet workshare;
-  t in "WEB-$CODE";
-}
+#   t out;
+#   t sheet workshare;
+#   t in "WEB-$CODE";
+# }
 
 # Automatically checkin to time tracker when opening a git repo
 # cd () { 

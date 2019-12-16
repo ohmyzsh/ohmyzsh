@@ -18,7 +18,7 @@ cd_git_checker () {
 ## --------------- Custom Functions --------------- 
 
 function editZSH {
-  sublime ~/.zshrc;
+  subl ~/.zshrc;
 }
 
 ## Create react app with custom scripts
@@ -37,7 +37,13 @@ function moveImages {
   done
 }
 
+# reboot shell, updating shells path
+function reboot-shell {
+  exec "$SHELL"
+}
+
 function mcclowes {
   echo "editZSH - Edit zshrc config";
   echo "mcclowes-react-scripts < project name : new-project > - create new react project using mcclowes-scripts create react app config";
+  echo "reboot-shell- reboot shell";
 }

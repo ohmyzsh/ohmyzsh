@@ -1,23 +1,16 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+export ZSH="/Users/maxclaytoncowes/Development/mcclowes/oh-my-zsh"
 
-# Path to your oh-my-zsh installation.
-export ZSH="/Users/mcclowes/development/mcclowes/oh-my-zsh"
-
-# Set list of themes to load
 ZSH_THEME="bureau"
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
 plugins=(
   codogo
   experiments
   git
   githubutils
   imagetools
+  jestutils
   mcclowes
+  pollen
   sublime
   workshare
   zsh-syntax-highlighting
@@ -27,19 +20,56 @@ source $ZSH/oh-my-zsh.sh
 
 ## --------------- User configuration --------------- 
 
+# Sublime as editor
+export EDITOR='sublime'
+
 # Paths
 
-export PATH="/usr/local/bin:$PATH"
-export PATH="/usr/bin:$PATH"
-export PATH="/bin:$PATH"
-export PATH="/usr/sbin:$PATH"
-export PATH="/sbin:$PATH"
-# export MANPATH="/usr/local/man:$MANPATH"
-
-export PATH="/usr/local/sbin:$PATH"
+PATH="/sbin:$PATH"
+PATH="/bin:$PATH"
+PATH="/usr/sbin:$PATH"
+PATH="/usr/bin:$PATH"
+PATH="/usr/local/sbin:$PATH"
+PATH="/usr/local/bin:$PATH"
 
 # Python
-export PATH=/usr/local/share/python:$PATH
+#PATH=/usr/local/share/python:$PATH
+#PATH="/usr/local/opt/python/libexec/bin:$PATH" # WIP
+
+# gettext
+PATH="/usr/local/opt/gettext/bin:$PATH"
+
+# pyenv
+export PYENV_VERSION="3.7.3"
+export PYENV_ROOT="$HOME/.pyenv"
+PATH="$PYENV_ROOT/bin:$PATH"
+
+# Yarn
+PATH="$PATH:/opt/yarn-[version]/bin"
+
+# Openssl
+export SSL_CERT_FILE="/usr/local/etc/openssl@1.1/cert.pem"
+export SSL_CERT_DIR="/usr/local/etc/openssl@1.1"
+# PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
+# export LDFLAGS="-L/usr/local/opt/openssl@1.1/lib"
+# export CPPFLAGS="-I/usr/local/opt/openssl@1.1/include"
+# export PKG_CONFIG_PATH="/usr/local/opt/openssl@1.1/lib/pkgconfig"
+
+#PATH=$PATH:$HOME/bin
+
+# nvm
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+export PATH
+
+# pyenv
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
+
+# -- Functions --
 
 # Function to check for updates to the current directory if the CD is a git repo
 cd () { builtin cd "$@" && cd_git_checker; }
@@ -49,28 +79,14 @@ cd_git_checker () {
   fi;
 }
 
-
 # Brew automcomplete
 if type brew &>/dev/null; then
   FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
 fi
 
-
-## --------------- 
-
-# tabtab source for serverless package
-# uninstall by removing these lines or running `tabtab uninstall serverless`
-[[ -f /Users/mcclowes/Development/vocalise-app/node_modules/tabtab/.completions/serverless.zsh ]] && . /Users/mcclowes/Development/vocalise-app/node_modules/tabtab/.completions/serverless.zsh
-# tabtab source for sls package
-# uninstall by removing these lines or running `tabtab uninstall sls`
-[[ -f /Users/mcclowes/Development/vocalise-app/node_modules/tabtab/.completions/sls.zsh ]] && . /Users/mcclowes/Development/vocalise-app/node_modules/tabtab/.completions/sls.zsh
-
-
-
-export PATH=$PATH:$HOME/bin
-export EDITOR='sublime'
-
-
+# npmfetch
 function npmfetch {
   rm -rf node_modules && npm update --save-dev && npm update --save
 }
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
