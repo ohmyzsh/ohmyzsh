@@ -5,6 +5,11 @@ function pollen-server-up {
   bin/server --exclude pollen_ui phoenix_ui ambassador_ui customer_ui calvin_ui    
 }
 
+## seed demo data
+function pollen-dummy-data {
+  bin/demo-data
+}
+
 function pollen-gco-jira {
   echo "TE code:";
   read CODE;
@@ -27,6 +32,7 @@ function pollen-git-commit-jira {
 
 function pollen {
   echo "pollen-server-up - spin up pollen server";
+  echo "pollen-dummy-data - seed demot data";
   echo "pollen-gco-jira - Checkout a branch in the format required to correspond to a Jira issue";
   echo "pollen-git-commit-jira - Commit to a branch in the format required to correspond to a Jira issue";
 }
