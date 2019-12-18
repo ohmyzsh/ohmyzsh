@@ -32,6 +32,7 @@ plugins=(... extract)
 | `tar`             | Tarball                              |
 | `tar.bz2`         | Tarball with bzip2 compression       |
 | `tar.gz`          | Tarball with gzip compression        |
+| `tar.lz`          | Tarball with lzip compression        |
 | `tar.xz`          | Tarball with lzma2 compression       |
 | `tar.zma`         | Tarball with lzma compression        |
 | `tar.zst`         | Tarball with zstd compression        |

@@ -45,6 +45,7 @@ extract() {
 				&& tar --zstd -xvf "$1" \
 				|| zstdcat "$1" | tar xvf - ;;
 			(*.tar) tar xvf "$1" ;;
+			(*.tar.lz) (( $+commands[lzip] )) && tar xvf "$1" ;;
 			(*.gz) (( $+commands[pigz] )) && pigz -dk "$1" || gunzip -k "$1" ;;
 			(*.bz2) bunzip2 "$1" ;;
 			(*.xz) unxz "$1" ;;
