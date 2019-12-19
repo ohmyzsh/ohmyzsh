@@ -20,7 +20,7 @@ else
    suffix="Gb"
 fi
 
-PROMPT='%{$reset_color%}%n %{$fg[green]%}{%{$reset_color%}%~%{$fg[green]%}}%{$reset_color%}$(git_prompt_info) greetings, earthling %{$fg[green]%}[%{$reset_color%}%{$TotalSize%}%{$suffix%}%{$fg[green]%}]%{$fg[red]%}$%{$reset_color%} ☞ '
+PROMPT='%f%n %F{green}{%f%~%F{green}}%f$(git_prompt_info) greetings, earthling %F{green}[%f%{$TotalSize%}%{$suffix%}%F{green}]%F{red}$%f ☞ '
 
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[red]%}±("
-ZSH_THEME_GIT_PROMPT_SUFFIX=");%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_PREFIX="%F{red}±("
+ZSH_THEME_GIT_PROMPT_SUFFIX=");%f"
