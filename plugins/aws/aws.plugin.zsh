@@ -87,7 +87,7 @@ function aws_change_access_key() {
 
 function aws_profiles() {
   [[ -r "${AWS_CONFIG_FILE:-$HOME/.aws/config}" ]] || return 1
-  grep -Eo '\[.*\]' "${AWS_CONFIG_FILE:-$HOME/.aws/config}" | sed -E 's/^\s*\[(profile)?\s*([a-zA-Z0-9_\.-]+)\]\s*$/\2/g'
+  grep --color=never -Eo '\[.*\]' "${AWS_CONFIG_FILE:-$HOME/.aws/config}" | sed -E 's/^\s*\[(profile)?\s*([a-zA-Z0-9_\.-]+)\]\s*$/\2/g'
 }
 
 function _aws_profiles() {
