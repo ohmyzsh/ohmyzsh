@@ -8,24 +8,39 @@ is found it will just cat the file normally, without syntax highlighting.
 
 ## Setup
 
-To use it, add colorize to the plugins array of your zshrc file:
+To use it, add colorize to the plugins array of your `~/.zshrc` file:
 ```
 plugins=(... colorize)
 ```
 
+## Configuration
+
 ### Requirements
 
-This plugin requires that Pygments be installed: [pygments.org](https://pygments.org/)
+This plugin requires that either of the following tools be installed:
 
-## Styles
+* Chroma: [https://github.com/alecthomas/chroma](https://github.com/alecthomas/chroma)
+* Pygments be installed: [pygments.org](https://pygments.org/)
+
+### Colorize tool
+
+Colorize supports `pygmentize` and `chroma` as syntax highlighter. By default colorize uses `pygmentize` unless it's not installed and `chroma` is. This can be overridden by the `ZSH_COLORIZE_TOOL` environment variable:
+
+```
+ZSH_COLORIZE_TOOL=chroma
+```
+
+### Styles
 
 Pygments offers multiple styles. By default, the `default` style is used, but you can choose another theme by setting the `ZSH_COLORIZE_STYLE` environment variable:
 
-`ZSH_COLORIZE_STYLE="colorful"`
+```
+ZSH_COLORIZE_STYLE="colorful"
+```
 
 ## Usage
 
-* `ccat  <file> [files]`: colorize the contents of the file (or files, if more than one are provided). 
+* `ccat <file> [files]`: colorize the contents of the file (or files, if more than one are provided).
   If no arguments are passed it will colorize the standard input or stdin.
 
 * `cless <file> [files]`: colorize the contents of the file (or files, if more than one are provided) and
