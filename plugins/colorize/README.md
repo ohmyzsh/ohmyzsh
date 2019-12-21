@@ -6,10 +6,16 @@ Colorize will highlight the content based on the filename extension. If it can't
 method for a given extension, it will try to find one by looking at the file contents. If no highlight method
 is found it will just cat the file normally, without syntax highlighting.
 
+## Setup
+
 To use it, add colorize to the plugins array of your zshrc file:
 ```
 plugins=(... colorize)
 ```
+
+### Requirements
+
+This plugin requires that Pygments be installed: [pygments.org](https://pygments.org/)
 
 ## Styles
 
@@ -29,7 +35,3 @@ Note that `cless` will behave as less when provided more than one file: you have
 the commands `:n` for next and `:p` for previous. The downside is that less options are not supported.
 But you can circumvent this by either using the LESS environment variable, or by running `ccat file1 file2|less --opts`.
 In the latter form, the file contents will be concatenated and presented by less as a single file.
-
-## Requirements
-
-You have to install Pygments first: [pygments.org](http://pygments.org/download.html)
