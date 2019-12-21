@@ -38,7 +38,7 @@ colorize_via_pygmentize() {
 
 colorize_via_pygmentize_less() (
     # this function is a subshell so tmp_files can be shared to cleanup function
-    declare -a tmp_files 
+    declare -a tmp_files
 
     cleanup () {
         [[ ${#tmp_files} -gt 0 ]] && rm -f "${tmp_files[@]}"
