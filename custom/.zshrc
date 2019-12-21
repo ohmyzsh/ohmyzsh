@@ -58,76 +58,10 @@ ZSH_THEME="william"
 
 source $ZSH/oh-my-zsh.sh
 
-# User configuration
+[ -f ~/.utils ] && source ~/.utils
 
-# export MANPATH="/usr/local/man:$MANPATH"
+# include .local if it exists
+[ -f $HOME/.local ] && . $HOME/.local
 
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# ssh
-# export SSH_KEY_PATH="~/.ssh/rsa_id"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-#PROMPT='%{$fg[magenta]%}%n%F{156}@%{$fg[green]%}%~ %{$fg_bold[blue]%}$(git_prompt_info)%{$reset_color%}%#'
-
-#PROMPT='%{$fg[magenta]%}%n%F{156}@%{$fg_bold[white]%}%M%F{255}:%{$fg[green]%}%~ %{$fg_bold[blue]%}$(git_prompt_info)%{$reset_color%}'
-#RPROMPT="[%*]"
-
-alias vi='vim'
-export LC_ALL=en_US.UTF-8  
-export LANG=en_US.UTF-8
-#export LANGAGE=zh_TW.UTF-8
-#export LC_ALL='en_GB.UTF-8'
-#export LANG='en_GB.UTF-8'
-#export LC_CTYPE=zh_TW.UTF-8 # 可以輸入UTF-8中文
-#export LC_MESSAGES=zh_TW.UTF-8 # 可以顯示UTF-8中文
-#export LC_TIME=en_US.UTF-8 # 日期格式還是用美式的
-emulate sh
-#. ~/.profile
-emulate zsh
-
-# added by Anaconda3 2019.03 installer
-# >>> conda init >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$(CONDA_REPORT_ERRORS=false '${HOME}/anaconda3/bin/conda' shell.bash hook 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    \eval "$__conda_setup"
-else
-    if [ -f "${HOME}/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "${HOME}/anaconda3/etc/profile.d/conda.sh"
-        CONDA_CHANGEPS1=false conda activate base
-    else
-        \export PATH="${HOME}/anaconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda init <<<
-
-nvm() {
-  echo "🚨  NVM not loaded! Loading now..."
-  unset -f nvm
-  export NVM_DIR="$HOME/.nvm"
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-  nvm "$@"
-}
-
+# fzf command
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
