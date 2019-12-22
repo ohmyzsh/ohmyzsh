@@ -41,12 +41,12 @@ ZSH_COLORIZE_STYLE="colorful"
 ## Usage
 
 * `ccat <file> [files]`: colorize the contents of the file (or files, if more than one are provided).
-  If no arguments are passed it will colorize the standard input or stdin.
+  If no files are passed it will colorize the standard input.
 
-* `cless <file> [files]`: colorize the contents of the file (or files, if more than one are provided) and
-  open less. If no arguments are passed it will colorize the standard input or stdin.
+* `cless [less-options] <file> [files]`: colorize the contents of the file (or files, if more than one are provided) and open less.
+  If no files are passed it will colorize the standard input.
+  The LESSOPEN and LESSCLOSE will be overwritten for this to work, but only in a local scope.
 
-Note that `cless` will behave as less when provided more than one file: you have to navigate files with
-the commands `:n` for next and `:p` for previous. The downside is that less options are not supported.
-But you can circumvent this by either using the LESS environment variable, or by running `ccat file1 file2|less --opts`.
-In the latter form, the file contents will be concatenated and presented by less as a single file.
+## Requirements
+
+You have to install Pygments first: [pygments.org](https://pygments.org/download/)
