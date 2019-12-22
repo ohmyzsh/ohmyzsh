@@ -17,10 +17,10 @@ plugins=(... colorize)
 
 ### Requirements
 
-This plugin requires that either of the following tools be installed:
+This plugin requires that at least one of the following tools is installed:
 
-* Chroma: [https://github.com/alecthomas/chroma](https://github.com/alecthomas/chroma)
-* Pygments be installed: [pygments.org](https://pygments.org/)
+* [Chroma](https://github.com/alecthomas/chroma)
+* [Pygments](https://pygments.org/download/)
 
 ### Colorize tool
 
@@ -46,7 +46,3 @@ ZSH_COLORIZE_STYLE="colorful"
 * `cless [less-options] <file> [files]`: colorize the contents of the file (or files, if more than one are provided) and open less.
   If no files are passed it will colorize the standard input.
   The LESSOPEN and LESSCLOSE will be overwritten for this to work, but only in a local scope.
-
-## Requirements
-
-You have to install Pygments first: [pygments.org](https://pygments.org/download/)
