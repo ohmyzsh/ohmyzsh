@@ -78,17 +78,21 @@ colorize_less() {
         # LESS="-R $LESS" enables raw ANSI colors, while maintain already set options.
         local LESS="-R $LESS"
 
-        # LESSOPEN="|zsh -c 'source \"$ZSH_COLORIZE_PLUGIN_PATH\"; colorize_cat %s 2> /dev/null'"
-        #   This variable tells less to pipe every file through the specified command (see the man of less INPUT PREPROCESSOR).
-        #   'zsh -ic "colorize_cat %s 2> /dev/null"' would not work for huge files like the ~/.zsh_history.
-        #   For such files the tty of the preprocessor will be supended.
-        #   Therefore we must source this file to make colorize_cat available in the preprocessor without the interactive mode.
-        #   2> /dev/null will suppress the error for large files 'broken pipe' of the python script pygmentize,
-        #   which will show up if less has not fully "loaded the file" (e.g. when not scrolled to the bottom)
-        #   while already the next file will be displayed.
-        local LESSOPEN="|zsh -c 'source \"$ZSH_COLORIZE_PLUGIN_PATH\"; colorize_cat %s 2> /dev/null'"
+        # This variable tells less to pipe every file through the specified command
+        # (see the man page of less INPUT PREPROCESSOR).
+        # 'zsh -ic "colorize_cat %s 2> /dev/null"' would not work for huge files like
+        # the ~/.zsh_history. For such files the tty of the preprocessor will be supended.
+        # Therefore we must source this file to make colorize_cat available in the
+        # preprocessor without the interactive mode.
+        # `2>/dev/null` will suppress the error for large files 'broken pipe' of the python
+        # script pygmentize, which will show up if less has not fully "loaded the file"
+        # (e.g. when not scrolled to the bottom) while already the next file will be displayed.
+        local LESSOPEN="| zsh -c 'source \"$ZSH_COLORIZE_PLUGIN_PATH\"; \
+        ZSH_COLORIZE_TOOL=$ZSH_COLORIZE_TOOL ZSH_COLORIZE_STYLE=$ZSH_COLORIZE_STYLE \
+        colorize_cat %s 2> /dev/null'"
 
-        # LESSCLOSE will be set to prevent any errors by executing an user script which assumes that his LESSOPEN has been executed.
+        # LESSCLOSE will be set to prevent any errors by executing a user script
+        # which assumes that his LESSOPEN has been executed.
         local LESSCLOSE=""
 
         LESS="$LESS" LESSOPEN="$LESSOPEN" LESSCLOSE="$LESSCLOSE" less "$@"
@@ -97,11 +101,13 @@ colorize_less() {
     if [ -t 0 ]; then
         _cless "$@"
     else
-        # The input is not associated with a terminal, therefore colorize_cat will colorize this input and pass it to less.
-        # Less has now to decide what to use. If any files have been provided, less will ignore the input by default,
-        # otherwise the colorized input will be used.
-        # If files have been supplied and the input has been redirected, this will lead to unnecessary overhead,
-        # but retains the ability to use the less options without checking for them inside this script.
+        # The input is not associated with a terminal, therefore colorize_cat will
+        # colorize this input and pass it to less.
+        # Less has now to decide what to use. If any files have been provided, less
+        # will ignore the input by default, otherwise the colorized input will be used.
+        # If files have been supplied and the input has been redirected, this will
+        # lead to unnecessary overhead, but retains the ability to use the less options
+        # without checking for them inside this script.
         colorize_cat | _cless "$@"
     fi
 }
