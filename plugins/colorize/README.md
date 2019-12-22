@@ -17,10 +17,10 @@ plugins=(... colorize)
 
 ### Requirements
 
-This plugin requires that either of the following tools be installed:
+This plugin requires that at least one of the following tools is installed:
 
-* Chroma: [https://github.com/alecthomas/chroma](https://github.com/alecthomas/chroma)
-* Pygments be installed: [pygments.org](https://pygments.org/)
+* [Chroma](https://github.com/alecthomas/chroma)
+* [Pygments](https://pygments.org/download/)
 
 ### Colorize tool
 
@@ -41,12 +41,8 @@ ZSH_COLORIZE_STYLE="colorful"
 ## Usage
 
 * `ccat <file> [files]`: colorize the contents of the file (or files, if more than one are provided).
-  If no arguments are passed it will colorize the standard input or stdin.
+  If no files are passed it will colorize the standard input.
 
-* `cless <file> [files]`: colorize the contents of the file (or files, if more than one are provided) and
-  open less. If no arguments are passed it will colorize the standard input or stdin.
-
-Note that `cless` will behave as less when provided more than one file: you have to navigate files with
-the commands `:n` for next and `:p` for previous. The downside is that less options are not supported.
-But you can circumvent this by either using the LESS environment variable, or by running `ccat file1 file2|less --opts`.
-In the latter form, the file contents will be concatenated and presented by less as a single file.
+* `cless [less-options] <file> [files]`: colorize the contents of the file (or files, if more than one are provided) and open less.
+  If no files are passed it will colorize the standard input.
+  The LESSOPEN and LESSCLOSE will be overwritten for this to work, but only in a local scope.
