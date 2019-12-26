@@ -13,6 +13,9 @@ mentioned rgb values, followed by the text to be printed. There is also 36 built
 which can be accessed via tab auto-complete. And there is support for bold, italic, and
 underline text.
 
+![screenshot](https://imgur.com/K0FVGzr.png)
+
+
 #### Table of Contents
  - [Setup](#Setup)
  - [Configuration](#Configuration)
