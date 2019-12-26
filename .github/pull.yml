@@ -9,5 +9,5 @@ rules:                              # Array of rules
       - kis87988
     reviewers:                      # Optional
       - kis87988
-    mergeMethod: merge
+    mergeMethod: rebase
 label: ":arrow_heading_down: pull"  # Optional
