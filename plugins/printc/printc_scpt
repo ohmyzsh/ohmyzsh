@@ -146,7 +146,7 @@ elif [[ $color_flag ]] || [[ $u_flag ]] || \
   fi
 else
   echo
-  echo "\033[1m\033[38;5;001mInvalid Option${RS}"
+  echo "\033[1m\033[38;5;001mInvalid Input${RS}"
   echo
   usage
   exit 1
