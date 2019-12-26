@@ -128,8 +128,12 @@ elif [[ $color_flag ]] || [[ $u_flag ]] || \
 
   if [[ $color_flag ]]; then
     test_input $color_flag[2]
+    # Set internal flag so script knows to use built in colors,
+    # rather than looking for passed in RGB values
     USED_BUILTIN=1
-    BUILT_IN_COLOR=$built_in_colors[$color_flag[2]]
+    # Extract RGB color code from $built_in_colors associative array
+    # corresponding to built in color requested by user
+    BUILT_IN_COLOR=(${(ps: :)${built_in_colors[$color_flag[2]]}})
   fi
   if [[ $u_flag ]]; then
     UL="\033[4m" # underline
@@ -148,28 +152,35 @@ else
   exit 1
 fi
 
+# If built in color was used, set the RGB value to those
+# that correspond with the built in color
 if [[ $USED_BUILTIN == 1 ]]; then
-  R=$BUILT_IN_COLOR[1,3]
-  G=$BUILT_IN_COLOR[5,7]
-  B=$BUILT_IN_COLOR[9,11]
+  R=$BUILT_IN_COLOR[1]
+  G=$BUILT_IN_COLOR[2]
+  B=$BUILT_IN_COLOR[3]
   MSG=$@
 else
+  # If user supplied RGB values, assign them to R G B
   if [[ $# == 4 ]]; then
     R=$1
     G=$2
     B=$3
     MSG=$4
+  # If no color options were specified, use white by default
   elif [[ $# == 1 ]]; then
     R=255
     G=255
     B=255
     MSG=$1
   else
+    # If something went wrong show the usage message and exit
     usage
+    exit 1
   fi
 fi
 
 if [[ $n_flag ]]; then
+  # If -n options is given, use -n with internal echo command
   echo -n "${UL}${BD}${IT}\033[38;2;${R};${G};${B}m${MSG}${RS}"
 else
   echo "${UL}${BD}${IT}\033[38;2;${R};${G};${B}m${MSG}${RS}"
