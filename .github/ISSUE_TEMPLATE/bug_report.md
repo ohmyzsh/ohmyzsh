@@ -1,27 +1,29 @@
 ---
 name: Bug report
-about: Create a report to help us improve ohmyzsh!
+about: Create a report to help us improve Oh My Zsh
 
 ---
 
-**Describe the bug**
 <!--
 Fill this out before posting. You can delete irrelevant sections, but
 an issue where no sections have been filled will be deleted without comment.
 -->
 
+**Describe the bug**
+A clear description of what the bug is.
+
 **To Reproduce**
-For Example:
-Steps to reproduce the behavior:
+Steps to reproduce the behavior, for example:
 1. Enable this plugin '...'
 2. Run command '...' or try the autocomplete command '...'
 3. See error
 
 **Expected behavior**
-A clear and concise description of what you expected to happen.
+A brief description of what should happen.
 
 **Screenshots and/or Recordings**
-If applicable, add screenshots to help explain your problem. Also you can record an asciinema session (https://asciinema.org/)
+If applicable, add screenshots to help explain your problem.
+You can also record an asciinema session: https://asciinema.org/
 
 **Desktop (please complete the following information):**
  - OS / Distro: [e.g. Arch Linux, macOS]
