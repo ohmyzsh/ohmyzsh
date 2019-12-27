@@ -48,7 +48,7 @@ export TERM=xterm-256color
 ```
 
 It is possible that this is all that will be needed for the italic functionality to work
-as well. I do reccomend trying and seeing if italics work. It it does not, just follow the
+as well. I do recommend trying and seeing if italics work. It it does not, just follow the
 simple steps below.
 
 ### Italics Setup
@@ -56,7 +56,7 @@ simple steps below.
 
  2) Create a file inside `~/.terminfo` called `xterm-256color-italics.terminfo`
 
- 3) Place the follwing contents inside `xterm-256color-italics.terminfo` *exactly* as
+ 3) Place the following contents inside `xterm-256color-italics.terminfo` *exactly* as
  they are shown:
 
  ```
