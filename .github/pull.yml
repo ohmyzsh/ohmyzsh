@@ -5,9 +5,5 @@ rules:                              # Array of rules
     mergeMethod: hardreset          # Optional, one of [none, merge, squash, rebase, hardreset], Default: none.
   - base: william_custom
     upstream: master                # Required. Can be a branch in the same forked repo.
-    assignees:                      # Optional
-      - kis87988
-    reviewers:                      # Optional
-      - kis87988
     mergeMethod: rebase
 label: ":arrow_heading_down: pull"  # Optional
