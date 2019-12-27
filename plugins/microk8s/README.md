@@ -8,7 +8,7 @@ To use it, add `microk8s` to the plugins array in your zshrc file.
 plugins=(... microk8s)
 ```
 
-## Common aliases
+## Aliases
 
 | Alias         | Command                    | Description                                                                                              |
 |---------------|----------------------------|----------------------------------------------------------------------------------------------------------|
