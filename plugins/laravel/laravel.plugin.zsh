@@ -4,6 +4,7 @@ alias bob='php artisan bob::build'
 
 # Development
 alias pas='php artisan serve'
+alias pati='php artisan tinker'
 
 # Database
 alias pam='php artisan migrate'
@@ -24,3 +25,8 @@ alias pacac='php artisan cache:clear'
 alias pacoc='php artisan config:clear'
 alias pavic='php artisan view:clear'
 alias paroc='php artisan route:clear'
+
+# Misc
+alias pak='php artisan key:generate'
+alias pasl='php artisan storage:link'
+alias pav='php artisan vendor:publish'
