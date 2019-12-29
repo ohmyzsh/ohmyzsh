@@ -26,10 +26,11 @@ the `brew` binary before sourcing `oh-my-zsh.sh` and it'll set up the environmen
 | `brewp`  | `brew pin`                              | Pin a specified formula so that it's not upgraded.                  |
 | `brews`  | `brew list -1`                          | List installed formulae or the installed files for a given formula. |
 | `brewsp` | `brew list --pinned`                    | List pinned formulae, or show the version of a given formula.       |
+| `bup`    | `brew upgrade`                          | Upgrade outdated, unpinned brews (with existing install options).   |
 | `bubc`   | `brew upgrade && brew cleanup`          | Upgrade outdated formulae and casks, then run cleanup.              |
 | `bugbc`  | `brew upgrade --greedy && brew cleanup` | Upgrade outdated formulae and casks (greedy), then run cleanup.     |
 | `bubo`   | `brew update && brew outdated`          | Update Homebrew data, then list outdated formulae and casks.        |
-| `bubu`   | `bubo && bubc`                          | Do the last two operations above.                                   |
+| `bubu`   | `bubo && bup`                           | Do the last two operations above.                                   |
 | `bfu`    | `brew upgrade --formula`                | Upgrade only formulas (not casks).                                  |
 | `buz`    | `brew uninstall --zap`                  | Remove all files associated with a cask.                            |
 
