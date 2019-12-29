@@ -2,12 +2,10 @@ alias brewp='brew pin'
 alias brews='brew list -1'
 alias brewsp='brew list --pinned'
 alias bubo='brew update && brew outdated'
-alias bubc='brew upgrade && brew cleanup'
-alias bcbu='brew cleanup && brew upgrade'
-alias bubu='bubo && bubc'
+alias bup='brew upgrade'
+alias bubu='bubo && bup'
 alias bcubo='brew update && brew cask outdated'
-alias bcubc='brew cask reinstall $(brew cask outdated) && brew cleanup'
-alias bucu='bubo && bcbu'
+alias bcub='brew cask reinstall $(brew cask outdated)'
 
 
 if command mkdir "$ZSH_CACHE_DIR/.brew-completion-message" 2>/dev/null; then
