@@ -10,19 +10,20 @@ if (( $+commands[kubectl] )); then
     unset __KUBECTL_COMPLETION_FILE
 fi
 
-# This command is used a LOT both below and in daily life
+# General aliases
+## This command is used a LOT both below and in daily life
 alias k=kubectl
 
-# Execute a kubectl command against all namespaces
+## Execute a kubectl command against all namespaces
 alias kca='f(){ kubectl "$@" --all-namespaces;  unset -f f; }; f'
 
-# Apply a YML file
+## Apply a YML file
 alias kaf='kubectl apply -f'
 
-# Drop into an interactive terminal on a container
+## Drop into an interactive terminal on a container
 alias keti='kubectl exec -ti'
 
-# Manage configuration quickly to switch contexts between local, dev ad staging.
+# Manage configuration to switch contexts quickly
 alias kcuc='kubectl config use-context'
 alias kcsc='kubectl config set-context'
 alias kcdc='kubectl config delete-context'
@@ -31,11 +32,11 @@ alias kccc='kubectl config current-context'
 # List all contexts
 alias kcgc='kubectl config get-contexts'
 
-# General aliases
+# Delete resources
 alias kdel='kubectl delete'
 alias kdelf='kubectl delete -f'
 
-# Pod management.
+# Pod management
 alias kgp='kubectl get pods'
 alias kgpw='kgp --watch'
 alias kgpwide='kgp -o wide'
@@ -43,10 +44,10 @@ alias kep='kubectl edit pods'
 alias kdp='kubectl describe pods'
 alias kdelp='kubectl delete pods'
 
-# get pod by label: kgpl "app=myapp" -n myns
+# Get pod by label: kgpl "app=myapp" -n myns
 alias kgpl='kgp -l'
 
-# Service management.
+# Service management
 alias kgs='kubectl get svc'
 alias kgsw='kgs --watch'
 alias kgswide='kgs -o wide'
@@ -78,7 +79,7 @@ alias kgsec='kubectl get secret'
 alias kdsec='kubectl describe secret'
 alias kdelsec='kubectl delete secret'
 
-# Deployment management.
+# Deployment management
 alias kgd='kubectl get deployment'
 alias kgdw='kgd --watch'
 alias kgdwide='kgd -o wide'
@@ -91,20 +92,10 @@ kres(){
     kubectl set env $@ REFRESHED_AT=$(date +%Y%m%d%H%M%S)
 }
 
-# Rollout management.
+# Rollout management
 alias kgrs='kubectl get rs'
 alias krh='kubectl rollout history'
 alias kru='kubectl rollout undo'
-
-# Statefulset management.
-alias kgss='kubectl get statefulset'
-alias kgssw='kgss --watch'
-alias kgsswide='kgss -o wide'
-alias kess='kubectl edit statefulset'
-alias kdss='kubectl describe statefulset'
-alias kdelss='kubectl delete statefulset'
-alias ksss='kubectl scale statefulset'
-alias krsss='kubectl rollout status statefulset'
 
 # Port forwarding
 alias kpf="kubectl port-forward"
@@ -120,16 +111,33 @@ alias klf='kubectl logs -f'
 # File copy
 alias kcp='kubectl cp'
 
-# Node Management
+# Node management
 alias kgno='kubectl get nodes'
 alias keno='kubectl edit node'
 alias kdno='kubectl describe node'
 alias kdelno='kubectl delete node'
 
-# PVC management.
+# PVC management
 alias kgpvc='kubectl get pvc'
 alias kgpvcw='kgpvc --watch'
 alias kepvc='kubectl edit pvc'
 alias kdpvc='kubectl describe pvc'
 alias kdelpvc='kubectl delete pvc'
 
+# Statefulset management
+alias kgss='kubectl get statefulset'
+alias kgssw='kgss --watch'
+alias kgsswide='kgss -o wide'
+alias kess='kubectl edit statefulset'
+alias kdss='kubectl describe statefulset'
+alias kdelss='kubectl delete statefulset'
+alias ksss='kubectl scale statefulset'
+alias krsss='kubectl rollout status statefulset'
+
+# Kustomization
+alias kak='kubectl apply -k'
+alias kdk='kubectl delete -k'
+alias kk='kubectl kustomize'
+
+# Get documentation of resources
+alias ke='kubectl explain'
