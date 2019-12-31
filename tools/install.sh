@@ -117,7 +117,7 @@ setup_zshrc() {
 			mv "$OLD_ZSHRC" "${OLD_OLD_ZSHRC}"
 
 			echo "${YELLOW}Found old ~/.zshrc.pre-oh-my-zsh." \
-				"${GREEN}Backing up to ${OLD_OLD_ZSHRC}${RESET}"
+			"${GREEN}Backing up to ${OLD_OLD_ZSHRC}${RESET}"
 		fi
 		echo "${YELLOW}Found ~/.zshrc.${RESET} ${GREEN}Backing up to ${OLD_ZSHRC}${RESET}"
 		mv ~/.zshrc "$OLD_ZSHRC"
@@ -127,8 +127,8 @@ setup_zshrc() {
 
 	cp "$ZSH/templates/zshrc.zsh-template" ~/.zshrc
 	sed "/^export ZSH=/ c\\
-export ZSH=\"$ZSH\"
-" ~/.zshrc > ~/.zshrc-omztemp
+	export ZSH=\"$ZSH\"
+	" ~/.zshrc > ~/.zshrc-omztemp
 	mv -f ~/.zshrc-omztemp ~/.zshrc
 
 	echo
@@ -148,8 +148,8 @@ setup_shell() {
 	# If this platform doesn't provide a "chsh" command, bail out.
 	if ! command_exists chsh; then
 		cat <<-EOF
-			I can't change your shell automatically because this system does not have chsh.
-			${BLUE}Please manually change your default shell to zsh${RESET}
+		I can't change your shell automatically because this system does not have chsh.
+		${BLUE}Please manually change your default shell to zsh${RESET}
 		EOF
 		return
 	fi
@@ -161,17 +161,17 @@ setup_shell() {
 	read opt
 	case $opt in
 		y*|Y*|"") echo "Changing the shell..." ;;
-		n*|N*) echo "Shell change skipped."; return ;;
-		*) echo "Invalid choice. Shell change skipped."; return ;;
-	esac
+n*|N*) echo "Shell change skipped."; return ;;
+*) echo "Invalid choice. Shell change skipped."; return ;;
+esac
 
 	# Check if we're running on Termux
 	case "$PREFIX" in
 		*com.termux*) termux=true; zsh=zsh ;;
-		*) termux=false ;;
-	esac
+*) termux=false ;;
+esac
 
-	if [ "$termux" != true ]; then
+if [ "$termux" != true ]; then
 		# Test for the right location of the "shells" file
 		if [ -f /etc/shells ]; then
 			shells_file=/etc/shells
@@ -223,55 +223,78 @@ main() {
 	while [ $# -gt 0 ]; do
 		case $1 in
 			--unattended) RUNZSH=no; CHSH=no ;;
-			--skip-chsh) CHSH=no ;;
-		esac
-		shift
-	done
+--skip-chsh) CHSH=no ;;
+esac
+shift
+done
 
-	setup_color
+setup_color
 
-	if ! command_exists zsh; then
-		echo "${YELLOW}Zsh is not installed.${RESET} Please install zsh first."
-		exit 1
-	fi
+if ! command_exists zsh; then
+	echo "${YELLOW}Zsh is not installed, Installing now.."
 
-	if [ -d "$ZSH" ]; then
-		cat <<-EOF
-			${YELLOW}You already have Oh My Zsh installed.${RESET}
-			You'll need to remove '$ZSH' if you want to reinstall.
-		EOF
-		exit 1
-	fi
+	OS=$(lsb_release -is)                                   
 
-	setup_ohmyzsh
-	setup_zshrc
-	setup_shell
+	case "$OS" in
+		'Ubuntu' | 'Debian' | 'Kali' | 'LinuxMint' | 'ElementaryOS' )	
+sudo apt update && sudo apt install zsh -y ;;
 
-	printf "$GREEN"
-	cat <<-'EOF'
-		         __                                     __
-		  ____  / /_     ____ ___  __  __   ____  _____/ /_
-		 / __ \/ __ \   / __ `__ \/ / / /  /_  / / ___/ __ \
-		/ /_/ / / / /  / / / / / / /_/ /    / /_(__  ) / / /
-		\____/_/ /_/  /_/ /_/ /_/\__, /    /___/____/_/ /_/
-		                        /____/                       ....is now installed!
+'Redhat' | 'Fedora' | 'CentOS' )
+sudo yum install zsh -y ;;
 
+'*SUSE' )
+sudo zypper refresh && sudo zypper install zsh -y;;
 
-		Please look over the ~/.zshrc file to select plugins, themes, and options.
+'*Arch' )
+sudo pacman -Syy && sudo pacman -S zsh --noconfirm ;;
 
-		p.s. Follow us on https://twitter.com/ohmyzsh
+'*too' )
+sudo emerge --sync && sudo emerge zsh ;;
 
-		p.p.s. Get stickers, shirts, and coffee mugs at https://shop.planetargon.com/collections/oh-my-zsh
+* )
+echo "Can't determine your Linux Distribution, Please install Zsh yourself!"
+exit 1 ;;
 
+esac	
+fi
+
+if [ -d "$ZSH" ]; then
+	cat <<-EOF
+	${YELLOW}You already have Oh My Zsh installed.${RESET}
+	You'll need to remove '$ZSH' if you want to reinstall.
 	EOF
-	printf "$RESET"
+	exit 1
+fi
 
-	if [ $RUNZSH = no ]; then
-		echo "${YELLOW}Run zsh to try it out.${RESET}"
-		exit
-	fi
+setup_ohmyzsh
+setup_zshrc
+setup_shell
 
-	exec zsh -l
+printf "$GREEN"
+cat <<-'EOF'
+__                                     __
+____  / /_     ____ ___  __  __   ____  _____/ /_
+/ __ \/ __ \   / __ `__ \/ / / /  /_  / / ___/ __ \
+/ /_/ / / / /  / / / / / / /_/ /    / /_(__  ) / / /
+\____/_/ /_/  /_/ /_/ /_/\__, /    /___/____/_/ /_/
+/____/                       ....is now installed!
+
+
+Please look over the ~/.zshrc file to select plugins, themes, and options.
+
+p.s. Follow us on https://twitter.com/ohmyzsh
+
+p.p.s. Get stickers, shirts, and coffee mugs at https://shop.planetargon.com/collections/oh-my-zsh
+
+EOF
+printf "$RESET"
+
+if [ $RUNZSH = no ]; then
+	echo "${YELLOW}Run zsh to try it out.${RESET}"
+	exit
+fi
+
+exec zsh -l
 }
 
 main "$@"
