@@ -22,6 +22,30 @@ plugins=(... aws)
 * `aws_profiles`: lists the available profiles in the  `$AWS_CONFIG_FILE` (default: `~/.aws/config`).
   Used to provide completion for the `asp` function.
 
+**Note**: The credentials file (`~/.aws/credentials`) uses a different naming
+format than the CLI config file (`~/.aws/config`) for named profiles. Include
+the prefix word "profile" only when configuring a named profile in the config
+file. Do not use the word profile when creating an entry in the credentials
+file.
+
+**Example**
+
+`~/.aws/credentials`
+
+```
+[root]
+aws_access_key_id=<...>
+aws_secret_access_key=<...>
+```
+
+`~/.aws/config`
+
+```
+[profile root]
+region=us-east-1
+output=json
+```
+
 ## Plugin options
 
 * Set `SHOW_AWS_PROMPT=false` in your zshrc file if you want to prevent the plugin from modifying your RPROMPT.
