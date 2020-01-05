@@ -1,5 +1,6 @@
 # custom files
 custom/
+.idea
 
 # temp files directories
 cache/
