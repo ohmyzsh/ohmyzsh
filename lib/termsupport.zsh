@@ -34,7 +34,7 @@ function title {
         if [[ -n "$terminfo[fsl]" ]] && [[ -n "$terminfo[tsl]" ]]; then
 	  echoti tsl 0
 	  echoti dl1
-	  print -Pn "$1"
+	  print -Pn "$2"
 	  echoti fsl
 	fi
       fi
