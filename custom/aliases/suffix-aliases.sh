@@ -1,0 +1,1 @@
+alias -s txt=subl
