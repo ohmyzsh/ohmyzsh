@@ -22,7 +22,7 @@ To learn more, visit [ohmyz.sh](https://ohmyz.sh), follow [@ohmyzsh](https://twi
 ### Prerequisites
 
 * A Unix-like operating system: macOS, Linux, BSD. On Windows: WSL is preferred, but cygwin or msys also mostly work.
-* [Zsh](https://www.zsh.org) should be installed (v4.3.9 or more recent). If not pre-installed (run `zsh --version` to confirm), check the following instructions here: [Installing ZSH](https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH)
+* [Zsh](https://www.zsh.org) should be installed (v4.3.9 or more recent). If not pre-installed (run `zsh --version` to confirm), check the following instructions here: [Installing ZSH](https://github.com/mnebus/ohmyzsh/wiki/Installing-ZSH)
 * `curl` or `wget` should be installed
 * `git` should be installed
 
@@ -33,13 +33,13 @@ Oh My Zsh is installed by running one of the following commands in your terminal
 #### via curl
 
 ```shell
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/mnebus/ohmyzsh/master/tools/install.sh)"
 ```
 
 #### via wget
 
 ```shell
-sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+sh -c "$(wget -O- https://raw.githubusercontent.com/mnebus/ohmyzsh/master/tools/install.sh)"
 ```
 
 #### Manual inspection
@@ -49,7 +49,7 @@ that by downloading the install script first, looking through it so everything l
 then running it:
 
 ```shell
-curl -Lo install.sh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+curl -Lo install.sh https://raw.githubusercontent.com/mnebus/ohmyzsh/master/tools/install.sh
 sh install.sh
 ```
 
@@ -57,7 +57,7 @@ sh install.sh
 
 ### Plugins
 
-Oh My Zsh comes with a shitload of plugins to take advantage of. You can take a look in the [plugins](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins) directory and/or the [wiki](https://github.com/ohmyzsh/ohmyzsh/wiki/Plugins) to see what's currently available.
+Oh My Zsh comes with a shitload of plugins to take advantage of. You can take a look in the [plugins](https://github.com/mnebus/ohmyzsh/tree/master/plugins) directory and/or the [wiki](https://github.com/ohmyzsh/ohmyzsh/wiki/Plugins) to see what's currently available.
 
 #### Enabling Plugins
 
@@ -89,7 +89,7 @@ Most plugins (should! we're working on this) include a __README__, which documen
 
 ### Themes
 
-We'll admit it. Early in the Oh My Zsh world, we may have gotten a bit too theme happy. We have over one hundred themes now bundled. Most of them have [screenshots](https://github.com/ohmyzsh/ohmyzsh/wiki/Themes) on the wiki. Check them out!
+We'll admit it. Early in the Oh My Zsh world, we may have gotten a bit too theme happy. We have over one hundred themes now bundled. Most of them have [screenshots](https://github.com/mnebus/ohmyzsh/wiki/Themes) on the wiki. Check them out!
 
 #### Selecting a Theme
 
@@ -164,14 +164,14 @@ flag `--unattended` to the `install.sh` script. This will have the effect of not
 the default shell, and also won't run `zsh` when the installation has finished.
 
 ```shell
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/mnebus/ohmyzsh/master/tools/install.sh)" "" --unattended
 ```
 
 #### Installing from a forked repository
 
 The install script also accepts these variables to allow installation of a different repository:
 
-- `REPO` (default: `ohmyzsh/ohmyzsh`): this takes the form of `owner/repository`. If you set
+- `REPO` (default: `mnebus/ohmyzsh`): this takes the form of `owner/repository`. If you set
   this variable, the installer will look for a repository at `https://github.com/{owner}/{repository}`.
 
 - `REMOTE` (default: `https://github.com/${REPO}.git`): this is the full URL of the git repository
@@ -195,7 +195,7 @@ REPO=apjanke/oh-my-zsh BRANCH=edge sh install.sh
 ##### 1. Clone the repository:
 
 ```shell
-git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
+git clone https://github.com/mnebus/ohmyzsh.git ~/.oh-my-zsh
 ```
 
 ##### 2. *Optionally*, backup your existing `~/.zshrc` file:
