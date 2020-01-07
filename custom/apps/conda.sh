@@ -15,4 +15,5 @@ fi
 unset __conda_setup
 
 conda activate env_data_science
+conda config --set changeps1 False # hide the name of the conda env in konsole
 # <<< conda initialize <<<
