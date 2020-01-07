@@ -1,0 +1,3 @@
+[submodule "custom/themes/spaceship-prompt"]
+	path = custom/themes/spaceship-prompt
+	url = https://github.com/denysdovhan/spaceship-prompt.git
