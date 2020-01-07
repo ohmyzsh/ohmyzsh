@@ -10,6 +10,22 @@ function pollen-dummy-data {
   bin/demo-data
 }
 
+## reset demo data
+function pollen-reset-dummy-data {
+  bin/reset_db && bin/demo-data
+}
+
+## cleanup build
+function pollen-reset-dummy-data {
+  docker-compose-down && bin/bootstrap
+}
+
+## run fe
+function pollen-phoenix-arise {
+  yarn dev
+}
+
+
 function pollen-gco-jira {
   echo "TE code:";
   read CODE;
