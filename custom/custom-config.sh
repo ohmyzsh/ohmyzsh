@@ -49,6 +49,9 @@ COMPLETION_WAITING_DOTS="true"
 # see 'man strftime' for details.
 # HIST_STAMPS="mm/dd/yyyy"
 
+#plugin thefuck
+eval $(thefuck --alias)
+
 # language environment
 export LANG=fr_FR.UTF-8
 
