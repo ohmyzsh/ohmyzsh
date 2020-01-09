@@ -1,6 +1,6 @@
 #compdef wd
 
-zstyle ':completion:*:descriptions' format '%B%d%b'
+zstyle ':completion::complete:wd:*:descriptions' format '%B%d%b'
 zstyle ':completion::complete:wd:*:commands' group-name commands
 zstyle ':completion::complete:wd:*:warp_points' group-name warp_points
 zstyle ':completion::complete:wd::' list-grouped
