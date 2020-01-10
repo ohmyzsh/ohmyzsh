@@ -1,16 +1,16 @@
 # ZSH Theme emulating the Fish shell's default prompt.
 
 _fishy_collapsed_wd() {
-  local -a dirs=("${(s:/:)${(D)PWD}}")
+  local -a dirs=("${(s:/:)${(Q)${(D)PWD}}}")
   for (( i=1; i<$#dirs; i++ )); do
     local dir=$dirs[$i]
-    if [[ $dir[1] == "." ]]; then
-      dirs[i]=$dir[1,2]
-    else
-      dirs[i]=$dir[1]
-    fi
+    case $dir[1] in
+      '.' | '\') dirs[i]=$dir[1,2] ;;
+      '~') (( i != 1 )) && dirs[i]=$dir[1] ;;
+      *) dirs[i]=$dir[1] ;;
+    esac
   done
-  echo ${(j:/:)dirs}
+  echo -E ${(j:/:)dirs}
 }
 
 local user_color='green'; [ $UID -eq 0 ] && user_color='red'
