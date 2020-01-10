@@ -1,12 +1,16 @@
 # ZSH Theme emulating the Fish shell's default prompt.
 
 _fishy_collapsed_wd() {
-  echo $(pwd | perl -pe '
-   BEGIN {
-      binmode STDIN,  ":encoding(UTF-8)";
-      binmode STDOUT, ":encoding(UTF-8)";
-   }; s|^$ENV{HOME}|~|g; s|/([^/.])[^/]*(?=/)|/$1|g; s|/\.([^/])[^/]*(?=/)|/.$1|g
-')
+  local -a dirs=("${(s:/:)${(D)PWD}}")
+  for (( i=1; i<$#dirs; i++ )); do
+    local dir=$dirs[$i]
+    if [[ $dir[1] == "." ]]; then
+      dirs[i]=$dir[1,2]
+    else
+      dirs[i]=$dir[1]
+    fi
+  done
+  echo ${(j:/:)dirs}
 }
 
 local user_color='green'; [ $UID -eq 0 ] && user_color='red'
