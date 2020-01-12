@@ -53,7 +53,7 @@ if [ -n "$remote" ]; then
 fi
 
 printf "${BLUE}%s${RESET}\n" "Updating Oh My Zsh"
-if git pull --rebase --stat origin master
+if git pull --rebase --stat origin master && git submodule update --init --recursive
 then
   printf '%s         %s__      %s           %s        %s       %s     %s__   %s\n' $RB_RED $RB_ORANGE $RB_YELLOW $RB_GREEN $RB_BLUE $RB_INDIGO $RB_VIOLET $RB_RESET
   printf '%s  ____  %s/ /_    %s ____ ___  %s__  __  %s ____  %s_____%s/ /_  %s\n' $RB_RED $RB_ORANGE $RB_YELLOW $RB_GREEN $RB_BLUE $RB_INDIGO $RB_VIOLET $RB_RESET
