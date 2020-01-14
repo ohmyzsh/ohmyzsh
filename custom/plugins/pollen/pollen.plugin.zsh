@@ -15,9 +15,9 @@ function pollen-reset-dummy-data {
   bin/reset_db && bin/demo-data
 }
 
-## cleanup build
-function pollen-reset-dummy-data {
-  docker-compose-down && bin/bootstrap
+## clean build
+function pollen-clean-build {
+  docker-compose down && bin/bootstrap
 }
 
 ## run fe
@@ -25,6 +25,10 @@ function pollen-phoenix-arise {
   yarn dev
 }
 
+## serve styleguide
+function pollen-styleguide {
+  styleguide_docs/bin/server
+}
 
 function pollen-gco-jira {
   echo "TE code:";
@@ -46,7 +50,6 @@ function pollen-git-commit-jira {
   git add --all && git commit -am "$COMMIT_MESSAGE";
 }
 
-
 function pollen-clear-virtual-env {
   for FOLDER in ambassador_api ambassador_ui auth_ui bin calvin_ui customer_ui devtools e2e_cypress etl_service finance_service gateway_api infrastructure lib licensed_travel_api logs node_modules notification_service phoenix_ui pollen_ui review_automation_service shortlinks_service styleguide_docs ; do
     pushd $FOLDER
@@ -57,8 +60,13 @@ function pollen-clear-virtual-env {
 
 
 function pollen {
-  echo "pollen-server-up - spin up pollen server";
-  echo "pollen-dummy-data - seed demot data";
+  echo "pollen-clean-build - docker-compose down && bin/bootstrap"
+  echo "pollen-clear-virtual-env - delete the .virtualenv folders in all dirs"
+  echo "pollen-dummy-data - create demo data";
   echo "pollen-gco-jira - Checkout a branch in the format required to correspond to a Jira issue";
   echo "pollen-git-commit-jira - Commit to a branch in the format required to correspond to a Jira issue";
+  echo "pollen-phoenix-arise - run FE"
+  echo "pollen-reset-dummy-data - delete then re-create dummy data"
+  echo "pollen-server-up - spin up pollen server";
+  echo "pollen-styleguide - run styleguide server"
 }
