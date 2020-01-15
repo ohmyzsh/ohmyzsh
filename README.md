@@ -19,7 +19,7 @@ To learn more, visit [ohmyz.sh](https://ohmyz.sh), follow [@ohmyzsh](https://twi
 
 [![Follow @ohmyzsh](https://img.shields.io/twitter/follow/ohmyzsh?label=Follow+@ohmyzsh&style=for-the-badge)](https://twitter.com/intent/follow?screen_name=ohmyzsh)
 [![Discord server](https://img.shields.io/discord/642496866407284746?style=for-the-badge)](https://discord.gg/bpXWhnN)
-![Travis (.com)](https://img.shields.io/travis/com/ModdedGamers/ohmyzsh?style=for-the-badge)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/ohmyzsh/ohmyzsh/Verify Changes?style=for-the-badge)
 
 ## Getting Started
 
