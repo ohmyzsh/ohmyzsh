@@ -7,17 +7,24 @@ function pollen-server-up {
 
 ## seed demo data
 function pollen-dummy-data {
-  bin/demo-data
+  # bin/demo-data
+  ambassador_api/bin/demo-data
 }
 
 ## reset demo data
 function pollen-reset-dummy-data {
-  bin/reset_db && bin/demo-data
+  #bin/reset_db && bin/demo-data
+  bin/reset_db && ambassador_api/bin/demo-data
 }
 
 ## clean build
 function pollen-clean-build {
   docker-compose down && bin/bootstrap
+}
+
+## really clean build
+function pollen-really-clean-build {
+  docker-compose down && bin/setup
 }
 
 ## run fe
@@ -58,7 +65,6 @@ function pollen-clear-virtual-env {
   done
 }
 
-
 function pollen {
   echo "pollen-clean-build - docker-compose down && bin/bootstrap"
   echo "pollen-clear-virtual-env - delete the .virtualenv folders in all dirs"
@@ -66,6 +72,7 @@ function pollen {
   echo "pollen-gco-jira - Checkout a branch in the format required to correspond to a Jira issue";
   echo "pollen-git-commit-jira - Commit to a branch in the format required to correspond to a Jira issue";
   echo "pollen-phoenix-arise - run FE"
+  echo "pollen-really-clean-build - bin/setup"
   echo "pollen-reset-dummy-data - delete then re-create dummy data"
   echo "pollen-server-up - spin up pollen server";
   echo "pollen-styleguide - run styleguide server"
