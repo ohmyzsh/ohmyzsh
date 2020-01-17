@@ -7,6 +7,9 @@ function setup_using_base_dir() {
 
     test -d "${FZF_BASE}" && fzf_base="${FZF_BASE}"
 
+    # Set this to the nix path on a nix system
+    test -f /etc/nixos/configuration.nix && fzf_base=`fzf-share`
+
     if [[ -z "${fzf_base}" ]]; then
         fzfdirs=(
           "${HOME}/.fzf"
@@ -31,8 +34,8 @@ function setup_using_base_dir() {
     fi
 
     if [[ -d "${fzf_base}" ]]; then
-        # Fix fzf shell directory for Archlinux package
-        if [[ ! -d "${fzf_base}/shell" ]] && [[ -f /etc/arch-release ]]; then
+        # Fix fzf shell directory for Archlinux and nixos package
+        if [[ ! -d "${fzf_base}/shell" ]] && [[ -f /etc/arch-release || -f /etc/nixos/configuration.nix ]]; then
           fzf_shell="${fzf_base}"
         else
           fzf_shell="${fzf_base}/shell"
