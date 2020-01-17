@@ -1,45 +1,35 @@
-diff --git b/plugins/gitfast/_git a/plugins/gitfast/_git
-index e2554130..a2e3bef5 100644
---- b/plugins/gitfast/_git
-+++ a/plugins/gitfast/_git
-@@ -30,7 +30,7 @@ if [ -z "$script" ]; then
- 	local -a locations
- 	local e
- 	locations=(
--		$(dirname ${funcsourcetrace[1]%:*})/git-completion.bash
-+		"$(dirname ${funcsourcetrace[1]%:*})/git-completion.bash"
- 		'/etc/bash_completion.d/git' # fedora, old debian
- 		'/usr/share/bash-completion/completions/git' # arch, ubuntu, new debian
- 		'/usr/share/bash-completion/git' # gentoo
-@@ -214,8 +214,10 @@ _git ()
+diff --git a/plugins/gitfast/git-prompt.sh b/plugins/gitfast/git-prompt.sh
+index 1d510cd4..8ab4125a 100644
+--- a/plugins/gitfast/git-prompt.sh
++++ b/plugins/gitfast/git-prompt.sh
+@@ -219,7 +219,7 @@ __git_ps1_show_upstream ()
+ 		if [[ -n "$count" && -n "$name" ]]; then
+ 			__git_ps1_upstream_name=$(git rev-parse \
+ 				--abbrev-ref "$upstream" 2>/dev/null)
+-			if [ $pcmode = yes ] && [ $ps1_expanded = yes ]; then
++			if [ "$pcmode" = yes ] && [ "$ps1_expanded" = yes ]; then
+ 				p="$p \${__git_ps1_upstream_name}"
+ 			else
+ 				p="$p ${__git_ps1_upstream_name}"
+@@ -237,7 +237,7 @@ __git_ps1_show_upstream ()
+ # to build a gitstring.
+ __git_ps1_colorize_gitstring ()
+ {
+-	if [[ -n ${ZSH_VERSION-} ]]; then
++	if [[ -n "${ZSH_VERSION-}" ]]; then
+ 		local c_red='%F{red}'
+ 		local c_green='%F{green}'
+ 		local c_lblue='%F{blue}'
+@@ -255,7 +255,7 @@ __git_ps1_colorize_gitstring ()
+ 	local flags_color="$c_lblue"
  
- 	if (( $+functions[__${service}_zsh_main] )); then
- 		__${service}_zsh_main
--	else
-+	elif (( $+functions[__${service}_main] )); then
- 		emulate ksh -c __${service}_main
-+	elif (( $+functions[_${service}] )); then
-+		emulate ksh -c _${service}
- 	fi
- 
- 	let _ret && _default && _ret=0
-diff --git b/plugins/gitfast/git-completion.bash a/plugins/gitfast/git-completion.bash
-index 9c8f7380..14012cab 100644
---- b/plugins/gitfast/git-completion.bash
-+++ a/plugins/gitfast/git-completion.bash
-@@ -2915,6 +2915,6 @@ __git_complete gitk __gitk_main
- # when the user has tab-completed the executable name and consequently
- # included the '.exe' suffix.
- #
--if [ Cygwin = "$(uname -o 2>/dev/null)" ]; then
-+if [[ "$OSTYPE" = cygwin* ]]; then
- __git_complete git.exe __git_main
- fi
-diff --git b/plugins/gitfast/git-prompt.sh a/plugins/gitfast/git-prompt.sh
-index 97eacd78..c1de34eb 100644
---- b/plugins/gitfast/git-prompt.sh
-+++ a/plugins/gitfast/git-prompt.sh
-@@ -502,9 +502,11 @@ __git_ps1 ()
+ 	local branch_color=""
+-	if [ $detached = no ]; then
++	if [ "$detached" = no ]; then
+ 		branch_color="$ok_color"
+ 	else
+ 		branch_color="$bad_color"
+@@ -535,13 +535,15 @@ __git_ps1 ()
  
  	local z="${GIT_PS1_STATESEPARATOR-" "}"
  
@@ -48,9 +38,23 @@ index 97eacd78..c1de34eb 100644
 -		__git_ps1_colorize_gitstring
 +	# NO color option unless in PROMPT_COMMAND mode or it's Zsh
 +	if [ -n "${GIT_PS1_SHOWCOLORHINTS-}" ]; then
-+		if [ $pcmode = yes ] || [ -n "${ZSH_VERSION-}" ]; then
++		if [ "$pcmode" = yes ] || [ -n "${ZSH_VERSION-}" ]; then
 +			__git_ps1_colorize_gitstring
 +		fi
  	fi
  
  	b=${b##refs/heads/}
+-	if [ $pcmode = yes ] && [ $ps1_expanded = yes ]; then
++	if [ "$pcmode" = yes ] && [ "$ps1_expanded" = yes ]; then
+ 		__git_ps1_branch_name=$b
+ 		b="\${__git_ps1_branch_name}"
+ 	fi
+@@ -549,7 +551,7 @@ __git_ps1 ()
+ 	local f="$w$i$s$u"
+ 	local gitstring="$c$b${f:+$z$f}$r$p"
+ 
+-	if [ $pcmode = yes ]; then
++	if [ "$pcmode" = yes ]; then
+ 		if [ "${__git_printf_supports_v-}" != yes ]; then
+ 			gitstring=$(printf -- "$printf_format" "$gitstring")
+ 		else
