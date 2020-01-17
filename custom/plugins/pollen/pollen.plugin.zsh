@@ -24,7 +24,7 @@ function pollen-clean-build {
 
 ## really clean build
 function pollen-really-clean-build {
-  docker-compose down && bin/setup
+  docker-compose down && bin/setup && bin/bootstrap
 }
 
 ## run fe
