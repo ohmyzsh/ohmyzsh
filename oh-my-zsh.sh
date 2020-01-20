@@ -32,8 +32,8 @@ fi
 is_plugin() {
   local base_dir=$1
   local name=$2
-  test -f $base_dir/plugins/$name/$name.plugin.zsh \
-    || test -f $base_dir/plugins/$name/_$name
+  builtin test -f $base_dir/plugins/$name/$name.plugin.zsh \
+    || builtin test -f $base_dir/plugins/$name/_$name
 }
 
 # Add all defined plugins to fpath. This must be done
