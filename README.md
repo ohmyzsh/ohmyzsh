@@ -15,7 +15,11 @@ Once installed, your terminal shell will become the talk of the town _or your mo
 
 Finally, you'll begin to get the sort of attention that you have always felt you deserved. ...or maybe you'll use the time that you're saving to start flossing more often. 😬
 
-To learn more, visit [ohmyz.sh](https://ohmyz.sh) and follow [@ohmyzsh](https://twitter.com/ohmyzsh) on Twitter.
+To learn more, visit [ohmyz.sh](https://ohmyz.sh), follow [@ohmyzsh](https://twitter.com/ohmyzsh) on Twitter, and/or join us on Discord.
+
+[![Follow @ohmyzsh](https://img.shields.io/twitter/follow/ohmyzsh?label=Follow+@ohmyzsh&style=for-the-badge)](https://twitter.com/intent/follow?screen_name=ohmyzsh)
+[![Discord server](https://img.shields.io/discord/642496866407284746?style=for-the-badge)](https://discord.gg/bpXWhnN)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/ohmyzsh/ohmyzsh/Verify Changes?style=for-the-badge)
 
 ## Getting Started
 
