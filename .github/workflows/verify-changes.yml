@@ -18,4 +18,4 @@ jobs:
       - name: Install ohmyzsh on ubuntu
         env:
           AUTHOR_NAME: "github.event.pusher.name" 
-        run: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ $AUTHOR_NAME /ohmyzsh/master/tools/install.sh)" "" --unattended && exit 0
+        run: sh -c "$(curl -fsSL https://raw.githubusercontent.com/$AUTHOR_NAME/ohmyzsh/master/tools/install.sh)" "" --unattended && exit 0
