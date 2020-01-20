@@ -11,9 +11,11 @@ jobs:
   install:
     name: Install on Ubuntu
     runs-on: [ubuntu-latest]
+
     steps:
       - name: Pre-Install zsh on Ubuntu
         run: sudo apt-get update; sudo apt-get install zsh; sudo chsh -s zsh
-        
       - name: Install ohmyzsh on ubuntu
-        run: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended && exit 0
+        env:
+          AUTHOR_NAME: "github.event.pusher.name" 
+        run: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ $AUTHOR_NAME /ohmyzsh/master/tools/install.sh)" "" --unattended && exit 0
