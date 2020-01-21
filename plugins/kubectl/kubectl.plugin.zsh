@@ -147,3 +147,8 @@ alias kepvc='kubectl edit pvc'
 alias kdpvc='kubectl describe pvc'
 alias kdelpvc='kubectl delete pvc'
 
+# Custom Resources
+alias kgcrd='kubectl get customresourcedefinitions.apiextensions.k8s.io'
+
+# API Services
+alias kgapi='kubectl get apiservices.apiregistration.k8s.io'
