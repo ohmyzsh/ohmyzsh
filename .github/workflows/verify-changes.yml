@@ -1,4 +1,4 @@
-name: Verify Changes
+name: Check Suite
 on:
   pull_request:
     branches:
@@ -8,7 +8,7 @@ on:
       - master
     
 jobs:
-  install:
+  verify-installer:
     name: Install on Ubuntu
     runs-on: ${{ matrix.os }}
     strategy:
@@ -22,3 +22,4 @@ jobs:
       - name: Install ohmyzsh
         uses: actions/checkout@v2.0.0
       - run: ./tools/install.sh
+  
