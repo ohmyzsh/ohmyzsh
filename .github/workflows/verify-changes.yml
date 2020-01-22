@@ -6,13 +6,17 @@ on:
   push:
     branches: 
       - master
-
+    
 jobs:
   install:
     name: Install on Ubuntu
-    runs-on: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
     steps:
-      - name: Pre-Install zsh on Ubuntu
+      - name: Pre-Install zsh on ubuntu
+        if: runner.os == "Linux"
         run: sudo apt-get update; sudo apt-get install zsh; sudo chsh -s zsh
         
       - name: Install ohmyzsh
