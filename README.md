@@ -17,9 +17,9 @@ Finally, you'll begin to get the sort of attention that you have always felt you
 
 To learn more, visit [ohmyz.sh](https://ohmyz.sh), follow [@ohmyzsh](https://twitter.com/ohmyzsh) on Twitter, and/or join us on Discord.
 
-[![Follow @ohmyzsh](https://img.shields.io/twitter/follow/ohmyzsh?label=Follow+@ohmyzsh&style=for-the-badge)](https://twitter.com/intent/follow?screen_name=ohmyzsh)
-[![Discord server](https://img.shields.io/discord/642496866407284746?style=for-the-badge)](https://discord.gg/bpXWhnN)
-![Travis (.com)](https://img.shields.io/travis/com/ModdedGamers/ohmyzsh?style=for-the-badge)
+[![Follow @ohmyzsh](https://img.shields.io/twitter/follow/ohmyzsh?label=Follow+@ohmyzsh&style=flat)](https://twitter.com/intent/follow?screen_name=ohmyzsh)
+[![Discord server](https://img.shields.io/discord/642496866407284746)](https://discord.gg/bpXWhnN)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/ohmyzsh/ohmyzsh/Check Suite?style=flat)
 
 ## Getting Started
 
