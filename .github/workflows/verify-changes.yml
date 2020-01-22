@@ -1,6 +1,7 @@
 name: Check Suite
 on:
   pull_request:
+    types: [opened, synchronize]
     branches:
       - master
   push:
