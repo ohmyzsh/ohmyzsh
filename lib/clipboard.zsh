@@ -24,7 +24,7 @@ function clipcopy() {
     else
       cat $file | pbcopy
     fi
-  elif [[ $OSTYPE == cygwin* ]]; then
+  elif [[ $OSTYPE == (cygwin|msys)* ]]; then
     if [[ -z $file ]]; then
       cat > /dev/clipboard
     else
@@ -71,7 +71,7 @@ function clippaste() {
   emulate -L zsh
   if [[ $OSTYPE == darwin* ]]; then
     pbpaste
-  elif [[ $OSTYPE == cygwin* ]]; then
+  elif [[ $OSTYPE == (cygwin|msys)* ]]; then
     cat /dev/clipboard
   else
     if (( $+commands[xclip] )); then
