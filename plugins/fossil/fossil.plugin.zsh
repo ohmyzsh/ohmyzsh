@@ -36,6 +36,10 @@ function _fossil_get_command_list () {
   fossil help -a | grep -v "Usage|Common|This is"
 }
 
+function _fossil_get_extra_files () {
+  fossil extra
+}
+
 function _fossil () {
   local context state state_descr line
   typeset -A opt_args
@@ -56,6 +60,8 @@ function _fossil () {
     subcommand)
       if [ "$words[2]" = "help" ]; then
         compadd `_fossil_get_command_list`
+      elif [ "$words[2]" = "add" ]; then
+        compadd `_fossil_get_extra_files`
       else
         compcall -D
       fi
