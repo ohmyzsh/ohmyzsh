@@ -32,4 +32,4 @@ alias admvw='adonis make:view'
 
 
 # Route
-alias adroutes='adonis route:list'
+alias adroute='adonis route:list'
