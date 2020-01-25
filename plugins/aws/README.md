@@ -3,7 +3,7 @@
 This plugin provides completion support for [awscli](https://docs.aws.amazon.com/cli/latest/reference/index.html)
 and a few utilities to manage AWS profiles and display them in the prompt.
 
-To use it, add `aws` to the plugins array in your zshrc file.
+To use it, make sure [jq](https://stedolan.github.io/jq/download/) is installed, and add `aws` to the plugins array in your zshrc file.
 
 ```zsh
 plugins=(... aws)
