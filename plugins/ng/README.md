@@ -1,6 +1,6 @@
 ## NG Plugin
 
-This [ng plugin](https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/ng)
+This [ng plugin](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/ng)
  adds completion support for Angular's CLI (named ng).
 
 Ng is hosted on [ng home](https://github.com/catull/angular-cli)

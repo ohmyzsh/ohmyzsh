@@ -12,10 +12,10 @@ alias acp='apt-cache policy'
 #List all installed packages
 alias agli='apt list --installed'
 
-# superuser operations ######################################################
-
 # List available updates only
-alias aglu='sudo apt-get -u upgrade --assume-no'
+alias aglu='apt list --upgradable'
+
+# superuser operations ######################################################
 
 alias afu='sudo apt-file update'
 

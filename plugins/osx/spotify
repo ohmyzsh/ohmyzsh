@@ -148,11 +148,11 @@ if [ $# = 0 ]; then
 else
 	if [ ! -d /Applications/Spotify.app ] && [ ! -d $HOME/Applications/Spotify.app ]; then
 		echo "The Spotify application must be installed."
-		exit 1
+		return 1
 	fi
 
     if [ $(osascript -e 'application "Spotify" is running') = "false" ]; then
-        osascript -e 'tell application "Spotify" to activate' || exit 1
+        osascript -e 'tell application "Spotify" to activate' || return 1
         sleep 2
     fi
 fi
@@ -170,12 +170,12 @@ while [ $# -gt 0 ]; do
                 if [ -z "${CLIENT_ID}" ]; then
                     cecho "Invalid Client ID, please update ${USER_CONFIG_FILE}";
                     showAPIHelp;
-                    exit 1;
+                    return 1
                 fi
                 if [ -z "${CLIENT_SECRET}" ]; then
                     cecho "Invalid Client Secret, please update ${USER_CONFIG_FILE}";
                     showAPIHelp;
-                    exit 1;
+                    return 1
                 fi
                 SHPOTIFY_CREDENTIALS=$(printf "${CLIENT_ID}:${CLIENT_SECRET}" | base64 | tr -d "\n"|tr -d '\r');
                 SPOTIFY_PLAY_URI="";
@@ -194,7 +194,7 @@ while [ $# -gt 0 ]; do
                         cecho "Autorization failed, please check ${USER_CONFG_FILE}"
                         cecho "${SPOTIFY_TOKEN_RESPONSE_DATA}"
                         showAPIHelp
-                        exit 1
+                        return 1
                     fi
                     SPOTIFY_ACCESS_TOKEN=$( \
                         printf "${SPOTIFY_TOKEN_RESPONSE_DATA}" \
@@ -307,7 +307,7 @@ while [ $# -gt 0 ]; do
 
         "quit"    ) cecho "Quitting Spotify.";
             osascript -e 'tell application "Spotify" to quit';
-            exit 0 ;;
+            break ;;
 
         "next"    ) cecho "Going to next track." ;
             osascript -e 'tell application "Spotify" to next track';
@@ -358,7 +358,7 @@ while [ $# -gt 0 ]; do
                 echo "  vol down                     # Decreases the volume by 10%.";
                 echo "  vol [amount]                 # Sets the volume to an amount between 0 and 100.";
                 echo "  vol                          # Shows the current Spotify volume.";
-                exit 1;
+                return 1
             fi
 
             osascript -e "tell application \"Spotify\" to set sound volume to $newvol";
@@ -468,9 +468,10 @@ while [ $# -gt 0 ]; do
         "help" )
             showHelp;
             break ;;
+
         * )
             showHelp;
-            exit 1;
+            return 1 ;;
 
     esac
 done

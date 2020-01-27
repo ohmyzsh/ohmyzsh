@@ -2,7 +2,7 @@
 
 - adds completion for basic bundler commands
 - adds short aliases for common bundler commands
-  - `be` aliased to `bundle exec`.  
+  - `be` aliased to `bundle exec`.
     It also supports aliases (if `rs` is `rails server`, `be rs` will bundle-exec `rails server`).
   - `bl` aliased to `bundle list`
   - `bp` aliased to `bundle package`
@@ -15,7 +15,7 @@
   - calls `bundle exec <gem executable>` otherwise
 
 Common gems wrapped by default (by name of the executable):
-`annotate`, `cap`, `capify`, `cucumber`, `foodcritic`, `guard`, `hanami`, `irb`, `jekyll`, `kitchen`, `knife`, `middleman`, `nanoc`, `pry`, `puma`, `rackup`, `rainbows`, `rake`, `rspec`, `shotgun`, `sidekiq`, `spec`, `spork`, `spring`, `strainer`, `tailor`, `taps`, `thin`, `thor`, `unicorn` and `unicorn_rails`.
+`annotate`, `cap`, `capify`, `cucumber`, `foodcritic`, `guard`, `hanami`, `irb`, `jekyll`, `kitchen`, `knife`, `middleman`, `nanoc`, `pry`, `puma`, `rackup`, `rainbows`, `rake`, `rspec`, `rubocop`, `shotgun`, `sidekiq`, `spec`, `spork`, `spring`, `strainer`, `tailor`, `taps`, `thin`, `thor`, `unicorn` and `unicorn_rails`.
 
 ## Configuration
 
@@ -42,7 +42,7 @@ This will exclude the `foreman` and `spin` gems (i.e. their executable) from bei
 
 ## Excluded gems
 
-These gems should not be called with `bundle exec`. Please see [issue #2923](https://github.com/robbyrussell/oh-my-zsh/pull/2923) on GitHub for clarification.
+These gems should not be called with `bundle exec`. Please see [issue #2923](https://github.com/ohmyzsh/ohmyzsh/pull/2923) on GitHub for clarification.
 
 `berks`
 `foreman`

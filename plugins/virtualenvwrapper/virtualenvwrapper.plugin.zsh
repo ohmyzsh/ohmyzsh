@@ -22,6 +22,13 @@ elif [[ -f "/usr/local/bin/virtualenvwrapper.sh" ]]; then
     virtualenvwrapper="/usr/local/bin/virtualenvwrapper.sh"
     source "/usr/local/bin/virtualenvwrapper.sh"
   }
+elif [[ -f "/usr/share/virtualenvwrapper/virtualenvwrapper.sh" ]]; then
+  function {
+    setopt local_options
+    unsetopt equals
+    virtualenvwrapper="/usr/share/virtualenvwrapper/virtualenvwrapper.sh"
+    source "/usr/share/virtualenvwrapper/virtualenvwrapper.sh"
+  }
 elif [[ -f "/etc/bash_completion.d/virtualenvwrapper" ]]; then
   function {
     setopt local_options
@@ -77,6 +84,12 @@ if [[ ! $DISABLE_VENV_CD -eq 1 ]]; then
       else
         ENV_NAME=""
       fi
+      
+      if [[ -n $CD_VIRTUAL_ENV && "$ENV_NAME" != "$CD_VIRTUAL_ENV" ]]; then
+        # We've just left the repo, deactivate the environment
+        # Note: this only happens if the virtualenv was activated automatically
+        deactivate && unset CD_VIRTUAL_ENV
+      fi
       if [[ "$ENV_NAME" != "" ]]; then
         # Activate the environment only if it is not already active
         if [[ "$VIRTUAL_ENV" != "$WORKON_HOME/$ENV_NAME" ]]; then
@@ -86,17 +99,12 @@ if [[ ! $DISABLE_VENV_CD -eq 1 ]]; then
             source $ENV_NAME/bin/activate && export CD_VIRTUAL_ENV="$ENV_NAME"
           fi
         fi
-      elif [[ -n $CD_VIRTUAL_ENV && -n $VIRTUAL_ENV ]]; then
-        # We've just left the repo, deactivate the environment
-        # Note: this only happens if the virtualenv was activated automatically
-        deactivate && unset CD_VIRTUAL_ENV
       fi
     fi
   }
 
   # Append workon_cwd to the chpwd_functions array, so it will be called on cd
   # http://zsh.sourceforge.net/Doc/Release/Functions.html
-  if ! (( $chpwd_functions[(I)workon_cwd] )); then
-    chpwd_functions+=(workon_cwd)
-  fi
+  autoload -U add-zsh-hook
+  add-zsh-hook chpwd workon_cwd
 fi

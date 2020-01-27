@@ -53,10 +53,11 @@ plugins=(
   kube-ps1
 )
 
+# After the "source Oh My Zsh" line
 PROMPT=$PROMPT'$(kube_ps1) '
 ```
 
-Note: the `PROMPT` example above was tested with the theme `robbyrussell`
+Note: The `PROMPT` example above was tested with the theme `robbyrussell`.
 
 ## Enabling / Disabling on the current shell
 

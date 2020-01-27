@@ -7,6 +7,9 @@
 # Email: neuralsandwich@gmail.com         #
 # Modified to add support for Apple Mac   #
 ###########################################
+# Author: J (927589452)                   #
+# Modified to add support for FreeBSD     #
+###########################################
 
 if [[ "$OSTYPE" = darwin* ]] ; then
 
@@ -62,6 +65,52 @@ if [[ "$OSTYPE" = darwin* ]] ; then
 
   function battery_is_charging() {
     [[ $(ioreg -rc "AppleSmartBattery"| grep '^.*"IsCharging"\ =\ ' | sed -e 's/^.*"IsCharging"\ =\ //') == "Yes" ]]
+  }
+
+elif [[ "$OSTYPE" = freebsd*  ]] ; then
+
+  function battery_is_charging() {
+    [[ $(sysctl -n hw.acpi.battery.state) -eq 2 ]]
+  }
+
+  function battery_pct() {
+    if (( $+commands[sysctl] )) ; then
+      echo "$(sysctl -n hw.acpi.battery.life)"
+    fi
+  }
+
+  function battery_pct_remaining() {
+    if [ ! $(battery_is_charging) ] ; then
+      battery_pct
+    else
+      echo "External Power"
+    fi
+  }
+
+  function battery_time_remaining() {
+    remaining_time=$(sysctl -n hw.acpi.battery.time)
+    if [[ $remaining_time -ge 0 ]] ; then
+      # calculation from https://www.unix.com/shell-programming-and-scripting/23695-convert-minutes-hours-minutes-seconds.html
+      ((hour=$remaining_time/60))
+      ((minute=$remaining_time-$hour*60))
+      echo $hour:$minute
+    fi
+  }
+
+  function battery_pct_prompt() {
+    b=$(battery_pct_remaining)
+    if [ ! $(battery_is_charging) ] ; then
+      if [ $b -gt 50 ] ; then
+        color='green'
+      elif [ $b -gt 20 ] ; then
+        color='yellow'
+      else
+        color='red'
+      fi
+      echo "%{$fg[$color]%}$(battery_pct_remaining)%%%{$reset_color%}"
+    else
+      echo "∞"
+    fi
   }
 
 elif [[ "$OSTYPE" = linux*  ]] ; then
