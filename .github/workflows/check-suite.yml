@@ -1,0 +1,25 @@
+name: Check Suite
+on:
+  pull_request:
+    types: [opened, synchronize]
+    branches:
+      - master
+  push:
+    branches: 
+      - master
+
+jobs:
+  verify-installer:
+    name: Install on Ubuntu
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - name: Pre-Install zsh on ubuntu
+        if: runner.os == 'Linux'
+        run: sudo apt-get update; sudo apt-get install zsh; sudo chsh -s zsh
+
+      - name: Install ohmyzsh
+        uses: actions/checkout@v2.0.0
+      - run: ./tools/install.sh
