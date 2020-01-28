@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Install zsh
         if: runner.os == 'Linux'
-        run: apt-get update; apt-get install zsh
+        run: sudo apt-get update; sudo apt-get install zsh
       - name: Test installer
         run: sh ./tools/install.sh
       - name: Check syntax
