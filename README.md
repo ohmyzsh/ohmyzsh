@@ -14,6 +14,7 @@ Finally, you'll begin to get the sort of attention that you have always felt you
 
 To learn more, visit [ohmyz.sh](https://ohmyz.sh), follow [@ohmyzsh](https://twitter.com/ohmyzsh) on Twitter, and/or join us on Discord.
 
+![Check Suite](https://github.com/ohmyzsh/ohmyzsh/workflows/Check%20Suite/badge.svg)
 [![Follow @ohmyzsh](https://img.shields.io/twitter/follow/ohmyzsh?label=Follow+@ohmyzsh&style=flat)](https://twitter.com/intent/follow?screen_name=ohmyzsh)
 [![Discord server](https://img.shields.io/discord/642496866407284746)](https://discord.gg/bpXWhnN)
 
