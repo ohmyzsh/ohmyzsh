@@ -1,7 +1,9 @@
 name: Check Suite
 on:
   pull_request:
-    types: [opened, synchronize]
+    types:
+      - opened
+      - synchronize
     branches:
       - master
   push:
@@ -9,17 +11,26 @@ on:
       - master
 
 jobs:
-  verify-installer:
-    name: Install on Ubuntu
+  tests:
+    name: Run tests
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
     steps:
-      - name: Pre-Install zsh on ubuntu
+      - name: Set up git repository
+        uses: actions/checkout@v2
+      - name: Install zsh
         if: runner.os == 'Linux'
-        run: sudo apt-get update; sudo apt-get install zsh; sudo chsh -s zsh
-
-      - name: Install ohmyzsh
-        uses: actions/checkout@v2.0.0
-      - run: ./tools/install.sh
+        run: apt-get update; apt-get install zsh
+      - name: Test installer
+        run: sh ./tools/install.sh
+      - name: Check syntax
+        run: |
+          for file in ./oh-my-zsh.sh \
+                      ./lib/*.zsh \
+                      ./plugins/*/*.plugin.zsh \
+                      ./plugins/*/_* \
+                      ./themes/*.zsh-theme; do
+            zsh -n "$file" || return 1
+          done
