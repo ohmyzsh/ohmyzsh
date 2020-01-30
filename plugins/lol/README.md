@@ -61,7 +61,7 @@ Plugin for adding catspeak aliases, because why not
 | `violenz`    | `git rebase`                                                     |
 | `visible`    | `echo`                                                           |
 | `wtf`        | `dmesg`                                                          |
-| `yolo`       | `git commit -m "$(curl -s https://whatthecommit.com/index.txt)"` |
+| `yolo`       | `git commit -m "$(curl -s http://whatthecommit.com/index.txt)"`  |
 
 ## Usage Examples
 
@@ -78,6 +78,6 @@ nowai u=r,go= some.file
 # ssh root@catserver.org
 pwned root@catserver.org
 
-# git commit -m "$(curl -s https://whatthecommit.com/index.txt)"
+# git commit -m "$(curl -s http://whatthecommit.com/index.txt)"
 yolo
 ```

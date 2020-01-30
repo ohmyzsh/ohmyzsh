@@ -1,6 +1,6 @@
-# VS code
+# VS Code
 
-This plugin makes interaction between the command line and the code editor easier.
+This plugin makes interaction between the command line and the VS Code editor easier.
 
 To start using it, add the `vscode` plugin to your `plugins` array in `~/.zshrc`:
 
@@ -8,9 +8,11 @@ To start using it, add the `vscode` plugin to your `plugins` array in `~/.zshrc`
 plugins=(... vscode)
 ```
 
-If you are using [Visual Studio Code Insiders](https://code.visualstudio.com/insiders/),
-add the following line in the oh-my-zsh settings section (between the `ZSH_THEME` and
-the `plugins=()` line). This will make the plugin use the Insiders version instead.
+## VS Code Insiders
+
+🍏 **If you are only using [VS Code Insiders](https://code.visualstudio.com/insiders/), the plugin will automatically bind to your Insiders installation.**
+
+But, if you have both Stable and Insiders versions and want to configure the plugin to just use the Insiders version, add the following line in the oh-my-zsh settings section (between the `ZSH_THEME` and the `plugins=()` line). This will make the plugin use the Insiders version instead.
 
 ```zsh
 ZSH_THEME=...

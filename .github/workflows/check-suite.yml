@@ -1,0 +1,36 @@
+name: Check Suite
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+    branches:
+      - master
+  push:
+    branches: 
+      - master
+
+jobs:
+  tests:
+    name: Run tests
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - name: Set up git repository
+        uses: actions/checkout@v2
+      - name: Install zsh
+        if: runner.os == 'Linux'
+        run: sudo apt-get update; sudo apt-get install zsh
+      - name: Test installer
+        run: sh ./tools/install.sh
+      - name: Check syntax
+        run: |
+          for file in ./oh-my-zsh.sh \
+                      ./lib/*.zsh \
+                      ./plugins/*/*.plugin.zsh \
+                      ./plugins/*/_* \
+                      ./themes/*.zsh-theme; do
+            zsh -n "$file" || return 1
+          done
