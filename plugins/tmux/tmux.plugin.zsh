@@ -29,11 +29,11 @@ alias tkss='tmux kill-session -t'
 # The TERM to use for non-256 color terminals.
 # Tmux states this should be screen, but you may need to change it on
 # systems without the proper terminfo
-: ${ZSH_TMUX_FIXTERM_WITHOUT_256COLOR:=screen}
+: ${ZSH_TMUX_FIXTERM_WITHOUT_256COLOR:=tmux}
 # The TERM to use for 256 color terminals.
 # Tmux states this should be screen-256color, but you may need to change it on
 # systems without the proper terminfo
-: ${ZSH_TMUX_FIXTERM_WITH_256COLOR:=screen-256color}
+: ${ZSH_TMUX_FIXTERM_WITH_256COLOR:=tmux-256color}
 # Set the configuration path
 : ${ZSH_TMUX_CONFIG:=$HOME/.tmux.conf}
 # Set -u option to support unicode
