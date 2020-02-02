@@ -81,6 +81,17 @@ prompt_end() {
   fi
   echo -n "%{%f%}"
   CURRENT_BG=''
+  printf "\n ➜ ";
+}
+
+prompt_clear() {
+  if [[ -n $CURRENT_BG ]]; then
+    echo -n " %{%k%F{$CURRENT_BG}%}"
+  else
+    echo -n "%{%k%}"
+  fi
+  echo -n "%{%f%}"
+  CURRENT_BG=''
 }
 
 ### Prompt components
@@ -198,7 +209,7 @@ prompt_hg() {
 
 # Dir: current working directory
 prompt_dir() {
-  prompt_segment blue $CURRENT_FG '%~'
+  prompt_segment blue white '%d'
 }
 
 # Virtualenv: current working virtualenv
@@ -217,10 +228,12 @@ prompt_status() {
   local -a symbols
 
   [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}✘"
+  [[ $RETVAL -eq 0 ]] && symbols+="%{%F{green}%}✓"
   [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}⚡"
   [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}⚙"
 
   [[ -n "$symbols" ]] && prompt_segment black default "$symbols"
+  [[ -z "$symbols" ]] && prompt_segment black default "$symbols"
 }
 
 #AWS Profile:
@@ -236,18 +249,24 @@ prompt_aws() {
   esac
 }
 
+prompt_datetime() {
+  prompt_segment green black "%D %* "
+}
+
 ## Main prompt
 build_prompt() {
   RETVAL=$?
-  prompt_status
+  prompt_datetime
   prompt_virtualenv
   prompt_aws
   prompt_context
   prompt_dir
-  prompt_git
   prompt_bzr
   prompt_hg
   prompt_end
+  prompt_git
+  prompt_status
+  prompt_clear
 }
 
 PROMPT='%{%f%b%k%}$(build_prompt) '
