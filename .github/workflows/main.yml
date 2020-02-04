@@ -1,4 +1,4 @@
-name: Check Suite
+name: CI
 on:
   pull_request:
     types:
