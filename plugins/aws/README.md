@@ -17,6 +17,20 @@ plugins=(... aws)
 
 * `agp`: gets the current value of `$AWS_PROFILE`.
 
+* `aar [<profile>]`: Assumes the IAM role referenced in the profile. In `~/.aws/credentials` it requires
+  - `role_arn` that contains the role to be assumed
+  - `source_profile` that is the profile that makes the assume role request
+
+  Example profile credentials:
+  ```
+  [production]
+  role_arn = arn:aws:iam::111111111111:role/user1
+  source_profile = staging
+  ```
+
+  Sets `$AWS_PROFILE` and `$AWS_DEFAULT_PROFILE` (legacy) to `<profile>`.
+  It also sets `$AWS_EB_PROFILE` to `<profile>` for the Elastic Beanstalk CLI.
+
 * `aws_change_access_key`: changes the AWS access key of a profile.
 
 * `aws_profiles`: lists the available profiles in the  `$AWS_CONFIG_FILE` (default: `~/.aws/config`).

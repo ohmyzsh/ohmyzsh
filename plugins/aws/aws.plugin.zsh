@@ -47,7 +47,52 @@ function aws_profiles() {
 function _aws_profiles() {
   reply=($(aws_profiles))
 }
-compctl -K _aws_profiles asp aws_change_access_key
+
+# AWS Assume Role
+function aar() {
+
+    if [[ -z "$1" ]]; then
+        unset AWS_DEFAULT_PROFILE AWS_PROFILE AWS_EB_PROFILE
+        echo AWS profile cleared.
+        return
+    fi
+
+    local aws_profile_name=${1}
+
+    local role_arn=$(aws configure --profile ${aws_profile_name} get role_arn)
+
+    if [[ -z "$role_arn" ]]; then
+        echo Role ARN for profile \(${aws_profile_name}\) cannot be found.
+        echo Please set the \'role_arn\' attribute on the profile.
+        return 1
+    fi
+
+    local session_name="${aws_profile_name}-session"
+
+    local credentials_output=$(aws sts assume-role --role-arn ${role_arn} --role-session-name ${session_name} --query '[Credentials.AccessKeyId,Credentials.SecretAccessKey,Credentials.SessionToken]' --output text | tr "\t" "\n")
+
+    local credentials=("${(f)credentials_output}")
+
+    local access_key_id=${credentials[1]}
+    local secret_access_key=${credentials[2]}
+    local session_token=${credentials[3]}
+
+    aws configure --profile ${aws_profile_name} set aws_access_key_id ${access_key_id}
+    aws configure --profile ${aws_profile_name} set aws_secret_access_key ${secret_access_key}
+    aws configure --profile ${aws_profile_name} set aws_session_token ${session_token}
+
+    export AWS_ACCESS_KEY_ID=${access_key_id}
+    export AWS_SECRET_ACCESS_KEY=${secret_access_key}
+    export AWS_SESSION_TOKEN=${session_token}
+
+    export AWS_DEFAULT_PROFILE=${aws_profile_name}
+    export AWS_PROFILE=${aws_profile_name}
+    export AWS_EB_PROFILE=${aws_profile_name}
+
+    echo Credentials set for AWS profile \(${aws_profile_name}\)
+}
+
+compctl -K _aws_profiles asp aws_change_access_key aar
 
 # AWS prompt
 function aws_prompt_info() {
