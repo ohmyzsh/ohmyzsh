@@ -29,6 +29,14 @@
 #    version    :  where optional, defaults to latest stable if not provided
 #                  eg: $ sdk install groovy
 
+SDKMAN_DIR=${SDKMAN_DIR:-$HOME/.sdkman}
+
+# If SDKMAN is missing, install it.
+! test -s ${SDKMAN_DIR}/bin/sdkman-init.sh && curl -fsSL https://get.sdkman.io | bash
+
+# Source SDKMAN to make it availble in the shell
+. ${SDKMAN_DIR}/bin/sdkman-init.sh
+
 local _sdk_commands=(
     install     i
     uninstall   rm
@@ -80,3 +88,4 @@ _sdk () {
 }
 
 compdef _sdk sdk
+
