@@ -1,55 +1,29 @@
-virtualenvwrapper='virtualenvwrapper.sh'
-virtualenvwrapper_lazy='virtualenvwrapper_lazy.sh'
+function {
+    # search in these locations for the init script:
+    for f in $commands[virtualenvwrapper_lazy.sh] \
+             $commands[virtualenvwrapper.sh] \
+             /usr/share/virtualenvwrapper/virtualenvwrapper{_lazy,}.sh \
+             /usr/local/bin/virtualenvwrapper{_lazy,}.sh \
+             /etc/bash_completion.d/virtualenvwrapper \
+             /usr/share/bash-completion/completions/virtualenvwrapper
+    do
+        if [[ -f $f ]]; then
+            source $f
+            return
+        fi
+    done
+    print "[oh-my-zsh] virtualenvwrapper plugin: Cannot find virtualenvwrapper.sh.\n"\
+          "Please install with \`pip install virtualenvwrapper\`" >&2
+}
 
-if (( $+commands[$virtualenvwrapper_lazy] )); then
-  function {
-    setopt local_options
-    unsetopt equals
-    virtualenvwrapper=${${virtualenvwrapper_lazy}:c}
-    source ${${virtualenvwrapper_lazy}:c}
-    [[ -z "$WORKON_HOME" ]] && WORKON_HOME="$HOME/.virtualenvs"
-  }
-elif (( $+commands[$virtualenvwrapper] )); then
-  function {
-    setopt local_options
-    unsetopt equals
-    source ${${virtualenvwrapper}:c}
-  }
-elif [[ -f "/usr/local/bin/virtualenvwrapper.sh" ]]; then
-  function {
-    setopt local_options
-    unsetopt equals
-    virtualenvwrapper="/usr/local/bin/virtualenvwrapper.sh"
-    source "/usr/local/bin/virtualenvwrapper.sh"
-  }
-elif [[ -f "/usr/share/virtualenvwrapper/virtualenvwrapper.sh" ]]; then
-  function {
-    setopt local_options
-    unsetopt equals
-    virtualenvwrapper="/usr/share/virtualenvwrapper/virtualenvwrapper.sh"
-    source "/usr/share/virtualenvwrapper/virtualenvwrapper.sh"
-  }
-elif [[ -f "/etc/bash_completion.d/virtualenvwrapper" ]]; then
-  function {
-    setopt local_options
-    unsetopt equals
-    virtualenvwrapper="/etc/bash_completion.d/virtualenvwrapper"
-    source "/etc/bash_completion.d/virtualenvwrapper"
-  }
-else
-  print "[oh-my-zsh] virtualenvwrapper plugin: Cannot find ${virtualenvwrapper}.\n"\
-        "Please install with \`pip install virtualenvwrapper\`" >&2
-  return
-fi
 if ! type workon &>/dev/null; then
   print "[oh-my-zsh] virtualenvwrapper plugin: shell function 'workon' not defined.\n"\
         "Please check ${virtualenvwrapper}" >&2
   return
 fi
 
-if [[ "$WORKON_HOME" == "" ]]; then
-  print "[oh-my-zsh] \$WORKON_HOME is not defined so plugin virtualenvwrapper will not work" >&2
-  return
+if [[ -z "$WORKON_HOME" ]]; then
+  WORKON_HOME="$HOME/.virtualenvs"
 fi
 
 if [[ ! $DISABLE_VENV_CD -eq 1 ]]; then
