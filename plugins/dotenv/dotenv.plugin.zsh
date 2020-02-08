@@ -2,7 +2,7 @@ source_env() {
   if [[ -f $ZSH_DOTENV_FILE ]]; then
   	
     # confirmation before sourcing .env file
-    echo -n "zsh: source .env file in the directory [Y/n]?: "
+    echo -n "dotenv: source .env file in the directory [Y/n]?: "
     read confirmation
     if [[ ($confirmation == "n") || ($confirmation == "N") ]]; then
       return
