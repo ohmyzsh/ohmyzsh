@@ -22,6 +22,6 @@ bindkey "\e"man man-command-line
 
 
 # ------------------------------------------------------------------------------
-# Also, you might want to use man-preview included in 'osx' plugin
+# Also, you might want to use man-preview included in 'macos' plugin
 # just substitute "man" in the function with "man-preview" after you included OS X in
 # the .zshrc
