@@ -1,7 +1,7 @@
 # Open the current directory in a Finder window
 alias ofd='open_command $PWD'
 
-function _omz_osx_get_frontmost_app() {
+function _omz_macos_get_frontmost_app() {
   local the_app=$(
     osascript 2>/dev/null <<EOF
       tell application "System Events"
@@ -17,7 +17,7 @@ function tab() {
   local command="cd \\\"$PWD\\\"; clear"
   (( $# > 0 )) && command="${command}; $*"
 
-  local the_app=$(_omz_osx_get_frontmost_app)
+  local the_app=$(_omz_macos_get_frontmost_app)
 
   if [[ "$the_app" == 'Terminal' ]]; then
     # Discarding stdout to quash "tab N of window id XXX" output
@@ -74,7 +74,7 @@ function vsplit_tab() {
   local command="cd \\\"$PWD\\\"; clear"
   (( $# > 0 )) && command="${command}; $*"
 
-  local the_app=$(_omz_osx_get_frontmost_app)
+  local the_app=$(_omz_macos_get_frontmost_app)
 
   if [[ "$the_app" == 'iTerm' ]]; then
     osascript <<EOF
@@ -127,7 +127,7 @@ function split_tab() {
   local command="cd \\\"$PWD\\\"; clear"
   (( $# > 0 )) && command="${command}; $*"
 
-  local the_app=$(_omz_osx_get_frontmost_app)
+  local the_app=$(_omz_macos_get_frontmost_app)
 
   if [[ "$the_app" == 'iTerm' ]]; then
     osascript 2>/dev/null <<EOF
@@ -338,7 +338,7 @@ EOF
 }
 
 # Spotify control function
-source ${ZSH}/plugins/osx/spotify
+source ${ZSH}/plugins/macos/spotify
 
 # Show/hide hidden files in the Finder
 alias showfiles="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
