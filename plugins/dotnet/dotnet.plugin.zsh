@@ -111,6 +111,8 @@ compdef _dotnet dotnet
 # --------------------------------------------------------------------- #
 alias dr='dotnet run'
 alias dt='dotnet test'
+alias dw='dotnet watch'
+alias dwr='dotnet watch run'
 alias ds='dotnet sln'
 alias da='dotnet add'
 alias dp='dotnet pack'
