@@ -10,12 +10,14 @@ plugins=(... dotnet)
 
 ## Aliases
 
-| Alias | Command      | Description                                                       |
-|-------|--------------|-------------------------------------------------------------------|
-| dn    | dotnet new   | Create a new .NET project or file.                                |
-| dr    | dotnet run   | Build and run a .NET project output.                              |
-| dt    | dotnet test  | Run unit tests using the test runner specified in a .NET project. |
-| ds    | dotnet sln   | Modify Visual Studio solution files.                              |
-| da    | dotnet add   | Add a package or reference to a .NET project.                     |
-| dp    | dotnet pack  | Create a NuGet package.                                           |
-| dng   | dotnet nuget | Provides additional NuGet commands.                               |
+| Alias | Command          | Description                                                       |
+|-------|------------------|-------------------------------------------------------------------|
+| dn    | dotnet new       | Create a new .NET project or file.                                |
+| dr    | dotnet run       | Build and run a .NET project output.                              |
+| dt    | dotnet test      | Run unit tests using the test runner specified in a .NET project. |
+| dw    | dotnet watch     | Watch for source file changes and restart the dotnet command.     |
+| dwr   | dotnet watch run | Watch for source file changes and restart the `run` command.      |
+| ds    | dotnet sln       | Modify Visual Studio solution files.                              |
+| da    | dotnet add       | Add a package or reference to a .NET project.                     |
+| dp    | dotnet pack      | Create a NuGet package.                                           |
+| dng   | dotnet nuget     | Provides additional NuGet commands.                               |
