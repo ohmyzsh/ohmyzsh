@@ -9,22 +9,23 @@
 export MARKPATH=$HOME/.marks
 
 jump() {
-	cd -P "$MARKPATH/$1" 2>/dev/null || {echo "No such mark: $1"; return 1}
+	builtin cd -P "$MARKPATH/$1" 2>/dev/null || {echo "No such mark: $1"; return 1}
 }
 
 mark() {
-	if [[ ( $# == 0 ) || ( "$1" == "." ) ]]; then
-		MARK=$(basename "$PWD")
+	if [[ $# -eq 0 || "$1" = "." ]]; then
+		MARK=${PWD:t}
 	else
 		MARK="$1"
 	fi
-	if read -q \?"Mark $PWD as ${MARK}? (y/n) "; then
-		mkdir -p "$MARKPATH"; ln -sfn "$PWD" "$MARKPATH/$MARK"
+	if read -q "?Mark $PWD as ${MARK}? (y/n) "; then
+		command mkdir -p "$MARKPATH"
+		command ln -sfn "$PWD" "$MARKPATH/$MARK"
 	fi
 }
 
 unmark() {
-	rm -i "$MARKPATH/$1"
+	LANG= command rm -i "$MARKPATH/$1"
 }
 
 marks() {
@@ -44,13 +45,7 @@ marks() {
 }
 
 _completemarks() {
-	if [[ $(ls "${MARKPATH}" | wc -l) -gt 1 ]]; then
-		reply=($(ls $MARKPATH/**/*(-) | grep : | sed -E 's/(.*)\/([_a-zA-Z0-9\.\-]*):$/\2/g'))
-	else
-		if readlink -e "${MARKPATH}"/* &>/dev/null; then
-			reply=($(ls "${MARKPATH}"))
-		fi
-	fi
+	reply=("${MARKPATH}"/*(N:t))
 }
 compctl -K _completemarks jump
 compctl -K _completemarks unmark
