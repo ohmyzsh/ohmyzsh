@@ -116,17 +116,17 @@ elif [[ "$OSTYPE" = freebsd*  ]] ; then
 elif [[ "$OSTYPE" = linux*  ]] ; then
 
   function battery_is_charging() {
-    ! [[ $(acpi 2>/dev/null | grep -c '^Battery.*Discharging') -gt 0 ]]
+    ! acpi 2>/dev/null | command grep -q '^Battery.*Discharging'
   }
 
   function battery_pct() {
     if (( $+commands[acpi] )) ; then
-      echo "$(acpi 2>/dev/null | cut -f2 -d ',' | tr -cd '[:digit:]')"
+      acpi 2>/dev/null | cut -f2 -d ',' | tr -cd '[:digit:]'
     fi
   }
 
   function battery_pct_remaining() {
-    if [ ! $(battery_is_charging) ] ; then
+    if ! battery_is_charging; then
       battery_pct
     else
       echo "External Power"
@@ -134,15 +134,17 @@ elif [[ "$OSTYPE" = linux*  ]] ; then
   }
 
   function battery_time_remaining() {
-    if [[ $(acpi 2>/dev/null | grep -c '^Battery.*Discharging') -gt 0 ]] ; then
-      echo $(acpi 2>/dev/null | cut -f3 -d ',')
+    if ! battery_is_charging; then
+      acpi 2>/dev/null | cut -f3 -d ','
     fi
   }
 
   function battery_pct_prompt() {
-    b=$(battery_pct_remaining) 
-    if [[ $(acpi 2>/dev/null | grep -c '^Battery.*Discharging') -gt 0 ]] ; then
-      if [ $b -gt 50 ] ; then
+    local b=$(battery_pct_remaining)
+    if battery_is_charging; then
+      echo "∞"
+    else
+      if [[ $b -gt 50 ]]; then
         color='green'
       elif [ $b -gt 20 ] ; then
         color='yellow'
@@ -150,8 +152,6 @@ elif [[ "$OSTYPE" = linux*  ]] ; then
         color='red'
       fi
       echo "%{$fg[$color]%}$(battery_pct_remaining)%%%{$reset_color%}"
-    else
-      echo "∞"
     fi
   }
 
