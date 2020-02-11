@@ -29,7 +29,7 @@ function pollen-really-clean-build {
 
 ## run fe
 function pollen-phoenix-arise {
-  yarn dev
+  npm run dev
 }
 
 ## serve styleguide
