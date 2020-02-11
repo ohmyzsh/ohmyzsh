@@ -169,8 +169,8 @@ fi
 
 function battery_level_gauge() {
   local gauge_slots=${BATTERY_GAUGE_SLOTS:-10};
-  local green_threshold=${BATTERY_GREEN_THRESHOLD:-6};
-  local yellow_threshold=${BATTERY_YELLOW_THRESHOLD:-4};
+  local green_threshold=${BATTERY_GREEN_THRESHOLD:-$(( gauge_slots * 0.6 ))};
+  local yellow_threshold=${BATTERY_YELLOW_THRESHOLD:-$(( gauge_slots * 0.4 ))};
   local color_green=${BATTERY_COLOR_GREEN:-%F{green}};
   local color_yellow=${BATTERY_COLOR_YELLOW:-%F{yellow}};
   local color_red=${BATTERY_COLOR_RED:-%F{red}};
@@ -183,26 +183,35 @@ function battery_level_gauge() {
   local charging_symbol=${BATTERY_CHARGING_SYMBOL:-'⚡'};
 
   local battery_remaining_percentage=$(battery_pct);
+  local filled empty gauge_color
 
   if [[ $battery_remaining_percentage =~ [0-9]+ ]]; then
-    local filled=$(((( $battery_remaining_percentage + $gauge_slots - 1) / $gauge_slots)));
-    local empty=$(($gauge_slots - $filled));
+    filled=$(( ($battery_remaining_percentage * $gauge_slots) / 100 ));
+    empty=$(( $gauge_slots - $filled ));
 
-    if [[ $filled -gt $green_threshold ]]; then local gauge_color=$color_green;
-    elif [[ $filled -gt $yellow_threshold ]]; then local gauge_color=$color_yellow;
-    else local gauge_color=$color_red;
+    if [[ $filled -gt $green_threshold ]]; then
+      gauge_color=$color_green;
+    elif [[ $filled -gt $yellow_threshold ]]; then
+      gauge_color=$color_yellow;
+    else
+      gauge_color=$color_red;
     fi
   else
-    local filled=$gauge_slots;
-    local empty=0;
+    filled=$gauge_slots;
+    empty=0;
     filled_symbol=${BATTERY_UNKNOWN_SYMBOL:-'.'};
   fi
 
-  local charging=' ' && battery_is_charging && charging=$charging_symbol;
+  local charging=' '
+  battery_is_charging && charging=$charging_symbol;
 
+  # Charging status and prefix
   printf ${charging_color//\%/\%\%}$charging${color_reset//\%/\%\%}${battery_prefix//\%/\%\%}${gauge_color//\%/\%\%}
-  printf ${filled_symbol//\%/\%\%}'%.0s' {1..$filled}
+  # Filled slots
+  [[ $filled -gt 0 ]] && printf ${filled_symbol//\%/\%\%}'%.0s' {1..$filled}
+  # Empty slots
   [[ $filled -lt $gauge_slots ]] && printf ${empty_symbol//\%/\%\%}'%.0s' {1..$empty}
+  # Suffix
   printf ${color_reset//\%/\%\%}${battery_suffix//\%/\%\%}${color_reset//\%/\%\%}
 }
 
