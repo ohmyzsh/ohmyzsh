@@ -30,13 +30,13 @@ unmark() {
 
 marks() {
 	local link max=0
-	for link in $MARKPATH/{,.}*(@); do
+	for link in $MARKPATH/{,.}*(@N); do
 		if [[ ${#link:t} -gt $max ]]; then
 			max=${#link:t}
 		fi
 	done
 	local printf_markname_template="$(printf -- "%%%us " "$max")"
-	for link in $MARKPATH/{,.}*(@); do
+	for link in $MARKPATH/{,.}*(@N); do
 		local markname="$fg[cyan]${link:t}$reset_color"
 		local markpath="$fg[blue]$(readlink $link)$reset_color"
 		printf -- "$printf_markname_template" "$markname"
@@ -53,7 +53,7 @@ compctl -K _completemarks unmark
 _mark_expansion() {
 	setopt localoptions extendedglob
 	autoload -U modify-current-argument
-	modify-current-argument '$(readlink "$MARKPATH/$ARG")'
+	modify-current-argument '$(readlink "$MARKPATH/$ARG" || echo "$ARG")'
 }
 zle -N _mark_expansion
 bindkey "^g" _mark_expansion
