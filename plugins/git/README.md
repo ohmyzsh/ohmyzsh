@@ -154,6 +154,7 @@ plugins=(... git)
 | gstl                 | git stash list                                                                                                                |
 | gstp                 | git stash pop                                                                                                                 |
 | gsts                 | git stash show --text                                                                                                         |
+| gstu                 | git stash --include-untracked                                                                                                 |
 | gstall               | git stash --all                                                                                                               |
 | gsu                  | git submodule update                                                                                                          |
 | gsw                  | git switch                                                                                                                    |
