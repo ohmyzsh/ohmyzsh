@@ -170,6 +170,7 @@ plugins=(... git)
 | glum                 | git pull upstream master                                                                                                      |
 | gwch                 | git whatchanged -p --abbrev-commit --pretty=medium                                                                            |
 | gwip                 | git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign -m "--wip-- [skip ci]"        |
+| grename                 | git branch -m old_branch new_branch ; git push origin :old_branch ; git push --set-upstream origin new_branch  "        |
 
 ### Deprecated
 
