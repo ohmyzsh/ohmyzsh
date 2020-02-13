@@ -31,8 +31,8 @@ function setup_using_base_dir() {
     fi
 
     if [[ -d "${fzf_base}" ]]; then
-        # Fix fzf shell directory for Archlinux package
-        if [[ ! -d "${fzf_base}/shell" ]] && [[ -f /etc/arch-release ]]; then
+        # Fix fzf shell directory for Archlinux or Void Linux package
+        if [[ ! -d "${fzf_base}/shell" ]] && { [[ -f /etc/arch-release ]] || [[ -d /etc/xbps.d ]]; }; then
           fzf_shell="${fzf_base}"
         else
           fzf_shell="${fzf_base}/shell"
