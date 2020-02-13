@@ -32,7 +32,7 @@ function setup_using_base_dir() {
     fi
 
     if [[ -d "${fzf_base}" ]]; then
-        # Fix fzf shell directory for Archlinux or Nix packages
+        # Fix fzf shell directory for Arch Linux, NixOS or Void Linux packages
         if [[ ! -d "${fzf_base}/shell" ]]; then
           fzf_shell="${fzf_base}"
         else
