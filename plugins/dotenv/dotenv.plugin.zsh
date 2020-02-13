@@ -1,10 +1,13 @@
 source_env() {
   if [[ -f $ZSH_DOTENV_FILE ]]; then
-    # confirm before sourcing .env file
-    local confirmation
-    echo -n "dotenv: source '$ZSH_DOTENV_FILE' file in the directory? (Y/n) "
-    if read -k 1 confirmation && [[ $confirmation = [nN] ]]; then
-      return
+
+    if [ "$ZSH_DOTENV_PROMPT" != "false" ]; then
+      # confirm before sourcing file
+      local confirmation
+      echo -n "dotenv: source '$ZSH_DOTENV_FILE' file in the directory? (Y/n) "
+      if read -k 1 confirmation && [[ $confirmation = [nN] ]]; then
+        return
+      fi
     fi
 
     # test .env syntax
