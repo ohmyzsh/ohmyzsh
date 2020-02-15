@@ -17,3 +17,16 @@ _dotnet_zsh_complete()
 }
 
 compdef _dotnet_zsh_complete dotnet
+
+# Aliases bellow are here for backwards compatibility
+# added by Shaun Tabone (https://github.com/xontab) 
+
+alias dr='dotnet run'
+alias dt='dotnet test'
+alias dw='dotnet watch'
+alias dwr='dotnet watch run'
+alias ds='dotnet sln'
+alias da='dotnet add'
+alias dp='dotnet pack'
+alias dng='dotnet nuget'
+
