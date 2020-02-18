@@ -160,6 +160,7 @@ alias gk='\gitk --all --branches'
 alias gke='\gitk --all $(git log -g --pretty=%h)'
 
 alias gl='git pull'
+alias gpl='git pull'
 alias glg='git log --stat'
 alias glgp='git log --stat -p'
 alias glgg='git log --graph'
