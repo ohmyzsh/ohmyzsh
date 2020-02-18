@@ -113,6 +113,7 @@ plugins=(... git)
 | gpf!                 | git push --force                                                                                                              |
 | gpoat                | git push origin --all && git push origin --tags                                                                               |
 | gpu                  | git push upstream                                                                                                             |
+| gpt                  | git push --tags                                                                                                               |
 | gpv                  | git push -v                                                                                                                   |
 | gr                   | git remote                                                                                                                    |
 | gra                  | git remote add                                                                                                                |
