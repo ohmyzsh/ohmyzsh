@@ -39,4 +39,4 @@ ZSH_THEME_HG_PROMPT_SUFFIX="$FG[075])%{$reset_color%}"
 
 # virtualenv settings
 ZSH_THEME_VIRTUALENV_PREFIX=" $FG[075]["
-ZSH_THEME_VIRTUALENV_PREFIX="]%{$reset_color%}"
+ZSH_THEME_VIRTUALENV_SUFFIX="]%{$reset_color%}"
