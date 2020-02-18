@@ -91,6 +91,7 @@ compdef _git gdv=git-diff
 alias gf='git fetch'
 alias gfa='git fetch --all --prune'
 alias gfo='git fetch origin'
+alias gfu='git fetch upstream'
 
 alias gfg='git ls-files | grep'
 
@@ -146,6 +147,7 @@ compdef _git ggu=git-checkout
 alias ggpur='ggu'
 alias ggpull='git pull origin "$(git_current_branch)"'
 alias ggpush='git push origin "$(git_current_branch)"'
+alias ggpush!='git push origin "$(git_current_branch)" --force'
 
 alias ggsup='git branch --set-upstream-to=origin/$(git_current_branch)'
 alias gpsup='git push --set-upstream origin $(git_current_branch)'
