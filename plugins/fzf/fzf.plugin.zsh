@@ -10,6 +10,7 @@ function setup_using_base_dir() {
     if [[ -z "${fzf_base}" ]]; then
         fzfdirs=(
           "${HOME}/.fzf"
+          "${HOME}/.nix-profile/share/fzf"
           "/usr/local/opt/fzf"
           "/usr/share/fzf"
           "/usr/local/share/examples/fzf"
@@ -31,8 +32,8 @@ function setup_using_base_dir() {
     fi
 
     if [[ -d "${fzf_base}" ]]; then
-        # Fix fzf shell directory for Archlinux package
-        if [[ ! -d "${fzf_base}/shell" ]] && [[ -f /etc/arch-release ]]; then
+        # Fix fzf shell directory for Arch Linux, NixOS or Void Linux packages
+        if [[ ! -d "${fzf_base}/shell" ]]; then
           fzf_shell="${fzf_base}"
         else
           fzf_shell="${fzf_base}/shell"
