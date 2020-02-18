@@ -73,3 +73,18 @@ alias sc-mask-now="sc-mask --now"
 alias scu-enable-now="scu-enable --now"
 alias scu-disable-now="scu-disable --now"
 alias scu-mask-now="scu-mask --now"
+
+function systemd_prompt_info {
+  local unit
+  for unit in $@; do
+    echo -n "$ZSH_THEME_SYSTEMD_PROMPT_PREFIX"
+    [[ -n "$ZSH_THEME_SYSTEMD_PROMPT_CAPS" ]] && echo "${(U)unit}:" || echo "$unit:"
+    if systemctl is-active $unit &>/dev/null; then
+        echo -n "$ZSH_THEME_SYSTEMD_PROMPT_ACTIVE" 
+    else
+        echo -n "$ZSH_THEME_SYSTEMD_PROMPT_NOTACTIVE"
+    fi
+    echo -n "$ZSH_THEME_SYSTEMD_PROMPT_SUFFIX"
+  done
+}
+
