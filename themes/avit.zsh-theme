@@ -1,12 +1,12 @@
 # AVIT ZSH Theme
 
 PROMPT='
-$(_user_host)${_current_dir} $(git_prompt_info) $(_ruby_version)
+$(_user_host)${_current_dir} $(git_prompt_info) $(ruby_prompt_info)
 %{$fg[$CARETCOLOR]%}▶%{$resetcolor%} '
 
 PROMPT2='%{$fg[$CARETCOLOR]%}◀%{$reset_color%} '
 
-RPROMPT='$(_vi_status)%{$(echotc UP 1)%}$(_git_time_since_commit) $(git_prompt_status) ${_return_status}%{$(echotc DO 1)%}'
+RPROMPT='$(vi_mode_prompt_info)%{$(echotc UP 1)%}$(_git_time_since_commit) $(git_prompt_status) ${_return_status}%{$(echotc DO 1)%}'
 
 local _current_dir="%{$fg_bold[blue]%}%3~%{$reset_color%} "
 local _return_status="%{$fg_bold[red]%}%(?..⍉)%{$reset_color%}"
@@ -29,20 +29,6 @@ function _user_host() {
   fi
   if [[ -n $me ]]; then
     echo "%{$fg[cyan]%}$me%{$reset_color%}:"
-  fi
-}
-
-function _vi_status() {
-  if {echo $fpath | grep -q "plugins/vi-mode"}; then
-    echo "$(vi_mode_prompt_info)"
-  fi
-}
-
-function _ruby_version() {
-  if {echo $fpath | grep -q "plugins/rvm"}; then
-    echo "%{$fg[grey]%}$(rvm_prompt_info)%{$reset_color%}"
-  elif {echo $fpath | grep -q "plugins/rbenv"}; then
-    echo "%{$fg[grey]%}$(rbenv_prompt_info)%{$reset_color%}"
   fi
 }
 
@@ -84,9 +70,9 @@ fi
 
 MODE_INDICATOR="%{$fg_bold[yellow]%}❮%{$reset_color%}%{$fg[yellow]%}❮❮%{$reset_color%}"
 
+# Git prompt settings
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[green]%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
-
 ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[red]%}✗%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_CLEAN=" %{$fg[green]%}✔%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[green]%}✚ "
@@ -95,6 +81,10 @@ ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[red]%}✖ "
 ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[blue]%}▴ "
 ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[cyan]%}§ "
 ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[white]%}◒ "
+
+# Ruby prompt settings
+ZSH_THEME_RUBY_PROMPT_PREFIX="%{$fg[grey]%}"
+ZSH_THEME_RUBY_PROMPT_SUFFIX="%{$reset_color%}"
 
 # Colors vary depending on time lapsed.
 ZSH_THEME_GIT_TIME_SINCE_COMMIT_SHORT="%{$fg[green]%}"
