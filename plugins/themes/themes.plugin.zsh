@@ -1,24 +1,27 @@
-function theme
-{
-    if [ -z "$1" ]; then
-        1="random"
-    fi
+function theme {
+    : ${1:=random} # Use random theme if none provided
 
-    if [ -f "$ZSH_CUSTOM/$1.zsh-theme" ]
-    then
+    if [[ -f "$ZSH_CUSTOM/$1.zsh-theme" ]]; then
         source "$ZSH_CUSTOM/$1.zsh-theme"
-    elif [ -f "$ZSH_CUSTOM/themes/$1.zsh-theme" ]
-    then
+    elif [[ -f "$ZSH_CUSTOM/themes/$1.zsh-theme" ]]; then
         source "$ZSH_CUSTOM/themes/$1.zsh-theme"
-    else
+    elif [[ -f "$ZSH/themes/$1.zsh-theme" ]]; then
         source "$ZSH/themes/$1.zsh-theme"
+    else
+        echo "$0: Theme '$1' not found"
+        return 1
     fi
 }
 
-function lstheme
-{
+function _theme {
+    _arguments "1: :($(lstheme))"
+}
+
+compdef _theme theme
+
+function lstheme {
     # Resources:
     # http://zsh.sourceforge.net/Doc/Release/Expansion.html#Modifiers
     # http://zsh.sourceforge.net/Doc/Release/Expansion.html#Glob-Qualifiers
-    print -l {$ZSH,$ZSH_CUSTOM}/themes/*.zsh-theme(N:t:r)
+    print "$ZSH_CUSTOM"/*.zsh-theme(N:t:r) {"$ZSH_CUSTOM","$ZSH"}/themes/*.zsh-theme(N:t:r)
 }
