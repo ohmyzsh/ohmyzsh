@@ -29,7 +29,7 @@ function _user_host() {
 # use a neutral color, otherwise colors will vary according to time.
 function _git_time_since_commit() {
   local last_commit now seconds_since_last_commit
-  local minutes hours commit_age
+  local minutes hours days years commit_age
   # Only proceed if there is actually a commit.
   if last_commit=$(git log --pretty=format:'%at' -1 2> /dev/null); then
     now=$(date +%s)
@@ -37,12 +37,16 @@ function _git_time_since_commit() {
 
     # Totals
     minutes=$((seconds_since_last_commit / 60))
-    hours=$((seconds_since_last_commit / 3600))
+    hours=$((minutes / 60))
+    days=$((hours / 24))
+    years=$((days / 365))
 
-    if [[ $hours -ge 24 ]]; then
-      commit_age="$(( hours / 24 ))d"
+    if [[ $years -gt 0 ]]; then
+      commit_age="${years}y$((days % 365 ))d"
+    elif [[ $days -gt 0 ]]; then
+      commit_age="${days}d$((hours % 24))h"
     elif [[ $hours -gt 0 ]]; then
-      commit_age+="$(( hours % 24 ))h$(( minutes % 60 ))m"
+      commit_age+="${hours}h$(( minutes % 60 ))m"
     else
       commit_age="${minutes}m"
     fi
