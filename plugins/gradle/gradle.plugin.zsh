@@ -7,7 +7,7 @@ gradle-or-gradlew() {
 		echo "executing gradlew instead of gradle";
 		./gradlew "$@";
 	else
-		gradle "$@";
+		command gradle "$@";
 	fi
 }
 
