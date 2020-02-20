@@ -230,9 +230,9 @@ Once you open up a new terminal window, it should load zsh with Oh My Zsh's conf
 If you have any hiccups installing, here are a few common fixes.
 
 * You _might_ need to modify your `PATH` in `~/.zshrc` if you're not able to find some commands after
-switching to `oh-my-zsh`.
+  switching to `oh-my-zsh`.
 * If you installed manually or changed the install location, check the `ZSH` environment variable in
-`~/.zshrc`.
+  `~/.zshrc`.
 
 ### Custom Plugins and Themes
 
@@ -241,6 +241,38 @@ If you want to override any of the default behaviors, just add a new file (endin
 If you have many functions that go well together, you can put them as a `XYZ.plugin.zsh` file in the `custom/plugins/` directory and then enable this plugin.
 
 If you would like to override the functionality of a plugin distributed with Oh My Zsh, create a plugin of the same name in the `custom/plugins/` directory and it will be loaded instead of the one in `plugins/`.
+
+### Using Oh My Zsh with VS Code
+
+There has been some success in rendering Oh My Zsh themes within the terminal of VS Code. Currently, this has been shown to work with the popular iTerm2.
+
+_Note: this solution was heavily inspired by a [blog post](https://dev.to/mattstratton/making-powerline-work-in-visual-studio-code-terminal-1m7) by [mattstratton](https://github.com/mattstratton)._
+
+#### 1. Changing the default Terminal app
+
+In _Settings_, under _User_, go to either
+
+- _Terminal > External: Linux Exec_
+- _Terminal > External: Osx Exec_
+- _Terminal > External: Windows Exec_
+
+depending on your particular operating system. Change this value to the path to your terminal application. You will likely have to restart VS Code for the change to take effect.
+
+#### 2. Downloading new Powerline fonts
+
+For many themes (e.g. agnoster), it will be necessary to download new Powerline fonts that are compatible with VS Code. [abertsch/Menlo-for-Powerline](https://github.com/abertsch/Menlo-for-Powerline) have been shown to work.
+
+#### 3. Changing the Terminal font
+
+If your theme requires a new Powerline font, you must now change the font used by the VS Code terminal. Once again in _Settings_, under _User_, go to,
+
+_Terminal > Integrated: Font Family_
+
+and change the value to this new Powerline font. For example, if downloaded the font suggested in the previous step, then this should now be set to "Menlo For Powerline" (no quotation marks needed).
+
+After restarted VS Code, the Terminal should now use Oh My Zsh with the theme you've designated in _~/.zshrc_.
+
+_Note: the colors of the VS Code terminal may not match your own terminal application due to a difference in color themes between the applications._
 
 ## Getting Updates
 
