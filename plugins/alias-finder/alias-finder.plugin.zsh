@@ -4,7 +4,7 @@ alias-finder() {
     case $i in
       -e|--exact) exact=true;;
       -l|--longer) longer=true;;
-      *) 
+      *)
         if [[ -z $cmd ]]; then
           cmd=$i
         else
@@ -14,7 +14,7 @@ alias-finder() {
     esac
   done
   cmd=$(sed 's/[].\|$(){}?+*^[]/\\&/g' <<< $cmd) # adds escaping for grep
-  if [[ $(wc -l <<< $cmd) == 1 ]]; then
+  if (( $(wc -l <<< $cmd) == 1 )); then
     while [[ $cmd != "" ]]; do
       if [[ $longer = true ]]; then
         wordStart="'{0,1}"
@@ -43,4 +43,5 @@ preexec_alias-finder() {
   fi
 }
 
-preexec_functions+=(preexec_alias-finder)
+autoload -U add-zsh-hook
+add-zsh-hook preexec preexec_alias-finder

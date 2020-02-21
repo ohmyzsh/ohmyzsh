@@ -9,7 +9,7 @@ You can also use K and J in VI mode or ^P and ^N in EMACS mode for the same.
 [1]: https://fishshell.com
 [2]: https://www.zsh.org/mla/users/2009/msg00818.html
 [3]: https://sourceforge.net/projects/fizsh/
-[4]: https://github.com/robbyrussell/oh-my-zsh/pull/215
+[4]: https://github.com/ohmyzsh/ohmyzsh/pull/215
 [5]: https://github.com/zsh-users/zsh-history-substring-search
 [6]: https://github.com/zsh-users/zsh-syntax-highlighting
 
