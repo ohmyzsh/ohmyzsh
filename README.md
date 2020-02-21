@@ -168,6 +168,10 @@ the default shell, and also won't run `zsh` when the installation has finished.
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 ```
 
+#### Overriding Insecure completion-dependent directories detected
+
+Set ```ZSH_DISABLE_COMPFIX=true``` before OMZ is sourced in your `.zshrc` file
+
 #### Installing from a forked repository
 
 The install script also accepts these variables to allow installation of a different repository:
