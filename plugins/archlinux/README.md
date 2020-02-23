@@ -39,9 +39,6 @@
 | trrem   | trizen -Rns                        | Remove packages, including its settings and unneeded dependencies   |
 | trrep   | trizen -Si                         | Display information about a package in the repositories             |
 | trreps  | trizen -Ss                         | Search for packages in the repositories                             |
-| trupd   | trizen -Sy && sudo abs && sudo aur | Update and refresh local package, ABS and AUR databases             |
-| trupd   | trizen -Sy && sudo abs             | Update and refresh the local package and ABS databases              |
-| trupd   | trizen -Sy && sudo aur             | Update and refresh the local package and AUR databases              |
 | trupd   | trizen -Sy                         | Update and refresh the local package database                       |
 | trupg   | trizen -Syua                       | Sync with repositories before upgrading all packages (from AUR too) |
 | trsu    | trizen -Syua --no-confirm          | Same as `trupg`, but without confirmation                           |
@@ -64,9 +61,6 @@
 | yarem   | yaourt -Rns                        | Remove packages, including its settings and unneeded dependencies   |
 | yarep   | yaourt -Si                         | Display information about a package in the repositories             |
 | yareps  | yaourt -Ss                         | Search for packages in the repositories                             |
-| yaupd   | yaourt -Sy && sudo abs && sudo aur | Update and refresh local package, ABS and AUR databases             |
-| yaupd   | yaourt -Sy && sudo abs             | Update and refresh the local package and ABS databases              |
-| yaupd   | yaourt -Sy && sudo aur             | Update and refresh the local package and AUR databases              |
 | yaupd   | yaourt -Sy                         | Update and refresh the local package database                       |
 | yaupg   | yaourt -Syua                       | Sync with repositories before upgrading all packages (from AUR too) |
 | yasu    | yaourt -Syua --no-confirm          | Same as `yaupg`, but without confirmation                           |
@@ -88,9 +82,6 @@
 | parem   | pacaur -Rns                        | Remove packages, including its settings and unneeded dependencies   |
 | parep   | pacaur -Si                         | Display information about a package in the repositories             |
 | pareps  | pacaur -Ss                         | Search for packages in the repositories                             |
-| paupd   | pacaur -Sy && sudo abs && sudo aur | Update and refresh local package, ABS and AUR databases             |
-| paupd   | pacaur -Sy && sudo abs             | Update and refresh the local package and ABS databases              |
-| paupd   | pacaur -Sy && sudo aur             | Update and refresh the local package and AUR databases              |
 | paupd   | pacaur -Sy                         | Update and refresh the local package database                       |
 | paupg   | pacaur -Syua                       | Sync with repositories before upgrading all packages (from AUR too) |
 | pasu    | pacaur -Syua --no-confirm          | Same as `paupg`, but without confirmation                           |
@@ -112,9 +103,6 @@
 | pacrep       | pacman -Si                              | Display information about a package in the repositories      |
 | pacreps      | pacman -Ss                              | Search for packages in the repositories                      |
 | pacrmorphans | sudo pacman -Rs $(pacman -Qtdq)         | Delete all orphaned packages                                 |
-| pacupd       | sudo pacman -Sy && sudo abs && sudo aur | Update and refresh the local package, ABS and AUR databases  |
-| pacupd       | sudo pacman -Sy && sudo abs             | Update and refresh the local package and ABS databases       |
-| pacupd       | sudo pacman -Sy && sudo aur             | Update and refresh the local package and AUR databases       |
 | pacupd       | sudo pacman -Sy                         | Update and refresh the local package database                |
 | pacupg       | sudo pacman -Syu                        | Sync with repositories before upgrading packages             |
 | upgrade      | sudo pacman -Syu                        | Sync with repositories before upgrading packages             |
