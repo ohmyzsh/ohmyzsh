@@ -9,6 +9,7 @@ alias arco='arc cover'
 alias arci='arc commit'
 
 alias ard='arc diff'
+alias ardc='arc diff --create'
 alias ardnu='arc diff --nounit'
 alias ardnupc='arc diff --nounit --plan-changes'
 alias ardpc='arc diff --plan-changes'

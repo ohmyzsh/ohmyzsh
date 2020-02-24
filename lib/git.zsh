@@ -12,11 +12,21 @@ function git_prompt_info() {
 function parse_git_dirty() {
   local STATUS
   local -a FLAGS
-  FLAGS=('--porcelain' '--ignore-submodules=dirty')
+  FLAGS=('--porcelain')
   if [[ "$(command git config --get oh-my-zsh.hide-dirty)" != "1" ]]; then
     if [[ "$DISABLE_UNTRACKED_FILES_DIRTY" == "true" ]]; then
       FLAGS+='--untracked-files=no'
     fi
+    case "$GIT_STATUS_IGNORE_SUBMODULES" in
+      git)
+        # let git decide (this respects per-repo config in .gitmodules)
+        ;;
+      *)
+        # if unset: ignore dirty submodules
+        # other values are passed to --ignore-submodules
+        FLAGS+="--ignore-submodules=${GIT_STATUS_IGNORE_SUBMODULES:-dirty}"
+        ;;
+    esac
     STATUS=$(command git status ${FLAGS} 2> /dev/null | tail -n1)
   fi
   if [[ -n $STATUS ]]; then
@@ -188,4 +198,13 @@ function git_current_user_name() {
 # Usage example: $(git_current_user_email)
 function git_current_user_email() {
   command git config user.email 2>/dev/null
+}
+
+# Output the name of the root directory of the git repository
+# Usage example: $(git_repo_name)
+function git_repo_name() {
+  local repo_path
+  if repo_path="$(git rev-parse --show-toplevel 2>/dev/null)" && [[ -n "$repo_path" ]]; then
+    echo ${repo_path:t}
+  fi
 }

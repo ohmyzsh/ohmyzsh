@@ -53,7 +53,8 @@ function push_future() {
 }
 
 # Called by zsh when directory changes
-chpwd_functions+=(chpwd_dirhistory)
+autoload -U add-zsh-hook
+add-zsh-hook chpwd chpwd_dirhistory
 function chpwd_dirhistory() {
   push_past $PWD
   # If DIRHISTORY_CD is not set...

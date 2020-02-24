@@ -7,7 +7,7 @@ gradle-or-gradlew() {
 		echo "executing gradlew instead of gradle";
 		./gradlew "$@";
 	else
-		gradle "$@";
+		command gradle "$@";
 	fi
 }
 
@@ -181,3 +181,4 @@ _gradlew_tasks () {
 ############################################################################
 compdef _gradle_tasks gradle
 compdef _gradlew_tasks gradlew
+compdef _gradlew_tasks gw
