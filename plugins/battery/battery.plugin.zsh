@@ -21,7 +21,8 @@ if [[ "$OSTYPE" = darwin* ]]; then
     local smart_battery_status="$(ioreg -rc AppleSmartBattery)"
     local -F maxcapacity=$(command grep '^.*"MaxCapacity"\ =\ ' <<< $smart_battery_status | sed -e 's/^.*"MaxCapacity"\ =\ //')
     local -F currentcapacity=$(command grep '^.*"CurrentCapacity"\ =\ ' <<< $smart_battery_status | sed -e 's/^.*CurrentCapacity"\ =\ //')
-    echo $(( (currentcapacity/maxcapacity) * 100 ))
+    local -i pct=$(( (currentcapacity/maxcapacity) * 100 ))
+    echo $pct
   }
 
   function battery_pct_remaining() {
@@ -47,16 +48,17 @@ if [[ "$OSTYPE" = darwin* ]]; then
   }
 
   function battery_pct_prompt () {
+    local battery_pct color
     if ioreg -rc AppleSmartBattery | command grep -q '^.*"ExternalConnected"\ =\ No'; then
-      b=$(battery_pct_remaining)
-      if [[ $b -gt 50 ]]; then
+      battery_pct=$(battery_pct_remaining)
+      if [[ $battery_pct -gt 50 ]]; then
         color='green'
-      elif [[ $b -gt 20 ]]; then
+      elif [[ $battery_pct -gt 20 ]]; then
         color='yellow'
       else
         color='red'
       fi
-      echo "%{$fg[$color]%}[$(battery_pct_remaining)%%]%{$reset_color%}"
+      echo "%{$fg[$color]%}[${battery_pct}%%]%{$reset_color%}"
     else
       echo "∞"
     fi
@@ -93,19 +95,19 @@ elif [[ "$OSTYPE" = freebsd* ]]; then
   }
 
   function battery_pct_prompt() {
-    local b color
-    b=$(battery_pct_remaining)
+    local battery_pct color
+    battery_pct=$(battery_pct_remaining)
     if battery_is_charging; then
       echo "∞"
     else
-      if [[ $b -gt 50 ]]; then
+      if [[ $battery_pct -gt 50 ]]; then
         color='green'
-      elif [[ $b -gt 20 ]]; then
+      elif [[ $battery_pct -gt 20 ]]; then
         color='yellow'
       else
         color='red'
       fi
-      echo "%{$fg[$color]%}$(battery_pct_remaining)%%%{$reset_color%}"
+      echo "%{$fg[$color]%}${battery_pct}%%%{$reset_color%}"
     fi
   }
 
@@ -136,19 +138,19 @@ elif [[ "$OSTYPE" = linux*  ]]; then
   }
 
   function battery_pct_prompt() {
-    local b color
-    b=$(battery_pct_remaining)
+    local battery_pct color
+    battery_pct=$(battery_pct_remaining)
     if battery_is_charging; then
       echo "∞"
     else
-      if [[ $b -gt 50 ]]; then
+      if [[ $battery_pct -gt 50 ]]; then
         color='green'
-      elif [[ $b -gt 20 ]]; then
+      elif [[ $battery_pct -gt 20 ]]; then
         color='yellow'
       else
         color='red'
       fi
-      echo "%{$fg[$color]%}$(battery_pct_remaining)%%%{$reset_color%}"
+      echo "%{$fg[$color]%}${battery_pct}%%%{$reset_color%}"
     fi
   }
 
