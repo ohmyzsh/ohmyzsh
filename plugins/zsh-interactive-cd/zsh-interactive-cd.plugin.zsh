@@ -144,4 +144,5 @@ zic-completion() {
 }
 
 zle -N zic-completion
-bindkey '^I' zic-completion
+bindkey -M emacs '^I' zic-completion
+bindkey -M viins '^I' zic-completion
