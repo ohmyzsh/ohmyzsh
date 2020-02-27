@@ -23,6 +23,8 @@ alias jhu='jhbuild update'
 alias jhuo='jhbuild updateone'
 # Uninstall
 alias jhun='jhbuild uninstall'
+# Shell
+alias jhsh='jhbuild shell'
 
 
 
