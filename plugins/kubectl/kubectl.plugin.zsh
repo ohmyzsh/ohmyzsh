@@ -149,6 +149,7 @@ alias kdelpvc='kubectl delete pvc'
 
 # Endpoints
 alias kgep='kubectl get endpoints'
+alias kgepa='kubectl get endpoints --all-namespaces'
 alias keep='kubectl edit endpoints'
 alias kdep='kubectl describe endpoints'
 alias kdelep='kubectl delete endpoints'
