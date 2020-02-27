@@ -27,7 +27,7 @@ alias arls='arc list'
 #
 
 ardu() {
-# With this, both, `ardu https://arcanist-url.com<REVISION>`, and `ardu <REVISION>` work.
+# With this, both, `ardu https://arcanist-url.com/<REVISION>`, and `ardu <REVISION>` work.
 arc diff --update "$(echo "$1" | awk '{n=split($1,a,"/");print a[n]}')"
 }
 
