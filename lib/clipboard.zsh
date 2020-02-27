@@ -78,6 +78,9 @@ function detect-clipboard() {
   elif [ -n "${TMUX:-}" ] && (( ${+commands[tmux]} )); then
     function clipcopy() { tmux load-buffer "${1:--}"; }
     function clippaste() { tmux save-buffer -; }
+  elif [[ $(uname -r) = *icrosoft* ]]; then
+    function clipcopy() { clip.exe < "${1:-/dev/stdin}"; }
+    function clippaste() { _retry_clipboard_detection_or_fail clippaste "$@"; }
   else
     function _retry_clipboard_detection_or_fail() {
       local clipcmd="${1}"; shift
