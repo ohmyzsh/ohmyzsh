@@ -54,7 +54,7 @@ function detect-clipboard() {
   if [[ "${OSTYPE}" == darwin* ]] && (( ${+commands[pbcopy]} )) && (( ${+commands[pbpaste]} )); then
     function clipcopy() { pbcopy < "${1:-/dev/stdin}"; }
     function clippaste() { pbpaste; }
-  elif [[ "${OSTYPE}" == cygwin* ]]; then
+  elif [[ "${OSTYPE}" == (cygwin|msys)* ]]; then
     function clipcopy() { cat "${1:-/dev/stdin}" > /dev/clipboard; }
     function clippaste() { cat /dev/clipboard; }
   elif [ -n "${WAYLAND_DISPLAY:-}" ] && (( ${+commands[wl-copy]} )) && (( ${+commands[wl-paste]} )); then

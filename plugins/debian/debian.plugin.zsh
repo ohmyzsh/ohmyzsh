@@ -72,7 +72,7 @@ if [[ $use_sudo -eq 1 ]]; then
 # commands using su #########
 else
     alias aac="su -ls '$apt_pref autoclean' root"
-    abd() {
+    function abd() {
         cmd="su -lc '$apt_pref build-dep $@' root"
         print "$cmd"
         eval "$cmd"
@@ -83,17 +83,17 @@ else
     alias adu="su -lc '$apt_pref update && aptitude dist-upgrade' root"
     alias afu="su -lc '$apt-file update'"
     alias au="su -lc '$apt_pref $apt_upgr' root"
-    ai() {
+    function ai() {
         cmd="su -lc 'aptitude -P install $@' root"
         print "$cmd"
         eval "$cmd"
     }
-    ap() {
+    function ap() {
         cmd="su -lc '$apt_pref -P purge $@' root"
         print "$cmd"
         eval "$cmd"
     }
-    ar() {
+    function ar() {
         cmd="su -lc '$apt_pref -P remove $@' root"
         print "$cmd"
         eval "$cmd"
@@ -114,7 +114,7 @@ fi
 # Registers a compdef for $1 that calls $apt_pref with the commands $2
 # To do that it creates a new completion function called _apt_pref_$2
 #
-apt_pref_compdef() {
+function apt_pref_compdef() {
     local f fb
     f="_apt_pref_${2}"
 
@@ -151,7 +151,7 @@ alias mydeb='time dpkg-buildpackage -rfakeroot -us -uc'
 
 # Functions #################################################################
 # create a simple script that can be used to 'duplicate' a system
-apt-copy() {
+function apt-copy() {
     print '#!/bin/sh'"\n" > apt-copy.sh
 
     cmd='$apt_pref install'
@@ -173,7 +173,7 @@ apt-copy() {
 #   apt-history rollback
 #   apt-history list
 # Based On: https://linuxcommando.blogspot.com/2008/08/how-to-show-apt-log-history.html
-apt-history () {
+function apt-history() {
   case "$1" in
     install)
       zgrep --no-filename 'install ' $(ls -rt /var/log/dpkg*)
@@ -202,7 +202,7 @@ apt-history () {
 }
 
 # Kernel-package building shortcut
-kerndeb () {
+function kerndeb() {
     # temporarily unset MAKEFLAGS ( '-j3' will fail )
     MAKEFLAGS=$( print - $MAKEFLAGS | perl -pe 's/-j\s*[\d]+//g' )
     print '$MAKEFLAGS set to '"'$MAKEFLAGS'"
@@ -216,10 +216,9 @@ kerndeb () {
 }
 
 # List packages by size
-function apt-list-packages {
+function apt-list-packages() {
     dpkg-query -W --showformat='${Installed-Size} ${Package} ${Status}\n' | \
     grep -v deinstall | \
     sort -n | \
     awk '{print $1" "$2}'
 }
-
