@@ -13,10 +13,26 @@ alias ardc='arc diff --create'
 alias ardnu='arc diff --nounit'
 alias ardnupc='arc diff --nounit --plan-changes'
 alias ardpc='arc diff --plan-changes'
+alias ardcp= 'arc diff --preview' # creates a new diff in the phab interface
 
 alias are='arc export'
 alias arh='arc help'
 alias arl='arc land'
 alias arli='arc lint'
 alias arls='arc list'
-alias arpa='arc patch'
+
+#
+# Functions
+# (sorted alphabetically)
+#
+
+ardu() {
+# With this, both, `ardu https://arcanist-url.com<REVISION>`, and `ardu <REVISION>` work.
+arc diff --update "$(echo "$1" | awk '{n=split($1,a,"/");print a[n]}')"
+}
+
+arpa() {
+# With this, both, `arpa https://arcanist-url/.com/<REVISION>`, and `arpa <REVISION>` work.
+arc patch "$(echo "$1" | awk '{n=split($1,a,"/");print a[n]}')"
+}
+
