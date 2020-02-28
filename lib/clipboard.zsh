@@ -83,7 +83,7 @@ function detect-clipboard() {
     function clippaste() { tmux save-buffer -; }
   elif [[ $(uname -r) = *icrosoft* ]]; then
     function clipcopy() { clip.exe < "${1:-/dev/stdin}"; }
-    function clippaste() { _retry_clipboard_detection_or_fail clippaste "$@"; }
+    function clippaste() { powershell.exe -noprofile -command Get-Clipboard; }
   else
     function _retry_clipboard_detection_or_fail() {
       local clipcmd="${1}"; shift
