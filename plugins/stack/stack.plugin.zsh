@@ -1,3 +1,2 @@
-autoload -U +X compinit && compinit
 autoload -U +X bashcompinit && bashcompinit
-eval "$(stack --bash-completion-script stack)"
+source <(stack --bash-completion-script stack)
