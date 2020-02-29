@@ -10,10 +10,13 @@
 #
 #   -f, --fish       fish simulation, equivalent to -l -s -t.
 #   -l, --last       Print the last directory's full name.
-#   -s, --short      Truncate directory names to the first character. Without
+#   -s, --short      Truncate directory names to the number of characters given by -#. Without
 #                    -s, names are truncated without making them ambiguous.
 #   -t, --tilde      Substitute ~ for the home directory.
 #   -T, --nameddirs  Substitute named directories as well.
+#   -#               Truncate each directly to at least this many characters inclusive of the
+#                    ellipsis character(s) (defaulting to 1).
+#   -e SYMBOL        Postfix symbol(s) to indicate that a directory name had been truncated.
 #
 # The long options can also be set via zstyle, like
 #   zstyle :prompt:shrink_path fish yes
@@ -68,11 +71,13 @@ shrink_path () {
                                 print 'Usage: shrink_path [-f -l -s -t] [directory]'
                                 print ' -f, --fish      fish-simulation, like -l -s -t'
                                 print ' -l, --last      Print the last directory''s full name'
-                                print ' -s, --short     Truncate directory names to the number of characters given by -#.'
+                                print ' -s, --short     Truncate directory names to the number of characters given by -#. Without'
+                                print '                 -s, names are truncated without making them ambiguous.'
                                 print ' -t, --tilde     Substitute ~ for the home directory'
                                 print ' -T, --nameddirs Substitute named directories as well'
-                                print ' -#              Truncate each directly to at least this many characters (defaulting to 1).'
-                                print ' -e SYMBOL       Postfix symbol to indicate that a directory name had been truncated.'
+                                print ' -#              Truncate each directly to at least this many characters inclusive of the'
+                                print '                 ellipsis character(s) (defaulting to 1).'
+                                print ' -e SYMBOL       Postfix symbol(s) to indicate that a directory name had been truncated.'
                                 print 'The long options can also be set via zstyle, like'
                                 print '  zstyle :prompt:shrink_path fish yes'
                                 return 0
@@ -95,6 +100,7 @@ shrink_path () {
                 shift
         done
 
+        typeset -i elllen=${#ellipsis}
         typeset -a tree expn
         typeset result part dir=${1-$PWD}
         typeset -i i
@@ -124,24 +130,20 @@ shrink_path () {
                         expn=(a b)
                         part=''
                         i=0
-                        until [[ $i -gt 99 || ( $i -ge $length || $dir == $part ) && ( (( ${#expn} == 1 )) || $dir = $expn ) ]];  do
+                        until [[ $i -gt 99 || ( $i -ge $((length - ellen)) || $dir == $part ) && ( (( ${#expn} == 1 )) || $dir = $expn ) ]];  do
                                 (( i++ ))
                                 part+=$dir[$i]
                                 expn=($(echo ${part}*(-/)))
-                                (( short )) && [[ $i -ge $length ]] && break
+                                (( short )) && [[ $i -ge $((length - ellen)) ]] && break
                         done
 
-                        typeset -i dif="(( ${#dir} - ${#part} ))"
-                        case $dif in
-                            0)
-                            ;;
-                            1)
-                                (( i++ ))
-                                    part+="$dir[$i]"
-                                ;;
-                            *)
-                                part+="$ellipsis"
-                        esac
+                        typeset -i dif=$(( ${#dir} - ${#part} - ellen ))
+                        if [[ $dif -gt 0 ]]
+                        then
+                            part+="$ellipsis"
+                        else
+                            part="$dir"
+                        fi
                         result+="/$part"
                         cd -q $dir
                         shift tree
