@@ -38,7 +38,7 @@ if [ -n "$remote" ]; then
 fi
 
 printf "${BLUE}%s${NORMAL}\n" "Updating Oh My Zsh"
-if git pull --rebase --autostash --stat origin master
+if git -c rebase.autoStash=true pull --rebase --stat origin master
 then
   printf '%s' "$GREEN"
   printf '%s\n' '         __                                     __   '
