@@ -38,7 +38,7 @@ shrink_path () {
         typeset -i tilde=0
         typeset -i named=0
         typeset -i length=1
-	typeset ellipsis=""
+        typeset ellipsis=""
 
         if zstyle -t ':prompt:shrink_path' fish; then
                 lastfull=1
@@ -55,10 +55,10 @@ shrink_path () {
 
         while [[ $1 == -* ]]; do
             case $1 in
-		--)
-		    shift
-		    break
-		    ;;
+                --)
+                    shift
+                    break
+                    ;;
                         -f|--fish)
                                 lastfull=1
                                 short=1
@@ -72,7 +72,7 @@ shrink_path () {
                                 print ' -t, --tilde     Substitute ~ for the home directory'
                                 print ' -T, --nameddirs Substitute named directories as well'
                                 print ' -#              Truncate each directly to at least this many characters (defaulting to 1).'
-				print ' -e SYMBOL       Postfix symbol to indicate that a directory name had been truncated.'
+                                print ' -e SYMBOL       Postfix symbol to indicate that a directory name had been truncated.'
                                 print 'The long options can also be set via zstyle, like'
                                 print '  zstyle :prompt:shrink_path fish yes'
                                 return 0
@@ -83,14 +83,14 @@ shrink_path () {
                         -T|--nameddirs)
                                 tilde=1
                                 named=1
-				;;
-			-[0-9]|-[0-9][0-9])
-			    length=${1/-/}
-			    ;;
-			-e)
-			    shift
-			    ellipsis="$1"
-			    ;;
+                                ;;
+                        -[0-9]|-[0-9][0-9])
+                            length=${1/-/}
+                            ;;
+                        -e)
+                            shift
+                            ellipsis="$1"
+                            ;;
                 esac
                 shift
         done
@@ -131,17 +131,17 @@ shrink_path () {
                                 (( short )) && [[ $i -ge $length ]] && break
                         done
 
-			typeset -i dif="(( ${#dir} - ${#part} ))"
-			case $dif in
-			    0)
-			    ;;
-			    1)
-				(( i++ ))
-			    	part+="$dir[$i]"
-				;;
-			    *)
-				part+="$ellipsis"
-			esac
+                        typeset -i dif="(( ${#dir} - ${#part} ))"
+                        case $dif in
+                            0)
+                            ;;
+                            1)
+                                (( i++ ))
+                                    part+="$dir[$i]"
+                                ;;
+                            *)
+                                part+="$ellipsis"
+                        esac
                         result+="/$part"
                         cd -q $dir
                         shift tree
