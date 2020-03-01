@@ -16,13 +16,13 @@ This a pure user-space program, shell-proxy setter, written Python3 and Bash.
 
 Method 1:
 
-Set `DEFAULT_PROXY` environment variable to `$HOME/.zshrc`.
+`$DEFAULT_PROXY` is the proxy URL you will set
 
 Method 2:
 
-Written a program to `$HOME/.config/proxy`.
+Written a program to `$HOME/.config/proxy` in the file.
 
-example program:
+Example program:
 
 ```bash
 #!/bin/bash
@@ -33,6 +33,10 @@ else
   echo "http://127.0.0.1:8123" # polipo
 fi
 ```
+
+Method 3:
+
+The working path of **Method 2** can be changed via `$CONFIG_PROXY`
 
 ## Reference
 

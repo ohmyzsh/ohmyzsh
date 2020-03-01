@@ -5,7 +5,7 @@ from subprocess import check_output, list2cmdline
 
 cwd = os.path.dirname(__file__)
 ssh_agent = os.path.join(cwd, "ssh-agent.py")
-user_proxy = os.path.expandvars("$HOME/.config/proxy")
+user_proxy = os.environ.get("CONFIG_PROXY", os.path.expandvars("$HOME/.config/proxy"))
 
 
 def get_http_proxy():
