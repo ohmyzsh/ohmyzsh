@@ -12,6 +12,28 @@ This a pure user-space program, shell-proxy setter, written Python3 and Bash.
 - Support ssh, sftp, scp, slogin and ssh-copy-id via based-`alias`
 - Built-in Auto-complete
 
+## Usage
+
+Method 1:
+
+Set `DEFAULT_PROXY` environment variable to `$HOME/.zshrc`.
+
+Method 2:
+
+Written a program to `$HOME/.config/proxy`.
+
+example program:
+
+```bash
+#!/bin/bash
+# The file path: $HOME/.config/proxy
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  echo "http://127.0.0.1:6152" # Surge Mac
+else
+  echo "http://127.0.0.1:8123" # polipo
+fi
+```
+
 ## Reference
 
 - `$GIT_SSH`: <https://www.git-scm.com/docs/git#Documentation/git.txt-codeGITSSHcode>
