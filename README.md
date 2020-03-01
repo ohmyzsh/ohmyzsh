@@ -133,6 +133,12 @@ ZSH_THEME_RANDOM_CANDIDATES=(
 )
 ```
 
+If you only know which themes you don't like, you can add them similarly to a blacklist:
+
+```shell
+ZSH_THEME_RANDOM_BLACKLIST=(pygmalion tjkirch_mod)
+```
+
 ### FAQ
 
 If you have some more questions or issues, you might find a solution in our [FAQ](https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ).
