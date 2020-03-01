@@ -20,7 +20,7 @@ Method 1:
 
 Method 2:
 
-Written a program to `$HOME/.config/proxy` in the file.
+Write a program to `$HOME/.config/proxy` in the file.
 
 Example program:
 
