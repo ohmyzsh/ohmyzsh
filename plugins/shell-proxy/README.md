@@ -2,7 +2,7 @@
 
 This a pure user-space program, shell-proxy setter, written Python3 and Bash.
 
-100% only side effects **environment variables** and **aliases**
+100% only no side-effects, only effect **environment variables** and **aliases**
 
 ## Key feature
 
