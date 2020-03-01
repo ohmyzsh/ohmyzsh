@@ -13,7 +13,7 @@ alias ardc='arc diff --create'
 alias ardnu='arc diff --nounit'
 alias ardnupc='arc diff --nounit --plan-changes'
 alias ardpc='arc diff --plan-changes'
-alias ardcp='arc diff --preview' # creates a new diff in the phab interface
+alias ardp='arc diff --preview' # creates a new diff in the phab interface
 
 alias are='arc export'
 alias arh='arc help'
