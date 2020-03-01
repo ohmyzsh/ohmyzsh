@@ -36,5 +36,5 @@ E.g., `ardu` accepts `https://arcanist-url.com/<REVISION>` as well as `<REVISION
 
 | Function                  | Command                                  |
 | ------------------------- | ---------------------------------------- |
-| ardu [URL or revision_id] | `arc diff --update` [URL or revision_id] |
-| arpa [URL or revision_id] | `arc patch` [URL or revision_id]         |
+| ardu [URL or revision_id] | `arc diff --update` [revision_id] |
+| arpa [URL or revision_id] | `arc patch` [revision_id]         |
