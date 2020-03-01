@@ -26,7 +26,6 @@ alias arls='arc list'
 # (sorted alphabetically)
 #
 
-
 _extract_revision_id(){
   # helper function to extract everything after the last slash.
   # If there is no slash, returns the whole variable
