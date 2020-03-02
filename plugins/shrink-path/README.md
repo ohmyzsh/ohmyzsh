@@ -21,6 +21,8 @@ here are the results of calling `shrink_path <option> /home/me/foo/bar/quux`:
     -t|--tilde    ~/f/ba/q
     -f|--fish     ~/f/b/quux
     -g|--glob     /h*/m*/foo/ba*/q*
+    -3            /hom/me/foo/bar/quu
+    -e '$' -3     /ho$/me/foo/bar/qu$
 ```
 
 
@@ -38,12 +40,15 @@ The following options are available:
 
 ```
     -f, --fish       fish simulation, equivalent to -l -s -t.
-    -g, --glob     Add asterix to allow globbing of shrunk path.
+    -g, --glob       Add asterix to allow globbing of shrunk path (equivalent to -e "*")
     -l, --last       Print the last directory's full name.
-    -s, --short      Truncate directory names to the first character. Without
+    -s, --short      Truncate directory names to the number of characters given by -. Without
                      -s, names are truncated without making them ambiguous.
     -t, --tilde      Substitute ~ for the home directory.
     -T, --nameddirs  Substitute named directories as well.
+    -#               Truncate each directly to at least this many characters inclusive of the
+                     ellipsis character(s) (defaulting to 1).
+    -e SYMBOL        Postfix symbol(s) to indicate that a directory name had been truncated.
 ```
 
 The long options can also be set via zstyle, like
@@ -58,6 +63,7 @@ supported.
 ## License
 
 Copyright (C) 2008 by Daniel Friesel <derf@xxxxxxxxxxxxxxxxxx>
+Copyright (C) 2018-2020 by Pavel N. Krivitsky
 
 License: WTFPL <http://www.wtfpl.net>
 

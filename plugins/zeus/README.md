@@ -24,6 +24,7 @@
 
 * `zcu` aliases `zeus cucumber`
 * `zucumber` aliases `zeus cucumber`
+* `zwip` aliases `zeus cucumber --profile wip`
 
 * `zspec` aliases `zeus rspec`
 

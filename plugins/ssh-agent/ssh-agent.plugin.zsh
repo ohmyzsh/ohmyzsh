@@ -5,14 +5,14 @@ function _start_agent() {
 	zstyle -s :omz:plugins:ssh-agent lifetime lifetime
 
 	# start ssh-agent and setup environment
-	echo starting ssh-agent...
+	echo Starting ssh-agent...
 	ssh-agent -s ${lifetime:+-t} ${lifetime} | sed 's/^echo/#echo/' >! $_ssh_env_cache
 	chmod 600 $_ssh_env_cache
 	. $_ssh_env_cache > /dev/null
 }
 
 function _add_identities() {
-	local id line sig
+	local id line sig lines
 	local -a identities loaded_sigs loaded_ids not_loaded
 	zstyle -a :omz:plugins:ssh-agent identities identities
 
@@ -32,10 +32,12 @@ function _add_identities() {
 	fi
 
 	# get list of loaded identities' signatures and filenames
-	for line in ${(f)"$(ssh-add -l)"}; do
-		loaded_sigs+=${${(z)line}[2]}
-		loaded_ids+=${${(z)line}[3]}
-	done
+	if lines=$(ssh-add -l); then
+		for line in ${(f)lines}; do
+			loaded_sigs+=${${(z)line}[2]}
+			loaded_ids+=${${(z)line}[3]}
+		done
+	fi
 
 	# add identities if not already loaded
 	for id in $identities; do
