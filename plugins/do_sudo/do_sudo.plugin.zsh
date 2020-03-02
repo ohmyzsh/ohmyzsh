@@ -10,6 +10,7 @@ function _do_sudo() {
     local -a args
     local -a cmd_alias_arr
     local cmd_alias
+    local return_value
     while (($#)); do
         case "$1" in
         command|exec|-) shift; break ;;
@@ -43,8 +44,10 @@ function _do_sudo() {
         else
             PATH="/sbin:/usr/sbin:/usr/local/sbin:$PATH" command sudo "${args[@]}" $==*
         fi
+        return_value=$?
         unset __do_sudo_glob
         unset __do_sudo_expanded
+        return $return_value
     fi
 }
 
