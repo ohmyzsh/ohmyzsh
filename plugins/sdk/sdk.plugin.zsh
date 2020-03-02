@@ -51,12 +51,13 @@ _listInstalledVersions() {
 }
 
 _listInstallableVersions() {
-  __sdkman_list_versions $1 | grep "^ " | sed -e "s/\* /*/g" | \
-      sed -e "s/>//g" | xargs -n 1 echo | grep -v "^*"
+  # Remove local (+) and installed (*) versions from the list
+  __sdkman_list_versions $1 | sed -e '/^[^ ]/d;s/[+*] [^ ]\+//g;s/>//g'
 }
 
 _listAllVersion() {
-  __sdkman_list_versions $1 | grep "^ " | sed -e "s/\*/ /g" | sed -e "s/>//g"
+  # Remove (*), (+), and (>) characters from the list
+  __sdkman_list_versions $1 | sed -e '/^[^ ]/d;s/[*+>] //g'
 }
 
 _sdk () {
