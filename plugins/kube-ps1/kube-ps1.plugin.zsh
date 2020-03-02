@@ -41,9 +41,9 @@ KUBE_PS1_SUFFIX="${KUBE_PS1_SUFFIX-)}"
 KUBE_PS1_LAST_TIME=0
 KUBE_PS1_ENABLED=true
 
-KUBE_PS1_COLOR_SYMBOL="%F{blue}"
-KUBE_PS1_COLOR_CONTEXT="%F{red}"
-KUBE_PS1_COLOR_NS="%F{cyan}"
+KUBE_PS1_COLOR_SYMBOL="%{$fg[blue]%}"
+KUBE_PS1_COLOR_CONTEXT="%{$fg[red]%}"
+KUBE_PS1_COLOR_NS="%{$fg[cyan]%}"
 
 _kube_ps1_binary_check() {
   command -v "$1" >/dev/null

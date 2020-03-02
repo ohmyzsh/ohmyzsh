@@ -1,19 +1,30 @@
 # VScode zsh plugin
-# author: https://github.com/MarsiBarsi
+# Authors:
+#   https://github.com/MarsiBarsi (original author)
+#   https://github.com/babakks
 
-alias vsc='code .'
-alias vsca='code --add'
-alias vscd='code --diff'
-alias vscg='code --goto'
-alias vscn='code --new-window'
-alias vscr='code --reuse-window'
-alias vscw='code --wait'
-alias vscu='code --user-data-dir'
+# Use the stable VS Code release, unless the Insiders version is the only
+# available installation
+if ! which code > /dev/null && which code-insiders > /dev/null; then
+  : ${VSCODE:=code-insiders}
+else
+  : ${VSCODE:=code}
+fi
 
-alias vsced='code --extensions-dir'
-alias vscie='code --install-extension'
-alias vscue='code --uninstall-extension'
+# Define aliases
+alias vsc="$VSCODE ."
+alias vsca="$VSCODE --add"
+alias vscd="$VSCODE --diff"
+alias vscg="$VSCODE --goto"
+alias vscn="$VSCODE --new-window"
+alias vscr="$VSCODE --reuse-window"
+alias vscw="$VSCODE --wait"
+alias vscu="$VSCODE --user-data-dir"
 
-alias vscv='code --verbose'
-alias vscl='code --log'
-alias vscde='code --disable-extensions'
+alias vsced="$VSCODE --extensions-dir"
+alias vscie="$VSCODE --install-extension"
+alias vscue="$VSCODE --uninstall-extension"
+
+alias vscv="$VSCODE --verbose"
+alias vscl="$VSCODE --log"
+alias vscde="$VSCODE --disable-extensions"

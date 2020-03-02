@@ -29,20 +29,11 @@ if [[ -z "$ZSH_CUSTOM" ]]; then
 fi
 
 
-# Load all of the config files in ~/oh-my-zsh that end in .zsh
-# TIP: Add files you don't want in git to .gitignore
-for config_file ($ZSH/lib/*.zsh); do
-  custom_config_file="${ZSH_CUSTOM}/lib/${config_file:t}"
-  [ -f "${custom_config_file}" ] && config_file=${custom_config_file}
-  source $config_file
-done
-
-
 is_plugin() {
   local base_dir=$1
   local name=$2
-  test -f $base_dir/plugins/$name/$name.plugin.zsh \
-    || test -f $base_dir/plugins/$name/_$name
+  builtin test -f $base_dir/plugins/$name/$name.plugin.zsh \
+    || builtin test -f $base_dir/plugins/$name/_$name
 }
 
 # Add all defined plugins to fpath. This must be done
@@ -71,6 +62,7 @@ if [ -z "$ZSH_COMPDUMP" ]; then
 fi
 
 if [[ $ZSH_DISABLE_COMPFIX != true ]]; then
+  source $ZSH/lib/compfix.zsh
   # If completion insecurities exist, warn the user
   handle_completion_insecurities
   # Load only from secure directories
@@ -79,6 +71,15 @@ else
   # If the user wants it, load from all found directories
   compinit -u -C -d "${ZSH_COMPDUMP}"
 fi
+
+
+# Load all of the config files in ~/oh-my-zsh that end in .zsh
+# TIP: Add files you don't want in git to .gitignore
+for config_file ($ZSH/lib/*.zsh); do
+  custom_config_file="${ZSH_CUSTOM}/lib/${config_file:t}"
+  [ -f "${custom_config_file}" ] && config_file=${custom_config_file}
+  source $config_file
+done
 
 # Load all of the plugins that were defined in ~/.zshrc
 for plugin ($plugins); do
@@ -96,25 +97,12 @@ done
 unset config_file
 
 # Load the theme
-if [[ "$ZSH_THEME" == "random" ]]; then
-  if [[ "${(t)ZSH_THEME_RANDOM_CANDIDATES}" = "array" ]] && [[ "${#ZSH_THEME_RANDOM_CANDIDATES[@]}" -gt 0 ]]; then
-    themes=($ZSH/themes/${^ZSH_THEME_RANDOM_CANDIDATES}.zsh-theme)
+if [ ! "$ZSH_THEME" = ""  ]; then
+  if [ -f "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme" ]; then
+    source "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme"
+  elif [ -f "$ZSH_CUSTOM/themes/$ZSH_THEME.zsh-theme" ]; then
+    source "$ZSH_CUSTOM/themes/$ZSH_THEME.zsh-theme"
   else
-    themes=($ZSH/themes/*zsh-theme)
-  fi
-  N=${#themes[@]}
-  ((N=(RANDOM%N)+1))
-  RANDOM_THEME=${themes[$N]}
-  source "$RANDOM_THEME"
-  echo "[oh-my-zsh] Random theme '$RANDOM_THEME' loaded..."
-else
-  if [ ! "$ZSH_THEME" = ""  ]; then
-    if [ -f "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme" ]; then
-      source "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme"
-    elif [ -f "$ZSH_CUSTOM/themes/$ZSH_THEME.zsh-theme" ]; then
-      source "$ZSH_CUSTOM/themes/$ZSH_THEME.zsh-theme"
-    else
-      source "$ZSH/themes/$ZSH_THEME.zsh-theme"
-    fi
+    source "$ZSH/themes/$ZSH_THEME.zsh-theme"
   fi
 fi

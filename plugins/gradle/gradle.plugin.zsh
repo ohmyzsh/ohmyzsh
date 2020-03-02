@@ -7,7 +7,7 @@ gradle-or-gradlew() {
 		echo "executing gradlew instead of gradle";
 		./gradlew "$@";
 	else
-		gradle "$@";
+		command gradle "$@";
 	fi
 }
 
@@ -83,7 +83,7 @@ function _gradle_arguments() {
     '--quiet[Log errors only]' \
     '--recompile-scripts[Forces scripts to be recompiled, bypassing caching]' \
     '--refresh-dependencies[Refresh the state of dependencies]' \
-    '--rerun-task[Specifies that any task optimization is ignored]' \
+    '--rerun-tasks[Specifies that any task optimization is ignored]' \
     '--settings-file[Specifies the settings file]' \
     '--stacktrace[Print out the stacktrace also for user exceptions]' \
     '--status[Print Gradle Daemon status]' \
@@ -181,3 +181,4 @@ _gradlew_tasks () {
 ############################################################################
 compdef _gradle_tasks gradle
 compdef _gradlew_tasks gradlew
+compdef _gradlew_tasks gw

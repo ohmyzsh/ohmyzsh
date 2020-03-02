@@ -11,7 +11,7 @@
 
 #
 # André König
-# Github: https://github.com/akoenig
+# GitHub: https://github.com/akoenig
 # Twitter: https://twitter.com/caiifr
 #
 

@@ -1,13 +1,14 @@
 # Find python file
 alias pyfind='find . -name "*.py"'
 
-# Remove python compiled byte-code and mypy cache in either current directory or in a
-# list of specified directories
+# Remove python compiled byte-code and mypy/pytest cache in either the current
+# directory or in a list of specified directories (including sub directories).
 function pyclean() {
     ZSH_PYCLEAN_PLACES=${*:-'.'}
     find ${ZSH_PYCLEAN_PLACES} -type f -name "*.py[co]" -delete
     find ${ZSH_PYCLEAN_PLACES} -type d -name "__pycache__" -delete
-    find ${ZSH_PYCLEAN_PLACES} -type d -name ".mypy_cache" -delete
+    find ${ZSH_PYCLEAN_PLACES} -depth -type d -name ".mypy_cache" -exec rm -r "{}" +
+    find ${ZSH_PYCLEAN_PLACES} -depth -type d -name ".pytest_cache" -exec rm -r "{}" +
 }
 
 # Add the user installed site-packages paths to PYTHONPATH, only if the
@@ -40,5 +41,7 @@ function pyuserpaths() {
 }
 
 # Grep among .py files
-alias pygrep='grep --include="*.py"'
+alias pygrep='grep -r --include="*.py"'
 
+# Run proper IPython regarding current virtualenv (if any)
+alias ipython="python -c 'import IPython; IPython.terminal.ipapp.launch_new_instance()'"
