@@ -57,11 +57,11 @@ shrink_path () {
         zstyle -t ':prompt:shrink_path' tilde && tilde=1
 
         while [[ $1 == -* ]]; do
-            case $1 in
-                --)
-                    shift
-                    break
-                    ;;
+                case $1 in
+                        --)
+                                shift
+                                break
+                        ;;
                         -f|--fish)
                                 lastfull=1
                                 short=1
@@ -88,14 +88,14 @@ shrink_path () {
                         -T|--nameddirs)
                                 tilde=1
                                 named=1
-                                ;;
+                        ;;
                         -[0-9]|-[0-9][0-9])
-                            length=${1/-/}
-                            ;;
+                                length=${1/-/}
+                        ;;
                         -e)
-                            shift
-                            ellipsis="$1"
-                            ;;
+                                shift
+                                ellipsis="$1"
+                        ;;
                 esac
                 shift
         done
@@ -130,7 +130,7 @@ shrink_path () {
                         expn=(a b)
                         part=''
                         i=0
-                        until [[ $i -gt 99 || ( $i -ge $((length - ellen)) || $dir == $part ) && ( (( ${#expn} == 1 )) || $dir = $expn ) ]];  do
+                        until [[ $i -gt 99 || ( $i -ge $((length - ellen)) || $dir == $part ) && ( (( ${#expn} == 1 )) || $dir = $expn ) ]]; do
                                 (( i++ ))
                                 part+=$dir[$i]
                                 expn=($(echo ${part}*(-/)))
