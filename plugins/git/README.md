@@ -45,7 +45,7 @@ plugins=(... git)
 | gcf                  | git config --list                                                                                                                |
 | gcl                  | git clone --recurse-submodules                                                                                                   |
 | gclean               | git clean -id                                                                                                                    |
-| gpristine            | git reset --hard && git clean -dfx                                                                                               |
+| gpristine            | git reset --hard && git clean -dffx                                                                                              |
 | gcm                  | git checkout master                                                                                                              |
 | gcd                  | git checkout develop                                                                                                             |
 | gcmsg                | git commit -m                                                                                                                    |
