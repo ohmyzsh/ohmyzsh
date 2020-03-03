@@ -32,10 +32,10 @@ function title {
         # Try to use terminfo to set the title
         # If the feature is available set title
         if [[ -n "$terminfo[fsl]" ]] && [[ -n "$terminfo[tsl]" ]]; then
-	  echoti tsl
-	  print -Pn "$1"
-	  echoti fsl
-	fi
+          echoti tsl
+          print -Pn "$1"
+          echoti fsl
+        fi
       fi
       ;;
   esac
@@ -50,23 +50,16 @@ fi
 
 # Runs before showing the prompt
 function omz_termsupport_precmd {
-  emulate -L zsh
-
-  if [[ "$DISABLE_AUTO_TITLE" == true ]]; then
-    return
-  fi
-
+  [[ "$DISABLE_AUTO_TITLE" == true ]] && return
   title $ZSH_THEME_TERM_TAB_TITLE_IDLE $ZSH_THEME_TERM_TITLE_IDLE
 }
 
 # Runs before executing the command
 function omz_termsupport_preexec {
+  [[ "$DISABLE_AUTO_TITLE" == true ]] && return
+
   emulate -L zsh
   setopt extended_glob
-
-  if [[ "$DISABLE_AUTO_TITLE" == true ]]; then
-    return
-  fi
 
   # split command into array of arguments
   local -a cmdargs
@@ -99,10 +92,9 @@ function omz_termsupport_preexec {
     esac
 
     # override preexec function arguments with job command
-    local job_cmd="${jobtexts[$job_id]}"
-    if [[ -n "$job_cmd" ]]; then
-      1="$job_cmd"
-      2="$job_cmd"
+    if [[ -n "${jobtexts[$job_id]}" ]]; then
+      1="${jobtexts[$job_id]}"
+      2="${jobtexts[$job_id]}"
     fi
   fi
 
