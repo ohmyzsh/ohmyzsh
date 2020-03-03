@@ -68,24 +68,47 @@ function omz_termsupport_preexec {
     return
   fi
 
+  # split command into array of arguments
+  local -a cmdargs
+  cmdargs=("${(z)2}")
+  # if running fg, extract the command from the job description
+  if [[ "${cmdargs[1]}" = fg ]]; then
+    # get the job id from the first argument passed to the fg command
+    local job_id jobspec="${cmdargs[2]#%}"
+    # logic based on jobs arguments:
+    # http://zsh.sourceforge.net/Doc/Release/Jobs-_0026-Signals.html#Jobs
+    # https://www.zsh.org/mla/users/2007/msg00704.html
+    case "$jobspec" in
+      <->) # %number argument:
+        # use the same <number> passed as an argument
+        job_id=${jobspec} ;;
+      ""|%|+) # empty, %% or %+ argument:
+        # use the current job, which appears with a + in $jobstates:
+        # suspended:+:5071=suspended (tty output)
+        job_id=${(k)jobstates[(r)*:+:*]} ;;
+      -) # %- argument:
+        # use the previous job, which appears with a - in $jobstates:
+        # suspended:-:6493=suspended (signal)
+        job_id=${(k)jobstates[(r)*:-:*]} ;;
+      [?]*) # %?string argument:
+        # use $jobtexts to match for a job whose command *contains* <string>
+        job_id=${(k)jobtexts[(r)*${(Q)jobspec}*]} ;;
+      *) # %string argument:
+        # use $jobtexts to match for a job whose command *starts with* <string>
+        job_id=${(k)jobtexts[(r)${(Q)jobspec}*]} ;;
+    esac
+
+    # override preexec function arguments with job command
+    local job_cmd="${jobtexts[$job_id]}"
+    if [[ -n "$job_cmd" ]]; then
+      1="$job_cmd"
+      2="$job_cmd"
+    fi
+  fi
+
   # cmd name only, or if this is sudo or ssh, the next cmd
   local CMD=${1[(wr)^(*=*|sudo|ssh|mosh|rake|-*)]:gs/%/%%}
   local LINE="${2:gs/%/%%}"
-
-  # replace fg, possibly with argument, with description from jobs
-  if [[ "$CMD" = fg ]]; then
-    local JOB
-    if [[ ${(z)1} = fg ]]; then # no arguments
-      JOB="$(jobs %% 2>/dev/null)"
-    else # arguments
-      JOB="$(jobs ${${(z)1}[2]} 2>/dev/null)"
-    fi
-    if [[ $? -eq 0 ]]; then
-      JOB="${${(z)JOB}[4,$]}" # trim job number, +, pid, status
-      title ${JOB:gs/%/%%} ${JOB:gs/%/%%}
-      return
-    fi
-  fi
 
   title '$CMD' '%100>...>$LINE%<<'
 }
