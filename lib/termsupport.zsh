@@ -32,8 +32,9 @@ function title {
         # Try to use terminfo to set the title
         # If the feature is available set title
         if [[ -n "$terminfo[fsl]" ]] && [[ -n "$terminfo[tsl]" ]]; then
-	  echoti tsl
-	  print -Pn "$1"
+	  echoti tsl 0
+	  echoti dl1
+	  print -Pn "$2"
 	  echoti fsl
 	fi
       fi
