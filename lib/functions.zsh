@@ -8,7 +8,7 @@ function uninstall_oh_my_zsh() {
 
 function upgrade_oh_my_zsh() {
   env ZSH="$ZSH" sh "$ZSH/tools/upgrade.sh"
-  rm -rf "$ZSH/log/update.lock"
+  command rm -rf "$ZSH/log/update.lock"
 }
 
 function take() {
