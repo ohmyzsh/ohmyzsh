@@ -32,6 +32,6 @@ ardu() {
 }
 
 arpa() {
-  # Both `arpa https://arcanist-url.com/<REVISION>`, and `ardu <REVISION>` work.
+  # Both `arpa https://arcanist-url.com/<REVISION>`, and `arpa <REVISION>` work.
   arc patch "${1:t}"
 }
