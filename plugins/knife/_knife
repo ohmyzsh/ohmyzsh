@@ -106,10 +106,10 @@ _knife() {
       compadd -Q "$@" show edit list "from file" create delete
       ;;
     bootstrap|clean|cook|prepare)
-      compadd "$@" nodes/*.json(N:t:r); done
+      compadd "$@" nodes/*.json(N:t:r)
       ;;
     init)
-      compadd "$@" ./*(/N:t); done
+      compadd "$@" ./*(/N:t)
       ;;
     *)
       _arguments '3:Subsubcommands:($(_knife_options2))'
