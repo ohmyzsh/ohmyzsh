@@ -26,20 +26,12 @@ alias arls='arc list'
 # (sorted alphabetically)
 #
 
-_extract_revision_id(){
-  # helper function to extract everything after the last slash.
-  # If there is no slash, returns the whole variable
-  local -a URL
-  URL=("${(s:/:)1}") # split by slash
-  echo "${URL[-1]}"
-}
-
 ardu() {
-# With this, both, `ardu https://arcanist-url.com/<REVISION>`, and `ardu <REVISION>` work.
-  arc diff --update "$(_extract_revision_id $1)"
+  # Both `ardu https://arcanist-url.com/<REVISION>`, and `ardu <REVISION>` work.
+  arc diff --update "${1:t}"
 }
 
 arpa() {
-# With this, both, `arpa https://arcanist-url/.com/<REVISION>`, and `arpa <REVISION>` work.
-  arc patch "$(_extract_revision_id $1)"
+  # Both `arpa https://arcanist-url.com/<REVISION>`, and `ardu <REVISION>` work.
+  arc patch "${1:t}"
 }
