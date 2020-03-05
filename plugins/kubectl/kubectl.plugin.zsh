@@ -86,6 +86,7 @@ alias kdecs='
 _kdecs() {
   if [ $(jq --version) != "jq-1.6" ]; then
       echo "kdecs requires jq-1.6 to use the base64d format";
+      unset -f _kdecs
       return 1
   fi
   kubectl get secret "$@" -o json | jq ".data | map_values(. | @base64d )";
