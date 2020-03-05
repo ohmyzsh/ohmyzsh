@@ -205,7 +205,7 @@ prompt_conda() {
   local conda_env="$CONDA_DEFAULT_ENV"
   if [[ -n $conda_env ]]; then
     if [[ -z $CONDA_PROMPT_MODIFIER ]]; then
-      prompt_segment blue black "($CONDA_DEFAULT_ENV)"
+      prompt_segment blue black "conda:$conda_env"
     fi
   fi
 }
