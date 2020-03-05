@@ -16,8 +16,7 @@ codiumExist=$( \whence -c "${execName:-NULL}" 2>&1 )
 if which codium > /dev/null 2>&1;then
   : ${VSCODIUM:=codium}
 else
-  #: ${VSCODIUM:=code-insiders}
-  echo "codium not found!"
+  printf "%s" "The executable codium was not found!"
 fi
 
 # Definining alias for all known options
