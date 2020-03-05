@@ -209,6 +209,14 @@ prompt_virtualenv() {
   fi
 }
 
+# Conda: current working environment
+prompt_conda() {
+  local conda_env="$CONDA_DEFAULT_ENV"
+  if [[ -n $conda_env && -z $CONDA_PROMPT_MODIFIER ]]; then
+    prompt_segment blue black "conda:$conda_env"
+  fi
+}
+
 # Status:
 # - was there an error
 # - am I root
@@ -241,6 +249,7 @@ build_prompt() {
   RETVAL=$?
   prompt_status
   prompt_virtualenv
+  prompt_conda
   prompt_aws
   prompt_context
   prompt_dir
