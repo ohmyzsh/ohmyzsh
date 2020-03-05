@@ -17,7 +17,7 @@ plugins=(... vscodium)
 ```
 
 ## Requirements
-Besides having ZSH and this plugin, you mut install VSCodium for your OS following the guide from vscodium's site:
+Besides having ZSH and this plugin, you must install VSCodium for your OS following the guide from vscodium's site:
 [Install section](https://vscodium.com/#install)
 
 ## Aliases that will be set
