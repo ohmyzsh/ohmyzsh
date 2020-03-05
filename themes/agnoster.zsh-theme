@@ -204,8 +204,7 @@ prompt_virtualenv() {
 prompt_conda() {
   local conda_env="$CONDA_DEFAULT_ENV"
   if [[ -n $conda_env ]]; then
-    local conda_changeps1="`conda config --show changeps1`" 
-    if [[ $conda_changeps1 == "changeps1: False" && $conda_env != "base" ]]; then
+    if [[ -z $CONDA_PROMPT_MODIFIER ]]; then
       prompt_segment blue black "($CONDA_DEFAULT_ENV)"
     fi
   fi
