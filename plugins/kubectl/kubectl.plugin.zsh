@@ -55,17 +55,6 @@ alias kgswide='kgs -o wide'
 alias kes='kubectl edit svc'
 alias kds='kubectl describe svc'
 alias kdels='kubectl delete svc'
-alias kdecs='
-_kdecs() {
-  if [ $(jq --version) != "jq-1.6" ]; then
-      echo "kdecs requires jq-1.6 to use the base64d format";
-      return 1
-  fi
-  kubectl get secret "$@" -o json | jq ".data | map_values(. | @base64d )";
-  unset -f _kdecs
-  return 0
-};
-_kdecs'
 
 # Ingress management
 alias kgi='kubectl get ingress'
@@ -93,6 +82,17 @@ alias kgsec='kubectl get secret'
 alias kgseca='kubectl get secret --all-namespaces'
 alias kdsec='kubectl describe secret'
 alias kdelsec='kubectl delete secret'
+alias kdecs='
+_kdecs() {
+  if [ $(jq --version) != "jq-1.6" ]; then
+      echo "kdecs requires jq-1.6 to use the base64d format";
+      return 1
+  fi
+  kubectl get secret "$@" -o json | jq ".data | map_values(. | @base64d )";
+  unset -f _kdecs
+  return 0
+};
+_kdecs'
 
 # Deployment management.
 alias kgd='kubectl get deployment'
