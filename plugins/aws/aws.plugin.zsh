@@ -62,24 +62,25 @@ fi
 
 # Load awscli completions
 
-function _awscli-homebrew-installed() {
-  # check if Homebrew is installed
-  (( $+commands[brew] )) || return 1
-
-  # speculatively check default brew prefix
-  if [ -h /usr/local/opt/awscli ]; then
-    _brew_prefix=/usr/local/opt/awscli
-  else
-    # ok, it is not in the default prefix
-    # this call to brew is expensive (about 400 ms), so at least let's make it only once
-    _brew_prefix=$(brew --prefix awscli)
-  fi
-}
-
 # AWS CLI v2 comes with its own autocompletion. Check if that is there, otherwise fall back
 if [[ -x /usr/local/bin/aws_completer ]]; then
+  autoload -Uz bashcompinit && bashcompinit
   complete -C aws_completer aws
 else
+  function _awscli-homebrew-installed() {
+    # check if Homebrew is installed
+    (( $+commands[brew] )) || return 1
+
+    # speculatively check default brew prefix
+    if [ -h /usr/local/opt/awscli ]; then
+      _brew_prefix=/usr/local/opt/awscli
+    else
+      # ok, it is not in the default prefix
+      # this call to brew is expensive (about 400 ms), so at least let's make it only once
+      _brew_prefix=$(brew --prefix awscli)
+    fi
+  }
+
   # get aws_zsh_completer.sh location from $PATH
   _aws_zsh_completer_path="$commands[aws_zsh_completer.sh]"
 
