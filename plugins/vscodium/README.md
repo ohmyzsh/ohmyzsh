@@ -2,7 +2,7 @@
 
 This plugin creates aliases for all VSCodium command line options.
 To enable, add it to the `plugins` array inside your zsh resources file in `~/.zshrc`.
-Look for plugins=( and add it to the end of the list. This can help to discover which line is it:
+Look for 'plugins=(', which is the name of the plugins array followed by a iquals sign and an open parenthesis to better match your search term, and add it to the end of the list. This can help to discover which line is it via your shell's terminal:
 
 ```
 egrep -rn "^plugins\=\(" ~/.zshrc
@@ -17,7 +17,7 @@ plugins=(... vscodium)
 ```
 
 ## Requirements
-Install VSCodium for your OS following the guide from vscodium's site:
+Besides having ZSH and this plugin, you mut install VSCodium for your OS following the guide from vscodium's site:
 [Install section](https://vscodium.com/#install)
 
 ## Aliases that will be set
@@ -52,7 +52,8 @@ Install VSCodium for your OS following the guide from vscodium's site:
 | vscle  | codium --list-extensions       | vscle  | List the installed extensions. |
 | vscsv  | codium --show-versions         | vscsv  | Show versions of installed extensions, when using --list-extension. |
 | vscc   | codium --category              | vscc   | Filters installed extensions by provided category, when using --list-extension. |
-| vscie  | codium --install-extension     | vscie <extension-id | path-to-vsix> | Installs or updates the extension. Use `--force` argument to avoid prompts. || vscue  | codium --uninstall-extension   | vscue  <extension-id> | Uninstalls an extension. |
+| vscie  | codium --install-extension     | vscie <extension-id \| path-to-vsix> | Installs or updates the extension. Use `--force` argument to avoid prompts. |
+| vscue  | codium --uninstall-extension   | vscue  <extension-id> | Uninstalls an extension. |
 | vscapi | codium --enable-proposed-api   | vscapi <extension-id> | Enables proposed API features for extensions. Can receive one or more extension IDs to enable individually. |
 
 #### Troubleshooting
@@ -66,5 +67,5 @@ Install VSCodium for your OS following the guide from vscodium's site:
 | vscdei  | codium --disable-extension                | vscdei <extension-id> | Disable an extension. |
 | vsciei  | codium --inspect-extensions               | vsciei <port> | Allow debugging and profiling of extensions. Check the developer tools for the connection URI. |
 | vscibe  | codium --inspect-brk-extensions           | vscibe <port> | Allow debugging and profiling of extensions with the extension host being paused after start. Check the developer tools for the connection URI. |
-| vscdg   | codium --disable-gpu                      | Disable GPU hardware acceleration. |
-| vscmm   | codium --max-memory                       | Max memory size for a window (in Mbytes). |
+| vscdg   | codium --disable-gpu                      | vscdg | Disable GPU hardware acceleration. |
+| vscmm   | codium --max-memory                       | vscmm | Max memory size for a window (in Mbytes). |
