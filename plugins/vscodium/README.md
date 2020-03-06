@@ -1,7 +1,7 @@
 # VS Codium Plugin
 
 This plugin creates aliases for all VSCodium command line options.
-To enable, add it to the `plugins` array inside your zsh resources file in `~/.zshrc`.
+To enable, add it to the `plugins` array inside your Zsh resources file in `~/.zshrc`.
 Look for 'plugins=(', which is the name of the plugins array followed by a iquals sign and an open parenthesis to better match your search term, and add it to the end of the list. This can help to discover which line is it via your shell's terminal:
 
 ```
@@ -17,7 +17,7 @@ plugins=(... vscodium)
 ```
 
 ## Requirements
-Besides having ZSH and this plugin, you must install VSCodium for your OS following the guide from vscodium's site:
+Besides having Zsh and this plugin, you must install VSCodium for your OS following the guide from vscodium's site:
 [Install section](https://vscodium.com/#install)
 
 ## Aliases that will be set

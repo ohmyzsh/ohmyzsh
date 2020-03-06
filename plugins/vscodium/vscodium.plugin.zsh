@@ -1,12 +1,12 @@
-# VScodium zsh plugin
-# Authors of VSCodium ZSH plugin:
+# VScodium Zsh plugin
+# Authors of VSCodium Zsh plugin:
 #   https://github.com/msmafra
 #
 # VSCodium more information here:
 # https://github.com/VSCodium/vscodium
 #
-# This plugin is inspire on from VScode zsh plugin.
-# Original authors of VScode zsh plugin:
+# This plugin is inspire on VScode Zsh plugin.
+# Original authors of VScode Zsh plugin:
 #   https://github.com/MarsiBarsi (original author)
 #   https://github.com/babakks
 #
