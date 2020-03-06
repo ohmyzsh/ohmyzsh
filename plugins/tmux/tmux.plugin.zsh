@@ -1,18 +1,6 @@
-if ! (( $+commands[tmux] )); then
-  print "zsh tmux plugin: tmux not found. Please install tmux before using this plugin." >&2
-  return 1
-fi
-
-# ALIASES
-
-alias ta='tmux attach -t'
-alias tad='tmux attach -d -t'
-alias ts='tmux new-session -s'
-alias tl='tmux list-sessions'
-alias tksv='tmux kill-server'
-alias tkss='tmux kill-session -t'
-
 # CONFIGURATION VARIABLES
+# Location/name of tmux binary
+: ${ZSH_TMUX_BINARY:=tmux}
 # Automatically start tmux
 : ${ZSH_TMUX_AUTOSTART:=false}
 # Only autostart once. If set to false, tmux will attempt to
@@ -39,6 +27,21 @@ alias tkss='tmux kill-session -t'
 # Set -u option to support unicode
 : ${ZSH_TMUX_UNICODE:=false}
 
+
+if ! (( $+commands[${ZSH_TMUX_BINARY}] )); then
+  print "zsh tmux plugin: ${ZSH_TMUX_BINARY} not found. Please install tmux before using this plugin." >&2
+  return 1
+fi
+
+# ALIASES
+
+alias ta='${ZSH_TMUX_BINARY} attach -t'
+alias tad='${ZSH_TMUX_BINARY} attach -d -t'
+alias ts='${ZSH_TMUX_BINARY} new-session -s'
+alias tl='${ZSH_TMUX_BINARY} list-sessions'
+alias tksv='${ZSH_TMUX_BINARY} kill-server'
+alias tkss='${ZSH_TMUX_BINARY} kill-session -t'
+
 # Determine if the terminal supports 256 colors
 if [[ $terminfo[colors] == 256 ]]; then
   export ZSH_TMUX_TERM=$ZSH_TMUX_FIXTERM_WITH_256COLOR
@@ -57,12 +60,12 @@ fi
 # Wrapper function for tmux.
 function _zsh_tmux_plugin_run() {
   if [[ -n "$@" ]]; then
-    command tmux "$@"
+    command ${ZSH_TMUX_BINARY} "$@"
     return $?
   fi
 
   local -a tmux_cmd
-  tmux_cmd=(command tmux)
+  tmux_cmd=(command ${ZSH_TMUX_BINARY})
   [[ "$ZSH_TMUX_ITERM2" == "true" ]] && tmux_cmd+=(-CC)
   [[ "$ZSH_TMUX_UNICODE" == "true" ]] && tmux_cmd+=(-u)
 
