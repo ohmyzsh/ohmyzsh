@@ -3,23 +3,30 @@
 #   https://github.com/msmafra
 #
 # VSCodium more information here:
-# https://github.com/VSCodium/vscodium
+#   https://github.com/VSCodium/vscodium
+# Zsh information
+#   https://www.zsh.org/
+# Oh My Zsh!
+#   https://ohmyz.sh/
 #
-# This plugin is inspire on VScode Zsh plugin.
+# This plugin is based on VScode Zsh plugin.
 # Original authors of VScode Zsh plugin:
 #   https://github.com/MarsiBarsi (original author)
 #   https://github.com/babakks
 #
 execName="codium"
-codiumExist=$( \whence -c "${execName:-NULL}" 2>&1 )
+codiumExists=$( \which "${execName:-NULL}" 2>&1 )
 
-if which codium > /dev/null 2>&1;then
+if [[ -f "${codiumExists}" ]];then
   : ${VSCODIUM:=codium}
 else
-  printf "%s" "The executable codium was not found!"
+  : ${VSCODIUM:-}
+  printf "%s\n" "The executable 'codium' could not be found!"
 fi
 
 # Definining alias for all known options
+if (( $+commands[codium] ));then
+# Open current directory
 alias vsc="${VSCODIUM} ."
 # To read from stdin, append '-' (e.g. 'ps aux | grep code | codium -')
 alias vsc-="${VSCODIUM} -"
@@ -56,3 +63,4 @@ alias vsciei="${VSCODIUM} --inspect-extensions"
 alias vscibe="${VSCODIUM} --inspect-brk-extensions"
 alias vscdg="${VSCODIUM} --disable-gpu"
 alias vscmm="${VSCODIUM} --max-memory"
+fi
