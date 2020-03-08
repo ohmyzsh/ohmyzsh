@@ -121,7 +121,7 @@ _gradle_parse_tasks () {
       if [[ "$lines_might_be_tasks" = true ]]; then
         # If a newline is found, echo the buffer to the calling function
         while read -r task; do
-          echo $task | awk '/[a-zA-Z0-9:-]+/ {print $1}'
+            echo $task | awk '/^[^/\\<>"?*|]+[^:]($| .*$)/ {print $1}'
         done <<< "$task_name_buffer"
         # Empty buffer, because we are done with the tasks
         task_name_buffer=""
