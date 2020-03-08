@@ -6,28 +6,29 @@ Colorize will highlight the content based on the filename extension. If it can't
 method for a given extension, it will try to find one by looking at the file contents. If no highlight method
 is found it will just cat the file normally, without syntax highlighting.
 
-## Setup
-
-To use it, add colorize to the plugins array of your `~/.zshrc` file:
-```
-plugins=(... colorize)
-```
-
 ## Configuration
 
 ### Requirements
 
-This plugin requires that at least one of the following tools is installed:
+This plugin requires that at least one of the following syntax highlighting tools is installed:
 
 * [Chroma](https://github.com/alecthomas/chroma)
 * [Pygments](https://pygments.org/download/)
 
-### Colorize tool
 
-Colorize supports `pygmentize` and `chroma` as syntax highlighter. By default colorize uses `pygmentize` unless it's not installed and `chroma` is. This can be overridden by the `ZSH_COLORIZE_TOOL` environment variable:
+### Setup
 
+Specify which installed tool you would like to use with the `ZSH_COLORIZE_TOOL` environment variable in `.zshrc` above the lines specifyng the oh-my-zsh plugins. Either:
+
+```ZSH_COLORIZE_TOOL=pygmentize```
+
+or
+
+```ZSH_COLORIZE_TOOL=chroma```
+
+Then enable colorize by adding it to the plugins array of your `~/.zshrc` file:
 ```
-ZSH_COLORIZE_TOOL=chroma
+plugins=(... colorize)
 ```
 
 ### Styles
