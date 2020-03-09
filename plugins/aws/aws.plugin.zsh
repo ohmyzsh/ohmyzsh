@@ -92,6 +92,9 @@ else
     # Ubuntu
     elif [[ -e /usr/share/zsh/vendor-completions/_awscli ]]; then
       _aws_zsh_completer_path=/usr/share/zsh/vendor-completions/_awscli
+    # NixOS
+    elif [[ -e "${commands[aws]:P:h:h}/share/zsh/site-functions/aws_zsh_completer.sh" ]]; then
+      _aws_zsh_completer_path="${commands[aws]:P:h:h}/share/zsh/site-functions/aws_zsh_completer.sh"
     # RPM
     else
       _aws_zsh_completer_path=/usr/share/zsh/site-functions/aws_zsh_completer.sh
