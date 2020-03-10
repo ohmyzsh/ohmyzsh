@@ -18,9 +18,9 @@ source_env() {
           return
         fi
 
-	      if [[ "$confirmation" = [aA] ]]; then
-	        echo "${dotenv_absolutepath}" >> "${ZSH_DOTENV_AGREE_LIST_FILE}"
-	      fi
+        if [[ "$confirmation" = [aA] ]]; then
+          echo "${dotenv_absolutepath}" >> "${ZSH_DOTENV_AGREE_LIST_FILE}"
+        fi
       fi
     fi
 
@@ -41,11 +41,11 @@ autoload -U add-zsh-hook
 add-zsh-hook chpwd source_env
 
 if [[ -z $ZSH_DOTENV_FILE ]]; then
-    ZSH_DOTENV_FILE=.env
+  ZSH_DOTENV_FILE=.env
 fi
 
 if [[ -z $ZSH_DOTENV_AGREE_LIST_FILE ]]; then
-    ZSH_DOTENV_AGREE_LIST_FILE="${ZSH}/dotenv-agree.list"
+  ZSH_DOTENV_AGREE_LIST_FILE="${ZSH}/dotenv-agree.list"
 fi
 
 source_env
