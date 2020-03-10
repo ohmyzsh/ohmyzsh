@@ -119,7 +119,7 @@
 | pacupg       | sudo pacman -Syu                        | Sync with repositories before upgrading packages             |
 | upgrade      | sudo pacman -Syu                        | Sync with repositories before upgrading packages             |
 | pacfileupg   | sudo pacman -Fy                         | Download fresh package databases from the server             |
-| pacfiles     | pacman -Fs                              | Search package file names for matching strings               |
+| pacfiles     | pacman -F                               | Search package file names for matching strings               |
 | pacls        | pacman -Ql                              | List files in a package                                      |
 | pacown       | pacman -Qo                              | Show which package owns a file                               |
 
