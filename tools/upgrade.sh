@@ -30,6 +30,9 @@ git config core.autocrlf false
 git config fsck.zeroPaddedFilemode ignore
 git config fetch.fsck.zeroPaddedFilemode ignore
 git config receive.fsck.zeroPaddedFilemode ignore
+# autostash on rebase (#7172)
+resetAutoStash=$(git config --bool rebase.autoStash 2>&1)
+git config rebase.autoStash true
 
 # Update upstream remote to ohmyzsh org
 remote=$(git remote -v | awk '/https:\/\/github\.com\/robbyrussell\/oh-my-zsh\.git/{ print $1; exit }')
@@ -38,7 +41,7 @@ if [ -n "$remote" ]; then
 fi
 
 printf "${BLUE}%s${NORMAL}\n" "Updating Oh My Zsh"
-if git -c rebase.autoStash=true pull --rebase --stat origin master
+if git pull --rebase --stat origin master
 then
   printf '%s' "$GREEN"
   printf '%s\n' '         __                                     __   '
@@ -53,3 +56,9 @@ then
 else
   printf "${RED}%s${NORMAL}\n" 'There was an error updating. Try again later?'
 fi
+
+# Unset git-config values set just for the upgrade
+case "$resetAutoStash" in
+  "") git config --unset rebase.autoStash ;;
+  *) git config rebase.autoStash "$resetAutoStash" ;;
+esac
