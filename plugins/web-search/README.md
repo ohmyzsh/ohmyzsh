@@ -34,6 +34,7 @@ Available search contexts are:
 | `yandex`              | `https://yandex.ru/yandsearch?text=`     |
 | `github`              | `https://github.com/search?q=`           |
 | `baidu`               | `https://www.baidu.com/s?wd=`            |
+| `bilibili`            | `https://search.bilibili.com/all?keyword=`|
 | `ecosia`              | `https://www.ecosia.org/search?q=`       |
 | `goodreads`           | `https://www.goodreads.com/search?q=`    |
 | `qwant`               | `https://www.qwant.com/?q=`              |
