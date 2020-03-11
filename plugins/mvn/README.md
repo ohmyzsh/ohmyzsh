@@ -4,6 +4,7 @@ The mvn plugin provides many [useful aliases](#aliases) as well as completion fo
 the [Apache Maven](https://maven.apache.org/) command (`mvn`).
 
 Enable it by adding `mvn` to the plugins array in your zshrc file:
+
 ```zsh
 plugins=(... mvn)
 ```

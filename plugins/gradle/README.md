@@ -18,6 +18,7 @@ whether it is `gradle` or `gradlew`. It also supports being called from
 any directory inside the root project directory.
 
 Examples:
+
 ```zsh
 gradle test
 gradle build

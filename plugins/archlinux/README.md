@@ -1,5 +1,13 @@
 # Archlinux plugin
 
+This plugin adds some aliases and functions to work with Arch Linux.
+
+To use it, add `archlinux` to the plugins array in your zshrc file:
+
+```zsh
+plugins=(... archlinux)
+```
+
 ## Features
 
 #### YAY

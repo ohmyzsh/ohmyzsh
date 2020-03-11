@@ -3,6 +3,7 @@
 This plugin adds auto-completion for [docker](https://www.docker.com/).
 
 To use it add `docker` to the plugins array in your zshrc file.
+
 ```zsh
 plugins=(... docker)
 ```

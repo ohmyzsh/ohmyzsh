@@ -172,7 +172,7 @@ plugins=(... git)
 | gwch                 | git whatchanged -p --abbrev-commit --pretty=medium                                                                               |
 | gwip                 | git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign -m "--wip-- [skip ci]"           |
 
-### Deprecated
+### Deprecated aliases
 
 These are aliases that have been removed, renamed, or otherwise modified in a way that may, or may not, receive further support.
 
@@ -211,7 +211,7 @@ These features allow to pause a branch development and switch to another one (_"
 | gwip             | Commit wip branch                               |
 | gunwip           | Uncommit wip branch                             |
 
-### Deprecated
+### Deprecated functions
 
 | Command                | Description                             | Reason                                                          |
 |:-----------------------|:----------------------------------------|:----------------------------------------------------------------|
