@@ -3,7 +3,7 @@ source_env() {
     if [ "$ZSH_DOTENV_PROMPT" != "false" ]; then
       # agree list
       touch "${ZSH_DOTENV_AGREE_LIST_FILE}"
-      local dotenv_absolutepath="$(readlink -f $ZSH_DOTENV_FILE)"
+      local dotenv_absolutepath="${ZSH_DOTENV_FILE:A}"
       local agree_list="${(@f)"$(<${ZSH_DOTENV_AGREE_LIST_FILE})"}"
       [[ ${agree_list[(ie)$]} -le ${#agree_list} ]]; local alreadyagreed=$?
 
@@ -49,4 +49,3 @@ if [[ -z $ZSH_DOTENV_AGREE_LIST_FILE ]]; then
 fi
 
 source_env
-
