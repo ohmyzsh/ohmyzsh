@@ -19,6 +19,9 @@ alias kca='_kca(){ kubectl "$@" --all-namespaces;  unset -f _kca; }; _kca'
 # Apply a YML file
 alias kaf='kubectl apply -f'
 
+# Apply a kustomization
+alias kak='kubectl apply -k'
+
 # Drop into an interactive terminal on a container
 alias keti='kubectl exec -ti'
 
@@ -34,6 +37,7 @@ alias kcgc='kubectl config get-contexts'
 # General aliases
 alias kdel='kubectl delete'
 alias kdelf='kubectl delete -f'
+alias kdelk='kubectl delete -k'
 
 # Pod management.
 alias kgp='kubectl get pods'
