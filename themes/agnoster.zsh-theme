@@ -99,32 +99,37 @@ prompt_git() {
   if [[ "$(git config --get oh-my-zsh.hide-status 2>/dev/null)" = 1 ]]; then
     return
   fi
-  local PL_BRANCH_CHAR RIGHT_ARROW LEFT_ARROW
+
+  local pl_branch_char pl_right_arrow pl_left_arrow
   () {
     local LC_ALL="" LC_CTYPE="en_US.UTF-8"
-    PL_BRANCH_CHAR=$'\ue0a0'         # 
-    RIGHT_ARROW=$'\u2192'            # →
-    LEFT_ARROW=$'\u2190'             # ←
+    pl_branch_char=$'\ue0a0'         # 
+    pl_right_arrow=$'\u2192'         # →
+    pl_left_arrow=$'\u2190'          # ←
   }
   local ref dirty mode repo_path background foreground
 
    if [[ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" = "true" ]]; then
     repo_path=$(git rev-parse --git-dir 2>/dev/null)
     dirty=$(parse_git_dirty)
-    ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="➦ $(git rev-parse --short HEAD 2> /dev/null)"
+    ref=$(git symbolic-ref HEAD 2> /dev/null) || \
+      ref="➦ $(git rev-parse --short HEAD 2> /dev/null)"
 
     if [[ -e "${repo_path}/BISECT_LOG" ]]; then
-      mode=" ${LEFT_ARROW}B${RIGHT_ARROW}"
+      mode=" ${pl_left_arrow}B${pl_right_arrow}"
       background=red
       foreground=white
     elif [[ -e "${repo_path}/MERGE_HEAD" ]]; then
-      mode=" ${RIGHT_ARROW}M${LEFT_ARROW}"
+      mode=" ${pl_right_arrow}M${pl_left_arrow}"
       background=red
       foreground=white
-    elif [[ -e "${repo_path}/rebase" || -e "${repo_path}/rebase-apply" || -e "${repo_path}/rebase-merge" || -e "${repo_path}/../.dotest" ]]; then
+    elif [[ -e "${repo_path}/rebase" || \
+      -e "${repo_path}/rebase-apply" || \
+      -e "${repo_path}/rebase-merge" || \
+      -e "${repo_path}/../.dotest" ]]; then
       current_commit=$(cat ${repo_path}/rebase-apply/next)
       total_commits=$(cat ${repo_path}/rebase-apply/last)
-      mode=" ${RIGHT_ARROW}R${RIGHT_ARROW} ${current_commit}/${total_commits}"
+      mode=" ${pl_right_arrow}R${pl_right_arrow} ${current_commit}/${total_commits}"
       background=red
       foreground=white
     elif [[ -n $dirty ]]; then
@@ -148,7 +153,7 @@ prompt_git() {
     zstyle ':vcs_info:*' formats ' %u%c'
     zstyle ':vcs_info:*' actionformats ' %u%c'
     vcs_info
-    echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode}"
+    echo -n "${ref/refs\/heads\//$pl_branch_char }${vcs_info_msg_0_%% }${mode}"
   fi
 }
 
