@@ -231,6 +231,10 @@ You must log out from your user session and log back in to see this change.
 
 Once you open up a new terminal window, it should load zsh with Oh My Zsh's configuration.
 
+#### Bring Oh My Zsh wherever you go through the SSH 
+
+Some users may want to use Oh My Zsh during the SSH connections. There is [xxh project](https://github.com/xxh/xxh) that allows bring Zsh with Oh My Zsh framework to the remote host without any installations, root access or affection on the host.
+
 ### Installation Problems
 
 If you have any hiccups installing, here are a few common fixes.
