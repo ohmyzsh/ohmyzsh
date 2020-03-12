@@ -99,10 +99,12 @@ prompt_git() {
   if [[ "$(git config --get oh-my-zsh.hide-status 2>/dev/null)" = 1 ]]; then
     return
   fi
-  local PL_BRANCH_CHAR
+  local PL_BRANCH_CHAR RIGHT_ARROW LEFT_ARROW
   () {
     local LC_ALL="" LC_CTYPE="en_US.UTF-8"
     PL_BRANCH_CHAR=$'\ue0a0'         # 
+    RIGHT_ARROW=$'\u2192'            # →
+    LEFT_ARROW=$'\u2190'             # ←
   }
   local ref dirty mode repo_path background foreground
 
@@ -112,15 +114,17 @@ prompt_git() {
     ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="➦ $(git rev-parse --short HEAD 2> /dev/null)"
 
     if [[ -e "${repo_path}/BISECT_LOG" ]]; then
-      mode=" <B>"
+      mode=" ${LEFT_ARROW}B${RIGHT_ARROW}"
       background=red
       foreground=white
     elif [[ -e "${repo_path}/MERGE_HEAD" ]]; then
-      mode=" >M<"
+      mode=" ${RIGHT_ARROW}M${LEFT_ARROW}"
       background=red
       foreground=white
     elif [[ -e "${repo_path}/rebase" || -e "${repo_path}/rebase-apply" || -e "${repo_path}/rebase-merge" || -e "${repo_path}/../.dotest" ]]; then
-      mode=" >R>"
+      current_commit=$(cat ${repo_path}/rebase-apply/next)
+      total_commits=$(cat ${repo_path}/rebase-apply/last)
+      mode=" ${RIGHT_ARROW}R${RIGHT_ARROW} ${current_commit}/${total_commits}"
       background=red
       foreground=white
     elif [[ -n $dirty ]]; then
