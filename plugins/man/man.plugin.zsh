@@ -14,7 +14,8 @@
 
 man-command-line() {
     [[ -z $BUFFER ]] && zle up-history
-    [[ $BUFFER != man\ * ]] && LBUFFER="man $LBUFFER"
+    local command="$(cut -d' ' -f1 <<<"$LBUFFER")"
+    [[ $BUFFER != man\ * ]] && LBUFFER="man $command"
 }
 zle -N man-command-line
 # Defined shortcut keys: [Esc]man
