@@ -1,7 +1,9 @@
 # CONTRIBUTING GUIDELINES
 
-Oh-My-Zsh is a community-driven project. Contribution is welcome, encouraged and appreciated.
+Oh-My-Zsh is a community-driven project. Contribution is welcome, encouraged, and appreciated.
 It is also essential for the development of the project.
+
+First, please take a moment to review our [code of conduct](CODE_OF_CONDUCT.md).
 
 These guidelines are an attempt at better addressing the huge amount of pending
 issues and pull requests. Please read them closely.
@@ -29,7 +31,7 @@ your problem.
 
 If you find one, comment on it so we can know there are more people experiencing it.
 
-If not, look at the [Troubleshooting](https://github.com/robbyrussell/oh-my-zsh/wiki/Troubleshooting)
+If not, look at the [Troubleshooting](https://github.com/ohmyzsh/ohmyzsh/wiki/Troubleshooting)
 page for instructions on how to gather data to better debug your problem.
 
 Then, you can go ahead and create an issue with as much detail as you can provide.
@@ -60,7 +62,7 @@ maintainers) by mentioning their GitHub handle (starting with `@`) in your messa
 
 You should be familiar with the basics of
 [contributing on GitHub](https://help.github.com/articles/using-pull-requests) and have a fork
-[properly set up](https://github.com/robbyrussell/oh-my-zsh/wiki/Contribution-Technical-Practices).
+[properly set up](https://github.com/ohmyzsh/ohmyzsh/wiki/Contribution-Technical-Practices).
 
 You MUST always create PRs with _a dedicated branch_ based on the latest upstream tree.
 
@@ -83,7 +85,7 @@ maintainers) by mentioning their GitHub handle (starting with `@`) in your messa
 
 ### You have an addition
 
-Please [do not](https://github.com/robbyrussell/oh-my-zsh/wiki/Themes#dont-send-us-your-theme-for-now)
+Please [do not](https://github.com/ohmyzsh/ohmyzsh/wiki/Themes#dont-send-us-your-theme-for-now)
 send themes for now.
 
 Please be so kind as to [search](#use-the-search-luke) for any pending, merged or rejected Pull Requests
@@ -107,7 +109,7 @@ to help you check whether a similar contribution to yours already exists. Please
 before making any contribution, it avoids duplicates and eases maintenance. Trust me,
 that works 90% of the time.
 
-You can also take a look at the [FAQ](https://github.com/robbyrussell/oh-my-zsh/wiki/FAQ)
+You can also take a look at the [FAQ](https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ)
 to be sure your contribution has not already come up.
 
 If all fails, your thing has probably not been reported yet, so you can go ahead
@@ -119,5 +121,5 @@ and [create an issue](#reporting-issues) or [submit a PR](#submitting-pull-reque
 
 Very nice!! :)
 
-Please have a look at the [Volunteer](https://github.com/robbyrussell/oh-my-zsh/wiki/Volunteers)
+Please have a look at the [Volunteer](https://github.com/ohmyzsh/ohmyzsh/wiki/Volunteers)
 page for instructions on where to start and more.

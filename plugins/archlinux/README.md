@@ -1,6 +1,34 @@
 # Archlinux plugin
 
+This plugin adds some aliases and functions to work with Arch Linux.
+
+To use it, add `archlinux` to the plugins array in your zshrc file:
+
+```zsh
+plugins=(... archlinux)
+```
+
 ## Features
+
+#### YAY
+
+| Alias   | Command                            | Description                                                         |
+|---------|------------------------------------|---------------------------------------------------------------------|
+| yaconf  | yay -Pg                            | Print current configuration                                         |
+| yain    | yay -S                             | Install packages from the repositories                              |
+| yains   | yay -U                             | Install a package from a local file                                 |
+| yainsd  | yay -S --asdeps                    | Install packages as dependencies of another package                 |
+| yaloc   | yay -Qi                            | Display information about a package in the local database           |
+| yalocs  | yay -Qs                            | Search for packages in the local database                           |
+| yalst   | yay -Qe                            | List installed packages including from AUR (tagged as "local")      |
+| yamir   | yay -Syy                           | Force refresh of all package lists after updating mirrorlist        |
+| yaorph  | yay -Qtd                           | Remove orphans using yay                                            |
+| yare    | yay -R                             | Remove packages, keeping its settings and dependencies              |
+| yarem   | yay -Rns                           | Remove packages, including its settings and unneeded dependencies   |
+| yarep   | yay -Si                            | Display information about a package in the repositories             |
+| yareps  | yay -Ss                            | Search for packages in the repositories                             |
+| yaupg   | yay -Syu                           | Sync with repositories before upgrading packages                    |
+| yasu    | yay -Syu --no-confirm              | Same as `yaupg`, but without confirmation                           |
 
 #### TRIZEN
 
@@ -99,7 +127,7 @@
 | pacupg       | sudo pacman -Syu                        | Sync with repositories before upgrading packages             |
 | upgrade      | sudo pacman -Syu                        | Sync with repositories before upgrading packages             |
 | pacfileupg   | sudo pacman -Fy                         | Download fresh package databases from the server             |
-| pacfiles     | pacman -Fs                              | Search package file names for matching strings               |
+| pacfiles     | pacman -F                               | Search package file names for matching strings               |
 | pacls        | pacman -Ql                              | List files in a package                                      |
 | pacown       | pacman -Qo                              | Show which package owns a file                               |
 
