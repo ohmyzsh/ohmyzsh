@@ -1,13 +1,14 @@
 # tmux
 
-This plugin provides aliases for [tmux](http://tmux.github.io/), the terminal multiplexer.
+This plugin provides aliases for [tmux](https://tmux.github.io/), the terminal multiplexer.
 To use it add `tmux` to the plugins array in your zshrc file.
 
 ```zsh
 plugins=(... tmux)
 ```
 
-The plugin also supports the following - 
+The plugin also supports the following:
+
 - determines if tmux is installed or not, if not, prompts user to install tmux
 - determines if the terminal supports the 256 colors or not, sets the appropriate configuration variable
 - sets the correct local config file to use
@@ -24,7 +25,6 @@ The plugin also supports the following -
 | `tkss` | tmux kill-session -t   | Terminate named running tmux session                      |
 | `tmux` | `_zsh_tmux_plugin_run` | Start a new tmux session                                  |
 
-
 ## Configuration Variables
 
 | Variable                            | Description                                                                   |
@@ -37,3 +37,5 @@ The plugin also supports the following -
 | `ZSH_TMUX_ITERM2`                   | Sets the `-CC` option for iTerm2 tmux integration (default: `false`)          |
 | `ZSH_TMUX_FIXTERM_WITHOUT_256COLOR` | `$TERM` to use for non 256-color terminals (default: `screen`)                |
 | `ZSH_TMUX_FIXTERM_WITH_256COLOR`    | `$TERM` to use for 256-color terminals (default: `screen-256color`            |
+| `ZSH_TMUX_CONFIG`                   | Set the configuration path (default: `$HOME/.tmux.conf`)                      |
+| `ZSH_TMUX_UNICODE`                  | Set `tmux -u` option to support unicode                                       |

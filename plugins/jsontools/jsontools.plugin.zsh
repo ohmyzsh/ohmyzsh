@@ -11,9 +11,10 @@ if [[ $(whence node) != "" && ( "x$JSONTOOLS_METHOD" = "x"  || "x$JSONTOOLS_METH
 	alias urlencode_json='xargs -0 node -e "console.log(encodeURIComponent(process.argv[1]))"'
 	alias urldecode_json='xargs -0 node -e "console.log(decodeURIComponent(process.argv[1]))"'
 elif [[ $(whence python) != "" && ( "x$JSONTOOLS_METHOD" = "x" || "x$JSONTOOLS_METHOD" = "xpython" ) ]]; then
-	alias pp_json='python -mjson.tool'
+	alias pp_json='python -c "import sys; del sys.path[0]; import runpy; runpy._run_module_as_main(\"json.tool\")"'
 	alias is_json='python -c "
-import json, sys;
+import sys; del sys.path[0];
+import json;
 try: 
 	json.loads(sys.stdin.read())
 except ValueError, e: 
@@ -22,11 +23,13 @@ else:
 	print True
 sys.exit(0)"'
 	alias urlencode_json='python -c "
-import urllib, json, sys;
+import sys; del sys.path[0];
+import urllib, json;
 print urllib.quote_plus(sys.stdin.read())
 sys.exit(0)"'
 	alias urldecode_json='python -c "
-import urllib, json, sys;
+import sys; del sys.path[0];
+import urllib, json;
 print urllib.unquote_plus(sys.stdin.read())
 sys.exit(0)"'
 elif [[ $(whence ruby) != "" && ( "x$JSONTOOLS_METHOD" = "x" || "x$JSONTOOLS_METHOD" = "xruby" ) ]]; then

@@ -10,9 +10,9 @@ plugins=(... laravel4)
 
 ## Aliases
 
-| Alias | Command                                   | Description                                     |
-|-----------|-------------------------------------------|-------------------------------------------------------------|
-| la4       | `php artisan`                             | Main Artisan command                        |
-| la4dump   | `php artisan dump-autoload`               | Regenerate framework autoload files         |
-| la4cache  | `php artisan cache:clear`                 | Flush the application cache                 |
-| la4routes | `php artisan routes`                      | List all registered routes                  |
+| Alias     | Command                     | Description                         |
+|-----------|-----------------------------|-------------------------------------|
+| la4       | `php artisan`               | Main Artisan command                |
+| la4dump   | `php artisan dump-autoload` | Regenerate framework autoload files |
+| la4cache  | `php artisan cache:clear`   | Flush the application cache         |
+| la4routes | `php artisan routes`        | List all registered routes          |

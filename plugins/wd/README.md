@@ -13,7 +13,7 @@ wd
 
 ### oh-my-zsh
 
-`wd` comes bundled with [oh-my-zshell](https://github.com/robbyrussell/oh-my-zsh)!
+`wd` comes bundled with [oh-my-zshell](https://github.com/ohmyzsh/ohmyzsh)!
 
 Just add the plugin in your `~/.zshrc` file:
 
@@ -53,7 +53,7 @@ Run either in terminal:
 
 #### Completion
 
-If you're NOT using [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) and you want to utilize the zsh-completion feature, you will also need to add the path to your `wd` installation (`~/bin/wd` if you used the automatic installer) to your `fpath`. E.g. in your `~/.zshrc`:
+If you're NOT using [oh-my-zsh](https://github.com/ohmyzsh/ohmyzsh) and you want to utilize the zsh-completion feature, you will also need to add the path to your `wd` installation (`~/bin/wd` if you used the automatic installer) to your `fpath`. E.g. in your `~/.zshrc`:
 
     fpath=(~/path/to/wd $fpath)
 
@@ -85,7 +85,7 @@ Also, you may have to force a rebuild of `zcompdump` by running:
         $ wd ...
 
     This is a wrapper for the zsh `dirs` function.
-    (You might need `setopt AUTO_PUSHD` in your `.zshrc` if you hare not using [oh-my-zshell](https://github.com/robbyrussell/oh-my-zsh)).
+    (You might need `setopt AUTO_PUSHD` in your `.zshrc` if you hare not using [oh-my-zshell](https://github.com/ohmyzsh/ohmyzsh)).
 
  * Remove warp point test point:
 

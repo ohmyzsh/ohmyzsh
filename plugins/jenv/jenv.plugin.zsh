@@ -15,7 +15,7 @@ if [[ $FOUND_JENV -eq 0 ]]; then
 fi
 
 if [[ $FOUND_JENV -eq 1 ]]; then
-    export PATH="${jenvdir}/bin:$PATH"
+    (( $+commands[jenv] )) || export PATH="${jenvdir}/bin:$PATH"
     eval "$(jenv init - zsh)"
 
     function jenv_prompt_info() { jenv version-name 2>/dev/null }

@@ -15,10 +15,10 @@ This plugin enables directory navigation similar to using back and forward on br
    )
    ```
 
-2. Reload the source file or restart your Terminal session:
+2. Restart the shell or restart your Terminal session:
 
    ```console
-   $ source ~/.zshrc
+   $ exec zsh
    $
    ```
 

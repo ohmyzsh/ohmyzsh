@@ -4,7 +4,7 @@ This plugin adds useful aliases for common [Yum](http://yum.baseurl.org/) comman
 
 To use it, add `yum` to the plugins array in your zshrc file:
 
-```
+```zsh
 plugins=(... yum)
 ```
 

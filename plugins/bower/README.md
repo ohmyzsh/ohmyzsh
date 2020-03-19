@@ -4,7 +4,7 @@ This plugin adds completion for [Bower](https://bower.io/) and a few useful alia
 
 To use it, add `bower` to the plugins array in your zshrc file:
 
-```
+```zsh
 plugins=(... bower)
 ```
 
@@ -15,4 +15,3 @@ plugins=(... bower)
 | bi    | `bower install` | Installs the project dependencies listed in bower.json |
 | bl    | `bower list`    | List local packages and possible updates               |
 | bs    | `bower search`  | Finds all packages or a specific package.              |
-

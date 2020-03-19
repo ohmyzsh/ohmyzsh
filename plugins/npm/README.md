@@ -1,9 +1,10 @@
-## npm plugin
+# npm plugin
 
 The npm plugin provides completion as well as adding many useful aliases.
 
 To use it, add npm to the plugins array of your zshrc file:
-```
+
+```zsh
 plugins=(... npm)
 ```
 

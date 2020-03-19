@@ -1,6 +1,6 @@
 ## percol
 
-Provides some useful function to make [percol](https://github.com/mooz/percol) work with zsh history and [jump plugin](https://github.com/robbyrussell/oh-my-zsh/blob/master/plugins/jump/jump.plugin.zsh)
+Provides some useful function to make [percol](https://github.com/mooz/percol) work with zsh history and [jump plugin](https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/jump/jump.plugin.zsh)
 
 ### Requirements
 
@@ -8,7 +8,7 @@ Provides some useful function to make [percol](https://github.com/mooz/percol) w
 pip install percol
 ```
 
-And [jump](https://github.com/robbyrussell/oh-my-zsh/blob/master/plugins/jump/jump.plugin.zsh) for `oh-my-zsh` is a optional requirement.
+And [jump](https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/jump/jump.plugin.zsh) for `oh-my-zsh` is a optional requirement.
 
 ### Usage
 

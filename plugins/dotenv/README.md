@@ -32,6 +32,8 @@ PORT=3001
 ```
 You can even mix both formats, although it's probably a bad idea.
 
+## Plugin options
+
 ### ZSH_DOTENV_FILE
 
 You can also modify the name of the file to be loaded with the variable `ZSH_DOTENV_FILE`.
@@ -42,6 +44,10 @@ For example, this will make the plugin look for files named `.dotenv` and load t
 # in ~/.zshrc, before Oh My Zsh is sourced:
 ZSH_DOTENV_FILE=.dotenv
 ```
+
+### ZSH_DOTENV_PROMPT
+
+Set `ZSH_DOTENV_PROMPT=false` in your zshrc file if you don't want the confirmation message.
 
 ## Version Control
 

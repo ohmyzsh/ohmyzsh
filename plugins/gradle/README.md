@@ -1,4 +1,4 @@
-## Gradle Plugin
+# Gradle plugin
 
 This plugin adds completions and aliases for [Gradle](https://gradle.org/).
 
@@ -10,9 +10,15 @@ plugins=(... gradle)
 
 ## Usage
 
-This plugin creates an alias `gradle` which is used to determine whether the current working directory has a gradlew file. If gradlew is present it will be used otherwise `gradle` is used directly. Gradle tasks can be executed directly without regard for whether it is `gradle` or `gradlew`
+This plugin creates a function called `gradle-or-gradlew`, which is aliased
+to `gradle`, which is used to determine whether the current project directory
+has a gradlew file. If `gradlew` is present it will be used, otherwise `gradle`
+is used instead. Gradle tasks can be executed directly without regard for
+whether it is `gradle` or `gradlew`. It also supports being called from
+any directory inside the root project directory.
 
 Examples:
+
 ```zsh
 gradle test
 gradle build
@@ -20,4 +26,5 @@ gradle build
 
 ## Completion
 
-The completion provided for this plugin caches the parsed tasks into a file named `.gradletasknamecache` in the current working directory, so you might want to add that to your `.gitignore` file so that it's not accidentally committed.
+This plugin uses [the completion from the Gradle project](https://github.com/gradle/gradle-completion),
+which is distributed under the MIT license.

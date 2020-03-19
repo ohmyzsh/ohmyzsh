@@ -41,6 +41,8 @@ subcmds=(
 'patch'
 'pkg'
 'provides'
+'rdependents'
+'rdeps'
 'rpmpackage'
 'search'
 'selfupdate'

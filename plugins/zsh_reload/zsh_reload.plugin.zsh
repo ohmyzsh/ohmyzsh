@@ -3,7 +3,7 @@ src() {
 	autoload -U compinit zrecompile
 	compinit -i -d "$cache/zcomp-$HOST"
 
-	for f in ~/.zshrc "$cache/zcomp-$HOST"; do
+	for f in ${ZDOTDIR:-~}/.zshrc "$cache/zcomp-$HOST"; do
 		zrecompile -p $f && command rm -f $f.zwc.old
 	done
 

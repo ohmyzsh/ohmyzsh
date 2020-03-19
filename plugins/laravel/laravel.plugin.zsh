@@ -17,6 +17,13 @@ alias pamm='php artisan make:model'
 alias pamc='php artisan make:controller'
 alias pams='php artisan make:seeder'
 alias pamt='php artisan make:test'
+alias pamfa='php artisan make:factory'
+alias pamp='php artisan make:policy'
+alias pame='php artisan make:event'
+alias pamj='php artisan make:job'
+alias paml='php artisan make:listener'
+alias pamn='php artisan make:notification'
+alias pampp='php artisan make:provider'
 
 
 # Clears
@@ -24,3 +31,11 @@ alias pacac='php artisan cache:clear'
 alias pacoc='php artisan config:clear'
 alias pavic='php artisan view:clear'
 alias paroc='php artisan route:clear'
+
+# queues
+alias paqf='php artisan queue:failed'
+alias paqft='php artisan queue:failed-table'
+alias paql='php artisan queue:listen'
+alias paqr='php artisan queue:retry'
+alias paqt='php artisan queue:table'
+alias paqw='php artisan queue:work'

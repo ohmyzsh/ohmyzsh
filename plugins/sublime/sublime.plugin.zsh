@@ -29,6 +29,8 @@ alias stn=create_project
         "/usr/local/bin/sublime_text"
         "/usr/bin/subl"
         "/usr/bin/subl3"
+        "/snap/bin/subl"
+        "/snap/bin/sublime-text.subl"
       )
     fi
   elif [[ "$OSTYPE" = darwin* ]]; then

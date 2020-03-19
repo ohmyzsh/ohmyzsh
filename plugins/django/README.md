@@ -34,23 +34,3 @@ runfcgi                    -- run this project as a fastcgi
 runserver                  -- start a lightweight web server for development
 ...
 ```
-
-If you want to see the options available for a specific command, try:
-
-```zsh
-$> python manage.py makemessages (press <TAB> here)
-```
-
-And that would result in:
-
-```zsh
---all         -a  -- re-examine all code and templates
---domain      -d  -- domain of the message files (default: "django")
---extensions  -e  -- file extension(s) to examine (default: ".html")
---help            -- display help information
---locale      -l  -- locale to process (default: all)
---pythonpath      -- directory to add to the Python path
---settings        -- python path to settings module
-...
-```
-

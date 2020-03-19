@@ -23,7 +23,8 @@ _togglePipenvShell() {
     fi
   fi
 }
-chpwd_functions+=(_togglePipenvShell)
+autoload -U add-zsh-hook
+add-zsh-hook chpwd _togglePipenvShell
 
 # Aliases
 alias pch="pipenv check"

@@ -1,17 +1,19 @@
 function setup_using_base_dir() {
-	# Declare all variables local not no mess with outside env in any way
-	local fzf_base
-	local fzf_shell
-	local fzfdirs
-	local dir
+    # Declare all variables local not no mess with outside env in any way
+    local fzf_base
+    local fzf_shell
+    local fzfdirs
+    local dir
 
     test -d "${FZF_BASE}" && fzf_base="${FZF_BASE}"
 
     if [[ -z "${fzf_base}" ]]; then
         fzfdirs=(
           "${HOME}/.fzf"
+          "${HOME}/.nix-profile/share/fzf"
           "/usr/local/opt/fzf"
           "/usr/share/fzf"
+          "/usr/local/share/examples/fzf"
         )
         for dir in ${fzfdirs}; do
             if [[ -d "${dir}" ]]; then
@@ -30,8 +32,8 @@ function setup_using_base_dir() {
     fi
 
     if [[ -d "${fzf_base}" ]]; then
-        # Fix fzf shell directory for Archlinux package
-        if [[ ! -d "${fzf_base}/shell" ]] && [[ -f /etc/arch-release ]]; then
+        # Fix fzf shell directory for Arch Linux, NixOS or Void Linux packages
+        if [[ ! -d "${fzf_base}/shell" ]]; then
           fzf_shell="${fzf_base}"
         else
           fzf_shell="${fzf_base}/shell"
@@ -58,7 +60,7 @@ function setup_using_base_dir() {
 
 
 function setup_using_debian_package() {
-    dpkg -s fzf &> /dev/null
+    (( $+commands[dpkg] )) && dpkg -s fzf &> /dev/null
     if (( $? )); then
         # Either not a debian based distro, or no fzf installed. In any case skip ahead
         return 1
@@ -67,7 +69,10 @@ function setup_using_debian_package() {
     # NOTE: There is no need to configure PATH for debian package, all binaries
     # are installed to /usr/bin by default
 
-    local completions="/usr/share/zsh/vendor-completions/_fzf"
+    # Determine completion file path: first bullseye/sid, then buster/stretch
+    local completions="/usr/share/doc/fzf/examples/completion.zsh"
+    [[ -f "$completions" ]] || completions="/usr/share/zsh/vendor-completions/_fzf"
+
     local key_bindings="/usr/share/doc/fzf/examples/key-bindings.zsh"
 
     # Auto-completion

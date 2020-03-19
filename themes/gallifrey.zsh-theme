@@ -1,4 +1,4 @@
-# ZSH Theme - Preview: https://github.com/robbyrussell/oh-my-zsh/wiki/Themes#gallifrey
+# ZSH Theme - Preview: https://github.com/ohmyzsh/ohmyzsh/wiki/Themes#gallifrey
 return_code="%(?..%{$fg[red]%}%? ↵%{$reset_color%})"
 host_color="%(!.%{$fg[red]%}.%{$fg[green]%})"
 

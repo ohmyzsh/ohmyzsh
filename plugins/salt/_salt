@@ -271,7 +271,7 @@ _salt_comp(){
     fi
 
     if _cache_invalid salt/salt_dir || ! _retrieve_cache salt/salt_dir; then
-        salt_dir="${$(python2 -c 'import salt; print(salt.__file__);')%__init__*}"
+        salt_dir="${$(python2 -c 'import sys; del sys.path[0]; import salt; print(salt.__file__);')%__init__*}"
         _store_cache salt/salt_dir salt_dir
     fi
 }

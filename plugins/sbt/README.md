@@ -17,16 +17,16 @@ plugins=(... sbt)
 | sbcln | `sbt clean`           | Deletes all generated files                                  |
 | sbcc  | `sbt clean compile`   | Deletes generated files, compiles the main sources           |
 | sbco  | `sbt console`         | Starts Scala with the compiled sources and all dependencies  |
-| sbcq  | `sbt console-quick`   | Starts Scala with all dependencies                           |
-| sbcp  | `sbt console-project` | Starts Scala with sbt and the build definitions              |
+| sbcq  | `sbt consoleQuick`    | Starts Scala with all dependencies                           |
+| sbcp  | `sbt consoleProject`  | Starts Scala with sbt and the build definitions              |
 | sbd   | `sbt doc`             | Generates API documentation for Scala source files           |
 | sbdc  | `sbt dist:clean`      | Deletes the distribution packages                            |
 | sbdi  | `sbt dist`            | Creates the distribution packages                            |
-| sbgi  | `sbt gen-idea`        | Create Idea project files                                    |
+| sbgi  | `sbt genIdea`         | Create Idea project files                                    |
 | sbp   | `sbt publish`         | Publishes artifacts to the repository                        |
-| sbpl  | `sbt publish-local`   | Publishes artifacts to the local Ivy repository              |
+| sbpl  | `sbt publishLocal`    | Publishes artifacts to the local Ivy repository              |
 | sbr   | `sbt run`             | Runs the main class for the project                          |
-| sbrm  | `sbt run-main`        | Runs the specified main class for the project                |
+| sbrm  | `sbt runMain`         | Runs the specified main class for the project                |
 | sbu   | `sbt update`          | Resolves and retrieves external dependencies                 |
 | sbx   | `sbt test`            | Compiles and runs all tests                                  |
 | sba   | `sbt assembly`        | Create a fat JAR with all dependencies                       |

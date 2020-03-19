@@ -23,6 +23,9 @@ jira reported [username]  # queries for issues reported by a user
 jira assigned [username]  # queries for issues assigned to a user
 jira myissues   # queries for you own issues
 jira branch     # opens an existing issue matching the current branch name
+                # The branch name may have prefixes ending in "/": "feature/MP-1234",
+                # and also suffixes starting with "_": "MP-1234_fix_dashboard"
+                # In both these cases, the issue opened will be "MP-1234"
 jira ABC-123    # opens an existing issue
 jira ABC-123 m  # opens an existing issue for adding a comment
 ```

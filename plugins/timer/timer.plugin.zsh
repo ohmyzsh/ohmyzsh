@@ -25,5 +25,6 @@ __timer_display_timer_precmd() {
   fi
 }
 
-preexec_functions+=(__timer_save_time_preexec)
-precmd_functions+=(__timer_display_timer_precmd)
+autoload -U add-zsh-hook
+add-zsh-hook preexec __timer_save_time_preexec
+add-zsh-hook precmd __timer_display_timer_precmd

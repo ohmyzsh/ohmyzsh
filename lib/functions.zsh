@@ -3,11 +3,12 @@ function zsh_stats() {
 }
 
 function uninstall_oh_my_zsh() {
-  env ZSH=$ZSH sh $ZSH/tools/uninstall.sh
+  env ZSH="$ZSH" sh "$ZSH/tools/uninstall.sh"
 }
 
 function upgrade_oh_my_zsh() {
-  env ZSH=$ZSH sh $ZSH/tools/upgrade.sh
+  env ZSH="$ZSH" sh "$ZSH/tools/upgrade.sh"
+  command rm -rf "$ZSH/log/update.lock"
 }
 
 function take() {

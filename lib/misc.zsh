@@ -22,7 +22,7 @@ env_default 'PAGER' 'less'
 env_default 'LESS' '-R'
 
 ## super user alias
-alias _='sudo'
+alias _='sudo '
 
 ## more intelligent acking for ubuntu users
 if which ack-grep &> /dev/null; then

@@ -1,7 +1,7 @@
 _paver_does_target_list_need_generating () {
-  [ ! -f .paver_targets ] && return 0;
-  [ pavement.py -nt .paver_targets ] && return 0;
-  return 1;
+  [ ! -f .paver_targets ] && return 0
+  [ pavement.py -nt .paver_targets ] && return 0
+  return 1
 }
 
 _paver () {

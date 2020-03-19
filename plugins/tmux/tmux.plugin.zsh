@@ -34,6 +34,10 @@ alias tkss='tmux kill-session -t'
 # Tmux states this should be screen-256color, but you may need to change it on
 # systems without the proper terminfo
 : ${ZSH_TMUX_FIXTERM_WITH_256COLOR:=screen-256color}
+# Set the configuration path
+: ${ZSH_TMUX_CONFIG:=$HOME/.tmux.conf}
+# Set -u option to support unicode
+: ${ZSH_TMUX_UNICODE:=false}
 
 # Determine if the terminal supports 256 colors
 if [[ $terminfo[colors] == 256 ]]; then
@@ -43,7 +47,8 @@ else
 fi
 
 # Set the correct local config file to use.
-if [[ "$ZSH_TMUX_ITERM2" == "false" && -e "$HOME/.tmux.conf" ]]; then
+if [[ "$ZSH_TMUX_ITERM2" == "false" && -e "$ZSH_TMUX_CONFIG" ]]; then
+  export ZSH_TMUX_CONFIG
   export _ZSH_TMUX_FIXED_CONFIG="${0:h:a}/tmux.extra.conf"
 else
   export _ZSH_TMUX_FIXED_CONFIG="${0:h:a}/tmux.only.conf"
@@ -59,13 +64,18 @@ function _zsh_tmux_plugin_run() {
   local -a tmux_cmd
   tmux_cmd=(command tmux)
   [[ "$ZSH_TMUX_ITERM2" == "true" ]] && tmux_cmd+=(-CC)
+  [[ "$ZSH_TMUX_UNICODE" == "true" ]] && tmux_cmd+=(-u)
 
   # Try to connect to an existing session.
   [[ "$ZSH_TMUX_AUTOCONNECT" == "true" ]] && $tmux_cmd attach
 
   # If failed, just run tmux, fixing the TERM variable if requested.
   if [[ $? -ne 0 ]]; then
-    [[ "$ZSH_TMUX_FIXTERM" == "true" ]] && tmux_cmd+=(-f "$_ZSH_TMUX_FIXED_CONFIG")
+    if [[ "$ZSH_TMUX_FIXTERM" == "true" ]]; then
+      tmux_cmd+=(-f "$_ZSH_TMUX_FIXED_CONFIG")
+    elif [[ -e "$ZSH_TMUX_CONFIG" ]]; then
+      tmux_cmd+=(-f "$ZSH_TMUX_CONFIG")
+    fi
     $tmux_cmd new-session
   fi
 

@@ -112,6 +112,13 @@ _supervisorctl_start() {
         '*::supvervisor process:_get_supervisor_procs'
 }
 
+(( $+functions[_supervisorctl_restart] )) ||
+_supervisorctl_restart() {
+    # TODO: add 'all'
+    _arguments -s \
+        '*::supvervisor process:_get_supervisor_procs'
+}
+
 (( $+functions[_supervisorctl_status] )) ||
 _supervisorctl_status() {
     _arguments \

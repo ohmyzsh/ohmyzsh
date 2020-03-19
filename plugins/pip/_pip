@@ -89,6 +89,7 @@ case "$words[1]" in
       if [[ "$state" == packages ]]; then
         _pip_all
         _wanted piplist expl 'packages' compadd -a piplist
+        _files -g "*.(tar.gz|whl)"
       fi ;;
   uninstall)
     _pip_installed

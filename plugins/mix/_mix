@@ -34,6 +34,7 @@ _1st_arguments=(
     'firmware:Nerves - Build a firmware image for the selected target platform'
     'firmware.burn:Nerves - Writes the generated firmware image to an attached SDCard or file'
     'firmware.image:Nerves - Create a firmware image file that can be copied byte-for-byte'
+    'format:Formats the given files and patterns'
     'help:Print help information for tasks'
     'hex:Print hex help information'
     'hex.config:Read or update hex config'
@@ -92,7 +93,7 @@ __task_list ()
     local expl
     declare -a tasks
 
-    tasks=(app.start archive archive.build archive.install archive.uninstall clean cmd compile compile.protocols deps deps.clean deps.compile deps.get deps.unlock deps.update do escript.build help hex hex.config hex.docs hex.info hex.key hex.outdated hex.owner hex.publish hex.search hex.user loadconfig local local.hex local.rebar new phoenix.digest phoenix.gen.channel phoenix.gen.html phoenix.gen.json phoenix.gen.model phoenix.gen.secret phoenix.new phoenix.routes phoenix.server phx.digest phx.digest.clean phx.gen.channel phx.gen.context phx.gen.embedded phx.gen.html phx.gen.json phx.gen.presence phx.gen.schema phx.gen.secret phx.new phx.new.ecto phx.new.web phx.routes phx.server run test)
+    tasks=(app.start archive archive.build archive.install archive.uninstall clean cmd compile compile.protocols deps deps.clean deps.compile deps.get deps.unlock deps.update do escript.build format help hex hex.config hex.docs hex.info hex.key hex.outdated hex.owner hex.publish hex.search hex.user loadconfig local local.hex local.rebar new phoenix.digest phoenix.gen.channel phoenix.gen.html phoenix.gen.json phoenix.gen.model phoenix.gen.secret phoenix.new phoenix.routes phoenix.server phx.digest phx.digest.clean phx.gen.channel phx.gen.context phx.gen.embedded phx.gen.html phx.gen.json phx.gen.presence phx.gen.schema phx.gen.secret phx.new phx.new.ecto phx.new.web phx.routes phx.server run test)
 
     _wanted tasks expl 'help' compadd $tasks
 }

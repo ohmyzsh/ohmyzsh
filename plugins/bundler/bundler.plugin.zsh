@@ -82,7 +82,7 @@ _bundler-installed() {
 _within-bundled-project() {
   local check_dir="$PWD"
   while [ "$check_dir" != "/" ]; do
-    [ -f "$check_dir/Gemfile" ] && return
+    [ -f "$check_dir/Gemfile" -o -f "$check_dir/gems.rb" ] && return
     check_dir="$(dirname $check_dir)"
   done
   false
@@ -95,7 +95,7 @@ _binstubbed() {
 _run-with-bundler() {
   if _bundler-installed && _within-bundled-project; then
     if _binstubbed $1; then
-      ./bin/$@
+      ./bin/${^^@}
     else
       bundle exec $@
     fi

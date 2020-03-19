@@ -2,489 +2,367 @@
 
 autoload -U regexp-replace
 
-zstyle -T ':completion:*:*:cargo:*' tag-order && \
-  zstyle ':completion:*:*:cargo:*' tag-order 'common-commands'
-
 _cargo() {
-local context state state_descr line
-typeset -A opt_args
+    local curcontext="$curcontext" ret=1
+    local -a command_scope_spec common parallel features msgfmt triple target registry
+    local -a state line state_descr # These are set by _arguments
+    typeset -A opt_args
 
-# leading items in parentheses are an exclusion list for the arguments following that arg
-# See: http://zsh.sourceforge.net/Doc/Release/Completion-System.html#Completion-Functions
-#   - => exclude all other options
-#   1 => exclude positional arg 1
-#   * => exclude all other args
-#   +blah => exclude +blah
-_arguments \
-    '(- 1 *)'{-h,--help}'[show help message]' \
-    '(- 1 *)--list[list installed commands]' \
-    '(- 1 *)'{-V,--version}'[show version information]' \
-    {-v,--verbose}'[use verbose output]' \
-    --color'[colorization option]' \
-    '(+beta +nightly)+stable[use the stable toolchain]' \
-    '(+stable +nightly)+beta[use the beta toolchain]' \
-    '(+stable +beta)+nightly[use the nightly toolchain]' \
-    '1: :->command' \
-    '*:: :->args'
+    common=(
+        '(-q --quiet)*'{-v,--verbose}'[use verbose output]'
+        '(-q --quiet -v --verbose)'{-q,--quiet}'[no output printed to stdout]'
+        '-Z+[pass unstable (nightly-only) flags to cargo]: :_cargo_unstable_flags'
+        '--frozen[require that Cargo.lock and cache are up-to-date]'
+        '--locked[require that Cargo.lock is up-to-date]'
+        '--color=[specify colorization option]:coloring:(auto always never)'
+        '(- 1 *)'{-h,--help}'[show help message]'
+    )
 
-case $state in
-    command)
-      _alternative 'common-commands:common:_cargo_cmds' 'all-commands:all:_cargo_all_cmds'
-      ;;
+    # leading items in parentheses are an exclusion list for the arguments following that arg
+    # See: http://zsh.sourceforge.net/Doc/Release/Completion-System.html#Completion-Functions
+    #   - => exclude all other options
+    #   1 => exclude positional arg 1
+    #   * => exclude all other args
+    #   +blah => exclude +blah
+    _arguments -s -S -C $common \
+        '(- 1 *)--list[list installed commands]' \
+        '(- 1 *)--explain=[provide a detailed explanation of an error message]:error code' \
+        '(- 1 *)'{-V,--version}'[show version information]' \
+        '(+beta +nightly)+stable[use the stable toolchain]' \
+        '(+stable +nightly)+beta[use the beta toolchain]' \
+        '(+stable +beta)+nightly[use the nightly toolchain]' \
+        '1: :_cargo_cmds' \
+        '*:: :->args'
 
-    args)
-        case $words[1] in
-            bench)
-                _arguments \
-                    '--features=[space separated feature list]' \
-                    '--all-features[enable all available features]' \
-                    '(-h, --help)'{-h,--help}'[show help message]' \
-                    '(-j, --jobs)'{-j,--jobs}'[number of parallel jobs, defaults to # of CPUs]' \
-                    "${command_scope_spec[@]}" \
-                    '--manifest-path=[path to manifest]: :_files -/' \
-                    '--no-default-features[do not build the default features]' \
-                    '--no-run[compile but do not run]' \
-                    '(-p,--package)'{-p=,--package=}'[package to run benchmarks for]:packages:_get_package_names' \
-                    '--target=[target triple]' \
-                    '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
-                    '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
-                    '--color=:colorization option:(auto always never)' \
-                    ;;
+    # These flags are mutually exclusive specifiers for the scope of a command; as
+    # they are used in multiple places without change, they are expanded into the
+    # appropriate command's `_arguments` where appropriate.
+    command_scope_spec=(
+        '(--bin --example --test --lib)--bench=[specify benchmark name]: :_cargo_benchmark_names'
+        '(--bench --bin --test --lib)--example=[specify example name]:example name'
+        '(--bench --example --test --lib)--bin=[specify binary name]:binary name'
+        '(--bench --bin --example --test)--lib=[specify library name]:library name'
+        '(--bench --bin --example --lib)--test=[specify test name]:test name'
+    )
 
-            build)
-                _arguments \
-                    '--features=[space separated feature list]' \
-                    '--all-features[enable all available features]' \
-                    '(-h, --help)'{-h,--help}'[show help message]' \
-                    '(-j, --jobs)'{-j,--jobs}'[number of parallel jobs, defaults to # of CPUs]' \
-                    "${command_scope_spec[@]}" \
-                    '--manifest-path=[path to manifest]: :_files -/' \
-                    '--no-default-features[do not build the default features]' \
-                    '(-p,--package)'{-p=,--package=}'[package to build]:packages:_get_package_names' \
-                    '--release=[build in release mode]' \
-                    '--target=[target triple]' \
-                    '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
-                    '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
-                    '--color=:colorization option:(auto always never)' \
-                    ;;
+    parallel=(
+        '(-j --jobs)'{-j+,--jobs=}'[specify number of parallel jobs]:jobs [# of CPUs]'
+    )
 
-            check)
-                _arguments \
-                    '--features=[space separated feature list]' \
-                    '--all-features[enable all available features]' \
-                    '(-h, --help)'{-h,--help}'[show help message]' \
-                    '(-j, --jobs)'{-j,--jobs}'[number of parallel jobs, defaults to # of CPUs]' \
-                    "${command_scope_spec[@]}" \
-                    '--manifest-path=[path to manifest]: :_files -/' \
-                    '--no-default-features[do not check the default features]' \
-                    '(-p,--package)'{-p=,--package=}'[package to check]:packages:_get_package_names' \
-                    '--release=[check in release mode]' \
-                    '--target=[target triple]' \
-                    '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
-                    '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
-                    '--color=:colorization option:(auto always never)' \
-                    ;;
+    features=(
+        '(--all-features)--features=[specify features to activate]:feature'
+        '(--features)--all-features[activate all available features]'
+        "--no-default-features[don't build the default features]"
+    )
 
-            clean)
-                _arguments \
-                    '(-h, --help)'{-h,--help}'[show help message]' \
-                    '--manifest-path=[path to manifest]: :_files -/' \
-                    '(-p,--package)'{-p=,--package=}'[package to clean]:packages:_get_package_names' \
-                    '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
-                    '--release[whether or not to clean release artifacts]' \
-                    '--target=[target triple(default:all)]' \
-                    '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
-                    '--color=:colorization option:(auto always never)' \
-                    ;;
+    msgfmt='--message-format=[specify error format]:error format [human]:(human json short)'
+    triple='--target=[specify target triple]:target triple'
+    target='--target-dir=[specify directory for all generated artifacts]:directory:_directories'
+    manifest='--manifest-path=[specify path to manifest]:path:_directories'
+    registry='--registry=[specify registry to use]:registry'
 
-            doc)
-                _arguments \
-                    '--features=[space separated feature list]' \
-                    '--all-features[enable all available features]' \
-                    '(-h, --help)'{-h,--help}'[show help message]' \
-                    '(-j, --jobs)'{-j,--jobs}'[number of parallel jobs, defaults to # of CPUs]' \
-                    '--manifest-path=[path to manifest]: :_files -/' \
-                    '--no-deps[do not build docs for dependencies]' \
-                    '--no-default-features[do not build the default features]' \
-                    '--open[open docs in browser after the build]' \
-                    '(-p, --package)'{-p,--package}'=[package to document]' \
-                    '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
-                    '--release[build artifacts in release mode, with optimizations]' \
-                    '--target=[build for the target triple]' \
-                    '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
-                    '--color=:colorization option:(auto always never)' \
-                    ;;
+    case $state in
+        args)
+            curcontext="${curcontext%:*}-${words[1]}:"
+            case ${words[1]} in
+                bench)
+                    _arguments -s -A "^--" $common $parallel $features $msgfmt $triple $target $manifest \
+                        "${command_scope_spec[@]}" \
+                        '--all-targets[benchmark all targets]' \
+                        "--no-run[compile but don't run]" \
+                        '(-p --package)'{-p+,--package=}'[specify package to run benchmarks for]:package:_cargo_package_names' \
+                        '--exclude=[exclude packages from the benchmark]:spec' \
+                        '--no-fail-fast[run all benchmarks regardless of failure]' \
+                        '1: :_guard "^-*" "bench name"' \
+                        '*:args:_default'
+                        ;;
 
-            fetch)
-                _arguments \
-                    '(-h, --help)'{-h,--help}'[show help message]' \
-                    '--manifest-path=[path to manifest]: :_files -/' \
-                    '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
-                    '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
-                    '--color=:colorization option:(auto always never)' \
-                    ;;
+                build)
+                    _arguments -s -S $common $parallel $features $msgfmt $triple $target $manifest \
+                        '--all-targets[equivalent to specifying --lib --bins --tests --benches --examples]' \
+                        "${command_scope_spec[@]}" \
+                        '(-p --package)'{-p+,--package=}'[specify package to build]:package:_cargo_package_names' \
+                        '--release[build in release mode]' \
+                        '--build-plan[output the build plan in JSON]' \
+                        ;;
 
-            generate-lockfile)
-                _arguments \
-                    '(-h, --help)'{-h,--help}'[show help message]' \
-                    '--manifest-path=[path to manifest]: :_files -/' \
-                    '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
-                    '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
-                    '--color=:colorization option:(auto always never)' \
-                    ;;
+                check)
+                    _arguments -s -S $common $parallel $features $msgfmt $triple $target $manifest \
+                        '--all-targets[equivalent to specifying --lib --bins --tests --benches --examples]' \
+                        "${command_scope_spec[@]}" \
+                        '(-p --package)'{-p+,--package=}'[specify package to check]:package:_cargo_package_names' \
+                        '--release[check in release mode]' \
+                        ;;
 
-            git-checkout)
-                _arguments \
-                    '(-h, --help)'{-h,--help}'[show help message]' \
-                    '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
-                    '--reference=[REF]' \
-                    '--url=[URL]' \
-                    '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
-                    '--color=:colorization option:(auto always never)' \
-                    ;;
+                clean)
+                    _arguments -s -S $common $triple $target $manifest \
+                        '(-p --package)'{-p+,--package=}'[specify package to clean]:package:_cargo_package_names' \
+                        '--release[clean release artifacts]' \
+                        '--doc[clean just the documentation directory]'
+                        ;;
 
-            help)
-                _arguments \
-                    '(-h, --help)'{-h,--help}'[show help message]' \
-                    '*: :_cargo_cmds' \
-                    ;;
+                doc)
+                    _arguments -s -S $common $parallel $features $msgfmt $triple $target $manifest \
+                        '--no-deps[do not build docs for dependencies]' \
+                        '--document-private-items[include non-public items in the documentation]' \
+                        '--open[open docs in browser after the build]' \
+                        '(-p --package)'{-p+,--package=}'[specify package to document]:package:_cargo_package_names' \
+                        '--release[build artifacts in release mode, with optimizations]' \
+                        ;;
 
-            init)
-                _arguments \
-                    '--bin[use binary template]' \
-                    '--vcs:initialize a new repo with a given VCS:(git hg none)' \
-                    '(-h, --help)'{-h,--help}'[show help message]' \
-                    '--name=[set the resulting package name]' \
-                    '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
-                    '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
-                    '--color=:colorization option:(auto always never)' \
-                    ;;
+                fetch)
+                    _arguments -s -S $common $triple $manifest
+                        ;;
 
-            install)
-                _arguments \
-                    '--bin=[only install the specified binary]' \
-                    '--branch=[branch to use when installing from git]' \
-                    '--color=:colorization option:(auto always never)' \
-                    '--debug[build in debug mode instead of release mode]' \
-                    '--example[install the specified example instead of binaries]' \
-                    '--features=[space separated feature list]' \
-                    '--all-features[enable all available features]' \
-                    '--git=[URL from which to install the crate]' \
-                    '(-h, --help)'{-h,--help}'[show help message]' \
-                    '(-j, --jobs)'{-j,--jobs}'[number of parallel jobs, defaults to # of CPUs]' \
-                    '--no-default-features[do not build the default features]' \
-                    '--path=[local filesystem path to crate to install]: :_files -/' \
-                    '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
-                    '--rev=[specific commit to use when installing from git]' \
-                    '--root=[directory to install packages into]: :_files -/' \
-                    '--tag=[tag to use when installing from git]' \
-                    '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
-                    '--vers=[version to install from crates.io]' \
-                    ;;
+                fix)
+                    _arguments -s -S $common $parallel $features $msgfmt $triple $target $manifest \
+                        "${command_scope_spec[@]}" \
+                        '--broken-code[fix code even if it already has compiler errors]' \
+                        '--edition[fix in preparation for the next edition]' \
+                        '--edition-idioms[fix warnings to migrate to the idioms of an edition]' \
+                        '--allow-no-vcs[fix code even if a VCS was not detected]' \
+                        '--allow-dirty[fix code even if the working directory is dirty]' \
+                        '--allow-staged[fix code even if the working directory has staged changes]'
+                ;;
 
-            locate-project)
-                _arguments \
-                    '(-h, --help)'{-h,--help}'[show help message]' \
-                    '--manifest-path=[path to manifest]: :_files -/' \
-                    ;;
+                generate-lockfile)
+                    _arguments -s -S $common $manifest
+                        ;;
 
-            login)
-                _arguments \
-                    '(-h, --help)'{-h,--help}'[show help message]' \
-                    '--host=[Host to set the token for]' \
-                    '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
-                    '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
-                    '--color=:colorization option:(auto always never)' \
-                    ;;
+                git-checkout)
+                    _arguments -s -S $common \
+                        '--reference=:reference' \
+                        '--url=:url:_urls'
+                        ;;
 
-            metadata)
-                _arguments \
-                    '(-h, --help)'{-h,--help}'[show help message]' \
-                    '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
-                    '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
-                    "--no-deps[output information only about the root package and don't fetch dependencies]" \
-                    '--no-default-features[do not include the default feature]' \
-                    '--manifest-path=[path to manifest]: :_files -/' \
-                    '--features=[space separated feature list]' \
-                    '--all-features[enable all available features]' \
-                    '--format-version=[format version(default: 1)]' \
-                    '--color=:colorization option:(auto always never)' \
-                    ;;
+                help)
+                    _cargo_cmds
+                        ;;
 
-            new)
-                _arguments \
-                    '--bin[use binary template]' \
-                    '--vcs:initialize a new repo with a given VCS:(git hg none)' \
-                    '(-h, --help)'{-h,--help}'[show help message]' \
-                    '--name=[set the resulting package name]' \
-                    '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
-                    '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
-                    '--color=:colorization option:(auto always never)' \
-                    ;;
+                init)
+                    _arguments -s -S $common $registry \
+                        '--lib[use library template]' \
+                        '--edition=[specify edition to set for the crate generated]:edition:(2015 2018)' \
+                        '--vcs=[initialize a new repo with a given VCS]:vcs:(git hg pijul fossil none)' \
+                        '--name=[set the resulting package name]:name' \
+                        '1:path:_directories'
+                        ;;
 
-            owner)
-                _arguments \
-                    '(-a, --add)'{-a,--add}'[add owner LOGIN]' \
-                    '(-h, --help)'{-h,--help}'[show help message]' \
-                    '--index[registry index]' \
-                    '(-l, --list)'{-l,--list}'[list owners of a crate]' \
-                    '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
-                    '(-r, --remove)'{-r,--remove}'[remove owner LOGIN]' \
-                    '--token[API token to use when authenticating]' \
-                    '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
-                    '--color=:colorization option:(auto always never)' \
-                    ;;
+                install)
+                    _arguments -s -S $common $parallel $features $triple $registry \
+                        '(-f --force)'{-f,--force}'[force overwriting of existing crates or binaries]' \
+                        '--bin=[only install the specified binary]:binary' \
+                        '--branch=[branch to use when installing from git]:branch' \
+                        '--debug[build in debug mode instead of release mode]' \
+                        '--example=[install the specified example instead of binaries]:example' \
+                        '--git=[specify URL from which to install the crate]:url:_urls' \
+                        '--path=[local filesystem path to crate to install]: :_directories' \
+                        '--rev=[specific commit to use when installing from git]:commit' \
+                        '--root=[directory to install packages into]: :_directories' \
+                        '--tag=[tag to use when installing from git]:tag' \
+                        '--vers=[version to install from crates.io]:version' \
+                        '--list[list all installed packages and their versions]' \
+                        '*: :_guard "^-*" "crate"'
+                        ;;
 
-            package)
-                _arguments \
-                    '(-h, --help)'{-h,--help}'[show help message]' \
-                    '(-l, --list)'{-l,--list}'[print files included in a package without making one]' \
-                    '--manifest-path=[path to manifest]: :_files -/' \
-                    '--no-metadata[ignore warnings about a lack of human-usable metadata]' \
-                    '--no-verify[do not build to verify contents]' \
-                    '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
-                    '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
-                    '--color=:colorization option:(auto always never)' \
-                    ;;
+                locate-project)
+                    _arguments -s -S $common $manifest
+                        ;;
 
-            pkgid)
-                _arguments \
-                    '(-h, --help)'{-h,--help}'[show help message]' \
-                    '--manifest-path=[path to manifest]: :_files -/' \
-                    '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
-                    '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
-                    '--color=:colorization option:(auto always never)' \
-                    ;;
+                login)
+                    _arguments -s -S $common $registry \
+                        '*: :_guard "^-*" "token"'
+                        ;;
 
-            publish)
-                _arguments \
-                    '(-h, --help)'{-h,--help}'[show help message]' \
-                    '--host=[Host to set the token for]' \
-                    '--manifest-path=[path to manifest]: :_files -/' \
-                    '--no-verify[Do not verify tarball until before publish]' \
-                    '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
-                    '--token[token to use when uploading]' \
-                    '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
-                    '--color=:colorization option:(auto always never)' \
-                    ;;
+                metadata)
+                    _arguments -s -S $common $features $manifest \
+                        "--no-deps[output information only about the root package and don't fetch dependencies]" \
+                        '--format-version=[specify format version]:version [1]:(1)'
+                        ;;
 
-            read-manifest)
-                _arguments \
-                    '(-h, --help)'{-h,--help}'[show help message]' \
-                    '--manifest-path=[path to manifest]: :_files -/' \
-                    '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
-                    '--color=:colorization option:(auto always never)' \
-                    ;;
+                new)
+                    _arguments -s -S $common $registry \
+                        '--lib[use library template]' \
+                        '--vcs:initialize a new repo with a given VCS:(git hg none)' \
+                        '--name=[set the resulting package name]'
+                        ;;
 
-            run)
-                _arguments \
-                    '--example=[name of the bin target]' \
-                    '--features=[space separated feature list]' \
-                    '--all-features[enable all available features]' \
-                    '(-h, --help)'{-h,--help}'[show help message]' \
-                    '(-j, --jobs)'{-j,--jobs}'[number of parallel jobs, defaults to # of CPUs]' \
-                    '--manifest-path=[path to manifest]: :_files -/' \
-                    '--bin=[name of the bin target]' \
-                    '--no-default-features[do not build the default features]' \
-                    '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
-                    '--release=[build in release mode]' \
-                    '--target=[target triple]' \
-                    '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
-                    '--color=:colorization option:(auto always never)' \
-                    '*: :_normal' \
-                    ;;
+                owner)
+                    _arguments -s -S $common $registry \
+                        '(-a --add)'{-a,--add}'[specify name of a user or team to invite as an owner]:name' \
+                        '--index=[specify registry index]:index' \
+                        '(-l --list)'{-l,--list}'[list owners of a crate]' \
+                        '(-r --remove)'{-r,--remove}'[specify name of a user or team to remove as an owner]:name' \
+                        '--token=[specify API token to use when authenticating]:token' \
+                        '*: :_guard "^-*" "crate"'
+                        ;;
 
-            rustc)
-                _arguments \
-                    '--color=:colorization option:(auto always never)' \
-                    '--features=[features to compile for the package]' \
-                    '--all-features[enable all available features]' \
-                    '(-h, --help)'{-h,--help}'[show help message]' \
-                    '(-j, --jobs)'{-j,--jobs}'=[number of parallel jobs, defaults to # of CPUs]' \
-                    '--manifest-path=[path to the manifest to fetch dependencies for]: :_files -/' \
-                    '--no-default-features[do not compile default features for the package]' \
-                    '(-p, --package)'{-p,--package}'=[profile to compile for]' \
-                    '--profile=[profile to build the selected target for]' \
-                    '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
-                    '--release[build artifacts in release mode, with optimizations]' \
-                    '--target=[target triple which compiles will be for]' \
-                    '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
-                    "${command_scope_spec[@]}" \
-                    ;;
+                package)
+                    _arguments -s -S $common $parallel $features $triple $target $manifest \
+                        '(-l --list)'{-l,--list}'[print files included in a package without making one]' \
+                        '--no-metadata[ignore warnings about a lack of human-usable metadata]' \
+                        '--allow-dirty[allow dirty working directories to be packaged]' \
+                        "--no-verify[don't build to verify contents]"
+                        ;;
 
-            rustdoc)
-                _arguments \
-                    '--color=:colorization option:(auto always never)' \
-                    '--features=[space-separated list of features to also build]' \
-                    '--all-features[enable all available features]' \
-                    '(-h, --help)'{-h,--help}'[show help message]' \
-                    '(-j, --jobs)'{-j,--jobs}'=[number of parallel jobs, defaults to # of CPUs]' \
-                    '--manifest-path=[path to the manifest to document]: :_files -/' \
-                    '--no-default-features[do not build the `default` feature]' \
-                    '--open[open the docs in a browser after the operation]' \
-                    '(-p, --package)'{-p,--package}'=[package to document]' \
-                    '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
-                    '--release[build artifacts in release mode, with optimizations]' \
-                    '--target=[build for the target triple]' \
-                    '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
-                    "${command_scope_spec[@]}" \
-                    ;;
+                pkgid)
+                    _arguments -s -S $common $manifest \
+                        '(-p --package)'{-p+,--package=}'[specify package to get ID specifier for]:package:_cargo_package_names' \
+                        '*: :_guard "^-*" "spec"'
+                        ;;
 
-            search)
-                _arguments \
-                    '--color=:colorization option:(auto always never)' \
-                    '(-h, --help)'{-h,--help}'[show help message]' \
-                    '--host=[host of a registry to search in]' \
-                    '--limit=[limit the number of results]' \
-                    '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
-                    '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
-                    ;;
+                publish)
+                    _arguments -s -S $common $parallel $features $triple $target $manifest $registry \
+                        '--index=[specify registry index]:index' \
+                        '--allow-dirty[allow dirty working directories to be packaged]' \
+                        "--no-verify[don't verify the contents by building them]" \
+                        '--token=[specify token to use when uploading]:token' \
+                        '--dry-run[perform all checks without uploading]'
+                        ;;
 
-            test)
-                _arguments \
-                    '--features=[space separated feature list]' \
-                    '--all-features[enable all available features]' \
-                    '(-h, --help)'{-h,--help}'[show help message]' \
-                    '(-j, --jobs)'{-j,--jobs}'[number of parallel jobs, defaults to # of CPUs]' \
-                    '--manifest-path=[path to manifest]: :_files -/' \
-                    '--test=[test name]: :_test_names' \
-                    '--no-default-features[do not build the default features]' \
-                    '--no-fail-fast[run all tests regardless of failure]' \
-                    '--no-run[compile but do not run]' \
-                    '(-p,--package)'{-p=,--package=}'[package to run tests for]:packages:_get_package_names' \
-                    '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
-                    '--release[build artifacts in release mode, with optimizations]' \
-                    '--target=[target triple]' \
-                    '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
-                    '--color=:colorization option:(auto always never)' \
-                    '1: :_test_names' \
-                    '(--doc --bin --example --test --bench)--lib[only test library]' \
-                    '(--lib --bin --example --test --bench)--doc[only test documentation]' \
-                    '(--lib --doc --example --test --bench)--bin=[binary name]' \
-                    '(--lib --doc --bin --test --bench)--example=[example name]' \
-                    '(--lib --doc --bin --example --bench)--test=[test name]' \
-                    '(--lib --doc --bin --example --test)--bench=[benchmark name]' \
-                    '--message-format:error format:(human json short)' \
-                    '--frozen[require lock and cache up to date]' \
-                    '--locked[require lock up to date]'
-                    ;;
+                read-manifest)
+                    _arguments -s -S $common $manifest
+                        ;;
 
-            uninstall)
-                _arguments \
-                    '--bin=[only uninstall the binary NAME]' \
-                    '--color=:colorization option:(auto always never)' \
-                    '(-h, --help)'{-h,--help}'[show help message]' \
-                    '(-q, --quiet)'{-q,--quiet}'[less output printed to stdout]' \
-                    '--root=[directory to uninstall packages from]: :_files -/' \
-                    '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
-                    ;;
+                run)
+                    _arguments -s -S $common $parallel $features $msgfmt $triple $target $manifest \
+                        '--example=[name of the bin target]:name' \
+                        '--bin=[name of the bin target]:name' \
+                        '(-p --package)'{-p+,--package=}'[specify package with the target to run]:package:_cargo_package_names' \
+                        '--release[build in release mode]' \
+                        '*: :_default'
+                        ;;
 
-            update)
-                _arguments \
-                    '--aggressive=[force dependency update]' \
-                    '(-h, --help)'{-h,--help}'[show help message]' \
-                    '--manifest-path=[path to manifest]: :_files -/' \
-                    '(-p,--package)'{-p=,--package=}'[package to update]:packages:__get_package_names' \
-                    '--precise=[update single dependency to PRECISE]: :' \
-                    '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
-                    '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
-                    '--color=:colorization option:(auto always never)' \
-                    ;;
+                rustc)
+                    _arguments -s -S $common $parallel $features $msgfmt $triple $target $manifest \
+                        '(-p --package)'{-p+,--package=}'[specify package to build]:package:_cargo_package_names' \
+                        '--profile=[specify profile to build the selected target for]:profile' \
+                        '--release[build artifacts in release mode, with optimizations]' \
+                        "${command_scope_spec[@]}" \
+                        '*: : _dispatch rustc rustc -default-'
+                        ;;
 
-            verify-project)
-                _arguments \
-                    '(-h, --help)'{-h,--help}'[show help message]' \
-                    '--manifest-path=[path to manifest]: :_files -/' \
-                    '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
-                    '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
-                    '--color=:colorization option:(auto always never)' \
-                    ;;
+                rustdoc)
+                    _arguments -s -S $common $parallel $features $msgfmt $triple $target $manifest \
+                        '--document-private-items[include non-public items in the documentation]' \
+                        '--open[open the docs in a browser after the operation]' \
+                        '(-p --package)'{-p+,--package=}'[specify package to document]:package:_cargo_package_names' \
+                        '--release[build artifacts in release mode, with optimizations]' \
+                        "${command_scope_spec[@]}" \
+                        '*: : _dispatch rustdoc rustdoc -default-'
+                        ;;
 
-            version)
-                _arguments \
-                    '(-h, --help)'{-h,--help}'[show help message]' \
-                    '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
-                    '--color=:colorization option:(auto always never)' \
-                    ;;
+                search)
+                    _arguments -s -S $common $registry \
+                        '--index=[specify registry index]:index' \
+                        '--limit=[limit the number of results]:results [10]' \
+                        '*: :_guard "^-*" "query"'
+                        ;;
 
-            yank)
-                _arguments \
-                    '(-h, --help)'{-h,--help}'[show help message]' \
-                    '--index[registry index]' \
-                    '(-q, --quiet)'{-q,--quiet}'[no output printed to stdout]' \
-                    '--token[API token to use when authenticating]' \
-                    '--undo[undo a yank, putting a version back into the index]' \
-                    '(-v, --verbose)'{-v,--verbose}'[use verbose output]' \
-                    '--color=:colorization option:(auto always never)' \
-                    '--vers[yank version]' \
-                    ;;
-        esac
-        ;;
-esac
+                test)
+                    _arguments -s -S $common $parallel $features $msgfmt $triple $target $manifest \
+                        '--test=[test name]: :_cargo_test_names' \
+                        '--no-fail-fast[run all tests regardless of failure]' \
+                        '--no-run[compile but do not run]' \
+                        '(-p --package)'{-p+,--package=}'[package to run tests for]:package:_cargo_package_names' \
+                        '--all[test all packages in the workspace]' \
+                        '--release[build artifacts in release mode, with optimizations]' \
+                        '1: :_cargo_test_names' \
+                        '(--doc --bin --example --test --bench)--lib[only test library]' \
+                        '(--lib --bin --example --test --bench)--doc[only test documentation]' \
+                        '(--lib --doc --example --test --bench)--bin=[binary name]' \
+                        '(--lib --doc --bin --test --bench)--example=[example name]' \
+                        '(--lib --doc --bin --example --bench)--test=[test name]' \
+                        '(--lib --doc --bin --example --test)--bench=[benchmark name]' \
+                        '*: :_default'
+                        ;;
+
+                uninstall)
+                    _arguments -s -S $common \
+                        '(-p --package)'{-p+,--package=}'[specify package to uninstall]:package:_cargo_package_names' \
+                        '--bin=[only uninstall the specified binary]:name' \
+                        '--root=[directory to uninstall packages from]: :_files -/' \
+                        '*:crate:_cargo_installed_crates -F line'
+                        ;;
+
+                update)
+                    _arguments -s -S $common $manifest \
+                        '--aggressive=[force dependency update]' \
+                        "--dry-run[don't actually write the lockfile]" \
+                        '(-p --package)'{-p+,--package=}'[specify package to update]:package:_cargo_package_names' \
+                        '--precise=[update single dependency to precise release]:release'
+                        ;;
+
+                verify-project)
+                    _arguments -s -S $common $manifest
+                        ;;
+
+                version)
+                    _arguments -s -S $common
+                        ;;
+
+                yank)
+                    _arguments -s -S $common $registry \
+                        '--vers=[specify yank version]:version' \
+                        '--undo[undo a yank, putting a version back into the index]' \
+                        '--index=[specify registry index to yank from]:registry index' \
+                        '--token=[specify API token to use when authenticating]:token' \
+                        '*: :_guard "^-*" "crate"'
+                        ;;
+                *)
+                    # allow plugins to define their own functions
+                    if ! _call_function ret _cargo-${words[1]}; then
+                        # fallback on default completion for unknown commands
+                        _default && ret=0
+                    fi
+                    (( ! ret ))
+                ;;
+            esac
+            ;;
+    esac
 }
 
-_cargo_cmds(){
-local -a commands;commands=(
-'bench:execute all benchmarks of a local package'
-'build:compile the current package'
-'check:check the current package without compiling'
-'clean:remove generated artifacts'
-'doc:build package documentation'
-'fetch:fetch package dependencies'
-'generate-lockfile:create lockfile'
-'git-checkout:git checkout'
-'help:get help for commands'
-'init:create new package in current directory'
-'install:install a Rust binary'
-'locate-project:print "Cargo.toml" location'
-'login:login to remote server'
-'metadata:the metadata for a package in json'
-'new:create a new package'
-'owner:manage the owners of a crate on the registry'
-'package:assemble local package into a distributable tarball'
-'pkgid:print a fully qualified package specification'
-'publish:upload package to the registry'
-'read-manifest:print manifest in JSON format'
-'run:run the main binary of the local package'
-'rustc:compile a package and all of its dependencies'
-'rustdoc:build documentation for a package'
-'search:search packages on crates.io'
-'test:execute all unit and tests of a local package'
-'uninstall:remove a Rust binary'
-'update:update dependencies'
-'verify-project:check Cargo.toml'
-'version:show version information'
-'yank:remove pushed file from index'
-)
-_describe -t common-commands 'common commands' commands
+_cargo_unstable_flags() {
+    local flags
+    flags=( help ${${${(M)${(f)"$(_call_program flags cargo -Z help)"}:#*--*}/ #-- #/:}##*-Z } )
+    _describe -t flags 'unstable flag' flags
 }
 
-_cargo_all_cmds(){
-local -a commands;commands=($(cargo --list))
-_describe -t all-commands 'all commands' commands
+_cargo_installed_crates() {
+    local expl
+    _description crates expl 'crate'
+    compadd "$@" "$expl[@]" - ${${${(f)"$(cargo install --list)"}:# *}%% *}
+}
+
+_cargo_cmds() {
+    local -a commands
+    # This uses Parameter Expansion Flags, which are a built-in Zsh feature.
+    # See more: http://zsh.sourceforge.net/Doc/Release/Expansion.html#Parameter-Expansion-Flags
+    # and       http://zsh.sourceforge.net/Doc/Release/Expansion.html#Parameter-Expansion
+    #
+    # # How this work?
+    #
+    # First it splits the result of `cargo --list` at newline, then it removes the first line.
+    # Then it removes indentation (4 whitespaces) before each items. (Note the x## pattern [1]).
+    # Then it replaces those spaces between item and description with a `:`
+    #
+    # [1]: https://github.com/zsh-users/zsh-completions/blob/master/zsh-completions-howto.org#patterns
+    commands=( ${${${(M)"${(f)$(_call_program commands cargo --list)}":#    *}/ ##/}/ ##/:} )
+    _describe -t commands 'command' commands
 }
 
 
 #FIXME: Disabled until fixed
 #gets package names from the manifest file
-_get_package_names()
-{
-}
-
-#TODO:see if it makes sense to have 'locate-project' to have non-json output.
-#strips package name from json stuff
-_locate_manifest(){
-local manifest=`cargo locate-project 2>/dev/null`
-regexp-replace manifest '\{"root":"|"\}' ''
-echo $manifest
+_cargo_package_names() {
+    _message -e packages package
 }
 
 # Extracts the values of "name" from the array given in $1 and shows them as
 # command line options for completion
-_get_names_from_array()
-{
-    local -a filelist;
-    local manifest=$(_locate_manifest)
+_cargo_names_from_array() {
+    # strip json from the path
+    local manifest=${${${"$(cargo locate-project)"}%\"\}}##*\"}
     if [[ -z $manifest ]]; then
         return 0
     fi
@@ -494,51 +372,36 @@ _get_names_from_array()
     local in_block=false
     local block_name=$1
     names=()
-    while read line
-    do
+    while read -r line; do
         if [[ $last_line == "[[$block_name]]" ]]; then
             in_block=true
         else
-            if [[ $last_line =~ '.*\[\[.*' ]]; then
+            if [[ $last_line =~ '\s*\[\[.*' ]]; then
                 in_block=false
             fi
         fi
 
         if [[ $in_block == true ]]; then
-            if [[ $line =~ '.*name.*=' ]]; then
-                regexp-replace line '^.*name *= *|"' ""
-                names+=$line
+            if [[ $line =~ '\s*name\s*=' ]]; then
+                regexp-replace line '^\s*name\s*=\s*|"' ''
+                names+=( "$line" )
             fi
         fi
 
         last_line=$line
-    done < $manifest
-    _describe $block_name names
+    done < "$manifest"
+    _describe "$block_name" names
 
 }
 
 #Gets the test names from the manifest file
-_test_names()
-{
-    _get_names_from_array "test"
+_cargo_test_names() {
+    _cargo_names_from_array "test"
 }
 
 #Gets the bench names from the manifest file
-_benchmark_names()
-{
-    _get_names_from_array "bench"
+_cargo_benchmark_names() {
+    _cargo_names_from_array "bench"
 }
-
-# These flags are mutually exclusive specifiers for the scope of a command; as
-# they are used in multiple places without change, they are expanded into the
-# appropriate command's `_arguments` where appropriate.
-set command_scope_spec
-command_scope_spec=(
-    '(--bin --example --test --lib)--bench=[benchmark name]: :_benchmark_names'
-    '(--bench --bin --test --lib)--example=[example name]'
-    '(--bench --example --test --lib)--bin=[binary name]'
-    '(--bench --bin --example --test)--lib=[library name]'
-    '(--bench --bin --example --lib)--test=[test name]'
-)
 
 _cargo

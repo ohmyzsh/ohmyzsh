@@ -17,7 +17,7 @@ EOF
 fi
 
 function colored() {
-	env \
+	command env \
 		LESS_TERMCAP_mb=$(printf "\e[1;31m") \
 		LESS_TERMCAP_md=$(printf "\e[1;31m") \
 		LESS_TERMCAP_me=$(printf "\e[0m") \
