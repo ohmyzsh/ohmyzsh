@@ -144,6 +144,7 @@ __git_zsh_cmd_common ()
 	init:'create an empty Git repository or reinitialize an existing one'
 	log:'show commit logs'
 	merge:'join two or more development histories together'
+	mergetool:'run merge conflict resolution tools to resolve merge conflicts'
 	mv:'move or rename a file, a directory, or a symlink'
 	pull:'fetch from and merge with another repository or a local branch'
 	push:'update remote refs along with associated objects'
