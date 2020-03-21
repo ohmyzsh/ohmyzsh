@@ -1,6 +1,6 @@
 _direnv_hook() {
   trap -- '' SIGINT;
-  eval "$("/usr/local/bin/direnv" export zsh)";
+  eval "$(direnv export zsh)";
   trap - SIGINT;
 }
 typeset -ag precmd_functions;
