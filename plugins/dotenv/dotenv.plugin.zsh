@@ -1,3 +1,14 @@
+## Settings
+
+# Filename of the dotenv file to look for
+: ${ZSH_DOTENV_FILE:=.env}
+
+# Path to the file containing allowed paths
+: ${ZSH_DOTENV_ALLOWED_LIST:="${ZSH_CACHE_DIR}/dotenv-allowed.list"}
+
+
+## Functions
+
 source_env() {
   if [[ -f $ZSH_DOTENV_FILE ]]; then
     if [[ "$ZSH_DOTENV_PROMPT" != false ]]; then
@@ -24,25 +35,12 @@ source_env() {
     # test .env syntax
     zsh -fn $ZSH_DOTENV_FILE || echo "dotenv: error when sourcing '$ZSH_DOTENV_FILE' file" >&2
 
-    if [[ -o a ]]; then
-      source $ZSH_DOTENV_FILE
-    else
-      set -a
-      source $ZSH_DOTENV_FILE
-      set +a
-    fi
+    setopt localoptions allexport
+    source $ZSH_DOTENV_FILE
   fi
 }
 
 autoload -U add-zsh-hook
 add-zsh-hook chpwd source_env
-
-if [[ -z $ZSH_DOTENV_FILE ]]; then
-  ZSH_DOTENV_FILE=.env
-fi
-
-if [[ -z $ZSH_DOTENV_AGREE_LIST_FILE ]]; then
-  ZSH_DOTENV_AGREE_LIST_FILE="${ZSH}/dotenv-agree.list"
-fi
 
 source_env
