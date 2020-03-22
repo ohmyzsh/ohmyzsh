@@ -1,26 +1,23 @@
 source_env() {
   if [[ -f $ZSH_DOTENV_FILE ]]; then
-    if [ "$ZSH_DOTENV_PROMPT" != "false" ]; then
-      # agree list
-      touch "${ZSH_DOTENV_AGREE_LIST_FILE}"
-      local dotenv_absolutepath="${ZSH_DOTENV_FILE:A}"
-      local agree_list="${(@f)"$(<${ZSH_DOTENV_AGREE_LIST_FILE})"}"
-      [[ ${agree_list[(ie)$]} -le ${#agree_list} ]]; local alreadyagreed=$?
+    if [[ "$ZSH_DOTENV_PROMPT" != false ]]; then
+      local confirmation dirpath="$PWD"
 
-      if ! [ "$alreadyagreed" = "1" ]; then
-        # confirm before sourcing file
-        local confirmation
+      # make sure there is an allowed file
+      touch "$ZSH_DOTENV_ALLOWED_LIST"
+
+      # check if current directory's .env file is allowed or ask for confirmation
+      if ! grep -q "$dirpath" "$ZSH_DOTENV_ALLOWED_LIST" &>/dev/null; then
         # print same-line prompt and output newline character if necessary
-        echo -n "dotenv: source '$ZSH_DOTENV_FILE' file in the directory? ([Y]es/[a]lways/[n]n) "
+        echo -n "dotenv: found '$ZSH_DOTENV_FILE' file. Source it? ([Y]es/[n]o/[a]lways) "
         read -k 1 confirmation; [[ "$confirmation" != $'\n' ]] && echo
-        # only bail out if confirmation character is n
-        if [[ "$confirmation" = [nN] ]]; then
-          return
-        fi
 
-        if [[ "$confirmation" = [aA] ]]; then
-          echo "${dotenv_absolutepath}" >> "${ZSH_DOTENV_AGREE_LIST_FILE}"
-        fi
+        # check input
+        case "$confirmation" in
+          [nN]) return ;;
+          [aA]) echo "$dirpath" >> "$ZSH_DOTENV_ALLOWED_LIST" ;;
+          *) ;; # interpret anything else as a yes
+        esac
       fi
     fi
 
