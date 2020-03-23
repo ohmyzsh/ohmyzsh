@@ -12,7 +12,7 @@
 source_env() {
   if [[ -f $ZSH_DOTENV_FILE ]]; then
     if [[ "$ZSH_DOTENV_PROMPT" != false ]]; then
-      local confirmation dirpath="$PWD"
+      local confirmation dirpath="${PWD:A}"
 
       # make sure there is an allowed file
       touch "$ZSH_DOTENV_ALLOWED_LIST"
