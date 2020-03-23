@@ -45,15 +45,14 @@ bureau_git_status() {
   fi
 
   # check status of local repository
-  _INDEX=$(command git status --porcelain -b 2> /dev/null)
-  if $(echo "$_INDEX" | command grep -q '^## .*ahead'); then
+  local ref
+  ref=$(command git rev-parse --abbrev-ref HEAD 2> /dev/null)
+  _INDEX=$(command git for-each-ref --format="%(upstream:track)" refs/heads/${ref} 2> /dev/null)
+  if $(echo "$_INDEX" | command grep -q 'ahead'); then
     _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_AHEAD"
   fi
-  if $(echo "$_INDEX" | command grep -q '^## .*behind'); then
+  if $(echo "$_INDEX" | command grep -q 'behind'); then
     _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_BEHIND"
-  fi
-  if $(echo "$_INDEX" | command grep -q '^## .*diverged'); then
-    _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_DIVERGED"
   fi
 
   if $(command git rev-parse --verify refs/stash &> /dev/null); then
