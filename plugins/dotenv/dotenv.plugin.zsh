@@ -4,7 +4,7 @@
 : ${ZSH_DOTENV_FILE:=.env}
 
 # Path to the file containing allowed paths
-: ${ZSH_DOTENV_ALLOWED_LIST:="${ZSH_CACHE_DIR}/dotenv-allowed.list"}
+: ${ZSH_DOTENV_ALLOWED_LIST:="${ZSH_CACHE_DIR:-$ZSH/cache}/dotenv-allowed.list"}
 
 
 ## Functions
