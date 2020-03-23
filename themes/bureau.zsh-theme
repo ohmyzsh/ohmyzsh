@@ -23,50 +23,51 @@ bureau_git_branch () {
 }
 
 bureau_git_status() {
-  _STATUS=""
+  local gstatus
+  gstatus=""
 
   # check status of files
   if [[ "$(command git config --get oh-my-zsh.hide-dirty 2> /dev/null)" != "1" ]]; then
-    local -a FLAGS
-    FLAGS=('--porcelain')
+    local flags index
+    flags=('--porcelain')
     if [[ "$DISABLE_UNTRACKED_FILES_DIRTY" == "true" ]]; then
-      FLAGS+="--untracked-files=no"
+      flags+="--untracked-files=no"
     fi
-    _INDEX=$(command git status $FLAGS 2> /dev/null)
-    if [[ -n "$_INDEX" ]]; then
-      if $(echo "$_INDEX" | command grep -q '^[AMRD]. '); then
-        _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_STAGED"
+    index=$(command git status $flags 2> /dev/null)
+    if [[ -n "$index" ]]; then
+      if $(echo "$index" | command grep -q '^[AMRD]. '); then
+        gstatus="$gstatus$ZSH_THEME_GIT_PROMPT_STAGED"
       fi
-      if $(echo "$_INDEX" | command grep -q '^.[MTD] '); then
-        _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_UNSTAGED"
+      if $(echo "$index" | command grep -q '^.[MTD] '); then
+        gstatus="$gstatus$ZSH_THEME_GIT_PROMPT_UNSTAGED"
       fi
-      if $(echo "$_INDEX" | command grep -q -E '^\?\? '); then
-        _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_UNTRACKED"
+      if $(echo "$index" | command grep -q -E '^\?\? '); then
+        gstatus="$gstatus$ZSH_THEME_GIT_PROMPT_UNTRACKED"
       fi
-      if $(echo "$_INDEX" | command grep -q '^UU '); then
-        _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_UNMERGED"
+      if $(echo "$index" | command grep -q '^UU '); then
+        gstatus="$gstatus$ZSH_THEME_GIT_PROMPT_UNMERGED"
       fi
     else
-      _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_CLEAN"
+      gstatus="$gstatus$ZSH_THEME_GIT_PROMPT_CLEAN"
     fi
   fi
 
   # check status of local repository
   local ref
   ref=$(command git rev-parse --abbrev-ref HEAD 2> /dev/null)
-  _INDEX=$(command git for-each-ref --format="%(upstream:track)" refs/heads/${ref} 2> /dev/null)
-  if $(echo "$_INDEX" | command grep -q 'ahead'); then
-    _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_AHEAD"
+  index=$(command git for-each-ref --format="%(upstream:track)" refs/heads/${ref} 2> /dev/null)
+  if $(echo "$index" | command grep -q 'ahead'); then
+    gstatus="$gstatus$ZSH_THEME_GIT_PROMPT_AHEAD"
   fi
-  if $(echo "$_INDEX" | command grep -q 'behind'); then
-    _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_BEHIND"
+  if $(echo "$index" | command grep -q 'behind'); then
+    gstatus="$gstatus$ZSH_THEME_GIT_PROMPT_BEHIND"
   fi
 
   if $(command git rev-parse --verify refs/stash &> /dev/null); then
-    _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_STASHED"
+    gstatus="$gstatus$ZSH_THEME_GIT_PROMPT_STASHED"
   fi
 
-  echo $_STATUS
+  echo $gstatus
 }
 
 bureau_git_prompt () {
