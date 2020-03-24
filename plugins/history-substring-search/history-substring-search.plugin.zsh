@@ -1,5 +1,5 @@
 0=${(%):-%N}
-source ${0:A:h}/zsh-history-substring-search.zsh
+source ${0:A:h}/history-substring-search.zsh
 
 
 # Bind terminal-specific up and down keys
