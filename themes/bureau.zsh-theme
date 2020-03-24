@@ -47,7 +47,7 @@ bureau_git_status() {
   local ref
   ref=$(command git rev-parse --abbrev-ref HEAD 2> /dev/null)
   index=$(command git for-each-ref --format="%(upstream:track)" refs/heads/${ref} 2> /dev/null)
-  if $(echo "$index" | command grep -q 'ahead'); then
+  if [[ "$index" == *"ahead"* ]]; then
     gstatus="$gstatus$ZSH_THEME_GIT_PROMPT_AHEAD"
   fi
   if $(echo "$index" | command grep -q 'behind'); then
