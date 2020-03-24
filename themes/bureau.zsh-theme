@@ -34,22 +34,13 @@ bureau_git_status() {
       flags+="--untracked-files=no"
     fi
     index=$(command git status $flags 2> /dev/null)
-    if [[ -n "$index" ]]; then
-      if $(echo "$index" | command grep -q '^[AMRD]. '); then
-        gstatus="$gstatus$ZSH_THEME_GIT_PROMPT_STAGED"
-      fi
-      if $(echo "$index" | command grep -q '^.[MTD] '); then
-        gstatus="$gstatus$ZSH_THEME_GIT_PROMPT_UNSTAGED"
-      fi
-      if $(echo "$index" | command grep -q -E '^\?\? '); then
-        gstatus="$gstatus$ZSH_THEME_GIT_PROMPT_UNTRACKED"
-      fi
-      if $(echo "$index" | command grep -q '^UU '); then
-        gstatus="$gstatus$ZSH_THEME_GIT_PROMPT_UNMERGED"
-      fi
-    else
-      gstatus="$gstatus$ZSH_THEME_GIT_PROMPT_CLEAN"
-    fi
+    case $index in
+      [AMRD]?*) gstatus+=$ZSH_THEME_GIT_PROMPT_STAGED ;;
+      ?[MTD]*) gstatus+=$ZSH_THEME_GIT_PROMPT_UNSTAGED ;;
+      "?? "*) gstatus+=$ZSH_THEME_GIT_PROMPT_UNTRACKED ;;
+      "UU "*) gstatus+=$ZSH_THEME_GIT_PROMPT_UNMERGED ;;
+      "") gstatus+=$ZSH_THEME_GIT_PROMPT_CLEAN ;;
+    esac
   fi
 
   # check status of local repository
