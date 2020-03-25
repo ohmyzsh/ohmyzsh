@@ -78,7 +78,7 @@ function systemd_prompt_info {
   local unit
   for unit in $@; do
     echo -n "$ZSH_THEME_SYSTEMD_PROMPT_PREFIX"
-    [[ -n "$ZSH_THEME_SYSTEMD_PROMPT_CAPS" ]] && echo "${(U)unit}:" || echo "$unit:"
+    [[ -n "$ZSH_THEME_SYSTEMD_PROMPT_CAPS" ]] && echo -n "${(U)unit}:" || echo -n "$unit:"
     if systemctl is-active $unit &>/dev/null; then
         echo -n "$ZSH_THEME_SYSTEMD_PROMPT_ACTIVE" 
     else
