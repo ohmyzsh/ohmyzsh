@@ -1,3 +1,6 @@
+# Define SHORT_HOST if not defined (%m = host name up to first .)
+SHORT_HOST=${SHORT_HOST:-${(%):-%m}}
+
 function _start_agent() {
 	local agents
 	local -a identities
