@@ -19,3 +19,7 @@ plugins=(... brew)
 | bubu   | `bubo && bubc`       | Updates Homebrew, lists outdated formulae, upgrades oudated and unpinned formulae, and removes stale and outdated downloads and versions. |
 | bcubo  | `brew update && brew cask outdated` | Fetch the newest version of Homebrew and all formulae, then list outdated casks. |
 | bcubc  | `brew cask reinstall $(brew cask outdated) && brew cleanup` | Updates outdated casks, then runs cleanup. |
+| bsl    | `brew services list` | List all running services for the current user (or root). |
+| bsr    | `brew services run` | Run the service formula without registering to launch at login (or boot). |
+| bson   | `brew services start` | Start the service formula immediately and register it to launch at login (or boot). |
+| bsoff  | `brew services stop` | Stop the service formula immediately and unregister it from launching at login (or boot). |
