@@ -47,11 +47,10 @@ if [[ $FOUND_RBENV -eq 1 ]]; then
     }
 
     function rbenv_prompt_info() {
-        if [[ -n $(current_gemset) ]] ; then
-            echo "$(current_ruby)@$(current_gemset)"
-        else
-            echo "$(current_ruby)"
-        fi
+        local ruby=$(current_ruby) gemset=$(current_gemset)
+        echo -n "${ZSH_THEME_RUBY_PROMPT_PREFIX}"
+        [[ -n "$gemset" ]] && echo -n "${ruby}@${gemset}" || echo -n "${ruby}"
+        echo "${ZSH_THEME_RUBY_PROMPT_SUFFIX}"
     }
 else
     alias rubies="ruby -v"
@@ -59,7 +58,11 @@ else
     function current_ruby() { echo "not supported" }
     function current_gemset() { echo "not supported" }
     function gems() { echo "not supported" }
-    function rbenv_prompt_info() { echo "system: $(ruby -v | cut -f-2 -d ' ')" }
+    function rbenv_prompt_info() {
+        echo -n "${ZSH_THEME_RUBY_PROMPT_PREFIX}"
+        echo -n "system: $(ruby -v | cut -f-2 -d ' ')"
+        echo "${ZSH_THEME_RUBY_PROMPT_SUFFIX}"
+    }
 fi
 
 unset FOUND_RBENV rbenvdirs dir

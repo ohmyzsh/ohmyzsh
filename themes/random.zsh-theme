@@ -3,7 +3,7 @@ typeset -Ua themes
 
 if [[ "${(t)ZSH_THEME_RANDOM_CANDIDATES}" = array && ${#ZSH_THEME_RANDOM_CANDIDATES[@]} -gt 0 ]]; then
   # Use ZSH_THEME_RANDOM_CANDIDATES if properly defined
-  themes=($ZSH_THEME_RANDOM_CANDIDATES)
+  themes=(${(@)ZSH_THEME_RANDOM_CANDIDATES:#random})
 else
   # Look for themes in $ZSH_CUSTOM and $ZSH and add only the theme name
   themes=(
@@ -12,7 +12,7 @@ else
     "$ZSH"/themes/*.zsh-theme(N:t:r)
   )
   # Remove blacklisted themes from the list
-  for theme in ${ZSH_THEME_RANDOM_BLACKLIST[@]}; do
+  for theme in random ${ZSH_THEME_RANDOM_BLACKLIST[@]}; do
     themes=("${(@)themes:#$theme}")
   done
 fi

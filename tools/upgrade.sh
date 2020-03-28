@@ -1,23 +1,20 @@
 
 # Use colors, but only if connected to a terminal, and that terminal
 # supports them.
-if which tput >/dev/null 2>&1; then
-    ncolors=$(tput colors)
-fi
-if [ -t 1 ] && [ -n "$ncolors" ] && [ "$ncolors" -ge 8 ]; then
-  RED="$(tput setaf 1)"
-  GREEN="$(tput setaf 2)"
-  YELLOW="$(tput setaf 3)"
-  BLUE="$(tput setaf 4)"
-  BOLD="$(tput bold)"
-  NORMAL="$(tput sgr0)"
+if [ -t 1 ]; then
+  RED=$(printf '\033[31m')
+  GREEN=$(printf '\033[32m')
+  YELLOW=$(printf '\033[33m')
+  BLUE=$(printf '\033[34m')
+  BOLD=$(printf '\033[1m')
+  RESET=$(printf '\033[m')
 else
   RED=""
   GREEN=""
   YELLOW=""
   BLUE=""
   BOLD=""
-  NORMAL=""
+  RESET=""
 fi
 
 cd "$ZSH"
@@ -30,6 +27,9 @@ git config core.autocrlf false
 git config fsck.zeroPaddedFilemode ignore
 git config fetch.fsck.zeroPaddedFilemode ignore
 git config receive.fsck.zeroPaddedFilemode ignore
+# autostash on rebase (#7172)
+resetAutoStash=$(git config --bool rebase.autoStash 2>&1)
+git config rebase.autoStash true
 
 # Update upstream remote to ohmyzsh org
 remote=$(git remote -v | awk '/https:\/\/github\.com\/robbyrussell\/oh-my-zsh\.git/{ print $1; exit }')
@@ -48,8 +48,14 @@ then
   printf '%s\n' '\____/_/ /_/  /_/ /_/ /_/\__, /    /___/____/_/ /_/  '
   printf '%s\n' '                        /____/                       '
   printf "${BLUE}%s\n" "Hooray! Oh My Zsh has been updated and/or is at the current version."
-  printf "${BLUE}${BOLD}%s${NORMAL}\n" "To keep up on the latest news and updates, follow us on twitter: https://twitter.com/ohmyzsh"
-  printf "${BLUE}${BOLD}%s${NORMAL}\n" "Get your Oh My Zsh swag at: https://shop.planetargon.com/collections/oh-my-zsh"
+  printf "${BLUE}${BOLD}%s${RESET}\n" "To keep up on the latest news and updates, follow us on twitter: https://twitter.com/ohmyzsh"
+  printf "${BLUE}${BOLD}%s${RESET}\n" "Get your Oh My Zsh swag at: https://shop.planetargon.com/collections/oh-my-zsh"
 else
-  printf "${RED}%s${NORMAL}\n" 'There was an error updating. Try again later?'
+  printf "${RED}%s${RESET}\n" 'There was an error updating. Try again later?'
 fi
+
+# Unset git-config values set just for the upgrade
+case "$resetAutoStash" in
+  "") git config --unset rebase.autoStash ;;
+  *) git config rebase.autoStash "$resetAutoStash" ;;
+esac

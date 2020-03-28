@@ -8,6 +8,15 @@ To start using it, add the `vscode` plugin to your `plugins` array in `~/.zshrc`
 plugins=(... vscode)
 ```
 
+## Requirements
+
+To use VS Code in the terminal **in macOS**, first you need to install the `code` command in the PATH,
+otherwise you might receive this message: `zsh: command not found: code`.
+
+[As the docs say](https://code.visualstudio.com/docs/setup/mac#_launching-from-the-command-line), open
+the Command Palette via (F1 or ⇧⌘P) and type shell command to find the Shell Command:
+> Install 'code' command in PATH
+
 ## VS Code Insiders
 
 🍏 **If you are only using [VS Code Insiders](https://code.visualstudio.com/insiders/), the plugin will automatically bind to your Insiders installation.**

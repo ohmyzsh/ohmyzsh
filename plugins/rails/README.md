@@ -80,4 +80,3 @@ separately. For example: `REP rake db:migrate` will migrate the production db.
 | `ssp`   | `ruby script/spec`                 |
 | `sc`    | `ruby script/console`              |
 | `sd`    | `ruby script/server --debugger`    |
-
