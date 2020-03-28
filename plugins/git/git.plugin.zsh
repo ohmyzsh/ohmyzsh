@@ -205,6 +205,7 @@ alias grhh='git reset --hard'
 alias groh='git reset origin/$(git_current_branch) --hard'
 alias grm='git rm'
 alias grmc='git rm --cached'
+alias grml="git ls-files --deleted -z | xargs -0 git rm -r"
 alias grmv='git remote rename'
 alias grrm='git remote remove'
 alias grs='git restore'
@@ -271,7 +272,4 @@ function grename() {
   fi
 }
 
-# Remove from repo all files deleted
-alias gitstrm="git st | egrep 'deleted' | sed -e 's/#//' -e 's/deleted:/git rm/' | sh"
-alias gitgcprune="git remote prune origin ; git gc --prune --aggressive"
-alias gitrmdeleted="git ls-files --deleted -z | xargs -0 git rm -r"
+alias ggcprune="git remote prune origin ; git gc --prune --aggressive"
