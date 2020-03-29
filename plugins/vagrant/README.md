@@ -14,6 +14,7 @@ plugins=(... vagrant)
 |---------|------------------------------|
 | `vgi`   | `vagrant init`               |
 | `vup`   | `vagrant up`                 |
+| `vupp`  | `vagrant up --provision`     |
 | `vd`    | `vagrant destroy`            |
 | `vdf`   | `vagrant destroy -f`         |
 | `vssh`  | `vagrant ssh`                |
