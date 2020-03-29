@@ -1,3 +1,6 @@
 [submodule "custom/plugins/zsh-syntax-highlighting"]
 	path = custom/plugins/zsh-syntax-highlighting
 	url = git://github.com/zsh-users/zsh-syntax-highlighting.git
+[submodule "plugins/bazel"]
+	path = plugins/bazel
+	url = https://github.com/jackwish/bazel.git
