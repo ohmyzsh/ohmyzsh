@@ -10,11 +10,13 @@ plugins=(... ruby)
 
 ## Aliases
 
-| Alias | Command                                | Description                                          |
-|-------|----------------------------------------|------------------------------------------------------|
-| rb    | `ruby`                                 | The Ruby command                                     |
-| sgem  | `sudo gem`                             | Run sudo gem on the system ruby, not the active ruby |
-| rfind | `find . -name "*.rb" \| xargs grep -n` | Find ruby file                                       |
-| gin   | `gem install`                          | Install a gem into the local repository              |
-| gun   | `gem uninstall`                        | Uninstall gems from the local repository             |
-| gli   | `gem list`                             | Display gems installed locally                       |
+| Alias  | Command                                | Description                                          |
+|--------|----------------------------------------|------------------------------------------------------|
+| rb     | `ruby`                                 | The Ruby command                                     |
+| sgem   | `sudo gem`                             | Run sudo gem on the system ruby, not the active ruby |
+| rfind  | `find . -name "*.rb" \| xargs grep -n` | Find ruby file                                       |
+| gin    | `gem install`                          | Install a gem into the local repository              |
+| gun    | `gem uninstall`                        | Uninstall gems from the local repository             |
+| gli    | `gem list`                             | Display gems installed locally                       |
+| rrun   | `ruby -run -e some_ruby_code_here      | Executes `some_ruby_code_here                        |
+| rhttpd | `ruby -run -e httpd`                   | Starts Webricks reading local directory              |
