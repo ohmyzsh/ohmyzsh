@@ -75,6 +75,7 @@ alias gcount='git shortlog -sn'
 alias gcp='git cherry-pick'
 alias gcpa='git cherry-pick --abort'
 alias gcpc='git cherry-pick --continue'
+alias gcpr="git remote prune origin ; git gc --prune --aggressive"
 alias gcs='git commit -S'
 
 alias gd='git diff'
@@ -96,6 +97,7 @@ alias gfg='git ls-files | grep'
 
 alias gg='git gui citool'
 alias gga='git gui citool --amend'
+
 
 function ggf() {
   [[ "$#" != 1 ]] && local b="$(git_current_branch)"
@@ -271,5 +273,3 @@ function grename() {
     git push --set-upstream origin "$2"
   fi
 }
-
-alias ggcprune="git remote prune origin ; git gc --prune --aggressive"
