@@ -18,6 +18,9 @@ set rtp+=~/.vim/bundle/vim-jsonnet/syntax/
 set rtp+=~/.vim/bundle/vim-jsonnet/ftdetect/
 set ignorecase
 set smartcase
+
+" Reduce update time so that Git Gutter updates more quickly
+set updatetime=100
 call vundle#rc()
 
 " let Vundle manage Vundle
@@ -57,6 +60,7 @@ Bundle 'google/vim-maktaba'
 Bundle 'bazelbuild/vim-bazel'
 Bundle 'chr4/nginx.vim'
 Bundle 'spwhitt/vim-nix'
+Bundle 'airblade/vim-gitgutter'
 " Bundle 'ensime/ensime-vim'
 
 " Scala Bundles
@@ -148,6 +152,11 @@ autocmd FileType tex set tw=80
 autocmd FileType tex set nowrap
 autocmd InsertLeave *.tex highlight OverLength ctermbg=darkred ctermfg=white guibg=#FFD9D9
 autocmd InsertLeave *.tex match OverLength /\%82v.*/
+
+augroup jsonnet_template
+  au!
+  autocmd BufNewFile,BufRead *.jsonnet.template   set syntax=jsonnet
+augroup END
 
 " automatically change window's cwd to file's dir
 set noautochdir
@@ -247,3 +256,25 @@ command! -register CopyMatches call CopyMatches(<q-reg>)
 noremap <F5> :Autoformat<CR>
 let g:formatdef_scalafmt = '"scalafmt --config .scalafmt.conf"'
 let g:formatters_scala = ['scalafmt']
+
+function! DiffBase(...)
+    " Get the commit hash if it was specified
+    let commit = a:0 == 0 ? 'databricks/master' : a:1
+
+    " Get the result of git show in a list
+    let flist = system('git diff --name-only ' . commit . '...HEAD | grep -v zzz')
+    let flist = split(flist, '\n')
+
+    " Create the dictionnaries used to populate the quickfix list
+    let list = []
+    for f in flist
+        let dic = {'filename': f, "lnum": 1}
+        call add(list, dic)
+    endfor
+
+    " Populate the qf list
+    call setqflist(list)
+
+    " Open the quickfix list
+    vertical topleft cwindow
+endfunction
