@@ -30,7 +30,7 @@ if [ -z "$script" ]; then
 	local -a locations
 	local e
 	locations=(
-		"$(dirname ${funcsourcetrace[1]%:*})/git-completion.bash"
+		$(dirname ${funcsourcetrace[1]%:*})/git-completion.bash
 		'/etc/bash_completion.d/git' # fedora, old debian
 		'/usr/share/bash-completion/completions/git' # arch, ubuntu, new debian
 		'/usr/share/bash-completion/git' # gentoo
@@ -39,7 +39,7 @@ if [ -z "$script" ]; then
 		test -f $e && script="$e" && break
 	done
 fi
-ZSH_VERSION='' . "$script"
+GIT_SOURCING_ZSH_COMPLETION=y . "$script"
 
 __gitcomp ()
 {
@@ -93,13 +93,22 @@ __gitcomp_nl_append ()
 	compadd -Q -S "${4- }" -p "${2-}" -- ${=1} && _ret=0
 }
 
+__gitcomp_file_direct ()
+{
+	emulate -L zsh
+
+	local IFS=$'\n'
+	compset -P '*[=:]'
+	compadd -f -- ${=1} && _ret=0
+}
+
 __gitcomp_file ()
 {
 	emulate -L zsh
 
 	local IFS=$'\n'
 	compset -P '*[=:]'
-	compadd -Q -p "${2-}" -f -- ${=1} && _ret=0
+	compadd -p "${2-}" -f -- ${=1} && _ret=0
 }
 
 __git_zsh_bash_func ()
@@ -223,10 +232,8 @@ _git ()
 
 	if (( $+functions[__${service}_zsh_main] )); then
 		__${service}_zsh_main
-	elif (( $+functions[__${service}_main] )); then
+	else
 		emulate ksh -c __${service}_main
-	elif (( $+functions[_${service}] )); then
-		emulate ksh -c _${service}
 	fi
 
 	let _ret && _default && _ret=0

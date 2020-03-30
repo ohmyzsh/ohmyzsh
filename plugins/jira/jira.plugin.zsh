@@ -63,25 +63,33 @@ function jira() {
   else
     # Anything that doesn't match a special action is considered an issue name
     # but `branch` is a special case that will parse the current git branch
+    local issue_arg issue
     if [[ "$action" == "branch" ]]; then
-      local issue_arg=$(git rev-parse --abbrev-ref HEAD)
-      local issue="${jira_prefix}${issue_arg}"
+      # Get name of the branch
+      issue_arg=$(git rev-parse --abbrev-ref HEAD)
+      # Strip prefixes like feature/ or bugfix/
+      issue_arg=${issue_arg##*/}
+      # Strip suffixes starting with _
+      issue_arg=(${(s:_:)issue_arg})
+      issue_arg=${issue_arg[1]}
+      if [[ "$issue_arg" = ${jira_prefix}* ]]; then
+        issue="${issue_arg}"
+      else
+        issue="${jira_prefix}${issue_arg}"
+      fi
     else
-      local issue_arg=$action
-      local issue="${jira_prefix}${issue_arg}"
+      issue_arg=${(U)action}
+      issue="${jira_prefix}${issue_arg}"
     fi
-    local url_fragment=''
+
+    local url_fragment
     if [[ "$2" == "m" ]]; then
       url_fragment="#add-comment"
       echo "Add comment to issue #$issue"
     else
       echo "Opening issue #$issue"
     fi
-    if [[ "$JIRA_RAPID_BOARD" == "true" ]]; then
-      open_command "${jira_url}/issues/${issue}${url_fragment}"
-    else
-      open_command "${jira_url}/browse/${issue}${url_fragment}"
-    fi
+    open_command "${jira_url}/browse/${issue}${url_fragment}"
   fi
 }
 

@@ -3,11 +3,12 @@ function zsh_stats() {
 }
 
 function uninstall_oh_my_zsh() {
-  env ZSH=$ZSH sh $ZSH/tools/uninstall.sh
+  env ZSH="$ZSH" sh "$ZSH/tools/uninstall.sh"
 }
 
 function upgrade_oh_my_zsh() {
-  env ZSH=$ZSH sh $ZSH/tools/upgrade.sh
+  env ZSH="$ZSH" sh "$ZSH/tools/upgrade.sh"
+  command rm -rf "$ZSH/log/update.lock"
 }
 
 function take() {
@@ -21,7 +22,7 @@ function open_command() {
   case "$OSTYPE" in
     darwin*)  open_cmd='open' ;;
     cygwin*)  open_cmd='cygstart' ;;
-    linux*)   ! [[ $(uname -a) =~ "Microsoft" ]] && open_cmd='xdg-open' || {
+    linux*)   [[ "$(uname -r)" != *icrosoft* ]] && open_cmd='nohup xdg-open' || {
                 open_cmd='cmd.exe /c start ""'
                 [[ -e "$1" ]] && { 1="$(wslpath -w "${1:a}")" || return 1 }
               } ;;
@@ -31,12 +32,7 @@ function open_command() {
               ;;
   esac
 
-  # don't use nohup on OSX
-  if [[ "$OSTYPE" == darwin* ]]; then
-    ${=open_cmd} "$@" &>/dev/null
-  else
-    nohup ${=open_cmd} "$@" &>/dev/null
-  fi
+  ${=open_cmd} "$@" &>/dev/null
 }
 
 #

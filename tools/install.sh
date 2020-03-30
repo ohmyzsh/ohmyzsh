@@ -1,12 +1,12 @@
 #!/bin/sh
 #
 # This script should be run via curl:
-#   sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+#   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 # or wget:
-#   sh -c "$(wget -qO- https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+#   sh -c "$(wget -qO- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 #
 # As an alternative, you can first download the install script and run it afterwards:
-#   wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh
+#   wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
 #   sh install.sh
 #
 # You can tweak the install behavior by setting variables when running the script. For
@@ -15,17 +15,19 @@
 #
 # Respects the following environment variables:
 #   ZSH     - path to the Oh My Zsh repository folder (default: $HOME/.oh-my-zsh)
-#   REPO    - name of the GitHub repo to install from (default: robbyrussell/oh-my-zsh)
+#   REPO    - name of the GitHub repo to install from (default: ohmyzsh/ohmyzsh)
 #   REMOTE  - full remote URL of the git repo to install (default: GitHub via HTTPS)
 #   BRANCH  - branch to check out immediately after install (default: master)
 #
 # Other options:
-#   CHSH    - 'no' means the installer will not change the default shell (default: yes)
-#   RUNZSH  - 'no' means the installer will not run zsh after the install (default: yes)
+#   CHSH       - 'no' means the installer will not change the default shell (default: yes)
+#   RUNZSH     - 'no' means the installer will not run zsh after the install (default: yes)
+#   KEEP_ZSHRC - 'yes' means the installer will not replace an existing .zshrc (default: no)
 #
 # You can also pass some arguments to the install script to set some these options:
 #   --skip-chsh: has the same behavior as setting CHSH to 'no'
 #   --unattended: sets both CHSH and RUNZSH to 'no'
+#   --keep-zshrc: sets KEEP_ZSHRC to 'yes'
 # For example:
 #   sh install.sh --unattended
 #
@@ -33,13 +35,14 @@ set -e
 
 # Default settings
 ZSH=${ZSH:-~/.oh-my-zsh}
-REPO=${REPO:-robbyrussell/oh-my-zsh}
+REPO=${REPO:-ohmyzsh/ohmyzsh}
 REMOTE=${REMOTE:-https://github.com/${REPO}.git}
 BRANCH=${BRANCH:-master}
 
 # Other options
 CHSH=${CHSH:-yes}
 RUNZSH=${RUNZSH:-yes}
+KEEP_ZSHRC=${KEEP_ZSHRC:-no}
 
 
 command_exists() {
@@ -90,7 +93,11 @@ setup_ohmyzsh() {
 		exit 1
 	fi
 
-	git clone --depth=1 --branch "$BRANCH" "$REMOTE" "$ZSH" || {
+	git clone -c core.eol=lf -c core.autocrlf=false \
+		-c fsck.zeroPaddedFilemode=ignore \
+		-c fetch.fsck.zeroPaddedFilemode=ignore \
+		-c receive.fsck.zeroPaddedFilemode=ignore \
+		--depth=1 --branch "$BRANCH" "$REMOTE" "$ZSH" || {
 		error "git clone of oh-my-zsh repo failed"
 		exit 1
 	}
@@ -107,6 +114,11 @@ setup_zshrc() {
 	# Must use this exact name so uninstall.sh can find it
 	OLD_ZSHRC=~/.zshrc.pre-oh-my-zsh
 	if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]; then
+		# Skip this if the user doesn't want to replace an existing .zshrc
+		if [ $KEEP_ZSHRC = yes ]; then
+			echo "${YELLOW}Found ~/.zshrc.${RESET} ${GREEN}Keeping...${RESET}"
+			return
+		fi
 		if [ -e "$OLD_ZSHRC" ]; then
 			OLD_OLD_ZSHRC="${OLD_ZSHRC}-$(date +%Y-%m-%d_%H-%M-%S)"
 			if [ -e "$OLD_OLD_ZSHRC" ]; then
@@ -125,10 +137,9 @@ setup_zshrc() {
 
 	echo "${GREEN}Using the Oh My Zsh template file and adding it to ~/.zshrc.${RESET}"
 
-	cp "$ZSH/templates/zshrc.zsh-template" ~/.zshrc
 	sed "/^export ZSH=/ c\\
 export ZSH=\"$ZSH\"
-" ~/.zshrc > ~/.zshrc-omztemp
+" "$ZSH/templates/zshrc.zsh-template" > ~/.zshrc-omztemp
 	mv -f ~/.zshrc-omztemp ~/.zshrc
 
 	echo
@@ -165,29 +176,37 @@ setup_shell() {
 		*) echo "Invalid choice. Shell change skipped."; return ;;
 	esac
 
-	# Test for the right location of the "shells" file
-	if [ -f /etc/shells ]; then
-		shells_file=/etc/shells
-	elif [ -f /usr/share/defaults/etc/shells ]; then # Solus OS
-		shells_file=/usr/share/defaults/etc/shells
-	else
-		error "could not find /etc/shells file. Change your default shell manually."
-		return
-	fi
+	# Check if we're running on Termux
+	case "$PREFIX" in
+		*com.termux*) termux=true; zsh=zsh ;;
+		*) termux=false ;;
+	esac
 
-	# Get the path to the right zsh binary
-	# 1. Use the most preceding one based on $PATH, then check that it's in the shells file
-	# 2. If that fails, get a zsh path from the shells file, then check it actually exists
-	if ! zsh=$(which zsh) || ! grep -qx "$zsh" "$shells_file"; then
-		if ! zsh=$(grep '^/.*/zsh$' "$shells_file" | tail -1) || [ ! -f "$zsh" ]; then
-			error "no zsh binary found or not present in '$shells_file'"
-			error "change your default shell manually."
+	if [ "$termux" != true ]; then
+		# Test for the right location of the "shells" file
+		if [ -f /etc/shells ]; then
+			shells_file=/etc/shells
+		elif [ -f /usr/share/defaults/etc/shells ]; then # Solus OS
+			shells_file=/usr/share/defaults/etc/shells
+		else
+			error "could not find /etc/shells file. Change your default shell manually."
 			return
+		fi
+
+		# Get the path to the right zsh binary
+		# 1. Use the most preceding one based on $PATH, then check that it's in the shells file
+		# 2. If that fails, get a zsh path from the shells file, then check it actually exists
+		if ! zsh=$(which zsh) || ! grep -qx "$zsh" "$shells_file"; then
+			if ! zsh=$(grep '^/.*/zsh$' "$shells_file" | tail -1) || [ ! -f "$zsh" ]; then
+				error "no zsh binary found or not present in '$shells_file'"
+				error "change your default shell manually."
+				return
+			fi
 		fi
 	fi
 
 	# We're going to change the default shell, so back up the current one
-	if [ -n $SHELL ]; then
+	if [ -n "$SHELL" ]; then
 		echo $SHELL > ~/.shell.pre-oh-my-zsh
 	else
 		grep "^$USER:" /etc/passwd | awk -F: '{print $7}' > ~/.shell.pre-oh-my-zsh
@@ -216,6 +235,7 @@ main() {
 		case $1 in
 			--unattended) RUNZSH=no; CHSH=no ;;
 			--skip-chsh) CHSH=no ;;
+			--keep-zshrc) KEEP_ZSHRC=yes ;;
 		esac
 		shift
 	done

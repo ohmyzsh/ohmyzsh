@@ -42,7 +42,7 @@ alias gap='git apply'
 alias gb='git branch'
 alias gba='git branch -a'
 alias gbd='git branch -d'
-alias gbda='git branch --no-color --merged | command grep -vE "^(\*|\s*(master|develop|dev)\s*$)" | command xargs -n 1 git branch -d'
+alias gbda='git branch --no-color --merged | command grep -vE "^(\+|\*|\s*(master|develop|dev)\s*$)" | command xargs -n 1 git branch -d'
 alias gbD='git branch -D'
 alias gbl='git blame -b -w'
 alias gbnm='git branch --no-merged'
@@ -66,7 +66,7 @@ alias gcb='git checkout -b'
 alias gcf='git config --list'
 alias gcl='git clone --recurse-submodules'
 alias gclean='git clean -id'
-alias gpristine='git reset --hard && git clean -dfx'
+alias gpristine='git reset --hard && git clean -dffx'
 alias gcm='git checkout master'
 alias gcd='git checkout develop'
 alias gcmsg='git commit -m'
@@ -207,7 +207,9 @@ alias grm='git rm'
 alias grmc='git rm --cached'
 alias grmv='git remote rename'
 alias grrm='git remote remove'
+alias grs='git restore'
 alias grset='git remote set-url'
+alias grss='git restore --source'
 alias grt='cd "$(git rev-parse --show-toplevel || echo .)"'
 alias gru='git reset --'
 alias grup='git remote update'
@@ -234,12 +236,15 @@ alias gstd='git stash drop'
 alias gstl='git stash list'
 alias gstp='git stash pop'
 alias gsts='git stash show --text'
+alias gstu='git stash --include-untracked'
 alias gstall='git stash --all'
 alias gsu='git submodule update'
+alias gsw='git switch'
+alias gswc='git switch -c'
 
 alias gts='git tag -s'
 alias gtv='git tag | sort -V'
-alias gtl='gtl(){ git tag --sort=-v:refname -n -l ${1}* }; noglob gtl'
+alias gtl='gtl(){ git tag --sort=-v:refname -n -l "${1}*" }; noglob gtl'
 
 alias gunignore='git update-index --no-assume-unchanged'
 alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
@@ -251,3 +256,17 @@ alias glum='git pull upstream master'
 
 alias gwch='git whatchanged -p --abbrev-commit --pretty=medium'
 alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign -m "--wip-- [skip ci]"'
+
+function grename() {
+  if [[ -z "$1" || -z "$2" ]]; then
+    echo "Usage: $0 old_branch new_branch"
+    return 1
+  fi
+
+  # Rename branch locally
+  git branch -m "$1" "$2"
+  # Rename branch in origin remote
+  if git push origin :"$1"; then
+    git push --set-upstream origin "$2"
+  fi
+}

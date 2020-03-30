@@ -3,6 +3,12 @@
 ##
 # zsh completion function for ripgrep
 #
+# Run ci/test_complete.sh after building to ensure that the options supported by
+# this function stay in synch with the `rg` binary.
+#
+# For convenience, a completion reference guide is included at the bottom of
+# this file.
+#
 # Originally based on code from the zsh-users project — see copyright notice
 # below.
 
@@ -37,6 +43,7 @@ _rg() {
     + '(exclusive)' # Misc. fully exclusive options
     '(: * -)'{-h,--help}'[display help information]'
     '(: * -)'{-V,--version}'[display version information]'
+    '(: * -)'--pcre2-version'[print the version of PCRE2 used by ripgrep, if available]'
 
     + '(buffered)' # buffering options
     '--line-buffered[force line buffering]'
@@ -79,7 +86,7 @@ _rg() {
 
     + '(file-name)' # File-name options
     {-H,--with-filename}'[show file name for matches]'
-    "--no-filename[don't show file name for matches]"
+    {-I,--no-filename}"[don't show file name for matches]"
 
     + '(file-system)' # File system options
     "--one-file-system[don't descend into directories on other file systems]"
@@ -97,6 +104,10 @@ _rg() {
     '*'{-g+,--glob=}'[include/exclude files matching specified glob]:glob'
     '*--iglob=[include/exclude files matching specified case-insensitive glob]:glob'
 
+    + '(glob-case-insensitive)' # File-glob case sensitivity options
+    '--glob-case-insensitive[treat -g/--glob patterns case insensitively]'
+    $no'--no-glob-case-insensitive[treat -g/--glob patterns case sensitively]'
+
     + '(heading)' # Heading options
     '(pretty-vimgrep)--heading[show matches grouped by file name]'
     "(pretty-vimgrep)--no-heading[don't show matches grouped by file name]"
@@ -105,9 +116,17 @@ _rg() {
     '--hidden[search hidden files and directories]'
     $no"--no-hidden[don't search hidden files and directories]"
 
+    + '(hybrid)' # hybrid regex options
+    '--auto-hybrid-regex[dynamically use PCRE2 if necessary]'
+    $no"--no-auto-hybrid-regex[don't dynamically use PCRE2 if necessary]"
+
     + '(ignore)' # Ignore-file options
-    "(--no-ignore-global --no-ignore-parent --no-ignore-vcs)--no-ignore[don't respect ignore files]"
-    $no'(--ignore-global --ignore-parent --ignore-vcs)--ignore[respect ignore files]'
+    "(--no-ignore-global --no-ignore-parent --no-ignore-vcs --no-ignore-dot)--no-ignore[don't respect ignore files]"
+    $no'(--ignore-global --ignore-parent --ignore-vcs --ignore-dot)--ignore[respect ignore files]'
+
+    + '(ignore-file-case-insensitive)' # Ignore-file case sensitivity options
+    '--ignore-file-case-insensitive[process ignore files case insensitively]'
+    $no'--no-ignore-file-case-insensitive[process ignore files case sensitively]'
 
     + '(ignore-global)' # Global ignore-file options
     "--no-ignore-global[don't respect global ignore files]"
@@ -121,6 +140,10 @@ _rg() {
     "--no-ignore-vcs[don't respect version control ignore files]"
     $no'--ignore-vcs[respect version control ignore files]'
 
+    + '(ignore-dot)' # .ignore-file options
+    "--no-ignore-dot[don't respect .ignore files]"
+    $no'--ignore-dot[respect .ignore files]'
+
     + '(json)' # JSON options
     '--json[output results in JSON Lines format]'
     $no"--no-json[don't output results in JSON Lines format]"
@@ -133,6 +156,10 @@ _rg() {
     '--crlf[use CRLF as line terminator]'
     $no"--no-crlf[don't use CRLF as line terminator]"
     '(text)--null-data[use NUL as line terminator]'
+
+    + '(max-columns-preview)' # max column preview options
+    '--max-columns-preview[show preview for long lines (with -M)]'
+    $no"--no-max-columns-preview[don't show preview for long lines (with -M)]"
 
     + '(max-depth)' # Directory-depth options
     '--max-depth=[specify max number of directories to descend]:number of directories'
@@ -213,6 +240,8 @@ _rg() {
 
     + '(text)' # Binary-search options
     {-a,--text}'[search binary files as if they were text]'
+    "--binary[search binary files, don't print binary data]"
+    $no"--no-binary[don't search binary files]"
     $no"(--null-data)--no-text[don't search binary files as if they were text]"
 
     + '(threads)' # Thread-count options
@@ -364,7 +393,7 @@ _rg_encodings() {
     shift{-,_}jis csshiftjis {,x-}sjis ms_kanji ms932
     utf{,-}8 utf-16{,be,le} unicode-1-1-utf-8
     windows-{31j,874,949,125{0..8}} dos-874 tis-620 ansi_x3.4-1968
-    x-user-defined auto
+    x-user-defined auto none
   )
 
   _wanted encodings expl encoding compadd -a "$@" - _encodings
@@ -382,6 +411,156 @@ _rg_types() {
 
 _rg "$@"
 
+################################################################################
+# ZSH COMPLETION REFERENCE
+#
+# For the convenience of developers who aren't especially familiar with zsh
+# completion functions, a brief reference guide follows. This is in no way
+# comprehensive; it covers just enough of the basic structure, syntax, and
+# conventions to help someone make simple changes like adding new options. For
+# more complete documentation regarding zsh completion functions, please see the
+# following:
+#
+# * http://zsh.sourceforge.net/Doc/Release/Completion-System.html
+# * https://github.com/zsh-users/zsh/blob/master/Etc/completion-style-guide
+#
+# OVERVIEW
+#
+# Most zsh completion functions are defined in terms of `_arguments`, which is a
+# shell function that takes a series of argument specifications. The specs for
+# `rg` are stored in an array, which is common for more complex functions; the
+# elements of the array are passed to `_arguments` on invocation.
+#
+# ARGUMENT-SPECIFICATION SYNTAX
+#
+# The following is a contrived example of the argument specs for a simple tool:
+#
+#   '(: * -)'{-h,--help}'[display help information]'
+#   '(-q -v --quiet --verbose)'{-q,--quiet}'[decrease output verbosity]'
+#   '!(-q -v --quiet --verbose)--silent'
+#   '(-q -v --quiet --verbose)'{-v,--verbose}'[increase output verbosity]'
+#   '--color=[specify when to use colors]:when:(always never auto)'
+#   '*:example file:_files'
+#
+# Although there may appear to be six specs here, there are actually nine; we
+# use brace expansion to combine specs for options that go by multiple names,
+# like `-q` and `--quiet`. This is customary, and ties in with the fact that zsh
+# merges completion possibilities together when they have the same description.
+#
+# The first line defines the option `-h`/`--help`. With most tools, it isn't
+# useful to complete anything after `--help` because it effectively overrides
+# all others; the `(: * -)` at the beginning of the spec tells zsh not to
+# complete any other operands (`:` and `*`) or options (`-`) after this one has
+# been used. The `[...]` at the end associates a description with `-h`/`--help`;
+# as mentioned, zsh will see the identical descriptions and merge these options
+# together when offering completion possibilities.
+#
+# The next line defines `-q`/`--quiet`. Here we don't want to suppress further
+# completions entirely, but we don't want to offer `-q` if `--quiet` has been
+# given (since they do the same thing), nor do we want to offer `-v` (since it
+# doesn't make sense to be quiet and verbose at the same time). We don't need to
+# tell zsh not to offer `--quiet` a second time, since that's the default
+# behaviour, but since this line expands to two specs describing `-q` *and*
+# `--quiet` we do need to explicitly list all of them here.
+#
+# The next line defines a hidden option `--silent` — maybe it's a deprecated
+# synonym for `--quiet`. The leading `!` indicates that zsh shouldn't offer this
+# option during completion. The benefit of providing a spec for an option that
+# shouldn't be completed is that, if someone *does* use it, we can correctly
+# suppress completion of other options afterwards.
+#
+# The next line defines `-v`/`--verbose`; this works just like `-q`/`--quiet`.
+#
+# The next line defines `--color`. In this example, `--color` doesn't have a
+# corresponding short option, so we don't need to use brace expansion. Further,
+# there are no other options it's exclusive with (just itself), so we don't need
+# to define those at the beginning. However, it does take a mandatory argument.
+# The `=` at the end of `--color=` indicates that the argument may appear either
+# like `--color always` or like `--color=always`; this is how most GNU-style
+# command-line tools work. The corresponding short option would normally use `+`
+# — for example, `-c+` would allow either `-c always` or `-calways`. For this
+# option, the arguments are known ahead of time, so we can simply list them in
+# parentheses at the end (`when` is used as the description for the argument).
+#
+# The last line defines an operand (a non-option argument). In this example, the
+# operand can be used any number of times (the leading `*`), and it should be a
+# file path, so we tell zsh to call the `_files` function to complete it. The
+# `example file` in the middle is the description to use for this operand; we
+# could use a space instead to accept the default provided by `_files`.
+#
+# GROUPING ARGUMENT SPECIFICATIONS
+#
+# Newer versions of zsh support grouping argument specs together. All specs
+# following a `+` and then a group name are considered to be members of the
+# named group. Grouping is useful mostly for organisational purposes; it makes
+# the relationship between different options more obvious, and makes it easier
+# to specify exclusions.
+#
+# We could rewrite our example above using grouping as follows:
+#
+#   '(: * -)'{-h,--help}'[display help information]'
+#   '--color=[specify when to use colors]:when:(always never auto)'
+#   '*:example file:_files'
+#   + '(verbosity)'
+#   {-q,--quiet}'[decrease output verbosity]'
+#   '!--silent'
+#   {-v,--verbose}'[increase output verbosity]'
+#
+# Here we take advantage of a useful feature of spec grouping — when the group
+# name is surrounded by parentheses, as in `(verbosity)`, it tells zsh that all
+# of the options in that group are exclusive with each other. As a result, we
+# don't need to manually list out the exclusions at the beginning of each
+# option.
+#
+# Groups can also be referred to by name in other argument specs; for example:
+#
+#   '(xyz)--aaa' '*: :_files'
+#   + xyz --xxx --yyy --zzz
+#
+# Here we use the group name `xyz` to tell zsh that `--xxx`, `--yyy`, and
+# `--zzz` are not to be completed after `--aaa`. This makes the exclusion list
+# much more compact and reusable.
+#
+# CONVENTIONS
+#
+# zsh completion functions generally adhere to the following conventions:
+#
+# * Use two spaces for indentation
+# * Combine specs for options with different names using brace expansion
+# * In combined specs, list the short option first (as in `{-a,--text}`)
+# * Use `+` or `=` as described above for options that take arguments
+# * Provide a description for all options, option-arguments, and operands
+# * Capitalise/punctuate argument descriptions as phrases, not complete
+#   sentences — 'display help information', never 'Display help information.'
+#   (but still capitalise acronyms and proper names)
+# * Write argument descriptions as verb phrases — 'display x', 'enable y',
+#   'use z'
+# * Word descriptions to make it clear when an option expects an argument;
+#   usually this is done with the word 'specify', as in 'specify x' or
+#   'use specified x')
+# * Write argument descriptions as tersely as possible — for example, articles
+#   like 'a' and 'the' should be omitted unless it would be confusing
+#
+# Other conventions currently used by this function:
+#
+# * Order argument specs alphabetically by group name, then option name
+# * Group options that are directly related, mutually exclusive, or frequently
+#   referenced by other argument specs
+# * Use only characters in the set [a-z0-9_-] in group names
+# * Order exclusion lists as follows: short options, long options, groups
+# * Use American English in descriptions
+# * Use 'don't' in descriptions instead of 'do not'
+# * Word descriptions for related options as similarly as possible. For example,
+#   `--foo[enable foo]` and `--no-foo[disable foo]`, or `--foo[use foo]` and
+#   `--no-foo[don't use foo]`
+# * Word descriptions to make it clear when an option only makes sense with
+#   another option, usually by adding '(with -x)' to the end
+# * Don't quote strings or variables unnecessarily. When quotes are required,
+#   prefer single-quotes to double-quotes
+# * Prefix option specs with `$no` when the option serves only to negate the
+#   behaviour of another option that must be provided explicitly by the user.
+#   This prevents rarely used options from cluttering up the completion menu
+################################################################################
 
 # ------------------------------------------------------------------------------
 # Copyright (c) 2011 Github zsh-users - http://github.com/zsh-users
