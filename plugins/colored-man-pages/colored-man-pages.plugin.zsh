@@ -31,18 +31,9 @@ function colored() {
 			"$@"
 }
 
-function man() {
-	colored man "$@"
-}
-
-# Colorize online man pages displayed by dman of debian-goodies
-# https://packages.debian.org/stable/debian-goodies
-function dman() {
-	colored dman "$@"
-}
-
-# Colorize man pages of deb packages displayed by debman of debian-goodies
-# https://packages.debian.org/stable/debian-goodies
-function debman() {
-	colored dman "$@"
+# Colorize man and dman/debman (from debian-goodies)
+function man \
+	dman \
+	debman {
+	colored $0 "$@"
 }
