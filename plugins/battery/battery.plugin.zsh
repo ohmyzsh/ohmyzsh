@@ -118,7 +118,7 @@ elif [[ "$OSTYPE" = linux*  ]]; then
 
   function battery_pct() {
     if (( $+commands[acpi] )); then
-      acpi 2>/dev/null | command grep -v "rate information unavailable" | command grep -E '^Battery.*(Disc|C)harging' | cut -f2 -d ',' | tr -cd '[:digit:]'
+      acpi 2>/dev/null | command grep -v "rate information unavailable" | command grep -E '^Battery.*(Full|(Disc|C)harging)' | cut -f2 -d ',' | tr -cd '[:digit:]'
     fi
   }
 
@@ -175,7 +175,7 @@ function battery_level_gauge() {
   local filled_symbol=${BATTERY_GAUGE_FILLED_SYMBOL:-'▶'}
   local empty_symbol=${BATTERY_GAUGE_EMPTY_SYMBOL:-'▷'}
   local charging_color=${BATTERY_CHARGING_COLOR:-$color_yellow}
-  local charging_symbol=${BATTERY_CHARGING_SYMBOL:-'⚡'}
+  local charging_symbol=${BATTERY_CHARGING_SYMBOL:-'%%{%%G⚡%%}'}
 
   local battery_remaining_percentage=$(battery_pct)
   local filled empty gauge_color
