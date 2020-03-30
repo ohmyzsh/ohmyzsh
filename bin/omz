@@ -17,6 +17,22 @@ function omz {
     _omz::$command "$@"
 }
 
+function _omz {
+    local -a subcmds
+    subcmds=(
+        'help:Usage information'
+        'test:Fetch Pull Request for local testing'
+    )
+
+    if (( CURRENT == 2 )); then
+        _describe 'command' subcmds
+    fi
+
+    return 0
+}
+
+compdef _omz omz
+
 function _omz::log {
     # $1 = info|warn|error|debug
     # $@ = text
