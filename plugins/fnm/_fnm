@@ -1,0 +1,55 @@
+#compdef fnm
+#autoload
+
+# fnm zsh completion
+
+local -a _1st_arguments
+_1st_arguments=(
+    '--help:Prints the fnm help message'
+    '--version:Prints fnm version information'
+    'alias:Alias a version'
+    'default:Alias a version as default'
+    'env:Show env configurations'
+    'exec:Execute a binary with the current Node.js version in $PATH'
+    'install:Install a new node version'
+    'ls:List all installed node versions'
+    'ls-remote:List all version available upstream'
+    'uninstall:Uninstall a node version'
+)
+
+__remote_list ()
+{
+    _wanted application expl 'command' compadd $(command fnm ls-remote | sed -e 1d | awk '{print $2}')
+}
+
+__installed_list ()
+{
+    _wanted application expl 'command' compadd $(command fnm ls | sed -e 1d | awk '{print $2}') 
+}
+
+local expl
+
+local curcontext="$curcontext" state line
+typeset -A opt_args
+
+_arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+case $state in
+  (command)
+      _describe -t commands "fnm subcommand" _1st_arguments
+      return
+  ;;
+
+  (options)
+    case $line[1] in
+      (install)
+         _arguments ':feature:__remote_list'
+      ;;
+      (uninstall)
+         _arguments ':feature:__installed_list'
+      ;;
+    esac
+  ;;
+esac
