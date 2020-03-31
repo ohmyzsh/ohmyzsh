@@ -125,13 +125,17 @@ prompt_git() {
     background=red
     foreground=white
   elif [[ -e "${repo_path}/rebase" || \
-    -e "${repo_path}/rebase-apply" || \
-    -e "${repo_path}/rebase-merge" || \
-    -e "${repo_path}/../.dotest" ]]; then
-    local current_commit total_commits
-    current_commit=$(cat ${repo_path}/rebase-apply/next)
-    total_commits=$(cat ${repo_path}/rebase-apply/last)
-    mode=" ${pl_right_arrow}R${pl_right_arrow} ${current_commit}/${total_commits}"
+          -e "${repo_path}/rebase-apply" || \
+          -e "${repo_path}/rebase-merge" || \
+          -e "${repo_path}/../.dotest" ]]; then
+    mode=" ${pl_right_arrow}R${pl_right_arrow}"
+    if [[ -e "${repo_path}/rebase-apply/next" && \
+          -e "${repo_path}/rebase-apply/last" ]]; then
+      local current_commit total_commits
+      current_commit=$(cat ${repo_path}/rebase-apply/next)
+      total_commits=$(cat ${repo_path}/rebase-apply/last)
+      mode+=" ${current_commit}/${total_commits}"
+    fi
     background=red
     foreground=white
   elif [[ -n $dirty ]]; then
