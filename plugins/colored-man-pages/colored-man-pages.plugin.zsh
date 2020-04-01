@@ -31,6 +31,9 @@ function colored() {
 			"$@"
 }
 
-function man() {
-	colored man "$@"
+# Colorize man and dman/debman (from debian-goodies)
+function man \
+	dman \
+	debman {
+	colored $0 "$@"
 }

@@ -23,5 +23,13 @@ function lstheme {
     # Resources:
     # http://zsh.sourceforge.net/Doc/Release/Expansion.html#Modifiers
     # http://zsh.sourceforge.net/Doc/Release/Expansion.html#Glob-Qualifiers
-    print "$ZSH_CUSTOM"/*.zsh-theme(N:t:r) {"$ZSH_CUSTOM","$ZSH"}/themes/*.zsh-theme(N:t:r)
+    {
+        # Show themes inside $ZSH_CUSTOM (in any subfolder)
+        # Strip $ZSH_CUSTOM/themes/ and $ZSH_CUSTOM/ from the name, so that it matches
+        # the value that should be written in $ZSH_THEME to load the theme.
+        print -l "$ZSH_CUSTOM"/**/*.zsh-theme(.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::) \
+
+        # Show themes inside $ZSH, stripping the head of the path.
+        print -l "$ZSH"/themes/*.zsh-theme(.N:t:r)
+    } | sort -u | fmt -w $COLUMNS
 }

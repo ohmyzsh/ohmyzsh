@@ -5,7 +5,8 @@ function {
              /usr/share/virtualenvwrapper/virtualenvwrapper{_lazy,}.sh \
              /usr/local/bin/virtualenvwrapper{_lazy,}.sh \
              /etc/bash_completion.d/virtualenvwrapper \
-             /usr/share/bash-completion/completions/virtualenvwrapper
+             /usr/share/bash-completion/completions/virtualenvwrapper \
+             $HOME/.local/bin/virtualenvwrapper.sh
     do
         if [[ -f $f ]]; then
             source $f
