@@ -11,6 +11,7 @@ function setup_using_base_dir() {
         fzfdirs=(
           "${HOME}/.fzf"
           "${HOME}/.nix-profile/share/fzf"
+          "/usr/bin/fzf"
           "/usr/local/opt/fzf"
           "/usr/share/fzf"
           "/usr/local/share/examples/fzf"
