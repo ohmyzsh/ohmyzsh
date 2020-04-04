@@ -13,12 +13,24 @@
 # ------------------------------------------------------------------------------
 
 man-command-line() {
-    # if there is no command typed, use the last command
-    [[ -z "$BUFFER" ]] && zle up-history
+  # if there is no command typed, use the last command
+  [[ -z "$BUFFER" ]] && zle up-history
 
-    # prepend man to only the first part of the typed command
-    # http://zsh.sourceforge.net/Doc/Release/Expansion.html#Parameter-Expansion-Flags
-    [[ "$BUFFER" != man\ * ]] && BUFFER="man ${${(Az)BUFFER}[1]}"
+  # prepend man to only the first part of the typed command
+  # http://zsh.sourceforge.net/Doc/Release/Expansion.html#Parameter-Expansion-Flags
+  if [[ "$BUFFER" == man\ * ]] && return
+
+  # get command and possible subcommand
+  ARGS=(${${(Az)BUFFER}[1]} ${${(Az)BUFFER}[2]})
+
+  # check if man page exists
+  man "${ARGS[1]}-${ARGS[2]}" > /dev/null 2>&1
+
+  if [[ $? == 0 ]]; then
+    BUFFER="man $ARGS"
+  else
+    BUFFER="man ${ARGS[1]}"
+  fi
 }
 zle -N man-command-line
 # Defined shortcut keys: [Esc]man
