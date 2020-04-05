@@ -73,4 +73,4 @@ if [[ $COMPLETION_WAITING_DOTS = true ]]; then
 fi
 
 # automatically load bash completion functions
-autoload -Uz bashcompinit && bashcompinit
+autoload -U +X bashcompinit && bashcompinit
