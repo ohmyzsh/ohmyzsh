@@ -147,3 +147,10 @@ alias kepvc='kubectl edit pvc'
 alias kdpvc='kubectl describe pvc'
 alias kdelpvc='kubectl delete pvc'
 
+# PV management.
+alias kgpv='k get pv'
+alias kgpva='kgpv -A'
+alias kgpvw='kgpv -w'
+alias kepv='k edit pv'
+alias kdpv='k describe pv'
+alias kdelpv='k del pv'
