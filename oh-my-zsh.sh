@@ -1,7 +1,7 @@
 # Set ZSH_CACHE_DIR to the path where cache files should be created
 # or else we will use the default cache/
 if [[ -z "$ZSH_CACHE_DIR" ]]; then
-  ZSH_CACHE_DIR="$ZSH/cache"
+  ZSH_CACHE_DIR=${XDG_CACHE_HOME:-"$ZSH/cache"}
 fi
 
 # Migrate .zsh-update file to $ZSH_CACHE_DIR
