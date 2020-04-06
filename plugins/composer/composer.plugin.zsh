@@ -15,20 +15,16 @@ _composer_get_required_list () {
 }
 
 _composer () {
-  local curcontext="$curcontext" state line
-  typeset -A opt_args
-  _arguments \
-    '1: :->command'\
-    '*: :->args'
+    local curcontext="$curcontext" state line
+    typeset -A opt_args
+    _arguments \
+        '*:: :->subcmds'
 
-  case $state in
-    command)
-      compadd $(_composer_get_command_list)
-      ;;
-    *)
-      compadd $(_composer_get_required_list)
-      ;;
-  esac
+    if (( CURRENT == 1 )) || ( ((CURRENT == 2)) && [ "$words[1]" = "global" ] ) ; then
+        compadd $(_composer_get_command_list)
+    else
+        compadd $(_composer_get_required_list)
+    fi
 }
 
 compdef _composer composer
@@ -51,5 +47,10 @@ alias cgrm='composer global remove'
 # install composer in the current directory
 alias cget='curl -s https://getcomposer.org/installer | php'
 
-# Add Composer's global binaries to PATH
-export PATH=$PATH:$(composer global config bin-dir --absolute 2>/dev/null)
+# Add Composer's global binaries to PATH, using Composer if available.
+if (( $+commands[composer] )); then
+  export PATH=$PATH:$(composer global config bin-dir --absolute 2>/dev/null)
+else
+  [ -d $HOME/.composer/vendor/bin ] && export PATH=$PATH:$HOME/.composer/vendor/bin
+  [ -d $HOME/.config/composer/vendor/bin ] && export PATH=$PATH:$HOME/.config/composer/vendor/bin
+fi

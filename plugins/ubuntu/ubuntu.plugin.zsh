@@ -1,73 +1,43 @@
-# Authors:
-# https://github.com/AlexBio
-# https://github.com/dbb
-# https://github.com/Mappleconfusers
-# https://github.com/trinaldi
-# Nicolas Jonas nextgenthemes.com
-# https://github.com/loctauxphilippe
-#
-# Debian, Ubuntu and friends related zsh aliases and functions for zsh
+(( $+commands[apt] )) && APT=apt || APT=apt-get
 
 alias acs='apt-cache search'
-compdef _acs acs='apt-cache search'
 
 alias afs='apt-file search --regexp'
-compdef _afs afs='apt-file search --regexp'
 
-# These are apt-get only
-alias ags='apt-get source'   # asrc
-compdef _ags ags='apt-get source'
+# These are apt/apt-get only
+alias ags="$APT source"
 
-alias acp='apt-cache policy' # app
-compdef _acp acp='apt-cache policy'
+alias acp='apt-cache policy'
 
 #List all installed packages
 alias agli='apt list --installed'
-compdef _agli agli='apt list --installed'
+
+# List available updates only
+alias aglu='apt list --upgradable'
 
 # superuser operations ######################################################
 
-# List available updates only
-alias aglu='sudo apt-get -u upgrade --assume-no'
-compdef _aglu aglu='sudo apt-get -u upgrade --assume-no'
-
 alias afu='sudo apt-file update'
-compdef _afu afu='sudo apt-file update'
 
 alias ppap='sudo ppa-purge'
-compdef _ppap ppap='sudo ppa-purge'
 
-alias apg='sudo apt-get'            # age - but without sudo
-alias aga='sudo apt-get autoclean' # aac
-alias agb='sudo apt-get build-dep' # abd
-alias agc='sudo apt-get clean'     # adc
-alias agd='sudo apt-get dselect-upgrade' # ads
-alias agi='sudo apt-get install'  # ai
-alias agp='sudo apt-get purge'    # ap
-alias agr='sudo apt-get remove'   # ar
-alias agu='sudo apt-get update'   # ad
-alias agud='sudo apt-get update && sudo apt-get full-upgrade' #adu
-alias agug='sudo apt-get upgrade' # ag
-alias aguu='sudo apt-get update && sudo apt-get upgrade'      #adg
-alias agar='sudo apt-get autoremove'
+alias age="sudo $APT"
+alias aga="sudo $APT autoclean"
+alias agb="sudo $APT build-dep"
+alias agc="sudo $APT clean"
+alias agd="sudo $APT dselect-upgrade"
+alias agi="sudo $APT install"
+alias agp="sudo $APT purge"
+alias agr="sudo $APT remove"
+alias agu="sudo $APT update"
+alias agud="sudo $APT update && sudo $APT dist-upgrade"
+alias agug="sudo $APT upgrade"
+alias aguu="sudo $APT update && sudo $APT upgrade"
+alias agar="sudo $APT autoremove"
 
-compdef _ag apg='sudo apt-get'
-compdef _aga aga='sudo apt-get autoclean'
-compdef _agb agb='sudo apt-get build-dep'
-compdef _agc agc='sudo apt-get clean'
-compdef _agd agd='sudo apt-get dselect-upgrade'
-compdef _agi agi='sudo apt-get install'
-compdef _agp agp='sudo apt-get purge'
-compdef _agr agr='sudo apt-get remove'
-compdef _agu agu='sudo apt-get update'
-compdef _agud agud='sudo apt-get update && sudo apt-get full-upgrade'
-compdef _agug agug='sudo apt-get upgrade'
-compdef _aguu aguu='sudo apt-get update && sudo apt-get upgrade'
-compdef _agar agar='sudo apt-get autoremove'
 
 # Remove ALL kernel images and headers EXCEPT the one in use
-alias kclean='sudo aptitude remove -P ?and(~i~nlinux-(ima|hea) \
-	?not(~n`uname -r`))'
+alias kclean='sudo aptitude remove -P ?and(~i~nlinux-(ima|hea) ?not(~n`uname -r`))'
 
 # Misc. #####################################################################
 # print all installed packages
@@ -86,13 +56,13 @@ aar() {
 	else
 		read "PACKAGE?Type in the package name to install/upgrade with this ppa [${1##*/}]: "
 	fi
-	
+
 	if [ -z "$PACKAGE" ]; then
 		PACKAGE=${1##*/}
 	fi
-	
-	sudo apt-add-repository $1 && sudo apt-get update
-	sudo apt-get install $PACKAGE
+
+	sudo apt-add-repository $1 && sudo $APT update
+	sudo $APT install $PACKAGE
 }
 
 # Prints apt history
@@ -102,7 +72,7 @@ aar() {
 #   apt-history remove
 #   apt-history rollback
 #   apt-history list
-# Based On: http://linuxcommando.blogspot.com/2008/08/how-to-show-apt-log-history.html
+# Based On: https://linuxcommando.blogspot.com/2008/08/how-to-show-apt-log-history.html
 apt-history () {
   case "$1" in
     install)
@@ -133,22 +103,22 @@ apt-history () {
 
 # Kernel-package building shortcut
 kerndeb () {
-    # temporarily unset MAKEFLAGS ( '-j3' will fail )
-    MAKEFLAGS=$( print - $MAKEFLAGS | perl -pe 's/-j\s*[\d]+//g' )
-    print '$MAKEFLAGS set to '"'$MAKEFLAGS'"
-	appendage='-custom' # this shows up in $ (uname -r )
-    revision=$(date +"%Y%m%d") # this shows up in the .deb file name
+  # temporarily unset MAKEFLAGS ( '-j3' will fail )
+  MAKEFLAGS=$( print - $MAKEFLAGS | perl -pe 's/-j\s*[\d]+//g' )
+  print '$MAKEFLAGS set to '"'$MAKEFLAGS'"
+  appendage='-custom' # this shows up in $(uname -r)
+  revision=$(date +"%Y%m%d") # this shows up in the .deb file name
 
-    make-kpkg clean
+  make-kpkg clean
 
-    time fakeroot make-kpkg --append-to-version "$appendage" --revision \
-        "$revision" kernel_image kernel_headers
+  time fakeroot make-kpkg --append-to-version "$appendage" --revision \
+      "$revision" kernel_image kernel_headers
 }
 
 # List packages by size
 function apt-list-packages {
-    dpkg-query -W --showformat='${Installed-Size} ${Package} ${Status}\n' | \
-    grep -v deinstall | \
-    sort -n | \
-    awk '{print $1" "$2}'
+  dpkg-query -W --showformat='${Installed-Size} ${Package} ${Status}\n' | \
+  grep -v deinstall | \
+  sort -n | \
+  awk '{print $1" "$2}'
 }

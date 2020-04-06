@@ -1,6 +1,5 @@
 #compdef repo
 
-
 __git_apply_whitespace_strategies ()
 {
   declare -a strategies
@@ -269,4 +268,3 @@ __repo_projects_or_all()
 
 _repo "$@"
 return $?
-

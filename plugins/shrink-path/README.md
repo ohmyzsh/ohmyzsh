@@ -7,19 +7,26 @@ For this directory tree:
 ```
     /home/
       me/
-        foo/
+        f o o/     # The prefix f is ambiguous between "f o o" and "f i g".
           bar/
             quux/
           biz/     # The prefix b is ambiguous between bar and biz.
+        f i g/
+          baz/
 ```
 here are the results of calling `shrink_path <option> /home/me/foo/bar/quux`:
 ```
     Option        Result
-    <none>        /h/m/f/ba/q
-    -l|--last     /h/m/f/ba/quux
+    <none>        /h/m/f o/ba/q
+    -l|--last     /h/m/f o/ba/q
     -s|--short    /h/m/f/b/q
-    -t|--tilde    ~/f/ba/q
+    -t|--tilde    ~/f o/ba/q
     -f|--fish     ~/f/b/quux
+    -g|--glob     /h*/m*/f o*/ba*/q*
+    -3            /hom/me/f o/bar/quu
+    -e '$' -3     /hom$/me/f o$/bar/quu$
+    -q            /h/m/f\ o/ba/q
+    -g -q         /h*/m*/f\ o*/ba*/q*
 ```
 
 
@@ -37,11 +44,16 @@ The following options are available:
 
 ```
     -f, --fish       fish simulation, equivalent to -l -s -t.
+    -g, --glob       Add asterisk to allow globbing of shrunk path (equivalent to -e "*")
     -l, --last       Print the last directory's full name.
-    -s, --short      Truncate directory names to the first character. Without
+    -s, --short      Truncate directory names to the number of characters given by -. Without
                      -s, names are truncated without making them ambiguous.
     -t, --tilde      Substitute ~ for the home directory.
     -T, --nameddirs  Substitute named directories as well.
+    -#               Truncate each directly to at least this many characters inclusive of the
+                     ellipsis character(s) (defaulting to 1).
+    -e SYMBOL        Postfix symbol(s) to indicate that a directory name had been truncated.
+    -q, --quote      Quote special characters in the shrunk path
 ```
 
 The long options can also be set via zstyle, like
@@ -56,11 +68,12 @@ supported.
 ## License
 
 Copyright (C) 2008 by Daniel Friesel <derf@xxxxxxxxxxxxxxxxxx>
+Copyright (C) 2018-2020 by Pavel N. Krivitsky
 
-License: WTFPL <http://sam.zoy.org/wtfpl>
+License: WTFPL <http://www.wtfpl.net>
 
-Ref: http://www.zsh.org/mla/workers/2009/msg00415.html
-     http://www.zsh.org/mla/workers/2009/msg00419.html
+Ref: https://www.zsh.org/mla/workers/2009/msg00415.html
+     https://www.zsh.org/mla/workers/2009/msg00419.html
 
 
 ## Misc

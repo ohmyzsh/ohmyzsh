@@ -1,18 +1,15 @@
-## Vault (https://www.vaultproject.io) autocomplete plugin
+# Vault plugin
 
-- Adds autocomplete options for all vault commands.
+Note: this plugin is deprecated. Use the [official autocompletion](https://www.vaultproject.io/docs/commands/index.html#autocompletion) instead.
 
-####Show help for all commands
-![General Help](http://i.imgur.com/yv5Db1r.png "Help for all commands")
+-------
 
+Adds autocomplete options for all [vault](https://www.vaultproject.io) commands.
 
-####Create new Vault token
-![Create token](http://i.imgur.com/xMegNgh.png "Create token")
+To use it, add `vault` to the plugins array in your zshrc file:
 
-
-####Enable audit backends
-![Audit backends](http://i.imgur.com/fKLeiSF.png "Audit backends")
-
-
+```zsh
+plugins=(... vault)
+```
 
 Crafted with <3 by Valentin Bud ([@valentinbud](https://twitter.com/valentinbud))

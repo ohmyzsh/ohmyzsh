@@ -2,6 +2,10 @@
 #   Navigate directory history using ALT-LEFT and ALT-RIGHT. ALT-LEFT moves back to directories 
 #   that the user has changed to in the past, and ALT-RIGHT undoes ALT-LEFT.
 # 
+#   Navigate directory hierarchy using ALT-UP and ALT-DOWN. (mac keybindings not yet implemented)
+#   ALT-UP moves to higher hierarchy (cd ..)
+#   ALT-DOWN moves into the first directory found in alphabetical order
+#
 
 dirhistory_past=($PWD)
 dirhistory_future=()
@@ -49,7 +53,8 @@ function push_future() {
 }
 
 # Called by zsh when directory changes
-chpwd_functions+=(chpwd_dirhistory)
+autoload -U add-zsh-hook
+add-zsh-hook chpwd chpwd_dirhistory
 function chpwd_dirhistory() {
   push_past $PWD
   # If DIRHISTORY_CD is not set...
@@ -120,7 +125,9 @@ zle -N dirhistory_zle_dirhistory_back
 bindkey "\e[3D" dirhistory_zle_dirhistory_back
 bindkey "\e[1;3D" dirhistory_zle_dirhistory_back
 # Mac teminal (alt+left/right)
-bindkey "^[b" dirhistory_zle_dirhistory_back
+if [[ "$TERM_PROGRAM" == "Apple_Terminal" ]]; then
+  bindkey "^[b" dirhistory_zle_dirhistory_back
+fi
 # Putty:
 bindkey "\e\e[D" dirhistory_zle_dirhistory_back
 # GNU screen:
@@ -129,8 +136,56 @@ bindkey "\eO3D" dirhistory_zle_dirhistory_back
 zle -N dirhistory_zle_dirhistory_future
 bindkey "\e[3C" dirhistory_zle_dirhistory_future
 bindkey "\e[1;3C" dirhistory_zle_dirhistory_future
-bindkey "^[f" dirhistory_zle_dirhistory_future
+if [[ "$TERM_PROGRAM" == "Apple_Terminal" ]]; then
+  bindkey "^[f" dirhistory_zle_dirhistory_future
+fi
 bindkey "\e\e[C" dirhistory_zle_dirhistory_future
 bindkey "\eO3C" dirhistory_zle_dirhistory_future
 
 
+# 
+# HIERARCHY Implemented in this section, in case someone wants to split it to another plugin if it clashes bindings
+# 
+
+# Move up in hierarchy
+function dirhistory_up() {
+  cd .. || return 1
+}
+
+# Move down in hierarchy
+function dirhistory_down() {
+  cd "$(find . -mindepth 1 -maxdepth 1 -type d | sort -n | head -n 1)" || return 1
+}
+
+
+# Bind keys to hierarchy navigation
+function dirhistory_zle_dirhistory_up() {
+  zle kill-buffer   # Erase current line in buffer
+  dirhistory_up
+  zle accept-line
+}
+
+function dirhistory_zle_dirhistory_down() {
+  zle kill-buffer   # Erase current line in buffer
+  dirhistory_down
+  zle accept-line
+}
+
+zle -N dirhistory_zle_dirhistory_up
+# xterm in normal mode
+bindkey "\e[3A" dirhistory_zle_dirhistory_up
+bindkey "\e[1;3A" dirhistory_zle_dirhistory_up
+# Mac teminal (alt+up)
+    #bindkey "^[?" dirhistory_zle_dirhistory_up #dont know it
+# Putty:
+bindkey "\e\e[A" dirhistory_zle_dirhistory_up
+# GNU screen:
+bindkey "\eO3A" dirhistory_zle_dirhistory_up
+
+zle -N dirhistory_zle_dirhistory_down
+bindkey "\e[3B" dirhistory_zle_dirhistory_down
+bindkey "\e[1;3B" dirhistory_zle_dirhistory_down
+# Mac teminal (alt+down)
+    #bindkey "^[?" dirhistory_zle_dirhistory_down #dont know it
+bindkey "\e\e[B" dirhistory_zle_dirhistory_down
+bindkey "\eO3B" dirhistory_zle_dirhistory_down

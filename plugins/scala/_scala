@@ -1,6 +1,6 @@
 #compdef scala scalac
 # ------------------------------------------------------------------------------
-# Copyright (c) 2012 Github zsh-users - http://github.com/zsh-users
+# Copyright (c) 2012 Github zsh-users - https://github.com/zsh-users
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -28,7 +28,7 @@
 # Description
 # -----------
 #
-#  Completion script for scala and scalac (http://www.scala-lang.org/).
+#  Completion script for scala and scalac (https://www.scala-lang.org/).
 #
 # ------------------------------------------------------------------------------
 # Authors

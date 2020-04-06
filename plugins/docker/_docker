@@ -431,7 +431,7 @@ __docker_complete_events_filter() {
     integer ret=1
     declare -a opts
 
-    opts=('container' 'daemon' 'event' 'image' 'label' 'network' 'type' 'volume')
+    opts=('container' 'daemon' 'event' 'image' 'label' 'network' 'scope' 'type' 'volume')
 
     if compset -P '*='; then
         case "${${words[-1]%=*}#*=}" in
@@ -450,9 +450,9 @@ __docker_complete_events_filter() {
                 ;;
             (event)
                 local -a event_opts
-                event_opts=('attach' 'commit' 'connect' 'copy' 'create' 'delete' 'destroy' 'detach' 'die' 'disconnect' 'exec_create' 'exec_detach'
-                'exec_start' 'export' 'health_status' 'import' 'kill' 'load'  'mount' 'oom' 'pause' 'pull' 'push' 'reload' 'rename' 'resize' 'restart' 'save' 'start'
-                'stop' 'tag' 'top' 'unmount' 'unpause' 'untag' 'update')
+                event_opts=('attach' 'commit' 'connect' 'copy' 'create' 'delete' 'destroy' 'detach' 'die' 'disable' 'disconnect' 'enable' 'exec_create' 'exec_detach'
+                'exec_start' 'export' 'health_status' 'import' 'install' 'kill' 'load'  'mount' 'oom' 'pause' 'pull' 'push' 'reload' 'remove' 'rename' 'resize'
+                'restart' 'save' 'start' 'stop' 'tag' 'top' 'unmount' 'unpause' 'untag' 'update')
                 _describe -t event-filter-opts "event filter options" event_opts && ret=0
                 ;;
             (image)
@@ -460,6 +460,11 @@ __docker_complete_events_filter() {
                 ;;
             (network)
                 __docker_complete_networks && ret=0
+                ;;
+            (scope)
+                local -a scope_opts
+                scope_opts=('local' 'swarm')
+                _describe -t scope-filter-opts "scope filter options" scope_opts && ret=0
                 ;;
             (type)
                 local -a type_opts
@@ -612,6 +617,7 @@ __docker_container_subcommand() {
         "($help)*--dns=[Custom DNS servers]:DNS server: "
         "($help)*--dns-option=[Custom DNS options]:DNS option: "
         "($help)*--dns-search=[Custom DNS search domains]:DNS domains: "
+        "($help)*--domainname=[Container NIS domain name]:domainname:_hosts"
         "($help)*"{-e=,--env=}"[Environment variables]:environment variable: "
         "($help)--entrypoint=[Overwrite the default entrypoint of the image]:entry point: "
         "($help)*--env-file=[Read environment variables from a file]:environment file:_files"
@@ -889,7 +895,7 @@ __docker_container_subcommand() {
                 $opts_help \
                 $opts_attach_exec_run_start \
                 "($help -a --attach)"{-a,--attach}"[Attach container's stdout/stderr and forward all signals]" \
-                "($help -i --interactive)"{-i,--interactive}"[Attach container's stding]" \
+                "($help -i --interactive)"{-i,--interactive}"[Attach container's stdin]" \
                 "($help -)*:containers:__docker_complete_stopped_containers" && ret=0
             ;;
         (stats)
@@ -923,7 +929,7 @@ __docker_container_subcommand() {
             local state
             _arguments $(__docker_arguments) \
                 $opts_help \
-                opts_create_run_update \
+                $opts_create_run_update \
                 "($help -)*: :->values" && ret=0
             case $state in
                 (values)
@@ -2209,7 +2215,7 @@ __docker_stack_subcommand() {
             _arguments $(__docker_arguments) \
                 $opts_help \
                 "($help)--bundle-file=[Path to a Distributed Application Bundle file]:dab:_files -g \"*.dab\"" \
-                "($help -c --compose-file)"{-c=,--compose-file=}"[Path to a Compose file]:compose file:_files -g \"*.(yml|yaml)\"" \
+                "($help -c --compose-file)"{-c=,--compose-file=}"[Path to a Compose file, or '-' to read from stdin]:compose file:_files -g \"*.(yml|yaml)\"" \
                 "($help)--with-registry-auth[Send registry authentication details to Swarm agents]" \
                 "($help -):stack:__docker_complete_stacks" && ret=0
             ;;
@@ -2280,6 +2286,9 @@ __docker_swarm_subcommand() {
                 $opts_help \
                 "($help)--advertise-addr=[Advertised address]:ip\:port: " \
                 "($help)--data-path-addr=[Data path IP or interface]:ip " \
+                "($help)--data-path-port=[Data Path Port]:port " \
+                "($help)--default-addr-pool=[Default address pool]" \
+                "($help)--default-addr-pool-mask-length=[Default address pool subnet mask length]" \
                 "($help)--autolock[Enable manager autolocking]" \
                 "($help)--availability=[Availability of the node]:availability:(active drain pause)" \
                 "($help)--cert-expiry=[Validity period for node certificates]:duration: " \

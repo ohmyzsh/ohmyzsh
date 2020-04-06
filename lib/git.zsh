@@ -10,16 +10,23 @@ function git_prompt_info() {
 
 # Checks if working tree is dirty
 function parse_git_dirty() {
-  local STATUS=''
+  local STATUS
   local -a FLAGS
   FLAGS=('--porcelain')
   if [[ "$(command git config --get oh-my-zsh.hide-dirty)" != "1" ]]; then
-    if [[ $POST_1_7_2_GIT -gt 0 ]]; then
-      FLAGS+='--ignore-submodules=dirty'
-    fi
     if [[ "$DISABLE_UNTRACKED_FILES_DIRTY" == "true" ]]; then
       FLAGS+='--untracked-files=no'
     fi
+    case "$GIT_STATUS_IGNORE_SUBMODULES" in
+      git)
+        # let git decide (this respects per-repo config in .gitmodules)
+        ;;
+      *)
+        # if unset: ignore dirty submodules
+        # other values are passed to --ignore-submodules
+        FLAGS+="--ignore-submodules=${GIT_STATUS_IGNORE_SUBMODULES:-dirty}"
+        ;;
+    esac
     STATUS=$(command git status ${FLAGS} 2> /dev/null | tail -n1)
   fi
   if [[ -n $STATUS ]]; then
@@ -77,8 +84,8 @@ function git_current_branch() {
 # Gets the number of commits ahead from remote
 function git_commits_ahead() {
   if command git rev-parse --git-dir &>/dev/null; then
-    local commits="$(git rev-list --count @{upstream}..HEAD)"
-    if [[ "$commits" != 0 ]]; then
+    local commits="$(git rev-list --count @{upstream}..HEAD 2>/dev/null)"
+    if [[ -n "$commits" && "$commits" != 0 ]]; then
       echo "$ZSH_THEME_GIT_COMMITS_AHEAD_PREFIX$commits$ZSH_THEME_GIT_COMMITS_AHEAD_SUFFIX"
     fi
   fi
@@ -87,8 +94,8 @@ function git_commits_ahead() {
 # Gets the number of commits behind remote
 function git_commits_behind() {
   if command git rev-parse --git-dir &>/dev/null; then
-    local commits="$(git rev-list --count HEAD..@{upstream})"
-    if [[ "$commits" != 0 ]]; then
+    local commits="$(git rev-list --count HEAD..@{upstream} 2>/dev/null)"
+    if [[ -n "$commits" && "$commits" != 0 ]]; then
       echo "$ZSH_THEME_GIT_COMMITS_BEHIND_PREFIX$commits$ZSH_THEME_GIT_COMMITS_BEHIND_SUFFIX"
     fi
   fi
@@ -181,28 +188,6 @@ function git_prompt_status() {
   echo $STATUS
 }
 
-# Compares the provided version of git to the version installed and on path
-# Outputs -1, 0, or 1 if the installed version is less than, equal to, or
-# greater than the input version, respectively.
-function git_compare_version() {
-  local INPUT_GIT_VERSION INSTALLED_GIT_VERSION
-  INPUT_GIT_VERSION=(${(s/./)1})
-  INSTALLED_GIT_VERSION=($(command git --version 2>/dev/null))
-  INSTALLED_GIT_VERSION=(${(s/./)INSTALLED_GIT_VERSION[3]})
-
-  for i in {1..3}; do
-    if [[ $INSTALLED_GIT_VERSION[$i] -gt $INPUT_GIT_VERSION[$i] ]]; then
-      echo 1
-      return 0
-    fi
-    if [[ $INSTALLED_GIT_VERSION[$i] -lt $INPUT_GIT_VERSION[$i] ]]; then
-      echo -1
-      return 0
-    fi
-  done
-  echo 0
-}
-
 # Outputs the name of the current user
 # Usage example: $(git_current_user_name)
 function git_current_user_name() {
@@ -215,7 +200,11 @@ function git_current_user_email() {
   command git config user.email 2>/dev/null
 }
 
-# This is unlikely to change so make it all statically assigned
-POST_1_7_2_GIT=$(git_compare_version "1.7.2")
-# Clean up the namespace slightly by removing the checker function
-unfunction git_compare_version
+# Output the name of the root directory of the git repository
+# Usage example: $(git_repo_name)
+function git_repo_name() {
+  local repo_path
+  if repo_path="$(git rev-parse --show-toplevel 2>/dev/null)" && [[ -n "$repo_path" ]]; then
+    echo ${repo_path:t}
+  fi
+}
