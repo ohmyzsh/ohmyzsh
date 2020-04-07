@@ -19,6 +19,9 @@ fi
 bindkey "^P" up-line-or-search
 bindkey "^N" down-line-or-search
 
+#make ctrl+u delete the text before the cursor instead of the entire line
+bindkey "^U" backward-kill-line
+
 # Use emacs key bindings
 bindkey -e
 
