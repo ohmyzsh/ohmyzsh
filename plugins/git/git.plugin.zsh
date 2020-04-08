@@ -263,7 +263,7 @@ alias gworkl='git worktree list'
 alias gworklo='git worktree lock'
 alias gworkmv='git worktree move'
 alias gworkpr='git worktree prune'
-alias gworkrm="git worktree remove"
+alias gworkrm='git worktree remove'
 alias gworkulo='git worktree unlock'
 
 function grename() {
