@@ -8,14 +8,14 @@ function sccs_prompt_info () {
   if [ -d SCCS ]; then
     # There is an SCCS folder. Does it host SCCS files and does it
     # have "dirty" files?
-    local IS_SCCS_FOLDER=false
-    [[ -n SCCS/s.*(#qN) ]] && IS_SCCS_FOLDER=true
+    local is_sccs_folder=false
+    [[ -n SCCS/s.*(#qN) ]] && is_sccs_folder=true
     
-    if [ "$IS_SCCS_FOLDER" = true ]; then 
+    if [ "$is_sccs_folder" = true ]; then 
         local _EDITED_SYM="$ZSH_THEME_SCCS_PROMPT_CLEAN"
 
-        local SCCS_CHECK=`sccs tell`
-        if [[ -n $SCCS_CHECK ]]; then
+        local sccs_check_command=`sccs tell`
+        if [[ -n $sccs_check_command ]]; then
             # We have dirty files here.
             _EDITED_SYM="$ZSH_THEME_SCCS_PROMPT_DIRTY"
         fi
