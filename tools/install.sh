@@ -20,12 +20,14 @@
 #   BRANCH  - branch to check out immediately after install (default: master)
 #
 # Other options:
-#   CHSH    - 'no' means the installer will not change the default shell (default: yes)
-#   RUNZSH  - 'no' means the installer will not run zsh after the install (default: yes)
+#   CHSH       - 'no' means the installer will not change the default shell (default: yes)
+#   RUNZSH     - 'no' means the installer will not run zsh after the install (default: yes)
+#   KEEP_ZSHRC - 'yes' means the installer will not replace an existing .zshrc (default: no)
 #
 # You can also pass some arguments to the install script to set some these options:
 #   --skip-chsh: has the same behavior as setting CHSH to 'no'
 #   --unattended: sets both CHSH and RUNZSH to 'no'
+#   --keep-zshrc: sets KEEP_ZSHRC to 'yes'
 # For example:
 #   sh install.sh --unattended
 #
@@ -40,6 +42,7 @@ BRANCH=${BRANCH:-master}
 # Other options
 CHSH=${CHSH:-yes}
 RUNZSH=${RUNZSH:-yes}
+KEEP_ZSHRC=${KEEP_ZSHRC:-no}
 
 
 command_exists() {
@@ -111,6 +114,11 @@ setup_zshrc() {
 	# Must use this exact name so uninstall.sh can find it
 	OLD_ZSHRC=~/.zshrc.pre-oh-my-zsh
 	if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]; then
+		# Skip this if the user doesn't want to replace an existing .zshrc
+		if [ $KEEP_ZSHRC = yes ]; then
+			echo "${YELLOW}Found ~/.zshrc.${RESET} ${GREEN}Keeping...${RESET}"
+			return
+		fi
 		if [ -e "$OLD_ZSHRC" ]; then
 			OLD_OLD_ZSHRC="${OLD_ZSHRC}-$(date +%Y-%m-%d_%H-%M-%S)"
 			if [ -e "$OLD_OLD_ZSHRC" ]; then
@@ -129,10 +137,9 @@ setup_zshrc() {
 
 	echo "${GREEN}Using the Oh My Zsh template file and adding it to ~/.zshrc.${RESET}"
 
-	cp "$ZSH/templates/zshrc.zsh-template" ~/.zshrc
 	sed "/^export ZSH=/ c\\
 export ZSH=\"$ZSH\"
-" ~/.zshrc > ~/.zshrc-omztemp
+" "$ZSH/templates/zshrc.zsh-template" > ~/.zshrc-omztemp
 	mv -f ~/.zshrc-omztemp ~/.zshrc
 
 	echo
@@ -228,6 +235,7 @@ main() {
 		case $1 in
 			--unattended) RUNZSH=no; CHSH=no ;;
 			--skip-chsh) CHSH=no ;;
+			--keep-zshrc) KEEP_ZSHRC=yes ;;
 		esac
 		shift
 	done

@@ -5,7 +5,7 @@
 To use it, add `fasd` to the plugins array in your zshrc file:
 
 ```zsh
-plugins=(... fd)
+plugins=(... fasd)
 ```
 
 ## Installation

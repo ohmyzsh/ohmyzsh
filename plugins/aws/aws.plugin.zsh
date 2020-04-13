@@ -10,7 +10,8 @@ function asp() {
     return
   fi
 
-  local available_profiles=($(aws_profiles))
+  local -a available_profiles
+  available_profiles=($(aws_profiles))
   if [[ -z "${available_profiles[(r)$1]}" ]]; then
     echo "${fg[red]}Profile '$1' not found in '${AWS_CONFIG_FILE:-$HOME/.aws/config}'" >&2
     echo "Available profiles: ${(j:, :)available_profiles:-no profiles found}${reset_color}" >&2
@@ -61,36 +62,45 @@ fi
 
 # Load awscli completions
 
-function _awscli-homebrew-installed() {
-  # check if Homebrew is installed
-  (( $+commands[brew] )) || return 1
+# AWS CLI v2 comes with its own autocompletion. Check if that is there, otherwise fall back
+if [[ -x /usr/local/bin/aws_completer ]]; then
+  autoload -Uz bashcompinit && bashcompinit
+  complete -C aws_completer aws
+else
+  function _awscli-homebrew-installed() {
+    # check if Homebrew is installed
+    (( $+commands[brew] )) || return 1
 
-  # speculatively check default brew prefix
-  if [ -h /usr/local/opt/awscli ]; then
-    _brew_prefix=/usr/local/opt/awscli
-  else
-    # ok, it is not in the default prefix
-    # this call to brew is expensive (about 400 ms), so at least let's make it only once
-    _brew_prefix=$(brew --prefix awscli)
+    # speculatively check default brew prefix
+    if [ -h /usr/local/opt/awscli ]; then
+      _brew_prefix=/usr/local/opt/awscli
+    else
+      # ok, it is not in the default prefix
+      # this call to brew is expensive (about 400 ms), so at least let's make it only once
+      _brew_prefix=$(brew --prefix awscli)
+    fi
+  }
+
+  # get aws_zsh_completer.sh location from $PATH
+  _aws_zsh_completer_path="$commands[aws_zsh_completer.sh]"
+
+  # otherwise check common locations
+  if [[ -z $_aws_zsh_completer_path ]]; then
+    # Homebrew
+    if _awscli-homebrew-installed; then
+      _aws_zsh_completer_path=$_brew_prefix/libexec/bin/aws_zsh_completer.sh
+    # Ubuntu
+    elif [[ -e /usr/share/zsh/vendor-completions/_awscli ]]; then
+      _aws_zsh_completer_path=/usr/share/zsh/vendor-completions/_awscli
+    # NixOS
+    elif [[ -e "${commands[aws]:P:h:h}/share/zsh/site-functions/aws_zsh_completer.sh" ]]; then
+      _aws_zsh_completer_path="${commands[aws]:P:h:h}/share/zsh/site-functions/aws_zsh_completer.sh"
+    # RPM
+    else
+      _aws_zsh_completer_path=/usr/share/zsh/site-functions/aws_zsh_completer.sh
+    fi
   fi
-}
 
-# get aws_zsh_completer.sh location from $PATH
-_aws_zsh_completer_path="$commands[aws_zsh_completer.sh]"
-
-# otherwise check common locations
-if [[ -z $_aws_zsh_completer_path ]]; then
-  # Homebrew
-  if _awscli-homebrew-installed; then
-    _aws_zsh_completer_path=$_brew_prefix/libexec/bin/aws_zsh_completer.sh
-  # Ubuntu
-  elif [[ -e /usr/share/zsh/vendor-completions/_awscli ]]; then
-    _aws_zsh_completer_path=/usr/share/zsh/vendor-completions/_awscli
-  # RPM
-  else
-    _aws_zsh_completer_path=/usr/share/zsh/site-functions/aws_zsh_completer.sh
-  fi
+  [[ -r $_aws_zsh_completer_path ]] && source $_aws_zsh_completer_path
+  unset _aws_zsh_completer_path _brew_prefix
 fi
-
-[[ -r $_aws_zsh_completer_path ]] && source $_aws_zsh_completer_path
-unset _aws_zsh_completer_path _brew_prefix

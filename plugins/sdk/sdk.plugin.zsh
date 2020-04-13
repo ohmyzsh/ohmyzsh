@@ -7,10 +7,10 @@
 #        sdk offline <enable|disable>
 #
 #    commands:
-#        install   or i    <candidate> [version]
+#        install   or i    <candidate> [version] [local-path]
 #        uninstall or rm   <candidate> <version>
 #        list      or ls   [candidate]
-#        use       or u    <candidate> [version]
+#        use       or u    <candidate> <version>
 #        default   or d    <candidate> [version]
 #        current   or c    [candidate]
 #        upgrade   or ug   [candidate]
@@ -20,14 +20,15 @@
 #        offline           [enable|disable]
 #        selfupdate        [force]
 #        update
-#        flush             <candidates|broadcast|archives|temp>
+#        flush             <broadcast|archives|temp>
 #
 #    candidate  :  the SDK to install: groovy, scala, grails, gradle, kotlin, etc.
 #                  use list command for comprehensive list of candidates
 #                  eg: $ sdk list
-#
 #    version    :  where optional, defaults to latest stable if not provided
 #                  eg: $ sdk install groovy
+#    local-path :  optional path to an existing local installation
+#                  eg: $ sdk install groovy 2.4.13-local /opt/groovy-2.4.13
 
 local _sdk_commands=(
     install     i
@@ -51,12 +52,13 @@ _listInstalledVersions() {
 }
 
 _listInstallableVersions() {
-  __sdkman_list_versions $1 | grep "^ " | sed -e "s/\* /*/g" | \
-      sed -e "s/>//g" | xargs -n 1 echo | grep -v "^*"
+  # Remove local (+) and installed (*) versions from the list
+  __sdkman_list_versions $1 | sed -e '/^[^ ]/d;s/[+*] [^ ]\+//g;s/>//g'
 }
 
 _listAllVersion() {
-  __sdkman_list_versions $1 | grep "^ " | sed -e "s/\*/ /g" | sed -e "s/>//g"
+  # Remove (*), (+), and (>) characters from the list
+  __sdkman_list_versions $1 | sed -e '/^[^ ]/d;s/[*+>] //g'
 }
 
 _sdk () {
@@ -67,7 +69,7 @@ _sdk () {
                       compadd -- $SDKMAN_CANDIDATES ;;
           offline)    compadd -- enable disable ;;
           selfupdate) compadd -- force ;;
-          flush)      compadd -- candidates broadcast archives temp ;;
+          flush)      compadd -- broadcast archives temp ;;
         esac
         ;;
     4)  case "$words[2]" in
