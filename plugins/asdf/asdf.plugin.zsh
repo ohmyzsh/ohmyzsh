@@ -12,8 +12,6 @@ fi
 if [[ -f "$ASDF_DIR/asdf.sh" ]]; then
     . "$ASDF_DIR/asdf.sh"
 
-    # Load completions
-    if [[ -f "$ASDF_COMPLETIONS/asdf.bash" ]]; then
-        . "$ASDF_COMPLETIONS/asdf.bash"
-    fi
+    fpath=($ASDF_COMPLETIONS $fpath)
+    autoload -Uz compinit && compinit
 fi
