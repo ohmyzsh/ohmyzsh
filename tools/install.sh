@@ -43,6 +43,7 @@ BRANCH=${BRANCH:-master}
 CHSH=${CHSH:-yes}
 RUNZSH=${RUNZSH:-yes}
 KEEP_ZSHRC=${KEEP_ZSHRC:-no}
+STARTUP_MESSAGE=${STARTUP_MESSAGE:-yes}
 
 
 command_exists() {
@@ -233,7 +234,7 @@ main() {
 	# Parse arguments
 	while [ $# -gt 0 ]; do
 		case $1 in
-			--unattended) RUNZSH=no; CHSH=no ;;
+			--unattended) STARTUP_MESSAGE=no; RUNZSH=no; CHSH=no ;;
 			--skip-chsh) CHSH=no ;;
 			--keep-zshrc) KEEP_ZSHRC=yes ;;
 		esac
@@ -258,25 +259,27 @@ main() {
 	setup_ohmyzsh
 	setup_zshrc
 	setup_shell
+	
+	if [ $STARTUP_MESSAGE = yes ]; then
+		printf "$GREEN"
+		cat <<-'EOF'
+					__                                     __
+			____  / /_     ____ ___  __  __   ____  _____/ /_
+			/ __ \/ __ \   / __ `__ \/ / / /  /_  / / ___/ __ \
+			/ /_/ / / / /  / / / / / / /_/ /    / /_(__  ) / / /
+			\____/_/ /_/  /_/ /_/ /_/\__, /    /___/____/_/ /_/
+									/____/                       ....is now installed!
 
-	printf "$GREEN"
-	cat <<-'EOF'
-		         __                                     __
-		  ____  / /_     ____ ___  __  __   ____  _____/ /_
-		 / __ \/ __ \   / __ `__ \/ / / /  /_  / / ___/ __ \
-		/ /_/ / / / /  / / / / / / /_/ /    / /_(__  ) / / /
-		\____/_/ /_/  /_/ /_/ /_/\__, /    /___/____/_/ /_/
-		                        /____/                       ....is now installed!
 
+			Please look over the ~/.zshrc file to select plugins, themes, and options.
 
-		Please look over the ~/.zshrc file to select plugins, themes, and options.
+			p.s. Follow us on https://twitter.com/ohmyzsh
 
-		p.s. Follow us on https://twitter.com/ohmyzsh
+			p.p.s. Get stickers, shirts, and coffee mugs at https://shop.planetargon.com/collections/oh-my-zsh
 
-		p.p.s. Get stickers, shirts, and coffee mugs at https://shop.planetargon.com/collections/oh-my-zsh
-
-	EOF
-	printf "$RESET"
+		EOF
+		printf "$RESET"
+	fi
 
 	if [ $RUNZSH = no ]; then
 		echo "${YELLOW}Run zsh to try it out.${RESET}"
