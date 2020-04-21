@@ -9,6 +9,8 @@ function omz {
     local command="$1"
     shift
 
+    # Subcommand functions start with _ so that they don't
+    # appear as completion entries when looking for `omz`
     (( $+functions[_omz::$command] )) || {
         _omz::help
         return 1
@@ -33,12 +35,25 @@ function _omz {
 
 compdef _omz omz
 
+
+function _omz::help {
+    cat <<EOF
+Usage: omz <command> [options]
+
+Available commands:
+
+    help              Print this help message
+    test <PR_NUMBER>  Fetch PR #NUMBER and rebase against master
+
+EOF
+}
+
 function _omz::log {
     # $1 = info|warn|error|debug
     # $@ = text
 
     local logtype=$1
-    local logname=omz
+    local logname=${${functrace[1]#_}%:*}
     shift
 
     # Don't print anything if debug is not active
@@ -56,8 +71,14 @@ function _omz::log {
 }
 
 function _omz::test {
-    if ! [[ -n "$1" && "$1" -gt 0 ]]; then
-        echo >&2 "Usage: omz test <PR_NUMBER>"
+    # Allow $1 to be a URL to the pull request
+    if [[ "$1" = https://* ]]; then
+        1="${1:t}"
+    fi
+
+    # Check the input
+    if ! [[ -n "$1" && "$1" =~ ^[[:digit:]]+$ ]]; then
+        echo >&2 "Usage: omz test <PR_NUMBER_or_URL>"
         return 1
     fi
 
@@ -78,25 +99,13 @@ function _omz::test {
         _omz::log info "rebasing PR #$1..."
         command git rebase master ohmyzsh/pull-$1 || {
             command git rebase --abort &>/dev/null
-            command git branch -D ohmyzsh/pull-$1 &>/dev/null
-            _omz::log error "error when trying to rebase PR #$1."
+            _omz::log warn "could not rebase PR #$1 on top of master."
+            _omz::log warn "you might not see the latest stable changes."
             return 1
         }
 
         _omz::log info "fetch of PR #${1} successful. Run \`zsh' to test the changes."
     )
-}
-
-function _omz::help {
-    cat <<EOF
-Usage: omz <command> [options]
-
-Available commands:
-
-    help              Print this help message
-    test <PR_NUMBER>  Fetch PR #NUMBER and rebase against master
-
-EOF
 }
 
 omz "$@"
