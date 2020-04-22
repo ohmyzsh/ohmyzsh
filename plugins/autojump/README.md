@@ -8,4 +8,4 @@ To use it, add `autojump` to the plugins array in your zshrc file:
 plugins=(... autojump)
 ```
 
-More info on the usage: https://github.com/wting/autojump
+**Note:** you have to [install autojump](https://github.com/wting/autojump#installation) first.
