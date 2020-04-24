@@ -136,7 +136,7 @@ function _omz::pr::test {
 
         # Fetch pull request head
         _omz::log info "fetching PR #$1 to ohmyzsh/pull-$1..."
-        command git fetch upstream refs/pull/$1/head:ohmyzsh/pull-$1 || {
+        command git fetch -f upstream refs/pull/$1/head:ohmyzsh/pull-$1 || {
             _omz::log error "error when trying to fetch PR #$1."
             return 1
         }
