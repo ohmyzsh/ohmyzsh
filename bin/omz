@@ -1,4 +1,4 @@
-#autoload
+#!/usr/bin/env zsh
 
 function omz {
     [[ $# -gt 0 ]] || {
@@ -20,18 +20,17 @@ function omz {
 }
 
 function _omz {
-    local -a cmds
+    local -a cmds subcmds
     cmds=(
         'help:Usage information'
-        'pr:Commands to manage Oh My Zsh Pull Requests'
+        'pr:Commands for Oh My Zsh Pull Requests'
     )
 
     if (( CURRENT == 2 )); then
         _describe 'command' cmds
     elif (( CURRENT == 3 )); then
         case "$words[2]" in
-            pr) local -a subcmds
-                subcmds=( 'test:Test a Pull Request' 'clean:Delete all Pull Request branches' )
+            pr) subcmds=( 'test:Test a Pull Request' 'clean:Delete all Pull Request branches' )
                 _describe 'command' subcmds ;;
         esac
     fi
@@ -48,13 +47,15 @@ Usage: omz <command> [options]
 
 Available commands:
 
-    help        Print this help message
-    pr          Oh My Zsh Pull Request subcommand
+    help                Print this help message
+    pr <command>        Commands for Oh My Zsh Pull Requests
 
 EOF
 }
 
 function _omz::log {
+    # if promptsubst is set, a message with `` or $()
+    # will be run even if quoted due to `print -P`
     setopt localoptions nopromptsubst
 
     # $1 = info|warn|error|debug
@@ -71,23 +72,24 @@ function _omz::log {
 
     # Choose coloring based on log type
     case "$logtype" in
-        prompt) print -Pn "%S%F{green}$logname%f%s: $@" ;;
-        debug) print -P "%S%F{white}$logname%f%s: $@" ;;
+        prompt) print -Pn "%S%F{blue}$logname%f%s: $@" ;;
+        debug) print -P "%F{white}$logname%f: $@" ;;
         info) print -P "%F{green}$logname%f: $@" ;;
-        warn) print -P "%F{yellow}$logname%f: $@" ;;
-        error) print -P "%F{red}$logname%f: $@" ;;
+        warn) print -P "%S%F{yellow}$logname%f%s: $@" ;;
+        error) print -P "%S%F{red}$logname%f%s: $@" ;;
     esac >&2
 }
 
 function _omz::pr {
     (( $# > 0 && $+functions[_omz::pr::$1] )) || {
-cat <<EOF
+        cat <<EOF
 Usage: omz pr <command> [options]
 
 Available commands:
 
     clean                       Delete all PR branches (ohmyzsh/pull-*)
     test <PR_number_or_URL>     Fetch PR #NUMBER and rebase against master
+
 EOF
         return 1
     }
@@ -100,10 +102,12 @@ EOF
 
 function _omz::pr::clean {
     (
+        set -e
         cd -q "$ZSH"
+
         _omz::log info "removing all Oh My Zsh Pull Request branches..."
-        git branch --list 'ohmyzsh/pull-*' | while read branch; do
-            git branch -D "$branch"
+        command git branch --list 'ohmyzsh/pull-*' | while read branch; do
+            command git branch -D "$branch"
         done
     )
 }
@@ -123,7 +127,7 @@ function _omz::pr::test {
     # Save current git HEAD
     local branch
     branch=$(cd -q "$ZSH"; git symbolic-ref --short HEAD) || {
-        _omz::log error "error when getting the current git branch. Aborting."
+        _omz::log error "error when getting the current git branch. Aborting..."
         return 1
     }
 
@@ -167,12 +171,12 @@ function _omz::pr::test {
     [[ "$REPLY" = [nN] ]] && return
 
     (
+        set -e
         cd -q "$ZSH"
+
         command git checkout "$branch" -- || {
             _omz::log error "could not go back to the previous branch ('$branch')."
             return 1
         }
     )
 }
-
-omz "$@"
