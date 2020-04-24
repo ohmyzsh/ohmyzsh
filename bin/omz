@@ -104,8 +104,13 @@ function _omz::test {
             return 1
         }
 
-        _omz::log info "fetch of PR #${1} successful. Run \`zsh' to test the changes."
+        _omz::log info "fetch of PR #${1} successful."
     )
+
+    if [[ $? -eq 0 ]]; then
+        _omz::log info "running \`zsh\` to test the changes. Run \`exit\` to go back."
+        zsh
+    fi
 }
 
 omz "$@"
