@@ -49,6 +49,8 @@ EOF
 }
 
 function _omz::log {
+    setopt localoptions nopromptsubst
+
     # $1 = info|warn|error|debug
     # $@ = text
 
