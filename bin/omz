@@ -20,14 +20,20 @@ function omz {
 }
 
 function _omz {
-    local -a subcmds
-    subcmds=(
+    local -a cmds
+    cmds=(
         'help:Usage information'
-        'test:Fetch Pull Request for local testing'
+        'pr:Commands to manage Oh My Zsh Pull Requests'
     )
 
     if (( CURRENT == 2 )); then
-        _describe 'command' subcmds
+        _describe 'command' cmds
+    elif (( CURRENT == 3 )); then
+        case "$words[2]" in
+            pr) local -a subcmds
+                subcmds=( 'test:Test a Pull Request' 'clean:Delete all Pull Request branches' )
+                _describe 'command' subcmds ;;
+        esac
     fi
 
     return 0
@@ -42,8 +48,8 @@ Usage: omz <command> [options]
 
 Available commands:
 
-    help              Print this help message
-    test <PR_NUMBER>  Fetch PR #NUMBER and rebase against master
+    help        Print this help message
+    pr          Oh My Zsh Pull Request subcommand
 
 EOF
 }
@@ -72,7 +78,34 @@ function _omz::log {
     esac >&2
 }
 
-function _omz::test {
+function _omz::pr {
+    (( $# > 0 && $+functions[_omz::pr::$1] )) || {
+cat <<EOF
+Usage: omz pr <command> [options]
+
+Available commands:
+
+    clean                       Delete all PR branches (ohmyzsh/pull-*)
+    test <PR_number_or_URL>     Fetch PR #NUMBER and rebase against master
+EOF
+        return 1
+    }
+
+    local command="$1"
+    shift
+
+    _omz::pr::$command "$@"
+}
+
+function _omz::pr::clean {
+    (
+        cd -q "$ZSH"
+        _omz::log info "removing all Oh My Zsh Pull Request branches..."
+        git branch --list 'ohmyzsh/pull-*' | xargs git branch -D
+    )
+}
+
+function _omz::pr::test {
     # Allow $1 to be a URL to the pull request
     if [[ "$1" = https://* ]]; then
         1="${1:t}"
@@ -80,7 +113,7 @@ function _omz::test {
 
     # Check the input
     if ! [[ -n "$1" && "$1" =~ ^[[:digit:]]+$ ]]; then
-        echo >&2 "Usage: omz test <PR_NUMBER_or_URL>"
+        echo >&2 "Usage: omz pr test <PR_NUMBER_or_URL>"
         return 1
     fi
 
