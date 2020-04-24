@@ -71,6 +71,7 @@ function _omz::log {
 
     # Choose coloring based on log type
     case "$logtype" in
+        prompt) print -Pn "%S%F{green}$logname%f%s: $@" ;;
         debug) print -P "%S%F{white}$logname%f%s: $@" ;;
         info) print -P "%F{green}$logname%f: $@" ;;
         warn) print -P "%F{yellow}$logname%f: $@" ;;
@@ -117,6 +118,14 @@ function _omz::pr::test {
         return 1
     fi
 
+    # Save current git HEAD
+    local branch
+    branch=$(cd -q "$ZSH"; git symbolic-ref --short HEAD) || {
+        _omz::log error "error when getting the current git branch. Aborting."
+        return 1
+    }
+
+
     # Fetch PR onto ohmyzsh/pull-<PR_NUMBER> branch and rebase against master
     # If any of these operations fail, undo the changes made
     (
@@ -136,16 +145,32 @@ function _omz::pr::test {
             command git rebase --abort &>/dev/null
             _omz::log warn "could not rebase PR #$1 on top of master."
             _omz::log warn "you might not see the latest stable changes."
+            _omz::log info "run \`zsh\` to test the changes."
             return 1
         }
 
         _omz::log info "fetch of PR #${1} successful."
     )
 
-    if [[ $? -eq 0 ]]; then
-        _omz::log info "running \`zsh\` to test the changes. Run \`exit\` to go back."
-        zsh
-    fi
+    # If there was an error, abort running zsh to test the PR
+    [[ $? -eq 0 ]] || return 1
+
+    # Run zsh to test the changes
+    _omz::log info "running \`zsh\` to test the changes. Run \`exit\` to go back."
+    command zsh -l
+
+    # After testing, go back to the previous HEAD if the user wants
+    _omz::log prompt "do you want to go back to the previous branch? [Y/n] "
+    read -r -k 1
+    [[ "$REPLY" = [nN] ]] && return
+
+    (
+        cd -q "$ZSH"
+        command git checkout "$branch" -- || {
+            _omz::log error "could not go back to the previous branch ('$branch')."
+            return 1
+        }
+    )
 }
 
 omz "$@"
