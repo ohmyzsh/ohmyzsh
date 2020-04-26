@@ -1,5 +1,6 @@
 #!zsh
 alias artisan='php artisan'
+#alias pa='php artisan'
 alias bob='php artisan bob::build'
 
 # Development
@@ -24,6 +25,20 @@ alias pamj='php artisan make:job'
 alias paml='php artisan make:listener'
 alias pamn='php artisan make:notification'
 alias pampp='php artisan make:provider'
+alias pamrq='php artisan make:request'
+alias pamrs='php artisan make:resource'
+
+# Routes
+alias parl="php artisan route:list"
+
+# UI
+alias paua="php artisan ui:auth"
+alias paua="php artisan ui:controllers"
+
+# Test 
+alias test="php artisan test"
+alias pu="clear && ./vendor/bin/phpunit"
+alias puf="clear && ./vendor/bin/phpunit --filter"
 
 
 # Clears
