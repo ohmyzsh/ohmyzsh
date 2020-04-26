@@ -138,9 +138,22 @@ function _omz::pr::test {
         set -e
         cd -q "$ZSH"
 
+        # Get the ohmyzsh git remote
+        command git remote -v | while read remote url _; do
+            case "$url" in
+            https://github.com/ohmyzsh/ohmyzsh(|.git)) found=1; break ;;
+            git@github.com:ohmyzsh/ohmyzsh(|.git)) found=1; break ;;
+            esac
+        done
+
+        (( $found )) || {
+            _omz::log error "could not found the ohmyzsh git remote. Aborting..."
+            return 1
+        }
+
         # Fetch pull request head
         _omz::log info "fetching PR #$1 to ohmyzsh/pull-$1..."
-        command git fetch -f upstream refs/pull/$1/head:ohmyzsh/pull-$1 || {
+        command git fetch -f "$remote" refs/pull/$1/head:ohmyzsh/pull-$1 || {
             _omz::log error "error when trying to fetch PR #$1."
             return 1
         }
