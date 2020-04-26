@@ -693,14 +693,17 @@ __git_refs ()
 				"refs/remotes/$match*" "refs/remotes/$match*/**")
 			;;
 		esac
-		__git_dir="$dir" __git for-each-ref --format="$fer_pfx%($format)$sfx" \
+		__git_dir="$dir" __git for-each-ref \
+			--sort=-committerdate \
+			--format="$fer_pfx%($format)$sfx" \
 			"${refs[@]}"
 		if [ -n "$track" ]; then
 			# employ the heuristic used by git checkout
 			# Try to find a remote branch that matches the completion word
 			# but only output if the branch name is unique
-			__git for-each-ref --format="$fer_pfx%(refname:strip=3)$sfx" \
-				--sort="refname:strip=3" \
+			__git for-each-ref \
+				--format="$fer_pfx%(refname:strip=3)$sfx" \
+				--sort=-committerdate \
 				"refs/remotes/*/$match*" "refs/remotes/*/$match*/**" | \
 			uniq -u
 		fi
@@ -721,7 +724,9 @@ __git_refs ()
 			case "HEAD" in
 			$match*)	echo "${pfx}HEAD$sfx" ;;
 			esac
-			__git for-each-ref --format="$fer_pfx%(refname:strip=3)$sfx" \
+			__git for-each-ref \
+				--sort=-committerdate \
+				--format="$fer_pfx%(refname:strip=3)$sfx" \
 				"refs/remotes/$remote/$match*" \
 				"refs/remotes/$remote/$match*/**"
 		else

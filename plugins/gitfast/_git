@@ -73,7 +73,13 @@ __gitcomp_direct ()
 
 	local IFS=$'\n'
 	compset -P '*[=:]'
-	compadd -Q -- ${=1} && _ret=0
+
+
+	# https://www.zsh.org/mla/users//2014/msg01270.html
+	local expl
+	_description -V retainsorting expl 'Group that retains the already existing sorting'
+
+	compadd "$expl[@]" -Q -- ${=1} && _ret=0
 }
 
 __gitcomp_nl ()
