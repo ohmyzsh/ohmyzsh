@@ -73,6 +73,11 @@ else
 fi
 
 
+# Load core files
+for core_file ($ZSH/core/*.zsh); do
+  source "$core_file"
+done
+
 # Load all of the config files in ~/oh-my-zsh that end in .zsh
 # TIP: Add files you don't want in git to .gitignore
 for config_file ($ZSH/lib/*.zsh); do
