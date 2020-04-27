@@ -199,3 +199,12 @@ function git_current_user_name() {
 function git_current_user_email() {
   command git config user.email 2>/dev/null
 }
+
+# Output the name of the root directory of the git repository
+# Usage example: $(git_repo_name)
+function git_repo_name() {
+  local repo_path
+  if repo_path="$(git rev-parse --show-toplevel 2>/dev/null)" && [[ -n "$repo_path" ]]; then
+    echo ${repo_path:t}
+  fi
+}

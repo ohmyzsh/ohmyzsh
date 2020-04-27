@@ -15,20 +15,16 @@ _composer_get_required_list () {
 }
 
 _composer () {
-  local curcontext="$curcontext" state line
-  typeset -A opt_args
-  _arguments \
-    '1: :->command'\
-    '*: :->args'
+    local curcontext="$curcontext" state line
+    typeset -A opt_args
+    _arguments \
+        '*:: :->subcmds'
 
-  case $state in
-    command)
-      compadd $(_composer_get_command_list)
-      ;;
-    *)
-      compadd $(_composer_get_required_list)
-      ;;
-  esac
+    if (( CURRENT == 1 )) || ( ((CURRENT == 2)) && [ "$words[1]" = "global" ] ) ; then
+        compadd $(_composer_get_command_list)
+    else
+        compadd $(_composer_get_required_list)
+    fi
 }
 
 compdef _composer composer
@@ -43,7 +39,7 @@ alias crm='composer remove'
 alias ci='composer install'
 alias ccp='composer create-project'
 alias cdu='composer dump-autoload'
-alias cdo='composer dump-autoload --optimize-autoloader'
+alias cdo='composer dump-autoload -o'
 alias cgu='composer global update'
 alias cgr='composer global require'
 alias cgrm='composer global remove'
