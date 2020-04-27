@@ -31,7 +31,12 @@ function asp() {
       if [[ -n $mfa_serial ]]; then
         echo "Please enter your MFA token for $mfa_serial:"
         read mfa_token
-        mfa_opt="--serial-number $mfa_serial --token-code $mfa_token"
+        echo "Please enter the session duration in seconds (900-43200; default: 3600, which is the default maximum for a role):"
+        read sess_duration
+        if [[ -z $sess_duration ]]; then
+          $sess_duration = 3600
+        fi
+        mfa_opt="--serial-number $mfa_serial --token-code $mfa_token --duration-seconds $sess_duration"
       fi
 
       local ext_id="$(aws configure get external_id --profile $1)"
