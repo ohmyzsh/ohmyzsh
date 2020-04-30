@@ -13,8 +13,11 @@ _sdk() {
 		l|ls|list|i|install)
 			compadd -X $'Candidates:\n' -- "${SDKMAN_CANDIDATES[@]}"
 			;;
-		ug|upgrade|c|current|u|use|d|default|rm|uninstall)
+		ug|upgrade|h|home|c|current|u|use|d|default|rm|uninstall)
 			compadd -X $'Installed Candidates:\n' -- "${${(u)${(f)$(find -L -- "${SDKMAN_CANDIDATES_DIR}" -mindepth 2 -maxdepth 2 -type d)}[@]:h}[@]:t}"
+			;;
+		e|env)
+			compadd init
 			;;
 		offline)
 			compadd enable disable
@@ -37,7 +40,7 @@ _sdk() {
 				compadd -X "Installable Versions of ${words[3]}:"$'\n' -- "${${(z)${(M)${(f)${$(__sdkman_list_versions "${words[3]}")//[*+>]+( )/-}}[@]:# *}[@]}[@]:#-*}"
 			fi
 			;;
-		u|use|d|default|rm|uninstall)
+		h|home|u|use|d|default|rm|uninstall)
 			compadd -X "Installed Versions of ${words[3]}:"$'\n' -- "${${(f)$(find -L -- "${SDKMAN_CANDIDATES_DIR}/${words[3]}" -mindepth 1 -maxdepth 1 -type d -not -name 'current')}[@]:t}"
 			;;
 		esac
