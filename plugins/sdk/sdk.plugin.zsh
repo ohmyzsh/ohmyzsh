@@ -16,6 +16,9 @@ _sdk() {
 		ug|upgrade|h|home|c|current|u|use|d|default|rm|uninstall)
 			compadd -X $'Installed Candidates:\n' -- "${${(u)${(f)$(find -L -- "${SDKMAN_CANDIDATES_DIR}" -mindepth 2 -maxdepth 2 -type d)}[@]:h}[@]:t}"
 			;;
+		e|env)
+			compadd init
+			;;
 		offline)
 			compadd enable disable
 			;;
