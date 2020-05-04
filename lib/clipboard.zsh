@@ -175,8 +175,7 @@ function __omz_clipboard_file_setup() {
       autoload -U add-zsh-hook
 
       # NOTE: This is not exported. That way we can be sure *we* created it.
-      __omz_clipboard_file="$(mktemp -t "omz-clipboard-${USER}.XXXXXXX")"
-      typeset -rg __omz_clipboard_file
+      typeset -rg __omz_clipboard_file="$(mktemp -t "omz-clipboard-${USER}.XXXXXXX")"
 
       # NOTE: This is done at zshexit instead of teardown (like if switching
       # clipboards), so that subshells may continue to use the file as long
@@ -185,7 +184,7 @@ function __omz_clipboard_file_setup() {
       add-zsh-hook zshexit __omz_cleanup_file_clipboard
     fi
 
-    ZSH_CLIPBOARD_FILENAME="${__omz_clipboard_file}"
+    typeset -gx ZSH_CLIPBOARD_FILENAME="${__omz_clipboard_file}"
   fi
 }
 # }}
@@ -194,7 +193,7 @@ function __omz_clipboard_file_setup() {
 # Copy/paste into an environment variable. Fine for local copies/pastes in vi-mode.
 __omz_all_clipboards+=(var)
 function __omz_clipboard_var_available() { return 0; }
-function __omz_clipboard_var_clipcopy() { ZSH_CLIPBOARD_CONTENTS="$(< "${1:-/dev/stdin}")"; }
+function __omz_clipboard_var_clipcopy() { typeset -gx ZSH_CLIPBOARD_CONTENTS="$(< "${1:-/dev/stdin}")"; }
 function __omz_clipboard_var_clippaste() { printf %s "${ZSH_CLIPBOARD_CONTENTS:-}"; }
 function __omz_clipboard_var_setup() { typeset -gx ZSH_CLIPBOARD_CONTENTS; }
 function __omz_clipboard_var_teardown() { unset ZSH_CLIPBOARD_CONTENTS; }
@@ -255,7 +254,7 @@ function clipboard-set() {
 
   # Track the new current clipboard as this new one, which will by used by
   # clipcopy and clippaste.
-  ZSH_CLIPBOARD="${1}"
+  typeset -gx ZSH_CLIPBOARD="${1}"
 }
 # }}
 
