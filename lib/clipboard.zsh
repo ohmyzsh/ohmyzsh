@@ -274,6 +274,7 @@ fi
 # Respects the user variable ZSH_CLIPBOARDS, but ensures that 'null' is used if
 # nothing else succeeds.
 function clipboard-detect() {
+  local c
   for c in "${ZSH_CLIPBOARDS[@]}"; do
     if typeset -f "__omz_clipboard_${c}_available" >/dev/null 2>&1 \
       && "__omz_clipboard_${c}_available" \
@@ -304,6 +305,7 @@ fi
 
 # List all available clipboard drivers. Just a helpful user command.
 function clipboard-list() {
+  local c
   for c in "${__omz_all_clipboards[@]}"; do
     if "__omz_clipboard_${c}_available"; then
       print "${c}"
