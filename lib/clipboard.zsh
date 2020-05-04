@@ -175,7 +175,7 @@ function __omz_clipboard_file_setup() {
       autoload -U add-zsh-hook
 
       # NOTE: This is not exported. That way we can be sure *we* created it.
-      __omz_clipboard_file="$(mktemp -t omz-clipboard-${USER}.XXXXXXX)"
+      __omz_clipboard_file="$(mktemp -t "omz-clipboard-${USER}.XXXXXXX")"
       typeset -rg __omz_clipboard_file
 
       # NOTE: This is done at zshexit instead of teardown (like if switching
