@@ -34,16 +34,27 @@ if [[ -d "$HOMEBREW_PREFIX/share/zsh/site-functions" ]]; then
   fpath+=("$HOMEBREW_PREFIX/share/zsh/site-functions")
 fi
 
+alias bc='brew cleanup'
+alias bci='brew info --cask'
+alias bcin='brew install --cask'
+alias bcl='brew list --cask'
+alias bco='brew outdated --cask'
+alias bcrin='brew reinstall --cask'
 alias bcubc='brew upgrade --cask && brew cleanup'
 alias bcubo='brew update && brew outdated --cask'
+alias bcup='brew upgrade --cask'
+alias bfu='brew upgrade --formula'
+alias bl='brew list'
+alias bo='brew outdated'
 alias brewp='brew pin'
 alias brewsp='brew list --pinned'
-alias bup='brew upgrade'
-alias bugbc='brew upgrade --greedy && brew cleanup'
+alias bu='brew update'
 alias bubo='brew update && brew outdated'
 alias bubu='bubo && bup'
 alias bubug='bubo && bugbc'
-alias bfu='brew upgrade --formula'
+alias bugbc='brew upgrade --greedy && brew cleanup'
+alias bup='brew upgrade'
+alias bup='brew upgrade'
 alias buz='brew uninstall --zap'
 
 function brews() {
