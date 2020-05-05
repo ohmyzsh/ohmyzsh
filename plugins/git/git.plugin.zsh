@@ -158,6 +158,7 @@ alias git-svn-dcommit-push='git svn dcommit && git push github master:svntrunk'
 
 alias gk='\gitk --all --branches'
 alias gke='\gitk --all $(git log -g --pretty=%h)'
+alias g+x='git update-index --chmod=+x'
 
 alias gl='git pull'
 alias glg='git log --stat'
