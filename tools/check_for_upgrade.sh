@@ -29,18 +29,16 @@ fi
 # Cancel upgrade if git is unavailable on the system
 whence git >/dev/null || return 0
 
-# Remove update.lock if already exist more than one hour
-if [[ $(find "$ZSH/log/update.lock" -mmin +60 2>/dev/null) ]]; then
-  rmdir $ZSH/log/update.lock
-fi
+# Open lock file and link file descriptor to it
+exec 7>$ZSH/log/update.lock
 
-if mkdir "$ZSH/log/update.lock" 2>/dev/null; then
+if flock -n 7; then
+  trap "rm -rf $ZSH/log/update.lock" EXIT SIGINT
   if [ -f ${ZSH_CACHE_DIR}/.zsh-update ]; then
     . ${ZSH_CACHE_DIR}/.zsh-update
 
     if [[ -z "$LAST_EPOCH" ]]; then
       _update_zsh_update
-      rmdir $ZSH/log/update.lock # TODO: fix later
       return 0
     fi
 
@@ -62,6 +60,4 @@ if mkdir "$ZSH/log/update.lock" 2>/dev/null; then
     # create the zsh file
     _update_zsh_update
   fi
-
-  rmdir $ZSH/log/update.lock
 fi
