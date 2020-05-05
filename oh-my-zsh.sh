@@ -68,7 +68,7 @@ zcompdump_metadata="\
 "
 
 # Delete the zcompdump file if OMZ zcompdump metadata changed
-if ! cmp -s <(command grep '^#omz' "$ZSH_COMPDUMP" 2>/dev/null) <<< "$zcompdump_metadata"; then
+if ! cmp -s <(command grep '^#omz' "$ZSH_COMPDUMP" 2>/dev/null) <(echo "$zcompdump_metadata"); then
   command rm -f "$ZSH_COMPDUMP"
   zcompdump_refresh=1
 fi
