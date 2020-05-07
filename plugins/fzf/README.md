@@ -17,3 +17,10 @@ plugins=(
   fzf
 )
 ```
+
+The plugin will also set the `FZF_DEFAULT_COMMAND` environment variable based on which finder you have available.
+You can override this on your `.zshrc`:
+```zsh
+export FZF_DEFAULT_COMMAND='<your fzf default commmand>'
+unlet FZF_DEFAULT_COMMAND  # use default FZF command
+```
