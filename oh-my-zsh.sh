@@ -86,7 +86,7 @@ fi
 
 # Append zcompdump metadata if missing
 if (( $zcompdump_refresh )); then
-  echo "\n$zcompdump_metadata" >>! "$ZSH_COMPDUMP"
+  echo "\n$zcompdump_metadata" | tee -a "$ZSH_COMPDUMP" &>/dev/null
 fi
 
 unset zcompdump_metadata zcompdump_refresh
