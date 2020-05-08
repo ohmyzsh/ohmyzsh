@@ -136,3 +136,12 @@ alias kdelpvc='kubectl delete pvc'
 # Resource Usage
 alias ktpo='kubectl top pod'
 alias ktno='kubectl top node'
+
+# Events
+_kge_go_template='go-template={{range .items}}{{.involvedObject.name}}{{"\t"}}{{.involvedObject.kind}}{{"\t"}}{{.message}}{{"\t"}}{{.reason}}{{"\t"}}{{.type}}{{"\t"}}{{.firstTimestamp}}{{"\n"}}{{end}}'
+kge() {
+    kubectl get events --sort-by='.metadata.creationTimestamp' -o "${_kge_go_template}" $@
+}
+kgew() {
+    kubectl get events -w -o "${_kge_go_template}" $@
+}

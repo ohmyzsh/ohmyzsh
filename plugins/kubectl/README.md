@@ -108,4 +108,6 @@ plugins=(... kubectl)
 |         |                                     | **Display Resource (CPU/Memory/Storage) usage**                                                           |
 | ktno    | `kubectl top node`                  | Display Resource (CPU/Memory/Storage) usage of nodes                                             |
 | ktpo    | `kubectl top pod`                   | Display Resource (CPU/Memory/Storage) usage of pods                                              |
-
+|         |                                     | **Events**                                                                                       |
+| kge     | `kubectl get events`                | Display events                                                                                   |
+| kgew    | `kubectl get events -w`             | Display events, and wait for new ones                                                            |
