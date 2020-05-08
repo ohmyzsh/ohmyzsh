@@ -14,4 +14,10 @@ MAGIC_ENTER_OTHER_COMMAND='ls -lh .'
 plugins=(... magic-enter)
 ```
 
+Note that if you also use `vim-mode`, you should declare `magic-enter` *after* `vim-mode` to avoid precedence.
+
+```zsh
+plugins=(... vim-mode ... magic-enter ...)
+```
+
 **Maintainer:** [@dufferzafar](https://github.com/dufferzafar)
