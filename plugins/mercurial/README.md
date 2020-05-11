@@ -16,6 +16,7 @@ plugins=(... mercurial)
 | `hga`   | `hg add`                                    |
 | `hgc`   | `hg commit`                                 |
 | `hgca`  | `hg commit --amend`                         |
+| `hgci`  | `hg commit --interactive`                   |
 | `hgb`   | `hg branch`                                 |
 | `hgba`  | `hg branches`                               |
 | `hgbk`  | `hg bookmarks`                              |
