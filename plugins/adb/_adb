@@ -48,8 +48,13 @@ _arguments \
 
 case "$state" in
 	specify_device)
-	_values  'devices' $(adb devices -l|awk 'NR>1&& $1 ~ /^[a-zA-Z0-9].*$/ \
-		{printf "%s[%s] ",$1,$6 }')
+	_values -C 'devices' ${$(adb devices -l|awk 'NR>1&& $1 \
+		{sub(/ +/," ",$0); \
+		gsub(":","\\:",$1); \
+		for(i=1;i<=NF;i++) {
+			if($i ~ /model:/) { split($i,m,":") } \
+			else if($i ~ /product:/) { split($i,p,":") } } \
+		printf "%s[%s(%s)] ",$1, p[2], m[2]}'):-""}
 	return
 	;;
 esac

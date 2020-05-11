@@ -16,8 +16,8 @@ EOF
 	fi
 fi
 
-function man() {
-	env \
+function colored() {
+	command env \
 		LESS_TERMCAP_mb=$(printf "\e[1;31m") \
 		LESS_TERMCAP_md=$(printf "\e[1;31m") \
 		LESS_TERMCAP_me=$(printf "\e[0m") \
@@ -28,5 +28,12 @@ function man() {
 		PAGER="${commands[less]:-$PAGER}" \
 		_NROFF_U=1 \
 		PATH="$HOME/bin:$PATH" \
-			man "$@"
+			"$@"
+}
+
+# Colorize man and dman/debman (from debian-goodies)
+function man \
+	dman \
+	debman {
+	colored $0 "$@"
 }

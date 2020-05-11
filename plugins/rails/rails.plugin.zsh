@@ -17,7 +17,7 @@ function _rake_command () {
     bin/stubs/rake $@
   elif [ -e "bin/rake" ]; then
     bin/rake $@
-  elif type bundle &> /dev/null && [ -e "Gemfile" ]; then
+  elif type bundle &> /dev/null && ([ -e "Gemfile" ] || [ -e "gems.rb" ]); then
     bundle exec rake $@
   else
     command rake $@
@@ -43,7 +43,7 @@ alias rc='rails console'
 alias rcs='rails console --sandbox'
 alias rd='rails destroy'
 alias rdb='rails dbconsole'
-alias rg='rails generate'
+alias rgen='rails generate'
 alias rgm='rails generate migration'
 alias rp='rails plugin'
 alias ru='rails runner'

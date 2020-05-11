@@ -2,10 +2,6 @@
 # insecure ownership or permissions) by:
 #
 # * Human-readably notifying the user of these insecurities.
-# * Moving away all existing completion caches to a temporary directory. Since
-#   any of these caches may have been generated from insecure directories, they
-#   are all suspect now. Failing to do so typically causes subsequent compinit()
-#   calls to fail with "command not found: compdef" errors. (That's bad.)
 function handle_completion_insecurities() {
   # List of the absolute paths of all unique insecure directories, split on
   # newline from compaudit()'s output resembling:
@@ -22,39 +18,27 @@ function handle_completion_insecurities() {
   insecure_dirs=( ${(f@):-"$(compaudit 2>/dev/null)"} )
 
   # If no such directories exist, get us out of here.
-  if (( ! ${#insecure_dirs} )); then
-      print "[oh-my-zsh] No insecure completion-dependent directories detected."
-      return
-  fi
+  [[ -z "${insecure_dirs}" ]] && return
 
   # List ownership and permissions of all insecure directories.
   print "[oh-my-zsh] Insecure completion-dependent directories detected:"
   ls -ld "${(@)insecure_dirs}"
-  print "[oh-my-zsh] For safety, completions will be disabled until you manually fix all"
-  print "[oh-my-zsh] insecure directory permissions and ownership and restart oh-my-zsh."
-  print "[oh-my-zsh] See the above list for directories with group or other writability.\n"
 
-  # Locally enable the "NULL_GLOB" option, thus removing unmatched filename
-  # globs from argument lists *AND* printing no warning when doing so. Failing
-  # to do so prints an unreadable warning if no completion caches exist below.
-  setopt local_options null_glob
+  cat <<EOD
 
-  # List of the absolute paths of all unique existing completion caches.
-  local -aU zcompdump_files
-  zcompdump_files=( "${ZSH_COMPDUMP}"(.) "${ZDOTDIR:-${HOME}}"/.zcompdump* )
+[oh-my-zsh] For safety, we will not load completions from these directories until
+[oh-my-zsh] you fix their permissions and ownership and restart zsh.
+[oh-my-zsh] See the above list for directories with group or other writability.
 
-  # Move such caches to a temporary directory.
-  if (( ${#zcompdump_files} )); then
-    # Absolute path of the directory to which such files will be moved.
-    local ZSH_ZCOMPDUMP_BAD_DIR="${ZSH_CACHE_DIR}/zcompdump-bad"
+[oh-my-zsh] To fix your permissions you can do so by disabling
+[oh-my-zsh] the write permission of "group" and "others" and making sure that the
+[oh-my-zsh] owner of these directories is either root or your current user.
+[oh-my-zsh] The following command may help:
+[oh-my-zsh]     compaudit | xargs chmod g-w,o-w
 
-    # List such files first.
-    print "[oh-my-zsh] Insecure completion caches also detected:"
-    ls -l "${(@)zcompdump_files}"
+[oh-my-zsh] If the above didn't help or you want to skip the verification of
+[oh-my-zsh] insecure directories you can set the variable ZSH_DISABLE_COMPFIX to
+[oh-my-zsh] "true" before oh-my-zsh is sourced in your zshrc file.
 
-    # For safety, move rather than permanently remove such files.
-    print "[oh-my-zsh] Moving to \"${ZSH_ZCOMPDUMP_BAD_DIR}/\"...\n"
-    mkdir -p "${ZSH_ZCOMPDUMP_BAD_DIR}"
-    mv "${(@)zcompdump_files}" "${ZSH_ZCOMPDUMP_BAD_DIR}/"
-  fi
+EOD
 }

@@ -1,6 +1,6 @@
 #compdef task
 #
-# Copyright 2010 - 2016 Johannes Schlatow
+# Copyright 2010 - 2019 Johannes Schlatow
 # Copyright 2009 P.C. Shyamshankar
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,10 +21,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-# http://www.opensource.org/licenses/mit-license.php
+# https://www.opensource.org/licenses/mit-license.php
 #
 typeset -g _task_cmds _task_projects _task_tags _task_config _task_modifiers
-_task_projects=($(task _projects))
+_task_projects=(${(f)"$(task _projects)"})
 _task_tags=($(task _tags))
 _task_zshids=( ${(f)"$(task _zshids)"} )
 _task_config=($(task _config))

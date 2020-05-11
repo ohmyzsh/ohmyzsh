@@ -25,6 +25,9 @@ else
 fi
 unset CASE_SENSITIVE HYPHEN_INSENSITIVE
 
+# Complete . and .. special directories
+zstyle ':completion:*' special-dirs true
+
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
 
@@ -68,3 +71,6 @@ if [[ $COMPLETION_WAITING_DOTS = true ]]; then
   zle -N expand-or-complete-with-dots
   bindkey "^I" expand-or-complete-with-dots
 fi
+
+# automatically load bash completion functions
+autoload -U +X bashcompinit && bashcompinit
