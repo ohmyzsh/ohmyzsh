@@ -1,0 +1,21 @@
+plugins=(
+  git
+  npm
+  node
+  kubectl
+  helm
+  lol
+  man
+  tmux
+  zsh_reload
+  zsh-navigation-tools
+  svn
+  ssh-agent
+  sudo
+  docker
+  docker-compose
+  vi-mode
+  go
+  golang
+)
+
