@@ -4,4 +4,5 @@
 
 if [ $commands[kn] ]; then
   source <(kn completion zsh)
+  compdef _kn kn 
 fi
