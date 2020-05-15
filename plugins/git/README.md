@@ -136,6 +136,7 @@ plugins=(... git)
 | grs                  | git restore                                                                                                                      |
 | grset                | git remote set-url                                                                                                               |
 | grss                 | git restore --source                                                                                                             |
+| grst                 | git restore --staged                                                                                                             |
 | grt                  | cd "$(git rev-parse --show-toplevel \|\| echo .)"                                                                                |
 | gru                  | git reset --                                                                                                                     |
 | grup                 | git remote update                                                                                                                |
