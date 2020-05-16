@@ -121,6 +121,8 @@ plugins=(... git)
 | grbc                 | git rebase --continue                                                                                                            |
 | grbd                 | git rebase develop                                                                                                               |
 | grbi                 | git rebase -i                                                                                                                    |
+| grbid                | git rebase -i $(git merge-base $(git_current_branch) develop)                                                                    |
+| grbim                | git rebase -i $(git merge-base $(git_current_branch) master)                                                                     |
 | grbm                 | git rebase master                                                                                                                |
 | grbs                 | git rebase --skip                                                                                                                |
 | grev                 | git revert                                                                                                                       |
