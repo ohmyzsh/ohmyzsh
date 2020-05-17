@@ -29,6 +29,8 @@ function update_ohmyzsh() {
 () {
     emulate -L zsh
 
+    local epoch_target mtime option LAST_EPOCH
+
     # Remove lock directory if older than a day
     zmodload zsh/datetime
     zmodload -F zsh/stat b:zstat
@@ -43,8 +45,11 @@ function update_ohmyzsh() {
         return
     fi
 
-    # Remove lock directory on exit
-    trap "rm -rf '$ZSH/log/update.lock'" EXIT INT QUIT
+    # Remove lock directory on exit. `return 1` is important for when trapping a SIGINT:
+    #  The return status from the function is handled specially. If it is zero, the signal is
+    #  assumed to have been handled, and execution continues normally. Otherwise, the shell
+    #  will behave as interrupted except that the return status of the trap is retained.
+    trap "rm -rf '$ZSH/log/update.lock'; return 1" EXIT INT QUIT
 
     # Create or update .zsh-update file if missing or malformed
     if ! source "${ZSH_CACHE_DIR}/.zsh-update" 2>/dev/null || [[ -z "$LAST_EPOCH" ]]; then
@@ -64,7 +69,8 @@ function update_ohmyzsh() {
         update_ohmyzsh
     else
         echo -n "[oh-my-zsh] Would you like to update? [Y/n] "
-        read -k 1 option
+        read -r -k 1 option
+        [[ "$option" != $'\n' ]] && echo
         case "$option" in
             [nN]) update_last-updated_file ;;
             *) update_ohmyzsh ;;
