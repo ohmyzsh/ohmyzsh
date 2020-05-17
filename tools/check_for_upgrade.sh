@@ -29,6 +29,15 @@ function update_ohmyzsh() {
 () {
     emulate -L zsh
 
+    # Remove lock directory if older than a day
+    zmodload zsh/datetime
+    zmodload -F zsh/stat b:zstat
+    if mtime=$(zstat +mtime "$ZSH/log/update.lock" 2>/dev/null); then
+        if (( (mtime + 3600 * 24) < EPOCHSECONDS )); then
+            command rm -rf "$ZSH/log/update.lock"
+        fi
+    fi
+
     # Check for lock directory
     if ! command mkdir "$ZSH/log/update.lock" 2>/dev/null; then
         return
