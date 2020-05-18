@@ -50,13 +50,13 @@ fi
 
 # Runs before showing the prompt
 function omz_termsupport_precmd {
-  [[ "$DISABLE_AUTO_TITLE" == true ]] && return
+  [[ "${DISABLE_AUTO_TITLE:-}" == true ]] && return
   title $ZSH_THEME_TERM_TAB_TITLE_IDLE $ZSH_THEME_TERM_TITLE_IDLE
 }
 
 # Runs before executing the command
 function omz_termsupport_preexec {
-  [[ "$DISABLE_AUTO_TITLE" == true ]] && return
+  [[ "${DISABLE_AUTO_TITLE:-}" == true ]] && return
 
   emulate -L zsh
   setopt extended_glob
