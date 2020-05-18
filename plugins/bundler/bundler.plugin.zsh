@@ -1,3 +1,4 @@
+alias ba="bundle add"
 alias be="bundle exec"
 alias bl="bundle list"
 alias bp="bundle package"
