@@ -5,9 +5,11 @@ fi
 
 # Cancel update if:
 # - the automatic update is disabled.
-# - the current user doesn't have write permissions for the oh-my-zsh directory.
+# - the current user doesn't have write permissions nor owns the $ZSH directory.
 # - git is unavailable on the system.
-if [[ "$DISABLE_AUTO_UPDATE" = true || ! -w "$ZSH" ]] || ! command -v git &>/dev/null; then
+if [[ "$DISABLE_AUTO_UPDATE" = true ]] \
+   || [[ ! -w "$ZSH" || ! -O "$ZSH" ]] \
+   || ! command -v git &>/dev/null; then
     return
 fi
 
