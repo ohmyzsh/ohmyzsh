@@ -52,7 +52,7 @@ if [ -n "$remote" ]; then
   git remote set-url "$remote" "https://github.com/ohmyzsh/ohmyzsh.git"
 fi
 
-printf "${BLUE}%s${NORMAL}\n" "Updating Oh My Zsh"
+printf "${BLUE}%s${RESET}\n" "Updating Oh My Zsh"
 if git pull --rebase --stat origin master
 then
   printf '%s         %s__      %s           %s        %s       %s     %s__   %s\n' $RB_RED $RB_ORANGE $RB_YELLOW $RB_GREEN $RB_BLUE $RB_INDIGO $RB_VIOLET $RB_RESET
