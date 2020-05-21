@@ -38,6 +38,8 @@ alias gapa='git add --patch'
 alias gau='git add --update'
 alias gav='git add --verbose'
 alias gap='git apply'
+alias gan='git add --intent-to-add'
+alias gana='git add --intent-to-add --all'
 
 alias gb='git branch'
 alias gba='git branch -a'
