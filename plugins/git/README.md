@@ -19,6 +19,7 @@ plugins=(... git)
 | gau                  | git add --update                                                                                                                 |
 | gav                  | git add --verbose                                                                                                                |
 | gap                  | git apply                                                                                                                        |
+| gapt                 | git apply --3way                                                                                                                 |
 | gb                   | git branch                                                                                                                       |
 | gba                  | git branch -a                                                                                                                    |
 | gbd                  | git branch -d                                                                                                                    |
@@ -171,6 +172,11 @@ plugins=(... git)
 | glum                 | git pull upstream master                                                                                                         |
 | gwch                 | git whatchanged -p --abbrev-commit --pretty=medium                                                                               |
 | gwip                 | git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign -m "--wip-- [skip ci]"           |
+| gam                  | git am                                                                                                                           |
+| gamc                 | git am --continue                                                                                                                |
+| gams                 | git am --skip                                                                                                                    |
+| gama                 | git am --abort                                                                                                                   |
+| gamscp               | git am --show-current-patch                                                                                                      |
 
 ### Deprecated aliases
 
