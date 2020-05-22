@@ -63,7 +63,7 @@ fi
 
 # Construct zcompdump OMZ metadata
 zcompdump_metadata="\
-#omz revision: $(cd -q "$ZSH"; git rev-parse HEAD 2>/dev/null)
+#omz revision: $(builtin cd -q "$ZSH"; git rev-parse HEAD 2>/dev/null)
 #omz fpath: $fpath\
 "
 
