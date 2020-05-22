@@ -101,7 +101,7 @@ plugins=(... git)
 | glola                | git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --all                     |
 | glog                 | git log --oneline --decorate --graph                                                                                             |
 | gloga                | git log --oneline --decorate --graph --all                                                                                       |
-| glp                  | `_git_log_prettily`                                                                                                              |
+| glp                  | git log --pretty=\<format\>                                                                                                       |
 | gm                   | git merge                                                                                                                        |
 | gmom                 | git merge origin/master                                                                                                          |
 | gmt                  | git mergetool --no-prompt                                                                                                        |
