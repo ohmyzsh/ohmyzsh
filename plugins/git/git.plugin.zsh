@@ -86,6 +86,11 @@ alias gds='git diff --staged'
 alias gdt='git diff-tree --no-commit-id --name-only -r'
 alias gdw='git diff --word-diff'
 
+function gdnolock() {
+  git diff "$@" ":(exclude)package-lock.json" ":(exclude)*.lock"
+}
+compdef _git gdnolock=git-diff
+
 function gdv() { git diff -w "$@" | view - }
 compdef _git gdv=git-diff
 

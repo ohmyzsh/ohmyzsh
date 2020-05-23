@@ -62,6 +62,7 @@ plugins=(... git)
 | gdct                 | git describe --tags $(git rev-list --tags --max-count=1)                                                                         |
 | gds                  | git diff --staged                                                                                                                |
 | gdt                  | git diff-tree --no-commit-id --name-only -r                                                                                      |
+| gdnolock             | git diff $@ ":(exclude)package-lock.json" ":(exclude)&ast;.lock"                                                                 |
 | gdv                  | git diff -w $@ \| view -                                                                                                         |
 | gdw                  | git diff --word-diff                                                                                                             |
 | gf                   | git fetch                                                                                                                        |
