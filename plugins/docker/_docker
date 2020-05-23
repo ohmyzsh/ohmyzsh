@@ -835,7 +835,7 @@ __docker_container_subcommand() {
             _arguments $(__docker_arguments) \
                 $opts_help \
                 "($help -t --time)"{-t=,--time=}"[Number of seconds to try to stop for before killing the container]:seconds to before killing:(1 5 10 30 60)" \
-                "($help -)*:containers:__docker_complete_containers_ids" && ret=0
+                "($help -)*:containers:__docker_complete_containers" && ret=0
             ;;
         (rm)
             local state
