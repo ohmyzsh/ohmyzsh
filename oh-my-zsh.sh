@@ -1,6 +1,17 @@
+# Set ZSH_CACHE_DIR to the path where cache files should be created
+# or else we will use the default cache/
+if [[ -z "$ZSH_CACHE_DIR" ]]; then
+  ZSH_CACHE_DIR="$ZSH/cache"
+fi
+
+# Migrate .zsh-update file to $ZSH_CACHE_DIR
+if [ -f ~/.zsh-update ] && [ ! -f ${ZSH_CACHE_DIR}/.zsh-update ]; then
+    mv ~/.zsh-update ${ZSH_CACHE_DIR}/.zsh-update
+fi
+
 # Check for updates on initial load...
 if [ "$DISABLE_AUTO_UPDATE" != "true" ]; then
-  env ZSH=$ZSH DISABLE_UPDATE_PROMPT=$DISABLE_UPDATE_PROMPT zsh -f $ZSH/tools/check_for_upgrade.sh
+  env ZSH=$ZSH ZSH_CACHE_DIR=$ZSH_CACHE_DIR DISABLE_UPDATE_PROMPT=$DISABLE_UPDATE_PROMPT zsh -f $ZSH/tools/check_for_upgrade.sh
 fi
 
 # Initializes Oh My Zsh
@@ -11,36 +22,20 @@ fpath=($ZSH/functions $ZSH/completions $fpath)
 # Load all stock functions (from $fpath files) called below.
 autoload -U compaudit compinit
 
-: ${ZSH_DISABLE_COMPFIX:=true}
-
 # Set ZSH_CUSTOM to the path where your custom config files
 # and plugins exists, or else we will use the default custom/
 if [[ -z "$ZSH_CUSTOM" ]]; then
     ZSH_CUSTOM="$ZSH/custom"
 fi
 
-# Set ZSH_CACHE_DIR to the path where cache files should be created
-# or else we will use the default cache/
-if [[ -z "$ZSH_CACHE_DIR" ]]; then
-  ZSH_CACHE_DIR="$ZSH/cache"
-fi
-
-
-# Load all of the config files in ~/oh-my-zsh that end in .zsh
-# TIP: Add files you don't want in git to .gitignore
-for config_file ($ZSH/lib/*.zsh); do
-  custom_config_file="${ZSH_CUSTOM}/lib/${config_file:t}"
-  [ -f "${custom_config_file}" ] && config_file=${custom_config_file}
-  source $config_file
-done
-
 
 is_plugin() {
   local base_dir=$1
   local name=$2
-  test -f $base_dir/plugins/$name/$name.plugin.zsh \
-    || test -f $base_dir/plugins/$name/_$name
+  builtin test -f $base_dir/plugins/$name/$name.plugin.zsh \
+    || builtin test -f $base_dir/plugins/$name/_$name
 }
+
 # Add all defined plugins to fpath. This must be done
 # before running compinit.
 for plugin ($plugins); do
@@ -48,6 +43,8 @@ for plugin ($plugins); do
     fpath=($ZSH_CUSTOM/plugins/$plugin $fpath)
   elif is_plugin $ZSH $plugin; then
     fpath=($ZSH/plugins/$plugin $fpath)
+  else
+    echo "[oh-my-zsh] plugin '$plugin' not found"
   fi
 done
 
@@ -64,18 +61,44 @@ if [ -z "$ZSH_COMPDUMP" ]; then
   ZSH_COMPDUMP="${ZDOTDIR:-${HOME}}/.zcompdump-${SHORT_HOST}-${ZSH_VERSION}"
 fi
 
-if [[ $ZSH_DISABLE_COMPFIX != true ]]; then
-  # If completion insecurities exist, warn the user without enabling completions.
-  if ! compaudit &>/dev/null; then
-    # This function resides in the "lib/compfix.zsh" script sourced above.
-    handle_completion_insecurities
-  # Else, enable and cache completions to the desired file.
-  else
-    compinit -d "${ZSH_COMPDUMP}"
-  fi
-else
-  compinit -i -d "${ZSH_COMPDUMP}"
+# Construct zcompdump OMZ metadata
+zcompdump_metadata="\
+#omz revision: $(builtin cd -q "$ZSH"; git rev-parse HEAD 2>/dev/null)
+#omz fpath: $fpath\
+"
+
+# Delete the zcompdump file if OMZ zcompdump metadata changed
+if ! cmp -s <(command grep '^#omz' "$ZSH_COMPDUMP" 2>/dev/null) <(echo "$zcompdump_metadata"); then
+  command rm -f "$ZSH_COMPDUMP"
+  zcompdump_refresh=1
 fi
+
+if [[ $ZSH_DISABLE_COMPFIX != true ]]; then
+  source $ZSH/lib/compfix.zsh
+  # If completion insecurities exist, warn the user
+  handle_completion_insecurities
+  # Load only from secure directories
+  compinit -i -C -d "${ZSH_COMPDUMP}"
+else
+  # If the user wants it, load from all found directories
+  compinit -u -C -d "${ZSH_COMPDUMP}"
+fi
+
+# Append zcompdump metadata if missing
+if (( $zcompdump_refresh )); then
+  echo "\n$zcompdump_metadata" | tee -a "$ZSH_COMPDUMP" &>/dev/null
+fi
+
+unset zcompdump_metadata zcompdump_refresh
+
+
+# Load all of the config files in ~/oh-my-zsh that end in .zsh
+# TIP: Add files you don't want in git to .gitignore
+for config_file ($ZSH/lib/*.zsh); do
+  custom_config_file="${ZSH_CUSTOM}/lib/${config_file:t}"
+  [ -f "${custom_config_file}" ] && config_file=${custom_config_file}
+  source $config_file
+done
 
 # Load all of the plugins that were defined in ~/.zshrc
 for plugin ($plugins); do
@@ -93,21 +116,12 @@ done
 unset config_file
 
 # Load the theme
-if [ "$ZSH_THEME" = "random" ]; then
-  themes=($ZSH/themes/*zsh-theme)
-  N=${#themes[@]}
-  ((N=(RANDOM%N)+1))
-  RANDOM_THEME=${themes[$N]}
-  source "$RANDOM_THEME"
-  echo "[oh-my-zsh] Random theme '$RANDOM_THEME' loaded..."
-else
-  if [ ! "$ZSH_THEME" = ""  ]; then
-    if [ -f "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme" ]; then
-      source "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme"
-    elif [ -f "$ZSH_CUSTOM/themes/$ZSH_THEME.zsh-theme" ]; then
-      source "$ZSH_CUSTOM/themes/$ZSH_THEME.zsh-theme"
-    else
-      source "$ZSH/themes/$ZSH_THEME.zsh-theme"
-    fi
+if [ ! "$ZSH_THEME" = ""  ]; then
+  if [ -f "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme" ]; then
+    source "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme"
+  elif [ -f "$ZSH_CUSTOM/themes/$ZSH_THEME.zsh-theme" ]; then
+    source "$ZSH_CUSTOM/themes/$ZSH_THEME.zsh-theme"
+  else
+    source "$ZSH/themes/$ZSH_THEME.zsh-theme"
   fi
 fi

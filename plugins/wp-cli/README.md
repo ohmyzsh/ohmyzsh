@@ -2,11 +2,11 @@
 
 **Maintainer:** [joshmedeski](https://github.com/joshmedeski)
 
-WordPress Command Line Interface (http://wp-cli.org/)
+WordPress Command Line Interface (https://wp-cli.org/)
 
 WP-CLI is a set of command-line tools for managing WordPress installations. You can update plugins, set up multisite installs and much more, without using a web browser.
 
-This plugin adds [tab completion](http://wp-cli.org/#complete) for `wp-cli` as well as several aliases.
+This plugin adds [tab completion](https://wp-cli.org/#tab-completions) for `wp-cli` as well as several aliases.
 
 ## List of Aliases
 
@@ -75,7 +75,7 @@ This plugin adds [tab completion](http://wp-cli.org/#complete) for `wp-cli` as w
 - wptp='wp theme path'
 - wpts='wp theme search'
 - wptst='wp theme status'
-- wptu='wp theme updatet'
+- wptu='wp theme update'
 
 ### User
 - wpuac='wp user add-cap'
@@ -101,7 +101,7 @@ This plugin adds [tab completion](http://wp-cli.org/#complete) for `wp-cli` as w
 - wpwm='wp widget move'
 - wpwu='wp widget update'
 
-The entire list of wp-cli commands can be found here: http://wp-cli.org/commands/
+The entire list of wp-cli commands can be found here: https://wp-cli.org/commands/
 
 I only included the commands that are most used. Please feel free to contribute to this project if you want more commands.
 
