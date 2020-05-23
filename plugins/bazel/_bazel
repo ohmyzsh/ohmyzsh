@@ -40,7 +40,7 @@ local curcontext="$curcontext" state line
 
 : ${BAZEL_COMPLETION_PACKAGE_PATH:=%workspace%}
 : ${BAZEL:=bazel}
-b() { ${BAZEL} --noblock_for_lock "$@" 2>/dev/null; }
+_bazel_b() { ${BAZEL} --noblock_for_lock "$@" 2>/dev/null; }
 
 # Default cache lifetime is 1 week
 zstyle -s ":completion:${curcontext}:" cache-lifetime lifetime
@@ -93,7 +93,7 @@ _bazel_get_options() {
   if _cache_invalid BAZEL_${lcmd}_options || _cache_invalid BAZEL_${lcmd}_args \
     || ! _bazel_safe_retrieve_cache BAZEL_${lcmd}_options ${_bazel_cmd_options} \
     || ! _retrieve_cache BAZEL_${lcmd}_args ${_bazel_cmd_args}; then
-    if ! eval "$(b help completion)"; then
+    if ! eval "$(_bazel_b help completion)"; then
       return
     fi
     local opts_var
@@ -163,7 +163,7 @@ _get_build_targets() {
       rule_re=".*_test|.*_binary"
       ;;
   esac
-  completions=(${$(b query "kind(\"${rule_re}\", ${pkg}:all)" 2>/dev/null)##*:})
+  completions=(${$(_bazel_b query "kind(\"${rule_re}\", ${pkg}:all)" 2>/dev/null)##*:})
   if ( (( ${#completions} > 0 )) && [[ $target_type != run ]] ); then
     completions+=(all)
   fi
@@ -282,7 +282,7 @@ _get_commands() {
   typeset -ga _bazel_cmd_list
   # Use `bazel help` instead of `bazel help completion` to get command
   # descriptions.
-  if _bazel_cmd_list=("${(@f)$(b help | awk '
+  if _bazel_cmd_list=("${(@f)$(_bazel_b help | awk '
 /Available commands/ { command=1; }
 /  [-a-z]+[ \t]+.+/ { if (command) { printf "%s:", $1; for (i=2; i<=NF; i++) printf "%s ", $i; print "" } }
 /^$/ { command=0; }')}"); then
@@ -331,7 +331,7 @@ _bazel_info_key() {
       typeset -ga _bazel_info_keys_list
       # Use `bazel help` instead of `bazel help completion` to get info-key
       # descriptions.
-      if _bazel_info_keys_list=("${(@f)$(b help info-keys | awk '
+      if _bazel_info_keys_list=("${(@f)$(_bazel_b help info-keys | awk '
   { printf "%s:", $1; for (i=2; i<=NF; i++) printf "%s ", $i; print "" }')}"); then
         _store_cache BAZEL_info_keys _bazel_info_keys_list
       fi
