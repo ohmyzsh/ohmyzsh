@@ -5,7 +5,7 @@
 # If they are not set yet, they will be
 # overwritten with their default values
 
-default fastfile_dir        "${HOME}/.fastfile/"
+default fastfile_dir        "${HOME}/.fastfile"
 default fastfile_var_prefix "§"
 
 ###########################
@@ -104,7 +104,7 @@ function fastfile_rm() {
 # Generate the aliases for the shortcuts
 #
 function fastfile_sync() {
-    for f in "${fastfile_dir}"/*; do
+    for f in "${fastfile_dir}"/*(N); do
         file=`basename "$f"` # To enable simpler handeling of spaces in file names
         varkey=`echo "$file" | tr " " "_"`
 
