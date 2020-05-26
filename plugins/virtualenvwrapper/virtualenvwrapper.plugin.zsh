@@ -1,23 +1,24 @@
 function {
     # search in these locations for the init script:
-    for f in $commands[virtualenvwrapper_lazy.sh] \
-             $commands[virtualenvwrapper.sh] \
-             /usr/share/virtualenvwrapper/virtualenvwrapper{_lazy,}.sh \
-             /usr/local/bin/virtualenvwrapper{_lazy,}.sh \
-             /etc/bash_completion.d/virtualenvwrapper \
-             /usr/share/bash-completion/completions/virtualenvwrapper \
-             $HOME/.local/bin/virtualenvwrapper.sh
+    for virtualenvwrapper in $commands[virtualenvwrapper_lazy.sh] \
+      $commands[virtualenvwrapper.sh] \
+      /usr/share/virtualenvwrapper/virtualenvwrapper{_lazy,}.sh \
+      /usr/local/bin/virtualenvwrapper{_lazy,}.sh \
+      /etc/bash_completion.d/virtualenvwrapper \
+      /usr/share/bash-completion/completions/virtualenvwrapper \
+      $HOME/.local/bin/virtualenvwrapper.sh
     do
-        if [[ -f $f ]]; then
-            source $f
+        if [[ -f "$virtualenvwrapper" ]]; then
+            source "$virtualenvwrapper"
             return
         fi
     done
     print "[oh-my-zsh] virtualenvwrapper plugin: Cannot find virtualenvwrapper.sh.\n"\
           "Please install with \`pip install virtualenvwrapper\`" >&2
+    return 1
 }
 
-if ! type workon &>/dev/null; then
+if [[ $? -eq 0 ]] && ! type workon &>/dev/null; then
   print "[oh-my-zsh] virtualenvwrapper plugin: shell function 'workon' not defined.\n"\
         "Please check ${virtualenvwrapper}" >&2
   return
