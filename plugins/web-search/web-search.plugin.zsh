@@ -16,6 +16,10 @@ function web_search() {
     baidu       "https://www.baidu.com/s?wd="
     ecosia      "https://www.ecosia.org/search?q="
     goodreads   "https://www.goodreads.com/search?q="
+    qwant       "https://www.qwant.com/?q="
+    givero      "https://www.givero.com/search?q="
+    stackoverflow  "https://stackoverflow.com/search?q="
+    wolframalpha   "https://www.wolframalpha.com/input/?i="
   )
 
   # check whether the search engine is supported
@@ -49,6 +53,10 @@ alias github='web_search github'
 alias baidu='web_search baidu'
 alias ecosia='web_search ecosia'
 alias goodreads='web_search goodreads'
+alias qwant='web_search qwant'
+alias givero='web_search givero'
+alias stackoverflow='web_search stackoverflow'
+alias wolframalpha='web_search wolframalpha'
 
 #add your own !bang searches here
 alias wiki='web_search duckduckgo \!w'

@@ -2,10 +2,13 @@
 typeset -g ZSH_LAST_WORKING_DIRECTORY
 
 # Updates the last directory once directory is changed
-chpwd_functions+=(chpwd_last_working_dir)
+autoload -U add-zsh-hook
+add-zsh-hook chpwd chpwd_last_working_dir
 chpwd_last_working_dir() {
-	local cache_file="$ZSH_CACHE_DIR/last-working-dir"
-	pwd >| "$cache_file"
+	if [ "$ZSH_SUBSHELL" = 0 ]; then
+		local cache_file="$ZSH_CACHE_DIR/last-working-dir"
+		pwd >| "$cache_file"
+	fi
 }
 
 # Changes directory to the last working directory
