@@ -154,7 +154,7 @@ _managepy-makemessages(){
     "--no-default-ignore[Don't ignore the common glob-style patterns 'CVS', '.*', '*~' and '*.pyc'.]" \
     "--no-wrap[Don't break long message lines into several lines.]" \
     "--no-location[Don't write '#: filename:line' lines.]" \
-    '--no-obsolete[emove obsolete message strings.]' \
+    '--no-obsolete[Remove obsolete message strings.]' \
     '--keep-pot[Keep .pot file after making messages.]' \
     $nul_args && ret=0
 }
@@ -374,7 +374,8 @@ _managepy-commands() {
 _applist() {
   local line
   local -a apps
-  _call_program help-command "python -c \"import os.path as op, re, django.conf, sys;\\
+  _call_program help-command "python -c \"import sys; del sys.path[0];\\
+                                          import os.path as op, re, django.conf;\\
                                           bn=op.basename(op.abspath(op.curdir));[sys\\
                                           .stdout.write(str(re.sub(r'^%s\.(.*?)$' %
                                           bn, r'\1', i)) + '\n') for i in django.conf.settings.\\
