@@ -8,6 +8,9 @@ To use it, add `rails` to the plugins array in your zshrc file:
 plugins=(... rails)
 ```
 
+To use rails instead of rake, put rails after `bundler` plugin. 
+This should be default action for e.g. `rr` for rails >= 5.0 and is deprecated in rails 6.0.x
+
 ## List of Aliases
 
 ### Rails aliases
@@ -26,7 +29,7 @@ plugins=(... rails)
 | `rsd` | `rails server --debugger`  | Launch a web server with debugger                  |
 | `rsp` | `rails server --port`      | Launch a web server and specify the listening port |
 
-### Rake aliases
+### Rake or Rails aliases (depending on rails version)
 
 | Alias   | Command                         | Description                                            |
 |---------|---------------------------------|--------------------------------------------------------|
@@ -73,10 +76,3 @@ separately. For example: `REP rake db:migrate` will migrate the production db.
 | Alias   | Command                            |
 |---------|------------------------------------|
 | `sstat` | `thin --stats "/thin/stats" start` |
-| `sg`    | `ruby script/generate`             |
-| `sd`    | `ruby script/destroy`              |
-| `sp`    | `ruby script/plugin`               |
-| `sr`    | `ruby script/runner`               |
-| `ssp`   | `ruby script/spec`                 |
-| `sc`    | `ruby script/console`              |
-| `sd`    | `ruby script/server --debugger`    |

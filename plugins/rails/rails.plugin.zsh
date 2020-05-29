@@ -1,3 +1,4 @@
+
 function _rails_command () {
   if [ -e "bin/stubs/rails" ]; then
     bin/stubs/rails $@
@@ -12,8 +13,13 @@ function _rails_command () {
   fi
 }
 
-function _rake_command () {
-  if [ -e "bin/stubs/rake" ]; then
+alias rails='_rails_command'
+compdef _rails_command=rails
+
+function _rails_task_runner_command () {
+  if [[ $(_rails_command -v 2>&1) =~ 'Rails [5-9]' ]]; then
+    rails $@
+  elif [ -e "bin/stubs/rake" ]; then
     bin/stubs/rake $@
   elif [ -e "bin/rake" ]; then
     bin/rake $@
@@ -24,11 +30,8 @@ function _rake_command () {
   fi
 }
 
-alias rails='_rails_command'
-compdef _rails_command=rails
-
-alias rake='_rake_command'
-compdef _rake_command=rake
+alias rake='_rails_task_runner_command'
+compdef _rails_task_runner_command=rake
 
 alias devlog='tail -f log/development.log'
 alias prodlog='tail -f log/production.log'
@@ -51,7 +54,7 @@ alias rs='rails server'
 alias rsd='rails server --debugger'
 alias rsp='rails server --port'
 
-# Rake aliases
+# Rake aliases for rails < 5 (rails for more recent verions)
 alias rdm='rake db:migrate'
 alias rdms='rake db:migrate:status'
 alias rdr='rake db:rollback'
@@ -59,9 +62,9 @@ alias rdc='rake db:create'
 alias rds='rake db:seed'
 alias rdd='rake db:drop'
 alias rdrs='rake db:reset'
-alias rdtc='rake db:test:clone'
+alias rdtc='rake db:test:clone' # not exists
 alias rdtp='rake db:test:prepare'
-alias rdmtc='rake db:migrate db:test:clone'
+alias rdmtc='rake db:migrate db:test:clone' # not exists
 alias rdsl='rake db:schema:load'
 alias rlc='rake log:clear'
 alias rn='rake notes'
@@ -73,13 +76,6 @@ alias rsts='rake stats'
 
 # legacy stuff
 alias sstat='thin --stats "/thin/stats" start'
-alias sg='ruby script/generate'
-alias sd='ruby script/destroy'
-alias sp='ruby script/plugin'
-alias sr='ruby script/runner'
-alias ssp='ruby script/spec'
-alias sc='ruby script/console'
-alias sd='ruby script/server --debugger'
 
 function remote_console() {
   /usr/bin/env ssh $1 "( cd $2 && ruby script/console production )"
