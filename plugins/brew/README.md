@@ -11,9 +11,10 @@ plugins=(... brew)
 ## Aliases
 
 | Alias    | Command                                                     | Description                                                         |
-|----------|-------------------------------------------------------------|---------------------------------------------------------------------|
+| -------- | ----------------------------------------------------------- | ------------------------------------------------------------------- |
 | `brewp`  | `brew pin`                                                  | Pin a specified formula so that it's not upgraded.                  |
 | `brews`  | `brew list -1`                                              | List installed formulae or the installed files for a given formula. |
+| `brewcs` | `brew cask list -1`                                         | List installed casks.                                               |
 | `brewsp` | `brew list --pinned`                                        | List pinned formulae, or show the version of a given formula.       |
 | `bubo`   | `brew update && brew outdated`                              | Update Homebrew and all formulae, then list outdated formulae.      |
 | `bubc`   | `brew upgrade && brew cleanup`                              | Upgrade outdated formulae, then run cleanup.                        |
