@@ -29,7 +29,7 @@ curl https://coderwall.com/bobwilliams.json | pp_json
 - **is_json**:
 
 ```sh
-# pretty print the contents of an existing json file
+# Validate if file's content conforms to a valid JSON schema
 less data.json | is_json
 ```
 
