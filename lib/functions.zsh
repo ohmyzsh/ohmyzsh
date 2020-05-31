@@ -235,3 +235,16 @@ function omz_urldecode {
 
   echo -E "$decoded"
 }
+
+# PSK buffoonery
+kill_cloud_drives() {
+  pkill "Backup" ; pkill "Dropbox"
+}
+
+# PSK List directories only
+lsd() {
+  ls -d */
+}
+
+# Yoink
+alias yoink="open -a Yoink"
