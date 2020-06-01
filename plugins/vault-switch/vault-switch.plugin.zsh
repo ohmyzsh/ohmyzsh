@@ -3,21 +3,21 @@ add-zsh-hook precmd _restore_cache
 
 FILE_CREDENTIALS="${HOME}/.vault-switch/credentials"
 
-function _restore_cache(){
+_restore_cache(){
     [ ! -d ${HOME}/.vault-switch ] && mkdir -p ${HOME}/.vault-switch
     [ ! -f $FILE_CREDENTIALS ] && touch ${FILE_CREDENTIALS}
     source ${FILE_CREDENTIALS}
 }
 
-function _get-nodes(){
+_get-nodes(){
     IFS=";" read -A NODES <<< ${VAULT_NODES}
 }
 
-function _set-color(){
+_set-color(){
     echo "\e[1;32m$1\e[0m"
 }
 
-function _list-nodes(){
+_list-nodes(){
     INDEX=1
     for i in  ${NODES[@]}
     do
@@ -29,7 +29,7 @@ function _list-nodes(){
     done
 }
 
-function _set-work-node(){
+_set-work-node(){
     if  [ $1 -gt ${#NODES[@]} ]
     then
         echo "Number of node not found"
@@ -50,7 +50,7 @@ function _set-work-node(){
 
 }
 
-function vault-switch() {
+vault-switch() {
     _get-nodes
     [ ! $1 ] && _list-nodes
     [ $1 ] && _set-work-node $1
