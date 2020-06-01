@@ -26,6 +26,7 @@ To learn more, visit [ohmyz.sh](https://ohmyz.sh), follow [@ohmyzsh](https://twi
 * [Zsh](https://www.zsh.org) should be installed (v4.3.9 or more recent). If not pre-installed (run `zsh --version` to confirm), check the following instructions here: [Installing ZSH](https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH)
 * `curl` or `wget` should be installed
 * `git` should be installed (recommended v1.7.2 or higher)
+* `cmp` should be installed, it is a part of [GNU Diffutils](https://www.gnu.org/software/diffutils/)
 
 ### Basic Installation
 
