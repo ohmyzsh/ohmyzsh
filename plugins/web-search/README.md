@@ -41,6 +41,8 @@ Available search contexts are:
 | `stackoverflow`       | `https://stackoverflow.com/search?q=`    |
 | `wolframalpha`        | `https://wolframalpha.com/input?i=`      |
 | `archive`             | `https://web.archive.org/web/*/`         |
+| `dictbing`            | `https://bing.com/dict/search?q=`            |
+| `dictmw`              | `https://www.merriam-webster.com/dictionary/`|
 
 Also there are aliases for bang-searching DuckDuckGo:
 
