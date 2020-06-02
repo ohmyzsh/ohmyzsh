@@ -262,6 +262,12 @@ To disable automatic upgrades, set the following in your `~/.zshrc`:
 DISABLE_AUTO_UPDATE=true
 ```
 
+To use classic green logo after upgrade, set the following in your `~/.zshrc`:
+
+```shell
+UPDATE_GREEN=true
+```
+
 ### Manual Updates
 
 If you'd like to upgrade at any point in time (maybe someone just released a new plugin and you don't want to wait a week?) you just need to run:
