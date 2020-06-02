@@ -62,13 +62,13 @@ if [ -z "$ZSH_COMPDUMP" ]; then
 fi
 
 # Construct zcompdump OMZ metadata
-zcompdump_metadata="\
-#omz revision: $(builtin cd -q "$ZSH"; git rev-parse HEAD 2>/dev/null)
-#omz fpath: $fpath\
-"
+zcompdump_revision="#omz revision: $(builtin cd -q "$ZSH"; git rev-parse HEAD 2>/dev/null)"
+zcompdump_fpath="#omz fpath: $fpath"
 
 # Delete the zcompdump file if OMZ zcompdump metadata changed
-if ! cmp -s <(command grep '^#omz' "$ZSH_COMPDUMP" 2>/dev/null) <(echo "$zcompdump_metadata"); then
+if ! command grep -q -Fx "$zcompdump_revision" "$ZSH_COMPDUMP" 2>/dev/null \
+   || ! command grep -q -Fx "$zcompdump_fpath" "$ZSH_COMPDUMP" 2>/dev/null; then
+  echo zcompdump changed
   command rm -f "$ZSH_COMPDUMP"
   zcompdump_refresh=1
 fi
@@ -86,10 +86,14 @@ fi
 
 # Append zcompdump metadata if missing
 if (( $zcompdump_refresh )); then
-  echo "\n$zcompdump_metadata" | tee -a "$ZSH_COMPDUMP" &>/dev/null
+  cat >>| "$ZSH_COMPDUMP" <<EOF
+
+$zcompdump_revision
+$zcompdump_fpath
+EOF
 fi
 
-unset zcompdump_metadata zcompdump_refresh
+unset zcompdump_revision zcompdump_fpath zcompdump_refresh
 
 
 # Load all of the config files in ~/oh-my-zsh that end in .zsh
