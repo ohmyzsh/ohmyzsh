@@ -68,7 +68,6 @@ zcompdump_fpath="#omz fpath: $fpath"
 # Delete the zcompdump file if OMZ zcompdump metadata changed
 if ! command grep -q -Fx "$zcompdump_revision" "$ZSH_COMPDUMP" 2>/dev/null \
    || ! command grep -q -Fx "$zcompdump_fpath" "$ZSH_COMPDUMP" 2>/dev/null; then
-  echo zcompdump changed
   command rm -f "$ZSH_COMPDUMP"
   zcompdump_refresh=1
 fi
