@@ -247,6 +247,8 @@ alias gstall='git stash --all'
 alias gsu='git submodule update'
 alias gsw='git switch'
 alias gswc='git switch -c'
+alias gswm='git switch master'
+alias gswd='git switch develop'
 
 alias gts='git tag -s'
 alias gtv='git tag | sort -V'
