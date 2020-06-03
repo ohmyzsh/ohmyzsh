@@ -85,7 +85,9 @@ fi
 
 # Append zcompdump metadata if missing
 if (( $zcompdump_refresh )); then
-  cat >>| "$ZSH_COMPDUMP" <<EOF
+  # Use `tee` in case the $ZSH_COMPDUMP filename is invalid, to silence the error
+  # See https://github.com/ohmyzsh/ohmyzsh/commit/dd1a7269#commitcomment-39003489
+  tee -a "$ZSH_COMPDUMP" &>/dev/null <<EOF
 
 $zcompdump_revision
 $zcompdump_fpath
