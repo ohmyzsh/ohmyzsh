@@ -26,7 +26,7 @@ function box_name {
 
 
 PROMPT="╭─%{$FG[040]%}%n%{$reset_color%} %{$FG[239]%}at%{$reset_color%} %{$FG[033]%}$(box_name)%{$reset_color%} %{$FG[239]%}in%{$reset_color%} %{$terminfo[bold]$FG[226]%}%~%{$reset_color%}\$(git_prompt_info)\$(ruby_prompt_info) %D - %*
-╰─$(virtualenv_info)$(prompt_char) "
+╰─\$(virtualenv_info)\$(prompt_char) "
 
 ZSH_THEME_GIT_PROMPT_PREFIX=" %{$FG[239]%}on%{$reset_color%} %{$fg[255]%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
