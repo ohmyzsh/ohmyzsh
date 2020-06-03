@@ -20,6 +20,7 @@ function web_search() {
     givero      "https://www.givero.com/search?q="
     stackoverflow  "https://stackoverflow.com/search?q="
     wolframalpha   "https://www.wolframalpha.com/input/?i="
+    archive     "https://web.archive.org/web/*/"
   )
 
   # check whether the search engine is supported
@@ -57,6 +58,7 @@ alias qwant='web_search qwant'
 alias givero='web_search givero'
 alias stackoverflow='web_search stackoverflow'
 alias wolframalpha='web_search wolframalpha'
+alias archive='web_search archive'
 
 #add your own !bang searches here
 alias wiki='web_search duckduckgo \!w'
