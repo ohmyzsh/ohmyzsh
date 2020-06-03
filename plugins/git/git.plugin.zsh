@@ -48,6 +48,7 @@ alias gbD='git branch -D'
 alias gbl='git blame -b -w'
 alias gbnm='git branch --no-merged'
 alias gbr='git branch --remote'
+alias gblist="git for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(if)%(HEAD)%(then)%(color:cyan)%(else)%(color:yellow)%(end)%(refname:short)%(color:reset)%(if)%(push)%(then) [%(push:remotename)]%(end) %(color:red)%(objectname:short)%(color:reset) %(contents:subject) %(color:magenta)%(authorname)%(color:reset) (%(color:green)%(committerdate:relative)%(color:reset))'"
 alias gbs='git bisect'
 alias gbsb='git bisect bad'
 alias gbsg='git bisect good'
