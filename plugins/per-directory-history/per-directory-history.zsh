@@ -118,6 +118,15 @@ function _per-directory-history-addhistory() {
   fi
 }
 
+function _per-directory-history-precmd() {
+  if [[ $_per_directory_history_initialized == false ]]; then
+    # start in directory mode
+    mkdir -p ${_per_directory_history_directory:h}
+    _per_directory_history_is_global=true
+    _per-directory-history-set-directory-history
+    _per_directory_history_initialized=true
+  fi
+}
 
 function _per-directory-history-set-directory-history() {
   if [[ $_per_directory_history_is_global == true ]]; then
@@ -149,8 +158,7 @@ function _per-directory-history-set-global-history() {
 autoload -U add-zsh-hook
 add-zsh-hook chpwd _per-directory-history-change-directory
 add-zsh-hook zshaddhistory _per-directory-history-addhistory
+add-zsh-hook precmd _per-directory-history-precmd
 
-#start in directory mode
-mkdir -p ${_per_directory_history_directory:h}
-_per_directory_history_is_global=true
-_per-directory-history-set-directory-history
+# set initialized flag to false
+_per_directory_history_initialized=false
