@@ -19,6 +19,7 @@ jira            # performs the default action
 
 jira new        # opens a new issue
 jira dashboard  # opens your JIRA dashboard
+jira tempo      # opens your JIRA Tempo
 jira reported [username]  # queries for issues reported by a user
 jira assigned [username]  # queries for issues assigned to a user
 jira myissues   # queries for you own issues

@@ -40,6 +40,7 @@ Available search contexts are:
 | `givero`              | `https://www.givero.com/search?q=`       |
 | `stackoverflow`       | `https://stackoverflow.com/search?q=`    |
 | `wolframalpha`        | `https://wolframalpha.com/input?i=`      |
+| `archive`             | `https://web.archive.org/web/*/`         |
 
 Also there are aliases for bang-searching DuckDuckGo:
 

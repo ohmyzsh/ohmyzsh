@@ -103,7 +103,7 @@ EOF
 function _omz::pr::clean {
     (
         set -e
-        cd -q "$ZSH"
+        builtin cd -q "$ZSH"
 
         _omz::log info "removing all Oh My Zsh Pull Request branches..."
         command git branch --list 'ohmyzsh/pull-*' | while read branch; do
@@ -126,7 +126,7 @@ function _omz::pr::test {
 
     # Save current git HEAD
     local branch
-    branch=$(cd -q "$ZSH"; git symbolic-ref --short HEAD) || {
+    branch=$(builtin cd -q "$ZSH"; git symbolic-ref --short HEAD) || {
         _omz::log error "error when getting the current git branch. Aborting..."
         return 1
     }
@@ -136,7 +136,7 @@ function _omz::pr::test {
     # If any of these operations fail, undo the changes made
     (
         set -e
-        cd -q "$ZSH"
+        builtin cd -q "$ZSH"
 
         # Get the ohmyzsh git remote
         command git remote -v | while read remote url _; do
@@ -185,7 +185,7 @@ function _omz::pr::test {
 
     (
         set -e
-        cd -q "$ZSH"
+        builtin cd -q "$ZSH"
 
         command git checkout "$branch" -- || {
             _omz::log error "could not go back to the previous branch ('$branch')."
