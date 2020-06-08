@@ -42,8 +42,13 @@ function reboot-shell {
   exec "$SHELL"
 }
 
+function cabal-list {
+  echo "DUCSGS >>> cabal cabal://2836d9c5a5971490b930b271b35bb86bcfff3937f46e8bd8980586f2015f1111";
+}
+
 function mcclowes {
   echo "editZSH - Edit zshrc config";
   echo "mcclowes-react-scripts < project name : new-project > - create new react project using mcclowes-scripts create react app config";
   echo "reboot-shell- reboot shell";
+  exho "calab-list - list cabal servers";
 }

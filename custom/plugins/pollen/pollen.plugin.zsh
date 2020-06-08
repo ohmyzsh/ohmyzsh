@@ -22,6 +22,12 @@ function pollen-clean-build {
   docker-compose down && bin/bootstrap
 }
 
+## clean build
+function pollen-clean-build2 {
+  docker-compose down && npm run bootstrap
+}
+
+
 ## really clean build
 function pollen-really-clean-build {
   docker-compose down && bin/setup && bin/bootstrap
@@ -35,6 +41,19 @@ function pollen-phoenix-arise {
 ## serve styleguide
 function pollen-styleguide {
   styleguide_docs/bin/server
+}
+
+## setup e2e
+function pollen-setup-e2e {
+  docker-compose down && bin/server-e2e
+}
+
+function pollen-run-tests-all {
+  ./e2e/bin/test --staging
+}
+
+function pollen-deploy-branch-to-staging {
+  bin/deploy --envname ${1} --services=phoenix_ui,ambassador_api,ambassador_ui,gateway_api,auth_ui --confirm
 }
 
 function pollen-gco-jira {
@@ -66,14 +85,18 @@ function pollen-clear-virtual-env {
 }
 
 function pollen {
-  echo "pollen-clean-build - docker-compose down && bin/bootstrap"
-  echo "pollen-clear-virtual-env - delete the .virtualenv folders in all dirs"
+  echo "pollen-clean-build - docker-compose down && bin/bootstrap";
+  echo "pollen-clean-build2 - docker-compose down && npm run bootstrap";
+  echo "pollen-clear-virtual-env - delete the .virtualenv folders in all dirs";
   echo "pollen-dummy-data - create demo data";
   echo "pollen-gco-jira - Checkout a branch in the format required to correspond to a Jira issue";
   echo "pollen-git-commit-jira - Commit to a branch in the format required to correspond to a Jira issue";
-  echo "pollen-phoenix-arise - run FE"
-  echo "pollen-really-clean-build - bin/setup"
-  echo "pollen-reset-dummy-data - delete then re-create dummy data"
+  echo "pollen-phoenix-arise - run FE";
+  echo "pollen-really-clean-build - bin/setup";
+  echo "pollen-reset-dummy-data - delete then re-create dummy data";
   echo "pollen-server-up - spin up pollen server";
-  echo "pollen-styleguide - run styleguide server"
+  echo "pollen-styleguide - run styleguide server";
+  echo "pollen-setup-e2e - docker-compose down && bin/server-e2e";
+  echo "pollen-run-tests-all - runs tests";
+  echo "pollen-deploy-branch-to-staging {x}- pushes local branch to a branch, x";
 }
