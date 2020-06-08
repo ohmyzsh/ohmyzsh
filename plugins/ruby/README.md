@@ -18,3 +18,14 @@ plugins=(... ruby)
 | gin   | `gem install`                          | Install a gem into the local repository              |
 | gun   | `gem uninstall`                        | Uninstall gems from the local repository             |
 | gli   | `gem list`                             | Display gems installed locally                       |
+| gi    | `gem info`                             | Show information for the given gem                   |
+| giall | `gem info --all`                        | Display all gem versions                             |
+| gca   | `gem cert --add`                       | Add a trusted certificate                            |
+| gcr   | `gem cert --remove`                    | Remove a trusted certificate                         |
+| gcb   | `gem cert --build`                     | Build private key and self-signed certificate        |
+| gclup | `gem cleanup -n`                       | Do not uninstall gem                                 |
+| ggi   | `gem generate_index`                   | Generate index file for gem server                   |
+| gh    | `gem help`                             | Provide additional help                              |
+| gl    | `gem lock`                             | Generate a lockdown list of gems                     |
+| go    | `gem open`                             | Open gem source in default editor                    |
+| goe   | `gem open -e`                          | Open gem sources in preferred editor                 |
