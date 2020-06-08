@@ -122,7 +122,7 @@ These are things that could be enhanced in future revisions of the plugin.
 
 ####  Gemoji support
 
-The [gemoji project](https://github.com/github/gemoji) seems to be the de facto main source for short names and other emoji-related metadata that isn't included in the official Unicode reports. (I'm saying this just from looking at the google results for "emoji short names" and related searches. -apjanke)
+The [gemoji project](https://github.com/github/gemoji) seems to be the de facto main source for short names and other emoji-related metadata that isn't included in the official Unicode reports. (I'm saying this just from looking at the web search results for "emoji short names" and related searches. -apjanke)
 
 If this plugin is updated to provide short names, CLDR sorting data, and similar stuff, it should probably be changed to use the Gemoji project, and the `update_emoji.pl` script be rewritten in Ruby so it can use the Gemoji library directly instead of parsing its data files.
 
