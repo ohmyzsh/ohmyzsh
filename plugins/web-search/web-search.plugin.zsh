@@ -6,6 +6,7 @@ function web_search() {
   # define search engine URLS
   typeset -A urls
   urls=(
+    $ZSH_WEB_SEARCH_ENGINES
     google      "https://www.google.com/search?q="
     bing        "https://www.bing.com/search?q="
     yahoo       "https://search.yahoo.com/search?p="
@@ -25,7 +26,7 @@ function web_search() {
 
   # check whether the search engine is supported
   if [[ -z "$urls[$1]" ]]; then
-    echo "Search engine $1 not supported."
+    echo "Search engine '$1' not supported."
     return 1
   fi
 
@@ -67,3 +68,13 @@ alias youtube='web_search duckduckgo \!yt'
 alias map='web_search duckduckgo \!m'
 alias image='web_search duckduckgo \!i'
 alias ducky='web_search duckduckgo \!'
+
+# other search engine aliases
+if [[ ${#ZSH_WEB_SEARCH_ENGINES} -gt 0 ]]; then
+  typeset -A engines
+  engines=($ZSH_WEB_SEARCH_ENGINES)
+  for key in ${(k)engines}; do
+    alias "$key"="web_search $key"
+  done
+  unset engines key
+fi
