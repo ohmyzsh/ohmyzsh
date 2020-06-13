@@ -26,7 +26,7 @@ Original author: [Sorin Ionescu](https://github.com/sorin-ionescu)
 | `man-preview`   | Open a specified man page in Preview app              |
 | `showfiles`     | Show hidden files                                     |
 | `hidefiles`     | Hide the hidden files                                 |
-| `itunes`        | DEPRECATED. Use `music` from macOS Catalina on        |
+| `itunes`        | _DEPRECATED_. Use `music` from macOS Catalina on      |
 | `music`         | Control Apple Music. Use `music -h` for usage details |
 | `spotify`       | Control Spotify and search by artist, album, track…   |
 | `rmdsstore`     | Remove .DS\_Store files recursively in a directory    |
