@@ -120,3 +120,51 @@ EOF
   esac
   osascript -e "tell application \"$APP_NAME\" to $opt"
 }
+
+function _music() {
+  local app_name
+  case "$words[1]" in
+    itunes) app_name="iTunes" ;;
+    music|*) app_name="Music" ;;
+  esac
+
+  local -a cmds subcmds
+  cmds=(
+    "launch:Launch the ${app_name} app"
+    "play:Play ${app_name}"
+    "pause:Pause ${app_name}"
+    "stop:Stop ${app_name}"
+    "rewind:Rewind ${app_name}"
+    "resume:Resume ${app_name}"
+    "quit:Quit ${app_name}"
+    "mute:Mute the ${app_name} app"
+    "unmute:Unmute the ${app_name} app"
+    "next:Skip to the next song"
+    "previous:Skip to the previous song"
+    "vol:Change the volume"
+    "playlist:Play a specific playlist"
+    {playing,status}":Show what song is currently playing"
+    {shuf,shuff,shuffle}":Set shuffle mode"
+    {-h,--help}":Show usage"
+  )
+
+  if (( CURRENT == 2 )); then
+    _describe 'command' cmds
+  elif (( CURRENT == 3 )); then
+    case "$words[2]" in
+      vol) subcmds=( 'up:Raise the volume' 'down:Lower the volume' )
+        _describe 'command' subcmds ;;
+      shuf|shuff|shuffle) subcmds=('on:Switch on shuffle mode' 'off:Switch off shuffle mode' 'toggle:Toggle shuffle mode (default)')
+        _describe 'command' subcmds ;;
+    esac
+  elif (( CURRENT == 4 )); then
+    case "$words[2]" in
+      playlist) subcmds=('play:Play the playlist (default)' 'stop:Stop the playlist')
+        _describe 'command' subcmds ;;
+    esac
+  fi
+
+  return 0
+}
+
+compdef _music music itunes
