@@ -1,10 +1,10 @@
 #!/usr/bin/env zsh
 
-function itunes music() {
-  local APP_NAME=Music
+function music itunes() {
+  local APP_NAME=Music sw_vers=$(sw_vers -productVersion 2>/dev/null)
 
   autoload is-at-least
-  if is-at-least 10.15 $(sw_vers -productVersion); then
+  if [[ -z "$sw_vers" ]] || is-at-least 10.15 $sw_vers; then
     if [[ $0 = itunes ]]; then
       echo >&2 The itunes function name is deprecated. Use \'music\' instead.
       return 1
@@ -14,7 +14,7 @@ function itunes music() {
   fi
 
   local opt=$1 playlist=$2
-  shift
+  (( $# > 0 )) && shift
   case "$opt" in
     launch|play|pause|stop|rewind|resume|quit)
       ;;
