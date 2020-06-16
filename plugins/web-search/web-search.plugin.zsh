@@ -6,6 +6,7 @@ function web_search() {
   # define search engine URLS
   typeset -A urls
   urls=(
+    $ZSH_WEB_SEARCH_ENGINES
     google      "https://www.google.com/search?q="
     bing        "https://www.bing.com/search?q="
     yahoo       "https://search.yahoo.com/search?p="
@@ -20,11 +21,13 @@ function web_search() {
     givero      "https://www.givero.com/search?q="
     stackoverflow  "https://stackoverflow.com/search?q="
     wolframalpha   "https://www.wolframalpha.com/input/?i="
+    archive     "https://web.archive.org/web/*/"
+    scholar        "https://scholar.google.com/scholar?q="
   )
 
   # check whether the search engine is supported
   if [[ -z "$urls[$1]" ]]; then
-    echo "Search engine $1 not supported."
+    echo "Search engine '$1' not supported."
     return 1
   fi
 
@@ -57,6 +60,8 @@ alias qwant='web_search qwant'
 alias givero='web_search givero'
 alias stackoverflow='web_search stackoverflow'
 alias wolframalpha='web_search wolframalpha'
+alias archive='web_search archive'
+alias scholar='web_search scholar'
 
 #add your own !bang searches here
 alias wiki='web_search duckduckgo \!w'
@@ -65,3 +70,13 @@ alias youtube='web_search duckduckgo \!yt'
 alias map='web_search duckduckgo \!m'
 alias image='web_search duckduckgo \!i'
 alias ducky='web_search duckduckgo \!'
+
+# other search engine aliases
+if [[ ${#ZSH_WEB_SEARCH_ENGINES} -gt 0 ]]; then
+  typeset -A engines
+  engines=($ZSH_WEB_SEARCH_ENGINES)
+  for key in ${(k)engines}; do
+    alias "$key"="web_search $key"
+  done
+  unset engines key
+fi

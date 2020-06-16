@@ -3,7 +3,6 @@
 # Pressing enter in a git directory runs `git status`
 # in other directories `ls`
 magic-enter () {
-
   # If commands are not already set, use the defaults
   [ -z "$MAGIC_ENTER_GIT_COMMAND" ] && MAGIC_ENTER_GIT_COMMAND="git status -u ."
   [ -z "$MAGIC_ENTER_OTHER_COMMAND" ] && MAGIC_ENTER_OTHER_COMMAND="ls -lh ."
@@ -20,5 +19,9 @@ magic-enter () {
     zle accept-line
   fi
 }
+
 zle -N magic-enter
-bindkey "^M" magic-enter
+
+bindkey -M emacs "^M" magic-enter
+bindkey -M vicmd "^M" magic-enter
+bindkey -M viins "^M" magic-enter

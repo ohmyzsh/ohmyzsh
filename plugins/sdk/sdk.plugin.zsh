@@ -1,84 +1,58 @@
+#!/usr/bin/env zsh
+
 ### SDKMAN Autocomplete for Oh My Zsh
 
-# This is the output from sdkman. All the these options are supported at the
-# moment.
-
-# Usage: sdk <command> [candidate] [version]
-#        sdk offline <enable|disable>
-#
-#    commands:
-#        install   or i    <candidate> [version] [local-path]
-#        uninstall or rm   <candidate> <version>
-#        list      or ls   [candidate]
-#        use       or u    <candidate> <version>
-#        default   or d    <candidate> [version]
-#        current   or c    [candidate]
-#        upgrade   or ug   [candidate]
-#        version   or v
-#        broadcast or b
-#        help      or h
-#        offline           [enable|disable]
-#        selfupdate        [force]
-#        update
-#        flush             <broadcast|archives|temp>
-#
-#    candidate  :  the SDK to install: groovy, scala, grails, gradle, kotlin, etc.
-#                  use list command for comprehensive list of candidates
-#                  eg: $ sdk list
-#    version    :  where optional, defaults to latest stable if not provided
-#                  eg: $ sdk install groovy
-#    local-path :  optional path to an existing local installation
-#                  eg: $ sdk install groovy 2.4.13-local /opt/groovy-2.4.13
-
-local _sdk_commands=(
-    install     i
-    uninstall   rm
-    list        ls
-    use         u
-    default     d
-    current     c
-    upgrade     ug
-    version     v
-    broadcast   b
-    help        h
-    offline
-    selfupdate
-    update
-    flush
-)
-
-_listInstalledVersions() {
-  __sdkman_build_version_csv $1 | sed -e "s/,/ /g"
-}
-
-_listInstallableVersions() {
-  # Remove local (+) and installed (*) versions from the list
-  __sdkman_list_versions $1 | sed -e '/^[^ ]/d;s/[+*] [^ ]\+//g;s/>//g'
-}
-
-_listAllVersion() {
-  # Remove (*), (+), and (>) characters from the list
-  __sdkman_list_versions $1 | sed -e '/^[^ ]/d;s/[*+>] //g'
-}
-
-_sdk () {
-  case $CURRENT in
-    2)  compadd -- $_sdk_commands ;;
-    3)  case "$words[2]" in
-          i|install|rm|uninstall|ls|list|u|use|d|default|c|current|ug|upgrade)
-                      compadd -- $SDKMAN_CANDIDATES ;;
-          offline)    compadd -- enable disable ;;
-          selfupdate) compadd -- force ;;
-          flush)      compadd -- broadcast archives temp ;;
-        esac
-        ;;
-    4)  case "$words[2]" in
-          rm|uninstall|d|default) compadd -- $(_listInstalledVersions $words[3]) ;;
-          i|install)              compadd -- $(_listInstallableVersions $words[3]) ;;
-          u|use)                  compadd -- $(_listAllVersion $words[3]) ;;
-        esac
-        ;;
-  esac
+_sdk() {
+	case "${CURRENT}" in
+	2)
+		compadd -X $'Commands:\n' -- "${${(Mk)functions[@]:#__sdk_*}[@]#__sdk_}"
+		compadd -n rm
+		;;
+	3)
+		case "${words[2]}" in
+		l|ls|list|i|install)
+			compadd -X $'Candidates:\n' -- "${SDKMAN_CANDIDATES[@]}"
+			;;
+		ug|upgrade|h|home|c|current|u|use|d|default|rm|uninstall)
+			compadd -X $'Installed Candidates:\n' -- "${${(u)${(f)$(find -L -- "${SDKMAN_CANDIDATES_DIR}" -mindepth 2 -maxdepth 2 -type d)}[@]:h}[@]:t}"
+			;;
+		e|env)
+			compadd init
+			;;
+		offline)
+			compadd enable disable
+			;;
+		selfupdate)
+			compadd force
+			;;
+		flush)
+			compadd archives broadcast temp version
+			;;
+		esac
+		;;
+	4)
+		case "${words[2]}" in
+		i|install)
+			setopt localoptions kshglob
+			if [[ "${words[3]}" == 'java' ]]; then
+				compadd -X $'Installable Versions of java:\n' -- "${${${${${(f)$(__sdkman_list_versions "${words[3]}")}[@]:5:-4}[@]:#* | (local only|installed ) | *}[@]##* |            | }[@]%%+( )}"
+			else
+				compadd -X "Installable Versions of ${words[3]}:"$'\n' -- "${${(z)${(M)${(f)${$(__sdkman_list_versions "${words[3]}")//[*+>]+( )/-}}[@]:# *}[@]}[@]:#-*}"
+			fi
+			;;
+		h|home|u|use|d|default|rm|uninstall)
+			compadd -X "Installed Versions of ${words[3]}:"$'\n' -- "${${(f)$(find -L -- "${SDKMAN_CANDIDATES_DIR}/${words[3]}" -mindepth 1 -maxdepth 1 -type d -not -name 'current')}[@]:t}"
+			;;
+		esac
+		;;
+	5)
+		case "${words[2]}" in
+		i|install)
+			_files -X "Path to Local Installation of ${words[3]} ${words[4]}:"$'\n' -/
+			;;
+		esac
+		;;
+	esac
 }
 
 compdef _sdk sdk

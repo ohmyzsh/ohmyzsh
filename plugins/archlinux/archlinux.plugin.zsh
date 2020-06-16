@@ -208,7 +208,7 @@ function pacmansignkeys() {
 if (( $+commands[xdg-open] )); then
   function pacweb() {
     pkg="$1"
-    infos="$(pacman -Si "$pkg")"
+    infos="$(LANG=C pacman -Si "$pkg")"
     if [[ -z "$infos" ]]; then
       return
     fi

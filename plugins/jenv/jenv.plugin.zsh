@@ -1,4 +1,4 @@
-jenvdirs=("$HOME/.jenv" "/usr/local" "/usr/local/jenv" "/opt/jenv")
+jenvdirs=("$HOME/.jenv" "/usr/local/bin/jenv" "/usr/local/jenv" "/opt/jenv")
 
 FOUND_JENV=0
 for jenvdir in $jenvdirs; do

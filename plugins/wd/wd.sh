@@ -36,11 +36,11 @@ wd_yesorno()
         read -r answer
 
         case ${answer:=${default}} in
-            Y|y|YES|yes|Yes )
+            "Y"|"y"|"YES"|"yes"|"Yes" )
                 RETVAL=${yes_RETVAL} && \
                     break
                 ;;
-            N|n|NO|no|No )
+            "N"|"n"|"NO"|"no"|"No" )
                 RETVAL=${no_RETVAL} && \
                     break
                 ;;
@@ -75,6 +75,8 @@ wd_print_usage()
 Usage: wd [command] [point]
 
 Commands:
+    <point>         Warps to the directory specified by the warp point
+    <point> <path>  Warps to the directory specified by the warp point with path appended
     add <point>     Adds the current working directory to your warp points
     add             Adds the current working directory to your warp points with current directory's name
     add! <point>    Overwrites existing warp point
@@ -182,6 +184,8 @@ wd_add()
         wd_remove $point > /dev/null
         printf "%q:%s\n" "${point}" "${PWD/#$HOME/~}" >> $WD_CONFIG
 
+        wd_export_static_named_directories
+
         wd_print_msg $WD_GREEN "Warp point added"
 
         # override exit code in case wd_remove did not remove any points
@@ -203,8 +207,9 @@ wd_remove()
 
     if [[ ${points[$point]} != "" ]]
     then
-        local config_tmp=$WD_CONFIG.tmp
-        if sed -n "/^${point}:.*$/!p" $WD_CONFIG > $config_tmp && mv $config_tmp $WD_CONFIG
+        local config_tmp=$(mktemp "${TMPDIR:-/tmp}/wd.XXXXXXXXXX")
+        # Copy and delete in two steps in order to preserve symlinks
+        if sed -n "/^${point}:.*$/!p" $WD_CONFIG > $config_tmp && cp $config_tmp $WD_CONFIG && rm $config_tmp
         then
             wd_print_msg $WD_GREEN "Warp point removed"
         else
@@ -334,7 +339,16 @@ wd_clean() {
     fi
 }
 
-local WD_CONFIG=$HOME/.warprc
+wd_export_static_named_directories() {
+  if [[ -z $WD_SKIP_EXPORT ]]
+  then
+    grep '^[0-9a-zA-Z_-]\+:' "$WD_CONFIG" | sed -e "s,~,$HOME," -e 's/:/=/' | while read warpdir ; do
+	    hash -d "$warpdir"
+    done
+  fi
+}
+
+local WD_CONFIG=${WD_CONFIG:-$HOME/.warprc}
 local WD_QUIET=0
 local WD_EXIT_CODE=0
 local WD_DEBUG=0
@@ -364,6 +378,8 @@ if [ ! -e $WD_CONFIG ]
 then
     # if not, create config file
     touch $WD_CONFIG
+else
+    wd_export_static_named_directories
 fi
 
 # load warp points
@@ -396,52 +412,57 @@ then
 else
 
     # parse rest of options
-    for o
+    local wd_o
+    for wd_o
     do
-        case "$o"
+        case "$wd_o"
             in
-            -a|--add|add)
+            "-a"|"--add"|"add")
                 wd_add false $2
                 break
                 ;;
-            -a!|--add!|add!)
+            "-a!"|"--add!"|"add!")
                 wd_add true $2
                 break
                 ;;
-            -r|--remove|rm)
+            "-e"|"export")
+                wd_export_static_named_directories
+                break
+                ;;
+            "-r"|"--remove"|"rm")
                 wd_remove $2
                 break
                 ;;
-            -l|list)
+            "-l"|"list")
                 wd_list_all
                 break
                 ;;
-            -ls|ls)
+            "-ls"|"ls")
                 wd_ls $2
                 break
                 ;;
-            -p|--path|path)
+            "-p"|"--path"|"path")
                 wd_path $2
                 break
                 ;;
-            -h|--help|help)
+            "-h"|"--help"|"help")
                 wd_print_usage
                 break
                 ;;
-            -s|--show|show)
+            "-s"|"--show"|"show")
                 wd_show $2
                 break
                 ;;
-            -c|--clean|clean)
+            "-c"|"--clean"|"clean")
                 wd_clean false
                 break
                 ;;
-            -c!|--clean!|clean!)
+            "-c!"|"--clean!"|"clean!")
                 wd_clean true
                 break
                 ;;
             *)
-                wd_warp $o $2
+                wd_warp $wd_o $2
                 break
                 ;;
             --)
@@ -466,6 +487,8 @@ unset wd_print_usage
 unset wd_alt_config
 unset wd_quiet_mode
 unset wd_print_version
+unset wd_export_static_named_directories
+unset wd_o
 
 unset args
 unset points

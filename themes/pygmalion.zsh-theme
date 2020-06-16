@@ -22,12 +22,7 @@ prompt_pygmalion_precmd(){
   local exp_nocolor="$(print -P \"$base_prompt_nocolor$gitinfo_nocolor$post_prompt_nocolor\")"
   local prompt_length=${#exp_nocolor}
 
-  local nl=""
-
-  if [[ $prompt_length -gt 40 ]]; then
-    nl=$'\n%{\r%}';
-  fi
-  PROMPT="$base_prompt$gitinfo$nl$post_prompt"
+  PROMPT="${base_prompt}${gitinfo}${post_prompt}"
 }
 
 prompt_setup_pygmalion

@@ -31,12 +31,12 @@ function aws_change_access_key() {
 
   echo Insert the credentials when asked.
   asp "$1" || return 1
-  aws iam create-access-key
-  aws configure --profile "$1"
+  AWS_PAGER="" aws iam create-access-key
+  AWS_PAGER="" aws configure --profile "$1"
 
   echo You can now safely delete the old access key running \`aws iam delete-access-key --access-key-id ID\`
   echo Your current keys are:
-  aws iam list-access-keys
+  AWS_PAGER="" aws iam list-access-keys
 }
 
 function aws_profiles() {

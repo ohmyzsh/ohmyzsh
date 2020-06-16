@@ -27,7 +27,7 @@ function lstheme {
         # Show themes inside $ZSH_CUSTOM (in any subfolder)
         # Strip $ZSH_CUSTOM/themes/ and $ZSH_CUSTOM/ from the name, so that it matches
         # the value that should be written in $ZSH_THEME to load the theme.
-        print -l "$ZSH_CUSTOM"/**/*.zsh-theme(.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::) \
+        print -l "$ZSH_CUSTOM"/**/*.zsh-theme(.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::)
 
         # Show themes inside $ZSH, stripping the head of the path.
         print -l "$ZSH"/themes/*.zsh-theme(.N:t:r)

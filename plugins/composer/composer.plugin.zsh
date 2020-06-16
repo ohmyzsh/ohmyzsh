@@ -39,17 +39,29 @@ alias crm='composer remove'
 alias ci='composer install'
 alias ccp='composer create-project'
 alias cdu='composer dump-autoload'
-alias cdo='composer dump-autoload --optimize-autoloader'
+alias cdo='composer dump-autoload -o'
 alias cgu='composer global update'
 alias cgr='composer global require'
 alias cgrm='composer global remove'
+alias co='composer outdated'
+alias cod='composer outdated --direct'
 
 # install composer in the current directory
 alias cget='curl -s https://getcomposer.org/installer | php'
 
 # Add Composer's global binaries to PATH, using Composer if available.
 if (( $+commands[composer] )); then
-  export PATH=$PATH:$(composer global config bin-dir --absolute 2>/dev/null)
+    _retrieve_cache composer
+
+    if [[ -z $__composer_bin_dir ]]; then
+        __composer_bin_dir=$(composer global config bin-dir --absolute 2>/dev/null)
+        _store_cache composer __composer_bin_dir
+    fi
+
+    # Add Composer's global binaries to PATH
+    export PATH="$PATH:$__composer_bin_dir"
+
+    unset __composer_bin_dir
 else
   [ -d $HOME/.composer/vendor/bin ] && export PATH=$PATH:$HOME/.composer/vendor/bin
   [ -d $HOME/.config/composer/vendor/bin ] && export PATH=$PATH:$HOME/.config/composer/vendor/bin

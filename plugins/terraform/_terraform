@@ -77,7 +77,8 @@ __fmt() {
         '-list=[(true) List files whose formatting differs (always false if using STDIN)]' \
         '-write=[(true) Write result to source file instead of STDOUT (always false if using STDIN or -check)]' \
         '-diff=[(false) Display diffs of formatting changes]' \
-        '-check=[(false) Check if the input is formatted. Exit status will be 0 if all input is properly formatted and non-zero otherwise.]'
+        '-check=[(false) Check if the input is formatted. Exit status will be 0 if all input is properly formatted and non-zero otherwise.]' \
+        '-recursive=[(false) Also process files in subdirectories. By default, only the given directory (or current directory) is processed.]'
 }
 
 __get() {

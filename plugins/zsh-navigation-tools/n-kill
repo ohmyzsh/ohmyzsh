@@ -42,8 +42,8 @@ NLIST_NONSELECTABLE_ELEMENTS=( 1 )
 
 type ps 2>/dev/null 1>&2 || { echo >&2 "Error: \`ps' not found"; return 1 }
 
-case "$OSTYPE" in
-    cygwin*) list=( `command ps -Wa` )  ;;
+case "$(uname)" in
+    CYGWIN*) list=( `command ps -Wa` )  ;;
     *) list=( `command ps -o pid,uid,command -A` ) ;;
 esac
 
