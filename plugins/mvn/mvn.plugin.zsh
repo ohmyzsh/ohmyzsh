@@ -61,6 +61,7 @@ alias mvndt='mvn dependency:tree'
 alias mvne='mvn eclipse:eclipse'
 alias mvnjetty='mvn jetty:run'
 alias mvnp='mvn package'
+alias mvnqdev='mvn quarkus:dev'
 alias mvns='mvn site'
 alias mvnsrc='mvn dependency:sources'
 alias mvnt='mvn test'
@@ -183,6 +184,8 @@ function listMavenCompletions {
 		tomee:run tomee:run-war tomee:run-war-only tomee:stop tomee:deploy tomee:undeploy
 		# spring-boot
 		spring-boot:run spring-boot:repackage
+		# quarkus
+		quarkus:dev quarkus:list-extensions quarkus:add-extension quarkus:add-extensions quarkus:generate-config quarkus:help
 		# exec
 		exec:exec exec:java
 		# versions
