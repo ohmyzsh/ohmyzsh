@@ -1,5 +1,7 @@
 # CloudApp plugin
 
+## The CloudApp API is deprecated, so the plugin will be removed shortly
+
 [CloudApp](https://www.getcloudapp.com) brings screen recording, screenshots, and GIF creation to the cloud, in an easy-to-use enterprise-level app. The CloudApp plugin allows you to upload a file to your CloadApp account from the command line.
 
 To use it, add `cloudapp` to the plugins array of your `~/.zshrc` file:
