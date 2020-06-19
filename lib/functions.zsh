@@ -3,11 +3,12 @@ function zsh_stats() {
 }
 
 function uninstall_oh_my_zsh() {
-  env ZSH=$ZSH sh $ZSH/tools/uninstall.sh
+  env ZSH="$ZSH" sh "$ZSH/tools/uninstall.sh"
 }
 
 function upgrade_oh_my_zsh() {
-  env ZSH=$ZSH sh $ZSH/tools/upgrade.sh
+  env ZSH="$ZSH" sh "$ZSH/tools/upgrade.sh"
+  command rm -rf "$ZSH/log/update.lock"
 }
 
 function take() {
@@ -88,7 +89,7 @@ function default() {
 #    0 if the env variable exists, 3 if it was set
 #
 function env_default() {
-    (( ${${(@f):-$(typeset +xg)}[(I)$1]} )) && return 0
+    [[ ${parameters[$1]} = *-export* ]] && return 0
     export "$1=$2" && return 3
 }
 

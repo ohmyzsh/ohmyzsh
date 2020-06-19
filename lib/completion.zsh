@@ -41,8 +41,8 @@ fi
 zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-directories
 
 # Use caching so that commands like apt and dpkg complete are useable
-zstyle ':completion::complete:*' use-cache 1
-zstyle ':completion::complete:*' cache-path $ZSH_CACHE_DIR
+zstyle ':completion:*' use-cache yes
+zstyle ':completion:*' cache-path $ZSH_CACHE_DIR
 
 # Don't complete uninteresting users
 zstyle ':completion:*:*:*:users' ignored-patterns \
@@ -71,3 +71,6 @@ if [[ $COMPLETION_WAITING_DOTS = true ]]; then
   zle -N expand-or-complete-with-dots
   bindkey "^I" expand-or-complete-with-dots
 fi
+
+# automatically load bash completion functions
+autoload -U +X bashcompinit && bashcompinit

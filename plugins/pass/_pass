@@ -18,6 +18,14 @@
 #   PASSWORD_STORE_DIR=$HOME/work/pass pass $@
 # }
 
+# If you use multiple repositories, you can configure completion like this:
+#
+# compdef _pass workpass
+# zstyle ':completion::complete:workpass::' prefix "$HOME/work/pass"
+# workpass() {
+#   PASSWORD_STORE_DIR=$HOME/work/pass pass $@
+# }
+
 
 _pass () {
 	local cmd
