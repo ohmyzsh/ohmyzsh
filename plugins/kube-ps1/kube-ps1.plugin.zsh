@@ -27,6 +27,7 @@ KUBE_PS1_SYMBOL_ENABLE="${KUBE_PS1_SYMBOL_ENABLE:-true}"
 KUBE_PS1_SYMBOL_DEFAULT=${KUBE_PS1_SYMBOL_DEFAULT:-$'\u2388 '}
 KUBE_PS1_SYMBOL_USE_IMG="${KUBE_PS1_SYMBOL_USE_IMG:-false}"
 KUBE_PS1_NS_ENABLE="${KUBE_PS1_NS_ENABLE:-true}"
+KUBE_PS1_USER_ENABLE="${KUBE_PS1_USER_ENABLE:-true}"
 KUBE_PS1_CONTEXT_ENABLE="${KUBE_PS1_CONTEXT_ENABLE:-true}"
 KUBE_PS1_PREFIX="${KUBE_PS1_PREFIX-(}"
 KUBE_PS1_SEPARATOR="${KUBE_PS1_SEPARATOR-|}"
@@ -35,12 +36,14 @@ KUBE_PS1_SUFFIX="${KUBE_PS1_SUFFIX-)}"
 KUBE_PS1_SYMBOL_COLOR="${KUBE_PS1_SYMBOL_COLOR-blue}"
 KUBE_PS1_CTX_COLOR="${KUBE_PS1_CTX_COLOR-red}"
 KUBE_PS1_NS_COLOR="${KUBE_PS1_NS_COLOR-cyan}"
+KUBE_PS1_USER_COLOR="${KUBE_PS1_SYMBOL_COLOR-blue}"
 KUBE_PS1_BG_COLOR="${KUBE_PS1_BG_COLOR}"
 KUBE_PS1_KUBECONFIG_CACHE="${KUBECONFIG}"
 KUBE_PS1_DISABLE_PATH="${HOME}/.kube/kube-ps1/disabled"
 KUBE_PS1_LAST_TIME=0
 KUBE_PS1_CLUSTER_FUNCTION="${KUBE_PS1_CLUSTER_FUNCTION}"
 KUBE_PS1_NAMESPACE_FUNCTION="${KUBE_PS1_NAMESPACE_FUNCTION}"
+KUBE_PS1_USER_FUNCTION="${KUBE_PS1_USER_FUNCTION}"
 
 # Determine our shell
 if [ "${ZSH_VERSION-}" ]; then
@@ -205,6 +208,7 @@ _kube_ps1_update_cache() {
     # No ability to fetch context/namespace; display N/A.
     KUBE_PS1_CONTEXT="BINARY-N/A"
     KUBE_PS1_NAMESPACE="N/A"
+    KUBE_PS1_USER="N/A"
     return
   fi
 
@@ -246,9 +250,23 @@ _kube_ps1_get_ns() {
     KUBE_PS1_NAMESPACE="$(${KUBE_PS1_BINARY} config view --minify --output 'jsonpath={..namespace}' 2>/dev/null)"
     # Set namespace to 'default' if it is not defined
     KUBE_PS1_NAMESPACE="${KUBE_PS1_NAMESPACE:-default}"
+    #KUBE_PS1_NAMESPACE="$(${KUBE_PS1_BINARY} config view --minify --output 'jsonpath={..users[0].name}' 2>/dev/null):${KUBE_PS1_NAMESPACE}"
 
     if [[ ! -z "${KUBE_PS1_NAMESPACE_FUNCTION}" ]]; then
         KUBE_PS1_NAMESPACE=$($KUBE_PS1_NAMESPACE_FUNCTION $KUBE_PS1_NAMESPACE)
+    fi
+  fi
+}
+
+
+_kube_ps1_get_user() {
+  if [[ "${KUBE_PS1_USER_ENABLE}" == true ]]; then
+    KUBE_PS1_USER="$(${KUBE_PS1_BINARY} config view --minify --output 'jsonpath={..users[0].name}' 2>/dev/null)"
+    # Set namespace to 'default' if it is not defined
+    KUBE_PS1_USER="${KUBE_PS1_USER:-N/A}"
+
+    if [[ ! -z "${KUBE_PS1_USER_FUNCTION}" ]]; then
+        KUBE_PS1_USER=$($KUBE_PS1_USER_FUNCTION $KUBE_PS1_USER)
     fi
   fi
 }
@@ -266,6 +284,7 @@ _kube_ps1_get_context_ns() {
   fi
 
   _kube_ps1_get_context
+  _kube_ps1_get_user
   _kube_ps1_get_ns
 }
 
@@ -351,6 +370,14 @@ kube_ps1() {
   # Context
   if [[ "${KUBE_PS1_CONTEXT_ENABLE}" == true ]]; then
     KUBE_PS1+="$(_kube_ps1_color_fg $KUBE_PS1_CTX_COLOR)${KUBE_PS1_CONTEXT}${KUBE_PS1_RESET_COLOR}"
+  fi
+
+  # User
+  if [[ "${KUBE_PS1_USER_ENABLE}" == true ]]; then
+    if [[ -n "${KUBE_PS1_DIVIDER}" ]] && [[ "${KUBE_PS1_CONTEXT_ENABLE}" == true ]]; then
+      KUBE_PS1+="${KUBE_PS1_DIVIDER}"
+    fi
+    KUBE_PS1+="$(_kube_ps1_color_fg ${KUBE_PS1_USER_COLOR})${KUBE_PS1_USER}${KUBE_PS1_RESET_COLOR}"
   fi
 
   # Namespace
