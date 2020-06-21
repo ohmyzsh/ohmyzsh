@@ -1,5 +1,5 @@
 # Sunrise theme for oh-my-zsh
-# Intended to be used with Solarized: http://ethanschoonover.com/solarized
+# Intended to be used with Solarized: https://ethanschoonover.com/solarized
 
 # Color shortcuts
 R=$fg_no_bold[red]

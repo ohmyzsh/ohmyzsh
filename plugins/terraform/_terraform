@@ -1,6 +1,6 @@
 #compdef terraform
 
-local -a _terraform_cmds
+local -a _terraform_cmds opt_args
 _terraform_cmds=(
     'apply:Builds or changes infrastructure'
     'console:Interactive console for Terraform interpolations'
@@ -16,12 +16,20 @@ _terraform_cmds=(
     'push:Upload this Terraform module to Atlas to run'
     'refresh:Update local state file against real resources'
     'show:Inspect Terraform state or plan'
+    'state:Advanced state management'
     'taint:Manually mark a resource for recreation'
     'untaint:Manually unmark a resource as tainted'
     'validate:Validates the Terraform files'
     'version:Prints the Terraform version'
     'workspace:Workspace management'
+    '0.12upgrade:Rewrites pre-0.12 module source code for v0.12'
 )
+
+__012upgrade() {
+  _arguments \
+    '-yes[Skip the initial introduction messages and interactive confirmation. This can be used to run this command in batch from a script.]' \
+    '-force[ Override the heuristic that attempts to detect if a configuration is already written for v0.12 or later.  Some of the transformations made by this command are not idempotent, so re-running against the same module may change the meanings expressions in the module.]'
+}
 
 __apply() {
     _arguments \
@@ -35,7 +43,7 @@ __apply() {
         '-refresh=[(true) Update state prior to checking for differences. This has no effect if a plan file is given to apply.]' \
         '-state=[(terraform.tfstate) Path to read and save state (unless state-out is specified).]' \
         '-state-out=[(path) Path to write state to that is different than "-state". This can be used to preserve the old state.]' \
-        '-target=[(resource) Resource to target. Operation will be limited to this resource and its dependencies. This flag can be used multiple times.]' \
+        '-target=[(resource) Resource to target. Operation will be limited to this resource and its dependencies. This flag can be used multiple times.]:target:__statelist' \
         '-var[("foo=bar") Set a variable in the Terraform configuration. This flag can be set multiple times.]' \
         '-var-file=[(foo) Set variables in the Terraform configuration from a file. If "terraform.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]'
 }
@@ -59,7 +67,7 @@ __destroy() {
         '-refresh=[(true) Update state prior to checking for differences. This has no effect if a plan file is given to apply.]' \
         '-state=[(terraform.tfstate) Path to read and save state (unless state-out is specified).]' \
         '-state-out=[(path) Path to write state to that is different than "-state". This can be used to preserve the old state.]' \
-        '-target=[(resource) Resource to target. Operation will be limited to this resource and its dependencies. This flag can be used multiple times.]' \
+        '-target=[(resource) Resource to target. Operation will be limited to this resource and its dependencies. This flag can be used multiple times.]:target:__statelist' \
         '-var[("foo=bar") Set a variable in the Terraform configuration. This flag can be set multiple times.]' \
         '-var-file=[(foo) Set variables in the Terraform configuration from a file. If "terraform.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]'
 }
@@ -69,7 +77,8 @@ __fmt() {
         '-list=[(true) List files whose formatting differs (always false if using STDIN)]' \
         '-write=[(true) Write result to source file instead of STDOUT (always false if using STDIN or -check)]' \
         '-diff=[(false) Display diffs of formatting changes]' \
-        '-check=[(false) Check if the input is formatted. Exit status will be 0 if all input is properly formatted and non-zero otherwise.]'
+        '-check=[(false) Check if the input is formatted. Exit status will be 0 if all input is properly formatted and non-zero otherwise.]' \
+        '-recursive=[(false) Also process files in subdirectories. By default, only the given directory (or current directory) is processed.]'
 }
 
 __get() {
@@ -140,7 +149,7 @@ __plan() {
         '-parallelism=[(10) Limit the number of concurrent operations.]' \
         '-refresh=[(true) Update state prior to checking for differences.]' \
         '-state=[(statefile) Path to a Terraform state file to use to look up Terraform-managed resources. By default it will use the state "terraform.tfstate" if it exists.]' \
-        '-target=[(resource) Resource to target. Operation will be limited to this resource and its dependencies. This flag can be used multiple times.]' \
+        '-target=[(resource) Resource to target. Operation will be limited to this resource and its dependencies. This flag can be used multiple times.]:target:__statelist' \
         '-var[("foo=bar") Set a variable in the Terraform configuration. This flag can be set multiple times.]' \
         '-var-file=[(foo) Set variables in the Terraform configuration from a file. If "terraform.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]' \
 }
@@ -172,7 +181,7 @@ __refresh() {
         '-no-color[If specified, output will not contain any color.]' \
         '-state=[(path) Path to read and save state (unless state-out is specified). Defaults to "terraform.tfstate".]' \
         '-state-out=[(path) Path to write state to that is different than "-state". This can be used to preserve the old state.]' \
-        '-target=[(resource) A Resource Address to target. Operation will be limited to this resource and its dependencies. This flag can be used multiple times.]' \
+        '-target=[(resource) A Resource Address to target. Operation will be limited to this resource and its dependencies. This flag can be used multiple times.]:target:__statelist' \
         '-var[("foo=bar") Set a variable in the Terraform configuration. This flag can be set multiple times.]' \
         '-var-file=[(path) Set variables in the Terraform configuration from a file. If "terraform.tfvars" is present, it will be automatically loaded if this flag is not specified.]'
 }
@@ -181,6 +190,70 @@ __show() {
     _arguments \
         '-module-depth=[(n) The maximum depth to expand modules. By default this is zero, which will not expand modules at all.]' \
         '-no-color[If specified, output will not contain any color.]'
+}
+
+__state() {
+    local -a __state_cmds
+    __state_cmds=(
+      'list:List resources in the state'
+      'mv:Move an item in the state'
+      'pull:Pull current state and output to stdout'
+      'push:Update remote state from a local state file'
+      'rm:Remove instances from the state' 
+      'show:Show a resource in the state'
+    )
+    _describe -t state "state commands" __state_cmds
+}
+
+__state_list() {
+  _arguments \
+    '-state=[(path) Path to a Terraform state file to use to look up Terraform-managed resources. By default it will use the state "terraform.tfstate" if it exists.]' \
+    '-id=[(id) Filters the results to include only instances whose resource types have an attribute named id whose value equals the given id string.]' \
+    "*:address:__statelist" 
+}
+
+__state_mv() {
+  _arguments \
+    "-dry-run[If set, prints out what would've been moved but doesn't actually move anything.]" \
+    "-backup=[(path) Path where Terraform should write the backup for the original state. This can't be disabled. If not set, Terraform will write it to the same path as the statefile with a \".backup\" extension.]:file:_files" \
+    "-backup-out=[(path) Path where Terraform should write the backup for the destination state. This can't be disabled. If not set, Terraform will write it to the same path as the destination state file with a backup extension. This only needs to be specified if -state-out is set to a different path than -state.]:file:_files" \
+    "-lock=[(true|false) Lock the state files when locking is supported.]:lock:(true false)" \
+    "-lock-timeout=[(seconds) Duration to retry a state lock.]" \
+    '-state=[(path) Path to the source state file. Defaults to the configured backend, or "terraform.tfstate"]:file:_files' \
+    "-state-out=[(path) Path to the destination state file to write to. If this isn't specified, the source state file will be used. This can be a new or existing path.]:file:_files" \
+    "::" \
+    ":source:__statelist" \
+    ":destination: " 
+}
+
+__state_push() {
+  _arguments \
+    "-force[Write the state even if lineages don't match or the remote serial is higher.]" \
+    '-lock=[(true|false) Lock the state file when locking is supported.]:lock:(true false)' \
+    "-lock-timeout=[(seconds) Duration to retry a state lock.]" \
+    "::" \
+    ":destination:_files"
+}
+
+__state_rm() {
+  _arguments \
+    "-dry-run[If set, prints out what would've been removed but doesn't actually remove anything.]" \
+    "-backup=[(path) Path where Terraform should write the backup for the original state.]:file:_files" \
+    "-lock=[(true|false) Lock the state files when locking is supported.]:lock:(true false)" \
+    "-lock-timeout=[(seconds) Duration to retry a state lock.]" \
+    '-state=[(path) Path to the state file to update. Defaults to the current workspace state.]:file:_files' \
+    "*:address:__statelist" 
+}
+
+
+__state_show() {
+  _arguments \
+    '-state=[(path) Path to a Terraform state file to use to look up Terraform-managed resources. By default it will use the state "terraform.tfstate" if it exists.]' \
+    "*:address:__statelist" 
+}
+
+__statelist() {
+  compadd $(terraform state list $opt_args[-state])
 }
 
 __taint() {
@@ -192,7 +265,8 @@ __taint() {
         '-module=[(path)  The module path where the resource lives. By default this will be root. Child modules can be specified by names. Ex. "consul" or "consul.vpc" (nested modules).]' \
         '-no-color[If specified, output will not contain any color.]' \
         '-state=[(path) Path to read and save state (unless state-out is  specified). Defaults to "terraform.tfstate".]' \
-        '-state-out=[(path) Path to write updated state file. By default, the "-state" path will be used.]'
+        '-state-out=[(path) Path to write updated state file. By default, the "-state" path will be used.]' \
+        "*:address:__statelist" 
 }
 
 __untaint() {
@@ -236,6 +310,8 @@ fi
 
 local -a _command_args
 case "$words[1]" in
+  0.12upgrade)
+    __012upgrade ;;
   apply)
     __apply ;;
   console)
@@ -264,6 +340,14 @@ case "$words[1]" in
     __refresh ;;
   show)
     __show ;;
+  state)
+    test $CURRENT -lt 3 && __state
+    [[ $words[2] = "list" ]] && __state_list
+    [[ $words[2] = "mv" ]] && __state_mv
+    [[ $words[2] = "push" ]] && __state_push
+    [[ $words[2] = "rm" ]] && __state_rm
+    [[ $words[2] = "show" ]] && __state_show
+    ;;
   taint)
     __taint ;;
   untaint)

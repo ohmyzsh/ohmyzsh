@@ -4,6 +4,7 @@ The mvn plugin provides many [useful aliases](#aliases) as well as completion fo
 the [Apache Maven](https://maven.apache.org/) command (`mvn`).
 
 Enable it by adding `mvn` to the plugins array in your zshrc file:
+
 ```zsh
 plugins=(... mvn)
 ```
@@ -55,4 +56,4 @@ has colored output, so this function will be soon removed from the plugin.
 ### Known bugs
 
 It has a bug where it will swallow mvn prompts for user input, _e.g._ when using
-`archetype:generate`. See [#5052](https://github.com/robbyrussell/oh-my-zsh/issues/5052).
+`archetype:generate`. See [#5052](https://github.com/ohmyzsh/ohmyzsh/issues/5052).

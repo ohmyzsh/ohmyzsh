@@ -149,7 +149,7 @@ alias pacmir='sudo pacman -Syy'
 alias paclsorphans='sudo pacman -Qdt'
 alias pacrmorphans='sudo pacman -Rs $(pacman -Qtdq)'
 alias pacfileupg='sudo pacman -Fy'
-alias pacfiles='pacman -Fs'
+alias pacfiles='pacman -F'
 alias pacls='pacman -Ql'
 alias pacown='pacman -Qo'
 
@@ -208,7 +208,7 @@ function pacmansignkeys() {
 if (( $+commands[xdg-open] )); then
   function pacweb() {
     pkg="$1"
-    infos="$(pacman -Si "$pkg")"
+    infos="$(LANG=C pacman -Si "$pkg")"
     if [[ -z "$infos" ]]; then
       return
     fi

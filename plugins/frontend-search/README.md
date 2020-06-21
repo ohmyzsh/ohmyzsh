@@ -52,6 +52,7 @@ Available search contexts are:
 | mdn           | `https://developer.mozilla.org/search?q=`                                   |
 | nodejs        | `https://www.google.com/search?as_sitesearch=nodejs.org/en/docs/&as_q=`     |
 | npmjs         | `https://www.npmjs.com/search?q=`                                           |
+| packagephobia | `https://packagephobia.now.sh/result?p=`                                    |
 | qunit         | `https://api.qunitjs.com/?s=`                                               |
 | reactjs       | `https://google.com/search?as_sitesearch=facebook.github.io/react&as_q=`    |
 | smacss        | `https://google.com/search?as_sitesearch=smacss.com&as_q=`                  |
@@ -61,6 +62,10 @@ Available search contexts are:
 | vuejs         | `https://www.google.com/search?as_sitesearch=vuejs.org&as_q=`               |
 
 If you want to have another context, open an Issue and tell us!
+
+## Fallback search behaviour
+
+The plugin will use Google as a fallback if the docs site for a search context does not have a search function. You can set the fallback search engine to DuckDuckGo by setting  `FRONTEND_SEARCH_FALLBACK='duckduckgo'` in your `~/.zshrc` file before Oh My Zsh is sourced.
 
 ## Author
 
