@@ -12,7 +12,11 @@ Once installed, your terminal shell will become the talk of the town _or your mo
 
 Finally, you'll begin to get the sort of attention that you have always felt you deserved. ...or maybe you'll use the time that you're saving to start flossing more often. 😬
 
-To learn more, visit [ohmyz.sh](https://ohmyz.sh) and follow [@ohmyzsh](https://twitter.com/ohmyzsh) on Twitter.
+To learn more, visit [ohmyz.sh](https://ohmyz.sh), follow [@ohmyzsh](https://twitter.com/ohmyzsh) on Twitter, and/or join us on Discord.
+
+[![CI](https://github.com/ohmyzsh/ohmyzsh/workflows/CI/badge.svg)](https://github.com/ohmyzsh/ohmyzsh/actions?query=workflow%3ACI)
+[![Follow @ohmyzsh](https://img.shields.io/twitter/follow/ohmyzsh?label=Follow+@ohmyzsh&style=flat)](https://twitter.com/intent/follow?screen_name=ohmyzsh)
+[![Discord server](https://img.shields.io/discord/642496866407284746)](https://discord.gg/ohmyzsh)
 
 ## About this ___Oh My Zsh___ fork
 This repository is a fork of [robbyrussell repository](https://github.com/robbyrussell/oh-my-zsh).
@@ -23,13 +27,10 @@ This fork of _Oh My Zsh_ has been modified in the following ways:
 ## Getting Started
 
 ### Prerequisites
-
-__Disclaimer:__ _Oh My Zsh works best on macOS and Linux._
-
-* Unix-like operating system (macOS or Linux)
-* [Zsh](https://www.zsh.org) should be installed (v4.3.9 or more recent). If not pre-installed (`zsh --version` to confirm), check the following instruction here: [Installing ZSH](https://github.com/bluekrow/oh-my-zsh/wiki/Installing-ZSH)
+* A Unix-like operating system: macOS, Linux, BSD. On Windows: WSL is preferred, but cygwin or msys also mostly work.
+* [Zsh](https://www.zsh.org) should be installed (v4.3.9 or more recent). If not pre-installed (run `zsh --version` to confirm), check the following instructions here: [Installing ZSH](https://github.com/bluekrow/oh-my-zsh/wiki/Installing-ZSH)
 * `curl` or `wget` should be installed
-* `git` should be installed
+* `git` should be installed (recommended v1.7.2 or higher)
 
 ### Basic Installation
 
@@ -137,6 +138,16 @@ ZSH_THEME_RANDOM_CANDIDATES=(
 )
 ```
 
+If you only know which themes you don't like, you can add them similarly to a blacklist:
+
+```shell
+ZSH_THEME_RANDOM_BLACKLIST=(pygmalion tjkirch_mod)
+```
+
+### FAQ
+
+If you have some more questions or issues, you might find a solution in our [FAQ](https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ).
+
 ## Advanced Topics
 
 If you're the type that likes to get their hands dirty, these sections might resonate.
@@ -165,14 +176,14 @@ flag `--unattended` to the `install.sh` script. This will have the effect of not
 the default shell, and also won't run `zsh` when the installation has finished.
 
 ```shell
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" "" --unattended
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 ```
 
 #### Installing from a forked repository
 
 The install script also accepts these variables to allow installation of a different repository:
 
-- `REPO` (default: `robbyrussell/oh-my-zsh`): this takes the form of `owner/repository`. If you set
+- `REPO` (default: `ohmyzsh/ohmyzsh`): this takes the form of `owner/repository`. If you set
   this variable, the installer will look for a repository at `https://github.com/{owner}/{repository}`.
 
 - `REMOTE` (default: `https://github.com/${REPO}.git`): this is the full URL of the git repository

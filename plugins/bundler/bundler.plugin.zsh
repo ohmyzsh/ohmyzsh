@@ -1,3 +1,4 @@
+alias ba="bundle add"
 alias be="bundle exec"
 alias bl="bundle list"
 alias bp="bundle package"
@@ -6,6 +7,7 @@ alias bout="bundle outdated"
 alias bu="bundle update"
 alias bi="bundle_install"
 alias bcn="bundle clean"
+alias bck="bundle check"
 
 bundled_commands=(
   annotate
@@ -27,6 +29,7 @@ bundled_commands=(
   rainbows
   rake
   rspec
+  rubocop
   shotgun
   sidekiq
   spec
@@ -81,7 +84,7 @@ _bundler-installed() {
 _within-bundled-project() {
   local check_dir="$PWD"
   while [ "$check_dir" != "/" ]; do
-    [ -f "$check_dir/Gemfile" ] && return
+    [ -f "$check_dir/Gemfile" -o -f "$check_dir/gems.rb" ] && return
     check_dir="$(dirname $check_dir)"
   done
   false
@@ -94,7 +97,7 @@ _binstubbed() {
 _run-with-bundler() {
   if _bundler-installed && _within-bundled-project; then
     if _binstubbed $1; then
-      ./bin/$@
+      ./bin/${^^@}
     else
       bundle exec $@
     fi
