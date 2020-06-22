@@ -271,11 +271,13 @@ main() {
 
 		Before your scream Oh My Zsh! please look over the ~/.zshrc file to select plugins, themes, and options.
 
-		Also follow us on Twitter @ https://twitter.com/ohmyzsh
+		Follow us on Twitter @ https://twitter.com/ohmyzsh
 
-		p.s. Get stickers, shirts, coffee mugs and other swag at https://shop.planetargon.com/collections/oh-my-zsh
+		p.s. Join our Discord server: https://discord.gg/ohmyzsh
+
+		p.p.s. Get stickers, shirts, coffee mugs and other swag at https://shop.planetargon.com/collections/oh-my-zsh
 		
-		p.p.s. Join our official Discord server: https://discord.gg/ohmyzsh
+		
 
 	EOF
 	printf "$RESET"
