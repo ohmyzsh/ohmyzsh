@@ -4,6 +4,7 @@ alias bob='php artisan bob::build'
 
 # Development
 alias pas='php artisan serve'
+alias pakg='php artisan key:generate'
 
 # Database
 alias pam='php artisan migrate'
