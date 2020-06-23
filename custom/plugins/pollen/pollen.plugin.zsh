@@ -2,17 +2,31 @@
 
 ## Spin up needed server components
 function pollen-server-up {
-  bin/server --exclude pollen_ui phoenix_ui ambassador_ui customer_ui calvin_ui    
+  #bin/server --exclude pollen_ui phoenix_ui ambassador_ui customer_ui calvin_ui avocado_ui  
+  bin/server ambassador_api phoenix_ui notification_service gateway_api           
+}
+
+function pollen-server-up-phoenix {
+  pollen-server-up-pollen
+}
+
+function pollen-server-up-pollen {
+  bin/server ambassador_api phoenix_ui notification_service gateway_api pollen_ui
 }
 
 ## seed demo data
-function pollen-dummy-data {
+function pollen-demo-data {
   # bin/demo-data
   ambassador_api/bin/demo-data
 }
 
+## seed demo data
+function pollen-demo-data-anonymized {
+  bin/get-anonymized-production-data
+}
+
 ## reset demo data
-function pollen-reset-dummy-data {
+function pollen-reset-demo-data {
   #bin/reset_db && bin/demo-data
   bin/reset_db && ambassador_api/bin/demo-data
 }
@@ -26,7 +40,6 @@ function pollen-clean-build {
 function pollen-clean-build2 {
   docker-compose down && npm run bootstrap
 }
-
 
 ## really clean build
 function pollen-really-clean-build {
@@ -88,15 +101,18 @@ function pollen {
   echo "pollen-clean-build - docker-compose down && bin/bootstrap";
   echo "pollen-clean-build2 - docker-compose down && npm run bootstrap";
   echo "pollen-clear-virtual-env - delete the .virtualenv folders in all dirs";
-  echo "pollen-dummy-data - create demo data";
+  echo "pollen-demo-data - create demo data";
+  echo "pollen-demo-data-anonymized - create demo data from anonymized data";
+  echo "pollen-deploy-branch-to-staging {x}- pushes local branch to a branch, x";
   echo "pollen-gco-jira - Checkout a branch in the format required to correspond to a Jira issue";
   echo "pollen-git-commit-jira - Commit to a branch in the format required to correspond to a Jira issue";
   echo "pollen-phoenix-arise - run FE";
   echo "pollen-really-clean-build - bin/setup";
-  echo "pollen-reset-dummy-data - delete then re-create dummy data";
-  echo "pollen-server-up - spin up pollen server";
-  echo "pollen-styleguide - run styleguide server";
-  echo "pollen-setup-e2e - docker-compose down && bin/server-e2e";
+  echo "pollen-reset-demo-data - delete then re-create demo data";
   echo "pollen-run-tests-all - runs tests";
-  echo "pollen-deploy-branch-to-staging {x}- pushes local branch to a branch, x";
+  echo "pollen-server-up - spin up pollen server";
+  echo "pollen-server-up-phoenix - server config for phoenix";
+  echo "pollen-server-up-pollen - server config for pollen";
+  echo "pollen-setup-e2e - docker-compose down && bin/server-e2e";
+  echo "pollen-styleguide - run styleguide server";
 }
