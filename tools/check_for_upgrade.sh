@@ -75,8 +75,15 @@ function update_ohmyzsh() {
         while read -t -k 1 option; do true; done
         [[ "$option" != ($'\n'|"") ]] && echo
 
-        echo -n "[oh-my-zsh] Would you like to update? [Y/n] "
-        read -r -k 1 option
+        # reset option to avoid autoaccept if enter was the last character
+        option=""
+
+        while [[ ! $option =~ [nNyY$'\n'] ]]
+        do
+            [[ "$option" != ($'\n'|"") ]] && echo
+            echo -n "[oh-my-zsh] Would you like to update? [Y/n] "
+            read -r -k 1 option
+        done
         [[ "$option" != $'\n' ]] && echo
         case "$option" in
             [nN]) update_last-updated_file ;;
