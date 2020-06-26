@@ -39,6 +39,10 @@ function move-bb-to-github {
   fi;
 }
 
+# Deleting consecutive commit from a branch
+# https://www.clock.co.uk/insight/deleting-a-git-commit
+# git rebase --onto $branchName~$firstCommitToRemove $branchName~$firstCommitToKeep $branchName
+
 #Change git commit - 
 function change-commit-time {
   GIT_COMMITTER_DATE="Thu Oct 10 11:36:13 2019 +0100" git commit --amend --no-edit --date "Thu Oct 10 11:36:13 2019 +0100"
