@@ -43,7 +43,7 @@ function vi-bindkey () {
 
 # use custom accept-line widget to update $VI_KEYMAP
 vi-bindkey vicmd viins visual -- vi-accept-line                      '^J'
-vi-bindkey vicmd viins viusal -- vi-accept-line                      '^M'
+vi-bindkey vicmd viins visual -- vi-accept-line                      '^M'
 
 # allow v to edit the command line (standard behaviour)
 autoload -Uz edit-command-line
