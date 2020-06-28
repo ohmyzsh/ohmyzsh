@@ -80,7 +80,7 @@ function update_ohmyzsh() {
         [[ "$option" != $'\n' ]] && echo
         case "$option" in
             [yY$'\n']) update_ohmyzsh ;;
-            *) update_last-updated_file ;;
+            [nN]) update_last-updated_file ;;
         esac
     fi
 }
