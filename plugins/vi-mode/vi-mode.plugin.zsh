@@ -19,31 +19,79 @@ zle -N vi-accept-line
 
 bindkey -v
 
+# Helper function to bind keys in multiple vi modes
+function vi-bindkey () {
+  # Parse argumets
+  local -a modes
+  local command
+  while (( $# )); do
+    [[ $1 = "--" ]] && break
+    modes+=$1
+    shift
+  done
+  shift
+  command=$1
+  shift
+
+  # Execute commands
+  for c in $@; do
+    for m in $modes; do
+      bindkey -M $m "$c" $command
+    done
+  done
+}
+
 # use custom accept-line widget to update $VI_KEYMAP
-bindkey -M vicmd '^J' vi-accept-line
-bindkey -M vicmd '^M' vi-accept-line
+vi-bindkey vicmd viins visual -- vi-accept-line                      '^J'
+vi-bindkey vicmd viins viusal -- vi-accept-line                      '^M'
 
 # allow v to edit the command line (standard behaviour)
 autoload -Uz edit-command-line
 zle -N edit-command-line
-bindkey -M vicmd 'v' edit-command-line
+vi-bindkey vicmd visual       -- edit-command-line                   '^v'
+
+# allow for  visual mode based selection
+vi-bindkey vicmd              -- visual-mode                         'v'
 
 # allow ctrl-p, ctrl-n for navigate history (standard behaviour)
-bindkey '^P' up-history
-bindkey '^N' down-history
+vi-bindkey vicmd viins        -- up-history                          '^P'
+vi-bindkey vicmd viins        -- down-history                        '^N'
 
-# allow ctrl-h, ctrl-w, ctrl-? for char and word deletion (standard behaviour)
-bindkey '^?' backward-delete-char
-bindkey '^h' backward-delete-char
-bindkey '^w' backward-kill-word
+# allow ctrl-h, ctrl-w, ctrl-?, ctrl-u for char, word, line deletion (standard behaviour)
+vi-bindkey vicmd viins        -- backward-delete-char                '^?'
+vi-bindkey vicmd viins        -- backward-delete-char                '^h'
+vi-bindkey vicmd viins        -- backward-kill-word                  '^w'
+vi-bindkey vicmd viins        -- backward-kill-line                  '^u'
 
 # allow ctrl-r and ctrl-s to search the history
-bindkey '^r' history-incremental-search-backward
-bindkey '^s' history-incremental-search-forward
+vi-bindkey vicmd viins        -- history-incremental-search-backward '^r'
+vi-bindkey vicmd viins        -- history-incremental-search-forward  '^s'
 
 # allow ctrl-a and ctrl-e to move to beginning/end of line
-bindkey '^a' beginning-of-line
-bindkey '^e' end-of-line
+vi-bindkey vicmd viins visual -- beginning-of-line                   '^a'
+vi-bindkey vicmd viins visual -- end-of-line                         '^e'
+
+# surround on text objects
+autoload -U select-bracketed
+zle -N select-bracketed
+autoload -U select-quoted
+zle -N select-quoted
+autoload -Uz surround
+zle -N delete-surround surround
+zle -N change-surround surround
+zle -N add-surround surround
+
+for m in visual viopp; do
+  for c in {a,i}${(s..)^:-'()[]{}<>bB'}; do
+    vi-bindkey $m             -- select-bracketed                    $c
+  done
+  for c in {a,i}{\',\",\`}; do
+    vi-bindkey $m             -- select-quoted                       $c
+  done
+done
+vi-bindkey vicmd              -- change-surround                     cs
+vi-bindkey vicmd              -- delete-surround                     ds
+vi-bindkey vicmd              -- add-surround                        ys
 
 # if mode indicator wasn't setup by theme, define default
 if [[ "$MODE_INDICATOR" == "" ]]; then
