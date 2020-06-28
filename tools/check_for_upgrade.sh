@@ -79,8 +79,8 @@ function update_ohmyzsh() {
         read -r -k 1 option
         [[ "$option" != $'\n' ]] && echo
         case "$option" in
+            [yY$'\n']) update_ohmyzsh ;;
             [nN]) update_last-updated_file ;;
-            *) update_ohmyzsh ;;
         esac
     fi
 }
