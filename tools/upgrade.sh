@@ -62,7 +62,8 @@ then
   printf '%s\____/%s_/ /_/ %s /_/ /_/ /_/%s\__, / %s   /___/%s____/%s_/ /_/  %s\n' $RB_RED $RB_ORANGE $RB_YELLOW $RB_GREEN $RB_BLUE $RB_INDIGO $RB_VIOLET $RB_RESET
   printf '%s    %s        %s           %s /____/ %s       %s     %s          %s\n' $RB_RED $RB_ORANGE $RB_YELLOW $RB_GREEN $RB_BLUE $RB_INDIGO $RB_VIOLET $RB_RESET
   printf "${BLUE}%s\n" "Hooray! Oh My Zsh has been updated and/or is at the current version."
-  printf "${BLUE}${BOLD}%s${RESET}\n" "To keep up on the latest news and updates, follow us on twitter: https://twitter.com/ohmyzsh"
+  printf "${BLUE}${BOLD}%s${RESET}\n" "To keep up on the latest news and updates, follow us on Twitter: https://twitter.com/ohmyzsh"
+  printf "${BLUE}${BOLD}%s${RESET}\n" "Want to get involved in the community? Join our Discord: https://discord.gg/ohmyzsh"
   printf "${BLUE}${BOLD}%s${RESET}\n" "Get your Oh My Zsh swag at: https://shop.planetargon.com/collections/oh-my-zsh"
 else
   printf "${RED}%s${RESET}\n" 'There was an error updating. Try again later?'
