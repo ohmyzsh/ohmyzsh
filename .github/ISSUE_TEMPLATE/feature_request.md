@@ -20,7 +20,7 @@ A description of what the problem is. Ex. I'm always frustrated when [...]
 A description of what you want to happen. [...]
 
 **Describe alternatives you've considered**
-A description of any alternative solutions or features you've considered. This can also include other plugins, themes and aliases.
+A description of any alternative solutions or features you've considered. This can also include other plugins or themes.
 
 **Additional context**
 Add any other context, screenshots or discord conversations about the feature request here. Also if you have any PRs related to this issue that are already open that you would like us to look at.
