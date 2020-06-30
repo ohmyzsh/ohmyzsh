@@ -154,7 +154,7 @@ the installer accepts (these settings are also documented at the top of the inst
 
 #### Custom Directory
 
-The default location is `~/.oh-my-zsh` (hidden in your home directory but can access by `cd ~/.oh-my-zsh`)
+The default location is `~/.oh-my-zsh` (hidden in your home directory, you can access it with `cd ~/.oh-my-zsh`)
 
 If you'd like to change the install directory with the `ZSH` environment variable, either by running
 `export ZSH=/your/path` before installing, or by setting it before the end of the install pipeline
