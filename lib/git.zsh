@@ -14,10 +14,10 @@ function parse_git_dirty() {
   local -a FLAGS
   FLAGS=('--porcelain')
   if [[ "$(command git config --get oh-my-zsh.hide-dirty)" != "1" ]]; then
-    if [[ "$DISABLE_UNTRACKED_FILES_DIRTY" == "true" ]]; then
+    if [[ "${DISABLE_UNTRACKED_FILES_DIRTY:-}" == "true" ]]; then
       FLAGS+='--untracked-files=no'
     fi
-    case "$GIT_STATUS_IGNORE_SUBMODULES" in
+    case "${GIT_STATUS_IGNORE_SUBMODULES:-}" in
       git)
         # let git decide (this respects per-repo config in .gitmodules)
         ;;
