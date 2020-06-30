@@ -45,7 +45,7 @@ current_time() {
 
 # Return status of the last command
 return_status() {
-   echo "%(?..%{$FG[001]%}out %?)%{$reset_color%}"
+   echo "%(?..%F{001}out %?)%{$reset_color%}"
 }
 
 # Set the git_prompt_info text
