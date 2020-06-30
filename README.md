@@ -82,7 +82,7 @@ plugins=(
 )
 ```
 
-_Note that the plugins are separated by whitespace (spacebar/enterkey). **Do not** use commas between them or it will break._
+_Note that the plugins are separated by whitespace (spaces, tabs, new lines...). **Do not** use commas between them or it will break._
 
 #### Using Plugins
 
