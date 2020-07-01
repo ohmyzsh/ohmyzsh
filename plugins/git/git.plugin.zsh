@@ -259,6 +259,7 @@ alias gupv='git pull --rebase -v'
 alias gupa='git pull --rebase --autostash'
 alias gupav='git pull --rebase --autostash -v'
 alias glum='git pull upstream master'
+alias glu = 'git pull upstream "$(git_current_branch)"'
 
 alias gwch='git whatchanged -p --abbrev-commit --pretty=medium'
 alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign -m "--wip-- [skip ci]"'
