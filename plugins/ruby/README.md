@@ -19,7 +19,7 @@ plugins=(... ruby)
 | gun   | `gem uninstall`                        | Uninstall gems from the local repository             |
 | gli   | `gem list`                             | Display gems installed locally                       |
 | gi    | `gem info`                             | Show information for the given gem                   |
-| giall | `gem info --all`                        | Display all gem versions                             |
+| giall | `gem info --all`                       | Display all gem versions                             |
 | gca   | `gem cert --add`                       | Add a trusted certificate                            |
 | gcr   | `gem cert --remove`                    | Remove a trusted certificate                         |
 | gcb   | `gem cert --build`                     | Build private key and self-signed certificate        |
