@@ -124,6 +124,7 @@ plugins=(... git)
 | grbd                 | git rebase develop                                                                                                               |
 | grbi                 | git rebase -i                                                                                                                    |
 | grbm                 | git rebase master                                                                                                                |
+| grbom                | git rebase origin/master                               |
 | grbs                 | git rebase --skip                                                                                                                |
 | grev                 | git revert                                                                                                                       |
 | grh                  | git reset                                                                                                                        |
