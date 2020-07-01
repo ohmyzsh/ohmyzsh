@@ -269,7 +269,7 @@ main() {
 		                        /____/                       ....is now installed!
 
 
-		Before your scream Oh My Zsh! please look over the ~/.zshrc file to select plugins, themes, and options.
+		Before you scream Oh My Zsh! please look over the ~/.zshrc file to select plugins, themes, and options.
 
 		• Follow us on Twitter: https://twitter.com/ohmyzsh
 		• Join our Discord server: https://discord.gg/ohmyzsh
