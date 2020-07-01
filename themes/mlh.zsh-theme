@@ -13,16 +13,16 @@
 
 # To easily discover colors and their codes, type `spectrum_ls` in the terminal
 
-export AT_SYMBOL=" @ "
-export IN_SYMBOL=" in "
-export ON_SYMBOL=" on "
-export SYMBOL="$"
+AT_SYMBOL=" @ "
+IN_SYMBOL=" in "
+ON_SYMBOL=" on "
+SYMBOL="$"
 
-export USER_COLOR="%{$FG[001]%}"
-export DEVICE_COLOR="%{$FG[033]%}"
-export DIR_COLOR="%{$FG[220]%}"
-export BRANCH_COLOR="%{$FG[001]%}"
-export TIME_COLOR="%{$FG[033]%}"
+USER_COLOR="%F{001}"
+DEVICE_COLOR="%F{033}"
+DIR_COLOR="%F{220}"
+BRANCH_COLOR="%F{001}"
+TIME_COLOR="%F{033}"
 
 username() {
    echo "$USER_COLOR%n%{$reset_color%}"
