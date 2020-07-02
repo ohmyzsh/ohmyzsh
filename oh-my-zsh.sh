@@ -53,16 +53,19 @@ fi
 
 # Save the location of the current completion dump file.
 if [ -z "$ZSH_COMPDUMP" ]; then
-  ZSH_COMPDUMP="${ZDOTDIR:-${HOME}}/.zcompdump-${SHORT_HOST}-${ZSH_VERSION}"
+  ZSH_COMPDUMP="${ZDOTDIR:-${HOME}}/.zcompdump"
 fi
 
 # Construct zcompdump OMZ metadata
-zcompdump_revision="#omz revision: $(builtin cd -q "$ZSH"; git rev-parse HEAD 2>/dev/null)"
-zcompdump_fpath="#omz fpath: $fpath"
+zcompdump_meta="\
+#omz host: $SHORT_HOST
+#omz zsh version: $ZSH_VERSION
+#omz revision: $(builtin cd -q "$ZSH"; git rev-parse HEAD 2>/dev/null)
+#omz fpath: $fpath"
 
 # Delete the zcompdump file if OMZ zcompdump metadata changed
-if ! command grep -q -Fx "$zcompdump_revision" "$ZSH_COMPDUMP" 2>/dev/null \
-   || ! command grep -q -Fx "$zcompdump_fpath" "$ZSH_COMPDUMP" 2>/dev/null; then
+if [ 0$(command grep -c -Fx "$zcompdump_meta" "$ZSH_COMPDUMP" 2>/dev/null) -ne \
+   $(command wc -l <<<"$zcompdump_meta") ]; then
   command rm -f "$ZSH_COMPDUMP"
   zcompdump_refresh=1
 fi
@@ -84,12 +87,11 @@ if (( $zcompdump_refresh )); then
   # See https://github.com/ohmyzsh/ohmyzsh/commit/dd1a7269#commitcomment-39003489
   tee -a "$ZSH_COMPDUMP" &>/dev/null <<EOF
 
-$zcompdump_revision
-$zcompdump_fpath
+$zcompdump_meta
 EOF
 fi
 
-unset zcompdump_revision zcompdump_fpath zcompdump_refresh
+unset zcompdump_meta zcompdump_refresh
 
 
 # Load all of the config files in ~/oh-my-zsh that end in .zsh
