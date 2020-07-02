@@ -86,7 +86,7 @@ _Note that the plugins are separated by whitespace (spaces, tabs, new lines...).
 
 #### Using Plugins
 
-Most plugins (should! we're working on this) include a __README__, which documents how to use them. This README should show the aliases and extra goodies that are inclued in that particular plugin.
+Each plugin includes a __README__, documenting it. This README should show the aliases (if the plugin adds any) and extra goodies that are inclued in that particular plugin.
 
 ### Themes
 
@@ -145,7 +145,7 @@ If you have some more questions or issues, you might find a solution in our [FAQ
 
 ## Advanced Topics
 
-If you're the type that likes to get their hands dirty (and break stuff), these sections might resonate.
+If you're the type that likes to get their hands dirty, these sections might resonate.
 
 ### Advanced Installation
 
