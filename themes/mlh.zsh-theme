@@ -25,32 +25,32 @@ BRANCH_COLOR="%F{001}"
 TIME_COLOR="%F{033}"
 
 username() {
-   echo "$USER_COLOR%n%{$reset_color%}"
+    echo "$USER_COLOR%n%f"
 }
 
 # Returns device name 
 device() {
-   echo "$DEVICE_COLOR%m%{$reset_color%}"
+    echo "$DEVICE_COLOR%m%f"
 }
 
 # The current directory
 directory() {
-   echo "$DIR_COLOR%1~%{$reset_color%}"
+    echo "$DIR_COLOR%1~%f"
 }
 
 # Current time with milliseconds
 current_time() {
-   echo "$TIME_COLOR%*%{$reset_color%}"
+    echo "$TIME_COLOR%*%f"
 }
 
 # Return status of the last command
 return_status() {
-   echo "%(?..%F{001}out %?)%{$reset_color%}"
+    echo "%(?..%F{001}out %?)%f"
 }
 
 # Set the git_prompt_info text
 ZSH_THEME_GIT_PROMPT_PREFIX="${ON_SYMBOL}${BRANCH_COLOR}"
-ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_SUFFIX="%f"
 ZSH_THEME_GIT_PROMPT_DIRTY=""
 ZSH_THEME_GIT_PROMPT_CLEAN=""
 
