@@ -179,6 +179,13 @@ plugins=(... git)
 | gama                 | git am --abort                                                                                                                   |
 | gamscp               | git am --show-current-patch                                                                                                      |
 
+### Main branch preference
+
+Following the recent push for removing racially-charged words from our technical vocabulary, the git plugin favors using
+a branch name other than `master`. In this case, we favor the shorter, neutral and descriptive term `main`. This means
+that any aliases and functions that previously used `master`, will use `main` if that branch exists. We do this via the
+function `git_main_branch`.
+
 ### Deprecated aliases
 
 These are aliases that have been removed, renamed, or otherwise modified in a way that may, or may not, receive further support.
@@ -201,12 +208,13 @@ These are aliases that have been removed, renamed, or otherwise modified in a wa
 
 ### Current
 
-| Command                | Description                                              |
-|:-----------------------|:---------------------------------------------------------|
-| `grename <old> <new>`  | Rename `old` branch to `new`, including in origin remote |
-| current_branch         | Return the name of the current branch                    |
-| git_current_user_name  | Returns the `user.name` config value                     |
-| git_current_user_email | Returns the `user.email` config value                    |
+| Command                | Description                                                                  |
+|:-----------------------|:-----------------------------------------------------------------------------|
+| `grename <old> <new>`  | Rename `old` branch to `new`, including in origin remote                     |
+| current_branch         | Return the name of the current branch                                        |
+| git_current_user_name  | Returns the `user.name` config value                                         |
+| git_current_user_email | Returns the `user.email` config value                                        |
+| git_main_branch        | Returns the name of the main branch: `main` if it exists, `master` otherwise |
 
 ### Work in Progress (WIP)
 
