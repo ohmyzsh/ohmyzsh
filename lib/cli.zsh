@@ -26,6 +26,7 @@ function _omz {
     'help:Usage information'
     'plugin:Manage plugins'
     'pr:Manage Oh My Zsh Pull Requests'
+    'reload:Reload the current zsh session'
     'theme:Manage themes'
     'update:Update Oh My Zsh'
   )
@@ -159,6 +160,7 @@ Available commands:
   changelog           Print the changelog
   plugin <command>    Manage plugins
   pr     <command>    Manage Oh My Zsh Pull Requests
+  reload              Reload the current zsh session
   theme  <command>    Manage themes
   update              Update Oh My Zsh
 
@@ -596,6 +598,16 @@ function _omz::pr::test {
       return 1
     }
   )
+}
+
+function _omz::reload {
+  # Delete current completion cache
+  command rm -f $_comp_dumpfile $ZSH_COMPDUMP
+
+  # Old zsh versions don't have ZSH_ARGZERO
+  local zsh="${ZSH_ARGZERO:-${functrace[-1]%:*}}"
+  # Check whether to run a login shell
+  [[ "$zsh" = -* || -o login ]] && exec -l "${zsh#-}" || exec "$zsh"
 }
 
 function _omz::theme {
