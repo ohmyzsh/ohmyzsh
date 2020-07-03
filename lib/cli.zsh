@@ -181,6 +181,10 @@ function _omz::pr::test {
     # After testing, go back to the previous HEAD if the user wants
     _omz::log prompt "do you want to go back to the previous branch? [Y/n] "
     read -r -k 1
+
+    # If no newline entered, add a newline
+    [[ "$REPLY" != $'\n' ]] && echo
+    # If NO selected, do nothing else
     [[ "$REPLY" = [nN] ]] && return
 
     (
