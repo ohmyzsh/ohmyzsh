@@ -25,6 +25,15 @@ function work_in_progress() {
   fi
 }
 
+# Check if main exists and use instead of master
+function git_main_branch() {
+  if [[ -n "$(git branch --list main)" ]]; then
+    echo main
+  else
+    echo master
+  fi
+}
+
 #
 # Aliases
 # (sorted alphabetically)
@@ -43,7 +52,7 @@ alias gapt='git apply --3way'
 alias gb='git branch'
 alias gba='git branch -a'
 alias gbd='git branch -d'
-alias gbda='git branch --no-color --merged | command grep -vE "^(\+|\*|\s*(master|development|develop|devel|dev)\s*$)" | command xargs -n 1 git branch -d'
+alias gbda='git branch --no-color --merged | command grep -vE "^(\+|\*|\s*($(git_main_branch)|development|develop|devel|dev)\s*$)" | command xargs -n 1 git branch -d'
 alias gbD='git branch -D'
 alias gbl='git blame -b -w'
 alias gbnm='git branch --no-merged'
@@ -68,7 +77,7 @@ alias gcf='git config --list'
 alias gcl='git clone --recurse-submodules'
 alias gclean='git clean -id'
 alias gpristine='git reset --hard && git clean -dffx'
-alias gcm='git checkout master'
+alias gcm='git checkout $(git_main_branch)'
 alias gcd='git checkout develop'
 alias gcmsg='git commit -m'
 alias gco='git checkout'
@@ -160,7 +169,7 @@ alias ghh='git help'
 
 alias gignore='git update-index --assume-unchanged'
 alias gignored='git ls-files -v | grep "^[[:lower:]]"'
-alias git-svn-dcommit-push='git svn dcommit && git push github master:svntrunk'
+alias git-svn-dcommit-push='git svn dcommit && git push github $(git_main_branch):svntrunk'
 
 alias gk='\gitk --all --branches'
 alias gke='\gitk --all $(git log -g --pretty=%h)'
@@ -182,10 +191,10 @@ alias gloga='git log --oneline --decorate --graph --all'
 alias glp="_git_log_prettily"
 
 alias gm='git merge'
-alias gmom='git merge origin/master'
+alias gmom='git merge origin/$(git_main_branch)'
 alias gmt='git mergetool --no-prompt'
 alias gmtvim='git mergetool --no-prompt --tool=vimdiff'
-alias gmum='git merge upstream/master'
+alias gmum='git merge upstream/$(git_main_branch)'
 alias gma='git merge --abort'
 
 alias gp='git push'
@@ -203,7 +212,7 @@ alias grba='git rebase --abort'
 alias grbc='git rebase --continue'
 alias grbd='git rebase develop'
 alias grbi='git rebase -i'
-alias grbm='git rebase master'
+alias grbm='git rebase $(git_main_branch)'
 alias grbs='git rebase --skip'
 alias grev='git revert'
 alias grh='git reset'
@@ -258,7 +267,7 @@ alias gup='git pull --rebase'
 alias gupv='git pull --rebase -v'
 alias gupa='git pull --rebase --autostash'
 alias gupav='git pull --rebase --autostash -v'
-alias glum='git pull upstream master'
+alias glum='git pull upstream $(git_main_branch)'
 
 alias gwch='git whatchanged -p --abbrev-commit --pretty=medium'
 alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign -m "--wip-- [skip ci]"'
