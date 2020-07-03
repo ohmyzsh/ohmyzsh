@@ -11,6 +11,12 @@ function upgrade_oh_my_zsh() {
   command rm -rf "$ZSH/log/update.lock"
 }
 
+function reload_zsh() {
+  command rm -f "$ZSH_COMPDUMP"
+  # Use $SHELL if available; remove leading dash if login shell
+  [[ -n "$SHELL" ]] && exec ${SHELL#-} || exec zsh
+}
+
 function take() {
   mkdir -p $@ && cd ${@:$#}
 }
