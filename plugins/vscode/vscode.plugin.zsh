@@ -2,6 +2,7 @@
 # Authors:
 #   https://github.com/MarsiBarsi (original author)
 #   https://github.com/babakks
+#   https://github.com/SteelShot
 
 # This will pick an appropriate executable in order:
 # VSCode > VSCode Insiders > VSCodium
