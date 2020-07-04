@@ -16,7 +16,7 @@ fi
 
 # Only if a flavour of VSCode is available the aliases
 # will be available
-if ! [ -z ${VSCODE+x} ]; then
+if ! [ -z ${VSCODE+x} ] && which $VSCODE > /dev/null; then
   alias vsc="$VSCODE ."
   alias vsca="$VSCODE --add"
   alias vscd="$VSCODE --diff"
