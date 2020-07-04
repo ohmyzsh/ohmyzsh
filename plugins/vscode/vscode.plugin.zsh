@@ -28,6 +28,8 @@ _vscode-register-aliases () {
 if ! [ -z ${VSCODE+x} ] && which $VSCODE > /dev/null; then
   _vscode-register-aliases
 else
+  unset VSCODE
+
   if which code > /dev/null; then
     : ${VSCODE:=code}
   elif which code-insiders > /dev/null; then
