@@ -1,3 +1,24 @@
+// APPs DEFAULT
+# Terminal
+brew install rbenv
+brew install postgres
+psql postgres
+CREATE USER postgres SUPERUSER;
+rbenv install 1.9.3-p551
+rbenv install 2.6.3
+
+rbenv global 1.9.3-p551
+https://github.com/robbyrussell/oh-my-zsh
+brew install postgres
+
+# Install bundler
+gem install bundler -v1.9.0
+echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.zshenv
+echo 'eval "$(rbenv init -)"' >> ~/.zshenv
+echo 'source $HOME/.zshenv' >> ~/.zshrc
+exec $SHELL
+
+// SUBLIME PACKAGES AND SETTINGS
 // Enter config: Sublime Text -> Preferences -> Settings
 // Packages to install (command + shift + P): AutoFileName, TestRspec, emment, Alignment, sublimelinter, rubocop, sidebar
 
