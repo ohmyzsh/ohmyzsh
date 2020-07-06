@@ -1,19 +1,10 @@
-ZSH-Geeknote
-============
+# Geeknote plugin
 
-[Geeknote](https://github.com/VitaliyRodnenko/geeknote) plugin for oh-my-zsh.
+This plugin provides autocompletion for [Geeknote](https://github.com/VitaliyRodnenko/geeknote)
+and an alias for `geeknote` called `gn`.
 
-Plugins provides:
+To use it, add `geeknote` to the plugins array in your zshrc file:
 
-* auto completion of commands and their options
-* alias `gn`
-
-## Installation
-
-### oh-my-zsh
-This plugin is already bundled in oh-my-zsh. To enable just configure plugin definition
-
-    plugins=( ... geeknote ...)
-
-### Antigen
-Use [Antigen's](https://github.com/zsh-users/antigen) bundle command to install by adding `antigen bundle s7anley/zsh-geeknote` to your `.zshrc` along with your other plugins.
+```zsh
+plugins=( ... geeknote ...)
+```

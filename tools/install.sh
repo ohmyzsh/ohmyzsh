@@ -269,11 +269,11 @@ main() {
 		                        /____/                       ....is now installed!
 
 
-		Please look over the ~/.zshrc file to select plugins, themes, and options.
+		Before you scream Oh My Zsh! please look over the ~/.zshrc file to select plugins, themes, and options.
 
-		p.s. Follow us on https://twitter.com/ohmyzsh
-
-		p.p.s. Get stickers, shirts, and coffee mugs at https://shop.planetargon.com/collections/oh-my-zsh
+		• Follow us on Twitter: https://twitter.com/ohmyzsh
+		• Join our Discord server: https://discord.gg/ohmyzsh
+		• Get stickers, shirts, coffee mugs and other swag: https://shop.planetargon.com/collections/oh-my-zsh
 
 	EOF
 	printf "$RESET"
