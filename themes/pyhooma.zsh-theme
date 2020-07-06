@@ -3,5 +3,5 @@ PROMPT=' 🍺 $fg[blue]($fg[red]%t$fg[blue]$fg[blue] ) $fg[yellow]#$(rbenv_promp
 # git theming
 ZSH_THEME_GIT_PROMPT_PREFIX="$fg[green]("
 ZSH_THEME_GIT_PROMPT_SUFFIX=")"
-ZSH_THEME_GIT_PROMPT_CLEAN="✔"
-ZSH_THEME_GIT_PROMPT_DIRTY="✗"
+ZSH_THEME_GIT_PROMPT_CLEAN=" ✔"
+ZSH_THEME_GIT_PROMPT_DIRTY=" ✗"
