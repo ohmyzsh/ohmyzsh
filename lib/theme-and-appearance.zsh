@@ -40,7 +40,7 @@ if [[ "$DISABLE_LS_COLORS" != "true" ]]; then
 fi
 
 # enable diff color if possible.
-if diff --color . . &>/dev/null; then
+if command diff --color . . &>/dev/null; then
   alias diff='diff --color'
 fi
 
