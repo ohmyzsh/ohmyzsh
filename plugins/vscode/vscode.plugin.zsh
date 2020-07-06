@@ -5,8 +5,13 @@
 #   https://github.com/SteelShot
 
 # Verify if any manual user choice of VS Code exists first.
+if [[ -n "$VSCODE" ]] && ! which $VSCODE &>/dev/null; then
+  echo "'$VSCODE' flavour of VS Code not detected."
+  unset VSCODE
+fi
+
 # Otherwise, try to detect a flavour of VS Code.
-if [[ -z "$VSCODE" ]] || ! which $VSCODE &>/dev/null; then
+if [[ -z "$VSCODE" ]]; then
   if which code &>/dev/null; then
     VSCODE=code
   elif which code-insiders &>/dev/null; then
@@ -18,8 +23,7 @@ if [[ -z "$VSCODE" ]] || ! which $VSCODE &>/dev/null; then
   fi
 fi
 
-alias vsc="$VSCODE"
-alias vsc.="$VSCODE ."
+alias vsc="$VSCODE ."
 alias vsca="$VSCODE --add"
 alias vscd="$VSCODE --diff"
 alias vscg="$VSCODE --goto"
