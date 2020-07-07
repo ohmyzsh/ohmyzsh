@@ -23,6 +23,7 @@ function _omz {
     local -a cmds subcmds
     cmds=(
         'help:Usage information'
+        'upgrade:Upgrade Oh My Zsh'
         'pr:Commands for Oh My Zsh Pull Requests'
     )
 
@@ -48,6 +49,7 @@ Usage: omz <command> [options]
 Available commands:
 
     help                Print this help message
+    upgrade             Upgrade Oh My Zsh
     pr <command>        Commands for Oh My Zsh Pull Requests
 
 EOF
@@ -78,6 +80,11 @@ function _omz::log {
         warn) print -P "%S%F{yellow}$logname%f%s: $@" ;;
         error) print -P "%S%F{red}$logname%f%s: $@" ;;
     esac >&2
+}
+
+function _omz::upgrade {
+    trap "{ rc=\$?; rm -rf '\$ZSH/log/update.lock'; return \$rc; }" EXIT INT QUIT
+    env ZSH="$ZSH" sh "$ZSH/tools/upgrade.sh"
 }
 
 function _omz::pr {
