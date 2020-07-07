@@ -57,6 +57,7 @@ if [ -z "$ZSH_COMPDUMP" ]; then
 fi
 
 # Construct zcompdump OMZ metadata
+zcompdump_meta_lines=4
 zcompdump_meta="\
 #omz host: $SHORT_HOST
 #omz zsh version: $ZSH_VERSION
@@ -64,8 +65,8 @@ zcompdump_meta="\
 #omz fpath: $fpath"
 
 # Delete the zcompdump file if OMZ zcompdump metadata changed
-if [ 0$(command grep -c -Fx "$zcompdump_meta" "$ZSH_COMPDUMP" 2>/dev/null) -ne \
-   $(command wc -l <<<"$zcompdump_meta") ]; then
+if [[ 0$(command grep -c -Fx "$zcompdump_meta" "$ZSH_COMPDUMP" 2>/dev/null) \
+  -ne $zcompdump_meta_lines ]]; then
   command rm -f "$ZSH_COMPDUMP"
   zcompdump_refresh=1
 fi
@@ -83,12 +84,7 @@ fi
 
 # Append zcompdump metadata if missing
 if (( $zcompdump_refresh )); then
-  # Use `tee` in case the $ZSH_COMPDUMP filename is invalid, to silence the error
-  # See https://github.com/ohmyzsh/ohmyzsh/commit/dd1a7269#commitcomment-39003489
-  tee -a "$ZSH_COMPDUMP" &>/dev/null <<EOF
-
-$zcompdump_meta
-EOF
+  echo "\n$zcompdump_meta" >>| "$ZSH_COMPDUMP"
 fi
 
 unset zcompdump_meta zcompdump_refresh
