@@ -181,10 +181,12 @@ plugins=(... git)
 
 ### Main branch preference
 
-Following the recent push for removing racially-charged words from our technical vocabulary, the git plugin favors using
-a branch name other than `master`. In this case, we favor the shorter, neutral and descriptive term `main`. This means
-that any aliases and functions that previously used `master`, will use `main` if that branch exists. We do this via the
-function `git_main_branch`.
+Following the recent push for removing racially-charged words from our technical vocabulary, users might favor using
+a branch name other than `master`. Now you can configure this by the environment variable `GIT_MAIN_BRANCH_PRIORITY`.
+It is a list of branch names separated by `:`. The function `git_main_branch` checks for all branches in the list and
+returns the first existing branch in the list. `git_main_branch` is used in many aliases which use `master` as the main
+branch before. The default `GIT_MAIN_BRANCH_PRIORITY` is `master:main` instead of `main:master`, and `git_main_branch`
+returns `master` if no branch in `GIT_MAIN_BRANCH_PRIORITY` exists, so that it's not a breaking change.
 
 ### Deprecated aliases
 
@@ -208,13 +210,13 @@ These are aliases that have been removed, renamed, or otherwise modified in a wa
 
 ### Current
 
-| Command                | Description                                                                  |
-|:-----------------------|:-----------------------------------------------------------------------------|
-| `grename <old> <new>`  | Rename `old` branch to `new`, including in origin remote                     |
-| current_branch         | Return the name of the current branch                                        |
-| git_current_user_name  | Returns the `user.name` config value                                         |
-| git_current_user_email | Returns the `user.email` config value                                        |
-| git_main_branch        | Returns the name of the main branch: `main` if it exists, `master` otherwise |
+| Command                | Description                                                                                                                     |
+| :--------------------- | :------------------------------------------------------------------------------------------------------------------------------ |
+| `grename <old> <new>`  | Rename `old` branch to `new`, including in origin remote                                                                        |
+| current_branch         | Return the name of the current branch                                                                                           |
+| git_current_user_name  | Returns the `user.name` config value                                                                                            |
+| git_current_user_email | Returns the `user.email` config value                                                                                           |
+| git_main_branch        | Returns the first existing branch in `$GIT_MAIN_BRANCH_PRIORITY` or "master" if no branch in `$GIT_MAIN_BRANCH_PRIORITY` exists |
 
 ### Work in Progress (WIP)
 

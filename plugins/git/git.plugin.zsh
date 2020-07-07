@@ -25,13 +25,22 @@ function work_in_progress() {
   fi
 }
 
-# Check if main exists and use instead of master
+# Look for the first existing branch in GIT_MAIN_BRANCH_PRIORITY or "master" if no branch exists
 function git_main_branch() {
-  if [[ -n "$(git branch --list main)" ]]; then
-    echo main
-  else
-    echo master
-  fi
+  [[ -v GIT_MAIN_BRANCH_PRIORITY ]] || GIT_MAIN_BRANCH_PRIORITY="master:main"
+  local git_main_branch_array=("${(@s/:/)GIT_MAIN_BRANCH_PRIORITY}")
+  local git_branch_list="$(git for-each-ref --format='%(refname:short)' refs/heads/*)"
+  local git_branch_array=("${(f)git_branch_list}")
+
+  for branch in $git_main_branch_array; do
+    if (($git_branch_array[(Ie)$branch])); then
+      echo "$branch"
+      return 0
+    fi
+  done
+
+  echo master
+  return 1
 }
 
 #
