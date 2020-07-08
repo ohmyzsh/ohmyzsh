@@ -7,10 +7,25 @@ on:
     branches:
       - master
   push:
-    branches: 
+    branches:
       - master
 
 jobs:
+  assign:
+    name: Assign PR reviewer
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up git repository
+        uses: actions/checkout@v2
+      - name: Install zsh
+        if: runner.os == 'Linux'
+        run: sudo apt-get update; sudo apt-get install zsh
+      - name: Test installer
+        run: sh ./tools/install.sh
+      - name: Where are we?
+        run: pwd
+      - name: Print changed files
+        run: git show --name-only @
   tests:
     name: Run tests
     runs-on: ${{ matrix.os }}
