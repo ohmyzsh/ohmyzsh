@@ -26,8 +26,16 @@ A brief description of what should happen.
 If applicable, add screenshots to help explain your problem.
 You can also record an asciinema session: https://asciinema.org/
 
+**Self Check**
+Have you tried reaching out on the [Discord server](discord.gg/ohmyzsh)? 
+This can help cut down on filling up issues. We always have a few people
+online that are in a variety of timezones that are willing to help you!
+Also searching existing [GitHub Issues](https://github.com/ohmyzsh/ohmyzsh/issues?q=)
+might help you get quicker support
+
 **Desktop (please complete the following information):**
  - OS / Distro: [e.g. Arch Linux, macOS]
+ - If on Windows what version of WSL: [e.g. WSL1, WSL2]
  - Latest ohmyzsh Update?: [e.g. Yes/No]
  - ZSH Version: [e.g. 5.6]
  - Terminal emulator [e.g. iTerm2]

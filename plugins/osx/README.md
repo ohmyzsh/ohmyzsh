@@ -22,14 +22,17 @@ Original author: [Sorin Ionescu](https://github.com/sorin-ionescu)
 | `pfs`           | Return the current Finder selection                   |
 | `cdf`           | `cd` to the current Finder directory                  |
 | `pushdf`        | `pushd` to the current Finder directory               |
+| `pxd`           | Return the current Xcode project directory            |
+| `cdx`           | `cd` to the current Xcode project directory           |
 | `quick-look`    | Quick-Look a specified file                           |
 | `man-preview`   | Open a specified man page in Preview app              |
-| `showfiles`     | Show hidden files                                     |
-| `hidefiles`     | Hide the hidden files                                 |
-| `itunes`        | DEPRECATED. Use `music` from macOS Catalina on        |
+| `showfiles`     | Show hidden files in Finder                           |
+| `hidefiles`     | Hide the hidden files in Finder                       |
+| `itunes`        | _DEPRECATED_. Use `music` from macOS Catalina on      |
 | `music`         | Control Apple Music. Use `music -h` for usage details |
 | `spotify`       | Control Spotify and search by artist, album, track…   |
 | `rmdsstore`     | Remove .DS\_Store files recursively in a directory    |
+| `btrestart`     | Restart the Bluetooth daemon                          |
 
 ## Acknowledgements
 

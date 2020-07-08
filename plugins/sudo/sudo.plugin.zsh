@@ -13,15 +13,28 @@
 # ------------------------------------------------------------------------------
 
 sudo-command-line() {
-    [[ -z $BUFFER ]] && zle up-history
-    if [[ $BUFFER == sudo\ * ]]; then
-        LBUFFER="${LBUFFER#sudo }"
-    elif [[ $BUFFER == $EDITOR\ * ]]; then
-        LBUFFER="${LBUFFER#$EDITOR }"
-        LBUFFER="sudoedit $LBUFFER"
+    [[ -z $BUFFER ]] && LBUFFER="$(fc -ln -1)"
+    if [[ -n $EDITOR && $BUFFER == $EDITOR\ * ]]; then
+        if [[ ${#LBUFFER} -le ${#EDITOR} ]]; then
+            RBUFFER=" ${BUFFER#$EDITOR }"
+            LBUFFER="sudoedit"
+        else
+            LBUFFER="sudoedit ${LBUFFER#$EDITOR }"
+        fi
     elif [[ $BUFFER == sudoedit\ * ]]; then
-        LBUFFER="${LBUFFER#sudoedit }"
-        LBUFFER="$EDITOR $LBUFFER"
+        if [[ ${#LBUFFER} -le 8 ]]; then
+            RBUFFER=" ${BUFFER#sudoedit }"
+            LBUFFER="$EDITOR"
+        else
+            LBUFFER="$EDITOR ${LBUFFER#sudoedit }"
+        fi
+    elif [[ $BUFFER == sudo\ * ]]; then
+        if [[ ${#LBUFFER} -le 4 ]]; then
+            RBUFFER="${BUFFER#sudo }"
+            LBUFFER=""
+        else
+            LBUFFER="${LBUFFER#sudo }"
+        fi
     else
         LBUFFER="sudo $LBUFFER"
     fi

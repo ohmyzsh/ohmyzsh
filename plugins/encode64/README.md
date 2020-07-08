@@ -53,6 +53,6 @@ plugins=(... encode64)
   ```console
   $ echo "b2gtbXktenNoCg==" | decode64
   oh-my-zsh
-  $ echo "b2gtbXktenNoCg==" | decode64
+  $ echo "b2gtbXktenNoCg==" | d64
   oh-my-zsh
   ```
