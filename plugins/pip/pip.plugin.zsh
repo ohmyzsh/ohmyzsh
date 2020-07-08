@@ -79,4 +79,5 @@ zsh-pip-test-clean-packages() {
 }
 
 alias pip="noglob pip" # allows square brackets for pip command invocation
-
+alias pin="pip install"
+alias pun="pip uninstall"
