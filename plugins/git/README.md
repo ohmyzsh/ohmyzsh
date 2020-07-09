@@ -183,8 +183,8 @@ plugins=(... git)
 
 Following the recent push for removing racially-charged words from our technical vocabulary, the git plugin favors using
 a branch name other than `master`. In this case, we favor the shorter, neutral and descriptive term `main`. This means
-that any aliases and functions that previously used `master`, will use `main` if that branch exists. We do this via the
-function `git_main_branch`.
+that any aliases and functions that previously used `master`, will use `main` if `master` doesn't exist. We do this via
+the function `git_main_branch`.
 
 ### Deprecated aliases
 
@@ -214,7 +214,7 @@ These are aliases that have been removed, renamed, or otherwise modified in a wa
 | current_branch         | Return the name of the current branch                                        |
 | git_current_user_name  | Returns the `user.name` config value                                         |
 | git_current_user_email | Returns the `user.email` config value                                        |
-| git_main_branch        | Returns the name of the main branch: `main` if it exists, `master` otherwise |
+| git_main_branch        | Returns the name of the main branch: `master` if it exists, `main` otherwise |
 
 ### Work in Progress (WIP)
 

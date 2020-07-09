@@ -27,10 +27,10 @@ function work_in_progress() {
 
 # Check if main exists and use instead of master
 function git_main_branch() {
-  if [[ -n "$(git branch --list main)" ]]; then
-    echo main
-  else
+  if [[ -n "$(git branch --list master)" ]]; then
     echo master
+  else
+    echo main
   fi
 }
 
