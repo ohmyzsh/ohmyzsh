@@ -57,11 +57,11 @@ in that directory. See the next section for more details.
 
 The default behavior of the plugin is to always ask whether to source a dotenv file. There's
 a **Y**es, **N**o, **A**lways and N**e**ver option. If you choose Always, the directory of the .env file
-will be added to an allowed list; if you choose Never, it get's added to a disallowed list.
-If a directory is found in those lists, the plugin won't ask for confirmation and will instead
-either source the .env file or proceed without action respectively.
+will be added to an allowed list; if you choose Never, it will be added to a disallowed list.
+If a directory is found in either of those lists, the plugin won't ask for confirmation and will
+instead either source the .env file or proceed without action respectively.
 
-This allowed and disallowed lists are saved by default in `$ZSH_CACHE_DIR/dotenv-allowed.list` and
+The allowed and disallowed lists are saved by default in `$ZSH_CACHE_DIR/dotenv-allowed.list` and
 `$ZSH_CACHE_DIR/dotenv-disallowed.list` respectively. If you want to change that location,
 change the `$ZSH_DOTENV_ALLOWED_LIST` and `$ZSH_DOTENV_DISALLOWED_LIST` variables, like so:
 
