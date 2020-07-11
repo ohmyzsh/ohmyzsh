@@ -53,24 +53,25 @@ Set `ZSH_DOTENV_PROMPT=false` in your zshrc file if you don't want the confirmat
 You can also choose the `Always` option when prompted to always allow sourcing the .env file
 in that directory. See the next section for more details.
 
-### ZSH_DOTENV_ALLOWED_LIST
+### ZSH_DOTENV_{DIS,}ALLOWED_LIST
 
 The default behavior of the plugin is to always ask whether to source a dotenv file. There's
-a **Y**es, **N**o, and **A**lways option. If you choose Always, the directory of the .env file
-will be added to an allowed list. If a directory is found in this list, the plugin won't ask
-for confirmation and will instead source the .env file directly.
+a **Y**es, **N**o, **A**lways and N**e**ver option. If you choose Always, the directory of the .env file
+will be added to an allowed list, for Never it get's added to a disallowed list respectively. If a directory is found in those lists, the plugin won't ask
+for confirmation and will instead source the .env file or proceed without action directly.
 
-This allowed list is saved by default in `$ZSH_CACHE_DIR/dotenv-allowed.list`. If you want
-to change that location, change the `$ZSH_DOTENV_ALLOWED_LIST` variable, like so:
+This (dis-)allowed list is saved by default in `$ZSH_CACHE_DIR/dotenv-{dis,}allowed.list`. If you want
+to change that location, change the `$ZSH_DOTENV_{DIS,}ALLOWED_LIST` variable, like so:
 
 ```zsh
 # in ~/.zshrc, before Oh My Zsh is sourced:
 ZSH_DOTENV_ALLOWED_LIST=/path/to/dotenv/allowed/list
+ZSH_DOTENV_DISALLOWED_LIST=/path/to/dotenv/disallowed/list
 ```
 
-This file is just a list of directories allowed, separated by a newline character. If you want
-to disallow a directory, just edit this file and remove the line for the directory you want to
-disallow.
+The file is just a list of directories, separated by a newline character. If you want
+to change your decistion, just edit the file and remove the line for the directory you want to
+change.
 
 ## Version Control
 
