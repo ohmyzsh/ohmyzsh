@@ -25,8 +25,7 @@ function work_in_progress() {
   fi
 }
 
-# Get the default 'main' branch
-# Marc(2020-07-11): I hope to be able to remove this someday
+# Get the default 'main' branch: from origin, from local branches, or else just 'master'
 function git_main_branch() {
   # Get default branch from the origin remote
   local branch
