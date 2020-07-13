@@ -51,7 +51,7 @@ function update_ohmyzsh() {
     #  The return status from the function is handled specially. If it is zero, the signal is
     #  assumed to have been handled, and execution continues normally. Otherwise, the shell
     #  will behave as interrupted except that the return status of the trap is retained.
-    trap "rm -rf '$ZSH/log/update.lock'; return 1" EXIT INT QUIT
+    trap "command rm -rf '$ZSH/log/update.lock'; return 1" EXIT INT QUIT
 
     # Create or update .zsh-update file if missing or malformed
     if ! source "${ZSH_CACHE_DIR}/.zsh-update" 2>/dev/null || [[ -z "$LAST_EPOCH" ]]; then
