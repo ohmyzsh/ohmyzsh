@@ -25,29 +25,13 @@ function work_in_progress() {
   fi
 }
 
-# Get the default 'main' branch: from origin, from local branches, or else just 'master'
+# Check if main exists and use instead of master
 function git_main_branch() {
-  # Get default branch from the origin remote
-  local branch
-  branch="${$(command git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null)#refs/remotes/origin/}"
-
-  if [[ -n "$branch" ]]; then
-    echo "$branch"
-    return
+  if [[ -n "$(git branch --list main)" ]]; then
+    echo main
+  else
+    echo master
   fi
-
-  # Look up list of local branches and return the first one that exists
-  local -a branches
-  branches=(${(@f)"$(command git for-each-ref --format='%(refname:short)' refs/heads 2>/dev/null)"})
-  for branch in master main; do
-    if (( ${branches[(Ie)$branch]} )); then
-      echo "$branch"
-      return
-    fi
-  done
-
-  echo master
-  return 1
 }
 
 #
