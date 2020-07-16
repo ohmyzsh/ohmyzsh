@@ -6,7 +6,9 @@ To use, add `battery` to the list of plugins in your `.zshrc` file:
 
 `plugins=(... battery)`
 
-Make sure the acpi tool is installed by running the following command:
+You must have the acpi tool installed on your operating system.
+
+Here's an example of how to install with apt:
 ```
 sudo apt-get install acpi
 ```
