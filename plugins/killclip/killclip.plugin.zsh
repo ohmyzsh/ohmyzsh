@@ -1,28 +1,28 @@
 _kc-yank() {
-  CUTBUFFER=$(clippaste)
+  AA=$(clippaste 2>/dev/null) && CUTBUFFER="$AA"
   zle yank
 }
 _kc-kill-line() {
   zle kill-line
-  printf "%s" "$CUTBUFFER" | clipcopy
+  printf "%s" "$CUTBUFFER" | clipcopy 2>/dev/null
 }
 _kc-kill-whole-line() {
   zle kill-whole-line
-  printf "%s" "$CUTBUFFER" | clipcopy
+  printf "%s" "$CUTBUFFER" | clipcopy 2>/dev/null
 }
 _kc-kill-word() {
   zle kill-word
-  printf "%s" "$CUTBUFFER" | clipcopy
+  printf "%s" "$CUTBUFFER" | clipcopy 2>/dev/null
 }
 _kc-backward-kill-word() {
   zle backward-kill-word
-  printf "%s" "$CUTBUFFER" | clipcopy
+  printf "%s" "$CUTBUFFER" | clipcopy 2>/dev/null
 }
 _kc-copy-region-as-kill() {
   ## https://unix.stackexchange.com/questions/19947/
   zle copy-region-as-kill
   zle set-mark-command -n -1
-  printf "%s" "$CUTBUFFER" | clipcopy
+  printf "%s" "$CUTBUFFER" | clipcopy 2>/dev/null
 }
 
 zle -N _kc-yank
