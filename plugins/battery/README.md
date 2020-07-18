@@ -9,7 +9,7 @@ To use, add `battery` to the list of plugins in your `.zshrc` file:
 Then, add the `battery_pct_prompt` function to your custom theme. For example:
 
 ```
-RPROMPT='$(battery_pct_prompt)  ...'
+RPROMPT='$(battery_pct_prompt) ...'
 ```
 
 ## Requirements
