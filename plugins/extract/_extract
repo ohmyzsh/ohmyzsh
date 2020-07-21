@@ -3,5 +3,5 @@
 
 _arguments \
   '(-r --remove)'{-r,--remove}'[Remove archive.]' \
-  "*::archive file:_files -g '(#i)*.(7z|Z|apk|aar|bz2|deb|gz|ipsw|jar|lrz|lz4|lzma|rar|rpm|sublime-package|tar|tar.bz2|tar.gz|tar.lrz|tar.lz|tar.lz4|tar.xz|tar.zma|tar.zst|tbz|tbz2|tgz|tlz|txz|tzst|war|whl|xpi|xz|zip|zst)(-.)'" \
+  "*::archive file:_files -g '(#i)*.(7z|Z|apk|aar|bz2|deb|gz|ipa|ipsw|jar|lrz|lz4|lzma|rar|rpm|sublime-package|tar|tar.bz2|tar.gz|tar.lrz|tar.lz|tar.lz4|tar.xz|tar.zma|tar.zst|tbz|tbz2|tgz|tlz|txz|tzst|war|whl|xpi|xz|zip|zst)(-.)'" \
     && return 0
