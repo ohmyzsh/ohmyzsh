@@ -26,6 +26,7 @@ plugins=(... laravel)
 | Alias | Description |
 |:-:|:-:|
 | `pamm`  |  `php artisan make:model` |
+| `pammid`  |  `php artisan make:middleware` |
 | `pamc`  |  `php artisan make:controller` |
 | `pams`  |  `php artisan make:seeder` |
 | `pamt`  |  `php artisan make:test` |
