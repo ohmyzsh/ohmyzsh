@@ -1,7 +1,0 @@
-* killclip plugin
-
-This plugin integrates zsh kill ring with system clipboard.
-
-It makes it possible to kill in zsh and paste into browser/editor or vice versa.
-
-Key bindings for =C-y=, =C-k=, =C-u=, =M-d=, =M-backspace= and =M-w= are rebound.
