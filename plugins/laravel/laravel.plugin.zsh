@@ -15,6 +15,7 @@ alias pads='php artisan db:seed'
 # Makers
 alias pamm='php artisan make:model'
 alias pamc='php artisan make:controller'
+alias pammid='php artisan make:middleware'
 alias pams='php artisan make:seeder'
 alias pamt='php artisan make:test'
 alias pamfa='php artisan make:factory'
