@@ -7,7 +7,7 @@ function pollen-server-up {
 }
 
 function pollen-server-up-phoenix {
-  pollen-server-up-pollen
+  pollen-server-up
 }
 
 function pollen-server-up-pollen {
@@ -15,14 +15,21 @@ function pollen-server-up-pollen {
 }
 
 ## seed demo data
-function pollen-demo-data {
+function pollen-data-demo {
   # bin/demo-data
   ambassador_api/bin/demo-data
 }
 
 ## seed demo data
-function pollen-demo-data-anonymized {
-  bin/get-anonymized-production-data
+function pollen-data-production {
+  # bin/get-production-data
+  ambassador_api/bin/get-production-data --force-download
+}
+
+## seed demo data
+function pollen-data-production-anonymized {
+  # bin/get-anonymized-production-data
+  ambassador_api/bin/get-anonymized-production-data --force-download
 }
 
 ## reset demo data
@@ -101,8 +108,9 @@ function pollen {
   echo "pollen-clean-build - docker-compose down && bin/bootstrap";
   echo "pollen-clean-build2 - docker-compose down && npm run bootstrap";
   echo "pollen-clear-virtual-env - delete the .virtualenv folders in all dirs";
-  echo "pollen-demo-data - create demo data";
-  echo "pollen-demo-data-anonymized - create demo data from anonymized data";
+  echo "pollen-data-demo - create demo data";
+  echo "pollen-data-production - download data from prod";
+  echo "pollen-data-production-anonymized - download data from prod, anonymized";
   echo "pollen-deploy-branch-to-staging {x}- pushes local branch to a branch, x";
   echo "pollen-gco-jira - Checkout a branch in the format required to correspond to a Jira issue";
   echo "pollen-git-commit-jira - Commit to a branch in the format required to correspond to a Jira issue";
