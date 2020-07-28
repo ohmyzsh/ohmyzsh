@@ -50,7 +50,7 @@ esac
 # variable.
 __git_find_repo_path ()
 {
-	if [ -n "$__git_repo_path" ]; then
+	if [ -n "${__git_repo_path-}" ]; then
 		# we already know where it is
 		return
 	fi
@@ -301,6 +301,19 @@ __gitcomp_direct ()
 	COMPREPLY=($1)
 }
 
+# Similar to __gitcomp_direct, but appends to COMPREPLY instead.
+# Callers must take care of providing only words that match the current word
+# to be completed and adding any prefix and/or suffix (trailing space!), if
+# necessary.
+# 1: List of newline-separated matching completion words, complete with
+#    prefix and suffix.
+__gitcomp_direct_append ()
+{
+	local IFS=$'\n'
+
+	COMPREPLY+=($1)
+}
+
 __gitcompappend ()
 {
 	local x i=${#COMPREPLY[@]}
@@ -373,7 +386,7 @@ __gitcomp ()
 # Clear the variables caching builtins' options when (re-)sourcing
 # the completion script.
 if [[ -n ${ZSH_VERSION-} ]]; then
-	unset $(set |sed -ne 's/^\(__gitcomp_builtin_[a-zA-Z0-9_][a-zA-Z0-9_]*\)=.*/\1/p') 2>/dev/null
+	unset ${(M)${(k)parameters[@]}:#__gitcomp_builtin_*} 2>/dev/null
 else
 	unset $(compgen -v __gitcomp_builtin_)
 fi
@@ -391,12 +404,12 @@ __gitcomp_builtin ()
 	# spaces must be replaced with underscore for multi-word
 	# commands, e.g. "git remote add" becomes remote_add.
 	local cmd="$1"
-	local incl="$2"
-	local excl="$3"
+	local incl="${2-}"
+	local excl="${3-}"
 
 	local var=__gitcomp_builtin_"${cmd/-/_}"
 	local options
-	eval "options=\$$var"
+	eval "options=\${$var-}"
 
 	if [ -z "$options" ]; then
 		# leading and trailing spaces are significant to make
@@ -611,6 +624,19 @@ __git_heads ()
 			"refs/heads/$cur_*" "refs/heads/$cur_*/**"
 }
 
+# Lists branches from remote repositories.
+# 1: A prefix to be added to each listed branch (optional).
+# 2: List only branches matching this word (optional; list all branches if
+#    unset or empty).
+# 3: A suffix to be appended to each listed branch (optional).
+__git_remote_heads ()
+{
+	local pfx="${1-}" cur_="${2-}" sfx="${3-}"
+
+	__git for-each-ref --format="${pfx//\%/%%}%(refname:strip=2)$sfx" \
+			"refs/remotes/$cur_*" "refs/remotes/$cur_*/**"
+}
+
 # Lists tags from the local repository.
 # Accepts the same positional parameters as __git_heads() above.
 __git_tags ()
@@ -619,6 +645,26 @@ __git_tags ()
 
 	__git for-each-ref --format="${pfx//\%/%%}%(refname:strip=2)$sfx" \
 			"refs/tags/$cur_*" "refs/tags/$cur_*/**"
+}
+
+# List unique branches from refs/remotes used for 'git checkout' and 'git
+# switch' tracking DWIMery.
+# 1: A prefix to be added to each listed branch (optional)
+# 2: List only branches matching this word (optional; list all branches if
+#    unset or empty).
+# 3: A suffix to be appended to each listed branch (optional).
+__git_dwim_remote_heads ()
+{
+	local pfx="${1-}" cur_="${2-}" sfx="${3-}"
+	local fer_pfx="${pfx//\%/%%}" # "escape" for-each-ref format specifiers
+
+	# employ the heuristic used by git checkout and git switch
+	# Try to find a remote branch that cur_es the completion word
+	# but only output if the branch name is unique
+	__git for-each-ref --format="$fer_pfx%(refname:strip=3)$sfx" \
+		--sort="refname:strip=3" \
+		"refs/remotes/*/$cur_*" "refs/remotes/*/$cur_*/**" | \
+	uniq -u
 }
 
 # Lists refs from the local (by default) or from a remote repository.
@@ -696,13 +742,7 @@ __git_refs ()
 		__git_dir="$dir" __git for-each-ref --format="$fer_pfx%($format)$sfx" \
 			"${refs[@]}"
 		if [ -n "$track" ]; then
-			# employ the heuristic used by git checkout
-			# Try to find a remote branch that matches the completion word
-			# but only output if the branch name is unique
-			__git for-each-ref --format="$fer_pfx%(refname:strip=3)$sfx" \
-				--sort="refname:strip=3" \
-				"refs/remotes/*/$match*" "refs/remotes/*/$match*/**" | \
-			uniq -u
+			__git_dwim_remote_heads "$pfx" "$match" "$sfx"
 		fi
 		return
 	fi
@@ -749,29 +789,51 @@ __git_refs ()
 # Usage: __git_complete_refs [<option>]...
 # --remote=<remote>: The remote to list refs from, can be the name of a
 #                    configured remote, a path, or a URL.
-# --track: List unique remote branches for 'git checkout's tracking DWIMery.
+# --dwim: List unique remote branches for 'git switch's tracking DWIMery.
 # --pfx=<prefix>: A prefix to be added to each ref.
 # --cur=<word>: The current ref to be completed.  Defaults to the current
 #               word to be completed.
 # --sfx=<suffix>: A suffix to be appended to each ref instead of the default
 #                 space.
+# --mode=<mode>: What set of refs to complete, one of 'refs' (the default) to
+#                complete all refs, 'heads' to complete only branches, or
+#                'remote-heads' to complete only remote branches. Note that
+#                --remote is only compatible with --mode=refs.
 __git_complete_refs ()
 {
-	local remote track pfx cur_="$cur" sfx=" "
+	local remote= dwim= pfx= cur_="$cur" sfx=" " mode="refs"
 
 	while test $# != 0; do
 		case "$1" in
 		--remote=*)	remote="${1##--remote=}" ;;
-		--track)	track="yes" ;;
+		--dwim)		dwim="yes" ;;
+		# --track is an old spelling of --dwim
+		--track)	dwim="yes" ;;
 		--pfx=*)	pfx="${1##--pfx=}" ;;
 		--cur=*)	cur_="${1##--cur=}" ;;
 		--sfx=*)	sfx="${1##--sfx=}" ;;
+		--mode=*)	mode="${1##--mode=}" ;;
 		*)		return 1 ;;
 		esac
 		shift
 	done
 
-	__gitcomp_direct "$(__git_refs "$remote" "$track" "$pfx" "$cur_" "$sfx")"
+	# complete references based on the specified mode
+	case "$mode" in
+		refs)
+			__gitcomp_direct "$(__git_refs "$remote" "" "$pfx" "$cur_" "$sfx")" ;;
+		heads)
+			__gitcomp_direct "$(__git_heads "$pfx" "$cur_" "$sfx")" ;;
+		remote-heads)
+			__gitcomp_direct "$(__git_remote_heads "$pfx" "$cur_" "$sfx")" ;;
+		*)
+			return 1 ;;
+	esac
+
+	# Append DWIM remote branch names if requested
+	if [ "$dwim" = "yes" ]; then
+		__gitcomp_direct_append "$(__git_dwim_remote_heads "$pfx" "$cur_" "$sfx")"
+	fi
 }
 
 # __git_refs2 requires 1 argument (to pass to __git_refs)
@@ -1090,7 +1152,7 @@ __git_find_on_cmdline ()
 	while [ $c -lt $cword ]; do
 		for word in $wordlist; do
 			if [ "$word" = "${words[c]}" ]; then
-				if [ -n "$show_idx" ]; then
+				if [ -n "${show_idx-}" ]; then
 					echo "$c $word"
 				else
 					echo "$word"
@@ -1099,6 +1161,40 @@ __git_find_on_cmdline ()
 			fi
 		done
 		((c++))
+	done
+}
+
+# Similar to __git_find_on_cmdline, except that it loops backwards and thus
+# prints the *last* word found. Useful for finding which of two options that
+# supersede each other came last, such as "--guess" and "--no-guess".
+#
+# Usage: __git_find_last_on_cmdline [<option>]... "<wordlist>"
+# --show-idx: Optionally show the index of the found word in the $words array.
+__git_find_last_on_cmdline ()
+{
+	local word c=$cword show_idx
+
+	while test $# -gt 1; do
+		case "$1" in
+		--show-idx)	show_idx=y ;;
+		*)		return 1 ;;
+		esac
+		shift
+	done
+	local wordlist="$1"
+
+	while [ $c -gt 1 ]; do
+		((c--))
+		for word in $wordlist; do
+			if [ "$word" = "${words[c]}" ]; then
+				if [ -n "$show_idx" ]; then
+					echo "$c $word"
+				else
+					echo "$word"
+				fi
+				return
+			fi
+		done
 	done
 }
 
@@ -1356,6 +1452,46 @@ _git_bundle ()
 	esac
 }
 
+# Helper function to decide whether or not we should enable DWIM logic for
+# git-switch and git-checkout.
+#
+# To decide between the following rules in priority order
+# 1) the last provided of "--guess" or "--no-guess" explicitly enable or
+#    disable completion of DWIM logic respectively.
+# 2) If the --no-track option is provided, take this as a hint to disable the
+#    DWIM completion logic
+# 3) If GIT_COMPLETION_CHECKOUT_NO_GUESS is set, disable the DWIM completion
+#    logic, as requested by the user.
+# 4) Enable DWIM logic otherwise.
+#
+__git_checkout_default_dwim_mode ()
+{
+	local last_option dwim_opt="--dwim"
+
+	if [ "${GIT_COMPLETION_CHECKOUT_NO_GUESS-}" = "1" ]; then
+		dwim_opt=""
+	fi
+
+	# --no-track disables DWIM, but with lower priority than
+	# --guess/--no-guess
+	if [ -n "$(__git_find_on_cmdline "--no-track")" ]; then
+		dwim_opt=""
+	fi
+
+	# Find the last provided --guess or --no-guess
+	last_option="$(__git_find_last_on_cmdline "--guess --no-guess")"
+	case "$last_option" in
+		--guess)
+			dwim_opt="--dwim"
+			;;
+		--no-guess)
+			dwim_opt=""
+			;;
+	esac
+
+	echo "$dwim_opt"
+}
+
 _git_checkout ()
 {
 	__git_has_doubledash && return
@@ -1368,14 +1504,38 @@ _git_checkout ()
 		__gitcomp_builtin checkout
 		;;
 	*)
-		# check if --track, --no-track, or --no-guess was specified
-		# if so, disable DWIM mode
-		local flags="--track --no-track --no-guess" track_opt="--track"
-		if [ "$GIT_COMPLETION_CHECKOUT_NO_GUESS" = "1" ] ||
-		   [ -n "$(__git_find_on_cmdline "$flags")" ]; then
-			track_opt=''
+		local dwim_opt="$(__git_checkout_default_dwim_mode)"
+		local prevword prevword="${words[cword-1]}"
+
+		case "$prevword" in
+			-b|-B|--orphan)
+				# Complete local branches (and DWIM branch
+				# remote branch names) for an option argument
+				# specifying a new branch name. This is for
+				# convenience, assuming new branches are
+				# possibly based on pre-existing branch names.
+				__git_complete_refs $dwim_opt --mode="heads"
+				return
+				;;
+			*)
+				;;
+		esac
+
+		# At this point, we've already handled special completion for
+		# the arguments to -b/-B, and --orphan. There are 3 main
+		# things left we can possibly complete:
+		# 1) a start-point for -b/-B, -d/--detach, or --orphan
+		# 2) a remote head, for --track
+		# 3) an arbitrary reference, possibly including DWIM names
+		#
+
+		if [ -n "$(__git_find_on_cmdline "-b -B -d --detach --orphan")" ]; then
+			__git_complete_refs --mode="refs"
+		elif [ -n "$(__git_find_on_cmdline "--track")" ]; then
+			__git_complete_refs --mode="remote-heads"
+		else
+			__git_complete_refs $dwim_opt --mode="refs"
 		fi
-		__git_complete_refs $track_opt
 		;;
 	esac
 }
@@ -2224,29 +2384,43 @@ _git_switch ()
 		__gitcomp_builtin switch
 		;;
 	*)
-		# check if --track, --no-track, or --no-guess was specified
-		# if so, disable DWIM mode
-		local track_opt="--track" only_local_ref=n
-		if [ "$GIT_COMPLETION_CHECKOUT_NO_GUESS" = "1" ] ||
-		   [ -n "$(__git_find_on_cmdline "--track --no-track --no-guess")" ]; then
-			track_opt=''
+		local dwim_opt="$(__git_checkout_default_dwim_mode)"
+		local prevword prevword="${words[cword-1]}"
+
+		case "$prevword" in
+			-c|-C|--orphan)
+				# Complete local branches (and DWIM branch
+				# remote branch names) for an option argument
+				# specifying a new branch name. This is for
+				# convenience, assuming new branches are
+				# possibly based on pre-existing branch names.
+				__git_complete_refs $dwim_opt --mode="heads"
+				return
+				;;
+			*)
+				;;
+		esac
+
+		# Unlike in git checkout, git switch --orphan does not take
+		# a start point. Thus we really have nothing to complete after
+		# the branch name.
+		if [ -n "$(__git_find_on_cmdline "--orphan")" ]; then
+			return
 		fi
-		# explicit --guess enables DWIM mode regardless of
-		# $GIT_COMPLETION_CHECKOUT_NO_GUESS
-		if [ -n "$(__git_find_on_cmdline "--guess")" ]; then
-			track_opt='--track'
-		fi
-		if [ -z "$(__git_find_on_cmdline "-d --detach")" ]; then
-			only_local_ref=y
+
+		# At this point, we've already handled special completion for
+		# -c/-C, and --orphan. There are 3 main things left to
+		# complete:
+		# 1) a start-point for -c/-C or -d/--detach
+		# 2) a remote head, for --track
+		# 3) a branch name, possibly including DWIM remote branches
+
+		if [ -n "$(__git_find_on_cmdline "-c -C -d --detach")" ]; then
+			__git_complete_refs --mode="refs"
+		elif [ -n "$(__git_find_on_cmdline "--track")" ]; then
+			__git_complete_refs --mode="remote-heads"
 		else
-			# --guess --detach is invalid combination, no
-			# dwim will be done when --detach is specified
-			track_opt=
-		fi
-		if [ $only_local_ref = y -a -z "$track_opt" ]; then
-			__gitcomp_direct "$(__git_heads "" "$cur" " ")"
-		else
-			__git_complete_refs $track_opt
+			__git_complete_refs $dwim_opt --mode="heads"
 		fi
 		;;
 	esac
@@ -2782,7 +2956,7 @@ _git_stash ()
 	local save_opts='--all --keep-index --no-keep-index --quiet --patch --include-untracked'
 	local subcommands='push list show apply clear drop pop create branch'
 	local subcommand="$(__git_find_on_cmdline "$subcommands save")"
-	if [ -n "$(__git_find_on_cmdline "-p")" ]; then
+	if [ -z "$subcommand" -a -n "$(__git_find_on_cmdline "-p")" ]; then
 		subcommand="push"
 	fi
 	if [ -z "$subcommand" ]; then
@@ -3176,7 +3350,7 @@ __git_main ()
 		((c++))
 	done
 
-	if [ -z "$command" ]; then
+	if [ -z "${command-}" ]; then
 		case "$prev" in
 		--git-dir|-C|--work-tree)
 			# these need a path argument, let's fall back to
@@ -3211,7 +3385,7 @@ __git_main ()
 			"
 			;;
 		*)
-			if test -n "$GIT_TESTING_PORCELAIN_COMMAND_LIST"
+			if test -n "${GIT_TESTING_PORCELAIN_COMMAND_LIST-}"
 			then
 				__gitcomp "$GIT_TESTING_PORCELAIN_COMMAND_LIST"
 			else
