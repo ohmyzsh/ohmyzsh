@@ -7,6 +7,6 @@ function get_host {
 PROMPT='> '
 RPROMPT='%~$(git_prompt_info)$(get_host)'
 
-ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[yellow]%}✗%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_DIRTY="%F{yellow}✗%f"
 ZSH_THEME_GIT_PROMPT_PREFIX="("
 ZSH_THEME_GIT_PROMPT_SUFFIX=")"
