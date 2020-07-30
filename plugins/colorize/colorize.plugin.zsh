@@ -62,11 +62,7 @@ colorize_cat() {
                 pygmentize -O style="$ZSH_COLORIZE_STYLE" -g "$FNAME"
             fi
         else
-            if [ -z "$ZSH_COLORIZE_CHROMA_FORMATTER" ]; then
-                chroma --style="$ZSH_COLORIZE_STYLE" "$FNAME"
-            else
-                chroma --style="$ZSH_COLORIZE_STYLE" --formatter="$ZSH_COLORIZE_CHROMA_FORMATTER" "$FNAME"
-            fi
+            chroma --style="$ZSH_COLORIZE_STYLE" --formatter="${ZSH_COLORIZE_CHROMA_FORMATTER:-terminal}" "$FNAME"
         fi
     done
 }
