@@ -75,14 +75,10 @@ cat >> $plugin_basename.plugin.zsh <<EOF
 
 # Bind terminal-specific up and down keys
 
-if [[ -n "\$terminfo[kcuu1]" ]]; then
-  bindkey -M emacs "\$terminfo[kcuu1]" history-substring-search-up
-  bindkey -M viins "\$terminfo[kcuu1]" history-substring-search-up
-fi
-if [[ -n "\$terminfo[kcud1]" ]]; then
-  bindkey -M emacs "\$terminfo[kcud1]" history-substring-search-down
-  bindkey -M viins "\$terminfo[kcud1]" history-substring-search-down
-fi
+omz_bindkey -M emacs -t kcuu1 history-substring-search-up
+omz_bindkey -M viins -t kcuu1 history-substring-search-up
+omz_bindkey -M emacs -t kcud1 history-substring-search-down
+omz_bindkey -M viins -t kcud1 history-substring-search-down
 
 EOF
 
