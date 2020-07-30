@@ -46,11 +46,7 @@ colorize_cat() {
         if [[ "$ZSH_COLORIZE_TOOL" == "pygmentize" ]]; then
             pygmentize -O style="$ZSH_COLORIZE_STYLE" -g
         else
-            if [ -z "$ZSH_COLORIZE_CHROMA_FORMATTER" ]; then
-                chroma --style="$ZSH_COLORIZE_STYLE"
-            else
-                chroma --style="$ZSH_COLORIZE_STYLE" --formatter="$ZSH_COLORIZE_CHROMA_FORMATTER"
-            fi
+            chroma --style="$ZSH_COLORIZE_STYLE" --formatter="${ZSH_COLORIZE_CHROMA_FORMATTER:-terminal}"
         fi
         return $?
     fi
