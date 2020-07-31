@@ -47,7 +47,7 @@ function usage() {
 }
 
 function list_themes() {
-    for THEME in $(ls $THEMES_DIR); do
+    for THEME in "$THEMES_DIR"/*.zsh-theme; do
         THEME_NAME=`echo $THEME | sed s/\.zsh-theme$//`
         echo $THEME_NAME
     done
@@ -64,7 +64,7 @@ function insert_favlist() {
 }
 
 function theme_chooser() {
-    for THEME in $(ls $THEMES_DIR); do
+    for THEME in "$THEMES_DIR"/*.zsh-theme; do
         echo
         theme_preview $THEME
         echo
