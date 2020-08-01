@@ -30,9 +30,16 @@ function _start_paste() {
 # command line. this has the nice effect of making the whole paste be
 # a single undo/redo event.
 function _end_paste() {
-#use bindkey -v here with vi mode probably. maybe you want to track
-#if you were in ins or cmd mode and restore the right one.
-  bindkey -e
+  # by default, safe-paste set keymap to emacs after paste
+  # you could set $KEYMAP_AFTER_PASTE to specify a prefered keymap, such as viins, after paste
+  # if you have a variable tracking keymap, you could set $KEYMAP_VAR_AFTER_PASTE as its name
+  if [[ ! -z "$KEYMAP_AFTER_PASTE" ]]; then
+    bindkey -A $KEYMAP_AFTER_PASTE main
+  elif [[ -z "$KEYMAP_VAR_AFTER_PASTE" ]]; then
+    bindkey -A ${!KEYMAP_VAR_AFTER_PASTE} main
+  else
+    bindkey -e
+  fi
   LBUFFER+=$_paste_content
   unset _paste_content
 }
