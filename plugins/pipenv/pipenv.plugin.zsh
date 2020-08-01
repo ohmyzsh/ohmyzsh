@@ -1,6 +1,6 @@
 # Pipenv completion
 _pipenv() {
-  eval $(env COMMANDLINE="${words[1,$CURRENT]}" _PIPENV_COMPLETE=complete-zsh  pipenv)
+  eval $(env COMMANDLINE="${words[1,$CURRENT]}" _PIPENV_COMPLETE=complete-zsh pipenv)
 }
 compdef _pipenv pipenv
 
@@ -25,6 +25,7 @@ _togglePipenvShell() {
 }
 autoload -U add-zsh-hook
 add-zsh-hook chpwd _togglePipenvShell
+_togglePipenvShell
 
 # Aliases
 alias pch="pipenv check"
