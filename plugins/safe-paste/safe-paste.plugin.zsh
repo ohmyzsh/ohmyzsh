@@ -35,7 +35,7 @@ function _end_paste() {
   # if you have a variable tracking keymap, you could set $KEYMAP_VAR_AFTER_PASTE as its name
   if [[ ! -z "$KEYMAP_AFTER_PASTE" ]]; then
     bindkey -A $KEYMAP_AFTER_PASTE main
-  elif [[ -z "$KEYMAP_VAR_AFTER_PASTE" ]]; then
+  elif [[ ! -z "$KEYMAP_VAR_AFTER_PASTE" ]]; then
     bindkey -A ${!KEYMAP_VAR_AFTER_PASTE} main
   else
     bindkey -e
