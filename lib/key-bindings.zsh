@@ -71,16 +71,32 @@ if [[ -n "${terminfo[kcbt]}" ]]; then
 fi
 
 # [Backspace] - delete backward
-bindkey '^?' backward-delete-char
+bindkey -M emacs '^?' backward-delete-char
+bindkey -M viins '^?' backward-delete-char
+bindkey -M vicmd '^?' backward-delete-char
 # [Delete] - delete forward
 if [[ -n "${terminfo[kdch1]}" ]]; then
   bindkey -M emacs "${terminfo[kdch1]}" delete-char            
   bindkey -M viins "${terminfo[kdch1]}" delete-char            # [Delete] - delete forward
   bindkey -M vicmd "${terminfo[kdch1]}" delete-char            # [Delete] - delete forward
 else
-  bindkey "^[[3~" delete-char
-  bindkey "^[3;5~" delete-char
+  bindkey -M emacs "^[[3~" delete-char
+  bindkey -M viins "^[[3~" delete-char
+  bindkey -M vicmd "^[[3~" delete-char
+
+  bindkey -M emacs "^[3;5~" delete-char
+  bindkey -M viins "^[3;5~" delete-char
+  bindkey -M vicmd "^[3;5~" delete-char
 fi
+
+# [Ctrl-Backspace] - delete whole backward-word
+bindkey -M emacs '^H' backward-kill-word
+bindkey -M viins '^H' backward-kill-word
+bindkey -M vicmd '^H' backward-kill-word
+# [Ctrl-Delete] - delete whole forward-word
+bindkey -M emacs '^[[3;5~' kill-word
+bindkey -M viins '^[[3;5~' kill-word
+bindkey -M vicmd '^[[3;5~' kill-word
 
 # [Ctrl-RightArrow] - move forward one word
 bindkey -M emacs '^[[1;5C' forward-word
@@ -91,10 +107,12 @@ bindkey -M emacs '^[[1;5D' backward-word
 bindkey -M viins '^[[1;5D' backward-word
 bindkey -M vicmd '^[[1;5D' backward-word
 
+
 bindkey '\ew' kill-region                             # [Esc-w] - Kill from the cursor to the mark
 bindkey -s '\el' 'ls\n'                               # [Esc-l] - run command: ls
 bindkey '^r' history-incremental-search-backward      # [Ctrl-r] - Search backward incrementally for a specified string. The string may begin with ^ to anchor the search to the beginning of the line.
 bindkey ' ' magic-space                               # [Space] - don't do history expansion
+
 
 # Edit the current command line in $EDITOR
 autoload -U edit-command-line
