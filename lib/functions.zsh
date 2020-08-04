@@ -7,8 +7,8 @@ function uninstall_oh_my_zsh() {
 }
 
 function upgrade_oh_my_zsh() {
-  env ZSH="$ZSH" sh "$ZSH/tools/upgrade.sh"
-  command rm -rf "$ZSH/log/update.lock"
+  echo >&2 "${fg[yellow]}Note: \`$0\` is deprecated. Use \`omz update\` instead.$reset_color"
+  omz update
 }
 
 function take() {
