@@ -76,9 +76,9 @@ bindkey -M viins '^?' backward-delete-char
 bindkey -M vicmd '^?' backward-delete-char
 # [Delete] - delete forward
 if [[ -n "${terminfo[kdch1]}" ]]; then
-  bindkey -M emacs "${terminfo[kdch1]}" delete-char            
-  bindkey -M viins "${terminfo[kdch1]}" delete-char            # [Delete] - delete forward
-  bindkey -M vicmd "${terminfo[kdch1]}" delete-char            # [Delete] - delete forward
+  bindkey -M emacs "${terminfo[kdch1]}" delete-char
+  bindkey -M viins "${terminfo[kdch1]}" delete-char
+  bindkey -M vicmd "${terminfo[kdch1]}" delete-char
 else
   bindkey -M emacs "^[[3~" delete-char
   bindkey -M viins "^[[3~" delete-char
@@ -91,8 +91,6 @@ fi
 
 # [Ctrl-Backspace] - delete whole backward-word
 bindkey -M emacs '^H' backward-kill-word
-bindkey -M viins '^H' backward-kill-word
-bindkey -M vicmd '^H' backward-kill-word
 # [Ctrl-Delete] - delete whole forward-word
 bindkey -M emacs '^[[3;5~' kill-word
 bindkey -M viins '^[[3;5~' kill-word
