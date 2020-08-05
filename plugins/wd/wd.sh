@@ -183,6 +183,11 @@ wd_add()
     then
         wd_remove $point > /dev/null
         printf "%q:%s\n" "${point}" "${PWD/#$HOME/~}" >> $WD_CONFIG
+        if (whence sort >/dev/null); then
+            local config_tmp=$(mktemp "${TMPDIR:-/tmp}/wd.XXXXXXXXXX")
+            # use 'cat' below to ensure we respect $WD_CONFIG as a symlink
+            sort -o "${config_tmp}" $WD_CONFIG  && cat "${config_tmp}" > $WD_CONFIG && rm "${config_tmp}"
+        fi
 
         wd_export_static_named_directories
 
@@ -342,8 +347,8 @@ wd_clean() {
 wd_export_static_named_directories() {
   if [[ -z $WD_SKIP_EXPORT ]]
   then
-    grep '^[0-9a-zA-Z_-]\+:' "$WD_CONFIG" | sed -e "s,~,$HOME," -e 's/:/=/' | while read warpdir ; do
-	    hash -d "$warpdir"
+    command grep '^[0-9a-zA-Z_-]\+:' "$WD_CONFIG" | sed -e "s,~,$HOME," -e 's/:/=/' | while read warpdir ; do
+        hash -d "$warpdir"
     done
   fi
 }
@@ -430,7 +435,10 @@ else
                 break
                 ;;
             "-r"|"--remove"|"rm")
-                wd_remove $2
+                # Loop over all arguments after "rm", separated by whitespace
+                for pointname in "${@:2}" ; do
+                    wd_remove $pointname
+                done
                 break
                 ;;
             "-l"|"list")
