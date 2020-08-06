@@ -19,18 +19,18 @@ function git_prompt_info() {
         info="<initialized>"
     elif branch=$(__git_prompt_git symbolic-ref HEAD 2> /dev/null); then
         # Branch name in the form "<upstream branch name>/<brach name>"
-        ref=$(__git_prompt_git for-each-ref --format='%(upstream:short)' ${branch} 2> /dev/null) || return 0
+        ref=$(__git_prompt_git for-each-ref --format='%(upstream:short)' ${branch} 2> /dev/null)
         info=$(command echo "${ref#refs/heads/}")
         if [[ "${info}" == "" ]]; then
             # Handle for no remote branch
-            info=$(command echo "<no-remote>/$(command git rev-parse --abbrev-ref HEAD)" 2> /dev/null) || return 0
+            info=$(command echo "<no-remote>/$(command git rev-parse --abbrev-ref HEAD)" 2> /dev/null)
         fi
     elif [[ "$(__git_prompt_git tag --points-at 2>/dev/null)" != "" ]]; then
         # Detached at a tag
         info=$(__git_prompt_git tag --points-at 2>/dev/null)
     else
         # Detached at unnamed revision
-        info=$(__git_prompt_git rev-parse --short HEAD 2> /dev/null) || return 0
+        info=$(__git_prompt_git rev-parse --short HEAD 2> /dev/null)
     fi
     echo "$ZSH_THEME_GIT_PROMPT_PREFIX${info}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
 }
