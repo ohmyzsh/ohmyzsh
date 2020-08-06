@@ -4,7 +4,8 @@ This plugin provides completion for [docker-compose](https://docs.docker.com/com
 aliases for frequent docker-compose commands.
 
 To use it, add docker-compose to the plugins array of your zshrc file:
-```
+
+```zsh
 plugins=(... docker-compose)
 ```
 
@@ -27,3 +28,4 @@ plugins=(... docker-compose)
 | dclf      | `docker-compose logs -f` | Show logs and follow output                                      |
 | dcpull    | `docker-compose pull`    | Pull image of a service                                          |
 | dcstart   | `docker-compose start`   | Start a container                                                |
+| dck       | `docker-compose kill`    | Kills containers                                                 |

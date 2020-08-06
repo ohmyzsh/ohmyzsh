@@ -12,14 +12,6 @@
 #   Modified to use tar command instead of zip
 #
 
-echo -ne '\e[1;33m'
-cat <<-EOF
-        [oh-my-zsh] WARNING: The 'transfer' plugin is deprecated and will be removed after
-        [oh-my-zsh] transfer.sh shuts down on November 30th. We suggest you stop using the
-        [oh-my-zsh] plugin and find an alternative file hosting service.
-EOF
-echo -ne '\e[0m'
-
 curl --version 2>&1 > /dev/null
 if [ $? -ne 0 ]; then
   echo "Could not find curl."
@@ -69,6 +61,8 @@ transfer() {
    
     # cat output link
     cat $tmpfile
+    # add newline
+    echo
 
     # cleanup
     rm -f $tmpfile

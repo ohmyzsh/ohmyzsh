@@ -20,7 +20,7 @@ _tasks_changed () {
 }
 
 _rake_generate () {
-  rake --silent --tasks | cut -d " " -f 2 > .rake_tasks
+  rake --silent --tasks | cut -d " " -f 2 | sed 's/\[.*\]//g' > .rake_tasks
 }
 
 _rake () {

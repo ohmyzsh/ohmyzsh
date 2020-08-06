@@ -18,7 +18,7 @@ function handle_completion_insecurities() {
   insecure_dirs=( ${(f@):-"$(compaudit 2>/dev/null)"} )
 
   # If no such directories exist, get us out of here.
-  (( ! ${#insecure_dirs} )) && return
+  [[ -z "${insecure_dirs}" ]] && return
 
   # List ownership and permissions of all insecure directories.
   print "[oh-my-zsh] Insecure completion-dependent directories detected:"
