@@ -9,6 +9,6 @@ alias rfind='find . -name "*.rb" | xargs grep -n'
 alias rb="ruby"
 
 # Gem Command Shorthands
-alias gin="gem install"
+alias gin="gem install --no-document"
 alias gun="gem uninstall"
 alias gli="gem list"
