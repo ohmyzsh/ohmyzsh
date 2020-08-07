@@ -150,3 +150,7 @@ alias kepvc='kubectl edit pvc'
 alias kdpvc='kubectl describe pvc'
 alias kdelpvc='kubectl delete pvc'
 
+# Endpoints management
+alias kged='kubectl get endpoints'
+alias kgeda='kubectl get endpoints --all-namespaces'
+alias kded='kubectl describe endpoints'
