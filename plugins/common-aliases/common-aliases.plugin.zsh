@@ -34,7 +34,9 @@ alias -g P="2>&1| pygmentize -l pytb"
 
 alias dud='du -d 1 -h'
 alias duf='du -sh *'
-alias fd='find . -type d -name'
+if ! which fd >/dev/null 2>%1; then
+  alias fd='find . -type d -name'
+fi
 alias ff='find . -type f -name'
 
 alias h='history'
