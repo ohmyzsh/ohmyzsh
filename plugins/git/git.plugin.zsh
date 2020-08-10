@@ -133,6 +133,8 @@ function ggl() {
 }
 compdef _git ggl=git-checkout
 
+alias ggn='git grep -n'
+
 function ggp() {
   if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
     git push origin "${*}"

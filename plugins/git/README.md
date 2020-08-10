@@ -74,6 +74,7 @@ plugins=(... git)
 | ggf                  | git push --force origin $(current_branch)                                                                                        |
 | ggfl                 | git push --force-with-lease origin $(current_branch)                                                                             |
 | ggl                  | git pull origin $(current_branch)                                                                                                |
+| ggn                  | git grep -n                                                                                                                      |
 | ggp                  | git push origin $(current_branch)                                                                                                |
 | ggpnp                | ggl && ggp                                                                                                                       |
 | ggpull               | git pull origin "$(git_current_branch)"                                                                                          |
