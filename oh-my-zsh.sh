@@ -44,11 +44,13 @@ for plugin ($plugins); do
 done
 
 # Figure out the SHORT hostname
-if [[ "$OSTYPE" = darwin* ]]; then
-  # macOS's $HOST changes with dhcp, etc. Use ComputerName if possible.
-  SHORT_HOST=$(scutil --get ComputerName 2>/dev/null) || SHORT_HOST=${HOST/.*/}
-else
-  SHORT_HOST=${HOST/.*/}
+if [[ -z "$SHORT_HOST" ]]; then
+  if [[ "$OSTYPE" = darwin* ]]; then
+    # macOS's $HOST changes with dhcp, etc. Use ComputerName if possible.
+    SHORT_HOST=$(scutil --get ComputerName 2>/dev/null) || SHORT_HOST=${HOST/.*/}
+  else
+    SHORT_HOST=${HOST/.*/}
+  fi
 fi
 
 # Save the location of the current completion dump file.
