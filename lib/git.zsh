@@ -11,6 +11,17 @@ function __git_prompt_git() {
 
 # Outputs current branch info in prompt format
 function git_prompt_info() {
+  local cwd=$(pwd)
+  while [[ "$cwd" != '' ]];do
+    if [[ -f "$cwd/.git/HEAD" ||  -f "$cwd/HEAD" ]];then
+      break
+    fi
+    cwd=${cwd%/*}
+  done
+  if [[ "$cwd" == '' ]];then
+    return
+  fi
+
   local ref
   if [[ "$(__git_prompt_git config --get oh-my-zsh.hide-status 2>/dev/null)" != "1" ]]; then
     ref=$(__git_prompt_git symbolic-ref HEAD 2> /dev/null) || \
