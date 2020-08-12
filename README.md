@@ -43,6 +43,11 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ```
 
+#### via fetch
+```
+$ sh -c "$(fetch https://raw.githubusercontent.com/ohmyzsh/oh-my-zsh/master/tools/install.sh -o -)"
+```
+
 #### Manual inspection
 
 It's a good idea to inspect the install script from projects you don't yet know. You can do
