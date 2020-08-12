@@ -63,6 +63,11 @@ alias gbsg='git bisect good'
 alias gbsr='git bisect reset'
 alias gbss='git bisect start'
 
+alias gullom= 'git pull origin master'
+alias gushom= 'git push origin master'
+alias gullod= 'git pull origin develop'
+alias gushod= 'git push origin develop'
+
 alias gc='git commit -v'
 alias gc!='git commit -v --amend'
 alias gcn!='git commit -v --no-edit --amend'
