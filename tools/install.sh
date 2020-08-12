@@ -2,8 +2,10 @@
 #
 # This script should be run via curl:
 #   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-# or wget:
+# or via wget:
 #   sh -c "$(wget -qO- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+# or via fetch:
+#   $ sh -c "$(fetch https://raw.githubusersontent.com/ohmyzsh/oh-my-zsh/master/tools/install.sh -o -)"
 #
 # As an alternative, you can first download the install script and run it afterwards:
 #   wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
