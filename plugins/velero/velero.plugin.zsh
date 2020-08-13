@@ -3,6 +3,6 @@
 #
 # Author: https://github.com/s1msn
 
-if [ $commands[oc] ]; then
+if [ $commands[velero] ]; then
   source <(velero completion zsh)
 fi
