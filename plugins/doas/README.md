@@ -2,10 +2,10 @@
 
 Easily prefix your current or previous commands with `doas` by pressing <kbd>esc</kbd> twice
 
-To use it, run the following command:
+To use it, add the following to your zshrc:
 
 ```console
-$ git clone https://github.com/anatolykopyl/doas-zsh-plugin.git $HOME/.oh-my-zsh/custom/plugins/doas
+plugins=(doas)
 ```
 
 ## Usage
