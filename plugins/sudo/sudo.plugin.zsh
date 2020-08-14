@@ -14,6 +14,14 @@
 
 sudo-command-line() {
     [[ -z $BUFFER ]] && LBUFFER="$(fc -ln -1)"
+
+    if [[ ${LBUFFER:0:1} == " " ]] ; then 
+        WHITESPACE=" ";
+        LBUFFER=${LBUFFER:1}
+    else 
+        WHITESPACE=""; 
+    fi
+
     if [[ -n $EDITOR && $BUFFER == $EDITOR\ * ]]; then
         if [[ ${#LBUFFER} -le ${#EDITOR} ]]; then
             RBUFFER=" ${BUFFER#$EDITOR }"
@@ -38,6 +46,7 @@ sudo-command-line() {
     else
         LBUFFER="sudo $LBUFFER"
     fi
+    LBUFFER=${WHITESPACE}${LBUFFER}
 }
 zle -N sudo-command-line
 # Defined shortcut keys: [Esc] [Esc]
