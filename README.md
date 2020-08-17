@@ -145,6 +145,11 @@ If you only know which themes you don't like, you can add them similarly to an i
 ZSH_THEME_RANDOM_IGNORED=(pygmalion tjkirch_mod)
 ```
 
+The theme name is displayed by default when you open a new window. To disable this set:
+```shell
+ZSH_ECHO_THEME=false
+```
+
 ### FAQ
 
 If you have some more questions or issues, you might find a solution in our [FAQ](https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ).
