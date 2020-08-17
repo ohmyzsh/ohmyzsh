@@ -35,4 +35,7 @@ else
   return 1
 fi
 
-echo "[oh-my-zsh] Random theme '${RANDOM_THEME}' loaded"
+# echo theme name unless disabled
+if [ -z "$ZSH_ECHO_THEME" ] || [ "$ZSH_ECHO_THEME" != false ]; then
+    echo "[oh-my-zsh] Random theme '${RANDOM_THEME}' loaded"
+fi
