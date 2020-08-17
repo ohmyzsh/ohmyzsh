@@ -53,6 +53,10 @@ error() {
 	echo ${RED}"Error: $@"${RESET} >&2
 }
 
+underline() {
+	echo "$(printf '\033[4m')$@$(printf '\033[24m')"
+}
+
 setup_color() {
 	# Only use colors if connected to a terminal
 	if [ -t 1 ]; then
@@ -269,11 +273,13 @@ main() {
 		                        /____/                       ....is now installed!
 
 
+	EOF
+	cat <<-EOF
 		Before you scream Oh My Zsh! please look over the ~/.zshrc file to select plugins, themes, and options.
 
-		• Follow us on Twitter: https://twitter.com/ohmyzsh
-		• Join our Discord server: https://discord.gg/ohmyzsh
-		• Get stickers, shirts, coffee mugs and other swag: https://shop.planetargon.com/collections/oh-my-zsh
+		• Follow us on Twitter: $(underline https://twitter.com/ohmyzsh)
+		• Join our Discord server: $(underline https://discord.gg/ohmyzsh)
+		• Get stickers, shirts, coffee mugs and other swag: $(underline https://shop.planetargon.com/collections/oh-my-zsh)
 
 	EOF
 	printf "$RESET"
