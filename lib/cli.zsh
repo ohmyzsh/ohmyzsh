@@ -201,10 +201,14 @@ function _omz::pr::test {
 }
 
 function _omz::update {
+    # Run update script
     env ZSH="$ZSH" sh "$ZSH/tools/upgrade.sh"
     # Update last updated file
     zmodload zsh/datetime
     echo "LAST_EPOCH=$(( EPOCHSECONDS / 60 / 60 / 24 ))" >! "${ZSH_CACHE_DIR}/.zsh-update"
     # Remove update lock if it exists
     command rm -rf "$ZSH/log/update.lock"
+    # Restart the zsh session
+    _omz::log info "restarting the zsh session..."
+    [[ -z "$SHELL" ]] && exec ${SHELL#-} || exec zsh
 }
