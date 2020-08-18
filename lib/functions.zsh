@@ -18,9 +18,6 @@ function upgrade_oh_my_zsh() {
   echo "LAST_EPOCH=$(( EPOCHSECONDS / 60 / 60 / 24 ))" >! "${ZSH_CACHE_DIR}/.zsh-update"
   # Remove update lock if it exists
   command rm -rf "$ZSH/log/update.lock"
-  # Restart the zsh session
-  _omz::log info "restarting the zsh session..."
-  [[ -z "$SHELL" ]] && exec ${SHELL#-} || exec zsh
 }
 
 function take() {
