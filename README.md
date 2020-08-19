@@ -44,8 +44,9 @@ sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools
 ```
 
 #### via fetch
-```
-$ sh -c "$(fetch https://raw.githubusercontent.com/ohmyzsh/oh-my-zsh/master/tools/install.sh -o -)"
+
+```shell
+sh -c "$(fetch https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -o -)"
 ```
 
 #### Manual inspection
