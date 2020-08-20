@@ -5,7 +5,7 @@
 # or via wget:
 #   sh -c "$(wget -qO- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 # or via fetch:
-#   sh -c "$(fetch https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -o -)"
+#   sh -c "$(fetch -o - https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 #
 # As an alternative, you can first download the install script and run it afterwards:
 #   wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
