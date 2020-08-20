@@ -32,6 +32,8 @@
 #   --keep-zshrc: sets KEEP_ZSHRC to 'yes'
 # For example:
 #   sh install.sh --unattended
+# or:
+#   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 #
 set -e
 
