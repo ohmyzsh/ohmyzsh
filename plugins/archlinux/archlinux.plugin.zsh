@@ -14,6 +14,7 @@ if (( $+commands[trizen] )); then
   alias trorph='trizen -Qtd'
   alias trinsd='trizen -S --asdeps'
   alias trmir='trizen -Syy'
+  alias trcln='trizen -Scc'
 
 
   if (( $+commands[abs] && $+commands[aur] )); then
@@ -69,9 +70,10 @@ if (( $+commands[yay] )); then
   alias yaloc='yay -Qi'
   alias yalocs='yay -Qs'
   alias yalst='yay -Qe'
-  alias yaorph='yay -Qtd'
+  alias yaorph='yay -Yc'
   alias yainsd='yay -S --asdeps'
   alias yamir='yay -Syy'
+  alias yacln='yay -Sc'
 
 
   if (( $+commands[abs] && $+commands[aur] )); then
@@ -100,6 +102,8 @@ if (( $+commands[pacaur] )); then
   alias paorph='pacaur -Qtd'
   alias painsd='pacaur -S --asdeps'
   alias pamir='pacaur -Syy'
+  alias pacln='pacaur -Sc'
+
 
   if (( $+commands[abs] && $+commands[aur] )); then
     alias paupd='pacaur -Sy && sudo abs && sudo aur'
@@ -152,6 +156,7 @@ alias pacfileupg='sudo pacman -Fy'
 alias pacfiles='pacman -F'
 alias pacls='pacman -Ql'
 alias pacown='pacman -Qo'
+alias paccln='pacman -Sc'
 
 
 if (( $+commands[abs] && $+commands[aur] )); then

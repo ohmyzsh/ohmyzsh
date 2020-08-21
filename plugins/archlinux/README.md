@@ -22,13 +22,14 @@ plugins=(... archlinux)
 | yalocs  | yay -Qs                            | Search for packages in the local database                           |
 | yalst   | yay -Qe                            | List installed packages including from AUR (tagged as "local")      |
 | yamir   | yay -Syy                           | Force refresh of all package lists after updating mirrorlist        |
-| yaorph  | yay -Qtd                           | Remove orphans using yay                                            |
+| yaorph  | yay -Yc                            | Remove orphans using yay                                            |
 | yare    | yay -R                             | Remove packages, keeping its settings and dependencies              |
 | yarem   | yay -Rns                           | Remove packages, including its settings and unneeded dependencies   |
 | yarep   | yay -Si                            | Display information about a package in the repositories             |
 | yareps  | yay -Ss                            | Search for packages in the repositories                             |
 | yaupg   | yay -Syu                           | Sync with repositories before upgrading packages                    |
 | yasu    | yay -Syu --no-confirm              | Same as `yaupg`, but without confirmation                           |
+| yacln   | yay -Sc                            | Clean all pacman and aur caches                                     |
 
 #### TRIZEN
 
@@ -53,6 +54,7 @@ plugins=(... archlinux)
 | trupd   | trizen -Sy                         | Update and refresh the local package database                       |
 | trupg   | trizen -Syua                       | Sync with repositories before upgrading all packages (from AUR too) |
 | trsu    | trizen -Syua --no-confirm          | Same as `trupg`, but without confirmation                           |
+| trcln   | trizen -Scc                        | Clean all pacman and aur caches                                     |
 | upgrade | trizen -Syu                        | Sync with repositories before upgrading packages                    |
 
 #### YAOURT
@@ -102,6 +104,7 @@ plugins=(... archlinux)
 | paupd   | pacaur -Sy                         | Update and refresh the local package database                       |
 | paupg   | pacaur -Syua                       | Sync with repositories before upgrading all packages (from AUR too) |
 | pasu    | pacaur -Syua --no-confirm          | Same as `paupg`, but without confirmation                           |
+| pacln   | pacaur -Sc                         | Clean all pacman and aur caches                                     |
 | upgrade | pacaur -Syu                        | Sync with repositories before upgrading packages                    |
 
 #### PACMAN
@@ -130,6 +133,7 @@ plugins=(... archlinux)
 | pacfiles     | pacman -F                               | Search package file names for matching strings               |
 | pacls        | pacman -Ql                              | List files in a package                                      |
 | pacown       | pacman -Qo                              | Show which package owns a file                               |
+| paccln       | pacman -Sc                              | Clean all pacman caches                                      |
 
 | Function       | Description                                          |
 |----------------|------------------------------------------------------|
@@ -152,3 +156,4 @@ plugins=(... archlinux)
 - Juraj Fiala - doctorjellyface@riseup.net
 - Majora320 (Moses Miller) - Majora320@gmail.com
 - Ybalrid (Arthur Brainville) - ybalrid@ybalrid.info
+- TahaCodes (Taha Farahani) - iotahacodes@gmail.com
