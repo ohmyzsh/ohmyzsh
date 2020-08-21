@@ -12,28 +12,53 @@ function __git_prompt_git() {
 # Outputs current branch info in prompt format
 function git_prompt_info() {
   local ref
-  if [[ "$(command git config --get oh-my-zsh.hide-status 2>/dev/null)" != "1" ]]; then
-    branches=$(command git branch --list -a 2> /dev/null)
-    if [[ "$branches" == "" && "$?" == "0" ]]; then
-        # Look for initialized folders
-        info="<initialized>"
-    elif branch=$(command git symbolic-ref HEAD 2> /dev/null); then
-        # Branch name in the form "<upstream branch name>/<brach name>"
-        ref=$(command git for-each-ref --format='%(upstream:short)' ${branch} 2> /dev/null) || return 0
-        info=$(command echo "${ref#refs/heads/}")
-        if [[ "${info}" == "" ]]; then
-            # Handle for no remote branch
-            info=$(command echo "<no-remote>/$(command git rev-parse --abbrev-ref HEAD)" 2> /dev/null) || return 0
-        fi
-    elif [[ "$(command git tag --points-at 2>/dev/null)" != "" ]]; then
-        # Detached at a tag
-        info=$(command git tag --points-at 2>/dev/null)
-    else
-        # Detached at unnamed revision
-        info=$(command git rev-parse --short HEAD 2> /dev/null) || return 0
-    fi
-    echo "$ZSH_THEME_GIT_PROMPT_PREFIX${info}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
+  local branches
+  local info
+  local deatchedtag
+
+  # If oh-my-zsh.hide-status equals to '1', get out.
+  if [[ "$(__git_prompt_git config --get oh-my-zsh.hide-status 2>/dev/null)" == "1" ]]; then
+    return 0
   fi
+
+  # If we are on a folder not tracked by git, get out.
+  if [[ "$(__git_prompt_git rev-parse --git-dir 2> /dev/null)" == "" ]]; then
+    return 0
+  fi
+
+  # If oh-my-zsh.classic-info is set, use classic info output of branch only
+  if [[ "$(__git_prompt_git config --get oh-my-zsh.classic-info 2>/dev/null)" == "1" ]]; then
+    ref=$(__git_prompt_git symbolic-ref HEAD 2> /dev/null) || \
+    ref=$(__git_prompt_git rev-parse --short HEAD 2> /dev/null) || return 0
+    echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
+    return 0
+  fi
+
+  branches=$(__git_prompt_git branch --list -a 2> /dev/null)
+  if [[ "${branches}" == "" && "$?" == "0" ]]; then
+      # Look for initialized repos that have zero commits
+      ref=$(__git_prompt_git symbolic-ref HEAD 2> /dev/null) || \
+      ref=$(__git_prompt_git rev-parse --short HEAD 2> /dev/null)
+      info="<initialized>/${ref#refs/heads/}"
+  elif branch=$(__git_prompt_git symbolic-ref HEAD 2> /dev/null); then
+      # Show upstream remote and current branch
+      ref=$(__git_prompt_git for-each-ref --format='%(upstream:short)' ${branch} 2> /dev/null) || return 0
+      info="${ref#refs/heads/}"
+      if [[ "${info}" == "" ]]; then
+          # Handle for no remote branch
+          info="<no-remote>/$(__git_prompt_git rev-parse --abbrev-ref HEAD)" || return 0
+      fi
+  else
+      deatchedtag=$(__git_prompt_git tag --points-at 2>/dev/null)
+      if [[ "${detachedtag}" != "" ]]; then
+          # Detached at a tag
+          info="${detachedtag}"
+      else
+          # Detached at unnamed revision
+          info=$(__git_prompt_git rev-parse --short HEAD 2> /dev/null) || return 0
+      fi
+  fi
+  echo "$ZSH_THEME_GIT_PROMPT_PREFIX${info}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
 }
 
 # Checks if working tree is dirty
