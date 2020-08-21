@@ -4,6 +4,8 @@
 #   sh -c "$(curl -fsSL https://raw.githubusercontent.com/mnebus/ohmyzsh/master/tools/install.sh)"
 # or wget:
 #   sh -c "$(wget -qO- https://raw.githubusercontent.com/mnebus/ohmyzsh/master/tools/install.sh)"
+# or via fetch:
+#   sh -c "$(fetch -o - https://raw.githubusercontent.com/mnebus/ohmyzsh/master/tools/install.sh)"
 #
 # As an alternative, you can first download the install script and run it afterwards:
 #   wget https://raw.githubusercontent.com/mnebus/ohmyzsh/master/tools/install.sh
@@ -20,14 +22,18 @@
 #   BRANCH  - branch to check out immediately after install (default: master)
 #
 # Other options:
-#   CHSH    - 'no' means the installer will not change the default shell (default: yes)
-#   RUNZSH  - 'no' means the installer will not run zsh after the install (default: yes)
+#   CHSH       - 'no' means the installer will not change the default shell (default: yes)
+#   RUNZSH     - 'no' means the installer will not run zsh after the install (default: yes)
+#   KEEP_ZSHRC - 'yes' means the installer will not replace an existing .zshrc (default: no)
 #
 # You can also pass some arguments to the install script to set some these options:
 #   --skip-chsh: has the same behavior as setting CHSH to 'no'
 #   --unattended: sets both CHSH and RUNZSH to 'no'
+#   --keep-zshrc: sets KEEP_ZSHRC to 'yes'
 # For example:
 #   sh install.sh --unattended
+# or:
+#   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 #
 set -e
 
@@ -40,6 +46,7 @@ BRANCH=${BRANCH:-master}
 # Other options
 CHSH=${CHSH:-yes}
 RUNZSH=${RUNZSH:-yes}
+KEEP_ZSHRC=${KEEP_ZSHRC:-no}
 
 
 command_exists() {
@@ -48,6 +55,10 @@ command_exists() {
 
 error() {
 	echo ${RED}"Error: $@"${RESET} >&2
+}
+
+underline() {
+	echo "$(printf '\033[4m')$@$(printf '\033[24m')"
 }
 
 setup_color() {
@@ -111,6 +122,11 @@ setup_zshrc() {
 	# Must use this exact name so uninstall.sh can find it
 	OLD_ZSHRC=~/.zshrc.pre-oh-my-zsh
 	if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]; then
+		# Skip this if the user doesn't want to replace an existing .zshrc
+		if [ $KEEP_ZSHRC = yes ]; then
+			echo "${YELLOW}Found ~/.zshrc.${RESET} ${GREEN}Keeping...${RESET}"
+			return
+		fi
 		if [ -e "$OLD_ZSHRC" ]; then
 			OLD_OLD_ZSHRC="${OLD_ZSHRC}-$(date +%Y-%m-%d_%H-%M-%S)"
 			if [ -e "$OLD_OLD_ZSHRC" ]; then
@@ -129,10 +145,9 @@ setup_zshrc() {
 
 	echo "${GREEN}Using the Oh My Zsh template file and adding it to ~/.zshrc.${RESET}"
 
-	cp "$ZSH/templates/zshrc.zsh-template" ~/.zshrc
 	sed "/^export ZSH=/ c\\
 export ZSH=\"$ZSH\"
-" ~/.zshrc > ~/.zshrc-omztemp
+" "$ZSH/templates/zshrc.zsh-template" > ~/.zshrc-omztemp
 	mv -f ~/.zshrc-omztemp ~/.zshrc
 
 	echo
@@ -228,6 +243,7 @@ main() {
 		case $1 in
 			--unattended) RUNZSH=no; CHSH=no ;;
 			--skip-chsh) CHSH=no ;;
+			--keep-zshrc) KEEP_ZSHRC=yes ;;
 		esac
 		shift
 	done
@@ -261,11 +277,13 @@ main() {
 		                        /____/                       ....is now installed!
 
 
-		Please look over the ~/.zshrc file to select plugins, themes, and options.
+	EOF
+	cat <<-EOF
+		Before you scream Oh My Zsh! please look over the ~/.zshrc file to select plugins, themes, and options.
 
-		p.s. Follow us on https://twitter.com/ohmyzsh
-
-		p.p.s. Get stickers, shirts, and coffee mugs at https://shop.planetargon.com/collections/oh-my-zsh
+		• Follow us on Twitter: $(underline https://twitter.com/ohmyzsh)
+		• Join our Discord server: $(underline https://discord.gg/ohmyzsh)
+		• Get stickers, shirts, coffee mugs and other swag: $(underline https://shop.planetargon.com/collections/oh-my-zsh)
 
 	EOF
 	printf "$RESET"
