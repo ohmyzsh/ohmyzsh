@@ -3,11 +3,21 @@ function zsh_stats() {
 }
 
 function uninstall_oh_my_zsh() {
-  env ZSH=$ZSH sh $ZSH/tools/uninstall.sh
+  env ZSH="$ZSH" sh "$ZSH/tools/uninstall.sh"
 }
 
 function upgrade_oh_my_zsh() {
-  env ZSH=$ZSH sh $ZSH/tools/upgrade.sh
+  if (( $+functions[_omz::update] )); then
+    echo >&2 "${fg[yellow]}Note: \`$0\` is deprecated. Use \`omz update\` instead.$reset_color"
+  fi
+
+  # Run update script
+  env ZSH="$ZSH" sh "$ZSH/tools/upgrade.sh"
+  # Update last updated file
+  zmodload zsh/datetime
+  echo "LAST_EPOCH=$(( EPOCHSECONDS / 60 / 60 / 24 ))" >! "${ZSH_CACHE_DIR}/.zsh-update"
+  # Remove update lock if it exists
+  command rm -rf "$ZSH/log/update.lock"
 }
 
 function take() {
@@ -21,7 +31,7 @@ function open_command() {
   case "$OSTYPE" in
     darwin*)  open_cmd='open' ;;
     cygwin*)  open_cmd='cygstart' ;;
-    linux*)   ! [[ $(uname -a) =~ "Microsoft" ]] && open_cmd='xdg-open' || {
+    linux*)   [[ "$(uname -r)" != *icrosoft* ]] && open_cmd='nohup xdg-open' || {
                 open_cmd='cmd.exe /c start ""'
                 [[ -e "$1" ]] && { 1="$(wslpath -w "${1:a}")" || return 1 }
               } ;;
@@ -31,12 +41,7 @@ function open_command() {
               ;;
   esac
 
-  # don't use nohup on OSX
-  if [[ "$OSTYPE" == darwin* ]]; then
-    ${=open_cmd} "$@" &>/dev/null
-  else
-    nohup ${=open_cmd} "$@" &>/dev/null
-  fi
+  ${=open_cmd} "$@" &>/dev/null
 }
 
 #
@@ -93,7 +98,7 @@ function default() {
 #    0 if the env variable exists, 3 if it was set
 #
 function env_default() {
-    (( ${${(@f):-$(typeset +xg)}[(I)$1]} )) && return 0
+    [[ ${parameters[$1]} = *-export* ]] && return 0
     export "$1=$2" && return 3
 }
 

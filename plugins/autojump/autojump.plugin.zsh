@@ -1,8 +1,3 @@
-(( $+commands[autojump] )) || {
-  echo '[oh-my-zsh] Please install autojump first (https://github.com/wting/autojump)'
-  return
-}
-
 declare -a autojump_paths
 autojump_paths=(
   $HOME/.autojump/etc/profile.d/autojump.zsh         # manual installation
@@ -34,6 +29,6 @@ if (( ! found && $+commands[brew] )); then
   fi
 fi
 
-(( ! found )) && echo '[oh-my-zsh] autojump script not found'
+(( ! found )) && echo '[oh-my-zsh] autojump not found. Please install it first.'
 
 unset autojump_paths file found
