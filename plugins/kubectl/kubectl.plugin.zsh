@@ -14,7 +14,7 @@ fi
 alias k=kubectl
 
 # Execute a kubectl command against all namespaces
-alias kca='f(){ kubectl "$@" --all-namespaces;  unset -f f; }; f'
+alias kca='_kca(){ kubectl "$@" --all-namespaces;  unset -f _kca; }; _kca'
 
 # Apply a YML file
 alias kaf='kubectl apply -f'
@@ -46,6 +46,9 @@ alias kdelp='kubectl delete pods'
 
 # get pod by label: kgpl "app=myapp" -n myns
 alias kgpl='kgp -l'
+
+# get pod by namespace: kgpn kube-system"
+alias kgpn='kgp -n'
 
 # Service management.
 alias kgs='kubectl get svc'

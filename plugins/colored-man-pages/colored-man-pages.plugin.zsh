@@ -17,7 +17,7 @@ EOF
 fi
 
 function colored() {
-	env \
+	command env \
 		LESS_TERMCAP_mb=$(printf "\e[1;31m") \
 		LESS_TERMCAP_md=$(printf "\e[1;31m") \
 		LESS_TERMCAP_me=$(printf "\e[0m") \
@@ -31,6 +31,9 @@ function colored() {
 			"$@"
 }
 
-function man() {
-	colored man "$@"
+# Colorize man and dman/debman (from debian-goodies)
+function man \
+	dman \
+	debman {
+	colored $0 "$@"
 }

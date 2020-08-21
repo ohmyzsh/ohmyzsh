@@ -1,9 +1,10 @@
-## Introduction
+# meteor plugin
 
 The [meteor plugin](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/meteor) provides many
 [useful aliases](#aliases) as well as completion for the `meteor` command.
 
 Enable it by adding `meteor` to the plugins array in your zshrc file:
+
 ```zsh
 plugins=(... meteor)
 ```

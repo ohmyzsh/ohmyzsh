@@ -4,6 +4,7 @@ Faster alternative to the main SVN plugin implementation. Works with svn 1.6 and
 Use as a drop-in replacement to the svn plugin, not as complementary.
 
 To use it, add `svn-fast-info` to the plugins array in your zshrc file:
+
 ```zsh
 plugins=(... svn-fast-info)
 ```

@@ -4,6 +4,7 @@ The mvn plugin provides many [useful aliases](#aliases) as well as completion fo
 the [Apache Maven](https://maven.apache.org/) command (`mvn`).
 
 Enable it by adding `mvn` to the plugins array in your zshrc file:
+
 ```zsh
 plugins=(... mvn)
 ```
@@ -35,6 +36,7 @@ if it's found, or the mvn command otherwise.
 | `mvndocs`            | `mvn dependency:resolve -Dclassifier=javadoc`   |
 | `mvndt`              | `mvn dependency:tree`                           |
 | `mvne`               | `mvn eclipse:eclipse`                           |
+| `mvnfmt`             | `mvn fmt:format`                                |
 | `mvnjetty`           | `mvn jetty:run`                                 |
 | `mvnp`               | `mvn package`                                   |
 | `mvns`               | `mvn site`                                      |
