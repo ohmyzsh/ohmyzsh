@@ -13,13 +13,15 @@
 # ------------------------------------------------------------------------------
 
 sudo-command-line() {
+    local WHITESPACE
+
     [[ -z $BUFFER ]] && LBUFFER="$(fc -ln -1)"
 
     if [[ ${LBUFFER:0:1} == " " ]] ; then 
-        WHITESPACE=" ";
+        WHITESPACE=" "
         LBUFFER=${LBUFFER:1}
     else 
-        WHITESPACE=""; 
+        WHITESPACE="" 
     fi
 
     if [[ -n $EDITOR && $BUFFER == $EDITOR\ * ]]; then
