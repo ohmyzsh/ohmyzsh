@@ -14,6 +14,14 @@
 
 sudo-command-line() {
     [[ -z $BUFFER ]] && LBUFFER="$(fc -ln -1)"
+
+    # Save beginning space
+    local WHITESPACE=""
+    if [[ ${LBUFFER:0:1} == " " ]] ; then 
+        WHITESPACE=" "
+        LBUFFER="${LBUFFER:1}"
+    fi
+
     if [[ -n $EDITOR && $BUFFER == $EDITOR\ * ]]; then
         if [[ ${#LBUFFER} -le ${#EDITOR} ]]; then
             RBUFFER=" ${BUFFER#$EDITOR }"
@@ -38,6 +46,9 @@ sudo-command-line() {
     else
         LBUFFER="sudo $LBUFFER"
     fi
+
+    # Preserve beginning space
+    LBUFFER="${WHITESPACE}${LBUFFER}"
 }
 zle -N sudo-command-line
 # Defined shortcut keys: [Esc] [Esc]
