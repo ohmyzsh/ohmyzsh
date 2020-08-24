@@ -39,7 +39,13 @@ function move-bb-to-github {
   fi;
 }
 
-# Deleting consecutive commit from a branch
+# @todo: make a function to remove a single commit
+# remove last commit 
+# git reset --hard HEAD~1
+# then git push --force
+
+# @todo: make a function
+# Removing consecutive commits from a branch
 # https://www.clock.co.uk/insight/deleting-a-git-commit
 # git rebase --onto $branchName~$firstCommitToRemove $branchName~$firstCommitToKeep $branchName
 

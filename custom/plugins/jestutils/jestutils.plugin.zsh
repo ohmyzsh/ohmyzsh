@@ -21,7 +21,6 @@ function pjwa { # jest watch all
   npm run test:unit -- --watchAll --runInBand --bail --verbose ${1};
 }
 
-
 function jest-utils {
   echo "jw <regex pattern for files> - Run tests, watch and bail";
   echo "jwnc <regex pattern for files> - Run tests, watch and bail";

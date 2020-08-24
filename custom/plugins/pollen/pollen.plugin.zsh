@@ -48,8 +48,13 @@ function pollen-clean-build2 {
   docker-compose down && npm run bootstrap
 }
 
-## really clean build
+## clean build + clear virtul env
 function pollen-really-clean-build {
+  pollen-clear-virtual-env && docker-compose down && bin/bootstrap
+}
+
+## really clean build
+function pollen-really-really-clean-build {
   docker-compose down && bin/setup && bin/bootstrap
 }
 
@@ -115,7 +120,8 @@ function pollen {
   echo "pollen-gco-jira - Checkout a branch in the format required to correspond to a Jira issue";
   echo "pollen-git-commit-jira - Commit to a branch in the format required to correspond to a Jira issue";
   echo "pollen-phoenix-arise - run FE";
-  echo "pollen-really-clean-build - bin/setup";
+  echo "pollen-really-clean-build - clean build but with virtual env cleared";
+  echo "pollen-really-really-clean-build - bin/setup";
   echo "pollen-reset-demo-data - delete then re-create demo data";
   echo "pollen-run-tests-all - runs tests";
   echo "pollen-server-up - spin up pollen server";
