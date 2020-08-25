@@ -4,14 +4,16 @@ _pipenv() {
 }
 compdef _pipenv pipenv
 
+POST_EXIT_DIR="${ZSH_CACHE_DIR:-$ZSH/cache}/pipenv-post-exit-dir"
+
 # Automatic pipenv shell activation/deactivation
 _togglePipenvShell() {
-  # deactivate shell if Pipfile doesn't exist and not in a subdir
-  if [[ ! -f "$PWD/Pipfile" ]]; then
-    if [[ "$PIPENV_ACTIVE" == 1 ]]; then
-      if [[ "$PWD" != "$pipfile_dir"* ]]; then
-        exit
-      fi
+  # deactivate shell if active and and not in a subdir of original pipenv
+  if [[ "$PIPENV_ACTIVE" == 1 ]]; then
+    if [[ "$PWD" != "$pipfile_dir"* ]]; then
+      echo "$PWD" > "$POST_EXIT_DIR"
+      unset pipfile_dir
+      exit
     fi
   fi
 
@@ -23,8 +25,20 @@ _togglePipenvShell() {
     fi
   fi
 }
+
+_changeDirPostExit() {
+  if [[ "$PIPENV_ACTIVE" != 1 ]]; then
+    if [[ -f "$POST_EXIT_DIR" ]]; then
+      new_dir=$(cat "$POST_EXIT_DIR")
+      rm "$POST_EXIT_DIR"
+      cd "$new_dir"
+    fi
+  fi
+}
+
 autoload -U add-zsh-hook
 add-zsh-hook chpwd _togglePipenvShell
+add-zsh-hook chpwd _changeDirPostExit
 _togglePipenvShell
 
 # Aliases
