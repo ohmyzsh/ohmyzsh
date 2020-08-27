@@ -1,22 +1,19 @@
-kube_get_service_list() {
-    kubectl get services -o name | sed  "s/service\///g"
-}
-
-kube_get_context_list() {
-    kubectl config get-contexts -o name
-}
-
-kube_get_namespace_list() {
-    kubectl get namespaces -o name | sed "s/namespace\///g"
-}
-
-kube_get_pod_list() {
-    kubectl get pods -o name | sed "s/pod\///g"
-}
-
-
 _telepresence() {
-    local state
+    kube_get_service_list() {
+        kubectl get services -o name | sed  "s/service\///g"
+    }
+
+    kube_get_context_list() {
+        kubectl config get-contexts -o name
+    }
+
+    kube_get_namespace_list() {
+        kubectl get namespaces -o name | sed "s/namespace\///g"
+    }
+
+    kube_get_pod_list() {
+        kubectl get pods -o name | sed "s/pod\///g"
+    }
     args+=(
     "--version[show program's version number and exit]"
     "--logfile[The path to write logs to. '-' means stdout, default is './telepresence.log'.]"
