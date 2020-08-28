@@ -25,8 +25,8 @@ prompt_setup_pygmalion(){
   base_prompt='$(_virtualenv_prompt_info)%{$fg[magenta]%}%n%{$reset_color%}%{$fg[cyan]%}@%{$reset_color%}%{$fg[yellow]%}%m%{$reset_color%}%{$fg[red]%}:%{$reset_color%}%{$fg[cyan]%}%0~%{$reset_color%}%{$fg[red]%}|%{$reset_color%}'
   post_prompt='%{$fg[cyan]%}⇒%{$reset_color%}  '
 
-  base_prompt_nocolor=$(echo "$base_prompt" | perl -pe "s/%\{[^}]+\}//g")
-  post_prompt_nocolor=$(echo "$post_prompt" | perl -pe "s/%\{[^}]+\}//g")
+  base_prompt_nocolor=${base_prompt//\%\{[^\}]##\}}
+  post_prompt_nocolor=${post_prompt//\%\{[^\}]##\}}
 
   autoload -U add-zsh-hook
   add-zsh-hook precmd prompt_pygmalion_precmd
@@ -34,7 +34,7 @@ prompt_setup_pygmalion(){
 
 prompt_pygmalion_precmd(){
   local gitinfo=$(git_prompt_info)
-  local gitinfo_nocolor=$(echo "$gitinfo" | perl -pe "s/%\{[^}]+\}//g")
+  local gitinfo_nocolor=${gitinfo//\%\{[^\}]##\}}
   local exp_nocolor="$(print -P \"$base_prompt_nocolor$gitinfo_nocolor$post_prompt_nocolor\")"
   local prompt_length=${#exp_nocolor}
 
