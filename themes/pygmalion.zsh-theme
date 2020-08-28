@@ -1,6 +1,8 @@
 # Yay! High voltage and arrows!
 
 prompt_setup_pygmalion(){
+  setopt localoptions extendedglob
+
   ZSH_THEME_GIT_PROMPT_PREFIX="%{$reset_color%}%{$fg[green]%}"
   ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%} "
   ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[yellow]%}⚡%{$reset_color%}"
@@ -17,6 +19,8 @@ prompt_setup_pygmalion(){
 }
 
 prompt_pygmalion_precmd(){
+  setopt localoptions extendedglob
+
   local gitinfo=$(git_prompt_info)
   local gitinfo_nocolor=${gitinfo//\%\{[^\}]##\}}
   local exp_nocolor="$(print -P \"$base_prompt_nocolor$gitinfo_nocolor$post_prompt_nocolor\")"
