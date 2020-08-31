@@ -26,6 +26,11 @@ if "$ZSH/tools/require_tool.sh" emacsclient 24 2>/dev/null ; then
     # create a new X frame
     alias eframe='emacsclient --alternate-editor "" --create-frame'
 
+    # The commands like to C-x C-f follow the directories path of zsh prompt 
+    chpwd() { print -P "\033AnSiTc %d" }
+    print -P "\033AnSiTu %n"
+    print -P "\033AnSiTc %d"
+
 
     # Write to standard output the path to the file
     # opened in the current buffer.
