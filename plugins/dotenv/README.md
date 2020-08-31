@@ -61,6 +61,11 @@ will be added to an allowed list; if you choose Never, it will be added to a dis
 If a directory is found in either of those lists, the plugin won't ask for confirmation and will
 instead either source the .env file or proceed without action respectively.
 
+If both `$ZSH_CACHE_DIR` and `$ZSH` are undefined the `[a]lways` and `n[e]ver`
+options will not be displayed as attempting to append to a missing file would
+result in an error everytime the plugin ran until you define the variables
+mentioned
+
 The allowed and disallowed lists are saved by default in `$ZSH_CACHE_DIR/dotenv-allowed.list` and
 `$ZSH_CACHE_DIR/dotenv-disallowed.list` respectively. If you want to change that location,
 change the `$ZSH_DOTENV_ALLOWED_LIST` and `$ZSH_DOTENV_DISALLOWED_LIST` variables, like so:
