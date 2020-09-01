@@ -6,10 +6,13 @@ _terraform_cmds=(
     'console:Interactive console for Terraform interpolations'
     'destroy:Destroy Terraform-managed infrastructure'
     'fmt:Rewrites config files to canonical format'
+    'force-unlock:Manually unlock the terraform state'
     'get:Download and install modules for the configuration'
     'graph:Create a visual graph of Terraform resources'
     'import:Import existing infrastructure into Terraform'
     'init:Initialize a Terraform working directory'
+    'login:Obtain and save credentials for a remote host'
+    'logout:Remove locally-stored credentials for a remote host'
     'output:Read an output from a state file'
     'plan:Generate and show an execution plan'
     'providers:Prints a tree of the providers used in the configuration'
@@ -81,6 +84,11 @@ __fmt() {
         '-recursive=[(false) Also process files in subdirectories. By default, only the given directory (or current directory) is processed.]'
 }
 
+__force_unlock() {
+    _arguments \
+        "-force[Don't ask for input for unlock confirmation.]"
+}
+
 __get() {
     _arguments \
         '-update=[(false) If true, modules already downloaded will be checked for updates and updated if necessary.]' \
@@ -126,6 +134,16 @@ __init() {
         '-reconfigure[Reconfigure the backend, ignoring any saved configuration.]' \
         '-upgrade=[(false) If installing modules (-get) or plugins (-get-plugins), ignore previously-downloaded objects and install the latest version allowed within configured constraints.]' \
         '-verify-plugins=[(true) Verify the authenticity and integrity of automatically downloaded plugins.]'
+}
+
+__login() {
+    _arguments \
+
+}
+
+__logout() {
+    _arguments \
+
 }
 
 __output() {
@@ -320,6 +338,8 @@ case "$words[1]" in
     __destroy ;;
   fmt)
     __fmt;;
+  force-unlock)
+    __force_unlock;;
   get)
     __get ;;
   graph)
@@ -328,6 +348,10 @@ case "$words[1]" in
     __import;;
   init)
     __init ;;
+  login)
+    __login ;;
+  logout)
+    __logout ;;
   output)
     __output ;;
   plan)
