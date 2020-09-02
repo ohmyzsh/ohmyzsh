@@ -41,8 +41,8 @@ fi
 zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-directories
 
 # Use caching so that commands like apt and dpkg complete are useable
-zstyle ':completion::complete:*' use-cache 1
-zstyle ':completion::complete:*' cache-path $ZSH_CACHE_DIR
+zstyle ':completion:*' use-cache yes
+zstyle ':completion:*' cache-path $ZSH_CACHE_DIR
 
 # Don't complete uninteresting users
 zstyle ':completion:*:*:*:users' ignored-patterns \
@@ -60,17 +60,16 @@ zstyle '*' single-ignored show
 
 if [[ $COMPLETION_WAITING_DOTS = true ]]; then
   expand-or-complete-with-dots() {
-    # toggle line-wrapping off and back on again
-    [[ -n "$terminfo[rmam]" && -n "$terminfo[smam]" ]] && echoti rmam
-    print -Pn "%{%F{red}......%f%}"
-    [[ -n "$terminfo[rmam]" && -n "$terminfo[smam]" ]] && echoti smam
-
+    print -Pn "%F{red}…%f"
     zle expand-or-complete
     zle redisplay
   }
   zle -N expand-or-complete-with-dots
-  bindkey "^I" expand-or-complete-with-dots
+  # Set the function as the default tab completion widget
+  bindkey -M emacs "^I" expand-or-complete-with-dots
+  bindkey -M viins "^I" expand-or-complete-with-dots
+  bindkey -M vicmd "^I" expand-or-complete-with-dots
 fi
 
 # automatically load bash completion functions
-autoload -Uz bashcompinit && bashcompinit
+autoload -U +X bashcompinit && bashcompinit

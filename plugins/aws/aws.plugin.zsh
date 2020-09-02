@@ -31,17 +31,17 @@ function aws_change_access_key() {
 
   echo Insert the credentials when asked.
   asp "$1" || return 1
-  aws iam create-access-key
-  aws configure --profile "$1"
+  AWS_PAGER="" aws iam create-access-key
+  AWS_PAGER="" aws configure --profile "$1"
 
   echo You can now safely delete the old access key running \`aws iam delete-access-key --access-key-id ID\`
   echo Your current keys are:
-  aws iam list-access-keys
+  AWS_PAGER="" aws iam list-access-keys
 }
 
 function aws_profiles() {
   [[ -r "${AWS_CONFIG_FILE:-$HOME/.aws/config}" ]] || return 1
-  grep '\[profile' "${AWS_CONFIG_FILE:-$HOME/.aws/config}"|sed -e 's/.*profile \([a-zA-Z0-9_\.-]*\).*/\1/'
+  grep '\[profile' "${AWS_CONFIG_FILE:-$HOME/.aws/config}"|sed -e 's/.*profile \([a-zA-Z0-9@_\.-]*\).*/\1/'
 }
 
 function _aws_profiles() {
@@ -63,7 +63,7 @@ fi
 # Load awscli completions
 
 # AWS CLI v2 comes with its own autocompletion. Check if that is there, otherwise fall back
-if [[ -x /usr/local/bin/aws_completer ]]; then
+if command -v aws_completer &> /dev/null; then
   autoload -Uz bashcompinit && bashcompinit
   complete -C aws_completer aws
 else
