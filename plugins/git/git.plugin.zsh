@@ -133,7 +133,8 @@ function ggl() {
 }
 compdef _git ggl=git-checkout
 
-alias ggn='git grep -n'
+alias ggr='git grep -n'
+alias ggri='git grep -n -i'
 
 function ggp() {
   if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
