@@ -69,7 +69,9 @@ then
   printf "${BLUE}${BOLD}%s ${UNDER}%s${RESET}\n" "Get your Oh My Zsh swag at:" "https://shop.planetargon.com/collections/oh-my-zsh"
 else
   printf "${RED}%s${RESET}\n" 'There was an error updating. Try again later?'
-  exit 1
+
+  # Prepare to return an error exit code
+  status=1
 fi
 
 # Unset git-config values set just for the upgrade
@@ -77,3 +79,6 @@ case "$resetAutoStash" in
   "") git config --unset rebase.autoStash ;;
   *) git config rebase.autoStash "$resetAutoStash" ;;
 esac
+
+# Exit with `1` if the update failed
+exit $status && unset status
