@@ -68,10 +68,8 @@ then
   printf "${BLUE}${BOLD}%s ${UNDER}%s${RESET}\n" "Want to get involved in the community? Join our Discord:" "https://discord.gg/ohmyzsh"
   printf "${BLUE}${BOLD}%s ${UNDER}%s${RESET}\n" "Get your Oh My Zsh swag at:" "https://shop.planetargon.com/collections/oh-my-zsh"
 else
+  status=$?
   printf "${RED}%s${RESET}\n" 'There was an error updating. Try again later?'
-
-  # Prepare to return an error exit code
-  status=1
 fi
 
 # Unset git-config values set just for the upgrade
