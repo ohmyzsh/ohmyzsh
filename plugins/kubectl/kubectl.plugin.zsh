@@ -150,3 +150,8 @@ alias kepvc='kubectl edit pvc'
 alias kdpvc='kubectl describe pvc'
 alias kdelpvc='kubectl delete pvc'
 
+# StorageClass management.
+alias kgsc='kubectl get storageclass'
+alias kesc='kubectl edit storageclass'
+alias kdsc='kubectl describe storageclass'
+alias kdelsc='kubectl delete storageclass'
