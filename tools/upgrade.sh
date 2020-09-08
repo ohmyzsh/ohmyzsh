@@ -79,4 +79,4 @@ case "$resetAutoStash" in
 esac
 
 # Exit with `1` if the update failed
-exit $status && unset status
+exit $status
