@@ -19,13 +19,13 @@ function current_epoch() {
     echo $(( EPOCHSECONDS / 60 / 60 / 24 ))
 }
 
-function update_last-updated_file() {
+function update_last_updated_file() {
     echo "LAST_EPOCH=$(current_epoch)" >! "${ZSH_CACHE_DIR}/.zsh-update"
 }
 
 function update_ohmyzsh() {
     ZSH="$ZSH" sh "$ZSH/tools/upgrade.sh"
-    update_last-updated_file
+    update_last_updated_file
 }
 
 () {
@@ -51,11 +51,11 @@ function update_ohmyzsh() {
     #  The return status from the function is handled specially. If it is zero, the signal is
     #  assumed to have been handled, and execution continues normally. Otherwise, the shell
     #  will behave as interrupted except that the return status of the trap is retained.
-    trap "rm -rf '$ZSH/log/update.lock'; return 1" EXIT INT QUIT
+    trap "command rm -rf '$ZSH/log/update.lock'; return 1" EXIT INT QUIT
 
     # Create or update .zsh-update file if missing or malformed
     if ! source "${ZSH_CACHE_DIR}/.zsh-update" 2>/dev/null || [[ -z "$LAST_EPOCH" ]]; then
-        update_last-updated_file
+        update_last_updated_file
         return
     fi
 
@@ -79,10 +79,10 @@ function update_ohmyzsh() {
         read -r -k 1 option
         [[ "$option" != $'\n' ]] && echo
         case "$option" in
-            [nN]) update_last-updated_file ;;
-            *) update_ohmyzsh ;;
+            [yY$'\n']) update_ohmyzsh ;;
+            [nN]) update_last_updated_file ;;
         esac
     fi
 }
 
-unset -f current_epoch update_last-updated_file update_ohmyzsh
+unset -f current_epoch update_last_updated_file update_ohmyzsh

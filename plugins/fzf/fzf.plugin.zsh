@@ -98,3 +98,13 @@ function indicate_error() {
 setup_using_debian_package || setup_using_base_dir || indicate_error
 
 unset -f setup_using_debian_package setup_using_base_dir indicate_error
+
+if [[ -z "$FZF_DEFAULT_COMMAND" ]]; then
+    if (( $+commands[rg] )); then
+        export FZF_DEFAULT_COMMAND='rg --files --hidden'
+    elif (( $+commands[fd] )); then
+        export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
+    elif (( $+commands[ag] )); then
+        export FZF_DEFAULT_COMMAND='ag -l --hidden -g ""'
+    fi
+fi
