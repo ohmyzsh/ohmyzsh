@@ -18,7 +18,7 @@ plugins=(... brew)
 | `bubo`   | `brew update && brew outdated`                                | Update Homebrew and all formulae, then list outdated formulae.      |
 | `bubc`   | `brew upgrade && brew cleanup`                                | Upgrade outdated formulae, then run cleanup.                        |
 | `bubu`   | `bubo && bubc`                                                | Do the last two operations above.                                   |
-| `bcubo`  | `brew update && brew outdated --cask`                         | Update Homebrew and alll formulae, then list outdated casks.        |
+| `bcubo`  | `brew update && brew outdated --cask`                         | Update Homebrew and all formulae, then list outdated casks.        |
 | `bcubc`  | `brew cask reinstall $(brew outdated --cask) && brew cleanup` | Update outdated casks, then run cleanup.                            |
 
 ## Completion
