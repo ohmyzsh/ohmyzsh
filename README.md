@@ -92,7 +92,7 @@ _Note that the plugins are separated by whitespace (spaces, tabs, new lines...).
 
 #### Using Plugins
 
-Each plugin includes a __README__, documenting it. This README should show the aliases (if the plugin adds any) and extra goodies that are inclued in that particular plugin.
+Each plugin includes a __README__, documenting it. This README should show the aliases (if the plugin adds any) and extra goodies that are included in that particular plugin.
 
 ### Themes
 
