@@ -71,7 +71,7 @@ if ! command grep -q -Fx "$zcompdump_revision" "$ZSH_COMPDUMP" 2>/dev/null \
 fi
 
 if [[ $ZSH_DISABLE_COMPFIX != true ]]; then
-  source $ZSH/lib/compfix.zsh
+  source $ZSH/lib/_compinit.zsh
   # If completion insecurities exist, warn the user
   handle_completion_insecurities
   # Load only from secure directories
