@@ -57,7 +57,7 @@ _z() {
         # don't track excluded directory trees
         local exclude
         for exclude in "${_Z_EXCLUDE_DIRS[@]}"; do
-            case "$*" in "$exclude*") return;; esac
+            case "$*" in "$exclude"*) return;; esac
         done
 
         # maintain the data file
