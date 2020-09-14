@@ -1,3 +1,11 @@
+# Load all stock functions (from $fpath files)
+autoload -U compaudit compinit
+
+# Save the location of the current completion dump file.
+if [ -z "$ZSH_COMPDUMP" ]; then
+  ZSH_COMPDUMP="${ZDOTDIR:-${HOME}}/.zcompdump-${SHORT_HOST}-${ZSH_VERSION}"
+fi
+
 # Handle completions insecurities (i.e., completion-dependent directories with
 # insecure ownership or permissions) by:
 #
@@ -43,6 +51,7 @@ function handle_completion_insecurities() {
 EOD
 }
 
+#
 function run_compinit() {
   # Construct zcompdump OMZ metadata
   local zcompdump_revision="#omz revision: $(builtin cd -q "$ZSH"; git rev-parse HEAD 2>/dev/null)"
