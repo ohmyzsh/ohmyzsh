@@ -23,6 +23,7 @@ function _omz {
     local -a cmds subcmds
     cmds=(
         'help:Usage information'
+        'update:Update Oh My Zsh'
         'pr:Commands for Oh My Zsh Pull Requests'
     )
 
@@ -48,6 +49,7 @@ Usage: omz <command> [options]
 Available commands:
 
     help                Print this help message
+    update              Update Oh My Zsh
     pr <command>        Commands for Oh My Zsh Pull Requests
 
 EOF
@@ -181,6 +183,10 @@ function _omz::pr::test {
     # After testing, go back to the previous HEAD if the user wants
     _omz::log prompt "do you want to go back to the previous branch? [Y/n] "
     read -r -k 1
+
+    # If no newline entered, add a newline
+    [[ "$REPLY" != $'\n' ]] && echo
+    # If NO selected, do nothing else
     [[ "$REPLY" = [nN] ]] && return
 
     (
@@ -192,4 +198,14 @@ function _omz::pr::test {
             return 1
         }
     )
+}
+
+function _omz::update {
+    # Run update script
+    env ZSH="$ZSH" sh "$ZSH/tools/upgrade.sh"
+    # Update last updated file
+    zmodload zsh/datetime
+    echo "LAST_EPOCH=$(( EPOCHSECONDS / 60 / 60 / 24 ))" >! "${ZSH_CACHE_DIR}/.zsh-update"
+    # Remove update lock if it exists
+    command rm -rf "$ZSH/log/update.lock"
 }
