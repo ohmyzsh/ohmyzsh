@@ -139,10 +139,10 @@ ZSH_THEME_RANDOM_CANDIDATES=(
 )
 ```
 
-If you only know which themes you don't like, you can add them similarly to a blacklist:
+If you only know which themes you don't like, you can add them similarly to an ignored list:
 
 ```shell
-ZSH_THEME_RANDOM_BLACKLIST=(pygmalion tjkirch_mod)
+ZSH_THEME_RANDOM_IGNORED=(pygmalion tjkirch_mod)
 ```
 
 ### FAQ
