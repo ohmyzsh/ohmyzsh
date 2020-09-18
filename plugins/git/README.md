@@ -108,6 +108,7 @@ plugins=(... git)
 | gmt                  | git mergetool --no-prompt                                                                                                        |
 | gmtvim               | git mergetool --no-prompt --tool=vimdiff                                                                                         |
 | gmum                 | git merge upstream/$(git_main_branch)                                                                                                          |
+| gmv                  | git mv                                                                                                                           |
 | gma                  | git merge --abort                                                                                                                |
 | gp                   | git push                                                                                                                         |
 | gpd                  | git push --dry-run                                                                                                               |

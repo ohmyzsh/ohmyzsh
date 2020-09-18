@@ -195,6 +195,7 @@ alias gmom='git merge origin/$(git_main_branch)'
 alias gmt='git mergetool --no-prompt'
 alias gmtvim='git mergetool --no-prompt --tool=vimdiff'
 alias gmum='git merge upstream/$(git_main_branch)'
+alias gmv='git mv'
 alias gma='git merge --abort'
 
 alias gp='git push'
