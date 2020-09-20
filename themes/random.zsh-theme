@@ -42,4 +42,6 @@ else
   return 1
 fi
 
-echo "[oh-my-zsh] Random theme '${RANDOM_THEME}' loaded"
+if [[ -z "$ZSH_THEME_RANDOM_QUIET" ]]; then
+  echo "[oh-my-zsh] Random theme '${RANDOM_THEME}' loaded"
+fi
