@@ -1,0 +1,380 @@
+#compdef podman
+
+# To get zsh to reread this file: unset -f _podman;rm -f ~/.zcompdump;compinit
+
+# On rereads, reset cache. (Not that the caching works, but some day it might)
+unset -m '_podman_*'
+
+###############################################################################
+# BEGIN 'podman help' parsers -- for options, subcommands, and usage
+
+# Run 'podman XX --help', set _podman_commands to a formatted list of cmds
+_read_podman_commands() {
+    local line
+
+    # Cache: the intention here is to run each 'podman help' only once.
+    # Unfortunately it doesn't seem to actually be working: even though
+    # I can see the var_ref in my shell, it's not visible here.
+    local _var_ref=_podman_commands_"${*// /_}"
+    typeset -ga _podman_commands
+    _podman_commands=(${(P)_var_ref})
+    (( $#_podman_commands )) && return
+
+    _call_program podman podman "$@" --help |\
+        sed -n -e '0,/^Available Commands/d' -e '/^[A-Z]/q;p' |\
+        sed -e 's/^ \+\([^ ]\+\) \+/\1:/' |\
+        egrep . | while read line; do
+        _podman_commands+=($line)
+    done
+
+    eval "typeset -ga $_var_ref"
+    eval "$_var_ref=(\$_podman_commands)"
+}
+
+# Run 'podman XX --help', set _podman_flag_list to a formatted list
+# of flag options for XX
+_read_podman_flags() {
+    local line
+
+    local _var_ref=_podman_flags_"${*// /_}"
+    eval "typeset -ga ${_var_ref}"
+    typeset -ga _podman_flag_list
+    _podman_flag_list=(${(P)_var_ref})
+    (( $#_podman_flag_list )) && return
+
+    # Extract the Flags; strip leading whitespace; pack '-f, --foo'
+    # as '-f,--foo' (no space); then add '=' to '--foo string'.
+    # The result will be, e.g. '-f,--foo=string  Description of Option'
+    _call_program podman podman "$@" --help |\
+        sed -n -e '0,/^Flags:/d' -e '/^$/q;p' |\
+        grep '^ \+-' |\
+        sed -e 's/^ *//' -e 's/^\(-.,\) --/\1--/' |\
+        sed -e 's/^\(-[^ ]\+\) \([^ ]\+\)  /\1=\2  /' |\
+        while read flags desc;do
+            # flags like --foo=string: split into --foo & string
+            local -a tmpa
+            local optval=
+            tmpa=(${(s.=.)flags})
+            if [ -n "$tmpa[2]" ]; then
+                flags=$tmpa[1]
+                optval=$tmpa[2]
+            fi
+
+            # 'podman attach --detach-keys' includes ']' in help msg
+            desc=${desc//\]/\\]}
+
+            for flag in ${(s:,:)flags}; do
+                if [ -n "$optval" ]; then
+                    _podman_flag_list+=("${flag}[$desc]:$(_podman_find_helper ${flags} ${optval} ${desc})")
+                else
+                    _podman_flag_list+=("${flag}[$desc]")
+                fi
+            done
+        done
+
+    eval "typeset -ga $_var_ref=(\$_podman_flag_list)"
+}
+
+# Run 'podman XXX --help', set _podman_usage to the line after "Usage:"
+_read_podman_usage() {
+    local _var_ref=_podman_usage_"${*// /_}"
+    typeset -ga _podman_usage
+    _podman_usage=${(P)_var_ref}
+    (( $#_podman_usage )) && return
+
+    _podman_usage=$(_call_program podman podman "$@" --help |\
+                        grep -A1 'Usage:'|\
+                        tail -1 |\
+                        sed -e 's/^ *//')
+
+    eval "typeset -ga $_var_ref"
+    eval "$_var_ref=\$_podman_usage"
+}
+
+# END   'podman help' parsers
+###############################################################################
+# BEGIN custom helpers for individual option arguments
+
+# Find a zsh helper for a given flag or command-line option
+_podman_find_helper() {
+    local flags=$1
+    local optval=$2
+    local desc=$3
+    local helper=
+
+    # Yes, this is a lot of hardcoding. IMHO it's still better than
+    # hardcoding every possible podman option.
+    # FIXME: there are many more options that could use helpers.
+    if expr "$desc" : ".*[Dd]irectory" >/dev/null; then
+        optval="directory"
+        helper="_files -/"
+    elif expr "$desc" : ".*[Pp]ath" >/dev/null; then
+        optval="path"
+        helper=_files
+    # For messages like 'restart policy ("always"|"no"|"on-failure")
+    elif optlist=$(expr "$desc" : '.*(\(\"[^\\)]\+|[^\\)]\+\"\))' 2>/dev/null); then
+        optval=${${flags##--}//-/ }       # "--log-level" => "log level"
+        optlist=${optlist//\"/}           # "a"|"b"|"c"   => a|b|c
+        optlist=${optlist//\|/ }          # a|b|c         => a b c
+        # FIXME: how to present values _in order_, not sorted alphabetically?
+        helper="($optlist)"
+    fi
+    echo "$optval:$helper"
+}
+
+# END   custom helpers for individual option arguments
+###############################################################################
+# BEGIN helpers for command-line args (containers, images)
+
+__podman_helper_generic() {
+    local expl line
+    local -a results
+
+    local foo1=$1; shift
+    local name=$2; shift
+
+    _call_program $foo1 podman "$@" |\
+        while read line; do
+            results+=(${=line})
+        done
+
+    _wanted $foo1 expl $name compadd ${(u)results}
+}
+
+_podman_helper_image() {
+    __podman_helper_generic podman-images 'images' \
+        images --format '{{.ID}}\ {{.Repository}}:{{.Tag}}'
+}
+
+# FIXME: at some point, distinguish between running & stopped containers
+_podman_helper_container() {
+    __podman_helper_generic podman-containers 'containers' \
+        ps -a --format '{{.Names}}\ {{.ID}}'
+}
+
+_podman_helper_pod() {
+    __podman_helper_generic podman-pods 'pods' pod list --format '{{.Name}}'
+}
+
+_podman_helper_volume() {
+    __podman_helper_generic podman-volumes 'volumes' volume ls --format '{{.Name}}'
+}
+
+# Combinations. This one seen in diff & inspect
+_podman_helper_container-or-image() {
+    _podman_helper_image
+    _podman_helper_container
+}
+
+# Seen in generate-kube
+_podman_helper_container-or-pod() {
+    _podman_helper_container
+    _podman_helper_pod
+}
+
+# For top and pod-top
+_podman_helper_format-descriptors() {
+    __podman_helper_generic top-format-descriptors 'format descriptors' \
+        top --list-descriptors
+}
+
+# for push, login/logout, and trust
+# FIXME: some day, use this to define a helper for IMAGE-PATH (in 'pull')
+_podman_helper_registry() {
+    local expl
+    local -a registries
+
+    # Suggestions for improvement more than welcome.
+    python3 -c 'from configparser import ConfigParser;cp=ConfigParser();cp.read("/etc/containers/registries.conf");registries=eval(cp.get("registries.search","registries"));[print(r) for r in registries]' 2>/dev/null | while read line; do
+        registries+=($line)
+    done
+
+    if (( $#registries )); then
+        _wanted podman-registry expl "registry" compadd ${(u)registries}
+    else
+        _hosts
+    fi
+}
+
+# END   helpers for command-line args
+###############################################################################
+# BEGIN figure out completion helpers for a given (sub)command
+
+# Read Usage string for this subcommand, set up helpers for its subargs
+_set_up_podman_args() {
+    _read_podman_usage "$@"
+
+    typeset -ga _podman_args=()
+    # E.g. 'podman exec [flags] CONTAINER [...' -> 'CONTAINER [....'
+    local usage_rhs=$(expr "$_podman_usage" : ".*\[flags\] \+\(.*\)")
+
+    # e.g. podman pod ps which takes no further args
+    if [ -z "$usage_rhs" ]; then
+        return
+    fi
+
+    # podman diff & inspect accept 'CONTAINER | IMAGE'; make into one keyword.
+    usage_rhs=${usage_rhs// | /-OR-}
+
+    # Arg parsing. There are three possibilities in Usage messages:
+    #
+    #   [IMAGE]            - optional image arg (zero or one)
+    #    IMAGE             - exactly one image arg
+    #    IMAGE [IMAGE...]  - one or more image args
+    # and, theoretically:
+    #   [IMAGE...]         - zero or more? Haven't seen it in practice. Defer.
+    #
+    # For completion purposes, we only need to provide two options:
+    # one, or more than one? That is: continue offering completion
+    # suggestions after the first one? For that, we make two passes;
+    # in the first, mark an option as either '' (only one) or
+
+    # Parse each command-line arg seen in usage message
+    local word
+    local -A _seen=()
+    for word in ${=usage_rhs}; do
+        local unbracketed=$(expr "$word" : "\[\(.*\)\]")
+
+        if [ -n "$unbracketed" ]; then
+            # Remove all dots; assume(!?) that they'll all be at the end
+            unbracketed=${unbracketed//./}
+
+            if (( $_seen[$unbracketed] )); then
+                # Is this the same word as the previous arg?
+                if expr "$_podman_args[-1]" : ":$unbracketed:" >/dev/null; then
+                    # Yes. Make it '*:...' instead of ':...', indicating >1
+                    _podman_args[-1]="*$_podman_args[-1]"
+                fi
+                continue
+            fi
+
+            word=$unbracketed
+        fi
+
+        # As of 2019-03 all such instances are '[COMMAND [ARG...]]' and are,
+        # of course, at the end of the line. We can't offer completion for
+        # these, because the container will have different commands than
+        # the host system... but try anyway.
+        if [ "$word" = '[COMMAND' ]; then
+            # e.g. podman create, exec, run
+            _podman_args+=(
+                ":command: _command_names -e"
+                "*::arguments: _normal"
+            )
+            return
+        fi
+
+        # Look for an existing helper, e.g. IMAGE -> _podman_helper_image
+        local helper="_podman_helper_${(L)word}"
+        if (( $+functions[$helper] )); then
+            :
+        else
+            # No defined helper. Reset, but check for known expressions.
+            helper=
+            case "$word" in
+                KUBEFILE)   helper='_files -g "*.y(|a)ml(-.)"' ;;
+                PATH)       helper='_files'                    ;;
+            esac
+        fi
+
+        # Another special case: 'top' actually takes multiple options
+        local multi=
+        if [ "$word" = "FORMAT-DESCRIPTORS" ]; then
+            multi='*'
+        fi
+        _podman_args+=("$multi:${(L)word}:$helper")
+        _seen[$word]=1
+    done
+}
+
+# For an endpoint command, i.e. not a subcommand.
+_podman_terminus() {
+    typeset -A opt_args
+    typeset -ga _podman_flag_list
+    typeset -ga _podman_args
+    integer ret=1
+
+    # Find out what args it takes (e.g. image(s), container(s)) and see
+    # if we have helpers for them.
+    _set_up_podman_args "$@"
+    _arguments -C $_podman_flag_list $_podman_args && ret=0
+
+    return ret
+}
+
+# END   figure out completion helpers for a given (sub)command
+################################################################################
+# BEGIN actual entry point
+
+# This is the main entry point; it's also where we (recursively) come in
+# to handle nested subcommands such as 'podman container' or even 3-level
+# ones like 'podman generate kube'. Nesting is complicated, so here's
+# my best understanding as of 2019-03-12:
+#
+# Easy first: when you do "podman <TAB>" zsh calls us, we run 'podman --help',
+# figure out the global options and subcommands, and run the magic _arguments
+# command. That will offer those options/subcommands, and complete, etc.
+#
+# Where it gets harder is when you do "podman container mount <TAB>".
+# zsh first calls us with words=(podman container mount) but we don't
+# want all that full context yet! We want to go a piece at a time,
+# handling 'container' first, then 'mount'; ending up with our
+# final 'podman container mount --help' giving us suitable flags
+# and no subcommands; from which we determine that it's a terminus
+# and jump to a function that handles non-subcommand arguments.
+#
+# This is the closest I've yet come to understanding zsh completion;
+# it is still incomplete and may in fact be incorrect. But it works
+# better than anything I've played with so far.
+_podman_subcommand() {
+    local curcontext="$curcontext" state line
+    typeset -A opt_args
+    integer ret=1
+
+    # Run 'podman --help' / 'podman system --help' for our context (initially
+    # empty, then possibly under subcommands); from those, get a list of
+    # flags appropriate for this context and, if applicable, subcommands.
+    _read_podman_flags "$@"
+    _read_podman_commands "$@"
+
+    # Now, is this a sub-subcommand, or does it have args?
+    if (( $#_podman_commands )); then
+        # Subcommands required (podman, podman system, etc)
+        local cmd=${words// /_}
+        _arguments -C $_podman_flag_list \
+                   "(-): :->command" \
+                   "(-)*:: :->option-or-argument" \
+            && ret=0
+
+        case $state in
+            (command)
+                _describe -t command "podman $* command" _podman_commands && ret=0
+                ;;
+            (option-or-argument)
+                # I think this is when we have a _completed_ subcommand.
+                # Recurse back into here, offering options for that subcommand.
+                curcontext=${curcontext%:*:*}:podman-${words[1]}:
+                _podman_subcommand "$@" ${words[1]} && ret=0
+            ;;
+        esac
+    else
+        # At a terminus, i.e. podman info, podman history; find out
+        # what args it takes.
+        _podman_terminus "$@" && ret=0
+    fi
+
+    return ret
+}
+
+_podman() {
+    _podman_subcommand
+}
+
+# Local Variables:
+#  mode: shell-script
+#  sh-indentation: 4
+#  indent-tabs-mode: nil
+#  sh-basic-offset: 4
+# End:
+# vim: ft=zsh sw=4 ts=4 et
+
