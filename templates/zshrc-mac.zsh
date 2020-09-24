@@ -42,6 +42,7 @@ plugins=(
     dircycle
     django
     docker
+    docker-compose
     encode64
     extract
     git-extras
@@ -52,6 +53,7 @@ plugins=(
     iterm2
     jira
     jump
+    kube-ps1
     kubectl
     launch_trial
     launchctl
@@ -94,6 +96,9 @@ source $ZSH/oh-my-zsh.sh
 export EDITOR='vim'
 export LESS='-RX'
 
+# After the "source Oh My Zsh" line
+RPS1='$(kube_ps1) '$RPS1
+
 unsetopt correctall
 
 if [ -e ~/.profile ]; then source ~/.profile; fi
@@ -105,7 +110,16 @@ PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 # added by travis gem
 [ -f $HOME/.travis/travis.sh ] && source $HOME/.travis/travis.sh
 
+[ -d /usr/local/opt/asdf ] && export ASDF_DIR=/usr/local/opt/asdf
+[ -d /usr/local/opt/ruby/bin ] && export PATH="/usr/local/opt/ruby/bin:$PATH"
+[ -d /usr/local/opt/postgresql@10/bin ] && export PATH="/usr/local/opt/postgresql@10/bin:$PATH"
+[ -d /usr/local/opt/node@12/bin ] && export PATH="/usr/local/opt/node@12/bin:$PATH"
+[ -d /usr/local/opt/icu4c/lib/pkgconfig ] && export PKG_CONFIG_PATH="/usr/local/opt/icu4c/lib/pkgconfig:$PKG_CONFIG_PATH"
+[ -d /usr/local/lib/ruby/gems/2.6.0/bin ] && export PATH="/usr/local/lib/ruby/gems/2.6.0/bin:$PATH"
+
 [ -f $HOME/.pyenv/shims/python ] && export PIPENV_PYTHON=$HOME/.pyenv/shims/python
 [ -d $HOME/.local/bin ] && export PATH=$HOME/.local/bin:$PATH
 [ -d $HOME/bin ] && export PATH=$HOME/bin:$PATH
 [ -f $HOME/.iterm2_shell_integration.zsh ] && source ~/.iterm2_shell_integration.zsh
+[ -d $HOME/.locations ] && export PATH=$HOME/.locations:$PATH
+export PATH="/usr/local/sbin:$PATH"
