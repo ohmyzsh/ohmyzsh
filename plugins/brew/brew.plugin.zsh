@@ -4,10 +4,10 @@ alias brewsp='brew list --pinned'
 alias bubo='brew update && brew outdated'
 alias bubc='brew upgrade && brew cleanup'
 alias bubu='bubo && bubc'
-alias bcubo='brew update && brew cask outdated'
-alias bcubc='brew cask reinstall $(brew cask outdated) && brew cleanup'
-alias bubcug='brew update && brew outdated && brew upgrade ; brew cask upgrade && brew cleanup'
-alias bubcugg='brew update && brew outdated && brew upgrade ; brew cask upgrade --greedy && brew cleanup'
+alias buboc='brew update && brew outdated --cask'
+alias bcrobc='brew cask reinstall $(brew outdated --cask) && brew cleanup'
+alias bubucbc='brew update && brew outdated && brew upgrade ; brew upgrade --cask && brew cleanup'
+alias bubucgbc='brew update && brew outdated && brew upgrade ; brew upgrade --cask --greedy && brew cleanup'
 
 if command mkdir "$ZSH_CACHE_DIR/.brew-completion-message" 2>/dev/null; then
 	print -P '%F{yellow}'Oh My Zsh brew plugin:
