@@ -1,6 +1,4 @@
-alias cloudapp="${0:a:h}/cloudapp.rb"
-
-# Ensure only the owner can access the credentials file
-if [[ -f ~/.cloudapp ]]; then
-  chmod 600 ~/.cloudapp
-fi
+print -Pn "%F{yellow}"
+print "[oh-my-zsh] The CloudApp API no longer works, so the cloudapp plugin will"
+print "[oh-my-zsh] be removed shortly. Please remove it from your plugins list."
+print -Pn "%f"

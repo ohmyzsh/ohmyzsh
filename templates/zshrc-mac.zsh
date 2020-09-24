@@ -46,7 +46,6 @@ plugins=(
     encode64
     extract
     git-extras
-    git-remote-branch
     git2
     grin
     helm

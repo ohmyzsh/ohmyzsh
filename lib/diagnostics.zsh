@@ -192,19 +192,19 @@ function _omz_diag_dump_one_big_text() {
   command ls -ld ~/.oh*
   builtin echo
   builtin echo oh-my-zsh git state:
-  (cd $ZSH && builtin echo "HEAD: $(git rev-parse HEAD)" && git remote -v && git status | command grep "[^[:space:]]")
+  (builtin cd $ZSH && builtin echo "HEAD: $(git rev-parse HEAD)" && git remote -v && git status | command grep "[^[:space:]]")
   if [[ $verbose -ge 1 ]]; then
-    (cd $ZSH && git reflog --date=default | command grep pull)
+    (builtin cd $ZSH && git reflog --date=default | command grep pull)
   fi
   builtin echo
   if [[ -e $ZSH_CUSTOM ]]; then
     local custom_dir=$ZSH_CUSTOM
     if [[ -h $custom_dir ]]; then
-      custom_dir=$(cd $custom_dir && pwd -P)
+      custom_dir=$(builtin cd $custom_dir && pwd -P)
     fi
     builtin echo "oh-my-zsh custom dir:"
     builtin echo "   $ZSH_CUSTOM ($custom_dir)"
-    (cd ${custom_dir:h} && command find ${custom_dir:t} -name .git -prune -o -print)
+    (builtin cd ${custom_dir:h} && command find ${custom_dir:t} -name .git -prune -o -print)
     builtin echo
   fi
 

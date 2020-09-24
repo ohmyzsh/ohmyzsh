@@ -219,7 +219,7 @@ __git_ps1_show_upstream ()
 		if [[ -n "$count" && -n "$name" ]]; then
 			__git_ps1_upstream_name=$(git rev-parse \
 				--abbrev-ref "$upstream" 2>/dev/null)
-			if [ "$pcmode" = yes ] && [ "$ps1_expanded" = yes ]; then
+			if [ $pcmode = yes ] && [ $ps1_expanded = yes ]; then
 				p="$p \${__git_ps1_upstream_name}"
 			else
 				p="$p ${__git_ps1_upstream_name}"
@@ -237,7 +237,7 @@ __git_ps1_show_upstream ()
 # to build a gitstring.
 __git_ps1_colorize_gitstring ()
 {
-	if [[ -n "${ZSH_VERSION-}" ]]; then
+	if [[ -n ${ZSH_VERSION-} ]]; then
 		local c_red='%F{red}'
 		local c_green='%F{green}'
 		local c_lblue='%F{blue}'
@@ -255,7 +255,7 @@ __git_ps1_colorize_gitstring ()
 	local flags_color="$c_lblue"
 
 	local branch_color=""
-	if [ "$detached" = no ]; then
+	if [ $detached = no ]; then
 		branch_color="$ok_color"
 	else
 		branch_color="$bad_color"
@@ -508,13 +508,13 @@ __git_ps1 ()
 
 	# NO color option unless in PROMPT_COMMAND mode or it's Zsh
 	if [ -n "${GIT_PS1_SHOWCOLORHINTS-}" ]; then
-		if [ "$pcmode" = yes ] || [ -n "${ZSH_VERSION-}" ]; then
+		if [ $pcmode = yes ] || [ -n "${ZSH_VERSION-}" ]; then
 			__git_ps1_colorize_gitstring
 		fi
 	fi
 
 	b=${b##refs/heads/}
-	if [ "$pcmode" = yes ] && [ "$ps1_expanded" = yes ]; then
+	if [ $pcmode = yes ] && [ $ps1_expanded = yes ]; then
 		__git_ps1_branch_name=$b
 		b="\${__git_ps1_branch_name}"
 	fi
@@ -522,7 +522,7 @@ __git_ps1 ()
 	local f="$w$i$s$u"
 	local gitstring="$c$b${f:+$z$f}$r$p"
 
-	if [ "$pcmode" = yes ]; then
+	if [ $pcmode = yes ]; then
 		if [ "${__git_printf_supports_v-}" != yes ]; then
 			gitstring=$(printf -- "$printf_format" "$gitstring")
 		else

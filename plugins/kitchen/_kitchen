@@ -67,7 +67,7 @@ _kitchen() {
 _kitchen_commands() {
   local commands
 
-  commands=("${(@f)$(_call_program commands $service help | sed -n 's/^  kitchen \([[:alpha:]]*\) [ [].*# \(.*\)$/\1:\2/p')}")
+  commands=("${(@f)$(_call_program commands $service help | sed -n 's/^  kitchen \([[:alpha:]]*\) [ A-Z[].*# \(.*\)$/\1:\2/p')}")
   _describe -t commands 'kitchen commands' commands
 }
 

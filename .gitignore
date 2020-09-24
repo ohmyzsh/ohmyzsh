@@ -6,3 +6,5 @@
 cache/
 .metadata/
 *~
+*.swp
+.DS_Store

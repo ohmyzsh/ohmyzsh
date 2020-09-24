@@ -59,6 +59,7 @@ alias mvnd='mvn deploy'
 alias mvndocs='mvn dependency:resolve -Dclassifier=javadoc'
 alias mvndt='mvn dependency:tree'
 alias mvne='mvn eclipse:eclipse'
+alias mvnfmt='mvn fmt:format'
 alias mvnjetty='mvn jetty:run'
 alias mvnp='mvn package'
 alias mvns='mvn site'
@@ -267,6 +268,8 @@ function listMavenCompletions {
 		stage:copy
 		# toolchain
 		toolchain:toolchain
+                #liberty
+                liberty:clean-server liberty:compile-jsp liberty:configure-arquillian liberty:create-server liberty:debug liberty:debug-server liberty:deploy liberty:dev liberty:display-url liberty:dump-server liberty:install-apps liberty:install-feature liberty:install-server liberty:java-dump-server liberty:package-server liberty:run liberty:run-server liberty:server-status liberty:start liberty:start-server liberty:status liberty:stop liberty:stop-server liberty:test-start-server liberty:test-stop-server liberty:undeploy liberty:uninstall-feature
 
 		# options
 		"-Dmaven.test.skip=true" -DskipTests -DskipITs -Dmaven.surefire.debug -DenableCiProfile "-Dpmd.skip=true" "-Dcheckstyle.skip=true" "-Dtycho.mode=maven" "-Dmaven.test.failure.ignore=true" "-DgroupId=" "-DartifactId=" "-Dversion=" "-Dpackaging=jar" "-Dfile="
