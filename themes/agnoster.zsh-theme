@@ -235,7 +235,7 @@ prompt_status() {
 #   ends in '-prod'
 # - displays black on green otherwise
 prompt_aws() {
-  [[ -z "$AWS_PROFILE" ]] && return
+  [[ -z "$AWS_PROFILE" || "$SHOW_AWS_PROMPT" = false ]] && return
   case "$AWS_PROFILE" in
     *-prod|*production*) prompt_segment red yellow  "AWS: $AWS_PROFILE" ;;
     *) prompt_segment green black "AWS: $AWS_PROFILE" ;;
