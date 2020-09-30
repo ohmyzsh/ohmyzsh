@@ -2,7 +2,7 @@
 
 Plugin for Terraform, a tool from Hashicorp for managing infrastructure safely and efficiently.
 
-Current as of Terraform v0.11.7
+Current as of Terraform v0.13
 
 ### Requirements
 
@@ -17,6 +17,7 @@ plugins=(... terraform)
 ```
 
  * Type `terraform` into your prompt and hit `TAB` to see available completion options
+ * Type `tf` into your prompt as a short alias to `terraform`
 
 ### Expanding ZSH prompt with current Terraform workspace name
 

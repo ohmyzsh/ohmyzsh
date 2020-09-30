@@ -7,3 +7,5 @@ function tf_prompt_info() {
       echo "[${workspace}]"
     fi
 }
+
+alias tf='terraform'
