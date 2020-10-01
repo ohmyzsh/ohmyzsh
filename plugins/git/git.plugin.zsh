@@ -291,3 +291,17 @@ function grename() {
     git push --set-upstream origin "$2"
   fi
 }
+
+# Git branch list local: list local branches, sort by last commit date
+function gbll {
+  git for-each-ref --sort=committerdate refs/heads/ --format="%(committerdate:short)|%(refname:short)|%(committername)" | while IFS='|' read date branch name; do
+    printf "%s %-40s %s\n" "$date" "$branch" "$name"
+  done
+}
+
+# Git branch list origin: list remote branches on origin, sort by last commit date
+function gblo {
+  git for-each-ref --sort=committerdate refs/remotes/origin --format="%(committerdate:short)|%(refname:short)|%(committername)" | while IFS='|' read date branch name; do
+    printf "%s %-40s %s\n" "$date" "${branch##origin/}" "$name"
+  done
+}
