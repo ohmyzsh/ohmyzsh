@@ -1,4 +1,4 @@
-# zsh-flatpak
+# flatpak
 
 ### Indroduction
 The (unofficial) [flatpak](https://flatpak.org) plugin that adds several aiases for managing your flatpak applications.  When executed, an alias is generated for each flatpak application installed on the system (both system and user).
