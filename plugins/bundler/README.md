@@ -2,19 +2,22 @@
 
 - Adds completion for basic bundler commands
 
-- Adds short aliases for common bundler commands
-  - `ba` aliased to `bundle add`
-  - `be` aliased to `bundle exec`.
-    It also supports aliases (if `rs` is `rails server`, `be rs` will bundle-exec `rails server`).
-  - `bl` aliased to `bundle list`
-  - `bp` aliased to `bundle package`
-  - `bo` aliased to `bundle open`
-  - `bout` aliased to `bundle outdated`
-  - `bu` aliased to `bundle update`
-  - `bi` aliased to `bundle install --jobs=<cpu core count>` (only for bundler `>= 1.4.0`)
-  - `bcn` aliased to `bundle clean`
-  - `bck` aliased to `bundle check`
+## Aliases
 
+| Alias  | Command             | Description                                               |
+|--------|---------------------|-----------------------------------------------------------|
+| `ba`   | `bundle add`        | Add gem to the Gemfile and run bundle install             |
+| `be`   | `bundle exec`       | Execute a command in the context of the bundle            |
+| `bl`   | `bundle list`       | List all the gems in the bundle                           |
+| `bp`   | `bundle package`    | Package your needed .gem files into your application      |
+| `bo`   | `bundle open`       | Opens the source directory for a gem in your bundle       |
+| `bout` | `bundle outdated`   | List installed gems with newer versions available         |
+| `bu`   | `bundle update`     | Update your gems to the latest available versions         |
+| `bi`   | `bundle install`    | Install the dependencies specified in your Gemfile        |
+| `bcn`  | `bundle clean`      | Cleans up unused gems in your bundler directory           |
+| `bck`  | `bundle check`      | Verifies if dependencies are satisfied by installed gems  |
+
+    
 - Adds a wrapper for common gems:
   - Looks for a binstub under `./bin/` and executes it (if present)
   - Calls `bundle exec <gem executable>` otherwise
