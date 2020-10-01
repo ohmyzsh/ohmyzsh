@@ -1,3 +1,6 @@
+# If ZSH is not defined, use the current script's directory.
+[[ -z "$ZSH" ]] && export ZSH="${${(%):-%x}:a:h}"
+
 # Set ZSH_CACHE_DIR to the path where cache files should be created
 # or else we will use the default cache/
 if [[ -z "$ZSH_CACHE_DIR" ]]; then

@@ -1,7 +1,7 @@
 ---
 name: Feature request
 about: Suggest a feature for Oh My Zsh
-labels: 'Type: feature'
+labels: 'feature'
 
 ---
 

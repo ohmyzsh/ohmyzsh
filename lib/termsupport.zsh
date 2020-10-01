@@ -17,17 +17,17 @@ function title {
   : ${2=$1}
 
   case "$TERM" in
-    cygwin|xterm*|putty*|rxvt*|konsole*|ansi|mlterm*)
-      print -Pn "\e]2;$2:q\a" # set window name
-      print -Pn "\e]1;$1:q\a" # set tab name
+    cygwin|xterm*|putty*|rxvt*|konsole*|ansi|mlterm*|alacritty|st*)
+      print -Pn "\e]2;${2:q}\a" # set window name
+      print -Pn "\e]1;${1:q}\a" # set tab name
       ;;
     screen*|tmux*)
-      print -Pn "\ek$1:q\e\\" # set screen hardstatus
+      print -Pn "\ek${1:q}\e\\" # set screen hardstatus
       ;;
     *)
       if [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
-        print -Pn "\e]2;$2:q\a" # set window name
-        print -Pn "\e]1;$1:q\a" # set tab name
+        print -Pn "\e]2;${2:q}\a" # set window name
+        print -Pn "\e]1;${1:q}\a" # set tab name
       else
         # Try to use terminfo to set the title
         # If the feature is available set title
