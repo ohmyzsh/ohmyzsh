@@ -24,18 +24,19 @@ alias fp-upu='flatpak update --user'
 # Adds a single flatpak alias given the application name
 flatpak_add_alias () {
 	# Using Application name, extract the name and lowercase it
-	local name=$(echo ${1:l} | grep -Po '[^\.]+$')
+	local flatpak_app_name=$(echo ${1:l} \
+		| grep -Po '[^\.]+$')
 
 	# Alias the function
-	alias $name="flatpak run $2 $1"
+	alias $flatpak_app_name="flatpak run $2 $1"
 }
 
 # Adds an alias for every install flatpak application
-foreach app in $(flatpak list --columns=application --app) ; do
-    flatpak_add_alias $app
-; done
+foreach flatpak_app_name in $(flatpak list --columns=application --app); do
+    flatpak_add_alias $flatpak_app_name
+done
 
 # Adds an alias for every user installed flatpak (overwriting all alias)
-foreach app in $(flatpak list --columns=application --user --app) ; do
-    flatpak_add_alias $app --user
-; done
+foreach flatpak_app_name in $(flatpak list --columns=application --user --app); do
+    flatpak_add_alias $flatpak_app_name --user
+done
