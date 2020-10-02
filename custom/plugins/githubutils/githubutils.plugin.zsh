@@ -39,6 +39,13 @@ function move-bb-to-github {
   fi;
 }
 
+function update-forked-branch {
+  git remote add upstream ${1};
+  git fetch upstream;
+  git checkout master;
+  git rebase upstream/master;
+}
+
 # @todo: make a function to remove a single commit
 # remove last commit 
 # git reset --hard HEAD~1

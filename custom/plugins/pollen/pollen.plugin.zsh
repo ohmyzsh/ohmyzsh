@@ -3,7 +3,7 @@
 ## Spin up needed server components
 function pollen-server-up {
   #bin/server --exclude pollen_ui phoenix_ui ambassador_ui customer_ui calvin_ui avocado_ui  
-  bin/server ambassador_api phoenix_ui notification_service gateway_api           
+  bin/server ambassador_api ambassador_api_worker phoenix_ui notification_service gateway_api           
 }
 
 function pollen-server-up-phoenix {
@@ -11,7 +11,7 @@ function pollen-server-up-phoenix {
 }
 
 function pollen-server-up-pollen {
-  bin/server ambassador_api phoenix_ui notification_service gateway_api pollen_ui
+  bin/server ambassador_api ambassador_api_worker phoenix_ui notification_service gateway_api pollen_ui
 }
 
 ## seed demo data
@@ -65,7 +65,7 @@ function pollen-phoenix-arise {
 
 ## serve styleguide
 function pollen-styleguide {
-  styleguide_docs/bin/server
+  styleguide/bin/server
 }
 
 ## setup e2e
@@ -102,7 +102,7 @@ function pollen-git-commit-jira {
 }
 
 function pollen-clear-virtual-env {
-  for FOLDER in ambassador_api ambassador_ui auth_ui bin calvin_ui customer_ui devtools e2e_cypress etl_service finance_service gateway_api infrastructure lib licensed_travel_api logs node_modules notification_service phoenix_ui pollen_ui review_automation_service shortlinks_service styleguide_docs ; do
+  for FOLDER in ambassador_api ambassador_ui auth_ui bin calvin_ui customer_ui devtools e2e_cypress etl_service finance_service gateway_api infrastructure lib licensed_travel_api logs node_modules notification_service phoenix_ui pollen_ui review_automation_service shortlinks_service styleguide ; do
     pushd $FOLDER
       rm -rf .virtualenv;
     popd
