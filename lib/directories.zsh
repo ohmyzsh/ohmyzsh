@@ -3,10 +3,13 @@ setopt auto_pushd
 setopt pushd_ignore_dups
 setopt pushdminus
 
-alias -g ...='../..'
-alias -g ....='../../..'
-alias -g .....='../../../..'
-alias -g ......='../../../../..'
+# If a directory named ... (up to 6 dots) exists then changing directory should
+# lead to a change to that directory, otherwise the corresponding alias should
+# be used.
+alias -g ...='$([ -d "..." ] && echo "..." || echo "../..")'
+alias -g ....='$([ -d "...." ] && echo "...." || echo "../../..")'
+alias -g .....='$([ -d "....." ] && echo "....." || echo "../../../..")'
+alias -g ......='$([ -d "......" ] && echo "......" || echo "../../../../..")'
 
 alias -- -='cd -'
 alias 1='cd -'
