@@ -40,3 +40,13 @@ ZSH_THEME_RVM_PROMPT_OPTIONS="i v g"
 function ruby_prompt_info() {
   echo $(rvm_prompt_info || rbenv_prompt_info || chruby_prompt_info)
 }
+
+# use this to enable users to see current python virtualenv name
+# `ZSH_THEME_VIRTUALENV_PREFIX`: sets the prefix of the VIRTUAL_ENV. Defaults to `[`.
+# `ZSH_THEME_VIRTUALENV_SUFFIX`: sets the suffix of the VIRTUAL_ENV. Defaults to `]`.
+# Note: to disable prompt mangling in virtual_env/bin/activate
+# use `export VIRTUAL_ENV_DISABLE_PROMPT=1``
+function virtualenv_prompt_info(){
+  [[ -n ${VIRTUAL_ENV} ]] || return
+  echo "${ZSH_THEME_VIRTUALENV_PREFIX:=[}${VIRTUAL_ENV:t}${ZSH_THEME_VIRTUALENV_SUFFIX:=]}"
+}
