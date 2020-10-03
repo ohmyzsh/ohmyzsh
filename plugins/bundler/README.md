@@ -40,7 +40,7 @@ Common gems wrapped by default (by name of the executable):
 You can add or remove gems from the list of wrapped commands.
 Please **use the exact name of the executable** and not the gem name.
 
-#### Add additional gems to be wrapped (`BUNDLED_COMMANDS`)
+#### Include gems to be wrapped (`BUNDLED_COMMANDS`)
 
 Add this before the plugin list in your `.zshrc`:
 
@@ -51,7 +51,7 @@ plugins=(... bundler ...)
 
 This will add the wrapper for the `rubocop` gem (i.e. the executable).
 
-### Remove gems from being wrapped (`UNBUNDLED_COMMANDS`)
+#### Exclude gems from being wrapped (`UNBUNDLED_COMMANDS`)
 
 Add this before the plugin list in your `.zshrc`:
 
