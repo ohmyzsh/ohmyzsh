@@ -93,7 +93,7 @@ function steeef_precmd {
         zstyle ':vcs_info:*:prompt:*' formats "${FMT_BRANCH} "
 
         vcs_info 'prompt'
-        PR_GIT_UPDATE=
+        PR_GIT_UPDATE=1
     fi
 }
 add-zsh-hook precmd steeef_precmd
