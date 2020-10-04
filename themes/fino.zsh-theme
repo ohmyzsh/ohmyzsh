@@ -11,14 +11,13 @@
 #
 # Also borrowing from http://stevelosh.com/blog/2010/02/my-extravagant-zsh-prompt/
 
-function virtualenv_prompt_info(){
+function virtualenv_prompt_info {
   [[ -n ${VIRTUAL_ENV} ]] || return
   echo "${ZSH_THEME_VIRTUALENV_PREFIX:=[}${VIRTUAL_ENV:t}${ZSH_THEME_VIRTUALENV_SUFFIX:=]}"
 }
 
 function prompt_char {
-  git branch >/dev/null 2>/dev/null && echo "±" && return
-  echo '○'
+  command git branch &>/dev/null && echo "±" || echo '○'
 }
 
 function box_name {
@@ -27,8 +26,8 @@ function box_name {
 
 local ruby_env='$(ruby_prompt_info)'
 local git_info='$(git_prompt_info)'
-local prompt_char='$(prompt_char)'
 local virtualenv_info='$(virtualenv_prompt_info)'
+local prompt_char='$(prompt_char)'
 
 PROMPT="╭─${FG[040]}%n ${FG[239]}at ${FG[033]}$(box_name) ${FG[239]}in %B${FG[226]}%~%{$reset_color%}${git_info}${ruby_env}${virtualenv_info}
 ╰─${prompt_char}%{$reset_color%} "
