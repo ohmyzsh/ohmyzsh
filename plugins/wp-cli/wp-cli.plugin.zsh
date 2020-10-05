@@ -138,6 +138,7 @@ alias wpwm='wp widget move'
 alias wpwu='wp widget update'
 
 
+autoload -U +X bashcompinit && bashcompinit
 # bash completion for the `wp` command
 
 _wp_complete() {

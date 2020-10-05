@@ -99,4 +99,6 @@ alias drvg="drush variable-get"
 alias drvs="drush variable-set"
 
 # Enable drush autocomplete support
+autoload bashcompinit
+bashcompinit
 source $(dirname $0)/drush.complete.sh
