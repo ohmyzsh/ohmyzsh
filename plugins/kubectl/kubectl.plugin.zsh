@@ -150,3 +150,14 @@ alias kepvc='kubectl edit pvc'
 alias kdpvc='kubectl describe pvc'
 alias kdelpvc='kubectl delete pvc'
 
+# Colored JSON output
+kj() {
+  kubectl "$@" -o json | jq
+}
+compdef kj=kubectl
+
+# Colored YAML output
+ky() {
+  kubectl "$@" -o yaml | yh
+}
+compdef ky=kubectl
