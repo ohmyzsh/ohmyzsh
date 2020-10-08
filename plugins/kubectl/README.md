@@ -106,3 +106,7 @@ plugins=(... kubectl)
 | kdelss  | `kubectl delete statefulset`        | Delete the statefulset                                                                           |
 | ksss    | `kubectl scale statefulset`         | Scale a statefulset                                                                              |
 | krsss   | `kubectl rollout status statefulset`| Check the rollout status of a deployment                                                         |
+|         |                                     | **Endpoints management**                                                                         |
+| kged    | `kubectl get endpoints`             | List the endpoints resources in ps output format                                                 |
+| kgeda   | `kubectl get endpoints --all-namespaces`| List the endoints resources  across all namespaces                                           |
+| kded    | `kubectl describe endpoints`        | Describe the endpoints resources in detail                                                       |
