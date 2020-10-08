@@ -150,3 +150,12 @@ alias kepvc='kubectl edit pvc'
 alias kdpvc='kubectl describe pvc'
 alias kdelpvc='kubectl delete pvc'
 
+# Endpoints
+alias kgep='kubectl get endpoints'
+alias kgepa='kubectl get endpoints --all-namespaces'
+alias keep='kubectl edit endpoints'
+alias kdep='kubectl describe endpoints'
+alias kdelep='kubectl delete endpoints'
+
+# Container attachment
+alias kat='kubectl attach'
