@@ -156,6 +156,11 @@ kj() {
 }
 compdef kj=kubectl
 
+kjx() {
+  kubectl "$@" -o json | fx
+}
+compdef kjx=kubectl
+
 # Colored YAML output
 ky() {
   kubectl "$@" -o yaml | yh
