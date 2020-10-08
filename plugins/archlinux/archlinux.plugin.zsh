@@ -43,7 +43,6 @@ if (( $+commands[yaourt] )); then
   alias yaorph='yaourt -Qtd'
   alias yainsd='yaourt -S --asdeps'
   alias yamir='yaourt -Syy'
-  alias yagendb='yay -Y --gendb'
 
 
   if (( $+commands[abs] && $+commands[aur] )); then
@@ -73,6 +72,7 @@ if (( $+commands[yay] )); then
   alias yaorph='yay -Qtd'
   alias yainsd='yay -S --asdeps'
   alias yamir='yay -Syy'
+  alias yagendb='yay -Y --gendb'
 
 
   if (( $+commands[abs] && $+commands[aur] )); then
