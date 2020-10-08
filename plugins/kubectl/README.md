@@ -106,3 +106,10 @@ plugins=(... kubectl)
 | kdelss  | `kubectl delete statefulset`        | Delete the statefulset                                                                           |
 | ksss    | `kubectl scale statefulset`         | Scale a statefulset                                                                              |
 | krsss   | `kubectl rollout status statefulset`| Check the rollout status of a deployment                                                         |
+|         |                                     |                                                                                                  |
+| kgj     | `kubectl get jobs`                  | List the jobs in ps format                                                                       |
+| kgjw    | `kgj --watch`                       | After getting the list of jobs, watch for changes                                                |
+| kgjwide | `kgj -o wide`                       | After getting the jobs, output in plain-text format with any additional information              |
+| kej     | `kubectl edit job`                  | Edit job resource from the default editor                                                        |
+| kdj     | `kubectl describe job`              | Describe job resource in detail                                                                  |
+| kdelj   | `kubectl delete job`                | Delete the job                                                                                   |
