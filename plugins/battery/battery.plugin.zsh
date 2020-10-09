@@ -118,7 +118,7 @@ elif [[ "$OSTYPE" = linux*  ]]; then
 
   function battery_pct() {
     if (( $+commands[acpi] )); then
-      acpi 2>/dev/null | command grep -v "rate information unavailable" | command grep -E '^Battery.*(Disc|C)harging' | cut -f2 -d ',' | tr -cd '[:digit:]'
+      acpi 2>/dev/null | command grep -v "rate information unavailable" | command grep -E '^Battery.*(Full|(Disc|C)harging)' | cut -f2 -d ',' | tr -cd '[:digit:]'
     fi
   }
 
@@ -201,11 +201,11 @@ function battery_level_gauge() {
   battery_is_charging && charging=$charging_symbol
 
   # Charging status and prefix
-  printf ${charging_color//\%/\%\%}$charging${color_reset//\%/\%\%}${battery_prefix//\%/\%\%}${gauge_color//\%/\%\%}
+  print -n ${charging_color}${charging}${color_reset}${battery_prefix}${gauge_color}
   # Filled slots
   [[ $filled -gt 0 ]] && printf ${filled_symbol//\%/\%\%}'%.0s' {1..$filled}
   # Empty slots
   [[ $filled -lt $gauge_slots ]] && printf ${empty_symbol//\%/\%\%}'%.0s' {1..$empty}
   # Suffix
-  printf ${color_reset//\%/\%\%}${battery_suffix//\%/\%\%}${color_reset//\%/\%\%}
+  print -n ${color_reset}${battery_suffix}${color_reset}
 }

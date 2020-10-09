@@ -36,7 +36,7 @@ __gnu_utils() {
   gcmds+=('gfind' 'gxargs' 'glocate')
 
   # Not part of either coreutils or findutils, installed separately.
-  gcmds+=('gsed' 'gtar' 'gtime')
+  gcmds+=('gsed' 'gtar' 'gtime' 'gmake')
 
   for gcmd in "${gcmds[@]}"; do
     # Do nothing if the command isn't found

@@ -52,6 +52,7 @@ Available search contexts are:
 | mdn           | `https://developer.mozilla.org/search?q=`                                   |
 | nodejs        | `https://www.google.com/search?as_sitesearch=nodejs.org/en/docs/&as_q=`     |
 | npmjs         | `https://www.npmjs.com/search?q=`                                           |
+| packagephobia | `https://packagephobia.now.sh/result?p=`                                    |
 | qunit         | `https://api.qunitjs.com/?s=`                                               |
 | reactjs       | `https://google.com/search?as_sitesearch=facebook.github.io/react&as_q=`    |
 | smacss        | `https://google.com/search?as_sitesearch=smacss.com&as_q=`                  |

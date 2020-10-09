@@ -33,7 +33,8 @@ plugins=(... kubectl)
 | kep     | `kubectl edit pods`                 | Edit pods from the default editor                                                                |
 | kdp     | `kubectl describe pods`             | Describe all pods                                                                                |
 | kdelp   | `kubectl delete pods`               | Delete all pods matching passed arguments                                                        |
-| kgpl    | `kgp -l`                            | Get pod by label. Example: `kgpl "app=myapp" -n myns`                                            |
+| kgpl    | `kgp -l`                            | Get pods by label. Example: `kgpl "app=myapp" -n myns`                                           |
+| kgpn    | `kgp -n`                            | Get pods by namespace. Example: `kgpn kube-system`                                               |
 |         |                                     | **Service management**                                                                           |
 | kgs     | `kubectl get svc`                   | List all services in ps output format                                                            |
 | kgsw    | `kgs --watch`                       | After listing all services, watch for changes                                                    |
@@ -105,3 +106,11 @@ plugins=(... kubectl)
 | kdelss  | `kubectl delete statefulset`        | Delete the statefulset                                                                           |
 | ksss    | `kubectl scale statefulset`         | Scale a statefulset                                                                              |
 | krsss   | `kubectl rollout status statefulset`| Check the rollout status of a deployment                                                         |
+
+## Wrappers
+
+This plugin provides 3 wrappers to colorize kubectl output in JSON and YAML using various tools (which must be installed):
+
+- `kj`: JSON, colorized with [`jq`](https://stedolan.github.io/jq/).
+- `kjx`: JSON, colorized with [`fx`](https://github.com/antonmedv/fx).
+- `ky`: YAML, colorized with [`yh`](https://github.com/andreazorzetto/yh).

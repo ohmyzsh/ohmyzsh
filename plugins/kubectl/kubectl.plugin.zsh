@@ -47,6 +47,9 @@ alias kdelp='kubectl delete pods'
 # get pod by label: kgpl "app=myapp" -n myns
 alias kgpl='kgp -l'
 
+# get pod by namespace: kgpn kube-system"
+alias kgpn='kgp -n'
+
 # Service management.
 alias kgs='kubectl get svc'
 alias kgsa='kubectl get svc --all-namespaces'
@@ -147,3 +150,19 @@ alias kepvc='kubectl edit pvc'
 alias kdpvc='kubectl describe pvc'
 alias kdelpvc='kubectl delete pvc'
 
+# Colored JSON output
+kj() {
+  kubectl "$@" -o json | jq
+}
+compdef kj=kubectl
+
+kjx() {
+  kubectl "$@" -o json | fx
+}
+compdef kjx=kubectl
+
+# Colored YAML output
+ky() {
+  kubectl "$@" -o yaml | yh
+}
+compdef ky=kubectl
