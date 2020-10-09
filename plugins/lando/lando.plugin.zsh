@@ -30,23 +30,21 @@ checkForFile(){
     # Not within $LANDO_ZSH_SITES_DIRECTORY
     return 1;
 
-  else
-
-    # "Checking for file: $LANDO_ZSH_CONFIG_FILE within $LANDO_ZSH_SITES_DIRECTORY..."
-
-    while [[ "$current_directory" != $LANDO_ZSH_SITES_DIRECTORY ]]; do
-
-        if [[ -f "$current_directory/$LANDO_ZSH_CONFIG_FILE" ]]; then
-          # echo "Using Lando"
-          return
-        fi
-        current_directory="${current_directory:h}"
-        
-    done
-
-    # File not found in loop above
-    # "Could not find $LANDO_ZSH_CONFIG_FILE in the current directory or in any of its parents up to $LANDO_ZSH_SITES_DIRECTORY."
-    return 1
-
   fi
+
+  # "Checking for file: $LANDO_ZSH_CONFIG_FILE within $LANDO_ZSH_SITES_DIRECTORY..."
+
+  while [[ "$current_directory" != $LANDO_ZSH_SITES_DIRECTORY ]]; do
+
+      if [[ -f "$current_directory/$LANDO_ZSH_CONFIG_FILE" ]]; then
+        # echo "Using Lando"
+        return
+      fi
+      current_directory="${current_directory:h}"
+      
+  done
+
+  # File not found in loop above
+  # "Could not find $LANDO_ZSH_CONFIG_FILE in the current directory or in any of its parents up to $LANDO_ZSH_SITES_DIRECTORY."
+  return 1
 }
