@@ -18,7 +18,12 @@ else
   # User can set this if they have an unusual Homebrew setup
   NVM_HOMEBREW="${NVM_HOMEBREW:-/usr/local/opt/nvm}"
   # Load nvm from Homebrew location if it exists
-  [[ -f "$NVM_HOMEBREW/nvm.sh" ]] && source "$NVM_HOMEBREW/nvm.sh" ${NVM_LAZY+"--no-use"}
+  if [[ -f "$NVM_HOMEBREW/nvm.sh" ]]; then
+    source "$NVM_HOMEBREW/nvm.sh" ${NVM_LAZY+"--no-use"}
+  else
+    # Exit the plugin if we couldn't find nvm
+    return
+  fi
 fi
 
 # Call nvm when first using node, npm or yarn
@@ -42,4 +47,4 @@ for nvm_completion in "$NVM_DIR/bash_completion" "$NVM_HOMEBREW/etc/bash_complet
   fi
 done
 
-unset NVM_HOMEBREW nvm_completion
+unset NVM_HOMEBREW NVM_LAZY nvm_completion
