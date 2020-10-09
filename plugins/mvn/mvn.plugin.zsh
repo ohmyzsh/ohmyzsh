@@ -73,7 +73,7 @@ alias mvn-updates='mvn versions:display-dependency-updates'
 
 function listMavenCompletions {
 	local file new_file
-	local -a profiles POM_FILES
+	local -a profiles POM_FILES modules
 
 	# Root POM
 	POM_FILES=(~/.m2/settings.xml)
@@ -108,6 +108,9 @@ function listMavenCompletions {
 		[[ -e $file ]] || continue
 		profiles+=($(sed 's/<!--.*-->//' "$file" | sed '/<!--/,/-->/d' | grep -e "<profile>" -A 1 | grep -e "<id>.*</id>" | sed 's?.*<id>\(.*\)<\/id>.*?-P\1?'))
 	done
+
+	# List modules
+	modules=($(find **/pom.xml -type f | grep -v '/target/classes/META-INF/' | grep '/pom.xml' |sed 's|\(.*\)/pom\.xml|\1|'))
 
 	reply=(
 		# common lifecycle
@@ -271,8 +274,8 @@ function listMavenCompletions {
 		stage:copy
 		# toolchain
 		toolchain:toolchain
-                #liberty
-                liberty:clean-server liberty:compile-jsp liberty:configure-arquillian liberty:create-server liberty:debug liberty:debug-server liberty:deploy liberty:dev liberty:display-url liberty:dump-server liberty:install-apps liberty:install-feature liberty:install-server liberty:java-dump-server liberty:package-server liberty:run liberty:run-server liberty:server-status liberty:start liberty:start-server liberty:status liberty:stop liberty:stop-server liberty:test-start-server liberty:test-stop-server liberty:undeploy liberty:uninstall-feature
+		#liberty
+		liberty:clean-server liberty:compile-jsp liberty:configure-arquillian liberty:create-server liberty:debug liberty:debug-server liberty:deploy liberty:dev liberty:display-url liberty:dump-server liberty:install-apps liberty:install-feature liberty:install-server liberty:java-dump-server liberty:package-server liberty:run liberty:run-server liberty:server-status liberty:start liberty:start-server liberty:status liberty:stop liberty:stop-server liberty:test-start-server liberty:test-stop-server liberty:undeploy liberty:uninstall-feature
 
 		# options
 		"-Dmaven.test.skip=true" -DskipTests -DskipITs -Dmaven.surefire.debug -DenableCiProfile "-Dpmd.skip=true" "-Dcheckstyle.skip=true" "-Dtycho.mode=maven" "-Dmaven.test.failure.ignore=true" "-DgroupId=" "-DartifactId=" "-Dversion=" "-Dpackaging=jar" "-Dfile="
@@ -323,6 +326,7 @@ function listMavenCompletions {
 		-Dit.test=$(if [ -d ./src/test/java ] ; then find ./src/test/java -type f -name '*.java' | grep -v svn | sed 's?.*/\([^/]*\)\..*?-Dit.test=\1?' ; fi)
 
 		$profiles
+		$modules
 	)
 }
 
