@@ -175,7 +175,7 @@ function _omz::pr::clean {
 
         # Check if there are PR branches
         local fmt branches
-        fmt="%(align:19,right)%(color:bold blue)%(refname:short)%(end)%(color:reset) %(color:dim bold red)%(objectname:short)%(color:reset)  %(color:yellow)%(contents:subject)"
+        fmt="%(color:bold blue)%(align:18,right)%(refname:short)%(end)%(color:reset) %(color:dim bold red)%(objectname:short)%(color:reset) %(color:yellow)%(contents:subject)"
         branches="$(command git for-each-ref --sort=-committerdate --color --format="$fmt" "refs/heads/ohmyzsh/pull-*")"
 
         # Exit if there are no PR branches
