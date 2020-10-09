@@ -19,7 +19,9 @@ plugins=(... lando)
 | `yarn`  | `lando yarn`  |
 
 #### How It Works:
-This plugin removes the requirement to type `lando` before a command. It prepends 'lando' for commands executed in the same directory as a .lando.yml config file, but preserves the use of non-lando commands with the same name.
+This plugin removes the requirement to type `lando` before a command. It utilizes the lando version of supported commands run within directories with the following criteria:
+- The `.lando.yml` file is found in the current directory or any parent directory within `$LANDO_ZSH_SITES`.
+- The current directory is within `$LANDO_ZSH_SITES_DIRECTORY` but is not `$LANDO_ZSH_SITES_DIRECTORY` itself.
 
 #### Settings: 
 - `LANDO_ZSH_SITES_DIREECTORY`: The plugin will stop searching through parents for `CONFIG_FILE` once it hits this directory.
