@@ -1,132 +1,39 @@
-#!zsh
-#
-# Author: Joshua Bedford
-# URL: github.com/joshuabedford/lando-zsh
+LANDO_ZSH_SITES_DIRECTORY="$HOME/Sites"
 
-#
-# A simple collection of alias functions to enable the use of CLIs within Lando without having to type 'lando'.
-#
-# WARNING: This could conflict with any aliases previously installed. If you have any of the CLIs installed globally (outside of lando)
-#      : The functions *should* enable the ability to not have to type 'lando' before a command by prepending lando for all commands done in the same directory as a .lando.yml file.
+LANDO_ZSH_CONFIG_FILE=./.lando.yml
 
+# Enable multiple commands with lando.
+function  artisan \
+          composer \
+          drush \
+          gulp \
+          npm \
+          wp \
+          yarn {
 
-SITES_DIRECTORY="$HOME/Sites"
-
-CONFIG_FILE=./.lando.yml
-
-# Enable wp command with lando.
-function wp(){
-
-  if checkForFile $CONFIG_FILE $SITES_DIRECTORY ; then
-    # Run Lando wp
-    lando wp "$@"
+  if checkForFile ; then
+    lando "$0" "$@"
   else
-    # Run System wp
-    command wp "$@"
+    command "$0" "$@"
   fi
 }
-
-# Enable composer command.
-function composer(){
-
-  if checkForFile $CONFIG_FILE $SITES_DIRECTORY ; then
-    # Run Lando composer
-    echo "Using 'lando composer'"
-    lando composer "$@"
-  else
-    # Run System composer
-    command composer "$@"
-  fi
-}
-
-# Enable artisan command.
-function artisan(){
-
-  if checkForFile $CONFIG_FILE $SITES_DIRECTORY ; then
-    # Run Lando artisan
-    lando artisan "$@"
-  else
-    # Run System artisan
-    command artisan "$@"
-  fi
-}
-
-# Enable yarn command for lando if lando file exists in directory.
-function yarn(){
-
-  if checkForFile $CONFIG_FILE $SITES_DIRECTORY ; then
-    echo "Running Lando yarn...";
-    # Run Lando yarn
-    lando yarn "$@"
-  else
-    echo "Running System yarn...";
-    # Run System yarn
-    command yarn "$@"
-  fi
-}
-
-# Enable npm command for lando if lando file exists in directory.
-function npm(){
-
-  if checkForFile $CONFIG_FILE $SITES_DIRECTORY ; then
-    echo "Running Lando npm...";
-    # Run Lando NPM
-    lando npm "$@"
-  else
-    echo "Running System npm...";
-    # Run System NPM
-    command npm "$@"
-  fi
-}
-
-# Enable gulp command.
-function gulp(){
-
-  if checkForFile $CONFIG_FILE $SITES_DIRECTORY ; then
-    echo "Running Lando gulp...";
-    # Run Lando gulp
-    lando gulp "$@"
-  else
-    echo "Running System gulp...";
-    # Run System gulp
-    command gulp "$@"
-  fi
-}
-
-# Enable drush command.
-function drush(){
-
-  if checkForFile $CONFIG_FILE $SITES_DIRECTORY ; then
-    echo "Running Lando drush...";
-    # Run Lando drush
-    lando drush "$@"
-  else
-    echo "Running System drush...";
-    # Run System drush
-    command drush "$@"
-  fi
-}
-
 
 # Check for the file in the current and parent directories.
-# $1: The file to search for (string)
-# $2: The directory to search up to.
 checkForFile(){
 
   local current_directory="$PWD"
 
   # Bash is backwards. 0 is true 1 (non-zero) is false.
-  flag="1"
-
   # Only bother checking for lando within the Sites directory.
-  if [[ ":$PWD:" == *":$2"* ]]; then
+  if [[ "$PWD" == "$LANDO_ZSH_SITES_DIRECTORY"* ]]; then
 
-    echo "Checking for file: $1 within $2..."
+    # "Checking for file: $LANDO_ZSH_CONFIG_FILE within $LANDO_ZSH_SITES_DIRECTORY..."
 
     while true; do
-      if [ $current_directory != "$2" ]; then
-          if [ -f "$current_directory/$1" ]; then
-            return "0"
+      if [ $current_directory != "$LANDO_ZSH_SITES_DIRECTORY" ]; then
+          if [ -f "$current_directory/$LANDO_ZSH_CONFIG_FILE" ]; then
+            echo "Using Lando"
+            return
           fi
         current_directory="$(dirname $current_directory)"
       else
@@ -134,28 +41,14 @@ checkForFile(){
       fi
     done
 
-    if [[ "$flag" == "1" ]]; then
-      echo "Could not find $1 in the current directory or in any of its parents up to $2."
-    fi
+    # File not found in loop above
+    # "Could not find $LANDO_ZSH_CONFIG_FILE in the current directory or in any of its parents up to $LANDO_ZSH_SITES_DIRECTORY."
+    return 1;
 
   else
 
-    echo "Checking for file: $1"
-
-    if [ -f "$1" ]; then
-      echo "Found it"
-      return 0
-    else
-      echo "Not Found"
-      return "1"
-    fi
-
-    if [[ "$flag" == "1" ]]; then
-      echo "Could not find $1."
-    fi
+    # Not within $LANDO_ZSH_SITES_DIRECTORY
+    return 1;
 
   fi
-
-  return $flag
-
 }
