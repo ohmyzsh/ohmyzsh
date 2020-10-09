@@ -1,45 +1,30 @@
-# nvm
-#
-# This plugin locates and loads nvm, looking for it in well-known locations.
+# Set NVM_DIR if it isn't already defined
+[[ -z "$NVM_DIR" ]] && export NVM_DIR="$HOME/.nvm"
 
-() {
-  emulate -L zsh
-  local nvm_install_dir="" dir install_locations
-  if [[ -n $NVM_INSTALL_DIR ]]; then
-    # User-specified path
-    nvm_install_dir=$NVM_INSTALL_DIR
-  else
-    # Well-known common installation locations for NVM
-    install_locations=( ~/.nvm )
-    [[ -n $NVM_DIR ]] && install_locations=($NVM_DIR $install_locations)
-    # Mac Homebrew sticks 
-    which brew &>/dev/null && install_locations+=$(brew --prefix nvm)
-    for dir ($install_locations); do
-      if [[ -s $dir/nvm.sh ]]; then
-        nvm_install_dir=$dir
-        break
-      fi
-    done
-  fi
+# Don't try to load nvm if command already available
+which nvm &> /dev/null && return
 
-  if [[ -n $nvm_install_dir ]]; then
-    source $nvm_install_dir/nvm.sh
-  else
-    # No NVM installation found
-    return 0
-  fi
+if [[ -f "$NVM_DIR/nvm.sh" ]]; then
+  # Load nvm if it exists in $NVM_DIR
+  source "$NVM_DIR/nvm.sh"
+else
+  # Otherwise try to load nvm installed via Homebrew
+  # User can set this if they have an unusual Homebrew setup
+  NVM_HOMEBREW="${NVM_HOMEBREW:-/usr/local/opt/nvm}"
+  # Load nvm from Homebrew location if it exists
+  [[ -f "$NVM_HOMEBREW/nvm.sh" ]] && source "$NVM_HOMEBREW/nvm.sh"
+fi
 
-  # Locate and use the completion file shipped with NVM, instead of this
-  # plugin's completion
-  # (Their bash completion file has zsh portability support)
-  if [[ $ZSH_NVM_BUNDLED_COMPLETION == true ]]; then
-    local bash_comp_file
-    # Homebrew relocates the bash completion file, so look multiple places
-    for bash_comp_file ( bash_completion etc/bash_completion.d/nvm ); do
-      if [[ -s $nvm_install_dir/$bash_comp_file ]]; then
-        source $nvm_install_dir/$bash_comp_file
-        break;
-      fi
-    done
+# Load nvm bash completion
+for nvm_completion in "$NVM_DIR/bash_completion" "$NVM_HOMEBREW/etc/bash_completion.d/nvm"; do
+  if [[ -f "$nvm_completion" ]]; then
+    # Load bashcompinit
+    autoload -U +X bashcompinit && bashcompinit
+    # Bypass compinit call in nvm bash completion script. See:
+    # https://github.com/nvm-sh/nvm/blob/4436638/bash_completion#L86-L93
+    ZSH_VERSION= source "$nvm_completion"
+    break
   fi
-}
+done
+
+unset NVM_HOMEBREW nvm_completion
