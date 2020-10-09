@@ -16,7 +16,7 @@ CONFIG_FILE=./.lando.yml
 
 # Enable wp command with lando.
 function wp(){
-  
+
   if checkForFile $CONFIG_FILE $SITES_DIRECTORY ; then
     # Run Lando wp
     lando wp "$@"
@@ -28,7 +28,7 @@ function wp(){
 
 # Enable composer command.
 function composer(){
-  
+
   if checkForFile $CONFIG_FILE $SITES_DIRECTORY ; then
     # Run Lando composer
     echo "Using 'lando composer'"
@@ -41,7 +41,7 @@ function composer(){
 
 # Enable artisan command.
 function artisan(){
-  
+
   if checkForFile $CONFIG_FILE $SITES_DIRECTORY ; then
     # Run Lando artisan
     lando artisan "$@"
@@ -51,9 +51,23 @@ function artisan(){
   fi
 }
 
+# Enable yarn command for lando if lando file exists in directory.
+function yarn(){
+
+  if checkForFile $CONFIG_FILE $SITES_DIRECTORY ; then
+    echo "Running Lando yarn...";
+    # Run Lando yarn
+    lando yarn "$@"
+  else
+    echo "Running System yarn...";
+    # Run System yarn
+    command yarn "$@"
+  fi
+}
+
 # Enable npm command for lando if lando file exists in directory.
 function npm(){
-  
+
   if checkForFile $CONFIG_FILE $SITES_DIRECTORY ; then
     echo "Running Lando npm...";
     # Run Lando NPM
@@ -67,7 +81,7 @@ function npm(){
 
 # Enable gulp command.
 function gulp(){
-  
+
   if checkForFile $CONFIG_FILE $SITES_DIRECTORY ; then
     echo "Running Lando gulp...";
     # Run Lando gulp
@@ -79,12 +93,26 @@ function gulp(){
   fi
 }
 
+# Enable drush command.
+function drush(){
+
+  if checkForFile $CONFIG_FILE $SITES_DIRECTORY ; then
+    echo "Running Lando drush...";
+    # Run Lando drush
+    lando drush "$@"
+  else
+    echo "Running System drush...";
+    # Run System drush
+    command drush "$@"
+  fi
+}
+
 
 # Check for the file in the current and parent directories.
 # $1: The file to search for (string)
 # $2: The directory to search up to.
 checkForFile(){
-  
+
   local current_directory="$PWD"
 
   # Bash is backwards. 0 is true 1 (non-zero) is false.
