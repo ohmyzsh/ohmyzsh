@@ -88,16 +88,41 @@ function setup_using_debian_package() {
     return 0
 }
 
+function setup_using_opensuse_package() {
+    # OpenSUSE installs fzf in /usr/bin
+    # If the command is not found, the package isn't installed
+    (( $+commands[fzf] )) || return 1
+
+    # The fzf-zsh-completion package installs the auto-completion in
+    local completions="/usr/share/zsh/site-functions/_fzf"
+    # The fzf-zsh-completion package installs the key-bindings file in
+    local key_bindings="/etc/zsh_completion.d/fzf-key-bindings"
+
+    # Auto-completion
+    if [[ -o interactive && "$DISABLE_FZF_AUTO_COMPLETION" != "true" ]]; then
+        source "$completions" 2>/dev/null
+    fi
+
+    # Key bindings
+    if [[ "$DISABLE_FZF_KEY_BINDINGS" != "true" ]]; then
+        source "$key_bindings" 2>/dev/null
+    fi
+
+    return 0
+}
+
 function indicate_error() {
     print "[oh-my-zsh] fzf plugin: Cannot find fzf installation directory.\n"\
           "Please add \`export FZF_BASE=/path/to/fzf/install/dir\` to your .zshrc" >&2
 }
 
-# Check for debian package first, because it easy to short cut
 # Indicate to user that fzf installation not found if nothing worked
-setup_using_debian_package || setup_using_base_dir || indicate_error
+setup_using_debian_package \
+    || setup_using_opensuse_package \
+    || setup_using_base_dir \
+    || indicate_error
 
-unset -f setup_using_debian_package setup_using_base_dir indicate_error
+unset -f setup_using_opensuse_package setup_using_debian_package setup_using_base_dir indicate_error
 
 if [[ -z "$FZF_DEFAULT_COMMAND" ]]; then
     if (( $+commands[rg] )); then
