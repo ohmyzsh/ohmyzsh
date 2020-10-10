@@ -60,8 +60,9 @@ Usage: omz <command> [options]
 Available commands:
 
     help                Print this help message
-    pr <command>        Commands for Oh My Zsh Pull Requests management
-    theme <command>     Commands for Oh My Zsh themes management
+    plugin <command>    Manage plugins
+    pr <command>        Manage Oh My Zsh Pull Requests
+    theme <command>     Manage themes
     update              Update Oh My Zsh
 
 EOF
