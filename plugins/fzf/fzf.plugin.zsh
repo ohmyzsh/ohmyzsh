@@ -1,9 +1,5 @@
 function setup_using_base_dir() {
-    # Declare all variables local not no mess with outside env in any way
-    local fzf_base
-    local fzf_shell
-    local fzfdirs
-    local dir
+    local fzf_base fzf_shell fzfdirs dir
 
     test -d "${FZF_BASE}" && fzf_base="${FZF_BASE}"
 
@@ -31,38 +27,37 @@ function setup_using_base_dir() {
         fi
     fi
 
-    if [[ -d "${fzf_base}" ]]; then
-        # Fix fzf shell directory for Arch Linux, NixOS or Void Linux packages
-        if [[ ! -d "${fzf_base}/shell" ]]; then
-          fzf_shell="${fzf_base}"
-        else
-          fzf_shell="${fzf_base}/shell"
-        fi
-
-        # Setup fzf binary path
-        if ! (( ${+commands[fzf]} )) && [[ ! "$PATH" == *$fzf_base/bin* ]]; then
-          export PATH="$PATH:$fzf_base/bin"
-        fi
-
-        # Auto-completion
-        if [[ ! "$DISABLE_FZF_AUTO_COMPLETION" == "true" ]]; then
-          [[ $- == *i* ]] && source "${fzf_shell}/completion.zsh" 2> /dev/null
-        fi
-
-        # Key bindings
-        if [[ ! "$DISABLE_FZF_KEY_BINDINGS" == "true" ]]; then
-          source "${fzf_shell}/key-bindings.zsh"
-        fi
-    else
+    if [[ ! -d "${fzf_base}" ]]; then
         return 1
+    fi
+
+    # Fix fzf shell directory for Arch Linux, NixOS or Void Linux packages
+    if [[ ! -d "${fzf_base}/shell" ]]; then
+        fzf_shell="${fzf_base}"
+    else
+        fzf_shell="${fzf_base}/shell"
+    fi
+
+    # Setup fzf binary path
+    if (( ! ${+commands[fzf]} )) && [[ "$PATH" != *$fzf_base/bin* ]]; then
+        export PATH="$PATH:$fzf_base/bin"
+    fi
+
+    # Auto-completion
+    if [[ -o interactive && "$DISABLE_FZF_AUTO_COMPLETION" != "true" ]]; then
+        source "${fzf_shell}/completion.zsh" 2> /dev/null
+    fi
+
+    # Key bindings
+    if [[ "$DISABLE_FZF_KEY_BINDINGS" != "true" ]]; then
+        source "${fzf_shell}/key-bindings.zsh"
     fi
 }
 
 
 function setup_using_debian_package() {
-    (( $+commands[dpkg] )) && dpkg -s fzf &> /dev/null
-    if (( $? )); then
-        # Either not a debian based distro, or no fzf installed. In any case skip ahead
+    if (( ! $+commands[dpkg] )) || ! dpkg -s fzf &>/dev/null; then
+        # Either not a debian based distro, or no fzf installed
         return 1
     fi
 
@@ -76,8 +71,8 @@ function setup_using_debian_package() {
     local key_bindings="/usr/share/doc/fzf/examples/key-bindings.zsh"
 
     # Auto-completion
-    if [[ $- == *i* ]] && [[ ! "$DISABLE_FZF_AUTO_COMPLETION" == "true" ]]; then
-         source $completions 2> /dev/null
+    if [[ -o interactive && "$DISABLE_FZF_AUTO_COMPLETION" != "true" ]]; then
+        source $completions 2> /dev/null
     fi
 
     # Key bindings
@@ -112,8 +107,10 @@ function setup_using_opensuse_package() {
 }
 
 function indicate_error() {
-    print "[oh-my-zsh] fzf plugin: Cannot find fzf installation directory.\n"\
-          "Please add \`export FZF_BASE=/path/to/fzf/install/dir\` to your .zshrc" >&2
+    cat >&2 <<EOF
+[oh-my-zsh] fzf plugin: Cannot find fzf installation directory.
+Please add \`export FZF_BASE=/path/to/fzf/install/dir\` to your .zshrc
+EOF
 }
 
 # Indicate to user that fzf installation not found if nothing worked
