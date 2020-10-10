@@ -95,48 +95,71 @@ prompt_context() {
 
 # Git: branch/detached head, dirty status
 prompt_git() {
-  (( $+commands[git] )) || return
-  if [[ "$(git config --get oh-my-zsh.hide-status 2>/dev/null)" = 1 ]]; then
+  if ! (( $+commands[git] )) || \
+    [[ "$(git config --get oh-my-zsh.hide-status 2>/dev/null)" = 1 ]] || \
+    ! $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
     return
   fi
-  local PL_BRANCH_CHAR
+
+  local pl_branch_char pl_right_arrow pl_left_arrow
   () {
     local LC_ALL="" LC_CTYPE="en_US.UTF-8"
-    PL_BRANCH_CHAR=$'\ue0a0'         # 
+    pl_branch_char=$'\ue0a0'         # 
+    pl_right_arrow=$'\u2192'         # →
+    pl_left_arrow=$'\u2190'          # ←
   }
-  local ref dirty mode repo_path
 
-   if [[ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" = "true" ]]; then
-    repo_path=$(git rev-parse --git-dir 2>/dev/null)
-    dirty=$(parse_git_dirty)
-    ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="➦ $(git rev-parse --short HEAD 2> /dev/null)"
-    if [[ -n $dirty ]]; then
-      prompt_segment yellow black
-    else
-      prompt_segment green $CURRENT_FG
+  local ref dirty repo_path
+  repo_path=$(git rev-parse --git-dir 2>/dev/null)
+  dirty=$(parse_git_dirty)
+  ref=$(git symbolic-ref HEAD 2> /dev/null) || \
+    ref="➦ $(git rev-parse --short HEAD 2> /dev/null)"
+
+  local mode background foreground
+  if [[ -e "${repo_path}/BISECT_LOG" ]]; then
+    mode=" ${pl_left_arrow}B${pl_right_arrow}"
+    background=red
+    foreground=white
+  elif [[ -e "${repo_path}/MERGE_HEAD" ]]; then
+    mode=" ${pl_right_arrow}M${pl_left_arrow}"
+    background=red
+    foreground=white
+  elif [[ -e "${repo_path}/rebase" || \
+          -e "${repo_path}/rebase-apply" || \
+          -e "${repo_path}/rebase-merge" || \
+          -e "${repo_path}/../.dotest" ]]; then
+    mode=" ${pl_right_arrow}R${pl_right_arrow}"
+    if [[ -e "${repo_path}/rebase-apply/next" && \
+          -e "${repo_path}/rebase-apply/last" ]]; then
+      local current_commit total_commits
+      current_commit=$(cat ${repo_path}/rebase-apply/next)
+      total_commits=$(cat ${repo_path}/rebase-apply/last)
+      mode+=" ${current_commit}/${total_commits}"
     fi
-
-    if [[ -e "${repo_path}/BISECT_LOG" ]]; then
-      mode=" <B>"
-    elif [[ -e "${repo_path}/MERGE_HEAD" ]]; then
-      mode=" >M<"
-    elif [[ -e "${repo_path}/rebase" || -e "${repo_path}/rebase-apply" || -e "${repo_path}/rebase-merge" || -e "${repo_path}/../.dotest" ]]; then
-      mode=" >R>"
-    fi
-
-    setopt promptsubst
-    autoload -Uz vcs_info
-
-    zstyle ':vcs_info:*' enable git
-    zstyle ':vcs_info:*' get-revision true
-    zstyle ':vcs_info:*' check-for-changes true
-    zstyle ':vcs_info:*' stagedstr '✚'
-    zstyle ':vcs_info:*' unstagedstr '●'
-    zstyle ':vcs_info:*' formats ' %u%c'
-    zstyle ':vcs_info:*' actionformats ' %u%c'
-    vcs_info
-    echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode}"
+    background=red
+    foreground=white
+  elif [[ -n $dirty ]]; then
+    background=yellow
+    foreground=black
+  else
+    background=green
+    foreground=$CURRENT_FG
   fi
+
+  prompt_segment $background $foreground
+
+  setopt promptsubst
+  autoload -Uz vcs_info
+
+  zstyle ':vcs_info:*' enable git
+  zstyle ':vcs_info:*' get-revision true
+  zstyle ':vcs_info:*' check-for-changes true
+  zstyle ':vcs_info:*' stagedstr '✚'
+  zstyle ':vcs_info:*' unstagedstr '●'
+  zstyle ':vcs_info:*' formats ' %u%c'
+  zstyle ':vcs_info:*' actionformats ' %u%c'
+  vcs_info
+  echo -n "${ref/refs\/heads\//$pl_branch_char }${vcs_info_msg_0_%% }${mode}"
 }
 
 prompt_bzr() {
