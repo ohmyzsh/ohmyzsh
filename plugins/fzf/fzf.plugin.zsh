@@ -84,7 +84,7 @@ function setup_using_debian_package() {
 }
 
 function setup_using_opensuse_package() {
-    # OpenSUSE installs fzf in /usr/bin
+    # OpenSUSE installs fzf in /usr/bin/fzf
     # If the command is not found, the package isn't installed
     (( $+commands[fzf] )) || return 1
 
@@ -92,6 +92,30 @@ function setup_using_opensuse_package() {
     local completions="/usr/share/zsh/site-functions/_fzf"
     # The fzf-zsh-completion package installs the key-bindings file in
     local key_bindings="/etc/zsh_completion.d/fzf-key-bindings"
+
+    # Auto-completion
+    if [[ -o interactive && "$DISABLE_FZF_AUTO_COMPLETION" != "true" ]]; then
+        source "$completions" 2>/dev/null
+    fi
+
+    # Key bindings
+    if [[ "$DISABLE_FZF_KEY_BINDINGS" != "true" ]]; then
+        source "$key_bindings" 2>/dev/null
+    fi
+
+    return 0
+}
+
+function setup_using_openbsd_package() {
+    # openBSD installs fzf in /usr/local/bin/fzf
+    if [[ "$OSTYPE" != openbsd* ]] || (( ! $+commands[fzf] )); then
+        return 1
+    fi
+
+    # The fzf package installs the auto-completion in
+    local completions="/usr/local/share/zsh/site-functions/_fzf_completion"
+    # The fzf package installs the key-bindings file in
+    local key_bindings="/usr/local/share/zsh/site-functions/_fzf_key_bindings"
 
     # Auto-completion
     if [[ -o interactive && "$DISABLE_FZF_AUTO_COMPLETION" != "true" ]]; then
@@ -114,7 +138,8 @@ EOF
 }
 
 # Indicate to user that fzf installation not found if nothing worked
-setup_using_debian_package \
+setup_using_openbsd_package \
+    || setup_using_debian_package \
     || setup_using_opensuse_package \
     || setup_using_base_dir \
     || indicate_error
