@@ -226,7 +226,7 @@ function git_prompt_status() {
   # For each status prefix, do a regex comparison
   for status_prefix in ${(k)prefix_constant_map}; do
     local status_constant="${prefix_constant_map[$status_prefix]}"
-    local status_regex="(^|\n)$status_prefix"
+    local status_regex=$'(^|\n)'"$status_prefix"
 
     if [[ "$status_text" =~ $status_regex ]]; then
       statuses_seen[$status_constant]=1
