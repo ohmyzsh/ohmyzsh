@@ -93,6 +93,12 @@ function setup_using_opensuse_package() {
     # The fzf-zsh-completion package installs the key-bindings file in
     local key_bindings="/etc/zsh_completion.d/fzf-key-bindings"
 
+    # If these are not found: (1) maybe we're not on OpenSUSE, or
+    # (2) maybe the fzf-zsh-completion package isn't installed.
+    if [[ ! -f "$completions" || ! -f "$key_bindings" ]]; then
+        return 1
+    fi
+
     # Auto-completion
     if [[ -o interactive && "$DISABLE_FZF_AUTO_COMPLETION" != "true" ]]; then
         source "$completions" 2>/dev/null
