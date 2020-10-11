@@ -26,12 +26,18 @@ _terraform_cmds=(
     'version:Prints the Terraform version'
     'workspace:Workspace management'
     '0.12upgrade:Rewrites pre-0.12 module source code for v0.12'
+    '0.13upgrade:Rewrites pre-0.13 module source code for v0.13'
 )
 
 __012upgrade() {
   _arguments \
     '-yes[Skip the initial introduction messages and interactive confirmation. This can be used to run this command in batch from a script.]' \
     '-force[ Override the heuristic that attempts to detect if a configuration is already written for v0.12 or later.  Some of the transformations made by this command are not idempotent, so re-running against the same module may change the meanings expressions in the module.]'
+}
+
+__013upgrade() {
+  _arguments \
+    '-yes[Skip the initial introduction messages and interactive confirmation. This can be used to run this command in batch from a script.]'
 }
 
 __apply() {
@@ -330,6 +336,8 @@ local -a _command_args
 case "$words[1]" in
   0.12upgrade)
     __012upgrade ;;
+  0.13upgrade)
+    __013upgrade ;;
   apply)
     __apply ;;
   console)
