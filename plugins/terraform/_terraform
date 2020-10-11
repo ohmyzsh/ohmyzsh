@@ -299,6 +299,11 @@ __validate() {
     '-var-file=[(path) Set variables in the Terraform configuration from a file. If "terraform.tfvars" is present, it will be automatically loaded if this flag is not specified.]'
 }
 
+__version() {
+    _arguments \
+    '-json[Output the version information as a JSON object.]'
+}
+
 __workspace() {
     local -a __workspace_cmds
     __workspace_cmds=(
@@ -370,6 +375,8 @@ case "$words[1]" in
     __untaint ;;
   validate)
     __validate ;;
+  version)
+    __version ;;
   workspace)
     test $CURRENT -lt 3 && __workspace ;;
 esac
