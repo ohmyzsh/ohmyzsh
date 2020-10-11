@@ -70,6 +70,15 @@ function dirhistory_cd(){
   unset DIRHISTORY_CD
 }
 
+function cde(){
+  # Reverse future
+  local reversed_future=(${(Oa)dirhistory_future})
+  push_past $PWD
+  dirhistory_past=(${dirhistory_past} $reversed_future)
+  dirhistory_future=()
+  cd $1
+}
+
 # Move backward in directory history
 function dirhistory_back() {
   local cw=""
