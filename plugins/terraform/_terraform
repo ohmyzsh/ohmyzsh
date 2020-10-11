@@ -16,7 +16,6 @@ _terraform_cmds=(
     'output:Read an output from a state file'
     'plan:Generate and show an execution plan'
     'providers:Prints a tree of the providers used in the configuration'
-    'push:Upload this Terraform module to Atlas to run'
     'refresh:Update local state file against real resources'
     'show:Inspect Terraform state or plan'
     'state:Advanced state management'
@@ -181,19 +180,6 @@ __plan() {
 __providers() {
     _arguments \
 
-}
-
-__push() {
-    _arguments \
-        '-atlas-address=[(url) An alternate address to an Atlas instance. Defaults to https://atlas.hashicorp.com.]' \
-        '-upload-modules=[(true) If true (default), then the modules being used are all locked at their current checkout and uploaded completely to Atlas. This prevents Atlas from running terraform get for you.]' \
-        '-name=[(name) Name of the infrastructure configuration in Atlas. The format of this is: "username/name" so that you can upload configurations not just to your account but to other accounts and organizations. This setting can also be set in the configuration in the Atlas section.]' \
-        '-no-color[Disables output with coloring]' \
-        '-overwrite=[(foo) Marks a specific variable to be updated on Atlas. Normally, if a variable is already set in Atlas, Terraform will not send the local value (even if it is different). This forces it to send the local value to Atlas. This flag can be repeated multiple times.]' \
-        '-token=[(token) Atlas API token to use to authorize the upload. If blank or unspecified, the ATLAS_TOKEN environmental variable will be used.]' \
-        '-var=[("foo=bar") Set the value of a variable for the Terraform configuration.]' \
-        '-var-file=[(foo) Set the value of variables using a variable file.]' \
-        '-vcs=[(true) If true (default), then Terraform will detect if a VCS is in use, such as Git, and will only upload files that are committed to version control. If no version control system is detected, Terraform will upload all files in path (parameter to the command).]'
 }
 
 __refresh() {
@@ -366,8 +352,6 @@ case "$words[1]" in
     __plan ;;
   providers)
     __providers ;;
-  push)
-    __push ;;
   refresh)
     __refresh ;;
   show)
