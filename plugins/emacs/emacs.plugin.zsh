@@ -29,11 +29,12 @@ if "$ZSH/tools/require_tool.sh" emacsclient 24 2>/dev/null ; then
     # Emacs ANSI Term tracking
     if [[ -n "$INSIDE_EMACS" ]]; then
         chpwd_emacs() { print -P "\033AnSiTc %d"; }
-        autoload -Uz add-zsh-hook && add-zsh-hook chpwd chpwd_emacs
+        print -P "\033AnSiTc %d"    # Track current working directory
+        print -P "\033AnSiTu %n"    # Track username        
 
-        chpwd_emacs                 # Track current working directory
-        print -P "\033AnSiTu %n"    # Track username
-        print -P "\033AnSiTh %m"    # Track hostname
+        # add chpwd hook
+        autoload -Uz add-zsh-hook
+        add-zsh-hook chpwd chpwd_emacs
     fi    
 
     # Write to standard output the path to the file
