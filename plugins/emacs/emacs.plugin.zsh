@@ -26,11 +26,14 @@ if "$ZSH/tools/require_tool.sh" emacsclient 24 2>/dev/null ; then
     # create a new X frame
     alias eframe='emacsclient --alternate-editor "" --create-frame'
 
-    # The commands like to C-x C-f follow the directories path of zsh prompt 
-    if [ -n "$INSIDE_EMACS" ]; then
-       chpwd() { print -P "\033AnSiTc %d" }
-       print -P "\033AnSiTu %n"
-       print -P "\033AnSiTc %d"
+    # Emacs ANSI Term tracking
+    if [[ -n "$INSIDE_EMACS" ]]; then
+        chpwd_emacs() { print -P "\033AnSiTc %d"; }
+        autoload -Uz add-zsh-hook && add-zsh-hook chpwd chpwd_emacs
+
+        chpwd_emacs                 # Track current working directory
+        print -P "\033AnSiTu %n"    # Track username
+        print -P "\033AnSiTh %m"    # Track hostname
     fi    
 
     # Write to standard output the path to the file
