@@ -1,6 +1,8 @@
 globalias() {
-   zle _expand_alias
-   zle expand-word
+   if [[ $GLOBALIAS_FILTER_VALUES[(Ie)$LBUFFER] -eq 0 ]]; then
+      zle _expand_alias
+      zle expand-word
+   fi
    zle self-insert
 }
 zle -N globalias

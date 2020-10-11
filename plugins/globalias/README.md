@@ -17,6 +17,8 @@ Then just press `SPACE` to trigger the expansion of a command you've written.
 If you only want to insert a space without expanding the command line, press
 `CTRL`+`SPACE`.
 
+if you would like to filter out any values from expanding set GLOBALIAS_FILTER_VALUES to an array of said values
+
 ## Examples
 
 #### Glob expressions
@@ -60,3 +62,17 @@ $ S<space>
 # expands to:
 $ sudo systemctl
 ```
+
+#### Filtered values
+
+```
+# .zshrc
+alias l='ls -lh'
+alias la='ls --color=auto -lah'
+export GLOBALIAS_FILTER_VALUES=(l)
+
+$ l<space>
+# does not expand
+$ la<space>
+# expands to:
+$ ls --color=auto -lah
