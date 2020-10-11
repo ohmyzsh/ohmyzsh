@@ -75,7 +75,7 @@ function update_ohmyzsh() {
         while read -t -k 1 option; do true; done
         [[ "$option" != ($'\n'|"") ]] && echo
 
-        echo -n "[oh-my-zsh] Would you like to update? [Y/n] "
+        echo -n "[oh-my-zsh] Would you like to update? [y/n] "
         read -r -k 1 option
         [[ "$option" != $'\n' ]] && echo
         case "$option" in
