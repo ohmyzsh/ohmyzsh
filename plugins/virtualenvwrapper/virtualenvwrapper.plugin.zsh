@@ -3,6 +3,7 @@ function {
     for virtualenvwrapper in $commands[virtualenvwrapper_lazy.sh] \
       $commands[virtualenvwrapper.sh] \
       /usr/share/virtualenvwrapper/virtualenvwrapper{_lazy,}.sh \
+      /usr/bin/virtualenvwrapper{_lazy,}.sh \
       /usr/local/bin/virtualenvwrapper{_lazy,}.sh \
       /etc/bash_completion.d/virtualenvwrapper \
       /usr/share/bash-completion/completions/virtualenvwrapper \
