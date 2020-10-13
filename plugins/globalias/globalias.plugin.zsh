@@ -1,5 +1,5 @@
 globalias() {
-   if [[ $GLOBALIAS_FILTER_VALUES[(Ie)$LBUFFER] -eq 0 ]]; then
+   if [[ $GLOBALIAS_FILTER_VALUES[(Ie)${${(A)=LBUFFER}[-1]}] -eq 0 ]]; then
       zle _expand_alias
       zle expand-word
    fi
