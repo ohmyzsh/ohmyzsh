@@ -84,7 +84,7 @@ _bracketed_paste_enqueue() {
 _bracketed_paste_zle_init() {
   _bracketed_paste_content=''
   # Tell terminal to send escape codes around pastes
-  if [ $TERM =~ '^(rxvt-unicode|xterm(-256color)?|screen(-256color)?)$' ]; then
+  if [[ $TERM =~ '^(rxvt-unicode|xterm(-256color)?|screen(-256color)?)$' ]]; then
     printf '\e[?2004h'
   fi
 }
@@ -93,7 +93,7 @@ _bracketed_paste_zle_init() {
 _bracketed_paste_zle_finish() {
   # Turn off bracketed paste when we leave ZLE, so pasting in other programs
   # doesn't get the ^[[200~ codes around the pasted text
-  if [ $TERM =~ '^(rxvt-unicode|xterm(-256color)?|screen(-256color)?)$' ]; then
+  if [[ $TERM =~ '^(rxvt-unicode|xterm(-256color)?|screen(-256color)?)$' ]]; then
     printf '\e[?2004l'
   fi
 }
