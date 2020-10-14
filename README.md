@@ -231,6 +231,7 @@ If you have any hiccups installing, here are a few common fixes.
 switching to `oh-my-zsh`.
 - If you installed manually or changed the install location, check the `ZSH` environment variable in
 `~/.zshrc`.
+- On Fedora/RHEL/CentOS systems, `chsh` is provided by the `util-linux-user` package.
 
 ### Custom Plugins and Themes
 
