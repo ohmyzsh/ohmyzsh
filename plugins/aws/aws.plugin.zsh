@@ -64,6 +64,7 @@ fi
 
 # AWS CLI v2 comes with its own autocompletion. Check if that is there, otherwise fall back
 if command -v aws_completer &> /dev/null; then
+  autoload -Uz bashcompinit && bashcompinit
   complete -C aws_completer aws
 else
   function _awscli-homebrew-installed() {

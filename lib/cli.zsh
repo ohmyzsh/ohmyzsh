@@ -23,16 +23,27 @@ function _omz {
     local -a cmds subcmds
     cmds=(
         'help:Usage information'
+        'plugin:Commands for Oh My Zsh plugins management'
+        'pr:Commands for Oh My Zsh Pull Requests management'
+        'theme:Commands for Oh My Zsh themes management'
         'update:Update Oh My Zsh'
-        'pr:Commands for Oh My Zsh Pull Requests'
     )
 
     if (( CURRENT == 2 )); then
         _describe 'command' cmds
     elif (( CURRENT == 3 )); then
         case "$words[2]" in
-            pr) subcmds=( 'test:Test a Pull Request' 'clean:Delete all Pull Request branches' )
+            plugin) subcmds=('list:List plugins')
                 _describe 'command' subcmds ;;
+            pr) subcmds=('test:Test a Pull Request' 'clean:Delete all Pull Request branches')
+                _describe 'command' subcmds ;;
+            theme) subcmds=('use:Load a theme' 'list:List themes')
+                _describe 'command' subcmds ;;
+        esac
+    elif (( CURRENT == 4 )); then
+        case "$words[2]::$words[3]" in
+            theme::use) compadd "$ZSH"/themes/*.zsh-theme(.N:t:r) \
+                "$ZSH_CUSTOM"/**/*.zsh-theme(.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::) ;;
         esac
     fi
 
@@ -49,10 +60,28 @@ Usage: omz <command> [options]
 Available commands:
 
     help                Print this help message
+    plugin <command>    Manage plugins
+    pr <command>        Manage Oh My Zsh Pull Requests
+    theme <command>     Manage themes
     update              Update Oh My Zsh
-    pr <command>        Commands for Oh My Zsh Pull Requests
 
 EOF
+}
+
+function _omz::confirm {
+    # If question supplied, ask it before reading the answer
+    # NOTE: uses the logname of the caller function
+    if [[ -n "$1" ]]; then
+        _omz::log prompt "$1" "${${functrace[1]#_}%:*}"
+    fi
+
+    # Read one character
+    read -r -k 1
+
+    # If no newline entered, add a newline
+    if [[ "$REPLY" != $'\n' ]]; then
+        echo
+    fi
 }
 
 function _omz::log {
@@ -61,11 +90,11 @@ function _omz::log {
     setopt localoptions nopromptsubst
 
     # $1 = info|warn|error|debug
-    # $@ = text
+    # $2 = text
+    # $3 = (optional) name of the logger
 
     local logtype=$1
-    local logname=${${functrace[1]#_}%:*}
-    shift
+    local logname=${3:-${${functrace[1]#_}%:*}}
 
     # Don't print anything if debug is not active
     if [[ $logtype = debug && -z $_OMZ_DEBUG ]]; then
@@ -74,12 +103,52 @@ function _omz::log {
 
     # Choose coloring based on log type
     case "$logtype" in
-        prompt) print -Pn "%S%F{blue}$logname%f%s: $@" ;;
-        debug) print -P "%F{white}$logname%f: $@" ;;
-        info) print -P "%F{green}$logname%f: $@" ;;
-        warn) print -P "%S%F{yellow}$logname%f%s: $@" ;;
-        error) print -P "%S%F{red}$logname%f%s: $@" ;;
+        prompt) print -Pn "%S%F{blue}$logname%f%s: $2" ;;
+        debug) print -P "%F{white}$logname%f: $2" ;;
+        info) print -P "%F{green}$logname%f: $2" ;;
+        warn) print -P "%S%F{yellow}$logname%f%s: $2" ;;
+        error) print -P "%S%F{red}$logname%f%s: $2" ;;
     esac >&2
+}
+
+function _omz::plugin {
+    (( $# > 0 && $+functions[_omz::plugin::$1] )) || {
+        cat <<EOF
+Usage: omz plugin <command> [options]
+
+Available commands:
+
+    list            List all available Oh My Zsh plugins
+
+EOF
+        return 1
+    }
+
+    local command="$1"
+    shift
+
+    _omz::plugin::$command "$@"
+}
+
+function _omz::plugin::list {
+    local -a custom_plugins builtin_plugins
+    custom_plugins=("$ZSH_CUSTOM"/plugins/*(/N:t))
+    builtin_plugins=("$ZSH"/plugins/*(/N:t))
+
+    {
+        (( ${#custom_plugins} )) && {
+            print -Pn "%U%BCustom plugins%b%u: "
+            print -l ${(q-)custom_plugins}
+        }
+
+        (( ${#builtin_plugins} )) && {
+            # add a line of separation
+            (( ${#custom_plugins} )) && echo
+
+            print -Pn "%U%BBuilt-in plugins%b%u: "
+            print -l ${(q-)builtin_plugins}
+        }
+    } | fmt -w $COLUMNS | sed -E $'s/\e?(\\[[0-9]*m)/\e\\1/g' # deal with fmt removing ESC
 }
 
 function _omz::pr {
@@ -106,6 +175,24 @@ function _omz::pr::clean {
     (
         set -e
         builtin cd -q "$ZSH"
+
+        # Check if there are PR branches
+        local fmt branches
+        fmt="%(color:bold blue)%(align:18,right)%(refname:short)%(end)%(color:reset) %(color:dim bold red)%(objectname:short)%(color:reset) %(color:yellow)%(contents:subject)"
+        branches="$(command git for-each-ref --sort=-committerdate --color --format="$fmt" "refs/heads/ohmyzsh/pull-*")"
+
+        # Exit if there are no PR branches
+        if [[ -z "$branches" ]]; then
+            _omz::log info "there are no Pull Request branches to remove."
+            return
+        fi
+
+        # Print found PR branches
+        echo "$branches\n"
+        # Confirm before removing the branches
+        _omz::confirm "do you want remove these Pull Request branches? [Y/n] "
+        # Only proceed if the answer is a valid yes option
+        [[ "$REPLY" != [yY$'\n'] ]] && return
 
         _omz::log info "removing all Oh My Zsh Pull Request branches..."
         command git branch --list 'ohmyzsh/pull-*' | while read branch; do
@@ -181,13 +268,9 @@ function _omz::pr::test {
     command zsh -l
 
     # After testing, go back to the previous HEAD if the user wants
-    _omz::log prompt "do you want to go back to the previous branch? [Y/n] "
-    read -r -k 1
-
-    # If no newline entered, add a newline
-    [[ "$REPLY" != $'\n' ]] && echo
-    # If NO selected, do nothing else
-    [[ "$REPLY" = [nN] ]] && return
+    _omz::confirm "do you want to go back to the previous branch? [Y/n] "
+    # Only proceed if the answer is a valid yes option
+    [[ "$REPLY" != [yY$'\n'] ]] && return
 
     (
         set -e
@@ -198,6 +281,66 @@ function _omz::pr::test {
             return 1
         }
     )
+}
+
+function _omz::theme {
+    (( $# > 0 && $+functions[_omz::theme::$1] )) || {
+        cat <<EOF
+Usage: omz theme <command> [options]
+
+Available commands:
+
+    list            List all available Oh My Zsh themes
+    use <theme>     Load an Oh My Zsh theme
+
+EOF
+        return 1
+    }
+
+    local command="$1"
+    shift
+
+    _omz::theme::$command "$@"
+}
+
+function _omz::theme::list {
+    local -a custom_themes builtin_themes
+    custom_themes=("$ZSH_CUSTOM"/**/*.zsh-theme(.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::))
+    builtin_themes=("$ZSH"/themes/*.zsh-theme(.N:t:r))
+
+    {
+        (( ${#custom_themes} )) && {
+            print -Pn "%U%BCustom themes%b%u: "
+            print -l ${(q-)custom_themes}
+        }
+
+        (( ${#builtin_themes} )) && {
+            # add a line of separation
+            (( ${#custom_themes} )) && echo
+
+            print -Pn "%U%BBuilt-in themes%b%u: "
+            print -l ${(q-)builtin_themes}
+        }
+    } | fmt -w $COLUMNS | sed -E $'s/\e?(\\[[0-9]*m)/\e\\1/g' # deal with fmt removing ESC
+}
+
+function _omz::theme::use {
+    if [[ -z "$1" ]]; then
+        echo >&2 "Usage: omz theme use <theme>"
+        return 1
+    fi
+
+    # Respect compatibility with old lookup order
+    if [[ -f "$ZSH_CUSTOM/$1.zsh-theme" ]]; then
+        source "$ZSH_CUSTOM/$1.zsh-theme"
+    elif [[ -f "$ZSH_CUSTOM/themes/$1.zsh-theme" ]]; then
+        source "$ZSH_CUSTOM/themes/$1.zsh-theme"
+    elif [[ -f "$ZSH/themes/$1.zsh-theme" ]]; then
+        source "$ZSH/themes/$1.zsh-theme"
+    else
+        _omz::log error "theme '$1' not found"
+        return 1
+    fi
 }
 
 function _omz::update {

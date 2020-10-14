@@ -106,3 +106,11 @@ plugins=(... kubectl)
 | kdelss  | `kubectl delete statefulset`        | Delete the statefulset                                                                           |
 | ksss    | `kubectl scale statefulset`         | Scale a statefulset                                                                              |
 | krsss   | `kubectl rollout status statefulset`| Check the rollout status of a deployment                                                         |
+
+## Wrappers
+
+This plugin provides 3 wrappers to colorize kubectl output in JSON and YAML using various tools (which must be installed):
+
+- `kj`: JSON, colorized with [`jq`](https://stedolan.github.io/jq/).
+- `kjx`: JSON, colorized with [`fx`](https://github.com/antonmedv/fx).
+- `ky`: YAML, colorized with [`yh`](https://github.com/andreazorzetto/yh).

@@ -71,7 +71,7 @@ wd_print_msg()
 
 wd_print_usage()
 {
-    cat <<- EOF
+    command cat <<- EOF
 Usage: wd [command] [point]
 
 Commands:
@@ -175,9 +175,9 @@ wd_add()
     elif [[ $point =~ "[[:space:]]+" ]]
     then
         wd_exit_fail "Warp point should not contain whitespace"
-    elif [[ $point == *:* ]]
+    elif [[ $point =~ : ]] || [[ $point =~ / ]]
     then
-        wd_exit_fail "Warp point cannot contain colons"
+        wd_exit_fail "Warp point contains illegal character (:/)"
     elif [[ ${points[$point]} == "" ]] || [ ! -z "$force" ]
     then
         wd_remove "$point" > /dev/null
@@ -185,7 +185,7 @@ wd_add()
         if (whence sort >/dev/null); then
             local config_tmp=$(mktemp "${TMPDIR:-/tmp}/wd.XXXXXXXXXX")
             # use 'cat' below to ensure we respect $WD_CONFIG as a symlink
-            sort -o "${config_tmp}" "$WD_CONFIG"  && cat "${config_tmp}" > "$WD_CONFIG" && rm "${config_tmp}"
+            command sort -o "${config_tmp}" "$WD_CONFIG" && command cat "${config_tmp}" > "$WD_CONFIG" && command rm "${config_tmp}"
         fi
 
         wd_export_static_named_directories
@@ -270,7 +270,7 @@ wd_ls()
 wd_path()
 {
     wd_getdir "$1"
-    echo "$(echo "$dir" | sed "s:${HOME}:~:g")"
+    echo "$(echo "$dir" | sed "s:~:${HOME}:g")"
 }
 
 wd_show()
