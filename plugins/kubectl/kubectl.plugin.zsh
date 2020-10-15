@@ -154,15 +154,19 @@ alias kdelpvc='kubectl delete pvc'
 kj() {
   kubectl "$@" -o json | jq
 }
-compdef kj=kubectl
 
 kjx() {
   kubectl "$@" -o json | fx
 }
-compdef kjx=kubectl
 
 # Colored YAML output
 ky() {
   kubectl "$@" -o yaml | yh
 }
-compdef ky=kubectl
+
+# only run if the user actually has kubectl installed
+if type kubectl > /dev/null; then
+  compdef kj=kubectl
+  compdef kjx=kubectl
+  compdef ky=kubectl
+fi
