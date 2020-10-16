@@ -15,6 +15,7 @@ plugins=(... git)
 | g                    | git                                                                                                                              |
 | ga                   | git add                                                                                                                          |
 | gaa                  | git add --all                                                                                                                    |
+| gai		       | git add --interactive														  |
 | gapa                 | git add --patch                                                                                                                  |
 | gau                  | git add --update                                                                                                                 |
 | gav                  | git add --verbose                                                                                                                |
