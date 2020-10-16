@@ -47,6 +47,7 @@ alias g='git'
 
 alias ga='git add'
 alias gaa='git add --all'
+alias gai='git add --interactive'
 alias gapa='git add --patch'
 alias gau='git add --update'
 alias gav='git add --verbose'
