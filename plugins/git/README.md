@@ -33,6 +33,7 @@ plugins=(... git)
 | gbsg                 | git bisect good                                                                                                                  |
 | gbsr                 | git bisect reset                                                                                                                 |
 | gbss                 | git bisect start                                                                                                                 |
+| gci                  | git commit --interactive                                                                                                         |
 | gc                   | git commit -v                                                                                                                    |
 | gc!                  | git commit -v --amend                                                                                                            |
 | gcn!                 | git commit -v --no-edit --amend                                                                                                  |
