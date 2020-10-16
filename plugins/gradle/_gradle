@@ -36,7 +36,7 @@ __gradle-set-project-root-dir() {
 }
 
 __gradle-init-cache-dir() {
-    cache_dir="$HOME/.gradle/completion"
+    cache_dir="${GRADLE_USER_HOME:-${HOME}/.gradle}/completion"
     mkdir -p $cache_dir
 }
 
