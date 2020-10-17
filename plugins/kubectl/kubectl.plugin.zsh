@@ -1,7 +1,7 @@
 if (( $+commands[kubectl] )); then
     __KUBECTL_COMPLETION_FILE="${ZSH_CACHE_DIR}/kubectl_completion"
 
-    if [[ ! -f $__KUBECTL_COMPLETION_FILE ]]; then
+    if [[ ! -f $__KUBECTL_COMPLETION_FILE || ! -s $__KUBECTL_COMPLETION_FILE ]]; then
         kubectl completion zsh >! $__KUBECTL_COMPLETION_FILE
     fi
 
@@ -151,7 +151,7 @@ alias kdpvc='kubectl describe pvc'
 alias kdelpvc='kubectl delete pvc'
 
 # Only run if the user actually has kubectl installed
-if (( $+commands[kubectl] )); then
+if (( ${+_comps[kubectl]} )); then
   kj() { kubectl "$@" -o json | jq; }
   kjx() { kubectl "$@" -o json | fx; }
   ky() { kubectl "$@" -o yaml | yh; }
