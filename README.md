@@ -38,7 +38,7 @@ Oh My Zsh is installed by running one of the following commands in your terminal
 
 #### Manual inspection
 
-It's a good idea to inspect the install script from projects you don't yet know. You can do
+It's a good idea to inspect the installed script from projects you don't yet know. You can do
 that by downloading the install script first, looking through it so everything looks normal,
 then running it:
 
