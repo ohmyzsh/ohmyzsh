@@ -1,0 +1,8 @@
+alias dr="deno run"
+alias dh="deno help"
+alias dbh="deno bundle help"
+alias dw="deno run --watch"
+alias dup="deno upgrade"
+alias di="deno install"
+alias dt="deno test"
+alias dl="deno lint"
