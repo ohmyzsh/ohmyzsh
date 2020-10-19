@@ -51,16 +51,16 @@ __apply() {
         '-refresh=[(true) Update state prior to checking for differences. This has no effect if a plan file is given to apply.]' \
         '-state=[(terraform.tfstate) Path to read and save state (unless state-out is specified).]' \
         '-state-out=[(path) Path to write state to that is different than "-state". This can be used to preserve the old state.]' \
-        '-target=[(resource) Resource to target. Operation will be limited to this resource and its dependencies. This flag can be used multiple times.]:target:__statelist' \
-        '-var[("foo=bar") Set a variable in the Terraform configuration. This flag can be set multiple times.]' \
-        '-var-file=[(foo) Set variables in the Terraform configuration from a file. If "terraform.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]'
+        '*-target=[(resource) Resource to target. Operation will be limited to this resource and its dependencies. This flag can be used multiple times.]:target:__statelist' \
+        '*-var[("foo=bar") Set a variable in the Terraform configuration. This flag can be set multiple times.]' \
+        '*-var-file=[(foo) Set variables in the Terraform configuration from a file. If "terraform.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]'
 }
 
 __console() {
     _arguments \
         '-state=[(terraform.tfstate) Path to read state.]' \
-        '-var[("foo=bar") Set a variable in the Terraform configuration. This flag can be set multiple times.]' \
-        '-var-file=[(foo) Set variables in the Terraform configuration from a file. If "terraform.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]'
+        '*-var[("foo=bar") Set a variable in the Terraform configuration. This flag can be set multiple times.]' \
+        '*-var-file=[(foo) Set variables in the Terraform configuration from a file. If "terraform.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]'
 }
 
 __destroy() {
@@ -75,9 +75,9 @@ __destroy() {
         '-refresh=[(true) Update state prior to checking for differences. This has no effect if a plan file is given to apply.]' \
         '-state=[(terraform.tfstate) Path to read and save state (unless state-out is specified).]' \
         '-state-out=[(path) Path to write state to that is different than "-state". This can be used to preserve the old state.]' \
-        '-target=[(resource) Resource to target. Operation will be limited to this resource and its dependencies. This flag can be used multiple times.]:target:__statelist' \
-        '-var[("foo=bar") Set a variable in the Terraform configuration. This flag can be set multiple times.]' \
-        '-var-file=[(foo) Set variables in the Terraform configuration from a file. If "terraform.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]'
+        '*-target=[(resource) Resource to target. Operation will be limited to this resource and its dependencies. This flag can be used multiple times.]:target:__statelist' \
+        '*-var[("foo=bar") Set a variable in the Terraform configuration. This flag can be set multiple times.]' \
+        '*-var-file=[(foo) Set variables in the Terraform configuration from a file. If "terraform.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]'
 }
 
 __fmt() {
@@ -119,8 +119,8 @@ __import() {
         '-provider=[(provider) Specific provider to use for import. This is used for specifying aliases, such as "aws.eu". Defaults to the normal provider prefix of the resource being imported.]' \
         '-state=[(PATH) Path to the source state file. Defaults to the configured backend, or "terraform.tfstate"]' \
         '-state-out=[(PATH) Path to the destination state file to write to. If this is not specified, the source state file will be used. This can be a new or existing path.]' \
-        '-var[("foo=bar") Set a variable in the Terraform configuration. This flag can be set multiple times. This is only useful with the "-config" flag.]' \
-        '-var-file=[(foo) Set variables in the Terraform configuration from a file. If "terraform.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]'
+        '*-var[("foo=bar") Set a variable in the Terraform configuration. This flag can be set multiple times. This is only useful with the "-config" flag.]' \
+        '*-var-file=[(foo) Set variables in the Terraform configuration from a file. If "terraform.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]'
 }
 
 __init() {
@@ -172,9 +172,9 @@ __plan() {
         '-parallelism=[(10) Limit the number of concurrent operations.]' \
         '-refresh=[(true) Update state prior to checking for differences.]' \
         '-state=[(statefile) Path to a Terraform state file to use to look up Terraform-managed resources. By default it will use the state "terraform.tfstate" if it exists.]' \
-        '-target=[(resource) Resource to target. Operation will be limited to this resource and its dependencies. This flag can be used multiple times.]:target:__statelist' \
-        '-var[("foo=bar") Set a variable in the Terraform configuration. This flag can be set multiple times.]' \
-        '-var-file=[(foo) Set variables in the Terraform configuration from a file. If "terraform.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]' \
+        '*-target=[(resource) Resource to target. Operation will be limited to this resource and its dependencies. This flag can be used multiple times.]:target:__statelist' \
+        '*-var[("foo=bar") Set a variable in the Terraform configuration. This flag can be set multiple times.]' \
+        '*-var-file=[(foo) Set variables in the Terraform configuration from a file. If "terraform.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]:file:_files'
 }
 
 __providers() {
@@ -208,9 +208,9 @@ __refresh() {
         '-no-color[If specified, output will not contain any color.]' \
         '-state=[(path) Path to read and save state (unless state-out is specified). Defaults to "terraform.tfstate".]' \
         '-state-out=[(path) Path to write state to that is different than "-state". This can be used to preserve the old state.]' \
-        '-target=[(resource) A Resource Address to target. Operation will be limited to this resource and its dependencies. This flag can be used multiple times.]:target:__statelist' \
-        '-var[("foo=bar") Set a variable in the Terraform configuration. This flag can be set multiple times.]' \
-        '-var-file=[(path) Set variables in the Terraform configuration from a file. If "terraform.tfvars" is present, it will be automatically loaded if this flag is not specified.]'
+        '*-target=[(resource) A Resource Address to target. Operation will be limited to this resource and its dependencies. This flag can be used multiple times.]:target:__statelist' \
+        '*-var[("foo=bar") Set a variable in the Terraform configuration. This flag can be set multiple times.]' \
+        '*-var-file=[(path) Set variables in the Terraform configuration from a file. If "terraform.tfvars" is present, it will be automatically loaded if this flag is not specified.]'
 }
 
 __show() {
@@ -323,8 +323,8 @@ __validate() {
     _arguments \
     '-check-variables=[(true) If set to true (default), the command will check whether all required variables have been specified.]' \
     '-no-color[If specified, output will not contain any color.]' \
-    '-var[("foo=bar") Set a variable in the Terraform configuration. This flag can be set multiple times.]' \
-    '-var-file=[(path) Set variables in the Terraform configuration from a file. If "terraform.tfvars" is present, it will be automatically loaded if this flag is not specified.]'
+    '*-var[("foo=bar") Set a variable in the Terraform configuration. This flag can be set multiple times.]' \
+    '*-var-file=[(path) Set variables in the Terraform configuration from a file. If "terraform.tfvars" is present, it will be automatically loaded if this flag is not specified.]'
 }
 
 __version() {
