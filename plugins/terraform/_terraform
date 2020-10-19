@@ -209,6 +209,7 @@ __state() {
       'mv:Move an item in the state'
       'pull:Pull current state and output to stdout'
       'push:Update remote state from a local state file'
+      'replace-provider:Replace provider for resources in the Terraform state'
       'rm:Remove instances from the state' 
       'show:Show a resource in the state'
     )
@@ -243,6 +244,16 @@ __state_push() {
     "-lock-timeout=[(seconds) Duration to retry a state lock.]" \
     "::" \
     ":destination:_files"
+}
+
+__state_replace_provider() {
+  _arguments \
+    '-auto-approve[Skip interactive approval.]' \
+    "-backup=[(path) PPath where Terraform should write the backup for the state file. This can't be disabled. If not set, Terraform will write it to the same path as the state file with a \".backup\" extension.]:file:_files" \
+    "-lock=[(true|false) Lock the state files when locking is supported.]:lock:(true false)" \
+    "-lock-timeout=[(seconds) Duration to retry a state lock.]" \
+    ":from_provider_fqn:" \
+    ":to_provider_fqn:"
 }
 
 __state_rm() {
@@ -366,6 +377,7 @@ case "$words[1]" in
     [[ $words[2] = "list" ]] && __state_list
     [[ $words[2] = "mv" ]] && __state_mv
     [[ $words[2] = "push" ]] && __state_push
+    [[ $words[2] = "replace-provider" ]] && __state_replace_provider
     [[ $words[2] = "rm" ]] && __state_rm
     [[ $words[2] = "show" ]] && __state_show
     ;;
