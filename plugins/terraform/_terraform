@@ -178,8 +178,25 @@ __plan() {
 }
 
 __providers() {
-    _arguments \
+    local -a __providers_cmds
+    __providers_cmds=(
+      'mirror:Mirrors the provider plugins needed for the current configuration'
+      'schema:Prints the schemas of the providers used in the configuration'
+    )
+    _describe -t providers "providers commands" __providers_cmds
 
+}
+
+__providers_mirror() {
+    _arguments \
+      '-platform=[(os_arch) Choose which target platform to build a mirror for.]' \
+      "*:target_dir:_files -/"
+}
+
+__providers_schema() {
+    _arguments \
+      '-json[]' \
+      '::'
 }
 
 __refresh() {
@@ -367,7 +384,10 @@ case "$words[1]" in
   plan)
     __plan ;;
   providers)
-    __providers ;;
+    test $CURRENT -lt 3 && __providers
+    [[ $words[2] = "mirror" ]] && __providers_mirror
+    [[ $words[2] = "schema" ]] && __providers_schema
+    ;;
   refresh)
     __refresh ;;
   show)
