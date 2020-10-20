@@ -132,8 +132,8 @@ EOF
 
 function _omz::plugin::list {
     local -a custom_plugins builtin_plugins
-    custom_plugins=("$ZSH_CUSTOM"/plugins/*(/N:t))
-    builtin_plugins=("$ZSH"/plugins/*(/N:t))
+    custom_plugins=("$ZSH_CUSTOM"/plugins/*(-/N:t))
+    builtin_plugins=("$ZSH"/plugins/*(-/N:t))
 
     # If the command is being piped, print all found line by line
     if [[ ! -t 1 ]]; then
