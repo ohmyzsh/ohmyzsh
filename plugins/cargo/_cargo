@@ -12,8 +12,8 @@ _cargo() {
         '(-q --quiet)*'{-v,--verbose}'[use verbose output]'
         '(-q --quiet -v --verbose)'{-q,--quiet}'[no output printed to stdout]'
         '-Z+[pass unstable (nightly-only) flags to cargo]: :_cargo_unstable_flags'
-        '--frozen[require that Cargo.lock and cache are up-to-date]'
-        '--locked[require that Cargo.lock is up-to-date]'
+        '--frozen[require that Cargo.lock and cache are up to date]'
+        '--locked[require that Cargo.lock is up to date]'
         '--color=[specify colorization option]:coloring:(auto always never)'
         '(- 1 *)'{-h,--help}'[show help message]'
     )
