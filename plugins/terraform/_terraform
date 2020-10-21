@@ -215,7 +215,7 @@ __refresh() {
 
 __show() {
     _arguments \
-        '-module-depth=[(n) The maximum depth to expand modules. By default this is zero, which will not expand modules at all.]' \
+        '-json[If specified, output the Terraform plan or state in a machine-readable form.]' \
         '-no-color[If specified, output will not contain any color.]'
 }
 
