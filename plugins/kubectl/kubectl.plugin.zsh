@@ -150,6 +150,24 @@ alias kepvc='kubectl edit pvc'
 alias kdpvc='kubectl describe pvc'
 alias kdelpvc='kubectl delete pvc'
 
+# Service account management.
+alias kgsa="kubectl get sa"
+alias kdsa="kubectl describe sa"
+alias kdelsa="kubectl delete sa"
+
+# DaemonSet management.
+alias kgds='kubectl get daemonset'
+alias kgdsw='kgds --watch'
+alias keds='kubectl edit daemonset'
+alias kdds='kubectl describe daemonset'
+alias kdelds='kubectl delete daemonset'
+
+# CronJob management.
+alias kgcj='kubectl get cronjob'
+alias kecj='kubectl edit cronjob'
+alias kdcj='kubectl describe cronjob'
+alias kdelcj='kubectl delete cronjob'
+
 # Only run if the user actually has kubectl installed
 if (( ${+_comps[kubectl]} )); then
   kj() { kubectl "$@" -o json | jq; }
