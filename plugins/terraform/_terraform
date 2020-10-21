@@ -98,7 +98,7 @@ __force_unlock() {
 __get() {
     _arguments \
         '-update=[(false) If true, modules already downloaded will be checked for updates and updated if necessary.]' \
-        '-no-color[If specified, output will contain no color.]'
+        '-no-color[Disable text coloring in the output.]'
 }
 
 __graph() {
@@ -127,14 +127,14 @@ __init() {
         '-backend=[(true) Configure the backend for this configuration.]' \
         '-backend-config=[This can be either a path to an HCL file with key/value assignments (same format as terraform.tfvars) or a 'key=value' format. This is merged with what is in the configuration file. This can be specified multiple times. The backend type must be in the configuration itself.]' \
         '-force-copy[Suppress prompts about copying state data. This is equivalent to providing a "yes" to all confirmation prompts.]' \
-        '-from-module=[Copy the contents of the given module into the target directory before initialization.]' \
+        '-from-module=[(SOURCE) Copy the contents of the given module into the target directory before initialization.]' \
         '-get=[(true) Download any modules for this configuration.]' \
         '-get-plugins=[(true) Download any missing plugins for this configuration.]' \
         '-input=[(true) Ask for input if necessary. If false, will error if input was required.]' \
         '-lock=[(true) Lock the state file when locking is supported.]:lock:(true false)' \
         '-lock-timeout=[(0s) Duration to retry a state lock.]' \
         '-no-color[If specified, output will contain no color.]' \
-        '-plugin-dir[Directory containing plugin binaries. This overrides all default search paths for plugins, and prevents the automatic installation of plugins. This flag can be used multiple times.]' \
+        '-plugin-dir[Directory containing plugin binaries. This overrides all default search paths for plugins, and prevents the automatic installation of plugins. This flag can be used multiple times.]:plugin_dir:_files -/' \
         '-reconfigure[Reconfigure the backend, ignoring any saved configuration.]' \
         '-upgrade=[(false) If installing modules (-get) or plugins (-get-plugins), ignore previously-downloaded objects and install the latest version allowed within configured constraints.]' \
         '-verify-plugins=[(true) Verify the authenticity and integrity of automatically downloaded plugins.]'
@@ -159,7 +159,8 @@ __output() {
 
 __plan() {
     _arguments \
-        '-destroy[() If set, a plan will be generated to destroy all resources managed by the given configuration and state.]' \
+        '-compact-warnings[If Terraform produces any warnings that are not accompanied by errors, show them in a more compact form that includes only the summary messages.]' \
+        '-destroy[If set, a plan will be generated to destroy all resources managed by the given configuration and state.]' \
         '-detailed-exitcode[() Return detailed exit codes when the command exits. This will change the meaning of exit codes to: 0 - Succeeded, diff is empty (no changes); 1 - Errored, 2 - Succeeded; there is a diff]' \
         '-input=[(true) Ask for input for variables if not directly set.]' \
         '-lock=[(true) Lock the state file when locking is supported.]:lock:(true false)' \
@@ -199,6 +200,7 @@ __providers_schema() {
 __refresh() {
     _arguments \
         '-backup=[(path) Path to backup the existing state file before modifying. Defaults to the "-state-out" path with ".backup" extension. Set to "-" to disable backup.]' \
+        '-compact-warnings[If Terraform produces any warnings that are not accompanied by errors, show them in a more compact form that includes only the summary messages.]' \
         '-input=[(true) Ask for input for variables if not directly set.]' \
         '-lock=[(true) Lock the state file when locking is supported.]:lock:(true false)' \
         '-lock-timeout=[(0s) Duration to retry a state lock.]' \
@@ -232,7 +234,7 @@ __state() {
 
 __state_list() {
   _arguments \
-    '-state=[(path) Path to a Terraform state file to use to look up Terraform-managed resources. By default it will use the state "terraform.tfstate" if it exists.]' \
+    '-state=[(statefile) Path to a Terraform state file to use to look up Terraform-managed resources. By default, Terraform will consult the state of the currently-selected workspace.]' \
     '-id=[(id) Filters the results to include only instances whose resource types have an attribute named id whose value equals the given id string.]' \
     "*:address:__statelist" 
 }
@@ -284,7 +286,7 @@ __state_rm() {
 
 __state_show() {
   _arguments \
-    '-state=[(path) Path to a Terraform state file to use to look up Terraform-managed resources. By default it will use the state "terraform.tfstate" if it exists.]' \
+    '-state=[(statefile) Path to a Terraform state file to use to look up Terraform-managed resources. By default it will use the state "terraform.tfstate" if it exists.]' \
     "*:address:__statelist" 
 }
 
@@ -318,8 +320,8 @@ __untaint() {
 __validate() {
     _arguments \
     '-no-color[If specified, output will not contain any color.]' \
-    '*-var[("foo=bar") Set a variable in the Terraform configuration. This flag can be set multiple times.]' \
-    '*-var-file=[(path) Set variables in the Terraform configuration from a file. If "terraform.tfvars" is present, it will be automatically loaded if this flag is not specified.]:file:_files'
+    '-json[Produce output in a machine-readable JSON format, suitable for use in text editor integrations and other automated systems.]' \
+    ':dir:_files -/'
 }
 
 __version() {
