@@ -44,7 +44,7 @@ __apply() {
         '-auto-approve[Skip interactive approval of plan before applying.]' \
         '-backup=[(path) Path to backup the existing state file before modifying. Defaults to the "-state-out" path with ".backup" extension. Set to "-" to disable backup.]' \
         '-compact-warnings[If Terraform produces any warnings that are not accompanied by errors, show them in a more compact form that includes only the summary messages.]' \
-        '-lock=[(true) Lock the state file when locking is supported.]' \
+        '-lock=[(true) Lock the state file when locking is supported.]:lock:(true false)' \
         '-lock-timeout=[(0s) Duration to retry a state lock.]' \
         '-input=[(true) Ask for input for variables if not directly set.]' \
         '-no-color[If specified, output wil be colorless.]' \
@@ -69,7 +69,7 @@ __destroy() {
         '-backup=[(path) Path to backup the existing state file before modifying. Defaults to the "-state-out" path with ".backup" extension. Set to "-" to disable backup.]' \
         '-auto-approve[Skip interactive approval before destroying.]' \
         '-force[Deprecated: same as auto-approve.]' \
-        '-lock=[(true) Lock the state file when locking is supported.]' \
+        '-lock=[(true) Lock the state file when locking is supported.]:lock:(true false)' \
         '-lock-timeout=[(0s) Duration to retry a state lock.]' \
         '-no-color[If specified, output will contain no color.]' \
         '-parallelism=[(10) Limit the number of concurrent operations.]' \
@@ -114,7 +114,7 @@ __import() {
         '-config=[(path) Path to a directory of Terraform configuration files to use to configure the provider. Defaults to pwd. If no config files are present, they must be provided via the input prompts or env vars.]' \
         '-allow-missing-config[Allow import when no resource configuration block exists.]' \
         '-input=[(true) Ask for input for variables if not directly set.]' \
-        '-lock=[(true) Lock the state file when locking is supported.]' \
+        '-lock=[(true) Lock the state file when locking is supported.]:lock:(true false)' \
         '-lock-timeout=[(0s) Duration to retry a state lock.]' \
         '-no-color[If specified, output will contain no color.]' \
         '-provider=[(provider) Specific provider to use for import. This is used for specifying aliases, such as "aws.eu". Defaults to the normal provider prefix of the resource being imported.]' \
@@ -133,7 +133,7 @@ __init() {
         '-get=[(true) Download any modules for this configuration.]' \
         '-get-plugins=[(true) Download any missing plugins for this configuration.]' \
         '-input=[(true) Ask for input if necessary. If false, will error if input was required.]' \
-        '-lock=[(true) Lock the state file when locking is supported.]' \
+        '-lock=[(true) Lock the state file when locking is supported.]:lock:(true false)' \
         '-lock-timeout=[(0s) Duration to retry a state lock.]' \
         '-no-color[If specified, output will contain no color.]' \
         '-plugin-dir[Directory containing plugin binaries. This overrides all default search paths for plugins, and prevents the automatic installation of plugins. This flag can be used multiple times.]' \
@@ -165,7 +165,7 @@ __plan() {
         '-destroy[() If set, a plan will be generated to destroy all resources managed by the given configuration and state.]' \
         '-detailed-exitcode[() Return detailed exit codes when the command exits. This will change the meaning of exit codes to: 0 - Succeeded, diff is empty (no changes); 1 - Errored, 2 - Succeeded; there is a diff]' \
         '-input=[(true) Ask for input for variables if not directly set.]' \
-        '-lock=[(true) Lock the state file when locking is supported.]' \
+        '-lock=[(true) Lock the state file when locking is supported.]:lock:(true false)' \
         '-lock-timeout=[(0s) Duration to retry a state lock.]' \
         '-module-depth=[(n) Specifies the depth of modules to show in the output. This does not affect the plan itself, only the output shown. By default, this is -1, which will expand all.]' \
         '-no-color[() If specified, output will contain no color.]' \
@@ -204,7 +204,7 @@ __refresh() {
     _arguments \
         '-backup=[(path) Path to backup the existing state file before modifying. Defaults to the "-state-out" path with ".backup" extension. Set to "-" to disable backup.]' \
         '-input=[(true) Ask for input for variables if not directly set.]' \
-        '-lock=[(true) Lock the state file when locking is supported.]' \
+        '-lock=[(true) Lock the state file when locking is supported.]:lock:(true false)' \
         '-lock-timeout=[(0s) Duration to retry a state lock.]' \
         '-no-color[If specified, output will not contain any color.]' \
         '-state=[(path) Path to read and save state (unless state-out is specified). Defaults to "terraform.tfstate".]' \
@@ -244,10 +244,10 @@ __state_list() {
 __state_mv() {
   _arguments \
     "-dry-run[If set, prints out what would've been moved but doesn't actually move anything.]" \
-    "-backup=[(path) Path where Terraform should write the backup for the original state. This can't be disabled. If not set, Terraform will write it to the same path as the statefile with a \".backup\" extension.]:file:_files" \
-    "-backup-out=[(path) Path where Terraform should write the backup for the destination state. This can't be disabled. If not set, Terraform will write it to the same path as the destination state file with a backup extension. This only needs to be specified if -state-out is set to a different path than -state.]:file:_files" \
-    "-lock=[(true|false) Lock the state files when locking is supported.]:lock:(true false)" \
-    "-lock-timeout=[(seconds) Duration to retry a state lock.]" \
+    "-backup=[(PATH) Path where Terraform should write the backup for the original state. This can't be disabled. If not set, Terraform will write it to the same path as the statefile with a \".backup\" extension.]:file:_files" \
+    "-backup-out=[(PATH) Path where Terraform should write the backup for the destination state. This can't be disabled. If not set, Terraform will write it to the same path as the destination state file with a backup extension. This only needs to be specified if -state-out is set to a different path than -state.]:file:_files" \
+    "-lock=[(true) Lock the state files when locking is supported.]:lock:(true false)" \
+    "-lock-timeout=[(0s) Duration to retry a state lock.]" \
     '-state=[(path) Path to the source state file. Defaults to the configured backend, or "terraform.tfstate"]:file:_files' \
     "-state-out=[(path) Path to the destination state file to write to. If this isn't specified, the source state file will be used. This can be a new or existing path.]:file:_files" \
     "::" \
@@ -258,8 +258,8 @@ __state_mv() {
 __state_push() {
   _arguments \
     "-force[Write the state even if lineages don't match or the remote serial is higher.]" \
-    '-lock=[(true|false) Lock the state file when locking is supported.]:lock:(true false)' \
-    "-lock-timeout=[(seconds) Duration to retry a state lock.]" \
+    '-lock=[(true) Lock the state file when locking is supported.]:lock:(true false)' \
+    "-lock-timeout=[(0s) Duration to retry a state lock.]" \
     "::" \
     ":destination:_files"
 }
@@ -267,9 +267,10 @@ __state_push() {
 __state_replace_provider() {
   _arguments \
     '-auto-approve[Skip interactive approval.]' \
-    "-backup=[(path) PPath where Terraform should write the backup for the state file. This can't be disabled. If not set, Terraform will write it to the same path as the state file with a \".backup\" extension.]:file:_files" \
-    "-lock=[(true|false) Lock the state files when locking is supported.]:lock:(true false)" \
-    "-lock-timeout=[(seconds) Duration to retry a state lock.]" \
+    "-backup=[(PATH) Path where Terraform should write the backup for the state file. This can't be disabled. If not set, Terraform will write it to the same path as the state file with a \".backup\" extension.]:file:_files" \
+    "-lock=[(true) Lock the state files when locking is supported.]:lock:(true false)" \
+    "-lock-timeout=[(0s) Duration to retry a state lock.]" \
+    '-state=[(PATH) Path to the source state file. Defaults to the configured backend, or "terraform.tfstate"]:file:_files' \
     ":from_provider_fqn:" \
     ":to_provider_fqn:"
 }
@@ -277,10 +278,10 @@ __state_replace_provider() {
 __state_rm() {
   _arguments \
     "-dry-run[If set, prints out what would've been removed but doesn't actually remove anything.]" \
-    "-backup=[(path) Path where Terraform should write the backup for the original state.]:file:_files" \
-    "-lock=[(true|false) Lock the state files when locking is supported.]:lock:(true false)" \
-    "-lock-timeout=[(seconds) Duration to retry a state lock.]" \
-    '-state=[(path) Path to the state file to update. Defaults to the current workspace state.]:file:_files' \
+    "-backup=[(PATH) Path where Terraform should write the backup for the original state.]:file:_files" \
+    "-lock=[(true) Lock the state file when locking is supported.]:lock:(true false)" \
+    "-lock-timeout=[(0s) Duration to retry a state lock.]" \
+    '-state=[(PATH) Path to the state file to update. Defaults to the current workspace state.]:file:_files' \
     "*:address:__statelist" 
 }
 
@@ -299,7 +300,7 @@ __taint() {
     _arguments \
         '-allow-missing[If specified, the command will succeed (exit code 0) even if the resource is missing.]' \
         '-backup=[(path) Path to backup the existing state file before modifying. Defaults to the "-state-out" path with ".backup" extension. Set to "-" to disable backup.]' \
-        '-lock=[(true) Lock the state file when locking is supported.]' \
+        '-lock=[(true) Lock the state file when locking is supported.]:lock:(true false)' \
         '-lock-timeout=[(0s) Duration to retry a state lock.]' \
         '-module=[(path)  The module path where the resource lives. By default this will be root. Child modules can be specified by names. Ex. "consul" or "consul.vpc" (nested modules).]' \
         '-no-color[If specified, output will not contain any color.]' \
@@ -312,7 +313,7 @@ __untaint() {
     _arguments \
     '-allow-missing[If specified, the command will succeed (exit code 0) even if the resource is missing.]' \
     '-backup=[(path) Path to backup the existing state file before modifying. Defaults to the "-state-out" path with ".backup" extension. Set to "-" to disable backup.]' \
-    '-lock=[(true) Lock the state file when locking is supported.]' \
+    '-lock=[(true) Lock the state file when locking is supported.]:lock:(true false)' \
     '-lock-timeout=[(0s) Duration to retry a state lock.]' \
     '-module=[(path)  The module path where the resource lives. By default this will be root. Child modules can be specified by names. Ex. "consul" or "consul.vpc" (nested modules).]' \
     '-no-color[If specified, output will not contain any color.]' \
