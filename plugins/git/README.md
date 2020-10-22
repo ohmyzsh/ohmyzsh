@@ -33,6 +33,10 @@ plugins=(... git)
 | gbsg                 | git bisect good                                                                                                                  |
 | gbsr                 | git bisect reset                                                                                                                 |
 | gbss                 | git bisect start                                                                                                                 |
+| gcfb                 | git cat-file blob                                                                                                                |
+| gcft                 | git cat-file tree                                                                                                                |
+| gcfc                 | git cat-file commit                                                                                                              |
+| gcfta                | git cat-file tag                                                                                                                 |
 | gc                   | git commit -v                                                                                                                    |
 | gc!                  | git commit -v --amend                                                                                                            |
 | gcn!                 | git commit -v --no-edit --amend                                                                                                  |
@@ -89,6 +93,7 @@ plugins=(... git)
 | gk                   | gitk --all --branches                                                                                                            |
 | gke                  | gitk --all $(git log -g --pretty=%h)                                                                                             |
 | gl                   | git pull                                                                                                                         |
+| glfp                 | git log --first-parent --no-merges                                                                                               |
 | glg                  | git log --stat                                                                                                                   |
 | glgp                 | git log --stat -p                                                                                                                |
 | glgg                 | git log --graph                                                                                                                  |
@@ -116,6 +121,7 @@ plugins=(... git)
 | gpoat                | git push origin --all && git push origin --tags                                                                                  |
 | gpu                  | git push upstream                                                                                                                |
 | gpv                  | git push -v                                                                                                                      |
+| grlp                 | git reflog --pretty=fuller                                                                                                       |
 | gr                   | git remote                                                                                                                       |
 | gra                  | git remote add                                                                                                                   |
 | grb                  | git rebase                                                                                                                       |
