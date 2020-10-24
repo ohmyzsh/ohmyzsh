@@ -3242,7 +3242,7 @@ if [[ -n ${ZSH_VERSION-} ]]; then
 
 		local IFS=$'\n'
 		compset -P '*[=:]'
-		compadd -Q -- ${=1} && _ret=0
+		compadd -Q -- ${${=1}% } && _ret=0
 	}
 
 	__gitcomp_nl ()
@@ -3290,6 +3290,7 @@ __git_func_wrap ()
 # This is NOT a public function; use at your own risk.
 __git_complete ()
 {
+	test -n "$ZSH_VERSION" && return
 	local wrapper="__git_wrap${2}"
 	eval "$wrapper () { __git_func_wrap $2 ; }"
 	complete -o bashdefault -o default -o nospace -F $wrapper $1 2>/dev/null \
@@ -3315,6 +3316,6 @@ __git_complete gitk __gitk_main
 # when the user has tab-completed the executable name and consequently
 # included the '.exe' suffix.
 #
-if [[ "$OSTYPE" = cygwin* ]]; then
-__git_complete git.exe __git_main
+if [ "$OSTYPE" = cygwin ]; then
+	__git_complete git.exe __git_main
 fi

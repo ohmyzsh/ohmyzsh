@@ -88,7 +88,8 @@
 # If you would like a colored hint about the current dirty state, set
 # GIT_PS1_SHOWCOLORHINTS to a nonempty value. The colors are based on
 # the colored output of "git status -sb" and are available only when
-# using __git_ps1 for PROMPT_COMMAND or precmd.
+# using __git_ps1 for PROMPT_COMMAND or precmd in Bash,
+# but always available in Zsh.
 #
 # If you would like __git_ps1 to do nothing in the case when the current
 # directory is set up to be ignored by git, then set

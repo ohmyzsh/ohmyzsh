@@ -16,12 +16,6 @@
 #
 #  fpath=(~/.zsh $fpath)
 
-complete ()
-{
-	# do nothing
-	return 0
-}
-
 zstyle -T ':completion:*:*:git:*' tag-order && \
 	zstyle ':completion:*:*:git:*' tag-order 'common-commands'
 
@@ -30,7 +24,7 @@ if [ -z "$script" ]; then
 	local -a locations
 	local e
 	locations=(
-		"$(dirname ${funcsourcetrace[1]%:*})/git-completion.bash"
+		"$(dirname ${funcsourcetrace[1]%:*})"/git-completion.bash
 		'/etc/bash_completion.d/git' # fedora, old debian
 		'/usr/share/bash-completion/completions/git' # arch, ubuntu, new debian
 		'/usr/share/bash-completion/git' # gentoo
@@ -50,10 +44,32 @@ __gitcomp ()
 	case "$cur_" in
 	--*=)
 		;;
+	--no-*)
+		local c IFS=$' \t\n'
+		local -a array
+		for c in ${=1}; do
+			if [[ $c == "--" ]]; then
+				continue
+			fi
+			c="$c${4-}"
+			case $c in
+			--*=|*.) ;;
+			*) c="$c " ;;
+			esac
+			array+=("$c")
+		done
+		compset -P '*[=:]'
+		compadd -Q -S '' -p "${2-}" -a -- array && _ret=0
+		;;
 	*)
 		local c IFS=$' \t\n'
 		local -a array
 		for c in ${=1}; do
+			if [[ $c == "--" ]]; then
+				c="--no-...${4-}"
+				array+=("$c ")
+				break
+			fi
 			c="$c${4-}"
 			case $c in
 			--*=*|*.) ;;
@@ -73,7 +89,7 @@ __gitcomp_direct ()
 
 	local IFS=$'\n'
 	compset -P '*[=:]'
-	compadd -Q -- ${=1} && _ret=0
+	compadd -Q -- ${${=1}% } && _ret=0
 }
 
 __gitcomp_nl ()
@@ -99,7 +115,12 @@ __gitcomp_file ()
 
 	local IFS=$'\n'
 	compset -P '*[=:]'
-	compadd -Q -p "${2-}" -f -- ${=1} && _ret=0
+	compadd -p "${2-}" -f -- ${=1} && _ret=0
+}
+
+_git_zsh ()
+{
+	__gitcomp "v1.0"
 }
 
 __git_zsh_bash_func ()
