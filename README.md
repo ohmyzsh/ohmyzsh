@@ -30,11 +30,11 @@ To learn more, visit [ohmyz.sh](https://ohmyz.sh), follow [@ohmyzsh](https://twi
 
 Oh My Zsh is installed by running one of the following commands in your terminal. You can install this via the command-line with either `curl`, `wget` or another similar tool.
 
-| Method    | Command                                                                                           |
-|:----------|:--------------------------------------------------------------------------------------------------|
-| **curl**  | `sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"` |
-| **wget**  | `sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`   |
-| **fetch** | `sh -c "$(fetch -o - https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"` |
+| Method    | Command                                                                                |
+|:----------|:---------------------------------------------------------------------------------------|
+| **curl**  | `sh -c "$(curl -fsSL https://github.com/ohmyzsh/ohmyzsh/raw/master/tools/install.sh)"` |
+| **wget**  | `sh -c "$(wget -O- https://github.com/ohmyzsh/ohmyzsh/raw/master/tools/install.sh)"`   |
+| **fetch** | `sh -c "$(fetch -o - https://github.com/ohmyzsh/ohmyzsh/raw/master/tools/install.sh)"` |
 
 #### Manual inspection
 
@@ -43,7 +43,7 @@ that by downloading the install script first, looking through it so everything l
 then running it:
 
 ```shell
-wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+wget https://github.com/ohmyzsh/ohmyzsh/raw/master/tools/install.sh
 sh install.sh
 ```
 
@@ -163,7 +163,7 @@ flag `--unattended` to the `install.sh` script. This will have the effect of not
 the default shell, and also won't run `zsh` when the installation has finished.
 
 ```shell
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+sh -c "$(curl -fsSL https://github.com/ohmyzsh/ohmyzsh/raw/master/tools/install.sh)" "" --unattended
 ```
 
 #### Installing from a forked repository
