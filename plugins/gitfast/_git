@@ -11,8 +11,9 @@
 #
 #  zstyle ':completion:*:*:git:*' script ~/.git-completion.zsh
 #
-# The recommended way to install this script is to copy to '~/.zsh/_git', and
-# then add the following to your ~/.zshrc file:
+# The recommended way to install this script is to make a copy of it in
+# ~/.zsh/ directory as ~/.zsh/git-completion.zsh and then add the following
+# to your ~/.zshrc file:
 #
 #  fpath=(~/.zsh $fpath)
 
@@ -33,7 +34,7 @@ if [ -z "$script" ]; then
 		test -f $e && script="$e" && break
 	done
 fi
-ZSH_VERSION='' . "$script"
+GIT_SOURCING_ZSH_COMPLETION=y . "$script"
 
 __gitcomp ()
 {
@@ -109,6 +110,15 @@ __gitcomp_nl_append ()
 	compadd -Q -S "${4- }" -p "${2-}" -- ${=1} && _ret=0
 }
 
+__gitcomp_file_direct ()
+{
+	emulate -L zsh
+
+	local IFS=$'\n'
+	compset -P '*[=:]'
+	compadd -f -- ${=1} && _ret=0
+}
+
 __gitcomp_file ()
 {
 	emulate -L zsh
@@ -161,9 +171,11 @@ __git_zsh_cmd_common ()
 	push:'update remote refs along with associated objects'
 	rebase:'forward-port local commits to the updated upstream head'
 	reset:'reset current HEAD to the specified state'
+	restore:'restore working tree files'
 	rm:'remove files from the working tree and from the index'
 	show:'show various types of objects'
 	status:'show the working tree status'
+	switch:'switch branches'
 	tag:'create, list, delete or verify a tag object signed with GPG')
 	_describe -t common-commands 'common commands' list && _ret=0
 }

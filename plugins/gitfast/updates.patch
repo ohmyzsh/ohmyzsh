@@ -1,8 +1,8 @@
 diff --git b/plugins/gitfast/_git a/plugins/gitfast/_git
-index c3521fbf..74b5feaf 100644
+index ce47e86b..dd3c3d17 100644
 --- b/plugins/gitfast/_git
 +++ a/plugins/gitfast/_git
-@@ -16,12 +16,6 @@
+@@ -17,12 +17,6 @@
  #
  #  fpath=(~/.zsh $fpath)
  
@@ -15,7 +15,7 @@ index c3521fbf..74b5feaf 100644
  zstyle -T ':completion:*:*:git:*' tag-order && \
  	zstyle ':completion:*:*:git:*' tag-order 'common-commands'
  
-@@ -30,7 +24,7 @@ if [ -z "$script" ]; then
+@@ -31,7 +25,7 @@ if [ -z "$script" ]; then
  	local -a locations
  	local e
  	locations=(
@@ -24,7 +24,7 @@ index c3521fbf..74b5feaf 100644
  		'/etc/bash_completion.d/git' # fedora, old debian
  		'/usr/share/bash-completion/completions/git' # arch, ubuntu, new debian
  		'/usr/share/bash-completion/git' # gentoo
-@@ -50,10 +44,32 @@ __gitcomp ()
+@@ -51,10 +45,32 @@ __gitcomp ()
  	case "$cur_" in
  	--*=)
  		;;
@@ -57,7 +57,7 @@ index c3521fbf..74b5feaf 100644
  			c="$c${4-}"
  			case $c in
  			--*=*|*.) ;;
-@@ -73,7 +89,7 @@ __gitcomp_direct ()
+@@ -74,7 +90,7 @@ __gitcomp_direct ()
  
  	local IFS=$'\n'
  	compset -P '*[=:]'
@@ -66,21 +66,19 @@ index c3521fbf..74b5feaf 100644
  }
  
  __gitcomp_nl ()
-@@ -99,7 +115,12 @@ __gitcomp_file ()
+@@ -112,6 +128,11 @@ __gitcomp_file ()
+ 	compadd -p "${2-}" -f -- ${=1} && _ret=0
+ }
  
- 	local IFS=$'\n'
- 	compset -P '*[=:]'
--	compadd -Q -p "${2-}" -f -- ${=1} && _ret=0
-+	compadd -p "${2-}" -f -- ${=1} && _ret=0
-+}
-+
 +_git_zsh ()
 +{
 +	__gitcomp "v1.0"
- }
- 
++}
++
  __git_zsh_bash_func ()
-@@ -223,8 +244,10 @@ _git ()
+ {
+ 	emulate -L ksh
+@@ -235,8 +256,10 @@ _git ()
  
  	if (( $+functions[__${service}_zsh_main] )); then
  		__${service}_zsh_main
@@ -93,10 +91,10 @@ index c3521fbf..74b5feaf 100644
  
  	let _ret && _default && _ret=0
 diff --git b/plugins/gitfast/git-completion.bash a/plugins/gitfast/git-completion.bash
-index 3683c772..c8d1a395 100644
+index 0a96ad87..468e1952 100644
 --- b/plugins/gitfast/git-completion.bash
 +++ a/plugins/gitfast/git-completion.bash
-@@ -3242,7 +3242,7 @@ if [[ -n ${ZSH_VERSION-} ]]; then
+@@ -3498,7 +3498,7 @@ if [[ -n ${ZSH_VERSION-} ]] &&
  
  		local IFS=$'\n'
  		compset -P '*[=:]'
@@ -105,7 +103,7 @@ index 3683c772..c8d1a395 100644
  	}
  
  	__gitcomp_nl ()
-@@ -3290,6 +3290,7 @@ __git_func_wrap ()
+@@ -3555,6 +3555,7 @@ __git_func_wrap ()
  # This is NOT a public function; use at your own risk.
  __git_complete ()
  {
@@ -113,7 +111,7 @@ index 3683c772..c8d1a395 100644
  	local wrapper="__git_wrap${2}"
  	eval "$wrapper () { __git_func_wrap $2 ; }"
  	complete -o bashdefault -o default -o nospace -F $wrapper $1 2>/dev/null \
-@@ -3315,6 +3316,6 @@ __git_complete gitk __gitk_main
+@@ -3580,6 +3581,6 @@ __git_complete gitk __gitk_main
  # when the user has tab-completed the executable name and consequently
  # included the '.exe' suffix.
  #
@@ -123,10 +121,10 @@ index 3683c772..c8d1a395 100644
 +	__git_complete git.exe __git_main
  fi
 diff --git b/plugins/gitfast/git-prompt.sh a/plugins/gitfast/git-prompt.sh
-index 983e419d..86741091 100644
+index 16260bab..54e123d6 100644
 --- b/plugins/gitfast/git-prompt.sh
 +++ a/plugins/gitfast/git-prompt.sh
-@@ -88,7 +88,8 @@
+@@ -97,7 +97,8 @@
  # If you would like a colored hint about the current dirty state, set
  # GIT_PS1_SHOWCOLORHINTS to a nonempty value. The colors are based on
  # the colored output of "git status -sb" and are available only when
@@ -136,7 +134,7 @@ index 983e419d..86741091 100644
  #
  # If you would like __git_ps1 to do nothing in the case when the current
  # directory is set up to be ignored by git, then set
-@@ -506,9 +507,11 @@ __git_ps1 ()
+@@ -553,9 +554,11 @@ __git_ps1 ()
  
  	local z="${GIT_PS1_STATESEPARATOR-" "}"
  
