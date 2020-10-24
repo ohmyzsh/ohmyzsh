@@ -5,7 +5,7 @@ function agp() {
 # AWS profile selection
 function asp() {
   if [[ -z "$1" ]]; then
-    unset AWS_DEFAULT_PROFILE AWS_PROFILE AWS_EB_PROFILE
+    unset AWS_DEFAULT_PROFILE AWS_PROFILE AWS_EB_PROFILE AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
     echo AWS profile cleared.
     return
   fi
@@ -18,9 +18,61 @@ function asp() {
     return 1
   fi
 
-  export AWS_DEFAULT_PROFILE=$1
-  export AWS_PROFILE=$1
-  export AWS_EB_PROFILE=$1
+  local exists="$(aws configure get aws_access_key_id --profile $1)"
+  local role_arn="$(aws configure get role_arn --profile $1)"
+  local aws_access_key_id=""
+  local aws_secret_access_key=""
+  local aws_session_token=""
+  if [[ -n $exists || -n $role_arn ]]; then
+    if [[ -n $role_arn ]]; then
+      local mfa_serial="$(aws configure get mfa_serial --profile $1)"
+      local mfa_token=""
+      local mfa_opt=""
+      if [[ -n $mfa_serial ]]; then
+        echo "Please enter your MFA token for $mfa_serial:"
+        read mfa_token
+        echo "Please enter the session duration in seconds (900-43200; default: 3600, which is the default maximum for a role):"
+        read sess_duration
+        if [[ -z $sess_duration ]]; then
+          sess_duration = 3600
+        fi
+        mfa_opt="--serial-number $mfa_serial --token-code $mfa_token --duration-seconds $sess_duration"
+      fi
+
+      local ext_id="$(aws configure get external_id --profile $1)"
+      local extid_opt=""
+      if [[ -n $ext_id ]]; then
+        extid_opt="--external-id $ext_id"
+      fi
+
+      local profile=$1
+      local source_profile="$(aws configure get source_profile --profile $1)"
+      if [[ -n $source_profile ]]; then
+        profile=$source_profile
+      fi
+
+      echo "Assuming role $role_arn using profile $profile"
+      local assume_cmd=(aws sts assume-role "--profile=$profile" "--role-arn $role_arn" "--role-session-name "$profile"" "$mfa_opt" "$extid_opt")
+      local JSON="$(eval ${assume_cmd[@]})"
+
+      aws_access_key_id="$(echo $JSON | jq -r '.Credentials.AccessKeyId')"
+      aws_secret_access_key="$(echo $JSON | jq -r '.Credentials.SecretAccessKey')"
+      aws_session_token="$(echo $JSON | jq -r '.Credentials.SessionToken')"
+    else
+      aws_access_key_id="$(aws configure get aws_access_key_id --profile $1)"
+      aws_secret_access_key="$(aws configure get aws_secret_access_key --profile $1)"
+      aws_session_token=""
+    fi
+
+    export AWS_DEFAULT_PROFILE=$1
+    export AWS_PROFILE=$1
+    export AWS_EB_PROFILE=$1
+    export AWS_ACCESS_KEY_ID=$aws_access_key_id
+    export AWS_SECRET_ACCESS_KEY=$aws_secret_access_key
+    [[ -z "$aws_session_token" ]] && unset AWS_SESSION_TOKEN || export AWS_SESSION_TOKEN=$aws_session_token
+
+    echo "Switched to AWS Profile: $1";
+  fi
 }
 
 function aws_change_access_key() {
@@ -41,7 +93,7 @@ function aws_change_access_key() {
 
 function aws_profiles() {
   [[ -r "${AWS_CONFIG_FILE:-$HOME/.aws/config}" ]] || return 1
-  grep '\[profile' "${AWS_CONFIG_FILE:-$HOME/.aws/config}"|sed -e 's/.*profile \([a-zA-Z0-9@_\.-]*\).*/\1/'
+  grep --color=never -Eo '\[.*\]' "${AWS_CONFIG_FILE:-$HOME/.aws/config}" | sed -E 's/^[[:space:]]*\[(profile)?[[:space:]]*([-_[:alnum:]\.@]+)\][[:space:]]*$/\2/g'
 }
 
 function _aws_profiles() {
