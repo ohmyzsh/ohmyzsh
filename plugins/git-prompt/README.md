@@ -11,6 +11,9 @@ plugins=(... git-prompt)
 
 See the [original repository](https://github.com/olivierverdier/zsh-git-prompt).
 
+## Prerequisites
+This plugin uses `python`, so your host needs to have it installed
+
 ## Examples
 
 The prompt may look like the following:

@@ -208,12 +208,12 @@ function pacmansignkeys() {
 if (( $+commands[xdg-open] )); then
   function pacweb() {
     pkg="$1"
-    infos="$(pacman -Si "$pkg")"
+    infos="$(LANG=C pacman -Si "$pkg")"
     if [[ -z "$infos" ]]; then
       return
     fi
-    repo="$(grep '^Repo' <<< "$infos" | grep -oP '[^ ]+$')"
-    arch="$(grep '^Arch' <<< "$infos" | grep -oP '[^ ]+$')"
+    repo="$(grep -m 1 '^Repo' <<< "$infos" | grep -oP '[^ ]+$')"
+    arch="$(grep -m 1 '^Arch' <<< "$infos" | grep -oP '[^ ]+$')"
     xdg-open "https://www.archlinux.org/packages/$repo/$arch/$pkg/" &>/dev/null
   }
 fi

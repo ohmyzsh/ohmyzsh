@@ -19,10 +19,11 @@ plugins=(... git)
 | gau                  | git add --update                                                                                                                 |
 | gav                  | git add --verbose                                                                                                                |
 | gap                  | git apply                                                                                                                        |
+| gapt                 | git apply --3way                                                                                                                 |
 | gb                   | git branch                                                                                                                       |
 | gba                  | git branch -a                                                                                                                    |
 | gbd                  | git branch -d                                                                                                                    |
-| gbda                 | git branch --no-color --merged \| command grep -vE "^(\+\|\*\|\s*(master\|develop\|dev)\s*$)" \| command xargs -n 1 git branch -d |
+| gbda                 | git branch --no-color --merged \| command grep -vE "^(\+\|\*\|\s*($(git_main_branch)\|development\|develop\|devel\|dev)\s*$)" \| command xargs -n 1 git branch -d |
 | gbD                  | git branch -D                                                                                                                    |
 | gbl                  | git blame -b -w                                                                                                                  |
 | gbnm                 | git branch --no-merged                                                                                                           |
@@ -46,7 +47,7 @@ plugins=(... git)
 | gcl                  | git clone --recurse-submodules                                                                                                   |
 | gclean               | git clean -id                                                                                                                    |
 | gpristine            | git reset --hard && git clean -dffx                                                                                              |
-| gcm                  | git checkout master                                                                                                              |
+| gcm                  | git checkout $(git_main_branch)                                                                                                                |
 | gcd                  | git checkout develop                                                                                                             |
 | gcmsg                | git commit -m                                                                                                                    |
 | gco                  | git checkout                                                                                                                     |
@@ -61,6 +62,7 @@ plugins=(... git)
 | gdct                 | git describe --tags $(git rev-list --tags --max-count=1)                                                                         |
 | gds                  | git diff --staged                                                                                                                |
 | gdt                  | git diff-tree --no-commit-id --name-only -r                                                                                      |
+| gdnolock             | git diff $@ ":(exclude)package-lock.json" ":(exclude)&ast;.lock"                                                                 |
 | gdv                  | git diff -w $@ \| view -                                                                                                         |
 | gdw                  | git diff --word-diff                                                                                                             |
 | gf                   | git fetch                                                                                                                        |
@@ -83,7 +85,7 @@ plugins=(... git)
 | ghh                  | git help                                                                                                                         |
 | gignore              | git update-index --assume-unchanged                                                                                              |
 | gignored             | git ls-files -v \| grep "^[[:lower:]]"                                                                                           |
-| git-svn-dcommit-push | git svn dcommit && git push github master:svntrunk                                                                               |
+| git-svn-dcommit-push | git svn dcommit && git push github $(git_main_branch):svntrunk                                                                                 |
 | gk                   | gitk --all --branches                                                                                                            |
 | gke                  | gitk --all $(git log -g --pretty=%h)                                                                                             |
 | gl                   | git pull                                                                                                                         |
@@ -100,12 +102,12 @@ plugins=(... git)
 | glola                | git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --all                     |
 | glog                 | git log --oneline --decorate --graph                                                                                             |
 | gloga                | git log --oneline --decorate --graph --all                                                                                       |
-| glp                  | `_git_log_prettily`                                                                                                              |
+| glp                  | git log --pretty=\<format\>                                                                                                      |
 | gm                   | git merge                                                                                                                        |
-| gmom                 | git merge origin/master                                                                                                          |
+| gmom                 | git merge origin/$(git_main_branch)                                                                                                            |
 | gmt                  | git mergetool --no-prompt                                                                                                        |
 | gmtvim               | git mergetool --no-prompt --tool=vimdiff                                                                                         |
-| gmum                 | git merge upstream/master                                                                                                        |
+| gmum                 | git merge upstream/$(git_main_branch)                                                                                                          |
 | gma                  | git merge --abort                                                                                                                |
 | gp                   | git push                                                                                                                         |
 | gpd                  | git push --dry-run                                                                                                               |
@@ -121,7 +123,7 @@ plugins=(... git)
 | grbc                 | git rebase --continue                                                                                                            |
 | grbd                 | git rebase develop                                                                                                               |
 | grbi                 | git rebase -i                                                                                                                    |
-| grbm                 | git rebase master                                                                                                                |
+| grbm                 | git rebase $(git_main_branch)                                                                                                                  |
 | grbs                 | git rebase --skip                                                                                                                |
 | grev                 | git revert                                                                                                                       |
 | grh                  | git reset                                                                                                                        |
@@ -168,9 +170,21 @@ plugins=(... git)
 | gupv                 | git pull --rebase -v                                                                                                             |
 | gupa                 | git pull --rebase --autostash                                                                                                    |
 | gupav                | git pull --rebase --autostash -v                                                                                                 |
-| glum                 | git pull upstream master                                                                                                         |
+| glum                 | git pull upstream $(git_main_branch)                                                                                                           |
 | gwch                 | git whatchanged -p --abbrev-commit --pretty=medium                                                                               |
 | gwip                 | git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign -m "--wip-- [skip ci]"           |
+| gam                  | git am                                                                                                                           |
+| gamc                 | git am --continue                                                                                                                |
+| gams                 | git am --skip                                                                                                                    |
+| gama                 | git am --abort                                                                                                                   |
+| gamscp               | git am --show-current-patch                                                                                                      |
+
+### Main branch preference
+
+Following the recent push for removing racially-charged words from our technical vocabulary, the git plugin favors using
+a branch name other than `master`. In this case, we favor the shorter, neutral and descriptive term `main`. This means
+that any aliases and functions that previously used `master`, will use `main` if that branch exists. We do this via the
+function `git_main_branch`.
 
 ### Deprecated aliases
 
@@ -194,12 +208,13 @@ These are aliases that have been removed, renamed, or otherwise modified in a wa
 
 ### Current
 
-| Command                | Description                                              |
-|:-----------------------|:---------------------------------------------------------|
-| `grename <old> <new>`  | Rename `old` branch to `new`, including in origin remote |
-| current_branch         | Return the name of the current branch                    |
-| git_current_user_name  | Returns the `user.name` config value                     |
-| git_current_user_email | Returns the `user.email` config value                    |
+| Command                | Description                                                                  |
+|:-----------------------|:-----------------------------------------------------------------------------|
+| `grename <old> <new>`  | Rename `old` branch to `new`, including in origin remote                     |
+| current_branch         | Return the name of the current branch                                        |
+| git_current_user_name  | Returns the `user.name` config value                                         |
+| git_current_user_email | Returns the `user.email` config value                                        |
+| git_main_branch        | Returns the name of the main branch: `main` if it exists, `master` otherwise |
 
 ### Work in Progress (WIP)
 

@@ -1,11 +1,49 @@
+## Aliases
+
+alias ba="bundle add"
+alias bck="bundle check"
+alias bcn="bundle clean"
 alias be="bundle exec"
+alias bi="bundle_install"
 alias bl="bundle list"
-alias bp="bundle package"
 alias bo="bundle open"
 alias bout="bundle outdated"
+alias bp="bundle package"
 alias bu="bundle update"
-alias bi="bundle_install"
-alias bcn="bundle clean"
+
+## Functions
+
+bundle_install() {
+  # Bail out if bundler is not installed
+  if (( ! $+commands[bundle] )); then
+    echo "Bundler is not installed"
+    return 1
+  fi
+
+  # Bail out if not in a bundled project
+  if ! _within-bundled-project; then
+    echo "Can't 'bundle install' outside a bundled project"
+    return 1
+  fi
+
+  # Check the bundler version is at least 1.4.0
+  autoload -Uz is-at-least
+  local bundler_version=$(bundle version | cut -d' ' -f3)
+  if ! is-at-least 1.4.0 "$bundler_version"; then
+    bundle install "$@"
+    return $?
+  fi
+
+  # If bundler is at least 1.4.0, use all the CPU cores to bundle install
+  if [[ "$OSTYPE" = (darwin|freebsd)* ]]; then
+    local cores_num="$(sysctl -n hw.ncpu)"
+  else
+    local cores_num="$(nproc)"
+  fi
+  bundle install --jobs="$cores_num" "$@"
+}
+
+## Gem wrapper
 
 bundled_commands=(
   annotate
@@ -52,65 +90,41 @@ for cmd in $BUNDLED_COMMANDS; do
   bundled_commands+=($cmd);
 done
 
-## Functions
-
-bundle_install() {
-  if ! _bundler-installed; then
-    echo "Bundler is not installed"
-  elif ! _within-bundled-project; then
-    echo "Can't 'bundle install' outside a bundled project"
-  else
-    local bundler_version=`bundle version | cut -d' ' -f3`
-    if [[ $bundler_version > '1.4.0' || $bundler_version = '1.4.0' ]]; then
-      if [[ "$OSTYPE" = (darwin|freebsd)* ]]
-      then
-        local cores_num="$(sysctl -n hw.ncpu)"
-      else
-        local cores_num="$(nproc)"
-      fi
-      bundle install --jobs=$cores_num $@
-    else
-      bundle install $@
-    fi
-  fi
-}
-
-_bundler-installed() {
-  which bundle > /dev/null 2>&1
-}
-
+# Check if in the root or a subdirectory of a bundled project
 _within-bundled-project() {
   local check_dir="$PWD"
-  while [ "$check_dir" != "/" ]; do
-    [ -f "$check_dir/Gemfile" -o -f "$check_dir/gems.rb" ] && return
-    check_dir="$(dirname $check_dir)"
+  while [[ "$check_dir" != "/" ]]; do
+    if [[ -f "$check_dir/Gemfile" || -f "$check_dir/gems.rb" ]]; then
+      return 0
+    fi
+    check_dir="${check_dir:h}"
   done
-  false
-}
-
-_binstubbed() {
-  [ -f "./bin/${1}" ]
+  return 1
 }
 
 _run-with-bundler() {
-  if _bundler-installed && _within-bundled-project; then
-    if _binstubbed $1; then
-      ./bin/${^^@}
-    else
-      bundle exec $@
-    fi
+  if (( ! $+commands[bundle] )) || ! _within-bundled-project; then
+    "$@"
+    return $?
+  fi
+
+  if [[ -f "./bin/${1}" ]]; then
+    ./bin/${^^@}
   else
-    $@
+    bundle exec "$@"
   fi
 }
 
-## Main program
 for cmd in $bundled_commands; do
-  eval "function unbundled_$cmd () { $cmd \$@ }"
-  eval "function bundled_$cmd () { _run-with-bundler $cmd \$@}"
-  alias $cmd=bundled_$cmd
+  # Create wrappers for bundled and unbundled execution
+  eval "function unbundled_$cmd () { \"$cmd\" \"\$@\"; }"
+  eval "function bundled_$cmd () { _run-with-bundler \"$cmd\" \"\$@\"; }"
+  alias "$cmd"="bundled_$cmd"
 
-  if which _$cmd > /dev/null 2>&1; then
-    compdef _$cmd bundled_$cmd=$cmd
+  # Bind completion function to wrapped gem if available
+  if (( $+functions[_$cmd] )); then
+    compdef "_$cmd" "bundled_$cmd"="$cmd"
   fi
 done
+
+unset cmd bundled_commands
