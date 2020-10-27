@@ -3585,7 +3585,6 @@ __git_func_wrap ()
 # This is NOT a public function; use at your own risk.
 __git_complete ()
 {
-	test -n "$ZSH_VERSION" && return
 	local wrapper="__git_wrap${2}"
 	eval "$wrapper () { __git_func_wrap $2 ; }"
 	complete -o bashdefault -o default -o nospace -F $wrapper $1 2>/dev/null \
@@ -3607,8 +3606,7 @@ if ! git --list-cmds=main >/dev/null 2>&1; then
 	{
 		case "$1" in
 		--list-cmds=*)
-			IFS=, read -r -a cmds <<< "${1##--list-cmds=}"
-			for x in ${cmds[@]}; do
+			while read -r -d ',' x; do
 				case "$x" in
 				nohelpers)
 					;;
@@ -3620,7 +3618,7 @@ if ! git --list-cmds=main >/dev/null 2>&1; then
 					echo ${__git_cmds[$x]}
 					;;
 				esac
-			done
+			done <<< "${1##--list-cmds=},"
 			return
 			;;
 		esac

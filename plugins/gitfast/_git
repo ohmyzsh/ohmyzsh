@@ -27,19 +27,26 @@ zstyle -T ':completion:*:*:git:*' tag-order && \
 zstyle -s ":completion:*:*:git:*" script script
 if [ -z "$script" ]; then
 	local -a locations
-	local e
+	local e bash_completion
+
+	bash_completion=$(pkg-config --variable=completionsdir bash-completion 2>/dev/null) ||
+		bash_completion='/usr/share/bash-completion/completions/'
+
 	locations=(
 		"$(dirname ${funcsourcetrace[1]%:*})"/git-completion.bash
 		"$HOME/.local/share/bash-completion/completions/git"
-		"$(pkg-config --variable=completionsdir bash-completion)"/git
-		'/usr/share/bash-completion/completions/git'
+		"$bash_completion/git"
 		'/etc/bash_completion.d/git' # old debian
 		)
 	for e in $locations; do
 		test -f $e && script="$e" && break
 	done
 fi
+
+local old_complete="$functions[complete]"
+functions[complete]=:
 GIT_SOURCING_ZSH_COMPLETION=y . "$script"
+functions[complete]="$old_complete"
 
 __gitcomp ()
 {
@@ -105,26 +112,26 @@ __gitcomp_nl ()
 	compadd -Q -S "${4- }" -p "${2-}" -- ${(f)1} && _ret=0
 }
 
-__gitcomp_nl_append ()
-{
-	emulate -L zsh
-
-	compset -P '*[=:]'
-	compadd -Q -S "${4- }" -p "${2-}" -- ${(f)1} && _ret=0
-}
-
-__gitcomp_file_direct ()
-{
-	emulate -L zsh
-
-	compadd -f -- ${(f)1} && _ret=0
-}
-
 __gitcomp_file ()
 {
 	emulate -L zsh
 
 	compadd -f -p "${2-}" -- ${(f)1} && _ret=0
+}
+
+__gitcomp_direct_append ()
+{
+	__gitcomp_direct "$@"
+}
+
+__gitcomp_nl_append ()
+{
+	__gitcomp_nl "$@"
+}
+
+__gitcomp_file_direct ()
+{
+	__gitcomp_file "$1" ""
 }
 
 _git_zsh ()
