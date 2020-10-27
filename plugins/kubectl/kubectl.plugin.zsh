@@ -31,6 +31,9 @@ alias kccc='kubectl config current-context'
 # List all contexts
 alias kcgc='kubectl config get-contexts'
 
+# View current config
+alias kcvm='kubectl config view --minify'
+
 # General aliases
 alias kdel='kubectl delete'
 alias kdelf='kubectl delete -f'
