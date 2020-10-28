@@ -61,7 +61,7 @@ function asp() {
     else
       aws_access_key_id="$(aws configure get aws_access_key_id --profile $1)"
       aws_secret_access_key="$(aws configure get aws_secret_access_key --profile $1)"
-      aws_session_token=""
+      aws_session_token="$(aws configure get aws_session_token --profile $1)"
     fi
 
     export AWS_DEFAULT_PROFILE=$1
