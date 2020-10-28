@@ -127,7 +127,8 @@ plugins=(... git)
 | grbs                 | git rebase --skip                                                                                                                |
 | grev                 | git revert                                                                                                                       |
 | grh                  | git reset                                                                                                                        |
-| grhh                 | git reset --hard                                                                                                                 |
+| grhh                 | git reset --hard                                                                           |
+| grhs                 | git reset --soft HEAD~1                                                                                                                |
 | groh                 | git reset origin/$(git_current_branch) --hard                                                                                    |
 | grm                  | git rm                                                                                                                           |
 | grmc                 | git rm --cached                                                                                                                  |
