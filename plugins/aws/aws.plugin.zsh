@@ -5,6 +5,27 @@ function agp() {
 # AWS profile selection
 function asp() {
   if [[ -z "$1" ]]; then
+    unset AWS_DEFAULT_PROFILE AWS_PROFILE AWS_EB_PROFILE
+    echo AWS profile cleared.
+    return
+  fi
+
+  local -a available_profiles
+  available_profiles=($(aws_profiles))
+  if [[ -z "${available_profiles[(r)$1]}" ]]; then
+    echo "${fg[red]}Profile '$1' not found in '${AWS_CONFIG_FILE:-$HOME/.aws/config}'" >&2
+    echo "Available profiles: ${(j:, :)available_profiles:-no profiles found}${reset_color}" >&2
+    return 1
+  fi
+
+  export AWS_DEFAULT_PROFILE=$1
+  export AWS_PROFILE=$1
+  export AWS_EB_PROFILE=$1
+}
+
+# AWS profile switch
+function acp() {
+  if [[ -z "$1" ]]; then
     unset AWS_DEFAULT_PROFILE AWS_PROFILE AWS_EB_PROFILE AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
     echo AWS profile cleared.
     return
@@ -34,7 +55,7 @@ function asp() {
         echo "Please enter the session duration in seconds (900-43200; default: 3600, which is the default maximum for a role):"
         read sess_duration
         if [[ -z $sess_duration ]]; then
-          sess_duration = 3600
+          sess_duration="3600"
         fi
         mfa_opt="--serial-number $mfa_serial --token-code $mfa_token --duration-seconds $sess_duration"
       fi
@@ -61,7 +82,7 @@ function asp() {
     else
       aws_access_key_id="$(aws configure get aws_access_key_id --profile $1)"
       aws_secret_access_key="$(aws configure get aws_secret_access_key --profile $1)"
-      aws_session_token=""
+      aws_session_token="$(aws configure get aws_session_token --profile $1)"
     fi
 
     export AWS_DEFAULT_PROFILE=$1
@@ -100,6 +121,7 @@ function _aws_profiles() {
   reply=($(aws_profiles))
 }
 compctl -K _aws_profiles asp aws_change_access_key
+compctl -K _aws_profiles acp aws_change_access_key
 
 # AWS prompt
 function aws_prompt_info() {
