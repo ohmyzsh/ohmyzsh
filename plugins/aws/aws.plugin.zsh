@@ -34,7 +34,7 @@ function asp() {
         echo "Please enter the session duration in seconds (900-43200; default: 3600, which is the default maximum for a role):"
         read sess_duration
         if [[ -z $sess_duration ]]; then
-          sess_duration = 3600
+          sess_duration="3600"
         fi
         mfa_opt="--serial-number $mfa_serial --token-code $mfa_token --duration-seconds $sess_duration"
       fi
