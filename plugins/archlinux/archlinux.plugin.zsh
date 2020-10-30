@@ -112,6 +112,35 @@ if (( $+commands[pacaur] )); then
   fi
 fi
 
+if (( $+commands[paru] )); then
+  alias paconf='paru -Pg'
+  alias paupg='paru -Syu'
+  alias pasu='paru -Syu --noconfirm'
+  alias pain='paru -S'
+  alias pains='paru -U'
+  alias pare='paru -R'
+  alias parem='paru -Rns'
+  alias parep='paru -Si'
+  alias pareps='paru -Ss'
+  alias paloc='paru -Qi'
+  alias palocs='paru -Qs'
+  alias palst='paru -Qe'
+  alias paorph='paru -Qtd'
+  alias painsd='paru -S --asdeps'
+  alias pamir='paru -Syy'
+
+
+  if (( $+commands[abs] && $+commands[aur] )); then
+    alias paupd='paru -Sy && sudo abs && sudo aur'
+  elif (( $+commands[abs] )); then
+    alias paupd='paru -Sy && sudo abs'
+  elif (( $+commands[aur] )); then
+    alias paupd='paru -Sy && sudo aur'
+  else
+    alias paupd='paru -Sy'
+  fi
+fi
+
 if (( $+commands[trizen] )); then
   function upgrade() {
     trizen -Syu
@@ -127,6 +156,10 @@ elif (( $+commands[yaourt] )); then
 elif (( $+commands[yay] )); then
   function upgrade() {
     yay -Syu
+  }
+elif (( $+commands[paru] )); then
+  function upgrade() {
+    paru -Syu
   }
 else
   function upgrade() {

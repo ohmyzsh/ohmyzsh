@@ -131,6 +131,25 @@ plugins=(... archlinux)
 | pacls        | pacman -Ql                              | List files in a package                                      |
 | pacown       | pacman -Qo                              | Show which package owns a file                               |
 
+#### PARU
+
+| Alias   | Command                            | Description                                                         |
+|---------|------------------------------------|---------------------------------------------------------------------|
+| pain    | paru -S                            | Install packages from the repositories                              |
+| pains   | paru -U                            | Install a package from a local file                                 |
+| painsd  | paru -S --asdeps                   | Install packages as dependencies of another package                 |
+| paloc   | paru -Qi                           | Display information about a package in the local database           |
+| palocs  | paru -Qs                           | Search for packages in the local database                           |
+| palst   | paru -Qe                           | List installed packages including from AUR (tagged as "local")      |
+| pamir   | paru -Syy                          | Force refresh of all package lists after updating mirrorlist        |
+| paorph  | paru -Qtd                          | Remove orphans using paru                                           |
+| pare    | paru -R                            | Remove packages, keeping its settings and dependencies              |
+| parem   | paru -Rns                          | Remove packages, including its settings and unneeded dependencies   |
+| parep   | paru -Si                           | Display information about a package in the repositories             |
+| pareps  | paru -Ss                           | Search for packages in the repositories                             |
+| paupg   | paru -Syu                          | Sync with repositories before upgrading packages                    |
+| pasu    | paru -Syu --no-confirm             | Same as `paupg`, but without confirmation                           |
+
 | Function       | Description                                          |
 |----------------|------------------------------------------------------|
 | pacdisowned    | List all disowned files in your system               |
@@ -152,3 +171,4 @@ plugins=(... archlinux)
 - Juraj Fiala - doctorjellyface@riseup.net
 - Majora320 (Moses Miller) - Majora320@gmail.com
 - Ybalrid (Arthur Brainville) - ybalrid@ybalrid.info
+- kattjevfel (Magnus Boman) - magunasu.b97@gmail.com
