@@ -29,13 +29,22 @@ function work_in_progress() {
   fi
 }
 
-# Check if main exists and use instead of master
+# Check if user specified main branch in config, then check if "main" exists,
+# then default to "master"
 function git_main_branch() {
-  if [[ -n "$(git branch --list main)" ]]; then
+  main_branch=`git config omz.git.mainBranch`
+  if [[ -n "$main_branch" ]]; then
+    echo "$main_branch"
+  elif [[ -n "$(git branch --list main)" ]]; then
     echo main
   else
     echo master
   fi
+}
+
+# Set the name of the main branch in this local repository
+function set_main_branch() {
+  git config --local omz.git.mainBranch "$1"
 }
 
 #
