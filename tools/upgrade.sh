@@ -64,6 +64,13 @@ if git pull --rebase --stat origin master; then
     ret=80 # non-zero exit code to indicate no changes pulled
   else
     message="Hooray! Oh My Zsh has been updated!"
+
+    # Display changelog with less if available, otherwise just print it to the terminal
+    if (( $+commands[less] )); then
+      command less -R <("$ZSH/tools/changelog.sh" HEAD "$last_commit")
+    else
+      "$ZSH/tools/changelog.sh" HEAD "$last_commit"
+    fi
   fi
 
   printf '%s         %s__      %s           %s        %s       %s     %s__   %s\n' $RAINBOW $RESET
