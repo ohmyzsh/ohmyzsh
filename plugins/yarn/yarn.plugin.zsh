@@ -1,3 +1,10 @@
+# Add yarn bin directory to $PATH if it exists and not in $PATH already
+bindir=$(yarn global bin 2>/dev/null) \
+  && [[ -d "$bindir" ]] \
+  && (( ! ${path[(Ie)$bindir]} )) \
+  && path+=("$bindir")
+unset bindir
+
 alias y="yarn"
 alias ya="yarn add"
 alias yad="yarn add --dev"
