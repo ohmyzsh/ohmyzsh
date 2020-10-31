@@ -35,9 +35,8 @@ _prepend_to_path() {
   # Prepend a new directory to the path if it's not already in there
   local newpath="${1:?Need path to prepend}"
   
-  # Return if not already found in PATH
+  # Prepend path if not already found in PATH
   if ! printf "%s" "$PATH" | grep -qE "(^|:)$newpath(:|$)"; then
-    # Prepend to path
     export PATH="$newpath:$PATH"
   fi
 }
