@@ -208,14 +208,14 @@ These are aliases that have been removed, renamed, or otherwise modified in a wa
 
 ### Current
 
-| Command                | Description                                                                                     |
-|:-----------------------|:------------------------------------------------------------------------------------------------|
-| `grename <old> <new>`  | Rename `old` branch to `new`, including in origin remote                                        |
-| current_branch         | Return the name of the current branch                                                           |
-| git_current_user_name  | Returns the `user.name` config value                                                            |
-| git_current_user_email | Returns the `user.email` config value                                                           |
+| Command                | Description                                                                                  |
+|:-----------------------|:---------------------------------------------------------------------------------------------|
+| `grename <old> <new>`  | Rename `old` branch to `new`, including in origin remote                                     |
+| current_branch         | Return the name of the current branch                                                        |
+| git_current_user_name  | Returns the `user.name` config value                                                         |
+| git_current_user_email | Returns the `user.email` config value                                                        |
 | git_main_branch        | Returns the name of the main branch: the value of `git config omz.git.mainBranch` if that key has been set, or `main` if a `main` branch exists, or `master` otherwise |
-| set_main_branch        | Sets the name of the main branch in your local repository using `git config omz.git.mainBranch` |
+| set_main_branch        | Sets the name of the main branch in a local repository using `git config omz.git.mainBranch` |
 
 ### Work in Progress (WIP)
 

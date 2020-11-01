@@ -42,7 +42,7 @@ function git_main_branch() {
   fi
 }
 
-# Set the name of the main branch in this local repository
+# Set the name of the main branch in a local repository
 function set_main_branch() {
   git config --local omz.git.mainBranch "$1"
 }
