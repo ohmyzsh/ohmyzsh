@@ -32,7 +32,7 @@ function work_in_progress() {
 # Check if user specified main branch in config, then check if "main" exists,
 # then default to "master"
 function git_main_branch() {
-  main_branch=`git config omz.git.mainBranch`
+  local main_branch=$(git config omz.git.mainBranch)
   if [[ -n "$main_branch" ]]; then
     echo "$main_branch"
   elif [[ -n "$(git branch --list main)" ]]; then
