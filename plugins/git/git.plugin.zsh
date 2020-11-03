@@ -33,6 +33,8 @@ function work_in_progress() {
 function git_main_branch() {
   if [[ -n "$(git branch --list main)" ]]; then
     echo main
+  elif [[ -n "$(git branch --list trunk)" ]]; then
+    echo trunk
   else
     echo master
   fi
