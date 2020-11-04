@@ -2,10 +2,10 @@
 # as seen in https://www.porcheron.info/command-not-found-for-zsh/
 # this is installed in Ubuntu
 if [ -x /usr/lib/command-not-found -o -x /usr/share/command-not-found/command-not-found ]; then
-    function command_not_found_handle {
+	command_not_found_handler() {
         # check because c-n-f could've been removed in the meantime
         if [ -x /usr/lib/command-not-found ]; then
-            /usr/lib/command-not-found -- "$1"
+            usr/lib/command-not-found -- "$1"
             return $?
         elif [ -x /usr/share/command-not-found/command-not-found ]; then
             /usr/share/command-not-found/command-not-found -- "$1"
@@ -14,6 +14,7 @@ if [ -x /usr/lib/command-not-found -o -x /usr/share/command-not-found/command-no
             printf "%s: command not found\n" "$1" >&2
             return 127
         fi
+		return 0
     }
 fi
 
