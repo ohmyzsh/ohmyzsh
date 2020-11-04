@@ -3,7 +3,7 @@
 This plugin provides completion support for [awscli](https://docs.aws.amazon.com/cli/latest/reference/index.html)
 and a few utilities to manage AWS profiles and display them in the prompt.
 
-To use it, make sure [jq](https://stedolan.github.io/jq/download/) is installed, and add `aws` to the plugins array in your zshrc file.
+To use it, add `aws` to the plugins array in your zshrc file.
 
 ```zsh
 plugins=(... aws)
@@ -40,6 +40,6 @@ plugins=(... aws)
 The plugin creates an `aws_prompt_info` function that you can use in your theme, which displays
 the current `$AWS_PROFILE`. It uses two variables to control how that is shown:
 
-- ZSH_THEME_AWS_PREFIX: sets the prefix of the AWS_PROFILE. Defaults to `<aws:`.
+* ZSH_THEME_AWS_PREFIX: sets the prefix of the AWS_PROFILE. Defaults to `<aws:`.
 
-- ZSH_THEME_AWS_SUFFIX: sets the suffix of the AWS_PROFILE. Defaults to `>`.
+* ZSH_THEME_AWS_SUFFIX: sets the suffix of the AWS_PROFILE. Defaults to `>`.
