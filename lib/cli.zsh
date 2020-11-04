@@ -20,53 +20,43 @@ function omz {
 }
 
 function _omz {
-    local -a cmds subcmds
-    cmds=(
-        'help:Usage information'
-        'plugin:Commands for Oh My Zsh plugins management'
-        'pr:Commands for Oh My Zsh Pull Requests management'
-        'theme:Commands for Oh My Zsh themes management'
-        'update:Update Oh My Zsh'
-    )
+  local -a cmds subcmds
+  cmds=(
+    'changelog:Print the changelog'
+    'help:Usage information'
+    'plugin:Manage plugins'
+    'pr:Manage Oh My Zsh Pull Requests'
+    'theme:Manage themes'
+    'update:Update Oh My Zsh'
+  )
 
-    if (( CURRENT == 2 )); then
-        _describe 'command' cmds
-    elif (( CURRENT == 3 )); then
-        case "$words[2]" in
-            plugin) subcmds=('list:List plugins')
-                _describe 'command' subcmds ;;
-            pr) subcmds=('test:Test a Pull Request' 'clean:Delete all Pull Request branches')
-                _describe 'command' subcmds ;;
-            theme) subcmds=('use:Load a theme' 'list:List themes')
-                _describe 'command' subcmds ;;
-        esac
-    elif (( CURRENT == 4 )); then
-        case "$words[2]::$words[3]" in
-            theme::use) compadd "$ZSH"/themes/*.zsh-theme(.N:t:r) \
-                "$ZSH_CUSTOM"/**/*.zsh-theme(.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::) ;;
-        esac
-    fi
+  if (( CURRENT == 2 )); then
+    _describe 'command' cmds
+  elif (( CURRENT == 3 )); then
+    case "$words[2]" in
+      changelog) local -a refs
+        refs=("${(@f)$(command git for-each-ref --format="%(refname:short):%(subject)" refs/heads refs/tags)}")
+        _describe 'command' refs ;;
+      plugin) subcmds=('list:List plugins')
+        _describe 'command' subcmds ;;
+      pr) subcmds=('test:Test a Pull Request' 'clean:Delete all Pull Request branches')
+        _describe 'command' subcmds ;;
+      theme) subcmds=('use:Load a theme' 'list:List themes')
+        _describe 'command' subcmds ;;
+    esac
+  elif (( CURRENT == 4 )); then
+    case "$words[2]::$words[3]" in
+      theme::use) compadd "$ZSH"/themes/*.zsh-theme(.N:t:r) \
+        "$ZSH_CUSTOM"/**/*.zsh-theme(.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::) ;;
+    esac
+  fi
 
-    return 0
+  return 0
 }
 
 compdef _omz omz
 
-
-function _omz::help {
-    cat <<EOF
-Usage: omz <command> [options]
-
-Available commands:
-
-    help                Print this help message
-    plugin <command>    Manage plugins
-    pr <command>        Manage Oh My Zsh Pull Requests
-    theme <command>     Manage themes
-    update              Update Oh My Zsh
-
-EOF
-}
+## Utility functions
 
 function _omz::confirm {
   # If question supplied, ask it before reading the answer
@@ -109,6 +99,41 @@ function _omz::log {
     warn) print -P "%S%F{yellow}$logname%f%s: $2" ;;
     error) print -P "%S%F{red}$logname%f%s: $2" ;;
   esac >&2
+}
+
+## User-facing commands
+
+function _omz::help {
+  cat <<EOF
+Usage: omz <command> [options]
+
+Available commands:
+
+  help                Print this help message
+  changelog           Print the changelog
+  plugin <command>    Manage plugins
+  pr     <command>    Manage Oh My Zsh Pull Requests
+  theme  <command>    Manage themes
+  update              Update Oh My Zsh
+
+EOF
+}
+
+function _omz::changelog {
+  local version=${1:-HEAD} format=${3:-"--text"}
+
+  if ! command git -C "$ZSH" show-ref --verify refs/heads/$version &>/dev/null && \
+    ! command git -C "$ZSH" show-ref --verify refs/tags/$version &>/dev/null && \
+    ! command git -C "$ZSH" rev-parse --verify "${version}^{commit}" &>/dev/null; then
+    cat <<EOF
+Usage: omz changelog [version]
+
+NOTE: <version> must be a valid branch, tag or commit.
+EOF
+    return 1
+  fi
+
+  "$ZSH/tools/changelog.sh" "$version" "${2:-}" "$format"
 }
 
 function _omz::plugin {
