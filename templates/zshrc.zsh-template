@@ -47,6 +47,9 @@ ZSH_THEME="robbyrussell"
 # Uncomment the following line to display red dots whilst waiting for completion.
 # COMPLETION_WAITING_DOTS="true"
 
+# Uncomment if you wish to define the completion dots
+# COMPLETION_DOTS_STYLE="%F{red}…%f"
+
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
 # much, much faster.
