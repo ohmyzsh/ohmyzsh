@@ -141,7 +141,7 @@ function aws_prompt_info() {
   echo "${ZSH_THEME_AWS_PREFIX:=<aws:}${AWS_PROFILE}${ZSH_THEME_AWS_SUFFIX:=>}"
 }
 
-if [ "$SHOW_AWS_PROMPT" != false ]; then
+if [[ "$SHOW_AWS_PROMPT" != false && "$RPROMPT" != *'$(aws_prompt_info)'* ]]; then
   RPROMPT='$(aws_prompt_info)'"$RPROMPT"
 fi
 
