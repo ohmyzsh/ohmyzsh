@@ -11,7 +11,7 @@ function pollen-server-up-phoenix {
 }
 
 function pollen-server-up-pollen {
-  bin/server ambassador_api ambassador_api_worker phoenix_ui notification_service gateway_api pollen_ui
+  bin/server ambassador_api ambassador_api_worker phoenix_ui notification_service gateway_api pollen_ui avocado_ui apollo
 }
 
 ## seed demo data
@@ -35,7 +35,8 @@ function pollen-data-production-anonymized {
 ## reset demo data
 function pollen-reset-demo-data {
   #bin/reset_db && bin/demo-data
-  bin/reset_db && ambassador_api/bin/demo-data
+  bin/reset_db && 
+  ambassador_api/bin/demo-data
 }
 
 ## clean build
@@ -48,7 +49,7 @@ function pollen-clean-build2 {
   docker-compose down && npm run bootstrap
 }
 
-## clean build + clear virtul env
+## clean build + clear x env
 function pollen-really-clean-build {
   pollen-clear-virtual-env && docker-compose down && bin/bootstrap
 }
@@ -102,7 +103,7 @@ function pollen-git-commit-jira {
 }
 
 function pollen-clear-virtual-env {
-  for FOLDER in ambassador_api ambassador_ui auth_ui bin calvin_ui customer_ui devtools e2e_cypress etl_service finance_service gateway_api infrastructure lib licensed_travel_api logs node_modules notification_service phoenix_ui pollen_ui review_automation_service shortlinks_service styleguide ; do
+  for FOLDER in ambassador_api ambassador_ui auth_ui bin calvin_ui customer_ui e2e_cypress etl_service finance_service gateway_api infrastructure lib logs notification_service phoenix_ui pollen_ui shortlinks_service styleguide ; do
     pushd $FOLDER
       rm -rf .virtualenv;
     popd
