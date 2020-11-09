@@ -154,10 +154,10 @@ unset -f setup_using_opensuse_package setup_using_debian_package setup_using_bas
 
 if [[ -z "$FZF_DEFAULT_COMMAND" ]]; then
     if (( $+commands[rg] )); then
-        export FZF_DEFAULT_COMMAND='rg --files --hidden'
+        export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git/*"'
     elif (( $+commands[fd] )); then
         export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
     elif (( $+commands[ag] )); then
-        export FZF_DEFAULT_COMMAND='ag -l --hidden -g ""'
+        export FZF_DEFAULT_COMMAND='ag -l --hidden -g "" --ignore .git'
     fi
 fi
