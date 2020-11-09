@@ -50,10 +50,8 @@ function acp() {
 
   if [[ -n $mfa_serial ]]; then
     local mfa_token=""
-    echo "Please enter your MFA token for $mfa_serial:"
-    read -r mfa_token
-    echo "Please enter the session duration in seconds (900-43200; default: 3600, which is the default maximum for a role):"
-    read -r sess_duration
+    vared -p "Please enter your MFA token for $mfa_serial: " -c mfa_token
+    vared -p "Please enter the session duration in seconds (900-43200; default: 3600, which is the default maximum for a role): " -c sess_duration
     if [[ -z $sess_duration ]]; then
       sess_duration="3600"
     fi
