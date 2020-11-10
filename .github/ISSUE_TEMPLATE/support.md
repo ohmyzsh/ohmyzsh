@@ -1,7 +1,7 @@
 ---
 name: Support
 about: Request support for any problem you're having with Oh My Zsh
-labels: 'support'
+labels: 'Support'
 
 ---
 

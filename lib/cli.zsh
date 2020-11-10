@@ -132,23 +132,26 @@ EOF
 
 function _omz::plugin::list {
     local -a custom_plugins builtin_plugins
-    custom_plugins=("$ZSH_CUSTOM"/plugins/*(/N:t))
-    builtin_plugins=("$ZSH"/plugins/*(/N:t))
+    custom_plugins=("$ZSH_CUSTOM"/plugins/*(-/N:t))
+    builtin_plugins=("$ZSH"/plugins/*(-/N:t))
 
-    {
-        (( ${#custom_plugins} )) && {
-            print -Pn "%U%BCustom plugins%b%u: "
-            print -l ${(q-)custom_plugins}
-        }
+    # If the command is being piped, print all found line by line
+    if [[ ! -t 1 ]]; then
+        print -l ${(q-)custom_plugins} ${(q-)builtin_plugins}
+        return
+    fi
 
-        (( ${#builtin_plugins} )) && {
-            # add a line of separation
-            (( ${#custom_plugins} )) && echo
+    if (( ${#custom_plugins} )); then
+        print -P "%U%BCustom plugins%b%u:"
+        print -l ${(q-)custom_plugins} | column
+    fi
 
-            print -Pn "%U%BBuilt-in plugins%b%u: "
-            print -l ${(q-)builtin_plugins}
-        }
-    } | fmt -w $COLUMNS | sed -E $'s/\e?(\\[[0-9]*m)/\e\\1/g' # deal with fmt removing ESC
+    if (( ${#builtin_plugins} )); then
+        (( ${#custom_plugins} )) && echo # add a line of separation
+
+        print -P "%U%BBuilt-in plugins%b%u:"
+        print -l ${(q-)builtin_plugins} | column
+    fi
 }
 
 function _omz::pr {
@@ -308,20 +311,23 @@ function _omz::theme::list {
     custom_themes=("$ZSH_CUSTOM"/**/*.zsh-theme(.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::))
     builtin_themes=("$ZSH"/themes/*.zsh-theme(.N:t:r))
 
-    {
-        (( ${#custom_themes} )) && {
-            print -Pn "%U%BCustom themes%b%u: "
-            print -l ${(q-)custom_themes}
-        }
+    # If the command is being piped, print all found line by line
+    if [[ ! -t 1 ]]; then
+        print -l ${(q-)custom_themes} ${(q-)builtin_themes}
+        return
+    fi
 
-        (( ${#builtin_themes} )) && {
-            # add a line of separation
-            (( ${#custom_themes} )) && echo
+    if (( ${#custom_themes} )); then
+        print -P "%U%BCustom themes%b%u:"
+        print -l ${(q-)custom_themes} | column
+    fi
 
-            print -Pn "%U%BBuilt-in themes%b%u: "
-            print -l ${(q-)builtin_themes}
-        }
-    } | fmt -w $COLUMNS | sed -E $'s/\e?(\\[[0-9]*m)/\e\\1/g' # deal with fmt removing ESC
+    if (( ${#builtin_themes} )); then
+        (( ${#custom_themes} )) && echo # add a line of separation
+
+        print -P "%U%BBuilt-in themes%b%u:"
+        print -l ${(q-)builtin_themes} | column
+    fi
 }
 
 function _omz::theme::use {

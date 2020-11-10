@@ -1,7 +1,7 @@
 if (( $+commands[kubectl] )); then
     __KUBECTL_COMPLETION_FILE="${ZSH_CACHE_DIR}/kubectl_completion"
 
-    if [[ ! -f $__KUBECTL_COMPLETION_FILE ]]; then
+    if [[ ! -f $__KUBECTL_COMPLETION_FILE || ! -s $__KUBECTL_COMPLETION_FILE ]]; then
         kubectl completion zsh >! $__KUBECTL_COMPLETION_FILE
     fi
 
@@ -150,19 +150,31 @@ alias kepvc='kubectl edit pvc'
 alias kdpvc='kubectl describe pvc'
 alias kdelpvc='kubectl delete pvc'
 
-# Colored JSON output
-kj() {
-  kubectl "$@" -o json | jq
-}
-compdef kj=kubectl
+# Service account management.
+alias kgsa="kubectl get sa"
+alias kdsa="kubectl describe sa"
+alias kdelsa="kubectl delete sa"
 
-kjx() {
-  kubectl "$@" -o json | fx
-}
-compdef kjx=kubectl
+# DaemonSet management.
+alias kgds='kubectl get daemonset'
+alias kgdsw='kgds --watch'
+alias keds='kubectl edit daemonset'
+alias kdds='kubectl describe daemonset'
+alias kdelds='kubectl delete daemonset'
 
-# Colored YAML output
-ky() {
-  kubectl "$@" -o yaml | yh
-}
-compdef ky=kubectl
+# CronJob management.
+alias kgcj='kubectl get cronjob'
+alias kecj='kubectl edit cronjob'
+alias kdcj='kubectl describe cronjob'
+alias kdelcj='kubectl delete cronjob'
+
+# Only run if the user actually has kubectl installed
+if (( ${+_comps[kubectl]} )); then
+  kj() { kubectl "$@" -o json | jq; }
+  kjx() { kubectl "$@" -o json | fx; }
+  ky() { kubectl "$@" -o yaml | yh; }
+
+  compdef kj=kubectl
+  compdef kjx=kubectl
+  compdef ky=kubectl
+fi
