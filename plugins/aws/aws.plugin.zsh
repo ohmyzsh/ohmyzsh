@@ -26,7 +26,8 @@ function asp() {
 # AWS profile switch
 function acp() {
   if [[ -z "$1" ]]; then
-    unset AWS_DEFAULT_PROFILE AWS_PROFILE AWS_EB_PROFILE AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
+    unset AWS_DEFAULT_PROFILE AWS_PROFILE AWS_EB_PROFILE
+    unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
     echo AWS profile cleared.
     return
   fi
@@ -39,73 +40,79 @@ function acp() {
     return 1
   fi
 
-  local aws_access_key_id="$(aws configure get aws_access_key_id --profile $1)"
-  local aws_secret_access_key="$(aws configure get aws_secret_access_key --profile $1)"
-  local aws_session_token="$(aws configure get aws_session_token --profile $1)"
-  local mfa_serial="$(aws configure get mfa_serial --profile $1)"
-  local role_arn="$(aws configure get role_arn --profile $1)"
+  local profile="$1"
+
+  # Get fallback credentials for if the aws command fails or no command is run
+  local aws_access_key_id="$(aws configure get aws_access_key_id --profile $profile)"
+  local aws_secret_access_key="$(aws configure get aws_secret_access_key --profile $profile)"
+  local aws_session_token="$(aws configure get aws_session_token --profile $profile)"
+
 
   # First, if the profile has MFA configured, lets get the token and session duration
-  local mfa_opt=""
+  local mfa_serial="$(aws configure get mfa_serial --profile $profile)"
 
-  if [[ -n $mfa_serial ]]; then
-    local mfa_token=""
-    echo "Please enter your MFA token for $mfa_serial:"
+  if [[ -n "$mfa_serial" ]]; then
+    local -a mfa_opt
+    local mfa_token sess_duration
+    echo -n "Please enter your MFA token for $mfa_serial: "
     read -r mfa_token
-    echo "Please enter the session duration in seconds (900-43200; default: 3600, which is the default maximum for a role):"
+    echo -n "Please enter the session duration in seconds (900-43200; default: 3600, which is the default maximum for a role): "
     read -r sess_duration
-    if [[ -z $sess_duration ]]; then
-      sess_duration="3600"
+    mfa_opt=(--serial-number "$mfa_serial" --token-code "$mfa_token" --duration-seconds "${sess_duration:-3600}")
+
+    # Now see whether we need to just MFA for the current role, or assume a different one
+    local role_arn="$(aws configure get role_arn --profile $profile)"
+
+    if [[ -n "$role_arn" ]]; then
+      # Means we need to assume a specified role
+      aws_command=(aws sts assume-role --role-arn "$role_arn" "${mfa_opt[@]}")
+
+      # Check whether external_id is configured to use while assuming the role
+      local external_id="$(aws configure get external_id --profile "$profile")"
+      if [[ -n "$external_id" ]]; then
+        aws_command+=(--external-id "$external_id")
+      fi
+
+      # Get source profile to use to assume role
+      local source_profile="$(aws configure get source_profile --profile "$profile")"
+      aws_command+=(--profile="${source_profile:-profile}" --role-session-name "${source_profile:-profile}")
+
+      echo "Assuming role $role_arn using profile ${source_profile:-profile}"
+    else
+      # Means we only need to do MFA
+      aws_command=(aws sts get-session-token --profile="$profile" "${mfa_opt[@]}")
+      echo "Obtaining session token for profile $profile"
     fi
-    mfa_opt="--serial-number $mfa_serial --token-code $mfa_token --duration-seconds $sess_duration"
+
+    # Format output of aws command for easier processing
+    aws_command+=(--query '[Credentials.AccessKeyId,Credentials.SecretAccessKey,Credentials.SessionToken]' --output text)
+
+    # Run the aws command to obtain credentials
+    local -a credentials
+    credentials=(${(ps:\t:)"$(${aws_command[@]})"})
+
+    if [[ -n "$credentials" ]]; then
+      aws_access_key_id="${credentials[1]}"
+      aws_secret_access_key="${credentials[2]}"
+      aws_session_token="${credentials[3]}"
+    fi
   fi
 
-  # Now see whether we need to just MFA for the current role, or assume a different one
-  local credentials_output=""
-  if [[ -n $role_arn ]]; then
-    # Means we need to assume a specified role
+  # Switch to AWS profile
+  if [[ -n "${aws_access_key_id}" && -n "$aws_secret_access_key" ]]; then
+    export AWS_DEFAULT_PROFILE="$profile"
+    export AWS_PROFILE="$profile"
+    export AWS_EB_PROFILE="$profile"
+    export AWS_ACCESS_KEY_ID="$aws_access_key_id"
+    export AWS_SECRET_ACCESS_KEY="$aws_secret_access_key"
 
-    # Check whether external_id is configured to use while assuming the role
-    local ext_id="$(aws configure get external_id --profile $1)"
-    local extid_opt=""
-    if [[ -n $ext_id ]]; then
-      extid_opt="--external-id $ext_id"
+    if [[ -n "$aws_session_token" ]]; then
+      export AWS_SESSION_TOKEN="$aws_session_token"
+    else
+      unset AWS_SESSION_TOKEN
     fi
 
-    # Get source profile to use to assume role
-    local profile=$1
-    local source_profile="$(aws configure get source_profile --profile "$1")"
-    if [[ -n $source_profile ]]; then
-      profile=$source_profile
-    fi
-
-    echo "Assuming role $role_arn using profile $profile"
-    local assume_cmd=(aws sts assume-role "--profile=$profile" "--role-arn $role_arn" "--role-session-name $profile" "$mfa_opt" "$extid_opt"
-      "--query '[Credentials.AccessKeyId,Credentials.SecretAccessKey,Credentials.SessionToken]' --output text | tr '\t' '\n'")
-    credentials_output="$(eval "${assume_cmd[@]}")"
-  elif [[ -n $mfa_opt ]]; then
-    # Means we only need to do MFA
-    echo "Obtaining session token for profile $profile"
-    local get_token_cmd=(aws sts get-session-token "--profile=$profile" "$mfa_opt"
-      "--query '[Credentials.AccessKeyId,Credentials.SecretAccessKey,Credentials.SessionToken]' --output text | tr '\t' '\n'")
-    credentials_output="$(eval "${get_token_cmd[@]}")"
-  fi
-
-  if [[ -n $credentials_output ]]; then
-    local credentials=("${(f)credentials_output}")
-    aws_access_key_id=${credentials[1]}
-    aws_secret_access_key=${credentials[2]}
-    aws_session_token=${credentials[3]}
-  fi
-
-  if [[ -n $aws_access_key_id && -n $aws_secret_access_key ]]; then
-    export AWS_DEFAULT_PROFILE=$1
-    export AWS_PROFILE=$1
-    export AWS_EB_PROFILE=$1
-    export AWS_ACCESS_KEY_ID=$aws_access_key_id
-    export AWS_SECRET_ACCESS_KEY=$aws_secret_access_key
-    [[ -z "$aws_session_token" ]] && unset AWS_SESSION_TOKEN || export AWS_SESSION_TOKEN=$aws_session_token
-    echo "Switched to AWS Profile: $1"
+    echo "Switched to AWS Profile: $profile"
   fi
 }
 
@@ -141,7 +148,7 @@ function aws_prompt_info() {
   echo "${ZSH_THEME_AWS_PREFIX:=<aws:}${AWS_PROFILE}${ZSH_THEME_AWS_SUFFIX:=>}"
 }
 
-if [ "$SHOW_AWS_PROMPT" != false ]; then
+if [[ "$SHOW_AWS_PROMPT" != false && "$RPROMPT" != *'$(aws_prompt_info)'* ]]; then
   RPROMPT='$(aws_prompt_info)'"$RPROMPT"
 fi
 
