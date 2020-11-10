@@ -46,6 +46,8 @@ the current `$AWS_PROFILE`. It uses two variables to control how that is shown:
 
 ## Configuration
 
+[Configuration and credential file settings](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) by AWS
+
 ### Scenario: IAM roles with a source profile and MFA authentication
 
 Source profile credentials in `~/.aws/credentials`:
