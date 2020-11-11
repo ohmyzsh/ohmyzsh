@@ -43,3 +43,33 @@ the current `$AWS_PROFILE`. It uses two variables to control how that is shown:
 * ZSH_THEME_AWS_PREFIX: sets the prefix of the AWS_PROFILE. Defaults to `<aws:`.
 
 * ZSH_THEME_AWS_SUFFIX: sets the suffix of the AWS_PROFILE. Defaults to `>`.
+
+## Configuration
+
+[Configuration and credential file settings](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) by AWS
+
+### Scenario: IAM roles with a source profile and MFA authentication
+
+Source profile credentials in `~/.aws/credentials`:
+
+```
+[source-profile-name]
+aws_access_key_id = ...
+aws_secret_access_key = ...
+```
+
+Role configuration in `~/.aws/config`:
+
+```
+[profile source-profile-name]
+mfa_serial = arn:aws:iam::111111111111:mfa/myuser
+region = us-east-1
+output = json
+
+[profile profile-with-role]
+role_arn = arn:aws:iam::9999999999999:role/myrole
+mfa_serial = arn:aws:iam::111111111111:mfa/myuser
+source_profile = source-profile-name
+region = us-east-1
+output = json
+```
