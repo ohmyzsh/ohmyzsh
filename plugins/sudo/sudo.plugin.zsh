@@ -37,7 +37,7 @@ sudo-command-line() {
     # Get the first part of the typed command and check if it's an alias to $EDITOR
     # If so, locally change $EDITOR to the alias so that it matches below
     if [[ -n "$EDITOR" ]]; then
-        local cmd="${(Az)BUFFER[1]}"
+        local cmd="${${(Az)BUFFER}[1]}"
         if [[ "${aliases[$cmd]} " = (\$EDITOR|$EDITOR)\ * ]]; then
             local EDITOR="$cmd"
         fi
