@@ -14,6 +14,16 @@
 #
 # ------------------------------------------------------------------------------
 
+__sudo-replace-buffer() {
+    local old=$1 new=$2
+    if [[ ${#LBUFFER} -le ${#old} ]]; then
+        RBUFFER=" ${BUFFER#$old }"
+        LBUFFER="$new"
+    else
+        LBUFFER="$new ${LBUFFER#$old }"
+    fi
+}
+
 sudo-command-line() {
     [[ -z $BUFFER ]] && LBUFFER="$(fc -ln -1)"
 
@@ -33,28 +43,14 @@ sudo-command-line() {
         fi
     fi
 
-
-    if [[ -n $EDITOR && $BUFFER == $EDITOR\ * ]]; then
-        if [[ ${#LBUFFER} -le ${#EDITOR} ]]; then
-            RBUFFER=" ${BUFFER#$EDITOR }"
-            LBUFFER="sudoedit"
-        else
-            LBUFFER="sudoedit ${LBUFFER#$EDITOR }"
-        fi
-    elif [[ $BUFFER == sudoedit\ * ]]; then
-        if [[ ${#LBUFFER} -le 8 ]]; then
-            RBUFFER=" ${BUFFER#sudoedit }"
-            LBUFFER="$EDITOR"
-        else
-            LBUFFER="$EDITOR ${LBUFFER#sudoedit }"
-        fi
-    elif [[ $BUFFER == sudo\ * ]]; then
-        if [[ ${#LBUFFER} -le 4 ]]; then
-            RBUFFER="${BUFFER#sudo }"
-            LBUFFER=""
-        else
-            LBUFFER="${LBUFFER#sudo }"
-        fi
+    if [[ -n $EDITOR && $BUFFER = $EDITOR\ * ]]; then
+        __sudo-replace-buffer "$EDITOR" "sudoedit"
+    elif [[ -n $EDITOR && $BUFFER = \$EDITOR\ * ]]; then
+        __sudo-replace-buffer "\$EDITOR" "sudoedit"
+    elif [[ $BUFFER = sudoedit\ * ]]; then
+        __sudo-replace-buffer "sudoedit" "$EDITOR"
+    elif [[ $BUFFER = sudo\ * ]]; then
+        __sudo-replace-buffer "sudo" ""
     else
         LBUFFER="sudo $LBUFFER"
     fi
