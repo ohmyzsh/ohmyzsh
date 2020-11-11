@@ -15,12 +15,12 @@
 # ------------------------------------------------------------------------------
 
 __sudo-replace-buffer() {
-    local old=$1 new=$2
+    local old=$1 new=$2 space=${2:+ }
     if [[ ${#LBUFFER} -le ${#old} ]]; then
-        RBUFFER=" ${BUFFER#$old }"
-        LBUFFER="$new"
+        RBUFFER="${space}${BUFFER#$old }"
+        LBUFFER="${new}"
     else
-        LBUFFER="$new ${LBUFFER#$old }"
+        LBUFFER="${new}${space}${LBUFFER#$old }"
     fi
 }
 
