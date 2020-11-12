@@ -16,3 +16,7 @@ You can also try to color other pages by prefixing the respective command with `
 ```zsh
 colored git help clone
 ```
+
+## Customization
+
+The plugin declares global associative array `less_termcap`, which maps termcap capabilities to escape sequences for the `less` pager. This mapping can be further customized by the user after the plugin is loaded. Check out sources for more.
