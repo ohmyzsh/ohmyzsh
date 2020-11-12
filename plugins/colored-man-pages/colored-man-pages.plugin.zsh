@@ -4,6 +4,10 @@ typeset __colored_man_pages_dir="${0:A:h}"
 function colored() {
   local -a environment
 
+  # Prefer `less` whenever available, since we specifically configured
+  # environment for it.
+  environment+=( PAGER="${commands[less]:-$PAGER}" )
+
   # See ./nroff script.
   if [[ "$OSTYPE" = solaris* ]]; then
     environment+=( PATH="${__colored_man_pages_dir}:$PATH" )
@@ -17,7 +21,6 @@ function colored() {
     LESS_TERMCAP_so=$(printf "\e[1;44;33m") \
     LESS_TERMCAP_ue=$(printf "\e[0m") \
     LESS_TERMCAP_us=$(printf "\e[1;32m") \
-    PAGER="${commands[less]:-$PAGER}" \
     $environment \
       "$@"
 }
