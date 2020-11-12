@@ -31,13 +31,14 @@ function work_in_progress() {
 
 # Check if main exists and use instead of master
 function git_main_branch() {
-  if [[ -n "$(git branch --list main)" ]]; then
-    echo main
-  elif [[ -n "$(git branch --list trunk)" ]]; then
-    echo trunk
-  else
-    echo master
-  fi
+  local branch
+  for branch in main trunk; do
+    if git show-ref -q --verify refs/heads/$branch; then
+      echo $branch
+      return
+    fi
+  done
+  echo master
 }
 
 #
