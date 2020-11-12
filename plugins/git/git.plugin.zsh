@@ -33,7 +33,7 @@ function work_in_progress() {
 function git_main_branch() {
   local branch
   for branch in main trunk; do
-    if git show-ref -q --verify refs/heads/$branch; then
+    if command git show-ref -q --verify refs/heads/$branch; then
       echo $branch
       return
     fi
