@@ -1,17 +1,54 @@
 ## --------------- Pollen Work Functions ---------------
 
 ## Spin up needed server components
-function pollen-server-up {
-  #bin/server --exclude pollen_ui phoenix_ui ambassador_ui customer_ui calvin_ui avocado_ui  
-  bin/server ambassador_api ambassador_api_worker phoenix_ui notification_service gateway_api           
+function pollen-server-up-pollen {
+  bin/server ambassador_api ambassador_api_worker phoenix_ui notification_service gateway_api pollen_ui avocado_ui apollo
 }
 
 function pollen-server-up-phoenix {
-  pollen-server-up
+  bin/server ambassador_api ambassador_api_worker phoenix_ui notification_service gateway_api           
 }
 
 function pollen-server-up-pollen {
-  bin/server ambassador_api ambassador_api_worker phoenix_ui notification_service gateway_api pollen_ui avocado_ui apollo
+  pollen-server-up
+}
+
+function pollen-server-up-admin {
+  bin/server \
+    admin_ui \
+    ambassador_api \
+    ambassador_api_worker \
+    apollo \
+    gateway_api \
+    notification_service \
+}
+
+function pollen-server-up-a {
+  bin/server \
+    admin_ui \
+    ambassador_api \
+}
+
+function pollen-server-up-b {
+  apollo/bin/server_admin
+}
+
+
+function pollen-server-up-test2 {
+  bin/server \
+    admin_ui \
+    ambassador_api \
+    ambassador_api_worker \
+}
+
+function pollen-server-up-admin-full {
+  bin/server \
+    admin_ui \
+    ambassador_api \
+    ambassador_api_worker \
+    apollo \
+    avocado_ui \
+    gateway_api \
 }
 
 ## seed demo data
@@ -128,6 +165,8 @@ function pollen {
   echo "pollen-server-up - spin up pollen server";
   echo "pollen-server-up-phoenix - server config for phoenix";
   echo "pollen-server-up-pollen - server config for pollen";
+  echo "pollen-server-up-admin - server config for admin ui";
+  echo "pollen-server-up-admin-full - server config for admin ui with pollen&phoenix";
   echo "pollen-setup-e2e - docker-compose down && bin/server-e2e";
   echo "pollen-styleguide - run styleguide server";
 }

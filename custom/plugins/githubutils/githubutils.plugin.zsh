@@ -46,6 +46,11 @@ function update-forked-branch {
   git rebase upstream/master;
 }
 
+function gb-rename {
+  git branch -m ${1};
+  git push -0u origin ${1};
+}
+
 # @todo: make a function to remove a single commit
 # remove last commit 
 # git reset --hard HEAD~1
@@ -66,5 +71,6 @@ function githubutils {
   echo "grebb - trigger rebase, allowing you to rebase all commits since branching off master";
   echo "greba <number of commits to rebase> - trigger rebase, allowing you to rebase all commits ever or ~X";
   echo "move-bb-to-github <destination> - rebase repo to new destination (with .git at the end)";
-  exho "change-commit-time - change current commits time"
+  echo "change-commit-time - change current commits time";
+  echo "gb-rename - rename a branch";
 }
