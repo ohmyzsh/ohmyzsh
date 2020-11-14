@@ -33,7 +33,7 @@ mvn-color() {
 	)
 }
 
-# either use orignal mvn or the mvn wrapper
+# either use original mvn or the mvn wrapper
 alias mvn="mvn-or-mvnw"
 
 # Run mvn against the pom found in a project's root directory (assumes a git repo)
