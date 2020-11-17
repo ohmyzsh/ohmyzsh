@@ -264,7 +264,7 @@ alias gunignore='git update-index --no-assume-unchanged'
 alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
 
 alias gu='git pull'
-alias guum='git pull upstream master'
+alias guum='git pull upstream $(git_main_branch)'
 alias gup='git pull --rebase'
 alias gupv='git pull --rebase -v'
 alias gupa='git pull --rebase --autostash'
