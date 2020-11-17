@@ -133,15 +133,6 @@ EOF
     _omz::plugin::$command "$@"
 }
 
-function _omz::plugin::info {
-    if [[ -z "$1" ]]; then
-        echo >&2 "Uoptionoptiosage: omz plugin info <plugin_name>"
-        return 1
-    fi
-
-    less -S "$ZSH"/plugins/"$1"/README.md
-}
-
 function _omz::plugin::list {
     local -a custom_plugins builtin_plugins
     custom_plugins=("$ZSH_CUSTOM"/plugins/*(-/N:t))
@@ -164,6 +155,15 @@ function _omz::plugin::list {
         print -P "%U%BBuilt-in plugins%b%u:"
         print -l ${(q-)builtin_plugins} | column
     fi
+}
+
+function _omz::plugin::info {
+    if [[ -z "$1" ]]; then
+        echo >&2 "Usage: omz plugin info <plugin_name>"
+        return 1
+    fi
+
+    less -S "$ZSH"/plugins/"$1"/README.md
 }
 
 function _omz::pr {
