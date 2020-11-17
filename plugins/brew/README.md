@@ -21,6 +21,7 @@ plugins=(... brew)
 | `buf`    | `brew upgrade --formula`                                      | Upgrade only formulas (not casks).                                  |
 | `bcubo`  | `brew update && brew outdated --cask`                         | Update Homebrew data, then list outdated casks.                     |
 | `bcubc`  | `brew cask reinstall $(brew outdated --cask) && brew cleanup` | Update outdated casks, then run cleanup.                            |
+| `bdeps`  | `brew leaves                                                  | xargs brew deps --installed --for-each                              | sed "s/^.\*:/$(tput setaf 4)&$(tput sgr0)/"` | Display the dependency tree of the installed formulae |
 
 ## Completion
 
