@@ -33,7 +33,7 @@ function _omz {
         _describe 'command' cmds
     elif (( CURRENT == 3 )); then
         case "$words[2]" in
-            plugin) subcmds=('list:List plugins')
+            plugin) subcmds=('list:List plugins' 'info:Get plugin information')
                 _describe 'command' subcmds ;;
             pr) subcmds=('test:Test a Pull Request' 'clean:Delete all Pull Request branches')
                 _describe 'command' subcmds ;;
@@ -44,6 +44,8 @@ function _omz {
         case "$words[2]::$words[3]" in
             theme::use) compadd "$ZSH"/themes/*.zsh-theme(.N:t:r) \
                 "$ZSH_CUSTOM"/**/*.zsh-theme(.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::) ;;
+            plugin::info) compadd "$ZSH"/plugins/*(-/N:t) \
+                "$ZSH_CUSTOM"/plugins/*(-/N:t) ;;
         esac
     fi
 
@@ -118,7 +120,8 @@ Usage: omz plugin <command> [options]
 
 Available commands:
 
-    list            List all available Oh My Zsh plugins
+    list                  List all available Oh My Zsh plugins
+    info <plugin_name>    Get information of a plugin
 
 EOF
         return 1
@@ -128,6 +131,15 @@ EOF
     shift
 
     _omz::plugin::$command "$@"
+}
+
+function _omz::plugin::info {
+    if [[ -z "$1" ]]; then
+        echo >&2 "Uoptionoptiosage: omz plugin info <plugin_name>"
+        return 1
+    fi
+
+    less -S "$ZSH"/plugins/"$1"/README.md
 }
 
 function _omz::plugin::list {
