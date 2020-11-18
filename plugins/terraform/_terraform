@@ -54,14 +54,14 @@ __apply() {
         '-state-out=[(path) Path to write state to that is different than "-state". This can be used to preserve the old state.]' \
         '*-target=[(resource) Resource to target. Operation will be limited to this resource and its dependencies. This flag can be used multiple times.]:target:__statelist' \
         '*-var[("foo=bar") Set a variable in the Terraform configuration. This flag can be set multiple times.]' \
-        '*-var-file=[(foo) Set variables in the Terraform configuration from a file. If "terraform.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]:file:_files'
+        '*-var-file=[(foo) Set variables in the Terraform configuration from a file. If "terraform.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]:file:_files -g "*.tfvars{,.json}"'
 }
 
 __console() {
     _arguments \
         '-state=[(terraform.tfstate) Path to read state.]' \
         '*-var[("foo=bar") Set a variable in the Terraform configuration. This flag can be set multiple times.]' \
-        '*-var-file=[(foo) Set variables in the Terraform configuration from a file. If "terraform.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]:file:_files'
+        '*-var-file=[(foo) Set variables in the Terraform configuration from a file. If "terraform.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]:file:_files -g "*.tfvars{,.json}"'
 }
 
 __destroy() {
@@ -78,7 +78,7 @@ __destroy() {
         '-state-out=[(path) Path to write state to that is different than "-state". This can be used to preserve the old state.]' \
         '*-target=[(resource) Resource to target. Operation will be limited to this resource and its dependencies. This flag can be used multiple times.]:target:__statelist' \
         '*-var[("foo=bar") Set a variable in the Terraform configuration. This flag can be set multiple times.]' \
-        '*-var-file=[(foo) Set variables in the Terraform configuration from a file. If "terraform.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]:file:_files'
+        '*-var-file=[(foo) Set variables in the Terraform configuration from a file. If "terraform.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]:file:_files -g "*.tfvars{,.json}"'
 }
 
 __fmt() {
@@ -119,7 +119,7 @@ __import() {
         '-state=[(PATH) Path to the source state file. Defaults to the configured backend, or "terraform.tfstate"]' \
         '-state-out=[(PATH) Path to the destination state file to write to. If this is not specified, the source state file will be used. This can be a new or existing path.]' \
         '*-var[("foo=bar") Set a variable in the Terraform configuration. This flag can be set multiple times. This is only useful with the "-config" flag.]' \
-        '*-var-file=[(foo) Set variables in the Terraform configuration from a file. If "terraform.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]:file:_files'
+        '*-var-file=[(foo) Set variables in the Terraform configuration from a file. If "terraform.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]:file:_files -g "*.tfvars{,.json}"'
 }
 
 __init() {
@@ -172,7 +172,7 @@ __plan() {
         '-state=[(statefile) Path to a Terraform state file to use to look up Terraform-managed resources. By default it will use the state "terraform.tfstate" if it exists.]' \
         '*-target=[(resource) Resource to target. Operation will be limited to this resource and its dependencies. This flag can be used multiple times.]:target:__statelist' \
         '*-var[("foo=bar") Set a variable in the Terraform configuration. This flag can be set multiple times.]' \
-        '*-var-file=[(foo) Set variables in the Terraform configuration from a file. If "terraform.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]:file:_files'
+        '*-var-file=[(foo) Set variables in the Terraform configuration from a file. If "terraform.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]:file:_files -g "*.tfvars{,.json}"'
 }
 
 __providers() {
@@ -209,7 +209,7 @@ __refresh() {
         '-state-out=[(path) Path to write state to that is different than "-state". This can be used to preserve the old state.]' \
         '*-target=[(resource) A Resource Address to target. Operation will be limited to this resource and its dependencies. This flag can be used multiple times.]:target:__statelist' \
         '*-var[("foo=bar") Set a variable in the Terraform configuration. This flag can be set multiple times.]' \
-        '*-var-file=[(path) Set variables in the Terraform configuration from a file. If "terraform.tfvars" is present, it will be automatically loaded if this flag is not specified.]:file:_files'
+        '*-var-file=[(foo) Set variables in the Terraform configuration from a file. If "terraform.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]:file:_files -g "*.tfvars{,.json}"'
 }
 
 __show() {
