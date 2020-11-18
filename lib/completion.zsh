@@ -1,7 +1,7 @@
 # fixme - the load process here seems a bit bizarre
 zmodload -i zsh/complist
 
-WORDCHARS='_-'
+WORDCHARS=''
 
 unsetopt menu_complete   # do not autoselect the first completion entry
 unsetopt flowcontrol
