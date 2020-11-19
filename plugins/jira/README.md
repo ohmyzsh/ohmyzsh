@@ -18,7 +18,7 @@ This plugin supplies one command, `jira`, through which all its features are exp
 jira            # performs the default action
 
 jira new        # opens a new issue
-jira dashboard  # opens your JIRA dashboard
+jira dashboard [rapid_view]  # opens your JIRA dashboard
 jira tempo      # opens your JIRA Tempo
 jira reported [username]  # queries for issues reported by a user
 jira assigned [username]  # queries for issues assigned to a user
@@ -62,6 +62,7 @@ echo "https://jira.atlassian.com" >> .jira-url
 * `$JIRA_NAME` - Your JIRA username; used as the default user for `assigned`/`reported` searches
 * `$JIRA_PREFIX` - Prefix added to issue ID arguments
 * `$JIRA_RAPID_BOARD` - Set to `true` if you use Rapid Board
+* `$JIRA_RAPID_VIEW` - Set the default rapid view; it doesn't work `$JIRA_RAPID_BOARD` is disabled
 * `$JIRA_DEFAULT_ACTION` - Action to do when `jira` is called with no arguments; defaults to "new"
 
 
