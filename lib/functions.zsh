@@ -242,25 +242,39 @@ lsd() {
 }
 
 # the ol' gfind. Doesn't take a file pattern.
-function gfind() {
+function gfindall() {
     fd -H -t f . -x grep --color=always -Hi ${1}
 }
 
 # gfind with file pattern.
-function gfindf() {
+function gfindfall() {
     fd -H -t f ".${1}" . -x grep --color=always -Hi "$@"
 }
 
-alias ffg=gfindf
+alias gfind=gfindall
+alias gfind-filename-all=gfindall
+
+# the ol' gfind. Doesn't take a file pattern.
+function gfind() {
+    fd -t f . -x grep --color=always -Hi ${1}
+}
+
+# gfind with file pattern.
+function gfindf() {
+    fd -t f ".${1}" . -x grep --color=always -Hi "$@"
+}
+
+alias gfind-filename=gfindf
+
+alias ff='fd -t f .'
+alias ffa='fd -H -t f .'
+
+alias fd='\fd -t d .'
+alias fda='\fd -H -t d .'
 
 # Launch firefox profile manager
 function firefox-profiles() {
     "/Applications/Firefox.app/Contents/MacOS/firefox-bin --profilemanager"
-}
-
-# Find files
-function ff() {
-    fd -H -t f $1 . "$@"
 }
 
 function start-cloud-storage() {
