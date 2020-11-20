@@ -163,6 +163,8 @@ function pollen {
   echo "pollen-reset-demo-data - delete then re-create demo data";
   echo "pollen-run-tests-all - runs tests";
   echo "pollen-server-up - spin up pollen server";
+  echo "pollen-server-up-a - for butterfly, pt. 1";
+  echo "pollen-server-up-b - for butterfly, pt. 2";
   echo "pollen-server-up-phoenix - server config for phoenix";
   echo "pollen-server-up-pollen - server config for pollen";
   echo "pollen-server-up-admin - server config for admin ui";
