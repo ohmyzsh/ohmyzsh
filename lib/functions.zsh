@@ -236,15 +236,52 @@ function omz_urldecode {
   echo -E "$decoded"
 }
 
-# PSK buffoonery
-kill_cloud_drives() {
-  pkill "Backup" ; pkill "Dropbox"
-}
-
 # PSK List directories only
 lsd() {
-  ls -d */
+    l | grep -E "^d"
 }
 
-# Yoink
-alias yoink="open -a Yoink"
+# the ol' gfind. Doesn't take a file pattern.
+function gfind() {
+    fd -H -t f . -x grep --color=always -Hi ${1}
+}
+
+# gfind with file pattern.
+function gfindf() {
+    fd -H -t f ".${1}" . -x grep --color=always -Hi "$@"
+}
+
+alias ffg=gfindf
+
+# Launch firefox profile manager
+function firefox-profiles() {
+    "/Applications/Firefox.app/Contents/MacOS/firefox-bin --profilemanager"
+}
+
+# Find files
+function ff() {
+    fd -H -t f $1 . "$@"
+}
+
+function start-cloud-storage() {
+    cd /Applications
+    open Dropbox.app &
+    open Backup\ and\ Sync.app &
+    open "Google Drive File Stream.app" &
+    cd -
+}
+
+function kill-cloud-storage() {
+    # TODO investigate pkill as alternative
+    killall "Google Drive File Stream" 2>/dev/null &
+    killall Dropbox 2>/dev/null &
+    killall "Backup and Sync" 2>/dev/null &
+}
+
+
+# Find directories
+function fdir() {
+    fd -t d $1 .
+}
+
+alias fdd=fdir
