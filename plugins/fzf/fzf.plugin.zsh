@@ -149,6 +149,30 @@ function fzf_setup_using_openbsd() {
   return 0
 }
 
+function fzf_setup_using_cygwin() {
+  # Cygwin installs fzf in /usr/local/bin/fzf
+  if [[ "$OSTYPE" != cygwin* ]] || (( ! $+commands[fzf] )); then
+    return 1
+  fi
+
+  # The fzf-zsh-completion package installs the auto-completion in
+  local completions="/etc/profile.d/fzf-completion.zsh"
+  # The fzf-zsh package installs the key-bindings file in
+  local key_bindings="/etc/profile.d/fzf.zsh"
+
+  # Auto-completion
+  if [[ -o interactive && "$DISABLE_FZF_AUTO_COMPLETION" != "true" ]]; then
+    source "$completions" 2>/dev/null
+  fi
+
+  # Key bindings
+  if [[ "$DISABLE_FZF_KEY_BINDINGS" != "true" ]]; then
+    source "$key_bindings" 2>/dev/null
+  fi
+
+  return 0
+}
+
 # Indicate to user that fzf installation not found if nothing worked
 function fzf_setup_error() {
   cat >&2 <<'EOF'
@@ -160,6 +184,7 @@ EOF
 fzf_setup_using_openbsd \
   || fzf_setup_using_debian \
   || fzf_setup_using_opensuse \
+  || fzf_setup_using_cygwin \
   || fzf_setup_using_base_dir \
   || fzf_setup_error
 
