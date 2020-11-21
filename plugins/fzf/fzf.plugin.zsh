@@ -136,6 +136,30 @@ function setup_using_openbsd_package() {
     return 0
 }
 
+function setup_using_cygwin_package() {
+    # Cygwin installs fzf in /usr/local/bin/fzf
+    if [[ "$OSTYPE" != cygwin* ]] || (( ! $+commands[fzf] )); then
+        return 1
+    fi
+
+    # The fzf-zsh-completion package installs the auto-completion in
+    local completions="/etc/profile.d/fzf-completion.zsh"
+    # The fzf-zsh package installs the key-bindings file in
+    local key_bindings="/etc/profile.d/fzf.zsh"
+
+    # Auto-completion
+    if [[ -o interactive && "$DISABLE_FZF_AUTO_COMPLETION" != "true" ]]; then
+        source "$completions" 2>/dev/null
+    fi
+
+    # Key bindings
+    if [[ "$DISABLE_FZF_KEY_BINDINGS" != "true" ]]; then
+        source "$key_bindings" 2>/dev/null
+    fi
+
+    return 0
+}
+
 function indicate_error() {
     cat >&2 <<EOF
 [oh-my-zsh] fzf plugin: Cannot find fzf installation directory.
@@ -147,12 +171,14 @@ EOF
 setup_using_openbsd_package \
     || setup_using_debian_package \
     || setup_using_opensuse_package \
+    || setup_using_cygwin_package \
     || setup_using_base_dir \
     || indicate_error
 
 unset -f setup_using_openbsd_package \
     setup_using_debian_package \
     setup_using_opensuse_package \
+    setup_using_cygwin_package \
     setup_using_base_dir \
     indicate_error
 
