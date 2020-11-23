@@ -1,27 +1,20 @@
-# Bind quick stuff to enter!
-#
-# Pressing enter in a git directory runs `git status`
-# in other directories `ls`
-magic-enter () {
-  # If commands are not already set, use the defaults
-  [ -z "$MAGIC_ENTER_GIT_COMMAND" ] && MAGIC_ENTER_GIT_COMMAND="git status -u ."
-  [ -z "$MAGIC_ENTER_OTHER_COMMAND" ] && MAGIC_ENTER_OTHER_COMMAND="ls -lh ."
+# Default commands
+: ${MAGIC_ENTER_GIT_COMMAND:="git status -u ."} # run when in a git repository
+: ${MAGIC_ENTER_OTHER_COMMAND:="ls -lh ."}      # run anywhere else
 
-  if [[ -z $BUFFER ]]; then
+magic-enter() {
+  if [[ -z "$BUFFER" ]]; then
     echo ""
-    if git rev-parse --is-inside-work-tree &>/dev/null; then
+    if command git rev-parse --is-inside-work-tree &>/dev/null; then
       eval "$MAGIC_ENTER_GIT_COMMAND"
     else
       eval "$MAGIC_ENTER_OTHER_COMMAND"
     fi
     zle redisplay
   else
-    zle accept-line
+    zle .accept-line
   fi
 }
 
-zle -N magic-enter
-
-bindkey -M emacs "^M" magic-enter
-bindkey -M vicmd "^M" magic-enter
-bindkey -M viins "^M" magic-enter
+# Wrapper for the accept-line zle widget (run when pressing Enter)
+zle -N accept-line magic-enter
