@@ -6,13 +6,12 @@ magic-enter() {
   # Only run MAGIC_ENTER commands when in PS1 and command prompt empty
   # http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#User_002dDefined-Widgets
   if [[ -z "$BUFFER" && "$CONTEXT" = start ]]; then
-    echo ""
     if command git rev-parse --is-inside-work-tree &>/dev/null; then
-      eval "$MAGIC_ENTER_GIT_COMMAND"
+      BUFFER="$MAGIC_ENTER_GIT_COMMAND"
     else
-      eval "$MAGIC_ENTER_OTHER_COMMAND"
+      BUFFER="$MAGIC_ENTER_OTHER_COMMAND"
     fi
-    zle redisplay
+    zle .accept-line
   else
     zle .accept-line
   fi
