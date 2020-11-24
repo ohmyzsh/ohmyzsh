@@ -49,7 +49,7 @@ function git_prompt_info() {
           info="<no-remote>/$(__git_prompt_git rev-parse --abbrev-ref HEAD)" || return 0
       fi
   else
-      deatchedtag=$(__git_prompt_git tag --points-at 2>/dev/null)
+      detachedtag=$(__git_prompt_git tag --points-at 2>/dev/null)
       if [[ "${detachedtag}" != "" ]]; then
           # Detached at a tag
           info="${detachedtag}"
