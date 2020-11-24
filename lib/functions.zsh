@@ -242,17 +242,14 @@ lsd() {
 }
 
 # the ol' gfind. Doesn't take a file pattern.
-function gfindall() {
+function gfind-all() {
     fd -H -t f . -x grep --color=always -Hi ${1}
 }
 
 # gfind with file pattern.
-function gfindfall() {
+function gfind-filename-all() {
     fd -H -t f ".${1}" . -x grep --color=always -Hi "$@"
 }
-
-alias gfind=gfindall
-alias gfind-filename-all=gfindall
 
 # the ol' gfind. Doesn't take a file pattern.
 function gfind() {
@@ -261,16 +258,22 @@ function gfind() {
 
 # gfind with file pattern.
 function gfindf() {
-    fd -t f ".${1}" . -x grep --color=always -Hi "$@"
+    fd -t f ".${1}" . -x grep --color=always -Hi "$2"
 }
 
 alias gfind-filename=gfindf
 
-alias ff='fd -t f .'
-alias ffa='fd -H -t f .'
+alias ff='fd -t f '         # find files
+alias ffa='fd -H -t f '     # find files in horrible places
 
-alias fd='\fd -t d .'
-alias fda='\fd -H -t d .'
+alias fdd='\fd -t d '       # find directories
+alias fdir='fdd'
+
+alias fdda='\fd -H -t d '   # find directories in horrible places
+
+alias lg='l | grep '        # ls grep
+
+alias git-stash-list-all='gitk `git stash list --pretty=format:%gd`'
 
 # Launch firefox profile manager
 function firefox-profiles() {
@@ -292,10 +295,5 @@ function kill-cloud-storage() {
     killall "Backup and Sync" 2>/dev/null &
 }
 
-
-# Find directories
-function fdir() {
-    fd -t d $1 .
-}
 
 alias fdd=fdir
