@@ -17,6 +17,8 @@ function git_prompt_info() {
   local deatchedtag
 
   # If oh-my-zsh.hide-status equals to '1', get out.
+  # This is useful to disable git prompt info in specific (e.g. large) repositories
+  # This setting can also be set globally
   if [[ "$(__git_prompt_git config --get oh-my-zsh.hide-status 2>/dev/null)" == "1" ]]; then
     return 0
   fi
@@ -26,39 +28,48 @@ function git_prompt_info() {
     return 0
   fi
 
-  # If oh-my-zsh.classic-info is set, use classic info output of branch only
-  if [[ "$(__git_prompt_git config --get oh-my-zsh.classic-info 2>/dev/null)" == "1" ]]; then
+  # Introduce a mode setting: `classic` is default behavior. `enhancedd` is opt-in.
+  statusmode="enhanced" # "$(__git_prompt_git config --get --default classic oh-my-zsh.status-mode 2>/dev/null)"
+
+  # If oh-my-zsh.enhanced-info is set, use enhanced info output.
+  # Otherwise, show classic 
+  if [[ "${statusmode}" == "classic" ]]; then
     ref=$(__git_prompt_git symbolic-ref HEAD 2> /dev/null) || \
     ref=$(__git_prompt_git rev-parse --short HEAD 2> /dev/null) || return 0
     echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
-    return 0
+  elif [[ "${statusmode}" == "enhanced" ]]; then
+    # Enhanced mode will print:
+    #   <initialized>/$branch: for initialized git repositories (zero commits)
+    #   <no-remote>/$branch  : for repositories with at least one commit and no remote
+    #   $remote/$branch      : for repositories with the remote set as upstream
+    #   <detached>           : for repositories in detached mode
+    if [[ "$(__git_prompt_git branch --list -a 2> /dev/null)" == "" && "$?" == "0" ]]; then
+        # Look for initialized repos that have zero commits
+        ref=$(__git_prompt_git symbolic-ref HEAD 2> /dev/null) || \
+        ref=$(__git_prompt_git rev-parse --short HEAD 2> /dev/null)
+        info="<initialized>/${ref#refs/heads/}"
+    elif branch=$(__git_prompt_git symbolic-ref HEAD 2> /dev/null); then
+        # Show upstream remote and current branch
+        ref=$(__git_prompt_git for-each-ref --format='%(upstream:short)' ${branch} 2> /dev/null) || return 0
+        info="${ref#refs/heads/}"
+        if [[ "${info}" == "" ]]; then
+            # Handle for no remote branch
+            info="<no-remote>/$(__git_prompt_git rev-parse --abbrev-ref HEAD)" || return 0
+        fi
+    else
+        detachedtag=$(__git_prompt_git tag --points-at 2>/dev/null)
+        if [[ "${detachedtag}" != "" ]]; then
+            # Detached at a tag
+            info="${detachedtag}"
+        else
+            # Detached at unnamed revision
+            info=$(__git_prompt_git rev-parse --short HEAD 2> /dev/null) || return 0
+        fi
+    fi
+    echo "$ZSH_THEME_GIT_PROMPT_PREFIX${info}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
   fi
 
-  branches=$(__git_prompt_git branch --list -a 2> /dev/null)
-  if [[ "${branches}" == "" && "$?" == "0" ]]; then
-      # Look for initialized repos that have zero commits
-      ref=$(__git_prompt_git symbolic-ref HEAD 2> /dev/null) || \
-      ref=$(__git_prompt_git rev-parse --short HEAD 2> /dev/null)
-      info="<initialized>/${ref#refs/heads/}"
-  elif branch=$(__git_prompt_git symbolic-ref HEAD 2> /dev/null); then
-      # Show upstream remote and current branch
-      ref=$(__git_prompt_git for-each-ref --format='%(upstream:short)' ${branch} 2> /dev/null) || return 0
-      info="${ref#refs/heads/}"
-      if [[ "${info}" == "" ]]; then
-          # Handle for no remote branch
-          info="<no-remote>/$(__git_prompt_git rev-parse --abbrev-ref HEAD)" || return 0
-      fi
-  else
-      detachedtag=$(__git_prompt_git tag --points-at 2>/dev/null)
-      if [[ "${detachedtag}" != "" ]]; then
-          # Detached at a tag
-          info="${detachedtag}"
-      else
-          # Detached at unnamed revision
-          info=$(__git_prompt_git rev-parse --short HEAD 2> /dev/null) || return 0
-      fi
-  fi
-  echo "$ZSH_THEME_GIT_PROMPT_PREFIX${info}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
+  return 0
 }
 
 # Checks if working tree is dirty
