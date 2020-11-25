@@ -26,6 +26,14 @@ This plugin adds [tab completion](https://wp-cli.org/#tab-completions) for `wp-c
 - wpcrs='wp cron schedule'
 - wpcrt='wp cron test'
 
+### Database
+- wpdbe='wp db export'
+- wpdbi='wp db import'
+- wpdbcr='wp db create'
+- wpdbs='wp db search'
+- wpdbch='wp db check'
+- wpdbr='wp db repair'
+
 ### Menu
 - wpmc='wp menu create'
 - wpmd='wp menu delete'

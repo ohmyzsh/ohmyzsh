@@ -27,6 +27,12 @@ alias wpcrs='wp cron schedule'
 alias wpcrt='wp cron test'
 
 # Db
+alias wpdbe='wp db export'
+alias wpdbi='wp db import'
+alias wpdbcr='wp db create'
+alias wpdbs='wp db search'
+alias wpdbch='wp db check'
+alias wpdbr='wp db repair'
 
 # Eval
 
