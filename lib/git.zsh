@@ -24,12 +24,12 @@ function git_prompt_info() {
   # Introduce a mode setting: 
   #   - classic  : default behaviour
   #   - enhanced : for more information (initialized/no-remote/remote/detached)
-  statusmode="$(__git_prompt_git config --get --default classic oh-my-zsh.status-mode 2>/dev/null)"
+  infomode="$(__git_prompt_git config --get --default classic oh-my-zsh.info-mode 2>/dev/null)"
 
   # Classic mode, on by default
-  if [[ "${statusmode}" == "enhanced" ]]; then
+  if [[ "${infomode}" == "enhanced" ]]; then
     git_prompt_info_enhanced
-  elif [[ "${statusmode}" == "classic" ]]; then
+  elif [[ "${infomode}" == "classic" ]]; then
     git_prompt_info_classic
   fi
 
