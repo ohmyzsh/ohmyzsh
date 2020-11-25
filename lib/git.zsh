@@ -22,7 +22,7 @@ function git_prompt_info() {
   fi
 
   # If we are on a folder not tracked by git, get out.
-  if [[ "$(__git_prompt_git rev-parse --git-dir 2> /dev/null)" == "" ]]; then
+  if ! __git_prompt_git rev-parse --git-dir 2> /dev/null; then
     return 0
   fi
 
