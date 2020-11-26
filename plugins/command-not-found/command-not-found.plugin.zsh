@@ -1,8 +1,9 @@
 # Uses the command-not-found package zsh support
 # as seen in https://www.porcheron.info/command-not-found-for-zsh/
 # this is installed in Ubuntu
+
 if [ -x /usr/lib/command-not-found -o -x /usr/share/command-not-found/command-not-found ]; then
-	command_not_found_handler() {
+    function command_not_found_handler {
         # check because c-n-f could've been removed in the meantime
         if [ -x /usr/lib/command-not-found ]; then
             /usr/lib/command-not-found -- "$1"
@@ -11,10 +12,10 @@ if [ -x /usr/lib/command-not-found -o -x /usr/share/command-not-found/command-no
             /usr/share/command-not-found/command-not-found -- "$1"
             return $?
         else
-            printf "%s: command not found\n" "$1" >&2
+            printf "zsh: command not found: %s\n" "$1" >&2
             return 127
         fi
-		return 0
+        return 0
     }
 fi
 
@@ -24,13 +25,12 @@ fi
 
 # Fedora command-not-found support
 if [ -f /usr/libexec/pk-command-not-found ]; then
-    command_not_found_handler () {
+    command_not_found_handler() {
         runcnf=1
         retval=127
         [ ! -S /var/run/dbus/system_bus_socket ] && runcnf=0
         [ ! -x /usr/libexec/packagekitd ] && runcnf=0
-        if [ $runcnf -eq 1 ]
-            then
+        if [ $runcnf -eq 1 ]; then
             /usr/libexec/pk-command-not-found $@
             retval=$?
         fi
@@ -46,7 +46,7 @@ fi
 
 # NixOS command-not-found support
 if [ -x /run/current-system/sw/bin/command-not-found ]; then
-    command_not_found_handler () {
+    command_not_found_handler() {
         /run/current-system/sw/bin/command-not-found $@
     }
 fi
