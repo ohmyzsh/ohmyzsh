@@ -1,8 +1,9 @@
 # README
 ## genpass
-This plugin provides three unique password generators for ZSH. Each generator has at least a 128-bit
-security margin and generates passwords from the cryptographically secure `/dev/urandom`. Each
-generator can also take an optional numeric argument to generate multiple passwords.
+This plugin provides three unique password generators for ZSH. Each generator
+has at least a 128-bit security margin and generates passwords from the
+cryptographically secure `/dev/urandom`. Each generator can also take an
+optional numeric argument to generate multiple passwords.
 
 Requirements:
 
@@ -15,9 +16,10 @@ Install:
     plugins=(... genpass)
 
 ### gen-apple-pass
-Generates a pronounceable pseudoword passphrase of the "cvccvc" consonant/vowel syntax, inspired by
-[Apple's iCloud Keychain password generator][1]. Each pseudoword has exactly 1 digit placed at the
-edge of a "word" and exactly 1 capital letter to satisfy most password security requirements.
+Generates a pronounceable pseudoword passphrase of the "cvccvc" consonant/vowel
+syntax, inspired by [Apple's iCloud Keychain password generator][1]. Each
+pseudoword has exactly 1 digit placed at the edge of a "word" and exactly 1
+capital letter to satisfy most password security requirements.
 
     % gen-apple-pass 
     gelcyv-foqtam-fotqoh-viMleb-lexduv-6ixfuk
@@ -30,7 +32,8 @@ edge of a "word" and exactly 1 capital letter to satisfy most password security 
 [1]: https://developer.apple.com/password-rules/
 
 ### gen-monkey-pass
-Generates visually unambiguous random meaningless strings using [Crockford's base32][2].
+Generates visually unambiguous random meaningless strings using [Crockford's
+base32][2].
 
     % gen-monkey-pass 
     xt7gn976e7jj3fstgpy27330x3
@@ -43,10 +46,10 @@ Generates visually unambiguous random meaningless strings using [Crockford's bas
 [2]: https://www.crockford.com/base32.html
 
 ### gen-xkcd-pass
-Generates passphrases from `/usr/share/dict/words` inspired by the [famous (and slightly misleading)
-XKCD comic][3]. Each passphrase is prepended with a digit showing the number of words in the
-passphrase to adhere to password security requirements that require digits. Each word is 6
-characters or less.
+Generates passphrases from `/usr/share/dict/words` inspired by the [famous (and
+slightly misleading) XKCD comic][3]. Each passphrase is prepended with a digit
+showing the number of words in the passphrase to adhere to password security
+requirements that require digits. Each word is 6 characters or less.
 
     % gen-xkcd-pass
     9-eaten-Slav-rife-aired-hill-cordon-splits-welsh-napes
