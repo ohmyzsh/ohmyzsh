@@ -31,6 +31,7 @@ plugins=(... extract)
 | `lzma`            | LZMA archive                         |
 | `rar`             | WinRAR archive                       |
 | `rpm`             | RPM package                          |
+| `shar`            | Shell archive                        |
 | `sublime-package` | Sublime Text package                 |
 | `tar`             | Tarball                              |
 | `tar.bz2`         | Tarball with bzip2 compression       |

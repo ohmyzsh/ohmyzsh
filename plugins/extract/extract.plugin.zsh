@@ -69,6 +69,7 @@ extract() {
 				cd ..
 			;;
 			(*.zst) unzstd "$1" ;;
+			(*.shar) sh "$1" ;;
 			(*)
 				echo "extract: '$1' cannot be extracted" >&2
 				success=1
