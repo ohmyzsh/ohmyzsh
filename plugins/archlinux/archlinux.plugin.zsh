@@ -207,13 +207,13 @@ function pacmansignkeys() {
 
 if (( $+commands[xdg-open] )); then
   function pacweb() {
-    pkg="$1"
-    infos="$(LANG=C pacman -Si "$pkg")"
+    local pkg="$1"
+    local infos="$(LANG=C pacman -Si "$pkg")"
     if [[ -z "$infos" ]]; then
       return
     fi
-    repo="$(grep -m 1 '^Repo' <<< "$infos" | grep -oP '[^ ]+$')"
-    arch="$(grep -m 1 '^Arch' <<< "$infos" | grep -oP '[^ ]+$')"
+    local repo="$(grep -m 1 '^Repo' <<< "$infos" | grep -oP '[^ ]+$')"
+    local arch="$(grep -m 1 '^Arch' <<< "$infos" | grep -oP '[^ ]+$')"
     xdg-open "https://www.archlinux.org/packages/$repo/$arch/$pkg/" &>/dev/null
   }
 fi
