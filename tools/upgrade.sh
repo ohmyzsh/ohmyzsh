@@ -1,5 +1,9 @@
 #!/usr/bin/env zsh
 
+if [ -z "$ZSH_VERSION" ]; then
+  exec zsh "$0"
+fi
+
 cd "$ZSH"
 
 # Use colors, but only if connected to a terminal
