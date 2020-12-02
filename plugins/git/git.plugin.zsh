@@ -31,6 +31,10 @@ function work_in_progress() {
 
 # Check if main exists and use instead of master
 function git_main_branch() {
+  local ref
+  ref=$(__git_prompt_git symbolic-ref --quiet HEAD 2> /dev/null)
+  local ret=$?
+  [[ $ret == 128 ]] && return  # no git repo.
   local branch
   for branch in main trunk; do
     if command git show-ref -q --verify refs/heads/$branch; then
