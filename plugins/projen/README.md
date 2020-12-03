@@ -12,9 +12,19 @@ plugins=(... projen)
 
 * `pj_install` installs the `npm` module globally
 
-* `pj` runs `npx projen`
+* `pgjn='projen new'`
+* `pgjv='projen --version'`
 
-* `pjn` runs `projen new`
+* `pj='npx projen'`
+
+* `pjv='pj --version'`
+* `pjb='pj build'`
+
+* `pjd='pj deploy'`
+* `pjdd='pj diff'`
+* `pjD='pj destroy'`
+
+* `pjU-'pj projen:upgrade'`
 
 ## Dependencies
 
