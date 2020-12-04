@@ -71,7 +71,7 @@ if git pull --rebase --stat origin master; then
 
     # Display changelog with less if available, otherwise just print it to the terminal
     if (( $+commands[less] )); then
-      command less -R <("$ZSH/tools/changelog.sh" HEAD "$last_commit")
+      "$ZSH/tools/changelog.sh" HEAD "$last_commit" --text | command less -R
     else
       "$ZSH/tools/changelog.sh" HEAD "$last_commit"
     fi
