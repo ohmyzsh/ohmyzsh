@@ -248,7 +248,7 @@ function display-release {
     case "$output" in
     raw) printf "$subject" ;;
     # In text mode, highlight (#<issue>) and dim text between `backticks`
-    text) sed -E $'s|#([0-9]+)|\e[32m#\\1\e[0m|g;s|`(.+)`|`\e[2m\\1\e[0m`|g' <<< "$subject" ;;
+    text) sed -E $'s|#([0-9]+)|\e[32m#\\1\e[0m|g;s|`([^`]+)`|`\e[2m\\1\e[0m`|g' <<< "$subject" ;;
     # In markdown mode, link to (#<issue>) issues
     md) sed -E 's|#([0-9]+)|[#\1](https://github.com/ohmyzsh/ohmyzsh/issues/\1)|g' <<< "$subject" ;;
     esac
