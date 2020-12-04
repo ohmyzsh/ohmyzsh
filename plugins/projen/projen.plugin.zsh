@@ -14,4 +14,4 @@ alias pjd='pj deploy'
 alias pjdd='pj diff'
 alias pjD='pj destroy'
 
-alias pjU-'pj projen:upgrade'
+alias pjU='pj projen:upgrade'
