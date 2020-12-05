@@ -27,6 +27,7 @@ alias wpcrs='wp cron schedule'
 alias wpcrt='wp cron test'
 
 # Db
+alias wpreset='wp db reset'
 
 # Eval
 
