@@ -171,14 +171,13 @@ function paclist() {
 }
 
 function pacdisowned() {
-  emulate -L zsh
-
+  local tmp db fs
   tmp=${TMPDIR-/tmp}/pacman-disowned-$UID-$$
   db=$tmp/db
   fs=$tmp/fs
 
   mkdir "$tmp"
-  trap  'rm -rf "$tmp"' EXIT
+  trap 'rm -rf "$tmp"' EXIT
 
   pacman -Qlq | sort -u > "$db"
 
@@ -189,15 +188,14 @@ function pacdisowned() {
 }
 
 function pacmanallkeys() {
-  emulate -L zsh
   curl -s https://www.archlinux.org/people/{developers,trustedusers}/ | \
     awk -F\" '(/pgp.mit.edu/) { sub(/.*search=0x/,""); print $1}' | \
     xargs sudo pacman-key --recv-keys
 }
 
 function pacmansignkeys() {
-  emulate -L zsh
-  for key in $*; do
+  local key
+  for key in $@; do
     sudo pacman-key --recv-keys $key
     sudo pacman-key --lsign-key $key
     printf 'trust\n3\n' | sudo gpg --homedir /etc/pacman.d/gnupg \
@@ -207,13 +205,13 @@ function pacmansignkeys() {
 
 if (( $+commands[xdg-open] )); then
   function pacweb() {
-    pkg="$1"
-    infos="$(LANG=C pacman -Si "$pkg")"
+    local pkg="$1"
+    local infos="$(LANG=C pacman -Si "$pkg")"
     if [[ -z "$infos" ]]; then
       return
     fi
-    repo="$(grep -m 1 '^Repo' <<< "$infos" | grep -oP '[^ ]+$')"
-    arch="$(grep -m 1 '^Arch' <<< "$infos" | grep -oP '[^ ]+$')"
+    local repo="$(grep -m 1 '^Repo' <<< "$infos" | grep -oP '[^ ]+$')"
+    local arch="$(grep -m 1 '^Arch' <<< "$infos" | grep -oP '[^ ]+$')"
     xdg-open "https://www.archlinux.org/packages/$repo/$arch/$pkg/" &>/dev/null
   }
 fi
