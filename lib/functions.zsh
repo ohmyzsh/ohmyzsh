@@ -14,7 +14,7 @@ function upgrade_oh_my_zsh() {
   fi
 
   # Run update script
-  env ZSH="$ZSH" zsh -f "$ZSH/tools/upgrade.sh"
+  env ZSH="$ZSH" zsh -f "$ZSH/tools/upgrade.sh" --interactive
   local ret=$?
   # Update last updated file
   zmodload zsh/datetime
