@@ -2,14 +2,6 @@
 # A command line interface for WordPress
 # https://wp-cli.org/
 
-# Cache
-
-# Cap
-
-# CLI
-
-# Comment
-
 # Core
 alias wpcc='wp core config'
 alias wpcd='wp core download'
@@ -27,18 +19,12 @@ alias wpcrs='wp cron schedule'
 alias wpcrt='wp cron test'
 
 # Db
-
-# Eval
-
-# Eval-File
-
-# Export
-
-# Help
-
-# Import
-
-# Media
+alias wpdbe='wp db export'
+alias wpdbi='wp db import'
+alias wpdbcr='wp db create'
+alias wpdbs='wp db search'
+alias wpdbch='wp db check'
+alias wpdbr='wp db repair'
 
 # Menu
 alias wpmc='wp menu create'
@@ -46,10 +32,6 @@ alias wpmd='wp menu delete'
 alias wpmi='wp menu item'
 alias wpml='wp menu list'
 alias wpmlo='wp menu location'
-
-# Network
-
-# Option
 
 # Plugin
 alias wppa='wp plugin activate'
@@ -77,24 +59,8 @@ alias wppom='wp post meta'
 alias wppou='wp post update'
 alias wppourl='wp post url'
 
-# Rewrite
-
-# Role
-
-# Scaffold
-
-# Search-Replace
-
-# Shell
-
 # Sidebar
 alias wpsbl='wp sidebar list'
-
-# Site
-
-# Super-Admin
-
-# Term
 
 # Theme
 alias wpta='wp theme activate'
@@ -110,8 +76,6 @@ alias wptp='wp theme path'
 alias wpts='wp theme search'
 alias wptst='wp theme status'
 alias wptu='wp theme update'
-
-# Transient
 
 # User
 alias wpuac='wp user add-cap'
@@ -138,9 +102,8 @@ alias wpwm='wp widget move'
 alias wpwu='wp widget update'
 
 
+# Completion for wp
 autoload -U +X bashcompinit && bashcompinit
-# bash completion for the `wp` command
-
 _wp_complete() {
 	local cur=${COMP_WORDS[COMP_CWORD]}
 
