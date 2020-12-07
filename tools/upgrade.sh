@@ -1,5 +1,9 @@
 #!/usr/bin/env zsh
 
+if [ -z "$ZSH_VERSION" ]; then
+  exec zsh "$0"
+fi
+
 cd "$ZSH"
 
 # Use colors, but only if connected to a terminal
@@ -29,7 +33,7 @@ if [ -t 1 ]; then
 fi
 
 # Update upstream remote to ohmyzsh org
-git remote -v | while read remote url _; do
+git remote -v | while read remote url extra; do
   case "$url" in
   https://github.com/robbyrussell/oh-my-zsh(|.git))
     git remote set-url "$remote" "https://github.com/ohmyzsh/ohmyzsh.git"
@@ -67,7 +71,7 @@ if git pull --rebase --stat origin master; then
 
     # Display changelog with less if available, otherwise just print it to the terminal
     if (( $+commands[less] )); then
-      command less -R <("$ZSH/tools/changelog.sh" HEAD "$last_commit")
+      "$ZSH/tools/changelog.sh" HEAD "$last_commit" --text | command less -R
     else
       "$ZSH/tools/changelog.sh" HEAD "$last_commit"
     fi

@@ -384,7 +384,7 @@ function _omz::update {
   # Remove update lock if it exists
   command rm -rf "$ZSH/log/update.lock"
   # Restart the zsh session
-  if [[ $ret -eq 0 ]]; then
+  if [[ $ret -eq 0 && "$1" != --unattended ]]; then
     # Check whether to run a login shell
     [[ "$ZSH_ARGZERO" = -* ]] && exec -l "${ZSH_ARGZERO#-}" || exec "$ZSH_ARGZERO"
   fi
