@@ -12,7 +12,7 @@ function __git_prompt_git() {
 function git_prompt_info() {
   # If we are on a folder not tracked by git, get out.
   # Otherwise, check for hide-info at global and local repository level
-  if ! $(__git_prompt_git rev-parse --git-dir &> /dev/null) \
+  if ! __git_prompt_git rev-parse --git-dir &> /dev/null \
      || [[ "$(__git_prompt_git config --get oh-my-zsh.hide-info 2>/dev/null)" == 1 ]]; then
     return 0
   fi
