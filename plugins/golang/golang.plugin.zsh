@@ -41,7 +41,7 @@ __go_tool_complete() {
     return
   fi
   build_flags=(
-    '-a[force reinstallation of packages that are already up-to-date]'
+    '-a[force reinstallation of packages that are already up to date]'
     '-n[print the commands but do not run them]'
     '-p[number of parallel builds]:number'
     '-race[enable data race detection]'

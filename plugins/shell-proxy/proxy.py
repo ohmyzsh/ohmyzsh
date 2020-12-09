@@ -30,7 +30,7 @@ def merge(mapping: dict):
 class CommandSet:
     proxies = make_proxies(get_http_proxy())
     aliases = {
-        _: "env NAME=%s %s" % (_, ssh_agent)
+        _: "env __SSH_PROGRAM_NAME__=%s %s" % (_, ssh_agent)
         for _ in ("ssh", "sftp", "scp", "slogin", "ssh-copy-id")
     }
 

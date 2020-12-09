@@ -10,28 +10,35 @@ plugins=(... brew)
 
 ## Aliases
 
-| Alias   | Command               | Description                                                                                                               |
-|---------|-----------------------|---------------------------------------------------------------------------------------------------------------------------|
-| bc      | `brew cleanup`        | Remove stale lock files and outdated downloads for all formulae and casks, and remove old versions of installed formulae. |
-| bci     | `brew cask info`      | Displays information about the given cask.                                                                                |
-| bcin    | `brew cask install`   | Install the given cask.                                                                                                   |
-| bcrin   | `brew cask reinstall` | Reinstall the given cask.                                                                                                 |
-| bcl     | `brew cask list`      | List installed casks.                                                                                                     |
-| bco     | `brew cask outdated`  | Report all outdated casks.                                                                                                |
-| bcup    | `brew cask upgrade`   | Updates all outdated casks.                                                                                               |
-| bl      | `brew list`           | List all installed formulae.                                                                                              |
-| bo      | `brew outdated`       | List installed formulae that have an updated version available.                                                           |
-| bu      | `brew update`         | Update brew and all installed formulae.                                                                                   |
-| bup     | `brew upgrade`        | Upgrade outdated, unpinned brews.                                                                                         |
-| brewp   | `brew pin`            | Pin a specified formula so that it's not upgraded.                                                                        |
-| brews   | `bl -1`               | List installed formulae or the installed files for a given formula.                                                       |
-| brewsp  | `bl --pinned`         | List pinned formulae, or show the version of a given formula.                                                             |
-| bubo    | `bu && bo`            | Update Homebrew and all formulae, then list outdated formulae.                                                            |
-| bubc    | `bup && bc`           | Upgrade outdated formulae, then run cleanup.                                                                              |
-| bubu    | `bubo && bubc`        | Do the last two operations above.                                                                                         |
-| bcubo   | `bu && bco`           | Update Homebrew and all formulae, then list outdated casks.                                                               |
-| bubobco | `bubo && bco`         | Fetch the newest version of Homebrew and all formulae, then list outdated formulae and casks.                             |
-| bcubc   | `bcrin $(bco) && bc`  | Update outdated casks, then run cleanup.                                                                                  |
+| Alias     | Command                                                       | Description                                                                                                               |
+|-----------|---------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
+| `bc`      | `brew cleanup`                                                | Remove stale lock files and outdated downloads for all formulae and casks, and remove old versions of installed formulae. |
+| `bci`     | `brew cask info`                                              | Displays information about the given cask.                                                                                |
+| `bcin`    | `brew cask install`                                           | Install the given cask.                                                                                                   |
+| `bcrin`   | `brew cask reinstall`                                         | Reinstall the given cask.                                                                                                 |
+| `bcl`     | `brew cask list`                                              | List installed casks.                                                                                                     |
+| `bco`     | `brew cask outdated`                                          | Report all outdated casks.                                                                                                |
+| `bcup`    | `brew cask upgrade`                                           | Updates all outdated casks.                                                                                               |
+| `bl`      | `brew list`                                                   | List all installed formulae.                                                                                              |
+| `bo`      | `brew outdated`                                               | List installed formulae that have an updated version available.                                                           |
+| `bu`      | `brew update`                                                 | Update brew and all installed formulae.                                                                                   |
+| `bup`     | `brew upgrade`                                                | Upgrade outdated, unpinned brews.                                                                                         |
+| `brewp`   | `brew pin`                                                    | Pin a specified formula so that it's not upgraded.                                                                        |
+| `brews`   | `bl -1`                                                       | List installed formulae or the installed files for a given formula.                                                       |
+| `brewsp`  | `bl --pinned`                                                 | List pinned formulae, or show the version of a given formula.                                                             |
+| `bubo`    | `bu && bo`                                                    | Update Homebrew and all formulae, then list outdated formulae.                                                            |
+| `bubc`    | `bup && bc`                                                   | Upgrade outdated formulae, then run cleanup.                                                                              |
+| `bubu`    | `bubo && bubc`                                                | Do the last two operations above.                                                                                         |
+| `bubobco` | `bubo && bco`                                                 | Fetch the newest version of Homebrew and all formulae, then list outdated formulae and casks.                             |
+| `brewp`   | `brew pin`                                                    | Pin a specified formula so that it's not upgraded.                                                                        |
+| `brews`   | `brew list -1`                                                | List installed formulae or the installed files for a given formula.                                                       |
+| `brewsp`  | `brew list --pinned`                                          | List pinned formulae, or show the version of a given formula.                                                             |
+| `bubo`    | `brew update && brew outdated`                                | Update Homebrew data, then list outdated formulae and casks.                                                              |
+| `bubc`    | `brew upgrade && brew cleanup`                                | Upgrade outdated formulae and casks, then run cleanup.                                                                    |
+| `bubu`    | `bubo && bubc`                                                | Do the last two operations above.                                                                                         |
+| `buf`     | `brew upgrade --formula`                                      | Upgrade only formulas (not casks).                                                                                        |
+| `bcubo`   | `brew update && brew outdated --cask`                         | Update Homebrew data, then list outdated casks.                                                                           |
+| `bcubc`   | `brew cask reinstall $(brew outdated --cask) && brew cleanup` | Update outdated casks, then run cleanup.                                                                                  |
 
 ## Completion
 
