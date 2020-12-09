@@ -112,3 +112,18 @@ if [ "x$YROOT_NAME" != "x" ]; then
 fi
 export CSCOPE_EDITOR=vim
 export TERM=xterm-256color
+# function to fix "Could not connect to $SSH_AUTH_SOCK" issue in tmux
+fixup_ssh_auth_sock() {
+    if [[ -n ${SSH_AUTH_SOCK} && ! -e ${SSH_AUTH_SOCK}  ]]
+    then
+        local new_sock=$(echo /tmp/ssh-*/agent.*(=UNomY1))
+        if [[ -n ${new_sock}  ]]
+        then
+            export SSH_AUTH_SOCK=${new_sock}
+        fi
+    fi
+}
+if [[ -n ${SSH_AUTH_SOCK}  ]]
+then
+    add-zsh-hook preexec fixup_ssh_auth_sock
+fi
