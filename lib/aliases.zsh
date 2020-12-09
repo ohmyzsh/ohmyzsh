@@ -41,7 +41,9 @@ alias ios='open /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimul
 alias code='~/Dropbox/Code'
 
 # SSHuttle
-alias tunnel='sshuttle -D --pidfile=/tmp/sshuttle.pid -r abiggs@10.26.0.80 10.26.196.0/24'
+# alias tunnel='sshuttle -D --pidfile=/tmp/sshuttle.pid -r abiggs@10.26.0.80 10.26.196.0/24'
+# alias stoptunnel='[[ -f /tmp/sshuttle.pid ]] && kill `cat /tmp/sshuttle.pid`'
+alias tunnel='sshuttle -D --dns --pidfile=/tmp/sshuttle.pid -r abiggs@192.168.1.115 0/0'
 alias stoptunnel='[[ -f /tmp/sshuttle.pid ]] && kill `cat /tmp/sshuttle.pid`'
 
 # Dropbox
