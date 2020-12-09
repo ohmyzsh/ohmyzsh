@@ -97,6 +97,12 @@ alias drv="drush version"
 alias drvd="drush variable-del"
 alias drvg="drush variable-get"
 alias drvs="drush variable-set"
+alias druli="drush uli"
+alias drcex="drush cex -y"
+alias drcim="drush cim -y"
+alias drws="drush ws"
+alias drwse="drush ws --extended"
+alias drwst="drush ws --tail"
 
 # Enable drush autocomplete support
 autoload bashcompinit
