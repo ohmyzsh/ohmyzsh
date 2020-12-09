@@ -111,6 +111,7 @@ if [ "x$YROOT_NAME" != "x" ]; then
     export CSCOPE_DB
 fi
 export CSCOPE_EDITOR=vim
+export EDITOR=vim
 export TERM=xterm-256color
 # function to fix "Could not connect to $SSH_AUTH_SOCK" issue in tmux
 fixup_ssh_auth_sock() {
