@@ -73,7 +73,9 @@ function drnew() {
 alias dr="drush"
 alias drca="drush cc all" # Deprecated for Drush 8
 alias drcb="drush cc block" # Deprecated for Drush 8
+alias drcex="drush config:export -y"
 alias drcg="drush cc registry" # Deprecated for Drush 8
+alias drcim="drush config:import -y"
 alias drcj="drush cc css-js"
 alias drcm="drush cc menu"
 alias drcml="drush cc module-list"
@@ -88,12 +90,16 @@ alias drfu="drush features-update -y"
 alias drif="drush image-flush --all"
 alias drpm="drush pm-list --type=module"
 alias drst="drush core-status"
+alias druli="drush user:login"
 alias drup="drush updatedb"
 alias drups="drush updatedb-status"
 alias drv="drush version"
 alias drvd="drush variable-del"
 alias drvg="drush variable-get"
 alias drvs="drush variable-set"
+alias drws="drush watchdog:show"
+alias drwse="drush watchdog:show --extended"
+alias drwst="drush watchdog:tail"
 
 # Enable drush autocomplete support
 autoload bashcompinit
