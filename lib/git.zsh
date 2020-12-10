@@ -21,7 +21,7 @@ function git_prompt_info() {
   ref=$(__git_prompt_git symbolic-ref --short HEAD 2> /dev/null) \
   || ref=$(__git_prompt_git rev-parse --short HEAD 2> /dev/null) \
   || return 0
- 
+
   # Use global ZSH_THEME_GIT_SHOW_UPSTREAM=1 for including upstream remote info
   local upstream
   if (( ${+ZSH_THEME_GIT_SHOW_UPSTREAM} )); then
