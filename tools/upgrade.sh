@@ -70,10 +70,12 @@ if git pull --rebase --stat origin master; then
     message="Hooray! Oh My Zsh has been updated!"
 
     # Display changelog with less if available, otherwise just print it to the terminal
-    if (( $+commands[less] )); then
-      "$ZSH/tools/changelog.sh" HEAD "$last_commit" --text | command less -R
-    else
-      "$ZSH/tools/changelog.sh" HEAD "$last_commit"
+    if [[ "$1" = --interactive ]]; then
+      if (( $+commands[less] )); then
+        "$ZSH/tools/changelog.sh" HEAD "$last_commit" --text | LESS= command less -R
+      else
+        "$ZSH/tools/changelog.sh" HEAD "$last_commit"
+      fi
     fi
   fi
 
