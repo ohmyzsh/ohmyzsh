@@ -51,7 +51,7 @@ alias cget='curl -s https://getcomposer.org/installer | php'
 
 # Add Composer's global binaries to PATH, using Composer if available.
 if (( $+commands[composer] )); then
-    autoload -Uz _store_cache _retrieve_cache
+    autoload -Uz _store_cache _retrieve_cache _cache_invalid
 
     _retrieve_cache composer
 
