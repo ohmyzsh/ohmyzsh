@@ -15,7 +15,7 @@ genpass-apple() {
     e 14 f 15 g 16 h 17 i 18 j 19 k 20 l 21 m 22 n 23 o 24 p 25 q 26 r 27 s 28 \
     t 29 u 30 v 31 w 32 x 33 y 34 z 35)
 
-  for i in {1.."$num"}; do
+  for i in {1..$num}; do
     local pseudo=""
 
     for j in {1..12}; do
@@ -28,7 +28,7 @@ genpass-apple() {
     local -i digit_pos=$base36[$p[$i]]
     local -i char_pos=$digit_pos
 
-    while [[ "$digit_pos" -eq "$char_pos" ]]; do
+    while [[ $digit_pos == $char_pos ]]; do
       char_pos=$base36[$(LC_ALL=C tr -cd 0-9a-z < /dev/urandom | head -c 1)]
     done
 
@@ -51,7 +51,7 @@ genpass-monkey() {
   local pass=$(LC_ALL=C tr -cd '0-9a-hjkmnp-tv-z' < /dev/urandom \
     | head -c $((26*$num)))
 
-  for i in {1.."$num"}; do
+  for i in {1..$num}; do
     printf "${pass:$((26*($i-1))):26}\n"
   done
 }
@@ -64,7 +64,7 @@ genpass-xkcd() {
   local dict=$(grep -E '^[a-zA-Z]{,6}$' /usr/share/dict/words)
   local -i n=$((int(ceil(128*log(2)/log(${(w)#dict})))))
 
-  for i in {1.."$num"}; do
+  for i in {1..$num}; do
     printf "$n-"
     printf "$dict" | shuf -n "$n" | paste -sd '-'
   done
