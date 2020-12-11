@@ -1,7 +1,7 @@
 autoload -U regexp-replace
 zmodload zsh/mathfunc
 
-gen-apple-pass() {
+gennpass-apple() {
   [[ $1 =~ '^[0-9]+$' ]] && local num=$1 || local num=1
 
   local i j
@@ -41,7 +41,7 @@ gen-apple-pass() {
   done
 }
 
-gen-monkey-pass() {
+gennpass-monkey() {
   [[ $1 =~ '^[0-9]+$' ]] && local num=$1 || local num=1
 
   local i
@@ -52,7 +52,7 @@ gen-monkey-pass() {
   done
 }
 
-gen-xkcd-pass() {
+gennpass-xkcd() {
   [[ $1 =~ '^[0-9]+$' ]] && local num=$1 || local num=1
 
   local i

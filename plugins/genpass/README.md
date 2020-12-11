@@ -15,46 +15,46 @@ Install:
 
     plugins=(... genpass)
 
-### gen-apple-pass
+### gennpass-apple
 Generates a pronounceable pseudoword passphrase of the "cvccvc" consonant/vowel
 syntax, inspired by [Apple's iCloud Keychain password generator][1]. Each
 pseudoword has exactly 1 digit placed at the edge of a "word" and exactly 1
 capital letter to satisfy most password security requirements.
 
-    % gen-apple-pass 
+    % gennpass-apple
     gelcyv-foqtam-fotqoh-viMleb-lexduv-6ixfuk
 
-    % gen-apple-pass 3
+    % gennpass-apple 3
     japvyz-qyjti4-kajrod-nubxaW-hukkan-dijcaf
     vydpig-fucnul-3ukpog-voggom-zygNad-jepgad
     zocmez-byznis-hegTaj-jecdyq-qiqmiq-5enwom
 
 [1]: https://developer.apple.com/password-rules/
 
-### gen-monkey-pass
+### gennpass-monkey
 Generates visually unambiguous random meaningless strings using [Crockford's
 base32][2].
 
-    % gen-monkey-pass 
+    % gennpass-monkey
     xt7gn976e7jj3fstgpy27330x3
 
-    % gen-monkey-pass 3
+    % gennpass-monkey 3
     n1qqwtzgejwgqve9yzf2gxvx4m
     r2n3f5s6vbqs2yx7xjnmahqewy
     296w9y9rts3p5r9yay0raek8e5
 
 [2]: https://www.crockford.com/base32.html
 
-### gen-xkcd-pass
+### gennpass-xkcd
 Generates passphrases from `/usr/share/dict/words` inspired by the [famous (and
 slightly misleading) XKCD comic][3]. Each passphrase is prepended with a digit
 showing the number of words in the passphrase to adhere to password security
 requirements that require digits. Each word is 6 characters or less.
 
-    % gen-xkcd-pass
+    % gennpass-xkcd
     9-eaten-Slav-rife-aired-hill-cordon-splits-welsh-napes
 
-    % gen-xkcd-pass 3
+    % gennpass-xkcd 3
     9-worker-Vlad-horde-shrubs-smite-thwart-paw-alters-prawns
     9-tutors-stink-rhythm-junk-snappy-hooray-barbs-mewl-clomp
     9-vital-escape-Angkor-Huff-wet-Mayra-abbés-putts-guzzle
