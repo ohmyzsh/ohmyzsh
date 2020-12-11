@@ -2,9 +2,10 @@ autoload -U regexp-replace
 zmodload zsh/mathfunc
 
 genpass-apple() {
-  [[ $1 =~ '^[0-9]+$' ]] && local num=$1 || local num=1
+  typeset -i i j num
 
-  local i j
+  [[ $1 =~ '^[0-9]+$' ]] && num=$1 || num=1
+
   local c="$(LC_ALL=C tr -cd b-df-hj-np-tv-xz < /dev/urandom | head -c $((24*$num)))"
   local v="$(LC_ALL=C tr -cd aeiouy < /dev/urandom | head -c $((12*$num)))"
   local n="$(LC_ALL=C tr -cd 0-9 < /dev/urandom | head -c $num)"
@@ -23,8 +24,8 @@ genpass-apple() {
       pseudo="${pseudo}${c:$((24*$i+2*${j}-25)):1}"   # consonant
     done
 
-    local digit_pos=$base36[$p[$i]]
-    local char_pos=$digit_pos
+    typeset -i digit_pos=$base36[$p[$i]]
+    typeset -i char_pos=$digit_pos
 
     while [[ "$digit_pos" -eq "$char_pos" ]]; do
       char_pos=$base36[$(LC_ALL=C tr -cd 0-9a-z < /dev/urandom | head -c 1)]
@@ -42,9 +43,10 @@ genpass-apple() {
 }
 
 genpass-monkey() {
-  [[ $1 =~ '^[0-9]+$' ]] && local num=$1 || local num=1
+  typeset -i i num
 
-  local i
+  [[ $1 =~ '^[0-9]+$' ]] && num=$1 || num=1
+
   local pass=$(LC_ALL=C tr -cd '0-9a-hjkmnp-tv-z' < /dev/urandom | head -c $((26*$num)))
 
   for i in {1.."$num"}; do
@@ -53,11 +55,12 @@ genpass-monkey() {
 }
 
 genpass-xkcd() {
-  [[ $1 =~ '^[0-9]+$' ]] && local num=$1 || local num=1
+  typeset -i i num
 
-  local i
+  [[ $1 =~ '^[0-9]+$' ]] && num=$1 || num=1
+
   local dict=$(grep -E '^[a-zA-Z]{,6}$' /usr/share/dict/words)
-  local n=$((int(ceil(128*log(2)/log(${(w)#dict})))))
+  typeset -i n=$((int(ceil(128*log(2)/log(${(w)#dict})))))
 
   for i in {1.."$num"}; do
     printf "$n-"
