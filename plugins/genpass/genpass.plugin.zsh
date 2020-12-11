@@ -2,17 +2,18 @@ autoload -U regexp-replace
 zmodload zsh/mathfunc
 
 genpass-apple() {
-  typeset -i i j num
+  local -i i j num
 
   [[ $1 =~ '^[0-9]+$' ]] && num=$1 || num=1
 
-  local c="$(LC_ALL=C tr -cd b-df-hj-np-tv-xz < /dev/urandom | head -c $((24*$num)))"
+  local c="$(LC_ALL=C tr -cd b-df-hj-np-tv-xz < /dev/urandom \
+    | head -c $((24*$num)))"
   local v="$(LC_ALL=C tr -cd aeiouy < /dev/urandom | head -c $((12*$num)))"
   local n="$(LC_ALL=C tr -cd 0-9 < /dev/urandom | head -c $num)"
   local p="$(LC_ALL=C tr -cd 056bchinotuz < /dev/urandom | head -c $num)"
-  typeset -A base36=(0 0 1 1 2 2 3 3 4 4 5 5 6 6 7 7 8 8 9 9 a 10 b 11 c 12 \
-    d 13 e 14 f 15 g 16 h 17 i 18 j 19 k 20 l 21 m 22 n 23 o 24 p 25 q 26 r 27 \
-    s 28 t 29 u 30 v 31 w 32 x 33 y 34 z 35)
+  local -A base36=(0 0 1 1 2 2 3 3 4 4 5 5 6 6 7 7 8 8 9 9 a 10 b 11 c 12 d 13 \
+    e 14 f 15 g 16 h 17 i 18 j 19 k 20 l 21 m 22 n 23 o 24 p 25 q 26 r 27 s 28 \
+    t 29 u 30 v 31 w 32 x 33 y 34 z 35)
 
   for i in {1.."$num"}; do
     local pseudo=""
@@ -24,8 +25,8 @@ genpass-apple() {
       pseudo="${pseudo}${c:$((24*$i+2*${j}-25)):1}"   # consonant
     done
 
-    typeset -i digit_pos=$base36[$p[$i]]
-    typeset -i char_pos=$digit_pos
+    local -i digit_pos=$base36[$p[$i]]
+    local -i char_pos=$digit_pos
 
     while [[ "$digit_pos" -eq "$char_pos" ]]; do
       char_pos=$base36[$(LC_ALL=C tr -cd 0-9a-z < /dev/urandom | head -c 1)]
@@ -43,11 +44,12 @@ genpass-apple() {
 }
 
 genpass-monkey() {
-  typeset -i i num
+  local -i i num
 
   [[ $1 =~ '^[0-9]+$' ]] && num=$1 || num=1
 
-  local pass=$(LC_ALL=C tr -cd '0-9a-hjkmnp-tv-z' < /dev/urandom | head -c $((26*$num)))
+  local pass=$(LC_ALL=C tr -cd '0-9a-hjkmnp-tv-z' < /dev/urandom \
+    | head -c $((26*$num)))
 
   for i in {1.."$num"}; do
     printf "${pass:$((26*($i-1))):26}\n"
@@ -55,12 +57,12 @@ genpass-monkey() {
 }
 
 genpass-xkcd() {
-  typeset -i i num
+  local -i i num
 
   [[ $1 =~ '^[0-9]+$' ]] && num=$1 || num=1
 
   local dict=$(grep -E '^[a-zA-Z]{,6}$' /usr/share/dict/words)
-  typeset -i n=$((int(ceil(128*log(2)/log(${(w)#dict})))))
+  local -i n=$((int(ceil(128*log(2)/log(${(w)#dict})))))
 
   for i in {1.."$num"}; do
     printf "$n-"
