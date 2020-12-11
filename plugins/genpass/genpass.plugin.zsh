@@ -61,6 +61,6 @@ gen-xkcd-pass() {
 
   for i in {1.."$num"}; do
     printf "$n-"
-    printf "$dict" | shuf --random-source=/dev/urandom -n "$n" | paste -sd '-'
+    printf "$dict" | shuf -n "$n" | paste -sd '-'
   done
 }
