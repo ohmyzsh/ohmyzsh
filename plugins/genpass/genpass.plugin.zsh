@@ -83,8 +83,9 @@ genpass-xkcd() {
   local dict=$(grep -E '^[a-zA-Z]{,6}$' /usr/share/dict/words)
 
   # Calculate the base-2 entropy of each word in $dict
-  # Entropy = log2($dict). For 128-bits, solve: 128 = entropy * log2($dict)
-  # Recall log2(n) = log(n)/log(2)
+  # Entropy is e = L * log2(C), where L is the length of the password (here,
+  # in words) and C the size of the character set (here, words in $dict).
+  # Solve for e = 128 bits of entropy. Recall: log2(n) = log(n)/log(2).
   local -i n=$((int(ceil(128*log(2)/log(${(w)#dict})))))
 
   for i in {1..$num}; do
