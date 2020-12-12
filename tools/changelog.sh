@@ -86,11 +86,15 @@ function parse-commit {
 
   # Return subject if the body or subject match the breaking change format
   function commit:is-breaking {
-    local subject="$1" body="$2"
+    local subject="$1" body="$2" message
 
     if [[ "$body" =~ "BREAKING CHANGE: (.*)" || \
       "$subject" =~ '^[^ :\)]+\)?!: (.*)$' ]]; then
-      echo "${match[1]}"
+      message="${match[1]}"
+      # skip next paragraphs (separated by two newlines or more)
+      message="${message%%$'\n\n'*}"
+      # ... and replace newlines with spaces
+      echo "${message//$'\n'/ }"
     else
       return 1
     fi
