@@ -1,5 +1,5 @@
-# README
-## genpass
+# genpass
+
 This plugin provides three unique password generators for ZSH. Each generator
 has at least a 128-bit security margin and generates passwords from the
 cryptographically secure `/dev/urandom`. Each generator can also take an
@@ -11,11 +11,12 @@ Requirements:
 * GNU coreutils (or appropriate for your system)
 * Word list providing `/usr/share/dict/words`
 
-Install:
+To use it, add `genpass` to the plugins array in your zshrc file:
 
     plugins=(... genpass)
 
-### genpass-apple
+## genpass-apple
+
 Generates a pronounceable pseudoword passphrase of the "cvccvc" consonant/vowel
 syntax, inspired by [Apple's iCloud Keychain password generator][1]. Each
 pseudoword has exactly 1 digit placed at the edge of a "word" and exactly 1
@@ -31,7 +32,8 @@ capital letter to satisfy most password security requirements.
 
 [1]: https://developer.apple.com/password-rules/
 
-### genpass-monkey
+## genpass-monkey
+
 Generates visually unambiguous random meaningless strings using [Crockford's
 base32][2].
 
@@ -45,7 +47,8 @@ base32][2].
 
 [2]: https://www.crockford.com/base32.html
 
-### genpass-xkcd
+## genpass-xkcd
+
 Generates passphrases from `/usr/share/dict/words` inspired by the [famous (and
 slightly misleading) XKCD comic][3]. Each passphrase is prepended with a digit
 showing the number of words in the passphrase to adhere to password security
