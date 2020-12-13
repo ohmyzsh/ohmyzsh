@@ -80,7 +80,7 @@ genpass-xkcd() {
   [[ $1 =~ '^[0-9]+$' ]] && num=$1 || num=1
 
   # Get all alphabetic words of at most 6 characters in length
-  local dict=$(LC_ALL=C grep -E '^[a-zA-Z]{,6}$' /usr/share/dict/words)
+  local dict=$(LC_ALL=C grep -E '^[a-zA-Z]{1,6}$' /usr/share/dict/words)
 
   # Calculate the base-2 entropy of each word in $dict
   # Entropy is e = L * log2(C), where L is the length of the password (here,
