@@ -101,6 +101,6 @@ genpass-xkcd() {
 
   for i in {1..$num}; do
     printf "$n-"
-    printf "$dict" | shuf -n "$n" | paste -sd '-'
+    printf "$dict" | shuf -n "$n" | paste -sd '-' -
   done
 }
