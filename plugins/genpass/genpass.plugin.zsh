@@ -88,8 +88,16 @@ genpass-xkcd() {
   # Solve for e = 128 bits of entropy. Recall: log2(n) = log(n)/log(2).
   local -i n=$((int(ceil(128*log(2)/log(${(w)#dict})))))
 
-  for i in {1..$num}; do
+  # MacOS compatibility for paste command
+  if [[ "$OSTYPE" = darwin* ]]; then
+   for i in {1..$num}; do
+     printf "$n-"
+     printf "$dict" | shuf -n "$n" | paste -sd '-' -
+   done
+  else
+   for i in {1..$num}; do
     printf "$n-"
     printf "$dict" | shuf -n "$n" | paste -sd '-'
-  done
+   done
+  fi
 }
