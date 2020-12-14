@@ -2,6 +2,12 @@ function pj_install() {
   npm install -g projen
 }
 
+function pj_pr_rebuild() {
+  local pr="$1"
+
+  gh pr review "$pr" --comment --body "@projen rebuild"
+}
+
 alias pgjn='projen new'
 alias pgjv='projen --version'
 
@@ -15,3 +21,5 @@ alias pjdd='pj diff'
 alias pjD='pj destroy'
 
 alias pjU='pj projen:upgrade'
+
+alias pjR='pj_pr_rebuild'

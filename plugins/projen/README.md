@@ -11,6 +11,8 @@ plugins=(... projen)
 ## Plugin commands
 
 * `pj_install` installs the `npm` module globally
+* `pj_pr_rebuild` comments on the pr with @projen build which which will run the GiitHub Actions workflow
+
 
 * `pgjn='projen new'`
 * `pgjv='projen --version'`
@@ -24,7 +26,9 @@ plugins=(... projen)
 * `pjdd='pj diff'`
 * `pjD='pj destroy'`
 
-* `pjU-'pj projen:upgrade'`
+* `pjU='pj projen:upgrade'`
+
+* `pjR='pj_pr_rebuild'
 
 ## Dependencies
 
