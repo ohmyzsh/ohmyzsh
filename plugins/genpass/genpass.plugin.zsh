@@ -73,11 +73,16 @@ genpass-monkey() {
 
 genpass-xkcd() {
   # Generates a 128-bit XKCD-style passphrase
-  # EG, 9-mien-flood-Patti-buxom-dozes-ickier-pay-ailed-Foster
+  # e.g, 9-mien-flood-Patti-buxom-dozes-ickier-pay-ailed-Foster
   # Can take a numerical argument for generating extra passwords
 
   if (( ! $+commands[shuf] )); then
     echo >&2 "$0: \`shuf\` command not found. Install coreutils (\`brew install coreutils\` on macOS)."
+    return 1
+  fi
+
+  if [[ ! -e /usr/share/dict/words ]]; then
+    echo >&2 "$0: no wordlist found in \`/usr/share/dict/words\`. Install one first."
     return 1
   fi
 
