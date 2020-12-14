@@ -75,6 +75,13 @@ genpass-xkcd() {
   # Generates a 128-bit XKCD-style passphrase
   # EG, 9-mien-flood-Patti-buxom-dozes-ickier-pay-ailed-Foster
   # Can take a numerical argument for generating extra passwords
+  
+  #Check for presence of shuf command.  Not installed by default on MacOS
+  if ! command -v shuf > /dev/null 2>&1; then
+    echo "Note: you need to install shuf, depending on your OS or distribution. (For MacOS, brew install coreutils)"
+    return 1
+  fi
+  
   local -i i num
 
   [[ $1 =~ '^[0-9]+$' ]] && num=$1 || num=1
