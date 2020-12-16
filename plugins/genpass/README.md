@@ -5,21 +5,22 @@ has at least a 128-bit security margin and generates passwords from the
 cryptographically secure `/dev/urandom`. Each generator can also take an
 optional numeric argument to generate multiple passwords.
 
-Requirements:
-
-* `grep(1)`
-* GNU coreutils (or appropriate for your system)
-* Word list providing `/usr/share/dict/words`
-
-To use it, add `genpass` to the plugins array in your zshrc file:
+To use it from an interactive ZSH, add `genpass` to the plugins array in your
+zshrc file:
 
     plugins=(... genpass)
+
+You can also invoke password generators directly (they are implemented as
+standalone executable files), which can be handy when you need to generate
+passwords in a script:
+
+    ~/.oh-my-zsh/plugins/genpass/genpass-apple 3
 
 ## genpass-apple
 
 Generates a pronounceable pseudoword passphrase of the "cvccvc" consonant/vowel
 syntax, inspired by [Apple's iCloud Keychain password generator][1]. Each
-pseudoword has exactly 1 digit placed at the edge of a "word" and exactly 1
+password has exactly 1 digit placed at the edge of a "word" and exactly 1
 capital letter to satisfy most password security requirements.
 
     % genpass-apple
