@@ -1,0 +1,45 @@
+#compdef projen
+
+################################################################################
+# Description
+# -----------
+#
+#  Completion script for projen (https://github.com/projen/projen)
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Philip M. Gollucci <pgollucci@p6m7g8.com>
+#
+# ------------------------------------------------------------------------------
+
+_arguments \
+  '(- 1 *)--help[Show help]' \
+  '(--post)--no-post[Runs post-synthesis steps such as installing dependencies. (Use --no-post to skip)]' \
+  '(- 1 *)--version[show version number]' \
+  '*:: :->command_args'
+
+### Root
+case $state in
+  command_args)
+    case $words[1] in
+      new)
+        _arguments \
+         '1: :(awscdk-app-ts awscdk-construct cdk8s jsii nextjs nextjs-ts node project react-ts typescript typescript-app)' \
+         '*:: :->proj_args'
+        ;;
+    esac
+esac
+
+### projen new X
+case $state in
+  proj_args)
+    case $words[1] in
+      awscdk-app-ts)
+        _arguments \
+          '(--synth)--no-synth[Synthesize after creating .projenrc.js (use --no-synth to disable)]' \
+          '(--comments)--no-comments[Include commented out options in .projenrc.js (use --no-comments to disable)]' \
+          ;;
+    esac
+esac
