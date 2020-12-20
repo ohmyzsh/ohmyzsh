@@ -103,7 +103,7 @@ setup_ohmyzsh() {
     exit 1
   }
 
-  ostype=$(uname -o)
+  ostype=$(uname)
   if [ -z "${ostype%CYGWIN*}" ] && git --version | grep -q msysgit; then
     fmt_error "Windows/MSYS Git is not supported on Cygwin"
     fmt_error "Make sure the Cygwin git package is installed and is first on the \$PATH"
