@@ -101,7 +101,7 @@ alias gdcw='git diff --cached --word-diff'
 alias gdct='git describe --tags $(git rev-list --tags --max-count=1)'
 alias gds='git diff --staged'
 alias gdt='git diff-tree --no-commit-id --name-only -r'
-alias gdu='git diff @{u} -- $(git diff --name-only $(git_main_branch))'
+alias gdu='git diff @{u} -- $(git diff --name-only $(git_main_branch)) $(git diff --name-only $(git merge-base @{u} $(git_main_branch)) @{u})'
 alias gdw='git diff --word-diff'
 
 function gdnolock() {
