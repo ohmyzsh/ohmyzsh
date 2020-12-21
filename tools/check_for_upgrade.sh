@@ -9,7 +9,7 @@ fi
 # - git is unavailable on the system.
 if [[ "$DISABLE_AUTO_UPDATE" = true ]] \
    || [[ ! -w "$ZSH" || ! -O "$ZSH" ]] \
-   || ! command -v git &>/dev/null; then
+   || (( ${+commands[git]} )); then
   return
 fi
 
