@@ -5,16 +5,24 @@ typeset -g ZSH_LAST_WORKING_DIRECTORY
 autoload -U add-zsh-hook
 add-zsh-hook chpwd chpwd_last_working_dir
 chpwd_last_working_dir() {
-	if [ "$ZSH_SUBSHELL" = 0 ]; then
-		local cache_file="$ZSH_CACHE_DIR/last-working-dir"
-		pwd >| "$cache_file"
-	fi
+  if [ "$ZSH_SUBSHELL" = 0 ]; then
+    if [ "$SSH_USER" != "" ]; then
+      local cache_file="$ZSH_CACHE_DIR/last-working-dir"
+    else
+      local cache_file="$ZSH_CACHE_DIR/$SSH_USER-last-working-dir"
+    fi
+    pwd >| "$cache_file"
+  fi
 }
 
 # Changes directory to the last working directory
 lwd() {
-	local cache_file="$ZSH_CACHE_DIR/last-working-dir"
-	[[ -r "$cache_file" ]] && cd "$(cat "$cache_file")"
+  if [ "$SSH_USER" != "" ]; then
+    local cache_file="$ZSH_CACHE_DIR/last-working-dir"
+  else
+    local cache_file="$ZSH_CACHE_DIR/$SSH_USER-last-working-dir"
+  fi
+  [[ -r "$cache_file" ]] && cd "$(cat "$cache_file")"
 }
 
 # Jump to last directory automatically unless:
