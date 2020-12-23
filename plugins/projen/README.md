@@ -1,6 +1,8 @@
 # projen
 
-This plugin provides some aliases for [projen](https://github.com/projen/projen)
+This plugin provides some aliases for [projen](https://github.com/projen/projen) 
+
+[Awesome List](https://github.com/p6m7g8/awesome-projen)
 
 To use it, make sure [projen](https://github.com/projen/projen) is installed, and add `projen` to the plugins array in your zshrc file.
 
@@ -11,7 +13,7 @@ plugins=(... projen)
 ## Plugin commands
 
 * `pj_install` installs the `npm` module globally
-* `pj_pr_rebuild` comments on the pr with @projen build which which will run the GiitHub Actions workflow
+* `pj_pr_rebuild` comments on the pr with "@projen build" which which will run the GiitHub Actions workflow
 
 
 * `pgjn='projen new'`
