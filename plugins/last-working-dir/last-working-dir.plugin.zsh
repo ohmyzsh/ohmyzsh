@@ -7,9 +7,9 @@ add-zsh-hook chpwd chpwd_last_working_dir
 chpwd_last_working_dir() {
   if [ "$ZSH_SUBSHELL" = 0 ]; then
     if [ "$SSH_USER" != "" ]; then
-      local cache_file="$ZSH_CACHE_DIR/last-working-dir"
+      local cache_file="$ZSH_CACHE_DIR/last-working-dir-$SSH_USER"
     else
-      local cache_file="$ZSH_CACHE_DIR/$SSH_USER-last-working-dir"
+      local cache_file="$ZSH_CACHE_DIR/last-working-dir"
     fi
     pwd >| "$cache_file"
   fi
@@ -18,9 +18,9 @@ chpwd_last_working_dir() {
 # Changes directory to the last working directory
 lwd() {
   if [ "$SSH_USER" != "" ]; then
-    local cache_file="$ZSH_CACHE_DIR/last-working-dir"
+    local cache_file="$ZSH_CACHE_DIR/last-working-dir-$SSH_USER"
   else
-    local cache_file="$ZSH_CACHE_DIR/$SSH_USER-last-working-dir"
+    local cache_file="$ZSH_CACHE_DIR/last-working-dir"
   fi
   [[ -r "$cache_file" ]] && cd "$(cat "$cache_file")"
 }
