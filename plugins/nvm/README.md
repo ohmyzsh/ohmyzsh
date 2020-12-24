@@ -11,8 +11,8 @@ plugins=(... nvm)
 
 ## Settings
 
-- **`NVM_DIR`**: if you have installed nvm in a directory other than `$HOME/.nvm`, set and export `NVM_DIR`
-  to be the directory where you installed nvm.
+- **`NVM_DIR`**: if you have installed nvm in a directory other than `$HOME/.nvm`, set `NVM_DIR` to be the
+  directory where you installed nvm.
   
 - **`NVM_HOMEBREW`**: if you installed nvm via Homebrew, in a directory other than `/usr/local/opt/nvm`, you
   can set `NVM_HOMEBREW` to be the directory where you installed it.
@@ -24,3 +24,5 @@ plugins=(... nvm)
 - **`NVM_AUTOLOAD`**: if `NVM_AUTOLOAD` is set to `1`, the plugin will automatically load a node version when
   if finds a [`.nvmrc` file](https://github.com/nvm-sh/nvm#nvmrc) in the current working directory indicating
   which node version to load.
+
+To enable a setting, set and export it in your zshrc file, for example `export NVM_AUTOLOAD=1`.
