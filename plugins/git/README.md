@@ -201,9 +201,9 @@ These are aliases that have been removed, renamed, or otherwise modified in a wa
 | ggpur  | `git pull --rebase origin $(current_branch)`           | new alias `ggu` (`ggpur` still exists for now though)  |
 | ggpush | `git push origin $(current_branch)`                    | new alias `ggp` (`ggpush` still exists for now though) |
 | gk     | `gitk --all --branches`                                | now aliased to `gitk --all --branches`                 |
-| glg    | `git log --stat --max-count = 10`                      | now aliased to `git log --stat --color`                |
-| glgg   | `git log --graph --max-count = 10`                     | now aliased to `git log --graph --color`               |
-| gwc    | `git whatchanged -p --abbrev-commit --pretty = medium` | new alias `gwch`                                       |
+| glg    | `git log --stat --max-count=10`                        | now aliased to `git log --stat`                        |
+| glgg   | `git log --graph --max-count=10`                       | now aliased to `git log --graph`                       |
+| gwc    | `git whatchanged -p --abbrev-commit --pretty=medium`   | new alias `gwch`                                       |
 
 ## Functions
 
