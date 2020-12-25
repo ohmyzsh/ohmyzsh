@@ -195,6 +195,7 @@ These are aliases that have been removed, renamed, or otherwise modified in a wa
 | gap    | `git add --patch`                                      | new alias `gapa`                                       |
 | gcl    | `git config --list`                                    | new alias `gcf`                                        |
 | gdc    | `git diff --cached`                                    | new alias `gdca`                                       |
+| gds    | `git diff --staged`                                    | use `gdca`, they are synonymous                        |
 | gdt    | `git difftool`                                         | no replacement                                         |
 | ggpull | `git pull origin $(current_branch)`                    | new alias `ggl` (`ggpull` still exists for now though) |
 | ggpur  | `git pull --rebase origin $(current_branch)`           | new alias `ggu` (`ggpur` still exists for now though)  |
