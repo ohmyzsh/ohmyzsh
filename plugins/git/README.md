@@ -47,7 +47,7 @@ plugins=(... git)
 | gcl                  | git clone --recurse-submodules                                                                                                   |
 | gclean               | git clean -id                                                                                                                    |
 | gpristine            | git reset --hard && git clean -dffx                                                                                              |
-| gcm                  | git checkout $(git_main_branch)                                                                                                                |
+| gcm                  | git checkout $(git_main_branch)                                                                                                  |
 | gcd                  | git checkout develop                                                                                                             |
 | gcmsg                | git commit -m                                                                                                                    |
 | gco                  | git checkout                                                                                                                     |
@@ -71,21 +71,21 @@ plugins=(... git)
 | gfo                  | git fetch origin                                                                                                                 |
 | gg                   | git gui citool                                                                                                                   |
 | gga                  | git gui citool --amend                                                                                                           |
-| ggf                  | git push --force origin $(current_branch)                                                                                        |
-| ggfl                 | git push --force-with-lease origin $(current_branch)                                                                             |
-| ggl                  | git pull origin $(current_branch)                                                                                                |
-| ggp                  | git push origin $(current_branch)                                                                                                |
+| ggf                  | git push --force origin $(git_current_branch)                                                                                    |
+| ggfl                 | git push --force-with-lease origin $(git_current_branch)                                                                         |
+| ggl                  | git pull origin $(git_current_branch)                                                                                            |
+| ggp                  | git push origin $(git_current_branch)                                                                                            |
 | ggpnp                | ggl && ggp                                                                                                                       |
 | ggpull               | git pull origin "$(git_current_branch)"                                                                                          |
 | ggpur                | ggu                                                                                                                              |
 | ggpush               | git push origin "$(git_current_branch)"                                                                                          |
 | ggsup                | git branch --set-upstream-to=origin/$(git_current_branch)                                                                        |
-| ggu                  | git pull --rebase origin $(current_branch)                                                                                       |
+| ggu                  | git pull --rebase origin $(git_current_branch)                                                                                   |
 | gpsup                | git push --set-upstream origin $(git_current_branch)                                                                             |
 | ghh                  | git help                                                                                                                         |
 | gignore              | git update-index --assume-unchanged                                                                                              |
 | gignored             | git ls-files -v \| grep "^[[:lower:]]"                                                                                           |
-| git-svn-dcommit-push | git svn dcommit && git push github $(git_main_branch):svntrunk                                                                                 |
+| git-svn-dcommit-push | git svn dcommit && git push github $(git_main_branch):svntrunk                                                                   |
 | gk                   | gitk --all --branches                                                                                                            |
 | gke                  | gitk --all $(git log -g --pretty=%h)                                                                                             |
 | gl                   | git pull                                                                                                                         |
@@ -104,10 +104,10 @@ plugins=(... git)
 | gloga                | git log --oneline --decorate --graph --all                                                                                       |
 | glp                  | git log --pretty=\<format\>                                                                                                      |
 | gm                   | git merge                                                                                                                        |
-| gmom                 | git merge origin/$(git_main_branch)                                                                                                            |
+| gmom                 | git merge origin/$(git_main_branch)                                                                                              |
 | gmt                  | git mergetool --no-prompt                                                                                                        |
 | gmtvim               | git mergetool --no-prompt --tool=vimdiff                                                                                         |
-| gmum                 | git merge upstream/$(git_main_branch)                                                                                                          |
+| gmum                 | git merge upstream/$(git_main_branch)                                                                                            |
 | gma                  | git merge --abort                                                                                                                |
 | gp                   | git push                                                                                                                         |
 | gpd                  | git push --dry-run                                                                                                               |
@@ -123,7 +123,7 @@ plugins=(... git)
 | grbc                 | git rebase --continue                                                                                                            |
 | grbd                 | git rebase develop                                                                                                               |
 | grbi                 | git rebase -i                                                                                                                    |
-| grbm                 | git rebase $(git_main_branch)                                                                                                                  |
+| grbm                 | git rebase $(git_main_branch)                                                                                                    |
 | grbs                 | git rebase --skip                                                                                                                |
 | grev                 | git revert                                                                                                                       |
 | grh                  | git reset                                                                                                                        |
@@ -170,7 +170,7 @@ plugins=(... git)
 | gupv                 | git pull --rebase -v                                                                                                             |
 | gupa                 | git pull --rebase --autostash                                                                                                    |
 | gupav                | git pull --rebase --autostash -v                                                                                                 |
-| glum                 | git pull upstream $(git_main_branch)                                                                                                           |
+| glum                 | git pull upstream $(git_main_branch)                                                                                             |
 | gwch                 | git whatchanged -p --abbrev-commit --pretty=medium                                                                               |
 | gwip                 | git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign -m "--wip-- [skip ci]"           |
 | gam                  | git am                                                                                                                           |
@@ -197,9 +197,9 @@ These are aliases that have been removed, renamed, or otherwise modified in a wa
 | gdc    | `git diff --cached`                                    | new alias `gdca`                                       |
 | gds    | `git diff --staged`                                    | use `gdca`, they are synonymous                        |
 | gdt    | `git difftool`                                         | no replacement                                         |
-| ggpull | `git pull origin $(current_branch)`                    | new alias `ggl` (`ggpull` still exists for now though) |
-| ggpur  | `git pull --rebase origin $(current_branch)`           | new alias `ggu` (`ggpur` still exists for now though)  |
-| ggpush | `git push origin $(current_branch)`                    | new alias `ggp` (`ggpush` still exists for now though) |
+| ggpull | `git pull origin $(git_current_branch)`                | new alias `ggl` (`ggpull` still exists for now though) |
+| ggpur  | `git pull --rebase origin $(git_current_branch)`       | new alias `ggu` (`ggpur` still exists for now though)  |
+| ggpush | `git push origin $(git_current_branch)`                | new alias `ggp` (`ggpush` still exists for now though) |
 | gk     | `gitk --all --branches`                                | now aliased to `gitk --all --branches`                 |
 | glg    | `git log --stat --max-count=10`                        | now aliased to `git log --stat`                        |
 | glgg   | `git log --graph --max-count=10`                       | now aliased to `git log --graph`                       |
@@ -212,7 +212,7 @@ These are aliases that have been removed, renamed, or otherwise modified in a wa
 | Command                | Description                                                                  |
 |:-----------------------|:-----------------------------------------------------------------------------|
 | `grename <old> <new>`  | Rename `old` branch to `new`, including in origin remote                     |
-| current_branch         | Return the name of the current branch                                        |
+| git_current_branch     | Return the name of the current branch                                        |
 | git_current_user_name  | Returns the `user.name` config value                                         |
 | git_current_user_email | Returns the `user.email` config value                                        |
 | git_main_branch        | Returns the name of the main branch: `main` if it exists, `master` otherwise |

@@ -19,6 +19,6 @@ plugins=(... git-lfs)
 
 ## Functions
 
-| Function | Command                                         |
-| :------- | :---------------------------------------------- |
-| `gplfs`  | `git lfs push origin "$(current_branch)" --all` |
+| Function | Command                                             |
+| :------- | :-------------------------------------------------- |
+| `gplfs`  | `git lfs push origin "$(git_current_branch)" --all` |

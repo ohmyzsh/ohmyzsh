@@ -127,6 +127,7 @@ function ggf() {
   git push --force origin "${b:=$1}"
 }
 compdef _git ggf=git-checkout
+
 function ggfl() {
   [[ "$#" != 1 ]] && local b="$(git_current_branch)"
   git push --force-with-lease origin "${b:=$1}"
