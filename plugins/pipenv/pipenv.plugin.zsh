@@ -19,7 +19,7 @@ _togglePipenvShell() {
   if [[ "$PIPENV_ACTIVE" != 1 ]]; then
     if [[ -f "$PWD/Pipfile" ]]; then
       export pipfile_dir="$PWD"
-#      pipenv shell
+      pipenv shell
     fi
   fi
 }
