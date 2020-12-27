@@ -1,19 +1,52 @@
 # fzf
 
-This plugin enables [junegunn's fzf](https://github.com/junegunn/fzf) fuzzy auto-completion and key bindings
+This plugin tries to find [junegunn's fzf](https://github.com/junegunn/fzf) based on where
+it's been installed, and enables its fuzzy auto-completion and key bindings.
+
+To use it, add `fzf` to the plugins array in your zshrc file:
 
 ```zsh
-# Set fzf installation directory path
+plugins=(... fzf)
+```
+
+## Settings
+
+All these settings should go in your zshrc file, before Oh My Zsh is sourced.
+
+### `FZF_BASE`
+
+Set to fzf installation directory path:
+
+```zsh
 export FZF_BASE=/path/to/fzf/install/dir
+```
 
-# Uncomment the following line to disable fuzzy completion
-# export DISABLE_FZF_AUTO_COMPLETION="true"
+### `FZF_DEFAULT_COMMAND`
 
-# Uncomment the following line to disable key bindings (CTRL-T, CTRL-R, ALT-C)
-# export DISABLE_FZF_KEY_BINDINGS="true"
+Set default command to use when input is tty:
 
-plugins=(
-  ...
-  fzf
-)
+```zsh
+export FZF_DEFAULT_COMMAND='<your fzf default commmand>'
+```
+
+If not set, the plugin will try to set it to these, in the order in which they're found:
+
+- [`rg`](https://github.com/BurntSushi/ripgrep)
+- [`fd`](https://github.com/sharkdp/fd)
+- [`ag`](https://github.com/ggreer/the_silver_searcher)
+
+### `DISABLE_FZF_AUTO_COMPLETION`
+
+Set whether to load fzf auto-completion:
+
+```zsh
+DISABLE_FZF_AUTO_COMPLETION="true"
+```
+
+### `DISABLE_FZF_KEY_BINDINGS`
+
+Set whether to disable key bindings (CTRL-T, CTRL-R, ALT-C):
+
+```zsh
+DISABLE_FZF_KEY_BINDINGS="true"
 ```
