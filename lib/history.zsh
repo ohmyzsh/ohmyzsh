@@ -6,7 +6,8 @@ function omz_history {
   if [[ -n "$clear" ]]; then
     # if -c provided, clobber the history file
     echo -n >| "$HISTFILE"
-    echo >&2 History file deleted. Reload the session to see its effects.
+    fc -p "$HISTFILE"
+    echo >&2 History file deleted.
   elif [[ -n "$list" ]]; then
     # if -l provided, run as if calling `fc' directly
     builtin fc "$@"

@@ -22,7 +22,7 @@ plugins=(... kubectl)
 | kcsc    | `kubectl config set-context`        | Set a context entry in kubeconfig                                                                |
 | kcdc    | `kubectl config delete-context`     | Delete the specified context from the kubeconfig                                                 |
 | kccc    | `kubectl config current-context`    | Display the current-context                                                                      |
-| kcgc    | `kubectl config get-contexts` | List of contexts available
+| kcgc    | `kubectl config get-contexts`       | List of contexts available
 |         |                                     | **General aliases**                                                                              |
 | kdel    | `kubectl delete`                    | Delete resources by filenames, stdin, resources and names, or by resources and label selector    |
 | kdelf   | `kubectl delete -f`                 | Delete a pod using the type and name specified in -f argument                                    |
@@ -91,13 +91,13 @@ plugins=(... kubectl)
 | keno    | `kubectl edit node`                 | Edit nodes resource from the default editor                                                      |
 | kdno    | `kubectl describe node`             | Describe node resource in detail                                                                 |
 | kdelno  | `kubectl delete node`               | Delete the node                                                                                  |
-|         |                                   | **Persistent Volume Claim management**                                                           |
+|         |                                     | **Persistent Volume Claim management**                                                           |
 | kgpvc   | `kubectl get pvc`                   | List all PVCs                                                                                    |
 | kgpvcw  | `kgpvc --watch`                     | After listing/getting the requested object, watch for changes                                    |
 | kepvc   | `kubectl edit pvc`                  | Edit pvcs from the default editor                                                                |
-| kdpvc   | `kubectl describe pvc`              | Descirbe all pvcs                                                                                |
+| kdpvc   | `kubectl describe pvc`              | Describe all pvcs                                                                                |
 | kdelpvc | `kubectl delete pvc`                | Delete all pvcs matching passed arguments                                                        |
-|         |                                     |                                                                                                  |
+|         |                                     | **StatefulSets management**                                                                      |
 | kgss    | `kubectl get statefulset`           | List the statefulsets in ps format                                                               |
 | kgssw   | `kgss --watch`                      | After getting the list of statefulsets, watch for changes                                        |
 | kgsswide| `kgss -o wide`                      | After getting the statefulsets, output in plain-text format with any additional information      |
@@ -106,3 +106,26 @@ plugins=(... kubectl)
 | kdelss  | `kubectl delete statefulset`        | Delete the statefulset                                                                           |
 | ksss    | `kubectl scale statefulset`         | Scale a statefulset                                                                              |
 | krsss   | `kubectl rollout status statefulset`| Check the rollout status of a deployment                                                         |
+|         |                                     | **Service Accounts management**                                                                  |
+| kgsa    | `kubectl get sa`                    | List all service accounts                                                                        |
+| kdsa    | `kubectl describe sa`               | Describe a service account in details                                                            |
+| kdelsa  | `kubectl delete sa`                 | Delete the service account                                                                       |
+|         |                                     | **DaemonSet management**                                                                         |
+| kgds    | `kubectl get daemonset`             | List all DaemonSets in ps output format                                                          |
+| kgdsw   | `kgds --watch`                      | After listing all DaemonSets, watch for changes                                                  |
+| keds    | `kubectl edit daemonset`            | Edit DaemonSets from the default editor                                                          |
+| kdds    | `kubectl describe daemonset`        | Describe all DaemonSets in detail                                                                |
+| kdelds  | `kubectl delete daemonset`          | Delete all DaemonSets matching passed argument                                                   |
+|         |                                     | **CronJob management**                                                                           |
+| kgcj    | `kubectl get cronjob`               | List all CronJobs in ps output format                                                            |
+| kecj    | `kubectl edit cronjob`              | Edit CronJob from the default editor                                                             |
+| kdcj    | `kubectl describe cronjob`          | Describe a CronJob in details                                                                    |
+| kdelcj  | `kubectl delete cronjob`            | Delete the CronJob                                                                               |
+
+## Wrappers
+
+This plugin provides 3 wrappers to colorize kubectl output in JSON and YAML using various tools (which must be installed):
+
+- `kj`: JSON, colorized with [`jq`](https://stedolan.github.io/jq/).
+- `kjx`: JSON, colorized with [`fx`](https://github.com/antonmedv/fx).
+- `ky`: YAML, colorized with [`yh`](https://github.com/andreazorzetto/yh).

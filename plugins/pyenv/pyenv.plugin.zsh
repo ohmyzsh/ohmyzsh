@@ -29,7 +29,7 @@ if [[ $FOUND_PYENV -ne 1 ]]; then
 fi
 
 if [[ $FOUND_PYENV -eq 1 ]]; then
-    eval "$(pyenv init - zsh)"
+    eval "$(pyenv init - --no-rehash zsh)"
     if (( $+commands[pyenv-virtualenv-init] )); then
         eval "$(pyenv virtualenv-init - zsh)"
     fi
