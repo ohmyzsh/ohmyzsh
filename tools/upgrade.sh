@@ -75,14 +75,10 @@ if git pull --rebase --stat origin master; then
 
     # Display changelog with less if available, otherwise just print it to the terminal
     if [[ "$1" = --interactive ]]; then
-      if (( $+commands[less] )); then
-        "$ZSH/tools/changelog.sh" HEAD "$last_commit" --text | LESS= command less -R
-      else
-        "$ZSH/tools/changelog.sh" HEAD "$last_commit"
-      fi
+      "$ZSH/tools/changelog.sh" HEAD "$last_commit"
     fi
 
-    printf "${BLUE}%s \`${BOLD}%s${RESET}${BLUE}\`${RESET}\n" "You can see the changelog again with" "omz changelog"
+    printf "${BLUE}%s \`${BOLD}%s${RESET}${BLUE}\`${RESET}\n" "You can see the changelog with" "omz changelog"
   fi
 
   printf '%s         %s__      %s           %s        %s       %s     %s__   %s\n' $RAINBOW $RESET
