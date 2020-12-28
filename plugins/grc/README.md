@@ -10,28 +10,12 @@ plugins=(... grc)
 
 ## Commands
 
-The following commands are wrapped by `grc` so that their output is automatically colored:
+The plugin sources the bundled alias generator from the installation,
+available at `/etc/grc.zsh`. The complete list of alises may vary
+depending on the installed version of `grc` on system.
 
-- `cc`
-- `configure`
-- `cvs`
-- `df`
-- `diff`
-- `dig`
-- `gcc`
-- `gmake`
-- `ifconfig`
-- `iwconfig`
-- `last`
-- `ldap`
-- `make`
-- `mount`
-- `mtr`
-- `netstat`
-- `ping`
-- `ping6`
-- `ps`
-- `traceroute`
-- `traceroute6`
-- `wdiff`
-- `whois`
+For checking the complete list, grep on the list of active aliases:
+
+```zsh
+alias | grep grc
+```
