@@ -1,5 +1,17 @@
 #!/usr/bin/env zsh
 
-# Verify if we can read the `/etc/grc.zsh` file for alias generation,
-# and source that.
-[[ ! -r /etc/grc.zsh ]] || source /etc/grc.zsh
+# common grc.zsh paths
+files=(
+  /etc/grc.zsh            # default
+  /usr/local/etc/grc.zsh  # homebrew
+)
+
+# verify the file is readable and source it
+for file in $files; do
+  if [[ -r "$file" ]]; then
+    source "$file"
+    break
+  fi
+done
+
+unset file files
