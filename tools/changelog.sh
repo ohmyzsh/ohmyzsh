@@ -91,6 +91,8 @@ function parse-commit {
     if [[ "$body" =~ "BREAKING CHANGE: (.*)" || \
       "$subject" =~ '^[^ :\)]+\)?!: (.*)$' ]]; then
       message="${match[1]}"
+      # remove CR characters (might be inserted in GitHub UI commit description form)
+      message="${message//$'\r'/}"
       # skip next paragraphs (separated by two newlines or more)
       message="${message%%$'\n\n'*}"
       # ... and replace newlines with spaces
