@@ -391,7 +391,9 @@ function _omz::update {
 
   # Restart the zsh session
   if [[ $ret -eq 0 && "$1" != --unattended ]]; then
+    # Old zsh versions don't have ZSH_ARGZERO
+    local zsh="${ZSH_ARGZERO:-${functrace[-1]%:*}}"
     # Check whether to run a login shell
-    [[ "$ZSH_ARGZERO" = -* ]] && exec -l "${ZSH_ARGZERO#-}" || exec "$ZSH_ARGZERO"
+    [[ "$zsh" = -* || -o login ]] && exec -l "${zsh#-}" || exec "$zsh"
   fi
 }
