@@ -31,7 +31,7 @@ function zle-keymap-select() {
   # update keymap variable for the prompt
   typeset -g VI_KEYMAP=$KEYMAP
 
-  if [ "${VI_MODE_RESET_PROMPT_ON_MODE_CHANGE:-}" = true ]; then
+  if [[ "${VI_MODE_RESET_PROMPT_ON_MODE_CHANGE:-}" = true ]]; then
     zle reset-prompt
     zle -R
   fi
@@ -73,84 +73,41 @@ bindkey '^s' history-incremental-search-forward
 bindkey '^a' beginning-of-line
 bindkey '^e' end-of-line
 
-if [[ "${terminfo[kpp]}" != "" ]]; then
-  bindkey "${terminfo[kpp]}" up-line-or-history       # [PageUp] - Up a line of history
-fi
-if [[ "${terminfo[knp]}" != "" ]]; then
-  bindkey "${terminfo[knp]}" down-line-or-history     # [PageDown] - Down a line of history
-fi
+function wrap_clipboard_widgets() {
+  # NB: Assume we are the first wrapper and that we only wrap native widgets
+  # See zsh-autosuggestions.zsh for a more generic and more robust wrapper
+  local verb="$1"
+  shift
 
-# start typing + [Up-Arrow] - fuzzy find history forward
-if [[ "${terminfo[kcuu1]}" != "" ]]; then
-  autoload -U up-line-or-beginning-search
-  zle -N up-line-or-beginning-search
-  bindkey "${terminfo[kcuu1]}" up-line-or-beginning-search
-fi
-# start typing + [Down-Arrow] - fuzzy find history backward
-if [[ "${terminfo[kcud1]}" != "" ]]; then
-  autoload -U down-line-or-beginning-search
-  zle -N down-line-or-beginning-search
-  bindkey "${terminfo[kcud1]}" down-line-or-beginning-search
-fi
-
-if [[ "${terminfo[khome]}" != "" ]]; then
-  bindkey "${terminfo[khome]}" beginning-of-line      # [Home] - Go to beginning of line
-fi
-if [[ "${terminfo[kend]}" != "" ]]; then
-  bindkey "${terminfo[kend]}"  end-of-line            # [End] - Go to end of line
-fi
-
-if [[ "${terminfo[kcbt]}" != "" ]]; then
-  bindkey "${terminfo[kcbt]}" reverse-menu-complete   # [Shift-Tab] - move through the completion menu backwards
-fi
-
-bindkey '^?' backward-delete-char                     # [Backspace] - delete backward
-if [[ "${terminfo[kdch1]}" != "" ]]; then
-  bindkey "${terminfo[kdch1]}" delete-char            # [Delete] - delete forward
-else
-  bindkey "^[[3~" delete-char
-  bindkey "^[3;5~" delete-char
-  bindkey "\e[3~" delete-char
-fi
-
-() {
-  local wrap_clipboard_widgets
-  function wrap_clipboard_widgets() {
-    # NB: Assume we are the first wrapper and that we only wrap native widgets
-    # See zsh-autosuggestions.zsh for a more generic and more robust wrapper
-    local verb="$1"
-    shift
-
-    local widget
-    local wrapped_name
-    for widget in "$@"; do
-      wrapped_name="_zsh-vi-${verb}-${widget}"
-      if [ "${verb}" = copy ]; then
-        eval "
-          function ${wrapped_name}() {
-            zle .${widget}
-            printf %s \"\${CUTBUFFER}\" | clipcopy
-          }
-        "
-      else
-        eval "
-          function ${wrapped_name}() {
-            CUTBUFFER=\"\$(clippaste)\"
-            zle .${widget}
-          }
-        "
-      fi
-      zle -N "${widget}" "${wrapped_name}"
-    done
-  }
-
-  wrap_clipboard_widgets copy vi-yank vi-yank-eol vi-backward-kill-word vi-change-whole-line vi-delete
-  wrap_clipboard_widgets paste vi-put-{before,after}
-  unfunction wrap_clipboard_widgets
+  local widget
+  local wrapped_name
+  for widget in "$@"; do
+    wrapped_name="_zsh-vi-${verb}-${widget}"
+    if [ "${verb}" = copy ]; then
+      eval "
+        function ${wrapped_name}() {
+          zle .${widget}
+          printf %s \"\${CUTBUFFER}\" | clipcopy
+        }
+      "
+    else
+      eval "
+        function ${wrapped_name}() {
+          CUTBUFFER=\"\$(clippaste)\"
+          zle .${widget}
+        }
+      "
+    fi
+    zle -N "${widget}" "${wrapped_name}"
+  done
 }
 
+wrap_clipboard_widgets copy vi-yank vi-yank-eol vi-backward-kill-word vi-change-whole-line vi-delete
+wrap_clipboard_widgets paste vi-put-{before,after}
+unfunction wrap_clipboard_widgets
+
 # if mode indicator wasn't setup by theme, define default
-if [[ "$MODE_INDICATOR" == "" ]]; then
+if [[ -z "$MODE_INDICATOR" ]]; then
   MODE_INDICATOR='%B%F{red}<%b<<%f'
 fi
 
@@ -166,6 +123,6 @@ function vi_mode_prompt_info() {
 }
 
 # define right prompt, if it wasn't defined by a theme
-if [[ "$RPS1" == "" && "$RPROMPT" == "" ]]; then
+if [[ -z "$RPS1" && -z "$RPROMPT" ]]; then
   RPS1='$(vi_mode_prompt_info)'
 fi
