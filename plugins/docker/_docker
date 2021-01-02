@@ -624,7 +624,8 @@ __docker_container_subcommand() {
         "($help)--entrypoint=[Overwrite the default entrypoint of the image]:entry point: "
         "($help)*--env-file=[Read environment variables from a file]:environment file:_files"
         "($help)*--expose=[Expose a port from the container without publishing it]: "
-        "($help)*--group=[Set one or more supplementary user groups for the container]:group:_groups"
+        "($help)*--gpus=[GPU devices to add to the container ('all' to pass all GPUs)]:device: "
+        "($help)*--group-add=[Set one or more supplementary user groups for the container]:group:_groups"
         "($help -h --hostname)"{-h=,--hostname=}"[Container host name]:hostname:_hosts"
         "($help -i --interactive)"{-i,--interactive}"[Keep stdin open even if not attached]"
         "($help)--init[Run an init inside the container that forwards signals and reaps processes]"
@@ -750,6 +751,7 @@ __docker_container_subcommand() {
                 $opts_attach_exec_run_start \
                 "($help -d --detach)"{-d,--detach}"[Detached mode: leave the container running in the background]" \
                 "($help)*"{-e=,--env=}"[Set environment variables]:environment variable: " \
+                "($help)*--env-file=[Read environment variables from a file]:environment file:_files" \
                 "($help -i --interactive)"{-i,--interactive}"[Keep stdin open even if not attached]" \
                 "($help)--privileged[Give extended Linux capabilities to the command]" \
                 "($help -t --tty)"{-t,--tty}"[Allocate a pseudo-tty]" \
@@ -791,7 +793,7 @@ __docker_container_subcommand() {
                 "($help -f --follow)"{-f,--follow}"[Follow log output]" \
                 "($help -s --since)"{-s=,--since=}"[Show logs since this timestamp]:timestamp: " \
                 "($help -t --timestamps)"{-t,--timestamps}"[Show timestamps]" \
-                "($help)--tail=[Output the last K lines]:lines:(1 10 20 50 all)" \
+                "($help -n --tail)"{-n=,--tail=}"[Number of lines to show from the end of the logs]:lines:(1 10 20 50 all)" \
                 "($help -)*:containers:__docker_complete_containers" && ret=0
             ;;
         (ls|list)
@@ -1018,6 +1020,7 @@ __docker_image_subcommand() {
                 "($help)*--shm-size=[Size of '/dev/shm' (format is '<number><unit>')]:shm size: " \
                 "($help)--squash[Squash newly built layers into a single new layer]" \
                 "($help -t --tag)*"{-t=,--tag=}"[Repository, name and tag for the image]: :__docker_complete_repositories_with_tags" \
+                "($help)--target=[Set the target build stage to build.]" \
                 "($help)*--ulimit=[ulimit options]:ulimit: " \
                 "($help)--userns=[Container user namespace]:user namespace:(host)" \
                 "($help -):path or URL:_directories" && ret=0
@@ -1958,6 +1961,8 @@ __docker_service_subcommand() {
 
     opts_help=("(: -)--help[Print usage]")
     opts_create_update=(
+        "($help)*--cap-add=[Add Linux capabilities]:capability: "
+        "($help)*--cap-drop=[Drop Linux capabilities]:capability: "
         "($help)*--constraint=[Placement constraints]:constraint: "
         "($help)--endpoint-mode=[Placement constraints]:mode:(dnsrr vip)"
         "($help)*"{-e=,--env=}"[Set environment variables]:env: "
@@ -1970,6 +1975,7 @@ __docker_service_subcommand() {
         "($help)*--label=[Service labels]:label: "
         "($help)--limit-cpu=[Limit CPUs]:value: "
         "($help)--limit-memory=[Limit Memory]:value: "
+        "($help)--limit-pids[Limit maximum number of processes (default 0 = unlimited)]"
         "($help)--log-driver=[Logging driver for service]:logging driver:__docker_complete_log_drivers"
         "($help)*--log-opt=[Logging driver options]:log driver options:__docker_complete_log_options"
         "($help)*--mount=[Attach a filesystem mount to the service]:mount: "
@@ -2012,6 +2018,7 @@ __docker_service_subcommand() {
                 "($help)*--dns-option=[Set DNS options]:DNS option: " \
                 "($help)*--dns-search=[Set custom DNS search domains]:DNS search: " \
                 "($help)*--env-file=[Read environment variables from a file]:environment file:_files" \
+                "($help)*--group=[Set one or more supplementary user groups for the container]:group: _groups " \
                 "($help)--mode=[Service Mode]:mode:(global replicated)" \
                 "($help)--name=[Service name]:name: " \
                 "($help)*--placement-pref=[Add a placement preference]:pref:__docker_service_complete_placement_pref" \
@@ -2035,7 +2042,7 @@ __docker_service_subcommand() {
                 "($help)--no-task-ids[Do not include task IDs]" \
                 "($help)--no-trunc[Do not truncate output]" \
                 "($help)--since=[Show logs since timestamp]:timestamp: " \
-                "($help)--tail=[Number of lines to show from the end of the logs]:lines:(1 10 20 50 all)" \
+                "($help -n --tail)"{-n=,--tail=}"[Number of lines to show from the end of the logs]:lines:(1 10 20 50 all)" \
                 "($help -t --timestamps)"{-t,--timestamps}"[Show timestamps]" \
                 "($help -)1:service:__docker_complete_services" && ret=0
             ;;
@@ -2639,6 +2646,8 @@ __docker_subcommand() {
                 "($help)*--cluster-store-opt=[Cluster store options]:Cluster options:->cluster-store-options" \
                 "($help)--config-file=[Path to daemon configuration file]:Config File:_files" \
                 "($help)--containerd=[Path to containerd socket]:socket:_files -g \"*.sock\"" \
+                "($help)--containerd-namespace=[Containerd namespace to use]:containerd namespace:" \
+                "($help)--containerd-plugins-namespace=[Containerd namespace to use for plugins]:containerd namespace:" \
                 "($help)--data-root=[Root directory of persisted Docker data]:path:_directories" \
                 "($help -D --debug)"{-D,--debug}"[Enable debug mode]" \
                 "($help)--default-gateway[Container default gateway IPv4 address]:IPv4 address: " \

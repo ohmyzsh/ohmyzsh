@@ -9,17 +9,8 @@ function uninstall_oh_my_zsh() {
 }
 
 function upgrade_oh_my_zsh() {
-  if (( $+functions[_omz::update] )); then
-    echo >&2 "${fg[yellow]}Note: \`$0\` is deprecated. Use \`omz update\` instead.$reset_color"
-  fi
-
-  # Run update script
-  env ZSH="$ZSH" sh "$ZSH/tools/upgrade.sh"
-  # Update last updated file
-  zmodload zsh/datetime
-  echo "LAST_EPOCH=$(( EPOCHSECONDS / 60 / 60 / 24 ))" >! "${ZSH_CACHE_DIR}/.zsh-update"
-  # Remove update lock if it exists
-  command rm -rf "$ZSH/log/update.lock"
+  echo >&2 "${fg[yellow]}Note: \`$0\` is deprecated. Use \`omz update\` instead.$reset_color"
+  omz update
 }
 
 function take() {
