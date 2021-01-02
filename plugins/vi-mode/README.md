@@ -4,6 +4,8 @@ This plugin increase `vi-like` zsh functionality.
 
 Use `ESC` or `CTRL-[` to enter `Normal mode`.
 
+Use `v` once in normal mode to get visual mode. 
+
 
 History
 -------
@@ -24,7 +26,7 @@ wasn't defined by theme.
 Vim edition
 -----------
 
-- `v`   : Edit current command line in Vim
+- `^v`   : Edit current command line in Vim
 
 
 Movement
