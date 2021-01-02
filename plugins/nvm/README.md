@@ -11,9 +11,11 @@ plugins=(... nvm)
 
 ## Settings
 
-- **`NVM_DIR`**: if you have installed nvm in a directory other than `$HOME/.nvm`, set and export `NVM_DIR`
-  to be the directory where you installed nvm.
-  
+If you installed nvm in a directory other than `$HOME/.nvm`, set and export `NVM_DIR` to be the directory
+where you installed nvm.
+
+These settings should go in your zshrc file, before Oh My Zsh is sourced:
+
 - **`NVM_HOMEBREW`**: if you installed nvm via Homebrew, in a directory other than `/usr/local/opt/nvm`, you
   can set `NVM_HOMEBREW` to be the directory where you installed it.
 
