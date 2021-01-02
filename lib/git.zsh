@@ -170,7 +170,7 @@ function git_prompt_status() {
     '\?\? '     'UNTRACKED'
     'A  '       'ADDED'
     'M  '       'ADDED'
-    'MM '       'ADDED'
+    'MM '       'MODIFIED'
     ' M '       'MODIFIED'
     'AM '       'MODIFIED'
     ' T '       'MODIFIED'
