@@ -175,7 +175,7 @@ function _omz::plugin::info {
   if [[ -d "$ZSH_CUSTOM/plugins/$1" || -d "$ZSH/plugins/$1" ]]; then
     _omz::log error "the '$1' plugin doesn't have a README file"
   else
-    _omz::log error "the '$1' plugin doesn't exist"
+    _omz::log error "'$1' plugin not found"
   fi
 
   return 1
