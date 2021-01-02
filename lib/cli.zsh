@@ -46,7 +46,7 @@ function _omz {
     esac
   elif (( CURRENT == 4 )); then
     case "$words[2]::$words[3]" in
-      plugin::info) compadd "$ZSH"/plugins/*/README.md(.N:h:t)
+      plugin::info) compadd "$ZSH"/plugins/*/README.md(.N:h:t) \
         "$ZSH_CUSTOM"/plugins/*/README.md(.N:h:t) ;;
       theme::use) compadd "$ZSH"/themes/*.zsh-theme(.N:t:r) \
         "$ZSH_CUSTOM"/**/*.zsh-theme(.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::) ;;
