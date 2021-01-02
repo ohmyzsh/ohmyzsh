@@ -46,8 +46,8 @@ function _omz {
     esac
   elif (( CURRENT == 4 )); then
     case "$words[2]::$words[3]" in
-      plugin::info) compadd "$ZSH"/plugins/*(-/N:t) \
-        "$ZSH_CUSTOM"/plugins/*(-/N:t) ;;
+      plugin::info) compadd "$ZSH"/plugins/*/README.md(.N:h:t)
+        "$ZSH_CUSTOM"/plugins/*/README.md(.N:h:t) ;;
       theme::use) compadd "$ZSH"/themes/*.zsh-theme(.N:t:r) \
         "$ZSH_CUSTOM"/**/*.zsh-theme(.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::) ;;
     esac
@@ -145,8 +145,8 @@ Usage: omz plugin <command> [options]
 
 Available commands:
 
-  list                  List all available Oh My Zsh plugins
-  info <plugin_name>    Get information of a plugin
+  info <plugin>   Get information of a plugin
+  list            List all available Oh My Zsh plugins
 
 EOF
     return 1
@@ -156,6 +156,29 @@ EOF
   shift
 
   _omz::plugin::$command "$@"
+}
+
+function _omz::plugin::info {
+  if [[ -z "$1" ]]; then
+    echo >&2 "Usage: omz plugin info <plugin>"
+    return 1
+  fi
+
+  local readme
+  for readme in "$ZSH_CUSTOM/plugins/$1/README.md" "$ZSH/plugins/$1/README.md"; do
+    if [[ -f "$readme" ]]; then
+      (( ${+commands[less]} )) && less "$readme" || cat "$readme"
+      return 0
+    fi
+  done
+
+  if [[ -d "$ZSH_CUSTOM/plugins/$1" || -d "$ZSH/plugins/$1" ]]; then
+    _omz::log error "the '$1' plugin doesn't have a README file"
+  else
+    _omz::log error "the '$1' plugin doesn't exist"
+  fi
+
+  return 1
 }
 
 function _omz::plugin::list {
@@ -180,15 +203,6 @@ function _omz::plugin::list {
     print -P "%U%BBuilt-in plugins%b%u:"
     print -l ${(q-)builtin_plugins} | column
   fi
-}
-
-function _omz::plugin::info {
-  if [[ -z "$1" ]]; then
-    echo >&2 "Usage: omz plugin info <plugin_name>"
-    return 1
-  fi
-
-  less -S "$ZSH"/plugins/"$1"/README.md
 }
 
 function _omz::pr {
