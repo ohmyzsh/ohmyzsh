@@ -4,13 +4,21 @@
 # This is especially true if the prompt does things like checking git status.
 #
 # Set to "true" to force the prompt to reset on each mode change.
-# Set to "false" to force the prompt *not* to reset on each mode change.
+# Unset or set to any other value to do the opposite.
 #
-# (The default is not to reset, unless we're showing the mode in RPS1).
+# The default is not to reset, unless we're showing the mode in RPS1.
 typeset -g VI_MODE_RESET_PROMPT_ON_MODE_CHANGE
+# Control whether to change the cursor style on mode change.
+#
+# Set to "true" to change the cursor on each mode change.
+# Unset or set to any other value to do the opposite.
+typeset -g VI_MODE_SET_CURSOR
+
 typeset -g VI_KEYMAP=main
 
 function _vi-mode-set-cursor-shape-for-keymap() {
+  [[ "$VI_MODE_SET_CURSOR" = true ]] || return
+
   # https://vt100.net/docs/vt510-rm/DECSCUSR
   local _shape=0
   case "${1:-${VI_KEYMAP:-main}}" in

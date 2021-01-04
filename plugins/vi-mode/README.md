@@ -22,6 +22,13 @@ plugins=(... vi-mode)
   The default value is unset, unless `vi_mode_prompt_info` is used, in which case it'll
   automatically be set to `true`.
 
+- `VI_MODE_SET_CURSOR`: controls whether the cursor style is changed when switching
+  to a different input mode. Set it to `true` to enable it (default: unset):
+
+  ```zsh
+  VI_MODE_SET_CURSOR=true
+  ```
+
 - `MODE_INDICATOR`: controls the string displayed when the shell is in normal mode.
   See [Mode indicator](#mode-indicator) for details.
 
