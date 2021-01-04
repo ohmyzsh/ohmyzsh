@@ -60,6 +60,12 @@ NOTE: some of these key bindings are set by zsh by default when using a vi-mode 
 - `/`      : Search backward in history
 - `n`      : Repeat the last `/`
 
+### Vim edition
+
+- `vv`     : Edit current command line in Vim
+
+NOTE: this used to be bound to `v`. That is now the default (`visual-mode`)
+
 ### Movement
 
 - `$`   : To the end of the line
@@ -99,9 +105,5 @@ NOTE: some of these key bindings are set by zsh by default when using a vi-mode 
 - `C`           : Delete to the end of the line and start insert
 - `r{char}`     : Replace the character under the cursor with {char}
 - `R`           : Enter replace mode: Each character replaces existing one
-- `x`           : Delete [count] characters under and after the cursor
-- `X`           : Delete [count] characters before the cursor
-
-### Removed key bindings
-
-- `v`   : Edit current command line in Vim
+- `x`           : Delete `count` characters under and after the cursor
+- `X`           : Delete `count` characters before the cursor
