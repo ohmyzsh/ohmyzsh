@@ -1,34 +1,59 @@
-vi-mode
-=======
+# vi-mode plugin
+
 This plugin increase `vi-like` zsh functionality.
+
+To use it, add `vi-mode` to the plugins array in your zshrc file:
+
+```zsh
+plugins=(... vi-mode)
+```
+
+## Settings
+
+- `VI_MODE_RESET_PROMPT_ON_MODE_CHANGE`: controls whether the prompt is redrawn when
+  switching to a different input mode. If this is unset, the mode indicator will not
+  be updated when changing to a different mode.
+  Set it to `true` to enable it. For example:
+
+  ```zsh
+  VI_MODE_RESET_PROMPT_ON_MODE_CHANGE=true
+  ```
+
+  The default value is unset, unless `vi_mode_prompt_info` is used, in which case it'll
+  automatically be set to `true`.
+
+- `MODE_INDICATOR`: controls the string displayed when the shell is in normal mode.
+  See [Mode indicator](#mode-indicator) for details.
+
+## Mode indicator
+
+*Normal mode* is indicated with a red `<<<` mark at the right prompt, when it
+hasn't been defined by theme.
+
+You can change this indicator by setting the `MODE_INDICATOR` variable. This setting
+supports Prompt Expansion sequences. For example:
+
+```zsh
+MODE_INDICATOR="%F{yellow}+%f"
+```
+
+You can also use the `vi_mode_prompt_info` function in your prompt, which will display
+this mode indicator.
+
+## Key bindings
 
 Use `ESC` or `CTRL-[` to enter `Normal mode`.
 
+NOTE: some of these key bindings are set by zsh by default when using a vi-mode keymap.
 
-History
--------
+### History
 
 - `ctrl-p` : Previous command in history
 - `ctrl-n` : Next command in history
 - `/`      : Search backward in history
 - `n`      : Repeat the last `/`
 
-
-Mode indicators
----------------
-
-*Normal mode* is indicated with red `<<<` mark at the right prompt, when it
-wasn't defined by theme.
-
-
-Vim edition
------------
-
-- `v`   : Edit current command line in Vim
-
-
-Movement
---------
+### Movement
 
 - `$`   : To the end of the line
 - `^`   : To the first non-blank character of the line
@@ -46,9 +71,7 @@ Movement
 - `;`   : Repeat latest f, t, F or T [count] times
 - `,`   : Repeat latest f, t, F or T in opposite direction
 
-
-Insertion
----------
+### Insertion
 
 - `i`   : Insert text before the cursor
 - `I`   : Insert text before the first character in the line
@@ -57,9 +80,7 @@ Insertion
 - `o`   : Insert new command line below the current one
 - `O`   : Insert new command line above the current one
 
-
-Delete and Insert
------------------
+### Delete and Insert
 
 - `ctrl-h`      : While in *Insert mode*: delete character before the cursor
 - `ctrl-w`      : While in *Insert mode*: delete word before the cursor
@@ -73,3 +94,7 @@ Delete and Insert
 - `R`           : Enter replace mode: Each character replaces existing one
 - `x`           : Delete [count] characters under and after the cursor
 - `X`           : Delete [count] characters before the cursor
+
+### Removed key bindings
+
+- `v`   : Edit current command line in Vim
