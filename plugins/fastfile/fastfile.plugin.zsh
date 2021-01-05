@@ -78,9 +78,9 @@ function fastfile_print() {
 #    (=> fastfle_print) for each shortcut
 #
 function fastfile_ls() {
-    for f in "${fastfile_dir}"/*(NF); do
-        file=`basename "$f"` # To enable simpler handeling of spaces in file names
-        varkey=`echo "$file" | tr " " "_"`
+    for f in "${fastfile_dir}"/*; do
+        file=$(basename "$f") # To enable simpler handeling of spaces in file names
+        varkey=$(echo "$file" | tr " " "_")
 
         # Special format for colums
         echo "${fastfile_var_prefix}${varkey}|->|$(fastfile_get "$file")"
