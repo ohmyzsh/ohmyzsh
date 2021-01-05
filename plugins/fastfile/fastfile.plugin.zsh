@@ -44,7 +44,7 @@ function fastfile() {
 #   The path to the shortcut file
 #
 function fastfile_resolv() {
-    echo "${fastfile_dir}${1}"
+    echo "${fastfile_dir}/${1}"
 }
 
 #
