@@ -19,4 +19,21 @@
 #
 # This solution taken from here: https://apple.stackexchange.com/a/353941
 #
-hidutil property --set '{"UserKeyMapping":[{"HIDKeyboardModifierMappingSrc":0x700000035,"HIDKeyboardModifierMappingDst":0x700000064},{"HIDKeyboardModifierMappingSrc":0x700000064,"HIDKeyboardModifierMappingDst":0x700000035}]}' > /dev/null
+
+MAPPING=$(cat <<EOF
+{
+   "UserKeyMapping":[
+      {
+         "HIDKeyboardModifierMappingSrc":0x700000035,
+         "HIDKeyboardModifierMappingDst":0x700000064
+      },
+      {
+         "HIDKeyboardModifierMappingSrc":0x700000064,
+         "HIDKeyboardModifierMappingDst":0x700000035
+      }
+   ]
+}
+EOF
+)
+
+hidutil property --set $MAPPING > /dev/null
