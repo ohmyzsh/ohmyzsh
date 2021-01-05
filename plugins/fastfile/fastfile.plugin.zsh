@@ -6,7 +6,7 @@
 # overwritten with their default values
 
 default fastfile_dir        "${HOME}/.fastfile"
-default fastfile_var_prefix "§"
+default fastfile_var_prefix "@"
 
 ###########################
 # Impl
