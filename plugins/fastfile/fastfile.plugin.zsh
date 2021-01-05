@@ -104,9 +104,9 @@ function fastfile_rm() {
 # Generate the aliases for the shortcuts
 #
 function fastfile_sync() {
-    for f in "${fastfile_dir}"/*(NF); do
-        file=`basename "$f"` # To enable simpler handeling of spaces in file names
-        varkey=`echo "$file" | tr " " "_"`
+    for f in "${fastfile_dir}"/*; do
+        file=$(basename "$f") # To enable simpler handeling of spaces in file names
+        varkey=$(echo "$file" | tr " " "_")
 
         alias -g "${fastfile_var_prefix}${varkey}"="'$(fastfile_get "$file")'"
     done
