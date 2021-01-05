@@ -1,0 +1,6 @@
+#compdef universalarchive
+#autoload
+
+_arguments \
+  "*::archive file:_files -g '(#i)*.(7z|Z|bz2|gz|lzma|rar|zst|tar|tar.bz|tar.bz2|tar.gz|tar.xz|tar.lzma|tbz|tbz2|tgz|tlz|txz|xz|zip|lzma)(-.)'" \
+&& return 0

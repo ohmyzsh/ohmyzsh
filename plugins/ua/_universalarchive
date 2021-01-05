@@ -1,7 +1,0 @@
-#compdef universalarchive
-#autoload
-
-_arguments \
-  '(-r --remove)'{-r,--remove}'[Remove archive.]' \
-  "*::archive file:_files -g '(#i)*.(7z|Z|bz2|gz|lzma|rar|tar|tar.bz2|tar.gz|tar.xz|tar.zma|tbz|tbz2|tgz|tlz|txz|xz|zip)(-.)'" \
-&& return 0
