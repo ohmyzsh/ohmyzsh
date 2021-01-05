@@ -359,8 +359,8 @@ EOF
 
 function _omz::theme::list {
   local -a custom_themes builtin_themes
-  custom_themes=("$ZSH_CUSTOM"/**/*.zsh-theme(.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::))
-  builtin_themes=("$ZSH"/themes/*.zsh-theme(.N:t:r))
+  custom_themes=("$ZSH_CUSTOM"/**/*.zsh-theme(-.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::))
+  builtin_themes=("$ZSH"/themes/*.zsh-theme(-.N:t:r))
 
   # If the command is being piped, print all found line by line
   if [[ ! -t 1 ]]; then
