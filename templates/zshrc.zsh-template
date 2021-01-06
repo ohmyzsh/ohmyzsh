@@ -128,3 +128,19 @@ if [[ -n ${SSH_AUTH_SOCK}  ]]
 then
     add-zsh-hook preexec fixup_ssh_auth_sock
 fi
+
+# add this to support g4d command
+source /etc/bash_completion.d/g4d
+
+# this function support search file by file name
+# to search under current directory, use 'rf filename'
+# to search under specific directory, use 'rf filename directory'
+# reference: https://github.com/BurntSushi/ripgrep/issues/193#issuecomment-643338962
+rf() {
+  if [ -z "$2" ]
+  then
+      rg --files | rg "$1"
+  else
+      rg --files "$2" | rg "$1"
+  fi
+}
