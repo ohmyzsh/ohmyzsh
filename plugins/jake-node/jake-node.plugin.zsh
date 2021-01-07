@@ -6,8 +6,8 @@
 # Inspiration : https://weblog.rubyonrails.org/2006/3/9/fast-rake-task-completion-for-zsh
 
 function _jake () {
-  if [ -f Jakefile ]||[ -f jakefile ]; then
-    compadd `jake -T | cut -d " " -f 2 | sed -E "s/.\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"`
+  if test -f Jakefile || test -f Jakefile.js || test -f jakefile || test -f Jakefile.js; then
+    compadd `jake --tasks | cut -d " " -f 2 | sed -E "s/.\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"`
   fi
 }
 
