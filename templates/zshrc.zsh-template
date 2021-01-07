@@ -144,3 +144,10 @@ rf() {
       rg --files "$2" | rg "$1"
   fi
 }
+
+# below are google specific settings
+
+# add this to support g4d command
+source /etc/bash_completion.d/g4d
+# colorful text-based g4 diff through Git
+export P4DIFF="git --no-pager diff --no-index"
