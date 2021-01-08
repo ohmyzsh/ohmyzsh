@@ -99,6 +99,7 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+alias prodplan='/google/data/ro/projects/prodplan/prodplan'
 
 # disable shared history among sessions
 setopt noincappendhistory
