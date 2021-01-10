@@ -286,7 +286,7 @@ function display-release {
 
     local hash subject
     for hash message in ${(kv)breaking}; do
-      echo " - $(fmt:hash) $(fmt:scope) $(fmt:subject "${message}")"
+      echo " - $(fmt:hash) $(fmt:scope)$(fmt:subject "${message}")"
     done | sort
     echo
   }
