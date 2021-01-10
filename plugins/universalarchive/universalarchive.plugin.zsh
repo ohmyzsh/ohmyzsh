@@ -10,28 +10,28 @@ Supported archive formats are:
 tlz (tar.lzma), txz (tar.xz), tZ (tar.Z), xz, Z, zip, and zst."
 
   if [[ $# -lt 2 ]]; then
-    echo >&2 "$usage"
+    print -u2 -- "$usage"
     return 1
   fi
 
   local ext="$1"
-  local input="$(realpath "$2")"
+  local input="${2:a}"
 
   shift
 
   if [[ ! -e "$input" ]]; then
-    echo >&2 "$input not found"
+    print -u2 -- "$input not found"
     return 1
   fi
 
   # generate output file name
   local output
   if [[ $# -gt 1 ]]; then
-    output="$(basename "${input%/*}")"
+    output="${input:h:t}"
   elif [[ -f "$input" ]]; then
-    output="$(basename "${input%.[^.]*}")"
+    output="${input:r:t}"
   elif [[ -d "$input" ]]; then
-    output="$(basename "${input}")"
+    output="${input:t}"
   fi
 
   # if output file exists, generate a random name
@@ -44,7 +44,7 @@ tlz (tar.lzma), txz (tar.xz), tZ (tar.Z), xz, Z, zip, and zst."
 
   # safety check
   if [[ -f "$output" ]]; then
-    echo >&2 "output file '$output' already exists. Aborting"
+    print -u2 -- "output file '$output' already exists. Aborting"
     return 1
   fi
 
@@ -65,6 +65,6 @@ tlz (tar.lzma), txz (tar.xz), tZ (tar.Z), xz, Z, zip, and zst."
     Z)            compress -vcf               "${@}" > "${output}" ;;
     zip)          zip -rull                   "${output}"   "${@}" ;;
     zst)          zstd -c -T0                 "${@}" > "${output}" ;;
-    *) echo >&2 "$usage"; return 1 ;;
+    *) print -u2 -- "$usage"; return 1 ;;
   esac
 }
