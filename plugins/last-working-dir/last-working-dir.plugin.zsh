@@ -5,23 +5,17 @@ typeset -g ZSH_LAST_WORKING_DIRECTORY
 autoload -U add-zsh-hook
 add-zsh-hook chpwd chpwd_last_working_dir
 chpwd_last_working_dir() {
-  if [ "$ZSH_SUBSHELL" = 0 ]; then
-    if [ "$SSH_USER" != "" ]; then
-      local cache_file="$ZSH_CACHE_DIR/last-working-dir-$SSH_USER"
-    else
-      local cache_file="$ZSH_CACHE_DIR/last-working-dir"
-    fi
-    pwd >| "$cache_file"
-  fi
+  # Don't run in subshells
+  [[ "$ZSH_SUBSHELL" -eq 0 ]] || return 0
+  # Add ".$SSH_USER" suffix to cache file if $SSH_USER is set and non-empty
+  local cache_file="$ZSH_CACHE_DIR/last-working-dir${SSH_USER:+.$SSH_USER}"
+  pwd >| "$cache_file"
 }
 
 # Changes directory to the last working directory
 lwd() {
-  if [ "$SSH_USER" != "" ]; then
-    local cache_file="$ZSH_CACHE_DIR/last-working-dir-$SSH_USER"
-  else
-    local cache_file="$ZSH_CACHE_DIR/last-working-dir"
-  fi
+  # Add ".$SSH_USER" suffix to cache file if $SSH_USER is set and non-empty
+  local cache_file="$ZSH_CACHE_DIR/last-working-dir${SSH_USER:+.$SSH_USER}"
   [[ -r "$cache_file" ]] && cd "$(cat "$cache_file")"
 }
 
