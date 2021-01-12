@@ -1,0 +1,592 @@
+#compdef deno
+
+autoload -U is-at-least
+
+_deno() {
+    typeset -A opt_args
+    typeset -a _arguments_options
+    local ret=1
+
+    if is-at-least 5.2; then
+        _arguments_options=(-s -S -C)
+    else
+        _arguments_options=(-s -C)
+    fi
+
+    local context curcontext="$curcontext" state line
+    _arguments "${_arguments_options[@]}" \
+'-L+[Set log level]: :(debug info)' \
+'--log-level=[Set log level]: :(debug info)' \
+'--unstable[Enable unstable features and APIs]' \
+'-q[Suppress diagnostic output]' \
+'--quiet[Suppress diagnostic output]' \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+":: :_deno_commands" \
+"*::: :->deno" \
+&& ret=0
+    case $state in
+    (deno)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:deno-command-$line[1]:"
+        case $line[1] in
+            (bundle)
+_arguments "${_arguments_options[@]}" \
+'--import-map=[UNSTABLE: Load import map file]' \
+'-c+[Load tsconfig.json configuration file]' \
+'--config=[Load tsconfig.json configuration file]' \
+'-r+[Reload source code cache (recompile TypeScript)]' \
+'--reload=[Reload source code cache (recompile TypeScript)]' \
+'--lock=[Check the specified lock file]' \
+'--cert=[Load certificate authority from PEM encoded file]' \
+'-L+[Set log level]: :(debug info)' \
+'--log-level=[Set log level]: :(debug info)' \
+'--no-remote[Do not resolve remote modules]' \
+'--no-check[Skip type checking modules]' \
+'--lock-write[Write lock file (use with --lock)]' \
+'--watch[Watch for file changes and restart process automatically]' \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+'--unstable[Enable unstable features and APIs]' \
+'-q[Suppress diagnostic output]' \
+'--quiet[Suppress diagnostic output]' \
+':source_file:_files' \
+'::out_file:_files' \
+&& ret=0
+;;
+(cache)
+_arguments "${_arguments_options[@]}" \
+'--import-map=[UNSTABLE: Load import map file]' \
+'-c+[Load tsconfig.json configuration file]' \
+'--config=[Load tsconfig.json configuration file]' \
+'-r+[Reload source code cache (recompile TypeScript)]' \
+'--reload=[Reload source code cache (recompile TypeScript)]' \
+'--lock=[Check the specified lock file]' \
+'--cert=[Load certificate authority from PEM encoded file]' \
+'-L+[Set log level]: :(debug info)' \
+'--log-level=[Set log level]: :(debug info)' \
+'--no-remote[Do not resolve remote modules]' \
+'--no-check[Skip type checking modules]' \
+'--lock-write[Write lock file (use with --lock)]' \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+'--unstable[Enable unstable features and APIs]' \
+'-q[Suppress diagnostic output]' \
+'--quiet[Suppress diagnostic output]' \
+':file:_files' \
+&& ret=0
+;;
+(compile)
+_arguments "${_arguments_options[@]}" \
+'--import-map=[UNSTABLE: Load import map file]' \
+'-c+[Load tsconfig.json configuration file]' \
+'--config=[Load tsconfig.json configuration file]' \
+'-r+[Reload source code cache (recompile TypeScript)]' \
+'--reload=[Reload source code cache (recompile TypeScript)]' \
+'--lock=[Check the specified lock file]' \
+'--cert=[Load certificate authority from PEM encoded file]' \
+'-o+[Output file (defaults to $PWD/<inferred-name>)]' \
+'--output=[Output file (defaults to $PWD/<inferred-name>)]' \
+'-L+[Set log level]: :(debug info)' \
+'--log-level=[Set log level]: :(debug info)' \
+'--no-remote[Do not resolve remote modules]' \
+'--no-check[Skip type checking modules]' \
+'--lock-write[Write lock file (use with --lock)]' \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+'--unstable[Enable unstable features and APIs]' \
+'-q[Suppress diagnostic output]' \
+'--quiet[Suppress diagnostic output]' \
+':source_file:_files' \
+&& ret=0
+;;
+(completions)
+_arguments "${_arguments_options[@]}" \
+'-L+[Set log level]: :(debug info)' \
+'--log-level=[Set log level]: :(debug info)' \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+'--unstable[Enable unstable features and APIs]' \
+'-q[Suppress diagnostic output]' \
+'--quiet[Suppress diagnostic output]' \
+':shell:(zsh bash fish powershell elvish)' \
+&& ret=0
+;;
+(doc)
+_arguments "${_arguments_options[@]}" \
+'--import-map=[UNSTABLE: Load import map file]' \
+'-r+[Reload source code cache (recompile TypeScript)]' \
+'--reload=[Reload source code cache (recompile TypeScript)]' \
+'-L+[Set log level]: :(debug info)' \
+'--log-level=[Set log level]: :(debug info)' \
+'--json[Output documentation in JSON format]' \
+'--private[Output private documentation]' \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+'--unstable[Enable unstable features and APIs]' \
+'-q[Suppress diagnostic output]' \
+'--quiet[Suppress diagnostic output]' \
+'::source_file:_files' \
+'::filter -- Dot separated path to symbol:_files' \
+&& ret=0
+;;
+(eval)
+_arguments "${_arguments_options[@]}" \
+'--import-map=[UNSTABLE: Load import map file]' \
+'-c+[Load tsconfig.json configuration file]' \
+'--config=[Load tsconfig.json configuration file]' \
+'-r+[Reload source code cache (recompile TypeScript)]' \
+'--reload=[Reload source code cache (recompile TypeScript)]' \
+'--lock=[Check the specified lock file]' \
+'--cert=[Load certificate authority from PEM encoded file]' \
+'--inspect=[activate inspector on host:port (default: 127.0.0.1:9229)]' \
+'--inspect-brk=[activate inspector on host:port and break at start of user script]' \
+'--v8-flags=[Set V8 command line options (for help: --v8-flags=--help)]' \
+'--seed=[Seed Math.random()]' \
+'-L+[Set log level]: :(debug info)' \
+'--log-level=[Set log level]: :(debug info)' \
+'--no-remote[Do not resolve remote modules]' \
+'--no-check[Skip type checking modules]' \
+'--lock-write[Write lock file (use with --lock)]' \
+'--cached-only[Require that remote dependencies are already cached]' \
+'-T[Treat eval input as TypeScript]' \
+'--ts[Treat eval input as TypeScript]' \
+'-p[print result to stdout]' \
+'--print[print result to stdout]' \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+'--unstable[Enable unstable features and APIs]' \
+'-q[Suppress diagnostic output]' \
+'--quiet[Suppress diagnostic output]' \
+':code_arg -- Code arg:_files' \
+&& ret=0
+;;
+(fmt)
+_arguments "${_arguments_options[@]}" \
+'--ignore=[Ignore formatting particular source files. Use with --unstable]' \
+'-L+[Set log level]: :(debug info)' \
+'--log-level=[Set log level]: :(debug info)' \
+'--check[Check if the source files are formatted]' \
+'--watch[Watch for file changes and restart process automatically]' \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+'--unstable[Enable unstable features and APIs]' \
+'-q[Suppress diagnostic output]' \
+'--quiet[Suppress diagnostic output]' \
+'::files:_files' \
+&& ret=0
+;;
+(info)
+_arguments "${_arguments_options[@]}" \
+'-r+[Reload source code cache (recompile TypeScript)]' \
+'--reload=[Reload source code cache (recompile TypeScript)]' \
+'--cert=[Load certificate authority from PEM encoded file]' \
+'--import-map=[UNSTABLE: Load import map file]' \
+'-L+[Set log level]: :(debug info)' \
+'--log-level=[Set log level]: :(debug info)' \
+'--no-check[Skip type checking modules]' \
+'--json[Outputs the information in JSON format]' \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+'--unstable[Enable unstable features and APIs]' \
+'-q[Suppress diagnostic output]' \
+'--quiet[Suppress diagnostic output]' \
+'::file:_files' \
+&& ret=0
+;;
+(install)
+_arguments "${_arguments_options[@]}" \
+'--import-map=[UNSTABLE: Load import map file]' \
+'-c+[Load tsconfig.json configuration file]' \
+'--config=[Load tsconfig.json configuration file]' \
+'-r+[Reload source code cache (recompile TypeScript)]' \
+'--reload=[Reload source code cache (recompile TypeScript)]' \
+'--lock=[Check the specified lock file]' \
+'--cert=[Load certificate authority from PEM encoded file]' \
+'--inspect=[activate inspector on host:port (default: 127.0.0.1:9229)]' \
+'--inspect-brk=[activate inspector on host:port and break at start of user script]' \
+'--allow-read=[Allow file system read access]' \
+'--allow-write=[Allow file system write access]' \
+'--allow-net=[Allow network access]' \
+'--v8-flags=[Set V8 command line options (for help: --v8-flags=--help)]' \
+'--seed=[Seed Math.random()]' \
+'-n+[Executable file name]' \
+'--name=[Executable file name]' \
+'--root=[Installation root]' \
+'-L+[Set log level]: :(debug info)' \
+'--log-level=[Set log level]: :(debug info)' \
+'--no-remote[Do not resolve remote modules]' \
+'--no-check[Skip type checking modules]' \
+'--lock-write[Write lock file (use with --lock)]' \
+'--allow-env[Allow environment access]' \
+'--allow-run[Allow running subprocesses]' \
+'--allow-plugin[Allow loading plugins]' \
+'--allow-hrtime[Allow high resolution time measurement]' \
+'-A[Allow all permissions]' \
+'--allow-all[Allow all permissions]' \
+'--cached-only[Require that remote dependencies are already cached]' \
+'-f[Forcefully overwrite existing installation]' \
+'--force[Forcefully overwrite existing installation]' \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+'--unstable[Enable unstable features and APIs]' \
+'-q[Suppress diagnostic output]' \
+'--quiet[Suppress diagnostic output]' \
+':cmd:_files' \
+&& ret=0
+;;
+(lsp)
+_arguments "${_arguments_options[@]}" \
+'-L+[Set log level]: :(debug info)' \
+'--log-level=[Set log level]: :(debug info)' \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+'--unstable[Enable unstable features and APIs]' \
+'-q[Suppress diagnostic output]' \
+'--quiet[Suppress diagnostic output]' \
+&& ret=0
+;;
+(lint)
+_arguments "${_arguments_options[@]}" \
+'--ignore=[Ignore linting particular source files]' \
+'-L+[Set log level]: :(debug info)' \
+'--log-level=[Set log level]: :(debug info)' \
+'--rules[List available rules]' \
+'--json[Output lint result in JSON format]' \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+'--unstable[Enable unstable features and APIs]' \
+'-q[Suppress diagnostic output]' \
+'--quiet[Suppress diagnostic output]' \
+'::files:_files' \
+&& ret=0
+;;
+(repl)
+_arguments "${_arguments_options[@]}" \
+'--import-map=[UNSTABLE: Load import map file]' \
+'-c+[Load tsconfig.json configuration file]' \
+'--config=[Load tsconfig.json configuration file]' \
+'-r+[Reload source code cache (recompile TypeScript)]' \
+'--reload=[Reload source code cache (recompile TypeScript)]' \
+'--lock=[Check the specified lock file]' \
+'--cert=[Load certificate authority from PEM encoded file]' \
+'--inspect=[activate inspector on host:port (default: 127.0.0.1:9229)]' \
+'--inspect-brk=[activate inspector on host:port and break at start of user script]' \
+'--v8-flags=[Set V8 command line options (for help: --v8-flags=--help)]' \
+'--seed=[Seed Math.random()]' \
+'-L+[Set log level]: :(debug info)' \
+'--log-level=[Set log level]: :(debug info)' \
+'--no-remote[Do not resolve remote modules]' \
+'--no-check[Skip type checking modules]' \
+'--lock-write[Write lock file (use with --lock)]' \
+'--cached-only[Require that remote dependencies are already cached]' \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+'--unstable[Enable unstable features and APIs]' \
+'-q[Suppress diagnostic output]' \
+'--quiet[Suppress diagnostic output]' \
+&& ret=0
+;;
+(run)
+_arguments "${_arguments_options[@]}" \
+'--import-map=[UNSTABLE: Load import map file]' \
+'-c+[Load tsconfig.json configuration file]' \
+'--config=[Load tsconfig.json configuration file]' \
+'-r+[Reload source code cache (recompile TypeScript)]' \
+'--reload=[Reload source code cache (recompile TypeScript)]' \
+'--lock=[Check the specified lock file]' \
+'--cert=[Load certificate authority from PEM encoded file]' \
+'--inspect=[activate inspector on host:port (default: 127.0.0.1:9229)]' \
+'--inspect-brk=[activate inspector on host:port and break at start of user script]' \
+'--allow-read=[Allow file system read access]' \
+'--allow-write=[Allow file system write access]' \
+'--allow-net=[Allow network access]' \
+'--v8-flags=[Set V8 command line options (for help: --v8-flags=--help)]' \
+'--seed=[Seed Math.random()]' \
+'-L+[Set log level]: :(debug info)' \
+'--log-level=[Set log level]: :(debug info)' \
+'--no-remote[Do not resolve remote modules]' \
+'--no-check[Skip type checking modules]' \
+'--lock-write[Write lock file (use with --lock)]' \
+'--allow-env[Allow environment access]' \
+'--allow-run[Allow running subprocesses]' \
+'--allow-plugin[Allow loading plugins]' \
+'--allow-hrtime[Allow high resolution time measurement]' \
+'-A[Allow all permissions]' \
+'--allow-all[Allow all permissions]' \
+'--cached-only[Require that remote dependencies are already cached]' \
+'(--inspect --inspect-brk)--watch[Watch for file changes and restart process automatically]' \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+'--unstable[Enable unstable features and APIs]' \
+'-q[Suppress diagnostic output]' \
+'--quiet[Suppress diagnostic output]' \
+':script_arg -- Script arg:_files' \
+&& ret=0
+;;
+(test)
+_arguments "${_arguments_options[@]}" \
+'--import-map=[UNSTABLE: Load import map file]' \
+'-c+[Load tsconfig.json configuration file]' \
+'--config=[Load tsconfig.json configuration file]' \
+'-r+[Reload source code cache (recompile TypeScript)]' \
+'--reload=[Reload source code cache (recompile TypeScript)]' \
+'--lock=[Check the specified lock file]' \
+'--cert=[Load certificate authority from PEM encoded file]' \
+'--inspect=[activate inspector on host:port (default: 127.0.0.1:9229)]' \
+'--inspect-brk=[activate inspector on host:port and break at start of user script]' \
+'--allow-read=[Allow file system read access]' \
+'--allow-write=[Allow file system write access]' \
+'--allow-net=[Allow network access]' \
+'--v8-flags=[Set V8 command line options (for help: --v8-flags=--help)]' \
+'--seed=[Seed Math.random()]' \
+'--filter=[Run tests with this string or pattern in the test name]' \
+'(--inspect --inspect-brk)--coverage=[Collect coverage information]' \
+'-L+[Set log level]: :(debug info)' \
+'--log-level=[Set log level]: :(debug info)' \
+'--no-remote[Do not resolve remote modules]' \
+'--no-check[Skip type checking modules]' \
+'--lock-write[Write lock file (use with --lock)]' \
+'--allow-env[Allow environment access]' \
+'--allow-run[Allow running subprocesses]' \
+'--allow-plugin[Allow loading plugins]' \
+'--allow-hrtime[Allow high resolution time measurement]' \
+'-A[Allow all permissions]' \
+'--allow-all[Allow all permissions]' \
+'--cached-only[Require that remote dependencies are already cached]' \
+'--no-run[Cache test modules, but don'\''t run tests]' \
+'--fail-fast[Stop on first error]' \
+'--allow-none[Don'\''t return error code if no test files are found]' \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+'--unstable[Enable unstable features and APIs]' \
+'-q[Suppress diagnostic output]' \
+'--quiet[Suppress diagnostic output]' \
+'::files -- List of file names to run:_files' \
+'::script_arg -- Script arg:_files' \
+&& ret=0
+;;
+(types)
+_arguments "${_arguments_options[@]}" \
+'-L+[Set log level]: :(debug info)' \
+'--log-level=[Set log level]: :(debug info)' \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+'--unstable[Enable unstable features and APIs]' \
+'-q[Suppress diagnostic output]' \
+'--quiet[Suppress diagnostic output]' \
+&& ret=0
+;;
+(upgrade)
+_arguments "${_arguments_options[@]}" \
+'--version=[The version to upgrade to]' \
+'--output=[The path to output the updated version to]' \
+'--cert=[Load certificate authority from PEM encoded file]' \
+'-L+[Set log level]: :(debug info)' \
+'--log-level=[Set log level]: :(debug info)' \
+'--dry-run[Perform all checks without replacing old exe]' \
+'-f[Replace current exe even if not out-of-date]' \
+'--force[Replace current exe even if not out-of-date]' \
+'--canary[Upgrade to canary builds]' \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'--unstable[Enable unstable features and APIs]' \
+'-q[Suppress diagnostic output]' \
+'--quiet[Suppress diagnostic output]' \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+'-L+[Set log level]: :(debug info)' \
+'--log-level=[Set log level]: :(debug info)' \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+'--unstable[Enable unstable features and APIs]' \
+'-q[Suppress diagnostic output]' \
+'--quiet[Suppress diagnostic output]' \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+}
+
+(( $+functions[_deno_commands] )) ||
+_deno_commands() {
+    local commands; commands=(
+        "bundle:Bundle module and dependencies into single file" \
+"cache:Cache the dependencies" \
+"compile:Compile the script into a self contained executable" \
+"completions:Generate shell completions" \
+"doc:Show documentation for a module" \
+"eval:Eval script" \
+"fmt:Format source files" \
+"info:Show info about cache or info related to source file" \
+"install:Install script as an executable" \
+"lsp:Start the language server" \
+"lint:Lint source files" \
+"repl:Read Eval Print Loop" \
+"run:Run a program given a filename or url to the module. Use '-' as a filename to read from stdin." \
+"test:Run tests" \
+"types:Print runtime TypeScript declarations" \
+"upgrade:Upgrade deno executable to given version" \
+"help:Prints this message or the help of the given subcommand(s)" \
+    )
+    _describe -t commands 'deno commands' commands "$@"
+}
+(( $+functions[_deno__bundle_commands] )) ||
+_deno__bundle_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands 'deno bundle commands' commands "$@"
+}
+(( $+functions[_deno__cache_commands] )) ||
+_deno__cache_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands 'deno cache commands' commands "$@"
+}
+(( $+functions[_deno__compile_commands] )) ||
+_deno__compile_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands 'deno compile commands' commands "$@"
+}
+(( $+functions[_deno__completions_commands] )) ||
+_deno__completions_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands 'deno completions commands' commands "$@"
+}
+(( $+functions[_deno__doc_commands] )) ||
+_deno__doc_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands 'deno doc commands' commands "$@"
+}
+(( $+functions[_deno__eval_commands] )) ||
+_deno__eval_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands 'deno eval commands' commands "$@"
+}
+(( $+functions[_deno__fmt_commands] )) ||
+_deno__fmt_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands 'deno fmt commands' commands "$@"
+}
+(( $+functions[_deno__help_commands] )) ||
+_deno__help_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands 'deno help commands' commands "$@"
+}
+(( $+functions[_deno__info_commands] )) ||
+_deno__info_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands 'deno info commands' commands "$@"
+}
+(( $+functions[_deno__install_commands] )) ||
+_deno__install_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands 'deno install commands' commands "$@"
+}
+(( $+functions[_deno__lint_commands] )) ||
+_deno__lint_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands 'deno lint commands' commands "$@"
+}
+(( $+functions[_deno__lsp_commands] )) ||
+_deno__lsp_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands 'deno lsp commands' commands "$@"
+}
+(( $+functions[_deno__repl_commands] )) ||
+_deno__repl_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands 'deno repl commands' commands "$@"
+}
+(( $+functions[_deno__run_commands] )) ||
+_deno__run_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands 'deno run commands' commands "$@"
+}
+(( $+functions[_deno__test_commands] )) ||
+_deno__test_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands 'deno test commands' commands "$@"
+}
+(( $+functions[_deno__types_commands] )) ||
+_deno__types_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands 'deno types commands' commands "$@"
+}
+(( $+functions[_deno__upgrade_commands] )) ||
+_deno__upgrade_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands 'deno upgrade commands' commands "$@"
+}
+
+_deno "$@"
