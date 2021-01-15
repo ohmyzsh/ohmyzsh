@@ -77,6 +77,8 @@ alias rsts='rails stats'
 alias rt='rails test'
 alias ru='rails runner'
 
+# Foreman aliases
+alias fmns='foreman start'
 
 # Rake aliases
 alias rkdc='rake db:create'
