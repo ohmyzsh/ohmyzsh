@@ -50,6 +50,7 @@ alias ru='rails runner'
 alias rs='rails server'
 alias rsd='rails server --debugger'
 alias rsp='rails server --port'
+alias rfs='foreman start'
 
 # Rake aliases
 alias rdm='rake db:migrate'
