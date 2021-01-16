@@ -100,13 +100,13 @@ function wrap_clipboard_widgets() {
       eval "
         function ${wrapped_name}() {
           zle .${widget}
-          printf %s \"\${CUTBUFFER}\" | clipcopy
+          printf %s \"\${CUTBUFFER}\" | clipcopy 2>/dev/null || true
         }
       "
     else
       eval "
         function ${wrapped_name}() {
-          CUTBUFFER=\"\$(clippaste)\"
+          CUTBUFFER=\"\$(clippaste 2>/dev/null || echo \$CUTBUFFER)\"
           zle .${widget}
         }
       "
