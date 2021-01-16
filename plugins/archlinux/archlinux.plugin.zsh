@@ -2,6 +2,12 @@
 #               Pacman                #
 #######################################
 
+# abs and aur command check
+local abs_aur=''
+(( ! $+commands[abs] )) || abs_aur+=' && sudo abs'
+(( ! $+commands[aur] )) || abs_aur+=' && sudo aur'
+
+
 # Pacman - https://wiki.archlinux.org/index.php/Pacman_Tips
 alias pacupg='sudo pacman -Syu'
 alias pacin='sudo pacman -S'
@@ -20,17 +26,8 @@ alias pacfileupg='sudo pacman -Fy'
 alias pacfiles='pacman -F'
 alias pacls='pacman -Ql'
 alias pacown='pacman -Qo'
+alias pacupd="sudo pacman -Sy$abs_aur"
 alias upgrade='sudo pacman -Syu'
-
-if (( $+commands[abs] && $+commands[aur] )); then
-  alias pacupd='sudo pacman -Sy && sudo abs && sudo aur'
-elif (( $+commands[abs] )); then
-  alias pacupd='sudo pacman -Sy && sudo abs'
-elif (( $+commands[aur] )); then
-  alias pacupd='sudo pacman -Sy && sudo aur'
-else
-  alias pacupd='sudo pacman -Sy'
-fi
 
 function paclist() {
   # Based on https://bbs.archlinux.org/viewtopic.php?id=93683
@@ -109,17 +106,8 @@ if (( $+commands[pacaur] )); then
   alias paorph='pacaur -Qtd'
   alias painsd='pacaur -S --asdeps'
   alias pamir='pacaur -Syy'
+  alias paupd="pacaur -Sy$abs_aur"
   alias upgrade='pacaur -Syu'
-
-  if (( $+commands[abs] && $+commands[aur] )); then
-    alias paupd='pacaur -Sy && sudo abs && sudo aur'
-  elif (( $+commands[abs] )); then
-    alias paupd='pacaur -Sy && sudo abs'
-  elif (( $+commands[aur] )); then
-    alias paupd='pacaur -Sy && sudo aur'
-  else
-    alias paupd='pacaur -Sy'
-  fi
 fi
 
 if (( $+commands[trizen] )); then
@@ -138,17 +126,8 @@ if (( $+commands[trizen] )); then
   alias trorph='trizen -Qtd'
   alias trinsd='trizen -S --asdeps'
   alias trmir='trizen -Syy'
+  alias trupd="trizen -Sy$abs_aur"
   alias upgrade='trizen -Syu'
-
-  if (( $+commands[abs] && $+commands[aur] )); then
-    alias trupd='trizen -Sy && sudo abs && sudo aur'
-  elif (( $+commands[abs] )); then
-    alias trupd='trizen -Sy && sudo abs'
-  elif (( $+commands[aur] )); then
-    alias trupd='trizen -Sy && sudo aur'
-  else
-    alias trupd='trizen -Sy'
-  fi
 fi
 
 if (( $+commands[yaourt] )); then
@@ -167,17 +146,8 @@ if (( $+commands[yaourt] )); then
   alias yaorph='yaourt -Qtd'
   alias yainsd='yaourt -S --asdeps'
   alias yamir='yaourt -Syy'
+  alias yaupd="yaourt -Sy$abs_aur"
   alias upgrade='yaourt -Syu'
-
-  if (( $+commands[abs] && $+commands[aur] )); then
-    alias yaupd='yaourt -Sy && sudo abs && sudo aur'
-  elif (( $+commands[abs] )); then
-    alias yaupd='yaourt -Sy && sudo abs'
-  elif (( $+commands[aur] )); then
-    alias yaupd='yaourt -Sy && sudo aur'
-  else
-    alias yaupd='yaourt -Sy'
-  fi
 fi
 
 if (( $+commands[yay] )); then
@@ -196,15 +166,8 @@ if (( $+commands[yay] )); then
   alias yaorph='yay -Qtd'
   alias yainsd='yay -S --asdeps'
   alias yamir='yay -Syy'
+  alias yaupd="yay -Sy$abs_aur"
   alias upgrade='yay -Syu'
-
-  if (( $+commands[abs] && $+commands[aur] )); then
-    alias yaupd='yay -Sy && sudo abs && sudo aur'
-  elif (( $+commands[abs] )); then
-    alias yaupd='yay -Sy && sudo abs'
-  elif (( $+commands[aur] )); then
-    alias yaupd='yay -Sy && sudo aur'
-  else
-    alias yaupd='yay -Sy'
-  fi
 fi
+
+unset abs_aur
