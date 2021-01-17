@@ -17,7 +17,7 @@ The plugin also supports the following:
 
 | Alias  | Command                | Description                                               |
 | ------ | -----------------------|---------------------------------------------------------- |
-| `t`    | ta $1 || ts $1         | Attach or Create a named tmux seesion                     |
+| `t`    | ta $1 \|\| ts $1       | Attach or Create a named tmux seesion                     |
 | `ta`   | tmux attach -t         | Attach new tmux session to already running named session  |
 | `tad`  | tmux attach -d -t      | Detach named tmux session                                 |
 | `ts`   | tmux new-session -s    | Create a new named tmux session                           |
