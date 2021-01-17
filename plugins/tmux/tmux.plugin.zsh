@@ -5,6 +5,7 @@ fi
 
 # ALIASES
 
+alias t='_t(){tmux attach -t $1 || tmux new -s $1}; _t'
 alias ta='tmux attach -t'
 alias tad='tmux attach -d -t'
 alias ts='tmux new-session -s'
