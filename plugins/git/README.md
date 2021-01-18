@@ -33,6 +33,7 @@ plugins=(... git)
 | gbsg                 | git bisect good                                                                                                                  |
 | gbsr                 | git bisect reset                                                                                                                 |
 | gbss                 | git bisect start                                                                                                                 |
+| gbt                  | git for-each-ref --format="%(upstream:short)" $(git symbolic-ref -q HEAD)                                                        |
 | gc                   | git commit -v                                                                                                                    |
 | gc!                  | git commit -v --amend                                                                                                            |
 | gcn!                 | git commit -v --no-edit --amend                                                                                                  |
