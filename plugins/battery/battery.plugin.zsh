@@ -111,18 +111,18 @@ elif [[ "$OSTYPE" = linux*  ]]; then
 
   function battery_is_charging() {
     if (( $+commands[acpitool] )); then
-      ! apcitool 2>/dev/null | command grep -q '^\s+Battery.*Discharging'
-    else if (( $+commands[acpi] )); then
+      ! acpitool 2>/dev/null | command grep -qE '^\s+Battery.*Discharging'
+    elif (( $+commands[acpi] )); then
       ! acpi 2>/dev/null | command grep -v "rate information unavailable" | command grep -q '^Battery.*Discharging'
-    fi; fi
+    fi
   }
 
   function battery_pct() {
     if (( $+commands[acpitool] )); then
       acpitool 2>/dev/null | command grep -E '^\s+All batteries\s*:' | cut -f1 -d',' | tr -cd '[[:digit:].]'
-    else if (( $+commands[acpi] )); then
+    elif (( $+commands[acpi] )); then
       acpi 2>/dev/null | command grep -v "rate information unavailable" | command grep -E '^Battery.*(Full|(Disc|C)harging)' | cut -f2 -d ',' | tr -cd '[:digit:]'
-    fi; fi
+    fi
   }
 
   function battery_pct_remaining() {
