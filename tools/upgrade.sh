@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 if [ -z "$ZSH_VERSION" ]; then
-  exec zsh "$0"
+  exec zsh "$0" "$@"
 fi
 
 cd "$ZSH"
