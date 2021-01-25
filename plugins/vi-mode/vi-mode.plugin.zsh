@@ -57,6 +57,7 @@ function zle-line-init() {
 zle -N zle-line-init
 
 function zle-line-finish() {
+  typeset -g VI_KEYMAP=main
   (( ! ${+terminfo[rmkx]} )) || echoti rmkx
   _vi-mode-set-cursor-shape-for-keymap default
 }
