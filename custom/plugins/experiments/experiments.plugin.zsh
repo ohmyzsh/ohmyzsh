@@ -4,3 +4,7 @@ function experimentsplit {
   ARR=(`echo ${BRANCH}`);
   echo ${ARR[2]};
 }
+
+function mvImg {
+  mkdir ${2} && mv ${1}* ./${2}   
+}

@@ -11,10 +11,6 @@ function pollen-server-up-phoenix {
   bin/server ambassador_api ambassador_api_worker phoenix_ui notification_service gateway_api           
 }
 
-function pollen-server-up-pollen {
-  pollen-server-up
-}
-
 function pollen-server-up-admin {
   bin/server \
     admin_ui \
