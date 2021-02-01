@@ -50,7 +50,9 @@ zle -N zle-keymap-select
 # These "echoti" statements were originally set in lib/key-bindings.zsh
 # Not sure the best way to extend without overriding.
 function zle-line-init() {
+  LAST_VI_KEYMAP=$VI_KEYMAP
   typeset -g VI_KEYMAP=main
+  [[ $LAST_VI_KEYMAP != 'main' ]] && zle reset-prompt
   (( ! ${+terminfo[smkx]} )) || echoti smkx
   _vi-mode-set-cursor-shape-for-keymap "${VI_KEYMAP}"
 }
