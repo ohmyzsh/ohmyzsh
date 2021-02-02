@@ -52,7 +52,7 @@ zle -N zle-keymap-select
 function zle-line-init() {
   LAST_VI_KEYMAP=$VI_KEYMAP
   typeset -g VI_KEYMAP=main
-  [[ $LAST_VI_KEYMAP != 'main' ]] && zle reset-prompt
+  [[ $LAST_VI_KEYMAP != 'main' ]] && [[ "${VI_MODE_RESET_PROMPT_ON_MODE_CHANGE:-}" = true ]] && zle reset-prompt
   (( ! ${+terminfo[smkx]} )) || echoti smkx
   _vi-mode-set-cursor-shape-for-keymap "${VI_KEYMAP}"
 }
