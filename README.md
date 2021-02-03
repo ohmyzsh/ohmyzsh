@@ -19,6 +19,10 @@ To learn more, visit [ohmyz.sh](https://ohmyz.sh), follow [@ohmyzsh](https://twi
 
 ## Getting Started
 
+### Give it a try
+
+You can give it a try from your browser by playing with the dedicated [Katacoda course](https://www.katacoda.com/rastadidi/courses/devtips/ohmyzsh).
+
 ### Prerequisites
 
 - A Unix-like operating system: macOS, Linux, BSD. On Windows: WSL2 is preferred, but cygwin or msys also mostly work.
