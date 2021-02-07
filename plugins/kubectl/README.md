@@ -111,7 +111,7 @@ plugins=(... kubectl)
 | kgsa    | `kubectl get sa`                      | List all service accounts                                                                         |
 | kdsa    | `kubectl describe sa`                 | Describe a service account in details                                                             |
 | kdelsa  | `kubectl delete sa`                   | Delete the service account                                                                        |
-|         |                                       | **DaemexeconSet management**                                                                      |
+|         |                                       | **DaemonSet management**                                                                      |
 | kgds    | `kubectl get daemonset`               | List all DaemonSets in ps output format                                                           |
 | kgdsw   | `kgds --watch`                        | After listing all DaemonSets, watch for changes                                                   |
 | keds    | `kubectl edit daemonset`              | Edit DaemonSets from the default editor                                                           |
