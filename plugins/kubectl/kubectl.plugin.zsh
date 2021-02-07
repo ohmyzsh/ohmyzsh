@@ -68,6 +68,7 @@ alias kdeli='kubectl delete ingress'
 
 # Namespace management
 alias kgns='kubectl get namespaces'
+alias kcns='kubectl create namespace'
 alias kens='kubectl edit namespace'
 alias kdns='kubectl describe namespace'
 alias kdelns='kubectl delete namespace'
@@ -168,11 +169,25 @@ alias kecj='kubectl edit cronjob'
 alias kdcj='kubectl describe cronjob'
 alias kdelcj='kubectl delete cronjob'
 
+# Job management.
+alias kgj='kubectl get job'
+alias kej='kubectl edit job'
+alias kdj='kubectl describe job'
+alias kdelj='kubectl delete job'
+
+# Top
+alias ktno='kubectl top node'
+alias ktnoc='kubectl top node --sort-by="cpu"'
+alias ktnom='kubectl top node --sort-by="memory"'
+alias ktp='kubectl top pod'
+alias ktpc='kubectl top pod --sort-by="cpu"'
+alias ktpm='kubectl top pod --sort-by="memory"'
+
 # Only run if the user actually has kubectl installed
 if (( ${+_comps[kubectl]} )); then
-  kj() { kubectl "$@" -o json | jq; }
+  kj()  { kubectl "$@" -o json | jq; }
   kjx() { kubectl "$@" -o json | fx; }
-  ky() { kubectl "$@" -o yaml | yh; }
+  ky()  { kubectl "$@" -o yaml | yh; }
 
   compdef kj=kubectl
   compdef kjx=kubectl
