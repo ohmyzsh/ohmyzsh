@@ -33,6 +33,7 @@ plugins=(... kubectl)
 | kep     | `kubectl edit pods`                       | Edit pods from the default editor                                                                 |
 | kdp     | `kubectl describe pods`                   | Describe all pods                                                                                 |
 | kdelp   | `kubectl delete pods`                     | Delete all pods matching passed arguments                                                         |
+| kdelpf  | `kubectl delete pods --force=true`        | Force delete all pods matching passed arguments                                                   |
 | kgpl    | `kgp -l`                                  | Get pods by label. Example: `kgpl "app=myapp" -n myns`                                            |
 | kgpn    | `kgp -n`                                  | Get pods by namespace. Example: `kgpn kube-system`                                                |
 |         |                                           | **Service management**                                                                            |

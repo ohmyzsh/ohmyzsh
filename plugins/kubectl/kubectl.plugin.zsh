@@ -43,6 +43,7 @@ alias kgpwide='kgp -o wide'
 alias kep='kubectl edit pods'
 alias kdp='kubectl describe pods'
 alias kdelp='kubectl delete pods'
+alias kdelpf='kubectl delete pods --force=true'
 
 # get pod by label: kgpl "app=myapp" -n myns
 alias kgpl='kgp -l'
