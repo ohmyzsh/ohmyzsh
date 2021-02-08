@@ -77,9 +77,10 @@ function _zsh_tmux_plugin_run() {
       tmux_cmd+=(-f "$ZSH_TMUX_CONFIG")
     fi
     if [[ -n "$ZSH_TMUX_DEFAULT_SESSION_NAME" ]]; then
-        ZSH_TMUX_DEFAULT_SESSION_NAME="-s $ZSH_TMUX_DEFAULT_SESSION_NAME"
+        $tmux_cmd new-session -s $ZSH_TMUX_DEFAULT_SESSION_NAME
+    else
+        $tmux_cmd new-session
     fi
-    $tmux_cmd new-session "$ZSH_TMUX_DEFAULT_SESSION_NAME"
   fi
 
   if [[ "$ZSH_TMUX_AUTOQUIT" == "true" ]]; then
