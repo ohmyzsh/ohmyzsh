@@ -13,11 +13,16 @@ function _start_agent() {
 
 function _add_identities() {
 	local id line sig lines
-	local -a identities loaded_sigs loaded_ids not_loaded
+	local -a identities identity_dir loaded_sigs loaded_ids not_loaded
 	zstyle -a :omz:plugins:ssh-agent identities identities
+	zstyle -a :omz:plugins:ssh-agent identity_dir identity_dir
+
+	if [[ -z $identity_dir ]]; then
+		identity_dir=".ssh"
+	fi
 
 	# check for .ssh folder presence
-	if [[ ! -d $HOME/.ssh ]]; then
+	if [[ ! -d $HOME/$identity_dir ]]; then
 		return
 	fi
 
@@ -27,7 +32,7 @@ function _add_identities() {
 		# key list found on `ssh-add` man page's DESCRIPTION section
 		for id in id_rsa id_dsa id_ecdsa id_ed25519 identity; do
 			# check if file exists
-			[[ -f "$HOME/.ssh/$id" ]] && identities+=$id
+			[[ -f "$HOME/$identity_dir/$id" ]] && identities+=$id
 		done
 	fi
 
@@ -43,8 +48,8 @@ function _add_identities() {
 	for id in $identities; do
 		# check for filename match, otherwise try for signature match
 		if [[ ${loaded_ids[(I)$HOME/.ssh/$id]} -le 0 ]]; then
-			sig="$(ssh-keygen -lf "$HOME/.ssh/$id" | awk '{print $2}')"
-			[[ ${loaded_sigs[(I)$sig]} -le 0 ]] && not_loaded+="$HOME/.ssh/$id"
+			sig="$(ssh-keygen -lf "$HOME/$identity_dir/$id" | awk '{print $2}')"
+			[[ ${loaded_sigs[(I)$sig]} -le 0 ]] && not_loaded+="$HOME/$identity_dir/$id"
 		fi
 	done
 
