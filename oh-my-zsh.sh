@@ -95,9 +95,9 @@ $zcompdump_fpath
 EOF
   fi
 }
-
-run_compinit
-
+if [[ "$DISABLE_COMPINIT" != "true" ]]; then
+  run_compinit
+fi
 
 # Load all of the config files in ~/oh-my-zsh that end in .zsh
 # TIP: Add files you don't want in git to .gitignore
