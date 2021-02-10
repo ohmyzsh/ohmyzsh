@@ -95,7 +95,7 @@ $zcompdump_fpath
 EOF
   fi
 }
-if [[ "$DISABLE_COMPINIT" != "true" ]]; then
+if [[ "$ZSH_DISABLE_COMPINIT" != "true" ]]; then
   run_compinit
 fi
 
