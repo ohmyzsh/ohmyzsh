@@ -18,10 +18,7 @@ if [[ "$OSTYPE" = darwin* ]]; then
   }
 
   function battery_pct() {
-    local battery_status="$(ioreg -rc AppleSmartBattery)"
-    local -i capacity=$(sed -n -e '/MaxCapacity/s/^.*"MaxCapacity"\ =\ //p' <<< $battery_status)
-    local -i current=$(sed -n -e '/CurrentCapacity/s/^.*"CurrentCapacity"\ =\ //p' <<< $battery_status)
-    echo $(( current * 100 / capacity ))
+    pmset -g batt | grep -Eo "\d+%" | cut -d% -f1
   }
 
   function battery_pct_remaining() {
@@ -175,7 +172,7 @@ function battery_level_gauge() {
   local filled_symbol=${BATTERY_GAUGE_FILLED_SYMBOL:-'▶'}
   local empty_symbol=${BATTERY_GAUGE_EMPTY_SYMBOL:-'▷'}
   local charging_color=${BATTERY_CHARGING_COLOR:-$color_yellow}
-  local charging_symbol=${BATTERY_CHARGING_SYMBOL:-'%{%G⚡%}'}
+  local charging_symbol=${BATTERY_CHARGING_SYMBOL:-'⚡'}
 
   local battery_remaining_percentage=$(battery_pct)
   local filled empty gauge_color

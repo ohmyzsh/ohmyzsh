@@ -23,6 +23,7 @@ plugins=(... extract)
 | `bz2`             | Bzip2 file                           |
 | `deb`             | Debian package                       |
 | `gz`              | Gzip file                            |
+| `ipa`             | iOS app package                      |
 | `ipsw`            | iOS firmware file                    |
 | `jar`             | Java Archive                         |
 | `lrz`             | LRZ archive                          |
