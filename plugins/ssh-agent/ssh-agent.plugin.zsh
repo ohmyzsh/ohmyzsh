@@ -5,7 +5,9 @@ function _start_agent() {
 	zstyle -s :omz:plugins:ssh-agent lifetime lifetime
 
 	# start ssh-agent and setup environment
-	echo Starting ssh-agent...
+	if [[ -z "$ZSH_SSH_AGENT_QUIET" ]]; then
+	    echo Starting ssh-agent...
+	fi
 	ssh-agent -s ${lifetime:+-t} ${lifetime} | sed 's/^echo/#echo/' >! $_ssh_env_cache
 	chmod 600 $_ssh_env_cache
 	. $_ssh_env_cache > /dev/null

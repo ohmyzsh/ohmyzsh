@@ -33,6 +33,10 @@ The lifetime may be specified in seconds or as described in sshd_config(5)
 zstyle :omz:plugins:ssh-agent lifetime 4h
 ```
 
+To **silence the plugin**, such as the `starting ssh agent...` message,
+simply set `ZSH_SSH_AGENT_QUIET=true` somewhere in your zsh profile
+_before_ you source your `oh-my-zsh.sh` file.
+
 ## Credits
 
 Based on code from Joseph M. Reagle: https://www.cygwin.com/ml/cygwin/2001-06/msg00537.html
