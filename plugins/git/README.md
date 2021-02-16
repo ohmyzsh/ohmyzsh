@@ -104,16 +104,17 @@ plugins=(... git)
 | gloga                | git log --oneline --decorate --graph --all                                                                                       |
 | glp                  | git log --pretty=\<format\>                                                                                                      |
 | gm                   | git merge                                                                                                                        |
-| gmom                 | git merge origin/$(git_main_branch)                                                                                                            |
+| gmom                 | git merge origin/$(git_main_branch)                                                                                              |
 | gmt                  | git mergetool --no-prompt                                                                                                        |
 | gmtvim               | git mergetool --no-prompt --tool=vimdiff                                                                                         |
-| gmum                 | git merge upstream/$(git_main_branch)                                                                                                          |
+| gmum                 | git merge upstream/$(git_main_branch)                                                                                            |
 | gma                  | git merge --abort                                                                                                                |
 | gp                   | git push                                                                                                                         |
 | gpd                  | git push --dry-run                                                                                                               |
 | gpf                  | git push --force-with-lease                                                                                                      |
 | gpf!                 | git push --force                                                                                                                 |
 | gpoat                | git push origin --all && git push origin --tags                                                                                  |
+| gps                  | git push -o skip-ci                                                                                                              |
 | gpu                  | git push upstream                                                                                                                |
 | gpv                  | git push -v                                                                                                                      |
 | gr                   | git remote                                                                                                                       |
