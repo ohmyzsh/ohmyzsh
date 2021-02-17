@@ -12,6 +12,9 @@ fi
 
 # This command is used a LOT both below and in daily life
 alias k=kubectl
+alias kg='kubectl get'
+alias kd='kubectl describe'
+alias ke='kubectl edit'
 
 # Execute a kubectl command against all namespaces
 alias kca='_kca(){ kubectl "$@" --all-namespaces;  unset -f _kca; }; _kca'
@@ -142,6 +145,7 @@ alias krsss='kubectl rollout status statefulset'
 
 # Port forwarding
 alias kpf="kubectl port-forward"
+alias kpfh="kubectl port-forward --help"
 
 # Tools for accessing all information
 alias kga='kubectl get all'

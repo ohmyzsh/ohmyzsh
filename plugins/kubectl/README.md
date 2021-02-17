@@ -14,6 +14,9 @@ plugins=(... kubectl)
 | Alias   | Command                                   | Description                                                                                       |
 |:--------|:------------------------------------------|:--------------------------------------------------------------------------------------------------|
 | k       | `kubectl`                                 | The kubectl command                                                                               |
+| kg      | `kubectl get`                             | The kubectl command                                                                               |
+| ks      | `kubectl describe`                        | The kubectl command                                                                               |
+| ke      | `kubectl edit`                            | The kubectl command                                                                               |
 | kca     | `kubectl --all-namespaces`                | The kubectl command targeting all namespaces                                                      |
 | kaf     | `kubectl apply -f`                        | Apply a YML file                                                                                  |
 | keti    | `kubectl exec -ti`                        | Drop into an interactive terminal on a container                                                  |
@@ -90,7 +93,8 @@ plugins=(... kubectl)
 | krh     | `kubectl rollout history`                 | Check the revisions of this deployment                                                            |
 | kru     | `kubectl rollout undo`                    | Rollback to the previous revision                                                                 |
 |         |                                           | **Port forwarding**                                                                               |
-| kpf     | `kubectl port-forward`                    | Forward one or more local ports to a pod                                                          |
+| kpf     | `kubectl port-forward`                    | Forward one or more local ports                                                                   |
+| kpfh    | `kubectl port-forward --help`             | Display help on Port-Forwarding                                                                   |
 |         |                                           | **Tools for accessing all information**                                                           |
 | kga     | `kubectl get all`                         | List all resources in ps format                                                                   |
 | kgaa    | `kubectl get all --all-namespaces`        | List the requested object(s) across all namespaces                                                |
