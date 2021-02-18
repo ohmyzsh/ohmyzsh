@@ -188,8 +188,8 @@ function pacdisowned() {
 }
 
 function pacmanallkeys() {
-  curl -s https://www.archlinux.org/people/{developers,trustedusers}/ | \
-    awk -F\" '(/pgp.mit.edu/) { sub(/.*search=0x/,""); print $1}' | \
+  curl -sL https://www.archlinux.org/people/{developers,trusted-users}/ | \
+    awk -F\" '(/keyserver.ubuntu.com/) { sub(/.*search=0x/,""); print $1}' | \
     xargs sudo pacman-key --recv-keys
 }
 

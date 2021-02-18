@@ -10,28 +10,6 @@ plugins=(... grc)
 
 ## Commands
 
-The following commands are wrapped by `grc` so that their output is automatically colored:
-
-- `cc`
-- `configure`
-- `cvs`
-- `df`
-- `diff`
-- `dig`
-- `gcc`
-- `gmake`
-- `ifconfig`
-- `iwconfig`
-- `last`
-- `ldap`
-- `make`
-- `mount`
-- `mtr`
-- `netstat`
-- `ping`
-- `ping6`
-- `ps`
-- `traceroute`
-- `traceroute6`
-- `wdiff`
-- `whois`
+The plugin sources the bundled alias generator from the installation, available at `/etc/grc.zsh`.
+The complete list of wrapped commands may vary depending on the installed version of `grc`, look
+at the file mentioned above (`/etc/grc.zsh`) to see which commands are wrapped.
