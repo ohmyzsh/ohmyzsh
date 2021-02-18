@@ -71,6 +71,7 @@ plugins=(... kubectl)
 | kdeld   | `kubectl delete deployment`         | Delete the deployment                                                                            |
 | ksd     | `kubectl scale deployment`          | Scale a deployment                                                                               |
 | krsd    | `kubectl rollout status deployment` | Check the rollout status of a deployment                                                         |
+| krrd    | `kubectl rollout restart deployment`| Perform a rolling restart of a deployment                                                        |
 | kres    | `kubectl set env $@ REFRESHED_AT=...` | Recreate all pods in deployment with zero-downtime                                                         |
 |         |                                     | **Rollout management**                                                                           |
 | kgrs    | `kubectl get rs`                    | To see the ReplicaSet `rs` created by the deployment                                             |
