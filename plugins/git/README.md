@@ -105,6 +105,7 @@ plugins=(... git)
 | `glo`                  | `git log --oneline --decorate`                                                                                                  |
 | `glog`                 | `git log --oneline --decorate --graph`                                                                                          |
 | `gloga`                | `git log --oneline --decorate --graph --all`                                                                                    |
+| `glom`                 | `git log --oneline --decorate --color $(git_main_branch)..`                                                                     |
 | `glp`                  | `git log --pretty=<format>`                                                                                                     |
 | `glg`                  | `git log --stat`                                                                                                                |
 | `glgp`                 | `git log --stat --patch`                                                                                                        |
