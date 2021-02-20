@@ -402,7 +402,8 @@ do
 done < "$WD_CONFIG"
 
 # get opts
-args=$(getopt -o a:r:c:lhs -l add:,rm:,clean,list,ls:,path:,help,show -- $*)
+GETOPT=$(command -v gnugetopt 2> /dev/null || command getopt || echo getopt)
+args=$($GETOPT -o a:r:c:lhs -l add:,rm:,clean,list,ls:,path:,help,show -- $*)
 
 # check if no arguments were given, and that version is not set
 if [[ ($? -ne 0 || $#* -eq 0) && -z $wd_print_version ]]
