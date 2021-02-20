@@ -48,6 +48,7 @@ plugins=(... git)
 | gcf                  | git config --list                                                                                                                |
 | gcl                  | git clone --recurse-submodules                                                                                                   |
 | gclean               | git clean -id                                                                                                                    |
+| gcfx                 | git commit --fixup                                                                                                               |
 | gpristine            | git reset --hard && git clean -dffx                                                                                              |
 | gcm                  | git checkout $(git_main_branch)                                                                                                                |
 | gcd                  | git checkout develop                                                                                                             |
@@ -102,6 +103,7 @@ plugins=(... git)
 | glod                 | git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset'                           |
 | glods                | git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset' --date=short              |
 | glola                | git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --all                     |
+| glom                 | git log --oneline --decorate --color $(git_main_branch)                                                                          |
 | glog                 | git log --oneline --decorate --graph                                                                                             |
 | gloga                | git log --oneline --decorate --graph --all                                                                                       |
 | glp                  | git log --pretty=\<format\>                                                                                                      |
