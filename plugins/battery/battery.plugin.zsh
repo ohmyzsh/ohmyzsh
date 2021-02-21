@@ -18,10 +18,7 @@ if [[ "$OSTYPE" = darwin* ]]; then
   }
 
   function battery_pct() {
-    local battery_status="$(ioreg -rc AppleSmartBattery)"
-    local -i capacity=$(sed -n -e '/MaxCapacity/s/^.*"MaxCapacity"\ =\ //p' <<< $battery_status)
-    local -i current=$(sed -n -e '/CurrentCapacity/s/^.*"CurrentCapacity"\ =\ //p' <<< $battery_status)
-    echo $(( current * 100 / capacity ))
+    pmset -g batt | grep -Eo "\d+%" | cut -d% -f1
   }
 
   function battery_pct_remaining() {

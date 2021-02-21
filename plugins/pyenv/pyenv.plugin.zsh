@@ -2,7 +2,11 @@
 # the 'pyenv_prompt_info' function. Also loads pyenv-virtualenv if available.
 
 # Load pyenv only if command not already available
-command -v pyenv &> /dev/null && FOUND_PYENV=1 || FOUND_PYENV=0
+if command -v pyenv &> /dev/null && [[ "$(uname -r)" != *icrosoft* ]]; then
+    FOUND_PYENV=1
+else
+    FOUND_PYENV=0
+fi
 
 if [[ $FOUND_PYENV -ne 1 ]]; then
     pyenvdirs=("$HOME/.pyenv" "/usr/local/pyenv" "/opt/pyenv" "/usr/local/opt/pyenv")
@@ -25,7 +29,7 @@ if [[ $FOUND_PYENV -ne 1 ]]; then
 fi
 
 if [[ $FOUND_PYENV -eq 1 ]]; then
-    eval "$(pyenv init - zsh)"
+    eval "$(pyenv init - --no-rehash zsh)"
     if (( $+commands[pyenv-virtualenv-init] )); then
         eval "$(pyenv virtualenv-init - zsh)"
     fi

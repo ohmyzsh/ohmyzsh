@@ -6,7 +6,8 @@ alias cless="colorize_less"
 ZSH_COLORIZE_PLUGIN_PATH=$0:A
 
 colorize_check_requirements() {
-    local available_tools=("chroma" "pygmentize")
+    local -a available_tools
+    available_tools=("chroma" "pygmentize")
 
     if [ -z "$ZSH_COLORIZE_TOOL" ]; then
         if (( $+commands[pygmentize] )); then
@@ -46,7 +47,7 @@ colorize_cat() {
         if [[ "$ZSH_COLORIZE_TOOL" == "pygmentize" ]]; then
             pygmentize -O style="$ZSH_COLORIZE_STYLE" -g
         else
-            chroma --style="$ZSH_COLORIZE_STYLE"
+            chroma --style="$ZSH_COLORIZE_STYLE" --formatter="${ZSH_COLORIZE_CHROMA_FORMATTER:-terminal}"
         fi
         return $?
     fi
@@ -62,7 +63,7 @@ colorize_cat() {
                 pygmentize -O style="$ZSH_COLORIZE_STYLE" -g "$FNAME"
             fi
         else
-            chroma --style="$ZSH_COLORIZE_STYLE" "$FNAME"
+            chroma --style="$ZSH_COLORIZE_STYLE" --formatter="${ZSH_COLORIZE_CHROMA_FORMATTER:-terminal}" "$FNAME"
         fi
     done
 }
@@ -95,7 +96,7 @@ colorize_less() {
         # which assumes that his LESSOPEN has been executed.
         local LESSCLOSE=""
 
-        LESS="$LESS" LESSOPEN="$LESSOPEN" LESSCLOSE="$LESSCLOSE" less "$@"
+        LESS="$LESS" LESSOPEN="$LESSOPEN" LESSCLOSE="$LESSCLOSE" command less "$@"
     }
 
     if [ -t 0 ]; then
