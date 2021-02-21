@@ -41,6 +41,6 @@ plugins=(... laravel-sail)
 ### Others
 | Alias | Description |
 |:-:|:-:|
-|`ss`|`sail shell`|
+|`sh`|`sail shell`|
 |`stinker`|`sail tinker`|
 |`sshare`|`sail share`|
