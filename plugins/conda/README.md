@@ -12,6 +12,7 @@ plugins=(... conda)
 | Alias  | Command                               |
 | :----- | :---                                  |
 | ca     | conda activate                        |
+| cab    | conda activate base                   |
 | cde    | conda deactivate                      |
 | cel    | conda env list                        |
 | cl     | conda list                            |
