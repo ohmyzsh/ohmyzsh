@@ -2,10 +2,10 @@ alias ca="conda activate"
 alias cab="conda activate base"
 alias cde="conda deactivate"
 
-alias cel="conda env list"
 alias cl="conda list"
 alias cle="conda list --export"
 alias cles="conda list --explicit > spec-file.txt"
+alias cel="conda env list"
 
 alias ci="conda install"
 alias ciy="conda install -y"
