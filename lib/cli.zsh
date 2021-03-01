@@ -401,13 +401,14 @@ function _omz::theme::use {
 }
 
 function _omz::update {
+  local last_commit=$(cd "$ZSH"; git rev-parse HEAD)
+
   # Run update script
   if [[ "$1" != --unattended ]]; then
     ZSH="$ZSH" zsh -f "$ZSH/tools/upgrade.sh" --interactive
   else
     ZSH="$ZSH" zsh -f "$ZSH/tools/upgrade.sh"
   fi
-  local ret=$?
 
   # Update last updated file
   zmodload zsh/datetime
@@ -415,8 +416,8 @@ function _omz::update {
   # Remove update lock if it exists
   command rm -rf "$ZSH/log/update.lock"
 
-  # Restart the zsh session
-  if [[ $ret -eq 0 && "$1" != --unattended ]]; then
+  # Restart the zsh session if there were changes
+  if [[ "$1" != --unattended && "$(cd "$ZSH"; git rev-parse HEAD)" != "$last_commit" ]]; then
     # Old zsh versions don't have ZSH_ARGZERO
     local zsh="${ZSH_ARGZERO:-${functrace[-1]%:*}}"
     # Check whether to run a login shell
