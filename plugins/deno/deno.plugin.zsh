@@ -3,5 +3,5 @@
 # Copy from plugins/helm/helm.plugin.zsh
 
 if [ $commands[deno] ]; then
-  source <(deno completion zsh)
+  source <(deno completions zsh)
 fi
