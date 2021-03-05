@@ -102,8 +102,9 @@ source $ZSH/oh-my-zsh.sh
 alias prodplan='/google/data/ro/projects/prodplan/prodplan'
 
 # disable shared history among sessions
-setopt noincappendhistory
-setopt nosharehistory
+# setopt noincappendhistory
+# setopt nosharehistory
+
 export PYTHONPATH=/home/xianshuli/proto:$PYTHONPATH
 export LD_LIBRARY_PATH=/home/xianshuli/local/lib64/:/home/xianshuli/local/lib/:$LD_LIBRARY_PATH:/home/xianshuli/ufe/external_interfaces/x86_64-linux-gcc/:/home/y/lib/
 export PATH=/home/xianshuli/local/bin:/home/xianshuli/local/sbin:$PATH
