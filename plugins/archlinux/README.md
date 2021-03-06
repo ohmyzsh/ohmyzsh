@@ -55,55 +55,6 @@ plugins=(... archlinux)
 | trsu    | trizen -Syua --no-confirm          | Same as `trupg`, but without confirmation                           |
 | upgrade | trizen -Syu                        | Sync with repositories before upgrading packages                    |
 
-#### YAOURT
-
-| Alias   | Command                            | Description                                                         |
-|---------|------------------------------------|---------------------------------------------------------------------|
-| yaconf  | yaourt -C                          | Fix all configuration files with vimdiff                            |
-| yain    | yaourt -S                          | Install packages from the repositories                              |
-| yains   | yaourt -U                          | Install a package from a local file                                 |
-| yainsd  | yaourt -S --asdeps                 | Install packages as dependencies of another package                 |
-| yaloc   | yaourt -Qi                         | Display information about a package in the local database           |
-| yalocs  | yaourt -Qs                         | Search for packages in the local database                           |
-| yalst   | yaourt -Qe                         | List installed packages including from AUR (tagged as "local")      |
-| yamir   | yaourt -Syy                        | Force refresh of all package lists after updating mirrorlist        |
-| yaorph  | yaourt -Qtd                        | Remove orphans using yaourt                                         |
-| yare    | yaourt -R                          | Remove packages, keeping its settings and dependencies              |
-| yarem   | yaourt -Rns                        | Remove packages, including its settings and unneeded dependencies   |
-| yarep   | yaourt -Si                         | Display information about a package in the repositories             |
-| yareps  | yaourt -Ss                         | Search for packages in the repositories                             |
-| yaupd   | yaourt -Sy && sudo abs && sudo aur | Update and refresh local package, ABS and AUR databases             |
-| yaupd   | yaourt -Sy && sudo abs             | Update and refresh the local package and ABS databases              |
-| yaupd   | yaourt -Sy && sudo aur             | Update and refresh the local package and AUR databases              |
-| yaupd   | yaourt -Sy                         | Update and refresh the local package database                       |
-| yaupg   | yaourt -Syua                       | Sync with repositories before upgrading all packages (from AUR too) |
-| yasu    | yaourt -Syua --no-confirm          | Same as `yaupg`, but without confirmation                           |
-| upgrade | yaourt -Syu                        | Sync with repositories before upgrading packages                    |
-
-#### PACAUR
-
-| Alias   | Command                            | Description                                                         |
-|---------|------------------------------------|---------------------------------------------------------------------|
-| pain    | pacaur -S                          | Install packages from the repositories                              |
-| pains   | pacaur -U                          | Install a package from a local file                                 |
-| painsd  | pacaur -S --asdeps                 | Install packages as dependencies of another package                 |
-| paloc   | pacaur -Qi                         | Display information about a package in the local database           |
-| palocs  | pacaur -Qs                         | Search for packages in the local database                           |
-| palst   | pacaur -Qe                         | List installed packages including from AUR (tagged as "local")      |
-| pamir   | pacaur -Syy                        | Force refresh of all package lists after updating mirrorlist        |
-| paorph  | pacaur -Qtd                        | Remove orphans using pacaur                                         |
-| pare    | pacaur -R                          | Remove packages, keeping its settings and dependencies              |
-| parem   | pacaur -Rns                        | Remove packages, including its settings and unneeded dependencies   |
-| parep   | pacaur -Si                         | Display information about a package in the repositories             |
-| pareps  | pacaur -Ss                         | Search for packages in the repositories                             |
-| paupd   | pacaur -Sy && sudo abs && sudo aur | Update and refresh local package, ABS and AUR databases             |
-| paupd   | pacaur -Sy && sudo abs             | Update and refresh the local package and ABS databases              |
-| paupd   | pacaur -Sy && sudo aur             | Update and refresh the local package and AUR databases              |
-| paupd   | pacaur -Sy                         | Update and refresh the local package database                       |
-| paupg   | pacaur -Syua                       | Sync with repositories before upgrading all packages (from AUR too) |
-| pasu    | pacaur -Syua --no-confirm          | Same as `paupg`, but without confirmation                           |
-| upgrade | pacaur -Syu                        | Sync with repositories before upgrading packages                    |
-
 #### PACMAN
 
 | Alias        | Command                                 | Description                                                  |
@@ -152,3 +103,4 @@ plugins=(... archlinux)
 - Juraj Fiala - doctorjellyface@riseup.net
 - Majora320 (Moses Miller) - Majora320@gmail.com
 - Ybalrid (Arthur Brainville) - ybalrid@ybalrid.info
+- Nowshed H. Imran(nowshed-imran) - now.im.627@gmail.com

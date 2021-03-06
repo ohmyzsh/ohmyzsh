@@ -27,35 +27,6 @@ if (( $+commands[trizen] )); then
   fi
 fi
 
-if (( $+commands[yaourt] )); then
-  alias yaconf='yaourt -C'
-  alias yaupg='yaourt -Syua'
-  alias yasu='yaourt -Syua --noconfirm'
-  alias yain='yaourt -S'
-  alias yains='yaourt -U'
-  alias yare='yaourt -R'
-  alias yarem='yaourt -Rns'
-  alias yarep='yaourt -Si'
-  alias yareps='yaourt -Ss'
-  alias yaloc='yaourt -Qi'
-  alias yalocs='yaourt -Qs'
-  alias yalst='yaourt -Qe'
-  alias yaorph='yaourt -Qtd'
-  alias yainsd='yaourt -S --asdeps'
-  alias yamir='yaourt -Syy'
-
-
-  if (( $+commands[abs] && $+commands[aur] )); then
-    alias yaupd='yaourt -Sy && sudo abs && sudo aur'
-  elif (( $+commands[abs] )); then
-    alias yaupd='yaourt -Sy && sudo abs'
-  elif (( $+commands[aur] )); then
-    alias yaupd='yaourt -Sy && sudo aur'
-  else
-    alias yaupd='yaourt -Sy'
-  fi
-fi
-
 if (( $+commands[yay] )); then
   alias yaconf='yay -Pg'
   alias yaupg='yay -Syu'
@@ -85,44 +56,9 @@ if (( $+commands[yay] )); then
   fi
 fi
 
-if (( $+commands[pacaur] )); then
-  alias paupg='pacaur -Syu'
-  alias pasu='pacaur -Syu --noconfirm'
-  alias pain='pacaur -S'
-  alias pains='pacaur -U'
-  alias pare='pacaur -R'
-  alias parem='pacaur -Rns'
-  alias parep='pacaur -Si'
-  alias pareps='pacaur -Ss'
-  alias paloc='pacaur -Qi'
-  alias palocs='pacaur -Qs'
-  alias palst='pacaur -Qe'
-  alias paorph='pacaur -Qtd'
-  alias painsd='pacaur -S --asdeps'
-  alias pamir='pacaur -Syy'
-
-  if (( $+commands[abs] && $+commands[aur] )); then
-    alias paupd='pacaur -Sy && sudo abs && sudo aur'
-  elif (( $+commands[abs] )); then
-    alias paupd='pacaur -Sy && sudo abs'
-  elif (( $+commands[aur] )); then
-    alias paupd='pacaur -Sy && sudo aur'
-  else
-    alias paupd='pacaur -Sy'
-  fi
-fi
-
 if (( $+commands[trizen] )); then
   function upgrade() {
     trizen -Syu
-  }
-elif (( $+commands[pacaur] )); then
-  function upgrade() {
-    pacaur -Syu
-  }
-elif (( $+commands[yaourt] )); then
-  function upgrade() {
-    yaourt -Syu
   }
 elif (( $+commands[yay] )); then
   function upgrade() {
