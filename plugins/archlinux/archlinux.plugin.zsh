@@ -104,7 +104,7 @@ if (( $+commands[aura] )); then
   alias auras='aura -As --both'
   alias auupd="sudo aura -Sy"
   alias auupg='sudo sh -c "aura -Syu              && aura -Au"'
-  alias ausu='sudo  sh -c "aura -Syu --no-confirm && aura -Au --no-confirm"'
+  alias ausu='sudo sh -c "aura -Syu --no-confirm && aura -Au --no-confirm"'
   alias upgrade='sudo aura -Syu'
 
   # extra bonus specially for aura
@@ -153,26 +153,6 @@ if (( $+commands[trizen] )); then
   alias upgrade='trizen -Syu'
 fi
 
-if (( $+commands[yaourt] )); then
-  alias yaconf='yaourt -C'
-  alias yaupg='yaourt -Syua'
-  alias yasu='yaourt -Syua --noconfirm'
-  alias yain='yaourt -S'
-  alias yains='yaourt -U'
-  alias yare='yaourt -R'
-  alias yarem='yaourt -Rns'
-  alias yarep='yaourt -Si'
-  alias yareps='yaourt -Ss'
-  alias yaloc='yaourt -Qi'
-  alias yalocs='yaourt -Qs'
-  alias yalst='yaourt -Qe'
-  alias yaorph='yaourt -Qtd'
-  alias yainsd='yaourt -S --asdeps'
-  alias yamir='yaourt -Syy'
-  alias yaupd="yaourt -Sy"
-  alias upgrade='yaourt -Syu'
-fi
-
 if (( $+commands[yay] )); then
   alias yaconf='yay -Pg'
   alias yaupg='yay -Syu'
@@ -192,4 +172,3 @@ if (( $+commands[yay] )); then
   alias yaupd="yay -Sy"
   alias upgrade='yay -Syu'
 fi
-
