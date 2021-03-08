@@ -29,7 +29,7 @@ function emotty() {
   # Parse tty number via prompt expansion. %l equals:
   # - N      if tty = /dev/ttyN
   # - pts/N  if tty = /dev/pts/N
-  local tty = ${${(%):-%l}##pts/}
+  local tty=${${(%):-%l}##pts/}
   # Normalize it to an emotty set index
   (( tty = (tty % ${#${=emotty}}) + 1 ))
 
