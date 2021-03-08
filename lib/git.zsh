@@ -94,8 +94,9 @@ function git_remote_status() {
 # Using '--quiet' with 'symbolic-ref' will not cause a fatal error (128) if
 # it's not a symbolic ref, but in a Git repo.
 function git_current_branch() {
-  local ref=$(__git_prompt_git branch --show-current 2> /dev/null)
-  local ret=$?
+  local ref ret
+  ref=$(__git_prompt_git branch --show-current 2> /dev/null)
+  ret=$?
   [[ $ret == 128 ]] && return  # no git repo.
   if [[ $ret != 0 ]]; then  # Git versions before 2.22.0
     ref=$(__git_prompt_git symbolic-ref --quiet HEAD 2> /dev/null)
