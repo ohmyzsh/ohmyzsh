@@ -43,10 +43,12 @@ plugins=(... git)
 | gcam                 | git commit -a -m                                                                                                                 |
 | gcsm                 | git commit -s -m                                                                                                                 |
 | gcb                  | git checkout -b                                                                                                                  |
-| gcf                  | git config --list                                                                                                                |
+| gcf                  | git config --list                                                                                                                 |
+| gccd                 | git clone $@ && cd $(basename "$_" .git)                                                                                         |
 | gcl                  | git clone --recurse-submodules                                                                                                   |
+| gclcd                | git clone --recurse-submodules $@ && cd $(basename "$_" .git)                                                                    |
 | gclean               | git clean -id                                                                                                                    |
-| gpristine            | git reset --hard && git clean -dffx                                                                                              |
+| gpristine            | git reset --hard && git clean -dffx                                                                                               |
 | gcm                  | git checkout $(git_main_branch)                                                                                                                |
 | gcd                  | git checkout develop                                                                                                             |
 | gcmsg                | git commit -m                                                                                                                    |
