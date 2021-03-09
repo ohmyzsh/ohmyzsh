@@ -81,8 +81,20 @@ alias gcans!='git commit -v -a -s --no-edit --amend'
 alias gcam='git commit -a -m'
 alias gcsm='git commit -s -m'
 alias gcb='git checkout -b'
+
+function gccd() {
+  git clone $@
+  cd "$(basename "$_" .git)"
+}
+
 alias gcf='git config --list'
 alias gcl='git clone --recurse-submodules'
+
+function gclcd() {
+  git clone --recurse-submodules $@
+  cd "$(basename "$_" .git)"
+}
+
 alias gclean='git clean -id'
 alias gpristine='git reset --hard && git clean -dffx'
 alias gcm='git checkout $(git_main_branch)'
