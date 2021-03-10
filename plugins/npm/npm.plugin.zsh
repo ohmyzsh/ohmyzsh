@@ -57,3 +57,35 @@ alias npmP="npm publish"
 
 # Run npm init
 alias npmI="npm init"
+
+npm-buffer-editor() {
+    if [[ "$1" == *"npm install"* ]]; then
+        BUFFER=$(sed -e "s/npm install/npm uninstall/g" <<< $1)
+    elif [[ "$1" == *"npm i"* ]]; then
+        BUFFER=$(sed -e "s/npm i/npm uninstall/g" <<< $1)
+    elif [[ "$1" == *"npm uninstall"* ]]; then
+        BUFFER=$(sed -e "s/npm uninstall/npm install/g" <<< $1)
+    fi
+}
+
+npm-uninstall-install-toggle() {
+    PREVLINE="$(fc -ln -1)"
+    LINE2="$(fc -ln -2 -2)"
+    CURRBUFFER=$BUFFER
+    if [[ -z $BUFFER && "$PREVLINE" =~ "npm install|npm i|npm uninstall" ]]; then
+        npm-buffer-editor "$PREVLINE"
+    elif [[ "$CURRBUFFER" =~ "npm install|npm i|npm uninstall" ]]; then;
+        npm-buffer-editor "$CURRBUFFER"
+    elif [[ "$LINE2" =~ "npm install|npm i|npm uninstall" ]]; then;
+        npm-buffer-editor "$LINE2"
+    else
+        BUFFER="npm install"
+    fi
+}
+
+zle -N npm-uninstall-install-toggle
+# Defined shortcut keys: [F1] [F1]
+# TIP: to pick a new bindkey use `sed -n l` to log key inputs.
+bindkey -M emacs '^[OP^[OP' npm-uninstall-install-toggle
+bindkey -M vicmd '^[OP^[OP' npm-uninstall-install-toggle
+bindkey -M viins '^[OP^[OP' npm-uninstall-install-toggle

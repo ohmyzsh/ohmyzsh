@@ -25,3 +25,8 @@ plugins=(... npm)
 | `npmR`  | `npm run`                    | Run npm scripts                                                 |
 | `npmP`  | `npm publish`                | Run npm publish                                                 |
 | `npmI`  | `npm init`                   | Run npm init                                                    |
+
+## npm install/uninstall toggle
+
+It will first toggle what is in your command line buffer, then your previous line history, then the line before that, 
+and if it still finds nothing it will replace the buffer with npm install. The default bind key for this is \[F1\]\[F1\].
