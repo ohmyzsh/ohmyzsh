@@ -28,5 +28,4 @@ plugins=(... npm)
 
 ## npm install/uninstall toggle
 
-It will first toggle what is in your command line buffer, then your previous line history, then the line before that, 
-and if it still finds nothing it will replace the buffer with npm install. The default bind key for this is \[F1\]\[F1\].
+It will first toggle what is in your command line buffer, then your previous line history, then the line before that, and if it still finds nothing it will replace the buffer with npm install. The default bind key for this is \[F2\] \[F2\].
