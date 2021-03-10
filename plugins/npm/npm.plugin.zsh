@@ -58,34 +58,34 @@ alias npmP="npm publish"
 # Run npm init
 alias npmI="npm init"
 
-npm-buffer-editor() {
-    if [[ "$1" == *"npm install"* ]]; then
-        BUFFER=$(sed -e "s/npm install/npm uninstall/g" <<< $1)
-    elif [[ "$1" == *"npm i"* ]]; then
-        BUFFER=$(sed -e "s/npm i/npm uninstall/g" <<< $1)
-    elif [[ "$1" == *"npm uninstall"* ]]; then
-        BUFFER=$(sed -e "s/npm uninstall/npm install/g" <<< $1)
-    fi
+_npm_buffer_editor() {
+  if [[ "$1" == *"npm install"* ]]; then
+    BUFFER=$(sed -e "s/npm install/npm uninstall/g" <<< $1)
+  elif [[ "$1" == *"npm i"* ]]; then
+    BUFFER=$(sed -e "s/npm i/npm uninstall/g" <<< $1)
+  elif [[ "$1" == *"npm uninstall"* ]]; then
+    BUFFER=$(sed -e "s/npm uninstall/npm install/g" <<< $1)
+  fi
 }
 
-npm-uninstall-install-toggle() {
-    prevline="$(fc -ln -1)"
-    line2="$(fc -ln -2 -2)"
-    currbuffer=$BUFFER
-    if [[ -z $BUFFER && "$prevline" =~ "npm install|npm i|npm uninstall" ]]; then
-        npm-buffer-editor "$prevline"
-    elif [[ "$currbuffer" =~ "npm install|npm i|npm uninstall" ]]; then;
-        npm-buffer-editor "$currbuffer"
-    elif [[ "$line2" =~ "npm install|npm i|npm uninstall" ]]; then;
-        npm-buffer-editor "$line2"
-    else
-        BUFFER="npm install"
-    fi
+npm_install_uninstall_toggle() {
+  local prev_line="$(fc -ln -1)"
+  local line2="$(fc -ln -2 -2)"
+  local curr_buffer=$BUFFER
+  if [[ -z $BUFFER && "$prev_line" =~ "npm install|npm i|npm uninstall" ]]; then
+    _npm_buffer_editor "$prev_line"
+  elif [[ "$curr_buffer" =~ "npm install|npm i|npm uninstall" ]]; then
+    _npm_buffer_editor "$curr_buffer"
+  elif [[ "$line2" =~ "npm install|npm i|npm uninstall" ]]; then
+    _npm_buffer_editor "$line2"
+  else
+    BUFFER="npm install"
+  fi
 }
 
-zle -N npm-uninstall-install-toggle
+zle -N npm_install_uninstall_toggle
 # Defined shortcut keys: [F2] [F2]
 # TIP: to pick a new bindkey use `sed -n l` to log key inputs.
-bindkey -M emacs '^[OQ^[OQ' npm-uninstall-install-toggle
-bindkey -M vicmd '^[OQ^[OQ' npm-uninstall-install-toggle
-bindkey -M viins '^[OQ^[OQ' npm-uninstall-install-toggle
+bindkey -M emacs '^[OQ^[OQ' npm_install_uninstall_toggle
+bindkey -M vicmd '^[OQ^[OQ' npm_install_uninstall_toggle
+bindkey -M viins '^[OQ^[OQ' npm_install_uninstall_toggle
