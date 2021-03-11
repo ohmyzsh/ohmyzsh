@@ -16,8 +16,8 @@ plugins=(... systemadmin)
 | clr     | `clear; echo Currently logged in on $TTY, as $USER in directory $PWD.` | Clears the screen and prints the current user, TTY, and directory  |
 | path    | `print -l $path`                                                       | Displays PATH with each entry on a separate line                   |
 | mkdir   | `mkdir -pv`                                                            | Automatically create parent directories and display verbose output |
-| psmem   | `ps -e -orss=,args= \| sort -b -k1,1n`                                 | Display the processes using the most memory                        |
-| psmem10 | `ps -e -orss=,args= \| sort -b -k1,1n \| head -10`                     | Display the top 10 processes using the most memory                 |
+| psmem   | `ps -e -orss=,args= \| sort -b -k1 -nr`                                | Display the processes using the most memory                        |
+| psmem10 | `ps -e -orss=,args= \| sort -b -k1 -nr \| head -10`                    | Display the top 10 processes using the most memory                 |
 | pscpu   | `ps -e -o pcpu,cpu,nice,state,cputime,args \|sort -k1 -nr`             | Display the top processes using the most CPU                       |
 | pscpu10 | `ps -e -o pcpu,cpu,nice,state,cputime,args \|sort -k1 -nr \| head -10` | Display the top 10 processes using the most CPU                    |
 | hist10  | `print -l ${(o)history%% *} \| uniq -c \| sort -nr \| head -n 10`      | Display the top 10 most used commands in the history               |

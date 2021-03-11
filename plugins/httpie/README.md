@@ -11,5 +11,10 @@ plugins=(... httpie)
 
 It uses completion from [zsh-completions](https://github.com/zsh-users/zsh-completions).
 
+## Aliases
+
+| Alias        | Command                                                          |
+| ------------ | ---------------------------------------------------------------- |
+| `https`      | `http --default-scheme=https`                                    |
 
 **Maintainer:** [lululau](https://github.com/lululau)

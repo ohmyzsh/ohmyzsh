@@ -53,7 +53,7 @@ bgnotify () { ## args: (title, subtitle)
 
 bgnotify_begin() {
   bgnotify_timestamp=$EPOCHSECONDS
-  bgnotify_lastcmd="$1"
+  bgnotify_lastcmd="${1:-$2}"
   bgnotify_windowid=$(currentWindowId)
 }
 

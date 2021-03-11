@@ -1,13 +1,16 @@
 function zsh_stats() {
-  fc -l 1 | awk '{CMD[$2]++;count++;}END { for (a in CMD)print CMD[a] " " CMD[a]/count*100 "% " a;}' | grep -v "./" | column -c3 -s " " -t | sort -nr | nl |  head -n20
+  fc -l 1 \
+    | awk '{ CMD[$2]++; count++; } END { for (a in CMD) print CMD[a] " " CMD[a]*100/count "% " a }' \
+    | grep -v "./" | sort -nr | head -20 | column -c3 -s " " -t | nl
 }
 
 function uninstall_oh_my_zsh() {
-  env ZSH=$ZSH sh $ZSH/tools/uninstall.sh
+  env ZSH="$ZSH" sh "$ZSH/tools/uninstall.sh"
 }
 
 function upgrade_oh_my_zsh() {
-  env ZSH=$ZSH sh $ZSH/tools/upgrade.sh
+  echo >&2 "${fg[yellow]}Note: \`$0\` is deprecated. Use \`omz update\` instead.$reset_color"
+  omz update
 }
 
 function take() {
@@ -88,7 +91,7 @@ function default() {
 #    0 if the env variable exists, 3 if it was set
 #
 function env_default() {
-    (( ${${(@f):-$(typeset +xg)}[(I)$1]} )) && return 0
+    [[ ${parameters[$1]} = *-export* ]] && return 0
     export "$1=$2" && return 3
 }
 
@@ -122,6 +125,7 @@ zmodload zsh/langinfo
 #    -P causes spaces to be encoded as '%20' instead of '+'
 function omz_urlencode() {
   emulate -L zsh
+  local -a opts
   zparseopts -D -E -a opts r m P
 
   local in_str=$1
