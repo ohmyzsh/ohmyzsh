@@ -30,3 +30,4 @@ plugins=(... docker-compose)
 | dcpull    | `docker-compose pull`          | Pull image of a service                                          |
 | dcstart   | `docker-compose start`         | Start a container                                                |
 | dck       | `docker-compose kill`          | Kills containers                                                 |
+| dcpullup  | `dcpull && dcup`               | Execute dcpull followed by dcup if the pull was successful       |
