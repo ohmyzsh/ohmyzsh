@@ -53,6 +53,8 @@ above will turn into:
 ssh-add -K -c -a /run/user/1000/ssh-auth <identities>
 ```
 
+For valid `ssh-add` arguments run `ssh-add --help` or `man ssh-add`.
+
 ## Credits
 
 Based on code from Joseph M. Reagle: https://www.cygwin.com/ml/cygwin/2001-06/msg00537.html
