@@ -66,13 +66,19 @@ ZSH_THEME_GIT_PROMPT_UNMERGED="${PR_RESET}${PR_YELLOW} ═${PR_RESET}"
 ZSH_THEME_GIT_PROMPT_UNTRACKED="${PR_RESET}${PR_YELLOW} ✭${PR_RESET}"
 
 # Get a fortune quote
-ps1_fortune () {
-  fortune
+ps1_fortune() {
+  (( ${+commands[fortune]} )) && fortune
 }
 
 # Obtain a command tip
-ps1_command_tip () {
-  wget -qO - http://www.commandlinefu.com/commands/random/plaintext | sed 1d | sed '/^$/d'
+ps1_command_tip() {
+  {
+    if (( ${+commands[wget]} )); then
+      command wget -qO- https://www.commandlinefu.com/commands/random/plaintext
+    elif (( ${+commands[curl]} )); then
+      command curl -fsL https://www.commandlinefu.com/commands/random/plaintext
+    fi
+  } | sed 1d | sed '/^$/d'
 }
 
 function precmd_adben {
