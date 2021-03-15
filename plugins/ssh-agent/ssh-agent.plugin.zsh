@@ -46,8 +46,9 @@ function _add_identities() {
 		fi
 	done
 
-	zstyle -a :omz:plugins:ssh-agent ssh_add_args ssh_add_args
-	[[ -n "$not_loaded" ]] && ssh-add "${ssh_add_args[@]}" ${^not_loaded}
+	local args
+	zstyle -a :omz:plugins:ssh-agent ssh-add-args args
+	[[ -n "$not_loaded" ]] && ssh-add "${args[@]}" ${^not_loaded}
 }
 
 # Get the filename to store/lookup the environment from
