@@ -22,7 +22,7 @@ transfer() {
     # check arguments
     if [ $# -eq 0 ]; 
     then 
-        echo "No arguments specified. Usage:\necho transfer /tmp/test.md\ncat /tmp/test.md | transfer test.md"
+        echo "No arguments specified! \nUsage:\n   transfer [file/folder] [option]\nExamples:\n   transfer /tmp/test.md\n   transfer /tmp/test.md -ca\n   cat /tmp/test.md | transfer test.md\n   cat /tmp/test.md | transfer test.md -ca\nOptions:\n   -ca  Encrypt file with symmetric cipher and create ASCII armored output"
         return 1
     fi
 
@@ -31,6 +31,16 @@ transfer() {
     
     # upload stdin or file
     file=$1
+
+    # crypt file with symmetric cipher and create ASCII armored output
+    crypt=0
+    if [ -n "$2" ]; 
+    then 
+        if [ "$2"  = "-ca" ]; 
+            then 
+                crypt=1
+        fi
+    fi
 
     if tty -s; 
     then 
@@ -48,15 +58,30 @@ transfer() {
             # tar directory and transfer
             tarfile=$( mktemp -t transferXXX.tar.gz )
             cd $(dirname $file) && tar -czf $tarfile $(basename $file)
-            curl --progress-bar --upload-file "$tarfile" "https://transfer.sh/$basefile.tar.gz" >> $tmpfile
+            if [ "$crypt" -eq 1 ]; 
+            then
+                gpg -cao - "$tarfile" | curl --progress-bar -T "-" "https://transfer.sh/$basefile.tar.gz" >> $tmpfile
+            else
+                curl --progress-bar --upload-file "$tarfile" "https://transfer.sh/$basefile.tar.gz" >> $tmpfile
+            fi
             rm -f $tarfile
         else
             # transfer file
-            curl --progress-bar --upload-file "$file" "https://transfer.sh/$basefile" >> $tmpfile
+            if [ "$crypt" -eq 1 ]; 
+            then
+                gpg -cao - "$file" | curl --progress-bar -T "-" "https://transfer.sh/$basefile" >> $tmpfile
+            else
+                curl --progress-bar --upload-file "$file" "https://transfer.sh/$basefile" >> $tmpfile
+            fi
         fi
     else 
-        # transfer pipe
-        curl --progress-bar --upload-file "-" "https://transfer.sh/$file" >> $tmpfile
+        # transfer from pipe
+        if [ "$crypt" -eq 1 ]; 
+        then
+            gpg -aco - | curl -X PUT --progress-bar -T "-" "https://transfer.sh/$file" >> $tmpfile
+        else
+            curl --progress-bar --upload-file "-" "https://transfer.sh/$file" >> $tmpfile
+        fi
     fi
    
     # cat output link

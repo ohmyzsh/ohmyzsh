@@ -22,3 +22,25 @@ transfer file.txt
 ```zsh
 transfer directory/
 ```
+
+### Encryption/Decryption
+
+- encrypt and upload file with symmetric cipher and create ASCII armored output
+```zsh
+transfer file -ca
+```
+
+- encrypt and upload folder with symmetric cipher and gpg output
+```zsh
+transfer folder -ca
+```
+
+- decrypt file
+```zsh
+gpg -d file -ca
+```
+
+- decrypt folder
+```zsh
+gpg -d your_archive.tgz.gpg | tar xz
+```
