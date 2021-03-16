@@ -57,15 +57,16 @@ command_exists() {
 }
 
 fmt_error() {
-  echo ${RED}"Error: $@"${RESET} >&2
+  printf '%sError: %s%s\n' "$BOLD$RED" "$*" "$RESET" >&2
 }
 
 fmt_underline() {
-  echo "$(printf '\033[4m')$@$(printf '\033[24m')"
+  printf '\033[4m%s\033[24m\n' "$*"
 }
 
 fmt_code() {
-  echo "\`$(printf '\033[38;5;247m')$@${RESET}\`"
+  # shellcheck disable=SC2016 # backtic in single-quote
+  printf '`\033[38;5;247m%s%s`\n' "$*" "$RESET"
 }
 
 setup_color() {
@@ -102,7 +103,8 @@ setup_ohmyzsh() {
     exit 1
   }
 
-  if [ "$OSTYPE" = cygwin ] && git --version | grep -q msysgit; then
+  ostype=$(uname)
+  if [ -z "${ostype%CYGWIN*}" ] && git --version | grep -q msysgit; then
     fmt_error "Windows/MSYS Git is not supported on Cygwin"
     fmt_error "Make sure the Cygwin git package is installed and is first on the \$PATH"
     exit 1
@@ -130,7 +132,7 @@ setup_zshrc() {
   OLD_ZSHRC=~/.zshrc.pre-oh-my-zsh
   if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]; then
     # Skip this if the user doesn't want to replace an existing .zshrc
-    if [ $KEEP_ZSHRC = yes ]; then
+    if [ "$KEEP_ZSHRC" = yes ]; then
       echo "${YELLOW}Found ~/.zshrc.${RESET} ${GREEN}Keeping...${RESET}"
       return
     fi
@@ -162,7 +164,7 @@ export ZSH=\"$ZSH\"
 
 setup_shell() {
   # Skip setup if the user wants or stdin is closed (not running interactively).
-  if [ $CHSH = no ]; then
+  if [ "$CHSH" = no ]; then
     return
   fi
 
@@ -183,8 +185,9 @@ EOF
   echo "${BLUE}Time to change your default shell to zsh:${RESET}"
 
   # Prompt for user choice on changing the default login shell
-  printf "${YELLOW}Do you want to change your default shell to zsh? [Y/n]${RESET} "
-  read opt
+  printf '%sDo you want to change your default shell to zsh? [Y/n]%s ' \
+    "$YELLOW" "$RESET"
+  read -r opt
   case $opt in
     y*|Y*|"") echo "Changing the shell..." ;;
     n*|N*) echo "Shell change skipped."; return ;;
@@ -211,7 +214,7 @@ EOF
     # Get the path to the right zsh binary
     # 1. Use the most preceding one based on $PATH, then check that it's in the shells file
     # 2. If that fails, get a zsh path from the shells file, then check it actually exists
-    if ! zsh=$(which zsh) || ! grep -qx "$zsh" "$shells_file"; then
+    if ! zsh=$(command -v zsh) || ! grep -qx "$zsh" "$shells_file"; then
       if ! zsh=$(grep '^/.*/zsh$' "$shells_file" | tail -1) || [ ! -f "$zsh" ]; then
         fmt_error "no zsh binary found or not present in '$shells_file'"
         fmt_error "change your default shell manually."
@@ -222,7 +225,7 @@ EOF
 
   # We're going to change the default shell, so back up the current one
   if [ -n "$SHELL" ]; then
-    echo $SHELL > ~/.shell.pre-oh-my-zsh
+    echo "$SHELL" > ~/.shell.pre-oh-my-zsh
   else
     grep "^$USER:" /etc/passwd | awk -F: '{print $7}' > ~/.shell.pre-oh-my-zsh
   fi
@@ -288,7 +291,7 @@ EOF
   setup_zshrc
   setup_shell
 
-  printf "$GREEN"
+  printf %s "$GREEN"
   cat <<'EOF'
          __                                     __
   ____  / /_     ____ ___  __  __   ____  _____/ /_
@@ -307,7 +310,7 @@ Before you scream Oh My Zsh! please look over the ~/.zshrc file to select plugin
 • Get stickers, shirts, coffee mugs and other swag: $(fmt_underline https://shop.planetargon.com/collections/oh-my-zsh)
 
 EOF
-  printf "$RESET"
+  printf %s "$RESET"
 
   if [ $RUNZSH = no ]; then
     echo "${YELLOW}Run zsh to try it out.${RESET}"
