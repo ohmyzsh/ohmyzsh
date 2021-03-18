@@ -100,6 +100,7 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias prodplan='/google/data/ro/projects/prodplan/prodplan'
+alias hg='hg --color=always'
 
 # disable shared history among sessions
 # setopt noincappendhistory
