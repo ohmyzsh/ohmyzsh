@@ -10,6 +10,9 @@
 # Author: J (927589452)                   #
 # Modified to add support for FreeBSD     #
 ###########################################
+# Author: Avneet Singh (kalsi-avneet)     #
+# Modified to add support for Android     #
+###########################################
 
 if [[ "$OSTYPE" = darwin* ]]; then
   function battery_is_charging() {
@@ -144,6 +147,46 @@ elif [[ "$OSTYPE" = linux*  ]]; then
       acpi 2>/dev/null | command grep -v "rate information unavailable" | cut -f3 -d ','
     fi
   }
+  function battery_pct_prompt() {
+    local battery_pct color
+    battery_pct=$(battery_pct_remaining)
+    if battery_is_charging; then
+      echo "∞"
+    else
+      if [[ $battery_pct -gt 50 ]]; then
+        color='green'
+      elif [[ $battery_pct -gt 20 ]]; then
+        color='yellow'
+      else
+        color='red'
+      fi
+      echo "%{$fg[$color]%}${battery_pct}%%%{$reset_color%}"
+    fi
+  }
+elif [[ "$OSTYPE" = linux-android ]] && (( ${+commands[termux-battery-status]} )); then
+  function battery_is_charging() {
+    termux-battery-status 2>/dev/null | command awk '/status/ { exit ($0 ~ /DISCHARGING/) }'
+  }
+  function battery_pct() {
+    # Sample output:
+    # {
+    #   "health": "GOOD",
+    #   "percentage": 93,
+    #   "plugged": "UNPLUGGED",
+    #   "status": "DISCHARGING",
+    #   "temperature": 29.0,
+    #   "current": 361816
+    # }
+    termux-battery-status 2>/dev/null | command awk '/percentage/ { gsub(/[,]/,""); print $2}'
+  }
+  function battery_pct_remaining() {
+    if ! battery_is_charging; then
+      battery_pct
+    else
+      echo "External Power"
+    fi
+  }
+  function battery_time_remaining() { } # Not available on android
   function battery_pct_prompt() {
     local battery_pct color
     battery_pct=$(battery_pct_remaining)
