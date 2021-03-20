@@ -10,6 +10,9 @@
 # Author: J (927589452)                   #
 # Modified to add support for FreeBSD     #
 ###########################################
+# Author: Avneet Singh (kalsi-avneet)     #
+# Modified to add support for Android     #
+###########################################
 
 if [[ "$OSTYPE" = darwin* ]]; then
 
@@ -89,6 +92,45 @@ elif [[ "$OSTYPE" = freebsd* ]]; then
       printf %02d:%02d $hour $minute
     fi
   }
+
+  function battery_pct_prompt() {
+    local battery_pct color
+    battery_pct=$(battery_pct_remaining)
+    if battery_is_charging; then
+      echo "∞"
+    else
+      if [[ $battery_pct -gt 50 ]]; then
+        color='green'
+      elif [[ $battery_pct -gt 20 ]]; then
+        color='yellow'
+      else
+        color='red'
+      fi
+      echo "%{$fg[$color]%}${battery_pct}%%%{$reset_color%}"
+    fi
+  }
+
+elif [[ "$OSTYPE" = linux-android  ]]; then
+
+  function battery_is_charging() {
+    [[ $(termux-battery-status | awk '/status/ { gsub(/[,"]/,""); print $2}') = "CHARGING" ]]
+
+  }
+
+  function battery_pct() {
+    termux-battery-status | awk '/percentage/ { gsub(/[,]/,""); print $2}'
+  }
+
+  function battery_pct_remaining() {
+    if ! battery_is_charging; then
+      battery_pct
+    else
+      echo "External Power"
+    fi
+  }
+
+  # Not available on android
+  function battery_time_remaining() { }
 
   function battery_pct_prompt() {
     local battery_pct color
