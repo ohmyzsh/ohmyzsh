@@ -89,8 +89,8 @@ function precmd {
 
 # Context: user@directory or just directory
 prompt_context () {
-    if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-        echo -n "${PR_RESET}${PR_RED}$USER@%m${PR_RESET}${PR_BRIGHT_YELLOW}%~%<<${PR_RESET}"
+    if [[ "$USERNAME" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
+        echo -n "${PR_RESET}${PR_RED}$USERNAME@%m${PR_RESET}${PR_BRIGHT_YELLOW}%~%<<${PR_RESET}"
     else
         echo -n "${PR_RESET}${PR_BRIGHT_YELLOW}%~%<<${PR_RESET}"
     fi
