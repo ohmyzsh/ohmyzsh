@@ -32,7 +32,7 @@ local ZSH_ESSEMBEH_COLOR="green"
 local ZSH_ESSEMBEH_PREFIX=""
 if [[ -n "$SSH_CONNECTION" ]]; then
 	# display the source address if connected via ssh
-	ZSH_ESSEMBEH_PREFIX="%{$fg[yellow]%}[$(echo $SSH_CONNECTION | awk '{print $1}')]%{$reset_color%} "
+	ZSH_ESSEMBEH_PREFIX="%{$fg[yellow]%}[$(echo $SSH_CONNECTION | awk '{print $(NF-1)}')]%{$reset_color%} "
 	# use red color to highlight a remote connection
 	ZSH_ESSEMBEH_COLOR="red"
 elif [[ -r /etc/debian_chroot ]]; then 
