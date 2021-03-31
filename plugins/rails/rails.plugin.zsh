@@ -7,6 +7,8 @@ function _rails_command () {
     ruby script/rails $@
   elif [ -e "script/server" ]; then
     ruby script/$@
+  elif type bundle &> /dev/null && ([ -e "Gemfile" ] || [ -e "gems.rb" ]); then
+    bundle exec rails $@
   else
     command rails $@
   fi
