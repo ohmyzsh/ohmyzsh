@@ -1,3 +1,30 @@
+if (( $+commands[pikaur] )); then
+  alias pikupg='pikaur -Syua'
+  alias piksu='pikaur -Syua --noconfirm'
+  alias pikin='pikaur -S'
+  alias pikins='pikaur -U'
+  alias pikre='pikaur -R'
+  alias pikrem='pikaur -Rns'
+  alias pikrep='pikaur -Si'
+  alias pikreps='pikaur -Ss'
+  alias pikloc='pikaur -Qi'
+  alias piklocs='pikaur -Qs'
+  alias piklst='pikaur -Qe'
+  alias pikorph='pikaur -Qtd'
+  alias pikinsd='pikaur -S --asdeps'
+  alias pikmir='pikaur -Syy'
+
+  if (( $+commands[abs] && $+commands[aur] )); then
+    alias trupd='pikaur -Sy && sudo abs && sudo aur'
+  elif (( $+commands[abs] )); then
+    alias trupd='pikaur -Sy && sudo abs'
+  elif (( $+commands[aur] )); then
+    alias trupd='pikaur -Sy && sudo aur'
+  else
+    alias trupd='pikaur -Sy'
+  fi
+fi
+
 if (( $+commands[trizen] )); then
   alias trconf='trizen -C'
   alias trupg='trizen -Syua'
@@ -14,7 +41,6 @@ if (( $+commands[trizen] )); then
   alias trorph='trizen -Qtd'
   alias trinsd='trizen -S --asdeps'
   alias trmir='trizen -Syy'
-
 
   if (( $+commands[abs] && $+commands[aur] )); then
     alias trupd='trizen -Sy && sudo abs && sudo aur'
@@ -43,7 +69,6 @@ if (( $+commands[yaourt] )); then
   alias yaorph='yaourt -Qtd'
   alias yainsd='yaourt -S --asdeps'
   alias yamir='yaourt -Syy'
-
 
   if (( $+commands[abs] && $+commands[aur] )); then
     alias yaupd='yaourt -Sy && sudo abs && sudo aur'
@@ -152,7 +177,6 @@ alias pacfileupg='sudo pacman -Fy'
 alias pacfiles='pacman -F'
 alias pacls='pacman -Ql'
 alias pacown='pacman -Qo'
-
 
 if (( $+commands[abs] && $+commands[aur] )); then
   alias pacupd='sudo pacman -Sy && sudo abs && sudo aur'
