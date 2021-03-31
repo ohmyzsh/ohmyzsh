@@ -115,6 +115,7 @@ plugins=(... archlinux)
 | paclocs      | pacman -Qs                              | Search for packages in the local database                    |
 | paclsorphans | sudo pacman -Qdt                        | List all orphaned packages                                   |
 | pacmir       | sudo pacman -Syy                        | Force refresh of all package lists after updating mirrorlist |
+| pacq         | pacman -Q                               | List all installed packages                                  |
 | pacre        | sudo pacman -R                          | Remove packages, keeping its settings and dependencies       |
 | pacrem       | sudo pacman -Rns                        | Remove packages, including its settings and dependencies     |
 | pacrep       | pacman -Si                              | Display information about a package in the repositories      |
@@ -135,6 +136,7 @@ plugins=(... archlinux)
 |----------------|------------------------------------------------------|
 | pacdisowned    | List all disowned files in your system               |
 | paclist        | List all installed packages with a short description |
+| paclexp        | List all explicitly installed packages               |
 | pacmanallkeys  | Get all keys for developers and trusted users        |
 | pacmansignkeys | Locally trust all keys passed as parameters          |
 | pacweb         | Open the website of an ArchLinux package             |
