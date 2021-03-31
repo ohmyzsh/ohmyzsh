@@ -1,26 +1,26 @@
 function _rails_command () {
-  if [ -e "bin/stubs/rails" ]; then
+  if type bundle &> /dev/null && { [ -e "Gemfile" ] || [ -e "gems.rb" ]; }; then
+    bundle exec rails $@
+  elif [ -e "bin/stubs/rails" ]; then
     bin/stubs/rails $@
   elif [ -e "bin/rails" ]; then
     bin/rails $@
   elif [ -e "script/rails" ]; then
     ruby script/rails $@
   elif [ -e "script/server" ]; then
-    ruby script/$@
-  elif type bundle &> /dev/null && ([ -e "Gemfile" ] || [ -e "gems.rb" ]); then
-    bundle exec rails $@
+    ruby script/server $@
   else
     command rails $@
   fi
 }
 
 function _rake_command () {
-  if [ -e "bin/stubs/rake" ]; then
+  if type bundle &> /dev/null && ([ -e "Gemfile" ] || [ -e "gems.rb" ]); then
+    bundle exec rake $@
+  elif [ -e "bin/stubs/rake" ]; then
     bin/stubs/rake $@
   elif [ -e "bin/rake" ]; then
     bin/rake $@
-  elif type bundle &> /dev/null && ([ -e "Gemfile" ] || [ -e "gems.rb" ]); then
-    bundle exec rake $@
   else
     command rake $@
   fi
