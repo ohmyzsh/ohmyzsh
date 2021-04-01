@@ -8,6 +8,6 @@ To use it, add `ripgrep` to the plugins array in your zshrc file:
 plugins=(... ripgrep)
 ```
 
-Completion is taken from the ripgrep release [`11.0.2`](https://github.com/BurntSushi/ripgrep/releases/tag/11.0.2).
+Completion is taken from the ripgrep release [`13.0.0`](https://github.com/BurntSushi/ripgrep/releases/tag/13.0.0).
 
-Updated on August 16th, 2019.
+Updated on June 13th, 2021.
