@@ -10,6 +10,7 @@ plugins=(... python)
 
 ## Aliases
 
+<<<<<<< HEAD
 | Command          | Description                                                                           |
 | ---------------- | ------------------------------------------------------------------------------------- |
 | `py`             | Runs `python`                                                                         |
@@ -19,3 +20,11 @@ plugins=(... python)
 | `pygrep <text>`  | Looks for `text` in .py files                                                         |
 | `pyuserpaths`    | Add --user site-packages to PYTHONPATH, for all installed python versions.            |
 | `pyserver`       | Starts an http.server on the current directory. Use `--directory` for a different one |
+
+## Virtual environments
+
+The plugin provides two utilities to manage Python venvs:
+
+- `mkv [name]`: make a new virtual environment called `name` (default: `venv`) in current directory.
+
+- `vrun [name]`: activate virtual environment called `name` (default: `venv`) in current directory.
