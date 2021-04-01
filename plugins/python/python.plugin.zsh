@@ -45,3 +45,36 @@ alias pygrep='grep -nr --include="*.py"'
 
 # Run proper IPython regarding current virtualenv (if any)
 alias ipython="python -c 'import IPython; IPython.terminal.ipapp.launch_new_instance()'"
+
+# Activate a python virtual environment called 'venv'
+# Alternatively, activate a virtual environment with a specific name
+function vrun() {
+    if [[ ${1} == "" ]]; then
+        local name="venv";
+    else
+        local name="${1}";
+    fi
+    local loc=$(realpath "${name}");
+    if [[ -d "${loc}/" ]]; then
+        if [[ -f "${loc}/bin/activate" ]]; then
+            . "${loc}/bin/activate" && echo "Activated virtual environment ${name}";
+        else
+            echo "${loc} is not a proper virtual environment. Aborting" && return 1;
+        fi
+    else
+        echo "No ${name}/ subdirectory in ${PWD}. Aborting" && return 1;
+    fi
+}
+
+# Create a new virtual environment
+# The default name is 'venv'
+# But it can be customized
+function mkv() {
+    if [[ ${1} == "" ]]; then
+        local name="venv";
+    else
+        local name="${1}";
+    fi
+    local loc=$(realpath "${name}");
+    python3 -m venv "${name}" && echo "Created ${loc}" && vrun "${name}";
+}
