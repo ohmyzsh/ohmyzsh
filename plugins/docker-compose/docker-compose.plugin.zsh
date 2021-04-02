@@ -26,3 +26,9 @@ alias dclf='docker-compose logs -f'
 alias dcpull='docker-compose pull'
 alias dcstart='docker-compose start'
 alias dck='docker-compose kill'
+
+# because alias doesn't support inserting $@ where we need it to be
+function dcsh() {
+  docker-compose exec $@ /bin/bash
+}
+
