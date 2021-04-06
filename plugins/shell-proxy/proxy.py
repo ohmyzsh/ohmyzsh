@@ -9,8 +9,9 @@ user_proxy = os.environ.get("CONFIG_PROXY", os.path.expandvars("$HOME/.config/pr
 
 
 def get_http_proxy():
-    if "DEFAULT_PROXY" in os.environ:
-        return os.environ["DEFAULT_PROXY"]
+    default_proxy = os.environ.get("DEFAULT_PROXY")
+    if default_proxy:
+        return default_proxy
     if os.path.isfile(user_proxy):
         return check_output(user_proxy).decode("utf-8").strip()
     raise Exception("Not found, Proxy configuration")
