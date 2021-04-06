@@ -367,4 +367,4 @@ _managepy() {
   esac
 }
 
-compdef _managepy manage.py
+_managepy "$@"
