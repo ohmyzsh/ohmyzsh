@@ -20,7 +20,12 @@ you would make is not already covered.
   - [Getting started](#getting-started)
   - [You have a solution](#you-have-a-solution)
   - [You have an addition](#you-have-an-addition)
-- [Use the Se
+- [Use the Search, Luke](#use-the-search-luke)
+- [Commit Guidelines](#commit-guidelines)
+  - [Format](#format)
+  - [Style](#style)
+- [Volunteer](#volunteer)
+
 <!-- /TOC -->
 
 ## Reporting Issues
