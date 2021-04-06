@@ -11,22 +11,16 @@ issues and pull requests. Please read them closely.
 Foremost, be so kind as to [search](#use-the-search-luke). This ensures any contribution
 you would make is not already covered.
 
-<!-- TOC -->
+<!-- TOC updateonsave:true depthfrom:2 -->
 
-- [CONTRIBUTING GUIDELINES](#contributing-guidelines)
-  - [Reporting Issues](#reporting-issues)
-    - [You have a problem](#you-have-a-problem)
-    - [You have a suggestion](#you-have-a-suggestion)
-  - [Submitting Pull Requests](#submitting-pull-requests)
-    - [Getting started](#getting-started)
-    - [You have a solution](#you-have-a-solution)
-    - [You have an addition](#you-have-an-addition)
-  - [Use the Search, Luke](#use-the-search-luke)
-  - [Commit Guidelines](#commit-guidelines)
-    - [Format](#format)
-    - [Style](#style)
-  - [Volunteer](#volunteer)
-
+- [Reporting Issues](#reporting-issues)
+  - [You have a problem](#you-have-a-problem)
+  - [You have a suggestion](#you-have-a-suggestion)
+- [Submitting Pull Requests](#submitting-pull-requests)
+  - [Getting started](#getting-started)
+  - [You have a solution](#you-have-a-solution)
+  - [You have an addition](#you-have-an-addition)
+- [Use the Se
 <!-- /TOC -->
 
 ## Reporting Issues
