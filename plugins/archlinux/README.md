@@ -48,6 +48,38 @@ upgrades were available. Use `pacman -Que` instead.
 
 ### AUR helpers
 
+#### Aura
+
+| Alias   | Command                                         | Description                                                             |
+|---------|-------------------------------------------------|-------------------------------------------------------------------------|
+| auin    | `sudo aura -S`                                  | Install packages from the repositories                                  |
+| aurin   | `sudo aura -A`                                  | Install packages from the repositories                                  |
+| auins   | `sudo aura -U`                                  | Install a package from a local file                                     |
+| auinsd  | `sudo aura -S --asdeps`                         | Install packages as dependencies of another package (repositories only) |
+| aurinsd | `sudo aura -A --asdeps`                         | Install packages as dependencies of another package (AUR only)          |
+| auloc   | `aura -Qi`                                      | Display information about a package in the local database               |
+| aulocs  | `aura -Qs`                                      | Search for packages in the local database                               |
+| auls    | `aura -Qql`                                     | List all files owned by a given package                                 |
+| aulst   | `aura -Qe`                                      | List installed packages including from AUR (tagged as "local")          |
+| aumir   | `sudo aura -Syy`                                | Force refresh of all package lists after updating mirrorlist            |
+| aurph   | `sudo aura -Oj`                                 | Remove orphans using aura                                               |
+| auown   | `aura -Qqo`                                     | Search for packages that own the specified file(s)                      |
+| aure    | `sudo aura -R`                                  | Remove packages, keeping its settings and dependencies                  |
+| aurem   | `sudo aura -Rns`                                | Remove packages, including its settings and unneeded dependencies       |
+| aurep   | `aura -Si`                                      | Display information about a package in the repositories                 |
+| aurrep  | `aura -Ai`                                      | Display information about a package from AUR                            |
+| aureps  | `aura -As --both`                               | Search for packages in the repositories and AUR                         |
+| auras   | `aura -As --both`                               | Same as above                                                           |
+| auupd   | `sudo aura -Sy && <abs/aur refresh>`[¹](#f1)    | Update and refresh local package, ABS and AUR databases                 |
+| auupg   | `sudo sh -c "aura -Syu              && aura -Au"` | Sync with repositories before upgrading all packages (from AUR too)   |
+| ausu    | `sudo sh -c "aura -Syu --no-confirm && aura -Au --no-confirm"` | Same as `auupg`, but without confirmation                |
+| upgrade[³](#f3) | `sudo aura -Syu`                        | Sync with repositories before upgrading packages                        |
+
+| Function        | Description                                                         |
+|-----------------|---------------------------------------------------------------------|
+| auownloc _file_ | Display information about a package that owns the specified file(s) |
+| auownls  _file_ | List all files owned by a package that owns the specified file(s)   |
+
 #### Pacaur
 
 | Alias   | Command                           | Description                                                         |
@@ -152,7 +184,8 @@ whether the package manager is installed, checked in the following order:
 2. `yaourt`
 3. `trizen`
 4. `pacaur`
-5. `pacman`
+5. `aura`
+6. `pacman`
 
 ## Contributors
 
