@@ -91,6 +91,35 @@ fi
 #             AUR helpers             #
 #######################################
 
+if (( $+commands[aura] )); then
+  alias auin='sudo aura -S'
+  alias aurin='sudo aura -A'
+  alias auins='sudo aura -U'
+  alias auinsd='sudo aura -S --asdeps'
+  alias aurinsd='sudo aura -A --asdeps'
+  alias auloc='aura -Qi'
+  alias aulocs='aura -Qs'
+  alias aulst='aura -Qe'
+  alias aumir='sudo aura -Syy'
+  alias aurph='sudo aura -Oj'
+  alias aure='sudo aura -R'
+  alias aurem='sudo aura -Rns'
+  alias aurep='aura -Si'
+  alias aurrep='aura -Ai'
+  alias aureps='aura -As --both'
+  alias auras='aura -As --both'
+  alias auupd="sudo aura -Sy$abs_aur"
+  alias auupg='sudo sh -c "aura -Syu              && aura -Au"'
+  alias ausu='sudo  sh -c "aura -Syu --no-confirm && aura -Au --no-confirm"'
+  alias upgrade='sudo aura -Syu'
+
+  # extra bonus specially for aura
+  alias auown="aura -Qqo"
+  alias auls="aura -Qql"
+  function auownloc() { aura -Qi  $(aura -Qqo $@); }
+  function auownls () { aura -Qql $(aura -Qqo $@); }
+fi
+
 if (( $+commands[pacaur] )); then
   alias paupg='pacaur -Syu'
   alias pasu='pacaur -Syu --noconfirm'
