@@ -33,7 +33,7 @@ _managepy_applabels() {
   local -a apps
   _call_program help-command \
     "./manage.py shell -c \\
-        \"import sys; from django.apps import apps;\\
+        \"import sys; del sys.path[0]; from django.apps import apps;\\
           [sys.stdout.write(app.label + '\n') for app in apps.get_app_configs()]\"" \
     | while read -A line; do apps=($line $apps) done
   _values 'Applications' $apps && ret=0
@@ -44,7 +44,7 @@ _managepy_usernames() {
   local -a names
   _call_program help-command \
     "./manage.py shell -c \\
-        \"import sys; from django.contrib.auth import get_user_model;\\
+        \"import sys; del sys.path[0]; from django.contrib.auth import get_user_model;\\
         User = get_user_model();\\
         [sys.stdout.write(username + '\n') for username in User.objects.values_list(User.USERNAME_FIELD, flat=True)]\"" \
     | while read -A line; do names=($line $names) done
