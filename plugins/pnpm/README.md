@@ -1,4 +1,4 @@
-# ng plugin
+# pnpm plugin
 
 This plugin adds autocompletion support for [pnpm](https://github.com/pnpm/pnpm)
 (named `pnpm`).
