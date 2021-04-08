@@ -38,10 +38,13 @@ if [ -f /usr/libexec/pk-command-not-found ]; then
     }
 fi
 
-# OSX command-not-found support
+# macOS command-not-found support
 # https://github.com/Homebrew/homebrew-command-not-found
-if [[ -s '/usr/local/Homebrew/Library/Taps/homebrew/homebrew-command-not-found/handler.sh' ]]; then
-    source '/usr/local/Homebrew/Library/Taps/homebrew/homebrew-command-not-found/handler.sh'
+HB_CNF_HANDLER_SUFFIX="Library/Taps/homebrew/homebrew-command-not-found/handler.sh"
+if [[ -s "/opt/homebrew/$HB_CNF_HANDLER_SUFFIX" ]]; then
+      source "/opt/homebrew/$HB_CNF_HANDLER_SUFFIX"
+elif [[ -s "/usr/local/Homebrew/$HB_CNF_HANDLER_SUFFIX" ]]; then
+      source "/usr/local/Homebrew/$HB_CNF_HANDLER_SUFFIX"
 fi
 
 # NixOS command-not-found support
