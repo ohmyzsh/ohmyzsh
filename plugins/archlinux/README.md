@@ -26,7 +26,7 @@ plugins=(... archlinux)
 | pacrep       | `pacman -Si`                           | Display information about a package in the repositories          |
 | pacreps      | `pacman -Ss`                           | Search for packages in the repositories                          |
 | pacrmorphans | `sudo pacman -Rs $(pacman -Qtdq)`      | Delete all orphaned packages                                     |
-| pacupd       | `sudo pacman -Sy && <abs/aur refresh>`[¹](#f1) | Update and refresh local package, ABS and AUR databases  |
+| pacupd       | `sudo pacman -Sy`                      | Update and refresh local package, ABS and AUR databases          |
 | pacupg       | `sudo pacman -Syu`                     | Sync with repositories before upgrading packages                 |
 | pacfileupg   | `sudo pacman -Fy`                      | Download fresh package databases from the server                 |
 | pacfiles     | `pacman -F`                            | Search package file names for matching strings                   |
@@ -70,7 +70,7 @@ upgrades were available. Use `pacman -Que` instead.
 | aurrep  | `aura -Ai`                                      | Display information about a package from AUR                            |
 | aureps  | `aura -As --both`                               | Search for packages in the repositories and AUR                         |
 | auras   | `aura -As --both`                               | Same as above                                                           |
-| auupd   | `sudo aura -Sy && <abs/aur refresh>`[¹](#f1)    | Update and refresh local package, ABS and AUR databases                 |
+| auupd   | `sudo aura -Sy`                                 | Update and refresh local package, ABS and AUR databases                 |
 | auupg   | `sudo sh -c "aura -Syu              && aura -Au"` | Sync with repositories before upgrading all packages (from AUR too)   |
 | ausu    | `sudo sh -c "aura -Syu --no-confirm && aura -Au --no-confirm"` | Same as `auupg`, but without confirmation                |
 | upgrade[³](#f3) | `sudo aura -Syu`                        | Sync with repositories before upgrading packages                        |
@@ -96,7 +96,7 @@ upgrades were available. Use `pacman -Que` instead.
 | parem   | `pacaur -Rns`                     | Remove packages, including its settings and unneeded dependencies   |
 | parep   | `pacaur -Si`                      | Display information about a package in the repositories             |
 | pareps  | `pacaur -Ss`                      | Search for packages in the repositories                             |
-| paupd   | `pacaur -Sy && <abs/aur refresh>`[¹](#f1) | Update and refresh local package, ABS and AUR databases     |
+| paupd   | `pacaur -Sy`                      | Update and refresh local package, ABS and AUR databases             |
 | paupg   | `pacaur -Syua`                    | Sync with repositories before upgrading all packages (from AUR too) |
 | pasu    | `pacaur -Syua --no-confirm`       | Same as `paupg`, but without confirmation                           |
 | upgrade[³](#f3) | `pacaur -Syu`             | Sync with repositories before upgrading packages                    |
@@ -118,7 +118,7 @@ upgrades were available. Use `pacman -Que` instead.
 | trrem   | `trizen -Rns`                     | Remove packages, including its settings and unneeded dependencies   |
 | trrep   | `trizen -Si`                      | Display information about a package in the repositories             |
 | trreps  | `trizen -Ss`                      | Search for packages in the repositories                             |
-| trupd   | `trizen -Sy && <abs/aur refresh>`[¹](#f1) | Update and refresh local package, ABS and AUR databases     |
+| trupd   | `trizen -Sy`                      | Update and refresh local package, ABS and AUR databases             |
 | trupg   | `trizen -Syua`                    | Sync with repositories before upgrading all packages (from AUR too) |
 | trsu    | `trizen -Syua --no-confirm`       | Same as `trupg`, but without confirmation                           |
 | upgrade[³](#f3) | `trizen -Syu`             | Sync with repositories before upgrading packages                    |
@@ -140,7 +140,7 @@ upgrades were available. Use `pacman -Que` instead.
 | yarem   | `yaourt -Rns`                     | Remove packages, including its settings and unneeded dependencies   |
 | yarep   | `yaourt -Si`                      | Display information about a package in the repositories             |
 | yareps  | `yaourt -Ss`                      | Search for packages in the repositories                             |
-| yaupd   | `yaourt -Sy && <abs/aur refresh>`[¹](#f1) | Update and refresh local package, ABS and AUR databases     |
+| yaupd   | `yaourt -Sy`                      | Update and refresh local package, ABS and AUR databases             |
 | yaupg   | `yaourt -Syua`                    | Sync with repositories before upgrading all packages (from AUR too) |
 | yasu    | `yaourt -Syua --no-confirm`       | Same as `yaupg`, but without confirmation                           |
 | upgrade[³](#f3) | `yaourt -Syu`             | Sync with repositories before upgrading packages                    |
@@ -162,16 +162,12 @@ upgrades were available. Use `pacman -Que` instead.
 | yarem   | `yay -Rns`                     | Remove packages, including its settings and unneeded dependencies |
 | yarep   | `yay -Si`                      | Display information about a package in the repositories           |
 | yareps  | `yay -Ss`                      | Search for packages in the repositories                           |
-| yaupd   | `yay -Sy && <abs/aur refresh>`[¹](#f1) | Update and refresh local package, ABS and AUR databases   |
+| yaupd   | `yay -Sy`                      | Update and refresh local package, ABS and AUR databases           |
 | yaupg   | `yay -Syu`                     | Sync with repositories before upgrading packages                  |
 | yasu    | `yay -Syu --no-confirm`        | Same as `yaupg`, but without confirmation                         |
 | upgrade[³](#f3) | `yay -Syu`             | Sync with repositories before upgrading packages                  |
 
 ---
-
-<span id="f1">¹</span>
-If the `abs` and/or `aur` commands are present, `sudo abs` and `sudo aur` are also
-called to update the ABS and AUR databases.
 
 <span id="f2">²</span>
 Yay and Yaourt aliases overlap. If both are installed, yay will take precedence.
@@ -199,3 +195,4 @@ whether the package manager is installed, checked in the following order:
 - MatthR3D - matthr3d@gmail.com
 - ornicar - thibault.duplessis@gmail.com
 - Ybalrid (Arthur Brainville) - ybalrid@ybalrid.info
+- Jeff M. Hubbard - jeffmhubbard@gmail.com
