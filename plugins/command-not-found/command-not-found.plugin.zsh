@@ -40,11 +40,11 @@ fi
 
 # macOS command-not-found support
 # https://github.com/Homebrew/homebrew-command-not-found
-if (( $+commands[brew] )); then
-    HB_CNF_HANDLER="$(brew --repository)/Library/Taps/homebrew/homebrew-command-not-found/handler.sh"
-    if [ -f "$HB_CNF_HANDLER" ]; then
-        source "$HB_CNF_HANDLER";
-    fi
+HB_CNF_HANDLER_SUFFIX="Library/Taps/homebrew/homebrew-command-not-found/handler.sh"
+if [[ -s "/opt/homebrew/$HB_CNF_HANDLER_SUFFIX" ]]; then
+      source "/opt/homebrew/$HB_CNF_HANDLER_SUFFIX"
+elif [[ -s "/usr/local/Homebrew/$HB_CNF_HANDLER_SUFFIX" ]]; then
+      source "/usr/local/Homebrew/$HB_CNF_HANDLER_SUFFIX"
 fi
 
 # NixOS command-not-found support
