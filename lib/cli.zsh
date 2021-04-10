@@ -116,7 +116,7 @@ Available commands:
   plugin <command>    Manage plugins
   pr     <command>    Manage Oh My Zsh Pull Requests
   theme  <command>    Manage themes
-  update              Update Oh My Zsh
+  update              Update Oh My Zsh; add --unattended to run it from a script (bypasses the automatic reload)
 
 EOF
 }
