@@ -24,8 +24,7 @@ function update_last_updated_file() {
 }
 
 function update_ohmyzsh() {
-  ZSH="$ZSH" zsh -f "$ZSH/tools/upgrade.sh" --interactive
-  if [[ "$?" = (0|80) ]]; then
+  if ZSH="$ZSH" zsh -f "$ZSH/tools/upgrade.sh" --interactive; then
     update_last_updated_file
   fi
 }

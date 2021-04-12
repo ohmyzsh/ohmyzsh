@@ -4,7 +4,7 @@
 __PROXY__="${0:A:h}/proxy.py"
 
 proxy() {
-	source <("$__PROXY__" "$1")
+	source <(env "DEFAULT_PROXY=$DEFAULT_PROXY" "$__PROXY__" "$1")
 }
 
 _proxy() {

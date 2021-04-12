@@ -112,7 +112,7 @@ function _omz_diag_dump_one_big_text() {
   command uname -a
   builtin echo OSTYPE=$OSTYPE
   builtin echo ZSH_VERSION=$ZSH_VERSION
-  builtin echo User: $USER
+  builtin echo User: $USERNAME
   builtin echo umask: $(umask)
   builtin echo
   _omz_diag_dump_os_specific_version
