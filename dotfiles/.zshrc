@@ -1,5 +1,5 @@
 export GOPATH=$HOME/go
-export DOTFILES=$HOME/src/dotfiles
+export DOTFILES=$HOME/dotfiles
 #:/usr/local/src:/go
 # echo WELCOME!
 # If you come from bash you might have to change your $PATH.
@@ -17,7 +17,7 @@ export CC=clang
 /bin/launchctl setenv CPATH /usr/local/include
 
 # Path to your oh-my-zsh installation.
-export ZSH=$HOME/src/oh-my-zsh
+export ZSH=$HOME/.oh-my-zsh
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -79,7 +79,7 @@ zstyle ':completion:*' completer _expand _complete _ignored _correct _approximat
 zstyle ':completion:*' max-errors 3
 zstyle ':completion:*' prompt 'e%e'
 zstyle ':completion:*' squeeze-slashes true
-zstyle :compinstall filename '/home/gnaddaf/.zshrc'
+zstyle :compinstall filename '$HOME/.zshrc'
 
 autoload -Uz compinit
 zmodload -i zsh/complist
