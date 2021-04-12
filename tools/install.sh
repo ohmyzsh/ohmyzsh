@@ -137,8 +137,6 @@ setup_zshrc() {
       echo "${YELLOW}Found ~/.zshrc.${RESET} ${GREEN}Keeping...${RESET}"
       return
     fi
-    mv ../dotfiles/.zshrc ~/.zshrc
-    return
     if [ -e "$OLD_ZSHRC" ]; then
       OLD_OLD_ZSHRC="${OLD_ZSHRC}-$(date +%Y-%m-%d_%H-%M-%S)"
       if [ -e "$OLD_OLD_ZSHRC" ]; then
@@ -155,6 +153,8 @@ setup_zshrc() {
     mv ~/.zshrc "$OLD_ZSHRC"
   fi
 
+  mv ../dotfiles/.zshrc ~/.zshrc
+  return
   echo "${GREEN}Using the Oh My Zsh template file and adding it to ~/.zshrc.${RESET}"
 
   sed "/^export ZSH=/ c\\
