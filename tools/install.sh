@@ -114,7 +114,8 @@ setup_ohmyzsh() {
     -c fsck.zeroPaddedFilemode=ignore \
     -c fetch.fsck.zeroPaddedFilemode=ignore \
     -c receive.fsck.zeroPaddedFilemode=ignore \
-    --depth=1 --branch "$BRANCH" "$REMOTE" "$ZSH" || {
+    "$REMOTE" "$ZSH" && \
+    pushd $ZSH && git checkout $BRANCH && popd || {
     fmt_error "git clone of oh-my-zsh repo failed"
     exit 1
   }
@@ -136,6 +137,8 @@ setup_zshrc() {
       echo "${YELLOW}Found ~/.zshrc.${RESET} ${GREEN}Keeping...${RESET}"
       return
     fi
+    mv ../dotfiles/.zshrc ~/.zshrc
+    return
     if [ -e "$OLD_ZSHRC" ]; then
       OLD_OLD_ZSHRC="${OLD_ZSHRC}-$(date +%Y-%m-%d_%H-%M-%S)"
       if [ -e "$OLD_OLD_ZSHRC" ]; then
