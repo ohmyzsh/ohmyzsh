@@ -153,7 +153,7 @@ setup_zshrc() {
     mv ~/.zshrc "$OLD_ZSHRC"
   fi
 
-  mv ../dotfiles/.zshrc ~/.zshrc
+  cp ${ZSH}/dotfiles/.zshrc ~/.zshrc
   return
   echo "${GREEN}Using the Oh My Zsh template file and adding it to ~/.zshrc.${RESET}"
 
