@@ -1,4 +1,3 @@
-
 ng_opts='addon asset-sizes b build completion d destroy doc e2e g generate get github-pages:deploy gh-pages:deploy h help i init install lint make-this-awesome new s serve server set t test update v version -h --help'
 
 _ng_completion () {
@@ -73,9 +72,7 @@ _ng_completion () {
       ;;
   esac
 
-  setopt shwordsplit
-  reply=($opts)
-  unset shwordsplit
+  reply=(${=opts})
 }
 
 compctl -K _ng_completion ng

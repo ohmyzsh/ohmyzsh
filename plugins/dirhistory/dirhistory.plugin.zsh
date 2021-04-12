@@ -53,7 +53,8 @@ function push_future() {
 }
 
 # Called by zsh when directory changes
-chpwd_functions+=(chpwd_dirhistory)
+autoload -U add-zsh-hook
+add-zsh-hook chpwd chpwd_dirhistory
 function chpwd_dirhistory() {
   push_past $PWD
   # If DIRHISTORY_CD is not set...
@@ -107,16 +108,16 @@ function dirhistory_forward() {
 # Bind keys to history navigation
 function dirhistory_zle_dirhistory_back() {
   # Erase current line in buffer
-  zle kill-buffer
-  dirhistory_back 
-  zle accept-line
+  zle .kill-buffer
+  dirhistory_back
+  zle .accept-line
 }
 
 function dirhistory_zle_dirhistory_future() {
   # Erase current line in buffer
-  zle kill-buffer
+  zle .kill-buffer
   dirhistory_forward
-  zle accept-line
+  zle .accept-line
 }
 
 zle -N dirhistory_zle_dirhistory_back
@@ -159,15 +160,15 @@ function dirhistory_down() {
 
 # Bind keys to hierarchy navigation
 function dirhistory_zle_dirhistory_up() {
-  zle kill-buffer   # Erase current line in buffer
+  zle .kill-buffer   # Erase current line in buffer
   dirhistory_up
-  zle accept-line
+  zle .accept-line
 }
 
 function dirhistory_zle_dirhistory_down() {
-  zle kill-buffer   # Erase current line in buffer
+  zle .kill-buffer   # Erase current line in buffer
   dirhistory_down
-  zle accept-line
+  zle .accept-line
 }
 
 zle -N dirhistory_zle_dirhistory_up
