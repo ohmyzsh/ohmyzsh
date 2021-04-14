@@ -244,6 +244,11 @@ EOF
   echo
 }
 
+dl_custom_plugins() {
+  git clone https://github.com/zdharma/fast-syntax-highlighting.git \
+    ${ZSH}/custom/plugins/fast-syntax-highlighting
+}
+
 main() {
   # Run as unattended if stdin is not a tty
   if [ ! -t 0 ]; then
@@ -293,14 +298,16 @@ EOF
   setup_ohmyzsh
   setup_zshrc
   setup_shell
+  dl_custom_plugins
 
   printf %s "$GREEN"
   cat <<'EOF'
-         __                                     __
-  ____  / /_     ____ ___  __  __   ____  _____/ /_
- / __ \/ __ \   / __ `__ \/ / / /  /_  / / ___/ __ \
-/ /_/ / / / /  / / / / / / /_/ /    / /_(__  ) / / /
-\____/_/ /_/  /_/ /_/ /_/\__, /    /___/____/_/ /_/
+  
+            ___________________***_____________________
+        ____  / /_     ____ ___  __  __   ____  _____/ /_
+---    / __ \/ __ \   / __ `__ \/ / / /  /_  / / ___/ __ \ ---
+---   / /_/ / / / /  / / / / / / /_/ /    / /_(__  ) / / / ---
+      \____/_/ /_/  /_/ /_/ /_/\__, /    /___/____/_/ /_/
                         /____/                       ....is now installed!
 
 
