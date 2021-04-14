@@ -13,8 +13,10 @@ export PATH=$PATH:$HOME/.iterm2
 export LDFLAGS="-L/usr/local/opt/bison/lib"
 export CC=clang
 
-/bin/launchctl setenv LIBRARY_PATH /usr/local/lib
-/bin/launchctl setenv CPATH /usr/local/include
+if test "$(uname)" = "Darwin"; then
+    /bin/launchctl setenv LIBRARY_PATH /usr/local/lib
+    /bin/launchctl setenv CPATH /usr/local/include
+fi
 
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
