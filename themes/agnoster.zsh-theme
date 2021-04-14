@@ -242,7 +242,7 @@ prompt_status() {
   local -a symbols
   symbols=()
   if [[ $RETVAL -ne 0 ]]; then
-    symbols+="%{%F{red}%}$RETVAL✘"
+    symbols+="%{%F{red}%}($RETVAL)✘"
   else
     symbols+="%{%F{green}%}✓"
   fi
@@ -272,7 +272,7 @@ build_prompt() {
   prompt_status
   prompt_virtualenv
   prompt_aws
-  prompt_context
+#  prompt_context
   prompt_dir
   prompt_git
   prompt_kubectl
