@@ -71,7 +71,7 @@ DISABLE_UNTRACKED_FILES_DIRTY="false"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 #plugins=(git zsh-git-prompt zsh-completions fasd systemd zsh-syntax-highlighting)
-plugins=(git git-extras fast zsh-syntax-highlighting docker docker-compose docker-machine helm)
+plugins=(git git-extras fast-syntax-highlighting docker docker-compose docker-machine helm)
 
 # The following lines were added by compinstall
 
