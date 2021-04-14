@@ -250,6 +250,9 @@ dl_custom_plugins() {
 
   git clone https://github.com/ghasemnaddaf/zsh-git-prompt --branch plugin \
     ${ZSH}/custom/plugins/zsh-git-prompt
+
+  git clone https://github.com/superbrothers/zsh-kubectl-prompt.git \
+    ${ZSH}/custom/plugins/zsh-kubectl-prompt
 }
 
 main() {
