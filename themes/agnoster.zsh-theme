@@ -123,30 +123,30 @@ prompt_git() {
     fi
 
     # from zsh-git-prompt/zshrc.sh
-    precmd_update_git_vars
-    if [ -n "$__CURRENT_GIT_STATUS" ]; then
-      if [ "$GIT_CHANGED" -ne "0" ]; then
-        mode+=" $ZSH_THEME_GIT_PROMPT_CHANGED$GIT_CHANGED"
-      fi
-      if [ "$GIT_STAGED" -ne "0" ]; then
-        mode+=" $ZSH_THEME_GIT_PROMPT_STAGED$GIT_STAGED"
-      fi
-      if [ "$GIT_BEHIND" -ne "0" ]; then
-        mode+=" %{%F{black}$ZSH_THEME_GIT_PROMPT_BEHIND$GIT_BEHIND%f%}"
-      fi
-      if [ "$GIT_AHEAD" -ne "0" ]; then
-        mode+=" %{%F{black}$ZSH_THEME_GIT_PROMPT_AHEAD$GIT_AHEAD%f%}"
-      fi
-      if [ "$GIT_CONFLICTS" -ne "0" ]; then
-    		    mode+=" $ZSH_THEME_GIT_PROMPT_CONFLICTS$GIT_CONFLICTS"
-      fi
-      if [ "$GIT_UNTRACKED" -ne "0" ]; then
-        mode+=" %{%F{black}$ZSH_THEME_GIT_PROMPT_UNTRACKED$GIT_UNTRACKED%f%}"
-      fi
-      if [ "$GIT_CHANGED" -eq "0" ] && [ "$GIT_CONFLICTS" -eq "0" ] && [ "$GIT_STAGED" -eq "0" ] && [ "$GIT_UNTRACKED" -eq "0" ]; then
-        mode+=" %{%F{blue}\u2691%f%}"
-      fi
-     fi
+    # precmd_update_git_vars
+    # if [ -n "$__CURRENT_GIT_STATUS" ]; then
+    #  if [ "$GIT_CHANGED" -ne "0" ]; then
+    #    mode+=" $ZSH_THEME_GIT_PROMPT_CHANGED$GIT_CHANGED"
+    #  fi
+    #  if [ "$GIT_STAGED" -ne "0" ]; then
+    #    mode+=" $ZSH_THEME_GIT_PROMPT_STAGED$GIT_STAGED"
+    #  fi
+    #  if [ "$GIT_BEHIND" -ne "0" ]; then
+    #    mode+=" %{%F{black}$ZSH_THEME_GIT_PROMPT_BEHIND$GIT_BEHIND%f%}"
+    #  fi
+    #  if [ "$GIT_AHEAD" -ne "0" ]; then
+    #    mode+=" %{%F{black}$ZSH_THEME_GIT_PROMPT_AHEAD$GIT_AHEAD%f%}"
+    #  fi
+    #  if [ "$GIT_CONFLICTS" -ne "0" ]; then
+    #		    mode+=" $ZSH_THEME_GIT_PROMPT_CONFLICTS$GIT_CONFLICTS"
+    #  fi
+    #  if [ "$GIT_UNTRACKED" -ne "0" ]; then
+    #    mode+=" %{%F{black}$ZSH_THEME_GIT_PROMPT_UNTRACKED$GIT_UNTRACKED%f%}"
+    #  fi
+    #  if [ "$GIT_CHANGED" -eq "0" ] && [ "$GIT_CONFLICTS" -eq "0" ] && [ "$GIT_STAGED" -eq "0" ] && [ "$GIT_UNTRACKED" -eq "0" ]; then
+    #    mode+=" %{%F{blue}\u2691%f%}"
+    #  fi
+    # fi
     # end from zsh-git-prompt/zshrc.sh
 
     if [[ -e "${repo_path}/BISECT_LOG" ]]; then

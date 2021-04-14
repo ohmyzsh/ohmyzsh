@@ -128,6 +128,9 @@ export LESSOPEN="|/usr/local/bin/lesspipe.sh %s" LESS_ADVANCED_PREPROCESSOR=1
 # ssh
 export SSH_KEY_PATH="~/.ssh/id_rsa"
 
+# github pat
+export GITHUB_PAT=$(cat $HOME/.git/.pat)
+
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
@@ -138,7 +141,7 @@ alias vb='virtualbox'
 alias vm='VBoxManage'
 alias vmls='VBoxManage list vms'
 alias vmclo='VBoxManage clonevm'     ## <UUID> --name "Ubuntu 18.04 C"
-alias vmreg='VBoxManage registervm"  ## ~/VirtualBox\ VMs/Ubuntu\ 18.04\ C/Ubuntu\ 18.04\ C.vbox
+alias vmreg='VBoxManage registervm'  ## ~/VirtualBox\ VMs/Ubuntu\ 18.04\ C/Ubuntu\ 18.04\ C.vbox
 alias grep='grep --color=auto'
 alias gck='git checkout'
 alias sublime='/Applications/Sublime.app/Contents/MacOS/Sublime'
@@ -147,8 +150,8 @@ alias eclipse='~/eclipse/cpp-2018-09/eclipse/eclipse'
 alias ec='eclipse  2>/dev/null'
 alias ff='firefox 2>/dev/null'
 alias ge='gedit 2>/dev/null'
-alias edit='atom'
+# alias edit='atom'
 alias ez="edit ~/.zshrc"
 alias ezo="edit ~/.oh-my-zsh"
-#alias ifconfig='/sbin/ifconfig'
+# alias ifconfig='/sbin/ifconfig'
 source $DOTFILES/k8s/kubectl_helpers.sh
