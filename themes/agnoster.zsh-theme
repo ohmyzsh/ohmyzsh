@@ -108,10 +108,10 @@ prompt_git() {
     PL_BRANCH_CHAR=$'\u2693'          # anchor
   }
 
-  if [[ ! -z "${ZSH_GIT_PROMPT}" ]]; then
+  if [[ ! -z "${USE_ZSH_GIT_PROMPT}" ]]; then
     # just use zsh-git-prompt with our segment coloring
     prompt_segment yellow red
-    echo -n ${PL_BRANCH_CHAR} ${ZSH_GIT_PROMPT}
+    echo -n ${PL_BRANCH_CHAR} $(git_super_status)
     return
   fi
 
