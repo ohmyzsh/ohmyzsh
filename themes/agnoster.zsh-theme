@@ -107,6 +107,14 @@ prompt_git() {
     #PL_BRANCH_CHAR=$'\ue0a0'         # 
     PL_BRANCH_CHAR=$'\u2693'          # anchor
   }
+
+  if [[ ! -z "${ZSH_GIT_PROMPT}" ]]; then
+    # just use zsh-git-prompt with our segment coloring
+    prompt_segment yellow red
+    echo -n ${PL_BRANCH_CHAR} ${ZSH_GIT_PROMPT}
+    return
+  fi
+
   local ref dirty mode repo_path
 
    if [[ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" = "true" ]]; then
@@ -138,9 +146,14 @@ prompt_git() {
     zstyle ':vcs_info:*' formats ' %u%c'
     zstyle ':vcs_info:*' actionformats ' %u%c'
     vcs_info
-    echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode}"
 
+    echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode}"
   fi
+}
+
+prompt_kubectl() {
+  prompt_segment magenta blue
+  echo -n ${ZSH_KUBECTL_PROMPT}
 }
 
 prompt_bzr() {
@@ -262,6 +275,7 @@ build_prompt() {
   prompt_context
   prompt_dir
   prompt_git
+  prompt_kubectl
   prompt_bzr
   prompt_hg
   prompt_end

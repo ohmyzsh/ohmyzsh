@@ -73,10 +73,7 @@ DISABLE_UNTRACKED_FILES_DIRTY="false"
 #plugins=(git zsh-git-prompt zsh-completions fasd systemd zsh-syntax-highlighting)
 plugins=(git git-extras docker docker-compose docker-machine helm fast-syntax-highlighting zsh-git-prompt)
 
-# build up the prompt from the theme and *-prompt plugins:
-PROMPT="${PROMPT} ZSH_GIT_PROMPT ZSH_KUBECTL_PROMPT"
 # The following lines were added by compinstall
-
 zstyle ':completion:*' completer _expand _complete _ignored _correct _approximate
 zstyle ':completion:*' max-errors 3
 zstyle ':completion:*' prompt 'e%e'
