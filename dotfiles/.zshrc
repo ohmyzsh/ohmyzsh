@@ -71,7 +71,7 @@ DISABLE_UNTRACKED_FILES_DIRTY="false"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 #plugins=(git zsh-git-prompt zsh-completions fasd systemd zsh-syntax-highlighting)
-plugins=(git git-extras docker docker-compose docker-machine helm fast-syntax-highlighting zsh-git-prompt)
+plugins=(git git-extras docker docker-compose docker-machine helm fast-syntax-highlighting zsh-git-prompt zsh-kubectl-prompt)
 
 # The following lines were added by compinstall
 zstyle ':completion:*' completer _expand _complete _ignored _correct _approximate
