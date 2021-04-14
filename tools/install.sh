@@ -248,7 +248,7 @@ dl_custom_plugins() {
   git clone https://github.com/zdharma/fast-syntax-highlighting.git \
     ${ZSH}/custom/plugins/fast-syntax-highlighting
 
-  git clone https://github.com/ghasemnaddaf/zsh-git-prompt \
+  git clone https://github.com/ghasemnaddaf/zsh-git-prompt --branch plugin \
     ${ZSH}/custom/plugins/zsh-git-prompt
 }
 
