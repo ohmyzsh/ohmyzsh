@@ -227,64 +227,264 @@ function omz_urldecode {
   echo -E "$decoded"
 }
 
+##################################
+# PSK Functions
+##################################
 # PSK List directories only
 lsd() {
     l | grep -E "^d"
 }
 
-# the ol' gfind. Doesn't take a file pattern.
-function gfind-all() {
-    fd -H -t f . -x grep --color=always -Hi ${1}
+# ls grep
+lsg() {
+    l | grep -iE "$1"
 }
 
-# gfind with file pattern.
-function gfind-filename-all() {
-    fd -H -t f ".${1}" . -x grep --color=always -Hi "$@"
+# the ol' gfind. Doesn't take a file pattern.
+function gfind-all() {
+    # fd -H -t f . -x grep --color=always -Hi ${1}
+    # Gah. Bye-bye gfind, here's an off-the-shelf improvement upon it https://github.com/burntsushi/ripgrep
+    # $1 is search term, $2 is path
+    # rg --no-ignore --hidden "$@"
+    # even better is ag / silver searcher https://github.com/ggreer/the_silver_searcher
+    ag -a --pager less "$@"
 }
 
 # the ol' gfind. Doesn't take a file pattern.
 function gfind() {
-    fd -t f . -x grep --color=always -Hi ${1}
+    # fd -t f . -x grep --color=always -Hi ${1}
+    ag --pager less "$@"
 }
 
-# gfind with file pattern.
+# Print out the matches only
 function gfindf() {
-    fd -t f ".${1}" . -x grep --color=always -Hi "$2"
+  # TODO make this a lot less shit e.g. don't search .git . Surely rg has
+  # the ability to do this.
+  find . -type f -exec grep --color=always -Hil $1 {} \;
 }
 
+function heroic-repo-configure() {
+  cp ${HOME}/src/spotify/prism-tools/heroic-test.yml ./heroic-guc.yml
+  cp ${HOME}/src/spotify/prism-tools/heroic-api-gae.yml ./heroic-gae.yml
+  ls -l | grep -E 'heroic.*yml|heroic.*yaml'
+  mkdir logs
+}
+
+function kube-list-local-contexts() {
+  grep '^- name: ' ~/.kube/config | awk '{print $3}'
+}
+
+function kube-list-prod-contexts() {
+  gcloud container clusters list --project=gke-xpn-1 --filter="resourceLabels[env]=production" --format="value(name)"
+}
+
+# function h() {
+#   NUM_LINES = ${1:-1000}
+#   history | tail -n $NUM_LINES
+# }
+
+# function h() {
+#   set -x
+#   NUM_LINES = ${1:-25}
+#   \history -${NUM_LINES}
+# }
+
+alias h="history -20"
 alias gfind-filename=gfindf
 
 alias ff='fd -t f '         # find files
 alias ffa='fd -H -t f '     # find files in horrible places
 
 alias fdd='\fd -t d '       # find directories
-alias fdir='fdd'
+alias fdir='\fd -t d '       # find directories
 
 alias fdda='\fd -H -t d '   # find directories in horrible places
 
-alias lg='l | grep '        # ls grep
+alias lg='l | grep -i '        # ls grep
+alias gfinda="gfind-all"
+alias hg="h | grep -i "
+# alias agl="ag --pager less "
+
+function agl() {
+  ag --pager less "$@"
+}
+
+function kill-em-all() {
+  NAME=$1
+
+  echo "Attempting to kill $NAME by arg match..."
+  pkill -fli $1
+  echo "Attempting to kill $NAME by binary match..."
+  pkill -li $1
+  echo "...the killing... is done"
+}
+
+function dateline() {
+  echo "––––––––––––"
+  date
+  echo "––––––––––––"
+}
+
+function clean-slate() {
+  clear
+  dateline
+}
+
+alias clr=clean-slate
+alias cls=clean-slate
+
+function psg () {
+  ps auwwwwx | grep -v 'grep ' | grep -E "%CPU|$1"
+}
+
+function edit() {
+  /Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code $1
+}
+
+function zshrc() {
+  pushd ~/.oh-my-zsh
+  edit .
+  popd
+}
+
+function dir-sizes() {
+  du -sh ./* | sort -h
+}
+
+# to avoid slow shells, we do it manually
+function kubectl() {
+    if ! type __start_kubectl >/dev/null 2>&1; then
+        source <(command kubectl completion zsh)
+    fi
+
+    command kubectl "$@"
+}
+
+function ssh-ds718() {
+  ssh -p 658 pskadmin@192.168.2.7
+}
 
 alias git-stash-list-all='gitk `git stash list --pretty=format:%gd`'
+
+function master-protection() {
+  git branch -vv | grep "origin/`git branch --show-current`"
+}
+
+function git-branch() {
+  git branch -vv | grep `git branch --show-current`
+}
+
+# kill most recent container instance
+alias docker-kill-latest='docker ps -l --format='{{.Names}}' | xargs docker kill'
+
+# stop all containers
+function docker-stop-all() {
+  docker container stop -t 2 $(docker container ls -q) &
+}
 
 # Launch firefox profile manager
 function firefox-profiles() {
     "/Applications/Firefox.app/Contents/MacOS/firefox-bin --profilemanager"
 }
 
+function find-all-massive-files() {
+  find . -size +1G -ls | sort -k7n # Find files larger than 1GB and then order the list by the file size
+}
+
 function start-cloud-storage() {
     cd /Applications
-    open Dropbox.app &
-    open Backup\ and\ Sync.app &
-    open "Google Drive File Stream.app" &
+    open Dropbox.app 2>/dev/null &
+    open Backup\ and\ Sync.app 2>/dev/null &
+    # Don't do this cos it downloads my backed up photos
+    # open "Google Drive File Stream.app" 2>/dev/null &
     cd -
+}
+
+function tree() {
+  /usr/local/homebrew/bin/tree -a $1 | colorize_less
 }
 
 function kill-cloud-storage() {
     # TODO investigate pkill as alternative
-    killall "Google Drive File Stream" 2>/dev/null &
+
+    # Don't do this cos it downloads my backed up photos
+    # killall "Google Drive File Stream" 2>/dev/null &
     killall Dropbox 2>/dev/null &
     killall "Backup and Sync" 2>/dev/null &
+    killall "Google Drive" 2>/dev/null &
 }
 
+# For photos, pictures, DS718
+function organise-into-dated-dirs() {
+  if [ $# -eq 0 ]
+  then
+    echo "Please supply an extension e.g. mov or mp4"
+    return
+  fi
 
-alias fdd=fdir
+  for x in *.${1}; do
+    d=$(date -r "$x" +%Y-%m-%d)
+    mkdir -p "$d"
+    mv -- "$x" "$d/"
+  done
+}
+
+### peco functions ###
+function peco-directories() {
+  local current_lbuffer="$LBUFFER"
+  local current_rbuffer="$RBUFFER"
+  if command -v fd >/dev/null 2>&1; then
+    local dir="$(command \fd --type directory --hidden --no-ignore --exclude .git/ --color never 2>/dev/null | peco )"
+  else
+    local dir="$(
+      command find \( -path '*/\.*' -o -fstype dev -o -fstype proc \) -type d -print 2>/dev/null \
+      | sed 1d \
+      | cut -b3- \
+      | awk '{a[length($0)" "NR]=$0}END{PROCINFO["sorted_in"]="@ind_num_asc"; for(i in a) print a[i]}' - \
+      | peco
+    )"
+  fi
+
+  if [ -n "$dir" ]; then
+    dir=$(echo "$dir" | tr -d '\n')
+    dir=$(printf %q "$dir")
+    # echo "PSK ${dir}"
+
+    BUFFER="${current_lbuffer}${file}${current_rbuffer}"
+    CURSOR=$#BUFFER
+  fi
+}
+
+function peco-files() {
+  local current_lbuffer="$LBUFFER"
+  local current_rbuffer="$RBUFFER"
+  if command -v fd >/dev/null 2>&1; then
+    local file="$(command \fd --type file --hidden --no-ignore --exclude .git/ --color never 2>/dev/null | peco)"
+  elif command -v rg >/dev/null 2>&1; then
+    local file="$(rg --glob "" --files --hidden --no-ignore-vcs --iglob !.git/ --color never 2>/dev/null | peco)"
+  elif command -v ag >/dev/null 2>&1; then
+    local file="$(ag --files-with-matches --unrestricted --skip-vcs-ignores --ignore .git/ --nocolor -g "" 2>/dev/null | peco)"
+  else
+    local file="$(
+    command find \( -path '*/\.*' -o -fstype dev -o -fstype proc \) -type f -print 2> /dev/null \
+      | sed 1d \
+      | cut -b3- \
+      | awk '{a[length($0)" "NR]=$0}END{PROCINFO["sorted_in"]="@ind_num_asc"; for(i in a) print a[i]}' - \
+      | peco
+    )"
+  fi
+
+  if [ -n "$file" ]; then
+    file=$(echo "$file" | tr -d '\n')
+    file=$(printf %q "$file")
+    BUFFER="${current_lbuffer}${file}${current_rbuffer}"
+    CURSOR=$#BUFFER
+  fi
+}
+
+zle -N peco-directories
+bindkey '^Xf' peco-directories
+zle -N peco-files
+bindkey '^X^f' peco-files
+
+### peco functions ###
