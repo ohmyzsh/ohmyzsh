@@ -100,6 +100,14 @@ kres(){
     kubectl set env $@ REFRESHED_AT=$(date +%Y%m%d%H%M%S)
 }
 
+# HorizontalPodAutoscaler management.
+alias kgh='kubectl get hpa'
+alias kgha='kgh --all-namespaces'
+alias kghw='kgh --watch'
+alias keh='kubectl edit hpa'
+alias kdh='kubectl describe hpa'
+alias kdelh='kubectl delete hpa'
+
 # Rollout management.
 alias kgrs='kubectl get rs'
 alias krh='kubectl rollout history'
