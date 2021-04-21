@@ -11,27 +11,16 @@ alias dts='deno test'
 alias dup='deno upgrade'
 
 # COMPLETION FUNCTION
-autoload -U add-zsh-hook
-_deno_completion_auto_update() {
-  if [[ $+commands[deno] -eq 0 \
-    && ( ! -r "$ZSH_CACHE_DIR/deno_version" \
-    || "$(deno --version)" != "$(< "$ZSH_CACHE_DIR/deno_version")" )]]; then
-      mkdir -p $ZSH/completions
-      deno completions zsh > $ZSH/completions/_deno
-      deno --version > $ZSH_CACHE_DIR/deno_version
-  fi
-}
-
-PERIOD=86400 # 24 hours
-add-zsh-hook periodic _deno_completion_auto_update
-
 if (( $+commands[deno] )); then
-  if [[ ! -f "$ZSH/completions/_deno" ]]; then
-    mkdir -p $ZSH/completions
+  if [[ ! -f $ZSH_CACHE_DIR/deno_version ]] \
+    || [[ "$(deno --version)" != "$(< "$ZSH_CACHE_DIR/deno_version")" ]] \
+    || [[ ! -f $ZSH/completions/_deno ]]; then
     deno completions zsh > $ZSH/completions/_deno
     deno --version > $ZSH_CACHE_DIR/deno_version
   fi
+fi
 
+if (( $+commands[deno] )); then
   if ! (($fpath[(I)$ZSH/completions ])); then
     # When using some package managers, such as zinit, the $ZSH/completions
     # dir is not added to fpath
