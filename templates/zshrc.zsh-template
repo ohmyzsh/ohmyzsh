@@ -99,8 +99,6 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias prodplan='/google/data/ro/projects/prodplan/prodplan'
-alias hg='hg --color=always'
 
 # disable shared history among sessions
 # setopt noincappendhistory
@@ -132,9 +130,6 @@ then
     add-zsh-hook preexec fixup_ssh_auth_sock
 fi
 
-# add this to support g4d command
-source /etc/bash_completion.d/g4d
-
 # this function support search file by file name
 # to search under current directory, use 'rf filename'
 # to search under specific directory, use 'rf filename directory'
@@ -154,3 +149,5 @@ rf() {
 source /etc/bash_completion.d/g4d
 # colorful text-based g4 diff through Git
 export P4DIFF="git --no-pager diff --no-index"
+alias prodplan='/google/data/ro/projects/prodplan/prodplan'
+alias hg='hg --color=always'
