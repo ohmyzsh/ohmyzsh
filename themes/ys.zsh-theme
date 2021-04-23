@@ -35,18 +35,16 @@ ys_hg_prompt_info() {
 	fi
 }
 
-local exit_code="%(?,,C:%{$fg[red]%}%?%{$reset_color%})"
-
 # Virtualenv
 local venv_prompt='$(virtenv_prompt)'
 YS_THEME_VIRTUALENV_PROMPT_PREFIX=" %{$fg[green]%}"
 YS_THEME_VIRTUALENV_PROMPT_SUFFIX=" %{$reset_color%}%"
 virtenv_prompt() {
-	if [ $(virtualenv_prompt_info) ]; then
-		echo -n "${YS_THEME_VIRTUALENV_PROMPT_PREFIX}$(virtualenv_prompt_info)${YS_THEME_VIRTUALENV_PROMPT_SUFFIX}"
-	fi
+	[[ -n ${VIRTUAL_ENV} ]] || return
+	echo "${YS_THEME_VIRTUALENV_PROMPT_PREFIX}${VIRTUAL_ENV:t}${YS_THEME_VIRTUALENV_PROMPT_SUFFIX}"
 }
 
+local exit_code="%(?,,C:%{$fg[red]%}%?%{$reset_color%})"
 
 # Prompt format:
 #
@@ -66,7 +64,7 @@ PROMPT="
 %{$terminfo[bold]$fg[yellow]%}%~%{$reset_color%}\
 ${hg_info}\
 ${git_info}\
-${venv_prompt}\
+${venv_info}\
  \
 %{$fg[white]%}[%*] $exit_code
 %{$terminfo[bold]$fg[red]%}$ %{$reset_color%}"
