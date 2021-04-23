@@ -36,7 +36,7 @@ ys_hg_prompt_info() {
 }
 
 # Virtualenv
-local venv_prompt='$(virtenv_prompt)'
+local venv_info='$(virtenv_prompt)'
 YS_THEME_VIRTUALENV_PROMPT_PREFIX=" %{$fg[green]%}"
 YS_THEME_VIRTUALENV_PROMPT_SUFFIX=" %{$reset_color%}%"
 virtenv_prompt() {
