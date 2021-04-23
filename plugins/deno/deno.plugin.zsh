@@ -14,16 +14,8 @@ alias dup='deno upgrade'
 if (( $+commands[deno] )); then
   if [[ ! -f $ZSH_CACHE_DIR/deno_version ]] \
     || [[ "$(deno --version)" != "$(< "$ZSH_CACHE_DIR/deno_version")" ]] \
-    || [[ ! -f $ZSH/completions/_deno ]]; then
-    deno completions zsh > $ZSH/completions/_deno
+    || [[ ! -f $ZSH/plugins/deno/_deno ]]; then
+    deno completions zsh > $ZSH/plugins/deno/_deno
     deno --version > $ZSH_CACHE_DIR/deno_version
-  fi
-fi
-
-if (( $+commands[deno] )); then
-  if ! (($fpath[(I)$ZSH/completions ])); then
-    # When using some package managers, such as zinit, the $ZSH/completions
-    # dir is not added to fpath
-    fpath+=($ZSH/completions)
   fi
 fi
