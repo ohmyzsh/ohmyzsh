@@ -37,6 +37,9 @@ alias npmE='PATH="$(npm bin)":"$PATH"'
 # Check which npm modules are outdated
 alias npmO="npm outdated"
 
+# Update all the packages listed to the latest version
+alias npmU="npm update"
+
 # Check package versions
 alias npmV="npm -v"
 
