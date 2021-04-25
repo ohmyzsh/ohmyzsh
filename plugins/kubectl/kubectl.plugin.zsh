@@ -12,6 +12,9 @@ fi
 
 # This command is used a LOT both below and in daily life
 alias k=kubectl
+alias kg='kubectl get'
+alias kd='kubectl describe'
+alias ke='kubectl edit'
 
 # Execute a kubectl command against all namespaces
 alias kca='_kca(){ kubectl "$@" --all-namespaces;  unset -f _kca; }; _kca'
@@ -43,6 +46,7 @@ alias kgpwide='kgp -o wide'
 alias kep='kubectl edit pods'
 alias kdp='kubectl describe pods'
 alias kdelp='kubectl delete pods'
+alias kdelpf='kubectl delete pods --force=true'
 
 # get pod by label: kgpl "app=myapp" -n myns
 alias kgpl='kgp -l'
@@ -68,6 +72,7 @@ alias kdeli='kubectl delete ingress'
 
 # Namespace management
 alias kgns='kubectl get namespaces'
+alias kcns='kubectl create namespace'
 alias kens='kubectl edit namespace'
 alias kdns='kubectl describe namespace'
 alias kdelns='kubectl delete namespace'
@@ -95,6 +100,17 @@ alias ked='kubectl edit deployment'
 alias kdd='kubectl describe deployment'
 alias kdeld='kubectl delete deployment'
 alias ksd='kubectl scale deployment'
+alias ksd0='kubectl scale deployment --replicas=0'
+alias ksd1='kubectl scale deployment --replicas=1'
+alias ksd2='kubectl scale deployment --replicas=2'
+alias ksd3='kubectl scale deployment --replicas=3'
+alias ksd4='kubectl scale deployment --replicas=4'
+alias ksd5='kubectl scale deployment --replicas=5'
+alias ksd6='kubectl scale deployment --replicas=6'
+alias ksd7='kubectl scale deployment --replicas=7'
+alias ksd8='kubectl scale deployment --replicas=8'
+alias ksd9='kubectl scale deployment --replicas=9'
+alias ksd10='kubectl scale deployment --replicas=10'
 alias krsd='kubectl rollout status deployment'
 kres(){
     kubectl set env $@ REFRESHED_AT=$(date +%Y%m%d%H%M%S)
@@ -114,10 +130,22 @@ alias kess='kubectl edit statefulset'
 alias kdss='kubectl describe statefulset'
 alias kdelss='kubectl delete statefulset'
 alias ksss='kubectl scale statefulset'
+alias ksss0='kubectl scale statefulset --replicas=0'
+alias ksss1='kubectl scale statefulset --replicas=1'
+alias ksss2='kubectl scale statefulset --replicas=2'
+alias ksss3='kubectl scale statefulset --replicas=3'
+alias ksss4='kubectl scale statefulset --replicas=4'
+alias ksss5='kubectl scale statefulset --replicas=5'
+alias ksss6='kubectl scale statefulset --replicas=6'
+alias ksss7='kubectl scale statefulset --replicas=7'
+alias ksss8='kubectl scale statefulset --replicas=8'
+alias ksss9='kubectl scale statefulset --replicas=9'
+alias ksss10='kubectl scale statefulset --replicas=10'
 alias krsss='kubectl rollout status statefulset'
 
 # Port forwarding
 alias kpf="kubectl port-forward"
+alias kpfh="kubectl port-forward --help"
 
 # Tools for accessing all information
 alias kga='kubectl get all'
@@ -168,11 +196,25 @@ alias kecj='kubectl edit cronjob'
 alias kdcj='kubectl describe cronjob'
 alias kdelcj='kubectl delete cronjob'
 
+# Job management.
+alias kgj='kubectl get job'
+alias kej='kubectl edit job'
+alias kdj='kubectl describe job'
+alias kdelj='kubectl delete job'
+
+# Top
+alias ktno='kubectl top node'
+alias ktnoc='kubectl top node --sort-by="cpu"'
+alias ktnom='kubectl top node --sort-by="memory"'
+alias ktp='kubectl top pod'
+alias ktpc='kubectl top pod --sort-by="cpu"'
+alias ktpm='kubectl top pod --sort-by="memory"'
+
 # Only run if the user actually has kubectl installed
 if (( ${+_comps[kubectl]} )); then
-  kj() { kubectl "$@" -o json | jq; }
+  kj()  { kubectl "$@" -o json | jq; }
   kjx() { kubectl "$@" -o json | fx; }
-  ky() { kubectl "$@" -o yaml | yh; }
+  ky()  { kubectl "$@" -o yaml | yh; }
 
   compdef kj=kubectl
   compdef kjx=kubectl
