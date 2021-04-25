@@ -18,6 +18,7 @@ plugins=(... npm)
 | `npmF`  | `npm i -f`                   | Force install from remote registries ignoring local cache       |
 | `npmE`  | `PATH="$(npm bin)":"$PATH"`  | Run command from node_modules folder based on current directory |
 | `npmO`  | `npm outdated`               | Check which npm modules are outdated                            |
+| `npmU`  | `npm update`                 | Update all the packages listed to the latest version            |
 | `npmV`  | `npm -v`                     | Check package versions                                          |
 | `npmL`  | `npm list`                   | List installed packages                                         |
 | `npmL0` | `npm ls --depth=0`           | List top-level installed packages                               |
