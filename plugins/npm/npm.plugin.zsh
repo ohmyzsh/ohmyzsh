@@ -27,6 +27,9 @@ alias npmS="npm i -S "
 # npmd is used by https://github.com/dominictarr/npmd
 alias npmD="npm i -D "
 
+# Force npm to fetch remote resources even if a local copy exists on disk.
+alias npmF='npm i -f'
+
 # Execute command from node_modules folder based on current directory
 # i.e npmE gulp
 alias npmE='PATH="$(npm bin)":"$PATH"'

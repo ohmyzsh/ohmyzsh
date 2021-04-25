@@ -15,6 +15,7 @@ plugins=(... npm)
 | `npmg`  | `npm i -g`                   | Install dependencies globally                                   |
 | `npmS`  | `npm i -S`                   | Install and save to dependencies in your package.json           |
 | `npmD`  | `npm i -D`                   | Install and save to dev-dependencies in your package.json       |
+| `npmF`  | `npm i -f`                   | Force install from remote registries ignoring local cache       |
 | `npmE`  | `PATH="$(npm bin)":"$PATH"`  | Run command from node_modules folder based on current directory |
 | `npmO`  | `npm outdated`               | Check which npm modules are outdated                            |
 | `npmV`  | `npm -v`                     | Check package versions                                          |
