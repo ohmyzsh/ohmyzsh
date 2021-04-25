@@ -27,3 +27,5 @@ plugins=(... npm)
 | `npmR`  | `npm run`                    | Run npm scripts                                                 |
 | `npmP`  | `npm publish`                | Run npm publish                                                 |
 | `npmI`  | `npm init`                   | Run npm init                                                    |
+| `npmi`  | `npm info`                   | Run npm info                                                    |
+| `npmSe` | `npm search`                 | Run npm search                                                  |
