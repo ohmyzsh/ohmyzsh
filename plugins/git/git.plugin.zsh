@@ -31,6 +31,7 @@ function work_in_progress() {
 
 # Check if main exists and use instead of master
 function git_main_branch() {
+  command git rev-parse --git-dir &>/dev/null || return
   local branch
   for branch in main trunk; do
     if command git show-ref -q --verify refs/heads/$branch; then
@@ -223,6 +224,7 @@ alias grbc='git rebase --continue'
 alias grbd='git rebase develop'
 alias grbi='git rebase -i'
 alias grbm='git rebase $(git_main_branch)'
+alias grbo='git rebase --onto'
 alias grbs='git rebase --skip'
 alias grev='git revert'
 alias grh='git reset'
@@ -235,6 +237,7 @@ alias grrm='git remote remove'
 alias grs='git restore'
 alias grset='git remote set-url'
 alias grss='git restore --source'
+alias grst='git restore --staged'
 alias grt='cd "$(git rev-parse --show-toplevel || echo .)"'
 alias gru='git reset --'
 alias grup='git remote update'
@@ -260,7 +263,7 @@ alias gstd='git stash drop'
 alias gstl='git stash list'
 alias gstp='git stash pop'
 alias gsts='git stash show --text'
-alias gstu='git stash --include-untracked'
+alias gstu='gsta --include-untracked'
 alias gstall='git stash --all'
 alias gsu='git submodule update'
 alias gsw='git switch'

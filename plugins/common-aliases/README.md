@@ -40,10 +40,12 @@ plugins=(... common-aliases)
 
 | Alias | Command                                             | Description                             |
 |-------|-----------------------------------------------------|-----------------------------------------|
-| fd    | `find . -type d -name`                              | Find a directory with the given name    |
+| fd\*  | `find . -type d -name`                              | Find a directory with the given name    |
 | ff    | `find . -type f -name`                              | Find a file with the given name         |
 | grep  | `grep --color`                                      | Searches for a query string             |
 | sgrep | `grep -R -n -H -C 5 --exclude-dir={.git,.svn,CVS}`  | Useful for searching within files       |
+
+\* Only if the [`fd`](https://github.com/sharkdp/fd) command isn't installed.
 
 ### Other Aliases
 
