@@ -8,20 +8,16 @@ To use it, add `gh` to the plugins array in your zshrc file:
 plugins=(... gh)
 ```
 
-## Clear cache
+This plugin does not add any aliases.
 
-This plugin does take use of some caching. The completion script is generated
-by the `gh` command itself (which makes this plugin version independent), and
-saves that to `$ZSH/plugins/gh/_gh`.
+## Cache
 
-After you update the `gh` command, those completions may be out of date.
+This plugin caches the completion script and is automatically updated when the
+plugin is loaded, which is usually when you start up a new terminal emulator.
 
-This cache is automatically checked periodically once per 24h, so as a user of
-this plugin you should not need to do anything. Just take notice that after an
-update the completions may act strangely up to 24 hours after you've updated.
+The cache is stored at:
 
-To clear the cache manually, run the following:
+- `$ZSH/plugins/gh/_gh` completions script
 
-```zsh
-rm -v $ZSH/plugins/gh/_gh $ZSH_CACHE_DIR/gh_version
-```
+- `$ZSH_CACHE_DIR/gh_version` version of GitHub CLI, used to invalidate
+  the cache.
