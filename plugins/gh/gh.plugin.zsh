@@ -7,5 +7,7 @@ if (( $+commands[gh] )); then
     gh completion --shell zsh > $ZSH/plugins/gh/_gh
     gh --version > $ZSH_CACHE_DIR/gh_version
   fi
+  autoload -Uz _gh
+  _comps[gh]=_gh
 fi
 
