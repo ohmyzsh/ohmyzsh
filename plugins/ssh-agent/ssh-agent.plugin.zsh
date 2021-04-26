@@ -48,7 +48,9 @@ function _add_identities() {
 		fi
 	done
 
-	[[ -n "$not_loaded" ]] && ssh-add ${^not_loaded}
+	local args
+	zstyle -a :omz:plugins:ssh-agent ssh-add-args args
+	[[ -n "$not_loaded" ]] && ssh-add "${args[@]}" ${^not_loaded}
 }
 
 # Get the filename to store/lookup the environment from
@@ -59,11 +61,11 @@ zstyle -b :omz:plugins:ssh-agent agent-forwarding _agent_forwarding
 
 if [[ $_agent_forwarding == "yes" && -n "$SSH_AUTH_SOCK" ]]; then
 	# Add a nifty symlink for screen/tmux if agent forwarding
-	[[ -L $SSH_AUTH_SOCK ]] || ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USER-screen
+	[[ -L $SSH_AUTH_SOCK ]] || ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USERNAME-screen
 elif [[ -f "$_ssh_env_cache" ]]; then
 	# Source SSH settings, if applicable
 	. $_ssh_env_cache > /dev/null
-	if [[ $USER == "root" ]]; then
+	if [[ $USERNAME == "root" ]]; then
 		FILTER="ax"
 	else
 		FILTER="x"
