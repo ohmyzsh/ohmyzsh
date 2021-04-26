@@ -12,7 +12,7 @@ plugins=(... gh)
 
 This plugin does take use of some caching. The completion script is generated
 by the `gh` command itself (which makes this plugin version independent), and
-saves that to `$ZSH/completions/_gh`.
+saves that to `$ZSH/plugins/gh/_gh`.
 
 After you update the `gh` command, those completions may be out of date.
 
@@ -23,5 +23,5 @@ update the completions may act strangely up to 24 hours after you've updated.
 To clear the cache manually, run the following:
 
 ```zsh
-rm -v $ZSH/completions/_gh $ZSH_CACHE_DIR/gh_version
+rm -v $ZSH/plugins/gh/_gh $ZSH_CACHE_DIR/gh_version
 ```
