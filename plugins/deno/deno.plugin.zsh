@@ -18,4 +18,6 @@ if (( $+commands[deno] )); then
     deno completions zsh > $ZSH/plugins/deno/_deno
     deno --version > $ZSH_CACHE_DIR/deno_version
   fi
+  autoload -Uz _deno
+  _comps[deno]=_deno
 fi
