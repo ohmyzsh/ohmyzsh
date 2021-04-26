@@ -1,0 +1,357 @@
+#compdef fnm
+
+autoload -U is-at-least
+
+_fnm() {
+    typeset -A opt_args
+    typeset -a _arguments_options
+    local ret=1
+
+    if is-at-least 5.2; then
+        _arguments_options=(-s -S -C)
+    else
+        _arguments_options=(-s -C)
+    fi
+
+    local context curcontext="$curcontext" state line
+    _arguments "${_arguments_options[@]}" \
+'--node-dist-mirror=[https://nodejs.org/dist/ mirror]' \
+'--fnm-dir=[The root directory of fnm installations]' \
+'--multishell-path=[Where the current node version link is stored. This value will be populated automatically by evaluating `fnm env` in your shell profile. Read more about it using `fnm help env`]' \
+'--log-level=[The log level of fnm commands]' \
+'--arch=[Override the architecture of the installed Node binary. Defaults to arch of fnm binary]' \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+":: :_fnm_commands" \
+"*::: :->fnm" \
+&& ret=0
+    case $state in
+    (fnm)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:fnm-command-$line[1]:"
+        case $line[1] in
+            (ls-remote)
+_arguments "${_arguments_options[@]}" \
+'--node-dist-mirror=[https://nodejs.org/dist/ mirror]' \
+'--fnm-dir=[The root directory of fnm installations]' \
+'--log-level=[The log level of fnm commands]' \
+'--arch=[Override the architecture of the installed Node binary. Defaults to arch of fnm binary]' \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+&& ret=0
+;;
+(list-remote)
+_arguments "${_arguments_options[@]}" \
+'--node-dist-mirror=[https://nodejs.org/dist/ mirror]' \
+'--fnm-dir=[The root directory of fnm installations]' \
+'--log-level=[The log level of fnm commands]' \
+'--arch=[Override the architecture of the installed Node binary. Defaults to arch of fnm binary]' \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+&& ret=0
+;;
+(ls)
+_arguments "${_arguments_options[@]}" \
+'--node-dist-mirror=[https://nodejs.org/dist/ mirror]' \
+'--fnm-dir=[The root directory of fnm installations]' \
+'--log-level=[The log level of fnm commands]' \
+'--arch=[Override the architecture of the installed Node binary. Defaults to arch of fnm binary]' \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+&& ret=0
+;;
+(list)
+_arguments "${_arguments_options[@]}" \
+'--node-dist-mirror=[https://nodejs.org/dist/ mirror]' \
+'--fnm-dir=[The root directory of fnm installations]' \
+'--log-level=[The log level of fnm commands]' \
+'--arch=[Override the architecture of the installed Node binary. Defaults to arch of fnm binary]' \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+&& ret=0
+;;
+(install)
+_arguments "${_arguments_options[@]}" \
+'--node-dist-mirror=[https://nodejs.org/dist/ mirror]' \
+'--fnm-dir=[The root directory of fnm installations]' \
+'--log-level=[The log level of fnm commands]' \
+'--arch=[Override the architecture of the installed Node binary. Defaults to arch of fnm binary]' \
+'--lts[Install latest LTS]' \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+'::version -- A version string. Can be a partial semver or a LTS version name by the format lts/NAME:_files' \
+&& ret=0
+;;
+(use)
+_arguments "${_arguments_options[@]}" \
+'--node-dist-mirror=[https://nodejs.org/dist/ mirror]' \
+'--fnm-dir=[The root directory of fnm installations]' \
+'--log-level=[The log level of fnm commands]' \
+'--arch=[Override the architecture of the installed Node binary. Defaults to arch of fnm binary]' \
+'--install-if-missing[Install the version if it isn'\''t installed yet]' \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+'::version:_files' \
+&& ret=0
+;;
+(env)
+_arguments "${_arguments_options[@]}" \
+'--shell=[The shell syntax to use. Infers when missing]: :(bash zsh fish powershell)' \
+'--node-dist-mirror=[https://nodejs.org/dist/ mirror]' \
+'--fnm-dir=[The root directory of fnm installations]' \
+'--log-level=[The log level of fnm commands]' \
+'--arch=[Override the architecture of the installed Node binary. Defaults to arch of fnm binary]' \
+'--multi[Deprecated. This is the default now]' \
+'--use-on-cd[Print the script to change Node versions every directory change]' \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+&& ret=0
+;;
+(completions)
+_arguments "${_arguments_options[@]}" \
+'--shell=[The shell syntax to use. Infers when missing]: :(zsh bash fish powershell elvish)' \
+'--node-dist-mirror=[https://nodejs.org/dist/ mirror]' \
+'--fnm-dir=[The root directory of fnm installations]' \
+'--log-level=[The log level of fnm commands]' \
+'--arch=[Override the architecture of the installed Node binary. Defaults to arch of fnm binary]' \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+&& ret=0
+;;
+(alias)
+_arguments "${_arguments_options[@]}" \
+'--node-dist-mirror=[https://nodejs.org/dist/ mirror]' \
+'--fnm-dir=[The root directory of fnm installations]' \
+'--log-level=[The log level of fnm commands]' \
+'--arch=[Override the architecture of the installed Node binary. Defaults to arch of fnm binary]' \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+':to-version:_files' \
+':name:_files' \
+&& ret=0
+;;
+(default)
+_arguments "${_arguments_options[@]}" \
+'--node-dist-mirror=[https://nodejs.org/dist/ mirror]' \
+'--fnm-dir=[The root directory of fnm installations]' \
+'--log-level=[The log level of fnm commands]' \
+'--arch=[Override the architecture of the installed Node binary. Defaults to arch of fnm binary]' \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+':version:_files' \
+&& ret=0
+;;
+(current)
+_arguments "${_arguments_options[@]}" \
+'--node-dist-mirror=[https://nodejs.org/dist/ mirror]' \
+'--fnm-dir=[The root directory of fnm installations]' \
+'--log-level=[The log level of fnm commands]' \
+'--arch=[Override the architecture of the installed Node binary. Defaults to arch of fnm binary]' \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+&& ret=0
+;;
+(exec)
+_arguments "${_arguments_options[@]}" \
+'--using=[Either an explicit version, or a filename with the version written in it]' \
+'--node-dist-mirror=[https://nodejs.org/dist/ mirror]' \
+'--fnm-dir=[The root directory of fnm installations]' \
+'--log-level=[The log level of fnm commands]' \
+'--arch=[Override the architecture of the installed Node binary. Defaults to arch of fnm binary]' \
+'--using-file[Deprecated. This is the default now]' \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+'::arguments -- The command to run:_files' \
+&& ret=0
+;;
+(uninstall)
+_arguments "${_arguments_options[@]}" \
+'--node-dist-mirror=[https://nodejs.org/dist/ mirror]' \
+'--fnm-dir=[The root directory of fnm installations]' \
+'--log-level=[The log level of fnm commands]' \
+'--arch=[Override the architecture of the installed Node binary. Defaults to arch of fnm binary]' \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+'::version:_files' \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+'--node-dist-mirror=[https://nodejs.org/dist/ mirror]' \
+'--fnm-dir=[The root directory of fnm installations]' \
+'--log-level=[The log level of fnm commands]' \
+'--arch=[Override the architecture of the installed Node binary. Defaults to arch of fnm binary]' \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+}
+
+(( $+functions[_fnm_commands] )) ||
+_fnm_commands() {
+    local commands; commands=(
+        "list-remote:List all remote Node.js versions" \
+"ls-remote:List all remote Node.js versions" \
+"list:List all locally installed Node.js versions" \
+"ls:List all locally installed Node.js versions" \
+"install:Install a new Node.js version" \
+"use:Change Node.js version" \
+"env:Print and set up required environment variables for fnm" \
+"completions:Print shell completions to stdout" \
+"alias:Alias a version to a common name" \
+"default:Set a version as the default version" \
+"current:Print the current Node.js version" \
+"exec:Run a command within fnm context" \
+"uninstall:Uninstall a Node.js version" \
+"help:Prints this message or the help of the given subcommand(s)" \
+    )
+    _describe -t commands 'fnm commands' commands "$@"
+}
+(( $+functions[_fnm__alias_commands] )) ||
+_fnm__alias_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands 'fnm alias commands' commands "$@"
+}
+(( $+functions[_fnm__completions_commands] )) ||
+_fnm__completions_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands 'fnm completions commands' commands "$@"
+}
+(( $+functions[_fnm__current_commands] )) ||
+_fnm__current_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands 'fnm current commands' commands "$@"
+}
+(( $+functions[_fnm__default_commands] )) ||
+_fnm__default_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands 'fnm default commands' commands "$@"
+}
+(( $+functions[_fnm__env_commands] )) ||
+_fnm__env_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands 'fnm env commands' commands "$@"
+}
+(( $+functions[_fnm__exec_commands] )) ||
+_fnm__exec_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands 'fnm exec commands' commands "$@"
+}
+(( $+functions[_fnm__help_commands] )) ||
+_fnm__help_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands 'fnm help commands' commands "$@"
+}
+(( $+functions[_fnm__install_commands] )) ||
+_fnm__install_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands 'fnm install commands' commands "$@"
+}
+(( $+functions[_fnm__list_commands] )) ||
+_fnm__list_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands 'fnm list commands' commands "$@"
+}
+(( $+functions[_fnm__list-remote_commands] )) ||
+_fnm__list-remote_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands 'fnm list-remote commands' commands "$@"
+}
+(( $+functions[_fnm__ls_commands] )) ||
+_fnm__ls_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands 'fnm ls commands' commands "$@"
+}
+(( $+functions[_ls_commands] )) ||
+_ls_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands 'ls commands' commands "$@"
+}
+(( $+functions[_fnm__ls-remote_commands] )) ||
+_fnm__ls-remote_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands 'fnm ls-remote commands' commands "$@"
+}
+(( $+functions[_ls-remote_commands] )) ||
+_ls-remote_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands 'ls-remote commands' commands "$@"
+}
+(( $+functions[_fnm__uninstall_commands] )) ||
+_fnm__uninstall_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands 'fnm uninstall commands' commands "$@"
+}
+(( $+functions[_fnm__use_commands] )) ||
+_fnm__use_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands 'fnm use commands' commands "$@"
+}
+
+_fnm "$@"
