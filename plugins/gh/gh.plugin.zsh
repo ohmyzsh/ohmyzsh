@@ -1,9 +1,9 @@
 # Autocompletion for the GitHub CLI (gh).
 
 if (( $+commands[gh] )); then
-    if [[ $+commands[gh] -eq 0 \
-        && ( ! -r "$ZSH_CACHE_DIR/gh_version" \
-        || "$(gh --version)" != "$(< "$ZSH_CACHE_DIR/gh_version")" ) ]]; then
+    if [[ ! -r "$ZSH_CACHE_DIR/gh_version" \
+        || "$(gh --version)" != "$(< "$ZSH_CACHE_DIR/gh_version")"
+        || ! -f "$ZSH/plugins/gh/_gh" ]]; then
         mkdir -p $ZSH/plugins/gh
         gh completion --shell zsh > $ZSH/plugins/gh/_gh
         gh --version > $ZSH_CACHE_DIR/gh_version
