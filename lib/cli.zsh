@@ -37,7 +37,7 @@ function _omz {
       changelog) local -a refs
         refs=("${(@f)$(command git for-each-ref --format="%(refname:short):%(subject)" refs/heads refs/tags)}")
         _describe 'command' refs ;;
-      plugin) subcmds=('list:List plugins')
+      plugin) subcmds=('info:Get plugin information' 'list:List plugins')
         _describe 'command' subcmds ;;
       pr) subcmds=('test:Test a Pull Request' 'clean:Delete all Pull Request branches')
         _describe 'command' subcmds ;;
@@ -46,6 +46,8 @@ function _omz {
     esac
   elif (( CURRENT == 4 )); then
     case "$words[2]::$words[3]" in
+      plugin::info) compadd "$ZSH"/plugins/*/README.md(.N:h:t) \
+        "$ZSH_CUSTOM"/plugins/*/README.md(.N:h:t) ;;
       theme::use) compadd "$ZSH"/themes/*.zsh-theme(.N:t:r) \
         "$ZSH_CUSTOM"/**/*.zsh-theme(.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::) ;;
     esac
@@ -143,6 +145,7 @@ Usage: omz plugin <command> [options]
 
 Available commands:
 
+  info <plugin>   Get information of a plugin
   list            List all available Oh My Zsh plugins
 
 EOF
@@ -153,6 +156,29 @@ EOF
   shift
 
   _omz::plugin::$command "$@"
+}
+
+function _omz::plugin::info {
+  if [[ -z "$1" ]]; then
+    echo >&2 "Usage: omz plugin info <plugin>"
+    return 1
+  fi
+
+  local readme
+  for readme in "$ZSH_CUSTOM/plugins/$1/README.md" "$ZSH/plugins/$1/README.md"; do
+    if [[ -f "$readme" ]]; then
+      (( ${+commands[less]} )) && less "$readme" || cat "$readme"
+      return 0
+    fi
+  done
+
+  if [[ -d "$ZSH_CUSTOM/plugins/$1" || -d "$ZSH/plugins/$1" ]]; then
+    _omz::log error "the '$1' plugin doesn't have a README file"
+  else
+    _omz::log error "'$1' plugin not found"
+  fi
+
+  return 1
 }
 
 function _omz::plugin::list {
@@ -333,8 +359,8 @@ EOF
 
 function _omz::theme::list {
   local -a custom_themes builtin_themes
-  custom_themes=("$ZSH_CUSTOM"/**/*.zsh-theme(.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::))
-  builtin_themes=("$ZSH"/themes/*.zsh-theme(.N:t:r))
+  custom_themes=("$ZSH_CUSTOM"/**/*.zsh-theme(-.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::))
+  builtin_themes=("$ZSH"/themes/*.zsh-theme(-.N:t:r))
 
   # If the command is being piped, print all found line by line
   if [[ ! -t 1 ]]; then
@@ -375,13 +401,14 @@ function _omz::theme::use {
 }
 
 function _omz::update {
+  local last_commit=$(cd "$ZSH"; git rev-parse HEAD)
+
   # Run update script
   if [[ "$1" != --unattended ]]; then
     ZSH="$ZSH" zsh -f "$ZSH/tools/upgrade.sh" --interactive
   else
     ZSH="$ZSH" zsh -f "$ZSH/tools/upgrade.sh"
   fi
-  local ret=$?
 
   # Update last updated file
   zmodload zsh/datetime
@@ -389,9 +416,11 @@ function _omz::update {
   # Remove update lock if it exists
   command rm -rf "$ZSH/log/update.lock"
 
-  # Restart the zsh session
-  if [[ $ret -eq 0 && "$1" != --unattended ]]; then
+  # Restart the zsh session if there were changes
+  if [[ "$1" != --unattended && "$(cd "$ZSH"; git rev-parse HEAD)" != "$last_commit" ]]; then
+    # Old zsh versions don't have ZSH_ARGZERO
+    local zsh="${ZSH_ARGZERO:-${functrace[-1]%:*}}"
     # Check whether to run a login shell
-    [[ "$ZSH_ARGZERO" = -* ]] && exec -l "${ZSH_ARGZERO#-}" || exec "$ZSH_ARGZERO"
+    [[ "$zsh" = -* || -o login ]] && exec -l "${zsh#-}" || exec "$zsh"
   fi
 }

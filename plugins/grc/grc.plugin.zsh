@@ -1,44 +1,17 @@
-# Adapted from: https://github.com/garabik/grc/blob/master/grc.zsh
+#!/usr/bin/env zsh
 
-if [[ "$TERM" = dumb ]] || (( ! $+commands[grc] )); then
-  return
-fi
-
-# Supported commands
-cmds=(
-  cc
-  configure
-  cvs
-  df
-  diff
-  dig
-  gcc
-  gmake
-  ifconfig
-  iwconfig
-  last
-  ldap
-  make
-  mount
-  mtr
-  netstat
-  ping
-  ping6
-  ps
-  traceroute
-  traceroute6
-  wdiff
-  whois
+# common grc.zsh paths
+files=(
+  /etc/grc.zsh            # default
+  /usr/local/etc/grc.zsh  # homebrew
 )
 
-# Set alias for supported commands
-for cmd in $cmds; do
-  if (( $+commands[$cmd] )); then
-    eval "function $cmd {
-      grc --colour=auto \"${commands[$cmd]}\" \"\$@\"
-    }"
+# verify the file is readable and source it
+for file in $files; do
+  if [[ -r "$file" ]]; then
+    source "$file"
+    break
   fi
 done
 
-# Clean up variables
-unset cmds cmd
+unset file files
