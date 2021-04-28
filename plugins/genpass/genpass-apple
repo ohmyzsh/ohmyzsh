@@ -1,0 +1,79 @@
+#!/usr/bin/env zsh
+#
+# Usage: genpass-apple [NUM]
+#
+# Generate a password made of 6 pseudowords of 6 characters each
+# with the security margin of at least 128 bits.
+#
+# Example password: xudmec-4ambyj-tavric-mumpub-mydVop-bypjyp
+#
+# If given a numerical argument, generate that many passwords.
+
+emulate -L zsh -o no_unset -o warn_create_global -o warn_nested_var
+
+if [[ ARGC -gt 1 || ${1-1} != ${~:-<1-$((16#7FFFFFFF))>} ]]; then
+  print -ru2 -- "usage: $0 [NUM]"
+  return 1
+fi
+
+zmodload zsh/system zsh/mathfunc || return
+
+{
+  local -r vowels=aeiouy
+  local -r consonants=bcdfghjklmnpqrstvwxz
+  local -r digits=0123456789
+
+  # Sets REPLY to a uniformly distributed random number in [1, $1].
+  # Requires: $1 <= 256.
+  function -$0-rand() {
+    local c
+    while true; do
+      sysread -s1 c || return
+      # Avoid bias towards smaller numbers.
+      (( #c < 256 / $1 * $1 )) && break
+    done
+    typeset -g REPLY=$((#c % $1 + 1))
+  }
+
+  local REPLY chars
+
+  repeat ${1-1}; do
+    # Generate 6 pseudowords of the form cvccvc where c and v
+    # denote random consonants and vowels respectively.
+    local words=()
+    repeat 6; do
+      words+=('')
+      repeat 2; do
+        for chars in $consonants $vowels $consonants; do
+          -$0-rand $#chars || return
+          words[-1]+=$chars[REPLY]
+        done
+      done
+    done
+
+    local pwd=${(j:-:)words}
+
+    # Replace either the first or the last character in one of
+    # the words with a random digit.
+    -$0-rand $#digits || return
+    local digit=$digits[REPLY]
+    -$0-rand $((2 * $#words)) || return
+    pwd[REPLY/2*7+2*(REPLY%2)-1]=$digit
+
+    # Convert one lower-case character to upper case.
+    while true; do
+      -$0-rand $#pwd || return
+      [[ $vowels$consonants == *$pwd[REPLY]* ]] && break
+    done
+    # NOTE: We aren't using ${(U)c} here because its results are
+    # locale-dependent. For example, when upper-casing 'i' in Turkish
+    # locale we would get 'İ', a.k.a. latin capital letter i with dot
+    # above. We could set LC_CTYPE=C locally but then we would run afoul
+    # of this zsh bug: https://www.zsh.org/mla/workers/2020/msg00588.html.
+    local c=$pwd[REPLY]
+    printf -v c '%o' $((#c - 32))
+    printf "%s\\$c%s\\n" "$pwd[1,REPLY-1]" "$pwd[REPLY+1,-1]" || return
+  done
+} always {
+  unfunction -m -- "-${(b)0}-*"
+} </dev/urandom

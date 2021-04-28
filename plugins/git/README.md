@@ -124,6 +124,7 @@ plugins=(... git)
 | grbd                 | git rebase develop                                                                                                               |
 | grbi                 | git rebase -i                                                                                                                    |
 | grbm                 | git rebase $(git_main_branch)                                                                                                                  |
+| grbo                 | git rebase --onto                                                                                                             |
 | grbs                 | git rebase --skip                                                                                                                |
 | grev                 | git revert                                                                                                                       |
 | grh                  | git reset                                                                                                                        |
@@ -136,6 +137,7 @@ plugins=(... git)
 | grs                  | git restore                                                                                                                      |
 | grset                | git remote set-url                                                                                                               |
 | grss                 | git restore --source                                                                                                             |
+| grst                 | git restore --staged                                                                                                             |
 | grt                  | cd "$(git rev-parse --show-toplevel \|\| echo .)"                                                                                |
 | gru                  | git reset --                                                                                                                     |
 | grup                 | git remote update                                                                                                                |

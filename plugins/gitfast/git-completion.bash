@@ -45,11 +45,6 @@
 #     When set to "1" suggest all options, including options which are
 #     typically hidden (e.g. '--allow-empty' for 'git commit').
 
-case "$COMP_WORDBREAKS" in
-*:*) : great ;;
-*)   COMP_WORDBREAKS="$COMP_WORDBREAKS:"
-esac
-
 # Discovers the path to the git repository taking any '--git-dir=<path>' and
 # '-C <path>' options into account and stores it in the $__git_repo_path
 # variable.
@@ -347,7 +342,7 @@ __gitcomp ()
 	local cur_="${3-$cur}"
 
 	case "$cur_" in
-	--*=)
+	*=)
 		;;
 	--no-*)
 		local c i=0 IFS=$' \t\n'
@@ -519,7 +514,7 @@ __gitcomp_builtin ()
 	local incl="${2-}"
 	local excl="${3-}"
 
-	local var=__gitcomp_builtin_"${cmd/-/_}"
+	local var=__gitcomp_builtin_"${cmd//-/_}"
 	local options
 	eval "options=\${$var-}"
 
@@ -1231,26 +1226,44 @@ __git_pretty_aliases ()
 # __git_aliased_command requires 1 argument
 __git_aliased_command ()
 {
-	local word cmdline=$(__git config --get "alias.$1")
-	for word in $cmdline; do
-		case "$word" in
-		\!gitk|gitk)
-			echo "gitk"
+	local cur=$1 last list word cmdline
+
+	while [[ -n "$cur" ]]; do
+		if [[ "$list" == *" $cur "* ]]; then
+			# loop detected
 			return
-			;;
-		\!*)	: shell command alias ;;
-		-*)	: option ;;
-		*=*)	: setting env ;;
-		git)	: git itself ;;
-		\(\))   : skip parens of shell function definition ;;
-		{)	: skip start of shell helper function ;;
-		:)	: skip null command ;;
-		\'*)	: skip opening quote after sh -c ;;
-		*)
-			echo "$word"
-			return
-		esac
+		fi
+
+		cmdline=$(__git config --get "alias.$cur")
+		list=" $cur $list"
+		last=$cur
+		cur=
+
+		for word in $cmdline; do
+			case "$word" in
+			\!gitk|gitk)
+				cur="gitk"
+				break
+				;;
+			\!*)	: shell command alias ;;
+			-*)	: option ;;
+			*=*)	: setting env ;;
+			git)	: git itself ;;
+			\(\))   : skip parens of shell function definition ;;
+			{)	: skip start of shell helper function ;;
+			:)	: skip null command ;;
+			\'*)	: skip opening quote after sh -c ;;
+			*)
+				cur="$word"
+				break
+			esac
+		done
 	done
+
+	cur=$last
+	if [[ "$cur" != "$1" ]]; then
+		echo "$cur"
+	fi
 }
 
 # Check whether one of the given words is present on the command line,
@@ -2723,10 +2736,10 @@ __git_complete_config_variable_name ()
 		return
 		;;
 	branch.*)
-		local pfx="${cur%.*}."
-		cur_="${cur#*.}"
+		local pfx="${cur_%.*}."
+		cur_="${cur_#*.}"
 		__gitcomp_direct "$(__git_heads "$pfx" "$cur_" ".")"
-		__gitcomp_nl_append $'autoSetupMerge\nautoSetupRebase\n' "$pfx" "$cur_" "$sfx"
+		__gitcomp_nl_append $'autoSetupMerge\nautoSetupRebase\n' "$pfx" "$cur_" "${sfx:- }"
 		return
 		;;
 	guitool.*.*)
@@ -2760,7 +2773,7 @@ __git_complete_config_variable_name ()
 		local pfx="${cur_%.*}."
 		cur_="${cur_#*.}"
 		__git_compute_all_commands
-		__gitcomp_nl "$__git_all_commands" "$pfx" "$cur_" "$sfx"
+		__gitcomp_nl "$__git_all_commands" "$pfx" "$cur_" "${sfx:- }"
 		return
 		;;
 	remote.*.*)
@@ -2776,7 +2789,7 @@ __git_complete_config_variable_name ()
 		local pfx="${cur_%.*}."
 		cur_="${cur_#*.}"
 		__gitcomp_nl "$(__git_remotes)" "$pfx" "$cur_" "."
-		__gitcomp_nl_append "pushDefault" "$pfx" "$cur_" "$sfx"
+		__gitcomp_nl_append "pushDefault" "$pfx" "$cur_" "${sfx:- }"
 		return
 		;;
 	url.*.*)
