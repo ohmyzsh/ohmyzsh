@@ -46,6 +46,8 @@ function _omz {
     esac
   elif (( CURRENT == 4 )); then
     case "$words[2]::$words[3]" in
+      plugin::enable) ;;
+      plugin::disable) ;;
       plugin::info) compadd "$ZSH"/plugins/*/README.md(.N:h:t) \
         "$ZSH_CUSTOM"/plugins/*/README.md(.N:h:t) ;;
       theme::use) compadd "$ZSH"/themes/*.zsh-theme(.N:t:r) \
@@ -145,8 +147,10 @@ Usage: omz plugin <command> [options]
 
 Available commands:
 
-  info <plugin>   Get information of a plugin
-  list            List all available Oh My Zsh plugins
+  disable <plugin> Disable a plugin
+  enable <plugin>  Enable a plugin
+  info <plugin>    Get information of a plugin
+  list             List all available Oh My Zsh plugins
 
 EOF
     return 1
@@ -156,6 +160,38 @@ EOF
   shift
 
   _omz::plugin::$command "$@"
+}
+
+function _omz::plugin::enable {
+  if [[ -z "$1" ]]; then
+    echo >&2 "Usage: omz plugin enable <plugin>"
+    return 1
+  fi
+  if [[ $plugins =~ "$1" ]]; then
+    echo "INFO: Plugin named \"$1\" was enabled."
+    return
+  fi
+  local new_plugins="${plugins} $1"
+  sed -iE "s/^plugins=.*/plugins=(${new_plugins})/g" $HOME/.zshrc
+  source $HOME/.zshrc
+  echo "INFO: Plugin enable successfully."
+}
+
+function _omz::plugin::disable {
+  if [[ -z "$1" ]]; then
+    echo >&2 "Usage: omz plugin disable <plugin>"
+    return 1
+  fi
+
+  is_exist=false
+  if ! [[ $plugins =~ "$1" ]]; then
+    echo "INFO: Plugin named \"$1\" was disabled."
+    return
+  fi
+  local new_plugins=$(echo $plugins | sed "s/$1//g" | sed "s/\\s+/ /g" | sed "s/ $//") 
+  sed -iE "s/^plugins=.*/plugins=(${new_plugins})/g" $HOME/.zshrc
+  source $HOME/.zshrc
+  echo "INFO: Plugin disable successfully."
 }
 
 function _omz::plugin::info {
