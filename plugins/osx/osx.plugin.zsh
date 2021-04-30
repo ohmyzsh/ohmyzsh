@@ -249,3 +249,4 @@ source "${0:h:A}/music"
 
 # Spotify control function
 source "${0:h:A}/spotify"
+
