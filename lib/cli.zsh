@@ -37,7 +37,7 @@ function _omz {
       changelog) local -a refs
         refs=("${(@f)$(command git for-each-ref --format="%(refname:short):%(subject)" refs/heads refs/tags)}")
         _describe 'command' refs ;;
-      plugin) subcmds=('info:Get plugin information' 'list:List plugins')
+      plugin) subcmds=('info:Get plugin information' 'list:List plugins' 'load:Load plugin(s)')
         _describe 'command' subcmds ;;
       pr) subcmds=('test:Test a Pull Request' 'clean:Delete all Pull Request branches')
         _describe 'command' subcmds ;;
@@ -48,8 +48,15 @@ function _omz {
     case "$words[2]::$words[3]" in
       plugin::info) compadd "$ZSH"/plugins/*/README.md(.N:h:t) \
         "$ZSH_CUSTOM"/plugins/*/README.md(.N:h:t) ;;
+      plugin::load) compadd "$ZSH"/plugins/*/*.plugin.zsh(.N:h:t) \
+        "$ZSH_CUSTOM"/plugins/*/*.plugin.zsh(.N:h:t) ;;
       theme::use) compadd "$ZSH"/themes/*.zsh-theme(.N:t:r) \
         "$ZSH_CUSTOM"/**/*.zsh-theme(.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::) ;;
+    esac
+  elif (( CURRENT > 4 )); then
+    case "$words[2]::$words[3]" in
+      plugin::load) compadd "$ZSH"/plugins/*/*.plugin.zsh(.N:h:t) \
+        "$ZSH_CUSTOM"/plugins/*/*.plugin.zsh(.N:h:t) ;;
     esac
   fi
 
@@ -147,6 +154,7 @@ Available commands:
 
   info <plugin>   Get information of a plugin
   list            List all available Oh My Zsh plugins
+  load <plugin>   Load plugin(s)
 
 EOF
     return 1
@@ -179,6 +187,33 @@ function _omz::plugin::info {
   fi
 
   return 1
+}
+
+function _omz::plugin::load {
+  if [[ -z "$1" ]]; then
+    echo >&2 "Usage: omz plugin load <plugin>"
+    return 1
+  fi
+
+  local plugins=("$@")
+  for plugin in $plugins; do
+    if [[ ! -d "$ZSH_CUSTOM/plugins/$plugin" && ! -d "$ZSH/plugins/$plugin" ]]; then
+      _omz::log error "$plugin plugin not found"
+      return 1
+    elif [[ ! -f "$ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh" && ! -f "$ZSH/plugins/$plugin/$plugin.plugin.zsh" ]]; then
+      _omz::log error "$plugin plugin folder doesn't have a \'.plugin.zsh\' file"
+      return 1
+    fi
+  done
+
+  for plugin in $plugins; do
+    for plugin_file in "$ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh" "$ZSH/plugins/$plugin/$plugin.plugin.zsh"; do
+      if [[ -f $plugin_file ]]; then
+        source "$plugin_file"
+        echo "$plugin plugin loaded"
+      fi
+    done
+  done
 }
 
 function _omz::plugin::list {
