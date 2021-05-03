@@ -23,7 +23,7 @@ plugins=(... git)
 | gb                   | git branch                                                                                                                       |
 | gba                  | git branch -a                                                                                                                    |
 | gbd                  | git branch -d                                                                                                                    |
-| gbda                 | git branch --no-color --merged \| command grep -vE "^(\+\|\*\|\s*($(git_main_branch)\|development\|develop\|devel\|dev)\s*$)" \| command xargs -n 1 git branch -d |
+| gbda                 | git branch --no-color --merged \| command grep -vE "^(\+\|\*\|\s*($(git_main_branch)\|$(git_develop_branch))\s*$)" \| command xargs -n 1 git branch -d |
 | gbD                  | git branch -D                                                                                                                    |
 | gbl                  | git blame -b -w                                                                                                                  |
 | gbnm                 | git branch --no-merged                                                                                                           |
@@ -48,7 +48,7 @@ plugins=(... git)
 | gclean               | git clean -id                                                                                                                    |
 | gpristine            | git reset --hard && git clean -dffx                                                                                              |
 | gcm                  | git checkout $(git_main_branch)                                                                                                                |
-| gcd                  | git checkout develop                                                                                                             |
+| gcd                  | git checkout $(git_develop_branch)                                                                                                             |
 | gcmsg                | git commit -m                                                                                                                    |
 | gco                  | git checkout                                                                                                                     |
 | gcount               | git shortlog -sn                                                                                                                 |
@@ -121,7 +121,7 @@ plugins=(... git)
 | grb                  | git rebase                                                                                                                       |
 | grba                 | git rebase --abort                                                                                                               |
 | grbc                 | git rebase --continue                                                                                                            |
-| grbd                 | git rebase develop                                                                                                               |
+| grbd                 | git rebase $(git_develop_branch)                                                                                                               |
 | grbi                 | git rebase -i                                                                                                                    |
 | grbm                 | git rebase $(git_main_branch)                                                                                                                  |
 | grbo                 | git rebase --onto                                                                                                             |
@@ -217,6 +217,7 @@ These are aliases that have been removed, renamed, or otherwise modified in a wa
 | git_current_user_name  | Returns the `user.name` config value                                         |
 | git_current_user_email | Returns the `user.email` config value                                        |
 | git_main_branch        | Returns the name of the main branch: `main` if it exists, `master` otherwise |
+| git_develop_branch        | Returns the name of the develop branch: `dev`, `devel`, `development` if they exists, otherwise `develop` by default |
 
 ### Work in Progress (WIP)
 
