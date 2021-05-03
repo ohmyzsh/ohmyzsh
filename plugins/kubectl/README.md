@@ -49,7 +49,7 @@ plugins=(... kubectl)
 | kdeli   | `kubectl delete ingress`            | Delete ingress resources matching passed argument                                                |
 |         |                                     | **Namespace management**                                                                         |
 | kgns    | `kubectl get namespaces`            | List the current namespaces in a cluster                                                         |
-| kcn     | `kubectl config set-context ...`    | Change current namespace |
+| kcn     | `kubectl config set-context --current --namespace` | Change current namespace |
 | kens    | `kubectl edit namespace`            | Edit namespace resource from the default editor                                                  |
 | kdns    | `kubectl describe namespace`        | Describe namespace resource in detail                                                            |
 | kdelns  | `kubectl delete namespace`          | Delete the namespace. WARNING! This deletes everything in the namespace                          |

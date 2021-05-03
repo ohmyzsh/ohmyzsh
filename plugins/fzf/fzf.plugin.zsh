@@ -7,6 +7,7 @@ function setup_using_base_dir() {
         fzfdirs=(
           "${HOME}/.fzf"
           "${HOME}/.nix-profile/share/fzf"
+          "${XDG_DATA_HOME:-$HOME/.local/share}/fzf"
           "/usr/local/opt/fzf"
           "/usr/share/fzf"
           "/usr/local/share/examples/fzf"
