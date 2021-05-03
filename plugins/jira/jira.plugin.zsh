@@ -37,6 +37,16 @@ function jira() {
   else
     jira_prefix=""
   fi
+  
+  if [[ -f .jira-dashboard-filter ]]; then
+    jira_dashboard_filter=$(cat .jira-dashboard-filter)
+  elif [[ -f ~/.jira-prefix ]]; then
+    jira_dashboard_filter=$(cat ~/.jira-dashboard-filter)
+  elif [[ -n "${JIRA_DASHBOARD_FILTER}" ]]; then
+    jira_dashboard_filter=${JIRA_DASHBOARD_FILTER}
+  else
+    jira_dashboard_filter=""
+  fi
 
 
   if [[ $action == "new" ]]; then
@@ -50,9 +60,9 @@ function jira() {
   elif [[ "$action" == "dashboard" ]]; then
     echo "Opening dashboard"
     if [[ "$JIRA_RAPID_BOARD" == "true" ]]; then
-      open_command "${jira_url}/secure/RapidBoard.jspa"
+      open_command "${jira_url}/secure/RapidBoard.jspa${jira_dashboard_filter}"
     else
-      open_command "${jira_url}/secure/Dashboard.jspa"
+      open_command "${jira_url}/secure/Dashboard.jspa${jira_dashboard_filter}"
     fi
   elif [[ "$action" == "tempo" ]]; then
     echo "Opening tempo"
@@ -63,6 +73,7 @@ function jira() {
     echo "JIRA_NAME=$JIRA_NAME"
     echo "JIRA_RAPID_BOARD=$JIRA_RAPID_BOARD"
     echo "JIRA_DEFAULT_ACTION=$JIRA_DEFAULT_ACTION"
+    echo "JIRA_DASHBOARD_FILTER=$jira_dashboard_filter"
   else
     # Anything that doesn't match a special action is considered an issue name
     # but `branch` is a special case that will parse the current git branch
