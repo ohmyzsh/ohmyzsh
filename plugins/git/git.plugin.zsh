@@ -33,6 +33,11 @@ function work_in_progress() {
 function git_main_branch() {
   command git rev-parse --git-dir &>/dev/null || return
   local branch
+  branch=$(command git symbolic-ref refs/remotes/origin/HEAD &>/dev/null | sed "s@^refs/remotes/origin/@@")
+  if ! [ -z "${branch// }" ]; then
+    echo $branch
+    return
+  fi
   for branch in main trunk; do
     if command git show-ref -q --verify refs/heads/$branch; then
       echo $branch
