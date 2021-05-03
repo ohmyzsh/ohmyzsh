@@ -161,6 +161,8 @@ function git_prompt_long_sha() {
 }
 
 function git_prompt_status() {
+  # Use global ZSH_THEME_GIT_HIDE_STATUS=1 for hiding any git status check
+  (( ${+ZSH_THEME_GIT_HIDE_STATUS} )) && return 
   [[ "$(__git_prompt_git config --get oh-my-zsh.hide-status 2>/dev/null)" = 1 ]] && return
 
   # Maps a git status prefix to an internal constant
