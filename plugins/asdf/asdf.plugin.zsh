@@ -2,6 +2,12 @@
 ASDF_DIR="${ASDF_DIR:-$HOME/.asdf}"
 ASDF_COMPLETIONS="$ASDF_DIR/completions"
 
+# If not found, check for archlinux/AUR package (/opt/asdf-vm/)
+if [[ ! -f "$ASDF_DIR/asdf.sh" || ! -f "$ASDF_COMPLETIONS/asdf.bash" ]] && [[ -f "/opt/asdf-vm/asdf.sh" ]]; then
+  ASDF_DIR="/opt/asdf-vm"
+  ASDF_COMPLETIONS="$ASDF_DIR"
+fi
+
 # If not found, check for Homebrew package
 if [[ ! -f "$ASDF_DIR/asdf.sh" || ! -f "$ASDF_COMPLETIONS/asdf.bash" ]] && (( $+commands[brew] )); then
   brew_prefix="$(brew --prefix asdf)"
