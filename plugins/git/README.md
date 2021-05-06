@@ -25,6 +25,7 @@ plugins=(... git)
 | gbd                  | git branch -d                                                                                                                    |
 | gbda                 | git branch --no-color --merged \| command grep -vE "^(\+\|\*\|\s*($(git_main_branch)\|development\|develop\|devel\|dev)\s*$)" \| command xargs -n 1 git branch -d |
 | gbD                  | git branch -D                                                                                                                    |
+| gbh                  | git branch --sort=-committerdate                                                                                                 |
 | gbl                  | git blame -b -w                                                                                                                  |
 | gbnm                 | git branch --no-merged                                                                                                           |
 | gbr                  | git branch --remote                                                                                                              |
