@@ -1,4 +1,5 @@
 # Plugin owners
+plugins/archlinux/                  @ratijas
 plugins/aws/                        @maksyms
 plugins/genpass/                    @atoponce
 plugins/git-lfs/                    @hellovietduc

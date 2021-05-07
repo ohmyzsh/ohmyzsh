@@ -227,7 +227,7 @@ EOF
   if [ -n "$SHELL" ]; then
     echo "$SHELL" > ~/.shell.pre-oh-my-zsh
   else
-    grep "^$USER:" /etc/passwd | awk -F: '{print $7}' > ~/.shell.pre-oh-my-zsh
+    grep "^$USERNAME:" /etc/passwd | awk -F: '{print $7}' > ~/.shell.pre-oh-my-zsh
   fi
 
   # Actually change the default shell to zsh
