@@ -55,7 +55,7 @@ extract() {
 			(*.lz4) lz4 -d "$1" ;;
 			(*.lzma) unlzma "$1" ;;
 			(*.z) uncompress "$1" ;;
-			(*.zip|*.war|*.jar|*.sublime-package|*.ipa|*.ipsw|*.xpi|*.apk|*.aar|*.whl) unzip "$1" -d $extract_dir ;;
+			(*.zip|*.war|*.jar|*.ear|*.sublime-package|*.ipa|*.ipsw|*.xpi|*.apk|*.aar|*.whl) unzip "$1" -d $extract_dir ;;
 			(*.rar) unrar x -ad "$1" ;;
 			(*.rpm) mkdir "$extract_dir" && cd "$extract_dir" && rpm2cpio "../$1" | cpio --quiet -id && cd .. ;;
 			(*.7z) 7za x "$1" ;;
