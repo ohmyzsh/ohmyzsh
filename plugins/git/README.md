@@ -152,6 +152,7 @@ plugins=(... git)
 | gsr                  | git svn rebase                                                                                                                   |
 | gss                  | git status -s                                                                                                                    |
 | gst                  | git status                                                                                                                       |
+| gstnu                | git status -uno                                                                                                                  |
 | gsta                 | git stash push                                                                                                                   |
 | gsta                 | git stash save                                                                                                                   |
 | gstaa                | git stash apply                                                                                                                  |
