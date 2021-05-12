@@ -6,7 +6,8 @@ function omz_history {
   if [[ -n "$clear" ]]; then
     # if -c provided, clobber the history file
     echo -n >| "$HISTFILE"
-    echo >&2 History file deleted. Reload the session to see its effects.
+    fc -p "$HISTFILE"
+    echo >&2 History file deleted.
   elif [[ -n "$list" ]]; then
     # if -l provided, run as if calling `fc' directly
     builtin fc "$@"
@@ -27,8 +28,8 @@ esac
 
 ## History file configuration
 [ -z "$HISTFILE" ] && HISTFILE="$HOME/.zsh_history"
-HISTSIZE=50000
-SAVEHIST=10000
+[ "$HISTSIZE" -lt 50000 ] && HISTSIZE=50000
+[ "$SAVEHIST" -lt 10000 ] && SAVEHIST=10000
 
 ## History command configuration
 setopt extended_history       # record timestamp of command in HISTFILE

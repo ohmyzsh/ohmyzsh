@@ -9,7 +9,7 @@ To enable it, add `ssh-agent` to your plugins:
 plugins=(... ssh-agent)
 ```
 
-## Instructions
+## Settings
 
 **IMPORTANT: put these settings _before_ the line that sources oh-my-zsh**
 
@@ -19,11 +19,15 @@ To enable **agent forwarding support** add the following to your zshrc file:
 zstyle :omz:plugins:ssh-agent agent-forwarding on
 ```
 
+----
+
 To **load multiple identities** use the `identities` style, For example:
 
 ```zsh
 zstyle :omz:plugins:ssh-agent identities id_rsa id_rsa2 id_github
 ```
+
+----
 
 To **set the maximum lifetime of the identities**, use the `lifetime` style.
 The lifetime may be specified in seconds or as described in sshd_config(5)
@@ -32,6 +36,24 @@ The lifetime may be specified in seconds or as described in sshd_config(5)
 ```zsh
 zstyle :omz:plugins:ssh-agent lifetime 4h
 ```
+
+----
+
+To **pass arguments to the `ssh-add` command** that adds the identities on startup,
+use the `ssh-add-args` setting. You can pass multiple arguments separated by spaces:
+
+```zsh
+zstyle :omz:plugins:ssh-agent ssh-add-args -K -c -a /run/user/1000/ssh-auth
+```
+
+These will then be passed the the `ssh-add` call as if written directly. The example
+above will turn into:
+
+```zsh
+ssh-add -K -c -a /run/user/1000/ssh-auth <identities>
+```
+
+For valid `ssh-add` arguments run `ssh-add --help` or `man ssh-add`.
 
 ## Credits
 
