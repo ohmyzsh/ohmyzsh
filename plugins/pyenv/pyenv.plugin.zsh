@@ -29,6 +29,8 @@ if [[ $FOUND_PYENV -ne 1 ]]; then
 fi
 
 if [[ $FOUND_PYENV -eq 1 ]]; then
+    PYENV_VERSION="$(pyenv --version | cut -d ' ' -f 2)"
+    is-at-least 1.2.27-21 "$PYENV_VERSION" && eval "$(pyenv init --path)"
     eval "$(pyenv init - --no-rehash zsh)"
     if (( $+commands[pyenv-virtualenv-init] )); then
         eval "$(pyenv virtualenv-init - zsh)"
