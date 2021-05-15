@@ -12,7 +12,7 @@ alias cryr="crystal run"
 alias cryrr="crystal run --release"
 
 # Spec
-alias crys="crystal spec --order rando"
+alias crys="crystal spec --order random"
 alias crysu="crystal spec"
 
 # Shards
