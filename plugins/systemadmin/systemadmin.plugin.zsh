@@ -131,7 +131,8 @@ d0() {
 
 # gather external ip address
 geteip() {
-    curl -s -S https://icanhazip.com
+    curl -s -S -4 https://icanhazip.com
+    curl -s -S -6 https://icanhazip.com
 }
 
 # determine local IP address(es)

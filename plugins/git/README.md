@@ -41,6 +41,8 @@ plugins=(... git)
 | gcan!                | git commit -v -a --no-edit --amend                                                                                               |
 | gcans!               | git commit -v -a -s --no-edit --amend                                                                                            |
 | gcam                 | git commit -a -m                                                                                                                 |
+| gcas                 | git commit -a -s                                                                                                                 |
+| gcasm                | git commit -a -s -m                                                                                                                  |
 | gcsm                 | git commit -s -m                                                                                                                 |
 | gcb                  | git checkout -b                                                                                                                  |
 | gcf                  | git config --list                                                                                                                |
