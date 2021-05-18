@@ -12,27 +12,33 @@ plugins=(... nordvpn)
 
 ## Completion
 
- | Command            | Completion of..                                                                                         |
- | ------------------ | ------------------------------------------------------------------------------------------------------- |
- | nordvpn            | All below commands, as well as `--help`, `-h`, `--version` and `-v`.                                    |
- | .. cities          | `--help` and `-h`                                                                                       |
- | .. connect         | Group names, Country names and City names if following a Country, `--help` and `-h`.                    |
- | .. countries       | `--help` and `-h`                                                                                       |
- | .. disconnect      | `--help` and `-h`                                                                                       |
- | .. groups          | `--help` and `-h`                                                                                       |
- | .. login           | `--username`, `-u`, `--password`, `-p`, `--help` and `-h`                                               |
- | .. logout          | `--help` and `-h`                                                                                       |
- | .. set             | `autoconnect`, `cybersec`, `dns`, `killswitch`, `notify`, `obfuscate` and `protocol`, `--help` and `-h` |
- | .. set autoconnect | `off`, `on`, `--help` and `-h`. `on` is followed by the same completion options as connect.             |
- | .. set cybersec    | `on`, `off`, `--help` and `-h`                                                                          |
- | .. set dns         | `off`, `--help` and `-h`                                                                                |
- | .. set killswitch  | `on`, `off`, `--help` and `-h`                                                                          |
- | .. set notify      | `on`, `off`, `--help` and `-h`                                                                          |
- | .. set obfuscate   | `on`, `off`, `--help` and `-h`                                                                          |
- | .. set protocol    | `TCP`, `UDP`, `--help` and `-h`                                                                         |
- | .. settings        | `--help` and `-h`                                                                                       |
- | .. status          | `--help` and `-h`                                                                                       |
- | .. whitelist       | add/remove options for ports and subnets as well as`--help` and `-h`                                    |
+ | Command            | Completion of..                                                                                                                               |
+ | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
+ | nordvpn            | All below commands, as well as `--help`, `-h`, `--version` and `-v`.                                                                          |
+ | .. account         | `--help` and `-h`                                                                                                                             |
+ | .. cities          | `--help` and `-h`                                                                                                                             |
+ | .. connect         | Group names, Country names and City names if following a Country, `--help` and `-h`.                                                          |
+ | .. countries       | `--help` and `-h`                                                                                                                             |
+ | .. disconnect      | `--help` and `-h`                                                                                                                             |
+ | .. rate            | `NUM`, `--help` and `-h`                                                                                                                      |
+ | .. register        | `--help` and `-h`                                                                                                                             |
+ | .. groups          | `--help` and `-h`                                                                                                                             |
+ | .. login           | `--username`, `-u`, `--password`, `-p`, `--help` and `-h`                                                                                     |
+ | .. logout          | `--help` and `-h`                                                                                                                             |
+ | .. set             | `autoconnect`, `cybersec`, `defaults`, `dns`, `firewall`, `killswitch`, `notify`, `obfuscate` and `protocol`, `technology`, `--help` and `-h` |
+ | .. set autoconnect | `off`, `on`, `--help` and `-h`. `on` is followed by the same completion options as connect.                                                   |
+ | .. set cybersec    | `on`, `off`, `--help` and `-h`                                                                                                                |
+ | .. set defaults    | `--help` and `-h`                                                                                                                             |
+ | .. set dns         | `off`, `--help` and `-h`                                                                                                                      |
+ | .. set firewall    | `on`, `off`,`--help` and `-h`                                                                                                                 |
+ | .. set killswitch  | `on`, `off`, `--help` and `-h`                                                                                                                |
+ | .. set notify      | `on`, `off`, `--help` and `-h`                                                                                                                |
+ | .. set obfuscate   | `on`, `off`, `--help` and `-h`                                                                                                                |
+ | .. set protocol    | `TCP`, `UDP`, `--help` and `-h`                                                                                                               |
+ | .. set technology  | `NordLynx`, `OpenVPN`, `--help` and `-h`                                                                                                      |
+ | .. settings        | `--help` and `-h`                                                                                                                             |
+ | .. status          | `--help` and `-h`                                                                                                                             |
+ | .. whitelist       | add/remove options for ports and subnets as well as`--help` and `-h`                                                                          |
  
  ## Aliases
 

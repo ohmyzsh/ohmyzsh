@@ -14,6 +14,8 @@ function _nordvpn {
                countries\:'Shows a list of countries where servers are available'
                disconnect\:'Disconnects you from VPN'
                groups\:'Shows a list of available server groups'
+               rate\:'Rate your last connection quality (1-5)'
+	           register\:'Registers a new user account'
                login\:'Logs you in'
                logout\:'Logs you out'
                set\:'Sets a configuration option'
@@ -33,6 +35,9 @@ function _nordvpn {
         ;;
         connect)
             _connect 1
+        ;;
+        rate)
+            _rate
         ;;
         login)
             _login
@@ -80,6 +85,12 @@ function _connect {
 
 }
 
+function _rate {
+    _arguments "1: :((NUM\:'the rating on a scale of 1 (poor) through 5 (great)'))" \
+               "--help:Show help" \
+               "-h:Show help"
+}
+
 function _login {
     _arguments \
         '--username[Specify a user account]'\
@@ -94,11 +105,14 @@ function _set {
     _arguments \
         "1: :((autoconnect\:'Enables or disables auto-connect. When enabled, this feature will automatically try to connect to VPN on operating system startup.'
                cybersec\:'Enables or disables CyberSec. When enabled, the CyberSec feature will automatically block suspicious websites.'
+               defaults\:'Restores settings to their default values.'
                dns\:'Sets custom DNS servers'
+               firewall\:'Enables or disables use of the firewall.'
                killswitch\:'Enables or disables Kill Switch. This security feature blocks your device from accessing the Internet outside the secure VPN tunnel.'
                notify\:'Enables or disables notifications'
                obfuscate\:'Enables or disables obfuscation. When enabled, this feature allows to bypass network traffic sensors which aim to detect usage of the protocol and log, throttle or block it.'
-               protocol\:'Sets the protocol'))"  \
+               protocol\:'Sets the protocol'
+               technology\:'Sets the technology'))"  \
         "--help:Show help" \
         "-h:Show help"
 
@@ -118,6 +132,9 @@ function _set {
         dns)
              _describe 'dns-setting' '(off)'
         ;;
+        firewall)
+             _describe 'firewall-setting' '(enabled 1 true enable on disabled 0 false disable off)'
+        ;;
         killswitch)
             _describe 'killswitch-setting' '(on off)'
         ;;
@@ -126,6 +143,9 @@ function _set {
         ;;
         obfuscate)
             _describe 'obfuscate-setting' '(on off)'
+        ;;
+        technology)
+            _describe 'technology-setting' '(OpenVPN NordLynx)'
         ;;
         protocol)
             _describe 'protocol-setting' '(TCP UDP)'
