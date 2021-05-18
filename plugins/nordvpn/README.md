@@ -45,6 +45,7 @@ plugins=(... nordvpn)
  | Alias        | Command              | Description                                           |
  | ------------ | -------------------- | ----------------------------------------------------- |
  | nord         | `nordvpn`            | Alias for nordvpn                                     |
+ | nordacc      | `nordvpn account`    | Shows account information                             |
  | nordcit      | `nordvpn cities`     | Shows a list of cities where servers are available    |
  | nordc        | `nordvpn connect`    | Connects you to VPN                                   |
  | nordcout     | `nordvpn countries`  | Shows a list of countries where servers are available |
@@ -52,6 +53,7 @@ plugins=(... nordvpn)
  | nordgrp      | `nordvpn groups`     | Shows a list of available server groups               |
  | nordl        | `nordvpn login`      | Logs you in                                           |
  | nordlo       | `nordvpn logout`     | Logs you out                                          |
+ | nordrt       | `nordvpn rate`       | Rate your last connection quality (1-5)               |
  | nordset      | `nordvpn set`        | Sets a configuration option                           |
  | nordsettings | `nordvpn settings`   | Shows current settings                                |
  | nordst       | `nordvpn status`     | Shows connection status                               |
