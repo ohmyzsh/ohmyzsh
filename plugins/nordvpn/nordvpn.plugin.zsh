@@ -15,7 +15,7 @@ function _nordvpn {
                disconnect\:'Disconnects you from VPN'
                groups\:'Shows a list of available server groups'
                rate\:'Rate your last connection quality (1-5)'
-	           register\:'Registers a new user account'
+	             register\:'Registers a new user account'
                login\:'Logs you in'
                logout\:'Logs you out'
                set\:'Sets a configuration option'
@@ -29,7 +29,7 @@ function _nordvpn {
         "-v:print the version" \
         "*::arg:->args"
 
-    case $line[1] in
+    case ${line[1]} in
         cities)
             _cities
         ;;
@@ -74,7 +74,7 @@ function _connect {
 
     ((index++))
 
-    country="$line[$index]"
+    country="${line[$index]}"
     cities_cmd=$(nordvpn cities $country)
     ret=$?
 
@@ -116,11 +116,11 @@ function _set {
         "--help:Show help" \
         "-h:Show help"
 
-    case $line[2] in
+    case ${line[2]} in
         autoconnect)
             _arguments "2: :((off\:'Disables auto-connect.' on\:'Enables auto-connect.'))"
 
-            case $line[3] in
+            case ${line[3]} in
                 on)
                     _connect 3
                 ;;
@@ -167,7 +167,7 @@ function _whitelist {
                    subnet\:'${line[2]}s subnet to a whitelist'))"
     fi
 
-    case $line[3] in
+    case ${line[3]} in
         port)
             _arguments "3: :((NUM\:'the port number to ${line[2]}'))"
 
