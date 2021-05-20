@@ -1,6 +1,6 @@
 #
 # Completion for the NordVPN Linux Client
-# Correct as at NordVPN Version 3.0.1-1
+# Correct as at NordVPN Version 3.9.4
 #
 compdef _nordvpn nordvpn
 declare line
