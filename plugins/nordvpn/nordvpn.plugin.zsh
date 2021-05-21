@@ -90,7 +90,7 @@ function _connect() {
 }
 
 function _rate() {
-  _arguments "1: :((NUM\:'the rating on a scale of 1 (poor) through 5 (great)'))" \
+  _arguments "1: :((1 2 3 4 5))" \
     "--help:Show help" \
     "-h:Show help"
 }
