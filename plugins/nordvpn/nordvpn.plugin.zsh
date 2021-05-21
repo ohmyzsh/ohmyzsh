@@ -3,7 +3,7 @@
 # Correct as at NordVPN Version 3.9.4
 #
 compdef _nordvpn nordvpn
-declare line
+declare -r line
 
 function _nordvpn() {
 
@@ -55,6 +55,7 @@ function _nordvpn() {
 }
 
 function _cities() {
+  local countries
   countries="$(nordvpn countries | tr -cs '[:alnum:]_' ' ' | tail -c +2 | head -c -1)"
   _arguments \
     "1: :(${countries})" \
@@ -63,6 +64,7 @@ function _cities() {
 }
 
 function _connect() {
+  local index countries groups country cities_cmd ret
   index="$1"
   countries="$(nordvpn countries | tr -cs '[:alnum:]_' ' ' | tail -c +2 | sed "s/ /\\\:'Country' /g")"
   groups="$(nordvpn groups | tr -cs '[:alnum:]_' ' ' | tail -c +2 | sed "s/ /\\\:'Group' /g")"
