@@ -5,6 +5,8 @@
 compdef _nordvpn nordvpn
 declare -r line
 
+readonly IP_PATTERN="^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\$"
+
 function _nordvpn() {
 
   _arguments -C \
@@ -120,35 +122,27 @@ function _set() {
 
   case "${line[2]}" in
     autoconnect)
-      _arguments "2: :((off\:'Disables auto-connect.' on\:'Enables auto-connect.'))"
+      _arguments "2: :((off on))"
 
       case "${line[3]}" in
-      on) _connect 3 ;;
+        on) _connect 3 ;;
       esac
       ;;
-    cybersec)
-      _describe 'cybersec-setting' '(on off)'
+    cybersec|firewall|killswitch|notify|obfuscate)
+      _arguments "2: :((off on))"
       ;;
     dns)
-      _describe 'dns-setting' '(off)'
-      ;;
-    firewall)
-      _describe 'firewall-setting' '(enabled 1 true enable on disabled 0 false disable off)'
-      ;;
-    killswitch)
-      _describe 'killswitch-setting' '(on off)'
-      ;;
-    notify)
-      _describe 'notify-setting' '(on off)'
-      ;;
-    obfuscate)
-      _describe 'obfuscate-setting' '(on off)'
+      _arguments "2: :((off 1.2.3.4))"
+
+      if [[ "${line[-2]}" =~ $IP_PATTERN ]]; then
+        _arguments "*: :((1.2.3.4))"
+      fi
       ;;
     technology)
-      _describe 'technology-setting' '(OpenVPN NordLynx)'
+      _arguments "2: :((OpenVPN NordLynx))"
       ;;
     protocol)
-      _describe 'protocol-setting' '(TCP UDP)'
+      _arguments "2: :((TCP UDP))"
       ;;
   esac
 }
