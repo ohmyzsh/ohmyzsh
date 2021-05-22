@@ -34,7 +34,7 @@ function _nordvpn() {
       _cities
       ;;
     connect)
-      _connect 1
+      _connect
       ;;
     rate)
       _rate
@@ -54,37 +54,49 @@ function _nordvpn() {
   esac
 }
 
+function _get_cities() {
+  nordvpn cities "$1" | tr -cs '[:alnum:]_' ' ' | tail -c +2 | head -c -1
+}
+
+function _get_countries() {
+  nordvpn countries | tr -cs '[:alnum:]_' ' ' | tail -c +2 | head -c -1
+}
+
+function _get_groups() {
+  nordvpn groups | tr -cs '[:alnum:]_' ' ' | tail -c +2 | head -c -1
+}
+
+function _in_array() {
+  local value="$1" && shift
+  local arr=("$@")
+  for element in "${arr[@]}"; do
+    if [[ "${element}" == "${value}" ]]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
 function _cities() {
-  local countries
-  countries="$(nordvpn countries | tr -cs '[:alnum:]_' ' ' | tail -c +2 | head -c -1)"
   _arguments \
-    "1: :(${countries})" \
-    "--help:Show help" \
-    "-h:Show help"
+    "1: :($(_get_countries))" \
+    {-h,--help}"[Show help]"
 }
 
 function _connect() {
-  local index countries groups country cities_cmd ret
-  index="$1"
-  countries="$(nordvpn countries | tr -cs '[:alnum:]_' ' ' | tail -c +2 | sed "s/ /\\\:'Country' /g")"
-  groups="$(nordvpn groups | tr -cs '[:alnum:]_' ' ' | tail -c +2 | sed "s/ /\\\:'Group' /g")"
+  local countries groups
+  read -rA countries < <(_get_countries)
+  read -rA groups < <(_get_groups)
 
   _arguments \
-    "${index}: :((${countries} ${groups}))" \
-    "--help:Show help" \
-    "-h:Show help"
+      ": :((  ${${countries[@]/%/\\\:'Country' }[*]} ${${groups[@]/%/\\\:'Group' }[*]} ))"  \
+      {-g,--group}":Specify a server group to connect to:(${groups})" \
+      {-h,--help}"[Show help]"
 
-  ((index++))
-
-  country="${line[${index}]}"
-  cities_cmd="$(nordvpn cities "${country}")"
-  ret="$?"
-
-  if [[ "${country}" != "--help" && "${ret}" -eq 0 ]]; then
-    cities="$(echo "${cities_cmd}" | tr -cs '[:alnum:]_' ' ' | tail -c +2 | head -c -1)"
-    _arguments "${index}: :(${cities})"
+  if _in_array "${line[-2]}" "${countries[@]}"; then
+    cities="$(_get_cities "${line[-2]}")"
+    _arguments "*:: :(${cities})"
   fi
-
 }
 
 function _rate() {
@@ -115,10 +127,23 @@ function _set() {
 
   case "${line[2]}" in
     autoconnect)
+      local countries groups
+      read -rA countries < <(_get_countries)
+      read -rA groups < <(_get_groups)
+
       _arguments "2: :((off on))"
 
       case "${line[3]}" in
-        on) _connect 3 ;;
+        on)
+            _arguments \
+                "3: :((  ${${countries[@]/%/\\\:'Country' }[*]} ${${groups[@]/%/\\\:'Group' }[*]} ))"  \
+                {-g,--group}":Specify a server group to connect to:(${groups})"
+
+            if _in_array "${line[-2]}" "${countries[@]}"; then
+              cities="$(_get_cities "${line[-2]}")"
+              _arguments "*:: :(${cities})"
+            fi
+        ;;
       esac
       ;;
     cybersec|firewall|killswitch|notify|obfuscate)
