@@ -25,10 +25,8 @@ function _nordvpn() {
                status\:'Shows connection status'
                whitelist\:'Adds or removes an option from a whitelist'
                help\:'Shows a list of commands or help for one command'))" \
-    "--help:Show help" \
-    "-h:Show help" \
-    "--version:print the version" \
-    "-v:print the version" \
+    {-h,--help}"[Show help]" \
+    {-v,--version}"[print the version]" \
     "*::arg:->args"
 
   case "${line[1]}" in
@@ -91,34 +89,29 @@ function _connect() {
 
 function _rate() {
   _arguments "1: :((1 2 3 4 5))" \
-    "--help:Show help" \
-    "-h:Show help"
+    {-h,--help}"[Show help]"
 }
 
 function _login() {
   _arguments \
-    '--username[Specify a user account]' \
-    '-u[Specify a user account]' \
-    '--password[Specify the password for the user specified in --username]' \
-    '-p[Specify the password for the user specified in --username]' \
-    '-h[Show help]' \
-    '--help[Show help]'
+    {-u,--username}'=[Specify a user account]' \
+    {-p,--password}'=[Specify the password for the user specified in --username]' \
+    {-h,--help}"[Show help]"
 }
 
 function _set() {
   _arguments \
     "1: :((autoconnect\:'Enables or disables auto-connect. When enabled, this feature will automatically try to connect to VPN on operating system startup.'
-               cybersec\:'Enables or disables CyberSec. When enabled, the CyberSec feature will automatically block suspicious websites.'
-               defaults\:'Restores settings to their default values.'
-               dns\:'Sets custom DNS servers'
-               firewall\:'Enables or disables use of the firewall.'
-               killswitch\:'Enables or disables Kill Switch. This security feature blocks your device from accessing the Internet outside the secure VPN tunnel.'
-               notify\:'Enables or disables notifications'
-               obfuscate\:'Enables or disables obfuscation. When enabled, this feature allows to bypass network traffic sensors which aim to detect usage of the protocol and log, throttle or block it.'
-               protocol\:'Sets the protocol'
-               technology\:'Sets the technology'))" \
-    "--help:Show help" \
-    "-h:Show help"
+           cybersec\:'Enables or disables CyberSec. When enabled, the CyberSec feature will automatically block suspicious websites.'
+           defaults\:'Restores settings to their default values.'
+           dns\:'Sets custom DNS servers'
+           firewall\:'Enables or disables use of the firewall.'
+           killswitch\:'Enables or disables Kill Switch. This security feature blocks your device from accessing the Internet outside the secure VPN tunnel.'
+           notify\:'Enables or disables notifications'
+           obfuscate\:'Enables or disables obfuscation. When enabled, this feature allows to bypass network traffic sensors which aim to detect usage of the protocol and log, throttle or block it.'
+           protocol\:'Sets the protocol'
+           technology\:'Sets the technology'))" \
+    {-h,--help}"[Show help]"
 
   case "${line[2]}" in
     autoconnect)
@@ -151,14 +144,13 @@ function _whitelist() {
   _arguments \
     "1: :((add\:'Adds an option to a whitelist.'
                remove\:'Removes an option from a whitelist'))" \
-    "--help:Show help" \
-    "-h:Show help"
+    {-h,--help}"[Show help]"
 
   if [[ -n "${line[2]}" ]]; then
     _arguments \
       "2: :((port\:'${line[2]}s port to a whitelist'
-                   ports\:'${line[2]}s port range to a whitelist'
-                   subnet\:'${line[2]}s subnet to a whitelist'))"
+             ports\:'${line[2]}s port range to a whitelist'
+             subnet\:'${line[2]}s subnet to a whitelist'))"
   fi
 
   case "${line[3]}" in
