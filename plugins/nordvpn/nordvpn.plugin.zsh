@@ -192,6 +192,10 @@ function _whitelist() {
       fi
 
       if [[ -n "${line[5]}" ]]; then
+        _describe 'use-protocol-setting' "(protocol)"
+      fi
+
+      if [[ -n "${line[6]}" ]]; then
         _describe 'protocol-setting' "(TCP UDP)"
       fi
       ;;
