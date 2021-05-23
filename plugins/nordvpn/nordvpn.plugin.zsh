@@ -171,9 +171,9 @@ function _whitelist() {
 
   if [[ -n "${line[2]}" ]]; then
     _arguments \
-      "2: :((port\:'${line[2]}s port to a whitelist'
-             ports\:'${line[2]}s port range to a whitelist'
-             subnet\:'${line[2]}s subnet to a whitelist'))"
+      "2: :((port\:'${line[2]}s port in a whitelist'
+             ports\:'${line[2]}s port range in a whitelist'
+             subnet\:'${line[2]}s subnet in a whitelist'))"
   fi
 
   case "${line[3]}" in
@@ -181,6 +181,10 @@ function _whitelist() {
       _arguments "3: :((1234\:'the port number to ${line[2]}'))"
 
       if [[ -n "${line[4]}" ]]; then
+        _describe 'use-protocol-setting' "(protocol)"
+      fi
+
+      if [[ -n "${line[5]}" ]]; then
         _describe 'protocol-setting' "(TCP UDP)"
       fi
       ;;
