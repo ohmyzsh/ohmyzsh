@@ -36,3 +36,27 @@ plugins=(... dnf)
 | dcall          | `sudo dnf clean all`         | Clean cache              |
 | dshell         | `sudo dnf shell`             | Enters dnf shell         |
 | dsdl           | `sudo dnf download --source` | Download package source  |
+
+NOTE : You can always revert to old aliases by setting `$OLD_DNF` to a non-zero value in `.zshrc` before omz in sourced, 
+
+Those are documented here :
+
+<details>
+
+| Alias | Command                 | Description              |
+|-------|-------------------------|--------------------------|
+| dnfl  | `dnf list`              | List packages            |
+| dnfli | `dnf list installed`    | List installed packages  |
+| dnfgl | `dnf grouplist`         | List package groups      |
+| dnfmc | `dnf makecache`         | Generate metadata cache  |
+| dnfp  | `dnf info`              | Show package information |
+| dnfs  | `dnf search`            | Search package           |
+| **Use `sudo`**                                             |
+| dnfu  | `sudo dnf upgrade`      | Upgrade package          |
+| dnfi  | `sudo dnf install`      | Install package          |
+| dnfgi | `sudo dnf groupinstall` | Install package group    |
+| dnfr  | `sudo dnf remove`       | Remove package           |
+| dnfgr | `sudo dnf groupremove`  | Remove package group     |
+| dnfc  | `sudo dnf clean all`    | Clean cache              |
+
+</details>
