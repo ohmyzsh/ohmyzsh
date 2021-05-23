@@ -5,8 +5,6 @@
 compdef _nordvpn nordvpn
 declare -r line
 
-readonly IP_PATTERN="^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\$"
-
 function _nordvpn() {
 
   _arguments -C \
@@ -152,7 +150,7 @@ function _set() {
     dns)
       _arguments "2: :((off 1.2.3.4))"
 
-      if [[ "${line[-2]}" =~ $IP_PATTERN ]]; then
+      if [[ "${line[-2]}" != "off" ]]; then
         _arguments "*: :((1.2.3.4))"
       fi
       ;;
