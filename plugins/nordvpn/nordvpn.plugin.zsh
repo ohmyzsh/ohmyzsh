@@ -11,20 +11,20 @@ function _nordvpn() {
 
   _arguments -C \
     "1: :((account\:'Shows account information'
-               cities\:'Shows a list of cities where servers are available'
-               connect\:'Connects you to VPN'
-               countries\:'Shows a list of countries where servers are available'
-               disconnect\:'Disconnects you from VPN'
-               groups\:'Shows a list of available server groups'
-               rate\:'Rate your last connection quality (1-5)'
-	             register\:'Registers a new user account'
-               login\:'Logs you in'
-               logout\:'Logs you out'
-               set\:'Sets a configuration option'
-               settings\:'Shows current settings'
-               status\:'Shows connection status'
-               whitelist\:'Adds or removes an option from a whitelist'
-               help\:'Shows a list of commands or help for one command'))" \
+           cities\:'Shows a list of cities where servers are available'
+           connect\:'Connects you to VPN'
+           countries\:'Shows a list of countries where servers are available'
+           disconnect\:'Disconnects you from VPN'
+           groups\:'Shows a list of available server groups'
+           rate\:'Rate your last connection quality (1-5)'
+	         register\:'Registers a new user account'
+           login\:'Logs you in'
+           logout\:'Logs you out'
+           set\:'Sets a configuration option'
+           settings\:'Shows current settings'
+           status\:'Shows connection status'
+           whitelist\:'Adds or removes an option from a whitelist'
+           help\:'Shows a list of commands or help for one command'))" \
     {-h,--help}"[Show help]" \
     {-v,--version}"[print the version]" \
     "*::arg:->args"
@@ -206,8 +206,22 @@ function _whitelist() {
 
 function _show_help() {
   _arguments \
-    "--help:Show help" \
-    "-h:Show help"
+      "1: :((account\:'Shows account information'
+             cities\:'Shows a list of cities where servers are available'
+             connect\:'Connects you to VPN'
+             countries\:'Shows a list of countries where servers are available'
+             disconnect\:'Disconnects you from VPN'
+             groups\:'Shows a list of available server groups'
+             rate\:'Rate your last connection quality (1-5)'
+	           register\:'Registers a new user account'
+             login\:'Logs you in'
+             logout\:'Logs you out'
+             set\:'Sets a configuration option'
+             settings\:'Shows current settings'
+             status\:'Shows connection status'
+             whitelist\:'Adds or removes an option from a whitelist'
+             help\:'Shows a list of commands or help for one command'))" \
+      {-h,--help}"[Show help]"
 }
 
 #
