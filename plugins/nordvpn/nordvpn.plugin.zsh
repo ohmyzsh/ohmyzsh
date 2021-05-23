@@ -178,17 +178,17 @@ function _whitelist() {
 
   case "${line[3]}" in
     port)
-      _arguments "3: :((NUM\:'the port number to ${line[2]}'))"
+      _arguments "3: :((1234\:'the port number to ${line[2]}'))"
 
       if [[ -n "${line[4]}" ]]; then
         _describe 'protocol-setting' "(TCP UDP)"
       fi
       ;;
     ports)
-      _arguments "3: :((NUM\:'the beginning port number to ${line[2]}'))"
+      _arguments "3: :((1234\:'the beginning port number to ${line[2]}'))"
 
       if [[ -n "${line[4]}" ]]; then
-        _arguments "4: :((NUM\:'the ending port number to ${line[2]}'))"
+        _arguments "4: :((1234\:'the ending port number to ${line[2]}'))"
       fi
 
       if [[ -n "${line[5]}" ]]; then
@@ -196,7 +196,7 @@ function _whitelist() {
       fi
       ;;
     subnet)
-      _arguments "3: :((CIDR\:'the address in CIDR notation to ${line[2]}'))"
+      _arguments "3: :((1.2.3.4/5\:'the address in CIDR notation to ${line[2]}'))"
       ;;
   esac
 
