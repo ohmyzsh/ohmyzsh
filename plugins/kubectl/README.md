@@ -107,7 +107,6 @@ plugins=(... kubectl)
 | ksss    | `kubectl scale statefulset`         | Scale a statefulset                                                                              |
 | krsss   | `kubectl rollout status statefulset`| Check the rollout status of a deployment                                                         |
 |         |                                     | **Service Accounts management**                                                                  |
-| kgsa    | `kubectl get sa`                    | List all service accounts                                                                        |
 | kdsa    | `kubectl describe sa`               | Describe a service account in details                                                            |
 | kdelsa  | `kubectl delete sa`                 | Delete the service account                                                                       |
 |         |                                     | **DaemonSet management**                                                                         |
