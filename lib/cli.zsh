@@ -403,6 +403,20 @@ function _omz::theme::use {
 function _omz::update {
   local last_commit=$(cd "$ZSH"; git rev-parse HEAD)
 
+  # Test for either flag
+  for arg in "$@"; do
+    case $arg in
+      --unattended)
+        local unattended=true
+        shift
+        ;;
+      --no-restart)
+        local no_restart=true
+        shift
+        ;;
+    esac
+  done
+
   # Run update script
   if [[ "$1" != --unattended ]]; then
     ZSH="$ZSH" zsh -f "$ZSH/tools/upgrade.sh" --interactive
@@ -415,12 +429,18 @@ function _omz::update {
   echo "LAST_EPOCH=$(( EPOCHSECONDS / 60 / 60 / 24 ))" >! "${ZSH_CACHE_DIR}/.zsh-update"
   # Remove update lock if it exists
   command rm -rf "$ZSH/log/update.lock"
-
-  # Restart the zsh session if there were changes
-  if [[ "$1" != --unattended && "$(cd "$ZSH"; git rev-parse HEAD)" != "$last_commit" ]]; then
-    # Old zsh versions don't have ZSH_ARGZERO
-    local zsh="${ZSH_ARGZERO:-${functrace[-1]%:*}}"
-    # Check whether to run a login shell
-    [[ "$zsh" = -* || -o login ]] && exec -l "${zsh#-}" || exec "$zsh"
+  
+  # Check if changes were made
+  if [[ "$(cd "$ZSH"; git rev-parse HEAD)" != "$last_commit" || true ]]; then
+    if [[ ! ( $unattended || $no_restart ) ]]; then
+      # Restart the zsh session
+      # Old zsh versions don't have ZSH_ARGZERO
+      local zsh="${ZSH_ARGZERO:-${functrace[-1]%:*}}"
+      # Check whether to run a login shell
+      [[ "$zsh" = -* || -o login ]] && exec -l "${zsh#-}" || exec "$zsh"
+    else
+      # Inform the user that they must restart to get changes
+      printf "\033[34m\033[1m%s\033[m\n" "Restart zsh to recieve changes"
+    fi
   fi
 }
