@@ -124,9 +124,13 @@ zle -N dirhistory_zle_dirhistory_back
 # xterm in normal mode
 bindkey "\e[3D" dirhistory_zle_dirhistory_back
 bindkey "\e[1;3D" dirhistory_zle_dirhistory_back
-# Mac teminal (alt+left/right)
-if [[ "$TERM_PROGRAM" == "Apple_Terminal" || "$TERM_PROGRAM" == "iTerm.app" ]]; then
+# Terminal.app
+if [[ "$TERM_PROGRAM" == "Apple_Terminal" ]]; then
   bindkey "^[b" dirhistory_zle_dirhistory_back
+fi
+# iTerm2
+if [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
+  bindkey "^[^[[D" dirhistory_zle_dirhistory_back
 fi
 # Putty:
 bindkey "\e\e[D" dirhistory_zle_dirhistory_back
@@ -136,8 +140,13 @@ bindkey "\eO3D" dirhistory_zle_dirhistory_back
 zle -N dirhistory_zle_dirhistory_future
 bindkey "\e[3C" dirhistory_zle_dirhistory_future
 bindkey "\e[1;3C" dirhistory_zle_dirhistory_future
-if [[ "$TERM_PROGRAM" == "Apple_Terminal" || "$TERM_PROGRAM" == "iTerm.app" ]]; then
+# Terminal.app
+if [[ "$TERM_PROGRAM" == "Apple_Terminal" ]]; then
   bindkey "^[f" dirhistory_zle_dirhistory_future
+fi
+# iTerm2
+if [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
+  bindkey "^[^[[C" dirhistory_zle_dirhistory_future
 fi
 bindkey "\e\e[C" dirhistory_zle_dirhistory_future
 bindkey "\eO3C" dirhistory_zle_dirhistory_future
