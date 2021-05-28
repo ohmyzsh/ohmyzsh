@@ -143,6 +143,10 @@ rf() {
   fi
 }
 
+# disable XON/XOFF (resume/pause) flow control characters to free up
+# ctrl+s and ctrl+q shortcuts
+stty -ixon -ixoff
+
 # below are google specific settings
 
 # add this to support g4d command
