@@ -215,6 +215,7 @@ alias gpd='git push --dry-run'
 alias gpf='git push --force-with-lease'
 alias gpf!='git push --force'
 alias gpoat='git push origin --all && git push origin --tags'
+alias gps='git push -o skip-ci'
 alias gpu='git push upstream'
 alias gpv='git push -v'
 
