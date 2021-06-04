@@ -1,6 +1,7 @@
 # Branch
 
 Displays the current Git or Mercurial branch fast.
+Also shows Mercurial Bookmark via slash, if they are used.
 
 ## Speed test
 

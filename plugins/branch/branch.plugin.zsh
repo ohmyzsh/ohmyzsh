@@ -19,7 +19,12 @@ function branch_prompt_info() {
     then
       if [[ -f "$current_dir/.hg/branch" ]]
       then
-        echo '☿' $(<"$current_dir/.hg/branch")
+        if [[ -f "$current_dir/.hg/bookmarks.current" ]]
+        then
+            echo '☿' $(<"$current_dir/.hg/branch")/$(<"$current_dir/.hg/bookmarks.current")
+        else
+            echo '☿' $(<"$current_dir/.hg/branch")
+        fi
       else
         echo '☿ default'
       fi
