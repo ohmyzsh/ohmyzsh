@@ -270,6 +270,7 @@ alias gsts='git stash show --text'
 alias gstu='gsta --include-untracked'
 alias gstall='git stash --all'
 alias gsu='git submodule update'
+alias gsuri='git submodule update --recursive --init'
 alias gsw='git switch'
 alias gswc='git switch -c'
 

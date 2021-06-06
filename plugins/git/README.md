@@ -165,6 +165,7 @@ plugins=(... git)
 | gstu                 | git stash --include-untracked                                                                                                    |
 | gstall               | git stash --all                                                                                                                  |
 | gsu                  | git submodule update                                                                                                             |
+| gsuri                | git submodule update --recursive --init                                                                                          |
 | gsw                  | git switch                                                                                                                       |
 | gswc                 | git switch -c                                                                                                                    |
 | gts                  | git tag -s                                                                                                                       |
