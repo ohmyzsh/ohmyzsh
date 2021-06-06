@@ -150,6 +150,8 @@ plugins=(... git)
 | `grba`                 | `git rebase --abort`                                                                                                            |
 | `grbc`                 | `git rebase --continue`                                                                                                         |
 | `grbi`                 | `git rebase --interactive`                                                                                                      |
+| `grbmi`                | `git rebase $(git_main_branch) --interactive`                                                                                   |
+| `grbmia`               | `git rebase $(git_main_branch) --interactive --autosquash`                                                                      |
 | `grbo`                 | `git rebase --onto`                                                                                                             |
 | `grbs`                 | `git rebase --skip`                                                                                                             |
 | `grbd`                 | `git rebase $(git_develop_branch)`                                                                                              |
