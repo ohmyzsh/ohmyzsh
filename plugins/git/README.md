@@ -196,6 +196,7 @@ plugins=(... git)
 | `gsb`                  | `git status --short -b`                                                                                                         |
 | `gsi`                  | `git submodule init`                                                                                                            |
 | `gsu`                  | `git submodule update`                                                                                                          |
+| `gsuri`                | `git submodule update --recursive --init`                                                                                       |
 | `gsd`                  | `git svn dcommit`                                                                                                               |
 | `git-svn-dcommit-push` | `git svn dcommit && git push github $(git_main_branch):svntrunk`                                                                |
 | `gsr`                  | `git svn rebase`                                                                                                                |
