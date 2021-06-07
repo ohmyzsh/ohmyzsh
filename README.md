@@ -72,6 +72,8 @@ plugins=(
   rake
   rbenv
   ruby
+  vim
+  python
 )
 ```
 
