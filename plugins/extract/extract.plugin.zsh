@@ -70,6 +70,7 @@ extract() {
 			;;
 			(*.zst) unzstd "$1" ;;
 			(*.cab) cabextract -d "$extract_dir" "$1" ;;
+			(*.cpio) cpio -idmvF "$1" ;;
 			(*)
 				echo "extract: '$1' cannot be extracted" >&2
 				success=1
