@@ -2,7 +2,7 @@
 
 Expands all glob expressions, subcommands and aliases (including global).
 
-Idea from: http://blog.patshead.com/2012/11/automatically-expaning-zsh-global-aliases---simplified.html.
+Idea from: https://blog.patshead.com/2012/11/automatically-expaning-zsh-global-aliases---simplified.html.
 
 ## Usage
 
@@ -16,6 +16,9 @@ Then just press `SPACE` to trigger the expansion of a command you've written.
 
 If you only want to insert a space without expanding the command line, press
 `CTRL`+`SPACE`.
+
+if you would like to filter out any values from expanding set `GLOBALIAS_FILTER_VALUES` to
+an array of said values. See [Filtered values](#filtered-values).
 
 ## Examples
 
@@ -37,7 +40,6 @@ $ ls folder/file.json anotherfolder/another.json
 $ mkdir "`date -R`"
 # expands to
 $ mkdir Tue,\ 04\ Oct\ 2016\ 13:54:03\ +0300
-
 ```
 
 #### Aliases
@@ -59,4 +61,19 @@ alias S="sudo systemctl"
 $ S<space>
 # expands to:
 $ sudo systemctl
+```
+
+#### Filtered values
+
+```
+# .zshrc
+alias l='ls -lh'
+alias la='ls --color=auto -lah'
+GLOBALIAS_FILTER_VALUES=(l)
+
+$ l<space>
+# does not expand
+$ la<space>
+# expands to:
+$ ls --color=auto -lah
 ```

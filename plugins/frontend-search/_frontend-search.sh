@@ -17,27 +17,35 @@ function _frontend() {
   frontend_points=( "${(f)mapfile[$CONFIG]//$HOME/~}" )
 
   commands=(
-    'jquery: Search in jQuery website'
-    'mdn: Search in MDN website'
-    'compassdoc: Search in COMPASS website'
-    'html5please: Search in HTML5 Please website'
-    'caniuse: Search in Can I Use website'
-    'aurajs: Search in AuraJs website'
-    'dartlang: Search in Dart website'
-    'lodash: Search in Lo-Dash website'
-    'qunit: Search in Qunit website'
-    'fontello: Search in fontello website'
-    'bootsnipp: Search in bootsnipp website'
-    'cssflow: Search in cssflow website'
-    'codepen: Search in codepen website'
-    'unheap: Search in unheap website'
+    'angular: Search in Angular.io website'
+    'angularjs: Search in docs.angularjs.org website'
     'bem: Search in BEM website'
-    'smacss: Search in SMACSS website'
-    'angularjs: Search in Angular website'
-    'reactjs: Search in React website'
+    'bootsnipp: Search in bootsnipp website'
+    'bundlephobia: Search in Bundlephobia website'
+    'caniuse: Search in Can I Use website'
+    'codepen: Search in codepen website'
+    'compassdoc: Search in COMPASS website'
+    'cssflow: Search in cssflow website'
+    'dartlang: Search in Dart website'
     'emberjs: Search in Ember website'
-    'stackoverflow: Search in StackOverflow website'
+    'flowtype: Search in Flowtype website'
+    'fontello: Search in fontello website'
+    'github: Search in GitHub website'
+    'html5please: Search in HTML5 Please website'
+    'jestjs: Search in Jest website'
+    'jquery: Search in jQuery website'
+    'lodash: Search in Lo-Dash website'
+    'mdn: Search in MDN website'
+    'nodejs: Search in NodeJS website'
     'npmjs: Search in NPMJS website'
+    'packagephobia: Search in Packagephobia website'
+    'qunit: Search in Qunit website'
+    'reactjs: Search in React website'
+    'smacss: Search in SMACSS website'
+    'stackoverflow: Search in StackOverflow website'
+    'typescript: Search in TypeScript website'
+    'unheap: Search in unheap website'
+    'vuejs: Search in VueJS website'
   )
 
   _arguments -C \
@@ -66,9 +74,6 @@ function _frontend() {
         caniuse)
           _describe -t points "Warp points" frontend_points && ret=0
           ;;
-        aurajs)
-          _describe -t points "Warp points" frontend_points && ret=0
-          ;;
         dartlang)
           _describe -t points "Warp points" frontend_points && ret=0
           ;;
@@ -79,6 +84,9 @@ function _frontend() {
           _describe -t points "Warp points" frontend_points && ret=0
           ;;
         fontello)
+          _describe -t points "Warp points" frontend_points && ret=0
+          ;;
+        github)
           _describe -t points "Warp points" frontend_points && ret=0
           ;;
         bootsnipp)
@@ -112,6 +120,27 @@ function _frontend() {
           _describe -t points "Warp points" frontend_points && ret=0
           ;;
         npmjs)
+          _describe -t points "Warp points" frontend_points && ret=0
+          ;;
+        bundlephobia)
+          _describe -t points "Warp points" frontend_points && ret=0
+          ;;
+        packagephobia)
+          _describe -t points "Warp points" frontend_points && ret=0
+          ;;
+        flowtype)
+          _describe -t points "Warp points" frontend_points && ret=0
+          ;;
+        typescript)
+          _describe -t points "Warp points" frontend_points && ret=0
+          ;;
+        vuejs)
+          _describe -t points "Warp points" frontend_points && ret=0
+          ;;
+        nodejs)
+          _describe -t points "Warp points" frontend_points && ret=0
+          ;;
+        jestjs)
           _describe -t points "Warp points" frontend_points && ret=0
           ;;
       esac

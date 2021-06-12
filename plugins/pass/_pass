@@ -6,11 +6,25 @@
 #    Brian Mattern <rephorm@rephorm.com>
 #    Jason A. Donenfeld <Jason@zx2c4.com>.
 # All Rights Reserved.
-#
 # This file is licensed under the GPLv2+.
-# Please visit http://git.zx2c4.com/password-store/tree/COPYING for more information.
+# Please visit https://git.zx2c4.com/password-store/tree/COPYING for more information.
+
+
+# If you use multiple repositories, you can configure completion like this:
 #
-# Oh my zsh plugin maintainer: Santiago Borrazás <sanbor@gmail.com>
+# compdef _pass workpass
+# zstyle ':completion::complete:workpass::' prefix "$HOME/work/pass"
+# workpass() {
+#   PASSWORD_STORE_DIR=$HOME/work/pass pass $@
+# }
+
+# If you use multiple repositories, you can configure completion like this:
+#
+# compdef _pass workpass
+# zstyle ':completion::complete:workpass::' prefix "$HOME/work/pass"
+# workpass() {
+#   PASSWORD_STORE_DIR=$HOME/work/pass pass $@
+# }
 
 
 _pass () {
@@ -117,8 +131,9 @@ _pass_cmd_show () {
 }
 _pass_complete_entries_helper () {
 	local IFS=$'\n'
-	local prefix="${PASSWORD_STORE_DIR:-$HOME/.password-store}"
-	_values -C 'passwords' ${$(find -L "$prefix" \( -name .git -o -name .gpg-id \) -prune -o $@ -print 2>/dev/null | sed -e "s#${prefix}/\{0,1\}##" -e 's#\.gpg##' | sort):-""}
+	local prefix
+	zstyle -s ":completion:${curcontext}:" prefix prefix || prefix="${PASSWORD_STORE_DIR:-$HOME/.password-store}"
+	_values -C 'passwords' ${$(find -L "$prefix" \( -name .git -o -name .gpg-id \) -prune -o $@ -print 2>/dev/null | sed -e "s#${prefix}/\{0,1\}##" -e 's#\.gpg##' -e 's#\\#\\\\#' | sort):-""}
 }
 
 _pass_complete_entries_with_subdirs () {

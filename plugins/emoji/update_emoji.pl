@@ -5,15 +5,15 @@
 # This script generates the emoji.plugin.zsh emoji definitions from the Unicode
 # character data for the emoji characters.
 #
-# The data file can be found at http://unicode.org/Public/emoji/latest/emoji-data.txt
-# as referenced in Unicode TR51 (http://www.unicode.org/reports/tr51/index.html).
+# The data file can be found at https://unicode.org/Public/emoji/latest/emoji-data.txt
+# as referenced in Unicode TR51 (https://www.unicode.org/reports/tr51/index.html).
 #
 # This is known to work with the data file from version 1.0. It may not work with later
 # versions if the format changes. In particular, this reads line comments to get the
 # emoji character name and unicode version.
 #
 # Country names have punctuation and other non-letter characters removed from their name,
-# to avoid possible complications with having to escape the strings when using them as 
+# to avoid possible complications with having to escape the strings when using them as
 # array subscripts. The definition file seems to use some combining characters like accents
 # that get stripped during this process.
 
@@ -41,7 +41,7 @@ sub process_emoji_data_file {
 #
 # This contains the definition for:
 #   \$emoji         - which maps character names to Unicode characters
-#   \$emoji_flags   - maps country names to Unicode flag characters using region indicators 
+#   \$emoji_flags   - maps country names to Unicode flag characters using region indicators
 
 # Main emoji
 typeset -gAH emoji
@@ -63,7 +63,7 @@ typeset -gAH emoji_mod
 		next if /^\s*#/ or /^\s*$/;
 
 		if (/^(\S.*?\S)\s*;\s*(\w+)\s*;\s*(\w+)\s*;\s*(\w+)\s*;\s*(\w.*?)\s*#\s*V(\S+)\s\(.*?\)\s*(\w.*\S)\s*$/) {
-			my ($code, $style, $level, $modifier_status, $sources, $version, $keycap_name) 
+			my ($code, $style, $level, $modifier_status, $sources, $version, $keycap_name)
 				= ($1, $2, $3, $4, $5, $6, $7);
 			#print "code=$code style=$style level=$level modifier_status=$modifier_status sources=$sources version=$version name=$keycap_name\n";
 			my @code_points = split /\s+/, $code;
@@ -84,7 +84,7 @@ typeset -gAH emoji_mod
 			if ($flag_country) {
 				$outfh->print("emoji_flags[$zsh_flag_country]=\$'$zsh_code'\n");
 			} else {
-				$outfh->print("emoji[$omz_name]=\$'$zsh_code'\n");				
+				$outfh->print("emoji[$omz_name]=\$'$zsh_code'\n");
 			}
 			# Modifiers are included in both the main set and their separate map,
 			# because they have a standalone representation as a color swatch.

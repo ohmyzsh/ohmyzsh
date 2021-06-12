@@ -23,7 +23,7 @@ function precmd {
     local promptsize=${#${(%):---(%n@%M:%l)---()}}
     local pwdsize=${#${(%):-%~}}
     local gitbranch="$(git_prompt_info)"
-    local rvmprompt="$(rvm_prompt_info)"
+    local rvmprompt="$(ruby_prompt_info)"
     local gitbranchsize=${#${gitbranch:-''}}
     local rvmpromptsize=${#${rvmprompt:-''}}
 
@@ -90,8 +90,8 @@ setprompt () {
     ZSH_THEME_GIT_PROMPT_SUFFIX="]"
     ###
     # Modify RVM prompt
-    ZSH_THEME_RVM_PROMPT_PREFIX=" ["
-    ZSH_THEME_RVM_PROMPT_SUFFIX="]"
+    ZSH_THEME_RUBY_PROMPT_PREFIX=" ["
+    ZSH_THEME_RUBY_PROMPT_SUFFIX="]"
 
 
 ###

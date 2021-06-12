@@ -1,6 +1,6 @@
 #compdef kitchen
 # ------------------------------------------------------------------------------
-# Copyright (c) 2014 Github zsh-users - http://github.com/zsh-users
+# Copyright (c) 2014 Github zsh-users - https://github.com/zsh-users
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -28,7 +28,7 @@
 # Description
 # -----------
 #
-#  Completion script for Test Kitchen (http://kitchen.ci/).
+#  Completion script for Test Kitchen (https://kitchen.ci/).
 #
 # ------------------------------------------------------------------------------
 # Authors
@@ -67,7 +67,7 @@ _kitchen() {
 _kitchen_commands() {
   local commands
 
-  commands=("${(@f)$(_call_program commands $service help | sed -n 's/^  kitchen \([[:alpha:]]*\) [ [].*# \(.*\)$/\1:\2/p')}")
+  commands=("${(@f)$(_call_program commands $service help | sed -n 's/^  kitchen \([[:alpha:]]*\) [ A-Z[].*# \(.*\)$/\1:\2/p')}")
   _describe -t commands 'kitchen commands' commands
 }
 

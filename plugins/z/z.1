@@ -22,6 +22,9 @@ OPTIONS
 \fB\-c\fR
 restrict matches to subdirectories of the current directory
 .TP
+\fB\-e\fR
+echo the best match, don't cd
+.TP
 \fB\-h\fR
 show a brief help message
 .TP
@@ -75,6 +78,9 @@ Set \fB$_Z_CMD\fR to change the command name (default \fBz\fR).
 Set \fB$_Z_DATA\fR to change the datafile (default \fB$HOME/.z\fR).
 .RE
 .RS
+Set \fB$_Z_MAX_SCORE\fR lower to age entries out faster (default \fB9000\fR).
+.RE
+.RS
 Set \fB$_Z_NO_RESOLVE_SYMLINKS\fR to prevent symlink resolution.
 .RE
 .RS
@@ -90,7 +96,8 @@ Set \fB$_Z_OWNER\fR to allow usage when in 'sudo -s' mode.
 (These settings should go in .bashrc/.zshrc before the line added above.)
 .RE
 .RS
-Install the provided man page \fBz.1\fR somewhere like \fB/usr/local/man/man1\fR.
+Install the provided man page \fBz.1\fR somewhere in your \f$MANPATH, like
+\fB/usr/local/man/man1\fR.
 .RE
 .SS
 Aging:

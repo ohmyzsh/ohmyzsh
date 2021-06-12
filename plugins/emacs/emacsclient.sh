@@ -20,7 +20,8 @@ _emacsfun()
 # tempfile. (first argument will be `--no-wait` passed in by the plugin.zsh)
 if [ "$#" -ge "2" -a "$2" = "-" ]
 then
-    tempfile="$(mktemp emacs-stdin-$USER.XXXXXXX --tmpdir)"
+    tempfile="$(mktemp --tmpdir emacs-stdin-$USERNAME.XXXXXXX 2>/dev/null \
+                || mktemp -t emacs-stdin-$USERNAME)" # support BSD mktemp
     cat - > "$tempfile"
     _emacsfun --no-wait $tempfile
 else
