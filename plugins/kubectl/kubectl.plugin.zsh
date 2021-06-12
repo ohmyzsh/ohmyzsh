@@ -151,7 +151,6 @@ alias kdpvc='kubectl describe pvc'
 alias kdelpvc='kubectl delete pvc'
 
 # Service account management.
-alias kgsa="kubectl get sa"
 alias kdsa="kubectl describe sa"
 alias kdelsa="kubectl delete sa"
 
