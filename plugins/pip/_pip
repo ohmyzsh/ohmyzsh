@@ -72,6 +72,7 @@ case "$words[1]" in
   install)
     _arguments \
       '(-U --upgrade)'{-U,--upgrade}'[upgrade all packages to the newest available version]' \
+      '(--user)--user[install packages to user home]' \
       '(-f --find-links)'{-f,--find-links}'[URL for finding packages]' \
       '(-r --requirement)'{-r,--requirement}'[Requirements file for packages to install]:File:_files' \
       '(--no-deps --no-dependencies)'{--no-deps,--no-dependencies}'[iIgnore package dependencies]' \
@@ -88,6 +89,7 @@ case "$words[1]" in
       if [[ "$state" == packages ]]; then
         _pip_all
         _wanted piplist expl 'packages' compadd -a piplist
+        _files -g "*.(tar.gz|whl)"
       fi ;;
   uninstall)
     _pip_installed

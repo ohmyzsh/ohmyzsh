@@ -1,6 +1,7 @@
 if [[ -z $commands[thefuck] ]]; then
-    echo 'thefuck is not installed, you should "pip install thefuck" first'
-    return -1
+    echo 'thefuck is not installed, you should "pip install thefuck" or "brew install thefuck" first.'
+    echo 'See https://github.com/nvbn/thefuck#installation'
+    return 1
 fi
 
 # Register alias
@@ -14,4 +15,6 @@ fuck-command-line() {
 }
 zle -N fuck-command-line
 # Defined shortcut keys: [Esc] [Esc]
-bindkey "\e\e" fuck-command-line
+bindkey -M emacs '\e\e' fuck-command-line
+bindkey -M vicmd '\e\e' fuck-command-line
+bindkey -M viins '\e\e' fuck-command-line

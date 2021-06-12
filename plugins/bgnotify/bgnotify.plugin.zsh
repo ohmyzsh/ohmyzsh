@@ -42,7 +42,7 @@ bgnotify () { ## args: (title, subtitle)
   elif hash notify-send 2>/dev/null; then #ubuntu gnome!
     notify-send "$1" "$2"
   elif hash kdialog 2>/dev/null; then #ubuntu kde!
-    kdialog  -title "$1" --passivepopup  "$2" 5
+    kdialog --title "$1" --passivepopup  "$2" 5
   elif hash notifu 2>/dev/null; then #cygwyn support!
     notifu /m "$2" /p "$1"
   fi
@@ -53,7 +53,7 @@ bgnotify () { ## args: (title, subtitle)
 
 bgnotify_begin() {
   bgnotify_timestamp=$EPOCHSECONDS
-  bgnotify_lastcmd="$1"
+  bgnotify_lastcmd="${1:-$2}"
   bgnotify_windowid=$(currentWindowId)
 }
 

@@ -5,8 +5,10 @@ local -a _1st_arguments
 _1st_arguments=(
   'new:create a new issue'
   'dashboard:open the dashboard'
+  'tempo:open the tempo'
   'reported:search for issues reported by a user'
   'assigned:search for issues assigned to a user'
+  'branch:open the issue named after the git branch of the current directory'
   'dumpconfig:display effective jira configuration'
 )
 

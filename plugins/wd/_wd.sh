@@ -1,6 +1,6 @@
 #compdef wd
 
-zstyle ':completion:*:descriptions' format '%B%d%b'
+zstyle ':completion::complete:wd:*:descriptions' format '%B%d%b'
 zstyle ':completion::complete:wd:*:commands' group-name commands
 zstyle ':completion::complete:wd:*:warp_points' group-name warp_points
 zstyle ':completion::complete:wd::' list-grouped
@@ -8,17 +8,31 @@ zstyle ':completion::complete:wd::' list-grouped
 zmodload zsh/mapfile
 
 function _wd() {
-  local CONFIG=$HOME/.warprc
+  local WD_CONFIG=${WD_CONFIG:-$HOME/.warprc}
   local ret=1
 
   local -a commands
   local -a warp_points
 
-  warp_points=( "${(f)mapfile[$CONFIG]//$HOME/~}" )
+  warp_points=( "${(f)mapfile[$WD_CONFIG]//$HOME/~}" )
+
+  typeset -A points
+  while read -r line
+  do
+    arr=(${(s,:,)line})
+    name=${arr[1]}
+    target_path=${arr[2]}
+
+    # replace ~ from path to fix completion (#17)
+    target_path=${target_path/#\~/$HOME}
+
+    points[$name]=$target_path
+  done < $WD_CONFIG
 
   commands=(
     'add:Adds the current working directory to your warp points'
     'add!:Overwrites existing warp point'
+    'export:Export warp points as static named directories'
     'rm:Removes the given warp point'
     'list:Outputs all stored warp points'
     'ls:Show files from given warp point'
@@ -34,13 +48,15 @@ function _wd() {
     '1: :->first_arg' \
     '2: :->second_arg' && ret=0
 
+  local target=$words[2]
+
   case $state in
     first_arg)
       _describe -t warp_points "Warp points" warp_points && ret=0
       _describe -t commands "Commands" commands && ret=0
       ;;
     second_arg)
-      case $words[2] in
+      case $target in
         add\!|rm)
           _describe -t points "Warp points" warp_points && ret=0
           ;;
@@ -55,6 +71,14 @@ function _wd() {
           ;;
         path)
           _describe -t points "Warp points" warp_points && ret=0
+          ;;
+        *)
+          if [[ -v points[$target] ]]; then
+            # complete sub directories from the warp point
+            _path_files -W "(${points[$target]})" -/ && ret=0
+          fi
+          
+          # don't complete anything if warp point is not valid
           ;;
       esac
       ;;

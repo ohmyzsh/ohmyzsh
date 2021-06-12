@@ -1,150 +1,260 @@
-wd
-==
+# wd
 
 [![Build Status](https://travis-ci.org/mfaerevaag/wd.png?branch=master)](https://travis-ci.org/mfaerevaag/wd)
 
-`wd` (*warp directory*) lets you jump to custom directories in zsh, without using `cd`. Why? Because `cd` seems ineffecient when the folder is frequently visited or has a long path.
+`wd` (*warp directory*) lets you jump to custom directories in zsh, without using `cd`.
+Why?
+Because `cd` seems inefficient when the folder is frequently visited or has a long path.
 
-*NOTE*: If you are not using zsh, check out the `ruby` branch which has `wd` implemented as a gem.
+![tty.gif](https://raw.githubusercontent.com/mfaerevaag/wd/master/tty.gif)
 
+## Setup
 
-### Setup
+### [oh-my-zsh](https://github.com/ohmyzsh/ohmyzsh)
 
-### oh-my-zsh
+`wd` comes bundled with oh-my-zsh!
 
-`wd` comes bundles with [oh-my-zshell](https://github.com/robbyrussell/oh-my-zsh)!
+Just add the plugin in your `.zshrc` file:
 
-Just add the plugin in your `~/.zshrc` file:
+```zsh
+plugins=(... wd)
+```
 
-    plugins=(... wd)
+### [Antigen](https://github.com/zsh-users/antigen)
 
+In your `.zshrc`:
 
-#### Automatic
+```zsh
+antigen bundle mfaerevaag/wd
+```
 
-Run either in terminal:
+### [Antibody](https://github.com/getantibody/antibody)
 
- * `curl -L https://github.com/mfaerevaag/wd/raw/master/install.sh | sh`
+In your `.zshrc`:
 
- * `wget --no-check-certificate https://github.com/mfaerevaag/wd/raw/master/install.sh -O - | sh`
+```zsh
+antibody bundle mfaerevaag/wd
+```
 
+### Arch ([AUR](https://aur.archlinux.org/packages/zsh-plugin-wd-git/))
 
-#### Manual
+1. Install from the AUR
 
- * Clone this repo to your liking
+```zsh
+yay -S zsh-plugin-wd-git
+# or use any other AUR helper
+```
 
- * Add `wd` function to `.zshrc` (or `.profile` etc.):
+2. Then add to your `.zshrc`:
 
-        wd() {
-            . ~/path/to/cloned/repo/wd/wd.sh
-        }
+```zsh
+wd() {
+    . /usr/share/wd/wd.sh
+}
+```
 
- * Install manpage. From `wd`'s base directory (requires root permissions):
+### [zplug](https://github.com/zplug/zplug)
 
-        # cp wd.1 /usr/share/man/man1/wd.1
-        # chmod 644 /usr/share/man/man1/wd.1
+```zsh
+zplug "mfaerevaag/wd", as:command, use:"wd.sh", hook-load:"wd() { . $ZPLUG_REPOS/mfaerevaag/wd/wd.sh }"
+```
 
-    Note, when pulling and updating `wd`, you'll need to do this again in case of changes to the manpage.
+### Automatic
 
+_Note: automatic install does not provide the manpage. It is also poor security practice to run remote code without first reviewing it, so you ought to look [here](https://github.com/mfaerevaag/wd/blob/master/install.sh)_
 
-#### Completion
+Run either command in your terminal:
 
-If you're NOT using [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) and you want to utelize the zsh-completion feature, you will also need to add the path to your `wd` installation (`~/bin/wd` if you used the automatic installer) to your `fpath`. E.g. in your `~/.zshrc`:
+```zsh
+curl -L https://github.com/mfaerevaag/wd/raw/master/install.sh | sh
+```
 
-    fpath=(~/path/to/wd $fpath)
+or
+
+```zsh
+wget --no-check-certificate https://github.com/mfaerevaag/wd/raw/master/install.sh -O - | sh
+```
+
+### Manual
+
+1. Clone this repository on your local machine in a sensible location (if you know what you're doing of course all of this is up to you):
+
+```zsh
+git clone git@github.com:mfaerevaag/wd.git ~/.local/wd --depth 1
+```
+
+2. Add `wd` function to `.zshrc` (or `.profile` etc.):
+
+```zsh
+wd() {
+    . ~/.local/wd/wd.sh
+}
+```
+
+3. Install manpage (optional):
+
+```zsh
+sudo cp ~/.local/wd/wd.1 /usr/share/man/man1/wd.1
+sudo chmod 644 /usr/share/man/man1/wd.1
+```
+
+**Note:** when pulling and updating `wd`, you'll need to repeat step 3 should the manpage change
+
+## Completion
+
+If you're NOT using [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) and you want to utilize the zsh-completion feature, you will also need to add the path to your `wd` installation (`~/bin/wd` if you used the automatic installer) to your `fpath`.
+E.g. in your `~/.zshrc`:
+
+```zsh
+fpath=(~/path/to/wd $fpath)
+```
 
 Also, you may have to force a rebuild of `zcompdump` by running:
 
-    $ rm -f ~/.zcompdump; compinit
+```zsh
+rm -f ~/.zcompdump; compinit
+```
 
+## Usage
 
+* Add warp point to current working directory:
 
-### Usage
+```zsh
+wd add foo
+```
 
- * Add warp point to current working directory:
+If a warp point with the same name exists, use `wd add foo --force` to overwrite it.
 
-        $ wd add foo
+**Note:** a warp point cannot contain colons, or consist of only spaces and dots.
+The first will conflict in how `wd` stores the warp points, and the second will conflict with other features, as below.
 
-    If a warp point with the same name exists, use `add!` to overwrite it.
+You can omit point name to automatically use the current directory's name instead.
 
-    Note, a warp point cannot contain colons, or only consist of only spaces and dots. The first will conflict in how `wd` stores the warp points, and the second will conflict other features, as below.
+* From any directory, warp to `foo` with:
 
- * From an other directory (not necessarily), warp to `foo` with:
+```zsh
+wd foo
+```
 
-        $ wd foo
+* You can also warp to a directory within `foo`, with autocompletion:
 
- * You can warp back to previous directory, and so on, with this dot syntax:
+```zsh
+wd foo some/inner/path
+```
 
-        $ wd ..
-        $ wd ...
+* You can warp back to previous directory and higher, with this dot syntax:
 
-    This is a wrapper for the zsh `dirs` function.
-    (You might need `setopt AUTO_PUSHD` in your `.zshrc` if you hare not using [oh-my-zshell](https://github.com/robbyrussell/oh-my-zsh)).
+```zsh
+wd ..
+wd ...
+```
 
- * Remove warp point test point:
+This is a wrapper for the zsh's `dirs` function.  
+_You might need to add `setopt AUTO_PUSHD` to your `.zshrc` if you are not using [oh-my-zsh](https://github.com/ohmyzsh/ohmyzsh)._
 
-        $ wd rm foo
+* Remove warp point:
 
- * List all warp points (stored in `~/.warprc`):
+```zsh
+wd rm foo
+```
 
-        $ wd list
+You can omit point name to use the current directory's name instead.
 
- * List files in given warp point:
+* List all warp points (stored in `~/.warprc` by default):
 
-        $ wd ls foo
+```zsh
+wd list
+```
 
- * Show path of given warp point:
+* List files in given warp point:
 
-        $ wd path foo
+```zsh
+wd ls foo
+```
 
- * List warp points to current directory, or optionally, path to given warp point:
+* Show path of given warp point:
 
-        $ wd show
+```zsh
+wd path foo
+```
 
- * Remove warp points to non-existent directories.
+* List warp points to current directory, or optionally, path to given warp point:
 
-        $ wd clean
+```zsh
+wd show
+```
 
-    Use `clean!` to not be prompted with confirmation (force).
+* Remove warp points to non-existent directories.
 
- * Print usage with no opts or the `help` argument:
+```zsh
+wd clean
+```
 
-        $ wd help
+Use `wd clean --force` to not be prompted with confirmation.
 
- * Print the running version of `wd`:
+* Print usage info:
 
-        $ wd --version
+```zsh
+wd help
+```
 
- * Specifically set the config file (default `~/.warprc`), which is useful when testing:
+The usage will be printed also if you call `wd` with no command
 
-        $ wd --config ./file <action>
+* Print the running version of `wd`:
 
- * Force `exit` with return code after running. This is not default, as it will *exit your terminal*, though required when testing/debugging.
+```zsh
+wd --version
+```
 
-        $ wd --debug <action>
+* Specifically set the config file (default being `~/.warprc`), which is useful for testing:
 
- * Silence all output:
+```zsh
+wd --config ./file <command>
+```
 
-        $ wd --quiet <action>
+* Force `exit` with return code after running. This is not default, as it will *exit your terminal*, though required for testing/debugging.
 
+```zsh
+wd --debug <command>
+```
 
-### Testing
+* Silence all output:
 
-`wd` comes with a small test suite, run with [shunit2](https://code.google.com/p/shunit2/). This can be used to confirm that things are working as it should on your setup, or to demonstrate an issue.
+```zsh
+wd --quiet <command>
+```
+
+## Configuration
+
+You can configure `wd` with the following environment variables:
+
+### `WD_CONFIG`
+
+Defines the path where warp points get stored. Defaults to `$HOME/.warprc`.
+
+## Testing
+
+`wd` comes with a small test suite, run with [shunit2](https://github.com/kward/shunit2). This can be used to confirm that things are working as they should on your setup, or to demonstrate an issue.
 
 To run, simply `cd` into the `test` directory and run the `tests.sh`.
 
-    $ ./tests.sh
+```zsh
+cd ./test
+./tests.sh
+```
 
+## Maintainers
 
-### License
+Following @mfaerevaag stepping away from active maintainership of this repository, the following users now are also maintainers of the repo:
 
-The project is licensed under the [MIT-license](https://github.com/mfaerevaag/wd/blob/master/LICENSE).
+* @alpha-tango-kilo
 
+* @MattLewin
 
-### Finally
+Anyone else contributing is greatly appreciated and will be mentioned in the release notes!
 
-If you have issues, feedback or improvements, don't hesitate to report it or submit a pull-request. In the case of an issue, we would much appreciate if you would include a failing test in `test/tests.sh`. Explanation on how to run the tests, read the section "Testing" in this README.
+---
 
-Credit to [altschuler](https://github.com/altschuler) for awesome idea.
+Credit to [altschuler](https://github.com/altschuler) for an awesome idea.
 
 Hope you enjoy!

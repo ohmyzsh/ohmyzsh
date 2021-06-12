@@ -1,14 +1,16 @@
 (( $+commands[npm] )) && {
-    __NPM_COMPLETION_FILE="${ZSH_CACHE_DIR}/npm_completion"
+  rm -f "${ZSH_CACHE_DIR:-$ZSH/cache}/npm_completion"
 
-    if [[ ! -f $__NPM_COMPLETION_FILE ]]; then
-        npm completion >! $__NPM_COMPLETION_FILE 2>/dev/null
-        [[ $? -ne 0 ]] && rm -f $__NPM_COMPLETION_FILE
-    fi
-
-    [[ -f $__NPM_COMPLETION_FILE ]] && source $__NPM_COMPLETION_FILE
-
-    unset __NPM_COMPLETION_FILE
+  _npm_completion() {
+    local si=$IFS
+    compadd -- $(COMP_CWORD=$((CURRENT-1)) \
+                 COMP_LINE=$BUFFER \
+                 COMP_POINT=0 \
+                 npm completion -- "${words[@]}" \
+                 2>/dev/null)
+    IFS=$si
+  }
+  compdef _npm_completion npm
 }
 
 # Install dependencies globally
@@ -25,6 +27,9 @@ alias npmS="npm i -S "
 # npmd is used by https://github.com/dominictarr/npmd
 alias npmD="npm i -D "
 
+# Force npm to fetch remote resources even if a local copy exists on disk.
+alias npmF='npm i -f'
+
 # Execute command from node_modules folder based on current directory
 # i.e npmE gulp
 alias npmE='PATH="$(npm bin)":"$PATH"'
@@ -32,11 +37,17 @@ alias npmE='PATH="$(npm bin)":"$PATH"'
 # Check which npm modules are outdated
 alias npmO="npm outdated"
 
+# Update all the packages listed to the latest version
+alias npmU="npm update"
+
 # Check package versions
 alias npmV="npm -v"
 
 # List packages
 alias npmL="npm list"
+
+# List top-level installed packages
+alias npmL0="npm ls --depth=0"
 
 # Run npm start
 alias npmst="npm start"
@@ -44,3 +55,17 @@ alias npmst="npm start"
 # Run npm test
 alias npmt="npm test"
 
+# Run npm scripts
+alias npmR="npm run"
+
+# Run npm publish 
+alias npmP="npm publish"
+
+# Run npm init
+alias npmI="npm init"
+
+# Run npm info
+alias npmi="npm info"
+
+# Run npm search
+alias npmSe="npm search"

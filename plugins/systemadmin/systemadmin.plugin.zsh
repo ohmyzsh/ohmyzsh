@@ -3,7 +3,6 @@
 # -----------
 #
 # This is one for the system administrator, operation and maintenance.
-# Some of which come from http://justinlilly.com/dotfiles/zsh.html
 #
 # ------------------------------------------------------------------------------
 # Authors
@@ -12,14 +11,6 @@
 # * Dongweiming <ciici123@gmail.com>
 #
 # ------------------------------------------------------------------------------
-
-function retval() {
-    if [[ -z $1 ]];then
-        echo '.'
-    else
-        echo $1
-    fi
-}
 
 function retlog() {
     if [[ -z $1 ]];then
@@ -30,24 +21,24 @@ function retlog() {
 }
 
 alias ping='ping -c 5'
-alias clr='clear;echo "Currently logged in on $(tty), as $USER in directory $PWD."'
-alias path='echo -e ${PATH//:/\\n}'
+alias clr='clear; echo Currently logged in on $TTY, as $USERNAME in directory $PWD.'
+alias path='print -l $path'
 alias mkdir='mkdir -pv'
 # get top process eating memory
-alias psmem='ps -e -orss=,args= | sort -b -k1,1n'
-alias psmem10='ps -e -orss=,args= | sort -b -k1,1n| head -10'
+alias psmem='ps -e -orss=,args= | sort -b -k1 -nr'
+alias psmem10='ps -e -orss=,args= | sort -b -k1 -nr | head -10'
 # get top process eating cpu if not work try excute : export LC_ALL='C'
-alias pscpu='ps -e -o pcpu,cpu,nice,state,cputime,args|sort -k1 -nr'
-alias pscpu10='ps -e -o pcpu,cpu,nice,state,cputime,args|sort -k1 -nr | head -10'
+alias pscpu='ps -e -o pcpu,cpu,nice,state,cputime,args|sort -k1,1n -nr'
+alias pscpu10='ps -e -o pcpu,cpu,nice,state,cputime,args|sort -k1,1n -nr | head -10'
 # top10 of the history
 alias hist10='print -l ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
 
 # directory LS
 dls () {
-    ls -l | grep "^d" | awk '{ print $9 }' | tr -d "/"
+    print -l *(/)
 }
 psgrep() {
-    ps aux | grep "$(retval $1)" | grep -v grep
+    ps aux | grep "${1:-.}" | grep -v grep
 }
 # Kills any process that matches a regexp passed to it
 killit() {
@@ -55,10 +46,10 @@ killit() {
 }
 
 # list contents of directories in a tree-like format
-if [ -z "\${which tree}" ]; then
-  tree () {
-      find $@ -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'
-  }
+if ! (( $+commands[tree] )); then
+    tree () {
+        find $@ -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'
+    }
 fi
 
 # Sort connection state
@@ -98,7 +89,7 @@ syn20() {
 
 # Printing process according to the port number
 port_pro() {
-    netstat -ntlp | grep "$(retval $1)" | awk '{print $7}' | cut -d/ -f1
+    netstat -ntlp | grep "${1:-.}" | awk '{print $7}' | cut -d/ -f1
 }
 
 # top10 of gain access to the ip address
@@ -135,20 +126,21 @@ httpstatus() {
 
 # Delete 0 byte file
 d0() {
-    find "$(retval $1)" -type f -size 0 -exec rm -rf {} \;
+    find "${1:-.}" -type f -size 0 -exec rm -rf {} \;
 }
 
 # gather external ip address
 geteip() {
-    curl -s -S https://icanhazip.com
+    curl -s -S -4 https://icanhazip.com
+    curl -s -S -6 https://icanhazip.com
 }
 
-# determine local IP address
+# determine local IP address(es)
 getip() {
     if (( ${+commands[ip]} )); then
-        ip addr | grep "inet " | grep -v '127.0.0.1' | awk '{print $2}'
+        ip addr | awk '/inet /{print $2}' | command grep -v 127.0.0.1
     else
-        ifconfig  | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}'
+        ifconfig | awk '/inet /{print $2}' | command grep -v 127.0.0.1
     fi
 }
 
