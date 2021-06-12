@@ -1,3 +1,138 @@
+#######################################
+#               Pacman                #
+#######################################
+
+# Pacman - https://wiki.archlinux.org/index.php/Pacman_Tips
+alias pacupg='sudo pacman -Syu'
+alias pacin='sudo pacman -S'
+alias pacins='sudo pacman -U'
+alias pacre='sudo pacman -R'
+alias pacrem='sudo pacman -Rns'
+alias pacrep='pacman -Si'
+alias pacreps='pacman -Ss'
+alias pacloc='pacman -Qi'
+alias paclocs='pacman -Qs'
+alias pacinsd='sudo pacman -S --asdeps'
+alias pacmir='sudo pacman -Syy'
+alias paclsorphans='sudo pacman -Qdt'
+alias pacrmorphans='sudo pacman -Rs $(pacman -Qtdq)'
+alias pacfileupg='sudo pacman -Fy'
+alias pacfiles='pacman -F'
+alias pacls='pacman -Ql'
+alias pacown='pacman -Qo'
+alias pacupd="sudo pacman -Sy"
+alias upgrade='sudo pacman -Syu'
+
+function paclist() {
+  # Based on https://bbs.archlinux.org/viewtopic.php?id=93683
+  pacman -Qqe | \
+    xargs -I '{}' \
+      expac "${bold_color}% 20n ${fg_no_bold[white]}%d${reset_color}" '{}'
+}
+
+function pacdisowned() {
+  local tmp db fs
+  tmp=${TMPDIR-/tmp}/pacman-disowned-$UID-$$
+  db=$tmp/db
+  fs=$tmp/fs
+
+  mkdir "$tmp"
+  trap 'rm -rf "$tmp"' EXIT
+
+  pacman -Qlq | sort -u > "$db"
+
+  find /bin /etc /lib /sbin /usr ! -name lost+found \
+    \( -type d -printf '%p/\n' -o -print \) | sort > "$fs"
+
+  comm -23 "$fs" "$db"
+}
+
+alias pacmanallkeys='sudo pacman-key --refresh-keys'
+
+function pacmansignkeys() {
+  local key
+  for key in $@; do
+    sudo pacman-key --recv-keys $key
+    sudo pacman-key --lsign-key $key
+    printf 'trust\n3\n' | sudo gpg --homedir /etc/pacman.d/gnupg \
+      --no-permission-warning --command-fd 0 --edit-key $key
+  done
+}
+
+if (( $+commands[xdg-open] )); then
+  function pacweb() {
+    if [[ $# = 0 || "$1" =~ '--help|-h' ]]; then
+      local underline_color="\e[${color[underline]}m"
+      echo "$0 - open the website of an ArchLinux package"
+      echo
+      echo "Usage:"
+      echo "    $bold_color$0$reset_color ${underline_color}target${reset_color}"
+      return 1
+    fi
+
+    local pkg="$1"
+    local infos="$(LANG=C pacman -Si "$pkg")"
+    if [[ -z "$infos" ]]; then
+      return
+    fi
+    local repo="$(grep -m 1 '^Repo' <<< "$infos" | grep -oP '[^ ]+$')"
+    local arch="$(grep -m 1 '^Arch' <<< "$infos" | grep -oP '[^ ]+$')"
+    xdg-open "https://www.archlinux.org/packages/$repo/$arch/$pkg/" &>/dev/null
+  }
+fi
+
+#######################################
+#             AUR helpers             #
+#######################################
+
+if (( $+commands[aura] )); then
+  alias auin='sudo aura -S'
+  alias aurin='sudo aura -A'
+  alias auins='sudo aura -U'
+  alias auinsd='sudo aura -S --asdeps'
+  alias aurinsd='sudo aura -A --asdeps'
+  alias auloc='aura -Qi'
+  alias aulocs='aura -Qs'
+  alias aulst='aura -Qe'
+  alias aumir='sudo aura -Syy'
+  alias aurph='sudo aura -Oj'
+  alias aure='sudo aura -R'
+  alias aurem='sudo aura -Rns'
+  alias aurep='aura -Si'
+  alias aurrep='aura -Ai'
+  alias aureps='aura -As --both'
+  alias auras='aura -As --both'
+  alias auupd="sudo aura -Sy"
+  alias auupg='sudo sh -c "aura -Syu              && aura -Au"'
+  alias ausu='sudo  sh -c "aura -Syu --no-confirm && aura -Au --no-confirm"'
+  alias upgrade='sudo aura -Syu'
+
+  # extra bonus specially for aura
+  alias auown="aura -Qqo"
+  alias auls="aura -Qql"
+  function auownloc() { aura -Qi  $(aura -Qqo $@); }
+  function auownls () { aura -Qql $(aura -Qqo $@); }
+fi
+
+if (( $+commands[pacaur] )); then
+  alias paupg='pacaur -Syu'
+  alias pasu='pacaur -Syu --noconfirm'
+  alias pain='pacaur -S'
+  alias pains='pacaur -U'
+  alias pare='pacaur -R'
+  alias parem='pacaur -Rns'
+  alias parep='pacaur -Si'
+  alias pareps='pacaur -Ss'
+  alias paloc='pacaur -Qi'
+  alias palocs='pacaur -Qs'
+  alias palst='pacaur -Qe'
+  alias paorph='pacaur -Qtd'
+  alias painsd='pacaur -S --asdeps'
+  alias pamir='pacaur -Syy'
+  alias paupd="pacaur -Sy"
+  alias upgrade='pacaur -Syu'
+fi
+
 if (( $+commands[trizen] )); then
   alias trconf='trizen -C'
   alias trupg='trizen -Syua'
@@ -14,17 +149,8 @@ if (( $+commands[trizen] )); then
   alias trorph='trizen -Qtd'
   alias trinsd='trizen -S --asdeps'
   alias trmir='trizen -Syy'
-
-
-  if (( $+commands[abs] && $+commands[aur] )); then
-    alias trupd='trizen -Sy && sudo abs && sudo aur'
-  elif (( $+commands[abs] )); then
-    alias trupd='trizen -Sy && sudo abs'
-  elif (( $+commands[aur] )); then
-    alias trupd='trizen -Sy && sudo aur'
-  else
-    alias trupd='trizen -Sy'
-  fi
+  alias trupd="trizen -Sy"
+  alias upgrade='trizen -Syu'
 fi
 
 if (( $+commands[yaourt] )); then
@@ -43,17 +169,8 @@ if (( $+commands[yaourt] )); then
   alias yaorph='yaourt -Qtd'
   alias yainsd='yaourt -S --asdeps'
   alias yamir='yaourt -Syy'
-
-
-  if (( $+commands[abs] && $+commands[aur] )); then
-    alias yaupd='yaourt -Sy && sudo abs && sudo aur'
-  elif (( $+commands[abs] )); then
-    alias yaupd='yaourt -Sy && sudo abs'
-  elif (( $+commands[aur] )); then
-    alias yaupd='yaourt -Sy && sudo aur'
-  else
-    alias yaupd='yaourt -Sy'
-  fi
+  alias yaupd="yaourt -Sy"
+  alias upgrade='yaourt -Syu'
 fi
 
 if (( $+commands[yay] )); then
@@ -72,148 +189,7 @@ if (( $+commands[yay] )); then
   alias yaorph='yay -Qtd'
   alias yainsd='yay -S --asdeps'
   alias yamir='yay -Syy'
-
-
-  if (( $+commands[abs] && $+commands[aur] )); then
-    alias yaupd='yay -Sy && sudo abs && sudo aur'
-  elif (( $+commands[abs] )); then
-    alias yaupd='yay -Sy && sudo abs'
-  elif (( $+commands[aur] )); then
-    alias yaupd='yay -Sy && sudo aur'
-  else
-    alias yaupd='yay -Sy'
-  fi
+  alias yaupd="yay -Sy"
+  alias upgrade='yay -Syu'
 fi
 
-if (( $+commands[pacaur] )); then
-  alias paupg='pacaur -Syu'
-  alias pasu='pacaur -Syu --noconfirm'
-  alias pain='pacaur -S'
-  alias pains='pacaur -U'
-  alias pare='pacaur -R'
-  alias parem='pacaur -Rns'
-  alias parep='pacaur -Si'
-  alias pareps='pacaur -Ss'
-  alias paloc='pacaur -Qi'
-  alias palocs='pacaur -Qs'
-  alias palst='pacaur -Qe'
-  alias paorph='pacaur -Qtd'
-  alias painsd='pacaur -S --asdeps'
-  alias pamir='pacaur -Syy'
-
-  if (( $+commands[abs] && $+commands[aur] )); then
-    alias paupd='pacaur -Sy && sudo abs && sudo aur'
-  elif (( $+commands[abs] )); then
-    alias paupd='pacaur -Sy && sudo abs'
-  elif (( $+commands[aur] )); then
-    alias paupd='pacaur -Sy && sudo aur'
-  else
-    alias paupd='pacaur -Sy'
-  fi
-fi
-
-if (( $+commands[trizen] )); then
-  function upgrade() {
-    trizen -Syu
-  }
-elif (( $+commands[pacaur] )); then
-  function upgrade() {
-    pacaur -Syu
-  }
-elif (( $+commands[yaourt] )); then
-  function upgrade() {
-    yaourt -Syu
-  }
-elif (( $+commands[yay] )); then
-  function upgrade() {
-    yay -Syu
-  }
-else
-  function upgrade() {
-    sudo pacman -Syu
-  }
-fi
-
-# Pacman - https://wiki.archlinux.org/index.php/Pacman_Tips
-alias pacupg='sudo pacman -Syu'
-alias pacin='sudo pacman -S'
-alias pacins='sudo pacman -U'
-alias pacre='sudo pacman -R'
-alias pacrem='sudo pacman -Rns'
-alias pacrep='pacman -Si'
-alias pacreps='pacman -Ss'
-alias pacloc='pacman -Qi'
-alias paclocs='pacman -Qs'
-alias pacinsd='sudo pacman -S --asdeps'
-alias pacmir='sudo pacman -Syy'
-alias paclsorphans='sudo pacman -Qdt'
-alias pacrmorphans='sudo pacman -Rs $(pacman -Qtdq)'
-alias pacfileupg='sudo pacman -Fy'
-alias pacfiles='pacman -Fs'
-alias pacls='pacman -Ql'
-alias pacown='pacman -Qo'
-
-
-if (( $+commands[abs] && $+commands[aur] )); then
-  alias pacupd='sudo pacman -Sy && sudo abs && sudo aur'
-elif (( $+commands[abs] )); then
-  alias pacupd='sudo pacman -Sy && sudo abs'
-elif (( $+commands[aur] )); then
-  alias pacupd='sudo pacman -Sy && sudo aur'
-else
-  alias pacupd='sudo pacman -Sy'
-fi
-
-function paclist() {
-  # Source: https://bbs.archlinux.org/viewtopic.php?id=93683
-  LC_ALL=C pacman -Qei $(pacman -Qu | cut -d " " -f 1) | \
-    awk 'BEGIN {FS=":"} /^Name/{printf("\033[1;36m%s\033[1;37m", $2)} /^Description/{print $2}'
-}
-
-function pacdisowned() {
-  emulate -L zsh
-
-  tmp=${TMPDIR-/tmp}/pacman-disowned-$UID-$$
-  db=$tmp/db
-  fs=$tmp/fs
-
-  mkdir "$tmp"
-  trap  'rm -rf "$tmp"' EXIT
-
-  pacman -Qlq | sort -u > "$db"
-
-  find /bin /etc /lib /sbin /usr ! -name lost+found \
-    \( -type d -printf '%p/\n' -o -print \) | sort > "$fs"
-
-  comm -23 "$fs" "$db"
-}
-
-function pacmanallkeys() {
-  emulate -L zsh
-  curl -s https://www.archlinux.org/people/{developers,trustedusers}/ | \
-    awk -F\" '(/pgp.mit.edu/) { sub(/.*search=0x/,""); print $1}' | \
-    xargs sudo pacman-key --recv-keys
-}
-
-function pacmansignkeys() {
-  emulate -L zsh
-  for key in $*; do
-    sudo pacman-key --recv-keys $key
-    sudo pacman-key --lsign-key $key
-    printf 'trust\n3\n' | sudo gpg --homedir /etc/pacman.d/gnupg \
-      --no-permission-warning --command-fd 0 --edit-key $key
-  done
-}
-
-if (( $+commands[xdg-open] )); then
-  function pacweb() {
-    pkg="$1"
-    infos="$(pacman -Si "$pkg")"
-    if [[ -z "$infos" ]]; then
-      return
-    fi
-    repo="$(grep '^Repo' <<< "$infos" | grep -oP '[^ ]+$')"
-    arch="$(grep '^Arch' <<< "$infos" | grep -oP '[^ ]+$')"
-    xdg-open "https://www.archlinux.org/packages/$repo/$arch/$pkg/" &>/dev/null
-  }
-fi

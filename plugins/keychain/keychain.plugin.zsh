@@ -1,4 +1,9 @@
-function _start_agent() {
+(( $+commands[keychain] )) || return
+
+# Define SHORT_HOST if not defined (%m = host name up to first .)
+SHORT_HOST=${SHORT_HOST:-${(%):-%m}}
+
+function {
 	local agents
 	local -a identities
 	local -a options
@@ -15,7 +20,7 @@ function _start_agent() {
 	zstyle -a :omz:plugins:keychain options options
 
 	# start keychain...
-	keychain ${^options:-} --agents ${agents:-gpg} ${^identities}
+	keychain ${^options:-} --agents ${agents:-gpg} ${^identities} --host $SHORT_HOST
 
 	# Get the filenames to store/lookup the environment from
 	_keychain_env_sh="$HOME/.keychain/$SHORT_HOST-sh"
@@ -25,8 +30,3 @@ function _start_agent() {
 	[ -f "$_keychain_env_sh" ]     && . "$_keychain_env_sh"
 	[ -f "$_keychain_env_sh_gpg" ] && . "$_keychain_env_sh_gpg"
 }
-
-_start_agent
-
-# tidy up after ourselves
-unfunction _start_agent

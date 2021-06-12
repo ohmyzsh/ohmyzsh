@@ -39,6 +39,11 @@ if [[ "$DISABLE_LS_COLORS" != "true" ]]; then
   fi
 fi
 
+# enable diff color if possible.
+if command diff --color . . &>/dev/null; then
+  alias diff='diff --color'
+fi
+
 setopt auto_cd
 setopt multios
 setopt prompt_subst

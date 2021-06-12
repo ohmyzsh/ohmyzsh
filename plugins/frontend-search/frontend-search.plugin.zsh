@@ -19,6 +19,7 @@ alias lodash='frontend lodash'
 alias mdn='frontend mdn'
 alias nodejs='frontend nodejs'
 alias npmjs='frontend npmjs'
+alias packagephobia='frontend packagephobia'
 alias qunit='frontend qunit'
 alias reactjs='frontend reactjs'
 alias smacss='frontend smacss'
@@ -27,6 +28,17 @@ alias typescript='frontend typescript'
 alias unheap='frontend unheap'
 alias vuejs='frontend vuejs'
 
+function _frontend_fallback() {
+  local url
+  if [[ "$FRONTEND_SEARCH_FALLBACK" == duckduckgo ]]; then
+    url="https://duckduckgo.com/?sites=$1&q="
+  else
+    url="https://google.com/search?as_sitesearch=$1&as_q="
+  fi
+
+  echo "$url"
+}
+
 function frontend() {
   emulate -L zsh
 
@@ -34,8 +46,8 @@ function frontend() {
   typeset -A urls
   urls=(
     angular        'https://angular.io/?search='
-    angularjs      'https://google.com/search?as_sitesearch=angularjs.org&as_q='
-    bem            'https://google.com/search?as_sitesearch=bem.info&as_q='
+    angularjs      $(_frontend_fallback 'angularjs.org')
+    bem            $(_frontend_fallback 'bem.info')
     bootsnipp      'https://bootsnipp.com/search?q='
     bundlephobia   'https://bundlephobia.com/result?p='
     caniuse        'https://caniuse.com/#search='
@@ -43,24 +55,25 @@ function frontend() {
     compassdoc     'http://compass-style.org/search?q='
     cssflow        'http://www.cssflow.com/search?q='
     dartlang       'https://api.dartlang.org/apidocs/channels/stable/dartdoc-viewer/dart:'
-    emberjs        'https://www.google.com/search?as_sitesearch=emberjs.com/&as_q='
-    flowtype       'https://google.com/search?as_sitesearch=flow.org/en/docs/&as_q='
+    emberjs        $(_frontend_fallback 'emberjs.com/')
+    flowtype       $(_frontend_fallback 'flow.org/en/docs/')
     fontello       'http://fontello.com/#search='
     github         'https://github.com/search?q='
     html5please    'https://html5please.com/#'
-    jestjs         'https://www.google.com/search?as_sitesearch=jestjs.io&as_q='
+    jestjs         $(_frontend_fallback 'jestjs.io')
     jquery         'https://api.jquery.com/?s='
     lodash         'https://devdocs.io/lodash/index#'
     mdn            'https://developer.mozilla.org/search?q='
-    nodejs         'https://www.google.com/search?as_sitesearch=nodejs.org/en/docs/&as_q='
+    nodejs         $(_frontend_fallback 'nodejs.org/en/docs/')
     npmjs          'https://www.npmjs.com/search?q='
+    packagephobia  'https://packagephobia.now.sh/result?p='
     qunit          'https://api.qunitjs.com/?s='
-    reactjs        'https://google.com/search?as_sitesearch=facebook.github.io/react&as_q='
-    smacss         'https://google.com/search?as_sitesearch=smacss.com&as_q='
+    reactjs        $(_frontend_fallback 'reactjs.org/')
+    smacss         $(_frontend_fallback 'smacss.com')
     stackoverflow  'https://stackoverflow.com/search?q='
-    typescript     'https://google.com/search?as_sitesearch=www.typescriptlang.org/docs&as_q='
+    typescript     $(_frontend_fallback 'www.typescriptlang.org/docs')
     unheap         'http://www.unheap.com/?s='
-    vuejs          'https://www.google.com/search?as_sitesearch=vuejs.org&as_q='
+    vuejs          $(_frontend_fallback 'vuejs.org')
   )
 
   # show help for command list
@@ -71,7 +84,7 @@ function frontend() {
       print -P "%Uterm%u and what follows is what will be searched for in the %Ucontext%u website,"
       print -P "and %Ucontext%u is one of the following:"
       print -P ""
-      print -P "  angular, angularjs, bem, bootsnipp, caniuse, codepen, compassdoc, cssflow,"
+      print -P "  angular, angularjs, bem, bootsnipp, caniuse, codepen, compassdoc, cssflow, packagephobia"
       print -P "  dartlang, emberjs, fontello, flowtype, github, html5please, jestjs, jquery, lodash,"
       print -P "  mdn, npmjs, nodejs, qunit, reactjs, smacss, stackoverflow, unheap, vuejs, bundlephobia"
       print -P ""
@@ -87,7 +100,7 @@ function frontend() {
     echo ""
     echo "Valid contexts are:"
     echo ""
-    echo "  angular, angularjs, bem, bootsnipp, caniuse, codepen, compassdoc, cssflow,"
+    echo "  angular, angularjs, bem, bootsnipp, caniuse, codepen, compassdoc, cssflow, packagephobia"
     echo "  dartlang, emberjs, fontello, github, html5please, jest, jquery, lodash,"
     echo "  mdn, npmjs, nodejs, qunit, reactjs, smacss, stackoverflow, unheap, vuejs, bundlephobia"
     echo ""

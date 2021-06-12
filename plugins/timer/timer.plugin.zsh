@@ -1,5 +1,8 @@
+zmodload zsh/datetime
+
 __timer_current_time() {
-  perl -MTime::HiRes=time -e'print time'
+  zmodload zsh/datetime
+  echo $EPOCHREALTIME
 }
 
 __timer_format_duration() {
@@ -19,11 +22,14 @@ __timer_display_timer_precmd() {
     local cmd_end_time=$(__timer_current_time)
     local tdiff=$((cmd_end_time - __timer_cmd_start_time))
     unset __timer_cmd_start_time
-    local tdiffstr=$(__timer_format_duration ${tdiff})
-    local cols=$((COLUMNS - ${#tdiffstr} - 1))
-    echo -e "\033[1A\033[${cols}C ${tdiffstr}"
+    if [[ -z "${TIMER_THRESHOLD}" || ${tdiff} -ge "${TIMER_THRESHOLD}" ]]; then
+        local tdiffstr=$(__timer_format_duration ${tdiff})
+        local cols=$((COLUMNS - ${#tdiffstr} - 1))
+        echo -e "\033[1A\033[${cols}C ${tdiffstr}"
+    fi
   fi
 }
 
-preexec_functions+=(__timer_save_time_preexec)
-precmd_functions+=(__timer_display_timer_precmd)
+autoload -U add-zsh-hook
+add-zsh-hook preexec __timer_save_time_preexec
+add-zsh-hook precmd __timer_display_timer_precmd
