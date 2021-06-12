@@ -84,3 +84,12 @@ zsh-pip-test-clean-packages() {
 
 alias pip="noglob pip" # allows square brackets for pip command invocation
 
+# Create requirements file
+alias pipreq="pip freeze > requirements.txt"
+
+# Update all installed packages
+alias pipupall="pipreq && sed -i 's/==/>=/g' requirements.txt && pip install -r requirements.txt --upgrade && rm -rf requirements.txt"
+
+# Uninstalled all installed packages
+alias pipunall="pipreq && pip uninstall -r requirements.txt -y && rm -rf requirements.txt"
+
