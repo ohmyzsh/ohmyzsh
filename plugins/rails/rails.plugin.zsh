@@ -56,6 +56,7 @@ alias rsb='rails server --bind'
 
 # Rake aliases
 alias rdm='rake db:migrate'
+alias rdmr='rake db:migrate:redo'
 alias rdmd='rake db:migrate:down'
 alias rdms='rake db:migrate:status'
 alias rdmu='rake db:migrate:up'
