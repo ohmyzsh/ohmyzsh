@@ -27,7 +27,7 @@ function _add_identities() {
 	local id line sig lines
 	local -a identities loaded_sigs loaded_ids not_loaded
 	zstyle -a :omz:plugins:ssh-agent identities identities
-
+  echo $identities #always return empty array.
 	# check for .ssh folder presence
 	if [[ ! -d $HOME/.ssh ]]; then
 		return
