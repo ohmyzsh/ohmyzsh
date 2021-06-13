@@ -1,25 +1,3 @@
-#!zsh
-#
-# Installation
-# ------------
-#
-# To achieve git-flow completion nirvana:
-#
-#  0. Update your zsh's git-completion module to the newest version.
-#     From here: https://github.com/zsh-users/zsh/blob/master/Completion/Unix/Command/_git
-#
-#  1. Install this file. Either:
-#
-#     a. Place it in your .zshrc:
-#
-#     b. Or, copy it somewhere (e.g. ~/.git-flow-completion.zsh) and put the following line in
-#        your .zshrc:
-#
-#            source ~/.git-flow-completion.zsh
-#
-#     c. Or, use this file as a oh-my-zsh plugin.
-#
-
 _git-flow ()
 {
     local curcontext="$curcontext" state line

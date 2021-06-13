@@ -1,10 +1,15 @@
 # This plugin loads pyenv into the current shell and provides prompt info via
 # the 'pyenv_prompt_info' function. Also loads pyenv-virtualenv if available.
 
-FOUND_PYENV=$+commands[pyenv]
+# Load pyenv only if command not already available
+if command -v pyenv &> /dev/null && [[ "$(uname -r)" != *icrosoft* ]]; then
+    FOUND_PYENV=1
+else
+    FOUND_PYENV=0
+fi
 
 if [[ $FOUND_PYENV -ne 1 ]]; then
-    pyenvdirs=("$HOME/.pyenv" "/usr/local/pyenv" "/opt/pyenv")
+    pyenvdirs=("$HOME/.pyenv" "/usr/local/pyenv" "/opt/pyenv" "/usr/local/opt/pyenv")
     for dir in $pyenvdirs; do
         if [[ -d $dir/bin ]]; then
             export PATH="$PATH:$dir/bin"
@@ -24,7 +29,7 @@ if [[ $FOUND_PYENV -ne 1 ]]; then
 fi
 
 if [[ $FOUND_PYENV -eq 1 ]]; then
-    eval "$(pyenv init - zsh)"
+    eval "$(pyenv init - --no-rehash zsh)"
     if (( $+commands[pyenv-virtualenv-init] )); then
         eval "$(pyenv virtualenv-init - zsh)"
     fi
@@ -38,4 +43,4 @@ else
     }
 fi
 
-unset FOUND_PYENV dir
+unset FOUND_PYENV pyenvdirs dir
