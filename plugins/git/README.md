@@ -57,7 +57,7 @@ plugins=(... git)
 | gcp                  | git cherry-pick                                                                                                                  |
 | gcpa                 | git cherry-pick --abort                                                                                                          |
 | gcpc                 | git cherry-pick --continue                                                                                                       |
-| gcs                  | git commit -S                                                                                                                    |
+| gcs                  | git commit -s                                                                                                                    |
 | gd                   | git diff                                                                                                                         |
 | gdca                 | git diff --cached                                                                                                                |
 | gdcw                 | git diff --cached --word-diff                                                                                                    |
