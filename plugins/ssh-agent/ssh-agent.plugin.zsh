@@ -1,16 +1,4 @@
-lockdir=/tmp/oh-my-zsh-ssh-agent.lock
-
-while true; do
-    if mkdir "$lockdir" 2>/dev/null
-    then    # directory did not exist, but was created successfully
-        trap 'rm -rf "$lockdir"' 0    # remove directory when script finishes
-        break    # continue with script
-    else
-        sleep 0.1  # sleep for 0.2 and try again
-    fi
-done
-
-typeset _ssh_env_cache
+typeset _agent_forwarding _ssh_env_cache
 
 function _start_agent() {
 	local lifetime
@@ -68,7 +56,10 @@ function _add_identities() {
 # Get the filename to store/lookup the environment from
 _ssh_env_cache="$HOME/.ssh/environment-$SHORT_HOST"
 
-if zstyle -t :omz:plugins:ssh-agent agent-forwarding && [[ -n "$SSH_AUTH_SOCK" ]]; then
+# test if agent-forwarding is enabled
+zstyle -b :omz:plugins:ssh-agent agent-forwarding _agent_forwarding
+
+if [[ $_agent_forwarding == "yes" && -n "$SSH_AUTH_SOCK" ]]; then
 	# Add a nifty symlink for screen/tmux if agent forwarding
 	[[ -L $SSH_AUTH_SOCK ]] || ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USERNAME-screen
 elif [[ -f "$_ssh_env_cache" ]]; then
@@ -82,16 +73,12 @@ elif [[ -f "$_ssh_env_cache" ]]; then
 	ps $FILTER | grep ssh-agent | grep -q $SSH_AGENT_PID || {
 		_start_agent
 	}
-elif [[ -d $HOME/.ssh ]]; then
+else
 	_start_agent
 fi
 
-if ! zstyle -t :omz:plugins:ssh-agent lazy; then
-	_add_identities
-fi
+_add_identities
 
 # tidy up after ourselves
-unset _ssh_env_cache
+unset _agent_forwarding _ssh_env_cache
 unfunction _start_agent _add_identities
-
-rm -rf "$lockdir"

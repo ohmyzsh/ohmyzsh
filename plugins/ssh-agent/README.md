@@ -19,17 +19,9 @@ To enable **agent forwarding support** add the following to your zshrc file:
 zstyle :omz:plugins:ssh-agent agent-forwarding on
 ```
 
-To **NOT load any identities on start** use the `lazy` style.
-This is particularly usefull when combined with the AddKeysToAgent
-(available from OpenSSH 7.2), since it allows to enter the password only
-on first use.
+----
 
-```zsh
-zstyle :omz:plugins:ssh-agent lazy yes
-```
-
-To **load multiple identities** use the `identities` style. This have no
-effect if `lazy` is enabled.
+To **load multiple identities** use the `identities` style, For example:
 
 ```zsh
 zstyle :omz:plugins:ssh-agent identities id_rsa id_rsa2 id_github
