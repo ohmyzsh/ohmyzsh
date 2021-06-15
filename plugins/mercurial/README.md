@@ -20,13 +20,13 @@ plugins=(... mercurial)
 | `hgba` | `hg branches`                                                                                               |
 | `hgbk` | `hg bookmarks`                                                                                              |
 | `hgco` | `hg checkout`                                                                                               |
-| `hgu`  | `hg update`                                                                                                 |
 | `hgd`  | `hg diff`                                                                                                   |
 | `hged` | `hg diffmerge`                                                                                              |
 | `hgp`  | `hg push`                                                                                                   |
 | `hgs`  | `hg status`                                                                                                 |
 | `hgsl` | `hg log --limit 20 --template "{node|short} | {date|isodatesec} | {author|user}: {desc|strip|firstline}\n"` |
 | `hgun` | `hg resolve --list`                                                                                         |
+| `hgu`  | `hg update`                                                                                                 |
 | `hgi`  | `hg incoming`                                                                                               |
 | `hgl`  | `hg pull -u`                                                                                                |
 | `hglr` | `hg pull --rebase`                                                                                          |
