@@ -25,6 +25,7 @@ function theme_preview() {
     print "$fg[blue]${(l.((${COLUMNS}-${#THEME_NAME}-5))..─.)}$reset_color $THEME_NAME $fg[blue]───$reset_color"
     source "$THEMES_DIR/$THEME"
     cols=$(tput cols)
+    (exit 1)
     print -P "$PROMPT                                                                                      $RPROMPT"
 }
 

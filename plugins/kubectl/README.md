@@ -49,7 +49,7 @@ plugins=(... kubectl)
 | kdeli   | `kubectl delete ingress`            | Delete ingress resources matching passed argument                                                |
 |         |                                     | **Namespace management**                                                                         |
 | kgns    | `kubectl get namespaces`            | List the current namespaces in a cluster                                                         |
-| kcn     | `kubectl config set-context ...`    | Change current namespace |
+| kcn     | `kubectl config set-context --current --namespace` | Change current namespace |
 | kens    | `kubectl edit namespace`            | Edit namespace resource from the default editor                                                  |
 | kdns    | `kubectl describe namespace`        | Describe namespace resource in detail                                                            |
 | kdelns  | `kubectl delete namespace`          | Delete the namespace. WARNING! This deletes everything in the namespace                          |
@@ -107,7 +107,6 @@ plugins=(... kubectl)
 | ksss    | `kubectl scale statefulset`         | Scale a statefulset                                                                              |
 | krsss   | `kubectl rollout status statefulset`| Check the rollout status of a deployment                                                         |
 |         |                                     | **Service Accounts management**                                                                  |
-| kgsa    | `kubectl get sa`                    | List all service accounts                                                                        |
 | kdsa    | `kubectl describe sa`               | Describe a service account in details                                                            |
 | kdelsa  | `kubectl delete sa`                 | Delete the service account                                                                       |
 |         |                                     | **DaemonSet management**                                                                         |

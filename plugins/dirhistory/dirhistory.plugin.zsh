@@ -2,7 +2,7 @@
 #   Navigate directory history using ALT-LEFT and ALT-RIGHT. ALT-LEFT moves back to directories 
 #   that the user has changed to in the past, and ALT-RIGHT undoes ALT-LEFT.
 # 
-#   Navigate directory hierarchy using ALT-UP and ALT-DOWN. (mac keybindings not yet implemented)
+#   Navigate directory hierarchy using ALT-UP and ALT-DOWN.
 #   ALT-UP moves to higher hierarchy (cd ..)
 #   ALT-DOWN moves into the first directory found in alphabetical order
 #
@@ -108,25 +108,29 @@ function dirhistory_forward() {
 # Bind keys to history navigation
 function dirhistory_zle_dirhistory_back() {
   # Erase current line in buffer
-  zle kill-buffer
-  dirhistory_back 
-  zle accept-line
+  zle .kill-buffer
+  dirhistory_back
+  zle .accept-line
 }
 
 function dirhistory_zle_dirhistory_future() {
   # Erase current line in buffer
-  zle kill-buffer
+  zle .kill-buffer
   dirhistory_forward
-  zle accept-line
+  zle .accept-line
 }
 
 zle -N dirhistory_zle_dirhistory_back
 # xterm in normal mode
 bindkey "\e[3D" dirhistory_zle_dirhistory_back
 bindkey "\e[1;3D" dirhistory_zle_dirhistory_back
-# Mac teminal (alt+left/right)
+# Terminal.app
 if [[ "$TERM_PROGRAM" == "Apple_Terminal" ]]; then
   bindkey "^[b" dirhistory_zle_dirhistory_back
+fi
+# iTerm2
+if [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
+  bindkey "^[^[[D" dirhistory_zle_dirhistory_back
 fi
 # Putty:
 bindkey "\e\e[D" dirhistory_zle_dirhistory_back
@@ -136,8 +140,13 @@ bindkey "\eO3D" dirhistory_zle_dirhistory_back
 zle -N dirhistory_zle_dirhistory_future
 bindkey "\e[3C" dirhistory_zle_dirhistory_future
 bindkey "\e[1;3C" dirhistory_zle_dirhistory_future
+# Terminal.app
 if [[ "$TERM_PROGRAM" == "Apple_Terminal" ]]; then
   bindkey "^[f" dirhistory_zle_dirhistory_future
+fi
+# iTerm2
+if [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
+  bindkey "^[^[[C" dirhistory_zle_dirhistory_future
 fi
 bindkey "\e\e[C" dirhistory_zle_dirhistory_future
 bindkey "\eO3C" dirhistory_zle_dirhistory_future
@@ -160,23 +169,24 @@ function dirhistory_down() {
 
 # Bind keys to hierarchy navigation
 function dirhistory_zle_dirhistory_up() {
-  zle kill-buffer   # Erase current line in buffer
+  zle .kill-buffer   # Erase current line in buffer
   dirhistory_up
-  zle accept-line
+  zle .accept-line
 }
 
 function dirhistory_zle_dirhistory_down() {
-  zle kill-buffer   # Erase current line in buffer
+  zle .kill-buffer   # Erase current line in buffer
   dirhistory_down
-  zle accept-line
+  zle .accept-line
 }
 
 zle -N dirhistory_zle_dirhistory_up
 # xterm in normal mode
 bindkey "\e[3A" dirhistory_zle_dirhistory_up
 bindkey "\e[1;3A" dirhistory_zle_dirhistory_up
-# Mac teminal (alt+up)
-    #bindkey "^[?" dirhistory_zle_dirhistory_up #dont know it
+if [[ "$TERM_PROGRAM" == "Apple_Terminal" || "$TERM_PROGRAM" == "iTerm.app" ]]; then
+  bindkey "^[[A" dirhistory_zle_dirhistory_up
+fi
 # Putty:
 bindkey "\e\e[A" dirhistory_zle_dirhistory_up
 # GNU screen:
@@ -185,7 +195,8 @@ bindkey "\eO3A" dirhistory_zle_dirhistory_up
 zle -N dirhistory_zle_dirhistory_down
 bindkey "\e[3B" dirhistory_zle_dirhistory_down
 bindkey "\e[1;3B" dirhistory_zle_dirhistory_down
-# Mac teminal (alt+down)
-    #bindkey "^[?" dirhistory_zle_dirhistory_down #dont know it
+if [[ "$TERM_PROGRAM" == "Apple_Terminal" || "$TERM_PROGRAM" == "iTerm.app" ]]; then
+  bindkey "^[[B" dirhistory_zle_dirhistory_down
+fi
 bindkey "\e\e[B" dirhistory_zle_dirhistory_down
 bindkey "\eO3B" dirhistory_zle_dirhistory_down
