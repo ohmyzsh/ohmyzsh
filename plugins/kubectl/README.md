@@ -120,6 +120,11 @@ plugins=(... kubectl)
 | kecj    | `kubectl edit cronjob`              | Edit CronJob from the default editor                                                             |
 | kdcj    | `kubectl describe cronjob`          | Describe a CronJob in details                                                                    |
 | kdelcj  | `kubectl delete cronjob`            | Delete the CronJob                                                                               |
+|         |                                     | **Job management**                                                                               |
+| kgj     | `kubectl get job`                   | List all Job in ps output format                                                                 |
+| kej     | `kubectl edit job`                  | Edit a Job in details                                                                            |
+| kdj     | `kubectl describe job`              | Describe the Job                                                                                 |
+| kdelj   | `kubectl delete job`                | Delete the Job                                                                                   |
 
 ## Wrappers
 
