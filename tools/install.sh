@@ -265,8 +265,18 @@ main() {
     exit 1
   fi
 
-  if [ -d "$ZSH" ]; then
+  is_zsh_valid=true
+  if [ ! -d "$ZSH" ]; then
+    if ! mkdir "$ZSH" ; then
+      echo "${YELLOW}Failed to create the \$ZSH folder ($ZSH).${RESET}"
+      is_zsh_valid=false
+    fi
+  else
     echo "${YELLOW}The \$ZSH folder already exists ($ZSH).${RESET}"
+    is_zsh_valid=false
+  fi
+
+  if [ "$is_zsh_valid" = false ]; then
     if [ "$custom_zsh" = yes ]; then
       cat <<EOF
 
@@ -275,7 +285,7 @@ exported. You have 3 options:
 
 1. Unset the ZSH variable when calling the installer:
    $(fmt_code "ZSH= sh install.sh")
-2. Install Oh My Zsh to a directory that doesn't exist yet:
+2. Install Oh My Zsh to a directory that doesn't exist yet and you have permission to the parent folder:
    $(fmt_code "ZSH=path/to/new/ohmyzsh/folder sh install.sh")
 3. (Caution) If the folder doesn't contain important information,
    you can just remove it with $(fmt_code "rm -r $ZSH")
