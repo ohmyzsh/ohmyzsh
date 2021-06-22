@@ -30,6 +30,7 @@
 #   --skip-chsh: has the same behavior as setting CHSH to 'no'
 #   --unattended: sets both CHSH and RUNZSH to 'no'
 #   --keep-zshrc: sets KEEP_ZSHRC to 'yes'
+#   --skip-git-clone: skip clone and use $ZSH as repo location
 # For example:
 #   sh install.sh --unattended
 # or:
@@ -254,6 +255,7 @@ main() {
       --unattended) RUNZSH=no; CHSH=no ;;
       --skip-chsh) CHSH=no ;;
       --keep-zshrc) KEEP_ZSHRC=yes ;;
+      --skip-git-clone) SKIP_GIT_CLONE=yes ;;
     esac
     shift
   done
@@ -265,39 +267,41 @@ main() {
     exit 1
   fi
 
-  is_zsh_valid=true
-  if [ ! -d "$ZSH" ]; then
-    if ! mkdir "$ZSH" ; then
-      echo "${YELLOW}Failed to create the \$ZSH folder ($ZSH).${RESET}"
+  if [ ! "$SKIP_GIT_CLONE" = yes ]; then
+    is_zsh_valid=true
+    if [ ! -d "$ZSH" ]; then
+      if ! mkdir "$ZSH" ; then
+        echo "${YELLOW}Failed to create the \$ZSH folder ($ZSH).${RESET}"
+        is_zsh_valid=false
+      fi
+    else
+      echo "${YELLOW}The \$ZSH folder already exists ($ZSH).${RESET}"
       is_zsh_valid=false
     fi
-  else
-    echo "${YELLOW}The \$ZSH folder already exists ($ZSH).${RESET}"
-    is_zsh_valid=false
-  fi
 
-  if [ "$is_zsh_valid" = false ]; then
-    if [ "$custom_zsh" = yes ]; then
-      cat <<EOF
+    if [ "$is_zsh_valid" = false ]; then
+      if [ "$custom_zsh" = yes ]; then
+        cat <<EOF
 
 You ran the installer with the \$ZSH setting or the \$ZSH variable is
 exported. You have 3 options:
 
 1. Unset the ZSH variable when calling the installer:
-   $(fmt_code "ZSH= sh install.sh")
+  $(fmt_code "ZSH= sh install.sh")
 2. Install Oh My Zsh to a directory that doesn't exist yet and you have permission to the parent folder:
-   $(fmt_code "ZSH=path/to/new/ohmyzsh/folder sh install.sh")
+  $(fmt_code "ZSH=path/to/new/ohmyzsh/folder sh install.sh")
 3. (Caution) If the folder doesn't contain important information,
-   you can just remove it with $(fmt_code "rm -r $ZSH")
+  you can just remove it with $(fmt_code "rm -r $ZSH")
 
 EOF
-    else
-      echo "You'll need to remove it if you want to reinstall."
+      else
+        echo "You'll need to remove it if you want to reinstall."
+      fi
+      exit 1
     fi
-    exit 1
-  fi
 
-  setup_ohmyzsh
+    setup_ohmyzsh
+  fi
   setup_zshrc
   setup_shell
 
