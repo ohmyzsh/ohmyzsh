@@ -96,6 +96,7 @@ alias ked='kubectl edit deployment'
 alias kdd='kubectl describe deployment'
 alias kdeld='kubectl delete deployment'
 alias ksd='kubectl scale deployment'
+alias krrd='kubectl rollout restart deployment'
 alias krsd='kubectl rollout status deployment'
 kres(){
     kubectl set env $@ REFRESHED_AT=$(date +%Y%m%d%H%M%S)
@@ -115,6 +116,7 @@ alias kess='kubectl edit statefulset'
 alias kdss='kubectl describe statefulset'
 alias kdelss='kubectl delete statefulset'
 alias ksss='kubectl scale statefulset'
+alias krrss='kubectl rollout restart statefulset'
 alias krsss='kubectl rollout status statefulset'
 
 # Port forwarding
