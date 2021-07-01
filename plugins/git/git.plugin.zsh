@@ -29,16 +29,27 @@ function work_in_progress() {
   fi
 }
 
-# Check if main exists and use instead of master
+# Detect name of the primary branch
+# (Use master as a fallback.)
 function git_main_branch() {
+  # Abort if not inside git repository
   command git rev-parse --git-dir &>/dev/null || return
-  local branch
+
+  # Resolve primary branch from the remote reference
+  local reference=$(command git rev-parse --symbolic-full-name --remotes='*/HEAD')
+  if [[ -n $reference ]]; then
+    echo ${reference#refs/remotes/*/}
+    return
+  fi
+
+  # Look up list of local branches and return the first one that exists
   for branch in main trunk; do
     if command git show-ref -q --verify refs/heads/$branch; then
       echo $branch
       return
     fi
   done
+
   echo master
 }
 
