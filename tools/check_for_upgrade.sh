@@ -48,14 +48,17 @@ function update_ohmyzsh() {
     return
   fi
 
-  # Remove lock directory on exit. `return 1` is important for when trapping a SIGINT:
+  # Remove lock directory on exit. `return $ret` is important for when trapping a SIGINT:
   #  The return status from the function is handled specially. If it is zero, the signal is
   #  assumed to have been handled, and execution continues normally. Otherwise, the shell
   #  will behave as interrupted except that the return status of the trap is retained.
+  #  This means that for a CTRL+C, the trap needs to return the same exit status so that
+  #  the shell actually exits what it's running.
   trap "
-  unset -f current_epoch update_last_updated_file update_ohmyzsh
-  command rm -rf '$ZSH/log/update.lock'
-  return 1
+    ret=\$?
+    unset -f current_epoch update_last_updated_file update_ohmyzsh 2>/dev/null
+    command rm -rf '$ZSH/log/update.lock'
+    return \$ret
   " EXIT INT QUIT
 
   # Create or update .zsh-update file if missing or malformed
