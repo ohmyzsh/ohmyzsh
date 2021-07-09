@@ -45,6 +45,8 @@ alias cgr='composer global require'
 alias cgrm='composer global remove'
 alias co='composer outdated'
 alias cod='composer outdated --direct'
+alias cs='composer show'
+alias csg='composer show | grep'
 
 # install composer in the current directory
 alias cget='curl -s https://getcomposer.org/installer | php'
