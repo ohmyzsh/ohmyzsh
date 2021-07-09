@@ -45,6 +45,7 @@ alias co='composer outdated'
 alias cod='composer outdated --direct'
 alias cr='composer require'
 alias crm='composer remove'
+alias cs='composer show'
 alias csu='composer self-update'
 alias cu='composer update'
 

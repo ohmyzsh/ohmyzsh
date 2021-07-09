@@ -29,5 +29,6 @@ Original author: Daniel Gomes <me@danielcsgomes.com>
 | `cod`  | `composer outdated --direct` | Shows a list of installed packages with available updates which are direct dependencies |
 | `cr`   | `composer require`           | Adds new packages to `composer.json`                                                    |
 | `crm`  | `composer remove`            | Removes packages from `composer.json`                                                   |
+| `cs`   | `composer show`              | Lists available packages, with optional filtering                                       |
 | `csu`  | `composer self-update`       | Updates composer to the latest version                                                  |
 | `cu`   | `composer update`            | Updates composer dependencies and `composer.lock` file                                  |
