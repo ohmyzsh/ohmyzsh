@@ -13,6 +13,7 @@ alias dco='docker-compose'
 alias dcb='docker-compose build'
 alias dce='docker-compose exec'
 alias dcps='docker-compose ps'
+alias dcpsg='docker-compose ps | grep'
 alias dcrestart='docker-compose restart'
 alias dcrm='docker-compose rm'
 alias dcr='docker-compose run'
@@ -27,8 +28,13 @@ alias dcpull='docker-compose pull'
 alias dcstart='docker-compose start'
 alias dck='docker-compose kill'
 
-# because alias doesn't support inserting $@ where we need it to be
+# These helpers are defined as functions because alias doesn't support inserting $@ where we need it to be
+
 function dcsh() {
+  docker-compose exec $@ /bin/sh
+}
+
+function dcbash() {
   docker-compose exec $@ /bin/bash
 }
 
