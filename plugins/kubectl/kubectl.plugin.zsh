@@ -43,6 +43,7 @@ alias kgpwide='kgp -o wide'
 alias kep='kubectl edit pods'
 alias kdp='kubectl describe pods'
 alias kdelp='kubectl delete pods'
+alias kgpall='kubectl get pods --all-namespaces -o wide'
 
 # get pod by label: kgpl "app=myapp" -n myns
 alias kgpl='kgp -l'
@@ -71,7 +72,7 @@ alias kgns='kubectl get namespaces'
 alias kens='kubectl edit namespace'
 alias kdns='kubectl describe namespace'
 alias kdelns='kubectl delete namespace'
-alias kcn='kubectl config set-context $(kubectl config current-context) --namespace'
+alias kcn='kubectl config set-context --current --namespace'
 
 # ConfigMap management
 alias kgcm='kubectl get configmaps'
@@ -151,7 +152,6 @@ alias kdpvc='kubectl describe pvc'
 alias kdelpvc='kubectl delete pvc'
 
 # Service account management.
-alias kgsa="kubectl get sa"
 alias kdsa="kubectl describe sa"
 alias kdelsa="kubectl delete sa"
 
