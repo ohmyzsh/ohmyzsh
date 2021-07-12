@@ -15,8 +15,10 @@ plugins=(... docker-compose)
 |-----------|------------------------------------|------------------------------------------------------------------|
 | dco       | `docker-compose`                   | Docker-compose main command                                      |
 | dcb       | `docker-compose build`             | Build containers                                                 |
+| dcbash    | `docker-compose exec $@ /bin/bash` | Bash shell in a running container *(func, not an alias)          |
 | dce       | `docker-compose exec`              | Execute command inside a container                               |
 | dcps      | `docker-compose ps`                | List containers                                                  |
+| dcpsg     | `docker-compose ps | grep`         | Grep for a running container                                     |
 | dcrestart | `docker-compose restart`           | Restart container                                                |
 | dcrm      | `docker-compose rm`                | Remove container                                                 |
 | dcr       | `docker-compose run`               | Run a command in container                                       |
@@ -29,5 +31,5 @@ plugins=(... docker-compose)
 | dclf      | `docker-compose logs -f`           | Show logs and follow output                                      |
 | dcpull    | `docker-compose pull`              | Pull image of a service                                          |
 | dcstart   | `docker-compose start`             | Start a container                                                |
-| dcsh      | `docker-compose exec $@ /bin/bash` | Execute a shell inside a running container *(func, not an alias) |
+| dcsh      | `docker-compose exec $@ /bin/sh`   | Shell in a running container *(func, not an alias)               |
 | dck       | `docker-compose kill`              | Kills containers                                                 |
