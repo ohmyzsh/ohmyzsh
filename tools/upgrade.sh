@@ -1,5 +1,7 @@
 #!/usr/bin/env zsh
 
+setopt TYPESET_SILENT
+
 if [ -z "$ZSH_VERSION" ]; then
   exec zsh "$0" "$@"
 fi
