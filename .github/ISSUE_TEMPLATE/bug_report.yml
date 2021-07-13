@@ -1,0 +1,62 @@
+name: Bug report
+description: Create a report to help us improve Oh My Zsh
+labels: 'Bug'
+body:
+  - type: textarea
+    attributes:
+      label: Describe the bug
+      description: A clear description of what the bug is.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: To Reproduce
+      description: | 
+        Steps to reproduce the behavior, for example:
+      placeholder: |
+        1. Enable this plugin '...'
+        2. Run command '...' or try the autocomplete command '...'
+        3. See error
+  - type: textarea
+    attributes:
+      label: Expected behavior
+      description: A brief description of what should happen.
+  - type: textarea
+    attributes:
+      label: Screenshots and/or Recordings
+      description: |
+        If applicable, add screenshots to help explain your problem.
+        You can also record an asciinema session: https://asciinema.org/
+  - type: markdown
+    attributes:
+      value: | 
+            ## Self Check
+            - Have you tried reaching out on the [Discord server](https://discord.gg/ohmyzsh)? 
+            This can help cut down on filling up issues. We always have a few people
+            online that are in a variety of timezones that are willing to help you!
+            
+            - Also searching existing [GitHub Issues](https://github.com/ohmyzsh/ohmyzsh/issues?q=) might help you get quicker support
+  - type: input
+    attributes:
+      label: OS / Distro
+      placeholder: e.g. Arch Linux, macOS
+  - type: dropdown
+    attributes:
+      label: If on Windows what version of WSL
+      options:
+        - WSL1 
+        - WSL2
+  - type: input
+    attributes:
+      label: ZSH Version
+      placeholder: e.g. 5.6
+  - type: input
+    attributes:
+      label: Terminal emulator
+      placeholder: e.g. iTerm2
+  - type: textarea
+    attributes:
+      label: Additional context
+      description: Add any other context about the problem here. This can be themes, plugins, custom configs.
+      
+  
