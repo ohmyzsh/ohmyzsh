@@ -4,9 +4,8 @@ labels: 'Feature'
 body:
   - type: input
     attributes:
-      label: Is your feature request related to a particular plugin or theme?
-      description: If so, specify it.
-      placeholder: The name of the plugin, theme or alias that you would like us to improve.
+      label: Is your feature request related to a particular plugin or theme? If so, specify it.
+      description: The name of the plugin, theme or alias that you would like us to improve.
   - type: textarea
     attributes:
       label: Is your feature request related to a problem? Please describe.
