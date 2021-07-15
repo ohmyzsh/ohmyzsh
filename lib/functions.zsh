@@ -289,22 +289,6 @@ function kube-list-prod-contexts() {
 #   \history -${NUM_LINES}
 # }
 
-alias h="history -20"
-alias gfind-filename=gfindf
-
-alias ff='fd -t f '         # find files
-alias ffa='fd -H -t f '     # find files in horrible places
-
-alias fdd='\fd -t d '       # find directories
-alias fdir='\fd -t d '       # find directories
-
-alias fdda='\fd -H -t d '   # find directories in horrible places
-
-alias lg='l | grep -i '        # ls grep
-alias gfinda="gfind-all"
-alias hg="h | grep -i "
-# alias agl="ag --pager less "
-
 function agl() {
   ag --pager less "$@"
 }
@@ -333,7 +317,7 @@ function clean-slate() {
 alias clr=clean-slate
 alias cls=clean-slate
 
-function psg () {
+function psgr() {
   ps auwwwwx | grep -v 'grep ' | grep -E "%CPU|$1"
 }
 
@@ -366,11 +350,11 @@ function ssh-ds718() {
 
 alias git-stash-list-all='gitk `git stash list --pretty=format:%gd`'
 
-function master-protection() {
+function master-show-protection() {
   git branch -vv | grep "origin/`git branch --show-current`"
 }
 
-function git-branch() {
+function git-show-branch() {
   git branch -vv | grep `git branch --show-current`
 }
 
@@ -378,31 +362,60 @@ function git-branch() {
 alias docker-kill-latest='docker ps -l --format='{{.Names}}' | xargs docker kill'
 
 # stop all containers
-function docker-stop-all() {
-  docker container stop -t 2 $(docker container ls -q) &
+docker-stop-all () {
+        docker container stop -t 2 $(docker container ls -q) 2>/dev/null
 }
 
-# Launch firefox profile manager
-function firefox-profiles() {
-    "/Applications/Firefox.app/Contents/MacOS/firefox-bin --profilemanager"
-}
-
-function find-all-massive-files() {
+function find-gig-files() {
   find . -size +1G -ls | sort -k7n # Find files larger than 1GB and then order the list by the file size
 }
 
-function start-cloud-storage() {
+function _start-cloud-storage() {
+    bgnotify "Booting cloud sync apps..."
     cd /Applications
     open Dropbox.app 2>/dev/null &
-    open Backup\ and\ Sync.app 2>/dev/null &
+    open Google\ Drive.app 2>/dev/null &
     # Don't do this cos it downloads my backed up photos
     # open "Google Drive File Stream.app" 2>/dev/null &
     cd -
 }
 
-function tree() {
-  /usr/local/homebrew/bin/tree -a $1 | colorize_less
+function start-cloud-storage() {
+  (
+    bgnotify "Waiting for local unison sync..."
+    /Users/peter/dotfiles_psk/bin/unison-cron-job.sh
+    sleep 7
+    _start-cloud-storage
+  ) &
 }
+
+function tree() {
+  /usr/local/homebrew/bin/tree -a $1 | colorize_less "$@"
+}
+
+# function open-all-edge-apps() {
+#   EDGE_APP_DIR='/Users/peter/Dropbox (Personal)/_Settings/Edge Apps.localized/'
+#   for APP in ${EDGE_APP_DIR}/*.app; do
+#     echo "Opening $APP ..."
+#     nohup open -a "$APP" &
+#   done
+# }
+
+function _open-all-chrome-apps() {
+  for APP in "${1}"/*.app; do
+    echo "Opening $APP ..."
+    nohup open -a "$APP" &
+  done
+}
+
+function open-all-chrome-apps() {
+  CHROME_APP_DIR='/Users/peter/Dropbox (Personal)/_Settings/Chrome Apps/Chrome Apps.localized/'
+  _open-all-chrome-apps "$CHROME_APP_DIR"
+  CHROME_APP_DIR='/Users/peter/Dropbox (Personal)/_Settings/Chrome/Chrome Apps/Chrome Apps.localized/'
+  _open-all-chrome-apps "$CHROME_APP_DIR"
+}
+
+alias start-all-edge-apps="open-all-edge-apps"
 
 function kill-cloud-storage() {
     # TODO investigate pkill as alternative
@@ -410,8 +423,8 @@ function kill-cloud-storage() {
     # Don't do this cos it downloads my backed up photos
     # killall "Google Drive File Stream" 2>/dev/null &
     killall Dropbox 2>/dev/null &
-    killall "Backup and Sync" 2>/dev/null &
     killall "Google Drive" 2>/dev/null &
+    killall -v "FinderSyncExtension" -SIGKILL &
 }
 
 # For photos, pictures, DS718

@@ -1,0 +1,1 @@
+/Users/peter/.oh-my-zsh/custom/themes/agnoster-short.zsh-theme

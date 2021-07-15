@@ -1,5 +1,12 @@
-alias kube="kubectl"
-alias mk="minikube"
-alias kube-list-contexts="kubectl config get-contexts"
-alias docker-suicide="killall com.docker.hyperkit"
-alias docker-die="killall com.docker.hyperkit"
+alias ts-resolve-host="tsunami variables resolve --unit-type host "
+
+function ts-variables-show() {
+  tsunami variables show $1 $2
+}
+function ts-variables-show-version() {
+  tsunami variables history $1 $2
+}
+
+alias tsunami-resolve-host="ts-resolve-host"
+alias tsunami-variables-show="ts-variables-show"
+alias tsunami-variables-show-version="ts-variables-show-version"

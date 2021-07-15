@@ -16,9 +16,9 @@ else
     # isn't available, --color won't be either (they were released at the same
     # time (v2.5): https://git.savannah.gnu.org/cgit/grep.git/tree/NEWS?id=1236f007
     if grep-flags-available --color=auto --exclude-dir=.cvs; then
-        GREP_OPTIONS="--color=always --exclude-dir=$EXC_FOLDERS"
+        GREP_OPTIONS="--exclude-dir=$EXC_FOLDERS"
     elif grep-flags-available --color=auto --exclude=.cvs; then
-        GREP_OPTIONS="--color=always --exclude=$EXC_FOLDERS"
+        GREP_OPTIONS="--exclude=$EXC_FOLDERS"
     fi
 
     if [[ -n "$GREP_OPTIONS" ]]; then
