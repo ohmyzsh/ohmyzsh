@@ -21,6 +21,10 @@ function asp() {
   export AWS_DEFAULT_PROFILE=$1
   export AWS_PROFILE=$1
   export AWS_EB_PROFILE=$1
+
+  if [[ "$2" == "login" ]]; then
+    aws sso login
+  fi
 }
 
 # AWS profile switch
