@@ -101,6 +101,11 @@ kres(){
     kubectl set env $@ REFRESHED_AT=$(date +%Y%m%d%H%M%S)
 }
 
+# Horizontal Pod Audoscaler
+alias kgh='kubectl get hpa'
+alias kghw='kgh --watch'
+alias keh='kubectl edit hpa'
+
 # Rollout management.
 alias kgrs='kubectl get rs'
 alias krh='kubectl rollout history'
