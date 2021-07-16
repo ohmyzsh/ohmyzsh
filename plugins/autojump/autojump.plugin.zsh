@@ -10,6 +10,7 @@ autojump_paths=(
   /usr/local/share/autojump/autojump.zsh             # FreeBSD installation
   /opt/local/etc/profile.d/autojump.sh               # macOS with MacPorts
   /usr/local/etc/profile.d/autojump.sh               # macOS with Homebrew (default)
+  /opt/homebrew/etc/profile.d/autojump.sh            # macOS with Homebrew (default on M1 macs)
 )
 
 for file in $autojump_paths; do
