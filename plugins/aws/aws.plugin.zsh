@@ -121,6 +121,21 @@ function acp() {
 
     echo "Switched to AWS Profile: $profile"
   fi
+
+  local sso_start_url="$(aws configure get sso_start_url --profile $profile)"
+  if [[ -n "sso_start_url" ]]; then
+    echo "Found SSO url $sso_start_url for $profile"
+    export AWS_PROFILE="$profile"
+    echo "Switched to AWS Profile: $profile"
+    echo "Checking if logged in..."
+    aws sts get-caller-identity > /dev/null
+    if [ $? -ne 0 ]; then
+        echo "Not logged in, trying to log you in..."
+        aws sso login --profile $profile
+    else
+        echo "Logged in already, have a great day"
+    fi
+  fi
 }
 
 function aws_change_access_key() {
