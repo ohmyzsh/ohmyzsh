@@ -5,8 +5,12 @@ if [[ -z $commands[thefuck] ]]; then
 fi
 
 # Register alias
-[[ ! -a $ZSH_CACHE_DIR/thefuck ]] && thefuck --alias > $ZSH_CACHE_DIR/thefuck
-source $ZSH_CACHE_DIR/thefuck
+if [[ -n $ZSH_CACHE_DIR ]]; then
+    [[ ! -a $ZSH_CACHE_DIR/thefuck ]] && thefuck --alias > $ZSH_CACHE_DIR/thefuck
+    source $ZSH_CACHE_DIR/thefuck
+else
+    eval $(thefuck --alias)
+fi
 
 fuck-command-line() {
     local FUCK="$(THEFUCK_REQUIRE_CONFIRMATION=0 thefuck $(fc -ln -1 | tail -n 1) 2> /dev/null)"
