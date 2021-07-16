@@ -24,6 +24,7 @@ plugins=(... docker-compose)
 | dcup      | `docker-compose up`            | Build, (re)create, start, and attach to containers for a service |
 | dcupb     | `docker-compose up --build`    | Same as `dcup`, but build images before starting containers      |
 | dcupd     | `docker-compose up -d`         | Same as `dcup`, but starts as daemon                             |
+| dcupbd    | `docker-compose up --build -d` | Same as `dcup`, but build images and then starts as daemon       |
 | dcdn      | `docker-compose down`          | Stop and remove containers                                       |
 | dcl       | `docker-compose logs`          | Show logs of container                                           |
 | dclf      | `docker-compose logs -f`       | Show logs and follow output                                      |
