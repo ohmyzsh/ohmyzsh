@@ -5,7 +5,7 @@ This plugin provides completion support for [`ag`](https://github.com/ggreer/the
 To use it, add ag to the plugins array in your zshrc file.
 
 ```zsh
-plugins=(... aws)
+plugins=(... ag)
 ```
 
 ## INSTALLATION NOTES
