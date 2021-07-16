@@ -10,8 +10,8 @@ plugins=(... git)
 
 ## Aliases
 
-| Alias                | Command                                                                                                                          |
-|:---------------------|:---------------------------------------------------------------------------------------------------------------------------------|
+| Alias                | Command                                                                                                                          | Description |
+|:---------------------|:---------------------------------------------------------------------------------------------------------------------------------|:----|
 | g                    | git                                                                                                                              |
 | ga                   | git add                                                                                                                          |
 | gaa                  | git add --all                                                                                                                    |
@@ -48,6 +48,7 @@ plugins=(... git)
 | gcf                  | git config --list                                                                                                                |
 | gcl                  | git clone --recurse-submodules                                                                                                   |
 | gclean               | git clean -id                                                                                                                    |
+| gcfx                 | git commit --fixup                                                                                                               |
 | gpristine            | git reset --hard && git clean -dffx                                                                                              |
 | gcm                  | git checkout $(git_main_branch)                                                                                                                |
 | gcd                  | git checkout develop                                                                                                             |
@@ -103,14 +104,15 @@ plugins=(... git)
 | glod                 | git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset'                           |
 | glods                | git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset' --date=short              |
 | glola                | git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --all                     |
+| glom                 | git log --oneline --decorate --color $(git_main_branch)                                                                          | List commit since the main branch |
 | glog                 | git log --oneline --decorate --graph                                                                                             |
 | gloga                | git log --oneline --decorate --graph --all                                                                                       |
 | glp                  | git log --pretty=\<format\>                                                                                                      |
 | gm                   | git merge                                                                                                                        |
-| gmom                 | git merge origin/$(git_main_branch)                                                                                                            |
+| gmom                 | git merge origin/$(git_main_branch)                                                                                              |
 | gmt                  | git mergetool --no-prompt                                                                                                        |
 | gmtvim               | git mergetool --no-prompt --tool=vimdiff                                                                                         |
-| gmum                 | git merge upstream/$(git_main_branch)                                                                                                          |
+| gmum                 | git merge upstream/$(git_main_branch)                                                                                            |
 | gma                  | git merge --abort                                                                                                                |
 | gp                   | git push                                                                                                                         |
 | gpd                  | git push --dry-run                                                                                                               |
@@ -126,9 +128,11 @@ plugins=(... git)
 | grba                 | git rebase --abort                                                                                                               |
 | grbc                 | git rebase --continue                                                                                                            |
 | grbd                 | git rebase develop                                                                                                               |
-| grbi                 | git rebase -i                                                                                                                    |
-| grbm                 | git rebase $(git_main_branch)                                                                                                                  |
-| grbo                 | git rebase --onto                                                                                                             |
+| grbi                 | git rebase --interactive                                                                                                         |
+| grbm                 | git rebase $(git_main_branch)                                                                                                    |
+| grbmi                | git rebase $(git_main_branch) --interactive                                                                                      |
+| grbmia               | git rebase $(git_main_branch) --interactive --autosquash                                                                         |
+| grbo                 | git rebase --onto                                                                                                                |
 | grbs                 | git rebase --skip                                                                                                                |
 | grev                 | git revert                                                                                                                       |
 | grh                  | git reset                                                                                                                        |
@@ -165,6 +169,7 @@ plugins=(... git)
 | gstu                 | git stash --include-untracked                                                                                                    |
 | gstall               | git stash --all                                                                                                                  |
 | gsu                  | git submodule update                                                                                                             |
+| gsuri                | git submodule update --recursive --init                                                                                          |
 | gsw                  | git switch                                                                                                                       |
 | gswc                 | git switch -c                                                                                                                    |
 | gts                  | git tag -s                                                                                                                       |
