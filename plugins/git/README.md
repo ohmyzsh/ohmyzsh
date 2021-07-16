@@ -177,6 +177,7 @@ plugins=(... git)
 | gupa                 | git pull --rebase --autostash                                                                                                    |
 | gupav                | git pull --rebase --autostash -v                                                                                                 |
 | glum                 | git pull upstream $(git_main_branch)                                                                                                           |
+| glm                  | git pull origin $(git_main_branch)                                                                                               |
 | gwch                 | git whatchanged -p --abbrev-commit --pretty=medium                                                                               |
 | gwip                 | git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign -m "--wip-- [skip ci]"           |
 | gam                  | git am                                                                                                                           |
