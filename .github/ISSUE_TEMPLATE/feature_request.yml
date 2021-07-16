@@ -4,17 +4,18 @@ labels: 'Feature'
 body:
   - type: input
     attributes:
-      label: Is your feature request related to a particular plugin or theme? If so, specify it.
-      description: The name of the plugin, theme or alias that you would like us to improve.
+      label: If the feature request is for a plugin or theme, specify it here.
+      description: The name of the plugin or theme that you would like us to improve.
+      placeholder: e.g. Git plugin, Agnoster theme
   - type: textarea
     attributes:
-      label: Is your feature request related to a problem? Please describe.
+      label: If the feature solves a problem you have, specify it here.
       description: A description of what the problem is. 
       placeholder: Ex. I'm always frustrated when...
   - type: textarea
     attributes:
-      label: Describe the solution you'd like
-      description: A description of what you want to happen.
+      label: Describe the proposed feature.
+      description: A description of what you want to happen. Be as specific as possible.
     validations:
       required: true
   - type: textarea
@@ -24,7 +25,7 @@ body:
   - type: textarea
     attributes:
       label: Additional context
-      description: Add any other context, screenshots or discord conversations about the feature request here. Also if you have any PRs related to this issue that are already open that you would like us to look at.
+      description: Add any other context, screenshots or Discord conversations about the feature request here. Also if you have any PRs related to this issue that are already open that you would like us to look at.
   - type: textarea
     attributes:
       label: Related Issues
