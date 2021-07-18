@@ -28,6 +28,7 @@ plugins=(... yarn)
 | yi    | `yarn init`                               | Interactively creates or updates a package.json file                          |
 | yin   | `yarn install`                            | Install dependencies defined in `package.json`                                |
 | yln   | `yarn lint`                               | Run the lint script defined in `package.json`                                 |
+| ylnf  | `yarn lint --fix`                         | Run the lint script defined in `package.json`to automatically fix problems    |
 | yls   | `yarn list`                               | List installed packages                                                       |
 | yout  | `yarn outdated`                           | Check for outdated package dependencies                                       |
 | yp    | `yarn pack`                               | Create a compressed gzip archive of package dependencies                      |
