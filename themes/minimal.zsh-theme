@@ -14,7 +14,7 @@ ZSH_THEME_HG_PROMPT_CLEAN=$ZSH_THEME_GIT_PROMPT_CLEAN
 vcs_status() {
     if [[ $(whence in_svn) != "" ]] && in_svn; then
         svn_prompt_info
-    elif [[ $(whence in_hg) != "" ]] && in_hg; then
+    elif [[ $(whence in_hg) != "" && $(in_hg) == 1 ]]; then
         hg_prompt_info
     else
         git_prompt_info
