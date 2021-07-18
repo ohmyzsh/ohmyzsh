@@ -39,6 +39,7 @@ fi
 # Adapted from: https://github.com/nvm-sh/nvm#zsh
 if (( $+NVM_AUTOLOAD )); then
   load-nvmrc() {
+    [[ -a .nvmrc ]] || return
     local node_version="$(nvm version)"
     local nvmrc_path="$(nvm_find_nvmrc)"
 
