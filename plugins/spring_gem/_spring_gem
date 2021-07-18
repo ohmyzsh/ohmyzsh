@@ -1,0 +1,116 @@
+#compdef spring
+#autoload
+
+# zsh spring completion
+
+local -a _1st_arguments
+_1st_arguments=(
+    'binstub:Generate spring based binstubs. Use --all to generate a binstub for all known commands.'
+    'help:Print available commands.'
+    'status:Show current status.'
+    'stop:Stop all spring processes for this project.'
+    'rails:Run a rails command. The following sub commands will use spring: console, runner, generate, destroy.'
+    'rake:Runs the rake command'
+    'rspec:Runs the rspec command'
+)
+
+local -a _binstub_arguments
+_binstub_arguments=(
+    '--all:Generate all binstubs'
+    'rails:Generate rails bintstub'
+    'rake:Generate rake bintstub '
+    'rspec:Generate rspec bintstub '
+)
+
+local -a _rails_arguments
+_rails_arguments=(
+    'console:rails console'
+    'runner:rails runner'
+    'generate:rails generator'
+    'destroy:rails destroy'
+    'server:rails server (NOT SPRUNG)'
+    'new:rails new (NOT SPRUNG)'
+    'application:rails application (NOT SPRUNG)'
+    'plugin new:rails plugin new (NOT SPRUNG)'
+)
+
+__task_list ()
+{
+    local expl
+    declare -a tasks
+
+    tasks=(binstub help status stop rails rake rspec)
+
+    _wanted tasks expl 'help' compadd $tasks
+}
+
+__binstub ()
+{
+    local curcontext="$curcontext" state line
+    typeset -A opt_args
+
+    _arguments -C \
+        ':command:->command' \
+        '*::options:->options'
+
+   case $state in
+       (command)
+           _describe -t commands "spring subcommand" _binstub_arguments
+           return
+       ;;
+
+       (options)
+       ;;
+    esac
+}
+
+__rails ()
+{
+    local curcontext="$curcontext" state line
+    typeset -A opt_args
+
+    _arguments -C \
+        ':command:->command' \
+        '*::options:->options'
+
+   case $state in
+       (command)
+           _describe -t commands "spring subcommand" _rails_arguments
+           return
+       ;;
+
+       (options)
+       ;;
+    esac
+}
+
+local expl
+
+local curcontext="$curcontext" state line
+typeset -A opt_args
+
+_arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+case $state in
+  (command)
+      _describe -t commands "spring subcommand" _1st_arguments
+      return
+  ;;
+
+  (options)
+    case $line[1] in
+      (help)
+         _arguments ':feature:__task_list'
+      ;;
+
+      (binstub)
+          __binstub
+      ;;
+      (rails)
+          __rails
+      ;;
+    esac
+  ;;
+esac
