@@ -14,3 +14,10 @@ plugins=(... pyenv)
 
 - `pyenv_prompt_info`: displays the Python version in use by pyenv; or the global Python
   version, if pyenv wasn't found.
+
+
+## Options
+
+- `PYENV_VIRTUALENV`: if set to `0`, will disable automatic activation/deactivation of
+  virtualenvs upon entering/leaving directories which contain a `.python-version` file.
+

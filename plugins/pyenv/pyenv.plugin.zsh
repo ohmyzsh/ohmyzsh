@@ -30,8 +30,10 @@ fi
 
 if [[ $FOUND_PYENV -eq 1 ]]; then
     eval "$(pyenv init - --no-rehash zsh)"
-    if (( $+commands[pyenv-virtualenv-init] )); then
-        eval "$(pyenv virtualenv-init - zsh)"
+    if [[ ${PYENV_VIRTUALENV:-1} -ne 0 ]]; then
+        if (( $+commands[pyenv-virtualenv-init] )); then
+            eval "$(pyenv virtualenv-init - zsh)"
+        fi
     fi
     function pyenv_prompt_info() {
         echo "$(pyenv version-name)"
