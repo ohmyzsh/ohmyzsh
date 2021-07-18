@@ -1,0 +1,187 @@
+#!/bin/zsh -f
+
+emulate -L zsh
+
+usage() {
+  local yellow="\033[38;5;003m"
+  local green="\033[38;5;002m"
+
+  print """${green}printc ${RS} v0.1
+
+${yellow}USAGE:${RS}
+     printc [FLAGS/OPTIONS] [<R G B>] ['string to print']
+
+${yellow}FLAGS:${RS}
+    ${green}-b${RS}     \033[1mbold${RS}
+    ${green}-i${RS}     \033[3mitalic${RS}
+    ${green}-u${RS}     \033[4munderline${RS}
+    ${green}-n${RS}     do not add newline to the result${RS}
+    ${green}-l${RS}     list built in colors${RS}
+    ${green}-h${RS}     show this help message${RS}
+
+${yellow}OPTIONS:${RS}
+    ${green}-C <built in color>${RS}
+
+${yellow}ARGS:${RS}
+    ${green}<R G B>${RS}    Red Green Blue values from 0 - 255 for each
+
+${yellow}Note:${RS}
+    Either the -C <build in color> OPTION or <R G B> ARGS can be used,
+    but not both. The flags -b -i -u can be used in any combination/order
+    or omitted completely. -C and/or <R G B> can be omitted and the color
+    will default to white, still observering the flags -b -i -u. Text to
+    be printed should be quoted. Use double quotes if you want to expand
+    variables inside your string, single quotes otherwise.
+
+${yellow}Examples:${RS}
+    printc -bu -C maroon 'Some Cool String'
+
+    printc -i 120 200 50 'Some Cool String'
+  """
+}
+
+showall() {
+  local all_colors=()
+  for color_v in $@; do
+    all_colors+=($(zsh $THIS_PROG -b -C $color_v $color_v))
+  done
+  print -C 3 $all_colors
+}
+
+THIS_PROG=$0:A
+UL=
+BD=
+IT=
+RS="\033[0m"
+BUILT_IN_COLOR=
+USED_BUILTIN=0
+
+typeset -A built_in_colors
+built_in_colors=(
+  cayenne '148 017 000'
+  mocha '148 082 000'
+  asparagus '146 144 000'
+  fern '079 143 000'
+  clover '000 143 000'
+  moss '000 144 081'
+  teal '000 145 147'
+  ocean '000 084 147'
+  midnight '001 025 147'
+  eggplant '083 027 147'
+  plum '148 033 147'
+  maroon '148 023 081'
+  maraschino '255 038 000'
+  tangerine '255 147 000'
+  lemon '255 251 000'
+  lime '142 250 000'
+  spring '000 249 000'
+  seafoam '000 250 146'
+  turquois '000 253 255'
+  aqua '000 150 255'
+  blueberry '004 051 255'
+  grape '148 055 255'
+  magenta '255 064 255'
+  strawberry '255 047 146'
+  salmon '255 126 121'
+  cantaloupe '255 212 121'
+  banana '255 252 121'
+  honeydew '212 251 121'
+  flora '115 250 121'
+  spindrift '115 252 214'
+  ice '115 253 255'
+  sky '118 214 255'
+  orchid '122 129 255'
+  lavender '215 131 255'
+  bubblegum '255 133 255'
+  carnation '255 138 216'
+)
+
+bad_color_input() {
+  local yellow="\033[38;5;003m"
+  print """
+${yellow}\033[1mInvalid Color${RS}
+
+\"$1\" is not a recognized color.
+
+Run \`printc -l\` to see all valid colors.
+  """ 1>&2
+  exit 1
+}
+
+test_input() {
+  [[ ! -n ${built_in_colors[(ie)$1]} ]] && \
+    bad_color_input $1
+}
+
+zparseopts -D - \
+  C:=color_flag u=u_flag b=b_flag i=i_flag l=l_flag h=h_flag n=n_flag
+
+if [[ $l_flag ]] || [[ $h_flag ]];then
+  [[ $h_flag ]] && usage || \
+    {
+      all_colors=( ${(k)built_in_colors} )
+      showall $all_colors
+    }
+  exit 0
+elif [[ $color_flag ]] || [[ $u_flag ]] || \
+  [[ $b_flag ]] || [[ $i_flag ]]; then
+
+  if [[ $color_flag ]]; then
+    test_input $color_flag[2]
+    # Set internal flag so script knows to use built in colors,
+    # rather than looking for passed in RGB values
+    USED_BUILTIN=1
+    # Extract RGB color code from $built_in_colors associative array
+    # corresponding to built in color requested by user
+    BUILT_IN_COLOR=(${(ps: :)${built_in_colors[$color_flag[2]]}})
+  fi
+  if [[ $u_flag ]]; then
+    UL="\033[4m" # underline
+  fi
+  if [[ $b_flag ]]; then
+    BD="\033[1m" # bold
+  fi
+  if [[ $i_flag ]]; then
+    IT="\033[3m" # italic
+  fi
+else
+  echo
+  echo "\033[1m\033[38;5;001mInvalid Input${RS}"
+  echo
+  usage
+  exit 1
+fi
+
+# If built in color was used, set the RGB value to those
+# that correspond with the built in color
+if [[ $USED_BUILTIN == 1 ]]; then
+  R=$BUILT_IN_COLOR[1]
+  G=$BUILT_IN_COLOR[2]
+  B=$BUILT_IN_COLOR[3]
+  MSG=$@
+else
+  # If user supplied RGB values, assign them to R G B
+  if [[ $# == 4 ]]; then
+    R=$1
+    G=$2
+    B=$3
+    MSG=$4
+  # If no color options were specified, use white by default
+  elif [[ $# == 1 ]]; then
+    R=255
+    G=255
+    B=255
+    MSG=$1
+  else
+    # If something went wrong show the usage message and exit
+    usage
+    exit 1
+  fi
+fi
+
+if [[ $n_flag ]]; then
+  # If -n options is given, use -n with internal echo command
+  echo -n "${UL}${BD}${IT}\033[38;2;${R};${G};${B}m${MSG}${RS}"
+else
+  echo "${UL}${BD}${IT}\033[38;2;${R};${G};${B}m${MSG}${RS}"
+fi
