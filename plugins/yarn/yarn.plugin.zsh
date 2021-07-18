@@ -29,3 +29,18 @@ alias yup="yarn upgrade"
 alias yv="yarn version"
 alias yw="yarn workspace"
 alias yws="yarn workspaces"
+
+
+_prepend_to_path() {
+  # Prepend a new directory to the path if it's not already in there
+  local newpath="${1:?Need path to prepend}"
+  
+  # Prepend path if not already found in PATH
+  if ! printf "%s" "$PATH" | grep -qE "(^|:)$newpath(:|$)"; then
+    export PATH="$newpath:$PATH"
+  fi
+}
+
+# Add Yarn to path
+_prepend_to_path "$HOME/.config/yarn/global/node_modules/.bin"
+_prepend_to_path "$HOME/.yarn/bin"
