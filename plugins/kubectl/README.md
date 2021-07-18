@@ -16,6 +16,7 @@ plugins=(... kubectl)
 | k       | `kubectl`                           | The kubectl command                                                                              |
 | kca     | `kubectl --all-namespaces`          | The kubectl command targeting all namespaces                                                     |
 | kaf     | `kubectl apply -f`                  | Apply a YML file                                                                                 |
+| kak     | `kubectl apply -k`                  | Apply a kustomize file                                                                           |
 | keti    | `kubectl exec -ti`                  | Drop into an interactive terminal on a container                                                 |
 |         |                                     | **Manage configuration quickly to switch contexts between local, dev and staging**               |
 | kcuc    | `kubectl config use-context`        | Set the current-context in a kubeconfig file                                                     |
