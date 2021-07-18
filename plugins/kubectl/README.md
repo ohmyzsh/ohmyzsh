@@ -9,6 +9,20 @@ To use it, add `kubectl` to the plugins array in your zshrc file:
 plugins=(... kubectl)
 ```
 
+## Theme
+
+The plugin creates an `kctx_prompt_info` function that you can use in your theme which displays your current kubernetes context using `kccc` alias.. It uses two variables to
+control how that is shown:
+
+- ZSH_THEME_KCTX_PREFIX: sets the prefix of your current context. Defaults to `<kctx:`.
+
+- ZSH_THEME_KCTX_SUFFIX: sets the suffix of your current context. Defaults to `>`.
+
+## Plugin options
+
+* Set `HIDE_KTCX_PROMPT=true` in your zshrc file if you want to prevent the plugin from modifying your RPROMPT. Some themes might overwrite the value of RPROMPT instead of
+  appending to it, so they'll need to be fixed to see the Kubernetes context prompt.
+
 ## Aliases
 
 | Alias   | Command                             | Description                                                                                      |

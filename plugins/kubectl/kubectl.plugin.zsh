@@ -10,6 +10,16 @@ if (( $+commands[kubectl] )); then
     unset __KUBECTL_COMPLETION_FILE
 fi
 
+# Kube Context prompt
+function kctx_prompt_info() {
+  [[ -z $(kccc) ]] && return
+  echo "${ZSH_THEME_KCTX_PREFIX:=<kctx:}$(kccc)${ZSH_THEME_KCTX_SUFFIX:=>}"
+}
+
+if [[ ! -v HIDE_KTCX_PROMPT ]]; then
+  RPROMPT='$(kctx_prompt_info)'"$RPROMPT"
+fi
+
 # This command is used a LOT both below and in daily life
 alias k=kubectl
 
