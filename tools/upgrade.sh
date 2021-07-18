@@ -60,9 +60,10 @@ git config rebase.autoStash true
 local ret=0
 
 # Update Oh My Zsh
+current_branch=$(git branch --show-current 2>/dev/null) || current_branch=master
 printf "${BLUE}%s${RESET}\n" "Updating Oh My Zsh"
 last_commit=$(git rev-parse HEAD)
-if git pull --rebase --stat origin master; then
+if git pull --rebase --stat origin "$current_branch"; then
   # Check if it was really updated or not
   if [[ "$(git rev-parse HEAD)" = "$last_commit" ]]; then
     message="Oh My Zsh is already at the latest version."
