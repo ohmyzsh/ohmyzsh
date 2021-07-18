@@ -60,7 +60,11 @@ zstyle '*' single-ignored show
 
 if [[ $COMPLETION_WAITING_DOTS = true ]]; then
   expand-or-complete-with-dots() {
-    print -Pn "%F{red}…%f"
+    if [[ $COMPLETION_DOTS_STYLE != "" ]]; then
+      print -Pn "$COMPLETION_DOTS_STYLE"
+    else
+      print -Pn "%F{red}…%f"
+    fi
     zle expand-or-complete
     zle redisplay
   }
