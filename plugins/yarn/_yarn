@@ -41,6 +41,7 @@ _commands=(
   'cache:List or clean every cached package'
   "check:Verify package dependencies agains yarn's lock file"
   'config:Manages the yarn configuration files'
+  'create:Creates new projects from any create-* starter kits'
   'generate-lock-entry:Generates a lock file entry'
   'global:Install packages globally on your operating system'
   'help:Show information about a command'
@@ -191,6 +192,11 @@ _yarn() {
           _arguments \
             '1: :(set get delete list)' \
             '*:: :->config_args'
+        ;;
+
+        create)
+          _arguments \
+            '*:starter-kit-package:'
         ;;
 
         global)
