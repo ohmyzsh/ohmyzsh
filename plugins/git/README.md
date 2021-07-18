@@ -126,6 +126,7 @@ plugins=(... git)
 | grba                 | git rebase --abort                                                                                                               |
 | grbc                 | git rebase --continue                                                                                                            |
 | grbd                 | git rebase develop                                                                                                               |
+| grbf                 | git rebase --ff                                                                                                                  |
 | grbi                 | git rebase -i                                                                                                                    |
 | grbm                 | git rebase $(git_main_branch)                                                                                                                  |
 | grbo                 | git rebase --onto                                                                                                             |
