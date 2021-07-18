@@ -62,6 +62,7 @@ alias gba='git branch -a'
 alias gbd='git branch -d'
 alias gbda='git branch --no-color --merged | command grep -vE "^(\+|\*|\s*($(git_main_branch)|development|develop|devel|dev)\s*$)" | command xargs -n 1 git branch -d'
 alias gbD='git branch -D'
+alias gbh="git branch --sort=-committerdate"
 alias gbl='git blame -b -w'
 alias gbnm='git branch --no-merged'
 alias gbr='git branch --remote'
