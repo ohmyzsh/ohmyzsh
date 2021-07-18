@@ -28,3 +28,25 @@ The plugin uses a custom launcher (which we'll call here `$EMACS_LAUNCHER`) that
 | eframe | `emacsclient --alternate-editor "" --create-frame` | Create new X frame                                             |
 | efile  | -                                                  | Print the path to the file open in the current buffer          |
 | ecd    | -                                                  | Print the directory of the file open in the the current buffer |
+
+## PS : Minimal configurtion on Mac Emacs to work with the plugin
+The following will allow Emacs installed on Mac to work with the plugin. This doc assumes that you are using Mac and that you will launch an Emacs GUI first before trying to use commandline.
+
+## Step1
+Install emacs using brew
+
+## Step2
+Paste the following to ~/.emacs.d/init.el
+
+```
+(require 'server)
+(unless (server-running-p)
+  (server-start))
+```
+
+## Step3
+Add the following to ~/.zshrc
+```
+export EMACS_LAUNCHER=/Applications/Emacs.app/Contents/MacOS/bin/emacsclient
+```
+  
