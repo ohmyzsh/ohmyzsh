@@ -1,3 +1,8 @@
+# Disable lazy load when auto load nvmrc
+if (( $+NVM_AUTOLOAD )); then
+  unset NVM_LAZY
+fi
+
 # See https://github.com/nvm-sh/nvm#installation-and-update
 if [[ -z "$NVM_DIR" ]]; then
   if [[ -d "$HOME/.nvm" ]]; then
