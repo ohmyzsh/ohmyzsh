@@ -28,8 +28,6 @@ sudo_commands=(
   emergency
   enable
   halt
-  hibernate
-  hybrid-sleep
   import-environment
   isolate
   kexec
@@ -38,33 +36,38 @@ sudo_commands=(
   list-machines
   load
   mask
-  poweroff
   preset
   preset-all
-  reboot
   reenable
   reload
   reload-or-restart
   reset-failed
   rescue
-  restart
   revert
   set-default
   set-environment
   set-property
   start
   stop
-  suspend
   switch-root
   try-reload-or-restart
   try-restart
   unmask
   unset-environment)
+power_commands=(
+  hibernate
+  hybrid-sleep
+  poweroff
+  reboot
+  restart
+  suspend
+)
 
 for c in $user_commands; do; alias sc-$c="systemctl $c"; done
 for c in $sudo_commands; do; alias sc-$c="sudo systemctl $c"; done
 for c in $user_commands; do; alias scu-$c="systemctl --user $c"; done
 for c in $sudo_commands; do; alias scu-$c="systemctl --user $c"; done
+for c in $power_commands; do; alias sc-$c="systemctl $c"; done
 
 alias sc-enable-now="sc-enable --now"
 alias sc-disable-now="sc-disable --now"
