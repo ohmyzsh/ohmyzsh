@@ -11,6 +11,14 @@ plugins=(... laravel)
 | `artisan`  | `php artisan`  |
 | `pas`  | `php artisan serve` |
 
+## Tests
+
+| Alias | Description |
+|:-:|:-:|
+| `pat`  |  `php artisan test` |
+| `pu`  |  `vendor/bin/phpunit` |
+| `puf`  |  `vendor/bin/phpunit --filter` |
+
 ## Database
 
 | Alias | Description |
