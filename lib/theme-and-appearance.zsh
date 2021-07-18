@@ -28,6 +28,9 @@ if [[ "$DISABLE_LS_COLORS" != "true" ]]; then
     [[ -n "$LS_COLORS" || -f "$HOME/.dircolors" ]] && gls --color -d . &>/dev/null && alias ls='gls --color=tty'
   else
     # For GNU ls, we use the default ls color theme. They can later be overwritten by themes.
+    if [[ -f "$HOME/.dircolors" ]]; then
+      eval "$(dircolors $HOME/.dircolors)"
+    fi
     if [[ -z "$LS_COLORS" ]]; then
       (( $+commands[dircolors] )) && eval "$(dircolors -b)"
     fi
