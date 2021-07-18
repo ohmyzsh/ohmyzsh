@@ -70,6 +70,7 @@ alias gbsb='git bisect bad'
 alias gbsg='git bisect good'
 alias gbsr='git bisect reset'
 alias gbss='git bisect start'
+alias gbt='git for-each-ref --format="%(upstream:short)" $(git symbolic-ref -q HEAD)'
 
 alias gc='git commit -v'
 alias gc!='git commit -v --amend'
