@@ -39,6 +39,10 @@ alias gflrf='git flow release finish'
 alias gflhp='git flow hotfix publish'
 alias gflrp='git flow release publish'
 alias gflfpll='git flow feature pull'
+alias gflffc='git flow feature finish $(echo $(current_branch) | cut -c 9-)'
+alias gflfpc='git flow feature publish $(echo $(current_branch) | cut -c 9-)'
+alias gflrfc='git flow release finish $(echo $(current_branch) | cut -c 9-)'
+alias gflrpc='git flow release publish $(echo $(current_branch) | cut -c 9-)'
 
 _git-flow ()
 {
