@@ -110,28 +110,52 @@ add-zsh-hook precmd omz_termsupport_precmd
 add-zsh-hook preexec omz_termsupport_preexec
 
 
-# Keep Apple Terminal.app's current working directory updated
-# Based on this answer: https://superuser.com/a/315029
+# Keep terminal emulator's current working directory correct,
+# even if the current working directory path contains symbolic links
+#
+# References:
+#   * Apple's Terminal.app: https://superuser.com/a/315029
+#   * iTerm2: https://iterm2.com/documentation-escape-codes.html (iTerm2 Extension / CurrentDir+RemoteHost)
+#   * Konsole: https://bugs.kde.org/show_bug.cgi?id=327720#c1
+#   * libvte (gnome-terminal, mate-terminal, …): https://bugzilla.gnome.org/show_bug.cgi?id=675987#c14
+#      - Apparently had bug before ~2012 were it would display the unknown OSC 7 code
+#
+# As of May 2021 mlterm, PuTTY, rxvt, screen, termux & xterm simply ignore the unknown OSC.
+#
 # With extra fixes to handle multibyte chars and non-UTF-8 locales
 
-if [[ "$TERM_PROGRAM" == "Apple_Terminal" ]] && [[ -z "$INSIDE_EMACS" ]]; then
-  # Emits the control sequence to notify Terminal.app of the cwd
-  # Identifies the directory using a file: URI scheme, including
-  # the host name to disambiguate local vs. remote paths.
-  function update_terminalapp_cwd() {
-    emulate -L zsh
+# Emits the control sequence to notify many terminal emulators
+# of the cwd
+#
+# Identifies the directory using a file: URI scheme, including
+# the host name to disambiguate local vs. remote paths.
+function omz_termsupport_chpwd {
+  emulate -L zsh
 
-    # Percent-encode the host and path names.
-    local URL_HOST URL_PATH
-    URL_HOST="$(omz_urlencode -P $HOST)" || return 1
-    URL_PATH="$(omz_urlencode -P $PWD)" || return 1
+  [[ "$INSIDE_EMACS" == *term* ]] && return
 
-    # Undocumented Terminal.app-specific control sequence
-    printf '\e]7;%s\a' "file://$URL_HOST$URL_PATH"
-  }
+  case "${TERM}" in
+    xterm*|putty*|rxvt*|konsole*|mlterm*|alacritty|screen*|tmux*)
+      # all of these either process OSC 7 correctly or ignore entirely
+    ;;
+    *)
+      if [[ "$TERM_PROGRAM" != "iTerm.app" ]]; then
+        # iTerm & iTerm2
+        return
+      fi
+    ;;
+  esac
 
-  # Use a precmd hook instead of a chpwd hook to avoid contaminating output
-  add-zsh-hook precmd update_terminalapp_cwd
-  # Run once to get initial cwd set
-  update_terminalapp_cwd
-fi
+  # Percent-encode the host and path names.
+  local URL_HOST URL_PATH
+  URL_HOST="$(omz_urlencode -P $HOST)" || return 1
+  URL_PATH="$(omz_urlencode -P $PWD)" || return 1
+
+  # common control sequence (OSC 7) to set current host and path
+  printf "\e]7;%s\a" "file://${URL_HOST}${URL_PATH}"
+}
+
+#FIXME: Use a precmd hook instead of a chpwd hook to avoid contaminating output – why!?
+add-zsh-hook chpwd omz_termsupport_chpwd
+# Run once to get initial cwd set
+omz_termsupport_chpwd
