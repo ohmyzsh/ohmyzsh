@@ -4,8 +4,8 @@ export LSCOLORS=dxFxCxDxBxegedabagacad
 
 local git_branch='$(git_prompt_info)%{$reset_color%}$(git_remote_status)'
 
-PROMPT="%{$fg[green]%}╭─%n@%m %{$reset_color%}%{$fg[yellow]%}in %~ %{$reset_color%}${git_branch}
-%{$fg[green]%}╰\$ %{$reset_color%}"
+PROMPT="%{%(#~$fg[red]~$fg[green])%}╭─%n@%m %{$reset_color%}%{$fg[yellow]%}in %~ %{$reset_color%}${git_branch}
+%{%(#~$fg[red]~$fg[green])%}╰%(#~#~\$) %{$reset_color%}"
 
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[yellow]%}on "
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
