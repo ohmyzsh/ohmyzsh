@@ -50,7 +50,7 @@ function jira() {
   elif [[ "$action" == "dashboard" ]]; then
     echo "Opening dashboard"
     if [[ "$JIRA_RAPID_BOARD" == "true" ]]; then
-      open_command "${jira_url}/secure/RapidBoard.jspa"
+      _jira_rapid_board ${@}
     else
       open_command "${jira_url}/secure/Dashboard.jspa"
     fi
@@ -61,6 +61,7 @@ function jira() {
     echo "JIRA_URL=$jira_url"
     echo "JIRA_PREFIX=$jira_prefix"
     echo "JIRA_NAME=$JIRA_NAME"
+    echo "JIRA_RAPID_VIEW=$JIRA_RAPID_VIEW"
     echo "JIRA_RAPID_BOARD=$JIRA_RAPID_BOARD"
     echo "JIRA_DEFAULT_ACTION=$JIRA_DEFAULT_ACTION"
   else
@@ -105,6 +106,16 @@ Valid options, in order of precedence:
   \$HOME/.jira-url file
   \$JIRA_URL environment variable
 EOF
+}
+
+function _jira_rapid_board() {
+  rapid_view=${2:=$JIRA_RAPID_VIEW}
+
+  if [[ -z $rapid_view ]]; then
+    open_command "${jira_url}/secure/RapidBoard.jspa"
+  else
+    open_command "${jira_url}/secure/RapidBoard.jspa?rapidView=$rapid_view"
+  fi
 }
 
 function _jira_query() {
