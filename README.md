@@ -288,7 +288,9 @@ We have (more than) enough themes for the time being. Please add your theme to t
 
 Oh My Zsh has a vibrant community of happy users and delightful contributors. Without all the time and help from our contributors, it wouldn't be so awesome.
 
-Thank you so much!
+Thank you so much! Here is the Contributor Over Time:
+
+![Contributor over time](https://contributor-graph-api.apiseven.com/contributors-svg?repo=ohmyzsh/ohmyzsh)
 
 ## Follow Us
 
