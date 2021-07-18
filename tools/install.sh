@@ -231,7 +231,8 @@ EOF
   fi
 
   # Actually change the default shell to zsh
-  if ! chsh -s "$zsh"; then
+  user="$(whoami)"
+  if ! sudo chsh -s "$zsh" "$user"; then
     fmt_error "chsh command unsuccessful. Change your default shell manually."
   else
     export SHELL="$zsh"
