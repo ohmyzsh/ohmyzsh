@@ -73,6 +73,7 @@ alias gbss='git bisect start'
 
 alias gc='git commit -v'
 alias gc!='git commit -v --amend'
+alias gc-='git checkout -'
 alias gcn!='git commit -v --no-edit --amend'
 alias gca='git commit -v -a'
 alias gca!='git commit -v -a --amend'
@@ -207,6 +208,7 @@ alias gloga='git log --oneline --decorate --graph --all'
 alias glp="_git_log_prettily"
 
 alias gm='git merge'
+alias gm-='git merge -'
 alias gmom='git merge origin/$(git_main_branch)'
 alias gmt='git mergetool --no-prompt'
 alias gmtvim='git mergetool --no-prompt --tool=vimdiff'
