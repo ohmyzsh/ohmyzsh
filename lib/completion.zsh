@@ -25,8 +25,8 @@ else
 fi
 unset CASE_SENSITIVE HYPHEN_INSENSITIVE
 
-# Complete . and .. special directories
-zstyle ':completion:*' special-dirs true
+# Only treat .. as a special directory when the prefix is empty, '.' or '../'
+zstyle -e ':completion:*' special-dirs '[[ $PREFIX = (../)#(|.|..) ]] && reply=(..)'
 
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
