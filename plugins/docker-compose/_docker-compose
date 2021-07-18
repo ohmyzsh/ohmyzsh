@@ -342,6 +342,7 @@ _docker-compose() {
         '*'{-f,--file}"[${file_description}]:file:_files -g '*.yml'" \
         '(-p --project-name)'{-p,--project-name}'[Specify an alternate project name (default: directory name)]:project name:' \
         "--compatibility[If set, Compose will attempt to convert keys in v3 files to their non-Swarm equivalent]" \
+        "--env-file[Specify custom .env file (default: .env)]:file:_files -g '*'" \
         '(- :)'{-v,--version}'[Print version and exit]' \
         '--verbose[Show more output]' \
         '--log-level=[Set log level]:level:(DEBUG INFO WARNING ERROR CRITICAL)' \
