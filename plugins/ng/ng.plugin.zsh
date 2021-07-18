@@ -1,5 +1,7 @@
 ng_opts='addon asset-sizes b build completion d destroy doc e2e g generate get github-pages:deploy gh-pages:deploy h help i init install lint make-this-awesome new s serve server set t test update v version -h --help'
 
+projects=($(ng config projects | grep -E '^\s{2}"' | sed -E 's/.*"([^"]*)".*/\1/'))
+
 _ng_completion () {
   local words cword opts
   read -Ac words
@@ -16,7 +18,7 @@ _ng_completion () {
       ;;
 
     b | build )
-      opts='--environment --output-path --suppress-sizes --target --watch --watcher -dev -e -prod'
+      opts="$projects --environment --output-path --suppress-sizes --target --watch --watcher -dev -e -prod"
       ;;
 
     d | destroy )
@@ -39,6 +41,10 @@ _ng_completion () {
       opts='--blueprint --dry-run --link-cli --mobile --name --prefix --skip-bower --skip-npm --source-dir --style --verbose -b -d -lc -n -p -sb -sd -sn -v'
       ;;
 
+    l | lint )
+      opts=$projects
+      ;;
+      
     new )
       opts='--blueprint --directory --dry-run --link-cli --mobile --prefix --skip-bower --skip-git --skip-npm --source-dir --style --verbose -b -d -dir -lc -p -sb -sd -sg -sn -v'
       ;;
@@ -52,7 +58,7 @@ _ng_completion () {
       ;;
 
     t | test )
-      opts='--browsers --colors --config-file --environment --filter --host --launch --log-level --module --path --port --query --reporter --server --silent --test-page --test-port --watch -H -c -cf -e -f -m -r -s -tp -w'
+      opts="$projects --browsers --colors --config-file --environment --filter --host --launch --log-level --module --path --port --query --reporter --server --silent --test-page --test-port --watch -H -c -cf -e -f -m -r -s -tp -w"
       ;;
       
     update )
