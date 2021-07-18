@@ -15,6 +15,9 @@ To use it, add emacs to the plugins array in your zshrc file:
 plugins=(... emacs)
 ```
 
+For non-X users, set the variable `ZSH_EMACS_NOX` to `true`. This will ensure
+that Emacs is started with the `-nw` flag (no windows).
+
 ## Aliases
 
 The plugin uses a custom launcher (which we'll call here `$EMACS_LAUNCHER`) that is just a wrapper around [`emacsclient`](https://www.emacswiki.org/emacs/EmacsClient).
