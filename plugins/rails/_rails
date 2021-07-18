@@ -11,8 +11,6 @@ _1st_arguments=(
     'application:Generate the Rails application code'
     'destroy:Undo code generated with "generate"'
 
-    'benchmarker:See how fast a piece of code runs'
-    'profiler:Get profile information from a piece of code'
     'plugin:Install a plugin'
 
     'plugin new:Generates skeleton for developing a Rails plugin'
@@ -21,24 +19,30 @@ _1st_arguments=(
 
 _rails_generate_arguments() {
     generate_arguments=(
-        assets
+        application_record
+        channel
         controller
-        decorator
         generator
         helper
         integration_test
+        job
+        mailbox
         mailer
         migration
         model
-        observer
-        performance_test
-        plugin
         resource
         scaffold
         scaffold_controller
         session_migration
-        stylesheets
+        responders_controller
+        system_test
         task
+        assets
+        stylesheets
+        observer
+        decorator
+        performance_test
+        plugin
     )
 }
 
