@@ -34,8 +34,6 @@ alias tkss='tmux kill-session -t'
 # Tmux states this should be screen-256color, but you may need to change it on
 # systems without the proper terminfo
 : ${ZSH_TMUX_FIXTERM_WITH_256COLOR:=screen-256color}
-# Set the configuration path
-: ${ZSH_TMUX_CONFIG:=$HOME/.tmux.conf}
 # Set -u option to support unicode
 : ${ZSH_TMUX_UNICODE:=false}
 
@@ -45,6 +43,12 @@ if [[ $terminfo[colors] == 256 ]]; then
 else
   export ZSH_TMUX_TERM=$ZSH_TMUX_FIXTERM_WITHOUT_256COLOR
 fi
+
+# Set the configuration path
+if [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/tmux/tmux.conf" ]; then
+  : ${ZSH_TMUX_CONFIG:=${XDG_CONFIG_HOME:-$HOME/.config}/tmux/tmux.conf}
+fi
+: ${ZSH_TMUX_CONFIG:=$HOME/.tmux.conf}
 
 # Set the correct local config file to use.
 if [[ "$ZSH_TMUX_ITERM2" == "false" && -e "$ZSH_TMUX_CONFIG" ]]; then
