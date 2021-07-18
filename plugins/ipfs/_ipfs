@@ -93,7 +93,8 @@ _ipfs_subcommand(){
             (pin)
               _arguments \
                 '(-t --type)'{-t,--type}'[The type of pinned keys to list. Can be "direct", "indirect", "recursive", or "all". Default: all.]' \
-                '(-q --quiet)'{-q,--quiet}'[Write just hashes of objects.]'
+                '(-q --quiet)'{-q,--quiet}'[Write just hashes of objects.]' \
+                '(-s --stream)'{-s,--stream}'[Enable streaming of pins as they are discovered.]'
             ;;
             (p2p)
               _arguments '(-v --headers)'{-v,--headers}'[Print table headers (Protocol, Listen, Target).]'
@@ -116,7 +117,14 @@ _ipfs_subcommand(){
             ;;
           esac
         ;;
-        (get|query|findpeer)
+        (query|findpeer)
+          case $MAIN_SUBCOMMAND in
+            (dht)
+              _arguments '(-v --verbose)'{-v,--verbose}'[Print extra information.]'
+            ;;
+          esac
+        ;;
+        (get)
           case $MAIN_SUBCOMMAND in
             (dht)
               _arguments '(-v --verbose)'{-v,--verbose}'[Print extra information.]'
@@ -158,22 +166,33 @@ _ipfs_subcommand(){
             ;;
           esac
         ;;
-        (cmds|diff)
+        (cmds)
           case $MAIN_SUBCOMMAND in
-            (diag|object)
+            (diag)
+              _arguments '(-v --verbose)'{-v,--verbose}'[Print extra information.]'
+            ;;
+          esac
+        ;;
+        (diff)
+          case $MAIN_SUBCOMMAND in
+            (object)
               _arguments '(-v --verbose)'{-v,--verbose}'[Print extra information.]'
             ;;
           esac
         ;;
         (stat)
           case $MAIN_SUBCOMMAND in
+            (dag)
+              _arguments \
+                '(-p --progress)'{-p,--progress}'[Return progressive data while reading through the DAG. Default: true.]'
+            ;;
             (object)
               _arguments '--human[Print sizes in human readable format (e.g., 1K 234M 2G).]'
             ;;
             (repo)
               _arguments \
-                '--size-only[Only report RepoSize and StorageMax.]' \
-                '--human[Print sizes in human readable format (e.g., 1K 234M 2G).]'
+                '(-s --size-only)'{-s,--size-only}'[Only report RepoSize and StorageMax.]' \
+                '(-H --human)'{-H,--human}'[Print sizes in human readable format (e.g., 1K 234M 2G).]'
             ;;
           esac
         ;;
@@ -186,7 +205,8 @@ _ipfs_subcommand(){
                 '--allow-offline[When offline, save the IPNS record to the the local datastore without broadcasting to the network instead of simply failing.]' \
                 '--ttl[Time duration this record should be cached for. Uses the same syntax as the lifetime option. (caution: experimental).]' \
                 '(-k --key)'{-k,--key}"[Name of the key to be used or a valid PeerID, as listed by 'ipfs key list -l'. Default: self.]" \
-                '(-Q --quieter)'{-Q,--quieter}'[Write only final hash.]'
+                '(-Q --quieter)'{-Q,--quieter}'[Write only final hash.]' \
+                '--ipns-base[Encoding used for keys: Can either be a multibase encoded CID or a base58btc encoded multihash. Takes {b58mh|base36|k|base32|b...}. Default: base36.]'
             ;;
           esac
         ;;
@@ -254,7 +274,7 @@ _ipfs_subcommand(){
                 '(-p --peer)'{-p,--peer}'[Specify a peer to print bandwidth for.]' \
                 '(-t --proto)'{-t,--proto}'[Specify a protocol to print bandwidth for.]' \
                 '--poll[Print bandwidth at an interval.]' \
-                '(-i --interval)'{-i,--interval}'[Time interval to wait between updating output, if 'poll' is true.]'
+                '(-i --interval)'{-i,--interval}"[Time interval to wait between updating output, if 'poll' is true.]"
             ;;
           esac
         ;;
@@ -289,6 +309,7 @@ _ipfs_subcommand(){
               _arguments \
                 '-f[Printf style format string. Default: %s.]' \
                 '-v[CID version to convert to.]' \
+                '--codec[CID codec to convert to.]' \
                 '-b[Multibase to display CID in.]'
             ;;
           esac
@@ -367,6 +388,45 @@ _ipfs_subcommand(){
             ;;
           esac
         ;;
+        (export)
+          case $MAIN_SUBCOMMAND in
+            (dag)
+              _arguments \
+                '(-p --progress)'{-p,--progress}'[Display progress on CLI. Defaults to true when STDERR is a TTY.]'
+            ;;
+            (key)
+              _arguments \
+                '(-o --output)'{-o,--output}'[The path where the output should be stored.]'
+            ;;
+          esac
+        ;;
+        (import)
+          case $MAIN_SUBCOMMAND in
+            (dag)
+              _arguments \
+                '--silent[No output.]' \
+                '--pin-roots[Pin optional roots listed in the .car headers after importing. Default: true.]'
+            ;;
+            (key)
+              _arguments \
+                '--ipns-base[Encoding used for keys: Can either be a multibase encoded CID or a base58btc encoded multihash. Takes {b58mh|base36|k|base32|b...}. Default: base36.]'
+            ;;
+          esac
+        ;;
+        (remote)
+          case $MAIN_SUBCOMMAND in
+            (pin)
+              local -a _pin_remote_arguments
+              _pin_remote_arguments=(
+                'add:Pin object to remote pinning service.'
+                'ls:List objects pinned to remote pinning service.'
+                'rm:Remove pins from remote pinning service.'
+                'service:Configure remote pinning services.'
+              )
+              _ipfs_subcommand _pin_remote_arguments
+            ;;
+          esac
+        ;;
       esac
     ;;
   esac
@@ -402,6 +462,8 @@ case $MAIN_SUBCOMMAND in
       '(--dereference-args)--dereference-args[Symlinks supplied in arguments are dereferenced.]' \
       '(--stdin-name)--stdin-name[Assign a name if the file source is stdin.]' \
       '(-H --hidden)'{-H,--hidden}'[Include files that are hidden. Only takes effect on recursive add.]' \
+      '(--ignore)--ignore[A rule (.gitignore-stype) defining which file(s) should be ignored (variadic, experimental).]' \
+      '(--ignore-rules-path)--ignore-rules-path[A path to a file with .gitignore-style ignore rules (experimental).]' \
       '(-q --quiet)'{-q,--quiet}'[Write minimal output.]' \
       '(-Q --quieter)'{-Q,--quieter}'[Write only final hash.]' \
       '(--silent)--silent[Write no output.]' \
@@ -483,6 +545,7 @@ case $MAIN_SUBCOMMAND in
   (daemon)
     _arguments \
       '--init[Initialize ipfs with default settings if not already initialized.]' \
+      '--init-config[Path to existing configuration file to be loaded during --init.]' \
       '--init-profile[Configuration profiles to apply for --init. See ipfs init --help for more.]' \
       '--routing[Overrides the routing option. Default: default.]' \
       '--mount[Mounts IPFS to the filesystem.]' \
@@ -501,9 +564,12 @@ case $MAIN_SUBCOMMAND in
   (dag)
     local -a _dag_arguments
     _dag_arguments=(
+      'export:Streams the selected DAG as a .car stream on stdout.'
       'get:Get a dag node from ipfs.'
+      'import:Import the contents of .car files'
       'put:Add a dag node to ipfs.'
       'resolve:Resolve ipld block.'
+      'stat:Gets stats for a DAG'
     )
     _ipfs_subcommand _dag_arguments
   ;;
@@ -564,21 +630,27 @@ case $MAIN_SUBCOMMAND in
       '(-l --compression-level)'{-l,--compression-level}'[The level of compression (1-9).]'
   ;;
   (id)
-    _arguments '(-f --format)'{-f,--format}'[Optional output format.]'
+    _arguments \
+      '(-f --format)'{-f,--format}'[Optional output format.]' \
+      '--peerid-base[Encoding used for peer IDs: Can either be a multibase encoded CID or a base58btc encoded multihash. Takes {b58mh|base36|k|base32|b...}. Default: b58mh.]'
   ;;
   (init)
     _arguments \
-      '(-b --bits)'{-b,--bits}'[Number of bits to use in the generated RSA private key. Default: 2048.]' \
+      '(-a --algorithm)'{-a, --algorithm}'[Cryptographic algorithm to use for key generation. Default: ed25519.]' \
+      '(-b --bits)'{-b,--bits}'[Number of bits to use in the generated RSA private key.]' \
       '(-e --empty-repo)'{-e,--empty-repo}"[Don't add and pin help files to the local storage.]" \
       '(-p --profile)'{-p,--profile}"[Apply profile settings to config. Multiple profiles can be separated by ','.]"
   ;;
   (key)
     local -a _key_arguments
     _key_arguments=(
+      'export:Export a keypair'
       'gen:Create a new keypair'
+      'import:Import a key and prints imported key id'
       'list:List all local keypairs'
       'rename:Rename a keypair'
       'rm:Remove a keypair'
+      'rotate:Rotates the ipfs identity.'
     )
     _ipfs_subcommand _key_arguments
   ;;
@@ -642,6 +714,7 @@ case $MAIN_SUBCOMMAND in
     _pin_arguments=(
       'add:Pin objects to local storage.'
       'ls:List objects pinned to local storage.'
+      'remote:Pin (and unpin) objects to remote pinning service.'
       'rm:Remove pinned objects from local storage.'
       'update:Update a recursive pin'
       'verify:Verify that recursive pins are complete.'
@@ -684,6 +757,7 @@ case $MAIN_SUBCOMMAND in
     _stats_arguments=(
       'bitswap:Show some diagnostic information on the bitswap agent.'
       'bw:Print ipfs bandwidth information.'
+      "dht:Returns statistics about the node's DHT(s)"
       'repo:Get stats for the currently used repo.'
     )
     _ipfs_subcommand _stats_arguments
