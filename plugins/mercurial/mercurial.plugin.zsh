@@ -2,6 +2,7 @@
 alias hga='hg add'
 alias hgc='hg commit'
 alias hgca='hg commit --amend'
+alias hgci='hg commit --interactive'
 alias hgb='hg branch'
 alias hgba='hg branches'
 alias hgbk='hg bookmarks'
