@@ -20,3 +20,9 @@ Here's an example of how to install with apt:
 ```
 sudo apt-get install acpi
 ```
+On Android (via Termux), you must have:
+1. The `Termux:API` addon app installed ( [Google Play](https://play.google.com/store/apps/details?id=com.termux.api)  | [F-Droid](https://f-droid.org/packages/com.termux.api/) ), and
+2. `termux-api` package installed within termux:
+    ```
+    pkg install termux-api
+    ```
