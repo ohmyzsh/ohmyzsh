@@ -49,6 +49,9 @@ ZSH_THEME="robbyrussell"
 # See https://github.com/ohmyzsh/ohmyzsh/issues/5765
 # COMPLETION_WAITING_DOTS="true"
 
+# Uncomment the following line to change format of dots whilst waiting for completion.
+# COMPLETION_WAITING_DOTS_FORMAT="%F{red}…%f"
+
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
 # much, much faster.
