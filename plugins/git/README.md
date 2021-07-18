@@ -25,6 +25,9 @@ plugins=(... git)
 | gbd                  | git branch -d                                                                                                                    |
 | gbda                 | git branch --no-color --merged \| command grep -vE "^(\+\|\*\|\s*($(git_main_branch)\|development\|develop\|devel\|dev)\s*$)" \| command xargs -n 1 git branch -d |
 | gbD                  | git branch -D                                                                                                                    |
+| gbg                  | git branch -vv | grep ": gone\]"                                                                                                 |
+| gbgd                 | local res=$(git branch -vv | grep ": gone\]" | awk '{print $1}') && [[ $res ]] && echo $res | xargs git branch -d                |
+| gbgD                 | local res=$(git branch -vv | grep ": gone\]" | awk '{print $1}') && [[ $res ]] && echo $res | xargs git branch -D                |
 | gbl                  | git blame -b -w                                                                                                                  |
 | gbnm                 | git branch --no-merged                                                                                                           |
 | gbr                  | git branch --remote                                                                                                              |
