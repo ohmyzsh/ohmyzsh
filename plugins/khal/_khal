@@ -1,0 +1,87 @@
+#compdef khal
+
+_calendars() {
+  local expl
+  _wanted calendars expl calendar compadd \
+      ${(f)"$(_call_program calendars khal printcalendars)"}
+}
+
+local curcontext="$curcontext" hlp="--help" ret=1
+local -a args state line
+local -A opt_args
+
+args=( '(- *)--help[show help information]' )
+_arguments -C $args \
+  {-c+,--config=}'[specify config file]:config file:_files' \
+  {-v+,--verbosity=}"[set verbosity level]:options:(CRITICAL ERROR WARNING INFO  DEBUG)" \
+  {-l+,--logfile=}'[specify the file to log to]:log file:()' \
+  '(- *)--version[show version]' \
+  ':subcommand:->subcommand' \
+  '*::options:->options' && ret=0
+
+case $state in
+  subcommand)
+    local -a subcommands
+    subcommands=(
+      'at:show all events for given time'
+      "calendar:show calendar"
+      "configure: intitial configuration"
+      "edit:edit (or delete) an event"
+      "import:import an ics file into a calendar"
+      "interactive:open the interactive calendar"
+      "list:show list of events"
+      "new:add a new event"
+      "printcalendars:print all configured calendars"
+      "printformats:print a date in all formats"
+      "printics:print ics file without importing"
+      "search:search for events"
+    )
+
+    _describe -t subcommands 'khal subcommands' subcommands && ret=0
+  ;;
+
+  options)
+    curcontext="${curcontext%:*}-${words[1]}:"
+
+    case $words[1] in
+      at | calendar | list | interactive | search | printcalendars | edit)
+        args+=(
+          "(-d --exclude-calendar $hlp)*"{-a+,--include-calendar=}'[specify calendar to use]:calendar:_calendars'
+          "(-a --include-calendar $hlp)*"{-d+,--exclude-calendar=}"[don't use this calendar]:calendar:_calendars"
+        )
+      ;|
+      list | calendar)
+        args+=(
+          "($hlp)--days=[specify how many days to include]:days:_dates -f d -F"
+          "($hlp)--events=[specify how many events to include]:events"
+        )
+      ;|
+      at | list) args+=( '*:date/time' ) ;;
+      new | import)
+        args+=(
+          "($hlp)-a+[specify calendar]:calendar:_calendars"
+        )
+      ;|
+      import)
+        args+=(
+          "(-r --random_uid $hlp)"{-r,--random_uid}'[select a random uid]'
+          "($hlp)--batch[don't ask for any confirmation]"
+          '*:file:_files -g "*.ics(-.)"'
+        )
+      ;;
+      new)
+        args+=(
+          "(-l --location $hlp)"{-l,--location=}'[specify location of event]:location'
+          "(-r --repeat $hlp)"{-r,--repeat=}'[repeat an event]:frequency:compadd -E0 - daily weekly monthly yearly'
+          "(-u --until $hlp)"{-u,--until=}'[specify date to stop an event repeating]:date'
+          "(-i --interactive $hlp)"{-i,--interactive=}'[interactively create a new event]'
+          ':start date/time' '::end date/time' '::timezone' ':summary' ':description'
+        )
+      ;;
+    esac
+
+    _arguments -A "-*" $args && ret=0
+  ;;
+esac
+
+return ret
