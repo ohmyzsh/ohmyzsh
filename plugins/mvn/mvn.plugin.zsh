@@ -1,8 +1,12 @@
 # Calls ./mvnw if found, otherwise execute the original mvn
 mvn-or-mvnw() {
-	if [ -x ./mvnw ]; then
+	if [ -x ./mvnw ] || [ -x ../mvnw ]; then
 		echo "executing mvnw instead of mvn"
-		./mvnw "$@"
+		if [ -x ./mvnw ]; then
+			./mvnw "$@"
+		else
+		  ../mvnw "$@"
+		fi
 	else
 		command mvn "$@"
 	fi
