@@ -1,14 +1,17 @@
-export GOPATH=$HOME/go
 export DOTFILES=$HOME/.dotfiles
 #:/usr/local/src:/go
 # echo WELCOME!
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:$PATH
+export GOPATH=$HOME/go
 export PATH=$GOPATH/bin:$PATH
 export PATH=/usr/local/opt/gettext/bin:$PATH
 export PATH=/usr/local/opt/bison/bin:$PATH
 export PATH=$PATH:$DOTFILES/bin
 export PATH=$PATH:$HOME/.iterm2
+
+export GIT_SRCDIR=$GOPATH/src/github.com
+mkdir -p ${GIT_SRCDIR}
 
 export LDFLAGS="-L/usr/local/opt/bison/lib"
 export CC=clang
