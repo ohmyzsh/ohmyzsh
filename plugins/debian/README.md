@@ -10,7 +10,7 @@ plugins=(... debian)
 
 ## Settings
 
-- `$apt_pref`: use apt or aptitude if installed, fallback is apt-get.
+- `$apt_pref`: use aptitude or apt if installed, fallback is apt-get.
 - `$apt_upgr`: use upgrade or safe-upgrade (for aptitude).
 
 Set `$apt_pref` and `$apt_upgr` to whatever command you want (before sourcing Oh My Zsh) to override this behavior.
