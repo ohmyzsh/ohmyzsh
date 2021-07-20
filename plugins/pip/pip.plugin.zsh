@@ -88,10 +88,9 @@ alias pip="noglob pip" # allows square brackets for pip command invocation
 alias pipreq="pip freeze > requirements.txt"
 
 # Update all installed packages
-alias pipupall="pipreq && sed -i 's/==/>=/g' requirements.txt && pip install -r requirements.txt --upgrade && rm -rf requirements.txt"
-
+alias pipupall="pip list --outdated --format freeze | cut --delimiter '=' --fields 1 | xargs --no-run-if-empty pip install --upgrade"
 # Install packages from requirements file
-alias pipir="pip install -r requirements.txt"
+alias pipir="pip install --requirement requirements.txt"
 
 # Uninstalled all installed packages
-alias pipunall="pipreq && pip uninstall -r requirements.txt -y && rm -rf requirements.txt"
+alias pipunall="pip list --format freeze | cut --delimiter '=' --fields 1 | xargs --no-run-if-empty pip uninstall"
