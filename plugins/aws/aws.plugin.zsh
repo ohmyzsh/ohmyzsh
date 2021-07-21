@@ -152,7 +152,7 @@ compctl -K _aws_profiles asp acp aws_change_access_key
 # AWS prompt
 function aws_prompt_info() {
   [[ -z $AWS_PROFILE ]] && return
-  echo "${ZSH_THEME_AWS_PREFIX:=<aws}:${AWS_PROFILE}> <region:${AWS_REGION}${ZSH_THEME_AWS_SUFFIX:=>}"
+  echo "${ZSH_THEME_AWS_PROFILE_PREFIX:=<aws:}${AWS_PROFILE}${ZSH_THEME_AWS_PROFILE_SUFFIX:=>} ${ZSH_THEME_AWS_REGION_PREFIX:=<region:}${AWS_REGION}${ZSH_THEME_AWS_REGION_SUFFIX:=>}"
 }
 
 if [[ "$SHOW_AWS_PROMPT" != false && "$RPROMPT" != *'$(aws_prompt_info)'* ]]; then
