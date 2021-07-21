@@ -38,11 +38,15 @@ plugins=(... aws)
 ## Theme
 
 The plugin creates an `aws_prompt_info` function that you can use in your theme, which displays
-the current `$AWS_PROFILE`. It uses two variables to control how that is shown:
+the current `$AWS_PROFILE` and `$AWS_REGION`. It uses four variables to control how that is shown:
 
-* ZSH_THEME_AWS_PREFIX: sets the prefix of the AWS_PROFILE. Defaults to `<aws:`.
+* ZSH_THEME_AWS_PROFILE_PREFIX: sets the prefix of the AWS_PROFILE. Defaults to `<aws:`.
 
-* ZSH_THEME_AWS_SUFFIX: sets the suffix of the AWS_PROFILE. Defaults to `>`.
+* ZSH_THEME_AWS_PROFILE_SUFFIX: sets the suffix of the AWS_PROFILE. Defaults to `>`.
+
+* ZSH_THEME_AWS_REGION_PREFIX: sets the prefix of the AWS_REGION. Defaults to `<region:`.
+
+* ZSH_THEME_AWS_REGION_SUFFIX: sets the suffix of the AWS_REGION. Defaults to `>`.
 
 ## Configuration
 
