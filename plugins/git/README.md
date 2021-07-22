@@ -44,6 +44,7 @@ plugins=(... git)
 | gcas                 | git commit -a -s                                                                                                                 |
 | gcasm                | git commit -a -s -m                                                                                                                  |
 | gcsm                 | git commit -s -m                                                                                                                 |
+| gcmp                 | git commit -p                                                                                                                  |
 | gcb                  | git checkout -b                                                                                                                  |
 | gcf                  | git config --list                                                                                                                |
 | gcl                  | git clone --recurse-submodules                                                                                                   |
