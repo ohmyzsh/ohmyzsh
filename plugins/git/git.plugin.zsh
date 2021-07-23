@@ -249,6 +249,7 @@ alias gru='git reset --'
 alias grup='git remote update'
 alias grv='git remote -v'
 
+alias gsa='git submodule add'
 alias gsb='git status -sb'
 alias gsd='git svn dcommit'
 alias gsh='git show'
