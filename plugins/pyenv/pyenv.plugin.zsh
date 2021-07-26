@@ -1,11 +1,13 @@
 # This plugin loads pyenv into the current shell and provides prompt info via
 # the 'pyenv_prompt_info' function. Also loads pyenv-virtualenv if available.
 
-# Load pyenv only if command not already available
-if command -v pyenv &> /dev/null && [[ "$(uname -r)" != *icrosoft* ]]; then
-  FOUND_PYENV=1
-else
+# Look for pyenv in $PATH and verify that it's not a part of pyenv-win in WSL
+if ! command -v pyenv &>/dev/null; then
   FOUND_PYENV=0
+elif [[ "${commands[pyenv]}" = */pyenv-win/* && "$(uname -r)" = *icrosoft* ]]; then
+  FOUND_PYENV=0
+else
+  FOUND_PYENV=1
 fi
 
 # Look for pyenv and try to load it (will only work on interactive shells)
