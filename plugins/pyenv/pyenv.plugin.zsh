@@ -9,51 +9,62 @@ else
   FOUND_PYENV=0
 fi
 
+# Look for pyenv and try to load it (will only work on interactive shells)
 if [[ $FOUND_PYENV -ne 1 ]]; then
   pyenvdirs=("$HOME/.pyenv" "/usr/local/pyenv" "/opt/pyenv" "/usr/local/opt/pyenv")
   for dir in $pyenvdirs; do
-    if [[ -d $dir/bin ]]; then
+    if [[ -d "$dir/bin" ]]; then
       FOUND_PYENV=1
-      DISCOVERED_PYENV=1
       break
     fi
   done
-fi
 
-if [[ $FOUND_PYENV -ne 1 ]]; then
-  if (( $+commands[brew] )) && dir=$(brew --prefix pyenv 2>/dev/null); then
-    if [[ -d $dir/bin ]]; then
-      FOUND_PYENV=1
-      DISCOVERED_PYENV=1
+  if [[ $FOUND_PYENV -ne 1 ]]; then
+    if (( $+commands[brew] )) && dir=$(brew --prefix pyenv 2>/dev/null); then
+      if [[ -d "$dir/bin" ]]; then
+        FOUND_PYENV=1
+      fi
     fi
   fi
-fi
 
-if [[ $FOUND_PYENV -eq 1 ]]; then
-  if [[ $DISCOVERED_PYENV -eq 1 ]]; then
-    echo pyenv is badly configured in this shell.  Follow the instructions here:
-    echo https://github.com/pyenv/pyenv/blob/master/README.md#advanced-configuration
-    echo On linux, this means adding the following lines to your .profile and sourcing it in your .zprofile:
-    echo export PYENV_ROOT=$dir
-    echo export PATH="\$PYENV_ROOT/bin:\$PATH"
-    echo eval "\$(pyenv init --path)"
-    # Configuring in .zshrc only makes pyenv available for interactive shells.
+  # If we found pyenv, load it but show a caveat about non-interactive shells
+  if [[ $FOUND_PYENV -eq 1 ]]; then
+    cat <<EOF
+Found pyenv, but it is badly configured. pyenv might not work for
+non-interactive shells (for example, when run from a script).
+${bold_color}
+To fix this message, add these lines to the '.profile' and '.zprofile' files
+in your home directory:
+
+export PYENV_ROOT="${dir/#$HOME/\$HOME}"
+export PATH="\$PYENV_ROOT/bin:\$PATH"
+eval "\$(pyenv init --path)"
+${reset_color}
+For more info go to https://github.com/pyenv/pyenv/#installation.
+EOF
+
+    # Configuring in .zshrc only makes pyenv available for interactive shells
     export PYENV_ROOT=$dir
     export PATH="$PYENV_ROOT/bin:$PATH"
     eval "$(pyenv init --path)"
   fi
+fi
+
+if [[ $FOUND_PYENV -eq 1 ]]; then
   eval "$(pyenv init - --no-rehash zsh)"
-  if (( $+commands[pyenv-virtualenv-init] )); then
+
+  if (( ${+commands[pyenv-virtualenv-init]} )); then
     eval "$(pyenv virtualenv-init - zsh)"
   fi
+
   function pyenv_prompt_info() {
     echo "$(pyenv version-name)"
   }
 else
-  # Fall back to system python.
+  # Fall back to system python
   function pyenv_prompt_info() {
     echo "system: $(python -V 2>&1 | cut -f 2 -d ' ')"
   }
 fi
 
-unset FOUND_PYENV DISCOVERED_PYENV pyenvdirs dir
+unset FOUND_PYENV pyenvdirs dir
