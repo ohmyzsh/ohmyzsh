@@ -4,7 +4,6 @@
 # Load pyenv only if command not already available
 if command -v pyenv &> /dev/null && [[ "$(uname -r)" != *icrosoft* ]]; then
   FOUND_PYENV=1
-  DISCOVERED_PYENV=0
 else
   FOUND_PYENV=0
 fi
