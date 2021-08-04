@@ -7,5 +7,5 @@ if (( $+commands[rustup] && $+commands[cargo] )); then
     cargo --version > $ZSH_CACHE_DIR/cargo_version
   fi
   autoload -Uz _cargo
-  _comps[rustup]=_cargo
+  _comps[cargo]=_cargo
 fi
