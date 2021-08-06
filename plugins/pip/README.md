@@ -17,3 +17,12 @@ or you can run `zsh-pip-cache-packages` directly.
 
 To reset the cache, run `zsh-pip-clear-cache` and it will be rebuilt next
 the next time you autocomplete `pip install`.
+
+## Aliases
+
+| Alias    | Description                                   |
+| :------- | :-------------------------------------------- |
+| pipreq   | Create requirements file                      |
+| pipir    | Install packages from `requirements.txt` file |
+| pipupall | Update all installed packages                 |
+| pipunall | Uninstall all installed packages              |

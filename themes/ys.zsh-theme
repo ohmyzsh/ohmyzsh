@@ -26,13 +26,24 @@ ys_hg_prompt_info() {
 	if [ -d '.hg' ]; then
 		echo -n "${YS_VCS_PROMPT_PREFIX1}hg${YS_VCS_PROMPT_PREFIX2}"
 		echo -n $(hg branch 2>/dev/null)
-		if [ -n "$(hg status 2>/dev/null)" ]; then
-			echo -n "$YS_VCS_PROMPT_DIRTY"
-		else
-			echo -n "$YS_VCS_PROMPT_CLEAN"
+		if [[ "$(hg config oh-my-zsh.hide-dirty 2>/dev/null)" != "1" ]]; then
+			if [ -n "$(hg status 2>/dev/null)" ]; then
+				echo -n "$YS_VCS_PROMPT_DIRTY"
+			else
+				echo -n "$YS_VCS_PROMPT_CLEAN"
+			fi
 		fi
 		echo -n "$YS_VCS_PROMPT_SUFFIX"
 	fi
+}
+
+# Virtualenv
+local venv_info='$(virtenv_prompt)'
+YS_THEME_VIRTUALENV_PROMPT_PREFIX=" %{$fg[green]%}"
+YS_THEME_VIRTUALENV_PROMPT_SUFFIX=" %{$reset_color%}%"
+virtenv_prompt() {
+	[[ -n ${VIRTUAL_ENV} ]] || return
+	echo "${YS_THEME_VIRTUALENV_PROMPT_PREFIX}${VIRTUAL_ENV:t}${YS_THEME_VIRTUALENV_PROMPT_SUFFIX}"
 }
 
 local exit_code="%(?,,C:%{$fg[red]%}%?%{$reset_color%})"
@@ -55,6 +66,7 @@ PROMPT="
 %{$terminfo[bold]$fg[yellow]%}%~%{$reset_color%}\
 ${hg_info}\
 ${git_info}\
+${venv_info}\
  \
 %{$fg[white]%}[%*] $exit_code
 %{$terminfo[bold]$fg[red]%}$ %{$reset_color%}"

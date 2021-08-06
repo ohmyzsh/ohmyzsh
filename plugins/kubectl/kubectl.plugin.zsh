@@ -1,7 +1,7 @@
 if (( $+commands[kubectl] )); then
     __KUBECTL_COMPLETION_FILE="${ZSH_CACHE_DIR}/kubectl_completion"
 
-    if [[ ! -f $__KUBECTL_COMPLETION_FILE ]]; then
+    if [[ ! -f $__KUBECTL_COMPLETION_FILE || ! -s $__KUBECTL_COMPLETION_FILE ]]; then
         kubectl completion zsh >! $__KUBECTL_COMPLETION_FILE
     fi
 
@@ -43,6 +43,7 @@ alias kgpwide='kgp -o wide'
 alias kep='kubectl edit pods'
 alias kdp='kubectl describe pods'
 alias kdelp='kubectl delete pods'
+alias kgpall='kubectl get pods --all-namespaces -o wide'
 
 # get pod by label: kgpl "app=myapp" -n myns
 alias kgpl='kgp -l'
@@ -71,7 +72,7 @@ alias kgns='kubectl get namespaces'
 alias kens='kubectl edit namespace'
 alias kdns='kubectl describe namespace'
 alias kdelns='kubectl delete namespace'
-alias kcn='kubectl config set-context $(kubectl config current-context) --namespace'
+alias kcn='kubectl config set-context --current --namespace'
 
 # ConfigMap management
 alias kgcm='kubectl get configmaps'
@@ -150,3 +151,30 @@ alias kepvc='kubectl edit pvc'
 alias kdpvc='kubectl describe pvc'
 alias kdelpvc='kubectl delete pvc'
 
+# Service account management.
+alias kdsa="kubectl describe sa"
+alias kdelsa="kubectl delete sa"
+
+# DaemonSet management.
+alias kgds='kubectl get daemonset'
+alias kgdsw='kgds --watch'
+alias keds='kubectl edit daemonset'
+alias kdds='kubectl describe daemonset'
+alias kdelds='kubectl delete daemonset'
+
+# CronJob management.
+alias kgcj='kubectl get cronjob'
+alias kecj='kubectl edit cronjob'
+alias kdcj='kubectl describe cronjob'
+alias kdelcj='kubectl delete cronjob'
+
+# Only run if the user actually has kubectl installed
+if (( ${+_comps[kubectl]} )); then
+  kj() { kubectl "$@" -o json | jq; }
+  kjx() { kubectl "$@" -o json | fx; }
+  ky() { kubectl "$@" -o yaml | yh; }
+
+  compdef kj=kubectl
+  compdef kjx=kubectl
+  compdef ky=kubectl
+fi

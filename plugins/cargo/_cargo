@@ -12,8 +12,8 @@ _cargo() {
         '(-q --quiet)*'{-v,--verbose}'[use verbose output]'
         '(-q --quiet -v --verbose)'{-q,--quiet}'[no output printed to stdout]'
         '-Z+[pass unstable (nightly-only) flags to cargo]: :_cargo_unstable_flags'
-        '--frozen[require that Cargo.lock and cache are up-to-date]'
-        '--locked[require that Cargo.lock is up-to-date]'
+        '--frozen[require that Cargo.lock and cache are up to date]'
+        '--locked[require that Cargo.lock is up to date]'
         '--color=[specify colorization option]:coloring:(auto always never)'
         '(- 1 *)'{-h,--help}'[show help message]'
     )
@@ -77,7 +77,7 @@ _cargo() {
                         '*:args:_default'
                         ;;
 
-                build)
+                build|b)
                     _arguments -s -S $common $parallel $features $msgfmt $triple $target $manifest \
                         '--all-targets[equivalent to specifying --lib --bins --tests --benches --examples]' \
                         "${command_scope_spec[@]}" \
@@ -86,7 +86,7 @@ _cargo() {
                         '--build-plan[output the build plan in JSON]' \
                         ;;
 
-                check)
+                check|c)
                     _arguments -s -S $common $parallel $features $msgfmt $triple $target $manifest \
                         '--all-targets[equivalent to specifying --lib --bins --tests --benches --examples]' \
                         "${command_scope_spec[@]}" \
@@ -224,7 +224,7 @@ _cargo() {
                     _arguments -s -S $common $manifest
                         ;;
 
-                run)
+                run|r)
                     _arguments -s -S $common $parallel $features $msgfmt $triple $target $manifest \
                         '--example=[name of the bin target]:name' \
                         '--bin=[name of the bin target]:name' \
@@ -259,7 +259,7 @@ _cargo() {
                         '*: :_guard "^-*" "query"'
                         ;;
 
-                test)
+                test|t)
                     _arguments -s -S $common $parallel $features $msgfmt $triple $target $manifest \
                         '--test=[test name]: :_cargo_test_names' \
                         '--no-fail-fast[run all tests regardless of failure]' \

@@ -41,6 +41,8 @@ plugins=(... git)
 | gcan!                | git commit -v -a --no-edit --amend                                                                                               |
 | gcans!               | git commit -v -a -s --no-edit --amend                                                                                            |
 | gcam                 | git commit -a -m                                                                                                                 |
+| gcas                 | git commit -a -s                                                                                                                 |
+| gcasm                | git commit -a -s -m                                                                                                                  |
 | gcsm                 | git commit -s -m                                                                                                                 |
 | gcb                  | git checkout -b                                                                                                                  |
 | gcf                  | git config --list                                                                                                                |
@@ -51,6 +53,7 @@ plugins=(... git)
 | gcd                  | git checkout develop                                                                                                             |
 | gcmsg                | git commit -m                                                                                                                    |
 | gco                  | git checkout                                                                                                                     |
+| gcor                 | git checkout --recurse-submodules                                                                                                |
 | gcount               | git shortlog -sn                                                                                                                 |
 | gcp                  | git cherry-pick                                                                                                                  |
 | gcpa                 | git cherry-pick --abort                                                                                                          |
@@ -114,6 +117,7 @@ plugins=(... git)
 | gpf                  | git push --force-with-lease                                                                                                      |
 | gpf!                 | git push --force                                                                                                                 |
 | gpoat                | git push origin --all && git push origin --tags                                                                                  |
+| gpr                  | git pull --rebase                                                                                                                |
 | gpu                  | git push upstream                                                                                                                |
 | gpv                  | git push -v                                                                                                                      |
 | gr                   | git remote                                                                                                                       |
@@ -124,6 +128,7 @@ plugins=(... git)
 | grbd                 | git rebase develop                                                                                                               |
 | grbi                 | git rebase -i                                                                                                                    |
 | grbm                 | git rebase $(git_main_branch)                                                                                                                  |
+| grbo                 | git rebase --onto                                                                                                             |
 | grbs                 | git rebase --skip                                                                                                                |
 | grev                 | git revert                                                                                                                       |
 | grh                  | git reset                                                                                                                        |
@@ -136,6 +141,7 @@ plugins=(... git)
 | grs                  | git restore                                                                                                                      |
 | grset                | git remote set-url                                                                                                               |
 | grss                 | git restore --source                                                                                                             |
+| grst                 | git restore --staged                                                                                                             |
 | grt                  | cd "$(git rev-parse --show-toplevel \|\| echo .)"                                                                                |
 | gru                  | git reset --                                                                                                                     |
 | grup                 | git remote update                                                                                                                |

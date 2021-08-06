@@ -15,6 +15,9 @@ alias agli='apt list --installed'
 # List available updates only
 alias aglu='apt list --upgradable'
 
+alias acsp='apt-cache showpkg'
+compdef _acsp acsp='apt-cache showpkg'
+
 # superuser operations ######################################################
 
 alias afu='sudo apt-file update'

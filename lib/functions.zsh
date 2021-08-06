@@ -1,5 +1,7 @@
 function zsh_stats() {
-  fc -l 1 | awk '{CMD[$2]++;count++;}END { for (a in CMD)print CMD[a] " " CMD[a]/count*100 "% " a;}' | grep -v "./" | column -c3 -s " " -t | sort -nr | nl |  head -n20
+  fc -l 1 \
+    | awk '{ CMD[$2]++; count++; } END { for (a in CMD) print CMD[a] " " CMD[a]*100/count "% " a }' \
+    | grep -v "./" | sort -nr | head -20 | column -c3 -s " " -t | nl
 }
 
 function uninstall_oh_my_zsh() {
@@ -11,7 +13,7 @@ function upgrade_oh_my_zsh() {
   omz update
 }
 
-function take() {
+function takedir() {
   mkdir -p $@ && cd ${@:$#}
 }
 
@@ -33,6 +35,30 @@ function open_command() {
   esac
 
   ${=open_cmd} "$@" &>/dev/null
+}
+
+function takeurl() {
+  data=$(mktemp)
+  curl -L $1 > $data
+  tar xf $data
+  thedir=$(tar tf $data | head -1)
+  rm $data
+  cd $thedir
+}
+
+function takegit() {
+  git clone $1
+  cd $(basename ${1%%.git})
+}
+
+function take() {
+  if [[ $1 =~ ^(https?|ftp).*\.tar\.(gz|bz2|xz)$ ]]; then
+    takeurl $1
+  elif [[ $1 =~ ^([A-Za-z0-9]\+@|https?|git|ssh|ftps?|rsync).*\.git/?$ ]]; then
+    takegit $1
+  else
+    takedir $1
+  fi
 }
 
 #
@@ -123,6 +149,7 @@ zmodload zsh/langinfo
 #    -P causes spaces to be encoded as '%20' instead of '+'
 function omz_urlencode() {
   emulate -L zsh
+  local -a opts
   zparseopts -D -E -a opts r m P
 
   local in_str=$1

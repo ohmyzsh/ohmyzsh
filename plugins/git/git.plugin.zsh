@@ -1,3 +1,7 @@
+# Git version checking
+autoload -Uz is-at-least
+git_version="${${(As: :)$(git version 2>/dev/null)}[3]}"
+
 #
 # Functions
 #
@@ -27,11 +31,15 @@ function work_in_progress() {
 
 # Check if main exists and use instead of master
 function git_main_branch() {
-  if [[ -n "$(git branch --list main)" ]]; then
-    echo main
-  else
-    echo master
-  fi
+  command git rev-parse --git-dir &>/dev/null || return
+  local branch
+  for branch in main trunk; do
+    if command git show-ref -q --verify refs/heads/$branch; then
+      echo $branch
+      return
+    fi
+  done
+  echo master
 }
 
 #
@@ -72,6 +80,8 @@ alias gcan!='git commit -v -a --no-edit --amend'
 alias gcans!='git commit -v -a -s --no-edit --amend'
 alias gcam='git commit -a -m'
 alias gcsm='git commit -s -m'
+alias gcas='git commit -a -s'
+alias gcasm='git commit -a -s -m'
 alias gcb='git checkout -b'
 alias gcf='git config --list'
 alias gcl='git clone --recurse-submodules'
@@ -81,11 +91,14 @@ alias gcm='git checkout $(git_main_branch)'
 alias gcd='git checkout develop'
 alias gcmsg='git commit -m'
 alias gco='git checkout'
+alias gcor='git checkout --recurse-submodules'
 alias gcount='git shortlog -sn'
 alias gcp='git cherry-pick'
 alias gcpa='git cherry-pick --abort'
 alias gcpc='git cherry-pick --continue'
 alias gcs='git commit -S'
+alias gcss='git commit -S -s'
+alias gcssm='git commit -S -s -m'
 
 alias gd='git diff'
 alias gdca='git diff --cached'
@@ -104,7 +117,10 @@ function gdv() { git diff -w "$@" | view - }
 compdef _git gdv=git-diff
 
 alias gf='git fetch'
-alias gfa='git fetch --all --prune'
+# --jobs=<n> was added in git 2.8
+is-at-least 2.8 "$git_version" \
+  && alias gfa='git fetch --all --prune --jobs=10' \
+  || alias gfa='git fetch --all --prune'
 alias gfo='git fetch origin'
 
 alias gfg='git ls-files | grep'
@@ -202,6 +218,7 @@ alias gpd='git push --dry-run'
 alias gpf='git push --force-with-lease'
 alias gpf!='git push --force'
 alias gpoat='git push origin --all && git push origin --tags'
+alias gpr='git pull --rebase'
 alias gpu='git push upstream'
 alias gpv='git push -v'
 
@@ -213,6 +230,7 @@ alias grbc='git rebase --continue'
 alias grbd='git rebase develop'
 alias grbi='git rebase -i'
 alias grbm='git rebase $(git_main_branch)'
+alias grbo='git rebase --onto'
 alias grbs='git rebase --skip'
 alias grev='git revert'
 alias grh='git reset'
@@ -225,6 +243,7 @@ alias grrm='git remote remove'
 alias grs='git restore'
 alias grset='git remote set-url'
 alias grss='git restore --source'
+alias grst='git restore --staged'
 alias grt='cd "$(git rev-parse --show-toplevel || echo .)"'
 alias gru='git reset --'
 alias grup='git remote update'
@@ -240,8 +259,7 @@ alias gss='git status -s'
 alias gst='git status'
 
 # use the default stash push on git 2.13 and newer
-autoload -Uz is-at-least
-is-at-least 2.13 "$(git --version 2>/dev/null | awk '{print $3}')" \
+is-at-least 2.13 "$git_version" \
   && alias gsta='git stash push' \
   || alias gsta='git stash save'
 
@@ -251,7 +269,7 @@ alias gstd='git stash drop'
 alias gstl='git stash list'
 alias gstp='git stash pop'
 alias gsts='git stash show --text'
-alias gstu='git stash --include-untracked'
+alias gstu='gsta --include-untracked'
 alias gstall='git stash --all'
 alias gsu='git submodule update'
 alias gsw='git switch'
@@ -291,3 +309,5 @@ function grename() {
     git push --set-upstream origin "$2"
   fi
 }
+
+unset git_version
