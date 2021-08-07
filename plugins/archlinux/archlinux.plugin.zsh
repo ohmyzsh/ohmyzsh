@@ -6,6 +6,7 @@
 alias pacupg='sudo pacman -Syu'
 alias pacin='sudo pacman -S'
 alias pacins='sudo pacman -U'
+alias paclr='sudo pacman -Sc'
 alias pacre='sudo pacman -R'
 alias pacrem='sudo pacman -Rns'
 alias pacrep='pacman -Si'
@@ -155,6 +156,7 @@ fi
 
 if (( $+commands[yaourt] )); then
   alias yaconf='yaourt -C'
+  alias yaclr='yaourt -Sc'
   alias yaupg='yaourt -Syua'
   alias yasu='yaourt -Syua --noconfirm'
   alias yain='yaourt -S'
@@ -175,6 +177,7 @@ fi
 
 if (( $+commands[yay] )); then
   alias yaconf='yay -Pg'
+  alias yaclr='yay -Sc'
   alias yaupg='yay -Syu'
   alias yasu='yay -Syu --noconfirm'
   alias yain='yay -S'
