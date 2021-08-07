@@ -19,6 +19,7 @@ plugins=(... archlinux)
 | pacinsd      | `sudo pacman -S --asdeps`              | Install packages as dependencies of another package              |
 | pacloc       | `pacman -Qi`                           | Display information about a package in the local database        |
 | paclocs      | `pacman -Qs`                           | Search for packages in the local database                        |
+| paclr        | `pacman -Sc`                           | Remove uninstalled packages from the cache                       |
 | paclsorphans | `sudo pacman -Qdt`                     | List all orphaned packages                                       |
 | pacmir       | `sudo pacman -Syy`                     | Force refresh of all package lists after updating mirrorlist     |
 | pacre        | `sudo pacman -R`                       | Remove packages, keeping its settings and dependencies           |
@@ -128,6 +129,7 @@ upgrades were available. Use `pacman -Que` instead.
 | Alias   | Command                           | Description                                                         |
 |---------|-----------------------------------|---------------------------------------------------------------------|
 | yaconf  | `yaourt -C`                       | Fix all configuration files with vimdiff                            |
+| yaclr   | `yaourt -Sc`                      | Remove uninstalled packages in the cache                            |
 | yain    | `yaourt -S`                       | Install packages from the repositories                              |
 | yains   | `yaourt -U`                       | Install a package from a local file                                 |
 | yainsd  | `yaourt -S --asdeps`              | Install packages as dependencies of another package                 |
@@ -150,6 +152,7 @@ upgrades were available. Use `pacman -Que` instead.
 | Alias   | Command                        | Description                                                       |
 |---------|--------------------------------|-------------------------------------------------------------------|
 | yaconf  | `yay -Pg`                      | Print current configuration                                       |
+| yaclr   | `yay -Sc`                      | Remove uninstalled packages in the cache                          |
 | yain    | `yay -S`                       | Install packages from the repositories                            |
 | yains   | `yay -U`                       | Install a package from a local file                               |
 | yainsd  | `yay -S --asdeps`              | Install packages as dependencies of another package               |
