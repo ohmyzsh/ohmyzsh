@@ -91,7 +91,7 @@ plugins=(... git)
 | git-svn-dcommit-push | git svn dcommit && git push github $(git_main_branch):svntrunk                                                                                 |
 | gk                   | gitk --all --branches                                                                                                            |
 | gke                  | gitk --all $(git log -g --pretty=%h)                                                                                             |
-| gl                   | git pull                                                                                                                         |
+| gu                   | git pull                                                                                                                         |
 | glg                  | git log --stat                                                                                                                   |
 | glgp                 | git log --stat -p                                                                                                                |
 | glgg                 | git log --graph                                                                                                                  |
@@ -176,7 +176,7 @@ plugins=(... git)
 | gupv                 | git pull --rebase -v                                                                                                             |
 | gupa                 | git pull --rebase --autostash                                                                                                    |
 | gupav                | git pull --rebase --autostash -v                                                                                                 |
-| glum                 | git pull upstream $(git_main_branch)                                                                                                           |
+| guum                 | git pull upstream $(git_main_branch)                                                                                                           |
 | gwch                 | git whatchanged -p --abbrev-commit --pretty=medium                                                                               |
 | gwip                 | git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign -m "--wip-- [skip ci]"           |
 | gam                  | git am                                                                                                                           |

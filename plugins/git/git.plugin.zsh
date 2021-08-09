@@ -190,7 +190,7 @@ alias git-svn-dcommit-push='git svn dcommit && git push github $(git_main_branch
 alias gk='\gitk --all --branches'
 alias gke='\gitk --all $(git log -g --pretty=%h)'
 
-alias gl='git pull'
+alias gu='git pull'
 alias glg='git log --stat'
 alias glgp='git log --stat -p'
 alias glgg='git log --graph'
@@ -285,7 +285,7 @@ alias gup='git pull --rebase'
 alias gupv='git pull --rebase -v'
 alias gupa='git pull --rebase --autostash'
 alias gupav='git pull --rebase --autostash -v'
-alias glum='git pull upstream $(git_main_branch)'
+alias guum='git pull upstream $(git_main_branch)'
 
 alias gwch='git whatchanged -p --abbrev-commit --pretty=medium'
 alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign -m "--wip-- [skip ci]"'
