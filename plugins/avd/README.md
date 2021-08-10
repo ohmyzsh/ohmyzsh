@@ -20,6 +20,7 @@ not work as expected.
 ## Functions
 
 - `avds` - Lists all the AVDs
+  - `-s` will skip the AVD numbers at the beginning of each output line
 - `avd [-v] <n>` - Launches n-th AVD from the AVDs list printed by
   `avds`
   - `-v` will let stdout and stderr print to the console which is
@@ -29,7 +30,7 @@ not work as expected.
 
 ## Aliases
 
-- `emus` - Same as `avds`
+- `emus [-s]` - Same as `avds [-s]`
 - `emu [-v] <n>` - Same as `avd [-v] <n>`
 
 ## Exemplary usage:

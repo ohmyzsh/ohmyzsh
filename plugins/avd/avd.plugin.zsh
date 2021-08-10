@@ -21,26 +21,50 @@ function find_emulator() {
 }
 
 function avds() {
-  local emulator_path
-  emulator_path=$(find_emulator)
+  _avds_usage() {
+    echo "Usage: avds [-s]"
+  }
 
-  # Print all AVDs and prepend each output line with a number, starting at 1.
-  eval "$emulator_path -list-avds" | grep -n '^'
+  local OPTIND o emulator_path cmd_to_execute skip_numbers
+
+  while getopts ":s" o; do
+    case "$o" in
+      s)
+        skip_numbers=1;;
+      *)
+        _avds_usage; return;;
+    esac
+  done
+
+  shift $((OPTIND-1))
+
+  emulator_path=$(find_emulator)
+  cmd_to_execute="$emulator_path -list-avds"
+
+  if [[ $skip_numbers -eq 1 ]]; then
+    # Just print all AVDs.
+    eval "$cmd_to_execute"
+  else
+    # Print all AVDs and prepend each output line with a number, starting at 1.
+    eval "$cmd_to_execute" | grep -n '^'
+  fi
 }
 
 function avd() {
-  help() {
+  _avd_usage() {
     echo "Usage: avd [-v] [AVD position on the list]"
     avds
   }
 
-  local OPTIND o verbose avd_number avd_name avds_count emulator_path cmd_to_execute
+  local OPTIND o verbose avd_number avd_name avds_count emulator_path
+  local cmd_to_execute
+
   while getopts ":v" o; do
     case "$o" in
       v)
         verbose=1;;
       *)
-        help; return;;
+        _avd_usage; return;;
     esac
   done
 
@@ -49,7 +73,7 @@ function avd() {
   avd_number="$1"
 
   if [[ -z $avd_number ]]; then
-    help
+    _avd_usage
     return
   fi
 
@@ -66,7 +90,7 @@ function avd() {
   fi
 
   # Print only the n-th AVD and remove the number prefix added by 'grep -n'
-  avd_name=$(avds | head -"$avd_number" | tail -1 | sed -E 's/^[0-9]+://')
+  avd_name=$(avds -s | head -"$avd_number" | tail -1)
   echo "Starting emulator: $avd_name"
 
   emulator_path=$(find_emulator)
