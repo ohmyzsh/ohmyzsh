@@ -36,9 +36,9 @@ not work as expected.
 ```
 ~/
 > avds
-Pixel_2_API_30
-Samsung_Tab_A_2019_API_25
-Samsung_Tab_A_2019_API_29
+1:Pixel_2_API_30
+2:Samsung_Tab_A_2019_API_25
+3:Samsung_Tab_A_2019_API_29
 
 ~/
 > avd 2
