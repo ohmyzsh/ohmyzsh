@@ -1,7 +1,8 @@
 # avd plugin
 
-The avd plugin provides aliases for Android Virtual Device / Android
-Emulator commands.
+The avd plugin provides a few functions for Android Virtual Device /
+Android Emulator commands to list all the available AVDs and launch them
+more easily.
 
 To use it, add avd to the plugins array of your zshrc file:
 
