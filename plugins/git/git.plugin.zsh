@@ -42,7 +42,7 @@ function git_main_branch() {
   echo master
 }
 
-# Check for develop and similar named branches
+# Check for develop and similarly named branches
 function git_develop_branch() {
   command git rev-parse --git-dir &>/dev/null || return
   local branch
