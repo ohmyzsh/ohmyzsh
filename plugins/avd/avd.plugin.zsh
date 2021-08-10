@@ -34,7 +34,7 @@ function avd() {
     avds
   }
 
-  local OPTIND o verbose avd_number avd_name avds_count emulator_path
+  local OPTIND o verbose avd_number avd_name avds_count emulator_path cmd_to_execute
   while getopts ":v" o; do
     case "$o" in
       v)
