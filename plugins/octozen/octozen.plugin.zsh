@@ -1,7 +1,6 @@
 # octozen plugin
 
-# Displays a zen from octocat 
-#
+# Displays a zen quote from octocat
 function display_octozen() {
   curl -m 2 -fsL "https://api.github.com/octocat"
   add-zsh-hook -d precmd display_octozen
