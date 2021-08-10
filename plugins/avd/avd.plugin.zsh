@@ -65,7 +65,8 @@ function avd() {
     return
   fi
 
-  avd_name=$(avds | head -"$avd_number" | tail -1)
+  # Print only the n-th AVD and remove the number prefix added by 'grep -n'
+  avd_name=$(avds | head -"$avd_number" | tail -1 | sed -E 's/^[0-9]+://')
   echo "Starting emulator: $avd_name"
 
   emulator_path=$(find_emulator)
