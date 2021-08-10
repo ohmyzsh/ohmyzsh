@@ -13,10 +13,6 @@ function upgrade_oh_my_zsh() {
   omz update
 }
 
-function takedir() {
-  mkdir -p $@ && cd ${@:$#}
-}
-
 function open_command() {
   local open_cmd
 
@@ -35,6 +31,13 @@ function open_command() {
   esac
 
   ${=open_cmd} "$@" &>/dev/null
+}
+
+# take functions
+
+# mkcd is equivalent to takedir
+function mkcd takedir() {
+  mkdir -p $@ && cd ${@:$#}
 }
 
 function takeurl() {
