@@ -89,7 +89,7 @@ function avd() {
     return
   fi
 
-  # Print only the n-th AVD and remove the number prefix added by 'grep -n'
+  # Print only the n-th AVD name.
   avd_name=$(avds -s | head -"$avd_number" | tail -1)
   echo "Starting emulator: $avd_name"
 
