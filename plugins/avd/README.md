@@ -43,5 +43,4 @@ not work as expected.
 ~/
 > avd 2
 Starting emulator: Samsung_Tab_A_2019_API_25
-[3] 33463
 ```
