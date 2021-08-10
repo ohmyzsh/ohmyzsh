@@ -23,7 +23,9 @@ function find_emulator() {
 function avds() {
   local emulator_path
   emulator_path=$(find_emulator)
-  eval "$emulator_path -list-avds"
+
+  # Print all AVDs and prepend each output line with a number, starting at 1.
+  eval "$emulator_path -list-avds" | grep -n '^'
 }
 
 function avd() {
