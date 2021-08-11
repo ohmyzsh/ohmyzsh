@@ -74,16 +74,16 @@ plugins=(... git)
 | gfo                  | git fetch origin                                                                                                                 |
 | gg                   | git gui citool                                                                                                                   |
 | gga                  | git gui citool --amend                                                                                                           |
-| ggf                  | git push --force origin $(current_branch)                                                                                        |
-| ggfl                 | git push --force-with-lease origin $(current_branch)                                                                             |
-| ggl                  | git pull origin $(current_branch)                                                                                                |
-| ggp                  | git push origin $(current_branch)                                                                                                |
+| ggf                  | git push --force origin $(git_current_branch)                                                                                        |
+| ggfl                 | git push --force-with-lease origin $(git_current_branch)                                                                             |
+| ggl                  | git pull origin $(git_current_branch)                                                                                                |
+| ggp                  | git push origin $(git_current_branch)                                                                                                |
 | ggpnp                | ggl && ggp                                                                                                                       |
 | ggpull               | git pull origin "$(git_current_branch)"                                                                                          |
 | ggpur                | ggu                                                                                                                              |
 | ggpush               | git push origin "$(git_current_branch)"                                                                                          |
 | ggsup                | git branch --set-upstream-to=origin/$(git_current_branch)                                                                        |
-| ggu                  | git pull --rebase origin $(current_branch)                                                                                       |
+| ggu                  | git pull --rebase origin $(git_current_branch)                                                                                       |
 | gpsup                | git push --set-upstream origin $(git_current_branch)                                                                             |
 | ghh                  | git help                                                                                                                         |
 | gignore              | git update-index --assume-unchanged                                                                                              |
@@ -202,9 +202,9 @@ These are aliases that have been removed, renamed, or otherwise modified in a wa
 | gcl    | `git config --list`                                    | new alias `gcf`                                        |
 | gdc    | `git diff --cached`                                    | new alias `gdca`                                       |
 | gdt    | `git difftool`                                         | no replacement                                         |
-| ggpull | `git pull origin $(current_branch)`                    | new alias `ggl` (`ggpull` still exists for now though) |
-| ggpur  | `git pull --rebase origin $(current_branch)`           | new alias `ggu` (`ggpur` still exists for now though)  |
-| ggpush | `git push origin $(current_branch)`                    | new alias `ggp` (`ggpush` still exists for now though) |
+| ggpull | `git pull origin $(git_current_branch)`                | new alias `ggl` (`ggpull` still exists for now though) |
+| ggpur  | `git pull --rebase origin $(git_current_branch)`       | new alias `ggu` (`ggpur` still exists for now though)  |
+| ggpush | `git push origin $(git_current_branch)`                | new alias `ggp` (`ggpush` still exists for now though) |
 | gk     | `gitk --all --branches`                                | now aliased to `gitk --all --branches`                 |
 | glg    | `git log --stat --max-count = 10`                      | now aliased to `git log --stat --color`                |
 | glgg   | `git log --graph --max-count = 10`                     | now aliased to `git log --graph --color`               |
@@ -217,7 +217,7 @@ These are aliases that have been removed, renamed, or otherwise modified in a wa
 | Command                | Description                                                                                              |
 |:-----------------------|:---------------------------------------------------------------------------------------------------------|
 | `grename <old> <new>`  | Rename `old` branch to `new`, including in origin remote                                                 |
-| current_branch         | Return the name of the current branch                                                                    |
+| git_current_branch     | Return the name of the current branch                                                                    |
 | git_current_user_name  | Returns the `user.name` config value                                                                     |
 | git_current_user_email | Returns the `user.email` config value                                                                    |
 | git_main_branch        | Returns the name of the main branch: `main` if it exists, `master` otherwise                             |
