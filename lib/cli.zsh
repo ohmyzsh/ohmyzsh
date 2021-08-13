@@ -265,8 +265,10 @@ function _omz::plugin::load {
   # We pass -D to avoid generating a new dump file, which would overwrite our
   # current one for the next session (and we don't want that because we're not
   # actually enabling the plugins for the next session).
+  # Note that we still have to pass -d "$_comp_dumpfile", so that compinit
+  # doesn't use the default zcompdump location (${ZDOTDIR:-$HOME}/.zcompdump).
   if (( has_completion )); then
-    compinit -D
+    compinit -D -d "$_comp_dumpfile"
   fi
 }
 
