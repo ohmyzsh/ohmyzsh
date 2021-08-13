@@ -42,7 +42,7 @@ plugins=(... git)
 | gcans!               | git commit -v -a -s --no-edit --amend                                                                                            |
 | gcam                 | git commit -a -m                                                                                                                 |
 | gcas                 | git commit -a -s                                                                                                                 |
-| gcasm                | git commit -a -s -m                                                                                                                  |
+| gcasm                | git commit -a -s -m                                                                                                              |
 | gcsm                 | git commit -s -m                                                                                                                 |
 | gcb                  | git checkout -b                                                                                                                  |
 | gcf                  | git config --list                                                                                                                |
@@ -59,6 +59,8 @@ plugins=(... git)
 | gcpa                 | git cherry-pick --abort                                                                                                          |
 | gcpc                 | git cherry-pick --continue                                                                                                       |
 | gcs                  | git commit -S                                                                                                                    |
+| gcss                 | git commit -S -s                                                                                                                 |
+| gcssm                | git commit -S -s -m                                                                                                              |
 | gd                   | git diff                                                                                                                         |
 | gdca                 | git diff --cached                                                                                                                |
 | gdcw                 | git diff --cached --word-diff                                                                                                    |
@@ -154,15 +156,14 @@ plugins=(... git)
 | gsr                  | git svn rebase                                                                                                                   |
 | gss                  | git status -s                                                                                                                    |
 | gst                  | git status                                                                                                                       |
-| gsta                 | git stash push                                                                                                                   |
-| gsta                 | git stash save                                                                                                                   |
+| gsta                 | git stash push / git stash save                                                                                                  |
 | gstaa                | git stash apply                                                                                                                  |
 | gstc                 | git stash clear                                                                                                                  |
 | gstd                 | git stash drop                                                                                                                   |
 | gstl                 | git stash list                                                                                                                   |
 | gstp                 | git stash pop                                                                                                                    |
 | gsts                 | git stash show --text                                                                                                            |
-| gstu                 | git stash --include-untracked                                                                                                    |
+| gstu                 | gsta --include-untracked                                                                                                    |
 | gstall               | git stash --all                                                                                                                  |
 | gsu                  | git submodule update                                                                                                             |
 | gsw                  | git switch                                                                                                                       |
@@ -205,9 +206,8 @@ These are aliases that have been removed, renamed, or otherwise modified in a wa
 | ggpull | `git pull origin $(current_branch)`                    | new alias `ggl` (`ggpull` still exists for now though) |
 | ggpur  | `git pull --rebase origin $(current_branch)`           | new alias `ggu` (`ggpur` still exists for now though)  |
 | ggpush | `git push origin $(current_branch)`                    | new alias `ggp` (`ggpush` still exists for now though) |
-| gk     | `gitk --all --branches`                                | now aliased to `gitk --all --branches`                 |
-| glg    | `git log --stat --max-count = 10`                      | now aliased to `git log --stat --color`                |
-| glgg   | `git log --graph --max-count = 10`                     | now aliased to `git log --graph --color`               |
+| glg    | `git log --stat --max-count=10`                        | now aliased to `git log --stat`                        |
+| glgg   | `git log --graph --max-count=10`                       | now aliased to `git log --graph`                       |
 | gwc    | `git whatchanged -p --abbrev-commit --pretty = medium` | new alias `gwch`                                       |
 
 ## Functions
