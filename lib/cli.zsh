@@ -49,8 +49,9 @@ function _omz {
       plugin::(info|load))
         local -aU plugins=("$ZSH"/plugins/*/{_*,*.plugin.zsh}(.N:h:t) "$ZSH_CUSTOM"/plugins/*/{_*,*.plugin.zsh}(.N:h:t))
         _describe 'plugin' plugins ;;
-      theme::use) compadd "$ZSH"/themes/*.zsh-theme(.N:t:r) \
-        "$ZSH_CUSTOM"/**/*.zsh-theme(.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::) ;;
+      theme::use)
+        local -aU themes=("$ZSH"/themes/*.zsh-theme(.N:t:r) "$ZSH_CUSTOM"/**/*.zsh-theme(.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::))
+        _describe 'theme' themes ;;
     esac
   elif (( CURRENT > 4 )); then
     case "$words[2]::$words[3]" in
