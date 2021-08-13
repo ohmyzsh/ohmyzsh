@@ -146,6 +146,7 @@ plugins=(... git)
 | gru                  | git reset --                                                                                                                     |
 | grup                 | git remote update                                                                                                                |
 | grv                  | git remote -v                                                                                                                    |
+| gsa                  | git submodule add                                                                                                                |
 | gsb                  | git status -sb                                                                                                                   |
 | gsd                  | git svn dcommit                                                                                                                  |
 | gsh                  | git show                                                                                                                         |
