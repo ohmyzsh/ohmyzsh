@@ -46,17 +46,25 @@ function _omz {
     esac
   elif (( CURRENT == 4 )); then
     case "$words[2]::$words[3]" in
-      plugin::info) compadd "$ZSH"/plugins/*/README.md(.N:h:t) \
-        "$ZSH_CUSTOM"/plugins/*/README.md(.N:h:t) ;;
-      plugin::load) compadd "$ZSH"/plugins/*/*.plugin.zsh(.N:h:t) \
-        "$ZSH_CUSTOM"/plugins/*/*.plugin.zsh(.N:h:t) ;;
+      plugin::(info|load))
+        local -aU plugins=("$ZSH"/plugins/*/{_*,*.plugin.zsh}(.N:h:t) "$ZSH_CUSTOM"/plugins/*/{_*,*.plugin.zsh}(.N:h:t))
+        _describe 'plugin' plugins ;;
       theme::use) compadd "$ZSH"/themes/*.zsh-theme(.N:t:r) \
         "$ZSH_CUSTOM"/**/*.zsh-theme(.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::) ;;
     esac
   elif (( CURRENT > 4 )); then
     case "$words[2]::$words[3]" in
-      plugin::load) compadd "$ZSH"/plugins/*/*.plugin.zsh(.N:h:t) \
-        "$ZSH_CUSTOM"/plugins/*/*.plugin.zsh(.N:h:t) ;;
+      plugin::load)
+        local -aU plugins=("$ZSH"/plugins/*/{_*,*.plugin.zsh}(.N:h:t) "$ZSH_CUSTOM"/plugins/*/{_*,*.plugin.zsh}(.N:h:t))
+
+        # Remove plugins already passed as arguments
+        # NOTE: $(( CURRENT - 1 )) is the last plugin argument completely passed, i.e. that which
+        # has a space after them. This is to avoid removing plugins partially passed, which makes
+        # the completion not add a space after the completed plugin.
+        local -a args=(${words[4,$(( CURRENT - 1))]})
+        plugins=(${plugins:|args})
+
+        _describe 'plugin' plugins ;;
     esac
   fi
 
@@ -191,7 +199,7 @@ function _omz::plugin::info {
 
 function _omz::plugin::load {
   if [[ -z "$1" ]]; then
-    echo >&2 "Usage: omz plugin load <plugin>"
+    echo >&2 "Usage: omz plugin load <plugin> [...]"
     return 1
   fi
 
