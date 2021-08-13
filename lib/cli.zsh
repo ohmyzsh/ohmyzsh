@@ -198,33 +198,6 @@ function _omz::plugin::info {
   return 1
 }
 
-function _omz::plugin::load {
-  if [[ -z "$1" ]]; then
-    echo >&2 "Usage: omz plugin load <plugin> [...]"
-    return 1
-  fi
-
-  local plugins=("$@")
-  for plugin in $plugins; do
-    if [[ ! -d "$ZSH_CUSTOM/plugins/$plugin" && ! -d "$ZSH/plugins/$plugin" ]]; then
-      _omz::log error "$plugin plugin not found"
-      return 1
-    elif [[ ! -f "$ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh" && ! -f "$ZSH/plugins/$plugin/$plugin.plugin.zsh" ]]; then
-      _omz::log error "$plugin plugin folder doesn't have a \'.plugin.zsh\' file"
-      return 1
-    fi
-  done
-
-  for plugin in $plugins; do
-    for plugin_file in "$ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh" "$ZSH/plugins/$plugin/$plugin.plugin.zsh"; do
-      if [[ -f $plugin_file ]]; then
-        source "$plugin_file"
-        echo "$plugin plugin loaded"
-      fi
-    done
-  done
-}
-
 function _omz::plugin::list {
   local -a custom_plugins builtin_plugins
   custom_plugins=("$ZSH_CUSTOM"/plugins/*(-/N:t))
@@ -246,6 +219,54 @@ function _omz::plugin::list {
 
     print -P "%U%BBuilt-in plugins%b%u:"
     print -l ${(q-)builtin_plugins} | column
+  fi
+}
+
+function _omz::plugin::load {
+  if [[ -z "$1" ]]; then
+    echo >&2 "Usage: omz plugin load <plugin> [...]"
+    return 1
+  fi
+
+  local plugins=("$@")
+  local plugin base has_completion=0
+
+  for plugin in $plugins; do
+    if [[ -d "$ZSH_CUSTOM/plugins/$plugin" ]]; then
+      base="$ZSH_CUSTOM/plugins/$plugin"
+    elif [[ -d "$ZSH/plugins/$plugin" ]]; then
+      base="$ZSH/plugins/$plugin"
+    else
+      _omz::log warn "plugin '$plugin' not found"
+      continue
+    fi
+
+    # Check if its a valid plugin
+    if [[ ! -f "$base/_$plugin" && ! -f "$base/$plugin.plugin.zsh" ]]; then
+      _omz::log warn "'$plugin' is not a valid plugin"
+      continue
+    # It it is a valid plugin, add its directory to $fpath unless it is already there
+    elif (( ! ${fpath[(Ie)$base]} )); then
+      fpath=("$base" $fpath)
+    fi
+
+    # Check if it has completion to reload compinit
+    if [[ -f "$base/_$plugin" ]]; then
+      has_completion=1
+    fi
+
+    # Load the plugin
+    if [[ -f "$base/$plugin.plugin.zsh" ]]; then
+      source "$base/$plugin.plugin.zsh"
+    fi
+  done
+
+  # If we have completion, we need to reload the completion
+  # We pass -D to avoid generating a new dump file, which would overwrite our
+  # current one for the next session (and we don't want that because we're not
+  # actually enabling the plugins for the next session).
+  if (( has_completion )); then
+    compinit -D
   fi
 }
 
