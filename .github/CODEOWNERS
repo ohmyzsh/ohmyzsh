@@ -7,3 +7,4 @@ plugins/gitfast/                    @felipec
 plugins/sdk/                        @rgoldberg
 plugins/universalarchive/           @Konfekt
 plugins/wp-cli/                     @joshmedeski
+plugins/zoxide/                     @ajeetdsouza

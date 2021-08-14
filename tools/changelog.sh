@@ -114,6 +114,11 @@ function parse-commit {
     fi
   }
 
+  # Ignore commit if it is a merge commit
+  if [[ $(command git show -s --format=%p $1 | wc -w) -gt 1 ]]; then
+    return
+  fi
+
   # Parse commit with hash $1
   local hash="$1" subject body warning rhash
   subject="$(command git show -s --format=%s $hash)"
