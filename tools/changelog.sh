@@ -391,9 +391,7 @@ function main {
 
   # Get commit list from $until commit until $since commit, or until root
   # commit if $since is unset, in short hash form.
-  # --first-parent is used when dealing with merges: it only prints the
-  # merge commit, not the commits of the merged branch.
-  command git rev-list --first-parent --abbrev-commit --abbrev=7 ${since:+$since..}$until | while read hash; do
+  command git rev-list --abbrev-commit --abbrev=7 ${since:+$since..}$until | while read hash; do
     # Truncate list on versions with a lot of commits
     if [[ -z "$since" ]] && (( ++read_commits > 35 )); then
       truncate=1
