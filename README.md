@@ -295,7 +295,7 @@ Thank you so much!
 We're on social media:
 
 - [@ohmyzsh](https://twitter.com/ohmyzsh) on Twitter. You should follow it.
-- [FaceBook](https://www.facebook.com/Oh-My-Zsh-296616263819290/) poke us.
+- [Facebook](https://www.facebook.com/Oh-My-Zsh-296616263819290/) poke us.
 - [Instagram](https://www.instagram.com/_ohmyzsh/) tag us in your post showing Oh My Zsh!
 - [Discord](https://discord.gg/ohmyzsh) to chat with us!
 
