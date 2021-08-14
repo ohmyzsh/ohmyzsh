@@ -112,6 +112,7 @@ plugins=(... git)
 | gmtvim               | git mergetool --no-prompt --tool=vimdiff                                                                                         |
 | gmum                 | git merge upstream/$(git_main_branch)                                                                                            |
 | gma                  | git merge --abort                                                                                                                |
+| gmru                 | git_most_recently_committed_branch 10                                                                                            |
 | gp                   | git push                                                                                                                         |
 | gpd                  | git push --dry-run                                                                                                               |
 | gpf                  | git push --force-with-lease                                                                                                      |
@@ -167,6 +168,7 @@ plugins=(... git)
 | gsu                  | git submodule update                                                                                                             |
 | gsw                  | git switch                                                                                                                       |
 | gswc                 | git switch -c                                                                                                                    |
+| gswl                 | git switch \$($(git_most_recently_committed_branch 1))                                                                           |
 | gts                  | git tag -s                                                                                                                       |
 | gtv                  | git tag \| sort -V                                                                                                               |
 | gtl                  | gtl(){ git tag --sort=-v:refname -n -l ${1}* }; noglob gtl                                                                       |
@@ -214,14 +216,15 @@ These are aliases that have been removed, renamed, or otherwise modified in a wa
 
 ### Current
 
-| Command                | Description                                                                                              |
-|:-----------------------|:---------------------------------------------------------------------------------------------------------|
-| `grename <old> <new>`  | Rename `old` branch to `new`, including in origin remote                                                 |
-| current_branch         | Return the name of the current branch                                                                    |
-| git_current_user_name  | Returns the `user.name` config value                                                                     |
-| git_current_user_email | Returns the `user.email` config value                                                                    |
-| git_main_branch        | Returns the name of the main branch: `main` if it exists, `master` otherwise                             |
-| git_develop_branch     | Returns the name of the develop branch: `dev`, `devel`, `development` if they exist, `develop` otherwise |
+| Command                            | Description                                                                                              |
+|:-----------------------------------|:---------------------------------------------------------------------------------------------------------|
+| `grename <old> <new>`              | Rename `old` branch to `new`, including in origin remote                                                 |
+| current_branch                     | Return the name of the current branch                                                                    |
+| git_current_user_name              | Returns the `user.name` config value                                                                     |
+| git_current_user_email             | Returns the `user.email` config value                                                                    |
+| git_main_branch                    | Returns the name of the main branch: `main` if it exists, `master` otherwise                             |
+| git_develop_branch                 | Returns the name of the develop branch: `dev`, `devel`, `development` if they exist, `develop` otherwise |
+| git_most_recently_committed_branch | Returns the last `n` number of recently committed branches                                               |
 
 ### Work in Progress (WIP)
 
