@@ -20,6 +20,7 @@ extract() {
 		shift
 	fi
 
+	local pwd="$PWD"
 	while (( $# > 0 )); do
 		if [[ ! -f "$1" ]]; then
 			echo "extract: '$1' is not a valid file" >&2
@@ -29,6 +30,7 @@ extract() {
 
 		success=0
 		extract_dir="${1:t:r}"
+		local full_path="${1:A}"
 		case "${1:l}" in
 			(*.tar.gz|*.tgz) (( $+commands[pigz] )) && { pigz -dc "$1" | tar xv } || tar zxvf "$1" ;;
 			(*.tar.bz2|*.tbz|*.tbz2) tar xvjf "$1" ;;
@@ -57,17 +59,16 @@ extract() {
 			(*.z) uncompress "$1" ;;
 			(*.zip|*.war|*.jar|*.ear|*.sublime-package|*.ipa|*.ipsw|*.xpi|*.apk|*.aar|*.whl) unzip "$1" -d "$extract_dir" ;;
 			(*.rar) unrar x -ad "$1" ;;
-			(*.rpm) mkdir "$extract_dir" && cd "$extract_dir" && rpm2cpio "../$1" | cpio --quiet -id && cd .. ;;
+			(*.rpm)
+				command mkdir -p "$extract_dir" && builtin cd -q "$extract_dir" \
+				&& rpm2cpio "$full_path" | cpio --quiet -id ;;
 			(*.7z) 7za x "$1" ;;
 			(*.deb)
-				local pwd="$PWD" file="${1:A}"
-				mkdir -p "$extract_dir/control" "$extract_dir/data"
-				builtin cd -q "$extract_dir"; ar vx "$file" > /dev/null
+				command mkdir -p "$extract_dir/control" "$extract_dir/data"
+				builtin cd -q "$extract_dir"; ar vx "$full_path" > /dev/null
 				builtin cd -q control; extract ../control.tar.*
 				builtin cd -q ../data; extract ../data.tar.*
-				builtin cd -q ..; command rm *.tar.* debian-binary
-				builtin cd -q "$pwd"
-			;;
+				builtin cd -q ..; command rm *.tar.* debian-binary ;;
 			(*.zst) unzstd "$1" ;;
 			(*.cab) cabextract -d "$extract_dir" "$1" ;;
 			(*.cpio) cpio -idmvF "$1" ;;
@@ -77,8 +78,11 @@ extract() {
 			;;
 		esac
 
-		(( success = $success > 0 ? $success : $? ))
-		(( $success == 0 )) && (( $remove_archive == 0 )) && rm "$1"
+		(( success = success > 0 ? success : $? ))
+		(( success == 0 && remove_archive == 0 )) && rm "$full_path"
 		shift
+
+		# Go back to original working directory in case we ran cd previously
+		builtin cd -q "$pwd"
 	done
 }
