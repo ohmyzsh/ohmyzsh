@@ -1,6 +1,8 @@
 alias x=extract
 
 extract() {
+	setopt localoptions noautopushd
+
 	local remove_archive
 	local success
 	local extract_dir
