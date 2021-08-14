@@ -86,7 +86,7 @@ plugins=(... git)
 | gignore              | git update-index --assume-unchanged                                                                                              |
 | gignored             | git ls-files -v \| grep "^[[:lower:]]"                                                                                           |
 | gskip                | git update-index --skip-worktree                                                                                                 |
-| gskiped              | git ls-files -v | grep ^S                                                                                                        |
+| gskiped              | git ls-files -v \| grep ^S                                                                                                       |
 | git-svn-dcommit-push | git svn dcommit && git push github $(git_main_branch):svntrunk                                                                                 |
 | gk                   | gitk --all --branches                                                                                                            |
 | gke                  | gitk --all $(git log -g --pretty=%h)                                                                                             |
