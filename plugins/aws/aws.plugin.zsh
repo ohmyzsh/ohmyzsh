@@ -93,7 +93,7 @@ function acp() {
     echo "Assuming role $role_arn using profile ${source_profile:-profile}"
   elif [[ -n "$sso_start_url" ]]; then
     # Means we need to do SSO Login
-    aws_command=(aws sso login --profile="${source_profile:-profile}")
+    aws_command=(aws sso login --profile="${source_profile:-profile}" --role-session-name "${sess_name}")
     echo "Performing SSO login for profile ${source_profile:-profile}"
   else
     # Means we only need to do MFA
