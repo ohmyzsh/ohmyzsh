@@ -55,6 +55,9 @@ function acp() {
   # Check if profile has SSO configured
   local sso_start_url="$(aws configure get sso_start_url --profile $profile)"
 
+  # Get source profile to use to assume role
+  local source_profile="$(aws configure get source_profile --profile $profile)"
+
   if [[ -n "$mfa_serial" ]]; then
     local -a mfa_opt
     local mfa_token
@@ -70,6 +73,10 @@ function acp() {
   # Now see whether we need to just MFA for the current role, or assume a different one
   local role_arn="$(aws configure get role_arn --profile $profile)"
   local sess_name="$(aws configure get role_session_name --profile $profile)"
+  
+  if [[ -z "$sess_name" ]]; then
+    sess_name="${source_profile:-profile}"
+  fi
 
   if [[ -n "$role_arn" ]]; then
     # Means we need to assume a specified role
@@ -81,18 +88,13 @@ function acp() {
       aws_command+=(--external-id "$external_id")
     fi
 
-    # Get source profile to use to assume role
-    local source_profile="$(aws configure get source_profile --profile $profile)"
-    if [[ -z "$sess_name" ]]; then
-      sess_name="${source_profile:-profile}"
-    fi
     aws_command+=(--profile="${source_profile:-profile}" --role-session-name "${sess_name}")
 
     echo "Assuming role $role_arn using profile ${source_profile:-profile}"
   elif [[ -n "$sso_start_url" ]]; then
     # Means we need to do SSO Login
-    aws_command=(aws sso login --profile="$profile")
-    echo "Performing SSO login for profile $profile"
+    aws_command=(aws sso login --profile="${source_profile:-profile}")
+    echo "Performing SSO login for profile ${source_profile:-profile}"
   else
     # Means we only need to do MFA
     aws_command=(aws sts get-session-token --profile="$profile" "${mfa_opt[@]}")
