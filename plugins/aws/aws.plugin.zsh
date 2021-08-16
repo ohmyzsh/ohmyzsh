@@ -52,6 +52,9 @@ function acp() {
   local mfa_serial="$(aws configure get mfa_serial --profile $profile)"
   local sess_duration="$(aws configure get duration_seconds --profile $profile)"
 
+  # Check if profile has SSO configured
+  local sso_start_url="$(aws configure get sso_start_url --profile $profile)"
+
   if [[ -n "$mfa_serial" ]]; then
     local -a mfa_opt
     local mfa_token
@@ -86,6 +89,10 @@ function acp() {
     aws_command+=(--profile="${source_profile:-profile}" --role-session-name "${sess_name}")
 
     echo "Assuming role $role_arn using profile ${source_profile:-profile}"
+  elif [[ -n "$sso_start_url" ]]; then
+    # Means we need to do SSO Login
+    aws_command=(aws sso login --profile="$profile")
+    echo "Performing SSO login for profile $profile"
   else
     # Means we only need to do MFA
     aws_command=(aws sts get-session-token --profile="$profile" "${mfa_opt[@]}")
