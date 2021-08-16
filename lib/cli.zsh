@@ -37,7 +37,7 @@ function _omz {
       changelog) local -a refs
         refs=("${(@f)$(command git for-each-ref --format="%(refname:short):%(subject)" refs/heads refs/tags)}")
         _describe 'command' refs ;;
-      plugin) subcmds=('info:Get plugin information' 'list:List plugins')
+      plugin) subcmds=('info:Get plugin information' 'list:List plugins' 'load:Load plugin(s)')
         _describe 'command' subcmds ;;
       pr) subcmds=('test:Test a Pull Request' 'clean:Delete all Pull Request branches')
         _describe 'command' subcmds ;;
@@ -46,10 +46,26 @@ function _omz {
     esac
   elif (( CURRENT == 4 )); then
     case "$words[2]::$words[3]" in
-      plugin::info) compadd "$ZSH"/plugins/*/README.md(.N:h:t) \
-        "$ZSH_CUSTOM"/plugins/*/README.md(.N:h:t) ;;
-      theme::use) compadd "$ZSH"/themes/*.zsh-theme(.N:t:r) \
-        "$ZSH_CUSTOM"/**/*.zsh-theme(.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::) ;;
+      plugin::(info|load))
+        local -aU plugins=("$ZSH"/plugins/*/{_*,*.plugin.zsh}(.N:h:t) "$ZSH_CUSTOM"/plugins/*/{_*,*.plugin.zsh}(.N:h:t))
+        _describe 'plugin' plugins ;;
+      theme::use)
+        local -aU themes=("$ZSH"/themes/*.zsh-theme(.N:t:r) "$ZSH_CUSTOM"/**/*.zsh-theme(.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::))
+        _describe 'theme' themes ;;
+    esac
+  elif (( CURRENT > 4 )); then
+    case "$words[2]::$words[3]" in
+      plugin::load)
+        local -aU plugins=("$ZSH"/plugins/*/{_*,*.plugin.zsh}(.N:h:t) "$ZSH_CUSTOM"/plugins/*/{_*,*.plugin.zsh}(.N:h:t))
+
+        # Remove plugins already passed as arguments
+        # NOTE: $(( CURRENT - 1 )) is the last plugin argument completely passed, i.e. that which
+        # has a space after them. This is to avoid removing plugins partially passed, which makes
+        # the completion not add a space after the completed plugin.
+        local -a args=(${words[4,$(( CURRENT - 1))]})
+        plugins=(${plugins:|args})
+
+        _describe 'plugin' plugins ;;
     esac
   fi
 
@@ -147,6 +163,7 @@ Available commands:
 
   info <plugin>   Get information of a plugin
   list            List all available Oh My Zsh plugins
+  load <plugin>   Load plugin(s)
 
 EOF
     return 1
@@ -202,6 +219,56 @@ function _omz::plugin::list {
 
     print -P "%U%BBuilt-in plugins%b%u:"
     print -l ${(q-)builtin_plugins} | column
+  fi
+}
+
+function _omz::plugin::load {
+  if [[ -z "$1" ]]; then
+    echo >&2 "Usage: omz plugin load <plugin> [...]"
+    return 1
+  fi
+
+  local plugins=("$@")
+  local plugin base has_completion=0
+
+  for plugin in $plugins; do
+    if [[ -d "$ZSH_CUSTOM/plugins/$plugin" ]]; then
+      base="$ZSH_CUSTOM/plugins/$plugin"
+    elif [[ -d "$ZSH/plugins/$plugin" ]]; then
+      base="$ZSH/plugins/$plugin"
+    else
+      _omz::log warn "plugin '$plugin' not found"
+      continue
+    fi
+
+    # Check if its a valid plugin
+    if [[ ! -f "$base/_$plugin" && ! -f "$base/$plugin.plugin.zsh" ]]; then
+      _omz::log warn "'$plugin' is not a valid plugin"
+      continue
+    # It it is a valid plugin, add its directory to $fpath unless it is already there
+    elif (( ! ${fpath[(Ie)$base]} )); then
+      fpath=("$base" $fpath)
+    fi
+
+    # Check if it has completion to reload compinit
+    if [[ -f "$base/_$plugin" ]]; then
+      has_completion=1
+    fi
+
+    # Load the plugin
+    if [[ -f "$base/$plugin.plugin.zsh" ]]; then
+      source "$base/$plugin.plugin.zsh"
+    fi
+  done
+
+  # If we have completion, we need to reload the completion
+  # We pass -D to avoid generating a new dump file, which would overwrite our
+  # current one for the next session (and we don't want that because we're not
+  # actually enabling the plugins for the next session).
+  # Note that we still have to pass -d "$_comp_dumpfile", so that compinit
+  # doesn't use the default zcompdump location (${ZDOTDIR:-$HOME}/.zcompdump).
+  if (( has_completion )); then
+    compinit -D -d "$_comp_dumpfile"
   fi
 }
 
