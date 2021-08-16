@@ -8,10 +8,14 @@ function {
       /usr/share/bash-completion/completions/virtualenvwrapper \
       $HOME/.local/bin/virtualenvwrapper.sh
     do
-        if [[ -f "$virtualenvwrapper" ]]; then
-            source "$virtualenvwrapper"
-            return
+      if [[ -f "$virtualenvwrapper" ]]; then
+        if [[ $VIRTUALENVWRAPPER_NO_LAZY -eq 1 ]] && [[ $(echo $virtualenvwrapper | grep lazy) ]]; then
+          true
+        else
+          source "$virtualenvwrapper"
+          return
         fi
+      fi
     done
     print "[oh-my-zsh] virtualenvwrapper plugin: Cannot find virtualenvwrapper.sh.\n"\
           "Please install with \`pip install virtualenvwrapper\`" >&2
