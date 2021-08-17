@@ -230,9 +230,9 @@ function _omz::plugin::disable {
   local awk_script="
 # if plugins=() is in oneline form, substitute disabled plugins and go to next line
 /^\s*plugins=\([^#]+\).*\$/ {
-  sub(/\s+(${(j:|:)dis_plugins})/, \"\") # with spaces before
-  sub(/(${(j:|:)dis_plugins})\s+/, \"\") # with spaces after
-  sub(/\((${(j:|:)dis_plugins})\)/, \"\") # without spaces (only plugin)
+  gsub(/\s+(${(j:|:)dis_plugins})/, \"\") # with spaces before
+  gsub(/(${(j:|:)dis_plugins})\s+/, \"\") # with spaces after
+  gsub(/\((${(j:|:)dis_plugins})\)/, \"\") # without spaces (only plugin)
   print \$0
   next
 }
@@ -240,9 +240,9 @@ function _omz::plugin::disable {
 # if plugins=() is in multiline form, enable multi flag and disable plugins if they're there
 /^\s*plugins=\(/ {
   multi=1
-  sub(/\s+(${(j:|:)dis_plugins})/, \"\")
-  sub(/(${(j:|:)dis_plugins})\s+/, \"\")
-  sub(/\((${(j:|:)dis_plugins})\)/, \"\")
+  gsub(/\s+(${(j:|:)dis_plugins})/, \"\")
+  gsub(/(${(j:|:)dis_plugins})\s+/, \"\")
+  gsub(/\((${(j:|:)dis_plugins})\)/, \"\")
   print \$0
   next
 }
@@ -251,17 +251,17 @@ function _omz::plugin::disable {
 # add new plugins and disable multi flag
 multi == 1 && /^[^#]*\)/ {
   multi=0
-  sub(/\s+(${(j:|:)dis_plugins})/, \"\")
-  sub(/(${(j:|:)dis_plugins})\s+/, \"\")
-  sub(/\((${(j:|:)dis_plugins})\)/, \"\")
+  gsub(/\s+(${(j:|:)dis_plugins})/, \"\")
+  gsub(/(${(j:|:)dis_plugins})\s+/, \"\")
+  gsub(/\((${(j:|:)dis_plugins})\)/, \"\")
   print \$0
   next
 }
 
 multi == 1 {
-  sub(/\s+(${(j:|:)dis_plugins})/, \"\")
-  sub(/(${(j:|:)dis_plugins})\s+/, \"\")
-  sub(/\((${(j:|:)dis_plugins})\)/, \"\")
+  gsub(/\s+(${(j:|:)dis_plugins})/, \"\")
+  gsub(/(${(j:|:)dis_plugins})\s+/, \"\")
+  gsub(/\((${(j:|:)dis_plugins})\)/, \"\")
   print \$0
   next
 }
@@ -283,13 +283,13 @@ multi == 1 {
   # Exit if the new .zshrc file has syntax errors
   if ! zsh -n ~/.zshrc; then
     _omz::log error "broken syntax in ~/.zshrc. Rolling back changes..."
-    mv ~/.zshrc ~/.zshrc.disabled
-    mv ~/.zshrc.swp ~/.zshrc
+    command mv -f ~/.zshrc ~/.zshrc.disabled
+    command mv -f ~/.zshrc.swp ~/.zshrc
     return 1
   fi
 
   # Restart the zsh session if there were no errors
-  _omz::log info ""
+  _omz::log info "plugins disabled: ${(j:, :)dis_plugins}."
 
   # Old zsh versions don't have ZSH_ARGZERO
   local zsh="${ZSH_ARGZERO:-${functrace[-1]%:*}}"
@@ -344,26 +344,27 @@ multi == 1 && /^[^#]*\)/ {
 { print \$0 }
 "
 
-  awk "$awk_script" ~/.zshrc > ~/.zshrc.disabled \
-  && mv ~/.zshrc ~/.zshrc.swp \
-  && mv ~/.zshrc.disabled ~/.zshrc
+  awk "$awk_script" ~/.zshrc > ~/.zshrc.enabled \
+  && command mv -f ~/.zshrc ~/.zshrc.swp \
+  && command mv -f ~/.zshrc.enabled ~/.zshrc
 
   # Exit if the new .zshrc file wasn't created correctly
   [[ $? -eq 0 ]] || {
     local ret=$?
-    _omz::log error "error disabling plugins."
+    _omz::log error "error enabling plugins."
     return $ret
   }
 
   # Exit if the new .zshrc file has syntax errors
   if ! zsh -n ~/.zshrc; then
     _omz::log error "broken syntax in ~/.zshrc. Rolling back changes..."
-    mv ~/.zshrc ~/.zshrc.disabled
-    mv ~/.zshrc.swp ~/.zshrc
+    command mv -f ~/.zshrc ~/.zshrc.enabled
+    command mv -f ~/.zshrc.swp ~/.zshrc
     return 1
   fi
 
   # Restart the zsh session if there were no errors
+  _omz::log info "plugins enabled: ${(j:, :)add_plugins}."
 
   # Old zsh versions don't have ZSH_ARGZERO
   local zsh="${ZSH_ARGZERO:-${functrace[-1]%:*}}"
