@@ -37,7 +37,13 @@ function _omz {
       changelog) local -a refs
         refs=("${(@f)$(command git for-each-ref --format="%(refname:short):%(subject)" refs/heads refs/tags)}")
         _describe 'command' refs ;;
-      plugin) subcmds=('info:Get plugin information' 'list:List plugins' 'load:Load plugin(s)')
+      plugin) subcmds=(
+        'enable:Enable a plugin'
+        'disable:Disable a plugin'
+        'info:Get plugin information'
+        'list:List plugins'
+        'load:Load plugin(s)'
+      )
         _describe 'command' subcmds ;;
       pr) subcmds=('test:Test a Pull Request' 'clean:Delete all Pull Request branches')
         _describe 'command' subcmds ;;
@@ -45,10 +51,21 @@ function _omz {
         _describe 'command' subcmds ;;
     esac
   elif (( CURRENT == 4 )); then
-    case "$words[2]::$words[3]" in
-      plugin::enable) ;;
-      plugin::disable) ;;
-      plugin::(info|load))
+    case "${words[2]}::${words[3]}" in
+      plugin::(disable|enable|load))
+        local -aU valid_plugins
+
+        if [[ "${words[3]}" = disable ]]; then
+          # if command is "disable", only offer already enabled plugins
+          valid_plugins=($plugins)
+        else
+          valid_plugins=("$ZSH"/plugins/*/{_*,*.plugin.zsh}(.N:h:t) "$ZSH_CUSTOM"/plugins/*/{_*,*.plugin.zsh}(.N:h:t))
+          # if command is "enable", remove already enabled plugins
+          [[ "${words[3]}" = enable ]] && valid_plugins=(${valid_plugins:|plugins})
+        fi
+
+        _describe 'plugin' valid_plugins ;;
+      plugin::info)
         local -aU plugins=("$ZSH"/plugins/*/{_*,*.plugin.zsh}(.N:h:t) "$ZSH_CUSTOM"/plugins/*/{_*,*.plugin.zsh}(.N:h:t))
         _describe 'plugin' plugins ;;
       theme::use)
@@ -56,18 +73,27 @@ function _omz {
         _describe 'theme' themes ;;
     esac
   elif (( CURRENT > 4 )); then
-    case "$words[2]::$words[3]" in
-      plugin::load)
-        local -aU plugins=("$ZSH"/plugins/*/{_*,*.plugin.zsh}(.N:h:t) "$ZSH_CUSTOM"/plugins/*/{_*,*.plugin.zsh}(.N:h:t))
+    case "${words[2]}::${words[3]}" in
+      plugin::(enable|disable|load))
+        local -aU valid_plugins
+
+        if [[ "${words[3]}" = disable ]]; then
+          # if command is "disable", only offer already enabled plugins
+          valid_plugins=($plugins)
+        else
+          valid_plugins=("$ZSH"/plugins/*/{_*,*.plugin.zsh}(.N:h:t) "$ZSH_CUSTOM"/plugins/*/{_*,*.plugin.zsh}(.N:h:t))
+          # if command is "enable", remove already enabled plugins
+          [[ "${words[3]}" = enable ]] && valid_plugins=(${valid_plugins:|plugins})
+        fi
 
         # Remove plugins already passed as arguments
         # NOTE: $(( CURRENT - 1 )) is the last plugin argument completely passed, i.e. that which
         # has a space after them. This is to avoid removing plugins partially passed, which makes
         # the completion not add a space after the completed plugin.
         local -a args=(${words[4,$(( CURRENT - 1))]})
-        plugins=(${plugins:|args})
+        valid_plugins=(${valid_plugins:|args})
 
-        _describe 'plugin' plugins ;;
+        _describe 'plugin' valid_plugins ;;
     esac
   fi
 
@@ -163,8 +189,8 @@ Usage: omz plugin <command> [options]
 
 Available commands:
 
-  disable <plugin> Disable a plugin
-  enable <plugin>  Enable a plugin
+  disable <plugin> Disable plugin(s)
+  enable <plugin>  Enable plugin(s)
   info <plugin>    Get information of a plugin
   list             List all available Oh My Zsh plugins
   load <plugin>    Load plugin(s)
