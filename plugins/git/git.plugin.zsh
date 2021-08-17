@@ -57,7 +57,7 @@ alias gav='git add --verbose'
 alias gap='git apply'
 alias gapt='git apply --3way'
 
-alias gb='git --no-pager branch'
+alias gb='git branch'
 alias gba='git branch -a'
 alias gbd='git branch -d'
 alias gbda='git branch --no-color --merged | command grep -vE "^(\+|\*|\s*($(git_main_branch)|development|develop|devel|dev)\s*$)" | command xargs -n 1 git branch -d'
