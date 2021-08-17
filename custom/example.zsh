@@ -8,3 +8,4 @@
 # brainstormr=~/Projects/development/planetargon/brainstormr
 # cd $brainstormr
 #
+alias wkgp="watch kubectl get pods"
