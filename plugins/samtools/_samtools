@@ -1,0 +1,40 @@
+#compdef samtools
+#autoload
+
+local curcontext="$curcontext" state line ret=1
+local -a _files
+
+_arguments -C \
+  '1: :->cmds' \
+  '2:: :->args' && ret=0
+
+case $state in
+  cmds)
+    _values "samtools command" \
+        "view[SAM<->BAM conversion]" \
+        "sort[sort alignment file]" \
+        "mpileup[multi-way pileup]" \
+        "depth[compute the depth]" \
+        "faidx[index/extract FASTA]" \
+        "tview[text alignment viewer]" \
+        "index[index alignment]" \
+        "idxstats[BAM index stats (r595 or later)]" \
+        "fixmate[fix mate information]" \
+        "flagstat[simple stats]" \
+        "calmd[recalculate MD/NM tags and '=' bases]" \
+        "merge[merge sorted alignments]" \
+        "rmdup[remove PCR duplicates]" \
+        "reheader[replace BAM header]" \
+        "cat[concatenate BAMs]" \
+        "bedcov[read depth per BED region]" \
+        "targetcut[cut fosmid regions (for fosmid pool only)]" \
+        "phase[phase heterozygotes]" \
+        "bamshuf[shuffle and group alignments by name]"
+    ret=0
+    ;;
+  *)
+    _files
+    ;;
+esac
+
+return ret
