@@ -226,13 +226,17 @@ function _omz::plugin::disable {
     return 1
   fi
 
+  # Remove plugins substitution awk script
+  local awk_subst_plugins="\
+  gsub(/\s+(${(j:|:)dis_plugins})/, \"\") # with spaces before
+  gsub(/(${(j:|:)dis_plugins})\s+/, \"\") # with spaces after
+  gsub(/\((${(j:|:)dis_plugins})\)/, \"\") # without spaces (only plugin)
+"
   # Disable plugins awk script
   local awk_script="
 # if plugins=() is in oneline form, substitute disabled plugins and go to next line
 /^\s*plugins=\([^#]+\).*\$/ {
-  gsub(/\s+(${(j:|:)dis_plugins})/, \"\") # with spaces before
-  gsub(/(${(j:|:)dis_plugins})\s+/, \"\") # with spaces after
-  gsub(/\((${(j:|:)dis_plugins})\)/, \"\") # without spaces (only plugin)
+  $awk_subst_plugins
   print \$0
   next
 }
@@ -240,29 +244,22 @@ function _omz::plugin::disable {
 # if plugins=() is in multiline form, enable multi flag and disable plugins if they're there
 /^\s*plugins=\(/ {
   multi=1
-  gsub(/\s+(${(j:|:)dis_plugins})/, \"\")
-  gsub(/(${(j:|:)dis_plugins})\s+/, \"\")
-  gsub(/\((${(j:|:)dis_plugins})\)/, \"\")
+  $awk_subst_plugins
   print \$0
   next
 }
 
-# if multi flag is enabled and we find a valid closing parenthesis,
-# add new plugins and disable multi flag
+# if multi flag is enabled and we find a valid closing parenthesis, remove plugins and disable multi flag
 multi == 1 && /^[^#]*\)/ {
   multi=0
-  gsub(/\s+(${(j:|:)dis_plugins})/, \"\")
-  gsub(/(${(j:|:)dis_plugins})\s+/, \"\")
-  gsub(/\((${(j:|:)dis_plugins})\)/, \"\")
+  $awk_subst_plugins
   print \$0
   next
 }
 
-multi == 1 {
-  gsub(/\s+(${(j:|:)dis_plugins})/, \"\")
-  gsub(/(${(j:|:)dis_plugins})\s+/, \"\")
-  gsub(/\((${(j:|:)dis_plugins})\)/, \"\")
-  print \$0
+multi == 1 && length(\$0) > 0 {
+  $awk_subst_plugins
+  if (length(\$0) > 0) print \$0
   next
 }
 
