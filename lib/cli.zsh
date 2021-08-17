@@ -38,8 +38,8 @@ function _omz {
         refs=("${(@f)$(command git for-each-ref --format="%(refname:short):%(subject)" refs/heads refs/tags)}")
         _describe 'command' refs ;;
       plugin) subcmds=(
-        'enable:Enable a plugin'
-        'disable:Disable a plugin'
+        'disable:Disable plugin(s)'
+        'enable:Enable plugin(s)'
         'info:Get plugin information'
         'list:List plugins'
         'load:Load plugin(s)'
