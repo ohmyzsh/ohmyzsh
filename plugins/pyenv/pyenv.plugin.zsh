@@ -46,16 +46,20 @@ For more info go to https://github.com/pyenv/pyenv/#installation.
 EOF
 
     # Configuring in .zshrc only makes pyenv available for interactive shells
-    export PYENV_ROOT=$dir
+    export PYENV_ROOT="$dir"
     export PATH="$PYENV_ROOT/bin:$PATH"
     eval "$(pyenv init --path)"
   fi
 fi
 
 if [[ $FOUND_PYENV -eq 1 ]]; then
+  if [[ -z "$PYENV_ROOT" ]]; then
+    export PYENV_ROOT="$(pyenv root)"
+  fi
+
   eval "$(pyenv init - --no-rehash zsh)"
 
-  if (( ${+commands[pyenv-virtualenv-init]} )); then
+  if [[ -d "$PYENV_ROOT/plugins/pyenv-virtualenv" ]]; then
     eval "$(pyenv virtualenv-init - zsh)"
   fi
 
