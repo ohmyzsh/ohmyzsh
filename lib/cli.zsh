@@ -150,7 +150,7 @@ function _omz::log {
 ## User-facing commands
 
 function _omz::help {
-  cat <<EOF
+  cat >&2 <<EOF
 Usage: omz <command> [options]
 
 Available commands:
@@ -171,7 +171,7 @@ function _omz::changelog {
   if ! command git -C "$ZSH" show-ref --verify refs/heads/$version &>/dev/null && \
     ! command git -C "$ZSH" show-ref --verify refs/tags/$version &>/dev/null && \
     ! command git -C "$ZSH" rev-parse --verify "${version}^{commit}" &>/dev/null; then
-    cat <<EOF
+    cat >&2 <<EOF
 Usage: omz changelog [version]
 
 NOTE: <version> must be a valid branch, tag or commit.
@@ -184,7 +184,7 @@ EOF
 
 function _omz::plugin {
   (( $# > 0 && $+functions[_omz::plugin::$1] )) || {
-    cat <<EOF
+    cat >&2 <<EOF
 Usage: omz plugin <command> [options]
 
 Available commands:
@@ -468,7 +468,7 @@ function _omz::plugin::load {
 
 function _omz::pr {
   (( $# > 0 && $+functions[_omz::pr::$1] )) || {
-    cat <<EOF
+    cat >&2 <<EOF
 Usage: omz pr <command> [options]
 
 Available commands:
@@ -600,7 +600,7 @@ function _omz::pr::test {
 
 function _omz::theme {
   (( $# > 0 && $+functions[_omz::theme::$1] )) || {
-    cat <<EOF
+    cat >&2 <<EOF
 Usage: omz theme <command> [options]
 
 Available commands:
