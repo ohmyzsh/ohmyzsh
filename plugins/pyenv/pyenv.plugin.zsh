@@ -30,7 +30,7 @@ if [[ $FOUND_PYENV -ne 1 ]]; then
 
   # If we found pyenv, load it but show a caveat about non-interactive shells
   if [[ $FOUND_PYENV -eq 1 ]]; then
-    cat <<EOF
+    cat >&2 <<EOF
 Found pyenv, but it is badly configured. pyenv might not work for
 non-interactive shells (for example, when run from a script).
 ${bold_color}
@@ -40,7 +40,8 @@ in your home directory:
 export PYENV_ROOT="${dir/#$HOME/\$HOME}"
 export PATH="\$PYENV_ROOT/bin:\$PATH"
 eval "\$(pyenv init --path)"
-${reset_color}
+
+You'll need to restart your user session for the changes to take effect.${reset_color}
 For more info go to https://github.com/pyenv/pyenv/#installation.
 EOF
 
