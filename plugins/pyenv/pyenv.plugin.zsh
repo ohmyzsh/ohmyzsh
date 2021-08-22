@@ -30,7 +30,7 @@ if [[ $FOUND_PYENV -ne 1 ]]; then
 
   # If we found pyenv, load it but show a caveat about non-interactive shells
   if [[ $FOUND_PYENV -eq 1 ]]; then
-    cat <<EOF
+    cat >&2 <<EOF
 Found pyenv, but it is badly configured. pyenv might not work for
 non-interactive shells (for example, when run from a script).
 ${bold_color}
@@ -40,21 +40,26 @@ in your home directory:
 export PYENV_ROOT="${dir/#$HOME/\$HOME}"
 export PATH="\$PYENV_ROOT/bin:\$PATH"
 eval "\$(pyenv init --path)"
-${reset_color}
+
+You'll need to restart your user session for the changes to take effect.${reset_color}
 For more info go to https://github.com/pyenv/pyenv/#installation.
 EOF
 
     # Configuring in .zshrc only makes pyenv available for interactive shells
-    export PYENV_ROOT=$dir
+    export PYENV_ROOT="$dir"
     export PATH="$PYENV_ROOT/bin:$PATH"
     eval "$(pyenv init --path)"
   fi
 fi
 
 if [[ $FOUND_PYENV -eq 1 ]]; then
+  if [[ -z "$PYENV_ROOT" ]]; then
+    export PYENV_ROOT="$(pyenv root)"
+  fi
+
   eval "$(pyenv init - --no-rehash zsh)"
 
-  if (( ${+commands[pyenv-virtualenv-init]} )); then
+  if [[ -d "$PYENV_ROOT/plugins/pyenv-virtualenv" ]]; then
     eval "$(pyenv virtualenv-init - zsh)"
   fi
 
