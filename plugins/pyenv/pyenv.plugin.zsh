@@ -57,7 +57,7 @@ if [[ $FOUND_PYENV -eq 1 ]]; then
     export PYENV_ROOT="$(pyenv root)"
   fi
 
-  eval "$(pyenv init - --no-rehash zsh)"
+  eval "$(pyenv init - --no-rehash --path zsh)"
 
   if [[ -d "$PYENV_ROOT/plugins/pyenv-virtualenv" ]]; then
     eval "$(pyenv virtualenv-init - zsh)"
