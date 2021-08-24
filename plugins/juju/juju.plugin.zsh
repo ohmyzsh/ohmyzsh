@@ -53,6 +53,29 @@ alias jsw='juju switch'
 # Functions (in alphabetic order)                            #
 # ---------------------------------------------------------- #
 
+jreld() {
+    # $1 = relation name
+    # $2 = app name
+    # $3 = unit number
+    if [ "$#" -ne 3 ]; then
+        echo "Invalid number of arguments."
+        echo "Usage:   jreld <relation-name> <app-name> <unit-number>"
+        echo "Example: jreld karma-dashboard alertmanager 0"
+        return 1
+    fi
+
+    local relid=$(juju run "relation-ids $1" --unit $2/$3)
+    if [ -z "$relid" ]; then return 1; fi
+    
+    echo "App data:"
+    juju run "relation-get -r $relid --app - $2" --unit $2/$3
+    
+    echo
+    
+    echo "Unit data:"
+    juju run "relation-get -r $relid - $2" --unit $2/$3
+}
+
 # Watch juju status, with optional interval (default: 5 sec)
 wjst() {
   local interval="${1:-5}"
