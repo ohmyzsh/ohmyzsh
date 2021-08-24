@@ -14,9 +14,11 @@
 
 # To customize symbols (e.g MLH_AT_SYMBOL), simply set them as environment variables
 # for example in your ~/.zshrc file, like this:
-# export MLH_AT_SYMBOL=" at "
-
-# Hint: to easily discover colors and their codes, type `spectrum_ls` in the terminal
+# MLH_AT_SYMBOL=" at "
+# 
+# Settings *must* be set before sourcing oh-my-zsh.sh the .zshrc file.
+#
+# To easily discover colors and their codes, type `spectrum_ls` in the terminal
 
 # right prompt default settings
 if [ -z "$MLH_PRINT_EXIT_CODE" ]; then
@@ -27,7 +29,7 @@ if [ -z "$MLH_PRINT_TIME" ]; then
   MLH_PRINT_TIME=false
 fi
 
-# symbols default settings
+# left prompt symbols default settings
 
 if [ -z "$MLH_AT_SYMBOL" ]; then
   MLH_AT_SYMBOL="@"
@@ -69,7 +71,7 @@ directory() {
 # Prints current time
 current_time() {
   if [ "$MLH_PRINT_TIME" = true ]; then
-    echo " $MLH_PRINT_TIME%*%f"
+    echo " $TIME_COLOR%*%f"
   fi
 }
 
