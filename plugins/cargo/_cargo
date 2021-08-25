@@ -56,7 +56,7 @@ _cargo() {
     )
 
     msgfmt='--message-format=[specify error format]:error format [human]:(human json short)'
-    triple='--target=[specify target triple]:target triple'
+    triple='--target=[specify target triple]:target triple:_cargo_target_triples'
     target='--target-dir=[specify directory for all generated artifacts]:directory:_directories'
     manifest='--manifest-path=[specify path to manifest]:path:_directories'
     registry='--registry=[specify registry to use]:registry'
@@ -402,6 +402,12 @@ _cargo_test_names() {
 #Gets the bench names from the manifest file
 _cargo_benchmark_names() {
     _cargo_names_from_array "bench"
+}
+
+_cargo_target_triples() {
+    local -a triples
+    triples=( $(rustc --print target-list) )
+    _describe "target triple" triples
 }
 
 _cargo
