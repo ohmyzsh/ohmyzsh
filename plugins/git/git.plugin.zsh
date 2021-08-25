@@ -29,17 +29,10 @@ function work_in_progress() {
   fi
 }
 
-# Check if main exists and use instead of master
+# Return the head branch
 function git_main_branch() {
   command git rev-parse --git-dir &>/dev/null || return
-  local branch
-  for branch in main trunk; do
-    if command git show-ref -q --verify refs/heads/$branch; then
-      echo $branch
-      return
-    fi
-  done
-  echo master
+  git branch -rl "*/HEAD" | rev | cut -d/ -f1 | rev
 }
 
 # Check for develop and similarly named branches
