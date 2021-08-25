@@ -56,7 +56,7 @@ _cargo() {
     )
 
     msgfmt='--message-format=[specify error format]:error format [human]:(human json short)'
-    triple='--target=[specify target triple]:target triple'
+    triple='--target=[specify target triple]:target triple:_cargo_target_triple'
     target='--target-dir=[specify directory for all generated artifacts]:directory:_directories'
     manifest='--manifest-path=[specify path to manifest]:path:_directories'
     registry='--registry=[specify registry to use]:registry'
@@ -129,12 +129,6 @@ _cargo() {
                     _arguments -s -S $common $manifest
                         ;;
 
-                git-checkout)
-                    _arguments -s -S $common \
-                        '--reference=:reference' \
-                        '--url=:url:_urls'
-                        ;;
-
                 help)
                     _cargo_cmds
                         ;;
@@ -142,7 +136,7 @@ _cargo() {
                 init)
                     _arguments -s -S $common $registry \
                         '--lib[use library template]' \
-                        '--edition=[specify edition to set for the crate generated]:edition:(2015 2018)' \
+                        '--edition=[specify edition to set for the crate generated]:edition:(2015 2018 2021)' \
                         '--vcs=[initialize a new repo with a given VCS]:vcs:(git hg pijul fossil none)' \
                         '--name=[set the resulting package name]:name' \
                         '1:path:_directories'
@@ -166,7 +160,9 @@ _cargo() {
                         ;;
 
                 locate-project)
-                    _arguments -s -S $common $manifest
+                    _arguments -s -S $common $manifest \
+                        '--message-format=[specify output representation]:output representation [json]:(json plain)'
+                        '--workspace[locate Cargo.toml of the workspace root]'
                         ;;
 
                 login)
@@ -277,6 +273,18 @@ _cargo() {
                         '*: :_default'
                         ;;
 
+                tree)
+                    _arguments -s -S $common $features $triple $manifest \
+                        '(-p --package)'{-p+,--package=}'[package to use as the root]:package:_cargo_package_names' \
+                        '(-i --invert)'{-i+,--invert=}'[invert the tree for the given package]:package:_cargo_package_names' \
+                        '--prefix=[line prefix]:prefix:(depth indent none)' \
+                        '--no-dedupe[repeat shared dependencies]' \
+                        '(-d --duplicates)'{-d,--duplicates}'[packages with multiple versions]' \
+                        '--charset=[utf8 or ascii]:charset:(utf8 ascii)' \
+                        '(-f --format)'{-f,--format=}'[format string]:format' \
+                        '(-e --edges)'{-e,--edges=}'[edge kinds]:kind:(features normal build dev all no-dev no-build no-normal)' \
+                        ;;
+
                 uninstall)
                     _arguments -s -S $common \
                         '(-p --package)'{-p+,--package=}'[specify package to uninstall]:package:_cargo_package_names' \
@@ -351,6 +359,11 @@ _cargo_cmds() {
     _describe -t commands 'command' commands
 }
 
+_cargo_target_triple() {
+    local -a targets
+	targets=( ${(f)"$(rustc --print target-list)"} )
+	_describe 'target triple' targets
+}
 
 #FIXME: Disabled until fixed
 #gets package names from the manifest file
@@ -361,8 +374,7 @@ _cargo_package_names() {
 # Extracts the values of "name" from the array given in $1 and shows them as
 # command line options for completion
 _cargo_names_from_array() {
-    # strip json from the path
-    local manifest=${${${"$(cargo locate-project)"}%\"\}}##*\"}
+    local manifest=$(cargo locate-project --message-format plain)
     if [[ -z $manifest ]]; then
         return 0
     fi
