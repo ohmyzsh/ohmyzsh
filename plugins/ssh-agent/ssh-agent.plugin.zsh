@@ -1,5 +1,3 @@
-typeset _agent_forwarding _ssh_env_cache
-
 function _start_agent() {
   local lifetime
   zstyle -s :omz:plugins:ssh-agent lifetime lifetime
@@ -97,7 +95,23 @@ else
   _start_agent
 fi
 
-_add_identities
+() {
+  emulate -L zsh
+
+  command mkdir "$ZSH_CACHE_DIR/ssh-agent.lock" 2>/dev/null || return
+
+  trap "
+    ret=\$?
+
+    command rm -rf '$ZSH_CACHE_DIR/ssh-agent.lock'
+    unset _agent_forwarding _ssh_env_cache
+    unfunction _start_agent _add_identities 2>/dev/null
+
+    return \$ret
+  " EXIT INT QUIT
+
+  _add_identities
+}
 
 # tidy up after ourselves
 unset _agent_forwarding _ssh_env_cache
