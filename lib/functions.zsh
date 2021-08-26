@@ -294,14 +294,6 @@ function heroic-repo-configure() {
   mkdir logs
 }
 
-function kube-list-local-contexts() {
-  grep '^- name: ' ~/.kube/config | awk '{print $3}'
-}
-
-function kube-list-prod-contexts() {
-  gcloud container clusters list --project=gke-xpn-1 --filter="resourceLabels[env]=production" --format="value(name)"
-}
-
 # function h() {
 #   NUM_LINES = ${1:-1000}
 #   history | tail -n $NUM_LINES
@@ -359,14 +351,6 @@ function dir-sizes() {
   du -sh ./* | sort -h
 }
 
-# to avoid slow shells, we do it manually
-function kubectl() {
-    if ! type __start_kubectl >/dev/null 2>&1; then
-        source <(command kubectl completion zsh)
-    fi
-
-    command kubectl "$@"
-}
 
 function ssh-ds718() {
   ssh -p 658 pskadmin@192.168.2.7
@@ -382,12 +366,18 @@ function git-show-branch() {
   git branch -vv | grep `git branch --show-current`
 }
 
+function git-show-all-stashes() {
+  echo "Hit 'q' to go to next file"
+  echo ""
+  git stash list | awk -F: '{ print "\n\n\n\n"; print $0; print "\n\n"; system("git stash show -p " $1); }'
+}
+
 # kill most recent container instance
 alias docker-kill-latest='docker ps -l --format='{{.Names}}' | xargs docker kill'
 
 # stop all containers
-docker-stop-all () {
-        docker container stop -t 2 $(docker container ls -q) 2>/dev/null
+docker-stop-all-containers () {
+  docker container stop -t 2 $(docker container ls -q) 2>/dev/null
 }
 
 function find-gig-files() {
@@ -413,17 +403,12 @@ function start-cloud-storage() {
   ) &
 }
 
-function tree() {
-  /usr/local/homebrew/bin/tree -a $1 | colorize_less "$@"
-}
 
-# function open-all-edge-apps() {
-#   EDGE_APP_DIR='/Users/peter/Dropbox (Personal)/_Settings/Edge Apps.localized/'
-#   for APP in ${EDGE_APP_DIR}/*.app; do
-#     echo "Opening $APP ..."
-#     nohup open -a "$APP" &
-#   done
-# }
+function tree() {
+  DIR=$1 ;
+  shift # pops $1 off
+  /usr/local/homebrew/bin/tree -a $DIR | colorize_less "$@"
+}
 
 function _open-all-chrome-apps() {
   for APP in "${1}"/*.app; do
@@ -439,7 +424,10 @@ function open-all-chrome-apps() {
   _open-all-chrome-apps "$CHROME_APP_DIR"
 }
 
-alias start-all-edge-apps="open-all-edge-apps"
+function post-boot-tasks() {
+    open-all-chrome-apps
+    docker-stop-all
+}
 
 function kill-cloud-storage() {
     # TODO investigate pkill as alternative

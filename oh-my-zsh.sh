@@ -25,7 +25,15 @@ alias helios='helios -z http://localhost:5801'
 fpath=($ZSH/functions $ZSH/completions $fpath)
 
 # Load all stock functions (from $fpath files) called below.
-autoload -U compaudit compinit
+# Only check daily from https://carlosbecker.com/posts/speeding-up-zsh/
+# autoload -U compinit && compinit -u
+# autoload -U compaudit compinit
+autoload -Uz compinit
+if [ $(date +'%j') != $(stat -f '%Sm' -t '%j' ~/.zcompdump) ]; then
+  compinit
+else
+  compinit -C
+fi
 
 # Set ZSH_CUSTOM to the path where your custom config files
 # and plugins exists, or else we will use the default custom/
