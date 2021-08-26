@@ -1,12 +1,25 @@
+# Get the filename to store/lookup the environment from
+ssh_env_cache="$HOME/.ssh/environment-$SHORT_HOST"
+
 function _start_agent() {
+  # Check if ssh-agent is already running
+  if [[ -f "$ssh_env_cache" ]]; then
+    . "$ssh_env_cache" > /dev/null
+
+    {
+      [[ "$USERNAME" = root ]] && command ps ax || command ps x
+    } | command grep ssh-agent | command grep -q $SSH_AGENT_PID && return 0
+  fi
+
+  # Set a maximum lifetime for identities added to ssh-agent
   local lifetime
   zstyle -s :omz:plugins:ssh-agent lifetime lifetime
 
   # start ssh-agent and setup environment
   echo Starting ssh-agent...
-  ssh-agent -s ${lifetime:+-t} ${lifetime} | sed 's/^echo/#echo/' >! $_ssh_env_cache
-  chmod 600 $_ssh_env_cache
-  . $_ssh_env_cache > /dev/null
+  ssh-agent -s ${lifetime:+-t} ${lifetime} | sed '/^echo/d' >! "$ssh_env_cache"
+  chmod 600 "$ssh_env_cache"
+  . "$ssh_env_cache" > /dev/null
 }
 
 function _add_identities() {
@@ -71,26 +84,12 @@ function _add_identities() {
   ssh-add "${args[@]}" ${^not_loaded}
 }
 
-# Get the filename to store/lookup the environment from
-_ssh_env_cache="$HOME/.ssh/environment-$SHORT_HOST"
-
 # test if agent-forwarding is enabled
-zstyle -b :omz:plugins:ssh-agent agent-forwarding _agent_forwarding
+zstyle -b :omz:plugins:ssh-agent agent-forwarding agent_forwarding
 
-if [[ $_agent_forwarding == "yes" && -n "$SSH_AUTH_SOCK" ]]; then
-  # Add a nifty symlink for screen/tmux if agent forwarding
-  [[ -L $SSH_AUTH_SOCK ]] || ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USERNAME-screen
-elif [[ -f "$_ssh_env_cache" ]]; then
-  # Source SSH settings, if applicable
-  . $_ssh_env_cache > /dev/null
-  if [[ $USERNAME == "root" ]]; then
-    FILTER="ax"
-  else
-    FILTER="x"
-  fi
-  ps $FILTER | grep ssh-agent | grep -q $SSH_AGENT_PID || {
-    _start_agent
-  }
+# Add a nifty symlink for screen/tmux if agent forwarding
+if [[ $agent_forwarding = "yes" && -n "$SSH_AUTH_SOCK" && ! -L "$SSH_AUTH_SOCK" ]]; then
+  ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USERNAME-screen
 else
   _start_agent
 fi
@@ -104,15 +103,15 @@ fi
     ret=\$?
 
     command rm -rf '$ZSH_CACHE_DIR/ssh-agent.lock'
-    unset _agent_forwarding _ssh_env_cache
+    unset agent_forwarding ssh_env_cache
     unfunction _start_agent _add_identities 2>/dev/null
 
     return \$ret
   " EXIT INT QUIT
 
   _add_identities
+
 }
 
-# tidy up after ourselves
-unset _agent_forwarding _ssh_env_cache
+unset agent_forwarding ssh_env_cache
 unfunction _start_agent _add_identities
