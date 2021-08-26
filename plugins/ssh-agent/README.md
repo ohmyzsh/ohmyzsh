@@ -27,6 +27,15 @@ To **load multiple identities** use the `identities` style, For example:
 zstyle :omz:plugins:ssh-agent identities id_rsa id_rsa2 id_github
 ```
 
+**NOTE:** the identities may be an absolute path if they are somewhere other than
+`~/.ssh`. For example:
+
+```zsh
+zstyle :omz:plugins:ssh-agent identities ~/.config/ssh/id_rsa ~/.config/ssh/id_rsa2 ~/.config/ssh/id_github
+# which can be simplified to
+zstyle :omz:plugins:ssh-agent identities ~/.config/ssh/{id_rsa,id_rsa2,id_github}
+```
+
 ----
 
 To **set the maximum lifetime of the identities**, use the `lifetime` style.
