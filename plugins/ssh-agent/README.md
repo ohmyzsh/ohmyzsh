@@ -57,7 +57,7 @@ For valid `ssh-add` arguments run `ssh-add --help` or `man ssh-add`.
 
 ----
 
-To set an **external helper** to ask for the passwords and possibly store 
+To set an **external helper** to ask for the passwords and possibly store
 them in the system keychain use the `helper` style. For example:
 
 ```zsh

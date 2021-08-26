@@ -48,22 +48,29 @@ function _add_identities() {
 		fi
 	done
 
-	# use user specified helper to ask for password (ksshaskpass, etc)
-	local helper
-	zstyle -s :omz:plugins:ssh-agent helper helper
-	if [ -n "$helper" ]; then
-		if [ -z `command -v "$helper"` ]; then
-			echo "ssh-agent: the helper '$helper' has not been found."
-		else
-			export SSH_ASKPASS="$helper"
-			in_from='/dev/null'
-		fi
+	# abort if no identities need to be loaded
+	if [[ ${#not_loaded} -eq 0 ]]; then
+		return
 	fi
 
+	# pass extra arguments to ssh-add
 	local args
 	zstyle -a :omz:plugins:ssh-agent ssh-add-args args
 
-	[[ -n "$not_loaded" ]] && ssh-add "${args[@]}" ${^not_loaded} < "${in_from:=/dev/stdin}"
+	# use user specified helper to ask for password (ksshaskpass, etc)
+	local helper
+	zstyle -s :omz:plugins:ssh-agent helper helper
+
+	if [[ -n "$helper" ]]; then
+		if [[ -z "${commands[$helper]}" ]]; then
+			echo "ssh-agent: the helper '$helper' has not been found."
+		else
+			SSH_ASKPASS="$helper" ssh-add "${args[@]}" ${^not_loaded} < /dev/null
+			return $?
+		fi
+	fi
+
+	ssh-add "${args[@]}" ${^not_loaded}
 }
 
 # Get the filename to store/lookup the environment from
