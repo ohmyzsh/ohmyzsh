@@ -58,6 +58,13 @@ jaddr() {
     # $1 = app name
     # $2 = unit number (optional)
     
+    if ! command -v jq &> /dev/null
+    then
+        echo "jq is required but could not be found."
+        return 1
+    fi
+
+    
     if [ "$#" -eq 1 ]; then
         # Get app address
         juju status "$1" --format=json | \
