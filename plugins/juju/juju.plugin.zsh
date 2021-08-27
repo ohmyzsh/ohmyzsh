@@ -53,6 +53,31 @@ alias jsw='juju switch'
 # Functions (in alphabetic order)                            #
 # ---------------------------------------------------------- #
 
+# Get app or unit address
+jaddr() {
+    # $1 = app name
+    # $2 = unit number (optional)
+    
+    if [ "$#" -eq 1 ]; then
+        # Get app address
+        juju status "$1" --format=json | \
+          jq -r ".applications.\"$1\".address"
+        
+    elif [ "$#" -eq 2 ]; then
+        # Get unit address
+        juju status "$1/$2" --format=json | \
+          jq -r ".applications.\"$1\".units.\"$1/$2\".address"
+        
+    else
+        echo "Invalid number of arguments."
+        echo "Usage:   jaddr <app-name> [<unit-number>]"
+        echo "Example: jaddr karma"
+        echo "Example: jaddr karma 0"
+        return 1
+    fi
+}
+
+# Display app and unit relation data
 jreld() {
     # $1 = relation name
     # $2 = app name

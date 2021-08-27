@@ -81,7 +81,9 @@ plugins=(... juju)
 
 ## Functions
 
-| Function | Arguments    | Description                                                |
-|----------|--------------|------------------------------------------------------------|
-| `wjst`   | `[interval]` | watch juju status, with optional interval (default: 5 sec) |
+| Function | Arguments                         | Description                                                |
+|----------|-----------------------------------|------------------------------------------------------------|
+| `jaddr`  | `app_name [unit_num]              | displau app or unit ip address                             |
+| `jreld`  | `relation_name app_name unit_num` | display app and unit relation data                         |
+| `wjst`   | `[interval]`                      | watch juju status, with optional interval (default: 5 sec) |
 
