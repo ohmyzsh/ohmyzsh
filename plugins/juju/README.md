@@ -53,7 +53,9 @@ plugins=(... juju)
 | jra   | juju run-action                                        | Queue an action for execution                                             |
 | jraw  | juju run-action --wait                                 | Queue an action for execution and wait for results, with optional timeout |
 | jrm   | juju remove-application                                | Remove application                                                        |
+| jrmds | juju remove-application --destroy-storage              | Remove application and destroy attached storage                           |
 | jrmf  | juju remove-application --force --no-wait              | Remove application forcefully                                             |
+| jrmf  | juju remove-application --force --no-wait --destroy-storage | Remove application forcefully, destroying attached storage           |
 | jrp   | juju refresh --path                                    | Upgrade charm from local charm file                                       |
 | jsa   | juju scale-application                                 | Set the desired number of application units                               |
 | jsh   | juju ssh                                               | Initiate an SSH session or execute a command on a Juju target             |
