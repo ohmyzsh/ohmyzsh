@@ -61,6 +61,13 @@ plugins=(... juju)
 | jsh   | juju ssh                                               | Initiate an SSH session or execute a command on a Juju target             |
 | jshc  | juju ssh --container                                   | Initiate an SSH session or execute a command on a given container         |
 
+### Storage
+| Alias | Command                                                | Description                                                               |
+|-------|--------------------------------------------------------|---------------------------------------------------------------------------|
+| jrs   | juju remove-storage                                    | Remove storage                                                            |
+| jrsf  | juju remove-storage --force                            | Remove storage even if it is currently attached                           |
+
+
 ### Relation
 | Alias  | Command                                               | Description                                                               |
 |--------|-------------------------------------------------------|---------------------------------------------------------------------------|
