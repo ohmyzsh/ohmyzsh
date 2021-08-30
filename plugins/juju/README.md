@@ -19,7 +19,7 @@ plugins=(... juju)
 | jdlr  | juju debug-log --ms --replay                           | Replay entire log                                                         |
 | jh    | juju help                                              | Show help on a command or other topic                                     |
 | jstj  | juju status --format=json                              | Show status in json format (more detailed)                                |
-| jst   | juju status --relations --color                        | Show status, including relations, in color                                |
+| jst   | juju status --relations --storage --color              | Show status, including relations and storage, in color                    |
 
 ### Bootstrap
 | Alias | Command                                                | Description                                                               |

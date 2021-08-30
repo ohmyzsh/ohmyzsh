@@ -48,7 +48,7 @@ alias jsh='juju ssh'
 alias jshc='juju ssh --container'
 alias jshm='juju show-model'
 alias jstj='juju status --format=json'
-alias jst='juju status --relations --color'
+alias jst='juju status --relations --storage --color'
 alias jsw='juju switch'
 
 # ---------------------------------------------------------- #
@@ -116,7 +116,7 @@ wjst() {
   if (( $# > 0 )); then
     shift
   fi
-  watch -n "$interval" --color juju status --relations --color "$@"
+  watch -n "$interval" --color juju status --relations --storage --color "$@"
   return $?
 }
 
