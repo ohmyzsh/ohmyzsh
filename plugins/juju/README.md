@@ -30,7 +30,8 @@ plugins=(... juju)
 ### Controller
 | Alias | Command                                                | Description                                                               |
 |-------|--------------------------------------------------------|---------------------------------------------------------------------------|
-| jdc   | juju destroy-controller --destroy-all-models           | Destroy a controller                                                      |
+| jdc   | juju destroy-controller -y --destroy-all-models        | Destroy a controller                                                      |
+| jdcds | juju destroy-controller -y --destroy-all-models --destroy-storage | Destroy a controller and associated storage                    |
 | jkc   | juju kill-controller -y -t 0                           | Forcibly terminate all associated resources for a Juju controller         |
 | jsw   | juju switch                                            | Select or identify the current controller and model                       |
 
