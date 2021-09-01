@@ -29,11 +29,13 @@
 # # This theme's look and feel is based on the Aaron Toponce's zsh theme, more info:
 # # https://pthree.org/2008/11/23/727/
 # # enjoy!
+
 ########## COLOR ###########
 for COLOR in CYAN WHITE YELLOW MAGENTA BLACK BLUE RED DEFAULT GREEN GREY; do
-    eval PR_$COLOR='%{$fg[${(L)COLOR}]%}'
-    eval PR_BRIGHT_$COLOR='%{$fg_bold[${(L)COLOR}]%}'
+  eval PR_$COLOR='%{$fg[${(L)COLOR}]%}'
+  eval PR_BRIGHT_$COLOR='%{$fg_bold[${(L)COLOR}]%}'
 done
+
 PR_RESET="%{$reset_color%}"
 RED_START="${PR_RESET}${PR_GREY}<${PR_RESET}${PR_RED}<${PR_BRIGHT_RED}<${PR_RESET} "
 RED_END="${PR_RESET}${PR_BRIGHT_RED}>${PR_RESET}${PR_RED}>${PR_GREY}>${PR_RESET} "
@@ -44,14 +46,14 @@ DIVISION="${PR_RESET}${PR_RED} < ${PR_RESET}"
 VCS_DIRTY_COLOR="${PR_RESET}${PR_YELLOW}"
 VCS_CLEAN_COLOR="${PR_RESET}${PR_GREEN}"
 VCS_SUFIX_COLOR="${PR_RESET}${PR_RED}› ${PR_RESET}"
-# ########## COLOR ###########
-# ########## SVN ###########
+
+########## SVN ###########
 ZSH_THEME_SVN_PROMPT_PREFIX="${PR_RESET}${PR_RED}‹svn:"
 ZSH_THEME_SVN_PROMPT_SUFFIX=""
 ZSH_THEME_SVN_PROMPT_DIRTY="${VCS_DIRTY_COLOR} ✘${VCS_SUFIX_COLOR}"
 ZSH_THEME_SVN_PROMPT_CLEAN="${VCS_CLEAN_COLOR} ✔${VCS_SUFIX_COLOR}"
-# ########## SVN ###########
-# ########## GIT ###########
+
+########## GIT ###########
 ZSH_THEME_GIT_PROMPT_PREFIX="${PR_RESET}${PR_RED}‹git:"
 ZSH_THEME_GIT_PROMPT_SUFFIX=""
 ZSH_THEME_GIT_PROMPT_DIRTY="${VCS_DIRTY_COLOR} ✘${VCS_SUFIX_COLOR}"
@@ -62,53 +64,63 @@ ZSH_THEME_GIT_PROMPT_DELETED="${PR_RESET}${PR_YELLOW} ✖${PR_RESET}"
 ZSH_THEME_GIT_PROMPT_RENAMED="${PR_RESET}${PR_YELLOW} ➜${PR_RESET}"
 ZSH_THEME_GIT_PROMPT_UNMERGED="${PR_RESET}${PR_YELLOW} ═${PR_RESET}"
 ZSH_THEME_GIT_PROMPT_UNTRACKED="${PR_RESET}${PR_YELLOW} ✭${PR_RESET}"
-# ########## GIT ###########
-function precmd {
-    #gets the fortune
-    ps1_fortune () {
-        #Choose from all databases, regardless of whether they are considered "offensive"
-        fortune -a
-    }
-    #obtains the tip
-    ps1_command_tip () {
-        wget -qO - http://www.commandlinefu.com/commands/random/plaintext | sed 1d | sed '/^$/d'
-    }
-    prompt_header () {
-        if [[ "true" == "$ENABLE_COMMAND_TIP" ]]; then
-            ps1_command_tip
-        else
-            ps1_fortune
-        fi
-    }
-    PROMPT_HEAD="${RED_START}${PR_YELLOW}$(prompt_header)${PR_RESET}"
-    # set a simple variable to show when in screen
-    if [[ -n "${WINDOW}" ]]; then
-        SCREEN=""
+
+# Get a fortune quote
+ps1_fortune() {
+  (( ${+commands[fortune]} )) && fortune
+}
+
+# Obtain a command tip
+ps1_command_tip() {
+  {
+    if (( ${+commands[wget]} )); then
+      command wget -qO- https://www.commandlinefu.com/commands/random/plaintext
+    elif (( ${+commands[curl]} )); then
+      command curl -fsL https://www.commandlinefu.com/commands/random/plaintext
     fi
+  } | sed 1d | sed '/^$/d'
+}
+
+function precmd_adben {
+  prompt_header() {
+    if [[ "$ENABLE_COMMAND_TIP" = true ]]; then
+      ps1_command_tip
+    else
+      ps1_fortune
+    fi
+  }
+
+  PROMPT_HEAD="${RED_START}${PR_YELLOW}$(prompt_header)${PR_RESET}"
+
+  # set a simple variable to show when in screen
+  if [[ -n "${WINDOW}" ]]; then
+    SCREEN=""
+  fi
 }
 
 # Context: user@directory or just directory
-prompt_context () {
-    if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-        echo -n "${PR_RESET}${PR_RED}$USER@%m${PR_RESET}${PR_BRIGHT_YELLOW}%~%<<${PR_RESET}"
-    else
-        echo -n "${PR_RESET}${PR_BRIGHT_YELLOW}%~%<<${PR_RESET}"
-    fi
+prompt_context() {
+  if [[ "$USERNAME" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
+    echo -n "${PR_RESET}${PR_RED}$USERNAME@%m${PR_RESET}${PR_BRIGHT_YELLOW}%~%<<${PR_RESET}"
+  else
+    echo -n "${PR_RESET}${PR_BRIGHT_YELLOW}%~%<<${PR_RESET}"
+  fi
 }
 
-set_prompt () {
-    # required for the prompt
-    setopt prompt_subst
-    autoload zsh/terminfo
+########## SETUP ###########
 
-    # ######### PROMPT #########
-    PROMPT='${PROMPT_HEAD}
+# Required for the prompt
+setopt prompt_subst
+autoload zsh/terminfo
+
+# Prompt
+PROMPT='${PROMPT_HEAD}
 ${RED_START}$(prompt_context)
 ${GREEN_START_P1}'
-    RPROMPT='${PR_RESET}$(git_prompt_info)$(svn_prompt_info)${PR_YELLOW}%D{%R.%S %a %b %d %Y} ${GREEN_END}${PR_RESET}'
-    # Matching continuation prompt
-    PROMPT2='${GREEN_BASE_START}${PR_RESET} %_ ${GREEN_BASE_START}${PR_RESET} '
-    # ######### PROMPT #########
-}
+RPROMPT='${PR_RESET}$(git_prompt_info)$(svn_prompt_info)${PR_YELLOW}%D{%R.%S %a %b %d %Y} ${GREEN_END}${PR_RESET}'
+# Matching continuation prompt
+PROMPT2='${GREEN_BASE_START}${PR_RESET} %_ ${GREEN_BASE_START}${PR_RESET} '
 
-set_prompt
+# Prompt head
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd precmd_adben

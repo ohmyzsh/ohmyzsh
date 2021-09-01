@@ -17,7 +17,7 @@ function _user_host() {
   local me
   if [[ -n $SSH_CONNECTION ]]; then
     me="%n@%m"
-  elif [[ $LOGNAME != $USER ]]; then
+  elif [[ $LOGNAME != $USERNAME ]]; then
     me="%n"
   fi
   if [[ -n $me ]]; then

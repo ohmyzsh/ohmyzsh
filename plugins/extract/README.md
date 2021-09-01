@@ -21,7 +21,10 @@ plugins=(... extract)
 | `apk`             | Android app file                     |
 | `aar`             | Android library file                 |
 | `bz2`             | Bzip2 file                           |
+| `cab`             | Microsoft cabinet archive            |
+| `cpio`            | Cpio archive                         |
 | `deb`             | Debian package                       |
+| `ear`             | Enterprise Application aRchive       |
 | `gz`              | Gzip file                            |
 | `ipa`             | iOS app package                      |
 | `ipsw`            | iOS firmware file                    |

@@ -21,7 +21,7 @@ function retlog() {
 }
 
 alias ping='ping -c 5'
-alias clr='clear; echo Currently logged in on $TTY, as $USER in directory $PWD.'
+alias clr='clear; echo Currently logged in on $TTY, as $USERNAME in directory $PWD.'
 alias path='print -l $path'
 alias mkdir='mkdir -pv'
 # get top process eating memory
@@ -131,7 +131,8 @@ d0() {
 
 # gather external ip address
 geteip() {
-    curl -s -S https://icanhazip.com
+    curl -s -S -4 https://icanhazip.com
+    curl -s -S -6 https://icanhazip.com
 }
 
 # determine local IP address(es)

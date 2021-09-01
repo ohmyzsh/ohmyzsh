@@ -17,6 +17,9 @@ plugins=(... dirhistory)
 | <kbd>alt</kbd> + <kbd>up</kbd>    | Move into the parent directory                            |
 | <kbd>alt</kbd> + <kbd>down</kbd>  | Move into the first child directory by alphabetical order |
 
+NOTE: some terminals might override the ALT+Arrows key bindings (Windows Terminal, for example).
+If these don't work check your terminal settings and change them to a different keyboard shortcut.
+
 ## Usage
 
 This plugin allows you to navigate the history of previous current-working-directories using ALT-LEFT and ALT-RIGHT. ALT-LEFT moves back to directories that the user has changed to in the past, and ALT-RIGHT undoes ALT-LEFT. MAC users may alternately use OPT-LEFT and OPT-RIGHT.
