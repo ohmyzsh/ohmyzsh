@@ -29,14 +29,10 @@ alias unheap='frontend unheap'
 alias vuejs='frontend vuejs'
 
 function _frontend_fallback() {
-  local url
-  if [[ "$FRONTEND_SEARCH_FALLBACK" == duckduckgo ]]; then
-    url="https://duckduckgo.com/?sites=$1&q="
-  else
-    url="https://google.com/search?as_sitesearch=$1&as_q="
-  fi
-
-  echo "$url"
+  case "$FRONTEND_SEARCH_FALLBACK" in
+    duckduckgo) echo "https://duckduckgo.com/?sites=$1&q=" ;;
+    *) echo "https://google.com/search?as_sitesearch=$1&as_q=" ;;
+  esac
 }
 
 function frontend() {
@@ -51,7 +47,7 @@ function frontend() {
     bootsnipp      'https://bootsnipp.com/search?q='
     bundlephobia   'https://bundlephobia.com/result?p='
     caniuse        'https://caniuse.com/#search='
-    codepen        'https://codepen.io/search?q='
+    codepen        'https://codepen.io/search/pens?q='
     compassdoc     'http://compass-style.org/search?q='
     cssflow        'http://www.cssflow.com/search?q='
     dartlang       'https://api.dartlang.org/apidocs/channels/stable/dartdoc-viewer/dart:'
