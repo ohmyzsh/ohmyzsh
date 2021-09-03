@@ -1,4 +1,6 @@
 pyenv_config_warning() {
+  [[ "$ZSH_PYENV_QUIET" != true ]] || return 0
+
   local reason="$1"
   local pyenv_root="${PYENV_ROOT/#$HOME/\$HOME}"
   cat >&2 <<EOF
