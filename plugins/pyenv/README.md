@@ -15,6 +15,9 @@ plugins=(... pyenv)
 - `ZSH_PYENV_QUIET`: if set to `true`, the plugin will not print any messages if it
   finds that `pyenv` is not properly configured.
 
+- `ZSH_PYENV_VIRTUALENV`: if set to `false`, the plugin will not load pyenv-virtualenv
+  when it finds it.
+
 ## Functions
 
 - `pyenv_prompt_info`: displays the Python version in use by pyenv; or the global Python

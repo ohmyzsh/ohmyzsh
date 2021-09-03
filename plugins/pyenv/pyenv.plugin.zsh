@@ -78,7 +78,7 @@ if [[ $FOUND_PYENV -eq 1 ]]; then
   eval "$(pyenv init - --no-rehash zsh)"
 
   # If pyenv-virtualenv exists, load it
-  if [[ -d "$PYENV_ROOT/plugins/pyenv-virtualenv" ]]; then
+  if [[ -d "$PYENV_ROOT/plugins/pyenv-virtualenv" && "$ZSH_PYENV_VIRTUALENV" != false ]]; then
     eval "$(pyenv virtualenv-init - zsh)"
   fi
 
