@@ -32,10 +32,10 @@ function work_in_progress() {
 # Check if main exists and use instead of master
 function git_main_branch() {
   command git rev-parse --git-dir &>/dev/null || return
-  local branch
-  for branch in main trunk; do
-    if command git show-ref -q --verify refs/heads/$branch; then
-      echo $branch
+  local ref
+  for ref in refs/{heads,remotes/{origin,upstream}}/{main,trunk}; do
+    if command git show-ref -q --verify $ref; then
+      echo ${ref:t}
       return
     fi
   done
@@ -73,7 +73,7 @@ alias gapt='git apply --3way'
 alias gb='git branch'
 alias gba='git branch -a'
 alias gbd='git branch -d'
-alias gbda='git branch --no-color --merged | command grep -vE "^(\+|\*|\s*($(git_main_branch)|$(git_develop_branch))\s*$)" | command xargs -n 1 git branch -d'
+alias gbda='git branch --no-color --merged | command grep -vE "^([+*]|\s*($(git_main_branch)|$(git_develop_branch))\s*$)" | command xargs git branch -d 2>/dev/null'
 alias gbD='git branch -D'
 alias gbl='git blame -b -w'
 alias gbnm='git branch --no-merged'

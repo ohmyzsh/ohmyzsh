@@ -1,3 +1,24 @@
+pyenv_config_warning() {
+  [[ "$ZSH_PYENV_QUIET" != true ]] || return 0
+
+  local reason="$1"
+  local pyenv_root="${PYENV_ROOT/#$HOME/\$HOME}"
+  cat >&2 <<EOF
+Found pyenv, but it is badly configured ($reason). pyenv might not
+work correctly for non-interactive shells (for example, when run from a script).
+${(%):-"%B%F{yellow}"}
+To fix this message, add these lines to the '.profile' and '.zprofile' files
+in your home directory:
+${(%):-"%f"}
+export PYENV_ROOT="$pyenv_root"
+export PATH="\$PYENV_ROOT/bin:\$PATH"
+eval "\$(pyenv init --path)"
+${(%):-"%F{yellow}"}
+You'll need to restart your user session for the changes to take effect.${(%):-%b%f}
+For more information go to https://github.com/pyenv/pyenv/#installation.
+EOF
+}
+
 # This plugin loads pyenv into the current shell and provides prompt info via
 # the 'pyenv_prompt_info' function. Also loads pyenv-virtualenv if available.
 
@@ -30,36 +51,34 @@ if [[ $FOUND_PYENV -ne 1 ]]; then
 
   # If we found pyenv, load it but show a caveat about non-interactive shells
   if [[ $FOUND_PYENV -eq 1 ]]; then
-    cat >&2 <<EOF
-Found pyenv, but it is badly configured. pyenv might not work for
-non-interactive shells (for example, when run from a script).
-${bold_color}
-To fix this message, add these lines to the '.profile' and '.zprofile' files
-in your home directory:
-
-export PYENV_ROOT="${dir/#$HOME/\$HOME}"
-export PATH="\$PYENV_ROOT/bin:\$PATH"
-eval "\$(pyenv init --path)"
-
-You'll need to restart your user session for the changes to take effect.${reset_color}
-For more info go to https://github.com/pyenv/pyenv/#installation.
-EOF
-
     # Configuring in .zshrc only makes pyenv available for interactive shells
     export PYENV_ROOT="$dir"
     export PATH="$PYENV_ROOT/bin:$PATH"
     eval "$(pyenv init --path)"
+
+    # Show warning due to bad pyenv configuration
+    pyenv_config_warning 'pyenv command not found in $PATH'
   fi
 fi
 
 if [[ $FOUND_PYENV -eq 1 ]]; then
+  # Setup $PYENV_ROOT if not already set
   if [[ -z "$PYENV_ROOT" ]]; then
     export PYENV_ROOT="$(pyenv root)"
+    pyenv_config_warning 'missing $PYENV_ROOT'
   fi
 
+  # Add pyenv shims to $PATH if not already added
+  if [[ -z "${path[(Re)$PYENV_ROOT/shims]}" ]]; then
+    eval "$(pyenv init --path)"
+    pyenv_config_warning 'missing pyenv shims in $PATH'
+  fi
+
+  # Load pyenv
   eval "$(pyenv init - --no-rehash zsh)"
 
-  if [[ -d "$PYENV_ROOT/plugins/pyenv-virtualenv" ]]; then
+  # If pyenv-virtualenv exists, load it
+  if [[ -d "$PYENV_ROOT/plugins/pyenv-virtualenv" && "$ZSH_PYENV_VIRTUALENV" != false ]]; then
     eval "$(pyenv virtualenv-init - zsh)"
   fi
 
@@ -74,3 +93,4 @@ else
 fi
 
 unset FOUND_PYENV pyenvdirs dir
+unfunction pyenv_config_warning
