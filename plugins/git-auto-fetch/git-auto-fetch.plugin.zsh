@@ -25,8 +25,9 @@ function git-fetch-all {
     fi
 
     # Fetch all remotes (avoid ssh passphrase prompt)
+    date -R &>! "$gitdir/FETCH_LOG"
     GIT_SSH_COMMAND="command ssh -o BatchMode=yes" \
-      command git fetch --all 2>/dev/null &>! "$gitdir/FETCH_LOG"
+      command git fetch --all 2>/dev/null &>> "$gitdir/FETCH_LOG"
   ) &|
 }
 
