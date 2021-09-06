@@ -285,8 +285,9 @@ function display-release {
     (( $#breaking != 0 )) || return 0
 
     case "$output" in
+    text) fmt:header "\e[31mBREAKING CHANGES" 3 ;;
     raw) fmt:header "BREAKING CHANGES" 3 ;;
-    text|md) fmt:header "⚠ BREAKING CHANGES" 3 ;;
+    md) fmt:header "BREAKING CHANGES ⚠" 3 ;;
     esac
 
     local hash subject
