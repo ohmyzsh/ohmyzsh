@@ -294,11 +294,12 @@ function display-release {
     local hash message
     local wrap_width=$(( (COLUMNS < 100 ? COLUMNS : 100) - 3 ))
     for hash message in ${(kv)breaking}; do
-      # Format the BREAKING CHANGE message by word-wrapping it at maximum 100 characters
-      # (use $COLUMNS if smaller than 100), and adding a 3-space left padding.
-      message="$(fmt -w $wrap_width <<< "$message" | sed 's/^/   /')"
-      # Display hash and scope first, and then the full message with newline separators
-      echo " - $(fmt:hash) $(fmt:scope)\n\n$(fmt:subject "$message")\n"
+      # Format the BREAKING CHANGE message by word-wrapping it at maximum 100
+      # characters (use $COLUMNS if smaller than 100)
+      message="$(fmt -w $wrap_width <<< "$message")"
+      # Display hash and scope in their own line, and then the full message with
+      # blank lines as separators and a 3-space left padding
+      echo " - $(fmt:hash) $(fmt:scope)\n\n$(fmt:subject "$message" | sed 's/^/   /')\n"
     done
   }
 
