@@ -13,15 +13,24 @@ _load_tab_completions
 
 # ---------------------------------------------------------- #
 # Aliases (in alphabetic order)                              #
+#                                                            #
+# Generally,                                                 #
+#   - `!` means --force --no-wait -y                         #
+#   - `ds` suffix means --destroy-storage                    #
 # ---------------------------------------------------------- #
 alias jam='juju add-model --config logging-config="<root>=WARNING; unit=DEBUG"\
   --config update-status-hook-interval="60m"'
 alias jb='juju bootstrap'
 alias jbm='juju bootstrap microk8s'
 alias jc='juju config'
-alias jdc='juju destroy-controller -y --destroy-all-models'
-alias jdcds='juju destroy-controller -y --destroy-all-models --destroy-storage'
-alias jdm='juju destroy-model --destroy-storage --force --no-wait'
+alias jdc='juju destroy-controller --destroy-all-models'
+alias jdc!='juju destroy-controller --destroy-all-models --force --no-wait -y'
+alias jdcds='juju destroy-controller --destroy-all-models --destroy-storage'
+alias jdcds!='juju destroy-controller --destroy-all-models --destroy-storage --force --no-wait -y'
+alias jdm='juju destroy-model'
+alias jdm!='juju destroy-model --force --no-wait -y'
+alias jdmds='juju destroy-model --destroy-storage'
+alias jdmds!='juju destroy-model --destroy-storage --force --no-wait -y'
 alias jde='juju deploy --channel=edge'
 alias jd='juju deploy'
 alias jdl='juju debug-log --ms'
@@ -38,14 +47,14 @@ alias jra='juju run-action'
 alias jraw='juju run-action --wait'
 alias jrel='juju relate'
 alias jrm='juju remove-application'
+alias jrm!='juju remove-application --force --no-wait'
 alias jrmds='juju remove-application --destroy-storage'
-alias jrmf='juju remove-application --force --no-wait'
-alias jrmfds='juju remove-application --force --no-wait --destroy-storage'
+alias jrmds!='juju remove-application --destroy-storage --force --no-wait'
 alias jrmrel='juju remove-relation'
 alias jrmsas='juju remove-saas'
 alias jrp='juju refresh --path'
 alias jrs='juju remove-storage'
-alias jrsf='juju remove-storage --force'
+alias jrs!='juju remove-storage --force'
 alias jsa='juju scale-application'
 alias jsh='juju ssh'
 alias jshc='juju ssh --container'

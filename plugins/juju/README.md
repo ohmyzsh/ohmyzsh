@@ -11,6 +11,9 @@ plugins=(... juju)
 ```
 
 ## Aliases
+Generally,
+- `!` means `--force --no-wait -y`
+- `ds` suffix means --destroy-storage
 
 ### General
 | Alias | Command                                                | Description                                                               |
@@ -30,8 +33,10 @@ plugins=(... juju)
 ### Controller
 | Alias | Command                                                | Description                                                               |
 |-------|--------------------------------------------------------|---------------------------------------------------------------------------|
-| jdc   | juju destroy-controller -y --destroy-all-models        | Destroy a controller                                                      |
-| jdcds | juju destroy-controller -y --destroy-all-models --destroy-storage | Destroy a controller and associated storage                    |
+| jdc   | juju destroy-controller --destroy-all-models           | Destroy a controller                                                      |
+| jdc!  | juju destroy-controller --destroy-all-models --force --no-wait -y | Destroy a controller                                           |
+| jdcds | juju destroy-controller --destroy-all-models --destroy-storage | Destroy a controller and associated storage                       |
+| jdcds!| juju destroy-controller --destroy-all-models --destroy-storage --force --no-wait -y | Destroy a controller and associated storage  |
 | jkc   | juju kill-controller -y -t 0                           | Forcibly terminate all associated resources for a Juju controller         |
 | jsw   | juju switch                                            | Select or identify the current controller and model                       |
 
@@ -39,7 +44,10 @@ plugins=(... juju)
 | Alias | Command                                                | Description                                                               |
 |-------|--------------------------------------------------------|---------------------------------------------------------------------------|
 | jam   | juju add-model                                         | Add a hosted model                                                        |
-| jdm   | juju destroy-model --destroy-storage --force --no-wait | Non-recoverable, complete removal of a model                              |
+| jdm   | juju destroy-model                                     | Non-recoverable, complete removal of a model                              |
+| jdm!  | juju destroy-model --force --no-wait -y                | Non-recoverable, complete removal of a model                              |
+| jdmds | juju destroy-model --destroy-storage                   | Non-recoverable, complete removal of a model                              |
+| jdmds!| juju destroy-model --destroy-storage --force --no-wait -y | Non-recoverable, complete removal of a model                           |
 | jmc   | juju model-config                                      | Display or set configuration values on a model                            |
 | jm    | juju models                                            | List models a user can access on a controller                             |
 | jshm  | juju show-model                                        | Show information about the current or specified model                     |
@@ -54,9 +62,9 @@ plugins=(... juju)
 | jra   | juju run-action                                        | Queue an action for execution                                             |
 | jraw  | juju run-action --wait                                 | Queue an action for execution and wait for results, with optional timeout |
 | jrm   | juju remove-application                                | Remove application                                                        |
+| jrm!  | juju remove-application --force --no-wait              | Remove application forcefully                                             |
 | jrmds | juju remove-application --destroy-storage              | Remove application and destroy attached storage                           |
-| jrmf  | juju remove-application --force --no-wait              | Remove application forcefully                                             |
-| jrmf  | juju remove-application --force --no-wait --destroy-storage | Remove application forcefully, destroying attached storage           |
+| jrmds!| juju remove-application --destroy-storage --force --no-wait | Remove application forcefully, destroying attached storage           |
 | jrp   | juju refresh --path                                    | Upgrade charm from local charm file                                       |
 | jsa   | juju scale-application                                 | Set the desired number of application units                               |
 | jsh   | juju ssh                                               | Initiate an SSH session or execute a command on a Juju target             |
@@ -66,7 +74,7 @@ plugins=(... juju)
 | Alias | Command                                                | Description                                                               |
 |-------|--------------------------------------------------------|---------------------------------------------------------------------------|
 | jrs   | juju remove-storage                                    | Remove storage                                                            |
-| jrsf  | juju remove-storage --force                            | Remove storage even if it is currently attached                           |
+| jrs!  | juju remove-storage --force                            | Remove storage even if it is currently attached                           |
 
 
 ### Relation
