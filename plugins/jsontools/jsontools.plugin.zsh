@@ -101,5 +101,13 @@ print(unquote_plus(sys.stdin.read()))
     }
   ;;
 esac
-
 unset JSONTOOLS_METHOD
+
+## Add NDJSON support
+
+function {pp,is,urlencode,urldecode}_ndjson() {
+  local json jsonfunc="${0//ndjson/json}"
+  while read -r json; do
+    $jsonfunc <<< "$json"
+  done
+}
