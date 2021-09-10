@@ -30,7 +30,7 @@ if [ -t 1 ]; then
   BOLD=$(printf '\033[1m')
   DIM=$(printf '\033[2m')
   UNDER=$(printf '\033[4m')
-  RESET=$(printf '\033[m')
+  RESET=$(printf '\033[0m')
 fi
 
 # Update upstream remote to ohmyzsh org
