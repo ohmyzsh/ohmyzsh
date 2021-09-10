@@ -13,6 +13,7 @@ plugins=(... jsontools)
 Usage is simple... just take your json data and pipe it into the appropriate jsontool:
 
 - `pp_json`: pretty prints json.
+- `pp_ndjson`: pretty prints a [ndjson](http://ndjson.org) (json-lines) 
 - `is_json`: returns true if valid json; false otherwise.
 - `urlencode_json`: returns a url encoded string for the given json.
 - `urldecode_json`: returns decoded json for the given url encoded string.
@@ -24,6 +25,13 @@ Usage is simple... just take your json data and pipe it into the appropriate jso
 ```sh
 # curl json data and pretty print the results
 curl https://coderwall.com/bobwilliams.json | pp_json
+```
+
+- **pp_ndjson**:
+
+```sh
+# echo two separate json objects and pretty print both
+echo '{"a": "b"}\n{"c": [1,2,3]}' | pp_ndjson
 ```
 
 - **is_json**:
