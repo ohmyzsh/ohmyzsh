@@ -18,11 +18,11 @@ Generally,
 ### General
 | Alias | Command                                                | Description                                                               |
 |-------|--------------------------------------------------------|---------------------------------------------------------------------------|
-| jdl   | juju debug-log --ms                                    | Display log, with millisecond resolution                                  |
-| jdlr  | juju debug-log --ms --replay                           | Replay entire log                                                         |
-| jh    | juju help                                              | Show help on a command or other topic                                     |
-| jstj  | juju status --format=json                              | Show status in json format (more detailed)                                |
-| jst   | juju status --relations --storage --color              | Show status, including relations and storage, in color                    |
+| `jdl`  | `juju debug-log --ms`                       | Display log, with millisecond resolution               |
+| `jdlr` | `juju debug-log --ms --replay`              | Replay entire log                                      |
+| `jh`   | `juju help`                                 | Show help on a command or other topic                  |
+| `jstj` | `juju status --format=json`                 | Show status in json format (more detailed)             |
+| `jst`  | `juju status --relations --storage --color` | Show status, including relations and storage, in color |
 
 ### Bootstrap
 | Alias | Command                                                | Description                                                               |
@@ -99,9 +99,7 @@ Generally,
 
 ## Functions
 
-| Function | Arguments                         | Description                                                |
-|----------|-----------------------------------|------------------------------------------------------------|
-| `jaddr`  | `app_name [unit_num]              | displau app or unit ip address                             |
-| `jreld`  | `relation_name app_name unit_num` | display app and unit relation data                         |
-| `wjst`   | `[interval]`                      | watch juju status, with optional interval (default: 5 sec) |
+- `jaddr <app_name> [unit_num]`: display app or unit IP address.
+- `jreld <relation_name> <app_name> <unit_num>`: display app and unit relation data.
+- `wjst [interval_secs]`: watch juju status, with optional interval (default: 5s).
 

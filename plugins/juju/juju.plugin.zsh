@@ -3,13 +3,10 @@
 # ---------------------------------------------------------- #
 
 # Load TAB completions
-_load_tab_completions() {
-  autoload -U +X compinit && compinit
-  autoload -U +X bashcompinit && bashcompinit
-  local jcomp="$(pkg-config --variable=completionsdir bash-completion)/juju"
-  [ -f "$jcomp" ] && source "$jcomp"
+() {
+  local completion_file="$(pkg-config --variable=completionsdir bash-completion)/juju"
+  [[ -f "$completion_file" ]] && source "$completion_file"
 }
-_load_tab_completions
 
 # ---------------------------------------------------------- #
 # Aliases (in alphabetic order)                              #
@@ -18,13 +15,13 @@ _load_tab_completions
 #   - `!` means --force --no-wait -y                         #
 #   - `ds` suffix means --destroy-storage                    #
 # ---------------------------------------------------------- #
-alias jam='juju add-model --config logging-config="<root>=WARNING; unit=DEBUG"\
-  --config update-status-hook-interval="60m"'
+alias jam="juju add-model --config logging-config=\"<root>=WARNING; unit=DEBUG\"\
+ --config update-status-hook-interval=\"60m\""
 alias jb='juju bootstrap'
 alias jbm='juju bootstrap microk8s'
 alias jc='juju config'
 alias jdc='juju destroy-controller --destroy-all-models'
-alias jdc!='juju destroy-controller --destroy-all-models --force --no-wait -y'
+alias 'jdc!'='juju destroy-controller --destroy-all-models --force --no-wait -y'
 alias jdcds='juju destroy-controller --destroy-all-models --destroy-storage'
 alias jdcds!='juju destroy-controller --destroy-all-models --destroy-storage --force --no-wait -y'
 alias jdm='juju destroy-model'
@@ -125,9 +122,7 @@ jreld() {
 # Watch juju status, with optional interval (default: 5 sec)
 wjst() {
   local interval="${1:-5}"
-  if (( $# > 0 )); then
-    shift
-  fi
+  shift $(( $# > 0 ))
   watch -n "$interval" --color juju status --relations --storage --color "$@"
   return $?
 }
