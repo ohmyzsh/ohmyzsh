@@ -171,6 +171,8 @@ if (( $+commands[yaourt] )); then
   alias yamir='yaourt -Syy'
   alias yaupd="yaourt -Sy"
   alias upgrade='yaourt -Syu'
+  alias yacun='yay -Yc'
+  alias yacf='yay -Scc'
 fi
 
 if (( $+commands[yay] )); then
@@ -191,5 +193,7 @@ if (( $+commands[yay] )); then
   alias yamir='yay -Syy'
   alias yaupd="yay -Sy"
   alias upgrade='yay -Syu'
+  alias yacun='yay -Yc'
+  alias yacf='yay -Scc'
 fi
 
