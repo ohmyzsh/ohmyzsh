@@ -1,0 +1,10 @@
+.cache
+.coverage
+*.pyc
+__pycache__
+*~
+*.tar.gz
+*.patch
+.pytest_cache
+.tox
+tags

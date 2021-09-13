@@ -1,0 +1,51 @@
+repos:
+- repo: git@github.com:pre-commit/pre-commit-hooks.git
+  rev: v1.4.0
+  hooks:
+  - id: autopep8-wrapper
+    language_version: python2
+    args:
+    - --in-place
+    - --aggressive
+    - --aggressive
+    - --ignore=E731
+    - --max-line-length=131
+  - id: check-added-large-files
+    language_version: python2
+  - id: check-ast
+    language_version: python2
+  - id: check-case-conflict
+    language_version: python2
+  - id: check-docstring-first
+    language_version: python2
+  - id: debug-statements
+    language_version: python2
+  - id: double-quote-string-fixer
+    language_version: python2
+  - id: end-of-file-fixer
+    language_version: python2
+    exclude_types: [batch, lua]
+  - id: fix-encoding-pragma
+    language_version: python2
+  - id: flake8
+    language_version: python2
+    args:
+    - --max-complexity=10
+    - --max-line-length=131
+    - --ignore=E402,E731
+    - --exclude=bin/autojump_argparse.py
+  - id: name-tests-test
+    language_version: python2
+  - id: requirements-txt-fixer
+    language_version: python2
+  - id: trailing-whitespace
+    language_version: python2
+- repo: git@github.com:asottile/reorder_python_imports.git
+  rev: v1.1.1
+  hooks:
+  - id: reorder-python-imports
+  language_version: python2
+- repo: git@github.com:asottile/add-trailing-comma
+  rev: v0.7.0
+  hooks:
+  - id: add-trailing-comma
