@@ -1,7 +1,10 @@
 if (( $+commands[rustup] )); then
   ver="$(rustup --version 2>/dev/null)"
   ver_file="$ZSH_CACHE_DIR/rustup_version"
-  comp_file="$ZSH/plugins/rustup/_rustup"
+  comp_file="$ZSH_CACHE_DIR/completions/_rustup"
+
+  mkdir -p "${comp_file:h}"
+  (( ${fpath[(Ie)${comp_file:h}]} )) || fpath=("${comp_file:h}" $fpath)
 
   if [[ ! -f "$comp_file" || ! -f "$ver_file" || "$ver" != "$(< "$ver_file")" ]]; then
     rustup completions zsh >| "$comp_file"

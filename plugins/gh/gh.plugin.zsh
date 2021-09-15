@@ -2,7 +2,10 @@
 if (( $+commands[gh] )); then
   ver="$(gh --version)"
   ver_file="$ZSH_CACHE_DIR/gh_version"
-  comp_file="$ZSH/plugins/gh/_gh"
+  comp_file="$ZSH_CACHE_DIR/completions/_gh"
+
+  mkdir -p "${comp_file:h}"
+  (( ${fpath[(Ie)${comp_file:h}]} )) || fpath=("${comp_file:h}" $fpath)
 
   if [[ ! -f "$comp_file" || ! -f "$ver_file" || "$ver" != "$(< "$ver_file")" ]]; then
     gh completion --shell zsh >| "$comp_file"

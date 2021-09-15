@@ -1,7 +1,10 @@
 if (( $+commands[rustup] && $+commands[cargo] )); then
   ver="$(cargo --version)"
   ver_file="$ZSH_CACHE_DIR/cargo_version"
-  comp_file="$ZSH/plugins/cargo/_cargo"
+  comp_file="$ZSH_CACHE_DIR/completions/_cargo"
+
+  mkdir -p "${comp_file:h}"
+  (( ${fpath[(Ie)${comp_file:h}]} )) || fpath=("${comp_file:h}" $fpath)
 
   if [[ ! -f "$comp_file" || ! -f "$ver_file" || "$ver" != "$(< "$ver_file")" ]]; then
     rustup completions zsh cargo >| "$comp_file"

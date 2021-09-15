@@ -1,7 +1,10 @@
 if (( $+commands[fnm] )); then
   ver="$(fnm --version)"
   ver_file="$ZSH_CACHE_DIR/fnm_version"
-  comp_file="$ZSH/plugins/fnm/_fnm"
+  comp_file="$ZSH_CACHE_DIR/completions/_fnm"
+
+  mkdir -p "${comp_file:h}"
+  (( ${fpath[(Ie)${comp_file:h}]} )) || fpath=("${comp_file:h}" $fpath)
 
   if [[ ! -f "$comp_file" || ! -f "$ver_file" || "$ver" != "$(< "$ver_file")" ]]; then
     fnm completions --shell=zsh >| "$comp_file"

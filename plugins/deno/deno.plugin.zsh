@@ -14,7 +14,10 @@ alias dup='deno upgrade'
 if (( $+commands[deno] )); then
   ver="$(deno --version)"
   ver_file="$ZSH_CACHE_DIR/deno_version"
-  comp_file="$ZSH/plugins/deno/_deno"
+  comp_file="$ZSH_CACHE_DIR/completions/_deno"
+
+  mkdir -p "${comp_file:h}"
+  (( ${fpath[(Ie)${comp_file:h}]} )) || fpath=("${comp_file:h}" $fpath)
 
   if [[ ! -f "$comp_file" || ! -f "$ver_file" || "$ver" != "$(< "$ver_file")" ]]; then
     deno completions zsh >| "$comp_file"
