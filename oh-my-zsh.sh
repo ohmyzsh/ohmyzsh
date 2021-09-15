@@ -9,7 +9,7 @@ fi
 
 # Make sure $ZSH_CACHE_DIR is writable, otherwise use a directory in $HOME
 if [[ ! -w "$ZSH_CACHE_DIR" ]]; then
-  ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/ohmyzsh"
+  ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/oh-my-zsh"
 fi
 
 # Create cache and completions dir and add to $fpath
