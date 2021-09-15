@@ -1,4 +1,8 @@
 if (( $+commands[rustup] && $+commands[cargo] )); then
+  # remove old generated completion file
+  command rm -f "${0:A:h}/_cargo"
+
+  # generate new completion file
   ver="$(cargo --version)"
   ver_file="$ZSH_CACHE_DIR/cargo_version"
   comp_file="$ZSH_CACHE_DIR/completions/_cargo"

@@ -12,6 +12,9 @@ alias dup='deno upgrade'
 
 # COMPLETION FUNCTION
 if (( $+commands[deno] )); then
+  # remove old generated completion file
+  command rm -f "${0:A:h}/_deno"
+
   ver="$(deno --version)"
   ver_file="$ZSH_CACHE_DIR/deno_version"
   comp_file="$ZSH_CACHE_DIR/completions/_deno"

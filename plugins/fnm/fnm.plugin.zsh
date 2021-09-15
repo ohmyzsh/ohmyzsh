@@ -1,4 +1,7 @@
 if (( $+commands[fnm] )); then
+  # remove old generated completion file
+  command rm -f "${0:A:h}/_fnm"
+
   ver="$(fnm --version)"
   ver_file="$ZSH_CACHE_DIR/fnm_version"
   comp_file="$ZSH_CACHE_DIR/completions/_fnm"

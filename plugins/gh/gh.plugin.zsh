@@ -1,5 +1,8 @@
 # Autocompletion for the GitHub CLI (gh).
 if (( $+commands[gh] )); then
+  # remove old generated completion file
+  command rm -f "${0:A:h}/_gh"
+
   ver="$(gh --version)"
   ver_file="$ZSH_CACHE_DIR/gh_version"
   comp_file="$ZSH_CACHE_DIR/completions/_gh"
