@@ -1,11 +1,16 @@
-# COMPLETION FUNCTION
 if (( $+commands[rustup] && $+commands[cargo] )); then
-  if [[ ! -f $ZSH_CACHE_DIR/cargo_version ]] \
-    || [[ "$(cargo --version)" != "$(< "$ZSH_CACHE_DIR/cargo_version")" ]] \
-    || [[ ! -f $ZSH/plugins/cargo/_cargo ]]; then
-    rustup completions zsh cargo > $ZSH/plugins/cargo/_cargo
-    cargo --version > $ZSH_CACHE_DIR/cargo_version
+  ver="$(cargo --version)"
+  ver_file="$ZSH_CACHE_DIR/cargo_version"
+  comp_file="$ZSH/plugins/cargo/_cargo"
+
+  if [[ ! -f "$comp_file" || ! -f "$ver_file" || "$ver" != "$(< "$ver_file")" ]]; then
+    rustup completions zsh cargo >| "$comp_file"
+    echo "$ver" >| "$ver_file"
   fi
+
+  declare -A _comps
   autoload -Uz _cargo
   _comps[cargo]=_cargo
+
+  unset ver ver_file comp_file
 fi

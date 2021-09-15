@@ -12,12 +12,18 @@ alias dup='deno upgrade'
 
 # COMPLETION FUNCTION
 if (( $+commands[deno] )); then
-  if [[ ! -f $ZSH_CACHE_DIR/deno_version ]] \
-    || [[ "$(deno --version)" != "$(< "$ZSH_CACHE_DIR/deno_version")" ]] \
-    || [[ ! -f $ZSH/plugins/deno/_deno ]]; then
-    deno completions zsh > $ZSH/plugins/deno/_deno
-    deno --version > $ZSH_CACHE_DIR/deno_version
+  ver="$(deno --version)"
+  ver_file="$ZSH_CACHE_DIR/deno_version"
+  comp_file="$ZSH/plugins/deno/_deno"
+
+  if [[ ! -f "$comp_file" || ! -f "$ver_file" || "$ver" != "$(< "$ver_file")" ]]; then
+    deno completions zsh >| "$comp_file"
+    echo "$ver" >| "$ver_file"
   fi
+
+  declare -A _comps
   autoload -Uz _deno
   _comps[deno]=_deno
+
+  unset ver ver_file comp_file
 fi
