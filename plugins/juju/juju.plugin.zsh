@@ -5,11 +5,10 @@
 # Load TAB completions
 # You need juju's bash completion script installed. By default bash-completion's                    
 # location will be used (i.e. pkg-config --variable=completionsdir bash-completion).
-() {
-  local completion_file="$(pkg-config --variable=completionsdir bash-completion)/juju" ||
-    local completion_file="/usr/share/bash-completion/completions/juju"
-  [[ -f "$completion_file" ]] && source "$completion_file"
-}
+completion_file="$(pkg-config --variable=completionsdir bash-completion 2>/dev/null)/juju" || \
+  completion_file="/usr/share/bash-completion/completions/juju"
+[[ -f "$completion_file" ]] && source "$completion_file"
+unset completion_file
 
 # ---------------------------------------------------------- #
 # Aliases (in alphabetic order)                              #
