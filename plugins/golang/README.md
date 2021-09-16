@@ -27,4 +27,5 @@ plugins=(... golang)
 | gops    | `cd $GOPATH/src`        | Takes you to $GOPATH/src                                      |
 | gor     | `go run`                | Compiles and runs your code                                   |
 | got     | `go test`               | Runs tests                                                    |
+| gota    | `go test ./...`         | Runs tests in all subdirectories                              |
 | gov     | `go vet`                | Vet examines Go source code and reports suspicious constructs |
