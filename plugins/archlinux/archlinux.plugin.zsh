@@ -170,8 +170,8 @@ if (( $+commands[yaourt] )); then
   alias yainsd='yaourt -S --asdeps'
   alias yamir='yaourt -Syy'
   alias yaupd="yaourt -Sy"
-  alias yacun='yaourt -Yc'
-  alias yacf='yaourt -Scc'
+  alias yaclun='yaourt -Yc'
+  alias yaclf='yaourt -Scc'
   alias upgrade='yaourt -Syu'
 fi
 
