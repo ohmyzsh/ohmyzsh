@@ -143,8 +143,8 @@ upgrades were available. Use `pacman -Que` instead.
 | yaupd   | `yaourt -Sy`                      | Update and refresh local package, ABS and AUR databases             |
 | yaupg   | `yaourt -Syua`                    | Sync with repositories before upgrading all packages (from AUR too) |
 | yasu    | `yaourt -Syua --no-confirm`       | Same as `yaupg`, but without confirmation                           |
-| yaclun  | `yaourt -Yc`                      | Remove unneeded installed packages                                |
-| yaclf   | `yaourt -Scc`                     | Remove cache directories                                          |
+| yaclun  | `yaourt -Yc`                      | Remove unneeded installed packages                                  |
+| yaclf   | `yaourt -Scc`                     | Remove cache directories                                            |
 | upgrade[²](#f2) | `yaourt -Syu`             | Sync with repositories before upgrading packages                    |
 
 #### Yay[¹](#f1)
