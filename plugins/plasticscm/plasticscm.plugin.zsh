@@ -22,7 +22,7 @@ function plasticscm_prompt_info {
 }
 
 function plasticscm_dirty_choose {
-  result=`bcm status --short --controlledchanged --changed --localdeleted --localmoved 2> /dev/null`
+  result=`$cm status --short --controlledchanged --changed --localdeleted --localmoved 2> /dev/null`
   if [ -z "$result" ]; then
     unset result
     echo $2
