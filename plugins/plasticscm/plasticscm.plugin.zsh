@@ -6,7 +6,7 @@ alias cms="$cm status"
 function plasticscm_get_branch_name() {
   _SELECTOR=`$cm showselector 2>/dev/null`
   if [ ! -z $_SELECTOR ]; then
-    branch=`echo $_SELECTOR | sed -n -e 's/.*smartbranch //p' | tr -d '"' | tr -d ' ' | tr -d '\n' | tr -d '\r'`
+    branch=`echo $_SELECTOR | sed -n -E -e 's/(.*smartbranch |.*br |.*branch )//p' | tr -d '"' | tr -d ' ' | tr -d '\n' | tr -d '\r'`
     echo $branch
     unset branch
   fi
@@ -22,7 +22,7 @@ function plasticscm_prompt_info {
 }
 
 function plasticscm_dirty_choose {
-  result=`bcm status --short --controlledchanged 2> /dev/null`
+  result=`bcm status --short --controlledchanged --changed --localdeleted --localmoved 2> /dev/null`
   if [ -z "$result" ]; then
     unset result
     echo $2
