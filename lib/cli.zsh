@@ -37,19 +37,63 @@ function _omz {
       changelog) local -a refs
         refs=("${(@f)$(command git for-each-ref --format="%(refname:short):%(subject)" refs/heads refs/tags)}")
         _describe 'command' refs ;;
-      plugin) subcmds=('info:Get plugin information' 'list:List plugins')
+      plugin) subcmds=(
+        'disable:Disable plugin(s)'
+        'enable:Enable plugin(s)'
+        'info:Get plugin information'
+        'list:List plugins'
+        'load:Load plugin(s)'
+      )
         _describe 'command' subcmds ;;
-      pr) subcmds=('test:Test a Pull Request' 'clean:Delete all Pull Request branches')
+      pr) subcmds=('clean:Delete all Pull Request branches' 'test:Test a Pull Request')
         _describe 'command' subcmds ;;
-      theme) subcmds=('use:Load a theme' 'list:List themes')
+      theme) subcmds=('list:List themes' 'set:Set a theme in your .zshrc file' 'use:Load a theme')
         _describe 'command' subcmds ;;
     esac
   elif (( CURRENT == 4 )); then
-    case "$words[2]::$words[3]" in
-      plugin::info) compadd "$ZSH"/plugins/*/README.md(.N:h:t) \
-        "$ZSH_CUSTOM"/plugins/*/README.md(.N:h:t) ;;
-      theme::use) compadd "$ZSH"/themes/*.zsh-theme(.N:t:r) \
-        "$ZSH_CUSTOM"/**/*.zsh-theme(.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::) ;;
+    case "${words[2]}::${words[3]}" in
+      plugin::(disable|enable|load))
+        local -aU valid_plugins
+
+        if [[ "${words[3]}" = disable ]]; then
+          # if command is "disable", only offer already enabled plugins
+          valid_plugins=($plugins)
+        else
+          valid_plugins=("$ZSH"/plugins/*/{_*,*.plugin.zsh}(.N:h:t) "$ZSH_CUSTOM"/plugins/*/{_*,*.plugin.zsh}(.N:h:t))
+          # if command is "enable", remove already enabled plugins
+          [[ "${words[3]}" = enable ]] && valid_plugins=(${valid_plugins:|plugins})
+        fi
+
+        _describe 'plugin' valid_plugins ;;
+      plugin::info)
+        local -aU plugins=("$ZSH"/plugins/*/{_*,*.plugin.zsh}(.N:h:t) "$ZSH_CUSTOM"/plugins/*/{_*,*.plugin.zsh}(.N:h:t))
+        _describe 'plugin' plugins ;;
+      theme::(set|use))
+        local -aU themes=("$ZSH"/themes/*.zsh-theme(.N:t:r) "$ZSH_CUSTOM"/**/*.zsh-theme(.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::))
+        _describe 'theme' themes ;;
+    esac
+  elif (( CURRENT > 4 )); then
+    case "${words[2]}::${words[3]}" in
+      plugin::(enable|disable|load))
+        local -aU valid_plugins
+
+        if [[ "${words[3]}" = disable ]]; then
+          # if command is "disable", only offer already enabled plugins
+          valid_plugins=($plugins)
+        else
+          valid_plugins=("$ZSH"/plugins/*/{_*,*.plugin.zsh}(.N:h:t) "$ZSH_CUSTOM"/plugins/*/{_*,*.plugin.zsh}(.N:h:t))
+          # if command is "enable", remove already enabled plugins
+          [[ "${words[3]}" = enable ]] && valid_plugins=(${valid_plugins:|plugins})
+        fi
+
+        # Remove plugins already passed as arguments
+        # NOTE: $(( CURRENT - 1 )) is the last plugin argument completely passed, i.e. that which
+        # has a space after them. This is to avoid removing plugins partially passed, which makes
+        # the completion not add a space after the completed plugin.
+        local -a args=(${words[4,$(( CURRENT - 1))]})
+        valid_plugins=(${valid_plugins:|args})
+
+        _describe 'plugin' valid_plugins ;;
     esac
   fi
 
@@ -106,7 +150,7 @@ function _omz::log {
 ## User-facing commands
 
 function _omz::help {
-  cat <<EOF
+  cat >&2 <<EOF
 Usage: omz <command> [options]
 
 Available commands:
@@ -127,7 +171,7 @@ function _omz::changelog {
   if ! command git -C "$ZSH" show-ref --verify refs/heads/$version &>/dev/null && \
     ! command git -C "$ZSH" show-ref --verify refs/tags/$version &>/dev/null && \
     ! command git -C "$ZSH" rev-parse --verify "${version}^{commit}" &>/dev/null; then
-    cat <<EOF
+    cat >&2 <<EOF
 Usage: omz changelog [version]
 
 NOTE: <version> must be a valid branch, tag or commit.
@@ -140,13 +184,16 @@ EOF
 
 function _omz::plugin {
   (( $# > 0 && $+functions[_omz::plugin::$1] )) || {
-    cat <<EOF
+    cat >&2 <<EOF
 Usage: omz plugin <command> [options]
 
 Available commands:
 
-  info <plugin>   Get information of a plugin
-  list            List all available Oh My Zsh plugins
+  disable <plugin> Disable plugin(s)
+  enable <plugin>  Enable plugin(s)
+  info <plugin>    Get information of a plugin
+  list             List all available Oh My Zsh plugins
+  load <plugin>    Load plugin(s)
 
 EOF
     return 1
@@ -156,6 +203,170 @@ EOF
   shift
 
   _omz::plugin::$command "$@"
+}
+
+function _omz::plugin::disable {
+  if [[ -z "$1" ]]; then
+    echo >&2 "Usage: omz plugin disable <plugin> [...]"
+    return 1
+  fi
+
+  # Check that plugin is in $plugins
+  local -a dis_plugins=()
+  for plugin in "$@"; do
+    if [[ ${plugins[(Ie)$plugin]} -eq 0 ]]; then
+      _omz::log warn "plugin '$plugin' is not enabled."
+      continue
+    fi
+    dis_plugins+=("$plugin")
+  done
+
+  # Exit if there are no enabled plugins to disable
+  if [[ ${#dis_plugins} -eq 0 ]]; then
+    return 1
+  fi
+
+  # Remove plugins substitution awk script
+  local awk_subst_plugins="\
+  gsub(/\s+(${(j:|:)dis_plugins})/, \"\") # with spaces before
+  gsub(/(${(j:|:)dis_plugins})\s+/, \"\") # with spaces after
+  gsub(/\((${(j:|:)dis_plugins})\)/, \"\") # without spaces (only plugin)
+"
+  # Disable plugins awk script
+  local awk_script="
+# if plugins=() is in oneline form, substitute disabled plugins and go to next line
+/^\s*plugins=\([^#]+\).*\$/ {
+  $awk_subst_plugins
+  print \$0
+  next
+}
+
+# if plugins=() is in multiline form, enable multi flag and disable plugins if they're there
+/^\s*plugins=\(/ {
+  multi=1
+  $awk_subst_plugins
+  print \$0
+  next
+}
+
+# if multi flag is enabled and we find a valid closing parenthesis, remove plugins and disable multi flag
+multi == 1 && /^[^#]*\)/ {
+  multi=0
+  $awk_subst_plugins
+  print \$0
+  next
+}
+
+multi == 1 && length(\$0) > 0 {
+  $awk_subst_plugins
+  if (length(\$0) > 0) print \$0
+  next
+}
+
+{ print \$0 }
+"
+
+  awk "$awk_script" ~/.zshrc > ~/.zshrc.new \
+  && command mv -f ~/.zshrc ~/.zshrc.bck \
+  && command mv -f ~/.zshrc.new ~/.zshrc
+
+  # Exit if the new .zshrc file wasn't created correctly
+  [[ $? -eq 0 ]] || {
+    local ret=$?
+    _omz::log error "error disabling plugins."
+    return $ret
+  }
+
+  # Exit if the new .zshrc file has syntax errors
+  if ! zsh -n ~/.zshrc; then
+    _omz::log error "broken syntax in ~/.zshrc. Rolling back changes..."
+    command mv -f ~/.zshrc ~/.zshrc.new
+    command mv -f ~/.zshrc.bck ~/.zshrc
+    return 1
+  fi
+
+  # Restart the zsh session if there were no errors
+  _omz::log info "plugins disabled: ${(j:, :)dis_plugins}."
+
+  # Old zsh versions don't have ZSH_ARGZERO
+  local zsh="${ZSH_ARGZERO:-${functrace[-1]%:*}}"
+  # Check whether to run a login shell
+  [[ "$zsh" = -* || -o login ]] && exec -l "${zsh#-}" || exec "$zsh"
+}
+
+function _omz::plugin::enable {
+  if [[ -z "$1" ]]; then
+    echo >&2 "Usage: omz plugin enable <plugin> [...]"
+    return 1
+  fi
+
+  # Check that plugin is not in $plugins
+  local -a add_plugins=()
+  for plugin in "$@"; do
+    if [[ ${plugins[(Ie)$plugin]} -ne 0 ]]; then
+      _omz::log warn "plugin '$plugin' is already enabled."
+      continue
+    fi
+    add_plugins+=("$plugin")
+  done
+
+  # Exit if there are no plugins to enable
+  if [[ ${#add_plugins} -eq 0 ]]; then
+    return 1
+  fi
+
+  # Enable plugins awk script
+  local awk_script="
+# if plugins=() is in oneline form, substitute ) with new plugins and go to the next line
+/^\s*plugins=\([^#]+\).*\$/ {
+  sub(/\)/, \" $add_plugins&\")
+  print \$0
+  next
+}
+
+# if plugins=() is in multiline form, enable multi flag
+/^\s*plugins=\(/ {
+  multi=1
+}
+
+# if multi flag is enabled and we find a valid closing parenthesis,
+# add new plugins and disable multi flag
+multi == 1 && /^[^#]*\)/ {
+  multi=0
+  sub(/\)/, \" $add_plugins&\")
+  print \$0
+  next
+}
+
+{ print \$0 }
+"
+
+  awk "$awk_script" ~/.zshrc > ~/.zshrc.new \
+  && command mv -f ~/.zshrc ~/.zshrc.bck \
+  && command mv -f ~/.zshrc.new ~/.zshrc
+
+  # Exit if the new .zshrc file wasn't created correctly
+  [[ $? -eq 0 ]] || {
+    local ret=$?
+    _omz::log error "error enabling plugins."
+    return $ret
+  }
+
+  # Exit if the new .zshrc file has syntax errors
+  if ! zsh -n ~/.zshrc; then
+    _omz::log error "broken syntax in ~/.zshrc. Rolling back changes..."
+    command mv -f ~/.zshrc ~/.zshrc.new
+    command mv -f ~/.zshrc.bck ~/.zshrc
+    return 1
+  fi
+
+  # Restart the zsh session if there were no errors
+  _omz::log info "plugins enabled: ${(j:, :)add_plugins}."
+
+  # Old zsh versions don't have ZSH_ARGZERO
+  local zsh="${ZSH_ARGZERO:-${functrace[-1]%:*}}"
+  # Check whether to run a login shell
+  [[ "$zsh" = -* || -o login ]] && exec -l "${zsh#-}" || exec "$zsh"
 }
 
 function _omz::plugin::info {
@@ -194,20 +405,70 @@ function _omz::plugin::list {
 
   if (( ${#custom_plugins} )); then
     print -P "%U%BCustom plugins%b%u:"
-    print -l ${(q-)custom_plugins} | column
+    print -l ${(q-)custom_plugins} | column -x
   fi
 
   if (( ${#builtin_plugins} )); then
     (( ${#custom_plugins} )) && echo # add a line of separation
 
     print -P "%U%BBuilt-in plugins%b%u:"
-    print -l ${(q-)builtin_plugins} | column
+    print -l ${(q-)builtin_plugins} | column -x
+  fi
+}
+
+function _omz::plugin::load {
+  if [[ -z "$1" ]]; then
+    echo >&2 "Usage: omz plugin load <plugin> [...]"
+    return 1
+  fi
+
+  local plugins=("$@")
+  local plugin base has_completion=0
+
+  for plugin in $plugins; do
+    if [[ -d "$ZSH_CUSTOM/plugins/$plugin" ]]; then
+      base="$ZSH_CUSTOM/plugins/$plugin"
+    elif [[ -d "$ZSH/plugins/$plugin" ]]; then
+      base="$ZSH/plugins/$plugin"
+    else
+      _omz::log warn "plugin '$plugin' not found"
+      continue
+    fi
+
+    # Check if its a valid plugin
+    if [[ ! -f "$base/_$plugin" && ! -f "$base/$plugin.plugin.zsh" ]]; then
+      _omz::log warn "'$plugin' is not a valid plugin"
+      continue
+    # It it is a valid plugin, add its directory to $fpath unless it is already there
+    elif (( ! ${fpath[(Ie)$base]} )); then
+      fpath=("$base" $fpath)
+    fi
+
+    # Check if it has completion to reload compinit
+    if [[ -f "$base/_$plugin" ]]; then
+      has_completion=1
+    fi
+
+    # Load the plugin
+    if [[ -f "$base/$plugin.plugin.zsh" ]]; then
+      source "$base/$plugin.plugin.zsh"
+    fi
+  done
+
+  # If we have completion, we need to reload the completion
+  # We pass -D to avoid generating a new dump file, which would overwrite our
+  # current one for the next session (and we don't want that because we're not
+  # actually enabling the plugins for the next session).
+  # Note that we still have to pass -d "$_comp_dumpfile", so that compinit
+  # doesn't use the default zcompdump location (${ZDOTDIR:-$HOME}/.zcompdump).
+  if (( has_completion )); then
+    compinit -D -d "$_comp_dumpfile"
   fi
 }
 
 function _omz::pr {
   (( $# > 0 && $+functions[_omz::pr::$1] )) || {
-    cat <<EOF
+    cat >&2 <<EOF
 Usage: omz pr <command> [options]
 
 Available commands:
@@ -339,13 +600,14 @@ function _omz::pr::test {
 
 function _omz::theme {
   (( $# > 0 && $+functions[_omz::theme::$1] )) || {
-    cat <<EOF
+    cat >&2 <<EOF
 Usage: omz theme <command> [options]
 
 Available commands:
 
   list            List all available Oh My Zsh themes
-  use <theme>     Load an Oh My Zsh theme
+  set <theme>     Set a theme in your .zshrc file
+  use <theme>     Load a theme
 
 EOF
     return 1
@@ -370,15 +632,82 @@ function _omz::theme::list {
 
   if (( ${#custom_themes} )); then
     print -P "%U%BCustom themes%b%u:"
-    print -l ${(q-)custom_themes} | column
+    print -l ${(q-)custom_themes} | column -x
   fi
 
   if (( ${#builtin_themes} )); then
     (( ${#custom_themes} )) && echo # add a line of separation
 
     print -P "%U%BBuilt-in themes%b%u:"
-    print -l ${(q-)builtin_themes} | column
+    print -l ${(q-)builtin_themes} | column -x
   fi
+}
+
+function _omz::theme::set {
+  if [[ -z "$1" ]]; then
+    echo >&2 "Usage: omz theme set <theme>"
+    return 1
+  fi
+
+  # Check that theme exists
+  if [[ ! -f "$ZSH_CUSTOM/$1.zsh-theme" ]] \
+    && [[ ! -f "$ZSH_CUSTOM/themes/$1.zsh-theme" ]] \
+    && [[ ! -f "$ZSH/themes/$1.zsh-theme" ]]; then
+    _omz::log error "%B$1%b theme not found"
+    return 1
+  fi
+
+  # Enable theme in .zshrc
+  local awk_script='
+!set && /^\s*ZSH_THEME=[^#]+.*$/ {
+  set=1
+  sub(/^\s*ZSH_THEME=[^#]+.*$/, "ZSH_THEME=\"'$1'\" # set by `omz`")
+  print $0
+  next
+}
+
+{ print $0 }
+
+END {
+  # If no ZSH_THEME= line was found, return an error
+  if (!set) exit 1
+}
+'
+
+  awk "$awk_script" ~/.zshrc > ~/.zshrc.new \
+  || {
+    # Prepend ZSH_THEME= line to .zshrc if it doesn't exist
+    cat <<EOF
+ZSH_THEME="$1" # set by \`omz\`
+
+EOF
+    cat ~/.zshrc
+  } > ~/.zshrc.new \
+  && command mv -f ~/.zshrc ~/.zshrc.bck \
+  && command mv -f ~/.zshrc.new ~/.zshrc
+
+  # Exit if the new .zshrc file wasn't created correctly
+  [[ $? -eq 0 ]] || {
+    local ret=$?
+    _omz::log error "error setting theme."
+    return $ret
+  }
+
+  # Exit if the new .zshrc file has syntax errors
+  if ! zsh -n ~/.zshrc; then
+    _omz::log error "broken syntax in ~/.zshrc. Rolling back changes..."
+    command mv -f ~/.zshrc ~/.zshrc.new
+    command mv -f ~/.zshrc.bck ~/.zshrc
+    return 1
+  fi
+
+  # Restart the zsh session if there were no errors
+  _omz::log info "'$1' theme set correctly."
+
+  # Old zsh versions don't have ZSH_ARGZERO
+  local zsh="${ZSH_ARGZERO:-${functrace[-1]%:*}}"
+  # Check whether to run a login shell
+  [[ "$zsh" = -* || -o login ]] && exec -l "${zsh#-}" || exec "$zsh"
 }
 
 function _omz::theme::use {
@@ -395,7 +724,7 @@ function _omz::theme::use {
   elif [[ -f "$ZSH/themes/$1.zsh-theme" ]]; then
     source "$ZSH/themes/$1.zsh-theme"
   else
-    _omz::log error "theme '$1' not found"
+    _omz::log error "%B$1%b theme not found"
     return 1
   fi
 }

@@ -1,16 +1,23 @@
 #!/usr/bin/env zsh
 
+# Protect against running with shells other than zsh
 if [ -z "$ZSH_VERSION" ]; then
   exec zsh "$0" "$@"
 fi
+
+# Protect against unwanted sourcing
+case "$ZSH_EVAL_CONTEXT" in
+  *:file) echo "error: this file should not be sourced" && return ;;
+esac
 
 cd "$ZSH"
 
 # Use colors, but only if connected to a terminal
 # and that terminal supports them.
 
-local -a RAINBOW
-local RED GREEN YELLOW BLUE BOLD DIM UNDER RESET
+setopt typeset_silent
+typeset -a RAINBOW
+typeset RED GREEN YELLOW BLUE BOLD DIM UNDER RESET
 
 if [ -t 1 ]; then
   RAINBOW=(
@@ -30,7 +37,7 @@ if [ -t 1 ]; then
   BOLD=$(printf '\033[1m')
   DIM=$(printf '\033[2m')
   UNDER=$(printf '\033[4m')
-  RESET=$(printf '\033[m')
+  RESET=$(printf '\033[0m')
 fi
 
 # Update upstream remote to ohmyzsh org
