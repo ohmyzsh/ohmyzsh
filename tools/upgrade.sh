@@ -66,10 +66,20 @@ git config rebase.autoStash true
 
 local ret=0
 
+# repository settings
+remote=${"$(git config --local oh-my-zsh.remote)":-origin}
+branch=${"$(git config --local oh-my-zsh.branch)":-master}
+
+# repository state
+last_head=$(git symbolic-ref --quiet --short HEAD || git rev-parse HEAD)
+# checkout update branch
+git checkout -q "$branch" -- || exit 1
+# branch commit before update (used in changelog)
+last_commit=$(git rev-parse "$branch")
+
 # Update Oh My Zsh
 printf "${BLUE}%s${RESET}\n" "Updating Oh My Zsh"
-last_commit=$(git rev-parse HEAD)
-if git pull --rebase --stat origin master; then
+if git pull --rebase --stat $remote $branch; then
   # Check if it was really updated or not
   if [[ "$(git rev-parse HEAD)" = "$last_commit" ]]; then
     message="Oh My Zsh is already at the latest version."
@@ -102,6 +112,9 @@ else
   ret=$?
   printf "${RED}%s${RESET}\n" 'There was an error updating. Try again later?'
 fi
+
+# go back to HEAD previous to update
+git checkout -q "$last_head" --
 
 # Unset git-config values set just for the upgrade
 case "$resetAutoStash" in

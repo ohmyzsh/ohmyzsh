@@ -53,7 +53,7 @@ KEEP_ZSHRC=${KEEP_ZSHRC:-no}
 
 
 command_exists() {
-	command -v "$@" >/dev/null 2>&1
+  command -v "$@" >/dev/null 2>&1
 }
 
 fmt_error() {
@@ -65,27 +65,27 @@ fmt_underline() {
 }
 
 fmt_code() {
-  # shellcheck disable=SC2016 # backtic in single-quote
+  # shellcheck disable=SC2016 # backtick in single-quote
   printf '`\033[38;5;247m%s%s`\n' "$*" "$RESET"
 }
 
 setup_color() {
-	# Only use colors if connected to a terminal
-	if [ -t 1 ]; then
-		RED=$(printf '\033[31m')
-		GREEN=$(printf '\033[32m')
-		YELLOW=$(printf '\033[33m')
-		BLUE=$(printf '\033[34m')
-		BOLD=$(printf '\033[1m')
-		RESET=$(printf '\033[m')
-	else
-		RED=""
-		GREEN=""
-		YELLOW=""
-		BLUE=""
-		BOLD=""
-		RESET=""
-	fi
+  # Only use colors if connected to a terminal
+  if [ -t 1 ]; then
+    RED=$(printf '\033[31m')
+    GREEN=$(printf '\033[32m')
+    YELLOW=$(printf '\033[33m')
+    BLUE=$(printf '\033[34m')
+    BOLD=$(printf '\033[1m')
+    RESET=$(printf '\033[m')
+  else
+    RED=""
+    GREEN=""
+    YELLOW=""
+    BLUE=""
+    BOLD=""
+    RESET=""
+  fi
 }
 
 setup_ohmyzsh() {
@@ -114,6 +114,8 @@ setup_ohmyzsh() {
     -c fsck.zeroPaddedFilemode=ignore \
     -c fetch.fsck.zeroPaddedFilemode=ignore \
     -c receive.fsck.zeroPaddedFilemode=ignore \
+    -c oh-my-zsh.remote=origin \
+    -c oh-my-zsh.branch="$BRANCH" \
     --depth=1 --branch "$BRANCH" "$REMOTE" "$ZSH" || {
     fmt_error "git clone of oh-my-zsh repo failed"
     exit 1
@@ -157,9 +159,9 @@ setup_zshrc() {
   sed "/^export ZSH=/ c\\
 export ZSH=\"$ZSH\"
 " "$ZSH/templates/zshrc.zsh-template" > ~/.zshrc-omztemp
-	mv -f ~/.zshrc-omztemp ~/.zshrc
+  mv -f ~/.zshrc-omztemp ~/.zshrc
 
-	echo
+  echo
 }
 
 setup_shell() {
