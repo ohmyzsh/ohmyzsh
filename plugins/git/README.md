@@ -66,6 +66,7 @@ plugins=(... git)
 | gds                  | git diff --staged                                                                                                                |
 | gdt                  | git diff-tree --no-commit-id --name-only -r                                                                                      |
 | gdnolock             | git diff $@ ":(exclude)package-lock.json" ":(exclude)&ast;.lock"                                                                 |
+| gdu                  | git diff @{u}                                                                                                                    |
 | gdv                  | git diff -w $@ \| view -                                                                                                         |
 | gdw                  | git diff --word-diff                                                                                                             |
 | gf                   | git fetch                                                                                                                        |
@@ -98,19 +99,19 @@ plugins=(... git)
 | glgga                | git log --graph --decorate --all                                                                                                 |
 | glgm                 | git log --graph --max-count=10                                                                                                   |
 | glo                  | git log --oneline --decorate                                                                                                     |
-| glol                 | git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'                           |
-| glols                | git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --stat                    |
+| glol                 | git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset'                           |
+| glols                | git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset' --stat                    |
 | glod                 | git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset'                           |
 | glods                | git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset' --date=short              |
-| glola                | git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --all                     |
+| glola                | git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset' --all                     |
 | glog                 | git log --oneline --decorate --graph                                                                                             |
 | gloga                | git log --oneline --decorate --graph --all                                                                                       |
 | glp                  | git log --pretty=\<format\>                                                                                                      |
 | gm                   | git merge                                                                                                                        |
 | gmom                 | git merge origin/$(git_main_branch)                                                                                              |
-| gmoc                 | git merge origin/$(git_current_branch)                                                                                         |
-| gmt                  | git mergetool --no-prompt                                                                                                        |
-| gmtvim               | git mergetool --no-prompt --tool=vimdiff                                                                                         |
+| gmoc                 | git merge origin/$(git_current_branch)                                                                                           |
+| gmtl                 | git mergetool --no-prompt                                                                                                        |
+| gmtlvim              | git mergetool --no-prompt --tool=vimdiff                                                                                         |
 | gmuc                 | git merge upstream/$(git_current_branch)                                                                                         |
 | gmum                 | git merge upstream/$(git_main_branch)                                                                                            |
 | gma                  | git merge --abort                                                                                                                |

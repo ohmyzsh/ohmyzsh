@@ -22,7 +22,8 @@ EOH
   local cmd=""
   local before="<esc>"
   local after=""
-  local name="GVIM"
+  # Look up the newest instance
+  local name="$(gvim --serverlist | tail -n 1)"
   while getopts ":b:a:n:" option
   do
     case $option in
