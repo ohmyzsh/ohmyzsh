@@ -72,6 +72,15 @@ fmt_code() {
 setup_color() {
   # Only use colors if connected to a terminal
   if [ -t 1 ]; then
+    RAINBOW="
+      $(printf '\033[38;5;196m')
+      $(printf '\033[38;5;202m')
+      $(printf '\033[38;5;226m')
+      $(printf '\033[38;5;082m')
+      $(printf '\033[38;5;021m')
+      $(printf '\033[38;5;093m')
+      $(printf '\033[38;5;163m')
+    "
     RED=$(printf '\033[31m')
     GREEN=$(printf '\033[32m')
     YELLOW=$(printf '\033[33m')
@@ -79,6 +88,7 @@ setup_color() {
     BOLD=$(printf '\033[1m')
     RESET=$(printf '\033[m')
   else
+    RAINBOW=""
     RED=""
     GREEN=""
     YELLOW=""
@@ -243,6 +253,27 @@ EOF
   echo
 }
 
+setup_success() {
+  printf '%s         %s__      %s           %s        %s       %s     %s__   %s\n' $RAINBOW $RESET
+  printf '%s  ____  %s/ /_    %s ____ ___  %s__  __  %s ____  %s_____%s/ /_  %s\n' $RAINBOW $RESET
+  printf '%s / __ \%s/ __ \  %s / __ `__ \%s/ / / / %s /_  / %s/ ___/%s __ \ %s\n' $RAINBOW $RESET
+  printf '%s/ /_/ /%s / / / %s / / / / / /%s /_/ / %s   / /_%s(__  )%s / / / %s\n' $RAINBOW $RESET
+  printf '%s\____/%s_/ /_/ %s /_/ /_/ /_/%s\__, / %s   /___/%s____/%s_/ /_/  %s\n' $RAINBOW $RESET
+  printf '%s    %s        %s           %s /____/ %s       %s     %s          %s....is now installed!%s\n' $RAINBOW $GREEN $RESET
+  printf %s "$GREEN"
+  cat <<EOF
+
+
+Before you scream Oh My Zsh! please look over the ~/.zshrc file to select plugins, themes, and options.
+
+• Follow us on Twitter: $(fmt_underline https://twitter.com/ohmyzsh)
+• Join our Discord server: $(fmt_underline https://discord.gg/ohmyzsh)
+• Get stickers, shirts, coffee mugs and other swag: $(fmt_underline https://shop.planetargon.com/collections/oh-my-zsh)
+
+EOF
+  printf %s "$RESET"
+}
+
 main() {
   # Run as unattended if stdin is not a tty
   if [ ! -t 0 ]; then
@@ -293,26 +324,7 @@ EOF
   setup_zshrc
   setup_shell
 
-  printf %s "$GREEN"
-  cat <<'EOF'
-         __                                     __
-  ____  / /_     ____ ___  __  __   ____  _____/ /_
- / __ \/ __ \   / __ `__ \/ / / /  /_  / / ___/ __ \
-/ /_/ / / / /  / / / / / / /_/ /    / /_(__  ) / / /
-\____/_/ /_/  /_/ /_/ /_/\__, /    /___/____/_/ /_/
-                        /____/                       ....is now installed!
-
-
-EOF
-  cat <<EOF
-Before you scream Oh My Zsh! please look over the ~/.zshrc file to select plugins, themes, and options.
-
-• Follow us on Twitter: $(fmt_underline https://twitter.com/ohmyzsh)
-• Join our Discord server: $(fmt_underline https://discord.gg/ohmyzsh)
-• Get stickers, shirts, coffee mugs and other swag: $(fmt_underline https://shop.planetargon.com/collections/oh-my-zsh)
-
-EOF
-  printf %s "$RESET"
+  setup_success
 
   if [ $RUNZSH = no ]; then
     echo "${YELLOW}Run zsh to try it out.${RESET}"
