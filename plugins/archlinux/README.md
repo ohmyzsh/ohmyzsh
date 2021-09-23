@@ -17,9 +17,10 @@ plugins=(... archlinux)
 | pacin        | `sudo pacman -S`                       | Install packages from the repositories                           |
 | pacins       | `sudo pacman -U`                       | Install a package from a local file                              |
 | pacinsd      | `sudo pacman -S --asdeps`              | Install packages as dependencies of another package              |
+| paclean      | `sudo pacman -Sc`                      | Clean out old and unused caches and packages                     |
 | pacloc       | `pacman -Qi`                           | Display information about a package in the local database        |
 | paclocs      | `pacman -Qs`                           | Search for packages in the local database                        |
-| paclr        | `pacman -Sc`                           | Remove uninstalled packages from the cache                       |
+| paclr        | `sudo pacman -Scc`                     | Remove all files from the cache                                  |
 | paclsorphans | `sudo pacman -Qdt`                     | List all orphaned packages                                       |
 | pacmir       | `sudo pacman -Syy`                     | Force refresh of all package lists after updating mirrorlist     |
 | pacre        | `sudo pacman -R`                       | Remove packages, keeping its settings and dependencies           |
@@ -53,6 +54,8 @@ upgrades were available. Use `pacman -Que` instead.
 
 | Alias   | Command                                         | Description                                                             |
 |---------|-------------------------------------------------|-------------------------------------------------------------------------|
+| auclean | `sudo aura -Sc`                                 | Clean out old and unused caches and packages                            |
+| auclr   | `sudo aura -Scc`                                | Remove all files from the cache                                         |
 | auin    | `sudo aura -S`                                  | Install packages from the repositories                                  |
 | aurin   | `sudo aura -A`                                  | Install packages from the repositories                                  |
 | auins   | `sudo aura -U`                                  | Install a package from a local file                                     |
@@ -87,6 +90,8 @@ upgrades were available. Use `pacman -Que` instead.
 | Alias   | Command                           | Description                                                         |
 |---------|-----------------------------------|---------------------------------------------------------------------|
 | trconf  | `trizen -C`                       | Fix all configuration files with vimdiff                            |
+| trclean | `trizen -Sc`                      | Clean out old and unused caches and packages                        |
+| trclr   | `trizen -Scc`                     | Remove all files from the cache                                     |
 | trin    | `trizen -S`                       | Install packages from the repositories                              |
 | trins   | `trizen -U`                       | Install a package from a local file                                 |
 | trinsd  | `trizen -S --asdeps`              | Install packages as dependencies of another package                 |
@@ -110,7 +115,8 @@ upgrades were available. Use `pacman -Que` instead.
 | Alias   | Command                        | Description                                                       |
 |---------|--------------------------------|-------------------------------------------------------------------|
 | yaconf  | `yay -Pg`                      | Print current configuration                                       |
-| yaclr   | `yay -Sc`                      | Remove uninstalled packages in the cache                          |
+| yaclean | `yay -Sc`                      | Clean out old and unused caches and packages                      |
+| yaclr   | `yay -Scc`                     | Remove all files from the cache                                   |
 | yain    | `yay -S`                       | Install packages from the repositories                            |
 | yains   | `yay -U`                       | Install a package from a local file                               |
 | yainsd  | `yay -S --asdeps`              | Install packages as dependencies of another package               |
