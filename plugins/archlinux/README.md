@@ -130,19 +130,17 @@ upgrades were available. Use `pacman -Que` instead.
 
 ---
 
-<span id="f1">¹</span>
-Yay and Yaourt aliases overlap. If both are installed, yay will take precedence.
 
 <span id="f2">²</span>
 The `upgrade` alias is set for all package managers. Its value will depend on
 whether the package manager is installed, checked in the following order:
 
 1. `yay`
-2. `yaourt`
-3. `trizen`
-4. `pacaur`
-5. `aura`
-6. `pacman`
+2. `trizen`
+3. `aura`
+4. `pacman`
+
+
 
 ## Contributors
 
