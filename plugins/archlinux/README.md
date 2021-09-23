@@ -33,7 +33,7 @@ plugins=(... archlinux)
 | pacfiles     | `pacman -F`                            | Search package file names for matching strings                   |
 | pacls        | `pacman -Ql`                           | List files in a package                                          |
 | pacown       | `pacman -Qo`                           | Show which package owns a file                                   |
-| upgrade[1](#f1) | `sudo pacman -Syu`                  | Sync with repositories before upgrading packages                 |
+| upgrade[<sup>1</sup>](#f1) | `sudo pacman -Syu`                  | Sync with repositories before upgrading packages                 |
 
 | Function       | Description                                               |
 |----------------|-----------------------------------------------------------|
