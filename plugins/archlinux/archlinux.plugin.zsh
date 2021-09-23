@@ -115,24 +115,6 @@ if (( $+commands[aura] )); then
   function auownls () { aura -Qql $(aura -Qqo $@); }
 fi
 
-if (( $+commands[pacaur] )); then
-  alias paupg='pacaur -Syu'
-  alias pasu='pacaur -Syu --noconfirm'
-  alias pain='pacaur -S'
-  alias pains='pacaur -U'
-  alias pare='pacaur -R'
-  alias parem='pacaur -Rns'
-  alias parep='pacaur -Si'
-  alias pareps='pacaur -Ss'
-  alias paloc='pacaur -Qi'
-  alias palocs='pacaur -Qs'
-  alias palst='pacaur -Qe'
-  alias paorph='pacaur -Qtd'
-  alias painsd='pacaur -S --asdeps'
-  alias pamir='pacaur -Syy'
-  alias paupd="pacaur -Sy"
-  alias upgrade='pacaur -Syu'
-fi
 
 if (( $+commands[trizen] )); then
   alias trconf='trizen -C'
@@ -154,26 +136,6 @@ if (( $+commands[trizen] )); then
   alias upgrade='trizen -Syu'
 fi
 
-if (( $+commands[yaourt] )); then
-  alias yaconf='yaourt -C'
-  alias yaclr='yaourt -Sc'
-  alias yaupg='yaourt -Syua'
-  alias yasu='yaourt -Syua --noconfirm'
-  alias yain='yaourt -S'
-  alias yains='yaourt -U'
-  alias yare='yaourt -R'
-  alias yarem='yaourt -Rns'
-  alias yarep='yaourt -Si'
-  alias yareps='yaourt -Ss'
-  alias yaloc='yaourt -Qi'
-  alias yalocs='yaourt -Qs'
-  alias yalst='yaourt -Qe'
-  alias yaorph='yaourt -Qtd'
-  alias yainsd='yaourt -S --asdeps'
-  alias yamir='yaourt -Syy'
-  alias yaupd="yaourt -Sy"
-  alias upgrade='yaourt -Syu'
-fi
 
 if (( $+commands[yay] )); then
   alias yaconf='yay -Pg'
