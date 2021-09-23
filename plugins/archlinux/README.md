@@ -74,7 +74,7 @@ upgrades were available. Use `pacman -Que` instead.
 | auupd   | `sudo aura -Sy`                                 | Update and refresh local package, ABS and AUR databases                 |
 | auupg   | `sudo sh -c "aura -Syu              && aura -Au"` | Sync with repositories before upgrading all packages (from AUR too)   |
 | ausu    | `sudo sh -c "aura -Syu --no-confirm && aura -Au --no-confirm"` | Same as `auupg`, but without confirmation                |
-| upgrade[²](#f1) | `sudo aura -Syu`                        | Sync with repositories before upgrading packages                        |
+| upgrade[](#f1) | `sudo aura -Syu`                        | Sync with repositories before upgrading packages                        |
 
 | Function        | Description                                                         |
 |-----------------|---------------------------------------------------------------------|
