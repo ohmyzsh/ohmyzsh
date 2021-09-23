@@ -140,7 +140,7 @@ whether the package manager is installed, checked in the following order:
 3. `aura`
 4. `pacman`
 
-Support for Yaourt and Pacaur have been removed since the project is unmaintained
+Support for Yaourt and Pacaur have been removed since they are no longer maintained
 
 ## Contributors
 
