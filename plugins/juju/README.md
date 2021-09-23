@@ -24,6 +24,7 @@ Generally:
 | `jdl`  | `juju debug-log --ms`                       | Display log, with millisecond resolution               |
 | `jdlr` | `juju debug-log --ms --replay`              | Replay entire log                                      |
 | `jh`   | `juju help`                                 | Show help on a command or other topic                  |
+| `jssl` | `juju juju show-status-log`                 | Output past statuses for the specified entity          |
 | `jstj` | `juju status --format=json`                 | Show status in json format (more detailed)             |
 | `jst`  | `juju status --relations --storage --color` | Show status, including relations and storage, in color |
 
@@ -76,6 +77,7 @@ Generally:
 | `jsa`    | `juju scale-application`                                      | Set the desired number of application units                               |
 | `jsh`    | `juju ssh`                                                    | Initiate an SSH session or execute a command on a Juju target             |
 | `jshc`   | `juju ssh --container`                                        | Initiate an SSH session or execute a command on a given container         |
+| `jsu`    | `juju show-unit`                                              | Displays information about a unit                                         |
 
 ### Storage
 
@@ -87,10 +89,11 @@ Generally:
 
 ### Relation
 
-| Alias    | Command                | Description                                           |
-|----------|------------------------|-------------------------------------------------------|
-| `jrel`   | `juju relate`          | Relate two applications                               |
-| `jrmrel` | `juju remove-relation` | Remove an existing relation between two applications. |
+| Alias     | Command                        | Description                                                       |
+|-----------|--------------------------------|-------------------------------------------------------------------|
+| `jrel`    | `juju relate`                  | Relate two applications                                           |
+| `jrmrel`  | `juju remove-relation`         | Remove an existing relation between two applications.             |
+| `jrmrel!` | `juju remove-relation --force` | Remove an existing relation between two applications, forcefully. |
 
 ### Cross-model relation (CMR)
 
