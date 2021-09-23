@@ -160,6 +160,7 @@ if (( $+commands[yay] )); then
   alias yaorph='yay -Qtd'
   alias yainsd='yay -S --asdeps'
   alias yamir='yay -Syy'
+  alias yaupd="yay -Sy"
   alias upgrade='yay -Syu'
 fi
 
