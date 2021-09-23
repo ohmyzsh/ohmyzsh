@@ -33,7 +33,7 @@ plugins=(... archlinux)
 | pacfiles     | `pacman -F`                            | Search package file names for matching strings                   |
 | pacls        | `pacman -Ql`                           | List files in a package                                          |
 | pacown       | `pacman -Qo`                           | Show which package owns a file                                   |
-| upgrade[<sup>1</sup>](#f1) | `sudo pacman -Syu`                  | Sync with repositories before upgrading packages                 |
+| upgrade[¹](#f1) | `sudo pacman -Syu`                  | Sync with repositories before upgrading packages                 |
 
 | Function       | Description                                               |
 |----------------|-----------------------------------------------------------|
@@ -74,7 +74,7 @@ upgrades were available. Use `pacman -Que` instead.
 | auupd   | `sudo aura -Sy`                                 | Update and refresh local package, ABS and AUR databases                 |
 | auupg   | `sudo sh -c "aura -Syu              && aura -Au"` | Sync with repositories before upgrading all packages (from AUR too)   |
 | ausu    | `sudo sh -c "aura -Syu --no-confirm && aura -Au --no-confirm"` | Same as `auupg`, but without confirmation                |
-| upgrade[](#f1) | `sudo aura -Syu`                        | Sync with repositories before upgrading packages                        |
+| upgrade[¹](#f1) | `sudo aura -Syu`                        | Sync with repositories before upgrading packages                        |
 
 | Function        | Description                                                         |
 |-----------------|---------------------------------------------------------------------|
@@ -102,7 +102,7 @@ upgrades were available. Use `pacman -Que` instead.
 | trupd   | `trizen -Sy`                      | Update and refresh local package, ABS and AUR databases             |
 | trupg   | `trizen -Syua`                    | Sync with repositories before upgrading all packages (from AUR too) |
 | trsu    | `trizen -Syua --no-confirm`       | Same as `trupg`, but without confirmation                           |
-| upgrade[1](#f1) | `trizen -Syu`             | Sync with repositories before upgrading packages                    |
+| upgrade[¹](#f1) | `trizen -Syu`             | Sync with repositories before upgrading packages                    |
 
 
 #### Yay
@@ -126,14 +126,12 @@ upgrades were available. Use `pacman -Que` instead.
 | yaupd   | `yay -Sy`                      | Update and refresh local package, ABS and AUR databases           |
 | yaupg   | `yay -Syu`                     | Sync with repositories before upgrading packages                  |
 | yasu    | `yay -Syu --no-confirm`        | Same as `yaupg`, but without confirmation                         |
-| upgrade[perscript:
-¹](#f1) | `yay -Syu`             | Sync with repositories before upgrading packages                  |
+| upgrade[¹](#f1) | `yay -Syu`             | Sync with repositories before upgrading packages                  |
 
 ---
 
 
-<span id="f1">perscript:
-¹</span>
+<span id="f1">¹</span>
 The `upgrade` alias is set for all package managers. Its value will depend on
 whether the package manager is installed, checked in the following order:
 
