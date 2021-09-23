@@ -126,12 +126,14 @@ upgrades were available. Use `pacman -Que` instead.
 | yaupd   | `yay -Sy`                      | Update and refresh local package, ABS and AUR databases           |
 | yaupg   | `yay -Syu`                     | Sync with repositories before upgrading packages                  |
 | yasu    | `yay -Syu --no-confirm`        | Same as `yaupg`, but without confirmation                         |
-| upgrade[1](#f1) | `yay -Syu`             | Sync with repositories before upgrading packages                  |
+| upgrade[perscript:
+¹](#f1) | `yay -Syu`             | Sync with repositories before upgrading packages                  |
 
 ---
 
 
-<span id="f1"></span>
+<span id="f1">perscript:
+¹</span>
 The `upgrade` alias is set for all package managers. Its value will depend on
 whether the package manager is installed, checked in the following order:
 
