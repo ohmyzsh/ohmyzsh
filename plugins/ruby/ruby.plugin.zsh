@@ -12,3 +12,5 @@ alias rb="ruby"
 alias gin="gem install"
 alias gun="gem uninstall"
 alias gli="gem list"
+alias rrun="ruby -run -e"
+alias rserver="ruby -run -e httpd . -p 8080" # requires webrick
