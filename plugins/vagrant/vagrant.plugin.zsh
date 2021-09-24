@@ -1,6 +1,7 @@
 alias vgi="vagrant init"
 
 alias vup="vagrant up"
+alias vupp='vagrant up --provision'
 alias vd="vagrant destroy"
 alias vdf="vagrant destroy -f"
 

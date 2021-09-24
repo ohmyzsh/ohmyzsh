@@ -1,6 +1,6 @@
 # lol
 
-Plugin for adding catspeak aliases, because why not.
+Plugin for adding catspeak [aliases](aliases) and some [functions](functons), because why not.
 
 To use it, add `lol` to the plugins array in your zshrc file:
 
@@ -50,6 +50,12 @@ plugins=(... lol)
 | `visible`    | `echo`                                                          |
 | `wtf`        | `dmesg`                                                         |
 | `yolo`       | `git commit -m "$(curl -s http://whatthecommit.com/index.txt)"` |
+
+## Functions
+
+| Function | Description |
+|----------|-------------|
+| flicoin  | Flip a coin |
 
 ## Usage Examples
 

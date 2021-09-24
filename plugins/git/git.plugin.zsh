@@ -109,6 +109,7 @@ alias gcount='git shortlog -sn'
 alias gcp='git cherry-pick'
 alias gcpa='git cherry-pick --abort'
 alias gcpc='git cherry-pick --continue'
+alias gcpr="git remote prune origin ; git gc --prune --aggressive"
 alias gcs='git commit -S'
 alias gcss='git commit -S -s'
 alias gcssm='git commit -S -s -m'
@@ -141,6 +142,7 @@ alias gfg='git ls-files | grep'
 
 alias gg='git gui citool'
 alias gga='git gui citool --amend'
+
 
 function ggf() {
   [[ "$#" != 1 ]] && local b="$(git_current_branch)"
@@ -252,6 +254,7 @@ alias grhh='git reset --hard'
 alias groh='git reset origin/$(git_current_branch) --hard'
 alias grm='git rm'
 alias grmc='git rm --cached'
+alias grml="git ls-files --deleted -z | xargs -0 git rm -r"
 alias grmv='git remote rename'
 alias grrm='git remote remove'
 alias grs='git restore'

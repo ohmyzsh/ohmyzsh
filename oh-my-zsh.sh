@@ -68,6 +68,16 @@ if [ -z "$ZSH_COMPDUMP" ]; then
   ZSH_COMPDUMP="${ZDOTDIR:-${HOME}}/.zcompdump-${SHORT_HOST}-${ZSH_VERSION}"
 fi
 
+if [ -z "$OMZ_PLUGINS"]; then
+  OMZ_PLUGINS="${ZDOTDIR:-${HOME}}/.omz-plugins"
+fi
+
+[[ -s ${OMZ_PLUGINS} ]] || echo none > $OMZ_PLUGINS
+
+if [[ "$(cat $OMZ_PLUGINS)" != "$plugins" ]]; then
+  echo $plugins > $OMZ_PLUGINS
+  rm $HOME/.zcompdump $ZSH_COMPDUMP
+fi
 # Construct zcompdump OMZ metadata
 zcompdump_revision="#omz revision: $(builtin cd -q "$ZSH"; git rev-parse HEAD 2>/dev/null)"
 zcompdump_fpath="#omz fpath: $fpath"

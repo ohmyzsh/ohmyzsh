@@ -37,19 +37,20 @@ alias kdelf='kubectl delete -f'
 
 # Pod management.
 alias kgp='kubectl get pods'
-alias kgpa='kubectl get pods --all-namespaces'
+alias kgpa='kgp --all-namespaces'
+alias kgpall='kgp --all-namespaces -o wide'
 alias kgpw='kgp --watch'
 alias kgpwide='kgp -o wide'
 alias kep='kubectl edit pods'
 alias kdp='kubectl describe pods'
 alias kdelp='kubectl delete pods'
-alias kgpall='kubectl get pods --all-namespaces -o wide'
 
 # get pod by label: kgpl "app=myapp" -n myns
 alias kgpl='kgp -l'
 
 # get pod by namespace: kgpn kube-system"
 alias kgpn='kgp -n'
+alias klp='kubectl logs pods'
 
 # Service management.
 alias kgs='kubectl get svc'

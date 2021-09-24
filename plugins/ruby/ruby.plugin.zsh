@@ -8,6 +8,12 @@ alias rfind='find . -name "*.rb" | xargs grep -n'
 # Shorthand Ruby
 alias rb="ruby"
 
+# Run Ruby code on command line
+alias rrun='ruby -run -e'
+
+# Start local server
+alias rbserver='ruby -run -e httpd'
+
 # Gem Command Shorthands
 alias gin="gem install"
 alias gun="gem uninstall"

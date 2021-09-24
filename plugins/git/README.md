@@ -58,6 +58,7 @@ plugins=(... git)
 | gcp                  | git cherry-pick                                                                                                                  |
 | gcpa                 | git cherry-pick --abort                                                                                                          |
 | gcpc                 | git cherry-pick --continue                                                                                                       |
+| gcpr                 | git remote prune origin ; git gc --prune --aggressive                                                                            |
 | gcs                  | git commit -S                                                                                                                    |
 | gd                   | git diff                                                                                                                         |
 | gdca                 | git diff --cached                                                                                                                |
@@ -137,6 +138,7 @@ plugins=(... git)
 | groh                 | git reset origin/$(git_current_branch) --hard                                                                                    |
 | grm                  | git rm                                                                                                                           |
 | grmc                 | git rm --cached                                                                                                                  |
+| grml                 | `git ls-files --deleted -z \| xargs -0 git rm -r`  Remove local deleted files.                                                   |
 | grmv                 | git remote rename                                                                                                                |
 | grrm                 | git remote remove                                                                                                                |
 | grs                  | git restore                                                                                                                      |
