@@ -16,3 +16,4 @@ plugins=(... python)
 | `pyclean [dirs]` | Deletes byte-code and cache files from a list of directories or the current one |
 | `pygrep <text>`  | Looks for `text` in .py files                                                   |
 | `pyuserpaths`    | Add --user site-packages to PYTHONPATH, for all installed python versions.      |
+| `pyserver`       | Starts a SimpleHTTPServer reading current directory.                            |
