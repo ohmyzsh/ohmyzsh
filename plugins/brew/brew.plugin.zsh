@@ -50,3 +50,17 @@ function brews() {
   echo "${formulae}" | sed "s/^\(.*\):\(.*\)$/\1${blue}\2${off}/"
   echo "\n${blue}==>${off} ${bold}Casks${off}\n${casks}"
 }
+
+alias bsl='brew services list'
+alias bsr='brew services run'
+alias bson='brew services start'
+alias bsoff='brew services stop'
+
+# Run all stopped services
+alias bsrunall='for service in $(bsl | grep stopped | cut -d" " -f1); bsr $service'
+
+# Start all stopped services
+alias bsstartall='for service in $(bsl | grep stopped | cut -d" " -f1); bson $service'
+
+# Stop all started services
+alias bsstopall='for service in $(bsl | grep started | cut -d" " -f1); bsoff $service'
