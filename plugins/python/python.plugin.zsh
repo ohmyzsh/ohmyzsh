@@ -48,3 +48,6 @@ alias pygrep='grep -nr --include="*.py"'
 
 # Run proper IPython regarding current virtualenv (if any)
 alias ipython="python -c 'import IPython; IPython.terminal.ipapp.launch_new_instance()'"
+
+# Share local directory as a HTTP server
+alias pyserver="python -m http.server"
