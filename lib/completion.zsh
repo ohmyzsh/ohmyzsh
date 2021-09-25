@@ -32,9 +32,9 @@ zstyle ':completion:*' list-colors ''
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
 
 if [[ "$OSTYPE" = solaris* ]]; then
-  zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm"
+  zstyle ':completion:*:*:*:*:processes' command "ps -u $USERNAME -o pid,user,comm"
 else
-  zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm -w -w"
+  zstyle ':completion:*:*:*:*:processes' command "ps -u $USERNAME -o pid,user,comm -w -w"
 fi
 
 # disable named-directories autocompletion
@@ -58,9 +58,12 @@ zstyle ':completion:*:*:*:users' ignored-patterns \
 # ... unless we really want to.
 zstyle '*' single-ignored show
 
-if [[ $COMPLETION_WAITING_DOTS = true ]]; then
+if [[ ${COMPLETION_WAITING_DOTS:-false} != false ]]; then
   expand-or-complete-with-dots() {
-    print -Pn "%F{red}…%f"
+    # use $COMPLETION_WAITING_DOTS either as toggle or as the sequence to show
+    [[ $COMPLETION_WAITING_DOTS = true ]] && COMPLETION_WAITING_DOTS="%F{red}…%f"
+    # turn off line wrapping and print prompt-expanded "dot" sequence
+    printf '\e[?7l%s\e[?7h' "${(%)COMPLETION_WAITING_DOTS}"
     zle expand-or-complete
     zle redisplay
   }

@@ -7,6 +7,7 @@ function setup_using_base_dir() {
         fzfdirs=(
           "${HOME}/.fzf"
           "${HOME}/.nix-profile/share/fzf"
+          "${XDG_DATA_HOME:-$HOME/.local/share}/fzf"
           "/usr/local/opt/fzf"
           "/usr/share/fzf"
           "/usr/local/share/examples/fzf"
@@ -64,11 +65,21 @@ function setup_using_debian_package() {
     # NOTE: There is no need to configure PATH for debian package, all binaries
     # are installed to /usr/bin by default
 
-    # Determine completion file path: first bullseye/sid, then buster/stretch
-    local completions="/usr/share/doc/fzf/examples/completion.zsh"
-    [[ -f "$completions" ]] || completions="/usr/share/zsh/vendor-completions/_fzf"
+    local completions key_bindings
 
-    local key_bindings="/usr/share/doc/fzf/examples/key-bindings.zsh"
+    case $PREFIX in
+        *com.termux*)
+            # Support Termux package
+            completions="${PREFIX}/share/fzf/completion.zsh"
+            key_bindings="${PREFIX}/share/fzf/key-bindings.zsh"
+            ;;
+        *)
+            # Determine completion file path: first bullseye/sid, then buster/stretch
+            completions="/usr/share/doc/fzf/examples/completion.zsh"
+            [[ -f "$completions" ]] || completions="/usr/share/zsh/vendor-completions/_fzf"
+            key_bindings="/usr/share/doc/fzf/examples/key-bindings.zsh"
+            ;;
+    esac
 
     # Auto-completion
     if [[ -o interactive && "$DISABLE_FZF_AUTO_COMPLETION" != "true" ]]; then
