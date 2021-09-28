@@ -1,10 +1,20 @@
 #!/bin/sh
 
 emacsfun() {
-  local frames="$(emacsclient --alternate-editor "" -n -e "(length (frame-list))" 2>/dev/null)"
+  local cmd frames
+
+  # Build the Emacs Lisp command to check for suitable frames
+  # See https://www.gnu.org/software/emacs/manual/html_node/elisp/Frames.html#index-framep
+  case "$*" in
+  *-t*|*--tty*|*-nw*) cmd="(memq 't (mapcar 'framep (frame-list)))" ;; # if != nil, there are tty frames
+  *) cmd="(delete 't (mapcar 'framep (frame-list)))" ;; # if != nil, there are graphical terminals (x, w32, ns)
+  esac
+
+  # Check if there are suitable frames
+  frames="$(emacsclient -a '' -n -e "$cmd" 2>/dev/null)"
 
   # Only create another X frame if there isn't one present
-  if [ -z "$frames" -o "$frames" -lt 2 ]; then
+  if [ -z "$frames" -o "$frames" = nil ]; then
     emacsclient --alternate-editor "" --create-frame "$@"
     return $?
   fi
