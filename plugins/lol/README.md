@@ -51,6 +51,12 @@ plugins=(... lol)
 | `wtf`        | `dmesg`                                                         |
 | `yolo`       | `git commit -m "$(curl -s http://whatthecommit.com/index.txt)"` |
 
+## Functions
+
+| Function     | Command                                                                          |
+| ------------ | -------------------------------------------------------------------------------- |
+| `qrcode url` | `curl qrcode.show/$url` add https:// on $url if it doesn't have an http protocol |
+
 ## Usage Examples
 
 ```sh
