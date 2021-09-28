@@ -49,3 +49,14 @@ alias yolo='git commit -m "$(curl -s http://whatthecommit.com/index.txt)"'
 alias letcat='git checkout'
 alias violenz='git rebase'
 
+qrcode() {
+  url=$1
+
+  if [[ "$url" != http* ]]; then
+    url=https://$1
+    echo
+    echo QRCode for: $url
+  fi
+
+  curl qrcode.show/$url
+}
