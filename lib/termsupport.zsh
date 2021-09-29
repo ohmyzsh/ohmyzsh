@@ -10,7 +10,8 @@ function title {
   emulate -L zsh
   setopt prompt_subst
 
-  [[ "$INSIDE_EMACS" == *term* ]] && return
+  # Don't set the title if inside emacs, unless using vterm
+  [[ -n "$INSIDE_EMACS" && "$INSIDE_EMACS" != vterm ]] && return
 
   # if $2 is unset use $1 as default
   # if it is set and empty, leave it as is
@@ -29,12 +30,9 @@ function title {
         print -Pn "\e]2;${2:q}\a" # set window name
         print -Pn "\e]1;${1:q}\a" # set tab name
       else
-        # Try to use terminfo to set the title
-        # If the feature is available set title
-        if [[ -n "$terminfo[fsl]" ]] && [[ -n "$terminfo[tsl]" ]]; then
-          echoti tsl
-          print -Pn "$1"
-          echoti fsl
+        # Try to use terminfo to set the title if the feature is available
+        if (( ${+terminfo[fsl]} && ${+terminfo[tsl]} )); then
+          print -Pn "${terminfo[tsl]}$1${terminfo[fsl]}"
         fi
       fi
       ;;
@@ -105,10 +103,12 @@ function omz_termsupport_preexec {
   title '$CMD' '%100>...>$LINE%<<'
 }
 
-autoload -U add-zsh-hook
-add-zsh-hook precmd omz_termsupport_precmd
-add-zsh-hook preexec omz_termsupport_preexec
+autoload -Uz add-zsh-hook
 
+if [[ -z "$INSIDE_EMACS" || "$INSIDE_EMACS" = vterm ]]; then
+  add-zsh-hook precmd omz_termsupport_precmd
+  add-zsh-hook preexec omz_termsupport_preexec
+fi
 
 # Keep Apple Terminal.app's current working directory updated
 # Based on this answer: https://superuser.com/a/315029
