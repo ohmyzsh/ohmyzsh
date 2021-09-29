@@ -1,8 +1,7 @@
 # juju plugin
 
-This plugin provides useful aliases and functions for [juju](https://juju.is/)
-(for TAB completion, refer to the 
-[official repo](https://github.com/juju/juju/blob/develop/etc/bash_completion.d/juju)).
+This plugin provides useful aliases and functions for [juju](https://juju.is/) (for TAB completion,
+refer to the [official repo](https://github.com/juju/juju/blob/develop/etc/bash_completion.d/juju)).
 
 To use this plugin, add `juju` to the plugins array in your zshrc file.
 
@@ -12,10 +11,10 @@ plugins=(... juju)
 
 ## Aliases
 
-Generally:
+Naming convention:
 
-- `!` means `--force --no-wait -y`
-- `ds` suffix means --destroy-storage
+- `!` suffix: `--force --no-wait -y`.
+- `ds` suffix: `--destroy-storage`.
 
 ### General
 
@@ -86,7 +85,6 @@ Generally:
 | `jrs`   | `juju remove-storage`         | Remove storage                                  |
 | `jrs!`  | `juju remove-storage --force` | Remove storage even if it is currently attached |
 
-
 ### Relation
 
 | Alias     | Command                        | Description                                                       |
@@ -115,6 +113,5 @@ Generally:
 
 - `jaddr <app_name> [unit_num]`: display app or unit IP address.
 - `jreld <relation_name> <app_name> <unit_num>`: display app and unit relation data.
-- `wjst [interval_secs] [args_for_watch]`: watch juju status, with optional interval 
+- `wjst [interval_secs] [args_for_watch]`: watch juju status, with optional interval
   (default: 5s); you may pass additional arguments to `watch`.
-

@@ -3,7 +3,7 @@
 # ---------------------------------------------------------- #
 
 # Load TAB completions
-# You need juju's bash completion script installed. By default bash-completion's                    
+# You need juju's bash completion script installed. By default bash-completion's
 # location will be used (i.e. pkg-config --variable=completionsdir bash-completion).
 completion_file="$(pkg-config --variable=completionsdir bash-completion 2>/dev/null)/juju" || \
   completion_file="/usr/share/bash-completion/completions/juju"
@@ -73,29 +73,26 @@ alias jsw='juju switch'
 jaddr() {
   # $1 = app name
   # $2 = unit number (optional)
-  
-  if ! [[ -x "$(command -v jq)" ]]; then
-    echo "jq is required but could not be found."
+  if (( ! ${+commands[jq]} )); then
+    echo "jq is required but could not be found." >&2
     return 1
   fi
 
-  if [[ "$#" -eq 1 ]]; then
+  if [[ $# -eq 1 ]]; then
     # Get app address
     juju status "$1" --format=json \
       | jq -r ".applications.\"$1\".address"
-
-    elif [[ "$#" -eq 2 ]]; then
-      # Get unit address
-      juju status "$1/$2" --format=json \
-        | jq -r ".applications.\"$1\".units.\"$1/$2\".address"
-        
-    else
-      echo "Invalid number of arguments."
-      echo "Usage:   jaddr <app-name> [<unit-number>]"
-      echo "Example: jaddr karma"
-      echo "Example: jaddr karma 0"
-      return 1
-    fi
+  elif [[ $# -eq 2 ]]; then
+    # Get unit address
+    juju status "$1/$2" --format=json \
+      | jq -r ".applications.\"$1\".units.\"$1/$2\".address"
+  else
+    echo "Invalid number of arguments."
+    echo "Usage:   jaddr <app-name> [<unit-number>]"
+    echo "Example: jaddr karma"
+    echo "Example: jaddr karma 0"
+    return 1
+  fi
 }
 
 # Display app and unit relation data
@@ -103,23 +100,21 @@ jreld() {
   # $1 = relation name
   # $2 = app name
   # $3 = unit number
-  if [[ "$#" -ne 3 ]]; then
+  if [[ $# -ne 3 ]]; then
     echo "Invalid number of arguments."
     echo "Usage:   jreld <relation-name> <app-name> <unit-number>"
     echo "Example: jreld karma-dashboard alertmanager 0"
     return 1
   fi
 
-  local relid=$(juju run "relation-ids $1" --unit $2/$3)
-  if [[ -z "$relid" ]]; then 
+  local relid="$(juju run "relation-ids $1" --unit $2/$3)"
+  if [[ -z "$relid" ]]; then
     return 1
   fi
 
   echo "App data:"
   juju run "relation-get -r $relid --app - $2" --unit $2/$3
-
   echo
-
   echo "Unit data:"
   juju run "relation-get -r $relid - $2" --unit $2/$3
 }
@@ -130,4 +125,3 @@ wjst() {
   shift $(( $# > 0 ))
   watch -n "$interval" --color juju status --relations --storage --color "$@"
 }
-
