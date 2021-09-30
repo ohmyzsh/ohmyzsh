@@ -181,4 +181,3 @@ whether the package manager is installed, checked in the following order:
 - Ybalrid (Arthur Brainville) - ybalrid@ybalrid.info
 - Jeff M. Hubbard - jeffmhubbard@gmail.com
 - K. Harishankar(harishnkr) - hari2menon1234@gmail.com
-- Nowshed H. Imran(nowshed-imran) - now.im.627@gmail.com
