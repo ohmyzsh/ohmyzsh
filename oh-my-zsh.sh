@@ -1,3 +1,11 @@
+# Protect against non-zsh execution of Oh My Zsh (use POSIX syntax here)
+[ -n "$ZSH_VERSION" ] || {
+  # ANSI (\033[<code>m): 0: reset, 1: bold, 4: underline, 22: no bold, 24: no underline, 31: red
+  printf "\033[1;31mERROR:\033[22m Oh My Zsh can't be loaded from: \033[1m${0#-}\033[22m. " >&2
+  printf "You need to run \033[1;4mzsh\033[22;24m instead.\033[0m\n" >&2
+  return 1
+}
+
 # If ZSH is not defined, use the current script's directory.
 [[ -z "$ZSH" ]] && export ZSH="${${(%):-%x}:a:h}"
 

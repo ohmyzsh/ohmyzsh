@@ -108,7 +108,7 @@ if (( $+commands[aura] )); then
   alias auras='aura -As --both'
   alias auupd="sudo aura -Sy"
   alias auupg='sudo sh -c "aura -Syu              && aura -Au"'
-  alias ausu='sudo  sh -c "aura -Syu --no-confirm && aura -Au --no-confirm"'
+  alias ausu='sudo sh -c "aura -Syu --no-confirm && aura -Au --no-confirm"'
   alias upgrade='sudo aura -Syu'
 
   # extra bonus specially for aura
@@ -159,7 +159,6 @@ if (( $+commands[trizen] )); then
   alias upgrade='trizen -Syu'
 fi
 
-
 if (( $+commands[yay] )); then
   alias yaconf='yay -Pg'
   alias yaclean='yay -Sc'
@@ -181,4 +180,3 @@ if (( $+commands[yay] )); then
   alias yaupd="yay -Sy"
   alias upgrade='yay -Syu'
 fi
-
