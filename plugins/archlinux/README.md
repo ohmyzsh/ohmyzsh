@@ -84,6 +84,27 @@ upgrades were available. Use `pacman -Que` instead.
 | auownloc _file_ | Display information about a package that owns the specified file(s) |
 | auownls  _file_ | List all files owned by a package that owns the specified file(s)   |
 
+#### Pacaur
+
+| Alias   | Command                           | Description                                                         |
+|---------|-----------------------------------|---------------------------------------------------------------------|
+| pain    | `pacaur -S`                       | Install packages from the repositories                              |
+| pains   | `pacaur -U`                       | Install a package from a local file                                 |
+| painsd  | `pacaur -S --asdeps`              | Install packages as dependencies of another package                 |
+| paloc   | `pacaur -Qi`                      | Display information about a package in the local database           |
+| palocs  | `pacaur -Qs`                      | Search for packages in the local database                           |
+| palst   | `pacaur -Qe`                      | List installed packages including from AUR (tagged as "local")      |
+| pamir   | `pacaur -Syy`                     | Force refresh of all package lists after updating mirrorlist        |
+| paorph  | `pacaur -Qtd`                     | Remove orphans using pacaur                                         |
+| pare    | `pacaur -R`                       | Remove packages, keeping its settings and dependencies              |
+| parem   | `pacaur -Rns`                     | Remove packages, including its settings and unneeded dependencies   |
+| parep   | `pacaur -Si`                      | Display information about a package in the repositories             |
+| pareps  | `pacaur -Ss`                      | Search for packages in the repositories                             |
+| paupd   | `pacaur -Sy`                      | Update and refresh local package, ABS and AUR databases             |
+| paupg   | `pacaur -Syua`                    | Sync with repositories before upgrading all packages (from AUR too) |
+| pasu    | `pacaur -Syua --no-confirm`       | Same as `paupg`, but without confirmation                           |
+| upgrade[¹](#f1) | `pacaur -Syu`             | Sync with repositories before upgrading packages                    |
+
 
 #### Trizen
 
@@ -143,10 +164,10 @@ whether the package manager is installed, checked in the following order:
 
 1. `yay`
 2. `trizen`
-3. `aura`
-4. `pacman`
+3. `pacaur`
+4. `aura`
+5. `pacman`
 
-Support for Yaourt and Pacaur have been removed since they are no longer maintained
 
 ## Contributors
 
