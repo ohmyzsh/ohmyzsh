@@ -119,7 +119,7 @@ if (( $+commands[aura] )); then
 fi
 
 if (( $+commands[pacaur] )); then
-  alias paccln='pacaur -Sc'
+  alias pacclean='pacaur -Sc'
   alias pacclr='pacaur -Scc'
   alias paupg='pacaur -Syu'
   alias pasu='pacaur -Syu --noconfirm'
