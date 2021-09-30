@@ -32,6 +32,41 @@ function current_epoch() {
   echo $(( EPOCHSECONDS / 60 / 60 / 24 ))
 }
 
+function is_update_available() {
+  local branch
+  branch=${"$(git -C "$ZSH" config --local oh-my-zsh.branch)":-master}
+
+  local remote remote_url remote_repo
+  remote=${"$(git -C "$ZSH" config --local oh-my-zsh.remote)":-origin}
+  remote_url=$(git -C "$ZSH" config remote.$remote.url)
+
+  local repo
+  case "$remote_url" in
+  https://github.com/*) repo=${${remote_url#https://github.com/}%.git} ;;
+  git@github.com:*) repo=${${remote_url#git@github.com:}%.git} ;;
+  *)
+    # If the remote is not using GitHub we can't check for updates
+    # Let's assume there are updates
+    return 0 ;;
+  esac
+
+  # If the remote repo is not the official one, let's assume there are updates available
+  [[ "$repo" = ohmyzsh/ohmyzsh ]] || return 0
+  local api_url="https://api.github.com/repos/${repo}/commits/${branch}"
+
+  # Get local and remote HEADs and compare them. If we can't get either assume there are updates
+  local local_head remote_head
+  local_head=$(git -C "$ZSH" rev-parse $branch 2>/dev/null) || return 0
+
+  remote_head=$(curl -fsSL -H 'Accept: application/vnd.github.v3.sha' $api_url 2>/dev/null) \
+  || remote_head=$(wget -O- --header='Accept: application/vnd.github.v3.sha' $api_url 2>/dev/null) \
+  || remote_head=$(HTTP_ACCEPT='Accept: application/vnd.github.v3.sha' fetch -o - $api_url 2>/dev/null) \
+  || return 0
+
+  # Compare local and remote HEADs
+  [[ "$local_head" != "$remote_head" ]]
+}
+
 function update_last_updated_file() {
   echo "LAST_EPOCH=$(current_epoch)" >! "${ZSH_CACHE_DIR}/.zsh-update"
 }
@@ -69,6 +104,8 @@ function update_ohmyzsh() {
   #  the shell actually exits what it's running.
   trap "
     ret=\$?
+    unset update_mode
+    unset -f current_epoch is_update_available update_last_updated_file update_ohmyzsh 2>/dev/null
     command rm -rf '$ZSH/log/update.lock'
     return \$ret
   " EXIT INT QUIT
@@ -83,6 +120,11 @@ function update_ohmyzsh() {
   zstyle -s ':omz:update' frequency epoch_target || epoch_target=${UPDATE_ZSH_DAYS:-13}
   # Test if enough time has passed until the next update
   if (( ( $(current_epoch) - $LAST_EPOCH ) < $epoch_target )); then
+    return
+  fi
+
+  # Check if there are updates available before proceeding
+  if ! is_update_available; then
     return
   fi
 
@@ -108,4 +150,4 @@ function update_ohmyzsh() {
 }
 
 unset update_mode
-unset -f current_epoch update_last_updated_file update_ohmyzsh
+unset -f current_epoch is_update_available update_last_updated_file update_ohmyzsh
