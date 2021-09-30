@@ -88,7 +88,7 @@ upgrades were available. Use `pacman -Que` instead.
 
 | Alias   | Command                           | Description                                                         |
 |---------|-----------------------------------|---------------------------------------------------------------------|
-| paccln  | `pacaur -Sc`                      | Clean out old and unused caches and packages                        |
+| pacclean| `pacaur -Sc`                      | Clean out old and unused caches and packages                        |
 | pacclr  | `pacaur -Scc`                     | Remove all files from the cache                                     |
 | pain    | `pacaur -S`                       | Install packages from the repositories                              |
 | pains   | `pacaur -U`                       | Install a package from a local file                                 |
