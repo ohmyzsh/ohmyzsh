@@ -118,6 +118,24 @@ if (( $+commands[aura] )); then
   function auownls () { aura -Qql $(aura -Qqo $@); }
 fi
 
+if (( $+commands[pacaur] )); then
+  alias paupg='pacaur -Syu'
+  alias pasu='pacaur -Syu --noconfirm'
+  alias pain='pacaur -S'
+  alias pains='pacaur -U'
+  alias pare='pacaur -R'
+  alias parem='pacaur -Rns'
+  alias parep='pacaur -Si'
+  alias pareps='pacaur -Ss'
+  alias paloc='pacaur -Qi'
+  alias palocs='pacaur -Qs'
+  alias palst='pacaur -Qe'
+  alias paorph='pacaur -Qtd'
+  alias painsd='pacaur -S --asdeps'
+  alias pamir='pacaur -Syy'
+  alias paupd="pacaur -Sy"
+  alias upgrade='pacaur -Syu'
+fi
 
 if (( $+commands[trizen] )); then
   alias trconf='trizen -C'
