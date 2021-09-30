@@ -89,6 +89,8 @@ function update_ohmyzsh() {
   # Ask for confirmation before updating unless in auto mode
   if [[ "$update_mode" = auto ]]; then
     update_ohmyzsh
+  elif [[ "$update_mode" = reminder ]]; then
+    echo "[oh-my-zsh] It's time to update! You can do that by running \`omz update\`"
   else
     # input sink to swallow all characters typed before the prompt
     # and add a newline if there wasn't one after characters typed
