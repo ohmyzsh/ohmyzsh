@@ -107,7 +107,6 @@ upgrades were available. Use `pacman -Que` instead.
 | pasu    | `pacaur -Syua --no-confirm`       | Same as `paupg`, but without confirmation                           |
 | upgrade[¹](#f1) | `pacaur -Syu`             | Sync with repositories before upgrading packages                    |
 
-
 #### Trizen
 
 | Alias   | Command                           | Description                                                         |
@@ -131,7 +130,6 @@ upgrades were available. Use `pacman -Que` instead.
 | trupg   | `trizen -Syua`                    | Sync with repositories before upgrading all packages (from AUR too) |
 | trsu    | `trizen -Syua --no-confirm`       | Same as `trupg`, but without confirmation                           |
 | upgrade[¹](#f1) | `trizen -Syu`             | Sync with repositories before upgrading packages                    |
-
 
 #### Yay
 
@@ -159,7 +157,6 @@ upgrades were available. Use `pacman -Que` instead.
 
 ---
 
-
 <span id="f1">¹</span>
 The `upgrade` alias is set for all package managers. Its value will depend on
 whether the package manager is installed, checked in the following order:
@@ -169,7 +166,6 @@ whether the package manager is installed, checked in the following order:
 3. `pacaur`
 4. `aura`
 5. `pacman`
-
 
 ## Contributors
 
@@ -186,4 +182,4 @@ whether the package manager is installed, checked in the following order:
 - Jeff M. Hubbard - jeffmhubbard@gmail.com
 - K. Harishankar(harishnkr) - hari2menon1234@gmail.com
 - Nowshed H. Imran(nowshed-imran) - now.im.627@gmail.com
-
+- 
