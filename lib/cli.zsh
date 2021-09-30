@@ -35,7 +35,7 @@ function _omz {
   elif (( CURRENT == 3 )); then
     case "$words[2]" in
       changelog) local -a refs
-        refs=("${(@f)$(command git for-each-ref --format="%(refname:short):%(subject)" refs/heads refs/tags)}")
+        refs=("${(@f)$(command git -C "$ZSH" for-each-ref --format="%(refname:short):%(subject)" refs/heads refs/tags)}")
         _describe 'command' refs ;;
       plugin) subcmds=(
         'disable:Disable plugin(s)'
