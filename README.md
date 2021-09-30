@@ -17,6 +17,40 @@ To learn more, visit [ohmyz.sh](https://ohmyz.sh), follow [@ohmyzsh](https://twi
 [![Discord server](https://img.shields.io/discord/642496866407284746)](https://discord.gg/ohmyzsh)
 [![Gitpod ready](https://img.shields.io/badge/Gitpod-ready-blue?logo=gitpod)](https://gitpod.io/#https://github.com/ohmyzsh/ohmyzsh)
 
+Table of Contents
+=================
+
+   * [Getting Started](#getting-started)
+      * [Prerequisites](#prerequisites)
+      * [Basic Installation](#basic-installation)
+         * [Manual inspection](#manual-inspection)
+   * [Using Oh My Zsh](#using-oh-my-zsh)
+      * [Plugins](#plugins)
+         * [Enabling Plugins](#enabling-plugins)
+         * [Using Plugins](#using-plugins)
+      * [Themes](#themes)
+         * [Selecting a Theme](#selecting-a-theme)
+      * [FAQ](#faq)
+   * [Advanced Topics](#advanced-topics)
+      * [Advanced Installation](#advanced-installation)
+         * [Custom Directory](#custom-directory)
+         * [Unattended install](#unattended-install)
+         * [Installing from a forked repository](#installing-from-a-forked-repository)
+         * [Manual Installation](#manual-installation)
+      * [Installation Problems](#installation-problems)
+      * [Custom Plugins and Themes](#custom-plugins-and-themes)
+   * [Getting Updates](#getting-updates)
+      * [Manual Updates](#manual-updates)
+   * [Uninstalling Oh My Zsh](#uninstalling-oh-my-zsh)
+   * [How do I contribute to Oh My Zsh?](#how-do-i-contribute-to-oh-my-zsh)
+      * [Do NOT send us themes](#do-not-send-us-themes)
+   * [Contributors](#contributors)
+   * [Follow Us](#follow-us)
+   * [Merchandise](#merchandise)
+   * [License](#license)
+   * [About Planet Argon](#about-planet-argon)
+
+
 ## Getting Started
 
 ### Prerequisites
