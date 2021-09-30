@@ -3,16 +3,29 @@ if [[ -f ~/.zsh-update && ! -f "${ZSH_CACHE_DIR}/.zsh-update" ]]; then
   mv ~/.zsh-update "${ZSH_CACHE_DIR}/.zsh-update"
 fi
 
+# Get user's update preferences
+#
+# Supported update modes:
+# - prompt (default): the user is asked before updating when it's time to update
+# - auto: the update is performed automatically when it's time
+# - reminder: a reminder is shown to the user when it's time to update
+# - disabled: automatic update is turned off
+zstyle -s ':omz:update' mode update_mode || update_mode=prompt
+
+# Support old-style settings
+[[ "$DISABLE_UPDATE_PROMPT" != true ]] || update_mode=auto
+[[ "$DISABLE_AUTO_UPDATE" != true ]] || update_mode=disabled
+
 # Cancel update if:
 # - the automatic update is disabled.
 # - the current user doesn't have write permissions nor owns the $ZSH directory.
 # - git is unavailable on the system.
-if [[ "$DISABLE_AUTO_UPDATE" = true ]] \
+if [[ "$update_mode" = disabled ]] \
    || [[ ! -w "$ZSH" || ! -O "$ZSH" ]] \
    || ! command -v git &>/dev/null; then
+  unset update_mode
   return
 fi
-
 
 function current_epoch() {
   zmodload zsh/datetime
@@ -56,7 +69,6 @@ function update_ohmyzsh() {
   #  the shell actually exits what it's running.
   trap "
     ret=\$?
-    unset -f current_epoch update_last_updated_file update_ohmyzsh 2>/dev/null
     command rm -rf '$ZSH/log/update.lock'
     return \$ret
   " EXIT INT QUIT
@@ -68,14 +80,14 @@ function update_ohmyzsh() {
   fi
 
   # Number of days before trying to update again
-  epoch_target=${UPDATE_ZSH_DAYS:-13}
+  zstyle -s ':omz:update' frequency epoch_target || epoch_target=${UPDATE_ZSH_DAYS:-13}
   # Test if enough time has passed until the next update
   if (( ( $(current_epoch) - $LAST_EPOCH ) < $epoch_target )); then
     return
   fi
 
-  # Ask for confirmation before updating unless disabled
-  if [[ "$DISABLE_UPDATE_PROMPT" = true ]]; then
+  # Ask for confirmation before updating unless in auto mode
+  if [[ "$update_mode" = auto ]]; then
     update_ohmyzsh
   else
     # input sink to swallow all characters typed before the prompt
@@ -92,3 +104,6 @@ function update_ohmyzsh() {
     esac
   fi
 }
+
+unset update_mode
+unset -f current_epoch update_last_updated_file update_ohmyzsh
