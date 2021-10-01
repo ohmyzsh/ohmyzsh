@@ -29,7 +29,13 @@ function git_prompt_info() {
     && upstream=" -> ${upstream}"
   fi
 
-  echo "${ZSH_THEME_GIT_PROMPT_PREFIX}${ref}${upstream}$(parse_git_dirty)${ZSH_THEME_GIT_PROMPT_SUFFIX}"
+  # Use global ZSH_THEME_GIT_SHOW_COMMITHASH=1 for including current HEAD commit short hash
+  local commitHash
+  if (( ${+ZSH_THEME_GIT_SHOW_COMMITHASH} )); then
+    commitHash="[$(git_prompt_short_sha)]"
+  fi
+
+  echo "${ZSH_THEME_GIT_PROMPT_PREFIX}${ref}${commitHash}${upstream}$(parse_git_dirty)${ZSH_THEME_GIT_PROMPT_SUFFIX}"
 }
 
 # Checks if working tree is dirty
