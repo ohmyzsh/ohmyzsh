@@ -13,5 +13,5 @@ qrcode () {
 qrsvg () {
   local input="$*"
   [ -z "$input" ] && _qrcode_show_message && local input="@/dev/stdin"
-  curl -d "${input}" https://qrcode.show -H "Accept: image/svg+xml"
+  curl -d "$input" https://qrcode.show -H "Accept: image/svg+xml"
 }
