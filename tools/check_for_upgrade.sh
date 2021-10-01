@@ -78,17 +78,21 @@ function update_ohmyzsh() {
   if [[ "$DISABLE_UPDATE_PROMPT" = true ]]; then
     update_ohmyzsh
   else
-    # input sink to swallow all characters typed before the prompt
-    # and add a newline if there wasn't one after characters typed
-    while read -t -k 1 option; do true; done
-    [[ "$option" != ($'\n'|"") ]] && echo
+    if [[ "$UPDATE_NOTIFICATION" = true ]]; then
+      echo "[oh-my-zsh] There is an update available for oh-my-zsh. You can update using \"omz update\"."
+    else
+      # input sink to swallow all characters typed before the prompt
+      # and add a newline if there wasn't one after characters typed
+      while read -t -k 1 option; do true; done
+      [[ "$option" != ($'\n'|"") ]] && echo
 
-    echo -n "[oh-my-zsh] Would you like to update? [Y/n] "
-    read -r -k 1 option
-    [[ "$option" != $'\n' ]] && echo
-    case "$option" in
-      [yY$'\n']) update_ohmyzsh ;;
-      [nN]) update_last_updated_file ;;
-    esac
+      echo -n "[oh-my-zsh] Would you like to update? [Y/n] "
+      read -r -k 1 option
+      [[ "$option" != $'\n' ]] && echo
+      case "$option" in
+        [yY$'\n']) update_ohmyzsh ;;
+        [nN]) update_last_updated_file ;;
+      esac
+    fi
   fi
 }
