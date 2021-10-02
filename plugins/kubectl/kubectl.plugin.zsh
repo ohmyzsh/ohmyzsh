@@ -168,6 +168,15 @@ alias kecj='kubectl edit cronjob'
 alias kdcj='kubectl describe cronjob'
 alias kdelcj='kubectl delete cronjob'
 
+# HorizontalPodAutoScaler management.
+alias kghpa='kubectl get hpa'
+alias kghpaa='kubectl get hpa --all-namespaces'
+alias kghpaw='kghpa --watch'
+alias kehpa='kubectl edit hpa'
+alias kdhpa='kubectl describe hpa'
+alias kdelhpa='kubectl delete hpa'
+alias kas='kubectl autoscale'
+
 # Only run if the user actually has kubectl installed
 if (( ${+_comps[kubectl]} )); then
   kj() { kubectl "$@" -o json | jq; }

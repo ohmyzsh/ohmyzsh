@@ -120,6 +120,13 @@ plugins=(... kubectl)
 | kecj    | `kubectl edit cronjob`              | Edit CronJob from the default editor                                                             |
 | kdcj    | `kubectl describe cronjob`          | Describe a CronJob in details                                                                    |
 | kdelcj  | `kubectl delete cronjob`            | Delete the CronJob                                                                               |
+|         |                                     | **HorizontalPodAutoscaler management**                                                           |
+| kghpa   | `kubectl get hpa`                   | List all HorizontalPodAutoscalers in ps output format                                            |
+| kghpaw  | `kghpa --watch`                     | After listing all HorizontalPodAutoscalers, watch for changes                                    |
+| kehpa   | `kubectl edit hpa`                  | Edit a HorizontalPodAutoscaler from default editor                                               |
+| kdhpa   | `kubectl describe hpa`              | Describe a HorizontalPodAutoscaler in detail                                                     |
+| kdelhpa | `kubectl delete hpa`                | Delete all HorizontalPodAutoscalers matching passed argument                                     |
+| kas     | `kubectl autoscale`                 | Create a HorizontalPodAutoscaler for a targeted resource                                         |
 
 ## Wrappers
 
