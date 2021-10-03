@@ -204,7 +204,6 @@ alias git-svn-dcommit-push='git svn dcommit && git push github $(git_main_branch
 alias gk='\gitk --all --branches'
 alias gke='\gitk --all $(git log -g --pretty=%h)'
 
-alias gl='git pull'
 alias glg='git log --stat'
 alias glgp='git log --stat -p'
 alias glgg='git log --graph'
@@ -295,6 +294,9 @@ alias gtl='gtl(){ git tag --sort=-v:refname -n -l "${1}*" }; noglob gtl'
 
 alias gunignore='git update-index --no-assume-unchanged'
 alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
+
+alias gu='git pull'
+alias guum='git pull upstream $(git_main_branch)'
 alias gup='git pull --rebase'
 alias gupv='git pull --rebase -v'
 alias gupa='git pull --rebase --autostash'

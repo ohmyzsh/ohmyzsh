@@ -92,7 +92,6 @@ plugins=(... git)
 | git-svn-dcommit-push | git svn dcommit && git push github $(git_main_branch):svntrunk                                                                   |
 | gk                   | gitk --all --branches                                                                                                            |
 | gke                  | gitk --all $(git log -g --pretty=%h)                                                                                             |
-| gl                   | git pull                                                                                                                         |
 | glg                  | git log --stat                                                                                                                   |
 | glgp                 | git log --stat -p                                                                                                                |
 | glgg                 | git log --graph                                                                                                                  |
@@ -173,6 +172,8 @@ plugins=(... git)
 | gtl                  | gtl(){ git tag --sort=-v:refname -n -l ${1}* }; noglob gtl                                                                       |
 | gunignore            | git update-index --no-assume-unchanged                                                                                           |
 | gunwip               | git log -n 1 \| grep -q -c "\-\-wip\-\-" && git reset HEAD~1                                                                     |
+| gu                   | git pull                                                                                                                         |
+| guum                 | git pull upstream master                                                                                                         |
 | gup                  | git pull --rebase                                                                                                                |
 | gupv                 | git pull --rebase -v                                                                                                             |
 | gupa                 | git pull --rebase --autostash                                                                                                    |
