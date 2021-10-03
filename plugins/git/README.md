@@ -89,7 +89,9 @@ plugins=(... git)
 | ghh                  | git help                                                                                                                         |
 | gignore              | git update-index --assume-unchanged                                                                                              |
 | gignored             | git ls-files -v \| grep "^[[:lower:]]"                                                                                           |
-| git-svn-dcommit-push | git svn dcommit && git push github $(git_main_branch):svntrunk                                                                   |
+| gskip                | git update-index --skip-worktree                                                                                                 |
+| gskiped              | git ls-files -v \| grep ^S                                                                                                       |
+| git-svn-dcommit-push | git svn dcommit && git push github $(git_main_branch):svntrunk                                                                                 |
 | gk                   | gitk --all --branches                                                                                                            |
 | gke                  | gitk --all $(git log -g --pretty=%h)                                                                                             |
 | gl                   | git pull                                                                                                                         |
@@ -172,6 +174,7 @@ plugins=(... git)
 | gtv                  | git tag \| sort -V                                                                                                               |
 | gtl                  | gtl(){ git tag --sort=-v:refname -n -l ${1}* }; noglob gtl                                                                       |
 | gunignore            | git update-index --no-assume-unchanged                                                                                           |
+| gunskip              | git update-index --no-skip-worktree                                                                                              |
 | gunwip               | git log -n 1 \| grep -q -c "\-\-wip\-\-" && git reset HEAD~1                                                                     |
 | gup                  | git pull --rebase                                                                                                                |
 | gupv                 | git pull --rebase -v                                                                                                             |

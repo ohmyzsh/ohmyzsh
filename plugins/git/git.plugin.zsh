@@ -199,6 +199,8 @@ alias ghh='git help'
 
 alias gignore='git update-index --assume-unchanged'
 alias gignored='git ls-files -v | grep "^[[:lower:]]"'
+alias gskip='git update-index --skip-worktree'
+alias gskiped='git ls-files -v | grep ^S'
 alias git-svn-dcommit-push='git svn dcommit && git push github $(git_main_branch):svntrunk'
 
 alias gk='\gitk --all --branches'
@@ -294,6 +296,7 @@ alias gtv='git tag | sort -V'
 alias gtl='gtl(){ git tag --sort=-v:refname -n -l "${1}*" }; noglob gtl'
 
 alias gunignore='git update-index --no-assume-unchanged'
+alias gunskip='git update-index --no-skip-worktree'
 alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
 alias gup='git pull --rebase'
 alias gupv='git pull --rebase -v'
