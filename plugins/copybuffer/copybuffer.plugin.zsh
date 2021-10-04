@@ -11,4 +11,6 @@ copybuffer () {
 
 zle -N copybuffer
 
-bindkey "^O" copybuffer
+bindkey -M emacs "^O" copybuffer
+bindkey -M viins "^O" copybuffer
+bindkey -M vicmd "^O" copybuffer
