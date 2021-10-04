@@ -299,6 +299,7 @@ alias gup='git pull --rebase'
 alias gupv='git pull --rebase -v'
 alias gupa='git pull --rebase --autostash'
 alias gupav='git pull --rebase --autostash -v'
+alias gupom='git pull --rebase origin $(git_main_branch)'
 alias glum='git pull upstream $(git_main_branch)'
 
 alias gwch='git whatchanged -p --abbrev-commit --pretty=medium'
