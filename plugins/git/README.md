@@ -90,8 +90,8 @@ plugins=(... git)
 | gignore              | git update-index --assume-unchanged                                                                                              |
 | gignored             | git ls-files -v \| grep "^[[:lower:]]"                                                                                           |
 | git-svn-dcommit-push | git svn dcommit && git push github $(git_main_branch):svntrunk                                                                   |
-| gk                   | gitk --all --branches                                                                                                            |
-| gke                  | gitk --all $(git log -g --pretty=%h)                                                                                             |
+| gk                   | gitk --all --branches &!                                                                                                          |
+| gke                  | gitk --all $(git log -g --pretty=%h) &!                                                                                           |
 | gl                   | git pull                                                                                                                         |
 | glg                  | git log --stat                                                                                                                   |
 | glgp                 | git log --stat -p                                                                                                                |
