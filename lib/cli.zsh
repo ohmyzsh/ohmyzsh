@@ -91,7 +91,8 @@ function _omz {
         # NOTE: $(( CURRENT - 1 )) is the last plugin argument completely passed, i.e. that which
         # has a space after them. This is to avoid removing plugins partially passed, which makes
         # the completion not add a space after the completed plugin.
-        local -a args=(${words[4,$(( CURRENT - 1))]})
+        local -a args
+        args=(${words[4,$(( CURRENT - 1))]})
         valid_plugins=(${valid_plugins:|args})
 
         _describe 'plugin' valid_plugins ;;
@@ -214,7 +215,7 @@ function _omz::plugin::disable {
   fi
 
   # Check that plugin is in $plugins
-  local -a dis_plugins=()
+  local -a dis_plugins
   for plugin in "$@"; do
     if [[ ${plugins[(Ie)$plugin]} -eq 0 ]]; then
       _omz::log warn "plugin '$plugin' is not enabled."
@@ -303,7 +304,7 @@ function _omz::plugin::enable {
   fi
 
   # Check that plugin is not in $plugins
-  local -a add_plugins=()
+  local -a add_plugins
   for plugin in "$@"; do
     if [[ ${plugins[(Ie)$plugin]} -ne 0 ]]; then
       _omz::log warn "plugin '$plugin' is already enabled."
@@ -424,10 +425,8 @@ function _omz::plugin::load {
     return 1
   fi
 
-  local plugins=("$@")
   local plugin base has_completion=0
-
-  for plugin in $plugins; do
+  for plugin in "$@"; do
     if [[ -d "$ZSH_CUSTOM/plugins/$plugin" ]]; then
       base="$ZSH_CUSTOM/plugins/$plugin"
     elif [[ -d "$ZSH/plugins/$plugin" ]]; then
