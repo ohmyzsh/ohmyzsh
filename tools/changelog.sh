@@ -120,7 +120,7 @@ function parse-commit {
   fi
 
   # Parse commit with hash $1
-  local hash="$1" subject body warning rhash
+  local hash="$1" subject body type warning rhash
   subject="$(command git show -s --format=%s $hash)"
   body="$(command git show -s --format=%b $hash)"
 
@@ -132,8 +132,12 @@ function parse-commit {
   #  commit body
   #  [BREAKING CHANGE: warning]
 
+  # if commit type is not going to be displayed, do nothing else
+  type="$(commit:type "$subject")"
+  (( ${MAIN_TYPES[(Ie)$type]} || ${OTHER_TYPES[(Ie)$type]} )) || return
+
   # commits holds the commit type
-  commits[$hash]="$(commit:type "$subject")"
+  commits[$hash]="$type"
   # scopes holds the commit scope
   scopes[$hash]="$(commit:scope "$subject")"
   # subjects holds the commit subject
