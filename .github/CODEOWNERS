@@ -1,0 +1,10 @@
+# Plugin owners
+plugins/archlinux/                  @ratijas
+plugins/aws/                        @maksyms
+plugins/genpass/                    @atoponce
+plugins/git-lfs/                    @hellovietduc
+plugins/gitfast/                    @felipec
+plugins/sdk/                        @rgoldberg
+plugins/universalarchive/           @Konfekt
+plugins/wp-cli/                     @joshmedeski
+plugins/zoxide/                     @ajeetdsouza

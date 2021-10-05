@@ -1,4 +1,6 @@
 alias bi="bower install"
+alias bisd="bower install --save-dev"
+alias bis="bower install --save"
 alias bl="bower list"
 alias bs="bower search"
 

@@ -374,7 +374,8 @@ _managepy-commands() {
 _applist() {
   local line
   local -a apps
-  _call_program help-command "python -c \"import os.path as op, re, django.conf, sys;\\
+  _call_program help-command "python -c \"import sys; del sys.path[0];\\
+                                          import os.path as op, re, django.conf;\\
                                           bn=op.basename(op.abspath(op.curdir));[sys\\
                                           .stdout.write(str(re.sub(r'^%s\.(.*?)$' %
                                           bn, r'\1', i)) + '\n') for i in django.conf.settings.\\
@@ -401,3 +402,6 @@ compdef _managepy django
 compdef _managepy django-admin
 compdef _managepy django-admin.py
 compdef _managepy django-manage
+
+print -P "%F{yellow}The django plugin is deprecated in favor of Zsh's Django completion.
+%BPlease remove it from your plugins to stop using it.%b%f"

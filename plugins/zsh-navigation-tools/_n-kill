@@ -10,8 +10,8 @@ integer cygwin=0
 local IFS="
 "
 
-case "$OSTYPE" in
-    cygwin*) list=( `command ps -Wa` ); cygwin=1 ;;
+case "$(uname)" in
+    CYGWIN*) list=( `command ps -Wa` ); cygwin=1 ;;
     *) list=( `command ps -o pid,uid,command -A` ) ;;
 esac
 
@@ -36,6 +36,6 @@ for line in "${list[@]}"; do
 done
 
 _wanted bits expl "Processes' name bits" \
-    compadd "$@" -a - words && ret=0
+    compadd -M 'm:{a-z}={A-Z}' "$@" -a - words && ret=0
 
 return "$ret"

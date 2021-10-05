@@ -1,17 +1,14 @@
 # Git-Flow plugin
 
-This plugin adds completion and aliases for the `git-flow` command. More information
-at https://github.com/nvie/gitflow.
+This plugin adds completion and aliases for the [`git-flow` command](https://github.com/nvie/gitflow).
 
-Enable git-flow plugin in your zshrc file:
-```
+To use it, add `git-flow` to the plugins array in your zshrc file:
+
+```zsh
 plugins=(... git-flow)
 ```
 
 ## Aliases
-
-More information about `git-flow` commands:
-https://github.com/nvie/gitflow/wiki/Command-Line-Arguments
 
 | Alias   | Command                    | Description                            |
 |---------|----------------------------|----------------------------------------|
@@ -30,3 +27,5 @@ https://github.com/nvie/gitflow/wiki/Command-Line-Arguments
 | `gflfp` | `git flow feature publish` | Publish feature: `gflfp <name>`        |
 | `gflhf` | `git flow hotfix finish`   | Finish hotfix: `gflhf <version>`       |
 | `gflrf` | `git flow release finish`  | Finish release: `gflrf <version>`      |
+
+[More information about `git-flow` commands](https://github.com/nvie/gitflow/wiki/Command-Line-Arguments).

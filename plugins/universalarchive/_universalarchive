@@ -1,0 +1,6 @@
+#compdef ua
+
+_arguments \
+  "1:archive format:(7z bz2 gz lzma lzo rar tar tar.bz2 tar.gz tar.lzma tar.xz tar.Z tbz tgz tlz txz tZ xz Z zip zst)" \
+  "*:input files:_files" \
+&& return 0

@@ -4,6 +4,7 @@ The mvn plugin provides many [useful aliases](#aliases) as well as completion fo
 the [Apache Maven](https://maven.apache.org/) command (`mvn`).
 
 Enable it by adding `mvn` to the plugins array in your zshrc file:
+
 ```zsh
 plugins=(... mvn)
 ```
@@ -18,6 +19,7 @@ if it's found, or the mvn command otherwise.
 | `mvn!`               | `mvn -f <root>/pom.xml`                         |
 | `mvnag`              | `mvn archetype:generate`                        |
 | `mvnboot`            | `mvn spring-boot:run`                           |
+| `mvnqdev`            | `mvn quarkus:dev`                               |
 | `mvnc`               | `mvn clean`                                     |
 | `mvncd`              | `mvn clean deploy`                              |
 | `mvnce`              | `mvn clean eclipse:clean eclipse:eclipse`       |
@@ -35,6 +37,7 @@ if it's found, or the mvn command otherwise.
 | `mvndocs`            | `mvn dependency:resolve -Dclassifier=javadoc`   |
 | `mvndt`              | `mvn dependency:tree`                           |
 | `mvne`               | `mvn eclipse:eclipse`                           |
+| `mvnfmt`             | `mvn fmt:format`                                |
 | `mvnjetty`           | `mvn jetty:run`                                 |
 | `mvnp`               | `mvn package`                                   |
 | `mvns`               | `mvn site`                                      |
@@ -55,4 +58,4 @@ has colored output, so this function will be soon removed from the plugin.
 ### Known bugs
 
 It has a bug where it will swallow mvn prompts for user input, _e.g._ when using
-`archetype:generate`. See [#5052](https://github.com/robbyrussell/oh-my-zsh/issues/5052).
+`archetype:generate`. See [#5052](https://github.com/ohmyzsh/ohmyzsh/issues/5052).
