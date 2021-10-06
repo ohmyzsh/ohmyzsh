@@ -36,6 +36,6 @@ if (( $+commands[rustup] && $+commands[cargo] )); then
   autoload -Uz _cargo
   _comps[cargo]=_cargo
 
-  unset ver ver_file comp_file
-  unset ver ver_file comp_file
+  unset ver1 ver_file1 comp_file1
+  unset ver2 ver_file2 comp_file2
 fi
