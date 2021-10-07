@@ -119,12 +119,23 @@ elif [[ "$OSTYPE" = linux*  ]]; then
 
   function battery_pct() {
     if (( $+commands[acpitool] )); then
-      if acpitool 2>/dev/null | command grep -qE '^\s+All batteries\s*:'; then
-        acpitool 2>/dev/null | command grep -E '^\s+All batteries\s*:' | cut -f1 -d',' | tr -cd '[[:digit:].]'
-      else
-	      # no 'All batteries section, get the one battery line that there should be
-        acpitool 2>/dev/null | command grep -E '^\s+Battery.*:' | head -n1 | cut -f2 -d: | cut -f2 -d',' | tr -cd '[[:digit:].]'
-      fi
+      acpitool 2>/dev/null | command awk -F, '
+        # Sample output:   All batteries  : 62.60%, 02:03:03
+        /^\s+All batteries/ {
+          gsub(/[^0-9.]/, "", $1)
+          pct=$1
+          exit
+        }
+
+        # Sample output:
+        #   Battery #1     : Unknown, 99.55%
+        #   Battery #2     : Discharging, 49.58%, 01:12:05
+        !pct && /^\s+Battery/ {
+          gsub(/[^0-9.]/, "", $2)
+          pct=$2
+        }
+        END { print pct }
+        '
     elif (( $+commands[acpi] )); then
       acpi 2>/dev/null | command grep -v "rate information unavailable" | command grep -E '^Battery.*(Full|(Disc|C)harging)' | cut -f2 -d ',' | tr -cd '[:digit:]'
     fi
