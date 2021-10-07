@@ -116,7 +116,7 @@ elif [[ "$OSTYPE" = linux*  ]]; then
           pct=$1
           exit
         }
-gd        !pct && /^\s+Battery/ {
+        !pct && /^\s+Battery/ {
           gsub(/[^0-9.]/, "", $2)
           pct=$2
         }
