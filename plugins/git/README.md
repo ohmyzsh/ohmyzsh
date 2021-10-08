@@ -169,6 +169,8 @@ plugins=(... git)
 | gsu                  | git submodule update                                                                                                             |
 | gsw                  | git switch                                                                                                                       |
 | gswc                 | git switch -c                                                                                                                    |
+| gswm                 | git switch $(git_main_branch)                                                                                                    |
+| gswd                 | git switch $(git_develop_branch)                                                                                                 |
 | gts                  | git tag -s                                                                                                                       |
 | gtv                  | git tag \| sort -V                                                                                                               |
 | gtl                  | gtl(){ git tag --sort=-v:refname -n -l ${1}* }; noglob gtl                                                                       |
