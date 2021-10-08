@@ -7,7 +7,7 @@ if [[ -n "$JSONTOOLS_METHOD" ]]; then
 fi
 
 # If method undefined, find the first one that is installed
-if [[ ! -v JSONTOOLS_METHOD ]]; then
+if [[ -z "$JSONTOOLS_METHOD" ]]; then
   for JSONTOOLS_METHOD in node python ruby; do
     # If method found, break out of loop
     (( $+commands[$JSONTOOLS_METHOD] )) && break
@@ -16,7 +16,7 @@ if [[ ! -v JSONTOOLS_METHOD ]]; then
   done
 
   # If no methods were found, exit the plugin
-  [[ -v JSONTOOLS_METHOD ]] || return 1
+  [[ -n "$JSONTOOLS_METHOD" ]] || return 1
 fi
 
 # Define json tools for each method

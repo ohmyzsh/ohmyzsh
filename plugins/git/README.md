@@ -47,6 +47,7 @@ plugins=(... git)
 | gcb                  | git checkout -b                                                                                                                  |
 | gcf                  | git config --list                                                                                                                |
 | gcl                  | git clone --recurse-submodules                                                                                                   |
+| gccd                 | git clone --recurse-submodules "$@" && cd "$(basename $_ .git)"                                                                  |
 | gclean               | git clean -id                                                                                                                    |
 | gpristine            | git reset --hard && git clean -dffx                                                                                              |
 | gcm                  | git checkout $(git_main_branch)                                                                                                  |
@@ -66,7 +67,7 @@ plugins=(... git)
 | gds                  | git diff --staged                                                                                                                |
 | gdt                  | git diff-tree --no-commit-id --name-only -r                                                                                      |
 | gdnolock             | git diff $@ ":(exclude)package-lock.json" ":(exclude)&ast;.lock"                                                                 |
-| gdu                  | git diff @{u}                                                                                                                    |
+| gdup                 | git diff @{upstream}                                                                                                             |
 | gdv                  | git diff -w $@ \| view -                                                                                                         |
 | gdw                  | git diff --word-diff                                                                                                             |
 | gf                   | git fetch                                                                                                                        |
@@ -90,8 +91,8 @@ plugins=(... git)
 | gignore              | git update-index --assume-unchanged                                                                                              |
 | gignored             | git ls-files -v \| grep "^[[:lower:]]"                                                                                           |
 | git-svn-dcommit-push | git svn dcommit && git push github $(git_main_branch):svntrunk                                                                   |
-| gk                   | gitk --all --branches                                                                                                            |
-| gke                  | gitk --all $(git log -g --pretty=%h)                                                                                             |
+| gk                   | gitk --all --branches &!                                                                                                          |
+| gke                  | gitk --all $(git log -g --pretty=%h) &!                                                                                           |
 | gl                   | git pull                                                                                                                         |
 | glg                  | git log --stat                                                                                                                   |
 | glgp                 | git log --stat -p                                                                                                                |
@@ -168,6 +169,8 @@ plugins=(... git)
 | gsu                  | git submodule update                                                                                                             |
 | gsw                  | git switch                                                                                                                       |
 | gswc                 | git switch -c                                                                                                                    |
+| gswm                 | git switch $(git_main_branch)                                                                                                    |
+| gswd                 | git switch $(git_develop_branch)                                                                                                 |
 | gts                  | git tag -s                                                                                                                       |
 | gtv                  | git tag \| sort -V                                                                                                               |
 | gtl                  | gtl(){ git tag --sort=-v:refname -n -l ${1}* }; noglob gtl                                                                       |
