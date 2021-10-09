@@ -100,7 +100,7 @@ alias gcf='git config --list'
 
 function gccd() {
   command git clone --recurse-submodules "$@"
-  [[ -d "$_" ]] && cd "$_" || cd "${${_:h}%.git}"
+  [[ -d "$_" ]] && cd "$_" || cd "${${_:t}%.git}"
 }
 compdef _git gccd=git-clone
 
