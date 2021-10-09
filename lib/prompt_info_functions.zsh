@@ -41,3 +41,13 @@ ZSH_THEME_RVM_PROMPT_OPTIONS="i v g"
 function ruby_prompt_info() {
   echo $(rvm_prompt_info || rbenv_prompt_info || chruby_prompt_info)
 }
+
+# use this to enable users to see their conda env info
+conda_prompt_info() {
+    if [ -n "$CONDA_DEFAULT_ENV" ]; then
+        conda config --set changeps1 false
+        echo -n "%{$terminfo[bold]$fg[yellow]%}($CONDA_DEFAULT_ENV) %{$reset_color%}"
+    else
+        echo -n ''
+    fi
+}
