@@ -29,30 +29,46 @@ function work_in_progress() {
   fi
 }
 
-# Check if main exists and use instead of master
+# Attempt to determine main branch 
+# First check to see if there is a user defined branch name override that exists and matching ref
+# Fall back to traditional main branch names
+# Otherwise inform user of local configuration override
 function git_main_branch() {
   command git rev-parse --git-dir &>/dev/null || return
+  
+  mainBranchName=$(command git config user.mainBranchName)
+  command git show-ref -q --verify "refs/heads/$mainBranchName" && echo "$mainBranchName" && return
+
   local ref
-  for ref in refs/{heads,remotes/{origin,upstream}}/{main,trunk}; do
+  for ref in refs/{heads,remotes/{origin,upstream}}/{master,main,trunk}; do
     if command git show-ref -q --verify $ref; then
       echo ${ref:t}
       return
     fi
   done
-  echo master
+  echo "No main branch found. Set git local config 'user.mainBranchName' to specify a non traditional branch" >&2
+  return 1
 }
 
-# Check for develop and similarly named branches
+# Attempt to determine develop branch 
+# First check to see if there is a user defined branch name override that exists and matching ref
+# Fall back to traditional dev branch names
+# Otherwise inform user of local configuration override
 function git_develop_branch() {
   command git rev-parse --git-dir &>/dev/null || return
+
+  devBranchName=$(command git config user.developBranchName)
+  command git show-ref -q --verify "refs/heads/$devBranchName" && echo "$devBranchName" && return
+
   local branch
-  for branch in dev devel development; do
+  for branch in dev devel develop development; do
     if command git show-ref -q --verify refs/heads/$branch; then
       echo $branch
       return
     fi
   done
-  echo develop
+  echo "No develop branch found. Set git local config 'user.developBranchName' to specify a non traditional branch" >&2
+  return 1
 }
 
 #
