@@ -1,15 +1,17 @@
-# Calls ./mvnw if found, otherwise execute the original mvn
+# Calls mvnw if found in the current project, otherwise execute the original mvn
 mvn-or-mvnw() {
-  if [ -x ./mvnw ] || [ -x ../mvnw ]; then
-    echo "executing mvnw instead of mvn"
-    if [ -x ./mvnw ]; then
-      ./mvnw "$@"
-    else
-      ../mvnw "$@"
-    fi
-  else
-    command mvn "$@"
+  local dir="$PWD"
+  while [[ ! -x "$dir/mvnw" && "$dir" != / ]]; do
+    dir="${dir:h}"
+  done
+
+  if [[ -x "$dir/mvnw" ]]; then
+    echo "Running \`$dir/mvnw\`..." >&2
+    "$dir/mvnw" "$@"
+    return $?
   fi
+
+  command mvn "$@"
 }
 
 # Wrapper function for Maven's mvn command. Based on https://gist.github.com/1027800
@@ -38,7 +40,7 @@ mvn-color() {
   )
 }
 
-# either use orignal mvn or the mvn wrapper
+# either use original mvn or the mvn wrapper
 alias mvn="mvn-or-mvnw"
 
 # Run mvn against the pom found in a project's root directory (assumes a git repo)
