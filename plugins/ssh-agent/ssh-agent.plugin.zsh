@@ -97,7 +97,7 @@ else
 fi
 
 # Don't add identities if lazy-loading is enabled
-if ! zstyle -b :omz:plugins:ssh-agent lazy; then
+if ! zstyle -t :omz:plugins:ssh-agent lazy; then
   _add_identities
 fi
 
