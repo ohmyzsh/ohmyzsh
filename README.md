@@ -168,6 +168,8 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 
 #### Installing from a forked repository
 
+___Note that the contents of forks is out of our control. Make sure you trust the fork before installing it !___
+
 The install script also accepts these variables to allow installation of a different repository:
 
 - `REPO` (default: `ohmyzsh/ohmyzsh`): this takes the form of `owner/repository`. If you set
@@ -183,10 +185,17 @@ The install script also accepts these variables to allow installation of a diffe
   checked out when cloning the repository. This might be useful for testing a Pull Request, or if you
   want to use a branch other than `master`.
 
-For example:
-
+The 3 most common examples:
 ```shell
-REPO=apjanke/oh-my-zsh BRANCH=edge sh install.sh
+#Install the fork but use the official install script:
+REPO=ngaro/oh-my-zsh BRANCH=cmtversion sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+#Install the fork with it's own install script:
+REPO=ngaro/oh-my-zsh ; BRANCH=cmtversion
+REPO=$REPO BRANCH=$BRANCH sh -c "$(curl -fsSL https://raw.githubusercontent.com/$REPO/$BRANCH/tools/install.sh)"
+
+#Install the fork with a script that you already downloaded
+REPO=ngaro/oh-my-zsh BRANCH=cmtversion install.sh
 ```
 
 #### Manual Installation
