@@ -21,3 +21,5 @@ alias dclf="$dccmd logs -f"
 alias dcpull="$dccmd pull"
 alias dcstart="$dccmd start"
 alias dck="$dccmd kill"
+
+unset dccmd
