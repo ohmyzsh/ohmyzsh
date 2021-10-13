@@ -33,5 +33,24 @@ elif (( CURRENT == 3 )); then
       flags+=(${^args}":$description")
     done
   done
-  _describe flags flags && return 0
+  _describe flags flags
+
+  case "$words[2]" in
+  b|build|l|lint|t|test)
+    # Sample output (ng config projects):
+    # {
+    #   "angular-project-1": {
+    #     ...
+    #   },
+    #   "angular-project-2": {
+    #     ...
+    #   }
+    # }
+    # In abscence of a proper JSON parser, just grab the lines with
+    # a 2-space indentation and only the stuff inside quotes
+    local -a projects
+    projects=(${(@f)"$(ng config projects 2>/dev/null | sed -n 's/^  "\([^"]\+\)".*$/\1/p')"})
+    _describe projects projects
+    ;;
+  esac
 fi
