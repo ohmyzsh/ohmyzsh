@@ -96,7 +96,10 @@ else
   _start_agent
 fi
 
-_add_identities
+# Don't add identities if lazy-loading is enabled
+if ! zstyle -t :omz:plugins:ssh-agent lazy; then
+  _add_identities
+fi
 
 unset agent_forwarding ssh_env_cache
 unfunction _start_agent _add_identities
