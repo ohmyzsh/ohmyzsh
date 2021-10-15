@@ -126,6 +126,7 @@ alias gdcw='git diff --cached --word-diff'
 alias gdct='git describe --tags $(git rev-list --tags --max-count=1)'
 alias gds='git diff --staged'
 alias gdt='git diff-tree --no-commit-id --name-only -r'
+alias gdtl='git difftool --no-prompt'
 alias gdup='git diff @{upstream}'
 alias gdw='git diff --word-diff'
 
