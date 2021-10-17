@@ -245,13 +245,13 @@ If you would like to override the functionality of a plugin distributed with Oh 
 By default, you will be prompted to check for upgrades every few weeks. If you would like `oh-my-zsh` to automatically upgrade itself without prompting you, set the following in your `~/.zshrc`:
 
 ```shell
-DISABLE_UPDATE_PROMPT=true
+zstyle ':omz:update' mode auto
 ```
 
 To disable automatic upgrades, set the following in your `~/.zshrc`:
 
 ```shell
-DISABLE_AUTO_UPDATE=true
+zstyle ':omz:update' mode disabled
 ```
 
 ### Manual Updates
