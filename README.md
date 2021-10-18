@@ -42,7 +42,7 @@ It's a good idea to inspect the install script from projects you don't yet know.
 that by downloading the install script first, looking through it so everything looks normal,
 then running it:
 
-```shell
+```sh
 wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
 sh install.sh
 ```
@@ -57,13 +57,13 @@ Oh My Zsh comes with a shitload of plugins for you to take advantage of. You can
 
 Once you spot a plugin (or several) that you'd like to use with Oh My Zsh, you'll need to enable them in the `.zshrc` file. You'll find the zshrc file in your `$HOME` directory. Open it with your favorite text editor and you'll see a spot to list all the plugins you want to load.
 
-```shell
+```sh
 vi ~/.zshrc
 ```
 
 For example, this might begin to look like this:
 
-```shell
+```sh
 plugins=(
   git
   bundler
@@ -91,13 +91,13 @@ _Robby's theme is the default one. It's not the fanciest one. It's not the simpl
 
 Once you find a theme that you'd like to use, you will need to edit the `~/.zshrc` file. You'll see an environment variable (all caps) in there that looks like:
 
-```shell
+```sh
 ZSH_THEME="robbyrussell"
 ```
 
 To use a different theme, simply change the value to match the name of your desired theme. For example:
 
-```shell
+```sh
 ZSH_THEME="agnoster" # (this is one of the fancy ones)
 # see https://github.com/ohmyzsh/ohmyzsh/wiki/Themes#agnoster
 ```
@@ -112,13 +112,13 @@ In case you did not find a suitable theme for your needs, please have a look at 
 
 If you're feeling feisty, you can let the computer select one randomly for you each time you open a new terminal window.
 
-```shell
+```sh
 ZSH_THEME="random" # (...please let it be pie... please be some pie..)
 ```
 
 And if you want to pick random theme from a list of your favorite themes:
 
-```shell
+```sh
 ZSH_THEME_RANDOM_CANDIDATES=(
   "robbyrussell"
   "agnoster"
@@ -127,7 +127,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(
 
 If you only know which themes you don't like, you can add them similarly to an ignored list:
 
-```shell
+```sh
 ZSH_THEME_RANDOM_IGNORED=(pygmalion tjkirch_mod)
 ```
 
@@ -152,7 +152,7 @@ If you'd like to change the install directory with the `ZSH` environment variabl
 `export ZSH=/your/path` before installing, or by setting it before the end of the install pipeline
 like this:
 
-```shell
+```sh
 ZSH="$HOME/.dotfiles/oh-my-zsh" sh install.sh
 ```
 
@@ -162,7 +162,7 @@ If you're running the Oh My Zsh install script as part of an automated install, 
 flag `--unattended` to the `install.sh` script. This will have the effect of not trying to change
 the default shell, and also won't run `zsh` when the installation has finished.
 
-```shell
+```sh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 ```
 
@@ -185,7 +185,7 @@ The install script also accepts these variables to allow installation of a diffe
 
 For example:
 
-```shell
+```sh
 REPO=apjanke/oh-my-zsh BRANCH=edge sh install.sh
 ```
 
@@ -193,13 +193,13 @@ REPO=apjanke/oh-my-zsh BRANCH=edge sh install.sh
 
 ##### 1. Clone the repository
 
-```shell
+```sh
 git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
 ```
 
 ##### 2. *Optionally*, backup your existing `~/.zshrc` file
 
-```shell
+```sh
 cp ~/.zshrc ~/.zshrc.orig
 ```
 
@@ -207,13 +207,13 @@ cp ~/.zshrc ~/.zshrc.orig
 
 You can create a new zsh config file by copying the template that we have included for you.
 
-```shell
+```sh
 cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
 ```
 
 ##### 4. Change your default shell
 
-```shell
+```sh
 chsh -s $(which zsh)
 ```
 
@@ -242,23 +242,40 @@ If you would like to override the functionality of a plugin distributed with Oh 
 
 ## Getting Updates
 
-By default, you will be prompted to check for upgrades every few weeks. If you would like `oh-my-zsh` to automatically upgrade itself without prompting you, set the following in your `~/.zshrc`:
+By default, you will be prompted to check for updates every 2 weeks. You can choose other update modes by adding a line to your `~/.zshrc` file, **before Oh My Zsh is loaded**:
 
-```shell
-DISABLE_UPDATE_PROMPT=true
-```
+1. Automatic update without confirmation prompt:
 
-To disable automatic upgrades, set the following in your `~/.zshrc`:
+   ```sh
+   zstyle ':omz:update' mode auto
+   ```
 
-```shell
-DISABLE_AUTO_UPDATE=true
+2. Just offer a reminder every few days, if there are updates available:
+
+   ```sh
+   zstyle ':omz:update' mode reminder
+   ```
+
+3. To disable automatic updates entirely:
+
+   ```sh
+   zstyle ':omz:update' mode disabled
+   ```
+
+NOTE: you can control how often Oh My Zsh checks for updates with the following setting:
+
+```sh
+# This will check for updates every 7 days
+zstyle ':omz:update' frequency 7
+# This will check for updates every time you open the terminal (not recommended)
+zstyle ':omz:update' frequency 0
 ```
 
 ### Manual Updates
 
-If you'd like to upgrade at any point in time (maybe someone just released a new plugin and you don't want to wait a week?) you just need to run:
+If you'd like to update at any point in time (maybe someone just released a new plugin and you don't want to wait a week?) you just need to run:
 
-```shell
+```sh
 omz update
 ```
 
