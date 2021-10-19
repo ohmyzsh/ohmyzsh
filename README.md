@@ -28,7 +28,7 @@ To learn more, visit [ohmyz.sh](https://ohmyz.sh), follow [@ohmyzsh](https://twi
 
 ### Basic Installation
 
-Oh My Zsh is installed by running one of the following commands in your terminal. You can install this via the command-line with either `curl`, `wget` or another similar tool.
+Oh My Zsh is installed by running one of the following commands in your terminaldone anything on it. you need not be . You can install this via the command-line with either `curl`, `wget` or another similar tool.
 
 | Method    | Command                                                                                           |
 |:----------|:--------------------------------------------------------------------------------------------------|
