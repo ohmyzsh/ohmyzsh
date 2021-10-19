@@ -29,4 +29,3 @@ plugins=(... ruby)
 | gl    | `gem lock`                             | Generate a lockdown list of gems                     |
 | go    | `gem open`                             | Open gem source in default editor                    |
 | goe   | `gem open -e`                          | Open gem sources in preferred editor                 |
-
