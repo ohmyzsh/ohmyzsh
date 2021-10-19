@@ -25,7 +25,8 @@ plugins=(... ruby)
 | gcb   | `gem cert --build`                     | Build private key and self-signed certificate        |
 | gclup | `gem cleanup -n`                       | Do not uninstall gem                                 |
 | ggi   | `gem generate_index`                   | Generate index file for gem server                   |
-| gh    | `gem help`                             | Provide additional help                              |
+| ghlp  | `gem help`                             | Provide additional help                              |
 | gl    | `gem lock`                             | Generate a lockdown list of gems                     |
 | go    | `gem open`                             | Open gem source in default editor                    |
 | goe   | `gem open -e`                          | Open gem sources in preferred editor                 |
+
