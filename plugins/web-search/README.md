@@ -67,7 +67,7 @@ ZSH_WEB_SEARCH_ENGINES=(
 )
 ```
 
-where `<context>` is the name of the search context, and `<URL>` a URL of
+Where `<context>` is the name of the search context, and `<URL>` a URL of
 the same type as the search contexts above. For example, to add `reddit`,
 you'd do:
 
