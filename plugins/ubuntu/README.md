@@ -30,8 +30,11 @@ Commands that use `$APT` will use `apt` if installed or defer to `apt-get` other
 | agr     | `sudo $APT remove <pkg>`                                                 | Remove a package                                                                                  |
 | ags     | `$APT source <pkg>`                                                      | Fetch the source for the specified package                                                        |
 | agu     | `sudo $APT update`                                                       | Update package list                                                                               |
+| aguc    | `sudo $APT update && sudo $APT list --upgradeable                        | Update packages list and show the upgradeable packages                                            |
 | agud    | `sudo $APT update && sudo $APT dist-upgrade`                             | Update packages list and perform a distribution upgrade                                           |
 | agug    | `sudo $APT upgrade`                                                      | Upgrade available packages                                                                        |
+| agul    | `sudo $APT upgrade && sudo $APT autoremove`                              | Upgrade available packages and autoclean any packages that can be cleaned                         |
+| agulc   | `sudo $APT update && list --upgradeable && upgrade -y && autoclean       | Updates packages list, displays upgradeable packages, upgrades the packages, and autocleans       |
 | agar    | `sudo $APT autoremove`                                                   | Remove automatically installed packages no longer needed                                          |
 | aguu    | `sudo $APT update && sudo $APT upgrade`                                  | Update packages list and upgrade available packages                                               |
 | allpkgs | `dpkg --get-selections \| grep -v deinstall`                             | Print all installed packages                                                                      |
