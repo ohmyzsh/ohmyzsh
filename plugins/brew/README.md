@@ -21,6 +21,7 @@ plugins=(... brew)
 | `buf`    | `brew upgrade --formula`              | Upgrade only formulas (not casks).                                  |
 | `bcubo`  | `brew update && brew outdated --cask` | Update Homebrew data, then list outdated casks.                     |
 | `bcubc`  | `brew upgrade --cask && brew cleanup` | Update outdated casks, then run cleanup.                            |
+| `buz`    | `brew uninstall --zap`                | Remove all files associated with a cask.                            |
 
 ## Completion
 
