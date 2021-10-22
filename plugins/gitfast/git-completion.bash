@@ -1671,7 +1671,14 @@ _git_checkout ()
 			__git_complete_refs $dwim_opt --mode="refs"
 		fi
 		;;
+
 	esac
+
+	if [ "$command" = "checkoutr" ]; then
+		__git_complete_refs $track_opt
+	else
+		__gitcomp_direct "$(__git_heads "" "$cur" " ")"
+	fi
 }
 
 __git_sequencer_inprogress_options="--continue --quit --abort --skip"
