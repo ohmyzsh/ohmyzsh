@@ -219,7 +219,8 @@ function quick-look() {
 }
 
 function man-preview() {
-  man -t "$@" | open -f -a Preview
+  # Don't let Preview.app steal focus if the man page doesn't exist
+  man -w "$@" &>/dev/null && man -t "$@" | open -f -a Preview || man "$@"
 }
 compdef _man man-preview
 
@@ -231,6 +232,29 @@ function vncviewer() {
 function rmdsstore() {
   find "${@:-.}" -type f -name .DS_Store -delete
 }
+
+# Erases purgeable disk space with 0s on the selected disk
+function freespace(){
+  if [[ -z "$1" ]]; then
+    echo "Usage: $0 <disk>"
+    echo "Example: $0 /dev/disk1s1"
+    echo
+    echo "Possible disks:"
+    df -h | awk 'NR == 1 || /^\/dev\/disk/'
+    return 1
+  fi
+
+  echo "Cleaning purgeable files from disk: $1 ...."
+  diskutil secureErase freespace 0 $1
+}
+
+_freespace() {
+  local -a disks
+  disks=("${(@f)"$(df | awk '/^\/dev\/disk/{ printf $1 ":"; for (i=9; i<=NF; i++) printf $i FS; print "" }')"}")
+  _describe disks disks
+}
+
+compdef _freespace freespace
 
 # Music / iTunes control function
 source "${0:h:A}/music"

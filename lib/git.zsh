@@ -206,7 +206,8 @@ function git_prompt_status() {
     STASHED UNMERGED AHEAD BEHIND DIVERGED
   )
 
-  local status_text="$(__git_prompt_git status --porcelain -b 2> /dev/null)"
+  local status_text
+  status_text="$(__git_prompt_git status --porcelain -b 2> /dev/null)"
 
   # Don't continue on a catastrophic failure
   if [[ $? -eq 128 ]]; then

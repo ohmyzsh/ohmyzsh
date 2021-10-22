@@ -402,3 +402,6 @@ compdef _managepy django
 compdef _managepy django-admin
 compdef _managepy django-admin.py
 compdef _managepy django-manage
+
+print -P "%F{yellow}The django plugin is deprecated in favor of Zsh's Django completion.
+%BPlease remove it from your plugins to stop using it.%b%f"

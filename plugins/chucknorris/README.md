@@ -1,8 +1,6 @@
 # chucknorris
 
-Chuck Norris fortunes plugin for oh-my-zsh. Perfectly suitable as MOTD.
-
-**Maintainers**: [apjanke](https://github.com/apjanke) [maff](https://github.com/maff)
+Chuck Norris fortunes plugin for Oh My Zsh. Perfectly suitable as MOTD.
 
 To use it add `chucknorris` to the plugins array in you zshrc file.
 

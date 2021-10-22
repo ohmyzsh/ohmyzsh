@@ -17,6 +17,8 @@ alias hgi='hg incoming'
 alias hgl='hg pull -u'
 alias hglr='hg pull --rebase'
 alias hgo='hg outgoing'
+alias hglg='hg log --stat -v'
+alias hglgp='hg log --stat  -p -v'
 
 function in_hg() {
   if $(hg branch > /dev/null 2>&1); then

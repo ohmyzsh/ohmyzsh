@@ -64,7 +64,7 @@ NOTE: some of these key bindings are set by zsh by default when using a vi-mode 
 
 - `vv`     : Edit current command line in Vim
 
-NOTE: this used to be bound to `v`. That is now the default (`visual-mode`)
+NOTE: this used to be bound to `v`. That is now the default (`visual-mode`).
 
 ### Movement
 
@@ -107,3 +107,21 @@ NOTE: this used to be bound to `v`. That is now the default (`visual-mode`)
 - `R`           : Enter replace mode: Each character replaces existing one
 - `x`           : Delete `count` characters under and after the cursor
 - `X`           : Delete `count` characters before the cursor
+
+## Known issues
+
+### Low `$KEYTIMEOUT`
+
+A low `$KEYTIMEOUT` value (< 15) means that key bindings that need multiple characters,
+like `vv`, will be very difficult to trigger. `$KEYTIMEOUT` controls the number of
+milliseconds that must pass before a key press is read and the appropriate key binding
+is triggered. For multi-character key bindings, the key presses need to happen before
+the timeout is reached, so on low timeouts the key press happens too slow, and therefore
+another key binding is triggered.
+
+We recommend either setting `$KEYTIMEOUT` to a higher value, or remapping the key bindings
+that you want to trigger to a keyboard sequence. For example:
+
+```zsh
+bindkey -M vicmd 'V' edit-command-line # this remaps `vv` to `V` (but overrides `visual-mode`)
+```
