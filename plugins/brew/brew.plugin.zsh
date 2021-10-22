@@ -7,3 +7,4 @@ alias bubu='bubo && bubc'
 alias buf='brew upgrade --formula'
 alias bcubo='brew update && brew outdated --cask'
 alias bcubc='brew upgrade --cask && brew cleanup'
+alias buz=`brew unstinall --zap`
