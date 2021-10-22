@@ -1671,7 +1671,6 @@ _git_checkout ()
 			__git_complete_refs $dwim_opt --mode="refs"
 		fi
 		;;
-
 	esac
 }
 
