@@ -1673,13 +1673,7 @@ _git_checkout ()
 		;;
 
 	esac
-
-	if [ "$command" = "checkoutr" ]; then
-		__git_complete_refs $track_opt
-	else
-		__gitcomp_direct "$(__git_heads "" "$cur" " ")"
-	fi
-}
+	
 
 __git_sequencer_inprogress_options="--continue --quit --abort --skip"
 
