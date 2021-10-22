@@ -1673,7 +1673,7 @@ _git_checkout ()
 		;;
 
 	esac
-	
+}
 
 __git_sequencer_inprogress_options="--continue --quit --abort --skip"
 
