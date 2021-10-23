@@ -1,8 +1,8 @@
 # sudo
 
 This plugin adds a shortcut to easily add or remove `sudo` from the command line
-when pressing <kbd>Esc</kbd> twice. It also adds a function to be able to run
-zsh functions with sudo.
+when pressing <kbd>Esc</kbd> twice. It also adds an alias and a function to be
+able to run aliases and functions with sudo.
 
 To use it, add `sudo` to the plugins array in your zshrc file:
 
@@ -15,6 +15,14 @@ plugins=(... sudo)
 - **Key binding**: press <kbd>Esc</kbd> twice to add or remove `sudo` from the command line.
   It has support for `sudoedit`. See the [key binding examples](#examples) section for more
   information.
+
+- **Aliases**: to make sudo work with aliases, the plugin adds an alias to sudo that makes
+  it so aliases are expanded when prepended with `sudo`. This is achieved by adding an
+  extra space to the alias:
+
+  ```zsh
+  alias sudo='sudo '
+  ```
 
 - **Functions**: to run a function with `sudo`, use `sudofn`. This function allows you
   to run a function in a new zsh process, so the whole function has admin privileges.

@@ -93,6 +93,9 @@ bindkey -M emacs '\e\e' sudo-command-line
 bindkey -M vicmd '\e\e' sudo-command-line
 bindkey -M viins '\e\e' sudo-command-line
 
+# Add alias to allow calling aliases with sudo
+alias sudo='sudo '
+
 # Add function for calling zsh functions with sudo
 sudofn() {
   # Optionally allow specifying zsh options when running it. The
