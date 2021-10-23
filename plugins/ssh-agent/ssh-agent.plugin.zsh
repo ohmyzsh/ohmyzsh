@@ -6,9 +6,11 @@ function _start_agent() {
   if [[ -f "$ssh_env_cache" ]]; then
     . "$ssh_env_cache" > /dev/null
 
-    {
-      [[ "$USERNAME" = root ]] && command ps ax || command ps x
-    } | command grep ssh-agent | command grep -q $SSH_AGENT_PID && return 0
+    # Test if $SSH_AUTH_SOCK is visible
+    zmodload zsh/net/socket
+    if [[ -S "$SSH_AUTH_SOCK" ]] && zsocket "$SSH_AUTH_SOCK" 2>/dev/null; then
+      return 0
+    fi
   fi
 
   # Set a maximum lifetime for identities added to ssh-agent
