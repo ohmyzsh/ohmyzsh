@@ -121,7 +121,7 @@ alias gcss='git commit -S -s'
 alias gcssm='git commit -S -s -m'
 
 alias gd='git diff'
-alias gdh='git diff HEAD'
+alias gdh='git diff HEAD-1'
 alias gdca='git diff --cached'
 alias gdcw='git diff --cached --word-diff'
 alias gdct='git describe --tags $(git rev-list --tags --max-count=1)'
