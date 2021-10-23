@@ -35,16 +35,7 @@ sudo-command-line() {
     LBUFFER="${LBUFFER:1}"
   fi
 
-  # If $EDITOR is not set, just toggle the sudo prefix on and off
-  if [[ -z "$EDITOR" ]]; then
-    case "$BUFFER" in
-      sudoedit\ *) __sudo-replace-buffer "sudoedit" "" ;;
-      sudo\ *) __sudo-replace-buffer "sudo" "" ;;
-      *) LBUFFER="sudo $LBUFFER" ;;
-    esac
-  else
-    # Check if the typed command is really an alias to $EDITOR
-
+  () {
     # Get the first part of the typed command
     local cmd="${${(Az)BUFFER}[1]}"
     # Get the first part of the alias of the same name as $cmd, or $cmd if no alias matches
@@ -52,6 +43,13 @@ sudo-command-line() {
     # Get the first part of the $EDITOR command ($EDITOR may have arguments after it)
     local editorcmd="${${(Az)EDITOR}[1]}"
 
+    # If the typed command is a function or an alias to a function, use sudofn
+    if [[ "$cmd" != (sudo|sudoedit) ]] && (( ${+functions[$realcmd]} )); then
+      LBUFFER="sudofn $LBUFFER"
+      return
+    fi
+
+    # Check if the typed command is really an alias to $EDITOR
     # Note: ${var:c} makes a $PATH search and expands $var to the full path
     # The if condition is met when:
     # - $realcmd is '$EDITOR'
@@ -67,7 +65,8 @@ sudo-command-line() {
     if [[ "$realcmd" = (\$EDITOR|$editorcmd|${editorcmd:c}) \
       || "${realcmd:c}" = ($editorcmd|${editorcmd:c}) ]] \
       || builtin which -a "$realcmd" | command grep -Fx -q "$editorcmd"; then
-      editorcmd="$cmd" # replace $editorcmd with the typed command so it matches below
+      __sudo-replace-buffer "$cmd" "sudoedit"
+      return
     fi
 
     # Check for editor commands in the typed command and replace accordingly
@@ -78,7 +77,7 @@ sudo-command-line() {
       sudo\ *) __sudo-replace-buffer "sudo" "" ;;
       *) LBUFFER="sudo $LBUFFER" ;;
     esac
-  fi
+  }
 
   # Preserve beginning space
   LBUFFER="${WHITESPACE}${LBUFFER}"
@@ -93,3 +92,47 @@ zle -N sudo-command-line
 bindkey -M emacs '\e\e' sudo-command-line
 bindkey -M vicmd '\e\e' sudo-command-line
 bindkey -M viins '\e\e' sudo-command-line
+
+# Add function for calling zsh functions with sudo
+sudofn() {
+  # Optionally allow specifying zsh options when running it. The
+  # zsh arguments need to be specified before the fn name, e.g.:
+  # $ sudofn -f -x funcname arg1 arg2
+  local -a opts
+  while [[ "$1" = [-+]* ]]; do
+    opts+=($1)
+    shift
+  done
+
+  # Return error if function not provided or undefined
+  if [[ -z "$1" ]]; then
+    echo "$0: you need to specify a function" >&2
+    return 1
+  elif (( ! ${+functions[$1]} )); then
+    echo "$0: function is not defined: $1" >&2
+    return 1
+  fi
+
+  # Define the function and run it in a new shell
+  local fn="$1"; shift
+  # Force non-interactive session but load .zshrc
+  command sudo -E -s -- zsh $opts +i -s <<EOF
+source ${ZDOTDIR:-$HOME}/.zshrc
+function $fn {
+${functions[$fn]}
+}
+$fn ${(j: :)${(q)@}}
+EOF
+}
+
+_sudofn() {
+  local -a fns excl
+  # Get functions that don't start with _
+  fns=(${(ok)functions:#_*})
+  # Ignore sudofn and functions that haven't been loaded
+  excl=(sudofn ${${(k)functions[(R)builtin autoload *]}:#_*})
+  fns=(${fns:|excl})
+  _arguments "1:shell function:($fns)" "*:: :${_comps[${words[2]}]:-_files}"
+}
+
+compdef _sudofn sudofn
