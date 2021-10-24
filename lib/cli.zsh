@@ -751,13 +751,16 @@ function _omz::theme::use {
 }
 
 function _omz::update {
+  local ret=0
   local last_commit=$(cd "$ZSH"; git rev-parse HEAD)
 
   # Run update script
   if [[ "$1" != --unattended ]]; then
     ZSH="$ZSH" zsh -f "$ZSH/tools/upgrade.sh" --interactive
+    ret=$?
   else
     ZSH="$ZSH" zsh -f "$ZSH/tools/upgrade.sh"
+    ret=$?
   fi
 
   # Update last updated file
@@ -773,4 +776,6 @@ function _omz::update {
     # Check whether to run a login shell
     [[ "$zsh" = -* || -o login ]] && exec -l "${zsh#-}" || exec "$zsh"
   fi
+
+  return $ret
 }
