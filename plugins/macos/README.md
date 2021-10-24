@@ -1,11 +1,11 @@
-# OSX plugin
+# MacOS plugin
 
 This plugin provides a few utilities to make it more enjoyable on macOS (previously named OSX).
 
-To start using it, add the `osx` plugin to your plugins array in `~/.zshrc`:
+To start using it, add the `macos` plugin to your plugins array in `~/.zshrc`:
 
 ```zsh
-plugins=(... osx)
+plugins=(... macos)
 ```
 
 Original author: [Sorin Ionescu](https://github.com/sorin-ionescu)
@@ -31,7 +31,7 @@ Original author: [Sorin Ionescu](https://github.com/sorin-ionescu)
 | `itunes`      | _DEPRECATED_. Use `music` from macOS Catalina on         |
 | `music`       | Control Apple Music. Use `music -h` for usage details    |
 | `spotify`     | Control Spotify and search by artist, album, track…      |
-| `rmdsstore`   | Remove .DS\_Store files recursively in a directory       |
+| `rmdsstore`   | Remove .DS_Store files recursively in a directory        |
 | `btrestart`   | Restart the Bluetooth daemon                             |
 | `freespace`   | Erases purgeable disk space with 0s on the selected disk |
 
