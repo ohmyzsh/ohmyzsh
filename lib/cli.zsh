@@ -756,11 +756,9 @@ function _omz::update {
 
   # Run update script
   if [[ "$1" != --unattended ]]; then
-    ZSH="$ZSH" zsh -f "$ZSH/tools/upgrade.sh" --interactive
-    ret=$?
+    ZSH="$ZSH" zsh -f "$ZSH/tools/upgrade.sh" --interactive || return $?
   else
-    ZSH="$ZSH" zsh -f "$ZSH/tools/upgrade.sh"
-    ret=$?
+    ZSH="$ZSH" zsh -f "$ZSH/tools/upgrade.sh" || return $?
   fi
 
   # Update last updated file
