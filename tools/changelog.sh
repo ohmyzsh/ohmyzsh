@@ -401,17 +401,18 @@ function main {
   # --format:       [7-char hash]<field sep>[ref names]<field sep>[subject]<field sep>[body]
   # --abbrev=7:     force commit hashes to be 7 characters long
   # --no-merges:    merge commits are omitted
+  # --first-parent: commits from merged branches are omitted
   local SEP="0mZmAgIcSeP"
   local -a raw_commits
   raw_commits=(${(0)"$(command git log -z \
     --format="%h${SEP}%D${SEP}%s${SEP}%b" --abbrev=7 \
-    --no-merges $range)"})
+    --no-merges --first-parent $range)"})
 
   local raw_commit
   local -a raw_fields
   for raw_commit in $raw_commits; do
     # Truncate list on versions with a lot of commits
-    if (( ++read_commits > 40 )); then
+    if [[ -z "$since" ]] && (( ++read_commits > 35 )); then
       truncate=1
       break
     fi
