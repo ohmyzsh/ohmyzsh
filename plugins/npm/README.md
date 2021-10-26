@@ -29,3 +29,4 @@ plugins=(... npm)
 | `npmI`  | `npm init`                   | Run npm init                                                    |
 | `npmi`  | `npm info`                   | Run npm info                                                    |
 | `npmSe` | `npm search`                 | Run npm search                                                  |
+| `npmpa` | `npm pack`                   | Run npm pack                                                  |

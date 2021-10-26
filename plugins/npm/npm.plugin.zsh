@@ -69,3 +69,6 @@ alias npmi="npm info"
 
 # Run npm search
 alias npmSe="npm search"
+
+# Run npm pack
+alias npmpa="npm pack"
