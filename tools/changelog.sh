@@ -1,5 +1,8 @@
 #!/usr/bin/env zsh
 
+cd "$ZSH"
+setopt extendedglob
+
 ##############################
 # CHANGELOG SCRIPT CONSTANTS #
 ##############################
@@ -114,15 +117,8 @@ function parse-commit {
     fi
   }
 
-  # Ignore commit if it is a merge commit
-  if [[ $(command git show -s --format=%p $1 | wc -w) -gt 1 ]]; then
-    return
-  fi
-
   # Parse commit with hash $1
-  local hash="$1" subject body warning rhash
-  subject="$(command git show -s --format=%s $hash)"
-  body="$(command git show -s --format=%b $hash)"
+  local hash="$1" subject="$2" body="$3" warning rhash
 
   # Commits following Conventional Commits (https://www.conventionalcommits.org/)
   # have the following format, where parts between [] are optional:
@@ -384,7 +380,8 @@ function main {
   # Commit classification arrays
   local -A commits subjects scopes breaking reverts
   local truncate=0 read_commits=0
-  local hash version tag
+  local version tag
+  local hash refs subject body
 
   # Get the first version name:
   # 1) try tag-like version, or
@@ -396,17 +393,40 @@ function main {
     || version=$(command git symbolic-ref --quiet --short $until 2>/dev/null) \
     || version=$(command git rev-parse --short $until 2>/dev/null)
 
-  # Get commit list from $until commit until $since commit, or until root
-  # commit if $since is unset, in short hash form.
-  command git rev-list --abbrev-commit --abbrev=7 ${since:+$since..}$until | while read hash; do
+  # Get commit list from $until commit until $since commit, or until root commit if $since is unset
+  local range=${since:+$since..}$until
+
+  # Git log options
+  # -z:             commits are delimited by null bytes
+  # --format:       [7-char hash]<field sep>[ref names]<field sep>[subject]<field sep>[body]
+  # --abbrev=7:     force commit hashes to be 7 characters long
+  # --no-merges:    merge commits are omitted
+  local SEP="0mZmAgIcSeP"
+  local -a raw_commits
+  raw_commits=(${(0)"$(command git log -z \
+    --format="%h${SEP}%D${SEP}%s${SEP}%b" --abbrev=7 \
+    --no-merges $range)"})
+
+  local raw_commit
+  local -a raw_fields
+  for raw_commit in $raw_commits; do
     # Truncate list on versions with a lot of commits
     if (( ++read_commits > 40 )); then
       truncate=1
       break
     fi
 
+    # Read the commit fields (@ is needed to keep empty values)
+    raw_fields=("${(@ps:$SEP:)raw_commit}")
+    hash="${raw_fields[1]}"
+    refs="${raw_fields[2]}"
+    subject="${raw_fields[3]}"
+    body="${raw_fields[4]}"
+
     # If we find a new release (exact tag)
-    if tag=$(command git describe --exact-match --tags $hash 2>/dev/null); then
+    if [[ "$refs" = *tag:\ * ]]; then
+      # Parse tag name (needs: setopt extendedglob)
+      tag="${${refs##*tag: }%%,# *}"
       # Output previous release
       display-release
       # Reinitialize commit storage
@@ -420,7 +440,7 @@ function main {
       read_commits=1
     fi
 
-    parse-commit "$hash"
+    parse-commit "$hash" "$subject" "$body"
   done
 
   display-release
@@ -430,8 +450,6 @@ function main {
     echo
   fi
 }
-
-cd "$ZSH"
 
 # Use raw output if stdout is not a tty
 if [[ ! -t 1 && -z "$3" ]]; then
