@@ -400,7 +400,7 @@ function main {
   # commit if $since is unset, in short hash form.
   command git rev-list --abbrev-commit --abbrev=7 ${since:+$since..}$until | while read hash; do
     # Truncate list on versions with a lot of commits
-    if [[ -z "$since" ]] && (( ++read_commits > 35 )); then
+    if (( ++read_commits > 40 )); then
       truncate=1
       break
     fi
