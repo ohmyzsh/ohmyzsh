@@ -52,10 +52,15 @@ function parse-commit {
   #   make a breaking change
 
   function commit:type {
-    local type="$(sed -E 's/^([a-zA-Z_\-]+)(\(.+\))?!?: .+$/\1/' <<< "$1")"
+    local type
+
+    # Parse commit type from the subject
+    if [[ "$1" =~ '^([a-zA-Z_\-]+)(\(.+\))?!?: .+$' ]]; then
+      type="${match[1]}"
+    fi
 
     # If $type doesn't appear in $TYPES array mark it as 'other'
-    if [[ -n "${(k)TYPES[(i)$type]}" ]]; then
+    if [[ -n "$type" && -n "${(k)TYPES[(i)$type]}" ]]; then
       echo $type
     else
       echo other
@@ -66,17 +71,18 @@ function parse-commit {
     local scope
 
     # Try to find scope in "type(<scope>):" format
-    scope=$(sed -nE 's/^[a-zA-Z_\-]+\((.+)\)!?: .+$/\1/p' <<< "$1")
-    if [[ -n "$scope" ]]; then
-      echo "$scope"
+    if [[ "$1" =~ '^[a-zA-Z_\-]+\((.+)\)!?: .+$' ]]; then
+      echo "${match[1]}"
       return
     fi
 
     # If no scope found, try to find it in "<scope>:" format
-    # Make sure it's not a type before printing it
-    scope=$(sed -nE 's/^([a-zA-Z_\-]+): .+$/\1/p' <<< "$1")
-    if [[ -z "${(k)TYPES[(i)$scope]}" ]]; then
-      echo "$scope"
+    if [[ "$1" =~ '^([a-zA-Z_\-]+): .+$' ]]; then
+      scope="${match[1]}"
+      # Make sure it's not a type before printing it
+      if [[ -z "${(k)TYPES[(i)$scope]}" ]]; then
+        echo "$scope"
+      fi
     fi
   }
 
@@ -84,7 +90,11 @@ function parse-commit {
     # Only display the relevant part of the commit, i.e. if it has the format
     # type[(scope)!]: subject, where the part between [] is optional, only
     # displays subject. If it doesn't match the format, returns the whole string.
-    sed -E 's/^[a-zA-Z_\-]+(\(.+\))?!?: (.+)$/\2/' <<< "$1"
+    if [[ "$1" =~ '^[a-zA-Z_\-]+(\(.+\))?!?: (.+)$' ]]; then
+      echo "${match[2]}"
+    else
+      echo "$1"
+    fi
   }
 
   # Return subject if the body or subject match the breaking change format
