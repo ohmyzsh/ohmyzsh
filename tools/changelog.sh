@@ -201,9 +201,9 @@ function display-release {
     #* Uses $hash from outer scope
     local hash="${1:-$hash}"
     case "$output" in
-    raw) printf "$hash" ;;
-    text) printf "\e[33m$hash\e[0m" ;; # red
-    md) printf "[\`$hash\`](https://github.com/ohmyzsh/ohmyzsh/commit/$hash)" ;;
+    raw) printf '%s' "$hash" ;;
+    text) printf '\e[33m%s\e[0m' "$hash" ;; # red
+    md) printf '[`%s`](https://github.com/ohmyzsh/ohmyzsh/commit/%s)' "$hash" ;;
     esac
   }
 
@@ -215,16 +215,16 @@ function display-release {
     case "$output" in
     raw)
       case "$level" in
-      1) printf "$header\n$(printf '%.0s=' {1..${#header}})\n\n" ;;
-      2) printf "$header\n$(printf '%.0s-' {1..${#header}})\n\n" ;;
-      *) printf "$header:\n\n" ;;
+      1) printf '%s\n%s\n\n' "$header" "$(printf '%.0s=' {1..${#header}})" ;;
+      2) printf '%s\n%s\n\n' "$header" "$(printf '%.0s-' {1..${#header}})" ;;
+      *) printf '%s:\n\n' "$header" ;;
       esac ;;
     text)
       case "$level" in
-      1|2) printf "\e[1;4m$header\e[0m\n\n" ;; # bold, underlined
-      *) printf "\e[1m$header:\e[0m\n\n" ;; # bold
+      1|2) printf '\e[1;4m%s\e[0m\n\n' "$header" ;; # bold, underlined
+      *) printf '\e[1m%s:\e[0m\n\n' "$header" ;; # bold
       esac ;;
-    md) printf "$(printf '%.0s#' {1..${level}}) $header\n\n" ;;
+    md) printf '%s %s\n\n' "$(printf '%.0s#' {1..${level}})" "$header" ;;
     esac
   }
 
@@ -250,8 +250,8 @@ function display-release {
 
     # Print [scope]
     case "$output" in
-    raw|md) printf "[$scope]${padding} " ;;
-    text) printf "[\e[38;5;9m$scope\e[0m]${padding} " ;; # red 9
+    raw|md) printf '[%s]%s ' "$scope" "$padding";;
+    text) printf '[\e[38;5;9m%s\e[0m]%s ' "$scope" "$padding";; # red 9
     esac
   }
 
@@ -264,7 +264,7 @@ function display-release {
     subject="${(U)subject:0:1}${subject:1}"
 
     case "$output" in
-    raw) printf "$subject" ;;
+    raw) printf '%s' "$subject" ;;
     # In text mode, highlight (#<issue>) and dim text between `backticks`
     text) sed -E $'s|#([0-9]+)|\e[32m#\\1\e[0m|g;s|`([^`]+)`|`\e[2m\\1\e[0m`|g' <<< "$subject" ;;
     # In markdown mode, link to (#<issue>) issues
@@ -277,8 +277,8 @@ function display-release {
     local type="${1:-${TYPES[$type]:-${(C)type}}}"
     [[ -z "$type" ]] && return 0
     case "$output" in
-    raw|md) printf "$type: " ;;
-    text) printf "\e[4m$type\e[24m: " ;; # underlined
+    raw|md) printf '%s: ' "$type" ;;
+    text) printf '\e[4m%s\e[24m: ' "$type" ;; # underlined
     esac
   }
 
@@ -292,7 +292,7 @@ function display-release {
     (( $#breaking != 0 )) || return 0
 
     case "$output" in
-    text) fmt:header "\e[31mBREAKING CHANGES" 3 ;;
+    text) printf '\e[31m'; fmt:header "BREAKING CHANGES" 3 ;;
     raw) fmt:header "BREAKING CHANGES" 3 ;;
     md) fmt:header "BREAKING CHANGES ⚠" 3 ;;
     esac
