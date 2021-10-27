@@ -428,7 +428,7 @@ function main {
     fi
 
     # Read the commit fields (@ is needed to keep empty values)
-    raw_fields=("${(@ps:$SEP:)raw_commit}")
+    eval "raw_fields=(\"\${(@ps:$SEP:)raw_commit}\")"
     hash="${raw_fields[1]}"
     refs="${raw_fields[2]}"
     subject="${raw_fields[3]}"
