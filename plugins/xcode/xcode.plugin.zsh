@@ -8,9 +8,9 @@ alias xcsel='sudo xcode-select --switch'
 function xc {
   local xcode_proj
   if [[ $# == 0 ]]; then
-    xcode_proj=(*.{xcworkspace,xcodeproj}(N))
+    xcode_proj=({*.{xcworkspace,xcodeproj},Package.swift}(N))
   else
-    xcode_proj=($1/*.{xcworkspace,xcodeproj}(N))
+    xcode_proj=($1/{*.{xcworkspace,xcodeproj},Package.swift}(N))
   fi
 
 
