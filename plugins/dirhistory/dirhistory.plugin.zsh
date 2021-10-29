@@ -121,35 +121,24 @@ function dirhistory_zle_dirhistory_future() {
 }
 
 zle -N dirhistory_zle_dirhistory_back
-# xterm in normal mode
-bindkey "\e[3D" dirhistory_zle_dirhistory_back
-bindkey "\e[1;3D" dirhistory_zle_dirhistory_back
-# Terminal.app
-if [[ "$TERM_PROGRAM" == "Apple_Terminal" ]]; then
-  bindkey "^[b" dirhistory_zle_dirhistory_back
-fi
-# iTerm2
-if [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
-  bindkey "^[^[[D" dirhistory_zle_dirhistory_back
-fi
-# Putty:
-bindkey "\e\e[D" dirhistory_zle_dirhistory_back
-# GNU screen:
-bindkey "\eO3D" dirhistory_zle_dirhistory_back
+bindkey "\e[3D" dirhistory_zle_dirhistory_back    # xterm in normal mode
+bindkey "\e[1;3D" dirhistory_zle_dirhistory_back  # xterm in normal mode
+bindkey "\e\e[D" dirhistory_zle_dirhistory_back   # Putty
+bindkey "\eO3D" dirhistory_zle_dirhistory_back    # GNU screen
+case "$TERM_PROGRAM" in
+iTerm.app) bindkey "^[^[[D" dirhistory_zle_dirhistory_back ;;   # iTerm2
+Apple_Terminal) bindkey "^[b" dirhistory_zle_dirhistory_back ;; # Terminal.app
+esac
 
 zle -N dirhistory_zle_dirhistory_future
-bindkey "\e[3C" dirhistory_zle_dirhistory_future
-bindkey "\e[1;3C" dirhistory_zle_dirhistory_future
-# Terminal.app
-if [[ "$TERM_PROGRAM" == "Apple_Terminal" ]]; then
-  bindkey "^[f" dirhistory_zle_dirhistory_future
-fi
-# iTerm2
-if [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
-  bindkey "^[^[[C" dirhistory_zle_dirhistory_future
-fi
-bindkey "\e\e[C" dirhistory_zle_dirhistory_future
-bindkey "\eO3C" dirhistory_zle_dirhistory_future
+bindkey "\e[3C" dirhistory_zle_dirhistory_future    # xterm in normal mode
+bindkey "\e[1;3C" dirhistory_zle_dirhistory_future  # xterm in normal mode
+bindkey "\e\e[C" dirhistory_zle_dirhistory_future   # Putty
+bindkey "\eO3C" dirhistory_zle_dirhistory_future    # GNU screen
+case "$TERM_PROGRAM" in
+iTerm.app) bindkey "^[^[[C" dirhistory_zle_dirhistory_future ;;   # iTerm2
+Apple_Terminal) bindkey "^[f" dirhistory_zle_dirhistory_future ;; # Terminal.app
+esac
 
 
 # 
@@ -181,22 +170,21 @@ function dirhistory_zle_dirhistory_down() {
 }
 
 zle -N dirhistory_zle_dirhistory_up
-# xterm in normal mode
-bindkey "\e[3A" dirhistory_zle_dirhistory_up
-bindkey "\e[1;3A" dirhistory_zle_dirhistory_up
-if [[ "$TERM_PROGRAM" == "Apple_Terminal" || "$TERM_PROGRAM" == "iTerm.app" ]]; then
-  bindkey "^[[A" dirhistory_zle_dirhistory_up
-fi
-# Putty:
-bindkey "\e\e[A" dirhistory_zle_dirhistory_up
-# GNU screen:
-bindkey "\eO3A" dirhistory_zle_dirhistory_up
+bindkey "\e[3A" dirhistory_zle_dirhistory_up    # xterm in normal mode
+bindkey "\e[1;3A" dirhistory_zle_dirhistory_up  # xterm in normal mode
+bindkey "\e\e[A" dirhistory_zle_dirhistory_up   # Putty
+bindkey "\eO3A" dirhistory_zle_dirhistory_up    # GNU screen
+case "$TERM_PROGRAM" in
+iTerm.app) bindkey "^[^[[A" dirhistory_zle_dirhistory_up ;;     # iTerm2
+Apple_Terminal) bindkey "^[OA" dirhistory_zle_dirhistory_up ;;  # Terminal.app
+esac
 
 zle -N dirhistory_zle_dirhistory_down
-bindkey "\e[3B" dirhistory_zle_dirhistory_down
-bindkey "\e[1;3B" dirhistory_zle_dirhistory_down
-if [[ "$TERM_PROGRAM" == "Apple_Terminal" || "$TERM_PROGRAM" == "iTerm.app" ]]; then
-  bindkey "^[[B" dirhistory_zle_dirhistory_down
-fi
-bindkey "\e\e[B" dirhistory_zle_dirhistory_down
-bindkey "\eO3B" dirhistory_zle_dirhistory_down
+bindkey "\e[3B" dirhistory_zle_dirhistory_down    # xterm in normal mode
+bindkey "\e[1;3B" dirhistory_zle_dirhistory_down  # xterm in normal mode
+bindkey "\e\e[B" dirhistory_zle_dirhistory_down   # Putty
+bindkey "\eO3B" dirhistory_zle_dirhistory_down    # GNU screen
+case "$TERM_PROGRAM" in
+iTerm.app) bindkey "^[^[[B" dirhistory_zle_dirhistory_down ;;     # iTerm2
+Apple_Terminal) bindkey "^[OB" dirhistory_zle_dirhistory_down ;;  # Terminal.app
+esac
