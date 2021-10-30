@@ -30,4 +30,8 @@ plugins=(... golang)
 | gor     | `go run`                | Compiles and runs your code                                   |
 | got     | `go test`               | Runs tests                                                    |
 | gota    | `go test ./...`         | Runs tests in all subdirectories                              |
+| goto    | `go tool`               | Prints all the available tools                                |
+| gotoc   | `go tool compile`       | Generates object file                                         |
+| gotod   | `go tool dist`          | Utility to bootstrap, build and test go runtime               |
+| gotofx  | `go tool fix`           | Fixes an application to use newer features                    |
 | gov     | `go vet`                | Vet examines Go source code and reports suspicious constructs |
