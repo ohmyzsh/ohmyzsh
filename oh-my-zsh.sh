@@ -177,3 +177,7 @@ if [ ! "$ZSH_THEME" = ""  ]; then
     source "$ZSH/themes/$ZSH_THEME.zsh-theme"
   fi
 fi
+
+#Added by orbsim to change default symbol prompt and add user@hostname to the first of it
+#2021-Oct-31
+export PS1='%F{green}%n@%F{yellow}%m'$PS1
