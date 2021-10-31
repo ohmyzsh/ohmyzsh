@@ -12,7 +12,7 @@ plugins=(... bloop)
 
 | Alias    | Command                               | Description                                                         |
 |----------|---------------------------------------|---------------------------------------------------------------------|
-| `bp`     | `brew projects`                       | List the projects in current repository                             |
-| `bc`     | `brew compile `                       | Compile the project                                                 |
-| `bcl`    | `brew clean `                         | Clean the project                                                   |
-| `br`     | `brew run `                           | Run the project                                                     |
+| `bp`     | `bloop projects`                      | List the projects in current repository                             |
+| `bc`     | `bloop compile `                      | Compile the project                                                 |
+| `bcl`    | `bloop clean `                        | Clean the project                                                   |
+| `br`     | `bloop run `                          | Run the project                                                     |
