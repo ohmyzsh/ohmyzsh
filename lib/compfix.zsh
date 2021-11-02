@@ -38,7 +38,7 @@ function handle_completion_insecurities() {
 
 [oh-my-zsh] If the above didn't help or you want to skip the verification of
 [oh-my-zsh] insecure directories you can set the variable ZSH_DISABLE_COMPFIX to
-[oh-my-zsh] "true" before oh-my-zsh is sourced in your zshrc file.
+[oh-my-zsh] true before oh-my-zsh is sourced in your zshrc file.
 
 EOD
 }
