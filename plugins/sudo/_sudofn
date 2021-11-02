@@ -1,0 +1,20 @@
+#compdef sudofn
+
+_sudofn() {
+  local -a fns excl
+
+  # Get functions that don't start with _
+  fns=(${(ok)functions:#_*})
+  # Ignore sudofn and functions that haven't been loaded
+  excl=(sudofn ${${(k)functions[(R)builtin autoload *]}:#_*})
+  fns=(${fns:|excl})
+
+  # 1. Suggest function names as the first argument
+  # 2. Use function's own completion logic to complete the rest of the arguments:
+  #    `*:: :` makes it so the argument position is reset and the typed command is ignored
+  #    `${_comps[${words[2]}]}` tries to find the completion function (stored in $_comps) for the
+  #    passed function name (${words[2]}). If none found, use `_files` which suggests filenames.
+  _arguments "1:shell function:($fns)" "*:: :${_comps[${words[2]}]:-_files}"
+}
+
+_sudofn "$@"

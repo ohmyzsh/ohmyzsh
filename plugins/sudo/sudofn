@@ -1,0 +1,30 @@
+#autoload
+
+# Optionally allow specifying zsh options when running it. The
+# zsh arguments need to be specified before the fn name, e.g.:
+# $ sudofn -f -x funcname arg1 arg2
+local -a opts
+while [[ "$1" = [-+]* ]]; do
+  opts+=($1)
+  shift
+done
+
+# Return error if function not provided or undefined
+if [[ -z "$1" ]]; then
+  echo "$0: you need to specify a function" >&2
+  return 1
+elif (( ! ${+functions[$1]} )); then
+  echo "$0: function is not defined: $1" >&2
+  return 1
+fi
+
+# Define the function and run it in a new shell
+local fn="$1"; shift
+# Force non-interactive session but load .zshrc
+command sudo -E -s -- zsh $opts +i -s <<EOF
+source ${ZDOTDIR:-$HOME}/.zshrc
+function $fn {
+${functions[$fn]}
+}
+$fn ${(j: :)${(q)@}}
+EOF
