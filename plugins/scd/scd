@@ -270,7 +270,7 @@ fi
 
 # Determine the last recorded directory
 if [[ -s ${SCD_HISTFILE} ]]; then
-    last_directory=${"$(tail -1 ${SCD_HISTFILE})"#*;}
+    last_directory=${"$(tail -n 1 ${SCD_HISTFILE})"#*;}
 fi
 
 # The "record" function adds its arguments to the directory index.
