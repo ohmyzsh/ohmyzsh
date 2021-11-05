@@ -54,14 +54,27 @@ function is_update_available() {
   [[ "$repo" = ohmyzsh/ohmyzsh ]] || return 0
   local api_url="https://api.github.com/repos/${repo}/commits/${branch}"
 
-  # Get local and remote HEADs and compare them. If we can't get either assume there are updates
-  local local_head remote_head
+  # Get local HEAD. If this fails assume there are updates
+  local local_head
   local_head=$(git -C "$ZSH" rev-parse $branch 2>/dev/null) || return 0
 
-  remote_head=$(curl -fsSL -H 'Accept: application/vnd.github.v3.sha' $api_url 2>/dev/null) \
-  || remote_head=$(wget -O- --header='Accept: application/vnd.github.v3.sha' $api_url 2>/dev/null) \
-  || remote_head=$(HTTP_ACCEPT='Accept: application/vnd.github.v3.sha' fetch -o - $api_url 2>/dev/null) \
-  || return 0
+  # Get remote HEAD. If we can't get it assume there are updates unless there is no connection:
+  # - curl: 6 (could not resolve) or 7 (could not connect)
+  # - wget: 4 (network unreachable)
+  # - fetch: 1 (no route to host)
+  local remote_head ret
+  remote_head=$(
+    curl -fsSL -H 'Accept: application/vnd.github.v3.sha' $api_url 2>/dev/null || {
+      [[ $? -eq 6 || $? -eq 7 ]] && exit 1
+    } || wget -O- --header='Accept: application/vnd.github.v3.sha' $api_url 2>/dev/null || {
+      [[ $? -eq 4 ]] && exit 1
+    } || HTTP_ACCEPT='Accept: application/vnd.github.v3.sha' fetch -o - $api_url 2>/dev/null || {
+      [[ $? -eq 1 ]] && exit 1
+    } || exit 0
+  )
+
+  # If can't fetch remote HEAD, return exit code
+  ret=$?; [[ -n "$remote_head" ]] || return $ret
 
   # Compare local and remote HEADs
   [[ "$local_head" != "$remote_head" ]]
