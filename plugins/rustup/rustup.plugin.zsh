@@ -2,7 +2,7 @@ if (( $+commands[rustup] )); then
   # remove old generated completion file
   command rm -f "${0:A:h}/_rustup"
 
-  ver="$(rustup --version 2>/dev/null)"
+  ver="$(rustup --help | head -n 1)" # `rustup --version` is slow
   ver_file="$ZSH_CACHE_DIR/rustup_version"
   comp_file="$ZSH_CACHE_DIR/completions/_rustup"
 
