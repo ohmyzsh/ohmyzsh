@@ -42,6 +42,8 @@ _z() {
     [ -z "$_Z_OWNER" -a -f "$datafile" -a ! -O "$datafile" ] && return
 
     _z_dirs () {
+        [ -f "$datafile" ] || return
+
         local line
         while read line; do
             # only count directories
@@ -54,14 +56,16 @@ _z() {
     if [ "$1" = "--add" ]; then
         shift
 
-        # $HOME isn't worth matching
-        [ "$*" = "$HOME" ] && return
+        # $HOME and / aren't worth matching
+        [ "$*" = "$HOME" -o "$*" = '/' ] && return
 
         # don't track excluded directory trees
-        local exclude
-        for exclude in "${_Z_EXCLUDE_DIRS[@]}"; do
-            case "$*" in "$exclude*") return;; esac
-        done
+        if [ ${#_Z_EXCLUDE_DIRS[@]} -gt 0 ]; then
+            local exclude
+            for exclude in "${_Z_EXCLUDE_DIRS[@]}"; do
+                case "$*" in "$exclude"*) return;; esac
+            done
+        fi
 
         # maintain the data file
         local tempfile="$datafile.$RANDOM"

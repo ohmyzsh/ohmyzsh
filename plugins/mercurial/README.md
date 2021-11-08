@@ -30,7 +30,8 @@ plugins=(... mercurial)
 | `hgl`  | `hg pull -u`                                                                                                |
 | `hglr` | `hg pull --rebase`                                                                                          |
 | `hgo`  | `hg outgoing`                                                                                               |
-
+| `hglg` | `hg log --stat -v`                                                                                          |
+| `hglgp`| `hg log --stat -p -v`                                                                                       |
 ## Prompt usage
 
 - Switch to a theme which uses `hg_prompt_info`
