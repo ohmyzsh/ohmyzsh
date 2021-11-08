@@ -237,12 +237,11 @@ function omz_urldecode {
   tmp=${tmp:gs/\\/\\\\/}
   # Handle %-escapes by turning them into `\xXX` printf escapes
   tmp=${tmp:gs/%/\\x/}
-  local decoded
-  eval "decoded=\$'$tmp'"
+  local decoded="$(printf -- "$tmp")"
 
   # Now we have a UTF-8 encoded string in the variable. We need to re-encode
   # it if caller is in a non-UTF-8 locale.
-  local safe_encodings
+  local -a safe_encodings
   safe_encodings=(UTF-8 utf8 US-ASCII)
   if [[ -z ${safe_encodings[(r)$caller_encoding]} ]]; then
     decoded=$(echo -E "$decoded" | iconv -f UTF-8 -t $caller_encoding)
