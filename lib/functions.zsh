@@ -1,7 +1,7 @@
 function zsh_stats() {
   fc -l 1 \
     | awk '{ CMD[$2]++; count++; } END { for (a in CMD) print CMD[a] " " CMD[a]*100/count "% " a }' \
-    | grep -v "./" | sort -nr | head -20 | column -c3 -s " " -t | nl
+    | grep -v "./" | sort -nr | head -n 20 | column -c3 -s " " -t | nl
 }
 
 function uninstall_oh_my_zsh() {
@@ -45,7 +45,7 @@ function takeurl() {
   data="$(mktemp)"
   curl -L "$1" > "$data"
   tar xf "$data"
-  thedir="$(tar tf "$data" | head -1)"
+  thedir="$(tar tf "$data" | head -n 1)"
   rm "$data"
   cd "$thedir"
 }
