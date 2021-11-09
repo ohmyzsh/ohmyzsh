@@ -19,14 +19,14 @@ export DIRHISTORY_SIZE=30
 # Returns the element if the array was not empty,
 # otherwise returns empty string.
 function pop_past() {
-  eval "$1='$dirhistory_past[$#dirhistory_past]'"
+  eval "$1=${(q)dirhistory_past[$#dirhistory_past]}"
   if [[ $#dirhistory_past -gt 0 ]]; then
     dirhistory_past[$#dirhistory_past]=()
   fi
 }
 
 function pop_future() {
-  eval "$1='$dirhistory_future[$#dirhistory_future]'"
+  eval "$1=${(q)dirhistory_future[$#dirhistory_future]}"
   if [[ $#dirhistory_future -gt 0 ]]; then
     dirhistory_future[$#dirhistory_future]=()
   fi
