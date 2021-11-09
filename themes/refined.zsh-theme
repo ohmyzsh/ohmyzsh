@@ -70,6 +70,7 @@ preexec() {
 # Output additional information about paths, repos and exec time
 #
 precmd() {
+    setopt localoptions nopromptsubst
     vcs_info # Get version control info before we start outputting stuff
     print -P "\n$(repo_information) %F{yellow}$(cmd_exec_time)%f"
     unset cmd_timestamp #Reset cmd exec time.
