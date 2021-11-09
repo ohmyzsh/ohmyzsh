@@ -446,9 +446,9 @@ function _omz::plugin::load {
     fi
 
     # Check if it has completion to reload compinit
-    if [[ -f "$base/_$plugin" ]]; then
-      has_completion=1
-    fi
+    local -a comp_files
+    comp_files=($base/_*(N))
+    has_completion=$(( $#comp_files > 0 ))
 
     # Load the plugin
     if [[ -f "$base/$plugin.plugin.zsh" ]]; then
