@@ -34,11 +34,11 @@ function current_epoch() {
 
 function is_update_available() {
   local branch
-  branch=${"$(git -C "$ZSH" config --local oh-my-zsh.branch)":-master}
+  branch=${"$(cd "$ZSH"; git config --local oh-my-zsh.branch)":-master}
 
   local remote remote_url remote_repo
-  remote=${"$(git -C "$ZSH" config --local oh-my-zsh.remote)":-origin}
-  remote_url=$(git -C "$ZSH" config remote.$remote.url)
+  remote=${"$(cd "$ZSH"; git config --local oh-my-zsh.remote)":-origin}
+  remote_url=$(cd "$ZSH"; git config remote.$remote.url)
 
   local repo
   case "$remote_url" in
@@ -56,7 +56,7 @@ function is_update_available() {
 
   # Get local HEAD. If this fails assume there are updates
   local local_head
-  local_head=$(git -C "$ZSH" rev-parse $branch 2>/dev/null) || return 0
+  local_head=$(cd "$ZSH"; git rev-parse $branch 2>/dev/null) || return 0
 
   # Get remote HEAD. If no suitable command is found assume there are updates
   # On any other error, skip the update (connection may be down)
