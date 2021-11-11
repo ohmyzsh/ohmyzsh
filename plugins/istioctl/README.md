@@ -5,5 +5,5 @@ The [istioctl](https://istio.io/latest/docs/ops/diagnostic-tools/istioctl/) tool
 To use it, add `istioctl` to the plugins array of your zshrc file:
 
 ```bash
-plugins=(... kn)
+plugins=(... istioctl)
 ```
