@@ -182,7 +182,7 @@ bindkey "\e\e[A" dirhistory_zle_dirhistory_up   # Putty
 bindkey "\eO3A" dirhistory_zle_dirhistory_up    # GNU screen
 case "$TERM_PROGRAM" in
 iTerm.app) bindkey "^[^[[A" dirhistory_zle_dirhistory_up ;;     # iTerm2
-Apple_Terminal) bindkey "^[OA" dirhistory_zle_dirhistory_up ;;  # Terminal.app
+Apple_Terminal) bindkey "^[[A" dirhistory_zle_dirhistory_up ;;  # Terminal.app
 esac
 if (( ${+terminfo[kcuu1]} )); then
   bindkey "^[${terminfo[kcuu1]}" dirhistory_zle_dirhistory_up # urxvt
@@ -195,7 +195,7 @@ bindkey "\e\e[B" dirhistory_zle_dirhistory_down   # Putty
 bindkey "\eO3B" dirhistory_zle_dirhistory_down    # GNU screen
 case "$TERM_PROGRAM" in
 iTerm.app) bindkey "^[^[[B" dirhistory_zle_dirhistory_down ;;     # iTerm2
-Apple_Terminal) bindkey "^[OB" dirhistory_zle_dirhistory_down ;;  # Terminal.app
+Apple_Terminal) bindkey "^[[B" dirhistory_zle_dirhistory_down ;;  # Terminal.app
 esac
 if (( ${+terminfo[kcud1]} )); then
   bindkey "^[${terminfo[kcud1]}" dirhistory_zle_dirhistory_down # urxvt
