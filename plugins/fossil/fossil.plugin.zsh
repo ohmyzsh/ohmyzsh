@@ -73,9 +73,9 @@ function _fossil_prompt () {
     local is_prompt=`echo $PROMPT | grep git`
 
     if [ "$is_prompt" = "" ]; then
-      export RPROMPT="$_rprompt"'$(fossil_prompt_info)'
+      RPROMPT="$_rprompt"'$(fossil_prompt_info)'
     else
-      export PROMPT="$_prompt"'$(fossil_prompt_info) '
+      PROMPT="$_prompt"'$(fossil_prompt_info) '
     fi
 
     _FOSSIL_PROMPT="1"

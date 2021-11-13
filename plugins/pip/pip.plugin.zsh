@@ -9,7 +9,11 @@
 # If you would like to clear your cache, go ahead and do a
 # "zsh-pip-clear-cache".
 
-ZSH_PIP_CACHE_FILE=~/.pip/zsh-cache
+if [[ -d "${XDG_CACHE_HOME:-$HOME/.cache}/pip" ]]; then
+  ZSH_PIP_CACHE_FILE="${XDG_CACHE_HOME:-$HOME/.cache}/pip/zsh-cache"
+else
+  ZSH_PIP_CACHE_FILE=~/.pip/zsh-cache
+fi
 ZSH_PIP_INDEXES=(https://pypi.org/simple/)
 
 zsh-pip-clear-cache() {
@@ -29,6 +33,7 @@ zsh-pip-cache-packages() {
   if [[ ! -f $ZSH_PIP_CACHE_FILE ]]; then
       echo -n "(...caching package index...)"
       tmp_cache=/tmp/zsh_tmp_cache
+      touch $tmp_cache
       for index in $ZSH_PIP_INDEXES ; do
           # well... I've already got two problems
           curl -L $index 2>/dev/null | \
@@ -79,3 +84,14 @@ zsh-pip-test-clean-packages() {
 
 alias pip="noglob pip" # allows square brackets for pip command invocation
 
+# Create requirements file
+alias pipreq="pip freeze > requirements.txt"
+
+# Update all installed packages
+alias pipupall="pipreq && sed -i 's/==/>=/g' requirements.txt && pip install -r requirements.txt --upgrade && rm -rf requirements.txt"
+
+# Install packages from requirements file
+alias pipir="pip install -r requirements.txt"
+
+# Uninstalled all installed packages
+alias pipunall="pipreq && pip uninstall -r requirements.txt -y && rm -rf requirements.txt"
