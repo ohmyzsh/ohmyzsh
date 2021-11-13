@@ -21,7 +21,23 @@ zstyle :omz:plugins:ssh-agent agent-forwarding on
 
 ----
 
-To **load multiple identities** use the `identities` style, For example:
+To **NOT load any identities on start** use the `lazy` setting. This is particularly
+useful when combined with the `AddKeysToAgent` setting (available since OpenSSH 7.2),
+since it allows to enter the password only on first use. _NOTE: you can know your
+OpenSSH version with `ssh -V`._
+
+```zsh
+zstyle :omz:plugins:ssh-agent lazy yes
+```
+
+You can enable `AddKeysToAgent` by passing `-o AddKeysToAgent=yes` to the `ssh` command,
+or by adding `AddKeysToAgent yes` to your `~/.ssh/config` file [1].
+See the [OpenSSH 7.2 Release Notes](http://www.openssh.com/txt/release-7.2).
+
+----
+
+To **load multiple identities** use the `identities` style (**this has no effect
+if the `lazy` setting is enabled**). For example:
 
 ```zsh
 zstyle :omz:plugins:ssh-agent identities id_rsa id_rsa2 id_github

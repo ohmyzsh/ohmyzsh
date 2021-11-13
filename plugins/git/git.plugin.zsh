@@ -97,6 +97,13 @@ alias gcas='git commit -a -s'
 alias gcasm='git commit -a -s -m'
 alias gcb='git checkout -b'
 alias gcf='git config --list'
+
+function gccd() {
+  command git clone --recurse-submodules "$@"
+  [[ -d "$_" ]] && cd "$_" || cd "${${_:t}%.git}"
+}
+compdef _git gccd=git-clone
+
 alias gcl='git clone --recurse-submodules'
 alias gclean='git clean -id'
 alias gpristine='git reset --hard && git clean -dffx'
@@ -119,7 +126,7 @@ alias gdcw='git diff --cached --word-diff'
 alias gdct='git describe --tags $(git rev-list --tags --max-count=1)'
 alias gds='git diff --staged'
 alias gdt='git diff-tree --no-commit-id --name-only -r'
-alias gdu='git diff @{u}'
+alias gdup='git diff @{upstream}'
 alias gdw='git diff --word-diff'
 
 function gdnolock() {
@@ -201,8 +208,8 @@ alias gignore='git update-index --assume-unchanged'
 alias gignored='git ls-files -v | grep "^[[:lower:]]"'
 alias git-svn-dcommit-push='git svn dcommit && git push github $(git_main_branch):svntrunk'
 
-alias gk='\gitk --all --branches'
-alias gke='\gitk --all $(git log -g --pretty=%h)'
+alias gk='\gitk --all --branches &!'
+alias gke='\gitk --all $(git log -g --pretty=%h) &!'
 
 alias gl='git pull'
 alias glg='git log --stat'
@@ -288,6 +295,8 @@ alias gstall='git stash --all'
 alias gsu='git submodule update'
 alias gsw='git switch'
 alias gswc='git switch -c'
+alias gswm='git switch $(git_main_branch)'
+alias gswd='git switch $(git_develop_branch)'
 
 alias gts='git tag -s'
 alias gtv='git tag | sort -V'
