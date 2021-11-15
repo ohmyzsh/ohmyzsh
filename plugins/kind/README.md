@@ -6,7 +6,7 @@ kind was primarily designed for testing Kubernetes itself, but may be used for l
 
 To use it, add `kind` to the plugins array of your zshrc file:
 
-```bash
+```sh
 plugins=(... kind)
 ```
 
