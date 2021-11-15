@@ -17,11 +17,20 @@ unset completion_file
 #   - `!` means --force --no-wait -y                         #
 #   - `ds` suffix means --destroy-storage                    #
 # ---------------------------------------------------------- #
+alias j="juju"
 alias jam="juju add-model --config logging-config=\"<root>=WARNING; unit=DEBUG\"\
  --config update-status-hook-interval=\"60m\""
 alias jb='juju bootstrap'
+alias jbng='juju bootstrap --no-gui'
+alias jbl='juju bootstrap localhost'
+alias jblng='juju bootstrap --no-gui localhost'
 alias jbm='juju bootstrap microk8s'
+alias jbmng='juju bootstrap --no-gui microk8s'
 alias jc='juju config'
+alias jcld='juju clouds'
+alias jclda='juju clouds --all'
+alias jctl='juju controllers'
+alias jctlr='juju controllers --refresh'
 alias jdc='juju destroy-controller --destroy-all-models'
 alias 'jdc!'='juju destroy-controller --destroy-all-models --force --no-wait -y'
 alias jdcds='juju destroy-controller --destroy-all-models --destroy-storage'
@@ -61,7 +70,8 @@ alias jshc='juju ssh --container'
 alias jshm='juju show-model'
 alias jssl='juju show-status-log'
 alias jstj='juju status --format=json'
-alias jst='juju status --relations --storage --color'
+alias jst='juju status --relations --color'
+alias jsts='juju status --relations --storage --color'
 alias jsu='juju show-unit'
 alias jsw='juju switch'
 
