@@ -1,3 +1,9 @@
+# Check if 'osx' is still in the plugins list and prompt to change to 'macos'
+if [[ -n "${plugins[(r)osx]}" ]]; then
+  print ${(%):-"%F{yellow}The \`osx\` plugin is deprecated and has been renamed to \`macos\`."}
+  print ${(%):-"Please update your .zshrc to use the \`%Bmacos%b\` plugin instead.%f"}
+fi
+
 # Open the current directory in a Finder window
 alias ofd='open_command $PWD'
 
@@ -11,7 +17,7 @@ function btrestart() {
   sudo kextload -b com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport
 }
 
-function _omz_osx_get_frontmost_app() {
+function _omz_macos_get_frontmost_app() {
   osascript 2>/dev/null <<EOF
     tell application "System Events"
       name of first item of (every process whose frontmost is true)
@@ -24,7 +30,7 @@ function tab() {
   local command="cd \\\"$PWD\\\"; clear"
   (( $# > 0 )) && command="${command}; $*"
 
-  local the_app=$(_omz_osx_get_frontmost_app)
+  local the_app=$(_omz_macos_get_frontmost_app)
 
   if [[ "$the_app" == 'Terminal' ]]; then
     # Discarding stdout to quash "tab N of window id XXX" output
@@ -77,7 +83,7 @@ function vsplit_tab() {
   local command="cd \\\"$PWD\\\"; clear"
   (( $# > 0 )) && command="${command}; $*"
 
-  local the_app=$(_omz_osx_get_frontmost_app)
+  local the_app=$(_omz_macos_get_frontmost_app)
 
   if [[ "$the_app" == 'iTerm' ]]; then
     osascript <<EOF
@@ -125,7 +131,7 @@ function split_tab() {
   local command="cd \\\"$PWD\\\"; clear"
   (( $# > 0 )) && command="${command}; $*"
 
-  local the_app=$(_omz_osx_get_frontmost_app)
+  local the_app=$(_omz_macos_get_frontmost_app)
 
   if [[ "$the_app" == 'iTerm' ]]; then
     osascript 2>/dev/null <<EOF
