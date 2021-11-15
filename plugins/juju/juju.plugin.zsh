@@ -95,6 +95,37 @@ jaddr() {
   fi
 }
 
+# Destroy all controllers
+jclean() {
+  if (( ! ${+commands[jq]} )); then
+    echo "jq is required but could not be found." >&2
+    return 1
+  fi
+
+  local controllers=$(juju controllers --format=json | jq -r '.controllers | keys[]' 2>/dev/null)
+  if [[ -z "$controllers" ]]; then
+    echo "No controllers registered"
+    return 0
+  fi
+
+  echo "This will forcefully destroy all storages, models and controllers."
+  echo "Controllers to be destroyed:"
+  echo "$controllers"
+
+  if ! read -q '?Are you sure (y/n)? '; then
+    echo
+    echo "Aborted."
+    return 0
+  fi
+
+  echo
+  for controller in ${=controllers}; do
+    timeout 2m juju destroy-controller --destroy-all-models --destroy-storage --force --no-wait -y $controller
+    timeout 2m juju kill-controller -y -t 0 $controller 2>/dev/null
+    timeout 10s juju unregister $controller 2>/dev/null
+  done
+}
+
 # Display app and unit relation data
 jreld() {
   # $1 = relation name
@@ -125,3 +156,4 @@ wjst() {
   shift $(( $# > 0 ))
   watch -n "$interval" --color juju status --relations --storage --color "$@"
 }
+
