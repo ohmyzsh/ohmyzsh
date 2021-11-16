@@ -4,8 +4,8 @@
 #####################################################
 
 ###
-# This plugin is only relevant if the terminal is iTerm2 on OSX.
-if [[ "$OSTYPE" == darwin* ]] && [[ -n "$ITERM_SESSION_ID" ]] ; then
+# This plugin is only relevant if the original terminal is iTerm2, which can be detected through its installed zsh integration
+if { type iterm2_set_user_var &>/dev/null ; };  then
 
   ###
   # Executes an arbitrary iTerm2 command via an escape code sequce.
