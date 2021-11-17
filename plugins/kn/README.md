@@ -1,10 +1,10 @@
 # kn - Knative CLI
 
-This plugin provides autocompletion for [kn](https://knative.dev/docs/install/install-kn/) revison, route, service, source, and trigger operations.
+This plugin provides autocompletion for [kn](https://knative.dev/docs/install/client/install-kn/) operations.
 
 To use it, add `kn` to the plugins array of your zshrc file:
 
-```bash
+```zsh
 plugins=(... kn)
 ```
 
