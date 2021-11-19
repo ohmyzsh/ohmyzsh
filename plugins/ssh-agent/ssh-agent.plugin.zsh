@@ -18,7 +18,7 @@ function _start_agent() {
   zstyle -s :omz:plugins:ssh-agent lifetime lifetime
 
   # start ssh-agent and setup environment
-  echo Starting ssh-agent...
+  zstyle -t :omz:plugins:ssh-agent quiet || echo >&2 "Starting ssh-agent ..."
   ssh-agent -s ${lifetime:+-t} ${lifetime} | sed '/^echo/d' >! "$ssh_env_cache"
   chmod 600 "$ssh_env_cache"
   . "$ssh_env_cache" > /dev/null
@@ -78,7 +78,7 @@ function _add_identities() {
 
   if [[ -n "$helper" ]]; then
     if [[ -z "${commands[$helper]}" ]]; then
-      echo "ssh-agent: the helper '$helper' has not been found."
+      echo >&2 "ssh-agent: the helper '$helper' has not been found."
     else
       SSH_ASKPASS="$helper" ssh-add "${args[@]}" ${^not_loaded} < /dev/null
       return $?
@@ -88,11 +88,9 @@ function _add_identities() {
   ssh-add "${args[@]}" ${^not_loaded}
 }
 
-# test if agent-forwarding is enabled
-zstyle -b :omz:plugins:ssh-agent agent-forwarding agent_forwarding
-
-# Add a nifty symlink for screen/tmux if agent forwarding
-if [[ $agent_forwarding = "yes" && -n "$SSH_AUTH_SOCK" && ! -L "$SSH_AUTH_SOCK" ]]; then
+# Add a nifty symlink for screen/tmux if agent forwarding is enabled
+if zstyle -t :omz:plugins:ssh-agent agent-forwarding \
+   && [[ -n "$SSH_AUTH_SOCK" && ! -L "$SSH_AUTH_SOCK" ]]; then
   ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USERNAME-screen
 else
   _start_agent

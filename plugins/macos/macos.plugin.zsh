@@ -1,9 +1,3 @@
-# Check if 'osx' is still in the plugins list and prompt to change to 'macos'
-if [[ -n "${plugins[(r)osx]}" ]]; then
-  print ${(%):-"%F{yellow}The \`osx\` plugin is deprecated and has been renamed to \`macos\`."}
-  print ${(%):-"Please update your .zshrc to use the \`%Bmacos%b\` plugin instead.%f"}
-fi
-
 # Open the current directory in a Finder window
 alias ofd='open_command $PWD'
 
