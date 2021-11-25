@@ -133,6 +133,12 @@ function update_ohmyzsh() {
     return
   fi
 
+  # Test if Oh My Zsh directory is a git repository
+  if ! (cd "$ZSH" && LANG= git rev-parse &>/dev/null); then
+    echo >&2 "[oh-my-zsh] Can't update: not a git repository."
+    return
+  fi
+
   # Check if there are updates available before proceeding
   if ! is_update_available; then
     return
