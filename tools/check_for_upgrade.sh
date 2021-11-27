@@ -34,11 +34,11 @@ function current_epoch() {
 
 function is_update_available() {
   local branch
-  branch=${"$(git -C "$ZSH" config --local oh-my-zsh.branch)":-master}
+  branch=${"$(cd "$ZSH"; git config --local oh-my-zsh.branch)":-master}
 
   local remote remote_url remote_repo
-  remote=${"$(git -C "$ZSH" config --local oh-my-zsh.remote)":-origin}
-  remote_url=$(git -C "$ZSH" config remote.$remote.url)
+  remote=${"$(cd "$ZSH"; git config --local oh-my-zsh.remote)":-origin}
+  remote_url=$(cd "$ZSH"; git config remote.$remote.url)
 
   local repo
   case "$remote_url" in
@@ -56,25 +56,22 @@ function is_update_available() {
 
   # Get local HEAD. If this fails assume there are updates
   local local_head
-  local_head=$(git -C "$ZSH" rev-parse $branch 2>/dev/null) || return 0
+  local_head=$(cd "$ZSH"; git rev-parse $branch 2>/dev/null) || return 0
 
-  # Get remote HEAD. If we can't get it assume there are updates unless there is no connection:
-  # - curl: 6 (could not resolve) or 7 (could not connect)
-  # - wget: 4 (network unreachable)
-  # - fetch: 1 (no route to host)
-  local remote_head ret
+  # Get remote HEAD. If no suitable command is found assume there are updates
+  # On any other error, skip the update (connection may be down)
+  local remote_head
   remote_head=$(
-    curl -fsSL -H 'Accept: application/vnd.github.v3.sha' $api_url 2>/dev/null || {
-      [[ $? -eq 6 || $? -eq 7 ]] && exit 1
-    } || wget -O- --header='Accept: application/vnd.github.v3.sha' $api_url 2>/dev/null || {
-      [[ $? -eq 4 ]] && exit 1
-    } || HTTP_ACCEPT='Accept: application/vnd.github.v3.sha' fetch -o - $api_url 2>/dev/null || {
-      [[ $? -eq 1 ]] && exit 1
-    } || exit 0
-  )
-
-  # If can't fetch remote HEAD, return exit code
-  ret=$?; [[ -n "$remote_head" ]] || return $ret
+    if (( ${+commands[curl]} )); then
+      curl -fsSL -H 'Accept: application/vnd.github.v3.sha' $api_url 2>/dev/null
+    elif (( ${+commands[wget]} )); then
+      wget -O- --header='Accept: application/vnd.github.v3.sha' $api_url 2>/dev/null
+    elif (( ${+commands[fetch]} )); then
+      HTTP_ACCEPT='Accept: application/vnd.github.v3.sha' fetch -o - $api_url 2>/dev/null
+    else
+      exit 0
+    fi
+  ) || return 1
 
   # Compare local and remote HEADs
   [[ "$local_head" != "$remote_head" ]]
@@ -133,6 +130,12 @@ function update_ohmyzsh() {
   zstyle -s ':omz:update' frequency epoch_target || epoch_target=${UPDATE_ZSH_DAYS:-13}
   # Test if enough time has passed until the next update
   if (( ( $(current_epoch) - $LAST_EPOCH ) < $epoch_target )); then
+    return
+  fi
+
+  # Test if Oh My Zsh directory is a git repository
+  if ! (cd "$ZSH" && LANG= git rev-parse &>/dev/null); then
+    echo >&2 "[oh-my-zsh] Can't update: not a git repository."
     return
   fi
 

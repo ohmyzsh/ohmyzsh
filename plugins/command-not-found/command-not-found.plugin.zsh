@@ -57,6 +57,6 @@ fi
 # Termux: https://github.com/termux/command-not-found
 if [[ -x /data/data/com.termux/files/usr/libexec/termux/command-not-found ]]; then
   command_not_found_handler() {
-    /data/data/com.termux/files/usr/libexec/termux/command-not-found -- "$1"
+    /data/data/com.termux/files/usr/libexec/termux/command-not-found "$1"
   }
 fi

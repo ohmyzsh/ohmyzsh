@@ -21,3 +21,4 @@ plugins=(... dotnet)
 | da    | dotnet add       | Add a package or reference to a .NET project.                     |
 | dp    | dotnet pack      | Create a NuGet package.                                           |
 | dng   | dotnet nuget     | Provides additional NuGet commands.                               |
+| db    | dotnet build     | Build a .NET project                                              |

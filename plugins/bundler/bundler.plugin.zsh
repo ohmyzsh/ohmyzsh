@@ -40,7 +40,7 @@ bundle_install() {
   else
     local cores_num="$(nproc)"
   fi
-  bundle install --jobs="$cores_num" "$@"
+  BUNDLE_JOBS="$cores_num" bundle install "$@"
 }
 
 ## Gem wrapper
@@ -81,14 +81,12 @@ bundled_commands=(
 )
 
 # Remove $UNBUNDLED_COMMANDS from the bundled_commands list
-for cmd in $UNBUNDLED_COMMANDS; do
-  bundled_commands=(${bundled_commands#$cmd});
-done
+bundled_commands=(${bundled_commands:|UNBUNDLED_COMMANDS})
+unset UNBUNDLED_COMMANDS
 
 # Add $BUNDLED_COMMANDS to the bundled_commands list
-for cmd in $BUNDLED_COMMANDS; do
-  bundled_commands+=($cmd);
-done
+bundled_commands+=($BUNDLED_COMMANDS)
+unset BUNDLED_COMMANDS
 
 # Check if in the root or a subdirectory of a bundled project
 _within-bundled-project() {
@@ -126,5 +124,4 @@ for cmd in $bundled_commands; do
     compdef "_$cmd" "bundled_$cmd"="$cmd"
   fi
 done
-
 unset cmd bundled_commands

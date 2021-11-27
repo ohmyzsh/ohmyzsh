@@ -19,14 +19,14 @@ export DIRHISTORY_SIZE=30
 # Returns the element if the array was not empty,
 # otherwise returns empty string.
 function pop_past() {
-  eval "$1='$dirhistory_past[$#dirhistory_past]'"
+  print -v $1 "${dirhistory_past[$#dirhistory_past]}"
   if [[ $#dirhistory_past -gt 0 ]]; then
     dirhistory_past[$#dirhistory_past]=()
   fi
 }
 
 function pop_future() {
-  eval "$1='$dirhistory_future[$#dirhistory_future]'"
+  print -v $1 "${dirhistory_future[$#dirhistory_future]}"
   if [[ $#dirhistory_future -gt 0 ]]; then
     dirhistory_future[$#dirhistory_future]=()
   fi
@@ -182,7 +182,7 @@ bindkey "\e\e[A" dirhistory_zle_dirhistory_up   # Putty
 bindkey "\eO3A" dirhistory_zle_dirhistory_up    # GNU screen
 case "$TERM_PROGRAM" in
 iTerm.app) bindkey "^[^[[A" dirhistory_zle_dirhistory_up ;;     # iTerm2
-Apple_Terminal) bindkey "^[OA" dirhistory_zle_dirhistory_up ;;  # Terminal.app
+Apple_Terminal) bindkey "^[[A" dirhistory_zle_dirhistory_up ;;  # Terminal.app
 esac
 if (( ${+terminfo[kcuu1]} )); then
   bindkey "^[${terminfo[kcuu1]}" dirhistory_zle_dirhistory_up # urxvt
@@ -195,7 +195,7 @@ bindkey "\e\e[B" dirhistory_zle_dirhistory_down   # Putty
 bindkey "\eO3B" dirhistory_zle_dirhistory_down    # GNU screen
 case "$TERM_PROGRAM" in
 iTerm.app) bindkey "^[^[[B" dirhistory_zle_dirhistory_down ;;     # iTerm2
-Apple_Terminal) bindkey "^[OB" dirhistory_zle_dirhistory_down ;;  # Terminal.app
+Apple_Terminal) bindkey "^[[B" dirhistory_zle_dirhistory_down ;;  # Terminal.app
 esac
 if (( ${+terminfo[kcud1]} )); then
   bindkey "^[${terminfo[kcud1]}" dirhistory_zle_dirhistory_down # urxvt
