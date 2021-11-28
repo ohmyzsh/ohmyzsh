@@ -122,7 +122,7 @@ _1st_arguments=(
   'zrem:remove a member from a sorted set'
   'zremrangebyrank:remove all members in a sorted set within the given indexes'
   'zremrangebyscore:remove all members in a sorted set within the given scores'
-  'zrevrange:return a range of membrs in a sorted set, by index, with scores ordered from high to low'
+  'zrevrange:return a range of members in a sorted set, by index, with scores ordered from high to low'
   'zrevrangebyscore:return a range of members in a sorted set, by score, with scores ordered from high to low'
   'zrevrank:determine the index of a member in a sorted set, with scores ordered from high to low'
   'zscore:get the score associated with the given member in a sorted set'
