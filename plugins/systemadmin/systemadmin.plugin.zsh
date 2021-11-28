@@ -105,7 +105,7 @@ visitpage20() {
 # top100 of Page lists the most time-consuming (more than 60 seconds) as well as the corresponding page number of occurrences
 consume100() {
     awk '($NF > 60 && $7~/\.php/){print $7}' "$(retlog)" |sort -n|uniq -c|sort -nr|head -n 100
-    # if django website or other webiste make by no suffix language
+    # if django website or other website make by no suffix language
     # awk '{print $7}' "$(retlog)" |sort -n|uniq -c|sort -nr|head -n 100
 }
 
