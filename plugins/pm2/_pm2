@@ -139,7 +139,7 @@ case "$words[1]" in
     stop|restart|delete|reload|reset)
         _arguments $id_all_comp && return 0
         ;;
-    env|inspect|monitor|unmonitor|discribe)
+    env|inspect|monitor|unmonitor|describe)
         _arguments $id_comp && return 0
         ;;
     deploy|startOrRestart|startOrReload)
