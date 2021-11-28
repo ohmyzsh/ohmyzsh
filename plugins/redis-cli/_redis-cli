@@ -63,7 +63,7 @@ _1st_arguments=(
   'mget:get the values of all the given keys'
   'monitor:listen for all requests received by the server in real time'
   'move:move a key to another database'
-  'mset:set multiple keys to muliple values'
+  'mset:set multiple keys to multiple values'
   'msetnx:set multiple keys tom ultiple values, only if none of the keys exist'
   'multi:mark the start of a transaction block'
   'object:inspect the internals of Redis objects'
