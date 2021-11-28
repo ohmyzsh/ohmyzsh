@@ -82,7 +82,7 @@ function fastfile_ls() {
         file=`basename "$f"` # To enable simpler handeling of spaces in file names
         varkey=`echo "$file" | tr " " "_"`
 
-        # Special format for colums
+        # Special format for columns
         echo "${fastfile_var_prefix}${varkey}|->|$(fastfile_get "$file")"
     done | column -t -s "|"
 }
