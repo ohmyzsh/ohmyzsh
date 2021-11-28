@@ -82,7 +82,7 @@ function __grunt() {
         update_msg=' (cache updated)'
     fi
 
-    # Make optioins completion.
+    # Make options completion.
     if [[ ${#__grunt_opts} -gt 0 ]]; then
         opts+=("${__grunt_opts[@]}")
     fi
