@@ -17,7 +17,7 @@ _1st_arguments=(
   # 'config resetstat: reset the stats returned by INFO'
   'dbsize:return the number of keys in the selected database'
   # 'debug object:get debugging information about a key'
-  # 'debug setgfault:make the server crash'
+  # 'debug segfault:make the server crash'
   'decr:decrement the integer value of a key by one'
   'decrby:decrement the integer value of a key by the given number'
   'del:delete a key'
