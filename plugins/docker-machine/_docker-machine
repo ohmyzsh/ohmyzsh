@@ -330,7 +330,7 @@ _docker-machine() {
     _arguments -C \
         "(- :)"{-h,--help}"[Show help]" \
         "(-D --debug)"{-D,--debug}"[Enable debug mode]" \
-        '(-s --stroage-path)'{-s,--storage-path}'[Configures storage path]:file:_files' \
+        '(-s --storage-path)'{-s,--storage-path}'[Configures storage path]:file:_files' \
         '--tls-ca-cert[CA to verify remotes against]:file:_files' \
         '--tls-ca-key[Private key to generate certificates]:file:_files' \
         '--tls-client-cert[Client cert to use for TLS]:file:_files' \
