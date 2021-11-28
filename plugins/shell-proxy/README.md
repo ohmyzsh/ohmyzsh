@@ -16,7 +16,7 @@ This a pure user-space program, shell-proxy setter, written Python3 and Bash.
 
 Method 1:
 
-`$DEFAULT_PROXY` is the proxy URL you will set
+`$__DEFAULT_PROXY__` is the proxy URL you will set
 
 Method 2:
 

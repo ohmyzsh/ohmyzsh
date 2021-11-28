@@ -9,7 +9,7 @@ user_proxy = os.environ.get("CONFIG_PROXY", os.path.expandvars("$HOME/.config/pr
 
 
 def get_http_proxy():
-    default_proxy = os.environ.get("DEFAULT_PROXY")
+    default_proxy = os.environ.get("__DEFAULT_PROXY__") or os.environ.get("DEFAULT_PROXY")
     if default_proxy:
         return default_proxy
     if os.path.isfile(user_proxy):

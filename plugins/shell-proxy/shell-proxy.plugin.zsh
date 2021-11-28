@@ -4,7 +4,10 @@
 __PROXY__="${0:A:h}/proxy.py"
 
 proxy() {
-	source <(env "DEFAULT_PROXY=$DEFAULT_PROXY" "$__PROXY__" "$1")
+  if [ -n "$DEFAULT_PROXY" ]; then 
+    echo "DEFAULT_PROXY is deprecated, use __DEFAULT_PROXY__ instead"
+  fi
+	source <(env "DEFAULT_PROXY=$DEFAULT_PROXY" "__DEFAULT_PROXY__=$__DEFAULT_PROXY__" "$__PROXY__" "$1")
 }
 
 _proxy() {
