@@ -19,7 +19,7 @@ _1st_arguments=(
   # 'debug object:get debugging information about a key'
   # 'debug setgfault:make the server crash'
   'decr:decrement the integer value of a key by one'
-  'decrby:decrement the integet value of a key by the given number'
+  'decrby:decrement the integer value of a key by the given number'
   'del:delete a key'
   'discard:discard all commands issued after MULTI'
   'echo:echo the given string'
