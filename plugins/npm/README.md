@@ -10,7 +10,7 @@ plugins=(... npm)
 
 ## Aliases
 
-| Alias   | Command                      | Descripton                                                      |
+| Alias   | Command                      | Description                                                     |
 |:------  |:-----------------------------|:----------------------------------------------------------------|
 | `npmg`  | `npm i -g`                   | Install dependencies globally                                   |
 | `npmS`  | `npm i -S`                   | Install and save to dependencies in your package.json           |
