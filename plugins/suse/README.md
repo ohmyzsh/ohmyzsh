@@ -62,7 +62,7 @@ plugins=(... suse)
 
 NOTE: `--no-refresh` is passed to zypper for speeding up the calls and avoid errors due to lack
 of root privileges. If you need to refresh the repositories, call `sudo zypper ref` (`zref` alias)
-before runing these aliases.
+before running these aliases.
 
 Related: [#9798](https://github.com/ohmyzsh/ohmyzsh/pull/9798).
 
