@@ -8,7 +8,7 @@ _1st_arguments=(
   'append:append a value to a key'
   'auth:authenticate to the server'
   'bgrewriteeaof:asynchronously rewrite the append-only file'
-  'bgsave:asynchornously save the dataset to disk'
+  'bgsave:asynchronously save the dataset to disk'
   'blpop:remove and get the first element in a list, or block until one is available'
   'brpop:remove and get the last element in a list, or block until one is available'
   'brpoplpush:pop a value from a list, push it to another list and return it; or block until one is available'
