@@ -161,7 +161,7 @@ function __grunt_update_cache() {
     fi
 
     if [[ $is_updating -ne 0 ]]; then
-        # Update caceh.
+        # Update cache.
         __grunt_version=$version
         __grunt_gruntfile=$gruntfile
         is_updating=1
