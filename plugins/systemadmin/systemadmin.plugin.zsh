@@ -27,7 +27,7 @@ alias mkdir='mkdir -pv'
 # get top process eating memory
 alias psmem='ps -e -orss=,args= | sort -b -k1 -nr'
 alias psmem10='ps -e -orss=,args= | sort -b -k1 -nr | head -n 10'
-# get top process eating cpu if not work try excute : export LC_ALL='C'
+# get top process eating cpu if not work try execute : export LC_ALL='C'
 alias pscpu='ps -e -o pcpu,cpu,nice,state,cputime,args|sort -k1,1n -nr'
 alias pscpu10='ps -e -o pcpu,cpu,nice,state,cputime,args|sort -k1,1n -nr | head -n 10'
 # top10 of the history
