@@ -3688,7 +3688,6 @@ Subsubcommands
 Subsubsubcommands
 sudo
 sudoedit
-SUFIX
 suitenames
 sunaku
 sunion
