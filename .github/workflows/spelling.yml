@@ -1,0 +1,31 @@
+name: Spell checking
+on:
+  pull_request_target:
+  push:
+  issue_comment:
+    types: [created]
+
+jobs:
+  spelling:
+    name: Spell checking
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout-merge
+      if: "contains(github.event_name, 'pull_request')"
+      uses: actions/checkout@v2
+      with:
+        ref: refs/pull/${{github.event.pull_request.number}}/merge
+    - name: checkout
+      if: ${{ github.event_name == 'push' ||
+        (
+          contains(github.event.comment.body, '@check-spelling-bot apply')
+        ) }}
+      uses: actions/checkout@v2
+    - uses: check-spelling/check-spelling@main
+      id: spelling
+      if: ${{ github.event_name != 'issue_comment' ||
+        (
+          contains(github.event.comment.body, '@check-spelling-bot apply')
+        ) }}
+      with:
+        experimental_apply_changes_via_bot: 1

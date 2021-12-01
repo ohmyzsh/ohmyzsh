@@ -1,0 +1,2 @@
+ohmyzsh
+oh-my-zsh
