@@ -32,7 +32,7 @@ _rebar () {
         'create[Create skel based on template and vars]' \
         'create-app[Create simple app skel]' \
         'create-node[Create simple node skel]' \
-        'list-template[List avaiavle templates]' \
+        'list-template[List available templates]' \
         'doc[Generate Erlang program documentation]' \
         'check-deps[Display to be fetched dependencies]' \
         'get-deps[Fetch dependencies]' \

@@ -157,7 +157,7 @@ _yarn() {
     '(--emoji)--no-emoji[disable emoji in output]' \
     '(--disable-pnp)'{--enable-pnp,--pnp}"[enable the Plug'n'Play installation]" \
     '--flat[only allow one version of a package]' \
-    '--focus[Focus on a single workspace by installing remote copies of its sibiling workspaces]' \
+    '--focus[Focus on a single workspace by installing remote copies of its sibling workspaces]' \
     '--force[install and build packages even if they were built before, overwrite lockfile]' \
     "--frozen-lockfile[don't generate a lockfile and fail if an update is needed]" \
     '--global-folder=[modules folder]:folder:_files -/' \
