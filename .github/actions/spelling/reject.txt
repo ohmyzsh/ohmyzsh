@@ -1,6 +1,0 @@
-^attache$
-occurence
-Sorce
-^[Ss]pae
-^untill
-^wether

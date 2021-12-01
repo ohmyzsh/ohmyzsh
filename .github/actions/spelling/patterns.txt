@@ -1,4 +1,0 @@
-# See https://github.com/check-spelling/check-spelling/wiki/Configuration-Examples:-patterns
-
-# ignore long runs of a single character:
-\b([A-Za-z])\g{-1}{3,}\b
