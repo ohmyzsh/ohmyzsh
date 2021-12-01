@@ -32,7 +32,7 @@ plugins=(... archlinux)
 | pacfiles     | `pacman -F`                            | Search package file names for matching strings                   |
 | pacls        | `pacman -Ql`                           | List files in a package                                          |
 | pacown       | `pacman -Qo`                           | Show which package owns a file                                   |
-| upgrade[²](#f2) | `sudo pacman -Syu`                  | Sync with repositories before upgrading packages                 |
+| upgrade[¹](#f1) | `sudo pacman -Syu`                  | Sync with repositories before upgrading packages                 |
 
 | Function       | Description                                               |
 |----------------|-----------------------------------------------------------|
@@ -73,7 +73,7 @@ upgrades were available. Use `pacman -Que` instead.
 | auupd   | `sudo aura -Sy`                                 | Update and refresh local package, ABS and AUR databases                 |
 | auupg   | `sudo sh -c "aura -Syu              && aura -Au"` | Sync with repositories before upgrading all packages (from AUR too)   |
 | ausu    | `sudo sh -c "aura -Syu --no-confirm && aura -Au --no-confirm"` | Same as `auupg`, but without confirmation                |
-| upgrade[²](#f2) | `sudo aura -Syu`                        | Sync with repositories before upgrading packages                        |
+| upgrade[¹](#f1) | `sudo aura -Syu`                        | Sync with repositories before upgrading packages                        |
 
 | Function        | Description                                                         |
 |-----------------|---------------------------------------------------------------------|
@@ -99,7 +99,7 @@ upgrades were available. Use `pacman -Que` instead.
 | paupd   | `pacaur -Sy`                      | Update and refresh local package, ABS and AUR databases             |
 | paupg   | `pacaur -Syua`                    | Sync with repositories before upgrading all packages (from AUR too) |
 | pasu    | `pacaur -Syua --no-confirm`       | Same as `paupg`, but without confirmation                           |
-| upgrade[²](#f2) | `pacaur -Syu`             | Sync with repositories before upgrading packages                    |
+| upgrade[¹](#f1) | `pacaur -Syu`             | Sync with repositories before upgrading packages                    |
 
 #### Trizen
 
@@ -121,31 +121,9 @@ upgrades were available. Use `pacman -Que` instead.
 | trupd   | `trizen -Sy`                      | Update and refresh local package, ABS and AUR databases             |
 | trupg   | `trizen -Syua`                    | Sync with repositories before upgrading all packages (from AUR too) |
 | trsu    | `trizen -Syua --no-confirm`       | Same as `trupg`, but without confirmation                           |
-| upgrade[²](#f2) | `trizen -Syu`             | Sync with repositories before upgrading packages                    |
+| upgrade[¹](#f1) | `trizen -Syu`             | Sync with repositories before upgrading packages                    |
 
-#### Yaourt[¹](#f1)
-
-| Alias   | Command                           | Description                                                         |
-|---------|-----------------------------------|---------------------------------------------------------------------|
-| yaconf  | `yaourt -C`                       | Fix all configuration files with vimdiff                            |
-| yain    | `yaourt -S`                       | Install packages from the repositories                              |
-| yains   | `yaourt -U`                       | Install a package from a local file                                 |
-| yainsd  | `yaourt -S --asdeps`              | Install packages as dependencies of another package                 |
-| yaloc   | `yaourt -Qi`                      | Display information about a package in the local database           |
-| yalocs  | `yaourt -Qs`                      | Search for packages in the local database                           |
-| yalst   | `yaourt -Qe`                      | List installed packages including from AUR (tagged as "local")      |
-| yamir   | `yaourt -Syy`                     | Force refresh of all package lists after updating mirrorlist        |
-| yaorph  | `yaourt -Qtd`                     | Remove orphans using yaourt                                         |
-| yare    | `yaourt -R`                       | Remove packages, keeping its settings and dependencies              |
-| yarem   | `yaourt -Rns`                     | Remove packages, including its settings and unneeded dependencies   |
-| yarep   | `yaourt -Si`                      | Display information about a package in the repositories             |
-| yareps  | `yaourt -Ss`                      | Search for packages in the repositories                             |
-| yaupd   | `yaourt -Sy`                      | Update and refresh local package, ABS and AUR databases             |
-| yaupg   | `yaourt -Syua`                    | Sync with repositories before upgrading all packages (from AUR too) |
-| yasu    | `yaourt -Syua --no-confirm`       | Same as `yaupg`, but without confirmation                           |
-| upgrade[²](#f2) | `yaourt -Syu`             | Sync with repositories before upgrading packages                    |
-
-#### Yay[¹](#f1)
+#### Yay
 
 | Alias   | Command                        | Description                                                       |
 |---------|--------------------------------|-------------------------------------------------------------------|
@@ -165,23 +143,19 @@ upgrades were available. Use `pacman -Que` instead.
 | yaupd   | `yay -Sy`                      | Update and refresh local package, ABS and AUR databases           |
 | yaupg   | `yay -Syu`                     | Sync with repositories before upgrading packages                  |
 | yasu    | `yay -Syu --no-confirm`        | Same as `yaupg`, but without confirmation                         |
-| upgrade[²](#f2) | `yay -Syu`             | Sync with repositories before upgrading packages                  |
+| upgrade[¹](#f1) | `yay -Syu`             | Sync with repositories before upgrading packages                  |
 
 ---
 
 <span id="f1">¹</span>
-Yay and Yaourt aliases overlap. If both are installed, yay will take precedence.
-
-<span id="f2">²</span>
 The `upgrade` alias is set for all package managers. Its value will depend on
 whether the package manager is installed, checked in the following order:
 
 1. `yay`
-2. `yaourt`
-3. `trizen`
-4. `pacaur`
-5. `aura`
-6. `pacman`
+2. `trizen`
+3. `pacaur`
+4. `aura`
+5. `pacman`
 
 ## Contributors
 

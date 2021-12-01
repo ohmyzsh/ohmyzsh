@@ -32,10 +32,10 @@ function work_in_progress() {
 # Check if main exists and use instead of master
 function git_main_branch() {
   command git rev-parse --git-dir &>/dev/null || return
-  local branch
-  for branch in main trunk; do
-    if command git show-ref -q --verify refs/heads/$branch; then
-      echo $branch
+  local ref
+  for ref in refs/{heads,remotes/{origin,upstream}}/{main,trunk}; do
+    if command git show-ref -q --verify $ref; then
+      echo ${ref:t}
       return
     fi
   done
@@ -78,7 +78,7 @@ alias gapt='git apply --3way'
 alias gb='git branch'
 alias gba='git branch -a'
 alias gbd='git branch -d'
-alias gbda='git branch --no-color --merged | command grep -vE "^(\+|\*|\s*($(git_main_branch)|$(git_develop_branch))\s*$)" | command xargs -n 1 git branch -d'
+alias gbda='git branch --no-color --merged | command grep -vE "^([+*]|\s*($(git_main_branch)|$(git_develop_branch))\s*$)" | command xargs git branch -d 2>/dev/null'
 alias gbD='git branch -D'
 alias gbl='git blame -b -w'
 alias gbnm='git branch --no-merged'
@@ -102,6 +102,13 @@ alias gcas='git commit -a -s'
 alias gcasm='git commit -a -s -m'
 alias gcb='git checkout -b'
 alias gcf='git config --list'
+
+function gccd() {
+  command git clone --recurse-submodules "$@"
+  [[ -d "$_" ]] && cd "$_" || cd "${${_:t}%.git}"
+}
+compdef _git gccd=git-clone
+
 alias gcl='git clone --recurse-submodules'
 alias gclean='git clean -id'
 alias gpristine='git reset --hard && git clean -dffx'
@@ -124,6 +131,7 @@ alias gdcw='git diff --cached --word-diff'
 alias gdct='git describe --tags $(git rev-list --tags --max-count=1)'
 alias gds='git diff --staged'
 alias gdt='git diff-tree --no-commit-id --name-only -r'
+alias gdup='git diff @{upstream}'
 alias gdw='git diff --word-diff'
 
 function gdnolock() {
@@ -205,8 +213,8 @@ alias gignore='git update-index --assume-unchanged'
 alias gignored='git ls-files -v | grep "^[[:lower:]]"'
 alias git-svn-dcommit-push='git svn dcommit && git push github $(git_main_branch):svntrunk'
 
-alias gk='\gitk --all --branches'
-alias gke='\gitk --all $(git log -g --pretty=%h)'
+alias gk='\gitk --all --branches &!'
+alias gke='\gitk --all $(git log -g --pretty=%h) &!'
 
 alias gl='git pull'
 alias glg='git log --stat'
@@ -215,19 +223,19 @@ alias glgg='git log --graph'
 alias glgga='git log --graph --decorate --all'
 alias glgm='git log --graph --max-count=10'
 alias glo='git log --oneline --decorate'
-alias glol="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'"
-alias glols="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --stat"
+alias glol="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset'"
+alias glols="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset' --stat"
 alias glod="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset'"
 alias glods="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset' --date=short"
-alias glola="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --all"
+alias glola="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset' --all"
 alias glog='git log --oneline --decorate --graph'
 alias gloga='git log --oneline --decorate --graph --all'
 alias glp="_git_log_prettily"
 
 alias gm='git merge'
 alias gmom='git merge origin/$(git_main_branch)'
-alias gmt='git mergetool --no-prompt'
-alias gmtvim='git mergetool --no-prompt --tool=vimdiff'
+alias gmtl='git mergetool --no-prompt'
+alias gmtlvim='git mergetool --no-prompt --tool=vimdiff'
 alias gmum='git merge upstream/$(git_main_branch)'
 alias gma='git merge --abort'
 alias gmru="$(git_most_recently_committed_branch 10)"
@@ -249,6 +257,7 @@ alias grbc='git rebase --continue'
 alias grbd='git rebase $(git_develop_branch)'
 alias grbi='git rebase -i'
 alias grbm='git rebase $(git_main_branch)'
+alias grbom='git rebase origin/$(git_main_branch)'
 alias grbo='git rebase --onto'
 alias grbs='git rebase --skip'
 alias grev='git revert'
@@ -294,6 +303,8 @@ alias gsu='git submodule update'
 alias gsw='git switch'
 alias gswc='git switch -c'
 alias gswl="git switch \$($(git_most_recently_committed_branch 1))"
+alias gswm='git switch $(git_main_branch)'
+alias gswd='git switch $(git_develop_branch)'
 
 alias gts='git tag -s'
 alias gtv='git tag | sort -V'

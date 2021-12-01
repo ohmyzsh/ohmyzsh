@@ -51,7 +51,7 @@ function parse_git_dirty() {
         FLAGS+="--ignore-submodules=${GIT_STATUS_IGNORE_SUBMODULES:-dirty}"
         ;;
     esac
-    STATUS=$(__git_prompt_git status ${FLAGS} 2> /dev/null | tail -1)
+    STATUS=$(__git_prompt_git status ${FLAGS} 2> /dev/null | tail -n 1)
   fi
   if [[ -n $STATUS ]]; then
     echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
@@ -206,7 +206,8 @@ function git_prompt_status() {
     STASHED UNMERGED AHEAD BEHIND DIVERGED
   )
 
-  local status_text="$(__git_prompt_git status --porcelain -b 2> /dev/null)"
+  local status_text
+  status_text="$(__git_prompt_git status --porcelain -b 2> /dev/null)"
 
   # Don't continue on a catastrophic failure
   if [[ $? -eq 128 ]]; then

@@ -20,7 +20,9 @@ function setup_using_base_dir() {
         done
 
         if [[ -z "${fzf_base}" ]]; then
-            if (( ${+commands[brew]} )) && dir="$(brew --prefix fzf 2>/dev/null)"; then
+            if (( ${+commands[fzf-share]} )) && dir="$(fzf-share)" && [[ -d "${dir}" ]]; then
+                fzf_base="${dir}"
+            elif (( ${+commands[brew]} )) && dir="$(brew --prefix fzf 2>/dev/null)"; then
                 if [[ -d "${dir}" ]]; then
                     fzf_base="${dir}"
                 fi

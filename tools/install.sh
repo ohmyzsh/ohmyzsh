@@ -53,39 +53,133 @@ KEEP_ZSHRC=${KEEP_ZSHRC:-no}
 
 
 command_exists() {
-	command -v "$@" >/dev/null 2>&1
+  command -v "$@" >/dev/null 2>&1
+}
+
+# The [ -t 1 ] check only works when the function is not called from
+# a subshell (like in `$(...)` or `(...)`, so this hack redefines the
+# function at the top level to always return false when stdout is not
+# a tty.
+if [ -t 1 ]; then
+  is_tty() {
+    true
+  }
+else
+  is_tty() {
+    false
+  }
+fi
+
+# This function uses the logic from supports-hyperlinks[1][2], which is
+# made by Kat Marchán (@zkat) and licensed under the Apache License 2.0.
+# [1] https://github.com/zkat/supports-hyperlinks
+# [2] https://crates.io/crates/supports-hyperlinks
+#
+# Copyright (c) 2021 Kat Marchán
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+supports_hyperlinks() {
+  # $FORCE_HYPERLINK must be set and be non-zero (this acts as a logic bypass)
+  if [ -n "$FORCE_HYPERLINK" ]; then
+    [ "$FORCE_HYPERLINK" != 0 ]
+    return $?
+  fi
+
+  # If stdout is not a tty, it doesn't support hyperlinks
+  is_tty || return 1
+
+  # DomTerm terminal emulator (domterm.org)
+  if [ -n "$DOMTERM" ]; then
+    return 0
+  fi
+
+  # VTE-based terminals above v0.50 (Gnome Terminal, Guake, ROXTerm, etc)
+  if [ -n "$VTE_VERSION" ]; then
+    [ $VTE_VERSION -ge 5000 ]
+    return $?
+  fi
+
+  # If $TERM_PROGRAM is set, these terminals support hyperlinks
+  case "$TERM_PROGRAM" in
+  Hyper|iTerm.app|terminology|WezTerm) return 0 ;;
+  esac
+
+  # kitty supports hyperlinks
+  if [ "$TERM" = xterm-kitty ]; then
+    return 0
+  fi
+
+  # Windows Terminal or Konsole also support hyperlinks
+  if [ -n "$WT_SESSION" ] || [ -n "$KONSOLE_VERSION" ]; then
+    return 0
+  fi
+
+  return 1
+}
+
+fmt_link() {
+  # $1: text, $2: url, $3: fallback mode
+  if supports_hyperlinks; then
+    printf '\033]8;;%s\a%s\033]8;;\a\n' "$2" "$1"
+    return
+  fi
+
+  case "$3" in
+  --text) printf '%s\n' "$1" ;;
+  --url|*) fmt_underline "$2" ;;
+  esac
+}
+
+fmt_underline() {
+  is_tty && printf '\033[4m%s\033[24m\n' "$*" || printf '%s\n' "$*"
+}
+
+# shellcheck disable=SC2016 # backtick in single-quote
+fmt_code() {
+  is_tty && printf '`\033[2m%s\033[22m`\n' "$*" || printf '`%s`\n' "$*"
 }
 
 fmt_error() {
   printf '%sError: %s%s\n' "$BOLD$RED" "$*" "$RESET" >&2
 }
 
-fmt_underline() {
-  printf '\033[4m%s\033[24m\n' "$*"
-}
-
-fmt_code() {
-  # shellcheck disable=SC2016 # backtic in single-quote
-  printf '`\033[38;5;247m%s%s`\n' "$*" "$RESET"
-}
-
 setup_color() {
-	# Only use colors if connected to a terminal
-	if [ -t 1 ]; then
-		RED=$(printf '\033[31m')
-		GREEN=$(printf '\033[32m')
-		YELLOW=$(printf '\033[33m')
-		BLUE=$(printf '\033[34m')
-		BOLD=$(printf '\033[1m')
-		RESET=$(printf '\033[m')
-	else
-		RED=""
-		GREEN=""
-		YELLOW=""
-		BLUE=""
-		BOLD=""
-		RESET=""
-	fi
+  # Only use colors if connected to a terminal
+  if is_tty; then
+    RAINBOW="
+      $(printf '\033[38;5;196m')
+      $(printf '\033[38;5;202m')
+      $(printf '\033[38;5;226m')
+      $(printf '\033[38;5;082m')
+      $(printf '\033[38;5;021m')
+      $(printf '\033[38;5;093m')
+      $(printf '\033[38;5;163m')
+    "
+    RED=$(printf '\033[31m')
+    GREEN=$(printf '\033[32m')
+    YELLOW=$(printf '\033[33m')
+    BLUE=$(printf '\033[34m')
+    BOLD=$(printf '\033[1m')
+    RESET=$(printf '\033[m')
+  else
+    RAINBOW=""
+    RED=""
+    GREEN=""
+    YELLOW=""
+    BLUE=""
+    BOLD=""
+    RESET=""
+  fi
 }
 
 setup_ohmyzsh() {
@@ -114,6 +208,8 @@ setup_ohmyzsh() {
     -c fsck.zeroPaddedFilemode=ignore \
     -c fetch.fsck.zeroPaddedFilemode=ignore \
     -c receive.fsck.zeroPaddedFilemode=ignore \
+    -c oh-my-zsh.remote=origin \
+    -c oh-my-zsh.branch="$BRANCH" \
     --depth=1 --branch "$BRANCH" "$REMOTE" "$ZSH" || {
     fmt_error "git clone of oh-my-zsh repo failed"
     exit 1
@@ -157,9 +253,9 @@ setup_zshrc() {
   sed "/^export ZSH=/ c\\
 export ZSH=\"$ZSH\"
 " "$ZSH/templates/zshrc.zsh-template" > ~/.zshrc-omztemp
-	mv -f ~/.zshrc-omztemp ~/.zshrc
+  mv -f ~/.zshrc-omztemp ~/.zshrc
 
-	echo
+  echo
 }
 
 setup_shell() {
@@ -215,7 +311,7 @@ EOF
     # 1. Use the most preceding one based on $PATH, then check that it's in the shells file
     # 2. If that fails, get a zsh path from the shells file, then check it actually exists
     if ! zsh=$(command -v zsh) || ! grep -qx "$zsh" "$shells_file"; then
-      if ! zsh=$(grep '^/.*/zsh$' "$shells_file" | tail -1) || [ ! -f "$zsh" ]; then
+      if ! zsh=$(grep '^/.*/zsh$' "$shells_file" | tail -n 1) || [ ! -f "$zsh" ]; then
         fmt_error "no zsh binary found or not present in '$shells_file'"
         fmt_error "change your default shell manually."
         return
@@ -239,6 +335,26 @@ EOF
   fi
 
   echo
+}
+
+# shellcheck disable=SC2183  # printf string has more %s than arguments ($RAINBOW expands to multiple arguments)
+print_success() {
+  printf '%s         %s__      %s           %s        %s       %s     %s__   %s\n'      $RAINBOW $RESET
+  printf '%s  ____  %s/ /_    %s ____ ___  %s__  __  %s ____  %s_____%s/ /_  %s\n'      $RAINBOW $RESET
+  printf '%s / __ \\%s/ __ \\  %s / __ `__ \\%s/ / / / %s /_  / %s/ ___/%s __ \\ %s\n'  $RAINBOW $RESET
+  printf '%s/ /_/ /%s / / / %s / / / / / /%s /_/ / %s   / /_%s(__  )%s / / / %s\n'      $RAINBOW $RESET
+  printf '%s\\____/%s_/ /_/ %s /_/ /_/ /_/%s\\__, / %s   /___/%s____/%s_/ /_/  %s\n'    $RAINBOW $RESET
+  printf '%s    %s        %s           %s /____/ %s       %s     %s          %s....is now installed!%s\n' $RAINBOW $GREEN $RESET
+  printf '\n'
+  printf '\n'
+  printf "%s %s %s\n" "Before you scream ${BOLD}${YELLOW}Oh My Zsh!${RESET} look over the" \
+    "$(fmt_code "$(fmt_link ".zshrc" "file://$HOME/.zshrc" --text)")" \
+    "file to select plugins, themes, and options."
+  printf '\n'
+  printf '%s\n' "• Follow us on Twitter: $(fmt_link @ohmyzsh https://twitter.com/ohmyzsh)"
+  printf '%s\n' "• Join our Discord community: $(fmt_link "Discord server" https://discord.gg/ohmyzsh)"
+  printf '%s\n' "• Get stickers, t-shirts, coffee mugs and more: $(fmt_link "Planet Argon Shop" https://shop.planetargon.com/collections/oh-my-zsh)"
+  printf '%s\n' $RESET
 }
 
 main() {
@@ -291,26 +407,7 @@ EOF
   setup_zshrc
   setup_shell
 
-  printf %s "$GREEN"
-  cat <<'EOF'
-         __                                     __
-  ____  / /_     ____ ___  __  __   ____  _____/ /_
- / __ \/ __ \   / __ `__ \/ / / /  /_  / / ___/ __ \
-/ /_/ / / / /  / / / / / / /_/ /    / /_(__  ) / / /
-\____/_/ /_/  /_/ /_/ /_/\__, /    /___/____/_/ /_/
-                        /____/                       ....is now installed!
-
-
-EOF
-  cat <<EOF
-Before you scream Oh My Zsh! please look over the ~/.zshrc file to select plugins, themes, and options.
-
-• Follow us on Twitter: $(fmt_underline https://twitter.com/ohmyzsh)
-• Join our Discord server: $(fmt_underline https://discord.gg/ohmyzsh)
-• Get stickers, shirts, coffee mugs and other swag: $(fmt_underline https://shop.planetargon.com/collections/oh-my-zsh)
-
-EOF
-  printf %s "$RESET"
+  print_success
 
   if [ $RUNZSH = no ]; then
     echo "${YELLOW}Run zsh to try it out.${RESET}"
