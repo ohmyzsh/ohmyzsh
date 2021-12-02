@@ -29,6 +29,7 @@ function _omz {
     'reload:Reload the current zsh session'
     'theme:Manage themes'
     'update:Update Oh My Zsh'
+    'version:Show the version'
   )
 
   if (( CURRENT == 2 )); then
@@ -36,7 +37,7 @@ function _omz {
   elif (( CURRENT == 3 )); then
     case "$words[2]" in
       changelog) local -a refs
-        refs=("${(@f)$(command git -C "$ZSH" for-each-ref --format="%(refname:short):%(subject)" refs/heads refs/tags)}")
+        refs=("${(@f)$(cd "$ZSH"; command git for-each-ref --format="%(refname:short):%(subject)" refs/heads refs/tags)}")
         _describe 'command' refs ;;
       plugin) subcmds=(
         'disable:Disable plugin(s)'
@@ -164,6 +165,7 @@ Available commands:
   reload              Reload the current zsh session
   theme  <command>    Manage themes
   update              Update Oh My Zsh
+  version             Show the version
 
 EOF
 }
@@ -171,9 +173,12 @@ EOF
 function _omz::changelog {
   local version=${1:-HEAD} format=${3:-"--text"}
 
-  if ! command git -C "$ZSH" show-ref --verify refs/heads/$version &>/dev/null && \
-    ! command git -C "$ZSH" show-ref --verify refs/tags/$version &>/dev/null && \
-    ! command git -C "$ZSH" rev-parse --verify "${version}^{commit}" &>/dev/null; then
+  if (
+    cd "$ZSH"
+    ! command git show-ref --verify refs/heads/$version && \
+    ! command git show-ref --verify refs/tags/$version && \
+    ! command git rev-parse --verify "${version}^{commit}"
+  ) &>/dev/null; then
     cat >&2 <<EOF
 Usage: omz changelog [version]
 
@@ -446,9 +451,9 @@ function _omz::plugin::load {
     fi
 
     # Check if it has completion to reload compinit
-    if [[ -f "$base/_$plugin" ]]; then
-      has_completion=1
-    fi
+    local -a comp_files
+    comp_files=($base/_*(N))
+    has_completion=$(( $#comp_files > 0 ))
 
     # Load the plugin
     if [[ -f "$base/$plugin.plugin.zsh" ]]; then
@@ -773,4 +778,25 @@ function _omz::update {
     # Check whether to run a login shell
     [[ "$zsh" = -* || -o login ]] && exec -l "${zsh#-}" || exec "$zsh"
   fi
+}
+
+function _omz::version {
+  (
+    cd "$ZSH"
+
+    # Get the version name:
+    # 1) try tag-like version
+    # 2) try name-rev
+    # 3) try branch name
+    local version
+    version=$(command git describe --tags HEAD 2>/dev/null) \
+    || version=$(command git name-rev --no-undefined --name-only --exclude="remotes/*" HEAD 2>/dev/null) \
+    || version=$(command git symbolic-ref --quiet --short HEAD 2>/dev/null)
+
+    # Get short hash for the current HEAD
+    local commit=$(command git rev-parse --short HEAD 2>/dev/null)
+
+    # Show version and commit hash
+    printf "%s (%s)\n" "$version" "$commit"
+  )
 }

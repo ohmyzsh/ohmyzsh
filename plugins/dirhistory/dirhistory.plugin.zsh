@@ -1,7 +1,7 @@
-## 
-#   Navigate directory history using ALT-LEFT and ALT-RIGHT. ALT-LEFT moves back to directories 
+##
+#   Navigate directory history using ALT-LEFT and ALT-RIGHT. ALT-LEFT moves back to directories
 #   that the user has changed to in the past, and ALT-RIGHT undoes ALT-LEFT.
-# 
+#
 #   Navigate directory hierarchy using ALT-UP and ALT-DOWN.
 #   ALT-UP moves to higher hierarchy (cd ..)
 #   ALT-DOWN moves into the first directory found in alphabetical order
@@ -14,25 +14,25 @@ export dirhistory_future
 
 export DIRHISTORY_SIZE=30
 
-# Pop the last element of dirhistory_past. 
-# Pass the name of the variable to return the result in. 
+# Pop the last element of dirhistory_past.
+# Pass the name of the variable to return the result in.
 # Returns the element if the array was not empty,
 # otherwise returns empty string.
 function pop_past() {
-  eval "$1='$dirhistory_past[$#dirhistory_past]'"
+  print -v $1 "${dirhistory_past[$#dirhistory_past]}"
   if [[ $#dirhistory_past -gt 0 ]]; then
     dirhistory_past[$#dirhistory_past]=()
   fi
 }
 
 function pop_future() {
-  eval "$1='$dirhistory_future[$#dirhistory_future]'"
+  print -v $1 "${dirhistory_future[$#dirhistory_future]}"
   if [[ $#dirhistory_future -gt 0 ]]; then
     dirhistory_future[$#dirhistory_future]=()
   fi
 }
 
-# Push a new element onto the end of dirhistory_past. If the size of the array 
+# Push a new element onto the end of dirhistory_past. If the size of the array
 # is >= DIRHISTORY_SIZE, the array is shifted
 function push_past() {
   if [[ $#dirhistory_past -ge $DIRHISTORY_SIZE ]]; then
@@ -76,7 +76,7 @@ function dirhistory_back() {
   local d=""
   # Last element in dirhistory_past is the cwd.
 
-  pop_past cw 
+  pop_past cw
   if [[ "" == "$cw" ]]; then
     # Someone overwrote our variable. Recover it.
     dirhistory_past=($PWD)
@@ -121,40 +121,35 @@ function dirhistory_zle_dirhistory_future() {
 }
 
 zle -N dirhistory_zle_dirhistory_back
-# xterm in normal mode
-bindkey "\e[3D" dirhistory_zle_dirhistory_back
-bindkey "\e[1;3D" dirhistory_zle_dirhistory_back
-# Terminal.app
-if [[ "$TERM_PROGRAM" == "Apple_Terminal" ]]; then
-  bindkey "^[b" dirhistory_zle_dirhistory_back
+bindkey "\e[3D" dirhistory_zle_dirhistory_back    # xterm in normal mode
+bindkey "\e[1;3D" dirhistory_zle_dirhistory_back  # xterm in normal mode
+bindkey "\e\e[D" dirhistory_zle_dirhistory_back   # Putty
+bindkey "\eO3D" dirhistory_zle_dirhistory_back    # GNU screen
+case "$TERM_PROGRAM" in
+iTerm.app) bindkey "^[^[[D" dirhistory_zle_dirhistory_back ;;   # iTerm2
+Apple_Terminal) bindkey "^[b" dirhistory_zle_dirhistory_back ;; # Terminal.app
+esac
+if (( ${+terminfo[kcub1]} )); then
+  bindkey "^[${terminfo[kcub1]}" dirhistory_zle_dirhistory_back  # urxvt
 fi
-# iTerm2
-if [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
-  bindkey "^[^[[D" dirhistory_zle_dirhistory_back
-fi
-# Putty:
-bindkey "\e\e[D" dirhistory_zle_dirhistory_back
-# GNU screen:
-bindkey "\eO3D" dirhistory_zle_dirhistory_back
 
 zle -N dirhistory_zle_dirhistory_future
-bindkey "\e[3C" dirhistory_zle_dirhistory_future
-bindkey "\e[1;3C" dirhistory_zle_dirhistory_future
-# Terminal.app
-if [[ "$TERM_PROGRAM" == "Apple_Terminal" ]]; then
-  bindkey "^[f" dirhistory_zle_dirhistory_future
+bindkey "\e[3C" dirhistory_zle_dirhistory_future    # xterm in normal mode
+bindkey "\e[1;3C" dirhistory_zle_dirhistory_future  # xterm in normal mode
+bindkey "\e\e[C" dirhistory_zle_dirhistory_future   # Putty
+bindkey "\eO3C" dirhistory_zle_dirhistory_future    # GNU screen
+case "$TERM_PROGRAM" in
+iTerm.app) bindkey "^[^[[C" dirhistory_zle_dirhistory_future ;;   # iTerm2
+Apple_Terminal) bindkey "^[f" dirhistory_zle_dirhistory_future ;; # Terminal.app
+esac
+if (( ${+terminfo[kcuf1]} )); then
+  bindkey "^[${terminfo[kcuf1]}" dirhistory_zle_dirhistory_future # urxvt
 fi
-# iTerm2
-if [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
-  bindkey "^[^[[C" dirhistory_zle_dirhistory_future
-fi
-bindkey "\e\e[C" dirhistory_zle_dirhistory_future
-bindkey "\eO3C" dirhistory_zle_dirhistory_future
 
 
-# 
+#
 # HIERARCHY Implemented in this section, in case someone wants to split it to another plugin if it clashes bindings
-# 
+#
 
 # Move up in hierarchy
 function dirhistory_up() {
@@ -181,22 +176,27 @@ function dirhistory_zle_dirhistory_down() {
 }
 
 zle -N dirhistory_zle_dirhistory_up
-# xterm in normal mode
-bindkey "\e[3A" dirhistory_zle_dirhistory_up
-bindkey "\e[1;3A" dirhistory_zle_dirhistory_up
-if [[ "$TERM_PROGRAM" == "Apple_Terminal" || "$TERM_PROGRAM" == "iTerm.app" ]]; then
-  bindkey "^[[A" dirhistory_zle_dirhistory_up
+bindkey "\e[3A" dirhistory_zle_dirhistory_up    # xterm in normal mode
+bindkey "\e[1;3A" dirhistory_zle_dirhistory_up  # xterm in normal mode
+bindkey "\e\e[A" dirhistory_zle_dirhistory_up   # Putty
+bindkey "\eO3A" dirhistory_zle_dirhistory_up    # GNU screen
+case "$TERM_PROGRAM" in
+iTerm.app) bindkey "^[^[[A" dirhistory_zle_dirhistory_up ;;     # iTerm2
+Apple_Terminal) bindkey "^[[A" dirhistory_zle_dirhistory_up ;;  # Terminal.app
+esac
+if (( ${+terminfo[kcuu1]} )); then
+  bindkey "^[${terminfo[kcuu1]}" dirhistory_zle_dirhistory_up # urxvt
 fi
-# Putty:
-bindkey "\e\e[A" dirhistory_zle_dirhistory_up
-# GNU screen:
-bindkey "\eO3A" dirhistory_zle_dirhistory_up
 
 zle -N dirhistory_zle_dirhistory_down
-bindkey "\e[3B" dirhistory_zle_dirhistory_down
-bindkey "\e[1;3B" dirhistory_zle_dirhistory_down
-if [[ "$TERM_PROGRAM" == "Apple_Terminal" || "$TERM_PROGRAM" == "iTerm.app" ]]; then
-  bindkey "^[[B" dirhistory_zle_dirhistory_down
+bindkey "\e[3B" dirhistory_zle_dirhistory_down    # xterm in normal mode
+bindkey "\e[1;3B" dirhistory_zle_dirhistory_down  # xterm in normal mode
+bindkey "\e\e[B" dirhistory_zle_dirhistory_down   # Putty
+bindkey "\eO3B" dirhistory_zle_dirhistory_down    # GNU screen
+case "$TERM_PROGRAM" in
+iTerm.app) bindkey "^[^[[B" dirhistory_zle_dirhistory_down ;;     # iTerm2
+Apple_Terminal) bindkey "^[[B" dirhistory_zle_dirhistory_down ;;  # Terminal.app
+esac
+if (( ${+terminfo[kcud1]} )); then
+  bindkey "^[${terminfo[kcud1]}" dirhistory_zle_dirhistory_down # urxvt
 fi
-bindkey "\e\e[B" dirhistory_zle_dirhistory_down
-bindkey "\eO3B" dirhistory_zle_dirhistory_down

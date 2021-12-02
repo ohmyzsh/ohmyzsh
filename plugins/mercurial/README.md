@@ -61,7 +61,7 @@ ZSH_THEME_HG_PROMPT_CLEAN="%{$fg[magenta]%})"
 This is the same as git plugin does. **Note**: additional changes to `.zshrc`, or using a theme designed
 to use `hg_prompt_info`, are required in order for this to work.
 
-## Mantainers
+## Maintainers
 
 - [ptrv](https://github.com/ptrv): original creator
 - [oshybystyi](https://github.com/oshybystyi)
