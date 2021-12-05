@@ -2,33 +2,28 @@
 #               Pacman                #
 #######################################
 
-# Pacman - https://wiki.archlinux.org/index.php/Pacman_Tips
-alias pacupg='sudo pacman -Syu'
+# Pacman - https://wiki.archlinux.org/title/pacman
 alias pacin='sudo pacman -S'
 alias pacins='sudo pacman -U'
+alias pacinsd='sudo pacman -S --asdeps'
 alias pacre='sudo pacman -R'
 alias pacrem='sudo pacman -Rns'
+alias pacgr='pacman -Sg'
 alias pacrep='pacman -Si'
 alias pacreps='pacman -Ss'
+alias pacmir='sudo pacman -Syy'
+alias pacorphans='pacman -Qet'
+alias pacfiles='pacman -F'
+alias pacfileupg='sudo pacman -Fy'
 alias pacloc='pacman -Qi'
 alias paclocs='pacman -Qs'
-alias pacinsd='sudo pacman -S --asdeps'
-alias pacmir='sudo pacman -Syy'
-alias paclsorphans='sudo pacman -Qdt'
-alias pacrmorphans='sudo pacman -Rs $(pacman -Qtdq)'
-alias pacfileupg='sudo pacman -Fy'
-alias pacfiles='pacman -F'
+alias paclist='pacman -Qe'
 alias pacls='pacman -Ql'
+alias paclsorphans='pacman -Qdt'
 alias pacown='pacman -Qo'
 alias pacupd="sudo pacman -Sy"
+alias pacupg='sudo pacman -Syu'
 alias upgrade='sudo pacman -Syu'
-
-function paclist() {
-  # Based on https://bbs.archlinux.org/viewtopic.php?id=93683
-  pacman -Qqe | \
-    xargs -I '{}' \
-      expac "${bold_color}% 20n ${fg_no_bold[white]}%d${reset_color}" '{}'
-}
 
 function pacdisowned() {
   local tmp db fs

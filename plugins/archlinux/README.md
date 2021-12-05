@@ -12,39 +12,37 @@ plugins=(... archlinux)
 
 ### Pacman
 
-| Alias        | Command                                | Description                                                      |
-|--------------|----------------------------------------|------------------------------------------------------------------|
-| pacin        | `sudo pacman -S`                       | Install packages from the repositories                           |
-| pacins       | `sudo pacman -U`                       | Install a package from a local file                              |
-| pacinsd      | `sudo pacman -S --asdeps`              | Install packages as dependencies of another package              |
-| pacloc       | `pacman -Qi`                           | Display information about a package in the local database        |
-| paclocs      | `pacman -Qs`                           | Search for packages in the local database                        |
-| paclsorphans | `sudo pacman -Qdt`                     | List all orphaned packages                                       |
-| pacmir       | `sudo pacman -Syy`                     | Force refresh of all package lists after updating mirrorlist     |
-| pacre        | `sudo pacman -R`                       | Remove packages, keeping its settings and dependencies           |
-| pacrem       | `sudo pacman -Rns`                     | Remove packages, including its settings and dependencies         |
-| pacrep       | `pacman -Si`                           | Display information about a package in the repositories          |
-| pacreps      | `pacman -Ss`                           | Search for packages in the repositories                          |
-| pacrmorphans | `sudo pacman -Rs $(pacman -Qtdq)`      | Delete all orphaned packages                                     |
-| pacupd       | `sudo pacman -Sy`                      | Update and refresh local package, ABS and AUR databases          |
-| pacupg       | `sudo pacman -Syu`                     | Sync with repositories before upgrading packages                 |
-| pacfileupg   | `sudo pacman -Fy`                      | Download fresh package databases from the server                 |
-| pacfiles     | `pacman -F`                            | Search package file names for matching strings                   |
-| pacls        | `pacman -Ql`                           | List files in a package                                          |
-| pacown       | `pacman -Qo`                           | Show which package owns a file                                   |
-| upgrade[¹](#f1) | `sudo pacman -Syu`                  | Sync with repositories before upgrading packages                 |
+| Alias        | Command                                | Description                                                                    |
+|--------------|----------------------------------------|--------------------------------------------------------------------------------|
+| pacin        | `sudo pacman -S`                       | Install packages from the repositories                                         |
+| pacins       | `sudo pacman -U`                       | Install a package from a local file                                            |
+| pacinsd      | `sudo pacman -S --asdeps`              | Install packages as dependencies of another package                            |
+| pacmir       | `sudo pacman -Syy`                     | Force refresh of all package lists after updating mirrorlist                   |
+| pacre        | `sudo pacman -R`                       | Remove packages, keeping its settings and dependencies                         |
+| pacrem       | `sudo pacman -Rns`                     | Remove packages, including its settings and dependencies                       |
+| pacgr        | `pacman -Sg`                           | Display packages belong to a group                                             | 
+| pacrep       | `pacman -Si`                           | Display information about a package in the repositories                        |
+| pacreps      | `pacman -Ss`                           | Search for packages in the repositories                                        |
+| pacorphans   | `pacman -Qet`                          | List all packages explicitly installed and not required as dependencies        |
+| pacupd       | `sudo pacman -Sy`                      | Update and refresh local package, ABS and AUR databases                        |
+| pacupg       | `sudo pacman -Syu`                     | Sync with repositories before upgrading packages                               |
+| pacfileupg   | `sudo pacman -Fy`                      | Download fresh package databases from the server                               |
+| pacfiles     | `pacman -F`                            | Search package file names for matching strings                                 |
+| paclist      | `pacman -Qe`                           | List all explicitly installed packages with version number                     |
+| pacloc       | `pacman -Qi`                           | Display information about a package in the local database                      |
+| paclocs      | `pacman -Qs`                           | Search for packages in the local database                                      |
+| pacls        | `pacman -Ql`                           | List files in a package                                                        |
+| paclsorphans | `pacman -Qdt`                          | List all orphaned packages                                                     |
+| pacown       | `pacman -Qo`                           | Show which package owns a file                                                 |
+| upgrade[¹](#f1) | `sudo pacman -Syu`                  | Sync with repositories before upgrading packages                               |
 
 | Function       | Description                                               |
 |----------------|-----------------------------------------------------------|
 | pacdisowned    | List all disowned files in your system                    |
-| paclist        | List all explicitly installed packages with a description |
 | pacmanallkeys  | Get all keys for developers and trusted users             |
 | pacmansignkeys | Locally trust all keys passed as parameters               |
 | pacweb         | Open the website of an ArchLinux package                  |
 
-Note: paclist used to print packages with a description which are (1) explicitly installed
-and (2) available for upgrade. Due to flawed scripting, it also printed all packages if no
-upgrades were available. Use `pacman -Que` instead.
 
 ### AUR helpers
 
