@@ -1,10 +1,12 @@
-name: Report a bug
-description: Report a bug that isn't caused by Oh My Zsh. If unsure, use this form
+name: Report a bug in Oh My Zsh
+description: Create a report to help us improve Oh My Zsh
+labels: ['Bug']
 body:
   - type: markdown
     attributes:
       value: |
         ## Self Check
+        - **Make sure this bug only happens with Oh My Zsh enabled**.
         - Look for similar errors in existing [GitHub Issues](https://github.com/ohmyzsh/ohmyzsh/issues?q=is%3Aissue) (open or closed).
         - Try reaching out on the [Discord server](https://discord.gg/ohmyzsh) for help.
   - type: textarea
@@ -49,6 +51,13 @@ body:
       label: Zsh version
       description: Run `echo $ZSH_VERSION` to check.
       placeholder: "5.6"
+  - type: input
+    validations:
+      required: true
+    attributes:
+      label: Oh My Zsh version
+      description: Run `omz version` to check.
+      placeholder: master (bf303965)
   - type: input
     validations:
       required: true

@@ -160,7 +160,8 @@ function update_ohmyzsh() {
     [[ "$option" != $'\n' ]] && echo
     case "$option" in
       [yY$'\n']) update_ohmyzsh ;;
-      [nN]) update_last_updated_file ;;
+      [nN]) update_last_updated_file ;&
+      *) echo "[oh-my-zsh] You can update manually by running \`omz update\`" ;;
     esac
   fi
 }
