@@ -30,6 +30,14 @@ jobs:
     - name: checkout
       if: github.event_name == 'push'
       uses: actions/checkout@v2
+    - name: find aliases
+      run: |
+        for a in $(git ls-files|grep '\.zsh$'); do
+          echo "-- $a"
+          if [ -s "$a" ]; then
+            perl -ne 'next unless s/^alias ([A-Za-z]{3,})=.*/$1/;print' "$a" | tee -a .github/actions/spelling/allow.txt
+          fi
+        done;
     - name: check-spelling
       id: spelling
       uses: check-spelling/check-spelling@prerelease
