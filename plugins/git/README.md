@@ -114,6 +114,7 @@ plugins=(... git)
 | gmtlvim              | git mergetool --no-prompt --tool=vimdiff                                                                                         |
 | gmum                 | git merge upstream/$(git_main_branch)                                                                                            |
 | gma                  | git merge --abort                                                                                                                |
+| gramb                | git branch --merged | egrep -v "(^\*|master|dev)" | xargs git branch -d                                                          |
 | gp                   | git push                                                                                                                         |
 | gpd                  | git push --dry-run                                                                                                               |
 | gpf                  | git push --force-with-lease                                                                                                      |
