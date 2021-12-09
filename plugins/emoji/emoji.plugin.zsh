@@ -20,7 +20,7 @@ unset _omz_emoji_plugin_dir
 
 # These additional emoji are not in the definition file, but are useful in conjunction with it
 
-# This is a combinin character that can be placed after any other character to surround
+# This is a combining character that can be placed after any other character to surround
 # it in a "keycap" symbol.
 # The digits 0-9 are already in the emoji table as keycap_digit_<N>, keycap_ten, etc. 
 # It's unclear whether this should be in the $emoji array, because those characters are all ones
