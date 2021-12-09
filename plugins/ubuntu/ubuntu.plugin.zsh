@@ -37,9 +37,9 @@ alias agud="sudo $APT update && sudo $APT dist-upgrade"
 alias agug="sudo $APT upgrade"
 alias aguu="sudo $APT update && sudo $APT upgrade"
 alias agar="sudo $APT autoremove"
-alias agul="sudo $APT update && sudo $APT list --upgradeable"
+alias agul="sudo $APT update && sudo $APT list --upgradable"
 alias aguc="sudo $APT upgrade -y && sudo $APT autoremove"
-alias agulc="sudo $APT update && sudo $APT list --upgradeable && sudo $APT upgrade -y && sudo $APT autoremove"
+alias agulc="sudo $APT update && sudo $APT list --upgradable && sudo $APT upgrade -y && sudo $APT autoremove"
 
 
 # Remove ALL kernel images and headers EXCEPT the one in use
