@@ -8,3 +8,4 @@ _jfrog() {
 }
 
 compdef _jfrog jfrog
+compdef _jfrog jf
