@@ -45,4 +45,5 @@ function rbfu-rubies() {
 
 # Public: Create rvm_prompt_info command for themes compatibility, unless
 # it has already been defined.
-[ ! -x rvm_prompt_info ] && function rvm_prompt_info() { echo "${RBFU_RUBY_VERSION:=system}" }
+(( ${+functions[rvm_prompt_info]} )) || \
+function rvm_prompt_info() { echo "${${RBFU_RUBY_VERSION:=system}:gs/%/%%}" }

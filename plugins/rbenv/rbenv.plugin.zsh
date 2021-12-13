@@ -47,7 +47,7 @@ if [[ $FOUND_RBENV -eq 1 ]]; then
   }
 
   function rbenv_prompt_info() {
-    local ruby=$(current_ruby) gemset=$(current_gemset)
+    local ruby=${$(current_ruby):gs/%/%%} gemset=${$(current_gemset):gs/%/%%}
     echo -n "${ZSH_THEME_RUBY_PROMPT_PREFIX}"
     [[ -n "$gemset" ]] && echo -n "${ruby}@${gemset}" || echo -n "${ruby}"
     echo "${ZSH_THEME_RUBY_PROMPT_SUFFIX}"
@@ -60,7 +60,7 @@ else
   function gems() { echo "not supported" }
   function rbenv_prompt_info() {
     echo -n "${ZSH_THEME_RUBY_PROMPT_PREFIX}"
-    echo -n "system: $(ruby -v | cut -f-2 -d ' ')"
+    echo -n "system: $(ruby -v | cut -f-2 -d ' ' | sed 's/%/%%/g')"
     echo "${ZSH_THEME_RUBY_PROMPT_SUFFIX}"
   }
 fi

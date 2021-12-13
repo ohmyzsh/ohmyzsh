@@ -73,7 +73,7 @@ function current_ruby() {
 }
 
 function chruby_prompt_info() {
-  echo "$(current_ruby)"
+  echo "${$(current_ruby):gs/%/%%}"
 }
 
 # Complete chruby command with installed rubies
