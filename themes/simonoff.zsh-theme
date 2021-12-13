@@ -68,7 +68,7 @@ ZSH_THEME_RUBY_PROMPT_SUFFIX="]"
 # Decide if we need to set titlebar text.
 case $TERM in
   xterm*|*rxvt*)
-    PR_TITLEBAR=$'%{\e]0;%(!.-=*[ROOT]*=- | .)%n@%M:%~ $(git_prompt_info) $(rvm_prompt_info) | ${COLUMNS}x${LINES} | %y\a%}'
+    PR_TITLEBAR=$'%{\e]0;%(!.-=*[ROOT]*=- | .)%n@%M:%~ $(git_prompt_info) $(ruby_prompt_info) | ${COLUMNS}x${LINES} | %y\a%}'
     ;;
   screen)
     PR_TITLEBAR=$'%{\e_screen \005 (\005t) | %(!.-=[ROOT]=- | .)%n@%m:%~ | ${COLUMNS}x${LINES} | %y\e\\%}'
@@ -88,7 +88,7 @@ fi
 # Finally, the prompt.
 PROMPT='$PR_SET_CHARSET$PR_STITLE${(e)PR_TITLEBAR}\
 $PR_RED$PR_HBAR<\
-$PR_BLUE%(!.$PR_RED%SROOT%s.%n)$PR_GREEN@$PR_BLUE%M:$PR_GREEN%$PR_PWDLEN<...<%~$PR_CYAN$(git_prompt_info)$(rvm_prompt_info)\
+$PR_BLUE%(!.$PR_RED%SROOT%s.%n)$PR_GREEN@$PR_BLUE%M:$PR_GREEN%$PR_PWDLEN<...<%~$PR_CYAN$(git_prompt_info)$(ruby_prompt_info)\
 $PR_RED>$PR_HBAR${(e)PR_FILLBAR}\
 $PR_RED$PR_HBAR<\
 $PR_GREEN%l$PR_RED>$PR_HBAR\
