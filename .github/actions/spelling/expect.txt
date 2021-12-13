@@ -3456,6 +3456,7 @@ sheerun
 shellcheck
 shellinit
 shellperson
+SHELLPROXY
 shitload
 SHLVL
 shm
