@@ -18,4 +18,4 @@ plugins=(... flutter)
 | `flb`      | `flutter build`        | Build flutter application                                                  |
 | `flattach` | `flutter attach`       | Attaches flutter to a running flutter application with enabled observatory |
 | `flget`    | `flutter packages get` | Installs dependencies                                                      |
-| `flc`      | `flutter clean`        | Cleans flutter porject                                                     |
+| `flc`      | `flutter clean`        | Cleans flutter project                                                     |

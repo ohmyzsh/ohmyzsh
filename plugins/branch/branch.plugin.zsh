@@ -3,29 +3,33 @@
 # Oct 2, 2015
 
 function branch_prompt_info() {
-  # Defines path as current directory
-  local current_dir=$PWD
-  # While current path is not root path
-  while [[ $current_dir != '/' ]]
-  do
-    # Git repository
-    if [[ -d "${current_dir}/.git" ]]
-    then
-      echo '±' ${"$(<"$current_dir/.git/HEAD")"##*/}
-      return;
+  # Start checking in current working directory
+  local branch="" dir="$PWD"
+  while [[ "$dir" != '/' ]]; do
+    # Found .git directory
+    if [[ -d "${dir}/.git" ]]; then
+      branch="${"$(<"${dir}/.git/HEAD")"##*/}"
+      echo '±' "${branch:gs/%/%%}"
+      return
     fi
-    # Mercurial repository
-    if [[ -d "${current_dir}/.hg" ]]
-    then
-      if [[ -f "$current_dir/.hg/branch" ]]
-      then
-        echo '☿' $(<"$current_dir/.hg/branch")
+
+    # Found .hg directory
+    if [[ -d "${dir}/.hg" ]]; then
+      if [[ -f "${dir}/.hg/branch" ]]; then
+        branch="$(<"${dir}/.hg/branch")"
       else
-        echo '☿ default'
+        branch="default"
       fi
-      return;
+
+      if [[ -f "${dir}/.hg/bookmarks.current" ]]; then
+        branch="${branch}/$(<"${dir}/.hg/bookmarks.current")"
+      fi
+
+      echo '☿' "${branch:gs/%/%%}"
+      return
     fi
-    # Defines path as parent directory and keeps looking for :)
-    current_dir="${current_dir:h}"
+
+    # Check parent directory
+    dir="${dir:h}"
   done
 }

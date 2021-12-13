@@ -26,16 +26,16 @@ def cheatsheet(lines):
         target_aliases.extend(group_list)
     return cheatsheet
 
-def pretty_print_group(key, aliases, hightlight=None):
+def pretty_print_group(key, aliases, highlight=None):
     if len(aliases) == 0:
         return
     group_hl_formatter = lambda g, hl: termcolor.colored(hl, 'yellow').join([termcolor.colored(part, 'red') for part in ('[%s]' % g).split(hl)])
     alias_hl_formatter = lambda alias, hl: termcolor.colored(hl, 'yellow').join([termcolor.colored(part, 'green') for part in ('\t%s = %s' % alias[0:2]).split(hl)])
     group_formatter = lambda g: termcolor.colored('[%s]' % g, 'red')
     alias_formatter = lambda alias: termcolor.colored('\t%s = %s' % alias[0:2], 'green')
-    if hightlight and len(hightlight)>0:
-        print (group_hl_formatter(key, hightlight))
-        print ('\n'.join([alias_hl_formatter(alias, hightlight) for alias in aliases]))
+    if highlight and len(highlight)>0:
+        print (group_hl_formatter(key, highlight))
+        print ('\n'.join([alias_hl_formatter(alias, highlight) for alias in aliases]))
     else:
         print (group_formatter(key))
         print ('\n'.join([alias_formatter(alias) for alias in aliases]))

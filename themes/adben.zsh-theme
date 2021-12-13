@@ -32,42 +32,44 @@
 
 ########## COLOR ###########
 for COLOR in CYAN WHITE YELLOW MAGENTA BLACK BLUE RED DEFAULT GREEN GREY; do
-  eval PR_$COLOR='%{$fg[${(L)COLOR}]%}'
-  eval PR_BRIGHT_$COLOR='%{$fg_bold[${(L)COLOR}]%}'
+  print -v "PR_$COLOR" "%b%{$fg[${(L)COLOR}]%}"
+  print -v "PR_BRIGHT_$COLOR" "%B%{$fg[${(L)COLOR}]%}"
 done
-
 PR_RESET="%{$reset_color%}"
-RED_START="${PR_RESET}${PR_GREY}<${PR_RESET}${PR_RED}<${PR_BRIGHT_RED}<${PR_RESET} "
-RED_END="${PR_RESET}${PR_BRIGHT_RED}>${PR_RESET}${PR_RED}>${PR_GREY}>${PR_RESET} "
-GREEN_END="${PR_RESET}${PR_BRIGHT_GREEN}>${PR_RESET}${PR_GREEN}>${PR_GREY}>${PR_RESET} "
-GREEN_BASE_START="${PR_RESET}${PR_GREY}>${PR_RESET}${PR_GREEN}>${PR_BRIGHT_GREEN}>${PR_RESET}"
-GREEN_START_P1="${PR_RESET}${GREEN_BASE_START}${PR_RESET} "
-DIVISION="${PR_RESET}${PR_RED} < ${PR_RESET}"
-VCS_DIRTY_COLOR="${PR_RESET}${PR_YELLOW}"
-VCS_CLEAN_COLOR="${PR_RESET}${PR_GREEN}"
-VCS_SUFIX_COLOR="${PR_RESET}${PR_RED}› ${PR_RESET}"
+
+RED_START="${PR_GREY}<${PR_RED}<${PR_BRIGHT_RED}<${PR_RESET} "
+RED_END="${PR_BRIGHT_RED}>${PR_RED}>${PR_GREY}>${PR_RESET} "
+GREEN_START="${PR_GREY}>${PR_GREEN}>${PR_BRIGHT_GREEN}>${PR_RESET}"
+GREEN_END="${PR_BRIGHT_GREEN}>${PR_GREEN}>${PR_GREY}>${PR_RESET} "
+
+########## VCS ###########
+VCS_DIRTY_COLOR="${PR_YELLOW}"
+VCS_CLEAN_COLOR="${PR_GREEN}"
+VCS_SUFFIX_COLOR="${PR_RED}› ${PR_RESET}"
 
 ########## SVN ###########
-ZSH_THEME_SVN_PROMPT_PREFIX="${PR_RESET}${PR_RED}‹svn:"
-ZSH_THEME_SVN_PROMPT_SUFFIX=""
-ZSH_THEME_SVN_PROMPT_DIRTY="${VCS_DIRTY_COLOR} ✘${VCS_SUFIX_COLOR}"
-ZSH_THEME_SVN_PROMPT_CLEAN="${VCS_CLEAN_COLOR} ✔${VCS_SUFIX_COLOR}"
+ZSH_THEME_SVN_PROMPT_PREFIX="${PR_RED}‹svn:"
+ZSH_THEME_SVN_PROMPT_SUFFIX="${VCS_SUFFIX_COLOR}"
+ZSH_THEME_SVN_PROMPT_DIRTY="${VCS_DIRTY_COLOR} ✘"
+ZSH_THEME_SVN_PROMPT_CLEAN="${VCS_CLEAN_COLOR} ✔"
 
 ########## GIT ###########
-ZSH_THEME_GIT_PROMPT_PREFIX="${PR_RESET}${PR_RED}‹git:"
-ZSH_THEME_GIT_PROMPT_SUFFIX=""
-ZSH_THEME_GIT_PROMPT_DIRTY="${VCS_DIRTY_COLOR} ✘${VCS_SUFIX_COLOR}"
-ZSH_THEME_GIT_PROMPT_CLEAN="${VCS_CLEAN_COLOR} ✔${VCS_SUFIX_COLOR}"
-ZSH_THEME_GIT_PROMPT_ADDED="${PR_RESET}${PR_YELLOW} ✚${PR_RESET}"
-ZSH_THEME_GIT_PROMPT_MODIFIED="${PR_RESET}${PR_YELLOW} ✹${PR_RESET}"
-ZSH_THEME_GIT_PROMPT_DELETED="${PR_RESET}${PR_YELLOW} ✖${PR_RESET}"
-ZSH_THEME_GIT_PROMPT_RENAMED="${PR_RESET}${PR_YELLOW} ➜${PR_RESET}"
-ZSH_THEME_GIT_PROMPT_UNMERGED="${PR_RESET}${PR_YELLOW} ═${PR_RESET}"
-ZSH_THEME_GIT_PROMPT_UNTRACKED="${PR_RESET}${PR_YELLOW} ✭${PR_RESET}"
+ZSH_THEME_GIT_PROMPT_PREFIX="${PR_RED}‹git:"
+ZSH_THEME_GIT_PROMPT_SUFFIX="${VCS_SUFFIX_COLOR}"
+ZSH_THEME_GIT_PROMPT_DIRTY="${VCS_DIRTY_COLOR} ✘"
+ZSH_THEME_GIT_PROMPT_CLEAN="${VCS_CLEAN_COLOR} ✔"
+ZSH_THEME_GIT_PROMPT_ADDED="${PR_YELLOW} ✚"
+ZSH_THEME_GIT_PROMPT_MODIFIED="${PR_YELLOW} ✹"
+ZSH_THEME_GIT_PROMPT_DELETED="${PR_YELLOW} ✖"
+ZSH_THEME_GIT_PROMPT_RENAMED="${PR_YELLOW} ➜"
+ZSH_THEME_GIT_PROMPT_UNMERGED="${PR_YELLOW} ═"
+ZSH_THEME_GIT_PROMPT_UNTRACKED="${PR_YELLOW} ✭"
 
 # Get a fortune quote
 ps1_fortune() {
-  (( ${+commands[fortune]} )) && fortune
+  if (( ${+commands[fortune]} )); then
+    fortune
+  fi
 }
 
 # Obtain a command tip
@@ -77,33 +79,27 @@ ps1_command_tip() {
       command wget -qO- https://www.commandlinefu.com/commands/random/plaintext
     elif (( ${+commands[curl]} )); then
       command curl -fsL https://www.commandlinefu.com/commands/random/plaintext
-    fi
-  } | sed 1d | sed '/^$/d'
+    fi 
+  } | sed '1d;/^$/d'
 }
 
-function precmd_adben {
-  prompt_header() {
-    if [[ "$ENABLE_COMMAND_TIP" = true ]]; then
-      ps1_command_tip
-    else
-      ps1_fortune
-    fi
-  }
+# Show prompt header (fortune / command tip)
+prompt_header() {
+  local header=$(
+    case "${ENABLE_COMMAND_TIP:-}" in
+    true) ps1_command_tip ;;
+    *) ps1_fortune ;;
+    esac
+  )
 
-  PROMPT_HEAD="${RED_START}${PR_YELLOW}$(prompt_header)${PR_RESET}"
-
-  # set a simple variable to show when in screen
-  if [[ -n "${WINDOW}" ]]; then
-    SCREEN=""
-  fi
+  # Make sure to quote % so that they're not expanded by the prompt
+  echo -n "${header:gs/%/%%}"
 }
 
 # Context: user@directory or just directory
 prompt_context() {
   if [[ "$USERNAME" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-    echo -n "${PR_RESET}${PR_RED}$USERNAME@%m${PR_RESET}${PR_BRIGHT_YELLOW}%~%<<${PR_RESET}"
-  else
-    echo -n "${PR_RESET}${PR_BRIGHT_YELLOW}%~%<<${PR_RESET}"
+    echo -n "${PR_RESET}${PR_RED}%n@%m"
   fi
 }
 
@@ -111,16 +107,12 @@ prompt_context() {
 
 # Required for the prompt
 setopt prompt_subst
-autoload zsh/terminfo
 
-# Prompt
-PROMPT='${PROMPT_HEAD}
-${RED_START}$(prompt_context)
-${GREEN_START_P1}'
-RPROMPT='${PR_RESET}$(git_prompt_info)$(svn_prompt_info)${PR_YELLOW}%D{%R.%S %a %b %d %Y} ${GREEN_END}${PR_RESET}'
+# Prompt: header, context (user@host), directory
+PROMPT="${RED_START}${PR_YELLOW}\$(prompt_header)${PR_RESET}
+${RED_START}\$(prompt_context)${PR_BRIGHT_YELLOW}%~${PR_RESET}
+${GREEN_START} "
+# Right prompt: vcs status + time
+RPROMPT="\$(git_prompt_info)\$(svn_prompt_info)${PR_YELLOW}%D{%R.%S %a %b %d %Y} ${GREEN_END}"
 # Matching continuation prompt
-PROMPT2='${GREEN_BASE_START}${PR_RESET} %_ ${GREEN_BASE_START}${PR_RESET} '
-
-# Prompt head
-autoload -Uz add-zsh-hook
-add-zsh-hook precmd precmd_adben
+PROMPT2="${GREEN_START} %_ ${GREEN_START} "

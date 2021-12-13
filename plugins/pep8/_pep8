@@ -29,6 +29,6 @@ _arguments -s -S \
   "--max-line-length[set maximum allowed line length (default: 79)]::n:_files" \
   "--format[set the error format \[default|pylint|<custom>\]]::format:_files" \
   "--diff[report only lines changed according to the unified diff received on STDIN]" \
-  "--benchmark[measure processing speed   are read from the \[pep8\] section of the tox.ini fg file located in any parent folder of the path(s) llowed options are: exclude, filename, select, ngth, count, format, quiet, show-pep8, show-source, .]" \
+  "--benchmark[measure processing speed   are read from the \[pep8\] section of the tox.ini fg file located in any parent folder of the path(s) allowed options are: exclude, filename, select, ngth, count, format, quiet, show-pep8, show-source, .]" \
   "--config[user config file location (default: /home/gsemet/.config/pep8)]::path:_files" \
   "*::args:_files"
