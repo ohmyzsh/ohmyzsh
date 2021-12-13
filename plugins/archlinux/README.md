@@ -145,17 +145,40 @@ upgrades were available. Use `pacman -Que` instead.
 | yasu    | `yay -Syu --no-confirm`        | Same as `yaupg`, but without confirmation                         |
 | upgrade[¹](#f1) | `yay -Syu`             | Sync with repositories before upgrading packages                  |
 
+#### Paru
+
+| Alias        | Command                                | Description                                                      |
+|--------------|----------------------------------------|------------------------------------------------------------------|
+| parin        | `sudo paru -S`                         | Install packages from the repositories                           |
+| parins       | `sudo paru -U`                         | Install a package from a local file                              |
+| parinsd      | `sudo paru -S --asdeps`                | Install packages as dependencies of another package              |
+| parloc       | `paru -Qi`                             | Display information about a package in the local database        |
+| parlocs      | `paru -Qs`                             | Search for packages in the local database                        |
+| parlsorph    | `sudo paru -Qtd`                       | List all orphaned packages                                       |
+| parmir       | `sudo paru -Syy`                       | Force refresh of all package lists after updating mirrorlist     |
+| parre        | `sudo paru -R`                         | Remove packages, keeping its settings and dependencies           |
+| parrem       | `sudo paru -Rns`                       | Remove packages, including its settings and dependencies         |
+| parrep       | `paru -Si`                             | Display information about a package in the repositories          |
+| parreps      | `paru -Ss`                             | Search for packages in the repositories                          |
+| parrorph     | `sudo sh -c "paru -Rs $(paru -Qtdq)"`  | Delete all orphaned packages                                     |
+| parupd       | `sudo paru -Sy`                        | Update and refresh local package, ABS and AUR databases          |
+| parupg       | `sudo paru -Syu`                       | Sync with repositories before upgrading packages                 |
+| parls        | `paru -Ql`                             | List files in a package                                          |
+| parown       | `paru -Qo`                             | Show which package owns a file                                   |
+| upgrade[¹](#f1) | `sudo paru -Syu`                    | Sync with repositories before upgrading packages                 |
+
 ---
 
 <span id="f1">¹</span>
 The `upgrade` alias is set for all package managers. Its value will depend on
 whether the package manager is installed, checked in the following order:
 
-1. `yay`
-2. `trizen`
-3. `pacaur`
-4. `aura`
-5. `pacman`
+1. `paru`
+2. `yay`
+3. `trizen`
+4. `pacaur`
+5. `aura`
+6. `pacman`
 
 ## Contributors
 
@@ -170,3 +193,4 @@ whether the package manager is installed, checked in the following order:
 - ornicar - thibault.duplessis@gmail.com
 - Ybalrid (Arthur Brainville) - ybalrid@ybalrid.info
 - Jeff M. Hubbard - jeffmhubbard@gmail.com
+- Juliano Marcelino - juliano@jmarcelino.com.br
