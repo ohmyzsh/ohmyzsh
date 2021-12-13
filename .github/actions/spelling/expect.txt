@@ -3453,6 +3453,7 @@ sheerun
 shellcheck
 shellinit
 shellperson
+SHELLPROXY
 shitload
 SHLVL
 shm
@@ -4487,4 +4488,3 @@ zxvf
 zyg
 zypper
 zzz
-SHELLPROXY
