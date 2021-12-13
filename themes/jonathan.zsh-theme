@@ -1,6 +1,4 @@
 function theme_precmd {
-  local -i TERMWIDTH=$COLUMNS
-
   PR_FILLBAR=""
   PR_PWDLEN=""
 
@@ -9,10 +7,12 @@ function theme_precmd {
   local pwdsize=${#${(%):-%~}}
 
   # Truncate the path if it's too long.
-  if (( promptsize + rubypromptsize + pwdsize > TERMWIDTH )); then
-    (( PR_PWDLEN = TERMWIDTH - promptsize ))
+  if (( promptsize + rubypromptsize + pwdsize > COLUMNS )); then
+    (( PR_PWDLEN = COLUMNS - promptsize ))
+  elif [[ "${langinfo[CODESET]}" = UTF-8 ]]; then
+    PR_FILLBAR="\${(l:$(( COLUMNS - (promptsize + rubypromptsize + pwdsize) ))::${PR_HBAR}:)}"
   else
-    PR_FILLBAR="\${(l.(($TERMWIDTH - ($promptsize + $rubypromptsize + $pwdsize)))..${PR_HBAR}.)}"
+    PR_FILLBAR="${PR_SHIFT_IN}\${(l:$(( COLUMNS - (promptsize + rubypromptsize + pwdsize) ))::${altchar[q]:--}:)}${PR_SHIFT_OUT}"
   fi
 }
 
@@ -48,18 +48,16 @@ ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_DIRTY=""
 ZSH_THEME_GIT_PROMPT_CLEAN=""
 
-ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[green]%} ✚"
-ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg[blue]%} ✹"
-ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[red]%} ✖"
-ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[magenta]%} ➜"
-ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[yellow]%} ═"
-ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[cyan]%} ✭"
+ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[green]%} %{%G✚%}"
+ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg[blue]%} %{%G✹%}"
+ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[red]%} %{%G✖%}"
+ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[magenta]%} %{%G➜%}"
+ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[yellow]%} %{%G═%}"
+ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[cyan]%} %{%G✭%}"
 
 # Use extended characters to look nicer if supported.
-if [[ "${langinfo[CODESET]}" = "UTF-8" ]]; then
+if [[ "${langinfo[CODESET]}" = UTF-8 ]]; then
   PR_SET_CHARSET=""
-  PR_SHIFT_IN=""
-  PR_SHIFT_OUT=""
   PR_HBAR="─"
   PR_ULCORNER="┌"
   PR_LLCORNER="└"
@@ -72,12 +70,12 @@ else
   PR_SET_CHARSET="%{$terminfo[enacs]%}"
   PR_SHIFT_IN="%{$terminfo[smacs]%}"
   PR_SHIFT_OUT="%{$terminfo[rmacs]%}"
-  PR_HBAR='$PR_SHIFT_IN${altchar[q]:--}$PR_SHIFT_OUT'
-  PR_ULCORNER='$PR_SHIFT_IN${altchar[l]:--}$PR_SHIFT_OUT'
-  PR_LLCORNER='$PR_SHIFT_IN${altchar[m]:--}$PR_SHIFT_OUT'
-  PR_LRCORNER='$PR_SHIFT_IN${altchar[j]:--}$PR_SHIFT_OUT'
-  PR_URCORNER='$PR_SHIFT_IN${altchar[k]:--}$PR_SHIFT_OUT'
-  fi
+  PR_HBAR="${PR_SHIFT_IN}${altchar[q]:--}${PR_SHIFT_OUT}"
+  PR_ULCORNER="${PR_SHIFT_IN}${altchar[l]:--}${PR_SHIFT_OUT}"
+  PR_LLCORNER="${PR_SHIFT_IN}${altchar[m]:--}${PR_SHIFT_OUT}"
+  PR_LRCORNER="${PR_SHIFT_IN}${altchar[j]:--}${PR_SHIFT_OUT}"
+  PR_URCORNER="${PR_SHIFT_IN}${altchar[k]:--}${PR_SHIFT_OUT}"
+fi
 
 # Decide if we need to set titlebar text.
 case $TERM in
