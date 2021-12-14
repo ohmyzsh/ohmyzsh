@@ -32,8 +32,8 @@
 
 ########## COLOR ###########
 for COLOR in CYAN WHITE YELLOW MAGENTA BLACK BLUE RED DEFAULT GREEN GREY; do
-  print -v "PR_$COLOR" "%b%{$fg[${(L)COLOR}]%}"
-  print -v "PR_BRIGHT_$COLOR" "%B%{$fg[${(L)COLOR}]%}"
+  typeset PR_$COLOR="%b%{$fg[${(L)COLOR}]%}"
+  typeset PR_BRIGHT_$COLOR="%B%{$fg[${(L)COLOR}]%}"
 done
 PR_RESET="%{$reset_color%}"
 

@@ -37,8 +37,8 @@ setopt prompt_subst
 # See if we can use colors.
 autoload zsh/terminfo
 for color in RED GREEN YELLOW BLUE MAGENTA CYAN WHITE GREY; do
-  print -v "PR_$color" "%{$terminfo[bold]$fg[${(L)color}]%}"
-  print -v "PR_LIGHT_$color" "%{$fg[${(L)color}]%}"
+  typeset PR_$color="%{$terminfo[bold]$fg[${(L)color}]%}"
+  typeset PR_LIGHT_$color="%{$fg[${(L)color}]%}"
 done
 PR_NO_COLOUR="%{$terminfo[sgr0]%}"
 
