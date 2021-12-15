@@ -143,6 +143,12 @@ fi
 
 unset zcompdump_revision zcompdump_fpath zcompdump_refresh
 
+# Store current aliases if should not enable the default ones from Oh My Zsh 
+local aliases_backup="/tmp/aliases_backup.sh"
+
+if [[ "$DISABLE_OMZ_ALIASES" == "true" ]]; then
+  alias > $aliases_backup
+fi
 
 # Load all of the config files in ~/oh-my-zsh that end in .zsh
 # TIP: Add files you don't want in git to .gitignore
@@ -152,6 +158,11 @@ for config_file ($ZSH/lib/*.zsh); do
   source $config_file
 done
 
+# Store current aliases if should not enable the ones from plugins
+if [[ "$DISABLE_OMZ_PLUGIN_ALIASES" == "true" ]] && [[ "$DISABLE_OMZ_ALIASES" != "true" ]]; then
+  alias > $aliases_backup
+fi
+
 # Load all of the plugins that were defined in ~/.zshrc
 for plugin ($plugins); do
   if [ -f $ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh ]; then
@@ -160,6 +171,15 @@ for plugin ($plugins); do
     source $ZSH/plugins/$plugin/$plugin.plugin.zsh
   fi
 done
+
+# Restore saved aliases
+if [[ "$DISABLE_OMZ_ALIASES" == "true" ]] || [[ "$DISABLE_OMZ_PLUGIN_ALIASES" == "true" ]]; then
+  if [ -f "$aliases_backup" ]; then
+    unalias -a
+    sed -i -e 's/^/alias /' $aliases_backup
+    source $aliases_backup
+  fi
+fi
 
 # Load all of your custom configurations from custom/
 for config_file ($ZSH_CUSTOM/*.zsh(N)); do
