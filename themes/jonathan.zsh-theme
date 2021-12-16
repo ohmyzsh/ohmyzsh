@@ -1,4 +1,6 @@
 function theme_precmd {
+  local TERMWIDTH=$(( COLUMNS - ${ZLE_RPROMPT_INDENT:-1} ))
+
   PR_FILLBAR=""
   PR_PWDLEN=""
 
@@ -7,12 +9,12 @@ function theme_precmd {
   local pwdsize=${#${(%):-%~}}
 
   # Truncate the path if it's too long.
-  if (( promptsize + rubypromptsize + pwdsize > COLUMNS )); then
-    (( PR_PWDLEN = COLUMNS - promptsize ))
+  if (( promptsize + rubypromptsize + pwdsize > TERMWIDTH )); then
+    (( PR_PWDLEN = TERMWIDTH - promptsize ))
   elif [[ "${langinfo[CODESET]}" = UTF-8 ]]; then
-    PR_FILLBAR="\${(l:$(( COLUMNS - (promptsize + rubypromptsize + pwdsize) ))::${PR_HBAR}:)}"
+    PR_FILLBAR="\${(l:$(( TERMWIDTH - (promptsize + rubypromptsize + pwdsize) ))::${PR_HBAR}:)}"
   else
-    PR_FILLBAR="${PR_SHIFT_IN}\${(l:$(( COLUMNS - (promptsize + rubypromptsize + pwdsize) ))::${altchar[q]:--}:)}${PR_SHIFT_OUT}"
+    PR_FILLBAR="${PR_SHIFT_IN}\${(l:$(( TERMWIDTH - (promptsize + rubypromptsize + pwdsize) ))::${altchar[q]:--}:)}${PR_SHIFT_OUT}"
   fi
 }
 
