@@ -20,7 +20,7 @@ function svn_prompt_info() {
       "$ZSH_PROMPT_BASE_COLOR" \
       \
       "$ZSH_THEME_BRANCH_NAME_COLOR" \
-      "$(svn_current_branch_name $info)" \
+      "${$(svn_current_branch_name $info):gs/%/%%}" \
       "$ZSH_PROMPT_BASE_COLOR" \
       \
       "$(svn_current_revision $info)" \
