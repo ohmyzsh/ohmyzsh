@@ -1,9 +1,10 @@
-# oh-my-zsh Bureau Theme
+# oh-my-zsh William Theme
+# from Bureau Theme
 
 ### NVM
 
-ZSH_THEME_NVM_PROMPT_PREFIX="%B⬡%b "
-ZSH_THEME_NVM_PROMPT_SUFFIX=""
+ZSH_THEME_NVM_PROMPT_PREFIX=" %B⬡%b v"
+ZSH_THEME_NVM_PROMPT_SUFFIX=" "
 
 ### Git [±master ▾●]
 
@@ -114,17 +115,42 @@ _1RIGHT="[%*] "
 
 bureau_precmd () {
   _1SPACES=`get_space $_1LEFT $_1RIGHT`
-  #print
   print -rP "$_1LEFT$_1SPACES$_1RIGHT"
 }
 
 setopt prompt_subst
-# if [[ $(bureau_git_prompt) ]]; then
-PROMPT='$(nvm_prompt_info)$(bureau_git_prompt)$_LIBERTY '
-# else
-#    PROMPT='$_LIBERTY'
-# fi
-# RPROMPT='$(nvm_prompt_info) $(bureau_git_prompt)'
+
+function nvm_prompt() {
+  [[ -f "$NVM_DIR/nvm.sh" ]] || return
+  which nvm &>/dev/null || return
+  local nvm_prompt=${$(nvm current)#v}
+  echo "${ZSH_THEME_NVM_PROMPT_PREFIX}${nvm_prompt}${ZSH_THEME_NVM_PROMPT_SUFFIX}"
+}
+
+function python_virtualenv_prompt() {
+  # Get the name of the virtual environment if one is active
+  if [[ -n $VIRTUAL_ENV ]]; then
+    local env_label="$(basename $VIRTUAL_ENV)"
+  fi
+
+  # Get the name of the Anaconda environment if one is active
+  if [[ -n $CONDA_PREFIX ]]; then
+    if [[ -n $env_label ]]; then
+      env_label+=" + $(basename $CONDA_PREFIX) "
+    else
+      local env_label="$(basename $CONDA_PREFIX)"
+    fi
+  fi
+
+  # Draw prompt segment if a virtual/conda environment is active
+  if [[ -n $env_label ]]; then
+    print -Pn "($env_label)"
+  fi
+}
+
+
+setopt prompt_subst
+PROMPT='$(python_virtualenv_prompt)$(nvm_prompt)$(bureau_git_prompt)$_LIBERTY '
 
 autoload -U add-zsh-hook
 add-zsh-hook precmd bureau_precmd
