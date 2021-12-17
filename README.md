@@ -1,46 +1,41 @@
-<p align="center">
-  <img src="https://s3.amazonaws.com/ohmyzsh/oh-my-zsh-logo.png" alt="Oh My Zsh">
-</p>
-
-[![Discord server](https://img.shields.io/discord/642496866407284746)](https://discord.gg/bpXWhnN)
-[![Follow @ohmyzsh](https://img.shields.io/twitter/follow/ohmyzsh?label=Follow+@ohmyzsh&style=flat)](https://twitter.com/intent/follow?screen_name=ohmyzsh)
+<p align="center"><img src="https://s3.amazonaws.com/ohmyzsh/oh-my-zsh-logo.png" alt="Oh My Zsh"></p>
 
 Oh My Zsh is an open source, community-driven framework for managing your [zsh](https://www.zsh.org/) configuration.
 
 Sounds boring. Let's try again.
 
-__Oh My Zsh will not make you a 10x developer...but you may feel like one.__
+**Oh My Zsh will not make you a 10x developer...but you may feel like one.**
 
 Once installed, your terminal shell will become the talk of the town _or your money back!_ With each keystroke in your command prompt, you'll take advantage of the hundreds of powerful plugins and beautiful themes. Strangers will come up to you in cafés and ask you, _"that is amazing! are you some sort of genius?"_
 
 Finally, you'll begin to get the sort of attention that you have always felt you deserved. ...or maybe you'll use the time that you're saving to start flossing more often. 😬
 
-To learn more, visit [ohmyz.sh](https://ohmyz.sh) and follow [@ohmyzsh](https://twitter.com/ohmyzsh) on Twitter.
+To learn more, visit [ohmyz.sh](https://ohmyz.sh), follow [@ohmyzsh](https://twitter.com/ohmyzsh) on Twitter, and join us on [Discord](https://discord.gg/ohmyzsh).
+
+[![CI](https://github.com/ohmyzsh/ohmyzsh/workflows/CI/badge.svg)](https://github.com/ohmyzsh/ohmyzsh/actions?query=workflow%3ACI)
+[![Follow @ohmyzsh](https://img.shields.io/twitter/follow/ohmyzsh?label=Follow+@ohmyzsh&style=flat)](https://twitter.com/intent/follow?screen_name=ohmyzsh)
+[![Discord server](https://img.shields.io/discord/642496866407284746)](https://discord.gg/ohmyzsh)
+[![Gitpod ready](https://img.shields.io/badge/Gitpod-ready-blue?logo=gitpod)](https://gitpod.io/#https://github.com/ohmyzsh/ohmyzsh)
+[![huntr.dev](https://cdn.huntr.dev/huntr_security_badge_mono.svg)](https://huntr.dev/bounties/disclose/?utm_campaign=ohmyzsh%2Fohmyzsh&utm_medium=social&utm_source=github&target=https%3A%2F%2Fgithub.com%2Fohmyzsh%2Fohmyzsh)
 
 ## Getting Started
 
 ### Prerequisites
 
-* A Unix-like operating system: macOS, Linux, BSD. On Windows: WSL is preferred, but cygwin or msys also mostly work.
-* [Zsh](https://www.zsh.org) should be installed (v4.3.9 or more recent). If not pre-installed (run `zsh --version` to confirm), check the following instructions here: [Installing ZSH](https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH)
-* `curl` or `wget` should be installed
-* `git` should be installed
+- A Unix-like operating system: macOS, Linux, BSD. On Windows: WSL2 is preferred, but cygwin or msys also mostly work.
+- [Zsh](https://www.zsh.org) should be installed (v4.3.9 or more recent is fine but we prefer 5.0.8 and newer). If not pre-installed (run `zsh --version` to confirm), check the following wiki instructions here: [Installing ZSH](https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH)
+- `curl` or `wget` should be installed
+- `git` should be installed (recommended v2.4.11 or higher)
 
 ### Basic Installation
 
-Oh My Zsh is installed by running one of the following commands in your terminal. You can install this via the command-line with either `curl` or `wget`.
+Oh My Zsh is installed by running one of the following commands in your terminal. You can install this via the command-line with either `curl`, `wget` or another similar tool.
 
-#### via curl
-
-```shell
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-```
-
-#### via wget
-
-```shell
-sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-```
+| Method    | Command                                                                                           |
+|:----------|:--------------------------------------------------------------------------------------------------|
+| **curl**  | `sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"` |
+| **wget**  | `sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`   |
+| **fetch** | `sh -c "$(fetch -o - https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"` |
 
 #### Manual inspection
 
@@ -48,8 +43,8 @@ It's a good idea to inspect the install script from projects you don't yet know.
 that by downloading the install script first, looking through it so everything looks normal,
 then running it:
 
-```shell
-curl -Lo install.sh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+```sh
+wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
 sh install.sh
 ```
 
@@ -57,39 +52,39 @@ sh install.sh
 
 ### Plugins
 
-Oh My Zsh comes with a shitload of plugins to take advantage of. You can take a look in the [plugins](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins) directory and/or the [wiki](https://github.com/ohmyzsh/ohmyzsh/wiki/Plugins) to see what's currently available.
+Oh My Zsh comes with a shitload of plugins for you to take advantage of. You can take a look in the [plugins](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins) directory and/or the [wiki](https://github.com/ohmyzsh/ohmyzsh/wiki/Plugins) to see what's currently available.
 
 #### Enabling Plugins
 
 Once you spot a plugin (or several) that you'd like to use with Oh My Zsh, you'll need to enable them in the `.zshrc` file. You'll find the zshrc file in your `$HOME` directory. Open it with your favorite text editor and you'll see a spot to list all the plugins you want to load.
 
-```shell
+```sh
 vi ~/.zshrc
 ```
 
 For example, this might begin to look like this:
 
-```shell
+```sh
 plugins=(
   git
   bundler
   dotenv
-  osx
+  macos
   rake
   rbenv
   ruby
 )
 ```
 
-_Note that the plugins are separated by whitespace. **Do not** use commas between them._
+_Note that the plugins are separated by whitespace (spaces, tabs, new lines...). **Do not** use commas between them or it will break._
 
 #### Using Plugins
 
-Most plugins (should! we're working on this) include a __README__, which documents how to use them.
+Each plugin includes a __README__, documenting it. This README should show the aliases (if the plugin adds any) and extra goodies that are included in that particular plugin.
 
 ### Themes
 
-We'll admit it. Early in the Oh My Zsh world, we may have gotten a bit too theme happy. We have over one hundred themes now bundled. Most of them have [screenshots](https://github.com/ohmyzsh/ohmyzsh/wiki/Themes) on the wiki. Check them out!
+We'll admit it. Early in the Oh My Zsh world, we may have gotten a bit too theme happy. We have over one hundred and fifty themes now bundled. Most of them have [screenshots](https://github.com/ohmyzsh/ohmyzsh/wiki/Themes) on the wiki (We are working on updating this!). Check them out!
 
 #### Selecting a Theme
 
@@ -97,13 +92,13 @@ _Robby's theme is the default one. It's not the fanciest one. It's not the simpl
 
 Once you find a theme that you'd like to use, you will need to edit the `~/.zshrc` file. You'll see an environment variable (all caps) in there that looks like:
 
-```shell
+```sh
 ZSH_THEME="robbyrussell"
 ```
 
 To use a different theme, simply change the value to match the name of your desired theme. For example:
 
-```shell
+```sh
 ZSH_THEME="agnoster" # (this is one of the fancy ones)
 # see https://github.com/ohmyzsh/ohmyzsh/wiki/Themes#agnoster
 ```
@@ -118,18 +113,23 @@ In case you did not find a suitable theme for your needs, please have a look at 
 
 If you're feeling feisty, you can let the computer select one randomly for you each time you open a new terminal window.
 
-
-```shell
+```sh
 ZSH_THEME="random" # (...please let it be pie... please be some pie..)
 ```
 
 And if you want to pick random theme from a list of your favorite themes:
 
-```shell
+```sh
 ZSH_THEME_RANDOM_CANDIDATES=(
   "robbyrussell"
   "agnoster"
 )
+```
+
+If you only know which themes you don't like, you can add them similarly to an ignored list:
+
+```sh
+ZSH_THEME_RANDOM_IGNORED=(pygmalion tjkirch_mod)
 ```
 
 ### FAQ
@@ -147,13 +147,13 @@ the installer accepts (these settings are also documented at the top of the inst
 
 #### Custom Directory
 
-The default location is `~/.oh-my-zsh` (hidden in your home directory)
+The default location is `~/.oh-my-zsh` (hidden in your home directory, you can access it with `cd ~/.oh-my-zsh`)
 
 If you'd like to change the install directory with the `ZSH` environment variable, either by running
 `export ZSH=/your/path` before installing, or by setting it before the end of the install pipeline
 like this:
 
-```shell
+```sh
 ZSH="$HOME/.dotfiles/oh-my-zsh" sh install.sh
 ```
 
@@ -163,7 +163,7 @@ If you're running the Oh My Zsh install script as part of an automated install, 
 flag `--unattended` to the `install.sh` script. This will have the effect of not trying to change
 the default shell, and also won't run `zsh` when the installation has finished.
 
-```shell
+```sh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 ```
 
@@ -186,21 +186,21 @@ The install script also accepts these variables to allow installation of a diffe
 
 For example:
 
-```shell
+```sh
 REPO=apjanke/oh-my-zsh BRANCH=edge sh install.sh
 ```
 
 #### Manual Installation
 
-##### 1. Clone the repository:
+##### 1. Clone the repository
 
-```shell
+```sh
 git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
 ```
 
-##### 2. *Optionally*, backup your existing `~/.zshrc` file:
+##### 2. *Optionally*, backup your existing `~/.zshrc` file
 
-```shell
+```sh
 cp ~/.zshrc ~/.zshrc.orig
 ```
 
@@ -208,13 +208,13 @@ cp ~/.zshrc ~/.zshrc.orig
 
 You can create a new zsh config file by copying the template that we have included for you.
 
-```shell
+```sh
 cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
 ```
 
 ##### 4. Change your default shell
 
-```shell
+```sh
 chsh -s $(which zsh)
 ```
 
@@ -228,9 +228,9 @@ Once you open up a new terminal window, it should load zsh with Oh My Zsh's conf
 
 If you have any hiccups installing, here are a few common fixes.
 
-* You _might_ need to modify your `PATH` in `~/.zshrc` if you're not able to find some commands after
+- You _might_ need to modify your `PATH` in `~/.zshrc` if you're not able to find some commands after
 switching to `oh-my-zsh`.
-* If you installed manually or changed the install location, check the `ZSH` environment variable in
+- If you installed manually or changed the install location, check the `ZSH` environment variable in
 `~/.zshrc`.
 
 ### Custom Plugins and Themes
@@ -243,24 +243,41 @@ If you would like to override the functionality of a plugin distributed with Oh 
 
 ## Getting Updates
 
-By default, you will be prompted to check for upgrades every few weeks. If you would like `oh-my-zsh` to automatically upgrade itself without prompting you, set the following in your `~/.zshrc`:
+By default, you will be prompted to check for updates every 2 weeks. You can choose other update modes by adding a line to your `~/.zshrc` file, **before Oh My Zsh is loaded**:
 
-```shell
-DISABLE_UPDATE_PROMPT=true
-```
+1. Automatic update without confirmation prompt:
 
-To disable automatic upgrades, set the following in your `~/.zshrc`:
+   ```sh
+   zstyle ':omz:update' mode auto
+   ```
 
-```shell
-DISABLE_AUTO_UPDATE=true
+2. Just offer a reminder every few days, if there are updates available:
+
+   ```sh
+   zstyle ':omz:update' mode reminder
+   ```
+
+3. To disable automatic updates entirely:
+
+   ```sh
+   zstyle ':omz:update' mode disabled
+   ```
+
+NOTE: you can control how often Oh My Zsh checks for updates with the following setting:
+
+```sh
+# This will check for updates every 7 days
+zstyle ':omz:update' frequency 7
+# This will check for updates every time you open the terminal (not recommended)
+zstyle ':omz:update' frequency 0
 ```
 
 ### Manual Updates
 
-If you'd like to upgrade at any point in time (maybe someone just released a new plugin and you don't want to wait a week?) you just need to run:
+If you'd like to update at any point in time (maybe someone just released a new plugin and you don't want to wait a week?) you just need to run:
 
-```shell
-upgrade_oh_my_zsh
+```sh
+omz update
 ```
 
 Magic! 🎉
@@ -293,10 +310,12 @@ Thank you so much!
 
 ## Follow Us
 
-We're on the social media.
+We're on social media:
 
-* [@ohmyzsh](https://twitter.com/ohmyzsh) on Twitter. You should follow it.
-* [Oh My Zsh](https://www.facebook.com/Oh-My-Zsh-296616263819290/) on Facebook.
+- [@ohmyzsh](https://twitter.com/ohmyzsh) on Twitter. You should follow it.
+- [Facebook](https://www.facebook.com/Oh-My-Zsh-296616263819290/) poke us.
+- [Instagram](https://www.instagram.com/_ohmyzsh/) tag us in your post showing Oh My Zsh!
+- [Discord](https://discord.gg/ohmyzsh) to chat with us!
 
 ## Merchandise
 

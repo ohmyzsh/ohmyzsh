@@ -17,6 +17,7 @@ alias stn=create_project
   if [[ "$OSTYPE" == linux* ]]; then
     if [[ "$(uname -r)" = *icrosoft* ]]; then
       _sublime_paths=(
+        "$(wslpath -u 'C:\Program Files\Sublime Text\sublime_text.exe' 2>/dev/null)"
         "$(wslpath -u 'C:\Program Files\Sublime Text 3\subl.exe' 2>/dev/null)"
         "$(wslpath -u 'C:\Program Files\Sublime Text 2\subl.exe' 2>/dev/null)"
       )
@@ -29,15 +30,19 @@ alias stn=create_project
         "/usr/local/bin/sublime_text"
         "/usr/bin/subl"
         "/usr/bin/subl3"
+        "/snap/bin/subl"
+        "/snap/bin/sublime-text.subl"
       )
     fi
   elif [[ "$OSTYPE" = darwin* ]]; then
     _sublime_paths=(
       "/usr/local/bin/subl"
       "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"
+      "/Applications/Sublime Text 4.app/Contents/SharedSupport/bin/subl"
       "/Applications/Sublime Text 3.app/Contents/SharedSupport/bin/subl"
       "/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl"
       "$HOME/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"
+      "$HOME/Applications/Sublime Text 4.app/Contents/SharedSupport/bin/subl"
       "$HOME/Applications/Sublime Text 3.app/Contents/SharedSupport/bin/subl"
       "$HOME/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl"
     )
@@ -48,6 +53,7 @@ alias stn=create_project
     )
   elif [[ "$OSTYPE" = msys ]]; then
     _sublime_paths=(
+      "/c/Program Files/Sublime Text/sublime_text.exe"
       "/c/Program Files/Sublime Text 2/subl.exe"
       "/c/Program Files/Sublime Text 3/subl.exe"
     )
