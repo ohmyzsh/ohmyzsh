@@ -596,7 +596,7 @@ case $MAIN_SUBCOMMAND in
       '(-v --headers)'{-v,--headers}'[Print table headers (Hash, Size, Name).]' \
       '--resolve-type[Resolve linked objects to find out their types. Default: true.]' \
       '--size[Resolve linked objects to find out their file size. Default: true.]' \
-      '(-s --stream)'{-s,--stream}'[Enable exprimental streaming of directory entries as they are traversed.]' \
+      '(-s --stream)'{-s,--stream}'[Enable experimental streaming of directory entries as they are traversed.]' \
   ;;
   (mount)
     _arguments \

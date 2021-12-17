@@ -124,7 +124,7 @@ logs_options=(
     '--out[only shows standard output]'
     '--lines[output the last N lines, instead of the last 15 by default]'
     '--timestamp[add timestamps (default format YYYY-MM-DD-HH:mm:ss)]'
-    '--nostream[print logs without lauching the log stream]'
+    '--nostream[print logs without launching the log stream]'
     '(-h --help)'{-h,--help}'[output usage information]'
     $id_all_comp
 )
@@ -139,7 +139,7 @@ case "$words[1]" in
     stop|restart|delete|reload|reset)
         _arguments $id_all_comp && return 0
         ;;
-    env|inspect|monitor|unmonitor|discribe)
+    env|inspect|monitor|unmonitor|describe)
         _arguments $id_comp && return 0
         ;;
     deploy|startOrRestart|startOrReload)

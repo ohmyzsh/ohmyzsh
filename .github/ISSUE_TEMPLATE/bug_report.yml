@@ -1,12 +1,11 @@
-name: Bug report
-description: Create a report to help us improve Oh My Zsh
-labels: 'Bug'
+name: Report a bug
+description: Report a bug that isn't caused by Oh My Zsh. If unsure, use this form
 body:
   - type: markdown
     attributes:
       value: |
         ## Self Check
-        - Try searching existing [GitHub Issues](https://github.com/ohmyzsh/ohmyzsh/issues?q=is%3Aissue) (open or closed) for similar issues.
+        - Look for similar errors in existing [GitHub Issues](https://github.com/ohmyzsh/ohmyzsh/issues?q=is%3Aissue) (open or closed).
         - Try reaching out on the [Discord server](https://discord.gg/ohmyzsh) for help.
   - type: textarea
     validations:
@@ -41,21 +40,21 @@ body:
     validations:
       required: true
     attributes:
-      label: OS / Distro
-      placeholder: e.g. Windows 10, Ubuntu 20.04, Arch Linux, macOS 10.15...
+      label: OS / Linux distribution
+      placeholder: Windows 10, Ubuntu 20.04, Arch Linux, macOS 10.15...
   - type: input
     validations:
       required: true
     attributes:
       label: Zsh version
       description: Run `echo $ZSH_VERSION` to check.
-      placeholder: e.g. 5.6
+      placeholder: "5.6"
   - type: input
     validations:
       required: true
     attributes:
       label: Terminal emulator
-      placeholder: e.g. iTerm2, Gnome Terminal...
+      placeholder: iTerm2, GNOME Terminal, Terminal.app...
   - type: dropdown
     attributes:
       label: If using WSL on Windows, which version of WSL

@@ -19,7 +19,7 @@ Commands that use `$APT` will use `apt` if installed or defer to `apt-get` other
 | acp     | `apt-cache policy`                                                       | Display the package source priorities                                                             |
 | afs     | `apt-file search --regexp`                                               | Perform a regular expression apt-file search                                                      |
 | afu     | `sudo apt-file update`                                                   | Generates or updates the apt-file package database                                                |
-| aga     | `sudo $APT autoclean`                                                    | Clears out the local reposityory of retrieved package files that can no longer be downloaded      |
+| aga     | `sudo $APT autoclean`                                                    | Clears out the local repository of retrieved package files that can no longer be downloaded       |
 | agb     | `sudo $APT build-dep <source_pkg>`                                       | Installs/Removes packages to satisfy the dependencies of a specified build pkg                    |
 | agc     | `sudo $APT clean`                                                        | Clears out the local repository of retrieved package files leaving everything from the lock files |
 | agd     | `sudo $APT dselect-upgrade`                                              | Follows dselect choices for package installation                                                  |
