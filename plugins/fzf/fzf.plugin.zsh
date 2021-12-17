@@ -163,7 +163,7 @@ setup_using_openbsd_package \
     || setup_using_base_dir \
     || indicate_error
 
-unset -f setup_using_opensuse_package setup_using_debian_package setup_using_base_dir indicate_error
+unset -f setup_using_openbsd_package setup_using_opensuse_package setup_using_debian_package setup_using_base_dir indicate_error
 
 if [[ -z "$FZF_DEFAULT_COMMAND" ]]; then
     if (( $+commands[rg] )); then
