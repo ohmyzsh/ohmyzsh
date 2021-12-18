@@ -35,19 +35,20 @@ prompt_setup_pygmalion(){
 }
 
 prompt_pygmalion_precmd(){
-  setopt localoptions extendedglob
+  setopt localoptions nopromptsubst extendedglob
 
   local gitinfo=$(git_prompt_info)
   local gitinfo_nocolor=${gitinfo//\%\{[^\}]##\}}
-  local exp_nocolor="$(print -P \"$base_prompt_nocolor$gitinfo_nocolor$post_prompt_nocolor\")"
+  local exp_nocolor="$(print -P \"${base_prompt_nocolor}${gitinfo_nocolor}${post_prompt_nocolor}\")"
   local prompt_length=${#exp_nocolor}
 
+  # add new line on prompt longer than 40 characters
   local nl=""
-
   if [[ $prompt_length -gt 40 ]]; then
-    nl=$'\n%{\r%}';
+    nl=$'\n%{\r%}'
   fi
-  PROMPT="$base_prompt$gitinfo$nl$post_prompt"
+
+  PROMPT="${base_prompt}\$(git_prompt_info)${nl}${post_prompt}"
 }
 
 prompt_setup_pygmalion

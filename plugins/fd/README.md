@@ -10,4 +10,4 @@ plugins=(... fd)
 
 Completion is taken from the fd release [`7.3.0`](https://github.com/sharkdp/fd/releases/tag/v7.3.0).
 
-Updated on Febrary 13th, 2019.
+Updated on February 13th, 2019.

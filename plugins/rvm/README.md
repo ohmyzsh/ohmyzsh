@@ -18,3 +18,4 @@ plugins=(... rvm)
 | `rb21`         | `rvm use ruby-2.1.2` |
 | `rvm-update`   | `rvm get head`       |
 | `gems`         | `gem list`           |
+| `rvms`         | `rvm gemset`         |

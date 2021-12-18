@@ -28,8 +28,8 @@ fi
 
 # Call nvm when first using node, npm or yarn
 if (( $+NVM_LAZY )); then
-  function node npm yarn {
-    unfunction node npm yarn
+  function node npm yarn $NVM_LAZY_CMD {
+    unfunction node npm yarn $NVM_LAZY_CMD
     nvm use default
     command "$0" "$@"
   }

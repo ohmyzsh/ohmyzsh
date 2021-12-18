@@ -13,6 +13,7 @@ This plugin sets up completion and aliases for [Deno](https://deno.land).
 | dh    | deno help        |
 | dli   | deno lint        |
 | drn   | deno run         |
+| drA   | deno run -A      |
 | drw   | deno run --watch |
 | dts   | deno test        |
 | dup   | deno upgrade     |

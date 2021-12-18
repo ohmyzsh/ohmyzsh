@@ -11,25 +11,28 @@ plugins=(... mercurial)
 
 ## Aliases
 
-| Alias  | Command                                                                                                     |
-|--------|-------------------------------------------------------------------------------------------------------------|
-| `hga`  | `hg add`                                                                                                    |
-| `hgc`  | `hg commit`                                                                                                 |
-| `hgca` | `hg commit --amend`                                                                                         |
-| `hgb`  | `hg branch`                                                                                                 |
-| `hgba` | `hg branches`                                                                                               |
-| `hgbk` | `hg bookmarks`                                                                                              |
-| `hgco` | `hg checkout`                                                                                               |
-| `hgd`  | `hg diff`                                                                                                   |
-| `hged` | `hg diffmerge`                                                                                              |
-| `hgp`  | `hg push`                                                                                                   |
-| `hgs`  | `hg status`                                                                                                 |
-| `hgsl` | `hg log --limit 20 --template "{node|short} | {date|isodatesec} | {author|user}: {desc|strip|firstline}\n"` |
-| `hgun` | `hg resolve --list`                                                                                         |
-| `hgi`  | `hg incoming`                                                                                               |
-| `hgl`  | `hg pull -u`                                                                                                |
-| `hglr` | `hg pull --rebase`                                                                                          |
-| `hgo`  | `hg outgoing`                                                                                               |
+| Alias   | Command                                     |
+| ------- | ------------------------------------------- |
+| `hga`   | `hg add`                                    |
+| `hgc`   | `hg commit`                                 |
+| `hgca`  | `hg commit --amend`                         |
+| `hgci`  | `hg commit --interactive`                   |
+| `hgb`   | `hg branch`                                 |
+| `hgba`  | `hg branches`                               |
+| `hgbk`  | `hg bookmarks`                              |
+| `hgco`  | `hg checkout`                               |
+| `hgd`   | `hg diff`                                   |
+| `hged`  | `hg diffmerge`                              |
+| `hgp`   | `hg push`                                   |
+| `hgs`   | `hg status`                                 |
+| `hgsl`  | `hg log --limit 20 --template "<template>"` |
+| `hgun`  | `hg resolve --list`                         |
+| `hgi`   | `hg incoming`                               |
+| `hgl`   | `hg pull -u`                                |
+| `hglr`  | `hg pull --rebase`                          |
+| `hgo`   | `hg outgoing`                               |
+| `hglg`  | `hg log --stat -v`                          |
+| `hglgp` | `hg log --stat -p -v`                       |
 
 ## Prompt usage
 
@@ -60,7 +63,7 @@ ZSH_THEME_HG_PROMPT_CLEAN="%{$fg[magenta]%})"
 This is the same as git plugin does. **Note**: additional changes to `.zshrc`, or using a theme designed
 to use `hg_prompt_info`, are required in order for this to work.
 
-## Mantainers
+## Maintainers
 
 - [ptrv](https://github.com/ptrv): original creator
 - [oshybystyi](https://github.com/oshybystyi)

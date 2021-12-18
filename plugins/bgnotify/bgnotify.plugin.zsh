@@ -20,6 +20,12 @@ if ! (type bgnotify_formatted | grep -q 'function'); then ## allow custom functi
   }
 fi
 
+currentAppId () {
+  if (( $+commands[osascript] )); then
+    osascript -e 'tell application (path to frontmost application as text) to id' 2>/dev/null
+  fi
+}
+
 currentWindowId () {
   if hash osascript 2>/dev/null; then #osx
     osascript -e 'tell application (path to frontmost application as text) to id of front window' 2&> /dev/null || echo "0"
@@ -32,11 +38,20 @@ currentWindowId () {
 
 bgnotify () { ## args: (title, subtitle)
   if hash terminal-notifier 2>/dev/null; then #osx
-    [[ "$TERM_PROGRAM" == 'iTerm.app' ]] && term_id='com.googlecode.iterm2';
-    [[ "$TERM_PROGRAM" == 'Apple_Terminal' ]] && term_id='com.apple.terminal';
+    local term_id="$bgnotify_appid"
+    if [[ -z "$term_id" ]]; then
+      case "$TERM_PROGRAM" in
+      iTerm.app) term_id='com.googlecode.iterm2' ;;
+      Apple_Terminal) term_id='com.apple.terminal' ;;
+      esac
+    fi
+
     ## now call terminal-notifier, (hopefully with $term_id!)
-    [ -z "$term_id" ] && terminal-notifier -message "$2" -title "$1" >/dev/null ||
-    terminal-notifier -message "$2" -title "$1" -activate "$term_id" -sender "$term_id" >/dev/null
+    if [[ -z "$term_id" ]]; then
+      terminal-notifier -message "$2" -title "$1" >/dev/null
+    else
+      terminal-notifier -message "$2" -title "$1" -activate "$term_id" -sender "$term_id" >/dev/null
+    fi
   elif hash growlnotify 2>/dev/null; then #osx growl
     growlnotify -m "$1" "$2"
   elif hash notify-send 2>/dev/null; then #ubuntu gnome!
@@ -54,6 +69,7 @@ bgnotify () { ## args: (title, subtitle)
 bgnotify_begin() {
   bgnotify_timestamp=$EPOCHSECONDS
   bgnotify_lastcmd="${1:-$2}"
+  bgnotify_appid="$(currentAppId)"
   bgnotify_windowid=$(currentWindowId)
 }
 
@@ -62,7 +78,7 @@ bgnotify_end() {
   elapsed=$(( EPOCHSECONDS - bgnotify_timestamp ))
   past_threshold=$(( elapsed >= bgnotify_threshold ))
   if (( bgnotify_timestamp > 0 )) && (( past_threshold )); then
-    if [ $(currentWindowId) != "$bgnotify_windowid" ]; then
+    if [[ $(currentAppId) != "$bgnotify_appid" || $(currentWindowId) != "$bgnotify_windowid" ]]; then
       print -n "\a"
       bgnotify_formatted "$didexit" "$bgnotify_lastcmd" "$elapsed"
     fi

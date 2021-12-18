@@ -5,7 +5,9 @@
 # Pacman - https://wiki.archlinux.org/index.php/Pacman_Tips
 alias pacupg='sudo pacman -Syu'
 alias pacin='sudo pacman -S'
+alias paclean='sudo pacman -Sc'
 alias pacins='sudo pacman -U'
+alias paclr='sudo pacman -Scc'
 alias pacre='sudo pacman -R'
 alias pacrem='sudo pacman -Rns'
 alias pacrep='pacman -Si'
@@ -88,6 +90,8 @@ fi
 if (( $+commands[aura] )); then
   alias auin='sudo aura -S'
   alias aurin='sudo aura -A'
+  alias auclean='sudo aura -Sc'
+  alias auclr='sudo aura -Scc'
   alias auins='sudo aura -U'
   alias auinsd='sudo aura -S --asdeps'
   alias aurinsd='sudo aura -A --asdeps'
@@ -104,7 +108,7 @@ if (( $+commands[aura] )); then
   alias auras='aura -As --both'
   alias auupd="sudo aura -Sy"
   alias auupg='sudo sh -c "aura -Syu              && aura -Au"'
-  alias ausu='sudo  sh -c "aura -Syu --no-confirm && aura -Au --no-confirm"'
+  alias ausu='sudo sh -c "aura -Syu --no-confirm && aura -Au --no-confirm"'
   alias upgrade='sudo aura -Syu'
 
   # extra bonus specially for aura
@@ -115,6 +119,8 @@ if (( $+commands[aura] )); then
 fi
 
 if (( $+commands[pacaur] )); then
+  alias pacclean='pacaur -Sc'
+  alias pacclr='pacaur -Scc'
   alias paupg='pacaur -Syu'
   alias pasu='pacaur -Syu --noconfirm'
   alias pain='pacaur -S'
@@ -138,6 +144,8 @@ if (( $+commands[trizen] )); then
   alias trupg='trizen -Syua'
   alias trsu='trizen -Syua --noconfirm'
   alias trin='trizen -S'
+  alias trclean='trizen -Sc'
+  alias trclr='trizen -Scc'
   alias trins='trizen -U'
   alias trre='trizen -R'
   alias trrem='trizen -Rns'
@@ -153,28 +161,10 @@ if (( $+commands[trizen] )); then
   alias upgrade='trizen -Syu'
 fi
 
-if (( $+commands[yaourt] )); then
-  alias yaconf='yaourt -C'
-  alias yaupg='yaourt -Syua'
-  alias yasu='yaourt -Syua --noconfirm'
-  alias yain='yaourt -S'
-  alias yains='yaourt -U'
-  alias yare='yaourt -R'
-  alias yarem='yaourt -Rns'
-  alias yarep='yaourt -Si'
-  alias yareps='yaourt -Ss'
-  alias yaloc='yaourt -Qi'
-  alias yalocs='yaourt -Qs'
-  alias yalst='yaourt -Qe'
-  alias yaorph='yaourt -Qtd'
-  alias yainsd='yaourt -S --asdeps'
-  alias yamir='yaourt -Syy'
-  alias yaupd="yaourt -Sy"
-  alias upgrade='yaourt -Syu'
-fi
-
 if (( $+commands[yay] )); then
   alias yaconf='yay -Pg'
+  alias yaclean='yay -Sc'
+  alias yaclr='yay -Scc'
   alias yaupg='yay -Syu'
   alias yasu='yay -Syu --noconfirm'
   alias yain='yay -S'
@@ -192,4 +182,3 @@ if (( $+commands[yay] )); then
   alias yaupd="yay -Sy"
   alias upgrade='yay -Syu'
 fi
-
