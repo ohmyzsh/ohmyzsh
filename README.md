@@ -37,6 +37,8 @@ Oh My Zsh is installed by running one of the following commands in your terminal
 | **wget**  | `sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`   |
 | **fetch** | `sh -c "$(fetch -o - https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"` |
 
+_Note that previous configuration in `.zshrc` will be placed in `.pre-oh-my-zsh`. After installation you can move configuration you want to preserve into `.zshrc`._
+
 #### Manual inspection
 
 It's a good idea to inspect the install script from projects you don't yet know. You can do
