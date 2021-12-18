@@ -10,6 +10,11 @@
 # % export emotty_set=nature
 # ------------------------------------------------------------------------------
 
+# Handle $0 according to the standard:
+# https://z-shell.github.io/zsh-plugin-assessor/Zsh-Plugin-Standard#zero-handling
+0="${${ZERO:-${0:#$ZSH_ARGZERO}}:-${(%):-%N}}"
+0="${${(M)0:#/*}:-$PWD/$0}"
+
 typeset -gAH _emotty_sets
 local _emotty_plugin_dir="${0:h}"
 source "$_emotty_plugin_dir/emotty_stellar_set.zsh"

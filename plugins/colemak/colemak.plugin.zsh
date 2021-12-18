@@ -19,6 +19,11 @@ bindkey -a 'N' vi-join
 bindkey -a 'j' vi-forward-word-end
 bindkey -a 'J' vi-forward-blank-word-end
 
+# Handle $0 according to the standard:
+# https://z-shell.github.io/zsh-plugin-assessor/Zsh-Plugin-Standard#zero-handling
+0="${${ZERO:-${0:#$ZSH_ARGZERO}}:-${(%):-%N}}"
+0="${${(M)0:#/*}:-$PWD/$0}"
+
 # New less versions will read this file directly
 export LESSKEYIN="${0:h:A}/colemak-less"
 
