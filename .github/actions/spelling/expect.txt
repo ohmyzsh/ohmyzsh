@@ -22,6 +22,7 @@ acr
 acroread
 acs
 acsc
+acss
 acsp
 actionformats
 Adamantium
@@ -1459,6 +1460,7 @@ gpr
 gpristine
 gpsup
 gpu
+gpus
 gpv
 gradle
 gradlew
@@ -2396,6 +2398,7 @@ mirrorlist
 mixin
 mkcd
 mkdir
+mkdirs
 mktag
 mktemp
 mktree
@@ -3453,6 +3456,7 @@ sheerun
 shellcheck
 shellinit
 shellperson
+SHELLPROXY
 shitload
 SHLVL
 shm
@@ -3684,7 +3688,6 @@ Subsubcommands
 Subsubsubcommands
 sudo
 sudoedit
-SUFIX
 suitenames
 sunaku
 sunion
