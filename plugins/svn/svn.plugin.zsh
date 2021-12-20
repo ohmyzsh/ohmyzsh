@@ -19,10 +19,10 @@ in_svn() {
 }
 
 svn_get_repo_name() {
-  if in_svn; then
-    LANG=C svn info | sed -n 's/^Repository\ Root:\ .*\///p' | read SVN_ROOT
-    LANG=C svn info | sed -n "s/^URL:\ .*$SVN_ROOT\///p"
-  fi
+  local info name
+  info="${1:-$(LANG= svn info 2>/dev/null)}"
+  name="$(sed -n 's/^Repository\ Root:\ .*\///p' <<< "$info")"
+  omz_urldecode "$name"
 }
 
 svn_get_branch_name() {
