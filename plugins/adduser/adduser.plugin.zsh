@@ -40,7 +40,7 @@ adduser() {
 		#cleanup
 		rm $temp_installscript
 	else
-		echo "Installationscript '$path_installscript' not available" 2> /dev/stderr;
+		echo "Installationscript '$path_installscript' not available" > /dev/stderr;
 		returncode=1
 	fi
 
@@ -48,7 +48,7 @@ adduser() {
 	if [[ $returncode -eq 0 ]]; then
 		echo "$result_string succeeded."
 	else
-		echo "$result_string failed." 2> /dev/stderr
+		echo "$result_string failed." > /dev/stderr
 	fi
 
 	return $returncode
