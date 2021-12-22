@@ -9,7 +9,7 @@ adduser() {
 
 	#Create user, errors will be reported by the 'real' adduser
 	#Use which/tail combination to call the binary instead of this function
-	$(which -a adduser | tail -1) $@ || return 1
+	command adduser $@ || return 1
 
 
 	echo "\nUser '${@[$#]}' has been created. I will now try to install 'Oh My Zsh'"
