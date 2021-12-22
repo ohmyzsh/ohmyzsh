@@ -19,18 +19,17 @@ adduser() {
 		#and also make sure that after the install script we are no longer the new user
 		temp_installscript=$(mktemp)
 		cat $path_installscript | \
-		sed 's/exec zsh -l//' |
 	        sed 's/read -r opt/opt=y; echo "\n--- This time I am answering \\"yes\\" for you, but you will still have to type in the password of that user ---"/' \
 		> $temp_installscript
 		chown ${@[$#]} $temp_installscript && chmod +x $temp_installscript
 
 		#try installing with sudo or su when not available
 		if [[ -x "$commands[sudo]" ]] ; then
-			sudo -u ${@[$#]} $temp_installscript
+			sudo -u ${@[$#]} RUNZSH=no $temp_installscript
 			returncode=$?
 		else
 			if [[ -x "$commands[su]" ]] ; then
-				su -l ${@[$#]} -c $temp_installscript
+				su -l ${@[$#]} -c "$temp_installscript --unattended"
 				returncode=$?
 			else
 				echo "You can't become ${@[$#]} (no 'sudo' or 'su' available)" > /dev/stderr;
