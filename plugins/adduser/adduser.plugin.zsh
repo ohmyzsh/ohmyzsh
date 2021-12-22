@@ -18,19 +18,28 @@ adduser() {
 		#copy install.sh to a new file in temp that we can give the right owner to execute
 		#and also make sure that after the install script we are no longer the new user
 		temp_installscript=$(mktemp)
-		cat $path_installscript | \
-	        sed 's/read -r opt/opt=y; echo "\n--- This time I am answering \\"yes\\" for you, but you will still have to type in the password of that user ---"/' \
-		> $temp_installscript
+		cp $path_installscript $temp_installscript
 		chown ${@[$#]} $temp_installscript && chmod +x $temp_installscript
 
 		#try installing with sudo or su when not available
 		if [[ -x "$commands[sudo]" ]] ; then
-			sudo -u ${@[$#]} RUNZSH=no $temp_installscript
+			sudo -u ${@[$#]} sh -c "$temp_installscript --unattended"
+			returncode=$?
+			if [[ -x "$commands[chsh]" ]] ; then
+				sudo chsh -s $commands[zsh] ${@[$#]}
+			else
+				echo "'chsh' is not available, change the shell manually." > /dev/stderr
+			fi
 			returncode=$?
 		else
 			if [[ -x "$commands[su]" ]] ; then
 				su -l ${@[$#]} -c "$temp_installscript --unattended"
 				returncode=$?
+				if [[ -x "$commands[chsh]" ]] ; then
+					su -c "chsh -s $commands[zsh] ${@[$#]}"
+				else
+					echo "'chsh' is not available, change the shell manually." > /dev/stderr
+				fi
 			else
 				echo "You can't become ${@[$#]} (no 'sudo' or 'su' available)" > /dev/stderr;
 				returncode=1
