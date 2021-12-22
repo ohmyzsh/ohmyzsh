@@ -25,11 +25,11 @@ adduser() {
 		chown ${@[$#]} $temp_installscript && chmod +x $temp_installscript
 
 		#try installing with sudo or su when not available
-		if [[ -x $(which sudo) ]] ; then
+		if [[ -x "$commands[sudo]" ]] ; then
 			sudo -u ${@[$#]} $temp_installscript
 			returncode=$?
 		else
-			if [[ -x $(which su) ]] ; then
+			if [[ -x "$commands[su]" ]] ; then
 				su -l ${@[$#]} -c $temp_installscript
 				returncode=$?
 			else
