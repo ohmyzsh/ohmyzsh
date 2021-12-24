@@ -12,7 +12,7 @@
 # To use, put this line to your ~/.tmux.conf. The tool is invoked with:
 # Ctrl+b h
 #
-# bind h run-shell -b "$ZNT_REPO_DIR/znt-tmux.zsh"
+# bind h run-shell -b "$ZNT_REPO_DIR/doc/znt-tmux.zsh"
 #
 
 # get and save the current active tmux pane id
