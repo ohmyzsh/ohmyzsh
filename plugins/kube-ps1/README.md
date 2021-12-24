@@ -37,11 +37,11 @@ PS1='[\u@\h \W $(kube_ps1)]\$ '
 
 ### Zsh Plugin Managers
 
-#### Using [zinit](https://github.com/zdharma-continuum/zinit)
+#### Using [zplugin](https://github.com/zdharma/zplugin)
 
 Update `.zshrc` with:
 ```sh
-zinit light jonmosco/kube-ps1
+zplugin light jonmosco/kube-ps1
 PROMPT='$(kube_ps1)'$PROMPT
 ```
 
