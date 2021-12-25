@@ -5,3 +5,5 @@ function shell_proxy_promt_info() {
 
     return 0
 }
+
+alias gtidy='git reset --hard && git clean -df'
