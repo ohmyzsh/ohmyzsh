@@ -1,11 +1,9 @@
-# install in /etc/zsh/zshrc or your personal .zshrc
-
 # gc
-prefixes=(5 6 8)
-for p in $prefixes; do
-	compctl -g "*.${p}" ${p}l
-	compctl -g "*.go" ${p}g
+for p in 5 6 8; do
+  compctl -g "*.${p}" ${p}l
+  compctl -g "*.go" ${p}g
 done
+unset p
 
 # standard go tools
 compctl -g "*.go" gofmt
@@ -268,7 +266,7 @@ alias goga='go get ./...'
 alias goi='go install'
 alias gol='go list'
 alias gom='go mod'
-alias gop='cd $GOPATH'
+alias gopa='cd $GOPATH'
 alias gopb='cd $GOPATH/bin'
 alias gops='cd $GOPATH/src'
 alias gor='go run'
