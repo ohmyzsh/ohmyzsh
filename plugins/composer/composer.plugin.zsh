@@ -1,18 +1,34 @@
-_composer () {
+## Basic Composer command completion
+# Since Zsh 5.7, an improved composer command completion is provided
+if ! is-at-least 5.7; then
+  _composer () {
     local curcontext="$curcontext" state line
     typeset -A opt_args
-    _arguments \
-        '*:: :->subcmds'
+    _arguments '*:: :->subcmds'
 
-    if (( CURRENT == 1 )) || ( ((CURRENT == 2)) && [ "$words[1]" = "global" ] ) ; then
-        compadd $(_composer_get_command_list)
+    if (( CURRENT == 1 )) || ( (( CURRENT == 2 )) && [[ "$words[1]" = "global" ]] ); then
+      # Command list
+      local -a subcmds
+      subcmds=("${(@f)"$($_comp_command1 --no-ansi 2>/dev/null | awk '
+        /Available commands/{ r=1 }
+        r == 1 && /^[ \t]*[a-z]+/{
+          gsub(/^[ \t]+/, "")
+          gsub(/  +/, ":")
+          print $0
+        }
+      ')"}")
+      _describe -t commands 'composer command' subcmds
     else
-        compadd $(_composer_get_required_list)
+      # Required list
+      compadd $($_comp_command1 show -s --no-ansi 2>/dev/null \
+        | sed '1,/requires/d' \
+        | awk 'NF > 0 && !/^requires \(dev\)/{ print $1 }')
     fi
-}
+  }
 
-compdef _composer composer
-compdef _composer composer.phar
+  compdef _composer composer
+  compdef _composer composer.phar
+fi
 
 
 ## Aliases
