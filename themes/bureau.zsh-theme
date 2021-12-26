@@ -17,13 +17,14 @@ ZSH_THEME_GIT_PROMPT_UNSTAGED="%{$fg_bold[yellow]%}●%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg_bold[red]%}●%{$reset_color%}"
 
 bureau_git_branch () {
+  local ref
   ref=$(command git symbolic-ref HEAD 2> /dev/null) || \
   ref=$(command git rev-parse --short HEAD 2> /dev/null) || return
   echo "${ref#refs/heads/}"
 }
 
 bureau_git_status() {
-  _STATUS=""
+  local _STATUS _INDEX
 
   # check status of files
   _INDEX=$(command git status --porcelain 2> /dev/null)
@@ -63,18 +64,22 @@ bureau_git_status() {
   echo $_STATUS
 }
 
-bureau_git_prompt () {
-  local _branch=$(bureau_git_branch)
-  local _status=$(bureau_git_status)
-  local _result=""
-  if [[ "${_branch}x" != "x" ]]; then
-    _result="$ZSH_THEME_GIT_PROMPT_PREFIX$_branch"
-    if [[ "${_status}x" != "x" ]]; then
-      _result="$_result $_status"
-    fi
-    _result="$_result$ZSH_THEME_GIT_PROMPT_SUFFIX"
+bureau_git_prompt() {
+  local branch=$(bureau_git_branch)
+  local status=$(bureau_git_status)
+  local info
+
+  if [[ -z "${branch}" ]]; then
+    return
   fi
-  echo $_result
+
+  info="${branch:gs/%/%%}"
+
+  if [[ -n "${status}" ]]; then
+    info+=" $status"
+  fi
+
+  echo "${ZSH_THEME_GIT_PROMPT_PREFIX}${info}${ZSH_THEME_GIT_PROMPT_SUFFIX}"
 }
 
 
