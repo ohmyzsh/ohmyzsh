@@ -121,31 +121,39 @@ function dirhistory_zle_dirhistory_future() {
 }
 
 zle -N dirhistory_zle_dirhistory_back
-bindkey "\e[3D" dirhistory_zle_dirhistory_back    # xterm in normal mode
-bindkey "\e[1;3D" dirhistory_zle_dirhistory_back  # xterm in normal mode
-bindkey "\e\e[D" dirhistory_zle_dirhistory_back   # Putty
-bindkey "\eO3D" dirhistory_zle_dirhistory_back    # GNU screen
-case "$TERM_PROGRAM" in
-iTerm.app) bindkey "^[^[[D" dirhistory_zle_dirhistory_back ;;   # iTerm2
-Apple_Terminal) bindkey "^[b" dirhistory_zle_dirhistory_back ;; # Terminal.app
-esac
-if (( ${+terminfo[kcub1]} )); then
-  bindkey "^[${terminfo[kcub1]}" dirhistory_zle_dirhistory_back  # urxvt
-fi
-
 zle -N dirhistory_zle_dirhistory_future
-bindkey "\e[3C" dirhistory_zle_dirhistory_future    # xterm in normal mode
-bindkey "\e[1;3C" dirhistory_zle_dirhistory_future  # xterm in normal mode
-bindkey "\e\e[C" dirhistory_zle_dirhistory_future   # Putty
-bindkey "\eO3C" dirhistory_zle_dirhistory_future    # GNU screen
-case "$TERM_PROGRAM" in
-iTerm.app) bindkey "^[^[[C" dirhistory_zle_dirhistory_future ;;   # iTerm2
-Apple_Terminal) bindkey "^[f" dirhistory_zle_dirhistory_future ;; # Terminal.app
-esac
-if (( ${+terminfo[kcuf1]} )); then
-  bindkey "^[${terminfo[kcuf1]}" dirhistory_zle_dirhistory_future # urxvt
-fi
 
+for keymap in emacs vicmd viins; do
+  # dirhistory_back
+  bindkey -M $keymap "\e[3D" dirhistory_zle_dirhistory_back    # xterm in normal mode
+  bindkey -M $keymap "\e[1;3D" dirhistory_zle_dirhistory_back  # xterm in normal mode
+  bindkey -M $keymap "\e\e[D" dirhistory_zle_dirhistory_back   # Putty
+  bindkey -M $keymap "\eO3D" dirhistory_zle_dirhistory_back    # GNU screen
+
+  case "$TERM_PROGRAM" in
+  Apple_Terminal) bindkey -M $keymap "^[b" dirhistory_zle_dirhistory_back ;; # Terminal.app
+  iTerm.app) bindkey -M $keymap "^[^[[D" dirhistory_zle_dirhistory_back ;;   # iTerm2
+  esac
+
+  if (( ${+terminfo[kcub1]} )); then
+    bindkey -M $keymap "^[${terminfo[kcub1]}" dirhistory_zle_dirhistory_back  # urxvt
+  fi
+
+  # dirhistory_future
+  bindkey -M $keymap "\e[3C" dirhistory_zle_dirhistory_future    # xterm in normal mode
+  bindkey -M $keymap "\e[1;3C" dirhistory_zle_dirhistory_future  # xterm in normal mode
+  bindkey -M $keymap "\e\e[C" dirhistory_zle_dirhistory_future   # Putty
+  bindkey -M $keymap "\eO3C" dirhistory_zle_dirhistory_future    # GNU screen
+
+  case "$TERM_PROGRAM" in
+  Apple_Terminal) bindkey -M $keymap "^[f" dirhistory_zle_dirhistory_future ;; # Terminal.app
+  iTerm.app) bindkey -M $keymap "^[^[[C" dirhistory_zle_dirhistory_future ;;   # iTerm2
+  esac
+
+  if (( ${+terminfo[kcuf1]} )); then
+    bindkey -M $keymap "^[${terminfo[kcuf1]}" dirhistory_zle_dirhistory_future # urxvt
+  fi
+done
 
 #
 # HIERARCHY Implemented in this section, in case someone wants to split it to another plugin if it clashes bindings
@@ -176,27 +184,38 @@ function dirhistory_zle_dirhistory_down() {
 }
 
 zle -N dirhistory_zle_dirhistory_up
-bindkey "\e[3A" dirhistory_zle_dirhistory_up    # xterm in normal mode
-bindkey "\e[1;3A" dirhistory_zle_dirhistory_up  # xterm in normal mode
-bindkey "\e\e[A" dirhistory_zle_dirhistory_up   # Putty
-bindkey "\eO3A" dirhistory_zle_dirhistory_up    # GNU screen
-case "$TERM_PROGRAM" in
-iTerm.app) bindkey "^[^[[A" dirhistory_zle_dirhistory_up ;;     # iTerm2
-Apple_Terminal) bindkey "^[[A" dirhistory_zle_dirhistory_up ;;  # Terminal.app
-esac
-if (( ${+terminfo[kcuu1]} )); then
-  bindkey "^[${terminfo[kcuu1]}" dirhistory_zle_dirhistory_up # urxvt
-fi
-
 zle -N dirhistory_zle_dirhistory_down
-bindkey "\e[3B" dirhistory_zle_dirhistory_down    # xterm in normal mode
-bindkey "\e[1;3B" dirhistory_zle_dirhistory_down  # xterm in normal mode
-bindkey "\e\e[B" dirhistory_zle_dirhistory_down   # Putty
-bindkey "\eO3B" dirhistory_zle_dirhistory_down    # GNU screen
-case "$TERM_PROGRAM" in
-iTerm.app) bindkey "^[^[[B" dirhistory_zle_dirhistory_down ;;     # iTerm2
-Apple_Terminal) bindkey "^[[B" dirhistory_zle_dirhistory_down ;;  # Terminal.app
-esac
-if (( ${+terminfo[kcud1]} )); then
-  bindkey "^[${terminfo[kcud1]}" dirhistory_zle_dirhistory_down # urxvt
-fi
+
+for keymap in emacs vicmd viins; do
+  # dirhistory_up
+  bindkey -M $keymap "\e[3A" dirhistory_zle_dirhistory_up    # xterm in normal mode
+  bindkey -M $keymap "\e[1;3A" dirhistory_zle_dirhistory_up  # xterm in normal mode
+  bindkey -M $keymap "\e\e[A" dirhistory_zle_dirhistory_up   # Putty
+  bindkey -M $keymap "\eO3A" dirhistory_zle_dirhistory_up    # GNU screen
+
+  case "$TERM_PROGRAM" in
+  Apple_Terminal) bindkey -M $keymap "^[[A" dirhistory_zle_dirhistory_up ;;  # Terminal.app
+  iTerm.app) bindkey -M $keymap "^[^[[A" dirhistory_zle_dirhistory_up ;;     # iTerm2
+  esac
+
+  if (( ${+terminfo[kcuu1]} )); then
+    bindkey -M $keymap "^[${terminfo[kcuu1]}" dirhistory_zle_dirhistory_up # urxvt
+  fi
+
+  # dirhistory_down
+  bindkey -M $keymap "\e[3B" dirhistory_zle_dirhistory_down    # xterm in normal mode
+  bindkey -M $keymap "\e[1;3B" dirhistory_zle_dirhistory_down  # xterm in normal mode
+  bindkey -M $keymap "\e\e[B" dirhistory_zle_dirhistory_down   # Putty
+  bindkey -M $keymap "\eO3B" dirhistory_zle_dirhistory_down    # GNU screen
+
+  case "$TERM_PROGRAM" in
+  Apple_Terminal) bindkey -M $keymap "^[[B" dirhistory_zle_dirhistory_down ;;  # Terminal.app
+  iTerm.app) bindkey -M $keymap "^[^[[B" dirhistory_zle_dirhistory_down ;;     # iTerm2
+  esac
+
+  if (( ${+terminfo[kcud1]} )); then
+    bindkey -M $keymap "^[${terminfo[kcud1]}" dirhistory_zle_dirhistory_down # urxvt
+  fi
+done
+
+unset keymap
