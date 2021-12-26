@@ -73,11 +73,6 @@ function hash() {
 }
 
 function rehash() {
-  if [[ "$*" =~ "-f" ]]; then
-    builtin rehash "$@"
-    __gnu_utils
-  else
-    builtin rehash "$@"
-  fi
+  builtin rehash "$@"
+  __gnu_utils
 }
-
