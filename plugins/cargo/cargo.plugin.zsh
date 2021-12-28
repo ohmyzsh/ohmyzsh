@@ -7,7 +7,7 @@ print ${(%):-'Please update your .zshrc to use the `%Brust%b` plugin instead.%f'
 0="${${ZERO:-${0:#$ZSH_ARGZERO}}:-${(%):-%N}}"
 0="${${(M)0:#/*}:-$PWD/$0}"
 # Remove old generated completion file
-command rm -f "${0:A:h}/_cargo"
+command rm -f "${0:A:h}/_cargo" "$ZSH_CACHE_DIR/cargo_version"
 
 (( ${fpath[(Ie)$ZSH/plugins/rust]} )) || {
   fpath=("$ZSH/plugins/rust" $fpath)
