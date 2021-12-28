@@ -13,6 +13,11 @@
 autoload -Uz is-at-least
 is-at-least 24 "${${(Az)"$(emacsclient --version 2>/dev/null)"}[2]}" || return 0
 
+# Handle $0 according to the standard:
+# https://zdharma-continuum.github.io/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html
+0="${${ZERO:-${0:#$ZSH_ARGZERO}}:-${(%):-%N}}"
+0="${${(M)0:#/*}:-$PWD/$0}"
+
 # Path to custom emacsclient launcher
 export EMACS_PLUGIN_LAUNCHER="${0:A:h}/emacsclient.sh"
 

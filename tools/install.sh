@@ -250,9 +250,9 @@ setup_zshrc() {
 
   echo "${GREEN}Using the Oh My Zsh template file and adding it to ~/.zshrc.${RESET}"
 
-  sed "/^export ZSH=/ c\\
-export ZSH=\"$ZSH\"
-" "$ZSH/templates/zshrc.zsh-template" > ~/.zshrc-omztemp
+  # Replace $HOME path with '$HOME' in $ZSH variable in .zshrc file
+  omz=$(echo "$ZSH" | sed "s|^$HOME/|\$HOME/|")
+  sed "s|^export ZSH=.*$|export ZSH=\"${omz}\"|" "$ZSH/templates/zshrc.zsh-template" > ~/.zshrc-omztemp
   mv -f ~/.zshrc-omztemp ~/.zshrc
 
   echo

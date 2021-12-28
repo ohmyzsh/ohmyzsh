@@ -1,24 +1,27 @@
 # Autocompletion for the GitHub CLI (gh).
-if (( $+commands[gh] )); then
-  # remove old generated completion file
-  command rm -f "${0:A:h}/_gh"
+if (( ! $+commands[gh] )); then
+  return
+fi
 
-  ver="$(gh --version)"
-  ver_file="$ZSH_CACHE_DIR/gh_version"
-  comp_file="$ZSH_CACHE_DIR/completions/_gh"
+# TODO: 2021-12-28: remove this block
+# Handle $0 according to the standard:
+# https://zdharma-continuum.github.io/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html
+0="${${ZERO:-${0:#$ZSH_ARGZERO}}:-${(%):-%N}}"
+0="${${(M)0:#/*}:-$PWD/$0}"
+# Remove old generated files
+command rm -f "${0:A:h}/_gh" "$ZSH_CACHE_DIR/gh_version"
 
-  mkdir -p "${comp_file:h}"
-  (( ${fpath[(Ie)${comp_file:h}]} )) || fpath=("${comp_file:h}" $fpath)
+# TODO: 2021-12-28: remove this bit of code as it exists in oh-my-zsh.sh
+# Add completions folder in $ZSH_CACHE_DIR
+command mkdir -p "$ZSH_CACHE_DIR/completions"
+(( ${fpath[(Ie)"$ZSH_CACHE_DIR/completions"]} )) || fpath=("$ZSH_CACHE_DIR/completions" $fpath)
 
-  if [[ ! -f "$comp_file" || ! -f "$ver_file" || "$ver" != "$(< "$ver_file")" ]]; then
-    gh completion --shell zsh >| "$comp_file"
-    echo "$ver" >| "$ver_file"
-  fi
-
+# If the completion file doesn't exist yet, we need to autoload it and
+# bind it to `gh`. Otherwise, compinit will have already done that.
+if [[ ! -f "$ZSH_CACHE_DIR/completions/_gh" ]]; then
   declare -A _comps
   autoload -Uz _gh
   _comps[gh]=_gh
-
-  unset ver ver_file comp_file
 fi
 
+gh completion --shell zsh >| "$ZSH_CACHE_DIR/completions/_gh" &|

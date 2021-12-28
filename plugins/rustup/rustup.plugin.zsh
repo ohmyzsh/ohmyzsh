@@ -1,22 +1,15 @@
-if (( $+commands[rustup] )); then
-  # remove old generated completion file
-  command rm -f "${0:A:h}/_rustup"
+print ${(%):-'%F{yellow}The `rustup` plugin is deprecated and has been moved to the `rust` plugin.'}
+print ${(%):-'Please update your .zshrc to use the `%Brust%b` plugin instead.%f'}
 
-  ver="$(rustup --version 2>/dev/null)"
-  ver_file="$ZSH_CACHE_DIR/rustup_version"
-  comp_file="$ZSH_CACHE_DIR/completions/_rustup"
+# TODO: 2021-12-28: remove this block
+# Handle $0 according to the standard:
+# https://zdharma-continuum.github.io/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html
+0="${${ZERO:-${0:#$ZSH_ARGZERO}}:-${(%):-%N}}"
+0="${${(M)0:#/*}:-$PWD/$0}"
+# Remove old generated completion file
+command rm -f "${0:A:h}/_rustup" "$ZSH_CACHE_DIR/rustup_version"
 
-  mkdir -p "${comp_file:h}"
-  (( ${fpath[(Ie)${comp_file:h}]} )) || fpath=("${comp_file:h}" $fpath)
-
-  if [[ ! -f "$comp_file" || ! -f "$ver_file" || "$ver" != "$(< "$ver_file")" ]]; then
-    rustup completions zsh >| "$comp_file"
-    echo "$ver" >| "$ver_file"
-  fi
-
-  declare -A _comps
-  autoload -Uz _rustup
-  _comps[rustup]=_rustup
-
-  unset ver ver_file comp_file
-fi
+(( ${fpath[(Ie)$ZSH/plugins/rust]} )) || {
+  fpath=("$ZSH/plugins/rust" $fpath)
+  source "$ZSH/plugins/rust/rust.plugin.zsh"
+}

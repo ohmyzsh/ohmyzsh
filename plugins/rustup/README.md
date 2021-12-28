@@ -1,9 +1,3 @@
 # rustup
 
-This plugin adds completion for [`rustup`](https://rustup.rs/), the toolchain installer for the Rust programming language.
-
-To use it, add `rustup` to the plugins array in your zshrc file:
-
-```zsh
-plugins=(... rustup)
-```
+**Deprecated: use the [`rust`](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/rust) plugin instead.**
