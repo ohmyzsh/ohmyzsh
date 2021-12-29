@@ -25,4 +25,7 @@ fi
 
 # Generate completion files in the background
 rustup completions zsh >| "$ZSH_CACHE_DIR/completions/_rustup" &|
-rustup completions zsh cargo >| "$ZSH_CACHE_DIR/completions/_cargo" &|
+cat >| "$ZSH_CACHE_DIR/completions/_cargo" <<'EOF'
+#compdef cargo
+source $(rustc +${${(z)$(rustup default)}[1]} --print sysroot)/share/zsh/site-functions/_cargo
+EOF
