@@ -44,6 +44,7 @@ Set `$apt_pref` and `$apt_upgr` to whatever command you want (before sourcing Oh
 | `ail`    | `sed -e 's/  */ /g' -e 's/ *//' \| cut -s -d ' ' -f 1 \| xargs sudo $apt_pref install` | Install all packages given on the command line while using only the first word of each line |
 | `ap`     | `sudo $apt_pref purge`                                                                 | Removes packages along with configuration files                                             |
 | `ar`     | `sudo $apt_pref remove`                                                                | Removes packages, keeps the configuration files                                             |
+| `aar`    | `sudo $apt_pref autoremove`                                                            | Removes packages installed automatically that are no longer needed                          |
 | `ads`    | `sudo apt-get dselect-upgrade`                                                         | Installs packages from list and removes all not in the list                                 |
 | `dia`    | `sudo dpkg -i ./*.deb`                                                                 | Install all .deb files in the current directory                                             |
 | `di`     | `sudo dpkg -i`                                                                         | Install all .deb files in the current directory                                             |
@@ -54,6 +55,7 @@ Set `$apt_pref` and `$apt_upgr` to whatever command you want (before sourcing Oh
 | Alias | Command                                                   |
 | ----- | --------------------------------------------------------- |
 | `aac` | `su -ls "$apt_pref autoclean" root`                       |
+| `aar` | `su -ls "$apt_pref autoremove" root`                      |
 | `ac`  | `su -ls "$apt_pref clean" root`                           |
 | `ad`  | `su -lc "$apt_pref update" root`                          |
 | `adg` | `su -lc "$apt_pref update && aptitude $apt_upgr" root`    |

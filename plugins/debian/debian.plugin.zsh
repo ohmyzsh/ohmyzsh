@@ -100,7 +100,7 @@ else
         print "$cmd"
         eval "$cmd"
     }
-    aar() {
+    function aar() {
         cmd="su -lc '$apt_pref -P autoremove $@' root"
         print "$cmd"
         eval "$cmd"
