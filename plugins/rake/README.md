@@ -13,25 +13,29 @@ plugins=(... rake)
 
 The plugin aliases the rake command so you can pass arguments when invoking rake tasks
 without having to escape the brackets, i.e., you can run
-```
+
+```sh
 rake namespace:task['argument']
 ```
+
 instead of having to do
-```
+
+```sh
 rake namespace:task\['argument'\]
 ```
 
-| Alias  | Command                        | Description                                   |
-|--------|--------------------------------|-----------------------------------------------|
-| rake   | `noglob rake`                  | Allows unescaped square brackets              |
-| brake  | `noglob bundle exec rake`      | Same as above but call rake using bundler     |
-| srake  | `noglob sudo rake`             | Same as rake but using sudo                   |
-| sbrake | `noglob sudo bundle exec rake` | Same as above but using both sudo and bundler |
+| Alias      | Command                        | Description                                   |
+| ---------- | ------------------------------ | --------------------------------------------- |
+| `rake`     | `noglob rake`                  | Allows unescaped square brackets              |
+| `bin/rake` | `noglob bin/rake`              | Same as above but using rake binstub          |
+| `brake`    | `noglob bundle exec rake`      | Same as above but call rake using bundler     |
+| `srake`    | `noglob sudo rake`             | Same as rake but using sudo                   |
+| `sbrake`   | `noglob sudo bundle exec rake` | Same as above but using both sudo and bundler |
 
 ## Jim Weirich
 
 The plugin also aliases `rake` to [`jimweirich`](https://github.com/jimweirich), author of Rake
 and big time contributor to the Ruby open source community. He passed away in 2014:
 
-> Thank you Jim for everything you contributed to the Ruby and open source community 
+> Thank you Jim for everything you contributed to the Ruby and open source community
 > over the years. We will miss you dearly. — [**@robbyrussell**](https://github.com/ohmyzsh/ohmyzsh/commit/598a9c6f990756386517d66b6bcf77e53791e905)

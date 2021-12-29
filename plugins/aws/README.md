@@ -14,6 +14,7 @@ plugins=(... aws)
 * `asp [<profile>]`: sets `$AWS_PROFILE` and `$AWS_DEFAULT_PROFILE` (legacy) to `<profile>`.
   It also sets `$AWS_EB_PROFILE` to `<profile>` for the Elastic Beanstalk CLI.
   Run `asp` without arguments to clear the profile.
+* `asp [<profile>] login`: If AWS SSO has been configured in your aws profile, it will run the `aws sso login` command following profile selection. 
 
 * `acp [<profile>]`: in addition to `asp` functionality, it actually changes the profile by
    assuming the role specified in the `<profile>` configuration. It supports MFA and sets

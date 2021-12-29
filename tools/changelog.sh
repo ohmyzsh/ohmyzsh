@@ -1,5 +1,8 @@
 #!/usr/bin/env zsh
 
+cd "$ZSH"
+setopt extendedglob
+
 ##############################
 # CHANGELOG SCRIPT CONSTANTS #
 ##############################
@@ -49,10 +52,15 @@ function parse-commit {
   #   make a breaking change
 
   function commit:type {
-    local type="$(sed -E 's/^([a-zA-Z_\-]+)(\(.+\))?!?: .+$/\1/' <<< "$1")"
+    local type
+
+    # Parse commit type from the subject
+    if [[ "$1" =~ '^([a-zA-Z_\-]+)(\(.+\))?!?: .+$' ]]; then
+      type="${match[1]}"
+    fi
 
     # If $type doesn't appear in $TYPES array mark it as 'other'
-    if [[ -n "${(k)TYPES[(i)$type]}" ]]; then
+    if [[ -n "$type" && -n "${(k)TYPES[(i)$type]}" ]]; then
       echo $type
     else
       echo other
@@ -63,17 +71,18 @@ function parse-commit {
     local scope
 
     # Try to find scope in "type(<scope>):" format
-    scope=$(sed -nE 's/^[a-zA-Z_\-]+\((.+)\)!?: .+$/\1/p' <<< "$1")
-    if [[ -n "$scope" ]]; then
-      echo "$scope"
+    if [[ "$1" =~ '^[a-zA-Z_\-]+\((.+)\)!?: .+$' ]]; then
+      echo "${match[1]}"
       return
     fi
 
     # If no scope found, try to find it in "<scope>:" format
-    # Make sure it's not a type before printing it
-    scope=$(sed -nE 's/^([a-zA-Z_\-]+): .+$/\1/p' <<< "$1")
-    if [[ -z "${(k)TYPES[(i)$scope]}" ]]; then
-      echo "$scope"
+    if [[ "$1" =~ '^([a-zA-Z_\-]+): .+$' ]]; then
+      scope="${match[1]}"
+      # Make sure it's not a type before printing it
+      if [[ -z "${(k)TYPES[(i)$scope]}" ]]; then
+        echo "$scope"
+      fi
     fi
   }
 
@@ -81,7 +90,11 @@ function parse-commit {
     # Only display the relevant part of the commit, i.e. if it has the format
     # type[(scope)!]: subject, where the part between [] is optional, only
     # displays subject. If it doesn't match the format, returns the whole string.
-    sed -E 's/^[a-zA-Z_\-]+(\(.+\))?!?: (.+)$/\2/' <<< "$1"
+    if [[ "$1" =~ '^[a-zA-Z_\-]+(\(.+\))?!?: (.+)$' ]]; then
+      echo "${match[2]}"
+    else
+      echo "$1"
+    fi
   }
 
   # Return subject if the body or subject match the breaking change format
@@ -114,15 +127,8 @@ function parse-commit {
     fi
   }
 
-  # Ignore commit if it is a merge commit
-  if [[ $(command git show -s --format=%p $1 | wc -w) -gt 1 ]]; then
-    return
-  fi
-
   # Parse commit with hash $1
-  local hash="$1" subject body warning rhash
-  subject="$(command git show -s --format=%s $hash)"
-  body="$(command git show -s --format=%b $hash)"
+  local hash="$1" subject="$2" body="$3" warning rhash
 
   # Commits following Conventional Commits (https://www.conventionalcommits.org/)
   # have the following format, where parts between [] are optional:
@@ -181,6 +187,12 @@ function display-release {
     return
   fi
 
+  # Get length of longest scope for padding
+  local max_scope=0
+  for hash in ${(k)scopes}; do
+    max_scope=$(( max_scope < ${#scopes[$hash]} ? ${#scopes[$hash]} : max_scope ))
+  done
+
   ##* Formatting functions
 
   # Format the hash according to output format
@@ -189,9 +201,9 @@ function display-release {
     #* Uses $hash from outer scope
     local hash="${1:-$hash}"
     case "$output" in
-    raw) printf "$hash" ;;
-    text) printf "\e[33m$hash\e[0m" ;; # red
-    md) printf "[\`$hash\`](https://github.com/ohmyzsh/ohmyzsh/commit/$hash)" ;;
+    raw) printf '%s' "$hash" ;;
+    text) printf '\e[33m%s\e[0m' "$hash" ;; # red
+    md) printf '[`%s`](https://github.com/ohmyzsh/ohmyzsh/commit/%s)' "$hash" ;;
     esac
   }
 
@@ -203,16 +215,16 @@ function display-release {
     case "$output" in
     raw)
       case "$level" in
-      1) printf "$header\n$(printf '%.0s=' {1..${#header}})\n\n" ;;
-      2) printf "$header\n$(printf '%.0s-' {1..${#header}})\n\n" ;;
-      *) printf "$header:\n\n" ;;
+      1) printf '%s\n%s\n\n' "$header" "$(printf '%.0s=' {1..${#header}})" ;;
+      2) printf '%s\n%s\n\n' "$header" "$(printf '%.0s-' {1..${#header}})" ;;
+      *) printf '%s:\n\n' "$header" ;;
       esac ;;
     text)
       case "$level" in
-      1|2) printf "\e[1;4m$header\e[0m\n\n" ;; # bold, underlined
-      *) printf "\e[1m$header:\e[0m\n\n" ;; # bold
+      1|2) printf '\e[1;4m%s\e[0m\n\n' "$header" ;; # bold, underlined
+      *) printf '\e[1m%s:\e[0m\n\n' "$header" ;; # bold
       esac ;;
-    md) printf "$(printf '%.0s#' {1..${level}}) $header\n\n" ;;
+    md) printf '%s %s\n\n' "$(printf '%.0s#' {1..${level}})" "$header" ;;
     esac
   }
 
@@ -220,18 +232,13 @@ function display-release {
     #* Uses $scopes (A) and $hash from outer scope
     local scope="${1:-${scopes[$hash]}}"
 
-    # Get length of longest scope for padding
-    local max_scope=0 padding=0
-    for hash in ${(k)scopes}; do
-      max_scope=$(( max_scope < ${#scopes[$hash]} ? ${#scopes[$hash]} : max_scope ))
-    done
-
     # If no scopes, exit the function
     if [[ $max_scope -eq 0 ]]; then
       return
     fi
 
     # Get how much padding is required for this scope
+    local padding=0
     padding=$(( max_scope < ${#scope} ? 0 : max_scope - ${#scope} ))
     padding="${(r:$padding:: :):-}"
 
@@ -243,8 +250,8 @@ function display-release {
 
     # Print [scope]
     case "$output" in
-    raw|md) printf "[$scope]${padding} " ;;
-    text) printf "[\e[38;5;9m$scope\e[0m]${padding} " ;; # red 9
+    raw|md) printf '[%s]%s ' "$scope" "$padding";;
+    text) printf '[\e[38;5;9m%s\e[0m]%s ' "$scope" "$padding";; # red 9
     esac
   }
 
@@ -257,7 +264,7 @@ function display-release {
     subject="${(U)subject:0:1}${subject:1}"
 
     case "$output" in
-    raw) printf "$subject" ;;
+    raw) printf '%s' "$subject" ;;
     # In text mode, highlight (#<issue>) and dim text between `backticks`
     text) sed -E $'s|#([0-9]+)|\e[32m#\\1\e[0m|g;s|`([^`]+)`|`\e[2m\\1\e[0m`|g' <<< "$subject" ;;
     # In markdown mode, link to (#<issue>) issues
@@ -270,8 +277,8 @@ function display-release {
     local type="${1:-${TYPES[$type]:-${(C)type}}}"
     [[ -z "$type" ]] && return 0
     case "$output" in
-    raw|md) printf "$type: " ;;
-    text) printf "\e[4m$type\e[24m: " ;; # underlined
+    raw|md) printf '%s: ' "$type" ;;
+    text) printf '\e[4m%s\e[24m: ' "$type" ;; # underlined
     esac
   }
 
@@ -285,15 +292,21 @@ function display-release {
     (( $#breaking != 0 )) || return 0
 
     case "$output" in
+    text) printf '\e[31m'; fmt:header "BREAKING CHANGES" 3 ;;
     raw) fmt:header "BREAKING CHANGES" 3 ;;
-    text|md) fmt:header "⚠ BREAKING CHANGES" 3 ;;
+    md) fmt:header "BREAKING CHANGES ⚠" 3 ;;
     esac
 
-    local hash subject
+    local hash message
+    local wrap_width=$(( (COLUMNS < 100 ? COLUMNS : 100) - 3 ))
     for hash message in ${(kv)breaking}; do
-      echo " - $(fmt:hash) $(fmt:scope)$(fmt:subject "${message}")"
-    done | sort
-    echo
+      # Format the BREAKING CHANGE message by word-wrapping it at maximum 100
+      # characters (use $COLUMNS if smaller than 100)
+      message="$(fmt -w $wrap_width <<< "$message")"
+      # Display hash and scope in their own line, and then the full message with
+      # blank lines as separators and a 3-space left padding
+      echo " - $(fmt:hash) $(fmt:scope)\n\n$(fmt:subject "$message" | sed 's/^/   /')\n"
+    done
   }
 
   function display:type {
@@ -377,7 +390,8 @@ function main {
   # Commit classification arrays
   local -A commits subjects scopes breaking reverts
   local truncate=0 read_commits=0
-  local hash version tag
+  local version tag
+  local hash refs subject body
 
   # Get the first version name:
   # 1) try tag-like version, or
@@ -389,19 +403,41 @@ function main {
     || version=$(command git symbolic-ref --quiet --short $until 2>/dev/null) \
     || version=$(command git rev-parse --short $until 2>/dev/null)
 
-  # Get commit list from $until commit until $since commit, or until root
-  # commit if $since is unset, in short hash form.
-  # --first-parent is used when dealing with merges: it only prints the
-  # merge commit, not the commits of the merged branch.
-  command git rev-list --first-parent --abbrev-commit --abbrev=7 ${since:+$since..}$until | while read hash; do
+  # Get commit list from $until commit until $since commit, or until root commit if $since is unset
+  local range=${since:+$since..}$until
+
+  # Git log options
+  # -z:             commits are delimited by null bytes
+  # --format:       [7-char hash]<field sep>[ref names]<field sep>[subject]<field sep>[body]
+  # --abbrev=7:     force commit hashes to be 7 characters long
+  # --no-merges:    merge commits are omitted
+  # --first-parent: commits from merged branches are omitted
+  local SEP="0mZmAgIcSeP"
+  local -a raw_commits
+  raw_commits=(${(0)"$(command git log -z \
+    --format="%h${SEP}%D${SEP}%s${SEP}%b" --abbrev=7 \
+    --no-merges --first-parent $range)"})
+
+  local raw_commit
+  local -a raw_fields
+  for raw_commit in $raw_commits; do
     # Truncate list on versions with a lot of commits
     if [[ -z "$since" ]] && (( ++read_commits > 35 )); then
       truncate=1
       break
     fi
 
+    # Read the commit fields (@ is needed to keep empty values)
+    eval "raw_fields=(\"\${(@ps:$SEP:)raw_commit}\")"
+    hash="${raw_fields[1]}"
+    refs="${raw_fields[2]}"
+    subject="${raw_fields[3]}"
+    body="${raw_fields[4]}"
+
     # If we find a new release (exact tag)
-    if tag=$(command git describe --exact-match --tags $hash 2>/dev/null); then
+    if [[ "$refs" = *tag:\ * ]]; then
+      # Parse tag name (needs: setopt extendedglob)
+      tag="${${refs##*tag: }%%,# *}"
       # Output previous release
       display-release
       # Reinitialize commit storage
@@ -415,7 +451,7 @@ function main {
       read_commits=1
     fi
 
-    parse-commit "$hash"
+    parse-commit "$hash" "$subject" "$body"
   done
 
   display-release
@@ -425,8 +461,6 @@ function main {
     echo
   fi
 }
-
-cd "$ZSH"
 
 # Use raw output if stdout is not a tty
 if [[ ! -t 1 && -z "$3" ]]; then
