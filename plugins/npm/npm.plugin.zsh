@@ -92,7 +92,7 @@ npm_toggle_install_uninstall() {
         ;;
       "npm i "*)
         BUFFER="${line/npm i/npm uninstall}"
-        (( CURSOR = CURSOR + 5 )) # i -> uninstall: 8 chars added
+        (( CURSOR = CURSOR + 8 )) # i -> uninstall: 8 chars added
         ;;
       *) continue ;;
     esac
