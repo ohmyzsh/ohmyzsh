@@ -50,4 +50,4 @@ alias pygrep='grep -nr --include="*.py"'
 alias ipython="python -c 'import IPython; IPython.terminal.ipapp.launch_new_instance()'"
 
 # Share local directory as a HTTP server
-alias pyserver="python -m SimpleHTTPServer"
+alias pyserver="python -m http.server"
