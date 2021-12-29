@@ -23,7 +23,7 @@ if parsed.scheme not in proxy_protocols:
 argv = [
     "nc",
     "-X",
-    proxy_protocols[parsed.scheme], # Supported protocols are 4 (SOCKS v.4), 5 (SOCKS v.5) and connect (HTTP proxy). Default SOCKS v.5 is used.
+    proxy_protocols[parsed.scheme], # Supported protocols are 4 (SOCKS v4), 5 (SOCKS v5) and connect (HTTP proxy). Default SOCKS v5 is used.
     "-x",
     parsed.netloc,  # proxy-host:proxy-port
     sys.argv[1],  # host
