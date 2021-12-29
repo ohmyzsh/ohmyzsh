@@ -52,9 +52,11 @@ if [[ $use_sudo -eq 1 ]]; then
     alias ai="sudo $apt_pref install"
     # Install all packages given on the command line while using only the first word of each line:
     # acs ... | ail
+
     alias ail="sed -e 's/  */ /g' -e 's/ *//' | cut -s -d ' ' -f 1 | xargs sudo $apt_pref install"
     alias ap="sudo $apt_pref purge"
     alias ar="sudo $apt_pref remove"
+    alias aar="sudo $apt_pref autoremove"
 
     # apt-get only
     alias ads="sudo apt-get dselect-upgrade"
@@ -98,7 +100,11 @@ else
         print "$cmd"
         eval "$cmd"
     }
-
+    aar() {
+        cmd="su -lc '$apt_pref -P autoremove $@' root"
+        print "$cmd"
+        eval "$cmd"
+    }
     # Install all .deb files in the current directory
     # Assumes glob_subst is off
     alias dia='su -lc "dpkg -i ./*.deb" root'
@@ -139,6 +145,7 @@ apt_pref_compdef ai  "install"
 apt_pref_compdef ail "install"
 apt_pref_compdef ap  "purge"
 apt_pref_compdef ar  "remove"
+apt_pref_compdef aar  "autoremove"
 apt_pref_compdef ads "dselect-upgrade"
 
 # Misc. #####################################################################
