@@ -82,7 +82,11 @@ zsh-pip-test-clean-packages() {
     fi
 }
 
-alias pip="noglob pip" # allows square brackets for pip command invocation
+if (( $+commands[pip3] && !$+commands[pip] )); then
+  alias pip="noglob pip3"
+else
+  alias pip="noglob pip"
+fi
 
 # Create requirements file
 alias pipreq="pip freeze > requirements.txt"

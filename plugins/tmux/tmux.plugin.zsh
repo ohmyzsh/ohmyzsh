@@ -46,6 +46,11 @@ else
   export ZSH_TMUX_TERM=$ZSH_TMUX_FIXTERM_WITHOUT_256COLOR
 fi
 
+# Handle $0 according to the standard:
+# https://zdharma-continuum.github.io/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html
+0="${${ZERO:-${0:#$ZSH_ARGZERO}}:-${(%):-%N}}"
+0="${${(M)0:#/*}:-$PWD/$0}"
+
 # Set the correct local config file to use.
 if [[ "$ZSH_TMUX_ITERM2" == "false" && -e "$ZSH_TMUX_CONFIG" ]]; then
   export ZSH_TMUX_CONFIG
@@ -76,7 +81,11 @@ function _zsh_tmux_plugin_run() {
     elif [[ -e "$ZSH_TMUX_CONFIG" ]]; then
       tmux_cmd+=(-f "$ZSH_TMUX_CONFIG")
     fi
-    $tmux_cmd new-session
+    if [[ -n "$ZSH_TMUX_DEFAULT_SESSION_NAME" ]]; then
+        $tmux_cmd new-session -s $ZSH_TMUX_DEFAULT_SESSION_NAME
+    else
+        $tmux_cmd new-session
+    fi
   fi
 
   if [[ "$ZSH_TMUX_AUTOQUIT" == "true" ]]; then

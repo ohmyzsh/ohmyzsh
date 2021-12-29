@@ -12,7 +12,7 @@ ZSH_THEME_FOSSIL_PROMPT_DIRTY=" %{$fg_bold[red]%}✖"
 # Text to display if the branch is clean
 ZSH_THEME_FOSSIL_PROMPT_CLEAN=" %{$fg_bold[green]%}✔"
 
-function fossil_prompt_info () {
+function fossil_prompt_info() {
   local _OUTPUT=`fossil branch 2>&1`
   local _STATUS=`echo $_OUTPUT | grep "use --repo"`
   if [ "$_STATUS" = "" ]; then
@@ -30,37 +30,6 @@ function fossil_prompt_info () {
       "$_EDITED_SYM"\
       "%{$reset_color%}"
   fi
-}
-
-function _fossil_get_command_list () {
-  fossil help -a | grep -v "Usage|Common|This is"
-}
-
-function _fossil () {
-  local context state state_descr line
-  typeset -A opt_args
-
-  _arguments \
-    '1: :->command'\
-    '2: :->subcommand'
-
-  case $state in
-    command)
-      local _OUTPUT=`fossil branch 2>&1 | grep "use --repo"`
-      if [ "$_OUTPUT" = "" ]; then
-        compadd `_fossil_get_command_list`
-      else
-        compadd clone init import help version
-      fi
-      ;;
-    subcommand)
-      if [ "$words[2]" = "help" ]; then
-        compadd `_fossil_get_command_list`
-      else
-        compcall -D
-      fi
-    ;;
-  esac
 }
 
 function _fossil_prompt () {
@@ -82,8 +51,5 @@ function _fossil_prompt () {
   fi
 }
 
-compdef _fossil fossil
-
 autoload -U add-zsh-hook
-
 add-zsh-hook precmd _fossil_prompt

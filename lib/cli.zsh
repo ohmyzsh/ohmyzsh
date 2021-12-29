@@ -26,8 +26,10 @@ function _omz {
     'help:Usage information'
     'plugin:Manage plugins'
     'pr:Manage Oh My Zsh Pull Requests'
+    'reload:Reload the current zsh session'
     'theme:Manage themes'
     'update:Update Oh My Zsh'
+    'version:Show the version'
   )
 
   if (( CURRENT == 2 )); then
@@ -35,7 +37,7 @@ function _omz {
   elif (( CURRENT == 3 )); then
     case "$words[2]" in
       changelog) local -a refs
-        refs=("${(@f)$(command git for-each-ref --format="%(refname:short):%(subject)" refs/heads refs/tags)}")
+        refs=("${(@f)$(cd "$ZSH"; command git for-each-ref --format="%(refname:short):%(subject)" refs/heads refs/tags)}")
         _describe 'command' refs ;;
       plugin) subcmds=(
         'disable:Disable plugin(s)'
@@ -66,10 +68,12 @@ function _omz {
 
         _describe 'plugin' valid_plugins ;;
       plugin::info)
-        local -aU plugins=("$ZSH"/plugins/*/{_*,*.plugin.zsh}(.N:h:t) "$ZSH_CUSTOM"/plugins/*/{_*,*.plugin.zsh}(.N:h:t))
+        local -aU plugins
+        plugins=("$ZSH"/plugins/*/{_*,*.plugin.zsh}(.N:h:t) "$ZSH_CUSTOM"/plugins/*/{_*,*.plugin.zsh}(.N:h:t))
         _describe 'plugin' plugins ;;
       theme::(set|use))
-        local -aU themes=("$ZSH"/themes/*.zsh-theme(.N:t:r) "$ZSH_CUSTOM"/**/*.zsh-theme(.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::))
+        local -aU themes
+        themes=("$ZSH"/themes/*.zsh-theme(.N:t:r) "$ZSH_CUSTOM"/**/*.zsh-theme(.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::))
         _describe 'theme' themes ;;
     esac
   elif (( CURRENT > 4 )); then
@@ -90,7 +94,8 @@ function _omz {
         # NOTE: $(( CURRENT - 1 )) is the last plugin argument completely passed, i.e. that which
         # has a space after them. This is to avoid removing plugins partially passed, which makes
         # the completion not add a space after the completed plugin.
-        local -a args=(${words[4,$(( CURRENT - 1))]})
+        local -a args
+        args=(${words[4,$(( CURRENT - 1))]})
         valid_plugins=(${valid_plugins:|args})
 
         _describe 'plugin' valid_plugins ;;
@@ -159,8 +164,10 @@ Available commands:
   changelog           Print the changelog
   plugin <command>    Manage plugins
   pr     <command>    Manage Oh My Zsh Pull Requests
+  reload              Reload the current zsh session
   theme  <command>    Manage themes
   update              Update Oh My Zsh
+  version             Show the version
 
 EOF
 }
@@ -168,9 +175,12 @@ EOF
 function _omz::changelog {
   local version=${1:-HEAD} format=${3:-"--text"}
 
-  if ! command git -C "$ZSH" show-ref --verify refs/heads/$version &>/dev/null && \
-    ! command git -C "$ZSH" show-ref --verify refs/tags/$version &>/dev/null && \
-    ! command git -C "$ZSH" rev-parse --verify "${version}^{commit}" &>/dev/null; then
+  if (
+    cd "$ZSH"
+    ! command git show-ref --verify refs/heads/$version && \
+    ! command git show-ref --verify refs/tags/$version && \
+    ! command git rev-parse --verify "${version}^{commit}"
+  ) &>/dev/null; then
     cat >&2 <<EOF
 Usage: omz changelog [version]
 
@@ -212,7 +222,7 @@ function _omz::plugin::disable {
   fi
 
   # Check that plugin is in $plugins
-  local -a dis_plugins=()
+  local -a dis_plugins
   for plugin in "$@"; do
     if [[ ${plugins[(Ie)$plugin]} -eq 0 ]]; then
       _omz::log warn "plugin '$plugin' is not enabled."
@@ -266,9 +276,10 @@ multi == 1 && length(\$0) > 0 {
 { print \$0 }
 "
 
-  awk "$awk_script" ~/.zshrc > ~/.zshrc.new \
-  && command mv -f ~/.zshrc ~/.zshrc.bck \
-  && command mv -f ~/.zshrc.new ~/.zshrc
+  local zdot="${ZDOTDIR:-$HOME}"
+  awk "$awk_script" "$zdot/.zshrc" > "$zdot/.zshrc.new" \
+  && command mv -f "$zdot/.zshrc" "$zdot/.zshrc.bck" \
+  && command mv -f "$zdot/.zshrc.new" "$zdot/.zshrc"
 
   # Exit if the new .zshrc file wasn't created correctly
   [[ $? -eq 0 ]] || {
@@ -278,10 +289,10 @@ multi == 1 && length(\$0) > 0 {
   }
 
   # Exit if the new .zshrc file has syntax errors
-  if ! zsh -n ~/.zshrc; then
-    _omz::log error "broken syntax in ~/.zshrc. Rolling back changes..."
-    command mv -f ~/.zshrc ~/.zshrc.new
-    command mv -f ~/.zshrc.bck ~/.zshrc
+  if ! zsh -n "$zdot/.zshrc"; then
+    _omz::log error "broken syntax in '"${zdot/#$HOME/\~}/.zshrc"'. Rolling back changes..."
+    command mv -f "$zdot/.zshrc" "$zdot/.zshrc.new"
+    command mv -f "$zdot/.zshrc.bck" "$zdot/.zshrc"
     return 1
   fi
 
@@ -301,7 +312,7 @@ function _omz::plugin::enable {
   fi
 
   # Check that plugin is not in $plugins
-  local -a add_plugins=()
+  local -a add_plugins
   for plugin in "$@"; do
     if [[ ${plugins[(Ie)$plugin]} -ne 0 ]]; then
       _omz::log warn "plugin '$plugin' is already enabled."
@@ -341,9 +352,10 @@ multi == 1 && /^[^#]*\)/ {
 { print \$0 }
 "
 
-  awk "$awk_script" ~/.zshrc > ~/.zshrc.new \
-  && command mv -f ~/.zshrc ~/.zshrc.bck \
-  && command mv -f ~/.zshrc.new ~/.zshrc
+  local zdot="${ZDOTDIR:-$HOME}"
+  awk "$awk_script" "$zdot/.zshrc" > "$zdot/.zshrc.new" \
+  && command mv -f "$zdot/.zshrc" "$zdot/.zshrc.bck" \
+  && command mv -f "$zdot/.zshrc.new" "$zdot/.zshrc"
 
   # Exit if the new .zshrc file wasn't created correctly
   [[ $? -eq 0 ]] || {
@@ -353,10 +365,10 @@ multi == 1 && /^[^#]*\)/ {
   }
 
   # Exit if the new .zshrc file has syntax errors
-  if ! zsh -n ~/.zshrc; then
-    _omz::log error "broken syntax in ~/.zshrc. Rolling back changes..."
-    command mv -f ~/.zshrc ~/.zshrc.new
-    command mv -f ~/.zshrc.bck ~/.zshrc
+  if ! zsh -n "$zdot/.zshrc"; then
+    _omz::log error "broken syntax in '"${zdot/#$HOME/\~}/.zshrc"'. Rolling back changes..."
+    command mv -f "$zdot/.zshrc" "$zdot/.zshrc.new"
+    command mv -f "$zdot/.zshrc.bck" "$zdot/.zshrc"
     return 1
   fi
 
@@ -422,10 +434,8 @@ function _omz::plugin::load {
     return 1
   fi
 
-  local plugins=("$@")
   local plugin base has_completion=0
-
-  for plugin in $plugins; do
+  for plugin in "$@"; do
     if [[ -d "$ZSH_CUSTOM/plugins/$plugin" ]]; then
       base="$ZSH_CUSTOM/plugins/$plugin"
     elif [[ -d "$ZSH/plugins/$plugin" ]]; then
@@ -445,9 +455,9 @@ function _omz::plugin::load {
     fi
 
     # Check if it has completion to reload compinit
-    if [[ -f "$base/_$plugin" ]]; then
-      has_completion=1
-    fi
+    local -a comp_files
+    comp_files=($base/_*(N))
+    has_completion=$(( $#comp_files > 0 ))
 
     # Load the plugin
     if [[ -f "$base/$plugin.plugin.zsh" ]]; then
@@ -598,6 +608,16 @@ function _omz::pr::test {
   )
 }
 
+function _omz::reload {
+  # Delete current completion cache
+  command rm -f $_comp_dumpfile $ZSH_COMPDUMP
+
+  # Old zsh versions don't have ZSH_ARGZERO
+  local zsh="${ZSH_ARGZERO:-${functrace[-1]%:*}}"
+  # Check whether to run a login shell
+  [[ "$zsh" = -* || -o login ]] && exec -l "${zsh#-}" || exec "$zsh"
+}
+
 function _omz::theme {
   (( $# > 0 && $+functions[_omz::theme::$1] )) || {
     cat >&2 <<EOF
@@ -630,17 +650,23 @@ function _omz::theme::list {
     return
   fi
 
+  # Print theme in use
+  if [[ -n "$ZSH_THEME" ]]; then
+    print -Pn "%U%BCurrent theme%b%u: "
+    [[ $ZSH_THEME = random ]] && echo "$RANDOM_THEME (via random)" || echo "$ZSH_THEME"
+    echo
+  fi
+
+  # Print custom themes if there are any
   if (( ${#custom_themes} )); then
     print -P "%U%BCustom themes%b%u:"
     print -l ${(q-)custom_themes} | column -x
+    echo
   fi
 
-  if (( ${#builtin_themes} )); then
-    (( ${#custom_themes} )) && echo # add a line of separation
-
-    print -P "%U%BBuilt-in themes%b%u:"
-    print -l ${(q-)builtin_themes} | column -x
-  fi
+  # Print built-in themes
+  print -P "%U%BBuilt-in themes%b%u:"
+  print -l ${(q-)builtin_themes} | column -x
 }
 
 function _omz::theme::set {
@@ -674,17 +700,18 @@ END {
 }
 '
 
-  awk "$awk_script" ~/.zshrc > ~/.zshrc.new \
+  local zdot="${ZDOTDIR:-$HOME}"
+  awk "$awk_script" "$zdot/.zshrc" > "$zdot/.zshrc.new" \
   || {
     # Prepend ZSH_THEME= line to .zshrc if it doesn't exist
     cat <<EOF
 ZSH_THEME="$1" # set by \`omz\`
 
 EOF
-    cat ~/.zshrc
-  } > ~/.zshrc.new \
-  && command mv -f ~/.zshrc ~/.zshrc.bck \
-  && command mv -f ~/.zshrc.new ~/.zshrc
+    cat "$zdot/.zshrc"
+  } > "$zdot/.zshrc.new" \
+  && command mv -f "$zdot/.zshrc" "$zdot/.zshrc.bck" \
+  && command mv -f "$zdot/.zshrc.new" "$zdot/.zshrc"
 
   # Exit if the new .zshrc file wasn't created correctly
   [[ $? -eq 0 ]] || {
@@ -694,10 +721,10 @@ EOF
   }
 
   # Exit if the new .zshrc file has syntax errors
-  if ! zsh -n ~/.zshrc; then
-    _omz::log error "broken syntax in ~/.zshrc. Rolling back changes..."
-    command mv -f ~/.zshrc ~/.zshrc.new
-    command mv -f ~/.zshrc.bck ~/.zshrc
+  if ! zsh -n "$zdot/.zshrc"; then
+    _omz::log error "broken syntax in '"${zdot/#$HOME/\~}/.zshrc"'. Rolling back changes..."
+    command mv -f "$zdot/.zshrc" "$zdot/.zshrc.new"
+    command mv -f "$zdot/.zshrc.bck" "$zdot/.zshrc"
     return 1
   fi
 
@@ -727,6 +754,10 @@ function _omz::theme::use {
     _omz::log error "%B$1%b theme not found"
     return 1
   fi
+
+  # Update theme settings
+  ZSH_THEME="$1"
+  [[ $1 = random ]] || unset RANDOM_THEME
 }
 
 function _omz::update {
@@ -734,9 +765,9 @@ function _omz::update {
 
   # Run update script
   if [[ "$1" != --unattended ]]; then
-    ZSH="$ZSH" zsh -f "$ZSH/tools/upgrade.sh" --interactive
+    ZSH="$ZSH" zsh -f "$ZSH/tools/upgrade.sh" --interactive || return $?
   else
-    ZSH="$ZSH" zsh -f "$ZSH/tools/upgrade.sh"
+    ZSH="$ZSH" zsh -f "$ZSH/tools/upgrade.sh" || return $?
   fi
 
   # Update last updated file
@@ -752,4 +783,25 @@ function _omz::update {
     # Check whether to run a login shell
     [[ "$zsh" = -* || -o login ]] && exec -l "${zsh#-}" || exec "$zsh"
   fi
+}
+
+function _omz::version {
+  (
+    cd "$ZSH"
+
+    # Get the version name:
+    # 1) try tag-like version
+    # 2) try name-rev
+    # 3) try branch name
+    local version
+    version=$(command git describe --tags HEAD 2>/dev/null) \
+    || version=$(command git name-rev --no-undefined --name-only --exclude="remotes/*" HEAD 2>/dev/null) \
+    || version=$(command git symbolic-ref --quiet --short HEAD 2>/dev/null)
+
+    # Get short hash for the current HEAD
+    local commit=$(command git rev-parse --short HEAD 2>/dev/null)
+
+    # Show version and commit hash
+    printf "%s (%s)\n" "$version" "$commit"
+  )
 }

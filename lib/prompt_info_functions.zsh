@@ -30,7 +30,7 @@ function rvm_prompt_info() {
   local rvm_prompt
   rvm_prompt=$($HOME/.rvm/bin/rvm-prompt ${=ZSH_THEME_RVM_PROMPT_OPTIONS} 2>/dev/null)
   [[ -z "${rvm_prompt}" ]] && return 1
-  echo "${ZSH_THEME_RUBY_PROMPT_PREFIX}${rvm_prompt}${ZSH_THEME_RUBY_PROMPT_SUFFIX}"
+  echo "${ZSH_THEME_RUBY_PROMPT_PREFIX}${rvm_prompt:gs/%/%%}${ZSH_THEME_RUBY_PROMPT_SUFFIX}"
 }
 
 ZSH_THEME_RVM_PROMPT_OPTIONS="i v g"
