@@ -46,35 +46,34 @@ alias pygrep='grep -nr --include="*.py"'
 # Run proper IPython regarding current virtualenv (if any)
 alias ipython="python -c 'import IPython; IPython.terminal.ipapp.launch_new_instance()'"
 
-# Activate a python virtual environment called 'venv'
-# Alternatively, activate a virtual environment with a specific name
+## venv utilities
+
+# Activate a the python virtual environment specified.
+# If none specified, use 'venv'.
 function vrun() {
-    if [[ ${1} == "" ]]; then
-        local name="venv";
-    else
-        local name="${1}";
-    fi
-    local loc=$(realpath "${name}");
-    if [[ -d "${loc}/" ]]; then
-        if [[ -f "${loc}/bin/activate" ]]; then
-            . "${loc}/bin/activate" && echo "Activated virtual environment ${name}";
-        else
-            echo "${loc} is not a proper virtual environment. Aborting" && return 1;
-        fi
-    else
-        echo "No ${name}/ subdirectory in ${PWD}. Aborting" && return 1;
-    fi
+  local name="${1:-venv}"
+  local venvpath="${name:P}"
+
+  if [[ ! -d "$venvpath" ]]; then
+    echo >&2 "Error: no such venv in current directory: $name"
+    return 1
+  fi
+
+  if [[ ! -f "${venvpath}/bin/activate" ]]; then
+    echo >&2 "Error: '${name}' is not a proper virtual environment"
+    return 1
+  fi
+
+  . "${venvpath}/bin/activate" || return $?
+  echo "Activated virtual environment ${name}"
 }
 
-# Create a new virtual environment
-# The default name is 'venv'
-# But it can be customized
+# Create a new virtual environment, with default name 'venv'.
 function mkv() {
-    if [[ ${1} == "" ]]; then
-        local name="venv";
-    else
-        local name="${1}";
-    fi
-    local loc=$(realpath "${name}");
-    python3 -m venv "${name}" && echo "Created ${loc}" && vrun "${name}";
+  local name="${1:-venv}"
+  local venvpath="${name:P}"
+
+  python3 -m venv "${name}" || return
+  echo >&2 "Created venv in '${venvpath}'"
+  vrun "${name}"
 }
