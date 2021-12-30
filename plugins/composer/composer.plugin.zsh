@@ -45,8 +45,10 @@ alias co='composer outdated'
 alias cod='composer outdated --direct'
 alias cr='composer require'
 alias crm='composer remove'
+alias cs='composer show'
 alias csu='composer self-update'
 alias cu='composer update'
+alias cuh='composer update --working-dir=$(composer config -g home)'
 
 
 ## If Composer not found, try to add known directories to $PATH

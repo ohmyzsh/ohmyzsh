@@ -164,7 +164,7 @@ _get_build_targets() {
       ;;
   esac
   completions=(${$(_bazel_b query "kind(\"${rule_re}\", ${pkg}:all)" 2>/dev/null)##*:})
-  if ( (( ${#completions} > 0 )) && [[ $target_type != run ]] ); then
+  if ( (( ${#completions} > 0 )) && [[ $target_type != bin ]] ); then
     completions+=(all)
   fi
   echo ${completions[*]}
