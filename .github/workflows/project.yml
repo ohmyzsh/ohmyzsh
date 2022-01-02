@@ -17,7 +17,7 @@ jobs:
           PROJECT_NUMBER: "1"
         run: |
           # Get Project data
-          GITHUB_TOKEN=$GITHUB_TOKEN gh api graphql -f query='
+          gh api graphql -f query='
             query($org: String!, $number: Int!) {
               organization(login: $org){
                 projectNext(number: $number) {
