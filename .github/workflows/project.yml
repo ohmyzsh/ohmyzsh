@@ -12,11 +12,12 @@ jobs:
     steps:
       - name: Read project data
         env:
+          GITHUB_TOKEN: ${{ secrets.PROJECT_TOKEN }}
           ORGANIZATION: ohmyzsh
           PROJECT_NUMBER: "1"
         run: |
           # Get Project data
-          gh api graphql -f query='
+          GITHUB_TOKEN=$GITHUB_TOKEN gh api graphql -f query='
             query($org: String!, $number: Int!) {
               organization(login: $org){
                 projectNext(number: $number) {
@@ -41,6 +42,7 @@ jobs:
 
       - name: Add to project
         env:
+          GITHUB_TOKEN: ${{ secrets.PROJECT_TOKEN }}
           ISSUE_ID: ${{ github.event.issue.node_id }}
           PR_ID: ${{ github.event.pull_request.node_id }}
         run: |
@@ -58,6 +60,8 @@ jobs:
 
       - name: Classify Pull Request
         if: github.event_name == 'pull_request_target'
+        env:
+          GITHUB_TOKEN: ${{ secrets.PROJECT_TOKEN }}
         run: |
           gh pr view ${{ github.event.pull_request.number }} --json files --jq '.files.[].path' | awk -F/ '
             /^plugins\// {
@@ -87,6 +91,8 @@ jobs:
 
       - name: Fill Pull Request fields in project
         if: github.event_name == 'pull_request_target'
+        env:
+          GITHUB_TOKEN: ${{ secrets.PROJECT_TOKEN }}
         run: |
           gh api graphql -f query='
             mutation (
