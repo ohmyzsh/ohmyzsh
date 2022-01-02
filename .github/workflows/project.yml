@@ -10,15 +10,9 @@ jobs:
     name: Add to project
     runs-on: ubuntu-latest
     steps:
-      - name: Generate token
-        id: generate_token
-        uses: tibdex/github-app-token@36464acb844fc53b9b8b2401da68844f6b05ebb0
-        with:
-          app_id: ${{ secrets.OHMYZSH_BOT_APP_ID }}
-          private_key: ${{ secrets.OHMYZSH_BOT_APP_PEM }}
       - name: Read project data
         env:
-          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+          GITHUB_TOKEN: ${{ secrets.PROJECT_TOKEN }}
           ORGANIZATION: ohmyzsh
           PROJECT_NUMBER: "1"
         run: |
@@ -45,9 +39,10 @@ jobs:
           PLUGIN_FIELD_ID=$(jq '.data.organization.projectNext.fields.nodes[] | select(.name == "Plugin") | .id' project_data.json)
           THEME_FIELD_ID=$(jq '.data.organization.projectNext.fields.nodes[] | select(.name == "Theme") | .id' project_data.json)
           EOF
+
       - name: Add to project
         env:
-          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+          GITHUB_TOKEN: ${{ secrets.PROJECT_TOKEN }}
           ISSUE_ID: ${{ github.event.issue.node_id }}
           PR_ID: ${{ github.event.pull_request.node_id }}
         run: |
@@ -62,10 +57,11 @@ jobs:
           ' -f project=$PROJECT_ID -f item=${ISSUE_ID:-$PR_ID} --jq '.data.addProjectNextItem.projectNextItem.id')"
 
           echo "ITEM_ID=$item_id" >> $GITHUB_ENV
+
       - name: Classify Pull Request
         if: github.event_name == 'pull_request_target'
         env:
-          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+          GITHUB_TOKEN: ${{ secrets.PROJECT_TOKEN }}
         run: |
           gh pr view ${{ github.event.pull_request.number }} --json files --jq '.files.[].path' | awk -F/ '
             /^plugins\// {
@@ -92,10 +88,11 @@ jobs:
           if [[ $(wc -l < themes.list) = 1 ]]; then
             echo "THEME=$(cat themes.list)" >> $GITHUB_ENV
           fi
+
       - name: Fill Pull Request fields in project
         if: github.event_name == 'pull_request_target'
         env:
-          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+          GITHUB_TOKEN: ${{ secrets.PROJECT_TOKEN }}
         run: |
           gh api graphql -f query='
             mutation (
