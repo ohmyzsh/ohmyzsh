@@ -16,6 +16,8 @@ jobs:
           ORGANIZATION: ohmyzsh
           PROJECT_NUMBER: "1"
         run: |
+          gh auth login --with-token ${{ env.GITHUB_TOKEN }}
+
           # Get Project data
           gh api graphql -f query='
             query($org: String!, $number: Int!) {
