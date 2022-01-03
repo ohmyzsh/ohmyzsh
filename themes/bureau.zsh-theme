@@ -24,59 +24,58 @@ bureau_git_branch () {
 }
 
 bureau_git_status() {
-  local _STATUS _INDEX
+  local result gitstatus
 
   # check status of files
-  _INDEX=$(command git status --porcelain 2> /dev/null)
-  if [[ -n "$_INDEX" ]]; then
-    if $(echo "$_INDEX" | command grep -q '^[AMRD]. '); then
-      _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_STAGED"
+  gitstatus=$(command git status --porcelain -b 2> /dev/null)
+  if [[ -n "$gitstatus" ]]; then
+    if $(echo "$gitstatus" | command grep -q '^[AMRD]. '); then
+      result+="$ZSH_THEME_GIT_PROMPT_STAGED"
     fi
-    if $(echo "$_INDEX" | command grep -q '^.[MTD] '); then
-      _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_UNSTAGED"
+    if $(echo "$gitstatus" | command grep -q '^.[MTD] '); then
+      result+="$ZSH_THEME_GIT_PROMPT_UNSTAGED"
     fi
-    if $(echo "$_INDEX" | command grep -q -E '^\?\? '); then
-      _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_UNTRACKED"
+    if $(echo "$gitstatus" | command grep -q -E '^\?\? '); then
+      result+="$ZSH_THEME_GIT_PROMPT_UNTRACKED"
     fi
-    if $(echo "$_INDEX" | command grep -q '^UU '); then
-      _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_UNMERGED"
+    if $(echo "$gitstatus" | command grep -q '^UU '); then
+      result+="$ZSH_THEME_GIT_PROMPT_UNMERGED"
     fi
   else
-    _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_CLEAN"
+    result+="$ZSH_THEME_GIT_PROMPT_CLEAN"
   fi
 
   # check status of local repository
-  _INDEX=$(command git status --porcelain -b 2> /dev/null)
-  if $(echo "$_INDEX" | command grep -q '^## .*ahead'); then
-    _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_AHEAD"
+  if $(echo "$gitstatus" | command grep -q '^## .*ahead'); then
+    result+="$ZSH_THEME_GIT_PROMPT_AHEAD"
   fi
-  if $(echo "$_INDEX" | command grep -q '^## .*behind'); then
-    _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_BEHIND"
+  if $(echo "$gitstatus" | command grep -q '^## .*behind'); then
+    result+="$ZSH_THEME_GIT_PROMPT_BEHIND"
   fi
-  if $(echo "$_INDEX" | command grep -q '^## .*diverged'); then
-    _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_DIVERGED"
+  if $(echo "$gitstatus" | command grep -q '^## .*diverged'); then
+    result+="$ZSH_THEME_GIT_PROMPT_DIVERGED"
   fi
 
   if $(command git rev-parse --verify refs/stash &> /dev/null); then
-    _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_STASHED"
+    result+="$ZSH_THEME_GIT_PROMPT_STASHED"
   fi
 
-  echo $_STATUS
+  echo $result
 }
 
 bureau_git_prompt() {
-  local branch=$(bureau_git_branch)
-  local status=$(bureau_git_status)
+  local gitbranch=$(bureau_git_branch)
+  local gitstatus=$(bureau_git_status)
   local info
 
-  if [[ -z "${branch}" ]]; then
+  if [[ -z "$gitbranch" ]]; then
     return
   fi
 
-  info="${branch:gs/%/%%}"
+  info="${gitbranch:gs/%/%%}"
 
-  if [[ -n "${status}" ]]; then
-    info+=" $status"
+  if [[ -n "$gitstatus" ]]; then
+    info+=" $gitstatus"
   fi
 
   echo "${ZSH_THEME_GIT_PROMPT_PREFIX}${info}${ZSH_THEME_GIT_PROMPT_SUFFIX}"
