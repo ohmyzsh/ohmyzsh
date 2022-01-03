@@ -43,8 +43,7 @@ jobs:
 
       - name: Add to project
         env:
-          ISSUE_ID: ${{ github.event.issue.node_id }}
-          PR_ID: ${{ github.event.pull_request.node_id }}
+          ISSUE_OR_PR_ID: ${{ github.event.issue.node_id || github.event.pull_request.node_id }}
         run: |
           item_id="$(gh api graphql -f query='
             mutation($project: ID!, $item: ID!) {
@@ -54,7 +53,7 @@ jobs:
                 }
               }
             }
-          ' -f project=$PROJECT_ID -f item=${ISSUE_ID:-$PR_ID} --jq '.data.addProjectNextItem.projectNextItem.id')"
+          ' -f project=$PROJECT_ID -f item=$ISSUE_OR_PR_ID --jq '.data.addProjectNextItem.projectNextItem.id')"
 
           echo "ITEM_ID=$item_id" >> $GITHUB_ENV
 
