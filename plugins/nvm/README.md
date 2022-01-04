@@ -17,7 +17,9 @@ where you installed nvm.
 These settings should go in your zshrc file, before Oh My Zsh is sourced:
 
 - **`NVM_HOMEBREW`**: if you installed nvm via Homebrew, in a directory other than `/usr/local/opt/nvm`, you
-  can set `NVM_HOMEBREW` to be the directory where you installed it.
+  can set `NVM_HOMEBREW` to be the directory where you installed it. For example, on Apple Silicon-based Macs,
+  [Homebrew is installed in `/opt/homebrew`](https://docs.brew.sh/Installation). To get the directory where
+  nvm has been installed, regardless of chip architecture, use `NVM_HOMEBREW=$(brew --prefix nvm)`.
 
 - **`NVM_LAZY`**: if you want the plugin to defer the load of nvm to speed-up the start of your zsh session,
   set `NVM_LAZY` to `1`. This will use the `--no-use` parameter when loading nvm, and will create a function

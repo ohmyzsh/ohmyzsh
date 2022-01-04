@@ -21,7 +21,7 @@
 #
 # Author: Konstantin Lepa <konstantin.lepa@gmail.com>
 
-"""ANSII Color formatting for output in terminal."""
+"""ANSI Color formatting for output in terminal."""
 
 from __future__ import print_function
 import os

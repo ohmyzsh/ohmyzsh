@@ -39,3 +39,4 @@ The plugin also supports the following:
 | `ZSH_TMUX_FIXTERM_WITH_256COLOR`    | `$TERM` to use for 256-color terminals (default: `screen-256color`            |
 | `ZSH_TMUX_CONFIG`                   | Set the configuration path (default: `$HOME/.tmux.conf`)                      |
 | `ZSH_TMUX_UNICODE`                  | Set `tmux -u` option to support unicode                                       |
+| `ZSH_TMUX_DEFAULT_SESSION_NAME`     | Set tmux default session name when autostart is enabled                       |

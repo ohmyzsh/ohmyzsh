@@ -32,16 +32,21 @@ plugins=(... vi-mode)
 - `MODE_INDICATOR`: controls the string displayed when the shell is in normal mode.
   See [Mode indicator](#mode-indicator) for details.
 
-## Mode indicator
+- `INSERT_MODE_INDICATOR`: controls the string displayed when the shell is in insert mode.
+  See [Mode indicator](#mode-indicator) for details.
+
+## Mode indicators
 
 *Normal mode* is indicated with a red `<<<` mark at the right prompt, when it
-hasn't been defined by theme.
+hasn't been defined by theme, *Insert mode* is not displayed by default.
 
-You can change this indicator by setting the `MODE_INDICATOR` variable. This setting
-supports Prompt Expansion sequences. For example:
+You can change these indicators by setting the `MODE_INDICATOR` (*Normal mode*) and
+`INSERT_MODE_INDICATORS` (*Insert mode*) variables.
+This settings support Prompt Expansion sequences. For example:
 
 ```zsh
-MODE_INDICATOR="%F{yellow}+%f"
+MODE_INDICATOR="%F{white}+%f"
+INSERT_MODE_INDICATOR="%F{yellow}+%f"
 ```
 
 You can also use the `vi_mode_prompt_info` function in your prompt, which will display
@@ -64,7 +69,7 @@ NOTE: some of these key bindings are set by zsh by default when using a vi-mode 
 
 - `vv`     : Edit current command line in Vim
 
-NOTE: this used to be bound to `v`. That is now the default (`visual-mode`)
+NOTE: this used to be bound to `v`. That is now the default (`visual-mode`).
 
 ### Movement
 
@@ -107,3 +112,21 @@ NOTE: this used to be bound to `v`. That is now the default (`visual-mode`)
 - `R`           : Enter replace mode: Each character replaces existing one
 - `x`           : Delete `count` characters under and after the cursor
 - `X`           : Delete `count` characters before the cursor
+
+## Known issues
+
+### Low `$KEYTIMEOUT`
+
+A low `$KEYTIMEOUT` value (< 15) means that key bindings that need multiple characters,
+like `vv`, will be very difficult to trigger. `$KEYTIMEOUT` controls the number of
+milliseconds that must pass before a key press is read and the appropriate key binding
+is triggered. For multi-character key bindings, the key presses need to happen before
+the timeout is reached, so on low timeouts the key press happens too slow, and therefore
+another key binding is triggered.
+
+We recommend either setting `$KEYTIMEOUT` to a higher value, or remapping the key bindings
+that you want to trigger to a keyboard sequence. For example:
+
+```zsh
+bindkey -M vicmd 'V' edit-command-line # this remaps `vv` to `V` (but overrides `visual-mode`)
+```

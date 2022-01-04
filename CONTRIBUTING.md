@@ -202,7 +202,7 @@ type(scope)!: subject
     feat(archlinux): add support for aura AUR helper (#9467)
     ```
 
-  - Formatted inline code by using backticks: the text inbetween backticks will also be highlighted by
+  - Formatted inline code by using backticks: the text between backticks will also be highlighted by
     the changelog tool:
     ```
     feat(shell-proxy): enable unexported `DEFAULT_PROXY` setting (#9774)

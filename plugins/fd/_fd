@@ -1,83 +1,268 @@
 #compdef fd fdfind
 
+##
+# zsh completion function for fd
+#
+# Based on ripgrep completion function.
+# Originally based on code from the zsh-users project — see copyright notice
+# below.
+
 autoload -U is-at-least
 
 _fd() {
-    typeset -A opt_args
-    typeset -a _arguments_options
-    local ret=1
+  local curcontext="$curcontext" no='!' ret=1
+  local -a context line state state_descr _arguments_options fd_types fd_args
+  local -A opt_args
 
-    if is-at-least 5.2; then
-        _arguments_options=(-s -S -C)
-    else
-        _arguments_options=(-s -C)
-    fi
+  if is-at-least 5.2; then
+    _arguments_options=( -s -S )
+  else
+    _arguments_options=( -s )
+  fi
 
-    local context curcontext="$curcontext" state line
-    _arguments "${_arguments_options[@]}" \
-'-d+[Set maximum search depth (default: none)]' \
-'--max-depth=[Set maximum search depth (default: none)]' \
-'--maxdepth=[See --max-depth]' \
-'*-t+[Filter by type: file (f), directory (d), symlink (l),
-executable (x), empty (e)]: :(f file d directory l symlink x executable e empty)' \
-'*--type=[Filter by type: file (f), directory (d), symlink (l),
-executable (x), empty (e)]: :(f file d directory l symlink x executable e empty)' \
-'*-e+[Filter by file extension]' \
-'*--extension=[Filter by file extension]' \
-'-x+[Execute a command for each search result]' \
-'--exec=[Execute a command for each search result]' \
-'(-x --exec)-X+[Execute a command with all search results at once]' \
-'(-x --exec)--exec-batch=[Execute a command with all search results at once]' \
-'*-E+[Exclude entries that match the given glob pattern]' \
-'*--exclude=[Exclude entries that match the given glob pattern]' \
-'*--ignore-file=[Add a custom ignore-file in .gitignore format]' \
-'-c+[When to use colors: never, *auto*, always]: :(never auto always)' \
-'--color=[When to use colors: never, *auto*, always]: :(never auto always)' \
-'-j+[Set number of threads to use for searching & executing]' \
-'--threads=[Set number of threads to use for searching & executing]' \
-'*-S+[Limit results based on the size of files.]' \
-'*--size=[Limit results based on the size of files.]' \
-'--max-buffer-time=[the time (in ms) to buffer, before streaming to the console]' \
-'--changed-within=[Filter by file modification time (newer than)]' \
-'--changed-before=[Filter by file modification time (older than)]' \
-'*--search-path=[(hidden)]' \
-'-H[Search hidden files and directories]' \
-'--hidden[Search hidden files and directories]' \
-'-I[Do not respect .(git|fd)ignore files]' \
-'--no-ignore[Do not respect .(git|fd)ignore files]' \
-'--no-ignore-vcs[Do not respect .gitignore files]' \
-'*-u[Alias for no-ignore and/or hidden]' \
-'-s[Case-sensitive search (default: smart case)]' \
-'--case-sensitive[Case-sensitive search (default: smart case)]' \
-'-i[Case-insensitive search (default: smart case)]' \
-'--ignore-case[Case-insensitive search (default: smart case)]' \
-'-F[Treat the pattern as a literal string]' \
-'--fixed-strings[Treat the pattern as a literal string]' \
-'-a[Show absolute instead of relative paths]' \
-'--absolute-path[Show absolute instead of relative paths]' \
-'-L[Follow symbolic links]' \
-'--follow[Follow symbolic links]' \
-'-p[Search full path (default: file-/dirname only)]' \
-'--full-path[Search full path (default: file-/dirname only)]' \
-'-0[Separate results by the null character]' \
-'--print0[Separate results by the null character]' \
-'--show-errors[Enable display of filesystem errors]' \
-'-h[Prints help information]' \
-'--help[Prints help information]' \
-'-V[Prints version information]' \
-'--version[Prints version information]' \
-'::pattern -- the search pattern, a regular expression (optional):_files' \
-'::path -- the root directory for the filesystem search (optional):_files' \
-&& ret=0
+  fd_types=(
+    {f,file}'\:"regular files"'
+    {d,directory}'\:"directories"'
+    {l,symlink}'\:"symbolic links"'
+    {e,empty}'\:"empty files or directories"'
+    {x,executable}'\:"executable (files)"'
+    {s,socket}'\:"sockets"'
+    {p,pipe}'\:"named pipes (FIFOs)"'
+  )
 
-}
+  # Do not complete rare options unless either the current prefix
+  # matches one of those options or the user has the `complete-all`
+  # style set. Note that this prefix check has to be updated manually to account
+  # for all of the potential negation options listed below!
+  if
+    # (--[bpsu]* => match all options marked with '$no')
+    [[ $PREFIX$SUFFIX == --[bopsu]* ]] ||
+    zstyle -t ":complete:$curcontext:*" complete-all
+  then
+    no=
+  fi
 
-(( $+functions[_fd_commands] )) ||
-_fd_commands() {
-    local commands; commands=(
+  # We make heavy use of argument groups here to prevent the option specs from
+  # growing unwieldy. These aren't supported in zsh <5.4, though, so we'll strip
+  # them out below if necessary. This makes the exclusions inaccurate on those
+  # older versions, but oh well — it's not that big a deal
+  fd_args=(
+    + '(hidden)' # hidden files
+    {-H,--hidden}'[search hidden files/directories]'
 
-    )
-    _describe -t commands 'fd commands' commands "$@"
+    + '(no-ignore-full)' # all ignore files
+    '(no-ignore-partial)'{-I,--no-ignore}"[don't respect .(git|fd)ignore and global ignore files]"
+    $no'(no-ignore-partial)*'{-u,--unrestricted}'[alias for --no-ignore, when repeated also alias for --hidden]'
+
+    + no-ignore-partial # some ignore files
+    "(no-ignore-full --no-ignore-vcs)--no-ignore-vcs[don't respect .gitignore files]"
+    "!(no-ignore-full --no-global-ignore-file)--no-global-ignore-file[don't respect the global ignore file]"
+
+    + '(case)' # case-sensitivity
+    {-s,--case-sensitive}'[perform a case-sensitive search]'
+    {-i,--ignore-case}'[perform a case-insensitive search]'
+
+    + '(regex-pattern)' # regex-based search pattern
+    '(no-regex-pattern)--regex[perform a regex-based search (default)]'
+
+    + '(no-regex-pattern)' # non-regex-based search pattern
+    {-g,--glob}'[perform a glob-based search]'
+    {-F,--fixed-strings}'[treat pattern as literal string instead of a regex]'
+
+    + '(match-full)' # match against full path
+    {-p,--full-path}'[match the pattern against the full path instead of the basename]'
+
+    + '(follow)' # follow symlinks
+    {-L,--follow}'[follow symbolic links to directories]'
+
+    + '(abs-path)' # show absolute paths
+    '(long-listing)'{-a,--absolute-path}'[show absolute paths instead of relative paths]'
+
+    + '(null-sep)' # use null separator for output
+    '(long-listing)'{-0,--print0}'[separate search results by the null character]'
+
+    + '(long-listing)' # long-listing output
+    '(abs-path null-sep max-results exec-cmds)'{-l,--list-details}'[use a long listing format with file metadata]'
+
+    + '(max-results)' # max number of results
+    '(long-listing exec-cmds)--max-results=[limit number of search results to given count and quit]:count'
+    '(long-listing exec-cmds)-1[limit to a single search result and quit]'
+
+    + '(fs-errors)' # file-system errors
+    $no'--show-errors[enable the display of filesystem errors]'
+
+    + '(fs-traversal)' # file-system traversal
+    $no"--one-file-system[don't descend into directories on other file systems]"
+    '!--mount'
+    '!--xdev'
+
+    + dir-depth # directory depth
+    '(--exact-depth -d --max-depth)'{-d+,--max-depth=}'[set max directory depth to descend when searching]:depth'
+    '!(--exact-depth -d --max-depth)--maxdepth:depth'
+    '(--exact-depth --min-depth)--min-depth=[set directory depth to descend before start searching]:depth'
+    '(--exact-depth -d --max-depth --maxdepth --min-depth)--exact-depth=[only search at the exact given directory depth]:depth'
+
+    + prune # pruning
+    "--prune[don't traverse into matching directories]"
+
+    + filter-misc # filter search
+    '*'{-t+,--type=}"[filter search by type]:type:(($fd_types))"
+    '*'{-e+,--extension=}'[filter search by file extension]:extension'
+    '*'{-E+,--exclude=}'[exclude files/directories that match the given glob pattern]:glob pattern'
+    '*'{-S+,--size=}'[limit search by file size]:size limit:->size'
+    '(-o --owner)'{-o+,--owner=}'[filter by owning user and/or group]:owner and/or group:->owner'
+
+    + ignore-file # extra ignore files
+    '*--ignore-file=[add a custom, low-precedence ignore-file with .gitignore format]: :_files'
+
+    + '(filter-mtime-newer)' # filter by files modified after than
+    '--changed-within=[limit search to files/directories modified within the given date/duration]:date or duration'
+    '!--change-newer-than=:date/duration'
+    '!--newer=:date/duration'
+
+    + '(filter-mtime-older)' # filter by files modified before than
+    '--changed-before=[limit search to files/directories modified before the given date/duration]:date or duration'
+    '!--change-older-than=:date/duration'
+    '!--older=:date/duration'
+
+    + '(color)' # colorize output
+    {-c+,--color=}'[declare when to colorize search results]:when to colorize:((
+      auto\:"show colors if the output goes to an interactive console (default)"
+      never\:"do not use colorized output"
+      always\:"always use colorized output"
+    ))'
+
+    + '(threads)'
+    {-j+,--threads=}'[set the number of threads for searching and executing]:number of threads'
+
+    + '(exec-cmds)' # execute command
+    '(long-listing max-results)'{-x+,--exec=}'[execute command for each search result]:command: _command_names -e:*\;::program arguments: _normal'
+    '(long-listing max-results)'{-X+,--exec-batch=}'[execute command for all search results at once]:command: _command_names -e:*\;::program arguments: _normal'
+
+    + other
+    '!(--max-buffer-time)--max-buffer-time=[set amount of time to buffer before showing output]:time (ms)'
+
+    + '(about)' # about flags
+    '(: * -)'{-h,--help}'[display help message]'
+    '(: * -)'{-v,--version}'[display version information]'
+
+    + path-sep # set path separator for output
+    $no'(--path-separator)--path-separator=[set the path separator to use when printing file paths]:path separator'
+
+    + search-path
+    $no'(--base-directory)--base-directory=[change the current working directory to the given path]:directory:_files -/'
+    $no'(*)*--search-path=[set search path (instead of positional <path> arguments)]:directory:_files -/'
+
+    + args # positional arguments
+    '1: :_guard "^-*" pattern'
+    '(--search-path)*:directory:_files -/'
+  )
+
+  # Strip out argument groups where unsupported (see above)
+  is-at-least 5.4 ||
+  fd_args=( ${(@)args:#(#i)(+|[a-z0-9][a-z0-9_-]#|\([a-z0-9][a-z0-9_-]#\))} )
+
+  _arguments $_arguments_options : $fd_args && ret=0
+
+  case ${state} in
+    owner)
+      compset -P '(\\|)\!'
+      if compset -P '*:'; then
+        _groups && ret=0
+      else
+        if
+          compset -S ':*' ||
+          # Do not add the colon suffix when completing "!user<TAB>
+          # (with a starting double-quote) otherwise pressing tab again
+          # after the inserted colon "!user:<TAB> will complete history modifiers
+          [[ $IPREFIX == (\\|\!)*  && ($QIPREFIX == \"* && -z $QISUFFIX) ]]
+        then
+          _users && ret=0
+        else
+          local q
+          # Since quotes are needed when using the negation prefix !,
+          # automatically remove the colon suffix also when closing the quote
+          if [[ $QIPREFIX == [\'\"]* ]]; then
+            q=${QIPREFIX:0:1}
+          fi
+          _users -r ": \t\n\-$q" -S : && ret=0
+        fi
+      fi
+      ;;
+
+    size)
+      if compset -P '[-+][0-9]##'; then
+        local -a suff=(
+          'B:bytes'
+          'K:kilobytes  (10^3  = 1000   bytes)'
+          'M:megabytes  (10^6  = 1000^2 bytes)'
+          'G:gigabytes  (10^9  = 1000^3 bytes)'
+          'T:terabytes  (10^12 = 1000^4 bytes)'
+          'Ki:kibibytes  ( 2^10 = 1024   bytes)'
+          'Mi:mebibytes  ( 2^20 = 1024^2 bytes)'
+          'Gi:gigibytes  ( 2^30 = 1024^3 bytes)'
+          'Ti:tebibytes  ( 2^40 = 1024^4 bytes)'
+        )
+        _describe -t units 'size limit units' suff -V 'units'
+      elif compset -P '[-+]'; then
+        _message -e 'size limit number (full format: <+-><number><unit>)'
+      else
+        _values 'size limit prefix (full format: <prefix><number><unit>)' \
+          '\+[file size must be greater or equal to]'\
+          '-[file size must be less than or equal to]' && ret=0
+      fi
+      ;;
+  esac
+
+  return ret
 }
 
 _fd "$@"
+
+# ------------------------------------------------------------------------------
+# Copyright (c) 2011 Github zsh-users - http://github.com/zsh-users
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * Neither the name of the zsh-users nor the
+#       names of its contributors may be used to endorse or promote products
+#       derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL ZSH-USERS BE LIABLE FOR ANY
+# DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for fd
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * smancill (https://github.com/smancill)
+#
+# ------------------------------------------------------------------------------
+
+# Local Variables:
+# mode: shell-script
+# coding: utf-8-unix
+# indent-tabs-mode: nil
+# sh-indentation: 2
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et

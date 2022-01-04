@@ -32,15 +32,21 @@
 # -------
 #
 #  * Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
+#  * Shohei YOSHIDA <syohex@gmail.com>
 #
 # ------------------------------------------------------------------------------
 
+declare -g _yarn_run_cwd
+
 _commands=(
   'access'
+  'audit:Checks for known security issues with the installed packages'
   'autoclean:Clean and remove unnecessary files from package dependencies'
   'cache:List or clean every cached package'
-  "check:Verify package dependencies agains yarn's lock file"
+  "check:Verify package dependencies against yarn's lock file"
   'config:Manages the yarn configuration files'
+  'create:Creates new projects from any create-* starter kits'
+  'exec'
   'generate-lock-entry:Generates a lock file entry'
   'global:Install packages globally on your operating system'
   'help:Show information about a command'
@@ -50,53 +56,98 @@ _commands=(
   'install:Install all the dependencies listed within package.json'
   'licenses:List licenses for installed packages'
   'link:Symlink a package folder during development'
-  'list:List installed packages'
   'login:Store registry username and email'
   'logout:Clear registry username and email'
+  'node:Runs Node with the same version that the one used by Yarn itself'
   'outdated:Check for outdated package dependencies'
   'owner:Manage package owners'
   'pack:Create a compressed gzip archive of package dependencies'
+  'policies:Defines project-wide policies for your project'
   'publish:Publish a package to the npm registry'
   'run:Run a defined package script'
   'tag:Add, remove, or list tags on a package'
   'team:Maintain team memberships'
   'unlink:Unlink a previously created symlink for a package'
+  'unplug:Temporarily copies a package outside of the global cache for debugging purposes'
   'version:Update the package version'
   'versions:Display version information of currently installed Yarn, Node.js, and its dependencies'
   'why:Show information about why a package is installed'
+  'workspace'
+  'workspaces:Show information about your workspaces'
 )
 
 _global_commands=(
   'add:Installs a package and any packages that it depends on'
   'bin:Displays the location of the yarn bin folder'
+  'list:List installed packages'
   'remove:Remove installed package from dependencies updating package.json'
   'upgrade:Upgrades packages to their latest version based on the specified range'
   'upgrade-interactive:Interactively upgrade packages'
 )
 
+_yarn_find_package_json() {
+  local dir=$(cd "$1" && pwd)
+
+  while true
+  do
+    if [[ -e "${dir}/package.json" ]]; then
+      echo "${dir}/package.json"
+      return
+    fi
+
+    if [[ $dir == '/' ]]; then
+      break
+    fi
+
+    dir=$(dirname $dir)
+  done
+}
+
 _yarn_commands_scripts() {
-  local -a scripts
-  scripts=($(yarn run --json 2>/dev/null | sed -E '/Commands available|possibleCommands/!d;s/.*Commands available from binary scripts: ([^"]+)".*/\1/;s/.*"items":\[([^]]+).*/\1/;s/[" ]//g' | tr , '\n' | sed -e 's/:/\\:/g'))
-  _describe 'command or script' _commands -- _global_commands -- scripts
+  local -a scripts binaries
+  local packageJson
+
+  if [[ -n $opt_args[--cwd] ]]; then
+    packageJson=$(_yarn_find_package_json $opt_args[--cwd])
+    binaries=($(cd $opt_args[--cwd] && echo node_modules/.bin/*(x:t)))
+  else
+    packageJson=$(_yarn_find_package_json $pwd)
+    binaries=($(echo node_modules/.bin/*(x:t)))
+  fi
+
+  if [[ -n $packageJson ]]; then
+    scripts=($(cat "$packageJson" | perl -0777 -MJSON::PP -n -E '%r=decode_json($_); say for sort keys %{$r->{scripts}}'))
+  fi
+
+  _describe 'command or script' _commands -- _global_commands -- scripts -- binaries
 }
 
 _yarn_scripts() {
-  local -a commands binaries scripts
-  local -a scriptNames scriptCommands
-  local i runJSON
+  local -a binaries scripts
+  local -a commands
+  local packageJson
 
-  runJSON=$(yarn run --json 2>/dev/null)
-  # Some sed utilities (e.g. Mac OS / BSD) don't interpret `\n` in a replacement
-  # pattern as a newline. See https://superuser.com/q/307165
-  binaries=($(sed -E '/Commands available/!d;s/.*Commands available from binary scripts: ([^"]+)".*/\1/;s/.*"items":\[([^]]+).*/\1/;s/[" ]//g;s/:/\\:/g;s/,/\'$'\n/g' <<< "$runJSON"))
-  scriptNames=($(sed -E '/possibleCommands/!d;s/.*"items":\[([^]]+).*/\1/;s/[" ]//g;s/:/\\:/g;s/,/\'$'\n/g' <<< "$runJSON"))
-  scriptCommands=("${(@f)$(sed -E '/possibleCommands/!d;s/.*"hints":\{(.+")\}.*/\1/;s/"[^"]+"://g;s/:/\\:/g;s/","/\'$'\n/g;s/(^"|"$)//g' <<< "$runJSON")}")
+  if [[ -n $_yarn_run_cwd ]]; then
+    packageJson=$(_yarn_find_package_json $_yarn_run_cwd)
+    if [[ -d "${_yarn_run_cwd}/node_modules" ]]; then
+      binaries=($(cd $_yarn_run_cwd && echo node_modules/.bin/*(x:t)))
+    else
+      binaries=($(cd $_yarn_run_cwd && yarn bin | perl -wln -e 'm{^[^:]+: (\S+)$} and print $1'))
+    fi
+  else
+    packageJson=$(_yarn_find_package_json $pwd)
+    if [[ -d node_modules ]]; then
+      binaries=($(echo node_modules/.bin/*(x:t)))
+    else
+      binaries=($(yarn bin | perl -wln -e 'm{^[^:]+: (\S+)$} and print $1'))
+    fi
+  fi
 
-  for (( i=1; i <= $#scriptNames; i++ )); do
-    scripts+=("${scriptNames[$i]}:${scriptCommands[$i]}")
-  done
+  if [[ -n $packageJson ]]; then
+    scripts=("${(@f)$(cat ${packageJson} | perl -0777 -MJSON::PP -n -E '%r=%{decode_json($_)->{scripts}}; printf "$_:$r{$_}\n" for sort keys %r')}")
+  fi
 
-  commands=($scripts $binaries)
+  commands=('env' $scripts $binaries)
   _describe 'command' commands
 }
 
@@ -110,6 +161,23 @@ _yarn_commands() {
   _describe 'command' _commands -- _global_commands
 }
 
+_yarn_add_files() {
+  if compset -P "(file|link):"; then
+    _files
+  fi
+}
+
+_yarn_workspaces() {
+  local version=$(yarn --version |sed -n 's|\([0-9]*\).*|\1|p')
+  local -a workspaces
+  if [[ $version == "1" ]]; then
+    workspaces=(${(@f)$(yarn workspaces info |sed -n -e 's/^  "\([^"]*\)": {/\1/p')})
+  else
+    workspaces=(${(@f)$(yarn workspaces list --json | sed -n 's|.*"name":"\([^"]*\)"}|\1|p')})
+  fi
+  _describe 'workspace' workspaces
+}
+
 _yarn() {
   local context state state_descr line
   typeset -A opt_args
@@ -118,37 +186,51 @@ _yarn() {
     '(-h --help)'{-h,--help}'[output usage information]' \
     '(-V --version)'{-V,--version}'[output the version number]' \
     '--verbose[output verbose messages on internal operations]' \
-    '--offline[trigger an error if any required dependencies are not available in local cache]' \
-    '--prefer-offline[use network only if dependencies are not available in local cache]' \
-    '--strict-semver' \
-    '--json' \
-    "--ignore-scripts[don't run lifecycle scripts]" \
-    '--har[save HAR output of network traffic]' \
-    '--ignore-platform[ignore platform checks]' \
-    '--ignore-engines[ignore engines check]' \
-    '--ignore-optional[ignore optional dependencies]' \
-    '--force[install and build packages even if they were built before, overwrite lockfile]' \
-    '--skip-integrity-check[run install without checking if node_modules is installed]' \
-    '--check-files[install will verify file tree of packages for consistency]' \
-    "--no-bin-links[don't generate bin links when setting up packages]" \
-    '--flat[only allow one version of a package]' \
-    '(--prod --production)'{--prod,--production} \
-    "--no-lockfile[don't read or generate a lockfile]" \
-    "--pure-lockfile[don't generate a lockfile]" \
-    "--frozen-lockfile[don't generate a lockfile and fail if an update is needed]" \
-    '--link-duplicates[create hardlinks to the repeated modules in node_modules]' \
-    '--global-folder=[modules folder]:folder:_files -/' \
-    '--modules-folder=[rather than installing modules into the node_modules folder relative to the cwd, output them here]:folder:_files -/' \
     '--cache-folder=[specify a custom folder to store the yarn cache]:folder:_files -/' \
+    '--check-files[install will verify file tree of packages for consistency]' \
+    '--cwd=[working directory to use]:path:_files -/' \
+    "(--enable-pnp --pnp)--disable-pnp[disable the Plug'n'Play installation]" \
+    '(--no-emoji)--emoji=[enable emoji in output(default: false)]:enabled:(true false)' \
+    '(--emoji)--no-emoji[disable emoji in output]' \
+    '(--disable-pnp)'{--enable-pnp,--pnp}"[enable the Plug'n'Play installation]" \
+    '--flat[only allow one version of a package]' \
+    '--focus[Focus on a single workspace by installing remote copies of its sibling workspaces]' \
+    '--force[install and build packages even if they were built before, overwrite lockfile]' \
+    "--frozen-lockfile[don't generate a lockfile and fail if an update is needed]" \
+    '--global-folder=[modules folder]:folder:_files -/' \
+    '--har[save HAR output of network traffic]' \
+    '--https-proxy=[HTTPS proxy]:host:_hosts' \
+    '--ignore-engines[ignore engines check]' \
+    "--ignore-scripts[don't run lifecycle scripts]" \
+    '--ignore-optional[ignore optional dependencies]' \
+    '--ignore-platform[ignore platform checks]' \
+    '--json[format Yarn log messages as lines of JSON]' \
+    '--link-duplicates[create hardlinks to the repeated modules in node_modules]' \
+    '--link-folder=[specify a custom folder to store global links]' \
+    '--modules-folder=[rather than installing modules into the node_modules folder relative to the cwd, output them here]:folder:_files -/' \
     '--mutex=[use a mutex to ensure only one yarn instance is executing]:type[\:specifier]' \
-    '--no-emoji[disable emoji in output]' \
-    '(-s --silent)'{-s,--silent}'[skip Yarn console logs, other types of logs (script output) will be printed]' \
-    '--proxy=:host:_hosts' \
-    '--https-proxy=:host:_hosts' \
-    '--no-progress[disable progress bar]' \
     '--network-concurrency=[maximum number of concurrent network requests]:number' \
     '--network-timeout=[TCP timeout for network requests]:milliseconds' \
+    "--no-bin-links[don't generate bin links when setting up packages]" \
+    '--no-default-rc[prevent Yarn from automatically detecting yarnrc and npmrc files]' \
+    "--no-lockfile[don't read or generate a lockfile]" \
     '--non-interactive[do not show interactive prompts]' \
+    '--no-node-version-check[do not warn when using a potentially unsupported Node version]' \
+    '--no-progress[disable progress bar]' \
+    '--offline[trigger an error if any required dependencies are not available in local cache]' \
+    '--otp=[one-time password for two factor authentication]:otpcode' \
+    '--prefer-offline[use network only if dependencies are not available in local cache]' \
+    '--preferred-cache-folder=[specify a custom folder to store the yarn cache if possible]:folder:_files -/' \
+    '(--prod --production)'{--prod,--production}'[install only production dependencies]' \
+    '--proxy=[HTTP proxy]:host:_hosts' \
+    "--pure-lockfile[don't generate a lockfile]" \
+    '--registry=[override configuration registry]:url:_urls' \
+    '(-s --silent)'{-s,--silent}'[skip Yarn console logs, other types of logs (script output) will be printed]' \
+    '--scripts-prepend-node-path=[prepend the node executable dir to the PATH in scripts]:bool:(true false)' \
+    '--skip-integrity-check[run install without checking if node_modules is installed]' \
+    "--strict-semver[don't compare semver loosely]" \
+    '--update-checksum[update package checksums from current repository]' \
+    '--use-yarnrc=[specifies a yarnrc that Yarn should use]:yarnrc:_files' \
     '1: :_yarn_commands_scripts' \
     '*:: :->command_args'
 
@@ -173,18 +255,29 @@ _yarn() {
             '(-O --optional)'{-O,--optional}'[install packages in optionalDependencies]' \
             '(-E --exact)'{-E,--exact}'[install packages as exact versions]' \
             '(-T --tilde)'{-T,--tilde}'[install the most recent release of the packages that have the same minor version]' \
-            '*:package-name:'
+            '(--ignore-workspace-root-check -W)'{--ignore-workspace-root-check,-W}'[allows a package to be installed at the workspaces root]' \
+            '--audit[checks for known security issues with the installed packages]' \
+            '*:package-name:_yarn_add_files'
+        ;;
+
+        audit)
+          _arguments \
+            '--verbose[output verbose message]' \
+            '--json[format Yarn log messages as lines of JSON]' \
+            '--level=[only print advisories with severity greater than or equal to]:level:(info low moderate high critical)' \
+            '--groups=[only audit dependencies from listed groups]:groups:->groups_args'
         ;;
 
         cache)
           _arguments \
-            '1: :(ls dir clean)'
+            '1: :(list dir clean)' \
+            '*:: :->cache_args'
         ;;
 
         check)
           _arguments \
-            '--integrity' \
-            '--verify-tree'
+            '--integrity[Verifies that versions and hashed values of the package contents in package.json]' \
+            '--verify-tree[Recursively verifies that the dependencies in package.json are present in node_modules]'
         ;;
 
         config)
@@ -223,12 +316,13 @@ _yarn() {
 
         list)
           _arguments \
-            '--depth[Limit the depth of the shown dependencies]:depth'
+            '--depth=[Limit the depth of the shown dependencies]:depth' \
+            '--pattern=[filter the list of dependencies by the pattern]'
         ;;
 
         owner)
           _arguments \
-            '1: :(ls add rm)' \
+            '1: :(list add rm)' \
             '*:: :->owner_args'
         ;;
 
@@ -247,12 +341,22 @@ _yarn() {
             '1: :_files'
         ;;
 
+        policies)
+          _arguments \
+            '1: :(set-version)'
+        ;;
+
         remove|upgrade)
           _arguments \
             '*:package:'
         ;;
 
         run)
+          if [[ -n $opt_args[--cwd] ]]; then
+            _yarn_run_cwd=$opt_args[--cwd]
+          else
+            _yarn_run_cwd=''
+          fi
           _arguments \
             '1: :_yarn_scripts' \
             '*:: :_default'
@@ -260,26 +364,33 @@ _yarn() {
 
         tag)
           _arguments \
-            '1: :(ls add rm)' \
+            '1: :(lists add rm)' \
             '*:: :->tag_args'
         ;;
 
         team)
           _arguments \
-            '1: :(create destroy add rm ls)' \
+            '1: :(create destroy add rm list)' \
             '*:: :->team_args'
         ;;
 
         upgrade-interactive)
           _arguments \
-            '--latest:use the version tagged latest in the registry:'
+            '--latest[use the version tagged latest in the registry]'
         ;;
 
         version)
           _arguments \
-            '--new-version:version:' \
-            '--message:message:' \
-            '--no-git-tag-version'
+            '--new-version[create a new version using an interactive session to prompt you]:version:' \
+            '--major[creates a new version by incrementing the major version]' \
+            '--minor[creates a new version by incrementing the minor version]' \
+            '--patch[creates a new version by incrementing the patch version]' \
+            '--premajor[creates a new prerelease version by incrementing the major version]' \
+            '--preminor[creates a new prerelease version by incrementing the minor version]' \
+            '--prepatch[creates a new prerelease version by incrementing the patch version]' \
+            '--prerelease[increments the prerelease version number keeping the main version]' \
+            '--no-git-tag-version[creates a new version without creating a git tag]' \
+            '--no-commit-hooks[bypasses running commit hooks when committing the new version]'
         ;;
 
         why)
@@ -287,7 +398,19 @@ _yarn() {
             '1:query:_files'
         ;;
 
-        *) 
+        workspace)
+          _arguments \
+            '1:workspace:_yarn_workspaces' \
+            '*:: :_yarn_global_commands'
+        ;;
+
+        workspaces)
+          _arguments \
+            '--json[format Yarn log messages as lines of JSON]' \
+            '1:commands:(info run)'
+        ;;
+
+        *)
           _default
         ;;
       esac
@@ -295,6 +418,12 @@ _yarn() {
   esac
 
   case $state in
+    cache_args)
+      if [[ $words[1] == "list" ]]; then
+        _arguments \
+          '--pattern=[print out every cached package that matches the pattern]:pattern:'
+      fi
+    ;;
     config_args)
       case $words[1] in
         get|delete)
@@ -309,6 +438,10 @@ _yarn() {
             '2:value:'
         ;;
       esac
+    ;;
+    groups_args)
+      local dependency_groups=(devDependencies dependencies optionalDependencies peerDependencies bundledDependencies)
+      _values -s ',' 'groups' $dependency_groups
     ;;
 
     owner_args)

@@ -21,6 +21,10 @@ function asp() {
   export AWS_DEFAULT_PROFILE=$1
   export AWS_PROFILE=$1
   export AWS_EB_PROFILE=$1
+
+  if [[ "$2" == "login" ]]; then
+    aws sso login
+  fi
 }
 
 # AWS profile switch
@@ -151,8 +155,8 @@ compctl -K _aws_profiles asp acp aws_change_access_key
 
 # AWS prompt
 function aws_prompt_info() {
-  [[ -z $AWS_PROFILE ]] && return
-  echo "${ZSH_THEME_AWS_PREFIX:=<aws:}${AWS_PROFILE}${ZSH_THEME_AWS_SUFFIX:=>}"
+  [[ -n "$AWS_PROFILE" ]] || return
+  echo "${ZSH_THEME_AWS_PREFIX:=<aws:}${AWS_PROFILE:gs/%/%%}${ZSH_THEME_AWS_SUFFIX:=>}"
 }
 
 if [[ "$SHOW_AWS_PROMPT" != false && "$RPROMPT" != *'$(aws_prompt_info)'* ]]; then
