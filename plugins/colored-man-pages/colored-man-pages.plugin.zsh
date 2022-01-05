@@ -22,7 +22,7 @@ less_termcap[ue]="${reset_color}"
 0="${${(M)0:#/*}:-$PWD/$0}"
 
 # Absolute path to this file's directory.
-typeset __colored_man_pages_dir="${0:A:h}"
+typeset -g __colored_man_pages_dir="${0:A:h}"
 
 function colored() {
   local -a environment
