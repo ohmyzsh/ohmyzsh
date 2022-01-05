@@ -86,13 +86,17 @@ is_plugin() {
 # Add all defined plugins to fpath. This must be done
 # before running compinit.
 for plugin ($plugins); do
-  if is_plugin $ZSH_CUSTOM $plugin; then
-    fpath=($ZSH_CUSTOM/plugins/$plugin $fpath)
-  elif is_plugin $ZSH $plugin; then
-    fpath=($ZSH/plugins/$plugin $fpath)
-  else
-    echo "[oh-my-zsh] plugin '$plugin' not found"
-  fi
+  for dir ($ZSH_CUSTOM $ZSH); do
+    if is_plugin $dir $plugin; then
+      if [ -f $dir/plugins/$plugin/completions-dir.txt ]; then
+        fpath=($dir/plugins/$plugin/$(cat $dir/plugins/$plugin/completions-dir.txt) $fpath)
+      else
+        fpath=($dir/plugins/$plugin $fpath)
+      fi
+    else
+      echo "[oh-my-zsh] plugin '$plugin' not found"
+    fi
+  done
 done
 
 # Figure out the SHORT hostname
