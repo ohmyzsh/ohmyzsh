@@ -1,8 +1,10 @@
 # git-commit-template plugin
 
-To better write git commit messages, we can use template to specify the desired description and type of message.
+To better write git commit messages, we can use template to specify the 
+desired description and type of message.
 
-To use it, add `git-commit-template` to the plugins array in your zshrc file:
+To use it, add `git-commit-template` to the plugins array in your zshrc 
+file:
 
 ```zsh
 plugins=(... git-commit-template)
@@ -16,7 +18,8 @@ plugins=(... git-commit-template)
 
 ## Usage
 
-All you have to do is call the `gct` command and fill in the items that are not optional at each step to prepare the message format.
+All you have to do is call the `gct` command and fill in the items that 
+are not optional at each step to prepare the message format.
 
 ![gct](https://raw.githubusercontent.com/ghasemdev/git-commit-template/master/images/1.png)
 
