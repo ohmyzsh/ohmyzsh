@@ -61,7 +61,7 @@ function _omz {
           # if command is "disable", only offer already enabled plugins
           valid_plugins=($plugins)
         else
-          valid_plugins=("$ZSH"/plugins/*/{_*,*.plugin.zsh}(.N:h:t) "$ZSH_CUSTOM"/plugins/*/{_*,*.plugin.zsh}(.N:h:t))
+          valid_plugins=("$ZSH"/plugins/*/{_*,*.plugin.zsh}(-.N:h:t) "$ZSH_CUSTOM"/plugins/*/{_*,*.plugin.zsh}(-.N:h:t))
           # if command is "enable", remove already enabled plugins
           [[ "${words[3]}" = enable ]] && valid_plugins=(${valid_plugins:|plugins})
         fi
@@ -69,11 +69,11 @@ function _omz {
         _describe 'plugin' valid_plugins ;;
       plugin::info)
         local -aU plugins
-        plugins=("$ZSH"/plugins/*/{_*,*.plugin.zsh}(.N:h:t) "$ZSH_CUSTOM"/plugins/*/{_*,*.plugin.zsh}(.N:h:t))
+        plugins=("$ZSH"/plugins/*/{_*,*.plugin.zsh}(-.N:h:t) "$ZSH_CUSTOM"/plugins/*/{_*,*.plugin.zsh}(-.N:h:t))
         _describe 'plugin' plugins ;;
       theme::(set|use))
         local -aU themes
-        themes=("$ZSH"/themes/*.zsh-theme(.N:t:r) "$ZSH_CUSTOM"/**/*.zsh-theme(.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::))
+        themes=("$ZSH"/themes/*.zsh-theme(-.N:t:r) "$ZSH_CUSTOM"/**/*.zsh-theme(-.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::))
         _describe 'theme' themes ;;
     esac
   elif (( CURRENT > 4 )); then
@@ -85,7 +85,7 @@ function _omz {
           # if command is "disable", only offer already enabled plugins
           valid_plugins=($plugins)
         else
-          valid_plugins=("$ZSH"/plugins/*/{_*,*.plugin.zsh}(.N:h:t) "$ZSH_CUSTOM"/plugins/*/{_*,*.plugin.zsh}(.N:h:t))
+          valid_plugins=("$ZSH"/plugins/*/{_*,*.plugin.zsh}(-.N:h:t) "$ZSH_CUSTOM"/plugins/*/{_*,*.plugin.zsh}(-.N:h:t))
           # if command is "enable", remove already enabled plugins
           [[ "${words[3]}" = enable ]] && valid_plugins=(${valid_plugins:|plugins})
         fi
