@@ -1,6 +1,7 @@
 git_commit_template() {
     # Check in this directory git exist
     if [ ! -d .git ]; then
+        echo "fatal: not a git repository (or any of the parent directories): .git"
         exit 1
     fi
 
@@ -107,6 +108,7 @@ octo-org/octo-repo#100\n\n"
     fi
 
     printf "\n    ${GREEN}${type_var}${scope}: ${short_desc}
+
     ${long_desc}
     ${breaking_changes}
     ${closed_issues}${RESET}\n\n"
@@ -115,6 +117,7 @@ octo-org/octo-repo#100\n\n"
     result_code=$?
     if [ "$result_code" = 0 ]; then
         git commit -m "${type_var}${scope}: ${short_desc}
+
 ${long_desc}
 ${breaking_changes}
 ${closed_issues}"
