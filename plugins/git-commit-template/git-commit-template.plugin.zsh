@@ -70,8 +70,12 @@ a file name, function name, class name, component name etc.\n\n"
 
     while :; do
         read -e short_desc
+        limit_counter=${#short_desc}
         if [ -z "$short_desc" ]; then
             printf "${RED}❌ Short description can not be empty.${RESET}\n"
+        elif [[ $limit_counter > 50 ]]; then
+            printf "${RED}❌ The maximum character for header is 50, Please\
+ provide details in long descriptions.${RESET}\n"
         else
             break
         fi
