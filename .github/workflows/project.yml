@@ -61,6 +61,8 @@ jobs:
       - name: Classify Pull Request
         if: github.event_name == 'pull_request_target'
         run: |
+          touch plugins.list themes.list
+
           gh pr view ${{ github.event.pull_request.number }} \
             --repo ${{ github.repository }} \
             --json files --jq '.files.[].path' | awk -F/ '
