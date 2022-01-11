@@ -317,7 +317,7 @@ EOF
     "$YELLOW" "$RESET"
   read -r opt
   case $opt in
-    y*|Y*|"") echo "Changing the shell..." ;;
+    y*|Y*|"") ;;
     n*|N*) echo "Shell change skipped."; return ;;
     *) echo "Invalid choice. Shell change skipped."; return ;;
   esac
@@ -355,11 +355,20 @@ EOF
   if [ -n "$SHELL" ]; then
     echo "$SHELL" > ~/.shell.pre-oh-my-zsh
   else
-    grep "^$USERNAME:" /etc/passwd | awk -F: '{print $7}' > ~/.shell.pre-oh-my-zsh
+    grep "^$USER:" /etc/passwd | awk -F: '{print $7}' > ~/.shell.pre-oh-my-zsh
   fi
 
-  # Actually change the default shell to zsh
-  if ! chsh -s "$zsh"; then
+  echo "Changing your shell to $zsh..."
+
+  # Check if user has sudo privileges and run `chsh` or `sudo chsh`
+  if LANG= sudo -l -U "$USER" 2>/dev/null | grep -q "is not allowed to run"; then
+    chsh -s "$zsh" "$USER"          # run chsh normally
+  else
+    sudo -k chsh -s "$zsh" "$USER"  # -k forces the password prompt
+  fi
+
+  # Check if the shell change was successful
+  if [ $? -ne 0 ]; then
     fmt_error "chsh command unsuccessful. Change your default shell manually."
   else
     export SHELL="$zsh"
