@@ -64,18 +64,18 @@ user_can_sudo() {
   #    • without privilege: exits with error code 1 and prints the message:
   #      Sorry, user <username> may not run sudo on <hostname>
   #
-  # 2. Pass `-S` to `sudo` to tell it to get the password from stdin
-  #    instead of from a tty, and pipe `true` to `sudo`, since it doesn't
-  #    output anything. This will make sudo exit with error code 1 and print
-  #    the message:
-  #    sudo: no password was provided
+  # 2. Pass `-n` to `sudo` to tell it to not ask for a password. If the
+  #    password is not required, the command will finish with exit code 0.
+  #    If one is required, sudo will exit with error code 1 and print the
+  #    message:
+  #    sudo: a password is required
   #
   # 3. Check for the words "may not run sudo" in the output to really tell
   #    whether the user has privileges or not. For that we have to make sure
   #    to run `sudo` in the default locale (with `LANG=`) so that the message
   #    stays consistent regardless of the user's locale.
   #
-  true | LANG= sudo -v -S 2>&1 | grep -q "may not run sudo"
+  LANG= sudo -n -v 2>&1 | grep -q "may not run sudo"
 }
 
 # The [ -t 1 ] check only works when the function is not called from
