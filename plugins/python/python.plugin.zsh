@@ -7,40 +7,37 @@ alias pyfind='find . -name "*.py"'
 # Remove python compiled byte-code and mypy/pytest cache in either the current
 # directory or in a list of specified directories (including sub directories).
 function pyclean() {
-    ZSH_PYCLEAN_PLACES=${*:-'.'}
-    find ${ZSH_PYCLEAN_PLACES} -type f -name "*.py[co]" -delete
-    find ${ZSH_PYCLEAN_PLACES} -type d -name "__pycache__" -delete
-    find ${ZSH_PYCLEAN_PLACES} -depth -type d -name ".mypy_cache" -exec rm -r "{}" +
-    find ${ZSH_PYCLEAN_PLACES} -depth -type d -name ".pytest_cache" -exec rm -r "{}" +
+  find "${@:-.}" -type f -name "*.py[co]" -delete
+  find "${@:-.}" -type d -name "__pycache__" -delete
+  find "${@:-.}" -depth -type d -name ".mypy_cache" -exec rm -r "{}" +
+  find "${@:-.}" -depth -type d -name ".pytest_cache" -exec rm -r "{}" +
 }
 
 # Add the user installed site-packages paths to PYTHONPATH, only if the
 #   directory exists. Also preserve the current PYTHONPATH value.
 # Feel free to autorun this when .zshrc loads.
 function pyuserpaths() {
-    local targets=("python2" "python3")  # bins
-    
-    # Get existing interpreters.
-    local interps=()
-    for target in $targets; do
-        [ `command -v $target` ] && interps+=($target)
-    done
+  setopt localoptions extendedglob
 
-    # Check for a non-standard install directory.
-    local user_base="${HOME}/.local"
-    [ $PYTHONUSERBASE ] && user_base=$PYTHONUSERBASE
+  # Check for a non-standard install directory.
+  local user_base="${PYTHONUSERBASE:-"${HOME}/.local"}"
 
-    # Add version specific paths, if:
-    #   it exists in the filesystem;
-    #   it isn't in PYTHONPATH already.
-    for interp in $interps; do
-        # Get minor release version.
-        local ver=`$interp -V 2>&1`
-        ver=`echo ${ver:7} | cut -d '.' -f 1,2`  # The patch version is variable length, truncate it.
-        
-        local site_pkgs="${user_base}/lib/python${ver}/site-packages"
-        [[ -d $site_pkgs && ! $PYTHONPATH =~ $site_pkgs ]] && export PYTHONPATH=${site_pkgs}:$PYTHONPATH
-    done
+  local python version site_pkgs
+  for python in python2 python3; do
+    # Check if command exists
+    (( ${+commands[$python]} )) || continue
+
+    # Get minor release version.
+    # The patch version is variable length, truncate it.
+    version=${(M)${"$($python -V 2>&1)":7}#[^.]##.[^.]##}
+
+    # Add version specific path, if:
+    # - it exists in the filesystem
+    # - it isn't in $PYTHONPATH already.
+    site_pkgs="${user_base}/lib/python${version}/site-packages"
+    [[ -d "$site_pkgs" && ! "$PYTHONPATH" =~ (^|:)"$site_pkgs"(:|$) ]] || continue
+    export PYTHONPATH="${site_pkgs}${PYTHONPATH+":${PYTHONPATH}"}"
+  done
 }
 
 # Grep among .py files

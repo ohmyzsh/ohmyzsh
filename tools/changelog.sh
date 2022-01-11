@@ -414,7 +414,7 @@ function main {
   # --first-parent: commits from merged branches are omitted
   local SEP="0mZmAgIcSeP"
   local -a raw_commits
-  raw_commits=(${(0)"$(command git log -z \
+  raw_commits=(${(0)"$(command git -c log.showSignature=false log -z \
     --format="%h${SEP}%D${SEP}%s${SEP}%b" --abbrev=7 \
     --no-merges --first-parent $range)"})
 

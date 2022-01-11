@@ -38,6 +38,8 @@ local c13=$'\e[38;5;196m\e[1m'
 
 
 zsh_path() {
+  setopt localoptions nopromptsubst
+
   local colors
   colors=$(echoti colors)
 

@@ -13,23 +13,25 @@ ZSH_THEME_FOSSIL_PROMPT_DIRTY=" %{$fg_bold[red]%}✖"
 ZSH_THEME_FOSSIL_PROMPT_CLEAN=" %{$fg_bold[green]%}✔"
 
 function fossil_prompt_info() {
-  local _OUTPUT=`fossil branch 2>&1`
-  local _STATUS=`echo $_OUTPUT | grep "use --repo"`
-  if [ "$_STATUS" = "" ]; then
-    local _EDITED=`fossil changes`
-    local _EDITED_SYM="$ZSH_THEME_FOSSIL_PROMPT_CLEAN"
-    local _BRANCH=`echo $_OUTPUT | grep "* " | sed 's/* //g'`
+  local info=$(fossil branch 2>&1)
 
-    if [ "$_EDITED" != "" ]; then
-      _EDITED_SYM="$ZSH_THEME_FOSSIL_PROMPT_DIRTY"
-    fi
+  # if we're not in a fossil repo, don't show anything
+  ! command grep -q "use --repo" <<< "$info" || return
 
-    echo "$ZSH_THEME_FOSSIL_PROMPT_PREFIX" \
-      "$_BRANCH" \
-      "$ZSH_THEME_FOSSIL_PROMPT_SUFFIX" \
-      "$_EDITED_SYM"\
-      "%{$reset_color%}"
+  local branch=$(echo $info | grep "* " | sed 's/* //g')
+  local changes=$(fossil changes)
+  local dirty="$ZSH_THEME_FOSSIL_PROMPT_CLEAN"
+
+  if [[ -n "$changes" ]]; then
+    dirty="$ZSH_THEME_FOSSIL_PROMPT_DIRTY"
   fi
+
+  printf '%s %s %s %s %s' \
+    "$ZSH_THEME_FOSSIL_PROMPT_PREFIX" \
+    "${branch:gs/%/%%}" \
+    "$ZSH_THEME_FOSSIL_PROMPT_SUFFIX" \
+    "$dirty" \
+    "%{$reset_color%}"
 }
 
 function _fossil_prompt () {
