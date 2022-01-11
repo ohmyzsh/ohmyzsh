@@ -56,6 +56,28 @@ command_exists() {
   command -v "$@" >/dev/null 2>&1
 }
 
+user_can_sudo() {
+  # The following command has 3 parts:
+  #
+  # 1. Run `sudo` with `-v`. Does the following:
+  #    • with privilege: asks for a password immediately.
+  #    • without privilege: exits with error code 1 and prints the message:
+  #      Sorry, user <username> may not run sudo on <hostname>
+  #
+  # 2. Pass `-S` to `sudo` to tell it to get the password from stdin
+  #    instead of from a tty, and pipe `true` to `sudo`, since it doesn't
+  #    output anything. This will make sudo exit with error code 1 and print
+  #    the message:
+  #    sudo: no password was provided
+  #
+  # 3. Check for the words "may not run sudo" in the output to really tell
+  #    whether the user has privileges or not. For that we have to make sure
+  #    to run `sudo` in the default locale (with `LANG=`) so that the message
+  #    stays consistent regardless of the user's locale.
+  #
+  true | LANG= sudo -v -S 2>&1 | grep -q "may not run sudo"
+}
+
 # The [ -t 1 ] check only works when the function is not called from
 # a subshell (like in `$(...)` or `(...)`, so this hack redefines the
 # function at the top level to always return false when stdout is not
@@ -360,8 +382,16 @@ EOF
 
   echo "Changing your shell to $zsh..."
 
-  # Check if user has sudo privileges and run `chsh` or `sudo chsh`
-  if LANG= sudo -l -U "$USER" 2>/dev/null | grep -q "is not allowed to run"; then
+  # Check if user has sudo privileges to run `chsh` with or without `sudo`
+  #
+  # This allows the call to succeed without password on systems where the
+  # user does not have a password but does have sudo privileges, like in
+  # Google Cloud Shell.
+  #
+  # On systems that don't have a user with passwordless sudo, the user will
+  # be prompted for the password either way, so this shouldn't cause any issues.
+  #
+  if user_can_sudo; then
     chsh -s "$zsh" "$USER"          # run chsh normally
   else
     sudo -k chsh -s "$zsh" "$USER"  # -k forces the password prompt
