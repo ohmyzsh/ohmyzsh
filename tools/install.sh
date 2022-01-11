@@ -127,6 +127,24 @@ supports_hyperlinks() {
   return 1
 }
 
+# Adapted from code and information by Anton Kochkov (@XVilka)
+# Source: https://gist.github.com/XVilka/8346728
+supports_truecolor() {
+  case "$COLORTERM" in
+  truecolor|24bit) return 0 ;;
+  esac
+
+  case "$TERM" in
+  iterm           |\
+  tmux-truecolor  |\
+  linux-truecolor |\
+  xterm-truecolor |\
+  screen-truecolor) return 0 ;;
+  esac
+
+  return 1
+}
+
 fmt_link() {
   # $1: text, $2: url, $3: fallback mode
   if supports_hyperlinks; then
@@ -155,7 +173,28 @@ fmt_error() {
 
 setup_color() {
   # Only use colors if connected to a terminal
-  if is_tty; then
+  if ! is_tty; then
+    RAINBOW=""
+    RED=""
+    GREEN=""
+    YELLOW=""
+    BLUE=""
+    BOLD=""
+    RESET=""
+    return
+  fi
+
+  if supports_truecolor; then
+    RAINBOW="
+      $(printf '\033[38;2;255;0;0m')
+      $(printf '\033[38;2;255;97;0m')
+      $(printf '\033[38;2;247;255;0m')
+      $(printf '\033[38;2;0;255;30m')
+      $(printf '\033[38;2;77;0;255m')
+      $(printf '\033[38;2;168;0;255m')
+      $(printf '\033[38;2;245;0;172m')
+    "
+  else
     RAINBOW="
       $(printf '\033[38;5;196m')
       $(printf '\033[38;5;202m')
@@ -165,21 +204,14 @@ setup_color() {
       $(printf '\033[38;5;093m')
       $(printf '\033[38;5;163m')
     "
-    RED=$(printf '\033[31m')
-    GREEN=$(printf '\033[32m')
-    YELLOW=$(printf '\033[33m')
-    BLUE=$(printf '\033[34m')
-    BOLD=$(printf '\033[1m')
-    RESET=$(printf '\033[m')
-  else
-    RAINBOW=""
-    RED=""
-    GREEN=""
-    YELLOW=""
-    BLUE=""
-    BOLD=""
-    RESET=""
   fi
+
+  RED=$(printf '\033[31m')
+  GREEN=$(printf '\033[32m')
+  YELLOW=$(printf '\033[33m')
+  BLUE=$(printf '\033[34m')
+  BOLD=$(printf '\033[1m')
+  RESET=$(printf '\033[0m')
 }
 
 setup_ohmyzsh() {
