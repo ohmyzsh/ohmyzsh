@@ -791,12 +791,13 @@ function _omz::version {
 
     # Get the version name:
     # 1) try tag-like version
-    # 2) try name-rev
-    # 3) try branch name
+    # 2) try branch name
+    # 3) try name-rev (tag~<rev> or branch~<rev>)
     local version
     version=$(command git describe --tags HEAD 2>/dev/null) \
+    || version=$(command git symbolic-ref --quiet --short HEAD 2>/dev/null) \
     || version=$(command git name-rev --no-undefined --name-only --exclude="remotes/*" HEAD 2>/dev/null) \
-    || version=$(command git symbolic-ref --quiet --short HEAD 2>/dev/null)
+    || version="<detached>"
 
     # Get short hash for the current HEAD
     local commit=$(command git rev-parse --short HEAD 2>/dev/null)
