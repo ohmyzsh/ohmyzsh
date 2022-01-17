@@ -182,7 +182,7 @@ function _omz::changelog {
     ! command git rev-parse --verify "${version}^{commit}"
   ) &>/dev/null; then
     cat >&2 <<EOF
-Usage: omz changelog [version]
+Usage: ${(j: :)${(s.::.)0#_}} [version]
 
 NOTE: <version> must be a valid branch, tag or commit.
 EOF
@@ -193,9 +193,9 @@ EOF
 }
 
 function _omz::plugin {
-  (( $# > 0 && $+functions[_omz::plugin::$1] )) || {
+  (( $# > 0 && $+functions[$0::$1] )) || {
     cat >&2 <<EOF
-Usage: omz plugin <command> [options]
+Usage: ${(j: :)${(s.::.)0#_}} <command> [options]
 
 Available commands:
 
@@ -212,12 +212,12 @@ EOF
   local command="$1"
   shift
 
-  _omz::plugin::$command "$@"
+  $0::$command "$@"
 }
 
 function _omz::plugin::disable {
   if [[ -z "$1" ]]; then
-    echo >&2 "Usage: omz plugin disable <plugin> [...]"
+    echo >&2 "Usage: ${(j: :)${(s.::.)0#_}} <plugin> [...]"
     return 1
   fi
 
@@ -307,7 +307,7 @@ multi == 1 && length(\$0) > 0 {
 
 function _omz::plugin::enable {
   if [[ -z "$1" ]]; then
-    echo >&2 "Usage: omz plugin enable <plugin> [...]"
+    echo >&2 "Usage: ${(j: :)${(s.::.)0#_}} <plugin> [...]"
     return 1
   fi
 
@@ -383,7 +383,7 @@ multi == 1 && /^[^#]*\)/ {
 
 function _omz::plugin::info {
   if [[ -z "$1" ]]; then
-    echo >&2 "Usage: omz plugin info <plugin>"
+    echo >&2 "Usage: ${(j: :)${(s.::.)0#_}} <plugin>"
     return 1
   fi
 
@@ -430,7 +430,7 @@ function _omz::plugin::list {
 
 function _omz::plugin::load {
   if [[ -z "$1" ]]; then
-    echo >&2 "Usage: omz plugin load <plugin> [...]"
+    echo >&2 "Usage: ${(j: :)${(s.::.)0#_}} <plugin> [...]"
     return 1
   fi
 
@@ -477,9 +477,9 @@ function _omz::plugin::load {
 }
 
 function _omz::pr {
-  (( $# > 0 && $+functions[_omz::pr::$1] )) || {
+  (( $# > 0 && $+functions[$0::$1] )) || {
     cat >&2 <<EOF
-Usage: omz pr <command> [options]
+Usage: ${(j: :)${(s.::.)0#_}} <command> [options]
 
 Available commands:
 
@@ -493,7 +493,7 @@ EOF
   local command="$1"
   shift
 
-  _omz::pr::$command "$@"
+  $0::$command "$@"
 }
 
 function _omz::pr::clean {
@@ -534,7 +534,7 @@ function _omz::pr::test {
 
   # Check the input
   if ! [[ -n "$1" && "$1" =~ ^[[:digit:]]+$ ]]; then
-    echo >&2 "Usage: omz pr test <PR_NUMBER_or_URL>"
+    echo >&2 "Usage: ${(j: :)${(s.::.)0#_}} <PR_NUMBER_or_URL>"
     return 1
   fi
 
@@ -619,9 +619,9 @@ function _omz::reload {
 }
 
 function _omz::theme {
-  (( $# > 0 && $+functions[_omz::theme::$1] )) || {
+  (( $# > 0 && $+functions[$0::$1] )) || {
     cat >&2 <<EOF
-Usage: omz theme <command> [options]
+Usage: ${(j: :)${(s.::.)0#_}} <command> [options]
 
 Available commands:
 
@@ -636,7 +636,7 @@ EOF
   local command="$1"
   shift
 
-  _omz::theme::$command "$@"
+  $0::$command "$@"
 }
 
 function _omz::theme::list {
@@ -671,7 +671,7 @@ function _omz::theme::list {
 
 function _omz::theme::set {
   if [[ -z "$1" ]]; then
-    echo >&2 "Usage: omz theme set <theme>"
+    echo >&2 "Usage: ${(j: :)${(s.::.)0#_}} <theme>"
     return 1
   fi
 
@@ -739,7 +739,7 @@ EOF
 
 function _omz::theme::use {
   if [[ -z "$1" ]]; then
-    echo >&2 "Usage: omz theme use <theme>"
+    echo >&2 "Usage: ${(j: :)${(s.::.)0#_}} <theme>"
     return 1
   fi
 
