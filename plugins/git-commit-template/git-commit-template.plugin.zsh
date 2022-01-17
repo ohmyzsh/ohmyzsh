@@ -1,9 +1,4 @@
 git_commit_template() {
-    # Check in this directory git exist
-    if [ ! -d .git ]; then
-        echo "fatal: not a git repository (or any of the parent directories): .git"
-        exit 1
-    fi
 
     # Color formatting
     RED="\033[0;31m"
@@ -70,10 +65,9 @@ a file name, function name, class name, component name etc.\n\n"
 
     while :; do
         read -e short_desc
-        limit_counter=${#short_desc}
         if [ -z "$short_desc" ]; then
             printf "${RED}❌ Short description can not be empty.${RESET}\n"
-        elif [[ $limit_counter > 50 ]]; then
+        elif [[ ${#limit_counter} -gt 50 ]]; then
             printf "${RED}❌ The maximum character for header is 50, Please\
  provide details in long descriptions.${RESET}\n"
         else
