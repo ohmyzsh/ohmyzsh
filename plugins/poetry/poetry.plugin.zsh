@@ -12,7 +12,7 @@ if ! [[ -e "$comp_file" &&
         -e "$version_file" &&
         "$version" == "$(<$version_file)" ]]; then
   echo "$version" >| "$version_file"
-  poetry completions zsh >| "$comp_file"
+  poetry completions zsh >| "$comp_file" &|
 
   # Manually load the new completion file for this shell session.
   # In future shells, compinit will handle this automatically.
