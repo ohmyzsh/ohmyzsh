@@ -3,22 +3,16 @@ if ! $(command -v poetry >/dev/null) ; then
   return
 fi
 
-version="$(poetry -V)"
-version_file="$ZSH_CACHE_DIR/poetry_version"
 comp_file="$ZSH_CACHE_DIR/completions/_poetry"
 
-# Create completion file if it does not exist, or if poetry version changes
-if ! [[ -e "$comp_file" && 
-        -e "$version_file" &&
-        "$version" == "$(<$version_file)" ]]; then
-  echo "$version" >| "$version_file"
-  poetry completions zsh >| "$comp_file" &|
-
-  # Manually load the new completion file for this shell session.
-  # In future shells, compinit will handle this automatically.
+# If the completion file doesn't exist yet, we need to autoload it and
+# bind it to `poetry`. Otherwise, compinit will have already done that.
+if [[ ! -f "$comp_file" ]]; then
+  typeset -g -A _comps
   autoload -Uz _poetry
-  typeset -A _comps
-  _comps[poetry]=_poetry
+  _comps[gh]=_poetry
 fi
 
-unset version version_file comp_file
+poetry completions zsh >| "$comp_file" &|
+
+unset comp_file
