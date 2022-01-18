@@ -64,7 +64,9 @@ plugins=(... git)
 | gdca                 | git diff --cached                                                                                                                |
 | gdcw                 | git diff --cached --word-diff                                                                                                    |
 | gdct                 | git describe --tags $(git rev-list --tags --max-count=1)                                                                         |
+| gdi                  | git diff --ignore-all-space                                                                                                      |
 | gds                  | git diff --staged                                                                                                                |
+| gdsi                 | git diff --staged --ignore-all-space                                                                                             |
 | gdt                  | git diff-tree --no-commit-id --name-only -r                                                                                      |
 | gdnolock             | git diff $@ ":(exclude)package-lock.json" ":(exclude)&ast;.lock"                                                                 |
 | gdup                 | git diff @{upstream}                                                                                                             |
