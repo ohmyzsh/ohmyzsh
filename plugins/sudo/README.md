@@ -24,6 +24,20 @@ By pressing the <kbd>esc</kbd> key twice, you will have the same command with `s
 $ sudo apt-get install build-essential
 ```
 
+The same happens for editing files with your default editor (defined in `$SUDO_EDITOR`, `$VISUAL` or `$EDITOR`, in that order):
+
+If the editor defined were `vim`:
+
+```console
+$ vim /etc/hosts
+```
+
+By pressing the <kbd>esc</kbd> key twice, you will have the same command with `sudo -e` instead of the editor, that would open that editor with root privileges:
+
+```console
+$ sudo -e /etc/hosts
+```
+
 ### Previous executed commands
 
 Say you want to delete a system file and denied:
@@ -43,6 +57,8 @@ $ sudo rm some-system-file.txt
 Password:
 $
 ```
+
+The same happens for file editing, as told before.
 
 ## Key binding
 

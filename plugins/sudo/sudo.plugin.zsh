@@ -2,7 +2,7 @@
 # Description
 # -----------
 #
-# sudo or sudoedit will be inserted before the command
+# sudo or sudo -e (replacement for sudoedit) will be inserted before the command
 #
 # ------------------------------------------------------------------------------
 # Authors
@@ -11,6 +11,7 @@
 # * Dongweiming <ciici123@gmail.com>
 # * Subhaditya Nath <github.com/subnut>
 # * Marc Cornellà <github.com/mcornella>
+# * Carlo Sala <carlosalag@protonmail.com>
 #
 # ------------------------------------------------------------------------------
 
@@ -35,10 +36,14 @@ sudo-command-line() {
     LBUFFER="${LBUFFER:1}"
   fi
 
+  # If $SUDO_EDITOR or $VISUAL are defined, then use that as $EDITOR
+  # Else use the default $EDITOR
+  local EDITOR=${SUDO_EDITOR:-${VISUAL:-$EDITOR}}
+
   # If $EDITOR is not set, just toggle the sudo prefix on and off
   if [[ -z "$EDITOR" ]]; then
     case "$BUFFER" in
-      sudoedit\ *) __sudo-replace-buffer "sudoedit" "" ;;
+      sudo\ -e\ *) __sudo-replace-buffer "sudo -e" "" ;;
       sudo\ *) __sudo-replace-buffer "sudo" "" ;;
       *) LBUFFER="sudo $LBUFFER" ;;
     esac
@@ -72,9 +77,9 @@ sudo-command-line() {
 
     # Check for editor commands in the typed command and replace accordingly
     case "$BUFFER" in
-      $editorcmd\ *) __sudo-replace-buffer "$editorcmd" "sudoedit" ;;
-      \$EDITOR\ *) __sudo-replace-buffer '$EDITOR' "sudoedit" ;;
-      sudoedit\ *) __sudo-replace-buffer "sudoedit" "$EDITOR" ;;
+      $editorcmd\ *) __sudo-replace-buffer "$editorcmd" "sudo -e" ;;
+      \$EDITOR\ *) __sudo-replace-buffer '$EDITOR' "sudo -e" ;;
+      sudo\ -e\ *) __sudo-replace-buffer "sudo -e" "$EDITOR" ;;
       sudo\ *) __sudo-replace-buffer "sudo" "" ;;
       *) LBUFFER="sudo $LBUFFER" ;;
     esac
