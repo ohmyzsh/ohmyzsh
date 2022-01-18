@@ -101,15 +101,25 @@ octo-org/octo-repo#100\n\n"
         scope="(${scope})"
     fi
 
-    if [ ! -z "$breaking_changes" ]; then
-        breaking_changes="BREAKING CHANGE: ${breaking_changes}"
+    massage="\n    ${GREEN}${type_var}${scope}: ${short_desc}\n"
+
+    if [ ! -z "$long_desc" ] || [ ! -z "$breaking_changes" ] || [ ! -z "$closed_issues" ]; then
+        massage="${massage}\n"
     fi
 
-    printf "\n    ${GREEN}${type_var}${scope}: ${short_desc}
+    if [ ! -z "$long_desc" ]; then
+        massage="${massage}    ${long_desc}\n"
+    fi
 
-    ${long_desc}
-    ${breaking_changes}
-    ${closed_issues}${RESET}\n\n"
+    if [ ! -z "$breaking_changes" ]; then
+        massage="${massage}    BREAKING CHANGE: ${breaking_changes}\n"
+    fi
+
+    if [ ! -z "$closed_issues" ]; then
+        massage="${massage}    ${closed_issues}\n"
+    fi
+
+    printf "${massage}\n${RESET}"
 
     # Git commit
     result_code=$?
