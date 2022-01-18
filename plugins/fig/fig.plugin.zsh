@@ -10,4 +10,4 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_fig" ]]; then
   _comps[fig]=_fig
 fi
 
-fig completions zsh >| "$ZSH_CACHE_DIR/completions/_fig" &|
+fig completion zsh >| "$ZSH_CACHE_DIR/completions/_fig" &|
