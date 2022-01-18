@@ -17,9 +17,13 @@
 
 __sudo-replace-buffer() {
   local old=$1 new=$2 space=${2:+ }
-  if [[ ${#LBUFFER} -le ${#old} ]]; then
-    RBUFFER="${space}${BUFFER#$old }"
-    LBUFFER="${new}"
+
+  # if the cursor is positioned in the $old part of the text, make
+  # the substitution and leave the cursor after the $new text
+  if [[ $CURSOR -le ${#old} ]]; then
+    BUFFER="${new}${space}${BUFFER#$old }"
+    CURSOR=${#new}
+  # otherwise just replace $old with $new in the text before the cursor
   else
     LBUFFER="${new}${space}${LBUFFER#$old }"
   fi
@@ -36,18 +40,21 @@ sudo-command-line() {
     LBUFFER="${LBUFFER:1}"
   fi
 
-  # If $SUDO_EDITOR or $VISUAL are defined, then use that as $EDITOR
-  # Else use the default $EDITOR
-  local EDITOR=${SUDO_EDITOR:-${VISUAL:-$EDITOR}}
+  {
+    # If $SUDO_EDITOR or $VISUAL are defined, then use that as $EDITOR
+    # Else use the default $EDITOR
+    local EDITOR=${SUDO_EDITOR:-${VISUAL:-$EDITOR}}
 
-  # If $EDITOR is not set, just toggle the sudo prefix on and off
-  if [[ -z "$EDITOR" ]]; then
-    case "$BUFFER" in
-      sudo\ -e\ *) __sudo-replace-buffer "sudo -e" "" ;;
-      sudo\ *) __sudo-replace-buffer "sudo" "" ;;
-      *) LBUFFER="sudo $LBUFFER" ;;
-    esac
-  else
+    # If $EDITOR is not set, just toggle the sudo prefix on and off
+    if [[ -z "$EDITOR" ]]; then
+      case "$BUFFER" in
+        sudo\ -e\ *) __sudo-replace-buffer "sudo -e" "" ;;
+        sudo\ *) __sudo-replace-buffer "sudo" "" ;;
+        *) LBUFFER="sudo $LBUFFER" ;;
+      esac
+      return
+    fi
+
     # Check if the typed command is really an alias to $EDITOR
 
     # Get the first part of the typed command
@@ -72,7 +79,8 @@ sudo-command-line() {
     if [[ "$realcmd" = (\$EDITOR|$editorcmd|${editorcmd:c}) \
       || "${realcmd:c}" = ($editorcmd|${editorcmd:c}) ]] \
       || builtin which -a "$realcmd" | command grep -Fx -q "$editorcmd"; then
-      editorcmd="$cmd" # replace $editorcmd with the typed command so it matches below
+      __sudo-replace-buffer "$cmd" "sudo -e"
+      return
     fi
 
     # Check for editor commands in the typed command and replace accordingly
@@ -83,13 +91,13 @@ sudo-command-line() {
       sudo\ *) __sudo-replace-buffer "sudo" "" ;;
       *) LBUFFER="sudo $LBUFFER" ;;
     esac
-  fi
+  } always {
+    # Preserve beginning space
+    LBUFFER="${WHITESPACE}${LBUFFER}"
 
-  # Preserve beginning space
-  LBUFFER="${WHITESPACE}${LBUFFER}"
-
-  # Redisplay edit buffer (compatibility with zsh-syntax-highlighting)
-  zle redisplay
+    # Redisplay edit buffer (compatibility with zsh-syntax-highlighting)
+    zle redisplay
+  }
 }
 
 zle -N sudo-command-line
