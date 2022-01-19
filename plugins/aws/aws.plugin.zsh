@@ -157,11 +157,11 @@ compctl -K _aws_profiles asp acp aws_change_access_key
 
 # AWS prompt
 function aws_prompt_info() {
-  if [[ -n $AWS_VAULT ]]; then
-    AWS_PROFILE=$AWS_VAULT
+  if [[ -n "$AWS_VAULT" ]]; then
+    echo "${ZSH_THEME_AWS_PREFIX:=<aws:}${AWS_VAULT:gs/%/%%}${ZSH_THEME_AWS_SUFFIX:=>}" && return
   fi
-  
-  [[ -z $AWS_PROFILE ]] && return
+
+  [[ -n "$AWS_PROFILE" ]] || return
   echo "${ZSH_THEME_AWS_PREFIX:=<aws:}${AWS_PROFILE:gs/%/%%}${ZSH_THEME_AWS_SUFFIX:=>}"
 
 }
