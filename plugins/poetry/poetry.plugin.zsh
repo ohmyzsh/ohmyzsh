@@ -3,16 +3,14 @@ if ! $(command -v poetry >/dev/null) ; then
   return
 fi
 
-comp_file="$ZSH_CACHE_DIR/completions/_poetry"
-
 # If the completion file doesn't exist yet, we need to autoload it and
 # bind it to `poetry`. Otherwise, compinit will have already done that.
-if [[ ! -f "$comp_file" ]]; then
+if [[ ! -f "$ZSH_CACHE_DIR/completions/_poetry" ]]; then
   typeset -g -A _comps
   autoload -Uz _poetry
   _comps[gh]=_poetry
 fi
 
-poetry completions zsh >| "$comp_file" &|
+poetry completions zsh >| "$ZSH_CACHE_DIR/completions/_poetry" &|
 
 unset comp_file
