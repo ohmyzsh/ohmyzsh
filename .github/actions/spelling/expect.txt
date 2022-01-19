@@ -23,6 +23,7 @@ acroread
 acs
 acsc
 acsp
+acss
 actionformats
 Adamantium
 adb
@@ -311,6 +312,7 @@ bisd
 bitboxer
 bitbucket
 bitswap
+bitwarden
 blkio
 blockprofile
 blockprofilerate
@@ -1459,6 +1461,7 @@ gpr
 gpristine
 gpsup
 gpu
+gpus
 gpv
 gradle
 gradlew
@@ -2396,6 +2399,7 @@ mirrorlist
 mixin
 mkcd
 mkdir
+mkdirs
 mktag
 mktemp
 mktree
@@ -3116,6 +3120,7 @@ rbenv
 rbenvdirs
 rbfu
 RBUFFER
+rbw
 rcfile
 Rchive
 rcs
@@ -3453,6 +3458,7 @@ sheerun
 shellcheck
 shellinit
 shellperson
+SHELLPROXY
 shitload
 SHLVL
 shm
@@ -3684,7 +3690,6 @@ Subsubcommands
 Subsubsubcommands
 sudo
 sudoedit
-SUFIX
 suitenames
 sunaku
 sunion
@@ -4439,8 +4444,8 @@ zrr
 zrs
 zscore
 zse
-zsh'ed
 zsh
+zsh'ed
 zshaddhistory
 zshcmd
 zshcommands

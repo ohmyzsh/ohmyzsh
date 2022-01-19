@@ -395,12 +395,12 @@ function main {
 
   # Get the first version name:
   # 1) try tag-like version, or
-  # 2) try name-rev, or
-  # 3) try branch name, or
+  # 2) try branch name, or
+  # 3) try name-rev, or
   # 4) try short hash
   version=$(command git describe --tags $until 2>/dev/null) \
-    || version=$(command git name-rev --no-undefined --name-only --exclude="remotes/*" $until 2>/dev/null) \
     || version=$(command git symbolic-ref --quiet --short $until 2>/dev/null) \
+    || version=$(command git name-rev --no-undefined --name-only --exclude="remotes/*" $until 2>/dev/null) \
     || version=$(command git rev-parse --short $until 2>/dev/null)
 
   # Get commit list from $until commit until $since commit, or until root commit if $since is unset
@@ -414,7 +414,7 @@ function main {
   # --first-parent: commits from merged branches are omitted
   local SEP="0mZmAgIcSeP"
   local -a raw_commits
-  raw_commits=(${(0)"$(command git log -z \
+  raw_commits=(${(0)"$(command git -c log.showSignature=false log -z \
     --format="%h${SEP}%D${SEP}%s${SEP}%b" --abbrev=7 \
     --no-merges --first-parent $range)"})
 

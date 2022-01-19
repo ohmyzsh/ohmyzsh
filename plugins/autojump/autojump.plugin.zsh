@@ -8,6 +8,7 @@ autojump_paths=(
   /etc/profile.d/autojump.zsh                        # manual installation
   /etc/profile.d/autojump.sh                         # Gentoo installation
   /usr/local/share/autojump/autojump.zsh             # FreeBSD installation
+  /usr/pkg/share/autojump/autojump.zsh               # NetBSD installation
   /opt/local/etc/profile.d/autojump.sh               # macOS with MacPorts
   /usr/local/etc/profile.d/autojump.sh               # macOS with Homebrew (default)
   /opt/homebrew/etc/profile.d/autojump.sh            # macOS with Homebrew (default on M1 macs)

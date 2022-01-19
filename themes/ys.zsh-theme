@@ -5,10 +5,8 @@
 #
 # Mar 2013 Yad Smood
 
-typeset +H my_gray="$FG[247]"
-
 # VCS
-YS_VCS_PROMPT_PREFIX1=" %{$my_gray%}on%{$reset_color%} "
+YS_VCS_PROMPT_PREFIX1=" %{$reset_color%}on%{$fg[blue]%} "
 YS_VCS_PROMPT_PREFIX2=":%{$fg[cyan]%}"
 YS_VCS_PROMPT_SUFFIX="%{$reset_color%}"
 YS_VCS_PROMPT_DIRTY=" %{$fg[red]%}x"
@@ -62,13 +60,13 @@ local exit_code="%(?,,C:%{$fg[red]%}%?%{$reset_color%})"
 PROMPT="
 %{$terminfo[bold]$fg[blue]%}#%{$reset_color%} \
 %(#,%{$bg[yellow]%}%{$fg[black]%}%n%{$reset_color%},%{$fg[cyan]%}%n) \
-%{$my_gray%}@ \
+%{$reset_color%}@ \
 %{$fg[green]%}%m \
-%{$my_gray%}in \
+%{$reset_color%}in \
 %{$terminfo[bold]$fg[yellow]%}%~%{$reset_color%}\
 ${hg_info}\
 ${git_info}\
 ${venv_info}\
  \
-%{$my_gray%}[%*] $exit_code
+[%*] $exit_code
 %{$terminfo[bold]$fg[red]%}$ %{$reset_color%}"

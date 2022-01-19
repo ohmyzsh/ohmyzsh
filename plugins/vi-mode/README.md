@@ -30,18 +30,23 @@ plugins=(... vi-mode)
   ```
 
 - `MODE_INDICATOR`: controls the string displayed when the shell is in normal mode.
-  See [Mode indicator](#mode-indicator) for details.
+  See [Mode indicators](#mode-indicators) for details.
 
-## Mode indicator
+- `INSERT_MODE_INDICATOR`: controls the string displayed when the shell is in insert mode.
+  See [Mode indicators](#mode-indicators) for details.
+
+## Mode indicators
 
 *Normal mode* is indicated with a red `<<<` mark at the right prompt, when it
-hasn't been defined by theme.
+hasn't been defined by theme, *Insert mode* is not displayed by default.
 
-You can change this indicator by setting the `MODE_INDICATOR` variable. This setting
-supports Prompt Expansion sequences. For example:
+You can change these indicators by setting the `MODE_INDICATOR` (*Normal mode*) and
+`INSERT_MODE_INDICATORS` (*Insert mode*) variables.
+This settings support Prompt Expansion sequences. For example:
 
 ```zsh
-MODE_INDICATOR="%F{yellow}+%f"
+MODE_INDICATOR="%F{white}+%f"
+INSERT_MODE_INDICATOR="%F{yellow}+%f"
 ```
 
 You can also use the `vi_mode_prompt_info` function in your prompt, which will display

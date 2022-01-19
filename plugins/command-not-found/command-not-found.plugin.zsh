@@ -60,3 +60,10 @@ if [[ -x /data/data/com.termux/files/usr/libexec/termux/command-not-found ]]; th
     /data/data/com.termux/files/usr/libexec/termux/command-not-found "$1"
   }
 fi
+
+# SUSE and derivates: https://www.unix.com/man-page/suse/1/command-not-found/
+if [[ -x /usr/bin/command-not-found ]]; then
+  command_not_found_handler() {
+    /usr/bin/command-not-found "$1"
+  }
+fi

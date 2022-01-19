@@ -3,7 +3,7 @@
 ##
 # zsh completion function for ripgrep
 #
-# Run ci/test_complete.sh after building to ensure that the options supported by
+# Run ci/test-complete after building to ensure that the options supported by
 # this function stay in synch with the `rg` binary.
 #
 # For convenience, a completion reference guide is included at the bottom of
@@ -72,10 +72,18 @@ _rg() {
     + '(count)' # Counting options
     {-c,--count}'[only show count of matching lines for each file]'
     '--count-matches[only show count of individual matches for each file]'
+    '--include-zero[include files with zero matches in summary]'
 
     + '(encoding)' # Encoding options
     {-E+,--encoding=}'[specify text encoding of files to search]: :_rg_encodings'
     $no'--no-encoding[use default text encoding]'
+
+    + '(engine)' # Engine choice options
+    '--engine=[select which regex engine to use]:when:((
+      default\:"use default engine"
+      pcre2\:"identical to --pcre2"
+      auto\:"identical to --auto-hybrid-regex"
+    ))'
 
     + file # File-input options
     '(1)*'{-f+,--file=}'[specify file containing patterns to search for]: :_files'
@@ -128,6 +136,10 @@ _rg() {
     '--ignore-file-case-insensitive[process ignore files case insensitively]'
     $no'--no-ignore-file-case-insensitive[process ignore files case sensitively]'
 
+    + '(ignore-exclude)' # Local exclude (ignore)-file options
+    "--no-ignore-exclude[don't respect local exclude (ignore) files]"
+    $no'--ignore-exclude[respect local exclude (ignore) files]'
+
     + '(ignore-global)' # Global ignore-file options
     "--no-ignore-global[don't respect global ignore files]"
     $no'--ignore-global[respect global ignore files]'
@@ -140,9 +152,17 @@ _rg() {
     "--no-ignore-vcs[don't respect version control ignore files]"
     $no'--ignore-vcs[respect version control ignore files]'
 
-    + '(ignore-dot)' # .ignore-file options
+    + '(require-git)' # git specific settings
+    "--no-require-git[don't require git repository to respect gitignore rules]"
+    $no'--require-git[require git repository to respect gitignore rules]'
+
+    + '(ignore-dot)' # .ignore options
     "--no-ignore-dot[don't respect .ignore files]"
     $no'--ignore-dot[respect .ignore files]'
+
+    + '(ignore-files)' # custom global ignore file options
+    "--no-ignore-files[don't respect --ignore-file flags]"
+    $no'--ignore-files[respect --ignore-file files]'
 
     + '(json)' # JSON options
     '--json[output results in JSON Lines format]'
@@ -263,6 +283,10 @@ _rg() {
     {-w,--word-regexp}'[only show matches surrounded by word boundaries]'
     {-x,--line-regexp}'[only show matches surrounded by line boundaries]'
 
+    + '(unicode)' # Unicode options
+    $no'--unicode[enable Unicode mode]'
+    '--no-unicode[disable Unicode mode]'
+
     + '(zip)' # Compression options
     '(--pre)'{-z,--search-zip}'[search in compressed files]'
     $no"--no-search-zip[don't search in compressed files]"
@@ -277,7 +301,9 @@ _rg() {
     ))'
     '*--colors=[specify color and style settings]: :->colorspec'
     '--context-separator=[specify string used to separate non-continuous context lines in output]:separator'
+    $no"--no-context-separator[don't print context separators]"
     '--debug[show debug messages]'
+    '--trace[show more verbose debug messages]'
     '--dfa-size-limit=[specify upper size limit of generated DFA]:DFA size (bytes)'
     "(1 stats)--files[show each file that would be searched (but don't search)]"
     '*--ignore-file=[specify additional ignore file]:ignore file:_files'
@@ -297,7 +323,7 @@ _rg() {
     '(--type-list)*: :_files'
   )
 
-  # This is used with test_complete.sh to verify that there are no options
+  # This is used with test-complete to verify that there are no options
   # listed in the help output that aren't also defined here
   [[ $_RG_COMPLETE_LIST_ARGS == (1|t*|y*) ]] && {
     print -rl - $args

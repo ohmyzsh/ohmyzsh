@@ -61,17 +61,19 @@ function _omz {
           # if command is "disable", only offer already enabled plugins
           valid_plugins=($plugins)
         else
-          valid_plugins=("$ZSH"/plugins/*/{_*,*.plugin.zsh}(.N:h:t) "$ZSH_CUSTOM"/plugins/*/{_*,*.plugin.zsh}(.N:h:t))
+          valid_plugins=("$ZSH"/plugins/*/{_*,*.plugin.zsh}(-.N:h:t) "$ZSH_CUSTOM"/plugins/*/{_*,*.plugin.zsh}(-.N:h:t))
           # if command is "enable", remove already enabled plugins
           [[ "${words[3]}" = enable ]] && valid_plugins=(${valid_plugins:|plugins})
         fi
 
         _describe 'plugin' valid_plugins ;;
       plugin::info)
-        local -aU plugins=("$ZSH"/plugins/*/{_*,*.plugin.zsh}(.N:h:t) "$ZSH_CUSTOM"/plugins/*/{_*,*.plugin.zsh}(.N:h:t))
+        local -aU plugins
+        plugins=("$ZSH"/plugins/*/{_*,*.plugin.zsh}(-.N:h:t) "$ZSH_CUSTOM"/plugins/*/{_*,*.plugin.zsh}(-.N:h:t))
         _describe 'plugin' plugins ;;
       theme::(set|use))
-        local -aU themes=("$ZSH"/themes/*.zsh-theme(.N:t:r) "$ZSH_CUSTOM"/**/*.zsh-theme(.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::))
+        local -aU themes
+        themes=("$ZSH"/themes/*.zsh-theme(-.N:t:r) "$ZSH_CUSTOM"/**/*.zsh-theme(-.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::))
         _describe 'theme' themes ;;
     esac
   elif (( CURRENT > 4 )); then
@@ -83,7 +85,7 @@ function _omz {
           # if command is "disable", only offer already enabled plugins
           valid_plugins=($plugins)
         else
-          valid_plugins=("$ZSH"/plugins/*/{_*,*.plugin.zsh}(.N:h:t) "$ZSH_CUSTOM"/plugins/*/{_*,*.plugin.zsh}(.N:h:t))
+          valid_plugins=("$ZSH"/plugins/*/{_*,*.plugin.zsh}(-.N:h:t) "$ZSH_CUSTOM"/plugins/*/{_*,*.plugin.zsh}(-.N:h:t))
           # if command is "enable", remove already enabled plugins
           [[ "${words[3]}" = enable ]] && valid_plugins=(${valid_plugins:|plugins})
         fi
@@ -180,7 +182,7 @@ function _omz::changelog {
     ! command git rev-parse --verify "${version}^{commit}"
   ) &>/dev/null; then
     cat >&2 <<EOF
-Usage: omz changelog [version]
+Usage: ${(j: :)${(s.::.)0#_}} [version]
 
 NOTE: <version> must be a valid branch, tag or commit.
 EOF
@@ -191,9 +193,9 @@ EOF
 }
 
 function _omz::plugin {
-  (( $# > 0 && $+functions[_omz::plugin::$1] )) || {
+  (( $# > 0 && $+functions[$0::$1] )) || {
     cat >&2 <<EOF
-Usage: omz plugin <command> [options]
+Usage: ${(j: :)${(s.::.)0#_}} <command> [options]
 
 Available commands:
 
@@ -210,12 +212,12 @@ EOF
   local command="$1"
   shift
 
-  _omz::plugin::$command "$@"
+  $0::$command "$@"
 }
 
 function _omz::plugin::disable {
   if [[ -z "$1" ]]; then
-    echo >&2 "Usage: omz plugin disable <plugin> [...]"
+    echo >&2 "Usage: ${(j: :)${(s.::.)0#_}} <plugin> [...]"
     return 1
   fi
 
@@ -274,9 +276,10 @@ multi == 1 && length(\$0) > 0 {
 { print \$0 }
 "
 
-  awk "$awk_script" ~/.zshrc > ~/.zshrc.new \
-  && command mv -f ~/.zshrc ~/.zshrc.bck \
-  && command mv -f ~/.zshrc.new ~/.zshrc
+  local zdot="${ZDOTDIR:-$HOME}"
+  awk "$awk_script" "$zdot/.zshrc" > "$zdot/.zshrc.new" \
+  && command mv -f "$zdot/.zshrc" "$zdot/.zshrc.bck" \
+  && command mv -f "$zdot/.zshrc.new" "$zdot/.zshrc"
 
   # Exit if the new .zshrc file wasn't created correctly
   [[ $? -eq 0 ]] || {
@@ -286,10 +289,10 @@ multi == 1 && length(\$0) > 0 {
   }
 
   # Exit if the new .zshrc file has syntax errors
-  if ! zsh -n ~/.zshrc; then
-    _omz::log error "broken syntax in ~/.zshrc. Rolling back changes..."
-    command mv -f ~/.zshrc ~/.zshrc.new
-    command mv -f ~/.zshrc.bck ~/.zshrc
+  if ! zsh -n "$zdot/.zshrc"; then
+    _omz::log error "broken syntax in '"${zdot/#$HOME/\~}/.zshrc"'. Rolling back changes..."
+    command mv -f "$zdot/.zshrc" "$zdot/.zshrc.new"
+    command mv -f "$zdot/.zshrc.bck" "$zdot/.zshrc"
     return 1
   fi
 
@@ -304,7 +307,7 @@ multi == 1 && length(\$0) > 0 {
 
 function _omz::plugin::enable {
   if [[ -z "$1" ]]; then
-    echo >&2 "Usage: omz plugin enable <plugin> [...]"
+    echo >&2 "Usage: ${(j: :)${(s.::.)0#_}} <plugin> [...]"
     return 1
   fi
 
@@ -349,9 +352,10 @@ multi == 1 && /^[^#]*\)/ {
 { print \$0 }
 "
 
-  awk "$awk_script" ~/.zshrc > ~/.zshrc.new \
-  && command mv -f ~/.zshrc ~/.zshrc.bck \
-  && command mv -f ~/.zshrc.new ~/.zshrc
+  local zdot="${ZDOTDIR:-$HOME}"
+  awk "$awk_script" "$zdot/.zshrc" > "$zdot/.zshrc.new" \
+  && command mv -f "$zdot/.zshrc" "$zdot/.zshrc.bck" \
+  && command mv -f "$zdot/.zshrc.new" "$zdot/.zshrc"
 
   # Exit if the new .zshrc file wasn't created correctly
   [[ $? -eq 0 ]] || {
@@ -361,10 +365,10 @@ multi == 1 && /^[^#]*\)/ {
   }
 
   # Exit if the new .zshrc file has syntax errors
-  if ! zsh -n ~/.zshrc; then
-    _omz::log error "broken syntax in ~/.zshrc. Rolling back changes..."
-    command mv -f ~/.zshrc ~/.zshrc.new
-    command mv -f ~/.zshrc.bck ~/.zshrc
+  if ! zsh -n "$zdot/.zshrc"; then
+    _omz::log error "broken syntax in '"${zdot/#$HOME/\~}/.zshrc"'. Rolling back changes..."
+    command mv -f "$zdot/.zshrc" "$zdot/.zshrc.new"
+    command mv -f "$zdot/.zshrc.bck" "$zdot/.zshrc"
     return 1
   fi
 
@@ -379,7 +383,7 @@ multi == 1 && /^[^#]*\)/ {
 
 function _omz::plugin::info {
   if [[ -z "$1" ]]; then
-    echo >&2 "Usage: omz plugin info <plugin>"
+    echo >&2 "Usage: ${(j: :)${(s.::.)0#_}} <plugin>"
     return 1
   fi
 
@@ -426,7 +430,7 @@ function _omz::plugin::list {
 
 function _omz::plugin::load {
   if [[ -z "$1" ]]; then
-    echo >&2 "Usage: omz plugin load <plugin> [...]"
+    echo >&2 "Usage: ${(j: :)${(s.::.)0#_}} <plugin> [...]"
     return 1
   fi
 
@@ -473,9 +477,9 @@ function _omz::plugin::load {
 }
 
 function _omz::pr {
-  (( $# > 0 && $+functions[_omz::pr::$1] )) || {
+  (( $# > 0 && $+functions[$0::$1] )) || {
     cat >&2 <<EOF
-Usage: omz pr <command> [options]
+Usage: ${(j: :)${(s.::.)0#_}} <command> [options]
 
 Available commands:
 
@@ -489,7 +493,7 @@ EOF
   local command="$1"
   shift
 
-  _omz::pr::$command "$@"
+  $0::$command "$@"
 }
 
 function _omz::pr::clean {
@@ -530,7 +534,7 @@ function _omz::pr::test {
 
   # Check the input
   if ! [[ -n "$1" && "$1" =~ ^[[:digit:]]+$ ]]; then
-    echo >&2 "Usage: omz pr test <PR_NUMBER_or_URL>"
+    echo >&2 "Usage: ${(j: :)${(s.::.)0#_}} <PR_NUMBER_or_URL>"
     return 1
   fi
 
@@ -615,9 +619,9 @@ function _omz::reload {
 }
 
 function _omz::theme {
-  (( $# > 0 && $+functions[_omz::theme::$1] )) || {
+  (( $# > 0 && $+functions[$0::$1] )) || {
     cat >&2 <<EOF
-Usage: omz theme <command> [options]
+Usage: ${(j: :)${(s.::.)0#_}} <command> [options]
 
 Available commands:
 
@@ -632,7 +636,7 @@ EOF
   local command="$1"
   shift
 
-  _omz::theme::$command "$@"
+  $0::$command "$@"
 }
 
 function _omz::theme::list {
@@ -667,7 +671,7 @@ function _omz::theme::list {
 
 function _omz::theme::set {
   if [[ -z "$1" ]]; then
-    echo >&2 "Usage: omz theme set <theme>"
+    echo >&2 "Usage: ${(j: :)${(s.::.)0#_}} <theme>"
     return 1
   fi
 
@@ -696,17 +700,18 @@ END {
 }
 '
 
-  awk "$awk_script" ~/.zshrc > ~/.zshrc.new \
+  local zdot="${ZDOTDIR:-$HOME}"
+  awk "$awk_script" "$zdot/.zshrc" > "$zdot/.zshrc.new" \
   || {
     # Prepend ZSH_THEME= line to .zshrc if it doesn't exist
     cat <<EOF
 ZSH_THEME="$1" # set by \`omz\`
 
 EOF
-    cat ~/.zshrc
-  } > ~/.zshrc.new \
-  && command mv -f ~/.zshrc ~/.zshrc.bck \
-  && command mv -f ~/.zshrc.new ~/.zshrc
+    cat "$zdot/.zshrc"
+  } > "$zdot/.zshrc.new" \
+  && command mv -f "$zdot/.zshrc" "$zdot/.zshrc.bck" \
+  && command mv -f "$zdot/.zshrc.new" "$zdot/.zshrc"
 
   # Exit if the new .zshrc file wasn't created correctly
   [[ $? -eq 0 ]] || {
@@ -716,10 +721,10 @@ EOF
   }
 
   # Exit if the new .zshrc file has syntax errors
-  if ! zsh -n ~/.zshrc; then
-    _omz::log error "broken syntax in ~/.zshrc. Rolling back changes..."
-    command mv -f ~/.zshrc ~/.zshrc.new
-    command mv -f ~/.zshrc.bck ~/.zshrc
+  if ! zsh -n "$zdot/.zshrc"; then
+    _omz::log error "broken syntax in '"${zdot/#$HOME/\~}/.zshrc"'. Rolling back changes..."
+    command mv -f "$zdot/.zshrc" "$zdot/.zshrc.new"
+    command mv -f "$zdot/.zshrc.bck" "$zdot/.zshrc"
     return 1
   fi
 
@@ -734,7 +739,7 @@ EOF
 
 function _omz::theme::use {
   if [[ -z "$1" ]]; then
-    echo >&2 "Usage: omz theme use <theme>"
+    echo >&2 "Usage: ${(j: :)${(s.::.)0#_}} <theme>"
     return 1
   fi
 
@@ -786,12 +791,13 @@ function _omz::version {
 
     # Get the version name:
     # 1) try tag-like version
-    # 2) try name-rev
-    # 3) try branch name
+    # 2) try branch name
+    # 3) try name-rev (tag~<rev> or branch~<rev>)
     local version
     version=$(command git describe --tags HEAD 2>/dev/null) \
+    || version=$(command git symbolic-ref --quiet --short HEAD 2>/dev/null) \
     || version=$(command git name-rev --no-undefined --name-only --exclude="remotes/*" HEAD 2>/dev/null) \
-    || version=$(command git symbolic-ref --quiet --short HEAD 2>/dev/null)
+    || version="<detached>"
 
     # Get short hash for the current HEAD
     local commit=$(command git rev-parse --short HEAD 2>/dev/null)

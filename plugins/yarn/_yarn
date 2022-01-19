@@ -85,36 +85,67 @@ _global_commands=(
   'upgrade-interactive:Interactively upgrade packages'
 )
 
+_yarn_find_package_json() {
+  local dir=$(cd "$1" && pwd)
+
+  while true
+  do
+    if [[ -e "${dir}/package.json" ]]; then
+      echo "${dir}/package.json"
+      return
+    fi
+
+    if [[ $dir == '/' ]]; then
+      break
+    fi
+
+    dir=$(dirname $dir)
+  done
+}
+
 _yarn_commands_scripts() {
-  local -a scripts
+  local -a scripts binaries
+  local packageJson
+
   if [[ -n $opt_args[--cwd] ]]; then
-    scripts=($(cd $opt_args[--cwd] && yarn run --json 2>/dev/null | sed -E '/Commands available|possibleCommands/!d;s/.*Commands available from binary scripts: ([^"]+)".*/\1/;s/.*"items":\[([^]]+).*/\1/;s/[" ]//g' | tr , '\n' | sed -e 's/:/\\:/g'))
+    packageJson=$(_yarn_find_package_json $opt_args[--cwd])
+    binaries=($(cd $opt_args[--cwd] && echo node_modules/.bin/*(x:t)))
   else
-    scripts=($(yarn run --json 2>/dev/null | sed -E '/Commands available|possibleCommands/!d;s/.*Commands available from binary scripts: ([^"]+)".*/\1/;s/.*"items":\[([^]]+).*/\1/;s/[" ]//g' | tr , '\n' | sed -e 's/:/\\:/g'))
+    packageJson=$(_yarn_find_package_json $pwd)
+    binaries=($(echo node_modules/.bin/*(x:t)))
   fi
 
-  _describe 'command or script' _commands -- _global_commands -- scripts
+  if [[ -n $packageJson ]]; then
+    scripts=($(cat "$packageJson" | perl -0777 -MJSON::PP -n -E '$r=decode_json($_); do{($k=$_)=~s/:/\\:/g;say $k}for sort keys %{$r->{scripts}}'))
+  fi
+
+  _describe 'command or script' _commands -- _global_commands -- scripts -- binaries
 }
 
 _yarn_scripts() {
-  local -a commands binaries scripts
-  local -a scriptNames scriptCommands
-  local i runJSON
+  local -a binaries scripts
+  local -a commands
+  local packageJson
 
   if [[ -n $_yarn_run_cwd ]]; then
-    runJSON=$(cd $_yarn_run_cwd && yarn run --json 2>/dev/null)
+    packageJson=$(_yarn_find_package_json $_yarn_run_cwd)
+    if [[ -d "${_yarn_run_cwd}/node_modules" ]]; then
+      binaries=($(cd $_yarn_run_cwd && echo node_modules/.bin/*(x:t)))
+    else
+      binaries=($(cd $_yarn_run_cwd && yarn bin | perl -wln -e 'm{^[^:]+: (\S+)$} and print $1'))
+    fi
   else
-    runJSON=$(yarn run --json 2>/dev/null)
+    packageJson=$(_yarn_find_package_json $pwd)
+    if [[ -d node_modules ]]; then
+      binaries=($(echo node_modules/.bin/*(x:t)))
+    else
+      binaries=($(yarn bin | perl -wln -e 'm{^[^:]+: (\S+)$} and print $1'))
+    fi
   fi
-  # Some sed utilities (e.g. Mac OS / BSD) don't interpret `\n` in a replacement
-  # pattern as a newline. See https://superuser.com/q/307165
-  binaries=($(sed -E '/Commands available/!d;s/.*Commands available from binary scripts: ([^"]+)".*/\1/;s/.*"items":\[([^]]+).*/\1/;s/[" ]//g;s/:/\\:/g;s/,/\'$'\n/g' <<< "$runJSON"))
-  scriptNames=($(sed -E '/possibleCommands/!d;s/.*"items":\[([^]]+).*/\1/;s/[" ]//g;s/:/\\:/g;s/,/\'$'\n/g' <<< "$runJSON"))
-  scriptCommands=("${(@f)$(sed -E '/possibleCommands/!d;s/.*"hints":\{(.+")\}.*/\1/;s/"[^"]+"://g;s/:/\\:/g;s/","/\'$'\n/g;s/(^"|"$)//g' <<< "$runJSON")}")
 
-  for (( i=1; i <= $#scriptNames; i++ )); do
-    scripts+=("${scriptNames[$i]}:${scriptCommands[$i]}")
-  done
+  if [[ -n $packageJson ]]; then
+    scripts=("${(@f)$(cat ${packageJson} | perl -0777 -MJSON::PP -n -E '%r=%{decode_json($_)->{scripts}}; do{$k=$_;($e=$k)=~s/:/\\:/g; printf "$e:$r{$k}\n"} for sort keys %r')}")
+  fi
 
   commands=('env' $scripts $binaries)
   _describe 'command' commands
@@ -137,7 +168,13 @@ _yarn_add_files() {
 }
 
 _yarn_workspaces() {
-  local -a workspaces=(${(@f)$(yarn workspaces info |sed -n -e 's/^  "\([^"]*\)": {/\1/p')})
+  local version=$(yarn --version |sed -n 's|\([0-9]*\).*|\1|p')
+  local -a workspaces
+  if [[ $version == "1" ]]; then
+    workspaces=(${(@f)$(yarn workspaces info |sed -n -e 's/^  "\([^"]*\)": {/\1/p')})
+  else
+    workspaces=(${(@f)$(yarn workspaces list --json | sed -n 's|.*"name":"\([^"]*\)"}|\1|p')})
+  fi
   _describe 'workspace' workspaces
 }
 
