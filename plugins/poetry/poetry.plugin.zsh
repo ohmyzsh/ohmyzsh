@@ -1,5 +1,5 @@
 # Return immediately if poetry is not found
-if ! $(command -v poetry >/dev/null) ; then
+if (( ! $+commands[poetry] )); then
   return
 fi
 
