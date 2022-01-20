@@ -55,7 +55,7 @@ svn_get_branch_name() {
 }
 
 svn_get_rev_nr() {
-  sed -n 's/Revision:\ //p' "${1:-$(LANG= svn info 2>/dev/null)}"
+  sed -n 's/Revision:\ //p' <<<"${1:-$(LANG= svn info 2>/dev/null)}"
 }
 
 svn_dirty() {

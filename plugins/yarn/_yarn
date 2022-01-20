@@ -116,7 +116,7 @@ _yarn_commands_scripts() {
   fi
 
   if [[ -n $packageJson ]]; then
-    scripts=($(cat "$packageJson" | perl -0777 -MJSON::PP -n -E '%r=decode_json($_); say for sort keys %{$r->{scripts}}'))
+    scripts=($(cat "$packageJson" | perl -0777 -MJSON::PP -n -E '$r=decode_json($_); do{($k=$_)=~s/:/\\:/g;say $k}for sort keys %{$r->{scripts}}'))
   fi
 
   _describe 'command or script' _commands -- _global_commands -- scripts -- binaries
@@ -144,7 +144,7 @@ _yarn_scripts() {
   fi
 
   if [[ -n $packageJson ]]; then
-    scripts=("${(@f)$(cat ${packageJson} | perl -0777 -MJSON::PP -n -E '%r=%{decode_json($_)->{scripts}}; printf "$_:$r{$_}\n" for sort keys %r')}")
+    scripts=("${(@f)$(cat ${packageJson} | perl -0777 -MJSON::PP -n -E '%r=%{decode_json($_)->{scripts}}; do{$k=$_;($e=$k)=~s/:/\\:/g; printf "$e:$r{$k}\n"} for sort keys %r')}")
   fi
 
   commands=('env' $scripts $binaries)

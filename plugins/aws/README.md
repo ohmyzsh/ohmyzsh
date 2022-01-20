@@ -19,10 +19,10 @@ plugins=(... aws)
 * `asr [<region>]`: sets `$AWS_REGION` and `$AWS_DEFAULT_REGION` (legacy) to `<region>`.
   Run `asr` without arguments to clear the profile.
 
-* `acp [<profile>]`: in addition to `asp` functionality, it actually changes the profile by
-   assuming the role specified in the `<profile>` configuration. It supports MFA and sets
-   `$AWS_ACCESS_KEY_ID`, `$AWS_SECRET_ACCESS_KEY` and `$AWS_SESSION_TOKEN`, if obtained. It
-   requires the roles to be configured as per the
+* `acp [<profile>] [<mfa_token>]`: in addition to `asp` functionality, it actually changes
+   the profile by assuming the role specified in the `<profile>` configuration. It supports
+   MFA and sets `$AWS_ACCESS_KEY_ID`, `$AWS_SECRET_ACCESS_KEY` and `$AWS_SESSION_TOKEN`, if
+   obtained. It requires the roles to be configured as per the
    [official guide](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-role.html).
    Run `acp` without arguments to clear the profile.
 
