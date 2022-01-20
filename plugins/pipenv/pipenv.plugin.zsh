@@ -23,9 +23,14 @@ _togglePipenvShell() {
     fi
   fi
 }
-autoload -U add-zsh-hook
-add-zsh-hook chpwd _togglePipenvShell
-_togglePipenvShell
+
+# If lazy loading selected, disable automatic pipenv shell activation;
+# e.g. in case you using direnv, or just need shortkeys and not the env.
+if [[ "$PIPENV_LAZY_LOAD" != 1 ]]; then
+  autoload -U add-zsh-hook
+  add-zsh-hook chpwd _togglePipenvShell
+  _togglePipenvShell
+fi
 
 # Aliases
 alias pch="pipenv check"

@@ -11,6 +11,9 @@ plugins=(... pipenv ...)
 This plugin provides some features to simplify the use of Pipenv while working on ZSH. 
 - Adds completion for pipenv
 - Auto activates and deactivates pipenv shell
+ - If lazy loading is desierd, e.g. in case you use direnv, or just need shortkeys,
+   setting `PIPENV_LAZY_LOAD` to 1 befor activating the plugin in `.zshrc` disables automatic pipenv shell activation.
+
 - Adds short aliases for common pipenv commands
   - `pch` is aliased to `pipenv check`
   - `pcl` is aliased to `pipenv clean`
