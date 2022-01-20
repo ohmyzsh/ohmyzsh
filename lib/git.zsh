@@ -6,7 +6,11 @@
 # We wrap in a local function instead of exporting the variable directly in
 # order to avoid interfering with manually-run git commands by the user.
 function __git_prompt_git() {
-  GIT_OPTIONAL_LOCKS=0 command git "$@"
+  if $(pwd -P | grep -q "^\/mnt\/c\/*"); then
+    GIT_OPTIONAL_LOCKS=0 command git.exe "$@"
+  else
+    GIT_OPTIONAL_LOCKS=0 command git "$@"
+  fi
 }
 
 function git_prompt_info() {
