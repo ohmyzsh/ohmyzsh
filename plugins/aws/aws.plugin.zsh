@@ -25,9 +25,6 @@ function asp() {
   export AWS_DEFAULT_PROFILE=$1
   export AWS_PROFILE=$1
   export AWS_EB_PROFILE=$1
-  # default region set `us-east-1`
-  # export AWS_REGION=${2:-us-east-1}
-  # export AWS_DEFAULT_REGION=${2:-us-east-1}
 
   if [[ "$2" == "login" ]]; then
     aws sso login
@@ -170,7 +167,11 @@ function aws_change_access_key() {
 }
 
 function aws_regions() {
-  echo -e "us-east-1\nus-east-2\nus-west-1\nus-west-2\neu-north-1\nap-south-1\neu-west-3\neu-west-2\neu-west-1\nap-northeast-3\nap-northeast-2\nap-northeast-1\nsa-east-1\nca-central-1\nap-southeast-1\nap-southeast-2\neu-central-1"
+  if [[ $AWS_DEFAULT_PROFILE || $AWS_PROFILE ]];then
+    aws ec2 describe-regions |grep RegionName | awk -F ':' '{gsub(/"/, "", $2);gsub(/,/, "", $2);gsub(/ /, "", $2);  print $2}'
+  else
+    echo "You must specify a AWS profile."
+  fi
 }
 
 function aws_profiles() {
