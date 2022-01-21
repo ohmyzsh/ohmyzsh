@@ -37,7 +37,7 @@ function _omz {
   elif (( CURRENT == 3 )); then
     case "$words[2]" in
       changelog) local -a refs
-        refs=("${(@f)$(cd "$ZSH"; command git for-each-ref --format="%(refname:short):%(subject)" refs/heads refs/tags)}")
+        refs=("${(@f)$(builtin cd -q "$ZSH"; command git for-each-ref --format="%(refname:short):%(subject)" refs/heads refs/tags)}")
         _describe 'command' refs ;;
       plugin) subcmds=(
         'disable:Disable plugin(s)'
@@ -176,7 +176,7 @@ function _omz::changelog {
   local version=${1:-HEAD} format=${3:-"--text"}
 
   if (
-    cd "$ZSH"
+    builtin cd -q "$ZSH"
     ! command git show-ref --verify refs/heads/$version && \
     ! command git show-ref --verify refs/tags/$version && \
     ! command git rev-parse --verify "${version}^{commit}"
@@ -761,7 +761,7 @@ function _omz::theme::use {
 }
 
 function _omz::update {
-  local last_commit=$(cd "$ZSH"; git rev-parse HEAD)
+  local last_commit=$(builtin cd -q "$ZSH"; git rev-parse HEAD)
 
   # Run update script
   if [[ "$1" != --unattended ]]; then
@@ -777,7 +777,7 @@ function _omz::update {
   command rm -rf "$ZSH/log/update.lock"
 
   # Restart the zsh session if there were changes
-  if [[ "$1" != --unattended && "$(cd "$ZSH"; git rev-parse HEAD)" != "$last_commit" ]]; then
+  if [[ "$1" != --unattended && "$(builtin cd -q "$ZSH"; git rev-parse HEAD)" != "$last_commit" ]]; then
     # Old zsh versions don't have ZSH_ARGZERO
     local zsh="${ZSH_ARGZERO:-${functrace[-1]%:*}}"
     # Check whether to run a login shell
@@ -787,7 +787,7 @@ function _omz::update {
 
 function _omz::version {
   (
-    cd "$ZSH"
+    builtin cd -q "$ZSH"
 
     # Get the version name:
     # 1) try tag-like version
