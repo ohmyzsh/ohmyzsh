@@ -16,10 +16,10 @@ plugins=(... aws)
   Run `asp` without arguments to clear the profile.
 * `asp [<profile>] login`: If AWS SSO has been configured in your aws profile, it will run the `aws sso login` command following profile selection. 
 
-* `acp [<profile>]`: in addition to `asp` functionality, it actually changes the profile by
-   assuming the role specified in the `<profile>` configuration. It supports MFA and sets
-   `$AWS_ACCESS_KEY_ID`, `$AWS_SECRET_ACCESS_KEY` and `$AWS_SESSION_TOKEN`, if obtained. It
-   requires the roles to be configured as per the
+* `acp [<profile>] [<mfa_token>]`: in addition to `asp` functionality, it actually changes
+   the profile by assuming the role specified in the `<profile>` configuration. It supports
+   MFA and sets `$AWS_ACCESS_KEY_ID`, `$AWS_SECRET_ACCESS_KEY` and `$AWS_SESSION_TOKEN`, if
+   obtained. It requires the roles to be configured as per the
    [official guide](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-role.html).
    Run `acp` without arguments to clear the profile.
 

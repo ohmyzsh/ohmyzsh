@@ -10,11 +10,13 @@ fi
 # - auto: the update is performed automatically when it's time
 # - reminder: a reminder is shown to the user when it's time to update
 # - disabled: automatic update is turned off
-zstyle -s ':omz:update' mode update_mode || update_mode=prompt
+zstyle -s ':omz:update' mode update_mode || {
+  update_mode=prompt
 
-# Support old-style settings
-[[ "$DISABLE_UPDATE_PROMPT" != true ]] || update_mode=auto
-[[ "$DISABLE_AUTO_UPDATE" != true ]] || update_mode=disabled
+  # If the mode zstyle setting is not set, support old-style settings
+  [[ "$DISABLE_UPDATE_PROMPT" != true ]] || update_mode=auto
+  [[ "$DISABLE_AUTO_UPDATE" != true ]] || update_mode=disabled
+}
 
 # Cancel update if:
 # - the automatic update is disabled.
@@ -34,11 +36,11 @@ function current_epoch() {
 
 function is_update_available() {
   local branch
-  branch=${"$(cd "$ZSH"; git config --local oh-my-zsh.branch)":-master}
+  branch=${"$(cd -q "$ZSH"; git config --local oh-my-zsh.branch)":-master}
 
   local remote remote_url remote_repo
-  remote=${"$(cd "$ZSH"; git config --local oh-my-zsh.remote)":-origin}
-  remote_url=$(cd "$ZSH"; git config remote.$remote.url)
+  remote=${"$(cd -q "$ZSH"; git config --local oh-my-zsh.remote)":-origin}
+  remote_url=$(cd -q "$ZSH"; git config remote.$remote.url)
 
   local repo
   case "$remote_url" in
@@ -56,7 +58,7 @@ function is_update_available() {
 
   # Get local HEAD. If this fails assume there are updates
   local local_head
-  local_head=$(cd "$ZSH"; git rev-parse $branch 2>/dev/null) || return 0
+  local_head=$(cd -q "$ZSH"; git rev-parse $branch 2>/dev/null) || return 0
 
   # Get remote HEAD. If no suitable command is found assume there are updates
   # On any other error, skip the update (connection may be down)
@@ -134,7 +136,7 @@ function update_ohmyzsh() {
   fi
 
   # Test if Oh My Zsh directory is a git repository
-  if ! (cd "$ZSH" && LANG= git rev-parse &>/dev/null); then
+  if ! (cd -q "$ZSH" && LANG= git rev-parse &>/dev/null); then
     echo >&2 "[oh-my-zsh] Can't update: not a git repository."
     return
   fi
