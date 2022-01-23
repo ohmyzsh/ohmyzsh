@@ -1,3 +1,4 @@
+unalias mvnd
 export mvnd=$(which -a mvnd|head -n 1)
 
 # Wrapper function for Maven's mvn command. Based on https://gist.github.com/1027800
