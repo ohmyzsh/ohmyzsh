@@ -1,5 +1,11 @@
 git_commit_template() {
 
+    # Check the current folder is a git repository
+    $(git -C $PWD rev-parse)
+    if [[ $? != 0 ]]; then
+        exit 1
+    fi
+
     # Color formatting
     RED="\033[0;31m"
     GREEN="\033[0;32m"
@@ -122,13 +128,20 @@ octo-org/octo-repo#100\n\n"
     printf "${massage}\n${RESET}"
 
     # Git commit
-    result_code=$?
-    if [ "$result_code" = 0 ]; then
-        git commit -m "${type_var}${scope}: ${short_desc}
+    if [ $? == 0 ]; then
+        if [[ $1 == "-s" ]] || [[ $1 == "sign" ]]; then
+            git commit -S -m "${type_var}${scope}: ${short_desc}
 
 ${long_desc}
 ${breaking_changes}
 ${closed_issues}"
+        else
+            git commit -m "${type_var}${scope}: ${short_desc}
+
+${long_desc}
+${breaking_changes}
+${closed_issues}"
+        fi
     else
         printf "\n${RED}❌ An error occurred. Please try again.${RESET}\n"
         exit 1
