@@ -1,13 +1,4 @@
 if (( $+commands[kubectl] )); then
-  # TODO: 2022-01-05: remove this block
-  # remove old generated files
-  command rm -f "$ZSH_CACHE_DIR/kubectl_completion"
-
-  # TODO: 2022-01-05: remove this bit of code as it exists in oh-my-zsh.sh
-  # Add completions folder in $ZSH_CACHE_DIR
-  command mkdir -p "$ZSH_CACHE_DIR/completions"
-  (( ${fpath[(Ie)"$ZSH_CACHE_DIR/completions"]} )) || fpath=("$ZSH_CACHE_DIR/completions" $fpath)
-
   # If the completion file does not exist, generate it and then source it
   # Otherwise, source it and regenerate in the background
   if [[ ! -f "$ZSH_CACHE_DIR/completions/_kubectl" ]]; then
