@@ -60,6 +60,8 @@ command_exists() {
 }
 
 user_can_sudo() {
+  # Check if sudo is installed
+  command_exists sudo || return 1
   # The following command has 3 parts:
   #
   # 1. Run `sudo` with `-v`. Does the following:
@@ -78,7 +80,7 @@ user_can_sudo() {
   #    to run `sudo` in the default locale (with `LANG=`) so that the message
   #    stays consistent regardless of the user's locale.
   #
-  LANG= sudo -n -v 2>&1 | grep -q "may not run sudo"
+  ! LANG= sudo -n -v 2>&1 | grep -q "may not run sudo"
 }
 
 # The [ -t 1 ] check only works when the function is not called from
@@ -395,9 +397,9 @@ EOF
   # be prompted for the password either way, so this shouldn't cause any issues.
   #
   if user_can_sudo; then
-    chsh -s "$zsh" "$USER"          # run chsh normally
-  else
     sudo -k chsh -s "$zsh" "$USER"  # -k forces the password prompt
+  else
+    chsh -s "$zsh" "$USER"          # run chsh normally
   fi
 
   # Check if the shell change was successful
