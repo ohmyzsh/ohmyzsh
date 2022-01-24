@@ -51,6 +51,9 @@ CHSH=${CHSH:-yes}
 RUNZSH=${RUNZSH:-yes}
 KEEP_ZSHRC=${KEEP_ZSHRC:-no}
 
+# Sane defaults
+USER=${USER:-$(whoami)}
+
 
 command_exists() {
   command -v "$@" >/dev/null 2>&1
