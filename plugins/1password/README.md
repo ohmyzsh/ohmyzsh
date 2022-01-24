@@ -11,7 +11,7 @@ plugins=(... 1password)
 Then, you can use the command `opswd` to copy passwords for services into your
 clipboard.
 
-## `opwsd`
+## `opswd`
 
 The `opswd` command is a wrapper around the `op` command. It takes a service
 name as an argument and copies the password for that service to the clipboard.
