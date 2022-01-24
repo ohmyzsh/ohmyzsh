@@ -190,24 +190,24 @@ fmt_code() {
 }
 
 fmt_error() {
-  printf '%sError: %s%s\n' "$BOLD$RED" "$*" "$RESET" >&2
+  printf '%sError: %s%s\n' "${FMT_BOLD}${FMT_RED}" "$*" "$FMT_RESET" >&2
 }
 
 setup_color() {
   # Only use colors if connected to a terminal
   if ! is_tty; then
-    RAINBOW=""
-    RED=""
-    GREEN=""
-    YELLOW=""
-    BLUE=""
-    BOLD=""
-    RESET=""
+    FMT_RAINBOW=""
+    FMT_RED=""
+    FMT_GREEN=""
+    FMT_YELLOW=""
+    FMT_BLUE=""
+    FMT_BOLD=""
+    FMT_RESET=""
     return
   fi
 
   if supports_truecolor; then
-    RAINBOW="
+    FMT_RAINBOW="
       $(printf '\033[38;2;255;0;0m')
       $(printf '\033[38;2;255;97;0m')
       $(printf '\033[38;2;247;255;0m')
@@ -217,7 +217,7 @@ setup_color() {
       $(printf '\033[38;2;245;0;172m')
     "
   else
-    RAINBOW="
+    FMT_RAINBOW="
       $(printf '\033[38;5;196m')
       $(printf '\033[38;5;202m')
       $(printf '\033[38;5;226m')
@@ -228,12 +228,12 @@ setup_color() {
     "
   fi
 
-  RED=$(printf '\033[31m')
-  GREEN=$(printf '\033[32m')
-  YELLOW=$(printf '\033[33m')
-  BLUE=$(printf '\033[34m')
-  BOLD=$(printf '\033[1m')
-  RESET=$(printf '\033[0m')
+  FMT_RED=$(printf '\033[31m')
+  FMT_GREEN=$(printf '\033[32m')
+  FMT_YELLOW=$(printf '\033[33m')
+  FMT_BLUE=$(printf '\033[34m')
+  FMT_BOLD=$(printf '\033[1m')
+  FMT_RESET=$(printf '\033[0m')
 }
 
 setup_ohmyzsh() {
@@ -244,7 +244,7 @@ setup_ohmyzsh() {
   # precedence over umasks except for filesystems mounted with option "noacl".
   umask g-w,o-w
 
-  echo "${BLUE}Cloning Oh My Zsh...${RESET}"
+  echo "${FMT_BLUE}Cloning Oh My Zsh...${FMT_RESET}"
 
   command_exists git || {
     fmt_error "git is not installed"
@@ -276,14 +276,14 @@ setup_zshrc() {
   # Keep most recent old .zshrc at .zshrc.pre-oh-my-zsh, and older ones
   # with datestamp of installation that moved them aside, so we never actually
   # destroy a user's original zshrc
-  echo "${BLUE}Looking for an existing zsh config...${RESET}"
+  echo "${FMT_BLUE}Looking for an existing zsh config...${FMT_RESET}"
 
   # Must use this exact name so uninstall.sh can find it
   OLD_ZSHRC=~/.zshrc.pre-oh-my-zsh
   if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]; then
     # Skip this if the user doesn't want to replace an existing .zshrc
     if [ "$KEEP_ZSHRC" = yes ]; then
-      echo "${YELLOW}Found ~/.zshrc.${RESET} ${GREEN}Keeping...${RESET}"
+      echo "${FMT_YELLOW}Found ~/.zshrc.${FMT_RESET} ${FMT_GREEN}Keeping...${FMT_RESET}"
       return
     fi
     if [ -e "$OLD_ZSHRC" ]; then
@@ -295,14 +295,14 @@ setup_zshrc() {
       fi
       mv "$OLD_ZSHRC" "${OLD_OLD_ZSHRC}"
 
-      echo "${YELLOW}Found old ~/.zshrc.pre-oh-my-zsh." \
-        "${GREEN}Backing up to ${OLD_OLD_ZSHRC}${RESET}"
+      echo "${FMT_YELLOW}Found old ~/.zshrc.pre-oh-my-zsh." \
+        "${FMT_GREEN}Backing up to ${OLD_OLD_ZSHRC}${FMT_RESET}"
     fi
-    echo "${YELLOW}Found ~/.zshrc.${RESET} ${GREEN}Backing up to ${OLD_ZSHRC}${RESET}"
+    echo "${FMT_YELLOW}Found ~/.zshrc.${FMT_RESET} ${FMT_GREEN}Backing up to ${OLD_ZSHRC}${FMT_RESET}"
     mv ~/.zshrc "$OLD_ZSHRC"
   fi
 
-  echo "${GREEN}Using the Oh My Zsh template file and adding it to ~/.zshrc.${RESET}"
+  echo "${FMT_GREEN}Using the Oh My Zsh template file and adding it to ~/.zshrc.${FMT_RESET}"
 
   # Replace $HOME path with '$HOME' in $ZSH variable in .zshrc file
   omz=$(echo "$ZSH" | sed "s|^$HOME/|\$HOME/|")
@@ -327,16 +327,16 @@ setup_shell() {
   if ! command_exists chsh; then
     cat <<EOF
 I can't change your shell automatically because this system does not have chsh.
-${BLUE}Please manually change your default shell to zsh${RESET}
+${FMT_BLUE}Please manually change your default shell to zsh${FMT_RESET}
 EOF
     return
   fi
 
-  echo "${BLUE}Time to change your default shell to zsh:${RESET}"
+  echo "${FMT_BLUE}Time to change your default shell to zsh:${FMT_RESET}"
 
   # Prompt for user choice on changing the default login shell
   printf '%sDo you want to change your default shell to zsh? [Y/n]%s ' \
-    "$YELLOW" "$RESET"
+    "$FMT_YELLOW" "$FMT_RESET"
   read -r opt
   case $opt in
     y*|Y*|"") ;;
@@ -402,30 +402,30 @@ EOF
     fmt_error "chsh command unsuccessful. Change your default shell manually."
   else
     export SHELL="$zsh"
-    echo "${GREEN}Shell successfully changed to '$zsh'.${RESET}"
+    echo "${FMT_GREEN}Shell successfully changed to '$zsh'.${FMT_RESET}"
   fi
 
   echo
 }
 
-# shellcheck disable=SC2183  # printf string has more %s than arguments ($RAINBOW expands to multiple arguments)
+# shellcheck disable=SC2183  # printf string has more %s than arguments ($FMT_RAINBOW expands to multiple arguments)
 print_success() {
-  printf '%s         %s__      %s           %s        %s       %s     %s__   %s\n'      $RAINBOW $RESET
-  printf '%s  ____  %s/ /_    %s ____ ___  %s__  __  %s ____  %s_____%s/ /_  %s\n'      $RAINBOW $RESET
-  printf '%s / __ \\%s/ __ \\  %s / __ `__ \\%s/ / / / %s /_  / %s/ ___/%s __ \\ %s\n'  $RAINBOW $RESET
-  printf '%s/ /_/ /%s / / / %s / / / / / /%s /_/ / %s   / /_%s(__  )%s / / / %s\n'      $RAINBOW $RESET
-  printf '%s\\____/%s_/ /_/ %s /_/ /_/ /_/%s\\__, / %s   /___/%s____/%s_/ /_/  %s\n'    $RAINBOW $RESET
-  printf '%s    %s        %s           %s /____/ %s       %s     %s          %s....is now installed!%s\n' $RAINBOW $GREEN $RESET
+  printf '%s         %s__      %s           %s        %s       %s     %s__   %s\n'      $FMT_RAINBOW $FMT_RESET
+  printf '%s  ____  %s/ /_    %s ____ ___  %s__  __  %s ____  %s_____%s/ /_  %s\n'      $FMT_RAINBOW $FMT_RESET
+  printf '%s / __ \\%s/ __ \\  %s / __ `__ \\%s/ / / / %s /_  / %s/ ___/%s __ \\ %s\n'  $FMT_RAINBOW $FMT_RESET
+  printf '%s/ /_/ /%s / / / %s / / / / / /%s /_/ / %s   / /_%s(__  )%s / / / %s\n'      $FMT_RAINBOW $FMT_RESET
+  printf '%s\\____/%s_/ /_/ %s /_/ /_/ /_/%s\\__, / %s   /___/%s____/%s_/ /_/  %s\n'    $FMT_RAINBOW $FMT_RESET
+  printf '%s    %s        %s           %s /____/ %s       %s     %s          %s....is now installed!%s\n' $FMT_RAINBOW $FMT_GREEN $FMT_RESET
   printf '\n'
   printf '\n'
-  printf "%s %s %s\n" "Before you scream ${BOLD}${YELLOW}Oh My Zsh!${RESET} look over the" \
+  printf "%s %s %s\n" "Before you scream ${FMT_BOLD}${FMT_YELLOW}Oh My Zsh!${FMT_RESET} look over the" \
     "$(fmt_code "$(fmt_link ".zshrc" "file://$HOME/.zshrc" --text)")" \
     "file to select plugins, themes, and options."
   printf '\n'
   printf '%s\n' "• Follow us on Twitter: $(fmt_link @ohmyzsh https://twitter.com/ohmyzsh)"
   printf '%s\n' "• Join our Discord community: $(fmt_link "Discord server" https://discord.gg/ohmyzsh)"
   printf '%s\n' "• Get stickers, t-shirts, coffee mugs and more: $(fmt_link "Planet Argon Shop" https://shop.planetargon.com/collections/oh-my-zsh)"
-  printf '%s\n' $RESET
+  printf '%s\n' $FMT_RESET
 }
 
 main() {
@@ -448,12 +448,12 @@ main() {
   setup_color
 
   if ! command_exists zsh; then
-    echo "${YELLOW}Zsh is not installed.${RESET} Please install zsh first."
+    echo "${FMT_YELLOW}Zsh is not installed.${FMT_RESET} Please install zsh first."
     exit 1
   fi
 
   if [ -d "$ZSH" ]; then
-    echo "${YELLOW}The \$ZSH folder already exists ($ZSH).${RESET}"
+    echo "${FMT_YELLOW}The \$ZSH folder already exists ($ZSH).${FMT_RESET}"
     if [ "$custom_zsh" = yes ]; then
       cat <<EOF
 
@@ -481,7 +481,7 @@ EOF
   print_success
 
   if [ $RUNZSH = no ]; then
-    echo "${YELLOW}Run zsh to try it out.${RESET}"
+    echo "${FMT_YELLOW}Run zsh to try it out.${FMT_RESET}"
     exit
   fi
 
