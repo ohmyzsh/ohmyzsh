@@ -289,7 +289,7 @@ multi == 1 && length(\$0) > 0 {
   }
 
   # Exit if the new .zshrc file has syntax errors
-  if ! zsh -n "$zdot/.zshrc"; then
+  if ! command zsh -n "$zdot/.zshrc"; then
     _omz::log error "broken syntax in '"${zdot/#$HOME/\~}/.zshrc"'. Rolling back changes..."
     command mv -f "$zdot/.zshrc" "$zdot/.zshrc.new"
     command mv -f "$zdot/.zshrc.bck" "$zdot/.zshrc"
@@ -365,7 +365,7 @@ multi == 1 && /^[^#]*\)/ {
   }
 
   # Exit if the new .zshrc file has syntax errors
-  if ! zsh -n "$zdot/.zshrc"; then
+  if ! command zsh -n "$zdot/.zshrc"; then
     _omz::log error "broken syntax in '"${zdot/#$HOME/\~}/.zshrc"'. Rolling back changes..."
     command mv -f "$zdot/.zshrc" "$zdot/.zshrc.new"
     command mv -f "$zdot/.zshrc.bck" "$zdot/.zshrc"
@@ -721,7 +721,7 @@ EOF
   }
 
   # Exit if the new .zshrc file has syntax errors
-  if ! zsh -n "$zdot/.zshrc"; then
+  if ! command zsh -n "$zdot/.zshrc"; then
     _omz::log error "broken syntax in '"${zdot/#$HOME/\~}/.zshrc"'. Rolling back changes..."
     command mv -f "$zdot/.zshrc" "$zdot/.zshrc.new"
     command mv -f "$zdot/.zshrc.bck" "$zdot/.zshrc"
@@ -765,9 +765,9 @@ function _omz::update {
 
   # Run update script
   if [[ "$1" != --unattended ]]; then
-    ZSH="$ZSH" zsh -f "$ZSH/tools/upgrade.sh" --interactive || return $?
+    ZSH="$ZSH" command zsh -f "$ZSH/tools/upgrade.sh" --interactive || return $?
   else
-    ZSH="$ZSH" zsh -f "$ZSH/tools/upgrade.sh" || return $?
+    ZSH="$ZSH" command zsh -f "$ZSH/tools/upgrade.sh" || return $?
   fi
 
   # Update last updated file
