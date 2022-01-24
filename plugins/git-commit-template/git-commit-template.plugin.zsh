@@ -1,3 +1,10 @@
+# Color formatting
+RED="\033[0;31m"
+GREEN="\033[0;32m"
+BLUE="\033[1;34m"
+CYAN="\033[0;36m"
+RESET="\033[0m"
+
 git_commit_template() {
 
     # Check the current folder is a git repository
@@ -5,13 +12,6 @@ git_commit_template() {
     if [[ $? != 0 ]]; then
         exit 1
     fi
-
-    # Color formatting
-    RED="\033[0;31m"
-    GREEN="\033[0;32m"
-    BLUE="\033[1;34m"
-    CYAN="\033[0;36m"
-    RESET="\033[0m"
 
     # Valid types
     TYPES=("feat" "fix" "docs" "style" "refactor"
@@ -118,11 +118,11 @@ octo-org/octo-repo#100\n\n"
     fi
 
     if [ ! -z "$breaking_changes" ]; then
-        massage="${massage}    BREAKING CHANGE: ${breaking_changes}\n"
+        massage="${massage}\n    BREAKING CHANGE: ${breaking_changes}\n"
     fi
 
     if [ ! -z "$closed_issues" ]; then
-        massage="${massage}    ${closed_issues}\n"
+        massage="${massage}\n    ${closed_issues}\n"
     fi
 
     printf "${massage}\n${RESET}"
@@ -133,13 +133,17 @@ octo-org/octo-repo#100\n\n"
             git commit -S -m "${type_var}${scope}: ${short_desc}
 
 ${long_desc}
+
 ${breaking_changes}
+
 ${closed_issues}"
         else
             git commit -m "${type_var}${scope}: ${short_desc}
 
 ${long_desc}
+
 ${breaking_changes}
+
 ${closed_issues}"
         fi
     else
