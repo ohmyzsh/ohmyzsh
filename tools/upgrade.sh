@@ -194,7 +194,7 @@ last_commit=$(git rev-parse "$branch")
 
 # Update Oh My Zsh
 printf "${BLUE}%s${RESET}\n" "Updating Oh My Zsh"
-if git pull --rebase $remote $branch; then
+if LANG= git pull --quiet --rebase $remote $branch; then
   # Check if it was really updated or not
   if [[ "$(git rev-parse HEAD)" = "$last_commit" ]]; then
     message="Oh My Zsh is already at the latest version."
