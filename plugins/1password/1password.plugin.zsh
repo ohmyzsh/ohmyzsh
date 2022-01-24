@@ -17,30 +17,24 @@ function opswd() {
   # If not logged in, print error and return
   op list users > /dev/null || return
 
+  local password
   # Copy the password to the clipboard
-  if ! op get item "$service" --fields password 2>/dev/null | clipcopy; then
+  if ! password=$(op get item "$service" --fields password 2>/dev/null); then
     echo "error: could not obtain password for $service"
     return 1
   fi
 
+  echo -n "$password" | clipcopy
   echo "✔ password for $service copied to clipboard"
 
   # If there's a one time password, copy it to the clipboard after 5 seconds
   local totp
   if totp=$(op get totp "$service" 2>/dev/null) && [[ -n "$totp" ]]; then
-    (
-      sleep 10 && echo -n "$totp" | clipcopy
-      echo "✔ TOTP for $service copied to clipboard"
-
-      sleep 30 && clipcopy < /dev/null 2>/dev/null
-      echo "clipboard cleared"
-    ) &!
-  else
-    (
-      sleep 30 && clipcopy < /dev/null 2>/dev/null
-      echo "clipboard cleared"
-    ) &!
+    sleep 10 && echo -n "$totp" | clipcopy
+    echo "✔ TOTP for $service copied to clipboard"
   fi
+
+  (sleep 20 && clipcopy </dev/null 2>/dev/null) &!
 }
 
 function _opswd() {
