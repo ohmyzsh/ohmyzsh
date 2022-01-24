@@ -45,7 +45,7 @@ function opswd() {
 
 function _opswd() {
   local -a services
-  services=("${(@f)$(op list items --categories Login 2>/dev/null | jq -r '.[].overview.title')}")
+  services=("${(@f)$(op list items --categories Login 2>/dev/null | op get item - --fields title 2>/dev/null)}")
   [[ -z "$services" ]] || compadd -a -- services
 }
 

@@ -23,4 +23,3 @@ NOTE: you need to be logged in for `opswd` to work. See:
 ## Requirements
 
 - [1Password's command line utility](https://1password.com/downloads/command-line/).
-- [`jq`](https://stedolan.github.io/jq/).
