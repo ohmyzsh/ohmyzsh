@@ -152,9 +152,9 @@ done
 
 # Load all of the plugins that were defined in ~/.zshrc
 for plugin ($plugins); do
-  if is_plugin "$ZSH_CUSTOM" "$plugin"; then
+  if [[ -f "$ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh" ]]; then
     source "$ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh"
-  elif is_plugin "$ZSH" "$plugin"; then
+  elif [[ -f "$ZSH/plugins/$plugin/$plugin.plugin.zsh" ]]; then
     source "$ZSH/plugins/$plugin/$plugin.plugin.zsh"
   fi
 done
