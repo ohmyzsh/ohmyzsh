@@ -191,7 +191,7 @@ while [ $# -gt 0 ]; do
                             -d "grant_type=client_credentials" \
                     )
                     if ! [[ "${SPOTIFY_TOKEN_RESPONSE_DATA}" =~ "access_token" ]]; then
-                        cecho "Autorization failed, please check ${USER_CONFG_FILE}"
+                        cecho "Authorization failed, please check ${USER_CONFG_FILE}"
                         cecho "${SPOTIFY_TOKEN_RESPONSE_DATA}"
                         showAPIHelp
                         return 1

@@ -1,83 +1,66 @@
 # Drush
 
-## Description
-This plugin offers aliases and functions to make the work with drush easier and more productive.
+This plugin adds aliases and functions for [Drush](https://www.drush.org), a command-line shell
+and Unix scripting interface for Drupal. It also adds completion for the `drush` command.
 
-To enable it, add the `drush` to your `plugins` array in `~/.zshrc`:
+To enable it, add `drush` to the plugins array in zshrc file:
 
-```
+```zsh
 plugins=(... drush)
 ```
 
 ## Aliases
-| Alias | Description                                                           | Command                     |
-|-------|-----------------------------------------------------------------------|-----------------------------|
-| dr    | Display drush help                                                    | drush                       |
-| drca  | Clear all drupal caches.                                              | drush cc all                |
-| drcb  | Clear block cache.                                                    | drush cc block              |
-| drcg  | Clear registry cache.                                                 | drush cc registry           |
-| drcj  | Clear css-js cache.                                                   | drush cc css-js             |
-| drcm  | Clear menu cache.                                                     | drush cc menu               |
-| drcml | Clear module-list cache.                                              | drush cc module-list        |
-| drcr  | Run all cron hooks in all active modules for specified site.          | drush core-cron             |
-| drct  | Clear theme-registry cache.                                           | drush cc theme-registry     |
-| drcv  | Clear views cache. (Make sure that the views module is enabled)       | drush cc views              |
-| drdmp | Backup database in a new dump.sql file                                | drush drush sql-dump --ordered-dump --result-file=dump.sql|
-| drf   | Display features status                                               | drush features              |
-| drfr  | Revert a feature module on your site.                                 | drush features-revert -y    |
-| drfu  | Update a feature module on your site.                                 | drush features-update -y    |
-| drfra | Revert all enabled feature module on your site.                       | drush features-revert-all   |
-| drif  | Flush all derived images.                                             | drush image-flush --all     |
-| drpm  | Show a list of available modules.                                     | drush pm-list --type=module |
-| drst  | Provides a birds-eye view of the current Drupal installation, if any. | drush core-status           |
-| drup  | Apply any database updates required (as with running update.php).     | drush updatedb              |
-| drups | List any pending database updates.                                    | drush updatedb-status       |
-| drv   | Show drush version.                                                   | drush version               |
-| drvd	| Delete a variable.																										| drush variable-del					|
-| drvg	| Get a list of some or all site variables and values.									| drush variable-get					|
-| drvs	| Set a variable.																												| drush variable-set					|
+
+| Alias   | Command                                                     | Description                                                          |
+| ------- | ----------------------------------------------------------- | -------------------------------------------------------------------- |
+| `dr`    | `drush`                                                     | Display drush help                                                   |
+| `drca`  | `drush cc all`                                              | _(Deprecated in Drush 8)_ Clear all drupal caches                    |
+| `drcb`  | `drush cc block`                                            | _(Deprecated in Drush 8)_ Clear block cache                          |
+| `drcex` | `drush config:export -y`                                    | Export Drupal configuration to a directory                           |
+| `drcg`  | `drush cc registry`                                         | _(Deprecated in Drush 8)_ Clear registry cache                       |
+| `drcim` | `drush config:import -y`                                    | Import config from a config directory                                |
+| `drcj`  | `drush cc css-js`                                           | Clear css-js cache                                                   |
+| `drcm`  | `drush cc menu`                                             | Clear menu cache                                                     |
+| `drcml` | `drush cc module-list`                                      | Clear module-list cache                                              |
+| `drcr`  | `drush core-cron`                                           | Run all cron hooks in all active modules for specified site          |
+| `drct`  | `drush cc theme-registry`                                   | Clear theme-registry cache                                           |
+| `drcv`  | `drush cc views`                                            | Clear views cache _(make sure that the views module is enabled)_     |
+| `drdmp` | `drush drush sql-dump --ordered-dump --result-file=dumpsql` | Backup database in a new dump.sql file                               |
+| `drf`   | `drush features`                                            | Display features status                                              |
+| `drfr`  | `drush features-revert -y`                                  | Revert a feature module on your site                                 |
+| `drfra` | `drush features-revert-all`                                 | Revert all enabled feature module on your site                       |
+| `drfu`  | `drush features-update -y`                                  | Update a feature module on your site                                 |
+| `drif`  | `drush image-flush --all`                                   | Flush all derived images                                             |
+| `drpm`  | `drush pm-list --type=module`                               | Show a list of available modules                                     |
+| `drst`  | `drush core-status`                                         | Provides a birds-eye view of the current Drupal installation, if any |
+| `druli` | `drush user:login`                                          | Display a one time login link for user ID 1, or another user         |
+| `drup`  | `drush updatedb`                                            | Apply any database updates required (as with running update.php)     |
+| `drups` | `drush updatedb-status`                                     | List any pending database updates                                    |
+| `drv`   | `drush version`                                             | Show drush version                                                   |
+| `drvd`  | `drush variable-del`                                        | Delete a variable                                                    |
+| `drvg`  | `drush variable-get`                                        | Get a list of some or all site variables and values                  |
+| `drvs`  | `drush variable-set`                                        | Set a variable                                                       |
+| `drws`  | `drush watchdog:show`                                       | Show watchdog messages                                               |
+| `drwse` | `drush watchdog:show --extended`                            | Show watchdog messages with extended information                     |
+| `drwst` | `drush watchdog:tail`                                       | Tail watchdog messages                                              |
 
 ## Functions
 
-### dren
-Download and enable one or more extensions (modules or themes).
-Must be invoked with one or more parameters. e.g.:
-`dren devel` or `dren devel module_filter views`
+- `dren`: download and enable one or more extensions (modules or themes). Must be
+  invoked with one or more parameters, e.g.: `dren devel` or `dren devel module_filter views`.
 
-### drf
-Edit drushrc, site alias, and Drupal settings.php files.
-Can be invoked with one or without parameters. e.g.:
-`drf 1`
+- `drf`: edit drushrc, site alias, and Drupal settings.php files.
+  Can be invoked with one or without parameters, e.g.: `drf 1`.
 
-### dris
-Disable one or more extensions (modules or themes)
-Must be invoked with one or more parameters. e.g.:
-`dris devel` or `dris devel module_filter views`
+- `dris`: disable one or more extensions (modules or themes). Must be invoked with
+  one or more parameters, e.g.: `dris devel` or `dris devel module_filter views`.
 
-### drpu
-Uninstall one or more modules.
-Must be invoked with one or more parameters. e.g.:
-`drpu devel` or `drpu devel module_filter views`
+- `drpu`: uninstall one or more modules. Must be invoked with one or more
+  parameters, e.g.: `drpu devel` or `drpu devel module_filter views`.
 
-### drnew
-Creates a brand new drupal website.
-Note: As soon as the installation is complete, drush will print a username and a random password into the terminal:
-```
-Installation complete.  User name: admin  User password: cf7t8yqNEm
-```
+- `drnew`: creates a brand new drupal website. Note: as soon as the installation
+  is complete, `drush` will print a username and a random password into the terminal:
 
-## Additional features
-
-### Autocomplete
-The [completion script for drush](https://github.com/drush-ops/drush/blob/8.0.1/drush.complete.sh) comes enabled with this plugin.
-So, it is possible to type a command:
-```
-drush sql
-```
-
-And as soon as the tab key is pressed, the script will display the available commands:
-```
-drush sql
-sqlc           sql-conf       sql-create     sql-dump       sql-query      sql-sanitize                
-sql-cli        sql-connect    sql-drop       sqlq           sqlsan         sql-sync
-```
+  ```text
+  Installation complete.  User name: admin  User password: cf7t8yqNEm
+  ```

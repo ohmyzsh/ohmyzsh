@@ -24,9 +24,7 @@ compdef _git _git_log_prettily=git-log
 
 # Warn if the current branch is a WIP
 function work_in_progress() {
-  if $(git log -n 1 2>/dev/null | grep -q -c "\-\-wip\-\-"); then
-    echo "WIP!!"
-  fi
+  command git -c log.showSignature=false log -n 1 2>/dev/null | grep -q -- "--wip--" && echo "WIP!!"
 }
 
 # Check if main exists and use instead of master
@@ -251,6 +249,7 @@ alias grbc='git rebase --continue'
 alias grbd='git rebase $(git_develop_branch)'
 alias grbi='git rebase -i'
 alias grbm='git rebase $(git_main_branch)'
+alias grbom='git rebase origin/$(git_main_branch)'
 alias grbo='git rebase --onto'
 alias grbs='git rebase --skip'
 alias grev='git revert'

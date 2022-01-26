@@ -1,42 +1,56 @@
-# Shell Proxy oh-my-zsh plugin
+# shell-proxy plugin
 
-This a pure user-space program, shell-proxy setter, written Python3 and Bash.
+This a pure user-space program, shell-proxy setter, written in Python3 and Zsh.
 
-100% only no side-effects, only effect **environment variables** and **aliases**
+To use it, add `shell-proxy` to the plugins array in your zshrc file:
 
-## Key feature
+```zsh
+plugins=(... shell-proxy)
+```
 
-- Support Ubuntu, Archlinux, etc (Linux)
-- Support macOS
-- Support git via based-`$GIT_SSH`
-- Support ssh, sftp, scp, slogin and ssh-copy-id via based-`alias`
-- Built-in Auto-complete
+## Key features
+
+- Supports macOS and Linux (Ubuntu, Archlinux, etc.)
+- Supports git via setting `$GIT_SSH`
+- Supports ssh, sftp, scp, slogin and ssh-copy-id via setting aliases
+- Built-in autocomplete
 
 ## Usage
 
-Method 1:
+### Method 1
 
-`$DEFAULT_PROXY` is the proxy URL you will set
+Set `SHELLPROXY_URL` environment variable to the URL of the proxy server:
 
-Method 2:
+```sh
+SHELLPROXY_URL="http://127.0.0.1:8123"
+proxy enable
+```
 
-Write a program to `$HOME/.config/proxy` in the file.
+### Method 2
 
-Example program:
+Write a program file in `$HOME/.config/proxy` so that the proxy URL is defined dynamically.
+Note that the program file must be executable.
 
-```bash
+Example:
+
+```sh
 #!/bin/bash
-# The file path: $HOME/.config/proxy
-if [[ "$OSTYPE" == "darwin"* ]]; then
+
+if [[ "$(uname)" = Darwin ]]; then
   echo "http://127.0.0.1:6152" # Surge Mac
 else
   echo "http://127.0.0.1:8123" # polipo
 fi
 ```
 
-Method 3:
+### Method 3
 
-The working path of **Method 2** can be changed via `$CONFIG_PROXY`
+Use [method 2](#method-2) but define the location of the program file by setting the
+`SHELLPROXY_CONFIG` environment variable:
+
+```sh
+SHELLPROXY_CONFIG="$HOME/.dotfiles/proxy-config"
+```
 
 ## Reference
 
@@ -45,8 +59,4 @@ The working path of **Method 2** can be changed via `$CONFIG_PROXY`
 
 ## Maintainer
 
-- <https://github.com/septs>
-
-## The oh-my-zsh plugin (shell-proxy)
-
-Public Domain
+- [@septs](https://github.com/septs)
