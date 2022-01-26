@@ -283,6 +283,11 @@ is-at-least 2.13 "$git_version" \
   && alias gsta='git stash push' \
   || alias gsta='git stash save'
 
+# enable "git stash --patch" on git 2.35 or newer
+is-at-least 2.35 "$git_version" \
+  && alias gstapa='git stash push --patch' \
+  || alias gstapa=gsta
+
 alias gstaa='git stash apply'
 alias gstc='git stash clear'
 alias gstd='git stash drop'
