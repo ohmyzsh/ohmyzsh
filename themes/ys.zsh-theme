@@ -49,7 +49,7 @@ local venv_info='$(virtenv_prompt)'
 YS_THEME_VIRTUALENV_PROMPT_PREFIX=" %{$fg[green]%}"
 YS_THEME_VIRTUALENV_PROMPT_SUFFIX=" %{$reset_color%}%"
 virtenv_prompt() {
-	[[ -n ${VIRTUAL_ENV} ]] || return
+	[[ -n "${VIRTUAL_ENV:-}" ]] || return
 	echo "${YS_THEME_VIRTUALENV_PROMPT_PREFIX}${VIRTUAL_ENV:t}${YS_THEME_VIRTUALENV_PROMPT_SUFFIX}"
 }
 
