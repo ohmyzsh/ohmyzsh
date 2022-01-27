@@ -263,13 +263,19 @@ setup_ohmyzsh() {
     exit 1
   fi
 
-  git clone -c core.eol=lf -c core.autocrlf=false \
-    -c fsck.zeroPaddedFilemode=ignore \
-    -c fetch.fsck.zeroPaddedFilemode=ignore \
-    -c receive.fsck.zeroPaddedFilemode=ignore \
-    -c oh-my-zsh.remote=origin \
-    -c oh-my-zsh.branch="$BRANCH" \
-    --depth=1 --branch "$BRANCH" "$REMOTE" "$ZSH" || {
+  # Manual clone with git config options to support git < v1.7.2
+  git init "$ZSH" && cd "$ZSH" \
+  && git config core.eol lf \
+  && git config core.autocrlf false \
+  && git config fsck.zeroPaddedFilemode ignore \
+  && git config fetch.fsck.zeroPaddedFilemode ignore \
+  && git config receive.fsck.zeroPaddedFilemode ignore \
+  && git config oh-my-zsh.remote origin \
+  && git config oh-my-zsh.branch "$BRANCH" \
+  && git remote add origin "$REMOTE" \
+  && git fetch --depth=1 origin \
+  && git checkout -b "$BRANCH" "origin/$BRANCH" || {
+    rm -rf "$ZSH"
     fmt_error "git clone of oh-my-zsh repo failed"
     exit 1
   }
