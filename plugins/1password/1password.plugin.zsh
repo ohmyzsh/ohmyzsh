@@ -4,8 +4,8 @@ if (( ${+commands[op]} )); then
 fi
 
 # opswd puts the password of the named service into the clipboard. If there's a
-# one time password, it will be copied into the clipboard after 5 seconds. The
-# clipboard is cleared after another 10 seconds.
+# one time password, it will be copied into the clipboard after 10 seconds. The
+# clipboard is cleared after another 20 seconds.
 function opswd() {
   if [[ $# -lt 1 ]]; then
     echo "Usage: opswd <service>"
