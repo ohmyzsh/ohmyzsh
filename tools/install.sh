@@ -37,6 +37,13 @@
 #
 set -e
 
+# Make sure important variables exist if not already defined
+#
+# $USER is defined by login(1) which is not always executed (e.g. containers)
+# POSIX: https://pubs.opengroup.org/onlinepubs/009695299/utilities/id.html
+USER=${USER:-$(id -u -n)}
+
+
 # Track if $ZSH was provided
 custom_zsh=${ZSH:+yes}
 
@@ -50,9 +57,6 @@ BRANCH=${BRANCH:-master}
 CHSH=${CHSH:-yes}
 RUNZSH=${RUNZSH:-yes}
 KEEP_ZSHRC=${KEEP_ZSHRC:-no}
-
-# Sane defaults
-USER=${USER:-$(whoami)}
 
 
 command_exists() {
