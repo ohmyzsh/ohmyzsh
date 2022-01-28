@@ -138,6 +138,7 @@ __git_ps1_show_upstream ()
 	done <<< "$output"
 
 	# parse configuration values
+	local option
 	for option in ${GIT_PS1_SHOWUPSTREAM}; do
 		case "$option" in
 		git|svn) upstream="$option" ;;
@@ -432,8 +433,8 @@ __git_ps1 ()
 	fi
 
 	local sparse=""
-	if [ -z "${GIT_PS1_COMPRESSSPARSESTATE}" ] &&
-	   [ -z "${GIT_PS1_OMITSPARSESTATE}" ] &&
+	if [ -z "${GIT_PS1_COMPRESSSPARSESTATE-}" ] &&
+	   [ -z "${GIT_PS1_OMITSPARSESTATE-}" ] &&
 	   [ "$(git config --bool core.sparseCheckout)" = "true" ]; then
 		sparse="|SPARSE"
 	fi
@@ -542,7 +543,7 @@ __git_ps1 ()
 			u="%${ZSH_VERSION+%}"
 		fi
 
-		if [ -n "${GIT_PS1_COMPRESSSPARSESTATE}" ] &&
+		if [ -n "${GIT_PS1_COMPRESSSPARSESTATE-}" ] &&
 		   [ "$(git config --bool core.sparseCheckout)" = "true" ]; then
 			h="?"
 		fi
