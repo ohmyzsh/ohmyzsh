@@ -104,7 +104,7 @@ fi
 
 # Save the location of the current completion dump file.
 if [[ -z "$ZSH_COMPDUMP" ]]; then
-  ZSH_COMPDUMP="${ZDOTDIR:-$HOME}/.zcompdump-$SHORT_HOST-$ZSH_VERSION"
+  ZSH_COMPDUMP="${ZDOTDIR:-$HOME}/.zcompdump-${SHORT_HOST}-${ZSH_VERSION}"
 fi
 
 # Construct zcompdump OMZ metadata
@@ -139,7 +139,6 @@ $zcompdump_revision
 $zcompdump_fpath
 EOF
 fi
-
 unset zcompdump_revision zcompdump_fpath zcompdump_refresh
 
 # Load all of the config files in ~/oh-my-zsh that end in .zsh
@@ -149,6 +148,7 @@ for config_file ("$ZSH"/lib/*.zsh); do
   [[ -f "$custom_config_file" ]] && config_file="$custom_config_file"
   source "$config_file"
 done
+unset custom_config_file
 
 # Load all of the plugins that were defined in ~/.zshrc
 for plugin ($plugins); do
