@@ -23,50 +23,59 @@ __docker-compose_all_services_in_compose_file() {
     local already_selected
     local -a services
     already_selected=$(echo $words | tr " " "|")
-    __docker-compose_q ps --services "$@" \
-        | grep -Ev "^(${already_selected})$"
+    __docker-compose_q config --services "$@" \
+	| grep -Ev "^(${already_selected})$"
 }
 
-# All services, even those without an existing container
-__docker-compose_services_all() {
+# All services with container
+__docker-compose_all_services_with_container() {
+    local already_selected
+    local -a services
+    already_selected=$(echo $words | tr " " "|")
+    __docker-compose_q ps --services "$@" \
+	| grep -Ev "^(${already_selected})$"
+}
+
+__docker-compose_services_in_compose_file_pre() {
     [[ $PREFIX = -* ]] && return 1
     integer ret=1
     services=$(__docker-compose_all_services_in_compose_file "$@")
     _alternative "args:services:($services)" && ret=0
-
     return ret
 }
 
-# All services that are defined by a Dockerfile reference
-__docker-compose_services_from_build() {
+__docker-compose_services_with_container_pre() {
     [[ $PREFIX = -* ]] && return 1
-    __docker-compose_services_all --filter source=build
+    integer ret=1
+    services=$(__docker-compose_all_services_with_container "$@")
+    _alternative "args:services:($services)" && ret=0
+    return ret
 }
 
-# All services that are defined by an image
-__docker-compose_services_from_image() {
+__docker-compose_services_in_compose_file() {
     [[ $PREFIX = -* ]] && return 1
-    __docker-compose_services_all --filter source=image
+    __docker-compose_services_in_compose_file_pre
+}
+
+__docker-compose_services_with_container() {
+    [[ $PREFIX = -* ]] && return 1
+    __docker-compose_services_with_container_pre
 }
 
 __docker-compose_pausedservices() {
     [[ $PREFIX = -* ]] && return 1
-    __docker-compose_services_all --filter status=paused
+    __docker-compose_services_with_container_pre --filter status=paused
 }
 
 __docker-compose_stoppedservices() {
     [[ $PREFIX = -* ]] && return 1
-    __docker-compose_services_all --filter status=stopped
+    __docker-compose_services_with_container_pre --filter status=stopped
+    __docker-compose_services_with_container_pre --filter status=exited
 }
 
 __docker-compose_runningservices() {
     [[ $PREFIX = -* ]] && return 1
-    __docker-compose_services_all --filter status=running
-}
-
-__docker-compose_services() {
-    [[ $PREFIX = -* ]] && return 1
-    __docker-compose_services_all
+    __docker-compose_services_with_container_pre --filter status=running
 }
 
 __docker-compose_caching_policy() {
@@ -119,7 +128,7 @@ __docker-compose_subcommand() {
                 '--pull[Always attempt to pull a newer version of the image.]' \
                 '--compress[Compress the build context using gzip.]' \
                 '--parallel[Build images in parallel.]' \
-                '*:services:__docker-compose_services_from_build' && ret=0
+                '*:services:__docker-compose_services_in_compose_file' && ret=0
             ;;
         (config)
             _arguments \
@@ -137,7 +146,7 @@ __docker-compose_subcommand() {
                 $opts_no_recreate \
                 $opts_no_build \
                 "(--no-build)--build[Build images before creating containers.]" \
-                '*:services:__docker-compose_services' && ret=0
+                '*:services:__docker-compose_services_in_compose_file' && ret=0
             ;;
         (down)
             _arguments \
@@ -151,7 +160,7 @@ __docker-compose_subcommand() {
             _arguments \
                 $opts_help \
                 '--json[Output events as a stream of json objects]' \
-                '*:services:__docker-compose_services' && ret=0
+                '*:services:__docker-compose_services_with_container' && ret=0
             ;;
         (exec)
             _arguments \
@@ -174,7 +183,7 @@ __docker-compose_subcommand() {
         _arguments \
         $opts_help \
         '-q[Only display IDs]' \
-        '*:services:__docker-compose_services' && ret=0
+        '*:services:__docker-compose_services_in_compose_file' && ret=0
         ;;
         (kill)
             _arguments \
@@ -189,7 +198,7 @@ __docker-compose_subcommand() {
                 $opts_no_color \
                 '--tail=[Number of lines to show from the end of the logs for each container.]:number of lines: ' \
                 '(-t --timestamps)'{-t,--timestamps}'[Show timestamps]' \
-                '*:services:__docker-compose_services' && ret=0
+                '*:services:__docker-compose_services_with_container' && ret=0
             ;;
         (pause)
             _arguments \
@@ -209,7 +218,7 @@ __docker-compose_subcommand() {
                 $opts_help \
                 '-q[Only display IDs]' \
                 '--filter KEY=VAL[Filter services by a property]:<filtername>=<value>:' \
-                '*:services:__docker-compose_services' && ret=0
+                '*:services:__docker-compose_services_with_container' && ret=0
             ;;
         (pull)
             _arguments \
@@ -218,13 +227,13 @@ __docker-compose_subcommand() {
                 '--no-parallel[Disable parallel pulling]' \
                 '(-q --quiet)'{-q,--quiet}'[Pull without printing progress information]' \
                 '--include-deps[Also pull services declared as dependencies]' \
-                '*:services:__docker-compose_services_from_image' && ret=0
+                '*:services:__docker-compose_services_in_compose_file' && ret=0
             ;;
         (push)
             _arguments \
                 $opts_help \
                 '--ignore-push-failures[Push what it can and ignores images with push failures.]' \
-                '*:services:__docker-compose_services' && ret=0
+                '*:services:__docker-compose_services_in_compose_file' && ret=0
             ;;
         (rm)
             _arguments \
@@ -250,7 +259,7 @@ __docker-compose_subcommand() {
                 '(-v --volume)*'{-v,--volume=}'[Bind mount a volume]:volume: ' \
                 '(-w --workdir)'{-w,--workdir=}'[Working directory inside the container]:workdir: ' \
                 "--use-aliases[Use the services network aliases in the network(s) the container connects to]" \
-                '(-):services:__docker-compose_services' \
+                '(-):services:__docker-compose_services_in_compose_file' \
                 '(-):command: _command_names -e' \
                 '*::arguments: _normal' && ret=0
             ;;
@@ -297,7 +306,7 @@ __docker-compose_subcommand() {
                 '--scale[SERVICE=NUM Scale SERVICE to NUM instances. Overrides the `scale` setting in the Compose file if present.]:service scale SERVICE=NUM: ' \
                 '--exit-code-from=[Return the exit code of the selected service container. Implies --abort-on-container-exit]:service:__docker-compose_services' \
                 $opts_remove_orphans \
-                '*:services:__docker-compose_services' && ret=0
+                '*:services:__docker-compose_services_in_compose_file' && ret=0
             ;;
         (version)
             _arguments \
