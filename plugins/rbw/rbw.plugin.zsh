@@ -17,3 +17,23 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_rbw" ]]; then
 fi
 
 rbw gen-completions zsh >| "$ZSH_CACHE_DIR/completions/_rbw" &|
+
+# rbwpw function copies the password of a service to the clipboard
+# and clears it after 20 seconds
+function rbwpw {
+  [[ $# -ne 1 ]] && echo "usage: rbwg <service>" && return 1
+  local service=$1
+  rbw unlock || (echo "rbw is locked" && return 1)
+  local pw=$(rbw get $service 2>/dev/null)
+  [[ -z $pw ]] && echo "$service not found" && return 1
+  echo -n $pw | clipcopy
+  echo "password for $service copied!"
+  (sleep 20 && clipcopy </dev/null 2>/dev/null) &|
+}
+
+function _rbwpw {
+  local -a services=("${(@f)$(rbw ls 2>/dev/null)}")
+  [[ -n services ]] && compadd -a -- services
+}
+
+compdef _rbwpw rbwpw
