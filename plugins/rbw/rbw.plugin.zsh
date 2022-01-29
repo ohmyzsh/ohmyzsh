@@ -21,7 +21,7 @@ rbw gen-completions zsh >| "$ZSH_CACHE_DIR/completions/_rbw" &|
 # rbwpw function copies the password of a service to the clipboard
 # and clears it after 20 seconds
 function rbwpw {
-  [[ $# -ne 1 ]] && echo "usage: rbwg <service>" && return 1
+  [[ $# -ne 1 ]] && echo "usage: rbwpw <service>" && return 1
   local service=$1
   rbw unlock || (echo "rbw is locked" && return 1)
   local pw=$(rbw get $service 2>/dev/null)
