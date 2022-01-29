@@ -17,30 +17,53 @@ function opswd() {
   # If not logged in, print error and return
   op list users > /dev/null || return
 
-  local password
-  # Copy the password to the clipboard
-  if ! password=$(op get item "$service" --fields password 2>/dev/null); then
-    echo "error: could not obtain password for $service"
+  local username
+  # Copy the username to the clipboard
+  if ! username=$(op get item "$service" --fields username 2>/dev/null); then
+    echo "error: could not obtain username for $service"
     return 1
   fi
 
-  echo -n "$password" | clipcopy
-  echo "✔ password for $service copied to clipboard"
+  echo -n "$username" | clipcopy
+  echo "✔ username for service $service copied to the clipboard. Continue? [y/N]"
+  read -r -k1 next_step
+  echo "\n"
+  if [ "$next_step" = y ] || [ "$next_step" = Y ]; then
 
-  # If there's a one time password, copy it to the clipboard after 5 seconds
-  local totp
-  if totp=$(op get totp "$service" 2>/dev/null) && [[ -n "$totp" ]]; then
-    sleep 10 && echo -n "$totp" | clipcopy
-    echo "✔ TOTP for $service copied to clipboard"
+    local password
+    # Copy the password to the clipboard
+    if ! password=$(op get item "$service" --fields password 2>/dev/null); then
+      echo "error: could not obtain password for $service"
+      return 1
+    fi
+
+    echo -n "$password" | clipcopy
+    echo "✔ password for $service copied to clipboard. Continue? [y/N]"
+    read -r -k1 next_step
+    echo "\n"
+
+    if [ "$next_step" = y ] || [ "$next_step" = Y ]; then
+      # If there's a one time password, copy it to the clipboard after 5 seconds
+      local totp
+      if totp=$(op get totp "$service" 2>/dev/null) && [[ -n "$totp" ]]; then
+        sleep 10 && echo -n "$totp" | clipcopy
+        echo "✔ TOTP for $service copied to clipboard"
+      fi
+    else
+      (sleep 20 && clipcopy </dev/null 2>/dev/null) &!
+    fi
+  else
+    (sleep 20 && clipcopy </dev/null 2>/dev/null) &!
   fi
 
   (sleep 20 && clipcopy </dev/null 2>/dev/null) &!
 }
 
-function _opswd() {
+# lists all the available services in 1password and use them for completion support
+function _opcomplete() {
   local -a services
   services=("${(@f)$(op list items --categories Login 2>/dev/null | op get item - --fields title 2>/dev/null)}")
   [[ -z "$services" ]] || compadd -a -- services
 }
 
-compdef _opswd opswd
+compdef _opcomplete opswd
