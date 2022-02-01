@@ -1,12 +1,12 @@
-# zsh-multipass
+# multipass
 
 This plugin provides completion for [multipass](https://multipass.run), as well as aliases
 for multipass commands.
 
-To use it add `zsh-multipass` to the plugins array in your zshrc file.
+To use it add `multipass` to the plugins array in your zshrc file.
 
 ```zsh
-plugins=(... zsh-multipass)
+plugins=(... multipass)
 
 ## Aliases
 
