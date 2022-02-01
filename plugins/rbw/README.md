@@ -9,8 +9,11 @@ To use it, add `rbw` to the plugins array in your zshrc file:
 plugins=(... rbw)
 ```
 
-It also adds the `rbwpw` function, that copies the password in the clipboard
-for the service you ask for and clears the clipboard 20s later. Usage:
+## `rbwpw`
+
+The `rbwpw` function is a wrapper around `rbw`. It copies the password in the
+clipboard for the service you ask for and clears the clipboard 20s later.
+The usage is as follows:
 
 ```zsh
 rbwpw <service>
