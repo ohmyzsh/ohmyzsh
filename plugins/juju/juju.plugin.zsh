@@ -164,6 +164,6 @@ jreld() {
 wjst() {
   local interval="${1:-5}"
   shift $(( $# > 0 ))
-  watch -n "$interval" --color juju status --relations --storage --color "$@"
+  watch -n "$interval" --color juju status --relations --color "$@"
 }
 
