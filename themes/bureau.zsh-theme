@@ -25,20 +25,21 @@ bureau_git_branch () {
 
 bureau_git_status() {
   local result gitstatus
+  gitstatus="$(command git status --porcelain -b 2>/dev/null)"
 
   # check status of files
-  gitstatus=$(command git status --porcelain -b 2> /dev/null)
-  if [[ -n "$gitstatus" ]]; then
-    if $(echo "$gitstatus" | command grep -q '^[AMRD]. '); then
+  local gitfiles="$(tail -n +2 <<< "$gitstatus")"
+  if [[ -n "$gitfiles" ]]; then
+    if $(echo "$gitfiles" | command grep -q '^[AMRD]. '); then
       result+="$ZSH_THEME_GIT_PROMPT_STAGED"
     fi
-    if $(echo "$gitstatus" | command grep -q '^.[MTD] '); then
+    if $(echo "$gitfiles" | command grep -q '^.[MTD] '); then
       result+="$ZSH_THEME_GIT_PROMPT_UNSTAGED"
     fi
-    if $(echo "$gitstatus" | command grep -q -E '^\?\? '); then
+    if $(echo "$gitfiles" | command grep -q -E '^\?\? '); then
       result+="$ZSH_THEME_GIT_PROMPT_UNTRACKED"
     fi
-    if $(echo "$gitstatus" | command grep -q '^UU '); then
+    if $(echo "$gitfiles" | command grep -q '^UU '); then
       result+="$ZSH_THEME_GIT_PROMPT_UNMERGED"
     fi
   else
@@ -46,13 +47,14 @@ bureau_git_status() {
   fi
 
   # check status of local repository
-  if $(echo "$gitstatus" | command grep -q '^## .*ahead'); then
+  local gitbranch="$(head -n 1 <<< "$gitstatus")"
+  if $(echo "$gitbranch" | command grep -q '^## .*ahead'); then
     result+="$ZSH_THEME_GIT_PROMPT_AHEAD"
   fi
-  if $(echo "$gitstatus" | command grep -q '^## .*behind'); then
+  if $(echo "$gitbranch" | command grep -q '^## .*behind'); then
     result+="$ZSH_THEME_GIT_PROMPT_BEHIND"
   fi
-  if $(echo "$gitstatus" | command grep -q '^## .*diverged'); then
+  if $(echo "$gitbranch" | command grep -q '^## .*diverged'); then
     result+="$ZSH_THEME_GIT_PROMPT_DIVERGED"
   fi
 
