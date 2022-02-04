@@ -27,7 +27,7 @@ bureau_git_status() {
   local result gitstatus
 
   # check status of files
-  gitstatus=$(command git status --porcelain -b 2> /dev/null)
+  gitstatus=$(command git status --porcelain 2> /dev/null)
   if [[ -n "$gitstatus" ]]; then
     if $(echo "$gitstatus" | command grep -q '^[AMRD]. '); then
       result+="$ZSH_THEME_GIT_PROMPT_STAGED"
@@ -46,6 +46,7 @@ bureau_git_status() {
   fi
 
   # check status of local repository
+  gitstatus=$(command git status --porcelain -b 2> /dev/null)
   if $(echo "$gitstatus" | command grep -q '^## .*ahead'); then
     result+="$ZSH_THEME_GIT_PROMPT_AHEAD"
   fi
