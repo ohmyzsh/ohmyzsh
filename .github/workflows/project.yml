@@ -47,21 +47,25 @@ jobs:
           ISSUE_OR_PR_ID: ${{ github.event.issue.node_id || github.event.pull_request.node_id }}
         run: |
           item_id="$(gh api graphql -f query='
-            mutation($project: ID!, $item: ID!) {
-              addProjectNextItem(input: {projectId: $project, contentId: $item}) {
+            mutation($project: ID!, $content: ID!) {
+              addProjectNextItem(input: {projectId: $project, contentId: $content}) {
                 projectNextItem {
                   id
                 }
               }
             }
-          ' -f project=$PROJECT_ID -f item=$ISSUE_OR_PR_ID --jq '.data.addProjectNextItem.projectNextItem.id')"
+          ' -f project=$PROJECT_ID -f content=$ISSUE_OR_PR_ID --jq '.data.addProjectNextItem.projectNextItem.id')"
 
           echo "ITEM_ID=$item_id" >> $GITHUB_ENV
 
       - name: Classify Pull Request
         if: github.event_name == 'pull_request_target'
         run: |
-          gh pr view ${{ github.event.pull_request.number }} --json files --jq '.files.[].path' | awk -F/ '
+          touch plugins.list themes.list
+
+          gh pr view ${{ github.event.pull_request.number }} \
+            --repo ${{ github.repository }} \
+            --json files --jq '.files.[].path' | awk -F/ '
             /^plugins\// {
               plugins[$2] = 1
             }

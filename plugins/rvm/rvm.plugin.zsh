@@ -1,7 +1,7 @@
 # Completion
 fpath+=("${rvm_path}/scripts/zsh/Completion")
 
-declare -A _comps
+typeset -g -A _comps
 autoload -Uz _rvm
 _comps[rvm]=_rvm
 

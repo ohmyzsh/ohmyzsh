@@ -30,10 +30,10 @@ plugins=(... vi-mode)
   ```
 
 - `MODE_INDICATOR`: controls the string displayed when the shell is in normal mode.
-  See [Mode indicator](#mode-indicator) for details.
+  See [Mode indicators](#mode-indicators) for details.
 
 - `INSERT_MODE_INDICATOR`: controls the string displayed when the shell is in insert mode.
-  See [Mode indicator](#mode-indicator) for details.
+  See [Mode indicators](#mode-indicators) for details.
 
 ## Mode indicators
 

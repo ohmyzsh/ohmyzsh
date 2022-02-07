@@ -1,13 +1,22 @@
 if (( $+commands[kubectl] )); then
-    __KUBECTL_COMPLETION_FILE="${ZSH_CACHE_DIR}/kubectl_completion"
+  # TODO: 2022-01-05: remove this block
+  # remove old generated files
+  command rm -f "$ZSH_CACHE_DIR/kubectl_completion"
 
-    if [[ ! -f $__KUBECTL_COMPLETION_FILE || ! -s $__KUBECTL_COMPLETION_FILE ]]; then
-        kubectl completion zsh >! $__KUBECTL_COMPLETION_FILE
-    fi
+  # TODO: 2022-01-05: remove this bit of code as it exists in oh-my-zsh.sh
+  # Add completions folder in $ZSH_CACHE_DIR
+  command mkdir -p "$ZSH_CACHE_DIR/completions"
+  (( ${fpath[(Ie)"$ZSH_CACHE_DIR/completions"]} )) || fpath=("$ZSH_CACHE_DIR/completions" $fpath)
 
-    [[ -f $__KUBECTL_COMPLETION_FILE ]] && source $__KUBECTL_COMPLETION_FILE
-
-    unset __KUBECTL_COMPLETION_FILE
+  # If the completion file does not exist, generate it and then source it
+  # Otherwise, source it and regenerate in the background
+  if [[ ! -f "$ZSH_CACHE_DIR/completions/_kubectl" ]]; then
+    kubectl completion zsh >| "$ZSH_CACHE_DIR/completions/_kubectl"
+    source "$ZSH_CACHE_DIR/completions/_kubectl"
+  else
+    source "$ZSH_CACHE_DIR/completions/_kubectl"
+    kubectl completion zsh >| "$ZSH_CACHE_DIR/completions/_kubectl" &|
+  fi
 fi
 
 # This command is used a LOT both below and in daily life
@@ -97,8 +106,9 @@ alias kdd='kubectl describe deployment'
 alias kdeld='kubectl delete deployment'
 alias ksd='kubectl scale deployment'
 alias krsd='kubectl rollout status deployment'
-kres(){
-    kubectl set env $@ REFRESHED_AT=$(date +%Y%m%d%H%M%S)
+
+function kres(){
+  kubectl set env $@ REFRESHED_AT=$(date +%Y%m%d%H%M%S)
 }
 
 # Rollout management.
@@ -170,9 +180,9 @@ alias kdelcj='kubectl delete cronjob'
 
 # Only run if the user actually has kubectl installed
 if (( ${+_comps[kubectl]} )); then
-  kj() { kubectl "$@" -o json | jq; }
-  kjx() { kubectl "$@" -o json | fx; }
-  ky() { kubectl "$@" -o yaml | yh; }
+  function kj() { kubectl "$@" -o json | jq; }
+  function kjx() { kubectl "$@" -o json | fx; }
+  function ky() { kubectl "$@" -o yaml | yh; }
 
   compdef kj=kubectl
   compdef kjx=kubectl

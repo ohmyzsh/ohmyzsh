@@ -55,7 +55,7 @@ svn_get_branch_name() {
 }
 
 svn_get_rev_nr() {
-  sed -n 's/Revision:\ //p' "${1:-$(LANG= svn info 2>/dev/null)}"
+  sed -n 's/Revision:\ //p' <<<"${1:-$(LANG= svn info 2>/dev/null)}"
 }
 
 svn_dirty() {
@@ -67,10 +67,10 @@ svn_dirty_choose() {
   root=$(sed -n 's/^Working Copy Root Path: //p' <<< "${1:-$(LANG= svn info 2>/dev/null)}")
   if LANG= svn status "$root" 2>/dev/null | command grep -Eq '^\s*[ACDIM!?L]'; then
     # Grep exits with 0 when "One or more lines were selected", return "dirty".
-    echo $1
+    echo $2
   else
     # Otherwise, no lines were found, or an error occurred. Return clean.
-    echo $2
+    echo $3
   fi
 }
 

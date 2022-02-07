@@ -39,7 +39,7 @@ function frontend() {
   emulate -L zsh
 
   # define search context URLS
-  typeset -A urls
+  local -A urls
   urls=(
     angular        'https://angular.io/?search='
     angularjs      $(_frontend_fallback 'angularjs.org')
@@ -73,25 +73,23 @@ function frontend() {
   )
 
   # show help for command list
-  if [[ $# -lt 2 ]]
-  then
-      print -P "Usage: frontend %Ucontext%u %Uterm%u [...%Umore%u] (or just: %Ucontext%u %Uterm%u [...%Umore%u])"
-      print -P ""
-      print -P "%Uterm%u and what follows is what will be searched for in the %Ucontext%u website,"
-      print -P "and %Ucontext%u is one of the following:"
-      print -P ""
-      print -P "  angular, angularjs, bem, bootsnipp, caniuse, codepen, compassdoc, cssflow, packagephobia"
-      print -P "  dartlang, emberjs, fontello, flowtype, github, html5please, jestjs, jquery, lodash,"
-      print -P "  mdn, npmjs, nodejs, qunit, reactjs, smacss, stackoverflow, unheap, vuejs, bundlephobia"
-      print -P ""
-      print -P "For example: frontend npmjs mocha (or just: npmjs mocha)."
-      print -P ""
-      return 1
+  if [[ $# -lt 2 ]]; then
+    print -P "Usage: frontend %Ucontext%u %Uterm%u [...%Umore%u] (or just: %Ucontext%u %Uterm%u [...%Umore%u])"
+    print -P ""
+    print -P "%Uterm%u and what follows is what will be searched for in the %Ucontext%u website,"
+    print -P "and %Ucontext%u is one of the following:"
+    print -P ""
+    print -P "  angular, angularjs, bem, bootsnipp, caniuse, codepen, compassdoc, cssflow, packagephobia"
+    print -P "  dartlang, emberjs, fontello, flowtype, github, html5please, jestjs, jquery, lodash,"
+    print -P "  mdn, npmjs, nodejs, qunit, reactjs, smacss, stackoverflow, unheap, vuejs, bundlephobia"
+    print -P ""
+    print -P "For example: frontend npmjs mocha (or just: npmjs mocha)."
+    print -P ""
+    return 1
   fi
 
   # check whether the search context is supported
-  if [[ -z "$urls[$1]" ]]
-  then
+  if [[ -z "$urls[$1]" ]]; then
     echo "Search context \"$1\" currently not supported."
     echo ""
     echo "Valid contexts are:"
