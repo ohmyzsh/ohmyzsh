@@ -103,19 +103,14 @@ get_space () {
   local STR=$1$2
   local zero='%([BSUbfksu]|([FB]|){*})'
   local LENGTH=${#${(S%%)STR//$~zero/}}
-  local SPACES=""
-  (( LENGTH = ${COLUMNS} - $LENGTH - 1))
+  local SPACES=$(( COLUMNS - LENGTH - ${ZLE_RPROMPT_INDENT:-1} ))
 
-  for i in {0..$LENGTH}
-    do
-      SPACES="$SPACES "
-    done
-
-  echo $SPACES
+  (( SPACES > 0 )) || return
+  printf ' %.0s' {1..$SPACES}
 }
 
 _1LEFT="$_USERNAME $_PATH"
-_1RIGHT="[%*] "
+_1RIGHT="[%*]"
 
 bureau_precmd () {
   _1SPACES=`get_space $_1LEFT $_1RIGHT`
