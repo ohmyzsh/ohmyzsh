@@ -16,6 +16,7 @@ unset completion_file
 # Generally,                                                 #
 #   - `!` means --force --no-wait -y                         #
 #   - `ds` suffix means --destroy-storage                    #
+#   - `jsh` prefix means juju show-*                         #
 # ---------------------------------------------------------- #
 alias j="juju"
 alias jam="juju add-model --config logging-config=\"<root>=WARNING; unit=DEBUG\"\
@@ -65,14 +66,16 @@ alias jrp='juju refresh --path'
 alias jrs='juju remove-storage'
 alias 'jrs!'='juju remove-storage --force'
 alias jsa='juju scale-application'
-alias jsh='juju ssh'
-alias jshc='juju ssh --container'
+alias jsha='juju show-application'
+alias jshc='juju show-controller'
 alias jshm='juju show-model'
-alias jssl='juju show-status-log'
+alias jshsl='juju show-status-log'
+alias jshu='juju show-unit'
+alias jssh='juju ssh'
+alias jsshc='juju ssh --container'
 alias jstj='juju status --format=json'
 alias jst='juju status --relations --color'
 alias jsts='juju status --relations --storage --color'
-alias jsu='juju show-unit'
 alias jsw='juju switch'
 
 # ---------------------------------------------------------- #

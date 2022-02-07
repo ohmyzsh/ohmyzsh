@@ -15,6 +15,7 @@ Naming convention:
 
 - `!` suffix: `--force --no-wait -y`.
 - `ds` suffix: `--destroy-storage`.
+- `jsh` prefix means `juju show-*`.
 
 ### General
 
@@ -26,7 +27,7 @@ Naming convention:
 | `jdl`   | `juju debug-log --ms`                       | Display log, with millisecond resolution               |
 | `jdlr`  | `juju debug-log --ms --replay`              | Replay entire log                                      |
 | `jh`    | `juju help`                                 | Show help on a command or other topic                  |
-| `jssl`  | `juju show-status-log`                      | Output past statuses for the specified entity          |
+| `jshsl` | `juju show-status-log`                      | Output past statuses for the specified entity          |
 | `jstj`  | `juju status --format=json`                 | Show status in json format (more detailed)             |
 | `jst`   | `juju status --relations --color`           | Show status, including relations, in color             |
 | `jsts`  | `juju status --relations --storage --color` | Show status, including relations and storage, in color |
@@ -53,6 +54,7 @@ Naming convention:
 | `jdcds`  | `juju destroy-controller --destroy-all-models --destroy-storage`                      | Destroy a controller and associated storage                       |
 | `jdcds!` | `juju destroy-controller --destroy-all-models --destroy-storage --force --no-wait -y` | Destroy a controller and associated storage                       |
 | `jkc`    | `juju kill-controller -y -t 0`                                                        | Forcibly terminate all associated resources for a Juju controller |
+| `jshc`   | `juju show-controller`                                                                | Shows detailed information of a controller                    |
 | `jsw`    | `juju switch`                                                                         | Select or identify the current controller and model               |
 
 ### Model
@@ -84,9 +86,9 @@ Naming convention:
 | `jrmds!` | `juju remove-application --destroy-storage --force --no-wait` | Remove application forcefully, destroying attached storage                |
 | `jrp`    | `juju refresh --path`                                         | Upgrade charm from local charm file                                       |
 | `jsa`    | `juju scale-application`                                      | Set the desired number of application units                               |
-| `jsh`    | `juju ssh`                                                    | Initiate an SSH session or execute a command on a Juju target             |
-| `jshc`   | `juju ssh --container`                                        | Initiate an SSH session or execute a command on a given container         |
-| `jsu`    | `juju show-unit`                                              | Displays information about a unit                                         |
+| `jssh`   | `juju ssh`                                                    | Initiate an SSH session or execute a command on a Juju target             |
+| `jsshc`  | `juju ssh --container`                                        | Initiate an SSH session or execute a command on a given container         |
+| `jshu`   | `juju show-unit`                                              | Displays information about a unit                                         |
 
 ### Storage
 
