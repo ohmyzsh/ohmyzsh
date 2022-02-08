@@ -23,5 +23,10 @@ input. See the options below
 ## Examples
 ```
 $ gl
-gl='git pull'
+alias-printer: git pull
+```
+
+```
+$ gl && grbm
+alias-printer: git pull && git rebase $(git_main_branch)
 ```

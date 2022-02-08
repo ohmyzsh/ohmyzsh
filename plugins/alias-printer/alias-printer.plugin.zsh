@@ -12,9 +12,7 @@ alias-printer() {
         echo "alias-printer turned off";
         ;;
       * )
-        if [[ ! -z $1 ]]; then
-          alias $1
-        fi
+        echo "alias-printer: $2"
         break
       ;;
     esac
