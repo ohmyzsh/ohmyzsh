@@ -23,5 +23,5 @@ input. See the options below
 ## Examples
 ```
 $ gl
-alias-printer: git pull
+gl='git pull'
 ```

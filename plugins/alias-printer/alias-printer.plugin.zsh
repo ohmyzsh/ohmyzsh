@@ -12,8 +12,8 @@ alias-printer() {
         echo "alias-printer turned off";
         ;;
       * )
-        if [[ ! -z $2 ]]; then
-          echo 'alias-printer: '"$2";
+        if [[ ! -z $1 ]]; then
+          alias $1
         fi
         break
       ;;
