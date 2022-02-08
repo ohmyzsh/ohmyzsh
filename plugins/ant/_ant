@@ -1,0 +1,22 @@
+#compdef ant
+
+_ant_does_target_list_need_generating () {
+  [[ ! -f .ant_targets ]] && return 0
+  [[ build.xml -nt .ant_targets ]] && return 0
+  return 1
+}
+
+_ant () {
+  if [[ ! -f build.xml ]]; then
+    return
+  fi
+
+  if ! _ant_does_target_list_need_generating; then
+    return
+  fi
+
+  ant -p | awk -F " " 'NR > 5 { print lastTarget } { lastTarget = $1 }' >| .ant_targets
+  compadd -- "$(cat .ant_targets)"
+}
+
+_ant "$@"

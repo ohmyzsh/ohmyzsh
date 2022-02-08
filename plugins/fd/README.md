@@ -8,6 +8,6 @@ To use it, add `fd` to the plugins array in your zshrc file:
 plugins=(... fd)
 ```
 
-Completion is taken from the fd release [`7.3.0`](https://github.com/sharkdp/fd/releases/tag/v7.3.0).
+Completion is taken from the fd release [`8.2.1`](https://github.com/sharkdp/fd/releases/tag/v8.2.1).
 
-Updated on Febrary 13th, 2019.
+Updated on April 1st, 2021.

@@ -1,7 +1,12 @@
 name: Feature request
 description: Suggest a feature for Oh My Zsh
-labels: 'Feature'
+labels: ["Feature"]
 body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Self Check
+        - Look for similar features in existing [GitHub Issues](https://github.com/ohmyzsh/ohmyzsh/issues?q=is%3Aissue) (open or closed).
   - type: input
     attributes:
       label: If the feature request is for a plugin or theme, specify it here.

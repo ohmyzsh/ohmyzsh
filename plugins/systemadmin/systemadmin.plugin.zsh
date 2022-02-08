@@ -26,10 +26,10 @@ alias path='print -l $path'
 alias mkdir='mkdir -pv'
 # get top process eating memory
 alias psmem='ps -e -orss=,args= | sort -b -k1 -nr'
-alias psmem10='ps -e -orss=,args= | sort -b -k1 -nr | head -10'
-# get top process eating cpu if not work try excute : export LC_ALL='C'
+alias psmem10='ps -e -orss=,args= | sort -b -k1 -nr | head -n 10'
+# get top process eating cpu if not work try execute : export LC_ALL='C'
 alias pscpu='ps -e -o pcpu,cpu,nice,state,cputime,args|sort -k1,1n -nr'
-alias pscpu10='ps -e -o pcpu,cpu,nice,state,cputime,args|sort -k1,1n -nr | head -10'
+alias pscpu10='ps -e -o pcpu,cpu,nice,state,cputime,args|sort -k1,1n -nr | head -n 10'
 # top10 of the history
 alias hist10='print -l ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
 
@@ -74,7 +74,7 @@ req20() {
 
 # top20 of Using tcpdump port 80 access to view
 http20() {
-    sudo tcpdump -i eth0 -tnn dst port 80 -c 1000 | awk -F"." '{print $1"."$2"."$3"."$4}' | sort | uniq -c | sort -nr |head -20
+    sudo tcpdump -i eth0 -tnn dst port 80 -c 1000 | awk -F"." '{print $1"."$2"."$3"."$4}' | sort | uniq -c | sort -nr |head -n 20
 }
 
 # top20 of Find time_wait connection
@@ -99,14 +99,14 @@ accessip10() {
 
 # top20 of Most Visited file or page
 visitpage20() {
-    awk '{print $11}' "$(retlog)"|sort|uniq -c|sort -nr|head -20
+    awk '{print $11}' "$(retlog)"|sort|uniq -c|sort -nr|head -n 20
 }
 
 # top100 of Page lists the most time-consuming (more than 60 seconds) as well as the corresponding page number of occurrences
 consume100() {
-    awk '($NF > 60 && $7~/\.php/){print $7}' "$(retlog)" |sort -n|uniq -c|sort -nr|head -100
-    # if django website or other webiste make by no suffix language
-    # awk '{print $7}' "$(retlog)" |sort -n|uniq -c|sort -nr|head -100
+    awk '($NF > 60 && $7~/\.php/){print $7}' "$(retlog)" |sort -n|uniq -c|sort -nr|head -n 100
+    # if django website or other website make by no suffix language
+    # awk '{print $7}' "$(retlog)" |sort -n|uniq -c|sort -nr|head -n 100
 }
 
 # Website traffic statistics (G)
