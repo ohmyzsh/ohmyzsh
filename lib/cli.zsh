@@ -573,7 +573,7 @@ function _omz::pr::test {
 
     # Rebase pull request branch against the current master
     _omz::log info "rebasing PR #$1..."
-    command git rebase master ohmyzsh/pull-$1 || {
+    command git rebase --no-gpg-sign master ohmyzsh/pull-$1 || {
       command git rebase --abort &>/dev/null
       _omz::log warn "could not rebase PR #$1 on top of master."
       _omz::log warn "you might not see the latest stable changes."
