@@ -573,13 +573,15 @@ function _omz::pr::test {
 
     # Rebase pull request branch against the current master
     _omz::log info "rebasing PR #$1..."
-    command git rebase --no-gpg-sign master ohmyzsh/pull-$1 || {
+    command git config commit.gpgsign false
+    command git rebase master ohmyzsh/pull-$1 || {
       command git rebase --abort &>/dev/null
       _omz::log warn "could not rebase PR #$1 on top of master."
       _omz::log warn "you might not see the latest stable changes."
       _omz::log info "run \`zsh\` to test the changes."
       return 1
     }
+    command git config --unset commit.gpgsign
 
     _omz::log info "fetch of PR #${1} successful."
   )
