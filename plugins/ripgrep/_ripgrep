@@ -121,7 +121,7 @@ _rg() {
     "(pretty-vimgrep)--no-heading[don't show matches grouped by file name]"
 
     + '(hidden)' # Hidden-file options
-    '--hidden[search hidden files and directories]'
+    {-.,--hidden}'[search hidden files and directories]'
     $no"--no-hidden[don't search hidden files and directories]"
 
     + '(hybrid)' # hybrid regex options
@@ -303,6 +303,8 @@ _rg() {
     '--context-separator=[specify string used to separate non-continuous context lines in output]:separator'
     $no"--no-context-separator[don't print context separators]"
     '--debug[show debug messages]'
+    '--field-context-separator[set string to delimit fields in context lines]'
+    '--field-match-separator[set string to delimit fields in matching lines]'
     '--trace[show more verbose debug messages]'
     '--dfa-size-limit=[specify upper size limit of generated DFA]:DFA size (bytes)'
     "(1 stats)--files[show each file that would be searched (but don't search)]"
