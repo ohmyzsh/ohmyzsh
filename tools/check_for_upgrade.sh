@@ -89,6 +89,23 @@ function update_ohmyzsh() {
   fi
 }
 
+function has_typed_input() {
+  # Created by Philippe Troin <phil@fifi.org>
+  # https://zsh.org/mla/users/2022/msg00062.html
+  emulate -L zsh
+  zmodload zsh/zselect
+
+  {
+    local termios=$(stty --save)
+    stty -icanon
+
+    zselect -t 0 -r 0
+    return $?
+  } always {
+    stty $termios
+  }
+}
+
 () {
   emulate -L zsh
 
@@ -146,26 +163,35 @@ function update_ohmyzsh() {
     return
   fi
 
-  # Ask for confirmation before updating unless in auto mode
+  # Don't ask for confirmation before updating if in auto mode
   if [[ "$update_mode" = auto ]]; then
     update_ohmyzsh
-  elif [[ "$update_mode" = reminder ]]; then
-    echo "[oh-my-zsh] It's time to update! You can do that by running \`omz update\`"
-  else
-    # input sink to swallow all characters typed before the prompt
-    # and add a newline if there wasn't one after characters typed
-    while read -t -k 1 option; do true; done
-    [[ "$option" != ($'\n'|"") ]] && echo
-
-    echo -n "[oh-my-zsh] Would you like to update? [Y/n] "
-    read -r -k 1 option
-    [[ "$option" != $'\n' ]] && echo
-    case "$option" in
-      [yY$'\n']) update_ohmyzsh ;;
-      [nN]) update_last_updated_file ;&
-      *) echo "[oh-my-zsh] You can update manually by running \`omz update\`" ;;
-    esac
+    return $?
   fi
+
+  # If in reminder mode show reminder and exit
+  if [[ "$update_mode" = reminder ]]; then
+    echo "[oh-my-zsh] It's time to update! You can do that by running \`omz update\`"
+    return 0
+  fi
+
+  # If user has typed input, show reminder and exit
+  if has_typed_input; then
+    echo
+    echo "[oh-my-zsh] It's time to update! You can do that by running \`omz update\`"
+    return 0
+  fi
+
+  # Ask for confirmation and only update on 'y', 'Y' or Enter
+  # Otherwise just show a reminder for how to update
+  echo -n "[oh-my-zsh] Would you like to update? [Y/n] "
+  read -r -k 1 option
+  [[ "$option" = $'\n' ]] || echo
+  case "$option" in
+    [yY$'\n']) update_ohmyzsh ;;
+    [nN]) update_last_updated_file ;&
+    *) echo "[oh-my-zsh] You can update manually by running \`omz update\`" ;;
+  esac
 }
 
 unset update_mode

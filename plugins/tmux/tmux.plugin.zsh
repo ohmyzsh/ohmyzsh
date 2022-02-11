@@ -3,16 +3,6 @@ if ! (( $+commands[tmux] )); then
   return 1
 fi
 
-# ALIASES
-
-alias ta='tmux attach -t'
-alias tad='tmux attach -d -t'
-alias ts='tmux new-session -s'
-alias tl='tmux list-sessions'
-alias tksv='tmux kill-server'
-alias tkss='tmux kill-session -t'
-alias tmuxconf='$EDITOR ~/.tmux.conf'
-
 # CONFIGURATION VARIABLES
 # Automatically start tmux
 : ${ZSH_TMUX_AUTOSTART:=false}
@@ -39,6 +29,16 @@ alias tmuxconf='$EDITOR ~/.tmux.conf'
 : ${ZSH_TMUX_CONFIG:=$HOME/.tmux.conf}
 # Set -u option to support unicode
 : ${ZSH_TMUX_UNICODE:=false}
+
+# ALIASES
+
+alias ta='tmux attach -t'
+alias tad='tmux attach -d -t'
+alias ts='tmux new-session -s'
+alias tl='tmux list-sessions'
+alias tksv='tmux kill-server'
+alias tkss='tmux kill-session -t'
+alias tmuxconf='$EDITOR $ZSH_TMUX_CONFIG'
 
 # Determine if the terminal supports 256 colors
 if [[ $terminfo[colors] == 256 ]]; then
