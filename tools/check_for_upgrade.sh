@@ -89,6 +89,23 @@ function update_ohmyzsh() {
   fi
 }
 
+function has_typed_input() {
+  # Created by Philippe Troin <phil@fifi.org>
+  # https://zsh.org/mla/users/2022/msg00062.html
+  emulate -L zsh
+  zmodload zsh/zselect
+
+  {
+    local termios=$(stty --save)
+    stty -icanon
+
+    zselect -t 0 -r 0
+    return $?
+  } always {
+    stty $termios
+  }
+}
+
 () {
   emulate -L zsh
 
@@ -159,7 +176,7 @@ function update_ohmyzsh() {
   fi
 
   # If user has typed input, show reminder and exit
-  if read -t -k 1; then
+  if has_typed_input; then
     echo
     echo "[oh-my-zsh] It's time to update! You can do that by running \`omz update\`"
     return 0
