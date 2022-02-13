@@ -8,9 +8,7 @@ plugins=(... zig)
 # Alias
 
 | Alias                 | Command                                          | Description                                          |
-|:----------------------|:-------------------------------------------------|-------------------------------------------------------
-| `ZCC`                 | `zig cc`                                         | `Use Zig as a drop-in C compiler`                    |
-| `ZCXX`                | `zig c++`                                        | `Use Zig as a drop-in C++ compiler`                  |
+|:----------------------|:-------------------------------------------------|:-----------------------------------------------------|
 | `zbuild`              | `zig build`                                      | `Build project from build.zig`                       |
 | `zbuildrun`           | `zig build run`                                  | `Build and run project from build.zig`               |
 | `zbuildtest`          | `zig build test`                                 | `Build, run and test project from build.zig`         |
@@ -23,3 +21,12 @@ plugins=(... zig)
 | `zrun`                | `zig run`                                        | `Create executable and run immediately`              |
 | `zversion`            | `zig version`                                    | `Print version number and exit`                      |
 | `zfind`               | `find . -name "*.zig"`                           | `Find all zig files`                                 |
+
+# Export
+
+| export                | Command                                          | Description                                          |
+|:----------------------|:-------------------------------------------------|:-----------------------------------------------------|
+| `ZCC`                 | `zig cc`                                         | `Use Zig as a drop-in C compiler`                    |
+| `ZCXX`                | `zig c++`                                        | `Use Zig as a drop-in C++ compiler`                  |
+
+**Note:** Export the commands without modify the default values (`CC` & `CXX`).
