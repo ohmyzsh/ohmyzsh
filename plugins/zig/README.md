@@ -24,7 +24,7 @@ plugins=(... zig)
 
 # Export
 
-| export                | Command                                          | Description                                          |
+| Export                | Command                                          | Description                                          |
 |:----------------------|:-------------------------------------------------|:-----------------------------------------------------|
 | `ZCC`                 | `zig cc`                                         | `Use Zig as a drop-in C compiler`                    |
 | `ZCXX`                | `zig c++`                                        | `Use Zig as a drop-in C++ compiler`                  |
