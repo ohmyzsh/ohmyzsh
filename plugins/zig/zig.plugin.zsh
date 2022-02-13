@@ -1,7 +1,7 @@
 
 # Zig as C & CXX compiler (clang wrapper)
-alias ZCC="zig cc -fno-sanitize=all -lc"
-alias ZCXX="zig c++ -fno-sanitize=all -lc -lc++"
+export ZCC="zig cc -fno-sanitize=all -lc"
+export ZCXX="zig c++ -fno-sanitize=all -lc -lc++"
 
 # Zig build-system project
 alias zbuild="zig build"
