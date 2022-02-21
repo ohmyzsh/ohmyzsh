@@ -272,7 +272,7 @@ setup_ohmyzsh() {
   fi
 
   # Manual clone with git config options to support git < v1.7.2
-  git init "$ZSH" && cd "$ZSH" \
+  git init --quiet "$ZSH" && cd "$ZSH" \
   && git config core.eol lf \
   && git config core.autocrlf false \
   && git config fsck.zeroPaddedFilemode ignore \
