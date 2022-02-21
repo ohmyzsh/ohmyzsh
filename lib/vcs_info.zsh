@@ -38,7 +38,7 @@
 # due to malicious input as a consequence of CVE-2021-45444, which affects
 # zsh versions from 5.0.3 to 5.8.
 #
-autoload -Uz +X regexp-replace VCS_INFO_formats
+autoload -Uz +X regexp-replace VCS_INFO_formats 2>/dev/null || return
 
 # We use $tmp here because it's already a local variable in VCS_INFO_formats
 typeset PATCH='for tmp (base base-name branch misc revision subdir) hook_com[$tmp]="${hook_com[$tmp]//\%/%%}"'
