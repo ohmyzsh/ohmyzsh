@@ -42,13 +42,17 @@ set -e
 # $USER is defined by login(1) which is not always executed (e.g. containers)
 # POSIX: https://pubs.opengroup.org/onlinepubs/009695299/utilities/id.html
 USER=${USER:-$(id -u -n)}
+# $HOME is defined at the time of login, but it could be unset. If it is unset,
+# a tilde by itself (~) will not be expanded to the current user's home directory.
+# POSIX: https://pubs.opengroup.org/onlinepubs/009696899/basedefs/xbd_chap08.html#tag_08_03
+HOME="${HOME:-$(getent passwd $USER | cut -d: -f6)}"
 
 
 # Track if $ZSH was provided
 custom_zsh=${ZSH:+yes}
 
 # Default settings
-ZSH=${ZSH:-~/.oh-my-zsh}
+ZSH="${ZSH:-$HOME/.oh-my-zsh}"
 REPO=${REPO:-ohmyzsh/ohmyzsh}
 REMOTE=${REMOTE:-https://github.com/${REPO}.git}
 BRANCH=${BRANCH:-master}
