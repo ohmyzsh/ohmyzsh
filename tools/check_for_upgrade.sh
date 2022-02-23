@@ -65,11 +65,11 @@ function is_update_available() {
   local remote_head
   remote_head=$(
     if (( ${+commands[curl]} )); then
-      curl -fsSL -H 'Accept: application/vnd.github.v3.sha' $api_url 2>/dev/null
+      curl -m 2 -fsSL -H 'Accept: application/vnd.github.v3.sha' $api_url 2>/dev/null
     elif (( ${+commands[wget]} )); then
-      wget -O- --header='Accept: application/vnd.github.v3.sha' $api_url 2>/dev/null
+      wget -T 2 -O- --header='Accept: application/vnd.github.v3.sha' $api_url 2>/dev/null
     elif (( ${+commands[fetch]} )); then
-      HTTP_ACCEPT='Accept: application/vnd.github.v3.sha' fetch -o - $api_url 2>/dev/null
+      HTTP_ACCEPT='Accept: application/vnd.github.v3.sha' fetch -T 2 -o - $api_url 2>/dev/null
     else
       exit 0
     fi
