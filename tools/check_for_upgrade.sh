@@ -75,8 +75,17 @@ function is_update_available() {
     fi
   ) || return 1
 
-  # Compare local and remote HEADs
-  [[ "$local_head" != "$remote_head" ]]
+  # Compare local and remote HEADs (if they're equal there are no updates)
+  [[ "$local_head" != "$remote_head" ]] || return 1
+
+  # If local and remote HEADs don't match, check if there's a common ancestor
+  # If the merge-base call fails, $remote_head might not be downloaded so assume there are updates
+  local base
+  base=$(cd -q "$ZSH"; git merge-base $local_head $remote_head 2>/dev/null) || return 0
+
+  # If the common ancestor ($base) is not $remote_head,
+  # the local HEAD is older than the remote HEAD
+  [[ $base != $remote_head ]]
 }
 
 function update_last_updated_file() {
