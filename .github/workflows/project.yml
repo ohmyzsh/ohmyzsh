@@ -1,0 +1,135 @@
+name: Project tracking
+on:
+  issues:
+    types: [opened]
+  pull_request_target:
+    types: [opened, synchronize]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  add-to-project:
+    name: Add to project
+    runs-on: ubuntu-latest
+    if: github.repository == 'ohmyzsh/ohmyzsh'
+    env:
+      GITHUB_TOKEN: ${{ secrets.PROJECT_TOKEN }}
+    steps:
+      - name: Read project data
+        env:
+          ORGANIZATION: ohmyzsh
+          PROJECT_NUMBER: "1"
+        run: |
+          # Get Project data
+          gh api graphql -f query='
+            query($org: String!, $number: Int!) {
+              organization(login: $org){
+                projectNext(number: $number) {
+                  id
+                  fields(first:20) {
+                    nodes {
+                      id
+                      name
+                    }
+                  }
+                }
+              }
+            }
+          ' -f org=$ORGANIZATION -F number=$PROJECT_NUMBER > project_data.json
+
+          # Parse project data
+          cat >> $GITHUB_ENV <<EOF
+          PROJECT_ID=$(jq '.data.organization.projectNext.id' project_data.json)
+          PLUGIN_FIELD_ID=$(jq '.data.organization.projectNext.fields.nodes[] | select(.name == "Plugin") | .id' project_data.json)
+          THEME_FIELD_ID=$(jq '.data.organization.projectNext.fields.nodes[] | select(.name == "Theme") | .id' project_data.json)
+          EOF
+
+      - name: Add to project
+        env:
+          ISSUE_OR_PR_ID: ${{ github.event.issue.node_id || github.event.pull_request.node_id }}
+        run: |
+          item_id="$(gh api graphql -f query='
+            mutation($project: ID!, $content: ID!) {
+              addProjectNextItem(input: {projectId: $project, contentId: $content}) {
+                projectNextItem {
+                  id
+                }
+              }
+            }
+          ' -f project=$PROJECT_ID -f content=$ISSUE_OR_PR_ID --jq '.data.addProjectNextItem.projectNextItem.id')"
+
+          echo "ITEM_ID=$item_id" >> $GITHUB_ENV
+
+      - name: Classify Pull Request
+        if: github.event_name == 'pull_request_target'
+        run: |
+          touch plugins.list themes.list
+
+          gh pr view ${{ github.event.pull_request.number }} \
+            --repo ${{ github.repository }} \
+            --json files --jq '.files.[].path' | awk -F/ '
+            /^plugins\// {
+              plugins[$2] = 1
+            }
+            /^themes\// {
+              gsub(/\.zsh-theme$/, "", $2)
+              themes[$2] = 1
+            }
+            END {
+              for (plugin in plugins) {
+                print plugin >> "plugins.list"
+              }
+              for (theme in themes) {
+                print theme >> "themes.list"
+              }
+            }
+          '
+          # If only one plugin is modified, add it to the plugin field
+          if [[ $(wc -l < plugins.list) = 1 ]]; then
+            echo "PLUGIN=$(cat plugins.list)" >> $GITHUB_ENV
+          fi
+          # If only one theme is modified, add it to the theme field
+          if [[ $(wc -l < themes.list) = 1 ]]; then
+            echo "THEME=$(cat themes.list)" >> $GITHUB_ENV
+          fi
+
+      - name: Fill Pull Request fields in project
+        if: github.event_name == 'pull_request_target'
+        run: |
+          gh api graphql -f query='
+            mutation (
+              $project: ID!
+              $item: ID!
+              $plugin_field: ID!
+              $plugin_value: String!
+              $theme_field: ID!
+              $theme_value: String!
+            ) {
+              set_plugin: updateProjectNextItemField(input: {
+                projectId: $project
+                itemId: $item
+                fieldId: $plugin_field
+                value: $plugin_value
+              }) {
+                projectNextItem {
+                  id
+                }
+              }
+              set_theme: updateProjectNextItemField(input: {
+                projectId: $project
+                itemId: $item
+                fieldId: $theme_field
+                value: $theme_value
+              }) {
+                projectNextItem {
+                  id
+                }
+              }
+            }
+          ' -f project=$PROJECT_ID -f item=$ITEM_ID \
+            -f plugin_field=$PLUGIN_FIELD_ID -f plugin_value=$PLUGIN \
+            -f theme_field=$THEME_FIELD_ID -f theme_value=$THEME \
+            --silent
+

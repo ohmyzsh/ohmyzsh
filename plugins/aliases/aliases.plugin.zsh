@@ -2,9 +2,10 @@
 #
 # - acs: alias cheatsheet
 #   group alias by command, pass addition argv to grep.
-ALIASES_PLUGIN_ROOT=$(cd `dirname $0` && pwd)
 function acs(){
-    which python >>/dev/null
-    [[ $? -eq 1 ]] && echo "[error]no python executable detected!" && return
-    alias | python $ALIASES_PLUGIN_ROOT/cheatsheet.py $@
+  (( $+commands[python] )) || {
+    echo "[error] No python executable detected"
+    return
+  }
+  alias | python ${functions_source[$0]:h}/cheatsheet.py $@
 }

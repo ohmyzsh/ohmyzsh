@@ -83,12 +83,14 @@ if [[ $FOUND_PYENV -eq 1 ]]; then
   fi
 
   function pyenv_prompt_info() {
-    echo "$(pyenv version-name)"
+    local version="$(pyenv version-name)"
+    echo "${version:gs/%/%%}"
   }
 else
   # Fall back to system python
   function pyenv_prompt_info() {
-    echo "system: $(python -V 2>&1 | cut -f 2 -d ' ')"
+    local version="$(python -V 2>&1 | cut -d' ' -f2)"
+    echo "system: ${version:gs/%/%%}"
   }
 fi
 

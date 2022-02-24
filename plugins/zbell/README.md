@@ -24,6 +24,9 @@ These settings need to be set in your zshrc file, before Oh My Zsh is sourced.
   zbell_ignore=($EDITOR $PAGER)
   ```
 
+- `zbell_use_notify_send`: If set to `true`, `notify-send` tool is used -- if
+  available -- to display a popup on the screen. Default: `true` (enabled).
+
 ## Author
 
 Adapted from an original version by [Jean-Philippe Ouellet](https://github.com/jpouellet).

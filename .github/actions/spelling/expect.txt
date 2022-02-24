@@ -22,8 +22,8 @@ acr
 acroread
 acs
 acsc
-acss
 acsp
+acss
 actionformats
 Adamantium
 adb
@@ -312,6 +312,7 @@ bisd
 bitboxer
 bitbucket
 bitswap
+bitwarden
 blkio
 blockprofile
 blockprofilerate
@@ -3119,6 +3120,7 @@ rbenv
 rbenvdirs
 rbfu
 RBUFFER
+rbw
 rcfile
 Rchive
 rcs
@@ -4442,8 +4444,8 @@ zrr
 zrs
 zscore
 zse
-zsh'ed
 zsh
+zsh'ed
 zshaddhistory
 zshcmd
 zshcommands

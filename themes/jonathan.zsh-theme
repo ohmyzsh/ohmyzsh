@@ -66,7 +66,7 @@ if [[ "${langinfo[CODESET]}" = UTF-8 ]]; then
   PR_LRCORNER="┘"
   PR_URCORNER="┐"
 else
-  typeset -A altchar
+  typeset -g -A altchar
   set -A altchar ${(s..)terminfo[acsc]}
   # Some stuff to help us draw nice lines
   PR_SET_CHARSET="%{$terminfo[enacs]%}"

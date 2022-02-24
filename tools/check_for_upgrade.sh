@@ -10,11 +10,13 @@ fi
 # - auto: the update is performed automatically when it's time
 # - reminder: a reminder is shown to the user when it's time to update
 # - disabled: automatic update is turned off
-zstyle -s ':omz:update' mode update_mode || update_mode=prompt
+zstyle -s ':omz:update' mode update_mode || {
+  update_mode=prompt
 
-# Support old-style settings
-[[ "$DISABLE_UPDATE_PROMPT" != true ]] || update_mode=auto
-[[ "$DISABLE_AUTO_UPDATE" != true ]] || update_mode=disabled
+  # If the mode zstyle setting is not set, support old-style settings
+  [[ "$DISABLE_UPDATE_PROMPT" != true ]] || update_mode=auto
+  [[ "$DISABLE_AUTO_UPDATE" != true ]] || update_mode=disabled
+}
 
 # Cancel update if:
 # - the automatic update is disabled.
@@ -34,11 +36,11 @@ function current_epoch() {
 
 function is_update_available() {
   local branch
-  branch=${"$(cd "$ZSH"; git config --local oh-my-zsh.branch)":-master}
+  branch=${"$(cd -q "$ZSH"; git config --local oh-my-zsh.branch)":-master}
 
   local remote remote_url remote_repo
-  remote=${"$(cd "$ZSH"; git config --local oh-my-zsh.remote)":-origin}
-  remote_url=$(cd "$ZSH"; git config remote.$remote.url)
+  remote=${"$(cd -q "$ZSH"; git config --local oh-my-zsh.remote)":-origin}
+  remote_url=$(cd -q "$ZSH"; git config remote.$remote.url)
 
   local repo
   case "$remote_url" in
@@ -56,7 +58,7 @@ function is_update_available() {
 
   # Get local HEAD. If this fails assume there are updates
   local local_head
-  local_head=$(cd "$ZSH"; git rev-parse $branch 2>/dev/null) || return 0
+  local_head=$(cd -q "$ZSH"; git rev-parse $branch 2>/dev/null) || return 0
 
   # Get remote HEAD. If no suitable command is found assume there are updates
   # On any other error, skip the update (connection may be down)
@@ -85,6 +87,31 @@ function update_ohmyzsh() {
   if ZSH="$ZSH" zsh -f "$ZSH/tools/upgrade.sh" --interactive; then
     update_last_updated_file
   fi
+}
+
+function has_typed_input() {
+  # Created by Philippe Troin <phil@fifi.org>
+  # https://zsh.org/mla/users/2022/msg00062.html
+  emulate -L zsh
+  zmodload zsh/zselect
+
+  # Back up stty settings prior to disabling canonical mode
+  # Consider that no input can be typed if stty fails
+  # (this might happen if stdin is not a terminal)
+  local termios
+  termios=$(stty --save 2>/dev/null) || return 1
+  {
+    # Disable canonical mode so that typed input counts
+    # regardless of whether Enter was pressed
+    stty -icanon
+
+    # Poll stdin (fd 0) for data ready to be read
+    zselect -t 0 -r 0
+    return $?
+  } always {
+    # Restore stty settings
+    stty $termios
+  }
 }
 
 () {
@@ -134,7 +161,7 @@ function update_ohmyzsh() {
   fi
 
   # Test if Oh My Zsh directory is a git repository
-  if ! (cd "$ZSH" && LANG= git rev-parse &>/dev/null); then
+  if ! (cd -q "$ZSH" && LANG= git rev-parse &>/dev/null); then
     echo >&2 "[oh-my-zsh] Can't update: not a git repository."
     return
   fi
@@ -144,26 +171,35 @@ function update_ohmyzsh() {
     return
   fi
 
-  # Ask for confirmation before updating unless in auto mode
+  # Don't ask for confirmation before updating if in auto mode
   if [[ "$update_mode" = auto ]]; then
     update_ohmyzsh
-  elif [[ "$update_mode" = reminder ]]; then
-    echo "[oh-my-zsh] It's time to update! You can do that by running \`omz update\`"
-  else
-    # input sink to swallow all characters typed before the prompt
-    # and add a newline if there wasn't one after characters typed
-    while read -t -k 1 option; do true; done
-    [[ "$option" != ($'\n'|"") ]] && echo
-
-    echo -n "[oh-my-zsh] Would you like to update? [Y/n] "
-    read -r -k 1 option
-    [[ "$option" != $'\n' ]] && echo
-    case "$option" in
-      [yY$'\n']) update_ohmyzsh ;;
-      [nN]) update_last_updated_file ;&
-      *) echo "[oh-my-zsh] You can update manually by running \`omz update\`" ;;
-    esac
+    return $?
   fi
+
+  # If in reminder mode show reminder and exit
+  if [[ "$update_mode" = reminder ]]; then
+    echo "[oh-my-zsh] It's time to update! You can do that by running \`omz update\`"
+    return 0
+  fi
+
+  # If user has typed input, show reminder and exit
+  if has_typed_input; then
+    echo
+    echo "[oh-my-zsh] It's time to update! You can do that by running \`omz update\`"
+    return 0
+  fi
+
+  # Ask for confirmation and only update on 'y', 'Y' or Enter
+  # Otherwise just show a reminder for how to update
+  echo -n "[oh-my-zsh] Would you like to update? [Y/n] "
+  read -r -k 1 option
+  [[ "$option" = $'\n' ]] || echo
+  case "$option" in
+    [yY$'\n']) update_ohmyzsh ;;
+    [nN]) update_last_updated_file ;&
+    *) echo "[oh-my-zsh] You can update manually by running \`omz update\`" ;;
+  esac
 }
 
 unset update_mode
