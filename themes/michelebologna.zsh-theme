@@ -40,7 +40,7 @@ local username_root_color=$red
 local hostname_root_color=$red
 
 # calculating hostname color with hostname characters
-for i in `hostname`; local hostname_normal_color=$color_array[$[((#i))%7+1]]
+for i in $HOST; local hostname_normal_color=$color_array[$[((#i))%7+1]]
 local -a hostname_color
 hostname_color=%(!.$hostname_root_color.$hostname_normal_color)
 
