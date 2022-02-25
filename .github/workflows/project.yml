@@ -5,6 +5,10 @@ on:
   pull_request_target:
     types: [opened, synchronize]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
 jobs:
   add-to-project:
     name: Add to project

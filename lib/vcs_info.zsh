@@ -1,8 +1,11 @@
-# Impacted versions go from v5.0.3 to v5.8 (v5.8.1 is the first patched version)
-autoload -Uz is-at-least
-if is-at-least 5.8.1 || ! is-at-least 5.0.3; then
-  return
-fi
+# Don't skip this file until a Zsh release does the necessary quoting.
+# This is because even though 5.8.1 undid recursive prompt_subst inside
+# prompt sequences, % characters in relevant fields will still be rendered
+# incorrectly in vcs_info, on all Zsh releases up to writing this.
+#
+# There is no release yet that does this right, since it requires changing
+# how what vcs_info hooks expect to receive. Even so, I'd rather be correct
+# and break custom vcs_info hooks than have a broken prompt.
 
 # Quote necessary $hook_com[<field>] items just before they are used
 # in the line "VCS_INFO_hook 'post-backend'" of the VCS_INFO_formats
@@ -35,7 +38,7 @@ fi
 # due to malicious input as a consequence of CVE-2021-45444, which affects
 # zsh versions from 5.0.3 to 5.8.
 #
-autoload -Uz +X regexp-replace VCS_INFO_formats
+autoload -Uz +X regexp-replace VCS_INFO_formats 2>/dev/null || return
 
 # We use $tmp here because it's already a local variable in VCS_INFO_formats
 typeset PATCH='for tmp (base base-name branch misc revision subdir) hook_com[$tmp]="${hook_com[$tmp]//\%/%%}"'
