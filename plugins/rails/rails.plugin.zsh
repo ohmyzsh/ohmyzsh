@@ -1,5 +1,7 @@
 function _rails_command () {
-  if [ -e "bin/stubs/rails" ]; then
+  if [ -e "bin/dev" ]; then
+    bin/dev $@
+  elif [ -e "bin/stubs/rails" ]; then
     bin/stubs/rails $@
   elif [ -e "bin/rails" ]; then
     bin/rails $@
