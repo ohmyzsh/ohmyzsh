@@ -118,6 +118,7 @@ plugins=(... git)
 | gpd                  | git push --dry-run                                                                                                               |
 | gpf                  | git push --force-with-lease                                                                                                      |
 | gpf!                 | git push --force                                                                                                                 |
+| gpt                  | git push --tags                                                                                                                  |
 | gpoat                | git push origin --all && git push origin --tags                                                                                  |
 | gpr                  | git pull --rebase                                                                                                                |
 | gpu                  | git push upstream                                                                                                                |
@@ -172,6 +173,7 @@ plugins=(... git)
 | gswc                 | git switch -c                                                                                                                    |
 | gswm                 | git switch $(git_main_branch)                                                                                                    |
 | gswd                 | git switch $(git_develop_branch)                                                                                                 |
+| gt                   | git tag                                                                                                                          |
 | gts                  | git tag -s                                                                                                                       |
 | gtv                  | git tag \| sort -V                                                                                                               |
 | gtl                  | gtl(){ git tag --sort=-v:refname -n -l ${1}* }; noglob gtl                                                                       |
