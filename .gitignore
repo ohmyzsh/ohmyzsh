@@ -6,6 +6,3 @@ cache/
 log/
 *.swp
 .DS_Store
-
-# ide
-.vscode
