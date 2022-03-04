@@ -36,11 +36,11 @@ function current_epoch() {
 
 function is_update_available() {
   local branch
-  branch=${"$(cd -q "$ZSH"; git config --local oh-my-zsh.branch)":-master}
+  branch=${"$(builtin cd -q "$ZSH"; git config --local oh-my-zsh.branch)":-master}
 
   local remote remote_url remote_repo
-  remote=${"$(cd -q "$ZSH"; git config --local oh-my-zsh.remote)":-origin}
-  remote_url=$(cd -q "$ZSH"; git config remote.$remote.url)
+  remote=${"$(builtin cd -q "$ZSH"; git config --local oh-my-zsh.remote)":-origin}
+  remote_url=$(builtin cd -q "$ZSH"; git config remote.$remote.url)
 
   local repo
   case "$remote_url" in
@@ -58,7 +58,7 @@ function is_update_available() {
 
   # Get local HEAD. If this fails assume there are updates
   local local_head
-  local_head=$(cd -q "$ZSH"; git rev-parse $branch 2>/dev/null) || return 0
+  local_head=$(builtin cd -q "$ZSH"; git rev-parse $branch 2>/dev/null) || return 0
 
   # Get remote HEAD. If no suitable command is found assume there are updates
   # On any other error, skip the update (connection may be down)
@@ -81,7 +81,7 @@ function is_update_available() {
   # If local and remote HEADs don't match, check if there's a common ancestor
   # If the merge-base call fails, $remote_head might not be downloaded so assume there are updates
   local base
-  base=$(cd -q "$ZSH"; git merge-base $local_head $remote_head 2>/dev/null) || return 0
+  base=$(builtin cd -q "$ZSH"; git merge-base $local_head $remote_head 2>/dev/null) || return 0
 
   # If the common ancestor ($base) is not $remote_head,
   # the local HEAD is older than the remote HEAD
@@ -170,7 +170,7 @@ function has_typed_input() {
   fi
 
   # Test if Oh My Zsh directory is a git repository
-  if ! (cd -q "$ZSH" && LANG= git rev-parse &>/dev/null); then
+  if ! (builtin cd -q "$ZSH" && LANG= git rev-parse &>/dev/null); then
     echo >&2 "[oh-my-zsh] Can't update: not a git repository."
     return
   fi
