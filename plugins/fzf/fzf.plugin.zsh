@@ -191,10 +191,10 @@ fzf_setup_using_openbsd \
 unset -f -m 'fzf_setup_*'
 
 if [[ -z "$FZF_DEFAULT_COMMAND" ]]; then
-  if (( $+commands[rg] )); then
-    export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git/*"'
-  elif (( $+commands[fd] )); then
+  if (( $+commands[fd] )); then
     export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
+  elif (( $+commands[rg] )); then
+    export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git/*"'
   elif (( $+commands[ag] )); then
     export FZF_DEFAULT_COMMAND='ag -l --hidden -g "" --ignore .git'
   fi
