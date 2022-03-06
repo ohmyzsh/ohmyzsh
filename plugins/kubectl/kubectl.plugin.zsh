@@ -104,6 +104,7 @@ kres(){
 # Rollout management.
 alias kgrs='kubectl get replicaset'
 alias kdrs='kubectl describe replicaset'
+alias kers='kubectl edit replicaset'
 alias krh='kubectl rollout history'
 alias kru='kubectl rollout undo'
 
