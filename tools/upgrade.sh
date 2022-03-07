@@ -135,6 +135,10 @@ if is_tty; then
       "$(printf '\033[38;2;255;215;0m')"
       "$(printf '\033[38;2;255;215;0m')"
     )
+    UKR_FLAG=(
+      "$(printf '\033[1;38;2;255;215;0;48;2;0;87;183m')"
+      "$(printf '\033[1;38;2;0;87;183;48;2;255;215;0m◤')"
+    )
   else
     RAINBOW=(
       "$(printf '\033[38;5;026m')"
@@ -144,6 +148,10 @@ if is_tty; then
       "$(printf '\033[38;5;011m')"
       "$(printf '\033[38;5;011m')"
       "$(printf '\033[38;5;011m')"
+    )
+    UKR_FLAG=(
+      "$(printf '\033[1;38;5;220;48;5;027m')"
+      "$(printf '\033[1;38;5;027;48;5;220m')◤"
     )
   fi
 
@@ -212,12 +220,13 @@ if LANG= git pull --quiet --rebase $remote $branch; then
     printf "${BLUE}%s \`${BOLD}%s${RESET}${BLUE}\`${RESET}\n" "You can see the changelog with" "omz changelog"
   fi
 
-  printf '%s         %s__      %s           %s        %s       %s     %s__   %s\n'      $RAINBOW $RESET
-  printf '%s  ____  %s/ /_    %s ____ ___  %s__  __  %s ____  %s_____%s/ /_  %s\n'      $RAINBOW $RESET
-  printf '%s / __ \\%s/ __ \\  %s / __ `__ \\%s/ / / / %s /_  / %s/ ___/%s __ \\ %s\n'  $RAINBOW $RESET
-  printf '%s/ /_/ /%s / / / %s / / / / / /%s /_/ / %s   / /_%s(__  )%s / / / %s\n'      $RAINBOW $RESET
-  printf '%s\\____/%s_/ /_/ %s /_/ /_/ /_/%s\\__, / %s   /___/%s____/%s_/ /_/  %s\n'    $RAINBOW $RESET
-  printf '%s    %s        %s           %s /____/ %s       %s     %s          %s\n'      $RAINBOW $RESET
+  printf '\n'
+  printf '%s         __                  %s                    __   %s\n'      $UKR_FLAG $RESET
+  printf '%s  ____  / /_     ____ ___   %s__  __   ____  _____/ /_  %s\n'      $UKR_FLAG $RESET
+  printf '%s / __ \\/ __ \\   / __ `__ \\ %s/ / / /  /_  / / ___/ __ \\ %s\n'  $UKR_FLAG $RESET
+  printf '%s/ /_/ / / / /  / / / / / /%s/ /_/ /    / /_(__  ) / / / %s\n'      $UKR_FLAG $RESET
+  printf '%s\\____/_/ /_/  /_/ /_/ /_/%s \__, /    /___/____/_/ /_/  %s\n'    $UKR_FLAG $RESET
+  printf '%s                        %s /____/                       %s\n'      $UKR_FLAG $RESET
   printf '\n'
   printf "${BLUE}%s${RESET}\n\n" "$message"
   printf "${BLUE}${BOLD}%s %s${RESET}\n" "To keep up with the latest news and updates, follow us on Twitter:" "$(fmt_link @ohmyzsh https://twitter.com/ohmyzsh)"
