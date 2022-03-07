@@ -153,6 +153,7 @@ plugins=(... git)
 | gsb                  | git status -sb                                                                                                                   |
 | gsd                  | git svn dcommit                                                                                                                  |
 | gsh                  | git show                                                                                                                         |
+| gshs                 | git show --stat                                                                                                                  |
 | gsi                  | git submodule init                                                                                                               |
 | gsps                 | git show --pretty=short --show-signature                                                                                         |
 | gsr                  | git svn rebase                                                                                                                   |
