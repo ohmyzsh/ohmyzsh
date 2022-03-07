@@ -14,6 +14,7 @@ plugins=(... laravel-art)
 |-----------|--------------------------------------|-------------------------------------|
 | art       | `php artisan`                        | Main Artisan command                |
 | arts      | `php artisan serve`                  | Serve the application               |
+| arto      | `php artisan optimize`               | Cache the framework bootstrap files  |
 | artr      | `php artisan route:list`             | List all registered routes          |
 | artm      | `php artisan migrate`                | Run the database migrations         |
 | artmf     | `php artisan migrate:fresh`          | Drop all tables and re-run all migrations  |
