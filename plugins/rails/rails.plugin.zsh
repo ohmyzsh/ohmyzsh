@@ -1,3 +1,4 @@
+# rails command wrapper
 function _rails_command () {
   if [ -e "bin/stubs/rails" ]; then
     bin/stubs/rails $@
@@ -12,28 +13,31 @@ function _rails_command () {
   fi
 }
 
+alias rails='_rails_command'
+compdef _rails_command=rails
+
+# rake command wrapper
 function _rake_command () {
   if [ -e "bin/stubs/rake" ]; then
     bin/stubs/rake $@
   elif [ -e "bin/rake" ]; then
     bin/rake $@
-  elif type bundle &> /dev/null && ([ -e "Gemfile" ] || [ -e "gems.rb" ]); then
+  elif type bundle &> /dev/null && [[ -e "Gemfile" || -e "gems.rb" ]]; then
     bundle exec rake $@
   else
     command rake $@
   fi
 }
 
-alias rails='_rails_command'
-compdef _rails_command=rails
-
 alias rake='_rake_command'
 compdef _rake_command=rake
 
+# Log aliases
 alias devlog='tail -f log/development.log'
 alias prodlog='tail -f log/production.log'
 alias testlog='tail -f log/test.log'
 
+# Environment settings
 alias -g RED='RAILS_ENV=development'
 alias -g REP='RAILS_ENV=production'
 alias -g RET='RAILS_ENV=test'
