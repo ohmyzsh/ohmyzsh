@@ -178,6 +178,12 @@ alias kecj='kubectl edit cronjob'
 alias kdcj='kubectl describe cronjob'
 alias kdelcj='kubectl delete cronjob'
 
+# Job management.
+alias kgj='kubectl get job'
+alias kej='kubectl edit job'
+alias kdj='kubectl describe job'
+alias kdelj='kubectl delete job'
+
 # Only run if the user actually has kubectl installed
 if (( ${+_comps[kubectl]} )); then
   function kj() { kubectl "$@" -o json | jq; }
