@@ -3,3 +3,4 @@ modified A
 add and commit at the same time
 diff
 vscode
+3-way-merge
