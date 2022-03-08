@@ -121,37 +121,44 @@ fmt_underline() {
   is_tty && printf '\033[4m%s\033[24m\n' "$*" || printf '%s\n' "$*"
 }
 
+fmt_logo() {
+  # wrapper around printf to ensure that \ and ` characters in the
+  # logo are properly escaped and the logo code can be seen easily
+  local string="$1"; shift
+  printf "${string//\\/\\\\}\n" "$@"
+}
+
 setopt typeset_silent
 typeset -a RAINBOW
 
 if is_tty; then
   if supports_truecolor; then
     RAINBOW=(
-      "$(printf '\033[38;2;0;87;183m')"
-      "$(printf '\033[38;2;0;87;183m')"
-      "$(printf '\033[38;2;0;87;183m')"
-      "$(printf '\033[38;2;255;215;0m')"
-      "$(printf '\033[38;2;255;215;0m')"
-      "$(printf '\033[38;2;255;215;0m')"
-      "$(printf '\033[38;2;255;215;0m')"
+      "$(printf '\033[38;2;255;0;0m')"
+      "$(printf '\033[38;2;255;97;0m')"
+      "$(printf '\033[38;2;247;255;0m')"
+      "$(printf '\033[38;2;0;255;30m')"
+      "$(printf '\033[38;2;77;0;255m')"
+      "$(printf '\033[38;2;168;0;255m')"
+      "$(printf '\033[38;2;245;0;172m')"
     )
     UKR_FLAG=(
-      "$(printf '\033[1;38;2;255;215;0;48;2;0;87;183m')"
-      "$(printf '\033[1;38;2;0;87;183;48;2;255;215;0m◤')"
+      "$(printf '\033[1;38;2;0;87;183m')"
+      "$(printf '\033[1;38;2;255;215;0m')"
     )
   else
     RAINBOW=(
-      "$(printf '\033[38;5;026m')"
-      "$(printf '\033[38;5;026m')"
-      "$(printf '\033[38;5;026m')"
-      "$(printf '\033[38;5;011m')"
-      "$(printf '\033[38;5;011m')"
-      "$(printf '\033[38;5;011m')"
-      "$(printf '\033[38;5;011m')"
+      "$(printf '\033[38;5;196m')"
+      "$(printf '\033[38;5;202m')"
+      "$(printf '\033[38;5;226m')"
+      "$(printf '\033[38;5;082m')"
+      "$(printf '\033[38;5;021m')"
+      "$(printf '\033[38;5;093m')"
+      "$(printf '\033[38;5;163m')"
     )
     UKR_FLAG=(
-      "$(printf '\033[1;38;5;220;48;5;027m')"
-      "$(printf '\033[1;38;5;027;48;5;220m')◤"
+      "$(printf '\033[1;38;5;027m')"
+      "$(printf '\033[1;38;5;220m')"
     )
   fi
 
@@ -221,12 +228,12 @@ if LANG= git pull --quiet --rebase $remote $branch; then
   fi
 
   printf '\n'
-  printf '%s         __                  %s                    __   %s\n'      $UKR_FLAG $RESET
-  printf '%s  ____  / /_     ____ ___   %s__  __   ____  _____/ /_  %s\n'      $UKR_FLAG $RESET
-  printf '%s / __ \\/ __ \\   / __ `__ \\ %s/ / / /  /_  / / ___/ __ \\ %s\n'  $UKR_FLAG $RESET
-  printf '%s/ /_/ / / / /  / / / / / /%s/ /_/ /    / /_(__  ) / / / %s\n'      $UKR_FLAG $RESET
-  printf '%s\\____/_/ /_/  /_/ /_/ /_/%s \__, /    /___/____/_/ /_/  %s\n'    $UKR_FLAG $RESET
-  printf '%s                        %s /____/                       %s\n'      $UKR_FLAG $RESET
+  fmt_logo '%s         __                  %s                   __   %s' $UKR_FLAG $RESET
+  fmt_logo '%s  ____  / /_     ____ ___  %s__  __   ____  _____/ /_  %s' $UKR_FLAG $RESET
+  fmt_logo '%s / __ \/ __ \   / __ `__ \%s/ / / /  /_  / / ___/ __ \ %s' $UKR_FLAG $RESET
+  fmt_logo '%s/ /_/ / / / /  / / / / / %s/ /_/ /    / /_(__  ) / / / %s' $UKR_FLAG $RESET
+  fmt_logo '%s\____/_/ /_/  /_/ /_/ /_/%s\__, /    /___/____/_/ /_/  %s' $UKR_FLAG $RESET
+  fmt_logo '%s                        %s/____/                       %s' $UKR_FLAG $RESET
   printf '\n'
   printf "${BLUE}%s${RESET}\n\n" "$message"
   printf "${BLUE}${BOLD}%s %s${RESET}\n" "To keep up with the latest news and updates, follow us on Twitter:" "$(fmt_link @ohmyzsh https://twitter.com/ohmyzsh)"
