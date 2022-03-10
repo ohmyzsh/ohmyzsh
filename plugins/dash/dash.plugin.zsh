@@ -1,5 +1,5 @@
 # Usage: dash [keyword:]query
-dash() { open dash://"$*" }
+dash() { open -a Dash.app dash://"$*" }
 compdef _dash dash
 
 _dash() {
