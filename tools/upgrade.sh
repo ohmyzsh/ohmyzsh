@@ -196,8 +196,26 @@ git checkout -q "$branch" -- || exit 1
 # branch commit before update (used in changelog)
 last_commit=$(git rev-parse "$branch")
 
-# Update Oh My Zsh
 printf "${BLUE}%s${RESET}\n" "Updating Oh My Zsh"
+
+# Update custom plugins
+if [[ -n $custom ]]; then
+  custom_updated=()
+  for custom_dir ("$ZSH"/custom/plugins/* "$ZSH"/custom/themes/*); do
+    if [[ -d "$custom_dir" ]] && [[ -d "$custom_dir/.git" ]]; then
+      cd "$custom_dir"
+      last_custom_commit=$(git rev-parse HEAD)
+      if LANG= git pull --quiet --rebase; then
+        if [[ "$(git rev-parse HEAD)" != "$last_custom_commit" ]]; then
+          custom_updated+="${custom_dir:t}"
+        fi
+      fi
+    fi
+  done
+fi
+
+# Update Oh My Zsh
+cd "$ZSH"
 if LANG= git pull --quiet --rebase $remote $branch; then
   # Check if it was really updated or not
   if [[ "$(git rev-parse HEAD)" = "$last_commit" ]]; then
@@ -223,7 +241,11 @@ if LANG= git pull --quiet --rebase $remote $branch; then
   printf '%s\\____/%s_/ /_/ %s /_/ /_/ /_/%s\\__, / %s   /___/%s____/%s_/ /_/  %s\n'    $RAINBOW $RESET
   printf '%s    %s        %s           %s /____/ %s       %s     %s          %s\n'      $RAINBOW $RESET
   printf '\n'
-  printf "${BLUE}%s${RESET}\n\n" "$message"
+  printf "${BLUE}%s${RESET}\n" "$message"
+  for plugin in $custom_updated; do
+    printf "${BLUE}%s${RESET}\n" "$plugin custom plugin/theme has been updated!"
+  done
+  printf '\n'
   printf "${BLUE}${BOLD}%s %s${RESET}\n" "To keep up with the latest news and updates, follow us on Twitter:" "$(fmt_link @ohmyzsh https://twitter.com/ohmyzsh)"
   printf "${BLUE}${BOLD}%s %s${RESET}\n" "Want to get involved in the community? Join our Discord:" "$(fmt_link "Discord server" https://discord.gg/ohmyzsh)"
   printf "${BLUE}${BOLD}%s %s${RESET}\n" "Get your Oh My Zsh swag at:" "$(fmt_link "Planet Argon Shop" https://shop.planetargon.com/collections/oh-my-zsh)"

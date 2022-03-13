@@ -775,12 +775,16 @@ function _omz::theme::use {
 function _omz::update {
   local last_commit=$(builtin cd -q "$ZSH"; git rev-parse HEAD)
 
+  custom=""
+  zstyle -t ':omz:update' custom && custom=true
   # Run update script
   if [[ "$1" != --unattended ]]; then
-    ZSH="$ZSH" command zsh -f "$ZSH/tools/upgrade.sh" --interactive || return $?
+    ZSH="$ZSH" custom=$custom command zsh -f "$ZSH/tools/upgrade.sh" --interactive \
+      || return $?
   else
-    ZSH="$ZSH" command zsh -f "$ZSH/tools/upgrade.sh" || return $?
+    ZSH="$ZSH" custom=$custom command zsh -f "$ZSH/tools/upgrade.sh" || return $?
   fi
+  unset custom_update
 
   # Update last updated file
   zmodload zsh/datetime
