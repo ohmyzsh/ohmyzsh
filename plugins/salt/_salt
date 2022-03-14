@@ -15,7 +15,18 @@
 # zstyle ':completion::complete:salt(|-cp|-call):minions:'            cache-ttl 4 days
 
 
-local state line curcontext="$curcontext" salt_dir
+local state line curcontext="$curcontext" salt_dir python
+if [[ -z $SALT_PYTHON_VERSION ]]; then
+    if command -v python3 > /dev/null; then
+        python=python3
+    elif command -v python2 > /dev/null; then
+        python=python2
+    else
+        python=python
+    fi
+else
+    python=python${SALT_PYTHON_VERSION}
+fi
 
 _modules(){
     local _funcs expl curcontext=${curcontext%:*}:modules
@@ -271,7 +282,7 @@ _salt_comp(){
     fi
 
     if _cache_invalid salt/salt_dir || ! _retrieve_cache salt/salt_dir; then
-        salt_dir="${$(python2 -c 'import sys; del sys.path[0]; import salt; print(salt.__file__);')%__init__*}"
+        salt_dir="${$(${python} -c 'import sys; del sys.path[0]; import salt; print(salt.__file__);')%__init__*}"
         _store_cache salt/salt_dir salt_dir
     fi
 }
