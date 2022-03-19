@@ -1,7 +1,7 @@
 
 function burl() {
   local url="$1"
-  if [[ "$url" == '' || "$rl" == '-h' ]]; then
+  if [[ "$url" == '' || "$url" == '-h' ]]; then
     cat <<EOF
 Usage:
   burl <URL> [...other args of curl]
