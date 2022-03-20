@@ -15,11 +15,11 @@ function opswd() {
   local service=$1
 
   # If not logged in, print error and return
-  op list users > /dev/null || return
+  op user list > /dev/null || return
 
   local password
   # Copy the password to the clipboard
-  if ! password=$(op get item "$service" --fields password 2>/dev/null); then
+  if ! password=$(op item get "$service" --fields password 2>/dev/null); then
     echo "error: could not obtain password for $service"
     return 1
   fi
@@ -29,7 +29,7 @@ function opswd() {
 
   # If there's a one time password, copy it to the clipboard after 5 seconds
   local totp
-  if totp=$(op get totp "$service" 2>/dev/null) && [[ -n "$totp" ]]; then
+  if totp=$(op item get --otp "$service" 2>/dev/null) && [[ -n "$totp" ]]; then
     sleep 10 && echo -n "$totp" | clipcopy
     echo "✔ TOTP for $service copied to clipboard"
   fi
@@ -39,7 +39,7 @@ function opswd() {
 
 function _opswd() {
   local -a services
-  services=("${(@f)$(op list items --categories Login 2>/dev/null | op get item - --fields title 2>/dev/null)}")
+  services=("${(@f)$(op item list --categories Login 2>/dev/null | op item get - --fields title 2>/dev/null)}")
   [[ -z "$services" ]] || compadd -a -- services
 }
 
