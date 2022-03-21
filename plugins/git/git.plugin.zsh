@@ -238,6 +238,7 @@ alias gpf='git push --force-with-lease'
 alias gpf!='git push --force'
 alias gpoat='git push origin --all && git push origin --tags'
 alias gpr='git pull --rebase'
+alias gprs='git pull --recurse-submodules'
 alias gpu='git push upstream'
 alias gpv='git push -v'
 
