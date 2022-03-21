@@ -27,7 +27,7 @@ function opswd() {
   echo -n "$password" | clipcopy
   echo "✔ password for $service copied to clipboard"
 
-  # If there's a one time password, copy it to the clipboard after 5 seconds
+  # If there's a one time password, copy it to the clipboard after 10 seconds
   local totp
   if totp=$(op item get --otp "$service" 2>/dev/null) && [[ -n "$totp" ]]; then
     sleep 10 && echo -n "$totp" | clipcopy
