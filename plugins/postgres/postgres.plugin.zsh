@@ -4,7 +4,7 @@ if (( ! $+commands[brew] )); then
   return
 fi
 
-local PG_BREW_DIR=$(brew --prefix)/var/postgres
+export PG_BREW_DIR=$(brew --prefix)/var/postgres
 
 alias startpost="pg_ctl -D $PG_BREW_DIR -l $PG_BREW_DIR/server.log start"
 alias stoppost="pg_ctl -D $PG_BREW_DIR stop -s -m fast"
