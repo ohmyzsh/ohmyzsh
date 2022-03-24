@@ -34,3 +34,5 @@ a TOTP is available, it will be copied to the clipboard after 10 seconds.
 ## Requirements
 
 - [1Password CLI 2](https://developer.1password.com/docs/cli/get-started#install)
+
+  > NOTE: if you're using 1Password CLI 1, [see how to upgrade to CLI 2](https://developer.1password.com/docs/cli/upgrade).
