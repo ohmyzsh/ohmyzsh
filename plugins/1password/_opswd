@@ -2,7 +2,7 @@
 
 function _opswd() {
   local -a services
-  services=("${(@f)$(op item list --categories Login 2>/dev/null | op item get - --fields title 2>/dev/null)}")
+  services=("${(@f)$(op item list --categories Login --cache 2>/dev/null | awk 'NR != 1 { print $2 }')}")
   [[ -z "$services" ]] || compadd -a -- services
 }
 
