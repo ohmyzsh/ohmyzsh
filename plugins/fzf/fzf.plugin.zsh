@@ -173,7 +173,6 @@ function fzf_setup_using_cygwin() {
   return 0
 }
 
-
 function fzf_setup_using_macports() {
   # If the command is not found, the package isn't installed
   (( $+commands[fzf] )) || return 1
