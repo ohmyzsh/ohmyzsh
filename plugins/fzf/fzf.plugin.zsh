@@ -154,7 +154,7 @@ function fzf_setup_using_cygwin() {
   if [[ "$OSTYPE" != cygwin* ]] || (( ! $+commands[fzf] )); then
     return 1
   fi
-  
+
   # The fzf-zsh-completion package installs the auto-completion in
   local completions="/etc/profile.d/fzf-completion.zsh"
   # The fzf-zsh package installs the key-bindings file in
