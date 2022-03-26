@@ -6,14 +6,6 @@ configured on `kubectl` to your Bash/Zsh prompt strings (i.e. the `$PS1`).
 
 Inspired by several tools used to simplify usage of `kubectl`.
 
-![prompt](img/screenshot2.png)
-
-![prompt_sol_light](img/screenshot-sol-light.png)
-
-![prompt_img](img/screenshot-img.png)
-
-![prompt demo](img/kube-ps1.gif)
-
 ## Installing
 
 ### MacOS

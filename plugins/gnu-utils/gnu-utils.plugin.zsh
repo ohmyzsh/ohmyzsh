@@ -11,11 +11,8 @@ if [[ ! -x "${commands[gwhoami]}" ]]; then
 fi
 
 __gnu_utils() {
-  emulate -L zsh
-  local gcmds
+  local -a gcmds
   local gcmd
-  local cmd
-  local prefix
 
   # coreutils 
   gcmds=('g[' 'gbase64' 'gbasename' 'gcat' 'gchcon' 'gchgrp' 'gchmod'
@@ -36,48 +33,28 @@ __gnu_utils() {
   gcmds+=('gfind' 'gxargs' 'glocate')
 
   # Not part of either coreutils or findutils, installed separately.
-  gcmds+=('gsed' 'gtar' 'gtime' 'gmake')
+  gcmds+=('gsed' 'gtar' 'gtime' 'gmake' 'ggrep')
 
   for gcmd in "${gcmds[@]}"; do
     # Do nothing if the command isn't found
     (( ${+commands[$gcmd]} )) || continue
     
     # This method allows for builtin commands to be primary but it's
-    # lost if hash -r or rehash -f is executed. Thus, those two 
-    # functions have to be wrapped.
+    # lost if hash -r or rehash is executed, or if $PATH is updated.
+    # Thus, a preexec hook is needed, which will only run if whoami
+    # is not already rehashed.
     #
     hash ${gcmd[2,-1]}=${commands[$gcmd]}
-
-    # This method generates wrapper functions.
-    # It will override shell builtins.
-    #
-    # eval "function $gcmd[2,-1]() { \"${prefix}/${gcmd//"["/"\\["}\" \"\$@\"; }"
-
-    # This method is inflexible since the aliases are at risk of being
-    # overridden resulting in the BSD coreutils being called.
-    #
-    # alias "$gcmd[2,-1]"="${prefix}/${gcmd//"["/"\\["}"
   done
 
   return 0
 }
-__gnu_utils
 
-function hash() {
-  if [[ "$*" =~ "-(r|f)" ]]; then
-    builtin hash "$@"
-    __gnu_utils
-  else
-    builtin hash "$@"
-  fi
+__gnu_utils_preexec() {
+  # Run __gnu_utils when the whoami command is not already rehashed.
+  # This acts as a sign that we need to rehash all GNU utils.
+  [[ "${commands[whoami]}" = "${commands[gwhoami]}" ]] || __gnu_utils
 }
 
-function rehash() {
-  if [[ "$*" =~ "-f" ]]; then
-    builtin rehash "$@"
-    __gnu_utils
-  else
-    builtin rehash "$@"
-  fi
-}
-
+autoload -Uz add-zsh-hook
+add-zsh-hook preexec __gnu_utils_preexec

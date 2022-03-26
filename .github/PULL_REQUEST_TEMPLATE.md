@@ -1,5 +1,7 @@
 ## Standards checklist:
 
+<!-- Fill with an x the ones that apply. Example: [x] -->
+
 - [ ] The PR title is descriptive.
 - [ ] The PR doesn't replicate another PR which is already open.
 - [ ] I have read the contribution guide and followed all the instructions.

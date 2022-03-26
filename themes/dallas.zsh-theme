@@ -9,7 +9,7 @@ DALLAS_CURRENT_MACH_="%F{green}%m%F{white}:%f"
 DALLAS_CURRENT_LOCA_="%F{cyan}%~\$(git_prompt_info)%f\$(parse_git_dirty)"
 # Grab the current username: dallas
 DALLAS_CURRENT_USER_="%F{red}%n%f"
-# Use a % for normal users and a # for privelaged (root) users.
+# Use a % for normal users and a # for privileged (root) users.
 DALLAS_PROMPT_CHAR_="%F{white}%(!.#.%%)%f"
 # For the git prompt, use a white @ and blue text for the branch name
 ZSH_THEME_GIT_PROMPT_PREFIX="%F{white}@%F{blue}"
