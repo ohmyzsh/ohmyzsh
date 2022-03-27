@@ -64,8 +64,11 @@ agp
 agrimaldi
 ags
 agu
+aguc
 agud
 agug
+agul
+agulc
 aguu
 AHg
 ainv
