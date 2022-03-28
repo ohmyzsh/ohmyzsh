@@ -285,10 +285,15 @@ setup_ohmyzsh() {
   && git remote add origin "$REMOTE" \
   && git fetch --depth=1 origin \
   && git checkout -b "$BRANCH" "origin/$BRANCH" || {
-    [ ! -d "$ZSH" ] || rm -rf "$ZSH" 2>/dev/null
+    [ ! -d "$ZSH" ] || {
+      cd -
+      rm -rf "$ZSH" 2>/dev/null
+    }
     fmt_error "git clone of oh-my-zsh repo failed"
     exit 1
   }
+  # Exit installation directory
+  cd -
 
   echo
 }
