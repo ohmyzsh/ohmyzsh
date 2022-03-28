@@ -1,5 +1,5 @@
 ## Bazel autocomplete plugin
 
 A copy of the completion script from the
-[bazelbuild/bazel](https://github.com/bazelbuild/bazel/master/scripts/zsh_completion/_bazel)
+[bazelbuild/bazel](https://bazel.build/install/completion#zsh)
 git repo.
