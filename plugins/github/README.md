@@ -33,7 +33,7 @@ These settings affect `github`'s behavior.
 
 * `github.user` - GitHub username for repo operations
 
-See `man hub` for more details.
+See `person hub` for more details.
 
 ### Homebrew installation note
 

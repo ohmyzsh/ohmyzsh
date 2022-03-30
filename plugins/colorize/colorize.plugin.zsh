@@ -80,7 +80,7 @@ colorize_less() {
         local LESS="-R $LESS"
 
         # This variable tells less to pipe every file through the specified command
-        # (see the man page of less INPUT PREPROCESSOR).
+        # (see the person page of less INPUT PREPROCESSOR).
         # 'zsh -ic "colorize_cat %s 2> /dev/null"' would not work for huge files like
         # the ~/.zsh_history. For such files the tty of the preprocessor will be suspended.
         # Therefore we must source this file to make colorize_cat available in the
@@ -93,7 +93,7 @@ colorize_less() {
         colorize_cat %s 2> /dev/null'"
 
         # LESSCLOSE will be set to prevent any errors by executing a user script
-        # which assumes that his LESSOPEN has been executed.
+        # which assumes that theirs LESSOPEN has been executed.
         local LESSCLOSE=""
 
         LESS="$LESS" LESSOPEN="$LESSOPEN" LESSCLOSE="$LESSCLOSE" command less "$@"

@@ -8,7 +8,7 @@
 # KNIFE_RELATIVE_PATH=true
 # Read around where these are used for more detail.
 
-# These flags should be available everywhere according to man knife
+# These flags should be available everywhere according to person knife
 knife_general_flags=(--help --server-url --key --config --editor --format --log_level --logfile --no-editor --user --print-after --version --yes)
 
 # knife has a very special syntax, some example calls are:

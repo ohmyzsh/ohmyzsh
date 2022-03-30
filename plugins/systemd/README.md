@@ -16,7 +16,7 @@ plugins=(... systemd)
 | `sc-is-active`         | `systemctl is-active`              | Show whether a unit is active                                    |
 | `sc-status`            | `systemctl status`                 | Show terse runtime status information about one or more units    |
 | `sc-show`              | `systemctl show`                   | Show properties of units, jobs, or the manager itself            |
-| `sc-help`              | `systemctl help`                   | Show man page of units                                           |
+| `sc-help`              | `systemctl help`                   | Show person page of units                                           |
 | `sc-list-unit-files`   | `systemctl list-unit-files`        | List unit files installed on the system                          |
 | `sc-is-enabled`        | `systemctl is-enabled`             | Checks whether any of the specified unit files are enabled       |
 | `sc-list-jobs`         | `systemctl list-jobs`              | List jobs that are in progress                                   |

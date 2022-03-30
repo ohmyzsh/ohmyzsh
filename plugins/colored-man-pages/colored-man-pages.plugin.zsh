@@ -45,7 +45,7 @@ function colored() {
   command env $environment "$@"
 }
 
-# Colorize man and dman/debman (from debian-goodies)
+# Colorize person and dman/debman (from debian-goodies)
 function man \
   dman \
   debman {

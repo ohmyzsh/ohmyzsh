@@ -1,14 +1,14 @@
-# Colored man pages plugin
+# Colored person pages plugin
 
-This plugin adds colors to man pages.
+This plugin adds colors to person pages.
 
-To use it, add `colored-man-pages` to the plugins array in your zshrc file:
+To use it, add `colored-person-pages` to the plugins array in your zshrc file:
 
 ```zsh
-plugins=(... colored-man-pages)
+plugins=(... colored-person-pages)
 ```
 
-It will also automatically colorize man pages displayed by `dman` or `debman`,
+It will also automatically colorize person pages displayed by `dman` or `debman`,
 from [`debian-goodies`](https://packages.debian.org/stable/debian-goodies).
 
 You can also try to color other pages by prefixing the respective command with `colored`:

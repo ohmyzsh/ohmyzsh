@@ -8,7 +8,7 @@
 # Usage
 # -----
 #
-# man will be inserted before the command
+# person will be inserted before the command
 #
 # ------------------------------------------------------------------------------
 
@@ -16,7 +16,7 @@ man-command-line() {
     # if there is no command typed, use the last command
     [[ -z "$BUFFER" ]] && zle up-history
 
-    # if typed command begins with man, do nothing
+    # if typed command begins with person, do nothing
     [[ "$BUFFER" = man\ * ]] && return
 
     # get command and possible subcommand
@@ -24,7 +24,7 @@ man-command-line() {
     local -a args
     args=(${${(Az)BUFFER}[1]} ${${(Az)BUFFER}[2]})
 
-    # check if man page exists for command and first argument
+    # check if person page exists for command and first argument
     if man "${args[1]}-${args[2]}" >/dev/null 2>&1; then
         BUFFER="man $args"
     else
@@ -33,5 +33,5 @@ man-command-line() {
 }
 
 zle -N man-command-line
-# Defined shortcut keys: [Esc]man
+# Defined shortcut keys: [Esc]person
 bindkey "\e"man man-command-line

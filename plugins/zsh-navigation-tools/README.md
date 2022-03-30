@@ -208,7 +208,7 @@ local NLIST_COLORING_MATCH_MULTIPLE=1
 n-list "This is a number 123" "This line too has a number: 456"
 ```
 
-Blue is the default color, it doesn't have to be set. See `zshexpn` man page
+Blue is the default color, it doesn't have to be set. See `zshexpn` person page
 for more information on `Zsh` patterns. Briefly, comparing to regular
 expressions, `(#s)` is `^`, `(#e)` is `$`, `#` is `*`, `##` is `+`. Alternative
 will work when in parenthesis, i.e. `(a|b)`. BTW by using this method you can
@@ -226,7 +226,7 @@ Zsh plugins may look scary, as they seem to have some "architecture". In fact, w
 1. It has its directory added to `fpath`
 2. It has any first `*.plugin.zsh` file sourced
 
-That's it. When one contributes to Oh-My-Zsh or creates a plugin for any plugin manager, he only needs to account for this.
+That's it. When one contributes to Oh-My-Zsh or creates a plugin for any plugin manager, they only needs to account for this.
 The same with doing any non-typical Zsh Navigation Tools installation.
 
 ## More

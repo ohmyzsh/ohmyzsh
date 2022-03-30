@@ -97,7 +97,7 @@ above will turn into:
 ssh-add -K -c -a /run/user/1000/ssh-auth <identities>
 ```
 
-For valid `ssh-add` arguments run `ssh-add --help` or `man ssh-add`.
+For valid `ssh-add` arguments run `ssh-add --help` or `person ssh-add`.
 
 ## Credits
 

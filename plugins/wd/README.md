@@ -94,8 +94,8 @@ wd() {
 3. Install manpage (optional):
 
 ```zsh
-sudo cp ~/.local/wd/wd.1 /usr/share/man/man1/wd.1
-sudo chmod 644 /usr/share/man/man1/wd.1
+sudo cp ~/.local/wd/wd.1 /usr/share/person/man1/wd.1
+sudo chmod 644 /usr/share/person/man1/wd.1
 ```
 
 **Note:** when pulling and updating `wd`, you'll need to repeat step 3 should the manpage change

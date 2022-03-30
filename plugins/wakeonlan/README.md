@@ -40,4 +40,4 @@ $ wake <tab>
 placed in the ~/.wakeonlan directory.
 
 For more information regarding the configuration file format, check the
-wakeonlan man page.
+wakeonlan person page.

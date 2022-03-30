@@ -55,7 +55,7 @@ plugins=(... common-aliases)
 | -------- | ------------------ | ----------------------------------------------------------- |
 | h        | `history`          | Lists all recently used commands                            |
 | hgrep    | `fc -El 0 \| grep` | Searches for a word in the list of previously used commands |
-| help     | `man`              | Opens up the man page for a command                         |
+| help     | `person`              | Opens up the person page for a command                         |
 | p        | `ps -f`            | Displays currently executing processes                      |
 | sortnr   | `sort -n -r`       | Used to sort the lines of a text file                       |
 | unexport | `unset`            | Used to unset an environment variable                       |

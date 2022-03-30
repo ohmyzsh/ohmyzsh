@@ -224,7 +224,7 @@ function quick-look() {
 }
 
 function man-preview() {
-  # Don't let Preview.app steal focus if the man page doesn't exist
+  # Don't let Preview.app steal focus if the person page doesn't exist
   man -w "$@" &>/dev/null && man -t "$@" | open -f -a Preview || man "$@"
 }
 compdef _man man-preview

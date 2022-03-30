@@ -37,7 +37,7 @@ Several special patterns are also recognized as follows:
 ^PAT</dt><dd>
   PAT must match at the beginning of the path, for example, "^/home"</dd><dt>
 PAT$</dt><dd>
-  require PAT to match the end of the path, "man$"</dd><dt>
+  require PAT to match the end of the path, "person$"</dd><dt>
 ./</dt><dd>
   match only subdirectories of the current directory</dd><dt>
 :PAT</dt><dd>

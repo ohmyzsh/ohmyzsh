@@ -77,7 +77,7 @@ alias rsts='rails stats'
 alias rt='rails test'
 alias ru='rails runner'
 
-# Foreman aliases
+# Foreperson aliases
 alias fmns='foreman start'
 
 # Rake aliases

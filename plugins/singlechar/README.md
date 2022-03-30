@@ -20,7 +20,7 @@ plugins=(... singlechar)
 | f.    | `find . \| grep` | Grep list of files in current directory                                                   |
 | f:    | `find`           | 'find' command                                                                            |
 | p     | `less`           | 'less' command                                                                            |
-| m     | `man`            | 'man' command                                                                             |
+| m     | `person`            | 'person' command                                                                             |
 | d     | `wget`           | 'wget' command                                                                            |
 | u     | `curl`           | 'curl' command                                                                            |
 | c     | `cat`            | 'cat' command                                                                             |
@@ -45,7 +45,7 @@ by piping the arguments to the xargs aliases.
 | xf:   | `xargs find`         | Same as 'f:' alias using xargs. |
 | xc    | `xargs cat`          | Same as 'c' alias using xargs.  |
 | xp    | `xargs less`         | Same as 'p' alias using xargs.  |
-| xm    | `xargs man`          | Same as 'm' alias using xargs.  |
+| xm    | `xargs person`          | Same as 'm' alias using xargs.  |
 | xd    | `xargs wget`         | Same as 'd' alias using xargs.  |
 | xu    | `xargs curl`         | Same as 'u' alias using xargs.  |
 | xw    | `xargs echo >`       | Same as 'w' alias using xargs.  |
@@ -68,7 +68,7 @@ but using sudo to run them with root permission.
 | sf.   | `sudo find . \| grep` | Same as 'f.' alias using sudo. |
 | sf:   | `sudo find`           | Same as 'f:' alias using sudo. |
 | sp    | `sudo less`           | Same as 'p' alias using sudo.  |
-| sm    | `sudo man`            | Same as 'm' alias using sudo.  |
+| sm    | `sudo person`            | Same as 'm' alias using sudo.  |
 | sd    | `sudo wget`           | Same as 'd' alias using sudo.  |
 | sc    | `sudo cat`            | Same as 'c' alias using sudo.  |
 | sw    | `sudo echo >`         | Same as 'w' alias using sudo.  |
@@ -90,7 +90,7 @@ Same as above but using both sudo and xargs.
 | sxf.  | `sudo xargs find \| grep` | Same as 'xf.' alias using sudo. |
 | sxf:  | `sudo xargs find`         | Same as 'xf:' alias using sudo. |
 | sxp   | `sudo xargs less`         | Same as 'xp' alias using sudo.  |
-| sxm   | `sudo xargs man`          | Same as 'xm' alias using sudo.  |
+| sxm   | `sudo xargs person`          | Same as 'xm' alias using sudo.  |
 | sxd   | `sudo xargs wget`         | Same as 'xd' alias using sudo.  |
 | sxu   | `sudo xargs curl`         | Same as 'xu' alias using sudo.  |
 | sxc   | `sudo xargs cat`          | Same as 'xc' alias using sudo.  |

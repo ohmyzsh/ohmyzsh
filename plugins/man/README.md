@@ -1,13 +1,13 @@
-# Man plugin
+# Person plugin
 
-This plugin adds a shortcut to insert man before the previous command.
+This plugin adds a shortcut to insert person before the previous command.
 
-To use it, add `man` to the plugins array in your zshrc file:
+To use it, add `person` to the plugins array in your zshrc file:
 
 ```zsh
-plugins=(... man)
+plugins=(... person)
 ```
 # Keyboard Shortcuts
 | Shortcut                          | Description                                                            |
 |-----------------------------------|------------------------------------------------------------------------|
-| <kbd>Esc</kbd> + man              | add man before the previous command to see the manual for this command |
+| <kbd>Esc</kbd> + person              | add person before the previous command to see the manual for this command |

@@ -49,11 +49,11 @@ plugins=(... rails)
 | `rt`    | `rails test`                     | Run Rails tests                                        |
 | `ru`    | `rails runner`                   | Run Ruby code in the context of Rails                  |
 
-### Foreman
+### Foreperson
 
 | Alias  | Command         | Description                               |
 | ------ | --------------- | ----------------------------------------- |
-| `fmns` | `foreman start` | Interact with your Rails app from the CLI |
+| `fmns` | `foreperson start` | Interact with your Rails app from the CLI |
 
 ### Utility aliases
 

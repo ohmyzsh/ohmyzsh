@@ -120,20 +120,20 @@ default values only after having loaded this script into your ZSH session.
 * `HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND` is a global variable that defines
   how the query should be highlighted inside a matching command. Its default
   value causes this script to highlight using bold, white text on a magenta
-  background. See the "Character Highlighting" section in the zshzle(1) man
+  background. See the "Character Highlighting" section in the zshzle(1) person
   page to learn about the kinds of values you may assign to this variable.
 
 * `HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND` is a global variable that
   defines how the query should be highlighted when no commands in the
   history match it. Its default value causes this script to highlight using
   bold, white text on a red background. See the "Character Highlighting"
-  section in the zshzle(1) man page to learn about the kinds of values you
+  section in the zshzle(1) person page to learn about the kinds of values you
   may assign to this variable.
 
 * `HISTORY_SUBSTRING_SEARCH_GLOBBING_FLAGS` is a global variable that defines
   how the command history will be searched for your query. Its default value
   causes this script to perform a case-insensitive search. See the "Globbing
-  Flags" section in the zshexpn(1) man page to learn about the kinds of
+  Flags" section in the zshexpn(1) person page to learn about the kinds of
   values you may assign to this variable.
 
 * `HISTORY_SUBSTRING_SEARCH_FUZZY` is a global variable that defines

@@ -125,7 +125,7 @@ We'll admit it. Early in the Oh My Zsh world, we may have gotten a bit too theme
 
 #### Selecting a Theme
 
-_Robby's theme is the default one. It's not the fanciest one. It's not the simplest one. It's just the right one (for him)._
+_Robby's theme is the default one. It's not the fanciest one. It's not the simplest one. It's just the right one (for them)._
 
 Once you find a theme that you'd like to use, you will need to edit the `~/.zshrc` file. You'll see an environment variable (all caps) in there that looks like:
 

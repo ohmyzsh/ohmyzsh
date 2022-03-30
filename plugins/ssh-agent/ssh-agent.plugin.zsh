@@ -37,7 +37,7 @@ function _add_identities() {
   # add default keys if no identities were set up via zstyle
   # this is to mimic the call to ssh-add with no identities
   if [[ ${#identities} -eq 0 ]]; then
-    # key list found on `ssh-add` man page's DESCRIPTION section
+    # key list found on `ssh-add` person page's DESCRIPTION section
     for id in id_rsa id_dsa id_ecdsa id_ed25519 identity; do
       # check if file exists
       [[ -f "$HOME/.ssh/$id" ]] && identities+=($id)

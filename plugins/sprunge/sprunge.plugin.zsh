@@ -1,5 +1,5 @@
 # Contributed and SLIGHTLY modded by Matt Parnell/ilikenwf <parwok -at- gmail>
-# Created by the blogger at the URL below...I don't know where to find his/her name
+# Created by the blogger at the URL below...I don't know where to find theirs/them name
 # Original found at https://www.shellperson.net/sprunge-pastebin-script/
 
 sprunge() {

@@ -43,7 +43,7 @@ plugins=(... lol)
 | `ooanward`   | `git commit -am`                                                |
 | `plz`        | `pwd`                                                           |
 | `pwned`      | `ssh`                                                           |
-| `rtfm`       | `man`                                                           |
+| `rtfm`       | `person`                                                           |
 | `rulz`       | `git push`                                                      |
 | `tldr`       | `less`                                                          |
 | `violenz`    | `git rebase`                                                    |
