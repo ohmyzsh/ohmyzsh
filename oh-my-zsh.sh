@@ -15,10 +15,6 @@ fi
 # Homebrew mentioned this so I'm doing it
 export SCALA_HOME=/usr/local/homebrew/opt/scala/idea
 
-# From Helios user guide https://github.com/spotify/helios/blob/master/docs/user_manual.md#using-the-helios-cli
-alias helios='helios -z http://localhost:5801'
-
-
 # Initializes Oh My Zsh
 
 # add a function path

@@ -61,14 +61,6 @@ function take() {
   fi
 }
 
-alias gdi="git diff --cached "
-alias gdc="git diff --cached "
-
-# Params: branch A and branch B to be diffed
-function gdb() {
-  git diff $1..$2
-}
-
 #
 # Get the value of an alias.
 #
@@ -272,38 +264,6 @@ lsg() {
     l | grep -iE "$1"
 }
 
-function alg() {
-  FN=/tmp/alg.$$
-  echo -e "\nAliases ———————" > $FN
-  alias | grep -i $1 >> $FN
-  echo -e "\nFunctions ———————" >> $FN
-  functions | grep -i $1 >> $FN
-  bat $FN
-  rm -f $FN
-}
-
-alias agr="alg"
-alias alias-grep="alg"
-
-# These need to be here since they're required by gfind*
-alias ag="/usr/local/homebrew/bin/ag --ignore '*.svg' --ignore '*.xlt' --ignore '*.tsx' --ignore '*.js' --ignore '*.snap' --ignore '*.json' --ignore '*.dat' --ignore '*.builds' --ignore '*.tsv' --ignore '*.csv' --ignore '*.lock' --ignore '*.patch' --ignore '*.sum' --pager=bat"
-alias ag-no-pager="/usr/local/homebrew/bin/ag --ignore '*.svg' --ignore '*.xlt' --ignore '*.tsx' --ignore '*.js' --ignore '*.snap' --ignore '*.json' --ignore '*.dat' --ignore '*.builds' --ignore '*.tsv' --ignore '*.csv' --ignore '*.lock' --ignore '*.patch' --ignore '*.sum'"
-alias "git-grep"="git \grep"
-
-function make-break() {
-  echo -e "—————————————————————————————————————————— \
-  \n\n——————————————————————————————————————————\n"
-}
-
-# Spits out a page of alternating white lines (hypens or thereabouts)
-function page-break() {
-  for i in {1..9}; do;
-    make-break
-  done
-}
-
-alias make-big-break=page-break
-
 # the ol' gfind. Doesn't take a file pattern.
 function gfind-all() {
     # fd -H -t f . -x grep --color=always -Hi ${1}
@@ -311,18 +271,27 @@ function gfind-all() {
     # $1 is search term, $2 is path
     # rg --no-ignore --hidden "$@"
     # even better is ag / silver searcher https://github.com/ggreer/the_silver_searcher
-    ag-no-pager --ignore-case -a --pager bat "$@"
+    ag -a --pager less "$@"
 }
 
 # the ol' gfind. Doesn't take a file pattern.
 function gfind() {
     # fd -t f . -x grep --color=always -Hi ${1}
-    ag-no-pager --ignore-case --pager bat "$@"
+    ag --pager less "$@"
 }
 
 # Print out the matches only
 function gfindf() {
-  ack -l $1 --pager=bat --color
+  # TODO make this a lot less shit e.g. don't search .git . Surely rg has
+  # the ability to do this.
+  find . -type f -exec grep --color=always -Hil $1 {} \;
+}
+
+function heroic-repo-configure() {
+  cp ${HOME}/src/spotify/prism-tools/heroic-test.yml ./heroic-guc.yml
+  cp ${HOME}/src/spotify/prism-tools/heroic-api-gae.yml ./heroic-gae.yml
+  ls -l | grep -E 'heroic.*yml|heroic.*yaml'
+  mkdir logs
 }
 
 # function h() {
@@ -340,10 +309,6 @@ function agl() {
   ag --pager less "$@"
 }
 
-function lsofgr() {
-  sudo lsof -i -P | grep -E "$1|LISTEN" | grep -E "$1|:"
-}
-
 function kill-em-all() {
   NAME=$1
 
@@ -355,9 +320,9 @@ function kill-em-all() {
 }
 
 function dateline() {
-  echo -e "\n––––––––––––"
+  echo "––––––––––––"
   date
-  echo -e "––––––––––––\n"
+  echo "––––––––––––"
 }
 
 function clean-slate() {
@@ -368,31 +333,9 @@ function clean-slate() {
 alias clr=clean-slate
 alias cls=clean-slate
 
-function h() {
-  NUM_LINES=$1
-  if [ -z "$NUM_LINES" ]; then
-      NUM_LINES=35
-  fi
-  \history -$NUM_LINES
-}
-
 function psgr() {
-  ps -e | grep -v 'grep ' | grep -iE "TIME CMD|$1"
+  ps auwwwwx | grep -v 'grep ' | grep -E "%CPU|$1"
 }
-
-# Sort on the command
-function psgr-sorted() {
-  echo "  PID TTY           TIME CMD"
-  ps -e | grep -v 'grep ' | grep -iE "$1" | sort -k 4
-}
-
-function lsofgr-listen() {
-  echo "Searching for processes listening on port $1..."
-  #echo "ℹ️ lsof can take up to 2 minutes to complete"
-  # --stdin Write the prompt to the standard error and read the password from the standard input instead of using the terminal device.
-  sudo --stdin < <(echo "11anfair") lsof -i -P | grep -E "COMMAND|.*:$1.*LISTEN"
-}
-alias port-grep=lsofgr
 
 function edit() {
   /Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code $1
@@ -408,12 +351,6 @@ function dir-sizes() {
   du -sh ./* | sort -h
 }
 
-# Call from within the source TLD
-function download-sources-intellij() {
-  mvn dependency:sources
-  mvn dependency:resolve -Dclassifier=javadoc
-}
-
 
 function ssh-ds718() {
   ssh -p 658 pskadmin@192.168.2.7
@@ -421,10 +358,26 @@ function ssh-ds718() {
 
 alias git-stash-list-all='gitk `git stash list --pretty=format:%gd`'
 
+function master-show-protection() {
+  git branch -vv | grep "origin/`git branch --show-current`"
+}
+
+function git-show-branch() {
+  git branch -vv | grep `git branch --show-current`
+}
+
 function git-show-all-stashes() {
   echo "Hit 'q' to go to next file"
   echo ""
   git stash list | awk -F: '{ print "\n\n\n\n"; print $0; print "\n\n"; system("git stash show -p " $1); }'
+}
+
+# kill most recent container instance
+alias docker-kill-latest='docker ps -l --format='{{.Names}}' | xargs docker kill'
+
+# stop all containers
+docker-stop-all-containers () {
+  docker container stop -t 2 $(docker container ls -q) 2>/dev/null
 }
 
 function find-gig-files() {
@@ -453,60 +406,22 @@ function start-cloud-storage() {
 # Out of action - needs work
 # function tree() {
 #   DIR=$1 ;
-#   shift # kubectl create -f hello-k8s-replicaset.yaml
-# ps $1 off
+#   shift # pops $1 off
 #   /usr/local/homebrew/bin/tree -a $DIR | colorize_less "$@"
 # }
-
-function space() {
-  echo;echo;echo;echo;echo;
-}
-
-alias s="space"
-
-function open-job-docs() {
-  open 'https://docs.google.com/document/d/1O81om1F14fNhWhqt5VpIULfiCHmNXPkFcMoED09cidU/edit'
-  open 'https://docs.google.com/document/d/1pBJfqcWhn9Wz6p6wPpPrk6_9MdGG_24qmpluz4pM3AY/edit'
-  open 'https://docs.google.com/document/d/1nj_MidYJEDhk1uzhPFOZ6uFdXfZY2hdrV0_f8zJ4Lgs/edit'
-  open 'https://docs.google.com/document/d/1gPNcLjrZJnJnWy0-k5SqpgP4VAUZ_ikRLR9qYEB50M0/edit'
-}
-
-goclean() {
- local pkg=$1; shift || return 1
- local ost
- local cnt
- local scr
-
- # Clean removes object files from package source directories (ignore error)
- go clean -i $pkg &>/dev/null
-
- # Set local variables
- [[ "$(uname -m)" == "x86_64" ]] \
- && ost="$(uname)";ost="${ost,,}_amd64" \
- && cnt="${pkg//[^\/]}"
-
- # Delete the source directory and compiled package directory(ies)
- if (("${#cnt}" == "2")); then
-  rm -rf "${GOPATH%%:*}/src/${pkg%/*}"
-  rm -rf "${GOPATH%%:*}/pkg/${ost}/${pkg%/*}"
- elif (("${#cnt}" > "2")); then
-  rm -rf "${GOPATH%%:*}/src/${pkg%/*/*}"
-  rm -rf "${GOPATH%%:*}/pkg/${ost}/${pkg%/*/*}"
- fi
-}
 
 function _open-all-chrome-apps() {
   for APP in "${1}"/*.app; do
     echo "Opening $APP ..."
-    nohup open -a "$APP" > /dev/null 2>&1 &
+    nohup open -a "$APP" &
   done
 }
 
 function open-all-chrome-apps() {
-  CHROME_APP_DIR='/Users/peter/Dropbox (Personal)/_Settings/Chrome Apps/Chrome Apps.localized'
-  _open-all-chrome-apps $CHROME_APP_DIR
-  CHROME_APP_DIR='/Users/peter/Dropbox (Personal)/_Settings/Chrome/Chrome Apps/Chrome Apps.localized'
-  _open-all-chrome-apps $CHROME_APP_DIR
+  CHROME_APP_DIR='/Users/peter/Dropbox (Personal)/_Settings/Chrome Apps/Chrome Apps.localized/'
+  _open-all-chrome-apps "$CHROME_APP_DIR"
+  CHROME_APP_DIR='/Users/peter/Dropbox (Personal)/_Settings/Chrome/Chrome Apps/Chrome Apps.localized/'
+  _open-all-chrome-apps "$CHROME_APP_DIR"
 }
 
 function post-boot-tasks() {
@@ -524,17 +439,20 @@ function kill-cloud-storage() {
     killall -v "FinderSyncExtension" -SIGKILL &
 }
 
-function explain-command {
-    command="https://explainshell.com/explain?cmd=${1}"
-osascript <<EOD
-tell application "Safari" to make new document with properties {URL:"$command"}
-return
-EOD
+# For photos, pictures, DS718
+function organise-into-dated-dirs() {
+  if [ $# -eq 0 ]
+  then
+    echo "Please supply an extension e.g. mov or mp4"
+    return
+  fi
 
+  for x in *.${1}; do
+    d=$(date -r "$x" +%Y-%m-%d)
+    mkdir -p "$d"
+    mv -- "$x" "$d/"
+  done
 }
-
-alias explainer="explain-command"
-alias explain-args="explain-command"
 
 ### peco functions ###
 function peco-directories() {
@@ -588,9 +506,6 @@ function peco-files() {
     CURSOR=$#BUFFER
   fi
 }
-
-# Include Rune funcs
-. $HOME/.oh-my-zsh/rune-shell-funcs.zsh
 
 zle -N peco-directories
 bindkey '^Xf' peco-directories

@@ -1,0 +1,1 @@
+../../IntelliJ-Shortcuts.md
