@@ -1,0 +1,40 @@
+emulate -L zsh
+
+zmodload zsh/curses
+
+test_fd0() {
+    true <&0
+}
+
+local restore=0 FD
+
+# Reattach to terminal
+if [ ! -t 0 ]; then
+    # Check if can reattach to terminal in any way
+    if [[ ! -c /dev/tty && ! -t 2 ]]; then
+        echo "No terminal available (no /dev/tty and no terminal at stderr)"
+        return 1
+    fi
+
+    if test_fd0 2>/dev/null; then
+        exec {FD}<&0
+        restore=2
+    else
+        restore=1
+    fi
+
+    if [[ ! -c /dev/tty ]]; then
+        exec <&2
+    else
+        exec </dev/tty
+    fi
+fi
+
+# Run the command
+"$@"
+
+# Restore FD state
+(( restore == 1 )) && exec <&-
+(( restore == 2 )) && exec <&$FD && exec {FD}<&-
+
+# vim: set filetype=zsh:

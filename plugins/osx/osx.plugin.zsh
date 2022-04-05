@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ------------------------------------------------------------------------------
 #          FILE:  osx.plugin.zsh
 #   DESCRIPTION:  oh-my-zsh plugin file.
@@ -209,3 +210,10 @@ EOF
 	esac
 	osascript -e "tell application \"iTunes\" to $opt"
 }
+=======
+print -u2 ${(%):-'%F{yellow}The `osx` plugin is deprecated and has been renamed to `macos`.'}
+print -u2 ${(%):-'Please update your .zshrc to use the `%Bmacos%b` plugin instead.%f'}
+
+(( ${fpath[(Ie)$ZSH/plugins/macos]} )) || fpath=("$ZSH/plugins/macos" $fpath)
+source "$ZSH/plugins/macos/macos.plugin.zsh"
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b

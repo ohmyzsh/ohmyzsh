@@ -1,6 +1,7 @@
 
 local user='%{$fg[magenta]%}%n@%{$fg[magenta]%}%m%{$reset_color%}'
 local pwd='%{$fg[blue]%}%~%{$reset_color%}'
+<<<<<<< HEAD
 local rvm=''
 if which rvm-prompt &> /dev/null; then
   rvm='%{$fg[green]%}‹$(rvm-prompt i v g)›%{$reset_color%}'
@@ -12,6 +13,12 @@ fi
 local return_code='%(?..%{$fg[red]%}%? ↵%{$reset_color%})'
 local git_branch='$(git_prompt_status)%{$reset_color%}$(git_prompt_info)%{$reset_color%}'
 
+=======
+local return_code='%(?..%{$fg[red]%}%? ↵%{$reset_color%})'
+local git_branch='$(git_prompt_status)%{$reset_color%}$(git_prompt_info)%{$reset_color%}'
+
+ZSH_THEME_RVM_PROMPT_OPTIONS="i v g"
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[green]%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_DIRTY=""
@@ -24,5 +31,13 @@ ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[magenta]%} ➜"
 ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[yellow]%} ═"
 ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[cyan]%} ✭"
 
+<<<<<<< HEAD
 PROMPT="${user} ${pwd}$ "
 RPROMPT="${return_code} ${git_branch} ${rvm}"
+=======
+ZSH_THEME_RUBY_PROMPT_PREFIX="%{$fg[green]%}‹"
+ZSH_THEME_RUBY_PROMPT_SUFFIX="›%{$reset_color%}"
+
+PROMPT="${user} ${pwd}$ "
+RPROMPT="${return_code} ${git_branch} \$(ruby_prompt_info)"
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b

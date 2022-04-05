@@ -12,8 +12,15 @@ alias ldot='ls -ld .*'
 alias lS='ls -1FSsh'
 alias lart='ls -1Fcart'
 alias lrt='ls -1Fcrt'
+<<<<<<< HEAD
 
 alias zshrc='$EDITOR ~/.zshrc' # Quick access to the ~/.zshrc file
+=======
+alias lsr='ls -lARFh' #Recursive list of files and directories
+alias lsn='ls -1'     #A column contains name of files and directories
+
+alias zshrc='${=EDITOR} ${ZDOTDIR:-$HOME}/.zshrc' # Quick access to the .zshrc file
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 
 alias grep='grep --color'
 alias sgrep='grep -R -n -H -C 5 --exclude-dir={.git,.svn,CVS} '
@@ -34,7 +41,11 @@ alias -g P="2>&1| pygmentize -l pytb"
 
 alias dud='du -d 1 -h'
 alias duf='du -sh *'
+<<<<<<< HEAD
 alias fd='find . -type d -name'
+=======
+(( $+commands[fd] )) || alias fd='find . -type d -name'
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 alias ff='find . -type f -name'
 
 alias h='history'
@@ -44,14 +55,18 @@ alias p='ps -f'
 alias sortnr='sort -n -r'
 alias unexport='unset'
 
+<<<<<<< HEAD
 alias whereami=display_info
 
+=======
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
 
 # zsh is able to auto-do some kungfoo
 # depends on the SUFFIX :)
+<<<<<<< HEAD
 if [ ${ZSH_VERSION//\./} -ge 420 ]; then
   # open browser on urls
   _browser_fts=(htm html de org net com at cx nl se dk dk php)
@@ -65,6 +80,26 @@ if [ ${ZSH_VERSION//\./} -ge 420 ]; then
 
   _media_fts=(ape avi flv mkv mov mp3 mpeg mpg ogg ogm rm wav webm)
   for ft in $_media_fts ; do alias -s $ft=mplayer ; done
+=======
+autoload -Uz is-at-least
+if is-at-least 4.2.0; then
+  # open browser on urls
+  if [[ -n "$BROWSER" ]]; then
+    _browser_fts=(htm html de org net com at cx nl se dk)
+    for ft in $_browser_fts; do alias -s $ft='$BROWSER'; done
+  fi
+
+  _editor_fts=(cpp cxx cc c hh h inl asc txt TXT tex)
+  for ft in $_editor_fts; do alias -s $ft='$EDITOR'; done
+
+  if [[ -n "$XIVIEWER" ]]; then
+    _image_fts=(jpg jpeg png gif mng tiff tif xpm)
+    for ft in $_image_fts; do alias -s $ft='$XIVIEWER'; done
+  fi
+
+  _media_fts=(ape avi flv m4a mkv mov mp3 mpeg mpg ogg ogm rm wav webm)
+  for ft in $_media_fts; do alias -s $ft=mplayer; done
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 
   #read documents
   alias -s pdf=acroread
@@ -83,4 +118,7 @@ fi
 
 # Make zsh know about hosts already accessed by SSH
 zstyle -e ':completion:*:(ssh|scp|sftp|rsh|rsync):hosts' hosts 'reply=(${=${${(f)"$(cat {/etc/ssh_,~/.ssh/known_}hosts(|2)(N) /dev/null)"}%%[# ]*}//,/ })'
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b

@@ -1,0 +1,29 @@
+{{with .PDoc}}{{/*
+
+Constants 
+---------------------------------------
+
+*/}}{{with .Consts}}{{range .}}{{range .Names}}{{.}} {{end}}{{end}}{{end}}{{/*
+
+Variables
+---------------------------------------
+
+*/}}{{with .Vars}}{{range .}}{{range .Names}}{{.}} {{end}}{{end}}{{end}}{{/*
+
+Functions
+---------------------------------------
+
+*/}}{{with .Funcs}}{{range .}}{{ .Name }} {{end}}{{end}}{{/*
+
+Types
+---------------------------------------
+
+*/}}{{with .Types}}{{range .}}{{ $TypeName := .Name }}{{ $TypeName }} {{/*
+
+*/}}{{range .Methods}}{{ $TypeName }}.{{.Name}} {{end}}{{/*
+
+*/}}{{range .Funcs}}{{.Name}} {{end}}{{/*
+
+*/}}{{range .Consts}}{{range .Names}}{{.}} {{end}}{{end}}{{/*
+
+*/}}{{range .Vars}}{{range .Names}}{{.}} {{end}}{{end}}{{end}}{{end}}{{end}}

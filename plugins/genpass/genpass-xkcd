@@ -1,0 +1,68 @@
+#!/usr/bin/env zsh
+#
+# Usage: genpass-xkcd [NUM]
+#
+# Generate a password made of words from /usr/share/dict/words
+# with the security margin of at least 128 bits.
+#
+# Example password: 9-mien-flood-Patti-buxom-dozes-ickier-pay-ailed-Foster
+#
+# If given a numerical argument, generate that many passwords.
+#
+# The name of this utility is a reference to https://xkcd.com/936/.
+
+emulate -L zsh -o no_unset -o warn_create_global -o warn_nested_var -o extended_glob
+
+if [[ ARGC -gt 1 || ${1-1} != ${~:-<1-$((16#7FFFFFFF))>} ]]; then
+  print -ru2 -- "usage: $0 [NUM]"
+  return 1
+fi
+
+zmodload zsh/system zsh/mathfunc || return
+
+local -r dict=/usr/share/dict/words
+
+if [[ ! -e $dict ]]; then
+  print -ru2 -- "$0: file not found: $dict"
+  return 1
+fi
+
+# Read all dictionary words and leave only those made of 1-6 characters.
+local -a words
+words=(${(M)${(f)"$(<$dict)"}:#[a-zA-Z](#c1,6)}) || return
+
+if (( $#words < 2 )); then
+  print -ru2 -- "$0: not enough suitable words in $dict"
+  return 1
+fi
+
+if (( $#words > 16#7FFFFFFF )); then
+  print -ru2 -- "$0: too many words in $dict"
+  return 1
+fi
+
+# Figure out how many words we need for 128 bits of security margin.
+# Each word adds log2($#words) bits.
+local -i n=$((ceil(128. / (log($#words) / log(2)))))
+
+{
+  local c
+  repeat ${1-1}; do
+    print -rn -- $n
+    repeat $n; do
+      while true; do
+        # Generate a random number in [0, 2**31).
+        local -i rnd=0
+        repeat 4; do
+          sysread -s1 c || return
+          (( rnd = (~(1 << 23) & rnd) << 8 | #c ))
+        done
+        # Avoid bias towards words in the beginning of the list.
+        (( rnd < 16#7FFFFFFF / $#words * $#words )) || continue
+        print -rn -- -$words[rnd%$#words+1]
+        break
+      done
+    done
+    print
+  done
+} </dev/urandom

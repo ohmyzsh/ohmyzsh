@@ -33,6 +33,10 @@ alias zunner='zeus runner'
 # Cucumber
 alias zcu='zeus cucumber'
 alias zucumber='zeus cucumber'
+<<<<<<< HEAD
+=======
+alias zwip='zeus cucumber --profile wip'
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 
 # Rspec
 alias zspec='zeus rspec'

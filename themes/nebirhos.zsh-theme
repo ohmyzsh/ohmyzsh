@@ -11,7 +11,11 @@ else
 fi
 
 # Get the host name (first 4 chars)
+<<<<<<< HEAD
 HOST_PROMPT_="%{$fg_bold[red]%}@$HOST[0,4] ➜  %{$fg_bold[cyan]%}%c "
+=======
+HOST_PROMPT_="%{$fg_bold[red]%}@%m ➜ %{$fg_bold[cyan]%}%c "
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 GIT_PROMPT="%{$fg_bold[blue]%}\$(git_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}"
 PROMPT="$HOST_PROMPT_$RUBY_PROMPT_$GIT_PROMPT"
 

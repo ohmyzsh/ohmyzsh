@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Authors:
 # https://github.com/AlexBio
 # https://github.com/dbb
@@ -17,6 +18,26 @@ fi
 
 # Use sudo by default if it's installed
 if [[ -e $( which -p sudo 2>&1 ) ]]; then
+=======
+# Use aptitude or apt if installed, fallback is apt-get
+# You can just set apt_pref='apt-get' to override it.
+
+if [[ -z $apt_pref || -z $apt_upgr ]]; then
+    if [[ -e $commands[aptitude] ]]; then
+        apt_pref='aptitude'
+        apt_upgr='safe-upgrade'
+    elif [[ -e $commands[apt] ]]; then
+        apt_pref='apt'
+        apt_upgr='upgrade'
+    else
+        apt_pref='apt-get'
+        apt_upgr='upgrade'
+    fi
+fi
+
+# Use sudo by default if it's installed
+if [[ -e $commands[sudo] ]]; then
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
     use_sudo=1
 fi
 
@@ -29,8 +50,12 @@ alias api='aptitude'
 # Some self-explanatory aliases
 alias acs="apt-cache search"
 alias aps='aptitude search'
+<<<<<<< HEAD
 alias as="aptitude -F \"* %p -> %d \n(%v/%V)\" \
 		--no-gui --disable-columns search"	# search package
+=======
+alias as="aptitude -F '* %p -> %d \n(%v/%V)' --no-gui --disable-columns search"
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 
 # apt-file
 alias afs='apt-file search --regexp'
@@ -43,6 +68,7 @@ alias app='apt-cache policy'
 # superuser operations ######################################################
 if [[ $use_sudo -eq 1 ]]; then
 # commands using sudo #######
+<<<<<<< HEAD
     alias aac='sudo $apt_pref autoclean'
     alias abd='sudo $apt_pref build-dep'
     alias ac='sudo $apt_pref clean'
@@ -60,26 +86,64 @@ if [[ $use_sudo -eq 1 ]]; then
 
     # apt-get only
     alias ads='sudo apt-get dselect-upgrade'
+=======
+    alias aac="sudo $apt_pref autoclean"
+    alias abd="sudo $apt_pref build-dep"
+    alias ac="sudo $apt_pref clean"
+    alias ad="sudo $apt_pref update"
+    alias adg="sudo $apt_pref update && sudo $apt_pref $apt_upgr"
+    alias adu="sudo $apt_pref update && sudo $apt_pref dist-upgrade"
+    alias afu="sudo apt-file update"
+    alias au="sudo $apt_pref $apt_upgr"
+    alias ai="sudo $apt_pref install"
+    # Install all packages given on the command line while using only the first word of each line:
+    # acs ... | ail
+
+    alias ail="sed -e 's/  */ /g' -e 's/ *//' | cut -s -d ' ' -f 1 | xargs sudo $apt_pref install"
+    alias ap="sudo $apt_pref purge"
+    alias ar="sudo $apt_pref remove"
+    alias aar="sudo $apt_pref autoremove"
+
+    # apt-get only
+    alias ads="sudo apt-get dselect-upgrade"
+
+    # apt only
+    alias alu="sudo apt update && apt list -u && sudo apt upgrade"
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 
     # Install all .deb files in the current directory.
     # Warning: you will need to put the glob in single quotes if you use:
     # glob_subst
+<<<<<<< HEAD
     alias dia='sudo dpkg -i ./*.deb'
     alias di='sudo dpkg -i'
 
     # Remove ALL kernel images and headers EXCEPT the one in use
     alias kclean='sudo aptitude remove -P ?and(~i~nlinux-(ima|hea) \
         ?not(~n`uname -r`))'
+=======
+    alias dia="sudo dpkg -i ./*.deb"
+    alias di="sudo dpkg -i"
+
+    # Remove ALL kernel images and headers EXCEPT the one in use
+    alias kclean='sudo aptitude remove -P "?and(~i~nlinux-(ima|hea) ?not(~n$(uname -r)))"'
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 
 
 # commands using su #########
 else
+<<<<<<< HEAD
     alias aac='su -ls \'$apt_pref autoclean\' root'
     abd() {
+=======
+    alias aac="su -ls '$apt_pref autoclean' root"
+    function abd() {
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
         cmd="su -lc '$apt_pref build-dep $@' root"
         print "$cmd"
         eval "$cmd"
     }
+<<<<<<< HEAD
     alias ac='su -ls \'$apt_pref clean\' root'
     alias ad='su -lc \'$apt_pref update\' root'
     alias adg='su -lc \'$apt_pref update && aptitude $apt_upgr\' root'
@@ -87,29 +151,58 @@ else
     alias afu='su -lc "apt-file update"'
     alias ag='su -lc \'$apt_pref $apt_upgr\' root'
     ai() {
+=======
+    alias ac="su -ls '$apt_pref clean' root"
+    alias ad="su -lc '$apt_pref update' root"
+    alias adg="su -lc '$apt_pref update && aptitude $apt_upgr' root"
+    alias adu="su -lc '$apt_pref update && aptitude dist-upgrade' root"
+    alias afu="su -lc '$apt-file update'"
+    alias au="su -lc '$apt_pref $apt_upgr' root"
+    function ai() {
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
         cmd="su -lc 'aptitude -P install $@' root"
         print "$cmd"
         eval "$cmd"
     }
+<<<<<<< HEAD
     ap() {
+=======
+    function ap() {
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
         cmd="su -lc '$apt_pref -P purge $@' root"
         print "$cmd"
         eval "$cmd"
     }
+<<<<<<< HEAD
     ar() {
+=======
+    function ar() {
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
         cmd="su -lc '$apt_pref -P remove $@' root"
         print "$cmd"
         eval "$cmd"
     }
+<<<<<<< HEAD
 
+=======
+    function aar() {
+        cmd="su -lc '$apt_pref -P autoremove $@' root"
+        print "$cmd"
+        eval "$cmd"
+    }
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
     # Install all .deb files in the current directory
     # Assumes glob_subst is off
     alias dia='su -lc "dpkg -i ./*.deb" root'
     alias di='su -lc "dpkg -i" root'
 
     # Remove ALL kernel images and headers EXCEPT the one in use
+<<<<<<< HEAD
     alias kclean='su -lc '\''aptitude remove -P ?and(~i~nlinux-(ima|hea) \
         ?not(~n`uname -r`))'\'' root'
+=======
+    alias kclean='su -lc "aptitude remove -P \"?and(~i~nlinux-(ima|hea) ?not(~n$(uname -r)))\"" root'
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 fi
 
 # Completion ################################################################
@@ -118,16 +211,28 @@ fi
 # Registers a compdef for $1 that calls $apt_pref with the commands $2
 # To do that it creates a new completion function called _apt_pref_$2
 #
+<<<<<<< HEAD
 apt_pref_compdef() {
+=======
+function apt_pref_compdef() {
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
     local f fb
     f="_apt_pref_${2}"
 
     eval "function ${f}() {
+<<<<<<< HEAD
         shift words; 
 	service=\"\$apt_pref\"; 
 	words=(\"\$apt_pref\" '$2' \$words); 
 	((CURRENT++))
 	test \"\${apt_pref}\" = 'aptitude' && _aptitude || _apt
+=======
+        shift words;
+        service=\"\$apt_pref\";
+        words=(\"\$apt_pref\" '$2' \$words);
+        ((CURRENT++))
+        test \"\${apt_pref}\" = 'aptitude' && _aptitude || _apt
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
     }"
 
     compdef "$f" "$1"
@@ -138,11 +243,19 @@ apt_pref_compdef abd "build-dep"
 apt_pref_compdef ac  "clean"
 apt_pref_compdef ad  "update"
 apt_pref_compdef afu "update"
+<<<<<<< HEAD
 apt_pref_compdef ag  "$apt_upgr"
+=======
+apt_pref_compdef au  "$apt_upgr"
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 apt_pref_compdef ai  "install"
 apt_pref_compdef ail "install"
 apt_pref_compdef ap  "purge"
 apt_pref_compdef ar  "remove"
+<<<<<<< HEAD
+=======
+apt_pref_compdef aar  "autoremove"
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 apt_pref_compdef ads "dselect-upgrade"
 
 # Misc. #####################################################################
@@ -155,7 +268,11 @@ alias mydeb='time dpkg-buildpackage -rfakeroot -us -uc'
 
 # Functions #################################################################
 # create a simple script that can be used to 'duplicate' a system
+<<<<<<< HEAD
 apt-copy() {
+=======
+function apt-copy() {
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
     print '#!/bin/sh'"\n" > apt-copy.sh
 
     cmd='$apt_pref install'
@@ -176,8 +293,13 @@ apt-copy() {
 #   apt-history remove
 #   apt-history rollback
 #   apt-history list
+<<<<<<< HEAD
 # Based On: http://linuxcommando.blogspot.com/2008/08/how-to-show-apt-log-history.html
 apt-history () {
+=======
+# Based On: https://linuxcommando.blogspot.com/2008/08/how-to-show-apt-log-history.html
+function apt-history() {
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
   case "$1" in
     install)
       zgrep --no-filename 'install ' $(ls -rt /var/log/dpkg*)
@@ -192,7 +314,11 @@ apt-history () {
         awk '{print $4"="$5}'
       ;;
     list)
+<<<<<<< HEAD
       zcat $(ls -rt /var/log/dpkg*)
+=======
+      zgrep --no-filename '' $(ls -rt /var/log/dpkg*)
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
       ;;
     *)
       echo "Parameters:"
@@ -206,11 +332,19 @@ apt-history () {
 }
 
 # Kernel-package building shortcut
+<<<<<<< HEAD
 kerndeb () {
     # temporarily unset MAKEFLAGS ( '-j3' will fail )
     MAKEFLAGS=$( print - $MAKEFLAGS | perl -pe 's/-j\s*[\d]+//g' )
     print '$MAKEFLAGS set to '"'$MAKEFLAGS'"
 	appendage='-custom' # this shows up in $ (uname -r )
+=======
+function kerndeb() {
+    # temporarily unset MAKEFLAGS ( '-j3' will fail )
+    MAKEFLAGS=$( print - $MAKEFLAGS | perl -pe 's/-j\s*[\d]+//g' )
+    print '$MAKEFLAGS set to '"'$MAKEFLAGS'"
+    appendage='-custom' # this shows up in $(uname -r )
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
     revision=$(date +"%Y%m%d") # this shows up in the .deb file name
 
     make-kpkg clean
@@ -220,10 +354,17 @@ kerndeb () {
 }
 
 # List packages by size
+<<<<<<< HEAD
 function apt-list-packages {
+=======
+function apt-list-packages() {
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
     dpkg-query -W --showformat='${Installed-Size} ${Package} ${Status}\n' | \
     grep -v deinstall | \
     sort -n | \
     awk '{print $1" "$2}'
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b

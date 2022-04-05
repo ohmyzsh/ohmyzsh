@@ -7,7 +7,11 @@
 # -----------------------------------------------------------------------------
 #          FILE:  _pod
 #   DESCRIPTION:  Cocoapods (0.33.1) autocomplete plugin for Oh-My-Zsh
+<<<<<<< HEAD
 #                 http://cocoapods.org
+=======
+#                 https://cocoapods.org
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 #                 Generated with `pod --completion-script
 #        AUTHOR:  Alexandre Joly (alexandre.joly@mekanics.ch)
 #        GITHUB:  https://github.com/mekanics

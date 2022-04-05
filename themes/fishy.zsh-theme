@@ -1,6 +1,7 @@
 # ZSH Theme emulating the Fish shell's default prompt.
 
 _fishy_collapsed_wd() {
+<<<<<<< HEAD
   echo $(pwd | perl -pe "
    BEGIN {
       binmode STDIN,  ':encoding(UTF-8)';
@@ -8,13 +9,32 @@ _fishy_collapsed_wd() {
    }; s|^$HOME|~|g; s|/([^/])[^/]*(?=/)|/\$1|g
 ")
 } 
+=======
+  local i pwd
+  pwd=("${(s:/:)PWD/#$HOME/~}")
+  if (( $#pwd > 1 )); then
+    for i in {1..$(($#pwd-1))}; do
+      if [[ "$pwd[$i]" = .* ]]; then
+        pwd[$i]="${${pwd[$i]}[1,2]}"
+      else
+        pwd[$i]="${${pwd[$i]}[1]}"
+      fi
+    done
+  fi
+  echo "${(j:/:)pwd}"
+}
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 
 local user_color='green'; [ $UID -eq 0 ] && user_color='red'
 PROMPT='%n@%m %{$fg[$user_color]%}$(_fishy_collapsed_wd)%{$reset_color%}%(!.#.>) '
 PROMPT2='%{$fg[red]%}\ %{$reset_color%}'
 
 local return_status="%{$fg_bold[red]%}%(?..%?)%{$reset_color%}"
+<<<<<<< HEAD
 RPROMPT='${return_status}$(git_prompt_info)$(git_prompt_status)%{$reset_color%}'
+=======
+RPROMPT="${RPROMPT}"'${return_status}$(git_prompt_info)$(git_prompt_status)%{$reset_color%}'
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 
 ZSH_THEME_GIT_PROMPT_PREFIX=" "
 ZSH_THEME_GIT_PROMPT_SUFFIX=""

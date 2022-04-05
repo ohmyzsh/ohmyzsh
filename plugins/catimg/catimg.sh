@@ -1,10 +1,18 @@
 ################################################################################
 # catimg script by Eduardo San Martin Morote aka Posva                         #
+<<<<<<< HEAD
 # http://posva.net                                                             #
 #                                                                              #
 # Ouput the content of an image to the stdout using the 256 colors of the      #
 # terminal.                                                                    #
 # Github: https://github.com/posva/catimg                                      #
+=======
+# https://posva.net                                                            #
+#                                                                              #
+# Output the content of an image to the stdout using the 256 colors of the     #
+# terminal.                                                                    #
+# GitHub: https://github.com/posva/catimg                                      #
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 ################################################################################
 
 function help() {

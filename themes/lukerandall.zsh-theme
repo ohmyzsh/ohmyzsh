@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # ZSH Theme - Preview: http://cl.ly/f701d00760f8059e06dc
+=======
+# ZSH Theme - Preview: https://cl.ly/f701d00760f8059e06dc
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 # Thanks to gallifrey, upon whose theme this is based
 
 local return_code="%(?..%{$fg_bold[red]%}%? ↵%{$reset_color%})"

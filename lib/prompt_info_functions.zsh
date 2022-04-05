@@ -10,9 +10,22 @@
 # Dummy implementations that return false to prevent command_not_found
 # errors with themes, that implement these functions
 # Real implementations will be used when the respective plugins are loaded
+<<<<<<< HEAD
 function chruby_prompt_info hg_prompt_info pyenv_prompt_info \
   rbenv_prompt_info svn_prompt_info vi_mode_prompt_info \
   virtualenv_prompt_info {
+=======
+function chruby_prompt_info \
+  rbenv_prompt_info \
+  hg_prompt_info \
+  pyenv_prompt_info \
+  svn_prompt_info \
+  vi_mode_prompt_info \
+  virtualenv_prompt_info \
+  jenv_prompt_info \
+  tf_prompt_info \
+{
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
   return 1
 }
 
@@ -22,10 +35,20 @@ function rvm_prompt_info() {
   [ -f $HOME/.rvm/bin/rvm-prompt ] || return 1
   local rvm_prompt
   rvm_prompt=$($HOME/.rvm/bin/rvm-prompt ${=ZSH_THEME_RVM_PROMPT_OPTIONS} 2>/dev/null)
+<<<<<<< HEAD
   [[ "${rvm_prompt}x" == "x" ]] && return 1
   echo "${ZSH_THEME_RVM_PROMPT_PREFIX:=(}${rvm_prompt}${ZSH_THEME_RVM_PROMPT_SUFFIX:=)}"
 }
 
+=======
+  [[ -z "${rvm_prompt}" ]] && return 1
+  echo "${ZSH_THEME_RUBY_PROMPT_PREFIX}${rvm_prompt:gs/%/%%}${ZSH_THEME_RUBY_PROMPT_SUFFIX}"
+}
+
+ZSH_THEME_RVM_PROMPT_OPTIONS="i v g"
+
+
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 # use this to enable users to see their ruby version, no matter which
 # version management system they use
 function ruby_prompt_info() {

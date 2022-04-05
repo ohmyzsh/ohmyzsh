@@ -1,0 +1,64 @@
+#compdef ros
+#autoload
+
+# roswell zsh completion, based on gem completion
+
+local -a _1st_arguments
+_1st_arguments=(
+'run: Run repl'
+'install:Install a given implementation or a system for roswell environment'
+'update:Update installed systems.'
+'build:Make executable from script.'
+'use:Change default implementation.'
+'init:a new ros script, optionally based on a template.'
+'fmt:Indent lisp source.'
+'list:Information'
+'template:[WIP] Manage templates'
+'delete:Delete installed implementations'
+'config:Get and set options'
+'version:Show the roswell version information'
+"help:Use \"ros help [command]\" for more information about a command."$'\n\t\t'"Use \"ros help [topic]\" for more information about the topic."
+) 
+
+#local expl
+
+_arguments \
+  '(--version)'--version'[Print version information and quit]' \
+  '(-w --wrap)'{-w,--wrap}'[\[CODE\] Run roswell with a shell wrapper CODE]' \
+  '(-m --image)'{-m,--image}'[\[IMAGE\] continue from Lisp image IMAGE]' \
+  '(-M --module)'{-M,--module}'[\[NAME\] Execute ros script found in ROSWELLPATH. (pythons -m)]' \
+  '(-L --lisp)'{-L,--lisp}'[\[NAME\] Run roswell with a lisp impl NAME\[/VERSION\].]' \
+  '(-l --load)'{-l,--load}'[\[FILE\] load lisp FILE while building]' \
+  '(-S --source-registry)'{-S,--source-registry}'[\[X\] override source registry of asdf systems]' \
+  '(-s --system --load-system)'{-s,--system,--load-system}'[\[SYSTEM\] load asdf SYSTEM while building]' \
+  '(-p --package)'{-p,--package}'[\[PACKAGE\] change current package to \[PACKAGE\]]' \
+  '(-sp --system-package)'{-sp,--system-package}'[\[SP\] combination of -s \[SP\] and -p \[SP\]]' \
+  '(-e --eval)'{-e,--eval}'[\[FORM\] evaluate \[FORM\] while building]' \
+  '--require'--require'[\[MODULE\] require \[MODULE\] while building]' \
+  '(-q --quit)'{-q,--quit}'[quit lisp here]' \
+  '(-r --restart)'{-r,--restart}'[\[FUNC\] restart from build by calling (\[FUNC\])]' \
+  '(-E --entry)'{-E,--entry}'[\[FUNC\] restart from build by calling (\[FUNC\] argv)]' \
+  '(-i --init)'{-i,--init}'[\[FORM\] evaluate \[FORM\] after restart]' \
+  '(-ip --print)'{-ip,--print}'[\[FORM\] evaluate and princ \[FORM\] after restart]' \
+  '(-iw --write)'{-iw,--write}'[\[FORM\] evaluate and write \[FORM\] after restart]' \
+  '(-F --final)'{-F,--final}'[\[FORM\] evaluate \[FORM\] before dumping IMAGE]' \
+  '(\+R --no-rc)'{\+R,--no-rc}'[skip /etc/rosrc, ~/.roswell/init.lisp]' \
+  '(-A --asdf)'{-A,--asdf}'[use new asdf]' \
+  '(\+Q --no-quicklisp)'{\+Q,--no-quicklisp}'[do not use quicklisp]' \
+  '(-v --verbose)'{-v,--verbose}'[be quite noisy while building]' \
+  '--quiet'--quiet'[be quite quiet while building default]' \
+  '--test'--test'[for test purpose]' \
+  '*:: :->subcmds'  && return 0
+
+
+if (( CURRENT == 1 )); then
+  _describe -t commands "ros subcommand" _1st_arguments
+  return
+fi
+
+# _files
+case "$words[1]" in
+  -l|--load)
+    _files
+    ;;
+esac

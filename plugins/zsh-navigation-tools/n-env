@@ -1,0 +1,47 @@
+# Copy this file into /usr/share/zsh/site-functions/
+# and add 'autoload n-env` to .zshrc
+#
+# This function allows to choose an environment variable
+# for edition with vared
+#
+# Uses n-list
+
+emulate -L zsh
+
+setopt extendedglob
+unsetopt equals
+zmodload zsh/curses
+
+local IFS="
+"
+
+[ -f ~/.config/znt/n-list.conf ] && builtin source ~/.config/znt/n-list.conf
+[ -f ~/.config/znt/n-env.conf ] && builtin source ~/.config/znt/n-env.conf
+
+local list
+local selected
+
+NLIST_REMEMBER_STATE=0
+
+list=( `env` )
+list=( "${(@M)list:#(#i)*$1*}" )
+
+local NLIST_GREP_STRING="$1"
+
+if [ "$#list" -eq 0 ]; then
+    echo "No matching variables"
+    return 1
+fi
+
+list=( "${(@i)list}" )
+n-list "$list[@]"
+
+if [ "$REPLY" -gt 0 ]; then
+    selected="$reply[REPLY]"
+    selected="${selected%%=*}"
+    echo "Editing \`$selected':"
+    print -rs "vared \"$selected\""
+    vared "$selected"
+fi
+
+# vim: set filetype=zsh:

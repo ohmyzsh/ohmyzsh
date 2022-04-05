@@ -6,7 +6,11 @@
 #   * Only shows the path on the left prompt by default.
 #   * Crops the path to a defined length and only shows the path relative to
 #     the current VCS repository root.
+<<<<<<< HEAD
 #   * Wears a different color wether the last command succeeded/failed.
+=======
+#   * Wears a different color whether the last command succeeded/failed.
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 #   * Shows user@hostname if connected through SSH.
 #   * Shows if logged in as root or not.
 # ------------------------------------------------------------------------------

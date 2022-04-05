@@ -18,6 +18,10 @@ case $state in
 			"check[Determine whether the requirements for your application are installed]" \
 			"list[Show all of the gems in the current bundle]" \
 			"show[Show the source location of a particular gem in the bundle]" \
+<<<<<<< HEAD
+=======
+			"info[Show details of a particular gem in the bundle]" \
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 			"outdated[Show all of the outdated gems in the current bundle]" \
 			"console[Start an IRB session in the context of the current bundle]" \
 			"open[Open an installed gem in the editor]" \
@@ -84,7 +88,11 @@ case $state in
 					'(--verbose)--verbose[Enable verbose output mode]'
 				ret=0
 				;;
+<<<<<<< HEAD
 			(open|show)
+=======
+			(open|show|info)
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 				_gems=( $(bundle show 2> /dev/null | sed -e '/^  \*/!d; s/^  \* \([^ ]*\) .*/\1/') )
 				if [[ $_gems != "" ]]; then
 					_values 'gems' $_gems && ret=0

@@ -1,6 +1,10 @@
 # user, host, full path, and time/date
 # on two lines for easier vgrepping
+<<<<<<< HEAD
 # entry in a nice long thread on the Arch Linux forums: http://bbs.archlinux.org/viewtopic.php?pid=521888#p521888
+=======
+# entry in a nice long thread on the Arch Linux forums: https://bbs.archlinux.org/viewtopic.php?pid=521888#p521888
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 
 function retcode() {}
 

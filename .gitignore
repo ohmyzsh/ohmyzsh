@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 locals.zsh
 log/.zsh_history
 projects.zsh
@@ -7,3 +8,13 @@ custom
 *.swp
 !custom/example.zshcache
 cache/
+=======
+# custom files
+custom/
+
+# temp files directories
+cache/
+log/
+*.swp
+.DS_Store
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b

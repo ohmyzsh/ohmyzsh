@@ -1,5 +1,8 @@
 # Git-centric variation of the "fishy" theme.
+<<<<<<< HEAD
 # See screenshot at http://ompldr.org/vOHcwZg
+=======
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 
 ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[green]%}+"
 ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg[magenta]%}!"

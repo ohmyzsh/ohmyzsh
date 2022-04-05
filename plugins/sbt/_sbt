@@ -6,6 +6,7 @@ _sbt_commands=(
   'clean:delete files produced by the build'
   'compile:compile sources'
   'console:start the Scala REPL with project classes on the classpath'
+<<<<<<< HEAD
   'console-quick:start the Scala REPL with project deps on the classpath'
   'console-project:start the Scala REPL w/sbt+build-def on the classpath'
   'dist:generate distribution artifacts'
@@ -22,6 +23,25 @@ _sbt_commands=(
   'test:execute all tests'
   'test-only:execute the tests provided as arguments'
   'test-quick:execute previously failed tests'
+=======
+  'consoleQuick:start the Scala REPL with project deps on the classpath'
+  'consoleProject:start the Scala REPL w/sbt+build-def on the classpath'
+  'dist:generate distribution artifacts'
+  'dist\:clean:clean distribution artifacts'
+  'doc:generate API documentation'
+  'genIdea:generate Intellij Idea project files'
+  'package:produce the main artifact, such as a binary jar'
+  'packageDoc:produce a doc artifact, such as a jar containing API docs'
+  'packageSrc:produce a source artifact, such as a jar containing sources'
+  'publish:publish artifacts to a repository'
+  'publishLocal:publish artifacts to the local repository'
+  'publishM2:publish artifacts to the local Maven 2 repository'
+  'run:run a main class'
+  'runMain:run the main class selected by the first argument'
+  'test:execute all tests'
+  'testOnly:execute the tests provided as arguments'
+  'testQuick:execute previously failed tests'
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
   'update:resolve and optionally retrieve dependencies'
 )
 

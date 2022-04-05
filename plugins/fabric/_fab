@@ -4,10 +4,26 @@
 local curcontext=$curcontext state line
 declare -A opt_args
 
+<<<<<<< HEAD
 declare target_list
 target_list=(`fab --shortlist 2>/dev/null`)
 
 _targets() {
+=======
+declare -a target_list
+target_list=("${(@f)$(fab -l 2>/dev/null | awk '{
+    if (NF == 0 || NR == 1) next
+    if (NF < 2) print $1
+    else {
+        docstring=substr($0, index($0,$2))
+        gsub(":", "\\:", docstring)
+        print $1":"docstring
+    }
+}')}")
+
+_fab_targets() {
+    [[ -n "$target_list" ]] || return
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
     _describe -t commands "fabric targets" target_list
 }
 
@@ -28,7 +44,11 @@ _arguments -w -S -C \
   '(-)--shortlist[print non-verbose list of possible commands and exit]: :->noargs' \
   '(--reject-unknown-hosts)--reject-unknown-hosts[reject unknown hosts]' \
   '(--no-pty)--no-pty[do not use pseudo-terminal in run/sudo]' \
+<<<<<<< HEAD
   "(-d+ --display=-)"{-d+,--display=-}"[print detailed info about a given command]: :_targets" \
+=======
+  "(-d+ --display=-)"{-d+,--display=-}"[print detailed info about a given command]: :_fab_targets" \
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
   '(-D --disable-known-hosts)'{-D,--disable-known-hosts}'[do not load user known_hosts file]' \
   '(-r --reject-unknown-hosts)'{-r,--reject-unknown-hosts}'[reject unknown hosts]' \
   '(-u+ --user=-)'{-u+,--user=-}'[username to use when connecting to remote hosts]: :' \
@@ -53,7 +73,11 @@ if [[ CURRENT -ge 1 ]]; then
         levels)
             _describe -t commands "output levels" output_levels;;
         *)
+<<<<<<< HEAD
             _targets;;
+=======
+            _fab_targets;;
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
     esac
 
     return

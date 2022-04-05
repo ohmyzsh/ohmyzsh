@@ -109,20 +109,39 @@ _supervisorctl_maintail() {
 _supervisorctl_start() {
     # TODO: add 'all'
     _arguments -s \
+<<<<<<< HEAD
         '*::supvervisor process:_get_supervisor_procs'
+=======
+        '*::supervisor process:_get_supervisor_procs'
+}
+
+(( $+functions[_supervisorctl_restart] )) ||
+_supervisorctl_restart() {
+    # TODO: add 'all'
+    _arguments -s \
+        '*::supervisor process:_get_supervisor_procs'
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 }
 
 (( $+functions[_supervisorctl_status] )) ||
 _supervisorctl_status() {
     _arguments \
+<<<<<<< HEAD
         '*::supvervisor process:_get_supervisor_procs'
+=======
+        '*::supervisor process:_get_supervisor_procs'
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 }
 
 (( $+functions[_supervisorctl_stop] )) ||
 _supervisorctl_stop() {
     # TODO: add 'all'
     _arguments -s \
+<<<<<<< HEAD
         '*::supvervisor process:_get_supervisor_procs'
+=======
+        '*::supervisor process:_get_supervisor_procs'
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 }
 
 (( $+functions[_supervisorctl_tail] )) ||
@@ -130,7 +149,11 @@ _supervisorctl_tail() {
     # TODO: add 'stderr'
     _arguments -s \
         '-f[Continuous tail of named process stdout Ctrl-C to exit.]' \
+<<<<<<< HEAD
         '*::supvervisor process:_get_supervisor_procs'
+=======
+        '*::supervisor process:_get_supervisor_procs'
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 }
 
 _supervisorctl "$@"

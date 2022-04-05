@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 _ant_does_target_list_need_generating () {
   [ ! -f .ant_targets ] && return 0;
   [ build.xml -nt .ant_targets ] && return 0;
@@ -14,3 +15,7 @@ _ant () {
 }
 
 compdef _ant ant
+=======
+# Default to colored output
+export ANT_ARGS='-logger org.apache.tools.ant.listener.AnsiColorLogger'
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b

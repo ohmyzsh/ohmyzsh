@@ -3,6 +3,11 @@
 
 _arguments \
   '(-r --remove)'{-r,--remove}'[Remove archive.]' \
+<<<<<<< HEAD
   "*::archive file:_files -g '(#i)*.(tar|tgz|tbz|tbz2|txz|tlz|gz|bz2|xz|lzma|Z|zip|ipsw|rar|7z|deb)(-.)'" && return 0
 
 
+=======
+  "*::archive file:_files -g '(#i)*.(7z|Z|apk|aar|bz2|cab|cpio|deb|ear|gz|ipa|ipsw|jar|lrz|lz4|lzma|rar|rpm|sublime-package|tar|tar.bz2|tar.gz|tar.lrz|tar.lz|tar.lz4|tar.xz|tar.zma|tar.zst|tbz|tbz2|tgz|tlz|txz|tzst|war|whl|xpi|xz|zip|zst)(-.)'" \
+    && return 0
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b

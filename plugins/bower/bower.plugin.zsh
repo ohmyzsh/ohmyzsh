@@ -1,4 +1,9 @@
 alias bi="bower install"
+<<<<<<< HEAD
+=======
+alias bisd="bower install --save-dev"
+alias bis="bower install --save"
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 alias bl="bower list"
 alias bs="bower search"
 
@@ -7,7 +12,11 @@ _bower_installed_packages () {
 }
 _bower ()
 {
+<<<<<<< HEAD
     local -a _1st_arguments _no_color _dopts _save_dev _force_lastest _production
+=======
+    local -a _1st_arguments _no_color _dopts _save_dev _force_latest _production
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
     local expl
     typeset -A opt_args
 
@@ -20,7 +29,11 @@ _bower ()
 
     _save_dev=('(--save-dev)--save-dev[Save installed packages into the project"s bower.json devDependencies]')
 
+<<<<<<< HEAD
     _force_lastest=('(--force-latest)--force-latest[Force latest version on conflict]')
+=======
+    _force_latest=('(--force-latest)--force-latest[Force latest version on conflict]')
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 
     _production=('(--production)--production[Do not install project devDependencies]')
 
@@ -52,7 +65,11 @@ _bower ()
         _arguments \
         $_dopts \
         $_save_dev \
+<<<<<<< HEAD
         $_force_lastest \
+=======
+        $_force_latest \
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
         $_no_color \
         $_production
         ;;
@@ -60,7 +77,11 @@ _bower ()
         _arguments \
         $_dopts \
         $_no_color \
+<<<<<<< HEAD
         $_force_lastest
+=======
+        $_force_latest
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
         _bower_installed_packages
         compadd "$@" $(echo $bower_package_list)
         ;;
@@ -72,6 +93,10 @@ _bower ()
         compadd "$@" $(echo $bower_package_list)
         ;;
         *)
+<<<<<<< HEAD
+=======
+        _arguments \
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
         $_no_color \
         ;;
     esac

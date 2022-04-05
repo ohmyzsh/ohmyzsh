@@ -26,4 +26,8 @@ _yii2 () {
   fi
 }
 
+<<<<<<< HEAD
 compdef _yii2 yii
+=======
+compdef _yii2 yii
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
