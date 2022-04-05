@@ -26,6 +26,7 @@ rubies=(
   26  'ruby-2.6'
   27  'ruby-2.7'
   30  'ruby-3.0'
+  31  'ruby-3.1'
 )
 
 for v in ${(k)rubies}; do

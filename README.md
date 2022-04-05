@@ -18,6 +18,41 @@ To learn more, visit [ohmyz.sh](https://ohmyz.sh), follow [@ohmyzsh](https://twi
 [![Gitpod ready](https://img.shields.io/badge/Gitpod-ready-blue?logo=gitpod)](https://gitpod.io/#https://github.com/ohmyzsh/ohmyzsh)
 [![huntr.dev](https://cdn.huntr.dev/huntr_security_badge_mono.svg)](https://huntr.dev/bounties/disclose/?utm_campaign=ohmyzsh%2Fohmyzsh&utm_medium=social&utm_source=github&target=https%3A%2F%2Fgithub.com%2Fohmyzsh%2Fohmyzsh)
 
+<details>
+<summary>Table of Contents</summary>
+
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Basic Installation](#basic-installation)
+    - [Manual inspection](#manual-inspection)
+- [Using Oh My Zsh](#using-oh-my-zsh)
+  - [Plugins](#plugins)
+    - [Enabling Plugins](#enabling-plugins)
+    - [Using Plugins](#using-plugins)
+  - [Themes](#themes)
+    - [Selecting a Theme](#selecting-a-theme)
+  - [FAQ](#faq)
+- [Advanced Topics](#advanced-topics)
+  - [Advanced Installation](#advanced-installation)
+    - [Custom Directory](#custom-directory)
+    - [Unattended install](#unattended-install)
+    - [Installing from a forked repository](#installing-from-a-forked-repository)
+    - [Manual Installation](#manual-installation)
+  - [Installation Problems](#installation-problems)
+  - [Custom Plugins and Themes](#custom-plugins-and-themes)
+- [Getting Updates](#getting-updates)
+  - [Manual Updates](#manual-updates)
+- [Uninstalling Oh My Zsh](#uninstalling-oh-my-zsh)
+- [How do I contribute to Oh My Zsh?](#how-do-i-contribute-to-oh-my-zsh)
+  - [Do NOT send us themes](#do-not-send-us-themes)
+- [Contributors](#contributors)
+- [Follow Us](#follow-us)
+- [Merchandise](#merchandise)
+- [License](#license)
+- [About Planet Argon](#about-planet-argon)
+
+</details>
+
 ## Getting Started
 
 ### Prerequisites
@@ -32,7 +67,7 @@ To learn more, visit [ohmyz.sh](https://ohmyz.sh), follow [@ohmyzsh](https://twi
 Oh My Zsh is installed by running one of the following commands in your terminal. You can install this via the command-line with either `curl`, `wget` or another similar tool.
 
 | Method    | Command                                                                                           |
-|:----------|:--------------------------------------------------------------------------------------------------|
+| :-------- | :------------------------------------------------------------------------------------------------ |
 | **curl**  | `sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"` |
 | **wget**  | `sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`   |
 | **fetch** | `sh -c "$(fetch -o - https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"` |
@@ -82,7 +117,7 @@ _Note that the plugins are separated by whitespace (spaces, tabs, new lines...).
 
 #### Using Plugins
 
-Each plugin includes a __README__, documenting it. This README should show the aliases (if the plugin adds any) and extra goodies that are included in that particular plugin.
+Each plugin includes a **README**, documenting it. This README should show the aliases (if the plugin adds any) and extra goodies that are included in that particular plugin.
 
 ### Themes
 
@@ -194,19 +229,19 @@ REPO=apjanke/oh-my-zsh BRANCH=edge sh install.sh
 
 #### Manual Installation
 
-##### 1. Clone the repository
+##### 1. Clone the repository <!-- omit in toc -->
 
 ```sh
 git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
 ```
 
-##### 2. *Optionally*, backup your existing `~/.zshrc` file
+##### 2. _Optionally_, backup your existing `~/.zshrc` file <!-- omit in toc -->
 
 ```sh
 cp ~/.zshrc ~/.zshrc.orig
 ```
 
-##### 3. Create a new zsh configuration file
+##### 3. Create a new zsh configuration file <!-- omit in toc -->
 
 You can create a new zsh config file by copying the template that we have included for you.
 
@@ -214,7 +249,7 @@ You can create a new zsh config file by copying the template that we have includ
 cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
 ```
 
-##### 4. Change your default shell
+##### 4. Change your default shell <!-- omit in toc -->
 
 ```sh
 chsh -s $(which zsh)
@@ -222,7 +257,7 @@ chsh -s $(which zsh)
 
 You must log out from your user session and log back in to see this change.
 
-##### 5. Initialize your new zsh configuration
+##### 5. Initialize your new zsh configuration <!-- omit in toc -->
 
 Once you open up a new terminal window, it should load zsh with Oh My Zsh's configuration.
 
@@ -230,10 +265,8 @@ Once you open up a new terminal window, it should load zsh with Oh My Zsh's conf
 
 If you have any hiccups installing, here are a few common fixes.
 
-- You _might_ need to modify your `PATH` in `~/.zshrc` if you're not able to find some commands after
-switching to `oh-my-zsh`.
-- If you installed manually or changed the install location, check the `ZSH` environment variable in
-`~/.zshrc`.
+- You _might_ need to modify your `PATH` in `~/.zshrc` if you're not able to find some commands after switching to `oh-my-zsh`.
+- If you installed manually or changed the install location, check the `ZSH` environment variable in `~/.zshrc`.
 
 ### Custom Plugins and Themes
 
