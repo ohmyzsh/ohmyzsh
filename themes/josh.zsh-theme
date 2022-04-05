@@ -9,8 +9,13 @@ function josh_prompt {
   (( spare_width = ${COLUMNS} ))
   prompt=" "
 
+<<<<<<< HEAD
   branch=$(current_branch)
   ruby_version=$(rvm_prompt_info || rbenv_prompt_info)
+=======
+  branch=$(git_current_branch)
+  ruby_version=$(ruby_prompt_info)
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
   path_size=${#PWD}
   branch_size=${#branch}
   ruby_size=${#ruby_version}
@@ -31,7 +36,11 @@ function josh_prompt {
     prompt=" $prompt"
   done
   
+<<<<<<< HEAD
   prompt="%{%F{green}%}$PWD$prompt%{%F{red}%}$(rvm_prompt_info || rbenv_prompt_info)%{$reset_color%} $(current_branch)"
+=======
+  prompt="%{%F{green}%}$PWD$prompt%{%F{red}%}$(ruby_prompt_info)%{$reset_color%} $(git_current_branch)"
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
   
   echo $prompt
 }

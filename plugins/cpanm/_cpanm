@@ -6,9 +6,12 @@
 #
 # Current supported cpanm version: 1.4000 (Tue Mar  8 01:00:49 PST 2011)
 #
+<<<<<<< HEAD
 # The latest code is always located at:
 #   https://github.com/rshhh/cpanminus/blob/master/etc/_cpanm
 #
+=======
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 
 local arguments curcontext="$curcontext"
 typeset -A opt_args
@@ -39,7 +42,11 @@ arguments=(
   '--reinstall[Reinstall the distribution even if you already have the latest version installed]'
   '--interactive[Turn on interactive configure]'
 
+<<<<<<< HEAD
   '--scandeps[Scan the depencencies of given modules and output the tree in a text format]'
+=======
+  '--scandeps[Scan the dependencies of given modules and output the tree in a text format]'
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
   '--format[Specify what format to display the scanned dependency tree]:scandeps format:(tree json yaml dists)'
 
   '--save-dists[Specify the optional directory path to copy downloaded tarballs]'

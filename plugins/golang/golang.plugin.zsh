@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # install in /etc/zsh/zshrc or your personal .zshrc
 
 # gc
@@ -162,3 +163,39 @@ compdef __go_tool_complete go
 
 # aliases
 alias gfa='go fmt . ./...'
+=======
+## completion
+compctl -g "*.go" gofmt # standard go tools
+compctl -g "*.go" gccgo # gccgo
+
+# gc
+for p in 5 6 8; do
+  compctl -g "*.${p}" ${p}l
+  compctl -g "*.go" ${p}g
+done
+unset p
+
+## aliases
+alias gob='go build'
+alias goc='go clean'
+alias god='go doc'
+alias gof='go fmt'
+alias gofa='go fmt ./...'
+alias gofx='go fix'
+alias gog='go get'
+alias goga='go get ./...'
+alias goi='go install'
+alias gol='go list'
+alias gom='go mod'
+alias gopa='cd $GOPATH'
+alias gopb='cd $GOPATH/bin'
+alias gops='cd $GOPATH/src'
+alias gor='go run'
+alias got='go test'
+alias gota='go test ./...'
+alias goto='go tool'
+alias gotoc='go tool compile'
+alias gotod='go tool dist'
+alias gotofx='go tool fix'
+alias gov='go vet'
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 if [ "$USER" = "root" ]; then CARETCOLOR="red"; else CARETCOLOR="magenta"; fi
+=======
+if [ "$USERNAME" = "root" ]; then CARETCOLOR="red"; else CARETCOLOR="magenta"; fi
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 
 local return_code="%(?..%{$fg_bold[red]%}:( %?%{$reset_color%})"
 

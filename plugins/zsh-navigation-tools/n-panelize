@@ -1,0 +1,68 @@
+# Copy this file into /usr/share/zsh/site-functions/
+# and add 'autoload n-panelize` to .zshrc
+#
+# This function somewhat reminds the panelize feature from Midnight Commander
+# It allows browsing output of arbitrary command. Example usage:
+# v-panelize ls /usr/local/bin
+#
+# Uses n-list
+
+emulate -L zsh
+
+setopt extendedglob
+zmodload zsh/curses
+
+local IFS="
+"
+
+unset NLIST_COLORING_PATTERN
+
+[ -f ~/.config/znt/n-list.conf ] && builtin source ~/.config/znt/n-list.conf
+[ -f ~/.config/znt/n-panelize.conf ] && builtin source ~/.config/znt/n-panelize.conf
+
+local list
+local selected
+
+NLIST_REMEMBER_STATE=0
+
+if [ -t 0 ]; then
+    # Check if there is proper input
+    if [ "$#" -lt 1 ]; then
+        echo "Usage: n-panelize {command} [option|argument] ... or command | n-panelize"
+        return 1
+    fi
+
+    # This loop makes script faster on some Zsh's (e.g. 5.0.8)
+    repeat 1; do
+        list=( `"$@"` )
+    done
+
+    # TODO: $? doesn't reach user
+    [ "$?" -eq 127 ] && return $?
+else
+    # Check if can reattach to terminal
+    if [[ ! -c /dev/tty && ! -t 2 ]]; then
+        echo "No terminal available (no /dev/tty)"
+        return 1
+    fi
+
+    # This loop makes script faster on some Zsh's (e.g. 5.0.8)
+    repeat 1; do
+        list=( "${(@f)"$(<&0)"}" )
+    done
+
+    if [[ ! -c /dev/tty ]]; then
+        exec <&2
+    else
+        exec </dev/tty
+    fi
+fi
+
+n-list "${list[@]}"
+
+if [ "$REPLY" -gt 0 ]; then
+    selected="$reply[REPLY]"
+    print -zr "# $selected"
+fi
+
+# vim: set filetype=zsh:

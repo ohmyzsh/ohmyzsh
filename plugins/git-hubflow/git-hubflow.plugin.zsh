@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!zsh
 #
 # Installation
@@ -19,6 +20,14 @@
 #
 #     c. Or, use this file as an oh-my-zsh plugin.
 #
+=======
+alias ghf='git hf'
+alias ghff='git hf feature'
+alias ghfr='git hf release'
+alias ghfh='git hf hotfix'
+alias ghfs='git hf support'
+alias ghfu='git hf update'
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 
 _git-hf ()
 {
@@ -90,8 +99,13 @@ __git-hf-release ()
                 'finish:Finish a release branch.'
                 'list:List all your release branches. (Alias to `git hf release`)'
                 'cancel:Cancel release'
+<<<<<<< HEAD
                 'push:Push release to github'
                 'pull:Pull release from github'
+=======
+                'push:Push release to GitHub'
+                'pull:Pull release from GitHub'
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
                 'track:Track release'
             )
             _describe -t commands 'git hf release' subcommands
@@ -148,8 +162,13 @@ __git-hf-hotfix ()
                 'list:List all your hotfix branches. (Alias to `git hf hotfix`)'
                 'publish:Publish the hotfix branch.'
                 'track:Track the hotfix branch.'
+<<<<<<< HEAD
                 'pull:Pull the hotfix from github.'
                 'push:Push the hotfix to github.'
+=======
+                'pull:Pull the hotfix from GitHub.'
+                'push:Push the hotfix to GitHub.'
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
                 'cancel:Cancel the hotfix.'
             )
             _describe -t commands 'git hf hotfix' subcommands
@@ -210,8 +229,13 @@ __git-hf-feature ()
                 'diff:Diff'
                 'rebase:Rebase feature branch against develop'
                 'checkout:Checkout feature'
+<<<<<<< HEAD
                 'pull:Pull feature branch from github'
                 'push:Push feature branch to github'
+=======
+                'pull:Pull feature branch from GitHub'
+                'push:Push feature branch to GitHub'
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
                 'cancel:Cancel feature'
             )
             _describe -t commands 'git hf feature' subcommands

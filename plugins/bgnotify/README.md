@@ -10,10 +10,17 @@ Standalone homepage: [t413/zsh-background-notify](https://github.com/t413/zsh-ba
 
 Just add bgnotify to your plugins list in your `.zshrc`
 
+<<<<<<< HEAD
 - On OS X you'll need [terminal-notifer](https://github.com/alloy/terminal-notifier)
   * `brew install terminal-notifier` (or `gem install terminal-notifier`)
 - On ubuntu you're already all set!
 - On windows you can use [notifu](http://www.paralint.com/projects/notifu/) or the Cygwin Ports libnotify package
+=======
+- On OS X you'll need [terminal-notifier](https://github.com/alloy/terminal-notifier)
+  * `brew install terminal-notifier` (or `gem install terminal-notifier`)
+- On ubuntu you're already all set!
+- On windows you can use [notifu](https://www.paralint.com/projects/notifu/) or the Cygwin Ports libnotify package
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 
 
 ## Screenshots

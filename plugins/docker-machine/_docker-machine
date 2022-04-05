@@ -1,0 +1,359 @@
+#compdef docker-machine
+# Description
+# -----------
+#  zsh completion for docker-machine
+#  https://github.com/leonhartX/docker-machine-zsh-completion
+# -------------------------------------------------------------------------
+# Version
+# -------
+#  0.1.1
+# -------------------------------------------------------------------------
+# Authors
+# -------
+#  * Ke Xu <leonhartx.k@gmail.com>
+# -------------------------------------------------------------------------
+# Inspiration
+# -----------
+#  * @sdurrheimer docker-compose-zsh-completion https://github.com/sdurrheimer/docker-compose-zsh-completion
+#  * @ilkka _docker-machine
+
+
+__docker-machine_get_hosts() {
+    [[ $PREFIX = -* ]] && return 1
+    local state
+    declare -a hosts
+    state=$1; shift
+    if [[ $state != all ]]; then
+        hosts=(${(f)"$(_call_program commands docker-machine ls -q --filter state=$state)"})
+    else
+        hosts=(${(f)"$(_call_program commands docker-machine ls -q)"})
+    fi
+    _describe 'host' hosts "$@" && ret=0
+    return ret
+}
+
+__docker-machine_hosts_with_state() {
+    declare -a hosts
+    hosts=(${(f)"$(_call_program commands docker-machine ls -f '{{.Name}}\:{{.DriverName}}\({{.State}}\)\ {{.URL}}')"})
+    _describe 'host' hosts
+}
+
+__docker-machine_hosts_all() {
+    __docker-machine_get_hosts all "$@"
+}
+
+__docker-machine_hosts_running() {
+    __docker-machine_get_hosts Running "$@"
+}
+
+__docker-machine_get_swarm() {
+    declare -a swarms
+    swarms=(${(f)"$(_call_program commands docker-machine ls -f {{.Swarm}} | awk '{print $1}')"})
+    _describe 'swarm' swarms
+}
+
+__docker-machine_hosts_and_files() {
+    _alternative "hosts:host:__docker-machine_hosts_all -qS ':'" 'files:files:_path_files'
+}
+
+__docker-machine_filters() {
+    [[ $PREFIX = -* ]] && return 1
+    integer ret=1
+
+    if compset -P '*='; then
+        case "${${words[-1]%=*}#*=}" in
+            (driver)
+                _describe -t driver-filter-opts "driver filter" opts_driver && ret=0
+                ;;
+            (swarm)
+                __docker-machine_get_swarm && ret=0
+                ;;
+            (state)
+                opts_state=('Running' 'Paused' 'Saved' 'Stopped' 'Stopping' 'Starting' 'Error')
+                _describe -t state-filter-opts "state filter" opts_state && ret=0
+                ;;
+            (name)
+                __docker-machine_hosts_all && ret=0
+                ;;
+            (label)
+                _message 'label' && ret=0
+                ;;
+            *)
+                _message 'value' && ret=0
+                ;;
+        esac
+    else
+        opts=('driver' 'swarm' 'state' 'name' 'label')
+        _describe -t filter-opts "filter" opts -qS "=" && ret=0
+    fi
+    return ret
+}
+
+__get_swarm_discovery() {
+    declare -a masters services
+    local service
+    services=()
+    masters=($(docker-machine ls -f {{.Swarm}} |grep '(master)' |awk '{print $1}'))
+    for master in $masters; do
+         service=${${${(f)"$(_call_program commands docker-machine inspect -f '{{.HostOptions.SwarmOptions.Discovery}}:{{.Name}}' $master)"}/:/\\:}}
+         services=($services $service)
+    done
+    _describe -t services "swarm service" services && ret=0
+    return ret
+}
+
+__get_create_argument() {
+    typeset -g docker_machine_driver
+    if [[ CURRENT -le 2 ]]; then
+        docker_machine_driver="none"
+    elif [[ CURRENT > 2 && $words[CURRENT-2] = '-d' || $words[CURRENT-2] = '--driver' ]]; then
+        docker_machine_driver=$words[CURRENT-1]
+    elif [[ $words[CURRENT-1] =~ '^(-d|--driver)=' ]]; then
+        docker_machine_driver=${${words[CURRENT-1]}/*=/}
+    fi
+    local driver_opt_cmd
+    local -a opts_provider opts_common opts_read_argument
+    opts_read_argument=(
+        ": :->argument"
+    )
+    opts_common=(
+        $opts_help \
+        '(--driver -d)'{--driver=,-d=}'[Driver to create machine with]:dirver:->driver-option' \
+        '--engine-install-url=[Custom URL to use for engine installation]:url' \
+        '*--engine-opt=[Specify arbitrary flags to include with the created engine in the form flag=value]:flag' \
+        '*--engine-insecure-registry=[Specify insecure registries to allow with the created engine]:registry' \
+        '*--engine-registry-mirror=[Specify registry mirrors to use]:mirror' \
+        '*--engine-label=[Specify labels for the created engine]:label' \
+        '--engine-storage-driver=[Specify a storage driver to use with the engine]:storage-driver:->storage-driver-option' \
+        '*--engine-env=[Specify environment variables to set in the engine]:environment' \
+        '--swarm[Configure Machine with Swarm]' \
+        '--swarm-image=[Specify Docker image to use for Swarm]:image' \
+        '--swarm-master[Configure Machine to be a Swarm master]' \
+        '--swarm-discovery=[Discovery service to use with Swarm]:service:->swarm-service' \
+        '--swarm-strategy=[Define a default scheduling strategy for Swarm]:strategy:(spread binpack random)' \
+        '*--swarm-opt=[Define arbitrary flags for swarm]:flag' \
+        '*--swarm-join-opt=[Define arbitrary flags for Swarm join]:flag' \
+        '--swarm-host=[ip/socket to listen on for Swarm master]:host' \
+        '--swarm-addr=[addr to advertise for Swarm (default: detect and use the machine IP)]:address' \
+        '--swarm-experimental[Enable Swarm experimental features]' \
+        '*--tls-san=[Support extra SANs for TLS certs]:option'
+    )
+    driver_opt_cmd="docker-machine create -d $docker_machine_driver | grep $docker_machine_driver | sed -e 's/\(--.*\)\ *\[\1[^]]*\]/*\1/g' -e 's/\(\[[^]]*\)/\\\\\\1\\\\/g' -e 's/\".*\"\(.*\)/\1/g' | awk '{printf \"%s[\", \$1; for(i=2;i<=NF;i++) {printf \"%s \", \$i}; print \"]\"}'"
+    if [[ $docker_machine_driver != "none" ]]; then
+        opts_provider=(${(f)"$(_call_program commands $driver_opt_cmd)"})
+        _arguments \
+            $opts_provider \
+            $opts_read_argument \
+            $opts_common && ret=0
+    else
+        _arguments $opts_common && ret=0
+    fi
+    case $state in
+        (driver-option)
+            _describe -t driver-option "driver" opts_driver && ret=0
+            ;;
+        (storage-driver-option)
+            _describe -t storage-driver-option "storage driver" opts_storage_driver && ret=0
+            ;;
+        (swarm-service)
+            __get_swarm_discovery && ret=0
+            ;;
+        (argument)
+            ret=0
+            ;;
+    esac
+    return ret
+}
+
+
+__docker-machine_subcommand() {
+    local -a opts_help
+    opts_help=("(- :)--help[Print usage]")
+    local -a opts_only_host opts_driver opts_storage_driver opts_state
+    opts_only_host=(
+        "$opts_help"
+        "*:host:__docker-machine_hosts_all"
+    )
+    opts_driver=('amazonec2' 'azure' 'digitalocean' 'exoscale' 'generic' 'google' 'hyperv' 'none' 'openstack' 'rackspace' 'softlayer' 'virtualbox' 'vmwarefusion' 'vmwarevcloudair' 'vmwarevsphere')
+    opts_storage_driver=('overlay' 'aufs' 'btrfs' 'devicemapper' 'vfs' 'zfs')
+    integer ret=1
+
+    case "$words[1]" in
+        (active)
+            _arguments \
+                $opts_help \
+                '(--timeout -t)'{--timeout=,-t=}'[Timeout in seconds, default to 10s]:seconds' && ret=0
+            ;;
+        (config)
+            _arguments \
+                $opts_help \
+                '--swarm[Display the Swarm config instead of the Docker daemon]' \
+                "*:host:__docker-machine_hosts_all" && ret=0
+            ;;
+        (create)
+            __get_create_argument
+           ;;
+        (env)
+            _arguments \
+                $opts_help \
+                '--swarm[Display the Swarm config instead of the Docker daemon]' \
+                '--shell=[Force environment to be configured for a specified shell: \[fish, cmd, powershell\], default is auto-detect]:shell' \
+                '(--unset -u)'{--unset,-u}'[Unset variables instead of setting them]' \
+                '--no-proxy[Add machine IP to NO_PROXY environment variable]' \
+                '*:host:__docker-machine_hosts_running' && ret=0
+            ;;
+        (help)
+            _arguments ':subcommand:__docker-machine_commands' && ret=0
+            ;;
+        (inspect)
+            _arguments \
+                $opts_help \
+                '(--format -f)'{--format=,-f=}'[Format the output using the given go template]:template' \
+                '*:host:__docker-machine_hosts_all' && ret=0
+            ;;
+        (ip)
+            _arguments \
+                $opts_help \
+                '*:host:__docker-machine_hosts_running' && ret=0
+            ;;
+        (kill)
+             _arguments \
+                $opts_help \
+                '*:host:__docker-machine_hosts_with_state' && ret=0
+            ;;
+        (ls)
+            _arguments \
+                $opts_help \
+                '(--quiet -q)'{--quiet,-q}'[Enable quiet mode]' \
+                '*--filter=[Filter output based on conditions provided]:filter:->filter-options' \
+                '(--timeout -t)'{--timeout=,-t=}'[Timeout in seconds, default to 10s]:seconds' \
+                '(--format -f)'{--format=,-f=}'[Pretty-print machines using a Go template]:template' && ret=0
+            case $state in
+                (filter-options)
+                    __docker-machine_filters && ret=0
+                    ;;
+            esac
+            ;;
+        (provision)
+            _arguments $opts_only_host && ret=0
+            ;;
+        (regenerate-certs)
+            _arguments \
+                $opts_help \
+                '(--force -f)'{--force,-f}'[Force rebuild and do not prompt]' \
+                '*:host:__docker-machine_hosts_all' && ret=0
+            ;;
+        (restart)
+            _arguments \
+                $opts_help \
+                '*:host:__docker-machine_hosts_with_state' && ret=0
+            ;;
+        (rm)
+            _arguments \
+                $opts_help \
+                '(--force -f)'{--force,-f}'[Remove local configuration even if machine cannot be removed, also implies an automatic yes (`-y`)]' \
+                '-y[Assumes automatic yes to proceed with remove, without prompting further user confirmation]' \
+                '*:host:__docker-machine_hosts_with_state' && ret=0
+            ;;
+        (scp)
+            _arguments \
+                $opts_help \
+                '(--recursive -r)'{--recursive,-r}'[Copy files recursively (required to copy directories))]' \
+                '*:files:__docker-machine_hosts_and_files' && ret=0
+            ;;
+        (ssh)
+            _arguments \
+                $opts_help \
+                '*:host:__docker-machine_hosts_running' && ret=0
+            ;;
+        (start)
+            _arguments \
+                $opts_help \
+                '*:host:__docker-machine_hosts_with_state' && ret=0
+            ;;
+        (status)
+            _arguments $opts_only_host && ret=0
+            ;;
+        (stop)
+            _arguments \
+                $opts_help \
+                '*:host:__docker-machine_hosts_with_state' && ret=0
+            ;;
+        (upgrade)
+            _arguments $opts_only_host && ret=0
+            ;;
+        (url)
+            _arguments \
+                $opts_help \
+                '*:host:__docker-machine_hosts_running' && ret=0
+            ;;
+    esac
+
+    return ret
+}
+
+
+__docker-machine_commands() {
+    local cache_policy
+
+    zstyle -s ":completion:${curcontext}:" cache-policy cache_policy
+    if [[ -z "$cache_policy" ]]; then
+        zstyle ":completion:${curcontext}:" cache-policy __docker-machine_caching_policy
+    fi
+
+    if ( [[ ${+_docker_machine_subcommands} -eq 0 ]] || _cache_invalid docker_machine_subcommands) \
+        && ! _retrieve_cache docker_machine_subcommands;
+    then
+        local -a lines
+        lines=(${(f)"$(_call_program commands docker-machine 2>&1)"})
+        _docker_machine_subcommands=(${${${lines[$((${lines[(i)Commands:]} + 1)),${lines[(I)  *]}]}## #}/$'\t'##/:})
+        (( $#_docker_machine_subcommands > 0 )) && _store_cache docker_machine_subcommands _docker_machine_subcommands
+    fi
+    _describe -t docker-machine-commands "docker-machine command" _docker_machine_subcommands
+}
+
+__docker-machine_caching_policy() {
+    oldp=( "$1"(Nmh+1) )
+    (( $#oldp ))
+}
+
+_docker-machine() {
+    if [[ $service != docker-machine ]]; then
+        _call_function - _$service
+        return
+    fi
+
+    local curcontext="$curcontext" state line
+    integer ret=1
+    typeset -A opt_args
+
+    _arguments -C \
+        "(- :)"{-h,--help}"[Show help]" \
+        "(-D --debug)"{-D,--debug}"[Enable debug mode]" \
+        '(-s --storage-path)'{-s,--storage-path}'[Configures storage path]:file:_files' \
+        '--tls-ca-cert[CA to verify remotes against]:file:_files' \
+        '--tls-ca-key[Private key to generate certificates]:file:_files' \
+        '--tls-client-cert[Client cert to use for TLS]:file:_files' \
+        '--tls-client-key[Private key used in client TLS auth]:file:_files' \
+        '--github-api-token[Token to use for requests to the Github API]' \
+        '--native-ssh[Use the native (Go-based) SSH implementation.]' \
+        '--bugsnag-api-token[BugSnag API token for crash reporting]' \
+        '(- :)'{-v,--version}'[Print the version]' \
+        "(-): :->command" \
+        "(-)*:: :->option-or-argument" && ret=0
+
+    case $state in
+        (command)
+            __docker-machine_commands && ret=0
+            ;;
+        (option-or-argument)
+            curcontext=${curcontext%:*:*}:docker-machine-$words[1]:
+            __docker-machine_subcommand && ret=0
+            ret=0
+            ;;
+    esac
+
+    return ret
+}
+
+_docker-machine "$@"

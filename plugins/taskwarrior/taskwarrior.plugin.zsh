@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ################################################################################
 # Author: Pete Clark
 # Email: pete[dot]clark[at]gmail[dot]com
@@ -12,6 +13,8 @@
 # gives a list of available modifications for that task, etc.
 ################################################################################
 
+=======
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 zstyle ':completion:*:*:task:*' verbose yes
 zstyle ':completion:*:*:task:*:descriptions' format '%U%B%d%b%u'
 

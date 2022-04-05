@@ -4,7 +4,11 @@ NAME
 z \- jump around
 .SH
 SYNOPSIS
+<<<<<<< HEAD
 z [\-chlrt] [regex1 regex2 ... regexn]
+=======
+z [\-chlrtx] [regex1 regex2 ... regexn]
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 .SH
 AVAILABILITY
 bash, zsh
@@ -13,12 +17,25 @@ DESCRIPTION
 Tracks your most used directories, based on 'frecency'.
 .P
 After a short learning phase, \fBz\fR will take you to the most 'frecent'
+<<<<<<< HEAD
 directory that matches ALL of the regexes given on the command line.
+=======
+directory that matches ALL of the regexes given on the command line, in order.
+
+For example, \fBz foo bar\fR would match \fB/foo/bar\fR but not \fB/bar/foo\fR.
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 .SH
 OPTIONS
 .TP
 \fB\-c\fR
+<<<<<<< HEAD
 restrict matches to subdirectories of the current directory.
+=======
+restrict matches to subdirectories of the current directory
+.TP
+\fB\-e\fR
+echo the best match, don't cd
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 .TP
 \fB\-h\fR
 show a brief help message
@@ -31,13 +48,23 @@ match by rank only
 .TP
 \fB\-t\fR
 match by recent access only
+<<<<<<< HEAD
+=======
+.TP
+\fB\-x\fR
+remove the current directory from the datafile
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 .SH EXAMPLES
 .TP 14
 \fBz foo\fR
 cd to most frecent dir matching foo
 .TP 14
 \fBz foo bar\fR
+<<<<<<< HEAD
 cd to most frecent dir matching foo and bar
+=======
+cd to most frecent dir matching foo, then bar
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 .TP 14
 \fBz -r foo\fR
 cd to highest ranked dir matching foo
@@ -70,12 +97,19 @@ Set \fB$_Z_CMD\fR to change the command name (default \fBz\fR).
 Set \fB$_Z_DATA\fR to change the datafile (default \fB$HOME/.z\fR).
 .RE
 .RS
+<<<<<<< HEAD
+=======
+Set \fB$_Z_MAX_SCORE\fR lower to age entries out faster (default \fB9000\fR).
+.RE
+.RS
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 Set \fB$_Z_NO_RESOLVE_SYMLINKS\fR to prevent symlink resolution.
 .RE
 .RS
 Set \fB$_Z_NO_PROMPT_COMMAND\fR to handle \fBPROMPT_COMMAND/precmd\fR yourself.
 .RE
 .RS
+<<<<<<< HEAD
 Set \fB$_Z_EXCLUDE_DIRS\fR to an array of directories to exclude.
 .RE
 .RS
@@ -83,17 +117,39 @@ Set \fB$_Z_EXCLUDE_DIRS\fR to an array of directories to exclude.
 .RE
 .RS
 Install the provided man page \fBz.1\fR somewhere like \fB/usr/local/man/man1\fR.
+=======
+Set \fB$_Z_EXCLUDE_DIRS\fR to an array of directory trees to exclude.
+.RE
+.RS
+Set \fB$_Z_OWNER\fR to allow usage when in 'sudo -s' mode.
+.RE
+.RS
+(These settings should go in .bashrc/.zshrc before the line added above.)
+.RE
+.RS
+Install the provided man page \fBz.1\fR somewhere in your \f$MANPATH, like
+\fB/usr/local/man/man1\fR.
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 .RE
 .SS
 Aging:
 The rank of directories maintained by \fBz\fR undergoes aging based on a simple
 formula. The rank of each entry is incremented every time it is accessed. When
+<<<<<<< HEAD
 the sum of ranks is greater than 6000, all ranks are multiplied by 0.99. Entries
 with a rank lower than 1 are forgotten.
 .SS
 Frecency:
 Frecency is a portmantaeu of 'recent' and 'frequency'. It is a weighted rank
 that depends on how often and how recently something occured. As far as I
+=======
+the sum of ranks is over 9000, all ranks are multiplied by 0.99. Entries with a
+rank lower than 1 are forgotten.
+.SS
+Frecency:
+Frecency is a portmanteau of 'recent' and 'frequency'. It is a weighted rank
+that depends on how often and how recently something occurred. As far as I
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 know, Mozilla came up with the term.
 .P
 To \fBz\fR, a directory that has low ranking but has been accessed recently
@@ -131,7 +187,11 @@ The environment variable \fB$_Z_NO_RESOLVE_SYMLINKS\fR can be set to prevent
 resolving of symlinks. If it is not set, symbolic links will be resolved when
 added to the datafile.
 .P
+<<<<<<< HEAD
 In bash, \fBz\fR prepends a command to the \fBPROMPT_COMMAND\fR environment
+=======
+In bash, \fBz\fR appends a command to the \fBPROMPT_COMMAND\fR environment
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 variable to maintain its database. In zsh, \fBz\fR appends a function
 \fB_z_precmd\fR to the \fBprecmd_functions\fR array.
 .P
@@ -139,8 +199,16 @@ The environment variable \fB$_Z_NO_PROMPT_COMMAND\fR can be set if you want to
 handle \fBPROMPT_COMMAND\fR or \fBprecmd\fR yourself.
 .P
 The environment variable \fB$_Z_EXCLUDE_DIRS\fR can be set to an array of
+<<<<<<< HEAD
 directories to exclude from tracking. \fB$HOME\fR is always excluded.
 Directories must be full paths without trailing slashes.
+=======
+directory trees to exclude from tracking. \fB$HOME\fR is always excluded.
+Directories must be full paths without trailing slashes.
+.P
+The environment variable \fB$_Z_OWNER\fR can be set to your username, to
+allow usage of \fBz\fR when your sudo environment keeps \fB$HOME\fR set.
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 .SH
 FILES
 Data is stored in \fB$HOME/.z\fR. This can be overridden by setting the

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ################################################################################
 #          FILE:  singlechar.plugin.zsh
 #   DESCRIPTION:  oh-my-zsh plugin file.
@@ -8,6 +9,8 @@
 #
 ################################################################################
 
+=======
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 ###########################
 # Settings 
 
@@ -130,4 +133,8 @@ alias sxd='"$ROOT" xargs "$WGET"'
 alias sxu='"$ROOT" xargs "$CURL"'
 
 alias sxw:='"$ROOT" xargs cat >'
+<<<<<<< HEAD
 alias sxa:='"$ROOT" xargs cat >>'
+=======
+alias sxa:='"$ROOT" xargs cat >>'
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b

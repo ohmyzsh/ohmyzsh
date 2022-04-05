@@ -1,6 +1,9 @@
 #compdef repo
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 __git_apply_whitespace_strategies ()
 {
   declare -a strategies
@@ -115,7 +118,13 @@ _repo()
         (start)
           _arguments : \
                      "(-h --help)"{-h,--help}"[Show help]" \
+<<<<<<< HEAD
                      "(--all)--all=[begin branch in all projects]"\
+=======
+                     "(--all)--all[begin branch in all projects]"\
+                     "(-r --rev --revision)"{-r,--rev,--revision=}"[point branch at this revision instead of upstream]":branch_or_rev:__repo__repo_branch_or_rev\
+                     "(--head)--head[abbreviation for --rev HEAD]"\
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
                     ':branch name:__repo_new__repo_branch_name' \
                     ':projects:__repo_projects_or_all' \
                     && ret=0
@@ -144,6 +153,16 @@ _repo()
                      "(-h --help)"{-h,--help}"[Show help]" \
                     && ret=0
           ;;
+<<<<<<< HEAD
+=======
+        (stage)
+          _arguments : \
+                     "(-h --help)"{-h,--help}"[Show help]" \
+                     "(-i --interactive)"{-i,--interactive}"[use interactive staging]" \
+                    ':projects:__repo_projects' \
+                    && ret=0
+          ;;
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
         (status)
           _arguments : \
                      "(-h --help)"{-h,--help}"[Show help]" \
@@ -269,4 +288,7 @@ __repo_projects_or_all()
 
 _repo "$@"
 return $?
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b

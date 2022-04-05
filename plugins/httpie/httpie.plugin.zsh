@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 function _httpie_completion() {
   _arguments -C \
     '(- 1 *)--version[display version information]' \
@@ -31,3 +32,12 @@ function _httpie_completion() {
 }
 
 compdef _httpie_completion http
+=======
+#
+# Aliases
+# (sorted alphabetically)
+#
+
+alias https='http --default-scheme=https'
+
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b

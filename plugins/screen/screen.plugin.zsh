@@ -2,7 +2,11 @@
 # of the tab window should be.
 if [[ "$TERM" == screen* ]]; then
   if [[ $_GET_PATH == '' ]]; then
+<<<<<<< HEAD
     _GET_PATH='echo $PWD | sed "s/^\/Users\//~/;s/^\/home\//~/;s/^~$USER/~/"'
+=======
+    _GET_PATH='echo $PWD | sed "s/^\/Users\//~/;s/^\/home\//~/;s/^~$USERNAME/~/"'
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
   fi
   if [[ $_GET_HOST == '' ]]; then
     _GET_HOST='echo $HOST | sed "s/\..*//"'
@@ -51,4 +55,8 @@ if [[ "$TERM" == screen* ]]; then
     eval "tab_hardstatus=$TAB_HARDSTATUS_PREFIX:$TAB_HARDSTATUS_PROMPT"
     screen_set $tab_title $tab_hardstatus
   }
+<<<<<<< HEAD
 fi
+=======
+fi
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b

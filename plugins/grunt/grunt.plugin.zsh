@@ -82,7 +82,11 @@ function __grunt() {
         update_msg=' (cache updated)'
     fi
 
+<<<<<<< HEAD
     # Make optioins completion.
+=======
+    # Make options completion.
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
     if [[ ${#__grunt_opts} -gt 0 ]]; then
         opts+=("${__grunt_opts[@]}")
     fi
@@ -161,7 +165,11 @@ function __grunt_update_cache() {
     fi
 
     if [[ $is_updating -ne 0 ]]; then
+<<<<<<< HEAD
         # Update caceh.
+=======
+        # Update cache.
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
         __grunt_version=$version
         __grunt_gruntfile=$gruntfile
         is_updating=1

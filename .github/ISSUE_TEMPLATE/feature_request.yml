@@ -1,0 +1,37 @@
+name: Feature request
+description: Suggest a feature for Oh My Zsh
+labels: ["Feature"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Self Check
+        - Look for similar features in existing [GitHub Issues](https://github.com/ohmyzsh/ohmyzsh/issues?q=is%3Aissue) (open or closed).
+  - type: input
+    attributes:
+      label: If the feature request is for a plugin or theme, specify it here.
+      description: The name of the plugin or theme that you would like us to improve.
+      placeholder: e.g. Git plugin, Agnoster theme
+  - type: textarea
+    attributes:
+      label: If the feature solves a problem you have, specify it here.
+      description: A description of what the problem is. 
+      placeholder: Ex. I'm always frustrated when...
+  - type: textarea
+    attributes:
+      label: Describe the proposed feature.
+      description: A description of what you want to happen. Be as specific as possible.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Describe alternatives you've considered
+      description: A description of any alternative solutions or features you've considered. This can also include other plugins or themes.
+  - type: textarea
+    attributes:
+      label: Additional context
+      description: Add any other context, screenshots or Discord conversations about the feature request here. Also if you have any PRs related to this issue that are already open that you would like us to look at.
+  - type: textarea
+    attributes:
+      label: Related Issues
+      description: Is there any open or closed issues that is related to this feature request? If so please link them below!

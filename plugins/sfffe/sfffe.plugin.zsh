@@ -6,9 +6,15 @@
 #       REQUIRE:  ack
 # ------------------------------------------------------------------------------
 
+<<<<<<< HEAD
 if [ ! -x $(which ack) ]; then
     echo  \'ack\' is not installed!
     exit -1
+=======
+if (( ! $+commands[ack] )); then
+    echo "'ack' is not installed!"
+    return
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 fi
 
 ajs() {

@@ -1,5 +1,9 @@
 # LOL!!1
+<<<<<<< HEAD
 # Source: http://aur.archlinux.org/packages/lolbash/lolbash/lolbash.sh
+=======
+# Source: https://aur.archlinux.org/packages/lolbash/lolbash/lolbash.sh
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 
 alias wtf='dmesg'
 alias onoz='cat /var/log/errors.log'
@@ -45,6 +49,10 @@ alias bringz='git pull'
 alias chicken='git add'
 alias oanward='git commit -m'
 alias ooanward='git commit -am'
+<<<<<<< HEAD
+=======
+alias yolo='git commit -m "$(curl -s http://whatthecommit.com/index.txt)"'
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 alias letcat='git checkout'
 alias violenz='git rebase'
 

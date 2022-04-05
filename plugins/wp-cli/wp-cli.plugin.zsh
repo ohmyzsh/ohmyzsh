@@ -1,5 +1,6 @@
 # WP-CLI
 # A command line interface for WordPress
+<<<<<<< HEAD
 # http://wp-cli.org/
 
 # Cache
@@ -9,6 +10,9 @@
 # CLI
 
 # Comment
+=======
+# https://wp-cli.org/
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 
 # Core
 alias wpcc='wp core config'
@@ -27,6 +31,7 @@ alias wpcrs='wp cron schedule'
 alias wpcrt='wp cron test'
 
 # Db
+<<<<<<< HEAD
 
 # Eval
 
@@ -39,6 +44,14 @@ alias wpcrt='wp cron test'
 # Import
 
 # Media
+=======
+alias wpdbe='wp db export'
+alias wpdbi='wp db import'
+alias wpdbcr='wp db create'
+alias wpdbs='wp db search'
+alias wpdbch='wp db check'
+alias wpdbr='wp db repair'
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 
 # Menu
 alias wpmc='wp menu create'
@@ -47,10 +60,13 @@ alias wpmi='wp menu item'
 alias wpml='wp menu list'
 alias wpmlo='wp menu location'
 
+<<<<<<< HEAD
 # Network
 
 # Option
 
+=======
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 # Plugin
 alias wppa='wp plugin activate'
 alias wppda='wp plugin deactivate'
@@ -63,7 +79,11 @@ alias wppp='wp plugin path'
 alias wpps='wp plugin search'
 alias wppst='wp plugin status'
 alias wppt='wp plugin toggle'
+<<<<<<< HEAD
 alias wppu='wp plugin uninstall'
+=======
+alias wppun='wp plugin uninstall'
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 alias wppu='wp plugin update'
 
 # Post
@@ -75,6 +95,7 @@ alias wppog='wp post get'
 alias wppol='wp post list'
 alias wppom='wp post meta'
 alias wppou='wp post update'
+<<<<<<< HEAD
 alias wppou='wp post url'
 
 # Rewrite
@@ -86,16 +107,22 @@ alias wppou='wp post url'
 # Search-Replace
 
 # Shell
+=======
+alias wppourl='wp post url'
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 
 # Sidebar
 alias wpsbl='wp sidebar list'
 
+<<<<<<< HEAD
 # Site
 
 # Super-Admin
 
 # Term
 
+=======
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 # Theme
 alias wpta='wp theme activate'
 alias wptd='wp theme delete'
@@ -109,9 +136,13 @@ alias wptm='wp theme mod'
 alias wptp='wp theme path'
 alias wpts='wp theme search'
 alias wptst='wp theme status'
+<<<<<<< HEAD
 alias wptu='wp theme updatet'
 
 # Transient
+=======
+alias wptu='wp theme update'
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 
 # User
 alias wpuac='wp user add-cap'
@@ -138,9 +169,14 @@ alias wpwm='wp widget move'
 alias wpwu='wp widget update'
 
 
+<<<<<<< HEAD
 autoload -U +X bashcompinit && bashcompinit
 # bash completion for the `wp` command
 
+=======
+# Completion for wp
+autoload -U +X bashcompinit && bashcompinit
+>>>>>>> 4d9e5ce9a7d8db3c3aadcae81580a5c3ff5a0e8b
 _wp_complete() {
 	local cur=${COMP_WORDS[COMP_CWORD]}
 
