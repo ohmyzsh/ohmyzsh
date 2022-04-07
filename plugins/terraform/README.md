@@ -25,6 +25,7 @@ plugins=(... terraform)
 | tfo   | terraform output           |
 | tfp   | terraform plan             |
 | tfv   | terraform validate         |
+| tfw   | terraform workspace        |
 | tfwl  | terraform workspace list   |
 | tfwn  | terraform workspace new    |
 | tfwd  | terraform workspace delete |
