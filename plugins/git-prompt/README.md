@@ -11,6 +11,14 @@ plugins=(... git-prompt)
 
 See the [original repository](https://github.com/olivierverdier/zsh-git-prompt).
 
+# Usage
+
+Use `$GIT_PROMPT` in PROMPT/RPROMPT variable in `.zshrc` file
+
+```zsh
+PROMPT="%~ in $(GIT_PROMPT) "
+```
+
 ## Requirements
 
 This plugin uses `python3`, so your host needs to have it installed.
