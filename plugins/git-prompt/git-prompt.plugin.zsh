@@ -98,4 +98,4 @@ ZSH_THEME_GIT_PROMPT_STASHED="%{$fg_bold[blue]%}%{⚑%G%}"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg_bold[green]%}%{✔%G%}"
 
 # Set the prompt.
-RPROMPT='$(git_super_status)'
+export GIT_PROMPT='$(git_super_status)'
