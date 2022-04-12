@@ -37,9 +37,13 @@ the lines below to your zshrc file**, but be aware of the side effects:
 
 | Alias   | Command                     | Description                                                                              |
 | :------ | :-------------------------- | :--------------------------------------------------------------------------------------- |
+| dbl     | `docker build`              | Build an image from a Dockerfile                                                         |
+| dcin    | `docker container inspect`  | Display detailed information on one or more containers                                   |
 | dlo     | `docker container logs`     | Fetch the logs of a docker container                                                     |
 | dls     | `docker container ls`       | List all the running docker containers                                                   |
 | dlsa    | `docker container ls -a`    | List all running and stopped containers                                                  |
+| dpo     | `docker container port`     | List port mappings or a specific mapping for the container                               |
+| dpu     | `docker pull`               | Pull an image or a repository from a registry                                            |
 | dr      | `docker container run`      | Create a new container and start it using the specified command                          |
 | drit    | `docker container run -it`  | Create a new container and start it in an interactive shell                              |
 | drm     | `docker container rm`       | Remove the specified container(s)                                                        |
@@ -47,27 +51,23 @@ the lines below to your zshrc file**, but be aware of the side effects:
 | dst     | `docker container start`    | Start one or more stopped containers                                                     |
 | dstp    | `docker container stop`     | Stop one or more running containers                                                      |
 | dtop    | `docker top`                | Display the running processes of a container                                             |
-| dpo     | `docker container port`     | List port mappings or a specific mapping for the container                               |
-| dpu     | `docker pull`               | Pull an image or a repository from a registry                                            |
 | dxc     | `docker container exec`     | Run a new command in a running container                                                 |
 | dxcit   | `docker container exec -it` | Run a new command in a running container in an interactive shell                         |
-| dbl     | `docker build`              | Build an image from a Dockerfile                                                         |
-| dcin    | `docker container inspect`  | Display detailed information on one or more containers                                   |
 |         |                             | **Docker Images**                                                                        |
-| dirm    | `docker image rm`           | Remove one or more images                                                                |
-| dils    | `docker image ls`           | List docker images                                                                       |
-| dit     | `docker image tag`          | Add a name and tag to a particular image                                                 |
-| dip     | `docker image push`         | Push an image or repository to a remote registry                                         |
 | dib     | `docker image build`        | Build an image from a Dockerfile (same as docker build)                                  |
 | dii     | `docker image inspect`      | Display detailed information on one or more images                                       |
+| dils    | `docker image ls`           | List docker images                                                                       |
+| dip     | `docker image push`         | Push an image or repository to a remote registry                                         |
+| dirm    | `docker image rm`           | Remove one or more images                                                                |
+| dit     | `docker image tag`          | Add a name and tag to a particular image                                                 |
 |         |                             | **Docker Network**                                                                       |
-| dnls    | `docker network ls`         | List all networks the engine daemon knows about, including those spanning multiple hosts |
-| dni     | `docker network inspect`    | Return information about one or more networks                                            |
 | dnc     | `docker network create`     | Create a new network                                                                     |
 | dncn    | `docker network connect`    | Connect a container to a network                                                         |
 | dndcn   | `docker network disconnect` | Disconnect a container from a network                                                    |
+| dni     | `docker network inspect`    | Return information about one or more networks                                            |
+| dnls    | `docker network ls`         | List all networks the engine daemon knows about, including those spanning multiple hosts |
 | dnrm    | `docker network rm`         | Remove one or more networks                                                              |
 |         |                             | **Docker Volume**                                                                        |
-| dvls    | `docker volume ls`          | List all the volumes known to  docker                                                    |
 | dvi     | `docker volume inspect`     | Display detailed information about one or more volumes                                   |
+| dvls    | `docker volume ls`          | List all the volumes known to  docker                                                    |
 | dvprune | `docker volume prune`       | Cleanup dangling volumes                                                                 |
