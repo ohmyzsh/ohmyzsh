@@ -38,24 +38,21 @@ the lines below to your zshrc file**, but be aware of the side effects:
 
 | Alias   | Command                             | Description                                                                                      |
 |:--------|:------------------------------------|:-------------------------------------------------------------------------------------------------|
-| di      | `docker info`                       | System wide information regarding the Docker installation                                        |
 | dlg     | `docker container logs`             | Fetch the logs of a docker container                                                             |
 | dls     | `docker container ls`               | List all the running docker containers                                                           |
 | dlsa    | `docker container ls -a`            | List all running and stopped containers                                                          |
 | dr      | `docker container run`              | Create a new container and start it using the specified command                                  |
 | drit    | `docker container run -it`          | Create a new container and start it in an interactive shell                                      |
 | drm     | `docker container rm`               | Remove the specified container(s)                                                                |
-| drmf    | `docker container rm -f`            | Force the removal of a running container (uses SIGKILL)                                          |
+| drm!    | `docker container rm -f`            | Force the removal of a running container (uses SIGKILL)                                          |
 | dst     | `docker container start`            | Start one or more stopped containers                                                             |
 | dstp    | `docker container stop`             | Stop one or more running containers                                                              |
 | dt      | `docker top`                        | Display the running processes of a container                                                     |
-| dv      | `docker version`                    | Show version information of the docker installation                                              |
 | dpo     | `docker container port`             | List port mappings or a specific mapping for the container                                       |
 | dpu     | `docker pull`                       | Pull an image or a repository from a registry                                                    |
 | dx      | `docker container exec`             | Run a new command in a running container                                                         |
 | dxit    | `docker container exec -it`         | Run a new command in a running container in an interactive shell                                 |
 | dbl     | `docker build`                      | Build an image from a Dockerfile                                                                 |
-| dhh     | `docker help`                       | List all the top level commands along with their description and options                         |
 | dcin    | `docker container inspect`          | Display detailed information on one or more containers                                           |
 | dpsa    | `docker container ps -a`            | Show all containers (similar to ls -a)                                                           |
 |         |                                     | **Docker Images**                                                                                |
