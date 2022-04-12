@@ -38,7 +38,7 @@ the lines below to your zshrc file**, but be aware of the side effects:
 
 | Alias   | Command                             | Description                                                                                      |
 |:--------|:------------------------------------|:-------------------------------------------------------------------------------------------------|
-| dlg     | `docker container logs`             | Fetch the logs of a docker container                                                             |
+| dlo     | `docker container logs`             | Fetch the logs of a docker container                                                             |
 | dls     | `docker container ls`               | List all the running docker containers                                                           |
 | dlsa    | `docker container ls -a`            | List all running and stopped containers                                                          |
 | dr      | `docker container run`              | Create a new container and start it using the specified command                                  |
@@ -47,11 +47,11 @@ the lines below to your zshrc file**, but be aware of the side effects:
 | drm!    | `docker container rm -f`            | Force the removal of a running container (uses SIGKILL)                                          |
 | dst     | `docker container start`            | Start one or more stopped containers                                                             |
 | dstp    | `docker container stop`             | Stop one or more running containers                                                              |
-| dt      | `docker top`                        | Display the running processes of a container                                                     |
+| dtop    | `docker top`                        | Display the running processes of a container                                                     |
 | dpo     | `docker container port`             | List port mappings or a specific mapping for the container                                       |
 | dpu     | `docker pull`                       | Pull an image or a repository from a registry                                                    |
-| dx      | `docker container exec`             | Run a new command in a running container                                                         |
-| dxit    | `docker container exec -it`         | Run a new command in a running container in an interactive shell                                 |
+| dxc     | `docker container exec`             | Run a new command in a running container                                                         |
+| dxcit   | `docker container exec -it`         | Run a new command in a running container in an interactive shell                                 |
 | dbl     | `docker build`                      | Build an image from a Dockerfile                                                                 |
 | dcin    | `docker container inspect`          | Display detailed information on one or more containers                                           |
 | dpsa    | `docker container ps -a`            | Show all containers (similar to ls -a)                                                           |
