@@ -39,4 +39,4 @@ alias dnrm='docker network rm'
 #docker volume
 alias dvls='docker volume ls'
 alias dvi='docker volume inspect'
-alias dvclean='docker volume rm $(docker volume ls -qf dangling=true)'
+alias dvprune='docker volume prune'

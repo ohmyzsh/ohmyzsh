@@ -75,4 +75,4 @@ the lines below to your zshrc file**, but be aware of the side effects:
 |         |                                     | **Docker Volume**                                                                                |
 | dvls    | `docker volume ls`                  | List all the volumes known to  docker                                                            |
 | dvi     | `docker volume inspect`             | Display detailed information about one or more volumes                                           |
-| dvclean | `docker volume rm $(docker volume ls -qf dangling=true)`| Cleanup dangling volumes                                                     |
+| dvprune | `docker volume prune`               | Cleanup dangling volumes                                                                         |
