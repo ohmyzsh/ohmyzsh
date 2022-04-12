@@ -107,3 +107,10 @@ if [[ -z "$TMUX" && "$ZSH_TMUX_AUTOSTART" == "true" && -z "$INSIDE_EMACS" && -z 
     _zsh_tmux_plugin_run
   fi
 fi
+
+# Change prefix to C-a in ssh connection (see #10847)
+if [[ -n "$SSH_CLIENT" ]] ; then
+  tmux unbind C-b
+  tmux set -g prefix C-a
+  tmux bind C-a send-prefix
+fi
