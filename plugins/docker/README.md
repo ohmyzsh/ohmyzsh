@@ -54,7 +54,6 @@ the lines below to your zshrc file**, but be aware of the side effects:
 | dxcit   | `docker container exec -it`         | Run a new command in a running container in an interactive shell                                 |
 | dbl     | `docker build`                      | Build an image from a Dockerfile                                                                 |
 | dcin    | `docker container inspect`          | Display detailed information on one or more containers                                           |
-| dpsa    | `docker container ps -a`            | Show all containers (similar to ls -a)                                                           |
 |         |                                     | **Docker Images**                                                                                |
 | dirm    | `docker image rm`                   | Remove one or more images                                                                        |
 | dils    | `docker image ls`                   | List docker images                                                                               |

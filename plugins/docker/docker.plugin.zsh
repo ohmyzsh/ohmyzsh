@@ -14,7 +14,6 @@ alias dxc='docker container exec'
 alias dxcit='docker container exec -it'
 alias dbl='docker build'
 alias dcin='docker container inspect'
-alias dpsa='docker container ps -a'
 
 #docker images
 alias dirm='docker image rm'
