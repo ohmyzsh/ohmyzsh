@@ -21,7 +21,7 @@ if parsed.scheme not in proxy_protocols:
     raise TypeError('unsupported proxy protocol: "{}"'.format(parsed.scheme))
 
 def make_argv():
-    yield os.environ.get("SHELLPROXY_NETCAT_PROGRAM", "nc")
+    yield "nc"
     if sys.platform == 'linux':
         # caveats: macOS built-in netcat command not supported proxy-type
         yield "-X" # --proxy-type
