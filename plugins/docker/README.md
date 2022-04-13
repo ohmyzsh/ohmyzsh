@@ -40,8 +40,8 @@ the lines below to your zshrc file**, but be aware of the side effects:
 | dbl     | `docker build`              | Build an image from a Dockerfile                                                         |
 | dcin    | `docker container inspect`  | Display detailed information on one or more containers                                   |
 | dlo     | `docker container logs`     | Fetch the logs of a docker container                                                     |
-| dls     | `docker container ls`       | List all the running docker containers                                                   |
-| dlsa    | `docker container ls -a`    | List all running and stopped containers                                                  |
+| dcls     | `docker container ls`       | List all the running docker containers                                                   |
+| dclsa    | `docker container ls -a`    | List all running and stopped containers                                                  |
 | dpo     | `docker container port`     | List port mappings or a specific mapping for the container                               |
 | dpu     | `docker pull`               | Pull an image or a repository from a registry                                            |
 | dr      | `docker container run`      | Create a new container and start it using the specified command                          |
