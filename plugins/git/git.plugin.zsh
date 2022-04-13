@@ -297,9 +297,14 @@ alias gswc='git switch -c'
 alias gswm='git switch $(git_main_branch)'
 alias gswd='git switch $(git_develop_branch)'
 
+alias gta='git tag -a'
 alias gts='git tag -s'
 alias gtv='git tag | sort -V'
 alias gtl='gtl(){ git tag --sort=-v:refname -n -l "${1}*" }; noglob gtl'
+
+function gtn(){
+        git tag -n$1
+}
 
 alias gunignore='git update-index --no-assume-unchanged'
 alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'

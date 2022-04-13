@@ -172,9 +172,11 @@ plugins=(... git)
 | gswc                 | git switch -c                                                                                                                    |
 | gswm                 | git switch $(git_main_branch)                                                                                                    |
 | gswd                 | git switch $(git_develop_branch)                                                                                                 |
+| gta                  | git tag -a                                                                                                                       |
 | gts                  | git tag -s                                                                                                                       |
 | gtv                  | git tag \| sort -V                                                                                                               |
 | gtl                  | gtl(){ git tag --sort=-v:refname -n -l ${1}* }; noglob gtl                                                                       |
+| gtn                  | git tag -n                                                                                                                       |
 | gunignore            | git update-index --no-assume-unchanged                                                                                           |
 | gunwip               | git log -n 1 \| grep -q -c "\-\-wip\-\-" && git reset HEAD~1                                                                     |
 | gup                  | git pull --rebase                                                                                                                |
