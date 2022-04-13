@@ -303,7 +303,7 @@ alias gtv='git tag | sort -V'
 alias gtl='gtl(){ git tag --sort=-v:refname -n -l "${1}*" }; noglob gtl'
 
 function gtn(){
-        git tag -n$1
+  git tag -n$1
 }
 
 alias gunignore='git update-index --no-assume-unchanged'
