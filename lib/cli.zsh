@@ -573,14 +573,13 @@ function _omz::pr::test {
 
     # Rebase pull request branch against the current master
     _omz::log info "rebasing PR #$1..."
-    local gpgsign
+    local ret gpgsign
     {
       # Back up commit.gpgsign setting: use --local to get the current repository
       # setting, not the global one. If --local is not a known option, it will
       # exit with a 129 status code.
-      if ! gpgsign=$(command git config --local commit.gpgsign 2>/dev/null); then
-        [[ $? -ne 129 ]] || gpgsign=$(command git config commit.gpgsign 2>/dev/null)
-      fi
+      gpgsign=$(command git config --local commit.gpgsign 2>/dev/null) || ret=$?
+      [[ $ret -ne 129 ]] || gpgsign=$(command git config commit.gpgsign 2>/dev/null)
       command git config commit.gpgsign false
 
       command git rebase master ohmyzsh/pull-$1 || {
