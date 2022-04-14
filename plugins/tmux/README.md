@@ -13,6 +13,11 @@ The plugin also supports the following:
 - determines if the terminal supports the 256 colors or not, sets the appropriate configuration variable
 - sets the correct local config file to use
 
+## Chnage bind-key on ssh connection
+
+When you from tmux ssh into remote server and run tmux on remote server, prefix key of your local and remote tmux if they are the same, they will interfere.
+Therefore, this plugin changes the server(ssh to it) prefix key.
+
 ## Aliases
 
 | Alias      | Command                    | Description                                              |
@@ -28,16 +33,18 @@ The plugin also supports the following:
 
 ## Configuration Variables
 
-| Variable                            | Description                                                                   |
-| ----------------------------------- | ----------------------------------------------------------------------------- |
-| `ZSH_TMUX_AUTOSTART`                | Automatically starts tmux (default: `false`)                                  |
-| `ZSH_TMUX_AUTOSTART_ONCE`           | Autostart only if tmux hasn't been started previously (default: `true`)       |
-| `ZSH_TMUX_AUTOCONNECT`              | Automatically connect to a previous session if it exits (default: `true`)     |
-| `ZSH_TMUX_AUTOQUIT`                 | Automatically closes terminal once tmux exits (default: `ZSH_TMUX_AUTOSTART`) |
-| `ZSH_TMUX_FIXTERM`                  | Sets `$TERM` to 256-color term or not based on current terminal support       |
-| `ZSH_TMUX_ITERM2`                   | Sets the `-CC` option for iTerm2 tmux integration (default: `false`)          |
-| `ZSH_TMUX_FIXTERM_WITHOUT_256COLOR` | `$TERM` to use for non 256-color terminals (default: `screen`)                |
-| `ZSH_TMUX_FIXTERM_WITH_256COLOR`    | `$TERM` to use for 256-color terminals (default: `screen-256color`            |
-| `ZSH_TMUX_CONFIG`                   | Set the configuration path (default: `$HOME/.tmux.conf`)                      |
-| `ZSH_TMUX_UNICODE`                  | Set `tmux -u` option to support unicode                                       |
-| `ZSH_TMUX_DEFAULT_SESSION_NAME`     | Set tmux default session name when autostart is enabled                       |
+| Variable                            | Description                                                                                        |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `ZSH_TMUX_AUTOSTART`                | Automatically starts tmux (default: `false`)                                                       |
+| `ZSH_TMUX_AUTOSTART_ONCE`           | Autostart only if tmux hasn't been started previously (default: `true`)                            |
+| `ZSH_TMUX_AUTOCONNECT`              | Automatically connect to a previous session if it exits (default: `true`)                          |
+| `ZSH_TMUX_AUTOQUIT`                 | Automatically closes terminal once tmux exits (default: `ZSH_TMUX_AUTOSTART`)                      |
+| `ZSH_TMUX_FIXTERM`                  | Sets `$TERM` to 256-color term or not based on current terminal support                            |
+| `ZSH_TMUX_ITERM2`                   | Sets the `-CC` option for iTerm2 tmux integration (default: `false`)                               |
+| `ZSH_TMUX_FIXTERM_WITHOUT_256COLOR` | `$TERM` to use for non 256-color terminals (default: `screen`)                                     |
+| `ZSH_TMUX_FIXTERM_WITH_256COLOR`    | `$TERM` to use for 256-color terminals (default: `screen-256color`                                 |
+| `ZSH_TMUX_CONFIG`                   | Set the configuration path (default: `$HOME/.tmux.conf`)                                           |
+| `ZSH_TMUX_UNICODE`                  | Set `tmux -u` option to support unicode                                                            |
+| `ZSH_TMUX_DEFAULT_SESSION_NAME`     | Set tmux default session name when autostart is enabled                                            |
+| `ZSH_TMUX_CHANGE_PREFIX_ON_SSH`     | Change prefix key on ssh connection (default: `true`)                                              |
+| `ZSH_TMUX_PREFIX_ON_SSH`            | Set tmux bind prefix for remap in ssh connection (default: `C-a`)                                 |
