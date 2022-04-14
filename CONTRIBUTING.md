@@ -47,7 +47,7 @@ It should include the data gathered as indicated above, along with:
 2. What the correct behavior should be
 3. What the actual behavior is
 
-Please copy to anyone relevant (_eg_ plugin maintainers) by mentioning their GitHub handle
+Please copy to anyone relevant (e.g. plugin maintainers) by mentioning their GitHub handle
 (starting with `@`) in your message.
 
 We will do our very best to help you.
@@ -59,7 +59,7 @@ your suggestion.
 
 If you find one, comment on it so we can know there are more people supporting it.
 
-If not, you can go ahead and create an issue. Please copy to anyone relevant (_eg_ plugin
+If not, you can go ahead and create an issue. Please copy to anyone relevant (e.g. plugin
 maintainers) by mentioning their GitHub handle (starting with `@`) in your message.
 
 ## Submitting Pull Requests
@@ -99,10 +99,10 @@ covering or related to what you want to add.
 
 If you find one, try it out and work with the author on a common solution.
 
-If not, then go ahead and submit a PR. Please copy to anyone relevant (_eg_ plugin
+If not, then go ahead and submit a PR. Please copy to anyone relevant (e.g. plugin
 maintainers) by mentioning their GitHub handle (starting with `@`) in your message.
 
-For any extensive change, _eg_ a new plugin, you will have to find testers to +1 your PR.
+For any extensive change, such as a new plugin, you will have to find testers to +1 your PR.
 
 ----
 
