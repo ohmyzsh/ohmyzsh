@@ -32,7 +32,7 @@ fi
 # Change prefix key on ssh connection
 : ${ZSH_TMUX_CHANGE_PREFIX_ON_SSH:=true}
 # Set prefix key on ssh connection
-: ${ZSH_TMUX_PREFIX_ON_SSH:="C-a"}
+: ${ZSH_TMUX_PREFIX_ON_SSH:="C-w"}
 
 # ALIASES
 
@@ -114,8 +114,8 @@ fi
 
 # Change prefix to $ZSH_TMUX_PREFIX_ON_SSH in ssh connection (see #10847)
 if [[ -n "$SSH_CLIENT" && $ZSH_TMUX_CHANGE_PREFIX_ON_SSH == true ]] ; then
-  # unbind last prefix key
-  tmux list-keys | grep send-prefix | awk '{print $4}' |  while read prefix_key; do
+  # unbind all prefix(2) key
+  tmux show-options -g | grep prefix | awk '{print $2}' | while read prefix_key; do
     tmux unbind $prefix_key
     echo $prefix_key unbinded.
   done

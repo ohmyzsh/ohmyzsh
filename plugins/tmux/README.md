@@ -47,4 +47,4 @@ Therefore, this plugin changes the server(ssh to it) prefix key.
 | `ZSH_TMUX_UNICODE`                  | Set `tmux -u` option to support unicode                                                            |
 | `ZSH_TMUX_DEFAULT_SESSION_NAME`     | Set tmux default session name when autostart is enabled                                            |
 | `ZSH_TMUX_CHANGE_PREFIX_ON_SSH`     | Change prefix key on ssh connection (default: `true`)                                              |
-| `ZSH_TMUX_PREFIX_ON_SSH`            | Set tmux bind prefix for remap in ssh connection (default: `C-a`)                                 |
+| `ZSH_TMUX_PREFIX_ON_SSH`            | Set tmux bind prefix for remap in ssh connection (default: `C-w`)                                 |
