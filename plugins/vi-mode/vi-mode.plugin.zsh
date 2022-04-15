@@ -14,6 +14,15 @@ typeset -g VI_MODE_RESET_PROMPT_ON_MODE_CHANGE
 # Unset or set to any other value to do the opposite.
 typeset -g VI_MODE_SET_CURSOR
 
+# Control how the cursor appears in the various vim modes. This only applies
+# if $VI_MODE_SET_CURSOR=true.
+#
+# See https://vt100.net/docs/vt510-rm/DECSCUSR for cursor styles
+typeset -g VI_MODE_CURSOR_NORMAL=2
+typeset -g VI_MODE_CURSOR_VISUAL=6
+typeset -g VI_MODE_CURSOR_INSERT=6
+typeset -g VI_MODE_CURSOR_OPPEND=0
+
 typeset -g VI_KEYMAP=main
 
 function _vi-mode-set-cursor-shape-for-keymap() {
@@ -22,13 +31,13 @@ function _vi-mode-set-cursor-shape-for-keymap() {
   # https://vt100.net/docs/vt510-rm/DECSCUSR
   local _shape=0
   case "${1:-${VI_KEYMAP:-main}}" in
-    main)    _shape=6 ;; # vi insert: line
-    viins)   _shape=6 ;; # vi insert: line
-    isearch) _shape=6 ;; # inc search: line
-    command) _shape=6 ;; # read a command name
-    vicmd)   _shape=2 ;; # vi cmd: block
-    visual)  _shape=2 ;; # vi visual mode: block
-    viopp)   _shape=0 ;; # vi operation pending: blinking block
+    main)    _shape=$VI_MODE_CURSOR_INSERT ;; # vi insert: line
+    viins)   _shape=$VI_MODE_CURSOR_INSERT ;; # vi insert: line
+    isearch) _shape=$VI_MODE_CURSOR_INSERT ;; # inc search: line
+    command) _shape=$VI_MODE_CURSOR_INSERT ;; # read a command name
+    vicmd)   _shape=$VI_MODE_CURSOR_NORMAL ;; # vi cmd: block
+    visual)  _shape=$VI_MODE_CURSOR_VISUAL ;; # vi visual mode: block
+    viopp)   _shape=$VI_MODE_CURSOR_OPPEND ;; # vi operation pending: blinking block
     *)       _shape=0 ;;
   esac
   printf $'\e[%d q' "${_shape}"

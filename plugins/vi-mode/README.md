@@ -29,6 +29,8 @@ plugins=(... vi-mode)
   VI_MODE_SET_CURSOR=true
   ```
 
+  See [Cursor Styles](#cursor-styles) for controlling how the cursor looks in different modes
+
 - `MODE_INDICATOR`: controls the string displayed when the shell is in normal mode.
   See [Mode indicators](#mode-indicators) for details.
 
@@ -51,6 +53,25 @@ INSERT_MODE_INDICATOR="%F{yellow}+%f"
 
 You can also use the `vi_mode_prompt_info` function in your prompt, which will display
 this mode indicator.
+
+## Cursor Styles
+
+You can control the cursor style used in each active vim mode by changing the values of the following variables.
+
+```zsh
+# defaults
+VI_MODE_CURSOR_NORMAL=2
+VI_MODE_CURSOR_VISUAL=6
+VI_MODE_CURSOR_INSERT=6
+VI_MODE_CURSOR_OPPEND=0
+```
+
+- 0, 1 - Blinking block
+- 2 - Solid block
+- 3 - Blinking underline
+- 4 - Solid underline
+- 5 - Blinking line
+- 6 - Solid line
 
 ## Key bindings
 
