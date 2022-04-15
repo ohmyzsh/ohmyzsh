@@ -1,5 +1,7 @@
-# Copies the pathname of the current directory to the system or X Windows clipboard
+echo ${(%):-'%F{yellow}The `%Bcopydir%b` plugin is deprecated. Use the `%Bcopypath%b` plugin instead.%f'}
+source "$ZSH/plugins/copypath/copypath.plugin.zsh"
+
+# TODO: 2022-02-22: Remove deprecated copydir function.
 function copydir {
-  emulate -L zsh
-  print -n $PWD | clipcopy
+  copypath
 }

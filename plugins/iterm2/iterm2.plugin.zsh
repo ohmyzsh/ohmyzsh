@@ -8,7 +8,7 @@
 if [[ "$OSTYPE" == darwin* ]] && [[ -n "$ITERM_SESSION_ID" ]] ; then
 
   ###
-  # Executes an arbitrary iTerm2 command via an escape code sequce.
+  # Executes an arbitrary iTerm2 command via an escape code sequence.
   # See https://iterm2.com/documentation-escape-codes.html for all supported commands.
   # Example: $ _iterm2_command "1337;StealFocus"
   function _iterm2_command() {

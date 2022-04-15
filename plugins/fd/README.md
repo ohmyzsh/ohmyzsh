@@ -7,7 +7,3 @@ To use it, add `fd` to the plugins array in your zshrc file:
 ```zsh
 plugins=(... fd)
 ```
-
-Completion is taken from the fd release [`7.3.0`](https://github.com/sharkdp/fd/releases/tag/v7.3.0).
-
-Updated on Febrary 13th, 2019.

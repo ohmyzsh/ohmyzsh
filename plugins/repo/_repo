@@ -114,7 +114,9 @@ _repo()
         (start)
           _arguments : \
                      "(-h --help)"{-h,--help}"[Show help]" \
-                     "(--all)--all=[begin branch in all projects]"\
+                     "(--all)--all[begin branch in all projects]"\
+                     "(-r --rev --revision)"{-r,--rev,--revision=}"[point branch at this revision instead of upstream]":branch_or_rev:__repo__repo_branch_or_rev\
+                     "(--head)--head[abbreviation for --rev HEAD]"\
                     ':branch name:__repo_new__repo_branch_name' \
                     ':projects:__repo_projects_or_all' \
                     && ret=0
@@ -141,6 +143,13 @@ _repo()
         (list)
           _arguments : \
                      "(-h --help)"{-h,--help}"[Show help]" \
+                    && ret=0
+          ;;
+        (stage)
+          _arguments : \
+                     "(-h --help)"{-h,--help}"[Show help]" \
+                     "(-i --interactive)"{-i,--interactive}"[use interactive staging]" \
+                    ':projects:__repo_projects' \
                     && ret=0
           ;;
         (status)
