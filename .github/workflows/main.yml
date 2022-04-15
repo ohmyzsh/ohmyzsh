@@ -36,3 +36,16 @@ jobs:
                       ./themes/*.zsh-theme; do
             zsh -n "$file" || return 1
           done
+
+  collisions:
+    name: Check alias collisions
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up git repository
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Check for alias collisions
+        run: python3 tools/alias_collision/check_alias_collision.py plugins
