@@ -25,7 +25,8 @@ then
 else
     alias history='fc -l 1'
 fi
-# List direcory contents
+
+# List directory contents
 alias lsa='ls -lah'
 alias l='ls -lah'
 alias ll='ls -lh'
@@ -33,9 +34,6 @@ alias la='ls -lAh'
 alias sl=ls # often screw this up
 
 alias afind='ack-grep -il'
-
-# iOS Simulator
-alias ios='open /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
 
 # Code Directory
 alias code='~/Dropbox/Code'
@@ -51,12 +49,6 @@ alias db='~/Dropbox'
 alias dbfc='find ~"/Dropbox (Univ. of Oklahoma)" -type f -name "* conflicted *"'
 alias dbrc='find ~"/Dropbox (Univ. of Oklahoma)" -type f -name "* conflicted *" -exec rm -f {} \;'
 
-# Docker Machine
-alias dminit="docker-machine create --driver virtualbox default"
-alias dmup="docker-machine start default; eval \"\$(docker-machine env default)\""
-alias dmdown="docker-machine stop"
-alias dm="docker-machine"
-
 # Docker Compose
 alias dc="docker-compose"
 alias dcup="docker-compose up -d"
@@ -66,6 +58,8 @@ alias dcrm="docker-compose stop && docker-compose rm -f"
 # Setup Docker Test Environment
 alias devup="docker-compose -f ~/Dropbox/Code/docker/test/docker-compose.yml up -d"
 alias devdown="docker-compose -f ~/Dropbox/Code/docker/test/docker-compose.yml stop"
+alias devup-arm="docker-compose -f ~/Dropbox/Code/docker/test-arm/docker-compose.yml up -d"
+alias devdown-arm="docker-compose -f ~/Dropbox/Code/docker/test-arm/docker-compose.yml stop"
 
 # Enter Docker containers
 alias devweb="docker exec -it web bash"
