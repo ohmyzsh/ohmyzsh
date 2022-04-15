@@ -69,34 +69,15 @@ ZSH_THEME="robbyrussell"
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-<<<<<<< HEAD
 # Add wisely, as too many plugins slow down shell startup.
-<<<<<<< HEAD
-<<<<<<< HEAD
-plugins=(git)
-
-source $ZSH/oh-my-zsh.sh
-=======
-plugins=(battery capistrano common-aliases git github laravel4 rbenv sublime systemadmin)
->>>>>>> Added Laravel4 plug-in for autocomplete
-=======
-plugins=(common-aliases git rbenv systemadmin)
-<<<<<<< HEAD
->>>>>>> Remove old Capistrano and Laravel4 plugin support.
-=======
->>>>>>> Fix plugins call
-=======
 plugins=(common-aliases git rbenv systemadmin laravel5)
->>>>>>> Add Laraval5 plugin
 
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-<<<<<<< HEAD
-=======
 export PATH=:/usr/local/bin:$HOME/.composer/vendor/bin:$HOME/bin:$PATH
->>>>>>> Added Composer bin to path
+
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
@@ -112,7 +93,6 @@ export PATH=:/usr/local/bin:$HOME/.composer/vendor/bin:$HOME/bin:$PATH
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
-<<<<<<< HEAD
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
@@ -121,13 +101,10 @@ export PATH=:/usr/local/bin:$HOME/.composer/vendor/bin:$HOME/bin:$PATH
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-<<<<<<< HEAD
-=======
+
 # ssh
 # export SSH_KEY_PATH="~/.ssh/dsa_id"
->>>>>>> Moved '$ZSH/oh-my-zsh.sh' back above User Config.
-=======
 
 # Add SSH passphrase to Keychain
 ssh-add -A 2>/dev/null
->>>>>>> Add SSH passphrase to Keychain on startup
+
