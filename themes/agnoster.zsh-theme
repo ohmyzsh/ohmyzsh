@@ -253,6 +253,7 @@ build_prompt() {
   prompt_bzr
   prompt_hg
   prompt_end
+  
 }
 
-PROMPT='%{%f%b%k%}$(build_prompt) '
+PROMPT='%{%f%b%k%}$(build_prompt) ☯  '
