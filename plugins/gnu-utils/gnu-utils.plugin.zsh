@@ -27,7 +27,7 @@ __gnu_utils() {
   'gsplit' 'gstat' 'gstty' 'gsum' 'gsync' 'gtac' 'gtail' 'gtee' 'gtest'
   'gtimeout' 'gtouch' 'gtr' 'gtrue' 'gtruncate' 'gtsort' 'gtty' 'guname'
   'gunexpand' 'guniq' 'gunlink' 'guptime' 'gusers' 'gvdir' 'gwc' 'gwho'
-  'gwhoami' 'gyes')
+  'gwhoami' 'gyes' 'ghostname')
 
   # findutils
   gcmds+=('gfind' 'gxargs' 'glocate')
