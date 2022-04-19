@@ -27,13 +27,16 @@ __gnu_utils() {
   'gsplit' 'gstat' 'gstty' 'gsum' 'gsync' 'gtac' 'gtail' 'gtee' 'gtest'
   'gtimeout' 'gtouch' 'gtr' 'gtrue' 'gtruncate' 'gtsort' 'gtty' 'guname'
   'gunexpand' 'guniq' 'gunlink' 'guptime' 'gusers' 'gvdir' 'gwc' 'gwho'
-  'gwhoami' 'gyes' 'ghostname')
+  'gwhoami' 'gyes')
 
   # findutils
   gcmds+=('gfind' 'gxargs' 'glocate')
 
   # Not part of either coreutils or findutils, installed separately.
   gcmds+=('gsed' 'gtar' 'gtime' 'gmake' 'ggrep')
+
+  # can be built optionally
+  gcmds+=('ghostname')
 
   for gcmd in "${gcmds[@]}"; do
     # Do nothing if the command isn't found
