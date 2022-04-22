@@ -16,7 +16,7 @@ if [[ -f "$NVM_DIR/nvm.sh" ]]; then
 else
   # Otherwise try to load nvm installed via Homebrew
   # User can set this if they have an unusual Homebrew setup
-  NVM_HOMEBREW="${NVM_HOMEBREW:-/usr/local/opt/nvm}"
+  NVM_HOMEBREW="${NVM_HOMEBREW:-${HOMEBREW_PREFIX:-$(brew --prefix)}/opt/nvm}"
   # Load nvm from Homebrew location if it exists
   if [[ -f "$NVM_HOMEBREW/nvm.sh" ]]; then
     source "$NVM_HOMEBREW/nvm.sh" ${NVM_LAZY+"--no-use"}
