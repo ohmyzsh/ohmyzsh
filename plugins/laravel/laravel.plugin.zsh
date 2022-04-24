@@ -1,6 +1,7 @@
 #!zsh
 alias artisan='php artisan'
 alias bob='php artisan bob::build'
+alias pa='php artisan'
 
 # Development
 alias pas='php artisan serve'
@@ -39,3 +40,6 @@ alias paql='php artisan queue:listen'
 alias paqr='php artisan queue:retry'
 alias paqt='php artisan queue:table'
 alias paqw='php artisan queue:work'
+
+# tinker
+alias pat='php artisan tinker'
