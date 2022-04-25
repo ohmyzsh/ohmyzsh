@@ -10,6 +10,7 @@ plugins=(... laravel)
 |:-:|:-:|
 | `artisan`  | `php artisan`  |
 | `pas`  | `php artisan serve` |
+| `pa`  | `php artisan`  |
 
 ## Database
 
@@ -55,3 +56,9 @@ plugins=(... laravel)
 | `paqr`  |  `php artisan queue:retry` |
 | `paqt`  |  `php artisan queue:table` |
 | `paqw`  |  `php artisan queue:work` |
+
+## tinker
+
+| Alias | Description |
+|:-:|:-:|
+| `pat`  |  `php artisan tinker` |
