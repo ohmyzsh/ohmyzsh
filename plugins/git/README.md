@@ -120,6 +120,7 @@ plugins=(... git)
 | gpf!                 | git push --force                                                                                                                 |
 | gpoat                | git push origin --all && git push origin --tags                                                                                  |
 | gpr                  | git pull --rebase                                                                                                                |
+| gpri                 | git pull --rebase=interactive                                                                                                    |
 | gpu                  | git push upstream                                                                                                                |
 | gpv                  | git push -v                                                                                                                      |
 | gr                   | git remote                                                                                                                       |
