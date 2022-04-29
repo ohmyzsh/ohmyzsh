@@ -13,7 +13,7 @@ function git_prompt_info() {
   # If we are on a folder not tracked by git, get out.
   # Otherwise, check for hide-info at global and local repository level
   if ! __git_prompt_git rev-parse --git-dir &> /dev/null \
-     || [[ "$(__git_prompt_git config --get oh-my-zsh.hide-info 2>/dev/null)" == 1 ]]; then
+     || [[ "$(__git_prompt_git config --get oh-my-zsh.hide-info 2>/dev/null)" == "1" ]]; then
     return 0
   fi
 
@@ -37,7 +37,8 @@ function parse_git_dirty() {
   local STATUS
   local -a FLAGS
   FLAGS=('--porcelain')
-  if [[ "$(__git_prompt_git config --get oh-my-zsh.hide-dirty)" == "1" ]]; then
+  if git_huge_repo \
+    || [[ "$(__git_prompt_git config --get oh-my-zsh.hide-dirty)" == "1" ]]; then
     return 0
   fi
   if [[ "${DISABLE_UNTRACKED_FILES_DIRTY:-}" == "true" ]]; then
@@ -161,8 +162,46 @@ function git_prompt_long_sha() {
   SHA=$(__git_prompt_git rev-parse HEAD 2> /dev/null) && echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
 }
 
+function git_repo_files_number() {
+  local gitdir
+  local indexf='index'
+  local X
+  local N
+  #N=$(__git_prompt_git ls-files 2> /dev/null | wc -l) # `git ls-files` is much faster than `git status` but still too slow!
+  gitdir=$(__git_prompt_git rev-parse --git-dir 2> /dev/null)
+  [[ $? -eq 128 ]] && return 128
+  [[ "$(__git_prompt_git config --get oh-my-zsh.hide-info 2>/dev/null)" == 1 ]] && return 0
+  # parse index file(s) [https://git-scm.com/docs/index-format]
+  X=$(xxd -p -l4 -s12 "$gitdir/$indexf" 2>/dev/null) # extension signature
+  [[ $? -ne 0 ]] && return 2
+  if [[ "$X" == "6c696e6b" ]]; then # "link" extension --> split/shared index
+    X=$(xxd -p -l20 -s20 "$gitdir/$indexf" 2>/dev/null) # shared index hash
+    [[ $? -ne 0 ]] && return 3
+    indexf="sharedindex.$X"
+  fi
+  X=$(xxd -p -l4 -s8 "$gitdir/$indexf" 2>/dev/null) # entries number
+  [[ $? -ne 0 ]] && return 2
+  N=$((16#$X))
+  echo -n "$N"
+}
+
+ZSH_THEME_GIT_HUGE_REPO_THRESHOLD=100000
+function git_huge_repo() {
+  local N
+  local ret
+  N="$(git_repo_files_number)"
+  ret=$?
+  [[ $ret -ne 0 ]] &&  return $ret
+  [[ "$N" -gt "$ZSH_THEME_GIT_HUGE_REPO_THRESHOLD" ]]
+  return $?
+}
+
 function git_prompt_status() {
   [[ "$(__git_prompt_git config --get oh-my-zsh.hide-status 2>/dev/null)" = 1 ]] && return
+  if git_huge_repo; then
+    echo "${ZSH_THEME_GIT_PROMPT_HUGE}"
+    return 2
+  fi
 
   # Maps a git status prefix to an internal constant
   # This cannot use the prompt constants, as they may be empty
