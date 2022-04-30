@@ -44,6 +44,8 @@ transfer() {
 
   local tmpfile tarfile item basename
 
+  local TRANSFER_URL=$(echo ${TRANSFER_CUSTOM_URL:-https://transfer.sh} | sed 's/\/$//g')
+
   # get temporarily filename, output is written to this file show progress can be showed
   tmpfile=$(mktemp -t transferXXX)
 
@@ -100,9 +102,9 @@ transfer() {
   if ! tty -s; then
     # transfer from pipe
     if (( crypt )); then
-      gpg -aco - | curl -X PUT --dump-header "$tmpfile.dump" -H "$maxDownloads" "$progress" -T - "https://transfer.sh/$item" >> $tmpfile
+      gpg -aco - | curl -X PUT --dump-header "$tmpfile.dump" -H "$maxDownloads" "$progress" -T - "${TRANSFER_URL}/$item" >> $tmpfile
     else
-      curl --dump-header "$tmpfile.dump" -H "$maxDownloads" "$progress" --upload-file - "https://transfer.sh/$item" >> $tmpfile
+      curl --dump-header "$tmpfile.dump" -H "$maxDownloads" "$progress" --upload-file - "${TRANSFER_URL}/$item" >> $tmpfile
     fi
   else 
     basename=$(basename "$item" | sed -e 's/[^a-zA-Z0-9._-]/-/g')
@@ -122,17 +124,17 @@ transfer() {
 
       tar -czf $tarfile $(basename $item)
       if (( crypt )); then
-        gpg -cao - "$tarfile" | curl --dump-header "$tmpfile.dump" -H "$maxDownloads" "$progress" -T "-" "https://transfer.sh/$basename.tar.gz.gpg" >> $tmpfile
+        gpg -cao - "$tarfile" | curl --dump-header "$tmpfile.dump" -H "$maxDownloads" "$progress" -T "-" "${TRANSFER_URL}/$basename.tar.gz.gpg" >> $tmpfile
       else
-        curl --dump-header "$tmpfile.dump" -H "$maxDownloads" "$progress" --upload-file "$tarfile" "https://transfer.sh/$basename.tar.gz" >> $tmpfile
+        curl --dump-header "$tmpfile.dump" -H "$maxDownloads" "$progress" --upload-file "$tarfile" "${TRANSFER_URL}/$basename.tar.gz" >> $tmpfile
       fi
       rm -f $tarfile
     else
       # transfer file
       if (( crypt )); then
-        gpg -cao - "$item" | curl --dump-header "$tmpfile.dump" -H "$maxDownloads" "$progress" -T "-" "https://transfer.sh/$basename.gpg" >> $tmpfile
+        gpg -cao - "$item" | curl --dump-header "$tmpfile.dump" -H "$maxDownloads" "$progress" -T "-" "${TRANSFER_URL}/$basename.gpg" >> $tmpfile
       else
-        curl --dump-header "$tmpfile.dump" -H "$maxDownloads" "$progress" --upload-file "$item" "https://transfer.sh/$basename" >> $tmpfile
+        curl --dump-header "$tmpfile.dump" -H "$maxDownloads" "$progress" --upload-file "$item" "${TRANSFER_URL}/$basename" >> $tmpfile
       fi
     fi
   fi
