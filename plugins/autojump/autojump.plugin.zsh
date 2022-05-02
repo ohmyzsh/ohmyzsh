@@ -1,5 +1,6 @@
 declare -a autojump_paths
 autojump_paths=(
+  ${XDG_DATA_HOME:-$HOME/.local/share}/autojump/autojump.zsh # XDG base directory specification
   $HOME/.autojump/etc/profile.d/autojump.zsh         # manual installation
   $HOME/.autojump/share/autojump/autojump.zsh        # manual installation
   $HOME/.nix-profile/etc/profile.d/autojump.sh       # NixOS installation
