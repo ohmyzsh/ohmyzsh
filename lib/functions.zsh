@@ -300,6 +300,13 @@ function page-break() {
   for i in {1..9}; do;
     make-break
   done
+  today-time
+}
+
+function today-time() {
+  echo "————————————\n"
+  date +"%a %l:%M%p"
+  echo "\n————————————"
 }
 
 alias make-big-break=page-break
@@ -597,4 +604,31 @@ bindkey '^Xf' peco-directories
 zle -N peco-files
 bindkey '^X^f' peco-files
 
-### peco functions ###
+###########################
+# Percol https://github.com/mooz/percol
+###########################
+function ppgrep() {
+    if [[ $1 == "" ]]; then
+        PERCOL=percol
+    else
+        PERCOL="percol --query $1"
+    fi
+    ps aux | eval $PERCOL | awk '{ print $2 }'
+}
+
+function ppkill() {
+    if [[ $1 =~ "^-" ]]; then
+        QUERY=""            # options only
+    else
+        QUERY=$1            # with a query
+        [[ $# > 0 ]] && shift
+    fi
+    ppgrep $QUERY | xargs kill $*
+}
+
+alias interactive-ps-grep="ppgrep"
+alias grep-ps-percol="ppgrep"
+alias grep-ps-interactive="ppgrep"
+alias interactive-kill="ppkill"
+alias kill-interactive="ppkill"
+alias kill-percol="ppkill"

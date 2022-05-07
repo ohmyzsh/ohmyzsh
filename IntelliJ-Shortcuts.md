@@ -1,1 +1,1 @@
-../../IntelliJ-Shortcuts.md
+/Users/peter/src/IntelliJ-Shortcuts.md
