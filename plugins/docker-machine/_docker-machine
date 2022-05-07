@@ -90,7 +90,7 @@ __docker-machine_filters() {
 }
 
 __get_swarm_discovery() {
-    declare -a masters serivces
+    declare -a masters services
     local service
     services=()
     masters=($(docker-machine ls -f {{.Swarm}} |grep '(master)' |awk '{print $1}'))
@@ -169,7 +169,7 @@ __get_create_argument() {
 __docker-machine_subcommand() {
     local -a opts_help
     opts_help=("(- :)--help[Print usage]")
-    local -a opts_only_host opts_driver opts_storage_driver opts_stragery
+    local -a opts_only_host opts_driver opts_storage_driver opts_state
     opts_only_host=(
         "$opts_help"
         "*:host:__docker-machine_hosts_all"
@@ -330,7 +330,7 @@ _docker-machine() {
     _arguments -C \
         "(- :)"{-h,--help}"[Show help]" \
         "(-D --debug)"{-D,--debug}"[Enable debug mode]" \
-        '(-s --stroage-path)'{-s,--storage-path}'[Configures storage path]:file:_files' \
+        '(-s --storage-path)'{-s,--storage-path}'[Configures storage path]:file:_files' \
         '--tls-ca-cert[CA to verify remotes against]:file:_files' \
         '--tls-ca-key[Private key to generate certificates]:file:_files' \
         '--tls-client-cert[Client cert to use for TLS]:file:_files' \

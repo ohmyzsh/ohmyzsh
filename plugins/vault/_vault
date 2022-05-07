@@ -53,7 +53,7 @@ mount_tune_args=(
 typeset -a mount_args
 mount_args=(
     $mount_tune_args
-    '(-path)-path=-[Mount point for the logical backend. This defauls to the type of the mount.]:path:'
+    '(-path)-path=-[Mount point for the logical backend. This defaults to the type of the mount.]:path:'
     '(-description)-description=-[Human-friendly description of the purpose for the mount. This shows up in the mounts command.]:description:'
 )
 
@@ -189,7 +189,7 @@ _vault_mounts() {
 }
 
 _vault_mount() {
-    # to find out how many types of backens are there
+    # to find out how many types of backends are there
     _arguments : \
         ${general_args[@]} \
         ${mount_args[@]} \
