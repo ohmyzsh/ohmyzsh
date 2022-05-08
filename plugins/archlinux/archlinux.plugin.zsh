@@ -33,20 +33,16 @@ function paclist() {
 }
 
 function pacdisowned() {
-  local tmp db fs
-  tmp=${TMPDIR-/tmp}/pacman-disowned-$UID-$$
-  db=$tmp/db
-  fs=$tmp/fs
-
-  mkdir "$tmp"
-  trap 'rm -rf "$tmp"' EXIT
-
+  local tmp_dir db fs
+  tmp_dir=$(mktemp --directory)
+  db=$tmp_dir/db
+  fs=$tmp_dir/fs
+  trap "rm -rf $tmp_dir" EXIT
   pacman -Qlq | sort -u > "$db"
-
-  find /bin /etc /lib /sbin /usr ! -name lost+found \
+  find /etc /usr ! -name lost+found \
     \( -type d -printf '%p/\n' -o -print \) | sort > "$fs"
-
   comm -23 "$fs" "$db"
+  rm -rf "$tmp_dir"
 }
 
 alias pacmanallkeys='sudo pacman-key --refresh-keys'
