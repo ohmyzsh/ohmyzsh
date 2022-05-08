@@ -39,7 +39,7 @@ plugins=(... archlinux)
 | Function       | Description                                               |
 |----------------|-----------------------------------------------------------|
 | pacdisowned    | List all disowned files in your system                    |
-| paclist        | List all explicitly installed packages with a description |
+| paclist        | List all explicitly installed packages                    |
 | pacmanallkeys  | Get all keys for developers and trusted users             |
 | pacmansignkeys | Locally trust all keys passed as parameters               |
 | pacweb         | Open the website of an ArchLinux package                  |
@@ -181,3 +181,4 @@ whether the package manager is installed, checked in the following order:
 - Ybalrid (Arthur Brainville) - ybalrid@ybalrid.info
 - Jeff M. Hubbard - jeffmhubbard@gmail.com
 - K. Harishankar(harishnkr) - hari2menon1234@gmail.com
+- WH-2099 - wh2099@outlook.com
