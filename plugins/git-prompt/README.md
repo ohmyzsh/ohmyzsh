@@ -9,7 +9,9 @@ To use it, add `git-prompt` to the plugins array in your zshrc file:
 plugins=(... git-prompt)
 ```
 
-You may also need to [customize your theme](https://github.com/ohmyzsh/ohmyzsh/issues/9395#issuecomment-1027130429). See the [OMZ wiki on customizing themes](https://github.com/ohmyzsh/ohmyzsh/wiki/Customization#overriding-and-adding-themes).
+You may also need to [customize your theme](https://github.com/ohmyzsh/ohmyzsh/issues/9395#issuecomment-1027130429) 
+to change the way the prompt is built. See the
+[OMZ wiki on customizing themes](https://github.com/ohmyzsh/ohmyzsh/wiki/Customization#overriding-and-adding-themes).
 
 See the [original repository](https://github.com/olivierverdier/zsh-git-prompt).
 
