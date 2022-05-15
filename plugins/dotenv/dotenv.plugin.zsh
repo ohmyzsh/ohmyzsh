@@ -23,12 +23,12 @@ source_env() {
     touch "$ZSH_DOTENV_DISALLOWED_LIST"
 
     # early return if disallowed
-    if command grep -q "$dirpath" "$ZSH_DOTENV_DISALLOWED_LIST" &>/dev/null; then
+    if command grep -Fx -q "$dirpath" "$ZSH_DOTENV_DISALLOWED_LIST" &>/dev/null; then
       return
     fi
 
     # check if current directory's .env file is allowed or ask for confirmation
-    if ! command grep -q "$dirpath" "$ZSH_DOTENV_ALLOWED_LIST" &>/dev/null; then
+    if ! command grep -Fx -q "$dirpath" "$ZSH_DOTENV_ALLOWED_LIST" &>/dev/null; then
       # get cursor column and print new line before prompt if not at line beginning
       local column
       echo -ne "\e[6n" > /dev/tty
@@ -52,7 +52,10 @@ source_env() {
   fi
 
   # test .env syntax
-  zsh -fn $ZSH_DOTENV_FILE || echo "dotenv: error when sourcing '$ZSH_DOTENV_FILE' file" >&2
+  zsh -fn $ZSH_DOTENV_FILE || {
+    echo "dotenv: error when sourcing '$ZSH_DOTENV_FILE' file" >&2
+    return 1
+  }
 
   setopt localoptions allexport
   source $ZSH_DOTENV_FILE

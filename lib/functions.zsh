@@ -1,7 +1,7 @@
 function zsh_stats() {
   fc -l 1 \
     | awk '{ CMD[$2]++; count++; } END { for (a in CMD) print CMD[a] " " CMD[a]*100/count "% " a }' \
-    | grep -v "./" | sort -nr | head -20 | column -c3 -s " " -t | nl
+    | grep -v "./" | sort -nr | head -n 20 | column -c3 -s " " -t | nl
 }
 
 function uninstall_oh_my_zsh() {
@@ -11,10 +11,6 @@ function uninstall_oh_my_zsh() {
 function upgrade_oh_my_zsh() {
   echo >&2 "${fg[yellow]}Note: \`$0\` is deprecated. Use \`omz update\` instead.$reset_color"
   omz update
-}
-
-function takedir() {
-  mkdir -p $@ && cd ${@:$#}
 }
 
 function open_command() {
@@ -37,28 +33,44 @@ function open_command() {
   ${=open_cmd} "$@" &>/dev/null
 }
 
+# take functions
+
+# mkcd is equivalent to takedir
+function mkcd takedir() {
+  mkdir -p $@ && cd ${@:$#}
+}
+
 function takeurl() {
-  data=$(mktemp)
-  curl -L $1 > $data
-  tar xf $data
-  thedir=$(tar tf $data | head -1)
-  rm $data
-  cd $thedir
+  local data thedir
+  data="$(mktemp)"
+  curl -L "$1" > "$data"
+  tar xf "$data"
+  thedir="$(tar tf "$data" | head -n 1)"
+  rm "$data"
+  cd "$thedir"
 }
 
 function takegit() {
-  git clone $1
-  cd $(basename ${1%%.git})
+  git clone "$1"
+  cd "$(basename ${1%%.git})"
 }
 
 function take() {
   if [[ $1 =~ ^(https?|ftp).*\.tar\.(gz|bz2|xz)$ ]]; then
-    takeurl $1
+    takeurl "$1"
   elif [[ $1 =~ ^([A-Za-z0-9]\+@|https?|git|ssh|ftps?|rsync).*\.git/?$ ]]; then
-    takegit $1
+    takegit "$1"
   else
-    takedir $1
+    takedir "$@"
   fi
+}
+
+alias gdi="git diff --cached "
+alias gdc="git diff --cached "
+
+# Params: branch A and branch B to be diffed
+function gdb() {
+  git diff $1..$2
 }
 
 #
@@ -233,12 +245,11 @@ function omz_urldecode {
   tmp=${tmp:gs/\\/\\\\/}
   # Handle %-escapes by turning them into `\xXX` printf escapes
   tmp=${tmp:gs/%/\\x/}
-  local decoded
-  eval "decoded=\$'$tmp'"
+  local decoded="$(printf -- "$tmp")"
 
   # Now we have a UTF-8 encoded string in the variable. We need to re-encode
   # it if caller is in a non-UTF-8 locale.
-  local safe_encodings
+  local -a safe_encodings
   safe_encodings=(UTF-8 utf8 US-ASCII)
   if [[ -z ${safe_encodings[(r)$caller_encoding]} ]]; then
     decoded=$(echo -E "$decoded" | iconv -f UTF-8 -t $caller_encoding)
@@ -264,10 +275,44 @@ lsg() {
     l | grep -iE "$1"
 }
 
+function alg() {
+  FN=/tmp/alg.$$
+  echo -e "\nAliases ———————" > $FN
+  alias | grep -i $1 >> $FN
+  echo -e "\nFunctions ———————" >> $FN
+  functions | grep -i $1 >> $FN
+  bat $FN
+  rm -f $FN
+}
+
+alias agr="alg"
+alias alias-grep="alg"
+
 # These need to be here since they're required by gfind*
 alias ag="/usr/local/homebrew/bin/ag --ignore '*.svg' --ignore '*.xlt' --ignore '*.tsx' --ignore '*.js' --ignore '*.snap' --ignore '*.json' --ignore '*.dat' --ignore '*.builds' --ignore '*.tsv' --ignore '*.csv' --ignore '*.lock' --ignore '*.patch' --ignore '*.sum' --pager=bat"
 alias ag-no-pager="/usr/local/homebrew/bin/ag --ignore '*.svg' --ignore '*.xlt' --ignore '*.tsx' --ignore '*.js' --ignore '*.snap' --ignore '*.json' --ignore '*.dat' --ignore '*.builds' --ignore '*.tsv' --ignore '*.csv' --ignore '*.lock' --ignore '*.patch' --ignore '*.sum'"
 alias "git-grep"="git \grep"
+
+function make-break() {
+  echo -e "—————————————————————————————————————————— \
+  \n\n——————————————————————————————————————————\n"
+}
+
+# Spits out a page of alternating white lines (hypens or thereabouts)
+function page-break() {
+  for i in {1..9}; do;
+    make-break
+  done
+  today-time
+}
+
+function today-time() {
+  echo "————————————\n"
+  date +"%a %l:%M%p"
+  echo "\n————————————"
+}
+
+alias make-big-break=page-break
 
 # the ol' gfind. Doesn't take a file pattern.
 function gfind-all() {
@@ -276,13 +321,13 @@ function gfind-all() {
     # $1 is search term, $2 is path
     # rg --no-ignore --hidden "$@"
     # even better is ag / silver searcher https://github.com/ggreer/the_silver_searcher
-    ag-no-pager -a --pager bat "$@"
+    ag-no-pager --ignore-case -a --pager bat "$@"
 }
 
 # the ol' gfind. Doesn't take a file pattern.
 function gfind() {
     # fd -t f . -x grep --color=always -Hi ${1}
-    ag-no-pager --pager bat "$@"
+    ag-no-pager --ignore-case --pager bat "$@"
 }
 
 # Print out the matches only
@@ -305,6 +350,10 @@ function agl() {
   ag --pager less "$@"
 }
 
+function lsofgr() {
+  sudo lsof -i -P | grep -E "$1|LISTEN" | grep -E "$1|:"
+}
+
 function kill-em-all() {
   NAME=$1
 
@@ -316,9 +365,9 @@ function kill-em-all() {
 }
 
 function dateline() {
-  echo "––––––––––––"
+  echo -e "\n––––––––––––"
   date
-  echo "––––––––––––"
+  echo -e "––––––––––––\n"
 }
 
 function clean-slate() {
@@ -329,9 +378,31 @@ function clean-slate() {
 alias clr=clean-slate
 alias cls=clean-slate
 
-function psgr() {
-  ps auwwwwx | grep -v 'grep ' | grep -E "%CPU|$1"
+function h() {
+  NUM_LINES=$1
+  if [ -z "$NUM_LINES" ]; then
+      NUM_LINES=35
+  fi
+  \history -$NUM_LINES
 }
+
+function psgr() {
+  ps -e | grep -v 'grep ' | grep -iE "TIME CMD|$1"
+}
+
+# Sort on the command
+function psgr-sorted() {
+  echo "  PID TTY           TIME CMD"
+  ps -e | grep -v 'grep ' | grep -iE "$1" | sort -k 4
+}
+
+function lsofgr-listen() {
+  echo "Searching for processes listening on port $1..."
+  #echo "ℹ️ lsof can take up to 2 minutes to complete"
+  # --stdin Write the prompt to the standard error and read the password from the standard input instead of using the terminal device.
+  sudo --stdin < <(echo "11anfair") lsof -i -P | grep -E "COMMAND|.*:$1.*LISTEN"
+}
+alias port-grep=lsofgr
 
 function edit() {
   /Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code $1
@@ -556,4 +627,31 @@ bindkey '^Xf' peco-directories
 zle -N peco-files
 bindkey '^X^f' peco-files
 
-### peco functions ###
+###########################
+# Percol https://github.com/mooz/percol
+###########################
+function ppgrep() {
+    if [[ $1 == "" ]]; then
+        PERCOL=percol
+    else
+        PERCOL="percol --query $1"
+    fi
+    ps aux | eval $PERCOL | awk '{ print $2 }'
+}
+
+function ppkill() {
+    if [[ $1 =~ "^-" ]]; then
+        QUERY=""            # options only
+    else
+        QUERY=$1            # with a query
+        [[ $# > 0 ]] && shift
+    fi
+    ppgrep $QUERY | xargs kill $*
+}
+
+alias interactive-ps-grep="ppgrep"
+alias grep-ps-percol="ppgrep"
+alias grep-ps-interactive="ppgrep"
+alias interactive-kill="ppkill"
+alias kill-interactive="ppkill"
+alias kill-percol="ppkill"

@@ -37,5 +37,5 @@ function _term_list(){
 }
 
 zle -C term_list menu-complete _generic
-bindkey "^v" term_list
+bindkey "^0" term_list
 zstyle ':completion:term_list::::' completer _term_list
