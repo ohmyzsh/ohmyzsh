@@ -264,6 +264,11 @@ lsg() {
     l | grep -iE "$1"
 }
 
+# These need to be here since they're required by gfind*
+alias ag="/usr/local/homebrew/bin/ag --ignore '*.svg' --ignore '*.xlt' --ignore '*.tsx' --ignore '*.js' --ignore '*.snap' --ignore '*.json' --ignore '*.dat' --ignore '*.builds' --ignore '*.tsv' --ignore '*.csv' --ignore '*.lock' --ignore '*.patch' --ignore '*.sum' --pager=bat"
+alias ag-no-pager="/usr/local/homebrew/bin/ag --ignore '*.svg' --ignore '*.xlt' --ignore '*.tsx' --ignore '*.js' --ignore '*.snap' --ignore '*.json' --ignore '*.dat' --ignore '*.builds' --ignore '*.tsv' --ignore '*.csv' --ignore '*.lock' --ignore '*.patch' --ignore '*.sum'"
+alias "git-grep"="git \grep"
+
 # the ol' gfind. Doesn't take a file pattern.
 function gfind-all() {
     # fd -H -t f . -x grep --color=always -Hi ${1}
@@ -271,27 +276,18 @@ function gfind-all() {
     # $1 is search term, $2 is path
     # rg --no-ignore --hidden "$@"
     # even better is ag / silver searcher https://github.com/ggreer/the_silver_searcher
-    ag -a --pager less "$@"
+    ag-no-pager -a --pager bat "$@"
 }
 
 # the ol' gfind. Doesn't take a file pattern.
 function gfind() {
     # fd -t f . -x grep --color=always -Hi ${1}
-    ag --pager less "$@"
+    ag-no-pager --pager bat "$@"
 }
 
 # Print out the matches only
 function gfindf() {
-  # TODO make this a lot less shit e.g. don't search .git . Surely rg has
-  # the ability to do this.
-  find . -type f -exec grep --color=always -Hil $1 {} \;
-}
-
-function heroic-repo-configure() {
-  cp ${HOME}/src/spotify/prism-tools/heroic-test.yml ./heroic-guc.yml
-  cp ${HOME}/src/spotify/prism-tools/heroic-api-gae.yml ./heroic-gae.yml
-  ls -l | grep -E 'heroic.*yml|heroic.*yaml'
-  mkdir logs
+  ack -l $1 --pager=bat --color
 }
 
 # function h() {
@@ -351,6 +347,12 @@ function dir-sizes() {
   du -sh ./* | sort -h
 }
 
+# Call from within the source TLD
+function download-sources-intellij() {
+  mvn dependency:sources
+  mvn dependency:resolve -Dclassifier=javadoc
+}
+
 
 function ssh-ds718() {
   ssh -p 658 pskadmin@192.168.2.7
@@ -358,7 +360,7 @@ function ssh-ds718() {
 
 alias git-stash-list-all='gitk `git stash list --pretty=format:%gd`'
 
-function master-show-protection() {
+function git-show-protection() {
   git branch -vv | grep "origin/`git branch --show-current`"
 }
 
@@ -373,11 +375,15 @@ function git-show-all-stashes() {
 }
 
 # kill most recent container instance
-alias docker-kill-latest='docker ps -l --format='{{.Names}}' | xargs docker kill'
+alias docker-kill-latest='docker ps -l --format="{{.Names}}" | xargs docker kill'
 
 # stop all containers
-docker-stop-all-containers () {
-  docker container stop -t 2 $(docker container ls -q) 2>/dev/null
+function docker-stop-all-containers () {
+  docker container stop -t 2 $(docker container ls -q) 2>/dev/null ; echo ""
+}
+
+function docker-lsg () {
+  docker image ls | grep -Ei "'IMAGE ID'|$1"
 }
 
 function find-gig-files() {
@@ -403,25 +409,63 @@ function start-cloud-storage() {
   ) &
 }
 
+# Out of action - needs work
+# function tree() {
+#   DIR=$1 ;
+#   shift # kubectl create -f hello-k8s-replicaset.yaml
+# ps $1 off
+#   /usr/local/homebrew/bin/tree -a $DIR | colorize_less "$@"
+# }
 
-function tree() {
-  DIR=$1 ;
-  shift # pops $1 off
-  /usr/local/homebrew/bin/tree -a $DIR | colorize_less "$@"
+function space() {
+  echo;echo;echo;echo;echo;
+}
+
+alias s="space"
+
+function open-job-docs() {
+  open 'https://docs.google.com/document/d/1O81om1F14fNhWhqt5VpIULfiCHmNXPkFcMoED09cidU/edit'
+  open 'https://docs.google.com/document/d/1pBJfqcWhn9Wz6p6wPpPrk6_9MdGG_24qmpluz4pM3AY/edit'
+  open 'https://docs.google.com/document/d/1nj_MidYJEDhk1uzhPFOZ6uFdXfZY2hdrV0_f8zJ4Lgs/edit'
+  open 'https://docs.google.com/document/d/1gPNcLjrZJnJnWy0-k5SqpgP4VAUZ_ikRLR9qYEB50M0/edit'
+}
+
+goclean() {
+ local pkg=$1; shift || return 1
+ local ost
+ local cnt
+ local scr
+
+ # Clean removes object files from package source directories (ignore error)
+ go clean -i $pkg &>/dev/null
+
+ # Set local variables
+ [[ "$(uname -m)" == "x86_64" ]] \
+ && ost="$(uname)";ost="${ost,,}_amd64" \
+ && cnt="${pkg//[^\/]}"
+
+ # Delete the source directory and compiled package directory(ies)
+ if (("${#cnt}" == "2")); then
+  rm -rf "${GOPATH%%:*}/src/${pkg%/*}"
+  rm -rf "${GOPATH%%:*}/pkg/${ost}/${pkg%/*}"
+ elif (("${#cnt}" > "2")); then
+  rm -rf "${GOPATH%%:*}/src/${pkg%/*/*}"
+  rm -rf "${GOPATH%%:*}/pkg/${ost}/${pkg%/*/*}"
+ fi
 }
 
 function _open-all-chrome-apps() {
   for APP in "${1}"/*.app; do
     echo "Opening $APP ..."
-    nohup open -a "$APP" &
+    nohup open -a "$APP" > /dev/null 2>&1 &
   done
 }
 
 function open-all-chrome-apps() {
-  CHROME_APP_DIR='/Users/peter/Dropbox (Personal)/_Settings/Chrome Apps/Chrome Apps.localized/'
-  _open-all-chrome-apps "$CHROME_APP_DIR"
-  CHROME_APP_DIR='/Users/peter/Dropbox (Personal)/_Settings/Chrome/Chrome Apps/Chrome Apps.localized/'
-  _open-all-chrome-apps "$CHROME_APP_DIR"
+  CHROME_APP_DIR='/Users/peter/Dropbox (Personal)/_Settings/Chrome Apps/Chrome Apps.localized'
+  _open-all-chrome-apps $CHROME_APP_DIR
+  CHROME_APP_DIR='/Users/peter/Dropbox (Personal)/_Settings/Chrome/Chrome Apps/Chrome Apps.localized'
+  _open-all-chrome-apps $CHROME_APP_DIR
 }
 
 function post-boot-tasks() {
@@ -439,20 +483,17 @@ function kill-cloud-storage() {
     killall -v "FinderSyncExtension" -SIGKILL &
 }
 
-# For photos, pictures, DS718
-function organise-into-dated-dirs() {
-  if [ $# -eq 0 ]
-  then
-    echo "Please supply an extension e.g. mov or mp4"
-    return
-  fi
+function explain-command {
+    command="https://explainshell.com/explain?cmd=${1}"
+osascript <<EOD
+tell application "Safari" to make new document with properties {URL:"$command"}
+return
+EOD
 
-  for x in *.${1}; do
-    d=$(date -r "$x" +%Y-%m-%d)
-    mkdir -p "$d"
-    mv -- "$x" "$d/"
-  done
 }
+
+alias explainer="explain-command"
+alias explain-args="explain-command"
 
 ### peco functions ###
 function peco-directories() {
@@ -506,6 +547,9 @@ function peco-files() {
     CURSOR=$#BUFFER
   fi
 }
+
+# Include Rune funcs
+. $HOME/.oh-my-zsh/rune-shell-funcs.zsh
 
 zle -N peco-directories
 bindkey '^Xf' peco-directories
