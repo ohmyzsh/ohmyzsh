@@ -11,3 +11,4 @@ plugins=(... oc)
 ## Contributors
 
 + [kevinkirkup](https://github.com/kevinkirkup) - Plugin Author
++ [jvarela01] (https://github.com/jvarela01) - Fix pluging completion for oc version 4.9 and 4.10
