@@ -32,3 +32,6 @@ These settings should go in your zshrc file, before Oh My Zsh is sourced:
 - **`NVM_AUTOLOAD`**: if `NVM_AUTOLOAD` is set to `1`, the plugin will automatically load a node version when
   if finds a [`.nvmrc` file](https://github.com/nvm-sh/nvm#nvmrc) in the current working directory indicating
   which node version to load.
+
+- **`NVM_SILENT`**: if `NVM_SILENT` is set to `1`, the plugin will disable verbose output of nvm when switching
+  between versions.

@@ -28,11 +28,17 @@ else
   return
 fi
 
+if (( $+$NVM_SILENT )); then
+  alias nvmUse="nvm use --silent"
+else
+  alias nvmUse="nvm use"
+fi
+
 # Call nvm when first using node, npm or yarn
 if (( $+NVM_LAZY )); then
   function node npm yarn $NVM_LAZY_CMD {
     unfunction node npm yarn $NVM_LAZY_CMD
-    nvm use default
+    nvmUse default
     command "$0" "$@"
   }
 fi
@@ -50,11 +56,13 @@ if (( $+NVM_AUTOLOAD )); then
       if [[ "$nvmrc_node_version" = "N/A" ]]; then
         nvm install
       elif [[ "$nvmrc_node_version" != "$node_version" ]]; then
-        nvm use
+        nvmUse
       fi
     elif [[ "$node_version" != "$(nvm version default)" ]]; then
-      echo "Reverting to nvm default version"
-      nvm use default
+      if [[ $NVM_SILENT -ne 1 ]]; then
+        echo "Reverting to nvm default version"
+      fi
+      nvmUse default
     fi
   }
 
