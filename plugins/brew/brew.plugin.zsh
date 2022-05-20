@@ -7,6 +7,10 @@ alias buf='brew upgrade --formula'
 alias bcubo='brew update && brew outdated --cask'
 alias bcubc='brew upgrade --cask && brew cleanup'
 
+BREW_DIR="${BREW_DIR:-/opt/homebrew}"
+
+eval "$($BREW_DIR/bin/brew shellenv)"
+
 function brews() {
   local formulae="$(brew leaves | xargs brew deps --installed --for-each)"
   local casks="$(brew list --cask)"
