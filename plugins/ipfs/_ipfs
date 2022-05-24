@@ -1,0 +1,791 @@
+#compdef ipfs
+#autoload
+
+local -a _1st_arguments
+_1st_arguments=(
+  'add:Add a file or directory to ipfs.'
+  'bitswap:Interact with the bitswap agent.'
+  'block:Interact with raw IPFS blocks.'
+  'bootstrap:Show or edit the list of bootstrap peers.'
+  'cat:Show IPFS object data.'
+  'cid:Convert and discover properties of CIDs'
+  'commands:List all available commands.'
+  'config:Get and set ipfs config values.'
+  'daemon:Run a network-connected IPFS node.'
+  'dag:Interact with ipld dag objects. (experimental)'
+  'dht:Issue commands directly through the DHT.'
+  'diag:Generate diagnostic reports.'
+  'dns:Resolve DNS links.'
+  'files:Interact with unixfs files.'
+  'filestore:Interact with filestore objects. (experimental)'
+  'get:Download IPFS objects.'
+  'id:Show ipfs node id info.'
+  'init:Initializes ipfs config file.'
+  'key:Create and list IPNS name keypairs.'
+  'log:Interact with the daemon log output.'
+  'ls:List directory contents for Unix filesystem objects.'
+  'mount:Mounts IPFS to the filesystem (read-only).'
+  'name:Publish and resolve IPNS names.'
+  'object:Interact with IPFS objects.'
+  'p2p:Libp2p stream mounting.'
+  'pin:Pin (and unpin) objects to local storage.'
+  'ping:Send echo request packets to IPFS hosts.'
+  'refs:List links (references) from an object.'
+  'repo:Manipulate the IPFS repo.'
+  'resolve:Resolve the value of names to IPFS.'
+  'stats:Query IPFS statistics.'
+  'swarm:Interact with the swarm.'
+  'tar:Utility functions for tar files in ipfs.'
+  'update:Download and apply go-ipfs updates'
+  'version:Show ipfs version information.'
+)
+
+_ipfs_subcommand(){
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+  _arguments -C ':command:->command' '*::options:->options'
+  case $state in
+    (command)
+      _describe -t commands "ipfs subcommand" $1
+      return
+    ;;
+    (options)
+      case $line[1] in
+        (wantlist)
+          case $MAIN_SUBCOMMAND in
+            (bitswap)
+              _arguments '(-p --peer)'{-p,--peer}'[Specify which peer to show wantlist for. Default: self.]'
+            ;;
+          esac
+        ;;
+        (add)
+          case $MAIN_SUBCOMMAND in
+            (pin)
+              _arguments \
+                '(-r --recursive)'{-r,--recursive}'[Recursively pin the object linked to by the specified object(s). Default: true.]' \
+                '--progress[Show progress.]'
+            ;;
+            (bootstrap)
+              local -a _bootstrap_rm_arguments
+              _bootstrap_rm_arguments=(
+                'default:Add default peers to the bootstrap list.'
+              )
+              _ipfs_subcommand _bootstrap_rm_arguments
+            ;;
+          esac
+        ;;
+        (rm)
+          case $MAIN_SUBCOMMAND in
+            (pin)
+              _arguments '(-r --recursive)'{-r,--recursive}'[Recursively unpin the object linked to by the specified object(s). Default: true.]'
+            ;;
+            (bootstrap)
+              local -a _bootstrap_rm_arguments
+              _bootstrap_rm_arguments=(
+                'all:Remove all peers from the bootstrap list.'
+              )
+              _ipfs_subcommand _bootstrap_rm_arguments
+            ;;
+          esac
+        ;;
+        (ls)
+          case $MAIN_SUBCOMMAND in
+            (pin)
+              _arguments \
+                '(-t --type)'{-t,--type}'[The type of pinned keys to list. Can be "direct", "indirect", "recursive", or "all". Default: all.]' \
+                '(-q --quiet)'{-q,--quiet}'[Write just hashes of objects.]' \
+                '(-s --stream)'{-s,--stream}'[Enable streaming of pins as they are discovered.]'
+            ;;
+            (p2p)
+              _arguments '(-v --headers)'{-v,--headers}'[Print table headers (Protocol, Listen, Target).]'
+            ;;
+          esac
+        ;;
+        (update)
+          case $MAIN_SUBCOMMAND in
+            (pin)
+              _arguments '--unpin[Remove the old pin. Default: true.]'
+            ;;
+          esac
+        ;;
+        (verify)
+          case $MAIN_SUBCOMMAND in
+            (pin)
+              _arguments \
+                '--verbose[Also write the hashes of non-broken pins.]' \
+                '(-q --quiet)'{-q,--quiet}'[Write just hashes of broken pins.]'
+            ;;
+          esac
+        ;;
+        (query|findpeer)
+          case $MAIN_SUBCOMMAND in
+            (dht)
+              _arguments '(-v --verbose)'{-v,--verbose}'[Print extra information.]'
+            ;;
+          esac
+        ;;
+        (get)
+          case $MAIN_SUBCOMMAND in
+            (dht)
+              _arguments '(-v --verbose)'{-v,--verbose}'[Print extra information.]'
+            ;;
+            (object)
+              _arguments '--data-encoding[Encoding type of the data field, either "text" or "base64". Default: text.]'
+            ;;
+          esac
+        ;;
+        (put)
+          case $MAIN_SUBCOMMAND in
+            (dht)
+              _arguments '(-v --verbose)'{-v,--verbose}'[Print extra information.]'
+            ;;
+            (object)
+              _arguments \
+                '--inputenc[Encoding type of input data. One of: {"protobuf", "json"}. Default: json.]' \
+                '--datafieldenc[Encoding type of the data field, either "text" or "base64". Default: text.]' \
+                '--pin[Pin this object when adding.]' \
+                '(-q --quiet)'{-q,--quiet}'[Write minimal output]'
+            ;;
+          esac
+        ;;
+        (findprovs)
+          case $MAIN_SUBCOMMAND in
+            (dht)
+              _arguments \
+                '(-v --verbose)'{-v,--verbose}'[Print extra information.]' \
+                '(-n --num-providers)'{-n,--num-providers}'[The number of providers to find. Default: 20.]'
+            ;;
+          esac
+        ;;
+        (provide)
+          case $MAIN_SUBCOMMAND in
+            (dht)
+              _arguments \
+                '(-v --verbose)'{-v,--verbose}'[Print extra information.]' \
+                '(-r --recursive)'{-r,--recursive}'[Recursively provide entire graph.]'
+            ;;
+          esac
+        ;;
+        (cmds)
+          case $MAIN_SUBCOMMAND in
+            (diag)
+              _arguments '(-v --verbose)'{-v,--verbose}'[Print extra information.]'
+            ;;
+          esac
+        ;;
+        (diff)
+          case $MAIN_SUBCOMMAND in
+            (object)
+              _arguments '(-v --verbose)'{-v,--verbose}'[Print extra information.]'
+            ;;
+          esac
+        ;;
+        (stat)
+          case $MAIN_SUBCOMMAND in
+            (dag)
+              _arguments \
+                '(-p --progress)'{-p,--progress}'[Return progressive data while reading through the DAG. Default: true.]'
+            ;;
+            (object)
+              _arguments '--human[Print sizes in human readable format (e.g., 1K 234M 2G).]'
+            ;;
+            (repo)
+              _arguments \
+                '(-s --size-only)'{-s,--size-only}'[Only report RepoSize and StorageMax.]' \
+                '(-H --human)'{-H,--human}'[Print sizes in human readable format (e.g., 1K 234M 2G).]'
+            ;;
+          esac
+        ;;
+        (publish)
+          case $MAIN_SUBCOMMAND in
+            (name)
+              _arguments \
+                '--resolve[Check if the given path can be resolved before publishing. Default: true.]' \
+                '(-t --lifetime)'{-t,--lifetime}'[Time duration that the record will be valid for. Default: 24h.]' \
+                '--allow-offline[When offline, save the IPNS record to the the local datastore without broadcasting to the network instead of simply failing.]' \
+                '--ttl[Time duration this record should be cached for. Uses the same syntax as the lifetime option. (caution: experimental).]' \
+                '(-k --key)'{-k,--key}"[Name of the key to be used or a valid PeerID, as listed by 'ipfs key list -l'. Default: self.]" \
+                '(-Q --quieter)'{-Q,--quieter}'[Write only final hash.]' \
+                '--ipns-base[Encoding used for keys: Can either be a multibase encoded CID or a base58btc encoded multihash. Takes {b58mh|base36|k|base32|b...}. Default: base36.]'
+            ;;
+          esac
+        ;;
+        (pubsub)
+          case $MAIN_SUBCOMMAND in
+            (name)
+              local -a _name_pubsub_arguments
+              _name_pubsub_arguments=(
+                'cancel:Cancel a name subscription'
+                'state:Query the state of IPNS pubsub'
+                'subs:Show current name subscriptions'
+              )
+              _ipfs_subcommand _name_pubsub_arguments
+            ;;
+          esac
+        ;;
+        (resolve)
+          case $MAIN_SUBCOMMAND in
+            (name)
+              _arguments \
+                '(-r --recursive)'{-r,--recursive}'[Resolve until the result is not an IPNS name. Default: true.]' \
+                '(-n --nocache)'{-n,--nocache}'[Do not use cached entries.]' \
+                '(--dhtrc --dht-record-count)'{--dhtrc,--dht-record-count}'[Number of records to request for DHT resolution.]' \
+                '(--dhtt --dht-timeout)'{--dhtt,--dht-timeout}'[Max time to collect values during DHT resolution eg "30s". Pass 0 for no timeout.]' \
+                '(-s --stream)'{-s,--stream}'[Stream entries as they are found.]'
+            ;;
+          esac
+        ;;
+        (patch)
+          case $MAIN_SUBCOMMAND in
+            (object)
+              local -a _object_patch_arguments
+              _object_patch_arguments=(
+                'add-link:Add a link to a given object.'
+                'append-data:Append data to the data segment of a dag node.'
+                'rm-link:Remove a link from a given object.'
+                'set-data:Set the data field of an IPFS object.'
+              )
+              _ipfs_subcommand _object_patch_arguments
+            ;;
+          esac
+        ;;
+        (gc)
+          case $MAIN_SUBCOMMAND in
+            (repo)
+              _arguments \
+                '--stream-errors[Stream errors.]' \
+                '(-q --quiet)'{-q,--quiet}'[Write minimal output.]'
+            ;;
+          esac
+        ;;
+        (bitswap)
+          case $MAIN_SUBCOMMAND in
+            (stats)
+              _arguments \
+                '(-v --verbose)'{-v,--verbose}'[Print extra information.]' \
+                '--human[Print sizes in human readable format (e.g., 1K 234M 2G).]'
+            ;;
+          esac
+        ;;
+        (bw)
+          case $MAIN_SUBCOMMAND in
+            (stats)
+              _arguments \
+                '(-p --peer)'{-p,--peer}'[Specify a peer to print bandwidth for.]' \
+                '(-t --proto)'{-t,--proto}'[Specify a protocol to print bandwidth for.]' \
+                '--poll[Print bandwidth at an interval.]' \
+                '(-i --interval)'{-i,--interval}"[Time interval to wait between updating output, if 'poll' is true.]"
+            ;;
+          esac
+        ;;
+        (repo)
+          case $MAIN_SUBCOMMAND in
+            (stats)
+              _arguments \
+                '--size-only[Only report RepoSize and StorageMax.]' \
+                '--human[Print sizes in human readable format (e.g., 1K 234M 2G).]'
+            ;;
+          esac
+        ;;
+        (bases)
+          case $MAIN_SUBCOMMAND in
+            (cid)
+              _arguments \
+                '--prefix[also include the single leter prefixes in addition to the code.]' \
+                '--numeric[also include numeric codes.]'
+            ;;
+          esac
+        ;;
+        (codecs|hashes)
+          case $MAIN_SUBCOMMAND in
+            (cid)
+              _arguments '--numeric[also include numeric codes.]'
+            ;;
+          esac
+        ;;
+        (format)
+          case $MAIN_SUBCOMMAND in
+            (cid)
+              _arguments \
+                '-f[Printf style format string. Default: %s.]' \
+                '-v[CID version to convert to.]' \
+                '--codec[CID codec to convert to.]' \
+                '-b[Multibase to display CID in.]'
+            ;;
+          esac
+        ;;
+        (close)
+          case $MAIN_SUBCOMMAND in
+            (p2p)
+              _arguments \
+                '(-a --all)'{-a,--all}'[Close all listeners.]' \
+                '(-p --protocol)'{-p,--protocol}'[Match protocol name.]' \
+                '(-l --listen-address)'{-l,--listen-address}'[Match listen address.]' \
+                '(-t --target-address)'{-t,--target-address}'[Match target address.]'
+            ;;
+          esac
+        ;;
+        (forward)
+          case $MAIN_SUBCOMMAND in
+            (p2p)
+              _arguments "--allow-custom-protocol[Don't require /x/ prefix.]"
+            ;;
+          esac
+        ;;
+        (listen)
+          case $MAIN_SUBCOMMAND in
+            (p2p)
+              _arguments \
+                "--allow-custom-protocol[Don't require /x/ prefix.]" \
+                '(-r --report-peer-id)'{-r,--report-peer-id}'[Send remote base58 peerid to target when a new connection is established.]'
+            ;;
+          esac
+        ;;
+        (stream)
+          case $MAIN_SUBCOMMAND in
+            (p2p)
+              local -a _p2p_stream_arguments
+              _p2p_stream_arguments=(
+                'close:Close active p2p stream.'
+                'ls:List active p2p streams.'
+              )
+              _ipfs_subcommand _p2p_stream_arguments
+            ;;
+          esac
+        ;;
+        (addrs)
+          case $MAIN_SUBCOMMAND in
+            (swarm)
+              local -a _swarm_addrs_arguments
+              _swarm_addrs_arguments=(
+                'listen:List interface listening addresses.'
+                'local:List local addresses.'
+              )
+              _ipfs_subcommand _swarm_addrs_arguments
+            ;;
+          esac
+        ;;
+        (filters)
+          case $MAIN_SUBCOMMAND in
+            (swarm)
+              local -a _swarm_filters_arguments
+              _swarm_filters_arguments=(
+                'add:Add an address filter.'
+                'rm:Remove an address filter.'
+              )
+              _ipfs_subcommand _swarm_filters_arguments
+            ;;
+          esac
+        ;;
+        (peers)
+          case $MAIN_SUBCOMMAND in
+            (swarm)
+              _arguments \
+                '(-v --verbose)'{-v,--verbose}'[display all extra information.]' \
+                '--streams[Also list information about open streams for each peer.]' \
+                '--latency[Also list information about latency to each peer.]' \
+                '--direction[Also list information about the direction of connection.]'
+            ;;
+          esac
+        ;;
+        (export)
+          case $MAIN_SUBCOMMAND in
+            (dag)
+              _arguments \
+                '(-p --progress)'{-p,--progress}'[Display progress on CLI. Defaults to true when STDERR is a TTY.]'
+            ;;
+            (key)
+              _arguments \
+                '(-o --output)'{-o,--output}'[The path where the output should be stored.]'
+            ;;
+          esac
+        ;;
+        (import)
+          case $MAIN_SUBCOMMAND in
+            (dag)
+              _arguments \
+                '--silent[No output.]' \
+                '--pin-roots[Pin optional roots listed in the .car headers after importing. Default: true.]'
+            ;;
+            (key)
+              _arguments \
+                '--ipns-base[Encoding used for keys: Can either be a multibase encoded CID or a base58btc encoded multihash. Takes {b58mh|base36|k|base32|b...}. Default: base36.]'
+            ;;
+          esac
+        ;;
+        (remote)
+          case $MAIN_SUBCOMMAND in
+            (pin)
+              local -a _pin_remote_arguments
+              _pin_remote_arguments=(
+                'add:Pin object to remote pinning service.'
+                'ls:List objects pinned to remote pinning service.'
+                'rm:Remove pins from remote pinning service.'
+                'service:Configure remote pinning services.'
+              )
+              _ipfs_subcommand _pin_remote_arguments
+            ;;
+          esac
+        ;;
+      esac
+    ;;
+  esac
+}
+
+local expl
+
+_arguments \
+  '(-c --config)'{-c,--config}'[Path to the configuration file to use.]' \
+  '(-D --debug)'{-D,--debug}'[Operate in debug mode.]' \
+  '(--help)--help[Show the full command help text.]' \
+  '(--h)-h[Show a short version of the command help text.]' \
+  '(-L --local)'{-L,--local}'[Run the command locally, instead of using the daemon. DEPRECATED: use --offline.]' \
+  '(--offline)--offline[Run the command offline.]' \
+  '(--api)--api[Use a specific API instance (defaults to /ip4/127.0.0.1/tcp/5001).]' \
+  '(--cid-base)--cid-base[Multibase encoding used for version 1 CIDs in output.]' \
+  '(--upgrade-cidv0-in-output)--upgrade-cidv0-in-output[Upgrade version 0 to version 1 CIDs in output.]' \
+  '(--enc --encoding)'{--enc,--encoding}'[The encoding type the output should be encoded with (json, xml, or text). Default: text.]' \
+  '(--stream-channels)--stream-channels[Stream channel output.]' \
+  '(--timeout)--timeout[Set a global timeout on the command.]' \
+  '*:: :->subcmds' && return 0
+
+if (( CURRENT == 1 )); then
+  _describe -t commands "ipfs subcommand" _1st_arguments
+  return
+fi
+
+MAIN_SUBCOMMAND="$words[1]"
+case $MAIN_SUBCOMMAND in
+  (add)
+    _arguments \
+      '(-r --recursive)'{-r,--recursive}'[Add directory paths recursively.]' \
+      '(--dereference-args)--dereference-args[Symlinks supplied in arguments are dereferenced.]' \
+      '(--stdin-name)--stdin-name[Assign a name if the file source is stdin.]' \
+      '(-H --hidden)'{-H,--hidden}'[Include files that are hidden. Only takes effect on recursive add.]' \
+      '(--ignore)--ignore[A rule (.gitignore-stype) defining which file(s) should be ignored (variadic, experimental).]' \
+      '(--ignore-rules-path)--ignore-rules-path[A path to a file with .gitignore-style ignore rules (experimental).]' \
+      '(-q --quiet)'{-q,--quiet}'[Write minimal output.]' \
+      '(-Q --quieter)'{-Q,--quieter}'[Write only final hash.]' \
+      '(--silent)--silent[Write no output.]' \
+      '(-p --progress)'{-p,--progress}'[Stream progress data.]' \
+      '(-t --trickle)'{-t,--trickle}'[Use trickle-dag format for dag generation.]' \
+      '(-n --only-hash)'{-n,--only-hash}'[Only chunk and hash - do not write to disk.]' \
+      '(-w --wrap-with-directory)'{-w,--wrap-with-directory}'[Wrap files with a directory object.]' \
+      '(-s --chunker)'{-s,--chunker}'[Chunking algorithm, size-(bytes) or rabin-(min)-(avg)-(max). Default: size-262144.]' \
+      '(--pin)--pin[Pin this object when adding. Default: true.]' \
+      '(--raw-leaves)--raw-leaves[Use raw blocks for leaf nodes. (experimental).]' \
+      '(--nocopy)--nocopy[Add the file using filestore. Implies raw-leaves. (experimental).]' \
+      '(--fscache)--fscache[Check the filestore for pre-existing blocks. (experimental).]' \
+      '(--cid-version)--cid-version[CID version. Defaults to 0 unless an option that depends on CIDv1 is passed. (experimental).]' \
+      '(--hash)--hash[Hash function to use. Implies CIDv1 if not sha2-256. (experimental). Default: sha2-256.]' \
+      '(--inline)--inline[Inline small blocks into CIDs. (experimental).]' \
+      '(--inline-limit)--inline-limit[Maximum block size to inline. (experimental). Default: 32.]'
+  ;;
+  (bitswap)
+    local -a _bitswap_arguments
+    _bitswap_arguments=(
+      'ledger:Show the current ledger for a peer.'
+      'reprovide:Trigger reprovider.'
+      'stat:Show some diagnostic information on the bitswap agent.'
+      'wantlist:Show blocks currently on the wantlist.'
+    )
+    _ipfs_subcommand _bitswap_arguments
+  ;;
+  (block)
+    local -a _block_arguments
+    _block_arguments=(
+      'get:Get a raw IPFS block.'
+      'put:Store input as an IPFS block.'
+      'rm:Remove IPFS block(s).'
+      'stat:Print information of a raw IPFS block.'
+    )
+    _ipfs_subcommand _block_arguments
+  ;;
+  (bootstrap)
+    local -a _bootstrap_arguments
+    _bootstrap_arguments=(
+      'add:Add peers to the bootstrap list.'
+      'list:Show peers in the bootstrap list.'
+      'rm:Remove peers from the bootstrap list.'
+    )
+    _ipfs_subcommand _bootstrap_arguments
+  ;;
+  (cat)
+    _arguments \
+      '(-o --offset)'{-o,--offset}'[Byte offset to begin reading from.]' \
+      '(-l --length)'{-l,--length}'[Maximum number of bytes to read.]'
+  ;;
+  (cid)
+    local -a _cid_arguments
+    _cid_arguments=(
+      'base32:Convert CIDs to Base32 CID version 1.'
+      'bases:List available multibase encodings.'
+      'codecs:List available CID codecs.'
+      'format:Format and convert a CID in various useful ways.'
+      'hashes:List available multihashes.'
+    )
+    _ipfs_subcommand _cid_arguments
+  ;;
+  (commands)
+    _arguments '(-f --flags)'{-f,--flags}'[Show command flags.]'
+  ;;
+  (config)
+    _arguments \
+      '--bool[Set a boolean value.]' \
+      '--json[Parse stringified JSON.]'
+    local -a _config_arguments
+    _config_arguments=(
+      'edit:Open the config file for editing in $EDITOR.'
+      'profile:Apply profiles to config.'
+      'replace:Replace the config with <file>.'
+      'show:Output config file contents.'
+    )
+    _ipfs_subcommand _config_arguments
+  ;;
+  (daemon)
+    _arguments \
+      '--init[Initialize ipfs with default settings if not already initialized.]' \
+      '--init-config[Path to existing configuration file to be loaded during --init.]' \
+      '--init-profile[Configuration profiles to apply for --init. See ipfs init --help for more.]' \
+      '--routing[Overrides the routing option. Default: default.]' \
+      '--mount[Mounts IPFS to the filesystem.]' \
+      '--writable[Enable writing objects (with POST, PUT and DELETE).]' \
+      '--mount-ipfs[Path to the mountpoint for IPFS (if using --mount). Defaults to config setting.]' \
+      '--mount-ipns[Path to the mountpoint for IPNS (if using --mount). Defaults to config setting.]' \
+      '--unrestricted-api[Allow API access to unlisted hashes.]' \
+      '--disable-transport-encryption[Disable transport encryption (for debugging protocols).]' \
+      '--enable-gc[Enable automatic periodic repo garbage collection.]' \
+      '--manage-fdlimit[Check and raise file descriptor limits if needed. Default: true.]' \
+      '--migrate[If true, assume yes at the migrate prompt. If false, assume no.]' \
+      '--enable-pubsub-experiment[Instantiate the ipfs daemon with the experimental pubsub feature enabled.]' \
+      '--enable-namesys-pubsub[Enable IPNS record distribution through pubsub; enables pubsub.]' \
+      '--enable-mplex-experiment[Add the experimental 'go-multiplex' stream muxer to libp2p on construction. Default: true.]'
+  ;;
+  (dag)
+    local -a _dag_arguments
+    _dag_arguments=(
+      'export:Streams the selected DAG as a .car stream on stdout.'
+      'get:Get a dag node from ipfs.'
+      'import:Import the contents of .car files'
+      'put:Add a dag node to ipfs.'
+      'resolve:Resolve ipld block.'
+      'stat:Gets stats for a DAG'
+    )
+    _ipfs_subcommand _dag_arguments
+  ;;
+  (dht)
+    local -a _dht_arguments
+    _dht_arguments=(
+      'findpeer:Find the multiaddresses associated with a Peer ID.'
+      'findprovs:Find peers that can provide a specific value, given a key.'
+      'get:Given a key, query the routing system for its best value.'
+      'provide:Announce to the network that you are providing given values.'
+      'put:Write a key/value pair to the routing system.'
+      'query:Find the closest Peer IDs to a given Peer ID by querying the DHT.'
+    )
+    _ipfs_subcommand _dht_arguments
+  ;;
+  (diag)
+    local -a _diag_arguments
+    _diag_arguments=(
+      'cmds:List commands run on this IPFS node.'
+      'sys:Print system diagnostic information.'
+    )
+    _ipfs_subcommand _diag_arguments
+  ;;
+  (dns)
+    _arguments '(-r --recursive)'{-r,--recursive}'[Resolve until the result is not a DNS link. Default: true.]'
+  ;;
+  (files)
+    _arguments '(-f --flush)'{-f,--flush}'[Flush target and ancestors after write. Default: true.]'
+    local -a _files_arguments
+    _files_arguments=(
+      'chcid:Change the cid version or hash function of the root node of a given path.'
+      'cp:Copy files into mfs.'
+      "flush:Flush a given path's data to disk."
+      'ls:List directories in the local mutable namespace.'
+      'mkdir:Make directories.'
+      'mv:Move files.'
+      'read:Read a file in a given mfs.'
+      'rm:Remove a file.'
+      'stat:Display file status.'
+      'write:Write to a mutable file in a given filesystem.'
+    )
+    _ipfs_subcommand _files_arguments
+  ;;
+  (filestore)
+    local -a _filestore_arguments
+    _filestore_arguments=(
+      'dups:List blocks that are both in the filestore and standard block storage.'
+      'ls:List objects in filestore.'
+      'verify:Verify objects in filestore.'
+    )
+    _ipfs_subcommand _filestore_arguments
+  ;;
+  (get)
+    _arguments \
+      '(-o --output)'{-o,--output}'[The path where the output should be stored.]'\
+      '(-a --archive)'{-a,--archive}'[Output a TAR archive.]' \
+      '(-C --compress)'{-C,--compress}'[Compress the output with GZIP compression.]' \
+      '(-l --compression-level)'{-l,--compression-level}'[The level of compression (1-9).]'
+  ;;
+  (id)
+    _arguments \
+      '(-f --format)'{-f,--format}'[Optional output format.]' \
+      '--peerid-base[Encoding used for peer IDs: Can either be a multibase encoded CID or a base58btc encoded multihash. Takes {b58mh|base36|k|base32|b...}. Default: b58mh.]'
+  ;;
+  (init)
+    _arguments \
+      '(-a --algorithm)'{-a, --algorithm}'[Cryptographic algorithm to use for key generation. Default: ed25519.]' \
+      '(-b --bits)'{-b,--bits}'[Number of bits to use in the generated RSA private key.]' \
+      '(-e --empty-repo)'{-e,--empty-repo}"[Don't add and pin help files to the local storage.]" \
+      '(-p --profile)'{-p,--profile}"[Apply profile settings to config. Multiple profiles can be separated by ','.]"
+  ;;
+  (key)
+    local -a _key_arguments
+    _key_arguments=(
+      'export:Export a keypair'
+      'gen:Create a new keypair'
+      'import:Import a key and prints imported key id'
+      'list:List all local keypairs'
+      'rename:Rename a keypair'
+      'rm:Remove a keypair'
+      'rotate:Rotates the ipfs identity.'
+    )
+    _ipfs_subcommand _key_arguments
+  ;;
+  (log)
+    local -a _log_arguments
+    _log_arguments=(
+      'level:Change the logging level.'
+      'ls:List the logging subsystems.'
+      'tail:Read the event log.'
+    )
+    _ipfs_subcommand _log_arguments
+  ;;
+  (ls)
+    _arguments \
+      '(-v --headers)'{-v,--headers}'[Print table headers (Hash, Size, Name).]' \
+      '--resolve-type[Resolve linked objects to find out their types. Default: true.]' \
+      '--size[Resolve linked objects to find out their file size. Default: true.]' \
+      '(-s --stream)'{-s,--stream}'[Enable experimental streaming of directory entries as they are traversed.]' \
+  ;;
+  (mount)
+    _arguments \
+      '(-f --ipfs-path)'{-f,--ipfs-path}'[The path where IPFS should be mounted.]' \
+      '(-n --ipns-path)'{-n,--ipns-path}'[The path where IPNS should be mounted.]'
+  ;;
+  (name)
+    local -a _name_arguments
+    _name_arguments=(
+      'publish:Publish IPNS names.'
+      'pubsub:IPNS pubsub management.'
+      'resolve:Resolve IPNS names.'
+    )
+    _ipfs_subcommand _name_arguments
+  ;;
+  (object)
+    local -a _object_arguments
+    _object_arguments=(
+      'data:Output the raw bytes of an IPFS object.'
+      'diff:Display the diff between two ipfs objects.'
+      'get:Get and serialize the DAG node named by <key>.'
+      'links:Output the links pointed to by the specified object.'
+      'new:Create a new object from an ipfs template.'
+      'patch:Create a new merkledag object based on an existing one.'
+      'put:Store input as a DAG object, print its key.'
+      'stat:Get stats for the DAG node named by <key>.'
+    )
+    _ipfs_subcommand _object_arguments
+  ;;
+  (p2p)
+    local -a _p2p_arguments
+    _p2p_arguments=(
+      'close:Stop listening for new connections to forward.'
+      'forward:Forward connections to libp2p service'
+      'listen:Create libp2p service'
+      'ls:List active p2p listeners.'
+      'stream:P2P stream management.'
+    )
+    _ipfs_subcommand _p2p_arguments
+  ;;
+  (pin)
+    local -a _pin_arguments
+    _pin_arguments=(
+      'add:Pin objects to local storage.'
+      'ls:List objects pinned to local storage.'
+      'remote:Pin (and unpin) objects to remote pinning service.'
+      'rm:Remove pinned objects from local storage.'
+      'update:Update a recursive pin'
+      'verify:Verify that recursive pins are complete.'
+    )
+    _ipfs_subcommand _pin_arguments
+  ;;
+  (ping)
+    _arguments '(-n --count)'{-n,--count}'[Number of ping messages to send. Default: 10.]'
+  ;;
+  (refs)
+    _arguments \
+      '--format[Emit edges with given format. Available tokens: <src> <dst> <linkname>. Default: <dst>.]' \
+      '(-e --edges)'{-e,--edges}'[Emit edge format: `<from> -> <to>`.]' \
+      '(-u --unique)'{-u,--unique}'[Omit duplicate refs from output.]' \
+      '(-r --recursive)'{-r,--recursive}'[Recursively list links of child nodes.]' \
+      '--max-depth[Only for recursive refs, limits fetch and listing to the given depth. Default: -1.]'
+    local -a _refs_arguments
+    _refs_arguments='local:List all local references.'
+    _ipfs_subcommand _refs_arguments
+  ;;
+  (repo)
+    local -a _repo_arguments
+    _repo_arguments=(
+      'fsck:Remove repo lockfiles.'
+      'gc:Perform a garbage collection sweep on the repo.'
+      'stat:Get stats for the currently used repo.'
+      'verify:Verify all blocks in repo are not corrupted.'
+      'version:Show the repo version.'
+    )
+    _ipfs_subcommand _repo_arguments
+  ;;
+  (resolve)
+    _arguments \
+      '(-r --recursive)'{-r,--recursive}'[Resolve until the result is an IPFS name. Default: true.]' \
+      '(--dhtrc --dht-record-count)'{--dhtrc,--dht-record-count}'[Number of records to request for DHT resolution.]' \
+      '(--dhtt --dht-timeout)'{--dhtt,--dht-timeout}'[Max time to collect values during DHT resolution eg "30s". Pass 0 for no timeout.]'
+  ;;
+  (stats)
+    local -a _stats_arguments
+    _stats_arguments=(
+      'bitswap:Show some diagnostic information on the bitswap agent.'
+      'bw:Print ipfs bandwidth information.'
+      "dht:Returns statistics about the node's DHT(s)"
+      'repo:Get stats for the currently used repo.'
+    )
+    _ipfs_subcommand _stats_arguments
+  ;;
+  (swarm)
+    local -a _swarm_arguments
+    _swarm_arguments=(
+      'addrs:List known addresses. Useful for debugging.'
+      'connect:Open connection to a given address.'
+      'disconnect:Close connection to a given address.'
+      'filters:Manipulate address filters.'
+      'peers:List peers with open connections.'
+    )
+    _ipfs_subcommand _swarm_arguments
+  ;;
+  (tar)
+    local -a _tar_arguments
+    _tar_arguments=(
+      'add:Import a tar file into ipfs.'
+      'cat:Export a tar file from IPFS.'
+    )
+    _ipfs_subcommand _tar_arguments
+  ;;
+  (version)
+    _arguments \
+      '(-n --number)'{-n,--number}'[Only show the version number.]' \
+      '--commit[Show the commit hash.]' \
+      '--repo[Show repo version.]' \
+      '--all[Show all version information.]'
+  ;;
+esac

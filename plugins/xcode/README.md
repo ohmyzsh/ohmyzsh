@@ -26,7 +26,7 @@ plugins=(... xcode)
 
 ###  `xc`
 
-Opens the current directory in Xcode as an Xcode project. This will open one of the `.xcworkspace` and `.xcodeproj` files that it can find in the current working directory. You can also specify a directory to look in for the Xcode files.
+Opens the current directory in Xcode as an Xcode project or a Swift package. This will open one of the `.xcworkspace`, `.xcodeproj`, `.swiftpm` and `Package.swift` files that it can find in the current working directory. You can also specify a directory to look in for the Xcode files.
 Returns 1 if it didn't find any relevant files.
 
 ###  `xx`

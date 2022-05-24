@@ -1,5 +1,8 @@
+zmodload zsh/datetime
+
 __timer_current_time() {
-  perl -MTime::HiRes=time -e'print time'
+  zmodload zsh/datetime
+  echo $EPOCHREALTIME
 }
 
 __timer_format_duration() {

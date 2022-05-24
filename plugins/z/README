@@ -23,6 +23,8 @@ DESCRIPTION
 OPTIONS
        -c     restrict matches to subdirectories of the current directory
 
+       -e     echo the best match, don't cd
+
        -h     show a brief help message
 
        -l     list only
@@ -57,6 +59,8 @@ NOTES
        Optionally:
               Set $_Z_CMD to change the command name (default z).
               Set $_Z_DATA to change the datafile (default $HOME/.z).
+              Set  $_Z_MAX_SCORE  lower  to  age  entries  out faster (default
+              9000).
               Set $_Z_NO_RESOLVE_SYMLINKS to prevent symlink resolution.
               Set $_Z_NO_PROMPT_COMMAND to handle PROMPT_COMMAND/precmd  your-
               self.
@@ -64,8 +68,8 @@ NOTES
               Set $_Z_OWNER to allow usage when in 'sudo -s' mode.
               (These  settings  should  go  in  .bashrc/.zshrc before the line
               added above.)
-              Install   the   provided   man   page   z.1    somewhere    like
-              /usr/local/man/man1.
+              Install the provided man page z.1  somewhere  in  your  MANPATH,
+              like /usr/local/man/man1.
 
    Aging:
        The rank of directories maintained by z undergoes aging based on a sim-

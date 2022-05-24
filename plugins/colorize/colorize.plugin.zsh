@@ -6,7 +6,8 @@ alias cless="colorize_less"
 ZSH_COLORIZE_PLUGIN_PATH=$0:A
 
 colorize_check_requirements() {
-    local available_tools=("chroma" "pygmentize")
+    local -a available_tools
+    available_tools=("chroma" "pygmentize")
 
     if [ -z "$ZSH_COLORIZE_TOOL" ]; then
         if (( $+commands[pygmentize] )); then
@@ -81,7 +82,7 @@ colorize_less() {
         # This variable tells less to pipe every file through the specified command
         # (see the man page of less INPUT PREPROCESSOR).
         # 'zsh -ic "colorize_cat %s 2> /dev/null"' would not work for huge files like
-        # the ~/.zsh_history. For such files the tty of the preprocessor will be supended.
+        # the ~/.zsh_history. For such files the tty of the preprocessor will be suspended.
         # Therefore we must source this file to make colorize_cat available in the
         # preprocessor without the interactive mode.
         # `2>/dev/null` will suppress the error for large files 'broken pipe' of the python
@@ -95,7 +96,7 @@ colorize_less() {
         # which assumes that his LESSOPEN has been executed.
         local LESSCLOSE=""
 
-        LESS="$LESS" LESSOPEN="$LESSOPEN" LESSCLOSE="$LESSCLOSE" less "$@"
+        LESS="$LESS" LESSOPEN="$LESSOPEN" LESSCLOSE="$LESSCLOSE" command less "$@"
     }
 
     if [ -t 0 ]; then
