@@ -1,0 +1,39 @@
+name: 'Close stale issues and PR'
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 1 * * *' # https://crontab.guru/#30_1_*_*_* (everyday at 0130)
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v5.0.0
+        with:
+          operations-per-run: 200
+          ascending: true
+          delete-branch: true
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          # Number of days of inactivity before an issue becomes stale
+          days-before-stale: 180
+          # Number of days of inactivity before a stale issue is closed
+          days-before-close: 10
+          # Issues with these labels will never be considered stale
+          exempt-issue-labels: "awaiting-approval,work-in-progress,on-hold,pinned,security"
+          exempt-pr-labels: "awaiting-approval,work-in-progress,on-hold,pinned,security"
+          # Comment to post when marking an issue as stale.
+          stale-issue-message: >
+            This issue has been automatically marked as stale because it has not had
+            recent activity. It will be closed if no further activity occurs. Thank you
+            for your contributions.
+          stale-pr-message: >
+            This pull request has been automatically marked as stale because it has not had
+            recent activity. It will be closed if no further activity occurs. Thank you
+            for your contributions.
+          # Label to use when marking an issue as stale
+          stale-issue-label: 'no-issue-activity'
+          stale-pr-label: 'no-pr-activity'
