@@ -18,7 +18,7 @@ function theme {
 }
 
 function _theme {
-    _arguments "1: :($(themels))"
+    _arguments "1: :($(lstheme))"
 }
 
 compdef _theme theme
@@ -31,7 +31,7 @@ function themes {
     unset -v THEMES_CURRENT_THEME
 }
 
-function themels {
+function lstheme {
     # Resources:
     # http://zsh.sourceforge.net/Doc/Release/Expansion.html#Modifiers
     # http://zsh.sourceforge.net/Doc/Release/Expansion.html#Glob-Qualifiers
