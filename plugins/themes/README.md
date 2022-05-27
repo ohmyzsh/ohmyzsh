@@ -14,5 +14,9 @@ plugins=(... themes)
 
 `theme ` - Changes the ZSH theme to some random theme.
 
-`lstheme ` - Lists installed ZSH themes.
+`themes <theme_name>` - Changes the ZSH theme to specified theme and save the theme.
+
+`themes ` - Changes the ZSH theme to some random theme and save `random` the theme.
+
+`themels ` - Lists installed ZSH themes.
 

@@ -1,3 +1,5 @@
+THEMES_CURRENT_THEME=""
+
 function theme {
     : ${1:=random} # Use random theme if none provided
 
@@ -11,15 +13,25 @@ function theme {
         echo "$0: Theme '$1' not found"
         return 1
     fi
+
+    THEMES_CURRENT_THEME=$1
 }
 
 function _theme {
-    _arguments "1: :($(lstheme))"
+    _arguments "1: :($(themels))"
 }
 
 compdef _theme theme
 
-function lstheme {
+function themes {
+    # Switch the theme
+    theme $1
+    # Save the theme to $HOME/.zshrc
+    sed -i "/ZSH_THEME=\"/cZSH_THEME=\"$THEMES_CURRENT_THEME\"" $HOME/.zshrc
+    unset -v THEMES_CURRENT_THEME
+}
+
+function themels {
     # Resources:
     # http://zsh.sourceforge.net/Doc/Release/Expansion.html#Modifiers
     # http://zsh.sourceforge.net/Doc/Release/Expansion.html#Glob-Qualifiers
