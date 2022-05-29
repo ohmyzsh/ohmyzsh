@@ -92,34 +92,34 @@ function update_hg_vars() {
 function hg_prompt_info() {
   update_hg_vars
   if $(hg id >/dev/null 2>&1); then
-    local STATUS="$ZSH_THEME_HG_PROMPT_PREFIX$ZSH_THEME_HG_PROMPT_BRANCH$HG_REV_BRANCH%{${reset_color}%}"
+    local hg_status="$ZSH_THEME_HG_PROMPT_PREFIX$ZSH_THEME_HG_PROMPT_BRANCH$HG_REV_BRANCH%{${reset_color}%}"
     if [[ "$HG_BEHIND" -ne "0" ]]; then
-      STATUS="$STATUS$ZSH_THEME_HG_PROMPT_BEHIND$HG_BEHIND%{$reset_color%}"
+      hg_status="$hg_status$ZSH_THEME_HG_PROMPT_BEHIND$HG_BEHIND%{$reset_color%}"
     fi
     if [[ "$HG_AHEAD" -ne "0" ]]; then
-      STATUS="$STATUS$ZSH_THEME_HG_PROMPT_AHEAD$HG_AHEAD%{$reset_color%}"
+      hg_status="$hg_status$ZSH_THEME_HG_PROMPT_AHEAD$HG_AHEAD%{$reset_color%}"
     fi
-    STATUS="$STATUS$ZSH_THEME_HG_PROMPT_SEPARATOR"
+    hg_status="$hg_status$ZSH_THEME_HG_PROMPT_SEPARATOR"
     if [[ "$HG_MODIFIED" -ne "0" ]]; then
-      STATUS="$STATUS$ZSH_THEME_HG_PROMPT_MODIFIED$HG_MODIFIED%{$reset_color%}"
+      hg_status="$hg_status$ZSH_THEME_HG_PROMPT_MODIFIED$HG_MODIFIED%{$reset_color%}"
     fi
     if [[ "$HG_ADDED" -ne "0" ]]; then
-      STATUS="$STATUS$ZSH_THEME_HG_PROMPT_ADDED$HG_ADDED%{$reset_color%}"
+      hg_status="$hg_status$ZSH_THEME_HG_PROMPT_ADDED$HG_ADDED%{$reset_color%}"
     fi
     if [[ "$HG_REMOVED" -ne "0" ]]; then
-      STATUS="$STATUS$ZSH_THEME_HG_PROMPT_REMOVED$HG_REMOVED%{$reset_color%}"
+      hg_status="$hg_status$ZSH_THEME_HG_PROMPT_REMOVED$HG_REMOVED%{$reset_color%}"
     fi
     if [[ "$HG_DELETED" -ne "0" ]]; then
-      STATUS="$STATUS$ZSH_THEME_HG_PROMPT_DELETED$HG_DELETED%{$reset_color%}"
+      hg_status="$hg_status$ZSH_THEME_HG_PROMPT_DELETED$HG_DELETED%{$reset_color%}"
     fi
     if [[ "$HG_UNKNOWN" -ne "0" ]]; then
-      STATUS="$STATUS$ZSH_THEME_HG_PROMPT_UNKNOWN$HG_UNKNOWN%{$reset_color%}"
+      hg_status="$hg_status$ZSH_THEME_HG_PROMPT_UNKNOWN$HG_UNKNOWN%{$reset_color%}"
     fi
     if [[ "$HG_MODIFIED" -eq "0" && "$HG_ADDED" -eq "0" && "$HG_REMOVED" -eq "0" && "$HG_DELETED" -eq "0" && "$HG_UNKNOWN" -eq "0" ]]; then
-      STATUS="$STATUS$ZSH_THEME_HG_PROMPT_CLEAN"
+      hg_status="$hg_status$ZSH_THEME_HG_PROMPT_CLEAN"
     fi
-    STATUS="$STATUS%{${reset_color}%}$ZSH_THEME_HG_PROMPT_SUFFIX"
-    echo "$STATUS"
+    hg_status="$hg_status%{${reset_color}%}$ZSH_THEME_HG_PROMPT_SUFFIX"
+    echo "$hg_status"
   fi
 }
 
