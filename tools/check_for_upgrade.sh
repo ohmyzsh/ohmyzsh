@@ -180,23 +180,17 @@ function has_typed_input() {
     return
   fi
 
+  # If in reminder mode or user has typed input, show reminder and exit
+  if [[ "$update_mode" = reminder ]] || has_typed_input; then
+    printf '\r\e[0K' # move cursor to first column and clear whole line
+    echo "[oh-my-zsh] It's time to update! You can do that by running \`omz update\`"
+    return 0
+  fi
+
   # Don't ask for confirmation before updating if in auto mode
   if [[ "$update_mode" = auto ]]; then
     update_ohmyzsh
     return $?
-  fi
-
-  # If in reminder mode show reminder and exit
-  if [[ "$update_mode" = reminder ]]; then
-    echo "[oh-my-zsh] It's time to update! You can do that by running \`omz update\`"
-    return 0
-  fi
-
-  # If user has typed input, show reminder and exit
-  if has_typed_input; then
-    echo
-    echo "[oh-my-zsh] It's time to update! You can do that by running \`omz update\`"
-    return 0
   fi
 
   # Ask for confirmation and only update on 'y', 'Y' or Enter
