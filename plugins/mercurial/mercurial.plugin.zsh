@@ -89,7 +89,7 @@ function update_hg_vars() {
   fi
 }
 
-function hg_prompt_info {
+function hg_prompt_info() {
   update_hg_vars
   if $(hg id >/dev/null 2>&1); then
     local STATUS="$ZSH_THEME_HG_PROMPT_PREFIX$ZSH_THEME_HG_PROMPT_BRANCH$HG_REV_BRANCH%{${reset_color}%}"
