@@ -12,7 +12,7 @@ plugins=(... golang)
 ## Aliases
 
 | Alias  | Command           | Description                                                      |
-| ------ | ----------------- | -------------------------------------------------------------    |
+| ------ | ----------------- | -----------------------------------------------------------------|
 | gob    | `go build`        | Build your code                                                  |
 | goc    | `go clean`        | Removes object files from package source directories             |
 | god    | `go doc`          | Prints documentation comments                                    |
