@@ -109,6 +109,7 @@ _1st_arguments=(
     'release.init:Generates sample files for releases'
     'run:Run the given file or expression'
     "test:Run a project's tests"
+    "test.watch:Run a project's tests continuously using hex package mix_test_watch"
     'test.coverage:Build report from exported test coverage'
     'xref:Prints cross reference information'
     '--help:Describe available tasks'
@@ -120,7 +121,7 @@ __task_list ()
     local expl
     declare -a tasks
 
-    tasks=(app.config app.start app.tree archive archive.build archive.install archive.uninstall clean cmd compile compile.protocols deps deps.clean deps.compile deps.get deps.tree deps.unlock deps.update do ecto.create ecto.drop ecto.dump ecto.gen.migration ecto.gen.repo ecto.load ecto.migrate ecto.migrations ecto.rollback escript escript.build escript.install escript.uninstall firmware firmware.burn firmware.image format help hex hex.audit hex.build hex.config hex.docs hex.info hex.organization hex.key hex.outdated hex.owner hex.package hex.publish hex.registry hex.repo hex.retire hex.search hex.sponsor hex.user loadconfig local local.hex local.phoenix local.phx local.public_keys local.rebar nerves.artifact nerves.artifact.get nerves.info nerves.new nerves.release.init new phoenix.digest phoenix.gen.channel phoenix.gen.html phoenix.gen.json phoenix.gen.model phoenix.gen.secret phoenix.new phoenix.routes phoenix.server phx.digest phx.digest.clean phx.gen.auth phx.gen.cert phx.gen.channel phx.gen.context phx.gen.embedded phx.gen.html phx.gen.json phx.gen.live phx.gen.notifier phx.gen.presence phx.gen.schema phx.gen.secret phx.gen.socket phx.new phx.new.ecto phx.new.web phx.routes phx.server profile.cprof profile.eprof profile.fprof release release.init run test test.coverage xref)
+    tasks=(app.config app.start app.tree archive archive.build archive.install archive.uninstall clean cmd compile compile.protocols deps deps.clean deps.compile deps.get deps.tree deps.unlock deps.update do ecto.create ecto.drop ecto.dump ecto.gen.migration ecto.gen.repo ecto.load ecto.migrate ecto.migrations ecto.rollback escript escript.build escript.install escript.uninstall firmware firmware.burn firmware.image format help hex hex.audit hex.build hex.config hex.docs hex.info hex.organization hex.key hex.outdated hex.owner hex.package hex.publish hex.registry hex.repo hex.retire hex.search hex.sponsor hex.user loadconfig local local.hex local.phoenix local.phx local.public_keys local.rebar nerves.artifact nerves.artifact.get nerves.info nerves.new nerves.release.init new phoenix.digest phoenix.gen.channel phoenix.gen.html phoenix.gen.json phoenix.gen.model phoenix.gen.secret phoenix.new phoenix.routes phoenix.server phx.digest phx.digest.clean phx.gen.auth phx.gen.cert phx.gen.channel phx.gen.context phx.gen.embedded phx.gen.html phx.gen.json phx.gen.live phx.gen.notifier phx.gen.presence phx.gen.schema phx.gen.secret phx.gen.socket phx.new phx.new.ecto phx.new.web phx.routes phx.server profile.cprof profile.eprof profile.fprof release release.init run test test.watch test.coverage xref)
 
     _wanted tasks expl 'help' compadd $tasks
 }
@@ -146,6 +147,9 @@ case $state in
          _arguments ':feature:__task_list'
          ;;
       (test)
+         _files
+         ;;
+      (test.watch)
          _files
          ;;
       (run)
