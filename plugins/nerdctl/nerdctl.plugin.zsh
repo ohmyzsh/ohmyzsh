@@ -4,4 +4,5 @@
 
 if [ $commands[nerdctl] ]; then
   source <(nerdctl completion zsh)
+  compdef _nerdctl nerdctl
 fi
