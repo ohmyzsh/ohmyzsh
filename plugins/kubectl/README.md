@@ -78,6 +78,8 @@ plugins=(... kubectl)
 | kers    | `kubectl edit replicaset`           | Edit ReplicaSet from the default editor                                                          |
 | krh     | `kubectl rollout history`           | Check the revisions of this deployment                                                           |
 | kru     | `kubectl rollout undo`              | Rollback to the previous revision                                                                |
+| krr     | `kubectl rollout restart`           | Execute a rolling restart
+|
 |         |                                     | **Port forwarding**                                                                              |
 | kpf     | `kubectl port-forward`              | Forward one or more local ports to a pod                                                         |
 |         |                                     | **Tools for accessing all information**                                                          |

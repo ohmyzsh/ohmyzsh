@@ -108,6 +108,7 @@ alias kdrs='kubectl describe replicaset'
 alias kers='kubectl edit replicaset'
 alias krh='kubectl rollout history'
 alias kru='kubectl rollout undo'
+alias krr='kubectl rollout restart'
 
 # Statefulset management.
 alias kgss='kubectl get statefulset'
