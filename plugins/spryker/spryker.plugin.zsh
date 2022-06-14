@@ -9,7 +9,7 @@ _spryker_sdk () {
 }
 
 _spryker_sdk_boot () {
-  echo "$(_spryker) boot -v"
+  echo "$(_spryker) boot"
 }
 
 _spryker_sdk_console () {
@@ -45,3 +45,4 @@ alias spkup='spk up --build --assets --data'
 alias spkcli='spk cli'
 alias spkcc='spk clean && spk clean-data'
 alias spkl='spk logs'
+alias spkp='spk prune'
