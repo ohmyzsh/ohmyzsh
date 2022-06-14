@@ -57,7 +57,7 @@ the lines below to your zshrc file**, but be aware of the side effects:
 | dib     | `docker image build`        | Build an image from a Dockerfile (same as docker build)                                  |
 | dii     | `docker image inspect`      | Display detailed information on one or more images                                       |
 | dils    | `docker image ls`           | List docker images                                                                       |
-| dip     | `docker image push`         | Push an image or repository to a remote registry                                         |
+| dipu     | `docker image push`         | Push an image or repository to a remote registry                                         |
 | dirm    | `docker image rm`           | Remove one or more images                                                                |
 | dit     | `docker image tag`          | Add a name and tag to a particular image                                                 |
 |         |                             | **Docker Network**                                                                       |
