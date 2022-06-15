@@ -12,7 +12,7 @@ _dotnet_zsh_complete()
     return
   fi
 
-  # This is not a variable assigment, don't remove spaces!
+  # This is not a variable assignment, don't remove spaces!
   _values = "${(ps:\n:)completions}"
 }
 
@@ -30,3 +30,4 @@ alias ds='dotnet sln'
 alias da='dotnet add'
 alias dp='dotnet pack'
 alias dng='dotnet nuget'
+alias db='dotnet build'
