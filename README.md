@@ -71,6 +71,8 @@ Oh My Zsh is installed by running one of the following commands in your terminal
 | **curl**  | `sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"` |
 | **wget**  | `sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`   |
 | **fetch** | `sh -c "$(fetch -o - https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"` |
+| **[Fig](https://fig.io/)** | <a href="https://fig.io/plugins/other/ohmyzsh" target="_blank"><img src="https://fig.io/badges/install-with-fig.svg" /></a>|
+
 
 _Note that any previous `.zshrc` will be renamed to `.zshrc.pre-oh-my-zsh`. After installation, you can move the configuration you want to preserve into the new `.zshrc`._
 
