@@ -31,7 +31,6 @@ alias rnios12='react-native run-ios --simulator "iPhone 12"'
 alias rnios12p='react-native run-ios --simulator "iPhone 12 Pro"'
 alias rnios12pm='react-native run-ios --simulator "iPhone 12 Pro Max"'
 
-
 # iPad
 alias rnipad2='react-native run-ios --simulator "iPad 2"'
 alias rnipad5='react-native run-ios --simulator "iPad (5th generation)"'
