@@ -58,10 +58,10 @@ function detect-clipboard() {
     function clipcopy() { cat "${1:-/dev/stdin}" > /dev/clipboard; }
     function clippaste() { cat /dev/clipboard; }
   elif [ -n "${WAYLAND_DISPLAY:-}" ] && (( ${+commands[wl-copy]} )) && (( ${+commands[wl-paste]} )); then
-    function clipcopy() { wl-copy < "${1:-/dev/stdin}"; }
+    function clipcopy() { wl-copy < "${1:-/dev/stdin}" &>/dev/null &|; }
     function clippaste() { wl-paste; }
   elif [ -n "${DISPLAY:-}" ] && (( ${+commands[xclip]} )); then
-    function clipcopy() { xclip -in -selection clipboard < "${1:-/dev/stdin}"; }
+    function clipcopy() { xclip -in -selection clipboard < "${1:-/dev/stdin}" &>/dev/null &|; }
     function clippaste() { xclip -out -selection clipboard; }
   elif [ -n "${DISPLAY:-}" ] && (( ${+commands[xsel]} )); then
     function clipcopy() { xsel --clipboard --input < "${1:-/dev/stdin}"; }
