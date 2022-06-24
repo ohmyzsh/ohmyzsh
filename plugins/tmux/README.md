@@ -13,7 +13,7 @@ The plugin also supports the following:
 - determines if the terminal supports the 256 colors or not, sets the appropriate configuration variable
 - sets the correct local config file to use
 
-## Chnage bind-key on ssh connection
+## Change bind-key on ssh connection
 
 When you from tmux ssh into remote server and run tmux on remote server, prefix key of your local and remote tmux if they are the same, they will interfere.
 Therefore, this plugin changes the server(ssh to it) prefix key.
