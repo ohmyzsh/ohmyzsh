@@ -15,7 +15,7 @@ The plugin also supports the following:
 
 ## Change bind-key on ssh connection
 
-When you from tmux ssh into remote server and run tmux on remote server, prefix key of your local and remote tmux if they are the same, they will interfere.
+When you ssh into remote server using tmux, If prefix key of your local and remote tmux are same, they will interfere.
 Therefore, this plugin changes the server(ssh to it) prefix key.
 
 ## Aliases
