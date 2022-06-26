@@ -32,7 +32,7 @@ fi
 # Change prefix key on ssh connection
 : ${ZSH_TMUX_CHANGE_PREFIX_ON_SSH:=true}
 # Set prefix key on ssh connection
-: ${ZSH_TMUX_PREFIX_ON_SSH:="C-w"}
+: ${ZSH_TMUX_PREFIX_ON_SSH:="C-v"}
 
 # ALIASES
 
