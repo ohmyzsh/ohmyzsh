@@ -24,10 +24,11 @@ env_default 'LESS' '-R'
 ## super user alias
 alias _='sudo '
 
-## more intelligent acking for ubuntu users
 if (( $+commands[ack-grep] )); then
   alias afind='ack-grep -il'
 else
+  if ! command -v ack >/dev/null 2>&1; then
+  fi
   alias afind='ack -il'
 fi
 
