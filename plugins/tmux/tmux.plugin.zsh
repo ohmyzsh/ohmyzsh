@@ -79,7 +79,7 @@ function _zsh_tmux_plugin_run() {
 
   # If failed, just run tmux, fixing the TERM variable if requested.
   if [[ $? -ne 0 ]]; then
-    if [[ "$ZSH_TMUX_FIXTERM" == "true" "$ZSH_TMUX_SKIP_CONFIG" == "false" ]]; then
+    if [[ "$ZSH_TMUX_FIXTERM" == "true" && "$ZSH_TMUX_SKIP_CONFIG" == "false" ]]; then
       tmux_cmd+=(-f "$_ZSH_TMUX_FIXED_CONFIG")
     elif [[ -e "$ZSH_TMUX_CONFIG" && "$ZSH_TMUX_SKIP_CONFIG" == "false" ]]; then
       tmux_cmd+=(-f "$ZSH_TMUX_CONFIG")
