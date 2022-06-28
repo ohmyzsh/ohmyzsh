@@ -52,7 +52,10 @@ source_env() {
   fi
 
   # test .env syntax
-  zsh -fn $ZSH_DOTENV_FILE || echo "dotenv: error when sourcing '$ZSH_DOTENV_FILE' file" >&2
+  zsh -fn $ZSH_DOTENV_FILE || {
+    echo "dotenv: error when sourcing '$ZSH_DOTENV_FILE' file" >&2
+    return 1
+  }
 
   setopt localoptions allexport
   source $ZSH_DOTENV_FILE

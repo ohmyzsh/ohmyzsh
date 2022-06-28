@@ -42,13 +42,19 @@ set -e
 # $USER is defined by login(1) which is not always executed (e.g. containers)
 # POSIX: https://pubs.opengroup.org/onlinepubs/009695299/utilities/id.html
 USER=${USER:-$(id -u -n)}
+# $HOME is defined at the time of login, but it could be unset. If it is unset,
+# a tilde by itself (~) will not be expanded to the current user's home directory.
+# POSIX: https://pubs.opengroup.org/onlinepubs/009696899/basedefs/xbd_chap08.html#tag_08_03
+HOME="${HOME:-$(getent passwd $USER 2>/dev/null | cut -d: -f6)}"
+# macOS does not have getent, but this works even if $HOME is unset
+HOME="${HOME:-$(eval echo ~$USER)}"
 
 
 # Track if $ZSH was provided
 custom_zsh=${ZSH:+yes}
 
 # Default settings
-ZSH=${ZSH:-~/.oh-my-zsh}
+ZSH="${ZSH:-$HOME/.oh-my-zsh}"
 REPO=${REPO:-ohmyzsh/ohmyzsh}
 REMOTE=${REMOTE:-https://github.com/${REPO}.git}
 BRANCH=${BRANCH:-master}
@@ -268,7 +274,7 @@ setup_ohmyzsh() {
   fi
 
   # Manual clone with git config options to support git < v1.7.2
-  git init "$ZSH" && cd "$ZSH" \
+  git init --quiet "$ZSH" && cd "$ZSH" \
   && git config core.eol lf \
   && git config core.autocrlf false \
   && git config fsck.zeroPaddedFilemode ignore \
@@ -279,10 +285,15 @@ setup_ohmyzsh() {
   && git remote add origin "$REMOTE" \
   && git fetch --depth=1 origin \
   && git checkout -b "$BRANCH" "origin/$BRANCH" || {
-    rm -rf "$ZSH"
+    [ ! -d "$ZSH" ] || {
+      cd -
+      rm -rf "$ZSH" 2>/dev/null
+    }
     fmt_error "git clone of oh-my-zsh repo failed"
     exit 1
   }
+  # Exit installation directory
+  cd -
 
   echo
 }
