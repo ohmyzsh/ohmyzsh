@@ -34,109 +34,109 @@ alias pscpu10='ps -e -o pcpu,cpu,nice,state,cputime,args|sort -k1,1n -nr | head 
 alias hist10='print -l ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
 
 # directory LS
-dls () {
+function dls() {
     print -l *(/)
 }
-psgrep() {
+function psgrep() {
     ps aux | grep "${1:-.}" | grep -v grep
 }
 # Kills any process that matches a regexp passed to it
-killit() {
+function killit() {
     ps aux | grep -v "grep" | grep "$@" | awk '{print $2}' | xargs sudo kill
 }
 
 # list contents of directories in a tree-like format
 if ! (( $+commands[tree] )); then
-    tree () {
+    function tree() {
         find $@ -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'
     }
 fi
 
 # Sort connection state
-sortcons() {
+function sortcons() {
     netstat -nat |awk '{print $6}'|sort|uniq -c|sort -rn
 }
 
 # View all 80 Port Connections
-con80() {
+function con80() {
     netstat -nat|grep -i ":80"|wc -l
 }
 
 # On the connected IP sorted by the number of connections
-sortconip() {
+function sortconip() {
     netstat -ntu | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -n
 }
 
 # top20 of Find the number of requests on 80 port
-req20() {
+function req20() {
     netstat -anlp|grep 80|grep tcp|awk '{print $5}'|awk -F: '{print $1}'|sort|uniq -c|sort -nr|head -n20
 }
 
 # top20 of Using tcpdump port 80 access to view
-http20() {
+function http20() {
     sudo tcpdump -i eth0 -tnn dst port 80 -c 1000 | awk -F"." '{print $1"."$2"."$3"."$4}' | sort | uniq -c | sort -nr |head -n 20
 }
 
 # top20 of Find time_wait connection
-timewait20() {
+function timewait20() {
     netstat -n|grep TIME_WAIT|awk '{print $5}'|sort|uniq -c|sort -rn|head -n20
 }
 
 # top20 of Find SYN connection
-syn20() {
+function syn20() {
     netstat -an | grep SYN | awk '{print $5}' | awk -F: '{print $1}' | sort | uniq -c | sort -nr|head -n20
 }
 
 # Printing process according to the port number
-port_pro() {
+function port_pro() {
     netstat -ntlp | grep "${1:-.}" | awk '{print $7}' | cut -d/ -f1
 }
 
 # top10 of gain access to the ip address
-accessip10() {
+function accessip10() {
     awk '{counts[$(11)]+=1}; END {for(url in counts) print counts[url], url}' "$(retlog)"
 }
 
 # top20 of Most Visited file or page
-visitpage20() {
+function visitpage20() {
     awk '{print $11}' "$(retlog)"|sort|uniq -c|sort -nr|head -n 20
 }
 
 # top100 of Page lists the most time-consuming (more than 60 seconds) as well as the corresponding page number of occurrences
-consume100() {
+function consume100() {
     awk '($NF > 60 && $7~/\.php/){print $7}' "$(retlog)" |sort -n|uniq -c|sort -nr|head -n 100
     # if django website or other website make by no suffix language
     # awk '{print $7}' "$(retlog)" |sort -n|uniq -c|sort -nr|head -n 100
 }
 
 # Website traffic statistics (G)
-webtraffic() {
+function webtraffic() {
     awk "{sum+=$10} END {print sum/1024/1024/1024}" "$(retlog)"
 }
 
 # Statistical connections 404
-c404() {
+function c404() {
     awk '($9 ~/404/)' "$(retlog)" | awk '{print $9,$7}' | sort
 }
 
 # Statistical http status.
-httpstatus() {
+function httpstatus() {
     awk '{counts[$(9)]+=1}; END {for(code in counts) print code, counts[code]}' "$(retlog)"
 }
 
 # Delete 0 byte file
-d0() {
+function d0() {
     find "${1:-.}" -type f -size 0 -exec rm -rf {} \;
 }
 
 # gather external ip address
-geteip() {
+function geteip() {
     curl -s -S -4 https://icanhazip.com
     curl -s -S -6 https://icanhazip.com
 }
 
 # determine local IP address(es)
-getip() {
+function getip() {
     if (( ${+commands[ip]} )); then
         ip addr | awk '/inet /{print $2}' | command grep -v 127.0.0.1
     else
@@ -145,11 +145,11 @@ getip() {
 }
 
 # Clear zombie processes
-clrz() {
+function clrz() {
     ps -eal | awk '{ if ($2 == "Z") {print $4}}' | kill -9
 }
 
 # Second concurrent
-conssec() {
+function conssec() {
     awk '{if($9~/200|30|404/)COUNT[$4]++}END{for( a in COUNT) print a,COUNT[a]}' "$(retlog)"|sort -k 2 -nr|head -n10
 }

@@ -173,6 +173,32 @@ function fzf_setup_using_cygwin() {
   return 0
 }
 
+function fzf_setup_using_macports() {
+  # If the command is not found, the package isn't installed
+  (( $+commands[fzf] )) || return 1
+
+  # The fzf-zsh-completion package installs the auto-completion in
+  local completions="/opt/local/share/zsh/site-functions/fzf"
+  # The fzf-zsh-completion package installs the key-bindings file in
+  local key_bindings="/opt/local/share/fzf/shell/key-bindings.zsh"
+
+  if [[ ! -f "$completions" || ! -f "$key_bindings" ]]; then
+    return 1
+  fi
+
+  # Auto-completion
+  if [[ -o interactive && "$DISABLE_FZF_AUTO_COMPLETION" != "true" ]]; then
+    source "$completions" 2>/dev/null
+  fi
+
+  # Key bindings
+  if [[ "$DISABLE_FZF_KEY_BINDINGS" != "true" ]]; then
+    source "$key_bindings" 2>/dev/null
+  fi
+
+  return 0
+}
+
 # Indicate to user that fzf installation not found if nothing worked
 function fzf_setup_error() {
   cat >&2 <<'EOF'
@@ -185,6 +211,7 @@ fzf_setup_using_openbsd \
   || fzf_setup_using_debian \
   || fzf_setup_using_opensuse \
   || fzf_setup_using_cygwin \
+  || fzf_setup_using_macports \
   || fzf_setup_using_base_dir \
   || fzf_setup_error
 

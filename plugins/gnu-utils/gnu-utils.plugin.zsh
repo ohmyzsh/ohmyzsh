@@ -35,6 +35,9 @@ __gnu_utils() {
   # Not part of either coreutils or findutils, installed separately.
   gcmds+=('gsed' 'gtar' 'gtime' 'gmake' 'ggrep')
 
+  # can be built optionally
+  gcmds+=('ghostname')
+
   for gcmd in "${gcmds[@]}"; do
     # Do nothing if the command isn't found
     (( ${+commands[$gcmd]} )) || continue
