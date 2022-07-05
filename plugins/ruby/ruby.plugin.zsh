@@ -22,3 +22,5 @@ alias geh="gem help"
 alias gel="gem lock"
 alias geo="gem open"
 alias geoe="gem open -e"
+alias rrun="ruby -e"
+alias rserver="ruby -e httpd . -p 8080" # requires webrick

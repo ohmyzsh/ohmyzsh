@@ -45,9 +45,7 @@ function rvm_gemset() {
 function git_time_since_commit() {
     if git rev-parse --git-dir > /dev/null 2>&1; then
         # Only proceed if there is actually a commit.
-        if [[ $(git log 2>&1 > /dev/null | grep -c "^fatal: bad default revision") == 0 ]]; then
-            # Get the last commit.
-            last_commit=`git log --pretty=format:'%at' -1 2> /dev/null`
+        if last_commit=`git -c log.showSignature=false log --pretty=format:'%at' -1 2> /dev/null`; then
             now=`date +%s`
             seconds_since_last_commit=$((now-last_commit))
 

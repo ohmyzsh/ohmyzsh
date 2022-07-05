@@ -45,6 +45,7 @@ function acp() {
   fi
 
   local profile="$1"
+  local mfa_token="$2"
 
   # Get fallback credentials for if the aws command fails or no command is run
   local aws_access_key_id="$(aws configure get aws_access_key_id --profile $profile)"
@@ -58,9 +59,10 @@ function acp() {
 
   if [[ -n "$mfa_serial" ]]; then
     local -a mfa_opt
-    local mfa_token
-    echo -n "Please enter your MFA token for $mfa_serial: "
-    read -r mfa_token
+    if [[ -z "$mfa_token" ]]; then
+      echo -n "Please enter your MFA token for $mfa_serial: "
+      read -r mfa_token
+    fi
     if [[ -z "$sess_duration" ]]; then
       echo -n "Please enter the session duration in seconds (900-43200; default: 3600, which is the default maximum for a role): "
       read -r sess_duration
@@ -155,8 +157,8 @@ compctl -K _aws_profiles asp acp aws_change_access_key
 
 # AWS prompt
 function aws_prompt_info() {
-  [[ -z $AWS_PROFILE ]] && return
-  echo "${ZSH_THEME_AWS_PREFIX:=<aws:}${AWS_PROFILE}${ZSH_THEME_AWS_SUFFIX:=>}"
+  [[ -n "$AWS_PROFILE" ]] || return
+  echo "${ZSH_THEME_AWS_PREFIX=<aws:}${AWS_PROFILE:gs/%/%%}${ZSH_THEME_AWS_SUFFIX=>}"
 }
 
 if [[ "$SHOW_AWS_PROMPT" != false && "$RPROMPT" != *'$(aws_prompt_info)'* ]]; then

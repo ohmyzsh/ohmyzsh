@@ -10,10 +10,15 @@ on:
     branches: 
       - master
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
 jobs:
   tests:
     name: Run tests
     runs-on: ${{ matrix.os }}
+    if: github.repository == 'ohmyzsh/ohmyzsh'
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]

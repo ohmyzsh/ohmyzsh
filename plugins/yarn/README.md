@@ -9,6 +9,15 @@ To use it, add `yarn` to the plugins array in your zshrc file:
 plugins=(... yarn)
 ```
 
+## Global scripts directory
+
+It also adds `yarn` global scripts dir (commonly `~/.yarn/bin`) to the `$PATH`.
+To disable this feature, set the following style in your `.zshrc`:
+
+```zsh
+zstyle ':omz:plugins:yarn' global-path false
+```
+
 ## Aliases
 
 | Alias | Command                                   | Description                                                                   |

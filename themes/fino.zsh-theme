@@ -21,7 +21,9 @@ function prompt_char {
 }
 
 function box_name {
-  [ -f ~/.box-name ] && cat ~/.box-name || echo ${SHORT_HOST:-$HOST}
+  local box="${SHORT_HOST:-$HOST}"
+  [[ -f ~/.box-name ]] && box="$(< ~/.box-name)"
+  echo "${box:gs/%/%%}"
 }
 
 local ruby_env='$(ruby_prompt_info)'

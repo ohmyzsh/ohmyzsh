@@ -8,22 +8,24 @@ if [[ -z "$NVM_DIR" ]]; then
 fi
 
 # Don't try to load nvm if command already available
-which nvm &> /dev/null && return
+# Note: nvm is a function so we need to use `which`
+! which nvm &>/dev/null || return
 
 if [[ -f "$NVM_DIR/nvm.sh" ]]; then
   # Load nvm if it exists in $NVM_DIR
   source "$NVM_DIR/nvm.sh" ${NVM_LAZY+"--no-use"}
-else
+elif (( $+commands[brew] )); then
   # Otherwise try to load nvm installed via Homebrew
   # User can set this if they have an unusual Homebrew setup
-  NVM_HOMEBREW="${NVM_HOMEBREW:-/usr/local/opt/nvm}"
+  NVM_HOMEBREW="${NVM_HOMEBREW:-${HOMEBREW_PREFIX:-$(brew --prefix)}/opt/nvm}"
   # Load nvm from Homebrew location if it exists
   if [[ -f "$NVM_HOMEBREW/nvm.sh" ]]; then
     source "$NVM_HOMEBREW/nvm.sh" ${NVM_LAZY+"--no-use"}
   else
-    # Exit the plugin if we couldn't find nvm
     return
   fi
+else
+  return
 fi
 
 # Call nvm when first using node, npm or yarn

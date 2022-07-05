@@ -1,72 +1,76 @@
 svn_prompt_info() {
-  local _DISPLAY
-  if in_svn; then
-    if [[ "$SVN_SHOW_BRANCH" = true ]]; then
-      unset SVN_SHOW_BRANCH
-      _DISPLAY=$(svn_get_branch_name)
-    else
-      _DISPLAY=$(svn_get_repo_name)
-      _DISPLAY=$(omz_urldecode "${_DISPLAY}")
-    fi
-    echo "$ZSH_PROMPT_BASE_COLOR$ZSH_THEME_SVN_PROMPT_PREFIX\
-$ZSH_THEME_REPO_NAME_COLOR$_DISPLAY$ZSH_PROMPT_BASE_COLOR$ZSH_THEME_SVN_PROMPT_SUFFIX$ZSH_PROMPT_BASE_COLOR$(svn_dirty)$(svn_dirty_pwd)$ZSH_PROMPT_BASE_COLOR"
+  local info display
+  info="$(LANG= svn info 2>/dev/null)" || return 1
+
+  if [[ "$SVN_SHOW_BRANCH" = true ]]; then
+    display="$(svn_get_branch_name "$info")"
+  else
+    display="$(svn_get_repo_name "$info")"
   fi
+
+  printf '%s%s%s%s%s%s%s%s%s%s' \
+    "$ZSH_PROMPT_BASE_COLOR" \
+    "$ZSH_THEME_SVN_PROMPT_PREFIX" \
+    "$ZSH_THEME_REPO_NAME_COLOR" \
+    "${display:gs/%/%%}" \
+    "$ZSH_PROMPT_BASE_COLOR" \
+    "$ZSH_THEME_SVN_PROMPT_SUFFIX" \
+    "$ZSH_PROMPT_BASE_COLOR" \
+    "$(svn_dirty $info)" \
+    "$(svn_dirty_pwd)" \
+    "$ZSH_PROMPT_BASE_COLOR"
 }
 
-
 in_svn() {
-  svn info >/dev/null 2>&1
+  svn info &>/dev/null
 }
 
 svn_get_repo_name() {
-  if in_svn; then
-    LANG=C svn info | sed -n 's/^Repository\ Root:\ .*\///p' | read SVN_ROOT
-    LANG=C svn info | sed -n "s/^URL:\ .*$SVN_ROOT\///p"
-  fi
+  local info name
+  info="${1:-$(LANG= svn info 2>/dev/null)}"
+  name="$(sed -n 's/^Repository\ Root:\ .*\///p' <<< "$info")"
+  omz_urldecode "$name"
 }
 
 svn_get_branch_name() {
-  local _DISPLAY=$(
-    LANG=C svn info 2> /dev/null | \
-      awk -F/ \
-      '/^URL:/ { \
-        for (i=0; i<=NF; i++) { \
-          if ($i == "branches" || $i == "tags" ) { \
-            print $(i+1); \
-            break;\
-          }; \
-          if ($i == "trunk") { print $i; break; } \
-        } \
-      }'
+  local info branch
+  info="${1:-$(LANG= svn info 2>/dev/null)}"
+  branch=$(
+    awk -F/ '/^URL:/ {
+      for (i=0; i<=NF; i++) {
+        if ($i == "branches" || $i == "tags" ) {
+          print $(i+1)
+          break
+        };
+        if ($i == "trunk") {
+          print $i
+          break
+        }
+      }
+    }' <<< "$info"
   )
+  branch="$(omz_urldecode "$branch")"
 
-  if [[ -z "$_DISPLAY" ]]; then
-    svn_get_repo_name
-  else
-    echo $_DISPLAY
-  fi
+  echo "${branch:-$(svn_get_repo_name "$info")}"
 }
 
 svn_get_rev_nr() {
-  if in_svn; then
-    LANG=C svn info 2> /dev/null | sed -n 's/Revision:\ //p'
-  fi
+  sed -n 's/Revision:\ //p' <<<"${1:-$(LANG= svn info 2>/dev/null)}"
 }
 
 svn_dirty() {
-  svn_dirty_choose $ZSH_THEME_SVN_PROMPT_DIRTY $ZSH_THEME_SVN_PROMPT_CLEAN
+  svn_dirty_choose "${1:-$(LANG= svn info 2>/dev/null)}" $ZSH_THEME_SVN_PROMPT_DIRTY $ZSH_THEME_SVN_PROMPT_CLEAN
 }
 
 svn_dirty_choose() {
-  if in_svn; then
-    local root=$(LANG=C svn info 2> /dev/null | sed -n 's/^Working Copy Root Path: //p')
-    if svn status $root 2> /dev/null | command grep -Eq '^\s*[ACDIM!?L]'; then
-      # Grep exits with 0 when "One or more lines were selected", return "dirty".
-      echo $1
-    else
-      # Otherwise, no lines were found, or an error occurred. Return clean.
-      echo $2
-    fi
+  local root
+  root=$(sed -n 's/^Working Copy Root Path: //p' <<< "${1:-$(LANG= svn info 2>/dev/null)}")
+  if LANG= svn status "$root" 2>/dev/null | command grep -Eq '^\s*[ACDIM!?L]'; then
+    # Grep exits with 0 when "One or more lines were selected", return "dirty".
+    echo $2
+  else
+    # Otherwise, no lines were found, or an error occurred. Return clean.
+    echo $3
   fi
 }
 
@@ -75,13 +79,11 @@ svn_dirty_pwd () {
 }
 
 svn_dirty_choose_pwd () {
-  if in_svn; then
-    if svn status "$PWD" 2> /dev/null | command grep -Eq '^\s*[ACDIM!?L]'; then
-      # Grep exits with 0 when "One or more lines were selected", return "dirty".
-      echo $1
-    else
-      # Otherwise, no lines were found, or an error occurred. Return clean.
-      echo $2
-    fi
+  if LANG= svn status "$PWD" 2>/dev/null | command grep -Eq '^\s*[ACDIM!?L]'; then
+    # Grep exits with 0 when "One or more lines were selected", return "dirty".
+    echo $1
+  else
+    # Otherwise, no lines were found, or an error occurred. Return clean.
+    echo $2
   fi
 }
