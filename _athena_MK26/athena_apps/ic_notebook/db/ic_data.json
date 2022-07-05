@@ -1,0 +1,67 @@
+{
+  "location": [
+    {
+      "fwd catho": "fwd ic / and op side eng room"
+    },
+    {
+      "ccs": "mid and aft catho controller"
+    },
+    {
+      "catho": "go to 1-97-1-L --> 3-98-1-Q for mid and aft power supply"
+    },
+    {
+      "staft alley 1": "1-96-1-L"
+    },
+    {
+      "staft alley 2": "most fwd hanger bay el staf ally"
+    },
+    {
+      "staft alley 3": "1-97-1-L"
+    },
+    {
+      "4-97-0-A": "DOWN: 1-97-1-L THUR:  3-97-1-L"
+    },
+    {
+      "3-114-2-E": "down 1-113-2-L gen room No.2"
+    }
+  ],
+  "tac-number": [],
+  "area": [
+    {
+      "xj7179": "from 1-88-1-L opposite stryway right wall"
+    },
+    {
+      "xj7191": "computer starywell wall"
+    },
+    {
+      "xj7184": "looking at workbench turn right, closes support beam to stairs"
+    },
+    {
+      "xj7192": "next to workbench"
+    },
+    {
+      "xj7182": "down under and aross straight"
+    },
+    {
+      "xj7177": "6-81-0-E right hand wall"
+    },
+    {
+      "xj7157": "back of 6-81-4-E"
+    },
+    {
+      "xj7181": "front of 6-81-4-E"
+    },
+    {
+      "xj7193": "up and over before 6-81-4-E"
+    },
+    {
+      "xj7154": "right Wall from 6-81-4-E"
+    },
+    {
+      "xj7180": "front of 6-81-2-E"
+    },
+    {
+      "xj7156": "back of 6-81-2-E"
+    }
+  ]
+}

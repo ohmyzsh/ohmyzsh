@@ -1,0 +1,25 @@
+{
+  "player": {
+    "name": "Sy",
+    "health": 50,
+    "exp": 106
+  },
+  "stats": {
+    "health_multi": 2,
+    "exp_multi": 0
+  },
+  "difficulty": {
+    "easy": 3,
+    "mid": 6,
+    "hard": 10,
+    "outcomes": [
+      3,
+      6,
+      10,
+      9,
+      13,
+      19,
+      16
+    ]
+  }
+}

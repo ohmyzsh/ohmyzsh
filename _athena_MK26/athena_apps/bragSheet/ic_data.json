@@ -1,0 +1,32 @@
+{
+   "day": [
+      "Mon Oct 182021",
+      "Tue Oct 192021",
+      "Tue Nov  22021",
+      "Thu May  52022"
+   ],
+   "WhatUdo": [
+      "something",
+      "halocarbon monitors",
+      "testing",
+      "test"
+   ],
+   "time_st": [
+      "1300",
+      "0800",
+      "1300",
+      "0"
+   ],
+   "time_fn": [
+      "1430",
+      "1330",
+      "1420",
+      "0"
+   ],
+   "duration": [
+      "5HH:30MM",
+      "1HH:20MM"
+   ],
+   "total hours": 6,
+   "extra minutes": 50
+}

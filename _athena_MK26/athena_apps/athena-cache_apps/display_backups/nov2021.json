@@ -1,0 +1,47 @@
+{
+    "quick_list": [
+       "IC1 HENMEWAY 2885:IVN",
+       "grep -c 00111100 log.bashrc | cat > testing.txt; bat testing.txt",
+       "cheif bergan 2844",
+       "mary kubica (the girl)"
+    ],
+    "notes": [
+       {
+  1
+          "the caller": "you made the apps, cool. now starr reenginnering the athena.py to ca
+       │ ll those apps and display them.you only have to login then python athena.py"
+  11   │       },
+  12   │       {
+  13   │          "march 16 2022 maintences ": "3 more mini potrals from may 24 2021 - tbd"
+  14   │       },
+  15   │       {
+  16   │          "quote": "trouble shooter <TS>"
+  17   │       }
+  18   │    ],
+  19   │    "Q1": [
+  20   │       {
+  21   │          "level up": "start learning docker or ALT"
+  22   │       },
+  23   │       {
+  24   │          "AN sales": "give list of links for her techy bf"
+  25   │       },
+  26   │       {
+  27   │          "recommended shows": "american gods, castle transovinya, {check keep notes app}"
+  28   │       },
+  29   │       {
+  30   │          "bae": "leaves Sept13th "
+  31   │       }
+  32   │    ],
+  33   │    "Q2": [],
+  34   │    "Q3": [
+  35   │       {
+  36   │          "movie": "the da vin chi code 2006"
+  37   │       }
+  38   │    ],
+  39   │    "Q4": [
+  40   │       {
+  41   │          "athenamk26": "CVS,juypternote system,page for athena,call pydroid pkg, from a crea
+       │ ted file from termux"
+  42   │       }
+    ]
+}

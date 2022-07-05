@@ -1,0 +1,61 @@
+[
+   {
+      "name": "sy",
+      "hp": 100,
+      "xp": 0,
+      "stg": 52,
+      "pt": 0,
+      "Mny": 56,
+      "req": 0,
+      "lmt": 2,
+      "base": {
+         "headquarter": {
+            "hp": 100,
+            "lv": 0
+         },
+         "hanger_1": {
+            "amt": 2,
+            "lmt": 2
+         },
+         "hanger_2": {
+            "amt": 2,
+            "lmt": 2
+         },
+         "hanger_3": {
+            "amt": 2,
+            "lmt": 2
+         }
+      }
+   },
+   {
+      "60": {
+         "mini_gun": 4,
+         "Amt": 2
+      },
+      "53": {
+         "seals": 6,
+         "Amt": 2
+      },
+      "f-35": {
+         "missles": 8,
+         "Amt": 2
+      }
+   },
+   {
+      "orc": {
+         "club": 7,
+         "hp": 100,
+         "amt": 0
+      },
+      "bow_man": {
+         "bow": 9,
+         "hp": 120,
+         "amt": 0
+      },
+      "gods": {
+         "staff": 11,
+         "hp": 300,
+         "amt": 0
+      }
+   }
+]
