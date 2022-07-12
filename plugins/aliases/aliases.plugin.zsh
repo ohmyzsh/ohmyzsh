@@ -3,9 +3,9 @@
 # - acs: alias cheatsheet
 #   group alias by command, pass addition argv to grep.
 function acs(){
-  (( $+commands[python] )) || {
+  (( $+commands[python3] )) || {
     echo "[error] No python executable detected"
     return
   }
-  alias | python ${functions_source[$0]:h}/cheatsheet.py $@
+  alias | python3 ${functions_source[$0]:h}/cheatsheet.py $@
 }

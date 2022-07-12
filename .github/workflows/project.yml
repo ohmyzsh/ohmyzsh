@@ -1,9 +1,13 @@
 name: Project tracking
 on:
   issues:
-    types: [opened]
+    types: [opened, reopened]
   pull_request_target:
-    types: [opened, synchronize]
+    types: [opened, reopened, synchronize]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
 
 jobs:
   add-to-project:

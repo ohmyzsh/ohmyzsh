@@ -23,8 +23,7 @@ TYPES=(
   test      "Testing"
 )
 
-#* Types that will be displayed in their own section,
-#* in the order specified here.
+#* Types that will be displayed in their own section, in the order specified here.
 local -a MAIN_TYPES
 MAIN_TYPES=(feat fix perf docs)
 
@@ -34,7 +33,8 @@ OTHER_TYPES=(refactor style other)
 
 #* Commit types that don't appear in $MAIN_TYPES nor $OTHER_TYPES
 #* will not be displayed and will simply be ignored.
-
+local -a IGNORED_TYPES
+IGNORED_TYPES=(${${${(@k)TYPES}:|MAIN_TYPES}:|OTHER_TYPES})
 
 ############################
 # COMMIT PARSING UTILITIES #
@@ -139,7 +139,7 @@ function parse-commit {
   #  [BREAKING CHANGE: warning]
 
   # commits holds the commit type
-  commits[$hash]="$(commit:type "$subject")"
+  types[$hash]="$(commit:type "$subject")"
   # scopes holds the commit scope
   scopes[$hash]="$(commit:scope "$subject")"
   # subjects holds the commit subject
@@ -164,26 +164,32 @@ function parse-commit {
 function display-release {
 
   # This function uses the following globals: output, version,
-  # commits (A), subjects (A), scopes (A), breaking (A) and reverts (A).
+  # types (A), subjects (A), scopes (A), breaking (A) and reverts (A).
   #
   # - output is the output format to use when formatting (raw|text|md)
   # - version is the version in which the commits are made
-  # - commits, subjects, scopes, breaking, and reverts are associative arrays
+  # - types, subjects, scopes, breaking, and reverts are associative arrays
   #   with commit hashes as keys
 
   # Remove commits that were reverted
   local hash rhash
   for hash rhash in ${(kv)reverts}; do
-    if (( ${+commits[$rhash]} )); then
+    if (( ${+types[$rhash]} )); then
       # Remove revert commit
-      unset "commits[$hash]" "subjects[$hash]" "scopes[$hash]" "breaking[$hash]"
+      unset "types[$hash]" "subjects[$hash]" "scopes[$hash]" "breaking[$hash]"
       # Remove reverted commit
-      unset "commits[$rhash]" "subjects[$rhash]" "scopes[$rhash]" "breaking[$rhash]"
+      unset "types[$rhash]" "subjects[$rhash]" "scopes[$rhash]" "breaking[$rhash]"
     fi
   done
 
+  # Remove commits from ignored types unless it has breaking change information
+  for hash in ${(k)types[(R)${(j:|:)IGNORED_TYPES}]}; do
+    (( ! ${+breaking[$hash]} )) || continue
+    unset "types[$hash]" "subjects[$hash]" "scopes[$hash]"
+  done
+
   # If no commits left skip displaying the release
-  if (( $#commits == 0 )); then
+  if (( $#types == 0 )); then
     return
   fi
 
@@ -313,7 +319,7 @@ function display-release {
     local hash type="$1"
 
     local -a hashes
-    hashes=(${(k)commits[(R)$type]})
+    hashes=(${(k)types[(R)$type]})
 
     # If no commits found of type $type, go to next type
     (( $#hashes != 0 )) || return 0
@@ -330,7 +336,7 @@ function display-release {
 
     # Commits made under types considered other changes
     local -A changes
-    changes=(${(kv)commits[(R)${(j:|:)OTHER_TYPES}]})
+    changes=(${(kv)types[(R)${(j:|:)OTHER_TYPES}]})
 
     # If no commits found under "other" types, don't display anything
     (( $#changes != 0 )) || return 0
@@ -388,7 +394,7 @@ function main {
   fi
 
   # Commit classification arrays
-  local -A commits subjects scopes breaking reverts
+  local -A types subjects scopes breaking reverts
   local truncate=0 read_commits=0
   local version tag
   local hash refs subject body
@@ -441,7 +447,7 @@ function main {
       # Output previous release
       display-release
       # Reinitialize commit storage
-      commits=()
+      types=()
       subjects=()
       scopes=()
       breaking=()

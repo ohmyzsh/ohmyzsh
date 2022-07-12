@@ -12,5 +12,3 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_poetry" ]]; then
 fi
 
 poetry completions zsh >| "$ZSH_CACHE_DIR/completions/_poetry" &|
-
-unset comp_file
