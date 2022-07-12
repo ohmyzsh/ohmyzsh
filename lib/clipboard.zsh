@@ -10,8 +10,8 @@
 # - pbcopy, pbpaste (macOS)
 # - cygwin (Windows running Cygwin)
 # - wl-copy, wl-paste (if $WAYLAND_DISPLAY is set)
-# - xclip (if $DISPLAY is set)
 # - xsel (if $DISPLAY is set)
+# - xclip (if $DISPLAY is set)
 # - lemonade (for SSH) https://github.com/pocke/lemonade
 # - doitclient (for SSH) http://www.chiark.greenend.org.uk/~sgtatham/doit/
 # - win32yank (Windows)
@@ -60,12 +60,12 @@ function detect-clipboard() {
   elif [ -n "${WAYLAND_DISPLAY:-}" ] && (( ${+commands[wl-copy]} )) && (( ${+commands[wl-paste]} )); then
     function clipcopy() { cat "${1:-/dev/stdin}" | wl-copy &>/dev/null &|; }
     function clippaste() { wl-paste; }
-  elif [ -n "${DISPLAY:-}" ] && (( ${+commands[xclip]} )); then
-    function clipcopy() { cat "${1:-/dev/stdin}" | xclip -selection clipboard -in &>/dev/null &|; }
-    function clippaste() { xclip -out -selection clipboard; }
   elif [ -n "${DISPLAY:-}" ] && (( ${+commands[xsel]} )); then
     function clipcopy() { cat "${1:-/dev/stdin}" | xsel --clipboard --input; }
     function clippaste() { xsel --clipboard --output; }
+  elif [ -n "${DISPLAY:-}" ] && (( ${+commands[xclip]} )); then
+    function clipcopy() { cat "${1:-/dev/stdin}" | xclip -selection clipboard -in &>/dev/null &|; }
+    function clippaste() { xclip -out -selection clipboard; }
   elif (( ${+commands[lemonade]} )); then
     function clipcopy() { cat "${1:-/dev/stdin}" | lemonade copy; }
     function clippaste() { lemonade paste; }
