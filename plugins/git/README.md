@@ -136,7 +136,7 @@ plugins=(... git)
 | grev                 | git revert                                                                                                                       |
 | grh                  | git reset                                                                                                                        |
 | grhh                 | git reset --hard                                                                                                                 |
-| groh                 | git reset origin/$(git_current_branch) --hard                                                                                    |
+| groh                 | git reset --hard HEAD@{u}                                                                                                        |
 | grm                  | git rm                                                                                                                           |
 | grmc                 | git rm --cached                                                                                                                  |
 | grmv                 | git remote rename                                                                                                                |
