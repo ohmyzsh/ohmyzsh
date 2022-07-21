@@ -28,6 +28,7 @@ function _term_list(){
   case $OSTYPE in
     solaris*) dirs=( ${(M)${${(f)"$(pgrep -U $UID -x zsh|xargs pwdx)"}:#$$:*}%%/*} ) ;;
     linux*) dirs=( /proc/${^$(pidof zsh):#$$}/cwd(N:A) ) ;;
+    darwin*) dirs=( $(lsof -d cwd -c zsh -a -Fn | grep '^n' | cut -c 2- ) ) ;;
   esac
   dirs=( ${(D)dirs} )
 
