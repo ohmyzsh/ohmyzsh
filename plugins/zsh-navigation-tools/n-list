@@ -261,6 +261,8 @@ done
 
 last_element="$#list"
 
+zcurses clear main redraw
+zcurses clear inner redraw
 while (( 1 )); do
     # Do searching (filtering with string)
     if [ -n "$NLIST_SEARCH_BUFFER" ]; then

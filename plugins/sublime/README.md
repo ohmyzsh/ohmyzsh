@@ -1,25 +1,37 @@
-## sublime
+# sublime
 
-Plugin for Sublime Text, a cross platform text and code editor, available for Linux, Mac OS X, and Windows.
+Plugin for [Sublime Text](https://www.sublimetext.com/), a cross platform text and code editor,
+available for Linux, macOS, and Windows.
 
-### Requirements
+To use the plugin, add `sublime` to the plugins array of your zshrc file:
 
- * [Sublime Text](https://www.sublimetext.com/)
+```zsh
+plugins=(... sublime)
+```
 
-### Usage
+Sublime Text has to be installed to use the plugin.
 
- * If `st` command is called without an argument, launch Sublime Text
+## Usage
 
- * If `st` is passed a directory, `cd` to it and open it in Sublime Text
+The plugin defines several aliases, such as:
 
- * If `st` is passed a file, open it in Sublime Text
+- `st`: opens Sublime Text. If passed a file or directory, Sublime Text will open it.
 
- * If `stt` command is called, it is equivalent to `st .`, opening the current folder in Sublime Text
+- `stt`: open Sublime Text on the current directory.
 
- * If `sst` command is called, it is like `sudo st`, opening the file or folder in Sublime Text. Useful for editing system protected files.
+- `sst`: if `sudo` is available, `sst` will open Sublime Text with root permissions, so that
+  you can modify any file or directory that you pass it. Useful to edit system files.
 
- * If `stp` command is called, it find a `.sublime-project` file by traversing up the directory structure. If there is no `.sublime-project` file, but if the current folder is a Git repo, opens up the root directory of the repo. If the current folder is not a Git repo, then opens up the current directory.
+There are also a few functions available:
 
- * If `stn` command is called without an argument, create a stub `.sublime-project` file in the current working directory if one does not already exist
+- `find_project` (or `stp` alias): if called, the function will search for a `.sublime-project` file
+  on the current directory or its parents, until it finds none.
 
- * If `stn` is passed a directory, create a stub `.sublime-project` file in it
+  If there is no `.sublime-project` file but the current folder is in a Git repository, it will open
+  Sublime Text on the root directory of the repository.
+
+  If there is no Git repository, it will then open Sublime Text on the current directory.
+
+- `create_project` (or `stn` alias): if called without an argument, create a stub `.sublime-project`
+  file in the current working directory, if one does not already exist. If passed a directory, create
+  a stub `.sublime-project` file in it.

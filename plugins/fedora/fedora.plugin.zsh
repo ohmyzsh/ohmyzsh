@@ -1,1 +1,0 @@
-../dnf/dnf.plugin.zsh

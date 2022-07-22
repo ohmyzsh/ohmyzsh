@@ -1,12 +1,10 @@
-## ZSH-Geeknote
+# Geeknote plugin
 
-[Geeknote](https://github.com/VitaliyRodnenko/geeknote) plugin for oh-my-zsh.
+This plugin provides autocompletion for [Geeknote](https://github.com/VitaliyRodnenko/geeknote)
+and an alias for `geeknote` called `gn`.
 
-Plugins provides:
+To use it, add `geeknote` to the plugins array in your zshrc file:
 
-- auto completion of commands and their options
-- alias `gn`
-
-You can find information how to install Geeknote and it's available commands on the [project website](http://www.geeknote.me/).
-
-Maintainer : Ján Koščo ([@s7anley](https://twitter.com/s7anley))
+```zsh
+plugins=( ... geeknote ...)
+```

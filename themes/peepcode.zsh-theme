@@ -4,11 +4,11 @@
 #
 
 git_repo_path() {
-  git rev-parse --git-dir 2>/dev/null
+  command git rev-parse --git-dir 2>/dev/null
 }
 
 git_commit_id() {
-  git rev-parse --short HEAD 2>/dev/null
+  command git rev-parse --short HEAD 2>/dev/null
 }
 
 git_mode() {
@@ -22,23 +22,26 @@ git_mode() {
 }
 
 git_dirty() {
-  if [[ "$repo_path" != '.' && `git ls-files -m` != "" ]]; then
+  if [[ "$repo_path" != '.' && -n "$(command git ls-files -m)" ]]; then
     echo " %{$fg_bold[grey]%}✗%{$reset_color%}"
   fi
 }
 
 git_prompt() {
   local cb=$(git_current_branch)
-  if [ -n "$cb" ]; then
+  if [[ -n "$cb" ]]; then
     local repo_path=$(git_repo_path)
     echo " %{$fg_bold[grey]%}$cb %{$fg[white]%}$(git_commit_id)%{$reset_color%}$(git_mode)$(git_dirty)"
   fi
 }
 
-local smiley="%(?,%{$fg[green]%}☺%{$reset_color%},%{$fg[red]%}☹%{$reset_color%})"
+local smiley='%(?.%F{green}☺%f.%F{red}☹%f)'
 
 PROMPT='
-%~
-${smiley}  %{$reset_color%}'
+${VIRTUAL_ENV:+"($VIRTUAL_ENV) "}%~
+${smiley}  '
 
-RPROMPT='%{$fg[white]%} $(ruby_prompt_info)$(git_prompt)%{$reset_color%}'
+RPROMPT='%F{white} $(ruby_prompt_info)$(git_prompt)%{$reset_color%}'
+
+# Disable automatic virtualenv prompt change
+export VIRTUAL_ENV_DISABLE_PROMPT=1

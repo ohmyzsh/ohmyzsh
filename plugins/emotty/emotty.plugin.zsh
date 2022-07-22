@@ -10,6 +10,11 @@
 # % export emotty_set=nature
 # ------------------------------------------------------------------------------
 
+# Handle $0 according to the standard:
+# https://zdharma-continuum.github.io/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html
+0="${${ZERO:-${0:#$ZSH_ARGZERO}}:-${(%):-%N}}"
+0="${${(M)0:#/*}:-$PWD/$0}"
+
 typeset -gAH _emotty_sets
 local _emotty_plugin_dir="${0:h}"
 source "$_emotty_plugin_dir/emotty_stellar_set.zsh"
@@ -25,8 +30,14 @@ emotty_default_set=emoji
 function emotty() {
   # Use emotty set defined by user, fallback to default
   local emotty=${_emotty_sets[${emotty_set:-$emotty_default_set}]}
-  # Parse $TTY number, normalizing it to an emotty set index
-  (( tty = (${TTY##/dev/tty} % ${#${=emotty}}) + 1 ))
+
+  # Parse tty number via prompt expansion. %l equals:
+  # - N      if tty = /dev/ttyN
+  # - pts/N  if tty = /dev/pts/N
+  local tty=${${(%):-%l}##pts/}
+  # Normalize it to an emotty set index
+  (( tty = (tty % ${#${=emotty}}) + 1 ))
+
   local character_name=${${=emotty}[tty]}
   echo "${emoji[${character_name}]}${emoji2[emoji_style]}"
 }

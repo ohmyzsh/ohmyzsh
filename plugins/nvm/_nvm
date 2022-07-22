@@ -8,6 +8,7 @@ _1st_arguments=(
   'help:show help'
   '--version:print out the latest released version of nvm'
   'install:download and install a version in <node|iojs|node version number>'
+  'install-latest-npm:download and install the latest npm version'
   'uninstall:uninstall a version'
   'use:modify PATH to use <version>. Uses .nvmrc if available'
   'exec:run <command> on <version>. Uses .nvmrc if available'

@@ -1,0 +1,60 @@
+#compdef scd
+#description smart change directory
+
+local curcontext="$curcontext" state line expl ret=1
+typeset -A opt_args
+
+local -a indexopts myargs
+indexopts=( --add -a --unindex )
+
+myargs=(
+    # common options
+    "(--help -h)"{--help,-h}"[print help and exit]"
+
+    # options for manipulating directory index
+    - index
+    "(--recursive -r)"{--recursive,-r}"[use recursive --add or --unindex]"
+    "($indexopts)"{--add,-a}"[add specified directories to the index]"
+    "($indexopts)--unindex[remove specified directories from the index]"
+    "*:directory:{ (( ${words[(I)-a|--add|--unindex]} )) && _path_files -/ }"
+
+    # define new directory alias
+    - alias
+    "--alias=[create alias for this or given directory]:directory-alias:()"
+    '1:directory:{ (( words[(I)--alias*] )) && _path_files -/ }'
+
+    # remove definition of directory alias
+    - unalias
+    "--unalias[remove definition of directory alias]"
+    "*::directory alias:->scd-alias-target"
+
+    # act on the directory change
+    - scd
+    "(--all -A)"{--all,-A}"[include less likely and ignored paths]"
+    "--list[print matching directories and exit]"
+    "(--verbose -v)"{--verbose,-v}"[show directory ranking and full paths]"
+    "(--push -p)"{--push,-p}"[change directory with 'pushd']"
+    "1::directory alias:->scd-alias-target"
+    "*:patterns:()"
+)
+
+_arguments -S -C $myargs && ret=0
+
+
+if [[ "$state" == scd-alias-target && -s ~/.scdalias.zsh ]]; then
+    local -a scdaliases
+    scdaliases=( )
+    eval "$(setopt extendedglob
+            phome="(#b)(#s)${HOME}(/*)#(#e)"
+            builtin hash -dr
+            source ~/.scdalias.zsh &&
+            for k v in ${(kv)nameddirs}; do
+                scdaliases+=( $k:${v/${~phome}/"~"${match[1]}} )
+            done
+            complete_unalias=${+opt_args[unalias---unalias]}
+            if (( complete_unalias && ! ${+nameddirs[OLD]} )); then
+                scdaliases+=( 'OLD:all aliases to non-existent paths' )
+            fi
+            typeset -p scdaliases )"
+    _describe -t scdaliases scdalias scdaliases
+fi

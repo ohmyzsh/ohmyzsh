@@ -1,2 +1,2 @@
-# Evan describes this sexy prompt as: "a skinny, topless prompt"
+# Evan's minimal prompt
 PROMPT='%m :: %2~ %B»%b '

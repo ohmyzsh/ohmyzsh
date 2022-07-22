@@ -1,6 +1,7 @@
 # Open folder in ForkLift.app or ForkLift2.app from console
 # Author: Adam Strzelecki nanoant.com, modified by Bodo Tasche bitboxer.de
 #         Updated to support ForkLift 2 and ForkLift 3 by Johan Kaving
+#         Updated to support ForkLift from Setapp by Paul Rudkin
 #
 # Usage:
 #   fl [<folder>]
@@ -26,6 +27,13 @@ function fl {
 
   try
     tell application "Finder"
+        set forkLiftSetapp to name of application file id "com.binarynights.forklift-setapp"
+    end tell
+  on error err_msg number err_num
+    set forkLiftSetapp to null
+  end try
+  try
+    tell application "Finder"
         set forkLift3 to name of application file id "com.binarynights.ForkLift-3"
     end tell
   on error err_msg number err_num
@@ -46,7 +54,12 @@ function fl {
     set forkLift to null
   end try
 
-  if forkLift3 is not null and application forkLift3 is running then
+  if forkLiftSetapp is not null and application forkLiftSetapp is running then
+    tell application forkLiftSetapp
+        activate
+        set forkLiftVersion to version
+    end tell	
+  else if forkLift3 is not null and application forkLift3 is running then
     tell application forkLift3
         activate
         set forkLiftVersion to version
@@ -62,7 +75,9 @@ function fl {
         set forkLiftVersion to version
     end tell
   else
-    if forkLift3 is not null then
+    if forkLiftSetapp is not null then
+        set appName to forkLiftSetapp
+    else if forkLift3 is not null then
         set appName to forkLift3
     else if forkLift2 is not null then
         set appName to forkLift2

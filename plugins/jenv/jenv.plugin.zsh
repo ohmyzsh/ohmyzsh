@@ -1,4 +1,4 @@
-jenvdirs=("$HOME/.jenv" "/usr/local/jenv" "/opt/jenv")
+jenvdirs=("$HOME/.jenv" "/usr/local/bin/jenv" "/usr/local/jenv" "/opt/jenv")
 
 FOUND_JENV=0
 for jenvdir in $jenvdirs; do
@@ -15,16 +15,22 @@ if [[ $FOUND_JENV -eq 0 ]]; then
 fi
 
 if [[ $FOUND_JENV -eq 1 ]]; then
-    export PATH="${jenvdir}/bin:$PATH"
+    (( $+commands[jenv] )) || export PATH="${jenvdir}/bin:$PATH"
     eval "$(jenv init - zsh)"
 
-    function jenv_prompt_info() { jenv version-name 2>/dev/null }
+    function jenv_prompt_info() {
+      local version="$(jenv version-name 2>/dev/null)"
+      echo "${version:gs/%/%%}"
+    }
 
     if [[ -d "${jenvdir}/versions" ]]; then
         export JENV_ROOT=$jenvdir
     fi
 else
-    function jenv_prompt_info() { echo "system: $(java -version 2>&1 | cut -f 2 -d ' ')" }
+    function jenv_prompt_info() {
+      local version="$(java -version 2>&1 | cut -d' ' -f2)"
+      echo "system: ${version:gs/%/%%}"
+    }
 fi
 
 unset jenvdir jenvdirs FOUND_JENV

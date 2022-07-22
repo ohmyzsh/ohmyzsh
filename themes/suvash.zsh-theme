@@ -8,20 +8,7 @@ function virtualenv_info {
     [[ -n "$VIRTUAL_ENV" ]] && echo '('${VIRTUAL_ENV:t}') '
 }
 
-function ruby_prompt {
-    if (( $+commands[rvm-prompt] )); then
-        print -n $ZSH_THEME_RUBY_PROMPT_PREFIX
-        print -n $(~/.rvm/bin/rvm-prompt)
-        print -n $ZSH_THEME_RUBY_PROMPT_SUFFIX
-    elif (( $+commands[rbenv] )); then
-        print -n $ZSH_THEME_RUBY_PROMPT_PREFIX
-        print -n $(rbenv version | sed -e "s/ (set.*$//")
-        print -n $ZSH_THEME_RUBY_PROMPT_SUFFIX
-    fi
-    return 0
-}
-
-PROMPT='%F{magenta}%n%f at %F{yellow}%m%f in %B%F{green}%~%f%b$(git_prompt_info)$(ruby_prompt)
+PROMPT='%F{magenta}%n%f at %F{yellow}%m%f in %B%F{green}%~%f%b$(git_prompt_info)$(ruby_prompt_info)
 $(virtualenv_info) $(prompt_char) '
 
 ZSH_THEME_GIT_PROMPT_PREFIX=' on %F{magenta}'

@@ -1,4 +1,4 @@
-## Coffeescript Plugin
+# Coffeescript Plugin
 
 This plugin provides aliases for quickly compiling and previewing your
 coffeescript code.

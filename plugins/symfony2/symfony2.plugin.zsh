@@ -5,7 +5,7 @@ _symfony_console () {
 }
 
 _symfony2_get_command_list () {
-   `_symfony_console` --no-ansi | sed "1,/Available commands/d" | awk '/^  ?[^ ]+ / { print $1 }'
+   `_symfony_console` --no-ansi --no-debug | sed "1,/Available commands/d" | awk '/^  ?[^ ]+ / { print $1 }'
 }
 
 _symfony2 () {
@@ -25,7 +25,10 @@ alias sfcw='sf cache:warmup'
 alias sfroute='sf debug:router'
 alias sfcontainer='sf debug:container'
 alias sfgb='sf generate:bundle'
+alias sfgc='sf generate:controller'
+alias sfgcom='sf generate:command'
 alias sfge='sf doctrine:generate:entity'
 alias sfsu='sf doctrine:schema:update'
+alias sfdc='sf doctrine:database:create'
 alias sfdev='sf --env=dev'
 alias sfprod='sf --env=prod'

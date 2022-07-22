@@ -9,8 +9,12 @@
 # If you would like to clear your cache, go ahead and do a
 # "zsh-pip-clear-cache".
 
-ZSH_PIP_CACHE_FILE=~/.pip/zsh-cache
-ZSH_PIP_INDEXES=(https://pypi.python.org/simple/)
+if [[ -d "${XDG_CACHE_HOME:-$HOME/.cache}/pip" ]]; then
+  ZSH_PIP_CACHE_FILE="${XDG_CACHE_HOME:-$HOME/.cache}/pip/zsh-cache"
+else
+  ZSH_PIP_CACHE_FILE=~/.pip/zsh-cache
+fi
+ZSH_PIP_INDEXES=(https://pypi.org/simple/)
 
 zsh-pip-clear-cache() {
   rm $ZSH_PIP_CACHE_FILE
@@ -29,9 +33,10 @@ zsh-pip-cache-packages() {
   if [[ ! -f $ZSH_PIP_CACHE_FILE ]]; then
       echo -n "(...caching package index...)"
       tmp_cache=/tmp/zsh_tmp_cache
+      touch $tmp_cache
       for index in $ZSH_PIP_INDEXES ; do
           # well... I've already got two problems
-          curl $index 2>/dev/null | \
+          curl -L $index 2>/dev/null | \
               zsh-pip-clean-packages \
                >> $tmp_cache
       done
@@ -77,5 +82,30 @@ zsh-pip-test-clean-packages() {
     fi
 }
 
-alias pip="noglob pip" # allows square brackets for pip command invocation
+if (( $+commands[pip3] && !$+commands[pip] )); then
+  alias pip="noglob pip3"
+else
+  alias pip="noglob pip"
+fi
 
+# Create requirements file
+alias pipreq="pip freeze > requirements.txt"
+
+# Install packages from requirements file
+alias pipir="pip install -r requirements.txt"
+
+# Update all installed packages
+function pipupall {
+  # non-GNU xargs does not support nor need `--no-run-if-empty`
+  local xargs="xargs --no-run-if-empty"
+  xargs --version 2>/dev/null | grep -q GNU || xargs="xargs"
+  pip list --outdated --format freeze | cut -d= -f1 | ${=xargs} pip install --upgrade
+}
+
+# Uninstalled all installed packages
+function pipunall {
+  # non-GNU xargs does not support nor need `--no-run-if-empty`
+  local xargs="xargs --no-run-if-empty"
+  xargs --version 2>/dev/null | grep -q GNU || xargs="xargs"
+  pip list --format freeze | cut -d= -f1 | ${=xargs} pip uninstall
+}
