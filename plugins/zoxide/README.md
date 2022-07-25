@@ -12,3 +12,17 @@ plugins=(... zoxide)
 ```
 
 **Note:** you have to [install zoxide](https://github.com/ajeetdsouza/zoxide#step-1-install-zoxide) first.
+
+### Init flags
+Some zoxide options are set when `zoxide init` is run. Because this plugin 
+automates that for you, environment variables are given to set these options.
+
+Here are some examples:
+```zsh
+# Set to add the `--cmd j` flag during `zoxide init`
+export _ZO_OMZ_CMD=j
+# Set to 1 to add the `--no-cmd` flag during `zoxide init`
+export _ZO_OMZ_NOCMD=1
+# Set to add the `--hook never` during `zoxide init`
+export _ZO_OMZ_HOOK=never
+```
