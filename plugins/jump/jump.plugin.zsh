@@ -8,8 +8,10 @@
 #
 export MARKPATH=$HOME/.marks
 
+
 jump() {
-	builtin cd -P "$MARKPATH/$1" 2>/dev/null || {echo "No such mark: $1"; return 1}
+	local markpath="$(readlink $MARKPATH/$1)" || {echo "No such mark: $1"; return 1}
+	builtin cd "$markpath" 2>/dev/null || {echo "Destination does not exist for mark [$1]: $markpath"; return 2}
 }
 
 mark() {
