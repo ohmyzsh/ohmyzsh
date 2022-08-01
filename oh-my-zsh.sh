@@ -62,7 +62,7 @@ if [[ "$DISABLE_AUTO_UPDATE" != true ]]; then
 fi
 
 # Homebrew mentioned this so I'm doing it
-export SCALA_HOME=/usr/local/homebrew/opt/scala/idea
+export SCALA_HOME=/opt/homebrew/opt/scala/idea
 
 # Initializes Oh My Zsh
 

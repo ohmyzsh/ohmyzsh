@@ -265,14 +265,9 @@ function omz_urldecode {
 ##################################
 # PSK Functions
 ##################################
-# PSK List directories only
-lsd() {
-    l | grep -E "^d"
-}
-
 # ls grep
 lsg() {
-    l | grep -iE "$1"
+    la | grep -iE "$1"
 }
 
 function alg() {
@@ -289,8 +284,8 @@ alias agr="alg"
 alias alias-grep="alg"
 
 # These need to be here since they're required by gfind*
-alias ag="/usr/local/homebrew/bin/ag --ignore '*.svg' --ignore '*.xlt' --ignore '*.tsx' --ignore '*.js' --ignore '*.snap' --ignore '*.json' --ignore '*.dat' --ignore '*.builds' --ignore '*.tsv' --ignore '*.csv' --ignore '*.lock' --ignore '*.patch' --ignore '*.sum' --pager=bat"
-alias ag-no-pager="/usr/local/homebrew/bin/ag --ignore '*.svg' --ignore '*.xlt' --ignore '*.tsx' --ignore '*.js' --ignore '*.snap' --ignore '*.json' --ignore '*.dat' --ignore '*.builds' --ignore '*.tsv' --ignore '*.csv' --ignore '*.lock' --ignore '*.patch' --ignore '*.sum'"
+alias ag-no-pager="/opt/homebrew/bin/ag --ignore '*.svg' --ignore '*.xlt' --ignore '*.tsx' --ignore '*.js' --ignore '*.snap' --ignore '*.json' --ignore '*.dat' --ignore '*.builds' --ignore '*.tsv' --ignore '*.csv' --ignore '*.lock' --ignore '*.patch' --ignore '*.sum'"
+alias ag="ag-no-pager --pager=bat"
 alias "git-grep"="git \grep"
 
 function make-break() {
@@ -300,10 +295,18 @@ function make-break() {
 
 # Spits out a page of alternating white lines (hypens or thereabouts)
 function page-break() {
-  for i in {1..9}; do;
+  lines-break 9
+}
+
+function lines-break(){
+  for i in {1..$1}; do;
     make-break
   done
   today-time
+}
+
+function half-page-break() {
+  lines-break 3
 }
 
 function today-time() {
@@ -321,7 +324,7 @@ function gfind-all() {
     # $1 is search term, $2 is path
     # rg --no-ignore --hidden "$@"
     # even better is ag / silver searcher https://github.com/ggreer/the_silver_searcher
-    ag-no-pager --ignore-case -a --pager bat "$@"
+    ag-no-pager --ignore-case --all-types --hidden --unrestricted --ignore-case --pager bat "$@"
 }
 
 # the ol' gfind. Doesn't take a file pattern.
@@ -359,8 +362,18 @@ function kill-em-all() {
 
   echo "Attempting to kill $NAME by arg match..."
   pkill -fli $1
+  MATCHED_BY_ARG=$?
   echo "Attempting to kill $NAME by binary match..."
   pkill -li $1
+  MATCHED_BY_BIN=$?
+
+  sleep 3
+  # if [[ "$MATCHED_BY_ARG" -ne 0 && "$MATCHED_BY_BIN" -ne 0 ]]; then
+    echo "Right, getting the machete out - brutally killing $NAME..."
+    pkill -9 -li $1
+    pkill -9 -fli $1
+  # fi
+
   echo "...the killing... is done"
 }
 
@@ -399,7 +412,7 @@ function psgr-sorted() {
 function lsofgr-listen() {
   echo "Searching for processes listening on port $1..."
   #echo "ℹ️ lsof can take up to 2 minutes to complete"
-  # --stdin Write the prompt to the standard error and read the password from the standard input instead of using the terminal device.
+  # --stdin Wr   the prompt to the standard error and read the password from the standard input instead of using the terminal device.
   sudo --stdin < <(echo "11anfair") lsof -i -P | grep -E "COMMAND|.*:$1.*LISTEN"
 }
 alias port-grep=lsofgr
@@ -619,8 +632,8 @@ function peco-files() {
   fi
 }
 
-# Include Rune funcs
-. $HOME/.oh-my-zsh/rune-shell-funcs.zsh
+# Include Work funcs
+# . $HOME/.oh-my-zsh/rune-shell-funcs.zsh
 
 zle -N peco-directories
 bindkey '^Xf' peco-directories
@@ -647,6 +660,26 @@ function ppkill() {
         [[ $# > 0 ]] && shift
     fi
     ppgrep $QUERY | xargs kill $*
+}
+
+function smileys() {
+  printf "$(awk 'BEGIN{c=127;while(c++<191){printf("\xf0\x9f\x98\\%s",sprintf("%o",c));}}')"
+}
+
+function clone-starred-repos() {
+  GITUSER=sming; curl "https://api.github.com/users/${GITUSER}/starred?per_page=1000" | grep -o 'git@[^"]*' | parallel -j 25 'git clone {}'
+}
+
+function print-path() {
+  echo "$PATH" | tr ':' '\n'
+}
+
+alias pretty-print-path="print-path"
+alias dump-path="print-path"
+alias path-dump="print-path"
+
+function envgr() {
+  env | grep -Ei "$@" | sort
 }
 
 alias interactive-ps-grep="ppgrep"
