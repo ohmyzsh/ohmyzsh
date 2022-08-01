@@ -17,3 +17,9 @@ You can use it by adding `$(toolbox_prompt_info)` to your `PROMPT` or `RPROMPT` 
 ```zsh
 RPROMPT='$(toolbox_prompt_info)'
 ```
+
+## Aliases
+
+| Alias | Command              | Description                            |
+|-------|----------------------|----------------------------------------|
+| tb    | `toolbox enter`      | Enters the toolbox environment         |

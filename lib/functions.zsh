@@ -152,7 +152,7 @@ zmodload zsh/langinfo
 # Returns nonzero if encoding failed.
 #
 # Usage:
-#  omz_urlencode [-r] [-m] [-P] <string>
+#  omz_urlencode [-r] [-m] [-P] <string> [<string> ...]
 #
 #    -r causes reserved characters (;/?:@&=+$,) to be escaped
 #
@@ -164,7 +164,7 @@ function omz_urlencode() {
   local -a opts
   zparseopts -D -E -a opts r m P
 
-  local in_str=$1
+  local in_str="$@"
   local url_str=""
   local spaces_as_plus
   if [[ -z $opts[(r)-P] ]]; then spaces_as_plus=1; fi
