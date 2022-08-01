@@ -27,6 +27,9 @@ alias npmS="npm i -S "
 # npmd is used by https://github.com/dominictarr/npmd
 alias npmD="npm i -D "
 
+# Install exact version rather dependencies than using npm's default semver range operator. 
+alias npmSE="npm i --save-exact"
+
 # Force npm to fetch remote resources even if a local copy exists on disk.
 alias npmF='npm i -f'
 
