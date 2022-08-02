@@ -280,9 +280,10 @@ multi == 1 && length(\$0) > 0 {
 "
 
   local zdot="${ZDOTDIR:-$HOME}"
-  awk "$awk_script" "$zdot/.zshrc" > "$zdot/.zshrc.new" \
-  && command mv -f "$zdot/.zshrc" "$zdot/.zshrc.bck" \
-  && command mv -f "$zdot/.zshrc.new" "$zdot/.zshrc"
+  local zshrc="${${:-"${zdot}/.zshrc"}:A}"
+  awk "$awk_script" "$zshrc" > "$zdot/.zshrc.new" \
+  && command cp -f "$zshrc" "$zdot/.zshrc.bck" \
+  && command mv -f "$zdot/.zshrc.new" "$zshrc"
 
   # Exit if the new .zshrc file wasn't created correctly
   [[ $? -eq 0 ]] || {
@@ -294,8 +295,7 @@ multi == 1 && length(\$0) > 0 {
   # Exit if the new .zshrc file has syntax errors
   if ! command zsh -n "$zdot/.zshrc"; then
     _omz::log error "broken syntax in '"${zdot/#$HOME/\~}/.zshrc"'. Rolling back changes..."
-    command mv -f "$zdot/.zshrc" "$zdot/.zshrc.new"
-    command mv -f "$zdot/.zshrc.bck" "$zdot/.zshrc"
+    command mv -f "$zdot/.zshrc.bck" "$zshrc"
     return 1
   fi
 
@@ -354,9 +354,10 @@ multi == 1 && /^[^#]*\)/ {
 "
 
   local zdot="${ZDOTDIR:-$HOME}"
-  awk "$awk_script" "$zdot/.zshrc" > "$zdot/.zshrc.new" \
-  && command mv -f "$zdot/.zshrc" "$zdot/.zshrc.bck" \
-  && command mv -f "$zdot/.zshrc.new" "$zdot/.zshrc"
+  local zshrc="${${:-"${zdot}/.zshrc"}:A}"
+  awk "$awk_script" "$zshrc" > "$zdot/.zshrc.new" \
+  && command cp -f "$zshrc" "$zdot/.zshrc.bck" \
+  && command mv -f "$zdot/.zshrc.new" "$zshrc"
 
   # Exit if the new .zshrc file wasn't created correctly
   [[ $? -eq 0 ]] || {
@@ -368,8 +369,7 @@ multi == 1 && /^[^#]*\)/ {
   # Exit if the new .zshrc file has syntax errors
   if ! command zsh -n "$zdot/.zshrc"; then
     _omz::log error "broken syntax in '"${zdot/#$HOME/\~}/.zshrc"'. Rolling back changes..."
-    command mv -f "$zdot/.zshrc" "$zdot/.zshrc.new"
-    command mv -f "$zdot/.zshrc.bck" "$zdot/.zshrc"
+    command mv -f "$zdot/.zshrc.bck" "$zshrc"
     return 1
   fi
 
@@ -715,7 +715,8 @@ END {
 '
 
   local zdot="${ZDOTDIR:-$HOME}"
-  awk "$awk_script" "$zdot/.zshrc" > "$zdot/.zshrc.new" \
+  local zshrc="${${:-"${zdot}/.zshrc"}:A}"
+  awk "$awk_script" "$zshrc" > "$zdot/.zshrc.new" \
   || {
     # Prepend ZSH_THEME= line to .zshrc if it doesn't exist
     cat <<EOF
@@ -724,8 +725,8 @@ ZSH_THEME="$1" # set by \`omz\`
 EOF
     cat "$zdot/.zshrc"
   } > "$zdot/.zshrc.new" \
-  && command mv -f "$zdot/.zshrc" "$zdot/.zshrc.bck" \
-  && command mv -f "$zdot/.zshrc.new" "$zdot/.zshrc"
+  && command cp -f "$zshrc" "$zdot/.zshrc.bck" \
+  && command mv -f "$zdot/.zshrc.new" "$zshrc"
 
   # Exit if the new .zshrc file wasn't created correctly
   [[ $? -eq 0 ]] || {
@@ -737,8 +738,7 @@ EOF
   # Exit if the new .zshrc file has syntax errors
   if ! command zsh -n "$zdot/.zshrc"; then
     _omz::log error "broken syntax in '"${zdot/#$HOME/\~}/.zshrc"'. Rolling back changes..."
-    command mv -f "$zdot/.zshrc" "$zdot/.zshrc.new"
-    command mv -f "$zdot/.zshrc.bck" "$zdot/.zshrc"
+    command mv -f "$zdot/.zshrc.bck" "$zshrc"
     return 1
   fi
 
