@@ -632,9 +632,6 @@ function peco-files() {
   fi
 }
 
-# Include Work funcs
-# . $HOME/.oh-my-zsh/rune-shell-funcs.zsh
-
 zle -N peco-directories
 bindkey '^Xf' peco-directories
 zle -N peco-files

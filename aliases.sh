@@ -5,18 +5,18 @@ alias all-aliases=n-aliases
 alias bmake="today-time && make "
 alias brew-x86="/usr/local/homebrew/bin/brew"
 alias cerebro="/usr/local/cerebro-0.9.4/bin/cerebro"
+alias clf="exa-default -t modified | tail -1 | xargs less" # cat the last file
 alias code="/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code"
 alias crontab="EDITOR=vi \crontab" # This is because code editing crontab doesn't work
 alias egr='env | sort | grep -i '
 alias envgr='env | sort | grep -i '
 alias errorsx="^FATA|^ERR|^WAR|^FAIL"
 alias errx="^FATA|^ERR|^WAR|^FAIL"
-# PSK 07-09-2022 undoing exa as it's hanging for ages on attached volumes
-alias fdd='\fd -t d -uu -i -L '                      # find directories
-alias fda="fd -t d -H -uu -i --no-ignore-vcs -I -L " # find directories in horrible places
-alias fdir='\fd -t d -uu -i -L '                     # find directories
-alias ff='fd -t f -uu -i -L '                        # find files
-alias ffa="fd -t f -H -uu -i --no-ignore-vcs -I -L " # find files in horrible places
+alias fdd='\fd -t d -uu -i -L '                       # find directories
+alias fdda="fd -t d -H -uu -i --no-ignore-vcs -I -L " # find directories in horrible places
+alias fdir='\fd -t d -uu -i -L '                      # find directories
+alias ff='fd -t f -uu -i -L '                         # find files
+alias ffa="fd -t f -H -uu -i --no-ignore-vcs -I -L "  # find files in horrible places
 alias ftp-DS="sftp -P 699 pskadmin@ds718-psk.synology.me"
 alias functions-n=n-functions
 alias g="google"
@@ -67,6 +67,7 @@ alias timer="termdown"
 alias vscode="/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code"
 alias yoink="open -a Yoink"
 alias z="vscode ~/.zshrc"
+# alias ls="exa --header  --git -1 --long"
 # WARNING: these might balls things up
 # alias cat="bat"
 # alias man="batman"
