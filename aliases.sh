@@ -44,7 +44,7 @@ alias list-aliases=n-aliases                 # wot about my aliases?
 alias list-functions=n-functions             # wot about my functions?
 alias list-themes="cat ${HOME}/.zsh_favlist" # oh-my-zsh stuff
 alias lock="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
-source ./alias-ls.sh
+source $HOME/.oh-my-zsh/alias-ls.sh
 alias lz='lazygit'
 alias maketi="today-time&&  make test-integration 2>&1 | tee .\/make-local.log ; docker-stop-all-containers >\/dev\/null &"
 alias maketil="make-big-break&&  make test-integration-local 2>&1 | tee .\/make-local.log ; docker-stop-all-containers >\/dev\/null &"
