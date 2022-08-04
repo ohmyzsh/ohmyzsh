@@ -1,6 +1,7 @@
 alias dbl='docker build'
 alias dpu='docker pull'
 alias dtop='docker top'
+alias dsta='docker stop $(docker ps -q)'
 
 # docker containers
 alias dcin='docker container inspect'
