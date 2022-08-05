@@ -1,9 +1,6 @@
 # ls colors
 autoload -U colors && colors
 
-# Enable ls colors
-export LSCOLORS="Gxfxcxdxbxegedabagacad"
-
 # TODO organise this chaotic logic
 
 if [[ "$DISABLE_LS_COLORS" != "true" ]]; then
@@ -20,12 +17,9 @@ if [[ "$DISABLE_LS_COLORS" != "true" ]]; then
     gls --color -d . &>/dev/null && alias ls='gls --color=tty'
     colorls -G -d . &>/dev/null && alias ls='colorls -G'
   elif [[ "$OSTYPE" == (darwin|freebsd)* ]]; then
-    # this is a good alias, it works by default just using $LSCOLORS
+    # Prefer gls over ls if available 
     ls -G . &>/dev/null && alias ls='ls -G'
-
-    # only use coreutils ls if there is a dircolors customization present ($LS_COLORS or .dircolors file)
-    # otherwise, gls will use the default color scheme which is ugly af
-    [[ -n "$LS_COLORS" || -f "$HOME/.dircolors" ]] && gls --color -d . &>/dev/null && alias ls='gls --color=tty'
+    gls --color -d . &>/dev/null && alias ls='gls --color=tty'
   else
     # For GNU ls, we use the default ls color theme. They can later be overwritten by themes.
     if [[ -z "$LS_COLORS" ]]; then
@@ -34,9 +28,17 @@ if [[ "$DISABLE_LS_COLORS" != "true" ]]; then
 
     ls --color -d . &>/dev/null && alias ls='ls --color=tty' || { ls -G . &>/dev/null && alias ls='ls -G' }
 
-    # Take advantage of $LS_COLORS for completion as well.
-    zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
   fi
+fi
+
+# Set default lscolors
+if [[ -z "$LSCOLORS" ]]; then
+  export LSCOLORS="Gxfxcxdxbxegedabagacad"
+fi
+
+# Set default ls_colors
+if [[ -z "$LS_COLORS" ]]; then
+  export LS_COLORS="di=1;36:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43"
 fi
 
 # enable diff color if possible.

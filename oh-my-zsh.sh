@@ -185,3 +185,9 @@ if [[ -n "$ZSH_THEME" ]]; then
     echo "[oh-my-zsh] theme '$ZSH_THEME' not found"
   fi
 fi
+
+# Take advantage of $LS_COLORS for completion as well.
+# In order for tab completion folders to have the same colors as ls
+# we need to set the zstyle for completion after the theme is sourced
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+
