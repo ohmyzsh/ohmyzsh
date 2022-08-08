@@ -15,8 +15,8 @@ Requirements: Python needs to be installed.
 
 ## Usage
 
-- `acs`: show all aliases by group.
+- `alcs`: show all aliases by group.
 
-- `acs <keyword>`: filter aliases by `<keyword>` and highlight.
+- `alcs <keyword>`: filter aliases by `<keyword>` and highlight.
 
   ![screenshot](https://cloud.githubusercontent.com/assets/3602957/11581913/cb54fb8a-9a82-11e5-846b-5a67f67ad9ad.png)
