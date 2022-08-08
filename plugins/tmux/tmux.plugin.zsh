@@ -26,12 +26,14 @@ fi
 # systems without the proper terminfo
 : ${ZSH_TMUX_FIXTERM_WITH_256COLOR:=screen-256color}
 # Set the configuration path
-: ${ZSH_TMUX_CONFIG:=$HOME/.tmux.conf}
+if [[ -e ${XDG_CONFIG_HOME:-$HOME/.config}/tmux/tmux.conf ]]; then
+  : ${ZSH_TMUX_CONFIG:=${XDG_CONFIG_HOME:-$HOME/.config}/tmux/tmux.conf}
+else
+  : ${ZSH_TMUX_CONFIG:=$HOME/.tmux.conf}
 # Set -u option to support unicode
 : ${ZSH_TMUX_UNICODE:=false}
 
 # ALIASES
-
 alias ta='tmux attach -t'
 alias tad='tmux attach -d -t'
 alias ts='tmux new-session -s'
