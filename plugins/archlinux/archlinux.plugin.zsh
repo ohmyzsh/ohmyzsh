@@ -87,6 +87,30 @@ fi
 #             AUR helpers             #
 #######################################
 
+# ordered by popularity (aur popularity score) 
+
+if (( $+commands[yay] )); then
+  alias yaconf='yay -Pg'
+  alias yaclean='yay -Sc'
+  alias yaclr='yay -Scc'
+  alias yaupg='yay -Syu'
+  alias yasu='yay -Syu --noconfirm'
+  alias yain='yay -S'
+  alias yains='yay -U'
+  alias yare='yay -R'
+  alias yarem='yay -Rns'
+  alias yarep='yay -Si'
+  alias yareps='yay -Ss'
+  alias yaloc='yay -Qi'
+  alias yalocs='yay -Qs'
+  alias yalst='yay -Qe'
+  alias yaorph='yay -Qtd'
+  alias yainsd='yay -S --asdeps'
+  alias yamir='yay -Syy'
+  alias yaupd="yay -Sy"
+  alias upgrade='yay -Syu'
+fi
+
 if (( $+commands[aura] )); then
   alias auin='sudo aura -S'
   alias aurin='sudo aura -A'
@@ -118,27 +142,6 @@ if (( $+commands[aura] )); then
   function auownls () { aura -Qql $(aura -Qqo $@); }
 fi
 
-if (( $+commands[pacaur] )); then
-  alias pacclean='pacaur -Sc'
-  alias pacclr='pacaur -Scc'
-  alias paupg='pacaur -Syu'
-  alias pasu='pacaur -Syu --noconfirm'
-  alias pain='pacaur -S'
-  alias pains='pacaur -U'
-  alias pare='pacaur -R'
-  alias parem='pacaur -Rns'
-  alias parep='pacaur -Si'
-  alias pareps='pacaur -Ss'
-  alias paloc='pacaur -Qi'
-  alias palocs='pacaur -Qs'
-  alias palst='pacaur -Qe'
-  alias paorph='pacaur -Qtd'
-  alias painsd='pacaur -S --asdeps'
-  alias pamir='pacaur -Syy'
-  alias paupd="pacaur -Sy"
-  alias upgrade='pacaur -Syu'
-fi
-
 if (( $+commands[trizen] )); then
   alias trconf='trizen -C'
   alias trupg='trizen -Syua'
@@ -161,24 +164,24 @@ if (( $+commands[trizen] )); then
   alias upgrade='trizen -Syu'
 fi
 
-if (( $+commands[yay] )); then
-  alias yaconf='yay -Pg'
-  alias yaclean='yay -Sc'
-  alias yaclr='yay -Scc'
-  alias yaupg='yay -Syu'
-  alias yasu='yay -Syu --noconfirm'
-  alias yain='yay -S'
-  alias yains='yay -U'
-  alias yare='yay -R'
-  alias yarem='yay -Rns'
-  alias yarep='yay -Si'
-  alias yareps='yay -Ss'
-  alias yaloc='yay -Qi'
-  alias yalocs='yay -Qs'
-  alias yalst='yay -Qe'
-  alias yaorph='yay -Qtd'
-  alias yainsd='yay -S --asdeps'
-  alias yamir='yay -Syy'
-  alias yaupd="yay -Sy"
-  alias upgrade='yay -Syu'
+if (( $+commands[pacaur] )); then
+  alias pacclean='pacaur -Sc'
+  alias pacclr='pacaur -Scc'
+  alias paupg='pacaur -Syu'
+  alias pasu='pacaur -Syu --noconfirm'
+  alias pain='pacaur -S'
+  alias pains='pacaur -U'
+  alias pare='pacaur -R'
+  alias parem='pacaur -Rns'
+  alias parep='pacaur -Si'
+  alias pareps='pacaur -Ss'
+  alias paloc='pacaur -Qi'
+  alias palocs='pacaur -Qs'
+  alias palst='pacaur -Qe'
+  alias paorph='pacaur -Qtd'
+  alias painsd='pacaur -S --asdeps'
+  alias pamir='pacaur -Syy'
+  alias paupd="pacaur -Sy"
+  alias upgrade='pacaur -Syu'
 fi
+
