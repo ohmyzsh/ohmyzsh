@@ -2,7 +2,8 @@
 : ${GIT_AUTO_FETCH_INTERVAL:=60}
 
 # Necessary for the git-fetch-all function
-zmodload zsh/datetime zsh/stat
+zmodload zsh/datetime
+zmodload -F zsh/stat b:zstat  # only zstat command, not stat command
 
 function git-fetch-all {
   (

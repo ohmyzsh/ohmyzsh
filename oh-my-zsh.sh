@@ -120,17 +120,18 @@ fi
 
 if [[ "$ZSH_DISABLE_COMPFIX" != true ]]; then
   source "$ZSH/lib/compfix.zsh"
-  # If completion insecurities exist, warn the user
-  handle_completion_insecurities
   # Load only from secure directories
-  compinit -i -C -d "$ZSH_COMPDUMP"
+  compinit -i -d "$ZSH_COMPDUMP"
+  # If completion insecurities exist, warn the user
+  handle_completion_insecurities &|
 else
   # If the user wants it, load from all found directories
-  compinit -u -C -d "$ZSH_COMPDUMP"
+  compinit -u -d "$ZSH_COMPDUMP"
 fi
 
 # Append zcompdump metadata if missing
-if (( $zcompdump_refresh )); then
+if (( $zcompdump_refresh )) \
+  || ! command grep -q -Fx "$zcompdump_revision" "$ZSH_COMPDUMP" 2>/dev/null; then
   # Use `tee` in case the $ZSH_COMPDUMP filename is invalid, to silence the error
   # See https://github.com/ohmyzsh/ohmyzsh/commit/dd1a7269#commitcomment-39003489
   tee -a "$ZSH_COMPDUMP" &>/dev/null <<EOF

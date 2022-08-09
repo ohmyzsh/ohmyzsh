@@ -47,7 +47,7 @@ It should include the data gathered as indicated above, along with:
 2. What the correct behavior should be
 3. What the actual behavior is
 
-Please copy to anyone relevant (_eg_ plugin maintainers) by mentioning their GitHub handle
+Please copy to anyone relevant (e.g. plugin maintainers) by mentioning their GitHub handle
 (starting with `@`) in your message.
 
 We will do our very best to help you.
@@ -59,7 +59,7 @@ your suggestion.
 
 If you find one, comment on it so we can know there are more people supporting it.
 
-If not, you can go ahead and create an issue. Please copy to anyone relevant (_eg_ plugin
+If not, you can go ahead and create an issue. Please copy to anyone relevant (e.g. plugin
 maintainers) by mentioning their GitHub handle (starting with `@`) in your message.
 
 ## Submitting Pull Requests
@@ -99,10 +99,31 @@ covering or related to what you want to add.
 
 If you find one, try it out and work with the author on a common solution.
 
-If not, then go ahead and submit a PR. Please copy to anyone relevant (_eg_ plugin
+If not, then go ahead and submit a PR. Please copy to anyone relevant (e.g. plugin
 maintainers) by mentioning their GitHub handle (starting with `@`) in your message.
 
-For any extensive change, _eg_ a new plugin, you will have to find testers to +1 your PR.
+For any extensive change, such as a new plugin, you will have to find testers to +1 your PR.
+
+### New plugin aliases
+
+We acknowledge that aliases are a core part of Oh My Zsh. There are plugins that have +100 aliases!
+
+This has become an issue for two opposing reasons:
+
+- Some users want to have their personal aliases in Oh My Zsh.
+- Some users don't want any aliases at all and feel that there are too many.
+
+Because of this, from now on we're requiring that new aliases follow these conditions:
+
+1. They will be used by many people, not just a few.
+2. The aliases will be used many times and for common tasks.
+3. Prefer one generic alias over many specific ones.
+4. When justifying the need for an alias, talk about workflows where you'll use it,
+   preferably in combination with other aliases.
+5. If there exists a command with the same name, look for a different alias name.
+
+This list is not exhaustive! Please remember that your alias will be in the machines of many people,
+so it should be justified why they should have it.
 
 ----
 

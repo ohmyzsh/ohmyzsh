@@ -280,9 +280,10 @@ multi == 1 && length(\$0) > 0 {
 "
 
   local zdot="${ZDOTDIR:-$HOME}"
-  awk "$awk_script" "$zdot/.zshrc" > "$zdot/.zshrc.new" \
-  && command mv -f "$zdot/.zshrc" "$zdot/.zshrc.bck" \
-  && command mv -f "$zdot/.zshrc.new" "$zdot/.zshrc"
+  local zshrc="${${:-"${zdot}/.zshrc"}:A}"
+  awk "$awk_script" "$zshrc" > "$zdot/.zshrc.new" \
+  && command cp -f "$zshrc" "$zdot/.zshrc.bck" \
+  && command mv -f "$zdot/.zshrc.new" "$zshrc"
 
   # Exit if the new .zshrc file wasn't created correctly
   [[ $? -eq 0 ]] || {
@@ -294,8 +295,7 @@ multi == 1 && length(\$0) > 0 {
   # Exit if the new .zshrc file has syntax errors
   if ! command zsh -n "$zdot/.zshrc"; then
     _omz::log error "broken syntax in '"${zdot/#$HOME/\~}/.zshrc"'. Rolling back changes..."
-    command mv -f "$zdot/.zshrc" "$zdot/.zshrc.new"
-    command mv -f "$zdot/.zshrc.bck" "$zdot/.zshrc"
+    command mv -f "$zdot/.zshrc.bck" "$zshrc"
     return 1
   fi
 
@@ -354,9 +354,10 @@ multi == 1 && /^[^#]*\)/ {
 "
 
   local zdot="${ZDOTDIR:-$HOME}"
-  awk "$awk_script" "$zdot/.zshrc" > "$zdot/.zshrc.new" \
-  && command mv -f "$zdot/.zshrc" "$zdot/.zshrc.bck" \
-  && command mv -f "$zdot/.zshrc.new" "$zdot/.zshrc"
+  local zshrc="${${:-"${zdot}/.zshrc"}:A}"
+  awk "$awk_script" "$zshrc" > "$zdot/.zshrc.new" \
+  && command cp -f "$zshrc" "$zdot/.zshrc.bck" \
+  && command mv -f "$zdot/.zshrc.new" "$zshrc"
 
   # Exit if the new .zshrc file wasn't created correctly
   [[ $? -eq 0 ]] || {
@@ -368,8 +369,7 @@ multi == 1 && /^[^#]*\)/ {
   # Exit if the new .zshrc file has syntax errors
   if ! command zsh -n "$zdot/.zshrc"; then
     _omz::log error "broken syntax in '"${zdot/#$HOME/\~}/.zshrc"'. Rolling back changes..."
-    command mv -f "$zdot/.zshrc" "$zdot/.zshrc.new"
-    command mv -f "$zdot/.zshrc.bck" "$zdot/.zshrc"
+    command mv -f "$zdot/.zshrc.bck" "$zshrc"
     return 1
   fi
 
@@ -573,12 +573,27 @@ function _omz::pr::test {
 
     # Rebase pull request branch against the current master
     _omz::log info "rebasing PR #$1..."
-    command git rebase master ohmyzsh/pull-$1 || {
-      command git rebase --abort &>/dev/null
-      _omz::log warn "could not rebase PR #$1 on top of master."
-      _omz::log warn "you might not see the latest stable changes."
-      _omz::log info "run \`zsh\` to test the changes."
-      return 1
+    local ret gpgsign
+    {
+      # Back up commit.gpgsign setting: use --local to get the current repository
+      # setting, not the global one. If --local is not a known option, it will
+      # exit with a 129 status code.
+      gpgsign=$(command git config --local commit.gpgsign 2>/dev/null) || ret=$?
+      [[ $ret -ne 129 ]] || gpgsign=$(command git config commit.gpgsign 2>/dev/null)
+      command git config commit.gpgsign false
+
+      command git rebase master ohmyzsh/pull-$1 || {
+        command git rebase --abort &>/dev/null
+        _omz::log warn "could not rebase PR #$1 on top of master."
+        _omz::log warn "you might not see the latest stable changes."
+        _omz::log info "run \`zsh\` to test the changes."
+        return 1
+      }
+    } always {
+      case "$gpgsign" in
+      "") command git config --unset commit.gpgsign ;;
+      *) command git config commit.gpgsign "$gpgsign" ;;
+      esac
     }
 
     _omz::log info "fetch of PR #${1} successful."
@@ -700,7 +715,8 @@ END {
 '
 
   local zdot="${ZDOTDIR:-$HOME}"
-  awk "$awk_script" "$zdot/.zshrc" > "$zdot/.zshrc.new" \
+  local zshrc="${${:-"${zdot}/.zshrc"}:A}"
+  awk "$awk_script" "$zshrc" > "$zdot/.zshrc.new" \
   || {
     # Prepend ZSH_THEME= line to .zshrc if it doesn't exist
     cat <<EOF
@@ -709,8 +725,8 @@ ZSH_THEME="$1" # set by \`omz\`
 EOF
     cat "$zdot/.zshrc"
   } > "$zdot/.zshrc.new" \
-  && command mv -f "$zdot/.zshrc" "$zdot/.zshrc.bck" \
-  && command mv -f "$zdot/.zshrc.new" "$zdot/.zshrc"
+  && command cp -f "$zshrc" "$zdot/.zshrc.bck" \
+  && command mv -f "$zdot/.zshrc.new" "$zshrc"
 
   # Exit if the new .zshrc file wasn't created correctly
   [[ $? -eq 0 ]] || {
@@ -722,8 +738,7 @@ EOF
   # Exit if the new .zshrc file has syntax errors
   if ! command zsh -n "$zdot/.zshrc"; then
     _omz::log error "broken syntax in '"${zdot/#$HOME/\~}/.zshrc"'. Rolling back changes..."
-    command mv -f "$zdot/.zshrc" "$zdot/.zshrc.new"
-    command mv -f "$zdot/.zshrc.bck" "$zdot/.zshrc"
+    command mv -f "$zdot/.zshrc.bck" "$zshrc"
     return 1
   fi
 
