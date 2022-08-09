@@ -9,7 +9,7 @@ function web_search() {
     $ZSH_WEB_SEARCH_ENGINES
     google      "https://www.google.com/search?q="
     bing        "https://www.bing.com/search?q="
-    brave        "https://search.brave.com/search?q="
+    brave       "https://search.brave.com/search?q="
     yahoo       "https://search.yahoo.com/search?p="
     duckduckgo  "https://www.duckduckgo.com/?q="
     startpage   "https://www.startpage.com/do/search?q="
