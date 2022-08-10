@@ -89,22 +89,22 @@ else
     alias afu="su -lc '$apt-file update'"
     alias au="su -lc '$apt_pref $apt_upgr' root"
     function ai() {
-        cmd="su -lc 'aptitude -P install $@' root"
+        cmd="su -lc '$apt_pref install $@' root"
         print "$cmd"
         eval "$cmd"
     }
     function ap() {
-        cmd="su -lc '$apt_pref -P purge $@' root"
+        cmd="su -lc '$apt_pref purge $@' root"
         print "$cmd"
         eval "$cmd"
     }
     function ar() {
-        cmd="su -lc '$apt_pref -P remove $@' root"
+        cmd="su -lc '$apt_pref remove $@' root"
         print "$cmd"
         eval "$cmd"
     }
     function aar() {
-        cmd="su -lc '$apt_pref -P autoremove $@' root"
+        cmd="su -lc '$apt_pref autoremove $@' root"
         print "$cmd"
         eval "$cmd"
     }
