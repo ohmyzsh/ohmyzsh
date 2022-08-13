@@ -21,7 +21,7 @@ alias dxcit='docker container exec -it'
 alias dib='docker image build'
 alias dii='docker image inspect'
 alias dils='docker image ls'
-alias dip='docker image push'
+alias dipu='docker image push'
 alias dirm='docker image rm'
 alias dit='docker image tag'
 

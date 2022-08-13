@@ -35,3 +35,4 @@ plugins=(... golang)
 | gotod  | `go tool dist`    | Utility to bootstrap, build and test go runtime               |
 | gotofx | `go tool fix`     | Fixes an application to use newer features                    |
 | gov    | `go vet`          | Vet examines Go source code and reports suspicious constructs |
+| gow    | `go work`         | Work provides access to operations on workspaces              |
