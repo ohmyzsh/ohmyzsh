@@ -1,3 +1,5 @@
+source ~/.oh-my-zsh/classkick-functions.zsh
+
 function zsh_stats() {
   fc -l 1 \
     | awk '{ CMD[$2]++; count++; } END { for (a in CMD) print CMD[a] " " CMD[a]*100/count "% " a }' \
@@ -324,7 +326,7 @@ function gfind-all() {
     # $1 is search term, $2 is path
     # rg --no-ignore --hidden "$@"
     # even better is ag / silver searcher https://github.com/ggreer/the_silver_searcher
-    ag-no-pager --ignore-case --all-types --hidden --unrestricted --ignore-case --pager bat "$@"
+    ag-no-pager --ignore-case --hidden --ignore-case --pager bat "$@"
 }
 
 # the ol' gfind. Doesn't take a file pattern.
@@ -391,12 +393,18 @@ function clean-slate() {
 alias clr=clean-slate
 alias cls=clean-slate
 
+function print-hashes() {
+  repeat $1 echo -n "#" ; echo
+}
+
 function h() {
+  print-hashes 60
   NUM_LINES=$1
   if [ -z "$NUM_LINES" ]; then
       NUM_LINES=35
   fi
   \history -$NUM_LINES
+  print-hashes 60
 }
 
 function psgr() {
@@ -456,6 +464,12 @@ function git-show-all-stashes() {
   echo "Hit 'q' to go to next file"
   echo ""
   git stash list | awk -F: '{ print "\n\n\n\n"; print $0; print "\n\n"; system("git stash show -p " $1); }'
+}
+
+# Check whether the supplied file is under SCM/git.
+# Check whether the supplied file is under SCM/git.
+function git-status() {
+  git ls-files | grep $1
 }
 
 # kill most recent container instance
@@ -685,3 +699,35 @@ alias grep-ps-interactive="ppgrep"
 alias interactive-kill="ppkill"
 alias kill-interactive="ppkill"
 alias kill-percol="ppkill"
+
+# From https://apple.stackexchange.com/a/432408/100202 - sets the current iterm2
+# tab to a random color
+PRELINE="\r\033[A"
+
+function random {
+    echo -e "\033]6;1;bg;red;brightness;$((1 + $RANDOM % 255))\a"$PRELINE
+    echo -e "\033]6;1;bg;green;brightness;$((1 + $RANDOM % 255))\a"$PRELINE
+    echo -e "\033]6;1;bg;blue;brightness;$((1 + $RANDOM % 255))\a"$PRELINE
+}
+
+function color {
+    case $1 in
+    green)
+    echo -e "\033]6;1;bg;red;brightness;57\a"$PRELINE
+    echo -e "\033]6;1;bg;green;brightness;197\a"$PRELINE
+    echo -e "\033]6;1;bg;blue;brightness;77\a"$PRELINE
+    ;;
+    red)
+    echo -e "\033]6;1;bg;red;brightness;270\a"$PRELINE
+    echo -e "\033]6;1;bg;green;brightness;60\a"$PRELINE
+    echo -e "\033]6;1;bg;blue;brightness;83\a"$PRELINE
+    ;;
+    orange)
+    echo -e "\033]6;1;bg;red;brightness;227\a"$PRELINE
+    echo -e "\033]6;1;bg;green;brightness;143\a"$PRELINE
+    echo -e "\033]6;1;bg;blue;brightness;10\a"$PRELINE
+    ;;
+    *)
+    random
+    esac
+}
