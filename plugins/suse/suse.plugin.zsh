@@ -12,16 +12,20 @@ alias zvcmp='zypper vcmp'
 #Packages commands
 alias zin='sudo zypper in'
 alias zinr='sudo zypper inr'
+alias zinrc='sudo zypper inr --no-recommends'
+alias znrc='sudo zypper in --no-recommends'
 alias zrm='sudo zypper rm'
 alias zsi='sudo zypper si'
 alias zve='sudo zypper ve'
 
 #Updates commands
 alias zdup='sudo zypper dup'
+alias zdnrc='sudo zypper dup --no-recommends'
 alias zlp='zypper lp'
 alias zlu='zypper lu'
 alias zpchk='sudo zypper pchk'
 alias zup='sudo zypper up'
+alias zunrc='sudo zypper up --no-recommends'
 alias zpatch='sudo zypper patch'
 
 #Request commands
