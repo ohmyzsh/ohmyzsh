@@ -24,7 +24,6 @@ export EMACS_PLUGIN_LAUNCHER="${0:A:h}/emacsclient.sh"
 # set EDITOR if not already defined.
 export EDITOR="${EDITOR:-${EMACS_PLUGIN_LAUNCHER}}"
 
-alias emacs="$EMACS_PLUGIN_LAUNCHER --no-wait"
 alias e=emacs
 # open terminal emacsclient
 alias te="$EMACS_PLUGIN_LAUNCHER -nw"
@@ -65,4 +64,14 @@ function ecd {
   local file
   file="$(efile)" || return $?
   echo "${file:h}"
+}
+
+# Opens emacs with --no-wait argument
+function emacs {
+  # Checks for emacs terminal arguments which are incompatible with --no-wait
+  if [[ $* =~ "-nw" || $* =~ "-t" || $* =~ "-tty" ]]; then
+    $EMACS_PLUGIN_LAUNCHER $@
+  else
+    $EMACS_PLUGIN_LAUNCHER --no-wait $@
+  fi
 }
