@@ -1,10 +1,8 @@
-# You can put files here to add functionality separated per file, which
-# will be ignored by git.
-# Files on the custom/ directory will be automatically loaded by the init
-# script, in alphabetical order.
-
-# For example: add yourself some shortcuts to projects you often work on.
+# Custom zsh configuration files can be added here. You can add a
+# single file or organize related commands into separate files. The
+# init script loads the files in the custom/ directory alphabetically.
+#
+# Example: add shortcuts to projects you often work on.
 #
 # brainstormr=~/Projects/development/planetargon/brainstormr
 # cd $brainstormr
-#
