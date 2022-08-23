@@ -29,6 +29,10 @@ fi
 : ${ZSH_TMUX_CONFIG:=$HOME/.tmux.conf}
 # Set -u option to support unicode
 : ${ZSH_TMUX_UNICODE:=false}
+# Change prefix key on ssh connection
+: ${ZSH_TMUX_CHANGE_PREFIX_ON_SSH:=true}
+# Set prefix key on ssh connection
+: ${ZSH_TMUX_PREFIX_ON_SSH:="C-v"}
 
 # ALIASES
 
@@ -106,4 +110,16 @@ if [[ -z "$TMUX" && "$ZSH_TMUX_AUTOSTART" == "true" && -z "$INSIDE_EMACS" && -z 
     export ZSH_TMUX_AUTOSTARTED=true
     _zsh_tmux_plugin_run
   fi
+fi
+
+# Change prefix to $ZSH_TMUX_PREFIX_ON_SSH in ssh connection (see #10847)
+if [[ -n "$SSH_CLIENT" && $ZSH_TMUX_CHANGE_PREFIX_ON_SSH == true ]] ; then
+  # unbind all prefix(2) key
+  tmux show-options -g | grep prefix | awk '{print $2}' | while read prefix_key; do
+    tmux unbind $prefix_key
+    echo $prefix_key unbinded.
+  done
+  tmux set -g prefix $ZSH_TMUX_PREFIX_ON_SSH
+  tmux bind $ZSH_TMUX_PREFIX_ON_SSH send-prefix
+  echo $ZSH_TMUX_PREFIX_ON_SSH is new prefix key.
 fi
