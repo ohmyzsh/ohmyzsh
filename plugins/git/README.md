@@ -58,6 +58,7 @@ plugins=(... git)
 | `gcpa`                 | `git cherry-pick --abort`                                                                                                       |
 | `gcpc`                 | `git cherry-pick --continue`                                                                                                    |
 | `gclean`               | `git clean --interactive -d`                                                                                                    |
+| `gcfx`                 | `git commit --fixup`                                                                                                            |
 | `gcl`                  | `git clone --recurse-submodules`                                                                                                |
 | `gccd`                 | `git clone --recurse-submodules "$@" && cd "$(basename $\_ .git)"`                                                              |
 | `gcam`                 | `git commit --all --message`                                                                                                    |

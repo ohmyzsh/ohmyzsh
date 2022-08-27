@@ -164,6 +164,7 @@ alias gcp='git cherry-pick'
 alias gcpa='git cherry-pick --abort'
 alias gcpc='git cherry-pick --continue'
 alias gclean='git clean --interactive -d'
+alias gcfx='git commit --fixup'
 alias gcl='git clone --recurse-submodules'
 
 function gccd() {
