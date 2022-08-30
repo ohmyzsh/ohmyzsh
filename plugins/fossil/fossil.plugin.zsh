@@ -7,10 +7,10 @@ ZSH_THEME_FOSSIL_PROMPT_PREFIX="%{$fg_bold[blue]%}fossil:(%{$fg_bold[red]%}"
 ZSH_THEME_FOSSIL_PROMPT_SUFFIX="%{$fg_bold[blue]%})"
 
 # Text to display if the branch is dirty
-ZSH_THEME_FOSSIL_PROMPT_DIRTY=" %{$fg_bold[red]%}✖"
+ZSH_THEME_FOSSIL_PROMPT_DIRTY="%{$fg_bold[red]%}✖"
 
 # Text to display if the branch is clean
-ZSH_THEME_FOSSIL_PROMPT_CLEAN=" %{$fg_bold[green]%}✔"
+ZSH_THEME_FOSSIL_PROMPT_CLEAN="%{$fg_bold[green]%}✔"
 
 function fossil_prompt_info() {
   local branch=$(fossil branch current 2>&1)
@@ -25,11 +25,11 @@ function fossil_prompt_info() {
     dirty="$ZSH_THEME_FOSSIL_PROMPT_DIRTY"
   fi
 
-  printf '%s %s %s %s %s' \
+  printf ' %s%s%s%s%s' \
     "$ZSH_THEME_FOSSIL_PROMPT_PREFIX" \
     "${branch:gs/%/%%}" \
-    "$ZSH_THEME_FOSSIL_PROMPT_SUFFIX" \
     "$dirty" \
+    "$ZSH_THEME_FOSSIL_PROMPT_SUFFIX" \
     "%{$reset_color%}"
 }
 
