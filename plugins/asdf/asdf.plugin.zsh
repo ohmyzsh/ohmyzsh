@@ -12,7 +12,13 @@ fi
 if [[ ! -f "$ASDF_DIR/asdf.sh" || ! -f "$ASDF_COMPLETIONS/asdf.bash" ]] && (( $+commands[brew] )); then
   brew_prefix="$(brew --prefix asdf)"
   ASDF_DIR="${brew_prefix}/libexec"
-  ASDF_COMPLETIONS="${brew_prefix}/etc/bash_completion.d"
+
+  # Find correct completions path if ZSH is used
+  if [ -n "$ZSH_VERSION" ]; then
+    ASDF_COMPLETIONS="${brew_prefix}/share/zsh/site-functions"
+  else
+    ASDF_COMPLETIONS="${brew_prefix}/etc/bash_completion.d"
+  fi
   unset brew_prefix
 fi
 
@@ -21,7 +27,11 @@ if [[ -f "$ASDF_DIR/asdf.sh" ]]; then
   . "$ASDF_DIR/asdf.sh"
 
   # Load completions
-  if [[ -f "$ASDF_COMPLETIONS/asdf.bash" ]]; then
-    . "$ASDF_COMPLETIONS/asdf.bash"
+  if [ -n "$ZSH_VERSION" ]; then
+    source "$ASDF_COMPLETIONS/_asdf"
+  else
+    if [[ -f "$ASDF_COMPLETIONS/asdf.bash" ]]; then
+      . "$ASDF_COMPLETIONS/asdf.bash"
+    fi
   fi
 fi
