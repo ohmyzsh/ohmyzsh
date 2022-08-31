@@ -1,7 +1,13 @@
 # Symfony2 basic command completion
 
 _symfony_console () {
-  echo "php $(find . -maxdepth 2 -mindepth 1 -name 'console' -type f | head -n 1)"
+  if [[ -f "bin/console" || -h "bin/console" ]]; then
+    echo "php bin/console"
+  elif [[ -f "app/console" || -h "app/console" ]]; then
+    echo "php app/console"
+  else
+    echo "php $(find . -maxdepth 2 -mindepth 1 -name 'console' -type f | head -n 1)"
+  fi
 }
 
 _symfony2_get_command_list () {
