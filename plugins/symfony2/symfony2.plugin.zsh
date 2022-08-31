@@ -6,7 +6,7 @@ _symfony_console () {
   elif [[ -f "app/console" || -h "app/console" ]]; then
     echo "php app/console"
   else
-    echo "php $(find . -maxdepth 2 -mindepth 1 -name 'console' -type f | head -n 1)"
+    echo "symfony-console-not-found"
   fi
 }
 
