@@ -5,15 +5,22 @@ from subprocess import check_output, list2cmdline
 
 cwd = os.path.dirname(__file__)
 ssh_agent = os.path.join(cwd, "ssh-agent.py")
-user_proxy = os.environ.get("CONFIG_PROXY", os.path.expandvars("$HOME/.config/proxy"))
+proxy_env = "SHELLPROXY_URL"
+proxy_config = os.environ.get("SHELLPROXY_CONFIG") or os.path.expandvars("$HOME/.config/proxy")
 
+usage="""shell-proxy: no proxy configuration found.
+
+Set `{env}` or create a config file at `{config}`
+See the plugin README for more information.""".format(env=proxy_env, config=proxy_config)
 
 def get_http_proxy():
-    if "DEFAULT_PROXY" in os.environ:
-        return os.environ["DEFAULT_PROXY"]
-    if os.path.isfile(user_proxy):
-        return check_output(user_proxy).decode("utf-8").strip()
-    raise Exception("Not found, Proxy configuration")
+    default_proxy = os.environ.get(proxy_env)
+    if default_proxy:
+        return default_proxy
+    if os.path.isfile(proxy_config):
+        return check_output(proxy_config).decode("utf-8").strip()
+    print(usage, file=sys.stderr)
+    sys.exit(1)
 
 
 def make_proxies(url: str):
@@ -52,8 +59,7 @@ class CommandSet:
             cmdline("echo", _)
 
     def usage(self):
-        cmdline("echo", "usage: proxy {enable,disable,status}")
-        self.status()
+        print("usage: proxy {enable,disable,status}", file=sys.stderr)
 
 
 def cmdline(*items):
@@ -64,7 +70,7 @@ def main():
     command = CommandSet()
     if len(sys.argv) == 1:
         command.usage()
-        sys.exit(-1)
+        sys.exit(1)
     getattr(command, sys.argv[1], command.usage)()
 
 

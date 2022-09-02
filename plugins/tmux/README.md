@@ -15,6 +15,7 @@ The plugin also supports the following:
 
 ## Aliases
 
+
 | Alias  | Command                | Description                                               |
 | ------ | -----------------------|---------------------------------------------------------- |
 | `t`    | ta $1 \|\| ts $1       | Attach or Create a named tmux seesion                     |
@@ -26,10 +27,11 @@ The plugin also supports the following:
 | `tkss` | tmux kill-session -t   | Terminate named running tmux session                      |
 | `tmux` | `_zsh_tmux_plugin_run` | Start a new tmux session                                  |
 
+
 ## Configuration Variables
 
 | Variable                            | Description                                                                   |
-|-------------------------------------|-------------------------------------------------------------------------------|
+| ----------------------------------- | ----------------------------------------------------------------------------- |
 | `ZSH_TMUX_AUTOSTART`                | Automatically starts tmux (default: `false`)                                  |
 | `ZSH_TMUX_AUTOSTART_ONCE`           | Autostart only if tmux hasn't been started previously (default: `true`)       |
 | `ZSH_TMUX_AUTOCONNECT`              | Automatically connect to a previous session if it exits (default: `true`)     |
@@ -40,3 +42,4 @@ The plugin also supports the following:
 | `ZSH_TMUX_FIXTERM_WITH_256COLOR`    | `$TERM` to use for 256-color terminals (default: `screen-256color`            |
 | `ZSH_TMUX_CONFIG`                   | Set the configuration path (default: `$HOME/.tmux.conf`)                      |
 | `ZSH_TMUX_UNICODE`                  | Set `tmux -u` option to support unicode                                       |
+| `ZSH_TMUX_DEFAULT_SESSION_NAME`     | Set tmux default session name when autostart is enabled                       |

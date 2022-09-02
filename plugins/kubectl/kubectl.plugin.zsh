@@ -1,13 +1,13 @@
 if (( $+commands[kubectl] )); then
-    __KUBECTL_COMPLETION_FILE="${ZSH_CACHE_DIR}/kubectl_completion"
-
-    if [[ ! -f $__KUBECTL_COMPLETION_FILE || ! -s $__KUBECTL_COMPLETION_FILE ]]; then
-        kubectl completion zsh >! $__KUBECTL_COMPLETION_FILE
-    fi
-
-    [[ -f $__KUBECTL_COMPLETION_FILE ]] && source $__KUBECTL_COMPLETION_FILE
-
-    unset __KUBECTL_COMPLETION_FILE
+  # If the completion file does not exist, generate it and then source it
+  # Otherwise, source it and regenerate in the background
+  if [[ ! -f "$ZSH_CACHE_DIR/completions/_kubectl" ]]; then
+    kubectl completion zsh | tee "$ZSH_CACHE_DIR/completions/_kubectl" >/dev/null
+    source "$ZSH_CACHE_DIR/completions/_kubectl"
+  else
+    source "$ZSH_CACHE_DIR/completions/_kubectl"
+    kubectl completion zsh | tee "$ZSH_CACHE_DIR/completions/_kubectl" >/dev/null &|
+  fi
 fi
 
 # This command is used a LOT both below and in daily life
@@ -20,7 +20,7 @@ alias kca='_kca(){ kubectl "$@" --all-namespaces;  unset -f _kca; }; _kca'
 alias kaf='kubectl apply -f'
 
 # Drop into an interactive terminal on a container
-alias keti='kubectl exec -ti'
+alias keti='kubectl exec -t -i'
 
 # Manage configuration quickly to switch contexts between local, dev ad staging.
 alias kcuc='kubectl config use-context'
@@ -43,6 +43,7 @@ alias kgpwide='kgp -o wide'
 alias kep='kubectl edit pods'
 alias kdp='kubectl describe pods'
 alias kdelp='kubectl delete pods'
+alias kgpall='kubectl get pods --all-namespaces -o wide'
 
 # get pod by label: kgpl "app=myapp" -n myns
 alias kgpl='kgp -l'
@@ -71,7 +72,7 @@ alias kgns='kubectl get namespaces'
 alias kens='kubectl edit namespace'
 alias kdns='kubectl describe namespace'
 alias kdelns='kubectl delete namespace'
-alias kcn='kubectl config set-context $(kubectl config current-context) --namespace'
+alias kcn='kubectl config set-context --current --namespace'
 
 # ConfigMap management
 alias kgcm='kubectl get configmaps'
@@ -96,12 +97,15 @@ alias kdd='kubectl describe deployment'
 alias kdeld='kubectl delete deployment'
 alias ksd='kubectl scale deployment'
 alias krsd='kubectl rollout status deployment'
-kres(){
-    kubectl set env $@ REFRESHED_AT=$(date +%Y%m%d%H%M%S)
+
+function kres(){
+  kubectl set env $@ REFRESHED_AT=$(date +%Y%m%d%H%M%S)
 }
 
 # Rollout management.
-alias kgrs='kubectl get rs'
+alias kgrs='kubectl get replicaset'
+alias kdrs='kubectl describe replicaset'
+alias kers='kubectl edit replicaset'
 alias krh='kubectl rollout history'
 alias kru='kubectl rollout undo'
 
@@ -151,7 +155,6 @@ alias kdpvc='kubectl describe pvc'
 alias kdelpvc='kubectl delete pvc'
 
 # Service account management.
-alias kgsa="kubectl get sa"
 alias kdsa="kubectl describe sa"
 alias kdelsa="kubectl delete sa"
 
@@ -168,11 +171,17 @@ alias kecj='kubectl edit cronjob'
 alias kdcj='kubectl describe cronjob'
 alias kdelcj='kubectl delete cronjob'
 
+# Job management.
+alias kgj='kubectl get job'
+alias kej='kubectl edit job'
+alias kdj='kubectl describe job'
+alias kdelj='kubectl delete job'
+
 # Only run if the user actually has kubectl installed
 if (( ${+_comps[kubectl]} )); then
-  kj() { kubectl "$@" -o json | jq; }
-  kjx() { kubectl "$@" -o json | fx; }
-  ky() { kubectl "$@" -o yaml | yh; }
+  function kj() { kubectl "$@" -o json | jq; }
+  function kjx() { kubectl "$@" -o json | fx; }
+  function ky() { kubectl "$@" -o yaml | yh; }
 
   compdef kj=kubectl
   compdef kjx=kubectl

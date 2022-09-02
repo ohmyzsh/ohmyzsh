@@ -2,7 +2,8 @@
 : ${GIT_AUTO_FETCH_INTERVAL:=60}
 
 # Necessary for the git-fetch-all function
-zmodload zsh/datetime zsh/stat
+zmodload zsh/datetime
+zmodload -F zsh/stat b:zstat  # only zstat command, not stat command
 
 function git-fetch-all {
   (
@@ -11,8 +12,9 @@ function git-fetch-all {
       return 0
     fi
 
-    # Do nothing if auto-fetch disabled
-    if [[ -z "$gitdir" || -f "$gitdir/NO_AUTO_FETCH" ]]; then
+    # Do nothing if auto-fetch is disabled or don't have permissions
+    if [[ ! -w "$gitdir" || -f "$gitdir/NO_AUTO_FETCH" ]] ||
+       [[ -f "$gitdir/FETCH_LOG" && ! -w "$gitdir/FETCH_LOG" ]]; then
       return 0
     fi
 
@@ -24,8 +26,9 @@ function git-fetch-all {
     fi
 
     # Fetch all remotes (avoid ssh passphrase prompt)
+    date -R &>! "$gitdir/FETCH_LOG"
     GIT_SSH_COMMAND="command ssh -o BatchMode=yes" \
-      command git fetch --all 2>/dev/null &>! "$gitdir/FETCH_LOG"
+      command git fetch --all 2>/dev/null &>> "$gitdir/FETCH_LOG"
   ) &|
 }
 

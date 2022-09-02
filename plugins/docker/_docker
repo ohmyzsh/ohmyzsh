@@ -1343,7 +1343,7 @@ __docker_node_complete_ls_filters() {
                 ;;
         esac
     else
-        opts=('id' 'label' 'membership' 'name' 'role')
+        opts=('id' 'label' 'membership' 'name' 'node.label' 'role')
         _describe -t filter-opts "filter options" opts -qS "=" && ret=0
     fi
 
@@ -2544,6 +2544,82 @@ __docker_volume_subcommand() {
 
 # EO volume
 
+# BO context
+
+__docker_complete_contexts() {
+    [[ $PREFIX = -* ]] && return 1
+    integer ret=1
+    declare -a contexts
+
+    contexts=(${(f)${:-"$(_call_program commands docker $docker_options context ls -q)"$'\n'}})
+
+    _describe -t context-list "context" contexts && ret=0
+    return ret
+}
+
+__docker_context_commands() {
+    local -a _docker_context_subcommands
+    _docker_context_subcommands=(
+        "create:Create new context"
+        "inspect:Display detailed information on one or more contexts"
+        "list:List available contexts"
+        "rm:Remove one or more contexts"
+        "show:Print the current context"
+        "update:Update a context"
+        "use:Set the default context"
+    )
+    _describe -t docker-context-commands "docker context command" _docker_context_subcommands
+}
+
+__docker_context_subcommand() {
+    local -a _command_args opts_help
+    local expl help="--help"
+    integer ret=1
+
+    opts_help=("(: -)--help[Print usage]")
+
+    case "$words[1]" in
+        (create)
+            _arguments $(__docker_arguments) \
+                $opts_help \
+                "($help)--default-stack-orchestrator=[Default orchestrator for stack operations to use with this context]:default-stack-orchestrator:(swarm kubernetes all)" \
+                "($help)--description=[Description of the context]:description:" \
+                "($help)--docker=[Set the docker endpoint]:docker:" \
+                "($help)--kubernetes=[Set the kubernetes endpoint]:kubernetes:" \
+                "($help)--from=[Create context from a named context]:from:__docker_complete_contexts" \
+                "($help -):name: " && ret=0
+            ;;
+        (use)
+            _arguments $(__docker_arguments) \
+                $opts_help \
+                "($help -)1:context:__docker_complete_contexts" && ret=0
+            ;;
+        (inspect)
+            _arguments $(__docker_arguments) \
+                $opts_help \
+                "($help -)1:context:__docker_complete_contexts" && ret=0
+            ;;
+        (rm)
+            _arguments $(__docker_arguments) \
+                $opts_help \
+                "($help -)1:context:__docker_complete_contexts" && ret=0
+            ;;
+        (update)
+            _arguments $(__docker_arguments) \
+                $opts_help \
+                "($help)--default-stack-orchestrator=[Default orchestrator for stack operations to use with this context]:default-stack-orchestrator:(swarm kubernetes all)" \
+                "($help)--description=[Description of the context]:description:" \
+                "($help)--docker=[Set the docker endpoint]:docker:" \
+                "($help)--kubernetes=[Set the kubernetes endpoint]:kubernetes:" \
+                "($help -):name:" && ret=0
+            ;;
+    esac
+
+    return ret
+}
+
+# EO context
+
 __docker_caching_policy() {
   oldp=( "$1"(Nmh+1) )     # 1 hour
   (( $#oldp ))
@@ -2576,7 +2652,7 @@ __docker_commands() {
     then
         local -a lines
         lines=(${(f)"$(_call_program commands docker 2>&1)"})
-        _docker_subcommands=(${${${(M)${lines[$((${lines[(i)*Commands:]} + 1)),-1]}:# *}## #}/ ##/:})
+        _docker_subcommands=(${${${(M)${lines[$((${lines[(i)*Commands:]} + 1)),-1]}:# *}## #}/\*# ##/:})
         _docker_subcommands=($_docker_subcommands 'daemon:Enable daemon mode' 'help:Show help for a command')
         (( $#_docker_subcommands > 2 )) && _store_cache docker_subcommands _docker_subcommands
     fi
@@ -2628,6 +2704,23 @@ __docker_subcommand() {
                 (option-or-argument)
                     curcontext=${curcontext%:*:*}:docker-${words[-1]}:
                     __docker_container_subcommand && ret=0
+                    ;;
+            esac
+            ;;
+        (context)
+            local curcontext="$curcontext" state
+            _arguments $(__docker_arguments) \
+                $opts_help \
+                "($help -): :->command" \
+                "($help -)*:: :->option-or-argument" && ret=0
+
+            case $state in
+                (command)
+                    __docker_context_commands && ret=0
+                    ;;
+                (option-or-argument)
+                    curcontext=${curcontext%:*:*}:docker-${words[-1]}:
+                    __docker_context_subcommand && ret=0
                     ;;
             esac
             ;;
@@ -2698,7 +2791,8 @@ __docker_subcommand() {
                 "($help)--tlsverify[Use TLS and verify the remote]" \
                 "($help)--userns-remap=[User/Group setting for user namespaces]:user\:group:->users-groups" \
                 "($help)--userland-proxy[Use userland proxy for loopback traffic]" \
-                "($help)--userland-proxy-path=[Path to the userland proxy binary]:binary:_files" && ret=0
+                "($help)--userland-proxy-path=[Path to the userland proxy binary]:binary:_files" \
+                "($help)--validate[Validate daemon configuration and exit]" && ret=0
 
             case $state in
                 (cluster-store)

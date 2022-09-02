@@ -10,7 +10,7 @@ plugins=(... debian)
 
 ## Settings
 
-- `$apt_pref`: use apt or aptitude if installed, fallback is apt-get.
+- `$apt_pref`: use aptitude or apt if installed, fallback is apt-get.
 - `$apt_upgr`: use upgrade or safe-upgrade (for aptitude).
 
 Set `$apt_pref` and `$apt_upgr` to whatever command you want (before sourcing Oh My Zsh) to override this behavior.
@@ -33,20 +33,22 @@ Set `$apt_pref` and `$apt_upgr` to whatever command you want (before sourcing Oh
 | Alias    | Command                                                                                | Description                                                                                 |
 | -------- | -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
 | `aac`    | `sudo $apt_pref autoclean`                                                             | Clears out the local repository of retrieved package files                                  |
+| `aar`    | `sudo $apt_pref autoremove`                                                            | Removes packages installed automatically that are no longer needed                          |
 | `abd`    | `sudo $apt_pref build-dep`                                                             | Installs all dependencies for building packages                                             |
 | `ac`     | `sudo $apt_pref clean`                                                                 | Clears out the local repository of retrieved package files except lock files                |
 | `ad`     | `sudo $apt_pref update`                                                                | Updates the package lists for upgrades for packages                                         |
 | `adg`    | `sudo $apt_pref update && sudo $apt_pref $apt_upgr`                                    | Update and upgrade packages                                                                 |
+| `ads`    | `sudo apt-get dselect-upgrade`                                                         | Installs packages from list and removes all not in the list                                 |
 | `adu`    | `sudo $apt_pref update && sudo $apt_pref dist-upgrade`                                 | Smart upgrade that handles dependencies                                                     |
 | `afu`    | `sudo apt-file update`                                                                 | Update the files in packages                                                                |
-| `au`     | `sudo $apt_pref $apt_upgr`                                                             | Install package upgrades                                                                    |
 | `ai`     | `sudo $apt_pref install`                                                               | Command-line tool to install package                                                        |
 | `ail`    | `sed -e 's/  */ /g' -e 's/ *//' \| cut -s -d ' ' -f 1 \| xargs sudo $apt_pref install` | Install all packages given on the command line while using only the first word of each line |
+| `alu`    | `sudo apt update && apt list -u && sudo apt upgrade`                                   | Update, list and upgrade packages                                                           |
 | `ap`     | `sudo $apt_pref purge`                                                                 | Removes packages along with configuration files                                             |
 | `ar`     | `sudo $apt_pref remove`                                                                | Removes packages, keeps the configuration files                                             |
-| `ads`    | `sudo apt-get dselect-upgrade`                                                         | Installs packages from list and removes all not in the list                                 |
-| `dia`    | `sudo dpkg -i ./*.deb`                                                                 | Install all .deb files in the current directory                                             |
+| `au`     | `sudo $apt_pref $apt_upgr`                                                             | Install package upgrades                                                                    |
 | `di`     | `sudo dpkg -i`                                                                         | Install all .deb files in the current directory                                             |
+| `dia`    | `sudo dpkg -i ./*.deb`                                                                 | Install all .deb files in the current directory                                             |
 | `kclean` | `sudo aptitude remove -P ?and(~i~nlinux-(ima\|hea) ?not(~n$(uname -r)))`               | Remove ALL kernel images and headers EXCEPT the one in use                                  |
 
 ## Aliases - Commands using `su`
@@ -54,6 +56,7 @@ Set `$apt_pref` and `$apt_upgr` to whatever command you want (before sourcing Oh
 | Alias | Command                                                   |
 | ----- | --------------------------------------------------------- |
 | `aac` | `su -ls "$apt_pref autoclean" root`                       |
+| `aar` | `su -ls "$apt_pref autoremove" root`                      |
 | `ac`  | `su -ls "$apt_pref clean" root`                           |
 | `ad`  | `su -lc "$apt_pref update" root`                          |
 | `adg` | `su -lc "$apt_pref update && aptitude $apt_upgr" root`    |
@@ -75,8 +78,8 @@ Set `$apt_pref` and `$apt_upgr` to whatever command you want (before sourcing Oh
 | ------------------- | --------------------------------------------------------------- |
 | `apt-copy`          | Create a simple script that can be used to 'duplicate' a system |
 | `apt-history`       | Displays apt history for a command                              |
-| `kerndeb`           | Builds kernel packages                                          |
 | `apt-list-packages` | List packages by size                                           |
+| `kerndeb`           | Builds kernel packages                                          |
 
 ## Authors
 

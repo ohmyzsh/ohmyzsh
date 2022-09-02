@@ -11,8 +11,9 @@ plugins=(... git-prompt)
 
 See the [original repository](https://github.com/olivierverdier/zsh-git-prompt).
 
-## Prerequisites
-This plugin uses `python`, so your host needs to have it installed
+## Requirements
+
+This plugin uses `python3`, so your host needs to have it installed.
 
 ## Examples
 
@@ -24,12 +25,13 @@ The prompt may look like the following:
 - `(master|✖2✚3)`: on branch `master`, 2 conflicts, 3 files changed
 - `(experimental↓2↑3|✔)`: on branch `experimental`; your branch has diverged by 3 commits, remote by 2 commits; the repository is otherwise clean
 - `(:70c2952|✔)`: not on any branch; parent commit has hash `70c2952`; the repository is otherwise clean
+- `(master|⚑2)`: on branch `master`, there are 2 stashed changes
 
 ## Prompt Structure
 
 By default, the general appearance of the prompt is:
 
-```
+```text
 (<branch><branch tracking>|<local status>)
 ```
 
@@ -43,6 +45,7 @@ The symbols are as follows:
 | ●n     | there are `n` staged files     |
 | ✖n     | there are `n` unmerged files   |
 | ✚n     | there are `n` unstaged files   |
+| ⚑n     | there are `n` stashed changes  |
 | …      | there are some untracked files |
 
 ### Branch Tracking Symbols
@@ -56,9 +59,8 @@ The symbols are as follows:
 ## Customisation
 
 - Set the variable `ZSH_THEME_GIT_PROMPT_CACHE` to any value in order to enable caching.
-- You may also change a number of variables (whose name start with `ZSH_THEME_GIT_PROMPT_`) 
+- You may also change a number of variables (whose name start with `ZSH_THEME_GIT_PROMPT_`)
   to change the appearance of the prompt. Take a look at the bottom of the [plugin file](git-prompt.plugin.zsh)`
   to see what variables are available.
-
 
 **Enjoy!**
