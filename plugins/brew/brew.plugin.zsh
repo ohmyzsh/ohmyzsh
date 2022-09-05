@@ -25,6 +25,10 @@ if [[ -z "$HOMEBREW_PREFIX" ]]; then
   export HOMEBREW_PREFIX="$(brew --prefix)"
 fi
 
+if [[ -d "$HOMEBREW_PREFIX/share/zsh/site-functions" ]]; then
+  fpath+=("$HOMEBREW_PREFIX/share/zsh/site-functions")
+fi
+
 alias bcubc='brew upgrade --cask && brew cleanup'
 alias bcubo='brew update && brew outdated --cask'
 alias bcubc='brew upgrade --cask && brew cleanup'
