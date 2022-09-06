@@ -10,7 +10,7 @@ To setup, follow the instructions:
 
 3. Enable this plugin in your `.zshrc` file:
 ```
-plugins=(... iterms-touch-bar-status)
+plugins=(... iterm2-touch-bar-status)
 ```
 
 4. While the text defaults to your current working directory, you can set it to anything you like by setting `$ITERM2_TOUCH_BAR_STATUS` in your `.zshrc` (or anywhere else actually).
