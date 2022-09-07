@@ -1,3 +1,10 @@
+# Deprecate ZSH_THEME_RANDOM_BLACKLIST
+if [[ -n "$ZSH_THEME_RANDOM_BLACKLIST" ]]; then
+  echo '[oh-my-zsh] ZSH_THEME_RANDOM_BLACKLIST is deprecated. Use `ZSH_THEME_RANDOM_IGNORED` instead.'
+  ZSH_THEME_RANDOM_IGNORED=($ZSH_THEME_RANDOM_BLACKLIST)
+  unset ZSH_THEME_RANDOM_BLACKLIST
+fi
+
 # Make themes a unique array
 typeset -Ua themes
 
@@ -11,8 +18,8 @@ else
     "$ZSH_CUSTOM"/themes/*.zsh-theme(N:t:r)
     "$ZSH"/themes/*.zsh-theme(N:t:r)
   )
-  # Remove blacklisted themes from the list
-  for theme in random ${ZSH_THEME_RANDOM_BLACKLIST[@]}; do
+  # Remove ignored themes from the list
+  for theme in random ${ZSH_THEME_RANDOM_IGNORED[@]}; do
     themes=("${(@)themes:#$theme}")
   done
 fi
@@ -35,4 +42,6 @@ else
   return 1
 fi
 
-echo "[oh-my-zsh] Random theme '${RANDOM_THEME}' loaded"
+if [[ "$ZSH_THEME_RANDOM_QUIET" != true ]]; then
+  echo "[oh-my-zsh] Random theme '${RANDOM_THEME}' loaded"
+fi

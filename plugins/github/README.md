@@ -2,8 +2,8 @@
 
 This plugin supports working with GitHub from the command line. It provides a few things:
 
-* Sets up the `hub` wrapper and completions for the `git` command if you have `hub` installed.
-* Completion for the `github` Ruby gem.
+* Sets up the `hub` wrapper and completions for the `git` command if you have [`hub`](https://github.com/github/hub) installed.
+* Completion for the [`github` Ruby gem](https://github.com/defunkt/github-gem).
 * Convenience functions for working with repos and URLs.
 
 ### Functions
@@ -11,7 +11,6 @@ This plugin supports working with GitHub from the command line. It provides a fe
 * `empty_gh` - Creates a new empty repo (with a `README.md`) and pushes it to GitHub
 * `new_gh` - Initializes an existing directory as a repo and pushes it to GitHub
 * `exist_gh` - Takes an existing repo and pushes it to GitHub
-* `git.io` - Shortens a URL using [git.io](https://git.io)
 
 
 ## Installation

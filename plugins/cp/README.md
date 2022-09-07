@@ -25,7 +25,7 @@ The enabled options for rsync are:
 
 * `-hhh`: outputs numbers in human-readable format, in units of 1024 (K, M, G, T).
 
-* `--backup-dir=/tmp/rsync`: move backup copies to "/tmp/rsync".
+* `--backup-dir="/tmp/rsync-$USERNAME"`: move backup copies to "/tmp/rsync-$USERNAME".
 
 * `-e /dev/null`: only work on local files (disable remote shells).
 

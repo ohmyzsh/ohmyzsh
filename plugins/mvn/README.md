@@ -19,6 +19,7 @@ if it's found, or the mvn command otherwise.
 | `mvn!`               | `mvn -f <root>/pom.xml`                         |
 | `mvnag`              | `mvn archetype:generate`                        |
 | `mvnboot`            | `mvn spring-boot:run`                           |
+| `mvnqdev`            | `mvn quarkus:dev`                               |
 | `mvnc`               | `mvn clean`                                     |
 | `mvncd`              | `mvn clean deploy`                              |
 | `mvnce`              | `mvn clean eclipse:clean eclipse:eclipse`       |

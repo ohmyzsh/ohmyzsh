@@ -9,7 +9,7 @@ Y=$fg_no_bold[yellow]
 B=$fg_no_bold[blue]
 RESET=$reset_color
 
-if [ "$USER" = "root" ]; then
+if [ "$USERNAME" = "root" ]; then
     PROMPTCOLOR="%{$R%}" PROMPTPREFIX="-!-";
 else
     PROMPTCOLOR="" PROMPTPREFIX="---";

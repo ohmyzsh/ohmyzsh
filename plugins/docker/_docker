@@ -624,7 +624,8 @@ __docker_container_subcommand() {
         "($help)--entrypoint=[Overwrite the default entrypoint of the image]:entry point: "
         "($help)*--env-file=[Read environment variables from a file]:environment file:_files"
         "($help)*--expose=[Expose a port from the container without publishing it]: "
-        "($help)*--group=[Set one or more supplementary user groups for the container]:group:_groups"
+        "($help)*--gpus=[GPU devices to add to the container ('all' to pass all GPUs)]:device: "
+        "($help)*--group-add=[Set one or more supplementary user groups for the container]:group:_groups"
         "($help -h --hostname)"{-h=,--hostname=}"[Container host name]:hostname:_hosts"
         "($help -i --interactive)"{-i,--interactive}"[Keep stdin open even if not attached]"
         "($help)--init[Run an init inside the container that forwards signals and reaps processes]"
@@ -750,6 +751,7 @@ __docker_container_subcommand() {
                 $opts_attach_exec_run_start \
                 "($help -d --detach)"{-d,--detach}"[Detached mode: leave the container running in the background]" \
                 "($help)*"{-e=,--env=}"[Set environment variables]:environment variable: " \
+                "($help)*--env-file=[Read environment variables from a file]:environment file:_files" \
                 "($help -i --interactive)"{-i,--interactive}"[Keep stdin open even if not attached]" \
                 "($help)--privileged[Give extended Linux capabilities to the command]" \
                 "($help -t --tty)"{-t,--tty}"[Allocate a pseudo-tty]" \
@@ -791,7 +793,7 @@ __docker_container_subcommand() {
                 "($help -f --follow)"{-f,--follow}"[Follow log output]" \
                 "($help -s --since)"{-s=,--since=}"[Show logs since this timestamp]:timestamp: " \
                 "($help -t --timestamps)"{-t,--timestamps}"[Show timestamps]" \
-                "($help)--tail=[Output the last K lines]:lines:(1 10 20 50 all)" \
+                "($help -n --tail)"{-n=,--tail=}"[Number of lines to show from the end of the logs]:lines:(1 10 20 50 all)" \
                 "($help -)*:containers:__docker_complete_containers" && ret=0
             ;;
         (ls|list)
@@ -1018,6 +1020,7 @@ __docker_image_subcommand() {
                 "($help)*--shm-size=[Size of '/dev/shm' (format is '<number><unit>')]:shm size: " \
                 "($help)--squash[Squash newly built layers into a single new layer]" \
                 "($help -t --tag)*"{-t=,--tag=}"[Repository, name and tag for the image]: :__docker_complete_repositories_with_tags" \
+                "($help)--target=[Set the target build stage to build.]" \
                 "($help)*--ulimit=[ulimit options]:ulimit: " \
                 "($help)--userns=[Container user namespace]:user namespace:(host)" \
                 "($help -):path or URL:_directories" && ret=0
@@ -1340,7 +1343,7 @@ __docker_node_complete_ls_filters() {
                 ;;
         esac
     else
-        opts=('id' 'label' 'membership' 'name' 'role')
+        opts=('id' 'label' 'membership' 'name' 'node.label' 'role')
         _describe -t filter-opts "filter options" opts -qS "=" && ret=0
     fi
 
@@ -1958,6 +1961,8 @@ __docker_service_subcommand() {
 
     opts_help=("(: -)--help[Print usage]")
     opts_create_update=(
+        "($help)*--cap-add=[Add Linux capabilities]:capability: "
+        "($help)*--cap-drop=[Drop Linux capabilities]:capability: "
         "($help)*--constraint=[Placement constraints]:constraint: "
         "($help)--endpoint-mode=[Placement constraints]:mode:(dnsrr vip)"
         "($help)*"{-e=,--env=}"[Set environment variables]:env: "
@@ -1970,6 +1975,7 @@ __docker_service_subcommand() {
         "($help)*--label=[Service labels]:label: "
         "($help)--limit-cpu=[Limit CPUs]:value: "
         "($help)--limit-memory=[Limit Memory]:value: "
+        "($help)--limit-pids[Limit maximum number of processes (default 0 = unlimited)]"
         "($help)--log-driver=[Logging driver for service]:logging driver:__docker_complete_log_drivers"
         "($help)*--log-opt=[Logging driver options]:log driver options:__docker_complete_log_options"
         "($help)*--mount=[Attach a filesystem mount to the service]:mount: "
@@ -2012,6 +2018,7 @@ __docker_service_subcommand() {
                 "($help)*--dns-option=[Set DNS options]:DNS option: " \
                 "($help)*--dns-search=[Set custom DNS search domains]:DNS search: " \
                 "($help)*--env-file=[Read environment variables from a file]:environment file:_files" \
+                "($help)*--group=[Set one or more supplementary user groups for the container]:group: _groups " \
                 "($help)--mode=[Service Mode]:mode:(global replicated)" \
                 "($help)--name=[Service name]:name: " \
                 "($help)*--placement-pref=[Add a placement preference]:pref:__docker_service_complete_placement_pref" \
@@ -2035,7 +2042,7 @@ __docker_service_subcommand() {
                 "($help)--no-task-ids[Do not include task IDs]" \
                 "($help)--no-trunc[Do not truncate output]" \
                 "($help)--since=[Show logs since timestamp]:timestamp: " \
-                "($help)--tail=[Number of lines to show from the end of the logs]:lines:(1 10 20 50 all)" \
+                "($help -n --tail)"{-n=,--tail=}"[Number of lines to show from the end of the logs]:lines:(1 10 20 50 all)" \
                 "($help -t --timestamps)"{-t,--timestamps}"[Show timestamps]" \
                 "($help -)1:service:__docker_complete_services" && ret=0
             ;;
@@ -2537,6 +2544,82 @@ __docker_volume_subcommand() {
 
 # EO volume
 
+# BO context
+
+__docker_complete_contexts() {
+    [[ $PREFIX = -* ]] && return 1
+    integer ret=1
+    declare -a contexts
+
+    contexts=(${(f)${:-"$(_call_program commands docker $docker_options context ls -q)"$'\n'}})
+
+    _describe -t context-list "context" contexts && ret=0
+    return ret
+}
+
+__docker_context_commands() {
+    local -a _docker_context_subcommands
+    _docker_context_subcommands=(
+        "create:Create new context"
+        "inspect:Display detailed information on one or more contexts"
+        "list:List available contexts"
+        "rm:Remove one or more contexts"
+        "show:Print the current context"
+        "update:Update a context"
+        "use:Set the default context"
+    )
+    _describe -t docker-context-commands "docker context command" _docker_context_subcommands
+}
+
+__docker_context_subcommand() {
+    local -a _command_args opts_help
+    local expl help="--help"
+    integer ret=1
+
+    opts_help=("(: -)--help[Print usage]")
+
+    case "$words[1]" in
+        (create)
+            _arguments $(__docker_arguments) \
+                $opts_help \
+                "($help)--default-stack-orchestrator=[Default orchestrator for stack operations to use with this context]:default-stack-orchestrator:(swarm kubernetes all)" \
+                "($help)--description=[Description of the context]:description:" \
+                "($help)--docker=[Set the docker endpoint]:docker:" \
+                "($help)--kubernetes=[Set the kubernetes endpoint]:kubernetes:" \
+                "($help)--from=[Create context from a named context]:from:__docker_complete_contexts" \
+                "($help -):name: " && ret=0
+            ;;
+        (use)
+            _arguments $(__docker_arguments) \
+                $opts_help \
+                "($help -)1:context:__docker_complete_contexts" && ret=0
+            ;;
+        (inspect)
+            _arguments $(__docker_arguments) \
+                $opts_help \
+                "($help -)1:context:__docker_complete_contexts" && ret=0
+            ;;
+        (rm)
+            _arguments $(__docker_arguments) \
+                $opts_help \
+                "($help -)1:context:__docker_complete_contexts" && ret=0
+            ;;
+        (update)
+            _arguments $(__docker_arguments) \
+                $opts_help \
+                "($help)--default-stack-orchestrator=[Default orchestrator for stack operations to use with this context]:default-stack-orchestrator:(swarm kubernetes all)" \
+                "($help)--description=[Description of the context]:description:" \
+                "($help)--docker=[Set the docker endpoint]:docker:" \
+                "($help)--kubernetes=[Set the kubernetes endpoint]:kubernetes:" \
+                "($help -):name:" && ret=0
+            ;;
+    esac
+
+    return ret
+}
+
+# EO context
+
 __docker_caching_policy() {
   oldp=( "$1"(Nmh+1) )     # 1 hour
   (( $#oldp ))
@@ -2569,7 +2652,7 @@ __docker_commands() {
     then
         local -a lines
         lines=(${(f)"$(_call_program commands docker 2>&1)"})
-        _docker_subcommands=(${${${(M)${lines[$((${lines[(i)*Commands:]} + 1)),-1]}:# *}## #}/ ##/:})
+        _docker_subcommands=(${${${(M)${lines[$((${lines[(i)*Commands:]} + 1)),-1]}:# *}## #}/\*# ##/:})
         _docker_subcommands=($_docker_subcommands 'daemon:Enable daemon mode' 'help:Show help for a command')
         (( $#_docker_subcommands > 2 )) && _store_cache docker_subcommands _docker_subcommands
     fi
@@ -2624,6 +2707,23 @@ __docker_subcommand() {
                     ;;
             esac
             ;;
+        (context)
+            local curcontext="$curcontext" state
+            _arguments $(__docker_arguments) \
+                $opts_help \
+                "($help -): :->command" \
+                "($help -)*:: :->option-or-argument" && ret=0
+
+            case $state in
+                (command)
+                    __docker_context_commands && ret=0
+                    ;;
+                (option-or-argument)
+                    curcontext=${curcontext%:*:*}:docker-${words[-1]}:
+                    __docker_context_subcommand && ret=0
+                    ;;
+            esac
+            ;;
         (daemon)
             _arguments $(__docker_arguments) \
                 $opts_help \
@@ -2639,6 +2739,8 @@ __docker_subcommand() {
                 "($help)*--cluster-store-opt=[Cluster store options]:Cluster options:->cluster-store-options" \
                 "($help)--config-file=[Path to daemon configuration file]:Config File:_files" \
                 "($help)--containerd=[Path to containerd socket]:socket:_files -g \"*.sock\"" \
+                "($help)--containerd-namespace=[Containerd namespace to use]:containerd namespace:" \
+                "($help)--containerd-plugins-namespace=[Containerd namespace to use for plugins]:containerd namespace:" \
                 "($help)--data-root=[Root directory of persisted Docker data]:path:_directories" \
                 "($help -D --debug)"{-D,--debug}"[Enable debug mode]" \
                 "($help)--default-gateway[Container default gateway IPv4 address]:IPv4 address: " \
@@ -2689,7 +2791,8 @@ __docker_subcommand() {
                 "($help)--tlsverify[Use TLS and verify the remote]" \
                 "($help)--userns-remap=[User/Group setting for user namespaces]:user\:group:->users-groups" \
                 "($help)--userland-proxy[Use userland proxy for loopback traffic]" \
-                "($help)--userland-proxy-path=[Path to the userland proxy binary]:binary:_files" && ret=0
+                "($help)--userland-proxy-path=[Path to the userland proxy binary]:binary:_files" \
+                "($help)--validate[Validate daemon configuration and exit]" && ret=0
 
             case $state in
                 (cluster-store)
