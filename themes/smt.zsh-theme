@@ -40,7 +40,7 @@ function git_time_since_commit() {
     local last_commit seconds_since_last_commit
 
     # Only proceed if there is actually a commit
-    if ! last_commit=$(command git log --pretty=format:'%at' -1 2>/dev/null); then
+    if ! last_commit=$(command git -c log.showSignature=false log --pretty=format:'%at' -1 2>/dev/null); then
         echo "[$ZSH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL~%{$reset_color%}]"
         return
     fi

@@ -29,3 +29,20 @@ plugins=(... npm)
 | `npmI`  | `npm init`                   | Run npm init                                                    |
 | `npmi`  | `npm info`                   | Run npm info                                                    |
 | `npmSe` | `npm search`                 | Run npm search                                                  |
+
+## `npm install` / `npm uninstall` toggle
+
+The plugin adds a function that toggles between `npm install` and `npm uninstall` in
+the current command or the last command, for up to 2 previous commands. **The default
+key binding is pressing <kbd>F2</kbd> twice**.
+
+You can change this key binding by adding the following line to your zshrc file:
+
+```zsh
+bindkey -M emacs '<seq>' npm_toggle_install_uninstall
+bindkey -M vicmd '<seq>' npm_toggle_install_uninstall
+bindkey -M viins '<seq>' npm_toggle_install_uninstall
+```
+
+where `<seq>` is a key sequence obtained by running `cat` and pressing the keyboard
+sequence you want.

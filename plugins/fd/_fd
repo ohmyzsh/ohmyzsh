@@ -1,4 +1,4 @@
-#compdef fd fdfind
+#compdef fd
 
 ##
 # zsh completion function for fd
@@ -57,6 +57,7 @@ _fd() {
     + no-ignore-partial # some ignore files
     "(no-ignore-full --no-ignore-vcs)--no-ignore-vcs[don't respect .gitignore files]"
     "!(no-ignore-full --no-global-ignore-file)--no-global-ignore-file[don't respect the global ignore file]"
+    $no'(no-ignore-full --no-ignore-parent)--no-ignore-parent[]'
 
     + '(case)' # case-sensitivity
     {-s,--case-sensitive}'[perform a case-sensitive search]'
@@ -138,6 +139,7 @@ _fd() {
     + '(exec-cmds)' # execute command
     '(long-listing max-results)'{-x+,--exec=}'[execute command for each search result]:command: _command_names -e:*\;::program arguments: _normal'
     '(long-listing max-results)'{-X+,--exec-batch=}'[execute command for all search results at once]:command: _command_names -e:*\;::program arguments: _normal'
+    '(long-listing max-results)--batch-size=[max number of args for each -X call]:size'
 
     + other
     '!(--max-buffer-time)--max-buffer-time=[set amount of time to buffer before showing output]:time (ms)'
@@ -152,6 +154,9 @@ _fd() {
     + search-path
     $no'(--base-directory)--base-directory=[change the current working directory to the given path]:directory:_files -/'
     $no'(*)*--search-path=[set search path (instead of positional <path> arguments)]:directory:_files -/'
+
+    + strip-cwd-prefix
+    $no'(strip-cwd-prefix exec-cmds)--strip-cwd-prefix[Strip ./ prefix when output is redirected]'
 
     + args # positional arguments
     '1: :_guard "^-*" pattern'
@@ -220,7 +225,7 @@ _fd() {
 _fd "$@"
 
 # ------------------------------------------------------------------------------
-# Copyright (c) 2011 Github zsh-users - http://github.com/zsh-users
+# Copyright (c) 2011 GitHub zsh-users - http://github.com/zsh-users
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without

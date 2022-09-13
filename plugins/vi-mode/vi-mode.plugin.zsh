@@ -119,11 +119,11 @@ function wrap_clipboard_widgets() {
   done
 }
 
-wrap_clipboard_widgets copy vi-yank vi-yank-eol vi-backward-kill-word vi-change-whole-line vi-delete
+wrap_clipboard_widgets copy vi-yank vi-yank-eol vi-backward-kill-word vi-change-whole-line vi-delete vi-delete-char
 wrap_clipboard_widgets paste vi-put-{before,after}
 unfunction wrap_clipboard_widgets
 
-# if mode indicator wasn't setup by theme, define default
+# if mode indicator wasn't setup by theme, define default, we'll leave INSERT_MODE_INDICATOR empty by default
 if [[ -z "$MODE_INDICATOR" ]]; then
   MODE_INDICATOR='%B%F{red}<%b<<%f'
 fi
@@ -136,7 +136,7 @@ function vi_mode_prompt_info() {
   # set RPS1/RPROMPT to something else in their custom config.
   : "${VI_MODE_RESET_PROMPT_ON_MODE_CHANGE:=true}"
 
-  echo "${${VI_KEYMAP/vicmd/$MODE_INDICATOR}/(main|viins)/}"
+  echo "${${VI_KEYMAP/vicmd/$MODE_INDICATOR}/(main|viins)/$INSERT_MODE_INDICATOR}"
 }
 
 # define right prompt, if it wasn't defined by a theme

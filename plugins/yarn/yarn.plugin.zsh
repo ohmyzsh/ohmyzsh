@@ -1,9 +1,14 @@
-# Add yarn bin directory to $PATH if it exists and not in $PATH already
-bindir=$(yarn global bin 2>/dev/null) \
-  && [[ -d "$bindir" ]] \
-  && (( ! ${path[(Ie)$bindir]} )) \
-  && path+=("$bindir")
-unset bindir
+if zstyle -T ':omz:plugins:yarn' global-path; then
+  # Skip yarn call if default global bin dir exists
+  [[ -d "$HOME/.yarn/bin" ]] && bindir="$HOME/.yarn/bin" || bindir="$(yarn global bin 2>/dev/null)"
+
+  # Add yarn bin directory to $PATH if it exists and not already in $PATH
+  [[ $? -eq 0 ]] \
+    && [[ -d "$bindir" ]] \
+    && (( ! ${path[(Ie)$bindir]} )) \
+    && path+=("$bindir")
+  unset bindir
+fi
 
 alias y="yarn"
 alias ya="yarn add"
