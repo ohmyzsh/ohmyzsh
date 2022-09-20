@@ -12,10 +12,6 @@ concurrency:
 permissions: {}
 jobs:
   add-to-project:
-    permissions:
-      repository-projects: write # to add to project
-      pull-requests: read # to view pull requests
-
     name: Add to project
     runs-on: ubuntu-latest
     if: github.repository == 'ohmyzsh/ohmyzsh'
