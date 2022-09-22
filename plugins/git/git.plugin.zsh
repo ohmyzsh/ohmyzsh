@@ -142,6 +142,15 @@ is-at-least 2.8 "$git_version" \
   || alias gfa='git fetch --all --prune'
 alias gfo='git fetch origin'
 
+function gfpr() {
+  if [[ -z "$1" || -z "$2" ]]; then
+    echo "Usage: $0 remote pr_id"
+    return 1
+  fi
+
+  git fetch "$1" pull/"$2"/head:pr_"$2"
+}
+
 alias gfg='git ls-files | grep'
 
 alias gg='git gui citool'

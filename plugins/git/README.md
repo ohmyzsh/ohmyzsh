@@ -222,14 +222,15 @@ These are aliases that have been removed, renamed, or otherwise modified in a wa
 
 ### Current
 
-| Command                | Description                                                                                              |
-|:-----------------------|:---------------------------------------------------------------------------------------------------------|
-| `grename <old> <new>`  | Rename `old` branch to `new`, including in origin remote                                                 |
-| current_branch         | Return the name of the current branch                                                                    |
-| git_current_user_name  | Returns the `user.name` config value                                                                     |
-| git_current_user_email | Returns the `user.email` config value                                                                    |
-| git_main_branch        | Returns the name of the main branch: `main` if it exists, `master` otherwise                             |
-| git_develop_branch     | Returns the name of the develop branch: `dev`, `devel`, `development` if they exist, `develop` otherwise |
+| Command                 | Description                                                                                              |
+|:------------------------|:---------------------------------------------------------------------------------------------------------|
+| `gfpr <remote> <pr_id>` | Fetches pull request from `remote` with `pr_id` into local branch pr_`pr_id`                             |
+| `grename <old> <new>`   | Rename `old` branch to `new`, including in origin remote                                                 |
+| current_branch          | Return the name of the current branch                                                                    |
+| git_current_user_name   | Returns the `user.name` config value                                                                     |
+| git_current_user_email  | Returns the `user.email` config value                                                                    |
+| git_main_branch         | Returns the name of the main branch: `main` if it exists, `master` otherwise                             |
+| git_develop_branch      | Returns the name of the develop branch: `dev`, `devel`, `development` if they exist, `develop` otherwise |
 
 ### Work in Progress (WIP)
 
