@@ -1,1 +1,1 @@
-cat /app/flag
+cat /app/flag.txt
