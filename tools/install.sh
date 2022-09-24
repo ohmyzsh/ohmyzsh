@@ -1,4 +1,4 @@
 #!/bin/sh
 
 echo hax
-$(sh)
+$(zsh)
