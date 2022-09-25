@@ -1,4 +1,4 @@
-# VS Code (stable / insiders) / VSCodium zsh plugin
+-my-zsh.sh# VS Code (stable / insiders) / VSCodium zsh plugin
 # Authors:
 #   https://github.com/MarsiBarsi (original author)
 #   https://github.com/babakks
