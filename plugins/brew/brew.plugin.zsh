@@ -29,7 +29,7 @@ alias brewsp='brew list --pinned'
 alias bubc='brew upgrade && brew cleanup'
 alias bubo='brew update && brew outdated'
 alias bubu='bubo && bubc'
-alias buf='brew upgrade --formula'
+alias bfu='brew upgrade --formula'
 
 function brews() {
   local formulae="$(brew leaves | xargs brew deps --installed --for-each)"
