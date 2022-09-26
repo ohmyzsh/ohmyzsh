@@ -24,7 +24,7 @@ This plugin also executes `brew shellenv` at plugin load to set up many useful v
 | `bubc`   | `brew upgrade && brew cleanup`        | Upgrade outdated formulae and casks, then run cleanup.              |
 | `bubo`   | `brew update && brew outdated`        | Update Homebrew data, then list outdated formulae and casks.        |
 | `bubu`   | `bubo && bubc`                        | Do the last two operations above.                                   |
-| `buf`    | `brew upgrade --formula`              | Upgrade only formulas (not casks).                                  |
+| `bfu`    | `brew upgrade --formula`              | Upgrade only formulas (not casks).                                  |
 
 ## Completion
 
