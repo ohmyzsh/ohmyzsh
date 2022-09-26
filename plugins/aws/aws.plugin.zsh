@@ -146,8 +146,7 @@ function aws_change_access_key() {
 }
 
 function aws_profiles() {
-  [[ -r "${AWS_CONFIG_FILE:-$HOME/.aws/config}" ]] || return 1
-  grep --color=never -Eo '\[.*\]' "${AWS_CONFIG_FILE:-$HOME/.aws/config}" | sed -E 's/^[[:space:]]*\[(profile)?[[:space:]]*([^[:space:]]+)\][[:space:]]*$/\2/g'
+  AWS_PAGER="" aws configure list-profiles
 }
 
 function _aws_profiles() {
