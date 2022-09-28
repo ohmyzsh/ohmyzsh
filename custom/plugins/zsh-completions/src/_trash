@@ -1,0 +1,52 @@
+#compdef trash
+# ------------------------------------------------------------------------------
+# Copyright (c) 2022 Github zsh-users - http://github.com/zsh-users
+#
+# Permission is hereby granted, without written agreement and without
+# licence or royalty fees, to use, copy, modify, and distribute this
+# software and to distribute modified versions of this software for any
+# purpose, provided that the above copyright notice and the following
+# two paragraphs appear in all copies of this software.
+#
+# In no event shall the Zsh Development Group be liable to any party for
+# direct, indirect, special, incidental, or consequential damages arising out
+# of the use of this software and its documentation, even if the Zsh
+# Development Group have been advised of the possibility of such damage.
+#
+# The Zsh Development Group specifically disclaim any warranties, including,
+# but not limited to, the implied warranties of merchantability and fitness
+# for a particular purpose.  The software provided hereunder is on an "as is"
+# basis, and the Zsh Development Group have no obligation to provide
+# maintenance, support, updates, enhancements, or modifications.
+#
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for trash-d (https://github.com/rushsteve1/trash-d)
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * danso (https://danso.ca)
+#
+# ------------------------------------------------------------------------------
+
+
+_arguments -C \
+  '--version[display version information and exit]' \
+  {-h,--help}'[display usage information]' \
+  {-d,--directory}'[remove empty directories]' \
+  {-r,-R,--recursive}'[delete directories and their contents recursively]' \
+  {-v,--verbose}'[print more information]' \
+  {-i,--interactive}'[ask before each deletion]' \
+  {-I,--interactive-once}'[ask once if deleting 3 or more]' \
+  {-f,--force}"[don't prompt and ignore errors]" \
+  --list'[list out the files in the trash]' \
+  --orphans'[list orphaned files in the trash]' \
+  --restore'[restore a file from the trash]' \
+  --delete'[delete a file from the trash]' \
+  --empty'[empty the trash bin]' \
+  --rm'[bypass trash bin and permanently delete a file]' \
+  '*: :_files'

@@ -1,0 +1,38 @@
+#compdef subliminal
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for Subliminal (https://github.com/Diaoul/subliminal).
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Julien Nicoulaud <julien.nicoulaud@gmail.com>
+#
+# ------------------------------------------------------------------------------
+
+
+_arguments \
+  '(- : *)'{-h,--help}'[show help message and exit]' \
+  '(- : *)--version[show version number and exit]' \
+  '*'{-l,--language}'[wanted language]: :_language_codes ISO-639-1' \
+  '*'{-p,--plugin}'[plugin to use]:plugin name:((OpenSubtitles BierDopje TheSubDB SubsWiki Subtitulos))' \
+  '(-m --multi)'{-m,--multi}'[download multiple subtitle languages]' \
+  '(-f --force)'{-f,--force}'[replace existing subtitle file]' \
+  '(-w --workers)'{-w,--workers}'[number of threads to use]:number' \
+  '(-c --compatibility)'{-c,--compatibility}'[try not to use unicode]' \
+  '(-q --quiet -v --verbose)'{-q,--quiet}'[disable output]' \
+  '(-v --verbose -q --quiet)'{-v,--verbose}'[verbose output]' \
+  '(--no-cache-dir)--cache-dir[cache directory to use]: :_files -/' \
+  '(--cache-dir)--no-cache-dir[do not use cache directory]' \
+  '*: :_files'
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et

@@ -1,0 +1,83 @@
+#compdef docpad
+# ------------------------------------------------------------------------------
+# Copyright (c) 2011 Github zsh-users - http://github.com/zsh-users
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * Neither the name of the zsh-users nor the
+#       names of its contributors may be used to endorse or promote products
+#       derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL ZSH-USERS BE LIABLE FOR ANY
+# DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for docpad (https://github.com/bevry/docpad).
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Changwoo Park (https://github.com/pismute)
+#
+# ------------------------------------------------------------------------------
+
+local curcontext="$curcontext" state line  ret=1
+
+local -a _1st_arguments
+_1st_arguments=(
+  'run: run [options], does everything - skeleton, generate, watch, server'
+  'server: server [options], creates a server for your generated project'
+  'skeleton: skeleton [options], will create a new project in your cwd based off an existing skeleton'
+  'render: render [path], render the file at <path> and output its results to stdout:path:_files'
+  'generate: (re)generates your project'
+  'watch: watches your project for changes, and (re)generates whenever a change is made'
+  'install: ensure everything is installed correctly'
+  'clean: ensure everything is cleaned correctly'
+  'info: display the information about your docpad instance'
+  'help: output the help'
+)
+
+_arguments -C \
+  '(-h --help)'{-h,--help}'[output usage information]'\
+  '(-V --version)'{-V,--version}'[output the version number]'\
+  '(-o --out)'{-o,--out}'[where to output the rendered directory or files]:path:_files'\
+  '(-c --config)'{-c,--config}'[a custom configuration file to load in]:path:_files'\
+  '(-e --env)'{-e,--env}'[the environment name to use for this instance, multiple names can be separated with a comma]'\
+  '(-d --debug)'{-d,--debug}'+[the level of debug messages you would like to display, if specified defaults to 7, otherwise 6]:number'\
+  '(-f --force)'{-f,--force}'[force a re-install of all modules]'\
+  '1: :->cmds'\
+  '*: :_files'&& ret=0
+
+case $state in
+  cmds)
+    _describe -t commands 'docpad command' _1st_arguments && ret=0
+    ;;
+
+esac
+
+return ret
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et

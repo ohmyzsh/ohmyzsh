@@ -1,0 +1,613 @@
+#compdef mvn mvnDebug
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for Maven (http://maven.apache.org).
+#
+#  Status: See FIXME and TODO tags.
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Julien Nicoulaud <julien.nicoulaud@gmail.com>
+#
+# ------------------------------------------------------------------------------
+# Notes
+# -----
+#
+#   * By default advanced phases are displayed only if you start typing them. To have
+#     them always displayed:
+#
+#       zstyle ':completion:*:mvn:*' show-all-phases true
+#
+#   * By default full form plugins (groupId:artifactId[:version]) are only shown if you
+#     start typing them. To have them always displayed:
+#
+#       zstyle ':completion:*:mvn:*' show-full-form-plugins true
+#
+#   * By default only the plugins for which the completion has already been
+#     called ("mvn plugin:<TAB>") are shown. To define your own list of plugins:
+#
+#       maven_plugins=(jboss tomcat gwt android)
+#       zstyle ':completion:*:mvn:*' plugins $maven_plugins
+#
+#   * To have a better presentation of completions:
+#
+#       zstyle ':completion:*:*:mvn:*:matches' group 'yes'
+#       zstyle ':completion:*:*:mvn:*:options' description 'yes'
+#       zstyle ':completion:*:*:mvn:*:options' auto-description '%d'
+#       zstyle ':completion:*:*:mvn:*:descriptions' format $'\e[1m -- %d --\e[22m'
+#       zstyle ':completion:*:*:mvn:*:messages' format $'\e[1m -- %d --\e[22m'
+#       zstyle ':completion:*:*:mvn:*:warnings' format $'\e[1m -- No matches found --\e[22m'
+#
+# ------------------------------------------------------------------------------
+
+
+_mvn() {
+  typeset -A opt_args
+  local context state line
+
+  local curcontext="$curcontext" maven_version excl_opts
+
+  excl_opts=(-h --help -v --version -ep --encrypt-password -emp --encrypt-master-password)
+
+  _pick_variant -r maven_version maven3='Maven 3' maven2='Maven 2' unknown --version
+  if [[ $maven_version == 'maven3' ]]; then
+    opts=(
+      "($excl_opts -T --threads)"{-T,--threads}'[thread count, for instance 2.0C where C is core multiplied]:thread count:_mvn_thread_counts'
+      "($excl_opts -t --toolchains)"{-t,--toolchains}'[alternate path for the user toolchains file]:toolchains file:_mvn_toolchains_files'
+      "($excl_opts -l --log-file)"{-l,--log-file}'[log file to where all build output will go]:log file:_mvn_log_files'
+    )
+  elif [[ $maven_version == 'maven2' ]]; then
+    opts=(
+      "($excl_opts -cpu --check-plugin-updates -up --update-plugins -npu --no-plugin-updates -o --offline)"{-cpu,--check-plugin-updates,-up,--update-plugins}'[force upToDate check for any relevant registered plugins]'
+      "($excl_opts -npr --no-plugin-registry)"{-npr,--no-plugin-registry}'[don'\''t use plugin-registry.xml for plugin versions]'
+      "($excl_opts -npu --no-plugin-updates -cpu --check-plugin-updates -up --update-plugins)"{-npu,--no-plugin-updates}'[suppress upToDate check for any relevant registered plugins]'
+      "($excl_opts -r --reactor)"{-r,--reactor}'[dynamically build reactor from subdirectories]:reactor:_mvn_reactors'
+    )
+  fi
+
+  [[ -n ${(M)words:#"-pl"} || -n ${(M)words:#"--projects"} ]] && opts+=(
+    "($excl_opts -am --also-make)"{-am,--also-make}'[if project list is specified, also build projects required by the list]'
+    "($excl_opts -amd --also-make-dependents)"{-amd,--also-make-dependents}'[if project list is specified, also build projects that depend on projects on the list]'
+  )
+
+  _arguments -C \
+    "(- : *)"{-h,--help}'[display help information]' \
+    "(- : *)"{-v,--version}'[display version information]' \
+    "(- : *)"{-emp,--encrypt-master-password}'[encrypt master security password]:master password:_mvn_passwords' \
+    "(- : *)"{-ep,--encrypt-password}'[encrypt server password]:password:_mvn_passwords' \
+    "($excl_opts -B --batch-mode)"{-B,--batch-mode}'[run in non-interactive (batch) mode]' \
+    "($excl_opts -V --show-version)"{-V,--show-version}'[display version information without stopping build]' \
+    "($excl_opts -q --quiet -X --debug)"{-q,--quiet}'[quiet output, only show errors]' \
+    "($excl_opts -X --debug -q --quiet)"{-X,--debug}'[produce execution debug output]' \
+    "($excl_opts -N --non-recursive)"{-N,--non-recursive}'[do not recurse into sub-projects]' \
+    "($excl_opts -C --strict-checksums -c --lax-checksums)"{-C,--strict-checksums}'[fail the build if checksums don'\''t match]' \
+    "($excl_opts -c --lax-checksums -C --strict-checksums)"{-c,--lax-checksums}'[warn if checksums don'\''t match]' \
+    "($excl_opts -e --errors)"{-e,--errors}'[produce execution error messages]' \
+    "($excl_opts -f --file)"{-f,--file}'[force the use of an alternate POM file]:POM file:_mvn_pom_files' \
+    "($excl_opts -s --settings)"{-s,--settings}'[alternate path for the user settings file]:settings file:_mvn_settings_files' \
+    "($excl_opts -gs --global-settings)"{-gs,--global-settings}'[alternate path for the global settings file]:global settings file:_mvn_settings_files' \
+    "($excl_opts -fae --fail-at-end -ff --fail-fast -fn --fail-never)"{-fae,--fail-at-end}'[only fail the build afterwards, allow all non-impacted builds to continue]' \
+    "($excl_opts -ff --fail-fast -fae --fail-at-end -fn --fail-never)"{-ff,--fail-fast}'[stop at first failure in reactorized builds]' \
+    "($excl_opts -fn --fail-never -fae --fail-at-end -ff --fail-fast)"{-fn,--fail-never}'[never fail the build, regardless of project result]' \
+    "($excl_opts)*"{-P,--activate-profiles}'[comma-delimited list of profiles to activate]:profile:_mvn_profiles -s ,' \
+    "($excl_opts -pl --projects)"{-pl,--projects}'[build specified reactor projects instead of all projects]:project list:_mvn_projects -s ,' \
+    "($excl_opts -rf --resume-from)"{-rf,--resume-from}'[resume reactor from specified project]:project:_mvn_projects' \
+    "($excl_opts -o --offline -U --update-snapshots -cpu --check-plugin-updates -up --update-plugins)"{-o,--offline}'[work offline]' \
+    "($excl_opts -U --update-snapshots -nsu --no-snapshot-updates -o --offline)"{-U,--update-snapshots}'[force a check for updated releases and snapshots on remote repositories]' \
+    "($excl_opts -nsu --no-snapshot-updates -U --update-snapshots -o --offline)"{-nsu,--no-snapshot-updates}'[Suppress SNAPSHOT updates]' \
+    "*"{-D-,--define}'[define a system property]:property:_mvn_properties' \
+    "${opts[@]}" \
+    "($excl_opts)*: :_mvn_args"
+}
+
+(( $+functions[_mvn_args] )) ||
+_mvn_args() {
+  _alternative \
+    'phases:phase:_mvn_phases' \
+    'plugin-colon-goals:plugin colon goal:_mvn_plugin_colon_goals'
+}
+
+(( $+functions[_mvn_phases] )) ||
+_mvn_phases() {
+  local phases
+  phases=(
+    'clean:remove all files generated by the previous build'
+    'compile:compile the source code of the project'
+    'test:run tests using a suitable unit testing framework'
+    'package:take the compiled code and package it in its distributable format, such as a JAR'
+    'integration-test:process and deploy the package if necessary into an environment where integration tests can be run'
+    'verify:run any checks to verify the package is valid and meets quality criteria'
+    'install:install the package into the local repository, for use as a dependency in other projects locally'
+    'deploy:done in an integration or release environment, copies the final package to the remote repository'
+    'site:generates the projects site documentation'
+    'site-deploy:deploys the generated site documentation to the specified web server'
+  )
+  if [[ $#PREFIX -gt 0 ]] || zstyle -t ":completion:${curcontext}:" show-all-phases; then
+    phases+=(
+      'pre-clean:executes processes needed prior to the actual project cleaning'
+      'post-clean:executes processes needed to finalize the project cleaning'
+      'validate:validate the project is correct and all necessary information is available'
+      'initialize:initialize build state, e.g. set properties or create directories'
+      'generate-sources:generate any source code for inclusion in compilation'
+      'process-sources:process the source code, for example to filter any values'
+      'generate-resources:generate resources for inclusion in the package'
+      'process-resources:copy and process the resources into the destination directory, ready for packaging'
+      'process-classes:post-process the generated files from compilation'
+      'generate-test-sources:generate any test source code for inclusion in compilation'
+      'process-test-sources:process the test source code, for example to filter any values'
+      'generate-test-resources:create resources for testing'
+      'process-test-resources:copy and process the resources into the test destination directory'
+      'test-compile:compile the test source code into the test destination directory'
+      'process-test-classes:post-process the generated files from test compilation'
+      'prepare-package:perform any operations necessary to prepare a package before the actual packaging'
+      'pre-integration-test:perform actions required before integration tests are executed'
+      'post-integration-test:perform actions required after integration tests have been executed'
+      'pre-site:executes processes needed prior to the actual project site generation.'
+      'post-site:executes processes needed to finalize the site generation, and to prepare for site deployment'
+    )
+  fi
+  _describe -t 'phases' "phase" phases
+}
+
+(( $+functions[_mvn_plugins] )) ||
+_mvn_plugins() {
+  local ret=1
+  if [[ $words[CURRENT] == *.* ]] || zstyle -t ":completion:${curcontext}:" show-full-form-plugins; then
+    _wanted full-form-plugins expl 'full form plugin' _mvn_full_form_plugins && ret=0
+  else
+    _wanted plugin-prefixes expl 'plugin prefix' _mvn_plugin_prefixes && ret=0
+  fi
+  return ret
+}
+
+(( $+functions[_mvn_plugin_colon_goals] )) ||
+_mvn_plugin_colon_goals() {
+  local ret=1
+  if [[ $words[CURRENT] == *.* ]] || zstyle -t ":completion:${curcontext}:" show-full-form-plugins; then
+    _wanted full-form-plugin-colon-goals expl 'full form plugin colon goal' _mvn_full_form_plugin_colon_goals && ret=0
+  else
+    _wanted plugin-prefix-colon-goals expl 'plugin prefix colon goal' _mvn_plugin_prefix_colon_goals && ret=0
+  fi
+  return ret
+}
+
+(( $+functions[_mvn_plugin_prefix_colon_goals] )) ||
+_mvn_plugin_prefix_colon_goals() {
+  local ret=1
+  if compset -P '*:'; then
+    local plugin="${IPREFIX%:}"
+    _wanted goals expl "${plugin} plugin goal" _mvn_plugin_goals $plugin && ret=0
+  else
+    _wanted plugin-prefixes expl 'plugin prefix' _mvn_plugin_prefixes -qS: && ret=0
+  fi
+  return ret
+}
+
+(( $+functions[_mvn_plugin_prefixes] )) ||
+_mvn_plugin_prefixes() {
+  local plugins
+  zstyle -a ":completion:${curcontext}:" plugins plugins
+  [[ $#plugins -eq 0 ]] && plugins=($(__mvn_get_plugin_prefix $(__mvn_get_cache_dir)/mvn/plugins/*(:t)))
+  _describe -t plugin-prefixes 'plugin prefix' plugins $@
+}
+
+(( $+functions[_mvn_full_form_plugin_colon_goals] )) ||
+_mvn_full_form_plugin_colon_goals() {
+  local ret=1
+  # FIXME Duplicates _mvn_full_form_plugins
+  if compset -P 1 '*:'; then
+    local groupId="${${IPREFIX%:}##*:}"
+    if compset -P 1 '*:'; then
+      local artifactId="${${IPREFIX%:}##*:}"
+      if compset -P 1 '*:'; then
+        local version="${${IPREFIX%:}##*:}"
+        _wanted goals expl "${artifactId}:${version} goal" _mvn_plugin_goals "${groupId}:${artifactId}:${version}" && ret=0
+      else
+        _alternative \
+          "versions:${artifactId} version:_mvn_artifact_versions -qS: ${groupId}:${artifactId}" \
+          "goals:${artifactId} goal:_mvn_plugin_goals ${groupId}:${artifactId}" \
+        && ret=0
+      fi
+    else
+      _wanted artifactIds expl "${groupId} artifactId" _mvn_groupId_artifactIds -qS: $groupId && ret=0
+    fi
+  else
+    _wanted groupIds expl "groupId" _mvn_groupIds -qS: && ret=0
+  fi
+  return ret
+}
+
+(( $+functions[_mvn_full_form_plugins] )) ||
+_mvn_full_form_plugins() {
+  local ret=1 chunk="${PREFIX%%:*}"
+  if compset -P 1 '*:'; then
+    local groupId="$chunk"
+    chunk="${PREFIX%%:*}"
+    if compset -P 1 '*:'; then
+      _wanted versions expl "${current} version" _mvn_artifact_versions $@ "${groupId}:${chunk}" && ret=0
+    else
+      _wanted artifactIds expl "${groupId} artifactId" _mvn_groupId_artifactIds -qS: "${groupId}" && ret=0
+    fi
+  else
+    _wanted groupIds expl "groupId" _mvn_groupIds -qS: && ret=0
+  fi
+  return ret
+}
+
+(( $+functions[_mvn_groupIds] )) ||
+_mvn_groupIds() {
+  local repository_location=$(__mvn_get_repository_location) update_policy ret=1
+
+  zstyle -s ":completion:${curcontext}:" cache-policy update_policy
+  [[ -z "$update_policy" ]] && zstyle ":completion:${curcontext}:" cache-policy _mvn_groupIds_caching_policy
+
+  if [[ -d $repository_location ]]; then
+    unset _groupIds
+    if ( [[ ${+_groupIds} -eq 0 ]] || _cache_invalid "mvn/repositories/${repository_location}/groupIds" ) && ! _retrieve_cache "mvn/repositories/${repository_location}/groupIds"; then
+      _groupIds=($repository_location/**/)
+      _groupIds=(${${${(u)_groupIds:h:h}#"$repository_location/"}//\//.})
+      [[ $#_groupIds -gt 0 ]] && _store_cache "mvn/repositories/${repository_location}/groupIds" _groupIds
+    fi
+
+    [[ $#_groupIds -gt 0 ]] && _multi_parts $@ . _groupIds && ret=0
+  fi
+
+  return ret
+}
+
+(( $+functions[_mvn_groupId_artifactIds] )) ||
+_mvn_groupId_artifactIds() {
+  local groupId_repository_location="${$(__mvn_get_repository_location)}/${${@[-1]}//\.//}" ret=1
+
+  if [[ -d $groupId_repository_location ]]; then
+    local artifactIds; artifactIds=($groupId_repository_location/*/*/*.pom(:h:h:t))
+    _describe -t artifactIds "artifactId" artifactIds $@[0,-2] && ret=0
+  fi
+
+  return ret
+}
+
+(( $+functions[_mvn_artifact_versions] )) ||
+_mvn_artifact_versions() {
+  local artifact_repository_location="${$(__mvn_get_repository_location)}/${${@[-1]}//[\.:]//}" ret=1
+
+  if [[ -d $artifact_repository_location ]]; then
+    local versions; versions=($artifact_repository_location/*/*.pom(:h:t))
+    _describe -t versions "version" versions $@[0,-2]
+  fi
+
+  return ret
+}
+
+(( $+functions[_mvn_plugin_goals] )) ||
+_mvn_plugin_goals() {
+  local ret=1 plugin="$@[-1]" update_policy
+
+  zstyle -s ":completion:${curcontext}:" cache-policy update_policy
+  [[ -z "$update_policy" ]] && zstyle ":completion:${curcontext}:" cache-policy _mvn_goals_caching_policy 
+
+  unset _goals
+  if ( [[ ${+_goals} -eq 0 ]] || _cache_invalid "mvn/plugins/${plugin}" ) && ! _retrieve_cache "mvn/plugins/${plugin}"; then
+    setopt localoptions extendedglob
+    _goals=(${(s:,,,:)${${${(f)${${${(f)${${${${(F)${(S)${(f)"$(_call_program goals $words[1] -N org.apache.maven.plugins:maven-help-plugin:2.1.1:describe -Dplugin=$plugin)"}//#$(__mvn_get_plugin_prefix $plugin):/,,,}}:#*BUILD FAILURE*}#*This plugin has*goals#:}%For more information, run \'mvn help:describe*}}//:/\\:}}}// ##/ }// Description\\: /:}})
+    [[ $#_goals -gt 0 ]] && _store_cache "mvn/plugins/${plugin}" _goals
+  fi
+
+  [[ $#_goals -gt 0 ]] && _describe -t "goals" "${plugin} goal" _goals $@[0,-2] && ret=0
+
+  return ret
+}
+
+(( $+functions[_mvn_profiles] )) ||
+_mvn_profiles() {
+
+  # FIXME Use "mvn help:all-profiles" output instead of parsing settings and pom files...
+  # Blocked on http://jira.codehaus.org/browse/MPH-82 and http://jira.codehaus.org/browse/MPH-83
+  local profs update_policy settings_file=$(__mvn_get_settings_file) parent_pom_file=$(__mvn_get_parent_pom_file) cache_name profiles_section ret=1
+
+  # TODO Should be split into _mvn_profiles/mvn_profiles_lists
+
+  zstyle -s ":completion:${curcontext}:" cache-policy update_policy
+  [[ -z "$update_policy" ]] && zstyle ":completion:${curcontext}:" cache-policy _mvn_profiles_caching_policy
+
+  profs=()
+
+  # Resolve profiles from settings.xml
+  if [[ -f  $settings_file ]]; then
+    unset _profiles
+    cache_name="mvn/profiles${settings_file:A}" # FIXME Don't use A modifier, it is only available on Zsh >= 4.3.10
+    if ( [[ ${+_profiles} -eq 0 ]] || _cache_invalid "$cache_name" ) && ! _retrieve_cache "$cache_name"; then
+      _profiles=()
+      profiles_section="${(M)${(f)$(<$settings_file)}:#*<profiles>*}"
+      if [[ -n "$profiles_section" ]]; then
+        for profile in ${(s:,,,:)${${${(S)${(S)${(S)${(S)${${profiles_section#*<profile>}%</profile>*}//<repositories>*<\/repositories>}//<pluginRepositories>*<\/pluginRepositories>}//<build>*<\/build>}//<\/id>*<id>/,,,}##*<id>}%%</id>*}}; do
+          [[ -z ${(M)profiles:#"$profile"*} ]] && _profiles+=("$profile"'['"in settings file"']')
+        done
+      fi
+      [[ $#_profiles -gt 0 ]] && _store_cache "$cache_name" _profiles
+    fi
+    profs+=($_profiles)
+  fi
+
+  # Resolve project profiles
+  if [[ -f  $parent_pom_file ]]; then
+    unset _profiles
+    cache_name="mvn/profiles${parent_pom_file:A}" # FIXME Don't use A modifier, it is only available on Zsh >= 4.3.10
+    if ( [[ ${+_profiles} -eq 0 ]] || _cache_invalid "$cache_name" ) && ! _retrieve_cache "$cache_name"; then
+      _profiles=()
+      setopt localoptions extendedglob
+      for file in ${parent_pom_file:h}/**/pom.xml~*target\/*; do  # FIXME project.build.directory is not always target/
+        profiles_section="${(M)${(f)$(<$file)}:#*<profiles>*}"
+        if [[ -n "$profiles_section" ]]; then
+          for profile in ${(s:,,,:)${${${(S)${(S)${(S)${(S)${${profiles_section#*<profile>}%</profile>*}//<repositories>*<\/repositories>}//<pluginRepositories>*<\/pluginRepositories>}//<build>*<\/build>}//<\/id>*<id>/,,,}##*<id>}%%</id>*}}; do
+            [[ -z ${(M)profiles:#"$profile"*} ]] && _profiles+=("$profile"'['"in ${file#${parent_pom_file:h}\/}"']')
+          done
+        fi
+      done
+      [[ $#_profiles -gt 0 ]] && _store_cache "$cache_name" _profiles
+    fi
+    profs+=($_profiles)
+  fi
+
+  compset -P '-'; compset -P '+'; compset -P '!' # FIXME Only works for the first profile
+
+  [[ $#profs -gt 0 ]] && _values $@ 'profile' "${profs[@]}" && ret=0
+
+  return ret
+}
+
+(( $+functions[_mvn_projects] )) ||
+_mvn_projects() {
+  # TODO Projects can also be given in the form [groupId:]artifactId.
+  # TODO Should be split into _mvn_projects/mvn_projects_lists
+  local pom_file=$(__mvn_get_parent_pom_file) ret=1
+
+  if [[ -f $pom_file ]]; then
+    setopt localoptions extendedglob
+    local projects; projects=(${pom_file:h}/*/**/pom.xml~*target\/*) # FIXME project.build.directory is not always target/
+    projects=(${${projects#.\/}:h})
+    [[ $#projects -gt 0 ]] && _values "$@" 'project' "${projects[@]}" && ret=0
+  fi
+
+  return ret
+}
+
+(( $+functions[_mvn_properties] )) ||
+_mvn_properties() {
+  local ret=1
+  if compset -P '*='; then
+    _wanted property-values expl 'property value' _mvn_property_values ${${IPREFIX%=}#-D} && ret=0
+  else
+    _wanted property-names expl 'property name' _mvn_property_names -qS= && ret=0
+  fi
+  return ret
+}
+
+(( $+functions[_mvn_property_names] )) ||
+_mvn_property_names() {
+  # FIXME "-qS=" should be inherited from _mvn_properties
+  local alternatives; alternatives=(
+    "common-property-names:common property name:_mvn_common_property_names -qS="
+  )
+  for plugin_colon_goal in ${(M)words:#[^-]*:*}; do
+    alternatives+=("plugin-property-names:plugin property name:_mvn_plugin_goal_property_names -qS= ${plugin_colon_goal}")
+  done
+  _alternative "${alternatives[@]}"
+}
+
+(( $+functions[_mvn_common_property_names] )) ||
+_mvn_common_property_names() {
+  local properties; properties=(
+    'skipTests:skip tests execution'
+    'maven.test.skip:skip tests compilation and execution'
+    'gpg.passphrase:gpg passphrase'
+    'tycho.mode:enable maven mode for Tycho projects to disable p2 resolution'
+  )
+  _describe -t 'common-property-names' 'common property name' properties $@
+}
+
+(( $+functions[_mvn_plugin_goal_property_names] )) ||
+_mvn_plugin_goal_property_names() {
+  local plugin_colon_goal="$@[-1]" update_policy ret=1
+
+  zstyle -s ":completion:${curcontext}:" cache-policy update_policy
+  [[ -z "$update_policy" ]] && zstyle ":completion:${curcontext}:" cache-policy _mvn_properties_caching_policy
+
+  unset _properties
+  if ( [[ ${+_properties} -eq 0 ]] || _cache_invalid "mvn/plugins/${plugin_colon_goal}" ) && ! _retrieve_cache "mvn/plugins/${plugin_colon_goal}"; then
+    # FIXME Does not work for:
+    #   android:apk (new line before expression)
+    #   ear:ear (unknown cause)
+    _properties=(${(M)${(ps:,,,:)${${${${(pj: :)${${${(f)${"$(_call_program properties $words[1] -N org.apache.maven.plugins:maven-help-plugin:2.1.1:describe -Dplugin=${plugin_colon_goal%:*} -Dgoal=${plugin_colon_goal##*:} -Ddetail)"#*Available parameters:}%%\[INFO\]*}//#    [a-z]*/,,,}##*Expression: \$\{}}//\}[[:space:]]##/:}//[[:space:]]##/ }//[[:space:]]#,,,[[:space:]]#/,,,}}:#[a-zA-Z]##:*})
+    [[ $#_properties -gt 0 ]] && _store_cache "mvn/plugins/${plugin_colon_goal}" _properties
+  fi
+
+  [[ $#_properties -gt 0 ]] && _describe -t "${plugin_colon_goal//:/-}-property-names" "${plugin_colon_goal} property name" _properties $@[0,-2] && ret=0
+
+  return ret
+}
+
+(( $+functions[_mvn_property_values] )) ||
+_mvn_property_values() {
+  local ret=1
+  setopt localoptions extendedglob
+  case $@[-1] in
+    ((#i)*pomFile*) _wanted pom-files expl 'POM file' _mvn_pom_files && ret=0;;
+    ((#i)*file*) _wanted files expl 'file' _files && ret=0;;
+    ((#i)*groupId*) _wanted groupIds expl 'groupId' _mvn_groupIds && ret=0;;
+    ((#i)*artifactId*) _wanted artifactIds expl 'artifactId' _mvn_groupId_artifactIds ${${(M)${(ps.:.)opt_args[(K)-D]}:#groupId=*}#groupId=} && ret=0;;
+    ((#i)*version*) _wanted versions expl 'version' _mvn_artifact_versions ${${(M)${(ps.:.)opt_args[(K)-D]}:#groupId=*}#groupId=}:${${(M)${(ps.:.)opt_args[(K)-D]}:#artifactId=*}#artifactId=} && ret=0;;
+    ((#i)*repositoryId*) _message -e repositoryIds 'repositoryId' && ret=0;; # TODO Not implemented
+    ((#i)*classifier*) _message -e classifiers 'classifier' && ret=0;;
+    ((#i)*scope*) _wanted scopes expl 'scope' _mvn_scopes && ret=0;;
+    ((#i)*url*) _wanted urls expl 'url' _urls && ret=0;; # TODO Use _alternative and add repository urls from settings + projects
+    ((#i)*(password|passphrase)*) _wanted passwords expl password _mvn_passwords && ret=0;;
+    ((#i)*(createChecksum|generatePom|maven.test.skip)*) _wanted booleans expl 'boolean' _mvn_booleans && ret=0;;
+    ((#i)*user*) _wanted users expl 'user' _users && ret=0;; # TODO Use _alternative and add repository usernames from settings + projects
+    ((#i)*plugin*) _wanted plugin expl 'plugin' _mvn_plugins && ret=0;;
+    ((#i)*tycho.mode*) _wanted tychomodes expl 'tychomode' _mvn_tycho_modes && ret=0;;
+    (*) _default && ret=0;;
+  esac
+  return ret
+}
+
+(( $+functions[_mvn_scopes] )) ||
+_mvn_scopes() {
+  local scopes; scopes=(
+    'compile:default scope, used if none is specified. Compile dependencies are available in all classpaths of a project. Furthermore, those dependencies are propagated to dependent projects.'
+    'provided:much like compile, but indicates you expect the JDK or a container to provide the dependency at runtime. For example, when building a web application for the Java Enterprise Edition, you would set the dependency on the Servlet API and related Java EE APIs to scope provided because the web container provides those classes. This scope is only available on the compilation and test classpath, and is not transitive.'
+    'runtime:indicates that the dependency is not required for compilation, but is for execution. It is in the runtime and test classpaths, but not the compile classpath.'
+    'test:indicates that the dependency is not required for normal use of the application, and is only available for the test compilation and execution phases.'
+    'system:similar to provided except that you have to provide the JAR which contains it explicitly. The artifact is always available and is not looked up in a repository.'
+    'import:only used on a dependency of type pom in the <dependencyManagement> section. It indicates that the specified POM should be replaced with the dependencies in that POM'\''s <dependencyManagement> section. Since they are replaced, dependencies with a scope of import do not actually participate in limiting the transitivity of a dependency.'
+  )
+  _describe -t scopes 'scope' scopes
+}
+
+(( $+functions[_mvn_thread_counts] )) ||
+_mvn_thread_counts() {
+  local thread_counts; thread_counts=(
+    '1:build with 1 thread'  '1C:build with 1 thread per CPU core'
+    '2:build with 2 threads' '2C:build with 2 threads per CPU core'
+    '3:build with 3 threads' '3C:build with 3 threads per CPU core'
+    '4:build with 4 threads' '4C:build with 4 threads per CPU core'
+    '5:build with 5 threads' '5C:build with 5 threads per CPU core'
+    '6:build with 6 threads' '6C:build with 6 threads per CPU core'
+    '7:build with 7 threads' '7C:build with 7 threads per CPU core'
+    '8:build with 8 threads' '8C:build with 8 threads per CPU core'
+  )
+  _describe -t thread-counts 'thread count' thread_counts
+}
+
+(( $+functions[_mvn_reactors] )) ||
+_mvn_reactors() {
+  _message -e reactors 'reactor' # FIXME No idea what kind of value the "--reactor" option is supposed to take
+}
+
+(( $+functions[_mvn_passwords] )) ||
+_mvn_passwords() {
+  _message -e passwords 'password'
+}
+
+(( $+functions[_mvn_pom_files] )) ||
+_mvn_pom_files() {
+  _files -g '*pom*\.xml*'
+}
+
+(( $+functions[_mvn_toolchains_files] )) ||
+_mvn_toolchains_files() {
+  _files -g '*toolchains*\.xml*'
+}
+
+(( $+functions[_mvn_settings_files] )) ||
+_mvn_settings_files() {
+  _files -g '*settings*\.xml*'
+}
+
+(( $+functions[_mvn_log_files] )) ||
+_mvn_log_files() {
+  _files
+}
+
+(( $+functions[_mvn_booleans] )) ||
+_mvn_booleans() {
+  local booleans; booleans=(
+    'true:"true" boolean value'
+    'false:"false" boolean value'
+  )
+  _describe -t booleans 'boolean' booleans
+}
+
+
+(( $+functions[_mvn_tycho_modes] )) ||
+_mvn_tycho_modes() {
+  local tychomodes; tychomodes=(
+    'maven:maven mode, Tycho will not do any p2 dependency resolution'
+  )
+  _describe -t tychomodes 'boolean' tychomodes
+}
+
+# ------------------------------------------------------------------------------
+# Helper functions
+# ------------------------------------------------------------------------------
+
+__mvn_get_pom_file() {
+  print ${~opt_args[-f]:-${opt_args[--file]:-pom.xml}}
+}
+
+__mvn_get_parent_pom_file() {
+  local pom_file=$(__mvn_get_pom_file)
+  while [[ -f ${pom_file:a:h:h}/pom.xml ]]; do
+    pom_file=${pom_file:a:h:h}/pom.xml;
+  done
+  print $pom_file
+}
+
+__mvn_get_settings_file() {
+  print ${~opt_args[-s]:-${opt_args[--settings]:-$HOME/.m2/settings.xml}}
+}
+
+__mvn_get_repository_location() {
+  print ${${${${(M)"$(<$(__mvn_get_settings_file))":#*<localRepository>*}:-$HOME/.m2/repository}##*<localRepository>}%%<\/localRepository>*}
+}
+
+__mvn_get_plugin_prefix() {
+  print ${${${${@#*.*:}%%:*}%-plugin}/-#maven-#}
+}
+
+__mvn_get_cache_dir() {
+  local cache_dir
+  zstyle -s ":completion:${curcontext}:" cache-path cache_dir
+  print ${cache_dir:-${ZDOTDIR:-$HOME}/.zcompcache}
+}
+
+
+# ------------------------------------------------------------------------------
+# Caching policies
+# ------------------------------------------------------------------------------
+
+(( $+functions[_mvn_goals_caching_policy] )) ||
+_mvn_goals_caching_policy() {
+  # Rebuild if cache is older than one month.
+  local -a oldp
+  oldp=( "$1"(NmM+1) )
+  (( $#oldp ))
+}
+
+(( $+functions[_mvn_properties_caching_policy] )) ||
+_mvn_properties_caching_policy() {
+  _mvn_goals_caching_policy 
+}
+
+(( $+functions[_mvn_groupIds_caching_policy] )) ||
+_mvn_groupIds_caching_policy() {
+  _mvn_goals_caching_policy
+}
+
+(( $+functions[_mvn_profiles_caching_policy] )) ||
+_mvn_profiles_caching_policy() {
+  # Rebuild if cached file more recent than cache.
+  local cached_file="${1#$(__mvn_get_cache_dir)}"
+  [[ -f $cached_file && $cached_file -nt "$1" ]] && return 0
+
+  # Rebuild if cache is older than one week.  
+  local -a oldp
+  oldp=( "$1"(Nmw+1) )
+  (( $#oldp )) && return 0
+
+  return 1
+}
+
+_mvn "$@"
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et

@@ -1,0 +1,190 @@
+#compdef play
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for Play! framework 1.2.2 (http://www.playframework.org).
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Julien Nicoulaud <julien.nicoulaud@gmail.com>
+#  * Mario Fernandez (https://github.com/sirech)
+#
+# ------------------------------------------------------------------------------
+
+
+_play() {
+  local context curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  local ret=1
+
+  _arguments -C \
+    '1: :_play_cmds' \
+    '*::arg:->args' \
+  && ret=0
+
+  case $state in
+    (args)
+      curcontext="${curcontext%:*:*}:play-cmd-$words[1]:"
+      case $line[1] in
+        (build-module|list-modules|lm|check|id)
+          _message 'no more arguments' && ret=0
+        ;;
+        (dependencies|deps)
+          _arguments \
+            '1:: :_play_apps' \
+            '(--debug)--debug[Debug mode (even more information logged than in verbose mode)]' \
+            '(--jpda)--jpda[Listen for JPDA connection. The process will be suspended until a client is plugged to the JPDA port.]' \
+            '(--sync)--sync[Keep lib/ and modules/ directory synced. Delete unknown dependencies.]' \
+            '(--verbose)--verbose[Verbose Mode]' \
+          && ret=0
+        ;;
+        (clean|javadoc|jd|out|pid|secret|stop)
+          _arguments '1:: :_play_apps' && ret=0
+        ;;
+        (help)
+          _arguments '1: :_play_cmds -F "(cp deps ec idea jd st lm nb nm help antify evolutions evolutions:apply evolutions:markApplied evolutions:resolve)"' && ret=0
+        ;;
+        (status|st)
+          _arguments \
+            '1:: :_play_apps' \
+            '(--url)--url[If you want to monitor an application running on a remote server, specify the application URL using this option]:URL:_urls' \
+            '(--secret)--secret[You can provide your own secret key using this option]:Secret key' \
+          && ret=0
+        ;;
+        (new)
+          _arguments \
+            '1: :_play_apps' \
+            '(--with)--with[Automatically enable this set of module for the newly created application]:Modules list:_play_modules_list' \
+          && ret=0
+        ;;
+        (install)
+          _arguments '1:Play! module:_play_modules_dash_versions' && ret=0
+        ;;
+        (new-module)
+          _arguments '1:Module directory:_files -/' && ret=0
+        ;;
+        (test|precompile|run|start|war|auto-test|classpath|cp|eclipsify|ec|idealize|idea|modules|netbeansify|nb)
+          local cmd_args; cmd_args=(
+            '1:: :_play_apps'
+            '(--deps)--deps[Resolve and install dependencies before running the command]'
+          )
+          case $line[1] in
+            (precompile|run|start|restart|war)
+              local app_dir="$line[2]"
+              [[ -d "$app_dir" ]] || app_dir=.
+              [[ -f "$app_dir/conf/application.conf" ]] && cmd_args+=('--'${(u)${(M)$(<$app_dir/conf/application.conf):#%*}%%.*}'[Use this ID to run the application (override the default framework ID)]')
+            ;|
+            (test|run)
+              cmd_args+=('(-f)-f[Disable the JPDA port checking and force the jpda.port value]')
+            ;|
+            (war)
+              cmd_args+=(
+                '(-o --output)'{-o,--output}'[The path where the WAR directory will be created. The contents of this directory will first be deleted]:output directory:_files -/'
+                '(--zip)--zip[By default, the script creates an exploded WAR. If you want a zipped archive, specify the --zip option]'
+                '(--exclude)--exclude[Excludes a list of colon separated directories]:excluded directories list:_play_colon_dirs_list'
+              )
+            ;|
+            (test|run|start|restart|war)
+              cmd_args+=('*:Java option')
+            ;;
+          esac
+          _arguments "$cmd_args[@]" && ret=0
+        ;;
+        *)
+          _call_function ret _play_cmd_$words[1] && ret=0
+          (( ret )) && _message 'no more arguments'
+        ;;
+      esac
+    ;;
+  esac
+}
+
+# FIXME Completes only core commands, some modules add commands too (eg Maven). Where do we get them ?
+# FIXME Parse 'play help' and 'play help <command>' (for aliases) instead of hard-coding.
+(( $+functions[_play_cmds] )) ||
+_play_cmds() {
+  local commands; commands=(
+    'antify:Create a build.xml file for this project'
+    'auto-test:Automatically run all application tests'
+    'build-module:Build and package a module'
+    'check:Check for a release newer than the current one'
+    {classpath,cp}':Display the computed classpath'
+    'clean:Delete temporary files (including the bytecode cache)'
+    {dependencies,deps}':Resolve and retrieve project dependencies'
+    {eclipsify,ec}':Create all Eclipse configuration files'
+    'evolutions:Run the evolution check'
+    'evolutions\:apply:Automatically apply pending evolutions'
+    'evolutions\:mark:AppliedMark pending evolutions as manually applied'
+    'evolutions\:resolve:Resolve partially applied evolution'
+    'help:Display help on a specific command'
+    'id:Define the framework ID'
+    {idealize,idea}':Create all IntelliJ Idea configuration files'
+    'install:Install a module'
+    {javadoc,jd}':Generate your application Javadoc'
+    {list-modules,lm}':List modules available from the central modules repository'
+    'modules:Display the computed modules list'
+    {netbeansify,nb}':Create all NetBeans configuration files'
+    'new:Create a new application'
+    {new-module,nm}':Create a module'
+    'out:Follow logs/system.out file'
+    'pid:Show the PID of the running application'
+    'precompile:Precompile all Java sources and templates to speed up application start-up'
+    'restart:Restart the running application'
+    'run:Run the application in the current shell'
+    'secret:Generate a new secret key'
+    'start:Start the application in the background'
+    {status,st}':Display the running application status'
+    'stop:Stop the running application'
+    'test:Run the application in test mode in the current shell'
+    'war:Export the application as a standalone WAR archive'
+  )
+  _describe -t commands 'Play! command' commands "$@"
+}
+
+(( $+functions[_play_apps] )) ||
+_play_apps() {
+  _wanted application expl 'Play! application directory' _files -/
+}
+
+(( $+functions[_play_modules] )) ||
+_play_modules() {
+  local modules; modules=(${(ps:,:)${${${(S)${(f)$(_call_program modules $service list-modules)}//\]*\[/,}%%\]*}##*\[}})
+  _describe -t modules 'Play! module' modules "$@"
+}
+
+(( $+functions[_play_modules_dash_versions] )) ||
+_play_modules_dash_versions() {
+  local ret=1
+  if compset -P '*-'; then
+    local versions; versions=(${(ps:,:)${${${${${(f)$(_call_program versions $service list-modules)}##*${IPREFIX%-}\]}#*Versions:}%%"~"*}//[[:space:]]/}})
+    _describe -t module-versions "${IPREFIX%-} module versions" versions && ret=0
+  else
+    _wanted modules expl 'Play! module' _play_modules -qS- && ret=0
+  fi
+}
+
+(( $+functions[_play_modules_list] )) ||
+_play_modules_list() {
+  compset -P '*,'; compset -S ',*'
+  _wanted module-list expl 'Play! modules list' _play_modules -qS,
+}
+
+(( $+functions[_play_colon_dirs_list] )) ||
+_play_colon_dirs_list() {
+  compset -P '*:'; compset -S ':*'
+  _wanted directories-list expl 'Directories list' _files -/ -qS:
+}
+
+_play "$@"
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et

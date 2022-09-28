@@ -1,0 +1,191 @@
+#compdef drush
+# ------------------------------------------------------------------------------
+# Copyright (c) 2014 Github zsh-users - http://github.com/zsh-users
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * Neither the name of the zsh-users nor the
+#       names of its contributors may be used to endorse or promote products
+#       derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL ZSH-USERS BE LIABLE FOR ANY
+# DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for Drush (http://drush.ws).
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Vasily Kraev (https://github.com/vasilykraev)
+#
+# ------------------------------------------------------------------------------
+
+_drush() {
+  local curcontext='$curcontext' state line cmds ret=1
+  integer NORMARG
+  typeset -A opt_args
+
+  global_args=('--debug' '--verbose' '--yes' '--no' '--simulate' '--root=' '--uri=')
+
+  _arguments -C \
+    '(--*)'{--version,--version}'[Show drush version.]' \
+    '(- *)'{-d,--debug}'[Display even more information, including internal messages.]' \
+    '(- *)'{-v,--verbose}'[Display extra information about the command.]' \
+    '(- *)'{-y,--yes}'[Assume "yes" as answer to all prompts.]' \
+    '(- *)'{-n,--no}'[Assume "no" as answer to all prompts.]' \
+    '(- *)'{-s,--simulate}'[Simulate all relevant actions (don'\''t actually change the system).]' \
+    '(- *)'{-r,--root=}'[Drupal root directory to use (default: current directory).]' \
+    '(- *)'{-l,--uri=}'[URI of the drupal site to use (only needed in multisite environments or when running on an alternate port).]' \
+    '1: :->cmds' \
+    '*::arg:->args' \
+  && ret=0
+
+case $state in
+  cmds)
+    _values 'drush command' \
+      '(archive-dump)'{archive-dump,ard,arb}'[Backup your code, files, and database into a single file.]' \
+      '(archive-restore)'{archive-restore,arr}'[Expand a site archive into a Drupal web site.]' \
+      '(cache-clear)'{cache-clear,cc}'[Clear a specific cache, or all drupal caches.]' \
+      '(core-status)'{core-status,status,st}'[Provides a birds-eye view of the current Drupal installation, if any.]' \
+      '(core-cron)'{core-cron,cron}'[Run all cron hooks in all active modules for specified site.]' \
+      '(core-execute)'{core-execute,exec}'[Execute a shell command. Usually used with a site alias.]' \
+      '(drupal-directory)'{drupal-directory,dd}'[Return the filesystem path for modules/themes and other key folders.]' \
+      'help[Print this help message.]' \
+      'image-flush[Flush all derived images for a given style.]' \
+      '(site-alias)'{site-alias,sa}'[Print an alias record.]' \
+      '(site-install)'{site-install,si}'[Install Drupal along with modules/themes/configuration using the specified install profile.]' \
+      'test-clean[Clean temporary tables and files.]' \
+      'test-run[Run tests. Note that you must use the --uri option.]' \
+      '(updatedb)'{updatedb,updb}'[Apply any database updates required (as with running update.php).]' \
+      '(variable-delete)'{variable-delete,vdel}'[Delete a variable.]' \
+      '(variable-get)'{variable-get,vget}'[Get a list of some or all site variables and values.]' \
+      '(variable-set)'{variable-set,vset}'[Set a variable.]' \
+      '(pm-list)'{pm-list,pml}'[Show a list of available extensions (modules and themes).]' \
+      '(pm-disable)'{pm-disable,dis}'[Disable one or more extensions (modules or themes). Disable dependent extensions as well.]' \
+      '(pm-download)'{pm-download,dl}'[Download projects from drupal.org or other sources.]' \
+      '(pm-enable)'{pm-enable,en}'[Enable one or more extensions (modules or themes). Enable dependent extensions as well.]' \
+      'pm-uninstall[Uninstall one or more modules.]' \
+      'pm-update[Update Drupal core and contrib projects and apply any pending database updates (Same as pm-updatecode + updatedb).]' \
+      '(sql-cli)'{sql-cli,sqlc}'[Open a SQL command-line interface using Drupals credentials.]' \
+      'sql-drop[Drop all tables in a given database.]' \
+      'sql-dump[Exports the Drupal DB as SQL using mysqldump or equivalent.]' \
+      '(sql-query)'{sql-query,sqlq}'[Execute a query against the site database.]' \
+      'sql-sync[Copy and import source database to target database. Transfers via rsync.]' \
+      '(user-login)'{user-login,uli}'[Display a one time login link for the given user account (defaults to uid 1).]' \
+      '(user-password)'{user-password,upwd}'[(Re)Set the password for the user account with the specified name.]' \
+      '(devel-reinstall)'{devel-reinstall,dre}'[Disable, Uninstall, and Install a list of projects. (devel)]' \
+      '(devel-token)'{devel-token,token}'[List available tokens (devel)]' \
+      '(generate-content)'{generate-content,genc}'[Create content. (devel_generate)]' \
+      '(generate-menus)'{generate-menus,genm}'[Create menus and menu items. (devel_generate)]' \
+      '(generate-terms)'{generate-terms,gent}'[Create terms in specified vocabulary. (devel_generate)]' \
+      '(generate-users)'{generate-users,genu}'[Create users. (devel_generate)]' \
+      '(generate-vocabs)'{generate-vocabs,genv}'[Create vocabularies. (devel_generate)]' \
+      '(features-diff)'{features-diff,fd}'[Show the difference between the default and overridden state of a feature.]' \
+      '(features-export)'{features-export,fe}'[Export a feature from your site into a module.]' \
+      '(features-list)'{features-list,fl}'[List all the available features for your site.]' \
+      '(features-revert)'{features-revert,fr}'[Revert a feature module on your site.]' \
+      '(features-revert-all)'{features-revert-all,fra}'[Revert all enabled feature module on your site.]' \
+      '(features-update)'{features-update,fu}'[Update a feature module on your site.]' \
+      '(features-update-all)'{features-update-all,fua}'[Update all feature modules on your site.]' \
+  && ret=0
+    ;;
+  args)
+    case $line[1] in
+      (archive-dump|ard)
+        _arguments \
+          '(--description)--description=[Filter out extensions that are provided by drupal core.]' \
+          '(--destination)--destination=[The full path and filename in which the archive should be stored. If omitted, it will be saved to the drush-backups directory.]' \
+          '(--no-core)--no-core[Exclude Drupal core, so the backup only contains the site specific stuff.]' \
+          '(--pipe)--pipe[Only print the destination of the archive. Useful for scripts that don'\''t pass --destination.]' \
+          '(--tar-options)--tar-options=[Options passed thru to the tar command.]' \
+        && ret=0
+        compadd -a global_args
+      ;;
+      (archive-restore|arr)
+        _arguments \
+          '(--db-prefix)--db-prefix[An optional table prefix to use during restore.]' \
+          '(--db-su)--db-su[Account to use when creating the new database. Optional.]' \
+          '(--db-su-pw)--db-su-pw[Password for the "db-su" account. Optional.]' \
+          '(--db-url)--db-url=[A Drupal 6 style database URL indicating the target for database restore. If not provided, the archived settings.php is used. ]' \
+          '(--destination)--destination[Specify where the Drupal site should be expanded, including the docroot. Defaults to the current working directory.]' \
+          '(--overwrite)--overwrite[Allow drush to overwrite any files in the destination.]' \
+        && ret=0
+        compadd -a global_args
+      ;;
+      (user-password|upwd)
+        _arguments \
+          '--password=:Set the password for the username someuser.' \
+        && ret=0
+      ;;
+      (help)
+        _values 'commands' 'arb' 'archive-dump' 'archive-restore' 'ard' 'arr' 'cache-clear' 'cc' 'core-cron' 'core-execute' 'core-status' 'cron' 'dd' 'devel-reinstall' 'devel-token' 'dis' 'dl' 'dre' 'drupal-directory' 'en' 'exec' 'fd' 'fe' 'features-diff' 'features-export' 'features-list' 'features-revert' 'features-revert-all' 'features-update' 'features-update-all' 'fl' 'fr' 'fra' 'fu' 'fua' 'genc' 'generate-content' 'generate-menus' 'generate-terms' 'generate-users' 'generate-vocabs' 'genm' 'gent' 'genu' 'genv' 'help' 'image-flush' 'pm-disable' 'pm-download' 'pm-enable' 'pm-list' 'pm-uninstall' 'pm-update' 'pml' 'sa' 'si' 'site-alias' 'site-install' 'sql-cli' 'sql-drop' 'sql-dump' 'sql-query' 'sql-sync' 'sqlc' 'sqlq' 'st' 'status' 'test-clean' 'test-run' 'token' 'uli' 'updatedb' 'updb' 'upwd' 'user-login' 'user-password' 'variable-delete' 'variable-get' 'variable-set' 'vdel' 'vget' 'vset'
+      ;;
+      (cc)
+        _values 'options' 'all' 'drush' 'theme-registry' 'menu' 'css-js' 'block'
+      ;;
+      (pm-list|pml)
+        _arguments \
+          '(--core)--core[Filter out extensions that are not in drupal core.]' \
+          '(--no-core)--no-core[Filter out extensions that are provided by drupal core.]' \
+          '(--pipe)--pipe[Returns a whitespace delimited list of the names of the resulting extensions.]' \
+          '(--status)--status=-[Filter by extension status. Choices: enabled, disabled and/or "not installed".]:status:(enabled disabled)' \
+          '(--type)--type=-[Filter by extension type. Choices: module, theme.]:type:(module theme)' \
+        && ret=0
+      ;;
+      (pm-disable|dis)
+        _modules=( $(drush pml --status=enabled --pipe) )
+        if [[ $_modules != "" ]]; then
+          _values 'enabled modules' $_modules
+        fi
+      ;;
+      (pm-enable|en)
+        _arguments -C \
+          '--resolve-dependencies[Attempt to download any missing dependencies. At the moment, only works when the module name is the same as the project name.]' \
+          '--skip[Skip automatic downloading of libraries (c.f. devel).]' && ret=0
+        _modules=( $(drush pml --status="disabled,not installed" --pipe) )
+        if [[ $_modules != "" ]]; then
+          _values -s 'not yet enabled modules' $_modules && ret=0
+        fi
+      ;;
+      (*)
+        _values 'Global options' \
+          {-d,--debug}'[Display even more information, including internal messages.]' \
+          {-v,--verbose}'[Display extra information about the command.]' \
+          {-y,--yes}'[Assume "yes" as answer to all prompts.]' \
+          {-n,--no}'[Assume "no" as answer to all prompts.]' \
+          {-s,--simulate}'[Simulate all relevant actions (don'\''t actually change the system).]' \
+          {-r,--root=}'[Drupal root directory to use (default: current directory).]' \
+          {-l,--uri=}'[URI of the drupal site to use (only needed in multisite environments or when running on an alternate port).]'
+        ;;
+    esac
+    ;;
+esac
+}
+
+_drush '$@'
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et

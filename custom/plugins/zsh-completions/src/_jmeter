@@ -1,0 +1,58 @@
+#compdef jmeter
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for JMeter (http://jakarta.apache.org/jmeter).
+#
+#  Status: incomplete
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Julien Nicoulaud <julien.nicoulaud@gmail.com>
+#
+# ------------------------------------------------------------------------------
+
+
+_arguments \
+  '(- 1 *)--?[print command line options and exit]' \
+  '(- 1 *)'{-h,--help}'[print usage information and exit]' \
+  '(- 1 *)'{-v,--version}'[print the version information and exit]' \
+  {-p,--propfile}'[the jmeter property file to use]:properties file:_files -g "*.properties"' \
+  '*'{-q,--addprop}'[additional property file(s)]:properties file:_files -g "*.properties"' \
+  {-t,--testfile}'[the jmeter test plan file to run]:JMeter test plan file:_files -g "*.jmx"' \
+  {-j,--jmeterlogfile}'[the jmeter log file]: :_files -g "*.log"' \
+  {-l,--logfile}'[the file to log samples to]: :_files -g "*.jtl"' \
+  {-i,--jmeterlogconf}'[jmeter logging configuration file]: :_files -g "*.xml"' \
+  {-j,--jmeterlogfile}'[jmeter run file]: :_files -g "*.log"' \
+  {-n,--nongui}'[run JMeter in nongui mode]' \
+  {-s,--server}'[run the JMeter server]' \
+  {-E,--proxyScheme}'[set a proxy scheme to use for the proxy server]:scheme' \
+  {-H,--proxyHost}'[set a proxy server for JMeter to use]: :_hosts' \
+  {-P,--proxyPort}'[set proxy server port for JMeter to use]:number' \
+  {-N,--nonProxyHosts}'[set non proxy host list]:host' \
+  {-u,--username}'[set username for proxy server that JMeter is to use]:username:_users' \
+  {-a,--password}'[set password for proxy server that JMeter is to use]:password' \
+  {-J-,--jmeterproperty}'[define additional JMeter properties]:argument=value' \
+  {-G-,--globalproperty}'[define Global properties (sent to servers)]:argument=value' \
+  {-D-,--systemproperty}'[define additional System properties]:argument=value' \
+  {-S,--systemPropertyFile}'[a property file to be added as System properties]:properties file:_files -g "*.properties"' \
+  {-f,--forceDeleteResultFile}'[force delete existing results files and web report folder]' \
+  {-L,--loglevel}'[define loglevel]:[category=]level' \
+  {-r,--runremote}'[start remote servers (as defined by the jmeter property remote_hosts)]' \
+  {-R,--remotestart}'[start these remote servers (overrides remote_hosts)]:remote servers list' \
+  {-d,--homedir}'[the JMeter home directory to use]: :_files -/' \
+  {-X,--remoteexit}'[exit the remote servers at end of test (non-GUI)]' \
+  {-g,--removeonly}'[generate report dashboard only, from a test results file]: :_files' \
+  {-e,--reportatendofloadtests}'[generate report dashboard after load test]' \
+  {-o,--reportoutputfolder}'[output folder for report dashboard]: :_files -/'
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et

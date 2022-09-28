@@ -1,0 +1,67 @@
+#compdef tox
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for tox (https://tox.readthedocs.io).
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Julien Nicoulaud <julien.nicoulaud@gmail.com>
+#
+# ------------------------------------------------------------------------------
+
+
+(( $+functions[_tox_envs_list] )) ||
+_tox_envs_list() {
+  local envs; envs=($(_call_program envs $service --listenvs-all))
+  if [ ${#envs} -gt 0 ]; then
+    _values -s , 'tox environments' "${envs[@]}"
+  else
+    _message 'tox environments (none found)'
+  fi
+}
+
+_arguments \
+  '(- 1 *)--version[show version and exit]' \
+  '(- 1 *)'{-h,--help}'[show help options]' \
+  '(- 1 *)'{--hi,--help-ini}'[show help about ini-names]' \
+  '*'{-v,--verbose}'[increase verbosity of reporting output]' \
+  '*-q[progressively silence reporting output]' \
+  '(- 1 *)--showconfig[show configuration information for all environments]' \
+  '(- 1 *)'{-l,--listenvs}'[show list of test environments]' \
+  '(- 1 *)'{-a,--listenvs-all}'[show list of all defined environments]' \
+  '-c[config file name or directory with "tox.ini" file]:config path:_files -g "*.ini"' \
+  '-e[work against specified environments]: :_tox_envs_list' \
+  "--devenv[sets up a development environment at ENVDIR based on the env's tox configuration specified by '-e' ]: :" \
+  '--notest[skip invoking test commands]' \
+  '--sdistonly[only perform the sdist packaging activity]' \
+  '--skip-pkg-install[skip package installation for this run]' \
+  '(-p --parallel)'{-p,--parallel}'[run tox environments in parallel]: :' \
+  '(-o --parallel-live)'{-o,--parallel-live}'[connect to stdout while running environments]' \
+  '--parallel--safe-build[ensure two tox builds can run in parallel]' \
+  '--installpkg[ensure two tox builds can run in parallel]:package path:_files -/' \
+  '--develop[install package in the venv using "setup.py develop"]' \
+  '(-i --index-url)'{-i,--index-url}'[set indexserver url]:index server URL:_urls' \
+  '--pre[install pre-releases and development versions of dependencies]' \
+  '(-r --recreate)'{-r,--recreate}'[force recreation of virtual environments]' \
+  '--result-json[write a json file with detailed information about all commands and results involved]:JSON file path:_files -g "*.json"' \
+  '--discover[for python discovery first try the python executables under these paths]:' \
+  '--hashseed[set PYTHONHASHSEED to SEED before running commands]:seed' \
+  '*--force-dep[forces a certain version of one of the dependencies when configuring the virtual environment]:pip requirement' \
+  '--sitepackages[override sitepackages setting to True in all envs]' \
+  '--alwayscopy[override alwayscopy setting to True in all envs]' \
+  '--no-provision[do not perform provision, but fail and if a path was provided write provision metadata as JSON to it]:JSON file path:_files -g "*.json"' \
+  '(-s --skip-missing-interpreters)'{-s,--skip-missing-interpreters}'[do not fail tests for missing interpreters]: :(config true false)' \
+  '--workdir[tox working directory]: :_files -/' \
+  '*: :_guard "^-*" command positional substitution arguments'
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et

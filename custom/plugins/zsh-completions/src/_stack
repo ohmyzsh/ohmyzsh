@@ -1,0 +1,134 @@
+#compdef stack
+# ------------------------------------------------------------------------------
+# Copyright (c) 2015 Github zsh-users - http://github.com/zsh-users
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * Neither the name of the zsh-users nor the
+#       names of its contributors may be used to endorse or promote products
+#       derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL ZSH-USERS BE LIABLE FOR ANY
+# DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# ------------------------------------------------------------------------------
+# Description
+# ------------------------------------------------------------------------------
+#
+# Completion script for stack (https://github.com/commercialhaskell/stack).
+#
+# ------------------------------------------------------------------------------
+# Authors
+# ------------------------------------------------------------------------------
+#
+# * Toshiki Teramura <toshiki.teramura@gmail.com>
+# * Nikita Ursol <nikita20001116@gmail.com>
+#
+# ------------------------------------------------------------------------------
+
+_stack () {
+    _arguments \
+        --help'[show usage information]' \
+        --version'[show version]' \
+        --numeric-version'[show only version number]' \
+        --hpack-numeric-version"[show only hpack's version number]" \
+        '--docker[enable using a Docker container, run "stack --docker-help" for details]' \
+        '--no-docker[disable using a Docker container, run "stack --docker-help" for details]' \
+        '--nix[enable use of a Nix-shell, run "stack --nix-help" for details]' \
+        '--no-nix[disable use of a Nix-shell, run "stack --nix-help" for details]' \
+        --verbosity'[verbosity: silent, error, warn, info, debug]' \
+        {-v,--verbose}'[enable verbose mode: verbosity level "debug"]' \
+        --silent'[enable silent mode: verbosity level "silent"]' \
+        --time-in-log'[enable inclusion of timings in logs, to use diff with logs]' \
+        --no-time-in-log'[disable inclusion of timings in logs, to use diff with logs]' \
+        --stack-root'[absolute path to the global stack root directory]' \
+        --work-dir'[relative path of work directory]' \
+        --system-ghc'[enable using the system installed GHC if available and a matching version]' \
+        --no-system-ghc'[disable using the system installed GHC if available and a matching version]' \
+        --install-ghc'[enable downloading and installing GHC if necessary]' \
+        --no-install-ghc'[disable downloading and installing GHC if necessary]' \
+        --arch'[system architecture, e.g. i386, x86_64]' \
+        --ghc-variant'[specialized GHC variant, e.g. integersimple (incompatible with --system-ghc)]' \
+        --ghc-build'[specialized GHC build, e.g. "gmp4" or "standard" (usually auto-detected)]' \
+        {-j,--jobs}'[number of concurrent jobs to run]' \
+        --extra-include-dirs'[extra directories to check for C header files]' \
+        --extra-lib-dirs'[extra directories to check for libraries]' \
+        --with-gcc'[use custom path to gcc executable]' \
+        --with-hpack'[use custom path to hpack executable]' \
+        --skip-ghc-check'[enable skipping the GHC version and architecture check]' \
+        --no-skip-ghc-check'[disable skipping the GHC version and architecture check]' \
+        --skip-msys'[enable skipping the local MSYS installation (Windows only)]' \
+        --no-skip-msys'[disable skipping the local MSYS installation (Windows only)]' \
+        --local-bin-path'[install binaries to specified location]' \
+        --setup-info-yaml'[alternate URL or relative / absolute path for stack dependencies]' \
+        --modify-code-page'[enable setting the codepage to support UTF-8 (Windows only)]' \
+        --no-modify-code-page'[disable setting the codepage to support UTF-8 (Windows only)]' \
+        --allow-different-user'[enable permission for non-owners to use a stack installation (POSIX only)]' \
+        --no-allow-different-user'[disable permission for non-owners to use a stack installation (POSIX only)]' \
+        --dump-logs'[enable dump the build output logs for local packages to the console]' \
+        --no-dump-logs'[disable dump the build output logs for local packages to the console]' \
+        {--color,--colour}'[specify when to use color in output; accepts "always", "never", "auto"]' \
+        --resolver'[override resolver in project file]' \
+        --terminal'[enable overriding terminal detection in the case of running in a false terminal]' \
+        --no-terminal'[disable overriding terminal detection in the case of running in a false terminal]' \
+        {--stack-colors,--stack-colours}"[specify stack's output styles]" \
+        --terminal-width'[specify the width of the terminal, used for pretty-print messages]' \
+        --stack-yaml'[override project stack.yaml file]' \
+        --lock-file'[specify how to interact with lock files.]' \
+        '*: :__stack_modes'
+}
+
+__stack_modes () {
+    _values \
+        'subcommand' \
+        'build[build the project(s) in this directory/configuration]' \
+        'install[build executables and install to a user path]' \
+        'test[build and test the project(s) in this directory/configuration]' \
+        'bench[build and benchmark the project(s) in this directory/configuration]' \
+        'haddock[generate haddocks for the project(s) in this directory/configuration]' \
+        'new[create a brand new project]' \
+        'templates[show how to find templates available for "stack new".]' \
+        'init[create stack project config from cabal or hpack package specifications]' \
+        'setup[get the appropriate ghc for your project]' \
+        'path[print out handy path information]' \
+        "ls[list command. (supports snapshots, dependencies and stack's styles)]" \
+        'unpack[unpack one or more packages locally]' \
+        'update[update the package index]' \
+        'upgrade[upgrade to the latest stack]' \
+        'upload[upload a package to Hackage]' \
+        'sdist[create source distribution tarballs]' \
+        'dot[visualize your projects dependency graph using Graphviz dot]' \
+        'ghc[run ghc]' \
+        'hoogle[run hoogle, the Haskell API search engine.]' \
+        'exec[execute a command]' \
+        'run[build and run an executable.]' \
+        'ghci[run ghci in the context of package(s) (experimental)]' \
+        "repl[run ghci in the context of package(s) (experimental) (alias for 'ghci')]" \
+        'runghc[run runghc]' \
+        "runhaskell[run runghc (alias for 'runghc')]" \
+        'script[run a Stack Script]' \
+        'eval[evaluate some haskell code inline.]' \
+        'clean[delete build artefacts for the project packages.]' \
+        'purge[delete the project stack working directories.]' \
+        'query[query general build information (experimental)]' \
+        'ide[ide-specific commands]' \
+        'docker[subcommands specific to Docker use]' \
+        'config[subcommands for accessing and modifying configuration values]' \
+        'hpc[subcommands specific to Haskell Program Coverage]'
+
+}
+
+_stack "$@"

@@ -1,0 +1,75 @@
+#compdef optirun
+# ------------------------------------------------------------------------------
+# Copyright (c) 2011 Github zsh-users - http://github.com/zsh-users
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * Neither the name of the zsh-users nor the
+#       names of its contributors may be used to endorse or promote products
+#       derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL ZSH-USERS BE LIABLE FOR ANY
+# DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for the optirun command from bumblebee
+#  (https://github.com/Bumblebee-Project/Bumblebee).
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Christophe-Marie Duquesne <chm.duquesne@gmail.com>
+#
+# ------------------------------------------------------------------------------
+
+local curcontext="$curcontext" state line
+typeset -A opt_args
+
+local -a arguments
+
+arguments=(
+    '--version[output version information]'
+    '(-h --help)'{-h,--help}'[show help]'
+    '(-c --vgl-compress)'{-c,--vgl-compress}'[image transport method]:method:(proxy jpeg rgb xb yuv)'
+    '--failsafe[run a program even if the nvidia card is unavailable]:boolean:(true false)'
+    '--no-failsafe[do not run a program if the nvidia card is unavailable]'
+    '--vgl-options[options to be passed to vglrun (example: +tr)]'
+    '(-q --quiet --silent)'{-q,--quiet,--silent}'[suppress all logging messages]'
+    '(-v --verbose)'{-v,--verbose}'[increase the verbosity level of log messages]'
+    '--debug[set the verbosity level to the maximum]'
+    '(-b --bridge)'{-b,--bridge}'[specify bridge library to use: VirtualGL, Primus or auto]:method:(auto primus virtualgl none)'
+    '(-d --display)'{-d,--display}'[the X display number to use]'
+    '(-C --config)'{-C,--config}'[retrieve settings for Bumblebee from FILE]:file:_files'
+    '(-l --ldpath)'{-l,--ldpath}'[PATH the libraries like libGL.so are searched in]:file:_files'
+    '--primus-ldpath[a colon-separated list of paths which are searched for the primus libGL.so.1]:file:_files'
+    '(-s --socket)'{-s,--socket}'[use FILE for communication with the daemon]:file:_files'
+    '--no-xorg[do not start secondary X server (implies -b none)]'
+    '*::arguments: _normal'
+)
+
+_arguments $arguments
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et

@@ -1,0 +1,42 @@
+#compdef jmeter-plugins
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for jmeter-plugins command line tool 0.4.2
+#  (http://code.google.com/p/jmeter-plugins).
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Julien Nicoulaud <julien.nicoulaud@gmail.com>
+#
+# ------------------------------------------------------------------------------
+
+
+_arguments \
+  '(- 1 *)--help[show help options]' \
+  '--generate-png[generate PNG file containing graph]:PNG file name:_files -g "*.png"' \
+  '--generate-csv[generate CSV file containing graph data]:CSV file name:_files -g "*.csv"' \
+  '--input-jtl[load data from specified JTL file]:JTL file:_files -g "*.jtl"' \
+  '--plugin-type[type of graph to use for results generation]:class:((AggregateReport ThreadsStateOverTime BytesThroughputOverTime HitsPerSecond LatenciesOverTime PerfMon ResponseCodesPerSecond ResponseTimesDistribution ResponseTimesOverTime ResponseTimesPercentiles ThroughputOverTime ThroughputVsThreads TimesVsThreads TransactionsPerSecond))' \
+  '--width[set graph width]:graph width (pixels)' \
+  '--height[set graph height]::graph height (pixels)' \
+  '--granulation[granulation time for samples]:time (ms)' \
+  '--relative-times[use relative X axis times, no will set absolute times]: :((yes no))' \
+  '--aggregate-rows[aggregate all rows into one]: :((yes no))' \
+  '--paint-gradient[paint gradient background]: :((yes no))' \
+  '--paint-zeroing[paint zeroing lines]: :((yes no))' \
+  '--prevent-outliers[prevent outliers on distribution graph]: :((yes no))' \
+  '--limit-rows[limit number of points in row]:number of points' \
+  '--force-y[force Y axis limit]:limit' \
+  '--hide-low-counts[hide points with sample count below limit]:limit'
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et

@@ -1,0 +1,134 @@
+#compdef bundle
+# ------------------------------------------------------------------------------
+# Copyright (c) 2016 Github zsh-users - http://github.com/zsh-users
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * Neither the name of the zsh-users nor the
+#       names of its contributors may be used to endorse or promote products
+#       derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL ZSH-USERS BE LIABLE FOR ANY
+# DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for Bundler (http://gembundler.com).
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Bruno Michel (https://github.com/nono)
+#
+# ------------------------------------------------------------------------------
+
+
+local curcontext="$curcontext" state line _gems _opts ret=1
+
+_arguments -C -A "-v" -A "--version" \
+	'(- 1 *)'{-v,--version}'[display version information]' \
+	'1: :->cmds' \
+	'*:: :->args' && ret=0
+
+case $state in
+	cmds)
+		_values "bundle command" \
+			"install[Install the gems specified by the Gemfile or Gemfile.lock]" \
+			"update[Update dependencies to their latest versions]" \
+			"package[Package the .gem files required by your application]" \
+			"exec[Execute a script in the context of the current bundle]" \
+			"config[Specify and read configuration options for bundler]" \
+			"add[Add the named gem to the Gemfile and run bundle install]" \
+			"binstubs[Generate binstubs for executables in a gem]" \
+			"check[Determine whether the requirements for your application are installed]" \
+			"list[Show all of the gems in the current bundle]" \
+			"show[Show the source location of a particular gem in the bundle]" \
+			"console[Start an IRB session in the context of the current bundle]" \
+			"open[Open an installed gem in the editor]" \
+			"viz[Generate a visual representation of your dependencies]" \
+			"init[Generate a simple Gemfile, placed in the current directory]" \
+			"gem[Create a simple gem, suitable for development with bundler]" \
+			"help[Describe available tasks or one specific task]" \
+			"platform[Displays platform compatibility information]" \
+			"clean[Clean up unused gems in your Bundler directory]" \
+			"doctor[Display warnings about common problems]" \
+			"remove[Removes gems from the Gemfile]" \
+			"outdated[Show all of the outdated gems in the current bundle]"
+		ret=0
+		;;
+	args)
+		case $line[1] in
+			help)
+				_values 'commands' 'install' 'update' 'package' 'exec' 'config' 'add' 'binstubs' 'check' 'list' 'show' 'console' 'open' 'viz' 'init' 'gem' 'help' 'platform' 'clean' 'doctor' 'remove' 'outdated' && ret=0
+				;;
+			install)
+				_policies=('HighSecurity' 'MediumSecurity' 'LowSecurity' 'AlmostNoSecurity' 'NoSecurity')
+				_arguments \
+					'(--no-color)--no-color[disable colorization in output]' \
+					'(--local)--local[do not attempt to connect to rubygems.org]' \
+					'(--quiet)--quiet[only output warnings and errors]' \
+					'(--gemfile)--gemfile=-[use the specified gemfile instead of Gemfile]:gemfile' \
+					'(--system)--system[install to the system location]' \
+					'(--deployment)--deployment[install using defaults tuned for deployment environments]' \
+					'(--frozen)--frozen[do not allow the Gemfile.lock to be updated after this install]' \
+					'(--path)--path=-[specify a different path than the system default]:path:_files' \
+					'(--binstubs)--binstubs=-[generate bin stubs for bundled gems to ./bin]:directory:_files' \
+					'(--without)--without=-[exclude gems that are part of the specified named group]:groups' \
+					'(--with)--with=-[include gems that are part of the specified named group]:groups' \
+					'(--clean)--clean[remove any gems not present in the current Gemfile]' \
+					'(--full-index)--full-index[download and cache the index file of all gems]' \
+					'(--jobs)--jobs=-[install gems parallelly]:number' \
+					'(--force)--force[force download every gem]' \
+					'(--no-cache)--no-cache[do not update the cache in vendor/cache with newly installed gems]' \
+					'(--no-prune)--no-prune[do not remove stale gem from cache after installation]' \
+					'(--retry)--retry=-[number of times to retry failed network or git requests]:number' \
+					'(--sheband)--shebang=-[specify ruby executable to execute scripts]:ruby' \
+					'(--standalone)--standalone=-[create standalone bundles]:groups' \
+					"(--trust-policy)--trust-policy=-[apply the Rubygems security policy]:arg:($_policies)"
+				ret=0
+				;;
+			exec)
+				_normal && ret=0
+				;;
+			(open|show)
+				_gems=( $(bundle show 2> /dev/null | sed -e '/^  \*/!d; s/^  \* \([^ ]*\) .*/\1/') )
+				if [[ $_gems != "" ]]; then
+					_values 'gems' $_gems && ret=0
+				fi
+				;;
+			*)
+				_opts=(  $(bundle help $line[1] | sed -e '/^  \[-/!d; s/^  \[\(-[^=]*\)=.*/\1/') )
+				_opts+=( $(bundle help $line[1] | sed -e '/^  -/!d; s/^  \(-.\), \[\(-[^=]*\)=.*/\1 \2/') )
+				if [[ $_opts != "" ]]; then
+					_values 'options' $_opts && ret=0
+				fi
+				;;
+		esac
+		;;
+esac
+
+return ret
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et

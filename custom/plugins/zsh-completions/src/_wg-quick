@@ -1,0 +1,25 @@
+#compdef wg-quick
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for wg-quick (a script for easy managemant of wireguard
+#  VPN tunnels) (https://www.wireguard.com/)
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Nicolas Lenz <nicolas@eisfunke.com>
+#
+# ------------------------------------------------------------------------------
+
+# The possible modes
+local modes=('up\:"bring a wireguard interface up"'\
+  'down\:"tear down and remove a wireguard interface"'\
+  'save\:"save configuration of a running wireguard interface"')
+
+# 1: Complete mode
+# 2: Complete interface with all .conf files in /etc/wireguard without the filename extension.
+_arguments "1:mode:((${modes}))"\
+  '2:interface:_path_files -W /etc/wireguard -g "*.conf(^/:r)"'

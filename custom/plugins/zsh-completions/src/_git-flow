@@ -1,0 +1,444 @@
+#compdef git-flow
+#description Git Flow branching model
+# ------------------------------------------------------------------------------
+# Copyright (c) 2010-2015 Justin Hileman
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+# IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+# DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+# OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
+# OR OTHER DEALINGS IN THE SOFTWARE.
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for git-flow (http://github.com/nvie/gitflow).
+#
+#  Source: https://github.com/bobthecow/git-flow-completion
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Justin Hileman (https://github.com/bobthecow)
+#  * Yusuke Muraoka (https://github.com/jbking)
+#  * Vincent Driessen (https://github.com/nvie)
+#  * Zifei Tong (https://github.com/chevalun)
+#  * Ben O'Hara (https://github.com/benohara)
+#
+# ------------------------------------------------------------------------------
+
+
+_git-flow ()
+{
+	local curcontext="$curcontext" state line
+	typeset -A opt_args
+
+	_arguments -C \
+		':command:->command' \
+		'*::options:->options'
+
+	case $state in
+		(command)
+
+			local -a subcommands
+			subcommands=(
+				'init:Initialize a new git repo with support for the branching model.'
+				'feature:Manage your feature branches.'
+				'release:Manage your release branches.'
+				'hotfix:Manage your hotfix branches.'
+				'support:Manage your support branches.'
+				'version:Shows version information.'
+			)
+			_describe -t commands 'git flow' subcommands
+		;;
+
+		(options)
+			case $line[1] in
+
+				(init)
+					_arguments \
+						-f'[Force setting of gitflow branches, even if already configured]' \
+						-d'[Use default branch naming conventions and prefixes]'
+					;;
+
+					(version)
+					;;
+
+					(hotfix)
+						__git-flow-hotfix
+					;;
+
+					(release)
+						__git-flow-release
+					;;
+
+					(feature)
+						__git-flow-feature
+					;;
+
+          (support)
+						__git-flow-support
+					;;
+
+			esac
+		;;
+	esac
+}
+
+__git-flow-release ()
+{
+	local curcontext="$curcontext" state line
+	typeset -A opt_args
+
+	_arguments -C \
+		':command:->command' \
+		'*::options:->options'
+
+	case $state in
+		(command)
+
+			local -a subcommands
+			subcommands=(
+				'start:Start a new release branch.'
+				'finish:Finish a release branch.'
+				'list:List all your release branches. (Alias to `git flow release`)'
+				'publish:Publish this release branch to origin.`)'
+				'track:Track a release branch from origin.`)'
+			)
+			_describe -t commands 'git flow release' subcommands
+			_arguments \
+				-v'[Verbose (more) output]'
+		;;
+
+		(options)
+			case $line[1] in
+
+				(start)
+					_arguments \
+						-F'[Fetch from origin before performing finish]'\
+						':version:__git_flow_version_list'
+				;;
+
+				(finish)
+					_arguments \
+						-F'[Fetch from origin before performing finish]' \
+						-s'[Sign the release tag cryptographically]'\
+						-u'[Use the given GPG-key for the digital signature (implies -s)]'\
+						-m'[Use the given tag message]'\
+						-n'[Don'\''t tag this release]'\
+						-p'[Push to $ORIGIN after performing finish]'\
+						-k'[Keep branch after performing finish]'\
+						':version:__git_flow_version_list'
+				;;
+
+				(publish)
+					_arguments \
+						':version:__git_flow_version_list'
+				;;
+
+				(track)
+					_arguments \
+						':version:__git_flow_version_list'
+				;;
+
+
+
+				*)
+					_arguments \
+						-v'[Verbose (more) output]'
+				;;
+			esac
+		;;
+	esac
+}
+
+__git-flow-hotfix ()
+{
+	local curcontext="$curcontext" state line
+	typeset -A opt_args
+
+	_arguments -C \
+		':command:->command' \
+		'*::options:->options'
+
+	case $state in
+		(command)
+
+			local -a subcommands
+			subcommands=(
+				'start:Start a new hotfix branch.'
+				'finish:Finish a hotfix branch.'
+				'list:List all your hotfix branches. (Alias to `git flow hotfix`)'
+				'publish:Publish this hotfix branch to origin`)'
+			)
+			_describe -t commands 'git flow hotfix' subcommands
+			_arguments \
+				-v'[Verbose (more) output]'
+		;;
+
+		(options)
+			case $line[1] in
+
+				(start)
+					_arguments \
+						-F'[Fetch from origin before performing finish]'\
+						':hotfix:__git_flow_version_list'\
+						':branch-name:__git_branch_names'
+				;;
+
+				(finish)
+					_arguments \
+						-F'[Fetch from origin before performing finish]' \
+						-s'[Sign the release tag cryptographically]'\
+						-u'[Use the given GPG-key for the digital signature (implies -s)]'\
+						-m'[Use the given tag message]'\
+						-p'[Push to $ORIGIN after performing finish]'\
+						':hotfix:__git_flow_hotfix_list'
+				;;
+
+				(publish)
+					_arguments \
+						':hotfix:__git_flow_hotfix_list'
+				;;
+
+				*)
+					_arguments \
+						-v'[Verbose (more) output]'
+				;;
+			esac
+		;;
+	esac
+}
+
+__git-flow-feature ()
+{
+	local curcontext="$curcontext" state line
+	typeset -A opt_args
+
+	_arguments -C \
+		':command:->command' \
+		'*::options:->options'
+
+	case $state in
+		(command)
+
+			local -a subcommands
+			subcommands=(
+				'start:Start a new feature branch.'
+				'finish:Finish a feature branch.'
+				'list:List all your feature branches. (Alias to `git flow feature`)'
+				'publish:Publish this feature branch to origin.'
+				'track:Track a feature branch from origin.'
+				'diff:Show a diff of changes since this feature branched off.'
+				'rebase:Rebase a feature branch on top of develop.'
+        'checkout:Check out (switch to) the given feature branch.'
+				'pull:Pull a feature branch from a remote peer.'
+			)
+			_describe -t commands 'git flow feature' subcommands
+			_arguments \
+				-v'[Verbose (more) output]'
+		;;
+
+		(options)
+			case $line[1] in
+
+				(start)
+					_arguments \
+						-F'[Fetch from origin before performing finish]'\
+						':feature:__git_flow_feature_list'\
+						':branch-name:__git_branch_names'
+				;;
+
+				(finish)
+					_arguments \
+						-F'[Fetch from origin before performing finish]' \
+						-r'[Finish branch by rebasing first]'\
+						-k'[Keep branch after performing finish]'\
+						-D'[Force delete feature branch after finish]'\
+						':feature:__git_flow_feature_list'
+				;;
+
+				(publish)
+					_arguments \
+						':feature:__git_flow_feature_list'\
+				;;
+
+				(track)
+					_arguments \
+						':feature:__git_flow_feature_list'\
+				;;
+
+				(diff)
+					_arguments \
+						':branch:__git_branch_names'\
+				;;
+
+				(rebase)
+					_arguments \
+						-i'[Do an interactive rebase]' \
+						':branch:__git_branch_names'
+				;;
+
+				(checkout)
+					_arguments \
+						':branch:__git_flow_feature_list'\
+				;;
+
+				(pull)
+					_arguments \
+						':remote:__git_remotes'\
+						':branch:__git_branch_names'
+				;;
+
+				*)
+					_arguments \
+						-v'[Verbose (more) output]'
+				;;
+			esac
+		;;
+	esac
+}
+
+__git-flow-support ()
+{
+	local curcontext="$curcontext" state line
+	typeset -A opt_args
+
+	_arguments -C \
+		':command:->command' \
+		'*::options:->options'
+
+	case $state in
+		(command)
+
+			local -a subcommands
+			subcommands=(
+				'start:Start a new support branch.'
+				'list:List all your support branches. (Alias to `git flow support`)'
+			)
+			_describe -t commands 'git flow support' subcommands
+			_arguments \
+				-v'[Verbose (more) output]'
+		;;
+
+		(options)
+			case $line[1] in
+
+				(start)
+					_arguments \
+						-F'[Fetch from origin before performing finish]'\
+						':feature:__git_flow_support_list'\
+						':branch-name:__git_branch_names'
+				;;
+
+				*)
+					_arguments \
+						-v'[Verbose (more) output]'
+				;;
+			esac
+		;;
+	esac
+}
+
+__git_flow_version_list ()
+{
+	local expl
+	declare -a versions
+
+	versions=(${${(f)"$(_call_program versions git flow release list 2> /dev/null | tr -d ' |*')"}})
+	__git_command_successful || return
+
+	_wanted versions expl 'version' compadd $versions
+}
+
+__git_flow_feature_list ()
+{
+	local expl
+	declare -a features
+
+	features=(${${(f)"$(_call_program features git flow feature list 2> /dev/null | tr -d ' |*')"}})
+	__git_command_successful || return
+
+	_wanted features expl 'feature' compadd $features
+}
+
+__git_remotes () {
+	local expl gitdir remotes
+
+	gitdir=$(_call_program gitdir git rev-parse --git-dir 2>/dev/null)
+	__git_command_successful || return
+
+	remotes=(${${(f)"$(_call_program remotes git config --get-regexp '"^remote\..*\.url$"')"}//#(#b)remote.(*).url */$match[1]})
+	__git_command_successful || return
+
+	# TODO: Should combine the two instead of either or.
+	if (( $#remotes > 0 )); then
+		_wanted remotes expl remote compadd $* - $remotes
+	else
+		_wanted remotes expl remote _files $* - -W "($gitdir/remotes)" -g "$gitdir/remotes/*"
+	fi
+}
+
+__git_flow_hotfix_list ()
+{
+	local expl
+	declare -a hotfixes
+
+	hotfixes=(${${(f)"$(_call_program hotfixes git flow hotfix list 2> /dev/null | tr -d ' |*')"}})
+	__git_command_successful || return
+
+	_wanted hotfixes expl 'hotfix' compadd $hotfixes
+}
+
+__git_flow_support_list ()
+{
+	local expl
+	declare -a support
+
+	support=(${${(f)"$(_call_program support git flow support list 2> /dev/null | tr -d ' |*')"}})
+	__git_command_successful || return
+
+	_wanted hotfixes expl 'support' compadd $support
+}
+
+
+__git_branch_names () {
+	local expl
+	declare -a branch_names
+
+	branch_names=(${${(f)"$(_call_program branchrefs git for-each-ref --format='"%(refname)"' refs/heads 2>/dev/null)"}#refs/heads/})
+	__git_command_successful || return
+
+	_wanted branch-names expl branch-name compadd $* - $branch_names
+}
+
+__git_command_successful () {
+	if (( ${#pipestatus:#0} > 0 )); then
+		_message 'not a git repository'
+		return 1
+	fi
+	return 0
+}
+
+_git-flow "$@"
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et

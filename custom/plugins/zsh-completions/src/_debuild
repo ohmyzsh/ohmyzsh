@@ -1,0 +1,40 @@
+#compdef debuild
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for debuild 2.10.
+#
+#  Status: incomplete.
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Julien Nicoulaud <julien.nicoulaud@gmail.com>
+#
+# ------------------------------------------------------------------------------
+
+
+# FIXME --noconf is only allowed in first position
+_arguments \
+  '(- 1 *)'{-h,--help}'[show help]' \
+  '(- 1 *)--version[show version and copyright information]' \
+  {--no-conf,--noconf}'[don'\''t read devscripts config files]' \
+  {-r-,--rootcmd=}'[command used to become root if debuild not setuid root (default: fakeroot)]: :_command_names' \
+  '*'{-e-,--preserve-envvar=}'[preserve environment variable]: :_vars' \
+  '(-e --preserve-envvar)--preserve-env[preserve all environment vars (except PATH)]' \
+  '*'{-e-,--set-envvar=}'[preserve environment variable]: :_vars -qS=' \
+  '--prepend-path=[prepend to the sanitised PATH]: :_files -/' \
+  '(-D)-d[skip checking of build dependencies]' \
+  '(-d)-D[force checking of build dependencies]' \
+  '--check-dirname-level[how much to check directory names]:level:((0\:never 1\:only\ if\ program\ changes\ directory\ \(default\) 2\:always))' \
+  '--check-dirname-regex[Perl regex defining matching directory names, the string PACKAGE will be replaced by the package name (default: '\''PACKAGE(-.+)?'\'')]:regex'
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et

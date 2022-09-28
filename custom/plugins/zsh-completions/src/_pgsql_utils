@@ -1,0 +1,590 @@
+#compdef psql pg_dump pg_dumpall pg_restore createdb dropdb vacuumdb createuser dropuser initdb
+# ------------------------------------------------------------------------------
+# Copyright (c) 2016 Github zsh-users - http://github.com/zsh-users, Dominic Mitchell, Johann 'Myrkraverk' Oskarsson, Daniel Serodio, J Smith
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * Neither the name of the zsh-users nor the
+#       names of its contributors may be used to endorse or promote products
+#       derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL ZSH-USERS BE LIABLE FOR ANY
+# DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for PostgreSQL utils (http://postgresql.org).
+#
+#  Source: http://www.zsh.org/mla/users/2004/msg01006.html
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Dominic Mitchell <dom+zsh@happygiraffe.net>
+#
+#  * Johann 'Myrkraverk' Oskarsson <johann@2ndquadrant.com>
+#
+#  * Daniel Serodio <dserodio@gmail.com> pg_dumpall completion
+#
+#  * J Smith <dark.panda@gmail.com> various completion additions
+#
+# ------------------------------------------------------------------------------
+
+
+_pgsql_get_identity () {
+    _pgsql_user=${(v)opt_args[(i)-U|--username]}
+    _pgsql_port=${(v)opt_args[(i)-p|--port]}
+    _pgsql_host=${(v)opt_args[(i)-h|--host]}
+
+    _pgsql_params=(
+        ${_pgsql_user:+"--username=$_pgsql_user"}
+        ${_pgsql_port:+"--port=$_pgsql_port"}
+        ${_pgsql_host:+"--host=$_pgsql_host"}
+    )
+}
+
+# Postgres Allows specifying the path to the directory containing the
+# socket as well as a hostname.
+_pgsql_host_or_dir() {
+    _alternative \
+        'hosts:host:_hosts' \
+        'directories:directory:_directories'
+}
+
+# This creates a port completion list based on socket files on the
+# local computer.  Be default, Postgres puts them in /tmp/ but Debian
+# changed that to /var/run/postgresql/ in their packages.
+_pgsql_ports() {
+    compadd "$@" - /tmp/.s.PGSQL.<->(N:e) /var/run/postgresql/.s.PGSQL.<->(N:e)
+}
+
+_pgsql_users () {
+    local _pgsql_user _pgsql_port _pgsql_host _pgsql_params
+    local _pgsql_user_sql
+    _pgsql_get_identity
+
+    # We use _pgsql_port and _pgsql_host directly here instead of
+    # _pgsql_params so as to not pick up a partially completed
+    # username.
+    _pgsql_params=(
+        ${_pgsql_port:+"--port=$_pgsql_port"}
+        ${_pgsql_host:+"--host=$_pgsql_host"}
+    )
+
+    _pgsql_user_sql='select r.rolname from pg_catalog.pg_roles r where r.rolcanlogin = true'
+
+    compadd "$@" - $( psql $_pgsql_params[@] -XAqt -c $_pgsql_user_sql template1 2>/dev/null )
+
+}
+
+_pgsql_tables () {
+    local _pgsql_user _pgsql_port _pgsql_host _pgsql_params
+    _pgsql_get_identity
+
+    # Need to pull out the database name from the existing arguments.
+    # This is going to vary between commands.  Thankfully, it's only
+    # used by pg_dump, which always has the dbname in arg1.  If it's
+    # not present it defaults to ${PGDATABASE:-$LOGNAME}, which
+    # matches (I think) the PostgreSQL behaviour.
+
+    local db
+    db=${line[1]:-${PGDATABASE:-$LOGNAME}}
+
+    ## Instead of parsing the output of the psql \ commands, we look
+    ## up the tables ourselves.  The following query has been tested
+    ## with Postgres 8.2 - 9.2.
+
+    local _pgsql_table_sql
+    _pgsql_table_sql="select n.nspname || '.' || c.relname \
+	from pg_catalog.pg_class c \
+		left join pg_catalog.pg_namespace n on n.oid = c.relnamespace \
+	where c.relkind in ('r', '') \
+		and n.nspname <> 'pg_catalog' \
+		and n.nspname <> 'information_schema' \
+		and n.nspname !~ '^pg_toast' \
+		and pg_catalog.pg_table_is_visible( c.oid ) \
+	order by 1"
+
+    compadd "$@" - \
+        $( psql $_pgsql_params[@] -AXqt -c $_pgsql_table_sql $db 2>/dev/null )
+}
+
+_pgsql_schemas () {
+    local _pgsql_user _pgsql_port _pgsql_host _pgsql_params
+    _pgsql_get_identity
+
+    local db
+    db=${line[1]:-${PGDATABASE:-$LOGNAME}}
+
+    local _pgsql_schema_sql="select n.nspname \
+        from pg_catalog.pg_namespace n \
+        where n.nspname !~ '^pg_' \
+            and n.nspname <> 'information_schema' \
+        order by 1;"
+
+    compadd "$@" - \
+        $( psql $_pgsql_params[@] -AXqt -c $_pgsql_schema_sql $db 2>/dev/null )
+}
+
+_pgsql_databases () {
+    local _pgsql_user _pgsql_port _pgsql_host _pgsql_params
+    _pgsql_get_identity
+
+    local _pgsql_services _pgsql_service_files
+    _pgsql_service_files=(~/.pg_service.conf)
+    (( $+commands[pg_config] )) && _pgsql_service_files+=$(pg_config --sysconfdir)/pg_service.conf
+
+    _pgsql_services=$( grep -h '^\[.*\]' $_pgsql_service_files 2>/dev/null \
+                         | sed -e 's/^\[/service=/' -e 's/\].*$//' )
+
+    local _pgsql_db_sql
+    _pgsql_db_sql="select d.datname from pg_catalog.pg_database d \
+	where d.datname <> 'template0'"
+
+    compadd "$@" - \
+            ${(f)_pgsql_services} \
+            $( psql $_pgsql_params[@] -AXtq -c $_pgsql_db_sql template1 2>/dev/null )
+}
+
+_pgsql_encodings () {
+    local _pgsql_user
+    _pgsql_get_identity
+
+    local _pgsql_db_sql
+    _pgsql_db_sql="select pg_encoding_to_char(i) from generate_series(0,100) i;"
+
+    compadd "$@" - $( psql $_pgsql_params[@] -AXtq -c $_pgsql_db_sql template1  )
+}
+
+
+##
+## The actual completion code for the commands
+##
+
+_psql () {
+    local curcontext="$curcontext" state line expl
+    typeset -A opt_args
+
+    _arguments -C -s "-*" \
+        "$_pgsql_common_opts[@]" \
+        {-c+,--command=}':execute SQL command:' \
+        {-d+,--dbname=}':database to connect to:_pgsql_databases' \
+        {-f+,--file=}':SQL file to read:_files' \
+        {-l,--list}'[list databases]' \
+        {-v+,--set=,--variable=}':set SQL variable:' \
+        {-V,--version}'[output version information, then exit]' \
+        {-X,--no-psqlrc}'[don'\''t read ~/.psqlrc]' \
+        {-1,--single-transaction}'[restore as a single transaction]' \
+        {-\?,--help=}':display help:' \
+        \
+        {-a,--echo-all}'[print commands read]' \
+        {-b,--echo-errors}'[echo failed commands]' \
+        {-e,--echo-queries}'[display queries submitted]' \
+        {-E,--echo-hidden}'[display hidden queries]' \
+        {-L,--log-file=}'[send session log to file]' \
+        {-n,--no-readline}'[disable enhanced command line editing (readline)]' \
+        {-o+,--output=}':query output:_files' \
+        {-q,--quiet}'[non verbose mode]' \
+        {-s,--single-step}'[prompt before each query]' \
+        {-S,--single-line}'[newline sends query]' \
+        \
+        {-A,--no-align}'[unaligned output mode]' \
+        --csv'[CSV (Comma-Separated Values) table output mode]' \
+        {-F+,--field-separator=}':field separator char:' \
+        {-H,--html}'[HTML output]' \
+        {-P+,--pset=}':set psql variable:' \
+        {-R+,--record-separator=}':record separator char:' \
+        {-t,--tuples-only}'[don'\''t display header/footer]' \
+        {-T+,--table-attr=}':HTML table options:' \
+        {-x,--expanded}'[one column per line]' \
+        {-z,--field-separator-zero}'[set field separator for unaligned output to zero byte]' \
+        {-0,--record-separator-zero}'[set record separator for unaligned output to zero byte]' \
+        -u'[prompt for username/password]' \
+        ':PostgreSQL database:_pgsql_databases' \
+        ':PostgreSQL user:_pgsql_users'
+}
+
+_pg_dump () {
+    local curcontext="$curcontext" state line expl
+    typeset -A opt_args
+
+    _arguments -C -s \
+        "$_pgsql_common_opts[@]" \
+        {-f+,--file=}':output file:_files' \
+        {-F+,--format=}':output format:_values "format" "p[plain text]" "t[tar]" "c[custom]"' \
+        {-j,--jobs=}'[use this many parallel jobs to dump]' \
+        {-v,--verbose}'[verbose mode]' \
+        {-V,--version}'[output version information, then exit]' \
+        {-Z+,--compress=}':compression level:_values "level" 9 8 7 6 5 4 3 2 1 0' \
+        --lock-wait-timeout='[fail after waiting TIMEOUT for a table lock]' \
+        --no-sync'[do not wait for changes to be written safely to disk]' \
+        {-\?,--help}'[display help]' \
+        \
+        {-a,--data-only}'[dump only data]' \
+        {-b,--blobs}'[dump blobs as well]' \
+        {-B,--no-blobs}'[exclude large objects in dump]' \
+        {-c,--clean}'[include clean cmds in dump]' \
+        {-C,--create}'[include createdb cmds in dump]' \
+        {-e+,--extension=}'[dump the specified extension(s) only]' \
+        {-E+,--encoding=}':database encoding:_pgsql_encodings' \
+        {-n+,--schema=}':schema to dump:_pgsql_schemas' \
+        {-N+,--exclude-schema=}':schema to NOT dump:_pgsql_schemas' \
+        {-O,--no-owner}'[don'\''t recreate as same owner]' \
+        {-s,--schema-only}'[no data, only schema]' \
+        {-S+,--superuser=}':superuser name:_pgsql_users' \
+        {-t+,--table=}':table to dump:_pgsql_tables' \
+        {-T+,--exclude-table=}':table to NOT dump:_pgsql_tables' \
+        {-x,--no-{acl,privileges}}'[don'\''t dump ACLs]' \
+        --binary-upgrade'[for use by upgrade utilities only]' \
+        {-D,--{attribute,column}-inserts}'[use INSERT (cols) not COPY]' \
+        --disable-dollar-quoting'[disable dollar quoting, use SQL standard quoting]' \
+        --disable-triggers'[disable triggers during data-only restore]' \
+        --enable-row-security'[enable row security (dump only content user has access to)]' \
+        --exclude-table-data='[do NOT dump data for the named table(s)]' \
+        --if-exists'[use IF EXISTS when dropping objects]' \
+        --include-foreign-data='[include data of foreign servers]' \
+        --inserts'[dump data as INSERT commands, rather than COPY]' \
+        --load-via-partition-root'[load partitions via the root table]' \
+        --no-comments'[do not dump comments]' \
+        --no-publications'[do not dump publications]' \
+        --no-security-labels'[do not dump security label assignments]' \
+        --no-subscriptions'[do not dump subscriptions]' \
+        --no-synchronized-snapshots'[do not use synchronized snapshots in parallel jobs]' \
+        --no-tablespaces'[do not dump tablespace assignments]' \
+        --no-toast-compression'[do not dump TOAST compression methods]' \
+        --no-unlogged-table-data'[do not dump unlogged table data]' \
+        --on-conflict-do-nothing'[add ON CONFLICT DO NOTHING to INSERT commands]' \
+        --quote-all-identifiers'[quote all identifiers, even if not key words]' \
+        --rows-per-insert=['number of rows per INSERT'] \
+        --section=':dump named section:_values "section" pre-data data post-data' \
+        --serializable-deferrable'[wait until the dump can run without anomalies]' \
+        --snapshot='[use given snapshot for the dump]' \
+        --strict-names'[require table and/or schema include patterns to match at least one entity each]' \
+        --use-set-session-authorization'[use SET SESSION AUTHORIZATION commands instead of ALTER OWNER]' \
+        \
+        {-i,--ignore-version}'[ignore version mismatch]' \
+        {-o,--oids}'[dump objects identifiers for every table]' \
+        {-R,--no-reconnect}'[don'\''t output connect]' \
+        -X+':option:_values "option" use-set-session-authorization disable-triggers' \
+        ':PostgreSQL database:_pgsql_databases'
+}
+
+_pg_restore () {
+    local curcontext="$curcontext" state line expl
+    typeset -A opt_args
+
+    _arguments -C -s \
+        "$_pgsql_common_opts[@]" \
+        {-d+,--dbname=}':database to connect to:_pgsql_databases' \
+        {-f+,--file=}':output file:_files' \
+        {-F+,--format=}':output format:_values "format" "p[plain text]" "t[tar]" "c[custom]"' \
+        {-l,--list}'[list databases]' \
+        {-v,--verbose}'[verbose mode]' \
+        {-V,--version}'[output version information, then exit]' \
+        {-\?,--help}'[display help]' \
+        \
+        {-a,--data-only}'[dump only data]' \
+        {-c,--clean}'[include clean (drop) cmds before recreating]' \
+        {-C,--create}'[include createdb cmds in dump]' \
+        {-e,--exit-on-error}'[exit on error, default is to continue]' \
+        {-I,--index=}':index name:' \
+        {-j,--jobs=}':use this many parallel jobs to restore:' \
+        {-L,--use-list=}':use table of contents from this file for selecting/ordering output:' \
+        {-n,--schema=}':restore only objects in this schema:' \
+        {-O,--no-owner}'[skip restoration of object ownership]' \
+        {-P,--function=}':restore named function:' \
+        {-s,--schema-only}'[restore only the schema, no data]' \
+        {-S,--superuser=}':superuser user name to use for disabling triggers:' \
+        {-t,--table=}':restore named table:' \
+        {-T,--trigger=}':restore named trigger:' \
+        {-x,--no-privileges}'[skip restoration of access privileges (grant/revoke)]' \
+        {-1,--single-transaction}'[restore as a single transaction]' \
+        --disable-triggers'[disable triggers during data-only restore]' \
+        --enable-row-security'[enable row security]' \
+        --if-exists'[use IF EXISTS when dropping objects]' \
+        --no-comments'[do not restore comments]' \
+        --no-data-for-failed-tables'[do not restore data of tables that could not be created]' \
+        --no-publications'[do not restore publications]' \
+        --no-security-labels'[do not restore security labels]' \
+        --no-subscriptions'[do not restore subscriptions]' \
+        --no-tablespaces'[do not restore tablespace assignments]' \
+        --section=':dump named section:_values "section" pre-data data post-data' \
+        --strict-names'[require table and/or schema include patterns to match at least one entity each]' \
+        --use-set-session-authorization'[use SET SESSION AUTHORIZATION commands instead of ALTER OWNER commands to set ownership]' \
+        \
+        {-b,--blobs}'[include large objects in dump]' \
+        {-B,--no-blobs}'[exclude large objects in dump]' \
+        \
+        "1: :_files"
+}
+
+_pg_dumpall () {
+    local curcontext="$curcontext" state line expl
+    typeset -A opt_args
+
+    _arguments -C -s \
+        "$_pgsql_common_opts[@]" \
+        {-f+,--file=}':output file:_files' \
+        {-v,--verbose}'[verbose mode]' \
+        {-V,--version}'[output version information, then exit]' \
+        --lock-wait-timeout='[fail after waiting TIMEOUT for a table lock]' \
+        {-\?,--help}'[display help]' \
+        \
+        {-a,--data-only}'[dump only data]' \
+        {-c,--clean}'[include clean (drop) cmds before recreating]' \
+        {-E,--encoding=}'[dump the data in encoding]' \
+        {-g,--globals-only}'[dump only global objects, no databases]' \
+        {-O,--no-owner}'[don'\''t recreate as same owner]' \
+        {-r,--roles-only}'[no databases or tablespaces, only roles]' \
+        {-s,--schema-only}'[no data, only schema]' \
+        {-S+,--superuser=}':superuser name:_pgsql_users' \
+        {-t,--tablespaces-only}'[no databases or roles, only tablespaces]' \
+        {-x,--no-privileges}'[don'\''t dump ACLs]' \
+        --binary-upgrade'[for use by upgrade utilities only]' \
+        --column-inserts'[use INSERT with column names not COPY]' \
+        --disable-dollar-quoting'[disable dollar quoting, use SQL standard quoting]' \
+        --disable-triggers'[disable triggers during data-only restore]' \
+        --exclude-database=':exclude databases:_pgsql_databases' \
+        --extra-float-digits='[override default setting for extra_float_digits]' \
+        --if-exists'[use IF EXISTS when dropping objects]' \
+        --inserts'[use INSERT not COPY]' \
+        --load-via-partition-root'[pload partitions via the root table]' \
+        --no-comments'[do not dump comments]' \
+        --no-publications'[do not dump publications]' \
+        --no-role-passwords'[do not dump passwords for roles]' \
+        --no-security-labels'[do not dump security label assignments]' \
+        --no-subscriptions'[do not dump subscriptions]' \
+        --no-sync'[do not wait for changes to be written safely to disk]' \
+        --no-tablespaces'[do not dump tablespace assignments]' \
+        --no-toast-compression'[do not dump TOAST compression methods]' \
+        --no-unlogged-table-data'[do not dump unlogged table data]' \
+        --on-conflict-do-nothing'[add ON CONFLICT DO NOTHING to INSERT commands]' \
+        --quote-all-identifiers'[quote all identifiers, even if not key words]' \
+        --rows-per-insert='[number of rows per INSERT]' \
+        --use-set-session-authorization'[use SET SESSION AUTHORIZATION cmds instead of ALTER OWNER]' \
+        {-o,--oids}'[dump objects identifiers for every table]' \
+}
+
+_createdb () {
+    local curcontext="$curcontext" state line expl
+    typeset -A opt_args
+
+    _arguments -C -s \
+        "$_pgsql_common_opts[@]" \
+        {-D+,--tablespace=}'[default tablespace for the database]' \
+        {-e,--echo}'[display SQL queries]' \
+        {-E+,--encoding=}':database encoding:_pgsql_encodings' \
+        {-l+,--locale=}'[locale settings for the database]' \
+        --lc-collate='[LC_COLLATE setting for the database]' \
+        --lc-ctype='[LC_CTYPE setting for the database]' \
+        {-O+,--owner=}':database user to own the new database:_pgsql_users' \
+        {-T+,--template=}':database template:_pgsql_databases' \
+        '--version[output version information, then exit]' \
+        {-\?,--help}'[display help]' \
+        \
+        --maintenance-db=':alternate maintenance database:_pgsql_databases' \
+        {-q,--quiet}'[non verbose mode]' \
+        --location=':database location (unsupported since PostgrSQL 8.0):_directories' \
+        ':PostgreSQL database:' \
+        ':comment:'
+}
+
+_dropdb () {
+    local curcontext="$curcontext" state line expl
+    typeset -A opt_args
+
+    _arguments -C -s \
+        "$_pgsql_common_opts[@]" \
+        {-e,--echo}'[display SQL queries]' \
+        {-f,--force}'[try to terminate other connections before dropping]' \
+        {-i,--interactive}'[confirm before drop]' \
+        {-V,--version}'[output version information, then exit]' \
+        --if-exists'[don'\''t treport error if database does'\''t exist]' \
+        --maintenance-db=':alternate maintenance database:_pgsql_databases' \
+        {-q,--quiet}'[non verbose mode]' \
+        ':PostgreSQL database:_pgsql_databases'
+}
+
+_vacuumdb () {
+    local curcontext="$curcontext" state line expl
+    typeset -A opt_args
+
+    _arguments -C -s \
+        "$_pgsql_common_opts[@]" \
+        {-a,--all}'[vacuum all databases]' \
+        {-d+,--dbname=}':database to connect to:_pgsql_databases' \
+        --disable-page-skipping'[disable all page-skipping behavior]' \
+        {-e,--echo}'[show the commands being sent to the server]' \
+        {-f,--full}'[do full vacuuming]' \
+        {-F,--freeze}'[freeze row transaction information]' \
+        --force-index-cleanup'[always remove index entries that point to dead tuples]' \
+        {-j,--jobs=}'[use this many concurrent connections to vacuum]' \
+        '--min-mxid-age=[minimum multixact ID age of tables to vacuum]' \
+        '--min-xid-age=[minimum transaction ID age of tables to vacuum]' \
+        --no-index-cleanup'[don'\''t remove index entries that point to dead tuples]' \
+        --no-process-toast'[skip the TOAST table associated with the table to vacuum]' \
+        --no-truncate'[don'\''t truncate empty pages at the end of the table]' \
+        {-P+,--parallel=}'[use this many background workers for vacuum, if available]' \
+        {-q,--quiet}'[do not write any messages]' \
+        '--skip-locked[skip relations that cannot be immediately locked]' \
+        {-t+,--table=}':table to dump:_pgsql_tables' \
+        {-v,--verbose}'[write a lot of output]' \
+        {-V,--version}'[output version information, then exit]' \
+        {-z,--analyze}'[update optimizer hints]' \
+        {-Z,--analyze-only}'[only update optimizer statistics; no vacuum]' \
+        --analyze-in-stages'[only update optimizer statistics, in multiple stages for faster results; no vacuum]' \
+        {-\?,--help}'[display help]' \
+        --maintenance-db='[alternate maintenance database]' \
+        '1:PostgreSQL database:_pgsql_databases'
+}
+
+_createuser () {
+    local curcontext="$curcontext" state line expl
+    typeset -A opt_args
+
+    _arguments -C -s \
+        "$_pgsql_common_opts[@]" \
+        {-c,--connection-limit=}'[connection limit for role (default: no limit)]' \
+        {-d,--createdb}'[role can create new databases]' \
+        {-D,--no-createdb}'[role cannot create databases]' \
+        {-e,--echo}'[display SQL queries]' \
+        {-g,--role=}'[new role will be a member of this role]' \
+        {-i,--inherit}'[role inherits privileges of roles it is a member of (default)]' \
+        {-I,--no-inherit}'[role does not inherit privileges]' \
+        {-l,--login}'[role can login (default)]' \
+        {-L,--no-login}'[role cannot login]' \
+        {-P,--pwprompt}'[assign a password to new role]' \
+        {-r,--createrole}'[role can create new roles]' \
+        {-R,--no-createrole}'[role cannot create roles]' \
+        {-s,--superuser}'[role will be superuser]' \
+        {-S,--no-superuser}'[role will not be superuser]' \
+        --interactive'[prompt for missing role name and attributes rather than using defaults]' \
+        --replication'[role can initiate replication]' \
+        --no-replication'[role cannot initiate replication]' \
+        {-E,--encrypted}'[encrypt stored password]' \
+        {-N,--unencrypted}'[do not encrypt stored password]' \
+        {-\?,--help}'[display help]'
+}
+
+_dropuser () {
+    local curcontext="$curcontext" state line expl
+    typeset -A opt_args
+
+    _arguments -C -s \
+        "$_pgsql_common_opts[@]" \
+        {-e,--echo}'[display SQL queries]' \
+        {-q,--quiet}'[non verbose mode]' \
+        {-i,--interactive}'[prompt before deleting anything, and prompt for role name if not specified]' \
+        {-V,--version}'[output version information, then exit]' \
+        --if-exists'[don'\''t report error if user doesn'\''t exist]' \
+        ':PostgreSQL user:_pgsql_users'
+}
+
+_initdb () {
+    local curcontext="$curcontext" state line expl
+    typeset -A opt_args
+
+    _arguments -C -s \
+        {--auth=,-A+}':default authentication method for local connections:_values "auth methods" $_pgsql_auth_methods[@]' \
+        --auth-host=':default authentication method for local TCP/IP connections:_values "auth methods" $_pgsql_auth_methods[@]' \
+        --auth-local=':default authentication method for local-socket connections:_values "auth methods" $_pgsql_auth_methods[@]' \
+        {-D+,--pgdata=}':location for this database cluster:_files' \
+        {-E+,--encoding=}':set default encoding for new databases:_pgsql_encodings' \
+        {-g,--allow-group-access}'[allow group readexecute on data directory]' \
+        {-k,--data-checksums}':use data page checksums:' \
+        --locale=':set default locale for new databases:' \
+        --lc-collate=':set the default locale for collate:' \
+        --lc-ctype=':set the default locale for ctype:' \
+        --lc-messages=':set the default locale for messages:' \
+        --lc-monetary=':set the default locale for monetary:' \
+        --lc-numeric=':set the default locale for numeric:' \
+        --lc-time=':set the default local for time:' \
+        --no-locale'[equivalent to --locale=C]' \
+        --pwfile=':read password for the new superuser from file:_files' \
+        {-T+,--text-search-config=}'[default text search configuration]' \
+        {-U+,--username=NAME}':database superuser name:' \
+        {-W,--pwprompt}'[prompt for a password for the new superuser]' \
+        {-X+,--waldir=}':location for the write-ahead log directory:_files' \
+        --xlogdir=':location for the transaction log directory (unsupported since PostgreSQL 10):_files' \
+        --wal-segsize='[size of WAL segments, in megabytes]' \
+        {-d,--debug}'[generate lots of debugging output]' \
+        --discard-caches'[set debug_discard_caches=1]' \
+        -L+':where to find the input files:_files' \
+        {-n,--no-clean}'[do not clean up after errors]' \
+        {-N,--no-sync}':do not wait for changes to be written safely to disk:' \
+        --instructions'[do not print instructions for next steps]' \
+        {-s,--show}'[show internal settings]' \
+        {-S,--sync-only}'[only sync data directory]' \
+        {-V,--version}'[output version information, then exit]' \
+        {-\?,--help}'[display help]' \
+        ':location for this database cluster:_files'
+}
+
+_pgsql_utils () {
+    local _pgsql_common_opts _pgsql_auth_methods
+
+    _pgsql_common_opts=(
+        {-\?,--help}'[display help]'
+        {-h+,--host=}':database host:_pgsql_host_or_dir'
+        {-p+,--port=}':database port number:_pgsql_ports'
+        {-U+,--username=}':connect as user:_pgsql_users'
+        {-W,--password}'[prompt for password]'
+        {-w,--no-password}'[never prompt for password]'
+        --role='[do SET ROLE before restore]'
+    )
+
+    _pgsql_auth_methods=(
+        trust
+        reject
+        md5
+        password
+        gss
+        sspi
+        krb5
+        ident
+        peer
+        ldap
+        radius
+        cert
+        pam
+    )
+
+    case "$service" in
+        psql)     _psql "$@"     ;;
+        pg_dump)  _pg_dump "$@"  ;;
+        pg_dumpall)  _pg_dumpall "$@"  ;;
+        pg_restore)  _pg_restore "$@" ;;
+        createdb) _createdb "$@" ;;
+        dropdb)   _dropdb "$@"   ;;
+        vacuumdb) _vacuumdb "$@"   ;;
+        createuser) _createuser "$@" ;;
+        dropuser) _dropuser "$@" ;;
+        initdb) _initdb "$@"     ;;
+    esac
+}
+
+_pgsql_utils "$@"
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et

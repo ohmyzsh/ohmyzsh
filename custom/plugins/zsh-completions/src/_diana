@@ -1,0 +1,150 @@
+#compdef diana
+# ------------------------------------------------------------------------------
+# Copyright (c) 2016 Github zsh-users - http://github.com/zsh-users
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * Neither the name of the zsh-users nor the
+#       names of its contributors may be used to endorse or promote products
+#       derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL ZSH-USERS BE LIABLE FOR ANY
+# DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for Diana a command line interface to the aria2 daemon. (https://github.com/baskerville/diana).
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Jindřich Pilař (https://github.com/JindrichPilar)
+#
+# ------------------------------------------------------------------------------
+
+local GIDs PGIDs
+
+_diana_load_gids() {
+  GIDs=()
+  local downloads hashArr fileName
+
+  downloads=$(diana list | cut -d' ' -f1)
+
+  if [ ${#downloads} -eq "0" ]; then
+    return
+  fi
+
+  hashArr=("${(f)$(echo "$downloads")}")
+  for ((i=1; i<=${#hashArr[@]}; i++)); do
+    fileName=$(diana files $hashArr[i] | grep "[X]" | rev | cut -d'/' -f1 | rev);
+    GIDs+=("$hashArr[i]:$fileName");
+  done
+}
+
+_diana_load_paused_gids() {
+  PGIDs=()
+  local downloads hashArr fileName
+
+  downloads=$(diana paused | cut -d' ' -f1)
+
+  if [ ${#downloads} -eq "0" ]; then
+    return
+  fi
+
+  hashArr=("${(f)$(echo "$downloads")}")
+  for ((i=1; i<=${#hashArr[@]}; i++)); do
+    fileName=$(diana files $hashArr[i] | grep "[X]" | rev | cut -d'/' -f1 | rev);
+    PGIDs+=("$hashArr[i]:$fileName");
+  done
+}
+
+_diana_command_arguments() {
+  case $words[1] in
+    (remove)
+      _diana_load_gids
+      _describe -t output 'Downloads to delete' GIDs
+    ;;
+    (info)
+      _diana_load_gids
+      _describe -t output 'Downloads to get info' GIDs
+    ;;
+    (files)
+      _diana_load_gids
+      _describe -t output 'Get files for downloads' GIDs
+    ;;
+    (forcerm)
+      _diana_load_gids
+      _describe -t output 'Downloads to delete' GIDs
+    ;;
+    (pause)
+      _diana_load_gids
+      _describe -t output 'Downloads to pause' GIDs
+    ;;
+    (resume)
+      _diana_load_paused_gids
+      _describe -t output 'Downloads to resume' PGIDs
+    ;;
+    (preview)
+      _diana_load_gids
+      _describe -t output 'Downloads to preview' GIDs
+    ;;
+  esac
+
+
+}
+
+_diana() {
+    local -a commands
+
+    commands=(
+        "list:Output the list of active downloads."
+        "paused:Output the list of paused downloads."
+        "stopped:Output the list of stopped downloads."
+        "info:Output information regarding the given GIDs."
+        "files:Output the files owned by the downloads corresponding to the given GIDs."
+        "errors:Output the list of errors."
+        "stats:Output download bandwidth statistics."
+        "add:Download the given items (local or remote URLs to torrents, etc.)."
+        "remove:Remove the downloads corresponding to the given GIDs."
+        "forcerm:Forcibly remove the downloads corresponding to the given GIDs."
+        "pause:Pause the downloads corresponding to the given GIDs."
+        "resume:Resume the downloads corresponding to the given GIDs."
+        "preview:Preview all the files from all the downloads corresponding to the given GIDs."
+        "sleep:Pause all the active downloads."
+        "wake:Resume all the paused downloads."
+        "purge:Clear the list of stopped downloads and errors."
+        "clean:Stop seeding completed downloads."
+    )
+
+_arguments -C \
+  '1:cmd:->cmds' \
+  '*:: :->args' \
+
+case "$state" in
+  (cmds)
+    _describe -t commands 'commands' commands
+  ;;
+  (*)
+    _diana_command_arguments
+  ;;
+esac
+}
+
+_diana
+

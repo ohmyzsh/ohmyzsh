@@ -1,0 +1,84 @@
+#compdef protoc
+# ------------------------------------------------------------------------------
+# Copyright (c) 2020 Github zsh-users - http://github.com/zsh-users
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * Neither the name of the zsh-users nor the
+#       names of its contributors may be used to endorse or promote products
+#       derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL ZSH-USERS BE LIABLE FOR ANY
+# DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for protoc -- protocol buffer description file compiler
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Shohei YOSHIDA (https://github.com/syohex)
+#
+# ------------------------------------------------------------------------------
+
+__protoc_files() {
+  if compset -P '@'; then
+    _files
+  else
+    _files -g '*.proto'
+  fi
+}
+
+_protoc() {
+  _arguments -C \
+    '(- : *)'{-h,--help}'[Show summary of options]' \
+    '(- : *)--version[Show version of program]' \
+    '*'{-I,--proto_path}'=[Specify the directory which to search for imports]:import_dir:_files -/' \
+    '--encode=[Read a text-format message of given type from stdin and write it in binary to stdout]' \
+    '--decode=[Read a text-format message of given type from stdin and write it in binary to stdout]' \
+    '--decode_raw[Read an arbitrary protocol message from stdin and write the raw tag/value pairs in text format to stdout]' \
+    '--descriptor_set_in=[Specifies a delimited list of FILES each containing a FileDescriptorSet]:desc_in:_files' \
+    {-o,--descriptor_set_out}'=[Writes a FileDescriptorSet to FILE]:desc_out:_files' \
+    '--include_imports[When using --descriptor_set_out, also include all dependencies of the input files in the set]' \
+    '--include_source_info[When using --descriptor_set_out, do not strip SourceCodeInfo from the FileDescriptorProto]' \
+    '--dependency_out=[Write a dependency output file in the format expected by make]:dep_out:_files' \
+    '--error_format=[Set the format in which print errors]:error_format:(gcc msvc)' \
+    '--print_free_field_numbers[Print the free field numbers of the messages]'\
+    '--plugin=[Specifies a plugin executable to use]:plugin:_files' \
+    '--cpp_out=[Generate C++ header and source]:out_dir:_files -/' \
+    '--csharp_out=[Generate C# source file]:out_dir:_files -/' \
+    '--java_out=[Generate Java source file]:out_dir:_files -/' \
+    '--js_out=[Generate JavaScript source]:out_dir:_files -/' \
+    '--objc_out=[Generate Objective C header and source]:out_dir:_files -/' \
+    '--php_out=[Generate PHP source file]:out_dir:_files -/' \
+    '--python_out=[Generate Python source file]:out_dir:_files -/' \
+    '--ruby_out=[Generate Ruby source file]:out_dir:_files -/' \
+    '*: :__protoc_files'
+}
+
+_protoc "$@"
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et

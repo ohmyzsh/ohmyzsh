@@ -1,0 +1,89 @@
+#compdef cask
+# ------------------------------------------------------------------------------
+# Copyright (c) 2014 Github zsh-users - http://github.com/zsh-users
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+# * Redistributions of source code must retain the above copyright
+# notice, this list of conditions and the following disclaimer.
+# * Redistributions in binary form must reproduce the above copyright
+# notice, this list of conditions and the following disclaimer in the
+# documentation and/or other materials provided with the distribution.
+# * Neither the name of the zsh-users nor the
+# names of its contributors may be used to endorse or promote products
+# derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL ZSH-USERS BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+# PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+# LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+# NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+# EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+# Completion script for cask (http://cask.readthedocs.org)
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+# * ptrv <mail@petervasil.net>
+# * Johan Andersson <johan.rejeep@gmail.com>
+# * Sebastien Duthil <duthils@free.fr>
+#
+# ------------------------------------------------------------------------------
+
+function _cask() {
+  local ret=1 state
+  _arguments \
+    ':subcommand:->subcommand' \
+    '*:: :->subcmds' && ret=0
+
+  case $state in
+    subcommand)
+      subcommands=(
+        "build:build all Elisp files in the files directive"
+        "clean-elc:remove all byte compiled Elisp files in the files directive"
+        "exec:execute command with correct 'exec-path' and 'load-path'"
+        "exec-path:print 'exec-path' for all packages and dependencies"
+        "files:print list of files specified in the files directive"
+        "help:display usage information or documentation for specified command"
+        "info:show info about the current package"
+        "init:initialize the current directory with a Cask-file"
+        "install:install all packages specified in the Cask-file"
+        "link:manage links"
+        "list:list dependencies"
+        "load-path:print 'load-path' for all packages and dependencies"
+        "outdated:print list of outdated packages"
+        "package:build package and put in specified directory (default: dist)"
+        "package-directory:print current package installation directory"
+        "path:print 'exec-path' for all packages and dependencies"
+        "pkg-file:write a 'define-package' file"
+        "update:update package version"
+        "upgrade-cask:upgrade Cask itself and its dependencies"
+        "upgrade:upgrade Cask itself and its dependencies"
+        "version:print program version"
+      )
+      _describe -t subcommands 'cask subcommands' subcommands && ret=0
+  esac
+
+  case "$words[1]" in
+    init)
+      _arguments \
+        '(--dev)--dev[Run in dev mode]' && ret=0 ;;
+    exec)
+      _generic
+      ;;
+  esac
+
+  return ret
+}
+
+_cask "$@"

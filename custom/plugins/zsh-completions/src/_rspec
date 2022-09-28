@@ -1,0 +1,108 @@
+#compdef rspec
+# ------------------------------------------------------------------------------
+# Copyright (c) 2016 Github zsh-users - http://github.com/zsh-users
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * Neither the name of the zsh-users nor the
+#       names of its contributors may be used to endorse or promote products
+#       derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL ZSH-USERS BE LIABLE FOR ANY
+# DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for RSpec (http://rspec.info/).
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Kazuya Takeshima (https://github.com/mitukiii)
+#
+# ------------------------------------------------------------------------------
+
+
+_rspec() {
+  local context state line curcontext="$curcontext"
+
+  _arguments -C \
+    -I'[Specify PATH to add to $LOAD_PATH (may be used more than once)]:PATH:_files' \
+    '*'{-r,--require}'[Require a file]:PATH:_files' \
+    '*'{-O,--options}'[Specify the path to a custom options file]:PATH:_files' \
+    --order'[Run examples by the specified order type]: :->order' \
+    --seed'[Equivalent of --order rand:SEED]: :_guard "[[\:digit\:]]#" "SEED"' \
+    --bisect'[Repeatedly runs the suite in order to isolate the failures to the smallest reproducible case]' \
+    --only-failures'[Filter to just the examples that failed the last time they ran]' \
+    '(-n --next-failure)'{-n,--next-failure}'[Apply `--only-failures` and abort after one failure (equivalent to `--only-failures --fail-fast --order defined`)]' \
+    --fail-fast'[Abort the run on first failure]' \
+    --no-fail-fast'[Do not abort the run on first failure]' \
+    --failure-exit-code'[Override the exit code used when there are failing specs]: :_guard "[[\:digit\:]]#" "CODE"' \
+    --dry-run'[Print the formatter output of your suite without running any examples or hooks]' \
+    '(-X --drb)'{-X,--drb}'[Run examples via DRb]' \
+    --drb-port'[Port to connect to the DRb server]: :_guard "[[\:digit\:]]#" "PORT"' \
+    '(-f --format)'{-f,--format}'[Choose a formatter]:FORMATTER:(progress documentation html json failures)' \
+    '(-o --out)'{-o,--out}'[Write output to a file instead of $stdout]:FILE:_files' \
+    --deprecation-out'[Write deprecation warnings to a file instead of $stderr]:FILE:_files' \
+    '(-b --backtrace)'{-b,--backtrace}'[Enable full backtrace]' \
+    --force-color'[Force the output to be in color, even if the output is not a TTY]' \
+    --no-color'[Force the output to not be in color, even if the output is a TTY]' \
+    '(-p --profile)'{-p,--profile}'[Enable profiling of examples and list the slowest examples (default: 10)]: :_guard "[[\:digit\:]]#" "COUNT"' \
+    --no-profile'[Disable profiling of examples]' \
+    '(-w --warnings)'{-w,--warnings}'[Enable ruby warnings]' \
+    '(-P --pattern)'{-P,--pattern}'[Load files matching pattern (default: "spec/**/*_spec.rb")]:PATTERN:' \
+    --exclude-pattern'[Load files except those matching pattern]:PATTERN:' \
+    '(-e --example)'{-e,--example}'[Run examples whose full nested names include STRING (may be used more than once)]:STRING:' \
+    '(-t --tag)'{-t,--tag}'[Run examples with the specified tag, or exclude examples by adding ~ before the tag]: :->tag' \
+    --default-path'[Set the default path where RSpec looks for examples (can be a path to a file or a directory)]:PATH:_files' \
+    '(- *)'--init'[Initialize your project with RSpec]' \
+    '(- *)'{-h,--help}"[You're looking at it]" \
+    '(- *)'{-v,--version}'[Display the version]' \
+    '*:files or directories:_files'
+
+  case "$state" in
+    order)
+      if compset -P '*:'; then
+        _guard '[[:digit:]]#' 'SEED'
+      else
+        _values 'TYPE[:SEED]' \
+          defined'[examples and groups are run in the order they are defined]' \
+          rand'[randomize the order of groups and examples]' \
+          random'[alias for rand]'
+      fi
+      ;;
+    tag)
+      if compset -P '*:'; then
+        _message 'VALUE'
+      else
+        _message 'TAG[:VALUE]'
+      fi
+      ;;
+  esac
+}
+
+_rspec "$@"
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et

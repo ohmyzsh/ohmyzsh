@@ -1,0 +1,181 @@
+#compdef zcash-cli
+# ------------------------------------------------------------------------------
+# Copyright (c) 2017 Github zsh-users - http://github.com/zsh-users
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * Neither the name of the zsh-users nor the
+#       names of its contributors may be used to endorse or promote products
+#       derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL ZSH-USERS BE LIABLE FOR ANY
+# DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for zcash-cli (https://z.cash).
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Jordy van Wolferen (https://github.com/jvwdev)
+#
+# ------------------------------------------------------------------------------
+
+local state line curcontext="$curcontext" ret=1
+
+_arguments -C \
+  '-?[display usage information]' \
+  -conf='[specify configuration file]:file [zcash.conf]:_files' \
+  -datadir='[specify data directory]:directory:_directories' \
+  -testnet'[use the test network]' \
+  -regtest'[enter regression test mode, which uses a special chain in which blocks can be solved instantly. This is intended for regression testing tools and app development.]' \
+  -rpcconnect='[send commands to node running on specified ip]:rpcconnect [127.0.0.1]:_hosts' \
+  -rpcport='[connect to JSON-RPC on specified port]: :_guard "[[\:digit\:]]#" "port [8232 or testnet\: 18232]"' \
+  -rpcwait'[wait for RPC server to start]' \
+  -rpcuser='[username for JSON-RPC connections]:rpcuser' \
+  -rpcpassword='[password for JSON-RPC connections]:rpcpassword' \
+  -rpcclienttimeout='[specify timeout during HTTP requests, or 0 for no timeout]: :_guard "[[\:digit\:]]#" "timeout (seconds) [900]"' \
+  ':subcommand:->subcommand' && ret=0
+
+case $state in
+  subcommand)
+    subcommands=(
+      'getbestblockhash'
+      'getblock'
+      'getblockchaininfo'
+      'getblockcount'
+      'getblockhash'
+      'getblockheader'
+      'getchaintips'
+      'getdifficulty'
+      'getmempoolinfo'
+      'getrawmempool'
+      'gettxout'
+      'gettxoutproof'
+      'gettxoutsetinfo'
+      'verifychain'
+      'verifytxoutproof'
+      'getinfo'
+      'help'
+      'stop'
+      'generate'
+      'getgenerate'
+      'setgenerate'
+      'getblocksubsidy'
+      'getblocktemplate'
+      'getlocalsolps'
+      'getmininginfo'
+      'getnetworkhashps'
+      'getnetworksolps'
+      'prioritisetransaction'
+      'submitblock'
+      'addnode'
+      'clearbanned'
+      'disconnectnode'
+      'getaddednodeinfo'
+      'getconnectioncount'
+      'getnettotals'
+      'getnetworkinfo'
+      'getpeerinfo'
+      'listbanned'
+      'ping'
+      'setban'
+      'createrawtransaction'
+      'decoderawtransaction'
+      'decodescript'
+      'fundrawtransaction'
+      'getrawtransaction'
+      'sendrawtransaction'
+      'signrawtransaction'
+      'createmultisig'
+      'estimatefee'
+      'estimatepriority'
+      'validateaddress'
+      'verifymessage'
+      'z_validateaddress'
+      'addmultisigaddress'
+      'backupwallet'
+      'dumpprivkey'
+      'dumpwallet'
+      'encryptwallet'
+      'getaccount'
+      'getaccountaddress'
+      'getaddressesbyaccount'
+      'getbalance'
+      'getnewaddress'
+      'getrawchangeaddress'
+      'getreceivedbyaccount'
+      'getreceivedbyaddress'
+      'gettransaction'
+      'getunconfirmedbalance'
+      'getwalletinfo'
+      'importaddress'
+      'importprivkey'
+      'importwallet'
+      'keypoolrefill'
+      'listaccounts'
+      'listaddressgroupings'
+      'listlockunspent'
+      'listreceivedbyaccount'
+      'listreceivedbyaddress'
+      'listsinceblock'
+      'listtransactions'
+      'listunspent'
+      'lockunspent'
+      'move'
+      'sendfrom'
+      'sendmany'
+      'sendtoaddress'
+      'setaccount'
+      'settxfee'
+      'signmessage'
+      'z_exportkey'
+      'z_exportwallet'
+      'z_getbalance'
+      'z_getnewaddress'
+      'z_getoperationresult'
+      'z_getoperationstatus'
+      'z_gettotalbalance'
+      'z_importkey'
+      'z_importwallet'
+      'z_listaddresses'
+      'z_listoperationids'
+      'z_listreceivedbyaddress'
+      'z_sendmany'
+      'zcbenchmark'
+      'zcrawjoinsplit'
+      'zcrawkeygen'
+      'zcrawreceive'
+      'zcsamplejoinsplit'
+    )
+
+    _describe -t subcommands 'zcash-cli subcommand' subcommands && ret=0
+  ;;
+esac
+
+return ret
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et

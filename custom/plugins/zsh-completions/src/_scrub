@@ -1,0 +1,66 @@
+#compdef scrub
+# ------------------------------------------------------------------------------
+# Copyright (c) 2016 Github zsh-users - http://github.com/zsh-users
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * Neither the name of the zsh-users nor the
+#       names of its contributors may be used to endorse or promote products
+#       derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL ZSH-USERS BE LIABLE FOR ANY
+# DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for scrub. A utility which iteratively writes patterns on files or disk devices to make retrieving the data more difficult. (http://linux.die.net/man/1/scrub).
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Jindřich Pilař (https://github.com/JindrichPilar)
+#
+# ------------------------------------------------------------------------------
+
+
+_scrub() {
+
+local patterns
+patterns="nnsa dod bsi gutmann schneier pfitzner7 pfitzner33 usarmy fillzero fillff random random2 old fastold"
+
+_arguments -C \
+   "(- 1 *)"{-v,--version}"[Print scrub version and exit.]" \
+   {-r,--remove}"[Remove the file after scrubbing.]" \
+   {-p,--pattern}"[Select  the  patterns to write.]:pattern:($patterns)" \
+   {-b,--blocksize}"[Perform read and write calls using the specified blocksize (in bytes).]:block size:" \
+   {-f,--force}"[Scrub even if target contains signature indicating it has already been scrubbed.]" \
+   {-S,--no-signature}"[Do not write scrub signature.]" \
+   {-X,--freespace}"[Create  specified directory and fill it with files until write returns ENOSPC (file sys‐tem full), then scrub the files as usual.]:directory name:" \
+   {-D,--dirent}"[After scrubbing the file, scrub its name in the directory entry, then rename it  to  the new name.]:new name:" \
+   {-s,--device-size}"[Override the device size (in bytes).]:size:" \
+   {-L,--no-link}"[If file is a symbolic link, do not scrub the link target.]" \
+   {-R,--no-hwrand}"[Don't use a hardware random number generator even if one is available.]" \
+   {-t,--no-threads}"[Don't generate random data in parallel with I/O.]" \
+   {-n,--dry-run}"[Do everything but write to targets.]" \
+   {-h,--help}"[Print a summary of command line options on stderr.]" \
+   '*:files:_files' \
+}
+
+_scrub
+

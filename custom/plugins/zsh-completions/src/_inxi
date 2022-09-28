@@ -1,0 +1,146 @@
+#compdef inxi
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+# Completion script of inxi - a full featured CLI system information tool
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+# * Oleksii Filonenko <brightone@protonmail.com>
+#
+# ------------------------------------------------------------------------------
+
+local colors=($(seq 0 42))
+local verbosity_levels=(
+	'0:Short output, same as: inxi'
+	'1:Basic verbose, -S + basic CPU'
+	'2:Adds -N, -M, -B, same as: inxi -b'
+	'3:Adds -C, -n, -x'
+	'4:Adds -P, -D'
+	'5:Adds -A, -m, -s, -l, -u'
+	'6:Adds -p, -o, -d, --usb, -xx'
+	'7:Adds -i, -xxx'
+	'8:Adds -r, --slots, -tcm, --admin'
+)
+local alt_downloaders=(
+	'40:Perl'
+	'41:Curl'
+	'42:Fetch'
+	'43:Wget'
+	'44:Curl, Fetch, and Wget'
+)
+local partition_sort_orders=(
+	'dev-base:/dev partition identifier'
+	'fs:partition filesystem'
+	'id:mount point of partition (default)'
+	'label:label of partition'
+	'percent-used:percentage of partition size used'
+	'size:KiB size of partition'
+	'uuid:UUID of the partition'
+	'used:KiB used of partition'
+)
+
+_arguments -s \
+	{-A,--audio}"[Show Audio/sound card(s) information]" \
+	{-b,--basic}"[Show basic output, short form]" \
+	{-B,--battery}"[Show system Battery information]" \
+	{-c+,--color=}"[Set color scheme]:color:(${colors[*]})" \
+	{-C,--cpu}"[Show full CPU output]" \
+	{-d,--disk-full,--optical}"[Show hard + optical drive info]" \
+	{-D,--disk}"[Show hard Disk info]" \
+	{-f,--flags}"[Show all CPU flags used]" \
+	{-F,--full}"[Show Full output]" \
+	{-G,--graphics}"[Show Graphic card(s) information]" \
+	"(- *)"{-h,--help}"[Show list of command-line options]" \
+	{-i,--ip}"[Show WAN IP address and local interfaces]" \
+	{-I,--info}"[Show Information: processes, uptime, etc.]" \
+	{-l,--label}"[Show partition labels]" \
+	{-m,--memory}"[Memory (RAM) data]" \
+	{-M,--machine}"[Show Machine data]" \
+	{-n,--network-advanced}"[Show Advanced Network card information]" \
+	{-N,--network}"[Show Network card(s) information]" \
+	{-o,--unmounted}"[Show unmounted partition information]" \
+	{-p,--partitions-full}"[Show full Partition information]" \
+	{-P,--partitions}"[Show basic Partition information]" \
+	{-r,--repos}"[Show distro repository data]" \
+	{-R,--raid}"[Show RAID data]" \
+	"(- *)"--recommends"[Check inxi dependencies + recommends]" \
+	{-s,--sensors}"[Show output from configured sensors]" \
+	--slots"[Show PCI slots]" \
+	{-S,--system}"[Show System information]" \
+	{-t+,--processes=}"[Show processes]:processes:((c\:'CPU only' m\:'Memory only' cm\:'CPU+memory'))" \
+	--usb"[Show USB data for attached Hubs and Devices]" \
+	{-u,--uuid}"[Show partition UUIDs]" \
+	"(- *)"{-U,--update}"[Auto-update inxi]" \
+	"(- *)"{-V,--version}"[Show version of inxi]" \
+	{-v+,--verbosity=}"[Script verbosity levels]:verbosity:->verbosity" \
+	{-w,--weather}"[Adds weather line]" \
+	{-W+,--weather-location=}"[Get weather/time for an alternate location]:weather location: " \
+	--weather-unit="[Set weather unit]:weather unit:((m\:metric i\:imperial mi\:'metric (imperial)' im\:'imperial (metric)'))" \
+	{-y+,--width=}"[Set width override]:columns (80 minimum): " \
+	{-z,--filter}"[Adds security filters]" \
+	{-Z,--filter-override}"[Absolute override for output filters]" \
+	\*{-x,--extra}"[Extra data options]" \
+	{-a,--admin}"[Admin extra data options]:admin option:->admin" \
+	--alt"[Bypass a downloader option]:downloader:->alt" \
+	--display"[Get display data out of X]:\:<integer>: " \
+	--dmidecode"[Force use of dmidecode]" \
+	--downloader"[Force inxi to use a specific downloader]:downloader:(curl fetch perl wget)" \
+	--host"[Turns on hostname in System line]" \
+	--indent-min"[Overrides default indent minimum value]:integer: " \
+	--limit"[Limit max IP addresses for -i]:limit (-1 removes the limit): " \
+	--man"[Updates / install man page with -U]" \
+	--no-host"[Turns off hostname in System line]" \
+	--no-man"[Disables man page install with -U]" \
+	--no-ssl"[Skip SSL certificate checks]" \
+	--output"[Change data output type]:type:(json screen xml)" \
+	--output-file"[Path to output file]:output file:->output_file" \
+	--partition-sort"[Change default sort order of partition output]:order:->partition_sort" \
+	--sleep"[Change CPU sleep time]:sleep time (usually in decimals): " \
+	--tty"[Forces internal IRC flag to off]" \
+	--usb-sys"[Forces the USB data generator to use /sys as data source]" \
+	--usb-tool"[Forces the USB data generator to use lsusb as data source]" \
+	--wan-ip-url"[Force -i to use supplied URL as WAN ip source]:URL: " \
+	--wm"[Force System item wm to use wmctrl as data source]" \
+	--dbg"[Debug downloader failures]:level:(1)" \
+	--debug"[On screen debugger output]:level:(1 2 3 10 11 20 21 22)" \
+	--ftp"[Set alternate ftp upload location]:FTP URL: " \
+	--debug-proc"[Force debugger to parse /proc directory data when run as root]" \
+	--debug-proc-print"[Use this to locate file that /proc debugger hangs on]" \
+	--debug-no-exit"[Skip exit on error when running debugger]" \
+	--debug-no-proc"[Skip /proc debugging in case of a hang]" \
+	--debug-no-sys"[Skip /sys debugging in case of a hang]" \
+	--debug-sys"[Force PowerPC debugger parsing of /sys as sudo/root]" \
+	--debug-proc"[Force debugger to parse /proc directory data when run as root]" \
+	--debug-sys-print"[Use this to locate file that /sys debugger hangs on]"
+
+case "$state" in
+	admin)
+		_arguments -s \
+			-C"[Adds CPU family, model-id, and stepping]" \
+			-d"[Adds logical and physical block size in bytes]" \
+			{-p,-P}"[Adds raw partition / filesystem block size]"
+		;;
+	alt)
+		_describe 'downloader' alt_downloaders
+		;;
+	output_file)
+		_alternative \
+			"outputs:output file:((print\:'Print to stdout'))" \
+			"outputs:output file:_files"
+		;;
+	partition_sort)
+		_describe 'sort order' partition_sort_orders
+		;;
+	verbosity)
+		_describe 'script verbosity level' verbosity_levels
+		;;
+esac
+
+# Local Variables:
+# mode: shell-script
+# sh-shell: zsh
+# End:

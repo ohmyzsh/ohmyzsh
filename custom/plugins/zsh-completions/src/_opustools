@@ -1,0 +1,113 @@
+#compdef opusenc opusdec opusinfo
+
+# ------------------------------------------------------------------------------
+# Copyright (c) 2021 Github zsh-users - http://github.com/zsh-users
+#
+# Permission is hereby granted, without written agreement and without
+# licence or royalty fees, to use, copy, modify, and distribute this
+# software and to distribute modified versions of this software for any
+# purpose, provided that the above copyright notice and the following
+# two paragraphs appear in all copies of this software.
+#
+# In no event shall the Zsh Development Group be liable to any party for
+# direct, indirect, special, incidental, or consequential damages arising out
+# of the use of this software and its documentation, even if the Zsh
+# Development Group have been advised of the possibility of such damage.
+#
+# The Zsh Development Group specifically disclaim any warranties, including,
+# but not limited to, the implied warranties of merchantability and fitness
+# for a particular purpose.  The software provided hereunder is on an "as is"
+# basis, and the Zsh Development Group have no obligation to provide
+# maintenance, support, updates, enhancements, or modifications.
+#
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for opus-tools (https://opus-codec.org/)
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Andre Kugland (https://github.com/kugland)
+#
+# ------------------------------------------------------------------------------
+
+case $service in
+  opusenc)
+    _arguments -S \
+      '1:input file:_files -g "*.(#i)(wav|flac|ogg|aif(|f))(-.)"' \
+      '2:output file:_files -g "*.(#i)opus(-.)"' \
+      '(- 1 *)'{-h,--help}'[show usage information]' \
+      '(- 1 *)'{-V,--version}'[show version information]' \
+      '(- 1 *)--help-picture[show help on attaching album art]' \
+      '--quiet[enable quiet mode]' \
+      '--bitrate[set target bitrate per channel]:target bitrate per channel (kbps) (6-256)' \
+      '--comp[set encoding complexity]:encoding complexity (1-10) [10]:(1 2 3 4 5 6 7 8 9 10)' \
+      '--cvbr[use constrained variable bitrate encoding]' \
+      '--downmix-mono[downmix to mono]' \
+      '--downmix-stereo[downmix to stereo (if >2 channels)]' \
+      '--expect-loss[set expected packet loss]:expected packet loss (percent) (0-100) [0]' \
+      '--framesize[set maximum frame size]:maximum frame size (milliseconds) [20]:(2.5 5 10 20 40 60)' \
+      '--hard-cbr[use hard constant bitrate encoding]' \
+      '--max-delay[set maximum container delay]:maximum container delay (milliseconds) (0-1000) [1000]' \
+      '--music[tune low bitrates for music (override automatic detection)]' \
+      '--no-phase-inv[disable use of phase inversion for intensity stereo]' \
+      '--speech[tune low bitrates for speech (override automatic detection)]' \
+      '--vbr[use variable bitrate encoding (default)]' \
+      '--album[set album or collection]:album or collection' \
+      '--date[set date of track]:date of track (YYYY, YYYY-MM, or YYYY-MM-DD):_dates -f "%F"' \
+      '--discard-comments[discard metadata when transcoding]' \
+      '--discard-pictures[discard pictures when transcoding]' \
+      '--padding[reserve extra bytes for metadata]:padding size (bytes) [512]' \
+      '--title[set track title]:track title' \
+      '--tracknumber[set track number]:track number' \
+      '*--artist[add artist or author]:artist or author' \
+      '*--comment[add an extra comment]:comment (tag=val)' \
+      '*--genre[add genre]:genre' \
+      '*--picture[attach album art]:album art:_files -g "*.(#i)(jp(|e)g|png|gif)(-.)"' \
+      '--ignorelength[ignore the data length in RIFF wav headers]' \
+      '--raw-bits[set bits per sample for raw input]:bits per sample [16]:(8 16 24)' \
+      '--raw-chan[set number of channels for raw input]:number of channels (1-255) [2]' \
+      '--raw-endianness[set endianness for raw input]:endianness:(("0"\:"big endian" "1"\:"little endian"))' \
+      '--raw-rate[set sampling rate for raw input]:sample rate (Hz) (100-768000) [48000]' \
+      '--raw[interpret input as raw PCM data without headers]' \
+      '--serial[force use of a specific stream serial number]:stream serial number' \
+      '--save-range[save check values for every frame to a file]:output for check values:_files' \
+      '--set-ctl-int[pass encoder control]:encoder control'
+    ;;
+  opusdec)
+    _arguments -S \
+      '1:input file:_files -g "*.(#i)opus(-.)"' \
+      '2::output file:_files -g "*.(#i)wav(-.)"' \
+      '(- 1 *)'{-h,--help}'[show usage information]' \
+      '(- 1 *)'{-V,--version}'[show version information]' \
+      '(- 1 *)--help-picture[show help on attaching album art]' \
+      '--quiet[enable quiet mode]' \
+      '--rate[force decoding at given sample rate]:sample rate (Hz) (8000-192000)' \
+      '--force-stereo[force decoding to stereo]' \
+      '--gain[adjust output volume]:gain (dB) (negative is quieter)' \
+      '--no-dither[do not dither 16-bit output]' \
+      '--float[output 32-bit floating-point samples]' \
+      '--force-wav[force RIFF wav header on output]' \
+      '--packet-loss[simulate random packet loss]:packet loss probability (percent) (0-100)' \
+      '--save-range[save check values for every frame to a file]:output for check values:_files'
+    ;;
+  opusinfo)
+    _arguments -s -S \
+      '(- 1 *)-h[show usage information]' \
+      '(- 1 *)-V[show version information]' \
+      '*-q[make the output quieter]' \
+      '*-v[make the output more verbose]' \
+      '*:opus file:_files -g "*.(#i)opus(-.)"'
+    ;;
+esac
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et

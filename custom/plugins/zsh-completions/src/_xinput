@@ -1,0 +1,208 @@
+#compdef xinput
+# ------------------------------------------------------------------------------
+# Copyright (c) 2011 Github zsh-users - http://github.com/zsh-users
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#     * Redistributions of source code must retain the above copyright
+# notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+# notice, this list of conditions and the following disclaimer in the
+# documentation and/or other materials provided with the distribution.
+#     * Neither the name of the zsh-users nor the
+# names of its contributors may be used to endorse or promote products
+# derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 'AS IS' AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL ZSH-USERS BE LIABLE FOR ANY
+# DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for xinput
+#  TODO: Add property handler
+#  TODO: Add buttons handler
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Timofey Titovets <nefelim4ag@gmail.com>
+#
+# ------------------------------------------------------------------------------
+_xinput(){
+	# list of xinput arguments
+	local -a _1st_arguments
+	_1st_arguments=(
+		'version:show version' '--version:show version'
+		'help:show help options' '--help:show help options'
+		get-feedbacks
+		set-ptr-feedback 
+		set-integer-feedback 
+		get-button-map 
+		set-button-map 
+		set-pointer
+		'set-mode:change the mode of device' '--set-mode:change the mode of device'
+		'list:show devices' '--list:show devices'
+		query-state 
+		test --test
+		create-master 
+		remove-master 
+		reattach 
+		float 
+		set-cp 
+		test-xi2 
+		map-to-output 
+		list-props 
+		set-int-prop 
+		set-float-prop 
+		set-atom-prop 
+		watch-props 
+		delete-prop 
+		set-prop 
+		'disable:disable the device' '--disable:disable the device' 
+		'enable:enable the device'  '--enable:enable the device'
+		--get-feedbacks
+		--set-ptr-feedback 
+		--set-integer-feedback 
+		--get-button-map 
+		--set-button-map 
+		--set-pointer
+		--query-state  
+		--create-master 
+		--remove-master 
+		--reattach 
+		--float 
+		--set-cp 
+		--test-xi2 
+		--map-to-output 
+		--list-props 
+		--set-int-prop 
+		--set-float-prop 
+		--set-atom-prop 
+		--watch-props 
+		--delete-prop 
+		--set-prop 
+	)
+
+	local context state line
+	local -A opt_args
+	# Used with "-O expl" for unsorted.
+	local -a expl
+	expl=(-Vx)
+
+	_arguments '*:: :->subcmds' && return 0
+
+	if (( CURRENT == 1 )); then
+		_describe -t commands "xinput commands" _1st_arguments -V1
+		return
+	fi
+
+	typeset -a xinput_devices_id xinput_devices xinput_devices_name
+	local i name
+	for i in ${(on)$(xinput list --id-only)}; do
+		# Removing prefixes, e.g. from "∼ 7" (floating slave).
+		i=${i##[^[:digit:]]#}
+		[[ -n "$i" ]] || continue
+		xinput_devices_id+=($i)
+		name="$(xinput list --name-only $i)"
+		xinput_devices_name+=(${name//:/\\:})
+		xinput_devices+=($i\:$name)
+	done
+	xinput_devices+=($xinput_devices_name)
+
+	# xinput arguments handler
+	case "$words[1]" in
+		--get-feedbacks|--set-ptr-feedback|--get-button-map|--query-state|--list-props|--watch-props|get-feedbacks|set-ptr-feedback|get-button-map|query-state|list-props|watch-props|--enable|enable|--map-to-output|map-to-output|--disable|disable)
+			_arguments -O expl \
+				':list option:(($xinput_devices))'
+		;;
+		--list|list)
+			_arguments -O expl \
+				'--short' \
+				'--long' \
+				'--name-only' \
+				'--id-only' \
+				':list option:(($xinput_devices))' \
+		;;
+		--set-integer-feedback|set-integer-feedback)
+			_arguments -O expl \
+				':list option:(($xinput_devices))' \
+				':list option:( feedback )' \
+				':list option:( $xinput_devices_id )'
+		;;
+		--set-button-map|set-button-map)
+			_arguments -O expl \
+				':list option:(($xinput_devices))' #map button 1 [map button 2 [...]]
+		;;
+		--set-pointer|set-pointer)
+			_arguments -O expl \
+				':list option:(($xinput_devices))' # [x index y index]
+		;;
+		--set-mode|set-mode)
+			_arguments -O expl \
+				':list option:(($xinput_devices))' \
+				':list option:(ABSOLUTE RELATIVE)'
+		;;
+		--test|test)
+			_arguments -O expl \
+				':list option:(-proximity ($xinput_devices ))' \
+				':list option:(($xinput_devices))'
+		;; 
+		--reattach|reattach)
+			_arguments -O expl \
+				':list option:(($xinput_devices))' \
+				':list option:(master slave)'
+		;; 
+		--float|float)
+			_arguments -O expl \
+				':list option:(($xinput_devices))'
+		;; 
+		--test-xi2|test-xi2)
+			_arguments -O expl \
+				':list option:(($xinput_devices --root))' \
+				':list option:(($xinput_devices))'
+		;;
+		--delete-prop|delete-prop)
+			_arguments -O expl \
+				':list option:(($xinput_devices))' #property
+		;;
+		--create-master|create-master)
+			_arguments -O expl \
+				':list option:(($xinput_devices))' # [sendCore (dflt:1)] [enable (dflt:1)]
+		;; 
+		--remove-master|remove-master)
+			_arguments -O expl \
+				':list option:($xinput_devices_id)' # [Floating|AttachToMaster (dflt:Floating)] [returnPointer] [returnKeyboard]
+		;; 
+		# --set-cp|set-cp); window device;; 
+		--set-prop|set-prop)
+			_arguments -O expl \
+				':list option:(($xinput_devices))' \
+				':list option:(--type={atom,float,int} --format={8,16,32})' \
+				':list option:(--type={atom,float,int} --format={8,16,32})' # property val [val ...]
+		;;
+		--set-int-prop|set-int-prop)
+			_arguments -O expl \
+				':list option:(($xinput_devices))' # property format (8, 16, 32) val [val ...]
+		;;
+		--set-float-prop|set-float-prop)
+			_arguments -O expl \
+				':list option:(($xinput_devices))' # property val [val ...]
+		;; 
+		--set-atom-prop|set-atom-prop)
+			_arguments -O expl \
+				':list option:(($xinput_devices))' # property val [val ...]
+		;;
+	esac
+}
+
+_xinput "$@"

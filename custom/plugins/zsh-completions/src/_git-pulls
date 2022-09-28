@@ -1,0 +1,83 @@
+#compdef git-pulls
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for git-pulls 0.3.1 (https://git-pulls.com/schacon/git-pulls).
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Julien Nicoulaud (https://github.com/nicoulaj)
+#
+# ------------------------------------------------------------------------------
+
+
+_git-pulls() {
+  typeset -A opt_args
+  local context state line curcontext="$curcontext"
+
+  local ret=1
+
+  _arguments -C \
+    '(- 1 *)--help[show usage]' \
+    '1:cmd:->cmds' \
+    '*::arg:->args' \
+  && ret=0
+
+  case "$state" in
+    (cmds)
+      local commands; commands=(
+        'update:update pull requests list'
+        'list:list pull requests'
+        'show:show pull request'
+        'browse:open pull request in a web browser'
+        'merge:merge pull request'
+      )
+      _describe -t commands 'command' commands && ret=0
+    ;;
+    (args)
+      curcontext="${curcontext%:*:*}:git-pulls-cmd-$words[1]:"
+      case $words[1] in
+        (update)
+          _message 'no more arguments' && ret=0
+        ;;
+        (list)
+          _arguments \
+            '--reverse[list in reverse order]' \
+          && ret=0
+        ;;
+        (show)
+          _arguments \
+            '1: :_git-pulls_pull_requests_numbers' \
+            '--full[use verbose output]' \
+          && ret=0
+        ;;
+        (browse|merge)
+          _arguments \
+            '1: :_git-pulls_pull_requests_numbers' \
+          && ret=0
+        ;;
+      esac
+    ;;
+  esac
+
+  return ret
+}
+
+(( $+functions[_git-pulls_pull_requests_numbers] )) ||
+_git-pulls_pull_requests_numbers() {
+  local pull_requests; pull_requests=(${${${(M)${(f)"$(_call_program users $service list)"}:#[[:digit:]]##[[:space:]]*}//:/\\:}/[[:space:]]##/:})
+  _describe -t pull-request-numbers 'pull request number' pull_requests "$@"
+}
+
+_git-pulls "$@"
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et

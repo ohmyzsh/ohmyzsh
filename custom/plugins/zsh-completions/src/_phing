@@ -1,0 +1,94 @@
+#compdef phing
+# ------------------------------------------------------------------------------
+# Copyright (c) Igor M. Timoshenko <igor.timoshenko@i.ua>
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is furnished
+# to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for Phing (http://phing.info).
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Igor Timoshenko <igor.timoshenko@i.ua>
+#
+# ------------------------------------------------------------------------------
+
+_phing() {
+  local context curcontext="$curcontext" state line ret=1
+  integer NORMARG
+  typeset -A opt_args
+
+  # Follow http://phing.info/docs/stable/webhelp/sec.commandlineargs.html for more information
+  _arguments \
+    '(-h -help)'{-h,-help}'[display the help screen]' \
+    '(-v -version)'{-v,-version}'[print version information and exit]' \
+    '(-l -list)'{-l,-list}'[list all available targets in buildfile (excluding targets that have their hidden attribute set to true)]' \
+    '(-q -quiet)'{-q,-quiet}'[quiet operation, no output at all]' \
+    '-verbose[verbose, give some more output]' \
+    '-debug[output debug information]' \
+    '-logfile [use given file for log]:file:_files' \
+    '-D[set the property to the specified value to be used in the buildfile]' \
+    '-find []:file:_files' \
+    '-buildfile [specify an alternate buildfile name. Default is build.xml]:file:_files' \
+    '-logger [specify an alternate logger. Default is phing.listener.DefaultLogger. Other options include phing.listener.NoBannerLogger, phing.listener.AnsiColorLogger, phing.listener.XmlLogger, phing.listener.TargetLogger and phing.listener.HtmlColorLogger]' \
+    '-propertyfile [load properties from the specified file]:file:_files' \
+    '(-v --version)'{-v,--version}'[show version]' \
+    '1: :->targets' \
+    '*:: :->args' \
+  && ret=0
+
+  case $state in
+    targets)
+      local buildfile; buildfile=build.xml
+      if [[ ! -f $buildfile ]]
+      then
+        ret=0
+      else
+        local targets; targets=($(sed -nE "/<target /s/.*name=[\"'](\w+)[\"'].*/\1/p" $buildfile))
+        _describe -t 'targets' 'target' targets && ret=0
+      fi
+    ;;
+    args)
+      if [[ CURRENT -eq NORMARG && ${+opt_args[--match]} -eq 0 ]]
+      then
+        # If the current argument is the first non-option argument
+        # and --match isn't present then a pattern is expected
+        _message -e patterns 'pattern' && ret=0
+      else
+        _files
+      fi
+    ;;
+  esac
+
+  return ret
+}
+
+_phing "$@"
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et

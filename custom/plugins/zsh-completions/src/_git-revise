@@ -1,0 +1,67 @@
+#compdef git-revise
+#description update, split and rearrange commits
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for git-revise 0.5.1
+#  (https://github.com/mystor/git-revise/).
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Hannu Hartikainen (https://github.com/dancek)
+#
+# ------------------------------------------------------------------------------
+
+__git-revise_commits() {
+  local -a commits
+  if git rev-parse --is-inside-work-tree 1>/dev/null 2>/dev/null; then
+    commits=(${(f)"$(git log -20 --pretty=format:'%h:%d %s' | sed 's/: /:/')"})
+    _describe -V 'commit' commits
+  else
+    _message 'not a git repository'
+  fi
+}
+
+__git-revise_branches() {
+  local -a branches
+  if git rev-parse --is-inside-work-tree 1>/dev/null 2>/dev/null; then
+    branches=(${(f)"$(git for-each-ref --format='%(refname:short)' refs/heads/)"})
+    _describe 'branch' branches
+  else
+    _message 'not a git repository'
+  fi
+}
+
+_git-revise() {
+  local curcontext="$curcontext" ret=1
+
+  _arguments -s \
+    '(- :)'{-h,--help}'[show help message and exit]' \
+    '--ref=[reference to update]: :__git-revise_branches' \
+    '--reauthor[reset the author of the targeted commit]' \
+    '(- :)--version[show version number and exit]' \
+    '(--edit -e)'{--edit,-e}'[edit commit message of targeted commit(s)]' \
+    '(--no-autosquash)--autosquash[automatically apply fixup! and squash! commits to their targets]' \
+    '(--autosquash)--no-autosquash[force disable revise.autoSquash behaviour]' \
+    '(--all -a)--no-index[ignore the index while rewriting history]' \
+    '(--no-index --all -a)'{--all,-a}'[stage all tracked files before running]' \
+    '(--interactive -i --message -m --cut -c)'{--interactive,-i}'[interactively edit commit stack]' \
+    '(--interactive -i --message -m --cut -c)'{--message,-m}'[specify commit message on command line]:MESSAGE:()' \
+    '(--interactive -i --message -m --cut -c)'{--cut,-c}'[interactively cut a commit into two smaller commits]' \
+    '1: :__git-revise_commits' && ret=0
+
+  return $ret
+}
+
+_git-revise "$@"
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et

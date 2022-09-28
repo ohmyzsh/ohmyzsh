@@ -1,0 +1,65 @@
+#compdef include-what-you-use
+
+# Copyright 2018 CERN for the benefit of the LHCb Collaboration.
+# All rights reserved.
+#
+# Developed by:
+# 
+#     CERN LBC group
+# 
+#     CERN
+# 
+#     http://cern.ch
+# 
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# with the Software without restriction, including without limitation the
+# rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+# sell copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+#     * Redistributions of source code must retain the above copyright notice,
+#       this list of conditions and the following disclaimers.
+# 
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimers in the
+#       documentation and/or other materials provided with the distribution.
+# 
+#     * Neither the names of the LBC group, CERN, nor the names of its
+#       contributors may be used to endorse or promote products derived from
+#       this Software without specific prior written permission.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+# CONTRIBUTORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS WITH
+# THE SOFTWARE.
+#
+# In applying this licence, CERN does not waive the privileges and immunities
+# granted to it by virtue of its status as an Intergovernmental Organization or
+# submit itself to any jurisdiction.
+
+# TODO:
+# - prevent _iwyu_opts from running once the first clang option got passed
+
+_iwyu_opts() {
+  _arguments '--check_also=[print iwyu-violation info for files matching the given glob pattern]:glob pattern:' \
+             '--cwd=[specify the current working directory]:current working directory:_path_files -/' \
+             '--howtodebug[print instructions on how to run iwyu under gdb]' \
+             '--howtodebug=[print instructions on how to run iwyu under gdb if file matches argument]:file for debug run:_path_files' \
+             '*'"--mapping_file=[iwyu mapping file]:iwyu mapping file:_path_files -g '*(/) *.imp'" \
+             "--no_default_mappings[do not add iwyu's default mappings]" \
+             '--pch_in_code[mark the first include in a translation unit as a precompiled header]' \
+             '--prefix_header_includes=[what to do with command line includes]:command line include treatment:(add keep remove)' \
+             "--transitive_includes_only[do not suggest that a file add headers that aren't already visible]" \
+             '--max_line_length=[maximum line length for includes]:a number:' \
+             '--no_comments[do not add "why" comments]' \
+             '--no_fwd_decls[do not use forward declarations]' \
+             '--verbose=[the higher the level, the more output]:a number:'
+}
+
+_arguments "*-Xiwyu[include-what-you-use options]:include-what-you-use options:_iwyu_opts"
+# gcc will also provide --version and --help. Not ideal.
+_gcc

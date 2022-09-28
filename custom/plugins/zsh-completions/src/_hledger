@@ -1,0 +1,286 @@
+#compdef hledger
+
+# ------------------------------------------------------------------------------
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for hledger 1.10 ( http://hledger.org/ )
+#  Last updated: 07.08.2018
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Valodim ( https://github.com/Valodim )
+#  * fdw ( https://github.com/fdw )
+#
+# ------------------------------------------------------------------------------
+# Notes
+# -----
+#
+# account completion depends on availability of a ~/.hledger.journal file
+#
+# ------------------------------------------------------------------------------
+
+
+local curcontext="$curcontext" curstate state line expl grp cmd ret=1
+typeset -a args
+typeset -A opt_args
+
+args=(
+  '(- *)'{-h,--help}'[print help information]'
+  '(-f --file)'{-f,--file}'=[use a different input file]:input file:_files'
+  '--rules-file=[CSV conversion rules file]:rules file:_files'
+  '--alias=[display accounts named OLD as NEW]:alias specification'
+  '--anon=[anonymize accounts and payees]'
+  '(-b --begin)'{-b,--begin}'=[include postings/txns on or after this date]:date'
+  '(-e --end)'{-e,--end}'=[include postings/txns before this date]:date'
+  '(-D --daily)'{-D,--daily}'[multiperiod/multicolumn report by day]'
+  '(-W --weekly)'{-W,--weekly}'[multiperiod/multicolumn report by week]'
+  '(-M --monthly)'{-M,--monthly}'[multiperiod/multicolumn report by month]'
+  '(-Q --quarterly)'{-Q,--quarterly}'[multiperiod/multicolumn report by quarter]'
+  '(-Y --yearly)'{-Y,--yearly}'[multiperiod/multicolumn report by year]'
+  '(-p --period)'{-p,--period}'=[set start date, end date, and/or reporting interval all at once]'
+  '(-C --cleared)'{-C,--cleared}'[include only cleared postings/txns]'
+  '(-U --uncleared)'{-U,--uncleared}'[include only uncleared postings/txns]'
+  '(-R --real)'{-R,--real}'[include only non-virtual postings]'
+  '(--depth)--depth=[hide accounts/postings deeper than N]:depth'
+  '(-E --empty)'{-E,--empty}'[show empty/zero things which are normally omitted]'
+  '(-B --cost)'{-B,--cost}'[show amounts in their cost price'\''s commodity]'
+  '(-V --value)'{-V,--value}'[converts reported amounts to the current market value]'
+  '(-I --ignore-assertions)'{-I,--ignore-assertions}'[ignore any failing balance assertions]'
+  '--forecast=[apply periodic transaction rules to generate future transactions]'
+)
+
+_arguments -C "$args[@]" -A "-*" \
+  '(- *)--version[print version information]' \
+  '--debug[show debug output]' \
+  '1: :->cmds' \
+  '*:: :->args' && ret=0
+
+while (( $#state )); do
+  curstate=$state
+  shift state
+  case $curstate in
+    cmds)
+        typeset -a cmds
+        cmds=(
+            'accounts:show account names (a)'
+            'activity:show an ascii barchart of posting counts per interval'
+            'add:prompt for transactions and add them to the journal'
+            'balance:show accounts and balances (b, bal)'
+            'balancesheet:show a balance sheet (bs)'
+            'balancesheetequity:like balancesheet, but also reports equity'
+            'cashflow:show a cashflow statement (cf)'
+            'check-dates:check that transactions are sorted by increasing date'
+            'check-dupes:report account names having the same leaf but different prefixes'
+            'close:print closing/opening transactions that bring some or all account balances to zero and back'
+            'help:show any of the hledger manuals'
+            'import:read new transactions added to each file since last run, and add them to the main journal file'
+            'incomestatement:show an income statement (is)'
+            'prices:print market price directives from the journal'
+            'print:show transaction entries (p, txns)'
+            'print-unique:print transactions which do not reuse an already-seen description'
+            'register:show postings and running total (r, reg)'
+            'register-patch:print the one posting whose transaction description is closest to the description'
+            'rewrite:print all transactions, adding custom postings to the matched ones'
+            'stats:show some journal statistics'
+            'tags:list all the tag names used in the journal'
+            'test:run built-in unit tests'
+        )
+        _describe 'subcommands' cmds && ret=0
+        ;;
+    args)
+        : $words
+        local cmd=$words[1]
+        (( $+cmd )) || return 1
+        # curcontext="${curcontext%:*:*}:$service-$cmd:"
+        case $cmd in
+            accounts)
+                args=(
+                    '(--declared)--declared[show account names declared with account directives]'
+                    '(--used)--used[show account names posted to by transactions]'
+                    '(--tree)--tree[show accounts as a tree (default in simple reports)]'
+                    '(--flat)--flat[show accounts as a list (default in multicolumn)]'
+                    '(--drop)--drop=[flat mode, omit N leading account name parts]:drop n'
+                )
+                ;;
+            activity)
+                ;;
+            add)
+               args=(
+                    '(--no-new-accounts)--no-new-accounts=[do not allow creating new accounts]'
+               )
+               ;;
+            bal|balance)
+                args+=(
+                    '(--change)--change[show balance change in each period (default)]'
+                    '(--cumulative)--cumulative[show balance change accumulated across periods]'
+                    '(-H --historical)'{-H,--historical}'[show historical ending balance in each period]'
+                    '(--tree)--tree[show accounts as a tree (default in simple reports)]'
+                    '(--flat)--flat[show accounts as a list (default in multicolumn)]'
+                    '(-A --average)'{-A,--average}'[show a row average column (in multicolumn mode)]'
+                    '(-T --row-total)'{-T,--row-total}'[show a row total column]'
+                    '(-N --no-total)'{-N,--no-total}'[do not show the final total row]'
+                    '(--drop)--drop=[in flat mode, omit N leading account name parts]:drop n'
+                    '(--no-elide)--no-elide[tree mode, do not squash boring parent accounts]'
+                    '(--format)--format=[in tree mode, use this custom line format]:custom line format'
+                    '(-O --output-format)'{-O,--output-format}='[select the output format from txt, csv, html]:format'
+                    '(-o --output-file)'{-o,--output-file}'=[write output to file]:file'
+                    '(--pretty-tables)--pretty-tables[use unicode to display prettier tables]'
+                    '(--sort-amount)--sort-amount[sort by amount instead of account code/name]'
+                    '(--invert)--invert[display all amounts with reversed sign]'
+                    '(--budget)--budget[show performance compared to budget goals]'
+                    '(--show-unbudgeted)--show-unbudgeted[with --budget, show unbudgeted accounts also]'
+                )
+                ;;
+            bl|balancesheet|balancesheetequity)
+                args+=(
+                    '(--change)--change[show balance change in each period (default)]'
+                    '(--cumulative)--cumulative[show balance change accumulated across periods]'
+                    '(-H --historical)'{-H,--historical}'[show historical ending balance in each period]'
+                    '(--tree)--tree[show accounts as a tree (default in simple reports)]'
+                    '(--flat)--flat[show accounts as a list (default in multicolumn)]'
+                    '(-A --average)'{-A,--average}'[show a row average column (in multicolumn mode)]'
+                    '(-T --row-total)'{-T,--row-total}'[show a row total column]'
+                    '(-N --no-total)'{-N,--no-total}'[do not show the final total row]'
+                    '(--drop)--drop=[in flat mode, omit N leading account name parts]:drop n'
+                    '(--no-elide)--no-elide[tree mode, do not squash boring parent accounts]'
+                    '(--format)--format=[in tree mode, use this custom line format]:custom line format'
+                    '(--sort-amount)--sort-amount[sort by amount instead of account code/name]'
+                )
+                ;;
+            cashflow|cf|balancesheet|bs|incomestatement|is)
+                args+=(
+                    '(--change)--change[show balance change in each period (default)]'
+                    '(--cumulative)--cumulative[show balance change accumulated across periods]'
+                    '(-H --historical)'{-H,--historical}'[show historical ending balance in each period]'
+                    '(--tree)--tree[show accounts as a tree (default in simple reports)]'
+                    '(--flat)--flat[show accounts as a list (default in multicolumn)]'
+                    '(-A --average)'{-A,--average}'[show a row average column (in multicolumn mode)]'
+                    '(-T --row-total)'{-T,--row-total}'[show a row total column]'
+                    '(-N --no-total)'{-N,--no-total}'[do not show the final total row]'
+                    '(--drop)--drop=[in flat mode, omit N leading account name parts]:drop n'
+                    '(--no-elide)--no-elide[tree mode, do not squash boring parent accounts]'
+                    '(--format)--format=[in tree mode, use this custom line format]:custom line format'
+                    '(--sort-amount)--sort-amount[sort by amount instead of account code/name]'
+                )
+                ;;
+            import)
+                args=(
+                    '(--dry-run)--dry-run[just show the transactions to be imported]'
+                )
+                ;;
+            is|incomestatement)
+                args+=(
+                    '(--change)--change[show balance change in each period (default)]'
+                    '(--cumulative)--cumulative[show balance change accumulated across periods]'
+                    '(-H --historical)'{-H,--historical}'[show historical ending balance in each period]'
+                    '(--tree)--tree[show accounts as a tree (default in simple reports)]'
+                    '(--flat)--flat[show accounts as a list (default in multicolumn)]'
+                    '(-A --average)'{-A,--average}'[show a row average column (in multicolumn mode)]'
+                    '(-T --row-total)'{-T,--row-total}'[show a row total column]'
+                    '(-N --no-total)'{-N,--no-total}'[do not show the final total row]'
+                    '(--drop)--drop=[in flat mode, omit N leading account name parts]:drop n'
+                    '(--no-elide)--no-elide[tree mode, do not squash boring parent accounts]'
+                    '(--format)--format=[in tree mode, use this custom line format]:custom line format'
+                    '(--sort-amount)--sort-amount[sort by amount instead of account code/name]'
+                )
+                ;;
+            print)
+                args=(
+                    '(-m --match)'{-m,--match}'[show the transaction whose description is most similar]:string'
+                    '(--new)--new[show only newer-dated transactions added in each file since last run]'
+                    '(-x --explicit)'{-x,--explicit}'[show all amounts explicitly]'
+                    '(-O --output-format)'{-O,--output-format}='[select the output format from txt, csv, html]:format'
+                    '(-o --output-file)'{-o,--output-file}'=[write output to file]:file'
+                )
+                ;;
+            register|reg)
+                args+=(
+                    '(--cumulative)--cumulative[show balance change accumulated across periods]'
+                    '(-H --historical)'{-H,--historical}'[show historical ending balance in each period]'
+                    '(-A --average)'{-A,--average}'[show a row average column (in multicolumn mode)]'
+                      '(-r --related)'{-r,--related}'[show postings'\'' siblings instead]'
+                      '(-w --width)'{-w,--width}'=[set output width to 120, or N]:width (default 80)'
+                    '(-O --output-format)'{-O,--output-format}='[select the output format from txt, csv, html]:format'
+                    '(-o --output-file)'{-o,--output-file}'=[write output to file]:file'
+                )
+                ;;
+            stats)
+                args=(
+                    '(-o --output-file)'{-o,--output-file}'=[write output to file]:file'
+                )
+                ;;
+            # fallback to _default
+            *) _arguments -C -A "-*" "$args[@]" \
+                    '*: :_default' && ret=0
+               continue
+        esac
+        _arguments -C -A "-*" "$args[@]" \
+            '*:query patterns:->query' && ret=0
+        ;;
+        query)
+
+            local -a accs keywords
+            keywords=(
+                'acct\::match account names'
+                'code\::match by transaction code'
+                'desc\::match transaction descriptions'
+                'tag\::match by tag name'
+                'depth\::match at or above depth'
+                'status\::match cleared/uncleared transactions'
+                'real\::match real/virtual transactions'
+                'empty\::match if amount is/is not zero'
+                'amt\::match transaction amount'
+                'cur\::match by currency'
+            )
+            if compset -P 'amt:'; then
+                _message 'match amount (<, <=, >, >=, add sign for non-absolute match)' && ret=0
+                continue
+            fi
+            if compset -P '(#b)(code|desc|tag|depth|status|real|empty):'; then
+                _message "'$match[1]' parameter" && ret=0
+                continue
+            fi
+
+            accs=( ${(f)"$(_call_program hledger hledger accounts $PREFIX 2>/dev/null)"} )
+            if (( $? )); then
+                _message "error fetching accounts from hledger"
+            fi
+
+            # decided against partial matching here. these lines can
+            # be uncommented to complete subaccounts hierarchically
+            # (add -S '' -q to the compadd below, too)
+            # if compset -P '(#b)(*):'; then
+                # accs=( ${(M)accs:#$match[1]:*} )
+                # accs=( ${accs#$IPREFIX} )
+            # fi
+            # accs=( ${accs%%:*} )
+
+            _wanted accounts expl "accounts" compadd -a accs && ret=0
+            _describe "matcher keywords" keywords -S '' && ret=0
+
+            # not is special, it doesn't need the -S ''
+            keywords=(
+                'not:negate expression'
+            )
+            _describe "matcher keywords" keywords && ret=0
+
+        ;;
+    esac
+done
+
+return ret

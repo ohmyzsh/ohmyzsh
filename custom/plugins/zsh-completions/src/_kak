@@ -1,0 +1,71 @@
+#compdef kak
+# ------------------------------------------------------------------------------
+# Copyright (c) 2017 Github zsh-users - http://github.com/zsh-users
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * Neither the name of the zsh-users nor the
+#       names of its contributors may be used to endorse or promote products
+#       derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL ZSH-USERS BE LIABLE FOR ANY
+# DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for kak (https://github.com/mawww/kakoune)
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Frank LENORMAND <https://github.com/lenormf>
+#
+# ------------------------------------------------------------------------------
+# -*- mode: zsh; sh-indentation: 2; indent-tabs-mode: nil; sh-basic-offset: 2; -*-
+# vim: ft=zsh sw=2 ts=2 et
+# ------------------------------------------------------------------------------
+
+_kak_sessions() {
+  local -a session_ids expl
+  session_ids=($(_call_program session_names kak -l))
+  _description session-ids expl "session name"
+  compadd "$expl[@]" -a session_ids
+}
+
+_kak() {
+  _arguments \
+        '-n[do not source rc files on startup]' \
+        '-l[list existing sessions]:session_id:_kak_sessions' \
+        '-clear[clear dead sessions]' \
+        '-ro[readonly mode]' \
+        '(-help --help)'{-help,--help}'[display a help message and quit]' \
+        '-d[run as a headless session (requires -s)]' \
+        '-q[in filter mode, be quiet about errors applying keys]' \
+        '-c[connect to given session]:session_id:_kak_sessions' \
+        '-e[execute argument on client initialisation]:keys' \
+        '-E[execute argument on server initialisation]:keys' \
+        '-s[set session name]:session_id' \
+        '-p[just send stdin as commands to the given session]:session_id:_kak_sessions' \
+        '-f[act as a filter, executing given keys on given files]:keys' \
+        '-i[backup the files on which a filter is applied using the given suffix]:suffix' \
+        '-ui[set the type of user interface to use (ncurses, dummy, or json)]:ui_type:(ncurses dummy json)' \
+        '*::files:_files'
+}
+
+_kak "$@"

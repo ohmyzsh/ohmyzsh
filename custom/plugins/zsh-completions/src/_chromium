@@ -1,0 +1,211 @@
+#compdef chromium
+
+# Copyright 2018 CERN for the benefit of the LHCb Collaboration
+
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are
+# met:
+#
+#    * Redistributions of source code must retain the above copyright
+# notice, this list of conditions and the following disclaimer.
+#    * Redistributions in binary form must reproduce the above
+# copyright notice, this list of conditions and the following disclaimer
+# in the documentation and/or other materials provided with the
+# distribution.
+#    * Neither the name of CERN nor the names of its
+# contributors may be used to endorse or promote products derived from
+# this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+# OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# In applying this licence, CERN does not waive the privileges and immunities
+# granted to it by virtue of its status as an Intergovernmental Organization
+# or submit itself to any jurisdiction.
+
+_arguments \
+       "--user-data-dir=[Specify the directory that user data is kept in]:directory:_path_files -/" \
+       "--app=[Runs URL in app mode]:url:_urls" \
+       "--incognito[Open in incognito mode]" \
+       "--new-window[open in new window]" \
+       "(--no-proxy-server --proxy-auto-detect --proxy-pac-url --password-store)--proxy-server=[specify proxy server]:[<proxy-scheme>\://]<proxy-host>[\:<proxy-port>]:_chromium_proxyurls" \
+       "--no-proxy-server[Disables the proxy server]" \
+       "--proxy-auto-detect[Autodetect proxy configuration]" \
+       "--proxy-pac-url=[Specify proxy autoconfiguration URL]:proxy autoconfiguration url:_urls" \
+       "--password-store=[Set the password store to use]:password store: _wanted arguments expl 'wallet store' compadd -- basic gnome kwallet" \
+       "--version[print version]" \
+       "*:: :{ _alternative _urls _files }"
+
+# excerpt from the chromium help message:
+#
+#              Specify the HTTP/SOCKS4/SOCKS5 proxy server to use for requests.  This overrides any environment variables or settings picked via the options dialog.  An individual proxy server is specified
+#              using the format:
+#
+#
+#
+#              Where <proxy-scheme> is the protocol of the proxy server, and is one of:
+#
+#                "http", "socks", "socks4", "socks5".
+#
+#              If the <proxy-scheme> is omitted, it defaults to "http". Also note that "socks" is equivalent to "socks5".
+#
+#              Examples:
+#
+#                --proxy-server="foopy:99"
+#                    Use the HTTP proxy "foopy:99" to load all URLs.
+#
+#                --proxy-server="socks://foobar:1080"
+#                    Use the SOCKS v5 proxy "foobar:1080" to load all URLs.
+#
+#                --proxy-server="socks4://foobar:1080"
+#                    Use the SOCKS v4 proxy "foobar:1080" to load all URLs.
+#
+#                --proxy-server="socks5://foobar:66"
+#                    Use the SOCKS v5 proxy "foobar:66" to load all URLs.
+#
+#              It is also possible to specify a separate proxy server for different URL types, by prefixing the proxy server specifier with a URL specifier:
+#
+#              Example:
+#
+#                --proxy-server="https=proxy1:80;http=socks4://baz:1080"
+#                    Load https://* URLs using the HTTP proxy "proxy1:80". And load http://*
+#                    URLs using the SOCKS v4 proxy "baz:1080".
+#
+
+_chromium_proxyurls () {
+  #TODO: semicolon separated urls not yet implemented
+  # mostly copied from _urls
+	local ipre scheme host user uhosts ret=1 expl match glob suf
+	local localhttp
+	zstyle -a ":completion:${curcontext}:urls" local localhttp
+	local localhttp_servername="$localhttp[1]"
+	local localhttp_documentroot="$localhttp[2]"
+	local localhttp_userdir="$localhttp[3]"
+	zstyle -a ":completion:${curcontext}:urls" urls urls
+	if [[ $#urls -gt 1 || ( $#urls -eq 1 && ! -d $urls[1] ) ]]
+	then
+		[[ $#urls -eq 1 && -f $urls[1] ]] && urls=($(< $urls[1]))
+		_wanted urls expl 'URL' compadd "$@" -a urls && return 0
+		urls=()
+	fi
+	urls="$urls[1]"
+	glob=(-g '*(^/)')
+	zparseopts -D -K -E 'g:=glob'
+	ipre="$IPREFIX"
+	if ! compset -P '(#b)([-+.a-z0-9]#):'
+	then
+		_tags -C argument prefixes
+		while _tags
+		do
+			while _next_label prefixes expl 'URL prefix' -S '' "$@"
+			do
+				compset -S '[^:/]*' && compstate[to_end]=''
+				compadd "$expl[@]" http:// socks:// socks4:// socks5:// && ret=0
+			done
+			(( ret )) || return 0
+		done
+		return 1
+	fi
+	scheme="$match[1]"
+	case "$scheme" in
+    (http(|s)|socks(|4|5)) if ! compset -P //
+			then
+				_wanted -C "$scheme" prefixes expl 'end of prefix' compadd -S '' "$@" //
+				return
+			fi ;;
+		(file) [[ -prefix //(127.0.0.1|localhost)/ ]] && compset -P '//(127.0.0.1|localhost)'
+			[[ -prefix /// ]] && compset -P //
+			if ! compset -P //
+			then
+				_tags -C file files
+				while _tags
+				do
+					while _next_label files expl 'local file'
+					do
+						if [[ -prefix / ]]
+						then
+							_path_files "$expl[@]" -S '' "${glob[@]}" && ret=0
+							_path_files "$expl[@]" -S/ -r '/' -/ && ret=0
+						elif [[ -z "$PREFIX" ]]
+						then
+							compadd -S '/' -r '/' "$expl[@]" "$@" - "${PWD%/}" && ret=0
+						fi
+					done
+					(( ret )) || return 0
+				done
+				return 1
+			fi ;;
+	esac
+	if ! compset -P '(#b)([^:/]#)([:/])'
+	then
+		uhosts=($urls/$scheme/$PREFIX*$SUFFIX(/:t))
+		_tags hosts
+		while _tags
+		do
+			while _next_label hosts expl host
+			do
+				compset -S '[:/]*' || suf="/"
+				(( $#uhosts )) || _hosts -S "$suf" -r '/:' "$expl[@]" && ret=0
+				[[ "$scheme" = http ]] && uhosts=($uhosts $localhttp_servername)
+				compadd -S "$suf" -r '/:' "$expl[@]" -a uhosts && ret=0
+			done
+			(( ret )) || return 0
+		done
+		return 1
+	fi
+	host="$match[1]"
+	[[ $match[2] = ':' ]] && ! compset -P '<->/' && _message -e ports 'port number' && return 0
+	_tags remote-files files || return 1
+	if [[ "$localhttp_servername" = "$host" ]]
+	then
+		if compset -P \~
+		then
+			if ! compset -P '(#b)([^/]#)/'
+			then
+				_users -S/ "$@"
+				return
+			fi
+			user="$match[1]"
+			while _tags
+			do
+				while _next_label files expl 'local file'
+				do
+					_path_files "$expl[@]" "$@" -W ~$user/$localhttp_userdir "${glob[@]}" && ret=0
+					_path_files -S/ -r '/' "$expl[@]" -W ~$user/$localhttp_userdir-/ && ret=0
+				done
+				(( ret )) || return 0
+			done
+		else
+			while _tags
+			do
+				while _next_label files expl 'local file'
+				do
+					_path_files "$expl[@]" "$@" -W $localhttp_documentroot "${glob[@]}" && ret=0
+					_path_files -S/ -r '/' "$expl[@]" -W $localhttp_documentroot -/ && ret=0
+				done
+				(( ret )) || return 0
+			done
+		fi
+	else
+		while _tags
+		do
+			(( $#urls )) && while _next_label files expl 'local file'
+			do
+				_path_files "$expl[@]" "$@" -W $urls/$scheme/$host "${glob[@]}" && ret=0
+				_path_files -S/ -r '/' "$expl[@]" -W $urls/$scheme/$host -/ && ret=0
+			done
+			[[ $scheme = (scp|sftp) ]] && _requested remote-files && _remote_files -h $host -- ssh && ret=0
+			(( ret )) || return 0
+		done
+	fi
+	return $ret
+}

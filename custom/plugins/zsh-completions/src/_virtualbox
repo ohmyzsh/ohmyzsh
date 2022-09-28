@@ -1,0 +1,322 @@
+#compdef VBoxManage=vboxmanage VBoxHeadless=vboxheadless vboxmanage=vboxmanage
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for VirtualBox (http://www.virtualbox.org).
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
+#  * Julien Nicoulaud <julien.nicoulaud@gmail.com>
+#
+# ------------------------------------------------------------------------------
+
+
+_vboxmachines() {
+	VBoxManage list vms | grep -Eo '^"[^"]+"' 2>/dev/null | sed -e 's|"||g' | while read machine; do
+		_wanted 'machine' expl 'machine' compadd $machine
+	done
+}
+
+_vboxnatnets() {
+  vboxmanage list natnetworks | awk -F: '/NetworkName:/{print $2}'| while read natnet; do
+    _wanted 'natnet' expl 'natnet' compadd $natnet
+  done
+}
+
+# Roughly guess command options
+_vboxcommandoptions() {
+	cmd="$1"
+	cmdoutput=$(VBoxManage "$cmd" 2>/dev/null | tail -n +2 | grep -v 'Syntax error:' | grep -v '<uuid>|<name>' | sed 's|<[^>]\+>||g' | sed 's|VBoxManage [^ ]\+ |  |')
+
+	optcount=0
+	option=""
+	optlines=()
+	echo "$cmdoutput" | grep -Eo '  [\[A-Za-z0-9\-\<].*' | while read line; do
+		option="${option}${line}"
+		if [[ $line[-1] != '|' ]]; then
+			optcount=$(($optcount+1))
+			optlines[$optcount]="$option"
+			option=""
+		fi
+	done
+
+	# optionals ([abc])
+	for line in $optlines; do
+		echo "$line" | grep -Eo '\[[^]]+\]' | while read option; do
+			option=$(echo $option | sed 's|[]\[]||g' | cut -d ' ' -f 1)
+			_options=(${(s:|:)option})
+			for option in $_options; do
+				_wanted "${cmd}_option" expl "${cmd} option" compadd -- $option
+			done
+		done
+	done
+
+	# mandatory
+	for line in $optlines; do
+		echo "$line" | sed 's|\[[^]]\+\]|\n|g' | while read option; do
+			if [[ "$option" != "" ]]; then
+				_option=$(echo $option | cut -d ' ' -f 1)
+				_options=(${(s:|:)option})
+				for option in $_options; do
+					_wanted "${cmd}_option" expl "${cmd} option" compadd -- $option
+				done
+			fi
+		done
+	done
+}
+
+# List possible mediums
+_vboxmediums() {
+	_wanted "mediums" expl "mediums" compadd -- "none"
+	_wanted "mediums" expl "mediums" compadd -- "emptydrive"
+	_wanted "mediums" expl "mediums" compadd -- "iscsi"
+
+	_files -g '*.{iso,vmdk,vdi}'
+
+	for CD in /dev/cd/*; do
+		readlink -f $CD
+	done | uniq | while read CD; do
+		_wanted "host drives" expl "host drives" compadd -- "host:$CD"
+	done
+}
+
+# List available os types
+_vboxostypes() {
+	VBoxManage list ostypes | grep '^ID' | awk '{print $2}' | while read OSTYPE; do
+		_wanted 'ostype' expl 'os type' compadd -- $OSTYPE
+	done
+}
+
+# Guess options for this commands
+_vboxopts_controlvm() { _vboxcommandoptions controlvm }
+_vboxopts_modifyvm() { _vboxcommandoptions modifyvm }
+_vboxopts_export() { _vboxcommandoptions export }
+
+_vboxmanage() {
+	local -a _1st_arguments
+	_1st_arguments=(
+		"list:gives information about VirtualBox's current settings"
+		'showvminfo:shows information about a particular virtual machine'
+		'registervm:import a virtual machine definition in an XML file into VirtualBox'
+		'unregistervm:unregisters a virtual machine'
+		'createvm:creates a new XML virtual machine definition file'
+		'modifyvm:changes the properties of a registered virtual machine which is not running'
+		'import:imports a virtual appliance in OVF format by copying the virtual disk images and creating virtual machines in VirtualBox'
+		'export:exports one or more virtual machines from VirtualBox into a virtual appliance in OVF format'
+		'startvm:starts a virtual machine that is currently in the "Powered off" or "Saved" states'
+		'controlvm:change the state of a virtual machine that is currently running'
+		'discardstate:discards the saved state of a virtual machine which is not currently running'
+		'adoptstate:adopt a saved state file (.sav)'
+		'snapshot:control snapshots'
+		'closemedium:removes a hard disk, DVD or floppy image from a VirtualBox media registry'
+		'storageattach:attaches/modifies/removes a storage medium connected to a storage controller'
+		'storagectl:attaches/modifies/removes a storage controller'
+		'bandwidthctl:creates/deletes/modifies bandwidth groups'
+		'showmediuminfo:shows information about a virtual hard disk image'
+		'createmedium:creates a new virtual hard disk image'
+		'modifymedium:change the characteristics of a disk image after it has been created'
+		'clonemedium:duplicates a registered virtual hard disk image to a new image file with a new unique identifier'
+		'convertfromraw:converts a raw disk image to a VirtualBox Disk Image (VDI) file'
+		'getextradata:retrieve string data to a virtual machine or to a VirtualBox configuration'
+		'setextradata:attach string data to a virtual machine or to a VirtualBox configuration'
+		'setproperty:change global settings which affect the entire VirtualBox installation'
+		'usbfilter:used for working with USB filters in virtual machines, or global filters'
+		'sharedfolder:share folders on the host computer with guest operating systems'
+		'guestproperty:get or set properties of a running virtual machine'
+		'guestcontrol:control certain things inside a guest from the host'
+		'debugvm:for experts who want to tinker with the exact details of virtual machine execution'
+		'metrics:monitor the usage of system resources'
+		'hostonlyif:change the IP configuration of a host-only network interface'
+		'dhcpserver:control the DHCP server that is built into VirtualBox'
+		'extpack:add or remove VirtualBox extension packs'
+		'natnetwork:add,modify,remove or start NatNetworks'
+	)
+
+	local context state line expl
+	local -A opt_args
+
+	_arguments '*:: :->subcmds' && return 0
+
+	if (( CURRENT == 1 )); then
+		_describe -t commands "VBoxManage commands" _1st_arguments -V1
+		return
+	fi
+
+	case "$words[1]" in
+		list)
+			_arguments \
+				'--long' \
+				':list option:(vms runningvms ostypes hostdvds hostfloppies bridgedifs hostonlyifs dhcpservers hostinfo hostcpuids hddbackends hdds dvds floppies usbhost usbfilters systemproperties natnetworks extpacks)'
+		;;
+		showvminfo)
+			_arguments \
+				:machine:_vboxmachines \
+				'--details' \
+				'--machinereadable' \
+				'--log: :'
+		;;
+		unregistervm)
+			_arguments \
+				:machine:_vboxmachines \
+				'--delete'
+		;;
+		createvm)
+			_arguments \
+				'--name: :' \
+				'--ostype:os type:_vboxostypes' \
+				'--register' \
+				'--basefolder:folder:_files -/' \
+				'--settingsfile:file:_files' \
+				'--uuid: :'
+		;;
+		modifyvm)
+			_arguments \
+				:machine:_vboxmachines \
+				:modifyvm_option:_vboxopts_modifyvm
+		;;
+		modifymedium|modifyhd)
+			_arguments \
+				:filename:_files \
+				'--type:hd type:(normal writethrough immutable shareable readonly multiattach)' \
+				'--autoreset:on off:(on off)' \
+				'--property: :' \
+				'--compact' \
+				'--resize:megabytes:' \
+				'--resizebyte:bytes:'
+		;;
+		import)
+			_arguments \
+				':ovf file:_files -g \*.{ovf,ova}' \
+				'--dry-run'
+		;;
+		export)
+			_arguments \
+				:machine:_vboxmachines \
+				:export_option:_vboxopts_export
+		;;
+		startvm)
+			_arguments \
+				:machine:_vboxmachines \
+				'--type:running mode:(gui sdl headless)'
+		;;
+		controlvm)
+			_arguments \
+				:machine:_vboxmachines \
+				:controlvm_option:_vboxopts_controlvm
+		;;
+		adoptstate)
+			_arguments \
+				:machine:_vboxmachines \
+				':sav file:_files -g \*.sav'
+		;;
+		closemedium)
+			_arguments \
+				':type:(disk dvd floppy)' \
+				':file:_files' \
+				'--delete'
+		;;
+		discardstate|bandwidthctl|getextradata|setextradata|debugvm)
+			_arguments \
+				:machine:_vboxmachines
+		;;
+		storagectl)
+			_arguments \
+				:machine:_vboxmachines \
+				'--name: :' \
+				'--add:type:(ide scsi floppy sas)' \
+				'--controller:type:(LSILogic|LSILogicSAS|BusLogic|IntelAHCI|PIIX3|PIIX4|ICH6|I82078)' \
+				--sataideemulation{1..4}":port:({1..30})" \
+				"--sataportcount:num:({1..30})" \
+				'--hostiocache:bool:(on off)' \
+				'--bootable:bool:(on off)' \
+				'--remove' #"
+		;;
+		storageattach)
+			_arguments \
+				:machine:_vboxmachines\
+				'--storagectl:storage ctl:("IDE Controller" "SATA Controller")' \
+				'--port: :' \
+				'--device: :' \
+				'--type:drive type:(dvddrive hdd fdd)' \
+				'--medium:mediums:_vboxmediums' \
+				'--mtype:behaviour:(normal writethrough immutable shareable)' \
+				'--comment: :' \
+				'--passthrough:enabled?:(on off)' \
+				'--bandwidthgroup: :' \
+				'--forceunmount' '--server: :' \
+				'--target: :' \
+				'--lun: :' \
+				'--encodedlun: :' \
+				'--username: :' \
+				'--password: :' \
+				'--intnet: :'
+		;;
+		createmedium|createhd)
+			_arguments \
+				'--filename:filename:_files -g \*.{vdi,vmdk,vhd}' \
+				'--size:megabytes:' \
+				'--sizebyte:bytes:' \
+				'--format:type:(VDI VMDK VHD)' \
+				'--variant:type:(Standard Fixed Split2G Stream ESX)'
+		;;
+		sharedfolder)
+			_arguments \
+				':action:(add remove)' \
+				:machine:_vboxmachines \
+				'--name: :' \
+				'--hostpath:path:_files -/' \
+				'--transient' \
+				'--readonly' \
+				'--automount'
+		;;
+    natnetwork)
+      _arguments \
+        ':action:(add modify remove start stop)' \
+        '--netname:natnet:_vboxnatnets' \
+        '--dhcp:bool:(on off)' \
+        '--ipv6:bool:(on off)' \
+        '--enable' \
+        '--disable'
+      ;;
+
+	esac
+	return 1
+}
+
+_vboxheadless() {
+	local context state line expl
+	local -A opt_args
+
+	_arguments \
+		'(-s -startvm --startvm)'{-s,-startvm,--startvm}'[Start given VM]:machine:_vboxmachines' \
+		'(-n --vnc)'{-n,--vnc}'[Enable the built in VNC server]' \
+		'(-m --vncport)'{-m,--vncport}'[TCP port number to use for the VNC server]:port:' \
+		'(-o --vncpass)'{-o,--vncpass}'[Set the VNC server password]:pw:' \
+		'(-v -vrde --vrde)'{-v,-vrde,--vrde}"[Enable (default) or disable the VRDE server or don't change the setting]::(on off config)" \
+		'(-e -vrdeproperty --vrdeproperty)'{-e,-vrdeproperty,--vrdeproperty}'[Set a VRDE property]: :' \
+		'(-c -capture --capture)'{-c,-capture,--capture}'[Record the VM screen output to a file]' \
+		'(-w --width)'{-w,--width}'[Frame width when recording]:width:' \
+		'(-h --height)'{-h,--height}'[Frame height when recording]:height:' \
+		'(-r --bitrate)'{-r,--bitrate}'[Recording bit rate when recording]:bitrate:' \
+		'(-f --filename)'{-f,--filename}'[File name when recording.  The codec used will be chosen based on the file extension]:filename:_files'
+}
+
+_virtualbox() {
+  local ret=1
+  _call_function ret _$service
+  return ret
+}
+
+_virtualbox "$@"
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et

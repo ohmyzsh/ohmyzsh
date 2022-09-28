@@ -1,0 +1,260 @@
+#compdef vagrant
+# ------------------------------------------------------------------------------
+# Copyright (c) 2009-2015 Robby Russell and contributors (see
+# https://github.com/robbyrussell/oh-my-zsh/contributors)
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for Vagrant (http://vagrantup.com).
+#
+#  Source: https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/vagrant
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Nikita Fedyashev (https://github.com/nfedyashev)
+#  * Mark Cornick (https://github.com/markcornick)
+#
+# ------------------------------------------------------------------------------
+
+# vagrant zsh completion
+
+local -a _1st_arguments
+_1st_arguments=(
+    'box:Box commands'
+    'connect:Connects to a shared, remote Vagrant environment'
+    'destroy:Destroys the vagrant environment'
+    'docker-logs:Shows Docker logs'
+    'docker-run:Run one-off commands against a Docker container'
+    'global-status:Reports the status of all active Vagrant environments on the system'
+    'halt:Halts the currently running vagrant environment'
+    'help:[TASK] Describe available tasks or one specific task'
+    'init:[box_name] [box_url] Initializes current folder for Vagrant usage'
+    'list-commands:Outputs all available Vagrant subcommands'
+    'login:Authenticates against a Vagrant Cloud server to access protected boxes'
+    'package:Packages a vagrant environment for distribution'
+    'plugin:Manage plugins'
+    'provision:Run the provisioner'
+    'push:Deploys code in this environment to a configured destination'
+    'rdp:Connects to machine via RDP'
+    'reload:Reload the vagrant environment'
+    'resume:Resumes a suspend vagrant environment'
+    'rsync:Syncs rsync synced folders to remote machine'
+    'rsync-auto:Syncs rsync synced folders automatically when files change'
+    'share:Shares the Vagrant environment and allows remote access'
+    'ssh:SSH into the currently running environment'
+    'ssh-config:Outputs .ssh/config valid syntax for connecting to this environment via ssh'
+    'status:Shows the status of the current Vagrant environment'
+    'suspend:Suspends the currently running vagrant environment'
+    'up:Creates the vagrant environment'
+    'version:Prints the currently installed Vagrant version and checks for new updates'
+    '--version:Prints the Vagrant version information'
+)
+
+local -a _box_arguments
+_box_arguments=(
+    'add:NAME URI Add a box to the system'
+    'help:COMMAND Describe subcommands or one specific subcommand'
+    'list:Lists all installed boxes'
+    'outdated:Checks if there is a new version available for the box'
+    'remove:NAME Remove a box from the system'
+    'repackage:NAME Repackage an installed box into a `.box` file.'
+    'update:Updates the box, if there any updates available'
+)
+
+local -a _plugin_arguments
+_plugin_arguments=(
+    'install:NAME Install a plugin to the system'
+    'license:NAME LICENSE_FILE Add a license for an installed plugin'
+    'list:Lists all installed plugins'
+    'uninstall:NAME Uninstall a plugin from the system'
+    'update:[NAMES...] Update all or specified plugins'
+)
+
+__task_list ()
+{
+    local expl
+    declare -a tasks
+
+    tasks=(box destroy global-status halt init package plugin provision \
+           reload resume ssh ssh_config status suspend up version)
+
+    _wanted tasks expl 'help' compadd $tasks
+}
+
+__box_list ()
+{
+    _wanted application expl 'command' compadd $(command vagrant box list | \
+                                                 awk '{print $1}' | \
+                                                 sed -e 's/ /\\ /g')
+}
+
+__plugin_list ()
+{
+    _wanted application expl 'command' compadd $(command vagrant plugin list \
+                                                 2>/dev/null| cut -d' ' -f1)
+}
+
+_vagrant_caching_policy()
+{
+    local reg_time comp_time check_file
+
+    case "${1##*/}" in
+        VAGRANT_VMS)
+            if [[ -z $VAGRANT_CWD ]]; then
+                check_file=./Vagrantfile
+            else
+                check_file=$VAGRANT_CWD/Vagrantfile
+            fi
+            ;;
+        *)
+            echo "unknown type: $1"
+            return -1
+            ;;
+    esac
+
+    case "$OSTYPE" in
+        darwin*) STATCMD="/usr/bin/stat -f '%c'" ;;
+        *)      STATCMD="stat -c '%Z'" ;;
+    esac
+    reg_time=${$(${(z)STATCMD} $check_file):Q}
+    comp_time=${$(${(z)STATCMD} $1):Q}
+
+    return $(( reg_time < comp_time ))
+}
+
+__vm_list ()
+{
+    local cache_policy
+    zstyle -s ":completion:${curcontext}:" cache-policy cache_policy
+    zstyle ":completion:${curcontext}:" cache-policy \
+        ${cache_policy:-_vagrant_caching_policy}
+
+    # Cache the list of VMs available
+    if ( [[ ${+_vagrant_vms} -eq 0 ]] || _cache_invalid VAGRANT_VMS ) &&
+        ! _retrieve_cache VAGRANT_VMS;
+    then
+      _vagrant_vms=( $(_call_program path-all "vagrant status | \
+                       awk '{print \$1}' | \
+                       grep -Ev '^$|^(Current|This|above|VM,)$'" ) )
+      _store_cache VAGRANT_VMS _vagrant_vms
+    fi
+
+    _wanted application expl 'command' compadd $_vagrant_vms
+}
+
+__vagrant-box ()
+{
+    local curcontext="$curcontext" state line
+    typeset -A opt_args
+
+    _arguments -C \
+        ':command:->command' \
+        '*::options:->options'
+
+   case $state in
+       (command)
+           _describe -t commands "gem subcommand" _box_arguments
+           return
+       ;;
+
+       (options)
+           case $line[1] in
+               (repackage|remove)
+                   _arguments ':feature:__box_list'
+               ;;
+           esac
+       ;;
+    esac
+}
+
+__vagrant-plugin ()
+{
+    local curcontext="$curcontext" state line
+    local -A opt_args
+
+    _arguments -C \
+        ':command:->command' \
+        '*::options:->options'
+
+   case $state in
+       (command)
+           _describe -t commands "gem subcommand" _plugin_arguments
+           return
+       ;;
+
+       (options)
+           case $line[1] in
+               (license)
+                   _arguments ':feature:__plugin_list' '*:file:_files'
+               ;;
+               (uninstall)
+                   _arguments ':feature:__plugin_list'
+               ;;
+           esac
+       ;;
+    esac
+}
+
+local expl
+local -a boxes installed_boxes
+
+local curcontext="$curcontext" state line
+local -A opt_args
+
+_arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+case $state in
+  (command)
+      _describe -t commands "gem subcommand" _1st_arguments
+      return
+  ;;
+
+  (options)
+    case $line[1] in
+      (help)
+         _arguments ':feature:__task_list'
+      ;;
+
+      (box)
+          __vagrant-box
+      ;;
+
+      (plugin)
+          __vagrant-plugin
+      ;;
+      (up|provision|package|destroy|reload|ssh|halt|resume|status|suspend)
+          _arguments ':feature:__vm_list'
+    esac
+  ;;
+esac
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et

@@ -1,0 +1,66 @@
+#compdef afew
+# ------------------------------------------------------------------------------
+# Copyright (c) 2016 Github zsh-users - http://github.com/zsh-users
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * Neither the name of the zsh-users nor the
+#       names of its contributors may be used to endorse or promote products
+#       derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL ZSH-USERS BE LIABLE FOR ANY
+# DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for afew an initial tagging script for notmuch mail. (https://github.com/teythoon/afew)
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Jindřich Pilař (https://github.com/JindrichPilar)
+#
+# ------------------------------------------------------------------------------
+
+_arguments \
+  '(- 1 *)-h[display usage information]' \
+  "(-c --classify -l --learn= -t --tag -u --update -U --update-reference -m --move-mails)"{-w,--watch}"[continuously monitor the mailbox for new messages matching the given query]" \
+  "(-c --classify -l --learn= -u --update -U --update-reference -m --move-mails -w --watch)"{-t,--tag}"[run the tag filters]" \
+  "(-c --classify -t --tag -u --update -U --update-reference -m --move-mails -w --watch)"{-l,--learn=}"[train category with the messages matching query]" \
+  "(-c --classify -l --learn= -t --tag -U --update-reference -m --move-mails -w --watch)"{-u,--update}"[update the categories (requires no query)]" \
+  "(-c --classify -l --learn= -t --tag -u --update -m --move-mails -w --watch)"{-U,--update-reference}"[update the reference category (takes quite some time) (requires no query)]" \
+  "(-l --learn= -t --tag -u --update -U --update-reference -m --move-mails -w --watch)"{-c,--classify}"[classify each message matching the iven query]" \
+  "(-c --classify -l --learn= -t --tag -u --update -U --update-reference -w --watch)"{-m,--move-mails}"[move mail files between maildir folders]" \
+  "(-n --all)"{-a,--all}"[operate on all email]" \
+  "(-a --new)"{-n,--new}"[operate on all new email]" \
+  {-C,--notmuch-config=}"[specify path to notmuch configuration file]:files:_files" \
+  {-e,--enable-filters=}"[specify filter classes to use]:filter" \
+  {-d,--dry-run}"[don't change the DB]" \
+  {-R,--reference-set-size=}"[specify size of the reference set]:size [1000]" \
+  {-T,--reference-set-timeframe-days=}"[don't use emails older than specified age]:age (days) [30]" \
+  {--verbose,-v}"[be more verbose]" \
+  '*: :_guard "^-*" query'
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et

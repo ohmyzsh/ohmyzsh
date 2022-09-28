@@ -1,0 +1,36 @@
+#compdef periscope
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for Periscope (http://code.google.com/p/periscope).
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Julien Nicoulaud <julien.nicoulaud@gmail.com>
+#
+# ------------------------------------------------------------------------------
+
+
+_arguments \
+  '(- : *)'{-h,--help}'[show help message and exit]' \
+  '(- : *)--version[show version number and exit]' \
+  '*'{-l,--language}'[wanted language]: :_language_codes ISO-639-1' \
+  '(-f --force)'{-f,--force}'[replace existing subtitle file]' \
+  '(-q --query)'{-q,--query}'[query to send to the subtitles website]:queries' \
+  '--list-plugins[list all plugins supported by periscope]' \
+  '--list-active-plugins[list all plugins used to search subtitles]' \
+  '--cache-folder[cache/config directory to use]: :_files -/' \
+  '--quiet[run in quiet mode (only show warn and error messages)]' \
+  '--debug[set the logging level to debug]' \
+  '*: :_files'
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et

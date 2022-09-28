@@ -1,0 +1,162 @@
+#compdef nanoc
+# ------------------------------------------------------------------------------
+# Copyright (c) 2020 OKURA Masafumi, MIT License
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for nanoc (https://nanoc.ws/)
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * OKURA Masafumi (https://okuramasafumi.com)
+#
+#  This works is heavily inspired by the middleman completion by
+#  Jozef Izso (https://github.com/jozefizso)
+#
+# ------------------------------------------------------------------------------
+
+local ret=1 state
+
+local -a common_ops
+common_ops=(
+  {-C,--no-color}"[disable color]"
+  {-V,--verbose}"[make output more detailed]"
+  {-d,--debug}"[enable debugging]"
+  {-e,--env=}"[set environment]"
+  {-h,--help}"[show the help message and quit]"
+  {-l,--color}"[enable color]"
+  {-v,--version}"[show version information and quit]"
+  {-w,--warn}"[enable warnings]"
+)
+
+typeset -A opt_args
+_arguments \
+  ':subcommand:->subcommand' \
+  $common_ops \
+  '*::options:->options' && ret=0
+
+case $state in
+  subcommand)
+    local -a subcommands
+    subcommands=(
+      "check:run issue checks"
+      "compile:compile items of this site"
+      "create-site:create a site"
+      "deploy:deploy the compiled site"
+      "help:show help"
+      "prune:remove files not managed by Nanoc from the output directory"
+      "shell:open a shell on the Nanoc environment"
+      "show-data:show data in this site"
+      "show-plugins:show all available plugins"
+      "show-rules:describe the rules for each item"
+      "view:start the web server that serves static files"
+    )
+
+    _describe -t subcommands 'nanoc subcommand' subcommands && ret=0
+  ;;
+
+  options)
+    local -a args
+    args=(
+      $common_ops
+    )
+
+    local -a help
+    help=(
+      "--help[Display help information]"
+    )
+
+    case $words[1] in
+      check)
+        args=(
+          {-L,--list}"[list all checks]"
+          {-a,--all}"[run all checks]"
+        )
+      ;;
+
+      compile)
+        args=(
+          "--diff[generate diff]"
+          )
+      ;;
+
+      create-site)
+        args=(
+          "--force[force creation of new site]"
+          )
+      ;;
+
+      deploy)
+        args=(
+          {-C,--no-check}"[do not run the issue checks marked for deployment]"
+          {-D,--list-deployers}"[list available deployers]"
+          {-L,--list}"[list available locations to deploy to]"
+          {-n,--dry-run}"[show what would be deployed]"
+          {-t,--target=}"[specify the location to deploy to (default:\`default\`)]"
+          )
+      ;;
+
+      prune)
+        args=(
+          {-n,--dry-run}"[print files to be deleted instead of actually deleting them]"
+          {-y,--yes}"[confirm deletion]"
+          )
+      ;;
+
+      shell)
+        args=(
+          {-p,--preprocess}"[run preprocessor]"
+          )
+      ;;
+
+      show-data)
+        args=(
+          )
+      ;;
+
+      show-plugins)
+        args=(
+          )
+      ;;
+
+      show-rules)
+        args=(
+          )
+      ;;
+
+      view)
+        args=(
+          {-H,--handler=}"[specify the handler to use(webrick/mongrel/...)]"
+          {-L,--live-reload}"[reload on changes]"
+          {-o,--host=}"[specify the host to listen on(default: 127.0.0.1)]"
+          {-p,--port=}"[specify the port to listen on(default: 3000)]"
+          )
+      ;;
+    esac
+
+    _arguments $args && ret=0
+  ;;
+esac
+
+return ret

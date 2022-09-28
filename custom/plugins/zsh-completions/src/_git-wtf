@@ -1,0 +1,65 @@
+#compdef git-wtf
+# ------------------------------------------------------------------------------
+# Copyright (c) 2011 Github zsh-users - http://github.com/zsh-users
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * Neither the name of the zsh-users nor the
+#       names of its contributors may be used to endorse or promote products
+#       derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL ZSH-USERS BE LIABLE FOR ANY
+# DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for git-wtf, authored by
+#  William Morgan (http://git-wt-commit.rubyforge.org/git-wtf)
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Mario Fernandez (https://github.com/sirech)
+#  * Shohei YOSHIDA (https://github.com/syohex)
+#
+# ------------------------------------------------------------------------------
+
+__git_wtf_branches() {
+  local -a branches
+  branches=(${(f)"$(git for-each-ref --format='%(refname:short)' refs/heads/)"})
+  _describe 'branch' branches
+}
+
+_arguments -w -C -s \
+    '(--long --short)'{-l,--long}'[include author info and date for each commit]' \
+    '(--long --short)'{-s,--short}'[do not show commits]' \
+    '(--all)'{-a,--all}'[show all branches across all remote repos, not just those from origin]' \
+    '(--all-commits)'{-A,--all-commits}'[show all commits, not just the first 5]' \
+    '(--key)'{-k,--key}'[show key]' \
+    '(--relations)'{-r,--relations}'[show relation to features / integration branches]' \
+    '(--dump-config)--dump-config[print out current configuration and exit]' \
+    '*: :__git_wtf_branches'
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et

@@ -1,0 +1,164 @@
+#compdef udisksctl
+#
+# ------------------------------------------------------------------------------
+# The MIT License
+#
+# Copyright 2014 Damir Jelić
+# 
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+#
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for udisksctl
+#   (https://cgit.freedesktop.org/udisks/tree/tools)
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Damir Jelić <poljarinho at gmail.com> [1]
+#  * Ole Jørgen Brønner <olejorgenb at yahoo.no> (minor additions)
+#
+# [1] https://lists.freedesktop.org/archives/devkit-devel/2014-February/001554.html
+#
+# ------------------------------------------------------------------------------
+# Notes
+# -----
+#
+# udisksctl actually provide built-in support for completion: It accepts an
+# special command 'complete' that returns completions. That is what drives the
+# upstream bash completion. In the future one might consider rewriting using
+# that. (but not sure how straight forward it would be to provide descriptions?)
+#
+
+_paths() {
+    local -a _path_list
+
+    for _path in $(_call_program paths "udisksctl complete \"udisksctl $words\" $CURSOR" | sed 's/:/\\:/g'); do
+        _path_list+=$_path
+    done
+
+    _describe 'path' _path_list
+}
+
+_filesystems() {
+    _fs_types=(
+        'adfs' 'affs' 'autofs' 'cifs' 'coda' 'coherent' 'cramfs' 'debugfs' 'devpts'
+        'efs' 'ext' 'ext2' 'ext3' 'ext4' 'hfs' 'hfsplus' 'hpfs' 'iso9660' 'jfs' 'minix'
+        'msdos' 'ncpfs' 'nfs' 'nfs4' 'ntfs' 'proc' 'qnx4' 'ramfs' 'reiserfs' 'romfs'
+        'squashfs' 'smbfs' 'sysv' 'tmpfs' 'ubifs' 'udf' 'ufs' 'umsdos' 'usbfs' 'vfat'
+        'xenix' 'xfs' 'xiafs'
+    )
+
+    _describe 'file system type' _fs_types
+}
+
+_udisksctl() {
+    typeset -A opt_args
+    local curcontext="$curcontext" state line ret=1
+
+    _arguments -C \
+        '1:udisksctl commands:->cmds' \
+        '*:: :->cmd_args' && ret=0
+
+    case $state in
+        cmds)
+            local commands; commands=(
+                'help:show help'
+                'info:show info about an object'
+                'dump:show info about all object'
+                'status:shows high-level status'
+                'monitor:monitor changes to objects'
+                'mount:mount a filesystem'
+                'unmount:unmount a filesystem'
+                'unlock:unlock an encrypted device'
+                'lock:lock an encrypted device'
+                'loop-setup:set-up a loop device'
+                'loop-delete:delete a loop device'
+                'power-off:safely power off a drive'
+                'smart-simulate:set SMART data for a drive'
+            )
+            _describe -t commands 'udisksctl command' commands && ret=0
+        ;;
+
+        cmd_args)
+            case $words[1] in
+                info)
+                    _arguments \
+                        {-p,--object-path}'[specify object to get information about]:object path:_paths' \
+                        {-b,--block-device}'[specify block device to get information about]:block device:_paths' \
+                        {-d,--drive}'[specify drive to get information about]:drive:_paths' && ret=0
+                ;;
+                mount)
+                    _arguments \
+                        {-p,--object-path}'[specify object to mount]:object path:_paths' \
+                        {-b,--block-device}'[specify block device to mount]:block device:_paths' \
+                        {-t,--filesystem-type}'[specify filesystem type to use]:fs type:_filesystems' \
+                        {-o,--options}'[mount options]' \
+                        "(--no-user-interaction)--no-user-interaction[don't authenticate the user if needed]" && ret=0
+                ;;
+                unmount)
+                    _arguments \
+                        {-p,--object-path}'[object to unmount]:object path:_paths' \
+                        {-b,--block-device}'[block device to unmount]:block device:_paths' \
+                        {-f,--force}'[force/lazy unmount]' \
+                        "(--no-user-interaction)--no-user-interaction[don't auhenticate the user if needed]" && ret=0
+                ;;
+                unlock|lock)
+                    _arguments \
+                        {-p,--object-path}'[object to lock/unlock]:object path:_paths' \
+                        {-b,--block-device}'[block device to lock/unlock]:block device:_paths' \
+                        "(--no-user-interaction)--no-user-interaction[don't authenticate the user if needed]" && ret=0
+                ;;
+                loop-setup)
+                    _arguments \
+                        {-f,--file}'[specify file to set-up a loop device for]:files:_files' \
+                        {-r,--read-only}'[setup read-only device]' \
+                        {-o,--offset}'[start at specified offset into file]:offset (bytes)' \
+                        {-s,--size}'[limit size]:limit (bytes)' \
+                        "(--no-user-interaction)--no-user-interaction[don't authenticate the user if needed]" && ret=0
+                ;;
+                loop-delete)
+                    _arguments \
+                        {-p,--object-path}'[object for loop device to delete]:object path:_paths' \
+                        {-b,--block-device}'[loop device to delete]:block device:_paths' \
+                        "(--no-user-interaction)--no-user-interaction[don't authenticate the user if needed]" && ret=0
+                ;;
+                power-off)
+                    _arguments \
+                        {-p,--object-path}'[object path for ATA device]:object path:_paths' \
+                        {-b,--block-device}'[device file for ATA device]:block device:_paths' \
+                        "(--no-user-interaction)--no-user-interaction[don't authenticate the user if needed]" && ret=0
+                ;;
+                smart-simulate)
+                    _arguments \
+                        {-f,--file}'[file with libatasmart blob]:files:_files' \
+                        {-p,--object-path}'[object to get information about]:object path:_paths' \
+                        {-b,--block-device}'[block device to get information about]:block device:_paths' \
+                        "(--no-user-interaction)--no-user-interaction[don't authenticate the user if needed]" && ret=0
+                ;;
+            esac
+        ;;
+    esac
+    return ret
+}
+
+_udisksctl "$@"
