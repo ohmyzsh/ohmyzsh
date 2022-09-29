@@ -1,0 +1,408 @@
+#!/usr/bin/env zsh
+#
+# This script does not have a stable API.
+#
+# Usage: mbuild [-b git-ref] [kernel-arch]...
+#
+# Builds a bunch of gitstatusd-* binaries. Without arguments builds binaries
+# for all platforms. git-ref defaults to master.
+#
+# Before using this script you need to set up build servers and list them
+# in ~/.ssh/config. There should be a Host entry for every value of `assets`
+# association defined below. VMs and cloud instances work as well as physical
+# machines, including localhost. As long as the machine has been set up as
+# described below and you can SSH to it without password, it should work.
+#
+#                    ===[ Build Server Setup ]===
+#
+#                              Linux
+#
+# - Install docker.
+#   $ apt install docker.io     # adjust appropriately if there is no `apt`
+#   $ usermod -aG docker $USER  # not needed if going to build as root
+# - Install git.
+#   $ apt install git           # adjust appropriately if there is no `apt`
+#
+#                              macOS
+#
+# - Install compiler tools:
+#   $ xcode-select --install
+# - Install homebrew: https://brew.sh/.
+#   $ bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+#
+#                             FreeBSD
+#
+# - Install git.
+#   $ pkg install git
+#
+#                             Windows
+#
+# - Disable Windows Defender (optional).
+#   ps> Set-MpPreference -DisableRealtimeMonitoring $true
+# - Install 64-bit and 32-bit msys2: https://www.msys2.org/wiki/MSYS2-installation/.
+#   - Open each of them after installation, type `pacman -Syu --noconfirm` and close the window.
+#   - Then run in powershell while having no msys2 or cygwin windows open:
+#     ps> C:\msys32\autorebase.bat
+#     ps> C:\msys64\autorebase.bat
+# - Install 64-bit and 32-bit cygwin: https://cygwin.com/install.html.
+#   - Choose to install 32-bit to c:/cygwin32 instead of the default c:/cygwin.
+#   - Select these packages: binutils, cmake, gcc-core, gcc-g++, git, make, perl, wget.
+#
+# IMPORTANT: Install msys2 and cygwin one at a time.
+#
+# IMPORTANT: msys2 builder can reboot the build machine.
+#
+# Option 1: OpenSSH for Windows
+#
+# - Install OpenSSH: https://docs.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse.
+#   ps> Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+#   ps> Start-Service sshd
+#   ps> Set-Service -Name sshd -StartupType 'Automatic'
+# - Enable publickey authentication: https://stackoverflow.com/a/50502015/1095235.
+#   ps> cd $env:USERPROFILE
+#   ps> mkdir .ssh
+#   ps> notepad.exe .ssh/authorized_keys
+#     - Paste your public key, save, close.
+#   ps> icacls .ssh/authorized_keys /inheritance:r
+#   ps> notepad.exe C:\ProgramData\ssh\sshd_config
+#     - Comment out these two lines, save, close:
+#       # Match Group administrators
+#       #   AuthorizedKeysFile __PROGRAMDATA__/ssh/administrators_authorized_keys
+#   ps> Restart-Service sshd
+#
+# Option 2: OpenSSH from WSL
+#
+# - Install WSL.
+# - Install Ubuntu.
+# - Install sshd.
+#   $ apt install openssh-server
+#   $ dpkg-reconfigure openssh-server
+#   $ cat >/etc/ssh/sshd_config <<\END
+#     ClientAliveInterval 60
+#     AcceptEnv TERM LANG LC_*
+#     PermitRootLogin no
+#     AllowTcpForwarding no
+#     AllowAgentForwarding no
+#     AllowStreamLocalForwarding no
+#     AuthenticationMethods publickey
+#   END
+#   service ssh --full-restart
+# - Add your public ssh key to ~/.ssh/authorized_keys.
+# - Make `sshd` start when Windows boots.
+
+'emulate' '-L' 'zsh' '-o' 'no_aliases' '-o' 'err_return'
+setopt no_unset extended_glob pipe_fail prompt_percent typeset_silent \
+  no_prompt_subst no_prompt_bang pushd_silent warn_create_global
+
+autoload -Uz is-at-least
+
+if ! is-at-least 5.1 || [[ $ZSH_VERSION == 5.4.* ]]; then
+  print -ru2 -- "[error] unsupported zsh version: $ZSH_VERSION"
+  return 1
+fi
+
+zmodload zsh/system
+
+local -r git_url='https://github.com/romkatv/gitstatus.git'
+
+local -rA assets=(
+  # target kernel-arch   hostname of the build machine
+  cygwin_nt-10.0-i686    build-windows-x86_64
+  cygwin_nt-10.0-x86_64  build-windows-x86_64
+  msys_nt-10.0-i686      build-windows-x86_64
+  msys_nt-10.0-x86_64    build-windows-x86_64
+  darwin-arm64           build-macos-arm64
+  darwin-x86_64          build-macos-x86_64
+  freebsd-amd64          build-freebsd-amd64
+  linux-aarch64          build-linux-aarch64
+  linux-armv6l           build-linux-armv7l
+  linux-armv7l           build-linux-armv7l
+  linux-i686             build-linux-x86_64
+  linux-ppc64le          build-linux-ppc64le
+  linux-x86_64           build-linux-x86_64
+)
+
+local -rA protocol=(
+  'cygwin_nt-10.0-*' windows
+  'msys_nt-10.0-*'   windows
+  'darwin-*'         unix
+  'freebsd-*'        unix
+  'linux-*'          unix
+)
+
+local -r rootdir=${ZSH_SCRIPT:h}
+local -r logs=$rootdir/logs
+local -r locks=$rootdir/locks
+local -r binaries=$rootdir/usrbin
+
+function usage() {
+  print -r -- 'usage: mbuild [-b REF] [KERNEL-ARCH]...'
+}
+
+local OPTARG opt git_ref=master
+local -i OPTIND
+while getopts ":b:h" opt; do
+  case $opt in
+    h) usage; return 0;;
+    b) [[ -n $OPTARG ]]; git_ref=$OPTARG;;
+    \?) print -ru2 -- "mbuild: invalid option: -$OPTARG"           ; return 1;;
+    :)  print -ru2 -- "mbuild: missing required argument: -$OPTARG"; return 1;;
+    *)  print -ru2 -- "mbuild: invalid option: -$opt"              ; return 1;;
+  esac
+done
+
+shift $((OPTIND - 1))
+
+(( $# )) || set -- ${(ko)assets}
+set -- ${(u)@}
+
+local platform
+for platform; do
+  if (( ! $+assets[$platform] )); then
+    print -ru2 -- "mbuild: invalid platform: $platform"
+    return 1
+  fi
+done
+
+local build='
+  rm -rf gitstatus
+  git clone --recursive --shallow-submodules --depth=1 -b '$git_ref' '$git_url'
+  cd gitstatus
+  if command -v zsh >/dev/null 2>&1; then
+    sh=zsh
+  elif command -v dash >/dev/null 2>&1; then
+    sh=dash
+  elif command -v ash >/dev/null 2>&1; then
+    sh=ash
+  else
+    sh=sh
+  fi
+  $sh -x ./build -m '
+
+function build-unix() {
+  local intro flags=(-sw)
+  case $2 in
+    linux-ppc64le) ;;
+    linux-*)       flags+=(-d docker);;
+    darwin-arm64)  intro='PATH="/opt/homebrew/bin:$PATH"';;
+    darwin-*)      intro='PATH="/usr/local/bin:$PATH"';;
+  esac
+  ssh $1 -- /bin/sh -uex <<<"
+    $intro
+    cd /tmp
+    $build ${2##*-} ${(j: :)${(@q)flags}}"
+  scp $1:/tmp/gitstatus/usrbin/gitstatusd $binaries/gitstatusd-$2
+}
+
+function build-windows() {
+  local shell=$(ssh $1 'echo $0')
+  if [[ $shell == '$0'* ]]; then
+    local c='c:'
+  else
+    local c='/mnt/c'
+  fi
+
+  local tmp env bin intro flags=(-w)
+  case $2 in
+    cygwin_nt-10.0-i686)   bin='cygwin32/bin'  ;|
+    cygwin_nt-10.0-x86_64) bin='cygwin64/bin'  ;|
+    msys_nt-10.0-i686)     bin='msys32/usr/bin';|
+    msys_nt-10.0-x86_64)   bin='msys64/usr/bin';|
+    cygwin_nt-10.0-*)
+      tmp='/cygdrive/c/tmp'
+    ;|
+    msys_nt-10.0-*)
+      tmp='/c/tmp'
+      env='MSYSTEM=MSYS'
+      # TODO: fix this (some errors about PGP keys).
+      # flags+=(-s)
+      # intro='pacman -S --needed --noconfirm git; '
+      intro+='PATH="$PATH:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl"'
+      while true; do
+        # TODO: run autorebase only when getting an error that can be fixed by autorebasing.
+        break
+        local out
+        out="$(ssh $1 cmd.exe "$c/${bin%%/*}/autorebase.bat" 2>&1)"
+        [[ $out == *"The following DLLs couldn't be rebased"* ]] || break
+        # Reboot to get rid of whatever is using those DLLs.
+        ssh $1 powershell.exe <<<'Restart-Computer -Force' || true
+        sleep 30
+        while ! ssh $1 <<<''; do sleep 5; done
+      done
+      () {
+        while true; do
+          # TODO: fix this (some errors about PGP keys).
+          break
+          local -i fd
+          exec {fd}< <(
+            ssh $1 $c/$bin/env.exe $env c:/$bin/bash.exe -l 2>&1 <<<"
+              pacman -Syu --noconfirm
+              exit")
+          {
+            local line
+            while true; do
+              IFS= read -u $fd -r line || return 0
+              if [[ $line == *"warning: terminate MSYS2"* ]]; then
+                # At this point the machine is hosed. A rogue process with a corrupted name
+                # is eating all CPU. The top SSH connection won't terminate on its own.
+                ssh $1 powershell.exe <<<'Restart-Computer -Force' || true
+                sleep 30
+                while ! ssh $1 <<<''; do sleep 5; done
+                break
+              fi
+            done
+          } always {
+            exec {fd}<&-
+            kill -- -$sysparams[procsubstpid] 2>/dev/null || true
+          }
+        done
+      } "$@"
+    ;|
+  esac
+
+  ssh $1 $c/$bin/env.exe $env c:/$bin/bash.exe -l <<<"
+    set -uex
+    $intro
+    mkdir -p -- $tmp
+    cd -- $tmp
+    $build ${2##*-} ${(j: :)${(@q)flags}}
+    exit"
+  scp $1:$c/tmp/gitstatus/usrbin/gitstatusd $binaries/gitstatusd-$2
+  chmod +x $binaries/gitstatusd-$2
+}
+
+if [[ -r /proc/version && "$(</proc/version)" == *Microsoft* ]]; then
+  () {
+    (( $# )) || return 0
+    print -ru2 -- "WARNING: lock files exist: $@"
+    (( $# )) && rm -- $@
+  } $locks/*(N)
+
+  function flock() {
+    local fd
+    sysopen -ro cloexec -u fd <(
+      exec </dev/null 2>/dev/null
+      (
+        trap '' TERM PIPE
+        local fd
+        while true; do
+          sysopen -wo create,excl -u fd -- $1 && break
+          sleep 1
+        done
+        exec {fd}>&-
+        while true; do
+          print || break
+        done
+        rm -- $1
+      ) &!
+    )
+    local REPLY
+    IFS= read -ru $fd
+  }
+else
+  function flock() {
+    : >>$1
+    zsystem flock $1
+  }
+fi
+
+function build() (
+  setopt xtrace
+  local platform=$1
+  local machine=$assets[$platform]
+  flock $locks/$machine
+  build-${protocol[(k)$platform]} $machine $platform
+  local tmp=gitstatusd-$platform.tmp.$$.tar.gz
+  ( cd -q -- $binaries; tar --owner=0 --group=0 -I 'gzip -9' -cf $tmp gitstatusd-$platform )
+  mv -f -- $binaries/$tmp $binaries/gitstatusd-$platform.tar.gz
+  # Make sure the last command is a built-in (important for flock).
+  :
+)
+
+function mbuild() {
+  local platform pid pids=()
+  for platform; do
+    build $platform &>$logs/$platform &
+    print -r -- "starting build for $platform on $assets[$platform] (pid $!)"
+    pids+=($platform $!)
+  done
+  local failed=()
+  for platform pid in $pids; do
+    print -rn -- "$platform => "
+    if wait $pid; then
+      print -r -- "ok"
+    else
+      print -r -- "error"
+      failed+=$platform
+    fi
+  done
+  (( $#failed )) || return 0
+  print
+  print -r -- "Error logs:"
+  print
+  for platform in $failed; do
+    print -r -- "  $platform => $logs/$platform"
+  done
+  return 1
+}
+
+# Copied from https://github.com/romkatv/run-process-tree.
+function run-process-tree() {
+  zmodload zsh/parameter zsh/param/private || return
+  local -P opt=(${(kv)options[@]})         || return
+  local -P pat=(${patchars[@]})            || return
+  local -P dis_pat=(${dis_patchars[@]})    || return
+  emulate -L zsh -o err_return             || return
+  setopt monitor traps_async pipe_fail no_unset
+  zmodload zsh/system
+
+  if (( $# == 0 )); then
+    print -ru2 -- 'usage: run-process-tree command [arg]...'
+    return 1
+  fi
+
+  local -P stdout REPLY
+  exec {stdout}>&1
+  {
+    {
+      local -Pi pipe
+      local -P gid=$sysparams[pid]
+      local -P sig=(ABRT EXIT HUP ILL INT PIPE QUIT TERM ZERR)
+      local -P trap=(trap "trap - $sig; kill -- -$sysparams[pid]" $sig)
+
+      exec {pipe}>&1 1>&$stdout
+      $trap
+
+      {
+        $trap
+        while sleep 1 && print -u $pipe .; do; done
+      } 2>/dev/null &
+      local -Pi watchdog=$!
+
+      {
+        trap - ZERR
+        exec {pipe}>&-
+        enable -p -- $pat
+        disable -p -- $dis_pat
+        options=($opt zle off monitor off)
+        "$@"
+      } &
+      local -Pi ret
+      wait $! || ret=$?
+
+      trap "exit $ret" TERM
+      kill $watchdog
+      wait $watchdog
+      return ret
+    } | while read; do; done || return
+  } always {
+    exec {stdout}>&-
+  }
+}
+
+mkdir -p -- $logs $locks $binaries
+
+() {
+  run-process-tree mbuild $@
+  exit
+} "$@"

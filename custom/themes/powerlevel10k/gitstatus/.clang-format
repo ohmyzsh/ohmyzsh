@@ -1,0 +1,4 @@
+BasedOnStyle: Google
+ColumnLimit: 100
+DerivePointerAlignment: false
+PointerAlignment: Left

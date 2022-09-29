@@ -1,0 +1,22 @@
+# This value gets embedded in gitstatusd at build time. It is
+# read by ./Makefile. `gitstatusd --version` reports it back.
+#
+# This value is also read by shell bindings (indirectly, through
+# ./install) when using GITSTATUS_DAEMON or usrbin/gitstatusd.
+gitstatus_version="v1.5.4"
+
+# libgit2 is a build time dependency of gitstatusd. The values of
+# libgit2_version and libgit2_sha256 are read by ./build.
+#
+# If ./deps/libgit2-${libgit2_version}.tar.gz doesn't exist, build
+# downloads it from the following location:
+#
+#   https://github.com/romkatv/libgit2/archive/${libgit2_version}.tar.gz
+#
+# Once downloaded, the tarball is stored at the path indicated
+# above so that repeated builds don't consume network bandwidth.
+#
+# If sha256 of ./deps/libgit2-${libgit2_version}.tar.gz doesn't match,
+# build gets aborted.
+libgit2_version="tag-0ad3d776aa86dd607dc86dcd7f77ad3ed7ebec61"
+libgit2_sha256="c5d0117ae74d3ef244c26f10cce022019077dbc4563e6251fa9f56d36868ce74"
