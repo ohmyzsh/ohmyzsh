@@ -13,14 +13,14 @@ fi
 
 if [[ -f "$NVM_DIR/nvm.sh" ]]; then
   # Load nvm if it exists in $NVM_DIR
-  source "$NVM_DIR/nvm.sh" ${NVM_LAZY+"--no-use"}
+  source "$NVM_DIR/nvm.sh" ${NVM_LAZY+"--no-use"} &|
 elif (( $+commands[brew] )); then
   # Otherwise try to load nvm installed via Homebrew
   # User can set this if they have an unusual Homebrew setup
   NVM_HOMEBREW="${NVM_HOMEBREW:-${HOMEBREW_PREFIX:-$(brew --prefix)}/opt/nvm}"
   # Load nvm from Homebrew location if it exists
   if [[ -f "$NVM_HOMEBREW/nvm.sh" ]]; then
-    source "$NVM_HOMEBREW/nvm.sh" ${NVM_LAZY+"--no-use"}
+    source "$NVM_HOMEBREW/nvm.sh" ${NVM_LAZY+"--no-use"} &|
   else
     return
   fi
