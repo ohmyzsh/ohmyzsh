@@ -47,7 +47,7 @@ __apply() {
         '-lock=[(true) Lock the state file when locking is supported.]:lock:(true false)' \
         '-lock-timeout=[(0s) Duration to retry a state lock.]' \
         '-input=[(true) Ask for input for variables if not directly set.]' \
-        '-no-color[If specified, output wil be colorless.]' \
+        '-no-color[If specified, output will be colorless.]' \
         '-parallelism=[(10) Limit the number of parallel resource operations.]' \
         '-refresh=[(true) Update state prior to checking for differences. This has no effect if a plan file is given to apply.]' \
         '-state=[(terraform.tfstate) Path to read and save state (unless state-out is specified).]:statefile:_files -g "*.tfstate"' \
