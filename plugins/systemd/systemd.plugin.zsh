@@ -93,6 +93,9 @@ alias scu-enable-now="scu-enable --now"
 alias scu-disable-now="scu-disable --now"
 alias scu-mask-now="scu-mask --now"
 
+# --full commands
+alias sc-edit-full="sc-edit --full"
+alias scu-edit-full="scu-edit --full"
 
 function systemd_prompt_info {
   local unit
