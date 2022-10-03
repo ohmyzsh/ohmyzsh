@@ -241,21 +241,21 @@ function _omz::plugin::disable {
 
   # Remove plugins substitution awk script
   local awk_subst_plugins="\
-  gsub(/\s+(${(j:|:)dis_plugins})/, \"\") # with spaces before
-  gsub(/(${(j:|:)dis_plugins})\s+/, \"\") # with spaces after
+  gsub(/[ \t]+(${(j:|:)dis_plugins})/, \"\") # with spaces before
+  gsub(/(${(j:|:)dis_plugins})[ \t]+/, \"\") # with spaces after
   gsub(/\((${(j:|:)dis_plugins})\)/, \"\") # without spaces (only plugin)
 "
   # Disable plugins awk script
   local awk_script="
 # if plugins=() is in oneline form, substitute disabled plugins and go to next line
-/^\s*plugins=\([^#]+\).*\$/ {
+/^[ \t]*plugins=\([^#]+\).*\$/ {
   $awk_subst_plugins
   print \$0
   next
 }
 
 # if plugins=() is in multiline form, enable multi flag and disable plugins if they're there
-/^\s*plugins=\(/ {
+/^[ \t]*plugins=\(/ {
   multi=1
   $awk_subst_plugins
   print \$0
@@ -330,14 +330,14 @@ function _omz::plugin::enable {
   # Enable plugins awk script
   local awk_script="
 # if plugins=() is in oneline form, substitute ) with new plugins and go to the next line
-/^\s*plugins=\([^#]+\).*\$/ {
+/^[ \t]*plugins=\([^#]+\).*\$/ {
   sub(/\)/, \" $add_plugins&\")
   print \$0
   next
 }
 
 # if plugins=() is in multiline form, enable multi flag
-/^\s*plugins=\(/ {
+/^[ \t]*plugins=\(/ {
   multi=1
 }
 
@@ -699,9 +699,9 @@ function _omz::theme::set {
 
   # Enable theme in .zshrc
   local awk_script='
-!set && /^\s*ZSH_THEME=[^#]+.*$/ {
+!set && /^[ \t]*ZSH_THEME=[^#]+.*$/ {
   set=1
-  sub(/^\s*ZSH_THEME=[^#]+.*$/, "ZSH_THEME=\"'$1'\" # set by `omz`")
+  sub(/^[ \t]*ZSH_THEME=[^#]+.*$/, "ZSH_THEME=\"'$1'\" # set by `omz`")
   print $0
   next
 }
