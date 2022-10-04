@@ -1,5 +1,5 @@
 (( $+commands[npm] )) && {
-  rm -f "${ZSH_CACHE_DIR:-$ZSH/cache}/npm_completion"
+  command rm -f "${ZSH_CACHE_DIR:-$ZSH/cache}/npm_completion"
 
   _npm_completion() {
     local si=$IFS
