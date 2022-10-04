@@ -120,6 +120,11 @@ plugins=(... git)
 | gpf!                 | git push --force                                                                                                                 |
 | gpoat                | git push origin --all && git push origin --tags                                                                                  |
 | gpr                  | git pull --rebase                                                                                                                |
+| gprv                 | git pull --rebase -v                                                                                                             |
+| gpra                 | git pull --rebase --autostash                                                                                                    |
+| gprav                | git pull --rebase --autostash -v                                                                                                 |
+| gprom                | git pull --rebase origin $(git_main_branch)                                                                                      |
+| gpromi               | git pull --rebase=interactive origin $(git_main_branch)                                                                          |
 | gpu                  | git push upstream                                                                                                                |
 | gpv                  | git push -v                                                                                                                      |
 | gr                   | git remote                                                                                                                       |
@@ -177,12 +182,6 @@ plugins=(... git)
 | gtl                  | gtl(){ git tag --sort=-v:refname -n -l ${1}* }; noglob gtl                                                                       |
 | gunignore            | git update-index --no-assume-unchanged                                                                                           |
 | gunwip               | git log -n 1 \| grep -q -c "\-\-wip\-\-" && git reset HEAD~1                                                                     |
-| gup                  | git pull --rebase                                                                                                                |
-| gupv                 | git pull --rebase -v                                                                                                             |
-| gupa                 | git pull --rebase --autostash                                                                                                    |
-| gupav                | git pull --rebase --autostash -v                                                                                                 |
-| gupom                | git pull --rebase origin $(git_main_branch)                                                                                      |
-| gupomi               | git pull --rebase=interactive origin $(git_main_branch)                                                                          |
 | glum                 | git pull upstream $(git_main_branch)                                                                                             |
 | gluc                 | git pull upstream $(git_current_branch)                                                                                          |
 | gwch                 | git whatchanged -p --abbrev-commit --pretty=medium                                                                               |
@@ -209,19 +208,25 @@ function `git_main_branch`.
 
 These are aliases that have been removed, renamed, or otherwise modified in a way that may, or may not, receive further support.
 
-| Alias  | Command                                                | Modification                                           |
-| :----- | :----------------------------------------------------- | :----------------------------------------------------- |
-| gap    | `git add --patch`                                      | new alias `gapa`                                       |
-| gcl    | `git config --list`                                    | new alias `gcf`                                        |
-| gdc    | `git diff --cached`                                    | new alias `gdca`                                       |
-| gdt    | `git difftool`                                         | no replacement                                         |
-| ggpull | `git pull origin $(current_branch)`                    | new alias `ggl` (`ggpull` still exists for now though) |
-| ggpur  | `git pull --rebase origin $(current_branch)`           | new alias `ggu` (`ggpur` still exists for now though)  |
-| ggpush | `git push origin $(current_branch)`                    | new alias `ggp` (`ggpush` still exists for now though) |
-| gk     | `gitk --all --branches`                                | now aliased to `gitk --all --branches`                 |
-| glg    | `git log --stat --max-count = 10`                      | now aliased to `git log --stat --color`                |
-| glgg   | `git log --graph --max-count = 10`                     | now aliased to `git log --graph --color`               |
-| gwc    | `git whatchanged -p --abbrev-commit --pretty = medium` | new alias `gwch`                                       |
+| Alias  | Command                                                   | Modification                                           |
+| :----- | :-------------------------------------------------------- | :----------------------------------------------------- |
+| gap    | `git add --patch`                                         | new alias `gapa`                                       |
+| gcl    | `git config --list`                                       | new alias `gcf`                                        |
+| gdc    | `git diff --cached`                                       | new alias `gdca`                                       |
+| gdt    | `git difftool`                                            | no replacement                                         |
+| ggpull | `git pull origin $(current_branch)`                       | new alias `ggl` (`ggpull` still exists for now though) |
+| ggpur  | `git pull --rebase origin $(current_branch)`              | new alias `ggu` (`ggpur` still exists for now though)  |
+| ggpush | `git push origin $(current_branch)`                       | new alias `ggp` (`ggpush` still exists for now though) |
+| gk     | `gitk --all --branches`                                   | now aliased to `gitk --all --branches`                 |
+| glg    | `git log --stat --max-count = 10`                         | now aliased to `git log --stat --color`                |
+| glgg   | `git log --graph --max-count = 10`                        | now aliased to `git log --graph --color`               |
+| gwc    | `git whatchanged -p --abbrev-commit --pretty = medium`    | now alias `gwch`                                       |
+| gup    | `git pull --rebase`                                       | now alias `gpr`                                        |
+| gupv   | `git pull --rebase -v`                                    | now alias `gprv`                                       |
+| gupa   | `git pull --rebase --autostash`                           | now alias `gpra`                                       |
+| gupav  | `git pull --rebase --autostash -v`                        | now alias `gprav`                                      |
+| gupom  | `git pull --rebase origin $(git_main_branch)`             | now alias `gprom`                                      |
+| gupomi | `git pull --rebase=interactive origin $(git_main_branch)` | now alias `gpromi`                                     |
 
 ## Functions
 
