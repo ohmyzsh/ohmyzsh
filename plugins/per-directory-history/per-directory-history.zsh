@@ -112,6 +112,12 @@ function _per-directory-history-change-directory() {
 }
 
 function _per-directory-history-addhistory() {
+  cmd=$*
+  len=${#cmd}
+  if (( len < 2 )); then
+    return
+  fi
+
   # respect hist_ignore_space
   if [[ -o hist_ignore_space ]] && [[ "$1" == \ * ]]; then
       true
