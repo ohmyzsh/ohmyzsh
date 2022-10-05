@@ -118,8 +118,7 @@ plugins=(... git)
 | gpd                  | git push --dry-run                                                                                                               |
 | gpf                  | git push --force-with-lease                                                                                                      |
 | gpf!                 | git push --force                                                                                                                 |
-| gpoat                | git push origin --all && git push origin --tags                                                                                  |
-| gpr                  | git pull --rebase                                                                                                                |
+| gpoat                | git push origin --all && git push origin --tags                                                                                  |                                                                                                                |
 | gpu                  | git push upstream                                                                                                                |
 | gpv                  | git push -v                                                                                                                      |
 | gr                   | git remote                                                                                                                       |
