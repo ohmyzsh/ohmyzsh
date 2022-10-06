@@ -22,9 +22,9 @@ These settings should go in your zshrc file, before Oh My Zsh is sourced:
   nvm has been installed, regardless of chip architecture, use `NVM_HOMEBREW=$(brew --prefix nvm)`.
 
 - **`NVM_LAZY`**: if you want the plugin to defer the load of nvm to speed-up the start of your zsh session,
-  set `NVM_LAZY` to `1`. This will use the `--no-use` parameter when loading nvm, and will create a function
-  for `node`, `npm`, `yarn`, and the command(s) specified by `NVM_LAZY_CMD`, so when you call either of them,
-  nvm will load with `nvm use default`.
+  set `NVM_LAZY` to `1`. This will source nvm script only when using it, and will create a function for `node`,
+  `npm`, `pnpm`, `yarn`, and the command(s) specified by `NVM_LAZY_CMD`, so when you call either of them,
+  nvm will be loaded and run with default version.
 
 - **`NVM_LAZY_CMD`**: if you want additional command(s) to trigger lazy loading of nvm, set `NVM_LAZY_CMD` to
   the command or an array of the commands.
