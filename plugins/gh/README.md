@@ -17,7 +17,7 @@ plugin is loaded, which is usually when you start up a new terminal emulator.
 
 The cache is stored at:
 
-- `$ZSH/plugins/gh/_gh` completions script
+- `$ZSH_CACHE_DIR/completions/_gh` completions script
 
-- `$ZSH_CACHE_DIR/gh_version` version of GitHub CLI, used to invalidate
+- `$ZSH_CACHE_DIR/gh_cached_version` version of GitHub CLI, used to invalidate
   the cache.

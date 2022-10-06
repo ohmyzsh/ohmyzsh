@@ -11,4 +11,21 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_gh" ]]; then
   _comps[gh]=_gh
 fi
 
-gh completion --shell zsh >| "$ZSH_CACHE_DIR/completions/_gh" &|
+# Cache gh completions
+#
+# - Caches the output of `gh completion --shell zsh` to $ZSH_CACHE_DIR/completions/_gh
+# - Refreshes when the version of gh changes
+function _gh_completions_cache() {
+  local gh_version version_cache completion_cache
+  version_cache="$ZSH_CACHE_DIR/gh_cached_version"
+  completion_cache="$ZSH_CACHE_DIR/completions/_gh"
+  gh_version=$(gh --version | awk '{print $3}')
+  if ! [ -f "$version_cache" ] || \
+     ! [ -f "$completion_cache" ] || \
+     [[ $(head -n 1 "$version_cache") != "$gh_version" ]]
+  then
+    echo "$gh_version" > "$version_cache"
+    gh completion --shell zsh >| "$ZSH_CACHE_DIR/completions/_gh" &|
+  fi
+}
+_gh_completions_cache
