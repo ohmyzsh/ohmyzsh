@@ -1,6 +1,7 @@
 # Fabric
 
-This plugin provides completion for [Fabric](https://www.fabfile.org/). Fabric is a high level Python (2.7, 3.4+) library designed to execute shell commands remotely over SSH, yielding useful Python objects in return.
+This plugin provides completion for [Fabric](https://www.fabfile.org/). 
+Fabric is a high level Python library for executing shell commands remotely over SSH. It is compatible with Python versions 2.7 and 3.4+.
 
 To use it add fabric to the plugins array in your zshrc file.
 
