@@ -112,11 +112,12 @@ function _per-directory-history-change-directory() {
 }
 
 function _per-directory-history-addhistory() {
+  local cmd="${1%%$'\n'}"
   # respect hist_ignore_space
   if [[ -o hist_ignore_space ]] && [[ "$1" == \ * ]]; then
       true
-  else
-      print -Sr -- "${1%%$'\n'}"
+  elif [[ $cmd != "" ]]; then
+      print -Sr -- $cmd
       # instantly write history if set options require it.
       if [[ -o share_history ]] || \
          [[ -o inc_append_history ]] || \
