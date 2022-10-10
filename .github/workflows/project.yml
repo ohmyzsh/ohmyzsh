@@ -9,6 +9,7 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
+permissions: {}
 jobs:
   add-to-project:
     name: Add to project

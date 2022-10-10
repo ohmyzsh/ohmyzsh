@@ -4,37 +4,31 @@ if [[ -z "$NVM_DIR" ]]; then
     export NVM_DIR="$HOME/.nvm"
   elif [[ -d "${XDG_CONFIG_HOME:-$HOME/.config}/nvm" ]]; then
     export NVM_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/nvm"
+  elif (( $+commands[brew] )); then
+    NVM_HOMEBREW="${NVM_HOMEBREW:-${HOMEBREW_PREFIX:-$(brew --prefix)}/opt/nvm}"
+    if [[ -d "$NVM_HOMEBREW" ]]; then
+      export NVM_DIR="$NVM_HOMEBREW"
+    fi
   fi
 fi
 
 # Don't try to load nvm if command already available
 # Note: nvm is a function so we need to use `which`
-! which nvm &>/dev/null || return
+which nvm &>/dev/null && return
 
-if [[ -f "$NVM_DIR/nvm.sh" ]]; then
+if (( $+NVM_LAZY )); then
+  # Call nvm when first using nvm, node, npm, pnpm, yarn or $NVM_LAZY_CMD
+  function nvm node npm pnpm yarn $NVM_LAZY_CMD {
+    unfunction nvm node npm pnpm yarn $NVM_LAZY_CMD
+    # Load nvm if it exists in $NVM_DIR
+    [[ -f "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
+    "$0" "$@"
+  }
+elif [[ -f "$NVM_DIR/nvm.sh" ]]; then
   # Load nvm if it exists in $NVM_DIR
-  source "$NVM_DIR/nvm.sh" ${NVM_LAZY+"--no-use"}
-elif (( $+commands[brew] )); then
-  # Otherwise try to load nvm installed via Homebrew
-  # User can set this if they have an unusual Homebrew setup
-  NVM_HOMEBREW="${NVM_HOMEBREW:-${HOMEBREW_PREFIX:-$(brew --prefix)}/opt/nvm}"
-  # Load nvm from Homebrew location if it exists
-  if [[ -f "$NVM_HOMEBREW/nvm.sh" ]]; then
-    source "$NVM_HOMEBREW/nvm.sh" ${NVM_LAZY+"--no-use"}
-  else
-    return
-  fi
+  source "$NVM_DIR/nvm.sh"
 else
   return
-fi
-
-# Call nvm when first using node, npm or yarn
-if (( $+NVM_LAZY )); then
-  function node npm yarn $NVM_LAZY_CMD {
-    unfunction node npm yarn $NVM_LAZY_CMD
-    nvm use default
-    command "$0" "$@"
-  }
 fi
 
 # Autoload nvm when finding a .nvmrc file in the current directory
