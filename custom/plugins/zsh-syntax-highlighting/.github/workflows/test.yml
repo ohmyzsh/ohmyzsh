@@ -1,0 +1,75 @@
+---
+name: Tests
+on:
+  push:
+    paths-ignore:
+      - '**.md'
+      - '**.png'
+  pull_request:
+    paths-ignore:
+      - '**.md'
+      - '**.png'
+  schedule:
+    - cron: '29 7 * * 1'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        version:
+          - master
+          - 5.8.1
+          - 5.8
+          - 5.7.1
+          - 5.7
+          - 5.6.2
+          - 5.6.1
+          - 5.6
+          - 5.5.1
+          - 5.5
+          - 5.4.2
+          - 5.4.1
+          - 5.4
+          - 5.3.1
+          - 5.3
+          - 5.2
+          - 5.1.1
+          - 5.1
+          - 5.0.8
+          - 5.0.7
+          - 5.0.6
+          - 5.0.5
+          - 5.0.4
+          - 5.0.3
+          - 5.0.2
+          - 5.0.1
+          - 5.0.0
+          - 4.3.17
+          - 4.3.16
+          - 4.3.15
+          - 4.3.14
+          - 4.3.13
+          - 4.3.12
+          - 4.3.11
+    container:
+      image: ghcr.io/zsh-users/zsh:${{ matrix.version }}
+    steps:
+      - uses: actions/checkout@v2
+      - run: install_packages bsdmainutils make procps
+      - run: make test
+
+  notify:
+    runs-on: ubuntu-latest
+    needs: test
+    if: failure() && (github.repository_owner == 'zsh-users')
+    steps:
+      -
+        name: Notify IRC
+        uses: Gottox/irc-message-action@v1
+        with:
+          server: irc.libera.chat
+          channel: '#zsh-syntax-highlighting'
+          nickname: zsyh-gh-bot
+          message: '${{ github.ref }} failed tests: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
