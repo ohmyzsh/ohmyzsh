@@ -107,7 +107,7 @@ supports_truecolor() {
 fmt_link() {
   # $1: text, $2: url, $3: fallback mode
   if supports_hyperlinks; then
-    printf '\033]8;;%s\a%s\033]8;;\a\n' "$2" "$1"
+    printf '\033]8;;%s\033\\%s\033]8;;\033\\\n' "$2" "$1"
     return
   fi
 
