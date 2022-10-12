@@ -156,10 +156,16 @@ supports_hyperlinks() {
     return 0
   fi
 
-  # Windows Terminal or Konsole also support hyperlinks
-  if [ -n "$WT_SESSION" ] || [ -n "$KONSOLE_VERSION" ]; then
+  # Windows Terminal also supports hyperlinks
+  if [ -n "$WT_SESSION" ]; then
     return 0
   fi
+
+  # Konsole supports hyperlinks, but it's an opt-in setting that can't be detected
+  # https://github.com/ohmyzsh/ohmyzsh/issues/10964
+  # if [ -n "$KONSOLE_VERSION" ]; then
+  #   return 0
+  # fi
 
   return 1
 }
