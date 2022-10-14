@@ -12,6 +12,7 @@ export NVM_DIR="$HOME/.nvm"
 
 # Sync changes
 THIS_CWD=${cwd}
+echo $THIS_CWD
 cd ~/.oh-my-zsh
 git pull
 git add .
