@@ -15,10 +15,10 @@ cwd=$(pwd)
 
 echo $THIS_CWD
 cd ~/.oh-my-zsh
-git pull
-git add .
-git commit -m "update"
-git push mine
+git pull >> /dev/null 
+git add . >> /dev/null 
+git commit -m "update" >> /dev/null 
+git push mine >> /dev/null 
 cd $cwd
 
 bindkey "\e[1;3D" backward-word     # ⌥←
