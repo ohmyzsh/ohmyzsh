@@ -10,17 +10,20 @@ if (( ! $+commands[brew] )); then
   else
     return
   fi
+
+  # Only add Homebrew installation to PATH, MANPATH, and INFOPATH if brew is
+  # not already on the path, to prevent duplicate entries. This aligns with
+  # the behavior of the brew installer.sh post-install steps.
+  eval "$("$BREW_LOCATION" shellenv)"
+  unset BREW_LOCATION
 fi
 
 if [[ -z "$HOMEBREW_PREFIX" ]]; then
-  if [[ -z $BREW_LOCATION ]]; then
-    eval "$(brew shellenv)"
-  else
-    eval "$("$BREW_LOCATION" shellenv)"
-  fi
+  # Maintain compatability with potential custom user profiles, where we had
+  # previously relied on always sourcing shellenv. OMZ plugins should not rely
+  # on this to be defined due to out of order processing.
+  export HOMEBREW_PREFIX="$(brew --prefix)"
 fi
-
-unset BREW_LOCATION
 
 alias bcubc='brew upgrade --cask && brew cleanup'
 alias bcubo='brew update && brew outdated --cask'
