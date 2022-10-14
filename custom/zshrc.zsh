@@ -18,7 +18,7 @@ cd ~/.oh-my-zsh
 git pull
 git add .
 git commit -m "update"
-git push mine master
+git push mine
 cd $cwd
 
 bindkey "\e[1;3D" backward-word     # ⌥←
