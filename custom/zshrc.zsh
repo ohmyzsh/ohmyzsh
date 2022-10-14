@@ -11,10 +11,15 @@ export NVM_DIR="$HOME/.nvm"
 
 
 # Sync changes
+THIS_CWD=`cwd`
+cd ~/.oh-my-zsh
 git pull
 git add .
 git commit -m "update"
 git push mine master
+cd $THIS_CWD
 
-bindkey "^[[1;3C" forward-word
-bindkey "^[[1;3D" backward-word
+bindkey "\e[1;3D" backward-word     # ⌥←
+bindkey "\e[1;3C" forward-word      # ⌥→
+bindkey "^[[1;9D" beginning-of-line # cmd+←
+bindkey "^[[1;9C" end-of-line       # cmd+→
