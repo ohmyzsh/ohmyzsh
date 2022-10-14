@@ -16,3 +16,5 @@ git add .
 git commit -m "update"
 git push mine master
 
+bindkey "^[[1;3C" forward-word
+bindkey "^[[1;3D" backward-word
