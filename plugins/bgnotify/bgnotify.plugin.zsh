@@ -20,25 +20,25 @@ if ! (type bgnotify_formatted | grep -q 'function'); then ## allow custom functi
   }
 fi
 
-currentAppId () {
-  if (( $+commands[osascript] )); then
-    osascript -e 'tell application (path to frontmost application as text) to id' 2>/dev/null
+}
+
+function currentAppId {
+  if (( ${+commands[osascript]} )); then
+    # output: com.googlecode.iterm2, 116
+    osascript -e 'tell application (path to frontmost application as text) to get the {id, id of front window}' 2>/dev/null
+  elif (( ${+commands[notify-send]} || ${+commands[kdialog]} )); then
+    xprop -root 2> /dev/null | awk '/NET_ACTIVE_WINDOW/{print $5;exit} END{exit !$5}' || echo "0"
+  else
+    echo $EPOCHSECONDS
   fi
 }
 
-currentWindowId () {
-  if hash osascript 2>/dev/null; then #osx
-    osascript -e 'tell application (path to frontmost application as text) to id of front window' 2&> /dev/null || echo "0"
-  elif (hash notify-send 2>/dev/null || hash kdialog 2>/dev/null); then #ubuntu!
-    xprop -root 2> /dev/null | awk '/NET_ACTIVE_WINDOW/{print $5;exit} END{exit !$5}' || echo "0"
-  else
-    echo $EPOCHSECONDS #fallback for windows
-  fi
-}
+# currentAppId is expensive (more on macOS!) and it will remain the same until the shell is close
+bgnotify_termid=$(currentAppId)
 
 bgnotify () { ## args: (title, subtitle)
   if hash terminal-notifier 2>/dev/null; then #osx
-    local term_id="$bgnotify_appid"
+    local term_id="${bgnotify_termid%%,*}" # remove window id
     if [[ -z "$term_id" ]]; then
       case "$TERM_PROGRAM" in
       iTerm.app) term_id='com.googlecode.iterm2' ;;
@@ -69,8 +69,6 @@ bgnotify () { ## args: (title, subtitle)
 bgnotify_begin() {
   bgnotify_timestamp=$EPOCHSECONDS
   bgnotify_lastcmd="${1:-$2}"
-  bgnotify_appid="$(currentAppId)"
-  bgnotify_windowid=$(currentWindowId)
 }
 
 bgnotify_end() {
@@ -78,7 +76,7 @@ bgnotify_end() {
   elapsed=$(( EPOCHSECONDS - bgnotify_timestamp ))
   past_threshold=$(( elapsed >= bgnotify_threshold ))
   if (( bgnotify_timestamp > 0 )) && (( past_threshold )); then
-    if [[ $(currentAppId) != "$bgnotify_appid" || $(currentWindowId) != "$bgnotify_windowid" ]]; then
+    if [[ $(currentAppId) != "$bgnotify_termid" ]]; then
       print -n "\a"
       bgnotify_formatted "$didexit" "$bgnotify_lastcmd" "$elapsed"
     fi
