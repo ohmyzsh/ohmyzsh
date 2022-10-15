@@ -6,7 +6,8 @@ function {
       /usr/local/bin/virtualenvwrapper{_lazy,}.sh \
       /etc/bash_completion.d/virtualenvwrapper \
       /usr/share/bash-completion/completions/virtualenvwrapper \
-      $HOME/.local/bin/virtualenvwrapper.sh
+      $HOME/.local/bin/virtualenvwrapper.sh \
+      /usr/bin/virtualenvwrapper.sh
     do
         if [[ -f "$virtualenvwrapper" ]]; then
             source "$virtualenvwrapper"
