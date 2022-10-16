@@ -33,6 +33,26 @@ function open_command() {
   ${=open_cmd} "$@" &>/dev/null
 }
 
+# CPU architecture
+function is_arm64 { [[ "$CPUTYPE" == arm64 ]] }
+function is_amd64 { [[ "$CPUTYPE" == x86_64 ]] }
+# linux
+function is_linux { [[ "$OSTYPE" == linux* ]]; }
+function is_android { [[ "$OSTYPE" == linux-android* ]]; }
+# bsd derivates
+function is_netbsd() { [[ "$OSTYPE" == netbsd* ]]; }
+function is_openbsd() { [[ "$OSTYPE" == openbsd* ]]; }
+function is_freebsd() { [[ "$OSTYPE" == freebsd* ]]; }
+function is_mac() { [[ "$OSTYPE" == darwin* ]]; }
+function is_mac_arm() { is_mac && is_arm64; }
+function is_mac_intel() { is_mac && is_amd64; }
+function is_bsd() { [[ "$OSTYPE" == (darwin|freebsd|openbsd|netbsd)* ]]; }
+function is_solaris { [[ "$OSTYPE" == solaris* ]]; }
+# on windows
+function is_cygwin { [[ "$OSTYPE" == cygwin* ]]; }
+function is_msys { [[ "$OSTYPE" == msys* ]]; }
+function is_windows { [[ "$OSTYPE" == (cygwin|msys)* ]]; }
+
 # take functions
 
 # mkcd is equivalent to takedir
