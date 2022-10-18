@@ -64,7 +64,7 @@ To learn more, visit [ohmyz.sh](https://ohmyz.sh), follow [@ohmyzsh](https://twi
 
 ### Basic Installation
 
-Oh My Zsh is installed by running one of the following commands in your terminal. You can install this via the command-line with either `curl`, `wget` or another similar tool.
+Oh My Zsh is installed by running one of the following commands in the terminal. You can install this via the command-line with either `curl`, `wget` or another similar tool.
 
 | Method    | Command                                                                                           |
 | :-------- | :------------------------------------------------------------------------------------------------ |
@@ -186,8 +186,8 @@ the installer accepts (these settings are also documented at the top of the inst
 
 The default location is `~/.oh-my-zsh` (hidden in your home directory, you can access it with `cd ~/.oh-my-zsh`)
 
-If you'd like to change the install directory with the `ZSH` environment variable, either by running
-`export ZSH=/your/path` before installing, or by setting it before the end of the install pipeline
+If you'd like to change the install directory with the `ZSH` environment variable, either run
+`export ZSH=/your/path` before installing, or set it before the end of the install pipeline
 like this:
 
 ```sh
