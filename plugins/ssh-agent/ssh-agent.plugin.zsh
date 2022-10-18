@@ -72,6 +72,9 @@ function _add_identities() {
   local args
   zstyle -a :omz:plugins:ssh-agent ssh-add-args args
 
+  # if ssh-agent quiet mode, pass -q to ssh-add
+  zstyle -t :omz:plugins:ssh-agent quiet && args=(-q $args)
+
   # use user specified helper to ask for password (ksshaskpass, etc)
   local helper
   zstyle -s :omz:plugins:ssh-agent helper helper

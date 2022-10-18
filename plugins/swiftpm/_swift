@@ -301,7 +301,7 @@ _swift_package_init() {
 _swift_package_unedit() {
     arguments=(
         ":The name of the package to unedit:_swift_dependency"
-        "--force[Unedit the package even if it has uncommited and unpushed changes.]"
+        "--force[Unedit the package even if it has uncommitted and unpushed changes.]"
     )
     _arguments $arguments && return
 }

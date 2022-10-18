@@ -13,6 +13,7 @@ if ! type autoenv_init >/dev/null; then
       ~/.autoenv
       ~/.local/bin
       /usr/local/opt/autoenv
+      /opt/homebrew/opt/autoenv
       /usr/local/bin
       /usr/share/autoenv-git
       ~/Library/Python/bin

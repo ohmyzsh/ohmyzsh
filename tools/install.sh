@@ -42,13 +42,19 @@ set -e
 # $USER is defined by login(1) which is not always executed (e.g. containers)
 # POSIX: https://pubs.opengroup.org/onlinepubs/009695299/utilities/id.html
 USER=${USER:-$(id -u -n)}
+# $HOME is defined at the time of login, but it could be unset. If it is unset,
+# a tilde by itself (~) will not be expanded to the current user's home directory.
+# POSIX: https://pubs.opengroup.org/onlinepubs/009696899/basedefs/xbd_chap08.html#tag_08_03
+HOME="${HOME:-$(getent passwd $USER 2>/dev/null | cut -d: -f6)}"
+# macOS does not have getent, but this works even if $HOME is unset
+HOME="${HOME:-$(eval echo ~$USER)}"
 
 
 # Track if $ZSH was provided
 custom_zsh=${ZSH:+yes}
 
 # Default settings
-ZSH=${ZSH:-~/.oh-my-zsh}
+ZSH="${ZSH:-$HOME/.oh-my-zsh}"
 REPO=${REPO:-ohmyzsh/ohmyzsh}
 REMOTE=${REMOTE:-https://github.com/${REPO}.git}
 BRANCH=${BRANCH:-master}
@@ -150,10 +156,16 @@ supports_hyperlinks() {
     return 0
   fi
 
-  # Windows Terminal or Konsole also support hyperlinks
-  if [ -n "$WT_SESSION" ] || [ -n "$KONSOLE_VERSION" ]; then
+  # Windows Terminal also supports hyperlinks
+  if [ -n "$WT_SESSION" ]; then
     return 0
   fi
+
+  # Konsole supports hyperlinks, but it's an opt-in setting that can't be detected
+  # https://github.com/ohmyzsh/ohmyzsh/issues/10964
+  # if [ -n "$KONSOLE_VERSION" ]; then
+  #   return 0
+  # fi
 
   return 1
 }
@@ -179,7 +191,7 @@ supports_truecolor() {
 fmt_link() {
   # $1: text, $2: url, $3: fallback mode
   if supports_hyperlinks; then
-    printf '\033]8;;%s\a%s\033]8;;\a\n' "$2" "$1"
+    printf '\033]8;;%s\033\\%s\033]8;;\033\\\n' "$2" "$1"
     return
   fi
 
@@ -261,14 +273,14 @@ setup_ohmyzsh() {
   }
 
   ostype=$(uname)
-  if [ -z "${ostype%CYGWIN*}" ] && git --version | grep -q msysgit; then
+  if [ -z "${ostype%CYGWIN*}" ] && git --version | grep -Eq 'msysgit|windows'; then
     fmt_error "Windows/MSYS Git is not supported on Cygwin"
     fmt_error "Make sure the Cygwin git package is installed and is first on the \$PATH"
     exit 1
   fi
 
   # Manual clone with git config options to support git < v1.7.2
-  git init "$ZSH" && cd "$ZSH" \
+  git init --quiet "$ZSH" && cd "$ZSH" \
   && git config core.eol lf \
   && git config core.autocrlf false \
   && git config fsck.zeroPaddedFilemode ignore \
@@ -279,10 +291,15 @@ setup_ohmyzsh() {
   && git remote add origin "$REMOTE" \
   && git fetch --depth=1 origin \
   && git checkout -b "$BRANCH" "origin/$BRANCH" || {
-    rm -rf "$ZSH"
+    [ ! -d "$ZSH" ] || {
+      cd -
+      rm -rf "$ZSH" 2>/dev/null
+    }
     fmt_error "git clone of oh-my-zsh repo failed"
     exit 1
   }
+  # Exit installation directory
+  cd -
 
   echo
 }
