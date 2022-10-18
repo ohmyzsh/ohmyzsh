@@ -30,10 +30,10 @@ def get_resp_items(resp):
 def get_status_text(status):
     if status == "success":
         return COLORS.FG.green + "✓" + COLORS.reset
-    elif status in ("running", "not_run", "retried", "queued"):
-        return COLORS.FG.yellow + "·" + COLORS.reset
+    elif status in ("running", "not_run", "retried"):
+        return COLORS.FG.yellow + "•" + COLORS.reset
     else:
-        return COLORS.FG.red + "˟" + COLORS.reset
+        return COLORS.FG.red + "✗" + COLORS.reset
 
 
 if not org_slug or len(args) != 3:
@@ -64,8 +64,10 @@ jobs = get_resp_items(response)
 
 for job in jobs:
     status = job["status"]
-    name = job["name"]
-    project_slug = job["project_slug"]
-    job_number = job["job_number"]
-    url = f"https://circleci.com/{project_slug}/{job_number}"
-    print("{}  {:<50}  {}".format(get_status_text(status), name, url))
+    if status in ("success", "running", "failed", "retried", "timedout",
+                  "on_hold", "canceled", "terminated_unknown"):
+      name = job["name"]
+      project_slug = job["project_slug"]
+      job_number = job["job_number"]
+      url = f"https://circleci.com/{project_slug}/{job_number}"
+      print("{}  {:<50}  {}".format(get_status_text(status), name, url))
