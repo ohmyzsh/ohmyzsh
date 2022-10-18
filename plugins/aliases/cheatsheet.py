@@ -1,7 +1,9 @@
 #!/usr/bin/env python
+
 import sys
 import itertools
 import termcolor
+import argparse
 
 def parse(line):
     left = line[0:line.find('=')].strip()
@@ -55,7 +57,6 @@ def pretty_print(cheatsheet, wfilter, group_list=None, groups_only=False):
             pretty_print_group(key, [ alias for alias in aliases if alias[0].find(wfilter)>-1 or alias[1].find(wfilter)>-1], wfilter)
 
 if __name__ == '__main__':
-    import argparse
     parser = argparse.ArgumentParser(description="Pretty print aliases.")
     parser.add_argument('filter', nargs="*", help="search aliases matching string")
     parser.add_argument('-g', '--group', dest="group_list", action='append', help="only print aliases in given groups")
