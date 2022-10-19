@@ -233,7 +233,7 @@ type(scope)!: subject
 
 Try to keep the first commit line short. This is harder to do using this commit style but try to be
 concise and if you need more space, you can use the commit body. Try to make sure that the commit
-subject is clear and precise enough that users will know what change by just looking at the changelog.
+subject is clear and precise enough that users will know what changed by just looking at the changelog.
 
 ----
 
