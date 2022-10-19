@@ -1,0 +1,15 @@
+[submodule "custom/plugins/zsh-autosuggestions"]
+	path = custom/plugins/zsh-autosuggestions
+	url = git@github.com:doncollins1985/zsh-autosuggestions
+[submodule "custom/plugins/zsh-history"]
+	path = custom/plugins/zsh-history
+	url = git@github.com:doncollins1985/zsh-history
+[submodule "custom/plugins/zsh-history-substring-search"]
+	path = custom/plugins/zsh-history-substring-search
+	url = git@github.com:doncollins1985/zsh-history-substring-search
+[submodule "custom/plugins/zsh-completions"]
+	path = custom/plugins/zsh-completions
+	url = git@github.com:doncollins1985/zsh-completions
+[submodule "custom/themes/powerlevel10k"]
+	path = custom/themes/powerlevel10k
+	url = git@github.com:doncollins1985/powerlevel10k

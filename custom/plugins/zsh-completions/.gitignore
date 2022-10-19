@@ -1,6 +1,0 @@
-# zsh word code files
-*.zwc
-
-# IDE files
-.vscode/
-.idea/

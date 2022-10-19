@@ -1,1 +1,0 @@
-../../docs/highlighters/root.md
