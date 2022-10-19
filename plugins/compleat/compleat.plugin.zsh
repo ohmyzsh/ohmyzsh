@@ -10,8 +10,11 @@ if (( ${+commands[compleat]} )); then
   local setup="${prefix}/share/compleat-1.0/compleat_setup" 
 
   if [[ -f "$setup" ]]; then
+    if ! bashcompinit >/dev/null 2>&1; then
+      autoload -U bashcompinit
+      bashcompinit -i
+    fi
+
     source "$setup" 
   fi
-
-  unset prefix setup
 fi

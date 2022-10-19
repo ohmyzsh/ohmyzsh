@@ -17,7 +17,7 @@ function _user_host() {
   local me
   if [[ -n $SSH_CONNECTION ]]; then
     me="%n@%m"
-  elif [[ $LOGNAME != $USER ]]; then
+  elif [[ $LOGNAME != $USERNAME ]]; then
     me="%n"
   fi
   if [[ -n $me ]]; then
@@ -31,7 +31,7 @@ function _git_time_since_commit() {
   local last_commit now seconds_since_last_commit
   local minutes hours days years commit_age
   # Only proceed if there is actually a commit.
-  if last_commit=$(git log --pretty=format:'%at' -1 2> /dev/null); then
+  if last_commit=$(command git -c log.showSignature=false log --format='%at' -1 2>/dev/null); then
     now=$(date +%s)
     seconds_since_last_commit=$((now-last_commit))
 

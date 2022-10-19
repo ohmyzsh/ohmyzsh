@@ -25,9 +25,10 @@ $ google oh-my-zsh
 Available search contexts are:
 
 | Context               | URL                                      |
-|-----------------------|------------------------------------------|
+| --------------------- | ---------------------------------------- |
 | `bing`                | `https://www.bing.com/search?q=`         |
 | `google`              | `https://www.google.com/search?q=`       |
+| `brs` or `brave`      | `https://search.brave.com/search?q=`     |
 | `yahoo`               | `https://search.yahoo.com/search?p=`     |
 | `ddg` or `duckduckgo` | `https://www.duckduckgo.com/?q=`         |
 | `sp` or `startpage`   | `https://www.startpage.com/do/search?q=` |

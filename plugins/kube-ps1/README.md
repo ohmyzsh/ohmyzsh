@@ -6,14 +6,6 @@ configured on `kubectl` to your Bash/Zsh prompt strings (i.e. the `$PS1`).
 
 Inspired by several tools used to simplify usage of `kubectl`.
 
-![prompt](img/screenshot2.png)
-
-![prompt_sol_light](img/screenshot-sol-light.png)
-
-![prompt_img](img/screenshot-img.png)
-
-![prompt demo](img/kube-ps1.gif)
-
 ## Installing
 
 ### MacOS
@@ -136,6 +128,7 @@ the following environment variables:
 | `KUBE_PS1_NS_ENABLE` | `true` | Display the namespace. If set to `false`, this will also disable `KUBE_PS1_DIVIDER` |
 | `KUBE_PS1_PREFIX` | `(` | Prompt opening character  |
 | `KUBE_PS1_SYMBOL_ENABLE` | `true ` | Display the prompt Symbol. If set to `false`, this will also disable `KUBE_PS1_SEPARATOR` |
+| `KUBE_PS1_SYMBOL_PADDING` | `false` | Adds a space (padding) after the symbol to prevent clobbering prompt characters |
 | `KUBE_PS1_SYMBOL_DEFAULT` | `⎈ ` | Default prompt symbol. Unicode `\u2388` |
 | `KUBE_PS1_SYMBOL_USE_IMG` | `false` | ☸️  ,  Unicode `\u2638` as the prompt symbol |
 | `KUBE_PS1_SEPARATOR` | &#124; | Separator between symbol and context name |
@@ -159,8 +152,10 @@ The default colors are set with the following environment variables:
 
 | Variable | Default | Meaning |
 | :------- | :-----: | ------- |
+| `KUBE_PS1_PREFIX_COLOR` | `null` | Set default color of the prompt prefix |
 | `KUBE_PS1_SYMBOL_COLOR` | `blue` | Set default color of the Kubernetes symbol |
 | `KUBE_PS1_CTX_COLOR` | `red` | Set default color of the context |
+| `KUBE_PS1_SUFFIX_COLOR` | `null` | Set default color of the prompt suffix |
 | `KUBE_PS1_NS_COLOR` | `cyan` | Set default color of the namespace |
 | `KUBE_PS1_BG_COLOR` | `null` | Set default color of the prompt background |
 
