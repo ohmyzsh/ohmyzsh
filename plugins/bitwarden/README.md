@@ -17,10 +17,4 @@ plugins=(... bitwarden)
 
 ## Cache
 
-This plugin caches the completion script and is automatically updated when the
-plugin is loaded, which is usually when you start up a new terminal emulator.
-
-The cache is stored at:
-
-- `$ZSH_CACHE_DIR/completions/_bw` completions script
-- `$ZSH_CACHE_DIR/bw_cached_version` completions script
+The completions are cached at `$ZSH_CACHE_DIR/completions/_bw`.

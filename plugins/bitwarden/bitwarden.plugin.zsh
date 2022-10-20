@@ -87,21 +87,4 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_bw" ]]; then
   _comps[bw]=_bw
 fi
 
-# Cache bitwarden-cli completions
-#
-# - Caches the output of `bw completions zsh` to $ZSH_CACHE_DIR/completions/_bw
-# - Refreshes when the version of bw changes
-function _bw_completions_cache() {
-  local bw_version version_cache completion_cache
-  version_cache="$ZSH_CACHE_DIR/bw_cached_version"
-  completion_cache="$ZSH_CACHE_DIR/completions/_bw"
-  bw_version=$(bw -v)
-  if ! [ -f "$version_cache" ] || \
-     ! [ -f "$completion_cache" ] || \
-     [[ $(head -n 1 "$version_cache") != "$bw_version" ]]
-  then
-    echo "$bw_version" > "$version_cache"
-    bw completion --shell zsh >| "$completion_cache" &|
-  fi
-}
-_bw_completions_cache
+bw completion --shell zsh >| "$ZSH_CACHE_DIR/completions/_bw" &|
