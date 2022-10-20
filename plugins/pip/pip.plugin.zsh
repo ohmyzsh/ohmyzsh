@@ -94,12 +94,12 @@ alias pipreq="pip freeze > requirements.txt"
 # Install packages from requirements file
 alias pipir="pip install -r requirements.txt"
 
-# Update all installed packages
+# Upgrade all installed packages
 function pipupall {
   # non-GNU xargs does not support nor need `--no-run-if-empty`
   local xargs="xargs --no-run-if-empty"
   xargs --version 2>/dev/null | grep -q GNU || xargs="xargs"
-  pip list --outdated --format freeze | cut -d= -f1 | ${=xargs} pip install --upgrade
+  pip list -o | awk "NR>=3" | cut -d " " -f 1 | ${=xargs} pip install -U
 }
 
 # Uninstalled all installed packages
