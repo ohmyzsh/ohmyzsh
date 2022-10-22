@@ -99,7 +99,7 @@ function pipupall {
   # non-GNU xargs does not support nor need `--no-run-if-empty`
   local xargs="xargs --no-run-if-empty"
   xargs --version 2>/dev/null | grep -q GNU || xargs="xargs"
-  pip list -o | awk "NR>=3" | cut -d " " -f 1 | ${=xargs} pip install -U
+  pip list --outdated | awk 'NR > 2 { print $1 }' | ${=xargs} pip install --upgrade
 }
 
 # Uninstalled all installed packages
