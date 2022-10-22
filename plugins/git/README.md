@@ -85,6 +85,7 @@ plugins=(... git)
 | ggpur                | ggu                                                                                                                              |
 | ggpush               | git push origin "$(git_current_branch)"                                                                                          |
 | ggsup                | git branch --set-upstream-to=origin/$(git_current_branch)                                                                        |
+| ggr                  | git grep -n --color=always                                                                                                       |
 | ggu                  | git pull --rebase origin $(current_branch)                                                                                       |
 | gpsup                | git push --set-upstream origin $(git_current_branch)                                                                             |
 | ghh                  | git help                                                                                                                         |
