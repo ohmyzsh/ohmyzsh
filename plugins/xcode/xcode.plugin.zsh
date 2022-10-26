@@ -31,7 +31,7 @@ function xx {
   open -a "Xcode.app" "$@"
 }
 
-# "XCode-SELect by Version" - select Xcode by just version number
+# "Xcode-Select by Version" - select Xcode by just version number
 # Uses naming convention:
 #  - different versions of Xcode are named Xcode-<version>.app or stored
 #     in a folder named Xcode-<version>
