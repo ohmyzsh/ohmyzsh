@@ -140,6 +140,7 @@ plugins=(... git)
 | grm                  | git rm                                                                                                                           |
 | grmc                 | git rm --cached                                                                                                                  |
 | grmv                 | git remote rename                                                                                                                |
+| grpa                 | git reset --patch                                                                                                                |
 | grrm                 | git remote remove                                                                                                                |
 | grs                  | git restore                                                                                                                      |
 | grset                | git remote set-url                                                                                                               |
