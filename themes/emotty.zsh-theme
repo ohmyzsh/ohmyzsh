@@ -46,6 +46,16 @@
 # is shown (see vcs_action_glyph variable, default: chevron).
 # ------------------------------------------------------------------------------
 
+(( ${+functions[emotty]} )) || {
+  echo "error: the emotty theme requires the emotty plugin" >&2
+  return 1
+}
+
+(( ${+emoji} )) || {
+  echo "error: the emotty theme requires the emoji plugin" >&2
+  return 1
+}
+
 user_prompt="$(emotty)"
 root_prompt="$emoji[skull]"
 warn_prompt="$emoji[collision_symbol]"
