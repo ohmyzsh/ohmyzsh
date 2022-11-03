@@ -53,7 +53,7 @@ jobs:
           ISSUE_OR_PR_ID: ${{ github.event.issue.node_id || github.event.pull_request.node_id }}
         run: |
           item_id="$(gh api graphql -f query='
-            mutation($project:ID!, $content:ID!) {
+            mutation($project: ID!, $content: ID!) {
               addProjectV2ItemById(input: {projectId: $project, contentId: $content}) {
                 item {
                   id
