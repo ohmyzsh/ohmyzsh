@@ -37,7 +37,7 @@ function _frontend() {
     'lodash: Search in Lo-Dash website'
     'mdn: Search in MDN website'
     'nodejs: Search in NodeJS website'
-    'npmjs: Search in NPMJS website'
+    'npmjs: Search in npmjs website'
     'packagephobia: Search in Packagephobia website'
     'qunit: Search in Qunit website'
     'reactjs: Search in React website'
