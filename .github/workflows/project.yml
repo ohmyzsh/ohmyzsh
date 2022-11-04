@@ -113,7 +113,9 @@ jobs:
                 projectId: $project
                 itemId: $item
                 fieldId: $plugin_field
-                value: $plugin_value
+                value: {
+                  text: $plugin_value
+                }
               }) {
                 projectV2Item {
                   id
@@ -123,7 +125,9 @@ jobs:
                 projectId: $project
                 itemId: $item
                 fieldId: $theme_field
-                value: $theme_value
+                value: {
+                  text: $theme_value
+                }
               }) {
                 projectV2Item {
                   id
