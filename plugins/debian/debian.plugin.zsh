@@ -55,7 +55,7 @@ if [[ $use_sudo -eq 1 ]]; then
 
     alias ail="sed -e 's/  */ /g' -e 's/ *//' | cut -s -d ' ' -f 1 | xargs sudo $apt_pref install"
     alias ap="sudo $apt_pref purge"
-    alias ar="sudo $apt_pref remove"
+    alias apr="sudo $apt_pref remove"
     alias aar="sudo $apt_pref autoremove"
 
     # apt-get only
@@ -98,7 +98,7 @@ else
         print "$cmd"
         eval "$cmd"
     }
-    function ar() {
+    function apr() {
         cmd="su -lc '$apt_pref remove $@' root"
         print "$cmd"
         eval "$cmd"
@@ -147,7 +147,7 @@ apt_pref_compdef au  "$apt_upgr"
 apt_pref_compdef ai  "install"
 apt_pref_compdef ail "install"
 apt_pref_compdef ap  "purge"
-apt_pref_compdef ar  "remove"
+apt_pref_compdef apr  "remove"
 apt_pref_compdef aar  "autoremove"
 apt_pref_compdef ads "dselect-upgrade"
 

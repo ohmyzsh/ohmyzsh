@@ -45,7 +45,7 @@ Set `$apt_pref` and `$apt_upgr` to whatever command you want (before sourcing Oh
 | `ail`    | `sed -e 's/  */ /g' -e 's/ *//' \| cut -s -d ' ' -f 1 \| xargs sudo $apt_pref install` | Install all packages given on the command line while using only the first word of each line |
 | `alu`    | `sudo apt update && apt list -u && sudo apt upgrade`                                   | Update, list and upgrade packages                                                           |
 | `ap`     | `sudo $apt_pref purge`                                                                 | Removes packages along with configuration files                                             |
-| `ar`     | `sudo $apt_pref remove`                                                                | Removes packages, keeps the configuration files                                             |
+| `apr`     | `sudo $apt_pref remove`                                                                | Removes packages, keeps the configuration files                                             |
 | `au`     | `sudo $apt_pref $apt_upgr`                                                             | Install package upgrades                                                                    |
 | `di`     | `sudo dpkg -i`                                                                         | Install all .deb files in the current directory                                             |
 | `dia`    | `sudo dpkg -i ./*.deb`                                                                 | Install all .deb files in the current directory                                             |
