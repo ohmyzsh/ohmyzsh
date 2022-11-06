@@ -72,7 +72,7 @@ Oh My Zsh is installed by running one of the following commands in your terminal
 | **wget**  | `sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`   |
 | **fetch** | `sh -c "$(fetch -o - https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"` |
 
-_Note that previous configuration in `.zshrc` will be placed in `.pre-oh-my-zsh`. After installation you can move configuration you want to preserve into `.zshrc`._
+_Note that any previous `.zshrc` will be renamed to `.zshrc.pre-oh-my-zsh`. After installation, you can move the configuration you want to preserve into the new `.zshrc`._
 
 #### Manual inspection
 
@@ -117,7 +117,7 @@ _Note that the plugins are separated by whitespace (spaces, tabs, new lines...).
 
 #### Using Plugins
 
-Each plugin includes a **README**, documenting it. This README should show the aliases (if the plugin adds any) and extra goodies that are included in that particular plugin.
+Each built-in plugin includes a **README**, documenting it. This README should show the aliases (if the plugin adds any) and extra goodies that are included in that particular plugin.
 
 ### Themes
 
@@ -140,7 +140,7 @@ ZSH_THEME="agnoster" # (this is one of the fancy ones)
 # see https://github.com/ohmyzsh/ohmyzsh/wiki/Themes#agnoster
 ```
 
-_Note: many themes require installing the [Powerline Fonts](https://github.com/powerline/fonts) in order to render properly._
+_Note: many themes require installing a [Powerline Font](https://github.com/powerline/fonts) or a [Nerd Font](https://github.com/ryanoasis/nerd-fonts) in order to render properly. Without them, these themes will render [weird prompt symbols](https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ#i-have-a-weird-character-in-my-prompt)_
 
 Open up a new terminal window and your prompt should look something like this:
 
@@ -196,9 +196,9 @@ ZSH="$HOME/.dotfiles/oh-my-zsh" sh install.sh
 
 #### Unattended install
 
-If you're running the Oh My Zsh install script as part of an automated install, you can pass the
-flag `--unattended` to the `install.sh` script. This will have the effect of not trying to change
-the default shell, and also won't run `zsh` when the installation has finished.
+If you're running the Oh My Zsh install script as part of an automated install, you can pass the `--unattended`
+flag to the `install.sh` script. This will have the effect of not trying to change
+the default shell, and it also won't run `zsh` when the installation has finished.
 
 ```sh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
@@ -329,7 +329,7 @@ Before you participate in our delightful community, please read the [code of con
 
 I'm far from being a [Zsh](https://www.zsh.org/) expert and suspect there are many ways to improve – if you have ideas on how to make the configuration easier to maintain (and faster), don't hesitate to fork and send pull requests!
 
-We also need people to test out pull-requests. So take a look through [the open issues](https://github.com/ohmyzsh/ohmyzsh/issues) and help where you can.
+We also need people to test out pull requests. So take a look through [the open issues](https://github.com/ohmyzsh/ohmyzsh/issues) and help where you can.
 
 See [Contributing](CONTRIBUTING.md) for more details.
 

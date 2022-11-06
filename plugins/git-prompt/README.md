@@ -13,7 +13,7 @@ See the [original repository](https://github.com/olivierverdier/zsh-git-prompt).
 
 ## Requirements
 
-This plugin uses `python`, so your host needs to have it installed
+This plugin uses `python3`, so your host needs to have it installed.
 
 ## Examples
 

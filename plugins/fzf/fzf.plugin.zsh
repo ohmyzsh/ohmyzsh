@@ -178,7 +178,7 @@ function fzf_setup_using_macports() {
   (( $+commands[fzf] )) || return 1
 
   # The fzf-zsh-completion package installs the auto-completion in
-  local completions="/opt/local/share/zsh/site-functions/fzf"
+  local completions="/opt/local/share/fzf/shell/completion.zsh"
   # The fzf-zsh-completion package installs the key-bindings file in
   local key_bindings="/opt/local/share/fzf/shell/key-bindings.zsh"
 
