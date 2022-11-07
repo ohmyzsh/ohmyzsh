@@ -302,7 +302,7 @@ alias gtv='git tag | sort -V'
 alias gtl='gtl(){ git tag --sort=-v:refname -n -l "${1}*" }; noglob gtl'
 
 alias gunignore='git update-index --no-assume-unchanged'
-alias gunwip='git log -n 1 | grep -q -c "--wip--" && git reset HEAD~1'
+alias gunwip='git log -n 1 | grep -q -c "\--wip--" && git reset HEAD~1'
 alias gup='git pull --rebase'
 alias gupv='git pull --rebase -v'
 alias gupa='git pull --rebase --autostash'
