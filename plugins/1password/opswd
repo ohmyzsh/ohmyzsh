@@ -14,6 +14,17 @@ function opswd() {
   # If not logged in, print error and return
   op user list > /dev/null || return
 
+  local username
+  # Copy the username to the clipboard
+  if ! username=$(op item get "$service" --fields username 2>/dev/null); then
+    echo "error: could not obtain username for $service"
+    return 1
+  fi
+
+  echo -n "$username" | clipcopy
+  echo "✔ username for service $service copied to the clipboard. Press Enter to continue"
+  read
+
   local password
   # Copy the password to the clipboard
   if ! password=$(op item get "$service" --fields password 2>/dev/null); then
@@ -22,12 +33,13 @@ function opswd() {
   fi
 
   echo -n "$password" | clipcopy
-  echo "✔ password for $service copied to clipboard"
+  echo "✔ password for $service copied to clipboard. Press Enter to continue"
+  read
 
-  # If there's a one time password, copy it to the clipboard after 10 seconds
+  # If there's a one time password, copy it to the clipboard
   local totp
   if totp=$(op item get --otp "$service" 2>/dev/null) && [[ -n "$totp" ]]; then
-    sleep 10 && echo -n "$totp" | clipcopy
+    echo -n "$totp" | clipcopy
     echo "✔ TOTP for $service copied to clipboard"
   fi
 
