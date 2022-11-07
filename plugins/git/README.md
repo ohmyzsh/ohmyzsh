@@ -195,11 +195,8 @@ plugins=(... git)
 | gwt                  | git worktree                                                                                                                     |
 | gwta                 | git worktree add                                                                                                                 |
 | gwtls                | git worktree list                                                                                                                |
-| gwtlo                | git worktree lock                                                                                                                |
 | gwtmv                | git worktree move                                                                                                                |
-| gwtpr                | git worktree prune                                                                                                               |
 | gwtrm                | git worktree remove                                                                                                              |
-| gwtulo               | git worktree unlock                                                                                                              |
 
 ### Main branch preference
 

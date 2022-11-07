@@ -318,11 +318,8 @@ alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commi
 alias gwt='git worktree'
 alias gwta='git worktree add'
 alias gwtls='git worktree list'
-alias gwtlo='git worktree lock'
 alias gwtmv='git worktree move'
-alias gwtpr='git worktree prune'
 alias gwtrm='git worktree remove'
-alias gwtulo='git worktree unlock'
 
 alias gam='git am'
 alias gamc='git am --continue'
