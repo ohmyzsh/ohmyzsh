@@ -8,6 +8,13 @@ function tf_prompt_info() {
   echo "${ZSH_THEME_TF_PROMPT_PREFIX-[}${workspace:gs/%/%%}${ZSH_THEME_TF_PROMPT_SUFFIX-]}"
 }
 
+# Autocompletion for Terraform.
+#
+if command -v terraform &> /dev/null; then
+  autoload -U bashcompinit && bashcompinit
+  complete -o nospace -C terraform terraform
+fi
+
 alias tf='terraform'
 alias tfa='terraform apply'
 alias tfd='terraform destroy'
