@@ -16,14 +16,37 @@ fi
 # Note: nvm is a function so we need to use `which`
 which nvm &>/dev/null && return
 
+# TODO: 2022-11-11: Remove soft-deprecate options
+if (( $+NVM_LAZY + $+NVM_LAZY_CMD + $+NVM_AUTOLOAD)); then
+  local -a used_commands
+  [[ -n $NVM_LAZY ]] && used_commands+=("\$NVM_LAZY")
+  [[ -n $NVM_LAZY_CMD ]] && used_commands+=("\$NVM_LAZY_CMD")
+  [[ -n $NVM_AUTOLOAD ]] && used_commands+=("\$NVM_AUTOLOAD")
+  echo "$fg[yellow][nvm plugin] Variable-style settings are deprecated, instead of $used_commands, use:"
+fi
 if (( $+NVM_LAZY )); then
-  # Call nvm when first using nvm, node, npm, pnpm, yarn or $NVM_LAZY_CMD
-  function nvm node npm pnpm yarn $NVM_LAZY_CMD {
-    unfunction nvm node npm pnpm yarn $NVM_LAZY_CMD
+  echo "$fg[yellow][nvm plugin] zstyle ':omz:plugins:nvm' lazy true$reset_color"
+  zstyle ':omz:plugins:nvm' lazy yes
+fi
+if (( $+NVM_LAZY_CMD )); then
+  echo "$fg[yellow][nvm plugin] zstyle ':omz:plugins:nvm' lazy-cmd $NVM_LAZY_CMD$reset_color"
+  zstyle ':omz:plugins:nvm' lazy-cmd $NVM_LAZY_CMD
+fi
+if (( $+NVM_AUTOLOAD )); then
+  echo "$fg[yellow][nvm plugin] zstyle ':omz:plugins:nvm' lazy true$reset_color"
+  zstyle ':omz:plugins:nvm' autoload yes
+fi
+
+if zstyle -t ':omz:plugins:nvm' lazy; then
+  # Call nvm when first using nvm, node, npm, pnpm, yarn or $EXTRA_LAZY_CMD
+  zstyle -a ':omz:plugins:nvm' lazy-cmd EXTRA_LAZY_CMD
+  function nvm node npm pnpm yarn $EXTRA_LAZY_CMD {
+    unfunction nvm node npm pnpm yarn $EXTRA_LAZY_CMD
     # Load nvm if it exists in $NVM_DIR
     [[ -f "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
     "$0" "$@"
   }
+  unset EXTRA_LAZY_CMD
 elif [[ -f "$NVM_DIR/nvm.sh" ]]; then
   # Load nvm if it exists in $NVM_DIR
   source "$NVM_DIR/nvm.sh"
@@ -33,7 +56,7 @@ fi
 
 # Autoload nvm when finding a .nvmrc file in the current directory
 # Adapted from: https://github.com/nvm-sh/nvm#zsh
-if (( $+NVM_AUTOLOAD )); then
+if zstyle -t ':omz:plugins:nvm' autoload; then
   load-nvmrc() {
     local node_version="$(nvm version)"
     local nvmrc_path="$(nvm_find_nvmrc)"
@@ -70,4 +93,5 @@ for nvm_completion in "$NVM_DIR/bash_completion" "$NVM_HOMEBREW/etc/bash_complet
   fi
 done
 
+# TODO: 2022-11-11: Remove NVM_LAZY NVM_AUTOLOAD
 unset NVM_HOMEBREW NVM_LAZY NVM_AUTOLOAD nvm_completion
