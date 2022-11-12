@@ -45,6 +45,7 @@ The symbols are as follows:
 | ●n     | there are `n` staged files     |
 | ✖n     | there are `n` unmerged files   |
 | ✚n     | there are `n` unstaged files   |
+| -n     | there are `n` deleted files    |
 | ⚑n     | there are `n` stashed changes  |
 | …      | there are some untracked files |
 
