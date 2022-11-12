@@ -95,9 +95,9 @@ out = ' '.join([
     str(len(staged)),
     str(len(conflicts)),
     str(len(changed)),
-    str(len(deleted)),
     str(len(untracked)),
     str(stashed),
-    str(clean)
+    str(clean),
+    str(len(deleted))
 ])
 print(out, end='')
