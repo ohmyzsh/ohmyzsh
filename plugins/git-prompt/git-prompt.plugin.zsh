@@ -52,7 +52,7 @@ function update_current_git_vars() {
     if [ -z ${ZSH_THEME_GIT_SHOW_UPSTREAM+x} ]; then
         GIT_UPSTREAM=
     else
-        GIT_UPSTREAM=$(git rev-parse --abbrev-ref --symbolic-full-name "@{upstream}" 2>/dev/null) && GIT_UPSTREAM=" -> ${GIT_UPSTREAM}"
+        GIT_UPSTREAM=$(git rev-parse --abbrev-ref --symbolic-full-name "@{upstream}" 2>/dev/null) && GIT_UPSTREAM="${ZSH_THEME_GIT_PROMPT_UPSTREAM_SEPARATOR}${GIT_UPSTREAM}"
     fi
 }
 
@@ -94,7 +94,6 @@ git_super_status() {
 }
 
 # Default values for the appearance of the prompt.
-#ZSH_THEME_GIT_SHOW_UPSTREAM=1
 ZSH_THEME_GIT_PROMPT_PREFIX="("
 ZSH_THEME_GIT_PROMPT_SUFFIX=")"
 ZSH_THEME_GIT_PROMPT_SEPARATOR="|"
@@ -108,6 +107,8 @@ ZSH_THEME_GIT_PROMPT_AHEAD="%{↑%G%}"
 ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[cyan]%}%{…%G%}"
 ZSH_THEME_GIT_PROMPT_STASHED="%{$fg_bold[blue]%}%{⚑%G%}"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg_bold[green]%}%{✔%G%}"
+#ZSH_THEME_GIT_SHOW_UPSTREAM=1
+ZSH_THEME_GIT_PROMPT_UPSTREAM_SEPARATOR="->"
 
 # Set the prompt.
 RPROMPT='$(git_super_status)'
