@@ -40,15 +40,17 @@ if (( ${+NVM_LAZY} + ${+NVM_LAZY_CMD} + ${+NVM_AUTOLOAD} )); then
 fi
 
 if zstyle -t ':omz:plugins:nvm' lazy; then
-  # Call nvm when first using nvm, node, npm, pnpm, yarn or $EXTRA_LAZY_CMD
-  zstyle -a ':omz:plugins:nvm' lazy-cmd EXTRA_LAZY_CMD
-  function nvm node npm pnpm yarn $EXTRA_LAZY_CMD {
-    unfunction nvm node npm pnpm yarn $EXTRA_LAZY_CMD
-    # Load nvm if it exists in $NVM_DIR
-    [[ -f "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
-    "$0" "$@"
-  }
-  unset EXTRA_LAZY_CMD
+  # Call nvm when first using nvm, node, npm, pnpm, yarn or other commands in lazy-cmd
+  zstyle -a ':omz:plugins:nvm' lazy-cmd nvm_lazy_cmd
+  eval "
+    function nvm node npm pnpm yarn $nvm_lazy_cmd {
+      unfunction nvm node npm pnpm yarn $nvm_lazy_cmd
+      # Load nvm if it exists in \$NVM_DIR
+      [[ -f \"\$NVM_DIR/nvm.sh\" ]] && source \"\$NVM_DIR/nvm.sh\"
+      \"\$0\" \"\$@\"
+    }
+  "
+  unset nvm_lazy_cmd
 elif [[ -f "$NVM_DIR/nvm.sh" ]]; then
   # Load nvm if it exists in $NVM_DIR
   source "$NVM_DIR/nvm.sh"
