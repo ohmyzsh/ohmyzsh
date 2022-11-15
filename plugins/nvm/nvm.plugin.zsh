@@ -17,24 +17,26 @@ fi
 which nvm &>/dev/null && return
 
 # TODO: 2022-11-11: Remove soft-deprecate options
-if (( $+NVM_LAZY + $+NVM_LAZY_CMD + $+NVM_AUTOLOAD)); then
-  local -a used_commands
-  [[ -n $NVM_LAZY ]] && used_commands+=("\$NVM_LAZY")
-  [[ -n $NVM_LAZY_CMD ]] && used_commands+=("\$NVM_LAZY_CMD")
-  [[ -n $NVM_AUTOLOAD ]] && used_commands+=("\$NVM_AUTOLOAD")
-  echo "$fg[yellow][nvm plugin] Variable-style settings are deprecated, instead of $used_commands, use:"
-fi
-if (( $+NVM_LAZY )); then
-  echo "$fg[yellow][nvm plugin] zstyle ':omz:plugins:nvm' lazy true$reset_color"
-  zstyle ':omz:plugins:nvm' lazy yes
-fi
-if (( $+NVM_LAZY_CMD )); then
-  echo "$fg[yellow][nvm plugin] zstyle ':omz:plugins:nvm' lazy-cmd $NVM_LAZY_CMD$reset_color"
-  zstyle ':omz:plugins:nvm' lazy-cmd $NVM_LAZY_CMD
-fi
-if (( $+NVM_AUTOLOAD )); then
-  echo "$fg[yellow][nvm plugin] zstyle ':omz:plugins:nvm' lazy true$reset_color"
-  zstyle ':omz:plugins:nvm' autoload yes
+if (( ${+NVM_LAZY} + ${+NVM_LAZY_CMD} + ${+NVM_AUTOLOAD} )); then
+  # Get list of NVM_* variable settings defined
+  local -a used_vars
+  used_vars=(${(o)parameters[(I)NVM_(AUTOLOAD|LAZY|LAZY_CMD)]})
+  # Nicely print the list in the style `var1, var2 and var3`
+  echo "${fg[yellow]}[nvm plugin] Variable-style settings are deprecated. Instead of ${(j:, :)used_vars[1,-2]}${used_vars[-2]+ and }${used_vars[-1]}, use:\n"
+  if (( $+NVM_AUTOLOAD )); then
+    echo "  zstyle ':omz:plugins:nvm' autoload true"
+    zstyle ':omz:plugins:nvm' autoload yes
+  fi
+  if (( $+NVM_LAZY )); then
+    echo "  zstyle ':omz:plugins:nvm' lazy true"
+    zstyle ':omz:plugins:nvm' lazy yes
+  fi
+  if (( $+NVM_LAZY_CMD )); then
+    echo "  zstyle ':omz:plugins:nvm' lazy-cmd $NVM_LAZY_CMD"
+    zstyle ':omz:plugins:nvm' lazy-cmd $NVM_LAZY_CMD
+  fi
+  echo "$reset_color"
+  unset used_vars NVM_AUTOLOAD NVM_LAZY NVM_LAZY_CMD
 fi
 
 if zstyle -t ':omz:plugins:nvm' lazy; then
@@ -93,5 +95,4 @@ for nvm_completion in "$NVM_DIR/bash_completion" "$NVM_HOMEBREW/etc/bash_complet
   fi
 done
 
-# TODO: 2022-11-11: Remove NVM_LAZY NVM_AUTOLOAD
-unset NVM_HOMEBREW NVM_LAZY NVM_AUTOLOAD nvm_completion
+unset NVM_HOMEBREW nvm_completion
