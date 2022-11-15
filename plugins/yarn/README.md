@@ -15,7 +15,7 @@ It also adds `yarn` global scripts dir (commonly `~/.yarn/bin`) to the `$PATH`.
 To disable this feature, set the following style in your `.zshrc`:
 
 ```zsh
-zstyle ':omz:plugins:yarn' global-path false
+zstyle ':omz:plugins:yarn' global-path no
 ```
 
 ## Aliases
