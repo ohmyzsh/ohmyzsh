@@ -35,6 +35,7 @@ plugins=(... git)
 | gbss                 | git bisect start                                                                                                                 |
 | gc                   | git commit -v                                                                                                                    |
 | gc!                  | git commit -v --amend                                                                                                            |
+| gcn                  | git commit -v --no-edit                                                                                                          |
 | gcn!                 | git commit -v --no-edit --amend                                                                                                  |
 | gca                  | git commit -v -a                                                                                                                 |
 | gca!                 | git commit -v -a --amend                                                                                                         |
