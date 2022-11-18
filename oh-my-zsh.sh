@@ -143,7 +143,10 @@ fi
 unset zcompdump_revision zcompdump_fpath zcompdump_refresh
 
 # zcompile the completion dump file if the .zwc is older or missing.
-zrecompile -q -p "$ZSH_COMPDUMP" && command rm -f "$ZSH_COMPDUMP.zwc.old"
+if command mkdir "${ZSH_COMPDUMP}.lock" 2>/dev/null; then
+  zrecompile -q -p "$ZSH_COMPDUMP"
+  command rm -rf "$ZSH_COMPDUMP.zwc.old" "${ZSH_COMPDUMP}.lock" 
+fi
 
 # Load all of the config files in ~/oh-my-zsh that end in .zsh
 # TIP: Add files you don't want in git to .gitignore
