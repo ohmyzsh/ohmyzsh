@@ -23,6 +23,6 @@ Requirements: Python needs to be installed.
 
 - `acs -g <group>/--group <group`: show only aliases for group `<group>`. Multiple uses of the flag show all groups,
 
-- `acs --groups-only`: show only group names
+- `acs --groups`: show only group names
 
   ![screenshot](https://cloud.githubusercontent.com/assets/3602957/11581913/cb54fb8a-9a82-11e5-846b-5a67f67ad9ad.png)
