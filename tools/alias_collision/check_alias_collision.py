@@ -1,6 +1,6 @@
 """Check for alias collisions within the codebase"""
 
-from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser, FileType
+from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser
 from pathlib import Path
 from typing import List
 from dataclasses import dataclass
@@ -54,7 +54,7 @@ def find_all_aliases(path: Path) -> List:
 
 
 def check_for_duplicates(aliases: List[Alias]) -> None:
-    elements = dict()
+    elements = {}
     for alias in aliases:
         if alias.alias in elements:
             existing = elements[alias.alias]
