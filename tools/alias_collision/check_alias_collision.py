@@ -9,7 +9,7 @@ import re
 
 
 ERROR_MESSAGE_TEMPLATE = """Found alias collision
-Alias %s defined in %s already exists as %s in %s.
+Alias `%s` defined in `%s` already exists as alias `%s` in `%s`.
 Consider renaming your alias.
 """
 
