@@ -7,6 +7,7 @@ from check_alias_collision import (
     find_aliases_in_file,
     check_for_duplicates,
     Alias,
+    Collision,
 )
 
 
@@ -73,21 +74,29 @@ class CheckAliasCollisionTest(TestCase):
         result = find_aliases_in_file(Path("conditional.zsh"))
         self.assertListEqual([], result)
 
-    def test_check_for_duplicates__no_duplicates_should_not_raise(self) -> None:
-        check_for_duplicates(
+    def test_check_for_duplicates__no_duplicates_should_return_empty_dict(self) -> None:
+        result = check_for_duplicates(
             [
                 Alias("g", "git", Path("git.zsh")),
                 Alias("ga", "git add", Path("git.zsh")),
                 Alias("gaa", "git add --all", Path("git.zsh")),
             ]
         )
-        self.assertTrue(True)
+        self.assertListEqual(result, [])
 
-    def test_check_for_duplicates__duplicates_should_raise(self) -> None:
-        with self.assertRaises(ValueError):
-            check_for_duplicates(
-                [
+    def test_check_for_duplicates__duplicates_should_have_one_collision(self) -> None:
+        result = check_for_duplicates(
+            [
+                Alias("gc", "git commit", Path("git.zsh")),
+                Alias("gc", "git clone", Path("git.zsh")),
+            ]
+        )
+        self.assertListEqual(
+            result,
+            [
+                Collision(
                     Alias("gc", "git commit", Path("git.zsh")),
                     Alias("gc", "git clone", Path("git.zsh")),
-                ]
-            )
+                )
+            ],
+        )
