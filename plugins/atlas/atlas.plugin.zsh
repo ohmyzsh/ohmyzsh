@@ -1,4 +1,4 @@
-# Autocompletion for the GitHub CLI (gh).
+# Autocompletion for the Atlas CLI (atlas).
 if (( ! $+commands[atlas] )); then
   return
 fi
