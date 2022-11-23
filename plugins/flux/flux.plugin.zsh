@@ -1,4 +1,4 @@
-# Autocompletion for the GitHub CLI (gh).
+# Autocompletion for the FluxCD CLI (flux).
 if (( ! $+commands[flux] )); then
   return
 fi
