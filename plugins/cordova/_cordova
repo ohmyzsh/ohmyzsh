@@ -1,0 +1,172 @@
+#compdef cordova
+# autoload
+
+typeset -A opt_args
+local context state line
+
+_cordova() {
+  local context state line curcontext="$curcontext"
+
+  if (( CURRENT > 2 )); then
+    (( CURRENT-- ))
+    shift words
+    _call_function - "__cordova_${words[1]}" || _nothing
+  else
+    __cordova_commands
+  fi
+}
+
+
+__cordova_commands() {
+  local context state line curcontext="$curcontext"
+
+  local -a cordova_options
+  __cordova_setup_cordova_options
+
+
+  _arguments -C \
+  $cordova_options \
+  ': :->command'
+
+  case "$state" in
+    command)
+local -a commands
+
+commands=(
+  create'[creates a cordova project in the specified PATH]'
+  help'[shows this syntax summary]'
+  info'[print out useful information helpful for submitting bug reports and getting help.]'
+  server'[runs a local web server for www/ assets. Port defaults to 8000.]'
+  run'[deploys app on specified (or all) platform devices]'
+  prepare'[copies files for specified platforms, or all platforms]'
+  compile'[builds the app for specified platforms, or all platforms]'
+  build'[shortcut for prepare, then compile]'
+  emulate'[deploys app in specified (or all) platform emulator(s)]'
+  platform'[add or remove a specified PLATFORM, etc]'
+  plugin'[add or remove a plugin from the specified PATH or URI, etc]'
+
+  )
+
+
+_values 'command' $commands
+;;
+esac
+}
+
+__cordova_plugin() {
+  local context state line curcontext="$curcontext"
+
+  if (( CURRENT > 2 )); then
+    (( CURRENT-- ))
+    shift word
+    _call_function - "__cordova_plugin_${words[1]}" || _nothing
+  else
+    __cordova_plugin_commands
+  fi
+
+}
+
+__cordova_plugin_commands (){
+
+ local context state line curcontext="$curcontext"
+
+ local -a cordova_options
+
+ _arguments -C \
+ $cordova_options \
+ ': :->command'
+
+ case "$state" in
+  command)
+local -a commands
+
+commands=(
+  add'[add platform]'
+  {remove,rm}'[remove platform]'
+  {list,ls}'[list all currently installed plugins]'
+  search'[search the plugin registry for plugins matching the keywords]'
+  )
+
+_values 'command' $commands
+;;
+esac
+
+}
+
+
+__cordova_platform() {
+  local context state line curcontext="$curcontext"
+
+  if (( CURRENT > 2 )); then
+    (( CURRENT-- ))
+    shift word
+    _call_function - "__cordova_platform_${words[1]}" || _nothing
+  else
+    __cordova_platform_commands
+  fi
+
+}
+
+__cordova_platform_commands (){
+
+ local context state line curcontext="$curcontext"
+
+ local -a cordova_options
+
+ _arguments -C \
+ $cordova_options \
+ ': :->command'
+
+ case "$state" in
+  command)
+local -a commands
+
+commands=(
+  add'[add platform]'
+  {remove,rm}'[remove platform]'
+  {list,ls}'[list all currently installed plugins]'
+  {update,up}'[update the version of cordova]'
+  search'[search the plugin registry for plugins matching the keywords]'
+  )
+
+
+_values 'command' $commands
+;;
+esac
+
+}
+
+__cordova_setup_cordova_options() {
+  cordova_options=(
+    -d'[debug mode ...]'
+    -v'[prints out this utility version]'
+    )
+}
+
+__cordova_server(){
+ __cordova_platform_select
+}
+
+__cordova_run(){
+  __cordova_platform_select
+}
+
+__cordova_prepare(){
+ __cordova_platform_select
+}
+
+__cordova_compile(){
+  __cordova_platform_select
+}
+__cordova_build(){
+  __cordova_platform_select
+}
+__cordova_emulate(){
+  __cordova_platform_select
+}
+
+__cordova_platform_select(){
+  _values 'platform' 'ios' 'android'
+}
+
+_cordova "$@"
