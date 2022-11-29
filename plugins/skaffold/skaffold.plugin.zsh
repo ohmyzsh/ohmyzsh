@@ -1,11 +1,14 @@
-if (( $+commands[skaffold] )); then
-  # If the completion file does not exist, generate it and then source it
-  # Otherwise, source it and regenerate in the background
-  if [[ ! -f "$ZSH_CACHE_DIR/completions/_skaffold" ]]; then
-    skaffold completion zsh | tee "$ZSH_CACHE_DIR/completions/_skaffold" >/dev/null
-    source "$ZSH_CACHE_DIR/completions/_skaffold"
-  else
-    source "$ZSH_CACHE_DIR/completions/_skaffold"
-    skaffold completion zsh | tee "$ZSH_CACHE_DIR/completions/_skaffold" >/dev/null &|
-  fi
+# Autocompletion for skaffold
+if (( ! $+commands[skaffold] )); then
+  return
 fi
+
+# If the completion file doesn't exist yet, we need to autoload it and
+# bind it to `skaffold`. Otherwise, compinit will have already done that.
+if [[ ! -f "$ZSH_CACHE_DIR/completions/_skaffold" ]]; then
+  typeset -g -A _comps
+  autoload -Uz _skaffold
+  _comps[gh]=_skaffold
+fi
+
+skaffold completion zsh >| "$ZSH_CACHE_DIR/completions/_gh" &|
