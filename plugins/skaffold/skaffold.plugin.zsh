@@ -8,7 +8,7 @@ fi
 if [[ ! -f "$ZSH_CACHE_DIR/completions/_skaffold" ]]; then
   typeset -g -A _comps
   autoload -Uz _skaffold
-  _comps[gh]=_skaffold
+  _comps[skaffold]=_skaffold
 fi
 
-skaffold completion zsh >| "$ZSH_CACHE_DIR/completions/_gh" &|
+skaffold completion zsh >| "$ZSH_CACHE_DIR/completions/_skaffold" &|
