@@ -24,11 +24,11 @@ if (( ${+NVM_LAZY} + ${+NVM_LAZY_CMD} + ${+NVM_AUTOLOAD} )); then
   # Nicely print the list in the style `var1, var2 and var3`
   echo "${fg[yellow]}[nvm plugin] Variable-style settings are deprecated. Instead of ${(j:, :)used_vars[1,-2]}${used_vars[-2]+ and }${used_vars[-1]}, use:\n"
   if (( $+NVM_AUTOLOAD )); then
-    echo "  zstyle ':omz:plugins:nvm' autoload true"
+    echo "  zstyle ':omz:plugins:nvm' autoload yes"
     zstyle ':omz:plugins:nvm' autoload yes
   fi
   if (( $+NVM_LAZY )); then
-    echo "  zstyle ':omz:plugins:nvm' lazy true"
+    echo "  zstyle ':omz:plugins:nvm' lazy yes"
     zstyle ':omz:plugins:nvm' lazy yes
   fi
   if (( $+NVM_LAZY_CMD )); then
@@ -61,9 +61,11 @@ fi
 # Autoload nvm when finding a .nvmrc file in the current directory
 # Adapted from: https://github.com/nvm-sh/nvm#zsh
 if zstyle -t ':omz:plugins:nvm' autoload; then
-  load-nvmrc() {
+  function load-nvmrc {
     local node_version="$(nvm version)"
     local nvmrc_path="$(nvm_find_nvmrc)"
+    local nvm_silent=""
+    zstyle -t ':omz:plugins:nvm' silent-autoload && _nvm_silent="--silent"
 
     if [[ -n "$nvmrc_path" ]]; then
       local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
@@ -71,11 +73,11 @@ if zstyle -t ':omz:plugins:nvm' autoload; then
       if [[ "$nvmrc_node_version" = "N/A" ]]; then
         nvm install
       elif [[ "$nvmrc_node_version" != "$node_version" ]]; then
-        nvm use
+        nvm use $nvm_silent
       fi
     elif [[ "$node_version" != "$(nvm version default)" ]]; then
       echo "Reverting to nvm default version"
-      nvm use default
+      nvm use default $nvm_silent
     fi
   }
 
