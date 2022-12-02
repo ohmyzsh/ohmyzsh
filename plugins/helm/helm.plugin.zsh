@@ -13,12 +13,6 @@ else
 fi
 
 alias h='helm'
-
-# Helm install
 alias hin='helm install'
-
-# Helm upgrade
-alias hup='helm upgrade'
-
-# Helm search
 alias hse='helm search'
+alias hup='helm upgrade'
