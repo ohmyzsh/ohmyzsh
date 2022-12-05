@@ -1,7 +1,0 @@
-alias mp="multipass"
-alias mpl="multipass list"
-alias mpla="multipass launch"
-alias mpln="multipass launch --network en0 --network name=bridge0,mode=manual"
-alias mps="multipass shell"
-alias mpsp="multipass stop"
-alias mpst="multipass start"
