@@ -29,6 +29,7 @@ zstyle ':omz:plugins:yarn' global-path no
 | yb    | `yarn build`                              | Run the build script defined in `package.json`                                |
 | ycc   | `yarn cache clean`                        | Clean yarn's global cache of packages                                         |
 | yd    | `yarn dev`                                | Run the dev script defined in `package.json`                                  |
+| yf    | `yarn format`                             | Run the dev script defined in `package.json`                                  |
 | yga   | `yarn global add`                         | Install packages globally on your operating system                            |
 | ygls  | `yarn global list`                        | Lists global installed packages                                               |
 | ygrm  | `yarn global remove`                      | Remove global installed packages from your OS                                 |
