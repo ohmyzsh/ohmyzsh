@@ -11,4 +11,5 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_poetry" ]]; then
   _comps[poetry]=_poetry
 fi
 
+mkdir -p $ZSH_CACHE_DIR/completions
 poetry completions zsh >| "$ZSH_CACHE_DIR/completions/_poetry" &|
