@@ -33,6 +33,14 @@ alias pscpu10='ps -e -o pcpu,cpu,nice,state,cputime,args|sort -k1,1n -nr | head 
 # top10 of the history
 alias hist10='print -l ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
 
+function ip() {
+    if [ -t 1 ]; then
+        command ip -color "$@"
+    else
+        command ip "$@"
+    fi
+}
+
 # directory LS
 function dls() {
     print -l *(/)

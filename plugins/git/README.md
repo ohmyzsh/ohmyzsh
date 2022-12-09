@@ -35,6 +35,7 @@ plugins=(... git)
 | gbss                 | git bisect start                                                                                                                 |
 | gc                   | git commit -v                                                                                                                    |
 | gc!                  | git commit -v --amend                                                                                                            |
+| gcn                  | git commit -v --no-edit                                                                                                          |
 | gcn!                 | git commit -v --no-edit --amend                                                                                                  |
 | gca                  | git commit -v -a                                                                                                                 |
 | gca!                 | git commit -v -a --amend                                                                                                         |
@@ -91,8 +92,8 @@ plugins=(... git)
 | gignore              | git update-index --assume-unchanged                                                                                              |
 | gignored             | git ls-files -v \| grep "^[[:lower:]]"                                                                                           |
 | git-svn-dcommit-push | git svn dcommit && git push github $(git_main_branch):svntrunk                                                                   |
-| gk                   | gitk --all --branches &!                                                                                                          |
-| gke                  | gitk --all $(git log -g --pretty=%h) &!                                                                                           |
+| gk                   | gitk --all --branches &!                                                                                                         |
+| gke                  | gitk --all $(git log -g --pretty=%h) &!                                                                                          |
 | gl                   | git pull                                                                                                                         |
 | glg                  | git log --stat                                                                                                                   |
 | glgp                 | git log --stat -p                                                                                                                |
@@ -184,7 +185,7 @@ plugins=(... git)
 | gupom                | git pull --rebase origin $(git_main_branch)                                                                                      |
 | gupomi               | git pull --rebase=interactive origin $(git_main_branch)                                                                          |
 | glum                 | git pull upstream $(git_main_branch)                                                                                             |
-| gluc                 | git pull upstream $(git_current_branch)                                                                                             |
+| gluc                 | git pull upstream $(git_current_branch)                                                                                          |
 | gwch                 | git whatchanged -p --abbrev-commit --pretty=medium                                                                               |
 | gwip                 | git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign -m "--wip-- [skip ci]"           |
 | gam                  | git am                                                                                                                           |
@@ -192,6 +193,11 @@ plugins=(... git)
 | gams                 | git am --skip                                                                                                                    |
 | gama                 | git am --abort                                                                                                                   |
 | gamscp               | git am --show-current-patch                                                                                                      |
+| gwt                  | git worktree                                                                                                                     |
+| gwta                 | git worktree add                                                                                                                 |
+| gwtls                | git worktree list                                                                                                                |
+| gwtmv                | git worktree move                                                                                                                |
+| gwtrm                | git worktree remove                                                                                                              |
 
 ### Main branch preference
 
