@@ -116,6 +116,17 @@ prompt_git() {
       prompt_segment green $CURRENT_FG
     fi
 
+    local ahead behind
+    ahead=$(git log --oneline @{upstream}.. 2>/dev/null)
+    behind=$(git log --oneline ..@{upstream} 2>/dev/null)
+    if [[ -n "$ahead" ]] && [[ -n "$behind" ]]; then
+      PL_BRANCH_CHAR=$'\u21c5'
+    elif [[ -n "$ahead" ]]; then
+      PL_BRANCH_CHAR=$'\u21b1'
+    elif [[ -n "$behind" ]]; then
+      PL_BRANCH_CHAR=$'\u21b0'
+    fi
+
     if [[ -e "${repo_path}/BISECT_LOG" ]]; then
       mode=" <B>"
     elif [[ -e "${repo_path}/MERGE_HEAD" ]]; then
