@@ -61,6 +61,8 @@ plugins=(... git)
 | gcpa                 | git cherry-pick --abort                                                                                                          |
 | gcpc                 | git cherry-pick --continue                                                                                                       |
 | gcs                  | git commit -S                                                                                                                    |
+| gcss                 | git commit -S -s                                                                                                                 |
+| gcssm                | git commit -S -s -m                                                                                                              |
 | gd                   | git diff                                                                                                                         |
 | gdca                 | git diff --cached                                                                                                                |
 | gdcw                 | git diff --cached --word-diff                                                                                                    |
@@ -158,8 +160,8 @@ plugins=(... git)
 | gsr                  | git svn rebase                                                                                                                   |
 | gss                  | git status -s                                                                                                                    |
 | gst                  | git status                                                                                                                       |
-| gsta                 | git stash push                                                                                                                   |
-| gsta                 | git stash save                                                                                                                   |
+| gsta                 | git stash push (git version >= 2.13)                                                                                             |
+| gsta                 | git stash save (git version < 2.13)                                                                                              |
 | gstaa                | git stash apply                                                                                                                  |
 | gstc                 | git stash clear                                                                                                                  |
 | gstd                 | git stash drop                                                                                                                   |
