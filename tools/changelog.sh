@@ -209,7 +209,7 @@ function display-release {
     case "$output" in
     raw) printf '%s' "$hash" ;;
     text) printf '\e[33m%s\e[0m' "$hash" ;; # red
-    md) printf '[`%s`](https://github.com/ohmyzsh/ohmyzsh/commit/%s)' "$hash" "$hash" ;;
+    md) printf '[`%s`](https://github.com/vineelsai26/ohmyzsh/commit/%s)' "$hash" "$hash" ;;
     esac
   }
 
@@ -274,7 +274,7 @@ function display-release {
     # In text mode, highlight (#<issue>) and dim text between `backticks`
     text) sed -E $'s|#([0-9]+)|\e[32m#\\1\e[0m|g;s|`([^`]+)`|`\e[2m\\1\e[0m`|g' <<< "$subject" ;;
     # In markdown mode, link to (#<issue>) issues
-    md) sed -E 's|#([0-9]+)|[#\1](https://github.com/ohmyzsh/ohmyzsh/issues/\1)|g' <<< "$subject" ;;
+    md) sed -E 's|#([0-9]+)|[#\1](https://github.com/vineelsai26/ohmyzsh/issues/\1)|g' <<< "$subject" ;;
     esac
   }
 

@@ -53,7 +53,7 @@ function is_update_available() {
   esac
 
   # If the remote repo is not the official one, let's assume there are updates available
-  [[ "$repo" = ohmyzsh/ohmyzsh ]] || return 0
+  [[ "$repo" = vineelsai26/ohmyzsh ]] || return 0
   local api_url="https://api.github.com/repos/${repo}/commits/${branch}"
 
   # Get local HEAD. If this fails assume there are updates

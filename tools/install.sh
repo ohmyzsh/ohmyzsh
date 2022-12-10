@@ -1,14 +1,14 @@
 #!/bin/sh
 #
 # This script should be run via curl:
-#   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+#   sh -c "$(curl -fsSL https://raw.githubusercontent.com/vineelsai26/ohmyzsh/master/tools/install.sh)"
 # or via wget:
-#   sh -c "$(wget -qO- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+#   sh -c "$(wget -qO- https://raw.githubusercontent.com/vineelsai26/ohmyzsh/master/tools/install.sh)"
 # or via fetch:
-#   sh -c "$(fetch -o - https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+#   sh -c "$(fetch -o - https://raw.githubusercontent.com/vineelsai26/ohmyzsh/master/tools/install.sh)"
 #
 # As an alternative, you can first download the install script and run it afterwards:
-#   wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+#   wget https://raw.githubusercontent.com/vineelsai26/ohmyzsh/master/tools/install.sh
 #   sh install.sh
 #
 # You can tweak the install behavior by setting variables when running the script. For
@@ -17,7 +17,7 @@
 #
 # Respects the following environment variables:
 #   ZSH     - path to the Oh My Zsh repository folder (default: $HOME/.oh-my-zsh)
-#   REPO    - name of the GitHub repo to install from (default: ohmyzsh/ohmyzsh)
+#   REPO    - name of the GitHub repo to install from (default: vineelsai26/ohmyzsh)
 #   REMOTE  - full remote URL of the git repo to install (default: GitHub via HTTPS)
 #   BRANCH  - branch to check out immediately after install (default: master)
 #
@@ -33,7 +33,7 @@
 # For example:
 #   sh install.sh --unattended
 # or:
-#   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+#   sh -c "$(curl -fsSL https://raw.githubusercontent.com/vineelsai26/ohmyzsh/master/tools/install.sh)" "" --unattended
 #
 set -e
 
@@ -55,7 +55,7 @@ custom_zsh=${ZSH:+yes}
 
 # Default settings
 ZSH="${ZSH:-$HOME/.oh-my-zsh}"
-REPO=${REPO:-ohmyzsh/ohmyzsh}
+REPO=${REPO:-vineelsai26/ohmyzsh}
 REMOTE=${REMOTE:-https://github.com/${REPO}.git}
 BRANCH=${BRANCH:-master}
 
@@ -290,7 +290,11 @@ setup_ohmyzsh() {
   && git config oh-my-zsh.branch "$BRANCH" \
   && git remote add origin "$REMOTE" \
   && git fetch --depth=1 origin \
-  && git checkout -b "$BRANCH" "origin/$BRANCH" || {
+  && git checkout -b "$BRANCH" "origin/$BRANCH" \
+  && git clone https://github.com/zsh-users/zsh-autosuggestions plugins/zsh-autosuggestions \
+  && git clone https://github.com/zsh-users/zsh-completions plugins/zsh-completions \
+  && git clone https://github.com/zsh-users/zsh-syntax-highlighting plugins/zsh-syntax-highlighting \
+  || {
     [ ! -d "$ZSH" ] || {
       cd -
       rm -rf "$ZSH" 2>/dev/null
