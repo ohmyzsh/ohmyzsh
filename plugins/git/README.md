@@ -52,7 +52,9 @@ plugins=(... git)
 | gclean               | git clean -id                                                                                                                    |
 | gpristine            | git reset --hard && git clean -dffx                                                                                              |
 | gcm                  | git checkout $(git_main_branch)                                                                                                  |
+| gcmbdp                | previous_branch=$(current_branch) && git checkout $(git_main_branch) && git pull && git branch -d $previous_branch                                                                                                 |
 | gcd                  | git checkout $(git_develop_branch)                                                                                               |
+| gcdbdp                | previous_branch=$(current_branch) && git checkout $(git_develop_branch) && git pull && git branch -d $previous_branch                                                                                                 |
 | gcmsg                | git commit -m                                                                                                                    |
 | gco                  | git checkout                                                                                                                     |
 | gcor                 | git checkout --recurse-submodules                                                                                                |
