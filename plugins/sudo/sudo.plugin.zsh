@@ -12,10 +12,18 @@
 # * Subhaditya Nath <github.com/subnut>
 # * Marc Cornellà <github.com/mcornella>
 # * Carlo Sala <carlosalag@protonmail.com>
+# * Marcelina Hołub <mjholub.me>
 #
 # ------------------------------------------------------------------------------
 
 __sudo-replace-buffer() {
+  #Store the command to use for escalating privileges
+  ROOT_COMMAND=sudo
+  #Check if sudo isn't present
+  if [[ ! $(command -v sudo) ]]; then
+    ROOT_COMMAND=doas
+  fi
+
   local old=$1 new=$2 space=${2:+ }
 
   # if the cursor is positioned in the $old part of the text, make
@@ -48,8 +56,8 @@ sudo-command-line() {
     # If $EDITOR is not set, just toggle the sudo prefix on and off
     if [[ -z "$EDITOR" ]]; then
       case "$BUFFER" in
-        sudo\ -e\ *) __sudo-replace-buffer "sudo -e" "" ;;
-        sudo\ *) __sudo-replace-buffer "sudo" "" ;;
+        $ROOT_COMMAND\ -e\ *) __sudo-replace-buffer "sudo -e" "" ;;
+        $ROOT_COMMAND\ *) __sudo-replace-buffer "sudo" "" ;;
         *) LBUFFER="sudo $LBUFFER" ;;
       esac
       return
@@ -85,11 +93,11 @@ sudo-command-line() {
 
     # Check for editor commands in the typed command and replace accordingly
     case "$BUFFER" in
-      $editorcmd\ *) __sudo-replace-buffer "$editorcmd" "sudo -e" ;;
-      \$EDITOR\ *) __sudo-replace-buffer '$EDITOR' "sudo -e" ;;
-      sudo\ -e\ *) __sudo-replace-buffer "sudo -e" "$EDITOR" ;;
-      sudo\ *) __sudo-replace-buffer "sudo" "" ;;
-      *) LBUFFER="sudo $LBUFFER" ;;
+      $editorcmd\ *) __sudo-replace-buffer "$editorcmd" "$ROOT_COMMAND -e" ;;
+      \$EDITOR\ *) __sudo-replace-buffer '$EDITOR' "$ROOT_COMMAND -e" ;;
+      $ROOT_COMMAND\ -e\ *) __sudo-replace-buffer "sudo -e" "$EDITOR" ;;
+      $ROOT_COMMAND\ *) __sudo-replace-buffer "$ROOT_COMMAND" "" ;;
+      *) LBUFFER="$ROOT_COMMAND $LBUFFER" ;;
     esac
   } always {
     # Preserve beginning space
