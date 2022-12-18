@@ -4,6 +4,7 @@ plugins/aws/                        @maksyms
 plugins/genpass/                    @atoponce
 plugins/git-lfs/                    @hellovietduc
 plugins/gitfast/                    @felipec
+plugins/react-native                @esthor
 plugins/sdk/                        @rgoldberg
 plugins/shell-proxy/                @septs
 plugins/universalarchive/           @Konfekt

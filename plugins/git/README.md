@@ -23,7 +23,7 @@ plugins=(... git)
 | gb                   | git branch                                                                                                                       |
 | gba                  | git branch -a                                                                                                                    |
 | gbd                  | git branch -d                                                                                                                    |
-| gbda                 | git branch --no-color --merged \| grep -vE "^([+*]\|\s*($(git_main_branch)\|$(git_develop_branch))\s*$)" \| xargs git branch -d 2>/dev/null |
+| gbda                 | git branch --no-color --merged \| grep -vE "^([+*]\|\s*(<span>$</span>(git_main_branch)\|<span>$</span>(git_develop_branch))\s*<span>$</span>)" \| xargs git branch -d 2>/dev/null |
 | gbD                  | git branch -D                                                                                                                    |
 | gbl                  | git blame -b -w                                                                                                                  |
 | gbnm                 | git branch --no-merged                                                                                                           |
@@ -35,6 +35,7 @@ plugins=(... git)
 | gbss                 | git bisect start                                                                                                                 |
 | gc                   | git commit -v                                                                                                                    |
 | gc!                  | git commit -v --amend                                                                                                            |
+| gcn                  | git commit -v --no-edit                                                                                                          |
 | gcn!                 | git commit -v --no-edit --amend                                                                                                  |
 | gca                  | git commit -v -a                                                                                                                 |
 | gca!                 | git commit -v -a --amend                                                                                                         |
@@ -42,12 +43,12 @@ plugins=(... git)
 | gcans!               | git commit -v -a -s --no-edit --amend                                                                                            |
 | gcam                 | git commit -a -m                                                                                                                 |
 | gcas                 | git commit -a -s                                                                                                                 |
-| gcasm                | git commit -a -s -m                                                                                                                  |
+| gcasm                | git commit -a -s -m                                                                                                              |
 | gcsm                 | git commit -s -m                                                                                                                 |
 | gcb                  | git checkout -b                                                                                                                  |
 | gcf                  | git config --list                                                                                                                |
 | gcl                  | git clone --recurse-submodules                                                                                                   |
-| gccd                 | git clone --recurse-submodules "$@" && cd "$(basename $_ .git)"                                                                  |
+| gccd                 | git clone --recurse-submodules "<span>$</span>@" && cd "<span>$</span>(basename <span>$</span>_ .git)"                           |
 | gclean               | git clean -id                                                                                                                    |
 | gpristine            | git reset --hard && git clean -dffx                                                                                              |
 | gcm                  | git checkout $(git_main_branch)                                                                                                  |
@@ -91,8 +92,8 @@ plugins=(... git)
 | gignore              | git update-index --assume-unchanged                                                                                              |
 | gignored             | git ls-files -v \| grep "^[[:lower:]]"                                                                                           |
 | git-svn-dcommit-push | git svn dcommit && git push github $(git_main_branch):svntrunk                                                                   |
-| gk                   | gitk --all --branches &!                                                                                                          |
-| gke                  | gitk --all $(git log -g --pretty=%h) &!                                                                                           |
+| gk                   | gitk --all --branches &!                                                                                                         |
+| gke                  | gitk --all $(git log -g --pretty=%h) &!                                                                                          |
 | gl                   | git pull                                                                                                                         |
 | glg                  | git log --stat                                                                                                                   |
 | glgp                 | git log --stat -p                                                                                                                |
@@ -184,6 +185,7 @@ plugins=(... git)
 | gupom                | git pull --rebase origin $(git_main_branch)                                                                                      |
 | gupomi               | git pull --rebase=interactive origin $(git_main_branch)                                                                          |
 | glum                 | git pull upstream $(git_main_branch)                                                                                             |
+| gluc                 | git pull upstream $(git_current_branch)                                                                                          |
 | gwch                 | git whatchanged -p --abbrev-commit --pretty=medium                                                                               |
 | gwip                 | git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign -m "--wip-- [skip ci]"           |
 | gam                  | git am                                                                                                                           |
@@ -191,6 +193,11 @@ plugins=(... git)
 | gams                 | git am --skip                                                                                                                    |
 | gama                 | git am --abort                                                                                                                   |
 | gamscp               | git am --show-current-patch                                                                                                      |
+| gwt                  | git worktree                                                                                                                     |
+| gwta                 | git worktree add                                                                                                                 |
+| gwtls                | git worktree list                                                                                                                |
+| gwtmv                | git worktree move                                                                                                                |
+| gwtrm                | git worktree remove                                                                                                              |
 
 ### Main branch preference
 
