@@ -26,10 +26,10 @@ alias pacupd="sudo pacman -Sy"
 alias upgrade='sudo pacman -Syu'
 
 function paclist() {
-  # Based on https://bbs.archlinux.org/viewtopic.php?id=93683
-  pacman -Qqe | \
-    xargs -I '{}' \
-      expac "${bold_color}% 20n ${fg_no_bold[white]}%d${reset_color}" '{}'
+  local pkgs=$(LC_ALL=C pacman -Qqe)
+  for pkg in ${(f)pkgs}; do
+      pacman -Qs --color=auto "^${pkg}\$"
+  done
 }
 
 function pacdisowned() {
