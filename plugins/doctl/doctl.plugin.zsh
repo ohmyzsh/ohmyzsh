@@ -4,6 +4,14 @@
 #
 # Author: https://github.com/HalisCz
 
-if [ $commands[doctl] ]; then
-  source <(doctl completion zsh)
+if (( ! $+commands[doctl] )); then
+  return
 fi
+
+if [[ ! -f "$ZSH_CACHE_DIR/completions/_doctl" ]]; then
+  typeset -g -A _comps
+  autoload -Uz _doctl
+  _comps[doctl]=_doctl
+fi
+
+doctl completion zsh >| "$ZSH_CACHE_DIR/completions/_doctl" &|
