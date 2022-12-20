@@ -6,4 +6,5 @@
 
 if [ $commands[doctl] ]; then
   source <(doctl completion zsh)
+  compdef _doctl doctl
 fi
