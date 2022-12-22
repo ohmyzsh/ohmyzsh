@@ -120,6 +120,7 @@ alias gcss='git commit -S -s'
 alias gcssm='git commit -S -s -m'
 
 alias gd='git diff'
+alias gdn='git diff --name-only'
 alias gdca='git diff --cached'
 alias gdcw='git diff --cached --word-diff'
 alias gdct='git describe --tags $(git rev-list --tags --max-count=1)'
