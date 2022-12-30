@@ -82,6 +82,11 @@ alias gbsg='git bisect good'
 alias gbsr='git bisect reset'
 alias gbss='git bisect start'
 
+alias gcfb='git cat-file blob'
+alias gcft='git cat-file tree'
+alias gcfc='git cat-file commit'
+alias gcfta='git cat-file tag'
+
 alias gc='git commit -v'
 alias gc!='git commit -v --amend'
 alias gcn='git commit -v --no-edit'
@@ -211,6 +216,7 @@ alias gk='\gitk --all --branches &!'
 alias gke='\gitk --all $(git log -g --pretty=%h) &!'
 
 alias gl='git pull'
+alias glfp='git log --first-parent --no-merges'
 alias glg='git log --stat'
 alias glgp='git log --stat -p'
 alias glgg='git log --graph'
@@ -241,6 +247,8 @@ alias gpoat='git push origin --all && git push origin --tags'
 alias gpr='git pull --rebase'
 alias gpu='git push upstream'
 alias gpv='git push -v'
+
+alias grlp='git reflog --pretty=fuller'
 
 alias gr='git remote'
 alias gra='git remote add'
