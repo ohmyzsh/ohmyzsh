@@ -53,6 +53,11 @@ function git_develop_branch() {
   echo develop
 }
 
+# Gets the most recently committed branch
+function git_most_recently_committed_branch() {
+  echo "git for-each-ref --count=$1 --sort=-committerdate refs/heads/ --format='%(refname:short)'"
+}
+
 #
 # Aliases
 # (sorted alphabetically)
@@ -232,6 +237,7 @@ alias gmtl='git mergetool --no-prompt'
 alias gmtlvim='git mergetool --no-prompt --tool=vimdiff'
 alias gmum='git merge upstream/$(git_main_branch)'
 alias gma='git merge --abort'
+alias gmru="$(git_most_recently_committed_branch 10)"
 
 alias gp='git push'
 alias gpd='git push --dry-run'
@@ -295,6 +301,7 @@ alias gstall='git stash --all'
 alias gsu='git submodule update'
 alias gsw='git switch'
 alias gswc='git switch -c'
+alias gswl="git switch \$($(git_most_recently_committed_branch 1))"
 alias gswm='git switch $(git_main_branch)'
 alias gswd='git switch $(git_develop_branch)'
 
