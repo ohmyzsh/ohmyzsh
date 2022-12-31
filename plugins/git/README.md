@@ -176,7 +176,7 @@ plugins=(... git)
 | gtv                  | git tag \| sort -V                                                                                                                                                                       |
 | gtl                  | gtl(){ git tag --sort=-v:refname -n --list ${1}\* }; noglob gtl                                                                                                                          |
 | gunignore            | git update-index --no-assume-unchanged                                                                                                                                                   |
-| gunwip               | git log -n 1 \| grep -q -c "\-\-wip\-\-" && git reset HEAD~1                                                                                                                             |
+| gunwip               | git log --max-count=1 \| grep -q -c "\-\-wip\-\-" && git reset HEAD~1                                                                                                                             |
 | gup                  | git pull --rebase                                                                                                                                                                        |
 | gupv                 | git pull --rebase --verbose                                                                                                                                                              |
 | gupa                 | git pull --rebase --autostash                                                                                                                                                            |
@@ -192,6 +192,10 @@ plugins=(... git)
 | gams                 | git am --skip                                                                                                                                                                            |
 | gama                 | git am --abort                                                                                                                                                                           |
 | gamscp               | git am --show-current-patch                                                                                                                                                              |
+| gwt                  | git worktree                                                                                                                     |
+| gwtls                | git worktree list                                                                                                                |
+| gwtmv                | git worktree move                                                                                                                |
+| gwtrm                | git worktree remove                                                                                                              |
 
 ### Main branch preference
 
