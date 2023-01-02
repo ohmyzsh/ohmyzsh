@@ -1,4 +1,4 @@
-# purple username
+# limegreen username
 username() {
    echo "%{$FG[040]%}%n%{$reset_color%}"
 }
@@ -8,14 +8,9 @@ directory() {
    echo "%2~"
 }
 
-# current time with milliseconds
-current_time() {
-   echo "%*"
-}
-
-# returns 👾 if there are errors, nothing otherwise
+# returns {emoji} if there are errors, nothing otherwise
 return_status() {
-   echo "%(?..👾)"
+   echo "%(?..💢)"
 }
 
 # set the git_prompt_info text
