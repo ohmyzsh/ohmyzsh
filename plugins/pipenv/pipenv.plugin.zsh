@@ -1,8 +1,5 @@
 # Pipenv completion
-_pipenv() {
-  eval $(env COMMANDLINE="${words[1,$CURRENT]}" _PIPENV_COMPLETE=complete-zsh pipenv)
-}
-compdef _pipenv pipenv
+eval "$(_PIPENV_COMPLETE=zsh_source pipenv)"
 
 # Automatic pipenv shell activation/deactivation
 _togglePipenvShell() {
