@@ -24,7 +24,7 @@ zstyle -s ':omz:update' mode update_mode || {
 # - git is unavailable on the system.
 if [[ "$update_mode" = disabled ]] \
    || [[ ! -w "$ZSH" || ! -O "$ZSH" ]] \
-   || ! command -v git &>/dev/null; then
+   || ! command git --version 2>&1 >/dev/null; then
   unset update_mode
   return
 fi
