@@ -78,10 +78,16 @@ supports_hyperlinks() {
     return 0
   fi
 
-  # Windows Terminal or Konsole also support hyperlinks
-  if [ -n "$WT_SESSION" ] || [ -n "$KONSOLE_VERSION" ]; then
+  # Windows Terminal also supports hyperlinks
+  if [ -n "$WT_SESSION" ]; then
     return 0
   fi
+
+  # Konsole supports hyperlinks, but it's an opt-in setting that can't be detected
+  # https://github.com/ohmyzsh/ohmyzsh/issues/10964
+  # if [ -n "$KONSOLE_VERSION" ]; then
+  #   return 0
+  # fi
 
   return 1
 }
@@ -107,7 +113,7 @@ supports_truecolor() {
 fmt_link() {
   # $1: text, $2: url, $3: fallback mode
   if supports_hyperlinks; then
-    printf '\033]8;;%s\a%s\033]8;;\a\n' "$2" "$1"
+    printf '\033]8;;%s\033\\%s\033]8;;\033\\\n' "$2" "$1"
     return
   fi
 

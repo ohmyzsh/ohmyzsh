@@ -107,7 +107,7 @@ usage() {
 NAME
     require_tool.sh - Ensure version of a tool is greater than the one expected
 
-SYNOPSYS
+SYNOPSIS
     require_tool.sh [ -h ]
                     [ --help ]
                     [ TOOL MIN_VERSION ]
