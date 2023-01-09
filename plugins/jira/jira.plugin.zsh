@@ -56,13 +56,18 @@ function jira() {
     fi
   elif [[ "$action" == "tempo" ]]; then
     echo "Opening tempo"
-    open_command "${jira_url}/secure/Tempo.jspa"
+    if [[ -n "$JIRA_TEMPO_PATH" ]]; then
+      open_command "${jira_url}${JIRA_TEMPO_PATH}"
+    else
+      open_command "${jira_url}/secure/Tempo.jspa"
+    fi
   elif [[ "$action" == "dumpconfig" ]]; then
     echo "JIRA_URL=$jira_url"
     echo "JIRA_PREFIX=$jira_prefix"
     echo "JIRA_NAME=$JIRA_NAME"
     echo "JIRA_RAPID_BOARD=$JIRA_RAPID_BOARD"
     echo "JIRA_DEFAULT_ACTION=$JIRA_DEFAULT_ACTION"
+    echo "JIRA_TEMPO_PATH=$JIRA_TEMPO_PATH"
   else
     # Anything that doesn't match a special action is considered an issue name
     # but `branch` is a special case that will parse the current git branch

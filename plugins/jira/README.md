@@ -68,6 +68,7 @@ echo "https://jira.atlassian.com" >> .jira-url
 * `$JIRA_PREFIX` - Prefix added to issue ID arguments
 * `$JIRA_RAPID_BOARD` - Set to `true` if you use Rapid Board
 * `$JIRA_DEFAULT_ACTION` - Action to do when `jira` is called with no arguments; defaults to "new"
+* `$JIRA_TEMPO_PATH` - Your JIRA tempo url path; defaults to "/secure/Tempo.jspa"
 
 
 ### Browser ###
