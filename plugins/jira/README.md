@@ -67,7 +67,7 @@ echo "https://jira.atlassian.com" >> .jira-url
 * `$JIRA_NAME` - Your JIRA username; used as the default user for `assigned`/`reported` searches
 * `$JIRA_PREFIX` - Prefix added to issue ID arguments
 * `$JIRA_RAPID_BOARD` - Set to `true` if you use Rapid Board
-* `$JIRA_RAPID_VIEW` - Set the default rapid view; it doesn't work `$JIRA_RAPID_BOARD` is disabled
+* `$JIRA_RAPID_VIEW` - Set the default rapid view; it doesn't work if `$JIRA_RAPID_BOARD` is set to false
 * `$JIRA_DEFAULT_ACTION` - Action to do when `jira` is called with no arguments; defaults to "new"
 * `$JIRA_TEMPO_PATH` - Your JIRA tempo url path; defaults to "/secure/Tempo.jspa"
 
