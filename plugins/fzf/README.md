@@ -26,13 +26,13 @@ export FZF_BASE=/path/to/fzf/install/dir
 Set default command to use when input is tty:
 
 ```zsh
-export FZF_DEFAULT_COMMAND='<your fzf default commmand>'
+export FZF_DEFAULT_COMMAND='<your fzf default command>'
 ```
 
 If not set, the plugin will try to set it to these, in the order in which they're found:
 
-- [`rg`](https://github.com/BurntSushi/ripgrep)
 - [`fd`](https://github.com/sharkdp/fd)
+- [`rg`](https://github.com/BurntSushi/ripgrep)
 - [`ag`](https://github.com/ggreer/the_silver_searcher)
 
 ### `DISABLE_FZF_AUTO_COMPLETION`

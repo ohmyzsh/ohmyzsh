@@ -11,8 +11,9 @@ plugins=(... git-prompt)
 
 See the [original repository](https://github.com/olivierverdier/zsh-git-prompt).
 
-## Prerequisites
-This plugin uses `python`, so your host needs to have it installed
+## Requirements
+
+This plugin uses `python3`, so your host needs to have it installed.
 
 ## Examples
 
@@ -30,7 +31,7 @@ The prompt may look like the following:
 
 By default, the general appearance of the prompt is:
 
-```
+```text
 (<branch><branch tracking>|<local status>)
 ```
 
@@ -44,6 +45,7 @@ The symbols are as follows:
 | ●n     | there are `n` staged files     |
 | ✖n     | there are `n` unmerged files   |
 | ✚n     | there are `n` unstaged files   |
+| -n     | there are `n` deleted files    |
 | ⚑n     | there are `n` stashed changes  |
 | …      | there are some untracked files |
 
@@ -58,9 +60,9 @@ The symbols are as follows:
 ## Customisation
 
 - Set the variable `ZSH_THEME_GIT_PROMPT_CACHE` to any value in order to enable caching.
-- You may also change a number of variables (whose name start with `ZSH_THEME_GIT_PROMPT_`) 
+- Set the variable `ZSH_THEME_GIT_SHOW_UPSTREAM` to any value to display the upstream branch.
+- You may also change a number of variables (whose name start with `ZSH_THEME_GIT_PROMPT_`)
   to change the appearance of the prompt. Take a look at the bottom of the [plugin file](git-prompt.plugin.zsh)`
   to see what variables are available.
-
 
 **Enjoy!**

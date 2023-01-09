@@ -1,3 +1,8 @@
+# Handle $0 according to the standard:
+# https://zdharma-continuum.github.io/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html
+0="${${ZERO:-${0:#$ZSH_ARGZERO}}:-${(%):-%N}}"
+0="${${(M)0:#/*}:-$PWD/$0}"
+
 __GIT_PROMPT_DIR="${0:A:h}"
 
 ## Hook function definitions
@@ -31,7 +36,7 @@ function update_current_git_vars() {
     unset __CURRENT_GIT_STATUS
 
     local gitstatus="$__GIT_PROMPT_DIR/gitstatus.py"
-    _GIT_STATUS=$(python ${gitstatus} 2>/dev/null)
+    _GIT_STATUS=$(python3 ${gitstatus} 2>/dev/null)
      __CURRENT_GIT_STATUS=("${(@s: :)_GIT_STATUS}")
     GIT_BRANCH=$__CURRENT_GIT_STATUS[1]
     GIT_AHEAD=$__CURRENT_GIT_STATUS[2]
@@ -42,12 +47,19 @@ function update_current_git_vars() {
     GIT_UNTRACKED=$__CURRENT_GIT_STATUS[7]
     GIT_STASHED=$__CURRENT_GIT_STATUS[8]
     GIT_CLEAN=$__CURRENT_GIT_STATUS[9]
+    GIT_DELETED=$__CURRENT_GIT_STATUS[10]
+
+    if [ -z ${ZSH_THEME_GIT_SHOW_UPSTREAM+x} ]; then
+        GIT_UPSTREAM=
+    else
+        GIT_UPSTREAM=$(git rev-parse --abbrev-ref --symbolic-full-name "@{upstream}" 2>/dev/null) && GIT_UPSTREAM="${ZSH_THEME_GIT_PROMPT_UPSTREAM_SEPARATOR}${GIT_UPSTREAM}"
+    fi
 }
 
 git_super_status() {
     precmd_update_git_vars
     if [ -n "$__CURRENT_GIT_STATUS" ]; then
-      STATUS="$ZSH_THEME_GIT_PROMPT_PREFIX$ZSH_THEME_GIT_PROMPT_BRANCH$GIT_BRANCH%{${reset_color}%}"
+      STATUS="$ZSH_THEME_GIT_PROMPT_PREFIX$ZSH_THEME_GIT_PROMPT_BRANCH$GIT_BRANCH$GIT_UPSTREAM%{${reset_color}%}"
       if [ "$GIT_BEHIND" -ne "0" ]; then
           STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_BEHIND$GIT_BEHIND%{${reset_color}%}"
       fi
@@ -63,6 +75,9 @@ git_super_status() {
       fi
       if [ "$GIT_CHANGED" -ne "0" ]; then
           STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_CHANGED$GIT_CHANGED%{${reset_color}%}"
+      fi
+      if [ "$GIT_DELETED" -ne "0" ]; then
+          STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_DELETED$GIT_DELETED%{${reset_color}%}"
       fi
       if [ "$GIT_UNTRACKED" -ne "0" ]; then
           STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_UNTRACKED$GIT_UNTRACKED%{${reset_color}%}"
@@ -86,11 +101,13 @@ ZSH_THEME_GIT_PROMPT_BRANCH="%{$fg_bold[magenta]%}"
 ZSH_THEME_GIT_PROMPT_STAGED="%{$fg[red]%}%{●%G%}"
 ZSH_THEME_GIT_PROMPT_CONFLICTS="%{$fg[red]%}%{✖%G%}"
 ZSH_THEME_GIT_PROMPT_CHANGED="%{$fg[blue]%}%{✚%G%}"
+ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[blue]%}%{-%G%}"
 ZSH_THEME_GIT_PROMPT_BEHIND="%{↓%G%}"
 ZSH_THEME_GIT_PROMPT_AHEAD="%{↑%G%}"
 ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[cyan]%}%{…%G%}"
 ZSH_THEME_GIT_PROMPT_STASHED="%{$fg_bold[blue]%}%{⚑%G%}"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg_bold[green]%}%{✔%G%}"
+ZSH_THEME_GIT_PROMPT_UPSTREAM_SEPARATOR="->"
 
 # Set the prompt.
 RPROMPT='$(git_super_status)'

@@ -46,14 +46,24 @@
 # is shown (see vcs_action_glyph variable, default: chevron).
 # ------------------------------------------------------------------------------
 
+(( ${+functions[emotty]} )) || {
+  echo "error: the emotty theme requires the emotty plugin" >&2
+  return 1
+}
+
+(( ${+emoji} )) || {
+  echo "error: the emotty theme requires the emoji plugin" >&2
+  return 1
+}
+
 user_prompt="$(emotty)"
 root_prompt="$emoji[skull]"
 warn_prompt="$emoji[collision_symbol]"
 
 vcs_unstaged_glyph="%{$emoji[circled_latin_capital_letter_m]$emoji2[emoji_style] %2G%}"
-vcs_staged_glyph="%{$emoji[high_voltage_sign] %2G%}"
-vcs_branch_glyph=$(print -P $'\Ue0a0') #  
-vcs_action_glyph=$(print -P $'\U276f') # ❯
+vcs_staged_glyph="%{$emoji[high_voltage_sign]%2G%}"
+vcs_branch_glyph=$'\Ue0a0' # 
+vcs_action_glyph=$'\U276f' # ❯
 
 red="$FG[001]"
 yellow="$FG[003]"

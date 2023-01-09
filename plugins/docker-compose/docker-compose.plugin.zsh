@@ -1,7 +1,5 @@
 # support Compose v2 as docker CLI plugin
-DOCKER_CONTEXT=default command docker compose &>/dev/null \
-  && dccmd='docker compose' \
-  || dccmd='docker-compose'
+(( ${+commands[docker-compose]} )) && dccmd='docker-compose' || dccmd='docker compose'
 
 alias dco="$dccmd"
 alias dcb="$dccmd build"
@@ -14,6 +12,7 @@ alias dcstop="$dccmd stop"
 alias dcup="$dccmd up"
 alias dcupb="$dccmd up --build"
 alias dcupd="$dccmd up -d"
+alias dcupdb="$dccmd up -d --build"
 alias dcdn="$dccmd down"
 alias dcl="$dccmd logs"
 alias dclf="$dccmd logs -f"
