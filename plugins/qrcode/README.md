@@ -1,8 +1,6 @@
 # QRCode plugin
 
-It uses https://qrcode.show
-
-Generate QR code easily for free - QR Code Generation as a Service
+Generate a QR Code from the command line. Uses [QRcode.show](https://qrcode.show) via curl.
 
 alias           | command
 --------------- | --------
