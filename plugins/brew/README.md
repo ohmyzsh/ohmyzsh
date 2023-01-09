@@ -26,11 +26,11 @@ defined for convenience.
 | `brews`  | `brew list -1`                        | List installed formulae or the installed files for a given formula. |
 | `brewsp` | `brew list --pinned`                  | List pinned formulae, or show the version of a given formula.       |
 | `bubc`   | `brew upgrade && brew cleanup`        | Upgrade outdated formulae and casks, then run cleanup.              |
+| `bugbc`  | `brew upgrade --greedy && brew cleanup`  | Upgrade outdated formulae and casks (greedy), then run cleanup.         |
 | `bubo`   | `brew update && brew outdated`        | Update Homebrew data, then list outdated formulae and casks.        |
 | `bubu`   | `bubo && bubc`                        | Do the last two operations above.                                   |
 | `buf`    | `brew upgrade --formula`              | Upgrade only formulas (not casks).                                  |
 | `buz`    | `brew uninstall --zap`                | Remove all files associated with a cask.                            |
-
 
 ## Completion
 
