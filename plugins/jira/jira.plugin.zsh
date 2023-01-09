@@ -75,7 +75,7 @@ function jira() {
       # Strip suffixes starting with _
       issue_arg=(${(s:_:)issue_arg})
       issue_arg=${issue_arg[1]}
-      if [[ "$issue_arg" = ${jira_prefix}* ]]; then
+      if [[ "${issue_arg:l}" = ${jira_prefix:l}* ]]; then
         issue="${issue_arg}"
       else
         issue="${jira_prefix}${issue_arg}"

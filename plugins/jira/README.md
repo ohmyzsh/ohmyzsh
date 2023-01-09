@@ -27,6 +27,11 @@ jira branch     # opens an existing issue matching the current branch name
                 # The branch name may have prefixes ending in "/": "feature/MP-1234",
                 # and also suffixes starting with "_": "MP-1234_fix_dashboard"
                 # In both these cases, the issue opened will be "MP-1234"
+                # This is also checks if the prefix is in the name, and adds it if not, so:
+                # "MP-1234" opens the issue "MP-1234",
+                # "mp-1234" opens the issue "mp-1234",
+                # and "1234" opens the issue "MP-1234".
+# NOTE: since jira is case insensitive, the first two examples open the same issue
 jira ABC-123    # opens an existing issue
 jira ABC-123 m  # opens an existing issue for adding a comment
 ```
