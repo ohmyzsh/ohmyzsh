@@ -35,19 +35,19 @@ you would make is not already covered.
 Please be so kind as to [search](#use-the-search-luke) for any open issue already covering
 your problem.
 
-If you find one, comment on it so we can know there are more people experiencing it.
+If you find one, comment on it, so we know more people are experiencing it.
 
 If not, look at the [Troubleshooting](https://github.com/ohmyzsh/ohmyzsh/wiki/Troubleshooting)
 page for instructions on how to gather data to better debug your problem.
 
 Then, you can go ahead and create an issue with as much detail as you can provide.
-It should include the data gathered as indicated above, along with:
+It should include the data gathered as indicated above, along with the following:
 
 1. How to reproduce the problem
 2. What the correct behavior should be
 3. What the actual behavior is
 
-Please copy to anyone relevant (_eg_ plugin maintainers) by mentioning their GitHub handle
+Please copy to anyone relevant (e.g. plugin maintainers) by mentioning their GitHub handle
 (starting with `@`) in your message.
 
 We will do our very best to help you.
@@ -57,9 +57,9 @@ We will do our very best to help you.
 Please be so kind as to [search](#use-the-search-luke) for any open issue already covering
 your suggestion.
 
-If you find one, comment on it so we can know there are more people supporting it.
+If you find one, comment on it, so we know more people are supporting it.
 
-If not, you can go ahead and create an issue. Please copy to anyone relevant (_eg_ plugin
+If not, you can go ahead and create an issue. Please copy to anyone relevant (e.g. plugin
 maintainers) by mentioning their GitHub handle (starting with `@`) in your message.
 
 ## Submitting Pull Requests
@@ -84,7 +84,7 @@ your [problem](#you-have-a-problem), and any pending/merged/rejected PR covering
 
 If the solution is already reported, try it out and +1 the pull request if the
 solution works ok. On the other hand, if you think your solution is better, post
-it with a reference to the other one so we can have both solutions to compare.
+it with reference to the other one so we can have both solutions to compare.
 
 If not, then go ahead and submit a PR. Please copy to anyone relevant (e.g. plugin
 maintainers) by mentioning their GitHub handle (starting with `@`) in your message.
@@ -99,10 +99,31 @@ covering or related to what you want to add.
 
 If you find one, try it out and work with the author on a common solution.
 
-If not, then go ahead and submit a PR. Please copy to anyone relevant (_eg_ plugin
+If not, then go ahead and submit a PR. Please copy to anyone relevant (e.g. plugin
 maintainers) by mentioning their GitHub handle (starting with `@`) in your message.
 
-For any extensive change, _eg_ a new plugin, you will have to find testers to +1 your PR.
+For any extensive change, such as a new plugin, you will have to find testers to +1 your PR.
+
+### New plugin aliases
+
+We acknowledge that aliases are a core part of Oh My Zsh. There are plugins that have +100 aliases!
+
+This has become an issue for two opposing reasons:
+
+- Some users want to have their personal aliases in Oh My Zsh.
+- Some users don't want any aliases at all and feel that there are too many.
+
+Because of this, from now on, we require that new aliases follow these conditions:
+
+1. They will be used by many people, not just a few.
+2. The aliases will be used many times and for common tasks.
+3. Prefer one generic alias over many specific ones.
+4. When justifying the need for an alias, talk about workflows where you'll use it,
+   preferably in combination with other aliases.
+5. If a command with the same name exists, look for a different alias name.
+
+This list is not exhaustive! Please remember that your alias will be in the machines of many people,
+so it should be justified why they should have it.
 
 ----
 
@@ -193,7 +214,7 @@ type(scope)!: subject
   ```
 
 - `subject`: a brief description of the changes. This will be displayed in the changelog. If you need
-  to specify other details you can use the commit body but it won't be visible.
+  to specify other details, you can use the commit body, but it won't be visible.
 
   Formatting tricks: the commit subject may contain:
 
@@ -210,9 +231,9 @@ type(scope)!: subject
 
 ### Style
 
-Try to keep the first commit line short. This is harder to do using this commit style but try to be
-concise and if you need more space, you can use the commit body. Try to make sure that the commit
-subject is clear and precise enough that users will know what change by just looking at the changelog.
+Try to keep the first commit line short. It's harder to do using this commit style but try to be
+concise, and if you need more space, you can use the commit body. Try to make sure that the commit
+subject is clear and precise enough that users will know what changed by just looking at the changelog.
 
 ----
 

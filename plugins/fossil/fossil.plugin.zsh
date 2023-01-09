@@ -13,12 +13,11 @@ ZSH_THEME_FOSSIL_PROMPT_DIRTY=" %{$fg_bold[red]%}✖"
 ZSH_THEME_FOSSIL_PROMPT_CLEAN=" %{$fg_bold[green]%}✔"
 
 function fossil_prompt_info() {
-  local info=$(fossil branch 2>&1)
+  local branch=$(fossil branch current 2>&1)
 
   # if we're not in a fossil repo, don't show anything
-  ! command grep -q "use --repo" <<< "$info" || return
+  ! command grep -q "use --repo" <<< "$branch" || return
 
-  local branch=$(echo $info | grep "* " | sed 's/* //g')
   local changes=$(fossil changes)
   local dirty="$ZSH_THEME_FOSSIL_PROMPT_CLEAN"
 

@@ -13,5 +13,11 @@ alias tfa='terraform apply'
 alias tfd='terraform destroy'
 alias tff='terraform fmt'
 alias tfi='terraform init'
+alias tfo='terraform output'
 alias tfp='terraform plan'
 alias tfv='terraform validate'
+
+if (( $+commands[terraform] )); then
+  autoload -U +X bashcompinit && bashcompinit
+  complete -o nospace -C terraform terraform
+fi

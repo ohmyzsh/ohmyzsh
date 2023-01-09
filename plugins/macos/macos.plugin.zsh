@@ -224,8 +224,9 @@ function quick-look() {
 }
 
 function man-preview() {
+  local location
   # Don't let Preview.app steal focus if the man page doesn't exist
-  man -w "$@" &>/dev/null && man -t "$@" | open -f -a Preview || man "$@"
+  location=$(man -w "$@") && mandoc -Tpdf $location | open -f -a Preview
 }
 compdef _man man-preview
 

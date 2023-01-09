@@ -209,7 +209,7 @@ function display-release {
     case "$output" in
     raw) printf '%s' "$hash" ;;
     text) printf '\e[33m%s\e[0m' "$hash" ;; # red
-    md) printf '[`%s`](https://github.com/ohmyzsh/ohmyzsh/commit/%s)' "$hash" ;;
+    md) printf '[`%s`](https://github.com/ohmyzsh/ohmyzsh/commit/%s)' "$hash" "$hash" ;;
     esac
   }
 
