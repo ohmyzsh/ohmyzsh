@@ -900,7 +900,7 @@ case "$words[1]" in
  force:data:tree:export)
  _command_args=(
  '(-q|--query)'{-q,--query}'[soql query, or filepath of file containing a soql query, to retrieve records]' \
- '(-p|--plan)'{-p,--plan}'[generate mulitple sobject tree files and a plan definition file for aggregated import]' \
+ '(-p|--plan)'{-p,--plan}'[generate multiple sobject tree files and a plan definition file for aggregated import]' \
  '(-x|--prefix)'{-x,--prefix}'[prefix of generated files]' \
  '(-d|--outputdir)'{-d,--outputdir}'[directory to store files]:file:_files' \
  '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \

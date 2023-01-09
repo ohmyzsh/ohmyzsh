@@ -1,5 +1,11 @@
 # Plugin owners
-plugins/aws/                        @maksyms
-plugins/git-lfs/                    @vietduc01100001
+plugins/archlinux/                  @ratijas
+plugins/genpass/                    @atoponce
+plugins/git-lfs/                    @hellovietduc
 plugins/gitfast/                    @felipec
+plugins/react-native                @esthor
 plugins/sdk/                        @rgoldberg
+plugins/shell-proxy/                @septs
+plugins/universalarchive/           @Konfekt
+plugins/wp-cli/                     @joshmedeski
+plugins/zoxide/                     @ajeetdsouza

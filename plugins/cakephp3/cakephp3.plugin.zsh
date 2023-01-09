@@ -1,10 +1,10 @@
 # CakePHP 3 basic command completion
 _cakephp3_get_command_list () {
-	bin/cake Completion commands
+	bin/cake completion commands
 }
 
 _cakephp3_get_sub_command_list () {
-	bin/cake Completion subcommands ${words[2]}
+	bin/cake completion subcommands ${words[2]}
 }
 
 _cakephp3_get_3rd_argument () {
@@ -34,5 +34,5 @@ compdef _cakephp3 cake
 
 #Alias
 alias c3='bin/cake'
-alias c3cache='bin/cake orm_cache clear'
+alias c3cache='bin/cake schema_cache clear'
 alias c3migrate='bin/cake migrations migrate'

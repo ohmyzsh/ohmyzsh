@@ -17,7 +17,7 @@ plugins=(... symfony2)
 | `sfsr`        | sf server:run                | Run the dev server            |
 | `sfcw`        | sf cache:warmup              | Use the Bundles warmer        |
 | `sfroute`     | sf debug:router              | Show the different routes     |
-| `sfcontainer` | sf debug:contaner            | List the different services   |
+| `sfcontainer` | sf debug:container           | List the different services   |
 | `sfgb`        | sf generate:bundle           | Generate a bundle             |
 | `sfgc`        | sf generate:controller       | Generate a controller         |
 | `sfgcom`      | sf generate:command          | Generate a command            |

@@ -1,12 +1,12 @@
 # wd
 
-[![Build Status](https://travis-ci.org/mfaerevaag/wd.png?branch=master)](https://travis-ci.org/mfaerevaag/wd)
+[![Build Status](https://github.com/mfaerevaag/wd/actions/workflows/test.yml/badge.svg)](https://github.com/mfaerevaag/wd/actions)
 
 `wd` (*warp directory*) lets you jump to custom directories in zsh, without using `cd`.
 Why?
 Because `cd` seems inefficient when the folder is frequently visited or has a long path.
 
-![tty.gif](https://raw.githubusercontent.com/mfaerevaag/wd/master/tty.gif)
+![Demo](https://raw.githubusercontent.com/mfaerevaag/wd/master/tty.gif)
 
 ## Setup
 
@@ -35,6 +35,10 @@ In your `.zshrc`:
 ```zsh
 antibody bundle mfaerevaag/wd
 ```
+
+### [Fig](https://fig.io)
+
+Install `wd` here: [![Fig plugin store](https://fig.io/badges/install-with-fig.svg)](https://fig.io/plugins/other/wd_mfaerevaag)
 
 ### Arch ([AUR](https://aur.archlinux.org/packages/zsh-plugin-wd-git/))
 

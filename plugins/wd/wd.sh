@@ -163,6 +163,7 @@ wd_add()
 {
     local point=$1
     local force=$2
+    cmdnames=(add rm show list ls path clean help)
 
     if [[ $point == "" ]]
     then
@@ -178,6 +179,9 @@ wd_add()
     elif [[ $point =~ : ]] || [[ $point =~ / ]]
     then
         wd_exit_fail "Warp point contains illegal character (:/)"
+    elif (($cmdnames[(Ie)$point]))
+    then
+        wd_exit_fail "Warp point name cannot be a wd command (see wd -h for a full list)"
     elif [[ ${points[$point]} == "" ]] || [ ! -z "$force" ]
     then
         wd_remove "$point" > /dev/null
@@ -185,7 +189,7 @@ wd_add()
         if (whence sort >/dev/null); then
             local config_tmp=$(mktemp "${TMPDIR:-/tmp}/wd.XXXXXXXXXX")
             # use 'cat' below to ensure we respect $WD_CONFIG as a symlink
-            command sort -o "${config_tmp}" "$WD_CONFIG" && command cat "${config_tmp}" > "$WD_CONFIG" && command rm "${config_tmp}"
+            command sort -o "${config_tmp}" "$WD_CONFIG" && command cat "${config_tmp}" >| "$WD_CONFIG" && command rm "${config_tmp}"
         fi
 
         wd_export_static_named_directories
@@ -214,7 +218,7 @@ wd_remove()
         then
             local config_tmp=$(mktemp "${TMPDIR:-/tmp}/wd.XXXXXXXXXX")
             # Copy and delete in two steps in order to preserve symlinks
-            if sed -n "/^${point_name}:.*$/!p" "$WD_CONFIG" > "$config_tmp" && command cp "$config_tmp" "$WD_CONFIG" && command rm "$config_tmp"
+            if sed -n "/^${point_name}:.*$/!p" "$WD_CONFIG" >| "$config_tmp" && command cp "$config_tmp" "$WD_CONFIG" && command rm "$config_tmp"
             then
                 wd_print_msg "$WD_GREEN" "Warp point removed"
             else
@@ -251,7 +255,7 @@ wd_list_all()
         then
             arr=(${(s,:,)line})
             key=${arr[1]}
-            val=${arr[2]}
+            val=${line#"${arr[1]}:"}
 
             if [[ -z $wd_quiet_mode ]]
             then
@@ -389,6 +393,11 @@ else
     wd_export_static_named_directories
 fi
 
+# disable extendedglob for the complete wd execution time
+setopt | grep -q extendedglob
+wd_extglob_is_set=$?
+[[ $wd_extglob_is_set ]] && setopt noextendedglob
+
 # load warp points
 typeset -A points
 while read -r line
@@ -475,6 +484,9 @@ fi
 # if not, next time warp will pick up variables from this run
 # remember, there's no sub shell
 
+[[ $wd_extglob_is_set ]] && setopt extendedglob
+
+unset wd_extglob_is_set
 unset wd_warp
 unset wd_add
 unset wd_remove

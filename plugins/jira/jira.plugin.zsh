@@ -44,7 +44,7 @@ function jira() {
     open_command "${jira_url}/secure/CreateIssue!default.jspa"
   elif [[ "$action" == "assigned" || "$action" == "reported" ]]; then
     _jira_query ${@:-$action}
-  elif [[ "$action" == "myissues" ]]; then
+  elif [[ "$action" == "mine" ]]; then
     echo "Opening my issues"
     open_command "${jira_url}/issues/?filter=-1"
   elif [[ "$action" == "dashboard" ]]; then
@@ -56,7 +56,11 @@ function jira() {
     fi
   elif [[ "$action" == "tempo" ]]; then
     echo "Opening tempo"
-    open_command "${jira_url}/secure/Tempo.jspa"
+    if [[ -n "$JIRA_TEMPO_PATH" ]]; then
+      open_command "${jira_url}${JIRA_TEMPO_PATH}"
+    else
+      open_command "${jira_url}/secure/Tempo.jspa"
+    fi
   elif [[ "$action" == "dumpconfig" ]]; then
     echo "JIRA_URL=$jira_url"
     echo "JIRA_PREFIX=$jira_prefix"
@@ -64,6 +68,7 @@ function jira() {
     echo "JIRA_RAPID_VIEW=$JIRA_RAPID_VIEW"
     echo "JIRA_RAPID_BOARD=$JIRA_RAPID_BOARD"
     echo "JIRA_DEFAULT_ACTION=$JIRA_DEFAULT_ACTION"
+    echo "JIRA_TEMPO_PATH=$JIRA_TEMPO_PATH"
   else
     # Anything that doesn't match a special action is considered an issue name
     # but `branch` is a special case that will parse the current git branch
@@ -76,7 +81,7 @@ function jira() {
       # Strip suffixes starting with _
       issue_arg=(${(s:_:)issue_arg})
       issue_arg=${issue_arg[1]}
-      if [[ "$issue_arg" = ${jira_prefix}* ]]; then
+      if [[ "${issue_arg:l}" = ${jira_prefix:l}* ]]; then
         issue="${issue_arg}"
       else
         issue="${jira_prefix}${issue_arg}"
