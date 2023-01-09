@@ -8,6 +8,7 @@ function artisan \
          drush \
          gulp \
          npm \
+         php \
          wp \
          yarn {
   if checkForLandoFile; then

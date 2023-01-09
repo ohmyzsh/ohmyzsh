@@ -1,13 +1,13 @@
-# Use apt or aptitude if installed, fallback is apt-get
+# Use aptitude or apt if installed, fallback is apt-get
 # You can just set apt_pref='apt-get' to override it.
 
 if [[ -z $apt_pref || -z $apt_upgr ]]; then
-    if [[ -e $commands[apt] ]]; then
-        apt_pref='apt'
-        apt_upgr='upgrade'
-    elif [[ -e $commands[aptitude] ]]; then
+    if [[ -e $commands[aptitude] ]]; then
         apt_pref='aptitude'
         apt_upgr='safe-upgrade'
+    elif [[ -e $commands[apt] ]]; then
+        apt_pref='apt'
+        apt_upgr='upgrade'
     else
         apt_pref='apt-get'
         apt_upgr='upgrade'
@@ -26,7 +26,7 @@ alias age='apt-get'
 alias api='aptitude'
 
 # Some self-explanatory aliases
-alias acs="apt-cache search"
+alias acse="apt-cache search"
 alias aps='aptitude search'
 alias as="aptitude -F '* %p -> %d \n(%v/%V)' --no-gui --disable-columns search"
 
@@ -51,13 +51,17 @@ if [[ $use_sudo -eq 1 ]]; then
     alias au="sudo $apt_pref $apt_upgr"
     alias ai="sudo $apt_pref install"
     # Install all packages given on the command line while using only the first word of each line:
-    # acs ... | ail
+    # acse ... | ail
+
     alias ail="sed -e 's/  */ /g' -e 's/ *//' | cut -s -d ' ' -f 1 | xargs sudo $apt_pref install"
     alias ap="sudo $apt_pref purge"
-    alias ar="sudo $apt_pref remove"
+    alias aar="sudo $apt_pref autoremove"
 
     # apt-get only
     alias ads="sudo apt-get dselect-upgrade"
+
+    # apt only
+    alias alu="sudo apt update && apt list -u && sudo apt upgrade"
 
     # Install all .deb files in the current directory.
     # Warning: you will need to put the glob in single quotes if you use:
@@ -84,21 +88,20 @@ else
     alias afu="su -lc '$apt-file update'"
     alias au="su -lc '$apt_pref $apt_upgr' root"
     function ai() {
-        cmd="su -lc 'aptitude -P install $@' root"
+        cmd="su -lc '$apt_pref install $@' root"
         print "$cmd"
         eval "$cmd"
     }
     function ap() {
-        cmd="su -lc '$apt_pref -P purge $@' root"
+        cmd="su -lc '$apt_pref purge $@' root"
         print "$cmd"
         eval "$cmd"
     }
-    function ar() {
-        cmd="su -lc '$apt_pref -P remove $@' root"
+    function aar() {
+        cmd="su -lc '$apt_pref autoremove $@' root"
         print "$cmd"
         eval "$cmd"
     }
-
     # Install all .deb files in the current directory
     # Assumes glob_subst is off
     alias dia='su -lc "dpkg -i ./*.deb" root'
@@ -138,7 +141,7 @@ apt_pref_compdef au  "$apt_upgr"
 apt_pref_compdef ai  "install"
 apt_pref_compdef ail "install"
 apt_pref_compdef ap  "purge"
-apt_pref_compdef ar  "remove"
+apt_pref_compdef aar  "autoremove"
 apt_pref_compdef ads "dselect-upgrade"
 
 # Misc. #####################################################################

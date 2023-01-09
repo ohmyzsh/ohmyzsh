@@ -29,18 +29,31 @@ autoload -Uz regexp-replace || return
 # initialize zbell_ignore if not set
 (( ${+zbell_ignore} )) || zbell_ignore=($EDITOR $PAGER)
 
+# initialize zbell_use_notify_send if not set
+(( ${+zbell_use_notify_send} )) || zbell_use_notify_send=true
+
 # initialize it because otherwise we compare a date and an empty string
 # the first time we see the prompt. it's fine to have lastcmd empty on the
 # initial run because it evaluates to an empty string, and splitting an
 # empty string just results in an empty array.
 zbell_timestamp=$EPOCHSECONDS
 
+# UI notification function
+# $1: command
+# $2: duration in seconds
+zbell_ui_notify() {
+	[[ $zbell_use_notify_send != "true" ]] && return
+
+	if type notify-send > /dev/null; then
+		notify-send -i terminal "Command completed in ${2}s:" $1
+	fi
+}
+
 # default notification function
 # $1: command
 # $2: duration in seconds
 zbell_notify() {
-	type notify-send > /dev/null && \
-		notify-send -i terminal "Command completed in ${2}s:" $1
+	zbell_ui_notify "${@}"
 	print -n "\a"
 }
 

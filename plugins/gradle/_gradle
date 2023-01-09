@@ -96,7 +96,7 @@ __gradle-generate-script-cache() {
         zle -R "Generating Gradle build script cache"
         # Cache all Gradle scripts
         local -a gradle_build_scripts
-        gradle_build_scripts=( $(find $project_root_dir -type f -name "*.gradle" -o -name "*.gradle.kts" 2>/dev/null | egrep -v "$script_exclude_pattern") )
+        gradle_build_scripts=( $(find $project_root_dir -type f -name "*.gradle" -o -name "*.gradle.kts" 2>/dev/null | grep -E -v "$script_exclude_pattern") )
         printf "%s\n" "${gradle_build_scripts[@]}" >| $cache_dir/$cache_name
     fi
 }

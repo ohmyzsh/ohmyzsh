@@ -1,22 +1,33 @@
 # Ember CLI
 
-**Maintainers:** [BilalBudhani](https://github.com/BilalBudhani), [eubenesa](https://github.com/eubenesa), [scottkidder](https://github.com/scottkidder]
+This plugin adds completion and aliases for using [`ember-cli`](https://cli.emberjs.com/).
 
-Ember CLI (https://www.ember-cli.com/)
+To use it, add `ember-cli` to the plugins array in your zshrc file:
 
-### List of Aliases
+```zsh
+plugins=(... ember-cli)
+```
 
-Alias | Ember-CLI command
------ | -----------------
-**es** | *ember serve*
-**ea** | *ember addon*
-**eb** | *ember build*
-**ed** | *ember destroy*
-**eg** | *ember generate*
-**eh** | *ember help*
-**ein** | *ember init*
-**ei** | *ember install*
-**et** | *ember test*
-**ets** | *ember test --serve*
-**eu** | *ember update*
-**ev** | *ember version*
+## Aliases
+
+| Alias | Command              |
+| ----- | -------------------- |
+| `ea`  | `ember addon`        |
+| `eb`  | `ember build`        |
+| `ed`  | `ember destroy`      |
+| `eg`  | `ember generate`     |
+| `eh`  | `ember help`         |
+| `ei`  | `ember install`      |
+| `ein` | `ember init`         |
+| `es`  | `ember serve`        |
+| `et`  | `ember test`         |
+| `ets` | `ember test --serve` |
+| `eu`  | `ember update`       |
+| `ev`  | `ember version`      |
+
+## Maintainers
+
+- [BilalBudhani](https://github.com/BilalBudhani)
+- [eubenesa](https://github.com/eubenesa)
+- [scottkidder](https://github.com/scottkidder]
+- [t-sauer](https://www.github.com/t-sauer)

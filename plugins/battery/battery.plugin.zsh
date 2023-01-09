@@ -10,17 +10,17 @@
 # Author: J (927589452)                   #
 # Modified to add support for FreeBSD     #
 ###########################################
+# Author: Avneet Singh (kalsi-avneet)     #
+# Modified to add support for Android     #
+###########################################
 
 if [[ "$OSTYPE" = darwin* ]]; then
-
   function battery_is_charging() {
     ioreg -rc AppleSmartBattery | command grep -q '^.*"ExternalConnected"\ =\ Yes'
   }
-
   function battery_pct() {
     pmset -g batt | grep -Eo "\d+%" | cut -d% -f1
   }
-
   function battery_pct_remaining() {
     if battery_is_charging; then
       echo "External Power"
@@ -28,7 +28,6 @@ if [[ "$OSTYPE" = darwin* ]]; then
       battery_pct
     fi
   }
-
   function battery_time_remaining() {
     local smart_battery_status="$(ioreg -rc "AppleSmartBattery")"
     if [[ $(echo $smart_battery_status | command grep -c '^.*"ExternalConnected"\ =\ No') -eq 1 ]]; then
@@ -42,7 +41,6 @@ if [[ "$OSTYPE" = darwin* ]]; then
       echo "∞"
     fi
   }
-
   function battery_pct_prompt () {
     local battery_pct color
     if ioreg -rc AppleSmartBattery | command grep -q '^.*"ExternalConnected"\ =\ No'; then
@@ -61,17 +59,14 @@ if [[ "$OSTYPE" = darwin* ]]; then
   }
 
 elif [[ "$OSTYPE" = freebsd* ]]; then
-
   function battery_is_charging() {
     [[ $(sysctl -n hw.acpi.battery.state) -eq 2 ]]
   }
-
   function battery_pct() {
     if (( $+commands[sysctl] )); then
       sysctl -n hw.acpi.battery.life
     fi
   }
-
   function battery_pct_remaining() {
     if ! battery_is_charging; then
       battery_pct
@@ -79,7 +74,6 @@ elif [[ "$OSTYPE" = freebsd* ]]; then
       echo "External Power"
     fi
   }
-
   function battery_time_remaining() {
     local remaining_time
     remaining_time=$(sysctl -n hw.acpi.battery.time)
@@ -89,7 +83,6 @@ elif [[ "$OSTYPE" = freebsd* ]]; then
       printf %02d:%02d $hour $minute
     fi
   }
-
   function battery_pct_prompt() {
     local battery_pct color
     battery_pct=$(battery_pct_remaining)
@@ -106,19 +99,22 @@ elif [[ "$OSTYPE" = freebsd* ]]; then
       echo "%{$fg[$color]%}${battery_pct}%%%{$reset_color%}"
     fi
   }
-
-elif [[ "$OSTYPE" = linux*  ]]; then
-
+elif [[ "$OSTYPE" = linux-android ]] && (( ${+commands[termux-battery-status]} )); then
   function battery_is_charging() {
-    ! acpi 2>/dev/null | command grep -v "rate information unavailable" | command grep -q '^Battery.*Discharging'
+    termux-battery-status 2>/dev/null | command awk '/status/ { exit ($0 ~ /DISCHARGING/) }'
   }
-
   function battery_pct() {
-    if (( $+commands[acpi] )); then
-      acpi 2>/dev/null | command grep -v "rate information unavailable" | command grep -E '^Battery.*(Full|(Disc|C)harging)' | cut -f2 -d ',' | tr -cd '[:digit:]'
-    fi
+    # Sample output:
+    # {
+    #   "health": "GOOD",
+    #   "percentage": 93,
+    #   "plugged": "UNPLUGGED",
+    #   "status": "DISCHARGING",
+    #   "temperature": 29.0,
+    #   "current": 361816
+    # }
+    termux-battery-status 2>/dev/null | command awk '/percentage/ { gsub(/[,]/,""); print $2}'
   }
-
   function battery_pct_remaining() {
     if ! battery_is_charging; then
       battery_pct
@@ -126,13 +122,7 @@ elif [[ "$OSTYPE" = linux*  ]]; then
       echo "External Power"
     fi
   }
-
-  function battery_time_remaining() {
-    if ! battery_is_charging; then
-      acpi 2>/dev/null | command grep -v "rate information unavailable" | cut -f3 -d ','
-    fi
-  }
-
+  function battery_time_remaining() { } # Not available on android
   function battery_pct_prompt() {
     local battery_pct color
     battery_pct=$(battery_pct_remaining)
@@ -149,7 +139,71 @@ elif [[ "$OSTYPE" = linux*  ]]; then
       echo "%{$fg[$color]%}${battery_pct}%%%{$reset_color%}"
     fi
   }
-
+elif [[ "$OSTYPE" = linux*  ]]; then
+  function battery_is_charging() {
+    if (( $+commands[acpitool] )); then
+      ! acpitool 2>/dev/null | command grep -qE '^\s+Battery.*Discharging'
+    elif (( $+commands[acpi] )); then
+      ! acpi 2>/dev/null | command grep -v "rate information unavailable" | command grep -q '^Battery.*Discharging'
+    fi
+  }
+  function battery_pct() {
+    if (( $+commands[acpitool] )); then
+      # Sample output:
+      #   Battery #1     : Unknown, 99.55%
+      #   Battery #2     : Discharging, 49.58%, 01:12:05
+      #   All batteries  : 62.60%, 02:03:03
+      local -i pct=$(acpitool 2>/dev/null | command awk -F, '
+        /^\s+All batteries/ {
+          gsub(/[^0-9.]/, "", $1)
+          pct=$1
+          exit
+        }
+        !pct && /^\s+Battery/ {
+          gsub(/[^0-9.]/, "", $2)
+          pct=$2
+        }
+        END { print pct }
+        ')
+      echo $pct
+    elif (( $+commands[acpi] )); then
+      # Sample output:
+      # Battery 0: Discharging, 0%, rate information unavailable
+      # Battery 1: Full, 100%
+      acpi 2>/dev/null | command awk -F, '
+        /rate information unavailable/ { next }
+        /^Battery.*: /{ gsub(/[^0-9]/, "", $2); print $2; exit }
+      '
+    fi
+  }
+  function battery_pct_remaining() {
+    if ! battery_is_charging; then
+      battery_pct
+    else
+      echo "External Power"
+    fi
+  }
+  function battery_time_remaining() {
+    if ! battery_is_charging; then
+      acpi 2>/dev/null | command grep -v "rate information unavailable" | cut -f3 -d ','
+    fi
+  }
+  function battery_pct_prompt() {
+    local battery_pct color
+    battery_pct=$(battery_pct_remaining)
+    if battery_is_charging; then
+      echo "∞"
+    else
+      if [[ $battery_pct -gt 50 ]]; then
+        color='green'
+      elif [[ $battery_pct -gt 20 ]]; then
+        color='yellow'
+      else
+        color='red'
+      fi
+      echo "%{$fg[$color]%}${battery_pct}%%%{$reset_color%}"
+    fi
+  }
 else
   # Empty functions so we don't cause errors in prompts
   function battery_is_charging { false }
@@ -174,7 +228,7 @@ function battery_level_gauge() {
   local charging_color=${BATTERY_CHARGING_COLOR:-$color_yellow}
   local charging_symbol=${BATTERY_CHARGING_SYMBOL:-'⚡'}
 
-  local battery_remaining_percentage=$(battery_pct)
+  local -i battery_remaining_percentage=$(battery_pct)
   local filled empty gauge_color
 
   if [[ $battery_remaining_percentage =~ [0-9]+ ]]; then

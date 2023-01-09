@@ -17,7 +17,7 @@ function _user_host() {
   local me
   if [[ -n $SSH_CONNECTION ]]; then
     me="%n@%m"
-  elif [[ $LOGNAME != $USER ]]; then
+  elif [[ $LOGNAME != $USERNAME ]]; then
     me="%n"
   fi
   if [[ -n $me ]]; then
@@ -31,7 +31,7 @@ function _git_time_since_commit() {
   local last_commit now seconds_since_last_commit
   local minutes hours days years commit_age
   # Only proceed if there is actually a commit.
-  if last_commit=$(git log --pretty=format:'%at' -1 2> /dev/null); then
+  if last_commit=$(command git -c log.showSignature=false log --format='%at' -1 2>/dev/null); then
     now=$(date +%s)
     seconds_since_last_commit=$((now-last_commit))
 
@@ -82,4 +82,4 @@ ZSH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL="%{$fg[white]%}"
 # LS colors, made with https://geoff.greer.fm/lscolors/
 export LSCOLORS="exfxcxdxbxegedabagacad"
 export LS_COLORS='di=34;40:ln=35;40:so=32;40:pi=33;40:ex=31;40:bd=34;46:cd=34;43:su=0;41:sg=0;46:tw=0;42:ow=0;43:'
-export GREP_COLOR='1;33'
+export GREP_COLORS='mt=1;33'

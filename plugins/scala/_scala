@@ -1,6 +1,6 @@
 #compdef scala scalac
 # ------------------------------------------------------------------------------
-# Copyright (c) 2012 Github zsh-users - https://github.com/zsh-users
+# Copyright (c) 2012 GitHub zsh-users - https://github.com/zsh-users
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -190,7 +190,7 @@ Y_opts=(
   "-Yshow-symkinds[Print abbreviated symbol kinds next to symbol names]"
   "-Yshow-trees[Print detailed ASTs (requires -Xprint\:phase)]"
   "-Yshow-trees-compact[Print detailed ASTs in compact form (requires -Xprint\:)]"
-  "-Yshow-trees-stringified[Print stringifications along with detailed ASTs (requires -Xprint\:)]"
+  "-Yshow-trees-stringified[Print stringification along with detailed ASTs (requires -Xprint\:)]"
   "-Ystatistics[Print compiler statistics]"
   "-Ystruct-dispatch\:-[Structural method dispatch policy (default\: poly-cache)]:policy name:(no-cache mono-cache poly-cache invoke-dynamic)"
 
