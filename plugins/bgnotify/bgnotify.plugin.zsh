@@ -62,7 +62,7 @@ function bgnotify_formatted {
 # for macOS, output is "app ID, window ID" (com.googlecode.iterm2, 116)
 function bgnotify_appid {
   if (( ${+commands[osascript]} )); then
-    osascript -e 'tell application (path to frontmost application as text) to get the {id, id of front window}' 2>/dev/null
+    osascript -e "tell application id \"$(_bgnotify_termid)\"  to get the {id, frontmost, id of front window, visible of front window}" 2>/dev/null
   elif (( ${+commands[xprop]} )); then
     xprop -root _NET_ACTIVE_WINDOW 2>/dev/null | cut -d' ' -f5
   else
@@ -70,17 +70,21 @@ function bgnotify_appid {
   fi
 }
 
+function _bgnotify_termid {
+  if [[ -z "$term_id" ]]; then
+    case "$TERM_PROGRAM" in
+    iTerm.app) echo 'com.googlecode.iterm2' ;;
+    Apple_Terminal) echo 'com.apple.terminal' ;;
+    esac
+  else
+    echo "$term_id"
+  fi
+}
+
 function bgnotify {
   # $1: title, $2: message
   if (( ${+commands[terminal-notifier]} )); then # macOS
-    local term_id="${bgnotify_termid%%,*}" # remove window id
-    if [[ -z "$term_id" ]]; then
-      case "$TERM_PROGRAM" in
-      iTerm.app) term_id='com.googlecode.iterm2' ;;
-      Apple_Terminal) term_id='com.apple.terminal' ;;
-      esac
-    fi
-
+    local term_id=$(_bgnotify_termid)
     if [[ -z "$term_id" ]]; then
       terminal-notifier -message "$2" -title "$1" &>/dev/null
     else
