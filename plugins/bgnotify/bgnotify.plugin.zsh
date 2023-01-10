@@ -27,7 +27,6 @@ function bgnotify_end {
     # check if Terminal app is not active
     [[ $(bgnotify_appid) != "$bgnotify_termid" ]] || return
 
-    printf '\a' # beep sound
     bgnotify_formatted "$exit_status" "$bgnotify_lastcmd" "$elapsed"
   } always {
     bgnotify_timestamp=0
@@ -52,6 +51,7 @@ function bgnotify_formatted {
   (( $3 < 60 )) || elapsed="$((( $3 % 3600) / 60 ))m $elapsed"
   (( $3 < 3600 )) || elapsed="$(( $3 / 3600 ))h $elapsed"
 
+  printf '\a' # beep sound
   if [[ $1 -eq 0 ]]; then
     bgnotify "#win (took $elapsed)" "$2"
   else
