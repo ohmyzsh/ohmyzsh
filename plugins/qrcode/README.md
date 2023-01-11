@@ -5,4 +5,4 @@ Generate a QR Code from the command line. Uses [QRcode.show](https://qrcode.show
 alias           | command
 --------------- | --------
 `qrcode [text]` | `curl -d "text" qrcode.show`
-`qrsvg  [text]` | `curl -d "text" qrcode.show -H "Accepct: image.svg"`
+`qrsvg  [text]` | `curl -d "text" qrcode.show -H "Accept: image/svg+xml"`
