@@ -146,7 +146,7 @@ function aws_change_access_key() {
 }
 
 function aws_profiles() {
-  AWS_PAGER="" aws configure list-profiles
+  aws --no-cli-pager configure list-profiles
 }
 
 function _aws_profiles() {
