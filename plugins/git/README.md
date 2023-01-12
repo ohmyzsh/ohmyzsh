@@ -60,6 +60,8 @@ plugins=(... git)
 | gcpa                 | git cherry-pick --abort                                                                                                                                                                  |
 | gcpc                 | git cherry-pick --continue                                                                                                                                                               |
 | gcs                  | git commit -S                                                                                                                                                                            |
+| gcss                 | git commit -S -s                                                                                                                                                                         |
+| gcssm                | git commit -S -s -m                                                                                                                                                                      |
 | gd                   | git diff                                                                                                                                                                                 |
 | gdca                 | git diff --cached                                                                                                                                                                        |
 | gdcw                 | git diff --cached --word-diff                                                                                                                                                            |
@@ -157,8 +159,8 @@ plugins=(... git)
 | gsr                  | git svn rebase                                                                                                                                                                           |
 | gss                  | git status --short                                                                                                                                                                       |
 | gst                  | git status                                                                                                                                                                               |
-| gsta                 | git stash push                                                                                                                                                                           |
-| gsta                 | git stash save                                                                                                                                                                           |
+| gsta                 | git stash push (git version >= 2.13)                                                                                                                                                     |
+| gsta                 | git stash save (git version < 2.13)                                                                                                                                                      |
 | gstaa                | git stash apply                                                                                                                                                                          |
 | gstc                 | git stash clear                                                                                                                                                                          |
 | gstd                 | git stash drop                                                                                                                                                                           |
@@ -176,7 +178,7 @@ plugins=(... git)
 | gtv                  | git tag \| sort -V                                                                                                                                                                       |
 | gtl                  | gtl(){ git tag --sort=-v:refname -n --list ${1}\* }; noglob gtl                                                                                                                          |
 | gunignore            | git update-index --no-assume-unchanged                                                                                                                                                   |
-| gunwip               | git log --max-count=1 \| grep -q -c "\-\-wip\-\-" && git reset HEAD~1                                                                                                                             |
+| gunwip               | git log --max-count=1 \| grep -q -c "\-\-wip\-\-" && git reset HEAD~1                                                                                                                    |
 | gup                  | git pull --rebase                                                                                                                                                                        |
 | gupv                 | git pull --rebase --verbose                                                                                                                                                              |
 | gupa                 | git pull --rebase --autostash                                                                                                                                                            |
@@ -192,10 +194,10 @@ plugins=(... git)
 | gams                 | git am --skip                                                                                                                                                                            |
 | gama                 | git am --abort                                                                                                                                                                           |
 | gamscp               | git am --show-current-patch                                                                                                                                                              |
-| gwt                  | git worktree                                                                                                                     |
-| gwtls                | git worktree list                                                                                                                |
-| gwtmv                | git worktree move                                                                                                                |
-| gwtrm                | git worktree remove                                                                                                              |
+| gwt                  | git worktree                                                                                                                                                                             |
+| gwtls                | git worktree list                                                                                                                                                                        |
+| gwtmv                | git worktree move                                                                                                                                                                        |
+| gwtrm                | git worktree remove                                                                                                                                                                      |
 
 ### Main branch preference
 
@@ -227,7 +229,7 @@ These are aliases that have been removed, renamed, or otherwise modified in a wa
 ### Current
 
 | Command                | Description                                                                                              |
-|:-----------------------|:---------------------------------------------------------------------------------------------------------|
+| :--------------------- | :------------------------------------------------------------------------------------------------------- |
 | `grename <old> <new>`  | Rename `old` branch to `new`, including in origin remote                                                 |
 | current_branch         | Return the name of the current branch                                                                    |
 | git_current_user_name  | Returns the `user.name` config value                                                                     |
@@ -240,13 +242,13 @@ These are aliases that have been removed, renamed, or otherwise modified in a wa
 These features allow to pause a branch development and switch to another one (_"Work in Progress"_,  or wip). When you want to go back to work, just unwip it.
 
 | Command          | Description                                     |
-|:-----------------|:------------------------------------------------|
+| :--------------- | :---------------------------------------------- |
 | work_in_progress | Echoes a warning if the current branch is a wip |
 | gwip             | Commit wip branch                               |
 | gunwip           | Uncommit wip branch                             |
 
 ### Deprecated functions
 
-| Command                | Description                             | Reason                                                          |
-|:-----------------------|:----------------------------------------|:----------------------------------------------------------------|
-| current_repository     | Return the names of the current remotes | Didn't work properly. Use `git remote -v` instead (`grv` alias) |
+| Command            | Description                             | Reason                                                          |
+| :----------------- | :-------------------------------------- | :-------------------------------------------------------------- |
+| current_repository | Return the names of the current remotes | Didn't work properly. Use `git remote -v` instead (`grv` alias) |
