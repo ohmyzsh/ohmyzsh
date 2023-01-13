@@ -89,7 +89,7 @@ prompt_end() {
 # Context: user@hostname (who am I and where am I)
 prompt_context() {
   if [[ "$USERNAME" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-    prompt_segment black default "%(!.%{%F{yellow}%}.)%n@%m"
+    prompt_segment black default "%(!.%{%F{yellow}%}.)%n"
   fi
 }
 
@@ -217,7 +217,7 @@ prompt_hg() {
 
 # Dir: current working directory
 prompt_dir() {
-  prompt_segment blue $CURRENT_FG '%~'
+  prompt_segment blue $CURRENT_FG '%2d'
 }
 
 # Virtualenv: current working virtualenv
@@ -249,16 +249,24 @@ prompt_status() {
 prompt_aws() {
   [[ -z "$AWS_PROFILE" || "$SHOW_AWS_PROMPT" = false ]] && return
   case "$AWS_PROFILE" in
-    *-prod|*production*) prompt_segment red yellow  "AWS: ${AWS_PROFILE:gs/%/%%}" ;;
+    *prod|*production*) prompt_segment red black  "AWS: ${AWS_PROFILE:gs/%/%%}" ;;
     *) prompt_segment green black "AWS: ${AWS_PROFILE:gs/%/%%}" ;;
   esac
 }
 
+prompt_shell() {
+  [[ -z "$SHELL_PROFILE" || "$SHOW_AWS_PROMPT" = false ]] && return
+  case "$SHELL_PROFILE" in
+    *prod|*production*) prompt_segment red black  "${SHELL_PROFILE:gs/%/%%}" ;;
+    *) prompt_segment green black "${SHELL_PROFILE:gs/%/%%}" ;;
+  esac
+}
 ## Main prompt
 build_prompt() {
   RETVAL=$?
   prompt_status
   prompt_virtualenv
+  prompt_shell
   prompt_aws
   prompt_context
   prompt_dir
