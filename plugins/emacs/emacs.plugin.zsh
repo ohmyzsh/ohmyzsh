@@ -32,7 +32,7 @@ alias te="$EMACS_PLUGIN_LAUNCHER -nw"
 # same than M-x eval but from outside Emacs.
 alias eeval="$EMACS_PLUGIN_LAUNCHER --eval"
 # create a new X frame
-alias eframe='emacsclient --alternate-editor "" --create-frame'
+alias eframe='emacsclient --alternate-editor="" --create-frame'
 
 # Emacs ANSI Term tracking
 if [[ -n "$INSIDE_EMACS" ]]; then
