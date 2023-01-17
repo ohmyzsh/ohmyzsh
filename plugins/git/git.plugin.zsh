@@ -141,6 +141,7 @@ is-at-least 2.8 "$git_version" \
   && alias gfa='git fetch --all --prune --jobs=10' \
   || alias gfa='git fetch --all --prune'
 alias gfo='git fetch origin'
+alias gfom='git fetch origin $(git_main_branch)'
 
 alias gfg='git ls-files | grep'
 
