@@ -60,8 +60,8 @@ function fzf_setup_using_base_dir() {
 
 
 function fzf_setup_using_debian() {
-  if (( ! $+commands[dpkg] )) || ! dpkg -s fzf &>/dev/null; then
-    # Either not a debian based distro, or no fzf installed
+  if (( ! $+commands[dpkg] )); then
+    # Not a debian based distro
     return 1
   fi
 
@@ -72,11 +72,19 @@ function fzf_setup_using_debian() {
 
   case $PREFIX in
     *com.termux*)
+      if [[ ! -f "${PREFIX}/bin/fzf" ]]; then
+        # fzf not installed
+        return 1
+      fi
       # Support Termux package
       completions="${PREFIX}/share/fzf/completion.zsh"
       key_bindings="${PREFIX}/share/fzf/key-bindings.zsh"
       ;;
     *)
+      if [[ ! -f /usr/bin/fzf ]]; then
+        # fzf not installed
+        return 1
+      fi
       # Determine completion file path: first bullseye/sid, then buster/stretch
       completions="/usr/share/doc/fzf/examples/completion.zsh"
       [[ -f "$completions" ]] || completions="/usr/share/zsh/vendor-completions/_fzf"
