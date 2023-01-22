@@ -60,8 +60,8 @@ function fzf_setup_using_base_dir() {
 
 
 function fzf_setup_using_debian() {
-  if (( ! $+commands[dpkg] )); then
-    # Not a debian based distro
+  if (( ! $+commands[dpkg] )) || zstyle -t ':omz:plugins:fzf' skip-dpkg; then
+    # Not a debian based distro 
     return 1
   fi
 
