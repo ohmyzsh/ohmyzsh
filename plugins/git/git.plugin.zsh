@@ -96,6 +96,16 @@ alias gcasm='git commit --all --signoff --message'
 alias gcb='git checkout -b'
 alias gcf='git config --list'
 
+function ghop(){
+    branch=$(git rev-parse --abbrev-ref HEAD)
+    if [ -n "$1" ]; then
+      path=$(echo $@|gsed -e "s/ /%20/g ; s|^|blob/$branch/|")
+    else
+      path="tree/$branch"
+    fi
+    git config --get remote.origin.url|gsed -re "/https/b;s|^.*:|https://github.com/|;s|(\.git\|)$|/$path|"|xargs open
+}
+
 function gccd() {
   command git clone --recurse-submodules "$@"
   [[ -d "$_" ]] && cd "$_" || cd "${${_:t}%.git}"
