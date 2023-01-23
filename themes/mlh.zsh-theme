@@ -87,7 +87,7 @@ exit_code() {
 }
 
 prompt_end() {
-  if [ "$UID" -eq "0" ]; then
+  if [ "$UID" -eq 0 ]; then
     printf "\n$MLH_SHELL_SYMBOL_ROOT"
   else
     printf "\n$MLH_SHELL_SYMBOL"
