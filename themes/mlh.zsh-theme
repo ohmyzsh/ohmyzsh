@@ -47,6 +47,10 @@ if [ -z "$MLH_SHELL_SYMBOL" ]; then
   MLH_SHELL_SYMBOL="$ "
 fi
 
+if [ -z "$MLH_SHELL_SYMBOL_ROOT" ]; then
+  MLH_SHELL_SYMBOL_ROOT="# "
+fi
+
 # colors
 USER_COLOR="%F{001}"
 DEVICE_COLOR="%F{033}"
@@ -83,7 +87,11 @@ exit_code() {
 }
 
 prompt_end() {
-  printf "\n$MLH_SHELL_SYMBOL"
+  if [ "$UID" -eq 0 ]; then
+    printf "\n$MLH_SHELL_SYMBOL_ROOT"
+  else
+    printf "\n$MLH_SHELL_SYMBOL"
+  fi
 }
 
 # Set git_prompt_info text
