@@ -50,3 +50,12 @@ Set whether to disable key bindings (CTRL-T, CTRL-R, ALT-C):
 ```zsh
 DISABLE_FZF_KEY_BINDINGS="true"
 ```
+
+### Skip `dpkg` loading
+
+If you have `dpkg` available in your `$PATH` but you don't want to load `fzf` from there, and facing some
+issues, you can define this option before loading `oh-my-zsh` in order to skip that loading:
+
+```zsh
+zstyle ':omz:plugins:fzf' skip-dpkg yes
+```
