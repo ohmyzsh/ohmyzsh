@@ -81,7 +81,7 @@ function fzf_setup_using_debian() {
       key_bindings="${PREFIX}/share/fzf/key-bindings.zsh"
       ;;
     *)
-      if [[ ! -f /usr/bin/fzf ]]; then
+      if [[ ! -d /usr/share/doc/fzf/examples ]]; then
         # fzf not installed
         return 1
       fi
