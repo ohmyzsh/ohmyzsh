@@ -60,7 +60,7 @@ function fzf_setup_using_base_dir() {
 
 
 function fzf_setup_using_debian() {
-  if (( ! $+commands[dpkg] )) || zstyle -t ':omz:plugins:fzf' skip-dpkg; then
+  if (( ! $+commands[apt] && ! $+commands[apt-get] )); then
     # Not a debian based distro 
     return 1
   fi
@@ -81,7 +81,7 @@ function fzf_setup_using_debian() {
       key_bindings="${PREFIX}/share/fzf/key-bindings.zsh"
       ;;
     *)
-      if [[ ! -f /usr/bin/fzf ]]; then
+      if [[ ! -d /usr/share/doc/fzf/examples ]]; then
         # fzf not installed
         return 1
       fi
