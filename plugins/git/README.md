@@ -22,6 +22,7 @@ plugins=(... git)
 | gapt                 | git apply --3way                                                                                                                                                                         |
 | gb                   | git branch                                                                                                                                                                               |
 | gba                  | git branch --all                                                                                                                                                                         |
+| gbc                  | git for-each-ref --format="%(committerdate) %09 %(authorname) %09 %(refname)" --sort committerdate                                                                                       |
 | gbd                  | git branch --delete                                                                                                                                                                      |
 | gbda                 | git branch --no-color --merged \| grep -vE "^([+*]\|\s*(<span>$</span>(git_main_branch)\|<span>$</span>(git_develop_branch))\s*<span>$</span>)" \| xargs git branch --delete 2>/dev/null |
 | gbD                  | git branch --delete --force                                                                                                                                                              |

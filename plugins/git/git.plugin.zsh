@@ -70,6 +70,7 @@ alias gapt='git apply --3way'
 
 alias gb='git branch'
 alias gba='git branch --all'
+alias gbc='git for-each-ref --format="%(committerdate) %09 %(authorname) %09 %(refname)" --sort committerdate'
 alias gbd='git branch --delete'
 alias gbda='git branch --no-color --merged | command grep -vE "^([+*]|\s*($(git_main_branch)|$(git_develop_branch))\s*$)" | command xargs git branch --delete 2>/dev/null'
 alias gbD='git branch --delete --force'
