@@ -7,18 +7,17 @@
 # (In screen, only short_tab_title is used)
 # Limited support for Apple Terminal (Terminal can't set window and tab separately)
 function title {
-  emulate -L zsh
-  setopt prompt_subst
+  setopt localoptions nopromptsubst
 
   # Don't set the title if inside emacs, unless using vterm
-  [[ -n "$INSIDE_EMACS" && "$INSIDE_EMACS" != vterm ]] && return
+  [[ -n "${INSIDE_EMACS:-}" && "$INSIDE_EMACS" != vterm ]] && return
 
   # if $2 is unset use $1 as default
   # if it is set and empty, leave it as is
   : ${2=$1}
 
   case "$TERM" in
-    cygwin|xterm*|putty*|rxvt*|konsole*|ansi|mlterm*|alacritty|st*)
+    cygwin|xterm*|putty*|rxvt*|konsole*|ansi|mlterm*|alacritty|st*|foot)
       print -Pn "\e]2;${2:q}\a" # set window name
       print -Pn "\e]1;${1:q}\a" # set tab name
       ;;
@@ -48,13 +47,13 @@ fi
 
 # Runs before showing the prompt
 function omz_termsupport_precmd {
-  [[ "${DISABLE_AUTO_TITLE:-}" == true ]] && return
-  title $ZSH_THEME_TERM_TAB_TITLE_IDLE $ZSH_THEME_TERM_TITLE_IDLE
+  [[ "${DISABLE_AUTO_TITLE:-}" != true ]] || return
+  title "$ZSH_THEME_TERM_TAB_TITLE_IDLE" "$ZSH_THEME_TERM_TITLE_IDLE"
 }
 
 # Runs before executing the command
 function omz_termsupport_preexec {
-  [[ "${DISABLE_AUTO_TITLE:-}" == true ]] && return
+  [[ "${DISABLE_AUTO_TITLE:-}" != true ]] || return
 
   emulate -L zsh
   setopt extended_glob
@@ -97,10 +96,10 @@ function omz_termsupport_preexec {
   fi
 
   # cmd name only, or if this is sudo or ssh, the next cmd
-  local CMD=${1[(wr)^(*=*|sudo|ssh|mosh|rake|-*)]:gs/%/%%}
+  local CMD="${1[(wr)^(*=*|sudo|ssh|mosh|rake|-*)]:gs/%/%%}"
   local LINE="${2:gs/%/%%}"
 
-  title '$CMD' '%100>...>$LINE%<<'
+  title "$CMD" "%100>...>${LINE}%<<"
 }
 
 autoload -Uz add-zsh-hook

@@ -15,7 +15,7 @@ _1st_arguments=(
   'restart:restarts the pow app linked to the current directory'
   'always_restart:reload the pow app after each request'
   'always_restart_off:do not reload the pow app after each request'
-  'rename:rename the current pow app to [NAME] or renmae [OLD] to [NEW]'
+  'rename:rename the current pow app to [NAME] or rename [OLD] to [NEW]'
   'environment:run the this pow app in a different environment (aliased `env`)'
   'browse:opens and navigates the default browser to this app'
   'logs:tail the application logs'

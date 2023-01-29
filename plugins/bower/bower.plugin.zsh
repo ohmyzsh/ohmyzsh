@@ -9,7 +9,7 @@ _bower_installed_packages () {
 }
 _bower ()
 {
-    local -a _1st_arguments _no_color _dopts _save_dev _force_lastest _production
+    local -a _1st_arguments _no_color _dopts _save_dev _force_latest _production
     local expl
     typeset -A opt_args
 
@@ -22,7 +22,7 @@ _bower ()
 
     _save_dev=('(--save-dev)--save-dev[Save installed packages into the project"s bower.json devDependencies]')
 
-    _force_lastest=('(--force-latest)--force-latest[Force latest version on conflict]')
+    _force_latest=('(--force-latest)--force-latest[Force latest version on conflict]')
 
     _production=('(--production)--production[Do not install project devDependencies]')
 
@@ -54,7 +54,7 @@ _bower ()
         _arguments \
         $_dopts \
         $_save_dev \
-        $_force_lastest \
+        $_force_latest \
         $_no_color \
         $_production
         ;;
@@ -62,7 +62,7 @@ _bower ()
         _arguments \
         $_dopts \
         $_no_color \
-        $_force_lastest
+        $_force_latest
         _bower_installed_packages
         compadd "$@" $(echo $bower_package_list)
         ;;

@@ -78,17 +78,19 @@ if [[ $FOUND_PYENV -eq 1 ]]; then
   eval "$(pyenv init - --no-rehash zsh)"
 
   # If pyenv-virtualenv exists, load it
-  if [[ "$(pyenv commands)" =~ "virtualenv-init" && "$ZSH_PYENV_VIRTUALENV" != false ]]; then
+  if [[ "$ZSH_PYENV_VIRTUALENV" != false && "$(pyenv commands)" =~ "virtualenv-init" ]]; then
     eval "$(pyenv virtualenv-init - zsh)"
   fi
 
   function pyenv_prompt_info() {
-    echo "$(pyenv version-name)"
+    local version="$(pyenv version-name)"
+    echo "${version:gs/%/%%}"
   }
 else
   # Fall back to system python
   function pyenv_prompt_info() {
-    echo "system: $(python -V 2>&1 | cut -f 2 -d ' ')"
+    local version="$(python3 -V 2>&1 | cut -d' ' -f2)"
+    echo "system: ${version:gs/%/%%}"
   }
 fi
 

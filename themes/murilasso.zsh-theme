@@ -1,7 +1,7 @@
 local return_code="%(?..%{$fg[red]%}%? ↵%{$reset_color%})"
 local user_host='%{$terminfo[bold]$fg[green]%}%n@%m%{$reset_color%}'
 local current_dir='%{$terminfo[bold]$fg[blue]%}%~%{$reset_color%}'
-local rvm_ruby='%{$fg[red]%}$(rvm_prompt_info || rbenv_prompt_info)%{$reset_color%}'
+local rvm_ruby='%{$fg[red]%}$(ruby_prompt_info)%{$reset_color%}'
 local git_branch='%{$fg[blue]%}$(git_prompt_info)%{$reset_color%}'
 
 PROMPT="${user_host}:${current_dir} ${rvm_ruby}
