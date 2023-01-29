@@ -110,6 +110,7 @@ plugins=(... git)
 | glp                  | git log --pretty=\<format\>                                                                                                      |
 | gm                   | git merge                                                                                                                        |
 | gmom                 | git merge origin/$(git_main_branch)                                                                                              |
+| gms                  | git merge --signoff
 | gmtl                 | git mergetool --no-prompt                                                                                                        |
 | gmtlvim              | git mergetool --no-prompt --tool=vimdiff                                                                                         |
 | gmum                 | git merge upstream/$(git_main_branch)                                                                                            |
