@@ -276,6 +276,16 @@ If you have many functions that go well together, you can put them as a `XYZ.plu
 
 If you would like to override the functionality of a plugin distributed with Oh My Zsh, create a plugin of the same name in the `custom/plugins/` directory and it will be loaded instead of the one in `plugins/`.
 
+### Remove directories aliases
+
+If you want to skip ohmyzsh default
+[directories aliases](https://github.com/ohmyzsh/ohmyzsh/blob/master/lib/directories.zsh) you can add the
+following snippet to your `zshrc`, before loading `oh-my-zsh.sh` script:
+
+```zsh
+zstyle ':omz:directories' aliases no
+```
+
 ## Getting Updates
 
 By default, you will be prompted to check for updates every 2 weeks. You can choose other update modes by adding a line to your `~/.zshrc` file, **before Oh My Zsh is loaded**:
