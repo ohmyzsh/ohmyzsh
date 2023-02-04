@@ -73,6 +73,7 @@ EOF
       (*.zst) unzstd "$file" ;;
       (*.cab) cabextract -d "$extract_dir" "$file" ;;
       (*.cpio) cpio -idmvF "$file" ;;
+      (*.zpaq) zpaq x "$file" ;;
       (*)
         echo "extract: '$file' cannot be extracted" >&2
         success=1 ;;

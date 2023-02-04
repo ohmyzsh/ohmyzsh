@@ -55,6 +55,7 @@ plugins=(... extract)
 | `xz`              | LZMA2 archive                        |
 | `zip`             | Zip archive                          |
 | `zst`             | Zstandard file (zstd)                |
+| `zpaq`            | Zpaq file                            |
 
 See [list of archive formats](https://en.wikipedia.org/wiki/List_of_archive_formats) for
 more information regarding archive formats.
