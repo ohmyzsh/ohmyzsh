@@ -1,6 +1,6 @@
 # Aliases in this file are bash and zsh compatible
 
-oh-my-zsh=$HOME/.oh-my-zsh
+ohmyzsh=$HOME/.oh-my-zsh
 
 # Get operating system
 platform='unknown'
@@ -32,23 +32,30 @@ fi
 
 # Alias Editing
 TRAPHUP() {
-  source $oh-my-zsh/custom/aliases.zsh
+  source $ohmyzsh/custom/aliases.zsh
 }
 
 alias ae='vim $oh-my-zsh/custom/aliases.zsh'      #alias edit
 alias arl='source $oh-my-zsh/custom/aliases.zsh'  #alias reload
 alias gar="killall -HUP -u \"$USER\" zsh"         #global alias reload
 
+# git
+alias gs='git status -uno'
+
 # vim using
 mvim --version > /dev/null 2>&1
 MACVIM_INSTALLED=$?
 if [ $MACVIM_INSTALLED -eq 0 ]; then
   alias vim="mvim -v"
+else
+  alias vi='vim'
 fi
 
 # mimic vim functions
 alias :q='exit'
 
 # vimrc editing
-alias ve='vim ~/.vimrc'
+alias ve='vi ~/.vimrc'
 
+# map fasd to autojump
+alias 'z=j'

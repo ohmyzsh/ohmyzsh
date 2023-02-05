@@ -74,7 +74,7 @@ plugins=(
     git
     alias-finder
     aliases
-    fasd
+    autojump
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -104,3 +104,4 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+ [ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
