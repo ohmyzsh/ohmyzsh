@@ -89,7 +89,7 @@ sh install.sh
 
 ### Plugins
 
-Oh My Zsh comes with a shitload of plugins for you to take advantage of. You can take a look in the [plugins](https://github.com/fklassen/ohmyzsh/tree/master/plugins) directory and/or the [wiki](https://github.com/fklassen/ohmyzsh/wiki/Plugins) to see what's currently available.
+Oh My Zsh comes with a shitload of plugins for you to take advantage of. You can take a look in the [plugins](https://github.com/fklassen/ohmyzsh/tree/master/plugins) directory and/or the [wiki](https://github.com/ohmyzsh/ohmyzsh/wiki/Plugins) to see what's currently available.
 
 #### Enabling Plugins
 
