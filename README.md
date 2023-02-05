@@ -58,7 +58,7 @@ To learn more, visit [ohmyz.sh](https://ohmyz.sh), follow [@ohmyzsh](https://twi
 ### Prerequisites
 
 - A Unix-like operating system: macOS, Linux, BSD. On Windows: WSL2 is preferred, but cygwin or msys also mostly work.
-- [Zsh](https://www.zsh.org) should be installed (v4.3.9 or more recent is fine but we prefer 5.0.8 and newer). If not pre-installed (run `zsh --version` to confirm), check the following wiki instructions here: [Installing ZSH](https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH)
+- [Zsh](https://www.zsh.org) should be installed (v4.3.9 or more recent is fine but we prefer 5.0.8 and newer). If not pre-installed (run `zsh --version` to confirm), check the following wiki instructions here: [Installing ZSH](https://github.com/fklassen/ohmyzsh/wiki/Installing-ZSH)
 - `curl` or `wget` should be installed
 - `git` should be installed (recommended v2.4.11 or higher)
 
@@ -68,9 +68,9 @@ Oh My Zsh is installed by running one of the following commands in your terminal
 
 | Method    | Command                                                                                           |
 | :-------- | :------------------------------------------------------------------------------------------------ |
-| **curl**  | `sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"` |
-| **wget**  | `sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`   |
-| **fetch** | `sh -c "$(fetch -o - https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"` |
+| **curl**  | `sh -c "$(curl -fsSL https://raw.githubusercontent.com/fklassen/ohmyzsh/master/tools/install.sh)"` |
+| **wget**  | `sh -c "$(wget -O- https://raw.githubusercontent.com/fklassen/ohmyzsh/master/tools/install.sh)"`   |
+| **fetch** | `sh -c "$(fetch -o - https://raw.githubusercontent.com/fklassen/ohmyzsh/master/tools/install.sh)"` |
 
 _Note that any previous `.zshrc` will be renamed to `.zshrc.pre-oh-my-zsh`. After installation, you can move the configuration you want to preserve into the new `.zshrc`._
 
@@ -81,7 +81,7 @@ that by downloading the install script first, looking through it so everything l
 then running it:
 
 ```sh
-wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+wget https://raw.githubusercontent.com/fklassen/ohmyzsh/master/tools/install.sh
 sh install.sh
 ```
 
@@ -89,7 +89,7 @@ sh install.sh
 
 ### Plugins
 
-Oh My Zsh comes with a shitload of plugins for you to take advantage of. You can take a look in the [plugins](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins) directory and/or the [wiki](https://github.com/ohmyzsh/ohmyzsh/wiki/Plugins) to see what's currently available.
+Oh My Zsh comes with a shitload of plugins for you to take advantage of. You can take a look in the [plugins](https://github.com/fklassen/ohmyzsh/tree/master/plugins) directory and/or the [wiki](https://github.com/fklassen/ohmyzsh/wiki/Plugins) to see what's currently available.
 
 #### Enabling Plugins
 
@@ -121,7 +121,7 @@ Each built-in plugin includes a **README**, documenting it. This README should s
 
 ### Themes
 
-We'll admit it. Early in the Oh My Zsh world, we may have gotten a bit too theme happy. We have over one hundred and fifty themes now bundled. Most of them have [screenshots](https://github.com/ohmyzsh/ohmyzsh/wiki/Themes) on the wiki (We are working on updating this!). Check them out!
+We'll admit it. Early in the Oh My Zsh world, we may have gotten a bit too theme happy. We have over one hundred and fifty themes now bundled. Most of them have [screenshots](https://github.com/fklassen/ohmyzsh/wiki/Themes) on the wiki (We are working on updating this!). Check them out!
 
 #### Selecting a Theme
 
@@ -137,16 +137,16 @@ To use a different theme, simply change the value to match the name of your desi
 
 ```sh
 ZSH_THEME="agnoster" # (this is one of the fancy ones)
-# see https://github.com/ohmyzsh/ohmyzsh/wiki/Themes#agnoster
+# see https://github.com/fklassen/ohmyzsh/wiki/Themes#agnoster
 ```
 
-_Note: many themes require installing a [Powerline Font](https://github.com/powerline/fonts) or a [Nerd Font](https://github.com/ryanoasis/nerd-fonts) in order to render properly. Without them, these themes will render [weird prompt symbols](https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ#i-have-a-weird-character-in-my-prompt)_
+_Note: many themes require installing a [Powerline Font](https://github.com/powerline/fonts) or a [Nerd Font](https://github.com/ryanoasis/nerd-fonts) in order to render properly. Without them, these themes will render [weird prompt symbols](https://github.com/fklassen/ohmyzsh/wiki/FAQ#i-have-a-weird-character-in-my-prompt)_
 
 Open up a new terminal window and your prompt should look something like this:
 
 ![Agnoster theme](https://cloud.githubusercontent.com/assets/2618447/6316862/70f58fb6-ba03-11e4-82c9-c083bf9a6574.png)
 
-In case you did not find a suitable theme for your needs, please have a look at the wiki for [more of them](https://github.com/ohmyzsh/ohmyzsh/wiki/External-themes).
+In case you did not find a suitable theme for your needs, please have a look at the wiki for [more of them](https://github.com/fklassen/ohmyzsh/wiki/External-themes).
 
 If you're feeling feisty, you can let the computer select one randomly for you each time you open a new terminal window.
 
@@ -171,7 +171,7 @@ ZSH_THEME_RANDOM_IGNORED=(pygmalion tjkirch_mod)
 
 ### FAQ
 
-If you have some more questions or issues, you might find a solution in our [FAQ](https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ).
+If you have some more questions or issues, you might find a solution in our [FAQ](https://github.com/fklassen/ohmyzsh/wiki/FAQ).
 
 ## Advanced Topics
 
@@ -232,7 +232,7 @@ REPO=apjanke/oh-my-zsh BRANCH=edge sh install.sh
 ##### 1. Clone the repository <!-- omit in toc -->
 
 ```sh
-git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
+git clone https://github.com/fklassen/ohmyzsh.git ~/.oh-my-zsh
 ```
 
 ##### 2. _Optionally_, backup your existing `~/.zshrc` file <!-- omit in toc -->
@@ -279,7 +279,7 @@ If you would like to override the functionality of a plugin distributed with Oh 
 ### Remove directories aliases
 
 If you want to skip ohmyzsh default
-[directories aliases](https://github.com/ohmyzsh/ohmyzsh/blob/master/lib/directories.zsh) you can add the
+[directories aliases](https://github.com/fklassen/ohmyzsh/blob/master/lib/directories.zsh) you can add the
 following snippet to your `zshrc`, before loading `oh-my-zsh.sh` script:
 
 ```zsh
