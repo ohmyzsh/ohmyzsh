@@ -199,6 +199,7 @@ alias ggpush='git push origin "$(git_current_branch)"'
 
 alias ggsup='git branch --set-upstream-to=origin/$(git_current_branch)'
 alias gpsup='git push --set-upstream origin $(git_current_branch)'
+alias gpsupf='git push --set-upstream origin $(git_current_branch) --force-with-lease'
 
 alias ghh='git help'
 

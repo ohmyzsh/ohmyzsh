@@ -89,6 +89,7 @@ plugins=(... git)
 | ggsup                | git branch --set-upstream-to=origin/$(git_current_branch)                                                                                                                                |
 | ggu                  | git pull --rebase origin $(current_branch)                                                                                                                                               |
 | gpsup                | git push --set-upstream origin $(git_current_branch)                                                                                                                                     |
+| gpsupf                | git push --set-upstream origin $(git_current_branch) --force-with-lease                                                                                                                                     |
 | ghh                  | git help                                                                                                                                                                                 |
 | gignore              | git update-index --assume-unchanged                                                                                                                                                      |
 | gignored             | git ls-files -v \| grep "^[[:lower:]]"                                                                                                                                                   |

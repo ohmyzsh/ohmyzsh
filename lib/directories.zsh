@@ -3,6 +3,8 @@ setopt auto_pushd
 setopt pushd_ignore_dups
 setopt pushdminus
 
+zstyle -T ':omz:directories' aliases || return
+
 alias -g ...='../..'
 alias -g ....='../../..'
 alias -g .....='../../../..'
