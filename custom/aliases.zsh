@@ -35,7 +35,7 @@ TRAPHUP() {
   source $ohmyzsh/custom/aliases.zsh
 }
 
-alias ae='vim $oh-my-zsh/custom/aliases.zsh'      #alias edit
+alias ae='vi $ohmyzsh/custom/aliases.zsh'      #alias edit
 alias arl='source $oh-my-zsh/custom/aliases.zsh'  #alias reload
 alias gar="killall -HUP -u \"$USER\" zsh"         #global alias reload
 
@@ -56,6 +56,3 @@ alias :q='exit'
 
 # vimrc editing
 alias ve='vi ~/.vimrc'
-
-# map fasd to autojump
-alias 'z=j'

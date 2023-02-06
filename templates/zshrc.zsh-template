@@ -75,6 +75,19 @@ plugins=(
     alias-finder
     aliases
     autojump
+    command-not-found
+    common-aliases
+    compleat
+    copybuffer
+    copyfile
+    copypath
+    dirhistory
+    docker
+    extract
+    fd
+    jfrog
+    man
+    vscode
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -104,4 +117,6 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
- [ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
+
+[ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
+ZSH_ALIAS_FINDER_AUTOMATIC=true
