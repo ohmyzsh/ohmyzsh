@@ -91,6 +91,7 @@ plugins=(
     man
     ssh-agent
     tmux
+    zsh-autosuggestions
     vscode
 )
 
@@ -127,3 +128,5 @@ export MANPATH="/usr/local/man:/usr/local/ssl/share/man:$MANPATH"
 
 [ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
 ZSH_ALIAS_FINDER_AUTOMATIC=true
+
+#eval "$(starship init zsh)"
