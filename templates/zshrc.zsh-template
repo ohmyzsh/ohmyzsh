@@ -89,9 +89,13 @@ plugins=(
     fd
     jfrog
     man
+    ssh-agent
     tmux
     vscode
 )
+
+zstyle :omz:plugins:ssh-agent agent-forwarding yes
+#zstyle :omz:plugins:ssh-agent helper ksshaskpass
 
 source $ZSH/oh-my-zsh.sh
 
