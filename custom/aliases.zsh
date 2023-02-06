@@ -47,8 +47,6 @@ mvim --version > /dev/null 2>&1
 MACVIM_INSTALLED=$?
 if [ $MACVIM_INSTALLED -eq 0 ]; then
   alias vim="mvim -v"
-else
-  alias vi='vim'
 fi
 
 # mimic vim functions
