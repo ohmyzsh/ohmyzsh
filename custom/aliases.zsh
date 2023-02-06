@@ -54,3 +54,6 @@ alias :q='exit'
 
 # vimrc editing
 alias ve='vi ~/.vimrc'
+
+# exa vs. ls
+alias ls='exa'
