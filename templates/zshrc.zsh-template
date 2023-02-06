@@ -71,9 +71,9 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-    git
     alias-finder
     aliases
+    aws
     autojump
     colored-man-pages
     command-not-found
@@ -87,6 +87,7 @@ plugins=(
     emoji
     extract
     fd
+    git
     jfrog
     man
     ssh-agent
@@ -129,4 +130,4 @@ export MANPATH="/usr/local/man:/usr/local/ssl/share/man:$MANPATH"
 [ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
 ZSH_ALIAS_FINDER_AUTOMATIC=true
 
-#eval "$(starship init zsh)"
+eval "$(starship init zsh)"
