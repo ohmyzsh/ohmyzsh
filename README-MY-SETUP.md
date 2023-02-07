@@ -1,7 +1,7 @@
 My Shell Setup
 ==============
 
-Much if my information comes from [here](https://www.bretfisher.com/shell/) and his [YouTube video](https://www.youtube.com/watch?v=KeSIJQEinJA).
+Much of my information comes from [here](https://www.bretfisher.com/shell/) and his [YouTube video](https://www.youtube.com/watch?v=KeSIJQEinJA).
 
 Note that this will backup and replace your existing `~/.zshrc` file
 
