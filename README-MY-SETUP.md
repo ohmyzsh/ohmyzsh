@@ -118,3 +118,36 @@ Common Install Steps
     ```
 
 * Start a terminal session
+
+Post install
+------------
+
+There are a few things that can make things even better
+
+* set up GIT configuration
+  * `cd && ln -s ~/.oh-my-zsh/plugins/gitconfig .gitconfig`
+  * create a `~/.gitconfig.user` for user-specific GIT settings
+
+    ```(shell)
+    [user]
+      name = Fred Klassen
+      email = fred.klassen@broadcom.com
+      #email = fklassen@appneta.com
+      signingkey = 84E4FA215C934A7D97DC76D5E9E2149793BDE17E
+    ```
+
+* create ~/.inputrc
+
+  ```(shell)
+  set editing-mode vi
+  set bell-style none
+  ```
+
+* install tmux config [Oh My Tmux](https://github.com/gpakosz/.tmux)
+* install vim config [SpaceVim](https://spacevim.org/)
+* install Mosh replacement [Eternal Terminal](https://eternalterminal.dev/)
+* on macOS
+  * install macVIM via `brew install macvim`
+  * install some colour themes for iTerm2 that you can choose from
+    * [iTerm2 snazzy](https://github.com/sindresorhus/iterm2-snazzy)
+    * [GitHub VS Code Theme for iTerm](https://github.com/cdalvaro/github-vscode-theme-iterm)

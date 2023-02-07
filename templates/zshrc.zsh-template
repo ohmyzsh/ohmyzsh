@@ -130,4 +130,5 @@ export MANPATH="/usr/local/man:/usr/local/ssl/share/man:$MANPATH"
 [ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
 ZSH_ALIAS_FINDER_AUTOMATIC=true
 
+# comment out if you want to disable Starship and use ZSH_THEME
 eval "$(starship init zsh)"
