@@ -120,7 +120,6 @@ plugins=(... git)
 | gma                  | git merge --abort                                                                                                                                                                        |
 | gp                   | git push                                                                                                                                                                                 |
 | gpd                  | git push --dry-run                                                                                                                                                                       |
-| gpf                  | git push --force-with-lease                                                                                                                                                              |
 | gpf                  | git push --force-with-lease --force-if-includes (git version >= 2.30)                                                                                                                    |
 | gpf                  | git push --force-with-lease (git version < 2.30)                                                                                                                                         |
 | gpf!                 | git push --force                                                                                                                                                                         |
