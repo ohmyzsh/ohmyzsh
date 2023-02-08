@@ -46,7 +46,7 @@ Linux
 * install some terminal tools
 
   ```(shell)
-  sudo apt install exa autojump thefuck
+  sudo apt install exa autojump thefuck tmux
   ```
 
 * install [Tilex](https://gnunn1.github.io/tilix-web/)
@@ -100,6 +100,13 @@ Common Install Steps
       ```shell
       REPO=<your_github_id>/ohmyzsh sh -c "$(curl -fsSL <https://raw.githubusercontent.com/fklassen/ohmyzsh/master/tools/install.sh>)"
       ```
+
+  * initialize submodules
+
+    ```(shell)
+    cd ~/.oh-my-zsh
+    git submodules update --init
+    ```
 
   * optionally configure by editing '~/.zshrc` (see [Getting Started](https://github.com/ohmyzsh/ohmyzsh/wiki#getting-started))
     * I personally like to make a symbolic link so I can commit my changes to my forked config

@@ -134,8 +134,12 @@ export MANPATH="/usr/local/man:/usr/local/ssl/share/man:$MANPATH"
 ZSH_ALIAS_FINDER_AUTOMATIC=true
 
 if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
-    source /etc/profile.d/vte.sh
+    if [ -f /etc/profile.d/vte.sh ]; then
+        source /etc/profile.d/vte.sh
+    fi
 fi
 
 # comment out if you want to disable Starship and use ZSH_THEME
-eval "$(starship init zsh)"
+if [ -f "$HOME/.config/starship.toml" ]; then
+    eval "$(starship init zsh)"
+fi
