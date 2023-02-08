@@ -117,18 +117,18 @@ Common Install Steps
       ```
 
 * install [Starship](https://starship.rs)
-  * run installer
-
-    ```(shell)
-    curl -sS https://starship.rs/install.sh | sh
-    ```
-
   * take a copy Starship config file
 
     ```(shell)
     mkdir -p ~/.config
     cd ~/.config
     ln -s ~/.oh-my-zsh/templates/starship.toml
+    ```
+
+  * run installer
+
+    ```(shell)
+    curl -sS https://starship.rs/install.sh | sh
     ```
 
 * install [fzf](https://github.com/junegunn/fzf#installation) for [zsh-interactive-cd](https://github.com/fklassen/ohmyzsh/tree/master/plugins/zsh-interactive-cd) support
@@ -163,6 +163,6 @@ There are a few things that can make things even better
 * install Mosh replacement [Eternal Terminal](https://eternalterminal.dev/)
 * on macOS
   * install macVIM via `brew install macvim`
-  * install some colour themes for iTerm2 that you can choose from
+  * if you don't like Gruv Box, you may want to install some colour themes for iTerm2
     * [iTerm2 snazzy](https://github.com/sindresorhus/iterm2-snazzy)
     * [GitHub VS Code Theme for iTerm](https://github.com/cdalvaro/github-vscode-theme-iterm)

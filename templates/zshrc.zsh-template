@@ -143,3 +143,6 @@ fi
 if [ -f "$HOME/.config/starship.toml" ]; then
     eval "$(starship init zsh)"
 fi
+
+# opt out of et telemetry data upload
+ET_NO_TELEMETRY=1
