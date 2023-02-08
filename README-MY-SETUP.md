@@ -100,6 +100,16 @@ Windows
     * open and Git Bash terminal in Administrator mode, cd to above directy and
       * `make install`
   * continue with instructions to install Zsh
+* install Oh My Posh in a PowerShell with commands:
+  * `winget install oh-my-posh`
+  * `winget install XP8K0HKJFRXGCK`
+  * `winget upgrade oh-my-posh`
+* need to install [Nerd Fonts](https://www.nerdfonts.com) (may want other fonts but must be `Nerd` variety)
+  * I download, expand, open with Explorer and double-click on each Windows font
+    * [Hack](https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/Hack.zip)
+    * [FiraCode](https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/FiraCode.zip)
+    * [Meslo](https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/Meslo.zip)
+* Windows Terminal does not seem to accept Nerd Fonts so I updated fonts in Git Bash shortcut and mainly use that.
 * continue to [Common Install Steps](#common-install-steps)
 
 Common Install Steps
@@ -185,7 +195,7 @@ There are a few things that can make things even better
   set bell-style none
   ```
 
-* install tmux config [Oh My Tmux](https://github.com/gpakosz/.tmux)
+* if tmux is installed install tmux config [Oh My Tmux](https://github.com/gpakosz/.tmux)
 * install vim config [SpaceVim](https://spacevim.org/)
 * install Mosh replacement [Eternal Terminal](https://eternalterminal.dev/)
 * on macOS
