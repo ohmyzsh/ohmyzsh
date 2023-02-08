@@ -56,5 +56,7 @@ alias :q='exit'
 alias ve='vi ~/.vimrc'
 
 # exa vs. ls
-alias ls='exa'
-alias la='ll -a'
+if [ ! "$MSYSTEM" = "MINGW64" ]; then
+  alias ls='exa'
+  alias la='ll -a'
+fi
