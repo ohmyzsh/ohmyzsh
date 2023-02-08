@@ -91,9 +91,12 @@ plugins=(
     jfrog
     man
     ssh-agent
+    thefuck
     tmux
-    zsh-autosuggestions
     vscode
+    zsh-autosuggestions
+    zsh-interactive-cd
+    zsh-navigation-tools
 )
 
 zstyle :omz:plugins:ssh-agent agent-forwarding yes
@@ -129,6 +132,10 @@ export MANPATH="/usr/local/man:/usr/local/ssl/share/man:$MANPATH"
 
 [ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
 ZSH_ALIAS_FINDER_AUTOMATIC=true
+
+if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
+    source /etc/profile.d/vte.sh
+fi
 
 # comment out if you want to disable Starship and use ZSH_THEME
 eval "$(starship init zsh)"

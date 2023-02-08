@@ -12,22 +12,24 @@ macOS
 
 * install [HomeBrew](https://brew.sh/) (probably already installed)
 * install [iTerm2](https://www.iterm2.com/)
+* install/configure iTerm2 colour themes [Grove Box contrib](https://github.com/gruvbox-community/gruvbox-contrib)
 * install prereqs
   * need to install [Nerd Fonts](https://www.nerdfonts.com) (may want other fonts but must be `Nerd` variety)
 
     ```shell
     brew tap homebrew/cask-fonts
-    brew install --cask font-fantasque-sans-mono
+    brew install --cask font-meslo-lg-nerd-font
     brew install --cask font-hack-nerd-font
     brew install --cask font-fira-nerd-font
     ```
 
-  * Configure iTerm2 to use one of the nerd fonts
+  * Configure iTerm2 to use one of the nerd fonts (I like hack)
   * needed for `oh-my-zsh` module `autojump`
 
     ```shell
     brew install autojump
     brew install terminal-notifier
+    brew install thefuck
     ```
 
   * install `ls` replacement `exa`
@@ -41,23 +43,28 @@ macOS
 Linux
 -----
 
+* install some terminal tools
+
+  ```(shell)
+  sudo apt install exa autojump thefuck
+  ```
+
 * install [Tilex](https://gnunn1.github.io/tilix-web/)
 
   ```shell
-  apt install tilix
+  sudo tilix
   ```
 
+* install/configure Tilex colour themes [Grove Box for Tilix](https://github.com/MichaelThessel/tilix-gruvbox)
 * install prereqs
   * If which zsh not installed, then install with `sudo apt install zsh`. Next, change your login shell with `chsh -s $(which zsh)`
 
   * need to install [Nerd Fonts](https://www.nerdfonts.com) (may want other fonts but must be `Nerd` variety)
-    * I download [FiraCode](https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/FiraCode.zip), exand, open Nautilus and double-click on each non-Windows font
-  * configure Tilix to use the Nerd font
-  * install `autojump`
-
-    ```(shell)
-    sudo apt install autojump
-    ```
+    * I download, expand, open Nautilus and double-click on each non-Windows font
+      * [Hack](https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/Hack.zip)
+      * [FiraCode](https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/FiraCode.zip)
+      * [Meslo](https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/Meslo.zip)
+  * configure Tilix to use the Nerd font (I like Hack)
 
 * continue to [Common Install Steps](#common-install-steps)
 
@@ -65,7 +72,7 @@ Windows
 -------
 
 * Install [Windows Terminal](https://github.com/microsoft/terminal)
-* Recommend using WSL2 with Ubuntu and zsh installed there, but may be able to use Git Bash
+* Recommend using WSL2 with Ubuntu and zsh installed there, but may be able to use Git Bash `wsl --install` (in Admin command prompt)
 * other steps TBD
 * continue to [Common Install Steps](#common-install-steps)
 
@@ -117,6 +124,7 @@ Common Install Steps
     ln -s ~/.oh-my-zsh/templates/starship.toml
     ```
 
+* install [fzf](https://github.com/junegunn/fzf#installation) for [zsh-interactive-cd](https://github.com/fklassen/ohmyzsh/tree/master/plugins/zsh-interactive-cd) support
 * Start a terminal session
 
 Post install

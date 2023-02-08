@@ -17,3 +17,6 @@ success_symbol = '[➜](bold green)' # The 'success_symbol' segment is being set
 # Disable the package module, hiding it from the prompt completely
 [package]
 disabled = true
+
+# increase command timeout from default 500 milliseconds
+command_timeout = 1500
