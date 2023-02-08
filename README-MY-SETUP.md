@@ -95,7 +95,10 @@ Windows
     fi
     ```
 
-  * `pip install thefuck`
+  * install [fasd]()
+    * `git clone https://github.com/clvv/fasd.git`
+    * open and Git Bash terminal in Administrator mode, cd to above directy and
+      * `make install`
   * continue with instructions to install Zsh
 * continue to [Common Install Steps](#common-install-steps)
 
@@ -124,14 +127,15 @@ Common Install Steps
       REPO=<your_github_id>/ohmyzsh sh -c "$(curl -fsSL <https://raw.githubusercontent.com/fklassen/ohmyzsh/master/tools/install.sh>)"
       ```
 
-  * initialize submodules
+    * initialize submodules
 
-    ```(shell)
-    cd ~/.oh-my-zsh
-    git submodules update --init
-    ```
+      ```(shell)
+      cd ~/.oh-my-zsh
+      git submodules update --init
+      ```
 
-  * optionally configure by editing '~/.zshrc` (see [Getting Started](https://github.com/ohmyzsh/ohmyzsh/wiki#getting-started))
+  * ... or if that doesn't work simply `git clone --recurse-submodules https://github.com/fklassen/ohmyzsh.git`
+  * configure '~/.zshrc` (see [Getting Started](https://github.com/ohmyzsh/ohmyzsh/wiki#getting-started))
     * I personally like to make a symbolic link so I can commit my changes to my forked config
 
       ```(shell)
@@ -140,7 +144,7 @@ Common Install Steps
       ```
 
 * install [Starship](https://starship.rs)
-  * take a copy Starship config file
+  * copy or link Starship config file
 
     ```(shell)
     mkdir -p ~/.config
