@@ -128,7 +128,21 @@ export MANPATH="/usr/local/man:/usr/local/ssl/share/man:$MANPATH"
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+alias gld="git log --pretty=format:'%C(yellow)%h%C(reset) - %an [%C(green)%ar%C(reset)] %s'"
+alias glsi='git ls-files --other --ignored --exclude-standard'
+alias galiases='git config -l | grep alias | cut -c 7-'
+gls='git log --stat --decorate --source -p'
+alias glhistg="git log --graph --pretty=format:'%C(yellow)%h%C(bold white red)%d%Creset %s %C(bold green)%cr %Creset%C(white)%an' --abbrev-commit --date=relative"
+alias gdmb='git branch --merged | grep -v "\*" | xargs -n 1 git branch -d'
+alias gnb='git nb' # new branch aka checkout -b
+alias gdtree='git diff-tree'
+alias gdt='git difftool'
+alias gmt='git mergetool'
+unalias rm
+# Homebrew upgrade packages (macOS only)
+alias brewu='brew update && brew upgrade && brew cleanup && brew doctor'
 
+# Other custom config
 [ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
 ZSH_ALIAS_FINDER_AUTOMATIC=true
 

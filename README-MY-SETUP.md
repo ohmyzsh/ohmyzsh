@@ -72,7 +72,6 @@ Windows
 -------
 
 * Install [Windows Terminal](https://github.com/microsoft/terminal)
-* Recommend using WSL2 with Ubuntu and zsh installed there, but may be able to use Git Bash `wsl --install` (in Admin command prompt)
 * other steps TBD
 * continue to [Common Install Steps](#common-install-steps)
 
