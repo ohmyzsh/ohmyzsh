@@ -71,8 +71,30 @@ Linux
 Windows
 -------
 
-* Install [Windows Terminal](https://github.com/microsoft/terminal)
-* other steps TBD
+* Install [Git Bash](https://www.atlassian.com/git/tutorials/git-bash), if not already installed
+* Optionally install Windows Terminal
+  * from an Admin PowerShell: `choco install microsoft-windows-terminal`
+  * add [Git Bash to Windows Terminal](https://linuxhint.com/add-git-bash-windows-terminal/)
+* Install _Zsh_ (not oh-my-zsh) using [these instructions](https://dominikrys.com/posts/zsh-in-git-bash-on-windows/)
+  * you may need to download [PeaZip](https://peazip.github.io/zst-compressed-file-format.html) to extract the file
+  * once .zst is extracted and copied to `/c/Program\ Files/Git/` open an admin Git Bash and do ...
+
+    ```(shell)
+    fklassen@FREDKLASSENA265 MINGW64 ~
+    $ cd /
+    fklassen@FREDKLASSENA265 MINGW64 /
+    $ tar xvf zsh-5.9-2-x86_64.pkg.tar
+    ```
+
+  * for `.bashrc` I prefer this entry so I can start the bash shell from zsh
+
+    ```(shell)
+    if [ -t 1 ] && [ "$0" = "/usr/bin/bash" ]; then
+      exec zsh
+    fi
+    ```
+
+  * continue with instructions to install Zsh
 * continue to [Common Install Steps](#common-install-steps)
 
 Common Install Steps

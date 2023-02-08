@@ -157,5 +157,12 @@ if [ -f "$HOME/.config/starship.toml" ]; then
     eval "$(starship init zsh)"
 fi
 
+# stuff for Windows
+if [ "$MSYSTEM" = "MINGW64" ]; then
+  zstyle :compinstall filename "$HOME/.zshrc"
+  autoload -Uz compinit
+  compinit
+fi
+
 # opt out of et telemetry data upload
 ET_NO_TELEMETRY=1
