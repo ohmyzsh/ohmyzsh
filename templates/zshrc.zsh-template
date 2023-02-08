@@ -26,7 +26,7 @@ ZSH_THEME="gnzh"
 # Uncomment one of the following lines to change the auto-update behavior
 # zstyle ':omz:update' mode disabled  # disable automatic updates
 # zstyle ':omz:update' mode auto      # update automatically without asking
-# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
+zstyle ':omz:update' mode reminder  # just remind me to update when it's time
 
 # Uncomment the following line to change how often to auto-update (in days).
 # zstyle ':omz:update' frequency 13
@@ -35,7 +35,7 @@ ZSH_THEME="gnzh"
 DISABLE_MAGIC_FUNCTIONS="true"
 
 # Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
+DISABLE_LS_COLORS="true"
 
 # Uncomment the following line to disable auto-setting terminal title.
 # DISABLE_AUTO_TITLE="true"
@@ -52,7 +52,7 @@ COMPLETION_WAITING_DOTS="true"
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
 # much, much faster.
-DISABLE_UNTRACKED_FILES_DIRTY="true"
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
@@ -74,7 +74,6 @@ plugins=(
     alias-finder
     aliases
     aws
-    autojump
     colored-man-pages
     command-not-found
     common-aliases
@@ -86,6 +85,7 @@ plugins=(
     docker
     emoji
     extract
+    fasd
     fd
     git
     jfrog
@@ -96,7 +96,6 @@ plugins=(
     vscode
     zsh-autosuggestions
     zsh-interactive-cd
-    zsh-navigation-tools
 )
 
 zstyle :omz:plugins:ssh-agent agent-forwarding yes

@@ -24,10 +24,10 @@ macOS
     ```
 
   * Configure iTerm2 to use one of the nerd fonts (I like hack)
-  * needed for `oh-my-zsh` module `autojump`
+  * needed for `oh-my-zsh` module `fasd`
 
     ```shell
-    brew install autojump
+    brew install fasd
     brew install terminal-notifier
     brew install thefuck
     ```
@@ -46,7 +46,7 @@ Linux
 * install some terminal tools
 
   ```(shell)
-  sudo apt install exa autojump thefuck tmux
+  sudo apt install exa fasd thefuck tmux
   ```
 
 * install [Tilex](https://gnunn1.github.io/tilix-web/)
