@@ -104,7 +104,7 @@ compdef _git gccd=git-clone
 
 alias gcl='git clone --recurse-submodules'
 alias gclean='git clean --interactive -d'
-alias gpristine='git reset --hard && git clean --force -dx'
+alias gpristine='git reset --hard && git clean --force -dfx'
 alias gcm='git checkout $(git_main_branch)'
 alias gcd='git checkout $(git_develop_branch)'
 alias gcmsg='git commit --message'
