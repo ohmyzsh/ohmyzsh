@@ -70,33 +70,61 @@ COMPLETION_WAITING_DOTS="true"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(
-    alias-finder
-    aliases
-    aws
-    colored-man-pages
-    command-not-found
-    common-aliases
-    compleat
-    copybuffer
-    copyfile
-    copypath
-    dircycle
-    docker
-    emoji
-    extract
-    fasd
-    fd
-    git
-    jfrog
-    man
-    ssh-agent
-    thefuck
-    tmux
-    vscode
-    zsh-autosuggestions
-    zsh-interactive-cd
-)
+if [ "$MSYSTEM" = "MINGW64" ]; then
+    plugins=(
+        alias-finder
+        aliases
+        aws
+        colored-man-pages
+        command-not-found
+        common-aliases
+        compleat
+        copybuffer
+        copyfile
+        copypath
+        dircycle
+        docker
+        emoji
+        extract
+        fasd
+        fd
+        git
+        jfrog
+        man
+        ssh-agent
+        vscode
+        zsh-autosuggestions
+        zsh-interactive-cd
+    )
+else
+    plugins=(
+        alias-finder
+        aliases
+        aws
+        colored-man-pages
+        command-not-found
+        common-aliases
+        compleat
+        copybuffer
+        copyfile
+        copypath
+        dircycle
+        docker
+        emoji
+        extract
+        fasd
+        fd
+        git
+        jfrog
+        man
+        ssh-agent
+        thefuck
+        tmux
+        vscode
+        zsh-autosuggestions
+        zsh-interactive-cd
+    )
+fi
 
 zstyle :omz:plugins:ssh-agent agent-forwarding yes
 #zstyle :omz:plugins:ssh-agent helper ksshaskpass

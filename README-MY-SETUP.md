@@ -86,14 +86,16 @@ Windows
     $ tar xvf zsh-5.9-2-x86_64.pkg.tar
     ```
 
-  * for `.bashrc` I prefer this entry so I can start the bash shell from zsh
+  * for `.bashrc` I prefer to append this entry so I can start the bash shell from zsh
 
     ```(shell)
+    /c/Windows/System32/chcp.com 65001 > /dev/null 2>&1
     if [ -t 1 ] && [ "$0" = "/usr/bin/bash" ]; then
       exec zsh
     fi
     ```
 
+  * `pip install thefuck`
   * continue with instructions to install Zsh
 * continue to [Common Install Steps](#common-install-steps)
 
