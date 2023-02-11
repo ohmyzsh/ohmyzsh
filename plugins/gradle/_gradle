@@ -1,3 +1,6 @@
+#compdef gradle gradlew gw
+# THE LINE ABOVE MUST BE THE FIRST LINE OF THIS FILE IN ORDER FOR COMPLETION TO WORK
+
 #
 # Taken from https://github.com/gradle/gradle-completion
 # Copyright (c) 2017 Eric Wendelin
@@ -20,8 +23,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 # Terms
-
-#compdef gradle gradlew gw
 
 __gradle-set-project-root-dir() {
     local dir=`pwd`
