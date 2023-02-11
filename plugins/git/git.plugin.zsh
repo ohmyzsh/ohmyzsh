@@ -53,48 +53,12 @@ function git_develop_branch() {
   echo develop
 }
 
-#
-# Aliases
-# (sorted alphabetically)
-#
 
-alias g='git'
 
-alias ga='git add'
-alias gaa='git add --all'
-alias gapa='git add --patch'
-alias gau='git add --update'
-alias gav='git add --verbose'
-alias gap='git apply'
-alias gapt='git apply --3way'
-
-alias gb='git branch'
-alias gba='git branch --all'
-alias gbd='git branch --delete'
-alias gbda='git branch --no-color --merged | command grep -vE "^([+*]|\s*($(git_main_branch)|$(git_develop_branch))\s*$)" | command xargs git branch --delete 2>/dev/null'
-alias gbD='git branch --delete --force'
-alias gbl='git blame -b -w'
-alias gbnm='git branch --no-merged'
-alias gbr='git branch --remote'
-alias gbs='git bisect'
-alias gbsb='git bisect bad'
-alias gbsg='git bisect good'
-alias gbsr='git bisect reset'
-alias gbss='git bisect start'
-
-alias gc='git commit --verbose'
-alias gc!='git commit --verbose --amend'
-alias gcn!='git commit --verbose --no-edit --amend'
-alias gca='git commit --verbose --all'
-alias gca!='git commit --verbose --all --amend'
-alias gcan!='git commit --verbose --all --no-edit --amend'
-alias gcans!='git commit --verbose --all --signoff --no-edit --amend'
-alias gcam='git commit --all --message'
-alias gcsm='git commit --signoff --message'
-alias gcas='git commit --all --signoff'
-alias gcasm='git commit --all --signoff --message'
-alias gcb='git checkout -b'
-alias gcf='git config --list'
+function gdnolock() {
+  git diff "$@" ":(exclude)package-lock.json" ":(exclude)*.lock"
+}
+compdef _git gdnolock=git-diff
 
 function gccd() {
   command git clone --recurse-submodules "$@"
@@ -102,50 +66,10 @@ function gccd() {
 }
 compdef _git gccd=git-clone
 
-alias gcl='git clone --recurse-submodules'
-alias gclean='git clean --interactive -d'
-alias gpristine='git reset --hard && git clean --force -dx'
-alias gcm='git checkout $(git_main_branch)'
-alias gcd='git checkout $(git_develop_branch)'
-alias gcmsg='git commit --message'
-alias gco='git checkout'
-alias gcor='git checkout --recurse-submodules'
-alias gcount='git shortlog --summary --numbered'
-alias gcp='git cherry-pick'
-alias gcpa='git cherry-pick --abort'
-alias gcpc='git cherry-pick --continue'
-alias gcs='git commit --gpg-sign'
-alias gcss='git commit --gpg-sign --signoff'
-alias gcssm='git commit --gpg-sign --signoff --message'
-
-alias gd='git diff'
-alias gdca='git diff --cached'
-alias gdcw='git diff --cached --word-diff'
-alias gdct='git describe --tags $(git rev-list --tags --max-count=1)'
-alias gds='git diff --staged'
-alias gdt='git diff-tree --no-commit-id --name-only -r'
-alias gdup='git diff @{upstream}'
-alias gdw='git diff --word-diff'
-
-function gdnolock() {
-  git diff "$@" ":(exclude)package-lock.json" ":(exclude)*.lock"
-}
-compdef _git gdnolock=git-diff
-
 function gdv() { git diff -w "$@" | view - }
 compdef _git gdv=git-diff
 
-alias gf='git fetch'
 # --jobs=<n> was added in git 2.8
-is-at-least 2.8 "$git_version" \
-  && alias gfa='git fetch --all --prune --jobs=10' \
-  || alias gfa='git fetch --all --prune'
-alias gfo='git fetch origin'
-
-alias gfg='git ls-files | grep'
-
-alias gg='git gui citool'
-alias gga='git gui citool --amend'
 
 function ggf() {
   [[ "$#" != 1 ]] && local b="$(git_current_branch)"
@@ -192,6 +116,106 @@ function ggu() {
   git pull --rebase origin "${b:=$1}"
 }
 compdef _git ggu=git-checkout
+
+
+function grename() {
+  if [[ -z "$1" || -z "$2" ]]; then
+    echo "Usage: $0 old_branch new_branch"
+    return 1
+  fi
+
+  # Rename branch locally
+  git branch -m "$1" "$2"
+  # Rename branch in origin remote
+  if git push origin :"$1"; then
+    git push --set-upstream origin "$2"
+  fi
+}
+
+unset git_version
+
+#
+# Aliases
+# (sorted alphabetically)
+#
+
+alias g='git'
+
+alias ga='git add'
+alias gaa='git add --all'
+alias gapa='git add --patch'
+alias gau='git add --update'
+alias gav='git add --verbose'
+
+alias gap='git apply'
+alias gapt='git apply --3way'
+
+alias gbs='git bisect'
+
+alias gbl='git blame -b -w'
+alias gbsb='git bisect bad'
+alias gbsg='git bisect good'
+alias gbsr='git bisect reset'
+alias gbss='git bisect start'
+
+alias gb='git branch'
+alias gba='git branch --all'
+alias gbd='git branch --delete'
+alias gbda='git branch --no-color --merged | command grep -vE "^([+*]|\s*($(git_main_branch)|$(git_develop_branch))\s*$)" | command xargs git branch --delete 2>/dev/null'
+alias gbD='git branch --delete --force'
+alias gbnm='git branch --no-merged'
+alias gbr='git branch --remote'
+
+alias gco='git checkout'
+alias gcb='git checkout -b'
+alias gcm='git checkout $(git_main_branch)'
+alias gcd='git checkout $(git_develop_branch)'
+alias gcor='git checkout --recurse-submodules'
+
+alias gc='git commit --verbose'
+alias gc!='git commit --verbose --amend'
+alias gcn!='git commit --verbose --no-edit --amend'
+alias gca='git commit --verbose --all'
+alias gca!='git commit --verbose --all --amend'
+alias gcan!='git commit --verbose --all --no-edit --amend'
+alias gcans!='git commit --verbose --all --signoff --no-edit --amend'
+alias gcam='git commit --all --message'
+alias gcsm='git commit --signoff --message'
+alias gcas='git commit --all --signoff'
+alias gcasm='git commit --all --signoff --message'
+alias gcs='git commit --gpg-sign'
+alias gcss='git commit --gpg-sign --signoff'
+alias gcssm='git commit --gpg-sign --signoff --message'
+
+alias gcf='git config --list'
+
+
+alias gcl='git clone --recurse-submodules'
+alias gclean='git clean --interactive -d'
+alias gpristine='git reset --hard && git clean --force -dx'
+alias gcmsg='git commit --message'
+alias gcount='git shortlog --summary --numbered'
+alias gcp='git cherry-pick'
+alias gcpa='git cherry-pick --abort'
+alias gcpc='git cherry-pick --continue'
+
+alias gd='git diff'
+alias gdca='git diff --cached'
+alias gdcw='git diff --cached --word-diff'
+alias gdct='git describe --tags $(git rev-list --tags --max-count=1)'
+alias gds='git diff --staged'
+alias gdt='git diff-tree --no-commit-id --name-only -r'
+alias gdup='git diff @{upstream}'
+alias gdw='git diff --word-diff'
+
+alias gf='git fetch'
+
+alias gfo='git fetch origin'
+
+alias gfg='git ls-files | grep'
+
+alias gg='git gui citool'
+alias gga='git gui citool --amend'
 
 alias ggpur='ggu'
 alias ggpull='git pull origin "$(git_current_branch)"'
@@ -278,10 +302,6 @@ alias gsr='git svn rebase'
 alias gss='git status --short'
 alias gst='git status'
 
-# use the default stash push on git 2.13 and newer
-is-at-least 2.13 "$git_version" \
-  && alias gsta='git stash push' \
-  || alias gsta='git stash save'
 
 alias gstaa='git stash apply'
 alias gstc='git stash clear'
@@ -327,18 +347,12 @@ alias gams='git am --skip'
 alias gama='git am --abort'
 alias gamscp='git am --show-current-patch'
 
-function grename() {
-  if [[ -z "$1" || -z "$2" ]]; then
-    echo "Usage: $0 old_branch new_branch"
-    return 1
-  fi
 
-  # Rename branch locally
-  git branch -m "$1" "$2"
-  # Rename branch in origin remote
-  if git push origin :"$1"; then
-    git push --set-upstream origin "$2"
-  fi
-}
+# use the default stash push on git 2.13 and newer
+is-at-least 2.13 "$git_version" \
+  && alias gsta='git stash push' \
+  || alias gsta='git stash save'
 
-unset git_version
+is-at-least 2.8 "$git_version" \
+  && alias gfa='git fetch --all --prune --jobs=10' \
+  || alias gfa='git fetch --all --prune'
