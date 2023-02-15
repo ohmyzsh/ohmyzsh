@@ -32,12 +32,14 @@ function _az-homebrew-installed() {
   (( $+commands[brew] )) || return 1
 
   # speculatively check default brew prefix
-  if [ -h /usr/local/opt/az ]; then
-    _brew_prefix=/usr/local/opt/az
+  if [[ -d /usr/local ]]; then
+    _brew_prefix=/usr/local
+  elif [[ -d /opt/homebrew ]]; then
+    _brew_prefix=/opt/homebrew
   else
     # ok, it is not in the default prefix
     # this call to brew is expensive (about 400 ms), so at least let's make it only once
-    _brew_prefix=$(brew --prefix azure-cli)
+    _brew_prefix=$(brew --prefix)
   fi
 }
 
@@ -49,12 +51,12 @@ _az_zsh_completer_path="$commands[az_zsh_completer.sh]"
 if [[ -z $_az_zsh_completer_path ]]; then
   # Homebrew
   if _az-homebrew-installed; then
-    _az_zsh_completer_path=$_brew_prefix/libexec/bin/az.completion.sh
+    _az_zsh_completer_path=$_brew_prefix/etc/bash_completion.d/az
   # Linux
   else
     _az_zsh_completer_path=/etc/bash_completion.d/azure-cli
   fi
 fi
 
-[[ -r $_az_zsh_completer_path ]] && source $_az_zsh_completer_path
+[[ -r $_az_zsh_completer_path ]] && autoload -U +X bashcompinit && bashcompinit && source $_az_zsh_completer_path
 unset _az_zsh_completer_path _brew_prefix
