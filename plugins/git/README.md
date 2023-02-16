@@ -124,6 +124,7 @@ plugins=(... git)
 | gpf                  | git push --force-with-lease (git version < 2.30)                                                                                                                                         |
 | gpf!                 | git push --force                                                                                                                                                                         |
 | gpoat                | git push origin --all && git push origin --tags                                                                                                                                          |
+| gpod                 | git push origin --delete                                                                                                                                                                 |
 | gpr                  | git pull --rebase                                                                                                                                                                        |
 | gpu                  | git push upstream                                                                                                                                                                        |
 | gpv                  | git push --verbose                                                                                                                                                                       |

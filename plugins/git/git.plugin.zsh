@@ -242,6 +242,7 @@ is-at-least 2.30 "$git_version" \
   || alias gpf='git push --force-with-lease'
 alias gpf!='git push --force'
 alias gpoat='git push origin --all && git push origin --tags'
+alias gpod='git push origin --delete'
 alias gpr='git pull --rebase'
 alias gpu='git push upstream'
 alias gpv='git push --verbose'
