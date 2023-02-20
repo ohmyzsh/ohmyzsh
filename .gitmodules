@@ -4,3 +4,6 @@
 [submodule "themes/powerlevel10k"]
 	path = themes/powerlevel10k
 	url = https://github.com/romkatv/powerlevel10k.git
+[submodule "plugins/zsh-autosuggestions"]
+	path = plugins/zsh-autosuggestions
+	url = https://github.com/zsh-users/zsh-autosuggestions.git
