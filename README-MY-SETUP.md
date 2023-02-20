@@ -46,13 +46,13 @@ Linux
 * install some terminal tools
 
   ```(shell)
-  sudo apt install exa fasd thefuck tmux
+  sudo apt install curl exa fasd fzf thefuck tmux vim-nox
   ```
 
 * install [Tilex](https://gnunn1.github.io/tilix-web/)
 
   ```shell
-  sudo tilix
+  sudo apt install tilix
   ```
 
 * install/configure Tilex colour themes [Grove Box for Tilix](https://github.com/MichaelThessel/tilix-gruvbox)

@@ -110,7 +110,6 @@ plugins=(
   git-escape-magic
   git
   gitignore
-  gpg-agent
   jira
   man
   pip
