@@ -1,5 +1,12 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -8,7 +15,8 @@ export ZSH="$HOME/.oh-my-zsh"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="gnzh"
+# See https://dev.to/abdfnx/oh-my-zsh-powerlevel10k-cool-terminal-1no0
+ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -65,66 +73,90 @@ COMPLETION_WAITING_DOTS="true"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
+# JIRA settings
+# allows commands like:
+#   jira new
+#   jira MP-1071
+#   jira dashboard "Triage :: Panic Leap"
+#   jira mine
+#   jira tempo
+#   jira reported "Heather Peterson"
+#   jira assigned
+JIRA_URL="https://appneta.atlassian.net/"
+JIRA_NAME="Fred Klassen"  # update with your JIRA name
+JIRA_TEMPO_PATH="jira/software/c/projects/MP/boards/216"
+
+# Pure settings - uncomment if you want an fancy prompt
+#PURE_PROMPT_SYMBOL='➜'
+
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-if [ "$MSYSTEM" = "MINGW64" ]; then
-    plugins=(
-        alias-finder
-        aliases
-        aws
-        colored-man-pages
-        command-not-found
-        common-aliases
-        compleat
-        copybuffer
-        copyfile
-        copypath
-        dircycle
-        docker
-        emoji
-        extract
-        fasd
-        fd
-        git
-        jfrog
-        man
-        ssh-agent
-        vscode
-        zsh-autosuggestions
-        zsh-interactive-cd
-    )
-else
-    plugins=(
-        alias-finder
-        aliases
-        aws
-        colored-man-pages
-        command-not-found
-        common-aliases
-        compleat
-        copybuffer
-        copyfile
-        copypath
-        dircycle
-        docker
-        emoji
-        extract
-        fasd
-        fd
-        git
-        jfrog
-        man
-        ssh-agent
-        thefuck
-        tmux
-        vscode
-        zsh-autosuggestions
-        zsh-interactive-cd
-    )
-fi
+plugins=(
+  alias-finder
+  aliases
+  compleat
+  copybuffer
+  copyfile
+  copypath
+  dircycle
+  dirpersist
+  docker-compose
+  docker-machine
+  docker
+  genpass
+  git-escape-magic
+  git
+  gitignore
+  gpg-agent
+  jira
+  man
+  pip
+  python
+  rsync
+  safe-paste
+  ssh-agent
+  vscode
+  web-search
+  zsh-autosuggestions
+  zsh-interactive-cd
+)
+
+# Linux only optional plugins
+case "$(uname)" in
+Linux) plugins+=(
+    debian
+    systemd
+  )
+  ;;
+esac
+
+# macOS only optional plugins
+case "$(uname)" in
+Darwin) plugins+=(
+    brew
+    forklift  # requires ForkLift from App Store
+  )
+  ;;
+esac
+
+# non-Windows optional plugins
+case "$(uname)" in
+Linux|Darwin) plugins+=(
+  command-not-found
+  tmux
+  tmuxinator
+  );;
+esac
+
+# optionally select your 'z' command-line filesystem jump tool
+# NOTE: zoxide requires installation of zoxide package
+plugins+=(
+  fasd
+  #zoxide
+  )
 
 zstyle :omz:plugins:ssh-agent agent-forwarding yes
 #zstyle :omz:plugins:ssh-agent helper ksshaskpass
@@ -166,7 +198,6 @@ alias gnb='git nb' # new branch aka checkout -b
 alias gdtree='git diff-tree'
 alias gdt='git difftool'
 alias gmt='git mergetool'
-unalias rm
 # Homebrew upgrade packages (macOS only)
 alias brewu='brew update && brew upgrade && brew cleanup && brew doctor'
 
@@ -180,10 +211,10 @@ if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
     fi
 fi
 
-# comment out if you want to disable Starship and use ZSH_THEME
-if [ -f "$HOME/.config/starship.toml" ]; then
-    eval "$(starship init zsh)"
-fi
+# uncomment if you want to enable Starship
+#if [ -f "$HOME/.config/starship.toml" ]; then
+#  eval "$(starship init zsh)"
+#fi
 
 # stuff for Windows
 if [ "$MSYSTEM" = "MINGW64" ]; then
@@ -194,3 +225,6 @@ fi
 
 # opt out of et telemetry data upload
 ET_NO_TELEMETRY=1
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
