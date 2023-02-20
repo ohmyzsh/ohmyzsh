@@ -25,6 +25,9 @@ plugins=(... git)
 | gbd                  | git branch --delete                                                                                                                                                                      |
 | gbda                 | git branch --no-color --merged \| grep -vE "^([+*]\|\s*(<span>$</span>(git_main_branch)\|<span>$</span>(git_develop_branch))\s*<span>$</span>)" \| xargs git branch --delete 2>/dev/null |
 | gbD                  | git branch --delete --force                                                                                                                                                              |
+| gbg                  | git branch -vv | grep ": gone\]"                                                                                                                                                         |
+| gbgd                 | local res=$(git branch -vv | grep ": gone\]" | awk '{print $1}') && [[ $res ]] && echo $res | xargs git branch -d                                                                        |
+| gbgD                 | local res=$(git branch -vv | grep ": gone\]" | awk '{print $1}') && [[ $res ]] && echo $res | xargs git branch -D                                                                        |
 | gbl                  | git blame -b -w                                                                                                                                                                          |
 | gbnm                 | git branch --no-merged                                                                                                                                                                   |
 | gbr                  | git branch --remote                                                                                                                                                                      |
