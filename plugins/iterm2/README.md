@@ -1,6 +1,7 @@
 # iTerm2 plugin
 
 This plugin adds a few functions that are useful when using [iTerm2](https://www.iterm2.com/).
+It also applies the [Shell Integration Script for iTerm2](https://iterm2.com/documentation-shell-integration.html).
 
 To use it, add _iterm2_ to the plugins array of your zshrc file:
 ```
@@ -23,6 +24,9 @@ plugins=(... iterm2)
 
 * `iterm2_tab_color_reset`
   resets the color of iTerm2's current tab back to default.
+
+
+For shell integration features see the [official documentation](https://iterm2.com/documentation-shell-integration.html).
 
 ## Contributors
 
