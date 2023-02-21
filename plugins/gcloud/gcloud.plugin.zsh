@@ -10,6 +10,7 @@ if [[ -z "${CLOUDSDK_HOME}" ]]; then
     "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk"
     "/usr/share/google-cloud-sdk"
     "/snap/google-cloud-sdk/current"
+    "/snap/google-cloud-cli/current"
     "/usr/lib/google-cloud-sdk"
     "/usr/lib64/google-cloud-sdk"
     "/opt/google-cloud-sdk"
