@@ -32,6 +32,8 @@ plugins=(... extract)
 | `lrz`             | LRZ archive                          |
 | `lz4`             | LZ4 archive                          |
 | `lzma`            | LZMA archive                         |
+| `obscpio`         | cpio archive used on
+[OBS](https://github.com/openSUSE/obs-service-tar_scm#obscpio)             |
 | `rar`             | WinRAR archive                       |
 | `rpm`             | RPM package                          |
 | `sublime-package` | Sublime Text package                 |

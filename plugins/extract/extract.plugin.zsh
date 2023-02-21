@@ -72,7 +72,7 @@ EOF
         builtin cd -q ..; command rm *.tar.* debian-binary ;;
       (*.zst) unzstd "$file" ;;
       (*.cab) cabextract -d "$extract_dir" "$file" ;;
-      (*.cpio) cpio -idmvF "$file" ;;
+      (*.cpio|*.obscpio) cpio -idmvF "$file" ;;
       (*.zpaq) zpaq x "$file" ;;
       (*)
         echo "extract: '$file' cannot be extracted" >&2
