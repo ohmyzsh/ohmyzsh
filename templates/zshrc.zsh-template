@@ -195,14 +195,14 @@ export MANPATH="/usr/local/man:/usr/local/ssl/share/man:$MANPATH"
 alias gnb='git nb' # new branch aka checkout -b
 alias gdtl='git difftool --no-prompt'
 
-if [ -x "$(command -v exa)" ]; then
+if [ -x "$(command -v lsd)" ]; then
+  alias ls="lsd"
+elif [ -x "$(command -v exa)" ]; then
   alias ls="exa"
   alias la="exa --long --all --group"
-else
-  if [ -x "$(command -v colorls)" ]; then
-    alias ls="colorls"
-    alias la="colorls -al"
-  fi
+elif [ -x "$(command -v colorls)" ]; then
+  alias ls="colorls"
+  alias la="colorls -al"
 fi
 
 # Other custom config

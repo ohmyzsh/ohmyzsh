@@ -38,6 +38,12 @@ macOS
     brew install exa
     ```
 
+  * and/or install `ls` replacement `lsd`
+
+    ```shell
+    brew install lsd
+    ```
+
 * continue to [Common Install Steps](#common-install-steps)
 
 Linux
@@ -46,7 +52,7 @@ Linux
 * install some terminal tools
 
   ```(shell)
-  sudo apt install curl exa fasd fzf ruby-full thefuck tmux vim-nox
+  sudo apt install curl exa fasd fzf lsd ruby-full thefuck tmux vim-nox
   ```
 
 * install [Tilex](https://gnunn1.github.io/tilix-web/)
@@ -193,8 +199,7 @@ There are a few things that can make things even better
 * if tmux is installed install tmux config [Oh My Tmux](https://github.com/gpakosz/.tmux)
 * install vim config [SpaceVim](https://spacevim.org/)
 * install Mosh replacement [Eternal Terminal](https://eternalterminal.dev/)
-* optionally install colorls
-  * `sudo gem install colorls`
+* optionally install [lsd](https://github.com/Peltoche/lsd)
 * optionally install file transer app
   * `curl -sL https://cutt.ly/tran-cli | bash`
 * on macOS
