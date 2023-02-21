@@ -193,8 +193,10 @@ There are a few things that can make things even better
 * if tmux is installed install tmux config [Oh My Tmux](https://github.com/gpakosz/.tmux)
 * install vim config [SpaceVim](https://spacevim.org/)
 * install Mosh replacement [Eternal Terminal](https://eternalterminal.dev/)
-* install colorls
+* optionally install colorls
   * `sudo gem install colorls`
+* optionally install file transer app
+  * `curl -sL https://cutt.ly/tran-cli | bash`
 * on macOS
   * install macVIM via `brew install macvim`
   * if you don't like Gruv Box, you may want to install some colour themes for iTerm2
