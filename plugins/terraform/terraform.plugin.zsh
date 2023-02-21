@@ -10,6 +10,7 @@ function tf_prompt_info() {
 
 alias tf='terraform'
 alias tfa='terraform apply'
+alias tfc='terraform console'
 alias tfd='terraform destroy'
 alias tff='terraform fmt'
 alias tfi='terraform init'
