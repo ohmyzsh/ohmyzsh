@@ -46,7 +46,7 @@ Linux
 * install some terminal tools
 
   ```(shell)
-  sudo apt install curl exa fasd fzf thefuck tmux vim-nox
+  sudo apt install curl exa fasd fzf ruby-full thefuck tmux vim-nox
   ```
 
 * install [Tilex](https://gnunn1.github.io/tilix-web/)
@@ -177,7 +177,7 @@ Post install
 There are a few things that can make things even better
 
 * set up GIT configuration
-  * `cd && ln -s ~/.oh-my-zsh/plugins/gitconfig .gitconfig`
+  * `cd && ln -s ~/.oh-my-zsh/template/gitconfig .gitconfig`
   * create a `~/.gitconfig.user` for user-specific GIT settings
 
     ```(shell)
@@ -189,15 +189,12 @@ There are a few things that can make things even better
     ```
 
 * create ~/.inputrc
-
-  ```(shell)
-  set editing-mode vi
-  set bell-style none
-  ```
-
+  * `cd && ln -s ~/.oh-my-zsh/template/inputrc .inputrc`
 * if tmux is installed install tmux config [Oh My Tmux](https://github.com/gpakosz/.tmux)
 * install vim config [SpaceVim](https://spacevim.org/)
 * install Mosh replacement [Eternal Terminal](https://eternalterminal.dev/)
+* install colorls
+  * `sudo gem install colorls`
 * on macOS
   * install macVIM via `brew install macvim`
   * if you don't like Gruv Box, you may want to install some colour themes for iTerm2
