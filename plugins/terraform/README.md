@@ -15,17 +15,22 @@ plugins=(... terraform)
 
 ## Aliases
 
-| Alias | Command              |
-| ----- | -------------------- |
-| `tf`  | `terraform`          |
-| `tfa` | `terraform apply`    |
-| `tfc` | `terraform console`  |
-| `tfd` | `terraform destroy`  |
-| `tff` | `terraform fmt`      |
-| `tfi` | `terraform init`     |
-| `tfo` | `terraform output`   |
-| `tfp` | `terraform plan`     |
-| `tfv` | `terraform validate` |
+| Alias    | Command                                                                                                               |
+| -------- | --------------------------------------------------------------------------------------------------------------------- |
+| `tf`     | `terraform`                                                                                                           |
+| `tfi`    | `terraform init`                                                                                                      |
+| `tff`    | `terraform fmt`                                                                                                       |
+| `tffr`   | `terraform fmt -recursive`                                                                                            |
+| `tfv`    | `terraform validate`                                                                                                  |
+| `tfp`    | `terraform plan`                                                                                                      |
+| `tfa`    | `terraform apply`                                                                                                     |
+| `tfa!`   | `terraform apply -auto-approve`                                                                                       |
+| `tfd`    | `terraform destroy`                                                                                                   |
+| `tfd!`   | `terraform destroy -auto-approve`                                                                                     |
+| `tfc`    | `terraform console`                                                                                                   |
+| `tfo`    | `terraform output`                                                                                                    |
+| `tfall`  | `terraform init && terraform fmt -recursive && terraform validate && terraform plan && terraform apply`               |
+| `tfall!` | `terraform init && terraform fmt -recursive && terraform validate && terraform plan && terraform apply -auto-approve` |
 
 ## Prompt function
 
