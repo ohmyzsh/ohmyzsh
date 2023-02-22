@@ -47,7 +47,7 @@ fi
 # enable diff color if possible.
 if command diff --color /dev/null /dev/null &>/dev/null; then
   function color-diff {
-    diff --color $@
+    command diff --color $@
   }
   alias diff="color-diff"
   compdef _diff color-diff # compdef is already loaded by this point
