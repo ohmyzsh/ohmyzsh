@@ -1,0 +1,6 @@
+alias pkr='packer'
+alias pkri='packer init .'
+alias pkrf='packer fmt . -recursive'
+alias pkrv='packer validate .'
+alias pkrb='packer build .'
+alias pkrall='packer init . && packer fmt . -recursive && packer validate . && packer build .'
