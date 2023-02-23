@@ -31,6 +31,12 @@ plugins=(... terraform)
 | `tfo`    | `terraform output`                                                                                                    |
 | `tfall`  | `terraform init && terraform fmt -recursive && terraform validate && terraform plan && terraform apply`               |
 | `tfall!` | `terraform init && terraform fmt -recursive && terraform validate && terraform plan && terraform apply -auto-approve` |
+| `tfw`    | `terraform workspace`                                                                                                 |
+| `tfws`   | `terraform workspace select`                                                                                          |
+| `tfwn`   | `terraform workspace new`                                                                                             |
+| `tfwd`   | `terraform workspace delete`                                                                                          |
+| `tfwls`  | `terraform workspace list`                                                                                            |
+| `tfr`    | `terraform refresh`                                                                                                   |
 
 ## Prompt function
 
