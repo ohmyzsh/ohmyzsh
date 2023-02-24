@@ -8,7 +8,7 @@ setopt pushdminus
 # to your `zshrc` before loading `oh-my-zsh.sh`
 # to disable the following aliases and functions
 
-zstyle -T ':omz:directories' aliases || return
+zstyle -T ':omz:directories' aliases || return 0
 
 alias -g ...='../..'
 alias -g ....='../../..'
