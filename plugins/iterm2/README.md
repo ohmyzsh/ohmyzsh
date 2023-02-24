@@ -13,7 +13,7 @@ You can enable the integration with zstyle. It's important to add this line
 before the line sourcing oh-my-zsh:
 
 ```
-zstyle :omz:plugins:iterm2 shell-integration true
+zstyle :omz:plugins:iterm2 shell-integration yes
 ```
 
 ## Plugin commands
