@@ -53,8 +53,6 @@ if command diff --color /dev/null /dev/null &>/dev/null; then
   compdef _diff color-diff # compdef is already loaded by this point
 fi
 
-setopt auto_cd
-setopt multios
 setopt prompt_subst
 
 [[ -n "$WINDOW" ]] && SCREEN_NO="%B$WINDOW%b " || SCREEN_NO=""
