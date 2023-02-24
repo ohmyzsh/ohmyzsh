@@ -13,3 +13,9 @@ alias dnfgi="sudo dnf groupinstall"         # Install package group
 alias dnfr="sudo dnf remove"                # Remove package
 alias dnfgr="sudo dnf groupremove"          # Remove package group
 alias dnfc="sudo dnf clean all"             # Clean cache
+
+alias dnfbd="sudo dnf builddep"             # Install package build dependencies
+function dnfbi()
+{
+  dnfbd "$@" && dnfi "$@"                   # Install package and build dependencies
+}

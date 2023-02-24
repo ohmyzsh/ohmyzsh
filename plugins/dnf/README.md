@@ -12,18 +12,20 @@ plugins=(... dnf)
 
 ## Aliases
 
-| Alias | Command                 | Description              |
-|-------|-------------------------|--------------------------|
-| dnfl  | `dnf list`              | List packages            |
-| dnfli | `dnf list installed`    | List installed packages  |
-| dnfgl | `dnf grouplist`         | List package groups      |
-| dnfmc | `dnf makecache`         | Generate metadata cache  |
-| dnfp  | `dnf info`              | Show package information |
-| dnfs  | `dnf search`            | Search package           |
-| **Use `sudo`**                                             |
-| dnfu  | `sudo dnf upgrade`      | Upgrade package          |
-| dnfi  | `sudo dnf install`      | Install package          |
-| dnfgi | `sudo dnf groupinstall` | Install package group    |
-| dnfr  | `sudo dnf remove`       | Remove package           |
-| dnfgr | `sudo dnf groupremove`  | Remove package group     |
-| dnfc  | `sudo dnf clean all`    | Clean cache              |
+| Alias          | Command                 | Description                      |
+|----------------|-------------------------|----------------------------------|
+| dnfl           | `dnf list`              | List packages                    |
+| dnfli          | `dnf list installed`    | List installed packages          |
+| dnfgl          | `dnf grouplist`         | List package groups              |
+| dnfmc          | `dnf makecache`         | Generate metadata cache          |
+| dnfp           | `dnf info`              | Show package information         |
+| dnfs           | `dnf search`            | Search package                   |
+| **Use `sudo`** |                         |                                  |
+| dnfu           | `sudo dnf upgrade`      | Upgrade package                  |
+| dnfi           | `sudo dnf install`      | Install package                  |
+| dnfgi          | `sudo dnf groupinstall` | Install package group            |
+| dnfr           | `sudo dnf remove`       | Remove package                   |
+| dnfgr          | `sudo dnf groupremove`  | Remove package group             |
+| dnfc           | `sudo dnf clean all`    | Clean cache                      |
+| dnfbd          | `sudo dnf builddep`     | Install package dependencies     |
+| dnfbi          | `dnfbd "@" && dnfi "@"` | Install package and dependencies |
