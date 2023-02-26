@@ -10,7 +10,7 @@ plugins=(... toolbox)
 
 ## Prompt function
 
-This plugins adds `toolbox_prompt_info()` function. Using it in your prompt, it will show the toolbox indicator ⬢ (if you are running in a toolbox container), and nothing if not.
+This plugins adds `toolbox_prompt_info` function. Using it in your prompt, it will show the toolbox indicator ⬢ (if you are running in a toolbox container), and nothing if not.
 
 You can use it by adding `$(toolbox_prompt_info)` to your `PROMPT` or `RPROMPT` variable:
 
@@ -18,19 +18,12 @@ You can use it by adding `$(toolbox_prompt_info)` to your `PROMPT` or `RPROMPT` 
 RPROMPT='$(toolbox_prompt_info)'
 ```
 
-## Aliases
-
-| Alias | Command              | Description                            |
-|-------|----------------------|----------------------------------------|
-| tb    | `toolbox enter`      | Enters the toolbox environment         |
-=======
 ## Usage
 
-The plugin allows to automatically enter toolboxes on `cd` into git
-repositories. It will use the default container defined in
-`TOOLBOX_DEFAULT_CONTAINER`. It will set the hostname of the container to the
-container name and set a ⬢ in front of the prompt to indicated that you
-are in a toolbox.
+The plugin allows to automatically enter toolboxes on `cd` into git repositories.
+It will use the default container defined in `TOOLBOX_DEFAULT_CONTAINER`. It will
+set the hostname of the container to the container name and set a `⬢` in front of
+the prompt to indicated that you are in a toolbox.
 
 ```
 ➜  github $ cd ansible
@@ -59,27 +52,34 @@ source $ZSH/oh-my-zsh.sh
 
 Toolboxes are exited when leaving a git repository. You can disable this behavior by setting `DISABLE_TOOLBOX_EXIT=1`.
 
-You can specify which image should be used as a default by setting `TOOLBOX_DEFAULT_IMAGE=ghcr.io/mikebarkmin/fedora-toolbox:35`.
+You can specify which image should be used as a default by setting the `TOOLBOX_DEFAULT_IMAGE` variable:
 
-For this plugin to work your container must have `zsh` installed. You can used this image `ghcr.io/mikebarkmin/fedora-toolbox:35` which comes preinstalled with `zsh` and `neovim`.
+```zsh
+TOOLBOX_DEFAULT_IMAGE=ghcr.io/mikebarkmin/fedora-toolbox:35
+```
+
+For this plugin to work your container must have `zsh` installed.
 
 ## Aliases
 
 There are some convenient aliases which make for example use of the `TOOLBOX_DEFAULT_IMAGE` when set.
 
-| alias | command | comment |
-| ----- | ------- | ------- |
-| tb | toolbox | |
-| tbi | echo $TOOLBOX_DEFAULT_CONTAINER > .toolbox && toolbox_cwd | |
-| tbc | toolbox create --image $TOOLBOX_DEFAULT_IMAGE | |
-| tbe | toolbox enter | This is context aware |
-| tbrm | toolbox rm | |
-| tbrmi | toolbox rmi | |
-| tbl | toolbox list | |
-| tbr | toolbox run | This is context aware |
+| Alias | Command                                                     |
+| ----- | ----------------------------------------------------------- |
+| tb    | `toolbox`                                                   |
+| tbi   | `echo $TOOLBOX_DEFAULT_CONTAINER > .toolbox && toolbox_cwd` |
+| tbrm  | `toolbox rm`                                                |
+| tbrmi | `toolbox rmi`                                               |
+| tbl   | `toolbox list`                                              |
 
+## Functions
+
+- `tbc`: creates a toolbox environment from a specified image in `$TOOLBOX_DEFAULT_IMAGE` or the default image.
+- `tbe`: enters the toolbox environment. This is context aware and will create it if it does not exist.
+- `tbr`: runs commands in the toolbox container. This is context aware.
 
 ## Theme Integration
+
 In most themes you can see the hostname (`user_host`), which is set by this plugin for each container, so there is no additional setup needed.
 
 Additionally, the plugin provides a prompt function with can be used in a theme to display a hexagon to indicated that you are in a toolbox.
