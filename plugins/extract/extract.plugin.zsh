@@ -30,12 +30,15 @@ EOF
     local extract_dir="${1:t:r}"
     local file="$1" full_path="${1:A}"
     case "${file:l}" in
-      (*.tar.gz|*.tgz) (( $+commands[pigz] )) && { pigz -dc "$file" | tar xv } || tar zxvf "$file" ;;
-      (*.tar.bz2|*.tbz|*.tbz2) tar xvjf "$file" ;;
+      (*.tar.gz|*.tgz)
+        (( $+commands[pigz] )) && { tar -I pigz -xvf "$file" } || tar zxvf "$file" ;;
+      (*.tar.bz2|*.tbz|*.tbz2)
+        (( $+commands[pbzip2] )) && { tar -I pbzip2 -xvf "$file" } || tar xvjf "$file" ;;
       (*.tar.xz|*.txz)
+        (( $+commands[pixz] )) && { tar -I pixz -xvf "$file" } || {
         tar --xz --help &> /dev/null \
         && tar --xz -xvf "$file" \
-        || xzcat "$file" | tar xvf - ;;
+        || xzcat "$file" | tar xvf - } ;;
       (*.tar.zma|*.tlz)
         tar --lzma --help &> /dev/null \
         && tar --lzma -xvf "$file" \
@@ -69,7 +72,8 @@ EOF
         builtin cd -q ..; command rm *.tar.* debian-binary ;;
       (*.zst) unzstd "$file" ;;
       (*.cab) cabextract -d "$extract_dir" "$file" ;;
-      (*.cpio) cpio -idmvF "$file" ;;
+      (*.cpio|*.obscpio) cpio -idmvF "$file" ;;
+      (*.zpaq) zpaq x "$file" ;;
       (*)
         echo "extract: '$file' cannot be extracted" >&2
         success=1 ;;

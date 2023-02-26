@@ -146,6 +146,7 @@ function aws_change_access_key() {
 }
 
 function aws_profiles() {
+  aws --no-cli-pager configure list-profiles 2> /dev/null && return
   [[ -r "${AWS_CONFIG_FILE:-$HOME/.aws/config}" ]] || return 1
   grep --color=never -Eo '\[.*\]' "${AWS_CONFIG_FILE:-$HOME/.aws/config}" | sed -E 's/^[[:space:]]*\[(profile)?[[:space:]]*([^[:space:]]+)\][[:space:]]*$/\2/g'
 }

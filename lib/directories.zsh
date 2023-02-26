@@ -1,7 +1,15 @@
 # Changing/making/removing directory
+setopt auto_cd
 setopt auto_pushd
 setopt pushd_ignore_dups
 setopt pushdminus
+
+# add (uncommented):
+# zstyle ':omz:directories' aliases no
+# to your `zshrc` before loading `oh-my-zsh.sh`
+# to disable the following aliases and functions
+
+zstyle -T ':omz:directories' aliases || return 0
 
 alias -g ...='../..'
 alias -g ....='../../..'

@@ -58,6 +58,7 @@ file**, but be aware of the side effects:
 | drm     | `docker container rm`         | Remove the specified container(s)                                                        |
 | drm!    | `docker container rm -f`      | Force the removal of a running container (uses SIGKILL)                                  |
 | dst     | `docker container start`      | Start one or more stopped containers                                                     |
+| drs     | `docker container restart`    | Restart one or more containers
 | dsta    | `docker stop $(docker ps -q)` | Stop all running containers                                                              |
 | dstp    | `docker container stop`       | Stop one or more running containers                                                      |
 | dtop    | `docker top`                  | Display the running processes of a container                                             |

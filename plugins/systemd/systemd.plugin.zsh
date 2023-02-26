@@ -107,6 +107,8 @@ function systemd_prompt_info {
 
     if systemctl is-active "$unit" &>/dev/null; then
       echo -n "$ZSH_THEME_SYSTEMD_PROMPT_ACTIVE"
+    elif systemctl --user is-active "$unit" &>/dev/null; then
+      echo -n "$ZSH_THEME_SYSTEMD_PROMPT_ACTIVE"
     else
       echo -n "$ZSH_THEME_SYSTEMD_PROMPT_NOTACTIVE"
     fi

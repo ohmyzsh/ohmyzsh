@@ -224,10 +224,8 @@ function quick-look() {
 }
 
 function man-preview() {
-  # Don't let Preview.app steal focus if the man page doesn't exist
   local page
-  for page in "${(@f)"$( man -w $@ )"}"
-  do
+  for page in "${(@f)"$(man -w $@)"}"; do
     command mandoc -Tpdf $page | open -f -a Preview
   done
 }
