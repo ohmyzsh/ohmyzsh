@@ -39,6 +39,7 @@ plugins=(... golang)
 | gov    | `go vet`          | Vet examines Go source code and reports suspicious constructs |
 | gove   | `go version`      | Prints Go version                                             |
 | gow    | `go work`         | Work provides access to operations on workspaces              |
+| goge   | `go generate`     | Generate Go files by processing source                        |
 
 ## Prompt
 
@@ -54,3 +55,4 @@ changes your prompt to:
 ```
 ~/go/project$ ▋                                                     1.22.3
 ```
+
