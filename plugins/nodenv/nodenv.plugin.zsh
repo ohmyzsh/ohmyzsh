@@ -7,7 +7,7 @@ if [[ $FOUND_NODENV -ne 1 ]]; then
     nodenvdirs=("$HOME/.nodenv" "/usr/local/nodenv" "/opt/nodenv" "/usr/local/opt/nodenv")
     for dir in $nodenvdirs; do
         if [[ -d $dir/bin ]]; then
-            export PATH="$PATH:$dir/bin"
+            export PATH="$dir/bin:$PATH"
             FOUND_NODENV=1
             break
         fi
@@ -17,7 +17,7 @@ fi
 if [[ $FOUND_NODENV -ne 1 ]]; then
     if (( $+commands[brew] )) && dir=$(brew --prefix nodenv 2>/dev/null); then
         if [[ -d $dir/bin ]]; then
-            export PATH="$PATH:$dir/bin"
+            export PATH="$dir/bin:$PATH"
             FOUND_NODENV=1
         fi
     fi
