@@ -24,7 +24,7 @@ if [[ $FOUND_NODENV -ne 1 ]]; then
 fi
 
 if [[ $FOUND_NODENV -eq 1 ]]; then
-    eval "$(nodenv init - zsh)"
+    eval "$(nodenv init --no-rehash - zsh)"
     function nodenv_prompt_info() {
         echo "$(nodenv version-name)"
     }
