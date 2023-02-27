@@ -56,7 +56,7 @@ def pretty_print(cheatsheet, wfilter, group_list=None, groups_only=False):
             pretty_print_group(key, [ alias for alias in aliases if wfilter in alias[0] or wfilter in alias[1] ], wfilter)
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Pretty print aliases.")
+    parser = argparse.ArgumentParser(description="Pretty print aliases.", prog="acs")
     parser.add_argument('filter', nargs="*", metavar="<keyword>", help="search aliases matching keywords")
     parser.add_argument('-g', '--group', dest="group_list", action='append', help="only print aliases in given groups")
     parser.add_argument('--groups', dest='groups_only', action='store_true', help="only print alias groups")
