@@ -51,9 +51,9 @@ def pretty_print(cheatsheet, wfilter, group_list=None, groups_only=False):
             continue
         aliases = cheatsheet.get(key)
         if not wfilter:
-            pretty_print_group(key, aliases, only_groupname=groups_only)
+            pretty_print_group(key, aliases, wfilter, groups_only)
         else:
-            pretty_print_group(key, [ alias for alias in aliases if wfilter in alias[0] or wfilter in alias[1] ], wfilter)
+            pretty_print_group(key, [ alias for alias in aliases if alias[0].find(wfilter)>-1 or alias[1].find(wfilter)>-1], wfilter)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Pretty print aliases.", prog="acs")
@@ -64,5 +64,5 @@ if __name__ == '__main__':
 
     lines = sys.stdin.readlines()
     group_list = args.group_list or None
-    wfilter = " ".join(args.filter[1:]) if args.filter else None
+    wfilter = " ".join(args.filter) or None
     pretty_print(cheatsheet(lines), wfilter, group_list, args.groups_only)
