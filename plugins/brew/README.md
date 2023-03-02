@@ -21,7 +21,6 @@ defined for convenience.
 | -------- | --------------------------------------- | ------------------------------------------------------------------- |
 | `bcubc`  | `brew upgrade --cask && brew cleanup`   | Update outdated casks, then run cleanup.                            |
 | `bcubo`  | `brew update && brew outdated --cask`   | Update Homebrew data, then list outdated casks.                     |
-| `bcubc`  | `brew upgrade --cask && brew cleanup`   | Update outdated casks, then run cleanup.                            |
 | `brewp`  | `brew pin`                              | Pin a specified formula so that it's not upgraded.                  |
 | `brews`  | `brew list -1`                          | List installed formulae or the installed files for a given formula. |
 | `brewsp` | `brew list --pinned`                    | List pinned formulae, or show the version of a given formula.       |
