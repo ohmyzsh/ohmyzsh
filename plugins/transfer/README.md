@@ -8,24 +8,36 @@ To use it, add `transfer` to the plugins array in your zshrc file:
 plugins=(... transfer)
 ```
 
-## Usage
+## Basic Usage
 
 - Transfer a file: `transfer file.txt`.
 
 - Transfer a whole directory (it will be automatically compressed): `transfer dir`.
 
-### Encryption / Decryption
+## Custom URL
+
+If you have a private instance of Transfer, you can add your custom URL
+
+To use it, add `TRANSFER_CUSTOM_URL` before the plugins array in your zshrc file:
+
+```zsh
+TRANSFER_CUSTOM_URL="https://localhost:8080"
+
+plugins=(... transfer)
+```
+
+## Encryption / Decryption
 
 - Encrypt and upload a file with symmetric cipher and create ASCII armored output:
 
   ```zsh
-  transfer file -ca
+  transfer -c file
   ```
 
 - Encrypt and upload directory with symmetric cipher and gpg output:
 
   ```zsh
-  transfer directory -ca
+  transfer -c directory
   ```
 
 - Decrypt file:
@@ -39,3 +51,24 @@ plugins=(... transfer)
   ```zsh
   gpg -d your_archive.tgz.gpg | tar xz
   ```
+
+## Capturing code to remove file and removing it
+
+- Capturing code
+
+```zsh
+transfer -d file
+```
+
+- Copy Delete Code
+```
+Delete Code: vvacju8zyC6P
+URL: https://transfer.sh/vaDdEiRpsR/test.md
+```
+
+- Removing file
+
+```
+# curl <URL>/<Delete Code>
+curl https://transfer.sh/vaDdEiRpsR/test.md/vvacju8zyC6P
+```
