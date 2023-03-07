@@ -15,6 +15,7 @@ def parse(line):
 
 def cheatsheet(lines):
     exps = [ parse(line) for line in lines ]
+    exps.sort(key=lambda exp:exp[2])
     cheatsheet = {'_default': []}
     for key, group in itertools.groupby(exps, lambda exp:exp[2]):
         group_list = [ item for item in group ]
