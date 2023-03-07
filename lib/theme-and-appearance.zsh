@@ -81,13 +81,3 @@ if [[ -z "$LS_COLORS" ]]; then
     export LS_COLORS="di=34:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=37;41:sg=30;43:tw=30;42:ow=34;42:"
   fi
 fi
-
-# Take advantage of $LS_COLORS for completion as well.
-function omz_set_completion_colors {
-  zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
-  add-zsh-hook -d precmd omz_set_completion_colors
-  unfunction omz_set_completion_colors
-}
-
-autoload -Uz add-zsh-hook
-add-zsh-hook precmd omz_set_completion_colors
