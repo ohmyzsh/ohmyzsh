@@ -146,22 +146,47 @@ if command mkdir "${ZSH_COMPDUMP}.lock" 2>/dev/null; then
   command rm -rf "$ZSH_COMPDUMP.zwc.old" "${ZSH_COMPDUMP}.lock" 
 fi
 
+_omz_source() {
+  local context filepath="$1"
+
+  # Construct zstyle context based on path
+  case "$filepath" in
+  lib/*) context="lib:${filepath:t:r}" ;;
+  plugins/*) context="plugins:${filepath:h2:t}" ;;
+  esac
+
+  local disabled_aliases=0
+  zstyle -T ":omz:${context}" aliases || disabled_aliases=1
+
+  # Back up aliases prior to sourcing
+  local -A aliases_pre
+  if (( disabled_aliases )); then
+    aliases_pre=("${(@kv)aliases}")
+  fi
+
+  # Source file from $ZSH_CUSTOM if it exists, otherwise from $ZSH
+  if [[ -f "$ZSH_CUSTOM/$filepath" ]]; then
+    source "$ZSH_CUSTOM/$filepath"
+  elif [[ -f "$ZSH/$filepath" ]]; then
+    source "$ZSH/$filepath"
+  fi
+
+  # Restore previous aliases if necessary
+  if (( disabled_aliases )); then
+    aliases=("${(@kv)aliases_pre}")
+  fi
+}
+
 # Load all of the config files in ~/oh-my-zsh that end in .zsh
 # TIP: Add files you don't want in git to .gitignore
 for config_file ("$ZSH"/lib/*.zsh); do
-  custom_config_file="$ZSH_CUSTOM/lib/${config_file:t}"
-  [[ -f "$custom_config_file" ]] && config_file="$custom_config_file"
-  source "$config_file"
+  _omz_source "${config_file:t2}"
 done
 unset custom_config_file
 
 # Load all of the plugins that were defined in ~/.zshrc
 for plugin ($plugins); do
-  if [[ -f "$ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh" ]]; then
-    source "$ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh"
-  elif [[ -f "$ZSH/plugins/$plugin/$plugin.plugin.zsh" ]]; then
-    source "$ZSH/plugins/$plugin/$plugin.plugin.zsh"
-  fi
+  _omz_source "plugins/$plugin/$plugin.plugin.zsh"
 done
 unset plugin
 
