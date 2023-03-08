@@ -51,8 +51,23 @@ MODE_INDICATOR="%F{white}+%f"
 INSERT_MODE_INDICATOR="%F{yellow}+%f"
 ```
 
-You can also use the `vi_mode_prompt_info` function in your prompt, which will display
-this mode indicator.
+### Adding mode indicators to your prompt
+
+`Vi-mode` by default will add mode indicators to `RPROMPT` **unless** that is defined by 
+a preceding plugin.
+
+If `PROMPT` or `RPROMPT` is not defined to your liking, you can add mode info manually. The `vi_mode_prompt_info` function is available to insert mode indicator information.
+
+Here are some examples:
+
+```bash
+source $ZSH/oh-my-zsh.sh
+
+PROMPT="$PROMPT\$(vi_mode_prompt_info)"
+RPROMPT="\$(vi_mode_prompt_info)$RPROMPT"
+```
+
+Note the `\$` here, which importantly prevents interpolation at the time of defining, but allows it to be executed for each prompt update event.
 
 ## Cursor Styles
 
