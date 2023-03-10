@@ -47,6 +47,7 @@ plugins=(... rails)
 | `rsp`   | `rails server --port`            | Launch a web server and specify the listening port     |
 | `rsts`  | `rails stats`                    | Print code statistics                                  |
 | `rt`    | `rails test`                     | Run Rails tests                                        |
+| `rta`   | `rails test:all`                 | Runs all Rails tests, including system tests           |
 | `ru`    | `rails runner`                   | Run Ruby code in the context of Rails                  |
 
 ### Foreman
