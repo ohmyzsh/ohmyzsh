@@ -12,7 +12,7 @@ plugins=(... aws)
 ## Plugin commands
 
 * `asp [<profile>]`: sets `$AWS_PROFILE` and `$AWS_DEFAULT_PROFILE` (legacy) to `<profile>`.
-  It also sets `$AWS_EB_PROFILE` to `<profile>` for the Elastic Beanstalk CLI.
+  It also sets `$AWS_EB_PROFILE` to `<profile>` for the Elastic Beanstalk CLI. It sets `$AWS_PROFILE_REGION` for display in `aws_prompt_info`. 
   Run `asp` without arguments to clear the profile.
 * `asp [<profile>] login`: If AWS SSO has been configured in your aws profile, it will run the `aws sso login` command following profile selection. 
 
