@@ -57,6 +57,7 @@ plugins=(... git)
 | gcd                  | git checkout $(git_develop_branch)                                                                                                                                                       |
 | gcmsg                | git commit --message                                                                                                                                                                     |
 | gco                  | git checkout                                                                                                                                                                             |
+| gcl                  | git checkout -                                                                                                                                                                           |
 | gcor                 | git checkout --recurse-submodules                                                                                                                                                        |
 | gcount               | git shortlog --summary -n                                                                                                                                                                |
 | gcp                  | git cherry-pick                                                                                                                                                                          |
