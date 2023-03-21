@@ -47,6 +47,7 @@ Naming convention:
 
 | Alias    | Command                                                                               | Description                                                       |
 |----------|---------------------------------------------------------------------------------------|-------------------------------------------------------------------|
+| `jcc`    | `juju_controller`                                                                     | Show current controller                                           |
 | `jctl`   | `juju controllers`                                                                    | List all controllers                                              |
 | `jctlr`  | `juju controllers --refresh`                                                          | List all controllers (download latest details)                    |
 | `jdc`    | `juju destroy-controller --destroy-all-models`                                        | Destroy a controller                                              |
@@ -62,6 +63,7 @@ Naming convention:
 | Alias    | Command                                                     | Description                                           |
 |----------|-------------------------------------------------------------|-------------------------------------------------------|
 | `jam`    | `juju add-model`                                            | Add a hosted model                                    |
+| `jcm`    | `juju_model`                                                | Show current model                                    |
 | `jdm`    | `juju destroy-model`                                        | Non-recoverable, complete removal of a model          |
 | `jdm!`   | `juju destroy-model --force --no-wait -y`                   | Non-recoverable, complete removal of a model          |
 | `jdmds`  | `juju destroy-model --destroy-storage`                      | Non-recoverable, complete removal of a model          |
@@ -126,5 +128,7 @@ Naming convention:
 - `jaddr <app_name> [unit_num]`: display app or unit IP address.
 - `jreld <relation_name> <app_name> <unit_num>`: display app and unit relation data.
 - `jclean`: destroy all controllers
+- `juju_controller`: display the controller your are connected to.
+- `juju_model`: display the model your are connected to.
 - `wjst [interval_secs] [args_for_watch]`: watch juju status, with optional interval
   (default: 5s); you may pass additional arguments to `watch`.

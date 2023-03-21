@@ -28,6 +28,8 @@ alias jblng='juju bootstrap --no-gui localhost'
 alias jbm='juju bootstrap microk8s'
 alias jbmng='juju bootstrap --no-gui microk8s'
 alias jc='juju config'
+alias jcc=juju_controller
+alias jcm=juju_model
 alias jcld='juju clouds'
 alias jclda='juju clouds --all'
 alias jctl='juju controllers'
@@ -163,10 +165,40 @@ jreld() {
   juju run "relation-get -r $relid - $2" --unit $2/$3
 }
 
+# Return Juju current controller
+juju_controller() {
+  local controller="$(grep "current-controller"  ~/.local/share/juju/controllers.yaml  | awk '{print $2}')"
+  if [[ -z "$controller" ]]; then
+    return 1
+  fi
+
+  echo $controller
+  return 0
+}
+
+# Return Juju current
+juju_model() {
+  local yqbin="$(whereis yq | awk '{print $2}')"
+
+  if [[ -z "$yqbin" ]]; then
+    echo "--"
+    return 1
+  fi
+
+  local model="$(cat  ~/.local/share/juju/models.yaml | yq e ".controllers.$(juju_controller).current-model" | awk -F "/" '{print $2}')"
+  
+  if [[ -z "$model" ]]; then
+    echo "--"
+    return 1
+  fi
+
+  echo $model
+  return 0
+}
+
 # Watch juju status, with optional interval (default: 5 sec)
 wjst() {
   local interval="${1:-5}"
   shift $(( $# > 0 ))
   watch -n "$interval" --color juju status --relations --color "$@"
 }
-
