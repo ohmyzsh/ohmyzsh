@@ -183,7 +183,7 @@ jmodel() {
     return 1
   fi
 
-  local model="$(cat  ~/.local/share/juju/models.yaml | yq e ".controllers.$(jcontroller).current-model" | awk -F "/" '{print $2}')"
+  local model="$(yq e ".controllers.$(jcontroller).current-model" < ~/.local/share/juju/models.yaml | awk -F "/" '{print $2}')"
   
   if [[ -z "$model" ]]; then
     echo "--"
