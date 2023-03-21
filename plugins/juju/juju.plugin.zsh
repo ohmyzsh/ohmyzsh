@@ -165,7 +165,7 @@ jreld() {
 
 # Return Juju current controller
 jcontroller() {
-  local controller="$(grep "current-controller"  ~/.local/share/juju/controllers.yaml  | awk '{print $2}')"
+  local controller="$(awk '/current-controller/ {print $2}' ~/.local/share/juju/controllers.yaml)"
   if [[ -z "$controller" ]]; then
     return 1
   fi
@@ -183,7 +183,7 @@ jmodel() {
     return 1
   fi
 
-  local model="$(yq e ".controllers.$(jcontroller).current-model" < ~/.local/share/juju/models.yaml | awk -F "/" '{print $2}')"
+  local model="$(yq e ".controllers.$(jcontroller).current-model" < ~/.local/share/juju/models.yaml | cut -d/ -f2)"
   
   if [[ -z "$model" ]]; then
     echo "--"
