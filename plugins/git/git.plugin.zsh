@@ -53,6 +53,19 @@ function git_develop_branch() {
   echo develop
 }
 
+function git_old_branch() {
+  command git rev-parse --git-dir &>/dev/null || return
+  local branches=($(git branch | cut -c 3-))
+  if [[ ${#branches[@]} -le 1 ]]; then
+    echo $(git_main_branch)
+    return 0
+  fi
+  local current_branch=$(git rev-parse --abbrev-ref HEAD)
+  local old_branch=$(git reflog | grep $current_branch | awk '{print $6}' | head -1)
+  echo $old_branch
+  return 0
+}
+
 #
 # Aliases
 # (sorted alphabetically)
@@ -305,6 +318,7 @@ alias gsw='git switch'
 alias gswc='git switch --create'
 alias gswm='git switch $(git_main_branch)'
 alias gswd='git switch $(git_develop_branch)'
+alias gswo='git switch $(git_old_branch)'
 
 alias gts='git tag --sign'
 alias gtv='git tag | sort -V'
