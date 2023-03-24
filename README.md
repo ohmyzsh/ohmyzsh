@@ -317,6 +317,17 @@ zstyle ':omz:update' frequency 7
 zstyle ':omz:update' frequency 0
 ```
 
+### Custom Directory Updates
+
+In case you have custom plugins or themes installed and you want to get them updated at the same time than ohmyzsh does you can configure the updater to do so.
+Setting the following snippet in your `.zshrc` every git repository inside `$ZSH_CUSTOM/themes` and `$ZSH_CUSTOM/plugins` directories are going to pull latest changes when ohmyzsh is updated.
+
+```sh
+zstyle ':omz:update' custom yes
+```
+
+NOTE: this feature is disabled by default
+
 ### Manual Updates
 
 If you'd like to update at any point in time (maybe someone just released a new plugin and you don't want to wait a week?) you just need to run:
