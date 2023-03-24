@@ -10,16 +10,16 @@ case "$ZSH_EVAL_CONTEXT" in
   *:file) echo "error: this file should not be sourced" && return ;;
 esac
 
+# Load user settings so that we can access :omz:update
+source $HOME/.szhrc
+
 # Get user's update verbose preferences
 #
 # Supported update verbose modes:
-# - prompt (default): the user is asked before updating when it's time to update
 # - default: default output
 # - minimal: a minimal output
 # - silent: no output, except for errors
-zstyle -s ':omz:update' verbose verbose_mode || {
-  verbose_mode=prompt
-}
+zstyle -s ':omz:update' verbose verbose_mode || verbose_mode=default
 
 cd "$ZSH"
 
@@ -214,8 +214,9 @@ git checkout -q "$branch" -- || exit 1
 last_commit=$(git rev-parse "$branch")
 
 # Update Oh My Zsh
-if ! [[ "$verbose_mode" = silent ]]
-printf "${BLUE}%s${RESET}\n" "Updating Oh My Zsh"
+# Avoid printing if silent
+if [[ "$verbose_mode" != silent ]]
+  printf "${BLUE}%s${RESET}\n" "Updating Oh My Zsh"
 fi
 if LANG= git pull --quiet --rebase $remote $branch; then
   # Check if it was really updated or not
@@ -232,12 +233,14 @@ if LANG= git pull --quiet --rebase $remote $branch; then
       "$ZSH/tools/changelog.sh" HEAD "$last_commit"
     fi
     
-    if ! [[ "$verbose_mode" = silent ]]
+    # Skip printing if silent
+    if [[ "$verbose_mode" != silent ]]
       printf "${BLUE}%s \`${BOLD}%s${RESET}${BLUE}\`${RESET}\n" "You can see the changelog with" "omz changelog"
     fi
   fi
 
   if [[ "$verbose_mode" = default]]
+    # Only print this if verbose is set to default
     printf '%s         %s__      %s           %s        %s       %s     %s__   %s\n'      $RAINBOW $RESET
     printf '%s  ____  %s/ /_    %s ____ ___  %s__  __  %s ____  %s_____%s/ /_  %s\n'      $RAINBOW $RESET
     printf '%s / __ \\%s/ __ \\  %s / __ `__ \\%s/ / / / %s /_  / %s/ ___/%s __ \\ %s\n'  $RAINBOW $RESET
