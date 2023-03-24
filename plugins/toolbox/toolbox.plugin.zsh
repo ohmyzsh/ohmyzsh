@@ -3,3 +3,4 @@ function toolbox_prompt_info() {
 }
 
 alias tb="toolbox enter"
+alias tr="toolbox run"
