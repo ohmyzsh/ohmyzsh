@@ -10,9 +10,6 @@ case "$ZSH_EVAL_CONTEXT" in
   *:file) echo "error: this file should not be sourced" && return ;;
 esac
 
-# Load user settings so that we can access :omz:update
-source $HOME/.szhrc
-
 # Get user's update verbose preferences
 #
 # Supported update verbose modes:
@@ -215,7 +212,7 @@ last_commit=$(git rev-parse "$branch")
 
 # Update Oh My Zsh
 # Avoid printing if silent
-if [[ "$verbose_mode" != silent ]]
+if [[ "$verbose_mode" != silent ]]; then
   printf "${BLUE}%s${RESET}\n" "Updating Oh My Zsh"
 fi
 if LANG= git pull --quiet --rebase $remote $branch; then
@@ -234,12 +231,12 @@ if LANG= git pull --quiet --rebase $remote $branch; then
     fi
     
     # Skip printing if silent
-    if [[ "$verbose_mode" != silent ]]
+    if [[ "$verbose_mode" != silent ]]; then
       printf "${BLUE}%s \`${BOLD}%s${RESET}${BLUE}\`${RESET}\n" "You can see the changelog with" "omz changelog"
     fi
   fi
 
-  if [[ "$verbose_mode" = default]]
+  if [[ "$verbose_mode" == default]]; then
     # Only print this if verbose is set to default
     printf '%s         %s__      %s           %s        %s       %s     %s__   %s\n'      $RAINBOW $RESET
     printf '%s  ____  %s/ /_    %s ____ ___  %s__  __  %s ____  %s_____%s/ /_  %s\n'      $RAINBOW $RESET
