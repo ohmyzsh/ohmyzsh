@@ -10,15 +10,33 @@ case "$ZSH_EVAL_CONTEXT" in
   *:file) echo "error: this file should not be sourced" && return ;;
 esac
 
-# Get user's update verbose preferences
-#
-# Supported update verbose modes:
-# - default: default output
-# - minimal: a minimal output
-# - silent: no output, except for errors
-zstyle -s ':omz:update' verbose verbose_mode || verbose_mode=default
-
 cd "$ZSH"
+
+ARGS = ()
+
+# Parsing the arguments
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --default)
+      verbose_mode="default"
+      shift
+      ;;
+    --minimal)
+      verbose_mode="minimal"
+      shift
+      ;;
+    --silent)
+      verbose_mode="silent"
+      shift
+      ;;
+    --interactive)
+      interactive=true
+      shift
+      ;;
+  esac
+done
+
+set -- "${ARGS[@]}"
 
 # Use colors, but only if connected to a terminal
 # and that terminal supports them.
@@ -211,10 +229,11 @@ git checkout -q "$branch" -- || exit 1
 last_commit=$(git rev-parse "$branch")
 
 # Update Oh My Zsh
-# Avoid printing if silent
+#>
 if [[ "$verbose_mode" != silent ]]; then
   printf "${BLUE}%s${RESET}\n" "Updating Oh My Zsh"
 fi
+
 if LANG= git pull --quiet --rebase $remote $branch; then
   # Check if it was really updated or not
   if [[ "$(git rev-parse HEAD)" = "$last_commit" ]]; then
@@ -226,18 +245,22 @@ if LANG= git pull --quiet --rebase $remote $branch; then
     git config oh-my-zsh.lastVersion "$last_commit"
 
     # Print changelog to the terminal
-    if [[ "$1" = --interactive ]]; then
+    if [[ interactive == true ]]; then
       "$ZSH/tools/changelog.sh" HEAD "$last_commit"
     fi
-    
-    # Skip printing if silent
-    if [[ "$verbose_mode" != silent ]]; then
-      printf "${BLUE}%s \`${BOLD}%s${RESET}${BLUE}\`${RESET}\n" "You can see the changelog with" "omz changelog"
-    fi
-  fi
 
-  if [[ "$verbose_mode" == default]]; then
-    # Only print this if verbose is set to default
+#>
+    if [[ "$verbose_mode" != silent ]]; then
+
+    printf "${BLUE}%s \`${BOLD}%s${RESET}${BLUE}\`${RESET}\n" "You can see the changelog with" "omz changelog"
+
+    fi
+#>
+
+  fi
+#>
+  if [[ "$verbose_mode" == default ]]; then
+
     printf '%s         %s__      %s           %s        %s       %s     %s__   %s\n'      $RAINBOW $RESET
     printf '%s  ____  %s/ /_    %s ____ ___  %s__  __  %s ____  %s_____%s/ /_  %s\n'      $RAINBOW $RESET
     printf '%s / __ \\%s/ __ \\  %s / __ `__ \\%s/ / / / %s /_  / %s/ ___/%s __ \\ %s\n'  $RAINBOW $RESET
@@ -250,6 +273,7 @@ if LANG= git pull --quiet --rebase $remote $branch; then
     printf "${BLUE}${BOLD}%s %s${RESET}\n" "Want to get involved in the community? Join our Discord:" "$(fmt_link "Discord server" https://discord.gg/ohmyzsh)"
     printf "${BLUE}${BOLD}%s %s${RESET}\n" "Get your Oh My Zsh swag at:" "$(fmt_link "Planet Argon Shop" https://shop.planetargon.com/collections/oh-my-zsh)"
   fi
+#>
 else
   ret=$?
   printf "${RED}%s${RESET}\n" 'There was an error updating. Try again later?'
