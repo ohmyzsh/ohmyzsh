@@ -775,11 +775,14 @@ function _omz::theme::use {
 function _omz::update {
   local last_commit=$(builtin cd -q "$ZSH"; git rev-parse HEAD)
 
+  zmodload zsh/zutil
+  zstyle -s ":omz:update" verbose verbose_mode || verbose_mode=default
+
   # Run update script
   if [[ "$1" != --unattended ]]; then
-    ZSH="$ZSH" command zsh -f "$ZSH/tools/upgrade.sh" --interactive || return $?
+    ZSH="$ZSH" command zsh -f "$ZSH/tools/upgrade.sh" --interactive --$verbose_mode || return $?
   else
-    ZSH="$ZSH" command zsh -f "$ZSH/tools/upgrade.sh" || return $?
+    ZSH="$ZSH" command zsh -f "$ZSH/tools/upgrade.sh" --$verbose_mode || return $?
   fi
 
   # Update last updated file
