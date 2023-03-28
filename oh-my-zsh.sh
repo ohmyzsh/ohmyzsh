@@ -192,6 +192,9 @@ if [[ -n "$ZSH_THEME" ]]; then
   fi
 fi
 
+# set completion colors to be the same as `ls`, after theme has been loaded
+[[ -z "$LS_COLORS" ]] || zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+
 for config_file ("$HOME"/.zsh.after/*.zsh(N)); do
   source "$config_file"
 done

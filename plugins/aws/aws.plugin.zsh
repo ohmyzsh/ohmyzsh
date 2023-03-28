@@ -2,10 +2,14 @@ function agp() {
   echo $AWS_PROFILE
 }
 
+function agr() {
+  echo $AWS_REGION
+}
+
 # AWS profile selection
 function asp() {
   if [[ -z "$1" ]]; then
-    unset AWS_DEFAULT_PROFILE AWS_PROFILE AWS_EB_PROFILE
+    unset AWS_DEFAULT_PROFILE AWS_PROFILE AWS_EB_PROFILE AWS_PROFILE_REGION
     echo AWS profile cleared.
     return
   fi
@@ -22,9 +26,30 @@ function asp() {
   export AWS_PROFILE=$1
   export AWS_EB_PROFILE=$1
 
+  export AWS_PROFILE_REGION=$(aws configure get region)
+
   if [[ "$2" == "login" ]]; then
     aws sso login
   fi
+}
+
+# AWS region selection
+function asr() {
+  if [[ -z "$1" ]]; then
+    unset AWS_DEFAULT_REGION AWS_REGION
+    echo AWS region cleared.
+    return
+  fi
+
+  local -a available_regions
+  available_regions=($(aws_regions))
+  if [[ -z "${available_regions[(r)$1]}" ]]; then
+    echo "${fg[red]}Available regions: \n$(aws_regions)"
+    return 1
+  fi
+
+  export AWS_REGION=$1
+  export AWS_DEFAULT_REGION=$1
 }
 
 # AWS profile switch
@@ -145,11 +170,24 @@ function aws_change_access_key() {
   AWS_PAGER="" aws iam list-access-keys
 }
 
+function aws_regions() {
+  if [[ $AWS_DEFAULT_PROFILE || $AWS_PROFILE ]];then
+    aws ec2 describe-regions |grep RegionName | awk -F ':' '{gsub(/"/, "", $2);gsub(/,/, "", $2);gsub(/ /, "", $2);  print $2}'
+  else
+    echo "You must specify a AWS profile."
+  fi
+}
+
 function aws_profiles() {
   aws --no-cli-pager configure list-profiles 2> /dev/null && return
   [[ -r "${AWS_CONFIG_FILE:-$HOME/.aws/config}" ]] || return 1
   grep --color=never -Eo '\[.*\]' "${AWS_CONFIG_FILE:-$HOME/.aws/config}" | sed -E 's/^[[:space:]]*\[(profile)?[[:space:]]*([^[:space:]]+)\][[:space:]]*$/\2/g'
 }
+
+function _aws_regions() {
+  reply=($(aws_regions))
+}
+compctl -K _aws_regions asr
 
 function _aws_profiles() {
   reply=($(aws_profiles))
@@ -158,14 +196,21 @@ compctl -K _aws_profiles asp acp aws_change_access_key
 
 # AWS prompt
 function aws_prompt_info() {
-  [[ -n "$AWS_PROFILE" ]] || return
-  echo "${ZSH_THEME_AWS_PREFIX=<aws:}${AWS_PROFILE:gs/%/%%}${ZSH_THEME_AWS_SUFFIX=>}"
+  local _aws_to_show
+  local region="${AWS_REGION:-${AWS_DEFAULT_REGION:-$AWS_PROFILE_REGION}}"
+  if [[ -n $AWS_PROFILE ]];then
+    _aws_to_show+="${ZSH_THEME_AWS_PROFILE_PREFIX:=<aws:}${AWS_PROFILE}${ZSH_THEME_AWS_PROFILE_SUFFIX:=>}"
+  fi
+  if [[ -n $AWS_REGION ]]; then
+    [[ -n $AWS_PROFILE ]] && _aws_to_show+=" "
+    _aws_to_show+="${ZSH_THEME_AWS_REGION_PREFIX:=<region:}${region}${ZSH_THEME_AWS_REGION_SUFFIX:=>}"
+  fi
+  echo "$_aws_to_show"
 }
 
 if [[ "$SHOW_AWS_PROMPT" != false && "$RPROMPT" != *'$(aws_prompt_info)'* ]]; then
   RPROMPT='$(aws_prompt_info)'"$RPROMPT"
 fi
-
 
 # Load awscli completions
 
@@ -211,3 +256,4 @@ else
   [[ -r $_aws_zsh_completer_path ]] && source $_aws_zsh_completer_path
   unset _aws_zsh_completer_path _brew_prefix
 fi
+
