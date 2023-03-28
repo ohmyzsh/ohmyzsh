@@ -317,6 +317,18 @@ zstyle ':omz:update' frequency 7
 zstyle ':omz:update' frequency 0
 ```
 
+### Updates verbosity
+
+You can also limit the update verbosity with the following settings:
+
+```sh
+zstyle ':omz:update' verbose default # default update prompt
+
+zstyle ':omz:update' verbose minimal # only few lines
+
+zstyle ':omz:update' verbose silent # only errors
+```
+
 ### Manual Updates
 
 If you'd like to update at any point in time (maybe someone just released a new plugin and you don't want to wait a week?) you just need to run:

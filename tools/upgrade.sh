@@ -12,6 +12,23 @@ esac
 
 cd "$ZSH"
 
+verbose_mode="default"
+interactive=false
+
+while getopts "v:i" opt; do
+  case $opt in
+    v)
+      if [[ $OPTARG == default || $OPTARG == minimal || $OPTARG == silent ]]; then
+        verbose_mode=$OPTARG
+      else
+        echo "[oh-my-zsh] update verbosity '$OPTARG' is not valid"
+        echo "[oh-my-zsh] valid options are 'default', 'minimal' and 'silent'"
+      fi
+      ;;
+    i) interactive=true ;;
+  esac
+done
+
 # Use colors, but only if connected to a terminal
 # and that terminal supports them.
 
@@ -203,7 +220,9 @@ git checkout -q "$branch" -- || exit 1
 last_commit=$(git rev-parse "$branch")
 
 # Update Oh My Zsh
-printf "${BLUE}%s${RESET}\n" "Updating Oh My Zsh"
+if [[ $verbose_mode != silent ]]; then
+  printf "${BLUE}%s${RESET}\n" "Updating Oh My Zsh"
+fi
 if LANG= git pull --quiet --rebase $remote $branch; then
   # Check if it was really updated or not
   if [[ "$(git rev-parse HEAD)" = "$last_commit" ]]; then
@@ -215,24 +234,30 @@ if LANG= git pull --quiet --rebase $remote $branch; then
     git config oh-my-zsh.lastVersion "$last_commit"
 
     # Print changelog to the terminal
-    if [[ "$1" = --interactive ]]; then
+    if [[ interactive == true && $verbose_mode == default ]] ; then
       "$ZSH/tools/changelog.sh" HEAD "$last_commit"
     fi
 
-    printf "${BLUE}%s \`${BOLD}%s${RESET}${BLUE}\`${RESET}\n" "You can see the changelog with" "omz changelog"
+    if [[ $verbose_mode != silent ]]; then
+      printf "${BLUE}%s \`${BOLD}%s${RESET}${BLUE}\`${RESET}\n" "You can see the changelog with" "omz changelog"
+    fi
   fi
 
-  printf '%s         %s__      %s           %s        %s       %s     %s__   %s\n'      $RAINBOW $RESET
-  printf '%s  ____  %s/ /_    %s ____ ___  %s__  __  %s ____  %s_____%s/ /_  %s\n'      $RAINBOW $RESET
-  printf '%s / __ \\%s/ __ \\  %s / __ `__ \\%s/ / / / %s /_  / %s/ ___/%s __ \\ %s\n'  $RAINBOW $RESET
-  printf '%s/ /_/ /%s / / / %s / / / / / /%s /_/ / %s   / /_%s(__  )%s / / / %s\n'      $RAINBOW $RESET
-  printf '%s\\____/%s_/ /_/ %s /_/ /_/ /_/%s\\__, / %s   /___/%s____/%s_/ /_/  %s\n'    $RAINBOW $RESET
-  printf '%s    %s        %s           %s /____/ %s       %s     %s          %s\n'      $RAINBOW $RESET
-  printf '\n'
-  printf "${BLUE}%s${RESET}\n\n" "$message"
-  printf "${BLUE}${BOLD}%s %s${RESET}\n" "To keep up with the latest news and updates, follow us on Twitter:" "$(fmt_link @ohmyzsh https://twitter.com/ohmyzsh)"
-  printf "${BLUE}${BOLD}%s %s${RESET}\n" "Want to get involved in the community? Join our Discord:" "$(fmt_link "Discord server" https://discord.gg/ohmyzsh)"
-  printf "${BLUE}${BOLD}%s %s${RESET}\n" "Get your Oh My Zsh swag at:" "$(fmt_link "Planet Argon Shop" https://shop.planetargon.com/collections/oh-my-zsh)"
+  if [[ $verbose_mode == default ]]; then
+    printf '%s         %s__      %s           %s        %s       %s     %s__   %s\n'      $RAINBOW $RESET
+    printf '%s  ____  %s/ /_    %s ____ ___  %s__  __  %s ____  %s_____%s/ /_  %s\n'      $RAINBOW $RESET
+    printf '%s / __ \\%s/ __ \\  %s / __ `__ \\%s/ / / / %s /_  / %s/ ___/%s __ \\ %s\n'  $RAINBOW $RESET
+    printf '%s/ /_/ /%s / / / %s / / / / / /%s /_/ / %s   / /_%s(__  )%s / / / %s\n'      $RAINBOW $RESET
+    printf '%s\\____/%s_/ /_/ %s /_/ /_/ /_/%s\\__, / %s   /___/%s____/%s_/ /_/  %s\n'    $RAINBOW $RESET
+    printf '%s    %s        %s           %s /____/ %s       %s     %s          %s\n'      $RAINBOW $RESET
+    printf '\n'
+    printf "${BLUE}%s${RESET}\n\n" "$message"
+    printf "${BLUE}${BOLD}%s %s${RESET}\n" "To keep up with the latest news and updates, follow us on Twitter:" "$(fmt_link @ohmyzsh https://twitter.com/ohmyzsh)"
+    printf "${BLUE}${BOLD}%s %s${RESET}\n" "Want to get involved in the community? Join our Discord:" "$(fmt_link "Discord server" https://discord.gg/ohmyzsh)"
+    printf "${BLUE}${BOLD}%s %s${RESET}\n" "Get your Oh My Zsh swag at:" "$(fmt_link "Planet Argon Shop" https://shop.planetargon.com/collections/oh-my-zsh)"
+  elif [[ $verbose_mode == minimal ]]; then
+    printf "${BLUE}%s${RESET}\n" "$message"
+  fi
 else
   ret=$?
   printf "${RED}%s${RESET}\n" 'There was an error updating. Try again later?'
