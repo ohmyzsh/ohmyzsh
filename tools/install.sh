@@ -84,6 +84,8 @@ command_exists() {
 user_can_sudo() {
   # Check if sudo is installed
   command_exists sudo || return 1
+  # Having tsu linked to sudo will cause errors.
+  [ ! -L $(command -v sudo) ] || ! [ $(basename $(readlink -f $(command -v sudo))) = tsu ]
   # The following command has 3 parts:
   #
   # 1. Run `sudo` with `-v`. Does the following:
