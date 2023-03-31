@@ -234,7 +234,7 @@ if LANG= git pull --quiet --rebase $remote $branch; then
     git config oh-my-zsh.lastVersion "$last_commit"
 
     # Print changelog to the terminal
-    if [[ interactive == true && $verbose_mode == default ]] ; then
+    if [[ $interactive == true && $verbose_mode == default ]]; then
       "$ZSH/tools/changelog.sh" HEAD "$last_commit"
     fi
 
