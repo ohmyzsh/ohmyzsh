@@ -43,12 +43,25 @@ function _vi-mode-set-cursor-shape-for-keymap() {
   printf $'\e[%d q' "${_shape}"
 }
 
+function _vi-mode-should-reset-prompt() {
+  # If $VI_MODE_RESET_PROMPT_ON_MODE_CHANGE is unset (default), dynamically
+  # check whether we're using the prompt to display vi-mode info
+  if [[ -z "${VI_MODE_RESET_PROMPT_ON_MODE_CHANGE:-}" ]]; then
+    [[ "${PS1} ${RPS1}" = *'$(vi_mode_prompt_info)'* ]]
+    return $?
+  fi
+
+  # If $VI_MODE_RESET_PROMPT_ON_MODE_CHANGE was manually set, let's check
+  # if it was specifically set to true or it was disabled with any other value
+  [[ "${VI_MODE_RESET_PROMPT_ON_MODE_CHANGE}" = true ]]
+}
+
 # Updates editor information when the keymap changes.
 function zle-keymap-select() {
   # update keymap variable for the prompt
   typeset -g VI_KEYMAP=$KEYMAP
 
-  if [[ "${VI_MODE_RESET_PROMPT_ON_MODE_CHANGE:-}" = true ]]; then
+  if _vi-mode-should-reset-prompt; then
     zle reset-prompt
     zle -R
   fi
@@ -59,10 +72,9 @@ zle -N zle-keymap-select
 # These "echoti" statements were originally set in lib/key-bindings.zsh
 # Not sure the best way to extend without overriding.
 function zle-line-init() {
-  local prev_vi_keymap
-  prev_vi_keymap="${VI_KEYMAP:-}"
+  local prev_vi_keymap="${VI_KEYMAP:-}"
   typeset -g VI_KEYMAP=main
-  [[ "$prev_vi_keymap" != 'main' ]] && [[ "${VI_MODE_RESET_PROMPT_ON_MODE_CHANGE:-}" = true ]] && zle reset-prompt
+  [[ "$prev_vi_keymap" != 'main' ]] && _vi-mode-should-reset-prompt && zle reset-prompt
   (( ! ${+terminfo[smkx]} )) || echoti smkx
   _vi-mode-set-cursor-shape-for-keymap "${VI_KEYMAP}"
 }
@@ -138,13 +150,6 @@ if [[ -z "$MODE_INDICATOR" ]]; then
 fi
 
 function vi_mode_prompt_info() {
-  # If we're using the prompt to display mode info, and we haven't explicitly
-  # disabled "reset prompt on mode change", then set it here.
-  #
-  # We do that here instead of the `if` statement below because the user may
-  # set RPS1/RPROMPT to something else in their custom config.
-  : "${VI_MODE_RESET_PROMPT_ON_MODE_CHANGE:=true}"
-
   echo "${${VI_KEYMAP/vicmd/$MODE_INDICATOR}/(main|viins)/$INSERT_MODE_INDICATOR}"
 }
 
