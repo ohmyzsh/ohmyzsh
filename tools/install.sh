@@ -84,6 +84,11 @@ command_exists() {
 user_can_sudo() {
   # Check if sudo is installed
   command_exists sudo || return 1
+  # Termux can't run sudo unless the device is rooted. Either way, `chsh` works
+  # without sudo, so we can detect it and exit the function early.
+  case "$PREFIX" in
+  *com.termux*) return 1 ;;
+  esac
   # The following command has 3 parts:
   #
   # 1. Run `sudo` with `-v`. Does the following:
@@ -440,7 +445,7 @@ EOF
   # On systems that don't have a user with passwordless sudo, the user will
   # be prompted for the password either way, so this shouldn't cause any issues.
   #
-  if [ "$termux" != true ] && user_can_sudo; then
+  if user_can_sudo; then
     sudo -k chsh -s "$zsh" "$USER"  # -k forces the password prompt
   else
     chsh -s "$zsh" "$USER"          # run chsh normally
