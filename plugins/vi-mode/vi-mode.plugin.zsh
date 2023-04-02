@@ -43,6 +43,13 @@ function _vi-mode-set-cursor-shape-for-keymap() {
   printf $'\e[%d q' "${_shape}"
 }
 
+function _visual-mode {
+  typeset -g VI_KEYMAP=visual
+  _vi-mode-set-cursor-shape-for-keymap "$VI_KEYMAP"
+  zle .visual-mode
+}
+zle -N visual-mode _visual-mode
+
 function _vi-mode-should-reset-prompt() {
   # If $VI_MODE_RESET_PROMPT_ON_MODE_CHANGE is unset (default), dynamically
   # check whether we're using the prompt to display vi-mode info
