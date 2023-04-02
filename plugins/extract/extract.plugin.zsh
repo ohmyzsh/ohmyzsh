@@ -93,8 +93,12 @@ EOF
     (( success > 0 )) && command rm -r "$extract_dir"
 
     # If content of extract dir is a single directory, move its contents up
-    # Glob flags: N: no error if directory is empty, Y2: at most 2 files
-    local content=("${extract_dir}"/*(NY2))
+    # Glob flags:
+    # - D: include files starting with .
+    # - N: no error if directory is empty
+    # - Y2: at most give 2 files
+    local -a content
+    content=("${extract_dir}"/*(DNY2))
     if [[ ${#content} -eq 1 && -d "${content[1]}" ]]; then
       command mv -f "${content[1]}" .
       command rmdir "$extract_dir"
