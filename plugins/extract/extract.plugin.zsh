@@ -88,9 +88,7 @@ EOF
     shift
 
     # Go back to original working directory
-    # and remove extraction directory if there was an error
     builtin cd -q "$pwd"
-    (( success > 0 )) && command rm -r "$extract_dir"
 
     # If content of extract dir is a single directory, move its contents up
     # Glob flags:
@@ -101,6 +99,8 @@ EOF
     content=("${extract_dir}"/*(DNY2))
     if [[ ${#content} -eq 1 && -d "${content[1]}" ]]; then
       command mv -f "${content[1]}" .
+      command rmdir "$extract_dir"
+    elif [[ ${#content} -eq 0 ]]; then
       command rmdir "$extract_dir"
     fi
   done
