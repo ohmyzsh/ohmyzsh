@@ -159,9 +159,10 @@ _omz_source() {
   zstyle -T ":omz:${context}" aliases || disabled_aliases=1
 
   # Back up aliases prior to sourcing
-  local -A aliases_pre
+  local -A aliases_pre galiases_pre
   if (( disabled_aliases )); then
     aliases_pre=("${(@kv)aliases}")
+    galiases_pre=("${(@kv)galiases}")
   fi
 
   # Source file from $ZSH_CUSTOM if it exists, otherwise from $ZSH
@@ -174,6 +175,7 @@ _omz_source() {
   # Restore previous aliases if necessary
   if (( disabled_aliases )); then
     aliases=("${(@kv)aliases_pre}")
+    galiases=("${(@kv)galiases_pre}")
   fi
 }
 
