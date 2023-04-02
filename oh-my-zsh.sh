@@ -151,8 +151,8 @@ _omz_source() {
 
   # Construct zstyle context based on path
   case "$filepath" in
-  lib/*) context="lib:${filepath:t:r}" ;;
-  plugins/*) context="plugins:${filepath:h2:t}" ;;
+  lib/*) context="lib:${filepath:t:r}" ;;          # :t = lib_name.zsh, :r = lib_name
+  plugins/*) context="plugins:${filepath:h2:t}" ;; # :h2 = plugins/plugin_name, :t = plugin_name
   esac
 
   local disabled_aliases=0
