@@ -155,14 +155,14 @@ _omz_source() {
   plugins/*) context="plugins:${filepath:h2:t}" ;; # :h2 = plugins/plugin_name, :t = plugin_name
   esac
 
-  local disabled_aliases=0
-  zstyle -T ":omz:${context}" aliases || disabled_aliases=1
+  local disable_aliases=0
+  zstyle -T ":omz:${context}" aliases || disable_aliases=1
 
-  # Back up aliases prior to sourcing
-  local -A aliases_pre galiases_pre
-  if (( disabled_aliases )); then
-    aliases_pre=("${(@kv)aliases}")
-    galiases_pre=("${(@kv)galiases}")
+  # Back up alias names prior to sourcing
+  local -a aliases_pre galiases_pre
+  if (( disable_aliases )); then
+    aliases_pre=("${(@k)aliases}")
+    galiases_pre=("${(@k)galiases}")
   fi
 
   # Source file from $ZSH_CUSTOM if it exists, otherwise from $ZSH
@@ -172,10 +172,13 @@ _omz_source() {
     source "$ZSH/$filepath"
   fi
 
-  # Restore previous aliases if necessary
-  if (( disabled_aliases )); then
-    aliases=("${(@kv)aliases_pre}")
-    galiases=("${(@kv)galiases_pre}")
+  # Unset all aliases that don't appear in the backed up list of aliases
+  if (( disable_aliases )); then
+    local -a unaliases
+    # ${var:|array} gets the list of items in var not in array
+    unaliases=("${(@k)aliases:|aliases_pre}" "${(@k)galiases:|galiases_pre}")
+    # unalias by pattern matching: (a|b|c) matches aliases a, b, and c
+    unalias -m "(${(j:|:)unaliases})"
   fi
 }
 
