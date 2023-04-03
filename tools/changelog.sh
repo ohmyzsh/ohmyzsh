@@ -106,6 +106,9 @@ function parse-commit {
       message="${match[1]}"
       # remove CR characters (might be inserted in GitHub UI commit description form)
       message="${message//$'\r'/}"
+      # remove lines containing only whitespace
+      local nlnl=$'\n\n'
+      message="${message//$'\n'[[:space:]]##$'\n'/$nlnl}"
       # skip next paragraphs (separated by two newlines or more)
       message="${message%%$'\n\n'*}"
       # ... and replace newlines with spaces
