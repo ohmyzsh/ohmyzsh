@@ -174,11 +174,10 @@ _omz_source() {
 
   # Unset all aliases that don't appear in the backed up list of aliases
   if (( disable_aliases )); then
-    local -a unaliases
+    local -a disabled
     # ${var:|array} gets the list of items in var not in array
-    unaliases=("${(@k)aliases:|aliases_pre}" "${(@k)galiases:|galiases_pre}")
-    # unalias by pattern matching: (a|b|c) matches aliases a, b, and c
-    unalias -m "(${(j:|:)unaliases})"
+    disabled=("${(@k)aliases:|aliases_pre}" "${(@k)galiases:|galiases_pre}")
+    (( $#disabled == 0 )) || unalias "${(@)disabled}"
   fi
 }
 
