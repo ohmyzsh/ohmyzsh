@@ -280,6 +280,8 @@ If you would like to override the functionality of a plugin distributed with Oh 
 
 ### Skip aliases
 
+<a name="remove-directories-aliases"></a>
+
 If you want to skip default Oh My Zsh aliases (those defined in `lib/*` files) or plugin aliases,
 you can use the settings below in your `~/.zshrc` file, **before Oh My Zsh is loaded**. Note that
 there are many different ways to skip aliases, depending on your needs.
@@ -301,13 +303,25 @@ zstyle ':omz:plugins:git' aliases no
 
 You can combine these in other ways taking into account that more specific scopes takes precedence:
 
-```
+```sh
 # Skip all plugin aliases, except for the git plugin
 zstyle ':omz:plugins:*' aliases no
 zstyle ':omz:plugins:git' aliases yes
 ```
 
-#### Disclaimer <!-- omit in toc -->
+A previous version of this feature was using the setting below, which has been removed:
+
+```sh
+zstyle ':omz:directories' aliases no
+```
+
+Instead, you can now use the following:
+
+```sh
+zstyle ':omz:lib:directories' aliases no
+```
+
+#### Notice <!-- omit in toc -->
 
 > This feature is currently in a testing phase and it may be subject to change in the future.
 > It is also not currently compatible with plugin managers such as zpm or zinit, which don't
