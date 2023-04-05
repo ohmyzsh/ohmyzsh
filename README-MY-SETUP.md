@@ -52,7 +52,7 @@ Linux
 * install some terminal tools
 
   ```(shell)
-  sudo apt install curl exa fasd fzf lsd ruby-full thefuck tmux vim-nox
+  sudo apt install curl exa fasd fzf ruby-full thefuck tmux vim-nox
   ```
 
 * install [Tilex](https://gnunn1.github.io/tilix-web/)
