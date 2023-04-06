@@ -98,8 +98,22 @@ EOF
     local -a content
     content=("${extract_dir}"/*(DNY2))
     if [[ ${#content} -eq 1 && -d "${content[1]}" ]]; then
-      command mv -f "${content[1]}" .
-      command rmdir "$extract_dir"
+      # The extracted folder (${content[1]}) may have the same name as $extract_dir
+      # If so, we need to rename it to avoid conflicts in a 3-step process
+      #
+      # 1. Move and rename the extracted folder to a temporary random name
+      # 2. Delete the empty folder
+      # 3. Rename the extracted folder to the original name
+      if [[ "${content[1]:t}" == "$extract_dir" ]]; then
+        # =(:) gives /tmp/zsh<random>, with :t it gives zsh<random>
+        local tmp_dir==(:); tmp_dir="${tmp_dir:t}"
+        command mv -f "${content[1]}" "$tmp_dir" \
+        && command rmdir "$extract_dir" \
+        && command mv -f "$tmp_dir" "$extract_dir"
+      else
+        command mv -f "${content[1]}" . \
+        && command rmdir "$extract_dir"
+      fi
     elif [[ ${#content} -eq 0 ]]; then
       command rmdir "$extract_dir"
     fi
