@@ -75,6 +75,7 @@ plugins=(
     vi-mode
     history
     history-substring-search
+    colored-man-pages
 )
 
 source $ZSH/oh-my-zsh.sh
