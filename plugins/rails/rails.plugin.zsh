@@ -75,6 +75,7 @@ alias rsd='rails server --debugger'
 alias rsp='rails server --port'
 alias rsts='rails stats'
 alias rt='rails test'
+alias rta='rails test:all'
 alias ru='rails runner'
 
 # Foreman aliases

@@ -46,7 +46,7 @@ elif (( CURRENT == 3 )); then
     #     ...
     #   }
     # }
-    # In abscence of a proper JSON parser, just grab the lines with
+    # In absence of a proper JSON parser, just grab the lines with
     # a 2-space indentation and only the stuff inside quotes
     local -a projects
     projects=(${(@f)"$(ng config projects 2>/dev/null | sed -n 's/^  "\([^"]\+\)".*$/\1/p')"})

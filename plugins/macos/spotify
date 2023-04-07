@@ -43,7 +43,7 @@ showAPIHelp() {
     echo "  find music by name. It is very likely you want this feature!";
     echo;
     echo "  To get this to work, you need to sign up (or in) and create an 'Application' at:";
-    echo "  https://developer.spotify.com/my-applications/#!/applications/create";
+    echo "  https://developer.spotify.com/dashboard/create";
     echo;
     echo "  Once you've created an application, find the 'Client ID' and 'Client Secret'";
     echo "  values, and enter them into your shpotify config file at '${USER_CONFIG_FILE}'";
