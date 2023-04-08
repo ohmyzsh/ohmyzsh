@@ -18,10 +18,10 @@ compctl -K _az_subscriptions azss
 
 # Azure prompt
 function azure_prompt_info() {
-  [[ ! -f "${AZURE_CONFIG_DIR:-$HOME/.azure/azureProfile.json}" ]] && return
+  [[ ! -f "${AZURE_CONFIG_DIR:-$HOME/.azure}/azureProfile.json" ]] && return
   # azgs is too expensive, if we have jq, we enable the prompt
   (( $+commands[jq] )) || return 1
-  azgs=$(jq -r '.subscriptions[] | select(.isDefault==true) .name' ${AZURE_CONFIG_DIR:-$HOME/.azure/azureProfile.json})
+  azgs=$(jq -r '.subscriptions[] | select(.isDefault==true) .name' "${AZURE_CONFIG_DIR:-$HOME/.azure}/azureProfile.json")
   echo "${ZSH_THEME_AZURE_PREFIX:=<az:}${azgs}${ZSH_THEME_AZURE_SUFFIX:=>}"
 }
 
