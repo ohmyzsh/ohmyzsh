@@ -116,6 +116,7 @@ plugins=(... git)
 | gloga                | git log --oneline --decorate --graph --all                                                                                                                                               |
 | glp                  | git log --pretty=\<format\>                                                                                                                                                              |
 | gm                   | git merge                                                                                                                                                                                |
+| gms                  | git merge --squash |
 | gmom                 | git merge origin/$(git_main_branch)                                                                                                                                                      |
 | gmtl                 | git mergetool --no-prompt                                                                                                                                                                |
 | gmtlvim              | git mergetool --no-prompt --tool=vimdiff                                                                                                                                                 |
