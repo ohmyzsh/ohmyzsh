@@ -186,7 +186,7 @@ function upgrade() {
   if [ $installedver != $currentver ]; then
     echo "[oh-my-zsh] Arch Linux PGP Keyring is out of date."
     echo "[oh-my-zsh] Updating before full system upgrade."
-    sudo pacman -Syu --needed --noconfirm archlinux-keyring
+    sudo pacman -Sy --needed --noconfirm archlinux-keyring
   else
     echo "[oh-my-zsh] Arch Linux PGP Keyring is up to date."
   fi
