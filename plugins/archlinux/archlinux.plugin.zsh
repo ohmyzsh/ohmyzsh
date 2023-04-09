@@ -180,17 +180,17 @@ fi
 
 # Check Arch Linux PGP Keyring before System Upgrade to prevent failure.
 function upgrade() {
-  echo "[oh-my-zsh] Checking Arch Linux PGP Keyring"
+  echo ":: Checking Arch Linux PGP Keyring..."
   local installedver="$(sudo pacman -Qi archlinux-keyring | grep -Po '(?<=Version         : ).*')"
   local currentver="$(sudo pacman -Si archlinux-keyring | grep -Po '(?<=Version         : ).*')"
   if [ $installedver != $currentver ]; then
-    echo "[oh-my-zsh] Arch Linux PGP Keyring is out of date."
-    echo "[oh-my-zsh] Updating before full system upgrade."
+    echo " Arch Linux PGP Keyring is out of date."
+    echo " Updating before full system upgrade."
     sudo pacman -Sy --needed --noconfirm archlinux-keyring
   else
-    echo "[oh-my-zsh] Arch Linux PGP Keyring is up to date."
+    echo " Arch Linux PGP Keyring is up to date."
+    echo " Proceeding with full system upgrade."
   fi
-  echo "[oh-mh-zsh] Proceeding with full system upgrade."
   if (( $+commands[yay] )); then
     yay -Syu
   elif (( $+commands[trizen] )); then
