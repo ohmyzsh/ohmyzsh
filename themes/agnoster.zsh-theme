@@ -252,12 +252,21 @@ prompt_aws() {
   esac
 }
 
+# Terraform Workspace:
+# - display current Terraform workspace name
+# - displays black on yellow
+prompt_terraform-workspace() {
+  [[ -z "$__TERRAFORM_WORKSPACE_CACHE" ]] && return
+  prompt_segment yellow black "TF: ${__TERRAFORM_WORKSPACE_CACHE:gs/%/%%}"
+}
+
 ## Main prompt
 build_prompt() {
   RETVAL=$?
   prompt_status
   prompt_virtualenv
   prompt_aws
+  prompt_terraform-workspace
   prompt_context
   prompt_dir
   prompt_git
