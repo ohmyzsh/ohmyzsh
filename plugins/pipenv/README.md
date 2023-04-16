@@ -23,7 +23,7 @@ This plugin provides some features to simplify the use of Pipenv while working o
   - `psh` is aliased to `pipenv shell`
   - `psy` is aliased to `pipenv sync`
   - `pu` is aliased to `pipenv uninstall`
-  - `pdt` is aliased to `pipenv update`
+  - `pupd` is aliased to `pipenv update`
   - `pwh` is aliased to `pipenv --where`
   - `pvenv` is aliased to `pipenv --venv`
   - `ppy` is aliased to `pipenv --py`
