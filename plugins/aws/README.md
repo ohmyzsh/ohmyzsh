@@ -1,7 +1,8 @@
 # aws
 
-This plugin provides completion support for [awscli](https://docs.aws.amazon.com/cli/latest/reference/index.html)
+This plugin provides completion support for [awscli v2](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/index.html)
 and a few utilities to manage AWS profiles/regions and display them in the prompt.
+[awscli v1](https://docs.aws.amazon.com/cli/latest/userguide/cliv2-migration.html) is no longer supported.
 
 To use it, add `aws` to the plugins array in your zshrc file.
 
@@ -12,9 +13,9 @@ plugins=(... aws)
 ## Plugin commands
 
 * `asp [<profile>]`: sets `$AWS_PROFILE` and `$AWS_DEFAULT_PROFILE` (legacy) to `<profile>`.
-  It also sets `$AWS_EB_PROFILE` to `<profile>` for the Elastic Beanstalk CLI. It sets `$AWS_PROFILE_REGION` for display in `aws_prompt_info`. 
+  It also sets `$AWS_EB_PROFILE` to `<profile>` for the Elastic Beanstalk CLI. It sets `$AWS_PROFILE_REGION` for display in `aws_prompt_info`.
   Run `asp` without arguments to clear the profile.
-* `asp [<profile>] login`: If AWS SSO has been configured in your aws profile, it will run the `aws sso login` command following profile selection. 
+* `asp [<profile>] login`: If AWS SSO has been configured in your aws profile, it will run the `aws sso login` command following profile selection.
 
 * `asr [<region>]`: sets `$AWS_REGION` and `$AWS_DEFAULT_REGION` (legacy) to `<region>`.
   Run `asr` without arguments to clear the profile.
@@ -65,7 +66,7 @@ the current `$AWS_PROFILE` and `$AWS_REGION`. It uses four variables to control 
 
 Source profile credentials in `~/.aws/credentials`:
 
-```
+```ini
 [source-profile-name]
 aws_access_key_id = ...
 aws_secret_access_key = ...
@@ -73,7 +74,7 @@ aws_secret_access_key = ...
 
 Role configuration in `~/.aws/config`:
 
-```
+```ini
 [profile source-profile-name]
 mfa_serial = arn:aws:iam::111111111111:mfa/myuser
 region = us-east-1
