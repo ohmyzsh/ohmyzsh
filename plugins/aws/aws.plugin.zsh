@@ -203,9 +203,8 @@ function aws_prompt_info() {
     _aws_to_show+="${ZSH_THEME_AWS_PROFILE_PREFIX="<aws:"}${AWS_PROFILE}${ZSH_THEME_AWS_PROFILE_SUFFIX=">"}"
   fi
 
-  _aws_to_show+="${ZSH_THEME_AWS_DIVIDER=' '}"
-
   if [[ -n $AWS_REGION ]]; then
+    [[ -n $AWS_PROFILE ]] && _aws_to_show+="${ZSH_THEME_AWS_DIVIDER=' '}"
     _aws_to_show+="${ZSH_THEME_AWS_REGION_PREFIX="<region:"}${region}${ZSH_THEME_AWS_REGION_SUFFIX=">"}"
   fi
 
