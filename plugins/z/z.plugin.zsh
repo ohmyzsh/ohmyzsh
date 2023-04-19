@@ -51,7 +51,7 @@
 #
 #   ZSHZ_CASE -> if `ignore', pattern matching is case-insensitive; if `smart',
 #     pattern matching is case-insensitive only when the pattern is all
-#     lowercase
+#     lowercase (default: `strict')
 #   ZSHZ_CMD -> name of command (default: z)
 #   ZSHZ_COMPLETION -> completion method (default: 'frecent'; 'legacy' for
 #     alphabetic sorting)
@@ -144,7 +144,7 @@ zshz() {
 
   # Don't use `emulate -L zsh' - it breaks PUSHD_IGNORE_DUPS
   setopt LOCAL_OPTIONS NO_KSH_ARRAYS NO_SH_WORD_SPLIT EXTENDED_GLOB
-  (( ZSHZ_DEBUG )) && setopt LOCAL_OPTIONS WARN_CREATE_GLOBAL
+  (( ${+ZSHZ_DEBUG} )) && setopt LOCAL_OPTIONS WARN_CREATE_GLOBAL
 
   local REPLY
   local -a lines
@@ -164,7 +164,7 @@ zshz() {
   [[ -f $datafile ]] || touch "$datafile"
 
   # Bail if we don't own the datafile and $ZSHZ_OWNER is not set
-  [[ -z ${ZSHZ_OWNER:-${_Z_OWNER}} && -f $datafile && ! -O $datafile ]] &&
+  [[ -z ${ZSHZ_OWNER:-${_Z_OWNER:-}} && -f $datafile && ! -O $datafile ]] &&
     return
 
   # Load the datafile into an array and parse it
@@ -197,7 +197,7 @@ zshz() {
 
       # Don't track directory trees excluded in ZSHZ_EXCLUDE_DIRS
       local exclude
-      for exclude in ${(@)ZSHZ_EXCLUDE_DIRS:-${(@)_Z_EXCLUDE_DIRS}}; do
+      for exclude in ${(@)ZSHZ_EXCLUDE_DIRS:-${(@)_Z_EXCLUDE_DIRS:-}}; do
         case $* in
           ${exclude}|${exclude}/*) return ;;
         esac
@@ -227,7 +227,7 @@ zshz() {
       --remove)
         local xdir  # Directory to be removed
 
-        if (( ${ZSHZ_NO_RESOLVE_SYMLINKS:-${_Z_NO_RESOLVE_SYMLINKS}} )); then
+        if (( ${ZSHZ_NO_RESOLVE_SYMLINKS:-${_Z_NO_RESOLVE_SYMLINKS:-}} )); then
           [[ -d ${${*:-${PWD}}:a} ]] && xdir=${${*:-${PWD}}:a}
         else
           [[ -d ${${*:-${PWD}}:A} ]] && xdir=${${*:-${PWD}}:a}
@@ -270,7 +270,7 @@ zshz() {
     fi
 
     local owner
-    owner=${ZSHZ_OWNER:-${_Z_OWNER}}
+    owner=${ZSHZ_OWNER:-${_Z_OWNER:-}}
 
     if (( ZSHZ[USE_FLOCK] )); then
       zf_mv "$tempfile" "$datafile" 2> /dev/null || zf_rm -f "$tempfile"
@@ -325,7 +325,7 @@ zshz() {
     # Remove paths from database if they no longer exist
     for line in $lines; do
       if [[ ! -d ${line%%\|*} ]]; then
-        for dir in ${(@)ZSHZ_KEEP_DIRS}; do
+        for dir in ${(@)ZSHZ_KEEP_DIRS:-}; do
           if [[ ${line%%\|*} == ${dir}/* ||
                 ${line%%\|*} == $dir     ||
                 $dir == '/' ]]; then
@@ -392,7 +392,7 @@ zshz() {
       path_field=${line%%\|*}
 
       path_field_normalized=$path_field
-      if (( ZSHZ_TRAILING_SLASH )); then
+      if (( ${ZSHZ_TRAILING_SLASH:-0} )); then
         path_field_normalized=${path_field%/}/
       fi
 
@@ -527,7 +527,7 @@ zshz() {
         for x in ${(k)output_matches}; do
           if (( ${output_matches[$x]} )); then
             path_to_display=$x
-            (( ZSHZ_TILDE )) &&
+            (( ${ZSHZ_TILDE:-0} )) &&
               path_to_display=${path_to_display/#${HOME}/\~}
             _zshz_printv -f "%-10d %s\n" ${output_matches[$x]} $path_to_display
             output+=( ${(f)REPLY} )
@@ -535,7 +535,7 @@ zshz() {
           fi
         done
         if [[ -n $common ]]; then
-          (( ZSHZ_TILDE )) && common=${common/#${HOME}/\~}
+          (( ${ZSHZ_TILDE:-0} )) && common=${common/#${HOME}/\~}
           (( $#output > 1 )) && printf "%-10s %s\n" 'common:' $common
         fi
         # -lt
@@ -557,7 +557,7 @@ zshz() {
         ;;
 
       *)
-        if (( ! ZSHZ_UNCOMMON )) && [[ -n $common ]]; then
+        if (( ! ${ZSHZ_UNCOMMON:-0} )) && [[ -n $common ]]; then
           _zshz_printv -- $common
         else
           _zshz_printv -- ${(P)match}
@@ -596,7 +596,7 @@ zshz() {
     # Remove paths from database if they no longer exist
     for line in $lines; do
       if [[ ! -d ${line%%\|*} ]]; then
-        for dir in ${(@)ZSHZ_KEEP_DIRS}; do
+        for dir in ${(@)ZSHZ_KEEP_DIRS:-}; do
           if [[ ${line%%\|*} == ${dir}/* ||
                 ${line%%\|*} == $dir     ||
                 $dir == '/' ]]; then
@@ -629,7 +629,7 @@ zshz() {
 
       # If $ZSHZ_TRAILING_SLASH is set, use path_field with a trailing slash for matching.
       local path_field_normalized=$path_field
-      if (( ZSHZ_TRAILING_SLASH )); then
+      if (( ${ZSHZ_TRAILING_SLASH:-0} )); then
         path_field_normalized=${path_field%/}/
       fi
 
@@ -640,12 +640,12 @@ zshz() {
       #
       # Otherwise, the default behavior of Zsh-z is to match case-sensitively if
       # possible, then to fall back on a case-insensitive match if possible.
-      if [[ $ZSHZ_CASE == 'smart' && ${1:l} == $1 &&
+      if [[ ${ZSHZ_CASE:-strict} == 'smart' && ${1:l} == $1 &&
             ${path_field_normalized:l} == ${~q:l} ]]; then
         imatches[$path_field]=$rank
-      elif [[ $ZSHZ_CASE != 'ignore' && $path_field_normalized == ${~q} ]]; then
+      elif [[ ${ZSHZ_CASE:-strict} != 'ignore' && $path_field_normalized == ${~q} ]]; then
         matches[$path_field]=$rank
-      elif [[ $ZSHZ_CASE != 'smart' && ${path_field_normalized:l} == ${~q:l} ]]; then
+      elif [[ ${ZSHZ_CASE:-strict} != 'smart' && ${path_field_normalized:l} == ${~q:l} ]]; then
         imatches[$path_field]=$rank
       fi
 
@@ -658,11 +658,11 @@ zshz() {
       escaped_path_field=${escaped_path_field//'['/'\['}
       escaped_path_field=${escaped_path_field//']'/'\]'}
 
-      if (( matches[$escaped_path_field] )) &&
+      if [[ -n ${matches[$escaped_path_field]+set} ]] &&
          (( matches[$escaped_path_field] > hi_rank )); then
         best_match=$path_field
         hi_rank=${matches[$escaped_path_field]}
-      elif (( imatches[$escaped_path_field] )) &&
+      elif [[ -n ${imatches[$escaped_path_field]+set} ]] &&
            (( imatches[$escaped_path_field] > ihi_rank )); then
         ibest_match=$path_field
         ihi_rank=${imatches[$escaped_path_field]}
@@ -697,7 +697,7 @@ zshz() {
     t \
     x
 
-  if [[ $1 == '--' ]]; then
+  if [[ ${1:-} == '--' ]]; then
     shift
   elif [[ -n ${(M)@:#-*} && -z $compstate ]]; then
     print "Improper option(s) given."
@@ -716,7 +716,7 @@ zshz() {
         if [[ $OSTYPE == (cygwin|msys) && $PWD == '/' && $* != /* ]]; then
           set -- "/$*"
         fi
-        if (( ${ZSHZ_NO_RESOLVE_SYMLINKS:-${_Z_NO_RESOLVE_SYMLINKS}} )); then
+        if (( ${ZSHZ_NO_RESOLVE_SYMLINKS:-${_Z_NO_RESOLVE_SYMLINKS:-}} )); then
           dir=${*:a}
         else
           dir=${*:A}
@@ -762,8 +762,8 @@ zshz() {
   # the home directory as a tilde.
   #########################################################
   _zshz_echo() {
-    if (( ZSHZ_ECHO )); then
-      if (( ZSHZ_TILDE )); then
+    if (( ${ZSHZ_ECHO:-0} )); then
+      if (( ${ZSHZ_TILDE:-0} )); then
         print ${PWD/#${HOME}/\~}
       else
         print $PWD
@@ -780,7 +780,8 @@ zshz() {
   # otherwise look for matches anywhere in paths
 
   # zpm-zsh/colors has a global $c, so we'll avoid math expressions here
-  if [[ ! -z ${(tP)opts[-c]} ]]; then
+  output_format=${output_format:-store}
+  if [[ -n ${(tP)opts[-c]+set} ]]; then
     _zshz_find_matches "$fnd*" $method $output_format
   else
     _zshz_find_matches "*$fnd*" $method $output_format
@@ -795,7 +796,7 @@ zshz() {
   #
   # If the best choice at this point is something like /foo/bar/foo/bar, and the  # search pattern is `bar', go to /foo/bar/foo/bar; but if the search pattern
   # is `foo', go to /foo/bar/foo
-  if (( ZSHZ_UNCOMMON )) && [[ -n $cd ]]; then
+  if (( ${ZSHZ_UNCOMMON:-0} )) && [[ -n $cd ]]; then
     if [[ -n $cd ]]; then
 
       # In the search pattern, replace spaces with *
@@ -826,7 +827,7 @@ zshz() {
 
   if (( ret2 == 0 )) && [[ -n $cd ]]; then
     if (( $+opts[-e] )); then               # echo
-      (( ZSHZ_TILDE )) && cd=${cd/#${HOME}/\~}
+      (( ${ZSHZ_TILDE:-0} )) && cd=${cd/#${HOME}/\~}
       print -- "$cd"
     else
       # cd if possible; echo the new path if $ZSHZ_ECHO == 1
@@ -858,7 +859,7 @@ _zshz_precmd() {
 
   # Don't track directory trees excluded in ZSHZ_EXCLUDE_DIRS
   local exclude
-  for exclude in ${(@)ZSHZ_EXCLUDE_DIRS:-${(@)_Z_EXCLUDE_DIRS}}; do
+  for exclude in ${(@)ZSHZ_EXCLUDE_DIRS:-${(@)_Z_EXCLUDE_DIRS:-}}; do
     case $PWD in
       ${exclude}|${exclude}/*) return ;;
     esac
@@ -926,7 +927,7 @@ ZSHZ[FUNCTIONS]='_zshz_usage
 # Enable WARN_NESTED_VAR for functions listed in
 #   ZSHZ[FUNCTIONS]
 ############################################################
-(( ZSHZ_DEBUG )) && () {
+(( ${+ZSHZ_DEBUG} )) && () {
   if is-at-least 5.4.0; then
     local x
     for x in ${=ZSHZ[FUNCTIONS]}; do
