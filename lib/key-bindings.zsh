@@ -118,6 +118,11 @@ bindkey '\C-x\C-e' edit-command-line
 # file rename magick
 bindkey "^[m" copy-prev-shell-word
 
+# Start typing + [Ctrl-P] - fuzzy find history forward
+bindkey '^P' up-line-or-beginning-search
+# Start typing + [Ctrl-N] - fuzzy find history backward
+bindkey '^N' down-line-or-beginning-search
+
 # consider emacs keybindings:
 
 #bindkey -e  ## emacs key bindings
