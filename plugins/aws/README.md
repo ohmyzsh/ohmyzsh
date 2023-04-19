@@ -58,6 +58,8 @@ the current `$AWS_PROFILE` and `$AWS_REGION`. It uses four variables to control 
 
 * ZSH_THEME_AWS_REGION_SUFFIX: sets the suffix of the AWS_REGION. Defaults to `>`.
 
+* ZSH_THEME_AWS_DIVIDER: sets the divider between ZSH_THEME_AWS_PROFILE_SUFFIX and ZSH_THEME_AWS_REGION_PREFIX. Defaults to ` ` (single space).
+
 ## Configuration
 
 [Configuration and credential file settings](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) by AWS
