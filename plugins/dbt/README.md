@@ -14,7 +14,7 @@ plugins=(... dbt)
 
 | Alias       | Command                          | Description                                                                   |
 |-------------|----------------------------------|-------------------------------------------------------------------------------|
-| dbtb        | `dbt build`                      | Install packages from the repositories                                        |
+| dbtb        | `dbt build`                      | Run models, tests, seeds and snapshots                                        |
 | dbtcl       | `dbt clean`                      | Clean the project, deletes all folders specified in the clean-targets list    |
 | dbtco       | `dbt compile`                    | Compile the project                                                           |
 | dbtdg       | `dbt debug`                      | Debug the project                                                             |
