@@ -71,7 +71,7 @@ alias npmi="npm info"
 alias npmSe="npm search"
 
 # Run npm run dev
-alias npmRD="npm run dev"
+alias npmrd="npm run dev"
 
 npm_toggle_install_uninstall() {
   # Look up to the previous 2 history commands
