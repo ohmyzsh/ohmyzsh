@@ -12,29 +12,16 @@ plugins=(... dbt)
 
 ## Aliases
 
-| Alias       | Command                          | Description                                                                   |
-|-------------|----------------------------------|-------------------------------------------------------------------------------|
-| dbtb        | `dbt build`                      | Run models, tests, seeds and snapshots                                        |
-| dbtcl       | `dbt clean`                      | Clean the project, deletes all folders specified in the clean-targets list    |
-| dbtco       | `dbt compile`                    | Compile the project                                                           |
-| dbtdg       | `dbt debug`                      | Debug the project                                                             |
-| dbtdgc      | `dbt debug --config-dir`         | Show the configured location for the profiles.yml file                        |
-| dbtdog      | `dbt docs generate`              | Generate docs                                                                 |
-| dbtdogn     | `dbt docs generate --no-compile` | Generate docs without compiling                                               |
-| dbtdos      | `dbt docs serve`                 | Serve docs                                                                    |
-| dbtds       | `dbt deps`                       | Pulls the most recent version of the dependencies listed in packages.yml      |
-| dbti        | `dbt init`                       | Initialize a new dbt project                                                  |
-| dbtl        | `dbt ls`                         | List available models                                                         |
-| dbtpa       | `dbt parse`                      | Parse the project                                                             |
-| dbtr        | `dbt run`                        | Run a model                                                                   |
-| dbtrf       | `dbt run --full-refresh`         | Run a model with a full refresh                                               |
-| dbtro       | `dbt run-operation`              | Invoke a macro                                                                |
-| dbts        | `dbt seed`                       | Load csv files located in the seed-paths directory of the dbt project         |
-| dbtsn       | `dbt snapshot`                   | Executes the Snapshots defined in the project                                 |
-| dbtsof      | `dbt source freshness`           | Query all of defined source tables, determining their "freshness"             |
-| dbtsw       | `dbt show`                       | Generates post-transformation preview from a source model, test, or analysis  |
-| dbtt        | `dbt test`                       | Runs tests defined on models, sources, snapshots, and seeds                   |
-| dbtv        | `dbt --verion`                   | Show the version on dbt installed in this host                                |
+| Alias       | Command                                         | Description                                           |
+|-----------|---------------------------------------------------|-------------------------------------------------------|
+| dbtlm     | `dbt ls -s state:modified`                        | List modified models only                             |
+| dbtrm     | `dbt run -s state:modified`                       | Run modified models only                              |
+| dbttm     | `dbt test -m state:modified`                      | Test modified models only                             |
+| dbtrtm    | `dbtrm && dbttm`                                  | Run and test modified models only                     |
+| dbtrs     | `dbt clean; dbt deps; dbt seed`                   | Re-seed data                                          |
+| dbtfrt    | `dbtrs; dbt run --full-refresh; dbt test`         | Perform a full fresh run with tests                   |
+| dbtcds    | `dbt docs generate; dbt docs serve`               | Generate docs without compiling                       |
+| dbtds     | `dbt docs generate --no-compile; dbt docs serve`  | Generate and serve docs skipping doc. re-compilation  |
 
 ## Maintainer
 
