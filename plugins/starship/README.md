@@ -17,3 +17,5 @@ Add `starship` to the plugins array in your `.zshrc` file:
 ```zsh
 plugins=(... starship)
 ```
+
+## ⚠️ ENABLING THIS PLUGIN WILL UNSET YOUR ZSH_THEME VARIABLE
