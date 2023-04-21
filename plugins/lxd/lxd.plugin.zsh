@@ -9,7 +9,7 @@ _lxc_get_global_flags () {
 }
 
 _lxc_get_command_list () {
-    echo "___command"
+    
     $_comp_command1 -h              | _lxc_get_commands
     $_comp_command1 -h              | _lxc_get_global_flags
 }
@@ -22,24 +22,24 @@ _lxc_get_subcommand_list () {
 
     case ${words[2]} in
             alias|cluster|image|operation|profile|project|remote|storage|warning)
-                    echo "___subco_alias"
+                    
                     ${words[1]} ${words[2]} list -f csv | cut -d, -f1
                     ;;
             list)
-                    echo "___subco_list"
+                    
                     ${words[1]} ${words[2]} -cn -fcsv ${words[3]}
                     ;;
             exec)
-                    echo "___subco_exec"
+                    
                     echo "--"
                     ${words[1]} list -cn -fcsv ${words[3]}
                     ;;
             network)
-                    echo "___subco_autre"
+                    
                     ${words[1]} ${words[2]} list -fcsv  | cut -d, -f1
                     ;;
             *)
-                    echo "___subco_autre"
+                    
                     ${words[1]} list -cn -fcsv  ${words[3]}
                     ;;
      esac
@@ -49,12 +49,12 @@ _lxc_get_subcommand_list () {
 _lxc_get_element_list () {
     case ${words[2]} in
             exec)
-                    echo "___subco_exec2"
+                    
                     echo "--"
                     $_comp_command1 ${words[2]} -h | _lxc_get_flags
             ;;
             *)
-                echo "___subco_autre2"
+                
                 $_comp_command1 ${words[2]} ${words[3]} -h | _lxc_get_flags
                 $_comp_command1 ${words[2]} ${words[3]} -h | _lxc_get_commands
             ;;
