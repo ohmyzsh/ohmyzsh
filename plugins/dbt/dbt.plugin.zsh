@@ -1,6 +1,3 @@
-
-# aliases for dbt
-
 # list modified models only
 alias dbtlm="dbt ls -s state:modified"
 
