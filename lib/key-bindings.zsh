@@ -39,7 +39,13 @@ if [[ -n "${terminfo[kcuu1]}" ]]; then
   bindkey -M emacs "${terminfo[kcuu1]}" up-line-or-beginning-search
   bindkey -M viins "${terminfo[kcuu1]}" up-line-or-beginning-search
   bindkey -M vicmd "${terminfo[kcuu1]}" up-line-or-beginning-search
+
+  # Same behavior for [Ctrl-P]
+  bindkey -M emacs '^P' up-line-or-beginning-search
+  bindkey -M viins '^P' up-line-or-beginning-search
+  bindkey -M vicmd '^P' up-line-or-beginning-search
 fi
+
 # Start typing + [Down-Arrow] - fuzzy find history backward
 if [[ -n "${terminfo[kcud1]}" ]]; then
   autoload -U down-line-or-beginning-search
@@ -48,6 +54,11 @@ if [[ -n "${terminfo[kcud1]}" ]]; then
   bindkey -M emacs "${terminfo[kcud1]}" down-line-or-beginning-search
   bindkey -M viins "${terminfo[kcud1]}" down-line-or-beginning-search
   bindkey -M vicmd "${terminfo[kcud1]}" down-line-or-beginning-search
+
+  # Same behavior for [Ctrl-N]
+  bindkey -M emacs '^N' down-line-or-beginning-search
+  bindkey -M viins '^N' down-line-or-beginning-search
+  bindkey -M vicmd '^N' down-line-or-beginning-search
 fi
 
 # [Home] - Go to beginning of line
@@ -74,6 +85,7 @@ fi
 bindkey -M emacs '^?' backward-delete-char
 bindkey -M viins '^?' backward-delete-char
 bindkey -M vicmd '^?' backward-delete-char
+
 # [Delete] - delete forward
 if [[ -n "${terminfo[kdch1]}" ]]; then
   bindkey -M emacs "${terminfo[kdch1]}" delete-char
@@ -117,27 +129,3 @@ bindkey '\C-x\C-e' edit-command-line
 
 # file rename magick
 bindkey "^[m" copy-prev-shell-word
-
-# Start typing + [Ctrl-P] - fuzzy find history forward
-bindkey '^P' up-line-or-beginning-search
-# Start typing + [Ctrl-N] - fuzzy find history backward
-bindkey '^N' down-line-or-beginning-search
-
-# consider emacs keybindings:
-
-#bindkey -e  ## emacs key bindings
-#
-#bindkey '^[[A' up-line-or-search
-#bindkey '^[[B' down-line-or-search
-#bindkey '^[^[[C' emacs-forward-word
-#bindkey '^[^[[D' emacs-backward-word
-#
-#bindkey -s '^X^Z' '%-^M'
-#bindkey '^[e' expand-cmd-path
-#bindkey '^[^I' reverse-menu-complete
-#bindkey '^X^N' accept-and-infer-next-history
-#bindkey '^W' kill-region
-#bindkey '^I' complete-word
-## Fix weird sequence that rxvt produces
-#bindkey -s '^[[Z' '\t'
-#
