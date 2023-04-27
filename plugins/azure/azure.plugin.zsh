@@ -31,11 +31,9 @@ function _az-homebrew-installed() {
   # check if Homebrew is installed
   (( $+commands[brew] )) || return 1
 
-  # speculatively check default brew prefix
-  if [[ -d /usr/local ]]; then
-    _brew_prefix=/usr/local
-  elif [[ -d /opt/homebrew ]]; then
-    _brew_prefix=/opt/homebrew
+  # if so, we assume it's default way to install brew
+  if [[ ${commands[brew]:t2} == bin/brew ]]; then
+    _brew_prefix="${commands[brew]:h:h}" # remove trailing /bin/brew
   else
     # ok, it is not in the default prefix
     # this call to brew is expensive (about 400 ms), so at least let's make it only once
