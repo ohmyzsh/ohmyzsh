@@ -1,4 +1,4 @@
-# AZ Get Subscritions
+# AZ Get Subscriptions
 function azgs() {
   az account show --output tsv --query 'name' 2>/dev/null
 }
