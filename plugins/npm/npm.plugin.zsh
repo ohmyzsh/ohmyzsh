@@ -73,6 +73,9 @@ alias npmSe="npm search"
 # Run npm run dev
 alias npmrd="npm run dev"
 
+# Adding npm install-test
+alias npmIt="npm install-test"
+
 npm_toggle_install_uninstall() {
   # Look up to the previous 2 history commands
   local line
