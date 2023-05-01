@@ -10,7 +10,7 @@ plugins=(... fasd)
 
 ## Installation
 
-Please find detailed installation guide [`here`](https://github.com/clvv/fasd#install)
+Please find detailed installation guide [`here`](https://github.com/whjvenyl/fasd#install)
 
 ## Aliases
 

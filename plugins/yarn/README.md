@@ -55,3 +55,4 @@ zstyle ':omz:plugins:yarn' global-path no
 | yv    | `yarn version`                            | Update the version of your package                                            |
 | yw    | `yarn workspace`                          | Run a command within a single workspace.                                      |
 | yws   | `yarn workspaces`                         | Run a command within all defined workspaces.                                  |
+| yy    | `yarn why`                                | Show why a package has been installed, detailing which other packages depend on it |

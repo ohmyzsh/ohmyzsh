@@ -15,6 +15,7 @@ def parse(line):
 
 def cheatsheet(lines):
     exps = [ parse(line) for line in lines ]
+    exps.sort(key=lambda exp:exp[2])
     cheatsheet = {'_default': []}
     for key, group in itertools.groupby(exps, lambda exp:exp[2]):
         group_list = [ item for item in group ]
@@ -56,8 +57,8 @@ def pretty_print(cheatsheet, wfilter, group_list=None, groups_only=False):
             pretty_print_group(key, [ alias for alias in aliases if alias[0].find(wfilter)>-1 or alias[1].find(wfilter)>-1], wfilter)
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Pretty print aliases.")
-    parser.add_argument('filter', nargs="*", help="search aliases matching string")
+    parser = argparse.ArgumentParser(description="Pretty print aliases.", prog="acs")
+    parser.add_argument('filter', nargs="*", metavar="<keyword>", help="search aliases matching keywords")
     parser.add_argument('-g', '--group', dest="group_list", action='append', help="only print aliases in given groups")
     parser.add_argument('--groups', dest='groups_only', action='store_true', help="only print alias groups")
     args = parser.parse_args()

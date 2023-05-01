@@ -19,7 +19,7 @@ Requirements: Python needs to be installed.
 
 - `acs -h/--help`: print help mesage
 
-- `acs <keyword>`: filter aliases by `<keyword>` and highlight
+- `acs <keyword(s)>`: filter and highlight aliases by `<keyword>`
 
 - `acs -g <group>/--group <group>`: show only aliases for group `<group>`. Multiple uses of the flag show all groups
 
