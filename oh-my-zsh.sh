@@ -159,10 +159,10 @@ _omz_source() {
   zstyle -T ":omz:${context}" aliases || disable_aliases=1
 
   # Back up alias names prior to sourcing
-  local -a aliases_pre galiases_pre
+  local -A aliases_pre galiases_pre
   if (( disable_aliases )); then
-    aliases_pre=("${(@k)aliases}")
-    galiases_pre=("${(@k)galiases}")
+    aliases_pre=("${(@kv)aliases}")
+    galiases_pre=("${(@kv)galiases}")
   fi
 
   # Source file from $ZSH_CUSTOM if it exists, otherwise from $ZSH
@@ -174,10 +174,16 @@ _omz_source() {
 
   # Unset all aliases that don't appear in the backed up list of aliases
   if (( disable_aliases )); then
-    local -a disabled
-    # ${var:|array} gets the list of items in var not in array
-    disabled=("${(@k)aliases:|aliases_pre}" "${(@k)galiases:|galiases_pre}")
-    (( $#disabled == 0 )) || unalias "${(@)disabled}"
+    if (( #aliases_pre )); then
+      aliases=("${(@kv)aliases_pre}")
+    else
+      (( #aliases )) && unalias "${(@k)aliases}"
+    fi
+    if (( #galiases_pre )); then
+      galiases=("${(@kv)galiases_pre}")
+    else
+      (( #galiases )) && unalias "${(@k)galiases}"
+    fi
   fi
 }
 
