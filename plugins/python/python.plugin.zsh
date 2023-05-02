@@ -48,7 +48,7 @@ alias ipython="python3 -c 'import IPython; IPython.terminal.ipapp.launch_new_ins
 
 # Share local directory as a HTTP server
 alias pyserver="python3 -m http.server"
-
+alias pyu="python3 -m pip install --upgrade pip"
 
 ## venv utilities
 
