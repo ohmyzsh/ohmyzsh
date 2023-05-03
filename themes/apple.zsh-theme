@@ -1,5 +1,5 @@
 function toon {
-  echo -n "󰐀"
+  echo -n ""
 }
 
 autoload -Uz vcs_info
