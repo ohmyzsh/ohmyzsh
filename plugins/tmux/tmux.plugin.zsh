@@ -26,7 +26,7 @@ fi
 # systems without the proper terminfo
 : ${ZSH_TMUX_FIXTERM_WITH_256COLOR:=screen-256color}
 # Set the configuration path
-: ${ZSH_TMUX_CONFIG:=$HOME/.tmux.conf}
+: ${ZSH_TMUX_CONFIG:=${XDG_CONFIG_HOME:=~/.config/tmux.conf}}
 # Set -u option to support unicode
 : ${ZSH_TMUX_UNICODE:=false}
 
