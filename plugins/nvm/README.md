@@ -58,3 +58,11 @@ zstyle ':omz:plugins:nvm' silent-autoload yes
 ```
 
 Note: _this will not remove regular `nvm` output_
+
+##### autoload with lazy
+
+Lazy and autoload mode can be used concurrently, but when doing so, only the current working directory will
+be searched for an `.nvmrc` file, unlike the usual nvm behaviour of searching all parent directories.
+The expectation is that if you're setting both of these options, this is an acceptable trade-off for the
+combination of lazy automatic loading.  If you need parent-searching for your autoloading, the lazy option
+isn't for you.

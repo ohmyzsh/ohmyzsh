@@ -61,6 +61,16 @@ fi
 # Autoload nvm when finding a .nvmrc file in the current directory
 # Adapted from: https://github.com/nvm-sh/nvm#zsh
 if zstyle -t ':omz:plugins:nvm' autoload; then
+  # if lazy mode is set, add a simplified nvm_find_nvmrc shim that only looks in the current directory
+  if zstyle -t ':omz:plugins:nvm' lazy; then
+    # This will be overridden with the real one as soon as a .zshrc is detected
+    function nvm_find_nvmrc {
+      if [ -e "${PWD}/.nvmrc" ]; then
+        command printf %s\\n "${PWD}/.nvmrc" 2> /dev/null
+      fi
+    }
+  fi
+
   function load-nvmrc {
     local node_version="$(nvm version)"
     local nvmrc_path="$(nvm_find_nvmrc)"
