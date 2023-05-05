@@ -180,7 +180,7 @@ function aws_change_access_key() {
   case $yn in
     [Yy]*)
       echo -n "\nDisabling access key ${original_aws_access_key_id}..."
-      if aws --no-cli-pager update-access-key --access-key-id ${original_aws_access_key_id} --status Inactive; then
+      if aws --no-cli-pager iam update-access-key --access-key-id ${original_aws_access_key_id} --status Inactive; then
         echo "done."
       else
         echo "\nFailed to disable ${original_aws_access_key_id} key."
