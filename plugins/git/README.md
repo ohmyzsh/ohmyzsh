@@ -139,6 +139,8 @@ plugins=(... git)
 | grbc                 | git rebase --continue                                                                                                                                                                    |
 | grbd                 | git rebase $(git_develop_branch)                                                                                                                                                         |
 | grbi                 | git rebase --interactive                                                                                                                                                                 |
+| grbio                | git rebase --interactive $(git_main_branch)                                                                                                                                              |
+| grbiom               | git rebase --interactive origin/$(git_main_branch)                                                                                                                                       |
 | grbm                 | git rebase $(git_main_branch)                                                                                                                                                            |
 | grbom                | git rebase origin/$(git_main_branch)                                                                                                                                                     |
 | grbo                 | git rebase --onto                                                                                                                                                                        |
