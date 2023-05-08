@@ -230,6 +230,8 @@ alias glola="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgr
 alias glog='git log --oneline --decorate --graph'
 alias gloga='git log --oneline --decorate --graph --all'
 alias glp="_git_log_prettily"
+alias glc="git log --all --graph --simplify-by-decoration --pretty='format:%C(auto)%d - %s'"
+alias glca="git log --all --graph --simplify-by-decoration --pretty='format:%C(blue)%h %C(green)%as %C(yellow)%al%C(auto)%d - %s'"
 
 alias gm='git merge'
 alias gmom='git merge origin/$(git_main_branch)'
