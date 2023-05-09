@@ -25,7 +25,7 @@ Original author: [Sorin Ionescu](https://github.com/sorin-ionescu)
 | `pxd`         | Return the current Xcode project directory               |
 | `cdx`         | `cd` to the current Xcode project directory              |
 | `quick-look`  | Quick-Look a specified file                              |
-| `man-preview` | Open a specified man page in Preview app                 |
+| `man-preview` | Open man pages in Preview app                            |
 | `showfiles`   | Show hidden files in Finder                              |
 | `hidefiles`   | Hide the hidden files in Finder                          |
 | `itunes`      | _DEPRECATED_. Use `music` from macOS Catalina on         |

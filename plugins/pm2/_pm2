@@ -118,7 +118,7 @@ start_options=(
 )
 logs_options=(
     '--json[json log output]'
-    '--format[formated log output]'
+    '--format[formatted log output]'
     '--raw[raw output]'
     '--err[only shows error output]'
     '--out[only shows standard output]'

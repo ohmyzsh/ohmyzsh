@@ -19,7 +19,7 @@ __gnu_utils() {
   'gchown' 'gchroot' 'gcksum' 'gcomm' 'gcp' 'gcsplit' 'gcut' 'gdate'
   'gdd' 'gdf' 'gdir' 'gdircolors' 'gdirname' 'gdu' 'gecho' 'genv' 'gexpand'
   'gexpr' 'gfactor' 'gfalse' 'gfmt' 'gfold' 'ggroups' 'ghead' 'ghostid'
-  'gid' 'ginstall' 'gjoin' 'gkill' 'glink' 'gln' 'glogname' 'gls' 'gmd5sum'
+  'gid' 'gindent' 'ginstall' 'gjoin' 'gkill' 'glink' 'gln' 'glogname' 'gls' 'gmd5sum'
   'gmkdir' 'gmkfifo' 'gmknod' 'gmktemp' 'gmv' 'gnice' 'gnl' 'gnohup' 'gnproc'
   'god' 'gpaste' 'gpathchk' 'gpinky' 'gpr' 'gprintenv' 'gprintf' 'gptx' 'gpwd'
   'greadlink' 'grm' 'grmdir' 'gruncon' 'gseq' 'gsha1sum' 'gsha224sum'
@@ -34,6 +34,9 @@ __gnu_utils() {
 
   # Not part of either coreutils or findutils, installed separately.
   gcmds+=('gsed' 'gtar' 'gtime' 'gmake' 'ggrep')
+
+  # can be built optionally
+  gcmds+=('ghostname')
 
   for gcmd in "${gcmds[@]}"; do
     # Do nothing if the command isn't found
@@ -58,3 +61,14 @@ __gnu_utils_preexec() {
 
 autoload -Uz add-zsh-hook
 add-zsh-hook preexec __gnu_utils_preexec
+
+# lib/theme-and-appearance.zsh sets the alias for ls not knowing that
+# we'll be using GNU ls. We'll reset this to use GNU ls --color.
+# See https://github.com/ohmyzsh/ohmyzsh/issues/11503
+#
+# The ls alias might look like:
+# - ls='ls -G'
+# - ls='gls --color=tty'
+if [[ -x "${commands[gls]}" && "${aliases[ls]}" = (*-G*|gls*) ]]; then
+  alias ls='ls --color=tty'
+fi

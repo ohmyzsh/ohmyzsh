@@ -57,9 +57,7 @@ mkdir -p "$ZSH_CACHE_DIR/completions"
 (( ${fpath[(Ie)"$ZSH_CACHE_DIR/completions"]} )) || fpath=("$ZSH_CACHE_DIR/completions" $fpath)
 
 # Check for updates on initial load...
-if [[ "$DISABLE_AUTO_UPDATE" != true ]]; then
-  source "$ZSH/tools/check_for_upgrade.sh"
-fi
+source "$ZSH/tools/check_for_upgrade.sh"
 
 # Initializes Oh My Zsh
 
@@ -67,7 +65,7 @@ fi
 fpath=("$ZSH/functions" "$ZSH/completions" $fpath)
 
 # Load all stock functions (from $fpath files) called below.
-autoload -U compaudit compinit
+autoload -U compaudit compinit zrecompile
 
 # Set ZSH_CUSTOM to the path where your custom config files
 # and plugins exists, or else we will use the default custom/
@@ -120,17 +118,18 @@ fi
 
 if [[ "$ZSH_DISABLE_COMPFIX" != true ]]; then
   source "$ZSH/lib/compfix.zsh"
-  # If completion insecurities exist, warn the user
-  handle_completion_insecurities
   # Load only from secure directories
-  compinit -i -C -d "$ZSH_COMPDUMP"
+  compinit -i -d "$ZSH_COMPDUMP"
+  # If completion insecurities exist, warn the user
+  handle_completion_insecurities &|
 else
   # If the user wants it, load from all found directories
-  compinit -u -C -d "$ZSH_COMPDUMP"
+  compinit -u -d "$ZSH_COMPDUMP"
 fi
 
 # Append zcompdump metadata if missing
-if (( $zcompdump_refresh )); then
+if (( $zcompdump_refresh )) \
+  || ! command grep -q -Fx "$zcompdump_revision" "$ZSH_COMPDUMP" 2>/dev/null; then
   # Use `tee` in case the $ZSH_COMPDUMP filename is invalid, to silence the error
   # See https://github.com/ohmyzsh/ohmyzsh/commit/dd1a7269#commitcomment-39003489
   tee -a "$ZSH_COMPDUMP" &>/dev/null <<EOF
@@ -141,22 +140,63 @@ EOF
 fi
 unset zcompdump_revision zcompdump_fpath zcompdump_refresh
 
+# zcompile the completion dump file if the .zwc is older or missing.
+if command mkdir "${ZSH_COMPDUMP}.lock" 2>/dev/null; then
+  zrecompile -q -p "$ZSH_COMPDUMP"
+  command rm -rf "$ZSH_COMPDUMP.zwc.old" "${ZSH_COMPDUMP}.lock" 
+fi
+
+_omz_source() {
+  local context filepath="$1"
+
+  # Construct zstyle context based on path
+  case "$filepath" in
+  lib/*) context="lib:${filepath:t:r}" ;;         # :t = lib_name.zsh, :r = lib_name
+  plugins/*) context="plugins:${filepath:h:t}" ;; # :h = plugins/plugin_name, :t = plugin_name
+  esac
+
+  local disable_aliases=0
+  zstyle -T ":omz:${context}" aliases || disable_aliases=1
+
+  # Back up alias names prior to sourcing
+  local -A aliases_pre galiases_pre
+  if (( disable_aliases )); then
+    aliases_pre=("${(@kv)aliases}")
+    galiases_pre=("${(@kv)galiases}")
+  fi
+
+  # Source file from $ZSH_CUSTOM if it exists, otherwise from $ZSH
+  if [[ -f "$ZSH_CUSTOM/$filepath" ]]; then
+    source "$ZSH_CUSTOM/$filepath"
+  elif [[ -f "$ZSH/$filepath" ]]; then
+    source "$ZSH/$filepath"
+  fi
+
+  # Unset all aliases that don't appear in the backed up list of aliases
+  if (( disable_aliases )); then
+    if (( #aliases_pre )); then
+      aliases=("${(@kv)aliases_pre}")
+    else
+      (( #aliases )) && unalias "${(@k)aliases}"
+    fi
+    if (( #galiases_pre )); then
+      galiases=("${(@kv)galiases_pre}")
+    else
+      (( #galiases )) && unalias "${(@k)galiases}"
+    fi
+  fi
+}
+
 # Load all of the config files in ~/oh-my-zsh that end in .zsh
 # TIP: Add files you don't want in git to .gitignore
 for config_file ("$ZSH"/lib/*.zsh); do
-  custom_config_file="$ZSH_CUSTOM/lib/${config_file:t}"
-  [[ -f "$custom_config_file" ]] && config_file="$custom_config_file"
-  source "$config_file"
+  _omz_source "lib/${config_file:t}"
 done
 unset custom_config_file
 
 # Load all of the plugins that were defined in ~/.zshrc
 for plugin ($plugins); do
-  if [[ -f "$ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh" ]]; then
-    source "$ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh"
-  elif [[ -f "$ZSH/plugins/$plugin/$plugin.plugin.zsh" ]]; then
-    source "$ZSH/plugins/$plugin/$plugin.plugin.zsh"
-  fi
+  _omz_source "plugins/$plugin/$plugin.plugin.zsh"
 done
 unset plugin
 
@@ -184,3 +224,6 @@ if [[ -n "$ZSH_THEME" ]]; then
     echo "[oh-my-zsh] theme '$ZSH_THEME' not found"
   fi
 fi
+
+# set completion colors to be the same as `ls`, after theme has been loaded
+[[ -z "$LS_COLORS" ]] || zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"

@@ -103,8 +103,7 @@ function frontend() {
 
   # build search url:
   # join arguments passed with '%20', then append to search context URL
-  # TODO substitute for proper urlencode method
-  url="${urls[$1]}${(j:%20:)@[2,-1]}"
+  url="${urls[$1]}$(omz_urlencode -P ${@[2,-1]})"
 
   echo "Opening $url ..."
 

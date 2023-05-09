@@ -66,6 +66,11 @@
 #     git           always compare HEAD to @{upstream}
 #     svn           always compare HEAD to your SVN upstream
 #
+# By default, __git_ps1 will compare HEAD to your SVN upstream if it can
+# find one, or @{upstream} otherwise.  Once you have set
+# GIT_PS1_SHOWUPSTREAM, you can override it on a per-repository basis by
+# setting the bash.showUpstream config variable.
+#
 # You can change the separator between the branch name and the above
 # state symbols by setting GIT_PS1_STATESEPARATOR. The default separator
 # is SP.
@@ -78,11 +83,6 @@
 # "|SPARSE" will be included in the prompt.  This can be shortened to a
 # single '?' character by setting GIT_PS1_COMPRESSSPARSESTATE, or omitted
 # by setting GIT_PS1_OMITSPARSESTATE.
-#
-# By default, __git_ps1 will compare HEAD to your SVN upstream if it can
-# find one, or @{upstream} otherwise.  Once you have set
-# GIT_PS1_SHOWUPSTREAM, you can override it on a per-repository basis by
-# setting the bash.showUpstream config variable.
 #
 # If you would like to see more information about the identity of
 # commits checked out as a detached HEAD, set GIT_PS1_DESCRIBE_STYLE
@@ -115,7 +115,7 @@ __git_ps1_show_upstream ()
 {
 	local key value
 	local svn_remote svn_url_pattern count n
-	local upstream=git legacy="" verbose="" name=""
+	local upstream_type=git legacy="" verbose="" name=""
 
 	svn_remote=()
 	# get some config options from git-config
@@ -132,7 +132,7 @@ __git_ps1_show_upstream ()
 		svn-remote.*.url)
 			svn_remote[$((${#svn_remote[@]} + 1))]="$value"
 			svn_url_pattern="$svn_url_pattern\\|$value"
-			upstream=svn+git # default upstream is SVN if available, else git
+			upstream_type=svn+git # default upstream type is SVN if available, else git
 			;;
 		esac
 	done <<< "$output"
@@ -141,16 +141,16 @@ __git_ps1_show_upstream ()
 	local option
 	for option in ${GIT_PS1_SHOWUPSTREAM}; do
 		case "$option" in
-		git|svn) upstream="$option" ;;
+		git|svn) upstream_type="$option" ;;
 		verbose) verbose=1 ;;
 		legacy)  legacy=1  ;;
 		name)    name=1 ;;
 		esac
 	done
 
-	# Find our upstream
-	case "$upstream" in
-	git)    upstream="@{upstream}" ;;
+	# Find our upstream type
+	case "$upstream_type" in
+	git)    upstream_type="@{upstream}" ;;
 	svn*)
 		# get the upstream from the "git-svn-id: ..." in a commit message
 		# (git-svn uses essentially the same procedure internally)
@@ -167,12 +167,12 @@ __git_ps1_show_upstream ()
 
 			if [[ -z "$svn_upstream" ]]; then
 				# default branch name for checkouts with no layout:
-				upstream=${GIT_SVN_ID:-git-svn}
+				upstream_type=${GIT_SVN_ID:-git-svn}
 			else
-				upstream=${svn_upstream#/}
+				upstream_type=${svn_upstream#/}
 			fi
-		elif [[ "svn+git" = "$upstream" ]]; then
-			upstream="@{upstream}"
+		elif [[ "svn+git" = "$upstream_type" ]]; then
+			upstream_type="@{upstream}"
 		fi
 		;;
 	esac
@@ -180,11 +180,11 @@ __git_ps1_show_upstream ()
 	# Find how many commits we are ahead/behind our upstream
 	if [[ -z "$legacy" ]]; then
 		count="$(git rev-list --count --left-right \
-				"$upstream"...HEAD 2>/dev/null)"
+				"$upstream_type"...HEAD 2>/dev/null)"
 	else
 		# produce equivalent output to --count for older versions of git
 		local commits
-		if commits="$(git rev-list --left-right "$upstream"...HEAD 2>/dev/null)"
+		if commits="$(git rev-list --left-right "$upstream_type"...HEAD 2>/dev/null)"
 		then
 			local commit behind=0 ahead=0
 			for commit in $commits
@@ -214,26 +214,26 @@ __git_ps1_show_upstream ()
 		*)	    # diverged from upstream
 			p="<>" ;;
 		esac
-	else
+	else # verbose, set upstream instead of p
 		case "$count" in
 		"") # no upstream
-			p="" ;;
+			upstream="" ;;
 		"0	0") # equal to upstream
-			p=" u=" ;;
+			upstream="|u=" ;;
 		"0	"*) # ahead of upstream
-			p=" u+${count#0	}" ;;
+			upstream="|u+${count#0	}" ;;
 		*"	0") # behind upstream
-			p=" u-${count%	0}" ;;
+			upstream="|u-${count%	0}" ;;
 		*)	    # diverged from upstream
-			p=" u+${count#*	}-${count%	*}" ;;
+			upstream="|u+${count#*	}-${count%	*}" ;;
 		esac
 		if [[ -n "$count" && -n "$name" ]]; then
 			__git_ps1_upstream_name=$(git rev-parse \
-				--abbrev-ref "$upstream" 2>/dev/null)
+				--abbrev-ref "$upstream_type" 2>/dev/null)
 			if [ $pcmode = yes ] && [ $ps1_expanded = yes ]; then
-				p="$p \${__git_ps1_upstream_name}"
+				upstream="$upstream \${__git_ps1_upstream_name}"
 			else
-				p="$p ${__git_ps1_upstream_name}"
+				upstream="$upstream ${__git_ps1_upstream_name}"
 				# not needed anymore; keep user's
 				# environment clean
 				unset __git_ps1_upstream_name
@@ -245,7 +245,8 @@ __git_ps1_show_upstream ()
 
 # Helper function that is meant to be called from __git_ps1.  It
 # injects color codes into the appropriate gitstring variables used
-# to build a gitstring.
+# to build a gitstring. Colored variables are responsible for clearing
+# their own color.
 __git_ps1_colorize_gitstring ()
 {
 	if [[ -n ${ZSH_VERSION-} ]]; then
@@ -271,22 +272,23 @@ __git_ps1_colorize_gitstring ()
 	else
 		branch_color="$bad_color"
 	fi
-	c="$branch_color$c"
+	if [ -n "$c" ]; then
+		c="$branch_color$c$c_clear"
+	fi
+	b="$branch_color$b$c_clear"
 
-	z="$c_clear$z"
-	if [ "$w" = "*" ]; then
-		w="$bad_color$w"
+	if [ -n "$w" ]; then
+		w="$bad_color$w$c_clear"
 	fi
 	if [ -n "$i" ]; then
-		i="$ok_color$i"
+		i="$ok_color$i$c_clear"
 	fi
 	if [ -n "$s" ]; then
-		s="$flags_color$s"
+		s="$flags_color$s$c_clear"
 	fi
 	if [ -n "$u" ]; then
-		u="$bad_color$u"
+		u="$bad_color$u$c_clear"
 	fi
-	r="$c_clear$r"
 }
 
 # Helper function to read the first line of a file into a variable.
@@ -512,7 +514,8 @@ __git_ps1 ()
 	local u=""
 	local h=""
 	local c=""
-	local p=""
+	local p="" # short version of upstream state indicator
+	local upstream="" # verbose version of upstream state indicator
 
 	if [ "true" = "$inside_gitdir" ]; then
 		if [ "true" = "$bare_repo" ]; then
@@ -555,6 +558,12 @@ __git_ps1 ()
 
 	local z="${GIT_PS1_STATESEPARATOR-" "}"
 
+	b=${b##refs/heads/}
+	if [ $pcmode = yes ] && [ $ps1_expanded = yes ]; then
+		__git_ps1_branch_name=$b
+		b="\${__git_ps1_branch_name}"
+	fi
+
 	# NO color option unless in PROMPT_COMMAND mode or it's Zsh
 	if [ -n "${GIT_PS1_SHOWCOLORHINTS-}" ]; then
 		if [ $pcmode = yes ] || [ -n "${ZSH_VERSION-}" ]; then
@@ -562,14 +571,8 @@ __git_ps1 ()
 		fi
 	fi
 
-	b=${b##refs/heads/}
-	if [ $pcmode = yes ] && [ $ps1_expanded = yes ]; then
-		__git_ps1_branch_name=$b
-		b="\${__git_ps1_branch_name}"
-	fi
-
-	local f="$h$w$i$s$u"
-	local gitstring="$c$b${f:+$z$f}${sparse}$r$p"
+	local f="$h$w$i$s$u$p"
+	local gitstring="$c$b${f:+$z$f}${sparse}$r${upstream}"
 
 	if [ $pcmode = yes ]; then
 		if [ "${__git_printf_supports_v-}" != yes ]; then
