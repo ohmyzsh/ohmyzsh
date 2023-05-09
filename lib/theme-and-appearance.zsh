@@ -65,7 +65,7 @@ case "$OSTYPE" in
     test-ls-args ls -G && alias ls='ls -G'
     # Only use GNU ls if installed and there are user defaults for $LS_COLORS,
     # as the default coloring scheme is not very pretty
-    zstyle -T ':omz:lib:theme-and-appearance' gnu-ls \
+    zstyle -t ':omz:lib:theme-and-appearance' gnu-ls \
       && test-ls-args gls --color \
       && alias ls='gls --color=tty'
     ;;
