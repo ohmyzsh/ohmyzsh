@@ -38,12 +38,14 @@ plugins=(... kubectl)
 |         |                                     | **Service management**                                                                           |
 | kgs     | `kubectl get svc`                   | List all services in ps output format                                                            |
 | kgsw    | `kgs --watch`                       | After listing all services, watch for changes                                                    |
+| kgsn    | `kgs -n`                            | List services by namespace. Example: `kgsn kube-system`                                          |
 | kgswide | `kgs -o wide`                       | After listing all services, output in plain-text format with any additional information          |
 | kes     | `kubectl edit svc`                  | Edit services(svc) from the default editor                                                       |
 | kds     | `kubectl describe svc`              | Describe all services in detail                                                                  |
 | kdels   | `kubectl delete svc`                | Delete all services matching passed argument                                                     |
 |         |                                     | **Ingress management**                                                                           |
 | kgi     | `kubectl get ingress`               | List ingress resources in ps output format                                                       |
+| kgin    | `kgi -n`                            | List ingress resources by namespace. Example: `kgin kube-system`                                 |
 | kei     | `kubectl edit ingress`              | Edit ingress resource from the default editor                                                    |
 | kdi     | `kubectl describe ingress`          | Describe ingress resource in detail                                                              |
 | kdeli   | `kubectl delete ingress`            | Delete ingress resources matching passed argument                                                |
@@ -55,15 +57,18 @@ plugins=(... kubectl)
 | kdelns  | `kubectl delete namespace`          | Delete the namespace. WARNING! This deletes everything in the namespace                          |
 |         |                                     | **ConfigMap management**                                                                         |
 | kgcm    | `kubectl get configmaps`            | List the configmaps in ps output format                                                          |
+| kgcmn   | `kgcm -n`                           | List configmaps by namespace. Example: `kgcmn kube-system`                                       |
 | kecm    | `kubectl edit configmap`            | Edit configmap resource from the default editor                                                  |
 | kdcm    | `kubectl describe configmap`        | Describe configmap resource in detail                                                            |
 | kdelcm  | `kubectl delete configmap`          | Delete the configmap                                                                             |
 |         |                                     | **Secret management**                                                                            |
 | kgsec   | `kubectl get secret`                | Get secret for decoding                                                                          |
+| kgsecn  | `kgsec -n`                          | List secrets by namespace. Example: `kgsecn kube-system`                                         |
 | kdsec   | `kubectl describe secret`           | Describe secret resource in detail                                                               |
 | kdelsec | `kubectl delete secret`             | Delete the secret                                                                                |
 |         |                                     | **Deployment management**                                                                        |
 | kgd     | `kubectl get deployment`            | Get the deployment                                                                               |
+| kgdn    | `kgd -n`                            | Get deployments by namspace. Example: `kgdn kube-system`                                         |
 | kgdw    | `kgd --watch`                       | After getting the deployment, watch for changes                                                  |
 | kgdwide | `kgd -o wide`                       | After getting the deployment, output in plain-text format with any additional information        |
 | ked     | `kubectl edit deployment`           | Edit deployment resource from the default editor                                                 |
@@ -74,6 +79,7 @@ plugins=(... kubectl)
 | kres    | `kubectl set env $@ REFRESHED_AT=...` | Recreate all pods in deployment with zero-downtime                                             |
 |         |                                     | **Rollout management**                                                                           |
 | kgrs    | `kubectl get replicaset`            | List all ReplicaSets `rs` created by the deployment                                              |
+| kgrsn   | `kgrs -n`                           | List ReplicaSets by namespace. Example: `kgrsn kube-system`                                      |
 | kdrs    | `kubectl describe replicaset`       | Describe ReplicaSet in detail                                                                    |
 | kers    | `kubectl edit replicaset`           | Edit ReplicaSet from the default editor                                                          |
 | krh     | `kubectl rollout history`           | Check the revisions of this deployment                                                           |
@@ -90,17 +96,20 @@ plugins=(... kubectl)
 | kcp     | `kubectl cp`                        | Copy files and directories to and from containers                                                |
 |         |                                     | **Node management**                                                                              |
 | kgno    | `kubectl get nodes`                 | List the nodes in ps output format                                                               |
+| kgnon   | `kgno -n`                           | List nodes by namespace. Example: `kgnon kube-system`                                            |
 | keno    | `kubectl edit node`                 | Edit nodes resource from the default editor                                                      |
 | kdno    | `kubectl describe node`             | Describe node resource in detail                                                                 |
 | kdelno  | `kubectl delete node`               | Delete the node                                                                                  |
 |         |                                     | **Persistent Volume Claim management**                                                           |
 | kgpvc   | `kubectl get pvc`                   | List all PVCs                                                                                    |
+| kgpvcn  | `kgpvc -n`                          | List PVCs by namespace. Example: `kgpvcn kube-system`                                            |
 | kgpvcw  | `kgpvc --watch`                     | After listing/getting the requested object, watch for changes                                    |
 | kepvc   | `kubectl edit pvc`                  | Edit pvcs from the default editor                                                                |
 | kdpvc   | `kubectl describe pvc`              | Describe all pvcs                                                                                |
 | kdelpvc | `kubectl delete pvc`                | Delete all pvcs matching passed arguments                                                        |
 |         |                                     | **StatefulSets management**                                                                      |
 | kgss    | `kubectl get statefulset`           | List the statefulsets in ps format                                                               |
+| kgssn   | `kgss -n`                           | List statefulsets by namespace. Example: `kgssn kube-system`                                     |
 | kgssw   | `kgss --watch`                      | After getting the list of statefulsets, watch for changes                                        |
 | kgsswide| `kgss -o wide`                      | After getting the statefulsets, output in plain-text format with any additional information      |
 | kess    | `kubectl edit statefulset`          | Edit statefulset resource from the default editor                                                |
@@ -119,11 +128,13 @@ plugins=(... kubectl)
 | kdelds  | `kubectl delete daemonset`          | Delete all DaemonSets matching passed argument                                                   |
 |         |                                     | **CronJob management**                                                                           |
 | kgcj    | `kubectl get cronjob`               | List all CronJobs in ps output format                                                            |
+| kgcjn   | `kgcj -n`                           | List CronJobs by namespace. Example: `kgcjn kube-system`                                         |
 | kecj    | `kubectl edit cronjob`              | Edit CronJob from the default editor                                                             |
 | kdcj    | `kubectl describe cronjob`          | Describe a CronJob in details                                                                    |
 | kdelcj  | `kubectl delete cronjob`            | Delete the CronJob                                                                               |
 |         |                                     | **Job management**                                                                               |
 | kgj     | `kubectl get job`                   | List all Job in ps output format                                                                 |
+| kgjn    | `kgj -n`                            | List Jobs by namespace. Example: `kgjn kube-system`                                              |
 | kej     | `kubectl edit job`                  | Edit a Job in details                                                                            |
 | kdj     | `kubectl describe job`              | Describe the Job                                                                                 |
 | kdelj   | `kubectl delete job`                | Delete the Job                                                                                   |

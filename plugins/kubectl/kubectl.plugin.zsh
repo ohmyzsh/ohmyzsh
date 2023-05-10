@@ -56,6 +56,7 @@ alias kgpn='kgp -n'
 # Service management.
 alias kgs='kubectl get svc'
 alias kgsa='kubectl get svc --all-namespaces'
+alias kgsn='kgs -n'
 alias kgsw='kgs --watch'
 alias kgswide='kgs -o wide'
 alias kes='kubectl edit svc'
@@ -65,6 +66,7 @@ alias kdels='kubectl delete svc'
 # Ingress management
 alias kgi='kubectl get ingress'
 alias kgia='kubectl get ingress --all-namespaces'
+alias kgin='kgi -n'
 alias kei='kubectl edit ingress'
 alias kdi='kubectl describe ingress'
 alias kdeli='kubectl delete ingress'
@@ -79,6 +81,7 @@ alias kcn='kubectl config set-context --current --namespace'
 # ConfigMap management
 alias kgcm='kubectl get configmaps'
 alias kgcma='kubectl get configmaps --all-namespaces'
+alias kgcmn='kgcm -n'
 alias kecm='kubectl edit configmap'
 alias kdcm='kubectl describe configmap'
 alias kdelcm='kubectl delete configmap'
@@ -86,12 +89,14 @@ alias kdelcm='kubectl delete configmap'
 # Secret management
 alias kgsec='kubectl get secret'
 alias kgseca='kubectl get secret --all-namespaces'
+alias kgsecn='kgsec -n'
 alias kdsec='kubectl describe secret'
 alias kdelsec='kubectl delete secret'
 
 # Deployment management.
 alias kgd='kubectl get deployment'
 alias kgda='kubectl get deployment --all-namespaces'
+alias kgdn='kgd -n'
 alias kgdw='kgd --watch'
 alias kgdwide='kgd -o wide'
 alias ked='kubectl edit deployment'
@@ -106,6 +111,7 @@ function kres(){
 
 # Rollout management.
 alias kgrs='kubectl get replicaset'
+alias kgrsn='kgrs -n'
 alias kdrs='kubectl describe replicaset'
 alias kers='kubectl edit replicaset'
 alias krh='kubectl rollout history'
@@ -114,6 +120,7 @@ alias kru='kubectl rollout undo'
 # Statefulset management.
 alias kgss='kubectl get statefulset'
 alias kgssa='kubectl get statefulset --all-namespaces'
+alias kgssn='kgss -n'
 alias kgssw='kgss --watch'
 alias kgsswide='kgss -o wide'
 alias kess='kubectl edit statefulset'
@@ -144,6 +151,7 @@ alias kcp='kubectl cp'
 
 # Node Management
 alias kgno='kubectl get nodes'
+alias kgnon='kgno -n'
 alias keno='kubectl edit node'
 alias kdno='kubectl describe node'
 alias kdelno='kubectl delete node'
@@ -151,6 +159,7 @@ alias kdelno='kubectl delete node'
 # PVC management.
 alias kgpvc='kubectl get pvc'
 alias kgpvca='kubectl get pvc --all-namespaces'
+alias kgpvcn='kgpvc -n'
 alias kgpvcw='kgpvc --watch'
 alias kepvc='kubectl edit pvc'
 alias kdpvc='kubectl describe pvc'
@@ -169,12 +178,14 @@ alias kdelds='kubectl delete daemonset'
 
 # CronJob management.
 alias kgcj='kubectl get cronjob'
+alias kgcjn='kgcj -n'
 alias kecj='kubectl edit cronjob'
 alias kdcj='kubectl describe cronjob'
 alias kdelcj='kubectl delete cronjob'
 
 # Job management.
 alias kgj='kubectl get job'
+alias kgjn='kgj -n'
 alias kej='kubectl edit job'
 alias kdj='kubectl describe job'
 alias kdelj='kubectl delete job'
