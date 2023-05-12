@@ -224,12 +224,12 @@ function aws_prompt_info() {
   local _aws_to_show
   local region="${AWS_REGION:-${AWS_DEFAULT_REGION:-$AWS_PROFILE_REGION}}"
 
-  if [[ -n $AWS_PROFILE ]];then
+  if [[ -n "$AWS_PROFILE" ]];then
     _aws_to_show+="${ZSH_THEME_AWS_PROFILE_PREFIX="<aws:"}${AWS_PROFILE}${ZSH_THEME_AWS_PROFILE_SUFFIX=">"}"
   fi
 
-  if [[ -n $AWS_REGION ]]; then
-    [[ -n $AWS_PROFILE ]] && _aws_to_show+="${ZSH_THEME_AWS_DIVIDER=" "}"
+  if [[ -n "$region" ]]; then
+    [[ -n "$_aws_to_show" ]] && _aws_to_show+="${ZSH_THEME_AWS_DIVIDER=" "}"
     _aws_to_show+="${ZSH_THEME_AWS_REGION_PREFIX="<region:"}${region}${ZSH_THEME_AWS_REGION_SUFFIX=">"}"
   fi
 
