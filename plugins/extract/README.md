@@ -25,6 +25,7 @@ plugins=(... extract)
 | `cpio`            | Cpio archive                         |
 | `deb`             | Debian package                       |
 | `ear`             | Enterprise Application aRchive       |
+| `exe`             | Windows executable file              |
 | `gz`              | Gzip file                            |
 | `ipa`             | iOS app package                      |
 | `ipsw`            | iOS firmware file                    |
@@ -52,9 +53,11 @@ plugins=(... extract)
 | `txz`             | Tarball with lzma2 compression       |
 | `tzst`            | Tarball with zstd compression        |
 | `war`             | Web Application archive (Java-based) |
+| `whl`             | Python wheel file                    |
 | `xpi`             | Mozilla XPI module file              |
 | `xz`              | LZMA2 archive                        |
 | `zip`             | Zip archive                          |
+| `zlib`            | zlib archive                         |
 | `zst`             | Zstandard file (zstd)                |
 | `zpaq`            | Zpaq file                            |
 

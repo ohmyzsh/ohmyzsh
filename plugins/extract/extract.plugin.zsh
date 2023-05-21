@@ -83,9 +83,10 @@ EOF
         builtin cd -q ../data; extract ../data.tar.*
         builtin cd -q ..; command rm *.tar.* debian-binary ;;
       (*.zst) unzstd "$full_path" ;;
-      (*.cab) cabextract "$full_path" ;;
+      (*.cab|*.exe) cabextract "$full_path" ;;
       (*.cpio|*.obscpio) cpio -idmvF "$full_path" ;;
       (*.zpaq) zpaq x "$full_path" ;;
+      (*.zlib) zlib-flate -uncompress < "$full_path" > "${file:r}" ;;
       (*)
         echo "extract: '$file' cannot be extracted" >&2
         success=1 ;;
