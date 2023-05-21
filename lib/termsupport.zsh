@@ -121,8 +121,8 @@ fi
 #
 # As of May 2021 mlterm, PuTTY, rxvt, screen, termux & xterm simply ignore the unknown OSC.
 
-# Don't define the function if we're inside Emacs
-if [[ -n "$INSIDE_EMACS" ]]; then
+# Don't define the function if we're inside Emacs or in an SSH session (#11696)
+if [[ -n "$INSIDE_EMACS" || -n "$SSH_CLIENT" || -n "$SSH_TTY" ]]; then
   return
 fi
 
