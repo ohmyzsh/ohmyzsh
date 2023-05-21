@@ -288,7 +288,7 @@ The default behaviour in Oh My Zsh is to use BSD `ls` in macOS and freeBSD syste
 sourcing `oh-my-zsh.sh`:
 
 ```zsh
-zstyle ':omz:lib:theme-and-appearance' gnu-ls no
+zstyle ':omz:lib:theme-and-appearance' gnu-ls yes
 ```
 
 _Note: this is not compatible with `DISABLE_LS_COLORS=true`_
