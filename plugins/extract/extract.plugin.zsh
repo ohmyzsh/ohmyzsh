@@ -27,12 +27,20 @@ EOF
     fi
 
     local success=0
-    local extract_dir="${1:t:r}"
     local file="$1" full_path="${1:A}"
+    local extract_dir="${1:t:r}"
+
+    # If there's a file or directory with the same name as the archive
+    # add a random string to the end of the extract directory
+    if [[ -e "$extract_dir" ]]; then
+      local rnd="${(L)"${$(( [##36]$RANDOM*$RANDOM ))}":1:5}"
+      extract_dir="${extract_dir}-${rnd}"
+    fi
 
     # Create an extraction directory based on the file name
     command mkdir -p "$extract_dir"
     builtin cd -q "$extract_dir"
+    echo "extract: extracting to $extract_dir" >&2
 
     case "${file:l}" in
       (*.tar.gz|*.tgz)
@@ -107,11 +115,13 @@ EOF
       if [[ "${content[1]:t}" == "$extract_dir" ]]; then
         # =(:) gives /tmp/zsh<random>, with :t it gives zsh<random>
         local tmp_dir==(:); tmp_dir="${tmp_dir:t}"
-        command mv -f "${content[1]}" "$tmp_dir" \
+        command mv "${content[1]}" "$tmp_dir" \
         && command rmdir "$extract_dir" \
-        && command mv -f "$tmp_dir" "$extract_dir"
-      else
-        command mv -f "${content[1]}" . \
+        && command mv "$tmp_dir" "$extract_dir"
+      # Otherwise, if the extracted folder name already exists in the current
+      # directory (because of a previous file / folder), keep the extract_dir
+      elif [[ ! -e "${content[1]:t}" ]]; then
+        command mv "${content[1]}" . \
         && command rmdir "$extract_dir"
       fi
     elif [[ ${#content} -eq 0 ]]; then
