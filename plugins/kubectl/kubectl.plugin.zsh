@@ -83,17 +83,9 @@ alias kgseca='kubectl get secret --all-namespaces'
 alias kdsec='kubectl describe secret'
 alias kdelsec='kubectl delete secret'
 alias kdecsec='
-_kdecsec() {
-  if [ $(jq --version) != "jq-1.6" ]; then
-      echo "kdecsec requires jq-1.6 to use the base64d format";
-      unset -f _kdecsec
-      return 1
-  fi
-  kubectl get secret "$@" -o json | jq ".data | map_values(. | @base64d )";
-  unset -f _kdecsec
-  return 0
-};
-_kdecsec'
+kdecsec_go_template='{{range $k,$v := .data}}{{"### "}}{{$k}}{{"\n"}}{{$v|base64decode}}{{"\n\n"}}{{end}}'
+alias kdecsec="kubectl get secret -o go-template='$kdecsec_go_template'"
+unset kdecsec_go_template
 
 # Deployment management.
 alias kgd='kubectl get deployment'
