@@ -67,6 +67,12 @@ bureau_git_status() {
 }
 
 bureau_git_prompt() {
+  # ignore non git folders and hidden repos (adapted from lib/git.zsh)
+  if ! command git rev-parse --git-dir &> /dev/null \
+     || [[ "$(command git config --get oh-my-zsh.hide-info 2>/dev/null)" == 1 ]]; then
+    return
+  fi
+
   # check git information
   local gitinfo=$(bureau_git_info)
   if [[ -z "$gitinfo" ]]; then
