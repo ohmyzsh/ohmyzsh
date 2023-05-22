@@ -180,6 +180,7 @@ function has_typed_input() {
 
   # Check if there are updates available before proceeding
   if ! is_update_available; then
+    update_last_updated_file
     return
   fi
 

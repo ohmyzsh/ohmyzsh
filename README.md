@@ -40,6 +40,7 @@ To learn more, visit [ohmyz.sh](https://ohmyz.sh), follow [@ohmyzsh](https://twi
     - [Manual Installation](#manual-installation)
   - [Installation Problems](#installation-problems)
   - [Custom Plugins and Themes](#custom-plugins-and-themes)
+  - [Enable GNU ls in macOS and freeBSD systems](#enable-gnu-ls)
   - [Skip aliases](#skip-aliases)
 - [Getting Updates](#getting-updates)
   - [Updates verbosity](#updates-verbosity)
@@ -277,6 +278,20 @@ If you want to override any of the default behaviors, just add a new file (endin
 If you have many functions that go well together, you can put them as a `XYZ.plugin.zsh` file in the `custom/plugins/` directory and then enable this plugin.
 
 If you would like to override the functionality of a plugin distributed with Oh My Zsh, create a plugin of the same name in the `custom/plugins/` directory and it will be loaded instead of the one in `plugins/`.
+
+### Enable GNU ls in macOS and freeBSD systems
+
+<a name="enable-gnu-ls"></a>
+
+The default behaviour in Oh My Zsh is to use BSD `ls` in macOS and freeBSD systems. If GNU `ls` is installed
+(as `gls` command), you can choose to use it instead. To do it, you can use zstyle-based config before
+sourcing `oh-my-zsh.sh`:
+
+```zsh
+zstyle ':omz:lib:theme-and-appearance' gnu-ls yes
+```
+
+_Note: this is not compatible with `DISABLE_LS_COLORS=true`_
 
 ### Skip aliases
 
