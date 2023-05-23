@@ -5,7 +5,7 @@ function zsh_stats() {
 }
 
 function uninstall_oh_my_zsh() {
-  env ZSH="$ZSH" sh "$ZSH/tools/uninstall.sh"
+  /usr/bin/env ZSH="$ZSH" sh "$ZSH/tools/uninstall.sh"
 }
 
 function upgrade_oh_my_zsh() {
