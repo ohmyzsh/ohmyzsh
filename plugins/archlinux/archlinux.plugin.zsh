@@ -28,7 +28,7 @@ alias upgrade='sudo pacman -Syu'
 function paclist() {
   local pkgs=$(LC_ALL=C pacman -Qqe)
   for pkg in ${(f)pkgs}; do
-      pacman -Qs --color=auto "^${pkg}\$"
+      pacman -Qs --color=auto "^${pkg}\$" || break
   done
 }
 
