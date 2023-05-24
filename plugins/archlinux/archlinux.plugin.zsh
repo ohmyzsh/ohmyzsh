@@ -47,7 +47,7 @@ function pacdisowned() {
 
   comm -23 "$fs" "$db"
 
-  rm -rf tmp_dir
+  rm -rf $tmp_dir
 }
 
 alias pacmanallkeys='sudo pacman-key --refresh-keys'
