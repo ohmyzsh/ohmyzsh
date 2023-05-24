@@ -186,7 +186,7 @@ plugins=(... git)
 | gtv                  | git tag \| sort -V                                                                                                                                                                       |
 | gtl                  | gtl(){ git tag --sort=-v:refname -n --list ${1}\* }; noglob gtl                                                                                                                          |
 | gunignore            | git update-index --no-assume-unchanged                                                                                                                                                   |
-| gunwip               | git log --max-count=1 \| grep -q -c "\-\-wip\-\-" && git reset HEAD~1                                                                                                                    |
+| gunwip               | git rev-list --max-count=1 --format="%s" HEAD \| grep -q "\-\-wip\-\-" && git reset HEAD~1                                                                                                   |
 | gup                  | git pull --rebase                                                                                                                                                                        |
 | gupv                 | git pull --rebase --verbose                                                                                                                                                              |
 | gupa                 | git pull --rebase --autostash                                                                                                                                                            |
