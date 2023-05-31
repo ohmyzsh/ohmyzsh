@@ -14,6 +14,7 @@ if [[ -z "${CLOUDSDK_HOME}" ]]; then
     "/usr/lib/google-cloud-sdk"
     "/usr/lib64/google-cloud-sdk"
     "/opt/google-cloud-sdk"
+    "/opt/google-cloud-cli"
     "/opt/local/libexec/google-cloud-sdk"
   )
 
