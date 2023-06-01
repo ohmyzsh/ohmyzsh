@@ -232,12 +232,16 @@ alias gloga='git log --oneline --decorate --graph --all'
 alias glp="_git_log_prettily"
 
 alias gm='git merge'
+alias gma='git merge --abort'
+alias gms="git merge --squash"
+
+alias gmd='git merge $(git_develop_branch)'
+alias gmm='git merge $(git_main_branch)'
+alias gmod='git merge origin/$(git_develop_branch)'
 alias gmom='git merge origin/$(git_main_branch)'
 alias gmtl='git mergetool --no-prompt'
 alias gmtlvim='git mergetool --no-prompt --tool=vimdiff'
 alias gmum='git merge upstream/$(git_main_branch)'
-alias gma='git merge --abort'
-alias gms="git merge --squash"
 
 alias gp='git push'
 alias gpd='git push --dry-run'
