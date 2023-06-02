@@ -1,12 +1,11 @@
 name: Test and Deploy installer
 on:
-  workflow_dispatch:
+  workflow_dispatch: {}
   push:
     paths:
-      - 'tools/install.sh'
-      - '.github/workflows/deploy-installer.yml'
-      - '.vercelignore'
-      - 'vercel.json'
+      - tools/install.sh
+      - .github/workflows/installer
+      - .github/workflows/installer.yml
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
@@ -42,14 +41,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Install node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
       - name: Install Vercel CLI
         run: npm install -g vercel
       - name: Setup project and deploy
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
         run: |
-          cp tools/install.sh install.sh
-          vc link -p install-omz --yes -t ${{ secrets.VERCEL_TOKEN }}
+          cp tools/install.sh .github/workflows/installer/install.sh
+          cd .github/workflows/installer
+          vc link --yes -t ${{ secrets.VERCEL_TOKEN }}
           vc deploy --prod -t ${{ secrets.VERCEL_TOKEN }}
