@@ -1,0 +1,55 @@
+name: Test and Deploy installer
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tools/install.sh'
+      - '.github/workflows/deploy-installer.yml'
+      - '.vercelignore'
+      - 'vercel.json'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read # to checkout
+
+jobs:
+  test:
+    name: Test installer
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+    steps:
+      - name: Set up git repository
+        uses: actions/checkout@v3
+      - name: Install zsh
+        if: runner.os == 'Linux'
+        run: sudo apt-get update; sudo apt-get install zsh
+      - name: Test installer
+        run: sh ./tools/install.sh
+
+  deploy:
+    name: Deploy installer in install.ohmyz.sh
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    needs:
+      - test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+      - name: Setup project and deploy
+        run: |
+          cp tools/install.sh install.sh
+          vc link -p install-omz --yes -t ${{ secrets.VERCEL_TOKEN }}
+          vc deploy --prod -t ${{ secrets.VERCEL_TOKEN }}
