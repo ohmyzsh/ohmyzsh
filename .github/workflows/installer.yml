@@ -36,6 +36,7 @@ jobs:
     name: Deploy installer in install.ohmyz.sh
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
+    environment: vercel
     needs:
       - test
     steps:
