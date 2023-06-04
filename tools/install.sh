@@ -67,9 +67,10 @@ zdot="${ZDOTDIR:-$HOME}"
 ZSH="${ZSH:-$HOME/.oh-my-zsh}"
 
 # Default settings
-REPO=${REPO:-ohmyzsh/ohmyzsh}
+# REPO=${REPO:-ohmyzsh/ohmyzsh}
+REPO=${REPO:-gmingj/ohmyzsh}
 REMOTE=${REMOTE:-https://github.com/${REPO}.git}
-BRANCH=${BRANCH:-master}
+BRANCH=${BRANCH:-ohmyzsh}
 
 # Other options
 CHSH=${CHSH:-yes}
