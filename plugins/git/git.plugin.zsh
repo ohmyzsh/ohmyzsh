@@ -30,15 +30,14 @@ function work_in_progress() {
 # Same as `gunwip` but recursive
 # "Unwips" all recent `--wip--` commits in loop until there is no left
 function gunwipall() {
-  commit=$(git rev-parse HEAD)
   while true; do
-    commit_message=$(git show -s --format="%s" "$commit")
-    if [[ $commit_message == *"--wip--"* ]]; then
-      git reset "$commit~1"
+    commit_message=$(git rev-list --max-count=1 --format="%s" HEAD)
+    if [[ $commit_message =~ "--wip--" ]]; then
+      git reset "HEAD~1"
+      (( $? )) && return 1
     else
       break
     fi
-    commit="$commit~1"
   done
 }
 
