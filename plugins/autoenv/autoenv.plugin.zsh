@@ -50,7 +50,7 @@ END
     return 1
   fi
   # Load autoenv
-  if [[ -e $autoenv_dir/activate ]];
+  if [[ -e $autoenv_dir/activate ]]; then
     source $autoenv_dir/activate
   else
     source $autoenv_dir/activate.sh
