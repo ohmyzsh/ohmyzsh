@@ -27,6 +27,20 @@ function work_in_progress() {
   command git -c log.showSignature=false log -n 1 2>/dev/null | grep -q -- "--wip--" && echo "WIP!!"
 }
 
+# Same as `gunwip` but recursive
+# "Unwips" all recent `--wip--` commits in loop until there is no left
+function gunwipall() {
+  while true; do
+    commit_message=$(git rev-list --max-count=1 --format="%s" HEAD)
+    if [[ $commit_message =~ "--wip--" ]]; then
+      git reset "HEAD~1"
+      (( $? )) && return 1
+    else
+      break
+    fi
+  done
+}
+
 # Check if main exists and use instead of master
 function git_main_branch() {
   command git rev-parse --git-dir &>/dev/null || return

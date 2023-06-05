@@ -254,6 +254,7 @@ These features allow to pause a branch development and switch to another one (_"
 | work_in_progress | Echoes a warning if the current branch is a wip |
 | gwip             | Commit wip branch                               |
 | gunwip           | Uncommit wip branch                             |
+| gunwipall        | Uncommit `--wip--` commits recursively          |
 
 ### Deprecated functions
 
