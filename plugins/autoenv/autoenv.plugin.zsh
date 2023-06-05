@@ -50,7 +50,7 @@ END
     return 1
   fi
   # Load autoenv
-  if [[ -e $autoenv_dir/activate ]]; then  # Modificado: Verifica si existe activate
+  if [[ -e $autoenv_dir/activate ]];
     source $autoenv_dir/activate
   else
     source $autoenv_dir/activate.sh
@@ -58,7 +58,6 @@ END
 fi
 }
 [[ $? != 0 ]] && return $?
-
 
 # The use_env call below is a reusable command to activate/create a new Python
 # virtualenv, requiring only a single declarative line of code in your .env files.
