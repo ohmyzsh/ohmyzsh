@@ -70,7 +70,7 @@ ZSH="${ZSH:-$HOME/.oh-my-zsh}"
 # REPO=${REPO:-ohmyzsh/ohmyzsh}
 REPO=${REPO:-gmingj/ohmyzsh}
 REMOTE=${REMOTE:-https://github.com/${REPO}.git}
-BRANCH=${BRANCH:-ohmyzsh}
+BRANCH=${BRANCH:-myohmyzsh}
 
 # Other options
 CHSH=${CHSH:-yes}
