@@ -76,6 +76,7 @@ plugins=(
     history
     history-substring-search
     colored-man-pages
+    z
 )
 
 source $ZSH/oh-my-zsh.sh
