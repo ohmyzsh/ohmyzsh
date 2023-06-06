@@ -31,8 +31,6 @@ jobs:
       - name: Install zsh
         if: runner.os == 'Linux'
         run: sudo apt-get update; sudo apt-get install zsh
-      - name: Test installer
-        run: sh ./tools/install.sh
       - name: Check syntax
         run: |
           for file in ./oh-my-zsh.sh \

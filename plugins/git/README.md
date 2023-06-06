@@ -116,6 +116,7 @@ plugins=(... git)
 | gloga                | git log --oneline --decorate --graph --all                                                                                                                                               |
 | glp                  | git log --pretty=\<format\>                                                                                                                                                              |
 | gm                   | git merge                                                                                                                                                                                |
+| gms                  | git merge --squash |
 | gmom                 | git merge origin/$(git_main_branch)                                                                                                                                                      |
 | gmtl                 | git mergetool --no-prompt                                                                                                                                                                |
 | gmtlvim              | git mergetool --no-prompt --tool=vimdiff                                                                                                                                                 |
@@ -185,7 +186,7 @@ plugins=(... git)
 | gtv                  | git tag \| sort -V                                                                                                                                                                       |
 | gtl                  | gtl(){ git tag --sort=-v:refname -n --list ${1}\* }; noglob gtl                                                                                                                          |
 | gunignore            | git update-index --no-assume-unchanged                                                                                                                                                   |
-| gunwip               | git log --max-count=1 \| grep -q -c "\-\-wip\-\-" && git reset HEAD~1                                                                                                                    |
+| gunwip               | git rev-list --max-count=1 --format="%s" HEAD \| grep -q "\-\-wip\-\-" && git reset HEAD~1                                                                                                   |
 | gup                  | git pull --rebase                                                                                                                                                                        |
 | gupv                 | git pull --rebase --verbose                                                                                                                                                              |
 | gupa                 | git pull --rebase --autostash                                                                                                                                                            |
@@ -253,6 +254,7 @@ These features allow to pause a branch development and switch to another one (_"
 | work_in_progress | Echoes a warning if the current branch is a wip |
 | gwip             | Commit wip branch                               |
 | gunwip           | Uncommit wip branch                             |
+| gunwipall        | Uncommit `--wip--` commits recursively          |
 
 ### Deprecated functions
 

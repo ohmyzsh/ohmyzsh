@@ -27,6 +27,20 @@ function work_in_progress() {
   command git -c log.showSignature=false log -n 1 2>/dev/null | grep -q -- "--wip--" && echo "WIP!!"
 }
 
+# Same as `gunwip` but recursive
+# "Unwips" all recent `--wip--` commits in loop until there is no left
+function gunwipall() {
+  while true; do
+    commit_message=$(git rev-list --max-count=1 --format="%s" HEAD)
+    if [[ $commit_message =~ "--wip--" ]]; then
+      git reset "HEAD~1"
+      (( $? )) && return 1
+    else
+      break
+    fi
+  done
+}
+
 # Check if main exists and use instead of master
 function git_main_branch() {
   command git rev-parse --git-dir &>/dev/null || return
@@ -237,6 +251,7 @@ alias gmtl='git mergetool --no-prompt'
 alias gmtlvim='git mergetool --no-prompt --tool=vimdiff'
 alias gmum='git merge upstream/$(git_main_branch)'
 alias gma='git merge --abort'
+alias gms="git merge --squash"
 
 alias gp='git push'
 alias gpd='git push --dry-run'
@@ -311,7 +326,7 @@ alias gtv='git tag | sort -V'
 alias gtl='gtl(){ git tag --sort=-v:refname -n --list "${1}*" }; noglob gtl'
 
 alias gunignore='git update-index --no-assume-unchanged'
-alias gunwip='git log --max-count=1 | grep -q -c "\--wip--" && git reset HEAD~1'
+alias gunwip='git rev-list --max-count=1 --format="%s" HEAD | grep -q "\--wip--" && git reset HEAD~1'
 alias gup='git pull --rebase'
 alias gupv='git pull --rebase --verbose'
 alias gupa='git pull --rebase --autostash'
