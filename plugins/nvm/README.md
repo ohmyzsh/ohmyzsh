@@ -26,7 +26,7 @@ These settings should go in your zshrc file, before Oh My Zsh is sourced:
 #### Lazy startup
 
 This option will help you to defer nvm's load until you use it to speed-up your zsh startup. This will source
-nvm script only when using it, and will create a function for `node`, `npm`, `pnpm`, `yarn`, and the
+nvm script only when using it, and will create a function for `node`, `npm`, `npx`, `pnpm`, `yarn`, and the
 command(s) specified by `lazy-cmd` option, so when you call either of them, nvm will be loaded and run with
 default version. To enable it, you can add this snippet to your zshrc, before Oh My Zsh is sourced:
 

@@ -43,8 +43,8 @@ if zstyle -t ':omz:plugins:nvm' lazy; then
   # Call nvm when first using nvm, node, npm, pnpm, yarn or other commands in lazy-cmd
   zstyle -a ':omz:plugins:nvm' lazy-cmd nvm_lazy_cmd
   eval "
-    function nvm node npm pnpm yarn $nvm_lazy_cmd {
-      unfunction nvm node npm pnpm yarn $nvm_lazy_cmd
+    function nvm node npm npx pnpm yarn $nvm_lazy_cmd {
+      unfunction nvm node npm npx pnpm yarn $nvm_lazy_cmd
       # Load nvm if it exists in \$NVM_DIR
       [[ -f \"\$NVM_DIR/nvm.sh\" ]] && source \"\$NVM_DIR/nvm.sh\"
       \"\$0\" \"\$@\"
