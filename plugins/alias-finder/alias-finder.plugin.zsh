@@ -1,14 +1,14 @@
 alias-finder() {
   local cmd="" exact="" longer="" wordStart="" wordEnd="" multiWordEnd=""
-  for i in $@; do
-    case $i in
+  for c in $@; do
+    case $c in
       -e|--exact) exact=true;;
       -l|--longer) longer=true;;
       *)
         if [[ -z $cmd ]]; then
-          cmd=$i
+          cmd=$c
         else
-          cmd="$cmd $i"
+          cmd="$cmd $c"
         fi
         ;;
     esac
