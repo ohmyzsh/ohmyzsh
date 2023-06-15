@@ -1,3 +1,13 @@
+# If the completion file doesn't exist yet, we need to autoload it and
+# bind it to `docker`. Otherwise, compinit will have already done that.
+if [[ ! -f "$ZSH_CACHE_DIR/completions/_docker" ]]; then
+  typeset -g -A _comps
+  autoload -Uz _docker
+  _comps[docker]=_docker
+fi
+
+docker completion zsh >| "$ZSH_CACHE_DIR/completions/_docker" &|
+
 alias dbl='docker build'
 alias dcin='docker container inspect'
 alias dcls='docker container ls'
