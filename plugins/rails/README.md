@@ -40,7 +40,10 @@ plugins=(... rails)
 | `rn`    | `rails notes`                    | Search for notes (`FIXME`, `TODO`) in code comments    |
 | `rp`    | `rails plugin`                   | Run a Rails plugin command                             |
 | `rr`    | `rails routes`                   | List all defined routes                                |
-| `rrg`   | `rails routes \| grep`           | List and filter the defined routes                     |
+| `rrc`   | `rails routes --controller`      | List and filter routes mapped to specific controller   |
+| `rre`   | `rails routes --expanded`        | List all defined routes in expanded table mode         |
+| `rrg`   | `rails routes --grep`            | List and filter the defined routes                     |
+| `rru`   | `rails routes --unused`          | List unused routes                                     |
 | `rs`    | `rails server`                   | Launch a web server                                    |
 | `rsb`   | `rails server --bind`            | Launch a web server binding it to a specific IP        |
 | `rsd`   | `rails server --debugger`        | Launch a web server with debugger                      |
