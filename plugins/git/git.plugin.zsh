@@ -29,11 +29,11 @@ function work_in_progress() {
 
 # Similar to `gunwip` but recursive "Unwips" all recent `--wip--` commits not just the last one
 function gunwipall() {
-  commit=$(git rev-list --grep='--wip--' --invert-grep --max-count=1 HEAD)
+  local _commit=$(git log --grep='--wip--' --invert-grep --max-count=1 --format=format:%H)
   
   # Check if a commit without "--wip--" was found and it's not the same as HEAD
-  if [[ "$commit" != "$(git rev-parse HEAD)" ]]; then
-    git reset $commit || return 1
+  if [[ "$_commit" != "$(git rev-parse HEAD)" ]]; then
+    git reset $_commit || return 1
   fi
 }
 
