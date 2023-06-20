@@ -16,7 +16,18 @@ fi
 # Note: nvm is a function so we need to use `which`
 which nvm &>/dev/null && return
 
-if zstyle -t ':omz:plugins:nvm' lazy; then
+if [[ -z "$NVM_DIR" ]]; then 
+  echo "[oh-my-zsh] nvm installation cannot be found"
+  echo "[oh-my-zsh] set NVM_DIR to your installation"
+  return
+fi
+if [[ ! -f "$NVM_DIR/nvm.sh" ]]; then 
+  echo "[oh-my-zsh] nvm.sh does not exist in $NVM_DIR"
+  return
+fi
+
+if zstyle -t ':omz:plugins:nvm' lazy && \
+  ! zstyle -t ':omz:plugins:nvm' autoload; then
   # Call nvm when first using nvm, node, npm, pnpm, yarn or other commands in lazy-cmd
   zstyle -a ':omz:plugins:nvm' lazy-cmd nvm_lazy_cmd
   eval "
@@ -28,11 +39,8 @@ if zstyle -t ':omz:plugins:nvm' lazy; then
     }
   "
   unset nvm_lazy_cmd
-elif [[ -f "$NVM_DIR/nvm.sh" ]]; then
-  # Load nvm if it exists in $NVM_DIR
-  source "$NVM_DIR/nvm.sh"
 else
-  return
+  source "$NVM_DIR/nvm.sh"
 fi
 
 # Autoload nvm when finding a .nvmrc file in the current directory
