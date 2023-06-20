@@ -16,29 +16,6 @@ fi
 # Note: nvm is a function so we need to use `which`
 which nvm &>/dev/null && return
 
-# TODO: 2022-11-11: Remove soft-deprecate options
-if (( ${+NVM_LAZY} + ${+NVM_LAZY_CMD} + ${+NVM_AUTOLOAD} )); then
-  # Get list of NVM_* variable settings defined
-  local -a used_vars
-  used_vars=(${(o)parameters[(I)NVM_(AUTOLOAD|LAZY|LAZY_CMD)]})
-  # Nicely print the list in the style `var1, var2 and var3`
-  echo "${fg[yellow]}[nvm plugin] Variable-style settings are deprecated. Instead of ${(j:, :)used_vars[1,-2]}${used_vars[-2]+ and }${used_vars[-1]}, use:\n"
-  if (( $+NVM_AUTOLOAD )); then
-    echo "  zstyle ':omz:plugins:nvm' autoload yes"
-    zstyle ':omz:plugins:nvm' autoload yes
-  fi
-  if (( $+NVM_LAZY )); then
-    echo "  zstyle ':omz:plugins:nvm' lazy yes"
-    zstyle ':omz:plugins:nvm' lazy yes
-  fi
-  if (( $+NVM_LAZY_CMD )); then
-    echo "  zstyle ':omz:plugins:nvm' lazy-cmd $NVM_LAZY_CMD"
-    zstyle ':omz:plugins:nvm' lazy-cmd $NVM_LAZY_CMD
-  fi
-  echo "$reset_color"
-  unset used_vars NVM_AUTOLOAD NVM_LAZY NVM_LAZY_CMD
-fi
-
 if zstyle -t ':omz:plugins:nvm' lazy; then
   # Call nvm when first using nvm, node, npm, pnpm, yarn or other commands in lazy-cmd
   zstyle -a ':omz:plugins:nvm' lazy-cmd nvm_lazy_cmd
