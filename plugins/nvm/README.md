@@ -43,6 +43,9 @@ zstyle ':omz:plugins:nvm' lazy-cmd eslint prettier typescript ...
 
 #### `.nvmrc` autoload
 
+Note: _this option cannot be used at the same time as `lazy`. `autoload` will override it and load `nvm` at
+startup._
+
 If set, the plugin will automatically load a node version when if finds a
 [`.nvmrc` file](https://github.com/nvm-sh/nvm#nvmrc) in the current working directory indicating which node
 version to load. This can be done, similar as previous options, adding:

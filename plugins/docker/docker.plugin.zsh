@@ -31,3 +31,22 @@ alias dvls='docker volume ls'
 alias dvprune='docker volume prune'
 alias dxc='docker container exec'
 alias dxcit='docker container exec -it'
+
+if (( ! $+commands[docker] )); then
+  return
+fi
+
+{
+  # `docker completion` is only available from 23.0.0 on
+  local _docker_version=$(command docker version --format '{{.Client.Version}}' 2>/dev/null)
+  if is-at-least 23.0.0 $_docker_version; then
+    # If the completion file doesn't exist yet, we need to autoload it and
+    # bind it to `docker`. Otherwise, compinit will have already done that.
+    if [[ ! -f "$ZSH_CACHE_DIR/completions/_docker" ]]; then
+      typeset -g -A _comps
+      autoload -Uz _docker
+      _comps[docker]=_docker
+    fi
+    command docker completion zsh >| "$ZSH_CACHE_DIR/completions/_docker"
+  fi
+} &|
