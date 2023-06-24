@@ -10,37 +10,14 @@ plugins=(... alias-finder)
 ## Usage
 To see if there is an alias defined for the command, pass it as an argument to `alias-finder`. This can also run automatically before each command you input - add `ZSH_ALIAS_FINDER_AUTOMATIC=true` to your zshrc if you want this.
 
-## Options
+### Options
 
-- Use `--longer` or `-l` to allow the aliases to be longer than the input (match aliases if they contain the input).
-- Use `--exact` or `-e` to avoid matching aliases that are shorter than the input.
+You can also set this options along with `ZSH_ALIAS_FINDER_AUTOMATIC` environment variable. For example,`ZSH_ALIAS_FINDER_OPTIONS='-l'` will be parsed as `alias-finder -l`. 
 
-## Examples
-```
-$ alias-finder "git pull"
-gl='git pull'
-g=git
-```
-```
-$ alias-finder "web_search google oh my zsh"
-google='web_search google'
-```
-```
-$ alias-finder "git commit -v"
-gc="git commit -v"
-g=git
-```
-```
-$ alias-finder -e "git commit -v"
-gc='git commit -v'
-```
-```
-$ alias-finder -l "git commit -v"
-gc='git commit -v'
-'gc!'='git commit -v --amend'
-gca='git commit -v -a'
-'gca!'='git commit -v -a --amend'
-'gcan!'='git commit -v -a --no-edit --amend'
-'gcans!'='git commit -v -a -s --no-edit --amend'
-'gcn!'='git commit -v --no-edit --amend'
-```
+> In order to clarify, let's say `alias a=abc` has source 'abc' and destination 'a'.
+
+- Use `--longer` or `-l` to include aliases where the source is longer than the input (in other words, the source could contain the whole input).
+- Use `--exact` or `-e` to avoid aliases where the source is shorter than the input (in other words, the source must be the same with the input).
+- Use `--cheap` or `-c` to avoid aliases where the destination is longer than the input (in other words, the destination must be the shorter than the input).
+
+
