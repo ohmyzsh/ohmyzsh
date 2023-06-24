@@ -2,55 +2,106 @@
 
 @setup {
   load ../alias-finder.plugin.zsh
+
+  set_git_aliases() {
+    unalias -a # all
+    alias g="git"
+    alias gc="git commit"
+    alias gcv="git commit -v"
+    alias gcvs="git commit -v -S"
+  }
 }
 
-@test 'default:find alias when input and alias are same' {
-  run unalias -a
-  alias glgm='git log --graph --max-count=10'
+@test 'find aliases that contain input' {
+  set_git_aliases
 
-  run alias-finder "git log --graph --max-count=10"
-
-  assert "${#lines[@]}" equals 1
-}
-
-@test 'exact:find alias when partial input is in alias list' {
-  run unalias -a
-  alias g='git'
-  alias glgm='git log --graph --max-count=10'
-
-  run alias-finder "git log --graph --max-count=10"
-
-  assert "${#lines[@]}" equals 2
-}
-
-@test 'exact:find only exact alias when e option is given' {
-  run unalias -a
-  alias g='git'
-  alias glgm='git log --graph --max-count=10'
-
-  run alias-finder -e "git log --graph --max-count=10"
-
-  assert "${#lines[@]}" equals 1
-  assert "${lines[1]}" same_as "glgm='git log --graph --max-count=10'"
-}
-
-@test 'longer:find alias not longer than input' {
-  run unalias -a
-  alias g='git'
-  alias glgm='git log --graph --max-count=10'
-
-  run alias-finder git log
+  run alias-finder "git"
 
   assert "${#lines[@]}" equals 1
   assert "${lines[1]}" same_as "g=git"
 }
 
-@test 'longer:find alias longer than input when l option is given' {
-  run unalias -a
-  alias g='git'
-  alias glgm='git log --graph --max-count=10'
+@test 'find aliases that contain input with whitespaces at ends' {
+  set_git_aliases
 
-  run alias-finder -l git log
+  run alias-finder "   git     "
+
+  assert "${#lines[@]}" equals 1
+  assert "${lines[1]}" same_as "g=git"
+}
+
+@test 'find aliases that contain multiple words' {
+  set_git_aliases
+
+  run alias-finder "git commit -v"
+
+  assert "${#lines[@]}" equals 3
+  assert "${lines[1]}" same_as "gcv='git commit -v'"
+  assert "${lines[2]}" same_as "gc='git commit'"
+  assert "${lines[3]}" same_as "g=git"
+}
+
+@test 'find alias that is the same with input when --exact option is set' {
+  set_git_aliases
+
+  run alias-finder -e "git"
+
+  assert "${#lines[@]}" equals 1
+  assert "${lines[1]}" same_as "g=git"
+}
+
+@test 'find alias that is the same with multiple words input when --exact option is set' {
+  set_git_aliases
+
+  run alias-finder -e "git commit -v"
+
+  assert "${#lines[@]}" equals 1
+  assert "${lines[1]}" same_as "gcv='git commit -v'"
+}
+
+@test 'find alias that is the same with or longer than input when --longer option is set' {
+  set_git_aliases
+
+  run alias-finder -l "git"
+
+  assert "${#lines[@]}" equals 4
+  assert "${lines[1]}" same_as "g=git"
+  assert "${lines[2]}" same_as "gc='git commit'"
+  assert "${lines[3]}" same_as "gcv='git commit -v'"
+  assert "${lines[4]}" same_as "gcvs='git commit -v -S'"
+}
+
+@test 'find alias that is the same with or longer than multiple words input when --longer option is set' {
+  set_git_aliases
+
+  run alias-finder -l "git commit -v"
 
   assert "${#lines[@]}" equals 2
+  assert "${lines[1]}" same_as "gcv='git commit -v'"
+  assert "${lines[2]}" same_as "gcvs='git commit -v -S'"
+}
+
+@test 'find aliases including expensive (longer) than input' {
+  set_git_aliases
+  alias expensiveCommands="git commit"
+
+  run alias-finder "git commit -v"
+
+  assert "${#lines[@]}" equals 4
+  assert "${lines[1]}" same_as "gcv='git commit -v'"
+  assert "${lines[2]}" same_as "expensiveCommands='git commit'"
+  assert "${lines[3]}" same_as "gc='git commit'"
+  assert "${lines[4]}" same_as "g=git"
+}
+
+@test 'find aliases excluding expensive (longer) than input when --cheap option is set' {
+  set_git_aliases
+  alias expensiveCommands="git commit"
+
+  run alias-finder -c "git commit -v"
+
+  assert "${#lines[@]}" equals 3
+  assert "${lines[1]}" same_as "gcv='git commit -v'"
+  assert "${lines[2]}" same_as "gc='git commit'"
+  assert "${lines[3]}" same_as "g=git"
 }
