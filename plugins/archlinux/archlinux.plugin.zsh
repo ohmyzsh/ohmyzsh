@@ -25,10 +25,7 @@ alias pacown='pacman -Qo'
 alias pacupd="sudo pacman -Sy"
 
 function paclist() {
-  local pkgs=$(LC_ALL=C pacman -Qqe)
-  for pkg in ${(f)pkgs}; do
-      pacman -Qs --color=auto "^${pkg}\$" || break
-  done
+  pacman -Qqe | xargs -I{} -P0 --no-run-if-empty pacman -Qs --color=auto "^{}\$"
 }
 
 function pacdisowned() {
