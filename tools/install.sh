@@ -360,8 +360,9 @@ setup_zshrc() {
   fi
   omz=$(echo "$omz" | sed "s|^$HOME/|\$HOME/|")
 
-  sed "s|^export ZSH=.*$|export ZSH=\"${omz}\"|" "$ZSH/templates/zshrc.zsh-template" > "$zdot/.zshrc-omztemp"
-  mv -f "$zdot/.zshrc-omztemp" "$zdot/.zshrc"
+  # sed "s|^export ZSH=.*$|export ZSH=\"${omz}\"|" "$ZSH/templates/zshrc.zsh-template" > "$zdot/.zshrc-omztemp"
+  # mv -f "$zdot/.zshrc-omztemp" "$zdot/.zshrc"
+  ln -sf "$ZSH/templates/zshrc.zsh-template" "$zdot/.zshrc"
 
   echo
 }

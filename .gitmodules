@@ -1,0 +1,9 @@
+[submodule "custom/plugins/zsh-autosuggestions"]
+	path = custom/plugins/zsh-autosuggestions
+	url = https://github.com/zsh-users/zsh-autosuggestions.git
+[submodule "custom/plugins/zsh-syntax-highlighting"]
+	path = custom/plugins/zsh-syntax-highlighting
+	url = https://github.com/zsh-users/zsh-syntax-highlighting.git
+[submodule "custom/themes/powerlevel10k"]
+	path = custom/themes/powerlevel10k
+	url = https://gitee.com/romkatv/powerlevel10k.git
