@@ -6,4 +6,4 @@
 	url = https://github.com/zsh-users/zsh-syntax-highlighting.git
 [submodule "custom/themes/powerlevel10k"]
 	path = custom/themes/powerlevel10k
-	url = https://gitee.com/romkatv/powerlevel10k.git
+	url = https://github.com/romkatv/powerlevel10k.git

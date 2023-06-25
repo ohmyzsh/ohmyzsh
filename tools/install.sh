@@ -274,53 +274,6 @@ setup_color() {
   FMT_RESET=$(printf '\033[0m')
 }
 
-setup_ohmyzsh() {
-  # Prevent the cloned repository from having insecure permissions. Failing to do
-  # so causes compinit() calls to fail with "command not found: compdef" errors
-  # for users with insecure umasks (e.g., "002", allowing group writability). Note
-  # that this will be ignored under Cygwin by default, as Windows ACLs take
-  # precedence over umasks except for filesystems mounted with option "noacl".
-  umask g-w,o-w
-
-  echo "${FMT_BLUE}Cloning Oh My Zsh...${FMT_RESET}"
-
-  command_exists git || {
-    fmt_error "git is not installed"
-    exit 1
-  }
-
-  ostype=$(uname)
-  if [ -z "${ostype%CYGWIN*}" ] && git --version | grep -Eq 'msysgit|windows'; then
-    fmt_error "Windows/MSYS Git is not supported on Cygwin"
-    fmt_error "Make sure the Cygwin git package is installed and is first on the \$PATH"
-    exit 1
-  fi
-
-  # Manual clone with git config options to support git < v1.7.2
-  git init --quiet "$ZSH" && cd "$ZSH" \
-  && git config core.eol lf \
-  && git config core.autocrlf false \
-  && git config fsck.zeroPaddedFilemode ignore \
-  && git config fetch.fsck.zeroPaddedFilemode ignore \
-  && git config receive.fsck.zeroPaddedFilemode ignore \
-  && git config oh-my-zsh.remote origin \
-  && git config oh-my-zsh.branch "$BRANCH" \
-  && git remote add origin "$REMOTE" \
-  && git fetch --depth=1 origin \
-  && git checkout -b "$BRANCH" "origin/$BRANCH" || {
-    [ ! -d "$ZSH" ] || {
-      cd -
-      rm -rf "$ZSH" 2>/dev/null
-    }
-    fmt_error "git clone of oh-my-zsh repo failed"
-    exit 1
-  }
-  # Exit installation directory
-  cd -
-
-  echo
-}
-
 setup_zshrc() {
   # Keep most recent old .zshrc at .zshrc.pre-oh-my-zsh, and older ones
   # with datestamp of installation that moved them aside, so we never actually
@@ -507,34 +460,11 @@ main() {
     exit 1
   fi
 
-  if [ -d "$ZSH" ]; then
-    echo "${FMT_YELLOW}The \$ZSH folder already exists ($ZSH).${FMT_RESET}"
-    if [ "$custom_zsh" = yes ]; then
-      cat <<EOF
-
-You ran the installer with the \$ZSH setting or the \$ZSH variable is
-exported. You have 3 options:
-
-1. Unset the ZSH variable when calling the installer:
-   $(fmt_code "ZSH= sh install.sh")
-2. Install Oh My Zsh to a directory that doesn't exist yet:
-   $(fmt_code "ZSH=path/to/new/ohmyzsh/folder sh install.sh")
-3. (Caution) If the folder doesn't contain important information,
-   you can just remove it with $(fmt_code "rm -r $ZSH")
-
-EOF
-    else
-      echo "You'll need to remove it if you want to reinstall."
-    fi
-    exit 1
-  fi
-
   # Create ZDOTDIR folder structure if it doesn't exist
   if [ -n "$ZDOTDIR" ]; then
     mkdir -p "$ZDOTDIR"
   fi
 
-  setup_ohmyzsh
   setup_zshrc
   setup_shell
 
