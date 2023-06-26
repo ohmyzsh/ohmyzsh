@@ -249,6 +249,30 @@ alias gmum='git merge upstream/$(git_main_branch)'
 alias gma='git merge --abort'
 alias gms="git merge --squash"
 
+# Open current repository on the browser
+function git_open_repository() {
+  REMOTE=$1
+  if [ -z "$REMOTE" ]
+  then
+    REMOTE="origin"
+  fi
+
+  URL=`git remote get-url ${REMOTE} &>/dev/null`
+  if [[ $? -ne 0 ]]; then
+    echo "Remote: ${REMOTE} not found"
+    return
+  fi
+
+  URL=`git remote get-url ${REMOTE}`
+  if [[  $URL != "https://"* ]] ;
+  then
+    URL=`echo $URL | sed "s.:./." | sed "s.git@.https://."`
+  fi
+  open $URL
+}
+
+alias gor='git_open_repository'
+
 alias gp='git push'
 alias gpd='git push --dry-run'
 is-at-least 2.30 "$git_version" \
