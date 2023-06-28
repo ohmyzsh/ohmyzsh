@@ -125,6 +125,7 @@
   autocrlf = false
   editor = vim
   excludesfile = ~/.yadr/git/gitignore
+  pager = less -F -X
 [advice]
   statusHints = false
 [diff]
@@ -142,3 +143,4 @@
 	program = gpg
 [commit]
 	gpgsign = true
+

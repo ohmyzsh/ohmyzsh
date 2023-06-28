@@ -138,6 +138,7 @@ esac
 # macOS only optional plugins
 case "$(uname)" in
 Darwin) plugins+=(
+          iterm2
           brew
           forklift  # requires ForkLift from App Store
         )
