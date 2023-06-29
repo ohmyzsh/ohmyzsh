@@ -11,7 +11,7 @@ function omz {
 
   # Subcommand functions start with _ so that they don't
   # appear as completion entries when looking for `omz`
-  (( $+functions[_omz::$command] )) || {
+  (( ${+functions[_omz::$command]} )) || {
     _omz::help
     return 1
   }
@@ -776,10 +776,11 @@ function _omz::update {
   local last_commit=$(builtin cd -q "$ZSH"; git rev-parse HEAD)
 
   # Run update script
+  zstyle -s ':omz:update' verbose verbose_mode || verbose_mode=default
   if [[ "$1" != --unattended ]]; then
-    ZSH="$ZSH" command zsh -f "$ZSH/tools/upgrade.sh" --interactive || return $?
+    ZSH="$ZSH" command zsh -f "$ZSH/tools/upgrade.sh" -i -v $verbose_mode || return $?
   else
-    ZSH="$ZSH" command zsh -f "$ZSH/tools/upgrade.sh" || return $?
+    ZSH="$ZSH" command zsh -f "$ZSH/tools/upgrade.sh" -v $verbose_mode || return $?
   fi
 
   # Update last updated file

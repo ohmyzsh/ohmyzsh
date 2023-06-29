@@ -16,39 +16,56 @@ fi
 # Note: nvm is a function so we need to use `which`
 which nvm &>/dev/null && return
 
-if (( $+NVM_LAZY )); then
-  # Call nvm when first using nvm, node, npm, pnpm, yarn or $NVM_LAZY_CMD
-  function nvm node npm pnpm yarn $NVM_LAZY_CMD {
-    unfunction nvm node npm pnpm yarn $NVM_LAZY_CMD
-    # Load nvm if it exists in $NVM_DIR
-    [[ -f "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
-    "$0" "$@"
-  }
-elif [[ -f "$NVM_DIR/nvm.sh" ]]; then
-  # Load nvm if it exists in $NVM_DIR
-  source "$NVM_DIR/nvm.sh"
-else
+if [[ -z "$NVM_DIR" ]]; then 
+  echo "[oh-my-zsh] nvm installation cannot be found"
+  echo "[oh-my-zsh] set NVM_DIR to your installation"
   return
+fi
+if [[ ! -f "$NVM_DIR/nvm.sh" ]]; then 
+  echo "[oh-my-zsh] nvm.sh does not exist in $NVM_DIR"
+  return
+fi
+
+if zstyle -t ':omz:plugins:nvm' lazy && \
+  ! zstyle -t ':omz:plugins:nvm' autoload; then
+  # Call nvm when first using nvm, node, npm, pnpm, yarn or other commands in lazy-cmd
+  zstyle -a ':omz:plugins:nvm' lazy-cmd nvm_lazy_cmd
+  eval "
+    function nvm node npm npx pnpm yarn $nvm_lazy_cmd {
+      unfunction nvm node npm npx pnpm yarn $nvm_lazy_cmd
+      # Load nvm if it exists in \$NVM_DIR
+      [[ -f \"\$NVM_DIR/nvm.sh\" ]] && source \"\$NVM_DIR/nvm.sh\"
+      \"\$0\" \"\$@\"
+    }
+  "
+  unset nvm_lazy_cmd
+else
+  source "$NVM_DIR/nvm.sh"
 fi
 
 # Autoload nvm when finding a .nvmrc file in the current directory
 # Adapted from: https://github.com/nvm-sh/nvm#zsh
-if (( $+NVM_AUTOLOAD )); then
-  load-nvmrc() {
+if zstyle -t ':omz:plugins:nvm' autoload; then
+  function load-nvmrc {
     local node_version="$(nvm version)"
     local nvmrc_path="$(nvm_find_nvmrc)"
+    local nvm_silent=""
+    zstyle -t ':omz:plugins:nvm' silent-autoload && nvm_silent="--silent"
 
     if [[ -n "$nvmrc_path" ]]; then
-      local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
+      local nvmrc_node_version=$(nvm version $(cat "$nvmrc_path" | tr -dc '[:print:]'))
 
       if [[ "$nvmrc_node_version" = "N/A" ]]; then
         nvm install
       elif [[ "$nvmrc_node_version" != "$node_version" ]]; then
-        nvm use
+        nvm use $nvm_silent
       fi
     elif [[ "$node_version" != "$(nvm version default)" ]]; then
-      echo "Reverting to nvm default version"
-      nvm use default
+      if [[ -z $nvm_silent ]]; then
+        echo "Reverting to nvm default version"
+      fi
+
+      nvm use default $nvm_silent
     fi
   }
 
@@ -70,4 +87,4 @@ for nvm_completion in "$NVM_DIR/bash_completion" "$NVM_HOMEBREW/etc/bash_complet
   fi
 done
 
-unset NVM_HOMEBREW NVM_LAZY NVM_AUTOLOAD nvm_completion
+unset NVM_HOMEBREW nvm_completion

@@ -9,6 +9,7 @@ function fzf_setup_using_base_dir() {
       "${HOME}/.nix-profile/share/fzf"
       "${XDG_DATA_HOME:-$HOME/.local/share}/fzf"
       "/usr/local/opt/fzf"
+      "/opt/homebrew/opt/fzf"
       "/usr/share/fzf"
       "/usr/local/share/examples/fzf"
     )
@@ -59,8 +60,8 @@ function fzf_setup_using_base_dir() {
 
 
 function fzf_setup_using_debian() {
-  if (( ! $+commands[dpkg] )) || ! dpkg -s fzf &>/dev/null; then
-    # Either not a debian based distro, or no fzf installed
+  if (( ! $+commands[apt] && ! $+commands[apt-get] )); then
+    # Not a debian based distro 
     return 1
   fi
 
@@ -71,11 +72,19 @@ function fzf_setup_using_debian() {
 
   case $PREFIX in
     *com.termux*)
+      if [[ ! -f "${PREFIX}/bin/fzf" ]]; then
+        # fzf not installed
+        return 1
+      fi
       # Support Termux package
       completions="${PREFIX}/share/fzf/completion.zsh"
       key_bindings="${PREFIX}/share/fzf/key-bindings.zsh"
       ;;
     *)
+      if [[ ! -d /usr/share/doc/fzf/examples ]]; then
+        # fzf not installed
+        return 1
+      fi
       # Determine completion file path: first bullseye/sid, then buster/stretch
       completions="/usr/share/doc/fzf/examples/completion.zsh"
       [[ -f "$completions" ]] || completions="/usr/share/zsh/vendor-completions/_fzf"
@@ -178,7 +187,7 @@ function fzf_setup_using_macports() {
   (( $+commands[fzf] )) || return 1
 
   # The fzf-zsh-completion package installs the auto-completion in
-  local completions="/opt/local/share/zsh/site-functions/fzf"
+  local completions="/opt/local/share/fzf/shell/completion.zsh"
   # The fzf-zsh-completion package installs the key-bindings file in
   local key_bindings="/opt/local/share/fzf/shell/key-bindings.zsh"
 

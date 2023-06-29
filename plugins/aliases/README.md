@@ -15,14 +15,14 @@ Requirements: Python needs to be installed.
 
 ## Usage
 
-- `acs`: show all aliases by group.
+- `acs`: show all aliases by group
 
-- `acs -h/--help`: print help mesage.
+- `acs -h/--help`: print help mesage
 
-- `acs <keyword>`: filter aliases by `<keyword>` and highlight.
+- `acs <keyword(s)>`: filter and highlight aliases by `<keyword>`
 
-- `acs -g <group>/--group <group`: show only aliases for group `<group>`. Multiple uses of the flag show all groups,
+- `acs -g <group>/--group <group>`: show only aliases for group `<group>`. Multiple uses of the flag show all groups
 
-- `acs --groups-only`: show only group names
+- `acs --groups`: show only group names
 
   ![screenshot](https://cloud.githubusercontent.com/assets/3602957/11581913/cb54fb8a-9a82-11e5-846b-5a67f67ad9ad.png)

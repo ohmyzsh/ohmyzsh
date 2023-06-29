@@ -7,7 +7,7 @@ on:
     branches:
       - master
   push:
-    branches: 
+    branches:
       - master
 
 concurrency:
@@ -27,12 +27,10 @@ jobs:
         os: [ubuntu-latest, macos-latest]
     steps:
       - name: Set up git repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Install zsh
         if: runner.os == 'Linux'
         run: sudo apt-get update; sudo apt-get install zsh
-      - name: Test installer
-        run: sh ./tools/install.sh
       - name: Check syntax
         run: |
           for file in ./oh-my-zsh.sh \

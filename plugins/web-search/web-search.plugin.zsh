@@ -24,6 +24,7 @@ function web_search() {
     wolframalpha    "https://www.wolframalpha.com/input/?i="
     archive         "https://web.archive.org/web/*/"
     scholar         "https://scholar.google.com/scholar?q="
+    ask             "https://www.ask.com/web?q="
   )
 
   # check whether the search engine is supported
@@ -64,6 +65,7 @@ alias stackoverflow='web_search stackoverflow'
 alias wolframalpha='web_search wolframalpha'
 alias archive='web_search archive'
 alias scholar='web_search scholar'
+alias ask='web_search ask'
 
 #add your own !bang searches here
 alias wiki='web_search duckduckgo \!w'

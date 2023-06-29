@@ -14,6 +14,15 @@ typeset -g VI_MODE_RESET_PROMPT_ON_MODE_CHANGE
 # Unset or set to any other value to do the opposite.
 typeset -g VI_MODE_SET_CURSOR
 
+# Control how the cursor appears in the various vim modes. This only applies
+# if $VI_MODE_SET_CURSOR=true.
+#
+# See https://vt100.net/docs/vt510-rm/DECSCUSR for cursor styles
+typeset -g VI_MODE_CURSOR_NORMAL=2
+typeset -g VI_MODE_CURSOR_VISUAL=6
+typeset -g VI_MODE_CURSOR_INSERT=6
+typeset -g VI_MODE_CURSOR_OPPEND=0
+
 typeset -g VI_KEYMAP=main
 
 function _vi-mode-set-cursor-shape-for-keymap() {
@@ -22,16 +31,36 @@ function _vi-mode-set-cursor-shape-for-keymap() {
   # https://vt100.net/docs/vt510-rm/DECSCUSR
   local _shape=0
   case "${1:-${VI_KEYMAP:-main}}" in
-    main)    _shape=6 ;; # vi insert: line
-    viins)   _shape=6 ;; # vi insert: line
-    isearch) _shape=6 ;; # inc search: line
-    command) _shape=6 ;; # read a command name
-    vicmd)   _shape=2 ;; # vi cmd: block
-    visual)  _shape=2 ;; # vi visual mode: block
-    viopp)   _shape=0 ;; # vi operation pending: blinking block
+    main)    _shape=$VI_MODE_CURSOR_INSERT ;; # vi insert: line
+    viins)   _shape=$VI_MODE_CURSOR_INSERT ;; # vi insert: line
+    isearch) _shape=$VI_MODE_CURSOR_INSERT ;; # inc search: line
+    command) _shape=$VI_MODE_CURSOR_INSERT ;; # read a command name
+    vicmd)   _shape=$VI_MODE_CURSOR_NORMAL ;; # vi cmd: block
+    visual)  _shape=$VI_MODE_CURSOR_VISUAL ;; # vi visual mode: block
+    viopp)   _shape=$VI_MODE_CURSOR_OPPEND ;; # vi operation pending: blinking block
     *)       _shape=0 ;;
   esac
   printf $'\e[%d q' "${_shape}"
+}
+
+function _visual-mode {
+  typeset -g VI_KEYMAP=visual
+  _vi-mode-set-cursor-shape-for-keymap "$VI_KEYMAP"
+  zle .visual-mode
+}
+zle -N visual-mode _visual-mode
+
+function _vi-mode-should-reset-prompt() {
+  # If $VI_MODE_RESET_PROMPT_ON_MODE_CHANGE is unset (default), dynamically
+  # check whether we're using the prompt to display vi-mode info
+  if [[ -z "${VI_MODE_RESET_PROMPT_ON_MODE_CHANGE:-}" ]]; then
+    [[ "${PS1} ${RPS1}" = *'$(vi_mode_prompt_info)'* ]]
+    return $?
+  fi
+
+  # If $VI_MODE_RESET_PROMPT_ON_MODE_CHANGE was manually set, let's check
+  # if it was specifically set to true or it was disabled with any other value
+  [[ "${VI_MODE_RESET_PROMPT_ON_MODE_CHANGE}" = true ]]
 }
 
 # Updates editor information when the keymap changes.
@@ -39,7 +68,7 @@ function zle-keymap-select() {
   # update keymap variable for the prompt
   typeset -g VI_KEYMAP=$KEYMAP
 
-  if [[ "${VI_MODE_RESET_PROMPT_ON_MODE_CHANGE:-}" = true ]]; then
+  if _vi-mode-should-reset-prompt; then
     zle reset-prompt
     zle -R
   fi
@@ -50,10 +79,9 @@ zle -N zle-keymap-select
 # These "echoti" statements were originally set in lib/key-bindings.zsh
 # Not sure the best way to extend without overriding.
 function zle-line-init() {
-  local prev_vi_keymap
-  prev_vi_keymap="${VI_KEYMAP:-}"
+  local prev_vi_keymap="${VI_KEYMAP:-}"
   typeset -g VI_KEYMAP=main
-  [[ "$prev_vi_keymap" != 'main' ]] && [[ "${VI_MODE_RESET_PROMPT_ON_MODE_CHANGE:-}" = true ]] && zle reset-prompt
+  [[ "$prev_vi_keymap" != 'main' ]] && _vi-mode-should-reset-prompt && zle reset-prompt
   (( ! ${+terminfo[smkx]} )) || echoti smkx
   _vi-mode-set-cursor-shape-for-keymap "${VI_KEYMAP}"
 }
@@ -129,13 +157,6 @@ if [[ -z "$MODE_INDICATOR" ]]; then
 fi
 
 function vi_mode_prompt_info() {
-  # If we're using the prompt to display mode info, and we haven't explicitly
-  # disabled "reset prompt on mode change", then set it here.
-  #
-  # We do that here instead of the `if` statement below because the user may
-  # set RPS1/RPROMPT to something else in their custom config.
-  : "${VI_MODE_RESET_PROMPT_ON_MODE_CHANGE:=true}"
-
   echo "${${VI_KEYMAP/vicmd/$MODE_INDICATOR}/(main|viins)/$INSERT_MODE_INDICATOR}"
 }
 

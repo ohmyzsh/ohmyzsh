@@ -25,18 +25,26 @@ if [[ -z "$HOMEBREW_PREFIX" ]]; then
   export HOMEBREW_PREFIX="$(brew --prefix)"
 fi
 
+if [[ -d "$HOMEBREW_PREFIX/share/zsh/site-functions" ]]; then
+  fpath+=("$HOMEBREW_PREFIX/share/zsh/site-functions")
+fi
+
 alias bcubc='brew upgrade --cask && brew cleanup'
 alias bcubo='brew update && brew outdated --cask'
+alias bcubc='brew upgrade --cask && brew cleanup'
 alias brewp='brew pin'
 alias brewsp='brew list --pinned'
 alias bubc='brew upgrade && brew cleanup'
+alias bugbc='brew upgrade --greedy && brew cleanup'
 alias bubo='brew update && brew outdated'
 alias bubu='bubo && bubc'
-alias buf='brew upgrade --formula'
+alias bubug='bubo && bugbc'
+alias bfu='brew upgrade --formula'
+alias buz='brew uninstall --zap'
 
 function brews() {
   local formulae="$(brew leaves | xargs brew deps --installed --for-each)"
-  local casks="$(brew list --cask)"
+  local casks="$(brew list --cask 2>/dev/null)"
 
   local blue="$(tput setaf 4)"
   local bold="$(tput bold)"

@@ -33,6 +33,14 @@ alias pscpu10='ps -e -o pcpu,cpu,nice,state,cputime,args|sort -k1,1n -nr | head 
 # top10 of the history
 alias hist10='print -l ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
 
+function ip() {
+    if [ -t 1 ]; then
+        command ip -color "$@"
+    else
+        command ip "$@"
+    fi
+}
+
 # directory LS
 function dls() {
     print -l *(/)
@@ -132,7 +140,13 @@ function d0() {
 # gather external ip address
 function geteip() {
     curl -s -S -4 https://icanhazip.com
-    curl -s -S -6 https://icanhazip.com
+
+    # handle case when there is no IPv6 external IP, which shows error
+    # curl: (7) Couldn't connect to server
+    curl -s -S -6 https://icanhazip.com 2>/dev/null
+    local ret=$?
+    (( ret == 7 )) && print -P -u2 "%F{red}error: no IPv6 route to host%f"
+    return $ret
 }
 
 # determine local IP address(es)

@@ -26,7 +26,7 @@ alias age='apt-get'
 alias api='aptitude'
 
 # Some self-explanatory aliases
-alias acs="apt-cache search"
+alias acse="apt-cache search"
 alias aps='aptitude search'
 alias as="aptitude -F '* %p -> %d \n(%v/%V)' --no-gui --disable-columns search"
 
@@ -51,7 +51,7 @@ if [[ $use_sudo -eq 1 ]]; then
     alias au="sudo $apt_pref $apt_upgr"
     alias ai="sudo $apt_pref install"
     # Install all packages given on the command line while using only the first word of each line:
-    # acs ... | ail
+    # acse ... | ail
 
     alias ail="sed -e 's/  */ /g' -e 's/ *//' | cut -s -d ' ' -f 1 | xargs sudo $apt_pref install"
     alias ap="sudo $apt_pref purge"

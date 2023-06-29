@@ -16,11 +16,12 @@ plugins=(... golang)
 | gob    | `go build`        | Build your code                                               |
 | goc    | `go clean`        | Removes object files from package source directories          |
 | god    | `go doc`          | Prints documentation comments                                 |
+| goe    | `go env`          | Prints Go environment information                             |
 | gof    | `go fmt`          | Gofmt formats (aligns and indents) Go programs.               |
 | gofa   | `go fmt ./...`    | Run go fmt for all packages in current directory, recursively |
 | gofx   | `go fix`          | Update packages to use a new API                              |
 | gog    | `go get`          | Downloads packages and then installs them to $GOPATH          |
-| gog    | `go get ./...`    | Installs all dependencies in current directory, recursively   |
+| goga   | `go get ./...`    | Installs all dependencies in current directory, recursively   |
 | goi    | `go install`      | Compiles and installs packages to $GOPATH                     |
 | gol    | `go list`         | Lists Go packages                                             |
 | gom    | `go mod`          | Access to operations on modules                               |
@@ -35,4 +36,5 @@ plugins=(... golang)
 | gotod  | `go tool dist`    | Utility to bootstrap, build and test go runtime               |
 | gotofx | `go tool fix`     | Fixes an application to use newer features                    |
 | gov    | `go vet`          | Vet examines Go source code and reports suspicious constructs |
+| gove   | `go version`      | Prints Go version                                             |
 | gow    | `go work`         | Work provides access to operations on workspaces              |
