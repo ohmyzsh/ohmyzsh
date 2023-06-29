@@ -27,7 +27,7 @@ This plugin requires that at least one of the following tools is installed:
 Colorize supports `pygmentize` and `chroma` as syntax highlighter. By default colorize uses `pygmentize` unless it's not installed and `chroma` is. This can be overridden by the `ZSH_COLORIZE_TOOL` environment variable:
 
 ```
-ZSH_COLORIZE_TOOL=chroma
+ZSH_COLORIZE_TOOL="chroma"
 ```
 
 ### Styles
