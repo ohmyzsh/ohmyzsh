@@ -37,8 +37,10 @@ if (( ! $+commands[docker] )); then
 fi
 
 {
+  # docker version returns `Docker version 24.0.2, build cb74dfcd85`
+  # with `s:,:` remove the comma after the version, and select third word of it
+  local _docker_version=${${(s:,:z)"$(command docker --version)"}[3]}
   # `docker completion` is only available from 23.0.0 on
-  local _docker_version=$(command docker version --format '{{.Client.Version}}' 2>/dev/null)
   if is-at-least 23.0.0 $_docker_version; then
     # If the completion file doesn't exist yet, we need to autoload it and
     # bind it to `docker`. Otherwise, compinit will have already done that.
