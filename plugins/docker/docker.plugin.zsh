@@ -36,6 +36,11 @@ if (( ! $+commands[docker] )); then
   return
 fi
 
+# Standarized $0 handling
+# https://zdharma-continuum.github.io/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html
+0="${${ZERO:-${0:#$ZSH_ARGZERO}}:-${(%):-%N}}"
+0="${${(M)0:#/*}:-$PWD/$0}"
+
 {
   # docker version returns `Docker version 24.0.2, build cb74dfcd85`
   # with `s:,:` remove the comma after the version, and select third word of it
@@ -50,5 +55,7 @@ fi
       _comps[docker]=_docker
     fi
     command docker completion zsh >| "$ZSH_CACHE_DIR/completions/_docker"
+  else
+    command cp "${0:h}/completions/_docker" "$ZSH_CACHE_DIR/completions/_docker"
   fi
 } &|
