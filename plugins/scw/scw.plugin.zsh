@@ -20,7 +20,14 @@ function sgp() {
 # SCW profile selection
 function ssp() {
   if [[ -z "$1" ]]; then
-    unset SCW_PROFILE
+    unset SCW_PROFILE \
+          SCW_DEFAULT_ORGANIZATION_ID \
+          SCW_DEFAULT_PROJECT_ID \
+          SCW_DEFAULT_REGION \
+          SCW_DEFAULT_ZONE \
+          SCW_API_URL \
+          SCW_ACCESS_KEY \
+          SCW_SECRET_KEY
     echo SCW profile cleared.
     return
   fi
@@ -33,7 +40,33 @@ function ssp() {
     return 1
   fi
 
-  export SCW_PROFILE=$1
+  export SCW_PROFILE="$1"
+  unset SCW_DEFAULT_ORGANIZATION_ID \
+        SCW_DEFAULT_PROJECT_ID \
+        SCW_DEFAULT_REGION \
+        SCW_DEFAULT_ZONE \
+        SCW_API_URL \
+        SCW_ACCESS_KEY \
+        SCW_SECRET_KEY
+
+  function scw_export() {
+    local -r scw_var="$1"
+    local -r scw_key="$2"
+
+    local -r scw_val="$(scw config get $scw_key)"
+    if [[ -n "$scw_val" ]] && [[ "$scw_val" != "-" ]]; then
+      eval "export ${scw_var}=$scw_val"
+    fi
+  }
+  scw_export "SCW_DEFAULT_ORGANIZATION_ID" "default-organization-id"
+  scw_export "SCW_DEFAULT_PROJECT_ID" "default-project-id"
+  scw_export "SCW_DEFAULT_REGION" "default-region"
+  scw_export "SCW_DEFAULT_ZONE" "default-zone"
+  scw_export "SCW_API_URL" "api-url"
+  if [[ "$SCW_EXPORT_TOKENS" = "true" ]]; then
+    scw_export "SCW_ACCESS_KEY" "access-key"
+    scw_export "SCW_SECRET_KEY" "secret-key"
+  fi
 }
 
 function scw_profiles() {
