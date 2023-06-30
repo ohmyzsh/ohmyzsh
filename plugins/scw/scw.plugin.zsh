@@ -89,6 +89,74 @@ function scw_config_path() {
   done
 }
 
+function scw_upgrade() {
+  if ! command -v curl &> /dev/null; then
+    echo "[oh-my-zsh] scw upgrade requires curl, please install it"
+    return
+  fi
+
+  local -r scw_path="$(which scw)"
+  if ! [[ "$scw_path" =~ "^$HOME/.*" ]]; then
+    echo "[oh-my-zsh] scw not installed in your HOME, upgrade cannot be performed"
+    return
+  fi
+  local scw_version=""
+  while read -r line; do
+    if [[ "$line" =~ "^Version +([0-9.]+)\$" ]]; then
+      scw_version="${match[1]}"
+      break
+    fi
+  done <<< "$(scw version)"
+  if [[ -z "$scw_version" ]]; then
+    echo "[oh-my-zsh] cannot determine current scw version"
+    return
+  fi
+
+  local -r shasums="$(curl --location --silent "https://github.com/scaleway/scaleway-cli/releases/latest/download/SHA256SUMS")"
+  if [[ -z "$shasums" ]]; then
+    echo "[oh-my-zsh] cannot download the list of binaries for the last release"
+    return
+  fi
+
+  local -r kernel_name="${$(uname --kernel-name):l}"
+  local -r arch="${$(uname --machine)//x86_64/amd64}"
+  local binary_sha256=""
+  local binary_name=""
+  while read -r line; do
+    if [[ "$line" =~ "^([0-9a-f]+)  (scaleway-cli_[0-9.]+_${kernel_name}_${arch})\$" ]]; then
+      binary_sha256="${match[1]}"
+      binary_name="${match[2]}"
+      break
+    fi
+  done <<< "$shasums"
+  if [[ -z "$binary_sha256" ]] || [[ -z "$binary_name" ]]; then
+    echo "[oh-my-zsh] cannot find a scw binary for your computer"
+    return
+  fi
+  if [[ "$binary_name" =~ "^scaleway-cli_${scw_version}_.*\$" ]]; then
+    echo "[oh-my-zsh] current scw version is already the latest (v${scw_version})"
+    return
+  fi
+
+  local -r binary_tmp="$(mktemp)"
+  echo "[oh-my-zsh] downloading ${binary_name}..."
+  curl --location --progress-bar "https://github.com/scaleway/scaleway-cli/releases/latest/download/${binary_name}" -o "$binary_tmp"
+  if [[ $? -ne 0 ]]; then
+    echo "[oh-my-zsh] cannot download the latest ${binary_name} release binary"
+    rm -f "$binary_tmp"
+    return
+  fi
+  if [[ "${$(sha256sum "$binary_tmp")%% *}" != "$binary_sha256" ]]; then
+    echo "[oh-my-zsh] downloaded ${binary_name} binary has a wrong sha256sum"
+    rm -f "$binary_tmp"
+    return
+  fi
+  # Install new scw command and preserve original file permissions
+  \cp --no-preserve=all --force "$binary_tmp" "$scw_path"
+  echo "[oh-my-zsh] scw successfully updated"
+  rm -f "$binary_tmp"
+}
+
 function _scw_profiles() {
   reply=($(scw_profiles))
 }
