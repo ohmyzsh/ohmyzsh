@@ -70,7 +70,7 @@ function ssp() {
 }
 
 function scw_profiles() {
-  scw autocomplete complete zsh 3 -- scw --profile 2> /dev/null
+  scw autocomplete complete zsh 5 -- scw config profile activate 2> /dev/null
 }
 
 function scw_config_path() {
