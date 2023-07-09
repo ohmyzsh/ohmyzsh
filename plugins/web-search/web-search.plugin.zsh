@@ -7,6 +7,8 @@ function web_search() {
   typeset -A urls
   urls=(
     $ZSH_WEB_SEARCH_ENGINES
+
+    firefox         "https://www.google.com/search?q="
     google          "https://www.google.com/search?q="
     bing            "https://www.bing.com/search?q="
     brave           "https://search.brave.com/search?q="
@@ -47,7 +49,7 @@ function web_search() {
   open_command "$url"
 }
 
-
+alias firefox='web-search firefox'
 alias bing='web_search bing'
 alias brs='web_search brave'
 alias google='web_search google'
