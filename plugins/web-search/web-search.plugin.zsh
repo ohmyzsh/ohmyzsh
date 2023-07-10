@@ -3,11 +3,12 @@
 function web_search() {
   emulate -L zsh
 
-  # define search engine URLS
+  # define search engine URLs
   typeset -A urls
   urls=(
     $ZSH_WEB_SEARCH_ENGINES
 
+    chrome          "google-chrome"
     firefox         "https://www.google.com/search?q="
     google          "https://www.google.com/search?q="
     bing            "https://www.bing.com/search?q="
@@ -35,21 +36,27 @@ function web_search() {
     return 1
   fi
 
-  # search or go to main page depending on number of arguments passed
+  # search or go to main page depending on the number of arguments passed
   if [[ $# -gt 1 ]]; then
-    # build search url:
+    # build search URL:
     # join arguments passed with '+', then append to search engine URL
     url="${urls[$1]}$(omz_urlencode ${@[2,-1]})"
   else
-    # build main page url:
+    # build main page URL:
     # split by '/', then rejoin protocol (1) and domain (2) parts with '//'
     url="${(j://:)${(s:/:)urls[$1]}[1,2]}"
   fi
 
-  open_command "$url"
+  if [[ $1 == "firefox" ]]; then
+    firefox "$url"
+  else
+    open_command "$url"
+  fi
 }
 
-alias firefox='web-search firefox'
+
+alias chrome='web_search chrome'
+alias firefox='web_search firefox'
 alias bing='web_search bing'
 alias brs='web_search brave'
 alias google='web_search google'
