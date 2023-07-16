@@ -1,6 +1,6 @@
 (( $+commands[apt] )) && APT=apt || APT=apt-get
 
-alias acse='apt-cache search'
+alias acs='apt-cache search'
 
 alias afs='apt-file search --regexp'
 

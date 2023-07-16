@@ -15,7 +15,7 @@ Commands that use `$APT` will use `apt` if installed or defer to `apt-get` other
 | Alias   | Command                                                                  | Description                                                                                       |
 |---------|--------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------|
 | age     | `sudo $APT`                                                              | Run apt-get with sudo                                                                             |
-| acse    | `apt-cache search`                                                       | Search the apt-cache with the specified criteria                                                  |
+| acs     | `apt-cache search`                                                       | Search the apt-cache with the specified criteria                                                  |
 | acsp    | `apt-cache showpkg`                                                      | Shows information about the listed packages                                                       |
 | acp     | `apt-cache policy`                                                       | Display the package source priorities                                                             |
 | afs     | `apt-file search --regexp`                                               | Perform a regular expression apt-file search                                                      |
