@@ -256,9 +256,17 @@ prompt_aws() {
 
 prompt_shell() {
   [[ -z "$SHELL_PROFILE" || "$SHOW_AWS_PROMPT" = false ]] && return
+  local ENV_PRPT="$SHELL_PROFILE"
+  case "$TERA_PROFILE" in
+    *qa*) ENV_PRPT="${SHELL_PROFILE}-qa" ;;
+    *stage*) ENV_PRPT="${SHELL_PROFILE}-st" ;;
+  esac
   case "$SHELL_PROFILE" in
-    *prod|*production*) prompt_segment red black  "${SHELL_PROFILE:gs/%/%%}" ;;
-    *) prompt_segment green black "${SHELL_PROFILE:gs/%/%%}" ;;
+    *prod|*production*) 
+          prompt_segment red black  "${ENV_PRPT:gs/%/%%}" ;;
+    *dev*) 
+          prompt_segment green black "${ENV_PRPT:gs/%/%%}" ;;
+    # *) prompt_segment green black "" ;;
   esac
 }
 ## Main prompt
