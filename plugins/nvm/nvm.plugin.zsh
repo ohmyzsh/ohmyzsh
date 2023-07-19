@@ -16,13 +16,7 @@ fi
 # Note: nvm is a function so we need to use `which`
 which nvm &>/dev/null && return
 
-if [[ -z "$NVM_DIR" ]]; then 
-  echo "[oh-my-zsh] nvm installation cannot be found"
-  echo "[oh-my-zsh] set NVM_DIR to your installation"
-  return
-fi
-if [[ ! -f "$NVM_DIR/nvm.sh" ]]; then 
-  echo "[oh-my-zsh] nvm.sh does not exist in $NVM_DIR"
+if [[ -z "$NVM_DIR" ]] || [[ ! -f "$NVM_DIR/nvm.sh" ]]; then 
   return
 fi
 
