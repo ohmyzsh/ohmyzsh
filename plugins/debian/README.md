@@ -21,7 +21,7 @@ Set `$apt_pref` and `$apt_upgr` to whatever command you want (before sourcing Oh
 | ------ | ---------------------------------------------------------------------- | ---------------------------------------------------------- |
 | `age`  | `apt-get`                                                              | Command line tool for handling packages                    |
 | `api`  | `aptitude`                                                             | Same functionality as `apt-get`, provides extra options    |
-| `acse` | `apt-cache search`                                                     | Command line tool for searching apt software package cache |
+| `acs`  | `apt-cache search`                                                     | Command line tool for searching apt software package cache |
 | `aps`  | `aptitude search`                                                      | Searches installed packages using aptitude                 |
 | `as`   | `aptitude -F '* %p -> %d \n(%v/%V)' --no-gui --disable-columns search` | Print searched packages using a custom format              |
 | `afs`  | `apt-file search --regexp`                                             | Search file in packages                                    |
