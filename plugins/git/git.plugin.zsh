@@ -132,6 +132,7 @@ alias gcss='git commit --gpg-sign --signoff'
 alias gcssm='git commit --gpg-sign --signoff --message'
 
 alias gd='git diff'
+alias gdn='git diff --name-only'
 alias gdca='git diff --cached'
 alias gdcw='git diff --cached --word-diff'
 alias gdct='git describe --tags $(git rev-list --tags --max-count=1)'
