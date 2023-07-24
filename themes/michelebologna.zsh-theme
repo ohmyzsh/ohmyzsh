@@ -29,14 +29,13 @@ local cyan="%{$fg_bold[cyan]%}"
 local yellow="%{$fg_bold[yellow]%}"
 local blue="%{$fg_bold[blue]%}"
 local magenta="%{$fg_bold[magenta]%}"
-local white="%{$fg_bold[white]%}"
 local reset="%{$reset_color%}"
 
 local -a color_array
-color_array=($green $red $cyan $yellow $blue $magenta $white)
+color_array=($green $red $cyan $yellow $blue $magenta)
 
-local username_color=$white
-local hostname_color=$color_array[$[((#HOST))%7+1]] # choose hostname color based on first character
+local username_color=$blue
+local hostname_color=$color_array[$[((#HOST))%6+1]] # choose hostname color based on first character
 local current_dir_color=$blue
 
 local username="%n"
@@ -66,10 +65,10 @@ function michelebologna_git_prompt {
   local out=$(git_prompt_info)$(git_prompt_status)$(git_remote_status)
   [[ -n $out ]] || return
   printf " %s(%s%s%s)%s" \
-    "%{$fg_bold[white]%}" \
+    "%{$fg_bold[blue]%}" \
     "%{$fg_bold[green]%}" \
     "$out" \
-    "%{$fg_bold[white]%}" \
+    "%{$fg_bold[blue]%}" \
     "%{$reset_color%}"
 }
 
