@@ -69,7 +69,6 @@ function gccd() {
 }
 compdef _git gccd=git-clone
 
-
 function gdnolock() {
   git diff "$@" ":(exclude)package-lock.json" ":(exclude)*.lock"
 }
@@ -78,10 +77,6 @@ compdef _git gdnolock=git-diff
 function gdv() { git diff -w "$@" | view - }
 compdef _git gdv=git-diff
 
-# --jobs=<n> was added in git 2.8
-is-at-least 2.8 "$git_version" \
-  && alias gfa='git fetch --all --prune --jobs=10' \
-  || alias gfa='git fetch --all --prune'
 
 function ggf() {
   [[ "$#" != 1 ]] && local b="$(git_current_branch)"
@@ -217,6 +212,10 @@ alias gdw='git diff --word-diff'
 alias gdup='git diff @{upstream}'
 alias gdt='git diff-tree --no-commit-id --name-only -r'
 alias gd='git diff'
+# --jobs=<n> was added in git 2.8
+is-at-least 2.8 "$git_version" \
+  && alias gfa='git fetch --all --prune --jobs=10' \
+  || alias gfa='git fetch --all --prune'
 alias gfo='git fetch origin'
 alias gf='git fetch'
 alias gga='git gui citool --amend'
@@ -308,7 +307,7 @@ alias gstd='git stash drop'
 alias gstl='git stash list'
 alias gstp='git stash pop'
 # use the default stash push on git 2.13 and newer
-is-at-least 2.13 "$git_version"
+is-at-least 2.13 "$git_version" \
   && alias gsta='git stash push' \
   || alias gsta='git stash save'
 alias gsts='git stash show --text'
