@@ -63,67 +63,6 @@ function git_develop_branch() {
   echo develop
 }
 
-function gccd() {
-  command git clone --recurse-submodules "$@"
-  [[ -d "$_" ]] && cd "$_" || cd "${${_:t}%.git}"
-}
-compdef _git gccd=git-clone
-
-function gdnolock() {
-  git diff "$@" ":(exclude)package-lock.json" ":(exclude)*.lock"
-}
-compdef _git gdnolock=git-diff
-
-function gdv() { git diff -w "$@" | view - }
-compdef _git gdv=git-diff
-
-
-function ggf() {
-  [[ "$#" != 1 ]] && local b="$(git_current_branch)"
-  git push --force origin "${b:=$1}"
-}
-compdef _git ggf=git-checkout
-function ggfl() {
-  [[ "$#" != 1 ]] && local b="$(git_current_branch)"
-  git push --force-with-lease origin "${b:=$1}"
-}
-compdef _git ggfl=git-checkout
-
-function ggl() {
-  if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
-    git pull origin "${*}"
-  else
-    [[ "$#" == 0 ]] && local b="$(git_current_branch)"
-    git pull origin "${b:=$1}"
-  fi
-}
-compdef _git ggl=git-checkout
-
-function ggp() {
-  if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
-    git push origin "${*}"
-  else
-    [[ "$#" == 0 ]] && local b="$(git_current_branch)"
-    git push origin "${b:=$1}"
-  fi
-}
-compdef _git ggp=git-checkout
-
-function ggpnp() {
-  if [[ "$#" == 0 ]]; then
-    ggl && ggp
-  else
-    ggl "${*}" && ggp "${*}"
-  fi
-}
-compdef _git ggpnp=git-checkout
-
-function ggu() {
-  [[ "$#" != 1 ]] && local b="$(git_current_branch)"
-  git pull --rebase origin "${b:=$1}"
-}
-compdef _git ggu=git-checkout
-
 function grename() {
   if [[ -z "$1" || -z "$2" ]]; then
     echo "Usage: $0 old_branch new_branch"
@@ -146,6 +85,16 @@ function grename() {
 #
 
 alias grt='cd "$(git rev-parse --show-toplevel || echo .)"'
+
+function ggpnp() {
+  if [[ "$#" == 0 ]]; then
+    ggl && ggp
+  else
+    ggl "${*}" && ggp "${*}"
+  fi
+}
+compdef _git ggpnp=git-checkout
+
 alias ggpur='ggu'
 alias g='git'
 alias ga='git add'
@@ -188,6 +137,13 @@ alias gcpa='git cherry-pick --abort'
 alias gcpc='git cherry-pick --continue'
 alias gclean='git clean --interactive -d'
 alias gcl='git clone --recurse-submodules'
+
+function gccd() {
+  command git clone --recurse-submodules "$@"
+  [[ -d "$_" ]] && cd "$_" || cd "${${_:t}%.git}"
+}
+compdef _git gccd=git-clone
+
 alias gcam='git commit --all --message'
 alias gcas='git commit --all --signoff'
 alias gcasm='git commit --all --signoff --message'
@@ -210,7 +166,17 @@ alias gdca='git diff --cached'
 alias gdcw='git diff --cached --word-diff'
 alias gds='git diff --staged'
 alias gdw='git diff --word-diff'
+
+function gdv() { git diff -w "$@" | view - }
+compdef _git gdv=git-diff
+
 alias gdup='git diff @{upstream}'
+
+function gdnolock() {
+  git diff "$@" ":(exclude)package-lock.json" ":(exclude)*.lock"
+}
+compdef _git gdnolock=git-diff
+
 alias gdt='git diff-tree --no-commit-id --name-only -r'
 alias gf='git fetch'
 # --jobs=<n> was added in git 2.8
@@ -250,17 +216,49 @@ alias gup='git pull --rebase'
 alias gupa='git pull --rebase --autostash'
 alias gupav='git pull --rebase --autostash --verbose'
 alias gupv='git pull --rebase --verbose'
+
+function ggu() {
+  [[ "$#" != 1 ]] && local b="$(git_current_branch)"
+  git pull --rebase origin "${b:=$1}"
+}
+compdef _git ggu=git-checkout
+
 alias gupom='git pull --rebase origin $(git_main_branch)'
 alias gupomi='git pull --rebase=interactive origin $(git_main_branch)'
 alias ggpull='git pull origin "$(git_current_branch)"'
+
+function ggl() {
+  if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
+    git pull origin "${*}"
+  else
+    [[ "$#" == 0 ]] && local b="$(git_current_branch)"
+    git pull origin "${b:=$1}"
+  fi
+}
+compdef _git ggl=git-checkout
+
 alias gluc='git pull upstream $(git_current_branch)'
 alias glum='git pull upstream $(git_main_branch)'
 alias gp='git push'
 alias gpd='git push --dry-run'
+
+function ggf() {
+  [[ "$#" != 1 ]] && local b="$(git_current_branch)"
+  git push --force origin "${b:=$1}"
+}
+compdef _git ggf=git-checkout
+
 alias gpf!='git push --force'
 is-at-least 2.30 "$git_version" \
   && alias gpf='git push --force-with-lease --force-if-includes' \
   || alias gpf='git push --force-with-lease'
+
+function ggfl() {
+  [[ "$#" != 1 ]] && local b="$(git_current_branch)"
+  git push --force-with-lease origin "${b:=$1}"
+}
+compdef _git ggfl=git-checkout
+
 alias gpsup='git push --set-upstream origin $(git_current_branch)'
 is-at-least 2.30 "$git_version" \
   && alias gpsupf='git push --set-upstream origin $(git_current_branch) --force-with-lease --force-if-includes' \
@@ -269,6 +267,17 @@ alias gpv='git push --verbose'
 alias gpoat='git push origin --all && git push origin --tags'
 alias gpod='git push origin --delete'
 alias ggpush='git push origin "$(git_current_branch)"'
+
+function ggp() {
+  if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
+    git push origin "${*}"
+  else
+    [[ "$#" == 0 ]] && local b="$(git_current_branch)"
+    git push origin "${b:=$1}"
+  fi
+}
+compdef _git ggp=git-checkout
+
 alias gpu='git push upstream'
 alias grb='git rebase'
 alias grba='git rebase --abort'
