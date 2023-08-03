@@ -3,7 +3,9 @@ autoload -Uz is-at-least
 git_version="${${(As: :)$(git version 2>/dev/null)}[3]}"
 
 #
-# Functions
+# Functions Current
+# (sorted alphabetically by function name)
+# (order should follow README)
 #
 
 # The name of the current branch
@@ -12,34 +14,6 @@ git_version="${${(As: :)$(git version 2>/dev/null)}[3]}"
 # to fix the core -> git plugin dependency.
 function current_branch() {
   git_current_branch
-}
-
-# Warn if the current branch is a WIP
-function work_in_progress() {
-  command git -c log.showSignature=false log -n 1 2>/dev/null | grep -q -- "--wip--" && echo "WIP!!"
-}
-
-# Similar to `gunwip` but recursive "Unwips" all recent `--wip--` commits not just the last one
-function gunwipall() {
-  local _commit=$(git log --grep='--wip--' --invert-grep --max-count=1 --format=format:%H)
-
-  # Check if a commit without "--wip--" was found and it's not the same as HEAD
-  if [[ "$_commit" != "$(git rev-parse HEAD)" ]]; then
-    git reset $_commit || return 1
-  fi
-}
-
-# Check if main exists and use instead of master
-function git_main_branch() {
-  command git rev-parse --git-dir &>/dev/null || return
-  local ref
-  for ref in refs/{heads,remotes/{origin,upstream}}/{main,trunk,mainline,default}; do
-    if command git show-ref -q --verify $ref; then
-      echo ${ref:t}
-      return
-    fi
-  done
-  echo master
 }
 
 # Check for develop and similarly named branches
@@ -55,6 +29,19 @@ function git_develop_branch() {
   echo develop
 }
 
+# Check if main exists and use instead of master
+function git_main_branch() {
+  command git rev-parse --git-dir &>/dev/null || return
+  local ref
+  for ref in refs/{heads,remotes/{origin,upstream}}/{main,trunk,mainline,default}; do
+    if command git show-ref -q --verify $ref; then
+      echo ${ref:t}
+      return
+    fi
+  done
+  echo master
+}
+
 function grename() {
   if [[ -z "$1" || -z "$2" ]]; then
     echo "Usage: $0 old_branch new_branch"
@@ -67,6 +54,27 @@ function grename() {
   if git push origin :"$1"; then
     git push --set-upstream origin "$2"
   fi
+}
+
+#
+# Functions Work in Progress (WIP)
+# (sorted alphabetically by function name)
+# (order should follow README)
+#
+
+# Similar to `gunwip` but recursive "Unwips" all recent `--wip--` commits not just the last one
+function gunwipall() {
+  local _commit=$(git log --grep='--wip--' --invert-grep --max-count=1 --format=format:%H)
+
+  # Check if a commit without "--wip--" was found and it's not the same as HEAD
+  if [[ "$_commit" != "$(git rev-parse HEAD)" ]]; then
+    git reset $_commit || return 1
+  fi
+}
+
+# Warn if the current branch is a WIP
+function work_in_progress() {
+  command git -c log.showSignature=false log -n 1 2>/dev/null | grep -q -- "--wip--" && echo "WIP!!"
 }
 
 #
