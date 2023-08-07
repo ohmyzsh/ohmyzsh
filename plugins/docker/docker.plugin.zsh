@@ -41,21 +41,22 @@ fi
 0="${${ZERO:-${0:#$ZSH_ARGZERO}}:-${(%):-%N}}"
 0="${${(M)0:#/*}:-$PWD/$0}"
 
+# If the completion file doesn't exist yet, we need to autoload it and
+# bind it to `docker`. Otherwise, compinit will have already done that.
+if [[ ! -f "$ZSH_CACHE_DIR/completions/_docker" ]]; then
+  typeset -g -A _comps
+  autoload -Uz _docker
+  _comps[docker]=_docker
+fi
+
 {
+  # `docker completion` is only available from 23.0.0 on
   # docker version returns `Docker version 24.0.2, build cb74dfcd85`
   # with `s:,:` remove the comma after the version, and select third word of it
-  local _docker_version=${${(s:,:z)"$(command docker --version)"}[3]}
-  # `docker completion` is only available from 23.0.0 on
-  if is-at-least 23.0.0 $_docker_version; then
-    # If the completion file doesn't exist yet, we need to autoload it and
-    # bind it to `docker`. Otherwise, compinit will have already done that.
-    if [[ ! -f "$ZSH_CACHE_DIR/completions/_docker" ]]; then
-      typeset -g -A _comps
-      autoload -Uz _docker
-      _comps[docker]=_docker
-    fi
-    command docker completion zsh >| "$ZSH_CACHE_DIR/completions/_docker"
-  else
-    command cp "${0:h}/completions/_docker" "$ZSH_CACHE_DIR/completions/_docker"
+  if zstyle -t ':omz:plugins:docker' legacy-completion || \
+    ! is-at-least 23.0.0 ${${(s:,:z)"$(command docker --version)"}[3]}; then
+        command cp "${0:h}/completions/_docker" "$ZSH_CACHE_DIR/completions/_docker"
+      else
+        command docker completion zsh >| "$ZSH_CACHE_DIR/completions/_docker"
   fi
 } &|
