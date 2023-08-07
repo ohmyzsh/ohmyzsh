@@ -4,6 +4,7 @@ This plugin adds a way to reference certain files or folders used frequently usi
 a global alias or shortcut.
 
 To use it, add `fastfile` to the plugins array in your zshrc file:
+
 ```zsh
 plugins=(... fastfile)
 ```
@@ -13,35 +14,37 @@ plugins=(... fastfile)
 Example: you access folder `/code/project/backend/database` very frequently.
 
 First, generate a shortcut with the name `pjdb`:
+
 ```zsh
 $ fastfile pjdb /code/project/backend/database
 ```
 
 Next time you want to access it, use `§pjdb`. For example:
+
 ```zsh
 $ cd §pjdb
 $ subl §pjdb
 ```
+
 where § is the fastfile prefix (see [below](#options) for how to change).
 
 **Note:** shortcuts with spaces in the name are assigned a global alias
 where the spaces have been substituted with underscores (`_`). For example:
 a shortcut named `"hello world"` corresponds with `§hello_world`.
 
-
 ## Functions
 
-- `fastfile <shortcut_name> <path/to/file/or/folder>`: generate a shortcut.
+- `fastfile <shortcut_name> [path/to/file/or/folder]`: generate a shortcut.
+  If the second argument is not provided, the current directory is used.
 
 - `fastfile_print <shortcut_name>`: prints a shortcut, with the format
   `<prefix><shortcut_name> -> <shortcut_path>`.
 
 - `fastfile_ls`: lists all shortcuts.
 
-- `fastfile_rm <shortcut_name> `: remove a shortcut.
+- `fastfile_rm <shortcut_name>`: remove a shortcut.
 
 - `fastfile_sync`: generates the global aliases for the shortcuts.
-
 
 ### Internal functions
 
@@ -50,7 +53,6 @@ a shortcut named `"hello world"` corresponds with `§hello_world`.
   is stored.
 
 - `fastfile_get <shortcut_name>`: get the real path of the shortcut.
-
 
 ## Aliases
 
@@ -61,7 +63,6 @@ a shortcut named `"hello world"` corresponds with `§hello_world`.
 | ffrm   | `fastfile_rm`    |
 | ffls   | `fastfile_ls`    |
 | ffsync | `fastfile_sync`  |
-
 
 ## Options
 

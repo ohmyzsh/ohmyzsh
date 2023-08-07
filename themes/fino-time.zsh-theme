@@ -12,6 +12,7 @@
 # Also borrowing from http://stevelosh.com/blog/2010/02/my-extravagant-zsh-prompt/
 
 function virtualenv_info {
+    [ $CONDA_DEFAULT_ENV ] && echo "($CONDA_DEFAULT_ENV) "
     [ $VIRTUAL_ENV ] && echo '('`basename $VIRTUAL_ENV`') '
 }
 
@@ -21,9 +22,10 @@ function prompt_char {
 }
 
 function box_name {
-    [ -f ~/.box-name ] && cat ~/.box-name || echo ${SHORT_HOST:-$HOST}
+  local box="${SHORT_HOST:-$HOST}"
+  [[ -f ~/.box-name ]] && box="$(< ~/.box-name)"
+  echo "${box:gs/%/%%}"
 }
-
 
 PROMPT="╭─%{$FG[040]%}%n%{$reset_color%} %{$FG[239]%}at%{$reset_color%} %{$FG[033]%}$(box_name)%{$reset_color%} %{$FG[239]%}in%{$reset_color%} %{$terminfo[bold]$FG[226]%}%~%{$reset_color%}\$(git_prompt_info)\$(ruby_prompt_info) %D - %*
 ╰─\$(virtualenv_info)\$(prompt_char) "

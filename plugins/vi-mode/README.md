@@ -29,23 +29,64 @@ plugins=(... vi-mode)
   VI_MODE_SET_CURSOR=true
   ```
 
-- `MODE_INDICATOR`: controls the string displayed when the shell is in normal mode.
-  See [Mode indicator](#mode-indicator) for details.
+  See [Cursor Styles](#cursor-styles) for controlling how the cursor looks in different modes
 
-## Mode indicator
+- `MODE_INDICATOR`: controls the string displayed when the shell is in normal mode.
+  See [Mode indicators](#mode-indicators) for details.
+
+- `INSERT_MODE_INDICATOR`: controls the string displayed when the shell is in insert mode.
+  See [Mode indicators](#mode-indicators) for details.
+
+## Mode indicators
 
 *Normal mode* is indicated with a red `<<<` mark at the right prompt, when it
-hasn't been defined by theme.
+hasn't been defined by theme, *Insert mode* is not displayed by default.
 
-You can change this indicator by setting the `MODE_INDICATOR` variable. This setting
-supports Prompt Expansion sequences. For example:
+You can change these indicators by setting the `MODE_INDICATOR` (*Normal mode*) and
+`INSERT_MODE_INDICATORS` (*Insert mode*) variables.
+This settings support Prompt Expansion sequences. For example:
 
 ```zsh
-MODE_INDICATOR="%F{yellow}+%f"
+MODE_INDICATOR="%F{white}+%f"
+INSERT_MODE_INDICATOR="%F{yellow}+%f"
 ```
 
-You can also use the `vi_mode_prompt_info` function in your prompt, which will display
-this mode indicator.
+### Adding mode indicators to your prompt
+
+`Vi-mode` by default will add mode indicators to `RPROMPT` **unless** that is defined by 
+a preceding plugin.
+
+If `PROMPT` or `RPROMPT` is not defined to your liking, you can add mode info manually. The `vi_mode_prompt_info` function is available to insert mode indicator information.
+
+Here are some examples:
+
+```bash
+source $ZSH/oh-my-zsh.sh
+
+PROMPT="$PROMPT\$(vi_mode_prompt_info)"
+RPROMPT="\$(vi_mode_prompt_info)$RPROMPT"
+```
+
+Note the `\$` here, which importantly prevents interpolation at the time of defining, but allows it to be executed for each prompt update event.
+
+## Cursor Styles
+
+You can control the cursor style used in each active vim mode by changing the values of the following variables.
+
+```zsh
+# defaults
+VI_MODE_CURSOR_NORMAL=2
+VI_MODE_CURSOR_VISUAL=6
+VI_MODE_CURSOR_INSERT=6
+VI_MODE_CURSOR_OPPEND=0
+```
+
+- 0, 1 - Blinking block
+- 2 - Solid block
+- 3 - Blinking underline
+- 4 - Solid underline
+- 5 - Blinking line
+- 6 - Solid line
 
 ## Key bindings
 
@@ -64,7 +105,7 @@ NOTE: some of these key bindings are set by zsh by default when using a vi-mode 
 
 - `vv`     : Edit current command line in Vim
 
-NOTE: this used to be bound to `v`. That is now the default (`visual-mode`)
+NOTE: this used to be bound to `v`. That is now the default (`visual-mode`).
 
 ### Movement
 
@@ -107,3 +148,21 @@ NOTE: this used to be bound to `v`. That is now the default (`visual-mode`)
 - `R`           : Enter replace mode: Each character replaces existing one
 - `x`           : Delete `count` characters under and after the cursor
 - `X`           : Delete `count` characters before the cursor
+
+## Known issues
+
+### Low `$KEYTIMEOUT`
+
+A low `$KEYTIMEOUT` value (< 15) means that key bindings that need multiple characters,
+like `vv`, will be very difficult to trigger. `$KEYTIMEOUT` controls the number of
+milliseconds that must pass before a key press is read and the appropriate key binding
+is triggered. For multi-character key bindings, the key presses need to happen before
+the timeout is reached, so on low timeouts the key press happens too slow, and therefore
+another key binding is triggered.
+
+We recommend either setting `$KEYTIMEOUT` to a higher value, or remapping the key bindings
+that you want to trigger to a keyboard sequence. For example:
+
+```zsh
+bindkey -M vicmd 'V' edit-command-line # this remaps `vv` to `V` (but overrides `visual-mode`)
+```

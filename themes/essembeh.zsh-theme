@@ -39,7 +39,7 @@ elif [[ -r /etc/debian_chroot ]]; then
 	# prefix prompt in case of chroot
 	ZSH_ESSEMBEH_PREFIX="%{$fg[yellow]%}[chroot:$(cat /etc/debian_chroot)]%{$reset_color%} "
 elif [[ -r /.dockerenv ]]; then
-	# also prefix prompt inside a docker contrainer
+	# also prefix prompt inside a docker container
 	ZSH_ESSEMBEH_PREFIX="%{$fg[yellow]%}[docker]%{$reset_color%} "
 fi
 if [[ $UID = 0 ]]; then

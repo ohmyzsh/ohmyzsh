@@ -12,16 +12,27 @@ plugins=(... dirhistory)
 
 | Shortcut                          | Description                                               |
 |-----------------------------------|-----------------------------------------------------------|
-| <kbd>alt</kbd> + <kbd>left</kbd>  | Go to previous directory                                  |
-| <kbd>alt</kbd> + <kbd>right</kbd> | Undo <kbd>alt</kbd> + <kbd>left</kbd>                     |
-| <kbd>alt</kbd> + <kbd>up</kbd>    | Move into the parent directory                            |
-| <kbd>alt</kbd> + <kbd>down</kbd>  | Move into the first child directory by alphabetical order |
+| <kbd>Alt</kbd> + <kbd>Left</kbd>  | Go to previous directory                                  |
+| <kbd>Alt</kbd> + <kbd>Right</kbd> | Go to next directory                                      |
+| <kbd>Alt</kbd> + <kbd>Up</kbd>    | Move into the parent directory                            |
+| <kbd>Alt</kbd> + <kbd>Down</kbd>  | Move into the first child directory by alphabetical order |
+
+**For macOS: use the Option key (<kbd>⌥</kbd>) instead of <kbd>Alt</kbd>**.
+
+> NOTE: some terminals might override the <kbd>Alt</kbd> + Arrows key bindings (e.g. Windows Terminal).
+> If these don't work check your terminal settings and change them to a different keyboard shortcut.
 
 ## Usage
 
-This plugin allows you to navigate the history of previous current-working-directories using ALT-LEFT and ALT-RIGHT. ALT-LEFT moves back to directories that the user has changed to in the past, and ALT-RIGHT undoes ALT-LEFT. MAC users may alternately use OPT-LEFT and OPT-RIGHT.
+This plugin allows you to navigate the history of previous working directories using <kbd>Alt</kbd> + <kbd>Left</kbd>
+and <kbd>Alt</kbd> + <kbd>Right</kbd>. <kbd>Alt</kbd> + <kbd>Left</kbd> moves to past directories, and
+<kbd>Alt</kbd> + <kbd>Right</kbd> goes back to recent directories.
 
-Also, navigate directory **hierarchy** using ALT-UP and ALT-DOWN. (mac keybindings not yet implemented). ALT-UP moves to higher hierarchy (shortcut for 'cd ..'). ALT-DOWN moves into the first directory found in alphabetical order (useful to navigate long empty directories e.g. java packages)
+**NOTE: the maximum directory history size is 30.**
+
+You can also navigate **directory hierarchies** using <kbd>Alt</kbd> + <kbd>Up</kbd> and <kbd>Alt</kbd> + <kbd>Down</kbd>.
+<kbd>Alt</kbd> + <kbd>Up</kbd> moves to the parent directory, while <kbd>Alt</kbd> + <kbd>Down</kbd> moves into the first
+child directory found in alphabetical order (useful to navigate long empty directories, e.g. Java packages).
 
 For example, if the shell was started, and the following commands were entered:
 
@@ -32,8 +43,20 @@ cd share
 cd doc
 ```
 
-Then entering ALT-LEFT at the prompt would change directory from /usr/share/doc to /usr/share, then if pressed again to /usr/, then ~. If ALT-RIGHT were pressed the directory would be changed to /usr/ again.
+the directory stack (`dirs -v`) would look like this:
 
-After that, ALT-DOWN will probably go to /usr/bin (depends on your /usr structure), ALT-UP will return to /usr, then ALT-UP will get you to /
+```console
+$ dirs -v
+0       /usr/share/doc
+1       /usr/share
+2       /usr
+3       ~
+```
 
-**Currently the max history size is 30**. The navigation should work for xterm, PuTTY xterm mode, GNU screen, and on MAC with alternate keys as mentioned above.
+then entering <kbd>Alt</kbd> + <kbd>Left</kbd> at the prompt would change directory from `/usr/share/doc` to `/usr/share`,
+then if pressed again to `/usr`, then `~`. If <kbd>Alt</kbd> + <kbd>Right</kbd> were pressed the directory would be changed
+to `/usr` again.
+
+After that, <kbd>Alt</kbd> + <kbd>Down</kbd> will probably go to `/usr/bin` if `bin` is the first directory in alphabetical
+order (depends on your `/usr` folder structure). <kbd>Alt</kbd> + <kbd>Up</kbd> will return to `/usr`, and once more will get
+you to the root folder (`/`).

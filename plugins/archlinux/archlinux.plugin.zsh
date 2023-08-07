@@ -5,7 +5,9 @@
 # Pacman - https://wiki.archlinux.org/index.php/Pacman_Tips
 alias pacupg='sudo pacman -Syu'
 alias pacin='sudo pacman -S'
+alias paclean='sudo pacman -Sc'
 alias pacins='sudo pacman -U'
+alias paclr='sudo pacman -Scc'
 alias pacre='sudo pacman -R'
 alias pacrem='sudo pacman -Rns'
 alias pacrep='pacman -Si'
@@ -21,30 +23,27 @@ alias pacfiles='pacman -F'
 alias pacls='pacman -Ql'
 alias pacown='pacman -Qo'
 alias pacupd="sudo pacman -Sy"
-alias upgrade='sudo pacman -Syu'
 
 function paclist() {
-  # Based on https://bbs.archlinux.org/viewtopic.php?id=93683
-  pacman -Qqe | \
-    xargs -I '{}' \
-      expac "${bold_color}% 20n ${fg_no_bold[white]}%d${reset_color}" '{}'
+  pacman -Qqe | xargs -I{} -P0 --no-run-if-empty pacman -Qs --color=auto "^{}\$"
 }
 
 function pacdisowned() {
-  local tmp db fs
-  tmp=${TMPDIR-/tmp}/pacman-disowned-$UID-$$
-  db=$tmp/db
-  fs=$tmp/fs
+  local tmp_dir db fs
+  tmp_dir=$(mktemp --directory)
+  db=$tmp_dir/db
+  fs=$tmp_dir/fs
 
-  mkdir "$tmp"
-  trap 'rm -rf "$tmp"' EXIT
+  trap "rm -rf $tmp_dir" EXIT
 
   pacman -Qlq | sort -u > "$db"
 
-  find /bin /etc /lib /sbin /usr ! -name lost+found \
+  find /etc /usr ! -name lost+found \
     \( -type d -printf '%p/\n' -o -print \) | sort > "$fs"
 
   comm -23 "$fs" "$db"
+
+  rm -rf $tmp_dir
 }
 
 alias pacmanallkeys='sudo pacman-key --refresh-keys'
@@ -88,6 +87,8 @@ fi
 if (( $+commands[aura] )); then
   alias auin='sudo aura -S'
   alias aurin='sudo aura -A'
+  alias auclean='sudo aura -Sc'
+  alias auclr='sudo aura -Scc'
   alias auins='sudo aura -U'
   alias auinsd='sudo aura -S --asdeps'
   alias aurinsd='sudo aura -A --asdeps'
@@ -104,8 +105,7 @@ if (( $+commands[aura] )); then
   alias auras='aura -As --both'
   alias auupd="sudo aura -Sy"
   alias auupg='sudo sh -c "aura -Syu              && aura -Au"'
-  alias ausu='sudo  sh -c "aura -Syu --no-confirm && aura -Au --no-confirm"'
-  alias upgrade='sudo aura -Syu'
+  alias ausu='sudo sh -c "aura -Syu --no-confirm && aura -Au --no-confirm"'
 
   # extra bonus specially for aura
   alias auown="aura -Qqo"
@@ -115,6 +115,8 @@ if (( $+commands[aura] )); then
 fi
 
 if (( $+commands[pacaur] )); then
+  alias pacclean='pacaur -Sc'
+  alias pacclr='pacaur -Scc'
   alias paupg='pacaur -Syu'
   alias pasu='pacaur -Syu --noconfirm'
   alias pain='pacaur -S'
@@ -130,7 +132,6 @@ if (( $+commands[pacaur] )); then
   alias painsd='pacaur -S --asdeps'
   alias pamir='pacaur -Syy'
   alias paupd="pacaur -Sy"
-  alias upgrade='pacaur -Syu'
 fi
 
 if (( $+commands[trizen] )); then
@@ -138,6 +139,8 @@ if (( $+commands[trizen] )); then
   alias trupg='trizen -Syua'
   alias trsu='trizen -Syua --noconfirm'
   alias trin='trizen -S'
+  alias trclean='trizen -Sc'
+  alias trclr='trizen -Scc'
   alias trins='trizen -U'
   alias trre='trizen -R'
   alias trrem='trizen -Rns'
@@ -150,31 +153,12 @@ if (( $+commands[trizen] )); then
   alias trinsd='trizen -S --asdeps'
   alias trmir='trizen -Syy'
   alias trupd="trizen -Sy"
-  alias upgrade='trizen -Syu'
-fi
-
-if (( $+commands[yaourt] )); then
-  alias yaconf='yaourt -C'
-  alias yaupg='yaourt -Syua'
-  alias yasu='yaourt -Syua --noconfirm'
-  alias yain='yaourt -S'
-  alias yains='yaourt -U'
-  alias yare='yaourt -R'
-  alias yarem='yaourt -Rns'
-  alias yarep='yaourt -Si'
-  alias yareps='yaourt -Ss'
-  alias yaloc='yaourt -Qi'
-  alias yalocs='yaourt -Qs'
-  alias yalst='yaourt -Qe'
-  alias yaorph='yaourt -Qtd'
-  alias yainsd='yaourt -S --asdeps'
-  alias yamir='yaourt -Syy'
-  alias yaupd="yaourt -Sy"
-  alias upgrade='yaourt -Syu'
 fi
 
 if (( $+commands[yay] )); then
   alias yaconf='yay -Pg'
+  alias yaclean='yay -Sc'
+  alias yaclr='yay -Scc'
   alias yaupg='yay -Syu'
   alias yasu='yay -Syu --noconfirm'
   alias yain='yay -S'
@@ -190,6 +174,30 @@ if (( $+commands[yay] )); then
   alias yainsd='yay -S --asdeps'
   alias yamir='yay -Syy'
   alias yaupd="yay -Sy"
-  alias upgrade='yay -Syu'
 fi
 
+# Check Arch Linux PGP Keyring before System Upgrade to prevent failure.
+function upgrade() {
+  echo ":: Checking Arch Linux PGP Keyring..."
+  local installedver="$(sudo pacman -Qi archlinux-keyring | grep -Po '(?<=Version         : ).*')"
+  local currentver="$(sudo pacman -Si archlinux-keyring | grep -Po '(?<=Version         : ).*')"
+  if [ $installedver != $currentver ]; then
+    echo " Arch Linux PGP Keyring is out of date."
+    echo " Updating before full system upgrade."
+    sudo pacman -Sy --needed --noconfirm archlinux-keyring
+  else
+    echo " Arch Linux PGP Keyring is up to date."
+    echo " Proceeding with full system upgrade."
+  fi
+  if (( $+commands[yay] )); then
+    yay -Syu
+  elif (( $+commands[trizen] )); then
+    trizen -Syu
+  elif (( $+commands[pacaur] )); then
+    pacaur -Syu
+  elif (( $+commands[aura] )); then
+    sudo aura -Syu
+  else
+    sudo pacman -Syu
+  fi
+}
