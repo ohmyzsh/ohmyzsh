@@ -139,6 +139,10 @@ alias gds='git diff --staged'
 alias gdt='git diff-tree --no-commit-id --name-only -r'
 alias gdup='git diff @{upstream}'
 alias gdw='git diff --word-diff'
+alias gdom='git diff origin/$(git_main_branch)'
+alias gdum='git diff upstream/$(git_main_branch)'
+alias gdoc='git diff origin/$(git_current_branch)'
+alias gduc='git diff upstream/$(git_current_branch)'
 
 function gdnolock() {
   git diff "$@" ":(exclude)package-lock.json" ":(exclude)*.lock"
@@ -212,6 +216,7 @@ alias ggpush='git push origin "$(git_current_branch)"'
 
 alias ggsup='git branch --set-upstream-to=origin/$(git_current_branch)'
 alias gpsup='git push --set-upstream origin $(git_current_branch)'
+alias gusup='git branch --set-upstream-to=upstream/$(git_current_branch)'
 is-at-least 2.30 "$git_version" \
   && alias gpsupf='git push --set-upstream origin $(git_current_branch) --force-with-lease --force-if-includes' \
   || alias gpsupf='git push --set-upstream origin $(git_current_branch) --force-with-lease'
@@ -270,12 +275,14 @@ alias grbd='git rebase $(git_develop_branch)'
 alias grbi='git rebase --interactive'
 alias grbm='git rebase $(git_main_branch)'
 alias grbom='git rebase origin/$(git_main_branch)'
+alias grbum='git rebase upstream/$(git_main_branch)'
 alias grbo='git rebase --onto'
 alias grbs='git rebase --skip'
 alias grev='git revert'
 alias grh='git reset'
 alias grhh='git reset --hard'
 alias groh='git reset origin/$(git_current_branch) --hard'
+alias gruh='git reset upstream/$(git_current_branch) --hard'
 alias grm='git rm'
 alias grmc='git rm --cached'
 alias grmv='git remote rename'
@@ -303,6 +310,10 @@ is-at-least 2.13 "$git_version" \
   && alias gsta='git stash push' \
   || alias gsta='git stash save'
 
+is-at-least 2.13 "$git_version" \
+  && alias gstam='git stash push --message' \
+  || alias gstam='git stash save --message'
+
 alias gstaa='git stash apply'
 alias gstc='git stash clear'
 alias gstd='git stash drop'
@@ -329,7 +340,9 @@ alias gupa='git pull --rebase --autostash'
 alias gupav='git pull --rebase --autostash --verbose'
 alias gupom='git pull --rebase origin $(git_main_branch)'
 alias gupomi='git pull --rebase=interactive origin $(git_main_branch)'
+alias glom='git pull origin $(git_main_branch)'
 alias glum='git pull upstream $(git_main_branch)'
+alias gloc='git pull origin $(git_current_branch)'
 alias gluc='git pull upstream $(git_current_branch)'
 
 alias gwch='git whatchanged -p --abbrev-commit --pretty=medium'
