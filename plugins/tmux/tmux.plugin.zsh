@@ -27,6 +27,8 @@ fi
 : ${ZSH_TMUX_FIXTERM_WITH_256COLOR:=screen-256color}
 # Set the configuration path
 : ${ZSH_TMUX_CONFIG:=$HOME/.tmux.conf}
+# Skip $ZSH_TMUX_CONFIG usage
+: ${ZSH_TMUX_SKIP_CONFIG:=false}
 # Set -u option to support unicode
 : ${ZSH_TMUX_UNICODE:=false}
 
@@ -81,9 +83,9 @@ function _zsh_tmux_plugin_run() {
 
   # If failed, just run tmux, fixing the TERM variable if requested.
   if [[ $? -ne 0 ]]; then
-    if [[ "$ZSH_TMUX_FIXTERM" == "true" ]]; then
+    if [[ "$ZSH_TMUX_FIXTERM" == "true" && "$ZSH_TMUX_SKIP_CONFIG" == "false" ]]; then
       tmux_cmd+=(-f "$_ZSH_TMUX_FIXED_CONFIG")
-    elif [[ -e "$ZSH_TMUX_CONFIG" ]]; then
+    elif [[ -e "$ZSH_TMUX_CONFIG" && "$ZSH_TMUX_SKIP_CONFIG" == "false" ]]; then
       tmux_cmd+=(-f "$ZSH_TMUX_CONFIG")
     fi
     if [[ -n "$ZSH_TMUX_DEFAULT_SESSION_NAME" ]]; then
