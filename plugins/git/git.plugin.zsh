@@ -27,11 +27,21 @@ function work_in_progress() {
   command git -c log.showSignature=false log -n 1 2>/dev/null | grep -q -- "--wip--" && echo "WIP!!"
 }
 
+# Similar to `gunwip` but recursive "Unwips" all recent `--wip--` commits not just the last one
+function gunwipall() {
+  local _commit=$(git log --grep='--wip--' --invert-grep --max-count=1 --format=format:%H)
+  
+  # Check if a commit without "--wip--" was found and it's not the same as HEAD
+  if [[ "$_commit" != "$(git rev-parse HEAD)" ]]; then
+    git reset $_commit || return 1
+  fi
+}
+
 # Check if main exists and use instead of master
 function git_main_branch() {
   command git rev-parse --git-dir &>/dev/null || return
   local ref
-  for ref in refs/{heads,remotes/{origin,upstream}}/{main,trunk}; do
+  for ref in refs/{heads,remotes/{origin,upstream}}/{main,trunk,mainline,default}; do
     if command git show-ref -q --verify $ref; then
       echo ${ref:t}
       return
@@ -69,10 +79,13 @@ alias gap='git apply'
 alias gapt='git apply --3way'
 
 alias gb='git branch'
-alias gba='git branch -a'
-alias gbd='git branch -d'
-alias gbda='git branch --no-color --merged | command grep -vE "^([+*]|\s*($(git_main_branch)|$(git_develop_branch))\s*$)" | command xargs git branch -d 2>/dev/null'
-alias gbD='git branch -D'
+alias gba='git branch --all'
+alias gbd='git branch --delete'
+alias gbda='git branch --no-color --merged | command grep -vE "^([+*]|\s*($(git_main_branch)|$(git_develop_branch))\s*$)" | command xargs git branch --delete 2>/dev/null'
+alias gbD='git branch --delete --force'
+alias gbg='git branch -vv | grep ": gone\]"'
+alias gbgd='git branch --no-color -vv | grep ": gone\]" | awk '"'"'{print $1}'"'"' | xargs git branch -d'
+alias gbgD='git branch --no-color -vv | grep ": gone\]" | awk '"'"'{print $1}'"'"' | xargs git branch -D'
 alias gbl='git blame -b -w'
 alias gbnm='git branch --no-merged'
 alias gbr='git branch --remote'
@@ -82,17 +95,17 @@ alias gbsg='git bisect good'
 alias gbsr='git bisect reset'
 alias gbss='git bisect start'
 
-alias gc='git commit -v'
-alias gc!='git commit -v --amend'
-alias gcn!='git commit -v --no-edit --amend'
-alias gca='git commit -v -a'
-alias gca!='git commit -v -a --amend'
-alias gcan!='git commit -v -a --no-edit --amend'
-alias gcans!='git commit -v -a -s --no-edit --amend'
-alias gcam='git commit -a -m'
-alias gcsm='git commit -s -m'
-alias gcas='git commit -a -s'
-alias gcasm='git commit -a -s -m'
+alias gc='git commit --verbose'
+alias gc!='git commit --verbose --amend'
+alias gcn!='git commit --verbose --no-edit --amend'
+alias gca='git commit --verbose --all'
+alias gca!='git commit --verbose --all --amend'
+alias gcan!='git commit --verbose --all --no-edit --amend'
+alias gcans!='git commit --verbose --all --signoff --no-edit --amend'
+alias gcam='git commit --all --message'
+alias gcsm='git commit --signoff --message'
+alias gcas='git commit --all --signoff'
+alias gcasm='git commit --all --signoff --message'
 alias gcb='git checkout -b'
 alias gcf='git config --list'
 
@@ -103,20 +116,20 @@ function gccd() {
 compdef _git gccd=git-clone
 
 alias gcl='git clone --recurse-submodules'
-alias gclean='git clean -id'
-alias gpristine='git reset --hard && git clean -dffx'
+alias gclean='git clean --interactive -d'
+alias gpristine='git reset --hard && git clean --force -dfx'
 alias gcm='git checkout $(git_main_branch)'
 alias gcd='git checkout $(git_develop_branch)'
-alias gcmsg='git commit -m'
+alias gcmsg='git commit --message'
 alias gco='git checkout'
 alias gcor='git checkout --recurse-submodules'
-alias gcount='git shortlog -sn'
+alias gcount='git shortlog --summary --numbered'
 alias gcp='git cherry-pick'
 alias gcpa='git cherry-pick --abort'
 alias gcpc='git cherry-pick --continue'
-alias gcs='git commit -S'
-alias gcss='git commit -S -s'
-alias gcssm='git commit -S -s -m'
+alias gcs='git commit --gpg-sign'
+alias gcss='git commit --gpg-sign --signoff'
+alias gcssm='git commit --gpg-sign --signoff --message'
 
 alias gd='git diff'
 alias gdca='git diff --cached'
@@ -199,6 +212,9 @@ alias ggpush='git push origin "$(git_current_branch)"'
 
 alias ggsup='git branch --set-upstream-to=origin/$(git_current_branch)'
 alias gpsup='git push --set-upstream origin $(git_current_branch)'
+is-at-least 2.30 "$git_version" \
+  && alias gpsupf='git push --set-upstream origin $(git_current_branch) --force-with-lease --force-if-includes' \
+  || alias gpsupf='git push --set-upstream origin $(git_current_branch) --force-with-lease'
 
 alias ghh='git help'
 
@@ -207,11 +223,11 @@ alias gignored='git ls-files -v | grep "^[[:lower:]]"'
 alias git-svn-dcommit-push='git svn dcommit && git push github $(git_main_branch):svntrunk'
 
 alias gk='\gitk --all --branches &!'
-alias gke='\gitk --all $(git log -g --pretty=%h) &!'
+alias gke='\gitk --all $(git log --walk-reflogs --pretty=%h) &!'
 
 alias gl='git pull'
 alias glg='git log --stat'
-alias glgp='git log --stat -p'
+alias glgp='git log --stat --patch'
 alias glgg='git log --graph'
 alias glgga='git log --graph --decorate --all'
 alias glgm='git log --graph --max-count=10'
@@ -231,15 +247,19 @@ alias gmtl='git mergetool --no-prompt'
 alias gmtlvim='git mergetool --no-prompt --tool=vimdiff'
 alias gmum='git merge upstream/$(git_main_branch)'
 alias gma='git merge --abort'
+alias gms="git merge --squash"
 
 alias gp='git push'
 alias gpd='git push --dry-run'
-alias gpf='git push --force-with-lease'
+is-at-least 2.30 "$git_version" \
+  && alias gpf='git push --force-with-lease --force-if-includes' \
+  || alias gpf='git push --force-with-lease'
 alias gpf!='git push --force'
 alias gpoat='git push origin --all && git push origin --tags'
+alias gpod='git push origin --delete'
 alias gpr='git pull --rebase'
 alias gpu='git push upstream'
-alias gpv='git push -v'
+alias gpv='git push --verbose'
 
 alias gr='git remote'
 alias gra='git remote add'
@@ -247,7 +267,7 @@ alias grb='git rebase'
 alias grba='git rebase --abort'
 alias grbc='git rebase --continue'
 alias grbd='git rebase $(git_develop_branch)'
-alias grbi='git rebase -i'
+alias grbi='git rebase --interactive'
 alias grbm='git rebase $(git_main_branch)'
 alias grbom='git rebase origin/$(git_main_branch)'
 alias grbo='git rebase --onto'
@@ -267,15 +287,15 @@ alias grst='git restore --staged'
 alias grt='cd "$(git rev-parse --show-toplevel || echo .)"'
 alias gru='git reset --'
 alias grup='git remote update'
-alias grv='git remote -v'
+alias grv='git remote --verbose'
 
-alias gsb='git status -sb'
+alias gsb='git status --short --branch'
 alias gsd='git svn dcommit'
 alias gsh='git show'
 alias gsi='git submodule init'
 alias gsps='git show --pretty=short --show-signature'
 alias gsr='git svn rebase'
-alias gss='git status -s'
+alias gss='git status --short'
 alias gst='git status'
 
 # use the default stash push on git 2.13 and newer
@@ -293,27 +313,33 @@ alias gstu='gsta --include-untracked'
 alias gstall='git stash --all'
 alias gsu='git submodule update'
 alias gsw='git switch'
-alias gswc='git switch -c'
+alias gswc='git switch --create'
 alias gswm='git switch $(git_main_branch)'
 alias gswd='git switch $(git_develop_branch)'
 
-alias gts='git tag -s'
+alias gts='git tag --sign'
 alias gtv='git tag | sort -V'
-alias gtl='gtl(){ git tag --sort=-v:refname -n -l "${1}*" }; noglob gtl'
+alias gtl='gtl(){ git tag --sort=-v:refname -n --list "${1}*" }; noglob gtl'
 
 alias gunignore='git update-index --no-assume-unchanged'
-alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
+alias gunwip='git rev-list --max-count=1 --format="%s" HEAD | grep -q "\--wip--" && git reset HEAD~1'
 alias gup='git pull --rebase'
-alias gupv='git pull --rebase -v'
+alias gupv='git pull --rebase --verbose'
 alias gupa='git pull --rebase --autostash'
-alias gupav='git pull --rebase --autostash -v'
+alias gupav='git pull --rebase --autostash --verbose'
 alias gupom='git pull --rebase origin $(git_main_branch)'
 alias gupomi='git pull --rebase=interactive origin $(git_main_branch)'
 alias glum='git pull upstream $(git_main_branch)'
 alias gluc='git pull upstream $(git_current_branch)'
 
 alias gwch='git whatchanged -p --abbrev-commit --pretty=medium'
-alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign -m "--wip-- [skip ci]"'
+alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign --message "--wip-- [skip ci]"'
+
+alias gwt='git worktree'
+alias gwta='git worktree add'
+alias gwtls='git worktree list'
+alias gwtmv='git worktree move'
+alias gwtrm='git worktree remove'
 
 alias gam='git am'
 alias gamc='git am --continue'

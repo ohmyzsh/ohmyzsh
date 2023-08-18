@@ -21,10 +21,12 @@ zstyle -s ':omz:update' mode update_mode || {
 # Cancel update if:
 # - the automatic update is disabled.
 # - the current user doesn't have write permissions nor owns the $ZSH directory.
+# - is not run from a tty
 # - git is unavailable on the system.
 if [[ "$update_mode" = disabled ]] \
    || [[ ! -w "$ZSH" || ! -O "$ZSH" ]] \
-   || ! command -v git &>/dev/null; then
+   || [[ ! -t 1 ]] \
+   || ! command git --version 2>&1 >/dev/null; then
   unset update_mode
   return
 fi
@@ -93,7 +95,8 @@ function update_last_updated_file() {
 }
 
 function update_ohmyzsh() {
-  if ZSH="$ZSH" zsh -f "$ZSH/tools/upgrade.sh" --interactive; then
+  zstyle -s ':omz:update' verbose verbose_mode || verbose_mode=default
+  if ZSH="$ZSH" zsh -f "$ZSH/tools/upgrade.sh" -i -v $verbose_mode; then
     update_last_updated_file
   fi
 }
@@ -177,6 +180,7 @@ function has_typed_input() {
 
   # Check if there are updates available before proceeding
   if ! is_update_available; then
+    update_last_updated_file
     return
   fi
 

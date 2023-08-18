@@ -40,7 +40,10 @@ To learn more, visit [ohmyz.sh](https://ohmyz.sh), follow [@ohmyzsh](https://twi
     - [Manual Installation](#manual-installation)
   - [Installation Problems](#installation-problems)
   - [Custom Plugins and Themes](#custom-plugins-and-themes)
+  - [Enable GNU ls in macOS and freeBSD systems](#enable-gnu-ls)
+  - [Skip aliases](#skip-aliases)
 - [Getting Updates](#getting-updates)
+  - [Updates verbosity](#updates-verbosity)
   - [Manual Updates](#manual-updates)
 - [Uninstalling Oh My Zsh](#uninstalling-oh-my-zsh)
 - [How do I contribute to Oh My Zsh?](#how-do-i-contribute-to-oh-my-zsh)
@@ -276,6 +279,72 @@ If you have many functions that go well together, you can put them as a `XYZ.plu
 
 If you would like to override the functionality of a plugin distributed with Oh My Zsh, create a plugin of the same name in the `custom/plugins/` directory and it will be loaded instead of the one in `plugins/`.
 
+### Enable GNU ls in macOS and freeBSD systems
+
+<a name="enable-gnu-ls"></a>
+
+The default behaviour in Oh My Zsh is to use BSD `ls` in macOS and freeBSD systems. If GNU `ls` is installed
+(as `gls` command), you can choose to use it instead. To do it, you can use zstyle-based config before
+sourcing `oh-my-zsh.sh`:
+
+```zsh
+zstyle ':omz:lib:theme-and-appearance' gnu-ls yes
+```
+
+_Note: this is not compatible with `DISABLE_LS_COLORS=true`_
+
+### Skip aliases
+
+<a name="remove-directories-aliases"></a>
+
+If you want to skip default Oh My Zsh aliases (those defined in `lib/*` files) or plugin aliases,
+you can use the settings below in your `~/.zshrc` file, **before Oh My Zsh is loaded**. Note that
+there are many different ways to skip aliases, depending on your needs.
+
+```sh
+# Skip all aliases, in lib files and enabled plugins
+zstyle ':omz:*' aliases no
+
+# Skip all aliases in lib files
+zstyle ':omz:lib:*' aliases no
+# Skip only aliases defined in the directories.zsh lib file
+zstyle ':omz:lib:directories' aliases no
+
+# Skip all plugin aliases
+zstyle ':omz:plugins:*' aliases no
+# Skip only the aliases from the git plugin
+zstyle ':omz:plugins:git' aliases no
+```
+
+You can combine these in other ways taking into account that more specific scopes takes precedence:
+
+```sh
+# Skip all plugin aliases, except for the git plugin
+zstyle ':omz:plugins:*' aliases no
+zstyle ':omz:plugins:git' aliases yes
+```
+
+A previous version of this feature was using the setting below, which has been removed:
+
+```sh
+zstyle ':omz:directories' aliases no
+```
+
+Instead, you can now use the following:
+
+```sh
+zstyle ':omz:lib:directories' aliases no
+```
+
+#### Notice <!-- omit in toc -->
+
+> This feature is currently in a testing phase and it may be subject to change in the future.
+> It is also not currently compatible with plugin managers such as zpm or zinit, which don't
+> source the init script (`oh-my-zsh.sh`) where this feature is implemented in.
+
+> It is also not currently aware of "aliases" that are defined as functions. Example of such
+> are `gccd`, `ggf`, or `ggl` functions from the git plugin.
+
 ## Getting Updates
 
 By default, you will be prompted to check for updates every 2 weeks. You can choose other update modes by adding a line to your `~/.zshrc` file, **before Oh My Zsh is loaded**:
@@ -305,6 +374,18 @@ NOTE: you can control how often Oh My Zsh checks for updates with the following 
 zstyle ':omz:update' frequency 7
 # This will check for updates every time you open the terminal (not recommended)
 zstyle ':omz:update' frequency 0
+```
+
+### Updates verbosity
+
+You can also limit the update verbosity with the following settings:
+
+```sh
+zstyle ':omz:update' verbose default # default update prompt
+
+zstyle ':omz:update' verbose minimal # only few lines
+
+zstyle ':omz:update' verbose silent # only errors
 ```
 
 ### Manual Updates
@@ -364,4 +445,4 @@ Oh My Zsh is released under the [MIT license](LICENSE.txt).
 
 ![Planet Argon](https://pa-github-assets.s3.amazonaws.com/PARGON_logo_digital_COL-small.jpg)
 
-Oh My Zsh was started by the team at [Planet Argon](https://www.planetargon.com/?utm_source=github), a [Ruby on Rails development agency](https://www.planetargon.com/skills/ruby-on-rails-development?utm_source=github). Check out our [other open source projects](https://www.planetargon.com/open-source?utm_source=github).
+Oh My Zsh was started by the team at [Planet Argon](https://www.planetargon.com/?utm_source=github), a [Ruby on Rails development agency](http://www.planetargon.com/services/ruby-on-rails-development?utm_source=github). Check out our [other open source projects](https://www.planetargon.com/open-source?utm_source=github).

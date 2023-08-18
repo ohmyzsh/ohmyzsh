@@ -29,6 +29,8 @@ plugins=(... vi-mode)
   VI_MODE_SET_CURSOR=true
   ```
 
+  See [Cursor Styles](#cursor-styles) for controlling how the cursor looks in different modes
+
 - `MODE_INDICATOR`: controls the string displayed when the shell is in normal mode.
   See [Mode indicators](#mode-indicators) for details.
 
@@ -49,8 +51,42 @@ MODE_INDICATOR="%F{white}+%f"
 INSERT_MODE_INDICATOR="%F{yellow}+%f"
 ```
 
-You can also use the `vi_mode_prompt_info` function in your prompt, which will display
-this mode indicator.
+### Adding mode indicators to your prompt
+
+`Vi-mode` by default will add mode indicators to `RPROMPT` **unless** that is defined by 
+a preceding plugin.
+
+If `PROMPT` or `RPROMPT` is not defined to your liking, you can add mode info manually. The `vi_mode_prompt_info` function is available to insert mode indicator information.
+
+Here are some examples:
+
+```bash
+source $ZSH/oh-my-zsh.sh
+
+PROMPT="$PROMPT\$(vi_mode_prompt_info)"
+RPROMPT="\$(vi_mode_prompt_info)$RPROMPT"
+```
+
+Note the `\$` here, which importantly prevents interpolation at the time of defining, but allows it to be executed for each prompt update event.
+
+## Cursor Styles
+
+You can control the cursor style used in each active vim mode by changing the values of the following variables.
+
+```zsh
+# defaults
+VI_MODE_CURSOR_NORMAL=2
+VI_MODE_CURSOR_VISUAL=6
+VI_MODE_CURSOR_INSERT=6
+VI_MODE_CURSOR_OPPEND=0
+```
+
+- 0, 1 - Blinking block
+- 2 - Solid block
+- 3 - Blinking underline
+- 4 - Solid underline
+- 5 - Blinking line
+- 6 - Solid line
 
 ## Key bindings
 

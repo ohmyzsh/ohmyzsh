@@ -1,5 +1,5 @@
 (( $+commands[npm] )) && {
-  rm -f "${ZSH_CACHE_DIR:-$ZSH/cache}/npm_completion"
+  command rm -f "${ZSH_CACHE_DIR:-$ZSH/cache}/npm_completion"
 
   _npm_completion() {
     local si=$IFS
@@ -69,6 +69,9 @@ alias npmi="npm info"
 
 # Run npm search
 alias npmSe="npm search"
+
+# Run npm run dev
+alias npmrd="npm run dev"
 
 npm_toggle_install_uninstall() {
   # Look up to the previous 2 history commands

@@ -10,6 +10,14 @@ To use it, add `pyenv` to the plugins array in your zshrc file:
 plugins=(... pyenv)
 ```
 
+If you receive a `Found pyenv, but it is badly configured.` error on startup, you may need to ensure that `pyenv` is initialized before the oh-my-zsh pyenv plugin is loaded. This can be achived by adding the following earlier in the `.zshrc` file than the `plugins=(...)` line:
+
+```zsh
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init --path)"
+```
+
 ## Settings
 
 - `ZSH_PYENV_QUIET`: if set to `true`, the plugin will not print any messages if it
