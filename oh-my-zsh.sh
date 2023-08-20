@@ -187,12 +187,12 @@ _omz_source() {
   fi
 }
 
-# Load all of the config files in ~/oh-my-zsh that end in .zsh
+# Load all of the lib files in ~/oh-my-zsh/lib that end in .zsh
 # TIP: Add files you don't want in git to .gitignore
-for config_file ("$ZSH"/lib/*.zsh); do
-  _omz_source "lib/${config_file:t}"
+for lib_file ("$ZSH"/lib/*.zsh); do
+  _omz_source "lib/${lib_file:t}"
 done
-unset custom_config_file
+unset lib_file
 
 # Load all of the plugins that were defined in ~/.zshrc
 for plugin ($plugins); do
