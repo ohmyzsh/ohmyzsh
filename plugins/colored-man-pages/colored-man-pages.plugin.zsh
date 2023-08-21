@@ -15,7 +15,6 @@ less_termcap[se]="${reset_color}"
 # underlining
 less_termcap[us]="${fg_bold[green]}"
 less_termcap[ue]="${reset_color}"
-export GROFF_NO_SGR=1
 
 # Handle $0 according to the standard:
 # https://zdharma-continuum.github.io/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html
@@ -37,6 +36,7 @@ function colored() {
   # Prefer `less` whenever available, since we specifically configured
   # environment for it.
   environment+=( PAGER="${commands[less]:-$PAGER}" )
+  environment+=( GROFF_NO_SGR=1 )
 
   # See ./nroff script.
   if [[ "$OSTYPE" = solaris* ]]; then
