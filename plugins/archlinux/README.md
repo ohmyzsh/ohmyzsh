@@ -107,6 +107,30 @@ upgrades were available. Use `pacman -Que` instead.
 | pasu    | `pacaur -Syua --no-confirm`       | Same as `paupg`, but without confirmation                           |
 | upgrade[¹](#f1) | `pacaur -Syu`             | Sync with repositories before upgrading packages                    |
 
+#### Paru
+
+| Alias   | Command                        | Description                                                       |
+|---------|--------------------------------|-------------------------------------------------------------------|
+| puclean | `paru -Sc`                     | Clean out old and unused caches and packages                      |
+| puclr   | `paru -Scc`                    | Remove all files from the cache                                   |
+| puin    | `paru -S`                      | Install packages from the repositories                            |
+| puins   | `paru -U`                      | Install a package from a local file                               |
+| puinsd  | `paru -S --asdeps`             | Install packages as dependencies of another package               |
+| puloc   | `paru -Qi`                     | Display information about a package in the local database         |
+| pulocs  | `paru -Qs`                     | Search for packages in the local database                         |
+| pulst   | `paru -Qe`                     | List installed packages including from AUR (tagged as "local")    |
+| pumir   | `paru -Syy`                    | Force refresh of all package lists after updating mirrorlist      |
+| puorph  | `paru -Qtd`                    | Remove orphans using yay                                          |
+| pure    | `paru -R`                      | Remove packages, keeping its settings and dependencies            |
+| purem   | `paru -Rns`                    | Remove packages, including its settings and unneeded dependencies |
+| purep   | `paru -Si`                     | Display information about a package in the repositories           |
+| pureps  | `paru -Ss`                     | Search for packages in the repositories                           |
+| puupd   | `paru -Sy`                     | Update and refresh local package, ABS and AUR databases           |
+| puupg   | `paru -Syu`                    | Sync with repositories before upgrading packages                  |
+| pusu    | `paru -Syu --no-confirm`       | Same as `yaupg`, but without confirmation                         |
+| pufiles | `paru -F`                      | Search package file names for matching strings                    |
+| upgrade[¹](#f1) | `paru -Syu`            | Sync with repositories before upgrading packages                  |
+
 #### Trizen
 
 | Alias   | Command                           | Description                                                         |
@@ -163,9 +187,10 @@ whether the package manager is installed, checked in the following order:
 
 1. `yay`
 2. `trizen`
-3. `pacaur`
-4. `aura`
-5. `pacman`
+3. `paru`
+4. `pacaur`
+5. `aura`
+6. `pacman`
 
 ## Contributors
 
@@ -182,3 +207,4 @@ whether the package manager is installed, checked in the following order:
 - Jeff M. Hubbard - jeffmhubbard@gmail.com
 - K. Harishankar(harishnkr) - hari2menon1234@gmail.com
 - WH-2099 - wh2099@outlook.com
+- Boris Frenkel - fobos2k@gmail.com
