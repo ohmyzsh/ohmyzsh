@@ -1,4 +1,5 @@
 #!/usr/bin/env zsh
+set +u # disable nounset
 
 local ret=0 # exit code
 
