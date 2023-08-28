@@ -147,8 +147,15 @@ function wrap_clipboard_widgets() {
   done
 }
 
-wrap_clipboard_widgets copy vi-yank vi-yank-eol vi-backward-kill-word vi-change-whole-line vi-delete vi-delete-char
-wrap_clipboard_widgets paste vi-put-{before,after}
+wrap_clipboard_widgets copy \
+    vi-yank vi-yank-eol vi-yank-whole-line \
+    vi-change vi-change-eol vi-change-whole-line \
+    vi-kill-line vi-kill-eol vi-backward-kill-word \
+    vi-delete vi-delete-char vi-backward-delete-char
+
+wrap_clipboard_widgets paste \
+    vi-put-{before,after}
+
 unfunction wrap_clipboard_widgets
 
 # if mode indicator wasn't setup by theme, define default, we'll leave INSERT_MODE_INDICATOR empty by default
