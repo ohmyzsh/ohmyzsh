@@ -103,11 +103,15 @@ compdef _tmux _zsh_tmux_plugin_run
 # Alias tmux to our wrapper function.
 alias tmux=_zsh_tmux_plugin_run
 
-# Autostart if not already in tmux and enabled.
-if [[ -z "$TMUX" && "$ZSH_TMUX_AUTOSTART" == "true" && -z "$INSIDE_EMACS" && -z "$EMACS" && -z "$VIM" ]]; then
-  # Actually don't autostart if we already did and multiple autostarts are disabled.
-  if [[ "$ZSH_TMUX_AUTOSTART_ONCE" == "false" || "$ZSH_TMUX_AUTOSTARTED" != "true" ]]; then
-    export ZSH_TMUX_AUTOSTARTED=true
-    _zsh_tmux_plugin_run
+# Autostart if not already in tmux.
+if [[ -z "$TMUX" && -z "$INSIDE_EMACS" && -z "$EMACS" && -z "$VIM" ]]; then
+  if [[ "$ZSH_TMUX_AUTOSTART" == "true" ]]; then
+    # Actually don't autostart if we already did and multiple autostarts are disabled.
+    if [[ "$ZSH_TMUX_AUTOSTART_ONCE" == "false" || "$ZSH_TMUX_AUTOSTARTED" != "true" ]]; then
+      export ZSH_TMUX_AUTOSTARTED=true
+      _zsh_tmux_plugin_run
+    fi
+  elif [[ "$ZSH_TMUX_AUTOCONNECT" == "true" ]]; then
+    command tmux attach
   fi
 fi
