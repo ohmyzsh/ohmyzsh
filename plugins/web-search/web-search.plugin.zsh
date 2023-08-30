@@ -25,6 +25,7 @@ function web_search() {
     archive         "https://web.archive.org/web/*/"
     scholar         "https://scholar.google.com/scholar?q="
     ask             "https://www.ask.com/web?q="
+    youtube         "https://www.youtube.com/results?search_query="
   )
 
   # check whether the search engine is supported
@@ -66,11 +67,12 @@ alias wolframalpha='web_search wolframalpha'
 alias archive='web_search archive'
 alias scholar='web_search scholar'
 alias ask='web_search ask'
+alias youtube='web_search youtube'
 
 #add your own !bang searches here
 alias wiki='web_search duckduckgo \!w'
 alias news='web_search duckduckgo \!n'
-alias youtube='web_search duckduckgo \!yt'
+#alias youtube='web_search duckduckgo \!yt'
 alias map='web_search duckduckgo \!m'
 alias image='web_search duckduckgo \!i'
 alias ducky='web_search duckduckgo \!'
