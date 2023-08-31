@@ -40,6 +40,20 @@ ZSH_THEME="robbyrussell"
 # Uncomment the following line to disable auto-setting terminal title.
 # DISABLE_AUTO_TITLE="true"
 
+# Uncomment the following to override default terminal title command truncation
+# char limit
+# ZSH_THEME_TERM_TITLE_CMDLINE_TRUNCATE="50"
+
+# Uncomment the following to override idle terminal title
+# ZSH_THEME_TERM_TITLE_IDLE="%n@%m:%90<..<%~%<<"
+
+# Uncomment the following to override idle terminal tab title
+# ZSH_THEME_TERM_TAB_TITLE_IDLE="%50<..<%~%<<"
+
+# Uncomment the following to override idle terminal tab title for terminals with
+# independent dir display (e.g. Apple_Terminal)
+# ZSH_THEME_TERM_TITLE_IDLE_SHORT='%n@%m'
+
 # Uncomment the following line to enable command auto-correction.
 # ENABLE_CORRECTION="true"
 

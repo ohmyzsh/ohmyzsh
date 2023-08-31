@@ -38,11 +38,15 @@ function title {
   esac
 }
 
-ZSH_THEME_TERM_TAB_TITLE_IDLE="%15<..<%~%<<" #15 char left truncated PWD
-ZSH_THEME_TERM_TITLE_IDLE="%n@%m:%~"
+# Allow overriding these settings, but fallback to defaults if unset
+ZSH_THEME_TERM_TITLE_CMDLINE_TRUNCATE="${ZSH_THEME_TERM_TITLE_CMDLINE_TRUNCATE:-100}"
+ZSH_THEME_TERM_TAB_TITLE_IDLE="${ZSH_THEME_TERM_TAB_TITLE_IDLE:-%15<..<%~%<<}" #15 char left truncated PWD
+ZSH_THEME_TERM_TITLE_IDLE="${ZSH_THEME_TERM_TITLE_IDLE:-%n@%m:%~}"
 # Avoid duplication of directory in terminals with independent dir display
 if [[ "$TERM_PROGRAM" == Apple_Terminal ]]; then
-  ZSH_THEME_TERM_TITLE_IDLE="%n@%m"
+  # Use user-specified setting if set, else use ZSH_THEME_TERM_TITLE_IDLE
+  # and remove ':%~' (e.g. default: "%n@%m")
+  ZSH_THEME_TERM_TITLE_IDLE="${ZSH_THEME_TERM_TITLE_IDLE_SHORT:-${ZSH_THEME_TERM_TITLE_IDLE//:%~/}}"
 fi
 
 # Runs before showing the prompt
@@ -99,7 +103,7 @@ function omz_termsupport_preexec {
   local CMD="${1[(wr)^(*=*|sudo|ssh|mosh|rake|-*)]:gs/%/%%}"
   local LINE="${2:gs/%/%%}"
 
-  title "$CMD" "%100>...>${LINE}%<<"
+  title "$CMD" "%${ZSH_THEME_TERM_TITLE_CMDLINE_TRUNCATE}>...>${LINE}%<<"
 }
 
 autoload -Uz add-zsh-hook
