@@ -121,6 +121,7 @@ plugins=(... git)
 | ggu                  | git pull --rebase origin $(current_branch)                                                                                                                       |
 | gupom                | git pull --rebase origin $(git_main_branch)                                                                                                                      |
 | gupomi               | git pull --rebase=interactive origin $(git_main_branch)                                                                                                          |
+| gupomia              | git pull --rebase=interactive origin $(git_main_branch) --autostash                                                                                              |
 | ggpull               | git pull origin "$(git_current_branch)"                                                                                                                          |
 | ggl                  | git pull origin $(current_branch)                                                                                                                                |
 | gluc                 | git pull upstream $(git_current_branch)                                                                                                                          |

@@ -234,6 +234,7 @@ compdef _git ggu=git-checkout
 
 alias gupom='git pull --rebase origin $(git_main_branch)'
 alias gupomi='git pull --rebase=interactive origin $(git_main_branch)'
+alias gupomia='git pull --rebase=interactive origin $(git_main_branch) --autostash'
 alias ggpull='git pull origin "$(git_current_branch)"'
 
 function ggl() {
