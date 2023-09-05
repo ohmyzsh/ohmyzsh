@@ -34,7 +34,7 @@ plugins=(... git)
 | gbsg                 | git bisect good                                                                                                                                                  |
 | gbsr                 | git bisect reset                                                                                                                                                 |
 | gbss                 | git bisect start                                                                                                                                                 |
-| gbl                  | git blame -b -w                                                                                                                                                  |
+| gbl                  | git blame -w                                                                                                                                                  |
 | gb                   | git branch                                                                                                                                                       |
 | gba                  | git branch --all                                                                                                                                                 |
 | gbd                  | git branch --delete                                                                                                                                              |
