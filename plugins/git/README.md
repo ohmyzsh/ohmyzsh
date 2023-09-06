@@ -36,7 +36,7 @@ plugins=(... git)
 | gbso                 | git bisect old                                                                                                                                                   |
 | gbsr                 | git bisect reset                                                                                                                                                 |
 | gbss                 | git bisect start                                                                                                                                                 |
-| gbl                  | git blame -w                                                                                                                                                  |
+| gbl                  | git blame -w                                                                                                                                                     |
 | gb                   | git branch                                                                                                                                                       |
 | gba                  | git branch --all                                                                                                                                                 |
 | gbd                  | git branch --delete                                                                                                                                              |
