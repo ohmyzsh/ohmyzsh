@@ -32,6 +32,8 @@ plugins=(... git)
 | gbs                  | git bisect                                                                                                                                                       |
 | gbsb                 | git bisect bad                                                                                                                                                   |
 | gbsg                 | git bisect good                                                                                                                                                  |
+| gbsn                 | git bisect new                                                                                                                                                   |
+| gbso                 | git bisect old                                                                                                                                                   |
 | gbsr                 | git bisect reset                                                                                                                                                 |
 | gbss                 | git bisect start                                                                                                                                                 |
 | gbl                  | git blame -w                                                                                                                                                  |
