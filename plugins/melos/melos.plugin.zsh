@@ -18,3 +18,13 @@ alias mpdr='melos publish --dry-run'
 alias mpndr='melos publish --no-dry-run'
 # Run
 alias mr='melos run'
+# Version
+alias mv='melos version'
+alias mvp='melos version --prerelease'
+alias mvg='melos version --graduate'
+alias mvc='melos version --changelog'
+alias mvg='melos version --git-tag-version'
+alias mvru='melos version --release-url'
+alias mvndc='melos version --no-dependent-constraints'
+alias mvndv='melos version --no-dependent-versions'
+alias mva='melos version --all'
