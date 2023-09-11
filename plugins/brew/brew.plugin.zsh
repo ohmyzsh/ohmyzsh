@@ -7,6 +7,12 @@ if (( ! $+commands[brew] )); then
     BREW_LOCATION="/home/linuxbrew/.linuxbrew/bin/brew"
   elif [[ -x "$HOME/.linuxbrew/bin/brew" ]]; then
     BREW_LOCATION="$HOME/.linuxbrew/bin/brew"
+  # Check if BREW_LOCATION was already set and executable
+  elif [[ -n "$BREW_LOCATION" ]]; then
+    if [[ ! -x "$BREW_LOCATION" ]]; then
+      echo "Warning: BREW_LOCATION was set to $BREW_LOCATION but that is not executable"
+      unset BREW_LOCATION
+    fi
   else
     return
   fi
