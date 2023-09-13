@@ -366,7 +366,7 @@ function display-release {
     # In text mode, highlight (#<issue>) and dim text between `backticks`
     text)
       if supports_hyperlinks; then
-        sed -E $'s|#([0-9]+)|\e]8;;https://github.com/ohmyzsh/ohmyzsh/issues/\\1\a\e[32m#\\1\e[0m\e]8;;\a|g' <<< "$subject"
+        sed -E $'s|#([0-9]+)|\e]8;;https://github.com/ohmyzsh/ohmyzsh/issues/\\1\a\e[32m#\\1\e[0m\e]8;;\a|g;s|`([^`]+)`|`\e[2m\\1\e[0m`|g' <<< "$subject"
       else
         sed -E $'s|#([0-9]+)|\e[32m#\\1\e[0m|g;s|`([^`]+)`|`\e[2m\\1\e[0m`|g' <<< "$subject"
       fi ;;
