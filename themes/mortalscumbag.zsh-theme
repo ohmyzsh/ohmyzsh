@@ -51,8 +51,14 @@ function ssh_connection() {
   fi
 }
 
+function _toolbox_prompt_info() {
+  if typeset -f toolbox_prompt_info > /dev/null; then
+    toolbox_prompt_info
+  fi
+}
+
 local ret_status="%(?:%{$fg_bold[green]%}:%{$fg_bold[red]%})%?%{$reset_color%}"
-PROMPT=$'\n$(ssh_connection)%{$fg_bold[green]%}%n@%m%{$reset_color%}$(my_git_prompt) : %~\n[${ret_status}] %# '
+PROMPT=$'\n$(_toolbox_prompt_info)$(ssh_connection)%{$fg_bold[green]%}%n@%m%{$reset_color%}$(my_git_prompt) : %~\n[${ret_status}] %# '
 
 ZSH_THEME_PROMPT_RETURNCODE_PREFIX="%{$fg_bold[red]%}"
 ZSH_THEME_GIT_PROMPT_PREFIX=" $fg[white]‹ %{$fg_bold[yellow]%}"

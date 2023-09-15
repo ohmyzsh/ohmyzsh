@@ -2,7 +2,7 @@
 # of the tab window should be.
 if [[ "$TERM" == screen* ]]; then
   if [[ $_GET_PATH == '' ]]; then
-    _GET_PATH='echo $PWD | sed "s/^\/Users\//~/;s/^\/home\//~/;s/^~$USER/~/"'
+    _GET_PATH='echo $PWD | sed "s/^\/Users\//~/;s/^\/home\//~/;s/^~$USERNAME/~/"'
   fi
   if [[ $_GET_HOST == '' ]]; then
     _GET_HOST='echo $HOST | sed "s/\..*//"'

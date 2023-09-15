@@ -14,22 +14,31 @@ In this document, "JIRA" refers to the JIRA issue tracking server, and `jira` re
 
 This plugin supplies one command, `jira`, through which all its features are exposed. Most forms of this command open a JIRA page in your web browser.
 
-```
-jira            # performs the default action
+## Commands
 
-jira new        # opens a new issue
-jira dashboard  # opens your JIRA dashboard
-jira tempo      # opens your JIRA Tempo
-jira reported [username]  # queries for issues reported by a user
-jira assigned [username]  # queries for issues assigned to a user
-jira myissues   # queries for you own issues
-jira branch     # opens an existing issue matching the current branch name
-                # The branch name may have prefixes ending in "/": "feature/MP-1234",
-                # and also suffixes starting with "_": "MP-1234_fix_dashboard"
-                # In both these cases, the issue opened will be "MP-1234"
-jira ABC-123    # opens an existing issue
-jira ABC-123 m  # opens an existing issue for adding a comment
-```
+| Command       | Description                                               |
+| :------------ | :-------------------------------------------------------- |
+| `jira`        | Performs the default action                               |
+| `jira new`    | Opens a new Jira issue dialogue                           |
+| `jira ABC-123`   | Opens an existing issue                                |
+| `jira ABC-123 m` | Opens an existing issue for adding a comment           |
+| `jira dashboard [rapid_view]` |  # opens your JIRA dashboard              |
+| `jira mine`   | Queries for your own issues                               |
+| `jira tempo`  | Opens your JIRA Tempo                                     |
+| `jira reported [username]`  | Queries for issues reported by a user       |
+| `jira assigned [username]`  | Queries for issues assigned to a user       |
+| `jira branch` | Opens an existing issue matching the current branch name  |
+
+
+### Jira Branch usage notes
+
+The branch name may have prefixes ending in "/": "feature/MP-1234", and also suffixes 
+starting with "_": "MP-1234_fix_dashboard". In both these cases, the issue opened will be "MP-1234"
+
+This is also checks if the prefix is in the name, and adds it if not, so: "MP-1234" opens the issue "MP-1234",
+"mp-1234" opens the issue "mp-1234", and "1234" opens the issue "MP-1234".
+
+
 
 #### Debugging usage  ####
 
@@ -62,7 +71,9 @@ echo "https://jira.atlassian.com" >> .jira-url
 * `$JIRA_NAME` - Your JIRA username; used as the default user for `assigned`/`reported` searches
 * `$JIRA_PREFIX` - Prefix added to issue ID arguments
 * `$JIRA_RAPID_BOARD` - Set to `true` if you use Rapid Board
+* `$JIRA_RAPID_VIEW` - Set the default rapid view; it doesn't work if `$JIRA_RAPID_BOARD` is set to false
 * `$JIRA_DEFAULT_ACTION` - Action to do when `jira` is called with no arguments; defaults to "new"
+* `$JIRA_TEMPO_PATH` - Your JIRA tempo url path; defaults to "/secure/Tempo.jspa"
 
 
 ### Browser ###

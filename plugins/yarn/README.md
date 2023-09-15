@@ -9,6 +9,15 @@ To use it, add `yarn` to the plugins array in your zshrc file:
 plugins=(... yarn)
 ```
 
+## Global scripts directory
+
+It also adds `yarn` global scripts dir (commonly `~/.yarn/bin`) to the `$PATH`.
+To disable this feature, set the following style in your `.zshrc`:
+
+```zsh
+zstyle ':omz:plugins:yarn' global-path no
+```
+
 ## Aliases
 
 | Alias | Command                                   | Description                                                                   |
@@ -20,6 +29,7 @@ plugins=(... yarn)
 | yb    | `yarn build`                              | Run the build script defined in `package.json`                                |
 | ycc   | `yarn cache clean`                        | Clean yarn's global cache of packages                                         |
 | yd    | `yarn dev`                                | Run the dev script defined in `package.json`                                  |
+| yf    | `yarn format`                             | Run the dev script defined in `package.json`                                  |
 | yga   | `yarn global add`                         | Install packages globally on your operating system                            |
 | ygls  | `yarn global list`                        | Lists global installed packages                                               |
 | ygrm  | `yarn global remove`                      | Remove global installed packages from your OS                                 |
@@ -28,6 +38,7 @@ plugins=(... yarn)
 | yi    | `yarn init`                               | Interactively creates or updates a package.json file                          |
 | yin   | `yarn install`                            | Install dependencies defined in `package.json`                                |
 | yln   | `yarn lint`                               | Run the lint script defined in `package.json`                                 |
+| ylnf  | `yarn lint --fix`                         | Run the lint script defined in `package.json`to automatically fix problems    |
 | yls   | `yarn list`                               | List installed packages                                                       |
 | yout  | `yarn outdated`                           | Check for outdated package dependencies                                       |
 | yp    | `yarn pack`                               | Create a compressed gzip archive of package dependencies                      |
@@ -44,3 +55,4 @@ plugins=(... yarn)
 | yv    | `yarn version`                            | Update the version of your package                                            |
 | yw    | `yarn workspace`                          | Run a command within a single workspace.                                      |
 | yws   | `yarn workspaces`                         | Run a command within all defined workspaces.                                  |
+| yy    | `yarn why`                                | Show why a package has been installed, detailing which other packages depend on it |

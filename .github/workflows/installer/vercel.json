@@ -1,0 +1,14 @@
+{
+  "headers": [
+    {
+      "source": "/((?!favicon.ico).*)",
+      "headers": [{ "key": "Content-Type", "value": "text/plain" }]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/((?!favicon.ico|install.sh).*)",
+      "destination": "/install.sh"
+    }
+  ]
+}

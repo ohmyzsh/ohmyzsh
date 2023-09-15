@@ -1,6 +1,7 @@
 # Pipenv
 
 ## Installation
+
 In your `.zshrc` file, add `pipenv` to the plugins section
 
 ```
@@ -8,7 +9,9 @@ plugins=(... pipenv ...)
 ```
 
 ## Features
-This plugin provides some features to simplify the use of Pipenv while working on ZSH. 
+
+This plugin provides some features to simplify the use of Pipenv while working on ZSH.
+
 - Adds completion for pipenv
 - Auto activates and deactivates pipenv shell
 - Adds short aliases for common pipenv commands
@@ -23,6 +26,17 @@ This plugin provides some features to simplify the use of Pipenv while working o
   - `psh` is aliased to `pipenv shell`
   - `psy` is aliased to `pipenv sync`
   - `pu` is aliased to `pipenv uninstall`
+  - `pupd` is aliased to `pipenv update`
   - `pwh` is aliased to `pipenv --where`
   - `pvenv` is aliased to `pipenv --venv`
   - `ppy` is aliased to `pipenv --py`
+
+## Configuration
+
+### Shell activation
+
+If you want to disable the shell activation and deactivation feature, add the following style to your `.zshrc` before sourcing `oh-my-zsh.sh`:
+
+```zsh
+zstyle ':omz:plugins:pipenv' auto-shell no
+```
