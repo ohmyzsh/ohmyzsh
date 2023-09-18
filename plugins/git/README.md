@@ -41,6 +41,7 @@ plugins=(... git)
 | gba                  | git branch --all                                                                                                                                                 |
 | gbd                  | git branch --delete                                                                                                                                              |
 | gbD                  | git branch --delete --force                                                                                                                                      |
+| gbv                  | git branch -v
 | gbda                 | git branch --no-color --merged &#124; grep -vE "^([+]&#124;\s($(git_main_branch)&#124;$(git_develop_branch))\s\*$)" &#124; xargs git branch --delete 2>/dev/null |
 | gbgd                 | LANG=C git branch --no-color -vv | grep ": gone\]" | awk '"'"'{print $1}'"'"' | xargs git branch -d                                                              |
 | gbgD                 | LANG=C git branch --no-color -vv | grep ": gone\]" | awk '"'"'{print $1}'"'"' | xargs git branch -D                                                              |
