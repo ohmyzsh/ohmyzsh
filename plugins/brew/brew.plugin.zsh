@@ -1,5 +1,10 @@
 if (( ! $+commands[brew] )); then
-  if [[ -x /opt/homebrew/bin/brew ]]; then
+  if [[ -n "$BREW_LOCATION" ]]; then
+    if [[ ! -x "$BREW_LOCATION" ]]; then
+      echo "[oh-my-zsh] $BREW_LOCATION is not executable"
+      return
+    fi
+  elif [[ -x /opt/homebrew/bin/brew ]]; then
     BREW_LOCATION="/opt/homebrew/bin/brew"
   elif [[ -x /usr/local/bin/brew ]]; then
     BREW_LOCATION="/usr/local/bin/brew"

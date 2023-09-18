@@ -1,14 +1,14 @@
+# ANSI formatting function (\033[<code>m)
+# 0: reset, 1: bold, 4: underline, 22: no bold, 24: no underline, 31: red, 33: yellow
+omz_f() {
+  [ $# -gt 0 ] || return
+  IFS=";" printf "\033[%sm" $*
+}
+# If stdout is not a terminal ignore all formatting
+[ -t 1 ] || omz_f() { :; }
+
 # Protect against non-zsh execution of Oh My Zsh (use POSIX syntax here)
 [ -n "$ZSH_VERSION" ] || {
-  # ANSI formatting function (\033[<code>m)
-  # 0: reset, 1: bold, 4: underline, 22: no bold, 24: no underline, 31: red, 33: yellow
-  omz_f() {
-    [ $# -gt 0 ] || return
-    IFS=";" printf "\033[%sm" $*
-  }
-  # If stdout is not a terminal ignore all formatting
-  [ -t 1 ] || omz_f() { :; }
-
   omz_ptree() {
     # Get process tree of the current process
     pid=$$; pids="$pid"
@@ -37,6 +37,15 @@
 
   return 1
 }
+
+# Check if in emulation mode, if so early return
+# https://github.com/ohmyzsh/ohmyzsh/issues/11686
+[[ "$(emulate)" = zsh ]] || {
+  printf "$(omz_f 1 31)Error:$(omz_f 22) Oh My Zsh can't be loaded in \`$(emulate)\` emulation mode.$(omz_f 0)\n" >&2
+  return 1
+}
+
+unset -f omz_f
 
 # If ZSH is not defined, use the current script's directory.
 [[ -z "$ZSH" ]] && export ZSH="${${(%):-%x}:a:h}"
@@ -187,12 +196,12 @@ _omz_source() {
   fi
 }
 
-# Load all of the config files in ~/oh-my-zsh that end in .zsh
+# Load all of the lib files in ~/oh-my-zsh/lib that end in .zsh
 # TIP: Add files you don't want in git to .gitignore
-for config_file ("$ZSH"/lib/*.zsh); do
-  _omz_source "lib/${config_file:t}"
+for lib_file ("$ZSH"/lib/*.zsh); do
+  _omz_source "lib/${lib_file:t}"
 done
-unset custom_config_file
+unset lib_file
 
 # Load all of the plugins that were defined in ~/.zshrc
 for plugin ($plugins); do

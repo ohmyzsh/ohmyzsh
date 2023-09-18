@@ -51,5 +51,4 @@ jobs:
         run: |
           cp tools/install.sh .github/workflows/installer/install.sh
           cd .github/workflows/installer
-          vc link --yes -t ${{ secrets.VERCEL_TOKEN }}
           vc deploy --prod -t ${{ secrets.VERCEL_TOKEN }}

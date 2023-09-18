@@ -2,8 +2,9 @@
 
 # common grc.zsh paths
 files=(
-  /etc/grc.zsh            # default
-  /usr/local/etc/grc.zsh  # homebrew
+  /etc/grc.zsh               # default
+  /usr/local/etc/grc.zsh     # homebrew darwin-x64
+  /opt/homebrew/etc/grc.zsh  # homebrew darwin-arm64
 )
 
 # verify the file is readable and source it
