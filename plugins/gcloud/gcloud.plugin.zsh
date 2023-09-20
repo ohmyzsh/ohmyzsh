@@ -29,11 +29,9 @@ if [[ -z "${CLOUDSDK_HOME}" ]]; then
 fi
 
 if (( ${+CLOUDSDK_HOME} )); then
-  # Only source this if gcloud isn't already on the path
-  if (( ! $+commands[gcloud] )); then
-    if [[ -f "${CLOUDSDK_HOME}/path.zsh.inc" ]]; then
-      source "${CLOUDSDK_HOME}/path.zsh.inc"
-    fi
+  # Source path file
+  if [[ -f "${CLOUDSDK_HOME}/path.zsh.inc" ]]; then
+    source "${CLOUDSDK_HOME}/path.zsh.inc"
   fi
 
   # Look for completion file in different paths
