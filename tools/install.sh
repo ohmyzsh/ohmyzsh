@@ -69,14 +69,14 @@ fi
 ZSH="${ZSH:-$HOME/.oh-my-zsh}"
 
 # Default settings
-REPO=${REPO:-ohmyzsh/ohmyzsh}
+REPO=${REPO:-GR3YH4TT3R93/ohmyzsh}
 REMOTE=${REMOTE:-https://github.com/${REPO}.git}
 BRANCH=${BRANCH:-master}
 
 # Other options
 CHSH=${CHSH:-yes}
-RUNZSH=${RUNZSH:-yes}
-KEEP_ZSHRC=${KEEP_ZSHRC:-no}
+RUNZSH=${RUNZSH:-no}
+KEEP_ZSHRC=${KEEP_ZSHRC:-yes}
 
 
 command_exists() {
