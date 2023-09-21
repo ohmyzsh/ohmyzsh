@@ -1,3 +1,4 @@
+---
 name: CI
 on:
   pull_request:
@@ -9,26 +10,23 @@ on:
   push:
     branches:
       - master
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
-
 permissions:
   contents: read # to fetch code (actions/checkout)
-
 jobs:
   tests:
     name: Run tests
     runs-on: ubuntu-latest
-    if: github.repository == 'ohmyzsh/ohmyzsh'
+    if: github.repository == 'GR3YH4TT3R93/ohmyzsh'
     steps:
       - name: Set up git repository
         uses: actions/checkout@v4
       - name: Install zsh
         run: sudo apt-get update; sudo apt-get install zsh
       - name: Check syntax
-        run: |
+        run: |-
           for file in ./oh-my-zsh.sh \
                       ./lib/*.zsh \
                       ./plugins/*/*.plugin.zsh \
