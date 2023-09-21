@@ -23,7 +23,15 @@ if [[ -z "$VSCODE" ]]; then
   fi
 fi
 
-alias vsc="$VSCODE ."
+function vscopen() {
+  if [ "$1" != "" ]; then
+    $VSCODE $1
+  else
+    $VSCODE .
+  fi
+}
+
+alias vsc=vscopen
 alias vsca="$VSCODE --add"
 alias vscd="$VSCODE --diff"
 alias vscg="$VSCODE --goto"
