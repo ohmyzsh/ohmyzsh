@@ -1,6 +1,6 @@
 # Default commands
-: ${MAGIC_ENTER_GIT_COMMAND:="git status -u ."} # run when in a git repository
-: ${MAGIC_ENTER_OTHER_COMMAND:="ls -lh ."}      # run anywhere else
+: ${MAGIC_ENTER_GIT_COMMAND:="gst"} # run when in a git repository
+: ${MAGIC_ENTER_OTHER_COMMAND:="l"}      # run anywhere else
 
 magic-enter() {
   # Only run MAGIC_ENTER commands when in PS1 and command line is empty
