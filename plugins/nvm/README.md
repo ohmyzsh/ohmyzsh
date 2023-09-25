@@ -47,7 +47,8 @@ Note: _this option cannot be used at the same time as `lazy`. `autoload` will ov
 startup._
 
 If set, the plugin will automatically load a node version when if finds a
-[`.nvmrc` file](https://github.com/nvm-sh/nvm#nvmrc) in the current working directory indicating which node
+[`.nvmrc` file](https://github.com/nvm-sh/nvm#n![ayOZS-data-collections-mobile-page-speed-new-industry-benchmarks-download](https://github.com/ohmyzsh/ohmyzsh/assets/115485785/528595de-da3f-4aa9-8ed4-1e4d646aa9c6)
+vmrc) in the current working directory indicating which node
 version to load. This can be done, similar as previous options, adding:
 
 ```zsh
