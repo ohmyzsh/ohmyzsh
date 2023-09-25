@@ -44,6 +44,7 @@ plugins=(... git)
 | `gbda`                 | `git branch --no-color --merged \| command grep -vE "^([+*]\|\s*($(git_main_branch)\|$(git_develop_branch))\s*$)" \| command xargs git branch --delete 2>/dev/null` |
 | `gbgd`                 | `LANG=C git branch --no-color -vv \| grep ": gone\]" \| awk '"'"'{print $1}'"'"' \| xargs git branch -d`                                                            |
 | `gbgD`                 | `LANG=C git branch --no-color -vv \| grep ": gone\]" \| awk '"'"'{print $1}'"'"' \| xargs git branch -D`                                                            |
+| `gbm`                  | `git branch --move`                                                                                                                                                 |
 | `gbnm`                 | `git branch --no-merged`                                                                                                                                            |
 | `gbr`                  | `git branch --remote`                                                                                                                                               |
 | `ggsup`                | `git branch --set-upstream-to=origin/$(git_current_branch)`                                                                                                         |
