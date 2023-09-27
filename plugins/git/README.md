@@ -199,7 +199,6 @@ plugins=(... git)
 | `gswc`                 | `git switch -c`                                                                                                                                                     |
 | `gswd`                 | `git switch $(git_develop_branch)`                                                                                                                                  |
 | `gswm`                 | `git switch $(git_main_branch)`                                                                                                                                     |
-| `gt`                   | `git tag`                                                                                                                                                           |
 | `gta`                  | `git tag --annotate`                                                                                                                                                |
 | `gts`                  | `git tag -s`                                                                                                                                                        |
 | `gtv`                  | `git tag \| sort -V`                                                                                                                                                |
