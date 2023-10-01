@@ -26,6 +26,9 @@ plugins=(... terraform)
 | `tfo` | `terraform output`   |
 | `tfp` | `terraform plan`     |
 | `tfv` | `terraform validate` |
+| `tfs` | `terraform state`    |
+| `tfsh`| `terraform show`    |
+
 
 ## Prompt function
 
