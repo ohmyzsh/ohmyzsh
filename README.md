@@ -1,6 +1,6 @@
 <p align="center"><img src="https://ohmyzsh.s3.amazonaws.com/omz-ansi-github.png" alt="Oh My Zsh"></p>
 
-Oh My Zsh stands as an open-source, community-driven framework dedicated to the management of your zsh configuration.
+Oh My Zsh stands as an open-source, community-driven framework dedicated to the management of your [zsh](https://www.zsh.org/) configuration.
 
 Seemingly mundane? Let's try a different perspective.
 
