@@ -8,8 +8,9 @@ Adds integration with [rtx](https://github.com/jdx/rtx), a runtime executor comp
 1. [Download & install rtx](https://github.com/jdx/rtx#installation) by running the following:
 
   ```
-  curl https://rtx.pub/rtx-latest-macos-arm64 > /usr/local/bin/rtx
+  curl https://rtx.pub/install.sh | sh
   ```
+
 
 2. [Enable rtx](https://github.com/jdx/rtx#quickstart) by adding it to your `plugins` definition in `~/.zshrc`.
 
