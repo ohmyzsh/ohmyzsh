@@ -25,6 +25,6 @@ See the [rtx readme](https://github.com/jdx/rtx#table-of-contents) for informati
 ```
 rtx install node         Install the current version specified in .tool-versions/.rtx.toml
 rtx use -g node@system   Use system node as global default
-rtx install node@20.0.0  //Install a specific version number
+rtx install node@20.0.0  Install a specific version number
 rtx use -g node@20       Use node-20.x as global default
 ```
