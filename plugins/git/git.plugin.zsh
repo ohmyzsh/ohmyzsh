@@ -122,7 +122,22 @@ alias gb='git branch'
 alias gba='git branch --all'
 alias gbd='git branch --delete'
 alias gbD='git branch --delete --force'
-alias gbda='git branch --no-color --merged | command grep -vE "^([+*]|\s*($(git_main_branch)|$(git_develop_branch))\s*$)" | command xargs git branch --delete 2>/dev/null'
+
+# Copied and modified from James Roeder (jmaroeder) under MIT License
+# https://github.com/jmaroeder/plugin-git/blob/216723ef4f9e8dde399661c39c80bdf73f4076c4/functions/gbda.fish
+function gbda() {
+  git branch --no-color --merged | command grep -vE "^([+*]|\s*($(git_main_branch)|$(git_develop_branch))\s*$)" | command xargs git branch --delete 2>/dev/null
+
+  local default_branch=$(git_main_branch)
+  git for-each-ref refs/heads/ "--format=%(refname:short)" | \
+    while read branch; do
+      local merge_base=$(git merge-base $default_branch $branch)
+      if [[ '-*' == $(git cherry $default_branch $(git commit-tree $(git rev-parse $branch\^{tree}) -p $merge_base -m _)) ]]; then
+        git branch -D $branch
+      fi
+    done
+}
+
 alias gbgd='LANG=C git branch --no-color -vv | grep ": gone\]" | awk '"'"'{print $1}'"'"' | xargs git branch -d'
 alias gbgD='LANG=C git branch --no-color -vv | grep ": gone\]" | awk '"'"'{print $1}'"'"' | xargs git branch -D'
 alias gbm='git branch --move'
