@@ -41,7 +41,6 @@ plugins=(... git)
 | `gba`                  | `git branch --all`                                                                                                                                                  |
 | `gbd`                  | `git branch --delete`                                                                                                                                               |
 | `gbD`                  | `git branch --delete --force`                                                                                                                                       |
-| `gbda`                 | `git branch --no-color --merged \| command grep -vE "^([+*]\|\s*($(git_main_branch)\|$(git_develop_branch))\s*$)" \| command xargs git branch --delete 2>/dev/null` |
 | `gbgd`                 | `LANG=C git branch --no-color -vv \| grep ": gone\]" \| awk '"'"'{print $1}'"'"' \| xargs git branch -d`                                                            |
 | `gbgD`                 | `LANG=C git branch --no-color -vv \| grep ": gone\]" \| awk '"'"'{print $1}'"'"' \| xargs git branch -D`                                                            |
 | `gbm`                  | `git branch --move`                                                                                                                                                 |
@@ -251,6 +250,7 @@ receive further support.
 | `git_develop_branch`     | Returns the name of the “development” branch: `dev`, `devel`, `development` if they exist, `develop` otherwise. |
 | `git_main_branch`        | Returns the name of the main branch: `main` if it exists, `master` otherwise.                                   |
 | `grename <old> <new>`    | Renames branch `<old>` to `<new>`, including on the origin remote.                                              |
+| `gbda`                   | Deletes all merged and squash-merged branches                                                                   |
 
 ### Work in Progress (WIP)
 
