@@ -1,10 +1,14 @@
-if (( $+commands[kind] )); then
-  __KIND_COMPLETION_FILE="${ZSH_CACHE_DIR}/kind_completion"
-  if [[ ! -f $__KIND_COMPLETION_FILE || ! -s $__KIND_COMPLETION_FILE ]]; then
-    kind completion zsh >! $__KIND_COMPLETION_FILE
-  fi
-
-  [[ -f $__KIND_COMPLETION_FILE ]] && source $__KIND_COMPLETION_FILE
-
-  unset __KIND_COMPLETION_FILE
+if (( ! $+commands[kind] )); then
+  return
 fi
+
+# If the completion file doesn't exist yet, we need to autoload it and
+# bind it to `kind`. Otherwise, compinit will have already done that.
+if [[ ! -f "$ZSH_CACHE_DIR/completions/_kind" ]]; then
+  typeset -g -A _comps
+  autoload -Uz _kind
+  _comps[kind]=_kind
+fi
+
+# Generate and load kind completion
+kind completion zsh >! "$ZSH_CACHE_DIR/completions/_kind" &|
