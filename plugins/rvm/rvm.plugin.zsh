@@ -25,6 +25,7 @@ rubies=(
   25  'ruby-2.5'
   26  'ruby-2.6'
   27  'ruby-2.7'
+  275  'ruby-2.7.5'
   30  'ruby-3.0'
   31  'ruby-3.1'
   32  'ruby-3.2'
