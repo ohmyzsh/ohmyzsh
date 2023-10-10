@@ -185,7 +185,7 @@ plugins=(... git)
 | `gstp`                 | `git stash pop`                                                                                                                                                     |
 | `gsta`                 | On Git >= 2.13: `git stash push`                                                                                                                                    |
 | `gsta`                 | On Git < 2.13: `git stash save`                                                                                                                                     |
-| `gsts`                 | `git stash show`                                                                                                                                                    |
+| `gsts`                 | `git stash show --patch`                                                                                                                                            |
 | `gst`                  | `git status`                                                                                                                                                        |
 | `gss`                  | `git status --short`                                                                                                                                                |
 | `gsb`                  | `git status --short -b`                                                                                                                                             |
