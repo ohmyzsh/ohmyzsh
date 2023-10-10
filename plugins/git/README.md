@@ -43,6 +43,7 @@ plugins=(... git)
 | `gbD`                  | `git branch --delete --force`                                                                                                                                       |
 | `gbgd`                 | `LANG=C git branch --no-color -vv \| grep ": gone\]" \| awk '"'"'{print $1}'"'"' \| xargs git branch -d`                                                            |
 | `gbgD`                 | `LANG=C git branch --no-color -vv \| grep ": gone\]" \| awk '"'"'{print $1}'"'"' \| xargs git branch -D`                                                            |
+| `gbf`                  | `git branch \| grep`                                                                                                                                                 |
 | `gbm`                  | `git branch --move`                                                                                                                                                 |
 | `gbnm`                 | `git branch --no-merged`                                                                                                                                            |
 | `gbr`                  | `git branch --remote`                                                                                                                                               |

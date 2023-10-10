@@ -122,6 +122,7 @@ alias gb='git branch'
 alias gba='git branch --all'
 alias gbd='git branch --delete'
 alias gbD='git branch --delete --force'
+alias gbf='git branch | grep'
 
 # Copied and modified from James Roeder (jmaroeder) under MIT License
 # https://github.com/jmaroeder/plugin-git/blob/216723ef4f9e8dde399661c39c80bdf73f4076c4/functions/gbda.fish
