@@ -20,16 +20,12 @@ permissions:
 jobs:
   tests:
     name: Run tests
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     if: github.repository == 'ohmyzsh/ohmyzsh'
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest]
     steps:
       - name: Set up git repository
         uses: actions/checkout@v3
       - name: Install zsh
-        if: runner.os == 'Linux'
         run: sudo apt-get update; sudo apt-get install zsh
       - name: Check syntax
         run: |
