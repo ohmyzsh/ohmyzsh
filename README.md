@@ -42,7 +42,7 @@ To learn more, visit [ohmyz.sh](https://ohmyz.sh), follow [@ohmyzsh](https://twi
     - [Manual Installation](#manual-installation)
   - [Installation Problems](#installation-problems)
   - [Custom Plugins And Themes](#custom-plugins-and-themes)
-  - [Enable Gnu ls in macOS And freeBSD Systems](#enable-gnu-ls-in-macos-and-freebsd-systems)
+  - [Enable GNU ls In macOS And freeBSD Systems](#enable-gnu-ls-in-macos-and-freebsd-systems)
   - [Skip Aliases](#skip-aliases)
 - [Getting Updates](#getting-updates)
   - [Updates Verbosity](#updates-verbosity)
@@ -293,7 +293,7 @@ If you have many functions that go well together, you can put them as a `XYZ.plu
 
 If you would like to override the functionality of a plugin distributed with Oh My Zsh, create a plugin of the same name in the `custom/plugins/` directory and it will be loaded instead of the one in `plugins/`.
 
-### Enable Gnu ls in macOS And freeBSD Systems
+### Enable GNU ls In macOS And freeBSD Systems
 
 <a name="enable-gnu-ls"></a>
 
