@@ -62,22 +62,33 @@ fi
 
 # Sort connection state
 function sortcons() {
-  netstat -nat |awk '{print $6}'|sort|uniq -c|sort -rn
+  {
+    LANG= ss -nat | awk 'NR > 1 {print $1}' \
+    || LANG= netstat -nat | awk 'NR > 2 {print $6}'
+  } | sort | uniq -c | sort -rn
 }
 
 # View all 80 Port Connections
 function con80() {
-  netstat -nat|grep -i ":80"|wc -l
+  {
+    LANG= ss -nat || LANG= netstat -nat
+  } | grep -E ":80[^0-9]" | wc -l
 }
 
 # On the connected IP sorted by the number of connections
 function sortconip() {
-  netstat -ntu | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -n
+  {
+    LANG= ss -ntu | awk 'NR > 1 {print $6}' \
+    || LANG= netstat -ntu | awk 'NR > 2 {print $5}'
+  } | cut -d: -f1 | sort | uniq -c | sort -n
 }
 
 # top20 of Find the number of requests on 80 port
 function req20() {
-  netstat -anlp|grep 80|grep tcp|awk '{print $5}'|awk -F: '{print $1}'|sort|uniq -c|sort -nr|head -n20
+  {
+    LANG= ss -tn | awk '$4 ~ /:80$/ {print $5}' \
+    || LANG= netstat -tn | awk '$4 ~ /:80$/ {print $5}'
+  } | awk -F: '{print $1}' | sort | uniq -c | sort -nr | head -n 20
 }
 
 # top20 of Using tcpdump port 80 access to view
@@ -87,17 +98,24 @@ function http20() {
 
 # top20 of Find time_wait connection
 function timewait20() {
-  netstat -n|grep TIME_WAIT|awk '{print $5}'|sort|uniq -c|sort -rn|head -n20
+  {
+    LANG= ss -nat | awk 'NR > 1 && /TIME-WAIT/ {print $5}' \
+    || LANG= netstat -nat | awk 'NR > 2 && /TIME_WAIT/ {print $5}'
+  } | sort | uniq -c | sort -rn | head -n 20
 }
 
 # top20 of Find SYN connection
 function syn20() {
-  netstat -an | grep SYN | awk '{print $5}' | awk -F: '{print $1}' | sort | uniq -c | sort -nr|head -n20
+  {
+    LANG= ss -an | awk '/SYN/ {print $5}' \
+    || LANG= netstat -an | awk '/SYN/ {print $5}'
+  } | awk -F: '{print $1}' | sort | uniq -c | sort -nr | head -n20
 }
 
 # Printing process according to the port number
 function port_pro() {
-  netstat -ntlp | grep "${1:-.}" | awk '{print $7}' | cut -d/ -f1
+  LANG= ss -ntlp | awk "NR > 1 && /:${1:-}/ {print \$6}" | sed 's/.*pid=\([^,]*\).*/\1/' \
+  || LANG= netstat -ntlp | awk "NR > 2 && /:${1:-}/ {print \$7}" | cut -d/ -f1
 }
 
 # top10 of gain access to the ip address
