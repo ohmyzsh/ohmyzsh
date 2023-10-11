@@ -90,7 +90,7 @@ Oh My Zsh is installed by running one of the following commands in your terminal
 
 _Note that any previous `.zshrc` will be renamed to `.zshrc.pre-oh-my-zsh`. After installation, you can move the configuration you want to preserve into the new `.zshrc`._
 
-#### Manual inspection
+#### Manual Inspection
 
 It's a good idea to inspect the install script from projects you don't yet know. You can do
 that by downloading the install script first, looking through it so everything looks normal,
@@ -306,7 +306,7 @@ zstyle ':omz:lib:theme-and-appearance' gnu-ls yes
 
 _Note: this is not compatible with `DISABLE_LS_COLORS=true`_
 
-### Skip aliases
+### Skip Aliases
 
 <a name="remove-directories-aliases"></a>
 
