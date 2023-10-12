@@ -17,7 +17,7 @@ Requirements: Python needs to be installed.
 
 - `als`: show all aliases by group
 
-- `als -h/--help`: print help mesage
+- `als -h/--help`: print help message
 
 - `als <keyword(s)>`: filter and highlight aliases by `<keyword>`
 
