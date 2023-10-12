@@ -64,7 +64,7 @@ Zsh-z is a drop-in replacement for `rupa/z` and will, by default, use the same d
     + Temporarily disabling use of `print -v`, which seems to be mangling CJK multibyte strings.
 - July 27, 2021
     + Internal escaping of path names now works with older versions of ZSH.
-    + Zsh-z now detects and discards any incomplete or incorrectly formattted database entries.
+    + Zsh-z now detects and discards any incomplete or incorrectly formatted database entries.
 - July 10, 2021
     + Setting `ZSHZ_TRAILING_SLASH=1` makes it so that a search pattern ending in `/` can match the end of a path; e.g. `z foo/` can match `/path/to/foo`.
 - June 25, 2021
@@ -85,7 +85,7 @@ Zsh-z is a drop-in replacement for `rupa/z` and will, by default, use the same d
 - January 11, 2021
     + Major refactoring of the code.
     + `z -lr` and `z -lt` work as expected.
-    + `EXTENDED_GLOB` has been disabled within the plugin to accomodate old-fashioned Windows directories with names such as `Progra~1`.
+    + `EXTENDED_GLOB` has been disabled within the plugin to accommodate old-fashioned Windows directories with names such as `Progra~1`.
     + Removed `zshelldoc` documentation.
 - January 6, 2021
     + I have corrected the frecency routine so that it matches `rupa/z`'s math, but for the present, Zsh-z will continue to display ranks as 1/10000th of what they are in `rupa/z` -- [they had to multiply theirs by 10000](https://github.com/rupa/z/commit/f1f113d9bae9effaef6b1e15853b5eeb445e0712) to work around `bash`'s inadequacies at dealing with decimal fractions.
