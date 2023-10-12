@@ -306,7 +306,7 @@ zshz() {
   }
 
   ############################################################
-  # Read the curent datafile contents, update them, "age" them
+  # Read the current datafile contents, update them, "age" them
   # when the total rank gets high enough, and print the new
   # contents to STDOUT.
   #
@@ -931,7 +931,7 @@ add-zsh-hook chpwd _zshz_chpwd
 # Completion
 ############################################################
 
-# Standarized $0 handling
+# Standardized $0 handling
 # https://zdharma-continuum.github.io/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html
 0="${${ZERO:-${0:#$ZSH_ARGZERO}}:-${(%):-%N}}"
 0="${${(M)0:#/*}:-$PWD/$0}"
