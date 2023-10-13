@@ -12,6 +12,8 @@ fi
 # Automatically connect to a previous session if it exists
 : ${ZSH_TMUX_AUTOCONNECT:=true}
 # Automatically close the terminal when tmux exits
+: ${ZSH_TMUX_SESSIONGROUP:=true}
+# With ZSH_TMUX_AUTOCONNECT specified, connect to existing session group
 : ${ZSH_TMUX_AUTOQUIT:=$ZSH_TMUX_AUTOSTART}
 # Set term to screen or screen-256color based on current terminal support
 : ${ZSH_TMUX_FIXTERM:=true}
@@ -78,10 +80,27 @@ function _zsh_tmux_plugin_run() {
   [[ "$ZSH_TMUX_UNICODE" == "true" ]] && tmux_cmd+=(-u)
 
   # Try to connect to an existing session.
-  if [[ -n "$ZSH_TMUX_DEFAULT_SESSION_NAME" ]]; then
-    [[ "$ZSH_TMUX_AUTOCONNECT" == "true" ]] && $tmux_cmd attach -t $ZSH_TMUX_DEFAULT_SESSION_NAME
-  else
-    [[ "$ZSH_TMUX_AUTOCONNECT" == "true" ]] && $tmux_cmd attach
+  if [[ "$ZSH_TMUX_AUTOCONNECT" == "true" ]]; then
+    if [[ "$ZSH_TMUX_SESSIONGROUP" == "true" ]]; then
+      # Instead of attaching, we can fairly freely run new-session which will
+      # give us a new session grouped with the specified target session.
+      # Adding `set-option destroy-unattached` discourages grouped sessions
+      # from accumulating over time
+      if [[ -n "$ZSH_TMUX_DEFAULT_SESSION_NAME" ]]; then
+        $tmux_cmd new-session -t $ZSH_TMUX_DEFAULT_SESSION_NAME \; set-option destroy-unattached
+      else
+        # The session group of 0 is a very rough guess.  Probably better would be
+        # to grab it from `tmux ls -F '#{session_name}' | tail -n 1` and bail if 
+        # there is none.
+        $tmux_cmd new-session -t 0 \; set-option destroy-unattached
+      fi
+    else
+      if [[ -n "$ZSH_TMUX_DEFAULT_SESSION_NAME" ]]; then
+        $tmux_cmd attach -t $ZSH_TMUX_DEFAULT_SESSION_NAME
+      else
+        $tmux_cmd attach
+      fi
+    fi
   fi
 
   # If failed, just run tmux, fixing the TERM variable if requested.
