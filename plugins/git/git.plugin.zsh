@@ -20,26 +20,31 @@ function current_branch() {
 function git_develop_branch() {
   command git rev-parse --git-dir &>/dev/null || return
   local branch
-  for branch in dev devel development; do
+  for branch in dev devel develop development; do
     if command git show-ref -q --verify refs/heads/$branch; then
       echo $branch
-      return
+      return 0
     fi
   done
+
   echo develop
+  return 1
 }
 
 # Check if main exists and use instead of master
 function git_main_branch() {
   command git rev-parse --git-dir &>/dev/null || return
   local ref
-  for ref in refs/{heads,remotes/{origin,upstream}}/{main,trunk,mainline,default}; do
+  for ref in refs/{heads,remotes/{origin,upstream}}/{main,trunk,mainline,default,master}; do
     if command git show-ref -q --verify $ref; then
       echo ${ref:t}
-      return
+      return 0
     fi
   done
+
+  # If no main branch was found, fall back to master but return error
   echo master
+  return 1
 }
 
 function grename() {
@@ -129,6 +134,8 @@ function gbda() {
   git branch --no-color --merged | command grep -vE "^([+*]|\s*($(git_main_branch)|$(git_develop_branch))\s*$)" | command xargs git branch --delete 2>/dev/null
 
   local default_branch=$(git_main_branch)
+  (( ! $? )) || default_branch=$(git_develop_branch)
+
   git for-each-ref refs/heads/ "--format=%(refname:short)" | \
     while read branch; do
       local merge_base=$(git merge-base $default_branch $branch)
