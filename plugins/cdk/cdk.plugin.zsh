@@ -11,7 +11,6 @@ _cdk_yargs_completions()
   IFS=$'
 ' reply=($(COMP_CWORD="$((CURRENT-1))" COMP_LINE="$BUFFER" COMP_POINT="$CURSOR" cdk --get-yargs-completions "${words[@]}"))
   IFS=$si
-  # Loop through the reply array and append "tomato" to each value
   _describe 'values' reply
 }
 compdef _cdk_yargs_completions cdk
