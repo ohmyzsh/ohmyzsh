@@ -6,12 +6,12 @@ fi
 ###-begin-cdk-completions-###
 _cdk_yargs_completions()
 {
-  local reply
+  local completion_suggestions
   local si=$IFS
   IFS=$'
-' reply=($(COMP_CWORD="$((CURRENT-1))" COMP_LINE="$BUFFER" COMP_POINT="$CURSOR" cdk --get-yargs-completions "${words[@]}"))
+' completion_suggestions=($(COMP_CWORD="$((CURRENT-1))" COMP_LINE="$BUFFER" COMP_POINT="$CURSOR" cdk --get-yargs-completions "${words[@]}"))
   IFS=$si
-  _describe 'values' reply
+  _describe 'values' completion_suggestions
 }
 compdef _cdk_yargs_completions cdk
 ###-end-cdk-completions-###
