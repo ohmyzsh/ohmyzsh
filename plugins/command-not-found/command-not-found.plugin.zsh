@@ -67,3 +67,20 @@ if [[ -x /usr/bin/command-not-found ]]; then
     /usr/bin/command-not-found "$1"
   }
 fi
+
+
+if [[ -e /etc/os-release || "$OSTYPE" == "linux-gnu"]]; then
+  source /etc/os-release
+  brew_installation_directory=$(brew --prefix)
+  if [[[ "$ID" = "ubuntu" || "$ID" = "centos" || "$ID" = "fedora" || "$ID" = "debian" || "$ID" == "opensuse"] && [ -d "$brew_installation_directory" ]] || [["$OSTYPE" == "linux-gnu" && -d "$brew_installation_directory"]]]; then
+    # Check if $brew_installation_directory is set and contains the handler script
+    if [[ -n $brew_installation_directory && -x "$brew_installation_directory/Library/Taps/homebrew/homebrew-command-not-found/handler.sh" ]]; then
+      command_not_found_handler() {
+        "$brew_installation_directory/Library/Taps/homebrew/homebrew-command-not-found/handler.sh" -- "$1"
+        return $?
+      }
+    fi
+  else
+     #Unknown or unsupported Linux distribution.
+  fi
+fi
