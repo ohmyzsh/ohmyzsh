@@ -58,7 +58,7 @@ function takeurl() {
 }
 
 function takegit() {
-  git clone "$1"
+  git clone --recurse-submodules "$1"
   cd "$(basename ${1%%.git})"
 }
 
