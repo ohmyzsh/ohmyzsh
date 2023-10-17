@@ -9,6 +9,7 @@ fi
 # - prompt (default): the user is asked before updating when it's time to update
 # - auto: the update is performed automatically when it's time
 # - reminder: a reminder is shown to the user when it's time to update
+# - background-alpha: an experimental update-on-the-background option
 # - disabled: automatic update is turned off
 zstyle -s ':omz:update' mode update_mode || {
   update_mode=prompt
@@ -91,13 +92,37 @@ function is_update_available() {
 }
 
 function update_last_updated_file() {
-  echo "LAST_EPOCH=$(current_epoch)" >! "${ZSH_CACHE_DIR}/.zsh-update"
+  local exit_status="$1" error="$2"
+
+  if [[ -z "${1}${2}" ]]; then
+    echo "LAST_EPOCH=$(current_epoch)" >! "${ZSH_CACHE_DIR}/.zsh-update"
+    return
+  fi
+
+  cat >! "${ZSH_CACHE_DIR}/.zsh-update" <<EOD
+LAST_EPOCH=$(current_epoch)
+EXIT_STATUS=${exit_status}
+ERROR='${error//\'/’}'
+EOD
 }
 
 function update_ohmyzsh() {
+  local verbose_mode
   zstyle -s ':omz:update' verbose verbose_mode || verbose_mode=default
-  if ZSH="$ZSH" zsh -f "$ZSH/tools/upgrade.sh" -i -v $verbose_mode; then
+
+  if [[ "$update_mode" != background-alpha ]] \
+    && LANG= ZSH="$ZSH" zsh -f "$ZSH/tools/upgrade.sh" -i -v $verbose_mode; then
     update_last_updated_file
+    return $?
+  fi
+
+  local exit_status error
+  if error=$(LANG= ZSH="$ZSH" zsh -f "$ZSH/tools/upgrade.sh" -i -v silent 2>&1); then
+    update_last_updated_file 0 "Update successful"
+  else
+    exit_status=$?
+    update_last_updated_file $exit_status "$error"
+    return $exit_status
   fi
 }
 
@@ -126,88 +151,145 @@ function has_typed_input() {
   }
 }
 
-() {
-  emulate -L zsh
+function handle_update() {
+  () {
+    emulate -L zsh
 
-  local epoch_target mtime option LAST_EPOCH
+    local epoch_target mtime option LAST_EPOCH
 
-  # Remove lock directory if older than a day
-  zmodload zsh/datetime
-  zmodload -F zsh/stat b:zstat
-  if mtime=$(zstat +mtime "$ZSH/log/update.lock" 2>/dev/null); then
-    if (( (mtime + 3600 * 24) < EPOCHSECONDS )); then
-      command rm -rf "$ZSH/log/update.lock"
+    # Remove lock directory if older than a day
+    zmodload zsh/datetime
+    zmodload -F zsh/stat b:zstat
+    if mtime=$(zstat +mtime "$ZSH/log/update.lock" 2>/dev/null); then
+      if (( (mtime + 3600 * 24) < EPOCHSECONDS )); then
+        command rm -rf "$ZSH/log/update.lock"
+      fi
     fi
-  fi
 
-  # Check for lock directory
-  if ! command mkdir "$ZSH/log/update.lock" 2>/dev/null; then
-    return
-  fi
+    # Check for lock directory
+    if ! command mkdir "$ZSH/log/update.lock" 2>/dev/null; then
+      return
+    fi
 
-  # Remove lock directory on exit. `return $ret` is important for when trapping a SIGINT:
-  #  The return status from the function is handled specially. If it is zero, the signal is
-  #  assumed to have been handled, and execution continues normally. Otherwise, the shell
-  #  will behave as interrupted except that the return status of the trap is retained.
-  #  This means that for a CTRL+C, the trap needs to return the same exit status so that
-  #  the shell actually exits what it's running.
-  trap "
-    ret=\$?
-    unset update_mode
-    unset -f current_epoch is_update_available update_last_updated_file update_ohmyzsh 2>/dev/null
-    command rm -rf '$ZSH/log/update.lock'
-    return \$ret
-  " EXIT INT QUIT
+    # Remove lock directory on exit. `return $ret` is important for when trapping a SIGINT:
+    #  The return status from the function is handled specially. If it is zero, the signal is
+    #  assumed to have been handled, and execution continues normally. Otherwise, the shell
+    #  will behave as interrupted except that the return status of the trap is retained.
+    #  This means that for a CTRL+C, the trap needs to return the same exit status so that
+    #  the shell actually exits what it's running.
+    trap "
+      ret=\$?
+      unset update_mode
+      unset -f current_epoch is_update_available update_last_updated_file update_ohmyzsh handle_update 2>/dev/null
+      command rm -rf '$ZSH/log/update.lock'
+      return \$ret
+    " EXIT INT QUIT
 
-  # Create or update .zsh-update file if missing or malformed
-  if ! source "${ZSH_CACHE_DIR}/.zsh-update" 2>/dev/null || [[ -z "$LAST_EPOCH" ]]; then
-    update_last_updated_file
-    return
-  fi
+    # Create or update .zsh-update file if missing or malformed
+    if ! source "${ZSH_CACHE_DIR}/.zsh-update" 2>/dev/null || [[ -z "$LAST_EPOCH" ]]; then
+      update_last_updated_file
+      return
+    fi
 
-  # Number of days before trying to update again
-  zstyle -s ':omz:update' frequency epoch_target || epoch_target=${UPDATE_ZSH_DAYS:-13}
-  # Test if enough time has passed until the next update
-  if (( ( $(current_epoch) - $LAST_EPOCH ) < $epoch_target )); then
-    return
-  fi
+    # Number of days before trying to update again
+    zstyle -s ':omz:update' frequency epoch_target || epoch_target=${UPDATE_ZSH_DAYS:-13}
+    # Test if enough time has passed until the next update
+    if (( ( $(current_epoch) - $LAST_EPOCH ) < $epoch_target )); then
+      return
+    fi
 
-  # Test if Oh My Zsh directory is a git repository
-  if ! (builtin cd -q "$ZSH" && LANG= git rev-parse &>/dev/null); then
-    echo >&2 "[oh-my-zsh] Can't update: not a git repository."
-    return
-  fi
+    # Test if Oh My Zsh directory is a git repository
+    if ! (builtin cd -q "$ZSH" && LANG= git rev-parse &>/dev/null); then
+      echo >&2 "[oh-my-zsh] Can't update: not a git repository."
+      return
+    fi
 
-  # Check if there are updates available before proceeding
-  if ! is_update_available; then
-    update_last_updated_file
-    return
-  fi
+    # Check if there are updates available before proceeding
+    if ! is_update_available; then
+      update_last_updated_file
+      return
+    fi
 
-  # If in reminder mode or user has typed input, show reminder and exit
-  if [[ "$update_mode" = reminder ]] || has_typed_input; then
-    printf '\r\e[0K' # move cursor to first column and clear whole line
-    echo "[oh-my-zsh] It's time to update! You can do that by running \`omz update\`"
-    return 0
-  fi
+    # If in reminder mode or user has typed input, show reminder and exit
+    if [[ "$update_mode" = reminder ]] || { [[ "$update_mode" != background-alpha ]] && has_typed_input }; then
+      printf '\r\e[0K' # move cursor to first column and clear whole line
+      echo "[oh-my-zsh] It's time to update! You can do that by running \`omz update\`"
+      return 0
+    fi
 
-  # Don't ask for confirmation before updating if in auto mode
-  if [[ "$update_mode" = auto ]]; then
-    update_ohmyzsh
-    return $?
-  fi
+    # Don't ask for confirmation before updating if in auto mode
+    if [[ "$update_mode" = (auto|background-alpha) ]]; then
+      update_ohmyzsh
+      return $?
+    fi
 
-  # Ask for confirmation and only update on 'y', 'Y' or Enter
-  # Otherwise just show a reminder for how to update
-  echo -n "[oh-my-zsh] Would you like to update? [Y/n] "
-  read -r -k 1 option
-  [[ "$option" = $'\n' ]] || echo
-  case "$option" in
-    [yY$'\n']) update_ohmyzsh ;;
-    [nN]) update_last_updated_file ;&
-    *) echo "[oh-my-zsh] You can update manually by running \`omz update\`" ;;
-  esac
+    # Ask for confirmation and only update on 'y', 'Y' or Enter
+    # Otherwise just show a reminder for how to update
+    echo -n "[oh-my-zsh] Would you like to update? [Y/n] "
+    read -r -k 1 option
+    [[ "$option" = $'\n' ]] || echo
+    case "$option" in
+      [yY$'\n']) update_ohmyzsh ;;
+      [nN]) update_last_updated_file ;&
+      *) echo "[oh-my-zsh] You can update manually by running \`omz update\`" ;;
+    esac
+  }
+
+  unset update_mode
+  unset -f current_epoch is_update_available update_last_updated_file update_ohmyzsh handle_update
 }
 
-unset update_mode
-unset -f current_epoch is_update_available update_last_updated_file update_ohmyzsh
+case "$update_mode" in
+  background-alpha)
+    autoload -Uz add-zsh-hook
+
+    _omz_bg_update() {
+      # do the update in a subshell
+      (handle_update) &|
+
+      # register update results function
+      add-zsh-hook precmd _omz_bg_update_status
+
+      # deregister background function
+      add-zsh-hook -d precmd _omz_bg_update
+      unset -f _omz_bg_update
+    }
+
+    _omz_bg_update_status() {
+      {
+        local LAST_EPOCH EXIT_STATUS ERROR
+        if [[ ! -f "$ZSH_CACHE_DIR"/.zsh-update ]]; then
+          return 1
+        fi
+
+        # check update results until timeout is reached
+        . "$ZSH_CACHE_DIR/.zsh-update"
+        if [[ -z "$EXIT_STATUS" || -z "$ERROR" ]]; then
+          return 1
+        fi
+
+        if [[ "$EXIT_STATUS" -eq 0 ]]; then
+          print -P "\n%F{green}[oh-my-zsh] Update successful.%f"
+          return 0
+        elif [[ "$EXIT_STATUS" -ne 0 ]]; then
+          print -P "\n%F{red}[oh-my-zsh] There was an error updating:%f"
+          printf "\n${fg[yellow]}%s${reset_color}" "$ERROR"
+          return 0
+        fi
+      } always {
+        if (( TRY_BLOCK_ERROR == 0 )); then
+          # if last update results have been handled, remove them from the status file
+          update_last_updated_file
+
+          # deregister background function
+          add-zsh-hook -d precmd _omz_bg_update_status
+          unset -f _omz_bg_update_status
+        fi
+      }
+    }
+
+    add-zsh-hook precmd _omz_bg_update
+    ;;
+  *)
+    handle_update ;;
+esac

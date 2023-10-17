@@ -20,26 +20,31 @@ function current_branch() {
 function git_develop_branch() {
   command git rev-parse --git-dir &>/dev/null || return
   local branch
-  for branch in dev devel development; do
+  for branch in dev devel develop development; do
     if command git show-ref -q --verify refs/heads/$branch; then
       echo $branch
-      return
+      return 0
     fi
   done
+
   echo develop
+  return 1
 }
 
 # Check if main exists and use instead of master
 function git_main_branch() {
   command git rev-parse --git-dir &>/dev/null || return
   local ref
-  for ref in refs/{heads,remotes/{origin,upstream}}/{main,trunk,mainline,default}; do
+  for ref in refs/{heads,remotes/{origin,upstream}}/{main,trunk,mainline,default,master}; do
     if command git show-ref -q --verify $ref; then
       echo ${ref:t}
-      return
+      return 0
     fi
   done
+
+  # If no main branch was found, fall back to master but return error
   echo master
+  return 1
 }
 
 function grename() {
@@ -122,9 +127,27 @@ alias gb='git branch'
 alias gba='git branch --all'
 alias gbd='git branch --delete'
 alias gbD='git branch --delete --force'
-alias gbda='git branch --no-color --merged | command grep -vE "^([+*]|\s*($(git_main_branch)|$(git_develop_branch))\s*$)" | command xargs git branch --delete 2>/dev/null'
+
+# Copied and modified from James Roeder (jmaroeder) under MIT License
+# https://github.com/jmaroeder/plugin-git/blob/216723ef4f9e8dde399661c39c80bdf73f4076c4/functions/gbda.fish
+function gbda() {
+  git branch --no-color --merged | command grep -vE "^([+*]|\s*($(git_main_branch)|$(git_develop_branch))\s*$)" | command xargs git branch --delete 2>/dev/null
+
+  local default_branch=$(git_main_branch)
+  (( ! $? )) || default_branch=$(git_develop_branch)
+
+  git for-each-ref refs/heads/ "--format=%(refname:short)" | \
+    while read branch; do
+      local merge_base=$(git merge-base $default_branch $branch)
+      if [[ '-*' == $(git cherry $default_branch $(git commit-tree $(git rev-parse $branch\^{tree}) -p $merge_base -m _)) ]]; then
+        git branch -D $branch
+      fi
+    done
+}
+
 alias gbgd='LANG=C git branch --no-color -vv | grep ": gone\]" | awk '"'"'{print $1}'"'"' | xargs git branch -d'
 alias gbgD='LANG=C git branch --no-color -vv | grep ": gone\]" | awk '"'"'{print $1}'"'"' | xargs git branch -D'
+alias gbm='git branch --move'
 alias gbnm='git branch --no-merged'
 alias gbr='git branch --remote'
 alias ggsup='git branch --set-upstream-to=origin/$(git_current_branch)'
@@ -309,6 +332,8 @@ alias grup='git remote update'
 alias grh='git reset'
 alias gru='git reset --'
 alias grhh='git reset --hard'
+alias grhk='git reset --keep'
+alias grhs='git reset --soft'
 alias gpristine='git reset --hard && git clean --force -dfx'
 alias groh='git reset origin/$(git_current_branch) --hard'
 alias grs='git restore'
@@ -331,7 +356,7 @@ alias gstp='git stash pop'
 is-at-least 2.13 "$git_version" \
   && alias gsta='git stash push' \
   || alias gsta='git stash save'
-alias gsts='git stash show --text'
+alias gsts='git stash show --patch'
 alias gst='git status'
 alias gss='git status --short'
 alias gsb='git status --short --branch'
@@ -344,6 +369,7 @@ alias gsw='git switch'
 alias gswc='git switch --create'
 alias gswd='git switch $(git_develop_branch)'
 alias gswm='git switch $(git_main_branch)'
+alias gta='git tag --annotate'
 alias gts='git tag --sign'
 alias gtv='git tag | sort -V'
 alias gignore='git update-index --assume-unchanged'
