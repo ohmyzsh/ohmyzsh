@@ -32,6 +32,8 @@ alias dvprune='docker volume prune'
 alias dxc='docker container exec'
 alias dxcit='docker container exec -it'
 
+function dsh() { docker container exec -it $1 /bin/bash;}
+
 if (( ! $+commands[docker] )); then
   return
 fi
