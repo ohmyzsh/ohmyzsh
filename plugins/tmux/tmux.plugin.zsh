@@ -119,7 +119,7 @@ function _tmux_directory_session() {
   tmux new -As "$session_name"
 }
 
-alias td=_tmux_directory_session
+alias tds=_tmux_directory_session
 
 # Autostart if not already in tmux and enabled.
 if [[ -z "$TMUX" && "$ZSH_TMUX_AUTOSTART" == "true" && -z "$INSIDE_EMACS" && -z "$EMACS" && -z "$VIM" && -z "$INTELLIJ_ENVIRONMENT_READER" ]]; then
