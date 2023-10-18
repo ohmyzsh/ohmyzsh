@@ -13,6 +13,11 @@ function _start_agent() {
     fi
   fi
 
+  if [[ ! -d "$HOME/.ssh" ]]; then
+    echo "[oh-my-zsh] ssh-agent plugin requires ~/.ssh directory"
+    return 1
+  fi
+
   # Set a maximum lifetime for identities added to ssh-agent
   local lifetime
   zstyle -s :omz:plugins:ssh-agent lifetime lifetime
@@ -20,13 +25,6 @@ function _start_agent() {
   # start ssh-agent and setup environment
   zstyle -t :omz:plugins:ssh-agent quiet || echo >&2 "Starting ssh-agent ..."
   ssh-agent -s ${lifetime:+-t} ${lifetime} | sed '/^echo/d' >! "$ssh_env_cache"
-  if [[ $? -ne 0 ]]; then
-  mkdir ~/.ssh
-  chmod 700 ~/.ssh
-  echo "You have enabled the ssh-agent which requires ~/.ssh directory to store a cache file."
-  echo "Created ~/.ssh directory to store cache file."
-  return
-  fi
   chmod 600 "$ssh_env_cache"
   . "$ssh_env_cache" > /dev/null
 }
