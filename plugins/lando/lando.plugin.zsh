@@ -11,7 +11,7 @@ function artisan \
          php \
          wp \
          yarn {
-  if checkForLandoFile; then
+  if [ checkForLandoFile ] && [ lando "$0" > /dev/null 2>&1 ]; then
     lando "$0" "$@"
   else
     command "$0" "$@"
