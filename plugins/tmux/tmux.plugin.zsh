@@ -108,6 +108,19 @@ compdef _tmux _zsh_tmux_plugin_run
 # Alias tmux to our wrapper function.
 alias tmux=_zsh_tmux_plugin_run
 
+function _tmux_directory_session() {
+  # current directory without leading path
+  local dir=${PWD##*/}
+  # md5 hash for the full working directory path
+  local md5=$(printf '%s' "$PWD" | md5sum | cut -d  ' ' -f 1)
+  # human friendly unique session name for this directory
+  local session_name="${dir}-${md5:0:6}"
+  # create or attach to the session
+  tmux new -As "$session_name"
+}
+
+alias tds=_tmux_directory_session
+
 # Autostart if not already in tmux and enabled.
 if [[ -z "$TMUX" && "$ZSH_TMUX_AUTOSTART" == "true" && -z "$INSIDE_EMACS" && -z "$EMACS" && -z "$VIM" && -z "$INTELLIJ_ENVIRONMENT_READER" ]]; then
   # Actually don't autostart if we already did and multiple autostarts are disabled.

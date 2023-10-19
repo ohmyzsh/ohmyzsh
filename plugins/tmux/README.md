@@ -25,6 +25,7 @@ The plugin also supports the following:
 | `tkss`     | tmux kill-session -t       | Terminate named running tmux session                     |
 | `tmux`     | `_zsh_tmux_plugin_run`     | Start a new tmux session                                 |
 | `tmuxconf` | `$EDITOR $ZSH_TMUX_CONFIG` | Open .tmux.conf file with an editor                      |
+| `tds`      | `_tmux_directory_session`  | Creates or attaches to a session for the current path    |
 
 ## Configuration Variables
 
