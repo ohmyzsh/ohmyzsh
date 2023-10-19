@@ -1,16 +1,19 @@
 # Settings
 : ${LANDO_ZSH_SITES_DIRECTORY:="$HOME/Sites"}
 : ${LANDO_ZSH_CONFIG_FILE:=.lando.yml}
+: ${LANDO_ZSH_WRAPPED_COMMANDS:="
+  artisan
+  composer
+  drush
+  gulp
+  npm
+  php
+  wp
+  yarn
+"}
 
 # Enable multiple commands with lando.
-function artisan \
-         composer \
-         drush \
-         gulp \
-         npm \
-         php \
-         wp \
-         yarn {
+function ${=LANDO_ZSH_WRAPPED_COMMANDS} {
   # If the lando task is available in `lando --help`, then it means:
   #
   # 1. `lando` is in a project with a `.lando.yml` file.
