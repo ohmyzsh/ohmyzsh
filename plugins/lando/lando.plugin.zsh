@@ -11,15 +11,23 @@ function artisan \
          php \
          wp \
          yarn {
-  if checkForLandoFile; then
-    lando "$0" "$@"
+  # If the lando task is available in `lando --help`, then it means:
+  #
+  # 1. `lando` is in a project with a `.lando.yml` file.
+  # 2. The lando task is available for lando, based on the .lando.yml config file.
+  #
+  # This has a penalty of about 250ms, so we still want to check if the lando file
+  # exists before, which is the fast path. If it exists, checking help output is
+  # still faster than running the command and failing.
+  if _lando_file_exists && lando --help 2>&1 | command grep -Eq "^ +lando $0 "; then
+    command lando "$0" "$@"
   else
     command "$0" "$@"
   fi
 }
 
 # Check for the file in the current and parent directories.
-checkForLandoFile() {
+_lando_file_exists() {
   # Only bother checking for lando within the Sites directory.
   if [[ "$PWD/" != "$LANDO_ZSH_SITES_DIRECTORY"/* ]]; then
     # Not within $LANDO_ZSH_SITES_DIRECTORY
