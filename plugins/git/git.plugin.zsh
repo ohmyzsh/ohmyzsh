@@ -237,14 +237,15 @@ alias gpd='git push --dry-run'
 alias gpf='git push --force-with-lease'
 alias gpf!='git push --force'
 alias gpoat='git push origin --all && git push origin --tags'
+alias gpu='git push upstream'
+alias gpv='git push -v'
+
 alias gpr='git pull --rebase'
 alias gprv='git pull --rebase -v'
 alias gpra='git pull --rebase --autostash'
 alias gprav='git pull --rebase --autostash -v'
 alias gprom='git pull --rebase origin $(git_main_branch)'
 alias gpromi='git pull --rebase=interactive origin $(git_main_branch)'
-alias gpu='git push upstream'
-alias gpv='git push -v'
 
 alias gr='git remote'
 alias gra='git remote add'
@@ -308,6 +309,7 @@ alias gtl='gtl(){ git tag --sort=-v:refname -n -l "${1}*" }; noglob gtl'
 
 alias gunignore='git update-index --no-assume-unchanged'
 alias gunwip='git log -n 1 | grep -q -c "\--wip--" && git reset HEAD~1'
+
 alias glum='git pull upstream $(git_main_branch)'
 alias gluc='git pull upstream $(git_current_branch)'
 
@@ -341,3 +343,21 @@ function grename() {
 }
 
 unset git_version
+
+# Logic for adding warnings on deprecated aliases
+local old_alias new_alias
+for old_alias new_alias (
+  # TODO(2023-10-19): remove deprecated `git pull --rebase` aliases
+  gup     gpr
+  gupv    gprv
+  gupa    gpra
+  gupav   gprav
+  gupom   gprom
+  gupomi  gpromi
+); do
+  aliases[$old_alias]="
+    print -P \"%F{yellow}[oh-my-zsh]: '$old_alias' is a deprecated alias, use '$new_alias' instead.%f\" >&2
+    $new_alias
+  "
+done
+unset old_alias new_alias
