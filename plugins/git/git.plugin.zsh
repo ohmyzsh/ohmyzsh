@@ -166,8 +166,15 @@ alias gclean='git clean --interactive -d'
 alias gcl='git clone --recurse-submodules'
 
 function gccd() {
-  command git clone --recurse-submodules "$@"
-  [[ -d "$_" ]] && cd "$_" || cd "${${_:t}%.git}"
+  # get repo URI from args based on valid formats: https://git-scm.com/docs/git-clone#URLS
+  local repo="${${@[(r)(ssh://*|git://*|ftp(s)#://*|http(s)#://*|*@*)(.git/#)#]}:-$_}"
+
+  # clone repository and exit if it fails
+  command git clone --recurse-submodules "$@" || return
+
+  # if last arg passed was a directory, that's where the repo was cloned
+  # otherwise parse the repo URI and use the last part as the directory
+  [[ -d "$_" ]] && cd "$_" || cd "${${repo:t}%.git/#}"
 }
 compdef _git gccd=git-clone
 
