@@ -141,7 +141,7 @@ function gbds() {
   git for-each-ref refs/heads/ "--format=%(refname:short)" | \
     while read branch; do
       local merge_base=$(git merge-base $default_branch $branch)
-      if [[ '-*' == $(git cherry $default_branch $(git commit-tree $(git rev-parse $branch\^{tree}) -p $merge_base -m _)) ]]; then
+      if [[ $(git cherry $default_branch $(git commit-tree $(git rev-parse $branch\^{tree}) -p $merge_base -m _)) = -* ]]; then
         git branch -D $branch
       fi
     done
