@@ -42,26 +42,31 @@ plugins=(... kubectl)
 | kes     | `kubectl edit svc`                  | Edit services(svc) from the default editor                                                       |
 | kds     | `kubectl describe svc`              | Describe all services in detail                                                                  |
 | kdels   | `kubectl delete svc`                | Delete all services matching passed argument                                                     |
+| kcs   | `kubectl create svc`                | Create a service                     |
 |         |                                     | **Ingress management**                                                                           |
 | kgi     | `kubectl get ingress`               | List ingress resources in ps output format                                                       |
 | kei     | `kubectl edit ingress`              | Edit ingress resource from the default editor                                                    |
 | kdi     | `kubectl describe ingress`          | Describe ingress resource in detail                                                              |
 | kdeli   | `kubectl delete ingress`            | Delete ingress resources matching passed argument                                                |
+| kci   | `kubectl create ingress`            | Create an ingress resource with the specified name                                               |
 |         |                                     | **Namespace management**                                                                         |
 | kgns    | `kubectl get namespaces`            | List the current namespaces in a cluster                                                         |
 | kcn     | `kubectl config set-context --current --namespace` | Change current namespace |
 | kens    | `kubectl edit namespace`            | Edit namespace resource from the default editor                                                  |
 | kdns    | `kubectl describe namespace`        | Describe namespace resource in detail                                                            |
 | kdelns  | `kubectl delete namespace`          | Delete the namespace. WARNING! This deletes everything in the namespace                          |
+| kcns  | `kubectl create namespace`          | Create the namespace with the specified name                          |
 |         |                                     | **ConfigMap management**                                                                         |
 | kgcm    | `kubectl get configmaps`            | List the configmaps in ps output format                                                          |
 | kecm    | `kubectl edit configmap`            | Edit configmap resource from the default editor                                                  |
 | kdcm    | `kubectl describe configmap`        | Describe configmap resource in detail                                                            |
 | kdelcm  | `kubectl delete configmap`          | Delete the configmap                                                                             |
+| kccm  | `kubectl create configmap`          | Create the configmap                                                                             |
 |         |                                     | **Secret management**                                                                            |
 | kgsec   | `kubectl get secret`                | Get secret for decoding                                                                          |
 | kdsec   | `kubectl describe secret`           | Describe secret resource in detail                                                               |
 | kdelsec | `kubectl delete secret`             | Delete the secret                                                                                |
+| kcsec | `kubectl create secret`             | Create the secret                                                                                |
 |         |                                     | **Deployment management**                                                                        |
 | kgd     | `kubectl get deployment`            | Get the deployment                                                                               |
 | kgdw    | `kgd --watch`                       | After getting the deployment, watch for changes                                                  |
@@ -70,6 +75,7 @@ plugins=(... kubectl)
 | kdd     | `kubectl describe deployment`       | Describe deployment resource in detail                                                           |
 | kdeld   | `kubectl delete deployment`         | Delete the deployment                                                                            |
 | ksd     | `kubectl scale deployment`          | Scale a deployment                                                                               |
+| kcd     | `kubectl create deployment`          | Create a deployment                                                                               |
 | krsd    | `kubectl rollout status deployment` | Check the rollout status of a deployment                                                         |
 | kres    | `kubectl set env $@ REFRESHED_AT=...` | Recreate all pods in deployment with zero-downtime                                             |
 |         |                                     | **Rollout management**                                                                           |
@@ -111,6 +117,7 @@ plugins=(... kubectl)
 |         |                                     | **Service Accounts management**                                                                  |
 | kdsa    | `kubectl describe sa`               | Describe a service account in details                                                            |
 | kdelsa  | `kubectl delete sa`                 | Delete the service account                                                                       |
+| kcsa  | `kubectl create sa`                 | Create the service account                                                                       |
 |         |                                     | **DaemonSet management**                                                                         |
 | kgds    | `kubectl get daemonset`             | List all DaemonSets in ps output format                                                          |
 | kgdsw   | `kgds --watch`                      | After listing all DaemonSets, watch for changes                                                  |
@@ -122,11 +129,13 @@ plugins=(... kubectl)
 | kecj    | `kubectl edit cronjob`              | Edit CronJob from the default editor                                                             |
 | kdcj    | `kubectl describe cronjob`          | Describe a CronJob in details                                                                    |
 | kdelcj  | `kubectl delete cronjob`            | Delete the CronJob                                                                               |
+| kccj  | `kubectl create cronjob`            | Create the CronJob                                                                               |
 |         |                                     | **Job management**                                                                               |
 | kgj     | `kubectl get job`                   | List all Job in ps output format                                                                 |
 | kej     | `kubectl edit job`                  | Edit a Job in details                                                                            |
 | kdj     | `kubectl describe job`              | Describe the Job                                                                                 |
 | kdelj   | `kubectl delete job`                | Delete the Job                                                                                   |
+| kcj   | `kubectl create job`                | Create the Job                                                                                   |
 
 ## Wrappers
 

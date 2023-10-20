@@ -36,6 +36,7 @@ alias kcgc='kubectl config get-contexts'
 # General aliases
 alias kdel='kubectl delete'
 alias kdelf='kubectl delete -f'
+alias kc='kubectl create'
 
 # Pod management.
 alias kgp='kubectl get pods'
@@ -61,6 +62,7 @@ alias kgswide='kgs -o wide'
 alias kes='kubectl edit svc'
 alias kds='kubectl describe svc'
 alias kdels='kubectl delete svc'
+alias kcs='kubectl create svc'
 
 # Ingress management
 alias kgi='kubectl get ingress'
@@ -68,6 +70,7 @@ alias kgia='kubectl get ingress --all-namespaces'
 alias kei='kubectl edit ingress'
 alias kdi='kubectl describe ingress'
 alias kdeli='kubectl delete ingress'
+alias kci='kubectl create ingress'
 
 # Namespace management
 alias kgns='kubectl get namespaces'
@@ -75,6 +78,7 @@ alias kens='kubectl edit namespace'
 alias kdns='kubectl describe namespace'
 alias kdelns='kubectl delete namespace'
 alias kcn='kubectl config set-context --current --namespace'
+alias kcns='kubectl create namespace'
 
 # ConfigMap management
 alias kgcm='kubectl get configmaps'
@@ -82,12 +86,14 @@ alias kgcma='kubectl get configmaps --all-namespaces'
 alias kecm='kubectl edit configmap'
 alias kdcm='kubectl describe configmap'
 alias kdelcm='kubectl delete configmap'
+alias kccm='kubectl create configmap'
 
 # Secret management
 alias kgsec='kubectl get secret'
 alias kgseca='kubectl get secret --all-namespaces'
 alias kdsec='kubectl describe secret'
 alias kdelsec='kubectl delete secret'
+alias kcsec='kubectl create secret'
 
 # Deployment management.
 alias kgd='kubectl get deployment'
@@ -99,6 +105,7 @@ alias kdd='kubectl describe deployment'
 alias kdeld='kubectl delete deployment'
 alias ksd='kubectl scale deployment'
 alias krsd='kubectl rollout status deployment'
+alias kcd='kubectl create deployment'
 
 function kres(){
   kubectl set env $@ REFRESHED_AT=$(date +%Y%m%d%H%M%S)
@@ -159,6 +166,7 @@ alias kdelpvc='kubectl delete pvc'
 # Service account management.
 alias kdsa="kubectl describe sa"
 alias kdelsa="kubectl delete sa"
+alias kcsa='kubectl create sa'
 
 # DaemonSet management.
 alias kgds='kubectl get daemonset'
@@ -173,12 +181,14 @@ alias kgcj='kubectl get cronjob'
 alias kecj='kubectl edit cronjob'
 alias kdcj='kubectl describe cronjob'
 alias kdelcj='kubectl delete cronjob'
+alias kccj='kubectl create cronjob'
 
 # Job management.
 alias kgj='kubectl get job'
 alias kej='kubectl edit job'
 alias kdj='kubectl describe job'
 alias kdelj='kubectl delete job'
+alias kcj='kubectl create job'
 
 # Only run if the user actually has kubectl installed
 if (( ${+_comps[kubectl]} )); then
