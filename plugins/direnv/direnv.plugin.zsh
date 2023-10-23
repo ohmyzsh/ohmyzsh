@@ -3,7 +3,7 @@ command -v direnv &>/dev/null || return
 
 _direnv_hook() {
   trap -- '' SIGINT;
-  eval "$(direnv export zsh)";
+  eval "$(direnv hook zsh)";
   trap - SIGINT;
 }
 typeset -ag precmd_functions;
