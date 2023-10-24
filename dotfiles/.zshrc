@@ -182,4 +182,4 @@ if [ -f '/Users/gshirazi/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Us
 if [ -f '/Users/gshirazi/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/gshirazi/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
 
 # The next line enables brew installed site-functions completions
-if [ -d '/usr/local/share/zsh/site-functions' ]; then for f in /uar/local/share/zsh/site-funtions; do . $f; done; fi
+if [ -d '/usr/local/share/zsh/site-functions' ]; then for f in /usr/local/share/zsh/site-functions; do . $f; done; fi
