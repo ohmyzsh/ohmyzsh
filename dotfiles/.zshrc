@@ -4,7 +4,7 @@ export DOTFILES=$HOME/.dotfiles
 #:/usr/local/src:/go
 # echo WELCOME!
 # If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=/usr/local/sbin:$HOME/bin:/usr/local/bin:$PATH
 export GOPATH=$HOME/go
 export GOBIN=$GOPATH/bin
 export PATH=$GOPATH/bin:$PATH
@@ -174,3 +174,9 @@ alias ezo="edit ~/.oh-my-zsh"
 # alias ifconfig='/sbin/ifconfig'
 source $DOTFILES/k8s/kubectl_helpers.sh
 
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/gshirazi/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/gshirazi/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/gshirazi/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/gshirazi/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
