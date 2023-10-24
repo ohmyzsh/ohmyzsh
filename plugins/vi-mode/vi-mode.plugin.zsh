@@ -154,7 +154,8 @@ wrap_clipboard_widgets copy \
     vi-delete vi-delete-char vi-backward-delete-char
 
 wrap_clipboard_widgets paste \
-    vi-put-{before,after}
+    vi-put-{before,after} \
+    put-replace-selection
 
 unfunction wrap_clipboard_widgets
 
