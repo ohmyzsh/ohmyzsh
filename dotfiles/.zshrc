@@ -180,3 +180,6 @@ if [ -f '/Users/gshirazi/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Us
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/gshirazi/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/gshirazi/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+
+# The next line enables brew installed site-functions completions
+if [ -d '/usr/local/share/zsh/site-functions' ]; then for f in /uar/local/share/zsh/site-funtions; do . $f; done; fi
