@@ -3,9 +3,9 @@ on:
   workflow_dispatch: {}
   push:
     paths:
-      - tools/install.sh
-      - .github/workflows/installer
-      - .github/workflows/installer.yml
+      - 'tools/install.sh'
+      - '.github/workflows/installer/**'
+      - '.github/workflows/installer.yml'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
