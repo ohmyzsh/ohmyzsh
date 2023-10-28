@@ -30,6 +30,7 @@ plugins=(... npm)
 | `npmi`  | `npm info`                   | Run npm info                                                    |
 | `npmSe` | `npm search`                 | Run npm search                                                  |
 | `npmrd` | `npm run dev`                | Run npm run dev                                                 |
+| `npmrb` | `npm run build`              | Run npm run build                                               |
 
 ## `npm install` / `npm uninstall` toggle
 
