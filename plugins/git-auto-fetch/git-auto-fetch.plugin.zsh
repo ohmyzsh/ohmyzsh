@@ -29,7 +29,7 @@ function git-fetch-all {
     date -R &>! "$gitdir/FETCH_LOG"
     GIT_SSH_COMMAND="command ssh -o BatchMode=yes" \
     GIT_TERMINAL_PROMPT=0 \
-      command git fetch --all 2>/dev/null &>> "$gitdir/FETCH_LOG"
+      command git fetch --all --recurse-submodules=yes 2>/dev/null &>> "$gitdir/FETCH_LOG"
   ) &|
 }
 
