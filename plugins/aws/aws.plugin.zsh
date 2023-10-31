@@ -266,10 +266,12 @@ if [[ "$AWS_PROFILE_STATE_ENABLED" == true ]]; then
 
   aws_state=($(cat $AWS_STATE_FILE))
   
-  if [[ -s "$AWS_STATE_FILE" ]]; then
-    asp "${aws_state[1]}"
-    test -z "${aws_state[2]}" || asr "${aws_state[2]}"
-  fi
+  export AWS_DEFAULT_PROFILE="${aws_state[1]}"
+  export AWS_PROFILE="$AWS_DEFAULT_PROFILE"
+  export AWS_EB_PROFILE="$AWS_DEFAULT_PROFILE"
+
+  export AWS_REGION="${aws_state[2]}"
+  export AWS_DEFAULT_REGION="$AWS_REGION"
 fi
 
 # Load awscli completions
