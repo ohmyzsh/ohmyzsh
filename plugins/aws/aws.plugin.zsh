@@ -270,7 +270,9 @@ if [[ "$AWS_PROFILE_STATE_ENABLED" == true ]]; then
   export AWS_PROFILE="$AWS_DEFAULT_PROFILE"
   export AWS_EB_PROFILE="$AWS_DEFAULT_PROFILE"
 
-  export AWS_REGION="${aws_state[2]}"
+  test -z "${aws_state[2]}" && AWS_REGION=$(aws configure get region)
+
+  export AWS_REGION=${AWS_REGION:-$aws_state[2]}
   export AWS_DEFAULT_REGION="$AWS_REGION"
 fi
 
