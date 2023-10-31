@@ -7,14 +7,16 @@ function agr() {
 }
 
 # Update state file if enabled
-function aws_update_state() {
+function _aws_update_state() {
   if [[ "$AWS_PROFILE_STATE_ENABLED" == true ]]; then
+    test -d $(dirname ${AWS_STATE_FILE}) || exit 1
     echo "${AWS_PROFILE} ${AWS_REGION}" > "${AWS_STATE_FILE}"
   fi
 }
 
-function aws_clear_state() {
+function _aws_clear_state() {
   if [[ "$AWS_PROFILE_STATE_ENABLED" == true ]]; then
+    test -d $(dirname ${AWS_STATE_FILE}) || exit 1
     echo > "${AWS_STATE_FILE}"
   fi
 }
@@ -23,7 +25,7 @@ function aws_clear_state() {
 function asp() {
   if [[ -z "$1" ]]; then
     unset AWS_DEFAULT_PROFILE AWS_PROFILE AWS_EB_PROFILE AWS_PROFILE_REGION
-    aws_clear_state
+    _aws_clear_state
     echo AWS profile cleared.
     return
   fi
@@ -42,7 +44,7 @@ function asp() {
 
   export AWS_PROFILE_REGION=$(aws configure get region)
 
-  aws_update_state
+  _aws_update_state
 
   if [[ "$2" == "login" ]]; then
     aws sso login
@@ -53,7 +55,7 @@ function asp() {
 function asr() {
   if [[ -z "$1" ]]; then
     unset AWS_DEFAULT_REGION AWS_REGION
-    aws_update_state
+    _aws_update_state
     echo AWS region cleared.
     return
   fi
@@ -67,7 +69,7 @@ function asr() {
 
   export AWS_REGION=$1
   export AWS_DEFAULT_REGION=$1
-  aws_update_state
+  _aws_update_state
 }
 
 # AWS profile switch
@@ -259,12 +261,12 @@ if [[ "$SHOW_AWS_PROMPT" != false && "$RPROMPT" != *'$(aws_prompt_info)'* ]]; th
 fi
 
 if [[ "$AWS_PROFILE_STATE_ENABLED" == true ]]; then
-  export AWS_STATE_FILE="${AWS_STATE_FILE:-/tmp/.aws_current_profile}"
-  export AWS_STATE=($(cat $AWS_STATE_FILE))
+  AWS_STATE_FILE="${AWS_STATE_FILE:-/tmp/.aws_current_profile}"
+  aws_state=($(cat $AWS_STATE_FILE))
   
   if [[ -s "$AWS_STATE_FILE" ]]; then
-    asp "${AWS_STATE[1]}"
-    test -z "${AWS_STATE[2]}" || asr "${AWS_STATE[2]}"
+    asp "${aws_state[1]}"
+    test -z "${aws_state[2]}" || asr "${aws_state[2]}"
   fi
 fi
 
