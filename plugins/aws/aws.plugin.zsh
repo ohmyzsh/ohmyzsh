@@ -17,7 +17,7 @@ function _aws_update_state() {
 function _aws_clear_state() {
   if [[ "$AWS_PROFILE_STATE_ENABLED" == true ]]; then
     test -d $(dirname ${AWS_STATE_FILE}) || exit 1
-    echo > "${AWS_STATE_FILE}"
+    echo -n > "${AWS_STATE_FILE}"
   fi
 }
 
@@ -262,6 +262,8 @@ fi
 
 if [[ "$AWS_PROFILE_STATE_ENABLED" == true ]]; then
   AWS_STATE_FILE="${AWS_STATE_FILE:-/tmp/.aws_current_profile}"
+  test -s "${AWS_STATE_FILE}" || return
+
   aws_state=($(cat $AWS_STATE_FILE))
   
   if [[ -s "$AWS_STATE_FILE" ]]; then
