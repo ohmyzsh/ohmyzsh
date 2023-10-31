@@ -48,7 +48,7 @@ plugins=(... aws)
 * Set `AWS_PROFILE_STATE_ENABLED=true` in your zshrc file if you want the aws profile to persist between shell sessions.
   This option might slow down your shell startup time.
   By default the state file path is `/tmp/.aws_current_profile`. This means that the state won't survive a reboot or otherwise GC.
-  You can control the state file path using the `AWS_PROFILE_STATE_FILE` environment variable.
+  You can control the state file path using the `AWS_STATE_FILE` environment variable.
 
 ## Theme
 
