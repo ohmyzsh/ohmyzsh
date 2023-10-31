@@ -6,10 +6,18 @@ function agr() {
   echo $AWS_REGION
 }
 
+# Update state file if enabled
+function aups() {
+  if [[ "$AWS_PROFILE_STATE_ENABLED" == true ]]; then
+    echo "$1" > "${AWS_PROFILE_STATE_FILE}"
+  fi
+}
+
 # AWS profile selection
 function asp() {
   if [[ -z "$1" ]]; then
     unset AWS_DEFAULT_PROFILE AWS_PROFILE AWS_EB_PROFILE AWS_PROFILE_REGION
+    aups $1
     echo AWS profile cleared.
     return
   fi
@@ -27,6 +35,8 @@ function asp() {
   export AWS_EB_PROFILE=$1
 
   export AWS_PROFILE_REGION=$(aws configure get region)
+
+  aups $1
 
   if [[ "$2" == "login" ]]; then
     aws sso login
@@ -238,6 +248,16 @@ function aws_prompt_info() {
 
 if [[ "$SHOW_AWS_PROMPT" != false && "$RPROMPT" != *'$(aws_prompt_info)'* ]]; then
   RPROMPT='$(aws_prompt_info)'"$RPROMPT"
+fi
+
+if [[ "$AWS_PROFILE_STATE_ENABLED" == true ]]; then
+  if [[ -z "$AWS_PROFILE_STATE_FILE" ]]; then
+    export AWS_PROFILE_STATE_FILE="/tmp/.aws_current_profile"
+  fi
+
+  if [[ -f "$AWS_PROFILE_STATE_FILE" ]]; then
+    asp "$(cat $AWS_PROFILE_STATE_FILE)"
+  fi
 fi
 
 # Load awscli completions
