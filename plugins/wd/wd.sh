@@ -396,7 +396,7 @@ fi
 # disable extendedglob for the complete wd execution time
 setopt | grep -q extendedglob
 wd_extglob_is_set=$?
-[[ $wd_extglob_is_set ]] && setopt noextendedglob
+(( ! $wd_extglob_is_set )) && setopt noextendedglob
 
 # load warp points
 typeset -A points
@@ -484,7 +484,7 @@ fi
 # if not, next time warp will pick up variables from this run
 # remember, there's no sub shell
 
-[[ $wd_extglob_is_set ]] && setopt extendedglob
+(( ! $wd_extglob_is_set )) && setopt extendedglob
 
 unset wd_extglob_is_set
 unset wd_warp
