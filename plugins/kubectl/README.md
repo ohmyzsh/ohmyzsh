@@ -26,6 +26,9 @@ plugins=(... kubectl)
 |         |                                     | **General aliases**                                                                              |
 | kdel    | `kubectl delete`                    | Delete resources by filenames, stdin, resources and names, or by resources and label selector    |
 | kdelf   | `kubectl delete -f`                 | Delete a pod using the type and name specified in -f argument                                    |
+| kdelf!  | `kubectl delete -f --grace-period=0`| Delete a pod using the type and name specified in -f argument with no grace period               |
+| kd      | `kubectl describe `                 | General describe                                                                                 |
+| kg      | `kubectl get`                       | General get                                                                                      |
 |         |                                     | **Pod management**                                                                               |
 | kgp     | `kubectl get pods`                  | List all pods in ps output format                                                                |
 | kgpw    | `kgp --watch`                       | After listing/getting the requested object, watch for changes                                    |
