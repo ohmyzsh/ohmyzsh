@@ -5,6 +5,9 @@ alias bob='php artisan bob::build'
 # Development
 alias pas='php artisan serve'
 
+# Key
+alias pakg='php artisan key:generate'
+
 # Database
 alias pam='php artisan migrate'
 alias pamf='php artisan migrate:fresh'
@@ -39,3 +42,6 @@ alias paql='php artisan queue:listen'
 alias paqr='php artisan queue:retry'
 alias paqt='php artisan queue:table'
 alias paqw='php artisan queue:work'
+
+# Storage
+alias pasl='php artisan storage:link'
