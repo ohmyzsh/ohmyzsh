@@ -283,6 +283,19 @@ compdef _git ggl=git-checkout
 alias gluc='git pull upstream $(git_current_branch)'
 alias glum='git pull upstream $(git_main_branch)'
 alias gp='git push'
+
+function gpa() {
+    for server in $(git remote -v | cut -f1 | uniq) ; do
+        echo "git push $server"; git push $server
+    done
+}
+
+function gpat() {
+    for server in $(git remote -v | cut -f1 | uniq) ; do
+        echo "git push $server --tags"; git push $server --tags
+    done
+}
+
 alias gpd='git push --dry-run'
 
 function ggf() {
