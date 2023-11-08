@@ -166,6 +166,8 @@ alias gclean='git clean --interactive -d'
 alias gcl='git clone --recurse-submodules'
 
 function gccd() {
+  setopt localoptions extendedglob
+
   # get repo URI from args based on valid formats: https://git-scm.com/docs/git-clone#URLS
   local repo="${${@[(r)(ssh://*|git://*|ftp(s)#://*|http(s)#://*|*@*)(.git/#)#]}:-$_}"
 
