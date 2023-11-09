@@ -20,26 +20,31 @@ function current_branch() {
 function git_develop_branch() {
   command git rev-parse --git-dir &>/dev/null || return
   local branch
-  for branch in dev devel development; do
+  for branch in dev devel develop development; do
     if command git show-ref -q --verify refs/heads/$branch; then
       echo $branch
-      return
+      return 0
     fi
   done
+
   echo develop
+  return 1
 }
 
 # Check if main exists and use instead of master
 function git_main_branch() {
   command git rev-parse --git-dir &>/dev/null || return
   local ref
-  for ref in refs/{heads,remotes/{origin,upstream}}/{main,trunk,mainline,default}; do
+  for ref in refs/{heads,remotes/{origin,upstream}}/{main,trunk,mainline,default,master}; do
     if command git show-ref -q --verify $ref; then
       echo ${ref:t}
-      return
+      return 0
     fi
   done
+
+  # If no main branch was found, fall back to master but return error
   echo master
+  return 1
 }
 
 function grename() {
@@ -123,16 +128,20 @@ alias gba='git branch --all'
 alias gbd='git branch --delete'
 alias gbD='git branch --delete --force'
 
-# Copied and modified from James Roeder (jmaroeder) under MIT License
-# https://github.com/jmaroeder/plugin-git/blob/216723ef4f9e8dde399661c39c80bdf73f4076c4/functions/gbda.fish
 function gbda() {
   git branch --no-color --merged | command grep -vE "^([+*]|\s*($(git_main_branch)|$(git_develop_branch))\s*$)" | command xargs git branch --delete 2>/dev/null
+}
 
+# Copied and modified from James Roeder (jmaroeder) under MIT License
+# https://github.com/jmaroeder/plugin-git/blob/216723ef4f9e8dde399661c39c80bdf73f4076c4/functions/gbda.fish
+function gbds() {
   local default_branch=$(git_main_branch)
+  (( ! $? )) || default_branch=$(git_develop_branch)
+
   git for-each-ref refs/heads/ "--format=%(refname:short)" | \
     while read branch; do
       local merge_base=$(git merge-base $default_branch $branch)
-      if [[ '-*' == $(git cherry $default_branch $(git commit-tree $(git rev-parse $branch\^{tree}) -p $merge_base -m _)) ]]; then
+      if [[ $(git cherry $default_branch $(git commit-tree $(git rev-parse $branch\^{tree}) -p $merge_base -m _)) = -* ]]; then
         git branch -D $branch
       fi
     done
@@ -157,8 +166,17 @@ alias gclean='git clean --interactive -d'
 alias gcl='git clone --recurse-submodules'
 
 function gccd() {
-  command git clone --recurse-submodules "$@"
-  [[ -d "$_" ]] && cd "$_" || cd "${${_:t}%.git}"
+  setopt localoptions extendedglob
+
+  # get repo URI from args based on valid formats: https://git-scm.com/docs/git-clone#URLS
+  local repo="${${@[(r)(ssh://*|git://*|ftp(s)#://*|http(s)#://*|*@*)(.git/#)#]}:-$_}"
+
+  # clone repository and exit if it fails
+  command git clone --recurse-submodules "$@" || return
+
+  # if last arg passed was a directory, that's where the repo was cloned
+  # otherwise parse the repo URI and use the last part as the directory
+  [[ -d "$_" ]] && cd "$_" || cd "${${repo:t}%.git/#}"
 }
 compdef _git gccd=git-clone
 
@@ -237,12 +255,12 @@ alias gmom='git merge origin/$(git_main_branch)'
 alias gmum='git merge upstream/$(git_main_branch)'
 alias gmtl='git mergetool --no-prompt'
 alias gmtlvim='git mergetool --no-prompt --tool=vimdiff'
+
 alias gl='git pull'
 alias gpr='git pull --rebase'
-alias gup='git pull --rebase'
-alias gupa='git pull --rebase --autostash'
-alias gupav='git pull --rebase --autostash --verbose'
-alias gupv='git pull --rebase --verbose'
+alias gprv='git pull --rebase -v'
+alias gpra='git pull --rebase --autostash'
+alias gprav='git pull --rebase --autostash -v'
 
 function ggu() {
   [[ "$#" != 1 ]] && local b="$(git_current_branch)"
@@ -250,8 +268,8 @@ function ggu() {
 }
 compdef _git ggu=git-checkout
 
-alias gupom='git pull --rebase origin $(git_main_branch)'
-alias gupomi='git pull --rebase=interactive origin $(git_main_branch)'
+alias gprom='git pull --rebase origin $(git_main_branch)'
+alias gpromi='git pull --rebase=interactive origin $(git_main_branch)'
 alias ggpull='git pull origin "$(git_current_branch)"'
 
 function ggl() {
@@ -379,3 +397,20 @@ alias gk='\gitk --all --branches &!'
 alias gke='\gitk --all $(git log --walk-reflogs --pretty=%h) &!'
 
 unset git_version
+
+# Logic for adding warnings on deprecated aliases
+local old_alias new_alias
+for old_alias new_alias (
+  # TODO(2023-10-19): remove deprecated `git pull --rebase` aliases
+  gup     gpr
+  gupv    gprv
+  gupa    gpra
+  gupav   gprav
+  gupom   gprom
+  gupomi  gpromi
+); do
+  aliases[$old_alias]="
+    print -Pu2 \"%F{yellow}[oh-my-zsh] '%F{red}${old_alias}%F{yellow}' is a deprecated alias, using '%F{green}${new_alias}%F{yellow}' instead.%f\"
+    $new_alias"
+done
+unset old_alias new_alias

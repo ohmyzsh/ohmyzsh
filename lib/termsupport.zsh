@@ -151,7 +151,7 @@ function omz_termsupport_cwd {
   URL_PATH="$(omz_urlencode -P $PWD)" || return 1
 
   # Konsole errors if the HOST is provided
-  [[ -z "$KONSOLE_VERSION" ]] || URL_HOST=""
+  [[ -z "$KONSOLE_PROFILE_NAME" && -z "$KONSOLE_DBUS_SESSION"  ]] || URL_HOST=""
 
   # common control sequence (OSC 7) to set current host and path
   printf "\e]7;file://%s%s\e\\" "${URL_HOST}" "${URL_PATH}"

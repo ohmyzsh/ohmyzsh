@@ -31,7 +31,7 @@ the Command Palette via (F1 or ⇧⌘P) and type shell command to find the Shell
 
 ## Using multiple flavours
 
-If for any reason, you ever require to use multiple flavours of VS Code i.e. VS Code (stable) and VS Code Insiders, you can 
+If for any reason, you ever require to use multiple flavours of VS Code i.e. VS Code (stable) and VS Code Insiders, you can
 manually specify the flavour's executable. Add the following line to the .zshrc file (between the `ZSH_THEME` and the `plugins=()` lines).
 This will make the plugin use your manually defined executable.
 
@@ -53,6 +53,7 @@ source $ZSH/oh-my-zsh.sh
 | Alias                   | Command                        | Description                                                                                                 |
 | ----------------------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------- |
 | vsc                     | code .                         | Open the current folder in VS code                                                                          |
+| vsc `dir`               | code `dir`                     | Open passed folder in VS code                                                                               |
 | vsca `dir`              | code --add `dir`               | Add folder(s) to the last active window                                                                     |
 | vscd `file` `file`      | code --diff `file` `file`      | Compare two files with each other.                                                                          |
 | vscg `file:line[:char]` | code --goto `file:line[:char]` | Open a file at the path on the specified line and character position.                                       |
