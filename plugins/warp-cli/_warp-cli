@@ -1,0 +1,88 @@
+#compdef warp-cli
+
+# this is based on warp-cli 2023.10.120
+
+# Arguments to \_regex_arguments, built up in array $args.
+local -a args reply
+args=( # Command word. Don't care what that is.
+/$'[^\0]#\0'/
+)
+
+_regex_words top-opts "top Options" \
+'-l:Listen for status changes and DNS logs (if enabled)' \
+'--l*isten:Listen for status changes and DNS logs (if enabled)' \
+'--a*ccept-tos:Accept the Terms of Service agreement' \
+'-v:Enable verbose output. Multiple Vs adds more verbosity' \
+'--verb*ose:Enable verbose output. Multiple Vs adds more verbosity' \
+'-h:Print help' \
+'--h*elp:Print help' \
+'-V:Print version' \
+'--vers*ion:Print version'
+args+=("$reply[@]" "#")
+
+_regex_words top-cmds "top Commands" \
+'acce*ss-reauth:Force refresh authentication with Cloudflare Access' \
+'acco*unt:Display the account associated with the current registration' \
+'add-excluded-h*ost:Add an excluded host' \
+'add-excluded-r*oute:Add an excluded IP' \
+'add-f*allback-domain:Add a domain that should be resolved with the fallback resolver instead of WARPs' \
+'add-t*rusted-ssid:Add a trusted Wi-Fi network for which WARP will be automatically disconnected' \
+'clear-c*ustom-endpoint:Remove the custom endpoint setting' \
+'clear-g*ateway:Clear the Gateway ID' \
+'co*nnect:Connect to WARP whenever possible (enable-always-on)' \
+'del*ete:Delete current registration' \
+'dev*ices:Display the list of devices associated with the current registration' \
+'disable-c*onnectivity-checks:Disable the runtime connectivity checks' \
+'disable-d*ns-log:Disable DNS logging' \
+'disable-e*thernet:Automatically disable WARP on ethernet networks (disabled for Zero Trust customers)' \
+'disable-w*ifi:Automatically disable WARP on Wi-Fi networks (disabled for Zero Trust customers)' \
+'dis*connect:Disconnect from WARP (disable-always-on)' \
+'du*mp-excluded-routes:Get split tunnel routing dump. For include-only mode, this shows routes NOT included' \
+'enable-c*onnectivity-checks:Enable the runtime connectivity checks' \
+'enable-d*ns-log:Enable DNS logging (Use with the -l option)' \
+'enable-e*thernet:Allow WARP on ethernet networks (disabled for Zero Trust customers)' \
+'enable-w*ifi:Allow WARP on Wi-Fi networks (disabled for Zero Trust customers)' \
+'ex*clude-private-ips:Exclude private IP ranges from tunnel' \
+'get-a*lternate-network:Get the name of the currently detected alternate network, if any' \
+'get-dev*ice-posture:Get the current device posture' \
+'get-dex*-data:Get the most recently uploaded DEX data. Returns the most recent test for each dex metric' \
+'get-excluded-h*osts:Get the list of excluded hosts' \
+'get-excluded-r*outes:Get the list of excluded routes' \
+'get-f*allback-domains:Get the list of domains that go to the fallback resolver' \
+'get-included-h*osts:Get the list of included hosts' \
+'get-included-r*outes:Get the list of included routes' \
+'get-or*ganization:Get the name of the Teams organization currently in settings' \
+'get-ov*erride-end:Retrieve the admin override end time' \
+'get-p*ause-end:Retrieve the pause end time' \
+'get-s*upport-url:Get the support url for the current Teams organization' \
+'get-v*irtual-networks:List the available virtual networks' \
+'h*elp:Print this message or the help of the given subcommand(s)' \
+'i*s-mode-switch-allowed:Outputs true if Teams users should be able to change connection mode, or false if not' \
+'n*etwork:Display the current network information' \
+'o*verride:Temporarily override MDM policies that require the client to stay enabled' \
+'reg*ister:Register with the WARP API, replacing any existing registration (Must be run before first connection!)' \
+'remove-excluded-h*ost:Remove an excluded host' \
+'remove-excluded-r*oute:Remove an excluded IP' \
+'remove-f*allback-domain:Stop a domain from being resolved with the fallback resolver' \
+'remove-t*rusted-ssid:Remove a trusted Wi-Fi network' \
+'rese*t-settings:Restore settings to default' \
+'rest*ore-fallback-domains:Restore the list of fallback resolver domains to its default value' \
+'rot*ate-keys:Generate a new key-pair, keeping the current registration' \
+'set-c*ustom-endpoint:Force the client to connect to the specified IP and PORT endpoint' \
+'set-f*amilies-mode:Set the families mode' \
+'set-g*ateway:Force the app to use the specified Gateway ID for DNS queries' \
+'set-l*icense:Attach the current registration to a different account using a license key' \
+'set-m*ode:Set the mode' \
+'set-p*roxy-port:Set the listening port for WARP proxy' \
+'sett*ings:Retrieve the current application settings' \
+'set-v*irtual-network:Set the currently connected virtual network via the id from get-virtual-networks' \
+'star*t-packet-capture:Start packet capture' \
+'stat*us:Ask the daemon to send the current status' \
+'sto*p-packet-capture:Stop packet capture' \
+'t*eams-enroll:Enroll with Cloudflare for Teams' \
+'warp-d*ns-stats:Retrieve the DNS stats for the current WARP connection' \
+'warp-s*tats:Retrieve the stats for the current WARP connection'
+args+=("$reply[@]")
+_regex_arguments _warp-cli "${args[@]}"
+
+_warp-cli "$@"
