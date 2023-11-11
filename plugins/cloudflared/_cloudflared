@@ -1,0 +1,206 @@
+#compdef cloudflared
+
+# this is based on cloudflared 2023.10.0
+#TODO: TUNNEL subcommands and options
+
+local -a access_login_opts
+_regex_words access-login-opts "Access Login Options" \
+'-h:Show Help' \
+'--he*lp:Show Help'
+access_login_opts=("$reply[@]")
+
+local -a access_curl_opts
+_regex_words access-curl-opts "Access Curl Options" \
+'--al*low-request:allow the curl request to continue even if the jwt is not present.' \
+'-ar:allow the curl request to continue even if the jwt is not present.'
+access_curl_opts=("$reply[@]")
+
+local -a access_token_opts
+_regex_words access-token-opts "Access Token Options" \
+'--a*pp:url of Access application' \
+'--he*lp:show help' \
+'-h:show help'
+access_token_opts=("$reply[@]")
+
+local -a access_tcp_rdp_ssh_smb_opts
+_regex_words access-tcp-rdp-ssh-smb-opts "Access TCP/RDP/SSH/SMB Options" \
+'--ho*stname:specify the hostname of your application.' \
+'--t*unnel-host:specify the hostname of your application.' \
+'-T:specify the hostname of your application.' \
+'--d*estination:specify the destination address of your SSH server.' \
+'--u*rl:specify the host and port to forward data to Cloudflare edge.' \
+'--li*stener:specify the host and port to forward data to Cloudflare edge.' \
+'-L:specify the host and port to forward data to Cloudflare edge.' \
+'--hea*der:specify additional headers you wish to send.  (accepts multiple inputs)' \
+'-H:specify additional headers you wish to send.  (accepts multiple inputs)' \
+'--service-token-i*d:specify an Access service token ID you wish to use.' \
+'--i*d:specify an Access service token ID you wish to use.' \
+'--service-token-s*ecret:specify an Access service token secret you wish to use.' \
+'--sec*ret:specify an Access service token secret you wish to use.' \
+'--logf*ile:Save application log to this file for reporting issues.' \
+'--log-d*irectory:Save application log to this directory for reporting issues.' \
+'--log-l*evel:Application logging level {debug, info, warn, error, fatal}.' \
+'--logl*evel:Application logging level {debug, info, warn, error, fatal}.' \
+'--hel*p:show help' \
+'-h:show help'
+access_tcp_rdp_ssh_smb_opts=("$reply[@]")
+
+local -a access_sshconfig_opts
+_regex_words access-ssh-config-opts "Access SSH-CONFIG Options" \
+'--ho*stname:specify the hostname of your application.' \
+'--s*hort-lived-cert:specify if you wish to generate short lived certs.' \
+'--he*lp:show help' \
+'-h:show help'
+access_sshconfig_opts=("$reply[@]")
+
+local -a access_sshgen_opts
+_regex_words access-ssh-gen-opts "Access SSH-GEN Options" \
+'--ho*stname:specify the hostname of your application.' \
+'--he*lp:show help' \
+'-h:show help'
+access_sshgen_opts=("$reply[@]")
+
+local -a access_cmds
+_regex_words access-cmds "Access Command" \
+'l*ogin:login (url of access application):$access_login_opts' \
+'c*url:curl {--allow-request, -ar} url {(curl args)...}:$access_curl_opts' \
+'to*ken:token -app=(url of access application):$access_token_opts' \
+'tc*p:tcp subcommand sends data over a proxy to the Cloudflare edge:$access_tcp_rdp_ssh_smb_opts' \
+'r*dp:rdp subcommand sends data over a proxy to the Cloudflare edge:$access_tcp_rdp_ssh_smb_opts' \
+'ssh:ssh subcommand sends data over a proxy to the Cloudflare edge:$access_tcp_rdp_ssh_smb_opts' \
+'sm*b:smb subcommand sends data over a proxy to the Cloudflare edge:$access_tcp_rdp_ssh_smb_opts' \
+'ssh-c*onfig:Prints an example configuration ~/.ssh/config:$access_sshconfig_opts' \
+'ssh-g*en:Generates a short lived certificate for given hostname:$access_sshgen_opts' \
+'h*elp:Shows a list of commands or help for one command'
+access_cmds=("$reply[@]")
+
+local -a tunnel_login_opts
+_regex_words tunnel-login-opts "Tunnel Login Options" \
+'-h:Show help' \
+'--h*elp:Show help'
+tunnel_login_opts=("$reply[@]")
+
+local -a tunnel_create_opts
+_regex_words tunnel-create-opts "Tunnel Create Options" \
+'-h:Show Help' \
+'--he*lp:Show Help' \
+'--o*utput:Render output using given FORMAT. Valid options are json or yaml' \
+'-o:Render output using given FORMAT. Valid options are json or yaml' \
+'--crede*ntials-file:Filepath at which to read/write the tunnel credentials' \
+'--cred-*file:Filepath at which to read/write the tunnel credentials' \
+'--s*ecret:Base64 encoded secret to set for the tunnel. The decoded secret must be at least 32 bytes long.' \
+'-s:Base64 encoded secret to set for the tunnel. The decoded secret must be at least 32 bytes long.'
+tunnel_create_opts=("$reply[@]")
+
+local -a tunnel_route_cmds
+_regex_words tunnel-route-cmds "Tunnel Route Commands" \
+'d*ns:HostnameRoute a hostname by creating a DNS CNAME record to a tunnel' \
+'l*b:Use this tunnel as a load balancer origin, creating pool and load balancer if necessary' \
+'i*p:Configure and query Cloudflare WARP routing to private IP networks made available through Cloudflare Tunnels.' \
+'he*lp:Shows a list of commands or help for one command' \
+'h:Shows a list of commands or help for one command' \
+'-h:Show Help' \
+'--he*lp:Show Help'
+tunnel_route_cmds=("$reply[@]")
+
+local -a tunnel_vnet_cmds
+_regex_words tunnel-vnet-cmds "Tunnel Vnet Commands" \
+'a*dd:Add a new virtual network to which IP routes can be attached' \
+'l*ist:Lists the virtual networks' \
+'d*elete:Delete a virtual network' \
+'u*pdate:Update a virtual network' \
+'h*elp:Shows a list of commands or help for one command'
+tunnel_vnet_cmds=("$reply[@]")
+
+local -a tunnel_run_opts
+_regex_words tunnel-run-opts "Tunnel Run Options" \
+'-h:Show help' \
+'--h*elp:Show help'
+tunnel_run_opts=("$reply[@]")
+
+local -a tunnel_list_opts
+_regex_words tunnel-list-opts "Tunnel List Options" \
+'-h:Show help' \
+'--h*elp:Show help'
+tunnel_list_opts=("$reply[@]")
+
+local -a tunnel_info_opts
+_regex_words tunnel-info-opts "Tunnel Info Options" \
+'-h:Show help' \
+'--h*elp:Show help'
+tunnel_info_opts=("$reply[@]")
+
+local -a tunnel_delete_opts
+_regex_words tunnel-delete-opts "Tunnel Delete Options" \
+'-h:Show help' \
+'--h*elp:Show help'
+tunnel_delete_opts=("$reply[@]")
+
+local -a tunnel_cleanup_opts
+_regex_words tunnel-cleanup-opts "Tunnel Cleanup Options" \
+'-h:Show help' \
+'--h*elp:Show help' \
+'--connector-id:Constraints the cleanup to stop the connections of a single Connector (by its ID).' \
+'-c:Constraints the cleanup to stop the connections of a single Connector (by its ID).'
+tunnel_cleanup_opts=("$reply[@]")
+
+local -a tunnel_token_opts
+_regex_words tunnel-token-opts "Tunnel Token Options" \
+'-h:Show help' \
+'--h*elp:Show help'
+tunnel_token_opts=("$reply[@]")
+
+local -a tunnel_cmds
+_regex_words tunnel-cmds "Tunnel Commands" \
+'lo*gin:Generate a configuration file with your login details:$tunnel_login_opts' \
+'cr*eate:Create a new tunnel with given name:$tunnel_create_opts' \
+'ro*ute:Define which traffic routed from Cloudflare edge to this tunnel:$tunnel_route_cmds' \
+'v*net:Configure and query virtual networks to manage private IP routes with overlapping IPs:$tunnel_vnet_cmds' \
+'ru*n:Proxy a local web server by running the given tunnel:$tunnel_run_opts' \
+'li*st:List existing tunnels:$tunnel_list_opts' \
+'i*nfo:List details about the active connectors for a tunnel:$tunnel_info_opts' \
+'d*elete:Delete existing tunnel by UUID or name:$tunnel_delete_opts' \
+'cl*eanup:Cleanup tunnel connections:$tunnel_cleanup_opts' \
+'t*oken:Fetch the credentials token for an existing tunnel (by name or UUID) that allows to run it:$tunnel_token_opts' \
+'h*elp:Shows a list of commands or help for one command'
+tunnel_cmds=("$reply[@]")
+
+# Arguments to \_regex_arguments, built up in array $args.
+local -a args reply
+args=( # Command word. Don't care what that is.
+/$'[^\0]#\0'/
+)
+
+_regex_words top-opts "top Options" \
+'--crede*ntials-file::Filepath at which to read/write the tunnel credentials' \
+'-cred-*file:Filepath at which to read/write the tunnel credentials' \
+'--r*egion:Cloudflare Edge region to connect to. Omit or set to empty to connect to the global region.' \
+'--edge-i*p-version:Cloudflare Edge IP address version to connect with.' \
+'--edge-b*ind-address:Bind to IP address for outgoing connections to Cloudflare Edge.' \
+'--l*abel:Use this option to give a meaningful label to a specific connector.' \
+'--po*st-quantum:When given creates an experimental post-quantum secure tunnel ' \
+'--pq:When given creates an experimental post-quantum secure tunnel ' \
+'--m*anagement-diagnostics:Enables the in-depth diagnostic routes to be made available over the management service (/debug/pprof, /metrics. etc.)' \
+'--o*verwrite-dns:Overwrites existing DNS records with this hostname' \
+'-f:Overwrites existing DNS records with this hostname' \
+'--he*lp:show help' \
+'-h:show help' \
+'--ve*rsion:Print the version' \
+'-v:Print the version' \
+'-V:Print the version'
+args+=("$reply[@]" "#")
+
+_regex_words top-cmds "top Commands" \
+'u*pdate:Update the agent if a new version exists' \
+'v*ersion:Print the version' \
+'p*roxy-dns:Run a DNS over HTTPS proxy server.' \
+'s*ervice:Manages the cloudflared system service' \
+'h*elp:Shows a list of commands or help for one command' \
+'a*ccess:Forward/Access subcommand:$access_cmds' \
+'ta*il:Stream logs from a remote cloudflared' \
+'tu*nnel:Use Cloudflare Tunnel to expose private services to the Internet or to Cloudflare connected private users:$tunnel_cmds'
+args+=("$reply[@]")
+
+_regex_arguments _cloudflared "${args[@]}"
+
+_cloudflared "$@"
