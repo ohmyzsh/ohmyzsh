@@ -3,6 +3,7 @@
 # common grc.zsh paths
 files=(
   /etc/grc.zsh               # default
+  /usr/share/grc/grc.zsh     # Gentoo Linux (app-misc/grc)
   /usr/local/etc/grc.zsh     # homebrew darwin-x64
   /opt/homebrew/etc/grc.zsh  # homebrew darwin-arm64
 )
