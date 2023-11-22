@@ -13,6 +13,11 @@ function _start_agent() {
     fi
   fi
 
+  if [[ ! -d "$HOME/.ssh" ]]; then
+    echo "[oh-my-zsh] ssh-agent plugin requires ~/.ssh directory"
+    return 1
+  fi
+
   # Set a maximum lifetime for identities added to ssh-agent
   local lifetime
   zstyle -s :omz:plugins:ssh-agent lifetime lifetime

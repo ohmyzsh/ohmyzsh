@@ -59,11 +59,14 @@ function bgnotify_formatted {
   fi
 }
 
-# for macOS, output is "app ID, window ID" (com.googlecode.iterm2, 116)
 function bgnotify_appid {
   if (( ${+commands[osascript]} )); then
+    # output is "app ID, window ID" (com.googlecode.iterm2, 116)
     osascript -e 'tell application (path to frontmost application as text) to get the {id, id of front window}' 2>/dev/null
-  elif (( ${+commands[xprop]} )); then
+  elif [[ -n $WAYLAND_DISPLAY && ${+commands[swaymsg]} && ${+commands[jq]} ]]; then # wayland+sway
+    # output is "app_id, container id" (Alacritty, 1694)
+    swaymsg -t get_tree | jq '.. | select(.type?) | select(.focused==true) | {app_id, id} | join(", ")'
+  elif [[ -n $DISPLAY && ${+commands[xprop]} ]]; then
     xprop -root _NET_ACTIVE_WINDOW 2>/dev/null | cut -d' ' -f5
   else
     echo $EPOCHSECONDS
@@ -71,7 +74,8 @@ function bgnotify_appid {
 }
 
 function bgnotify {
-  # $1: title, $2: message
+  local title="$1"
+  local message="$2"
   if (( ${+commands[terminal-notifier]} )); then # macOS
     local term_id="${bgnotify_termid%%,*}" # remove window id
     if [[ -z "$term_id" ]]; then
@@ -82,18 +86,22 @@ function bgnotify {
     fi
 
     if [[ -z "$term_id" ]]; then
-      terminal-notifier -message "$2" -title "$1" &>/dev/null
+      terminal-notifier -message "$message" -title "$title" &>/dev/null
     else
-      terminal-notifier -message "$2" -title "$1" -activate "$term_id" -sender "$term_id" &>/dev/null
+      terminal-notifier -message "$message" -title "$title" -activate "$term_id" -sender "$term_id" &>/dev/null
     fi
   elif (( ${+commands[growlnotify]} )); then # macOS growl
-    growlnotify -m "$1" "$2"
-  elif (( ${+commands[notify-send]} )); then # GNOME
-    notify-send "$1" "$2"
+    growlnotify -m "$title" "$message"
+  elif (( ${+commands[notify-send]} )); then
+    if [[ -n $ALACRITTY_WINDOW_ID ]]; then
+        notify-send -i Alacritty "$title" "$message"
+    else
+        notify-send "$title" "$message"
+    fi
   elif (( ${+commands[kdialog]} )); then # KDE
-    kdialog --title "$1" --passivepopup  "$2" 5
+    kdialog --title "$title" --passivepopup  "$message" 5
   elif (( ${+commands[notifu]} )); then # cygwin
-    notifu /m "$2" /p "$1"
+    notifu /m "$message" /p "$title"
   fi
 }
 

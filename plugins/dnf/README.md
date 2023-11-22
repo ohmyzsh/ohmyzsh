@@ -10,6 +10,9 @@ To use it, add `dnf` to the plugins array in your zshrc file:
 plugins=(... dnf)
 ```
 
+Classic `dnf` is getting superseded by `dnf5`; this plugin detects the presence
+of `dnf5` and uses it as drop-in alternative to the slower `dnf`.
+
 ## Aliases
 
 | Alias | Command                 | Description              |
