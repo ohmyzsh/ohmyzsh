@@ -63,10 +63,10 @@ function bgnotify_appid {
   if (( ${+commands[osascript]} )); then
     # output is "app ID, window ID" (com.googlecode.iterm2, 116)
     osascript -e 'tell application (path to frontmost application as text) to get the {id, id of front window}' 2>/dev/null
-  elif [[ -n $WAYLAND_DISPLAY && ${+commands[swaymsg]} && ${+commands[jq]} ]]; then # wayland+sway
+  elif [[ -n $WAYLAND_DISPLAY ]] && (( ${+commands[swaymsg]} )) && (( ${+commands[jq]} )); then # wayland+sway
     # output is "app_id, container id" (Alacritty, 1694)
     swaymsg -t get_tree | jq '.. | select(.type?) | select(.focused==true) | {app_id, id} | join(", ")'
-  elif [[ -n $DISPLAY && ${+commands[xprop]} ]]; then
+  elif [[ -n $DISPLAY ]] && (( ${+commands[xprop]} )); then
     xprop -root _NET_ACTIVE_WINDOW 2>/dev/null | cut -d' ' -f5
   else
     echo $EPOCHSECONDS
