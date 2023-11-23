@@ -28,7 +28,7 @@ plugins=(... docker-compose)
 | dcdn      | `docker-compose down`            | Stop and remove containers                                                       |
 | dcl       | `docker-compose logs`            | Show logs of container                                                           |
 | dclf      | `docker-compose logs -f`         | Show logs and follow output                                                      |
-| dclF      | `docker-compose logs -f --tail0` | Just follow logs output                                                          |
+| dclF      | `docker-compose logs -f --tail0` | Just follow recent logs                                                          |
 | dcpull    | `docker-compose pull`            | Pull image of a service                                                          |
 | dcstart   | `docker-compose start`           | Start a container                                                                |
 | dck       | `docker-compose kill`            | Kills containers                                                                 |
