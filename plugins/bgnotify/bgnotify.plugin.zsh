@@ -63,9 +63,9 @@ function bgnotify_appid {
   if (( ${+commands[osascript]} )); then
     # output is "app ID, window ID" (com.googlecode.iterm2, 116)
     osascript -e 'tell application (path to frontmost application as text) to get the {id, id of front window}' 2>/dev/null
-  elif [[ -n $WAYLAND_DISPLAY ]] && (( ${+commands[swaymsg]} )) && (( ${+commands[jq]} )); then # wayland+sway
-    # output is "app_id, container id" (Alacritty, 1694)
-    swaymsg -t get_tree | jq '.. | select(.type?) | select(.focused==true) | {app_id, id} | join(", ")'
+  elif [[ -n $WAYLAND_DISPLAY ]] && (( ${+commands[swaymsg]} )); then # wayland+sway
+    local app_id=$(find_sway_appid)
+    [[ -n "$app_id" ]] && echo "$app_id" || echo $EPOCHSECONDS
   elif [[ -z $WAYLAND_DISPLAY ]] && [[ -n $DISPLAY ]] && (( ${+commands[xprop]} )); then
     xprop -root _NET_ACTIVE_WINDOW 2>/dev/null | cut -d' ' -f5
   else
@@ -73,19 +73,55 @@ function bgnotify_appid {
   fi
 }
 
+
+function find_sway_appid {
+  # output is "app_id,container_id", for example "Alacritty,1694"
+  # see example swaymsg output: https://github.com/ohmyzsh/ohmyzsh/files/13463939/output.json
+  if (( ${+commands[jq]} )); then
+    swaymsg -t get_tree | jq '.. | select(.type?) | select(.focused==true) | {app_id, id} | join(",")'
+  else
+    swaymsg -t get_tree | awk '
+      BEGIN { Id = ""; Appid = ""; FocusNesting = -1; Nesting = 0 }
+      {
+        # Enter a block
+        if ($0 ~ /.*{$/) Nesting++
+
+        # Exit a block. If Nesting is now less than FocusNesting, we have the data we are looking for
+        if ($0 ~ /^[[:blank:]]*}.*/) { Nesting--; if (FocusNesting > 0 && Nesting < FocusNesting) exit 0 }
+
+        # Save the Id, it is potentially what we are looking for
+        if ($0 ~ /^[[:blank:]]*"id": [0-9]*,?$/)    { sub(/^[[:blank:]]*"id": /, "");      sub(/,$/,  ""); Id = $0 }
+
+        # Save the Appid, it is potentially what we are looking for
+        if ($0 ~ /^[[:blank:]]*"app_id": ".*",?$/)  { sub(/^[[:blank:]]*"app_id": "/, ""); sub(/",$/, ""); Appid = $0 }
+
+        # Window is focused, this nesting block contains the Id and Appid we want!
+        if ($0 ~ /^[[:blank:]]*"focused": true,?$/) { FocusNesting = Nesting }
+      }
+      END {
+        if (Appid != "" && Id != "" && FocusNesting != -1) print Appid "," Id
+        else print ""
+      }'
+  fi
+}
+
+function find_term_id {
+  local term_id="${bgnotify_termid%%,*}" # remove window id
+  if [[ -z "$term_id" ]]; then
+    case "$TERM_PROGRAM" in
+      iTerm.app) term_id='com.googlecode.iterm2' ;;
+      Apple_Terminal) term_id='com.apple.terminal' ;;
+    esac
+  fi
+  echo "$term_id"
+}
+
 function bgnotify {
   local title="$1"
   local message="$2"
   local icon="$3"
   if (( ${+commands[terminal-notifier]} )); then # macOS
-    local term_id="${bgnotify_termid%%,*}" # remove window id
-    if [[ -z "$term_id" ]]; then
-      case "$TERM_PROGRAM" in
-      iTerm.app) term_id='com.googlecode.iterm2' ;;
-      Apple_Terminal) term_id='com.apple.terminal' ;;
-      esac
-    fi
-
+    local term_id=$(find_term_id)
     terminal-notifier -message "$message" -title "$title" ${=icon:+-appIcon "$icon"} ${=term_id:+-activate "$term_id" -sender "$term_id"} &>/dev/null
   elif (( ${+commands[growlnotify]} )); then # macOS growl
     growlnotify -m "$title" "$message"
