@@ -59,6 +59,7 @@
 [[ -z $HISTORY_BASE ]] && HISTORY_BASE="$HOME/.directory_history"
 [[ -z $HISTORY_START_WITH_GLOBAL ]] && HISTORY_START_WITH_GLOBAL=false
 [[ -z $PER_DIRECTORY_HISTORY_TOGGLE ]] && PER_DIRECTORY_HISTORY_TOGGLE='^G'
+[[ -z $PER_DIRECTORY_HISTORY_PRINT_MODE_CHANGE ]] && PER_DIRECTORY_HISTORY_PRINT_MODE_CHANGE=true
 
 #-------------------------------------------------------------------------------
 # toggle global/directory history used for searching - ctrl-G by default
@@ -68,13 +69,15 @@ function per-directory-history-toggle-history() {
   if [[ $_per_directory_history_is_global == true ]]; then
     _per-directory-history-set-directory-history
     _per_directory_history_is_global=false
-    zle -I
-    echo "using local history"
+    if [[ $PER_DIRECTORY_HISTORY_PRINT_MODE_CHANGE == true ]]; then
+      zle -M "using local history"
+    fi
   else
     _per-directory-history-set-global-history
     _per_directory_history_is_global=true
-    zle -I
-    echo "using global history"
+    if [[ $PER_DIRECTORY_HISTORY_PRINT_MODE_CHANGE == true ]]; then
+      zle -M "using global history"
+    fi
   fi
 }
 
