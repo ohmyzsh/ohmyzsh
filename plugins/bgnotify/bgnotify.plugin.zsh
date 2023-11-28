@@ -71,13 +71,13 @@ function find_sway_appid {
       if ($0 ~ /^[[:blank:]]*}.*/) { Nesting--; if (FocusNesting > 0 && Nesting < FocusNesting) exit 0 }
 
       # Save the Id, it is potentially what we are looking for
-      if ($0 ~ /^[[:blank:]]*"id": [0-9]*,$/)    { sub(/^[[:blank:]]*"id": /, "");      sub(/,$/,  ""); Id = $0 }
+      if ($0 ~ /^[[:blank:]]*"id": [0-9]*,?$/)    { sub(/^[[:blank:]]*"id": /, "");      sub(/,$/,  ""); Id = $0 }
 
       # Save the Appid, it is potentially what we are looking for
-      if ($0 ~ /^[[:blank:]]*"app_id": ".*",$/)  { sub(/^[[:blank:]]*"app_id": "/, ""); sub(/",$/, ""); Appid = $0 }
+      if ($0 ~ /^[[:blank:]]*"app_id": ".*",?$/)  { sub(/^[[:blank:]]*"app_id": "/, ""); sub(/",$/, ""); Appid = $0 }
 
       # Window is focused, this nesting block contains the Id and Appid we want!
-      if ($0 ~ /^[[:blank:]]*"focused": true,$/) { FocusNesting = Nesting }
+      if ($0 ~ /^[[:blank:]]*"focused": true,?$/) { FocusNesting = Nesting }
     }
     END {
       if (Appid != "" && Id != "" && FocusNesting != -1) print Appid "," Id
