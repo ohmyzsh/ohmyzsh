@@ -79,6 +79,8 @@ function per-directory-history-toggle-history() {
       zle -M "using global history"
     fi
   fi
+  zle .push-line
+  zle .accept-line
 }
 
 autoload per-directory-history-toggle-history
