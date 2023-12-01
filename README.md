@@ -109,7 +109,7 @@ wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
 sh install.sh
 ```
 
-Like with the basic installation, if the above URL times out or otherwise fails, you may have to substitute the URL for `https://install.ohmyz.sh` to be able to get the script.
+If the above URL times out or otherwise fails, you may have to substitute the URL for `https://install.ohmyz.sh` to be able to get the script.
 
 ## Using Oh My Zsh
 
@@ -229,6 +229,8 @@ the default shell, and it also won't run `zsh` when the installation has finishe
 ```sh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 ```
+
+If you're in China, India, or another country that blocks `raw.githubusercontent.com`, you may have to substitute the URL for `https://install.ohmyz.sh` for it to install.
 
 #### Installing From A Forked Repository
 
