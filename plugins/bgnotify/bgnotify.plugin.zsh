@@ -27,7 +27,7 @@ function bgnotify_end {
     # check if Terminal app is not active
     [[ $(bgnotify_appid) != "$bgnotify_termid" ]] || return
 
-    printf '\a' # beep sound
+    [[ $bgnotify_bell = true ]] && printf '\a' # beep sound
     bgnotify_formatted "$exit_status" "$bgnotify_lastcmd" "$elapsed"
   } always {
     bgnotify_timestamp=0
@@ -135,6 +135,9 @@ function bgnotify {
 }
 
 ## Defaults
+
+# enable terminal bell on notify by default
+bgnotify_bell=${bgnotify_bell:-true}
 
 # notify if command took longer than 5s by default
 bgnotify_threshold=${bgnotify_threshold:-5}
