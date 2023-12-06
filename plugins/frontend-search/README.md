@@ -60,6 +60,7 @@ Available search contexts are:
 | typescript    | `https://google.com/search?as_sitesearch=www.typescriptlang.org/docs&as_q=` |
 | unheap        | `http://www.unheap.com/?s=`                                                 |
 | vuejs         | `https://www.google.com/search?as_sitesearch=vuejs.org&as_q=`               |
+| nextjs        | `https://www.google.com/search?as_sitesearch=nextjs.org&as_q=`              |
 
 If you want to have another context, open an Issue and tell us!
 
