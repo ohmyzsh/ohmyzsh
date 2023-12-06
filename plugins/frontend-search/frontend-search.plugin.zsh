@@ -30,10 +30,16 @@ alias vuejs='frontend vuejs'
 alias nextjs='frontend nextjs'
 
 function _frontend_fallback() {
-  case "$FRONTEND_SEARCH_FALLBACK" in
-    duckduckgo) echo "https://duckduckgo.com/?sites=$1&q=" ;;
-    *) echo "https://google.com/search?as_sitesearch=$1&as_q=" ;;
-  esac
+  if [[ "$FRONTEND_SEARCH_FALLBACK_LUCKY" == "true" ]]; then
+    case true in
+      *) echo "https://duckduckgo.com/?q=!ducky+site%3A$1+" ;;
+    esac
+  else
+    case "$FRONTEND_SEARCH_FALLBACK" in
+      duckduckgo) echo "https://duckduckgo.com/?sites=$1&q=" ;;
+      *) echo "https://google.com/search?as_sitesearch=$1&as_q=" ;;
+    esac
+  fi
 }
 
 function frontend() {
