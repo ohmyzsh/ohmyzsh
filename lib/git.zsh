@@ -37,6 +37,13 @@ function git_prompt_info() {
 function parse_git_dirty() {
   local STATUS
   local -a FLAGS
+
+  # The process of checking whether the directory is dirty in a large GIT project is extremely slow.
+  # To enhance user experience, we are bypassing this step altogether.
+  gitdir=$(__git_prompt_git rev-parse --git-dir)
+  size=$(du -s "$gitdir" | cut -f1)
+  [ "$size" -gt 102400 ] && return
+
   FLAGS=('--porcelain')
   if [[ "$(__git_prompt_git config --get oh-my-zsh.hide-dirty)" != "1" ]]; then
     if [[ "${DISABLE_UNTRACKED_FILES_DIRTY:-}" == "true" ]]; then
