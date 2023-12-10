@@ -3,6 +3,7 @@
 #   https://github.com/MarsiBarsi (original author)
 #   https://github.com/babakks
 #   https://github.com/SteelShot
+#   https://github.com/AliSajid
 
 # Verify if any manual user choice of VS Code exists first.
 if [[ -n "$VSCODE" ]] && ! which $VSCODE &>/dev/null; then
@@ -46,3 +47,5 @@ alias vscue="$VSCODE --uninstall-extension"
 alias vscv="$VSCODE --verbose"
 alias vscl="$VSCODE --log"
 alias vscde="$VSCODE --disable-extensions"
+
+alias vscp="$VSCODE --profile"
