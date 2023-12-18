@@ -11,7 +11,8 @@ from typing import Optional, TypedDict
 TMP_DIR = os.path.join(os.environ.get("TMP_DIR", "/tmp"), "ohmyzsh")
 # Relative path to dependencies.yml file
 DEPS_YAML_FILE = ".github/dependencies.yml"
-
+# Dry run flag
+DRY_RUN = os.environ.get("DRY_RUN", "0") == "1"
 
 import timeit
 class CodeTimer:
@@ -53,6 +54,7 @@ class DependencyYAML(TypedDict):
 
 class UpdateStatus(TypedDict):
   has_updates: bool
+  version: Optional[str]
   compare_url: Optional[str]
   head_ref: Optional[str]
   head_url: Optional[str]
@@ -69,6 +71,9 @@ class CommandRunner:
 
   @staticmethod
   def run_or_fail(command: list[str], stage: str, *args, **kwargs):
+    if DRY_RUN and command[0] == "gh":
+      command.insert(0, "echo")
+
     result = subprocess.run(command, *args, capture_output=True, **kwargs)
 
     if result.returncode != 0:
@@ -115,13 +120,16 @@ class Dependency:
 
     self.name: str = ""
     self.desc: str = ""
+    self.kind: str = ""
 
     match path.split("/"):
       case ["plugins", name]:
         self.name = name
+        self.kind = "plugin"
         self.desc = f"{name} plugin"
       case ["themes", name]:
         self.name = name.replace(".zsh-theme", "")
+        self.kind = "theme"
         self.desc = f"{self.name} theme"
       case _:
         self.name = self.desc = path
@@ -148,21 +156,27 @@ class Dependency:
 
     # Check for updates
     repo = self.values["repo"]
-    branch = self.values["branch"]
+    remote_branch = self.values["branch"]
     version = self.values["version"]
+    is_tag = version.startswith("tag:")
 
     try:
       with CodeTimer(f"update check: {repo}"):
-        status = GitHub.check_updates(repo, branch, version)
+        if is_tag:
+          status = GitHub.check_newer_tag(repo, version.replace("tag:", ""))
+        else:
+          status = GitHub.check_updates(repo, remote_branch, version)
+
       if status["has_updates"]:
         short_sha = status["head_ref"][:8]
+        new_version = status["version"] if is_tag else short_sha
 
         try:
           # Create new branch
-          branch = Git.create_branch(self.path, short_sha)
+          branch = Git.create_branch(self.path, new_version)
 
           # Update dependencies.yml file
-          self.__update_yaml(status["head_ref"])
+          self.__update_yaml(f"tag:{new_version}" if is_tag else status["version"])
 
           # Update dependency files
           self.__apply_upstream_changes()
@@ -170,13 +184,16 @@ class Dependency:
           # Add all changes and commit
           Git.add_and_commit(self.name, short_sha)
 
+          # Push changes to remote
+          Git.push(branch)
+
           # Create GitHub PR
           GitHub.create_pr(
             branch,
-            f"feat({self.name}): update to version {short_sha}",
+            f"feat({self.name}): update to version {new_version}",
             f"""## Description
 
-Update for **{self.desc}**: update to version [{short_sha}]({status['head_url']}).
+Update for **{self.desc}**: update to version [{new_version}]({status['head_url']}).
 Check out the [list of changes]({status['compare_url']}).
 """
           )
@@ -200,13 +217,13 @@ Check out the [list of changes]({status['compare_url']}).
             sys.exit(1)
 
           # Create a GitHub issue to notify maintainer
-          title = f"{self.path}: update to {short_sha}"
+          title = f"{self.path}: update to {new_version}"
           body = (
             f"""## Description
 
-There is a new version of `{self.desc}` available.
+There is a new version of `{self.name}` {self.kind} available.
 
-New version: [{short_sha}]({status['head_url']})
+New version: [{new_version}]({status['head_url']})
 Check out the [list of changes]({status['compare_url']}).
 """
           )
@@ -272,6 +289,7 @@ class Git:
       print(f"Cloning {remote_url} to {repo_dir} and checking out {branch}", file=sys.stderr)
       CommandRunner.run_or_fail(["git", "clone", "--depth=1", "-b", branch, remote_url, repo_dir], stage="Clone")
 
+  @staticmethod
   def create_branch(path: str, version: str):
     # Get current branch name
     result = CommandRunner.run_or_fail(["git", "rev-parse", "--abbrev-ref", "HEAD"], stage="GetDefaultBranch")
@@ -306,12 +324,53 @@ class Git:
     ], stage="CreateCommit", env=clean_env)
 
   @staticmethod
+  def push(branch: str):
+    CommandRunner.run_or_fail(["git", "push", "-u", "origin", branch], stage="PushBranch")
+
+  @staticmethod
   def clean_repo():
     CommandRunner.run_or_fail(["git", "reset", "--hard", "HEAD"], stage="ResetRepository")
     CommandRunner.run_or_fail(["git", "checkout", Git.default_branch], stage="CheckoutDefaultBranch")
 
 
 class GitHub:
+  @staticmethod
+  def check_newer_tag(repo, current_tag) -> UpdateStatus:
+    # GET /repos/:owner/:repo/git/refs/tags
+    url = f"https://api.github.com/repos/{repo}/git/refs/tags"
+
+    # Send a GET request to the GitHub API
+    response = requests.get(url)
+
+    # If the request was successful
+    if response.status_code == 200:
+      # Parse the JSON response
+      data = response.json()
+
+      if len(data) == 0:
+        return {
+          "has_updates": False,
+        }
+
+      latest_ref = data[-1]
+      latest_tag = latest_ref["ref"].replace("refs/tags/", "")
+
+      if latest_tag == current_tag:
+        return {
+          "has_updates": False,
+        }
+
+      return {
+        "has_updates": True,
+        "version": latest_tag,
+        "compare_url": f"https://github.com/{repo}/compare/{current_tag}...{latest_tag}",
+        "head_ref": latest_ref["object"]["sha"],
+        "head_url": f"https://github.com/{repo}/releases/tag/{latest_tag}",
+      }
+    else:
+      # If the request was not successful, raise an exception
+      raise Exception(f"GitHub API request failed with status code {response.status_code}: {response.json()}")
+
   @staticmethod
   def check_updates(repo, branch, version) -> UpdateStatus:
     # TODO: add support for semver updating (based on tags)
@@ -337,6 +396,7 @@ class GitHub:
 
       return {
         "has_updates": data["status"] != "identical",
+        "version": data["commits"][-1]["sha"],
         "compare_url": data["permalink_url"],
         "head_ref": data["commits"][-1]["sha"],
         "head_url": data["commits"][-1]["html_url"]
@@ -362,6 +422,7 @@ class GitHub:
       "gh",
       "pr",
       "create",
+      "-B", Git.default_branch,
       "-H", branch,
       "-t", title,
       "-b", body
