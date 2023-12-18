@@ -8,13 +8,12 @@ jobs:
   check:
     name: Check for updates
     runs-on: ubuntu-latest
-    container: alpine:latest
     steps:
       - name: Checkout
         if: github.repository == 'ohmyzsh/ohmyzsh'
         uses: actions/checkout@v4
       - name: Authenticate as @ohmyzsh
-        uses: ohmyzsh/github-app-token@b62528385c34dbc9f38e5f4225ac829252d1ea92
+        uses: ohmyzsh/github-app-token@v2
         with:
           app-id: ${{ secrets.OHMYZSH_APP_ID }}
           private-key: ${{ secrets.OHMYZSH_APP_PRIVATE_KEY }}
