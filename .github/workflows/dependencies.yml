@@ -15,8 +15,8 @@ jobs:
       - name: Authenticate as @ohmyzsh
         uses: ohmyzsh/github-app-token@v2
         with:
-          app-id: ${{ secrets.OHMYZSH_APP_ID }}
-          private-key: ${{ secrets.OHMYZSH_APP_PRIVATE_KEY }}
+          app_id: ${{ secrets.OHMYZSH_APP_ID }}
+          private_key: ${{ secrets.OHMYZSH_APP_PRIVATE_KEY }}
       - name: Process dependencies
         env:
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
