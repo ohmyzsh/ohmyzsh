@@ -254,11 +254,27 @@ prompt_aws() {
   esac
 }
 
+prompt_kubecontext() {
+  [[ -z "$(which kubectl)" ]] && return
+  local kube_prompt="k8s: "
+  local current_context="$(kubectl config current-context)"
+  local current_namespace="$(kubectl config get-contexts --no-headers | grep '*' | awk '{print $5}')"
+  [[ -z "${current_context}" ]] && return
+  kube_prompt+="${current_context}"
+  [[ "${current_namespace}" ]] && [[ "${current_namespace}" != "default" ]]&& kube_prompt+="/${current_namespace}"
+
+  case "$kube_prompt" in
+    *prod*|*production*) prompt_segment red black "${kube_prompt}" ;;
+    *) prompt_segment cyan $CURRENT_FG "${kube_prompt}" ;;
+  esac
+}
+
 ## Main prompt
 build_prompt() {
   RETVAL=$?
   prompt_status
   prompt_virtualenv
+  prompt_kubecontext
   prompt_aws
   prompt_context
   prompt_dir
