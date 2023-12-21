@@ -21,11 +21,11 @@ function bgnotify_end {
     local elapsed=$(( EPOCHSECONDS - bgnotify_timestamp ))
 
     # check time elapsed
-    [[ $bgnotify_timestamp -gt 0 ]] || return
-    [[ $elapsed -ge $bgnotify_threshold ]] || return
+    [[ $bgnotify_timestamp -gt 0 ]] || return 0
+    [[ $elapsed -ge $bgnotify_threshold ]] || return 0
 
     # check if Terminal app is not active
-    [[ $(bgnotify_appid) != "$bgnotify_termid" ]] || return
+    [[ $(bgnotify_appid) != "$bgnotify_termid" ]] || return 0
 
     [[ $bgnotify_bell = true ]] && printf '\a' # beep sound
     bgnotify_formatted "$exit_status" "$bgnotify_lastcmd" "$elapsed"
