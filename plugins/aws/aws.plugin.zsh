@@ -30,6 +30,8 @@ function asp() {
 
   if [[ "$2" == "login" ]]; then
     aws sso login
+  elif [[ "$2" == "logout" ]]; then
+    aws sso logout
   fi
 }
 
