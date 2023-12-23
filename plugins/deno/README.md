@@ -16,5 +16,6 @@ This plugin sets up completion and aliases for [Deno](https://deno.land).
 | drA   | deno run -A         |
 | drw   | deno run --watch    |
 | dru   | deno run --unstable |
+| dt    | deno task           |
 | dts   | deno test           |
 | dup   | deno upgrade        |
