@@ -602,6 +602,7 @@ __docker_container_subcommand() {
     opts_create_run=(
         "($help -a --attach)"{-a=,--attach=}"[Attach to stdin, stdout or stderr]:device:(STDIN STDOUT STDERR)"
         "($help)*--add-host=[Add a custom host-to-IP mapping]:host\:ip mapping: "
+        "($help)*--annotation=[Add an annotation to the container (passed through to the OCI runtime)]:annotations: "
         "($help)*--blkio-weight-device=[Block IO (relative device weight)]:device:Block IO weight: "
         "($help)*--cap-add=[Add Linux capabilities]:capability: "
         "($help)*--cap-drop=[Drop Linux capabilities]:capability: "
@@ -662,7 +663,7 @@ __docker_container_subcommand() {
         "($help)*--ulimit=[ulimit options]:ulimit: "
         "($help)--userns=[Container user namespace]:user namespace:(host)"
         "($help)--tmpfs[mount tmpfs]"
-        "($help)*-v[Bind mount a volume]:volume: "
+        "($help)*-v[Bind mount a volume]:volume:_directories -W / -P '/' -S '\:' -r '/ '"
         "($help)--volume-driver=[Optional volume driver for the container]:volume driver:(local)"
         "($help)*--volumes-from=[Mount volumes from the specified container]:volume: "
         "($help -w --workdir)"{-w=,--workdir=}"[Working directory inside the container]:directory:_directories"
@@ -2527,6 +2528,8 @@ __docker_volume_subcommand() {
         (prune)
             _arguments $(__docker_arguments) \
                 $opts_help \
+                "($help -a --all)"{-a,--all}"[Remove all unused local volumes, not just anonymous ones]" \
+                "($help)*--filter=[Filter values]:filter:__docker_complete_prune_filters" \
                 "($help -f --force)"{-f,--force}"[Do not prompt for confirmation]" && ret=0
             ;;
         (rm)
@@ -2765,8 +2768,8 @@ __docker_subcommand() {
                 "($help)--live-restore[Enable live restore of docker when containers are still running]" \
                 "($help)--log-driver=[Default driver for container logs]:logging driver:__docker_complete_log_drivers" \
                 "($help)*--log-opt=[Default log driver options for containers]:log driver options:__docker_complete_log_options" \
-                "($help)--max-concurrent-downloads[Set the max concurrent downloads for each pull]" \
-                "($help)--max-concurrent-uploads[Set the max concurrent uploads for each push]" \
+                "($help)--max-concurrent-downloads[Set the max concurrent downloads]" \
+                "($help)--max-concurrent-uploads[Set the max concurrent uploads]" \
                 "($help)--max-download-attempts[Set the max download attempts for each pull]" \
                 "($help)--mtu=[Network MTU]:mtu:(0 576 1420 1500 9000)" \
                 "($help)--oom-score-adjust=[Set the oom_score_adj for the daemon]:oom-score:(-500)" \
@@ -2774,7 +2777,7 @@ __docker_subcommand() {
                 "($help)--raw-logs[Full timestamps without ANSI coloring]" \
                 "($help)*--registry-mirror=[Preferred registry mirror]:registry mirror: " \
                 "($help)--seccomp-profile=[Path to seccomp profile]:path:_files -g \"*.json\"" \
-                "($help -s --storage-driver)"{-s=,--storage-driver=}"[Storage driver to use]:driver:(aufs btrfs devicemapper overlay overlay2 vfs zfs)" \
+                "($help -s --storage-driver)"{-s=,--storage-driver=}"[Storage driver to use]:driver:(btrfs devicemapper overlay2 vfs zfs)" \
                 "($help)--selinux-enabled[Enable selinux support]" \
                 "($help)--shutdown-timeout=[Set the shutdown timeout value in seconds]:time: " \
                 "($help)*--storage-opt=[Storage driver options]:storage driver options: " \

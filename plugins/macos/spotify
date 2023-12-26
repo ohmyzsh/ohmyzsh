@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 function spotify() {
-# Copyright (c) 2012--2019 Harish Narayanan <mail@harishnarayanan.org>
+# Copyright (c) 2012--2023 Harish Narayanan <mail@harishnarayanan.org>
 #
 # Contains numerous helpful contributions from Jorge Colindres, Thomas
 # Pritchard, iLan Epstein, Gabriele Bonetti, Sean Heller, Eric Martin
@@ -35,6 +35,9 @@ if ! [[ -f "${USER_CONFIG_FILE}" ]]; then
 fi
 source "${USER_CONFIG_FILE}";
 
+# Set the percent change in volume for vol up and vol down
+VOL_INCREMENT=10
+
 showAPIHelp() {
     echo;
     echo "Connecting to Spotify's API:";
@@ -43,7 +46,7 @@ showAPIHelp() {
     echo "  find music by name. It is very likely you want this feature!";
     echo;
     echo "  To get this to work, you need to sign up (or in) and create an 'Application' at:";
-    echo "  https://developer.spotify.com/my-applications/#!/applications/create";
+    echo "  https://developer.spotify.com/dashboard/create";
     echo;
     echo "  Once you've created an application, find the 'Client ID' and 'Client Secret'";
     echo "  values, and enter them into your shpotify config file at '${USER_CONFIG_FILE}'";
@@ -170,12 +173,12 @@ while [ $# -gt 0 ]; do
                 if [ -z "${CLIENT_ID}" ]; then
                     cecho "Invalid Client ID, please update ${USER_CONFIG_FILE}";
                     showAPIHelp;
-                    return 1
+                    return 1;
                 fi
                 if [ -z "${CLIENT_SECRET}" ]; then
                     cecho "Invalid Client Secret, please update ${USER_CONFIG_FILE}";
                     showAPIHelp;
-                    return 1
+                    return 1;
                 fi
                 SHPOTIFY_CREDENTIALS=$(printf "${CLIENT_ID}:${CLIENT_SECRET}" | base64 | tr -d "\n"|tr -d '\r');
                 SPOTIFY_PLAY_URI="";
@@ -198,7 +201,7 @@ while [ $# -gt 0 ]; do
                     fi
                     SPOTIFY_ACCESS_TOKEN=$( \
                         printf "${SPOTIFY_TOKEN_RESPONSE_DATA}" \
-                        | grep -E -o '"access_token":".*",' \
+                        | command grep -E -o '"access_token":".*",' \
                         | sed 's/"access_token"://g' \
                         | sed 's/"//g' \
                         | sed 's/,.*//g' \
@@ -219,9 +222,8 @@ while [ $# -gt 0 ]; do
                             -H "Accept: application/json" \
                             --data-urlencode "q=$Q" \
                             -d "type=$type&limit=1&offset=0" \
-                        | grep -E -o "spotify:$type:[a-zA-Z0-9]+" -m 1
+                        | command grep -E -o "spotify:$type:[a-zA-Z0-9]+" -m 1
                     )
-                    echo "play uri: ${SPOTIFY_PLAY_URI}"
                 }
 
                 case $2 in
@@ -235,11 +237,11 @@ while [ $# -gt 0 ]; do
 
                         results=$( \
                             curl -s -G $SPOTIFY_SEARCH_API --data-urlencode "q=$Q" -d "type=playlist&limit=10&offset=0" -H "Accept: application/json" -H "Authorization: Bearer ${SPOTIFY_ACCESS_TOKEN}" \
-                            | grep -E -o "spotify:playlist:[a-zA-Z0-9]+" -m 10 \
+                            | command grep -E -o "spotify:playlist:[a-zA-Z0-9]+" -m 10 \
                         )
 
                         count=$( \
-                            echo "$results" | grep -c "spotify:playlist" \
+                            echo "$results" | command grep -c "spotify:playlist" \
                         )
 
                         if [ "$count" -gt 0 ]; then
@@ -333,16 +335,16 @@ while [ $# -gt 0 ]; do
                 cecho "Current Spotify volume level is $vol.";
                 break ;
             elif [ "$2" = "up" ]; then
-                if [ $vol -le 90 ]; then
-                    newvol=$(( vol+10 ));
+              if [ $vol -le $(( 100-$VOL_INCREMENT )) ]; then
+                    newvol=$(( vol+$VOL_INCREMENT ));
                     cecho "Increasing Spotify volume to $newvol.";
                 else
                     newvol=100;
                     cecho "Spotify volume level is at max.";
                 fi
             elif [ "$2" = "down" ]; then
-                if [ $vol -ge 10 ]; then
-                    newvol=$(( vol-10 ));
+                if [ $vol -ge $(( $VOL_INCREMENT )) ]; then
+                    newvol=$(( vol-$VOL_INCREMENT ));
                     cecho "Reducing Spotify volume to $newvol.";
                 else
                     newvol=0;
@@ -354,11 +356,11 @@ while [ $# -gt 0 ]; do
             else
                 echo "Improper use of 'vol' command"
                 echo "The 'vol' command should be used as follows:"
-                echo "  vol up                       # Increases the volume by 10%.";
-                echo "  vol down                     # Decreases the volume by 10%.";
+                echo "  vol up                       # Increases the volume by $VOL_INCREMENT%.";
+                echo "  vol down                     # Decreases the volume by $VOL_INCREMENT%.";
                 echo "  vol [amount]                 # Sets the volume to an amount between 0 and 100.";
                 echo "  vol                          # Shows the current Spotify volume.";
-                return 1
+                return 1;
             fi
 
             osascript -e "tell application \"Spotify\" to set sound volume to $newvol";
@@ -468,10 +470,9 @@ while [ $# -gt 0 ]; do
         "help" )
             showHelp;
             break ;;
-
         * )
             showHelp;
-            return 1 ;;
+            return 1;
 
     esac
 done

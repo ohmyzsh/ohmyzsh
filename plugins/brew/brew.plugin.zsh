@@ -1,5 +1,10 @@
 if (( ! $+commands[brew] )); then
-  if [[ -x /opt/homebrew/bin/brew ]]; then
+  if [[ -n "$BREW_LOCATION" ]]; then
+    if [[ ! -x "$BREW_LOCATION" ]]; then
+      echo "[oh-my-zsh] $BREW_LOCATION is not executable"
+      return
+    fi
+  elif [[ -x /opt/homebrew/bin/brew ]]; then
     BREW_LOCATION="/opt/homebrew/bin/brew"
   elif [[ -x /usr/local/bin/brew ]]; then
     BREW_LOCATION="/usr/local/bin/brew"
@@ -25,6 +30,10 @@ if [[ -z "$HOMEBREW_PREFIX" ]]; then
   export HOMEBREW_PREFIX="$(brew --prefix)"
 fi
 
+if [[ -d "$HOMEBREW_PREFIX/share/zsh/site-functions" ]]; then
+  fpath+=("$HOMEBREW_PREFIX/share/zsh/site-functions")
+fi
+
 alias bcubc='brew upgrade --cask && brew cleanup'
 alias bcubo='brew update && brew outdated --cask'
 alias bcubc='brew upgrade --cask && brew cleanup'
@@ -35,7 +44,7 @@ alias bugbc='brew upgrade --greedy && brew cleanup'
 alias bubo='brew update && brew outdated'
 alias bubu='bubo && bubc'
 alias bubug='bubo && bugbc'
-alias buf='brew upgrade --formula'
+alias bfu='brew upgrade --formula'
 alias buz='brew uninstall --zap'
 
 function brews() {

@@ -23,7 +23,14 @@ if [[ -z "$VSCODE" ]]; then
   fi
 fi
 
-alias vsc="$VSCODE ."
+function vsc {
+  if (( $# )); then
+    $VSCODE $@
+  else
+    $VSCODE .
+  fi
+}
+
 alias vsca="$VSCODE --add"
 alias vscd="$VSCODE --diff"
 alias vscg="$VSCODE --goto"
