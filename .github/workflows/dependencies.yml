@@ -13,6 +13,7 @@ jobs:
         if: github.repository == 'ohmyzsh/ohmyzsh'
         uses: actions/checkout@v4
       - name: Authenticate as @ohmyzsh
+        id: generate_token
         uses: ohmyzsh/github-app-token@v2
         with:
           app_id: ${{ secrets.OHMYZSH_APP_ID }}
