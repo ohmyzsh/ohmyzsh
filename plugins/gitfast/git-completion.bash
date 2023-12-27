@@ -58,6 +58,12 @@
 #
 #     When set to "1" suggest all options, including options which are
 #     typically hidden (e.g. '--allow-empty' for 'git commit').
+#
+#   GIT_COMPLETION_IGNORE_CASE
+#
+#     When set, uses for-each-ref '--ignore-case' to find refs that match
+#     case insensitively, even on systems with case sensitive file systems
+#     (e.g., completing tag name "FOO" on "git checkout f<TAB>").
 
 # The following functions are meant to modify COMPREPLY, which should not be
 # modified directly.  The purpose is to localize the modifications so it's
@@ -320,116 +326,6 @@ else
 	unset $(compgen -v __gitcomp_builtin_)
 fi
 
-__gitcomp_builtin_add_default=" --dry-run --verbose --interactive --patch --edit --force --update --renormalize --intent-to-add --all --ignore-removal --refresh --ignore-errors --ignore-missing --sparse --chmod= --pathspec-from-file= --pathspec-file-nul --no-dry-run -- --no-verbose --no-interactive --no-patch --no-edit --no-force --no-update --no-renormalize --no-intent-to-add --no-all --no-ignore-removal --no-refresh --no-ignore-errors --no-ignore-missing --no-sparse --no-chmod --no-pathspec-from-file --no-pathspec-file-nul"
-__gitcomp_builtin_am_default=" --interactive --3way --quiet --signoff --utf8 --keep --keep-non-patch --message-id --keep-cr --no-keep-cr --scissors --quoted-cr= --whitespace= --ignore-space-change --ignore-whitespace --directory= --exclude= --include= --patch-format= --reject --resolvemsg= --continue --resolved --skip --abort --quit --show-current-patch --allow-empty --committer-date-is-author-date --ignore-date --rerere-autoupdate --gpg-sign --empty= -- --no-interactive --no-3way --no-quiet --no-signoff --no-utf8 --no-keep --no-keep-non-patch --no-message-id --no-scissors --no-whitespace --no-ignore-space-change --no-ignore-whitespace --no-directory --no-exclude --no-include --no-patch-format --no-reject --no-resolvemsg --no-committer-date-is-author-date --no-ignore-date --no-rerere-autoupdate --no-gpg-sign"
-__gitcomp_builtin_apply_default=" --exclude= --include= --no-add --stat --numstat --summary --check --index --intent-to-add --cached --apply --3way --build-fake-ancestor= --whitespace= --ignore-space-change --ignore-whitespace --reverse --unidiff-zero --reject --allow-overlap --verbose --quiet --inaccurate-eof --recount --directory= --allow-empty --add -- --no-stat --no-numstat --no-summary --no-check --no-index --no-intent-to-add --no-cached --no-apply --no-3way --no-build-fake-ancestor --no-whitespace --no-ignore-space-change --no-ignore-whitespace --no-reverse --no-unidiff-zero --no-reject --no-allow-overlap --no-verbose --no-quiet --no-inaccurate-eof --no-recount --no-directory --no-allow-empty"
-__gitcomp_builtin_archive_default=" --output= --remote= --exec= --no-output -- --no-remote --no-exec"
-__gitcomp_builtin_bisect__helper_default=" --bisect-reset --bisect-next-check --bisect-terms --bisect-start --bisect-next --bisect-state --bisect-log --bisect-replay --bisect-skip --bisect-visualize --bisect-run --no-log --log"
-__gitcomp_builtin_blame_default=" --incremental --root --show-stats --progress --score-debug --show-name --show-number --porcelain --line-porcelain --show-email --ignore-rev= --ignore-revs-file= --color-lines --color-by-age --minimal --contents= --abbrev --no-incremental -- --no-root --no-show-stats --no-progress --no-score-debug --no-show-name --no-show-number --no-porcelain --no-line-porcelain --no-show-email --no-ignore-rev --no-ignore-revs-file --no-color-lines --no-color-by-age --no-minimal --no-contents --no-abbrev"
-__gitcomp_builtin_branch_default=" --verbose --quiet --track --set-upstream-to= --unset-upstream --color --remotes --contains --no-contains --abbrev --all --delete --move --copy --list --show-current --create-reflog --edit-description --merged --no-merged --column --sort= --points-at= --ignore-case --recurse-submodules --format= -- --no-verbose --no-quiet --no-track --no-set-upstream-to --no-unset-upstream --no-color --no-remotes --no-abbrev --no-all --no-delete --no-move --no-copy --no-list --no-show-current --no-create-reflog --no-edit-description --no-column --no-sort --no-points-at --no-ignore-case --no-recurse-submodules --no-format"
-__gitcomp_builtin_bugreport_default=" --output-directory= --suffix= --no-output-directory -- --no-suffix"
-__gitcomp_builtin_cat_file_default=" --allow-unknown-type --batch --batch-check --batch-command --batch-all-objects --buffer --follow-symlinks --unordered --textconv --filters --path= --no-allow-unknown-type -- --no-buffer --no-follow-symlinks --no-unordered --no-path"
-__gitcomp_builtin_check_attr_default=" --all --cached --stdin --no-all -- --no-cached --no-stdin"
-__gitcomp_builtin_check_ignore_default=" --quiet --verbose --stdin --non-matching --no-index --index -- --no-quiet --no-verbose --no-stdin --no-non-matching"
-__gitcomp_builtin_check_mailmap_default=" --stdin --no-stdin"
-__gitcomp_builtin_checkout_default=" --guess --overlay --quiet --recurse-submodules --progress --merge --conflict= --detach --track --orphan= --ignore-other-worktrees --ours --theirs --patch --ignore-skip-worktree-bits --pathspec-from-file= --pathspec-file-nul --no-guess -- --no-overlay --no-quiet --no-recurse-submodules --no-progress --no-merge --no-conflict --no-detach --no-track --no-orphan --no-ignore-other-worktrees --no-patch --no-ignore-skip-worktree-bits --no-pathspec-from-file --no-pathspec-file-nul"
-__gitcomp_builtin_checkout__worker_default=" --prefix= --no-prefix"
-__gitcomp_builtin_checkout_index_default=" --all --ignore-skip-worktree-bits --force --quiet --no-create --index --stdin --temp --prefix= --stage= --create -- --no-all --no-ignore-skip-worktree-bits --no-force --no-quiet --no-index --no-stdin --no-temp --no-prefix"
-__gitcomp_builtin_cherry_default=" --abbrev --verbose --no-abbrev -- --no-verbose"
-__gitcomp_builtin_cherry_pick_default=" --quit --continue --abort --skip --cleanup= --no-commit --edit --signoff --mainline= --rerere-autoupdate --strategy= --strategy-option= --gpg-sign --ff --allow-empty --allow-empty-message --keep-redundant-commits --commit -- --no-cleanup --no-edit --no-signoff --no-mainline --no-rerere-autoupdate --no-strategy --no-strategy-option --no-gpg-sign --no-ff --no-allow-empty --no-allow-empty-message --no-keep-redundant-commits"
-__gitcomp_builtin_clean_default=" --quiet --dry-run --interactive --exclude= --no-quiet -- --no-dry-run --no-interactive"
-__gitcomp_builtin_clone_default=" --verbose --quiet --progress --reject-shallow --no-checkout --bare --mirror --local --no-hardlinks --shared --recurse-submodules --jobs= --template= --reference= --reference-if-able= --dissociate --origin= --branch= --upload-pack= --depth= --shallow-since= --shallow-exclude= --single-branch --no-tags --shallow-submodules --separate-git-dir= --config= --server-option= --ipv4 --ipv6 --filter= --also-filter-submodules --remote-submodules --sparse --checkout --hardlinks --tags -- --no-verbose --no-quiet --no-progress --no-reject-shallow --no-bare --no-mirror --no-local --no-shared --no-recurse-submodules --no-recursive --no-jobs --no-template --no-reference --no-reference-if-able --no-dissociate --no-origin --no-branch --no-upload-pack --no-depth --no-shallow-since --no-shallow-exclude --no-single-branch --no-shallow-submodules --no-separate-git-dir --no-config --no-server-option --no-ipv4 --no-ipv6 --no-filter --no-also-filter-submodules --no-remote-submodules --no-sparse"
-__gitcomp_builtin_column_default=" --command= --mode --raw-mode= --width= --indent= --nl= --padding= --no-command -- --no-mode --no-raw-mode --no-width --no-indent --no-nl --no-padding"
-__gitcomp_builtin_commit_default=" --quiet --verbose --file= --author= --date= --message= --reedit-message= --reuse-message= --fixup= --squash= --reset-author --trailer= --signoff --template= --edit --cleanup= --status --gpg-sign --all --include --interactive --patch --only --no-verify --dry-run --short --branch --ahead-behind --porcelain --long --null --amend --no-post-rewrite --untracked-files --pathspec-from-file= --pathspec-file-nul --verify --post-rewrite -- --no-quiet --no-verbose --no-file --no-author --no-date --no-message --no-reedit-message --no-reuse-message --no-fixup --no-squash --no-reset-author --no-signoff --no-template --no-edit --no-cleanup --no-status --no-gpg-sign --no-all --no-include --no-interactive --no-patch --no-only --no-dry-run --no-short --no-branch --no-ahead-behind --no-porcelain --no-long --no-null --no-amend --no-untracked-files --no-pathspec-from-file --no-pathspec-file-nul"
-__gitcomp_builtin_commit_graph_default=" --object-dir= --no-object-dir"
-__gitcomp_builtin_config_default=" --global --system --local --worktree --file= --blob= --get --get-all --get-regexp --get-urlmatch --replace-all --add --unset --unset-all --rename-section --remove-section --list --fixed-value --edit --get-color --get-colorbool --type= --bool --int --bool-or-int --bool-or-str --path --expiry-date --null --name-only --includes --show-origin --show-scope --default= --no-global -- --no-system --no-local --no-worktree --no-file --no-blob --no-get --no-get-all --no-get-regexp --no-get-urlmatch --no-replace-all --no-add --no-unset --no-unset-all --no-rename-section --no-remove-section --no-list --no-fixed-value --no-edit --no-get-color --no-get-colorbool --no-type --no-null --no-name-only --no-includes --no-show-origin --no-show-scope --no-default"
-__gitcomp_builtin_count_objects_default=" --verbose --human-readable --no-verbose -- --no-human-readable"
-__gitcomp_builtin_credential_cache_default=" --timeout= --socket= --no-timeout -- --no-socket"
-__gitcomp_builtin_credential_cache__daemon_default=" --debug --no-debug"
-__gitcomp_builtin_credential_store_default=" --file= --no-file"
-__gitcomp_builtin_describe_default=" --contains --debug --all --tags --long --first-parent --abbrev --exact-match --candidates= --match= --exclude= --always --dirty --broken --no-contains -- --no-debug --no-all --no-tags --no-long --no-first-parent --no-abbrev --no-exact-match --no-candidates --no-match --no-exclude --no-always --no-dirty --no-broken"
-__gitcomp_builtin_difftool_default=" --gui --dir-diff --no-prompt --symlinks --tool= --tool-help --trust-exit-code --extcmd= --no-index --index -- --no-gui --no-dir-diff --no-symlinks --no-tool --no-tool-help --no-trust-exit-code --no-extcmd"
-__gitcomp_builtin_env__helper_default=" --type= --default= --exit-code --no-default -- --no-exit-code"
-__gitcomp_builtin_fast_export_default=" --progress= --signed-tags= --tag-of-filtered-object= --reencode= --export-marks= --import-marks= --import-marks-if-exists= --fake-missing-tagger --full-tree --use-done-feature --no-data --refspec= --anonymize --anonymize-map= --reference-excluded-parents --show-original-ids --mark-tags --data -- --no-progress --no-signed-tags --no-tag-of-filtered-object --no-reencode --no-export-marks --no-import-marks --no-import-marks-if-exists --no-fake-missing-tagger --no-full-tree --no-use-done-feature --no-refspec --no-anonymize --no-reference-excluded-parents --no-show-original-ids --no-mark-tags"
-__gitcomp_builtin_fetch_default=" --verbose --quiet --all --set-upstream --append --atomic --upload-pack= --force --multiple --tags --jobs= --prefetch --prune --prune-tags --recurse-submodules --dry-run --write-fetch-head --keep --update-head-ok --progress --depth= --shallow-since= --shallow-exclude= --deepen= --unshallow --refetch --update-shallow --refmap= --server-option= --ipv4 --ipv6 --negotiation-tip= --negotiate-only --filter= --auto-maintenance --auto-gc --show-forced-updates --write-commit-graph --stdin --no-verbose -- --no-quiet --no-all --no-set-upstream --no-append --no-atomic --no-upload-pack --no-force --no-multiple --no-tags --no-jobs --no-prefetch --no-prune --no-prune-tags --no-recurse-submodules --no-dry-run --no-write-fetch-head --no-keep --no-update-head-ok --no-progress --no-depth --no-shallow-since --no-shallow-exclude --no-deepen --no-update-shallow --no-server-option --no-ipv4 --no-ipv6 --no-negotiation-tip --no-negotiate-only --no-filter --no-auto-maintenance --no-auto-gc --no-show-forced-updates --no-write-commit-graph --no-stdin"
-__gitcomp_builtin_fmt_merge_msg_default=" --log --message= --into-name= --file= --no-log -- --no-message --no-into-name --no-file"
-__gitcomp_builtin_for_each_ref_default=" --shell --perl --python --tcl --count= --format= --color --sort= --points-at= --merged --no-merged --contains --no-contains --ignore-case -- --no-shell --no-perl --no-python --no-tcl --no-count --no-format --no-color --no-sort --no-points-at --no-ignore-case"
-__gitcomp_builtin_for_each_repo_default=" --config= --no-config"
-__gitcomp_builtin_format_patch_default=" --numbered --no-numbered --signoff --stdout --cover-letter --numbered-files --suffix= --start-number= --reroll-count= --filename-max-length= --rfc --cover-from-description= --subject-prefix= --output-directory= --keep-subject --no-binary --zero-commit --ignore-if-in-upstream --no-stat --add-header= --to= --cc= --from --in-reply-to= --attach --inline --thread --signature= --base= --signature-file= --quiet --progress --interdiff= --range-diff= --creation-factor= --binary -- --no-numbered --no-signoff --no-stdout --no-cover-letter --no-numbered-files --no-suffix --no-start-number --no-reroll-count --no-filename-max-length --no-cover-from-description --no-zero-commit --no-ignore-if-in-upstream --no-add-header --no-to --no-cc --no-from --no-in-reply-to --no-attach --no-thread --no-signature --no-base --no-signature-file --no-quiet --no-progress --no-interdiff --no-range-diff --no-creation-factor"
-__gitcomp_builtin_fsck_default=" --verbose --unreachable --dangling --tags --root --cache --reflogs --full --connectivity-only --strict --lost-found --progress --name-objects --no-verbose -- --no-unreachable --no-dangling --no-tags --no-root --no-cache --no-reflogs --no-full --no-connectivity-only --no-strict --no-lost-found --no-progress --no-name-objects"
-__gitcomp_builtin_fsck_objects_default=" --verbose --unreachable --dangling --tags --root --cache --reflogs --full --connectivity-only --strict --lost-found --progress --name-objects --no-verbose -- --no-unreachable --no-dangling --no-tags --no-root --no-cache --no-reflogs --no-full --no-connectivity-only --no-strict --no-lost-found --no-progress --no-name-objects"
-__gitcomp_builtin_fsmonitor__daemon_default=""
-__gitcomp_builtin_gc_default=" --quiet --prune --aggressive --keep-largest-pack --no-quiet -- --no-prune --no-aggressive --no-keep-largest-pack"
-__gitcomp_builtin_grep_default=" --cached --no-index --untracked --exclude-standard --recurse-submodules --invert-match --ignore-case --word-regexp --text --textconv --recursive --max-depth= --extended-regexp --basic-regexp --fixed-strings --perl-regexp --line-number --column --full-name --files-with-matches --name-only --files-without-match --only-matching --count --color --break --heading --context= --before-context= --after-context= --threads= --show-function --function-context --and --or --not --quiet --all-match --index -- --no-cached --no-untracked --no-exclude-standard --no-recurse-submodules --no-invert-match --no-ignore-case --no-word-regexp --no-text --no-textconv --no-recursive --no-extended-regexp --no-basic-regexp --no-fixed-strings --no-perl-regexp --no-line-number --no-column --no-full-name --no-files-with-matches --no-name-only --no-files-without-match --no-only-matching --no-count --no-color --no-break --no-heading --no-context --no-before-context --no-after-context --no-threads --no-show-function --no-function-context --no-or --no-quiet --no-all-match"
-__gitcomp_builtin_hash_object_default=" --stdin --stdin-paths --no-filters --literally --path= --filters -- --no-stdin --no-stdin-paths --no-literally --no-path"
-__gitcomp_builtin_help_default=" --all --external-commands --aliases --man --web --info --verbose --guides --config --no-external-commands -- --no-aliases --no-man --no-web --no-info --no-verbose"
-__gitcomp_builtin_hook_default=""
-__gitcomp_builtin_init_default=" --template= --bare --shared --quiet --separate-git-dir= --initial-branch= --object-format= --no-template -- --no-bare --no-quiet --no-separate-git-dir --no-initial-branch --no-object-format"
-__gitcomp_builtin_init_db_default=" --template= --bare --shared --quiet --separate-git-dir= --initial-branch= --object-format= --no-template -- --no-bare --no-quiet --no-separate-git-dir --no-initial-branch --no-object-format"
-__gitcomp_builtin_interpret_trailers_default=" --in-place --trim-empty --where= --if-exists= --if-missing= --only-trailers --only-input --unfold --parse --no-divider --trailer= --divider -- --no-in-place --no-trim-empty --no-where --no-if-exists --no-if-missing --no-only-trailers --no-only-input --no-unfold --no-trailer"
-__gitcomp_builtin_log_default=" --quiet --source --use-mailmap --decorate-refs= --decorate-refs-exclude= --decorate --no-quiet -- --no-source --no-use-mailmap --no-mailmap --no-decorate-refs --no-decorate-refs-exclude --no-decorate"
-__gitcomp_builtin_ls_files_default=" --cached --deleted --modified --others --ignored --stage --killed --directory --eol --empty-directory --unmerged --resolve-undo --exclude= --exclude-from= --exclude-per-directory= --exclude-standard --full-name --recurse-submodules --error-unmatch --with-tree= --abbrev --debug --deduplicate --sparse --no-cached -- --no-deleted --no-modified --no-others --no-ignored --no-stage --no-killed --no-directory --no-eol --no-empty-directory --no-unmerged --no-resolve-undo --no-exclude-per-directory --no-recurse-submodules --no-error-unmatch --no-with-tree --no-abbrev --no-debug --no-deduplicate --no-sparse"
-__gitcomp_builtin_ls_remote_default=" --quiet --upload-pack= --tags --heads --refs --get-url --sort= --symref --server-option= --no-quiet -- --no-upload-pack --no-tags --no-heads --no-refs --no-get-url --no-sort --no-symref --no-server-option"
-__gitcomp_builtin_ls_tree_default=" --long --name-only --name-status --object-only --full-name --full-tree --format= --abbrev --no-full-name -- --no-full-tree --no-abbrev"
-__gitcomp_builtin_merge_default=" --stat --summary --log --squash --commit --edit --cleanup= --ff --ff-only --rerere-autoupdate --verify-signatures --strategy= --strategy-option= --message= --file --into-name= --verbose --quiet --abort --quit --continue --allow-unrelated-histories --progress --gpg-sign --autostash --overwrite-ignore --signoff --no-verify --verify -- --no-stat --no-summary --no-log --no-squash --no-commit --no-edit --no-cleanup --no-ff --no-rerere-autoupdate --no-verify-signatures --no-strategy --no-strategy-option --no-message --no-into-name --no-verbose --no-quiet --no-abort --no-quit --no-continue --no-allow-unrelated-histories --no-progress --no-gpg-sign --no-autostash --no-overwrite-ignore --no-signoff"
-__gitcomp_builtin_merge_base_default=" --all --octopus --independent --is-ancestor --fork-point --no-all"
-__gitcomp_builtin_merge_file_default=" --stdout --diff3 --zdiff3 --ours --theirs --union --marker-size= --quiet --no-stdout -- --no-diff3 --no-zdiff3 --no-ours --no-theirs --no-union --no-marker-size --no-quiet"
-__gitcomp_builtin_mktree_default=" --missing --batch --no-missing -- --no-batch"
-__gitcomp_builtin_multi_pack_index_default=" --object-dir= --no-object-dir"
-__gitcomp_builtin_mv_default=" --verbose --dry-run --sparse --no-verbose -- --no-dry-run --no-sparse"
-__gitcomp_builtin_name_rev_default=" --name-only --tags --refs= --exclude= --all --stdin --annotate-stdin --undefined --always --no-name-only -- --no-tags --no-refs --no-exclude --no-all --no-stdin --no-annotate-stdin --no-undefined --no-always"
-__gitcomp_builtin_notes_default=" --ref= --no-ref"
-__gitcomp_builtin_pack_objects_default=" --quiet --progress --all-progress --all-progress-implied --index-version= --max-pack-size= --local --incremental --window= --window-memory= --depth= --reuse-delta --reuse-object --delta-base-offset --threads= --non-empty --revs --unpacked --all --reflog --indexed-objects --stdin-packs --stdout --include-tag --keep-unreachable --pack-loose-unreachable --unpack-unreachable --sparse --thin --shallow --honor-pack-keep --keep-pack= --compression= --keep-true-parents --use-bitmap-index --write-bitmap-index --filter= --missing= --exclude-promisor-objects --delta-islands --uri-protocol= --no-quiet -- --no-progress --no-all-progress --no-all-progress-implied --no-local --no-incremental --no-window --no-depth --no-reuse-delta --no-reuse-object --no-delta-base-offset --no-threads --no-non-empty --no-revs --no-stdin-packs --no-stdout --no-include-tag --no-keep-unreachable --no-pack-loose-unreachable --no-unpack-unreachable --no-sparse --no-thin --no-shallow --no-honor-pack-keep --no-keep-pack --no-compression --no-keep-true-parents --no-use-bitmap-index --no-write-bitmap-index --no-filter --no-exclude-promisor-objects --no-delta-islands --no-uri-protocol"
-__gitcomp_builtin_pack_refs_default=" --all --prune --no-all -- --no-prune"
-__gitcomp_builtin_pickaxe_default=" --incremental --root --show-stats --progress --score-debug --show-name --show-number --porcelain --line-porcelain --show-email --ignore-rev= --ignore-revs-file= --color-lines --color-by-age --minimal --contents= --abbrev --no-incremental -- --no-root --no-show-stats --no-progress --no-score-debug --no-show-name --no-show-number --no-porcelain --no-line-porcelain --no-show-email --no-ignore-rev --no-ignore-revs-file --no-color-lines --no-color-by-age --no-minimal --no-contents --no-abbrev"
-__gitcomp_builtin_prune_default=" --dry-run --verbose --progress --expire= --exclude-promisor-objects --no-dry-run -- --no-verbose --no-progress --no-expire --no-exclude-promisor-objects"
-__gitcomp_builtin_prune_packed_default=" --dry-run --quiet --no-dry-run -- --no-quiet"
-__gitcomp_builtin_pull_default=" --verbose --quiet --progress --recurse-submodules --rebase --stat --log --signoff --squash --commit --edit --cleanup= --ff --ff-only --verify --verify-signatures --autostash --strategy= --strategy-option= --gpg-sign --allow-unrelated-histories --all --append --upload-pack= --force --tags --prune --jobs --dry-run --keep --depth= --shallow-since= --shallow-exclude= --deepen= --unshallow --update-shallow --refmap= --server-option= --ipv4 --ipv6 --negotiation-tip= --show-forced-updates --set-upstream --no-verbose -- --no-quiet --no-progress --no-recurse-submodules --no-rebase --no-stat --no-log --no-signoff --no-squash --no-commit --no-edit --no-cleanup --no-ff --no-verify --no-verify-signatures --no-autostash --no-strategy --no-strategy-option --no-gpg-sign --no-allow-unrelated-histories --no-all --no-append --no-upload-pack --no-force --no-tags --no-prune --no-jobs --no-dry-run --no-keep --no-depth --no-shallow-since --no-shallow-exclude --no-deepen --no-update-shallow --no-server-option --no-ipv4 --no-ipv6 --no-negotiation-tip --no-show-forced-updates --no-set-upstream"
-__gitcomp_builtin_push_default=" --verbose --quiet --repo= --all --mirror --delete --tags --dry-run --porcelain --force --force-with-lease --force-if-includes --recurse-submodules= --receive-pack= --exec= --set-upstream --progress --prune --no-verify --follow-tags --signed --atomic --push-option= --ipv4 --ipv6 --verify -- --no-verbose --no-quiet --no-repo --no-all --no-mirror --no-delete --no-tags --no-dry-run --no-porcelain --no-force --no-force-with-lease --no-force-if-includes --no-recurse-submodules --no-receive-pack --no-exec --no-set-upstream --no-progress --no-prune --no-follow-tags --no-signed --no-atomic --no-push-option --no-ipv4 --no-ipv6"
-__gitcomp_builtin_range_diff_default=" --creation-factor= --no-dual-color --notes --left-only --right-only --patch --no-patch --unified --function-context --raw --patch-with-raw --patch-with-stat --numstat --shortstat --dirstat --cumulative --dirstat-by-file --check --summary --name-only --name-status --stat --stat-width= --stat-name-width= --stat-graph-width= --stat-count= --compact-summary --binary --full-index --color --ws-error-highlight= --abbrev --src-prefix= --dst-prefix= --line-prefix= --no-prefix --inter-hunk-context= --output-indicator-new= --output-indicator-old= --output-indicator-context= --break-rewrites --find-renames --irreversible-delete --find-copies --find-copies-harder --no-renames --rename-empty --follow --minimal --ignore-all-space --ignore-space-change --ignore-space-at-eol --ignore-cr-at-eol --ignore-blank-lines --ignore-matching-lines= --indent-heuristic --patience --histogram --diff-algorithm= --anchored= --word-diff --word-diff-regex= --color-words --color-moved --color-moved-ws= --relative --text --exit-code --quiet --ext-diff --textconv --ignore-submodules --submodule --ita-invisible-in-index --ita-visible-in-index --pickaxe-all --pickaxe-regex --rotate-to= --skip-to= --find-object= --diff-filter= --output= --dual-color -- --no-creation-factor --no-notes --no-left-only --no-right-only --no-function-context --no-compact-summary --no-full-index --no-color --no-abbrev --no-find-copies-harder --no-rename-empty --no-follow --no-minimal --no-ignore-matching-lines --no-indent-heuristic --no-color-moved --no-color-moved-ws --no-relative --no-text --no-exit-code --no-quiet --no-ext-diff --no-textconv"
-__gitcomp_builtin_read_tree_default=" --index-output= --empty --verbose --trivial --aggressive --reset --prefix= --exclude-per-directory= --dry-run --no-sparse-checkout --debug-unpack --recurse-submodules --quiet --sparse-checkout -- --no-empty --no-verbose --no-trivial --no-aggressive --no-reset --no-dry-run --no-debug-unpack --no-recurse-submodules --no-quiet"
-__gitcomp_builtin_rebase_default=" --onto= --keep-base --no-verify --quiet --verbose --no-stat --signoff --committer-date-is-author-date --reset-author-date --ignore-whitespace --whitespace= --force-rebase --no-ff --continue --skip --abort --quit --edit-todo --show-current-patch --apply --merge --interactive --rerere-autoupdate --empty= --autosquash --gpg-sign --autostash --exec= --rebase-merges --fork-point --strategy= --strategy-option= --root --reschedule-failed-exec --reapply-cherry-picks --verify --stat --ff -- --no-onto --no-keep-base --no-quiet --no-verbose --no-signoff --no-committer-date-is-author-date --no-reset-author-date --no-ignore-whitespace --no-whitespace --no-force-rebase --no-rerere-autoupdate --no-autosquash --no-gpg-sign --no-autostash --no-exec --no-rebase-merges --no-fork-point --no-strategy --no-strategy-option --no-root --no-reschedule-failed-exec --no-reapply-cherry-picks"
-__gitcomp_builtin_receive_pack_default=" --quiet --no-quiet"
-__gitcomp_builtin_reflog_default=""
-__gitcomp_builtin_remote_default=" --verbose --no-verbose"
-__gitcomp_builtin_repack_default=" --quiet --local --write-bitmap-index --delta-islands --unpack-unreachable= --keep-unreachable --window= --window-memory= --depth= --threads= --max-pack-size= --pack-kept-objects --keep-pack= --geometric= --write-midx --no-quiet -- --no-local --no-write-bitmap-index --no-delta-islands --no-unpack-unreachable --no-keep-unreachable --no-window --no-window-memory --no-depth --no-threads --no-max-pack-size --no-pack-kept-objects --no-keep-pack --no-geometric --no-write-midx"
-__gitcomp_builtin_replace_default=" --list --delete --edit --graft --convert-graft-file --raw --format= --no-raw -- --no-format"
-__gitcomp_builtin_rerere_default=" --rerere-autoupdate --no-rerere-autoupdate"
-__gitcomp_builtin_reset_default=" --quiet --no-refresh --mixed --soft --hard --merge --keep --recurse-submodules --patch --intent-to-add --pathspec-from-file= --pathspec-file-nul --refresh -- --no-quiet --no-mixed --no-soft --no-hard --no-merge --no-keep --no-recurse-submodules --no-patch --no-intent-to-add --no-pathspec-from-file --no-pathspec-file-nul"
-__gitcomp_builtin_restore_default=" --source= --staged --worktree --ignore-unmerged --overlay --quiet --recurse-submodules --progress --merge --conflict= --ours --theirs --patch --ignore-skip-worktree-bits --pathspec-from-file= --pathspec-file-nul --no-source -- --no-staged --no-worktree --no-ignore-unmerged --no-overlay --no-quiet --no-recurse-submodules --no-progress --no-merge --no-conflict --no-patch --no-ignore-skip-worktree-bits --no-pathspec-from-file --no-pathspec-file-nul"
-__gitcomp_builtin_revert_default=" --quit --continue --abort --skip --cleanup= --no-commit --edit --signoff --mainline= --rerere-autoupdate --strategy= --strategy-option= --gpg-sign --commit -- --no-cleanup --no-edit --no-signoff --no-mainline --no-rerere-autoupdate --no-strategy --no-strategy-option --no-gpg-sign"
-__gitcomp_builtin_rm_default=" --dry-run --quiet --cached --ignore-unmatch --sparse --pathspec-from-file= --pathspec-file-nul --no-dry-run -- --no-quiet --no-cached --no-ignore-unmatch --no-sparse --no-pathspec-from-file --no-pathspec-file-nul"
-__gitcomp_builtin_send_pack_default=" --verbose --quiet --receive-pack= --exec= --remote= --all --dry-run --mirror --force --signed --push-option= --progress --thin --atomic --stateless-rpc --stdin --helper-status --force-with-lease --force-if-includes --no-verbose -- --no-quiet --no-receive-pack --no-exec --no-remote --no-all --no-dry-run --no-mirror --no-force --no-signed --no-push-option --no-progress --no-thin --no-atomic --no-stateless-rpc --no-stdin --no-helper-status --no-force-with-lease --no-force-if-includes"
-__gitcomp_builtin_shortlog_default=" --committer --numbered --summary --email --group= --no-committer -- --no-numbered --no-summary --no-email --no-group"
-__gitcomp_builtin_show_default=" --quiet --source --use-mailmap --decorate-refs= --decorate-refs-exclude= --decorate --no-quiet -- --no-source --no-use-mailmap --no-mailmap --no-decorate-refs --no-decorate-refs-exclude --no-decorate"
-__gitcomp_builtin_show_branch_default=" --all --remotes --color --more --list --no-name --current --sha1-name --merge-base --independent --topo-order --topics --sparse --date-order --reflog --name -- --no-all --no-remotes --no-color --no-more --no-list --no-current --no-sha1-name --no-merge-base --no-independent --no-topo-order --no-topics --no-sparse --no-date-order"
-__gitcomp_builtin_show_index_default=" --object-format= --no-object-format"
-__gitcomp_builtin_show_ref_default=" --tags --heads --verify --head --dereference --hash --abbrev --quiet --exclude-existing --no-tags -- --no-heads --no-verify --no-head --no-dereference --no-hash --no-abbrev --no-quiet"
-__gitcomp_builtin_sparse_checkout_default=""
-__gitcomp_builtin_stage_default=" --dry-run --verbose --interactive --patch --edit --force --update --renormalize --intent-to-add --all --ignore-removal --refresh --ignore-errors --ignore-missing --sparse --chmod= --pathspec-from-file= --pathspec-file-nul --no-dry-run -- --no-verbose --no-interactive --no-patch --no-edit --no-force --no-update --no-renormalize --no-intent-to-add --no-all --no-ignore-removal --no-refresh --no-ignore-errors --no-ignore-missing --no-sparse --no-chmod --no-pathspec-from-file --no-pathspec-file-nul"
-__gitcomp_builtin_stash_default=""
-__gitcomp_builtin_status_default=" --verbose --short --branch --show-stash --ahead-behind --porcelain --long --null --untracked-files --ignored --ignore-submodules --column --no-renames --find-renames --renames -- --no-verbose --no-short --no-branch --no-show-stash --no-ahead-behind --no-porcelain --no-long --no-null --no-untracked-files --no-ignored --no-ignore-submodules --no-column"
-__gitcomp_builtin_stripspace_default=" --strip-comments --comment-lines"
-__gitcomp_builtin_switch_default=" --create= --force-create= --guess --discard-changes --quiet --recurse-submodules --progress --merge --conflict= --detach --track --orphan= --ignore-other-worktrees --no-create -- --no-force-create --no-guess --no-discard-changes --no-quiet --no-recurse-submodules --no-progress --no-merge --no-conflict --no-detach --no-track --no-orphan --no-ignore-other-worktrees"
-__gitcomp_builtin_symbolic_ref_default=" --quiet --delete --short --no-quiet -- --no-delete --no-short"
-__gitcomp_builtin_tag_default=" --list --delete --verify --annotate --message= --file= --edit --sign --cleanup= --local-user= --force --create-reflog --column --contains --no-contains --merged --no-merged --sort= --points-at --format= --color --ignore-case -- --no-annotate --no-file --no-edit --no-sign --no-cleanup --no-local-user --no-force --no-create-reflog --no-column --no-sort --no-points-at --no-format --no-color --no-ignore-case"
-__gitcomp_builtin_update_index_default=" --ignore-submodules --add --replace --remove --unmerged --refresh --really-refresh --cacheinfo --chmod= --assume-unchanged --no-assume-unchanged --skip-worktree --no-skip-worktree --ignore-skip-worktree-entries --info-only --force-remove --stdin --index-info --unresolve --again --ignore-missing --verbose --clear-resolve-undo --index-version= --split-index --untracked-cache --test-untracked-cache --force-untracked-cache --force-write-index --fsmonitor --fsmonitor-valid --no-fsmonitor-valid -- --no-ignore-submodules --no-add --no-replace --no-remove --no-unmerged --no-ignore-skip-worktree-entries --no-info-only --no-force-remove --no-ignore-missing --no-verbose --no-index-version --no-split-index --no-untracked-cache --no-test-untracked-cache --no-force-untracked-cache --no-force-write-index --no-fsmonitor"
-__gitcomp_builtin_update_ref_default=" --no-deref --stdin --create-reflog --deref -- --no-stdin --no-create-reflog"
-__gitcomp_builtin_update_server_info_default=" --force --no-force"
-__gitcomp_builtin_upload_pack_default=" --stateless-rpc --strict --timeout= --no-stateless-rpc -- --no-strict --no-timeout"
-__gitcomp_builtin_verify_commit_default=" --verbose --raw --no-verbose -- --no-raw"
-__gitcomp_builtin_verify_pack_default=" --verbose --stat-only --object-format= --no-verbose -- --no-stat-only --no-object-format"
-__gitcomp_builtin_verify_tag_default=" --verbose --raw --format= --no-verbose -- --no-raw --no-format"
-__gitcomp_builtin_version_default=" --build-options --no-build-options"
-__gitcomp_builtin_whatchanged_default=" --quiet --source --use-mailmap --decorate-refs= --decorate-refs-exclude= --decorate --no-quiet -- --no-source --no-use-mailmap --no-mailmap --no-decorate-refs --no-decorate-refs-exclude --no-decorate"
-__gitcomp_builtin_write_tree_default=" --missing-ok --prefix= --no-missing-ok -- --no-prefix"
-__gitcomp_builtin_send_email_default="--sender= --from= --smtp-auth= --8bit-encoding= --no-format-patch --no-bcc --no-suppress-from --no-annotate --relogin-delay= --no-cc --no-signed-off-cc --no-signed-off-by-cc --no-chain-reply-to --smtp-debug= --smtp-domain= --chain-reply-to --dry-run --compose --bcc= --smtp-user= --thread --cc-cover --identity= --to= --reply-to= --no-cc-cover --suppress-cc= --to-cmd= --smtp-server= --smtp-ssl-cert-path= --no-thread --smtp-server-option= --quiet --batch-size= --envelope-sender= --smtp-ssl --no-to --validate --format-patch --suppress-from --cc= --compose-encoding= --to-cover --in-reply-to= --annotate --smtp-encryption= --cc-cmd= --smtp-server-port= --smtp-pass= --signed-off-cc --signed-off-by-cc --no-xmailer --subject= --no-to-cover --confirm= --transfer-encoding= --no-smtp-auth --sendmail-cmd= --no-validate --no-identity --dump-aliases --xmailer --force --numbered --no-numbered --signoff --stdout --cover-letter --numbered-files --suffix= --start-number= --reroll-count= --filename-max-length= --rfc --cover-from-description= --subject-prefix= --output-directory= --keep-subject --no-binary --zero-commit --ignore-if-in-upstream --no-stat --add-header= --from --attach --inline --signature= --base= --signature-file= --progress --interdiff= --range-diff= --creation-factor= --binary -- --no-signoff --no-stdout --no-cover-letter --no-numbered-files --no-suffix --no-start-number --no-reroll-count --no-filename-max-length --no-cover-from-description --no-zero-commit --no-ignore-if-in-upstream --no-add-header --no-from --no-in-reply-to --no-attach --no-signature --no-base --no-signature-file --no-quiet --no-progress --no-interdiff --no-range-diff --no-creation-factor"
-
-__gitcomp_builtin_get_default ()
-{
-	eval "test -n \"\$${1}_default\" && echo \"\$${1}_default\""
-}
-
 # This function is equivalent to
 #
 #    __gitcomp_opts "$(git xxx --git-completion-helper) ..."
@@ -457,11 +353,9 @@ __gitcomp_builtin ()
 		else
 			completion_helper="--git-completion-helper"
 		fi
-		completion="$(__git ${cmd/_/ } $completion_helper ||
-			__gitcomp_builtin_get_default $var)" || return
 		# leading and trailing spaces are significant to make
 		# option removal work correctly.
-		options=" $incl $completion "
+		options=" $incl $(__git ${cmd/_/ } $completion_helper) " || return
 
 		for i in $excl; do
 			options="${options/ $i / }"
@@ -604,6 +498,7 @@ __git_heads ()
 	local pfx="${1-}" cur_="${2-}" sfx="${3-}"
 
 	__git for-each-ref --format="${pfx//\%/%%}%(refname:strip=2)$sfx" \
+			${GIT_COMPLETION_IGNORE_CASE+--ignore-case} \
 			"refs/heads/$cur_*" "refs/heads/$cur_*/**"
 }
 
@@ -617,6 +512,7 @@ __git_remote_heads ()
 	local pfx="${1-}" cur_="${2-}" sfx="${3-}"
 
 	__git for-each-ref --format="${pfx//\%/%%}%(refname:strip=2)$sfx" \
+			${GIT_COMPLETION_IGNORE_CASE+--ignore-case} \
 			"refs/remotes/$cur_*" "refs/remotes/$cur_*/**"
 }
 
@@ -627,6 +523,7 @@ __git_tags ()
 	local pfx="${1-}" cur_="${2-}" sfx="${3-}"
 
 	__git for-each-ref --format="${pfx//\%/%%}%(refname:strip=2)$sfx" \
+			${GIT_COMPLETION_IGNORE_CASE+--ignore-case} \
 			"refs/tags/$cur_*" "refs/tags/$cur_*/**"
 }
 
@@ -646,6 +543,7 @@ __git_dwim_remote_heads ()
 	# but only output if the branch name is unique
 	__git for-each-ref --format="$fer_pfx%(refname:strip=3)$sfx" \
 		--sort="refname:strip=3" \
+		${GIT_COMPLETION_IGNORE_CASE+--ignore-case} \
 		"refs/remotes/*/$cur_*" "refs/remotes/*/$cur_*/**" | \
 	uniq -u
 }
@@ -670,6 +568,7 @@ __git_refs ()
 	local format refs
 	local pfx="${3-}" cur_="${4-$cur}" sfx="${5-}"
 	local match="${4-}"
+	local umatch="${4-}"
 	local fer_pfx="${pfx//\%/%%}" # "escape" for-each-ref format specifiers
 
 	__git_find_repo_path
@@ -693,12 +592,19 @@ __git_refs ()
 		fi
 	fi
 
+	if test "${GIT_COMPLETION_IGNORE_CASE:+1}" = "1"
+	then
+		# uppercase with tr instead of ${match,^^} for bash 3.2 compatibility
+		umatch=$(echo "$match" | tr a-z A-Z 2>/dev/null || echo "$match")
+	fi
+
 	if [ "$list_refs_from" = path ]; then
 		if [[ "$cur_" == ^* ]]; then
 			pfx="$pfx^"
 			fer_pfx="$fer_pfx^"
 			cur_=${cur_#^}
 			match=${match#^}
+			umatch=${umatch#^}
 		fi
 		case "$cur_" in
 		refs|refs/*)
@@ -709,7 +615,7 @@ __git_refs ()
 		*)
 			for i in HEAD FETCH_HEAD ORIG_HEAD MERGE_HEAD REBASE_HEAD CHERRY_PICK_HEAD; do
 				case "$i" in
-				$match*)
+				$match*|$umatch*)
 					if [ -e "$dir/$i" ]; then
 						echo "$pfx$i$sfx"
 					fi
@@ -723,6 +629,7 @@ __git_refs ()
 			;;
 		esac
 		__git_dir="$dir" __git for-each-ref --format="$fer_pfx%($format)$sfx" \
+			${GIT_COMPLETION_IGNORE_CASE+--ignore-case} \
 			"${refs[@]}"
 		if [ -n "$track" ]; then
 			__git_dwim_remote_heads "$pfx" "$match" "$sfx"
@@ -742,15 +649,16 @@ __git_refs ()
 	*)
 		if [ "$list_refs_from" = remote ]; then
 			case "HEAD" in
-			$match*)	echo "${pfx}HEAD$sfx" ;;
+			$match*|$umatch*)	echo "${pfx}HEAD$sfx" ;;
 			esac
 			__git for-each-ref --format="$fer_pfx%(refname:strip=3)$sfx" \
+				${GIT_COMPLETION_IGNORE_CASE+--ignore-case} \
 				"refs/remotes/$remote/$match*" \
 				"refs/remotes/$remote/$match*/**"
 		else
 			local query_symref
 			case "HEAD" in
-			$match*)	query_symref="HEAD" ;;
+			$match*|$umatch*)	query_symref="HEAD" ;;
 			esac
 			__git ls-remote "$remote" $query_symref \
 				"refs/tags/$match*" "refs/heads/$match*" \
@@ -888,7 +796,6 @@ __git_list_merge_strategies ()
 	}'
 }
 
-__git_merge_strategies_default='octopus ours recursive resolve subtree'
 __git_merge_strategies=
 # 'git merge -s help' (and thus detection of the merge strategy
 # list) fails, unfortunately, if run outside of any git working
@@ -898,8 +805,7 @@ __git_merge_strategies=
 __git_compute_merge_strategies ()
 {
 	test -n "$__git_merge_strategies" ||
-	{ __git_merge_strategies=$(__git_list_merge_strategies);
-		__git_merge_strategies="${__git_merge_strategies:-__git_merge_strategies_default}"; }
+	__git_merge_strategies=$(__git_list_merge_strategies)
 }
 
 __git_merge_strategy_options="ours theirs subtree subtree= patience
@@ -2281,7 +2187,7 @@ _git_reflog ()
 	fi
 }
 
-__git_send_email_options="--no-cc-cover --cc= --no-bcc --force --relogin-delay= --to= --suppress-cc= --no-annotate --no-chain-reply-to --sendmail-cmd= --no-identity --transfer-encoding= --validate --no-smtp-auth --confirm= --no-format-patch --reply-to= --smtp-pass= --smtp-server= --annotate --envelope-sender= --no-validate --dry-run --no-thread --smtp-debug= --no-to --thread --no-xmailer --identity= --no-signed-off-cc --no-signed-off-by-cc --smtp-domain= --to-cover --8bit-encoding= --bcc= --smtp-ssl-cert-path= --smtp-user= --cc-cmd= --to-cmd= --no-cc --smtp-server-option= --in-reply-to= --subject= --batch-size= --smtp-auth= --compose --smtp-server-port= --xmailer --no-to-cover --chain-reply-to --smtp-encryption= --dump-aliases --quiet --smtp-ssl --signed-off-cc --signed-off-by-cc --suppress-from --compose-encoding= --no-suppress-from --sender= --from= --format-patch --cc-cover --numbered --no-numbered --signoff --stdout --cover-letter --numbered-files --suffix= --start-number= --reroll-count= --filename-max-length= --rfc --cover-from-description= --subject-prefix= --output-directory= --keep-subject --no-binary --zero-commit --ignore-if-in-upstream --no-stat --add-header= --from --attach --inline --signature= --base= --signature-file= --progress --interdiff= --range-diff= --creation-factor= --binary -- --no-signoff --no-stdout --no-cover-letter --no-numbered-files --no-suffix --no-start-number --no-reroll-count --no-filename-max-length --no-cover-from-description --no-zero-commit --no-ignore-if-in-upstream --no-add-header --no-from --no-in-reply-to --no-attach --no-signature --no-base --no-signature-file --no-quiet --no-progress --no-interdiff --no-range-diff --no-creation-factor"
+__gitcomp_builtin_send_email_default="--8bit-encoding= --add-header= --annotate --attach --base= --batch-size= --bcc= --binary --cc-cmd= --cc-cover --cc= --chain-reply-to --compose --compose-encoding= --confirm= --cover-from-description= --cover-letter --creation-factor= --dry-run --dump-aliases --envelope-sender= --filename-max-length= --force --force-in-body-from --format-patch --from --from= --identity= --ignore-if-in-upstream --in-reply-to= --inline --interdiff= --keep-subject --numbered --numbered-files --output-directory= --progress --quiet --range-diff= --relogin-delay= --reply-to= --reroll-count= --rfc --sender= --sendmail-cmd= --signature-file= --signature= --signed-off-by-cc --signed-off-cc --signoff --smtp-auth= --smtp-debug= --smtp-domain= --smtp-encryption= --smtp-pass= --smtp-server-option= --smtp-server-port= --smtp-server= --smtp-ssl --smtp-ssl-cert-path= --smtp-user= --start-number= --stdout --subject-prefix= --subject= --suffix= --suppress-cc= --suppress-from --thread --to-cmd= --to-cover --to= --transfer-encoding= --v= --validate --xmailer --zero-commit -- --no-add-header --no-annotate --no-attach --no-base --no-bcc --no-binary --no-cc --no-cc-cover --no-chain-reply-to --no-cover-from-description --no-cover-letter --no-creation-factor --no-filename-max-length --no-force-in-body-from --no-format-patch --no-from --no-identity --no-ignore-if-in-upstream --no-in-reply-to --no-interdiff --no-numbered --no-numbered-files --no-progress --no-quiet --no-range-diff --no-reroll-count --no-signature --no-signature-file --no-signed-off-by-cc --no-signed-off-cc --no-signoff --no-smtp-auth --no-start-number --no-stat --no-stdout --no-suffix --no-suppress-from --no-thread --no-to --no-to-cover --no-validate --no-xmailer --no-zero-commit"
 __git_send_email_confirm_options="always never auto cc compose"
 __git_send_email_suppresscc_options="author self cc bodycc sob cccmd body all"
 
@@ -2321,7 +2227,11 @@ _git_send_email ()
 		return
 		;;
 	--*)
-		__gitcomp_builtin send-email "$__git_send_email_options $__git_format_patch_extra_options"
+		# Older versions of git send-email don't have all the options
+		git send-email --git-completion-helper | grep -q annotate ||
+		__gitcomp_builtin_send_email=$__gitcomp_builtin_send_email_default
+
+		__gitcomp_builtin send-email "$__git_format_patch_extra_options"
 		return
 		;;
 	esac
@@ -2456,7 +2366,25 @@ __git_config_vars=
 __git_compute_config_vars ()
 {
 	test -n "$__git_config_vars" ||
-	__git_config_vars="$(git help --config-for-completion | sort -u)"
+	__git_config_vars="$(git help --config-for-completion)"
+}
+
+__git_compute_config_sections_old ()
+{
+	__git_compute_config_vars
+	echo "$__git_config_vars" |
+		awk -F . '{ dict[$1] = 1 } END { for (e in dict) print e }'
+}
+
+__git_config_sections=
+__git_compute_config_sections ()
+{
+	test -n "$__git_config_sections" ||
+	__git_config_sections="$(
+		git help --config-sections-for-completion > /dev/null 2>&1 &&
+		git help --config-sections-for-completion ||
+		__git_compute_config_sections_old
+	)"
 }
 
 # Completes possible values of various configuration variables.
@@ -2670,16 +2598,8 @@ __git_complete_config_variable_name ()
 		__gitcomp "$__git_config_vars" "" "$cur_" "$sfx"
 		;;
 	*)
-		__git_compute_config_vars
-		__gitcomp_nl "$(echo "$__git_config_vars" |
-				awk -F . '{
-					sections[$1] = 1
-				}
-				END {
-					for (s in sections)
-						print s "."
-				}
-				')" "" "$cur_" ""
+		__git_compute_config_sections
+		__gitcomp_nl "$__git_config_sections" "" "$cur_" "."
 		;;
 	esac
 }
@@ -3627,43 +3547,6 @@ __git_complete ()
 	fi
 	___git_complete $1 $func
 }
-
-if ! git --list-cmds=main >/dev/null 2>&1; then
-
-	declare -A __git_cmds
-	__git_cmds[list-complete]="apply blame cherry config difftool fsck help instaweb mergetool prune reflog remote repack replace request-pull send-email show-branch stage whatchanged"
-	__git_cmds[list-guide]="attributes cli core-tutorial credentials cvs-migration diffcore everyday faq glossary hooks ignore mailmap modules namespaces remote-helpers repository-layout revisions submodules tutorial tutorial-2 workflows"
-	__git_cmds[list-mainporcelain]="add am archive bisect branch bundle checkout cherry-pick citool clean clone commit describe diff fetch format-patch gc grep gui init log maintenance merge mv notes pull push range-diff rebase reset restore revert rm shortlog show sparse-checkout stash status submodule switch tag worktree gitk"
-	__git_cmds[main]="add add--interactive am annotate apply archimport archive bisect bisect--helper blame branch bugreport bundle cat-file check-attr check-ignore check-mailmap check-ref-format checkout checkout--worker checkout-index cherry cherry-pick citool clean clone column commit commit-graph commit-tree config count-objects credential credential-cache credential-cache--daemon credential-store cvsexportcommit cvsimport cvsserver daemon describe diff diff-files diff-index diff-tree difftool difftool--helper env--helper fast-export fast-import fetch fetch-pack filter-branch fmt-merge-msg for-each-ref for-each-repo format-patch fsck fsck-objects fsmonitor--daemon gc get-tar-commit-id grep gui gui--askpass hash-object help hook http-backend http-fetch http-push imap-send index-pack init init-db instaweb interpret-trailers legacy-rebase legacy-stash log ls-files ls-remote ls-tree mailinfo mailsplit maintenance merge merge-base merge-file merge-index merge-octopus merge-one-file merge-ours merge-recursive merge-recursive-ours merge-recursive-theirs merge-resolve merge-subtree merge-tree mergetool mktag mktree multi-pack-index mv name-rev notes p4 pack-objects pack-redundant pack-refs patch-id pickaxe prune prune-packed pull push quiltimport range-diff read-tree rebase rebase--helper receive-pack reflog relink remote remote-ext remote-fd remote-ftp remote-ftps remote-http remote-https remote-testsvn repack replace request-pull rerere reset restore rev-list rev-parse revert rm send-email send-pack serve sh-i18n--envsubst shell shortlog show show-branch show-index show-ref sparse-checkout stage stash status stripspace submodule submodule--helper svn switch symbolic-ref tag unpack-file unpack-objects update-index update-ref update-server-info upload-archive upload-archive--writer upload-pack var verify-commit verify-pack verify-tag version web--browse whatchanged worktree write-tree"
-	__git_cmds[others]=""
-	__git_cmds[parseopt]="add am apply archive bisect--helper blame branch bugreport cat-file check-attr check-ignore check-mailmap checkout checkout--worker checkout-index cherry cherry-pick clean clone column commit commit-graph config count-objects credential-cache credential-cache--daemon credential-store describe difftool env--helper fast-export fetch fmt-merge-msg for-each-ref for-each-repo format-patch fsck fsck-objects fsmonitor--daemon gc grep hash-object help hook init init-db interpret-trailers log ls-files ls-remote ls-tree merge merge-base merge-file mktree multi-pack-index mv name-rev notes pack-objects pack-refs pickaxe prune prune-packed pull push range-diff read-tree rebase receive-pack reflog remote repack replace rerere reset restore revert rm send-pack shortlog show show-branch show-index show-ref sparse-checkout stage stash status stripspace switch symbolic-ref tag update-index update-ref update-server-info upload-pack verify-commit verify-pack verify-tag version whatchanged write-tree "
-
-	# Override __git
-	__git ()
-	{
-		case "$1" in
-		--list-cmds=*)
-			while read -r -d ',' x; do
-				case "$x" in
-				nohelpers)
-					;;
-				alias)
-					;;
-				config)
-					;;
-				*)
-					echo ${__git_cmds[$x]}
-					;;
-				esac
-			done <<< "${1##--list-cmds=},"
-			return
-			;;
-		esac
-		git ${__git_C_args:+"${__git_C_args[@]}"} \
-			${__git_dir:+--git-dir="$__git_dir"} "$@" 2>/dev/null
-	}
-
-fi
 
 ___git_complete git __git_main
 ___git_complete gitk __gitk_main

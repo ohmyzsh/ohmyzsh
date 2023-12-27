@@ -2,7 +2,7 @@ dependencies:
   plugins/gitfast:
     repo: felipec/git-completion
     branch: master
-    version: tag:v1.3.7
+    version: tag:v2.0
     postcopy: |
       set -e
       rm -rf git-completion.plugin.zsh Makefile README.adoc t tools
