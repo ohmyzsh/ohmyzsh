@@ -23,5 +23,6 @@ jobs:
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
           TMP_DIR: ${{ env.RUNNER_TEMP }}
         run: |
+          gh auth logout # clear env before logging in
           gh auth login --with-token <<< "${GITHUB_TOKEN}"
           python3 .github/workflows/dependencies/updater.py
