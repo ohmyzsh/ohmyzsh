@@ -21,6 +21,8 @@ jobs:
       - name: Process dependencies
         env:
           GH_TOKEN: ${{ steps.generate_token.outputs.token }}
+          GIT_APP_NAME: ohmyzsh[bot]
+          GIT_APP_EMAIL: 54982679+ohmyzsh[bot]@users.noreply.github.com
           TMP_DIR: ${{ env.RUNNER_TEMP }}
         run: |
           python3 .github/workflows/dependencies/updater.py
