@@ -302,8 +302,8 @@ class Git:
 
   @staticmethod
   def add_and_commit(scope: str, version: str):
-    user_name = "ohmyzsh"
-    user_email = "bot@ohmyz.sh"
+    user_name = os.environ.get("GIT_APP_NAME")
+    user_email = os.environ.get("GIT_APP_EMAIL")
 
     # Add all files to git staging
     CommandRunner.run_or_fail(["git", "add", "-A", "-v"], stage="AddFiles")
