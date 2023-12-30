@@ -284,7 +284,11 @@ function ggl() {
 compdef _git ggl=git-checkout
 
 alias gluc='git pull upstream $(git_current_branch)'
+alias glucra='git pull upstream $(git_current_branch) --rebase --autostash'
+alias glucrav='git pull upstream $(git_current_branch) --rebase --autostash -v'
 alias glum='git pull upstream $(git_main_branch)'
+alias glumra='git pull upstream $(git_main_branch) --rebase --autostash'
+alias glumrav='git pull upstream $(git_main_branch) --rebase --autostash -v'
 alias gp='git push'
 alias gpd='git push --dry-run'
 
