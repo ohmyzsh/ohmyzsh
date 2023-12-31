@@ -26,12 +26,17 @@ fi
 # systems without the proper terminfo
 : ${ZSH_TMUX_FIXTERM_WITH_256COLOR:=screen-256color}
 # Set the configuration path
-: ${ZSH_TMUX_CONFIG:=$HOME/.tmux.conf}
+if [[ -e $HOME/.tmux.conf ]]; then
+  : ${ZSH_TMUX_CONFIG:=$HOME/.tmux.conf}
+elif [[ -e ${XDG_CONFIG_HOME:-$HOME/.config}/tmux/tmux.conf ]]; then
+  : ${ZSH_TMUX_CONFIG:=${XDG_CONFIG_HOME:-$HOME/.config}/tmux/tmux.conf}
+else
+  : ${ZSH_TMUX_CONFIG:=$HOME/.tmux.conf}
+fi
 # Set -u option to support unicode
 : ${ZSH_TMUX_UNICODE:=false}
 
 # ALIASES
-
 alias ta='tmux attach -t'
 alias tad='tmux attach -d -t'
 alias ts='tmux new-session -s'
@@ -73,7 +78,11 @@ function _zsh_tmux_plugin_run() {
   [[ "$ZSH_TMUX_UNICODE" == "true" ]] && tmux_cmd+=(-u)
 
   # Try to connect to an existing session.
-  [[ "$ZSH_TMUX_AUTOCONNECT" == "true" ]] && $tmux_cmd attach
+  if [[ -n "$ZSH_TMUX_DEFAULT_SESSION_NAME" ]]; then
+    [[ "$ZSH_TMUX_AUTOCONNECT" == "true" ]] && $tmux_cmd attach -t $ZSH_TMUX_DEFAULT_SESSION_NAME
+  else
+    [[ "$ZSH_TMUX_AUTOCONNECT" == "true" ]] && $tmux_cmd attach
+  fi
 
   # If failed, just run tmux, fixing the TERM variable if requested.
   if [[ $? -ne 0 ]]; then
@@ -83,9 +92,9 @@ function _zsh_tmux_plugin_run() {
       tmux_cmd+=(-f "$ZSH_TMUX_CONFIG")
     fi
     if [[ -n "$ZSH_TMUX_DEFAULT_SESSION_NAME" ]]; then
-        $tmux_cmd new-session -s $ZSH_TMUX_DEFAULT_SESSION_NAME
+      $tmux_cmd new-session -s $ZSH_TMUX_DEFAULT_SESSION_NAME
     else
-        $tmux_cmd new-session
+      $tmux_cmd new-session
     fi
   fi
 
@@ -99,8 +108,21 @@ compdef _tmux _zsh_tmux_plugin_run
 # Alias tmux to our wrapper function.
 alias tmux=_zsh_tmux_plugin_run
 
+function _tmux_directory_session() {
+  # current directory without leading path
+  local dir=${PWD##*/}
+  # md5 hash for the full working directory path
+  local md5=$(printf '%s' "$PWD" | md5sum | cut -d  ' ' -f 1)
+  # human friendly unique session name for this directory
+  local session_name="${dir}-${md5:0:6}"
+  # create or attach to the session
+  tmux new -As "$session_name"
+}
+
+alias tds=_tmux_directory_session
+
 # Autostart if not already in tmux and enabled.
-if [[ -z "$TMUX" && "$ZSH_TMUX_AUTOSTART" == "true" && -z "$INSIDE_EMACS" && -z "$EMACS" && -z "$VIM" ]]; then
+if [[ -z "$TMUX" && "$ZSH_TMUX_AUTOSTART" == "true" && -z "$INSIDE_EMACS" && -z "$EMACS" && -z "$VIM" && -z "$INTELLIJ_ENVIRONMENT_READER" ]]; then
   # Actually don't autostart if we already did and multiple autostarts are disabled.
   if [[ "$ZSH_TMUX_AUTOSTART_ONCE" == "false" || "$ZSH_TMUX_AUTOSTARTED" != "true" ]]; then
     export ZSH_TMUX_AUTOSTARTED=true

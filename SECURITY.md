@@ -17,8 +17,7 @@ In the near future we will introduce versioning, so expect this section to chang
 
 **Do not submit an issue or pull request**: this might reveal the vulnerability.
 
-Instead, you should email the maintainers directly at: [**security@ohmyz.sh**](mailto:security@ohmyz.sh).
+Instead, you should email the maintainers directly at: [**security@ohmyz.sh**](mailto:security@ohmyz.sh),
+or using the link to [privately report a vulnerability with GitHub](https://github.com/ohmyzsh/ohmyzsh/security/advisories/new).
 
 We will deal with the vulnerability privately and submit a patch as soon as possible.
-
-You can also submit your vulnerability report to [huntr.dev](https://huntr.dev/bounties/disclose/?utm_campaign=ohmyzsh%2Fohmyzsh&utm_medium=social&utm_source=github&target=https%3A%2F%2Fgithub.com%2Fohmyzsh%2Fohmyzsh) and see if you can get a bounty reward.

@@ -126,5 +126,7 @@ Naming convention:
 - `jaddr <app_name> [unit_num]`: display app or unit IP address.
 - `jreld <relation_name> <app_name> <unit_num>`: display app and unit relation data.
 - `jclean`: destroy all controllers
+- `jcontroller`: display the controller your are connected to.
+- `jmodel`: display the model your are connected to.
 - `wjst [interval_secs] [args_for_watch]`: watch juju status, with optional interval
   (default: 5s); you may pass additional arguments to `watch`.

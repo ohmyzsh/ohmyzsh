@@ -1,0 +1,23 @@
+{
+  "headers": [
+    {
+      "source": "/((?!favicon.ico).*)",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/plain"
+        },
+        {
+          "key": "Content-Disposition",
+          "value": "inline; filename=\"install.sh\""
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/((?!favicon.ico|install.sh).*)",
+      "destination": "/install.sh"
+    }
+  ]
+}

@@ -9,14 +9,21 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
+permissions: {}
 jobs:
   add-to-project:
     name: Add to project
     runs-on: ubuntu-latest
     if: github.repository == 'ohmyzsh/ohmyzsh'
-    env:
-      GITHUB_TOKEN: ${{ secrets.PROJECT_TOKEN }}
     steps:
+      - name: Authenticate as @ohmyzsh
+        id: generate_token
+        uses: ohmyzsh/github-app-token@v2
+        with:
+          app_id: ${{ secrets.OHMYZSH_APP_ID }}
+          private_key: ${{ secrets.OHMYZSH_APP_PRIVATE_KEY }}
+      - name: Store app token
+        run: echo "GH_TOKEN=${{ steps.generate_token.outputs.token }}" >> "$GITHUB_ENV"
       - name: Read project data
         env:
           ORGANIZATION: ohmyzsh
@@ -26,24 +33,25 @@ jobs:
           gh api graphql -f query='
             query($org: String!, $number: Int!) {
               organization(login: $org){
-                projectNext(number: $number) {
+                projectV2(number: $number) {
                   id
                   fields(first:20) {
                     nodes {
-                      id
-                      name
+                      ... on ProjectV2Field {
+                        id
+                        name
+                      }
                     }
                   }
                 }
               }
-            }
-          ' -f org=$ORGANIZATION -F number=$PROJECT_NUMBER > project_data.json
+            }' -f org=$ORGANIZATION -F number=$PROJECT_NUMBER > project_data.json
 
           # Parse project data
           cat >> $GITHUB_ENV <<EOF
-          PROJECT_ID=$(jq '.data.organization.projectNext.id' project_data.json)
-          PLUGIN_FIELD_ID=$(jq '.data.organization.projectNext.fields.nodes[] | select(.name == "Plugin") | .id' project_data.json)
-          THEME_FIELD_ID=$(jq '.data.organization.projectNext.fields.nodes[] | select(.name == "Theme") | .id' project_data.json)
+          PROJECT_ID=$(jq '.data.organization.projectV2.id' project_data.json)
+          PLUGIN_FIELD_ID=$(jq '.data.organization.projectV2.fields.nodes[] | select(.name == "Plugin") | .id' project_data.json)
+          THEME_FIELD_ID=$(jq '.data.organization.projectV2.fields.nodes[] | select(.name == "Theme") | .id' project_data.json)
           EOF
 
       - name: Add to project
@@ -52,13 +60,13 @@ jobs:
         run: |
           item_id="$(gh api graphql -f query='
             mutation($project: ID!, $content: ID!) {
-              addProjectNextItem(input: {projectId: $project, contentId: $content}) {
-                projectNextItem {
+              addProjectV2ItemById(input: {projectId: $project, contentId: $content}) {
+                item {
                   id
                 }
               }
             }
-          ' -f project=$PROJECT_ID -f content=$ISSUE_OR_PR_ID --jq '.data.addProjectNextItem.projectNextItem.id')"
+          ' -f project=$PROJECT_ID -f content=$ISSUE_OR_PR_ID --jq '.data.addProjectV2ItemById.item.id')"
 
           echo "ITEM_ID=$item_id" >> $GITHUB_ENV
 
@@ -107,23 +115,27 @@ jobs:
               $theme_field: ID!
               $theme_value: String!
             ) {
-              set_plugin: updateProjectNextItemField(input: {
+              set_plugin: updateProjectV2ItemFieldValue(input: {
                 projectId: $project
                 itemId: $item
                 fieldId: $plugin_field
-                value: $plugin_value
+                value: {
+                  text: $plugin_value
+                }
               }) {
-                projectNextItem {
+                projectV2Item {
                   id
                 }
               }
-              set_theme: updateProjectNextItemField(input: {
+              set_theme: updateProjectV2ItemFieldValue(input: {
                 projectId: $project
                 itemId: $item
                 fieldId: $theme_field
-                value: $theme_value
+                value: {
+                  text: $theme_value
+                }
               }) {
-                projectNextItem {
+                projectV2Item {
                   id
                 }
               }
@@ -132,4 +144,3 @@ jobs:
             -f plugin_field=$PLUGIN_FIELD_ID -f plugin_value=$PLUGIN \
             -f theme_field=$THEME_FIELD_ID -f theme_value=$THEME \
             --silent
-
