@@ -17,6 +17,7 @@ if [[ -z "${CLOUDSDK_HOME}" ]]; then
     "/opt/google-cloud-sdk"
     "/opt/google-cloud-cli"
     "/opt/local/libexec/google-cloud-sdk"
+    "$HOME/.asdf/installs/gcloud/*/"
   )
 
   for gcloud_sdk_location in $search_locations; do
