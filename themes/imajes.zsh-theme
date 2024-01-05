@@ -2,4 +2,4 @@
 #  http://zshwiki.org/home/config/prompt
 #
 
-PROMPT="%{$fg[red]%}%%%{$reset_color%} "
+PROMPT="%F{red}%%%f "
