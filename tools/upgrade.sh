@@ -281,5 +281,8 @@ case "$resetAutoStash" in
   *) git config rebase.autoStash "$resetAutoStash" ;;
 esac
 
-# Exit with `1` if the update failed
-exit $ret
+# Let script exit without exit command if update succeeds to allow ease of external automated updates
+if [ "$ret" -ne 0 ]; then
+    # Exit with exit code if the update failed
+    exit $ret
+fi
