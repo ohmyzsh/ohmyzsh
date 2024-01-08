@@ -16,17 +16,20 @@
 # ------------------------------------------------------------------------------
 
 __sudo_e_ok() {
-  [[ "$1" == "sudo" ]] && return 0  # Removing sudo, so return no issue
+  # If we are prefixed with sudo, removing it is ok
+  [[ "$1" == "sudo" ]] && return 0
   shift
-  local FILE GRP GROUPS=( $(id -G) )
-  for FILE in "$@"; do
-    [[ -d "$FILE" || -L "$FILE" ]] && return 1  # Dirs and symlinks fail
-    local DIR="$(dirname -- "$FILE")"
-    [[ ! -d "$DIR" ]] && return 1  # Non-existent parent
-    [[ "$(id -u)" -eq "$(ls -ldn "$DIR" | awk '{print $3}')" ]] && return 1  # We own the dir
-    local OWNER=( $(ls -ldn "$DIR" | awk '{print $4}') )
-    for GRP in "${GROUPS[@]}"; do
-      [[ "$GRP" == "$OWNER" ]] && return 1  # A group we are in owns the dir
+  local file grp groups=( $(id -G) )
+  for file in "$@"; do
+    # Dirs and symlinks are not allowed, now is a non-existent parent
+    [[ -d "$file" || -L "$file" ]] && return 1
+    local dir="$(dirname -- "$file")"
+    [[ ! -d "$dir" ]] && return 1
+    # Check if we own the parent directory or are in a group that does
+    [[ "$(id -u)" -eq "$(ls -ldn "$dir" | awk '{print $3}')" ]] && return 1
+    local owner=( $(ls -ldn "$dir" | awk '{print $4}') )
+    for grp in "${groups[@]}"; do
+      [[ "$grp" == "$owner" ]] && return 1
     done
   done
   return 0
