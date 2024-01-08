@@ -67,7 +67,7 @@ sudo-command-line() {
 
     # If sudo -e is not ok or $EDITOR is not set, just toggle the sudo prefix on and off
     test -z "$EDITOR" || __sudo_e_ok "${(z)LBUFFER}"
-    if [[ $? -ne 0 || -z "$EDITOR" ]]; then
+    if [[ "$?" -ne 0 ]]; then
       case "$BUFFER" in
         sudo\ -e\ *) __sudo-replace-buffer "sudo -e" "" ;;
         sudo\ *) __sudo-replace-buffer "sudo" "" ;;
