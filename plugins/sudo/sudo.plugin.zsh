@@ -15,6 +15,23 @@
 #
 # ------------------------------------------------------------------------------
 
+__sudo_e_ok() {
+  [[ "$1" == "sudo" ]] && return 0  # Removing sudo, so return no issue
+  shift
+  local FILE GRP GROUPS=( $(id -G) )
+  for FILE in "$@"; do
+    [[ -d "$FILE" || -L "$FILE" ]] && return 1  # Dirs and symlinks fail
+    local DIR="$(dirname -- "$FILE")"
+    [[ ! -d "$DIR" ]] && return 1  # Non-existent parent
+    [[ "$(id -u)" -eq "$(ls -ldn "$DIR" | awk '{print $3}')" ]] && return 1  # We own the dir
+    local OWNER=( $(ls -ldn "$DIR" | awk '{print $4}') )
+    for GRP in "${GROUPS[@]}"; do
+      [[ "$GRP" == "$OWNER" ]] && return 1  # A group we are in owns the dir
+    done
+  done
+  return 0
+}
+
 __sudo-replace-buffer() {
   local old=$1 new=$2 space=${2:+ }
 
@@ -45,8 +62,9 @@ sudo-command-line() {
     # Else use the default $EDITOR
     local EDITOR=${SUDO_EDITOR:-${VISUAL:-$EDITOR}}
 
-    # If $EDITOR is not set, just toggle the sudo prefix on and off
-    if [[ -z "$EDITOR" ]]; then
+    # If sudo -e is not ok or $EDITOR is not set, just toggle the sudo prefix on and off
+    __sudo_e_ok "${(z)LBUFFER}"
+    if [[ $? -ne 0 || -z "$EDITOR" ]]; then
       case "$BUFFER" in
         sudo\ -e\ *) __sudo-replace-buffer "sudo -e" "" ;;
         sudo\ *) __sudo-replace-buffer "sudo" "" ;;
