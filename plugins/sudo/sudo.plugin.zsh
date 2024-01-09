@@ -29,7 +29,7 @@ __sudo_e_ok() {
     [[ "$(id -u)" -eq "$(ls -ldn "$dir" | awk '{print $3}')" ]] && return 1
     local owner=( $(ls -ldn "$dir" | awk '{print $4}') )
     for grp in "${groups[@]}"; do
-      [[ "$grp" == "$owner" ]] && return 1
+      [[ "$grp" -eq "$owner" ]] && return 1
     done
   done
   return 0
