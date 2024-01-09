@@ -21,7 +21,7 @@ __sudo_e_ok() {
   shift
   local file grp groups=( $(id -G) )
   for file in "$@"; do
-    # Dirs and symlinks are not allowed, now is a non-existent parent
+    # Dirs and symlinks are not allowed, nor is a non-existent parent
     [[ -d "$file" || -L "$file" ]] && return 1
     local dir="$(dirname -- "$file")"
     [[ ! -d "$dir" ]] && return 1
