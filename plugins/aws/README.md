@@ -16,6 +16,8 @@ plugins=(... aws)
   It also sets `$AWS_EB_PROFILE` to `<profile>` for the Elastic Beanstalk CLI. It sets `$AWS_PROFILE_REGION` for display in `aws_prompt_info`.
   Run `asp` without arguments to clear the profile.
 * `asp [<profile>] login`: If AWS SSO has been configured in your aws profile, it will run the `aws sso login` command following profile selection.
+* `asp [<profile>] login [<sso_session>]`: In addition to `asp [<profile>] login`, if SSO session has been configured in your aws profile, it will run the `aws sso login --sso-session <sso_session>` command following profile selection.
+* `asp [<profile>] logout`: If AWS SSO has been configured in your aws profile, it will run the `aws sso logout` command following profile selection.
 
 * `asr [<region>]`: sets `$AWS_REGION` and `$AWS_DEFAULT_REGION` (legacy) to `<region>`.
   Run `asr` without arguments to clear the profile.
