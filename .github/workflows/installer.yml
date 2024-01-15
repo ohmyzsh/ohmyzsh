@@ -17,6 +17,7 @@ permissions:
 jobs:
   test:
     name: Test installer
+    if: github.repository == 'ohmyzsh/ohmyzsh'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -48,7 +49,8 @@ jobs:
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
           cp tools/install.sh .github/workflows/installer/install.sh
           cd .github/workflows/installer
-          vc deploy --prod -t ${{ secrets.VERCEL_TOKEN }}
+          vc deploy --prod -t "$VERCEL_TOKEN"

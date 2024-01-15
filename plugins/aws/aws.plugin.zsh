@@ -29,7 +29,13 @@ function asp() {
   export AWS_PROFILE_REGION=$(aws configure get region)
 
   if [[ "$2" == "login" ]]; then
-    aws sso login
+    if [[ -n "$3" ]]; then
+      aws sso login --sso-session $3
+    else
+      aws sso login
+    fi
+  elif [[ "$2" == "logout" ]]; then
+    aws sso logout
   fi
 }
 
