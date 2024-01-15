@@ -202,6 +202,7 @@ alias gdct='git describe --tags $(git rev-list --tags --max-count=1)'
 alias gd='git diff'
 alias gdca='git diff --cached'
 alias gdcw='git diff --cached --word-diff'
+alias gdm='git diff $(git_main_branch)'
 alias gds='git diff --staged'
 alias gdw='git diff --word-diff'
 

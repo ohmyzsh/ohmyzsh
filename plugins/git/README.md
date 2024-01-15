@@ -81,6 +81,7 @@ plugins=(... git)
 | `gd`                   | `git diff`                                                                                                                      |
 | `gdca`                 | `git diff --cached`                                                                                                             |
 | `gdcw`                 | `git diff --cached --word-diff`                                                                                                 |
+| `gdm`                  | `git diff $(git_main_branch)`                                                                                                   |
 | `gds`                  | `git diff --staged`                                                                                                             |
 | `gdw`                  | `git diff --word-diff`                                                                                                          |
 | `gdv`                  | `git diff -w "$@" \| view -`                                                                                                    |
