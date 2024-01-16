@@ -254,10 +254,45 @@ prompt_aws() {
   esac
 }
 
+#KUBERNETES icon:
+# - display KUBERNETES icon if context set
+# - displays red icon on black if context name contains 'prod'
+# - displays green icon on black if context name contains 'dev' or 'stage'
+# - displays yellow icon on black otherwise
+prompt_kubernetes_icon() {
+  KUBERNETES_SYMBOL=$'\xE2\x8E\x88'
+  KUBERNETES_CONTEXT=$1
+
+  case "$KUBERNETES_CONTEXT" in
+    *prod*) prompt_segment black red "$KUBERNETES_SYMBOL";;
+    *dev*|*stage*) prompt_segment black green "$KUBERNETES_SYMBOL";;
+    *) prompt_segment black yellow "$KUBERNETES_SYMBOL";;
+  esac
+
+}
+#KUBERNETES context:
+# - display current KUBERNETES context for connection
+# - from file .kube/config or env $KUBECONFIG
+# - displays context name
+# - displays namespace if set
+prompt_kubernetes() {
+  KUBERNETES_BINARY="${KUBERNETES_BINARY:-kubectl}"
+  [[ -z "$KUBECONFIG" && -z "$(${KUBERNETES_BINARY} config current-context 2>/dev/null)" ]] && return
+
+  KUBERNETES_CONTEXT="$(${KUBERNETES_BINARY} config current-context 2>/dev/null)"
+  KUBERNETES_CONTEXT="${KUBERNETES_CONTEXT:-N/A}"
+  KUBERNETES_NAMESPACE="$(${KUBERNETES_BINARY} config view --minify -o jsonpath={..namespace} 2>/dev/null)"
+  KUBERNETES_NAMESPACE="${KUBERNETES_NAMESPACE:+ ns:$KUBERNETES_NAMESPACE}"
+
+  prompt_kubernetes_icon "$KUBERNETES_CONTEXT"
+  prompt_segment $CURRENT_BG default "$KUBERNETES_CONTEXT$KUBERNETES_NAMESPACE"
+}
+
 ## Main prompt
 build_prompt() {
   RETVAL=$?
   prompt_status
+  prompt_kubernetes
   prompt_virtualenv
   prompt_aws
   prompt_context
