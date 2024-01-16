@@ -26,6 +26,7 @@ function web_search() {
     scholar         "https://scholar.google.com/scholar?q="
     ask             "https://www.ask.com/web?q="
     youtube         "https://www.youtube.com/results?search_query="
+    deepl           "https://www.deepl.com/translator#auto/auto/"
   )
 
   # check whether the search engine is supported
@@ -68,6 +69,7 @@ alias archive='web_search archive'
 alias scholar='web_search scholar'
 alias ask='web_search ask'
 alias youtube='web_search youtube'
+alias deepl='web_search deepl'
 
 #add your own !bang searches here
 alias wiki='web_search duckduckgo \!w'

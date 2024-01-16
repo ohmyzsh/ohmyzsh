@@ -45,6 +45,7 @@ Available search contexts are:
 | `scholar`             | `https://scholar.google.com/scholar?q=`         |
 | `ask`                 | `https://www.ask.com/web?q=`                    |
 | `youtube`             | `https://www.youtube.com/results?search_query=` |
+| `deepl`               | `https://www.deepl.com/translator#auto/auto/`   |
 
 Also there are aliases for bang-searching DuckDuckGo:
 
