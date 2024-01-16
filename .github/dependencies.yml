@@ -24,4 +24,8 @@ dependencies:
     version: 8f5d8a5aa9942da7b2a764c7fa79e0f36ba802f7
     precopy: |
       set -e
-      test -e zsh-history-substring-search.plugin.zsh && mv zsh-history-substring-search.plugin.zsh history-substring-search.plugin.zsh
+      rm -f zsh-history-substring-search.plugin.zsh
+      test -e zsh-history-substring-search.zsh && mv zsh-history-substring-search.zsh history-substring-search.zsh
+    postcopy: |
+      set -e
+      test -e dependencies/OMZ-README.md && cat dependencies/OMZ-README.md >> README.md
