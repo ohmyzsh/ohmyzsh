@@ -21,7 +21,7 @@ dependencies:
   plugins/history-substring-search:
     repo: zsh-users/zsh-history-substring-search
     branch: master
-    version: 8f5d8a5aa9942da7b2a764c7fa79e0f36ba802f7
+    version: 8dd05bfcc12b0cd1ee9ea64be725b3d9f713cf64
     precopy: |
       set -e
       rm -f zsh-history-substring-search.plugin.zsh
