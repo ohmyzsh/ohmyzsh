@@ -39,6 +39,7 @@ alias vscn="$VSCODE --new-window"
 alias vscr="$VSCODE --reuse-window"
 alias vscw="$VSCODE --wait"
 alias vscu="$VSCODE --user-data-dir"
+alias vscp="$VSCODE --profile"
 
 alias vsced="$VSCODE --extensions-dir"
 alias vscie="$VSCODE --install-extension"
@@ -47,5 +48,3 @@ alias vscue="$VSCODE --uninstall-extension"
 alias vscv="$VSCODE --verbose"
 alias vscl="$VSCODE --log"
 alias vscde="$VSCODE --disable-extensions"
-
-alias vscp="$VSCODE --profile"
