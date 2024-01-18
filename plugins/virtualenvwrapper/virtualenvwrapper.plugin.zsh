@@ -88,4 +88,5 @@ if [[ ! $DISABLE_VENV_CD -eq 1 ]]; then
   # http://zsh.sourceforge.net/Doc/Release/Functions.html
   autoload -U add-zsh-hook
   add-zsh-hook chpwd workon_cwd
+  [[ $PWD != ~ ]] && workon_cwd
 fi
