@@ -37,9 +37,14 @@ function web_search() {
 
   # search or go to main page depending on number of arguments passed
   if [[ $# -gt 1 ]]; then
+    # if search goes in the query string ==> space as +, otherwise %20
+    # see https://stackoverflow.com/questions/1634271/url-encoding-the-space-character-or-20
+    local param="-P"
+    [[ "$urls[$1]" =~ .*\?.*=$ ]] && param=""
+
     # build search url:
     # join arguments passed with '+', then append to search engine URL
-    url="${urls[$1]}$(omz_urlencode ${@[2,-1]})"
+    url="${urls[$1]}$(omz_urlencode $param ${@[2,-1]})"
   else
     # build main page url:
     # split by '/', then rejoin protocol (1) and domain (2) parts with '//'
