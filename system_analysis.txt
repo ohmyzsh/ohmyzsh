@@ -1,0 +1,64 @@
+Список активных служб:
+  UNIT                                     LOAD   ACTIVE SUB     DESCRIPTION
+  accounts-daemon.service                  loaded active running Accounts Service
+  alsa-restore.service                     loaded active exited  Save/Restore Sound Card State
+  avahi-daemon.service                     loaded active running Avahi mDNS/DNS-SD Stack
+  chrome-remote-desktop@ars.service        loaded active running Chrome Remote Desktop instance for ars
+  colord.service                           loaded active running Manage, Install and Generate Color Profiles
+  dbus-broker.service                      loaded active running D-Bus System Message Bus
+  dracut-shutdown.service                  loaded active exited  Restore /run/initramfs on shutdown
+  firewalld.service                        loaded active running firewalld - dynamic firewall daemon
+  fwupd.service                            loaded active running Firmware update daemon
+  gdm.service                              loaded active running GNOME Display Manager
+  kmod-static-nodes.service                loaded active exited  Create List of Static Device Nodes
+  ldconfig.service                         loaded active exited  Rebuild Dynamic Linker Cache
+  libvirt-dbus.service                     loaded active running Libvirt DBus Service
+  lvm2-monitor.service                     loaded active exited  Monitoring of LVM2 mirrors, snapshots etc. using dmeventd or progress polling
+  NetworkManager-wait-online.service       loaded active exited  Network Manager Wait Online
+  NetworkManager.service                   loaded active running Network Manager
+● packagekit.service                       loaded failed failed  PackageKit Daemon
+  pamac-daemon.service                     loaded active running Pamac Daemon
+  passim.service                           loaded active running Local Caching Server
+  polkit.service                           loaded active running Authorization Manager
+  power-profiles-daemon.service            loaded active running Power Profiles daemon
+  rtkit-daemon.service                     loaded active running RealtimeKit Scheduling Policy Service
+  sshd.service                             loaded active running OpenSSH Daemon
+  systemd-binfmt.service                   loaded active exited  Set Up Additional Binary Formats
+  systemd-journal-catalog-update.service   loaded active exited  Rebuild Journal Catalog
+  systemd-journal-flush.service            loaded active exited  Flush Journal to Persistent Storage
+  systemd-journald.service                 loaded active running Journal Service
+  systemd-logind.service                   loaded active running User Login Management
+  systemd-modules-load.service             loaded active exited  Load Kernel Modules
+  systemd-random-seed.service              loaded active exited  Load/Save OS Random Seed
+  systemd-remount-fs.service               loaded active exited  Remount Root and Kernel File Systems
+  systemd-sysctl.service                   loaded active exited  Apply Kernel Variables
+  systemd-sysusers.service                 loaded active exited  Create System Users
+  systemd-timesyncd.service                loaded active running Network Time Synchronization
+  systemd-tmpfiles-setup-dev-early.service loaded active exited  Create Static Device Nodes in /dev gracefully
+  systemd-tmpfiles-setup-dev.service       loaded active exited  Create Static Device Nodes in /dev
+  systemd-tmpfiles-setup.service           loaded active exited  Create Volatile Files and Directories
+  systemd-udev-trigger.service             loaded active exited  Coldplug All udev Devices
+  systemd-udevd.service                    loaded active running Rule-based Manager for Device Events and Files
+  systemd-update-done.service              loaded active exited  Update is Completed
+  systemd-update-utmp.service              loaded active exited  Record System Boot/Shutdown in UTMP
+  systemd-user-sessions.service            loaded active exited  Permit User Sessions
+  systemd-vconsole-setup.service           loaded active exited  Virtual Console Setup
+  udisks2.service                          loaded active running Disk Manager
+  upower.service                           loaded active running Daemon for power management
+  user-runtime-dir@1000.service            loaded active exited  User Runtime Directory /run/user/1000
+  user@1000.service                        loaded active running User Manager for UID 1000
+  warp-svc.service                         loaded active running Cloudflare Zero Trust Client Daemon
+  wpa_supplicant.service                   loaded active running WPA supplicant
+
+Legend: LOAD   → Reflects whether the unit definition was properly loaded.
+        ACTIVE → The high-level unit activation state, i.e. generalization of SUB.
+        SUB    → The low-level unit activation state, values depend on unit type.
+
+49 loaded units listed. Pass --all to see loaded but inactive units, too.
+To show all installed unit files use 'systemctl list-unit-files'.
+
+
+Список автозагружаемых программ в GNOME:
+итого 0
+
+
