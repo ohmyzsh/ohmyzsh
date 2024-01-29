@@ -2,38 +2,45 @@
 # Take all host sections in .ssh/config and offer them for
 # completion as hosts (e.g. for ssh, rsync, scp and the like)
 # Filter out wildcard host sections.
-local hosts
-if [[ -f $HOME/.ssh/config ]]; then
-  hosts=($(egrep '^Host.*' $HOME/.ssh/config | awk '{print $2}' | grep -v '^*' | sed -e 's/\.*\*$//'))
-  zstyle ':completion:*:hosts' hosts $hosts
+_ssh_configfile="$HOME/.ssh/config"
+if [[ -f "$_ssh_configfile" ]]; then
+  _hosts=($(egrep '^Host.*' "$_ssh_configfile" | awk '{print $2}' | grep -v '^*' | sed -e 's/\.*\*$//'))
+  zstyle ':completion:*:hosts' hosts $_hosts
+  unset _hosts
 fi
+unset _ssh_configfile
 
 ############################################################
 # Remove host key from known hosts based on a host section
 # name from .ssh/config
 function ssh_rmhkey {
-  if [[ "x$1" == "x" ]]; then return; fi
-  ssh-keygen -R $(grep -A10 $1 ~/.ssh/config | grep -i HostName | head -n 1 | awk '{print $2}')
+  local ssh_configfile="$HOME/.ssh/config"
+  local ssh_host="$1"
+  if [[ -z "$ssh_host" ]]; then return; fi
+  ssh-keygen -R $(grep -A10 "$ssh_host" "$ssh_configfile" | grep -i HostName | head -n 1 | awk '{print $2}')
 }
 compctl -k hosts ssh_rmhkey
 
 ############################################################
 # Load SSH key into agent
 function ssh_load_key() {
-  local key=$1
-  if [[ "$key" == "" ]]; then return; fi
-  if ( ! ssh-add -l | grep -q $key ); then
-    ssh-add ~/.ssh/$key;
+  local key="$1"
+  if [[ -z "$key" ]]; then return; fi
+  local keyfile="$HOME/.ssh/$key"
+  local keysig=$(ssh-keygen -l -f "$keyfile")
+  if ( ! ssh-add -l | grep -q "$keysig" ); then
+    ssh-add "$keyfile"
   fi
 }
 
 ############################################################
 # Remove SSH key from agent
 function ssh_unload_key {
-  local key=$1
-  if [[ "$key" == "" ]]; then return; fi
-  if ( ssh-add -l|grep -q $key ); then
-    local keyfile=$(ssh-add -l | grep $key | cut -d ' ' -f 3)
-    ssh-add -d $keyfile
+  local key="$1"
+  if [[ -z "$key" ]]; then return; fi
+  local keyfile="$HOME/.ssh/$key"
+  local keysig=$(ssh-keygen -l -f "$keyfile")
+  if ( ssh-add -l | grep -q "$keysig" ); then
+    ssh-add -d "$keyfile"
   fi
 }
