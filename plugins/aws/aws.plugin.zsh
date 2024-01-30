@@ -202,7 +202,7 @@ function aws_change_access_key() {
 }
 
 function aws_regions() {
-  local -a region
+  local region
   if [[ $AWS_DEFAULT_REGION ]];then
       region="$AWS_DEFAULT_REGION"
   elif [[ $AWS_REGION ]];then
