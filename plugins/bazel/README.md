@@ -16,7 +16,7 @@ The plugin has a copy of [the completion script from the git repository][1].
 
 | Alias   | Command                                | Description                                            |
 | ------- | -------------------------------------- | ------------------------------------------------------ |
-| bb      | `bazel build`                          | The `bazel build` command                              |
-| bt      | `bazel test`                           | The `bazel test` command                               |
-| br      | `bazel run`                            | The `bazel run` command                                |
-| bq      | `bazel query`                          | The `bazel query` command                              |
+| bzb      | `bazel build`                          | The `bazel build` command                              |
+| bzt      | `bazel test`                           | The `bazel test` command                               |
+| bzr      | `bazel run`                            | The `bazel run` command                                |
+| bzq      | `bazel query`                          | The `bazel query` command                              |
