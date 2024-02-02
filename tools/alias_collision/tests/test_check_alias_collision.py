@@ -10,6 +10,7 @@ from check_alias_collision import (
     check_for_duplicates,
     Alias,
     Collision,
+    load_known_collisions,
 )
 
 
@@ -24,6 +25,23 @@ CONDITIONAL_ALIAS = """
 is-at-least 2.8 "$git_version" \
   && alias gfa='git fetch --all --prune --jobs=10' \
   || alias gfa='git fetch --all --prune'
+"""
+
+ONE_KNOWN_COLLISION = """
+[
+    {
+        "existing_alias": {
+            "alias": "gcd",
+            "value": "git checkout $(git_develop_branch)",
+            "module": "plugins/git/git.plugin.zsh"
+        },
+        "new_alias": {
+            "alias": "gcd",
+            "value": "git checkout $(git config gitflow.branch.develop)",
+            "module": "plugins/git-flow/git-flow.plugin.zsh"
+        }
+    }
+]
 """
 
 
@@ -127,3 +145,22 @@ def test_is_new_collision__new_alias_in_known_collisions__should_return_false() 
     new_alias = Alias("ga", "git add", Path("git.zsh"))
     collision = Collision(Alias("gd", "git diff", Path("git.zsh")), new_alias)
     assert collision.is_new_collision(known_collisions) is False
+
+
+def test_load_known_collisions__empty_file__should_return_empty_list(
+    fs: FakeFilesystem,
+) -> None:
+    empty_list = Path("empty.json")
+    fs.create_file(empty_list, contents="[]")
+    result = load_known_collisions(empty_list)
+    assert [] == result
+
+
+def test_load_known_collisions__one_collision__should_return_one_collision(
+    fs: FakeFilesystem,
+) -> None:
+    known_collisions_file = Path("known_collisions.json")
+    fs.create_file(known_collisions_file, contents=ONE_KNOWN_COLLISION)
+    result = load_known_collisions(known_collisions_file)
+    assert 1 == len(result)
+    assert "gcd" == result[0].existing_alias.alias
