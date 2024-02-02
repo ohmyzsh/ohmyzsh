@@ -56,4 +56,4 @@ jobs:
       - name: Run unit tests
         run: |
           cd tools/alias_collision/
-          python -m unittest discover tests
+          python -m pytest
