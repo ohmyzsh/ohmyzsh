@@ -87,9 +87,7 @@ def test_find_aliases_in_file__one_conditional_alias_should_find_none(
     assert [] == result
 
 
-def test_check_for_duplicates__no_duplicates_should_return_empty_dict(
-    fs: FakeFilesystem,
-) -> None:
+def test_check_for_duplicates__no_duplicates_should_return_empty_dict() -> None:
     result = check_for_duplicates(
         [
             Alias("g", "git", Path("git.zsh")),
@@ -100,9 +98,7 @@ def test_check_for_duplicates__no_duplicates_should_return_empty_dict(
     assert result == []
 
 
-def test_check_for_duplicates__duplicates_should_have_one_collision(
-    fs: FakeFilesystem,
-) -> None:
+def test_check_for_duplicates__duplicates_should_have_one_collision() -> None:
     result = check_for_duplicates(
         [
             Alias("gc", "git commit", Path("git.zsh")),
@@ -115,3 +111,19 @@ def test_check_for_duplicates__duplicates_should_have_one_collision(
             Alias("gc", "git clone", Path("git.zsh")),
         )
     ]
+
+
+def test_is_new_collision__new_alias_not_in_known_collisions__should_return_true() -> (
+    None
+):
+    known_collisions = ["gc", "gd"]
+    new_alias = Alias("ga", "git add", Path("git.zsh"))
+    collision = Collision(Alias("gd", "git diff", Path("git.zsh")), new_alias)
+    assert collision.is_new_collision(known_collisions) is True
+
+
+def test_is_new_collision__new_alias_in_known_collisions__should_return_false() -> None:
+    known_collisions = ["gc", "gd", "ga"]
+    new_alias = Alias("ga", "git add", Path("git.zsh"))
+    collision = Collision(Alias("gd", "git diff", Path("git.zsh")), new_alias)
+    assert collision.is_new_collision(known_collisions) is False

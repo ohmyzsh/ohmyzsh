@@ -12,6 +12,45 @@ ERROR_MESSAGE_TEMPLATE = (
     "Alias `%s` defined in `%s` already exists as alias `%s` in `%s`."
 )
 
+# TODO: We want that list to be empty
+KNOWN_COLLISIONS = [
+    "bcubc",
+    "pbl",
+    "gcd",
+    "h",
+    "brs",
+    "github",
+    "stackoverflow",
+    "zcl",
+    "afs",
+    "allpkgs",
+    "mydeb",
+    "jh",
+    "n",
+    "a",
+    "p",
+    "sf",
+    "sp",
+    "hs",
+    "db",
+    "rn",
+    "rs",
+    "ru",
+    "sc",
+    "sd",
+    "sd",
+    "sp",
+    "c",
+    "dr",
+    "rake",
+    "rubies",
+    "h",
+    "ma",
+    "map",
+    "mis",
+    "m",
+]
+
 
 def dir_path(path_string: str) -> Path:
     if Path(path_string).is_dir():
@@ -47,6 +86,9 @@ class Collision:
     existing_alias: Alias
     new_alias: Alias
 
+    def is_new_collision(self, known_collisions: List[str]) -> bool:
+        return self.new_alias.alias not in known_collisions
+
 
 def find_aliases_in_file(file: Path) -> List[Alias]:
     matches = re.findall(r"^alias (.*)='(.*)'", file.read_text(), re.M)
@@ -54,8 +96,7 @@ def find_aliases_in_file(file: Path) -> List[Alias]:
 
 
 def find_all_aliases(path: Path) -> list:
-    files = list(path.rglob("*.zsh"))
-    aliases = [find_aliases_in_file(file) for file in files]
+    aliases = [find_aliases_in_file(file) for file in path.rglob("*.zsh")]
     return list(itertools.chain(*aliases))
 
 
@@ -94,10 +135,13 @@ def main():
     args = parse_arguments()
     aliases = find_all_aliases(args.folder)
     collisions = check_for_duplicates(aliases)
-    print_collisions(collisions)
-    # TODO enable once all collisions are fixed
-    # if collisions:
-    #     exit(-1)
+    new_collisions = [
+        collision
+        for collision in collisions
+        if collision.is_new_collision(KNOWN_COLLISIONS)
+    ]
+    print_collisions(new_collisions)
+    return -1 if collisions else 0
 
 
 if __name__ == "__main__":
