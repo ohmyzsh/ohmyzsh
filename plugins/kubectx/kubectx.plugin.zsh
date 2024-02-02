@@ -9,5 +9,5 @@ function kubectx_prompt_info() {
 
   # use value in associative array if it exists
   # otherwise fall back to the context name
-  echo "${kubectx_mapping[$current_ctx]:-${current_ctx:gs/%/%%}}"
+  echo "${kubectx_mapping[\"$current_ctx\"]:-${current_ctx:gs/%/%%}}"
 }
