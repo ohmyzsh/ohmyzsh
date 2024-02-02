@@ -3,6 +3,7 @@
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser
 from pathlib import Path
 from dataclasses import dataclass
+from typing import List, Dict
 import itertools
 import re
 
@@ -47,7 +48,7 @@ class Collision:
     new_alias: Alias
 
 
-def find_aliases_in_file(file: Path) -> list[Alias]:
+def find_aliases_in_file(file: Path) -> List[Alias]:
     matches = re.findall(r"^alias (.*)='(.*)'", file.read_text(), re.M)
     return [Alias(match[0], match[1], file) for match in matches]
 
@@ -58,7 +59,7 @@ def find_all_aliases(path: Path) -> list:
     return list(itertools.chain(*aliases))
 
 
-def check_for_duplicates(aliases: list[Alias]) -> list[Collision]:
+def check_for_duplicates(aliases: List[Alias]) -> List[Collision]:
     elements = {}
     collisions = []
     for alias in aliases:
@@ -70,7 +71,7 @@ def check_for_duplicates(aliases: list[Alias]) -> list[Collision]:
     return collisions
 
 
-def print_collisions(collisions: dict[Alias, Alias]) -> None:
+def print_collisions(collisions: Dict[Alias, Alias]) -> None:
     if collisions:
         print(f"Found {len(collisions)} alias collisions:\n")
         for collision in collisions:
