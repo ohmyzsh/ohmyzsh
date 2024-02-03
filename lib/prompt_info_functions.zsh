@@ -40,5 +40,5 @@ ZSH_THEME_RVM_PROMPT_OPTIONS="i v g"
 # use this to enable users to see their ruby version, no matter which
 # version management system they use
 function ruby_prompt_info() {
-  echo $(rvm_prompt_info || rbenv_prompt_info || chruby_prompt_info)
+  echo "$(rvm_prompt_info || rbenv_prompt_info || chruby_prompt_info)"
 }
