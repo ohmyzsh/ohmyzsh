@@ -1,18 +1,6 @@
 [
     {
         "existing_alias": {
-            "alias": "bcubc",
-            "value": "brew upgrade --cask && brew cleanup",
-            "module": "plugins/brew/brew.plugin.zsh"
-        },
-        "new_alias": {
-            "alias": "bcubc",
-            "value": "brew upgrade --cask && brew cleanup",
-            "module": "plugins/brew/brew.plugin.zsh"
-        }
-    },
-    {
-        "existing_alias": {
             "alias": "pbl",
             "value": "podman build",
             "module": "plugins/podman/podman.plugin.zsh"
