@@ -11,6 +11,7 @@ _git_commit_aliases=(
   'revert'
   'style'
   'test'
+  'wip'
 )
 
 local alias type

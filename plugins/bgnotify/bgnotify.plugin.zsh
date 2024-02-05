@@ -21,13 +21,12 @@ function bgnotify_end {
     local elapsed=$(( EPOCHSECONDS - bgnotify_timestamp ))
 
     # check time elapsed
-    [[ $bgnotify_timestamp -gt 0 ]] || return
-    [[ $elapsed -ge $bgnotify_threshold ]] || return
+    [[ $bgnotify_timestamp -gt 0 ]] || return 0
+    [[ $elapsed -ge $bgnotify_threshold ]] || return 0
 
     # check if Terminal app is not active
-    [[ $(bgnotify_appid) != "$bgnotify_termid" ]] || return
+    [[ $(bgnotify_appid) != "$bgnotify_termid" ]] || return 0
 
-    [[ $bgnotify_bell = true ]] && printf '\a' # beep sound
     bgnotify_formatted "$exit_status" "$bgnotify_lastcmd" "$elapsed"
   } always {
     bgnotify_timestamp=0
@@ -52,6 +51,7 @@ function bgnotify_formatted {
   (( $3 < 60 )) || elapsed="$((( $3 % 3600) / 60 ))m $elapsed"
   (( $3 < 3600 )) || elapsed="$(( $3 / 3600 ))h $elapsed"
 
+  [[ $bgnotify_bell = true ]] && printf '\a' # beep sound
   if [[ $exit_status -eq 0 ]]; then
     bgnotify "#win (took $elapsed)" "$cmd"
   else
@@ -61,10 +61,9 @@ function bgnotify_formatted {
 
 function bgnotify_appid {
   if (( ${+commands[osascript]} )); then
-    # output is "app ID, window ID" (com.googlecode.iterm2, 116)
-    osascript -e 'tell application (path to frontmost application as text) to get the {id, id of front window}' 2>/dev/null
+    osascript -e "tell application id \"$(bgnotify_programid)\"  to get the {id, frontmost, id of front window, visible of front window}" 2>/dev/null
   elif [[ -n $WAYLAND_DISPLAY ]] && (( ${+commands[swaymsg]} )); then # wayland+sway
-    local app_id=$(find_sway_appid)
+    local app_id=$(bgnotify_find_sway_appid)
     [[ -n "$app_id" ]] && echo "$app_id" || echo $EPOCHSECONDS
   elif [[ -z $WAYLAND_DISPLAY ]] && [[ -n $DISPLAY ]] && (( ${+commands[xprop]} )); then
     xprop -root _NET_ACTIVE_WINDOW 2>/dev/null | cut -d' ' -f5
@@ -74,7 +73,7 @@ function bgnotify_appid {
 }
 
 
-function find_sway_appid {
+function bgnotify_find_sway_appid {
   # output is "app_id,container_id", for example "Alacritty,1694"
   # see example swaymsg output: https://github.com/ohmyzsh/ohmyzsh/files/13463939/output.json
   if (( ${+commands[jq]} )); then
@@ -105,15 +104,11 @@ function find_sway_appid {
   fi
 }
 
-function find_term_id {
-  local term_id="${bgnotify_termid%%,*}" # remove window id
-  if [[ -z "$term_id" ]]; then
-    case "$TERM_PROGRAM" in
-      iTerm.app) term_id='com.googlecode.iterm2' ;;
-      Apple_Terminal) term_id='com.apple.terminal' ;;
-    esac
-  fi
-  echo "$term_id"
+function bgnotify_programid {
+  case "$TERM_PROGRAM" in
+    iTerm.app) echo 'com.googlecode.iterm2' ;;
+    Apple_Terminal) echo 'com.apple.terminal' ;;
+  esac
 }
 
 function bgnotify {
@@ -121,7 +116,7 @@ function bgnotify {
   local message="$2"
   local icon="$3"
   if (( ${+commands[terminal-notifier]} )); then # macOS
-    local term_id=$(find_term_id)
+    local term_id=$(bgnotify_programid)
     terminal-notifier -message "$message" -title "$title" ${=icon:+-appIcon "$icon"} ${=term_id:+-activate "$term_id" -sender "$term_id"} &>/dev/null
   elif (( ${+commands[growlnotify]} )); then # macOS growl
     growlnotify -m "$title" "$message"
