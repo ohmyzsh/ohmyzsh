@@ -13,8 +13,6 @@ ZSH_THEME_RUBY_PROMPT_SUFFIX="›%{$reset_color%}"
 PROMPT='
 %\($reset_color%}$(git_prompt_info)$(virtualenv_prompt_info) %{$fg_bold[red]%}%*%{$reset_color%})$fg_bold[green]%}$reset_color%}%~$ '
 
-RPROMPT='$(ruby_prompt_info)'
-
 VIRTUAL_ENV_DISABLE_PROMPT=0
 ZSH_THEME_VIRTUAL_ENV_PROMPT_PREFIX="%{$fg[green]%}"
 ZSH_THEME_VIRTUAL_ENV_PROMPT_SUFFIX="%{$reset_color%}"
