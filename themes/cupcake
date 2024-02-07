@@ -1,0 +1,79 @@
+#!/usr/bin/env zsh
+
+# Emoji-based theme to display source control management and
+# virtual environment info beside the ordinary zsh prompt.
+
+# Theme inspired by:
+#  - Naming your Terminal tabs in OSX Lion - http://thelucid.com/2012/01/04/naming-your-terminal-tabs-in-osx-lion/
+#  - Bash_it sexy theme
+
+# Demo:
+# ┌ⓔ virtualenv 💁user @ 🎭 host in 📁directory on 🌿branch {1} ↑1 ↓1 +1 •1 ⌀1 ✗
+# └❯ cd .bash-it/themes/cupcake
+
+# virtualenv prompts
+VIRTUALENV_CHAR="ⓔ "
+VIRTUALENV_THEME_PROMPT_PREFIX=""
+VIRTUALENV_THEME_PROMPT_SUFFIX=""
+
+# SCM prompts
+SCM_NONE_CHAR=""
+SCM_GIT_CHAR="[±] "
+SCM_GIT_BEHIND_CHAR="%F{red}↓%f"
+SCM_GIT_AHEAD_CHAR="%F{green}↑%f"
+SCM_GIT_UNTRACKED_CHAR="⌀"
+SCM_GIT_UNSTAGED_CHAR="%F{yellow}•%f"
+SCM_GIT_STAGED_CHAR="%F{green}+%f"
+
+SCM_THEME_PROMPT_DIRTY=""
+SCM_THEME_PROMPT_CLEAN=""
+SCM_THEME_PROMPT_PREFIX=""
+SCM_THEME_PROMPT_SUFFIX=""
+
+# Git status prompts
+GIT_THEME_PROMPT_DIRTY=" %F{red}✗%f"
+GIT_THEME_PROMPT_CLEAN=" %F{green}✓%f"
+GIT_THEME_PROMPT_PREFIX=""
+GIT_THEME_PROMPT_SUFFIX=""
+
+# ICONS =======================================================================
+
+icon_start="┌"
+icon_user="💁  "
+icon_host=" @ 🎭  "
+icon_directory=" in 📁  "
+icon_branch="🌿"
+icon_end="└❯ "
+
+# extra spaces ensure legibility in prompt
+
+# FUNCTIONS ===================================================================
+
+# Display virtual environment info
+virtualenv_prompt() {
+  if [[ -n "$VIRTUAL_ENV" ]]; then
+    virtualenv=$(basename "$VIRTUAL_ENV")
+    echo -e "$VIRTUALENV_CHAR$virtualenv "
+  fi
+}
+
+# Rename tab
+tabname() {
+  print -Pn "\e]1;$1\a"
+}
+
+# Rename window
+winname() {
+  print -Pn "\e]2;$1\a"
+}
+
+# PROMPT OUTPUT ===============================================================
+
+# Displays the current prompt
+prompt_command() {
+  PROMPT="\n${icon_start}$(virtualenv_prompt)${icon_user}%F{red}%n%f${icon_host}%F{cyan}%m%f${icon_directory}%F{magenta}%~%f%([[ -n \$(git branch 2> /dev/null) ]] && echo \" on ${icon_branch}  \")%F{white}$(scm_prompt_info)%f\n${icon_end}"
+  RPROMPT="${icon_end}"
+}
+
+# Runs prompt (this bypasses any $PROMPT setting)
+safe_append_prompt_command prompt_command
