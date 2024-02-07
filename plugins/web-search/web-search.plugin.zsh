@@ -44,7 +44,7 @@ function web_search() {
     # if search goes in the query string ==> space as +, otherwise %20
     # see https://stackoverflow.com/questions/1634271/url-encoding-the-space-character-or-20
     local param="-P"
-    [[ "$urls[$1]" =~ .*\?.*=$ ]] && param=""
+    [[ "$urls[$1]" == *\?*= ]] && param=""
 
     # build search url:
     # join arguments passed with '+', then append to search engine URL
