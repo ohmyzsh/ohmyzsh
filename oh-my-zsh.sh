@@ -53,7 +53,7 @@ unset -f omz_f
 # Set ZSH_CACHE_DIR to the path where cache files should be created
 # or else we will use the default cache/
 if [[ -z "$ZSH_CACHE_DIR" ]]; then
-  ZSH_CACHE_DIR="$ZSH/cache"
+  ZSH_CACHE_DIR=${XDG_CACHE_HOME:-"$ZSH/cache"}
 fi
 
 # Make sure $ZSH_CACHE_DIR is writable, otherwise use a directory in $HOME
