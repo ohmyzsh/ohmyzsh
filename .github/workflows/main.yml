@@ -24,7 +24,7 @@ jobs:
     if: github.repository == 'ohmyzsh/ohmyzsh'
     steps:
       - name: Set up git repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install zsh
         run: sudo apt-get update; sudo apt-get install zsh
       - name: Check syntax
