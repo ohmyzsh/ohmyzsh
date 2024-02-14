@@ -29,12 +29,15 @@ plugins=(... laravel)
 | `pamc`  |  `php artisan make:controller` |
 | `pams`  |  `php artisan make:seeder` |
 | `pamt`  |  `php artisan make:test` |
-| `pamfa`  |  `php artisan make:factory` |
+| `pamfa` |  `php artisan make:factory` |
 | `pamp`  |  `php artisan make:policy` |
 | `pame`  |  `php artisan make:event` |
 | `pamj`  |  `php artisan make:job` |
 | `paml`  |  `php artisan make:listener` |
 | `pamn`  |  `php artisan make:notification` |
+| `pampp` |  `php artisan make:provider` |
+| `pammm` |  `php artisan make:migration` |
+
 
 ## Clears
 
