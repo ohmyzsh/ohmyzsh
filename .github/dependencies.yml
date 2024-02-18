@@ -18,3 +18,14 @@ dependencies:
       set -e
       test -e _zshz && mv -f _zshz _z
       test -e zsh-z.plugin.zsh && mv -f zsh-z.plugin.zsh z.plugin.zsh
+  plugins/history-substring-search:
+    repo: zsh-users/zsh-history-substring-search
+    branch: master
+    version: 8dd05bfcc12b0cd1ee9ea64be725b3d9f713cf64
+    precopy: |
+      set -e
+      rm -f zsh-history-substring-search.plugin.zsh
+      test -e zsh-history-substring-search.zsh && mv zsh-history-substring-search.zsh history-substring-search.zsh
+    postcopy: |
+      set -e
+      test -e dependencies/OMZ-README.md && cat dependencies/OMZ-README.md >> README.md
