@@ -42,7 +42,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set up git repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -55,11 +55,12 @@ jobs:
         run: |
           cd tools/alias_collision/
           python -m pytest
+      - name: Checkout target branch
+        uses: actions/checkout@v4
+        with:
+          path: ohmyzsh-target-branch
+          ref: ${GITHUB_BASE_REF}
       - name: Check for alias collisions on target branch
-        run: |
-          git checkout ${GITHUB_BASE_REF}
-          python tools/alias_collision/check_alias_collision.py plugins --known-collisions-output-path known_alias_collisions.json
+        run: python ohmyzsh-target-branch/tools/alias_collision/check_alias_collision.py plugins --known-collisions-output-path known_alias_collisions.json
       - name: Compare known collisions to new collisions on source branch
-        run: |
-          git checkout ${GITHUB_HEAD_REF}
-          python tools/alias_collision/check_alias_collision.py plugins --known-collisions known_alias_collisions.json
+        run: python tools/alias_collision/check_alias_collision.py plugins --known-collisions known_alias_collisions.json
