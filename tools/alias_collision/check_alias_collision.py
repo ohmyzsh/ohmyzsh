@@ -2,7 +2,7 @@
 
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser
 from pathlib import Path
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass
 from typing import List, Dict
 import itertools
 import re
@@ -13,8 +13,7 @@ ERROR_MESSAGE_TEMPLATE = (
     "Alias `%s` defined in `%s` already exists as alias `%s` in `%s`."
 )
 
-# TODO: We want that list to be empty and get rid of this file
-KNOWN_COLLISIONS = Path(__file__).resolve().parent / "known_collisions.json"
+KNOWN_COLLISIONS_PATH = Path(__file__).resolve().parent / "known_collisions.json"
 
 
 def dir_path(path_string: str) -> Path:
@@ -34,26 +33,38 @@ def parse_arguments():
         type=dir_path,
         help="Folder to check",
     )
-    parser.add_argument(
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument(
         "--known-collisions",
         type=Path,
-        default=KNOWN_COLLISIONS,
-        help="Json-serialized list of known collisions",
+        default=None,
+        help="Json-serialized list of known collision to compare to",
+    )
+    group.add_argument(
+        "--known-collisions-output-path",
+        type=Path,
+        default=KNOWN_COLLISIONS_PATH,
+        help="Output path for a json-serialized list of known collisions",
     )
     return parser.parse_args()
 
 
 @dataclass(frozen=True)
 class Alias:
-
     alias: str
     value: str
     module: Path
 
+    def to_dict(self) -> Dict:
+        return {
+            "alias": self.alias,
+            "value": self.value,
+            "module": str(self.module),
+        }
+
 
 @dataclass(frozen=True)
 class Collision:
-
     existing_alias: Alias
     new_alias: Alias
 
@@ -66,6 +77,12 @@ class Collision:
             Alias(**collision_dict["existing_alias"]),
             Alias(**collision_dict["new_alias"]),
         )
+
+    def to_dict(self) -> Dict:
+        return {
+            "existing_alias": self.existing_alias.to_dict(),
+            "new_alias": self.new_alias.to_dict(),
+        }
 
 
 def find_aliases_in_file(file: Path) -> List[Alias]:
@@ -113,25 +130,36 @@ def print_collisions(collisions: Dict[Alias, Alias]) -> None:
         print("Found no collisions")
 
 
+def check_for_new_collisions(
+    known_collisions: Path, collisions: List[Collision]
+) -> List[Collision]:
+    known_collisions = load_known_collisions(known_collisions)
+    known_collision_aliases = [
+        collision.new_alias.alias for collision in known_collisions
+    ]
+
+    return [
+        collision
+        for collision in collisions
+        if collision.is_new_collision(known_collision_aliases)
+    ]
+
+
 def main() -> int:
     """main"""
     args = parse_arguments()
     aliases = find_all_aliases(args.folder)
     collisions = check_for_duplicates(aliases)
 
-    known_collisions = load_known_collisions(args.known_collisions)
-    known_collision_aliases = [
-        collision.new_alias.alias for collision in known_collisions
-    ]
+    if args.known_collisions is not None:
+        new_collisions = check_for_new_collisions(args.known_collisions, collisions)
+        print_collisions(new_collisions)
+        return -1 if new_collisions else 0
 
-    new_collisions = [
-        collision
-        for collision in collisions
-        if collision.is_new_collision(known_collision_aliases)
-    ]
-
-    print_collisions(new_collisions)
-    return -1 if new_collisions else 0
+    args.known_collisions_output_path.write_text(
+        json.dumps([collision.to_dict() for collision in collisions])
+    )
+    return 0
 
 
 if __name__ == "__main__":
