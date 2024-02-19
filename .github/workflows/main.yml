@@ -59,7 +59,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: ohmyzsh-target-branch
-          ref: ${GITHUB_BASE_REF}
+          ref: master
       - name: Check for alias collisions on target branch
         run: python ohmyzsh-target-branch/tools/alias_collision/check_alias_collision.py plugins --known-collisions-output-path known_alias_collisions.json
       - name: Compare known collisions to new collisions on source branch
