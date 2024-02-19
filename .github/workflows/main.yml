@@ -61,6 +61,6 @@ jobs:
           path: ohmyzsh-target-branch
           ref: master
       - name: Check for alias collisions on target branch
-        run: python ohmyzsh-target-branch/tools/alias_collision/check_alias_collision.py plugins --known-collisions-output-path known_alias_collisions.json
+        run: python tools/alias_collision/check_alias_collision.py ohmyzsh-target-branch/plugins --known-collisions-output-path known_alias_collisions.json
       - name: Compare known collisions to new collisions on source branch
         run: python tools/alias_collision/check_alias_collision.py plugins --known-collisions known_alias_collisions.json
