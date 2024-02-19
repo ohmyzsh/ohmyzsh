@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "kubatura-340918",
+  "private_key_id": "ab00de4245031c40089f28467b3baa1da56d0666",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDE8NVwvvTlGC77\nnCzFY5BmKCWXej3vck4khCz6zN3ibtNsuISUuk4r5Q/X0dkY6oL5Ejxl72n+Q0Va\nVbS8RV6ZVfcksNPwo8sKjgjn4nO2/5ia4OD+yZuvgBxC9xdA5Qq9X/HVXfsCFl+O\nqOoRIaYaNNN7IRlS/9r513Aepi4aAw1AJf0IN6j95EkGPIpmLYWKzZdovKkj77tD\nUvEMZaO30umqXbNTstqNM0/bUor4NenXN67BQJYZa7t9qj7BX01oDEUaV/6Nc5VP\nSj01f4CgNZZGbj8+Dl+9e9xCnov4DCdbhGqeOukNpc5huIENjAV+pylSHZyp7fQz\nxp/qd5ivAgMBAAECggEAAQgevQwsIsGV2uqfK7GFRICercuzoVhSYszOxT60gkuv\nXuXakMTL+SS1iuLOvlLiW385GpwLq/7ULE9TVA59jbXEtVHYrYMproYxrOtYzwux\na89PBThPp78ykQKZTd3sXC79ajbZbY7AvG+qju1QyQ1CWrz5M+nZEg6gtpQwI3Q2\nXJ3b/uh/eLEnkZXbrNJU7csGHxpMZgJrNjOz1qCvdYyJSTHAx6fCA64DBBVYLRzA\nArO1/5rS0/lPOwKMlD0+RfkYydHOlFJ5VnkiTe6YjnyC8PU8TObH3zrvb1HnDDcW\nRVP9/Jk77zw3QI1qQv/tHITZYtsibUR8+aYJ23SBHQKBgQD1T/bwN6TTf352WjJ+\nEGNLUqS81isy2xdiaXkDFoObE/21nNPJT1/7CG7hzJsi6/4aKWcDQnOVjbOALUSf\nddtWGeNkrL4qLDL1ysRwv7Gd1seh9sB6MQpdT0dh8nCVmzGJNfgLHpY1SrIqdPMs\nYxgALmgECBc4zNI5I0CIjRY4lQKBgQDNhV4UlvshMTgDESPrb/OgLw688XtYRHT8\ntNKtR6Uq/5MqvMW3jXE3dJ8vdd7AJ1St7v6MOJ9Y4l0haiC195y1QZmAHrng/1Nd\nrpIysIs0PxHCAOa08VdfskvkkNYZ43rlXidEzYlsgawUyj7mmKHz226j5P6kBHAN\nnVNFFLVHMwKBgCjkvKiMzhhHv6AhJxumxbavvzCPj0H6Derk5Dxki2nVqkyVKST8\n62YgoMNZZV8r8f8QedCsSjJbHdo3MaJXdknjJOoKdeT320LoG1kkS4qhXEQeqzVz\naWPmrGKilKwL4/UYnxHTdnzJx+uV9Ven6T9WfRZ29tAMLNtDiiV5R4QFAoGAQBR/\nWwggUR8ZictEWdpUKfPCMqNQhBsEJu7yaVjXZOq/Jiops6uES3gvUgr8YwlgW8MS\n1wGonXwm8Y43mMUVtWY4yDvMVR0HD0SpDOkC3k1z6fuB85T0W0AqbZ/DQdstrGqI\n7+juGkjsMKdGqXuZs4ENpEh4JQfFMFmHZxin1QUCgYEAwtnLSzhxa9AwwW+pkaNe\nLSBhuKotWgNTYiSNCpxkPlNNxj3VbE1voQDoQTNZqpOloMc2/fnDiVxb5ev7foNp\nqlsdY0NjIdxPRf9VlDs8Q4QXuEmMqZgTb96Iz9bzGeeVlUJfsta0EJOVZTiHLADm\n6XWlmjC58iBhbZOe6RVjJ08=\n-----END PRIVATE KEY-----\n",
+  "client_email": "termux@kubatura-340918.iam.gserviceaccount.com",
+  "client_id": "100561963919946716654",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/termux%40kubatura-340918.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
