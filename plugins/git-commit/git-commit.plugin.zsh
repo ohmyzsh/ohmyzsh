@@ -14,7 +14,6 @@ _git_commit_aliases=(
   'wip'
 )
 
-local -a _git_commit_flags
 _git_commit_flags=(
   '-s'
   '--scope'
@@ -33,7 +32,7 @@ remove_flags() {
   message=$(sed -E "s/\s($regex)\s|\s($regex)$//g" <<< "$message")
 
   echo "$message"
-}
+};
 
 build_message () {
   if [[ "$*" =~ (-sa|-as) ]]; then
@@ -77,4 +76,4 @@ for type in "${_git_commit_aliases[@]}"; do
   fi
 done
 
-unset _git_commit_aliases _flags alias type
+unset _git_commit_aliases _git_commit_flags alias type
