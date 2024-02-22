@@ -12,6 +12,9 @@ plugins=(... git-commit)
 
 ```zsh
 git <type> [(-s, --scope) "<scope>"] "<message>"
+git <type> [(-a, --attention)] "<message>"
+git <type> [(-s, --scope) "<scope>"] [(-a, --attention)] "<message>"
+git <type> [(-sa, -as)] "<scope>" "<message>" "<message>"
 ```
 
 > ⚠️ Single/Double quotes around the scope and message are required
