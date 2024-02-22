@@ -42,6 +42,28 @@ Where `type` is one of the following:
 | Git alias                                     | Command                                              |
 | --------------------------------------------- | ---------------------------------------------------- |
 | `git style "remove trailing whitespace"`      | `git commit -m "style: remove trailing whitespace"`  |
-| `git wip "work in progress"`                  | `git commit -m "work in progress"`                   |
+| `git wip -a "work in progress"`               | `git commit -m "wip!: work in progress"`             |
 | `git fix -s "router" "correct redirect link"` | `git commit -m "fix(router): correct redirect link"` |
-| `git rev -s "api" "rollback v2"`              | `git commit -m "revert(api): rollback v2"`           |
+| `git rev -a -s "api" "rollback v2"`           | `git commit -m "revert(api)!: rollback v2"`          |
+
+## Conventional Commits List
+
+| Type     | Name                     | Description                                                                                            |
+| -------- | ------------------------ | ------------------------------------------------------------------------------------------------------ |
+| build    | Builds                   | Change that affect the build system or external dependencies (exemple scopes: composer and/or npm)     |
+| chore    | Chores                   | Other changes that don't modify src or test files                                                      |
+| ci       | Continuous Integrations  | Changes to our CI configuration files and scripts                                                      |
+| docs     | Documantation            | Documentation onyl changes                                                                             |
+| feat     | Features                 | A new feature                                                                                          |
+| fix      | Bug Fixes                | A bug fix                                                                                              |
+| perf     | Performance Improvements | A code change that improves performance                                                                |
+| refactor | Code Refactoring         | A code change tha neither fixes a bug nor adds a feature                                               |
+| rev      | Reverts                  | Reverts a previous commit                                                                              |
+| style    | Styles                   | Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc) |
+| test     | Tests                    | Adding missing tests or correcting existing tests                                                      |
+
+## Extras
+
+| Type  | Name             | Description                                                                       |
+| ----- | ---------------- | --------------------------------------------------------------------------------- |
+| wip   | Work In Progress | Denote commits that are still in progress and not ready for integration or review |
