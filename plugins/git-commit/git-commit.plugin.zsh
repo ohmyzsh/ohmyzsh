@@ -40,15 +40,22 @@ build_message () {
     local attention='!'
     local scope="($2)"
     shift 2
-  else
-    if [[ "$*" =~ (-s|--scope) ]]; then
-      local scope="($2)"
-      shift 2
-    fi
+  elif [[ "$1" =~ (-a|--attention) ]]; then
+    local attention='!'
+    shift 1
+  elif [[ "$2" =~ (-a|--attention) ]]; then
+    local attention='!'
+    shift 1
+  elif [[ "$*" =~ (-a|--attention) ]]; then
+    local attention='!'
+  fi
 
-    if [[ "$*" =~ (-a|--attention) ]]; then
-      local attention='!'
-    fi
+  if [[ "$*" =~ (-s|--scope) ]]; then
+    local scope="($2)"
+    shift 2
+  elif [[ "$2" =~ (-s|--scope) ]]; then
+    local scope="($3)"
+    shift 2
   fi
 
   local message="'$type'${scope}$attention: $@";
