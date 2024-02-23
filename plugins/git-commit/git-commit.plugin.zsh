@@ -51,7 +51,7 @@ build_message () {
       i=$next
     fi
 
-    if [[ "$flag" =~ (-s|--scope) ]]; then
+    if [[ "$flag" =~ (-s|--scope) && -n "$value" ]]; then
       local scope="($value)"
       i=$next
     fi
