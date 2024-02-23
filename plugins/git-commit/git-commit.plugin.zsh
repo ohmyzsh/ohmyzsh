@@ -32,7 +32,7 @@ remove_flags() {
 build_message () {
   local argv=("$@")
   local argc=${#@}
-  local i=0
+  local i=1
 
   while [[ $i -lt $argc ]];
   do
