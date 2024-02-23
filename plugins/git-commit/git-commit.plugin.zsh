@@ -34,7 +34,7 @@ build_message () {
   local argc=${#@}
   local i=0
 
-  while [ $i -lt $argc ];
+  while [[ $i -lt $argc ]];
   do
     if [[ "${argv[$i]}" =~ (-sa|-as) ]]; then
       local attention='!'
