@@ -35,26 +35,34 @@ remove_flags() {
 };
 
 build_message () {
-  if [[ "$*" =~ (-sa|-as) ]]; then
-    local attention='!'
-    local scope="($2)"
-  elif [[ "$1" =~ (-a|--attention) ]]; then
-    local attention='!'
-  elif [[ "$2" =~ (-a|--attention) ]]; then
-    local attention='!'
-  elif [[ "$*" =~ (-a|--attention) ]]; then
-    local attention='!'
-  fi
+  local argv=("$@")
+  local argc=${#@}
+  local i=0
 
-  if [[ "$*" =~ (-s|--scope) ]]; then
-    local scope="($2)"
-  elif [[ "$2" =~ (-s|--scope) ]]; then
-    local scope="($3)"
-  fi
+  while [ $i -lt $argc ];
+  do
+    if [[ "${argv[$i]}" =~ (-sa|-as) ]]; then
+      local attention='!'
+      local scope="(${argv[$i + 1]})"
+      i=$[$i + 1]
+    fi
 
-  local message="'$type'${scope}$attention: $@";
+    if [[ "${argv[$i]}" =~ (-a|--attention) ]]; then
+      local attention='!'
+      i=$[$i + 1]
+    fi
 
-  git commit -m $(remove_flags "$message" "${_git_commit_flags[@]}")
+    if [[ "${argv[$i]}" =~ (-s|--scope) ]]; then
+      local scope="(${argv[$i + 1]})"
+      i=$[$i + 1]
+    fi
+  i=$[$i + 1]
+  done
+
+  local template="'$type'${scope}$attention: ${@}";
+  local message=$(remove_flags "$template" "${_git_commit_flags[@]}")
+
+  git commit -m "$message"
 };
 
 local alias type
