@@ -24,14 +24,9 @@ _git_commit_flags=(
 )
 
 remove_flags() {
-  local message="$1"
-  local flags=("${@:2}")
-
   local regex=$(IFS="|"; echo "${_git_commit_flags[*]}")
 
-  message=$(sed -E "s/\s($regex)\s|\s($regex)$//g" <<< "$message")
-
-  echo "$message"
+  echo $(sed -E "s/\s($regex)\s|\s($regex)$//g" <<< "$1")
 };
 
 build_message () {
