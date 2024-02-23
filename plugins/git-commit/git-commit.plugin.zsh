@@ -36,22 +36,26 @@ build_message () {
 
   while [[ $i -lt $argc ]];
   do
-    if [[ "${argv[$i]}" =~ (-sa|-as) ]]; then
+    local flag="${argv[$i]}"
+    local value="${argv[$i + 1]}"
+    local next=$[$i + 1]
+
+    if [[ "$flag" =~ (-sa|-as) ]]; then
       local attention='!'
-      local scope="(${argv[$i + 1]})"
-      i=$[$i + 1]
+      local scope="($value)"
+      i=$next
     fi
 
-    if [[ "${argv[$i]}" =~ (-a|--attention) ]]; then
+    if [[ "$flag" =~ (-a|--attention) ]]; then
       local attention='!'
-      i=$[$i + 1]
+      i=$next
     fi
 
-    if [[ "${argv[$i]}" =~ (-s|--scope) ]]; then
-      local scope="(${argv[$i + 1]})"
-      i=$[$i + 1]
+    if [[ "$flag" =~ (-s|--scope) ]]; then
+      local scope="($value)"
+      i=$next
     fi
-  i=$[$i + 1]
+  i=$next
   done
 
   local template="'$type'${scope}$attention: ${@}";
