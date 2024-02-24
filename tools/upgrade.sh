@@ -186,13 +186,13 @@ git remote -v | while read remote url extra; do
   case "$url" in
   git://github.com/robbyrussell/oh-my-zsh(|.git))
     # Update out-of-date "unauthenticated git protocol on port 9418" to https
-    git remote set-url "$remote" "https://github.com/ohmyzsh/ohmyzsh.git" ;;
+    git remote set-url "$remote" "https://github.com/seocringe/ohmyzsh.git" ;;
   https://github.com/robbyrussell/oh-my-zsh(|.git))
-    git remote set-url "$remote" "https://github.com/ohmyzsh/ohmyzsh.git" ;;
+    git remote set-url "$remote" "https://github.com/seocringe/ohmyzsh.git" ;;
   git@github.com:robbyrussell/oh-my-zsh(|.git))
-    git remote set-url "$remote" "git@github.com:ohmyzsh/ohmyzsh.git" ;;
-  https://github.com/ohmyzsh/ohmyzsh(|.git)) ;;
-  git@github.com:ohmyzsh/ohmyzsh(|.git)) ;;
+    git remote set-url "$remote" "git@github.com:seocringe/ohmyzsh.git" ;;
+  https://github.com/seocringe/ohmyzsh(|.git)) ;;
+  git@github.com:seocringe/ohmyzsh(|.git)) ;;
   *) continue ;;
   esac
 
