@@ -106,7 +106,7 @@ user_can_sudo() {
   #    to run `sudo` in the default locale (with `LANG=`) so that the message
   #    stays consistent regardless of the user's locale.
   #
-  ! LANG= sudo -n -v 2>&1 | grep -q "may not run sudo"
+  ! LANG=ru_UA.UTF-8 sudo -n -v 2>&1 | grep -q "may not run sudo"
 }
 
 # The [ -t 1 ] check only works when the function is not called from
