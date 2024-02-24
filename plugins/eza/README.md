@@ -12,6 +12,7 @@ plugins=(... eza)
 
 All configurations are done using the `zstyle` command in the `:omz:plugins:eza` namespace.
 
+**NOTE:** The configuring needs to be done prior to OMZ loading the plugins. When the plugin is loaded, changing the `zstyle` won't have any effect.
 
 ### `dirs-first`
 
