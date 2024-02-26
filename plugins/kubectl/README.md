@@ -70,6 +70,7 @@ plugins=(... kubectl)
 | kdd     | `kubectl describe deployment`       | Describe deployment resource in detail                                                           |
 | kdeld   | `kubectl delete deployment`         | Delete the deployment                                                                            |
 | ksd     | `kubectl scale deployment`          | Scale a deployment                                                                               |
+| krrd    | `kubectl rollout restart deployment` | Rollout restart a deployment                                                                     |
 | krsd    | `kubectl rollout status deployment` | Check the rollout status of a deployment                                                         |
 | kres    | `kubectl set env $@ REFRESHED_AT=...` | Recreate all pods in deployment with zero-downtime                                             |
 |         |                                     | **Rollout management**                                                                           |
@@ -107,7 +108,8 @@ plugins=(... kubectl)
 | kdss    | `kubectl describe statefulset`      | Describe statefulset resource in detail                                                          |
 | kdelss  | `kubectl delete statefulset`        | Delete the statefulset                                                                           |
 | ksss    | `kubectl scale statefulset`         | Scale a statefulset                                                                              |
-| krsss   | `kubectl rollout status statefulset`| Check the rollout status of a deployment                                                         |
+| krrss   | `kubectl rollout restart statefulset` | Rollout restart a statefulset                                                                    |
+| krsss   | `kubectl rollout status statefulset`| Check the rollout status of a statefulset                                                        |
 |         |                                     | **Service Accounts management**                                                                  |
 | kdsa    | `kubectl describe sa`               | Describe a service account in details                                                            |
 | kdelsa  | `kubectl delete sa`                 | Delete the service account                                                                       |
