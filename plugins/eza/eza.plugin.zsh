@@ -1,4 +1,7 @@
-
+if ! (( $+commands[eza] )); then
+  print "zsh eza plugin: eza not found. Please install eza before using this plugin." >&2
+  return 1
+fi
 
 typeset -a _EZA_HEAD
 typeset -a _EZA_TAIL
