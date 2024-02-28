@@ -20,13 +20,21 @@ fi
 # Set '-CC' option for iTerm2 tmux integration
 : ${ZSH_TMUX_ITERM2:=false}
 # The TERM to use for non-256 color terminals.
-# Tmux states this should be screen, but you may need to change it on
+# Tmux states this should be tmux|screen, but you may need to change it on
 # systems without the proper terminfo
-: ${ZSH_TMUX_FIXTERM_WITHOUT_256COLOR:=screen}
+if [[ -e /usr/share/terminfo/t/tmux ]]; then
+  : ${ZSH_TMUX_FIXTERM_WITHOUT_256COLOR:=tmux}
+else
+  : ${ZSH_TMUX_FIXTERM_WITHOUT_256COLOR:=screen}
+fi
 # The TERM to use for 256 color terminals.
-# Tmux states this should be screen-256color, but you may need to change it on
+# Tmux states this should be (tmux|screen)-256color, but you may need to change it on
 # systems without the proper terminfo
-: ${ZSH_TMUX_FIXTERM_WITH_256COLOR:=screen-256color}
+if [[ -e /usr/share/terminfo/t/tmux-256color ]]; then
+  : ${ZSH_TMUX_FIXTERM_WITH_256COLOR:=tmux-256color}
+else
+  : ${ZSH_TMUX_FIXTERM_WITH_256COLOR:=screen-256color}
+fi
 # Set the configuration path
 if [[ -e $HOME/.tmux.conf ]]; then
   : ${ZSH_TMUX_CONFIG:=$HOME/.tmux.conf}
