@@ -12,6 +12,9 @@ function _configure_eza() {
   if zstyle -T ':omz:plugins:eza' 'showgroup'; then
     _EZA_HEAD+=("g")
   fi
+  if zstyle -t ':omz:plugins:eza' 'header'; then
+    _EZA_HEAD+=("h")
+  fi
   # Get the tail long-options
   if zstyle -t ':omz:plugins:eza' 'dirs-first'; then
     _EZA_TAIL+=("--group-directories-first")

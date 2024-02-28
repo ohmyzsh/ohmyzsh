@@ -25,6 +25,17 @@ If `true`, directories will be grouped first.
 Default: `false`
 
 
+### `header`
+
+```zsh
+zstyle ':omz:plugins:eza' 'header' $BOOL
+```
+
+If `true`, always add `-h` flag to add a header row for each column.
+
+Default: `false`
+
+
 ### `showgroup`
 
 ```zsh
