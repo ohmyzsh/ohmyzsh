@@ -86,13 +86,18 @@ Default: Not set, which means the default behavior of `eza` will take place.
 
 ## Aliases
 
-Note that aliases may be modified by Configuration.
+**Notes:**
+
+* Aliases may be modified by Configuration
+* The term "files" without "only" qualifier means both files & directories
 
 
 | Alias   | Command           | Description                                                                 |
 | ------- | ----------------- | --------------------------------------------------------------------------- |
 | `la`    | `eza -la`         | List all files (except . and ..) as a long list                             |
-| `ldot`  | `eza -ld .*`      | List all dotfiles (directories shown as entries instead of recursed into)   |
+| `ldot`  | `eza -ld .*`      | List dotfiles only (directories shown as entries instead of recursed into)  |
+| `lD`    | `eza -lD`         | List only directories (excluding dotdirs) as a long list                    |
+| `lDD`   | `eza -laD`        | List only directories (including dotdirs) as a long list                    |
 | `ll`    | `eza -l`          | List files as a long list                                                   |
 | `ls`    | `eza`             | Plain eza call                                                              |
 | `lS`    | `eza -l -ssize`   | List files as a long list, sorted by size                                   |
