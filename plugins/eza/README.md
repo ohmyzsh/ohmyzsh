@@ -25,6 +25,17 @@ If `true`, directories will be grouped first.
 Default: `false`
 
 
+### `git-status`
+
+```zsh
+zstyle ':omz:plugins:eza' 'git-status' $BOOL
+```
+
+If `true`, always add `--git` flag to indicate git status (if tracked / in a git repo).
+
+Default: `false`
+
+
 ### `header`
 
 ```zsh

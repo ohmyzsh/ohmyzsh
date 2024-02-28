@@ -31,6 +31,9 @@ function _configure_eza() {
   if zstyle -t ':omz:plugins:eza' 'dirs-first'; then
     _EZA_TAIL+=("--group-directories-first")
   fi
+  if zstyle -t ':omz:plugins:eza' 'git-status'; then
+    _EZA_TAIL+=("--git")
+  fi
   zstyle -s ':omz:plugins:eza' 'time-style' _val
   if [[ $_val ]]; then
     _EZA_TAIL+=("--time-style='$_val'")
