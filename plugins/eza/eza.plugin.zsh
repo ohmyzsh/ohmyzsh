@@ -15,6 +15,18 @@ function _configure_eza() {
   if zstyle -t ':omz:plugins:eza' 'header'; then
     _EZA_HEAD+=("h")
   fi
+  zstyle -s ':omz:plugins:eza' 'size-prefix' _val
+  case "${_val:l}" in
+    binary)
+      _EZA_HEAD+=("b")
+      ;;
+    none)
+      _EZA_HEAD+=("B")
+      ;;
+  esac
+  if zstyle -s ':omz:plugins:eza' 'header'; then
+    _EZA_HEAD+=("h")
+  fi
   # Get the tail long-options
   if zstyle -t ':omz:plugins:eza' 'dirs-first'; then
     _EZA_TAIL+=("--group-directories-first")
