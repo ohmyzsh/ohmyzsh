@@ -51,6 +51,8 @@ _alias_eza lD   lD
 _alias_eza lDD  lDa
 _alias_eza ll   l
 _alias_eza ls
+_alias_eza lsd  d
+_alias_eza lsdl dl
 _alias_eza lS   "l -ssize"
 _alias_eza lT   "l -snewest"
 
