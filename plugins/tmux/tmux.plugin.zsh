@@ -28,7 +28,7 @@ fi
 # The TERM to use for 256 color terminals.
 # Tmux states this should be (tmux|screen)-256color, but you may need to change it on
 # systems without the proper terminfo
-if [[ -e /usr/share/terminfo/t/tmux-256color]]; then
+if [[ -e /usr/share/terminfo/t/tmux-256color ]]; then
   : ${ZSH_TMUX_FIXTERM_WITH_256COLOR:=tmux-256color}
 else
   : ${ZSH_TMUX_FIXTERM_WITH_256COLOR:=screen-256color}
