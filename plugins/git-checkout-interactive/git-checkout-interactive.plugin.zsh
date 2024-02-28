@@ -3,9 +3,10 @@
 #######################################
 
 function git-checkout-interactive() {
+  local ITEMS_TO_SHOW=10
   # Get all branches sorted by committer date, along with their last commit hash
   local branches
-  branches=$(git for-each-ref --sort=-committerdate --format='%(refname:short) %(objectname:short)' refs/heads/)
+  branches=$(git for-each-ref --count="$ITEMS_TO_SHOW" --sort=-committerdate --format='%(refname:short) %(objectname:short)' refs/heads/)
 
   # Parse branches
   local branch_list=()
