@@ -27,9 +27,9 @@ function _configure_eza() {
 _configure_eza
 
 function _alias_eza() {
-  local _tail
-  _tail="${(j: :)_EZA_TAIL}"
-  alias "$1"="eza -${(j::)_EZA_HEAD}$2${_tail:+ }${_tail}${3:+ }$3"
+  local _head="${(j::)_EZA_HEAD}$2"
+  local _tail="${(j: :)_EZA_TAIL}"
+  alias "$1"="eza ${_head:+-}${_head}${_tail:+ }${_tail}${3:+ }$3"
 }
 
 _alias_eza la   la
@@ -43,4 +43,3 @@ unfunction _alias_eza
 unfunction _configure_eza
 unset _EZA_HEAD
 unset _EZA_TAIL
-
