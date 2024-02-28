@@ -9,13 +9,11 @@ typeset -a _EZA_TAIL
 function _configure_eza() {
   local _val
   # Get the head flags
-  zstyle -s ':omz:plugins:eza' 'showgroup' _val
-  if [[ -z $_val || $_val == 1 ]]; then
+  if zstyle -T ':omz:plugins:eza' 'showgroup'; then
     _EZA_HEAD+=("g")
   fi
   # Get the tail long-options
-  zstyle -s ':omz:plugins:eza' 'dirs-first' _val
-  if [[ $_val == 1 ]]; then
+  if zstyle -t ':omz:plugins:eza' 'dirs-first'; then
     _EZA_TAIL+=("--group-directories-first")
   fi
   zstyle -s ':omz:plugins:eza' 'time-style' _val

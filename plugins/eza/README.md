@@ -20,9 +20,9 @@ All configurations are done using the `zstyle` command in the `:omz:plugins:eza`
 zstyle ':omz:plugins:eza' 'dirs-first' $BOOL
 ```
 
-If `1`, directories will be grouped first.
+If `true`, directories will be grouped first.
 
-Default: `0`
+Default: `false`
 
 
 ### `showgroup`
@@ -31,9 +31,9 @@ Default: `0`
 zstyle ':omz:plugins:eza' 'showgroup' $BOOL
 ```
 
-If `1` (default), always add `-g` flag to show the group ownership.
+If `true` (default), always add `-g` flag to show the group ownership.
 
-Default: `1`
+Default: `true`
 
 
 ### `time-style`
