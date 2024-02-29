@@ -1,5 +1,6 @@
 # Plugin owners
 plugins/archlinux/                  @ratijas
+plugins/eza/                        @pepoluan
 plugins/genpass/                    @atoponce
 plugins/git-lfs/                    @hellovietduc
 plugins/gitfast/                    @felipec
