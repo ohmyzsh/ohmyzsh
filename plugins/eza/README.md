@@ -17,51 +17,51 @@ All configurations are done using the `zstyle` command in the `:omz:plugins:eza`
 ### `dirs-first`
 
 ```zsh
-zstyle ':omz:plugins:eza' 'dirs-first' $BOOL
+zstyle ':omz:plugins:eza' 'dirs-first' yes|no
 ```
 
-If `true`, directories will be grouped first.
+If `yes`, directories will be grouped first.
 
-Default: `false`
+Default: `no`
 
 
 ### `git-status`
 
 ```zsh
-zstyle ':omz:plugins:eza' 'git-status' $BOOL
+zstyle ':omz:plugins:eza' 'git-status' yes|no
 ```
 
-If `true`, always add `--git` flag to indicate git status (if tracked / in a git repo).
+If `yes`, always add `--git` flag to indicate git status (if tracked / in a git repo).
 
-Default: `false`
+Default: `no`
 
 
 ### `header`
 
 ```zsh
-zstyle ':omz:plugins:eza' 'header' $BOOL
+zstyle ':omz:plugins:eza' 'header' yes|no
 ```
 
-If `true`, always add `-h` flag to add a header row for each column.
+If `yes`, always add `-h` flag to add a header row for each column.
 
-Default: `false`
+Default: `no`
 
 
 ### `showgroup`
 
 ```zsh
-zstyle ':omz:plugins:eza' 'showgroup' $BOOL
+zstyle ':omz:plugins:eza' 'showgroup' yes|no
 ```
 
-If `true` (default), always add `-g` flag to show the group ownership.
+If `yes` (default), always add `-g` flag to show the group ownership.
 
-Default: `true`
+Default: `yes`
 
 
 ### `size-prefix`
 
 ```zsh
-zstyle ':omz:plugins:eza' 'size-prefix' ('binary'|'none'|'si')
+zstyle ':omz:plugins:eza' 'size-prefix' (binary|none|si)
 ```
 
 Choose the prefix to be used in displaying file size:
