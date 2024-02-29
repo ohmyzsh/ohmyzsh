@@ -47,7 +47,7 @@ fi
 : ${ZSH_TMUX_UNICODE:=false}
 
 # ALIASES
-function _build_alias {
+function _build_tmux_alias {
   eval "function $1 {
     if [[ \${1::1} == '-' ]]; then
       tmux $2 \"\$@\"
@@ -61,10 +61,12 @@ alias tksv='tmux kill-server'
 alias tl='tmux list-sessions'
 alias tmuxconf='$EDITOR $ZSH_TMUX_CONFIG'
 
-_build_alias "ta" "attach" "-t"
-_build_alias "tad" "attach -d" "-t"
-_build_alias "ts" "new-session" "-s"
-_build_alias "tkss" "kill-session" "-t"
+_build_tmux_alias "ta" "attach" "-t"
+_build_tmux_alias "tad" "attach -d" "-t"
+_build_tmux_alias "ts" "new-session" "-s"
+_build_tmux_alias "tkss" "kill-session" "-t"
+
+unfunction _build_tmux_alias
 
 # Determine if the terminal supports 256 colors
 if [[ $terminfo[colors] == 256 ]]; then
