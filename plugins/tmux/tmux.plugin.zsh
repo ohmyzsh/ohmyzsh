@@ -47,42 +47,24 @@ fi
 : ${ZSH_TMUX_UNICODE:=false}
 
 # ALIASES
-alias tl='tmux list-sessions'
+function _build_alias {
+  eval "function $1 {
+    if [[ \${1::1} == '-' ]]; then
+      tmux $2 \"\$@\"
+    else
+      tmux $2 $3 \"\$@\"
+    fi
+  }"
+}
+
 alias tksv='tmux kill-server'
+alias tl='tmux list-sessions'
 alias tmuxconf='$EDITOR $ZSH_TMUX_CONFIG'
 
-function ts() {
-  if [[ $@ == -* ]]; then
-    tmux new-session $@
-  else
-    tmux new-session ${@:+-s}$@
-  fi
-}
-
-function tkss() {
-  if [[ $@ == -* ]]; then
-    tmux kill-session $@
-  else
-    tmux kill-session ${@:+-t}$@
-  fi
-}
-
-function ta() {
-  if [[ $@ == -* ]]; then
-    tmux attach-session $@
-  else
-    tmux attach-session ${@:+-t}$@
-
-  fi
-}
-
-function tad() {
-  if [[ $@ == -* ]]; then
-    tmux attach-session -d $@
-  else
-    tmux attach-session -d ${@:+-t}$@
-  fi
-}
+_build_alias "ta" "attach" "-t"
+_build_alias "tad" "attach -d" "-t"
+_build_alias "ts" "new-session" "-s"
+_build_alias "tkss" "kill-session" "-t"
 
 # Determine if the terminal supports 256 colors
 if [[ $terminfo[colors] == 256 ]]; then
