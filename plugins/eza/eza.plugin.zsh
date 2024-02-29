@@ -9,7 +9,7 @@ typeset -a _EZA_TAIL
 function _configure_eza() {
   local _val
   # Get the head flags
-  if zstyle -T ':omz:plugins:eza' 'showgroup'; then
+  if zstyle -T ':omz:plugins:eza' 'show-group'; then
     _EZA_HEAD+=("g")
   fi
   if zstyle -t ':omz:plugins:eza' 'header'; then
