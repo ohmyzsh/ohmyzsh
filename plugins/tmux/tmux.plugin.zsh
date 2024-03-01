@@ -100,11 +100,13 @@ function _zsh_tmux_plugin_run() {
   [[ "$ZSH_TMUX_ITERM2" == "true" ]] && tmux_cmd+=(-CC)
   [[ "$ZSH_TMUX_UNICODE" == "true" ]] && tmux_cmd+=(-u)
 
+  local _detached=""
+  [[ "$ZSH_TMUX_DETACHED" == "true" ]] && _detached="-d"
   # Try to connect to an existing session.
   if [[ -n "$ZSH_TMUX_DEFAULT_SESSION_NAME" ]]; then
-    [[ "$ZSH_TMUX_AUTOCONNECT" == "true" ]] && $tmux_cmd attach ${ZSH_TMUX_DETACHED:+"-d"} -t $ZSH_TMUX_DEFAULT_SESSION_NAME
+    [[ "$ZSH_TMUX_AUTOCONNECT" == "true" ]] && $tmux_cmd attach $_detached -t $ZSH_TMUX_DEFAULT_SESSION_NAME
   else
-    [[ "$ZSH_TMUX_AUTOCONNECT" == "true" ]] && $tmux_cmd attach ${ZSH_TMUX_DETACHED:+"-d"}
+    [[ "$ZSH_TMUX_AUTOCONNECT" == "true" ]] && $tmux_cmd attach $_detached
   fi
 
   # If failed, just run tmux, fixing the TERM variable if requested.
