@@ -24,19 +24,19 @@ _git_commit_flags=(
   '-as'
 )
 
-remove_flags() {
-  local regex=$(
-    IFS="|"
-    echo "${_git_commit_flags[*]}"
-  )
-
-  echo $(sed -E "s/\s($regex)\s|\s($regex)$//g" <<<"$1")
-}
-
 build_message() {
   local argv=("$@")
   local argc=${#@}
   local i=1
+
+  remove_flags() {
+    local regex=$(
+      IFS="|"
+      echo "${_git_commit_flags[*]}"
+    )
+
+    echo $(sed -E "s/\s($regex)\s|\s($regex)$//g" <<<"$1")
+  }
 
   while [[ $i -lt $argc ]]; do
     local flag="${argv[$i]}"
