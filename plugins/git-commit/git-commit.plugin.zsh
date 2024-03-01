@@ -30,10 +30,7 @@ build_message() {
   local i=1
 
   remove_flags() {
-    local regex=$(
-      IFS="|"
-      echo "${_git_commit_flags[*]}"
-    )
+    local regex="${(j:|:)_git_commit_flags}"
 
     echo $(sed -E "s/\s($regex)\s|\s($regex)$//g" <<<"$1")
   }
