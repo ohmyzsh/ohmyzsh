@@ -52,7 +52,7 @@ build_message() {
     i=$next
   done
 
-  local template="'$type'${scope}$attention: ${@}"
+  local template="'$type'${scope}$attention:' ${@}'"
   local message=$(noglob sed -E "s/\s*(${(j:|:)_git_commit_flags})\s*//g" <<< "$template")
 
   git commit -m "$message"
