@@ -22,8 +22,18 @@ plugins=(... python)
 
 ## Virtual environments
 
-The plugin provides two utilities to manage Python venvs:
+The plugin provides three utilities to manage Python venvs:
 
 - `mkv [name]`: make a new virtual environment called `name` (default: `venv`) in current directory.
 
 - `vrun [name]`: activate virtual environment called `name` (default: `venv`) in current directory.
+
+- `auto_vrun`: Automatically activate the venv virtual environment when
+  cd’ing into a directory containing `venv/bin/activate`, and
+  automatically deactivate the venv virtual environment when cd’ing into
+  any other directory.
+  - Set the environment variable `VENV_NAME` to auto-activate on a
+  different venv name. (Example: `VENV_NAME=.venv`).
+  - Set the environment variable `DISABLE_AUTO_VRUN` to anything to
+  deactivate `auto_vrun`. (Example: `DISABLE_AUTO_VRUN=true`) Unset
+  `DISABLE_AUTO_VRUN` to re-enable.
