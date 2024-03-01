@@ -29,12 +29,6 @@ build_message() {
   local argc=${#@}
   local i=1
 
-  remove_flags() {
-    local regex="${(j:|:)_git_commit_flags}"
-
-    echo -n $(sed -E "s/\s*($regex)\s*//g" <<< "$1")
-  }
-
   while [[ $i -lt $argc ]]; do
     local flag="${argv[$i]}"
     local value="${argv[$i + 1]}"
@@ -59,7 +53,7 @@ build_message() {
   done
 
   local template="'$type'${scope}$attention: ${@}"
-  local message=$(remove_flags "$template" "${_git_commit_flags[@]}")
+  local message=$(noglob sed -E "s/\s*(${(j:|:)_git_commit_flags})\s*//g" <<< "$template")
 
   git commit -m "$message"
 }
