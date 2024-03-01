@@ -32,7 +32,7 @@ build_message() {
   remove_flags() {
     local regex="${(j:|:)_git_commit_flags}"
 
-    echo $(sed -E "s/\s($regex)\s|\s($regex)$//g" <<<"$1")
+    echo -n $(sed -E "s/\s*($regex)\s*//g" <<< "$1")
   }
 
   while [[ $i -lt $argc ]]; do
