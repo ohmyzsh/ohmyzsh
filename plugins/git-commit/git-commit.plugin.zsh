@@ -14,6 +14,7 @@ _git_commit_aliases=(
   'wip'
 )
 
+typeset -a _git_commit_flags
 _git_commit_flags=(
   '-s'
   '--scope'
