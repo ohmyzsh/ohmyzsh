@@ -24,21 +24,23 @@ _git_commit_flags=(
 )
 
 remove_flags() {
-  local regex=$(IFS="|"; echo "${_git_commit_flags[*]}")
+  local regex=$(
+    IFS="|"
+    echo "${_git_commit_flags[*]}"
+  )
 
-  echo $(sed -E "s/\s($regex)\s|\s($regex)$//g" <<< "$1")
-};
+  echo $(sed -E "s/\s($regex)\s|\s($regex)$//g" <<<"$1")
+}
 
-build_message () {
+build_message() {
   local argv=("$@")
   local argc=${#@}
   local i=1
 
-  while [[ $i -lt $argc ]];
-  do
+  while [[ $i -lt $argc ]]; do
     local flag="${argv[$i]}"
     local value="${argv[$i + 1]}"
-    local next=$[$i + 1]
+    local next=$(($i + 1))
 
     if [[ "$flag" =~ (-sa|-as) ]]; then
       local attention='!'
@@ -55,14 +57,14 @@ build_message () {
       local scope="($value)"
       i=$next
     fi
-  i=$next
+    i=$next
   done
 
-  local template="'$type'${scope}$attention: ${@}";
+  local template="'$type'${scope}$attention: ${@}"
   local message=$(remove_flags "$template" "${_git_commit_flags[@]}")
 
   git commit -m "$message"
-};
+}
 
 local alias type
 for type in "${_git_commit_aliases[@]}"; do
