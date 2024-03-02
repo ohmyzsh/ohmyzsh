@@ -49,7 +49,7 @@ fi
 # ALIASES
 function _build_tmux_alias {
   eval "function $1 {
-    if [[ -z \$1 ]] || [[ \${1::1} == '-' ]]; then
+    if [[ -z \$1 ]] || [[ \${1:0:1} == '-' ]]; then
       tmux $2 \"\$@\"
     else
       tmux $2 $3 \"\$@\"
