@@ -28,7 +28,30 @@ for _type in "${_git_commit_aliases[@]}"; do
     *) _alias=$_type ;;
   esac
 
-  local _func='!a() { if [ "$1" = "-s" ] || [ "$1" = "--scope" ]; then local scope="$2"; shift 2; git commit -m "'$type'(${scope}): ${@}"; else git commit -m "'$type': ${@}"; fi }; a'
+  local _func='!a() {
+local _scope _attention _message
+while [ $# -ne 0 ]; do
+case $1 in
+  -s | --scope )
+    if [ -z $2 ]; then
+      echo "Missing scope!"
+      return 1
+    fi
+    _scope="$2"
+    shift 2
+    ;;
+  -a | --attention )
+    _attention="!"
+    shift 1
+    ;;
+  * )
+    _message+=" $1"
+    shift 1
+    ;;
+esac
+done
+git commit -m "'$_type'${_scope:+(${_scope})}${_attention}:${_message}"
+}; a'
 
   git config --global alias.$_alias "$_func"
 done
