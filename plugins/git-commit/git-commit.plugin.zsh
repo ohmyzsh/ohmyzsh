@@ -1,7 +1,8 @@
-if git config --global --get-all alias.$_alias >/dev/null 2>&1 \
-  && ! git config --global --get-all oh-my-zsh.git-commit-alias >/dev/null 2>&1; then
+local _rev="$(git -C $ZSH rev-parse HEAD 2> /dev/null)"
+if [[ $_rev == $(git config --global --get oh-my-zsh.git-commit-alias 2> /dev/null) ]]; then
   return
 fi
+git config --global oh-my-zsh.git-commit-alias "$_rev"
 
 local -a _git_commit_aliases
 _git_commit_aliases=(
@@ -55,5 +56,3 @@ git commit -m "'$_type'${_scope:+(${_scope})}${_attention}:${_message}"
 
   git config --global alias.$_alias "$_func"
 done
-
-git config --global oh-my-zsh.git-commit-alias "true"
