@@ -26,9 +26,11 @@ The plugin provides three utilities to manage Python 3.3+
 [venv](https://docs.python.org/3/library/venv.html) virtual
 environments:
 
-- `mkv [name]`: make a new virtual environment called `name` (default: `venv`) in current directory.
+- `mkv [name]`: Make a new virtual environment called *name* (else
+  `$PYTHON_VENV_NAME`, else "venv") in the current directory.
 
-- `vrun [name]`: activate virtual environment called `name` (default: `venv`) in current directory.
+- `vrun [name]`: Activate the virtual environment called *name* (else
+  `$PYTHON_VENV_NAME`, else "venv") in the current directory.
 
 - `auto_vrun`: Automatically activate the venv virtual environment when
   cd’ing into a directory containing `venv/bin/activate`, and

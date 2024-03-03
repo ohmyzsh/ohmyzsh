@@ -53,9 +53,9 @@ alias pyserver="python3 -m http.server"
 ## venv utilities
 
 # Activate a the python virtual environment specified.
-# If none specified, use 'venv'.
+# If none specified, use $PYTHON_VENV_NAME, else 'venv'.
 function vrun() {
-  local name="${1:-venv}"
+  local name="${1:-${PYTHON_VENV_NAME:-venv}}"
   local venvpath="${name:P}"
 
   if [[ ! -d "$venvpath" ]]; then
@@ -72,9 +72,10 @@ function vrun() {
   echo "Activated virtual environment ${name}"
 }
 
-# Create a new virtual environment, with default name 'venv'.
+# Create a new virtual environment using the specified name.
+# If none specfied, use $PYTHON_VENV_NAME, else 'venv'.
 function mkv() {
-  local name="${1:-venv}"
+  local name="${1:-${PYTHON_VENV_NAME:-venv}}"
   local venvpath="${name:P}"
 
   python3 -m venv "${name}" || return
