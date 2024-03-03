@@ -46,7 +46,7 @@ case $1 in
     shift 1
     ;;
   * )
-    _message+=" $1"
+    _message="${_message} $1"
     shift 1
     ;;
 esac
