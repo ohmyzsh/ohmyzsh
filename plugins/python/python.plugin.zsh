@@ -51,11 +51,12 @@ alias pyserver="python3 -m http.server"
 
 
 ## venv utilities
+: ${PYTHON_VENV_NAME:=venv}
 
 # Activate a the python virtual environment specified.
 # If none specified, use $PYTHON_VENV_NAME, else 'venv'.
 function vrun() {
-  local name="${1:-${PYTHON_VENV_NAME:-venv}}"
+  local name="${1:-$PYTHON_VENV_NAME}"
   local venvpath="${name:P}"
 
   if [[ ! -d "$venvpath" ]]; then
@@ -73,9 +74,9 @@ function vrun() {
 }
 
 # Create a new virtual environment using the specified name.
-# If none specfied, use $PYTHON_VENV_NAME, else 'venv'.
+# If none specfied, use $PYTHON_VENV_NAME
 function mkv() {
-  local name="${1:-${PYTHON_VENV_NAME:-venv}}"
+  local name="${1:-$PYTHON_VENV_NAME}"
   local venvpath="${name:P}"
 
   python3 -m venv "${name}" || return
@@ -83,15 +84,15 @@ function mkv() {
   vrun "${name}"
 }
 
-# Automatically activate venv when cd'ing into a directory
-auto_vrun() {
-    [[ ! -n "$PYTHON_AUTO_VRUN" ]] && return 0
-    local venvpath="${PYTHON_VENV_NAME:-venv}"
-    if [[ -f "${venvpath}/bin/activate" ]]; then
-        source "${venvpath}/bin/activate" > /dev/null 2>&1
+if [[ "$PYTHON_AUTO_VRUN" == "true" ]]; then
+  # Automatically activate venv when changing dir
+  auto_vrun() {
+    if [[ -f "${PYTHON_VENV_NAME}/bin/activate" ]]; then
+      source "${PYTHON_VENV_NAME}/bin/activate" > /dev/null 2>&1
     else
-        [[ -n "$(command -v deactivate)" ]] && deactivate > /dev/null 2>&1
+      (( $+functions[deactivate] )) && deactivate > /dev/null 2>&1
     fi
-}
-add-zsh-hook chpwd auto_vrun
-auto_vrun
+  }
+  add-zsh-hook chpwd auto_vrun
+  auto_vrun
+fi

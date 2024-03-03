@@ -22,33 +22,18 @@ plugins=(... python)
 
 ## Virtual environments
 
-The plugin provides three utilities to manage Python 3.3+
-[venv](https://docs.python.org/3/library/venv.html) virtual
-environments:
+The plugin provides three utilities to manage Python 3.3+ [venv](https://docs.python.org/3/library/venv.html)
+virtual environments:
 
-- `mkv [name]`: Make a new virtual environment called *name* (else
-  `$PYTHON_VENV_NAME`, else "venv") in the current directory.
+- `mkv [name]`: make a new virtual environment called `name` (default: if set `$PYTHON_VENV_NAME`, else
+  `venv`) in the current directory.
 
-- `vrun [name]`: Activate the virtual environment called *name* (else
-  `$PYTHON_VENV_NAME`, else "venv") in the current directory.
+- `vrun [name]`: Activate the virtual environment called `name` (default: if set `$PYTHON_VENV_NAME`, else
+  `venv`) in the current directory.
 
-- `auto_vrun`: Automatically activate the venv virtual environment when
-  cd’ing into a directory containing `venv/bin/activate`, and
-  automatically deactivate it when cd’ing into any other directory,
-  including subdirectories.
-  - To enable, set `PYTHON_AUTO_VRUN` to anything. For example:
-
-        export PYTHON_AUTO_VRUN='true'
-  - To disable, either unset the environment variable:
-
-        unset PYTHON_AUTO_VRUN
-    or entirely remove `auto_vrun` from the list of functions associated
-    with the `chpwd` hook:
-
-        add-zsh-hook -d chpwd auto_vrun
-    If you disable `auto_vrun` while a virtual environment is active,
-    you'll need to manually `deactivate`.
-  - The default virtual environment name is "venv". To use a different
-    name, set `PYTHON_VENV_NAME`. For example:
-
-        export PYTHON_VENV_NAME='.venv'
+- `auto_vrun`: Automatically activate the venv virtual environment when entering a directory containing
+  `<venv-name>/bin/activate`, and automatically deactivate it when navigating out of it (including
+  subdirectories!).
+  - To enable the feature, set `export PYTHON_AUTO_VRUN=true` before sourcing oh-my-zsh.
+  - The default virtual environment name is `venv`. To use a different name, set
+    `export PYTHON_VENV_NAME=<venv-name>`. For example: `export PYTHON_VENV_NAME=".venv"`
