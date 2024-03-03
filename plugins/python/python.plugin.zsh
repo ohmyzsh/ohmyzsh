@@ -82,16 +82,14 @@ function mkv() {
   vrun "${name}"
 }
 
-# Virtual environment is assumed to be named "venv".
-# Set VENV_NAME to another name if you use a different name, maybe ".venv".
-# To disable, set DISABLE_AUTO_VRUN to anything. Unset to re-enable.
+# Automatically activate venv when cd'ing into a directory
 auto_vrun() {
-    [ $DISABLE_AUTO_VRUN ] && return 0
-    local venvpath=${VENV_NAME:-'venv'}
-    if [ -e "${venvpath}/bin/activate" ]; then
+    [[ ! -n "$PYTHON_AUTO_VRUN" ]] && return 0
+    local venvpath="${PYTHON_VENV_NAME:-venv}"
+    if [[ -f "${venvpath}/bin/activate" ]]; then
         source "${venvpath}/bin/activate" > /dev/null 2>&1
     else
-        [ -n "$(command -v deactivate)" ] && deactivate > /dev/null 2>&1
+        [[ -n "$(command -v deactivate)" ]] && deactivate > /dev/null 2>&1
     fi
 }
 add-zsh-hook chpwd auto_vrun
