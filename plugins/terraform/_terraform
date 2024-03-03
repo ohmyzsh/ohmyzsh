@@ -173,17 +173,22 @@ compdef _terraform terraform
 }
 
 (( ${+functions[_terraform_metadata]} )) || _terraform_metadata() {
+  _arguments \
+    '*::terraform metadata command:_terraform_metadata_commands'
+}
+
+(( ${+functions[_terraform_metadata_commands]} )) || _terraform_metadata_commands() {
   local -a _metadata_cmds
   _metadata_cmds=(
     'functions:Show signatures and descriptions for the available functions'
   )
-  if [[ "${CURRENT}" -lt 3 ]]; then
+  if (( CURRENT == 1 )); then
     _describe -t commands "terraform metadata commands" _metadata_cmds
     return
   fi
 
   local curcontext="${curcontext}"
-  cmd="${${_metadata_cmds[(r)$words[2]:*]%%:*}}"
+  cmd="${${_metadata_cmds[(r)$words[1]:*]%%:*}}"
   curcontext="${curcontext%:*:*}:terraform-metadata-${cmd}:"
 
   if (( ${+functions[_terraform_metadata_$cmd]} )); then
@@ -195,8 +200,7 @@ compdef _terraform terraform
 
 (( ${+functions[_terraform_metadata_functions]} )) || _terraform_metadata_functions() {
   _arguments \
-    '-json' \
-    '::'
+    '-json[]'
 }
 
 (( ${+functions[_terraform_output]} )) || _terraform_output() {
@@ -230,27 +234,25 @@ compdef _terraform terraform
 }
 
 (( ${+functions[_terraform_providers]} )) || _terraform_providers() {
+  _arguments \
+    '-test-directory=[(path) Set the Terraform test directory, defaults to "tests".]:test_directory:_files -W __chdir -/' \
+    '*::terraform providers command:_terraform_providers_commands'
+}
+
+(( ${+functions[_terraform_providers_commands]} )) || _terraform_providers_commands() {
   local -a _providers_cmds
   _providers_cmds=(
     'lock:Write out dependency locks for the configured providers'
     'mirror:Save local copies of all required provider plugins'
     'schema:Show schemas for the providers used in the configuration'
   )
-
-  local context state state_descr line
-  typeset -A opt_args
-
-  if [[ "${${#word[@]:#-*}}" -lt 3 ]]; then
-    _arguments \
-      '-test-directory=[(path) Set the Terraform test directory, defaults to "tests".]:test_directory:_files -W __chdir -/' \
-      '*:: :->command'
-
+  if (( CURRENT == 1 )); then
     _describe -t commands "terraform providers commands" _providers_cmds
     return
   fi
 
   local curcontext="${curcontext}"
-  cmd="${${_providers_cmds[(r)$words[2]:*]%%:*}}"
+  cmd="${${_providers_cmds[(r)$words[1]:*]%%:*}}"
   curcontext="${curcontext%:*:*}:terraform-providers-${cmd}:"
 
   if (( ${+functions[_terraform_providers_$cmd]} )); then
@@ -277,8 +279,7 @@ compdef _terraform terraform
 
 (( ${+functions[_terraform_providers_schema]} )) || _terraform_providers_schema() {
   _arguments \
-    '-json[]' \
-    '::'
+    '-json[]'
 }
 
 (( ${+functions[_terraform_refresh]} )) || _terraform_refresh() {
@@ -305,6 +306,11 @@ compdef _terraform terraform
 }
 
 (( ${+functions[_terraform_state]} )) || _terraform_state() {
+  _arguments \
+    '*::terraform state command:_terraform_state_commands'
+}
+
+(( ${+functions[_terraform_state_commands]} )) || _terraform_state_commands() {
   local -a _state_cmds
   _state_cmds=(
     'list:List resources in the state'
@@ -315,13 +321,13 @@ compdef _terraform terraform
     'rm:Remove instances from the state'
     'show:Show a resource in the state'
   )
-  if [[ "${CURRENT}" -lt 3 ]]; then
+  if (( CURRENT == 1 )); then
     _describe -t commands "terraform state commands" _state_cmds
     return
   fi
 
   local curcontext="${curcontext}"
-  cmd="${${_state_cmds[(r)$words[2]:*]%%:*}}"
+  cmd="${${_state_cmds[(r)$words[1]:*]%%:*}}"
   curcontext="${curcontext%:*:*}:terraform-state-${cmd}:"
 
   if (( ${+functions[_terraform_state_$cmd]} )); then
@@ -451,6 +457,11 @@ compdef _terraform terraform
 }
 
 (( ${+functions[_terraform_workspace]} )) || _terraform_workspace() {
+  _arguments \
+    '*::terraform workspace command:_terraform_workspace_commands'
+}
+
+(( ${+functions[_terraform_workspace_commands]} )) || _terraform_workspace_commands() {
   local -a _workspace_cmds
   _workspace_cmds=(
     'delete:Delete a workspace'
@@ -459,13 +470,13 @@ compdef _terraform terraform
     'select:Select a workspace'
     'show:Show the name of the current workspace'
   )
-  if [[ "${CURRENT}" -lt 3 ]]; then
+  if (( CURRENT == 1 )); then
     _describe -t commands "terraform workspace commands" _workspace_cmds
     return
   fi
 
   local curcontext="${curcontext}"
-  cmd="${${_workspace_cmds[(r)$words[2]:*]%%:*}}"
+  cmd="${${_workspace_cmds[(r)$words[1]:*]%%:*}}"
   curcontext="${curcontext%:*:*}:terraform-workspace-${cmd}:"
 
   if (( ${+functions[_terraform_workspace_$cmd]} )); then
