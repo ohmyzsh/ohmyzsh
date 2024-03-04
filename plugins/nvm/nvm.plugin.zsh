@@ -45,7 +45,6 @@ function _omz_setup_autoload {
   # Autoload nvm when finding a .nvmrc file in the current directory
   # Adapted from: https://github.com/nvm-sh/nvm#zsh
   function load-nvmrc {
-    local node_version="$(nvm version)"
     local nvmrc_path="$(nvm_find_nvmrc)"
     local nvm_silent=""
     zstyle -t ':omz:plugins:nvm' silent-autoload && nvm_silent="--silent"
@@ -58,10 +57,8 @@ function _omz_setup_autoload {
       elif [[ "$nvmrc_node_version" != "$node_version" ]]; then
         nvm use $nvm_silent
       fi
-    elif [[ "$node_version" != "$(nvm version default)" ]]; then
-      if [[ -z $nvm_silent ]]; then
-        echo "Reverting to nvm default version"
-      fi
+    elif [[ -n "$(PWD=$OLDPWD nvm_find_nvmrc)" ]] && [[ "$(nvm version)" != "$(nvm version default)" ]]; then
+      [[ -z $nvm_silent ]] && echo "Reverting to nvm default version"
 
       nvm use default $nvm_silent
     fi
