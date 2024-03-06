@@ -38,3 +38,7 @@ plugins=(... vagrant)
 | `vpll`  | `vagrant plugin list`        |
 | `vplun` | `vagrant plugin uninstall`   |
 | `vplu`  | `vagrant plugin update`      |
+| `vsnl`  | `vagrant snapshot list`      |
+| `vsns`  | `vagrant snapshot save`      |
+| `vsnd`  | `vagrant snapshot delete`    |
+| `vsnr`  | `vagrant snapshot restore`   |

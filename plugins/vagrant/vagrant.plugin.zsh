@@ -31,3 +31,8 @@ alias vpli="vagrant plugin install"
 alias vpll="vagrant plugin list"
 alias vplun="vagrant plugin uninstall"
 alias vplu="vagrant plugin update"
+
+alias vsnl="vagrant snapshot list"
+alias vsns="vagrant snapshot save"
+alias vsnd="vagrant snapshot delete"
+alias vsnr="vagrant snapshot restore"
