@@ -12,3 +12,6 @@ plugins/starship/                   @axieax
 plugins/universalarchive/           @Konfekt
 plugins/wp-cli/                     @joshmedeski
 plugins/zoxide/                     @ajeetdsouza
+
+# Core library owners
+lib/00subexecutor.zsh               @pepoluan
