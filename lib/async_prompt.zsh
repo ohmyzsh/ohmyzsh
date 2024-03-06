@@ -11,19 +11,34 @@ zmodload zsh/system
 #  function _git_prompt_status_async {
 #    # Do some expensive operation that outputs to stdout
 #  }
-#  _omz_async_functions+=(_git_prompt_status_async)
+#  _omz_register_handler _git_prompt_status_async
 #
 # Then add a stub prompt function in `$PROMPT` or similar prompt variables,
 # which will show the output of "$_OMZ_ASYNC_OUTPUT[handler_name]":
 #
 #  function git_prompt_status {
-#    echo $_OMZ_ASYNC_OUTPUT[_git_prompt_status]
+#    echo -n $_OMZ_ASYNC_OUTPUT[_git_prompt_status]
 #  }
 #
 #  RPROMPT='$(git_prompt_status)'
 #
 # This API is subject to change and optimization. Rely on it at your own risk.
-typeset -ga _omz_async_functions
+
+function _omz_register_handler {
+  typeset -ga _omz_async_functions
+  # we want to do nothing if there's no $1 function or we already set it up
+  if [[ -z "$1" ]] || (( ! ${+functions[$1]} )) \
+    || (( ${+_omz_async_functions[$1]} )); then
+    return
+  fi
+  _omz_async_functions+=("$1")
+  # let's add the hook to async_request if it's not there yet
+  if (( ! ${+precmd_functions[_omz_async_request]} )) \
+    && (( ${+functions[_omz_async_request]})); then
+    autoload -Uz add-zsh-hook
+    add-zsh-hook precmd _omz_async_request
+  fi
+}
 
 # Set up async handlers and callbacks
 function _omz_async_request {
@@ -122,6 +137,3 @@ function _omz_async_callback() {
   _OMZ_ASYNC_FDS[$handler]=-1
   _OMZ_ASYNC_PIDS[$handler]=-1
 }
-
-autoload -Uz add-zsh-hook
-add-zsh-hook precmd _omz_async_request
