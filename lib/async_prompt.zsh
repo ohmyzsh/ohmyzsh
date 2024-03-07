@@ -25,15 +25,16 @@ zmodload zsh/system
 # This API is subject to change and optimization. Rely on it at your own risk.
 
 function _omz_register_handler {
+  setopt localoptions noksharrays
   typeset -ga _omz_async_functions
   # we want to do nothing if there's no $1 function or we already set it up
   if [[ -z "$1" ]] || (( ! ${+functions[$1]} )) \
-    || (( ${+_omz_async_functions[$1]} )); then
+    || (( ${_omz_async_functions[(Ie)$1]} )); then
     return
   fi
   _omz_async_functions+=("$1")
   # let's add the hook to async_request if it's not there yet
-  if (( ! ${+precmd_functions[_omz_async_request]} )) \
+  if (( ! ${precmd_functions[(Ie)_omz_async_request]} )) \
     && (( ${+functions[_omz_async_request]})); then
     autoload -Uz add-zsh-hook
     add-zsh-hook precmd _omz_async_request
