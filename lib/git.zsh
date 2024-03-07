@@ -38,7 +38,7 @@ function _omz_git_prompt_status() {
 }
 
 # Enable async prompt by default unless the setting is at false / no
-if zstyle -T ':omz:alpha:lib:git' async-prompt; then
+if zstyle -t ':omz:alpha:lib:git' async-prompt; then
   function git_prompt_info() {
     _omz_register_handler _omz_git_prompt_status
     if [[ -n "$_OMZ_ASYNC_OUTPUT[_omz_git_prompt_status]" ]]; then
