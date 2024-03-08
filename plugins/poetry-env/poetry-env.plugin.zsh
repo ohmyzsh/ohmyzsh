@@ -17,7 +17,7 @@ _togglePoetryShell() {
       if grep -q 'tool.poetry' "$PWD/pyproject.toml"; then
         export poetry_active=1
         export poetry_dir="$PWD"
-        source "$(poetry env info --path)/bin/activate"
+        poetry shell
       fi
     fi
   fi
