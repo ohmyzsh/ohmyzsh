@@ -5,8 +5,8 @@
 zmodload zsh/system
 
 # For now, async prompt function handlers are set up like so:
-# First, define the async function handler and add the function name
-# to the _omz_async_functions array:
+# First, define the async function handler and register the handler
+# with _omz_register_handler:
 #
 #  function _git_prompt_status_async {
 #    # Do some expensive operation that outputs to stdout
@@ -17,7 +17,7 @@ zmodload zsh/system
 # which will show the output of "$_OMZ_ASYNC_OUTPUT[handler_name]":
 #
 #  function git_prompt_status {
-#    echo -n $_OMZ_ASYNC_OUTPUT[_git_prompt_status]
+#    echo -n $_OMZ_ASYNC_OUTPUT[_git_prompt_status_async]
 #  }
 #
 #  RPROMPT='$(git_prompt_status)'
@@ -43,6 +43,7 @@ function _omz_register_handler {
 
 # Set up async handlers and callbacks
 function _omz_async_request {
+  local -i ret=$?
   typeset -gA _OMZ_ASYNC_FDS _OMZ_ASYNC_PIDS _OMZ_ASYNC_OUTPUT
 
   # executor runs a subshell for all async requests based on key
@@ -83,6 +84,8 @@ function _omz_async_request {
       builtin echo ${sysparams[pid]}
       # Store handler name for callback
       builtin echo $handler
+      # Set exit code for the handler if used
+      (exit $ret)
       # Run the async function handler
       $handler
     )
@@ -138,3 +141,6 @@ function _omz_async_callback() {
   _OMZ_ASYNC_FDS[$handler]=-1
   _OMZ_ASYNC_PIDS[$handler]=-1
 }
+
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd _omz_async_request
