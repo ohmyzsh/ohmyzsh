@@ -57,12 +57,61 @@ function _build_tmux_alias {
   }"
 }
 
-function _session_completion {
+# ALIAS COMPLETION (Modified from https://github.com/zsh-users/zsh)
+_tmux-attach-session() {
   local sessions
   sessions=(${(f)"$(tmux list-session)"})
+  [[ -n ${tmux_describe} ]] && print "attach or switch to a session" && return
 
-  _alternative \
-    'commands:: _describe -t sessions "tmux session" sessions'
+  # If no flag is given, complete with session names.
+  if (( CURRENT == 2 )); then
+    _alternative \
+      'commands:: _describe -t sessions "tmux session" sessions'
+    return
+  fi
+
+  if [[ $words[1] =~ ta ]]; then 
+    _arguments -s \
+      '1:sessions' \
+      '-c+[specify working directory for the session]:directory:_directories' \
+      '-d[detach other clients attached to target session]' \
+      '-f+[set client flags]: :_tmux_client_flags' \
+      '-r[put the client into read-only mode]' \
+      '-t+[specify target session]:target session: __tmux-sessions-separately' \
+      "-E[don't apply update-environment option]" \
+      '-x[with -d, send SIGHUP to the parent of the attached client]'
+    elif [[ $words[1] = "tkss" ]]; then
+      _arguments -s \
+        '1:sessions' \
+        '-a[kill all session except the one specified by -t]' \
+        '-t+[specify target session]:session:__tmux-sessions' \
+        '-C[clear alerts (bell, activity, silence) in all windows linked to the session]'
+    fi
+
+  return
+}
+
+_tmux_client_flags() {
+  _values -s , flag active-pane ignore-size no-output \
+      'pause-after:time (seconds)' read-only wait-exit
+}
+
+__tmux-sessions-separately() {
+    local ret=1
+    local -a sessions detached_sessions attached_sessions
+    sessions=( ${${(f)"$(command tmux 2> /dev/null list-sessions)"}/:[ $'\t']##/:} )
+    detached_sessions=(    ${sessions:#*"(attached)"} )
+    attached_sessions=( ${(M)sessions:#*"(attached)"} )
+
+    # ### This seems to work without a _tags loop but not with it.  I suspect
+    # ### that has something to do with _describe doing its own _tags loop.
+    _tags detached-sessions attached-sessions
+    # Placing detached before attached means the default behaviour of this
+    # function better suits its only current caller, _tmux-attach-session().
+    _requested detached-sessions && _describe -t detached-sessions 'detached session' detached_sessions "$@" && ret=0
+    _requested attached-sessions && _describe -t attached-sessions 'attached session' attached_sessions "$@" && ret=0
+
+    return ret
 }
 
 alias tksv='tmux kill-server'
@@ -140,7 +189,7 @@ function _zsh_tmux_plugin_run() {
 compdef _tmux _zsh_tmux_plugin_run
 
 # Provide session name completion for alias functions.
-compdef _session_completion ta tad tkss
+compdef _tmux-attach-session ta tad tkss
 
 # Alias tmux to our wrapper function.
 alias tmux=_zsh_tmux_plugin_run
