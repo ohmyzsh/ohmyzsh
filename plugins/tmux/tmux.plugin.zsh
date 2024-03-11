@@ -57,6 +57,14 @@ function _build_tmux_alias {
   }"
 }
 
+function _session_completion {
+  local sessions
+  sessions=(${(f)"$(tmux list-session)"})
+
+  _alternative \
+    'commands:: _describe -t sessions "tmux session" sessions'
+}
+
 alias tksv='tmux kill-server'
 alias tl='tmux list-sessions'
 alias tmuxconf='$EDITOR $ZSH_TMUX_CONFIG'
@@ -130,6 +138,10 @@ function _zsh_tmux_plugin_run() {
 
 # Use the completions for tmux for our function
 compdef _tmux _zsh_tmux_plugin_run
+
+# Provide session name completion for alias functions.
+compdef _session_completion ta tad tkss
+
 # Alias tmux to our wrapper function.
 alias tmux=_zsh_tmux_plugin_run
 
