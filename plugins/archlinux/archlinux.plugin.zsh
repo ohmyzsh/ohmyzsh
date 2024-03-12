@@ -170,7 +170,7 @@ if (( $+commands[yay] )); then
   alias yaloc='yay -Qi'
   alias yalocs='yay -Qs'
   alias yalst='yay -Qe'
-  alias yaorph='yay -Qtd'
+  alias yaorph='yay -Qtdq | yay -Rns -'
   alias yainsd='yay -S --asdeps'
   alias yamir='yay -Syy'
   alias yaupd="yay -Sy"
