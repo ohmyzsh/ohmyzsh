@@ -445,13 +445,13 @@ We have (more than) enough themes for the time being. Please add your theme to t
 
 ## Contributors
 
-<a href="https://github.com/ohmyzsh/ohmyzsh/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=ohmyzsh/ohmyzsh" width="100%"/>
-</a>
-
 Oh My Zsh has a vibrant community of happy users and delightful contributors. Without all the time and help from our contributors, it wouldn't be so awesome.
 
 Thank you so much!
+
+<a href="https://github.com/ohmyzsh/ohmyzsh/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=ohmyzsh/ohmyzsh" width="100%"/>
+</a>
 
 ## Follow Us
 
