@@ -1,3 +1,7 @@
+if [ -z "${ZSH_GRADLE_PLUGIN_ALIAS:-}" ]; then
+	return 0
+fi
+
 # Looks for a gradlew file in the current working directory
 # or any of its parent directories, and executes it if found.
 # Otherwise it will call gradle directly.
