@@ -453,12 +453,6 @@ Oh My Zsh has a vibrant community of happy users and delightful contributors. Wi
 
 Thank you so much!
 
-## Star History
-
-<a href="https://star-history.com/#ohmyzsh/ohmyzsh">
-  <img src="https://api.star-history.com/svg?repos=ohmyzsh/ohmyzsh&type=Date" alt="Star History Chart" width="100%" />
-</a>
-
 ## Follow Us
 
 We're on social media:
