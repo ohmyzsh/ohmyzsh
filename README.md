@@ -449,6 +449,10 @@ Oh My Zsh has a vibrant community of happy users and delightful contributors. Wi
 
 Thank you so much!
 
+<a href="https://github.com/ohmyzsh/ohmyzsh/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=ohmyzsh/ohmyzsh" width="100%"/>
+</a>
+
 ## Follow Us
 
 We're on social media:
