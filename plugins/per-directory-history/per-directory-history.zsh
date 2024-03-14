@@ -21,7 +21,7 @@
 #-------------------------------------------------------------------------------
 #
 # The idea/inspiration for a per directory history is from Stewart MacArthur[1]
-# and Dieter[2], the implementation idea is from Bart Schaefer on the the zsh
+# and Dieter[2], the implementation idea is from Bart Schaefer on the zsh
 # mailing list[3].  The implementation is by Jim Hester in September 2012.
 #
 # [1]: http://www.compbiome.com/2010/07/bash-per-directory-bash-history.html
