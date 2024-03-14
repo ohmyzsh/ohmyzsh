@@ -8,6 +8,7 @@ if [[ "$ENABLE_CORRECTION" == "true" ]]; then
   zstyle -s ':omz' 'subexecutor' _subex
   alias "$_subex"="nocorrect $_subex"
   unset _subex
+  alias subex='nocorrect subex'
 
   setopt correct_all
 fi
