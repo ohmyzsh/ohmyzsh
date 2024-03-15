@@ -35,4 +35,4 @@ dependencies:
     version: ea018400d86610d0f79f84debbb33c2d2ef5dbec
     precopy: |
       set -e
-      find . ! -name _gradle -delete
+      find . ! -name _gradle ! -name LICENSE -delete
