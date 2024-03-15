@@ -1,0 +1,545 @@
+#compdef tofu
+compdef _tofu tofu
+
+(( ${+functions[_tofu_commands]} )) || _tofu_commands() {
+  local -a _tofu_cmds
+  _tofu_cmds=(
+    'apply:Create or update infrastructure'
+    'console:Try OpenTofu expressions at an interactive command prompt'
+    'destroy:Destroy previously-created infrastructure'
+    'fmt:Reformat your configuration in the standard style'
+    'force-unlock:Release a stuck lock on the current workspace'
+    'get:Install or upgrade remote OpenTofu modules'
+    'graph:Generate a Graphviz graph of the steps in an operation'
+    'import:Associate existing infrastructure with a OpenTofu resource'
+    'init:Prepare your working directory for other commands'
+    'login:Obtain and save credentials for a remote host'
+    'logout:Remove locally-stored credentials for a remote host'
+    'metadata:Metadata related commands'
+    'output:Show output values from your root module'
+    'plan:Show changes required by the current configuration'
+    'providers:Show the providers required for this configuration'
+    'refresh:Update the state to match remote systems'
+    'show:Show the current state or a saved plan'
+    'state:Advanced state management'
+    'taint:Mark a resource instance as not fully functional'
+    'test:Execute integration tests for OpenTofu modules'
+    'untaint:Remove the '\''tainted'\'' state from a resource instance'
+    'validate:Check whether the configuration is valid'
+    'version:Show the current OpenTofu version'
+    'workspace:Workspace management'
+  )
+  if (( CURRENT == 1 )); then
+    _describe -t commands 'tofu commands' _tofu_cmds
+    return
+  fi
+
+  local curcontext="${curcontext}"
+  cmd="${${_tofu_cmds[(r)$words[1]:*]%%:*}}"
+  curcontext="${curcontext%:*:*}:tofu-${cmd}:"
+
+  local __chdir="${opt_args[-chdir]:-.}"
+
+  if (( ${+functions[_tofu_$cmd]} )); then
+    "_tofu_${cmd}"
+  else
+    _message "no more options"
+  fi
+}
+
+(( ${+functions[_tofu_apply]} )) || _tofu_apply() {
+  _arguments \
+    '-auto-approve[Skip interactive approval of plan before applying.]' \
+    '-backup=[(path) Path to backup the existing state file before modifying. Defaults to the "-state-out" path with ".backup" extension. Set to "-" to disable backup.]:backupfile:_files -W __chdir -g "*.backup"' \
+    '-compact-warnings[If OpenTofu produces any warnings that are not accompanied by errors, show them in a more compact form that includes only the summary messages.]' \
+    '-destroy[Destroy OpenTofu-managed infrastructure. The command "tofu destroy" is a convenience alias for this option.]' \
+    '-lock=[(true) Don'\''t hold a state lock during the operation. This is dangerous if others might concurrently run commands against the same workspace.]:lock:(true false)' \
+    '-lock-timeout=[(0s) Duration to retry a state lock.]:lock_timeout:' \
+    '-input=[(true) Ask for input for variables if not directly set.]:input:(true false)' \
+    '-no-color[If specified, output won'\''t contain any color.]' \
+    '-parallelism=[(10) Limit the number of parallel resource operations.]:parallelism:' \
+    '-refresh=[(true) Skip checking for external changes to remote objects while creating the plan. This can potentially make planning faster, but at the expense of possibly planning against a stale record of the remote system state.]:refresh:(true false)' \
+    '*-replace=[(resource) Force replacement of a particular resource instance using its resource address. If applying would'\''ve normally produced an update or no-op action for this instance, OpenTofu will replace it instead. You can use this option multiple times to replace more than one object.]:resource:__tofu_state_resources' \
+    '-state=[(tofu.tfstate) Path to read and save state (unless state-out is specified).]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '-state-out=[(path) Path to write state to that is different than "-state". This can be used to preserve the old state.]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '*-target=[(resource) Limit the operation to only the given module, resource, or resource instance and all of its dependencies. You can use this option multiple times to include more than one object. This is for exceptional use only.]:target:__tofu_state_resources' \
+    '*-var=[(for=bar) Set a value for one of the input variables in the root module of the configuration. Use this option more than once to set more than one variable.]:var:' \
+    '*-var-file=[(foo) Load variable values from the given file, in addition to the default files tofu.tfvars and *.auto.tfvars. Use this option more than once to include more than one variables file.]:file:_files -W __chdir -g "*.tfvars{,.json}"' \
+    ':plan:_files -W __chdir -'
+}
+
+(( ${+functions[_tofu_console]} )) || _tofu_console() {
+  _arguments \
+    '-state=[(tofu.tfstate) Legacy option for the local backend only. See the local backend'\''s documentation for more information.]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '-plan[Create a new plan (as if running "tofu plan") and then evaluate expressions against its planned state, instead of evaluating against the current state. You can use this to inspect the effects of configuration changes that haven'\''t been applied yet.]' \
+    '*-var=[(for=bar) Set a variable in the OpenTofu configuration. This flag can be set multiple times.]:var:' \
+    '*-var-file=[(foo) Set variables in the OpenTofu configuration from a file. If "tofu.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]:file:_files -W __chdir -g "*.tfvars{,.json}"'
+}
+
+(( ${+functions[_tofu_destroy]} )) || _tofu_destroy() {
+  _arguments \
+    '-auto-approve[Skip interactive approval of plan before applying.]' \
+    '-backup=[(path) Path to backup the existing state file before modifying. Defaults to the "-state-out" path with ".backup" extension. Set to "-" to disable backup.]:backupfile:_files -W __chdir -g "*.backup"' \
+    '-compact-warnings[If OpenTofu produces any warnings that are not accompanied by errors, show them in a more compact form that includes only the summary messages.]' \
+    '-lock=[(true) Don'\''t hold a state lock during the operation. This is dangerous if others might concurrently run commands against the same workspace.]:lock:(true false)' \
+    '-lock-timeout=[(0s) Duration to retry a state lock.]:lock_timeout:' \
+    '-input=[(true) Ask for input for variables if not directly set.]:input:(true false)' \
+    '-no-color[If specified, output won'\''t contain any color.]' \
+    '-parallelism=[(10) Limit the number of parallel resource operations.]:parallelism:' \
+    '-refresh=[(true) Update state prior to checking for differences. This has no effect if a plan file is given to apply.]:refresh:(true false)' \
+    '-state=[(tofu.tfstate) Path to read and save state (unless state-out is specified).]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '-state-out=[(path) Path to write state to that is different than "-state". This can be used to preserve the old state.]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '*-target=[(resource) Limit the operation to only the given module, resource, or resource instance and all of its dependencies. You can use this option multiple times to include more than one object. This is for exceptional use only.]:target:__tofu_state_resources' \
+    '*-var=[(for=bar) Set a value for one of the input variables in the root module of the configuration. Use this option more than once to set more than one variable.]:var:' \
+    '*-var-file=[(foo) Load variable values from the given file, in addition to the default files tofu.tfvars and *.auto.tfvars. Use this option more than once to include more than one variables file.]:file:_files -W __chdir -g "*.tfvars{,.json}"'
+}
+
+(( ${+functions[_tofu_fmt]} )) || _tofu_fmt() {
+  _arguments \
+    '-list=[(true) Don'\''t list files whose formatting differs (always disabled if using STDIN)]:list:(true false)' \
+    '-write=[(true) Don'\''t write to source files (always disabled if using STDIN or -check)]:write:(true false)' \
+    '-diff[Display diffs of formatting changes]' \
+    '-check[Check if the input is formatted. Exit status will be 0 if all input is properly formatted and non-zero otherwise.]' \
+    '-no-color[If specified, output won'\''t contain any color.]' \
+    '-recursive[Also process files in subdirectories. By default, only the given directory (or current directory) is processed.]' \
+    '*:targets:_files -W __chdir -'
+}
+
+(( ${+functions[_tofu_force-unlock]} )) || _tofu_force-unlock() {
+  _arguments \
+    '-force[Don'\''t ask for input for unlock confirmation.]' \
+    ':lock_id:'
+}
+
+(( ${+functions[_tofu_get]} )) || _tofu_get() {
+  _arguments \
+    '-update[Check already-downloaded modules for available updates and install the newest versions available.]' \
+    '-no-color[Disable text coloring in the output.]' \
+    '-test-directory=[(tests) Set the OpenTofu test directory, defaults to "tests".]:test_directory:_files -W __chdir -/'
+}
+
+(( ${+functions[_tofu_graph]} )) || _tofu_graph() {
+  _arguments \
+    '-draw-cycles[Highlight any cycles in the graph with colored edges. This helps when diagnosing cycle errors. This option is supported only when illustrating a real evaluation graph, selected using the -type=TYPE option.]' \
+    '-module-depth=[(-1) (deprecated) In prior versions of OpenTofu, specified the depth of modules to show in the output.]:module_depth:' \
+    '-plan=[Render graph using the specified plan file instead of the configuration in the current directory. Implies -type=apply.]:plan:_files -W __chdir -' \
+    '-type=[(plan) Type of operation graph to output. Can be: plan, plan-refresh-only, plan-destroy, or apply. By default OpenTofu just summarizes the relationships between the resources in your configuration, without any particular operation in mind. Full operation graphs are more detailed but therefore often harder to read.]:type:(plan plan-refresh-only plan-destroy apply)'
+}
+
+(( ${+functions[_tofu_import]} )) || _tofu_import() {
+  _arguments \
+    '-backup=[(path) Path to backup the existing state file before modifying. Defaults to the "-state-out" path with ".backup" extension. Set to "-" to disable backup.]:backupfile:_files -W __chdir -g "*.backup"' \
+    '-config=[(path) Path to a directory of OpenTofu configuration files to use to configure the provider. Defaults to pwd. If no config files are present, they must be provided via the input prompts or env vars.]:config:_files -W __chdir -/' \
+    '-input=[(true) Disable interactive input prompts.]:input:(true false)' \
+    '-lock=[(true) Don'\''t hold a state lock during the operation. This is dangerous if others might concurrently run commands against the same workspace.]:lock:(true false)' \
+    '-lock-timeout=[(0s) Duration to retry a state lock.]:lock_timeout:' \
+    '-no-color[If specified, output will contain no color.]' \
+    '-state=[(PATH) Path to the source state file. Defaults to the configured backend, or "tofu.tfstate"]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '-state-out=[(PATH) Path to the destination state file to write to. If this is not specified, the source state file will be used. This can be a new or existing path.]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '*-var=[(for=bar) Set a variable in the OpenTofu configuration. This flag can be set multiple times. This is only useful with the "-config" flag.]:var:' \
+    '*-var-file=[(foo) Set variables in the OpenTofu configuration from a file. If "tofu.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]:file:_files -W __chdir -g "*.tfvars{,.json}"' \
+    ':addr:' \
+    ':id:'
+}
+
+(( ${+functions[_tofu_init]} )) || _tofu_init() {
+  _arguments \
+    '-backend=[(true) Disable backend or OpenTofu Cloud initialization for this configuration and use what was previously initialized instead.]:backend:(true false)' \
+    '-backend-config=[Configuration to be merged with what is in the configuration file'\''s '\''backend'\'' block. This can be either a path to an HCL file with key/value assignments (same format as tofu.tfvars) or a '\''key=value'\'' format, and can be specified multiple times. The backend type must be in the configuration itself.]:backend_config:_files -W __chdir -' \
+    '-force-copy[Suppress prompts about copying state data. This is equivalent to providing a "yes" to all confirmation prompts.]' \
+    '-from-module=[Copy the contents of the given module into the target directory before initialization.]:from_module:_files -W __chdir -/' \
+    '-get=[(true) Disable downloading modules for this configuration.]:get:(true false)' \
+    '-input=[(true) Disable interactive prompts. Note that some actions may require interactive prompts and will error if input is disabled.]:input:(true false)' \
+    '-lock=[(true) Don'\''t hold a state lock during backend migration. This is dangerous if others might concurrently run commands against the same workspace.]:lock:(true false)' \
+    '-lock-timeout=[(0s) Duration to retry a state lock.]:lock_timeout:' \
+    '-no-color[If specified, output will contain no color.]' \
+    '-plugin-dir[Directory containing plugin binaries. This overrides all default search paths for plugins, and prevents the automatic installation of plugins. This flag can be used multiple times.]:plugin_dir:_files -W __chdir -/' \
+    '-reconfigure[Reconfigure the backend, ignoring any saved configuration.]' \
+    '-migrate-state[Reconfigure a backend, and attempt to migrate any existing state.]' \
+    '-upgrade[Install the latest module and provider versions allowed within configured constraints, overriding the default behavior of selecting exactly the version recorded in the dependency lockfile.]' \
+    '-lockfile=[Set a dependency lockfile mode. Currently only "readonly" is valid.]:lockfile:( readonly )' \
+    '-ignore-remote-version[A rare option used for OpenTofu Cloud and the remote backend only. Set this to ignore checking that the local and remote OpenTofu versions use compatible state representations, making an operation proceed even when there is a potential mismatch. See the documentation on configuring OpenTofu with OpenTofu Cloud for more information.]' \
+    '-test-directory=[(tests) Set the OpenTofu test directory, defaults to "tests".]:test_directory:_files -W __chdir -/'
+}
+
+(( ${+functions[_tofu_login]} )) || _tofu_login() {
+  _arguments \
+    ':hostname:'
+}
+
+(( ${+functions[_tofu_logout]} )) || _tofu_logout() {
+  _arguments \
+    ':hostname:'
+}
+
+(( ${+functions[_tofu_metadata]} )) || _tofu_metadata() {
+  _arguments \
+    '*::tofu metadata command:_tofu_metadata_commands'
+}
+
+(( ${+functions[_tofu_metadata_commands]} )) || _tofu_metadata_commands() {
+  local -a _metadata_cmds
+  _metadata_cmds=(
+    'functions:Show signatures and descriptions for the available functions'
+  )
+  if (( CURRENT == 1 )); then
+    _describe -t commands "tofu metadata commands" _metadata_cmds
+    return
+  fi
+
+  local curcontext="${curcontext}"
+  cmd="${${_metadata_cmds[(r)$words[1]:*]%%:*}}"
+  curcontext="${curcontext%:*:*}:tofu-metadata-${cmd}:"
+
+  if (( ${+functions[_tofu_metadata_$cmd]} )); then
+    "_tofu_metadata_${cmd}"
+  else
+    _message "no more options"
+  fi
+}
+
+(( ${+functions[_tofu_metadata_functions]} )) || _tofu_metadata_functions() {
+  _arguments \
+    '-json[]'
+}
+
+(( ${+functions[_tofu_output]} )) || _tofu_output() {
+  _arguments \
+    '-state=[(path) Path to the state file to read. Defaults to "tofu.tfstate". Ignored when remote state is used.]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '-no-color[If specified, output will contain no color.]' \
+    '-json[If specified, machine readable output will be printed in JSON format]' \
+    '-raw[For value types that can be automatically converted to a string, will print the raw string directly, rather than a human-oriented representation of the value.]' \
+    ':name:'
+}
+
+(( ${+functions[_tofu_plan]} )) || _tofu_plan() {
+  _arguments \
+    '-compact-warnings[If OpenTofu produces any warnings that are not accompanied by errors, show them in a more compact form that includes only the summary messages.]' \
+    '-destroy[Select the "destroy" planning mode, which creates a plan to destroy all objects currently managed by this OpenTofu configuration instead of the usual behavior.]' \
+    '-detailed-exitcode[Return detailed exit codes when the command exits. This will change the meaning of exit codes to: 0 - Succeeded, diff is empty (no changes); 1 - Errored, 2 - Succeeded; there is a diff]' \
+    '-input=[(true) Ask for input for variables if not directly set.]:input:(true false)' \
+    '-generate-config-out=[(path) (Experimental) If import blocks are present in configuration, instructs OpenTofu to generate HCL for any imported resources not already present. The configuration is written to a new file at PATH, which must not already exist. OpenTofu may still attempt to write configuration if the plan errors.]:generate_config_out:' \
+    '-lock=[(true) Don'\''t hold a state lock during the operation. This is dangerous if others might concurrently run commands against the same workspace.]:lock:(true false)' \
+    '-lock-timeout=[(0s) Duration to retry a state lock.]:lock_timeout:' \
+    '-no-color[If specified, output will contain no color.]' \
+    '-out=[(path) Write a plan file to the given path. This can be used as input to the "apply" command.]:out:' \
+    '-parallelism=[(10) Limit the number of concurrent operations.]:parallelism:' \
+    '-refresh=[(true) Skip checking for external changes to remote objects while creating the plan. This can potentially make planning faster, but at the expense of possibly planning against a stale record of the remote system state.]:refresh:(true false)' \
+    '-refresh-only[Select the "refresh only" planning mode, which checks whether remote objects still match the outcome of the most recent OpenTofu apply but does not propose any actions to undo any changes made outside of OpenTofu.]' \
+    '*-replace=[(resource) Force replacement of a particular resource instance using its resource address. If the plan would'\''ve normally produced an update or no-op action for this instance, OpenTofu will plan to replace it instead. You can use this option multiple times to replace more than one object.]:replace:__tofu_state_resources' \
+    '-state=[(statefile) Path to a OpenTofu state file to use to look up OpenTofu-managed resources. By default it will use the state "tofu.tfstate" if it exists.]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '*-target=[(resource) Limit the planning operation to only the given module, resource, or resource instance and all of its dependencies. You can use this option multiple times to include more than one object. This is for exceptional use only.]:target:__tofu_state_resources' \
+    '*-var=[(for=bar) Set a value for one of the input variables in the root module of the configuration. Use this option more than once to set more than one variable.]:var:' \
+    '*-var-file=[(foo) Load variable values from the given file, in addition to the default files tofu.tfvars and *.auto.tfvars. Use this option more than once to include more than one variables file.]:file:_files -W __chdir -g "*.tfvars{,.json}"'
+}
+
+(( ${+functions[_tofu_providers]} )) || _tofu_providers() {
+  _arguments \
+    '-test-directory=[(path) Set the OpenTofu test directory, defaults to "tests".]:test_directory:_files -W __chdir -/' \
+    '*::tofu providers command:_tofu_providers_commands'
+}
+
+(( ${+functions[_tofu_providers_commands]} )) || _tofu_providers_commands() {
+  local -a _providers_cmds
+  _providers_cmds=(
+    'lock:Write out dependency locks for the configured providers'
+    'mirror:Save local copies of all required provider plugins'
+    'schema:Show schemas for the providers used in the configuration'
+  )
+  if (( CURRENT == 1 )); then
+    _describe -t commands "tofu providers commands" _providers_cmds
+    return
+  fi
+
+  local curcontext="${curcontext}"
+  cmd="${${_providers_cmds[(r)$words[1]:*]%%:*}}"
+  curcontext="${curcontext%:*:*}:tofu-providers-${cmd}:"
+
+  if (( ${+functions[_tofu_providers_$cmd]} )); then
+    "_tofu_providers_${cmd}"
+  else
+    _message "no more options"
+  fi
+}
+
+(( ${+functions[_tofu_providers_lock]} )) || _tofu_providers_lock() {
+  _arguments \
+    '-fs-mirror=[(dir) Consult the given filesystem mirror directory instead of the origin registry for each of the given providers.]:fs_mirror:_files -W __chdir -/' \
+    '-net-mirror=[(url) Consult the given network mirror (given as a base URL) instead of the origin registry for each of the given providers.]:net_mirror:' \
+    '*-platform=[(os_arch) Choose a target platform to request package checksums for.]:platform:' \
+    '*:provider:'
+}
+
+(( ${+functions[_tofu_providers_mirror]} )) || _tofu_providers_mirror() {
+  _arguments \
+    '*-platform=[(os_arch) Choose which target platform to build a mirror for.]:platform:' \
+    '::' \
+    ':target_dir:_files -W __chdir -/'
+}
+
+(( ${+functions[_tofu_providers_schema]} )) || _tofu_providers_schema() {
+  _arguments \
+    '-json[]'
+}
+
+(( ${+functions[_tofu_refresh]} )) || _tofu_refresh() {
+  _arguments \
+    '-backup=[(path) Path to backup the existing state file before modifying. Defaults to the "-state-out" path with ".backup" extension. Set to "-" to disable backup.]::backupfile:_files -W __chdir -g "*.backup"' \
+    '-compact-warnings[If OpenTofu produces any warnings that are not accompanied by errors, show them in a more compact form that includes only the summary messages.]' \
+    '-input=[(true) Ask for input for variables if not directly set.]:input:(true false)' \
+    '-lock=[(true) Don'\''t hold a state lock during the operation. This is dangerous if others might concurrently run commands against the same workspace.]:lock:(true false)' \
+    '-lock-timeout=[(0s) Duration to retry a state lock.]:lock_timeout:' \
+    '-no-color[If specified, output will not contain any color.]' \
+    '-parallelism=[(10) Limit the number of parallel resource operations.]:parallelism:' \
+    '-state=[(path) Path to read and save state (unless state-out is specified). Defaults to "tofu.tfstate".]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '-state-out=[(path) Path to write state to that is different than "-state". This can be used to preserve the old state.]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '*-target=[(resource) A Resource Address to target. Operation will be limited to this resource and its dependencies. This flag can be used multiple times.]:target:__tofu_state_resources' \
+    '*-var=[(for=bar) Set a variable in the OpenTofu configuration. This flag can be set multiple times.]:var:' \
+    '*-var-file=[(foo) Set variables in the OpenTofu configuration from a file. If "tofu.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]:file:_files -W __chdir -g "*.tfvars{,.json}"'
+}
+
+(( ${+functions[_tofu_show]} )) || _tofu_show() {
+  _arguments \
+    '-json[If specified, output the OpenTofu plan or state in a machine-readable form.]' \
+    '-no-color[If specified, output will not contain any color.]' \
+    ':path:_files -W __chdir -g "*.tfstate"'
+}
+
+(( ${+functions[_tofu_state]} )) || _tofu_state() {
+  _arguments \
+    '*::tofu state command:_tofu_state_commands'
+}
+
+(( ${+functions[_tofu_state_commands]} )) || _tofu_state_commands() {
+  local -a _state_cmds
+  _state_cmds=(
+    'list:List resources in the state'
+    'mv:Move an item in the state'
+    'pull:Pull current state and output to stdout'
+    'push:Update remote state from a local state file'
+    'replace-provider:Replace provider in the state'
+    'rm:Remove instances from the state'
+    'show:Show a resource in the state'
+  )
+  if (( CURRENT == 1 )); then
+    _describe -t commands "tofu state commands" _state_cmds
+    return
+  fi
+
+  local curcontext="${curcontext}"
+  cmd="${${_state_cmds[(r)$words[1]:*]%%:*}}"
+  curcontext="${curcontext%:*:*}:tofu-state-${cmd}:"
+
+  if (( ${+functions[_tofu_state_$cmd]} )); then
+    "_tofu_state_${cmd}"
+  else
+    _message "no more options"
+  fi
+}
+
+(( ${+functions[_tofu_state_list]} )) || _tofu_state_list() {
+  _arguments \
+    '-state=[(statefile) Path to a OpenTofu state file to use to look up OpenTofu-managed resources. By default, OpenTofu will consult the state of the currently-selected workspace.]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '-id=[(id) Filters the results to include only instances whose resource types have an attribute named id whose value equals the given id string.]:id:' \
+    '*:address:__tofu_state_resources'
+}
+
+(( ${+functions[_tofu_state_mv]} )) || _tofu_state_mv() {
+  _arguments \
+    '-dry-run[If set, prints out what would'\''ve been moved but doesn'\''t actually move anything.]' \
+    '-backup=[(PATH) Path where OpenTofu should write the backup for the original state. This can"t be disabled. If not set, OpenTofu will write it to the same path as the statefile with a ".backup" extension.]:backupfile:_files -W __chdir -g "*.backup"' \
+    '-backup-out=[(PATH) Path where OpenTofu should write the backup for the destination state. This can"t be disabled. If not set, OpenTofu will write it to the same path as the destination state file with a backup extension. This only needs to be specified if -state-out is set to a different path than -state.]:backupfile:_files -W __chdir -g "*.backup"' \
+    '-ignore-remote-version[A rare option used for the remote backend only. See the remote backend documentation for more information.]' \
+    '-lock=[(true) Don'\''t hold a state lock during the operation. This is dangerous if others might concurrently run commands against the same workspace.]:lock:(true false)' \
+    '-lock-timeout=[(0s) Duration to retry a state lock.]:lock_timeout:' \
+    '-state=[(path) Path to the source state file. Defaults to the configured backend, or "tofu.tfstate"]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '-state-out=[(path) Path to the destination state file to write to. If this isn"t specified, the source state file will be used. This can be a new or existing path.]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '::' \
+    ':source:__tofu_state_resources' \
+    ':destination: '
+}
+
+(( ${+functions[_tofu_state_push]} )) || _tofu_state_push() {
+  _arguments \
+    '-force[Write the state even if lineages don'\''t match or the remote serial is higher.]' \
+    '-lock=[(true) Don'\''t hold a state lock during the operation. This is dangerous if others might concurrently run commands against the same workspace.]:lock:(true false)' \
+    '-lock-timeout=[(0s) Duration to retry a state lock.]:lock_timeout:' \
+    '::' \
+    ':destination:_files'
+}
+
+(( ${+functions[_tofu_state_replace-provider]} )) || _tofu_state_replace-provider() {
+  _arguments \
+    '-auto-approve[Skip interactive approval.]' \
+    '-backup=[(PATH) Path where OpenTofu should write the backup for the state file. This can"t be disabled. If not set, OpenTofu will write it to the same path as the state file with a ".backup" extension.]:backupfile:_files -W __chdir -g "*.backup"' \
+    '-lock=[(true) Don'\''t hold a state lock during the operation. This is dangerous if others might concurrently run commands against the same workspace.]:lock:(true false)' \
+    '-lock-timeout=[(0s) Duration to retry a state lock.]:lock_timeout:' \
+    '-state=[(PATH) Path to the source state file. Defaults to the configured backend, or "tofu.tfstate"]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '::' \
+    ':from_provider_fqn:' \
+    ':to_provider_fqn:'
+}
+
+(( ${+functions[_tofu_state_rm]} )) || _tofu_state_rm() {
+  _arguments \
+    '-dry-run[If set, prints out what would'\''ve been removed but doesn'\''t actually remove anything.]' \
+    '-backup=[(PATH) Path where OpenTofu should write the backup for the original state.]::backupfile:_files -W __chdir -g "*.backup"' \
+    '-ignore-remote-version[Continue even if remote and local OpenTofu versions are incompatible. This may result in an unusable workspace, and should be used with extreme caution.]' \
+    '-lock=[(true) Don'\''t hold a state lock during the operation. This is dangerous if others might concurrently run commands against the same workspace.]:lock:(true false)' \
+    '-lock-timeout=[(0s) Duration to retry a state lock.]:lock_timeout:' \
+    '-state=[(PATH) Path to the state file to update. Defaults to the current workspace state.]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '*:address:__tofu_state_resources'
+}
+
+(( ${+functions[_tofu_state_show]} )) || _tofu_state_show() {
+  _arguments \
+    '-state=[(statefile) Path to a OpenTofu state file to use to look up OpenTofu-managed resources. By default it will use the state "tofu.tfstate" if it exists.]:statefile:_files -W __chdir -g "*.tfstate"' \
+    "*:address:__tofu_state_resources"
+}
+
+(( ${+functions[__tofu_state_resources]} )) || __tofu_state_resources() {
+  local resource
+  local -a resources
+  tofu -chdir="${__chdir}" state list -state="${opt_args[-state]}" 2>/dev/null | while read -r resource; do
+    resources+=( "${resource}" )
+  done
+  compadd "${@}" - "${resources[@]}"
+}
+
+(( ${+functions[_tofu_taint]} )) || _tofu_taint() {
+  _arguments \
+    '-allow-missing[If specified, the command will succeed (exit code 0) even if the resource is missing.]' \
+    '-backup=[(path) Path to backup the existing state file before modifying. Defaults to the "-state-out" path with ".backup" extension. Set to "-" to disable backup.]:backupfile:_files -W __chdir -g "*.backup"' \
+    '-ignore-remote-version[A rare option used for the remote backend only. See the remote backend documentation for more information.]' \
+    '-lock=[(true) Don'\''t hold a state lock during the operation. This is dangerous if others might concurrently run commands against the same workspace.]:lock:(true false)' \
+    '-lock-timeout=[(0s) Duration to retry a state lock.]:lock_timeout:' \
+    '-state=[(path) Path to read and save state (unless state-out is  specified). Defaults to "tofu.tfstate".]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '-state-out=[(path) Path to write updated state file. By default, the "-state" path will be used.]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '*:address:__tofu_state_resources'
+}
+
+(( ${+functions[_tofu_test]} )) || _tofu_test() {
+  _arguments \
+    '-cloud-run=[(source) If specified, OpenTofu will execute this test run remotely using OpenTofu Cloud. You must specify the source of a module registered in a private module registry as the argument to this flag. This allows OpenTofu to associate the cloud run with the correct OpenTofu Cloud module and organization.]:cloud_run:' \
+    '*-filter=[(testfile) If specified, OpenTofu will only execute the test files specified by this flag. You can use this option multiple times to execute more than one test file.]:testfile:_files -W __chdir -g "*.tftest.hcl"' \
+    '-json[If specified, machine readable output will be printed in JSON format]' \
+    '-no-color[If specified, machine readable output will be printed in JSON format]' \
+    '-test-directory=[(path) Set the OpenTofu test directory, defaults to "tests".]:test_directory:_files -W __chdir -/' \
+    '*-var=[(for=bar) Set a value for one of the input variables in the root module of the configuration. Use this option more than once to set more than one variable.]:var:' \
+    '*-var-file=[(foo) Load variable values from the given file, in addition to the default files tofu.tfvars and *.auto.tfvars. Use this option more than once to include more than one variables file.]:file:_files -W __chdir -g "*.tfvars{,.json}"' \
+    '-verbose[Print the plan or state for each test run block as it executes.]' \
+}
+
+(( ${+functions[_tofu_untaint]} )) || _tofu_untaint() {
+  _arguments \
+    '-allow-missing[If specified, the command will succeed (exit code 0) even if the resource is missing.]' \
+    '-backup=[(path) Path to backup the existing state file before modifying. Defaults to the "-state-out" path with ".backup" extension. Set to "-" to disable backup.]:backupfile:_files -W __chdir -g "*.backup"' \
+    '-lock=[(true) Don'\''t hold a state lock during the operation. This is dangerous if others might concurrently run commands against the same workspace.]:lock:(true false)' \
+    '-lock-timeout=[(0s) Duration to retry a state lock.]:lock_timeout:' \
+    '-state=[(path) Path to read and save state (unless state-out is  specified). Defaults to "tofu.tfstate".]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '-state-out=[(path) Path to write updated state file. By default, the "-state" path will be used.]:statefile:_files -W __chdir -g "*.tfstate"' \
+    ':name:__tofu_state_resources'
+}
+
+(( ${+functions[_tofu_validate]} )) || _tofu_validate() {
+  _arguments \
+    '-json[Produce output in a machine-readable JSON format, suitable for use in text editor integrations and other automated systems.]' \
+    '-no-color[If specified, output will not contain any color.]' \
+    '-no-tests[If specified, OpenTofu will not validate test files.]' \
+    '-test-directory=[(path) Set the OpenTofu test directory, defaults to "tests".]:test_directory:_files -W __chdir -/' \
+    ':dir:_files -W __chdir -/'
+}
+
+(( ${+functions[_tofu_version]} )) || _tofu_version() {
+  _arguments \
+    '-json[Output the version information as a JSON object.]' \
+    '::'
+}
+
+(( ${+functions[_tofu_workspace]} )) || _tofu_workspace() {
+  _arguments \
+    '*::tofu workspace command:_tofu_workspace_commands'
+}
+
+(( ${+functions[_tofu_workspace_commands]} )) || _tofu_workspace_commands() {
+  local -a _workspace_cmds
+  _workspace_cmds=(
+    'delete:Delete a workspace'
+    'list:List Workspaces'
+    'new:Create a new workspace'
+    'select:Select a workspace'
+    'show:Show the name of the current workspace'
+  )
+  if (( CURRENT == 1 )); then
+    _describe -t commands "tofu workspace commands" _workspace_cmds
+    return
+  fi
+
+  local curcontext="${curcontext}"
+  cmd="${${_workspace_cmds[(r)$words[1]:*]%%:*}}"
+  curcontext="${curcontext%:*:*}:tofu-workspace-${cmd}:"
+
+  if (( ${+functions[_tofu_workspace_$cmd]} )); then
+    "_tofu_workspace_${cmd}"
+  else
+    _message "no more options"
+  fi
+}
+
+(( ${+functions[_tofu_workspace_delete]} )) || _tofu_workspace_delete() {
+  _arguments \
+    '-force[Remove a workspace even if it is managing resources. OpenTofu can no longer track or manage the workspace'\''s infrastructure.]' \
+    '-lock=[(true) Don'\''t hold a state lock during the operation. This is dangerous if others might concurrently run commands against the same workspace.]:lock:(true false)' \
+    '-lock-timeout=[(0s) Duration to retry a state lock.]:lock_timeout:' \
+    '::' \
+    ':name:__tofu_workspaces'
+}
+
+(( ${+functions[_tofu_workspace_list]} )) || _tofu_workspace_list() {
+  _arguments
+}
+
+(( ${+functions[_tofu_workspace_new]} )) || _tofu_workspace_new() {
+  _arguments \
+    '-lock=[(true) Don'\''t hold a state lock during the operation. This is dangerous if others might concurrently run commands against the same workspace.]:lock:(true false)' \
+    '-lock-timeout=[(0s) Duration to retry a state lock.]:lock_timeout:' \
+    '-state=[(path) Copy an existing state file into the new workspace.]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '::' \
+    ':name:'
+}
+
+(( ${+functions[_tofu_workspace_select]} )) || _tofu_workspace_select() {
+  _arguments \
+    '-or-create=[(false) Create the OpenTofu workspace if it doesn'\''t exist.]:or_create:(true false)' \
+    '::' \
+    ':name:__tofu_workspaces'
+}
+
+(( ${+functions[_tofu_workspace_show]} )) || _tofu_workspace_show() {
+  _arguments
+}
+
+(( ${+functions[__tofu_workspaces]} )) || __tofu_workspaces() {
+  local workspace
+  local -a workspaces
+  tofu -chdir="${__chdir}" workspace list | while read -r workspace; do
+    if [[ -z "${workspace}" ]]; then
+      continue
+    fi
+    workspaces+=( "${workspace#[ *] }" )
+  done
+  compadd "${@}" - "${workspaces[@]}"
+}
+
+_tofu() {
+  _arguments \
+    '-chdir=[(DIR) Switch to a different working directory before executing the given subcommand.]:chdir:_files -W __chdir -/' \
+    '-help[Show this help output, or the help for a specified subcommand.]' \
+    '-version[An alias for the "version" subcommand.]' \
+    '*::tofu command:_tofu_commands'
+}
+
+# don't run the completion function when being source-ed or eval-ed
+if [ "${funcstack[1]}" = '_tofu' ]; then
+  _tofu
+fi
