@@ -29,3 +29,10 @@ dependencies:
     postcopy: |
       set -e
       test -e dependencies/OMZ-README.md && cat dependencies/OMZ-README.md >> README.md
+  plugins/gradle:
+    repo: gradle/gradle-completion
+    branch: master
+    version: 25da917cf5a88f3e58f05be3868a7b2748c8afe6
+    precopy: |
+      set -e
+      find . ! -name _gradle ! -name LICENSE -delete
