@@ -73,3 +73,5 @@ zle -N insert-cycleddown
 # this conveniently by loading the "xterm with Numeric Keypad" preset.
 bindkey "\e[1;6D" insert-cycledleft
 bindkey "\e[1;6C" insert-cycledright
+bindkey "\e[1;6A" insert-cycledup
+bindkey "\e[1;6B" insert-cycleddown
