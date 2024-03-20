@@ -36,7 +36,6 @@ fi
 
 alias bcubc='brew upgrade --cask && brew cleanup'
 alias bcubo='brew update && brew outdated --cask'
-alias bcubc='brew upgrade --cask && brew cleanup'
 alias brewp='brew pin'
 alias brewsp='brew list --pinned'
 alias bubc='brew upgrade && brew cleanup'

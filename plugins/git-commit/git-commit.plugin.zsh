@@ -1,8 +1,8 @@
-function _git_commit_register {
-  if ! git config --global --get-all alias.$1 >/dev/null 2>&1; then
-    git config --global alias.$1 '!a() { if [ "$1" = "-s" ] || [ "$1" = "--scope" ]; then local scope="$2"; shift 2; git commit -m "'$1'(${scope}): ${@}"; else git commit -m "'$1': ${@}"; fi }; a'
-  fi
-}
+local _rev="$(git -C $ZSH rev-parse HEAD 2> /dev/null)"
+if [[ $_rev == $(git config --global --get oh-my-zsh.git-commit-alias 2> /dev/null) ]]; then
+  return
+fi
+git config --global oh-my-zsh.git-commit-alias "$_rev"
 
 local -a _git_commit_aliases
 _git_commit_aliases=(
@@ -17,11 +17,42 @@ _git_commit_aliases=(
   'revert'
   'style'
   'test'
+  'wip'
 )
 
-for _alias in "${_git_commit_aliases[@]}"; do
-  _git_commit_register $_alias
-done
+local _alias _type
+for _type in "${_git_commit_aliases[@]}"; do
+  # an alias can't be named "revert" because the git command takes precedence
+  # https://stackoverflow.com/a/3538791
+  case "$_type" in
+    revert) _alias=rev ;;
+    *) _alias=$_type ;;
+  esac
 
-unfunction _git_commit_register
-unset _alias
+  local _func='!a() {
+local _scope _attention _message
+while [ $# -ne 0 ]; do
+case $1 in
+  -s | --scope )
+    if [ -z $2 ]; then
+      echo "Missing scope!"
+      return 1
+    fi
+    _scope="$2"
+    shift 2
+    ;;
+  -a | --attention )
+    _attention="!"
+    shift 1
+    ;;
+  * )
+    _message="${_message} $1"
+    shift 1
+    ;;
+esac
+done
+git commit -m "'$_type'${_scope:+(${_scope})}${_attention}:${_message}"
+}; a'
+
+  git config --global alias.$_alias "$_func"
+done

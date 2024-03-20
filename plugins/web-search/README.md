@@ -45,6 +45,11 @@ Available search contexts are:
 | `scholar`             | `https://scholar.google.com/scholar?q=`         |
 | `ask`                 | `https://www.ask.com/web?q=`                    |
 | `youtube`             | `https://www.youtube.com/results?search_query=` |
+| `deepl`               | `https://www.deepl.com/translator#auto/auto/`   |
+| `dockerhub`           | `https://hub.docker.com/search?q=`              |
+| `npmpkg`              | `https://www.npmjs.com/search?q=`               |
+| `packagist`           | `https://packagist.org/?query=`                 |
+| `gopkg`               | `https://pkg.go.dev/search?m=package&q=`        |
 
 Also there are aliases for bang-searching DuckDuckGo:
 

@@ -8,6 +8,7 @@ function fzf_setup_using_base_dir() {
       "${HOME}/.fzf"
       "${HOME}/.nix-profile/share/fzf"
       "${XDG_DATA_HOME:-$HOME/.local/share}/fzf"
+      "${MSYSTEM_PREFIX}/share/fzf"
       "/usr/local/opt/fzf"
       "/opt/homebrew/opt/fzf"
       "/usr/share/fzf"

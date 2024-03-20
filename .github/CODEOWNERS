@@ -1,13 +1,14 @@
 # Plugin owners
 plugins/archlinux/                  @ratijas
+plugins/dbt/                        @msempere
+plugins/eza/                        @pepoluan
 plugins/genpass/                    @atoponce
 plugins/git-lfs/                    @hellovietduc
 plugins/gitfast/                    @felipec
 plugins/react-native                @esthor
 plugins/sdk/                        @rgoldberg
 plugins/shell-proxy/                @septs
+plugins/starship/                   @axieax
 plugins/universalarchive/           @Konfekt
 plugins/wp-cli/                     @joshmedeski
 plugins/zoxide/                     @ajeetdsouza
-plugins/starship/                   @axieax
-plugins/dbt/                        @msempere

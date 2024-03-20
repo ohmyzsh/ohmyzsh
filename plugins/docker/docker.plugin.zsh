@@ -57,6 +57,6 @@ fi
     ! is-at-least 23.0.0 ${${(s:,:z)"$(command docker --version)"}[3]}; then
         command cp "${0:h}/completions/_docker" "$ZSH_CACHE_DIR/completions/_docker"
       else
-        command docker completion zsh >| "$ZSH_CACHE_DIR/completions/_docker"
+        command docker completion zsh | tee "$ZSH_CACHE_DIR/completions/_docker" > /dev/null
   fi
 } &|

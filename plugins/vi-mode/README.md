@@ -37,6 +37,8 @@ plugins=(... vi-mode)
 - `INSERT_MODE_INDICATOR`: controls the string displayed when the shell is in insert mode.
   See [Mode indicators](#mode-indicators) for details.
 
+- `VI_MODE_DISABLE_CLIPBOARD`: If set, disables clipboard integration on yank/paste
+
 ## Mode indicators
 
 *Normal mode* is indicated with a red `<<<` mark at the right prompt, when it
@@ -144,10 +146,16 @@ NOTE: this used to be bound to `v`. That is now the default (`visual-mode`).
 - `c{motion}`   : Delete {motion} text and start insert
 - `cc`          : Delete line and start insert
 - `C`           : Delete to the end of the line and start insert
+- `P`           : Insert the contents of the clipboard before the cursor
+- `p`           : Insert the contents of the clipboard after the cursor
 - `r{char}`     : Replace the character under the cursor with {char}
 - `R`           : Enter replace mode: Each character replaces existing one
 - `x`           : Delete `count` characters under and after the cursor
 - `X`           : Delete `count` characters before the cursor
+
+NOTE: delete/kill commands (`dd`, `D`, `c{motion}`, `C`, `x`,`X`) and yank commands
+(`y`, `Y`) will copy to the clipboard. Contents can then be put back using paste commands
+(`P`, `p`).
 
 ## Known issues
 
