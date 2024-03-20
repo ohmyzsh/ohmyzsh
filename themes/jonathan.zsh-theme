@@ -7,6 +7,7 @@ function theme_precmd {
   local promptsize=${#${(%):---(%n@%m:%l)---()--}}
   local rubypromptsize=${#${(%)$(ruby_prompt_info)}}
   local pwdsize=${#${(%):-%~}}
+  pwdsize=$(($pwdsize * 3 - ${#${(ml[$pwdsize * 2])${(%):-%~}}}))
 
   # Truncate the path if it's too long.
   if (( promptsize + rubypromptsize + pwdsize > TERMWIDTH )); then
