@@ -16,7 +16,7 @@ This plugin supplies one command, `jira`, through which all its features are exp
 
 ## Commands
 
-`jira help` or `jira usage` will print usage instructions
+`jira help` or `jira usage` will print the below usage instructions
 
 | Command       | Description                                               |
 | :------------ | :-------------------------------------------------------- |
