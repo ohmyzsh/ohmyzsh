@@ -13,6 +13,8 @@ fi
 : ${ZSH_TMUX_AUTOCONNECT:=true}
 # Automatically close the terminal when tmux exits
 : ${ZSH_TMUX_AUTOQUIT:=$ZSH_TMUX_AUTOSTART}
+# Automatically pick up tmux environments
+: ${ZSH_TMUX_AUTOREFRESH:=true}
 # Set term to screen or screen-256color based on current terminal support
 : ${ZSH_TMUX_DETACHED:=false}
 # Set detached mode
@@ -128,6 +130,15 @@ function _zsh_tmux_plugin_run() {
   fi
 }
 
+# Refresh tmux environment variables.
+function _zsh_tmux_plugin_preexec()
+{
+  local -a tmux_cmd
+  tmux_cmd=(command tmux)
+
+  eval $($tmux_cmd show-environment -s)
+}
+
 # Use the completions for tmux for our function
 compdef _tmux _zsh_tmux_plugin_run
 # Alias tmux to our wrapper function.
@@ -153,4 +164,10 @@ if [[ -z "$TMUX" && "$ZSH_TMUX_AUTOSTART" == "true" && -z "$INSIDE_EMACS" && -z 
     export ZSH_TMUX_AUTOSTARTED=true
     _zsh_tmux_plugin_run
   fi
+fi
+
+# Automatically refresh tmux environments if tmux is running.
+if [[ -n "$TMUX" && "$ZSH_TMUX_AUTOREFRESH" == "true" ]] && tmux ls >/dev/null 2>/dev/null; then
+  autoload -U add-zsh-hook
+  add-zsh-hook preexec _zsh_tmux_plugin_preexec
 fi
