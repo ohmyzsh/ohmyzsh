@@ -11,6 +11,9 @@ fi
 # Load mise hooks
 eval "$($__mise activate zsh)"
 
+# Hook mise into current environment
+eval "$($__mise hook-env -s zsh)"
+
 # If the completion file doesn't exist yet, we need to autoload it and
 # bind it to `mise`. Otherwise, compinit will have already done that.
 if [[ ! -f "$ZSH_CACHE_DIR/completions/_$__mise" ]]; then
