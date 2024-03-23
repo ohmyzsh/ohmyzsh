@@ -254,12 +254,25 @@ prompt_aws() {
   esac
 }
 
+
+# VRF Profile
+# Display current VRF name
+prompt_vrf() {
+  if ((${+commands[ip]} )); then
+    VRF=$(ip vrf identify)
+    [[ -z "$VRF" ]] && return
+    prompt_segment green black  "${VRF:gs/%/%%}"
+  fi
+}
+
+
 ## Main prompt
 build_prompt() {
   RETVAL=$?
   prompt_status
   prompt_virtualenv
   prompt_aws
+  prompt_vrf
   prompt_context
   prompt_dir
   prompt_git
