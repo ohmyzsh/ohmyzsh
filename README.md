@@ -452,6 +452,9 @@ Thank you so much!
 <a href="https://github.com/ohmyzsh/ohmyzsh/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=ohmyzsh/ohmyzsh" width="100%"/>
 </a>
+a href="https://github.com/Ronskie0804">
+  <img src="https://avatars.githubusercontent.com/u/140984233?v=4" width="100%"/>
+</a>
 
 ## Follow Us
 
