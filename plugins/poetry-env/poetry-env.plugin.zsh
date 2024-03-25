@@ -14,10 +14,10 @@ _togglePoetryShell() {
   # activate the environment if pyproject.toml exists
   if [[ "$poetry_active" != 1 ]]; then
     if [[ -f "$PWD/pyproject.toml" ]]; then
-      if grep -q 'tool.poetry' "$PWD/pyproject.toml"; then
+      if grep -q 'tool.poetry' "$PWD/pyproject.toml" && venv_dir=$(poetry env info --path); then
         export poetry_active=1
         export poetry_dir="$PWD"
-        source "$(poetry env info --path)/bin/activate"
+        source "${venv_dir}/bin/activate"
       fi
     fi
   fi
