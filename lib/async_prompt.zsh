@@ -3,6 +3,7 @@
 # https://github.com/woefe/git-prompt.zsh/blob/master/git-prompt.zsh
 
 zmodload zsh/system
+autoload -Uz is-at-least
 
 # For now, async prompt function handlers are set up like so:
 # First, define the async function handler and register the handler
@@ -93,7 +94,8 @@ function _omz_async_request {
 
     # There's a weird bug here where ^C stops working unless we force a fork
     # See https://github.com/zsh-users/zsh-autosuggestions/issues/364
-    command true
+    # and https://github.com/zsh-users/zsh-autosuggestions/pull/612
+    is-at-least 5.8 || command true
 
     # Save the PID from the handler child process
     read -u $fd "_OMZ_ASYNC_PIDS[$handler]"
