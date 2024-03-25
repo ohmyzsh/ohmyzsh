@@ -44,7 +44,7 @@ function _omz_register_handler {
 # Set up async handlers and callbacks
 function _omz_async_request {
   local -i ret=$?
-  typeset -gA _OMZ_ASYNC_FDS _OMZ_ASYNC_PIDS _OMZ_ASYNC_OUTPUT
+  typeset -gA _OMZ_ASYNC_FDS _OMZ_ASYNC_PIDS _OMZ_ASYNC_OUTPUT _OMZ_ASYNC_HANDLERS
 
   # executor runs a subshell for all async requests based on key
   local handler
@@ -82,16 +82,16 @@ function _omz_async_request {
     exec {fd}< <(
       # Tell parent process our PID
       builtin echo ${sysparams[pid]}
-      # Store handler name for callback
-      builtin echo $handler
       # Set exit code for the handler if used
-      (exit $ret)
+      () { return $ret }
       # Run the async function handler
       $handler
     )
 
     # Save FD for handler
     _OMZ_ASYNC_FDS[$handler]=$fd
+    # Save handler name for callback
+    _OMZ_ASYNC_HANDLERS[$fd]=$handler
 
     # There's a weird bug here where ^C stops working unless we force a fork
     # See https://github.com/zsh-users/zsh-autosuggestions/issues/364
@@ -114,9 +114,8 @@ function _omz_async_callback() {
   local err=$2  # Second arg will be passed in case of error
 
   if [[ -z "$err" || "$err" == "hup" ]]; then
-    # Get handler name from first line
-    local handler
-    read handler <&$fd
+    # Get handler name from fd
+    local handler=${_OMZ_ASYNC_HANDLERS[$fd]}
 
     # Store old output which is supposed to be already printed
     local old_output="${_OMZ_ASYNC_OUTPUT[$handler]}"
@@ -136,6 +135,9 @@ function _omz_async_callback() {
 
   # Always remove the handler
   zle -F "$fd"
+
+  # Remove the fd => handle name association
+  unset '_OMZ_ASYNC_HANDLERS[$fd]'
 
   # Unset global FD variable to prevent closing user created FDs in the precmd hook
   _OMZ_ASYNC_FDS[$handler]=-1
