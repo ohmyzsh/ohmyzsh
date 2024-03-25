@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh 
+#!/usr/bin/env zsh
 #local return_code="%(?..%{$fg[red]%}%? ↵%{$reset_color%})"
 
 setopt promptsubst

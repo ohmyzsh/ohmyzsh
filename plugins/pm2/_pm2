@@ -79,7 +79,7 @@ _id_names() {
     local app_list
     app_list=`pm2 list -m`
 
-    local -a names ids 
+    local -a names ids
     names=(`echo $app_list | grep '+---' | awk '{print $2}'`)
     ids=(`echo $app_list | grep 'pm2 id' | awk '{print $4}'`)
 

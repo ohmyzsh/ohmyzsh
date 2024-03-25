@@ -1,6 +1,6 @@
 ## marktext
 
-Plugin for MarkText, a previewer for Markdown files on Mac OS X 
+Plugin for MarkText, a previewer for Markdown files on Mac OS X
 
 ### Requirements
 
