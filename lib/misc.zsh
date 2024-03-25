@@ -27,9 +27,6 @@ elif (( ${+commands[more]} )); then
   env_default 'PAGER' 'more'
 fi
 
-## super user alias
-alias _='sudo '
-
 ## more intelligent acking for ubuntu users and no alias for users without ack
 if (( $+commands[ack-grep] )); then
   alias afind='ack-grep -il'
