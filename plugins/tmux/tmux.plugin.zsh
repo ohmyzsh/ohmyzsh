@@ -57,6 +57,43 @@ function _build_tmux_alias {
   }"
 }
 
+# ALIAS COMPLETION (Modified from https://github.com/zsh-users/zsh)
+_tmux-attach-session() {
+  [[ -n ${tmux_describe} ]] && print "attach or switch to a session" && return
+
+  local sessions
+  sessions=(${(f)"$(tmux list-session)"})
+
+  if (( CURRENT == 2 )); then
+    _alternative \
+      'commands:: _describe -t sessions "tmux session" sessions'
+    return
+  fi
+
+  if [[ $words[1] =~ ta ]]; then 
+    _arguments -s \
+      '1:session' \
+      '-c+[specify working directory for the session]:directory:_directories' \
+      '-d[detach other clients attached to target session]' \
+      '-f+[set client flags]: :_tmux_client_flags' \
+      '-r[put the client into read-only mode]' \
+      "-E[don't apply update-environment option]" \
+      '-x[with -d, send SIGHUP to the parent of the attached client]'
+    elif [[ $words[1] = "tkss" ]]; then
+      _arguments -s \
+        '1:session' \
+        '-a[kill all session except the one specified by -t]' \
+        '-C[clear alerts (bell, activity, silence) in all windows linked to the session]'
+    fi
+
+  return
+}
+
+_tmux_client_flags() {
+  _values -s , flag active-pane ignore-size no-output \
+      'pause-after:time (seconds)' read-only wait-exit
+}
+
 alias tksv='tmux kill-server'
 alias tl='tmux list-sessions'
 alias tmuxconf='$EDITOR $ZSH_TMUX_CONFIG'
@@ -130,6 +167,10 @@ function _zsh_tmux_plugin_run() {
 
 # Use the completions for tmux for our function
 compdef _tmux _zsh_tmux_plugin_run
+
+# Provide session name completion for alias functions.
+compdef _tmux-attach-session ta tad tkss
+
 # Alias tmux to our wrapper function.
 alias tmux=_zsh_tmux_plugin_run
 
