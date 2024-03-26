@@ -35,7 +35,7 @@ This plugin supplies one command, `jira`, through which all its features are exp
 
 ### Jira Branch usage notes
 
-The branch name may have prefixes ending in "/": "feature/MP-1234", and also suffixes 
+The branch name may have prefixes ending in "/": "feature/MP-1234", and also suffixes
 starting with "_": "MP-1234_fix_dashboard". In both these cases, the issue opened will be "MP-1234"
 
 This is also checks if the prefix is in the name, and adds it if not, so: "MP-1234" opens the issue "MP-1234",

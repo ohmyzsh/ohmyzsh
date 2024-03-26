@@ -188,7 +188,7 @@ Add a backslash to the end of the last line add `'zsh-z'` to the list, e.g.,
 Then relaunch `zsh`.
 
 ### For [zcomet](https://github.com/agkozak/zcomet) users
-        
+
 Simply add
 
     zcomet load agkozak/zsh-z

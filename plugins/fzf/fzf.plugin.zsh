@@ -62,7 +62,7 @@ function fzf_setup_using_base_dir() {
 
 function fzf_setup_using_debian() {
   if (( ! $+commands[apt] && ! $+commands[apt-get] )); then
-    # Not a debian based distro 
+    # Not a debian based distro
     return 1
   fi
 

@@ -11,7 +11,7 @@ _dotnet_completion() {
 compdef _dotnet_completion dotnet
 
 # Aliases bellow are here for backwards compatibility
-# added by Shaun Tabone (https://github.com/xontab) 
+# added by Shaun Tabone (https://github.com/xontab)
 
 alias dn='dotnet new'
 alias dr='dotnet run'

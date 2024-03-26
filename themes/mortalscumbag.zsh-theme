@@ -1,6 +1,6 @@
 function my_git_prompt() {
   tester=$(git rev-parse --git-dir 2> /dev/null) || return
-  
+
   INDEX=$(git status --porcelain 2> /dev/null)
   STATUS=""
 

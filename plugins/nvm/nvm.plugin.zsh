@@ -16,7 +16,7 @@ if [[ -z "$NVM_DIR" ]]; then
   fi
 fi
 
-if [[ -z "$NVM_DIR" ]] || [[ ! -f "$NVM_DIR/nvm.sh" ]]; then 
+if [[ -z "$NVM_DIR" ]] || [[ ! -f "$NVM_DIR/nvm.sh" ]]; then
   return
 fi
 
