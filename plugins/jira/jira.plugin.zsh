@@ -60,7 +60,7 @@ function jira() {
   elif [[ "$action" == "assigned" || "$action" == "reported" ]]; then
     _jira_query ${@:-$action}
   elif [[ "$action" == "help" || "$action" == "usage" ]]; then
-    usage
+    _jira_usage
   elif [[ "$action" == "mine" ]]; then
     echo "Opening my issues"
     open_command "${jira_url}/issues/?filter=-1"
