@@ -2,6 +2,21 @@
 #
 # See README.md for details
 
+function _jira_usage() {
+cat <<EOF
+jira                            Performs the default action
+jira new                        Opens a new Jira issue dialogue
+jira ABC-123                    Opens an existing issue
+jira ABC-123 m                  Opens an existing issue for adding a comment
+jira dashboard [rapid_view]     Opens your JIRA dashboard
+jira mine                       Queries for your own issues
+jira tempo                      Opens your JIRA Tempo
+jira reported [username]        Queries for issues reported by a user
+jira assigned [username]        Queries for issues assigned to a user
+jira branch                     Opens an existing issue matching the current branch name
+EOF
+}
+
 function jira() {
   emulate -L zsh
   local action jira_url jira_prefix
@@ -44,6 +59,8 @@ function jira() {
     open_command "${jira_url}/secure/CreateIssue!default.jspa"
   elif [[ "$action" == "assigned" || "$action" == "reported" ]]; then
     _jira_query ${@:-$action}
+  elif [[ "$action" == "help" || "$action" == "usage" ]]; then
+    _jira_usage
   elif [[ "$action" == "mine" ]]; then
     echo "Opening my issues"
     open_command "${jira_url}/issues/?filter=-1"
