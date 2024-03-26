@@ -2,7 +2,7 @@
 #
 # See README.md for details
 
-function usage() {
+function _jira_usage() {
 cat <<EOF
 jira                            Performs the default action
 jira new                        Opens a new Jira issue dialogue
