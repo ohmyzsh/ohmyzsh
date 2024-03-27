@@ -8,6 +8,9 @@ To use it, add `vi-mode` to the plugins array in your zshrc file:
 plugins=(... vi-mode)
 ```
 
+NOTE: The following settings should be added after `source $ZSH/oh-my-zsh.sh`
+so the plugin doesn't override them.
+
 ## Settings
 
 - `VI_MODE_RESET_PROMPT_ON_MODE_CHANGE`: controls whether the prompt is redrawn when
