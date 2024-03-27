@@ -28,7 +28,11 @@ alias dstp='docker container stop'
 alias dtop='docker top'
 alias dvi='docker volume inspect'
 alias dvls='docker volume ls'
+alias dcprune="docker container prune"
+alias diprune="docker image prune"
+alias dnprune="docker network prune"
 alias dvprune='docker volume prune'
+alias dprune="dcprune; diprune; dnprune; dvprune"
 alias dxc='docker container exec'
 alias dxcit='docker container exec -it'
 
