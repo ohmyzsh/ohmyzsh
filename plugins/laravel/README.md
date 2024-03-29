@@ -10,6 +10,7 @@ plugins=(... laravel)
 |:-:|:-:|
 | `artisan`  | `php artisan`  |
 | `pas`  | `php artisan serve` |
+| `pat`  | `php artisan tinker` |
 
 ## Database
 
@@ -44,6 +45,7 @@ plugins=(... laravel)
 | `pacoc`  |  `php artisan config:clear` |
 | `pavic`  |  `php artisan view:clear` |
 | `paroc`  |  `php artisan route:clear` |
+| `paoc`   |  `php artisan optimize:clear` |
 
 ## Queues
 
