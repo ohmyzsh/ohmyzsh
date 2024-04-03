@@ -96,8 +96,7 @@ function _omz_async_request {
     command true
 
     # Save the PID from the handler child process
-    read pid <&$fd
-    _OMZ_ASYNC_PIDS[$handler]=$pid
+    read -u $fd "_OMZ_ASYNC_PIDS[$handler]"
 
     # When the fd is readable, call the response handler
     zle -F "$fd" _omz_async_callback
@@ -119,7 +118,7 @@ function _omz_async_callback() {
     local old_output="${_OMZ_ASYNC_OUTPUT[$handler]}"
 
     # Read output from fd
-    _OMZ_ASYNC_OUTPUT[$handler]="$(cat <&$fd)"
+    IFS= read -r -u $fd -d '' "_OMZ_ASYNC_OUTPUT[$handler]"
 
     # Repaint prompt if output has changed
     if [[ "$old_output" != "${_OMZ_ASYNC_OUTPUT[$handler]}" ]]; then
