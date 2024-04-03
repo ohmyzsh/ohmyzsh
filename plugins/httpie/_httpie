@@ -1,4 +1,4 @@
-#compdef http
+#compdef http https
 # ------------------------------------------------------------------------------
 # Copyright (c) 2015 GitHub zsh-users - http://github.com/zsh-users
 # All rights reserved.
