@@ -7,7 +7,7 @@ function _tasko_print_help() {
 function tasko () {
   if [[ $# -ne 2 ]]; then
     echo 'Error: Too many/few arguments, expecting two.' >&2
-    tasko_print_help
+    _tasko_print_help
     return 1
   fi
 
