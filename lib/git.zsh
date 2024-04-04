@@ -40,12 +40,14 @@ function _omz_git_prompt_info() {
 # Enable async prompt by default unless the setting is at false / no
 if zstyle -T ':omz:alpha:lib:git' async-prompt; then
   function git_prompt_info() {
+    setopt localoptions noksharrays
     if [[ -n "$_OMZ_ASYNC_OUTPUT[_omz_git_prompt_info]" ]]; then
       echo -n "$_OMZ_ASYNC_OUTPUT[_omz_git_prompt_info]"
     fi
   }
 
   function git_prompt_status() {
+    setopt localoptions noksharrays
     if [[ -n "$_OMZ_ASYNC_OUTPUT[_omz_git_prompt_status]" ]]; then
       echo -n "$_OMZ_ASYNC_OUTPUT[_omz_git_prompt_status]"
     fi
