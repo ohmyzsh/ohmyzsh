@@ -57,13 +57,13 @@ if zstyle -T ':omz:alpha:lib:git' async-prompt; then
   # or any of the other prompt variables
   function _defer_async_git_register() {
     # Check if git_prompt_info is used in a prompt variable
-    case "${PS1}:${PS2}:${PS3}:${PS4}:${RPS1}:${RPS2}:${RPS3}:${RPS4}" in
+    case "${PS1}:${PS2}:${PS3}:${PS4}:${RPROMPT}:${RPS1}:${RPS2}:${RPS3}:${RPS4}" in
     *(\$\(git_prompt_info\)|\`git_prompt_info\`)*)
       _omz_register_handler _omz_git_prompt_info
       ;;
     esac
 
-    case "${PS1}:${PS2}:${PS3}:${PS4}:${RPS1}:${RPS2}:${RPS3}:${RPS4}" in
+    case "${PS1}:${PS2}:${PS3}:${PS4}:${RPROMPT}:${RPS1}:${RPS2}:${RPS3}:${RPS4}" in
     *(\$\(git_prompt_status\)|\`git_prompt_status\`)*)
       _omz_register_handler _omz_git_prompt_status
       ;;
