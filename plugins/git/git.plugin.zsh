@@ -252,6 +252,7 @@ alias gignored='git ls-files -v | grep "^[[:lower:]]"'
 alias gfg='git ls-files | grep'
 alias gm='git merge'
 alias gma='git merge --abort'
+alias gmc='git merge --continue'
 alias gms="git merge --squash"
 alias gmom='git merge origin/$(git_main_branch)'
 alias gmum='git merge upstream/$(git_main_branch)'
