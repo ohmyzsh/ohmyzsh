@@ -13,6 +13,7 @@ autojump_paths=(
   /opt/local/etc/profile.d/autojump.sh                     # macOS with MacPorts
   /usr/local/etc/profile.d/autojump.sh                     # macOS with Homebrew (default)
   /opt/homebrew/etc/profile.d/autojump.sh                  # macOS with Homebrew (default on M1 macs)
+  /opt/pkg/share/autojump/autojump.zsh                     # macOS with pkgsrc
   /etc/profiles/per-user/$USER/etc/profile.d/autojump.sh   # macOS Nix, Home Manager and flakes
 )
 
