@@ -4,7 +4,7 @@
 0="${${(M)0:#/*}:-$PWD/$0}"
 
 # Open the current directory in a Finder window
-alias ofd='open_command'
+alias ofd='open_command $PWD'
 
 # Show/hide hidden files in the Finder
 alias showfiles="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
