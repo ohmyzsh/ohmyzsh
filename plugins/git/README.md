@@ -166,6 +166,7 @@ plugins=(... git)
 | `grhk`                 | `git reset --keep`                                                                                                              |
 | `grhs`                 | `git reset --soft`                                                                                                              |
 | `gpristine`            | `git reset --hard && git clean --force -dfx`                                                                                    |
+| `gwipe`                | `git reset --hard && git clean --force -df`                                                                                     |
 | `groh`                 | `git reset origin/$(git_current_branch) --hard`                                                                                 |
 | `grs`                  | `git restore`                                                                                                                   |
 | `grss`                 | `git restore --source`                                                                                                          |
