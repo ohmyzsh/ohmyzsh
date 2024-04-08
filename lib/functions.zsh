@@ -15,6 +15,8 @@ function upgrade_oh_my_zsh() {
 
 function open_command() {
   local open_cmd
+  local args=("$@")
+  [ "${#args[@]}" = 0 ] && args=("$PWD")
 
   # define the open command
   case "$OSTYPE" in
@@ -32,12 +34,12 @@ function open_command() {
 
   # If a URL is passed, $BROWSER might be set to a local browser within SSH.
   # See https://github.com/ohmyzsh/ohmyzsh/issues/11098
-  if [[ -n "$BROWSER" && "$1" = (http|https)://* ]]; then
-    "$BROWSER" "$@"
+  if [[ -n "$BROWSER" && "${args[@]}" = (http|https)://* ]]; then
+    "$BROWSER" "$args"
     return
   fi
 
-  ${=open_cmd} "$@" &>/dev/null
+  ${=open_cmd} "${args[@]}" &>/dev/null
 }
 
 # take functions
