@@ -37,7 +37,7 @@ function open_command() {
     return
   fi
 
-  ${=open_cmd} "${@[-1]}" &>/dev/null
+  ${=open_cmd} "$@" &>/dev/null
 }
 
 # take functions
