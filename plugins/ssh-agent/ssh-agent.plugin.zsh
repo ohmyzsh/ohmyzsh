@@ -13,6 +13,11 @@ function _start_agent() {
     fi
   fi
 
+  if [[ ! -d "$HOME/.ssh" ]]; then
+    echo "[oh-my-zsh] ssh-agent plugin requires ~/.ssh directory"
+    return 1
+  fi
+
   # Set a maximum lifetime for identities added to ssh-agent
   local lifetime
   zstyle -s :omz:plugins:ssh-agent lifetime lifetime
@@ -72,6 +77,9 @@ function _add_identities() {
   local args
   zstyle -a :omz:plugins:ssh-agent ssh-add-args args
 
+  # if ssh-agent quiet mode, pass -q to ssh-add
+  zstyle -t :omz:plugins:ssh-agent quiet && args=(-q $args)
+
   # use user specified helper to ask for password (ksshaskpass, etc)
   local helper
   zstyle -s :omz:plugins:ssh-agent helper helper
@@ -90,8 +98,10 @@ function _add_identities() {
 
 # Add a nifty symlink for screen/tmux if agent forwarding is enabled
 if zstyle -t :omz:plugins:ssh-agent agent-forwarding \
-   && [[ -n "$SSH_AUTH_SOCK" && ! -L "$SSH_AUTH_SOCK" ]]; then
-  ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USERNAME-screen
+   && [[ -n "$SSH_AUTH_SOCK" ]]; then
+  if [[ ! -L "$SSH_AUTH_SOCK" ]]; then
+    ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USERNAME-screen
+  fi
 else
   _start_agent
 fi

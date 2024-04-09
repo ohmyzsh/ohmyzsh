@@ -17,7 +17,7 @@ Original author: [Sorin Ionescu](https://github.com/sorin-ionescu)
 | `tab`         | Open the current directory in a new tab                  |
 | `split_tab`   | Split the current terminal tab horizontally              |
 | `vsplit_tab`  | Split the current terminal tab vertically                |
-| `ofd`         | Open the current directory in a Finder window            |
+| `ofd`         | Open passed directories (or $PWD by default) in Finder   |
 | `pfd`         | Return the path of the frontmost Finder window           |
 | `pfs`         | Return the current Finder selection                      |
 | `cdf`         | `cd` to the current Finder directory                     |
@@ -25,7 +25,7 @@ Original author: [Sorin Ionescu](https://github.com/sorin-ionescu)
 | `pxd`         | Return the current Xcode project directory               |
 | `cdx`         | `cd` to the current Xcode project directory              |
 | `quick-look`  | Quick-Look a specified file                              |
-| `man-preview` | Open a specified man page in Preview app                 |
+| `man-preview` | Open man pages in Preview app                            |
 | `showfiles`   | Show hidden files in Finder                              |
 | `hidefiles`   | Hide the hidden files in Finder                          |
 | `itunes`      | _DEPRECATED_. Use `music` from macOS Catalina on         |

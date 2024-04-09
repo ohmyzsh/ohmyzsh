@@ -109,11 +109,24 @@ prompt_git() {
    if [[ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" = "true" ]]; then
     repo_path=$(git rev-parse --git-dir 2>/dev/null)
     dirty=$(parse_git_dirty)
-    ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="➦ $(git rev-parse --short HEAD 2> /dev/null)"
+    ref=$(git symbolic-ref HEAD 2> /dev/null) || \
+    ref="◈ $(git describe --exact-match --tags HEAD 2> /dev/null)" || \
+    ref="➦ $(git rev-parse --short HEAD 2> /dev/null)"
     if [[ -n $dirty ]]; then
       prompt_segment yellow black
     else
       prompt_segment green $CURRENT_FG
+    fi
+
+    local ahead behind
+    ahead=$(git log --oneline @{upstream}.. 2>/dev/null)
+    behind=$(git log --oneline ..@{upstream} 2>/dev/null)
+    if [[ -n "$ahead" ]] && [[ -n "$behind" ]]; then
+      PL_BRANCH_CHAR=$'\u21c5'
+    elif [[ -n "$ahead" ]]; then
+      PL_BRANCH_CHAR=$'\u21b1'
+    elif [[ -n "$behind" ]]; then
+      PL_BRANCH_CHAR=$'\u21b0'
     fi
 
     if [[ -e "${repo_path}/BISECT_LOG" ]]; then

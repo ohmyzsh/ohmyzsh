@@ -27,12 +27,19 @@ alias stackoverflow='frontend stackoverflow'
 alias typescript='frontend typescript'
 alias unheap='frontend unheap'
 alias vuejs='frontend vuejs'
+alias nextjs='frontend nextjs'
 
 function _frontend_fallback() {
-  case "$FRONTEND_SEARCH_FALLBACK" in
-    duckduckgo) echo "https://duckduckgo.com/?sites=$1&q=" ;;
-    *) echo "https://google.com/search?as_sitesearch=$1&as_q=" ;;
-  esac
+  if [[ "$FRONTEND_SEARCH_FALLBACK_LUCKY" == "true" ]]; then
+    case true in
+      *) echo "https://duckduckgo.com/?q=!ducky+site%3A$1+" ;;
+    esac
+  else
+    case "$FRONTEND_SEARCH_FALLBACK" in
+      duckduckgo) echo "https://duckduckgo.com/?sites=$1&q=" ;;
+      *) echo "https://google.com/search?as_sitesearch=$1&as_q=" ;;
+    esac
+  fi
 }
 
 function frontend() {
@@ -70,6 +77,7 @@ function frontend() {
     typescript     $(_frontend_fallback 'www.typescriptlang.org/docs')
     unheap         'http://www.unheap.com/?s='
     vuejs          $(_frontend_fallback 'vuejs.org')
+    nextjs         $(_frontend_fallback 'nextjs.org')
   )
 
   # show help for command list
@@ -81,7 +89,7 @@ function frontend() {
     print -P ""
     print -P "  angular, angularjs, bem, bootsnipp, caniuse, codepen, compassdoc, cssflow, packagephobia"
     print -P "  dartlang, emberjs, fontello, flowtype, github, html5please, jestjs, jquery, lodash,"
-    print -P "  mdn, npmjs, nodejs, qunit, reactjs, smacss, stackoverflow, unheap, vuejs, bundlephobia"
+    print -P "  mdn, npmjs, nodejs, qunit, reactjs, smacss, stackoverflow, unheap, vuejs, bundlephobia, nextjs"
     print -P ""
     print -P "For example: frontend npmjs mocha (or just: npmjs mocha)."
     print -P ""
@@ -96,7 +104,7 @@ function frontend() {
     echo ""
     echo "  angular, angularjs, bem, bootsnipp, caniuse, codepen, compassdoc, cssflow, packagephobia"
     echo "  dartlang, emberjs, fontello, github, html5please, jest, jquery, lodash,"
-    echo "  mdn, npmjs, nodejs, qunit, reactjs, smacss, stackoverflow, unheap, vuejs, bundlephobia"
+    echo "  mdn, npmjs, nodejs, qunit, reactjs, smacss, stackoverflow, unheap, vuejs, bundlephobia, nextjs"
     echo ""
     return 1
   fi

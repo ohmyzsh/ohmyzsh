@@ -144,7 +144,7 @@ _yarn_scripts() {
   fi
 
   if [[ -n $packageJson ]]; then
-    scripts=("${(@f)$(cat ${packageJson} | perl -0777 -MJSON::PP -n -E '%r=%{decode_json($_)->{scripts}}; do{$k=$_;($e=$k)=~s/:/\\:/g; printf "$e:$r{$k}\n"} for sort keys %r')}")
+    scripts=("${(@f)$(cat ${packageJson} | perl -0777 -MJSON::PP -n -E 'binmode(STDOUT, ":encoding(UTF-8)"); %r=%{decode_json($_)->{scripts}}; do{$k=$_;($e=$k)=~s/:/\\:/g; printf "$e:$r{$k}\n"} for sort keys %r')}")
   fi
 
   commands=('env' $scripts $binaries)

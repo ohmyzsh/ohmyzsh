@@ -12,8 +12,8 @@ function omz_history {
     # if -l provided, run as if calling `fc' directly
     builtin fc "$@"
   else
-    # unless a number is provided, show all history events (starting from 1)
-    [[ ${@[-1]-} = *[0-9]* ]] && builtin fc -l "$@" || builtin fc -l "$@" 1
+    # otherwise, run `fc -l` with a custom format
+    builtin fc -l "$@"
   fi
 }
 

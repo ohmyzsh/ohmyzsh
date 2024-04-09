@@ -2,10 +2,30 @@ function agp() {
   echo $AWS_PROFILE
 }
 
+function agr() {
+  echo $AWS_REGION
+}
+
+# Update state file if enabled
+function _aws_update_state() {
+  if [[ "$AWS_PROFILE_STATE_ENABLED" == true ]]; then
+    test -d $(dirname ${AWS_STATE_FILE}) || exit 1
+    echo "${AWS_PROFILE} ${AWS_REGION}" > "${AWS_STATE_FILE}"
+  fi
+}
+
+function _aws_clear_state() {
+  if [[ "$AWS_PROFILE_STATE_ENABLED" == true ]]; then
+    test -d $(dirname ${AWS_STATE_FILE}) || exit 1
+    echo -n > "${AWS_STATE_FILE}"
+  fi
+}
+
 # AWS profile selection
 function asp() {
   if [[ -z "$1" ]]; then
-    unset AWS_DEFAULT_PROFILE AWS_PROFILE AWS_EB_PROFILE
+    unset AWS_DEFAULT_PROFILE AWS_PROFILE AWS_EB_PROFILE AWS_PROFILE_REGION
+    _aws_clear_state
     echo AWS profile cleared.
     return
   fi
@@ -22,9 +42,40 @@ function asp() {
   export AWS_PROFILE=$1
   export AWS_EB_PROFILE=$1
 
+  export AWS_PROFILE_REGION=$(aws configure get region)
+
+  _aws_update_state
+
   if [[ "$2" == "login" ]]; then
-    aws sso login
+    if [[ -n "$3" ]]; then
+      aws sso login --sso-session $3
+    else
+      aws sso login
+    fi
+  elif [[ "$2" == "logout" ]]; then
+    aws sso logout
   fi
+}
+
+# AWS region selection
+function asr() {
+  if [[ -z "$1" ]]; then
+    unset AWS_DEFAULT_REGION AWS_REGION
+    _aws_update_state
+    echo AWS region cleared.
+    return
+  fi
+
+  local -a available_regions
+  available_regions=($(aws_regions))
+  if [[ -z "${available_regions[(r)$1]}" ]]; then
+    echo "${fg[red]}Available regions: \n$(aws_regions)"
+    return 1
+  fi
+
+  export AWS_REGION=$1
+  export AWS_DEFAULT_REGION=$1
+  _aws_update_state
 }
 
 # AWS profile switch
@@ -135,20 +186,68 @@ function aws_change_access_key() {
     return 1
   fi
 
-  echo "Insert the credentials when asked."
-  asp "$1" || return 1
-  AWS_PAGER="" aws iam create-access-key
-  AWS_PAGER="" aws configure --profile "$1"
+  local profile="$1"
+  # Get current access key
+  local original_aws_access_key_id="$(aws configure get aws_access_key_id --profile $profile)"
 
-  echo "You can now safely delete the old access key running \`aws iam delete-access-key --access-key-id ID\`"
+  asp "$profile" || return 1
+  echo "Generating a new access key pair for you now."
+  if aws --no-cli-pager iam create-access-key; then
+    echo "Insert the newly generated credentials when asked."
+    aws --no-cli-pager configure --profile $profile
+  else
+    echo "Current access keys:"
+    aws --no-cli-pager iam list-access-keys
+    echo "Profile \"${profile}\" is currently using the $original_aws_access_key_id key. You can delete an old access key by running \`aws --profile $profile iam delete-access-key --access-key-id AccessKeyId\`"
+    return 1
+  fi
+
+  read -q "yn?Would you like to disable your previous access key (${original_aws_access_key_id}) now? "
+  case $yn in
+    [Yy]*)
+      echo -n "\nDisabling access key ${original_aws_access_key_id}..."
+      if aws --no-cli-pager iam update-access-key --access-key-id ${original_aws_access_key_id} --status Inactive; then
+        echo "done."
+      else
+        echo "\nFailed to disable ${original_aws_access_key_id} key."
+      fi
+      ;;
+    *)
+      echo ""
+      ;;
+  esac
+  echo "You can now safely delete the old access key by running \`aws --profile $profile iam delete-access-key --access-key-id ${original_aws_access_key_id}\`"
   echo "Your current keys are:"
-  AWS_PAGER="" aws iam list-access-keys
+  aws --no-cli-pager iam list-access-keys
+}
+
+function aws_regions() {
+  local region
+  if [[ $AWS_DEFAULT_REGION ]];then
+      region="$AWS_DEFAULT_REGION"
+  elif [[ $AWS_REGION ]];then
+      region="$AWS_REGION"
+  else
+      region="us-west-1"
+  fi
+
+  if [[ $AWS_DEFAULT_PROFILE || $AWS_PROFILE ]];then
+    aws ec2 describe-regions --region $region |grep RegionName | awk -F ':' '{gsub(/"/, "", $2);gsub(/,/, "", $2);gsub(/ /, "", $2);  print $2}'
+  else
+    echo "You must specify a AWS profile."
+  fi
 }
 
 function aws_profiles() {
+  aws --no-cli-pager configure list-profiles 2> /dev/null && return
   [[ -r "${AWS_CONFIG_FILE:-$HOME/.aws/config}" ]] || return 1
-  grep --color=never -Eo '\[.*\]' "${AWS_CONFIG_FILE:-$HOME/.aws/config}" | sed -E 's/^[[:space:]]*\[(profile)?[[:space:]]*([-_[:alnum:]\.@]+)\][[:space:]]*$/\2/g'
+  grep --color=never -Eo '\[.*\]' "${AWS_CONFIG_FILE:-$HOME/.aws/config}" | sed -E 's/^[[:space:]]*\[(profile)?[[:space:]]*([^[:space:]]+)\][[:space:]]*$/\2/g'
 }
+
+function _aws_regions() {
+  reply=($(aws_regions))
+}
+compctl -K _aws_regions asr
 
 function _aws_profiles() {
   reply=($(aws_profiles))
@@ -157,14 +256,40 @@ compctl -K _aws_profiles asp acp aws_change_access_key
 
 # AWS prompt
 function aws_prompt_info() {
-  [[ -n "$AWS_PROFILE" ]] || return
-  echo "${ZSH_THEME_AWS_PREFIX=<aws:}${AWS_PROFILE:gs/%/%%}${ZSH_THEME_AWS_SUFFIX=>}"
+  local _aws_to_show
+  local region="${AWS_REGION:-${AWS_DEFAULT_REGION:-$AWS_PROFILE_REGION}}"
+
+  if [[ -n "$AWS_PROFILE" ]];then
+    _aws_to_show+="${ZSH_THEME_AWS_PROFILE_PREFIX="<aws:"}${AWS_PROFILE}${ZSH_THEME_AWS_PROFILE_SUFFIX=">"}"
+  fi
+
+  if [[ -n "$region" ]]; then
+    [[ -n "$_aws_to_show" ]] && _aws_to_show+="${ZSH_THEME_AWS_DIVIDER=" "}"
+    _aws_to_show+="${ZSH_THEME_AWS_REGION_PREFIX="<region:"}${region}${ZSH_THEME_AWS_REGION_SUFFIX=">"}"
+  fi
+
+  echo "$_aws_to_show"
 }
 
 if [[ "$SHOW_AWS_PROMPT" != false && "$RPROMPT" != *'$(aws_prompt_info)'* ]]; then
   RPROMPT='$(aws_prompt_info)'"$RPROMPT"
 fi
 
+if [[ "$AWS_PROFILE_STATE_ENABLED" == true ]]; then
+  AWS_STATE_FILE="${AWS_STATE_FILE:-/tmp/.aws_current_profile}"
+  test -s "${AWS_STATE_FILE}" || return
+
+  aws_state=($(cat $AWS_STATE_FILE))
+
+  export AWS_DEFAULT_PROFILE="${aws_state[1]}"
+  export AWS_PROFILE="$AWS_DEFAULT_PROFILE"
+  export AWS_EB_PROFILE="$AWS_DEFAULT_PROFILE"
+
+  test -z "${aws_state[2]}" && AWS_REGION=$(aws configure get region)
+
+  export AWS_REGION=${AWS_REGION:-$aws_state[2]}
+  export AWS_DEFAULT_REGION="$AWS_REGION"
+fi
 
 # Load awscli completions
 
@@ -210,3 +335,4 @@ else
   [[ -r $_aws_zsh_completer_path ]] && source $_aws_zsh_completer_path
   unset _aws_zsh_completer_path _brew_prefix
 fi
+

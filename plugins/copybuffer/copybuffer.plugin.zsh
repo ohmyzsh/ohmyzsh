@@ -1,4 +1,4 @@
-# copy the active line from the command line buffer 
+# copy the active line from the command line buffer
 # onto the system clipboard
 
 copybuffer () {
