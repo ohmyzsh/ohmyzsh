@@ -3,7 +3,10 @@ function omz_history {
   local clear list
   zparseopts -E c=clear l=list
 
-  if [[ -n "$clear" ]]; then
+  if [[ $# -eq 0 ]]; then
+    # if no arguments provided, show full history starting from 1
+    builtin fc -l 1
+  elif [[ -n "$clear" ]]; then
     # if -c provided, clobber the history file
     echo -n >| "$HISTFILE"
     fc -p "$HISTFILE"
