@@ -124,7 +124,7 @@ function _omz_async_callback() {
 
     # Repaint prompt if output has changed
     if [[ "$old_output" != "${_OMZ_ASYNC_OUTPUT[$handler]}" ]]; then
-      zle reset-prompt
+      zle .reset-prompt
       zle -R
     fi
 
