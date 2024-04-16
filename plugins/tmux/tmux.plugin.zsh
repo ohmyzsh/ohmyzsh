@@ -13,6 +13,8 @@ fi
 : ${ZSH_TMUX_AUTOCONNECT:=true}
 # Automatically close the terminal when tmux exits
 : ${ZSH_TMUX_AUTOQUIT:=$ZSH_TMUX_AUTOSTART}
+# Automatically name the new session based on the basename of PWD
+: ${ZSH_TMUX_AUTONAME_SESSION:=false}
 # Set term to screen or screen-256color based on current terminal support
 : ${ZSH_TMUX_DETACHED:=false}
 # Set detached mode
@@ -102,9 +104,22 @@ function _zsh_tmux_plugin_run() {
 
   local _detached=""
   [[ "$ZSH_TMUX_DETACHED" == "true" ]] && _detached="-d"
+
+  local session_name
+  if [[ "$ZSH_TMUX_AUTONAME_SESSION" == "true" ]]; then
+    # Name the session after the basename of the current directory
+    session_name=${PWD##*/}
+    # If the current directory is the home directory, name it 'HOME'
+    [[ "$PWD" == "$HOME" ]] && session_name="HOME"
+    # If the current directory is the root directory, name it 'ROOT'
+    [[ "$PWD" == "/" ]] && session_name="ROOT"
+  else
+      session_name="$ZSH_TMUX_DEFAULT_SESSION_NAME"
+  fi
+
   # Try to connect to an existing session.
-  if [[ -n "$ZSH_TMUX_DEFAULT_SESSION_NAME" ]]; then
-    [[ "$ZSH_TMUX_AUTOCONNECT" == "true" ]] && $tmux_cmd attach $_detached -t $ZSH_TMUX_DEFAULT_SESSION_NAME
+  if [[ -n "$session_name" ]]; then
+    [[ "$ZSH_TMUX_AUTOCONNECT" == "true" ]] && $tmux_cmd attach $_detached -t "$session_name"
   else
     [[ "$ZSH_TMUX_AUTOCONNECT" == "true" ]] && $tmux_cmd attach $_detached
   fi
@@ -116,8 +131,9 @@ function _zsh_tmux_plugin_run() {
     elif [[ -e "$ZSH_TMUX_CONFIG" ]]; then
       tmux_cmd+=(-f "$ZSH_TMUX_CONFIG")
     fi
-    if [[ -n "$ZSH_TMUX_DEFAULT_SESSION_NAME" ]]; then
-      $tmux_cmd new-session -s $ZSH_TMUX_DEFAULT_SESSION_NAME
+
+    if [[ -n "$session_name" ]]; then
+      $tmux_cmd new-session -s "$session_name"
     else
       $tmux_cmd new-session
     fi
