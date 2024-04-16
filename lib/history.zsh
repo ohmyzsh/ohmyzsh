@@ -12,9 +12,6 @@ function omz_history {
     echo -n >| "$HISTFILE"
     fc -p "$HISTFILE"
     echo >&2 History file deleted.
-  elif [[ -n "$list" ]]; then
-    # if -l provided, run as if calling `fc' directly
-    builtin fc $stamp -l "$@"
   else
     # otherwise, run `fc -l` with a custom format
     builtin fc $stamp -l "$@"
