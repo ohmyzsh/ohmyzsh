@@ -29,4 +29,5 @@ prompt_pygmalion_precmd(){
   PROMPT="${base_prompt}\$(git_prompt_info)${post_prompt}"
 }
 
+prompt_pygmalion_precmd
 prompt_setup_pygmalion
