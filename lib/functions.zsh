@@ -5,7 +5,7 @@ function zsh_stats() {
 }
 
 function uninstall_oh_my_zsh() {
-  env ZSH="$ZSH" sh "$ZSH/tools/uninstall.sh"
+  command env ZSH="$ZSH" sh "$ZSH/tools/uninstall.sh"
 }
 
 function upgrade_oh_my_zsh() {
@@ -182,6 +182,8 @@ function omz_urlencode() {
   fi
 
   # Use LC_CTYPE=C to process text byte-by-byte
+  # Note that this doesn't work in Termux, as it only has UTF-8 locale.
+  # Characters will be processed as UTF-8, which is fine for URLs.
   local i byte ord LC_ALL=C
   export LC_ALL
   local reserved=';/?:@&=+$,'
@@ -206,6 +208,9 @@ function omz_urlencode() {
     else
       if [[ "$byte" == " " && -n $spaces_as_plus ]]; then
         url_str+="+"
+      elif [[ "$PREFIX" = *com.termux* ]]; then
+        # Termux does not have non-UTF8 locales, so just send the UTF-8 character directly
+        url_str+="$byte"
       else
         ord=$(( [##16] #byte ))
         url_str+="%$ord"

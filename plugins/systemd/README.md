@@ -12,6 +12,7 @@ plugins=(... systemd)
 
 | Alias                  | Command                            | Description                                                      |
 |:-----------------------|:-----------------------------------|:-----------------------------------------------------------------|
+| `sc-failed`            | `systemctl --failed`               | List failed systemd units                                        |
 | `sc-list-units`        | `systemctl list-units`             | List all units systemd has in memory                             |
 | `sc-is-active`         | `systemctl is-active`              | Show whether a unit is active                                    |
 | `sc-status`            | `systemctl status`                 | Show terse runtime status information about one or more units    |

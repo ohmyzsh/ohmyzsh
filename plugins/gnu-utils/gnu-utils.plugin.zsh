@@ -14,12 +14,12 @@ __gnu_utils() {
   local -a gcmds
   local gcmd
 
-  # coreutils 
+  # coreutils
   gcmds=('g[' 'gbase64' 'gbasename' 'gcat' 'gchcon' 'gchgrp' 'gchmod'
   'gchown' 'gchroot' 'gcksum' 'gcomm' 'gcp' 'gcsplit' 'gcut' 'gdate'
   'gdd' 'gdf' 'gdir' 'gdircolors' 'gdirname' 'gdu' 'gecho' 'genv' 'gexpand'
   'gexpr' 'gfactor' 'gfalse' 'gfmt' 'gfold' 'ggroups' 'ghead' 'ghostid'
-  'gid' 'ginstall' 'gjoin' 'gkill' 'glink' 'gln' 'glogname' 'gls' 'gmd5sum'
+  'gid' 'gindent' 'ginstall' 'gjoin' 'gkill' 'glink' 'gln' 'glogname' 'gls' 'gmd5sum'
   'gmkdir' 'gmkfifo' 'gmknod' 'gmktemp' 'gmv' 'gnice' 'gnl' 'gnohup' 'gnproc'
   'god' 'gpaste' 'gpathchk' 'gpinky' 'gpr' 'gprintenv' 'gprintf' 'gptx' 'gpwd'
   'greadlink' 'grm' 'grmdir' 'gruncon' 'gseq' 'gsha1sum' 'gsha224sum'
@@ -41,7 +41,7 @@ __gnu_utils() {
   for gcmd in "${gcmds[@]}"; do
     # Do nothing if the command isn't found
     (( ${+commands[$gcmd]} )) || continue
-    
+
     # This method allows for builtin commands to be primary but it's
     # lost if hash -r or rehash is executed, or if $PATH is updated.
     # Thus, a preexec hook is needed, which will only run if whoami

@@ -8,6 +8,7 @@ function fzf_setup_using_base_dir() {
       "${HOME}/.fzf"
       "${HOME}/.nix-profile/share/fzf"
       "${XDG_DATA_HOME:-$HOME/.local/share}/fzf"
+      "${MSYSTEM_PREFIX}/share/fzf"
       "/usr/local/opt/fzf"
       "/opt/homebrew/opt/fzf"
       "/usr/share/fzf"
@@ -61,7 +62,7 @@ function fzf_setup_using_base_dir() {
 
 function fzf_setup_using_debian() {
   if (( ! $+commands[apt] && ! $+commands[apt-get] )); then
-    # Not a debian based distro 
+    # Not a debian based distro
     return 1
   fi
 

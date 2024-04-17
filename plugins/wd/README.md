@@ -153,7 +153,7 @@ wd ..
 wd ...
 ```
 
-This is a wrapper for the zsh's `dirs` function.  
+This is a wrapper for the zsh's `dirs` function.
 _You might need to add `setopt AUTO_PUSHD` to your `.zshrc` if you are not using [oh-my-zsh](https://github.com/ohmyzsh/ohmyzsh)._
 
 * Remove warp point:

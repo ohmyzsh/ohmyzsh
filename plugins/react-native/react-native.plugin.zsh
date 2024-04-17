@@ -39,6 +39,10 @@ alias rnios14='react-native run-ios --simulator "iPhone 14"'
 alias rnios14pl='react-native run-ios --simulator "iPhone 14 Plus"'
 alias rnios14p='react-native run-ios --simulator "iPhone 14 Pro"'
 alias rnios14pm='react-native run-ios --simulator "iPhone 14 Pro Max"'
+alias rnios15='react-native run-ios --simulator "iPhone 15"'
+alias rnios15pl='react-native run-ios --simulator "iPhone 15 Plus"'
+alias rnios15p='react-native run-ios --simulator "iPhone 15 Pro"'
+alias rnios15pm='react-native run-ios --simulator "iPhone 15 Pro Max"'
 
 # iPad
 alias rnipad2='react-native run-ios --simulator "iPad 2"'

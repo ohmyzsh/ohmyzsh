@@ -136,6 +136,7 @@ the following environment variables:
 | `KUBE_PS1_SUFFIX` | `)` | Prompt closing character |
 | `KUBE_PS1_CLUSTER_FUNCTION` | No default, must be user supplied | Function to customize how cluster is displayed |
 | `KUBE_PS1_NAMESPACE_FUNCTION` | No default, must be user supplied | Function to customize how namespace is displayed |
+| `KUBE_PS1_KUBECONFIG_SYMLINK` | `false` | Treat `KUBECONFIG` and `~/.kube/config` files as symbolic links |
 
 For terminals that do not support UTF-8, the symbol will be replaced with the
 string `k8s`.

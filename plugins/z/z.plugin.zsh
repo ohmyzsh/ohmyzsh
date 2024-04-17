@@ -4,7 +4,7 @@
 #
 # https://github.com/agkozak/zsh-z
 #
-# Copyright (c) 2018-2022 Alexandros Kozak
+# Copyright (c) 2018-2023 Alexandros Kozak
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -52,6 +52,7 @@
 #   ZSHZ_CASE -> if `ignore', pattern matching is case-insensitive; if `smart',
 #     pattern matching is case-insensitive only when the pattern is all
 #     lowercase
+#   ZSHZ_CD -> the directory-changing command that is used (default: builtin cd)
 #   ZSHZ_CMD -> name of command (default: z)
 #   ZSHZ_COMPLETION -> completion method (default: 'frecent'; 'legacy' for
 #     alphabetic sorting)
@@ -99,19 +100,29 @@ With no ARGUMENT, list the directory history in ascending rank.
 }
 
 # Load zsh/datetime module, if necessary
-(( $+EPOCHSECONDS )) || zmodload zsh/datetime
-
-# Load zsh/files, if necessary
-[[ ${builtins[zf_chown]} == 'defined' &&
-   ${builtins[zf_mv]}    == 'defined' &&
-   ${builtins[zf_rm]}    == 'defined' ]] ||
-  zmodload -F zsh/files b:zf_chown b:zf_mv b:zf_rm
-
-# Load zsh/system, if necessary
-[[ ${modules[zsh/system]} == 'loaded' ]] || zmodload zsh/system &> /dev/null
+(( ${+EPOCHSECONDS} )) || zmodload zsh/datetime
 
 # Global associative array for internal use
 typeset -gA ZSHZ
+
+# Fallback utilities in case Zsh lacks zsh/files (as is the case with MobaXterm)
+ZSHZ[CHOWN]='chown'
+ZSHZ[MV]='mv'
+ZSHZ[RM]='rm'
+# Try to load zsh/files utilities
+if [[ ${builtins[zf_chown]-} != 'defined' ||
+      ${builtins[zf_mv]-}    != 'defined' ||
+      ${builtins[zf_rm]-}    != 'defined' ]]; then
+  zmodload -F zsh/files b:zf_chown b:zf_mv b:zf_rm &> /dev/null
+fi
+# Use zsh/files, if it is available
+[[ ${builtins[zf_chown]-} == 'defined' ]] && ZSHZ[CHOWN]='zf_chown'
+[[ ${builtins[zf_mv]-} == 'defined' ]] && ZSHZ[MV]='zf_mv'
+[[ ${builtins[zf_rm]-} == 'defined' ]] && ZSHZ[RM]='zf_rm'
+
+
+# Load zsh/system, if necessary
+[[ ${modules[zsh/system]-} == 'loaded' ]] || zmodload zsh/system &> /dev/null
 
 # Make sure ZSHZ_EXCLUDE_DIRS has been declared so that other scripts can
 # simply append to it
@@ -129,6 +140,7 @@ is-at-least 5.3.0 && ZSHZ[PRINTV]=1
 # Globals:
 #   ZSHZ
 #   ZSHZ_CASE
+#   ZSHZ_CD
 #   ZSHZ_COMPLETION
 #   ZSHZ_DATA
 #   ZSHZ_DEBUG
@@ -143,15 +155,25 @@ is-at-least 5.3.0 && ZSHZ[PRINTV]=1
 zshz() {
 
   # Don't use `emulate -L zsh' - it breaks PUSHD_IGNORE_DUPS
-  setopt LOCAL_OPTIONS NO_KSH_ARRAYS NO_SH_WORD_SPLIT EXTENDED_GLOB
+  setopt LOCAL_OPTIONS NO_KSH_ARRAYS NO_SH_WORD_SPLIT EXTENDED_GLOB UNSET
   (( ZSHZ_DEBUG )) && setopt LOCAL_OPTIONS WARN_CREATE_GLOBAL
 
   local REPLY
   local -a lines
 
-  # Allow the user to specify the datafile name in $ZSHZ_DATA (default: ~/.z)
+  # Allow the user to specify a custom datafile in $ZSHZ_DATA (or legacy $_Z_DATA)
+  local custom_datafile="${ZSHZ_DATA:-$_Z_DATA}"
+
+  # If a datafile was provided as a standalone file without a directory path
+  # print a warning and exit
+  if [[ -n ${custom_datafile} && ${custom_datafile} != */* ]]; then
+    print "ERROR: You configured a custom Zsh-z datafile (${custom_datafile}), but have not specified its directory." >&2
+    exit
+  fi
+
+  # If the user specified a datafile, use that or default to ~/.z
   # If the datafile is a symlink, it gets dereferenced
-  local datafile=${${ZSHZ_DATA:-${_Z_DATA:-${HOME}/.z}}:A}
+  local datafile=${${custom_datafile:-$HOME/.z}:A}
 
   # If the datafile is a directory, print a warning and exit
   if [[ -d $datafile ]]; then
@@ -161,7 +183,7 @@ zshz() {
 
   # Make sure that the datafile exists before attempting to read it or lock it
   # for writing
-  [[ -f $datafile ]] || touch "$datafile"
+  [[ -f $datafile ]] || { mkdir -p "${datafile:h}" && touch "$datafile" }
 
   # Bail if we don't own the datafile and $ZSHZ_OWNER is not set
   [[ -z ${ZSHZ_OWNER:-${_Z_OWNER}} && -f $datafile && ! -O $datafile ]] &&
@@ -265,7 +287,7 @@ zshz() {
 
     if (( ret != 0 )); then
       # Avoid clobbering the datafile if the write to tempfile failed
-      zf_rm -f "$tempfile"
+      ${ZSHZ[RM]} -f "$tempfile"
       return $ret
     fi
 
@@ -273,16 +295,17 @@ zshz() {
     owner=${ZSHZ_OWNER:-${_Z_OWNER}}
 
     if (( ZSHZ[USE_FLOCK] )); then
-      zf_mv "$tempfile" "$datafile" 2> /dev/null || zf_rm -f "$tempfile"
+      ${ZSHZ[MV]} "$tempfile" "$datafile" 2> /dev/null || ${ZSHZ[RM]} -f "$tempfile"
 
       if [[ -n $owner ]]; then
-        zf_chown ${owner}:"$(id -ng ${owner})" "$datafile"
+        ${ZSHZ[CHOWN]} ${owner}:"$(id -ng ${owner})" "$datafile"
       fi
     else
       if [[ -n $owner ]]; then
-        zf_chown "${owner}":"$(id -ng "${owner}")" "$tempfile"
+        ${ZSHZ[CHOWN]} "${owner}":"$(id -ng "${owner}")" "$tempfile"
       fi
-      zf_mv -f "$tempfile" "$datafile" 2> /dev/null || zf_rm -f "$tempfile"
+      ${ZSHZ[MV]} -f "$tempfile" "$datafile" 2> /dev/null ||
+          ${ZSHZ[RM]} -f "$tempfile"
     fi
 
     # In order to make z -x work, we have to disable zsh-z's adding
@@ -294,7 +317,7 @@ zshz() {
   }
 
   ############################################################
-  # Read the curent datafile contents, update them, "age" them
+  # Read the current datafile contents, update them, "age" them
   # when the total rank gets high enough, and print the new
   # contents to STDOUT.
   #
@@ -620,7 +643,7 @@ zshz() {
         *)
           # Frecency routine
           (( dx = EPOCHSECONDS - time_field ))
-          rank=$(( 10000 * rank_field * (3.75/((0.0001 * dx + 1) + 0.25)) ))
+          rank=$(( 10000 * rank_field * (3.75/( (0.0001 * dx + 1) + 0.25)) ))
           ;;
       esac
 
@@ -757,6 +780,26 @@ zshz() {
   }
 
   #########################################################
+  # Allow the user to specify directory-changing command
+  # using $ZSHZ_CD (default: builtin cd).
+  #
+  # Globals:
+  #   ZSHZ_CD
+  #
+  # Arguments:
+  #   $* Path
+  #########################################################
+  zshz_cd() {
+    setopt LOCAL_OPTIONS NO_WARN_CREATE_GLOBAL
+
+    if [[ -z $ZSHZ_CD ]]; then
+      builtin cd "$*"
+    else
+      ${=ZSHZ_CD} "$*"
+    fi
+  }
+
+  #########################################################
   # If $ZSHZ_ECHO == 1, display paths as you jump to them.
   # If it is also the case that $ZSHZ_TILDE == 1, display
   # the home directory as a tilde.
@@ -773,7 +816,7 @@ zshz() {
 
   if [[ ${@: -1} == /* ]] && (( ! $+opts[-e] && ! $+opts[-l] )); then
     # cd if possible; echo the new path if $ZSHZ_ECHO == 1
-    [[ -d ${@: -1} ]] && builtin cd ${@: -1} && _zshz_echo && return
+    [[ -d ${@: -1} ]] && zshz_cd ${@: -1} && _zshz_echo && return
   fi
 
   # With option -c, make sure query string matches beginning of matches;
@@ -830,12 +873,12 @@ zshz() {
       print -- "$cd"
     else
       # cd if possible; echo the new path if $ZSHZ_ECHO == 1
-      [[ -d $cd ]] && builtin cd "$cd" && _zshz_echo
+      [[ -d $cd ]] && zshz_cd "$cd" && _zshz_echo
     fi
   else
     # if $req is a valid path, cd to it; echo the new path if $ZSHZ_ECHO == 1
     if ! (( $+opts[-e] || $+opts[-l] )) && [[ -d $req ]]; then
-      builtin cd "$req" && _zshz_echo
+      zshz_cd "$req" && _zshz_echo
     else
       return $ret2
     fi
@@ -852,6 +895,9 @@ alias ${ZSHZ_CMD:-${_Z_CMD:-z}}='zshz 2>&1'
 #   ZSHZ
 ############################################################
 _zshz_precmd() {
+  # Protect against `setopt NO_UNSET'
+  setopt LOCAL_OPTIONS UNSET
+
   # Do not add PWD to datafile when in HOME directory, or
   # if `z -x' has just been run
   [[ $PWD == "$HOME" ]] || (( ZSHZ[DIRECTORY_REMOVED] )) && return
@@ -899,10 +945,10 @@ add-zsh-hook chpwd _zshz_chpwd
 # Completion
 ############################################################
 
-# Standarized $0 handling
-# (See https://github.com/agkozak/Zsh-100-Commits-Club/blob/master/Zsh-Plugin-Standard.adoc)
-0=${${ZERO:-${0:#$ZSH_ARGZERO}}:-${(%):-%N}}
-0=${${(M)0:#/*}:-$PWD/$0}
+# Standardized $0 handling
+# https://zdharma-continuum.github.io/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html
+0="${${ZERO:-${0:#$ZSH_ARGZERO}}:-${(%):-%N}}"
+0="${${(M)0:#/*}:-$PWD/$0}"
 
 (( ${fpath[(ie)${0:A:h}]} <= ${#fpath} )) || fpath=( "${0:A:h}" "${fpath[@]}" )
 
@@ -926,7 +972,7 @@ ZSHZ[FUNCTIONS]='_zshz_usage
 # Enable WARN_NESTED_VAR for functions listed in
 #   ZSHZ[FUNCTIONS]
 ############################################################
-(( ZSHZ_DEBUG )) && () {
+(( ${+ZSHZ_DEBUG} )) && () {
   if is-at-least 5.4.0; then
     local x
     for x in ${=ZSHZ[FUNCTIONS]}; do

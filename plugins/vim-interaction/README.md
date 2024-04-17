@@ -3,7 +3,7 @@
 The plugin presents a function called `callvim` whose usage is:
 
     usage: callvim [-b cmd] [-a cmd] [file ... fileN]
-    
+
       -b cmd     Run this command in GVIM before editing the first file
       -a cmd     Run this command in GVIM after editing the first file
       file       The file to edit

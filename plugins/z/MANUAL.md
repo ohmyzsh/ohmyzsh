@@ -1,5 +1,11 @@
 # Zsh-z
 
+[![MIT License](img/mit_license.svg)](https://opensource.org/licenses/MIT)
+![Zsh version 4.3.11 and higher](img/zsh_4.3.11_plus.svg)
+[![GitHub stars](https://img.shields.io/github/stars/agkozak/zsh-z.svg)](https://github.com/agkozak/zsh-z/stargazers)
+
+![Zsh-z demo](img/demo.gif)
+
 Zsh-z is a command line tool that allows you to jump quickly to directories that you have visited frequently in the past, or recently -- but most often a combination of the two (a concept known as ["frecency"](https://en.wikipedia.org/wiki/Frecency)). It works by keeping track of when you go to directories and how much time you spend in them. It is then in the position to guess where you want to go when you type a partial string, e.g., `z src` might take you to `~/src/zsh`. `z zsh` might also get you there, and `z c/z` might prove to be even more specific -- it all depends on your habits and how much time you have been using Zsh-z to build up a database. After using Zsh-z for a little while, you will get to where you want to be by typing considerably less than you would need if you were using `cd`.
 
 Zsh-z is a native Zsh port of [rupa/z](https://github.com/rupa/z), a tool written for `bash` and Zsh that uses embedded `awk` scripts to do the heavy lifting. It was quite possibly my most used command line tool for a couple of years. I decided to translate it, `awk` parts and all, into pure Zsh script, to see if by eliminating calls to external tools (`awk`, `sort`, `date`, `sed`, `mv`, `rm`, and `chown`) and reducing forking through subshells I could make it faster. The performance increase is impressive, particularly on systems where forking is slow, such as Cygwin, MSYS2, and WSL. I have found that, in those environments, switching directories using Zsh-z can be over 100% faster than it is using `rupa/z`.
@@ -28,6 +34,16 @@ Zsh-z is a drop-in replacement for `rupa/z` and will, by default, use the same d
 <details>
     <summary>Here are the latest features and updates.</summary>
 
+- August 24, 2023
+    + Zsh-z will now run when `setopt NO_UNSET` has been enabled (props @ntninja).
+- August 23, 2023
+    + Better logic for loading `zsh/files` (props @z0rc)
+- August 2, 2023
+    + Zsh-z still uses the `zsh/files` module when possible, but will fall back on the standard `chown`, `mv`, and `rm` commands in its absence.
+- April 27, 2023
+    + Zsh-z now allows the user to specify the directory-changing command using the `ZSHZ_CD` environment variable (default: `builtin cd`; props @basnijholt).
+- January 27, 2023
+    + If the datafile directory specified by `ZSHZ_DATA` or `_Z_DATA` does not already exist, create it (props @mattmc3).
 - June 29, 2022
     + Zsh-z is less likely to leave temporary files sitting around (props @mafredri).
 - June 27, 2022
@@ -56,7 +72,7 @@ Zsh-z is a drop-in replacement for `rupa/z` and will, by default, use the same d
     + Temporarily disabling use of `print -v`, which seems to be mangling CJK multibyte strings.
 - July 27, 2021
     + Internal escaping of path names now works with older versions of ZSH.
-    + Zsh-z now detects and discards any incomplete or incorrectly formattted database entries.
+    + Zsh-z now detects and discards any incomplete or incorrectly formatted database entries.
 - July 10, 2021
     + Setting `ZSHZ_TRAILING_SLASH=1` makes it so that a search pattern ending in `/` can match the end of a path; e.g. `z foo/` can match `/path/to/foo`.
 - June 25, 2021
@@ -77,7 +93,7 @@ Zsh-z is a drop-in replacement for `rupa/z` and will, by default, use the same d
 - January 11, 2021
     + Major refactoring of the code.
     + `z -lr` and `z -lt` work as expected.
-    + `EXTENDED_GLOB` has been disabled within the plugin to accomodate old-fashioned Windows directories with names such as `Progra~1`.
+    + `EXTENDED_GLOB` has been disabled within the plugin to accommodate old-fashioned Windows directories with names such as `Progra~1`.
     + Removed `zshelldoc` documentation.
 - January 6, 2021
     + I have corrected the frecency routine so that it matches `rupa/z`'s math, but for the present, Zsh-z will continue to display ranks as 1/10000th of what they are in `rupa/z` -- [they had to multiply theirs by 10000](https://github.com/rupa/z/commit/f1f113d9bae9effaef6b1e15853b5eeb445e0712) to work around `bash`'s inadequacies at dealing with decimal fractions.
@@ -94,13 +110,13 @@ Zsh-z is a drop-in replacement for `rupa/z` and will, by default, use the same d
 
 ### General observations
 
-This script can be installed simply by downloading it and sourcing it from your `.zshrc`:
+This plugin can be installed simply by putting the various files in a directory together and by sourcing `zsh-z.plugin.zsh` in your `.zshrc`:
 
     source /path/to/zsh-z.plugin.zsh
 
-For tab completion to work, you will want to have loaded `compinit`. The frameworks handle this themselves. If you are not using a framework, put
+For tab completion to work, `_zshz` *must* be in the same directory as `zsh-z.plugin.zsh`, and you will want to have loaded `compinit`. The frameworks handle this themselves. If you are not using a framework, put
 
-    autoload -U compinit && compinit
+    autoload -U compinit; compinit
 
 in your .zshrc somewhere below where you source `zsh-z.plugin.zsh`.
 
@@ -118,13 +134,19 @@ Add the line
 
 to your `.zshrc`, somewhere above the line that says `antigen apply`.
 
-### For [oh-my-zsh](http://ohmyz.sh/) users
+### For [Oh My Zsh](http://ohmyz.sh/) users
 
-Execute the following command:
+Zsh-z is now included as part of Oh My Zsh! As long as you are using an up-to-date installation of Oh My Zsh, you can activate Zsh-z simply by adding `z` to your `plugins` array in your `.zshrc`, e.g.,
+
+    plugins=( git z )
+
+It is as simple as that.
+
+If, however, you prefer always to use the latest version of Zsh-z from the `agkozak/zsh-z` repo, you may install it thus:
 
     git clone https://github.com/agkozak/zsh-z ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-z
 
-and add `zsh-z` to the line of your `.zshrc` that specifies `plugins=()`, e.g., `plugins=( git zsh-z )`.
+and activate it by adding `zsh-z` to the line of your `.zshrc` that specifies `plugins=()`, e.g., `plugins=( git zsh-z )`.
 
 ### For [prezto](https://github.com/sorin-ionescu/prezto) users
 
@@ -166,7 +188,7 @@ Add a backslash to the end of the last line add `'zsh-z'` to the list, e.g.,
 Then relaunch `zsh`.
 
 ### For [zcomet](https://github.com/agkozak/zcomet) users
-        
+
 Simply add
 
     zcomet load agkozak/zsh-z
@@ -246,6 +268,7 @@ to install `zsh-z`.
 Zsh-z has environment variables (they all begin with `ZSHZ_`) that change its behavior if you set them; you can also keep your old ones if you have been using `rupa/z` (they begin with `_Z_`).
 
 * `ZSHZ_CMD` changes the command name (default: `z`)
+* `ZSHZ_CD` specifies the default directory-changing command (default: `builtin cd`)
 * `ZSHZ_COMPLETION` can be `'frecent'` (default) or `'legacy'`, depending on whether you want your completion results sorted according to frecency or simply sorted alphabetically
 * `ZSHZ_DATA` changes the database file (default: `~/.z`)
 * `ZSHZ_ECHO` displays the new path name when changing directories (default: `0`)

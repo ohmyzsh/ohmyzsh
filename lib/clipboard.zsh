@@ -62,7 +62,7 @@ function detect-clipboard() {
     function clippaste() { powershell.exe -noprofile -command Get-Clipboard; }
   elif [ -n "${WAYLAND_DISPLAY:-}" ] && (( ${+commands[wl-copy]} )) && (( ${+commands[wl-paste]} )); then
     function clipcopy() { cat "${1:-/dev/stdin}" | wl-copy &>/dev/null &|; }
-    function clippaste() { wl-paste; }
+    function clippaste() { wl-paste --no-newline; }
   elif [ -n "${DISPLAY:-}" ] && (( ${+commands[xsel]} )); then
     function clipcopy() { cat "${1:-/dev/stdin}" | xsel --clipboard --input; }
     function clippaste() { xsel --clipboard --output; }
@@ -100,8 +100,8 @@ function detect-clipboard() {
   fi
 }
 
-# Detect at startup. A non-zero exit here indicates that the dummy clipboards were set,
-# which is not really an error. If the user calls them, they will attempt to redetect
-# (for example, perhaps the user has now installed xclip) and then either print an error
-# or proceed successfully.
-detect-clipboard || true
+function clipcopy clippaste {
+  unfunction clipcopy clippaste
+  detect-clipboard || true # let one retry
+  "$0" "$@"
+}

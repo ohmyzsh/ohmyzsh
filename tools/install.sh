@@ -63,7 +63,9 @@ zdot="${ZDOTDIR:-$HOME}"
 # Default value for $ZSH
 # a) if $ZDOTDIR is supplied and not $HOME: $ZDOTDIR/ohmyzsh
 # b) otherwise, $HOME/.oh-my-zsh
-[ "$ZDOTDIR" = "$HOME" ] || ZSH="${ZSH:-${ZDOTDIR:+$ZDOTDIR/ohmyzsh}}"
+if [ -n "$ZDOTDIR" ] && [ "$ZDOTDIR" != "$HOME" ]; then
+  ZSH="${ZSH:-$ZDOTDIR/ohmyzsh}"
+fi
 ZSH="${ZSH:-$HOME/.oh-my-zsh}"
 
 # Default settings
@@ -84,6 +86,10 @@ command_exists() {
 user_can_sudo() {
   # Check if sudo is installed
   command_exists sudo || return 1
+  # Termux can't run sudo, so we can detect it and exit the function early.
+  case "$PREFIX" in
+  *com.termux*) return 1 ;;
+  esac
   # The following command has 3 parts:
   #
   # 1. Run `sudo` with `-v`. Does the following:
@@ -160,11 +166,16 @@ supports_hyperlinks() {
 
   # If $TERM_PROGRAM is set, these terminals support hyperlinks
   case "$TERM_PROGRAM" in
-  Hyper|iTerm.app|terminology|WezTerm) return 0 ;;
+  Hyper|iTerm.app|terminology|WezTerm|vscode) return 0 ;;
   esac
 
-  # kitty supports hyperlinks
-  if [ "$TERM" = xterm-kitty ]; then
+  # These termcap entries support hyperlinks
+  case "$TERM" in
+  xterm-kitty|alacritty|alacritty-direct) return 0 ;;
+  esac
+
+  # xfce4-terminal supports hyperlinks
+  if [ "$COLORTERM" = "xfce4-terminal" ]; then
     return 0
   fi
 

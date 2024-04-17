@@ -77,7 +77,7 @@ function _wd() {
             # complete sub directories from the warp point
             _path_files -W "(${points[$target]})" -/ && ret=0
           fi
-          
+
           # don't complete anything if warp point is not valid
           ;;
       esac
