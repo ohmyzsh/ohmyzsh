@@ -24,6 +24,8 @@ if test "$(uname)" = "Darwin"; then
     /bin/launchctl setenv CPATH /usr/local/include
 fi
 
+if [ -f '$HOME/.zshrc.private' ]; then . '$HOME/.zshrc.private'; fi
+
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
@@ -44,7 +46,7 @@ HYPHEN_INSENSITIVE="true"
 # DISABLE_AUTO_UPDATE="true"
 
 # Uncomment the following line to change how often to auto-update (in days).
-export UPDATE_ZSH_DAYS=7
+export UPDATE_ZSH_DAYS=14
 
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
@@ -72,7 +74,7 @@ DISABLE_UNTRACKED_FILES_DIRTY="false"
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
 # iterm2 for Mac OS
-#source $DOTFILES/zsh/.iterm2_shell_integration.zsh
+source $DOTFILES/zsh/.iterm2_shell_integration.zsh
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to $ZSH/custom/plugins/
@@ -171,9 +173,10 @@ alias ge='gedit 2>/dev/null'
 # alias edit='atom'
 alias ez="edit ~/.zshrc"
 alias ezo="edit ~/.oh-my-zsh"
+alias zz='. ~/.zshrc'
 # alias ifconfig='/sbin/ifconfig'
 source $DOTFILES/k8s/kubectl_helpers.sh
-
+source $DOTFILES/tsh/tsh.zsh
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/gshirazi/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/gshirazi/Downloads/google-cloud-sdk/path.zsh.inc'; fi
