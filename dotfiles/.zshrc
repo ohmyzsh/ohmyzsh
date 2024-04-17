@@ -24,7 +24,7 @@ if test "$(uname)" = "Darwin"; then
     /bin/launchctl setenv CPATH /usr/local/include
 fi
 
-if [ -f '$HOME/.zshrc.private' ]; then . '$HOME/.zshrc.private'; fi
+if [ -f $HOME/.zshrc.private ]; then . $HOME/.zshrc.private; fi
 
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
