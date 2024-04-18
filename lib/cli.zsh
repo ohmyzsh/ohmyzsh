@@ -773,7 +773,17 @@ function _omz::theme::use {
 }
 
 function _omz::update {
-  local last_commit=$(builtin cd -q "$ZSH"; git rev-parse HEAD)
+  # Check if git command is available
+  (( $+commands[git] )) || {
+    _omz::log error "git is not installed. Aborting..."
+    return 1
+  }
+
+  local last_commit=$(builtin cd -q "$ZSH"; git rev-parse HEAD 2>/dev/null)
+  [[ $? -eq 0 ]] || {
+    _omz::log error "\`$ZSH\` is not a git directory. Aborting..."
+    return 1
+  }
 
   # Run update script
   zstyle -s ':omz:update' verbose verbose_mode || verbose_mode=default
