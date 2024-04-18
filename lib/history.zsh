@@ -2,7 +2,7 @@
 function omz_history {
   # parse arguments and remove from $@
   local clear list stamp
-  zparseopts -E -D c=clear l=list f=stamp E=stamp i=stamp
+  zparseopts -E -D c=clear l=list f=stamp E=stamp i=stamp t:=stamp
 
   if [[ -n "$clear" ]]; then
     # if -c provided, clobber the history file
