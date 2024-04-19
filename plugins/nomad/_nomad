@@ -89,7 +89,7 @@ __plan() {
     '-address=[(addr) The address of the Nomad server. Overrides the NOMAD_ADDR environment variable if set. Default = http://127.0.0.1:4646]' \
     '-region=[(region) The region of the Nomad servers to forward commands to. Overrides the NOMAD_REGION environment variable if set. Defaults to the Agent s local region.]' \
     '-no-color[Disables colored command output.]' \
-    '-diff[Determines whether the diff between the remote job and planned job is shown. Defaults to true.]' 
+    '-diff[Determines whether the diff between the remote job and planned job is shown. Defaults to true.]'
 }
 
 __run() {

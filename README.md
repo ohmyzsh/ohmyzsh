@@ -43,6 +43,7 @@ To learn more, visit [ohmyz.sh](https://ohmyz.sh), follow [@ohmyzsh](https://twi
   - [Custom Plugins And Themes](#custom-plugins-and-themes)
   - [Enable GNU ls In macOS And freeBSD Systems](#enable-gnu-ls-in-macos-and-freebsd-systems)
   - [Skip Aliases](#skip-aliases)
+  - [Disable async git prompt](#disable-async-git-prompt)
 - [Getting Updates](#getting-updates)
   - [Updates Verbosity](#updates-verbosity)
   - [Manual Updates](#manual-updates)
@@ -359,6 +360,17 @@ Instead, you can now use the following:
 
 ```sh
 zstyle ':omz:lib:directories' aliases no
+```
+
+### Disable async git prompt
+
+Async prompt functions are an experimental feature (included on April 3, 2024) that allows Oh My Zsh to render prompt information
+asyncronously. This can improve prompt rendering performance, but it might not work well with some setups. We hope that's not an
+issue, but if you're seeing problems with this new feature, you can turn it off by setting the following in your .zshrc file,
+before Oh My Zsh is sourced:
+
+```sh
+zstyle ':omz:alpha:lib:git' async-prompt no
 ```
 
 #### Notice <!-- omit in toc -->

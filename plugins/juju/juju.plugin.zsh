@@ -184,7 +184,7 @@ jmodel() {
   fi
 
   local model="$(yq e ".controllers.$(jcontroller).current-model" < ~/.local/share/juju/models.yaml | cut -d/ -f2)"
-  
+
   if [[ -z "$model" ]]; then
     echo "--"
     return 1
