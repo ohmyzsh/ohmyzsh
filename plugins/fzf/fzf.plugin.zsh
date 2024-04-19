@@ -1,3 +1,12 @@
+function fzf_setup_using_fzf() {
+  (( ${+commands[fzf]} )) || return 1
+
+  local fzf_ver=${$(fzf --version)[1]}
+  is-at-least 0.48.0 $fzf_ver || return 1
+
+  eval "$(fzf --zsh)"
+}
+
 function fzf_setup_using_base_dir() {
   local fzf_base fzf_shell fzfdirs dir
 
@@ -217,7 +226,8 @@ Please add `export FZF_BASE=/path/to/fzf/install/dir` to your .zshrc
 EOF
 }
 
-fzf_setup_using_openbsd \
+fzf_setup_using_fzf \
+  || fzf_setup_using_openbsd \
   || fzf_setup_using_debian \
   || fzf_setup_using_opensuse \
   || fzf_setup_using_cygwin \
