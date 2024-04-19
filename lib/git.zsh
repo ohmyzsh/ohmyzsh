@@ -1,3 +1,5 @@
+autoload -Uz is-at-least
+
 # The git prompt's git commands are read-only and should not interfere with
 # other processes. This environment variable is equivalent to running with `git
 # --no-optional-locks`, but falls back gracefully for older versions of git.
@@ -37,8 +39,10 @@ function _omz_git_prompt_info() {
   echo "${ZSH_THEME_GIT_PROMPT_PREFIX}${ref:gs/%/%%}${upstream:gs/%/%%}$(parse_git_dirty)${ZSH_THEME_GIT_PROMPT_SUFFIX}"
 }
 
-# Enable async prompt by default unless the setting is at false / no
-if zstyle -T ':omz:alpha:lib:git' async-prompt; then
+# Use async version if setting is enabled, or undefined but zsh version is at least 5.0.6
+# https://github.com/ohmyzsh/ohmyzsh/issues/12331#issuecomment-2059460268
+if zstyle -t ':omz:alpha:lib:git' async-prompt \
+  || { is-at-least 5.0.6 && zstyle -T ':omz:alpha:lib:git' async-prompt }; then
   function git_prompt_info() {
     setopt localoptions noksharrays
     if [[ -n "$_OMZ_ASYNC_OUTPUT[_omz_git_prompt_info]" ]]; then
