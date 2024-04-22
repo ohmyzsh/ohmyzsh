@@ -1,7 +1,5 @@
-PROMPT="%(?:%{$fg_bold[green]%}%1{➜%} :%{$fg_bold[red]%}%1{➜%} ) %{$fg[cyan]%}%c%{$reset_color%}"
-PROMPT+=' $(git_prompt_info)'
+# Define LS_COLORS for customizing ls command output
+export LS_COLORS='di=36:*.doc=35:*.txt=33:*.*=0'
 
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[blue]%}git:(%{$fg[red]%}"
-ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%} "
-ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%}) %{$fg[yellow]%}%1{✗%}"
-ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%})"
+# Set the prompt format
+PS1="%F{magenta}%n %F{cyan}in %F{white}%~%f %F{magenta}ॐ%f %F{green}" 
