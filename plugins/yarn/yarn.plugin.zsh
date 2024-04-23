@@ -1,6 +1,5 @@
-# Get the configured version of yarn
+# Check if the user has configured Yarn Berry
 is_yarn_berry="false"
-
 if zstyle -t ':omz:plugins:yarn' berry; then
   is_yarn_berry="true"
 fi
