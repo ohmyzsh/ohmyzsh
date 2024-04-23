@@ -59,18 +59,18 @@ alias yw="yarn workspace"
 alias yws="yarn workspaces"
 alias yy="yarn why"
 
-# These commands should only be registered if Yarn v1 is used
-if [[ ${is_yarn_berry} == "false" ]]; then
-    alias yga="yarn global add"
-    alias ygls="yarn global list"
-    alias ygrm="yarn global remove"
-    alias ygu="yarn global upgrade"
-    alias yls="yarn list"
-    alias yout="yarn outdated"
-    alias yuca="yarn global upgrade && yarn cache clean"
-else
+# Commands that are specific to the yarn version being used
+if [[ ${is_yarn_berry} == "true" ]]; then
   alias ydlx="yarn dlx"
   alias yn="yarn node"
+else
+  alias yga="yarn global add"
+  alias ygls="yarn global list"
+  alias ygrm="yarn global remove"
+  alias ygu="yarn global upgrade"
+  alias yls="yarn list"
+  alias yout="yarn outdated"
+  alias yuca="yarn global upgrade && yarn cache clean"
 fi
 
 unset is_yarn_berry
