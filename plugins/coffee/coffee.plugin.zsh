@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 
 # compile a string of coffeescript and print to output
 cf () {
