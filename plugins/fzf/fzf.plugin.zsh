@@ -1,8 +1,10 @@
 function fzf_setup_using_fzf() {
   (( ${+commands[fzf]} )) || return 1
 
-  local fzf_ver=${$(fzf --version)[1]}
-  is-at-least 0.48.0 $fzf_ver || return 1
+  # we remove "fzf " prefix, this fixes really old fzf versions behaviour
+  # see https://github.com/ohmyzsh/ohmyzsh/issues/12387
+  local fzf_ver=${"$(fzf --version)"#fzf }
+  is-at-least 0.48.0 ${${(s: :)fzf_ver}[1]} || return 1
 
   eval "$(fzf --zsh)"
 }

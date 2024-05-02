@@ -15,6 +15,7 @@ autojump_paths=(
   /opt/homebrew/etc/profile.d/autojump.sh                  # macOS with Homebrew (default on M1 macs)
   /opt/pkg/share/autojump/autojump.zsh                     # macOS with pkgsrc
   /etc/profiles/per-user/$USER/etc/profile.d/autojump.sh   # macOS Nix, Home Manager and flakes
+  /nix/var/nix/gcroots/current-system/sw/share/zsh/site-functions/autojump.zsh  # macOS Nix, nix-darwin
 )
 
 for file in $autojump_paths; do
