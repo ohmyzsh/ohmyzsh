@@ -86,12 +86,19 @@ function mkv() {
 
 if [[ "$PYTHON_AUTO_VRUN" == "true" ]]; then
   # Automatically activate venv when changing dir
-  auto_vrun() {
-    for activator in "${PYTHON_VENV_NAME}"*/bin/activate(N); do
-      if [[ -f "${activator}" ]]; then
-        source "${activator}" > /dev/null 2>&1
-        return
-      fi
+  function auto_vrun() {
+    local dirname="$PWD"
+
+    while
+      for activator in "${dirname}/${PYTHON_VENV_NAME}"*/bin/activate(N); do
+        if [[ -f "${activator}" ]]; then
+          source "${activator}" > /dev/null 2>&1
+          return
+        fi
+      done
+      [[ -n "$dirname" ]]
+    do
+      dirname=${dirname%/*}
     done
 
     (( $+functions[deactivate] )) && deactivate > /dev/null 2>&1
