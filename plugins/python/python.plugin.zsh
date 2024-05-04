@@ -87,11 +87,14 @@ function mkv() {
 if [[ "$PYTHON_AUTO_VRUN" == "true" ]]; then
   # Automatically activate venv when changing dir
   auto_vrun() {
-    if [[ -f "${PYTHON_VENV_NAME}/bin/activate" ]]; then
-      source "${PYTHON_VENV_NAME}/bin/activate" > /dev/null 2>&1
-    else
-      (( $+functions[deactivate] )) && deactivate > /dev/null 2>&1
-    fi
+    for activator in "${PYTHON_VENV_NAME}"*/bin/activate(N); do
+      if [[ -f "${activator}" ]]; then
+        source "${activator}" > /dev/null 2>&1
+        return
+      fi
+    done
+
+    (( $+functions[deactivate] )) && deactivate > /dev/null 2>&1
   }
   add-zsh-hook chpwd auto_vrun
   auto_vrun

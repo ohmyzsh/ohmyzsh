@@ -35,5 +35,6 @@ virtual environments:
   `<venv-name>/bin/activate`, and automatically deactivate it when navigating out of it (including
   subdirectories!).
   - To enable the feature, set `export PYTHON_AUTO_VRUN=true` before sourcing oh-my-zsh.
-  - The default virtual environment name is `venv`. To use a different name, set
+  - Plugin activates first virtual environment in lexicographic order whose name begins with `<venv-name>`.
+    The default virtual environment name is `venv`. To use a different name, set
     `export PYTHON_VENV_NAME=<venv-name>`. For example: `export PYTHON_VENV_NAME=".venv"`
