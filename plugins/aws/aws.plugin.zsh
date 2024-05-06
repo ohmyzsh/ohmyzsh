@@ -280,7 +280,7 @@ if [[ "$AWS_PROFILE_STATE_ENABLED" == true ]]; then
   test -s "${AWS_STATE_FILE}" || return
 
   aws_state=($(cat $AWS_STATE_FILE))
-  
+
   export AWS_DEFAULT_PROFILE="${aws_state[1]}"
   export AWS_PROFILE="$AWS_DEFAULT_PROFILE"
   export AWS_EB_PROFILE="$AWS_DEFAULT_PROFILE"

@@ -16,23 +16,26 @@ This plugin supplies one command, `jira`, through which all its features are exp
 
 ## Commands
 
+`jira help` or `jira usage` will print the below usage instructions
+
 | Command       | Description                                               |
 | :------------ | :-------------------------------------------------------- |
 | `jira`        | Performs the default action                               |
 | `jira new`    | Opens a new Jira issue dialogue                           |
 | `jira ABC-123`   | Opens an existing issue                                |
 | `jira ABC-123 m` | Opens an existing issue for adding a comment           |
-| `jira dashboard [rapid_view]` |  # opens your JIRA dashboard              |
+| `jira dashboard [rapid_view]` |  Opens your JIRA dashboard              |
 | `jira mine`   | Queries for your own issues                               |
 | `jira tempo`  | Opens your JIRA Tempo                                     |
 | `jira reported [username]`  | Queries for issues reported by a user       |
 | `jira assigned [username]`  | Queries for issues assigned to a user       |
 | `jira branch` | Opens an existing issue matching the current branch name  |
+| `jira help` | Prints usage instructions  |
 
 
 ### Jira Branch usage notes
 
-The branch name may have prefixes ending in "/": "feature/MP-1234", and also suffixes 
+The branch name may have prefixes ending in "/": "feature/MP-1234", and also suffixes
 starting with "_": "MP-1234_fix_dashboard". In both these cases, the issue opened will be "MP-1234"
 
 This is also checks if the prefix is in the name, and adds it if not, so: "MP-1234" opens the issue "MP-1234",

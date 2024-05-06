@@ -179,8 +179,8 @@ fi
 # Check Arch Linux PGP Keyring before System Upgrade to prevent failure.
 function upgrade() {
   echo ":: Checking Arch Linux PGP Keyring..."
-  local installedver="$(sudo pacman -Qi archlinux-keyring | grep -Po '(?<=Version         : ).*')"
-  local currentver="$(sudo pacman -Si archlinux-keyring | grep -Po '(?<=Version         : ).*')"
+  local installedver="$(LANG= sudo pacman -Qi archlinux-keyring | grep -Po '(?<=Version         : ).*')"
+  local currentver="$(LANG= sudo pacman -Si archlinux-keyring | grep -Po '(?<=Version         : ).*')"
   if [ $installedver != $currentver ]; then
     echo " Arch Linux PGP Keyring is out of date."
     echo " Updating before full system upgrade."

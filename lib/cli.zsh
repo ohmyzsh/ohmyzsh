@@ -448,7 +448,7 @@ function _omz::plugin::load {
     if [[ ! -f "$base/_$plugin" && ! -f "$base/$plugin.plugin.zsh" ]]; then
       _omz::log warn "'$plugin' is not a valid plugin"
       continue
-    # It it is a valid plugin, add its directory to $fpath unless it is already there
+    # It is a valid plugin, add its directory to $fpath unless it is already there
     elif (( ! ${fpath[(Ie)$base]} )); then
       fpath=("$base" $fpath)
     fi
@@ -773,7 +773,17 @@ function _omz::theme::use {
 }
 
 function _omz::update {
-  local last_commit=$(builtin cd -q "$ZSH"; git rev-parse HEAD)
+  # Check if git command is available
+  (( $+commands[git] )) || {
+    _omz::log error "git is not installed. Aborting..."
+    return 1
+  }
+
+  local last_commit=$(builtin cd -q "$ZSH"; git rev-parse HEAD 2>/dev/null)
+  [[ $? -eq 0 ]] || {
+    _omz::log error "\`$ZSH\` is not a git directory. Aborting..."
+    return 1
+  }
 
   # Run update script
   zstyle -s ':omz:update' verbose verbose_mode || verbose_mode=default

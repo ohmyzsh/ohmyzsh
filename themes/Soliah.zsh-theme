@@ -5,10 +5,10 @@ ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[white]%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%})"
 
 # Text to display if the branch is dirty
-ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}*%{$reset_color%}" 
+ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}*%{$reset_color%}"
 
 # Text to display if the branch is clean
-ZSH_THEME_GIT_PROMPT_CLEAN="" 
+ZSH_THEME_GIT_PROMPT_CLEAN=""
 
 # Colors vary depending on time lapsed.
 ZSH_THEME_GIT_TIME_SINCE_COMMIT_SHORT="%{$fg[green]%}"
@@ -36,7 +36,7 @@ function rvm_gemset() {
         GEMSET=`rvm gemset list | grep '=>' | cut -b4-`
         if [[ -n $GEMSET ]]; then
             echo "%{$fg[yellow]%}$GEMSET%{$reset_color%}|"
-        fi 
+        fi
     fi
 }
 
@@ -52,12 +52,12 @@ function git_time_since_commit() {
             # Totals
             MINUTES=$((seconds_since_last_commit / 60))
             HOURS=$((seconds_since_last_commit/3600))
-           
+
             # Sub-hours and sub-minutes
             DAYS=$((seconds_since_last_commit / 86400))
             SUB_HOURS=$((HOURS % 24))
             SUB_MINUTES=$((MINUTES % 60))
-            
+
             if [[ -n $(git status -s 2> /dev/null) ]]; then
                 if [ "$MINUTES" -gt 30 ]; then
                     COLOR="$ZSH_THEME_GIT_TIME_SINCE_COMMIT_LONG"

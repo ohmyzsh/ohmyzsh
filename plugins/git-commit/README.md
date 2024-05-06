@@ -1,6 +1,8 @@
 # git-commit plugin
 
-The git-commit plugin adds several [git aliases](https://www.git-scm.com/docs/git-config#Documentation/git-config.txt-alias) for [conventional commit](https://www.conventionalcommits.org/en/v1.0.0/#summary) messages.
+The git-commit plugin adds several
+[git aliases](https://www.git-scm.com/docs/git-config#Documentation/git-config.txt-alias) for
+[conventional commit](https://www.conventionalcommits.org/en/v1.0.0/#summary) messages.
 
 To use it, add `git-commit` to the plugins array in your zshrc file:
 
@@ -11,10 +13,8 @@ plugins=(... git-commit)
 ## Syntax
 
 ```zsh
-git <type> [(-s, --scope) "<scope>"] "<message>"
+git <type> [(-s, --scope) "<scope>"] [(-a, --attention)] "<message>"
 ```
-
-> ⚠️ Single/Double quotes around the scope and message are required
 
 Where `type` is one of the following:
 
@@ -33,6 +33,9 @@ Where `type` is one of the following:
 
 > NOTE: the alias for `revert` type is `rev`, as otherwise it conflicts with the git command of the same name.
 > It will still generate a commit message in the format `revert: <message>`
+
+> ⚠️ Enabling this plugin will (potentially) overwrite all `alias.<type>` that you manually set. Use with
+> care!
 
 ## Examples
 

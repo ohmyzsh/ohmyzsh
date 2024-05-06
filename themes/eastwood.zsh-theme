@@ -1,5 +1,5 @@
 # RVM settings
-if [[ -s ~/.rvm/scripts/rvm ]] ; then 
+if [[ -s ~/.rvm/scripts/rvm ]] ; then
   RPS1="%{$fg[yellow]%}rvm:%{$reset_color%}%{$fg[red]%}\$(~/.rvm/bin/rvm-prompt)%{$reset_color%} $EPS1"
 else
   if which rbenv &> /dev/null; then

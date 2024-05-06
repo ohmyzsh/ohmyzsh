@@ -8,7 +8,7 @@
 #   - prefix to detect docker containers or chroot
 #   - git plugin to display current branch and status
 
-# git plugin 
+# git plugin
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[cyan]%}("
 ZSH_THEME_GIT_PROMPT_SUFFIX=") %{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_UNTRACKED="%%"
@@ -35,7 +35,7 @@ if [[ -n "$SSH_CONNECTION" ]]; then
 	ZSH_ESSEMBEH_PREFIX="%{$fg[yellow]%}[$(echo $SSH_CONNECTION | awk '{print $1}')]%{$reset_color%} "
 	# use red color to highlight a remote connection
 	ZSH_ESSEMBEH_COLOR="red"
-elif [[ -r /etc/debian_chroot ]]; then 
+elif [[ -r /etc/debian_chroot ]]; then
 	# prefix prompt in case of chroot
 	ZSH_ESSEMBEH_PREFIX="%{$fg[yellow]%}[chroot:$(cat /etc/debian_chroot)]%{$reset_color%} "
 elif [[ -r /.dockerenv ]]; then

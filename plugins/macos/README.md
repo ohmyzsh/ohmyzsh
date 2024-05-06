@@ -17,7 +17,7 @@ Original author: [Sorin Ionescu](https://github.com/sorin-ionescu)
 | `tab`         | Open the current directory in a new tab                  |
 | `split_tab`   | Split the current terminal tab horizontally              |
 | `vsplit_tab`  | Split the current terminal tab vertically                |
-| `ofd`         | Open the current directory in a Finder window            |
+| `ofd`         | Open passed directories (or $PWD by default) in Finder   |
 | `pfd`         | Return the path of the frontmost Finder window           |
 | `pfs`         | Return the current Finder selection                      |
 | `cdf`         | `cd` to the current Finder directory                     |

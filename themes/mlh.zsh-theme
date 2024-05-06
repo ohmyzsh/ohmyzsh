@@ -15,7 +15,7 @@
 # To customize symbols (e.g MLH_AT_SYMBOL), simply set them as environment variables
 # for example in your ~/.zshrc file, like this:
 # MLH_AT_SYMBOL=" at "
-# 
+#
 # Settings *must* be set before sourcing oh-my-zsh.sh the .zshrc file.
 #
 # To easily discover colors and their codes, type `spectrum_ls` in the terminal

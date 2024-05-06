@@ -89,7 +89,7 @@ __plan() {
     '-address=[(addr) The address of the Nomad server. Overrides the NOMAD_ADDR environment variable if set. Default = http://127.0.0.1:4646]' \
     '-region=[(region) The region of the Nomad servers to forward commands to. Overrides the NOMAD_REGION environment variable if set. Defaults to the Agent s local region.]' \
     '-no-color[Disables colored command output.]' \
-    '-diff[Determines whether the diff between the remote job and planned job is shown. Defaults to true.]' 
+    '-diff[Determines whether the diff between the remote job and planned job is shown. Defaults to true.]'
 }
 
 __run() {
@@ -97,7 +97,7 @@ __run() {
     '-address=[(addr) The address of the Nomad server. Overrides the NOMAD_ADDR environment variable if set. Default = http://127.0.0.1:4646]' \
     '-region=[(region) The region of the Nomad servers to forward commands to. Overrides the NOMAD_REGION environment variable if set. Defaults to the Agent s local region.]' \
     '-no-color[Disables colored command output.]' \
-    '-check-index[If set, the job is only registered or updated if the the passed job modify index matches the server side version. If a check-index value of zero is passed, the job is only registered if it does not yet exist. If a non-zero value is passed, it ensures that the job is being updated from a known state. The use of this flag is most common in conjunction with plan command.]' \
+    '-check-index[If set, the job is only registered or updated if the passed job modify index matches the server side version. If a check-index value of zero is passed, the job is only registered if it does not yet exist. If a non-zero value is passed, it ensures that the job is being updated from a known state. The use of this flag is most common in conjunction with plan command.]' \
     '-detach[Return immediately instead of entering monitor mode. After job submission, the evaluation ID will be printed to the screen, which can be used to examine the evaluation using the eval-status command.]' \
     '-output[Output the JSON that would be submitted to the HTTP API without submitting the job.]' \
     '-verbose[Show full information.]'
