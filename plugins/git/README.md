@@ -41,8 +41,8 @@ plugins=(... git)
 | `gba`                  | `git branch --all`                                                                                                              |
 | `gbd`                  | `git branch --delete`                                                                                                           |
 | `gbD`                  | `git branch --delete --force`                                                                                                   |
-| `gbgd`                 | `LANG=C git branch --no-color -vv \| grep ": gone\]" \| awk '"'"'{print $1}'"'"' \| xargs git branch -d`                        |
-| `gbgD`                 | `LANG=C git branch --no-color -vv \| grep ": gone\]" \| awk '"'"'{print $1}'"'"' \| xargs git branch -D`                        |
+| `gbgd`                 | `LANG=C git branch --no-color -vv \| grep ": gone\]" \| cut -c 3- \| awk '"'"'{print $1}'"'"' \| xargs git branch -d`           |
+| `gbgD`                 | `LANG=C git branch --no-color -vv \| grep ": gone\]" \| cut -c 3- \| awk '"'"'{print $1}'"'"' \| xargs git branch -D`           |
 | `gbm`                  | `git branch --move`                                                                                                             |
 | `gbnm`                 | `git branch --no-merged`                                                                                                        |
 | `gbr`                  | `git branch --remote`                                                                                                           |
