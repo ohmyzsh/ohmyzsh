@@ -87,21 +87,20 @@ function mkv() {
 if [[ "$PYTHON_AUTO_VRUN" == "true" ]]; then
   # Automatically activate venv when changing dir
   function auto_vrun() {
-    local dirname="$PWD"
+    # deactivate if we're on a different dir than VIRTUAL_ENV states
+    # we don't deactivate subdirectories!
+    if (( $+functions[deactivate] )) && [[ $PWD != ${VIRTUAL_ENV:h}* ]]; then
+      deactivate > /dev/null 2>&1
+    fi
 
-    while
-      for activator in "${dirname}/${PYTHON_VENV_NAME}"*/bin/activate(N); do
-        if [[ -f "${activator}" ]]; then
-          source "${activator}" > /dev/null 2>&1
-          return
-        fi
+    if [[ $PWD != ${VIRTUAL_ENV:h} ]]; then
+      for _file in "${PYTHON_VENV_NAME}"*/bin/activate(N.); do
+        # make sure we're not in a venv already
+        (( $+functions[deactivate] )) && deactivate > /dev/null 2>&1
+        source $_file > /dev/null 2>&1
+        break
       done
-      [[ -n "$dirname" ]]
-    do
-      dirname=${dirname%/*}
-    done
-
-    (( $+functions[deactivate] )) && deactivate > /dev/null 2>&1
+    fi
   }
   add-zsh-hook chpwd auto_vrun
   auto_vrun
