@@ -1,3 +1,4 @@
+import json
 import os
 import re
 import shutil
@@ -213,8 +214,10 @@ class Dependency:
                 new_version = status["version"] if is_tag else short_sha
 
                 try:
+                    branch_name = f"update/{self.path}/{new_version}"
+
                     # Create new branch
-                    branch = Git.create_branch(self.path, new_version)
+                    branch = Git.checkout_or_create_branch(branch_name)
 
                     # Update dependencies.yml file
                     self.__update_yaml(
@@ -353,7 +356,7 @@ class Git:
             )
 
     @staticmethod
-    def create_branch(path: str, version: str):
+    def checkout_or_create_branch(branch_name: str):
         # Get current branch name
         result = CommandRunner.run_or_fail(
             ["git", "rev-parse", "--abbrev-ref", "HEAD"], stage="GetDefaultBranch"
@@ -361,10 +364,16 @@ class Git:
         Git.default_branch = result.stdout.decode("utf-8").strip()
 
         # Create new branch and return created branch name
-        branch_name = f"update/{path}/{version}"
-        CommandRunner.run_or_fail(
-            ["git", "checkout", "-b", branch_name], stage="CreateBranch"
-        )
+        try:
+            # try to checkout already existing branch
+            CommandRunner.run_or_fail(
+                ["git", "checkout", branch_name], stage="CreateBranch"
+            )
+        except CommandRunner.Exception:
+            # otherwise create new branch
+            CommandRunner.run_or_fail(
+                ["git", "checkout", "-b", branch_name], stage="CreateBranch"
+            )
         return branch_name
 
     @staticmethod
@@ -515,6 +524,27 @@ class GitHub:
 
     @staticmethod
     def create_pr(branch: str, title: str, body: str) -> None:
+        # first of all let's check if PR is already open
+        check_cmd = [
+            "gh",
+            "pr",
+            "list",
+            "--state",
+            "open",
+            "--head",
+            branch,
+            "--json",
+            "title",
+        ]
+        # returncode is 0 also if no PRs are found
+        output = json.loads(
+            CommandRunner.run_or_fail(check_cmd, stage="CheckPullRequestOpen")
+            .stdout.decode("utf-8")
+            .strip()
+        )
+        # we have PR in this case!
+        if len(output) > 0:
+            return
         cmd = [
             "gh",
             "pr",
