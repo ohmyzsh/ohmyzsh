@@ -1,13 +1,15 @@
 import os
+import re
 import shutil
 import subprocess
 import sys
 import timeit
 from copy import deepcopy
-from typing import Literal, NotRequired, TypedDict
+from typing import Literal, NotRequired, Optional, TypedDict
 
 import requests
 import yaml
+from semver import Version
 
 # Get TMP_DIR variable from environment
 TMP_DIR = os.path.join(os.environ.get("TMP_DIR", "/tmp"), "ohmyzsh")
@@ -15,6 +17,35 @@ TMP_DIR = os.path.join(os.environ.get("TMP_DIR", "/tmp"), "ohmyzsh")
 DEPS_YAML_FILE = ".github/dependencies.yml"
 # Dry run flag
 DRY_RUN = os.environ.get("DRY_RUN", "0") == "1"
+
+# utils for tag comparison
+BASEVERSION = re.compile(
+    r"""[vV]?
+    (?P<major>(0|[1-9])\d*)
+    (\.
+    (?P<minor>(0|[1-9])\d*)
+    (\.
+    (?P<patch>(0|[1-9])\d*)
+    )?
+    )?
+    """,
+    re.VERBOSE,
+)
+
+
+def coerce(version: str) -> Optional[Version]:
+    match = BASEVERSION.search(version)
+    if not match:
+        return None
+
+    # BASEVERSION looks for `MAJOR.minor.patch` in the string given
+    # it fills with None if any of them is missing (for example `2.1`)
+    ver = {
+        key: 0 if value is None else value for key, value in match.groupdict().items()
+    }
+    # Version takes `major`, `minor`, `patch` arguments
+    ver = Version(**ver)  # pyright: ignore[reportArgumentType]
+    return ver
 
 
 class CodeTimer:
@@ -390,6 +421,11 @@ class GitHub:
 
         # Send a GET request to the GitHub API
         response = requests.get(url)
+        current_version = coerce(current_tag)
+        if current_version is None:
+            raise ValueError(
+                f"Stored {current_version} from {repo} does not follow semver"
+            )
 
         # If the request was successful
         if response.status_code == 200:
@@ -401,10 +437,27 @@ class GitHub:
                     "has_updates": False,
                 }
 
-            latest_ref = data[-1]
+            latest_ref = None
+            latest_version: Optional[Version] = None
+            for ref in data:
+                # we find the tag since GitHub returns it as plain git ref
+                tag_version = coerce(ref["ref"].replace("refs/tags/", ""))
+                if tag_version is None:
+                    # we skip every tag that is not semver-complaint
+                    continue
+                if latest_version is None or tag_version.compare(latest_version) > 0:
+                    # if we have a "greater" semver version, set it as latest
+                    latest_version = tag_version
+                    latest_ref = ref
+
+            # raise if no valid semver tag is found
+            if latest_ref is None or latest_version is None:
+                raise ValueError(f"No tags following semver found in {repo}")
+
+            # we get the tag since GitHub returns it as plain git ref
             latest_tag = latest_ref["ref"].replace("refs/tags/", "")
 
-            if latest_tag == current_tag:
+            if latest_version.compare(current_version) <= 0:
                 return {
                     "has_updates": False,
                 }
@@ -424,9 +477,6 @@ class GitHub:
 
     @staticmethod
     def check_updates(repo, branch, version) -> UpdateStatusFalse | UpdateStatusTrue:
-        # TODO: add support for semver updating (based on tags)
-        # Check if upstream github repo has a new version
-        # GitHub API URL for comparing two commits
         url = f"https://api.github.com/repos/{repo}/compare/{version}...{branch}"
 
         # Send a GET request to the GitHub API
