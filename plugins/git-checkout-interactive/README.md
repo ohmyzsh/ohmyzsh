@@ -1,6 +1,6 @@
 # lol
 
-This plugin adds quick switch between your branches.
+This plugin adds a command that lets you interactively switch between branches.
 
 To use it, add `git-checkout-interactive` to the plugins array in your `.zshrc` file:
 
