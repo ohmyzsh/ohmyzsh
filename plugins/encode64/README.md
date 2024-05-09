@@ -40,7 +40,7 @@ plugins=(... encode64)
 
 ### Encoding a file
 
-Encode a file's contents to base64 and save output to text file.  
+Encode a file's contents to base64 and save output to text file.
 **NOTE:** Takes provided file and saves encoded content as new file with `.txt` extension
 
 - From parameter

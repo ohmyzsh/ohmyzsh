@@ -93,6 +93,9 @@ alias scu-enable-now="scu-enable --now"
 alias scu-disable-now="scu-disable --now"
 alias scu-mask-now="scu-mask --now"
 
+# --failed commands
+alias scu-failed='systemctl --user --failed'
+alias sc-failed='systemctl --failed'
 
 function systemd_prompt_info {
   local unit

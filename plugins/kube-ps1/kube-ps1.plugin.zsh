@@ -40,6 +40,7 @@ KUBE_PS1_NS_COLOR="${KUBE_PS1_NS_COLOR-cyan}"
 KUBE_PS1_BG_COLOR="${KUBE_PS1_BG_COLOR}"
 
 KUBE_PS1_KUBECONFIG_CACHE="${KUBECONFIG}"
+KUBE_PS1_KUBECONFIG_SYMLINK="${KUBE_PS1_KUBECONFIG_SYMLINK:-false}"
 KUBE_PS1_DISABLE_PATH="${HOME}/.kube/kube-ps1/disabled"
 KUBE_PS1_LAST_TIME=0
 KUBE_PS1_CLUSTER_FUNCTION="${KUBE_PS1_CLUSTER_FUNCTION}"
@@ -190,14 +191,26 @@ _kube_ps1_file_newer_than() {
   local file=$1
   local check_time=$2
 
-  if [[ "${KUBE_PS1_SHELL}" == "zsh" ]]; then
-    mtime=$(zstat +mtime "${file}")
-  elif stat -c "%s" /dev/null &> /dev/null; then
-    # GNU stat
-    mtime=$(stat -L -c %Y "${file}")
+  if [[ "${KUBE_PS1_KUBECONFIG_SYMLINK}" == "true" ]]; then
+    if [[ "${KUBE_PS1_SHELL}" == "zsh" ]]; then
+      mtime=$(zstat -L +mtime "${file}")
+    elif stat -c "%s" /dev/null &> /dev/null; then
+      # GNU stat
+      mtime=$(stat -c %Y "${file}")
+    else
+      # BSD stat
+      mtime=$(stat -f %m "$file")
+    fi
   else
-    # BSD stat
-    mtime=$(stat -L -f %m "$file")
+    if [[ "${KUBE_PS1_SHELL}" == "zsh" ]]; then
+      mtime=$(zstat +mtime "${file}")
+    elif stat -c "%s" /dev/null &> /dev/null; then
+      # GNU stat
+      mtime=$(stat -L -c %Y "${file}")
+    else
+      # BSD stat
+      mtime=$(stat -L -f %m "$file")
+    fi
   fi
 
   [[ "${mtime}" -gt "${check_time}" ]]

@@ -12,28 +12,30 @@ fi
 
 _PIPENV_COMPLETE=zsh_source pipenv >| "$ZSH_CACHE_DIR/completions/_pipenv" &|
 
-# Automatic pipenv shell activation/deactivation
-_togglePipenvShell() {
-  # deactivate shell if Pipfile doesn't exist and not in a subdir
-  if [[ ! -f "$PWD/Pipfile" ]]; then
-    if [[ "$PIPENV_ACTIVE" == 1 ]]; then
-      if [[ "$PWD" != "$pipfile_dir"* ]]; then
-        exit
+if zstyle -T ':omz:plugins:pipenv' auto-shell; then
+  # Automatic pipenv shell activation/deactivation
+  _togglePipenvShell() {
+    # deactivate shell if Pipfile doesn't exist and not in a subdir
+    if [[ ! -f "$PWD/Pipfile" ]]; then
+      if [[ "$PIPENV_ACTIVE" == 1 ]]; then
+        if [[ "$PWD" != "$pipfile_dir"* ]]; then
+          exit
+        fi
       fi
     fi
-  fi
 
-  # activate the shell if Pipfile exists
-  if [[ "$PIPENV_ACTIVE" != 1 ]]; then
-    if [[ -f "$PWD/Pipfile" ]]; then
-      export pipfile_dir="$PWD"
-      pipenv shell
+    # activate the shell if Pipfile exists
+    if [[ "$PIPENV_ACTIVE" != 1 ]]; then
+      if [[ -f "$PWD/Pipfile" ]]; then
+        export pipfile_dir="$PWD"
+        pipenv shell
+      fi
     fi
-  fi
-}
-autoload -U add-zsh-hook
-add-zsh-hook chpwd _togglePipenvShell
-_togglePipenvShell
+  }
+  autoload -U add-zsh-hook
+  add-zsh-hook chpwd _togglePipenvShell
+  _togglePipenvShell
+fi
 
 # Aliases
 alias pch="pipenv check"

@@ -6,10 +6,26 @@ function agr() {
   echo $AWS_REGION
 }
 
+# Update state file if enabled
+function _aws_update_state() {
+  if [[ "$AWS_PROFILE_STATE_ENABLED" == true ]]; then
+    test -d $(dirname ${AWS_STATE_FILE}) || exit 1
+    echo "${AWS_PROFILE} ${AWS_REGION}" > "${AWS_STATE_FILE}"
+  fi
+}
+
+function _aws_clear_state() {
+  if [[ "$AWS_PROFILE_STATE_ENABLED" == true ]]; then
+    test -d $(dirname ${AWS_STATE_FILE}) || exit 1
+    echo -n > "${AWS_STATE_FILE}"
+  fi
+}
+
 # AWS profile selection
 function asp() {
   if [[ -z "$1" ]]; then
     unset AWS_DEFAULT_PROFILE AWS_PROFILE AWS_EB_PROFILE AWS_PROFILE_REGION
+    _aws_clear_state
     echo AWS profile cleared.
     return
   fi
@@ -28,8 +44,16 @@ function asp() {
 
   export AWS_PROFILE_REGION=$(aws configure get region)
 
+  _aws_update_state
+
   if [[ "$2" == "login" ]]; then
-    aws sso login
+    if [[ -n "$3" ]]; then
+      aws sso login --sso-session $3
+    else
+      aws sso login
+    fi
+  elif [[ "$2" == "logout" ]]; then
+    aws sso logout
   fi
 }
 
@@ -37,6 +61,7 @@ function asp() {
 function asr() {
   if [[ -z "$1" ]]; then
     unset AWS_DEFAULT_REGION AWS_REGION
+    _aws_update_state
     echo AWS region cleared.
     return
   fi
@@ -50,6 +75,7 @@ function asr() {
 
   export AWS_REGION=$1
   export AWS_DEFAULT_REGION=$1
+  _aws_update_state
 }
 
 # AWS profile switch
@@ -196,8 +222,17 @@ function aws_change_access_key() {
 }
 
 function aws_regions() {
+  local region
+  if [[ $AWS_DEFAULT_REGION ]];then
+      region="$AWS_DEFAULT_REGION"
+  elif [[ $AWS_REGION ]];then
+      region="$AWS_REGION"
+  else
+      region="us-west-1"
+  fi
+
   if [[ $AWS_DEFAULT_PROFILE || $AWS_PROFILE ]];then
-    aws ec2 describe-regions |grep RegionName | awk -F ':' '{gsub(/"/, "", $2);gsub(/,/, "", $2);gsub(/ /, "", $2);  print $2}'
+    aws ec2 describe-regions --region $region |grep RegionName | awk -F ':' '{gsub(/"/, "", $2);gsub(/,/, "", $2);gsub(/ /, "", $2);  print $2}'
   else
     echo "You must specify a AWS profile."
   fi
@@ -238,6 +273,22 @@ function aws_prompt_info() {
 
 if [[ "$SHOW_AWS_PROMPT" != false && "$RPROMPT" != *'$(aws_prompt_info)'* ]]; then
   RPROMPT='$(aws_prompt_info)'"$RPROMPT"
+fi
+
+if [[ "$AWS_PROFILE_STATE_ENABLED" == true ]]; then
+  AWS_STATE_FILE="${AWS_STATE_FILE:-/tmp/.aws_current_profile}"
+  test -s "${AWS_STATE_FILE}" || return
+
+  aws_state=($(cat $AWS_STATE_FILE))
+
+  export AWS_DEFAULT_PROFILE="${aws_state[1]}"
+  export AWS_PROFILE="$AWS_DEFAULT_PROFILE"
+  export AWS_EB_PROFILE="$AWS_DEFAULT_PROFILE"
+
+  test -z "${aws_state[2]}" && AWS_REGION=$(aws configure get region)
+
+  export AWS_REGION=${AWS_REGION:-$aws_state[2]}
+  export AWS_DEFAULT_REGION="$AWS_REGION"
 fi
 
 # Load awscli completions

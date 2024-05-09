@@ -34,6 +34,8 @@ toggle set the `PER_DIRECTORY_HISTORY_TOGGLE` environment variable.
   and global histories.
 * `PER_DIRECTORY_HISTORY_TOGGLE` is the key binding used to run the toggle-history
   function above (default `^G`)
+* `PER_DIRECTORY_HISTORY_PRINT_MODE_CHANGE` is a variable which toggles whether
+  the current mode is printed to the screen following a mode change (default `true`)
 
 ## History
 

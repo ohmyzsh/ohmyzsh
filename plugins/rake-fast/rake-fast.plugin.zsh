@@ -43,14 +43,17 @@ _tasks_changed () {
 }
 
 _rake_generate () {
-  echo "version:$_rake_tasks_version" > .rake_tasks
-
-  rake --silent --tasks --all \
+  local rake_tasks_content="version:$_rake_tasks_version\n"
+  rake_tasks_content+=$(rake --silent --tasks --all \
     | sed "s/^rake //" | sed "s/\:/\\\:/g" \
     | sed "s/\[[^]]*\]//g" \
     | sed "s/ *# /\:/" \
-    | sed "s/\:$//" \
-    >> .rake_tasks
+    | sed "s/\:$//")
+
+  local rake_tasks_file="$(mktemp -t .rake_tasks.XXXXXX)"
+  echo $rake_tasks_content > $rake_tasks_file
+
+  mv $rake_tasks_file .rake_tasks
 }
 
 _rake () {
