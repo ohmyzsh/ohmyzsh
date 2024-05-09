@@ -36,3 +36,11 @@ dependencies:
     precopy: |
       set -e
       find . ! -name _gradle ! -name LICENSE -delete
+  plugins/wd:
+    repo: mfaerevaag/wd
+    branch: master
+    version: tag:v0.6.0
+    precopy: |
+      set -e
+      rm -r test
+      rm install.sh tty.gif wd.1
