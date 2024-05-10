@@ -54,7 +54,7 @@ function _omz_setup_autoload {
 
       if [[ "$nvmrc_node_version" = "N/A" ]]; then
         nvm install
-      elif [[ "$nvmrc_node_version" != "$node_version" ]]; then
+      elif [[ "$nvmrc_node_version" != "$(nvm version)" ]]; then
         nvm use $nvm_silent
       fi
     elif [[ -n "$(PWD=$OLDPWD nvm_find_nvmrc)" ]] && [[ "$(nvm version)" != "$(nvm version default)" ]]; then
