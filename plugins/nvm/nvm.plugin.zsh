@@ -50,7 +50,7 @@ function _omz_setup_autoload {
     zstyle -t ':omz:plugins:nvm' silent-autoload && nvm_silent="--silent"
 
     if [[ -n "$nvmrc_path" ]]; then
-      local nvmrc_node_version=$(nvm version $(cat "$nvmrc_path" | tr -dc '[:print:]'))
+      local nvmrc_node_version=$(nvm version $(command cat "$nvmrc_path" | tr -dc '[:print:]'))
 
       if [[ "$nvmrc_node_version" = "N/A" ]]; then
         nvm install
