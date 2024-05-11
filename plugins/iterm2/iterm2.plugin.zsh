@@ -7,6 +7,17 @@
 # This plugin is only relevant if the terminal is iTerm2 on OSX.
 if [[ "$OSTYPE" == darwin* ]] && [[ -n "$ITERM_SESSION_ID" ]] ; then
 
+  # maybe make it the default in the future and allow opting out?
+  if zstyle -t ':omz:plugins:iterm2' shell-integration; then
+    # Handle $0 according to the standard:
+    # https://zdharma-continuum.github.io/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html
+    0="${${ZERO:-${0:#$ZSH_ARGZERO}}:-${(%):-%N}}"
+    0="${${(M)0:#/*}:-$PWD/$0}"
+
+    # See official docs: https://iterm2.com/documentation-shell-integration.html
+    source "${0:A:h}/iterm2_shell_integration.zsh"
+  fi
+
   ###
   # Executes an arbitrary iTerm2 command via an escape code sequence.
   # See https://iterm2.com/documentation-escape-codes.html for all supported commands.

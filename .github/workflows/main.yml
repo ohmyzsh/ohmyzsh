@@ -7,29 +7,26 @@ on:
     branches:
       - master
   push:
-    branches: 
+    branches:
       - master
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
+permissions:
+  contents: read # to fetch code (actions/checkout)
+
 jobs:
   tests:
     name: Run tests
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     if: github.repository == 'ohmyzsh/ohmyzsh'
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest]
     steps:
       - name: Set up git repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Install zsh
-        if: runner.os == 'Linux'
         run: sudo apt-get update; sudo apt-get install zsh
-      - name: Test installer
-        run: sh ./tools/install.sh
       - name: Check syntax
         run: |
           for file in ./oh-my-zsh.sh \

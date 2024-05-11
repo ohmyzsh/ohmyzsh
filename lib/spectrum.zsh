@@ -7,6 +7,7 @@ typeset -AHg FX FG BG
 FX=(
   reset     "%{[00m%}"
   bold      "%{[01m%}" no-bold      "%{[22m%}"
+  dim       "%{[02m%}" no-dim       "%{[22m%}"
   italic    "%{[03m%}" no-italic    "%{[23m%}"
   underline "%{[04m%}" no-underline "%{[24m%}"
   blink     "%{[05m%}" no-blink     "%{[25m%}"

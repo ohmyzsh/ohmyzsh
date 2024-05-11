@@ -7,9 +7,3 @@ To use it, add `gitfast` to the plugins array in your zshrc file:
 ```zsh
 plugins=(... gitfast)
 ```
-
-## Aliases
-
-An earlier version of the plugin also loaded the git plugin. If you want to keep those
-aliases enable the [git plugin](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git)
-as well.

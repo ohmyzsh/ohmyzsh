@@ -35,7 +35,7 @@ alias -g NUL="> /dev/null 2>&1"
 alias -g P="2>&1| pygmentize -l pytb"
 
 alias dud='du -d 1 -h'
-alias duf='du -sh *'
+(( $+commands[duf] )) || alias duf='du -sh *'
 (( $+commands[fd] )) || alias fd='find . -type d -name'
 alias ff='find . -type f -name'
 
