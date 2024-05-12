@@ -8,7 +8,7 @@
 # @github.com/mfaerevaag/wd
 
 # version
-readonly WD_VERSION=0.5.0
+readonly WD_VERSION=0.6.1
 
 # colors
 readonly WD_BLUE="\033[96m"
@@ -57,12 +57,11 @@ wd_print_msg()
 {
     if [[ -z $wd_quiet_mode ]]
     then
-        local color=$1
-        local msg=$2
+        local color="${1:-$WD_BLUE}"  # Default to blue if no color is provided
+        local msg="$2"
 
-        if [[ $color == "" || $msg == "" ]]
-        then
-            print " ${WD_RED}*${WD_NOC} Could not print message. Sorry!"
+        if [[ -z "$msg" ]]; then
+            print "${WD_RED}*${WD_NOC} Could not print message. Sorry!"
         else
             print " ${color}*${WD_NOC} ${msg}"
         fi
@@ -228,6 +227,20 @@ wd_remove()
             wd_exit_fail "Warp point was not found"
         fi
     done
+}
+
+wd_browse() {
+    if ! command -v fzf >/dev/null; then
+        echo "This functionality requires fzf. Please install fzf first."
+        return 1
+    fi
+    local entries=("${(@f)$(sed "s:${HOME}:~:g" "$WD_CONFIG" | awk -F ':' '{print $1 " -> " $2}')}")
+    local selected_entry=$(printf '%s\n' "${entries[@]}" | fzf --height 40% --reverse)
+    if [[ -n $selected_entry ]]; then
+        local selected_point="${selected_entry%% ->*}"
+        selected_point=$(echo "$selected_point" | xargs)
+        wd $selected_point
+    fi
 }
 
 wd_list_all()
@@ -396,7 +409,9 @@ fi
 # disable extendedglob for the complete wd execution time
 setopt | grep -q extendedglob
 wd_extglob_is_set=$?
-(( ! $wd_extglob_is_set )) && setopt noextendedglob
+if (( wd_extglob_is_set == 0 )); then
+    setopt noextendedglob
+fi
 
 # load warp points
 typeset -A points
@@ -434,6 +449,10 @@ else
             in
             "-a"|"--add"|"add")
                 wd_add "$2" "$wd_force_mode"
+                break
+                ;;
+            "-b"|"browse")
+                wd_browse
                 break
                 ;;
             "-e"|"export")
@@ -484,7 +503,9 @@ fi
 # if not, next time warp will pick up variables from this run
 # remember, there's no sub shell
 
-(( ! $wd_extglob_is_set )) && setopt extendedglob
+if (( wd_extglob_is_set == 0 )); then
+    setopt extendedglob
+fi
 
 unset wd_extglob_is_set
 unset wd_warp
