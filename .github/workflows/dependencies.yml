@@ -2,7 +2,7 @@ name: Update dependencies
 on:
   workflow_dispatch: {}
   schedule:
-    - cron: '34 3 * * */8'
+    - cron: "34 3 * * */8"
 
 jobs:
   check:
@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Authenticate as @ohmyzsh
         id: generate_token
         uses: ohmyzsh/github-app-token@v2
