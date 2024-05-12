@@ -4,6 +4,8 @@ function fzf_setup_using_fzf() {
   # we remove "fzf " prefix, this fixes really old fzf versions behaviour
   # see https://github.com/ohmyzsh/ohmyzsh/issues/12387
   local fzf_ver=${"$(fzf --version)"#fzf }
+
+  autoload -Uz is-at-least
   is-at-least 0.48.0 ${${(s: :)fzf_ver}[1]} || return 1
 
   eval "$(fzf --zsh)"
