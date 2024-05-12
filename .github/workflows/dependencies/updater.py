@@ -390,21 +390,27 @@ class Git:
         clean_env["GIT_CONFIG_GLOBAL"] = "/dev/null"
         clean_env["GIT_CONFIG_NOSYSTEM"] = "1"
 
-        # Commit with settings above
-        CommandRunner.run_or_fail(
-            [
-                "git",
-                "-c",
-                f"user.name={user_name}",
-                "-c",
-                f"user.email={user_email}",
-                "commit",
-                "-m",
-                f"feat({scope}): update to {version}",
-            ],
-            stage="CreateCommit",
-            env=clean_env,
-        )
+        # check if repo is clean (clean => no error, no commit)
+        try:
+            CommandRunner.run_or_fail(
+                ["git", "diff", "--exit-code"], stage="CheckRepoClean", env=clean_env
+            )
+        except CommandRunner.Exception:
+            # Commit with settings above
+            CommandRunner.run_or_fail(
+                [
+                    "git",
+                    "-c",
+                    f"user.name={user_name}",
+                    "-c",
+                    f"user.email={user_email}",
+                    "commit",
+                    "-m",
+                    f"feat({scope}): update to {version}",
+                ],
+                stage="CreateCommit",
+                env=clean_env,
+            )
 
     @staticmethod
     def push(branch: str):
