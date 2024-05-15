@@ -148,6 +148,27 @@ function fzf_setup_using_opensuse() {
   return 0
 }
 
+function fzf_setup_using_fedora() {
+  (( $+commands[fzf] )) || return 1
+
+  local completions="/usr/share/zsh/site-functions/fzf"
+  local key_bindings="/usr/share/fzf/shell/key-bindings.zsh"
+
+  if [[ ! -f "$completions" || ! -f "$key_bindings" ]]; then
+    return 1
+  fi
+
+  if [[ -o interactive && "$DISABLE_FZF_AUTO_COMPLETION" != "true" ]]; then
+    source "$completions" 2>/dev/null
+  fi
+
+  if [[ "$DISABLE_FZF_KEY_BINDINGS" != "true" ]]; then
+    source "$key_bindings" 2>/dev/null
+  fi
+
+  return 0
+}
+
 function fzf_setup_using_openbsd() {
   # openBSD installs fzf in /usr/local/bin/fzf
   if [[ "$OSTYPE" != openbsd* ]] || (( ! $+commands[fzf] )); then
@@ -234,6 +255,7 @@ fzf_setup_using_fzf \
   || fzf_setup_using_openbsd \
   || fzf_setup_using_debian \
   || fzf_setup_using_opensuse \
+  || fzf_setup_using_fedora \
   || fzf_setup_using_cygwin \
   || fzf_setup_using_macports \
   || fzf_setup_using_base_dir \
