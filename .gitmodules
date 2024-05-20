@@ -1,0 +1,3 @@
+[submodule "plugins/shell-aws-autoprofile"]
+	path = plugins/shell-aws-autoprofile
+	url = https://github.com/dbhagen/shell-aws-autoprofile
