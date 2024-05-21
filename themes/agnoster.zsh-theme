@@ -227,6 +227,14 @@ prompt_virtualenv() {
   fi
 }
 
+# Conda Virtualenv
+promp_conda_virtualenv() {
+  if [[ -n $CONDA_PROMPT_MODIFIER ]]; then
+    prompt_segment black default ${CONDA_PROMPT_MODIFIER:1:-2}
+  fi
+}
+
+
 # Status:
 # - was there an error
 # - am I root
@@ -266,6 +274,7 @@ build_prompt() {
   prompt_bzr
   prompt_hg
   prompt_end
+  promp_conda_virtualenv
 }
 
 PROMPT='%{%f%b%k%}$(build_prompt) '
