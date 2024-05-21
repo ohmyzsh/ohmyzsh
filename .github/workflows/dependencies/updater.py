@@ -240,9 +240,9 @@ class Dependency:
                             f"feat({self.name}): update to version {new_version}",
                             f"""## Description
 
-    Update for **{self.desc}**: update to version [{new_version}]({status['head_url']}).
-    Check out the [list of changes]({status['compare_url']}).
-    """,
+Update for **{self.desc}**: update to version [{new_version}]({status['head_url']}).
+Check out the [list of changes]({status['compare_url']}).
+""",
                         )
 
                     # Clean up repository
