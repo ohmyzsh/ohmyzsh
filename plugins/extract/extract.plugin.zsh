@@ -87,7 +87,7 @@ EOF
         builtin cd -q control; extract ../control.tar.*
         builtin cd -q ../data; extract ../data.tar.*
         builtin cd -q ..; command rm *.tar.* debian-binary ;;
-      (*.zst) unzstd "$full_path" ;;
+      (*.zst) unzstd --stdout "$full_path" > "${file:t:r}" ;;
       (*.cab|*.exe) cabextract "$full_path" ;;
       (*.cpio|*.obscpio) cpio -idmvF "$full_path" ;;
       (*.zpaq) zpaq x "$full_path" ;;

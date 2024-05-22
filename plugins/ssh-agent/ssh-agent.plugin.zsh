@@ -62,7 +62,7 @@ function _add_identities() {
     # if id is an absolute path, make file equal to id
     [[ "$id" = /* ]] && file="$id" || file="$HOME/.ssh/$id"
     # check for filename match, otherwise try for signature match
-    if [[ ${loaded_ids[(I)$file]} -le 0 ]]; then
+    if [[ -f $file && ${loaded_ids[(I)$file]} -le 0 ]]; then
       sig="$(ssh-keygen -lf "$file" | awk '{print $2}')"
       [[ ${loaded_sigs[(I)$sig]} -le 0 ]] && not_loaded+=("$file")
     fi
@@ -98,8 +98,10 @@ function _add_identities() {
 
 # Add a nifty symlink for screen/tmux if agent forwarding is enabled
 if zstyle -t :omz:plugins:ssh-agent agent-forwarding \
-   && [[ -n "$SSH_AUTH_SOCK" && ! -L "$SSH_AUTH_SOCK" ]]; then
-  ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USERNAME-screen
+   && [[ -n "$SSH_AUTH_SOCK" ]]; then
+  if [[ ! -L "$SSH_AUTH_SOCK" ]]; then
+    ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USERNAME-screen
+  fi
 else
   _start_agent
 fi

@@ -11,6 +11,7 @@ _1st_arguments=(
   'assigned:search for issues assigned to a user'
   'branch:open the issue named after the git branch of the current directory'
   'dumpconfig:display effective jira configuration'
+  'help:print usage help to stdout'
 )
 
 _arguments -C \

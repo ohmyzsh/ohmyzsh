@@ -3,8 +3,15 @@
 0="${${ZERO:-${0:#$ZSH_ARGZERO}}:-${(%):-%N}}"
 0="${${(M)0:#/*}:-$PWD/$0}"
 
-# Open the current directory in a Finder window
-alias ofd='open_command $PWD'
+# Open in Finder the directories passed as arguments, or the current directory if
+# no directories are passed
+function ofd {
+  if (( ! $# )); then
+    open_command $PWD
+  else
+    open_command $@
+  fi
+}
 
 # Show/hide hidden files in the Finder
 alias showfiles="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"

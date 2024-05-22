@@ -41,8 +41,8 @@ plugins=(... git)
 | `gba`                  | `git branch --all`                                                                                                              |
 | `gbd`                  | `git branch --delete`                                                                                                           |
 | `gbD`                  | `git branch --delete --force`                                                                                                   |
-| `gbgd`                 | `LANG=C git branch --no-color -vv \| grep ": gone\]" \| awk '"'"'{print $1}'"'"' \| xargs git branch -d`                        |
-| `gbgD`                 | `LANG=C git branch --no-color -vv \| grep ": gone\]" \| awk '"'"'{print $1}'"'"' \| xargs git branch -D`                        |
+| `gbgd`                 | `LANG=C git branch --no-color -vv \| grep ": gone\]" \| cut -c 3- \| awk '"'"'{print $1}'"'"' \| xargs git branch -d`           |
+| `gbgD`                 | `LANG=C git branch --no-color -vv \| grep ": gone\]" \| cut -c 3- \| awk '"'"'{print $1}'"'"' \| xargs git branch -D`           |
 | `gbm`                  | `git branch --move`                                                                                                             |
 | `gbnm`                 | `git branch --no-merged`                                                                                                        |
 | `gbr`                  | `git branch --remote`                                                                                                           |
@@ -111,6 +111,7 @@ plugins=(... git)
 | `gfg`                  | `git ls-files \| grep`                                                                                                          |
 | `gm`                   | `git merge`                                                                                                                     |
 | `gma`                  | `git merge --abort`                                                                                                             |
+| `gmc`                  | `git merge --continue`                                                                                                             |
 | `gms`                  | `git merge --squash`                                                                                                            |
 | `gmom`                 | `git merge origin/$(git_main_branch)`                                                                                           |
 | `gmum`                 | `git merge upstream/$(git_main_branch)`                                                                                         |
@@ -166,6 +167,7 @@ plugins=(... git)
 | `grhk`                 | `git reset --keep`                                                                                                              |
 | `grhs`                 | `git reset --soft`                                                                                                              |
 | `gpristine`            | `git reset --hard && git clean --force -dfx`                                                                                    |
+| `gwipe`                | `git reset --hard && git clean --force -df`                                                                                     |
 | `groh`                 | `git reset origin/$(git_current_branch) --hard`                                                                                 |
 | `grs`                  | `git restore`                                                                                                                   |
 | `grss`                 | `git restore --source`                                                                                                          |

@@ -1,8 +1,8 @@
 name: Update dependencies
 on:
   workflow_dispatch: {}
-  # schedule:
-  #   - cron: '34 3 * * */8'
+  schedule:
+    - cron: "0 6 * * 0"
 
 jobs:
   check:
@@ -12,12 +12,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Authenticate as @ohmyzsh
         id: generate_token
         uses: ohmyzsh/github-app-token@v2
         with:
           app_id: ${{ secrets.OHMYZSH_APP_ID }}
           private_key: ${{ secrets.OHMYZSH_APP_PRIVATE_KEY }}
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
       - name: Process dependencies
         env:
           GH_TOKEN: ${{ steps.generate_token.outputs.token }}

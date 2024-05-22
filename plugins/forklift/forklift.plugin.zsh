@@ -58,7 +58,7 @@ function fl {
     tell application forkLiftSetapp
         activate
         set forkLiftVersion to version
-    end tell	
+    end tell
   else if forkLift3 is not null and application forkLift3 is running then
     tell application forkLift3
         activate
@@ -84,7 +84,7 @@ function fl {
     else if forkLift is not null then
         set appName to forkLift
     end if
-    
+
     tell application appName
         activate
         set forkLiftVersion to version

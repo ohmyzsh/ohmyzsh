@@ -147,8 +147,8 @@ function gbds() {
     done
 }
 
-alias gbgd='LANG=C git branch --no-color -vv | grep ": gone\]" | awk '"'"'{print $1}'"'"' | xargs git branch -d'
-alias gbgD='LANG=C git branch --no-color -vv | grep ": gone\]" | awk '"'"'{print $1}'"'"' | xargs git branch -D'
+alias gbgd='LANG=C git branch --no-color -vv | grep ": gone\]" | cut -c 3- | awk '"'"'{print $1}'"'"' | xargs git branch -d'
+alias gbgD='LANG=C git branch --no-color -vv | grep ": gone\]" | cut -c 3- | awk '"'"'{print $1}'"'"' | xargs git branch -D'
 alias gbm='git branch --move'
 alias gbnm='git branch --no-merged'
 alias gbr='git branch --remote'
@@ -252,6 +252,7 @@ alias gignored='git ls-files -v | grep "^[[:lower:]]"'
 alias gfg='git ls-files | grep'
 alias gm='git merge'
 alias gma='git merge --abort'
+alias gmc='git merge --continue'
 alias gms="git merge --squash"
 alias gmom='git merge origin/$(git_main_branch)'
 alias gmum='git merge upstream/$(git_main_branch)'
@@ -349,6 +350,7 @@ alias grhh='git reset --hard'
 alias grhk='git reset --keep'
 alias grhs='git reset --soft'
 alias gpristine='git reset --hard && git clean --force -dfx'
+alias gwipe='git reset --hard && git clean --force -df'
 alias groh='git reset origin/$(git_current_branch) --hard'
 alias grs='git restore'
 alias grss='git restore --source'
