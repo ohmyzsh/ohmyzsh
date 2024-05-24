@@ -259,7 +259,7 @@ alias gmum='git merge upstream/$(git_main_branch)'
 alias gmtl='git mergetool --no-prompt'
 alias gmtlvim='git mergetool --no-prompt --tool=vimdiff'
 
-alias gl='git pull'
+alias gp='git pull'
 alias gpr='git pull --rebase'
 alias gprv='git pull --rebase -v'
 alias gpra='git pull --rebase --autostash'
