@@ -9,6 +9,13 @@ plugins=(... macos)
 ```
 
 Original author: [Sorin Ionescu](https://github.com/sorin-ionescu)
+Added Support for Tabby: [theredcmdcraft](https://github.com/theredcmdcraft)
+
+## Supported Terminals
+- iTerm
+- iTerm2
+- Hyper
+- Tabby (https://github.com/Eugeny/tabby)
 
 ## Commands
 
