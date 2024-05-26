@@ -8,14 +8,11 @@ To start using it, add the `macos` plugin to your plugins array in `~/.zshrc`:
 plugins=(... macos)
 ```
 
-Original author: [Sorin Ionescu](https://github.com/sorin-ionescu)
-Added Support for Tabby: [theredcmdcraft](https://github.com/theredcmdcraft)
-
 ## Supported Terminals
-- iTerm
-- iTerm2
-- Hyper
-- Tabby (https://github.com/Eugeny/tabby)
+- [iTerm](https://iterm.sourceforge.net/)
+- [iTerm2](https://iterm2.com/)
+- [Hyper](https://hyper.is/)
+- [Tabby](https://tabby.sh/)
 
 ## Commands
 
@@ -44,7 +41,9 @@ Added Support for Tabby: [theredcmdcraft](https://github.com/theredcmdcraft)
 
 ## Acknowledgements
 
-This application makes use of the following third party scripts:
+Original author: [Sorin Ionescu](https://github.com/sorin-ionescu)
+
+This application makes use of the following third-party scripts:
 
 [shpotify](https://github.com/hnarayanan/shpotify)
 
