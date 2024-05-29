@@ -36,12 +36,13 @@ plugins=(... kubectl)
 | kgpl    | `kgp -l`                            | Get pods by label. Example: `kgpl "app=myapp" -n myns`                                           |
 | kgpn    | `kgp -n`                            | Get pods by namespace. Example: `kgpn kube-system`                                               |
 |         |                                     | **Service management**                                                                           |
-| kgs     | `kubectl get svc`                   | List all services in ps output format                                                            |
-| kgsw    | `kgs --watch`                       | After listing all services, watch for changes                                                    |
-| kgswide | `kgs -o wide`                       | After listing all services, output in plain-text format with any additional information          |
-| kes     | `kubectl edit svc`                  | Edit services(svc) from the default editor                                                       |
-| kds     | `kubectl describe svc`              | Describe all services in detail                                                                  |
-| kdels   | `kubectl delete svc`                | Delete all services matching passed argument                                                     |
+| kgsvc   | `kubectl get svc`                   | List all services in ps output format                                                            |
+| kgsvca  | `kubectl get svc --all-namespaces`  | List all services in ps output format targeting all namespaces                                   |
+| kgsvcw  | `kgs --watch`                       | After listing all services, watch for changes                                                    |
+| kgsvcwide | `kgs -o wide`                     | After listing all services, output in plain-text format with any additional information          |
+| kesvc   | `kubectl edit svc`                  | Edit services(svc) from the default editor                                                       |
+| kdsvc   | `kubectl describe svc`              | Describe all services in detail                                                                  |
+| kdelsvc | `kubectl delete svc`                | Delete all services matching passed argument                                                     |
 |         |                                     | **Ingress management**                                                                           |
 | kgi     | `kubectl get ingress`               | List ingress resources in ps output format                                                       |
 | kei     | `kubectl edit ingress`              | Edit ingress resource from the default editor                                                    |
@@ -109,8 +110,13 @@ plugins=(... kubectl)
 | ksss    | `kubectl scale statefulset`         | Scale a statefulset                                                                              |
 | krsss   | `kubectl rollout status statefulset`| Check the rollout status of a deployment                                                         |
 |         |                                     | **Service Accounts management**                                                                  |
-| kdsa    | `kubectl describe sa`               | Describe a service account in details                                                            |
-| kdelsa  | `kubectl delete sa`                 | Delete the service account                                                                       |
+| kgsa    | `kubectl get sa`                    | List all service accounts in ps output format                                                    |
+| kgsaa   | `kubectl get sa --all-namespaces`   | List all service accounts in ps output format targeting all namespaces                           |
+| kgsaw   | `kgsa --watch`                      | After listing all service accounts, watch for changes                                            |
+| kgsawide| `kgsa -o wide`                      | After listing all service accounts, output in plain-text format with any additional information  |
+| kesa    | `kubectl edit sa`                   | Edit service accounts(svc) from the default editor                                               |
+| kdsa    | `kubectl describe sa`               | Describe all service accounts in detail                                                          |
+| kdelsa  | `kubectl delete sa`                 | Delete all service accounts matching passed argument                                             |
 |         |                                     | **DaemonSet management**                                                                         |
 | kgds    | `kubectl get daemonset`             | List all DaemonSets in ps output format                                                          |
 | kgdsw   | `kgds --watch`                      | After listing all DaemonSets, watch for changes                                                  |
