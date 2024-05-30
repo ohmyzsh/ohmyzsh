@@ -1,9 +1,3 @@
-# Check if the user has configured Yarn Berry
-is_yarn_berry="false"
-if zstyle -t ':omz:plugins:yarn' berry; then
-  is_yarn_berry="true"
-fi
-
 if zstyle -T ':omz:plugins:yarn' global-path; then
   # Skip yarn call if default global bin dir exists
   [[ -d "$HOME/.yarn/bin" ]] && bindir="$HOME/.yarn/bin" || bindir="$(yarn global bin 2>/dev/null)"
@@ -37,22 +31,6 @@ alias yst="yarn start"
 alias yt="yarn test"
 alias ytc="yarn test --coverage"
 alias yui="yarn upgrade-interactive"
-
-# --latest flag was removed in yarn berry so we execute the base command
-if [[ ${is_yarn_berry} == "true" ]]; then
-  alias yuil='yui'
-else
-  alias yuil='yarn upgrade-interactive --latest'
-fi
-
-# The flag for installing with restrictive lockfile was changed in yarn berry
-if [[ ${is_yarn_berry} == "true" ]]; then
-  alias yii='yarn install --immutable'
-else
-  alias yii='yarn install --frozen-lockfile'
-fi
-
-alias yifl="yii"
 alias yup="yarn upgrade"
 alias yv="yarn version"
 alias yw="yarn workspace"
@@ -60,10 +38,22 @@ alias yws="yarn workspaces"
 alias yy="yarn why"
 
 # Commands that are specific to the yarn version being used
-if [[ ${is_yarn_berry} == "true" ]]; then
+if zstyle -t ':omz:plugins:yarn' berry; then
+  # aliases that differ
+  alias yuil='yui' # --latest flag was removed in yarn berry
+  alias yii='yarn install --immutable'
+  alias yifl='yarn install --immutable'
+
+  # unique aliases
   alias ydlx="yarn dlx"
   alias yn="yarn node"
 else
+  # aliases that differ
+  alias yuil='yarn upgrade-interactive --latest'
+  alias yii='yarn install --frozen-lockfile'
+  alias yifl='yarn install --frozen-lockfile'
+
+  # unique aliases
   alias yga="yarn global add"
   alias ygls="yarn global list"
   alias ygrm="yarn global remove"
