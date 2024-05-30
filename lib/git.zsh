@@ -11,7 +11,7 @@ function __git_prompt_git() {
   GIT_OPTIONAL_LOCKS=0 command git "$@"
 }
 
-function _omz_git_prompt_info() {
+function git_prompt_info() {
   # If we are on a folder not tracked by git, get out.
   # Otherwise, check for hide-info at global and local repository level
   if ! __git_prompt_git rev-parse --git-dir &> /dev/null \
@@ -41,31 +41,29 @@ function _omz_git_prompt_info() {
 
 # Use async version if setting is enabled or undefined
 if zstyle -T ':omz:alpha:lib:git' async-prompt; then
-  function git_prompt_info() {
-    if [[ -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_info]}" ]]; then
-      echo -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_info]}"
-    fi
-  }
-
-  function git_prompt_status() {
-    if [[ -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_status]}" ]]; then
-      echo -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_status]}"
-    fi
-  }
-
   # Conditionally register the async handler, only if it's needed in $PROMPT
   # or any of the other prompt variables
   function _defer_async_git_register() {
+    # Check if the user wants to register some async functions
+    local -a async_functions
+    zstyle -a ':omz:alpha:lib:git' async-functions async_functions
+
+    if (( ${#async_functions} )); then
+      for async_function in $async_functions; do
+        _omz_make_async_function $async_function
+      done
+    fi
+
     # Check if git_prompt_info is used in a prompt variable
     case "${PS1}:${PS2}:${PS3}:${PS4}:${RPROMPT}:${RPS1}:${RPS2}:${RPS3}:${RPS4}" in
     *(\$\(git_prompt_info\)|\`git_prompt_info\`)*)
-      _omz_register_handler _omz_git_prompt_info
+      _omz_make_async_function git_prompt_info
       ;;
     esac
 
     case "${PS1}:${PS2}:${PS3}:${PS4}:${RPROMPT}:${RPS1}:${RPS2}:${RPS3}:${RPS4}" in
     *(\$\(git_prompt_status\)|\`git_prompt_status\`)*)
-      _omz_register_handler _omz_git_prompt_status
+      _omz_make_async_function git_prompt_status
       ;;
     esac
 
@@ -76,13 +74,6 @@ if zstyle -T ':omz:alpha:lib:git' async-prompt; then
   # Register the async handler first. This needs to be done before
   # the async request prompt is run
   precmd_functions=(_defer_async_git_register $precmd_functions)
-else
-  function git_prompt_info() {
-    _omz_git_prompt_info
-  }
-  function git_prompt_status() {
-    _omz_git_prompt_status
-  }
 fi
 
 # Checks if working tree is dirty
@@ -213,7 +204,7 @@ function git_prompt_long_sha() {
   SHA=$(__git_prompt_git rev-parse HEAD 2> /dev/null) && echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
 }
 
-function _omz_git_prompt_status() {
+function git_prompt_status() {
   [[ "$(__git_prompt_git config --get oh-my-zsh.hide-status 2>/dev/null)" = 1 ]] && return
 
   # Maps a git status prefix to an internal constant

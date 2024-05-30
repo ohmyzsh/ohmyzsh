@@ -23,4 +23,8 @@ vcs_status() {
   fi
 }
 
-PROMPT='%2~ $(vcs_status)»%b '
+# Register the sync function
+autoload -Uz _omz_make_async_function
+_omz_make_async_function vcs_status
+
+PROMPT='%2~ $(vcs_status_async)»%b '

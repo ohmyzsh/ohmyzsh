@@ -26,7 +26,6 @@ autoload -Uz is-at-least
 # This API is subject to change and optimization. Rely on it at your own risk.
 
 function _omz_register_handler {
-  setopt localoptions noksharrays
   typeset -ga _omz_async_functions
   # we want to do nothing if there's no $1 function or we already set it up
   if [[ -z "$1" ]] || (( ! ${+functions[$1]} )) \
@@ -40,6 +39,25 @@ function _omz_register_handler {
     autoload -Uz add-zsh-hook
     add-zsh-hook precmd _omz_async_request
   fi
+}
+
+function _omz_make_async_function {
+  local sync_func=$1
+
+  # Check if the sync function has already been made async
+  if (( ${+functions[${sync_func}_async]} )); then
+    return
+  fi
+
+  # Register the sync function as a handler
+  _omz_register_handler ${sync_func}
+
+  # Redefine the original function to output the async result
+  eval "function ${sync_func}_async {
+    if [[ -n \"\${_OMZ_ASYNC_OUTPUT[${sync_func}]}\" ]]; then
+      echo -n \"\${_OMZ_ASYNC_OUTPUT[${sync_func}]}\"
+    fi
+  }"
 }
 
 # Set up async handlers and callbacks
