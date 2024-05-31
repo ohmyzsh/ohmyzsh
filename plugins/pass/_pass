@@ -20,6 +20,8 @@
 
 _pass () {
 	local cmd
+  local rootcontext
+  rootcontext=$curcontext
 	if (( CURRENT > 2)); then
 		cmd=${words[2]}
 		# Set the context for the subcommand.
@@ -123,8 +125,9 @@ _pass_cmd_show () {
 _pass_complete_entries_helper () {
 	local IFS=$'\n'
 	local prefix
-	zstyle -s ":completion:${curcontext}:" prefix prefix || prefix="${PASSWORD_STORE_DIR:-$HOME/.password-store}"
-	_values -C 'passwords' ${$(find -L "$prefix" \( -name .git -o -name .gpg-id \) -prune -o $@ -print 2>/dev/null | sed -e "s#${prefix}/\{0,1\}##" -e 's#\.gpg##' -e 's#\\#\\\\#g' -e 's#:#\\:#g' | sort):-""}
+	zstyle -s ":completion:${rootcontext}:" prefix prefix ||
+prefix="${PASSWORD_STORE_DIR:-$HOME/.password-store}"
+  _values -C 'passwords' ${$(find -L "$prefix" \( -name .git -o -name .gpg-id \) -prune -o $@ -print 2>/dev/null | sed -e "s#${prefix}/\{0,1\}##" -e 's#\.gpg##' -e 's#\\#\\\\#g' -e 's#:#\\:#g' | sort):-""}
 }
 
 _pass_complete_entries_with_subdirs () {
