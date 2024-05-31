@@ -62,5 +62,3 @@ else
   alias yout="yarn outdated"
   alias yuca="yarn global upgrade && yarn cache clean"
 fi
-
-unset is_yarn_berry
