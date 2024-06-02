@@ -1,4 +1,5 @@
 # Put files in this folder to add your own custom functionality.
+# t
 # See: https://github.com/ohmyzsh/ohmyzsh/wiki/Customization
 #
 # Files in the custom/ directory will be:
