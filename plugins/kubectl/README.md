@@ -28,6 +28,7 @@ plugins=(... kubectl)
 | kdelf   | `kubectl delete -f`                 | Delete a pod using the type and name specified in -f argument                                    |
 |         |                                     | **Pod management**                                                                               |
 | kgp     | `kubectl get pods`                  | List all pods in ps output format                                                                |
+| kgpa    | `kubectl get pods --all-namespaces` | List all pods of all namespaces in ps output format                                              |
 | kgpw    | `kgp --watch`                       | After listing/getting the requested object, watch for changes                                    |
 | kgpwide | `kgp -o wide`                       | Output in plain-text format with any additional information. For pods, the node name is included |
 | kep     | `kubectl edit pods`                 | Edit pods from the default editor                                                                |
