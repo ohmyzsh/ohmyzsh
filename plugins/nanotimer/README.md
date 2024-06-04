@@ -9,3 +9,5 @@ To use it, add `nanotimer` to the plugins array of your zshrc file:
 ```zsh
 plugins=(... nanotimer)
 ```
+
+![Preview](nanotimer.preview.png?raw=true "Timer RPrompt Preview")
