@@ -55,6 +55,16 @@ If `yes` (default), always add `-g` flag to show the group ownership.
 
 Default: `yes`
 
+### `icons`
+
+```zsh
+zstyle ':omz:plugins:eza' 'icons' yes|no
+```
+
+If `yes`, sets the `--icons` option of `eza`, adding icons for files and folders.
+
+Default: `no`
+
 ### `size-prefix`
 
 ```zsh
