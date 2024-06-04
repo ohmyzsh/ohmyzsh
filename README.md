@@ -89,7 +89,7 @@ Oh My Zsh is installed by running one of the following commands in your terminal
 | **wget**  | `sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`   |
 | **fetch** | `sh -c "$(fetch -o - https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"` |
 
-Alternatively, the installer is also mirrored outside GitHub. Using this URL instead may be required if you're in a country like India or China, that blocks `raw.githubusercontent.com`:
+Alternatively, the installer is also mirrored outside GitHub. Using this URL instead may be required if you're in a country like China or India (for certain ISPs), that blocks `raw.githubusercontent.com`:
 
 | Method    | Command                                                                                           |
 | :-------- | :------------------------------------------------------------------------------------------------ |
@@ -235,7 +235,7 @@ If you're in China, India, or another country that blocks `raw.githubusercontent
 
 #### Installing From A Forked Repository
 
-The install script also accepts these variables to allow installation of a different repository:
+The install script also accepts these variables to allow the installation of a different repository:
 
 - `REPO` (default: `ohmyzsh/ohmyzsh`): this takes the form of `owner/repository`. If you set
   this variable, the installer will look for a repository at `https://github.com/{owner}/{repository}`.
@@ -309,7 +309,7 @@ If you would like to override the functionality of a plugin distributed with Oh 
 
 <a name="enable-gnu-ls"></a>
 
-The default behaviour in Oh My Zsh is to use BSD `ls` in macOS and freeBSD systems. If GNU `ls` is installed
+The default behaviour in Oh My Zsh is to use BSD `ls` in macOS and FreeBSD systems. If GNU `ls` is installed
 (as `gls` command), you can choose to use it instead. To do it, you can use zstyle-based config before
 sourcing `oh-my-zsh.sh`:
 
@@ -342,7 +342,7 @@ zstyle ':omz:plugins:*' aliases no
 zstyle ':omz:plugins:git' aliases no
 ```
 
-You can combine these in other ways taking into account that more specific scopes takes precedence:
+You can combine these in other ways taking into account that more specific scopes take precedence:
 
 ```sh
 # Skip all plugin aliases, except for the git plugin
@@ -365,7 +365,7 @@ zstyle ':omz:lib:directories' aliases no
 ### Disable async git prompt
 
 Async prompt functions are an experimental feature (included on April 3, 2024) that allows Oh My Zsh to render prompt information
-asyncronously. This can improve prompt rendering performance, but it might not work well with some setups. We hope that's not an
+asynchronously. This can improve prompt rendering performance, but it might not work well with some setups. We hope that's not an
 issue, but if you're seeing problems with this new feature, you can turn it off by setting the following in your .zshrc file,
 before Oh My Zsh is sourced:
 
