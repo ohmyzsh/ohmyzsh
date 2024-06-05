@@ -117,7 +117,7 @@ function bgnotify {
   local icon="$3"
   if (( ${+commands[terminal-notifier]} )); then # macOS
     local term_id=$(bgnotify_programid)
-    terminal-notifier -message "$message" -title "$title" ${=icon:+-appIcon "$icon"} ${=term_id:+-activate "$term_id" -sender "$term_id"} &>/dev/null
+    terminal-notifier -message "$message" -title "$title" ${=icon:+-appIcon "$icon"} ${=term_id:+-activate "$term_id"} &>/dev/null
   elif (( ${+commands[growlnotify]} )); then # macOS growl
     growlnotify -m "$title" "$message"
   elif (( ${+commands[notify-send]} )); then

@@ -79,6 +79,13 @@ EOF
         key code 36  #(presses enter)
       end tell
 EOF
+
+  elif [[ "$the_app" == 'Tabby' ]]; then
+    osascript >/dev/null <<EOF
+      tell application "System Events"
+        tell process "Tabby" to keystroke "t" using command down
+      end tell
+EOF
   else
     echo "$0: unsupported terminal app: $the_app" >&2
     return 1
@@ -126,6 +133,12 @@ EOF
       delay 1
       keystroke "${command} \n"
     end tell
+EOF
+  elif [[ "$the_app" == 'Tabby' ]]; then
+    osascript >/dev/null <<EOF
+      tell application "System Events"
+        tell process "Tabby" to keystroke "D" using command down
+      end tell
 EOF
   else
     echo "$0: unsupported terminal app: $the_app" >&2
@@ -175,6 +188,12 @@ EOF
       delay 1
       keystroke "${command} \n"
     end tell
+EOF
+  elif [[ "$the_app" == 'Tabby' ]]; then
+    osascript >/dev/null <<EOF
+      tell application "System Events"
+        tell process "Tabby" to keystroke "d" using command down
+      end tell
 EOF
   else
     echo "$0: unsupported terminal app: $the_app" >&2
