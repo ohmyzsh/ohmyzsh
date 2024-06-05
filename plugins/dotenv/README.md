@@ -78,6 +78,15 @@ change.
 NOTE: if a directory is found in both the allowed and disallowed lists, the disallowed list
 takes preference, _i.e._ the .env file will never be sourced.
 
+### ZSH_DOTENV_RECURSIVE, ZSH_DOTENV_ROOT
+Set `ZSH_DOTENV_RECURSIVE=true` in your zshrc file to enable recursive search for the `ZSH_DOTENV_FILE` up to
+`ZSH_DOTENV_ROOT` (default `$HOME`) and source from `$ZSH_DOTENV_ROOT` to `$PWD`.
+
+```zsh
+# in ~/.zshrc, before Oh My Zsh is sourced:
+ZSH_DOTENV_RECURSIVE=true
+ZSH_DOTENV_ROOT=/path/to/root
+```
 ## Version Control
 
 **It's strongly recommended to add `.env` file to `.gitignore`**, because usually it contains sensitive information such as your credentials, secret keys, passwords etc. You don't want to commit this file, it's supposed to be local only.

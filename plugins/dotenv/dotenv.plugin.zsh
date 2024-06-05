@@ -7,11 +7,13 @@
 : ${ZSH_DOTENV_ALLOWED_LIST:="${ZSH_CACHE_DIR:-$ZSH/cache}/dotenv-allowed.list"}
 : ${ZSH_DOTENV_DISALLOWED_LIST:="${ZSH_CACHE_DIR:-$ZSH/cache}/dotenv-disallowed.list"}
 
-
+: ${ZSH_DOTENV_ROOT:=$HOME}
+: ${ZSH_DOTENV_RECURSIVE:=false}
 ## Functions
 
 source_env() {
-  if [[ ! -f "$ZSH_DOTENV_FILE" ]]; then
+  base_dir=${1:=.}
+  if [[ ! -f "$base_dir/$ZSH_DOTENV_FILE" ]]; then
     return
   fi
 
@@ -37,7 +39,7 @@ source_env() {
       [[ $column -eq 1 ]] || echo
 
       # print same-line prompt and output newline character if necessary
-      echo -n "dotenv: found '$ZSH_DOTENV_FILE' file. Source it? ([Y]es/[n]o/[a]lways/n[e]ver) "
+      echo -n "dotenv: found '$base_dir/$ZSH_DOTENV_FILE' file. Source it? ([Y]es/[n]o/[a]lways/n[e]ver) "
       read -k 1 confirmation
       [[ "$confirmation" = $'\n' ]] || echo
 
@@ -52,16 +54,34 @@ source_env() {
   fi
 
   # test .env syntax
-  zsh -fn $ZSH_DOTENV_FILE || {
-    echo "dotenv: error when sourcing '$ZSH_DOTENV_FILE' file" >&2
+  zsh -fn $base_dir/$ZSH_DOTENV_FILE || {
+    echo "dotenv: error when sourcing '$base_dir/$ZSH_DOTENV_FILE' file" >&2
     return 1
   }
 
   setopt localoptions allexport
-  source $ZSH_DOTENV_FILE
+  source $base_dir/$ZSH_DOTENV_FILE
 }
 
+source_recursive_env() {
+  curr_dir=$PWD
+  paths_to_load=()
+  while [[ "$curr_dir" = "$HOME"* ]]; do
+    if [[ -f "$curr_dir/$ZSH_DOTENV_FILE" ]]; then
+      paths_to_load+=("$curr_dir")
+    fi
+    curr_dir=${curr_dir%/*}
+  done
+  for path_to_load in "${paths_to_load[@]}"; do
+    source_env "$path_to_load"
+  done
+}
 autoload -U add-zsh-hook
-add-zsh-hook chpwd source_env
 
-source_env
+if [[ "$ZSH_DOTENV_RECURSIVE" = true ]]; then
+  add-zsh-hook chpwd source_recursive_env
+  source_recursive_env
+else
+  add-zsh-hook chpwd source_env
+  source_env
+fi
