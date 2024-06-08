@@ -32,7 +32,7 @@ function _configure_eza() {
     _EZA_TAIL+=("--git")
   fi
   if zstyle -t ':omz:plugins:eza' 'icons'; then
-    _EZA_TAIL+=("--icons")
+    _EZA_TAIL+=("--icons=auto")
   fi
   zstyle -s ':omz:plugins:eza' 'time-style' _val
   if [[ $_val ]]; then
