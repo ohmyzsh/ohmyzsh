@@ -80,7 +80,7 @@ EOF
       (*.rar) unrar x -ad "$full_path" ;;
       (*.rpm)
         rpm2cpio "$full_path" | cpio --quiet -id ;;
-      (*.7z) 7za x "$full_path" ;;
+      (*.7z | *.7z.[0-9]*) 7za x "$full_path" ;;
       (*.deb)
         command mkdir -p "control" "data"
         ar vx "$full_path" > /dev/null
