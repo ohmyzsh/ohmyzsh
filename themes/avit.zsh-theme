@@ -15,7 +15,7 @@ __RPROMPT='$(vi_mode_prompt_info)%{$(echotc UP 1)%}$(_git_time_since_commit) $(g
 if [[ -z $RPROMPT ]]; then
   RPROMPT=$__RPROMPT
 else
-  RPROMPT="${RPROMPT} ${__RPROMPT}"  
+  RPROMPT="${RPROMPT} ${__RPROMPT}"
 fi
 
 function _user_host() {

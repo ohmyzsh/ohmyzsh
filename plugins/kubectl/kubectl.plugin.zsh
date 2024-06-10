@@ -180,13 +180,11 @@ alias kej='kubectl edit job'
 alias kdj='kubectl describe job'
 alias kdelj='kubectl delete job'
 
-# Only run if the user actually has kubectl installed
-if (( ${+_comps[kubectl]} )); then
-  function kj() { kubectl "$@" -o json | jq; }
-  function kjx() { kubectl "$@" -o json | fx; }
-  function ky() { kubectl "$@" -o yaml | yh; }
-
-  compdef kj=kubectl
-  compdef kjx=kubectl
-  compdef ky=kubectl
+function kj() { kubectl "$@" -o json | jq; }
+function kjx() { kubectl "$@" -o json | fx; }
+function ky() { kubectl "$@" -o yaml | yh; }
+if (( ${+functions[compdef]} )); then
+  compdef _kubectl kj
+  compdef _kubectl kjx
+  compdef _kubectl ky
 fi

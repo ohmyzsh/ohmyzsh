@@ -90,7 +90,7 @@ use the `ssh-add-args` setting. You can pass multiple arguments separated by spa
 zstyle :omz:plugins:ssh-agent ssh-add-args -K -c -a /run/user/1000/ssh-auth
 ```
 
-These will then be passed the the `ssh-add` call as if written directly. The example
+These will then be passed the `ssh-add` call as if written directly. The example
 above will turn into:
 
 ```zsh

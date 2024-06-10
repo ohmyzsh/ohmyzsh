@@ -43,6 +43,7 @@ To learn more, visit [ohmyz.sh](https://ohmyz.sh), follow [@ohmyzsh](https://twi
   - [Custom Plugins And Themes](#custom-plugins-and-themes)
   - [Enable GNU ls In macOS And freeBSD Systems](#enable-gnu-ls-in-macos-and-freebsd-systems)
   - [Skip Aliases](#skip-aliases)
+  - [Disable async git prompt](#disable-async-git-prompt)
 - [Getting Updates](#getting-updates)
   - [Updates Verbosity](#updates-verbosity)
   - [Manual Updates](#manual-updates)
@@ -88,7 +89,7 @@ Oh My Zsh is installed by running one of the following commands in your terminal
 | **wget**  | `sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`   |
 | **fetch** | `sh -c "$(fetch -o - https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"` |
 
-Alternatively, the installer is also mirrored outside GitHub. Using this URL instead may be required if you're in a country like India or China, that blocks `raw.githubusercontent.com`:
+Alternatively, the installer is also mirrored outside GitHub. Using this URL instead may be required if you're in a country like China or India (for certain ISPs), that blocks `raw.githubusercontent.com`:
 
 | Method    | Command                                                                                           |
 | :-------- | :------------------------------------------------------------------------------------------------ |
@@ -234,7 +235,7 @@ If you're in China, India, or another country that blocks `raw.githubusercontent
 
 #### Installing From A Forked Repository
 
-The install script also accepts these variables to allow installation of a different repository:
+The install script also accepts these variables to allow the installation of a different repository:
 
 - `REPO` (default: `ohmyzsh/ohmyzsh`): this takes the form of `owner/repository`. If you set
   this variable, the installer will look for a repository at `https://github.com/{owner}/{repository}`.
@@ -308,7 +309,7 @@ If you would like to override the functionality of a plugin distributed with Oh 
 
 <a name="enable-gnu-ls"></a>
 
-The default behaviour in Oh My Zsh is to use BSD `ls` in macOS and freeBSD systems. If GNU `ls` is installed
+The default behaviour in Oh My Zsh is to use BSD `ls` in macOS and FreeBSD systems. If GNU `ls` is installed
 (as `gls` command), you can choose to use it instead. To do it, you can use zstyle-based config before
 sourcing `oh-my-zsh.sh`:
 
@@ -341,7 +342,7 @@ zstyle ':omz:plugins:*' aliases no
 zstyle ':omz:plugins:git' aliases no
 ```
 
-You can combine these in other ways taking into account that more specific scopes takes precedence:
+You can combine these in other ways taking into account that more specific scopes take precedence:
 
 ```sh
 # Skip all plugin aliases, except for the git plugin
@@ -359,6 +360,17 @@ Instead, you can now use the following:
 
 ```sh
 zstyle ':omz:lib:directories' aliases no
+```
+
+### Disable async git prompt
+
+Async prompt functions are an experimental feature (included on April 3, 2024) that allows Oh My Zsh to render prompt information
+asynchronously. This can improve prompt rendering performance, but it might not work well with some setups. We hope that's not an
+issue, but if you're seeing problems with this new feature, you can turn it off by setting the following in your .zshrc file,
+before Oh My Zsh is sourced:
+
+```sh
+zstyle ':omz:alpha:lib:git' async-prompt no
 ```
 
 #### Notice <!-- omit in toc -->
@@ -448,6 +460,10 @@ We have (more than) enough themes for the time being. Please add your theme to t
 Oh My Zsh has a vibrant community of happy users and delightful contributors. Without all the time and help from our contributors, it wouldn't be so awesome.
 
 Thank you so much!
+
+<a href="https://github.com/ohmyzsh/ohmyzsh/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=ohmyzsh/ohmyzsh" width="100%"/>
+</a>
 
 ## Follow Us
 

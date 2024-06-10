@@ -15,7 +15,7 @@ plugins=(... terraform)
 
 ## Aliases
 
-| Alias  | Command                  |
+| Alias  | Command                   |
 | ------ | ------------------------- |
 | `tf`   | `terraform`               |
 | `tfa`  | `terraform apply`         |
@@ -28,6 +28,7 @@ plugins=(... terraform)
 | `tfp`  | `terraform plan`          |
 | `tfv`  | `terraform validate`      |
 | `tfs`  | `terraform state`         |
+| `tft`  | `terraform test`          |
 | `tfsh` | `terraform show`          |
 
 

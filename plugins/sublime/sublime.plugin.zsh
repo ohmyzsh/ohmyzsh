@@ -4,7 +4,7 @@ alias st=subl
 alias stt='subl .'
 
 # Define sst only if sudo exists
-(( $+commands[sudo] )) && alias sst='sudo subl'
+(( $+commands[sudo] )) && alias sst='sudo -EH subl'
 
 alias stp=find_project
 alias stn=create_project
@@ -62,7 +62,7 @@ alias stn=create_project
   for _sublime_path in $_sublime_paths; do
     if [[ -a $_sublime_path ]]; then
       alias subl="'$_sublime_path'"
-      (( $+commands[sudo] )) && alias sst="sudo '$_sublime_path'"
+      (( $+commands[sudo] )) && alias sst="sudo -EH '$_sublime_path'"
       break
     fi
   done
