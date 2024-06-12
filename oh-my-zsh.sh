@@ -71,7 +71,7 @@ source "$ZSH/tools/check_for_upgrade.sh"
 # Initializes Oh My Zsh
 
 # add a function path
-fpath=("$ZSH/functions" "$ZSH/completions" $fpath)
+fpath=($ZSH/{functions,completions} $ZSH_CUSTOM/{functions,completions} $fpath)
 
 # Load all stock functions (from $fpath files) called below.
 autoload -U compaudit compinit zrecompile
