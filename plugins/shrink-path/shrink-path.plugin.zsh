@@ -142,8 +142,6 @@ shrink_path () {
 
         [[ -d $dir ]] || return 0
 
-        function join_by { local IFS="$1"; shift; echo "$*"; }
-
         if (( expand )) {
                 echo "$dir"
                 return 0
