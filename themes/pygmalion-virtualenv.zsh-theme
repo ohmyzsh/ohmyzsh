@@ -47,8 +47,8 @@ prompt_pygmalion_precmd(){
   if [[ $prompt_length -gt 40 ]]; then
     nl=$'\n%{\r%}'
   fi
-
-  PROMPT="${base_prompt}\$(git_prompt_info)${nl}${post_prompt}"
 }
 
 prompt_setup_pygmalion
+
+PROMPT="${base_prompt}\$(git_prompt_info)${nl}${post_prompt}"
