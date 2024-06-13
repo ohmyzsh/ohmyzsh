@@ -26,9 +26,6 @@ function tasko () {
   read answer
   if [[ $answer == y* ]] || [[ $answer == Y* ]]; then
     open_command $annotation_desc
-    return 0
-    fi
-    return 1
   fi
   return 0
 }
