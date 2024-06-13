@@ -146,10 +146,10 @@ case $state in
          _arguments ':feature:__task_list'
          ;;
       (test)
-         _files
+         _path_files -X "All tests" -g "test/**/*_test.exs" -g "apps/*/test/**/*_test.exs"
          ;;
       (run)
-         _files
+         _files -g "*.(exs|ex)"
          ;;
     esac
   ;;
