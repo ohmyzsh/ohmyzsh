@@ -25,12 +25,8 @@ function tasko () {
   echo "Open $annotation_desc? [y/n]"
   read answer
   if [[ $answer == y* ]] || [[ $answer == Y* ]]; then
-    if [[ $(uname -s) == "Linux" ]]; then
-      xdg-open $annotation_desc
-      return 0
-    else
-      open $annotation_desc
-      return 0
+    open_command $annotation_desc
+    return 0
     fi
     return 1
   fi
