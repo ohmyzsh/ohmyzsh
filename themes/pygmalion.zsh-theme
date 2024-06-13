@@ -25,8 +25,8 @@ prompt_pygmalion_precmd(){
   local gitinfo_nocolor=${gitinfo//\%\{[^\}]##\}}
   local exp_nocolor="$(print -P \"${base_prompt_nocolor}${gitinfo_nocolor}${post_prompt_nocolor}\")"
   local prompt_length=${#exp_nocolor}
-
-  PROMPT="${base_prompt}\$(git_prompt_info)${post_prompt}"
 }
 
 prompt_setup_pygmalion
+
+PROMPT="${base_prompt}\$(git_prompt_info)${post_prompt}"
