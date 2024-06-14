@@ -57,6 +57,12 @@ esac
 : ${AGNOSTER_GIT_DIRTY_FG:=black}
 : ${AGNOSTER_GIT_DIRTY_BG:=yellow}
 
+# Bazaar related
+: ${AGNOSTER_BZR_CLEAN_FG:=${CURRENT_FG}}
+: ${AGNOSTER_BZR_CLEAN_BG:=green}
+: ${AGNOSTER_BZR_DIRTY_FG:=black}
+: ${AGNOSTER_BZR_DIRTY_BG:=yellow}
+
 # Mercurial related
 : ${AGNOSTER_HG_NEWFILE_FG:=white}
 : ${AGNOSTER_HG_NEWFILE_BG:=red}
@@ -68,6 +74,12 @@ esac
 # VirtualEnv colors
 : ${AGNOSTER_VENV_FG:=black}
 : ${AGNOSTER_VENV_BG:=blue}
+
+# AWS Profile colors
+: ${AGNOSTER_AWS_PROD_FG:=yellow}
+: ${AGNOSTER_AWS_PROD_BG:=red}
+: ${AGNOSTER_AWS_FG:=black}
+: ${AGNOSTER_AWS_BG:=green}
 
 # Status symbols
 : ${AGNOSTER_STATUS_RETVAL_FG:=red}
@@ -236,12 +248,12 @@ prompt_bzr() {
     status_all=$(echo -n "$bzr_status" | head -n1 | wc -m)
     revision=${$(command bzr log -r-1 --log-format line | cut -d: -f1):gs/%/%%}
     if [[ $status_mod -gt 0 ]] ; then
-      prompt_segment yellow black "bzr@$revision ✚"
+      prompt_segment "$AGNOSTER_BZR_DIRTY_BG" "$AGNOSTER_BZR_DIRTY_FG" "bzr@$revision ✚"
     else
       if [[ $status_all -gt 0 ]] ; then
-        prompt_segment yellow black "bzr@$revision"
+        prompt_segment "$AGNOSTER_BZR_DIRTY_BG" "$AGNOSTER_BZR_DIRTY_FG" "bzr@$revision"
       else
-        prompt_segment green black "bzr@$revision"
+        prompt_segment "$AGNOSTER_BZR_CLEAN_BG" "$AGNOSTER_BZR_CLEAN_FG" "bzr@$revision"
       fi
     fi
   fi
@@ -326,8 +338,8 @@ prompt_status() {
 prompt_aws() {
   [[ -z "$AWS_PROFILE" || "$SHOW_AWS_PROMPT" = false ]] && return
   case "$AWS_PROFILE" in
-    *-prod|*production*) prompt_segment red yellow  "AWS: ${AWS_PROFILE:gs/%/%%}" ;;
-    *) prompt_segment green black "AWS: ${AWS_PROFILE:gs/%/%%}" ;;
+    *-prod|*production*) prompt_segment "$AGNOSTER_AWS_PROD_BG" "$AGNOSTER_AWS_PROD_FG"  "AWS: ${AWS_PROFILE:gs/%/%%}" ;;
+    *) prompt_segment "$AGNOSTER_AWS_BG" "$AGNOSTER_AWS_FG" "AWS: ${AWS_PROFILE:gs/%/%%}" ;;
   esac
 }
 
