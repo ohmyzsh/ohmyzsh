@@ -29,13 +29,22 @@
 # jobs are running in this shell will all be displayed automatically when
 # appropriate.
 
+### Segment drawing
+# A few utility functions to make it easy and re-usable to draw segmented prompts
+
+CURRENT_BG='NONE'
+
+case ${SOLARIZED_THEME:-dark} in
+    light) CURRENT_FG='white';;
+    *)     CURRENT_FG='black';;
+esac
 
 ### Theme Configuration Initialization
 #
 # Override these settings in your ~/.zshrc
 
 # Current working directory
-: ${AGNOSTER_DIR_FG:=black}
+: ${AGNOSTER_DIR_FG:=${CURRENT_FG}}
 : ${AGNOSTER_DIR_BG:=blue}
 
 # user@host
@@ -43,7 +52,7 @@
 : ${AGNOSTER_CONTEXT_BG:=black}
 
 # Git related
-: ${AGNOSTER_GIT_CLEAN_FG:=black}
+: ${AGNOSTER_GIT_CLEAN_FG:=${CURRENT_FG}}
 : ${AGNOSTER_GIT_CLEAN_BG:=green}
 : ${AGNOSTER_GIT_DIRTY_FG:=black}
 : ${AGNOSTER_GIT_DIRTY_BG:=yellow}
@@ -53,7 +62,7 @@
 : ${AGNOSTER_HG_NEWFILE_BG:=red}
 : ${AGNOSTER_HG_CHANGED_FG:=black}
 : ${AGNOSTER_HG_CHANGED_BG:=yellow}
-: ${AGNOSTER_HG_CLEAN_FG:=black}
+: ${AGNOSTER_HG_CLEAN_FG:=${CURRENT_FG}}
 : ${AGNOSTER_HG_CLEAN_BG:=green}
 
 # VirtualEnv colors
@@ -72,16 +81,6 @@
 # Show git working dir in the style "/git/root   master  relative/dir" instead of "/git/root/relative/dir   master"
 : ${AGNOSTER_GIT_INLINE:=false}
 
-
-### Segment drawing
-# A few utility functions to make it easy and re-usable to draw segmented prompts
-
-CURRENT_BG='NONE'
-
-case ${SOLARIZED_THEME:-dark} in
-    light) CURRENT_FG='white';;
-    *)     CURRENT_FG='black';;
-esac
 
 # Special Powerline characters
 
