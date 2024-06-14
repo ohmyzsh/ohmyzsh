@@ -80,6 +80,8 @@ esac
 : ${AGNOSTER_STATUS_RETVAL_NUMERIC:=false}
 # Show git working dir in the style "/git/root   master  relative/dir" instead of "/git/root/relative/dir   master"
 : ${AGNOSTER_GIT_INLINE:=false}
+# Show the git branch status in the prompt rather than the generic branch symbol
+: ${AGNOSTER_GIT_BRANCH_STATUS:=true}
 
 
 # Special Powerline characters
@@ -181,15 +183,17 @@ prompt_git() {
       prompt_segment "$AGNOSTER_GIT_CLEAN_BG" "$AGNOSTER_GIT_CLEAN_FG"
     fi
 
-    local ahead behind
-    ahead=$(command git log --oneline @{upstream}.. 2>/dev/null)
-    behind=$(command git log --oneline ..@{upstream} 2>/dev/null)
-    if [[ -n "$ahead" ]] && [[ -n "$behind" ]]; then
-      PL_BRANCH_CHAR=$'\u21c5'
-    elif [[ -n "$ahead" ]]; then
-      PL_BRANCH_CHAR=$'\u21b1'
-    elif [[ -n "$behind" ]]; then
-      PL_BRANCH_CHAR=$'\u21b0'
+    if [[ $AGNOSTER_GIT_BRANCH_STATUS == 'true' ]]; then
+      local ahead behind
+      ahead=$(command git log --oneline @{upstream}.. 2>/dev/null)
+      behind=$(command git log --oneline ..@{upstream} 2>/dev/null)
+      if [[ -n "$ahead" ]] && [[ -n "$behind" ]]; then
+        PL_BRANCH_CHAR=$'\u21c5'
+      elif [[ -n "$ahead" ]]; then
+        PL_BRANCH_CHAR=$'\u21b1'
+      elif [[ -n "$behind" ]]; then
+        PL_BRANCH_CHAR=$'\u21b0'
+      fi
     fi
 
     if [[ -e "${repo_path}/BISECT_LOG" ]]; then
