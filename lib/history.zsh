@@ -9,7 +9,7 @@ function omz_history {
 
     # confirm action before deleting history
     print -nu2 "This action will irreversibly delete your command history. Are you sure? [y/N] "
-    builtin read
+    builtin read -E
     [[ "$REPLY" = [yY] ]] || return 0
 
     print -nu2 >| "$HISTFILE"
