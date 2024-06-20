@@ -114,6 +114,8 @@ prompt_git() {
     ref="➦ $(command git rev-parse --short HEAD 2> /dev/null)"
     if [[ -n $dirty ]]; then
       prompt_segment yellow black
+    elif [[ "$(git config --get oh-my-zsh.hide-dirty 2>/dev/null)" = 1 ]]; then
+      prompt_segment white black
     else
       prompt_segment green $CURRENT_FG
     fi
@@ -142,7 +144,11 @@ prompt_git() {
 
     zstyle ':vcs_info:*' enable git
     zstyle ':vcs_info:*' get-revision true
-    zstyle ':vcs_info:*' check-for-changes true
+    if [[ -z $dirty ]]; then
+      zstyle ':vcs_info:*' check-for-staged-changes true
+    else
+      zstyle ':vcs_info:*' check-for-changes true
+    fi
     zstyle ':vcs_info:*' stagedstr '✚'
     zstyle ':vcs_info:*' unstagedstr '±'
     zstyle ':vcs_info:*' formats ' %u%c'
