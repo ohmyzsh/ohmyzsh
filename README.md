@@ -88,6 +88,8 @@ Oh My Zsh is installed by running one of the following commands in your terminal
 | **curl**  | `sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"` |
 | **wget**  | `sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`   |
 | **fetch** | `sh -c "$(fetch -o - https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"` |
+| **[Fig](https://fig.io/)** | <a href="https://fig.io/plugins/other/ohmyzsh" target="_blank"><img src="https://fig.io/badges/install-with-fig.svg" /></a>|
+
 
 Alternatively, the installer is also mirrored outside GitHub. Using this URL instead may be required if you're in a country like China or India (for certain ISPs), that blocks `raw.githubusercontent.com`:
 
