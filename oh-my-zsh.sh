@@ -48,13 +48,15 @@ omz_f() {
 unset -f omz_f
 
 # If ZSH is not defined, use the current script's directory.
-[[ -z "$ZSH" ]] && export ZSH="${${(%):-%x}:a:h}"
+[[ -n "$ZSH" ]] || export ZSH="${${(%):-%x}:a:h}"
+
+# Set ZSH_CUSTOM to the path where your custom config files
+# and plugins exists, or else we will use the default custom/
+[[ -n "$ZSH_CUSTOM" ]] || ZSH_CUSTOM="$ZSH/custom"
 
 # Set ZSH_CACHE_DIR to the path where cache files should be created
 # or else we will use the default cache/
-if [[ -z "$ZSH_CACHE_DIR" ]]; then
-  ZSH_CACHE_DIR="$ZSH/cache"
-fi
+[[ -n "$ZSH_CACHE_DIR" ]] || ZSH_CACHE_DIR="$ZSH/cache"
 
 # Make sure $ZSH_CACHE_DIR is writable, otherwise use a directory in $HOME
 if [[ ! -w "$ZSH_CACHE_DIR" ]]; then
@@ -75,12 +77,6 @@ fpath=($ZSH/{functions,completions} $ZSH_CUSTOM/{functions,completions} $fpath)
 
 # Load all stock functions (from $fpath files) called below.
 autoload -U compaudit compinit zrecompile
-
-# Set ZSH_CUSTOM to the path where your custom config files
-# and plugins exists, or else we will use the default custom/
-if [[ -z "$ZSH_CUSTOM" ]]; then
-    ZSH_CUSTOM="$ZSH/custom"
-fi
 
 is_plugin() {
   local base_dir=$1
