@@ -164,6 +164,7 @@ alias gcp='git cherry-pick'
 alias gcpa='git cherry-pick --abort'
 alias gcpc='git cherry-pick --continue'
 alias gclean='git clean --interactive -d'
+alias gcfx='git commit --fixup'
 alias gcl='git clone --recurse-submodules'
 
 function gccd() {
@@ -236,6 +237,7 @@ alias glol='git log --graph --pretty="%Cred%h%Creset -%C(auto)%d%Creset %s %Cgre
 alias glo='git log --oneline --decorate'
 alias glog='git log --oneline --decorate --graph'
 alias gloga='git log --oneline --decorate --graph --all'
+alias glom='git log --oneline --decorate --color $(git_main_branch)..'
 
 # Pretty log messages
 function _git_log_prettily(){
@@ -336,6 +338,8 @@ alias grbs='git rebase --skip'
 alias grbd='git rebase $(git_develop_branch)'
 alias grbm='git rebase $(git_main_branch)'
 alias grbom='git rebase origin/$(git_main_branch)'
+alias grbmi='git rebase $(git_main_branch) --interactive'
+alias grbmia='git rebase $(git_main_branch) --interactive --autosquash'
 alias grf='git reflog'
 alias gr='git remote'
 alias grv='git remote --verbose'
@@ -380,6 +384,7 @@ alias gss='git status --short'
 alias gsb='git status --short --branch'
 alias gsi='git submodule init'
 alias gsu='git submodule update'
+alias gsuri='git submodule update --recursive --init'
 alias gsd='git svn dcommit'
 alias git-svn-dcommit-push='git svn dcommit && git push github $(git_main_branch):svntrunk'
 alias gsr='git svn rebase'
