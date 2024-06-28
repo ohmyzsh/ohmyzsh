@@ -54,13 +54,13 @@ alias kgpl='kgp -l'
 alias kgpn='kgp -n'
 
 # Service management.
-alias kgs='kubectl get svc'
-alias kgsa='kubectl get svc --all-namespaces'
-alias kgsw='kgs --watch'
-alias kgswide='kgs -o wide'
-alias kes='kubectl edit svc'
-alias kds='kubectl describe svc'
-alias kdels='kubectl delete svc'
+alias kgsvc='kubectl get svc'
+alias kgsvca='kubectl get svc --all-namespaces'
+alias kgsvcw='kgsvc --watch'
+alias kgsvcwide='kgsvc -o wide'
+alias kesvc='kubectl edit svc'
+alias kdsvc='kubectl describe svc'
+alias kdelsvc='kubectl delete svc'
 
 # Ingress management
 alias kgi='kubectl get ingress'
@@ -157,6 +157,11 @@ alias kdpvc='kubectl describe pvc'
 alias kdelpvc='kubectl delete pvc'
 
 # Service account management.
+alias kgsa="kubectl get sa"
+alias kgsaa="kubectl get sa --all-namespaces"
+alias kgsaw="kgsa --watch"
+alias kgsawide="kgsa -o wide"
+alias kesa="kubectl edit sa"
 alias kdsa="kubectl describe sa"
 alias kdelsa="kubectl delete sa"
 
