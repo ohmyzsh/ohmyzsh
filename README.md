@@ -44,6 +44,7 @@ To learn more, visit [ohmyz.sh](https://ohmyz.sh), follow [@ohmyzsh](https://twi
   - [Enable GNU ls In macOS And freeBSD Systems](#enable-gnu-ls-in-macos-and-freebsd-systems)
   - [Skip Aliases](#skip-aliases)
   - [Disable async git prompt](#disable-async-git-prompt)
+  - [Specifying a Subexecutor](#specifying-a-subexecutor)
 - [Getting Updates](#getting-updates)
   - [Updates Verbosity](#updates-verbosity)
   - [Manual Updates](#manual-updates)
@@ -381,6 +382,39 @@ zstyle ':omz:alpha:lib:git' async-prompt no
 
 > It is also not currently aware of "aliases" that are defined as functions. Example of such
 > are `gccd`, `ggf`, or `ggl` functions from the git plugin.
+
+
+### Specifying a Subexecutor
+
+A ***subexecutor*** is a tool that can execute other programs as if running using a different user, usually as `EUID=0` (`root`).
+
+The most well-known subexecutor is probably the `sudo` tool; however, `sudo` is not the only subexecutor tool available. In addition, `sudo` is only available for the Gnu/Linux operating system.
+
+Users of *BSD operating systems usually just use either the `su` tool or the `doas` tool; the latter is now also available for Gnu/Linux through the [OpenDoas](https://github.com/Duncaen/OpenDoas) package.
+
+By default, Oh My Zsh will try to automatically detect which subexecutor is in use (prioritizing detection of `doas` over `sudo`). However, you can explicitly specify which subexecutor you want to use using the following:
+
+```sh
+zstyle ':omz' subexecutor $SUBEXECUTOR
+
+# For example, if you want to use sudo as the subexecutor regardless of the result of detection, specify:
+zstyle ':omz' subexecutor sudo
+```
+
+To allow flexibility/transparency, a function `subex` is provided. With this function, you can invoke the subexecutor without needing to know which subexecutor is available on the system; this will be very helpful for instance if you are writing plugins for Oh My Zsh.
+
+```sh
+# Example of editing a root-only-editable file
+subex vim /etc/hosts
+
+# Example of creating a new user
+subex useradd -m -s $(which zsh) user2
+```
+
+Do note that the `subex` function is a thin wrapper around the subexecutor: it passes all arguments to the subexecutor without any processing; it is not meant to be a compatibility thunking layer between the various subexecutor tools available. Care must still be taken if you need to use subexecutor-specific options because what's available for one subexecutor might not be available for the other subexecutors.
+
+The `subex` function dynamically adjusts to in-session changes of `zstyle ':omz' subexecutor` value.
+
 
 ## Getting Updates
 
