@@ -59,6 +59,7 @@ plugins=(... git)
 | `gcpc`                 | `git cherry-pick --continue`                                                                                                    |
 | `gclean`               | `git clean --interactive -d`                                                                                                    |
 | `gcl`                  | `git clone --recurse-submodules`                                                                                                |
+| `gclf`                 | `git clone --recursive --shallow-submodules --filter=blob:none --also-filter-submodules`                                        |
 | `gccd`                 | `git clone --recurse-submodules "$@" && cd "$(basename $\_ .git)"`                                                              |
 | `gcam`                 | `git commit --all --message`                                                                                                    |
 | `gcas`                 | `git commit --all --signoff`                                                                                                    |
@@ -111,7 +112,7 @@ plugins=(... git)
 | `gfg`                  | `git ls-files \| grep`                                                                                                          |
 | `gm`                   | `git merge`                                                                                                                     |
 | `gma`                  | `git merge --abort`                                                                                                             |
-| `gmc`                  | `git merge --continue`                                                                                                             |
+| `gmc`                  | `git merge --continue`                                                                                                          |
 | `gms`                  | `git merge --squash`                                                                                                            |
 | `gmom`                 | `git merge origin/$(git_main_branch)`                                                                                           |
 | `gmum`                 | `git merge upstream/$(git_main_branch)`                                                                                         |
