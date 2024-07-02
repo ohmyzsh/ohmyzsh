@@ -15,6 +15,9 @@ kubectl completion zsh 2> /dev/null >| "$ZSH_CACHE_DIR/completions/_kubectl" &|
 # This command is used a LOT both below and in daily life
 alias k=kubectl
 
+# General purpose get for the resources which don't have aliases like custom resources.
+alias kg=kubectl get
+
 # Execute a kubectl command against all namespaces
 alias kca='_kca(){ kubectl "$@" --all-namespaces;  unset -f _kca; }; _kca'
 
