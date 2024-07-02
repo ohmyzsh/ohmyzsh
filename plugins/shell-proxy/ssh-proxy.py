@@ -21,8 +21,12 @@ if parsed.scheme not in proxy_protocols:
     raise TypeError('unsupported proxy protocol: "{}"'.format(parsed.scheme))
 
 def make_argv():
-    yield "nc"
-    if sys.platform in {'linux', 'cygwin'}:
+    if sys.platform == 'darwin':
+        # 'nc' in $PATH may be installed by homebrew, if without path
+        yield "/usr/bin/nc"
+    else:
+        yield "nc"
+    if sys.platform in {'linux', 'cygwin', 'darwin'}:
         # caveats: the built-in netcat of most linux distributions and cygwin support proxy type
         # caveats: macOS built-in netcat command not supported proxy-type
         yield "-X" # --proxy-type
