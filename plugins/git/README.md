@@ -53,6 +53,7 @@ plugins=(... git)
 | `gcb`                  | `git checkout -b`                                                                                                               |
 | `gcB`                  | `git checkout -B`                                                                                                               |
 | `gcd`                  | `git checkout $(git_develop_branch)`                                                                                            |
+| `gcL`                  | `git checkout -`                                                                                                                |
 | `gcm`                  | `git checkout $(git_main_branch)`                                                                                               |
 | `gcp`                  | `git cherry-pick`                                                                                                               |
 | `gcpa`                 | `git cherry-pick --abort`                                                                                                       |
