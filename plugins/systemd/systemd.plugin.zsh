@@ -93,6 +93,9 @@ alias scu-enable-now="scu-enable --now"
 alias scu-disable-now="scu-disable --now"
 alias scu-mask-now="scu-mask --now"
 
+# --failed commands
+alias scu-failed='systemctl --user --failed'
+alias sc-failed='systemctl --failed'
 
 function systemd_prompt_info {
   local unit
@@ -106,6 +109,8 @@ function systemd_prompt_info {
     fi
 
     if systemctl is-active "$unit" &>/dev/null; then
+      echo -n "$ZSH_THEME_SYSTEMD_PROMPT_ACTIVE"
+    elif systemctl --user is-active "$unit" &>/dev/null; then
       echo -n "$ZSH_THEME_SYSTEMD_PROMPT_ACTIVE"
     else
       echo -n "$ZSH_THEME_SYSTEMD_PROMPT_NOTACTIVE"

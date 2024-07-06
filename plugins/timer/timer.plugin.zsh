@@ -23,9 +23,12 @@ __timer_display_timer_precmd() {
     local tdiff=$((cmd_end_time - __timer_cmd_start_time))
     unset __timer_cmd_start_time
     if [[ -z "${TIMER_THRESHOLD}" || ${tdiff} -ge "${TIMER_THRESHOLD}" ]]; then
+      local last_cmd="${history[$((HISTCMD - 1))]%% *}"
+      if [[ "$last_cmd" != clear ]]; then
         local tdiffstr=$(__timer_format_duration ${tdiff})
         local cols=$((COLUMNS - ${#tdiffstr} - 1))
         echo -e "\033[1A\033[${cols}C ${tdiffstr}"
+      fi 
     fi
   fi
 }

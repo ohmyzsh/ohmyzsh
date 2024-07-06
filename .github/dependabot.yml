@@ -1,0 +1,12 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: "weekly"
+      day: "sunday"
+  - package-ecosystem: "pip"
+    directory: "/.github/workflows/dependencies"
+    schedule:
+      interval: "weekly"
+      day: "sunday"
