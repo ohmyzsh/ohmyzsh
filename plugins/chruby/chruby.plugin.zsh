@@ -20,7 +20,7 @@ _source-from-homebrew() {
 
   local _brew_prefix
   # check default brew prefix
-  if [[ -h /usr/local/opt/chruby ]];then
+  if [[ -L /usr/local/opt/chruby ]];then
     _brew_prefix="/usr/local/opt/chruby"
   else
     # ok , it is not default prefix

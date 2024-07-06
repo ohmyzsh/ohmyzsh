@@ -131,7 +131,7 @@ function _omz_diag_dump_one_big_text() {
           sha_str=$sha_str[1]
           extra_str+=" SHA $sha_str"
         fi
-        if [[ -h "$progfile" ]]; then
+        if [[ -L "$progfile" ]]; then
           extra_str+=" ( -> ${progfile:A} )"
         fi
       fi
@@ -199,7 +199,7 @@ function _omz_diag_dump_one_big_text() {
   builtin echo
   if [[ -e $ZSH_CUSTOM ]]; then
     local custom_dir=$ZSH_CUSTOM
-    if [[ -h $custom_dir ]]; then
+    if [[ -L $custom_dir ]]; then
       custom_dir=$(builtin cd $custom_dir && pwd -P)
     fi
     builtin echo "oh-my-zsh custom dir:"
@@ -309,9 +309,9 @@ function _omz_diag_dump_check_core_commands() {
 
 function _omz_diag_dump_echo_file_w_header() {
   local file=$1
-  if [[ ( -f $file || -h $file ) ]]; then
+  if [[ ( -f $file || -L $file ) ]]; then
     builtin echo "========== $file =========="
-    if [[ -h $file ]]; then
+    if [[ -L $file ]]; then
       builtin echo "==========    ( => ${file:A} )   =========="
     fi
     command cat $file

@@ -18,7 +18,7 @@ function _rbfu_rubies_print() {
   rb_out="$rb"
 
   # If the ruby is a symlink, add @ to the name.
-  if [[ -h "$1" ]]; then
+  if [[ -L "$1" ]]; then
     rb_out="${rb_out}${fg[green]}@${reset_color}"
   fi
 
