@@ -38,6 +38,9 @@ function _configure_eza() {
   if [[ $_val ]]; then
     _EZA_TAIL+=("--time-style='$_val'")
   fi
+  if zstyle -t ":omz:plugins:eza" "hyperlink"; then
+    _EZA_TAIL+=("--hyperlink")
+  fi
 }
 
 _configure_eza
