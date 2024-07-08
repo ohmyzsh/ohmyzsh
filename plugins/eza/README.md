@@ -90,6 +90,16 @@ Sets the `--time-style` option of `eza`. (See `man eza` for the options)
 
 Default: Not set, which means the default behavior of `eza` will take place.
 
+### `hyperlink`
+
+```zsh
+zstyle ':omz:plugins:eza' 'header' yes|no
+```
+
+If `yes`, always add `--hyperlink` flag to create hyperlink with escape codes.
+
+Default: `no`
+
 ## Aliases
 
 **Notes:**
