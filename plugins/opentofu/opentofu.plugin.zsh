@@ -2,14 +2,20 @@
 autoload -Uz bashcompinit && bashcompinit
 complete -C tofu tofu
 
-# tofu prompt functions
+# tofu workspace prompt function
 function tofu_prompt_info() {
-  # dont show 'default' workspace in home dir
-  [[ "$PWD" != ~ ]] || return
-  # to keep compatibility with opentofu, the data dir names .terraform in OpenTofu
-  [[ -d .terraform && -r .terraform/environment ]] || return
+  # only show the workspace name if we're in an opentofu project
+  # i.e. if a .terraform directory exists within the hierarchy
+  local dir="$PWD"
+  while [[ ! -d "${dir}/.terraform" ]]; do
+    [[ "$dir" != / ]] || return 0 # stop at the root directory
+    dir="${dir:h}"                # get the parent directory
+  done
 
-  local workspace="$(< .terraform/environment)"
+  # workspace might be different than the .terraform/environment file
+  # for example, if set with the TF_WORKSPACE environment variable
+  local workspace="$(tofu workspace show)"
+  # make sure to escape % signs in the workspace name to prevent command injection
   echo "${ZSH_THEME_TOFU_PROMPT_PREFIX-[}${workspace:gs/%/%%}${ZSH_THEME_TOFU_PROMPT_SUFFIX-]}"
 }
 
