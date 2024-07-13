@@ -33,21 +33,26 @@ plugins=(... opentofu)
 | `ttws`| `tofu workspace`|
 
 
-## Prompt function
+## Prompt functions
 
-You can add the current OpenTofu workspace in your prompt by adding `$(tofu_prompt_info)`,
-`$(tofu_version_prompt_info)` to your `PROMPT` or `RPROMPT` variable.
+- `tofu_prompt_info`: shows the current workspace when in an OpenTofu project directory.
+
+- `tofu_version_prompt_info`: shows the current version of the `tofu` commmand.
+
+To use them, add them to a `PROMPT` variable in your theme or `.zshrc` file:
 
 ```sh
-RPROMPT='$(tofu_prompt_info)'
+PROMPT='$(tofu_prompt_info)'
 RPROMPT='$(tofu_version_prompt_info)'
 ```
 
-You can also specify the PREFIX and SUFFIX for the workspace with the following variables:
+You can also specify the PREFIX and SUFFIX strings for both functions, with the following variables:
 
 ```sh
+# for tofu_prompt_info
 ZSH_THEME_TOFU_PROMPT_PREFIX="%{$fg[white]%}"
 ZSH_THEME_TOFU_PROMPT_SUFFIX="%{$reset_color%}"
+# for tofu_version_prompt_info
 ZSH_THEME_TOFU_VERSION_PROMPT_PREFIX="%{$fg[white]%}"
 ZSH_THEME_TOFU_VERSION_PROMPT_SUFFIX="%{$reset_color%}"
 ```
