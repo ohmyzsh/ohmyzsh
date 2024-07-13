@@ -19,9 +19,11 @@ function tofu_prompt_info() {
   echo "${ZSH_THEME_TOFU_PROMPT_PREFIX-[}${workspace:gs/%/%%}${ZSH_THEME_TOFU_PROMPT_SUFFIX-]}"
 }
 
+# tofu version prompt function
 function tofu_version_prompt_info() {
-  local tofu_version
-  tofu_version=$(tofu --version | head -n 1 | cut -d ' ' -f 2)
+  # get the output of `tofu --version` in a single line, and get the second word after splitting by a space
+  local tofu_version=${${(s: :)$(tofu --version)}[2]}
+  # make sure to escape % signs in the version string to prevent command injection
   echo "${ZSH_THEME_TOFU_VERSION_PROMPT_PREFIX-[}${tofu_version:gs/%/%%}${ZSH_THEME_TOFU_VERSION_PROMPT_SUFFIX-]}"
 }
 
