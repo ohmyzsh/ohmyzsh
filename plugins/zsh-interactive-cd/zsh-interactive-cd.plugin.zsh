@@ -1,4 +1,10 @@
-# Copyright (c) 2017 Henry Chang
+#!/usr/bin/env zsh
+#
+# Copyright 2017-2018 Henry Chang
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 __zic_fzf_prog() {
   [ -n "$TMUX_PANE" ] && [ "${FZF_TMUX:-0}" != 0 ] && [ ${LINES:-40} -gt 15 ] \
@@ -17,7 +23,7 @@ __zic_matched_subdir_list() {
       length=0
     fi
     find -L "$dir" -mindepth 1 -maxdepth 1 -type d 2>/dev/null \
-        | cut -b $(( ${length} + 2 ))- | sed '/^$/d' | while read -r line; do
+        | cut -b $(( ${length} + 2 ))- | command sed '/^$/d' | while read -r line; do
       if [[ "${line[1]}" == "." ]]; then
         continue
       fi
@@ -32,13 +38,19 @@ __zic_matched_subdir_list() {
     seg=$(basename -- "$1")
     starts_with_dir=$( \
       find -L "$dir" -mindepth 1 -maxdepth 1 -type d \
-          2>/dev/null | cut -b $(( ${length} + 2 ))- | sed '/^$/d' \
+          2>/dev/null | cut -b $(( ${length} + 2 ))- | command sed '/^$/d' \
           | while read -r line; do
         if [[ "${seg[1]}" != "." && "${line[1]}" == "." ]]; then
           continue
         fi
-        if [[ "$line" == "$seg"* ]]; then
-          echo "$line"
+        if [ "$zic_case_insensitive" = "true" ]; then
+          if [[ "$line:u" == "$seg:u"* ]]; then
+            echo "$line"
+          fi
+        else
+          if [[ "$line" == "$seg"* ]]; then
+            echo "$line"
+          fi
         fi
       done
     )
@@ -46,16 +58,33 @@ __zic_matched_subdir_list() {
       echo "$starts_with_dir"
     else
       find -L "$dir" -mindepth 1 -maxdepth 1 -type d \
-          2>/dev/null | cut -b $(( ${length} + 2 ))- | sed '/^$/d' \
+          2>/dev/null | cut -b $(( ${length} + 2 ))- | command sed '/^$/d' \
           | while read -r line; do
         if [[ "${seg[1]}" != "." && "${line[1]}" == "." ]]; then
           continue
         fi
-        if [[ "$line" == *"$seg"* ]]; then
-          echo "$line"
+        if [ "$zic_case_insensitive" = "true" ]; then
+          if [[ "$line:u" == *"$seg:u"* ]]; then
+            echo "$line"
+          fi
+        else
+          if [[ "$line" == *"$seg"* ]]; then
+            echo "$line"
+          fi
         fi
       done
     fi
+  fi
+}
+
+__zic_fzf_bindings() {
+  autoload is-at-least
+  fzf=$(__zic_fzf_prog)
+
+  if $(is-at-least '0.21.0' $(${=fzf} --version)); then
+    echo 'shift-tab:up,tab:down,bspace:backward-delete-char/eof'
+  else
+    echo 'shift-tab:up,tab:down'
   fi
 }
 
@@ -75,6 +104,7 @@ _zic_complete() {
   fi
 
   fzf=$(__zic_fzf_prog)
+  fzf_bindings=$(__zic_fzf_bindings)
 
   if [ $(echo $l | wc -l) -eq 1 ]; then
     matches=${(q)l}
@@ -82,7 +112,7 @@ _zic_complete() {
     matches=$(echo $l \
         | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} \
           --reverse $FZF_DEFAULT_OPTS $FZF_COMPLETION_OPTS \
-          --bind 'shift-tab:up,tab:down'" ${=fzf} \
+          --bind '${fzf_bindings}'" ${=fzf} \
         | while read -r item; do
       echo -n "${(q)item} "
     done)
@@ -144,5 +174,7 @@ zic-completion() {
 }
 
 zle -N zic-completion
-bindkey -M emacs '^I' zic-completion
-bindkey -M viins '^I' zic-completion
+if [ -z $zic_custom_binding ]; then
+  zic_custom_binding='^I'
+fi
+bindkey "${zic_custom_binding}" zic-completion

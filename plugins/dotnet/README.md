@@ -17,7 +17,9 @@ plugins=(... dotnet)
 | dt    | dotnet test      | Run unit tests using the test runner specified in a .NET project. |
 | dw    | dotnet watch     | Watch for source file changes and restart the dotnet command.     |
 | dwr   | dotnet watch run | Watch for source file changes and restart the `run` command.      |
+| dwt   | dotnet watch test| Watch for source file changes and restart the `test` command.     |
 | ds    | dotnet sln       | Modify Visual Studio solution files.                              |
 | da    | dotnet add       | Add a package or reference to a .NET project.                     |
 | dp    | dotnet pack      | Create a NuGet package.                                           |
 | dng   | dotnet nuget     | Provides additional NuGet commands.                               |
+| db    | dotnet build     | Build a .NET project                                              |

@@ -11,18 +11,15 @@ if [[ ! -x "${commands[gwhoami]}" ]]; then
 fi
 
 __gnu_utils() {
-  emulate -L zsh
-  local gcmds
+  local -a gcmds
   local gcmd
-  local cmd
-  local prefix
 
-  # coreutils 
+  # coreutils
   gcmds=('g[' 'gbase64' 'gbasename' 'gcat' 'gchcon' 'gchgrp' 'gchmod'
   'gchown' 'gchroot' 'gcksum' 'gcomm' 'gcp' 'gcsplit' 'gcut' 'gdate'
   'gdd' 'gdf' 'gdir' 'gdircolors' 'gdirname' 'gdu' 'gecho' 'genv' 'gexpand'
   'gexpr' 'gfactor' 'gfalse' 'gfmt' 'gfold' 'ggroups' 'ghead' 'ghostid'
-  'gid' 'ginstall' 'gjoin' 'gkill' 'glink' 'gln' 'glogname' 'gls' 'gmd5sum'
+  'gid' 'gindent' 'ginstall' 'gjoin' 'gkill' 'glink' 'gln' 'glogname' 'gls' 'gmd5sum'
   'gmkdir' 'gmkfifo' 'gmknod' 'gmktemp' 'gmv' 'gnice' 'gnl' 'gnohup' 'gnproc'
   'god' 'gpaste' 'gpathchk' 'gpinky' 'gpr' 'gprintenv' 'gprintf' 'gptx' 'gpwd'
   'greadlink' 'grm' 'grmdir' 'gruncon' 'gseq' 'gsha1sum' 'gsha224sum'
@@ -36,48 +33,42 @@ __gnu_utils() {
   gcmds+=('gfind' 'gxargs' 'glocate')
 
   # Not part of either coreutils or findutils, installed separately.
-  gcmds+=('gsed' 'gtar' 'gtime' 'gmake')
+  gcmds+=('gsed' 'gtar' 'gtime' 'gmake' 'ggrep')
+
+  # can be built optionally
+  gcmds+=('ghostname')
 
   for gcmd in "${gcmds[@]}"; do
     # Do nothing if the command isn't found
     (( ${+commands[$gcmd]} )) || continue
-    
+
     # This method allows for builtin commands to be primary but it's
-    # lost if hash -r or rehash -f is executed. Thus, those two 
-    # functions have to be wrapped.
+    # lost if hash -r or rehash is executed, or if $PATH is updated.
+    # Thus, a preexec hook is needed, which will only run if whoami
+    # is not already rehashed.
     #
     hash ${gcmd[2,-1]}=${commands[$gcmd]}
-
-    # This method generates wrapper functions.
-    # It will override shell builtins.
-    #
-    # eval "function $gcmd[2,-1]() { \"${prefix}/${gcmd//"["/"\\["}\" \"\$@\"; }"
-
-    # This method is inflexible since the aliases are at risk of being
-    # overridden resulting in the BSD coreutils being called.
-    #
-    # alias "$gcmd[2,-1]"="${prefix}/${gcmd//"["/"\\["}"
   done
 
   return 0
 }
-__gnu_utils
 
-function hash() {
-  if [[ "$*" =~ "-(r|f)" ]]; then
-    builtin hash "$@"
-    __gnu_utils
-  else
-    builtin hash "$@"
-  fi
+__gnu_utils_preexec() {
+  # Run __gnu_utils when the whoami command is not already rehashed.
+  # This acts as a sign that we need to rehash all GNU utils.
+  [[ "${commands[whoami]}" = "${commands[gwhoami]}" ]] || __gnu_utils
 }
 
-function rehash() {
-  if [[ "$*" =~ "-f" ]]; then
-    builtin rehash "$@"
-    __gnu_utils
-  else
-    builtin rehash "$@"
-  fi
-}
+autoload -Uz add-zsh-hook
+add-zsh-hook preexec __gnu_utils_preexec
 
+# lib/theme-and-appearance.zsh sets the alias for ls not knowing that
+# we'll be using GNU ls. We'll reset this to use GNU ls --color.
+# See https://github.com/ohmyzsh/ohmyzsh/issues/11503
+#
+# The ls alias might look like:
+# - ls='ls -G'
+# - ls='gls --color=tty'
+if [[ -x "${commands[gls]}" && "${aliases[ls]}" = (*-G*|gls*) ]]; then
+  alias ls='ls --color=tty'
+fi

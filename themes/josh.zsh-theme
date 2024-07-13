@@ -10,12 +10,12 @@ function josh_prompt {
   prompt=" "
 
   branch=$(git_current_branch)
-  ruby_version=$(rvm_prompt_info || rbenv_prompt_info)
+  ruby_version=$(ruby_prompt_info)
   path_size=${#PWD}
   branch_size=${#branch}
   ruby_size=${#ruby_version}
   user_machine_size=${#${(%):-%n@%m-}}
-  
+
   if [[ ${#branch} -eq 0 ]]
     then (( ruby_size = ruby_size + 1 ))
   else
@@ -24,15 +24,15 @@ function josh_prompt {
       (( branch_size = branch_size + 2 ))
     fi
   fi
-  
+
   (( spare_width = ${spare_width} - (${user_machine_size} + ${path_size} + ${branch_size} + ${ruby_size}) ))
 
   while [ ${#prompt} -lt $spare_width ]; do
     prompt=" $prompt"
   done
-  
-  prompt="%{%F{green}%}$PWD$prompt%{%F{red}%}$(rvm_prompt_info || rbenv_prompt_info)%{$reset_color%} $(git_current_branch)"
-  
+
+  prompt="%{%F{green}%}$PWD$prompt%{%F{red}%}$(ruby_prompt_info)%{$reset_color%} $(git_current_branch)"
+
   echo $prompt
 }
 

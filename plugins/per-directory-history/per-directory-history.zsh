@@ -21,7 +21,7 @@
 #-------------------------------------------------------------------------------
 #
 # The idea/inspiration for a per directory history is from Stewart MacArthur[1]
-# and Dieter[2], the implementation idea is from Bart Schaefer on the the zsh
+# and Dieter[2], the implementation idea is from Bart Schaefer on the zsh
 # mailing list[3].  The implementation is by Jim Hester in September 2012.
 #
 # [1]: http://www.compbiome.com/2010/07/bash-per-directory-bash-history.html
@@ -32,7 +32,7 @@
 #
 # Copyright (c) 2014 Jim Hester
 #
-# This software is provided 'as-is', without any express or implied warranty. 
+# This software is provided 'as-is', without any express or implied warranty.
 # In no event will the authors be held liable for any damages arising from the
 # use of this software.
 #
@@ -57,7 +57,9 @@
 #-------------------------------------------------------------------------------
 
 [[ -z $HISTORY_BASE ]] && HISTORY_BASE="$HOME/.directory_history"
+[[ -z $HISTORY_START_WITH_GLOBAL ]] && HISTORY_START_WITH_GLOBAL=false
 [[ -z $PER_DIRECTORY_HISTORY_TOGGLE ]] && PER_DIRECTORY_HISTORY_TOGGLE='^G'
+[[ -z $PER_DIRECTORY_HISTORY_PRINT_MODE_CHANGE ]] && PER_DIRECTORY_HISTORY_PRINT_MODE_CHANGE=true
 
 #-------------------------------------------------------------------------------
 # toggle global/directory history used for searching - ctrl-G by default
@@ -66,18 +68,23 @@
 function per-directory-history-toggle-history() {
   if [[ $_per_directory_history_is_global == true ]]; then
     _per-directory-history-set-directory-history
-    print -n "\nusing local history"
+    _per_directory_history_is_global=false
+    if [[ $PER_DIRECTORY_HISTORY_PRINT_MODE_CHANGE == true ]]; then
+      zle -M "using local history"
+    fi
   else
     _per-directory-history-set-global-history
-    print -n "\nusing global history"
+    _per_directory_history_is_global=true
+    if [[ $PER_DIRECTORY_HISTORY_PRINT_MODE_CHANGE == true ]]; then
+      zle -M "using global history"
+    fi
   fi
-  zle .push-line
-  zle .accept-line
 }
 
 autoload per-directory-history-toggle-history
 zle -N per-directory-history-toggle-history
 bindkey $PER_DIRECTORY_HISTORY_TOGGLE per-directory-history-toggle-history
+bindkey -M vicmd $PER_DIRECTORY_HISTORY_TOGGLE per-directory-history-toggle-history
 
 #-------------------------------------------------------------------------------
 # implementation details
@@ -114,43 +121,58 @@ function _per-directory-history-addhistory() {
       true
   else
       print -Sr -- "${1%%$'\n'}"
+      # instantly write history if set options require it.
+      if [[ -o share_history ]] || \
+         [[ -o inc_append_history ]] || \
+         [[ -o inc_append_history_time ]]; then
+          fc -AI $HISTFILE
+          fc -AI $_per_directory_history_directory
+      fi
       fc -p $_per_directory_history_directory
   fi
 }
 
+function _per-directory-history-precmd() {
+  if [[ $_per_directory_history_initialized == false ]]; then
+    _per_directory_history_initialized=true
+
+    if [[ $HISTORY_START_WITH_GLOBAL == true ]]; then
+      _per-directory-history-set-global-history
+      _per_directory_history_is_global=true
+    else
+      _per-directory-history-set-directory-history
+      _per_directory_history_is_global=false
+    fi
+  fi
+}
 
 function _per-directory-history-set-directory-history() {
-  if [[ $_per_directory_history_is_global == true ]]; then
-    fc -AI $HISTFILE
-    local original_histsize=$HISTSIZE
-    HISTSIZE=0
-    HISTSIZE=$original_histsize
-    if [[ -e "$_per_directory_history_directory" ]]; then
-      fc -R "$_per_directory_history_directory"
-    fi
+  fc -AI $HISTFILE
+  local original_histsize=$HISTSIZE
+  HISTSIZE=0
+  HISTSIZE=$original_histsize
+  if [[ -e "$_per_directory_history_directory" ]]; then
+    fc -R "$_per_directory_history_directory"
   fi
-  _per_directory_history_is_global=false
-}
-function _per-directory-history-set-global-history() {
-  if [[ $_per_directory_history_is_global == false ]]; then
-    fc -AI $_per_directory_history_directory
-    local original_histsize=$HISTSIZE
-    HISTSIZE=0
-    HISTSIZE=$original_histsize
-    if [[ -e "$HISTFILE" ]]; then
-      fc -R "$HISTFILE"
-    fi
-  fi
-  _per_directory_history_is_global=true
 }
 
+function _per-directory-history-set-global-history() {
+  fc -AI $_per_directory_history_directory
+  local original_histsize=$HISTSIZE
+  HISTSIZE=0
+  HISTSIZE=$original_histsize
+  if [[ -e "$HISTFILE" ]]; then
+    fc -R "$HISTFILE"
+  fi
+}
+
+mkdir -p ${_per_directory_history_directory:h}
 
 #add functions to the exec list for chpwd and zshaddhistory
 autoload -U add-zsh-hook
 add-zsh-hook chpwd _per-directory-history-change-directory
 add-zsh-hook zshaddhistory _per-directory-history-addhistory
+add-zsh-hook precmd _per-directory-history-precmd
 
-#start in directory mode
-mkdir -p ${_per_directory_history_directory:h}
-_per_directory_history_is_global=true
-_per-directory-history-set-directory-history
+# set initialized flag to false
+_per_directory_history_initialized=false

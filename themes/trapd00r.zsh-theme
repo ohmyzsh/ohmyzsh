@@ -2,7 +2,7 @@
 #
 # This theme needs a terminal supporting 256 colors as well as unicode.
 # In order to avoid external dependencies, it also has a zsh version of
-# the perl script at https://github.com/trapd00r/utils/blob/master/zsh_path,
+# the previously used perl script https://github.com/trapd00r/utils/blob/master/zsh_path,
 # which splits up the current path and makes it fancy.
 #
 # By default it spans over two lines like so:
@@ -38,6 +38,8 @@ local c13=$'\e[38;5;196m\e[1m'
 
 
 zsh_path() {
+  setopt localoptions nopromptsubst
+
   local colors
   colors=$(echoti colors)
 
@@ -100,7 +102,6 @@ zstyle ':vcs_info:*' actionformats \
 zstyle ':vcs_info:*' formats \
     "%{$c8%}%s%%{$c7%}❨ %{$c9%}%{$c11%}%b%{$c7%} ❩%{$reset_color%}%f "
 
-zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
 zstyle ':vcs_info:*' enable git
 
 add-zsh-hook precmd prompt_jnrowe_precmd

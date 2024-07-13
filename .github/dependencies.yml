@@ -1,0 +1,46 @@
+dependencies:
+  plugins/gitfast:
+    repo: felipec/git-completion
+    branch: master
+    version: tag:v2.1
+    postcopy: |
+      set -e
+      rm -rf git-completion.plugin.zsh Makefile README.adoc t tools
+      test -e git-completion.zsh && mv -f git-completion.zsh _git
+  plugins/z:
+    branch: master
+    repo: agkozak/zsh-z
+    version: afaf2965b41fdc6ca66066e09382726aa0b6aa04
+    precopy: |
+      set -e
+      test -e README.md && mv -f README.md MANUAL.md
+    postcopy: |
+      set -e
+      test -e _zshz && mv -f _zshz _z
+      test -e zsh-z.plugin.zsh && mv -f zsh-z.plugin.zsh z.plugin.zsh
+  plugins/history-substring-search:
+    repo: zsh-users/zsh-history-substring-search
+    branch: master
+    version: 87ce96b1862928d84b1afe7c173316614b30e301
+    precopy: |
+      set -e
+      rm -f zsh-history-substring-search.plugin.zsh
+      test -e zsh-history-substring-search.zsh && mv zsh-history-substring-search.zsh history-substring-search.zsh
+    postcopy: |
+      set -e
+      test -e dependencies/OMZ-README.md && cat dependencies/OMZ-README.md >> README.md
+  plugins/gradle:
+    repo: gradle/gradle-completion
+    branch: master
+    version: 25da917cf5a88f3e58f05be3868a7b2748c8afe6
+    precopy: |
+      set -e
+      find . ! -name _gradle ! -name LICENSE -delete
+  plugins/wd:
+    repo: mfaerevaag/wd
+    branch: master
+    version: tag:v0.7.1
+    precopy: |
+      set -e
+      rm -r test
+      rm install.sh tty.gif wd.1

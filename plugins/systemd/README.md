@@ -3,7 +3,8 @@
 The systemd plugin provides many useful aliases for systemd.
 
 To use it, add systemd to the plugins array of your zshrc file:
-```
+
+```zsh
 plugins=(... systemd)
 ```
 
@@ -11,6 +12,7 @@ plugins=(... systemd)
 
 | Alias                  | Command                            | Description                                                      |
 |:-----------------------|:-----------------------------------|:-----------------------------------------------------------------|
+| `sc-failed`            | `systemctl --failed`               | List failed systemd units                                        |
 | `sc-list-units`        | `systemctl list-units`             | List all units systemd has in memory                             |
 | `sc-is-active`         | `systemctl is-active`              | Show whether a unit is active                                    |
 | `sc-status`            | `systemctl status`                 | Show terse runtime status information about one or more units    |
@@ -22,7 +24,7 @@ plugins=(... systemd)
 | `sc-show-environment`  | `systemctl show-environment`       | Dump the systemd manager environment block                       |
 | `sc-cat`               | `systemctl cat`                    | Show backing files of one or more units                          |
 | `sc-list-timers`       | `systemctl list-timers`            | List timer units currently in memory                             |
-| **Aliases with sudo**                                                                                                          |
+| **Aliases with sudo**                                                                                                        |||
 | `sc-start`             | `sudo systemctl start`             | Start Unit(s)                                                    |
 | `sc-stop`              | `sudo systemctl stop`              | Stop Unit(s)                                                     |
 | `sc-reload`            | `sudo systemctl reload`            | Reload Unit(s)                                                   |
@@ -59,9 +61,11 @@ to your prompt, drop `$(systemd_prompt_info [unit]...)` into your prompt (more t
 may be specified).
 
 The plugin will add the following to your prompt for each `$unit`.
-```
+
+```text
 <prefix><unit>:<active|notactive><suffix>
 ```
+
 You can control these parts with the following variables:
 
 - `<prefix>`: Set `$ZSH_THEME_SYSTEMD_PROMPT_PREFIX`.
@@ -79,7 +83,7 @@ You can control these parts with the following variables:
 
 For example, if your prompt contains `PROMPT='$(systemd_prompt_info dhcpd httpd)'` and you set the following variables:
 
-```
+```sh
 ZSH_THEME_SYSTEMD_PROMPT_PREFIX="["
 ZSH_THEME_SYSTEMD_PROMPT_SUFFIX="]"
 ZSH_THEME_SYSTEMD_PROMPT_ACTIVE="+"
@@ -89,6 +93,6 @@ ZSH_THEME_SYSTEMD_PROMPT_CAPS=1
 
 If `dhcpd` is running, and `httpd` is not, then your prompt will look like this:
 
-```
+```text
 [DHCPD: +][HTTPD: X]
 ```
