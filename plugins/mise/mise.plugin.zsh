@@ -24,3 +24,4 @@ fi
 
 # Generate and load mise completion
 $__mise completion zsh >| "$ZSH_CACHE_DIR/completions/_$__mise" &|
+unset __mise
