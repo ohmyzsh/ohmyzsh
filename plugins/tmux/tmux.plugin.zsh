@@ -50,6 +50,7 @@ fi
 
 # ALIASES
 function _build_tmux_alias {
+  setopt localoptions no_rc_expand_param
   eval "function $1 {
     if [[ -z \$1 ]] || [[ \${1:0:1} == '-' ]]; then
       tmux $2 \"\$@\"
