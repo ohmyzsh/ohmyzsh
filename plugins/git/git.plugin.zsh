@@ -265,6 +265,7 @@ alias gpr='git pull --rebase'
 alias gprv='git pull --rebase -v'
 alias gpra='git pull --rebase --autostash'
 alias gprav='git pull --rebase --autostash -v'
+alias gprs='git pull --rebase --recurse-submodules'
 
 function ggu() {
   [[ "$#" != 1 ]] && local b="$(git_current_branch)"
