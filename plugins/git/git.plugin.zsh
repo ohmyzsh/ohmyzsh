@@ -327,11 +327,12 @@ function ggp() {
 }
 compdef _git ggp=git-checkout
 
-function git_tag_add() {
+function git_tag_create() {
     local tagName=$1
     local message=${2:-$tagName}
 
     git tag -a "$tagName" -m "$message"
+    git push origin $tagName
 }
 
 alias gpu='git push upstream'
@@ -398,7 +399,7 @@ alias gswm='git switch $(git_main_branch)'
 alias gta='git tag --annotate'
 alias gts='git tag --sign'
 alias gtv='git tag | sort -V'
-alias gtc='git_tag_add'
+alias gtc='git_tag_create'
 alias gignore='git update-index --assume-unchanged'
 alias gunignore='git update-index --no-assume-unchanged'
 alias gwch='git whatchanged -p --abbrev-commit --pretty=medium'
