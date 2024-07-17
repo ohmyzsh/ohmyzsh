@@ -205,6 +205,8 @@ plugins=(... git)
 | `gta`                  | `git tag --annotate`                                                                                                            |
 | `gts`                  | `git tag -s`                                                                                                                    |
 | `gtv`                  | `git tag \| sort -V`                                                                                                            |
+| `gtd`                  | `git tag -d`                                                                                                            |
+| `gtdr`                  | `git push --delete origin`                                                                                                            |
 | `gignore`              | `git update-index --assume-unchanged`                                                                                           |
 | `gunignore`            | `git update-index --no-assume-unchanged`                                                                                        |
 | `gwch`                 | `git whatchanged -p --abbrev-commit --pretty=medium`                                                                            |
