@@ -220,8 +220,8 @@ alias gdt='git diff-tree --no-commit-id --name-only -r'
 alias gf='git fetch'
 # --jobs=<n> was added in git 2.8
 is-at-least 2.8 "$git_version" \
-  && alias gfa='git fetch --all --prune --jobs=10' \
-  || alias gfa='git fetch --all --prune'
+  && alias gfa='git fetch --all --tags --prune --jobs=10' \
+  || alias gfa='git fetch --all --tags --prune'
 alias gfo='git fetch origin'
 alias gg='git gui citool'
 alias gga='git gui citool --amend'
