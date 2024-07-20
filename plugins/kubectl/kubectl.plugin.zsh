@@ -180,11 +180,23 @@ alias kej='kubectl edit job'
 alias kdj='kubectl describe job'
 alias kdelj='kubectl delete job'
 
-function kj() { kubectl "$@" -o json | jq; }
-function kjx() { kubectl "$@" -o json | fx; }
-function ky() { kubectl "$@" -o yaml | yh; }
-if (( ${+functions[compdef]} )); then
-  compdef _kubectl kj
-  compdef _kubectl kjx
-  compdef _kubectl ky
-fi
+# Utility print functions (json / yaml)
+function _build_kubectl_out_alias {
+  setopt localoptions norcexpandparam
+
+  # alias function
+  eval "function $1 { $2 }"
+
+  # completion function
+  eval "function _$1 {
+    words=(kubectl \"\${words[@]:1}\")
+    _kubectl
+  }"
+
+  compdef _$1 $1
+}
+
+_build_kubectl_out_alias "kj"  'kubectl "$@" -o json | jq'
+_build_kubectl_out_alias "kjx" 'kubectl "$@" -o json | fx'
+_build_kubectl_out_alias "ky"  'kubectl "$@" -o yaml | yh'
+unfunction _build_kubectl_out_alias
