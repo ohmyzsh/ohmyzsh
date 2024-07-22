@@ -45,6 +45,7 @@ alias bubu='bubo && bubc'
 alias bubug='bubo && bugbc'
 alias bfu='brew upgrade --formula'
 alias buz='brew uninstall --zap'
+alias ba='brew autoremove'
 
 function brews() {
   local formulae="$(brew leaves | xargs brew deps --installed --for-each)"
