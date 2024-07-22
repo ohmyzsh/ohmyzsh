@@ -9,8 +9,9 @@ function omz_history {
 
     # confirm action before deleting history
     print -nu2 "This action will irreversibly delete your command history. Are you sure? [y/N] "
-    builtin read -E
-    [[ "$REPLY" = [yY] ]] || return 0
+    builtin read -k1
+    [[ "$REPLY" = $'\n' ]] || print -u2
+    [[ "$REPLY" != ([nN]|$'\n') ]] || return 0
 
     print -nu2 >| "$HISTFILE"
     fc -p "$HISTFILE"
