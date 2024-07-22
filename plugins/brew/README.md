@@ -21,6 +21,7 @@ the `brew` binary before sourcing `oh-my-zsh.sh` and it'll set up the environmen
 
 | Alias    | Command                                 | Description                                                           |
 | -------- | --------------------------------------- | --------------------------------------------------------------------- |
+| `ba`     | `brew autoremove`                       | Uninstall unnecessary formulae.                                       |
 | `bc`     | `brew cleanup`                          | Run cleanup.                                                          |
 | `bci`    | `brew info --cask`                      | Display information about the given cask.                             |
 | `bcin`   | `brew install --cask`                   | Install the given cask.                                               |
@@ -30,7 +31,7 @@ the `brew` binary before sourcing `oh-my-zsh.sh` and it'll set up the environmen
 | `bcubc`  | `brew upgrade --cask && brew cleanup`   | Upgrade outdated casks, then run cleanup.                             |
 | `bcubo`  | `brew update && brew outdated --cask`   | Update Homebrew data, then list outdated casks.                       |
 | `bcup`   | `brew upgrade --cask`                   | Upgrade all outdated casks.                                           |
-| `bfu`    | `brew upgrade --formula`                | Upgrade only formulas (not casks).                                    |
+| `bfu`    | `brew upgrade --formula`                | Upgrade only formulae (not casks).                                    |
 | `bi`     | `brew install`                          | Install a formula.                                                    |
 | `bl`     | `brew list`                             | List all installed formulae.                                          |
 | `bo`     | `brew outdated`                         | List installed formulae that have an updated version available.       |

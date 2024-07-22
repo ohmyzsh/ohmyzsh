@@ -34,6 +34,7 @@ if [[ -d "$HOMEBREW_PREFIX/share/zsh/site-functions" ]]; then
   fpath+=("$HOMEBREW_PREFIX/share/zsh/site-functions")
 fi
 
+alias ba='brew autoremove'
 alias bc='brew cleanup'
 alias bci='brew info --cask'
 alias bcin='brew install --cask'
