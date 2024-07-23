@@ -5,8 +5,10 @@ updates:
     schedule:
       interval: "weekly"
       day: "sunday"
+    labels: []
   - package-ecosystem: "pip"
     directory: "/.github/workflows/dependencies"
     schedule:
       interval: "weekly"
       day: "sunday"
+    labels: []
