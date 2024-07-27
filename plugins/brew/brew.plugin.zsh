@@ -35,10 +35,10 @@ if [[ -d "$HOMEBREW_PREFIX/share/zsh/site-functions" ]]; then
 fi
 
 alias ba='brew autoremove'
-alias bc='brew cleanup'
 alias bci='brew info --cask'
 alias bcin='brew install --cask'
 alias bcl='brew list --cask'
+alias bcn='brew cleanup'
 alias bco='brew outdated --cask'
 alias bcrin='brew reinstall --cask'
 alias bcubc='brew upgrade --cask && brew cleanup'
