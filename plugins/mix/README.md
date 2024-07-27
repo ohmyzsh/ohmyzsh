@@ -17,3 +17,4 @@ plugins=(... mix)
 | Ecto                     | [Ecto](https://hexdocs.pm/ecto/Ecto.html)                |
 | Hex                      | [Hex](https://hex.pm/)                                   |
 | Nerves                   | [Nerves](https://nerves-project.org/)                    |
+| mix_test_watch           | [mix_test_watch](https://hex.pm/packages/mix_test_watch) |
