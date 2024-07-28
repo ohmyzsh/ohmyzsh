@@ -165,7 +165,7 @@ git_toplevel() {
 # Context: user@hostname (who am I and where am I)
 prompt_context() {
   if [[ "$USERNAME" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-    prompt_segment "$AGNOSTER_CONTEXT_BG" "$AGNOSTER_CONTEXT_FG" "%(!.%{%F{$AGNOSTER_STATUS_ROOT_FG}%}.)%n@%m"
+    prompt_segment black default "%(!.%{%F{yellow}%}.)%n"
   fi
 }
 
@@ -304,12 +304,7 @@ prompt_hg() {
 
 # Dir: current working directory
 prompt_dir() {
-  if [[ $AGNOSTER_GIT_INLINE == 'true' ]] && $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
-    # Git repo and inline path enabled, hence only show the git root
-    prompt_segment "$AGNOSTER_DIR_BG" "$AGNOSTER_DIR_FG" "$(git_toplevel | sed "s:^$HOME:~:")"
-  else
-    prompt_segment "$AGNOSTER_DIR_BG" "$AGNOSTER_DIR_FG" '%~'
-  fi
+  prompt_segment blue $CURRENT_FG '%2d'
 }
 
 # Virtualenv: current working virtualenv
@@ -345,16 +340,32 @@ prompt_status() {
 prompt_aws() {
   [[ -z "$AWS_PROFILE" || "$SHOW_AWS_PROMPT" = false ]] && return
   case "$AWS_PROFILE" in
-    *-prod|*production*) prompt_segment "$AGNOSTER_AWS_PROD_BG" "$AGNOSTER_AWS_PROD_FG"  "AWS: ${AWS_PROFILE:gs/%/%%}" ;;
-    *) prompt_segment "$AGNOSTER_AWS_BG" "$AGNOSTER_AWS_FG" "AWS: ${AWS_PROFILE:gs/%/%%}" ;;
+    *prod|*production*) prompt_segment red black  "AWS: ${AWS_PROFILE:gs/%/%%}" ;;
+    *) prompt_segment green black "AWS: ${AWS_PROFILE:gs/%/%%}" ;;
   esac
 }
 
+prompt_shell() {
+  [[ -z "$SHELL_PROFILE" || "$SHOW_AWS_PROMPT" = false ]] && return
+  local ENV_PRPT="$SHELL_PROFILE"
+  case "$TERA_PROFILE" in
+    *qa*) ENV_PRPT="${SHELL_PROFILE}-qa" ;;
+    *stage*) ENV_PRPT="${SHELL_PROFILE}-st" ;;
+  esac
+  case "$SHELL_PROFILE" in
+    *prod|*production*) 
+          prompt_segment red black  "${ENV_PRPT:gs/%/%%}" ;;
+    *dev*) 
+          prompt_segment green black "${ENV_PRPT:gs/%/%%}" ;;
+    # *) prompt_segment green black "" ;;
+  esac
+}
 ## Main prompt
 build_prompt() {
   RETVAL=$?
   prompt_status
   prompt_virtualenv
+  prompt_shell
   prompt_aws
   prompt_context
   prompt_dir
