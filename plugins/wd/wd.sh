@@ -90,7 +90,6 @@ Commands:
     clean                Remove points warping to nonexistent directories (will prompt unless --force is used)
 
     -v | --version  Print version
-    -d | --debug    Exit after execution with exit codes (for testing)
     -c | --config   Specify config file (default ~/.warprc)
     -q | --quiet    Suppress all output
     -f | --force    Allows overwriting without warning (for add & clean)
@@ -436,7 +435,6 @@ zparseopts -D -E \
     c:=wd_alt_config -config:=wd_alt_config \
     q=wd_quiet_mode -quiet=wd_quiet_mode \
     v=wd_print_version -version=wd_print_version \
-    d=wd_debug_mode -debug=wd_debug_mode \
     f=wd_force_mode -force=wd_force_mode
 
 if [[ ! -z $wd_print_version ]]
@@ -583,9 +581,4 @@ unset args
 unset points
 unset val &> /dev/null # fixes issue #1
 
-if [[ -n $wd_debug_mode ]]
-then
-    exit $WD_EXIT_CODE
-else
-    unset wd_debug_mode
-fi
+return $WD_EXIT_CODE
