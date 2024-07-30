@@ -362,6 +362,15 @@ Instead, you can now use the following:
 zstyle ':omz:lib:directories' aliases no
 ```
 
+#### Notice <!-- omit in toc -->
+
+> This feature is currently in a testing phase and it may be subject to change in the future.
+> It is also not currently compatible with plugin managers such as zpm or zinit, which don't
+> source the init script (`oh-my-zsh.sh`) where this feature is implemented in.
+
+> It is also not currently aware of "aliases" that are defined as functions. Example of such
+> are `gccd`, `ggf`, or `ggl` functions from the git plugin.
+
 ### Disable async git prompt
 
 Async prompt functions are an experimental feature (included on April 3, 2024) that allows Oh My Zsh to render prompt information
@@ -372,15 +381,6 @@ before Oh My Zsh is sourced:
 ```sh
 zstyle ':omz:alpha:lib:git' async-prompt no
 ```
-
-#### Notice <!-- omit in toc -->
-
-> This feature is currently in a testing phase and it may be subject to change in the future.
-> It is also not currently compatible with plugin managers such as zpm or zinit, which don't
-> source the init script (`oh-my-zsh.sh`) where this feature is implemented in.
-
-> It is also not currently aware of "aliases" that are defined as functions. Example of such
-> are `gccd`, `ggf`, or `ggl` functions from the git plugin.
 
 ## Getting Updates
 
