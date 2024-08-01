@@ -34,6 +34,18 @@ alias dvprune='docker volume prune'
 alias dxc='docker container exec'
 alias dxcit='docker container exec -it'
 
+function dpsf {
+  docker ps --filter "name=${1}"
+}
+
+function dpsfa {
+  docker ps --filter "name=${1}" -a
+}
+
+function dif() {
+  docker images --filter "reference=*${1}*"
+}
+
 if (( ! $+commands[docker] )); then
   return
 fi
