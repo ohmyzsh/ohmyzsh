@@ -46,7 +46,6 @@ the `brew` binary before sourcing `oh-my-zsh.sh` and it'll set up the environmen
 | `bsr`    | `brew services run`                     | Run the service without registering to launch at login (or boot).     |
 | `bsra`   | `bsr --all`                             | Run all stopped services.                                             |
 | `bu`     | `brew update`                           | Update brew and all installed formulae.                               |
-| `bubc`   | `brew upgrade && brew cleanup`          | Upgrade outdated formulae and casks, then run cleanup.                |
 | `bubo`   | `brew update && brew outdated`          | Update Homebrew data, then list outdated formulae and casks.          |
 | `bubu`   | `bubo && bup`                           | Do the last two operations above.                                     |
 | `bugbc`  | `brew upgrade --greedy && brew cleanup` | Upgrade outdated formulae and casks (greedy), then run cleanup.       |
