@@ -11,7 +11,7 @@ plugins=(... git)
 ## Aliases
 
 | Alias                  | Command                                                                                                                         |
-| :--------------------- | :------------------------------------------------------------------------------------------------------------------------------ |
+|:-----------------------|:--------------------------------------------------------------------------------------------------------------------------------|
 | `grt`                  | `cd "$(git rev-parse --show-toplevel \|\| echo .)"`                                                                             |
 | `ggpnp`                | `ggl && ggp`                                                                                                                    |
 | `ggpur`                | `ggu`                                                                                                                           |
@@ -205,6 +205,7 @@ plugins=(... git)
 | `gta`                  | `git tag --annotate`                                                                                                            |
 | `gts`                  | `git tag -s`                                                                                                                    |
 | `gtv`                  | `git tag \| sort -V`                                                                                                            |
+| `gtc`                  | `git tag -a <tagName> -m <message/tagName> && git push origin <tagName>`                                                        |
 | `gignore`              | `git update-index --assume-unchanged`                                                                                           |
 | `gunignore`            | `git update-index --no-assume-unchanged`                                                                                        |
 | `gwch`                 | `git whatchanged -p --abbrev-commit --pretty=medium`                                                                            |
