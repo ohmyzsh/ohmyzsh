@@ -63,7 +63,6 @@ alias bubu='bubo && bup'
 alias bubug='bubo && bugbc'
 alias bugbc='brew upgrade --greedy && brew cleanup'
 alias bup='brew upgrade'
-alias bup='brew upgrade'
 alias buz='brew uninstall --zap'
 
 function brews() {
