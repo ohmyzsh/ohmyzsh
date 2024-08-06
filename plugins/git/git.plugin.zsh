@@ -422,3 +422,11 @@ for old_alias new_alias (
     $new_alias"
 done
 unset old_alias new_alias
+
+function autofetch() {
+    if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null ) ]] ; then
+        git fetch
+    fi
+}
+
+add-zsh-hook chpwd fetch
