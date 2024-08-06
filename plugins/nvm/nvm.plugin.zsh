@@ -50,11 +50,11 @@ function _omz_setup_autoload {
     zstyle -t ':omz:plugins:nvm' silent-autoload && nvm_silent="--silent"
 
     if [[ -n "$nvmrc_path" ]]; then
-      local nvmrc_node_version=$(nvm version $(cat "$nvmrc_path" | tr -dc '[:print:]'))
+      local nvmrc_node_version=$(nvm version $(command cat "$nvmrc_path" | tr -dc '[:print:]'))
 
       if [[ "$nvmrc_node_version" = "N/A" ]]; then
         nvm install
-      elif [[ "$nvmrc_node_version" != "$node_version" ]]; then
+      elif [[ "$nvmrc_node_version" != "$(nvm version)" ]]; then
         nvm use $nvm_silent
       fi
     elif [[ -n "$(PWD=$OLDPWD nvm_find_nvmrc)" ]] && [[ "$(nvm version)" != "$(nvm version default)" ]]; then
@@ -72,9 +72,9 @@ function _omz_setup_autoload {
 }
 
 if zstyle -t ':omz:plugins:nvm' lazy; then
-  # Call nvm when first using nvm, node, npm, pnpm, yarn or other commands in lazy-cmd
+  # Call nvm when first using nvm, node, npm, pnpm, yarn, corepack or other commands in lazy-cmd
   zstyle -a ':omz:plugins:nvm' lazy-cmd nvm_lazy_cmd
-  nvm_lazy_cmd=(nvm node npm npx pnpm yarn $nvm_lazy_cmd) # default values
+  nvm_lazy_cmd=(nvm node npm npx pnpm yarn corepack $nvm_lazy_cmd) # default values
   eval "
     function $nvm_lazy_cmd {
       for func in $nvm_lazy_cmd; do

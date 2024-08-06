@@ -2,6 +2,7 @@
 # Author: Adam Strzelecki nanoant.com, modified by Bodo Tasche bitboxer.de
 #         Updated to support ForkLift 2 and ForkLift 3 by Johan Kaving
 #         Updated to support ForkLift from Setapp by Paul Rudkin
+#         Updated to support ForkLift 4 by Michal Szymanski (misiektoja)
 #
 # Usage:
 #   fl [<folder>]
@@ -109,6 +110,11 @@ function fl {
         if forkLiftVersion starts with "3" then
             tell pop over of list of group of splitter group of splitter group of topWindow
                 set value of text field 1 to "$PWD"
+            end tell
+        else if forkLiftVersion starts with "4" then
+            tell pop over of list of group of splitter group of splitter group of topWindow
+                keystroke "$PWD"
+                delay 0.1
             end tell
         else
             tell sheet 1 of topWindow

@@ -57,13 +57,13 @@ Using [antigen](https://github.com/zsh-users/antigen):
 
 1. Add the `antigen bundle` command just before `antigen apply`, like this:
 
-```
+``` 
 antigen bundle zsh-users/zsh-history-substring-search
 antigen apply
 ```
-
+ 
 2. Then, **after** `antigen apply`, add the key binding configurations, like this:
-
+ 
 ```
 # zsh-history-substring-search configuration
 bindkey '^[[A' history-substring-search-up # or '\eOA'
@@ -120,7 +120,7 @@ Usage
           bindkey "$terminfo[kcuu1]" history-substring-search-up
           bindkey "$terminfo[kcud1]" history-substring-search-down
 
-      Users have also observed that `[OA` and `[OB` are correct values,
+      Users have also observed that `[OA` and `[OB` are correct values, 
       _even if_ these were not the observed values. If you are having trouble
       with the observed values, give these a try.
 

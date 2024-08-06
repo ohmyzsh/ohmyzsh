@@ -18,12 +18,12 @@ typeset -g VI_MODE_SET_CURSOR
 # if $VI_MODE_SET_CURSOR=true.
 #
 # See https://vt100.net/docs/vt510-rm/DECSCUSR for cursor styles
-typeset -g VI_MODE_CURSOR_NORMAL=2
-typeset -g VI_MODE_CURSOR_VISUAL=6
-typeset -g VI_MODE_CURSOR_INSERT=6
-typeset -g VI_MODE_CURSOR_OPPEND=0
+typeset -g VI_MODE_CURSOR_NORMAL=${VI_MODE_CURSOR_NORMAL:=2}
+typeset -g VI_MODE_CURSOR_VISUAL=${VI_MODE_CURSOR_VISUAL:=6}
+typeset -g VI_MODE_CURSOR_INSERT=${VI_MODE_CURSOR_INSERT:=6}
+typeset -g VI_MODE_CURSOR_OPPEND=${VI_MODE_CURSOR_OPPEND:=0}
 
-typeset -g VI_KEYMAP=main
+typeset -g VI_KEYMAP=${VI_KEYMAP:=main}
 
 function _vi-mode-set-cursor-shape-for-keymap() {
   [[ "$VI_MODE_SET_CURSOR" = true ]] || return
@@ -162,9 +162,7 @@ if [[ -z "${VI_MODE_DISABLE_CLIPBOARD:-}" ]]; then
 fi
 
 # if mode indicator wasn't setup by theme, define default, we'll leave INSERT_MODE_INDICATOR empty by default
-if [[ -z "$MODE_INDICATOR" ]]; then
-  MODE_INDICATOR='%B%F{red}<%b<<%f'
-fi
+typeset -g MODE_INDICATOR=${MODE_INDICATOR:='%B%F{red}<%b<<%f'}
 
 function vi_mode_prompt_info() {
   echo "${${VI_KEYMAP/vicmd/$MODE_INDICATOR}/(main|viins)/$INSERT_MODE_INDICATOR}"

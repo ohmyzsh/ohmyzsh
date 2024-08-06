@@ -160,6 +160,8 @@ zmodload zsh/langinfo
 #    -P causes spaces to be encoded as '%20' instead of '+'
 function omz_urlencode() {
   emulate -L zsh
+  setopt norematchpcre
+
   local -a opts
   zparseopts -D -E -a opts r m P
 

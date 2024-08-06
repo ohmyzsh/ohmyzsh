@@ -1,6 +1,10 @@
 # if using GNU screen, let the zsh tell screen what the title and hardstatus
 # of the tab window should be.
 if [[ "$TERM" == screen* ]]; then
+  # Unset title() function defined in lib/termsupport.zsh to prevent
+  # overwriting our screen titles
+  title(){}
+
   if [[ $_GET_PATH == '' ]]; then
     _GET_PATH='echo $PWD | sed "s/^\/Users\//~/;s/^\/home\//~/;s/^~$USERNAME/~/"'
   fi

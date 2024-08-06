@@ -2,7 +2,7 @@
 
 This plugin searches the defined aliases and outputs any that match the command inputted. This makes learning new aliases easier.
 
-## Usage
+## Setup
 
 To use it, add `alias-finder` to the `plugins` array of your zshrc file:
 ```
@@ -21,6 +21,41 @@ zstyle ':omz:plugins:alias-finder' cheaper yes # disabled by default
 ```
 
 As you can see, options are also available with zstyle.
+
+## Usage
+
+When you execute a command alias finder will look at your defined aliases and suggest shorter aliases you could have used, for example:
+
+Running the un-aliased `git status` command:
+```sh
+╭─tim@fox ~/repo/gitopolis ‹main› 
+╰─$ git status
+
+gst='git status'         # <=== shorter suggestion from alias-finder
+
+On branch main
+Your branch is up-to-date with 'origin/main'.
+nothing to commit, working tree clean
+```
+
+Running a shorter `git st` alias from `.gitconfig` that it suggested :
+```sh
+╭─tim@fox ~/repo/gitopolis ‹main› 
+╰─$ git st
+gs='git st'         # <=== shorter suggestion from alias-finder
+## main...origin/main
+```
+
+Running the shortest `gs` shell alias that it found:
+```sh
+╭─tim@fox ~/repo/gitopolis ‹main› 
+╰─$ gs
+         # <=== no suggestions alias-finder because this is the shortest
+## main...origin/main
+```
+
+![image](https://github.com/ohmyzsh/ohmyzsh/assets/19378/39642750-fb10-4f1a-b7f9-f36789eeb01b)
+
 
 ### Options
 

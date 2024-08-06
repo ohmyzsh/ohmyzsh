@@ -2,7 +2,7 @@
 
 This plugin looks for [pyenv](https://github.com/pyenv/pyenv), a Simple Python version
 management system, and loads it if it's found. It also loads pyenv-virtualenv, a pyenv
-plugin to manage virtualenv, if it's found.
+plugin to manage virtualenv, if it's found. If a venv is found pyenv won't load.
 
 To use it, add `pyenv` to the plugins array in your zshrc file:
 

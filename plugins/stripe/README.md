@@ -1,4 +1,4 @@
-# Struoe
+# Stripe
 
 This plugin provides completion for the [Stripe CLI](https://stripe.com/docs/stripe-cli).
 

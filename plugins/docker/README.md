@@ -51,6 +51,7 @@ zstyle ':omz:plugins:docker' legacy-completion yes
 | dii     | `docker image inspect`        | Display detailed information on one or more images                                       |
 | dils    | `docker image ls`             | List docker images                                                                       |
 | dipu    | `docker image push`           | Push an image or repository to a remote registry                                         |
+| dipru   | `docker image prune -a`       | Remove all images not referenced by any container                                        |
 | dirm    | `docker image rm`             | Remove one or more images                                                                |
 | dit     | `docker image tag`            | Add a name and tag to a particular image                                                 |
 | dlo     | `docker container logs`       | Fetch the logs of a docker container                                                     |
@@ -61,6 +62,8 @@ zstyle ':omz:plugins:docker' legacy-completion yes
 | dnls    | `docker network ls`           | List all networks the engine daemon knows about, including those spanning multiple hosts |
 | dnrm    | `docker network rm`           | Remove one or more networks                                                              |
 | dpo     | `docker container port`       | List port mappings or a specific mapping for the container                               |
+| dps     | `docker ps`                   | List all the running docker containers                                                   |
+| dpsa    | `docker ps -a`                | List all running and stopped containers                                                  |
 | dpu     | `docker pull`                 | Pull an image or a repository from a registry                                            |
 | dr      | `docker container run`        | Create a new container and start it using the specified command                          |
 | drit    | `docker container run -it`    | Create a new container and start it in an interactive shell                              |

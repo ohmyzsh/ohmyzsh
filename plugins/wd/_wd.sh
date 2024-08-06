@@ -31,6 +31,7 @@ function _wd() {
 
   commands=(
     'add:Adds the current working directory to your warp points'
+    'addcd:Adds a directory to your warp points'
     'add!:Overwrites existing warp point'
     'export:Export warp points as static named directories'
     'rm:Removes the given warp point'
@@ -62,6 +63,9 @@ function _wd() {
           ;;
         add)
           _message 'Write the name of your warp point' && ret=0
+          ;;
+	addcd)
+          _message 'Write the name of your path' && ret=0
           ;;
         show)
           _describe -t points "Warp points" warp_points && ret=0

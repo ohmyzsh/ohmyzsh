@@ -25,6 +25,7 @@ plugins=(... golang)
 | goi    | `go install`      | Compiles and installs packages to $GOPATH                     |
 | gol    | `go list`         | Lists Go packages                                             |
 | gom    | `go mod`          | Access to operations on modules                               |
+| gomt   | `go mod tidy`     | Tidies up the go.mod file                                     |
 | gopa   | `cd $GOPATH`      | Takes you to `$GOPATH`                                        |
 | gopb   | `cd $GOPATH/bin`  | Takes you to `$GOPATH/bin`                                    |
 | gops   | `cd $GOPATH/src`  | Takes you to `$GOPATH/src`                                    |

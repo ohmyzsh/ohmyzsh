@@ -44,7 +44,7 @@ function pyuserpaths() {
 alias pygrep='grep -nr --include="*.py"'
 
 # Run proper IPython regarding current virtualenv (if any)
-alias ipython='python3 -c "import IPython, sys; sys.exit(IPython.start_ipython())"'
+alias ipython='python3 -c "import sys; del sys.path[0]; import IPython; sys.exit(IPython.start_ipython())"'
 
 # Share local directory as a HTTP server
 alias pyserver="python3 -m http.server"
@@ -86,11 +86,20 @@ function mkv() {
 
 if [[ "$PYTHON_AUTO_VRUN" == "true" ]]; then
   # Automatically activate venv when changing dir
-  auto_vrun() {
-    if [[ -f "${PYTHON_VENV_NAME}/bin/activate" ]]; then
-      source "${PYTHON_VENV_NAME}/bin/activate" > /dev/null 2>&1
-    else
-      (( $+functions[deactivate] )) && deactivate > /dev/null 2>&1
+  function auto_vrun() {
+    # deactivate if we're on a different dir than VIRTUAL_ENV states
+    # we don't deactivate subdirectories!
+    if (( $+functions[deactivate] )) && [[ $PWD != ${VIRTUAL_ENV:h}* ]]; then
+      deactivate > /dev/null 2>&1
+    fi
+
+    if [[ $PWD != ${VIRTUAL_ENV:h} ]]; then
+      for _file in "${PYTHON_VENV_NAME}"*/bin/activate(N.); do
+        # make sure we're not in a venv already
+        (( $+functions[deactivate] )) && deactivate > /dev/null 2>&1
+        source $_file > /dev/null 2>&1
+        break
+      done
     fi
   }
   add-zsh-hook chpwd auto_vrun

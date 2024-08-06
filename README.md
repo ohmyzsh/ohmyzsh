@@ -37,7 +37,7 @@ Once installed, your terminal shell will become the talk of the town _or your mo
 
 Finally, you'll begin to get the sort of attention that you have always felt you deserved. ...or maybe you'll use the time that you're saving to start flossing more often. 😬
 
-To learn more, visit [ohmyz.sh](https://ohmyz.sh), follow [@ohmyzsh](https://twitter.com/ohmyzsh) on Twitter, and join us on [Discord](https://discord.gg/ohmyzsh).
+To learn more, visit [ohmyz.sh](https://ohmyz.sh), follow [@ohmyzsh](https://x.com/ohmyzsh) on X (formerly Twitter), and join us on [Discord](https://discord.gg/ohmyzsh).
 
 [![CI](https://github.com/ohmyzsh/ohmyzsh/workflows/CI/badge.svg)](https://github.com/ohmyzsh/ohmyzsh/actions?query=workflow%3ACI)
 [![X (formerly Twitter) Follow](https://img.shields.io/twitter/follow/ohmyzsh?label=%40ohmyzsh&logo=x&style=flat)](https://twitter.com/intent/follow?screen_name=ohmyzsh)
@@ -116,7 +116,7 @@ Oh My Zsh is installed by running one of the following commands in your terminal
 | **wget**  | `sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`   |
 | **fetch** | `sh -c "$(fetch -o - https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"` |
 
-Alternatively, the installer is also mirrored outside GitHub. Using this URL instead may be required if you're in a country like India or China, that blocks `raw.githubusercontent.com`:
+Alternatively, the installer is also mirrored outside GitHub. Using this URL instead may be required if you're in a country like China or India (for certain ISPs), that blocks `raw.githubusercontent.com`:
 
 | Method    | Command                                                                                           |
 | :-------- | :------------------------------------------------------------------------------------------------ |
@@ -262,7 +262,7 @@ If you're in China, India, or another country that blocks `raw.githubusercontent
 
 #### Installing From A Forked Repository
 
-The install script also accepts these variables to allow installation of a different repository:
+The install script also accepts these variables to allow the installation of a different repository:
 
 - `REPO` (default: `ohmyzsh/ohmyzsh`): this takes the form of `owner/repository`. If you set
   this variable, the installer will look for a repository at `https://github.com/{owner}/{repository}`.
@@ -336,7 +336,7 @@ If you would like to override the functionality of a plugin distributed with Oh 
 
 <a name="enable-gnu-ls"></a>
 
-The default behaviour in Oh My Zsh is to use BSD `ls` in macOS and freeBSD systems. If GNU `ls` is installed
+The default behaviour in Oh My Zsh is to use BSD `ls` in macOS and FreeBSD systems. If GNU `ls` is installed
 (as `gls` command), you can choose to use it instead. To do it, you can use zstyle-based config before
 sourcing `oh-my-zsh.sh`:
 
@@ -369,7 +369,7 @@ zstyle ':omz:plugins:*' aliases no
 zstyle ':omz:plugins:git' aliases no
 ```
 
-You can combine these in other ways taking into account that more specific scopes takes precedence:
+You can combine these in other ways taking into account that more specific scopes take precedence:
 
 ```sh
 # Skip all plugin aliases, except for the git plugin
@@ -389,17 +389,6 @@ Instead, you can now use the following:
 zstyle ':omz:lib:directories' aliases no
 ```
 
-### Disable async git prompt
-
-Async prompt functions are an experimental feature (included on April 3, 2024) that allows Oh My Zsh to render prompt information
-asyncronously. This can improve prompt rendering performance, but it might not work well with some setups. We hope that's not an
-issue, but if you're seeing problems with this new feature, you can turn it off by setting the following in your .zshrc file,
-before Oh My Zsh is sourced:
-
-```sh
-zstyle ':omz:alpha:lib:git' async-prompt no
-```
-
 #### Notice <!-- omit in toc -->
 
 > This feature is currently in a testing phase and it may be subject to change in the future.
@@ -408,6 +397,17 @@ zstyle ':omz:alpha:lib:git' async-prompt no
 
 > It is also not currently aware of "aliases" that are defined as functions. Example of such
 > are `gccd`, `ggf`, or `ggl` functions from the git plugin.
+
+### Disable async git prompt
+
+Async prompt functions are an experimental feature (included on April 3, 2024) that allows Oh My Zsh to render prompt information
+asynchronously. This can improve prompt rendering performance, but it might not work well with some setups. We hope that's not an
+issue, but if you're seeing problems with this new feature, you can turn it off by setting the following in your .zshrc file,
+before Oh My Zsh is sourced:
+
+```sh
+zstyle ':omz:alpha:lib:git' async-prompt no
+```
 
 ## Getting Updates
 
@@ -496,7 +496,7 @@ Thank you so much!
 
 We're on social media:
 
-- [@ohmyzsh](https://twitter.com/ohmyzsh) on Twitter. You should follow it.
+- [@ohmyzsh](https://x.com/ohmyzsh) on X (formerly Twitter). You should follow it.
 - [Facebook](https://www.facebook.com/Oh-My-Zsh-296616263819290/) poke us.
 - [Instagram](https://www.instagram.com/_ohmyzsh/) tag us in your post showing Oh My Zsh!
 - [Discord](https://discord.gg/ohmyzsh) to chat with us!
@@ -513,4 +513,4 @@ Oh My Zsh is released under the [MIT license](LICENSE.txt).
 
 ![Planet Argon](https://pa-github-assets.s3.amazonaws.com/PARGON_logo_digital_COL-small.jpg)
 
-Oh My Zsh was started by the team at [Planet Argon](https://www.planetargon.com/?utm_source=github), a [Ruby on Rails development agency](http://www.planetargon.com/services/ruby-on-rails-development?utm_source=github). Check out our [other open source projects](https://www.planetargon.com/open-source?utm_source=github).
+Oh My Zsh was started by the team at [Planet Argon](https://www.planetargon.com/?utm_source=github), a [Ruby on Rails development agency](https://www.planetargon.com/services/ruby-on-rails-development?utm_source=github). Check out our [other open source projects](https://www.planetargon.com/open-source?utm_source=github).
