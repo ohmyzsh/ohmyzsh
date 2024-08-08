@@ -1,4 +1,7 @@
-# This scripts is copied from (MIT License):
+# Enable usage of global dotnet tools.
+export PATH="$PATH:$HOME/.dotnet/tools/"
+
+# This script is copied from (MIT License):
 # https://raw.githubusercontent.com/dotnet/sdk/main/scripts/register-completions.zsh
 
 #compdef dotnet
