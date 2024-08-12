@@ -47,6 +47,9 @@ alias kdp='kubectl describe pods'
 alias kdelp='kubectl delete pods'
 alias kgpall='kubectl get pods --all-namespaces -o wide'
 
+# Horizontal Pod Autoscaler
+alias kghpa='kubectl get hpa'
+
 # get pod by label: kgpl "app=myapp" -n myns
 alias kgpl='kgp -l'
 
