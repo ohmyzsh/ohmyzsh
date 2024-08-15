@@ -167,7 +167,15 @@ ZSH_THEME="agnoster" # (this is one of the fancy ones)
 # see https://github.com/ohmyzsh/ohmyzsh/wiki/Themes#agnoster
 ```
 
-_Note: many themes require installing a [Powerline Font](https://github.com/powerline/fonts) or a [Nerd Font](https://github.com/ryanoasis/nerd-fonts) in order to render properly. Without them, these themes will render [weird prompt symbols](https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ#i-have-a-weird-character-in-my-prompt)_
+> [!NOTE]
+> You will many times see screenshots for a zsh theme, and try it out, and find that it doesn't look the same for you.
+> 
+> This is because many themes require installing a [Powerline Font](https://github.com/powerline/fonts) or a [Nerd Font](https://github.com/ryanoasis/nerd-fonts) in order to render properly.
+> Without them, these themes will render weird prompt symbols. Check out [the FAQ](https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ#i-have-a-weird-character-in-my-prompt) for more information.
+>
+> Also, beware that themes only control what your prompt looks like. This is, the text you see before or after your cursor, where you'll type your commands.
+> Themes don't control things such as the colors of your terminal window (known as _color scheme_) or the font of your terminal. These are settings that you can change in your terminal emulator.
+> For more information, see [what is a zsh theme](https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ#what-is-a-zsh-theme).
 
 Open up a new terminal window and your prompt should look something like this:
 
