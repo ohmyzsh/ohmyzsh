@@ -114,6 +114,7 @@ plugins=(... git)
 | `gma`                  | `git merge --abort`                                                                                                             |
 | `gmc`                  | `git merge --continue`                                                                                                          |
 | `gms`                  | `git merge --squash`                                                                                                            |
+| `gmff`                 | `git merge --ff-only`                                                                                                           |
 | `gmom`                 | `git merge origin/$(git_main_branch)`                                                                                           |
 | `gmum`                 | `git merge upstream/$(git_main_branch)`                                                                                         |
 | `gmtl`                 | `git mergetool --no-prompt`                                                                                                     |
@@ -125,6 +126,8 @@ plugins=(... git)
 | `gprav`                | `git pull --rebase --autostash -v`                                                                                              |
 | `gprom`                | `git pull --rebase origin $(git_main_branch)`                                                                                   |
 | `gpromi`               | `git pull --rebase=interactive origin $(git_main_branch)`                                                                       |
+| `gprum`                | `git pull --rebase upstream $(git_main_branch)`                                                                                 |
+| `gprumi`               | `git pull --rebase=interactive upstream $(git_main_branch)`                                                                     |
 | `ggpull`               | `git pull origin "$(git_current_branch)"`                                                                                       |
 | `ggl`                  | `git pull origin $(current_branch)`                                                                                             |
 | `gluc`                 | `git pull upstream $(git_current_branch)`                                                                                       |
@@ -156,6 +159,7 @@ plugins=(... git)
 | `grbd`                 | `git rebase $(git_develop_branch)`                                                                                              |
 | `grbm`                 | `git rebase $(git_main_branch)`                                                                                                 |
 | `grbom`                | `git rebase origin/$(git_main_branch)`                                                                                          |
+| `grbum`                | `git rebase upstream/$(git_main_branch)`                                                                                        |
 | `grf`                  | `git reflog`                                                                                                                    |
 | `gr`                   | `git remote`                                                                                                                    |
 | `grv`                  | `git remote --verbose`                                                                                                          |
