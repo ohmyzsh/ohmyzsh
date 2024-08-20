@@ -1,5 +1,7 @@
 # Add git-commit commands directory to path
-path=("$ZSH/plugins/git-commit/git-commands" $path)
+0="${${ZERO:-${0:#$ZSH_ARGZERO}}:-${(%):-%N}}"
+0="${${(M)0:#/*}:-$PWD/$0}"
+path=("${0:a:h}/git-commands" $path)
 
 # Append completions for custom git commands
 () {
@@ -29,7 +31,7 @@ path=("$ZSH/plugins/git-commit/git-commands" $path)
 # Clean up aliases from the prior implementation of git-commit. Can be safely removed
 # once everyone's .gitconfig has been restored.
 () {
-  git config --global --get oh-my-zsh.git-commit-alias &> /dev/null || return
+  git config --global --get oh-my-zsh.git-commit-alias &> /dev/null || return 0
   local -a old_git_aliases=(
     'build'  'chore'     'ci'
     'docs'   'feat'      'fix'
