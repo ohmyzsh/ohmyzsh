@@ -46,6 +46,7 @@ alias kep='kubectl edit pods'
 alias kdp='kubectl describe pods'
 alias kdelp='kubectl delete pods'
 alias kgpall='kubectl get pods --all-namespaces -o wide'
+alias kclearevicted="kubectl get pods --all-namespaces -o json | jq '.items[] | select(.status.reason!=null) | select(.status.reason | contains(\"Evicted\")) | \"kubectl delete pods \(.metadata.name) -n \(.metadata.namespace)\"' | xargs -n 1 bash -c"
 
 # get pod by label: kgpl "app=myapp" -n myns
 alias kgpl='kgp -l'
