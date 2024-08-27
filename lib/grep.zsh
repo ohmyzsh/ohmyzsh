@@ -24,8 +24,8 @@ else
     if [[ -n "$GREP_OPTIONS" ]]; then
         # export grep, egrep and fgrep settings
         alias grep="grep $GREP_OPTIONS"
-        alias egrep="grep -E $GREP_OPTIONS"
-        alias fgrep="grep -F $GREP_OPTIONS"
+        alias egrep="grep -E"
+        alias fgrep="grep -F"
 
         # write to cache file if cache directory is writable
         if [[ -w "$ZSH_CACHE_DIR" ]]; then
