@@ -8,5 +8,5 @@ log/
 .DS_Store
 
 # editor configs
-.vscode
-.idea
+.vscode/
+.idea/
