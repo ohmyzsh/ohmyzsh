@@ -74,7 +74,7 @@ function _omz_setup_autoload {
 if zstyle -t ':omz:plugins:nvm' lazy; then
   # Call nvm when first using nvm, node, npm, pnpm, yarn, corepack or other commands in lazy-cmd
   zstyle -a ':omz:plugins:nvm' lazy-cmd nvm_lazy_cmd
-  nvm_lazy_cmd=(nvm node npm npx pnpm yarn corepack $nvm_lazy_cmd) # default values
+  nvm_lazy_cmd=(nvm node npm npx pnpm pnpx yarn corepack $nvm_lazy_cmd) # default values
   eval "
     function $nvm_lazy_cmd {
       for func in $nvm_lazy_cmd; do
