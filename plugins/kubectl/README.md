@@ -28,12 +28,12 @@ plugins=(... kubectl)
 | kdelf   | `kubectl delete -f`                 | Delete a pod using the type and name specified in -f argument                                    |
 |         |                                     | **Pod management**                                                                               |
 | kgp     | `kubectl get pods`                  | List all pods in ps output format                                                                |
+| kgpl    | `kubectl get pods --show-labels`    | List all pods in ps output format with labels                                                    |
 | kgpw    | `kgp --watch`                       | After listing/getting the requested object, watch for changes                                    |
 | kgpwide | `kgp -o wide`                       | Output in plain-text format with any additional information. For pods, the node name is included |
 | kep     | `kubectl edit pods`                 | Edit pods from the default editor                                                                |
 | kdp     | `kubectl describe pods`             | Describe all pods                                                                                |
 | kdelp   | `kubectl delete pods`               | Delete all pods matching passed arguments                                                        |
-| kgpl    | `kgp -l`                            | Get pods by label. Example: `kgpl "app=myapp" -n myns`                                           |
 | kgpn    | `kgp -n`                            | Get pods by namespace. Example: `kgpn kube-system`                                               |
 |         |                                     | **Service management**                                                                           |
 | kgs     | `kubectl get svc`                   | List all services in ps output format                                                            |
@@ -49,7 +49,7 @@ plugins=(... kubectl)
 | kdeli   | `kubectl delete ingress`            | Delete ingress resources matching passed argument                                                |
 |         |                                     | **Namespace management**                                                                         |
 | kgns    | `kubectl get namespaces`            | List the current namespaces in a cluster                                                         |
-| kcn     | `kubectl config set-context --current --namespace` | Change current namespace |
+| kcn     | `kubectl config set-context --current --namespace` | Change current namespace                                                          |
 | kens    | `kubectl edit namespace`            | Edit namespace resource from the default editor                                                  |
 | kdns    | `kubectl describe namespace`        | Describe namespace resource in detail                                                            |
 | kdelns  | `kubectl delete namespace`          | Delete the namespace. WARNING! This deletes everything in the namespace                          |
@@ -90,6 +90,7 @@ plugins=(... kubectl)
 | kcp     | `kubectl cp`                        | Copy files and directories to and from containers                                                |
 |         |                                     | **Node management**                                                                              |
 | kgno    | `kubectl get nodes`                 | List the nodes in ps output format                                                               |
+| kgnol   | `kubectl get nodes --show-labels`   | List the nodes in ps output format with labels                                                   |
 | keno    | `kubectl edit node`                 | Edit nodes resource from the default editor                                                      |
 | kdno    | `kubectl describe node`             | Describe node resource in detail                                                                 |
 | kdelno  | `kubectl delete node`               | Delete the node                                                                                  |
