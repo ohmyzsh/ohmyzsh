@@ -40,6 +40,7 @@ alias dud='du -d 1 -h'
 alias ff='find . -type f -name'
 
 alias h='history'
+alias c='clear'
 alias hgrep="fc -El 0 | grep"
 alias help='man'
 alias p='ps -f'
