@@ -74,7 +74,7 @@ function vrun() {
 }
 
 # Create a new virtual environment using the specified name.
-# If none specfied, use $PYTHON_VENV_NAME
+# If none specified, use $PYTHON_VENV_NAME
 function mkv() {
   local name="${1:-$PYTHON_VENV_NAME}"
   local venvpath="${name:P}"
