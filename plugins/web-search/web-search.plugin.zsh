@@ -31,7 +31,7 @@ function web_search() {
     npmpkg          "https://www.npmjs.com/search?q="
     packagist       "https://packagist.org/?query="
     gopkg           "https://pkg.go.dev/search?m=package&q="
-    chatgpt         "https://chat.openai.com?q="
+    chatgpt         "https://chatgpt.com/?q="
   )
 
   # check whether the search engine is supported

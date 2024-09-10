@@ -50,17 +50,17 @@ Available search contexts are:
 | `npmpkg`              | `https://www.npmjs.com/search?q=`               |
 | `packagist`           | `https://packagist.org/?query=`                 |
 | `gopkg`               | `https://pkg.go.dev/search?m=package&q=`        |
-| `chatgpt`             | `https://chat.openai.com?q=`                    |
+| `chatgpt`             | `https://chatgpt.com/?q=`                       |
 
 Also there are aliases for bang-searching DuckDuckGo:
 
-| Context   | Bang  |
-| --------- | ----- |
-| `wiki`    | `!w`  |
-| `news`    | `!n`  |
-| `map`     | `!m`  |
-| `image`   | `!i`  |
-| `ducky`   | `!`   |
+| Context | Bang |
+| ------- | ---- |
+| `wiki`  | `!w` |
+| `news`  | `!n` |
+| `map`   | `!m` |
+| `image` | `!i` |
+| `ducky` | `!`  |
 
 ### Custom search engines
 
