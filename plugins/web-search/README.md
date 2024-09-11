@@ -51,6 +51,7 @@ Available search contexts are:
 | `packagist`           | `https://packagist.org/?query=`                 |
 | `gopkg`               | `https://pkg.go.dev/search?m=package&q=`        |
 | `chatgpt`             | `https://chatgpt.com/?q=`                       |
+| `reddit`              | `https://www.reddit.com/search/?q=`             |
 
 Also there are aliases for bang-searching DuckDuckGo:
 
