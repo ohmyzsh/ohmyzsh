@@ -86,6 +86,7 @@ alias npmpkg='web_search npmpkg'
 alias packagist='web_search packagist'
 alias gopkg='web_search gopkg'
 alias chatgpt='web_search chatgpt'
+alias reddit='web_search reddit'
 
 #add your own !bang searches here
 alias wiki='web_search duckduckgo \!w'
