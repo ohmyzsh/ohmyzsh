@@ -227,7 +227,7 @@ function _omz_git_prompt_status() {
   prefix_constant_map=(
     '\?\? '     'UNTRACKED'
     'A  '       'ADDED'
-    'M  '       'ADDED'
+    'M  '       'MODIFIED'
     'MM '       'MODIFIED'
     ' M '       'MODIFIED'
     'AM '       'MODIFIED'
