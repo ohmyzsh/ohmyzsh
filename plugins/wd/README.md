@@ -115,9 +115,11 @@ wd() {
 
 3. Install manpage (optional):
 
+Move manpage into an appropriate directory, then trigger `mandb` to discover it
+
 ```zsh
-sudo cp ~/.local/wd/wd.1 /usr/share/man/man1/wd.1
-sudo chmod 644 /usr/share/man/man1/wd.1
+sudo install -m 644 ~/.local/wd/wd.1 /usr/share/man/man1/wd.1
+sudo mandb /usr/share/man/man1
 ```
 
 **Note:** when pulling and updating `wd`, you'll need to repeat step 3 should the manpage change
@@ -139,10 +141,11 @@ rm -f ~/.zcompdump; compinit
 
 ## Browse
 
-If you want to make use of the `fzf`-powered browse feature to fuzzy search through all your warp points, set up a keybind in your `.zshrc`:
+`wd` comes with an `fzf`-powered browse feature to fuzzy search through all your warp points. It's available through the `wd browse` command. For quick access you can set up an alias or keybind in your `.zshrc`:
 
 ```zsh
-bindkey ${FZF_WD_BINDKEY:-'^B'} fuzzy_wd_widget
+# ctrl-b to open the fzf browser
+bindkey ${FZF_WD_BINDKEY:-'^B'} wd_browse_widget
 ```
 
 ## Usage
@@ -253,12 +256,6 @@ wd --version
 
 ```zsh
 wd --config ./file <command>
-```
-
-* Force `exit` with return code after running. This is not default, as it will *exit your terminal*, though required for testing/debugging.
-
-```zsh
-wd --debug <command>
 ```
 
 * Silence all output:
