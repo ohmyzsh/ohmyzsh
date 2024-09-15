@@ -117,15 +117,15 @@ function bgnotify {
   local icon="$3"
   if (( ${+commands[terminal-notifier]} )); then # macOS
     local term_id=$(bgnotify_programid)
-    terminal-notifier -message "$message" -title "$title" ${=icon:+-appIcon "$icon"} ${=term_id:+-activate "$term_id"} &>/dev/null
+    terminal-notifier -message "$message" -title "$title" ${=icon:+-appIcon "$icon"} ${=term_id:+-activate "$term_id"} ${=bgnotify_extraargs:-} &>/dev/null
   elif (( ${+commands[growlnotify]} )); then # macOS growl
-    growlnotify -m "$title" "$message"
+    growlnotify -m "$title" "$message" ${=bgnotify_extraargs:-}
   elif (( ${+commands[notify-send]} )); then
-    notify-send "$title" "$message" ${=icon:+--icon "$icon"}
+    notify-send "$title" "$message" ${=icon:+--icon "$icon"} ${=bgnotify_extraargs:-}
   elif (( ${+commands[kdialog]} )); then # KDE
-    kdialog --title "$title" --passivepopup  "$message" 5
+    kdialog --title "$title" --passivepopup  "$message" 5 ${=bgnotify_extraargs:-}
   elif (( ${+commands[notifu]} )); then # cygwin
-    notifu /m "$message" /p "$title" ${=icon:+/i "$icon"}
+    notifu /m "$message" /p "$title" ${=icon:+/i "$icon"} ${=bgnotify_extraargs:-}
   fi
 }
 
