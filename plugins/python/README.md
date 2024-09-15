@@ -13,7 +13,6 @@ plugins=(... python)
 | Command          | Description                                                                            |
 | ---------------- | -------------------------------------------------------------------------------------- |
 | `py`             | Runs `python3`. Only set if `py` is not installed.                                     |
-| `ipython`        | Runs the appropriate `ipython` version according to the activated virtualenv           |
 | `pyfind`         | Finds .py files recursively in the current directory                                   |
 | `pyclean [dirs]` | Deletes byte-code and cache files from a list of directories or the current one        |
 | `pygrep <text>`  | Looks for `text` in `*.py` files in the current directory, recursively                 |

@@ -43,9 +43,6 @@ function pyuserpaths() {
 # Grep among .py files
 alias pygrep='grep -nr --include="*.py"'
 
-# Run proper IPython regarding current virtualenv (if any)
-alias ipython='python3 -c "import sys; del sys.path[0]; import IPython; sys.exit(IPython.start_ipython())"'
-
 # Share local directory as a HTTP server
 alias pyserver="python3 -m http.server"
 
