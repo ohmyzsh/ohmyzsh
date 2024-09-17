@@ -178,6 +178,12 @@ alias kej='kubectl edit job'
 alias kdj='kubectl describe job'
 alias kdelj='kubectl delete job'
 
+# Certificate management.
+alias kgcert='kubectl get certificate'
+alias kgcerta='kubectl get certificate --all-namespaces'
+alias kdcert='kubectl describe certificate'
+alias kdelcert='kubectl delete certificate'
+
 # Utility print functions (json / yaml)
 function _build_kubectl_out_alias {
   setopt localoptions norcexpandparam
