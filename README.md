@@ -7,7 +7,7 @@
 1. oh-my-zsh
 
 ```bash
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/snakewarhead/oh-my-zsh/master/tools/install.sh)"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/arawlin/oh-my-zsh/master/tools/install.sh)"
 ```
 
 ## Issues

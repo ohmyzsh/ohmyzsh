@@ -67,7 +67,7 @@ if [ -n "$ZDOTDIR" ] && [ "$ZDOTDIR" != "$HOME" ]; then
   ZSH="${ZSH:-$ZDOTDIR/ohmyzsh}"
 fi
 ZSH="${ZSH:-$HOME/.oh-my-zsh}"
-REPO=${REPO:-snakewarhead/oh-my-zsh}
+REPO=${REPO:-arawlin/oh-my-zsh}
 REMOTE=${REMOTE:-https://github.com/${REPO}.git}
 BRANCH=${BRANCH:-master}
 
