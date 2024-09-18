@@ -73,6 +73,7 @@ plugins=(... git)
 | `gcans!`               | `git commit --verbose --all --signoff --no-edit --amend`                                                                        |
 | `gcann!`               | `git commit --verbose --all --date=now --no-edit --amend`                                                                       |
 | `gc!`                  | `git commit --verbose --amend`                                                                                                  |
+| `gcn`                  | `git commit --verbose --no-edit`                                                                                                |
 | `gcn!`                 | `git commit --verbose --no-edit --amend`                                                                                        |
 | `gcs`                  | `git commit -S`                                                                                                                 |
 | `gcss`                 | `git commit -S -s`                                                                                                              |
