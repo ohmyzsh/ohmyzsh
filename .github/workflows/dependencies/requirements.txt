@@ -1,0 +1,7 @@
+certifi==2024.8.30
+charset-normalizer==3.3.2
+idna==3.9
+PyYAML==6.0.2
+requests==2.32.3
+semver==3.0.2
+urllib3==2.2.3

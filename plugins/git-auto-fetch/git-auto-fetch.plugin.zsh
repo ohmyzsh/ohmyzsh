@@ -2,7 +2,8 @@
 : ${GIT_AUTO_FETCH_INTERVAL:=60}
 
 # Necessary for the git-fetch-all function
-zmodload zsh/datetime zsh/stat
+zmodload zsh/datetime
+zmodload -F zsh/stat b:zstat  # only zstat command, not stat command
 
 function git-fetch-all {
   (
@@ -27,7 +28,8 @@ function git-fetch-all {
     # Fetch all remotes (avoid ssh passphrase prompt)
     date -R &>! "$gitdir/FETCH_LOG"
     GIT_SSH_COMMAND="command ssh -o BatchMode=yes" \
-      command git fetch --all 2>/dev/null &>> "$gitdir/FETCH_LOG"
+    GIT_TERMINAL_PROMPT=0 \
+      command git fetch --all --recurse-submodules=yes 2>/dev/null &>> "$gitdir/FETCH_LOG"
   ) &|
 }
 

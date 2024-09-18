@@ -10,10 +10,20 @@ plugins=(... toolbox)
 
 ## Prompt function
 
-This plugins adds `toolbox_prompt_info()` function. Using it in your prompt, it will show the toolbox indicator ⬢ (if you are running in a toolbox container), and nothing if not.
+This plugins adds `toolbox_prompt_info()` function. Using it in your prompt, it will show the toolbox
+indicator ⬢ (if you are running in a toolbox container), and nothing if not.
 
 You can use it by adding `$(toolbox_prompt_info)` to your `PROMPT` or `RPROMPT` variable:
 
 ```zsh
 RPROMPT='$(toolbox_prompt_info)'
 ```
+
+In the same way, it adds `toolbox_prompt_name()`, showing the name of the containerized environment.
+
+## Aliases
+
+| Alias | Command         | Description                          |
+| ----- | --------------- | ------------------------------------ |
+| tbe   | `toolbox enter` | Enters the toolbox environment       |
+| tbr   | `toolbox run`   | Run a command in an existing toolbox |

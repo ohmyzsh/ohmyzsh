@@ -18,7 +18,7 @@ _1st_arguments=(
 'config:Get and set options'
 'version:Show the roswell version information'
 "help:Use \"ros help [command]\" for more information about a command."$'\n\t\t'"Use \"ros help [topic]\" for more information about the topic."
-) 
+)
 
 #local expl
 

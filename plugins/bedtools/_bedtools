@@ -47,7 +47,7 @@ case $state in
         "random[Generate random intervals in a genome.]" \
         "reldist[Calculate the distribution of relative distances b/w two files.]" \
         "sample[Sample random records from file using reservoir sampling.]" \
-        "shuffle[Randomly redistrubute intervals in a genome.]" \
+        "shuffle[Randomly redistribute intervals in a genome.]" \
         "slop[Adjust the size of intervals.]" \
         "sort[Order the intervals in a file.]" \
         "subtract[Remove intervals based on overlaps b/w two files.]" \

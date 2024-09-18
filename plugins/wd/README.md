@@ -1,12 +1,12 @@
 # wd
 
-[![Build Status](https://travis-ci.org/mfaerevaag/wd.png?branch=master)](https://travis-ci.org/mfaerevaag/wd)
+[![Build Status](https://github.com/mfaerevaag/wd/actions/workflows/test.yml/badge.svg)](https://github.com/mfaerevaag/wd/actions)
 
 `wd` (*warp directory*) lets you jump to custom directories in zsh, without using `cd`.
 Why?
 Because `cd` seems inefficient when the folder is frequently visited or has a long path.
 
-![tty.gif](https://raw.githubusercontent.com/mfaerevaag/wd/master/tty.gif)
+![Demo](https://raw.githubusercontent.com/mfaerevaag/wd/master/tty.gif)
 
 ## Setup
 
@@ -36,6 +36,10 @@ In your `.zshrc`:
 antibody bundle mfaerevaag/wd
 ```
 
+### [Fig](https://fig.io)
+
+Install `wd` here: [![Fig plugin store](https://fig.io/badges/install-with-fig.svg)](https://fig.io/plugins/other/wd_mfaerevaag)
+
 ### Arch ([AUR](https://aur.archlinux.org/packages/zsh-plugin-wd-git/))
 
 1. Install from the AUR
@@ -51,6 +55,24 @@ yay -S zsh-plugin-wd-git
 wd() {
     . /usr/share/wd/wd.sh
 }
+```
+
+### [Home Manager](https://github.com/nix-community/home-manager)
+
+Add the following to your `home.nix` then run `home-manager switch`:
+
+```nix
+programs.zsh.plugins = [
+  {
+    name = "wd";
+    src = pkgs.fetchFromGitHub {
+      owner = "mfaerevaag";
+      repo = "wd";
+      rev = "v0.5.2";
+      sha256 = "sha256-4yJ1qhqhNULbQmt6Z9G22gURfDLe30uV1ascbzqgdhg=";
+    };
+  }
+];
 ```
 
 ### [zplug](https://github.com/zplug/zplug)
@@ -93,9 +115,11 @@ wd() {
 
 3. Install manpage (optional):
 
+Move manpage into an appropriate directory, then trigger `mandb` to discover it
+
 ```zsh
-sudo cp ~/.local/wd/wd.1 /usr/share/man/man1/wd.1
-sudo chmod 644 /usr/share/man/man1/wd.1
+sudo install -m 644 ~/.local/wd/wd.1 /usr/share/man/man1/wd.1
+sudo mandb /usr/share/man/man1
 ```
 
 **Note:** when pulling and updating `wd`, you'll need to repeat step 3 should the manpage change
@@ -115,6 +139,15 @@ Also, you may have to force a rebuild of `zcompdump` by running:
 rm -f ~/.zcompdump; compinit
 ```
 
+## Browse
+
+`wd` comes with an `fzf`-powered browse feature to fuzzy search through all your warp points. It's available through the `wd browse` command. For quick access you can set up an alias or keybind in your `.zshrc`:
+
+```zsh
+# ctrl-b to open the fzf browser
+bindkey ${FZF_WD_BINDKEY:-'^B'} wd_browse_widget
+```
+
 ## Usage
 
 * Add warp point to current working directory:
@@ -127,6 +160,19 @@ If a warp point with the same name exists, use `wd add foo --force` to overwrite
 
 **Note:** a warp point cannot contain colons, or consist of only spaces and dots.
 The first will conflict in how `wd` stores the warp points, and the second will conflict with other features, as below.
+
+* Add warp point to any directory with default name:
+
+```zsh
+wd addcd /foo/ bar
+```
+
+* Add warp point to any directory with a custom name:
+
+```zsh
+wd addcd /foo/
+```
+
 
 You can omit point name to automatically use the current directory's name instead.
 
@@ -210,12 +256,6 @@ wd --version
 
 ```zsh
 wd --config ./file <command>
-```
-
-* Force `exit` with return code after running. This is not default, as it will *exit your terminal*, though required for testing/debugging.
-
-```zsh
-wd --debug <command>
 ```
 
 * Silence all output:

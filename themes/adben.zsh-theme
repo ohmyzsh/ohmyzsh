@@ -79,7 +79,7 @@ ps1_command_tip() {
       command wget -qO- https://www.commandlinefu.com/commands/random/plaintext
     elif (( ${+commands[curl]} )); then
       command curl -fsL https://www.commandlinefu.com/commands/random/plaintext
-    fi 
+    fi
   } | sed '1d;/^$/d'
 }
 

@@ -98,7 +98,7 @@ jaddr() {
   elif [[ $# -eq 2 ]]; then
     # Get unit address
     juju status "$1/$2" --format=json \
-      | jq -r ".applications.\"$1\".units.\"$1/$2\".address"
+      | jq -r ".applications.\"$1\".units.\"$1/$2\" | .address // .\"public-address\""
   else
     echo "Invalid number of arguments."
     echo "Usage:   jaddr <app-name> [<unit-number>]"
@@ -163,10 +163,40 @@ jreld() {
   juju run "relation-get -r $relid - $2" --unit $2/$3
 }
 
+# Return Juju current controller
+jcontroller() {
+  local controller="$(awk '/current-controller/ {print $2}' ~/.local/share/juju/controllers.yaml)"
+  if [[ -z "$controller" ]]; then
+    return 1
+  fi
+
+  echo $controller
+  return 0
+}
+
+# Return Juju current model
+jmodel() {
+  local yqbin="$(whereis yq | awk '{print $2}')"
+
+  if [[ -z "$yqbin" ]]; then
+    echo "--"
+    return 1
+  fi
+
+  local model="$(yq e ".controllers.$(jcontroller).current-model" < ~/.local/share/juju/models.yaml | cut -d/ -f2)"
+
+  if [[ -z "$model" ]]; then
+    echo "--"
+    return 1
+  fi
+
+  echo $model
+  return 0
+}
+
 # Watch juju status, with optional interval (default: 5 sec)
 wjst() {
   local interval="${1:-5}"
   shift $(( $# > 0 ))
   watch -n "$interval" --color juju status --relations --color "$@"
 }
-

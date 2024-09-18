@@ -1,6 +1,6 @@
 """
 Update Emoji.py
-Refeshes OMZ emoji database based on the latest Unicode spec
+Refreshes OMZ emoji database based on the latest Unicode spec
 """
 import re
 import json
@@ -56,7 +56,7 @@ typeset -gAH emoji_groups
 
 # def country_iso(_all_names, _omz_name):
 #     """ Using the external library country_converter,
-#         this funciton can detect the ISO2 and ISO3 codes
+#         this function can detect the ISO2 and ISO3 codes
 #         of the country. It takes as argument the array
 #         with all the names of the emoji, and returns that array."""
 #     omz_no_underscore = re.sub(r'_', r' ', _omz_name)
@@ -95,8 +95,8 @@ def name_to_omz(_name, _group, _subgroup, _status):
         shortname = snake_case(_name)
     # Special treatment by status
     # Enables us to have every emoji combination,
-    # even the one that are not officially sanctionned
-    # and are implemeted by, say, only one vendor
+    # even the one that are not officially sanctioned
+    # and are implemented by, say, only one vendor
     if _status == "unqualified":
         shortname += "_unqualified"
     elif _status == "minimally-qualified":

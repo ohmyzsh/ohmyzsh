@@ -90,7 +90,7 @@ use the `ssh-add-args` setting. You can pass multiple arguments separated by spa
 zstyle :omz:plugins:ssh-agent ssh-add-args -K -c -a /run/user/1000/ssh-auth
 ```
 
-These will then be passed the the `ssh-add` call as if written directly. The example
+These will then be passed the `ssh-add` call as if written directly. The example
 above will turn into:
 
 ```zsh
@@ -98,6 +98,33 @@ ssh-add -K -c -a /run/user/1000/ssh-auth <identities>
 ```
 
 For valid `ssh-add` arguments run `ssh-add --help` or `man ssh-add`.
+
+### Powerline 10k specific settings
+
+Powerline10k has an instant prompt setting that doesn't like when this plugin
+writes to the console. Consider using the following settings if you're using
+p10k (documented above):
+
+```
+zstyle :omz:plugins:ssh-agent quiet yes
+zstyle :omz:plugins:ssh-agent lazy yes
+```
+
+### macOS specific settings
+
+macOS supports using passphrases stored in the keychain when adding identities
+to the ssh-agent.
+
+```
+ssh-add --apple-use-keychain ~/.ssh/id_rsa ...
+```
+
+
+This plugin can be configured to use the keychain when loading using the following:
+
+```
+zstyle :omz:plugins:ssh-agent ssh-add-args --apple-load-keychain
+```
 
 ## Credits
 

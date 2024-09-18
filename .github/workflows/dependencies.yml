@@ -1,0 +1,36 @@
+name: Update dependencies
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: "0 6 * * 0"
+
+jobs:
+  check:
+    name: Check for updates
+    runs-on: ubuntu-latest
+    if: github.repository == 'ohmyzsh/ohmyzsh'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Authenticate as @ohmyzsh
+        id: generate_token
+        uses: ohmyzsh/github-app-token@v2
+        with:
+          app_id: ${{ secrets.OHMYZSH_APP_ID }}
+          private_key: ${{ secrets.OHMYZSH_APP_PRIVATE_KEY }}
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+      - name: Process dependencies
+        env:
+          GH_TOKEN: ${{ steps.generate_token.outputs.token }}
+          GIT_APP_NAME: ohmyzsh[bot]
+          GIT_APP_EMAIL: 54982679+ohmyzsh[bot]@users.noreply.github.com
+          TMP_DIR: ${{ runner.temp }}
+        run: |
+          pip install -r .github/workflows/dependencies/requirements.txt
+          python3 .github/workflows/dependencies/updater.py

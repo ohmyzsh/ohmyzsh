@@ -16,7 +16,8 @@ _fishy_collapsed_wd() {
 }
 
 local user_color='green'; [ $UID -eq 0 ] && user_color='red'
-PROMPT='%n@%m %{$fg[$user_color]%}$(_fishy_collapsed_wd)%{$reset_color%}%(!.#.>) '
+local host_color='white'; [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] && host_color='yellow'
+PROMPT='%{$fg[$user_color]%}%n%{$reset_color%}@%{$fg[$host_color]%}%m %{$fg[$user_color]%}$(_fishy_collapsed_wd)%{$reset_color%}%(!.#.>) '
 PROMPT2='%{$fg[red]%}\ %{$reset_color%}'
 
 local return_status="%{$fg_bold[red]%}%(?..%?)%{$reset_color%}"
