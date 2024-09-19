@@ -20,7 +20,7 @@ if [[ -z "$NVM_DIR" ]] || [[ ! -f "$NVM_DIR/nvm.sh" ]]; then
   return
 fi
 
-function _omz_load_nvm_completion {
+function _omz_nvm_setup_completion {
   local _nvm_completion
   # Load nvm bash completion
   for _nvm_completion in "$NVM_DIR/bash_completion" "$NVM_HOMEBREW/etc/bash_completion.d/nvm"; do
@@ -33,12 +33,12 @@ function _omz_load_nvm_completion {
       break
     fi
   done
-  unfunction _omz_load_nvm_completion
+  unfunction _omz_nvm_setup_completion
 }
 
-function _omz_setup_autoload {
+function _omz_nvm_setup_autoload {
   if ! zstyle -t ':omz:plugins:nvm' autoload; then
-    unfunction _omz_setup_autoload
+    unfunction _omz_nvm_setup_autoload
     return
   fi
 
@@ -68,13 +68,13 @@ function _omz_setup_autoload {
   add-zsh-hook chpwd load-nvmrc
 
   load-nvmrc
-  unfunction _omz_setup_autoload
+  unfunction _omz_nvm_setup_autoload
 }
 
 if zstyle -t ':omz:plugins:nvm' lazy; then
   # Call nvm when first using nvm, node, npm, pnpm, yarn, corepack or other commands in lazy-cmd
   zstyle -a ':omz:plugins:nvm' lazy-cmd nvm_lazy_cmd
-  nvm_lazy_cmd=(nvm node npm npx pnpm pnpx yarn corepack $nvm_lazy_cmd) # default values
+  nvm_lazy_cmd=(_omz_nvm_load nvm node npm npx pnpm pnpx yarn corepack $nvm_lazy_cmd) # default values
   eval "
     function $nvm_lazy_cmd {
       for func in $nvm_lazy_cmd; do
@@ -84,14 +84,16 @@ if zstyle -t ':omz:plugins:nvm' lazy; then
       done
       # Load nvm if it exists in \$NVM_DIR
       [[ -f \"\$NVM_DIR/nvm.sh\" ]] && source \"\$NVM_DIR/nvm.sh\"
-      _omz_load_nvm_completion
-      _omz_setup_autoload
-      \"\$0\" \"\$@\"
+      _omz_nvm_setup_completion
+      _omz_nvm_setup_autoload
+      if [[ \"\$0\" != _omz_nvm_load ]]; then
+        \"\$0\" \"\$@\"
+      fi
     }
   "
   unset nvm_lazy_cmd
 else
   source "$NVM_DIR/nvm.sh"
-  _omz_load_nvm_completion
-  _omz_setup_autoload
+  _omz_nvm_setup_completion
+  _omz_nvm_setup_autoload
 fi

@@ -42,6 +42,8 @@ as you want:
 zstyle ':omz:plugins:nvm' lazy-cmd eslint prettier typescript ...
 ```
 
+There will be a function `_omz_nvm_load` available to load `nvm` without executing any other trigger command.
+
 #### `.nvmrc` autoload
 
 Note: _if used at the same time as `lazy`, `autoload` will start working only after nvm has been lazy-loaded_
