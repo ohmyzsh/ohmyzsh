@@ -162,6 +162,18 @@ function git_current_branch() {
   echo ${ref#refs/heads/}
 }
 
+# Outputs the name of the previously checked out branch
+# Usage example: git pull origin $(git_current_branch)
+# rev-parse --symbolic-full-name @{-1} only prints if it is a branch
+function git_previous_branch() {
+  local ref
+  ref=$(__git_prompt_git rev-parse --quiet --symbolic-full-name @{-1} 2> /dev/null)
+  local ret=$?
+  if [[ $ret != 0 ]] || [[ -z $ref ]]; then
+    return  # no git repo or non-branch previous ref
+  fi
+  echo ${ref#refs/heads/}
+}
 
 # Gets the number of commits ahead from remote
 function git_commits_ahead() {
@@ -227,7 +239,7 @@ function _omz_git_prompt_status() {
   prefix_constant_map=(
     '\?\? '     'UNTRACKED'
     'A  '       'ADDED'
-    'M  '       'ADDED'
+    'M  '       'MODIFIED'
     'MM '       'MODIFIED'
     ' M '       'MODIFIED'
     'AM '       'MODIFIED'

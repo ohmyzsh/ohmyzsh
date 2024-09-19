@@ -634,7 +634,7 @@ _swift_package_unedit() {
     integer ret=1
     local -a args
     args+=(
-        '--force[Unedit the package even if it has uncommited and unpushed changes]'
+        '--force[Unedit the package even if it has uncommitted and unpushed changes]'
         ':package-name:'
         '--version[Show the version.]'
         '(-help -h --help)'{-help,-h,--help}'[Show help information.]'

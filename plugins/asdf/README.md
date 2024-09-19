@@ -1,7 +1,5 @@
 ## asdf
 
-**Maintainer:** [@RobLoach](https://github.com/RobLoach)
-
 Adds integration with [asdf](https://github.com/asdf-vm/asdf), the extendable version manager, with support for Ruby, Node.js, Elixir, Erlang and more.
 
 ### Installation
@@ -28,3 +26,7 @@ asdf install nodejs latest
 asdf global nodejs latest
 asdf local nodejs latest
 ```
+
+### Maintainer
+
+- [@RobLoach](https://github.com/RobLoach)

@@ -1,7 +1,5 @@
 # Swift Package Manager
 
-## Description
-
 This plugin provides a few utilities that make you faster on your daily work with the [Swift Package Manager](https://github.com/apple/swift-package-manager), as well as autocompletion for Swift 5.9.
 
 To start using it, add the `swiftpm` plugin to your `plugins` array in `~/.zshrc`:

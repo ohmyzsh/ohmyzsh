@@ -43,7 +43,7 @@ function _add_identities() {
   # this is to mimic the call to ssh-add with no identities
   if [[ ${#identities} -eq 0 ]]; then
     # key list found on `ssh-add` man page's DESCRIPTION section
-    for id in id_rsa id_dsa id_ecdsa id_ed25519 identity; do
+    for id in id_rsa id_dsa id_ecdsa id_ed25519 id_ed25519_sk identity; do
       # check if file exists
       [[ -f "$HOME/.ssh/$id" ]] && identities+=($id)
     done

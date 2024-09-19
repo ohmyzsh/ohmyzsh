@@ -57,6 +57,16 @@ function takeurl() {
   cd "$thedir"
 }
 
+function takezip() {
+  local data thedir
+  data="$(mktemp)"
+  curl -L "$1" > "$data"
+  unzip "$data" -d "./"
+  thedir="$(unzip -l "$data" | awk 'NR==4 {print $4}' | sed 's/\/.*//')"
+  rm "$data"
+  cd "$thedir"
+}
+
 function takegit() {
   git clone "$1"
   cd "$(basename ${1%%.git})"
@@ -65,6 +75,8 @@ function takegit() {
 function take() {
   if [[ $1 =~ ^(https?|ftp).*\.(tar\.(gz|bz2|xz)|tgz)$ ]]; then
     takeurl "$1"
+  elif [[ $1 =~ ^(https?|ftp).*\.(zip)$ ]]; then
+    takezip "$1"
   elif [[ $1 =~ ^([A-Za-z0-9]\+@|https?|git|ssh|ftps?|rsync).*\.git/?$ ]]; then
     takegit "$1"
   else

@@ -197,6 +197,7 @@ alias gcan!='git commit --verbose --all --no-edit --amend'
 alias gcans!='git commit --verbose --all --signoff --no-edit --amend'
 alias gcann!='git commit --verbose --all --date=now --no-edit --amend'
 alias gc!='git commit --verbose --amend'
+alias gcn='git commit --verbose --no-edit'
 alias gcn!='git commit --verbose --no-edit --amend'
 alias gcf='git config --list'
 alias gdct='git describe --tags $(git rev-list --tags --max-count=1)'
@@ -255,6 +256,7 @@ alias gm='git merge'
 alias gma='git merge --abort'
 alias gmc='git merge --continue'
 alias gms="git merge --squash"
+alias gmff="git merge --ff-only"
 alias gmom='git merge origin/$(git_main_branch)'
 alias gmum='git merge upstream/$(git_main_branch)'
 alias gmtl='git mergetool --no-prompt'
@@ -274,6 +276,8 @@ compdef _git ggu=git-checkout
 
 alias gprom='git pull --rebase origin $(git_main_branch)'
 alias gpromi='git pull --rebase=interactive origin $(git_main_branch)'
+alias gprum='git pull --rebase upstream $(git_main_branch)'
+alias gprumi='git pull --rebase=interactive upstream $(git_main_branch)'
 alias ggpull='git pull origin "$(git_current_branch)"'
 
 function ggl() {
@@ -337,6 +341,7 @@ alias grbs='git rebase --skip'
 alias grbd='git rebase $(git_develop_branch)'
 alias grbm='git rebase $(git_main_branch)'
 alias grbom='git rebase origin/$(git_main_branch)'
+alias grbum='git rebase upstream/$(git_main_branch)'
 alias grf='git reflog'
 alias gr='git remote'
 alias grv='git remote --verbose'

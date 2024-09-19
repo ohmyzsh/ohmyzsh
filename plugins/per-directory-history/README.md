@@ -1,5 +1,4 @@
-per-directory-history plugin
-----------------------------
+# per-directory-history plugin
 
 This plugin adds per-directory history for zsh, as well as a global history,
 and the ability to toggle between them with a keyboard shortcut. This is a

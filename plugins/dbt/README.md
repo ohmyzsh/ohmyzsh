@@ -1,13 +1,11 @@
 # dbt plugin
 
-## Introduction
-
 The `dbt plugin` adds several aliases for useful [dbt](https://docs.getdbt.com/) commands and
 [aliases](#aliases).
 
 To use it, add `dbt` to the plugins array of your zshrc file:
 
-```
+```zsh
 plugins=(... dbt)
 ```
 
@@ -26,4 +24,4 @@ plugins=(... dbt)
 
 ## Maintainer
 
-### [msempere](https://github.com/msempere)
+- [msempere](https://github.com/msempere)
