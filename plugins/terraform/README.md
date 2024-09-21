@@ -32,7 +32,7 @@ plugins=(... terraform)
 | `tfs`   | `terraform state`                |
 | `tft`   | `terraform test`                 |
 | `tfsh`  | `terraform show`                 |
-
+| `tffu`  | `terraform show`                 |
 
 ## Prompt function
 
