@@ -163,7 +163,7 @@ function git_current_branch() {
 }
 
 # Outputs the name of the previously checked out branch
-# Usage example: git pull origin $(git_current_branch)
+# Usage example: git pull origin $(git_previous_branch)
 # rev-parse --symbolic-full-name @{-1} only prints if it is a branch
 function git_previous_branch() {
   local ref
