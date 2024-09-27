@@ -100,7 +100,11 @@ function _add_identities() {
 if zstyle -t :omz:plugins:ssh-agent agent-forwarding \
    && [[ -n "$SSH_AUTH_SOCK" ]]; then
   if [[ ! -L "$SSH_AUTH_SOCK" ]]; then
-    ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USERNAME-screen
+    if [[ -n "$TERMUX_VERSION" ]]; then
+      ln -sf "$SSH_AUTH_SOCK" "$PREFIX"/tmp/ssh-agent-$USERNAME-screen
+    else
+      ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USERNAME-screen
+    fi
   fi
 else
   _start_agent
