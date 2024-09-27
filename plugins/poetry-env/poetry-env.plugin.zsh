@@ -9,7 +9,7 @@ _togglePoetryShell() {
   if [[ $poetry_active -eq 1 ]] && { [[ $in_poetry_dir -eq 0 ]] && [[ "$PWD" != "$poetry_dir"* ]]; }; then
     export poetry_active=0
     unset poetry_dir
-    deactivate
+    deactivate 2>/dev/null
   fi
 
   # Activate the environment if in a Poetry directory and no environment is currently active
