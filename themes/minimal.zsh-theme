@@ -19,7 +19,7 @@ vcs_status() {
   elif (( ${+functions[in_hg]} )) && in_hg; then
     hg_prompt_info
   else
-    git_prompt_info
+    _omz_git_prompt_info
   fi
 }
 
