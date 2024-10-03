@@ -35,6 +35,9 @@ toggle set the `PER_DIRECTORY_HISTORY_TOGGLE` environment variable.
   function above (default `^G`)
 * `PER_DIRECTORY_HISTORY_PRINT_MODE_CHANGE` is a variable which toggles whether
   the current mode is printed to the screen following a mode change (default `true`)
+* `PER_DIRECTORY_HISTORY_AUTO_TOGGLE` if set to true, when you change
+  directories, the mode will be toggled to match the mode that was used 
+  the last time you were in the directory.
 
 ## History
 
