@@ -22,7 +22,7 @@ plugins=(... terraform)
 | `tfaa`  | `terraform apply -auto-approve`  |
 | `tfc`   | `terraform console`              |
 | `tfd`   | `terraform destroy`              |
-| `tfda`  | `terraform destroy -auto-approve`|
+| `tfd!`  | `terraform destroy -auto-approve`|
 | `tff`   | `terraform fmt`                  |
 | `tffr`  | `terraform fmt -recursive`       |
 | `tfi`   | `terraform init`                 |
