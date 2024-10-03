@@ -22,6 +22,7 @@ plugins=(... opentofu)
 | `ttaa` | `tofu apply -auto-approve`   |
 | `ttc`  | `tofu console`               |
 | `ttd`  | `tofu destroy`               |
+| `ttd!` | `tofu destroy -auto-approve` |
 | `ttf`  | `tofu fmt`                   |
 | `ttfr` | `tofu fmt -recursive`        |
 | `tti`  | `tofu init`                  |
