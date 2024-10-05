@@ -15,9 +15,9 @@ To enable it for every single command, set zstyle in your `~/.zshrc`.
 # ~/.zshrc
 
 zstyle ':omz:plugins:alias-finder' autoload yes # disabled by default
-zstyle ':omz:plugins:alias-finder' longer yes # disabled by default
-zstyle ':omz:plugins:alias-finder' exact yes # disabled by default
-zstyle ':omz:plugins:alias-finder' cheaper yes # disabled by default
+zstyle ':omz:plugins:alias-finder' longer yes # enabled by default
+zstyle ':omz:plugins:alias-finder' exact yes # enabled by default
+zstyle ':omz:plugins:alias-finder' cheaper yes # enabled by default
 ```
 
 As you can see, options are also available with zstyle.
@@ -63,6 +63,6 @@ Running the shortest `gs` shell alias that it found:
 
 - Use `--longer` or `-l` to include aliases where the source is longer than the input (in other words, the source could contain the whole input).
 - Use `--exact` or `-e` to avoid aliases where the source is shorter than the input (in other words, the source must be the same with the input).
-- Use `--cheaper` or `-c` to avoid aliases where the destination is longer than the input (in other words, the destination must be the shorter than the input).
+- Use `--cheaper` or `-c` to avoid aliases where the destination is longer than the input (in other words, the destination must be shorter than the input).
 
 
