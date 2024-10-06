@@ -15,23 +15,25 @@ plugins=(... opentofu)
 
 ## Aliases
 
-| Alias  | Command               |
-|--------|-----------------------|
-| `tt`   | `tofu`                |
-| `tta`  | `tofu apply`          |
-| `ttc`  | `tofu console`        |
-| `ttd`  | `tofu destroy`        |
-| `ttf`  | `tofu fmt`            |
-| `ttfr` | `tofu fmt -recursive` |
-| `tti`  | `tofu init`           |
-| `tto`  | `tofu output`         |
-| `ttp`  | `tofu plan`           |
-| `ttv`  | `tofu validate`       |
-| `tts`  | `tofu state`          |
-| `ttsh` | `tofu show`           |
-| `ttr`  | `tofu refresh`        |
-| `ttt`  | `tofu test`           |
-| `ttws` | `tofu workspace`      |
+| Alias  | Command                      |
+|--------|------------------------------|
+| `tt`   | `tofu`                       |
+| `tta`  | `tofu apply`                 |
+| `ttaa` | `tofu apply -auto-approve`   |
+| `ttc`  | `tofu console`               |
+| `ttd`  | `tofu destroy`               |
+| `ttd!` | `tofu destroy -auto-approve` |
+| `ttf`  | `tofu fmt`                   |
+| `ttfr` | `tofu fmt -recursive`        |
+| `tti`  | `tofu init`                  |
+| `tto`  | `tofu output`                |
+| `ttp`  | `tofu plan`                  |
+| `ttv`  | `tofu validate`              |
+| `tts`  | `tofu state`                 |
+| `ttsh` | `tofu show`                  |
+| `ttr`  | `tofu refresh`               |
+| `ttt`  | `tofu test`                  |
+| `ttws` | `tofu workspace`             |
 
 
 ## Prompt functions
