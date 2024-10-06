@@ -1,0 +1,22 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/base:noble",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "streetsidesoftware.code-spell-checker",
+        "usernamehw.errorlens",
+        "mads-hartmann.bash-ide-vscode"
+      ],
+      "settings": {
+        "[shellscript]": {
+          "editor.defaultFormatter": "mads-hartmann.bash-ide-vscode",
+          "editor.tabSize": 4,
+          "files.eol": "\n"
+        },
+        "editor.trimAutoWhitespace": true,
+        "files.autoSave": "afterDelay",
+        "files.eol": "auto"
+      }
+    }
+  }
+}
