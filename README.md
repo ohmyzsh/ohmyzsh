@@ -48,7 +48,7 @@ Twitter), and join us on [Discord](https://discord.gg/ohmyzsh).
   - [Custom Plugins And Themes](#custom-plugins-and-themes)
   - [Enable GNU ls In macOS And freeBSD Systems](#enable-gnu-ls-in-macos-and-freebsd-systems)
   - [Skip Aliases](#skip-aliases)
-  - [Disable async git prompt](#disable-async-git-prompt)
+  - [Async git prompt](#async-git-prompt)
 - [Getting Updates](#getting-updates)
   - [Updates Verbosity](#updates-verbosity)
   - [Manual Updates](#manual-updates)
@@ -415,7 +415,7 @@ zstyle ':omz:lib:directories' aliases no
 > It is also not currently aware of "aliases" that are defined as functions. Example of such are `gccd`,
 > `ggf`, or `ggl` functions from the git plugin.
 
-### Disable async git prompt
+### Async git prompt
 
 Async prompt functions are an experimental feature (included on April 3, 2024) that allows Oh My Zsh to render
 prompt information asynchronously. This can improve prompt rendering performance, but it might not work well
@@ -424,6 +424,14 @@ turn it off by setting the following in your .zshrc file, before Oh My Zsh is so
 
 ```sh
 zstyle ':omz:alpha:lib:git' async-prompt no
+```
+
+If your problem is that the git prompt just stopped appearing, you can try to force it setting the following
+configuration before `oh-my-zsh.sh` is sourced. If it still does not work, please open an issue with your
+case.
+
+```sh
+zstyle ':omz:alpha:lib:git' async-prompt force
 ```
 
 ## Getting Updates
