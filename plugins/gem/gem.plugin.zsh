@@ -11,7 +11,7 @@ function gemy {
 if [[ ! -f "$ZSH_CACHE_DIR/completions/_gem" ]]; then
   typeset -g -A _comps
   autoload -Uz _gem
-  _comps[docker]=_gem
+  _comps[gem]=_gem
 fi
 
 # zsh 5.5 already provides completion for `_gem`. With this we ensure that
