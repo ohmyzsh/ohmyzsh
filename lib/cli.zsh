@@ -344,18 +344,38 @@ function _omz::plugin::enable {
   next
 }
 
-# if plugins=() is in multiline form, enable multi flag
+# if plugins=() is in multiline form, enable multi flag and indent by default with 2 spaces
 /^[ \t]*plugins=\(/ {
   multi=1
+  indent=\"  \"
+  print \$0
+  next
 }
 
 # if multi flag is enabled and we find a valid closing parenthesis,
-# add new plugins and disable multi flag
+# add new plugins with proper indent and disable multi flag
 multi == 1 && /^[^#]*\)/ {
   multi=0
-  sub(/\)/, \" $add_plugins&\")
+  split(\"$add_plugins\",p,\" \")
+  for (i in p) {
+    print indent p[i]
+  }
   print \$0
   next
+}
+
+# if multi flag is enabled and we didnt find a closing parenthesis,
+# get the indentation level to match when adding plugins
+multi == 1 && /^[^#]*/ {
+  indent=\"\"
+  for (i = 1; i <= length(\$0); i++) {
+    char=substr(\$0, i, 1)
+    if (char == \" \" || char == \"\t\") {
+      indent = indent char
+    } else {
+      break
+    }
+  }
 }
 
 { print \$0 }
