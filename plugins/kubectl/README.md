@@ -20,6 +20,7 @@ plugins=(... kubectl)
 |          |                                                    | **Manage configuration quickly to switch contexts between local, dev and staging**               |
 | kcuc     | `kubectl config use-context`                       | Set the current-context in a kubeconfig file                                                     |
 | kcsc     | `kubectl config set-context`                       | Set a context entry in kubeconfig                                                                |
+| kucc     | `kubectl config unset current-context`             | Unset the current-context in a kubeconfig file                                                   |
 | kcdc     | `kubectl config delete-context`                    | Delete the specified context from the kubeconfig                                                 |
 | kccc     | `kubectl config current-context`                   | Display the current-context                                                                      |
 | kcgc     | `kubectl config get-contexts`                      | List of contexts available                                                                       |
