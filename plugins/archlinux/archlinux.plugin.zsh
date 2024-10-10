@@ -5,6 +5,7 @@
 # Pacman - https://wiki.archlinux.org/index.php/Pacman_Tips
 alias pacupg='sudo pacman -Syu'
 alias pacin='sudo pacman -S'
+alias pacinn='sudo pacman -S --needed'
 alias paclean='sudo pacman -Sc'
 alias pacins='sudo pacman -U'
 alias paclr='sudo pacman -Scc'
