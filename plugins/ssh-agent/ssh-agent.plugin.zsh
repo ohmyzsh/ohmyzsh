@@ -45,7 +45,7 @@ function _add_identities() {
     # Iterate over files in .ssh folder.
     for file in "$HOME/.ssh"/*; do
       # Check if file is a regular file and starts with "-----BEGIN OPENSSH PRIVATE KEY-----".
-      if [[ -f "$file" && $(head -n 1 "$file") =~ ^-----BEGIN\ OPENSSH\ PRIVATE\ KEY----- ]]; then
+      if [[ -f "$file" && $(command head -n 1 "$file") =~ ^-----BEGIN\ OPENSSH\ PRIVATE\ KEY----- ]]; then
         # Add filename (without path) to identities array.
         identities+=("${file##*/}")
       fi
