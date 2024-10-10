@@ -23,8 +23,17 @@ eval "$(pyenv init --path)"
 - `ZSH_PYENV_QUIET`: if set to `true`, the plugin will not print any messages if it
   finds that `pyenv` is not properly configured.
 
+- `ZSH_PYENV_NO_SYSTEM`: if set to `true`, the plugin will not show the system or
+  default Python version when it finds it.
+
 - `ZSH_PYENV_VIRTUALENV`: if set to `false`, the plugin will not load pyenv-virtualenv
   when it finds it.
+
+- `ZSH_THEME_PYENV_PREFIX`: the prefix to display before the Python version in
+  the prompt.
+
+- `ZSH_THEME_PYENV_SUFFIX`: the prefix to display after the Python version in
+  the prompt.
 
 ## Functions
 
