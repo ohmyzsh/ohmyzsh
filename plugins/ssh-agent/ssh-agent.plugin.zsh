@@ -45,7 +45,7 @@ function _add_identities() {
     # Iterate over files in .ssh folder.
     for file in "$HOME/.ssh"/*; do
       # Check if file is a valid private key using file magic.
-      if [[ -f "$file" && $(file -b "$file") == *"private key"* ]]; then
+      if [[ -f "$file" && $(command file -b "$file") == *"private key"* ]]; then
         # Add filename (without path) to identities array.
         identities+=("${file##*/}")
       fi
