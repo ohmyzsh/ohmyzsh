@@ -228,7 +228,7 @@ class Dependency:
                     self.__apply_upstream_changes()
 
                     # Add all changes and commit
-                    has_new_commit = Git.add_and_commit(self.name, short_sha)
+                    has_new_commit = Git.add_and_commit(self.name, new_version)
 
                     if has_new_commit:
                         # Push changes to remote
