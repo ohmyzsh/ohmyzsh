@@ -39,16 +39,13 @@ function _add_identities() {
     return
   fi
 
-  # If no keys specified in zstyle, add default keys.
-  # Mimics calling ssh-add with no arguments.
-  if [[ ${#identities[@]} -eq 0 ]]; then
-    # Iterate over files in .ssh folder.
-    for file in "$HOME/.ssh"/*; do
-      # Check if file is a regular file and starts with "-----BEGIN OPENSSH PRIVATE KEY-----".
-      if [[ -f "$file" && $(command head -n 1 "$file") =~ ^-----BEGIN\ OPENSSH\ PRIVATE\ KEY----- ]]; then
-        # Add filename (without path) to identities array.
-        identities+=("${file##*/}")
-      fi
+  # add default keys if no identities were set up via zstyle
+  # this is to mimic the call to ssh-add with no identities
+  if [[ ${#identities} -eq 0 ]]; then
+    # key list found on `ssh-add` man page's DESCRIPTION section
+    for id in id_rsa id_dsa id_ecdsa id_ed25519 id_ed25519_sk identity; do
+      # check if file exists
+      [[ -f "$HOME/.ssh/$id" ]] && identities+=($id)
     done
   fi
 
