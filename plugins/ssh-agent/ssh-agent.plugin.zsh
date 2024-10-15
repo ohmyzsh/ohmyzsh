@@ -39,8 +39,7 @@ function _add_identities() {
     return
   fi
 
-  # If no keys specified in zstyle, add default keys.
-  # Mimics calling ssh-add with no arguments.
+  # If no keys specified in zstyle, loads all private keys in ~/.ssh
   if [[ ${#identities[@]} -eq 0 ]]; then
     # Iterate over files in .ssh folder.
     for file in "$HOME/.ssh"/*; do
