@@ -263,6 +263,7 @@ alias gmtl='git mergetool --no-prompt'
 alias gmtlvim='git mergetool --no-prompt --tool=vimdiff'
 
 alias gl='git pull'
+alias gpff='git pull --ff-only'
 alias gpr='git pull --rebase'
 alias gprv='git pull --rebase -v'
 alias gpra='git pull --rebase --autostash'
