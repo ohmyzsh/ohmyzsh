@@ -254,6 +254,54 @@ prompt_aws() {
   esac
 }
 
+#KUBERNETES icon:
+# - display KUBERNETES icon if context set
+# - displays red icon on black if context name contains 'prod'
+# - displays green icon on black if context name contains 'dev' or 'stage'
+# - displays yellow icon on black otherwise
+prompt_kubernetes_icon() {
+  KUBERNETES_SYMBOL=$'\xE2\x8E\x88'
+  KUBERNETES_CONTEXT=$1
+
+  case "$KUBERNETES_CONTEXT" in
+    *prod*) prompt_segment black red "$KUBERNETES_SYMBOL";;
+    *dev*|*stage*) prompt_segment black green "$KUBERNETES_SYMBOL";;
+    *) prompt_segment black yellow "$KUBERNETES_SYMBOL";;
+  esac
+
+}
+#KUBERNETES context:
+# - display current KUBERNETES context for connection
+# - from file .kube/config or env $KUBECONFIG
+# - displays kubernetes icon if $OMZ_THEME_AGNOSTER_KUBERNETES_ICON is not set to hidden
+# - displays context name if $OMZ_THEME_AGNOSTER_KUBERNETES_CONTEXT is not set to hidden
+# - displays namespace if $OMZ_THEME_AGNOSTER_KUBERNETES_NAMESPACE is not set to hidden
+prompt_kubernetes() {
+  KUBERNETES_BINARY="${KUBERNETES_BINARY:-kubectl}"
+  [[ -z "$KUBECONFIG" && -z "$(${KUBERNETES_BINARY} config current-context 2>/dev/null)" ]] && return
+
+  KUBERNETES_PROMPT=""
+
+  if [[ "$OMZ_THEME_AGNOSTER_KUBERNETES_CONTEXT" != "hidden" ]]; then
+    KUBERNETES_CONTEXT="$(${KUBERNETES_BINARY} config current-context 2>/dev/null)"
+    KUBERNETES_CONTEXT="${KUBERNETES_CONTEXT:-N/A}"
+    KUBERNETES_PROMPT="$KUBERNETES_PROMPT$KUBERNETES_CONTEXT"
+  fi
+
+  if [[ "$OMZ_THEME_AGNOSTER_KUBERNETES_NAMESPACE" != "hidden" ]]; then
+    KUBERNETES_NAMESPACE="$(${KUBERNETES_BINARY} config view --minify -o jsonpath={..namespace} 2>/dev/null)"
+    KUBERNETES_NAMESPACE="${KUBERNETES_NAMESPACE:+ ns:$KUBERNETES_NAMESPACE}"
+    KUBERNETES_PROMPT="$KUBERNETES_PROMPT -$KUBERNETES_NAMESPACE"
+  fi
+
+  if [[ "$KUBERNETES_PROMPT" != "" ]]; then
+    if [[ "$OMZ_THEME_AGNOSTER_KUBERNETES_ICON" != "hidden" ]]; then
+      prompt_kubernetes_icon "$KUBERNETES_CONTEXT"
+    fi
+    prompt_segment $CURRENT_BG default "$KUBERNETES_PROMPT"
+  fi
+}
+
 ## Main prompt
 build_prompt() {
   RETVAL=$?
@@ -262,6 +310,7 @@ build_prompt() {
   prompt_aws
   prompt_context
   prompt_dir
+  prompt_kubernetes
   prompt_git
   prompt_bzr
   prompt_hg
