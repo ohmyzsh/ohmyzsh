@@ -30,47 +30,31 @@ function web_search() {
     npmpkg          "https://www.npmjs.com/search?q="
     packagist       "https://packagist.org/?query="
     gopkg           "https://pkg.go.dev/search?m=package&q="
-    chatgpt         "https://chat.openai.com"  # Updated to correct URL
+    chatgpt         "https://chat.openai.com"
     reddit          "https://www.reddit.com/search/?q="
   )
 
-  # Function to print available search engines
-  function print_engines() {
-    echo "Available search engines:"
-    for key in ${(k)urls}; do
-      echo "  - $key"
-    done
-  }
-
-  # Show help if no arguments or help flag
-  if [[ $# -eq 0 ]] || [[ "$1" == "-h" ]] || [[ "$1" == "--help" ]]; then
-    echo "Usage: web_search <engine> [search terms]"
-    echo "Example: web_search google hello world"
-    print_engines
-    return 0
-  }
-
-  # Check whether the search engine is supported
+  # check whether the search engine is supported
   if [[ -z "$urls[$1]" ]]; then
-    echo "Error: Search engine '$1' not supported."
-    print_engines
+    echo "Search engine '$1' not supported."
     return 1
-  }
+  fi
 
-  # Search or go to main page depending on number of arguments passed
+  # search or go to main page depending on number of arguments passed
   if [[ $# -gt 1 ]]; then
-    # Determine URL encoding parameter based on query string format
+    # if search goes in the query string ==> space as +, otherwise %20
     local param="-P"
     [[ "$urls[$1]" == *\?*= ]] && param=""
-
-    # Build search url by joining arguments and appending to search engine URL
+    # build search url:
+    # join arguments passed with '+', then append to search engine URL
     url="${urls[$1]}$(omz_urlencode $param ${@[2,-1]})"
   else
-    # Build main page url by splitting and rejoining protocol and domain parts
+    # build main page url:
+    # split by '/', then rejoin protocol (1) and domain (2) parts with '//'
     url="${(j://:)${(s:/:)urls[$1]}[1,2]}"
   fi
 
-  # Open URL in default browser
+  # Open URL in default browser based on platform
   if command -v xdg-open >/dev/null 2>&1; then
     xdg-open "$url"  # Linux
   elif command -v open >/dev/null 2>&1; then
