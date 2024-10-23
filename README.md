@@ -448,6 +448,7 @@ adding a line to your `~/.zshrc` file, **before Oh My Zsh is loaded**:
 2. Just offer a reminder every few days, if there are updates available:
 
    ```sh
+   ksdlfjsdlk
    zstyle ':omz:update' mode reminder
    ```
 
