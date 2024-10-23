@@ -8,7 +8,7 @@
 # @github.com/mfaerevaag/wd
 
 # version
-readonly WD_VERSION=0.9.0
+readonly WD_VERSION=0.9.1
 
 # colors
 readonly WD_BLUE="\033[96m"
@@ -59,7 +59,7 @@ wd_print_msg()
     then
         local color="${1:-$WD_BLUE}"  # Default to blue if no color is provided
         local msg="$2"
-        
+
         if [[ -z "$msg" ]]; then
             print "${WD_RED}*${WD_NOC} Could not print message. Sorry!"
         else
@@ -344,6 +344,7 @@ wd_path()
 wd_show()
 {
     local name_arg=$1
+    local show_pwd
     # if there's an argument we look up the value
     if [[ -n $name_arg ]]
     then
@@ -358,12 +359,12 @@ wd_show()
         local wd_matches
         wd_matches=()
         # do a reverse lookup to check whether PWD is in $points
-        PWD="${PWD/$HOME/~}"
-        if [[ ${points[(r)$PWD]} == "$PWD" ]]
+        show_pwd="${PWD/$HOME/~}"
+        if [[ ${points[(r)$show_pwd]} == "$show_pwd" ]]
         then
             for name in ${(k)points}
             do
-                if [[ $points[$name] == "$PWD" ]]
+                if [[ $points[$name] == "$show_pwd" ]]
                 then
                     wd_matches[$(($#wd_matches+1))]=$name
                 fi
@@ -371,7 +372,7 @@ wd_show()
 
             wd_print_msg "$WD_BLUE" "$#wd_matches warp point(s) to current directory: ${WD_GREEN}$wd_matches${WD_NOC}"
         else
-            wd_print_msg "$WD_YELLOW" "No warp point to $(echo "$PWD" | sed "s:$HOME:~:")"
+            wd_print_msg "$WD_YELLOW" "No warp point to $show_pwd"
         fi
     fi
 }

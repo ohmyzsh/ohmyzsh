@@ -190,8 +190,7 @@ ZSH_THEME="agnoster" # (this is one of the fancy ones)
 <!-- prettier-ignore-start -->
 > [!NOTE]
 > You will many times see screenshots for a zsh theme, and try it out, and find that it doesn't look the same for you.
-<!-- prettier-ignore-end -->
-
+>
 > This is because many themes require installing a [Powerline Font](https://github.com/powerline/fonts) or a
 > [Nerd Font](https://github.com/ryanoasis/nerd-fonts) in order to render properly. Without them, these themes
 > will render weird prompt symbols. Check out
@@ -203,6 +202,7 @@ ZSH_THEME="agnoster" # (this is one of the fancy ones)
 > terminal window (known as _color scheme_) or the font of your terminal. These are settings that you can
 > change in your terminal emulator. For more information, see
 > [what is a zsh theme](https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ#what-is-a-zsh-theme).
+<!-- prettier-ignore-end -->
 
 Open up a new terminal window and your prompt should look something like this:
 

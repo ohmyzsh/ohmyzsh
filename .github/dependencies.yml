@@ -28,7 +28,7 @@ dependencies:
   plugins/wd:
     repo: mfaerevaag/wd
     branch: master
-    version: tag:v0.9.0
+    version: tag:v0.9.1
     precopy: |
       set -e
       rm -r test
