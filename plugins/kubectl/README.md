@@ -35,6 +35,7 @@ plugins=(... kubectl)
 | kgpwide  | `kgp -o wide`                                      | Output in plain-text format with any additional information. For pods, the node name is included |
 | kep      | `kubectl edit pods`                                | Edit pods from the default editor                                                                |
 | kdp      | `kubectl describe pods`                            | Describe all pods                                                                                |
+| kdpa     | `kubectl describe pods --all-namespaces`           | Describe all pods targeting all namespaces                                                       |
 | kdelp    | `kubectl delete pods`                              | Delete all pods matching passed arguments                                                        |
 |          |                                                    | **Service management**                                                                           |
 | kgs      | `kubectl get svc`                                  | List all services in ps output format                                                            |
