@@ -50,7 +50,7 @@ function web_search() {
 
     # build search url:
     # join arguments passed with '+', then append to search engine URL
-    url="${urls[$1]}$(omz_urlencode $param ${@[2,-1]})"
+    url="${urls[$1]}$(omz_urlencode $param ${(s: :)@[2,-1]})"
   else
     # build main page url:
     # split by '/', then rejoin protocol (1) and domain (2) parts with '//'
