@@ -174,6 +174,7 @@ if (( $+commands[yay] )); then
   alias yainsd='yay -S --asdeps'
   alias yamir='yay -Syy'
   alias yaupd="yay -Sy"
+  alias allcl="sudo pacman -Scc;yay -Scc"
 fi
 
 # Check Arch Linux PGP Keyring before System Upgrade to prevent failure.
