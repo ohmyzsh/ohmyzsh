@@ -121,6 +121,7 @@ plugins=(... git)
 | `gmtl`                 | `git mergetool --no-prompt`                                                                                                     |
 | `gmtlvim`              | `git mergetool --no-prompt --tool=vimdiff`                                                                                      |
 | `gl`                   | `git pull`                                                                                                                      |
+| `gpff`                 | `git pull --ff-only`                                                                                                                      |
 | `gpr`                  | `git pull --rebase`                                                                                                             |
 | `gprv`                 | `git pull --rebase -v`                                                                                                          |
 | `gpra`                 | `git pull --rebase --autostash`                                                                                                 |
