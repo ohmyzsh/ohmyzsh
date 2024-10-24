@@ -1,0 +1,174 @@
+#compdef podman-compose
+
+# Description
+# -----------
+#  zsh completion for podman-compose
+# -------------------------------------------------------------------------
+# Author(s)
+# -------
+#  Sahil Rt sahil.rathee@infortts.com
+# -------------------------------------------------------------------------
+
+__podman_compose_q() {
+    podman-compose 2>/dev/null "$@"
+}
+
+# All services defined in podman-compose.yml
+__podman_compose_all_services_in_compose_file() {
+    local already_selected
+    local -a services
+    already_selected=$(echo $words | tr " " "|")
+    __podman_compose_q ps --services "$@" \
+        | grep -Ev "^(${already_selected})$"
+}
+
+# All services, even those without an existing container
+__podman_compose_services_all() {
+    [[ $PREFIX = -* ]] && return 1
+    integer ret=1
+    services=$(__podman_compose_all_services_in_compose_file "$@")
+    _alternative "args:services:($services)" && ret=0
+
+    return ret
+}
+
+# All services that are defined by a Dockerfile reference
+__podman_compose_services_from_build() {
+    [[ $PREFIX = -* ]] && return 1
+    __podman_compose_services_all --filter source=build
+}
+
+# All services that are defined by an image
+__podman_compose_services_from_image() {
+    [[ $PREFIX = -* ]] && return 1
+    __podman_compose_services_all --filter source=image
+}
+
+__podman_compose_pausedservices() {
+    [[ $PREFIX = -* ]] && return 1
+    __podman_compose_services_all --filter status=paused
+}
+
+__podman_compose_stoppedservices() {
+    [[ $PREFIX = -* ]] && return 1
+    __podman_compose_services_all --filter status=stopped
+}
+
+__podman_compose_runningservices() {
+    [[ $PREFIX = -* ]] && return 1
+    __podman_compose_services_all --filter status=running
+}
+
+__podman_compose_services() {
+    [[ $PREFIX = -* ]] && return 1
+    __podman_compose_services_all
+}
+
+__podman_compose_caching_policy() {
+    oldp=( "$1"(Nmh+1) )            # 1 hour
+    (( $#oldp ))
+}
+
+__podman_compose_commands() {
+    local cache_policy
+
+    zstyle -s ":completion:${curcontext}:" cache-policy cache_policy
+    if [[ -z "$cache_policy" ]]; then
+        zstyle ":completion:${curcontext}:" cache-policy __podman_compose_caching_policy
+    fi
+
+    if ( [[ ${+_podman_compose_subcommands} -eq 0 ]] || _cache_invalid podman_compose_subcommands) \
+        && ! _retrieve_cache podman_compose_subcommands;
+    then
+        local -a lines
+        lines=(${(f)"$(_call_program commands podman-compose 2>&1)"})
+        _podman_compose_subcommands=(${${${lines[$((${lines[(i)Commands:]} + 1)),${lines[(I)  *]}]}## #}/ ##/:})
+        (( $#_podman_compose_subcommands > 0 )) && _store_cache podman_compose_subcommands _podman_compose_subcommands
+    fi
+    _describe -t podman-compose-commands "podman-compose command" _podman_compose_subcommands
+}
+
+__podman_compose_subcommand() {
+    local opts_help opts_no_color opts_no_deps
+
+    opts_help='(: -)--help[Print usage]'
+    opts_no_color='--no-color[Produce monochrome output.]'
+    opts_no_deps="--no-deps[Don't start linked services.]"
+
+    integer ret=1
+
+    case "$words[1]" in
+        (build)
+            _arguments \
+                $opts_help \
+                '--no-cache[Do not use cache when building the image.]' \
+                '--pull[Always attempt to pull a newer version of the image.]' \
+                '*:services:__podman_compose_services_from_build' && ret=0
+            ;;
+        (down)
+            _arguments \
+                $opts_help \
+                '--remove-orphans[Remove containers for services not defined in the Compose file]' \
+                '--volumes[Remove named volumes and anonymous volumes attached to containers]' && ret=0
+            ;;
+        (logs)
+            _arguments \
+                $opts_help \
+                '(-f --follow)'{-f,--follow}'[Follow log output]' \
+                '--tail=[Number of lines to show from the end of the logs for each container.]:number of lines: ' \
+                $opts_no_color \
+                '*:services:__podman_compose_services' && ret=0
+            ;;
+        (start|stop)
+            _arguments \
+                $opts_help \
+                '*:services:__podman_compose_services' && ret=0
+            ;;
+        (ps)
+            _arguments \
+                $opts_help \
+                '--filter KEY=VAL[Filter services by a property]:<filtername>=<value>:' \
+                '*:services:__podman_compose_services' && ret=0
+            ;;
+        (*)
+            _message 'Unknown sub command' && ret=1
+            ;;
+    esac
+
+    return ret
+}
+
+_podman_compose() {
+    local curcontext="$curcontext" state line
+    integer ret=1
+    typeset -A opt_args
+
+    _arguments -C \
+        '(- :)'{-h,--help}'[Get help]' \
+        '*'{-f,--file}"[Specify an alternate podman-compose file (default: podman-compose.yml)]:file:_files -g '*.yml'" \
+        '(-p --project-name)'{-p,--project-name}'[Specify an alternate project name (default: directory name)]:project name:' \
+        "--compatibility[Attempt to convert keys to non-Swarm equivalent]" \
+        '(-v --version)'{-v,--version}'[Print version and exit]' \
+        "--log-level=[Set log level]:level:(DEBUG INFO WARNING ERROR CRITICAL)" \
+        "--tls[Use TLS]" \
+        "--tlscert=[Path to TLS certificate file]:client cert path:" \
+        "--tlskey=[Path to TLS key file]:tls key path:" \
+        "--tlsverify[Use TLS and verify the remote]" \
+        "--skip-hostname-check[Skip daemon hostname check]" \
+        '(-): :->command' \
+        '(-)*:: :->option-or-argument' && ret=0
+
+    case $state in
+        (command)
+            __podman_compose_commands && ret=0
+            ;;
+        (option-or-argument)
+            curcontext=${curcontext%:*:*}:podman-compose-$words[1]:
+            __podman_compose_subcommand && ret=0
+            ;;
+    esac
+
+    return ret
+}
+
+_podman_compose "$@"
