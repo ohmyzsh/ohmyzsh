@@ -146,6 +146,7 @@ plugins=(
   git
   bundler
   dotenv
+sdfsdf
   macos
   rake
   rbenv
