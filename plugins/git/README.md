@@ -116,6 +116,7 @@ plugins=(... git)
 | `gmc`                  | `git merge --continue`                                                                                                          |
 | `gms`                  | `git merge --squash`                                                                                                            |
 | `gmff`                 | `git merge --ff-only`                                                                                                           |
+| `gmod`                 | `git merge origin/$(git_develop_branch)`                                                                                        |
 | `gmom`                 | `git merge origin/$(git_main_branch)`                                                                                           |
 | `gmum`                 | `git merge upstream/$(git_main_branch)`                                                                                         |
 | `gmtl`                 | `git mergetool --no-prompt`                                                                                                     |
