@@ -60,6 +60,7 @@
 [[ -z $HISTORY_START_WITH_GLOBAL ]] && HISTORY_START_WITH_GLOBAL=false
 [[ -z $PER_DIRECTORY_HISTORY_TOGGLE ]] && PER_DIRECTORY_HISTORY_TOGGLE='^G'
 [[ -z $PER_DIRECTORY_HISTORY_PRINT_MODE_CHANGE ]] && PER_DIRECTORY_HISTORY_PRINT_MODE_CHANGE=true
+[[ -z $PER_DIRECTORY_HISTORY_AUTO_TOGGLE ]] && PER_DIRECTORY_HISTORY_AUTO_TOGGLE=false
 
 #-------------------------------------------------------------------------------
 # toggle global/directory history used for searching - ctrl-G by default
@@ -94,6 +95,26 @@ _per_directory_history_directory="$HISTORY_BASE${PWD:A}/history"
 
 function _per-directory-history-change-directory() {
   _per_directory_history_directory="$HISTORY_BASE${PWD:A}/history"
+
+  # Should we use the toggle mode that was last used in this directory?
+  if [[ $PER_DIRECTORY_HISTORY_AUTO_TOGGLE == true ]]; then
+    if [[ -f "${_per_directory_history_directory}-on" ]]; then
+      if [[ $_per_directory_history_is_global == true ]]; then
+        _per_directory_history_is_global=false
+        if [[ $PER_DIRECTORY_HISTORY_PRINT_MODE_CHANGE == true ]]; then
+          echo "using local history"
+        fi
+      fi
+    else
+      if [[ $_per_directory_history_is_global == false ]]; then
+        _per_directory_history_is_global=true
+        if [[ $PER_DIRECTORY_HISTORY_PRINT_MODE_CHANGE == true ]]; then
+          echo "using global history"
+        fi
+      fi
+    fi
+  fi
+
   mkdir -p ${_per_directory_history_directory:h}
   if [[ $_per_directory_history_is_global == false ]]; then
     #save to the global history
@@ -135,13 +156,22 @@ function _per-directory-history-addhistory() {
 function _per-directory-history-precmd() {
   if [[ $_per_directory_history_initialized == false ]]; then
     _per_directory_history_initialized=true
-
-    if [[ $HISTORY_START_WITH_GLOBAL == true ]]; then
-      _per-directory-history-set-global-history
-      _per_directory_history_is_global=true
+    if [[ $PER_DIRECTORY_HISTORY_AUTO_TOGGLE == false ]] ; then
+      if [[ $HISTORY_START_WITH_GLOBAL == true ]]; then
+        _per-directory-history-set-global-history
+        _per_directory_history_is_global=true
+      else
+        _per-directory-history-set-directory-history
+        _per_directory_history_is_global=false
+      fi
     else
-      _per-directory-history-set-directory-history
-      _per_directory_history_is_global=false
+      if [[ ! -f "${_per_directory_history_directory}-on" ]]; then
+        _per-directory-history-set-global-history
+        _per_directory_history_is_global=true
+      else
+        _per-directory-history-set-directory-history
+        _per_directory_history_is_global=false
+      fi
     fi
   fi
 }
@@ -151,6 +181,9 @@ function _per-directory-history-set-directory-history() {
   local original_histsize=$HISTSIZE
   HISTSIZE=0
   HISTSIZE=$original_histsize
+  if [[ $PER_DIRECTORY_HISTORY_AUTO_TOGGLE == true ]]; then
+    echo "" > "${_per_directory_history_directory}-on"
+  fi
   if [[ -e "$_per_directory_history_directory" ]]; then
     fc -R "$_per_directory_history_directory"
   fi
@@ -161,6 +194,9 @@ function _per-directory-history-set-global-history() {
   local original_histsize=$HISTSIZE
   HISTSIZE=0
   HISTSIZE=$original_histsize
+  if [[ $PER_DIRECTORY_HISTORY_AUTO_TOGGLE == true ]]; then
+    rm "${_per_directory_history_directory}-on" 2> /dev/null
+  fi
   if [[ -e "$HISTFILE" ]]; then
     fc -R "$HISTFILE"
   fi
