@@ -1,0 +1,20 @@
+{
+	"image": "mcr.microsoft.com/devcontainers/base:noble",
+	"features": {
+		"ghcr.io/devcontainers/features/common-utils": {
+			"installZsh": true,
+			"configureZshAsDefaultShell": true,
+			"username": "vscode",
+			"userUid": 1000,
+			"userGid": 1000
+		}
+	},
+	"postCreateCommand": "rm -rf $HOME/.oh-my-zsh && ln -s /workspaces/ohmyzsh $HOME/.oh-my-zsh && cp /workspaces/ohmyzsh/templates/minimal.zshrc $HOME/.zshrc",
+	"customizations": {
+		"codespaces": {
+			"openFiles": [
+				"README.md"
+			]
+		}
+	}
+}

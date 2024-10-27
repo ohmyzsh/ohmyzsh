@@ -9,3 +9,7 @@ indent_style = space
 
 [*.py]
 indent_size = 4
+
+[devcontainer.json]
+indent_size = 4
+indent_style = tab
