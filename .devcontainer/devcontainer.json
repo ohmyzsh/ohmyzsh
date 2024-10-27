@@ -9,7 +9,7 @@
 			"userGid": 1000
 		}
 	},
-	"postCreateCommand": "rm -rf $HOME/.oh-my-zsh && ln -s /workspaces/ohmyzsh $HOME/.oh-my-zsh && cp /workspaces/ohmyzsh/templates/minimal.zshrc $HOME/.zshrc",
+	"postCreateCommand": "dir=/workspaces/ohmyzsh; rm -rf $HOME/.oh-my-zsh && ln -s $dir $HOME/.oh-my-zsh && cp $dir/templates/minimal.zshrc $HOME/.zshrc && chgrp -R 1000 $dir && chmod g-w,o-w $dir",
 	"customizations": {
 		"codespaces": {
 			"openFiles": [
