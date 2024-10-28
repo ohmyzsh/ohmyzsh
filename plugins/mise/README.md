@@ -30,3 +30,7 @@ mise use -g node@system   Use system node as global default
 mise install node@20.0.0  Install a specific version number
 mise use -g node@20       Use node-20.x as global default
 ```
+
+## Setting
+
+- `ZSH_MISE_AUTOEXPORT_VERSIONS`: if set to `true`, the plugin will register a `chpwd` hook to update environment variable to reflect the current configuration. The variables are constructed from the output of `mise -ls -c`, with the `MISE_TOOL_` prefix, and their value is set to the full version of the tool, e.g., `M̀ISE_TOOL_PYTHON=3.8.20``. This can be used when building prompts.

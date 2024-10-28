@@ -22,6 +22,19 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_$__mise" ]]; then
   _comps[$__mise]=_$__mise
 fi
 
+
+if [[ "$ZSH_MISE_AUTOEXPORT_VERSIONS" != true ]]; then
+  _updateMiseVersions() {
+    unset -m "MISE_TOOL_*"
+    eval $(mise ls -c --no-header \
+      | sed 's/^\(\S\+\)\s\+\(\S\+\).*$/export MISE_TOOL_\U\1=\2/')
+  }
+
+  autoload -U add-zsh-hook
+  add-zsh-hook chpwd _updateMiseVersions
+  _updateMiseVersions # Initial call to check the current directory at shell startup
+fi
+
 # Generate and load mise completion
 $__mise completion zsh >| "$ZSH_CACHE_DIR/completions/_$__mise" &|
 unset __mise
