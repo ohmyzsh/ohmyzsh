@@ -1,6 +1,6 @@
 # Podman Compose Plugin
 
-This plugin provides aliases for working with `podman-compose` (or `podman compose`, based on availability) to simplify multi-container Podman workflows.
+This plugin provides aliases for working with [podman-compose](https://docs.podman.io/en/latest/markdown/podman-compose.1.html) (or `podman compose`, based on availability) to simplify multi-container Podman workflows.
 
 To use it, add `podman-compose` to the plugins array in your `.zshrc` file.
 
