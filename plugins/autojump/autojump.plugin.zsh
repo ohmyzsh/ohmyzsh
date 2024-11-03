@@ -6,6 +6,7 @@ autojump_paths=(
   /run/current-system/sw/share/autojump/autojump.zsh       # NixOS installation
   /etc/profiles/per-user/$USER/share/autojump/autojump.zsh # Home Manager, NixOS with user-scoped packages
   /usr/share/autojump/autojump.zsh                         # Debian and Ubuntu package
+  $PREFIX/share/autojump/autojump.zsh                      # Termux package
   /etc/profile.d/autojump.zsh                              # manual installation
   /etc/profile.d/autojump.sh                               # Gentoo installation
   /usr/local/share/autojump/autojump.zsh                   # FreeBSD installation
