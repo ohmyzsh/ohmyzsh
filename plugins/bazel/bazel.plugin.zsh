@@ -4,6 +4,6 @@ alias bzt='bazel test'
 alias bzr='bazel run'
 alias bzq='bazel query'
 
-bzlmod_integrety() {
+sri-hash() {
     openssl dgst -sha256 -binary $1 | openssl base64 -A | sed 's/^/sha256-/'
 }

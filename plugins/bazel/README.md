@@ -25,4 +25,4 @@ The plugin has a copy of [the completion script from the git repository][1].
 
 | Function | Description                              |
 | -------- | ---------------------------------------- |
-| bzlmod_integrety  | Generate bzlmod integrity value |
+| sri-hash  | Generate SRI hash used by bzlmod |
