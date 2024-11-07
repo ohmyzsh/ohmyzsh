@@ -16,7 +16,13 @@ The plugin has a copy of [the completion script from the git repository][1].
 
 | Alias   | Command                                | Description                                            |
 | ------- | -------------------------------------- | ------------------------------------------------------ |
-| bzb      | `bazel build`                          | The `bazel build` command                              |
-| bzt      | `bazel test`                           | The `bazel test` command                               |
-| bzr      | `bazel run`                            | The `bazel run` command                                |
-| bzq      | `bazel query`                          | The `bazel query` command                              |
+| bzb     | `bazel build`                          | The `bazel build` command                              |
+| bzt     | `bazel test`                           | The `bazel test` command                               |
+| bzr     | `bazel run`                            | The `bazel run` command                                |
+| bzq     | `bazel query`                          | The `bazel query` command                              |
+
+## Functions
+
+| Function | Description                              |
+| -------- | ---------------------------------------- |
+| bzlmod_integrety  | Generate bzlmod integrity value |
