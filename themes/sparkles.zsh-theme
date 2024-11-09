@@ -1,9 +1,10 @@
-# Comment
+# Sparkles theme
 
-PROMPT='%{$fg[magenta]%}[%c] %{$reset_color%} %{$fg[magenta]%}$(git_prompt_info)%{$reset_color%} $(git_prompt_status)%{$reset_color%}> '
+PROMPT='%{$fg[magenta]%}[%c] %{$reset_color%} %{$fg[green]%}$(git_prompt_info)%{$reset_color%} $(git_prompt_status)%{$reset_color%} > '
 
-ZSH_THEME_GIT_PROMPT_PREFIX=""
+# ZSH_THEME_GIT_PROMPT_PREFIX=""
 ZSH_THEME_GIT_PROMPT_SUFFIX=""
+ZSH_THEME_GIT_PROMPT_PREFIX="\uebdb "
 ZSH_THEME_GIT_PROMPT_DIRTY=""
 ZSH_THEME_GIT_PROMPT_CLEAN=""
 ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[cyan]%} ^"
