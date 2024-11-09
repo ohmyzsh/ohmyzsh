@@ -237,20 +237,27 @@ prompt_status() {
   [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}✘"
   [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}⚡"
   [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}⚙"
-
+#
   [[ -n "$symbols" ]] && prompt_segment black default "$symbols"
 }
 
 #AWS Profile:
 # - display current AWS_PROFILE name
-# - displays yellow on red if profile name contains 'production' or
-#   ends in '-prod'
+# - displays yellow on red if profile name matches contents of AWS_SENSITIVE_PROFILES 
+#   if AWS_SENSITIVE_PROFILES is not set, then check if profile name ends with -prod or contains *production*
 # - displays black on green otherwise
 prompt_aws() {
   [[ -z "$AWS_PROFILE" || "$SHOW_AWS_PROMPT" = false ]] && return
+
+  if [ -z $AWS_SENSITIVE_PROFILES ]; then
+    aws_sensitive_profiles="*-prod|*production*"
+  else
+    aws_sensitive_profiles=$AWS_SENSITIVE_PROFILES
+  fi
+
   case "$AWS_PROFILE" in
-    *-prod|*production*) prompt_segment red yellow  "AWS: ${AWS_PROFILE:gs/%/%%}" ;;
-    *) prompt_segment green black "AWS: ${AWS_PROFILE:gs/%/%%}" ;;
+    $~aws_sensitive_profiles) prompt_segment red yellow  "$AWS_PROFILE" ;;
+    *) prompt_segment green black "$AWS_PROFILE" ;;
   esac
 }
 
