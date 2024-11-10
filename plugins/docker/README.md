@@ -51,6 +51,7 @@ zstyle ':omz:plugins:docker' legacy-completion yes
 | dii      | `docker image inspect`                                      | Display detailed information on one or more images                                                                 |
 | dils     | `docker image ls`                                           | List docker images                                                                                                 |
 | dipu     | `docker image push`                                         | Push an image or repository to a remote registry                                                                   |
+| dipru    | `docker image prune -a`                                     | Remove all images not referenced by any container                                                                  |
 | dirm     | `docker image rm`                                           | Remove one or more images                                                                                          |
 | dit      | `docker image tag`                                          | Add a name and tag to a particular image                                                                           |
 | dkil     | `docker kill`                                               | Kill one or more running containers                                                                                |
@@ -65,6 +66,7 @@ zstyle ':omz:plugins:docker' legacy-completion yes
 | dpo      | `docker container port`                                     | List port mappings or a specific mapping for the container                                                         |
 | dpu      | `docker pull`                                               | Pull an image or a repository from a registry                                                                      |
 | dpsh     | `docker push`                                               | Upload an image to a registry                                                                                      |
+| dpsa     | `docker ps -a`                                              | List all running and stopped containers                                                                            |
 | dritrm   | `docker container run --rm -it`                             | Create a new container, start it in an interactive shell and automatically remove it                               |
 | dr       | `docker container run`                                      | Create a new container and start it using the specified command                                                    |
 | drit     | `docker container run -it`                                  | Create a new container and start it in an interactive shell                                                        |
