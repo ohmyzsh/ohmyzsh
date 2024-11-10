@@ -1,6 +1,6 @@
 """
 Update Emoji.py
-Refeshes OMZ emoji database based on the latest Unicode spec
+Refreshes OMZ emoji database based on the latest Unicode spec
 """
 import re
 import json
@@ -95,7 +95,7 @@ def name_to_omz(_name, _group, _subgroup, _status):
         shortname = snake_case(_name)
     # Special treatment by status
     # Enables us to have every emoji combination,
-    # even the one that are not officially sanctionned
+    # even the one that are not officially sanctioned
     # and are implemented by, say, only one vendor
     if _status == "unqualified":
         shortname += "_unqualified"

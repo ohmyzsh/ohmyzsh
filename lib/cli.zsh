@@ -241,10 +241,18 @@ function _omz::plugin::disable {
 
   # Remove plugins substitution awk script
   local awk_subst_plugins="\
-  gsub(/[ \t]+(${(j:|:)dis_plugins})/, \"\") # with spaces before
-  gsub(/(${(j:|:)dis_plugins})[ \t]+/, \"\") # with spaces after
-  gsub(/\((${(j:|:)dis_plugins})\)/, \"\") # without spaces (only plugin)
+  gsub(/[ \t]+(${(j:|:)dis_plugins})[ \t]+/, \" \") # with spaces before or after
+  gsub(/[ \t]+(${(j:|:)dis_plugins})$/, \"\")       # with spaces before and EOL
+  gsub(/^(${(j:|:)dis_plugins})[ \t]+/, \"\")       # with BOL and spaces after
+
+  gsub(/\((${(j:|:)dis_plugins})[ \t]+/, \"(\")     # with parenthesis before and spaces after
+  gsub(/[ \t]+(${(j:|:)dis_plugins})\)/, \")\")     # with spaces before or parenthesis after
+  gsub(/\((${(j:|:)dis_plugins})\)/, \"()\")        # with only parentheses
+
+  gsub(/^(${(j:|:)dis_plugins})\)/, \")\")          # with BOL and closing parenthesis
+  gsub(/\((${(j:|:)dis_plugins})$/, \"(\")          # with opening parenthesis and EOL
 "
+
   # Disable plugins awk script
   local awk_script="
 # if plugins=() is in oneline form, substitute disabled plugins and go to next line
@@ -336,18 +344,38 @@ function _omz::plugin::enable {
   next
 }
 
-# if plugins=() is in multiline form, enable multi flag
+# if plugins=() is in multiline form, enable multi flag and indent by default with 2 spaces
 /^[ \t]*plugins=\(/ {
   multi=1
+  indent=\"  \"
+  print \$0
+  next
 }
 
 # if multi flag is enabled and we find a valid closing parenthesis,
-# add new plugins and disable multi flag
+# add new plugins with proper indent and disable multi flag
 multi == 1 && /^[^#]*\)/ {
   multi=0
-  sub(/\)/, \" $add_plugins&\")
+  split(\"$add_plugins\",p,\" \")
+  for (i in p) {
+    print indent p[i]
+  }
   print \$0
   next
+}
+
+# if multi flag is enabled and we didnt find a closing parenthesis,
+# get the indentation level to match when adding plugins
+multi == 1 && /^[^#]*/ {
+  indent=\"\"
+  for (i = 1; i <= length(\$0); i++) {
+    char=substr(\$0, i, 1)
+    if (char == \" \" || char == \"\t\") {
+      indent = indent char
+    } else {
+      break
+    }
+  }
 }
 
 { print \$0 }
@@ -389,8 +417,23 @@ function _omz::plugin::info {
   local readme
   for readme in "$ZSH_CUSTOM/plugins/$1/README.md" "$ZSH/plugins/$1/README.md"; do
     if [[ -f "$readme" ]]; then
-      (( ${+commands[less]} )) && less "$readme" || cat "$readme"
-      return 0
+      # If being piped, just cat the README
+      if [[ ! -t 1 ]]; then
+        cat "$readme"
+        return $?
+      fi
+
+      # Enrich the README display depending on the tools we have
+      # - glow: https://github.com/charmbracelet/glow
+      # - bat: https://github.com/sharkdp/bat
+      # - less: typical pager command
+      case 1 in
+        ${+commands[glow]}) glow -p "$readme" ;;
+        ${+commands[bat]}) bat -l md --style plain "$readme" ;;
+        ${+commands[less]}) less "$readme" ;;
+        *) cat "$readme" ;;
+      esac
+      return $?
     fi
   done
 
@@ -448,7 +491,7 @@ function _omz::plugin::load {
     if [[ ! -f "$base/_$plugin" && ! -f "$base/$plugin.plugin.zsh" ]]; then
       _omz::log warn "'$plugin' is not a valid plugin"
       continue
-    # It it is a valid plugin, add its directory to $fpath unless it is already there
+    # It is a valid plugin, add its directory to $fpath unless it is already there
     elif (( ! ${fpath[(Ie)$base]} )); then
       fpath=("$base" $fpath)
     fi
@@ -773,7 +816,17 @@ function _omz::theme::use {
 }
 
 function _omz::update {
-  local last_commit=$(builtin cd -q "$ZSH"; git rev-parse HEAD)
+  # Check if git command is available
+  (( $+commands[git] )) || {
+    _omz::log error "git is not installed. Aborting..."
+    return 1
+  }
+
+  local last_commit=$(builtin cd -q "$ZSH"; git rev-parse HEAD 2>/dev/null)
+  [[ $? -eq 0 ]] || {
+    _omz::log error "\`$ZSH\` is not a git directory. Aborting..."
+    return 1
+  }
 
   # Run update script
   zstyle -s ':omz:update' verbose verbose_mode || verbose_mode=default

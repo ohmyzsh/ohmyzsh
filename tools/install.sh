@@ -63,7 +63,9 @@ zdot="${ZDOTDIR:-$HOME}"
 # Default value for $ZSH
 # a) if $ZDOTDIR is supplied and not $HOME: $ZDOTDIR/ohmyzsh
 # b) otherwise, $HOME/.oh-my-zsh
-[ "$ZDOTDIR" = "$HOME" ] || ZSH="${ZSH:-${ZDOTDIR:+$ZDOTDIR/ohmyzsh}}"
+if [ -n "$ZDOTDIR" ] && [ "$ZDOTDIR" != "$HOME" ]; then
+  ZSH="${ZSH:-$ZDOTDIR/ohmyzsh}"
+fi
 ZSH="${ZSH:-$HOME/.oh-my-zsh}"
 
 # Default settings
@@ -164,11 +166,16 @@ supports_hyperlinks() {
 
   # If $TERM_PROGRAM is set, these terminals support hyperlinks
   case "$TERM_PROGRAM" in
-  Hyper|iTerm.app|terminology|WezTerm) return 0 ;;
+  Hyper|iTerm.app|terminology|WezTerm|vscode) return 0 ;;
   esac
 
-  # kitty supports hyperlinks
-  if [ "$TERM" = xterm-kitty ]; then
+  # These termcap entries support hyperlinks
+  case "$TERM" in
+  xterm-kitty|alacritty|alacritty-direct) return 0 ;;
+  esac
+
+  # xfce4-terminal supports hyperlinks
+  if [ "$COLORTERM" = "xfce4-terminal" ]; then
     return 0
   fi
 
@@ -475,7 +482,7 @@ print_success() {
     "$(fmt_code "$(fmt_link ".zshrc" "file://$zdot/.zshrc" --text)")" \
     "file to select plugins, themes, and options."
   printf '\n'
-  printf '%s\n' "• Follow us on Twitter: $(fmt_link @ohmyzsh https://twitter.com/ohmyzsh)"
+  printf '%s\n' "• Follow us on X: $(fmt_link @ohmyzsh https://x.com/ohmyzsh)"
   printf '%s\n' "• Join our Discord community: $(fmt_link "Discord server" https://discord.gg/ohmyzsh)"
   printf '%s\n' "• Get stickers, t-shirts, coffee mugs and more: $(fmt_link "Planet Argon Shop" https://shop.planetargon.com/collections/oh-my-zsh)"
   printf '%s\n' $FMT_RESET

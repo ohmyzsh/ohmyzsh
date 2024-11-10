@@ -52,6 +52,7 @@ plugins=(... extract)
 | `tlz`             | Tarball with lzma compression        |
 | `txz`             | Tarball with lzma2 compression       |
 | `tzst`            | Tarball with zstd compression        |
+| `vsix`            | VS Code extension zip file           |
 | `war`             | Web Application archive (Java-based) |
 | `whl`             | Python wheel file                    |
 | `xpi`             | Mozilla XPI module file              |

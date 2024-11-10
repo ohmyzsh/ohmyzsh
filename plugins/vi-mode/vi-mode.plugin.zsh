@@ -18,12 +18,12 @@ typeset -g VI_MODE_SET_CURSOR
 # if $VI_MODE_SET_CURSOR=true.
 #
 # See https://vt100.net/docs/vt510-rm/DECSCUSR for cursor styles
-typeset -g VI_MODE_CURSOR_NORMAL=2
-typeset -g VI_MODE_CURSOR_VISUAL=6
-typeset -g VI_MODE_CURSOR_INSERT=6
-typeset -g VI_MODE_CURSOR_OPPEND=0
+typeset -g VI_MODE_CURSOR_NORMAL=${VI_MODE_CURSOR_NORMAL:=2}
+typeset -g VI_MODE_CURSOR_VISUAL=${VI_MODE_CURSOR_VISUAL:=6}
+typeset -g VI_MODE_CURSOR_INSERT=${VI_MODE_CURSOR_INSERT:=6}
+typeset -g VI_MODE_CURSOR_OPPEND=${VI_MODE_CURSOR_OPPEND:=0}
 
-typeset -g VI_KEYMAP=main
+typeset -g VI_KEYMAP=${VI_KEYMAP:=main}
 
 function _vi-mode-set-cursor-shape-for-keymap() {
   [[ "$VI_MODE_SET_CURSOR" = true ]] || return
@@ -147,14 +147,22 @@ function wrap_clipboard_widgets() {
   done
 }
 
-wrap_clipboard_widgets copy vi-yank vi-yank-eol vi-backward-kill-word vi-change-whole-line vi-delete vi-delete-char
-wrap_clipboard_widgets paste vi-put-{before,after}
-unfunction wrap_clipboard_widgets
+if [[ -z "${VI_MODE_DISABLE_CLIPBOARD:-}" ]]; then
+  wrap_clipboard_widgets copy \
+      vi-yank vi-yank-eol vi-yank-whole-line \
+      vi-change vi-change-eol vi-change-whole-line \
+      vi-kill-line vi-kill-eol vi-backward-kill-word \
+      vi-delete vi-delete-char vi-backward-delete-char
+
+  wrap_clipboard_widgets paste \
+      vi-put-{before,after} \
+      put-replace-selection
+
+  unfunction wrap_clipboard_widgets
+fi
 
 # if mode indicator wasn't setup by theme, define default, we'll leave INSERT_MODE_INDICATOR empty by default
-if [[ -z "$MODE_INDICATOR" ]]; then
-  MODE_INDICATOR='%B%F{red}<%b<<%f'
-fi
+typeset -g MODE_INDICATOR=${MODE_INDICATOR:='%B%F{red}<%b<<%f'}
 
 function vi_mode_prompt_info() {
   echo "${${VI_KEYMAP/vicmd/$MODE_INDICATOR}/(main|viins)/$INSERT_MODE_INDICATOR}"

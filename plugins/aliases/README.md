@@ -1,7 +1,5 @@
 # Aliases cheatsheet
 
-**Maintainer:** [@hqingyi](https://github.com/hqingyi)
-
 With lots of 3rd-party amazing aliases installed, this plugin helps list the shortcuts
 that are currently available based on the plugins you have enabled.
 
@@ -13,11 +11,13 @@ plugins=(aliases)
 
 Requirements: Python needs to be installed.
 
+**Maintainer:** [@hqingyi](https://github.com/hqingyi)
+
 ## Usage
 
 - `als`: show all aliases by group
 
-- `als -h/--help`: print help mesage
+- `als -h/--help`: print help message
 
 - `als <keyword(s)>`: filter and highlight aliases by `<keyword>`
 
@@ -25,4 +25,4 @@ Requirements: Python needs to be installed.
 
 - `als --groups`: show only group names
 
-  ![screenshot](https://cloud.githubusercontent.com/assets/3602957/11581913/cb54fb8a-9a82-11e5-846b-5a67f67ad9ad.png)
+  ![screenshot](https://github.com/ohmyzsh/ohmyzsh/assets/66907184/5bfa00ea-5fc3-4e97-8b22-2f74f6b948c7)

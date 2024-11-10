@@ -6,6 +6,7 @@ alias dib='docker image build'
 alias dii='docker image inspect'
 alias dils='docker image ls'
 alias dipu='docker image push'
+alias dipru='docker image prune -a'
 alias dirm='docker image rm'
 alias dit='docker image tag'
 alias dkil='docker kill'
@@ -18,6 +19,8 @@ alias dni='docker network inspect'
 alias dnls='docker network ls'
 alias dnrm='docker network rm'
 alias dpo='docker container port'
+alias dps='docker ps'
+alias dpsa='docker ps -a'
 alias dpu='docker pull'
 alias dpsh='docker push'
 alias dr='docker container run'
@@ -54,7 +57,7 @@ if (( ! $+commands[docker] )); then
   return
 fi
 
-# Standarized $0 handling
+# Standardized $0 handling
 # https://zdharma-continuum.github.io/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html
 0="${${ZERO:-${0:#$ZSH_ARGZERO}}:-${(%):-%N}}"
 0="${${(M)0:#/*}:-$PWD/$0}"
@@ -75,6 +78,6 @@ fi
     ! is-at-least 23.0.0 ${${(s:,:z)"$(command docker --version)"}[3]}; then
         command cp "${0:h}/completions/_docker" "$ZSH_CACHE_DIR/completions/_docker"
       else
-        command docker completion zsh >| "$ZSH_CACHE_DIR/completions/_docker"
+        command docker completion zsh | tee "$ZSH_CACHE_DIR/completions/_docker" > /dev/null
   fi
 } &|

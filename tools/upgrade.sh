@@ -1,4 +1,5 @@
 #!/usr/bin/env zsh
+set +u # disable nounset
 
 local ret=0 # exit code
 
@@ -9,8 +10,13 @@ fi
 
 # Protect against unwanted sourcing
 case "$ZSH_EVAL_CONTEXT" in
-  *:file) echo "error: this file should not be sourced" && return ;;
+  *:file) echo "error: this file should not be sourced" && return 1 ;;
 esac
+
+# Define "$ZSH" if not defined -- in theory this should be `export`ed by the calling script
+if [[ -z "$ZSH" ]]; then
+  ZSH="${0:a:h:h}"
+fi
 
 cd "$ZSH"
 
@@ -89,11 +95,16 @@ supports_hyperlinks() {
 
   # If $TERM_PROGRAM is set, these terminals support hyperlinks
   case "$TERM_PROGRAM" in
-  Hyper|iTerm.app|terminology|WezTerm) return 0 ;;
+  Hyper|iTerm.app|terminology|WezTerm|vscode) return 0 ;;
   esac
 
-  # kitty supports hyperlinks
-  if [ "$TERM" = xterm-kitty ]; then
+  # These termcap entries support hyperlinks
+  case "$TERM" in
+  xterm-kitty|alacritty|alacritty-direct) return 0 ;;
+  esac
+
+  # xfce4-terminal supports hyperlinks
+  if [ "$COLORTERM" = "xfce4-terminal" ]; then
     return 0
   fi
 
@@ -260,7 +271,7 @@ if LANG= git pull --quiet --rebase $remote $branch; then
     printf '%s    %s        %s           %s /____/ %s       %s     %s          %s\n'      $RAINBOW $RESET
     printf '\n'
     printf "${BLUE}%s${RESET}\n\n" "$message"
-    printf "${BLUE}${BOLD}%s %s${RESET}\n" "To keep up with the latest news and updates, follow us on Twitter:" "$(fmt_link @ohmyzsh https://twitter.com/ohmyzsh)"
+    printf "${BLUE}${BOLD}%s %s${RESET}\n" "To keep up with the latest news and updates, follow us on X:" "$(fmt_link @ohmyzsh https://x.com/ohmyzsh)"
     printf "${BLUE}${BOLD}%s %s${RESET}\n" "Want to get involved in the community? Join our Discord:" "$(fmt_link "Discord server" https://discord.gg/ohmyzsh)"
     printf "${BLUE}${BOLD}%s %s${RESET}\n" "Get your Oh My Zsh swag at:" "$(fmt_link "Planet Argon Shop" https://shop.planetargon.com/collections/oh-my-zsh)"
   elif [[ $verbose_mode == minimal ]]; then

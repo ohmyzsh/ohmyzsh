@@ -3,9 +3,9 @@ on:
   workflow_dispatch: {}
   push:
     paths:
-      - tools/install.sh
-      - .github/workflows/installer
-      - .github/workflows/installer.yml
+      - 'tools/install.sh'
+      - '.github/workflows/installer/**'
+      - '.github/workflows/installer.yml'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
@@ -17,6 +17,7 @@ permissions:
 jobs:
   test:
     name: Test installer
+    if: github.repository == 'ohmyzsh/ohmyzsh'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -25,7 +26,7 @@ jobs:
           - macos-latest
     steps:
       - name: Set up git repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install zsh
         if: runner.os == 'Linux'
         run: sudo apt-get update; sudo apt-get install zsh
@@ -41,15 +42,15 @@ jobs:
       - test
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install Vercel CLI
         run: npm install -g vercel
       - name: Setup project and deploy
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
           cp tools/install.sh .github/workflows/installer/install.sh
           cd .github/workflows/installer
-          vc link --yes -t ${{ secrets.VERCEL_TOKEN }}
-          vc deploy --prod -t ${{ secrets.VERCEL_TOKEN }}
+          vc deploy --prod -t "$VERCEL_TOKEN"

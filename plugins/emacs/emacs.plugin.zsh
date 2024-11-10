@@ -60,7 +60,7 @@ function efile {
 }
 
 # Write to standard output the directory of the file
-# opened in the the current buffer
+# opened in the current buffer
 function ecd {
   local file
   file="$(efile)" || return $?

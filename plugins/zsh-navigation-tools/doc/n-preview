@@ -170,7 +170,7 @@ while (( 1 )); do
     elif [ -n "$keypad" ]; then
         final_key="$keypad"
     else
-        _vpreview_status_msg "Inproper input detected"
+        _vpreview_status_msg "Improper input detected"
         zcurses refresh status 
     fi
 

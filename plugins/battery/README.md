@@ -12,6 +12,13 @@ Then, add the `battery_pct_prompt` function to your custom theme. For example:
 RPROMPT='$(battery_pct_prompt) ...'
 ```
 
+Also, you set the `BATTERY_CHARGING` variable to your favor.
+For example:
+
+```zsh
+BATTERY_CHARGING="⚡️"
+```
+
 ## Requirements
 
 - On Linux, you must have the `acpi` or `acpitool` commands installed on your operating system.

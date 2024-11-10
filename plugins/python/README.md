@@ -12,8 +12,7 @@ plugins=(... python)
 
 | Command          | Description                                                                            |
 | ---------------- | -------------------------------------------------------------------------------------- |
-| `py`             | Runs `python3`                                                                         |
-| `ipython`        | Runs the appropriate `ipython` version according to the activated virtualenv           |
+| `py`             | Runs `python3`. Only set if `py` is not installed.                                     |
 | `pyfind`         | Finds .py files recursively in the current directory                                   |
 | `pyclean [dirs]` | Deletes byte-code and cache files from a list of directories or the current one        |
 | `pygrep <text>`  | Looks for `text` in `*.py` files in the current directory, recursively                 |
@@ -22,8 +21,19 @@ plugins=(... python)
 
 ## Virtual environments
 
-The plugin provides two utilities to manage Python venvs:
+The plugin provides three utilities to manage Python 3.3+ [venv](https://docs.python.org/3/library/venv.html)
+virtual environments:
 
-- `mkv [name]`: make a new virtual environment called `name` (default: `venv`) in current directory.
+- `mkv [name]`: make a new virtual environment called `name` (default: if set `$PYTHON_VENV_NAME`, else
+  `venv`) in the current directory.
 
-- `vrun [name]`: activate virtual environment called `name` (default: `venv`) in current directory.
+- `vrun [name]`: Activate the virtual environment called `name` (default: if set `$PYTHON_VENV_NAME`, else
+  `venv`) in the current directory.
+
+- `auto_vrun`: Automatically activate the venv virtual environment when entering a directory containing
+  `<venv-name>/bin/activate`, and automatically deactivate it when navigating out of it (keeps venv activated
+  in subdirectories).
+  - To enable the feature, set `export PYTHON_AUTO_VRUN=true` before sourcing oh-my-zsh.
+  - Plugin activates first virtual environment in lexicographic order whose name begins with `<venv-name>`.
+    The default virtual environment name is `venv`. To use a different name, set
+    `export PYTHON_VENV_NAME=<venv-name>`. For example: `export PYTHON_VENV_NAME=".venv"`

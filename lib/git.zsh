@@ -1,3 +1,5 @@
+autoload -Uz is-at-least
+
 # The git prompt's git commands are read-only and should not interfere with
 # other processes. This environment variable is equivalent to running with `git
 # --no-optional-locks`, but falls back gracefully for older versions of git.
@@ -9,14 +11,18 @@ function __git_prompt_git() {
   GIT_OPTIONAL_LOCKS=0 command git "$@"
 }
 
-function git_prompt_info() {
+function _omz_git_prompt_info() {
   # If we are on a folder not tracked by git, get out.
   # Otherwise, check for hide-info at global and local repository level
   if ! __git_prompt_git rev-parse --git-dir &> /dev/null \
-     || [[ "$(__git_prompt_git config --get oh-my-zsh.hide-info 2>/dev/null)" == 1 ]]; then
+    || [[ "$(__git_prompt_git config --get oh-my-zsh.hide-info 2>/dev/null)" == 1 ]]; then
     return 0
   fi
 
+  # Get either:
+  # - the current branch name
+  # - the tag name if we are on a tag
+  # - the short SHA of the current commit
   local ref
   ref=$(__git_prompt_git symbolic-ref --short HEAD 2> /dev/null) \
   || ref=$(__git_prompt_git describe --tags --exact-match HEAD 2> /dev/null) \
@@ -32,6 +38,73 @@ function git_prompt_info() {
 
   echo "${ZSH_THEME_GIT_PROMPT_PREFIX}${ref:gs/%/%%}${upstream:gs/%/%%}$(parse_git_dirty)${ZSH_THEME_GIT_PROMPT_SUFFIX}"
 }
+
+# Use async version if setting is enabled, or unset but zsh version is at least 5.0.6.
+# This avoids async prompt issues caused by previous zsh versions:
+# - https://github.com/ohmyzsh/ohmyzsh/issues/12331
+# - https://github.com/ohmyzsh/ohmyzsh/issues/12360
+# TODO(2024-06-12): @mcornella remove workaround when CentOS 7 reaches EOL
+local _style
+if zstyle -t ':omz:alpha:lib:git' async-prompt \
+  || { is-at-least 5.0.6 && zstyle -T ':omz:alpha:lib:git' async-prompt }; then
+  function git_prompt_info() {
+    if [[ -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_info]}" ]]; then
+      echo -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_info]}"
+    fi
+  }
+
+  function git_prompt_status() {
+    if [[ -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_status]}" ]]; then
+      echo -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_status]}"
+    fi
+  }
+
+  # Conditionally register the async handler, only if it's needed in $PROMPT
+  # or any of the other prompt variables
+  function _defer_async_git_register() {
+    # Check if git_prompt_info is used in a prompt variable
+    case "${PS1}:${PS2}:${PS3}:${PS4}:${RPROMPT}:${RPS1}:${RPS2}:${RPS3}:${RPS4}" in
+    *(\$\(git_prompt_info\)|\`git_prompt_info\`)*)
+      _omz_register_handler _omz_git_prompt_info
+      ;;
+    esac
+
+    case "${PS1}:${PS2}:${PS3}:${PS4}:${RPROMPT}:${RPS1}:${RPS2}:${RPS3}:${RPS4}" in
+    *(\$\(git_prompt_status\)|\`git_prompt_status\`)*)
+      _omz_register_handler _omz_git_prompt_status
+      ;;
+    esac
+
+    add-zsh-hook -d precmd _defer_async_git_register
+    unset -f _defer_async_git_register
+  }
+
+  # Register the async handler first. This needs to be done before
+  # the async request prompt is run
+  precmd_functions=(_defer_async_git_register $precmd_functions)
+elif zstyle -s ':omz:alpha:lib:git' async-prompt _style && [[ $_style == "force" ]]; then
+  function git_prompt_info() {
+    if [[ -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_info]}" ]]; then
+      echo -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_info]}"
+    fi
+  }
+
+  function git_prompt_status() {
+    if [[ -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_status]}" ]]; then
+      echo -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_status]}"
+    fi
+  }
+
+  _omz_register_handler _omz_git_prompt_info
+  _omz_register_handler _omz_git_prompt_status
+else
+  function git_prompt_info() {
+    _omz_git_prompt_info
+  }
+  function git_prompt_status() {
+    _omz_git_prompt_status
+  }
+fi
 
 # Checks if working tree is dirty
 function parse_git_dirty() {
@@ -105,6 +178,18 @@ function git_current_branch() {
   echo ${ref#refs/heads/}
 }
 
+# Outputs the name of the previously checked out branch
+# Usage example: git pull origin $(git_previous_branch)
+# rev-parse --symbolic-full-name @{-1} only prints if it is a branch
+function git_previous_branch() {
+  local ref
+  ref=$(__git_prompt_git rev-parse --quiet --symbolic-full-name @{-1} 2> /dev/null)
+  local ret=$?
+  if [[ $ret != 0 ]] || [[ -z $ref ]]; then
+    return  # no git repo or non-branch previous ref
+  fi
+  echo ${ref#refs/heads/}
+}
 
 # Gets the number of commits ahead from remote
 function git_commits_ahead() {
@@ -161,7 +246,7 @@ function git_prompt_long_sha() {
   SHA=$(__git_prompt_git rev-parse HEAD 2> /dev/null) && echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
 }
 
-function git_prompt_status() {
+function _omz_git_prompt_status() {
   [[ "$(__git_prompt_git config --get oh-my-zsh.hide-status 2>/dev/null)" = 1 ]] && return
 
   # Maps a git status prefix to an internal constant
@@ -170,7 +255,7 @@ function git_prompt_status() {
   prefix_constant_map=(
     '\?\? '     'UNTRACKED'
     'A  '       'ADDED'
-    'M  '       'ADDED'
+    'M  '       'MODIFIED'
     'MM '       'MODIFIED'
     ' M '       'MODIFIED'
     'AM '       'MODIFIED'
