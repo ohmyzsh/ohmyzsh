@@ -87,6 +87,7 @@ zstyle ':omz:plugins:docker' legacy-completion yes
 
 ## Custom functions (pseudo-aliases)
 
-| Name  | Function                                   | Description                                               |
-| :---- | :----------------------------------------- | :-------------------------------------------------------- |
-| dxcsh | `dxcsh() { docker exec -it "$@" /bin/sh }` | Run a interactive shell inside a running docker container |
+| Name    | Function                                       | Description                                               |
+| :------ | :--------------------------------------------- | :-------------------------------------------------------- |
+| dxcsh   | `dxcsh() { docker exec -it "$@" /bin/sh }`     | Run a interactive shell inside a running docker container |
+| dxcbash | `dxcbash() { docker exec -it "$@" /bin/bash }` | Run a interactive bash inside a running docker container  |

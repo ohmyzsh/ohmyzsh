@@ -41,6 +41,7 @@ alias dxc='docker container exec'
 alias dxcit='docker container exec -it'
 
 dxcsh() { docker exec -it "$@" /bin/sh }
+dxcbash() { docker exec -it "$@" /bin/bash }
 
 if (( ! $+commands[docker] )); then
   return
