@@ -314,6 +314,9 @@ prompt_dir() {
 
 # Virtualenv: current working virtualenv
 prompt_virtualenv() {
+  if [ -n "$CONDA_DEFAULT_ENV" ]; then
+    prompt_segment magenta $CURRENT_FG "🐍 $CONDA_DEFAULT_ENV"
+  fi
   if [[ -n "$VIRTUAL_ENV" && -n "$VIRTUAL_ENV_DISABLE_PROMPT" ]]; then
     prompt_segment "$AGNOSTER_VENV_BG" "$AGNOSTER_VENV_FG" "(${VIRTUAL_ENV:t:gs/%/%%})"
   fi
@@ -354,9 +357,9 @@ prompt_aws() {
 build_prompt() {
   RETVAL=$?
   prompt_status
-  prompt_virtualenv
   prompt_aws
   prompt_context
+  prompt_virtualenv
   prompt_dir
   prompt_git
   prompt_bzr
