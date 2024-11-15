@@ -41,6 +41,7 @@ zstyle ':omz:plugins:yarn' berry yes
 | yb                 | `yarn build`                                                                                          | Run the build script defined in `package.json`                                     |
 | ycc                | `yarn cache clean`                                                                                    | Clean yarn's global cache of packages                                              |
 | yd                 | `yarn dev`                                                                                            | Run the dev script defined in `package.json`                                       |
+| ydd                | `yarn dedupe`                                                                                         | Removes duplicate dependencies from the lockfile.                                  |
 | yf                 | `yarn format`                                                                                         | Run the dev script defined in `package.json`                                       |
 | yh                 | `yarn help`                                                                                           | Show help for a yarn command                                                       |
 | yi                 | `yarn init`                                                                                           | Interactively creates or updates a package.json file                               |
