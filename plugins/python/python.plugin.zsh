@@ -1,5 +1,5 @@
-# python command
-alias py='python3'
+# set python command if 'py' not installed
+builtin which py > /dev/null || alias py='python3'
 
 # Find python file
 alias pyfind='find . -name "*.py"'
@@ -43,19 +43,17 @@ function pyuserpaths() {
 # Grep among .py files
 alias pygrep='grep -nr --include="*.py"'
 
-# Run proper IPython regarding current virtualenv (if any)
-alias ipython="python3 -c 'import IPython; IPython.terminal.ipapp.launch_new_instance()'"
-
 # Share local directory as a HTTP server
 alias pyserver="python3 -m http.server"
 
 
 ## venv utilities
+: ${PYTHON_VENV_NAME:=venv}
 
 # Activate a the python virtual environment specified.
-# If none specified, use 'venv'.
+# If none specified, use $PYTHON_VENV_NAME, else 'venv'.
 function vrun() {
-  local name="${1:-venv}"
+  local name="${1:-$PYTHON_VENV_NAME}"
   local venvpath="${name:P}"
 
   if [[ ! -d "$venvpath" ]]; then
@@ -72,12 +70,35 @@ function vrun() {
   echo "Activated virtual environment ${name}"
 }
 
-# Create a new virtual environment, with default name 'venv'.
+# Create a new virtual environment using the specified name.
+# If none specified, use $PYTHON_VENV_NAME
 function mkv() {
-  local name="${1:-venv}"
+  local name="${1:-$PYTHON_VENV_NAME}"
   local venvpath="${name:P}"
 
   python3 -m venv "${name}" || return
   echo >&2 "Created venv in '${venvpath}'"
   vrun "${name}"
 }
+
+if [[ "$PYTHON_AUTO_VRUN" == "true" ]]; then
+  # Automatically activate venv when changing dir
+  function auto_vrun() {
+    # deactivate if we're on a different dir than VIRTUAL_ENV states
+    # we don't deactivate subdirectories!
+    if (( $+functions[deactivate] )) && [[ $PWD != ${VIRTUAL_ENV:h}* ]]; then
+      deactivate > /dev/null 2>&1
+    fi
+
+    if [[ $PWD != ${VIRTUAL_ENV:h} ]]; then
+      for _file in "${PYTHON_VENV_NAME}"*/bin/activate(N.); do
+        # make sure we're not in a venv already
+        (( $+functions[deactivate] )) && deactivate > /dev/null 2>&1
+        source $_file > /dev/null 2>&1
+        break
+      done
+    fi
+  }
+  add-zsh-hook chpwd auto_vrun
+  auto_vrun
+fi

@@ -1,3 +1,7 @@
+# if there is a virtualenv already loaded pyenv should not be loaded
+# see https://github.com/ohmyzsh/ohmyzsh/issues/12589
+[[ -n ${VIRTUAL_ENV:-} ]] && return
+
 pyenv_config_warning() {
   [[ "$ZSH_PYENV_QUIET" != true ]] || return 0
 

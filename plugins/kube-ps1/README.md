@@ -1,5 +1,4 @@
-kube-ps1: Kubernetes prompt for bash and zsh
-============================================
+# kube-ps1: Kubernetes prompt for bash and zsh
 
 A script that lets you add the current Kubernetes context and namespace
 configured on `kubectl` to your Bash/Zsh prompt strings (i.e. the `$PS1`).
@@ -136,6 +135,7 @@ the following environment variables:
 | `KUBE_PS1_SUFFIX` | `)` | Prompt closing character |
 | `KUBE_PS1_CLUSTER_FUNCTION` | No default, must be user supplied | Function to customize how cluster is displayed |
 | `KUBE_PS1_NAMESPACE_FUNCTION` | No default, must be user supplied | Function to customize how namespace is displayed |
+| `KUBE_PS1_KUBECONFIG_SYMLINK` | `false` | Treat `KUBECONFIG` and `~/.kube/config` files as symbolic links |
 
 For terminals that do not support UTF-8, the symbol will be replaced with the
 string `k8s`.

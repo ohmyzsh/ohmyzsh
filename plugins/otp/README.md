@@ -16,7 +16,7 @@ Provided aliases:
   email address). Then the OTP key needs to be pasted, followed by a CTRL+D character
   inserted on an empty line.
 
-- `ot`: generates a MFA code based on the given key and copies it to the clipboard 
+- `ot`: generates a MFA code based on the given key and copies it to the clipboard
   (on Linux it relies on xsel, on MacOS X it uses pbcopy instead).
 
 The plugin uses `$HOME/.otp` to store its internal files.

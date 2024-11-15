@@ -17,7 +17,7 @@ function title {
   : ${2=$1}
 
   case "$TERM" in
-    cygwin|xterm*|putty*|rxvt*|konsole*|ansi|mlterm*|alacritty|st*|foot|contour*)
+    cygwin|xterm*|putty*|rxvt*|konsole*|ansi|mlterm*|alacritty*|st*|foot*|contour*)
       print -Pn "\e]2;${2:q}\a" # set window name
       print -Pn "\e]1;${1:q}\a" # set tab name
       ;;
@@ -121,15 +121,15 @@ fi
 #
 # As of May 2021 mlterm, PuTTY, rxvt, screen, termux & xterm simply ignore the unknown OSC.
 
-# Don't define the function if we're inside Emacs
-if [[ -n "$INSIDE_EMACS" ]]; then
+# Don't define the function if we're inside Emacs or in an SSH session (#11696)
+if [[ -n "$INSIDE_EMACS" || -n "$SSH_CLIENT" || -n "$SSH_TTY" ]]; then
   return
 fi
 
 # Don't define the function if we're in an unsupported terminal
 case "$TERM" in
   # all of these either process OSC 7 correctly or ignore entirely
-  xterm*|putty*|rxvt*|konsole*|mlterm*|alacritty|screen*|tmux*) ;;
+  xterm*|putty*|rxvt*|konsole*|mlterm*|alacritty*|screen*|tmux*) ;;
   contour*|foot*) ;;
   *)
     # Terminal.app and iTerm2 process OSC 7 correctly
@@ -150,8 +150,11 @@ function omz_termsupport_cwd {
   URL_HOST="$(omz_urlencode -P $HOST)" || return 1
   URL_PATH="$(omz_urlencode -P $PWD)" || return 1
 
+  # Konsole errors if the HOST is provided
+  [[ -z "$KONSOLE_PROFILE_NAME" && -z "$KONSOLE_DBUS_SESSION"  ]] || URL_HOST=""
+
   # common control sequence (OSC 7) to set current host and path
-  printf "\e]7;%s\a" "file://${URL_HOST}${URL_PATH}"
+  printf "\e]7;file://%s%s\e\\" "${URL_HOST}" "${URL_PATH}"
 }
 
 # Use a precmd hook instead of a chpwd hook to avoid contaminating output

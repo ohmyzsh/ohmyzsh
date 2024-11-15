@@ -27,7 +27,7 @@ function opswd() {
 
   local password
   # Copy the password to the clipboard
-  if ! password=$(op item get "$service" --fields password 2>/dev/null); then
+  if ! password=$(op item get "$service" --reveal --fields password 2>/dev/null); then
     echo "error: could not obtain password for $service"
     return 1
   fi

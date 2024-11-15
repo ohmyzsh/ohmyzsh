@@ -25,27 +25,25 @@ alias pacown='pacman -Qo'
 alias pacupd="sudo pacman -Sy"
 
 function paclist() {
-  # Based on https://bbs.archlinux.org/viewtopic.php?id=93683
-  pacman -Qqe | \
-    xargs -I '{}' \
-      expac "${bold_color}% 20n ${fg_no_bold[white]}%d${reset_color}" '{}'
+  pacman -Qqe | xargs -I{} -P0 --no-run-if-empty pacman -Qs --color=auto "^{}\$"
 }
 
 function pacdisowned() {
-  local tmp db fs
-  tmp=${TMPDIR-/tmp}/pacman-disowned-$UID-$$
-  db=$tmp/db
-  fs=$tmp/fs
+  local tmp_dir db fs
+  tmp_dir=$(mktemp --directory)
+  db=$tmp_dir/db
+  fs=$tmp_dir/fs
 
-  mkdir "$tmp"
-  trap 'rm -rf "$tmp"' EXIT
+  trap "rm -rf $tmp_dir" EXIT
 
   pacman -Qlq | sort -u > "$db"
 
-  find /bin /etc /lib /sbin /usr ! -name lost+found \
+  find /etc /usr ! -name lost+found \
     \( -type d -printf '%p/\n' -o -print \) | sort > "$fs"
 
   comm -23 "$fs" "$db"
+
+  rm -rf $tmp_dir
 }
 
 alias pacmanallkeys='sudo pacman-key --refresh-keys'
@@ -181,8 +179,8 @@ fi
 # Check Arch Linux PGP Keyring before System Upgrade to prevent failure.
 function upgrade() {
   echo ":: Checking Arch Linux PGP Keyring..."
-  local installedver="$(sudo pacman -Qi archlinux-keyring | grep -Po '(?<=Version         : ).*')"
-  local currentver="$(sudo pacman -Si archlinux-keyring | grep -Po '(?<=Version         : ).*')"
+  local installedver="$(LANG= sudo pacman -Qi archlinux-keyring | grep -Po '(?<=Version         : ).*')"
+  local currentver="$(LANG= sudo pacman -Si archlinux-keyring | grep -Po '(?<=Version         : ).*')"
   if [ $installedver != $currentver ]; then
     echo " Arch Linux PGP Keyring is out of date."
     echo " Updating before full system upgrade."

@@ -1,14 +1,14 @@
 # suse
 
-**Maintainer**: [r-darwish](https://github.com/r-darwish)
-
-Alias for Zypper according to the official Zypper's alias
+Aliases for [Zypper](https://en.opensuse.org/Portal:Zypper) according to the official Zypper's alias
 
 To use it add `suse` to the plugins array in you zshrc file.
 
 ```zsh
 plugins=(... suse)
 ```
+
+**Maintainer**: [r-darwish](https://github.com/r-darwish)
 
 ## Main commands
 
@@ -79,6 +79,7 @@ Related: [#9798](https://github.com/ohmyzsh/ohmyzsh/pull/9798).
 | zrr   | `sudo zypper rr`    | remove repositories                      |
 
 ## Services commands
+
 | Alias | Commands           | Description                                                    |
 | ----- | ------------------ | -------------------------------------------------------------- |
 | zas   | `sudo zypper as`   | adds a service specified by URI to the system                  |
@@ -88,6 +89,7 @@ Related: [#9798](https://github.com/ohmyzsh/ohmyzsh/pull/9798).
 | zls   | `zypper ls`        | list services defined on the system                            |
 
 ## Package Locks Management commands
+
 | Alias | Commands         | Description                         |
 | ----- | ---------------- | ----------------------------------- |
 | zal   | `sudo zypper al` | add a package lock                  |

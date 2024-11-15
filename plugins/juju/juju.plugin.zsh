@@ -98,7 +98,7 @@ jaddr() {
   elif [[ $# -eq 2 ]]; then
     # Get unit address
     juju status "$1/$2" --format=json \
-      | jq -r ".applications.\"$1\".units.\"$1/$2\".address"
+      | jq -r ".applications.\"$1\".units.\"$1/$2\" | .address // .\"public-address\""
   else
     echo "Invalid number of arguments."
     echo "Usage:   jaddr <app-name> [<unit-number>]"
@@ -184,7 +184,7 @@ jmodel() {
   fi
 
   local model="$(yq e ".controllers.$(jcontroller).current-model" < ~/.local/share/juju/models.yaml | cut -d/ -f2)"
-  
+
   if [[ -z "$model" ]]; then
     echo "--"
     return 1

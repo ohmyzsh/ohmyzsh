@@ -1,19 +1,27 @@
 ## History wrapper
 function omz_history {
-  local clear list
-  zparseopts -E c=clear l=list
+  # parse arguments and remove from $@
+  local clear list stamp REPLY
+  zparseopts -E -D c=clear l=list f=stamp E=stamp i=stamp t:=stamp
 
   if [[ -n "$clear" ]]; then
     # if -c provided, clobber the history file
-    echo -n >| "$HISTFILE"
+
+    # confirm action before deleting history
+    print -nu2 "This action will irreversibly delete your command history. Are you sure? [y/N] "
+    builtin read -E
+    [[ "$REPLY" = [yY] ]] || return 0
+
+    print -nu2 >| "$HISTFILE"
     fc -p "$HISTFILE"
-    echo >&2 History file deleted.
-  elif [[ -n "$list" ]]; then
-    # if -l provided, run as if calling `fc' directly
-    builtin fc "$@"
+
+    print -u2 History file deleted.
+  elif [[ $# -eq 0 ]]; then
+    # if no arguments provided, show full history starting from 1
+    builtin fc $stamp -l 1
   else
-    # unless a number is provided, show all history events (starting from 1)
-    [[ ${@[-1]-} = *[0-9]* ]] && builtin fc -l "$@" || builtin fc -l "$@" 1
+    # otherwise, run `fc -l` with a custom format
+    builtin fc $stamp -l "$@"
   fi
 }
 
