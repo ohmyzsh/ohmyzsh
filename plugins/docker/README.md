@@ -75,6 +75,8 @@ zstyle ':omz:plugins:docker' legacy-completion yes
 | dstp    | `docker container stop`       | Stop one or more running containers                                                      |
 | dtop    | `docker top`                  | Display the running processes of a container                                             |
 | dvi     | `docker volume inspect`       | Display detailed information about one or more volumes                                   |
+| dvc     | `docker volume create`        | Create a new volume                                                                      |
+| dvrm    | `docker volume rm`            | Remove one or more volumes                                                               |
 | dvls    | `docker volume ls`            | List all the volumes known to docker                                                     |
 | dvprune | `docker volume prune`         | Cleanup dangling volumes                                                                 |
 | dxc     | `docker container exec`       | Run a new command in a running container                                                 |
