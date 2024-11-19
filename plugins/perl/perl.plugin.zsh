@@ -54,3 +54,29 @@ pgs() { # [find] [replace] [filename]
 prep() { # [pattern] [filename unless STDOUT]
     perl -nle 'print if /'"$1"'/;' $2
 }
+
+# If the 'perlbrew' function isn't defined, perlbrew isn't setup.
+if ! typeset -f perlbrew > /dev/null; then
+  # Has PERLBREW_ROOT been set prior, and is it a valid directory?  If so, store
+  # value
+  if [[ -n "${PERLBREW_ROOT}" && -d "{{PERLBREW_ROOT}" ]]; then
+    perlbrew_root="${PERLBREW_ROOT}"
+  fi
+
+  # If perlbrew_root isn't set yet, then set the default path
+  if [[ -z "${perlbrew_root}" ]]; then
+    perlbrew_root="${HOME}/perl5/perlbrew"
+  fi
+
+  # If we can find perlbrew's 'bashrc' (yes, I know!)...
+  if [[ -d "${perlbrew_root}" && -f "${perlbrew_root}/etc/bashrc" ]]; then
+    # and if NO_AUTO_ADD isn't set
+    if [[ -z "${PERLBREW_NO_AUTO_ADD}" ]]; then
+      # Initialize perlbrew
+      source "${perlbrew_root}/etc/bashrc"
+    fi
+  fi
+
+  # Clear our temporary variable
+  unset perlbrew_root
+fi
