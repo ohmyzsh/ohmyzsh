@@ -19,7 +19,8 @@ if zstyle -T ':omz:plugins:pipenv' auto-shell; then
     if [[ ! -f "$PWD/Pipfile" ]]; then
       if [[ "$PIPENV_ACTIVE" == 1 ]]; then
         if [[ "$PWD" != "$pipfile_dir"* ]]; then
-          exit
+          unset PIPENV_ACTIVE pipfile_dir
+          deactivate
         fi
       fi
     fi
@@ -28,7 +29,8 @@ if zstyle -T ':omz:plugins:pipenv' auto-shell; then
     if [[ "$PIPENV_ACTIVE" != 1 ]]; then
       if [[ -f "$PWD/Pipfile" ]]; then
         export pipfile_dir="$PWD"
-        pipenv shell
+        source "$(pipenv --venv)/bin/activate"
+        export PIPENV_ACTIVE=1
       fi
     fi
   }
