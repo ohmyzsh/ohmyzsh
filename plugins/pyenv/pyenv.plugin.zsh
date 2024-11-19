@@ -88,7 +88,7 @@ if [[ $FOUND_PYENV -eq 1 ]]; then
 
   function pyenv_prompt_info() {
     local version="$(pyenv version-name)"
-    if [[ "$ZSH_PYENV_NO_SYSTEM" = "true" ]] && [[ "${version}" = "system" ]]; then
+    if [[ "$ZSH_THEME_PYENV_NO_SYSTEM" == "true" ]] && [[ "${version}" == "system" ]]; then
       return
     fi
     echo "${ZSH_THEME_PYENV_PREFIX=}${version:gs/%/%%}${ZSH_THEME_PYENV_SUFFIX=}"
