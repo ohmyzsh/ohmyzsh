@@ -96,7 +96,7 @@ if [[ $FOUND_PYENV -eq 1 ]]; then
 else
   # Fall back to system python
   function pyenv_prompt_info() {
-    if [[ "$ZSH_PYENV_NO_SYSTEM" = "true" ]]; then
+    if [[ "$ZSH_THEME_PYENV_NO_SYSTEM" == "true" ]]; then
       return
     fi
     local version="$(python3 -V 2>&1 | cut -d' ' -f2)"
