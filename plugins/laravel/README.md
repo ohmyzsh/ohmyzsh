@@ -49,6 +49,7 @@ plugins=(... laravel)
 | `pacoc`  |  `php artisan config:clear` |
 | `pavic`  |  `php artisan view:clear` |
 | `paroc`  |  `php artisan route:clear` |
+| `paopc`  |  `php artisan optimize:clear` |
 
 ## Queues
 
