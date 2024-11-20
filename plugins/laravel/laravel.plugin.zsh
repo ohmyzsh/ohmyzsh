@@ -38,7 +38,6 @@ alias pavic='php artisan view:clear'
 alias paroc='php artisan route:clear'
 alias paopc='php artisan optimize:clear'
 
-
 # queues
 alias paqf='php artisan queue:failed'
 alias paqft='php artisan queue:failed-table'
