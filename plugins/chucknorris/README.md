@@ -40,7 +40,8 @@ Last login: Fri Jan 30 23:12:26 on ttys001
 Available via homebrew, apt, ...
 
 > [!NOTE]  
-> In addition to installing `fortune`, it may be necessary to run 
-> `strfile $ZSH/plugins/chucknorris/fortunes/chucknorris\n` 
-> (include the "\n" literally) to write the fortune data to the proper directory.
+> In addition to installing `fortune`, it may be necessary to run:
 > 
+> `strfile $ZSH/plugins/chucknorris/fortunes/chucknorris\n`
+> 
+> (include the "\n" literally) to write the fortune data to the proper directory.
