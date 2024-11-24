@@ -38,3 +38,7 @@ Last login: Fri Jan 30 23:12:26 on ttys001
 - `cowsay` if using `chuck_cow`
 
 Available via homebrew, apt, ...
+
+> [!NOTE]  
+> In addition to installing `fortune`, it may be necessary to run `strfile $ZSH/plugins/chucknorris/fortunes/chucknorris\n` to write the fortune data to the proper directory.
+> 
