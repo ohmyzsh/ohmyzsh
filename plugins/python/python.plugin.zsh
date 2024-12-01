@@ -81,6 +81,18 @@ function mkv() {
   vrun "${name}"
 }
 
+# Create a new virtual environment using the specified name.
+# If none specified, use $PYTHON_VENV_NAME
+# Use system site packages
+function mkvs() {
+  local name="${1:-$PYTHON_VENV_NAME}"
+  local venvpath="${name:P}"
+
+  python3 -m venv --system-site-packages "${name}" || return
+  echo >&2 "Created venv with system site packages in '${venvpath}'"
+  vrun "${name}"
+}
+
 if [[ "$PYTHON_AUTO_VRUN" == "true" ]]; then
   # Automatically activate venv when changing dir
   function auto_vrun() {
