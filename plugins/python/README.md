@@ -27,6 +27,8 @@ virtual environments:
 - `mkv [name]`: make a new virtual environment called `name` (default: if set `$PYTHON_VENV_NAME`, else
   `venv`) in the current directory.
 
+- `mkvs [name]`: same as `mkvs`, but uses system site packages by adding `--system-site-packages` argument.
+
 - `vrun [name]`: Activate the virtual environment called `name` (default: if set `$PYTHON_VENV_NAME`, else
   `venv`) in the current directory.
 
