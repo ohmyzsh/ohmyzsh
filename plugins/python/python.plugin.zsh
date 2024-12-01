@@ -46,59 +46,81 @@ alias pygrep='grep -nr --include="*.py"'
 # Share local directory as a HTTP server
 alias pyserver="python3 -m http.server"
 
-
-## venv utilities
 : ${PYTHON_VENV_NAME:=venv}
 
-# Activate a the python virtual environment specified.
-# If none specified, use $PYTHON_VENV_NAME, else 'venv'.
+# Activate the first valid Python virtual environment from a list.
 function vrun() {
-  local name="${1:-$PYTHON_VENV_NAME}"
-  local venvpath="${name:P}"
+  local venv_list=("${PYTHON_VENV_NAME}")
+  local venvpath
 
-  if [[ ! -d "$venvpath" ]]; then
-    echo >&2 "Error: no such venv in current directory: $name"
-    return 1
-  fi
+  # Loop through potential venv names
+  for name in "${venv_list[@]}"; do
+    venvpath="${PWD}/${name}"
+    
+    if [[ -d "$venvpath" && -f "${venvpath}/bin/activate" ]]; then
+      . "${venvpath}/bin/activate" || return $?
+      echo "Activated virtual environment ${name}"
+      return 0
+    fi
+  done
 
-  if [[ ! -f "${venvpath}/bin/activate" ]]; then
-    echo >&2 "Error: '${name}' is not a proper virtual environment"
-    return 1
-  fi
-
-  . "${venvpath}/bin/activate" || return $?
-  echo "Activated virtual environment ${name}"
+  echo >&2 "Error: No valid virtual environment found in the list: ${PYTHON_VENV_NAME[*]}"
+  return 1
 }
 
-# Create a new virtual environment using the specified name.
-# If none specified, use $PYTHON_VENV_NAME
+# Create a new virtual environment with the specified name or the first in the list.
 function mkv() {
-  local name="${1:-$PYTHON_VENV_NAME}"
-  local venvpath="${name:P}"
+  local name="${1:-${PYTHON_VENV_NAME%% *}}"
+  local venvpath="${PWD}/${name}"
 
   python3 -m venv "${name}" || return
   echo >&2 "Created venv in '${venvpath}'"
-  vrun "${name}"
+
+  # Activate directly without relying on vrun
+  if [[ -f "${venvpath}/bin/activate" ]]; then
+    . "${venvpath}/bin/activate" || return $?
+    echo "Activated virtual environment ${name}"
+  else
+    echo >&2 "Error: Failed to activate the virtual environment in '${venvpath}'"
+    return 1
+  fi
 }
 
+
 if [[ "$PYTHON_AUTO_VRUN" == "true" ]]; then
-  # Automatically activate venv when changing dir
   function auto_vrun() {
-    # deactivate if we're on a different dir than VIRTUAL_ENV states
-    # we don't deactivate subdirectories!
-    if (( $+functions[deactivate] )) && [[ $PWD != ${VIRTUAL_ENV:h}* ]]; then
-      deactivate > /dev/null 2>&1
+    local current_dir="$PWD"
+    local active_venv="${VIRTUAL_ENV}"
+    local venv_root=""
+
+    # Determine the root of the currently active virtual environment
+    if [[ -n "$active_venv" ]]; then
+      venv_root="${VIRTUAL_ENV%/bin*}"
     fi
 
-    if [[ $PWD != ${VIRTUAL_ENV:h} ]]; then
-      for _file in "${PYTHON_VENV_NAME}"*/bin/activate(N.); do
-        # make sure we're not in a venv already
-        (( $+functions[deactivate] )) && deactivate > /dev/null 2>&1
-        source $_file > /dev/null 2>&1
-        break
+    # Deactivate if leaving the root directory of the virtual environment
+    if [[ -n "$active_venv" ]] && [[ "$current_dir" != "$venv_root"* ]]; then
+      deactivate > /dev/null 2>&1
+      active_venv=""
+    fi
+
+    # Activate the virtual environment if not active and found in the current directory or its ancestors
+    if [[ -z "$active_venv" ]]; then
+      local dir="$PWD"
+      while [[ "$dir" != "/" ]]; do
+        for _venv_name in "${PYTHON_VENV_NAME[@]}"; do
+          local activate_script="${dir}/${_venv_name}/bin/activate"
+          if [[ -f "$activate_script" ]]; then
+            source "$activate_script" > /dev/null 2>&1
+            return
+          fi
+        done
+        dir="$(dirname "$dir")"
       done
     fi
   }
+
+  # Hook to execute the function on directory changes
   add-zsh-hook chpwd auto_vrun
-  auto_vrun
+  auto_vrun  # Run once for the current directory
 fi
