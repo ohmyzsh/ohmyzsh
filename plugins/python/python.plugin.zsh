@@ -75,32 +75,52 @@ function mkv() {
 
   python3 -m venv "${name}" || return
   echo >&2 "Created venv in '${venvpath}'"
-  vrun "${name}"
+
+  # Activate directly without relying on vrun
+  if [[ -f "${venvpath}/bin/activate" ]]; then
+    . "${venvpath}/bin/activate" || return $?
+    echo "Activated virtual environment ${name}"
+  else
+    echo >&2 "Error: Failed to activate the virtual environment in '${venvpath}'"
+    return 1
+  fi
 }
 
+
 if [[ "$PYTHON_AUTO_VRUN" == "true" ]]; then
-  # Automatically activate the first valid venv and deactivate if leaving its root directory
   function auto_vrun() {
-    # If we're inside a virtual environment, check if we're leaving its root
-    if [[ -n "${VIRTUAL_ENV}" ]]; then
-      local venv_root="${VIRTUAL_ENV%/bin*}"  # Extract the root directory of the virtual environment
-      # Deactivate if we are outside the root directory of the virtual environment
-      if [[ "$PWD" != "$venv_root"* ]]; then
-        echo "Deactivating virtual environment"
-        deactivate > /dev/null 2>&1
-      fi
+    local current_dir="$PWD"
+    local active_venv="${VIRTUAL_ENV}"
+    local venv_root=""
+
+    # Determine the root of the currently active virtual environment
+    if [[ -n "$active_venv" ]]; then
+      venv_root="${VIRTUAL_ENV%/bin*}"
     fi
 
-    # Attempt to activate a venv from the list in the current directory
-    for _venv_name in "${PYTHON_VENV_NAME[@]}"; do
-      local activate_script="${PWD}/${_venv_name}/bin/activate"
-      if [[ -f "${activate_script}" ]]; then
-        source "${activate_script}" > /dev/null 2>&1
-        echo "Automatically activated virtual environment ${_venv_name}"
-        return 0
-      fi
-    done
+    # Deactivate if leaving the root directory of the virtual environment
+    if [[ -n "$active_venv" ]] && [[ "$current_dir" != "$venv_root"* ]]; then
+      deactivate > /dev/null 2>&1
+      active_venv=""
+    fi
+
+    # Activate the virtual environment if not active and found in the current directory or its ancestors
+    if [[ -z "$active_venv" ]]; then
+      local dir="$PWD"
+      while [[ "$dir" != "/" ]]; do
+        for _venv_name in "${PYTHON_VENV_NAME[@]}"; do
+          local activate_script="${dir}/${_venv_name}/bin/activate"
+          if [[ -f "$activate_script" ]]; then
+            source "$activate_script" > /dev/null 2>&1
+            return
+          fi
+        done
+        dir="$(dirname "$dir")"
+      done
+    fi
   }
+
+  # Hook to execute the function on directory changes
   add-zsh-hook chpwd auto_vrun
-  auto_vrun
+  auto_vrun  # Run once for the current directory
 fi
