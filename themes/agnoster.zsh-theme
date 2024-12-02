@@ -113,7 +113,7 @@ prompt_git() {
     ref="◈ $(command git describe --exact-match --tags HEAD 2> /dev/null)" || \
     ref="➦ $(command git rev-parse --short HEAD 2> /dev/null)"
     if [[ -n $dirty ]]; then
-      prompt_segment yellow black
+      prompt_segment yellow $CURRENT_FG
     else
       prompt_segment green $CURRENT_FG
     fi
