@@ -6,15 +6,15 @@
 
 ![Zsh-z demo](img/demo.gif)
 
-Zsh-z is a command line tool that allows you to jump quickly to directories that you have visited frequently in the past, or recently -- but most often a combination of the two (a concept known as ["frecency"](https://en.wikipedia.org/wiki/Frecency)). It works by keeping track of when you go to directories and how much time you spend in them. It is then in the position to guess where you want to go when you type a partial string, e.g., `z src` might take you to `~/src/zsh`. `z zsh` might also get you there, and `z c/z` might prove to be even more specific -- it all depends on your habits and how much time you have been using Zsh-z to build up a database. After using Zsh-z for a little while, you will get to where you want to be by typing considerably less than you would need if you were using `cd`.
+Zsh-z is a command-line tool that allows you to jump quickly to directories that you have visited frequently or recently -- but most often a combination of the two (a concept known as ["frecency"](https://en.wikipedia.org/wiki/Frecency)). It works by keeping track of when you go to directories and how much time you spend in them. Based on this data, it predicts where you want to go when you type a partial string. For example, `z src` might take you to `~/src/zsh`. `z zsh` might also get you there, and `z c/z` might prove to be even more specific -- it all depends on your habits and how long you have been using Zsh-z to build up a database. After using Zsh-z for a little while, you will get to where you want to be by typing considerably less than you would need to if you were using `cd`.
 
-Zsh-z is a native Zsh port of [rupa/z](https://github.com/rupa/z), a tool written for `bash` and Zsh that uses embedded `awk` scripts to do the heavy lifting. It was quite possibly my most used command line tool for a couple of years. I decided to translate it, `awk` parts and all, into pure Zsh script, to see if by eliminating calls to external tools (`awk`, `sort`, `date`, `sed`, `mv`, `rm`, and `chown`) and reducing forking through subshells I could make it faster. The performance increase is impressive, particularly on systems where forking is slow, such as Cygwin, MSYS2, and WSL. I have found that, in those environments, switching directories using Zsh-z can be over 100% faster than it is using `rupa/z`.
+Zsh-z is a native Zsh port of [`rupa/z`](https://github.com/rupa/z), a tool written for `bash` and Zsh that uses embedded `awk` scripts to do the heavy lifting. `rupa/z` was my most used command-line tool for a couple of years. I decided to translate it, `awk` parts and all, into pure Zsh script, to see if by eliminating calls to external tools (`awk`, `sort`, `date`, `sed`, `mv`, `rm`, and `chown`) and reducing forking through subshells I could make it faster. The performance increase is impressive, particularly on systems where forking is slow, such as Cygwin, MSYS2, and WSL. I have found that in those environments, switching directories using Zsh-z can be over 100% faster than it is using `rupa/z`.
 
-There is a noteworthy stability increase as well. Race conditions have always been a problem with `rupa/z`, and users of that utility will occasionally lose their `.z` databases. By having Zsh-z only use Zsh (`rupa/z` uses a hybrid shell code that works on `bash` as well), I have been able to implement a `zsh/system`-based file-locking mechanism similar to [the one @mafredri once proposed for `rupa/z`](https://github.com/rupa/z/pull/199). It is now nearly impossible to crash the database, even through extreme testing.
+There is also a significant stability improvement. Race conditions have always been a problem with `rupa/z`, and users of that utility occasionally lose their `~/.z` databases. By having Zsh-z only use Zsh (`rupa/z` uses a hybrid shell code standard that works on `bash` as well), I have been able to implement a `zsh/system`-based file-locking mechanism similar to [the one @mafredri once proposed for `rupa/z`](https://github.com/rupa/z/pull/199). It is now nearly impossible to crash the database.
 
-There are other, smaller improvements which I try to document in [Improvements and Fixes](#improvements-and-fixes). These include the new default behavior of sorting your tab completions by frecency rather than just letting Zsh sort the raw results alphabetically (a behavior which can be restored if you like it -- [see below](#settings)).
+There are other, smaller improvements which I document below in [Improvements and Fixes](#improvements-and-fixes). For instance, tab completions are now sorted by frecency by default rather than alphabetically (the latter behavior can be restored if you like it -- [see below](#settings)).
 
-Zsh-z is a drop-in replacement for `rupa/z` and will, by default, use the same database (`~/.z`), so you can go on using `rupa/z` when you launch `bash`.
+Zsh-z is a drop-in replacement for `rupa/z` and will, by default, use the same database (`~/.z`, or whatever database file you specify), so you can go on using `rupa/z` when you launch `bash`.
 
 ## Table of Contents
 - [News](#news)
@@ -37,13 +37,13 @@ Zsh-z is a drop-in replacement for `rupa/z` and will, by default, use the same d
 - August 24, 2023
     + Zsh-z will now run when `setopt NO_UNSET` has been enabled (props @ntninja).
 - August 23, 2023
-    + Better logic for loading `zsh/files` (props @z0rc)
+    + Better logic for loading `zsh/files` (props @z0rc).
 - August 2, 2023
-    + Zsh-z still uses the `zsh/files` module when possible, but will fall back on the standard `chown`, `mv`, and `rm` commands in its absence.
+    + Zsh-z still uses the `zsh/files` module when possible but will fall back on the standard `chown`, `mv`, and `rm` commands in its absence.
 - April 27, 2023
     + Zsh-z now allows the user to specify the directory-changing command using the `ZSHZ_CD` environment variable (default: `builtin cd`; props @basnijholt).
 - January 27, 2023
-    + If the datafile directory specified by `ZSHZ_DATA` or `_Z_DATA` does not already exist, create it (props @mattmc3).
+    + If the database file directory specified by `ZSHZ_DATA` or `_Z_DATA` does not already exist, create it (props @mattmc3).
 - June 29, 2022
     + Zsh-z is less likely to leave temporary files sitting around (props @mafredri).
 - June 27, 2022
@@ -69,7 +69,7 @@ Zsh-z is a drop-in replacement for `rupa/z` and will, by default, use the same d
     + Fixed the explanation string printed during completion so that it may be formatted with `zstyle`.
     + Zsh-z now declares `ZSHZ_EXCLUDE_DIRS` as an array with unique elements so that you do not have to.
 - July 29, 2021
-    + Temporarily disabling use of `print -v`, which seems to be mangling CJK multibyte strings.
+    + Temporarily disabling the use of `print -v`, which was mangling CJK multibyte strings.
 - July 27, 2021
     + Internal escaping of path names now works with older versions of ZSH.
     + Zsh-z now detects and discards any incomplete or incorrectly formatted database entries.
@@ -102,7 +102,7 @@ Zsh-z is a drop-in replacement for `rupa/z` and will, by default, use the same d
 - December 22, 2020
     + `ZSHZ_CASE`: when set to `ignore`, pattern matching is case-insensitive; when set to `smart`, patterns are matched case-insensitively when they are all lowercase and case-sensitively when they have uppercase characters in them (a behavior very much like Vim's `smartcase` setting).
     + `ZSHZ_KEEP_DIRS` is an array of directory names that should not be removed from the database, even if they are not currently available (useful when a drive is not always mounted).
-    + Symlinked datafiles were having their symlinks overwritten; this bug has been fixed.
+    + Symlinked database files were having their symlinks overwritten; this bug has been fixed.
 
 </details>
 
@@ -118,7 +118,7 @@ For tab completion to work, `_zshz` *must* be in the same directory as `zsh-z.pl
 
     autoload -U compinit; compinit
 
-in your .zshrc somewhere below where you source `zsh-z.plugin.zsh`.
+in your `.zshrc` somewhere below where you source `zsh-z.plugin.zsh`.
 
 If you add
 
@@ -188,7 +188,7 @@ Add a backslash to the end of the last line add `'zsh-z'` to the list, e.g.,
 Then relaunch `zsh`.
 
 ### For [zcomet](https://github.com/agkozak/zcomet) users
-
+        
 Simply add
 
     zcomet load agkozak/zsh-z
@@ -228,7 +228,7 @@ Add the line
 
 to your `.zshrc`.
 
-`zsh-z` supports `zinit`'s `unload` feature; just run `zinit unload agkozak/zshz` to restore the shell to its state before `zsh-z` was loaded.
+Zsh-z supports `zinit`'s `unload` feature; just run `zinit unload agkozak/zsh-z` to restore the shell to its state before Zsh-z was loaded.
 
 ### For [Znap](https://github.com/marlonrichert/zsh-snap) users
 
@@ -249,7 +249,7 @@ somewhere above the line that says `zplug load`. Then run
     zplug install
     zplug load
 
-to install `zsh-z`.
+to install Zsh-z.
 
 ## Command Line Options
 
@@ -263,9 +263,9 @@ to install `zsh-z`.
 - `-x`    Remove a directory (by default, the current directory) from the database
 - `-xR`   Remove a directory (by default, the current directory) and its subdirectories from the database
 
-# Settings
+## Settings
 
-Zsh-z has environment variables (they all begin with `ZSHZ_`) that change its behavior if you set them; you can also keep your old ones if you have been using `rupa/z` (they begin with `_Z_`).
+Zsh-z has environment variables (they all begin with `ZSHZ_`) that change its behavior if you set them. You can also keep your old ones if you have been using `rupa/z` (whose environment variables begin with `_Z_`).
 
 * `ZSHZ_CMD` changes the command name (default: `z`)
 * `ZSHZ_CD` specifies the default directory-changing command (default: `builtin cd`)
@@ -324,19 +324,18 @@ A good example might involve a directory tree that has Git repositories within i
 
 (As a Zsh user, I tend to use `**` instead of `find`, but it is good to see how deep your directory trees go before doing that.)
 
-
 ## Other Improvements and Fixes
 
 * `z -x` works, with the help of `chpwd_functions`.
-* Zsh-z works on Solaris.
+* Zsh-z is compatible with Solaris.
 * Zsh-z uses the "new" `zshcompsys` completion system instead of the old `compctl` one.
-* There is no error message when the database file has not yet been created.
-* There is support for special characters (e.g., `[`) in directory names.
-* If `z -l` only returns one match, a common root is not printed.
-* Exit status codes increasingly make sense.
-* Completions work with options `-c`, `-r`, and `-t`.
-* If `~/foo` and `~/foob` are matches, `~/foo` is *not* the common root. Only a common parent directory can be a common root.
-* `z -x` and the new, recursive `z -xR` can take an argument so that you can remove directories other than `PWD` from the database.
+* No error message is displayed when the database file has not yet been created.
+* Special characters (e.g., `[`) in directory names are now supported.
+* If `z -l` returns only one match, a common root is not printed.
+* Exit status codes are more logical.
+* Completions now work with options `-c`, `-r`, and `-t`.
+* If `~/foo` and `~/foob` are matches, `~/foo` is no longer considered the common root. Only a common parent directory can be a common root.
+* `z -x` and the new, recursive `z -xR` can now accept an argument so that you can remove directories other than `PWD` from the database.
 
 ## Migrating from Other Tools
 
@@ -358,7 +357,7 @@ the line
 
 That will re-bind `z` or the command of your choice to the underlying Zsh-z function.
 
-## Known Bugs
+## Known Bug
 It is possible to run a completion on a string with spaces in it, e.g., `z us bi<TAB>` might take you to `/usr/local/bin`. This works, but as things stand, after the completion the command line reads
 
     z us /usr/local/bin.
