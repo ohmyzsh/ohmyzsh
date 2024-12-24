@@ -29,6 +29,7 @@ alias kcuc='kubectl config use-context'
 alias kcsc='kubectl config set-context'
 alias kcdc='kubectl config delete-context'
 alias kccc='kubectl config current-context'
+alias kucc='kubectl config unset current-context'
 
 # List all contexts
 alias kcgc='kubectl config get-contexts'
