@@ -22,28 +22,28 @@ OP_RUN_WRAPPER_SYMBOL="🔑"
 
 # Currently we take a simple approach and set aliases to override each command, this could be done with functions instead
 # Also ignoring the option to specify specific environment files with the `--env-file` flag
-set_op_aliases() {
+function set_op_aliases() {
   for cmd in "${OP_RUN_WRAPPER_CMDS[@]}"; do
     alias "$cmd"="op run -- $cmd"
   done
 }
 
-unset_op_aliases() {
+function unset_op_aliases() {
   for cmd in "${OP_RUN_WRAPPER_CMDS[@]}"; do
     unalias "$cmd" 2>/dev/null
   done
 }
 
-set_prompt() {
+function set_prompt() {
   OP_RUN_WRAPPER_ORIGINAL_PROMPT=$PROMPT
   export PROMPT="(${OP_RUN_WRAPPER_SYMBOL}) ${PROMPT}"
 }
 
-unset_prompt() {
+function unset_prompt() {
   export PROMPT="${OP_RUN_WRAPPER_ORIGINAL_PROMPT}"
 }
  
-toggle_secrets_injection() {
+function toggle_secrets_injection() {
   if [[ -z "${OP_RUN_WRAPPER_CMDS[*]}" ]]; then
     echo "Error: OP_RUN_WRAPPER_CMDS is empty, please update the list of commands which require secrets injection."
     zle reset-prompt
