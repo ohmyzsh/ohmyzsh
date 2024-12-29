@@ -89,7 +89,7 @@ function detect-clipboard() {
     function clipcopy() {
       local content_tocopy
       content_tocopy=$(cat "${1:-/dev/stdin}" | base64 | tr -d '\n')
-      printf "\033]52;c;%s\a" "$data" > /dev/tty
+      printf "\033]52;c;%s\a" "$content_tocopy" > /dev/tty
     }
     function clippaste() {
       echo "OSC 52 does not support pasting from the clipboard."
