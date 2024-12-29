@@ -87,8 +87,8 @@ function detect-clipboard() {
   elif [[ "$TERM" == "xterm"* || "$TERM" == "screen"* || "$TERM" == "tmux"* ]]; then
     # OSC 52 support
     function clipcopy() {
-      local data
-      data=$(cat "${1:-/dev/stdin}" | base64 | tr -d '\n')
+      local content_tocopy
+      content_tocopy=$(cat "${1:-/dev/stdin}" | base64 | tr -d '\n')
       printf "\033]52;c;%s\a" "$data" > /dev/tty
     }
     function clippaste() {
