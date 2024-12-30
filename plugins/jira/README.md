@@ -43,6 +43,23 @@ starting with "_": "MP-1234_fix_dashboard". In both these cases, the issue opene
 This is also checks if the prefix is in the name, and adds it if not, so: "MP-1234" opens the issue "MP-1234",
 "mp-1234" opens the issue "mp-1234", and "1234" opens the issue "MP-1234".
 
+If your branch naming convention deviates, you can overwrite the jira_branch function to determine and echo the Jira issue key yourself.
+Create a file at `~/.oh-my-zsh/plugins/jira-patch/jira-patch.plugin.zsh` and add `jira-patch` after `jira` in the $plugins variable
+(see https://github.com/ohmyzsh/ohmyzsh/wiki/Customization#partially-overriding-an-existing-plugin).
+Example:
+```zsh
+# Determine branch name from naming convention 'type/KEY-123/description'.
+function jira_branch() {
+  # Get name of the branch
+  issue_arg=$(git rev-parse --abbrev-ref HEAD)
+  # Strip prefixes like feature/ or bugfix/
+  issue_arg=${issue_arg#*/}
+  # Strip suffixes like /some-branch-description
+  issue_arg=${issue_arg%%/*}
+  # Return the value
+  echo $issue_arg
+}
+```
 
 
 #### Debugging usage
