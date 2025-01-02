@@ -399,8 +399,8 @@ EOF
     "$FMT_YELLOW" "$FMT_RESET"
   read -r opt
   case $opt in
-    y*|Y*|"") ;;
-    n*|N*) echo "Shell change skipped."; return ;;
+    [Yy]*|"") ;;
+    [Nn]*) echo "Shell change skipped."; return ;;
     *) echo "Invalid choice. Shell change skipped."; return ;;
   esac
 
