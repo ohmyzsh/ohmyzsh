@@ -17,6 +17,9 @@ function ofd {
 alias showfiles="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
 alias hidefiles="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
 
+# Reset Launchpad layout (defaults method does not work in MacOS 15.2+)
+alias resetlaunchpad='defaults write com.apple.dock ResetLaunchPad -bool true && rm -rf /private/$(getconf DARWIN_USER_DIR)/com.apple.dock.launchpad && killall Dock'
+
 # Bluetooth restart
 function btrestart() {
   sudo kextunload -b com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport
