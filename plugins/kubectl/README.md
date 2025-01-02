@@ -12,7 +12,7 @@ plugins=(... kubectl)
 ## Aliases
 
 | Alias    | Command                                                 | Description                                                                                      |
-| :------- | :------------------------------------------------------ | :----------------------------------------------------------------------------------------------- |
+| :------- |:--------------------------------------------------------| :----------------------------------------------------------------------------------------------- |
 | k        | `kubectl`                                               | The kubectl command                                                                              |
 | kca      | `kubectl --all-namespaces`                              | The kubectl command targeting all namespaces                                                     |
 | kaf      | `kubectl apply -f`                                      | Apply a YML file                                                                                 |
@@ -74,6 +74,8 @@ plugins=(... kubectl)
 | kdeld    | `kubectl delete deployment`                             | Delete the deployment                                                                            |
 | ksd      | `kubectl scale deployment`                              | Scale a deployment                                                                               |
 | krsd     | `kubectl rollout status deployment`                     | Check the rollout status of a deployment                                                         |
+| krrd     | `kubectl rollout restart deployment`                    | Rollout restart a deployment                                                                     |
+| krrd     | `kubectl rollout restart deploy`                        | Rollout restart a deployment                                                                     |
 | kres     | `kubectl set env $@ REFRESHED_AT=...`                   | Recreate all pods in deployment with zero-downtime                                               |
 |          |                                                         | **Rollout management**                                                                           |
 | kgrs     | `kubectl get replicaset`                                | List all ReplicaSets `rs` created by the deployment                                              |
@@ -112,6 +114,7 @@ plugins=(... kubectl)
 | kdelss   | `kubectl delete statefulset`                            | Delete the statefulset                                                                           |
 | ksss     | `kubectl scale statefulset`                             | Scale a statefulset                                                                              |
 | krsss    | `kubectl rollout status statefulset`                    | Check the rollout status of a deployment                                                         |
+| krrss    | `kubectl rollout restart statefulset`                   | Rollout restart a statefulset                                                                    |
 |          |                                                         | **Service Accounts management**                                                                  |
 | kdsa     | `kubectl describe sa`                                   | Describe a service account in details                                                            |
 | kdelsa   | `kubectl delete sa`                                     | Delete the service account                                                                       |
