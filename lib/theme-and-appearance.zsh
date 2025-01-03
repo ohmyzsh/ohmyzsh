@@ -71,9 +71,9 @@ case "$OSTYPE" in
     ;;
   *)
     if test-ls-args ls --color; then
-      alias ls='ls --color=tty'
+      alias ls='ls --group-directories-first -h --color -FC'
     elif test-ls-args ls -G; then
-      alias ls='ls -G'
+      alias ls='ls --group-directories-first -h --color -FC'
     fi
     ;;
 esac
