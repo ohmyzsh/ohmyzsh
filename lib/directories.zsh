@@ -35,6 +35,6 @@ compdef _dirs d
 
 # List directory contents
 alias lsa='ls -lah'
-alias l='ls -lah'
-alias ll='ls -lh'
+alias l='ls --group-directories-first -h --color -FC'
+alias ll='ls -FC -lv --group-directories-first'
 alias la='ls -lAh'
