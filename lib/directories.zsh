@@ -22,7 +22,7 @@ alias 9='cd -9'
 alias md='mkdir -p'
 alias rd=rmdir
 
-function d () {
+function d() {
   if [[ -n $1 ]]; then
     dirs "$@"
   else
@@ -35,4 +35,5 @@ compdef _dirs d
 alias lsa='ls -lah'
 alias l='ls -lah'
 alias ll='ls -lh'
-alias la='ls -lAh'
+# Note that if I switch back to native ls from eza, change the a to an A
+alias la='ls -lah'

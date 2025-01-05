@@ -1,4 +1,4 @@
-source ~/.oh-my-zsh/classkick-functions.zsh
+source ~/.oh-my-zsh/work-functions.zsh
 
 function zsh_stats() {
   fc -l 1 \
@@ -269,24 +269,31 @@ function omz_urldecode {
 ##################################
 # ls grep
 lsg() {
-    la | grep -iE "$1"
+    la | grep --color=always -iE "$1"
 }
 
-function alg() {
+beenv() {
+  echo "\$MYSQL_USER=$MYSQL_USER"
+  echo "\$MYSQL_PASSWORD=$MYSQL_PASSWORD"
+  echo "\$MYSQL_HOST_IP=$MYSQL_HOST_IP"
+  echo "\$PYTHONPATH=$PYTHONPATH"
+  echo "\$TEST_DB=$TEST_DB"
+}
+
+alg () {
   FN=/tmp/alg.$$
   echo -e "\nAliases ———————" > $FN
-  alias | grep -i $1 >> $FN
+  alias | grep --color=always --ignore-case -h --exclude-dir={.bzr,CVS,.git,.hg,.svn,.idea,.tox} -i $1 >> $FN
   echo -e "\nFunctions ———————" >> $FN
-  functions | grep -i $1 >> $FN
-  bat $FN
+  functions | grep --color=always --ignore-case -h --exclude-dir={.bzr,CVS,.git,.hg,.svn,.idea,.tox} -i $1 >> $FN
+  less $FN
   rm -f $FN
 }
-
 alias agr="alg"
 alias alias-grep="alg"
 
 # These need to be here since they're required by gfind*
-alias ag-no-pager="/opt/homebrew/bin/ag --ignore '*.svg' --ignore '*.xlt' --ignore '*.tsx' --ignore '*.js' --ignore '*.snap' --ignore '*.json' --ignore '*.dat' --ignore '*.builds' --ignore '*.tsv' --ignore '*.csv' --ignore '*.lock' --ignore '*.patch' --ignore '*.sum'"
+alias ag-no-pager="/opt/homebrew/bin/ag --ignore '*.snap' --ignore '*.dat' --ignore '*.builds' --ignore '*.tsv' --ignore '*.csv' --ignore '*.lock' --ignore '*.patch' --ignore '*.sum' --ignore-dir={venv,node_modules,mounts}"
 alias ag="ag-no-pager --pager=bat"
 alias "git-grep"="git \grep"
 
@@ -318,6 +325,7 @@ function today-time() {
 }
 
 alias make-big-break=page-break
+alias space=page-break
 
 # the ol' gfind. Doesn't take a file pattern.
 function gfind-all() {
@@ -329,34 +337,35 @@ function gfind-all() {
     ag-no-pager --ignore-case --hidden --ignore-case --pager bat "$@"
 }
 
+function gfind-all-only-matching-files() {
+    ag-no-pager --ignore-case --hidden --ignore-case --pager bat --count "$@"
+}
+
 # the ol' gfind. Doesn't take a file pattern.
 function gfind() {
     # fd -t f . -x grep --color=always -Hi ${1}
     ag-no-pager --ignore-case --pager bat "$@"
 }
 
-# Print out the matches only
-function gfindf() {
-  ack -l $1 --pager=bat --color
+function gfind-only-matching-files() {
+    ag-no-pager --ignore-case --pager bat --count "$@"
 }
 
-# function h() {
-#   NUM_LINES = ${1:-1000}
-#   history | tail -n $NUM_LINES
-# }
+# Print out the matches only
+function gfindf() {
+  ack -l $1 --pager=less --color
+}
 
-# function h() {
-#   set -x
-#   NUM_LINES = ${1:-25}
-#   \history -${NUM_LINES}
-# }
+batdiff() {
+    git diff --name-only --diff-filter=d | xargs bat --diff
+}
 
 function agl() {
-  ag --pager less "$@"
+  ag --pager bat "$@"
 }
 
 function lsofgr() {
-  sudo lsof -i -P | grep -E "$1|LISTEN" | grep -E "$1|:"
+  sudo lsof -i -P | grep -E "$1|COMMAND" | grep -E "$1|:"
 }
 
 function kill-em-all() {
@@ -396,26 +405,59 @@ alias cls=clean-slate
 function print-hashes() {
   repeat $1 echo -n "#" ; echo
 }
-
 function h() {
-  print-hashes 60
-  NUM_LINES=$1
-  if [ -z "$NUM_LINES" ]; then
-      NUM_LINES=35
-  fi
-  \history -$NUM_LINES
-  print-hashes 60
+    # check if we passed any parameters
+    if [ -z "$*" ]; then
+        # if no parameters were passed print entire history
+        print-hashes 60
+        history -200
+        print-hashes 60
+    else
+        # if words were passed use it as a search
+        history 1 | egrep --color=auto "$@"
+    fi
 }
 
-function psgr() {
-  ps -e | grep -v 'grep ' | grep -iE "TIME CMD|$1"
+# function h() {
+#   print-hashes 60
+#   NUM_LINES=$1
+#   if [ -z "$NUM_LINES" ]; then
+#       NUM_LINES=35
+#   fi
+#   history -$NUM_LINES
+#   print-hashes 60
+# }
+
+
+function psgr () {
+  # echo "  UID   PID  PPID   C STIME   TTY           TIME CMD"
+  # ps -h -A -o %cpu,%mem,command,cputime,state,user,pid,ppid,ruser,start,time,tt,tty | \grep -v 'grep ' | awk '{$1=$1};1' | \grep -iE "$1"
+  ps -ef | \grep -v 'grep ' | awk '{$1=$1};1' | \grep -iE "$1|PPID"
 }
 
 # Sort on the command
 function psgr-sorted() {
-  echo "  PID TTY           TIME CMD"
-  ps -e | grep -v 'grep ' | grep -iE "$1" | sort -k 4
+  echo "  UID   PID  PPID   C STIME   TTY           TIME CMD"
+  ps -ef | grep -v 'grep ' | awk '{$1=$1};1' | grep -iE "$1" | sort -k 4
 }
+
+psgr-pid-only () {
+  ps -e | \grep -v 'grep ' | awk '{$1=$1};1' | \grep -iE "$1" | cut -f 1 -d" "
+}
+
+kill-em-all () {
+  PROCESS_NAME=$1
+  echo "This will absolutely kill all processes matching *$PROCESS_NAME*. Are you sure?"
+  read  -n 1
+  psgr-pid-only $PROCESS_NAME|cut -f 1 -d" "| tr '\n' ' ' | xargs kill -9
+  RES=$?
+  echo "RES: • ${RES} •"
+}
+
+function list-app-url-schemes() {
+  defaults read /Applications/${1}.app/Contents/Info.plist CFBundleURLTypes
+}
+alias url-schemes-of-app=list-app-url-schemes
 
 function lsofgr-listen() {
   echo "Searching for processes listening on port $1..."
@@ -433,6 +475,11 @@ function zshrc() {
   pushd ~/.oh-my-zsh
   edit .
   popd
+}
+
+
+function what-is-my-ip() {
+  ifconfig en0 | awk -v OFS="\n" '{ print $1 " " $2, $NF }' | grep "inet 192"
 }
 
 function dir-sizes() {
@@ -460,28 +507,28 @@ function git-show-branch() {
   git branch -vv | grep `git branch --show-current`
 }
 
+function git-show-stash() {
+  git stash show stash@{$1}
+}
+alias gss="git-show-stash"
+
+function git-apply-stash() {
+  git stash apply stash@{$1}
+}
+alias gas="git-apply-stash"
+alias gsa="git-apply-stash"
+
 function git-show-all-stashes() {
   echo "Hit 'q' to go to next file"
   echo ""
   git stash list | awk -F: '{ print "\n\n\n\n"; print $0; print "\n\n"; system("git stash show -p " $1); }'
 }
+alias gsas="git-show-all-stashes"
 
 # Check whether the supplied file is under SCM/git.
 # Check whether the supplied file is under SCM/git.
 function git-status() {
   git ls-files | grep $1
-}
-
-# kill most recent container instance
-alias docker-kill-latest='docker ps -l --format="{{.Names}}" | xargs docker kill'
-
-# stop all containers
-function docker-stop-all-containers () {
-  docker container stop -t 2 $(docker container ls -q) 2>/dev/null ; echo ""
-}
-
-function docker-lsg () {
-  docker image ls | grep -Ei "'IMAGE ID'|$1"
 }
 
 function find-gig-files() {
@@ -528,42 +575,8 @@ function open-job-docs() {
   open 'https://docs.google.com/document/d/1gPNcLjrZJnJnWy0-k5SqpgP4VAUZ_ikRLR9qYEB50M0/edit'
 }
 
-goclean() {
- local pkg=$1; shift || return 1
- local ost
- local cnt
- local scr
-
- # Clean removes object files from package source directories (ignore error)
- go clean -i $pkg &>/dev/null
-
- # Set local variables
- [[ "$(uname -m)" == "x86_64" ]] \
- && ost="$(uname)";ost="${ost,,}_amd64" \
- && cnt="${pkg//[^\/]}"
-
- # Delete the source directory and compiled package directory(ies)
- if (("${#cnt}" == "2")); then
-  rm -rf "${GOPATH%%:*}/src/${pkg%/*}"
-  rm -rf "${GOPATH%%:*}/pkg/${ost}/${pkg%/*}"
- elif (("${#cnt}" > "2")); then
-  rm -rf "${GOPATH%%:*}/src/${pkg%/*/*}"
-  rm -rf "${GOPATH%%:*}/pkg/${ost}/${pkg%/*/*}"
- fi
-}
-
-function _open-all-chrome-apps() {
-  for APP in "${1}"/*.app; do
-    echo "Opening $APP ..."
-    nohup open -a "$APP" > /dev/null 2>&1 &
-  done
-}
-
 function open-all-chrome-apps() {
-  CHROME_APP_DIR='/Users/peter/Dropbox (Personal)/_Settings/Chrome Apps/Chrome Apps.localized'
-  _open-all-chrome-apps $CHROME_APP_DIR
-  CHROME_APP_DIR='/Users/peter/Dropbox (Personal)/_Settings/Chrome/Chrome Apps/Chrome Apps.localized'
-  _open-all-chrome-apps $CHROME_APP_DIR
+  /Users/peter/.oh-my-zsh/bin/launch-browser-apps.sh & 2>&1 > /dev/null
 }
 
 function post-boot-tasks() {
@@ -579,6 +592,39 @@ function kill-cloud-storage() {
     killall Dropbox 2>/dev/null &
     killall "Google Drive" 2>/dev/null &
     killall -v "FinderSyncExtension" -SIGKILL &
+}
+
+function mdfind() {
+    /usr/bin/mdfind $@ 2> >(grep --invert-match ' \[UserQueryParser\] ' >&2)
+}
+
+function mdfind-current-dir() { # find file in .
+  mdfind -onlyin . -name $1
+}
+
+function mdfind-home-dir() { # mdfind file in $HOME
+  mdfind -onlyin $HOME -name $1
+}
+
+function mdfind-grep-current-dir() { # mdfind grep in current dir
+  mdfind -onlyin . $1
+}
+
+function mdfind-grep-home-dir() { # mdfind grep in $HOME
+  mdfind -onlyin $HOME $1
+}
+
+
+function google-search() {
+  s $1 -p google
+}
+
+function amazon-search() {
+  s $1 -p amazon
+}
+
+function youtube-search() {
+  s $1 -p youtube
 }
 
 function explain-command {
@@ -704,6 +750,7 @@ alias kill-percol="ppkill"
 # tab to a random color
 PRELINE="\r\033[A"
 
+# From https://stackoverflow.com/questions/59090903/is-there-any-way-to-get-iterm2-to-color-each-new-tab-with-a-different-color-usi
 function random {
     echo -e "\033]6;1;bg;red;brightness;$((1 + $RANDOM % 255))\a"$PRELINE
     echo -e "\033]6;1;bg;green;brightness;$((1 + $RANDOM % 255))\a"$PRELINE
@@ -731,3 +778,59 @@ function color {
     random
     esac
 }
+
+function git-diff-repos() {
+  RESULTS="diff-results.patch"
+  echo "" > $RESULTS
+
+  for DIR in */; do
+    pushd $DIR
+    echo "\n———————\nGit diffing $PWD\n———————\n" >> ../$RESULTS
+    git --no-pager diff --ignore-space-change -- ':!*poetry.lock' -- ':^.vscode' . >> ../$RESULTS
+    popd
+  done
+
+  bat $RESULTS
+}
+
+function git-info-repos() {
+  RESULTS="info-results.txt"
+  echo "" > $RESULTS
+
+  for DIR in */; do
+    pushd $DIR
+    echo "\n———————\nGit info-ing $PWD\n———————\n" >> ../$RESULTS
+    git-info 2>&1 >> ../$RESULTS
+    popd
+  done
+
+  bat $RESULTS
+}
+
+function git-merge-develop() {
+  echo "\nChecking out develop..." && gco develop && \
+  echo "\nPulling develop..." && git pull && \
+  echo "\nChecking out -..." && gco - && \
+  echo "\nMerging develop in..." && git merge develop
+}
+
+function scrcpy-s20() {
+  # presumably this once worked but does not now
+  # /opt/homebrew/bin/scrcpy --serial R5CN20MZEKJ
+  /opt/homebrew/bin/scrcpy -sadb-R5CN20MZEKJ-ogJwLS._adb-tls-connect._tcp.
+  if [[ "$?" -ne 0 ]]
+  then
+    echo "first run usually fails, trying a second time..."
+  fi
+}
+alias run-scrcpy=launch-scrcpy
+alias scr=launch-scrcpy
+
+
+function dir-with-most-files() {
+  ~/bin/dir-with-most-files.sh "$@"
+}
+
+alias most-files-dir=dir-with-most-files
+alias count-files=dir-with-most-files
+alias biggest-dirs=dir-with-most-files

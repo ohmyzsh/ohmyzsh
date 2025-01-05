@@ -15,10 +15,9 @@ else
     # Check for --exclude-dir, otherwise check for --exclude. If --exclude
     # isn't available, --color won't be either (they were released at the same
     # time (v2.5): https://git.savannah.gnu.org/cgit/grep.git/tree/NEWS?id=1236f007
-    if grep-flags-available --color=auto --exclude-dir=.cvs; then
-        GREP_OPTIONS="--exclude-dir=$EXC_FOLDERS"
-    elif grep-flags-available --color=auto --exclude=.cvs; then
-        GREP_OPTIONS="--exclude=$EXC_FOLDERS"
+    if grep-flags-available --color=always --exclude-dir=.cvs; then
+        GREP_OPTIONS="--color=always --ignore-case --exclude-dir=$EXC_FOLDERS"
+    elif grep-flags-available --color=always --exclude=.cvs; then
     fi
 
     if [[ -n "$GREP_OPTIONS" ]]; then
@@ -26,7 +25,6 @@ else
         alias grep="grep $GREP_OPTIONS"
         alias egrep="egrep $GREP_OPTIONS"
         alias fgrep="fgrep $GREP_OPTIONS"
-
         # write to cache file if cache directory is writable
         if [[ -w "$ZSH_CACHE_DIR" ]]; then
             alias -L grep egrep fgrep >| "$__GREP_CACHE_FILE"
