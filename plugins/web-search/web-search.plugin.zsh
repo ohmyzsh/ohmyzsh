@@ -10,6 +10,7 @@ function web_search() {
     google          "https://www.google.com/search?q="
     bing            "https://www.bing.com/search?q="
     brave           "https://search.brave.com/search?q="
+    braveai         "https://search.brave.com/search?summary=1&q="
     yahoo           "https://search.yahoo.com/search?p="
     duckduckgo      "https://www.duckduckgo.com/?q="
     startpage       "https://www.startpage.com/do/search?q="
@@ -34,6 +35,12 @@ function web_search() {
     chatgpt         "https://chatgpt.com/?q="
     reddit          "https://www.reddit.com/search/?q="
     ppai            "https://www.perplexity.ai/search/new?q="
+    claude          "https://claude.ai/new?q="
+    mistral         "https://chat.mistral.ai/chat?q="
+    mscop           "https://www.bing.com/search?showconv=1&sendquery=1&q="
+    you             "https://you.com/search?q="
+    youchat         "https://you.com/search?tbm=youchat&q="
+    gmaps           "https://www.google.com/maps/search/?api=1&query="
   )
 
   # check whether the search engine is supported
@@ -63,10 +70,13 @@ function web_search() {
 
 
 alias bing='web_search bing'
+alias brave='web_search brave'
 alias brs='web_search brave'
 alias google='web_search google'
 alias yahoo='web_search yahoo'
+alias duckduckgo='web_search duckduckgo'
 alias ddg='web_search duckduckgo'
+alias startpage='web_search startpage'
 alias sp='web_search startpage'
 alias yandex='web_search yandex'
 alias github='web_search github'
@@ -89,6 +99,13 @@ alias gopkg='web_search gopkg'
 alias chatgpt='web_search chatgpt'
 alias reddit='web_search reddit'
 alias ppai='web_search ppai'
+alias braveai='web_search braveai'
+alias claude='web_search claude'
+alias mistral='web_search mistral'
+alias mscop='web_search mscop'
+alias you='web_search you'
+alias youchat='web_search youchat'
+alias gmaps='web_search gmaps'
 
 #add your own !bang searches here
 alias wiki='web_search duckduckgo \!w'
