@@ -32,6 +32,7 @@ function web_search() {
     packagist       "https://packagist.org/?query="
     gopkg           "https://pkg.go.dev/search?m=package&q="
     chatgpt         "https://chatgpt.com/?q="
+    claude          "https://claude.ai/new?q="
     reddit          "https://www.reddit.com/search/?q="
     ppai            "https://www.perplexity.ai/search/new?q="
   )
@@ -87,6 +88,7 @@ alias npmpkg='web_search npmpkg'
 alias packagist='web_search packagist'
 alias gopkg='web_search gopkg'
 alias chatgpt='web_search chatgpt'
+alias claude='web_search claude'
 alias reddit='web_search reddit'
 alias ppai='web_search ppai'
 
