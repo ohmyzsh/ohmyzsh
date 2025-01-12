@@ -115,6 +115,22 @@ alias gamscp='git am --show-current-patch'
 alias gams='git am --skip'
 alias gap='git apply'
 alias gapt='git apply --3way'
+
+# Adds and commits an untracked file.
+function gac() {
+  if [ $# -lt 2 ]; then
+    echo "Usage: gac <file> <commit message>"
+    return 1
+  fi
+
+  local file="$1"
+  shift
+  local message="$@"
+
+  git add "$file"
+  git commit -m "$message"
+}
+
 alias gbs='git bisect'
 alias gbsb='git bisect bad'
 alias gbsg='git bisect good'
