@@ -58,8 +58,8 @@ request['Content-Type'] = 'application/json'
 Net::HTTP.start(uri.host, uri.port, use_ssl: true, verify_mode: OpenSSL::SSL::VERIFY_PEER) do |http|
   res = http.request(request)
   if res.is_a?(Net::HTTPSuccess)
-    puts "Counttime is configured correctly. Time will be logged."
+    puts "Jira auto-worklog is configured correctly. Time will be logged."
   else
-    puts "Counttime is not configured correctly. Please check your JIRA URL and Personal Access Token."
+    puts "Jira auto-worklog is not configured correctly. Please check your JIRA URL and Personal Access Token."
   end
 end
