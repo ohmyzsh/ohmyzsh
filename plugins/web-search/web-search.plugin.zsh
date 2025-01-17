@@ -34,6 +34,9 @@ function web_search() {
     chatgpt         "https://chatgpt.com/?q="
     reddit          "https://www.reddit.com/search/?q="
     ppai            "https://www.perplexity.ai/search/new?q="
+    claude          "https://claude.ai/chats?q="    
+    grok            "https://grok.x.ai/search?q="
+    x               "https://x.com/home"
   )
 
   # check whether the search engine is supported
