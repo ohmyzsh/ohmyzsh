@@ -2,11 +2,12 @@ dependencies:
   plugins/gitfast:
     repo: felipec/git-completion
     branch: master
-    version: tag:v2.1
+    version: tag:v2.2
     postcopy: |
       set -e
       rm -rf git-completion.plugin.zsh Makefile README.adoc t tools
-      test -e git-completion.zsh && mv -f git-completion.zsh _git
+      mv -f src/* .
+      rm -rf src
   plugins/gradle:
     repo: gradle/gradle-completion
     branch: master
