@@ -24,16 +24,24 @@ plugins=(... python)
 The plugin provides three utilities to manage Python 3.3+ [venv](https://docs.python.org/3/library/venv.html)
 virtual environments:
 
-- `mkv [name]`: make a new virtual environment called `name` (default: if set `$PYTHON_VENV_NAME`, else
-  `venv`) in the current directory.
+- `mkv [name]`: make a new virtual environment called `name` in the current directory.
+  **Default**: `$PYTHON_VENV_NAME` if set, otherwise `venv`.
 
-- `vrun [name]`: Activate the virtual environment called `name` (default: if set `$PYTHON_VENV_NAME`, else
-  `venv`) in the current directory.
+- `vrun [name]`: activate the virtual environment called `name` in the current directory.
+  **Default**: the first existing in `$PYTHON_VENV_NAMES`.
 
-- `auto_vrun`: Automatically activate the venv virtual environment when entering a directory containing
+- `auto_vrun`: automatically activate the venv virtual environment when entering a directory containing
   `<venv-name>/bin/activate`, and automatically deactivate it when navigating out of it (keeps venv activated
   in subdirectories).
-  - To enable the feature, set `export PYTHON_AUTO_VRUN=true` before sourcing oh-my-zsh.
-  - Plugin activates first virtual environment in lexicographic order whose name begins with `<venv-name>`.
+  - To enable the feature, set `PYTHON_AUTO_VRUN=true` before sourcing oh-my-zsh.
+  - The plugin activates the first existing virtual environment, in order, appearing in `$PYTON_VENV_NAMES`.
     The default virtual environment name is `venv`. To use a different name, set
-    `export PYTHON_VENV_NAME=<venv-name>`. For example: `export PYTHON_VENV_NAME=".venv"`
+    `PYTHON_VENV_NAME=<venv-name>`. For example: `PYTHON_VENV_NAME=".venv"`
+
+### Settings
+
+You can set these variables in your `.zshrc` file, before Oh My Zsh is sourced.
+
+- `$PYTHON_VENV_NAME`: preferred name for virtual environments (default: `venv`).
+
+- `$PYTHON_VENV_NAMES`: list of virtual environment names to be checked, in order, by `vrun` and `auto_vrun`.
