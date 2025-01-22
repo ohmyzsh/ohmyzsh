@@ -1,7 +1,7 @@
 {
   "headers": [
     {
-      "source": "/((?!favicon.ico).*)",
+      "source": "/(|install.sh)",
       "headers": [
         {
           "key": "Content-Type",
@@ -16,7 +16,7 @@
   ],
   "rewrites": [
     {
-      "source": "/((?!favicon.ico|install.sh).*)",
+      "source": "/",
       "destination": "/install.sh"
     }
   ]

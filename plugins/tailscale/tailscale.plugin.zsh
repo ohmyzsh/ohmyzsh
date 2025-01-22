@@ -1,4 +1,4 @@
-if (( ! $+commands[tailscale] )); then
+if (( ! $+commands[tailscale] && ! $+aliases[tailscale] )); then
   return
 fi
 
@@ -7,7 +7,12 @@ fi
 if [[ ! -f "$ZSH_CACHE_DIR/completions/_tailscale" ]]; then
   typeset -g -A _comps
   autoload -Uz _tailscale
-  _comps[tailscale]=_tailscale
+
+  if (( $+commands[tailscale] )); then
+    _comps[tailscale]=_tailscale
+  elif (( $+aliases[tailscale] )); then
+    _comps[${aliases[tailscale]:t}]=_tailscale
+  fi
 fi
 
 tailscale completion zsh >| "$ZSH_CACHE_DIR/completions/_tailscale" &|

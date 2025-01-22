@@ -13,6 +13,7 @@ plugins=(... systemadmin)
 | Alias   | Command                                                                    | Description                                                        |
 |---------|----------------------------------------------------------------------------|--------------------------------------------------------------------|
 | ping    | `ping -c 5`                                                                | Sends only 5 ICMP Messages                                         |
+| ping6   | `ping6 -c 5`                                                               | Sends only 5 ICMPv6 Messages                                       |
 | clr     | `clear; echo Currently logged in on $TTY, as $USERNAME in directory $PWD.` | Clears the screen and prints the current user, TTY, and directory  |
 | path    | `print -l $path`                                                           | Displays PATH with each entry on a separate line                   |
 | mkdir   | `mkdir -pv`                                                                | Automatically create parent directories and display verbose output |
