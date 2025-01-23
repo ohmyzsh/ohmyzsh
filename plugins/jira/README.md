@@ -44,7 +44,7 @@ This is also checks if the prefix is in the name, and adds it if not, so: "MP-12
 "mp-1234" opens the issue "mp-1234", and "1234" opens the issue "MP-1234".
 
 If your branch naming convention deviates, you can overwrite the jira_branch function to determine and echo the Jira issue key yourself.
-Define a function `jira_branch` after sourcing `oh-my-zsh.sh`.
+Define a function `jira_branch` after sourcing `oh-my-zsh.sh` in your `.zshrc`.
 Example:
 ```zsh
 # Determine branch name from naming convention 'type/KEY-123/description'.
