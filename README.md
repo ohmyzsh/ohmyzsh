@@ -488,7 +488,7 @@ omz update
 ```
 
 > [!NOTE]
-> If you want to automate this process in a script, you should call directly the `update` script, like this:
+> If you want to automate this process in a script, you should call directly the `upgrade` script, like this:
 >
 > ```sh
 > $ZSH/tools/upgrade.sh
