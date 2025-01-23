@@ -41,7 +41,28 @@ virtual environments:
 ### Settings
 
 You can set these variables in your `.zshrc` file, before Oh My Zsh is sourced.
+For example:
 
-- `$PYTHON_VENV_NAME`: preferred name for virtual environments (default: `venv`).
+```sh
+PYTHON_VENV_NAME=".venv"
+PYTHON_VENV_NAMES=($PYTHON_VENV_NAME venv)
+...
+plugins=(... python)
+source "$ZSH/oh-my-zsh.sh"
+```
 
-- `$PYTHON_VENV_NAMES`: list of virtual environment names to be checked, in order, by `vrun` and `auto_vrun`.
+
+## `$PYTHON_VENV_NAME`
+
+**Default**: `venv`.
+
+Preferred name for virtual environments, for example when creating via `mkv`.
+
+## `$PYTHON_VENV_NAMES`
+
+**Default**: `$PYTHON_VENV_NAME venv .venv`.
+
+Array of virtual environment names to be checked, in order, by `vrun` and `auto_vrun`.
+This means these functions will load the first existing virtual environment in this list.
+Duplicate names are ignored.
+
