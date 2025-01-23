@@ -56,27 +56,10 @@ prep() { # [pattern] [filename unless STDOUT]
 }
 
 # If the 'perlbrew' function isn't defined, perlbrew isn't setup.
-if ! typeset -f perlbrew > /dev/null; then
-  # Has PERLBREW_ROOT been set prior, and is it a valid directory?  If so, store
-  # value
-  if [[ -n "${PERLBREW_ROOT}" && -d "{{PERLBREW_ROOT}" ]]; then
-    perlbrew_root="${PERLBREW_ROOT}"
+if [[ $ZSH_PERLBREW_ACTIVATE != false ]] && (( ! $+functions[perlbrew] )); then
+  local _perlbrew="${PERLBREW_ROOT:-${HOME}/perl5/perlbrew}"
+  if [[ -f "${_perlbrew}/etc/bashrc" ]]; then
+    source "${_perlbrew}/etc/bashrc"
   fi
-
-  # If perlbrew_root isn't set yet, then set the default path
-  if [[ -z "${perlbrew_root}" ]]; then
-    perlbrew_root="${HOME}/perl5/perlbrew"
-  fi
-
-  # If we can find perlbrew's 'bashrc' (yes, I know!)...
-  if [[ -d "${perlbrew_root}" && -f "${perlbrew_root}/etc/bashrc" ]]; then
-    # and if NO_AUTO_ADD isn't set
-    if [[ -z "${PERLBREW_NO_AUTO_ADD}" ]]; then
-      # Initialize perlbrew
-      source "${perlbrew_root}/etc/bashrc"
-    fi
-  fi
-
-  # Clear our temporary variable
-  unset perlbrew_root
+  unset _perlbrew
 fi
