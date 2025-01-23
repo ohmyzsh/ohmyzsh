@@ -1,5 +1,5 @@
 # If direnv is not found, don't continue and print a warning
-if ! command -v direnv &>/dev/null; then
+if (( ! $+commands[direnv] )); then
   echo "Warning: direnv not found. Please install direnv and ensure it's in your PATH before using this plugin."
   return
 fi
