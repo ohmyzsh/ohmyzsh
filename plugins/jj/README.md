@@ -44,9 +44,15 @@ You can find an example
 
 Sometimes `jj` can be slower than `git`.
 
-If you feel slowdowns, you can try adding `ZSH_THEME_JJ_IGNORE_WORKING_COPY=1` to your theme, which will add
-`--ignore-working-copy` to all calls made to `jj`. The downside here is that your prompt might stay outdated
-until the next time `jj` gets a chance to _not_ ignore the working copy.
+If you feel slowdowns, consider using the following:
+
+```
+zstyle :omz:plugins:jj ignore-working-copy yes
+```
+
+This will add `--ignore-working-copy` to all `jj` commands executed by your prompt. The downside here is that
+your prompt might be out-of-sync until the next time `jj` gets a chance to _not_ ignore the working copy (i.e.
+you manually run a `jj` command).
 
 If you prefer to keep your prompt always up-to-date but still don't want to _feel_ the slowdown, you can make
 your prompt asynchronous. This plugin doesn't do this automatically so you'd have to hack your theme a bit for
