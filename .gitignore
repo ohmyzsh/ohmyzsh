@@ -10,3 +10,6 @@ log/
 # editor configs
 .vscode
 .idea
+
+# zcompile cached files
+*.zwc
