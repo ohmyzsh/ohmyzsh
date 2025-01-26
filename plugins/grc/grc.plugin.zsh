@@ -5,6 +5,7 @@ files=(
   /etc/grc.zsh               # default
   /usr/local/etc/grc.zsh     # homebrew darwin-x64
   /opt/homebrew/etc/grc.zsh  # homebrew darwin-arm64
+  /home/linuxbrew/.linuxbrew/etc/grc.zsh # linuxbrew 
   /usr/share/grc/grc.zsh     # Gentoo Linux (app-misc/grc)
 )
 

@@ -1,6 +1,7 @@
 #!/usr/bin/env zsh
 
 function omz {
+  setopt localoptions noksharrays
   [[ $# -gt 0 ]] || {
     _omz::help
     return 1
@@ -822,6 +823,13 @@ function _omz::update {
     return 1
   }
 
+  # Check if --unattended was passed
+  [[ "$1" != --unattended ]] || {
+    _omz::log error "the \`\e[2m--unattended\e[0m\` flag is no longer supported, use the \`\e[2mupgrade.sh\e[0m\` script instead."
+    _omz::log error "for more information see https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ#how-do-i-update-oh-my-zsh"
+    return 1
+  }
+
   local last_commit=$(builtin cd -q "$ZSH"; git rev-parse HEAD 2>/dev/null)
   [[ $? -eq 0 ]] || {
     _omz::log error "\`$ZSH\` is not a git directory. Aborting..."
@@ -830,11 +838,7 @@ function _omz::update {
 
   # Run update script
   zstyle -s ':omz:update' verbose verbose_mode || verbose_mode=default
-  if [[ "$1" != --unattended ]]; then
-    ZSH="$ZSH" command zsh -f "$ZSH/tools/upgrade.sh" -i -v $verbose_mode || return $?
-  else
-    ZSH="$ZSH" command zsh -f "$ZSH/tools/upgrade.sh" -v $verbose_mode || return $?
-  fi
+  ZSH="$ZSH" command zsh -f "$ZSH/tools/upgrade.sh" -i -v $verbose_mode || return $?
 
   # Update last updated file
   zmodload zsh/datetime
@@ -843,7 +847,7 @@ function _omz::update {
   command rm -rf "$ZSH/log/update.lock"
 
   # Restart the zsh session if there were changes
-  if [[ "$1" != --unattended && "$(builtin cd -q "$ZSH"; git rev-parse HEAD)" != "$last_commit" ]]; then
+  if [[ "$(builtin cd -q "$ZSH"; git rev-parse HEAD)" != "$last_commit" ]]; then
     # Old zsh versions don't have ZSH_ARGZERO
     local zsh="${ZSH_ARGZERO:-${functrace[-1]%:*}}"
     # Check whether to run a login shell
