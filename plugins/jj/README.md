@@ -8,6 +8,28 @@ To use it, add `jj` to the plugins array of your zshrc file:
 plugins=(... jj)
 ```
 
+## Aliases
+
+| Alias  | Command                       |
+| ------ | ----------------------------- |
+| jjc    | `jj commit`                   |
+| jjcmsg | `jj commit --message`         |
+| jjd    | `jj diff`                     |
+| jjdmsg | `jj desc --message`           |
+| jjds   | `jj desc`                     |
+| jje    | `jj edit`                     |
+| jjgcl  | `jj git clone`                |
+| jjgf   | `jj git fetch`                |
+| jjgp   | `jj git push`                 |
+| jjl    | `jj log`                      |
+| jjla   | `jj log -r "all()"`           |
+| jjn    | `jj new`                      |
+| jjrb   | `jj rebase`                   |
+| jjrs   | `jj restore`                  |
+| jjrt   | `cd "$(jj root \|\| echo .)"` |
+| jjsp   | `jj split`                    |
+| jjsq   | `jj squash`                   |
+
 ## Prompt usage
 
 Because `jj` has a very powerful [template syntax](https://martinvonz.github.io/jj/latest/templates/), this
