@@ -31,6 +31,13 @@ This plugin enhances your Zsh shell environment by integrating powerful features
    omz plugin enable ollama
    ```
 
+   In order to get the most benefit from completions, with helpful usage hints, etc:
+   ```sh
+   # ~/.zshrc
+   # add the following zstyle entry wherever you want
+   zstyle ':completion:*:*:*:*:descriptions' format '%F{green}%d%f'
+   ```
+
 
 2. **Restart Your Shell**
    Apply the changes by reloading Oh-My-Zsh:
