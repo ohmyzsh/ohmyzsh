@@ -60,12 +60,6 @@ The plugin provides autocompletion and enhanced functionality for the following 
 | `rm`        | Remove a model from the local system.    |
 | `help [command]` | Provide help information for a command.  |
 
-### Alias
-
-The plugin includes an alias for convenience:
-
-- `o`: This is an alias for the `ollama` command, allowing you to use `o` as a shorthand for executing Ollama commands. Useful when jumping around the command line frequently.
-
 ```sh
 >>> o ls
 NAME                                 ID              SIZE      MODIFIED

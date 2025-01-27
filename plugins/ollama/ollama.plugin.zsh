@@ -68,8 +68,10 @@ _ollama() {
       # Handle argument completion based on the specified command
       case $words[1] in
         run|rm|stop|show|pull|push)
-          # For these commands, provide model name suggestions
-          _ollama_get_models
+          # For these commands, provide model name suggestions exactly once
+          if [[ $CURRENT -eq 2 ]]; then
+            _ollama_get_models
+          fi
           ;;
         cp)
           if [[ $CURRENT -eq 2 ]]; then
@@ -101,6 +103,3 @@ _ollama() {
 
 # Register the '_ollama' function as the completion handler for the 'ollama' command
 compdef _ollama ollama
-
-# Register aliases
-alias o=ollama
