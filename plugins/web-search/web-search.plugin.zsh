@@ -33,6 +33,7 @@ function web_search() {
     gopkg           "https://pkg.go.dev/search?m=package&q="
     chatgpt         "https://chatgpt.com/?q="
     reddit          "https://www.reddit.com/search/?q="
+    ppai            "https://www.perplexity.ai/search/new?q="
   )
 
   # check whether the search engine is supported
@@ -87,6 +88,7 @@ alias packagist='web_search packagist'
 alias gopkg='web_search gopkg'
 alias chatgpt='web_search chatgpt'
 alias reddit='web_search reddit'
+alias ppai='web_search ppai'
 
 #add your own !bang searches here
 alias wiki='web_search duckduckgo \!w'

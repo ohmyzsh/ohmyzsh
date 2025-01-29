@@ -487,6 +487,17 @@ wait a week?) you just need to run:
 omz update
 ```
 
+> [!NOTE]
+> If you want to automate this process in a script, you should call directly the `upgrade` script, like this:
+>
+> ```sh
+> $ZSH/tools/upgrade.sh
+> ```
+>
+> See more options in the [FAQ: How do I update Oh My Zsh?](https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ#how-do-i-update-oh-my-zsh).
+>
+> **USE OF `omz update --unattended` HAS BEEN REMOVED, AS IT HAS SIDE EFFECTS**.
+
 Magic! 🎉
 
 ## Uninstalling Oh My Zsh
