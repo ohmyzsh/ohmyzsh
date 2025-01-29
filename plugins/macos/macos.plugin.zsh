@@ -18,11 +18,18 @@ alias showfiles="defaults write com.apple.finder AppleShowAllFiles -bool true &&
 alias hidefiles="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
 
 # Reset Launchpad layout (defaults method does not work in MacOS Sequoia and onward)
-if [[ "$(sw_vers --productVersion)" -ge 15.0 ]]; then
-  alias resetlaunchpad='rm -rf /private/$(getconf DARWIN_USER_DIR)/com.apple.dock.launchpad && killall Dock'
-else
-  alias resetlaunchpad='defaults write com.apple.dock ResetLaunchPad -bool true && killall Dock'
-fi
+function resetlaunchpad() {
+  if [[ "$(sw_vers --productVersion)" -ge 15.0 ]]; then
+    local user_dir="$(getconf DARWIN_USER_DIR)"
+    if [[ -n "$user_dir" && -d "$user_dir/com.apple.dock.launchpad" ]]; then
+      rm -rf "$user_dir/com.apple.dock.launchpad" &&
+      killall Dock
+    fi
+  else
+    defaults write com.apple.dock ResetLaunchPad -bool true
+    && killall Dock
+  fi
+}
 
 # Bluetooth restart
 function btrestart() {
