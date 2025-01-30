@@ -2,9 +2,9 @@ function tf_prompt_info() {
   # dont show 'default' workspace in home dir
   [[ "$PWD" != ~ ]] || return
   # check if in terraform dir and file exists
-  [[ -d .terraform && -r .terraform/environment ]] || return
+  [[ -d "${TF_DATA_DIR:-.terraform}" && -r "${TF_DATA_DIR:-.terraform}/environment" ]] || return
 
-  local workspace="$(< .terraform/environment)"
+  local workspace="$(< "${TF_DATA_DIR:-.terraform}/environment")"
   echo "${ZSH_THEME_TF_PROMPT_PREFIX-[}${workspace:gs/%/%%}${ZSH_THEME_TF_PROMPT_SUFFIX-]}"
 }
 
