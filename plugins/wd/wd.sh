@@ -8,7 +8,7 @@
 # @github.com/mfaerevaag/wd
 
 # version
-readonly WD_VERSION=0.9.2
+readonly WD_VERSION=0.9.3
 
 # colors
 readonly WD_BLUE="\033[96m"
@@ -256,20 +256,47 @@ wd_remove()
 }
 
 wd_browse() {
+    # Check if fzf is installed
     if ! command -v fzf >/dev/null; then
-        echo "This functionality requires fzf. Please install fzf first."
+        wd_print_msg "$WD_RED" "This functionality requires fzf. Please install fzf first."
         return 1
     fi
+
+    # Ensure wd_config_file is properly set
+    if [[ -z $wd_config_file ]]; then
+        wd_config_file="${WD_CONFIG:-$HOME/.warprc}"
+    fi
+
+    # Check if config file exists
+    if [[ ! -f $wd_config_file ]]; then
+        wd_print_msg "$WD_RED" "Config file $wd_config_file does not exist. Please create it first."
+        return 1
+    fi
+
+    # Read entries from the config file
     local entries=("${(@f)$(sed "s:${HOME}:~:g" "$wd_config_file" | awk -F ':' '{print $1 " -> " $2}')}")
+    if [[ -z $entries ]]; then
+        wd_print_msg "$WD_YELLOW" "You don't have any warp points to browse"
+        return 1
+    fi
+
+    # Temp file for remove operations
     local script_path="${${(%):-%x}:h}"
     local wd_remove_output=$(mktemp "${TMPDIR:-/tmp}/wd.XXXXXXXXXX")
+
+    # Create fzf bindings
     entries=("All warp points:" "Press enter to select. Press delete to remove" "${entries[@]}")
-    local fzf_bind="delete:execute(echo {} | awk -F ' -> ' '{print \$1}' | xargs -I {} "$script_path/wd.sh" rm {} > "$wd_remove_output")+abort"
+    local fzf_bind="delete:execute(echo {} | awk -F ' -> ' '{print \$1}' | xargs -I {} \"$script_path/wd.sh\" rm {} > \"$wd_remove_output\")+abort"
+
+    # Run fzf
     local selected_entry=$(printf '%s\n' "${entries[@]}" | fzf --height 100% --reverse --header-lines=2 --bind="$fzf_bind")
+
+    # Handle selection
     if [[ -e $wd_remove_output ]]; then
         cat "$wd_remove_output"
-        rm "$wd_remove_output"
+        rm -f "$wd_remove_output"
     fi
+
     if [[ -n $selected_entry ]]; then
         local selected_point="${selected_entry%% ->*}"
         selected_point=$(echo "$selected_point" | xargs)
@@ -278,14 +305,26 @@ wd_browse() {
 }
 
 wd_browse_widget() {
-  if [[ -e $wd_config_file ]]; then
+    # Ensure wd_config_file is properly set
+    if [[ -z $wd_config_file ]]; then
+        wd_config_file="${WD_CONFIG:-$HOME/.warprc}"
+    fi
+
+    # Check if config file exists
+    if [[ ! -f $wd_config_file ]]; then
+        wd_print_msg "$WD_RED" "Config file $wd_config_file does not exist. Please create it first."
+        return 1
+    fi
+
+    # Call wd_browse to handle the selection
     wd_browse
+
+    # Restore the zsh buffer and cursor after running wd_browse
     saved_buffer=$BUFFER
     saved_cursor=$CURSOR
     BUFFER=
     zle redisplay
     zle accept-line
-  fi
 }
 
 wd_restore_buffer() {
@@ -578,7 +617,7 @@ unset wd_print_msg
 unset wd_yesorno
 unset wd_print_usage
 unset wd_alt_config
-unset wd_config_file
+#unset wd_config_file do not unset this - breaks keybind
 unset wd_quiet_mode
 unset wd_print_version
 unset wd_force_mode
