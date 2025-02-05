@@ -1,0 +1,42 @@
+//   henry tawiah annan
+//   H00878886
+//   CSC 122 - B01
+// 
+//   I certify that this is my own work and where appropriate an extension 
+//   of the starter code provided for the assignment. 
+// ***************************************************************************
+
+#ifndef COMPLEX_H
+#define COMPLEX_H
+
+#include <iostream>
+#include <cmath>
+
+class Complex {
+private:
+    double real;
+    double imag;
+public:
+    Complex();                          
+    Complex(double r, double i);       
+
+    double getReal() const;
+    double getImag() const;
+
+    void setReal(double r);
+    void setImag(double i);
+
+    Complex operator+(const Complex& other) const;
+    Complex operator-(const Complex& other) const;
+    Complex operator*(const Complex& other) const;
+    Complex operator/(const Complex& other) const;
+    Complex operator-() const;
+
+    double magnitude() const;
+    Complex conjugate() const;
+
+    friend std::ostream& operator<<(std::ostream& os, const Complex& c);
+    friend std::istream& operator>>(std::istream& is, Complex& c);
+};
+
+#endif
