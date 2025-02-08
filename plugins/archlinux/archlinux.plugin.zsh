@@ -177,7 +177,6 @@ if (( $+commands[yay] )); then
 fi
 
 if (( $+commands[paru] )); then
-  alias parconf='paru -Pg'
   alias parclean='paru -Sc'
   alias parclr='paru -Scc'
   alias parupg='paru -Syu'
