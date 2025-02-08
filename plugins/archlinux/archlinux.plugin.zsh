@@ -176,6 +176,27 @@ if (( $+commands[yay] )); then
   alias yaupd="yay -Sy"
 fi
 
+if (( $+commands[paru] )); then
+  alias parconf='paru -Pg'
+  alias parclean='paru -Sc'
+  alias parclr='paru -Scc'
+  alias parupg='paru -Syu'
+  alias parsu='paru -Syu --noconfirm'
+  alias parin='paru -S'
+  alias parins='paru -U'
+  alias pare='paru -R'
+  alias parem='paru -Rns'
+  alias parep='paru -Si'
+  alias pareps='paru -Ss'
+  alias parloc='paru -Qi'
+  alias parlocs='paru -Qs'
+  alias parlst='paru -Qe'
+  alias parorph='paru -Qtd'
+  alias parinsd='paru -S --asdeps'
+  alias parmir='paru -Syy'
+  alias parupd="paru -Sy"
+fi
+
 # Check Arch Linux PGP Keyring before System Upgrade to prevent failure.
 function upgrade() {
   echo ":: Checking Arch Linux PGP Keyring..."
@@ -189,7 +210,9 @@ function upgrade() {
     echo " Arch Linux PGP Keyring is up to date."
     echo " Proceeding with full system upgrade."
   fi
-  if (( $+commands[yay] )); then
+  if (( $+commands[paru] )); then
+    paru -Syu
+  elif (( $+commands[yay] )); then
     yay -Syu
   elif (( $+commands[trizen] )); then
     trizen -Syu
