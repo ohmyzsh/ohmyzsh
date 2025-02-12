@@ -146,7 +146,7 @@ git_toplevel() {
 		# We are in a bare repo. Use git dir as root
 		repo_root=$(git rev-parse --git-dir)
 		if [[ $repo_root = '.' ]]; then
-			repo_root=$(pwd)
+			repo_root=$PWD
 		fi
 	fi
 	echo -n $repo_root
