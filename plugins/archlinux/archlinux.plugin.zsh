@@ -184,20 +184,20 @@ function upgrade() {
   if [ $installedver != $currentver ]; then
     echo " Arch Linux PGP Keyring is out of date."
     echo " Updating before full system upgrade."
-    sudo pacman -Sy --needed --noconfirm archlinux-keyring
+    sudo pacman -S --needed --noconfirm archlinux-keyring
   else
     echo " Arch Linux PGP Keyring is up to date."
     echo " Proceeding with full system upgrade."
   fi
   if (( $+commands[yay] )); then
-    yay -Syu
+    yay -Su
   elif (( $+commands[trizen] )); then
-    trizen -Syu
+    trizen -Su
   elif (( $+commands[pacaur] )); then
-    pacaur -Syu
+    pacaur -Su
   elif (( $+commands[aura] )); then
-    sudo aura -Syu
+    sudo aura -Su
   else
-    sudo pacman -Syu
+    sudo pacman -Su
   fi
 }
