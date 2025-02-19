@@ -81,7 +81,9 @@ source $DOTFILES/zsh/.iterm2_shell_integration.zsh
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 #plugins=(git zsh-git-prompt zsh-completions fasd systemd zsh-syntax-highlighting zsh-git-prompt)
-plugins=(git git-extras git-prompt docker docker-compose docker-machine helm fast-syntax-highlighting zsh-kubectl-prompt)
+plugins=(git git-extras git-prompt docker docker-compose docker-machine helm zsh-kubectl-prompt)
+
+source ~/.zsh-other-plugins/fsh/fast-syntax-highlighting.plugin.zsh
 
 # The following lines were added by compinstall
 zstyle ':completion:*' completer _expand _complete _ignored _correct _approximate
@@ -141,9 +143,9 @@ export SSH_KEY_PATH="~/.ssh/id_rsa"
 export GITHUB_PAT=$(cat $HOME/.git/.pat)
 
 # Perforce
-export P4CLIENT=$(hostname)
-export P4USER=$USER
-export P4PORT=$(cat ~/.p4/.port)
+# export P4CLIENT=$(hostname)
+# export P4USER=$USER
+#export P4PORT=$(cat ~/.p4/.port)
 export PATH=/sbin:/bin:${PATH}:${HOME}/bin/p4v-2021.1.2085655/bin:/import/tools/qa/bin:/import/tools/lab/bin:/import/lab/bin
 # export EDITOR=vim
 export ASLAN_INSTALL_ROOT=${HOME}/work/builds/nios/nios-8.6
