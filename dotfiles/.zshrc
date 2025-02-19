@@ -177,6 +177,8 @@ alias zz='. ~/.zshrc'
 # alias ifconfig='/sbin/ifconfig'
 source $DOTFILES/k8s/kubectl_helpers.sh
 source $DOTFILES/tsh/tsh.zsh
+source $DOTFILES/py/py_helpers.sh
+
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/gshirazi/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/gshirazi/Downloads/google-cloud-sdk/path.zsh.inc'; fi
