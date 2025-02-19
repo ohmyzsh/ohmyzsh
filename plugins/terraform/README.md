@@ -19,7 +19,7 @@ plugins=(... terraform)
 |---------|----------------------------------|
 | `tf`    | `terraform`                      |
 | `tfa`   | `terraform apply`                |
-| `tfaa`  | `terraform apply -auto-approve`  |
+| `tfa!`  | `terraform apply -auto-approve`  |
 | `tfc`   | `terraform console`              |
 | `tfd`   | `terraform destroy`              |
 | `tfd!`  | `terraform destroy -auto-approve`|
