@@ -36,6 +36,9 @@ alias kcgc='kubectl config get-contexts'
 # General aliases
 alias kdel='kubectl delete'
 alias kdelf='kubectl delete -f'
+alias kg='kubectl get'
+alias ke='kubectl edit'
+alias kd='kubectl describe'
 
 # Pod management.
 alias kgp='kubectl get pods'
